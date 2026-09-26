@@ -1,0 +1,143 @@
+﻿=== IDM / HAO123 / NATIVE ===
+-- HKLM Chrome Extensions --
+HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\Extensions\ngpampappnmepgilojfohadhhmbhlaek
+
+
+path         : C:\Program Files (x86)\Internet Download Manager\IDMGCExt.crx
+version      : 6.42.64
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\Extensions\ngp
+               ampappnmepgilojfohadhhmbhlaek
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\Extensions
+PSChildName  : ngpampappnmepgilojfohadhhmbhlaek
+PSProvider   : Microsoft.PowerShell.Core\Registry
+HKEY_LOCAL_MACHINE\SOFTWARE\Google\Chrome\Extensions\ngpampappnmepgilojfohadhhmbhlaek
+
+
+path         : C:\Program Files (x86)\Internet Download Manager\IDMGCExt.crx
+version      : 6.42.64
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Google\Chrome\Extensions\ngpampappnmepgi
+               lojfohadhhmbhlaek
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Google\Chrome\Extensions
+PSChildName  : ngpampappnmepgilojfohadhhmbhlaek
+PSProvider   : Microsoft.PowerShell.Core\Registry
+-- NativeMessagingHosts --
+HKEY_LOCAL_MACHINE\SOFTWARE\Google\Chrome\NativeMessagingHosts\com.microsoft.browsercore
+
+
+(default)    : C:\Windows\BrowserCore\manifest.json
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Google\Chrome\NativeMessagingHosts\com.m
+               icrosoft.browsercore
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Google\Chrome\NativeMessagingHosts
+PSChildName  : com.microsoft.browsercore
+PSProvider   : Microsoft.PowerShell.Core\Registry
+HKEY_LOCAL_MACHINE\SOFTWARE\Google\Chrome\NativeMessagingHosts\com.microsoft.defender.browser_extension.native_message_host
+
+
+(default)    : C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.24080.9-0\com.microsoft.defender.be.chrome.json
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Google\Chrome\NativeMessagingHosts\com.m
+               icrosoft.defender.browser_extension.native_message_host
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Google\Chrome\NativeMessagingHosts
+PSChildName  : com.microsoft.defender.browser_extension.native_message_host
+PSProvider   : Microsoft.PowerShell.Core\Registry
+HKEY_LOCAL_MACHINE\SOFTWARE\Google\Chrome\NativeMessagingHosts\com.tonec.idm
+
+
+(default)    : C:\Program Files (x86)\Internet Download Manager\IDMMsgHost.json
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Google\Chrome\NativeMessagingHosts\com.t
+               onec.idm
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Google\Chrome\NativeMessagingHosts
+PSChildName  : com.tonec.idm
+PSProvider   : Microsoft.PowerShell.Core\Registry
+HKEY_LOCAL_MACHINE\SOFTWARE\Google\Chrome\NativeMessagingHosts\mbambgnativemsg.exe
+
+
+(default)    : C:\Program Files\Malwarebytes\Anti-Malware\mbam.manifest.json
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Google\Chrome\NativeMessagingHosts\mbamb
+               gnativemsg.exe
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Google\Chrome\NativeMessagingHosts
+PSChildName  : mbambgnativemsg.exe
+PSProvider   : Microsoft.PowerShell.Core\Registry
+HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagingHosts\com.clockworkmod.adb
+
+
+(default)    : C:\Program Files (x86)\ClockworkMod\Universal Adb Driver\nmh-manifest.json
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagin
+               gHosts\com.clockworkmod.adb
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagin
+               gHosts
+PSChildName  : com.clockworkmod.adb
+PSProvider   : Microsoft.PowerShell.Core\Registry
+HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagingHosts\com.google.chrome.remote_assistance
+
+
+(default)    : C:\Program Files (x86)\Google\Chrome Remote 
+               Desktop\151.0.7922.13\com.google.chrome.remote_assistance.json
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagin
+               gHosts\com.google.chrome.remote_assistance
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagin
+               gHosts
+PSChildName  : com.google.chrome.remote_assistance
+PSProvider   : Microsoft.PowerShell.Core\Registry
+HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagingHosts\com.google.chrome.remote_desktop
+
+
+(default)    : C:\Program Files (x86)\Google\Chrome Remote Desktop\151.0.7922.13\com.google.chrome.remote_desktop.json
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagin
+               gHosts\com.google.chrome.remote_desktop
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagin
+               gHosts
+PSChildName  : com.google.chrome.remote_desktop
+PSProvider   : Microsoft.PowerShell.Core\Registry
+HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagingHosts\com.google.chrome.remote_webauthn
+
+
+(default)    : C:\Program Files (x86)\Google\Chrome Remote Desktop\151.0.7922.13\com.google.chrome.remote_webauthn.json
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagin
+               gHosts\com.google.chrome.remote_webauthn
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagin
+               gHosts
+PSChildName  : com.google.chrome.remote_webauthn
+PSProvider   : Microsoft.PowerShell.Core\Registry
+HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagingHosts\com.tonec.idm
+
+
+(default)    : C:\Program Files (x86)\Internet Download Manager\IDMMsgHost.json
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagin
+               gHosts\com.tonec.idm
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagin
+               gHosts
+PSChildName  : com.tonec.idm
+PSProvider   : Microsoft.PowerShell.Core\Registry
+HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagingHosts\mbambgnativemsg.exe
+
+
+(default)    : C:\Program Files\Malwarebytes\Anti-Malware\mbam.manifest.json
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagin
+               gHosts\mbambgnativemsg.exe
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Google\Chrome\NativeMessagin
+               gHosts
+PSChildName  : mbambgnativemsg.exe
+PSProvider   : Microsoft.PowerShell.Core\Registry
+-- Profile 14 Preferences grep hao/idm/homepage --
+no Preferences: hao123
+no Preferences: hao_123
+no Preferences: homepage
+no Preferences: startup_urls
+no Preferences: IDM
+no Preferences: idmcc
+no Preferences: internet download
+no Preferences: session.startup
+no Preferences: default_search
+no Preferences: search_provider_overrides
+no Preferences: pinned_tabs
+homepage=
+homepage_is_newtabpage=
+startup=
+restore=
+search=
+searchurl=
+-- Secure Preferences hao --
+HIT Secure Preferences hao123
+per_mode":true}},"homepage":"https://www.google.com.br/","session":{"startup_urls":["http://www.google.com/","http://br.hao123.com/?tn=fa_pro_hp_01_hao123_br","https://www.google.com/"]}},"extensions":{"settings":{"chkpgpejeflhoodlogeghpajbdohljek":{"lastpingday":"13431769201754141"},"doaaifppmpcnbkmpegmpkkcnlobgifid":{"lastpingday":"13431769201754141"},"fgghniogdmjoobgdgfncblbhokgaijmi":{"incogni
+-- IDM process --
+DONE

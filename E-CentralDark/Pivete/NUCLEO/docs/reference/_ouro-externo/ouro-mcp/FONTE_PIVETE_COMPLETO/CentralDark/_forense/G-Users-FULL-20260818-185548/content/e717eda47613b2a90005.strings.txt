@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\react\interactables-legacy\interactable-model-context.d.ts.map
+
+{"version":3,"file":"interactable-model-context.d.ts","names":[],"sources":["../../../src/react/interactables-legacy/interactable-model-context.ts"],"mappings":";;;iBAGgB,aAAa,eAAe;iBAiB5B,8BACd,aAAa,eAAe,yBAC5B,oBAAoB,YAAY,0BAChC,cAAc,YAAY,UAAU;EACjC;EAAgB,OAAO,eAAe"}

@@ -1,0 +1,11 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@radix-ui\react-compose-refs\dist\index.d.mts
+
+import * as React from 'react';
+type PossibleRef<T> = React.Ref<T> | undefined;
+ * A utility to compose multiple refs together
+ * Accepts callback refs and RefObject(s)
+declare function composeRefs<T>(...refs: PossibleRef<T>[]): React.RefCallback<T>;
+ * A custom hook that composes multiple refs
+ * Accepts callback refs and RefObject(s)
+declare function useComposedRefs<T>(...refs: PossibleRef<T>[]): React.RefCallback<T>;
+export { composeRefs, useComposedRefs };

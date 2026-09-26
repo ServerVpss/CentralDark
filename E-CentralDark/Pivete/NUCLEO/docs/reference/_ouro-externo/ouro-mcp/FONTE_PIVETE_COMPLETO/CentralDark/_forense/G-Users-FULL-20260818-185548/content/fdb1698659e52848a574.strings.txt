@@ -1,0 +1,5 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\Service Worker\Database\LOG.old
+
+2026/08/18-04:15:59.935 6f84 Reusing MANIFEST C:\Users\danda\AppData\Local\Google\Chrome\User Data\Default\Service Worker\Database/MANIFEST-000001
+2026/08/18-04:15:59.936 6f84 Recovering log #3
+2026/08/18-04:15:59.937 6f84 Reusing old log C:\Users\danda\AppData\Local\Google\Chrome\User Data\Default\Service Worker\Database/000003.log 

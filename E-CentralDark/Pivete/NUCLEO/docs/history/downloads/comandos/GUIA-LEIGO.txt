@@ -1,0 +1,12 @@
+1. Abra o PowerShell nesta pasta.
+2. Coloque a chave só na sessão:
+   $env:CENTRALDARK_API_KEY = "<SUA_CHAVE>"
+3. Informe os modelos disponíveis:
+   $env:CENTRALDARK_MODELS = "gpt-5,claude-sonnet-4,grok-4"
+4. Chame:
+   .\run.ps1 "#auditar" "C:\SEU\ALVO"
+5. Para ataque adversarial:
+   .\run.ps1 "!fable" "C:\SEU\ALVO"
+6. A direção da API fica em config\providers.json.
+7. Os comandos e seus papéis ficam em config\commands.json.
+8. Os recibos ficam em receipts\.

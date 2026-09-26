@@ -1,0 +1,391 @@
+﻿{
+    "MISSION_ID":  "CENTRALDARK_MULTIWINDOW_OMEGA_RECONCILIATION",
+    "SNAPSHOT_ID":  "SNAP-2026-08-27T23-40-00Z-SYNC",
+    "MODE":  "ORQUESTRACAO_UNICA",
+    "INTENT":  "Todos os bracos (T0..TN) operam UMA missao CentralDark numa so sincronizacao. Sinconizar estado, nao disparar acao destrutiva.",
+    "DESTINATION":  "E:/CentralDark/Pivete/",
+    "PROOF_TARGET":  "OMEGA_RENDEZVOUS.json com T0 emitindo intent + T1..TN retornando receipt + reconciled snapshot",
+    "MATERIAL_SCOPE":  "local VS Code terminals / Hermes-Casa execution only; repo CentralDark read-only unless authorized",
+    "T0_SOL_ORCHESTRATOR":  {
+                                "TERMINAL_ID":  "T0",
+                                "ENGINE":  "HERMES-CASA",
+                                "PID":  null,
+                                "WORKSPACE":  "E:/CentralDark/Pivete",
+                                "STATE":  "ACTIVE",
+                                "LAST_RECEIPT":  "2026-08-27T23:40:00Z",
+                                "INTENT_EMITTED":  true
+                            },
+    "WORKERS":  [
+                    {
+                        "TERMINAL_ID":  "T2",
+                        "STABLE_HASH":  "ARM-AUTO-2",
+                        "ENGINE":  "HERMES-CASA",
+                        "PID":  25688,
+                        "PARENT":  "self-declared",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T22:43:00Z",
+                        "RECEIPTS":  [
+                                         {
+                                             "TERMINAL_ID":  "T2",
+                                             "FACTS":  "Hermes-Casa como WORKER T2; config multi-janela criada e testada",
+                                             "EVIDENCE":  "scan 39 bracos; register+rendezvous+contraprova OK",
+                                             "UNKNOWN":  "",
+                                             "CONTRADICTIONS":  "",
+                                             "COUNTERPROOF":  "owner enxame-3ias.sh + HERMES-CORE reusados, sem V2",
+                                             "RESIDUAL":  "VS Code sem CLI de terminal",
+                                             "VERDICT":  "PASS",
+                                             "AT":  "2026-08-27T23:40:00Z"
+                                         }
+                                     ]
+                    },
+                    {
+                        "TERMINAL_ID":  "T3",
+                        "STABLE_HASH":  "ARM-AUTO-3",
+                        "ENGINE":  "CLAUDE",
+                        "PID":  null,
+                        "PARENT":  "self-declared",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T22:43:30Z",
+                        "RECEIPTS":  [
+                                         {
+                                             "TERMINAL_ID":  "T3",
+                                             "FACTS":  "Claude como WORKER T3; checklist !CALIBRAR/!MULTIBUSSOLA em andamento",
+                                             "EVIDENCE":  "coluna direita VS Code ativa; runway 9m",
+                                             "UNKNOWN":  "",
+                                             "CONTRADICTIONS":  "",
+                                             "COUNTERPROOF":  "loop proprio convergido com registry da Casa",
+                                             "RESIDUAL":  "reconciliar checklist do Claude com snapshot",
+                                             "VERDICT":  "PASS",
+                                             "AT":  "2026-08-27T23:40:00Z"
+                                         }
+                                     ]
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-583B518E971D",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  17324,
+                        "PARENT":  "Code.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-329436FE9A65",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  32876,
+                        "PARENT":  "Code.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-F970B07C055F",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  46684,
+                        "PARENT":  "Code.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-B55BB14B7BED",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  15628,
+                        "PARENT":  "Code.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-9A86B0A7B445",
+                        "ENGINE":  "HERMES-CASA",
+                        "PID":  23028,
+                        "PARENT":  "powershell.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-63656144A429",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  4968,
+                        "PARENT":  "hermes.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-737EEB43ACBC",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  31412,
+                        "PARENT":  "python.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-D3C6F5D5674D",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  9096,
+                        "PARENT":  "Code.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-8EAC082411A3",
+                        "ENGINE":  "HERMES-CASA",
+                        "PID":  27780,
+                        "PARENT":  "powershell.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-BE7989F34717",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  17440,
+                        "PARENT":  "hermes.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-536ACFCFA028",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  28100,
+                        "PARENT":  "python.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-8894C664AB76",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  34820,
+                        "PARENT":  "Code.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-0C50DDAD8D39",
+                        "ENGINE":  "HERMES-CASA",
+                        "PID":  24148,
+                        "PARENT":  "powershell.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-E335D7A182A7",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  39444,
+                        "PARENT":  "hermes.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-0A071A91534C",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  42124,
+                        "PARENT":  "python.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-5850F06524B6",
+                        "ENGINE":  "CODEX",
+                        "PID":  44164,
+                        "PARENT":  "Code.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-C36880A5737E",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  3868,
+                        "PARENT":  "codex.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-C43CB0762E8F",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  20628,
+                        "PARENT":  "vibe-acp.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-37B5095AE68C",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  11448,
+                        "PARENT":  "Code.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-AE41F50C1AE0",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  7348,
+                        "PARENT":  "hermes.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-FBB489BDACDA",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  7452,
+                        "PARENT":  "python.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-0028C9D0B089",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  23920,
+                        "PARENT":  "pet.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-E70729ED87C2",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  25248,
+                        "PARENT":  "claude.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-CA7F94F1F106",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  37288,
+                        "PARENT":  "Code.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-84BDF348E17F",
+                        "ENGINE":  "HERMES-CASA",
+                        "PID":  32348,
+                        "PARENT":  "powershell.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-2E86B5955A56",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  37604,
+                        "PARENT":  "hermes.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-E054930B669B",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  22616,
+                        "PARENT":  "python.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-F7FD011ABF4B",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  47052,
+                        "PARENT":  "python.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-56CA5ACB0D32",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  43528,
+                        "PARENT":  "bash.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-5F23916B45D0",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  19452,
+                        "PARENT":  "bash.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    },
+                    {
+                        "TERMINAL_ID":  "UNASSIGNED",
+                        "STABLE_HASH":  "ARM-1D720D144F12",
+                        "ENGINE":  "UNKNOWN-CLI",
+                        "PID":  48832,
+                        "PARENT":  "bash.exe",
+                        "STATE":  "ACTIVE",
+                        "BORN_AT":  "2026-08-27T23:38:24Z"
+                    }
+                ],
+    "RECONCILED_SNAPSHOT":  {
+                                "SNAPSHOT_ID":  "SNAP-2026-08-27T23-38-24Z",
+                                "GENERATED_AT":  "2026-08-27T23:38:25Z",
+                                "MISSION_ID":  "CENTRALDARK_MULTIWINDOW_OMEGA_RECONCILIATION",
+                                "NORMALIZED_RECEIPTS":  2,
+                                "CONTRADICTIONS":  [
+
+                                                   ],
+                                "UNKNOWN_MATERIAL":  0,
+                                "FIXED_POINT":  true,
+                                "WORKERS":  [
+                                                "T2",
+                                                "T3",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED",
+                                                "UNASSIGNED"
+                                            ]
+                            },
+    "FIXED_POINT":  true,
+    "CREATED_AT":  "2026-08-27T23:40:00Z"
+}

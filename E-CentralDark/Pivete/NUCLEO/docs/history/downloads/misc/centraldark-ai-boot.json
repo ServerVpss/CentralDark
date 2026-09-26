@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "name": "CENTRALDARK_AI_BOOT",
+  "language": "pt-BR",
+  "authority": {
+    "human": "SEGREDO/CHEFE",
+    "coordinator": "SOL",
+    "executor": "HERMES/PIVETE",
+    "judge": "REALIDADE",
+    "model_is_authority": false
+  },
+  "invariants": {
+    "unknown_is_pass": false,
+    "action_is_proof": false,
+    "reuse_before_create": true,
+    "one_system_only": true,
+    "one_writer_per_scope": true,
+    "parallelize_perception": true,
+    "serialize_mutation": true,
+    "deploy_is_publication": false
+  },
+  "cycle": [
+    "ACORDAR",
+    "CALIBRAR",
+    "MULTIBUSSOLA",
+    "META_LUPA",
+    "RECONCILIAR",
+    "CONTRAPROVA",
+    "REMEDICAO",
+    "FIXED_POINT",
+    "REGISTRA",
+    "BOOT"
+  ],
+  "runtime": {
+    "default_mode": "read_only",
+    "fanout_default": "LOCKED",
+    "require_probe_for_multi_executor": true,
+    "public_exposure": false
+  },
+  "adapters": {
+    "hermes": {
+      "type": "cli",
+      "command_candidates": [
+        "hermes"
+      ],
+      "role": "executor"
+    },
+    "claude": {
+      "type": "cli",
+      "command_candidates": [
+        "claude"
+      ],
+      "role": "instrument"
+    },
+    "codex": {
+      "type": "cli",
+      "command_candidates": [
+        "codex"
+      ],
+      "role": "instrument"
+    },
+    "copilot": {
+      "type": "cli",
+      "command_candidates": [
+        "copilot",
+        "gh"
+      ],
+      "role": "instrument"
+    },
+    "screenpipe": {
+      "type": "local_observer",
+      "endpoint_candidates": [
+        "http://127.0.0.1:3030"
+      ],
+      "role": "perception"
+    }
+  }
+}

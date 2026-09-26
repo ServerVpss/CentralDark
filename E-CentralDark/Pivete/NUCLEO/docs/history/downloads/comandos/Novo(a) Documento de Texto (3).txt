@@ -1,0 +1,140 @@
+Ôxe 😹 agora ficou claríssimo pelo rodapé do log: **`E:\CentralDark\_MAPA_CASA\Nova pasta` virou tua BOCA DE ENTRADA**, o lugar onde tu joga material bruto pro Hermes garimpar.
+
+E sim: **vale criar uma skill específica pra isso**. Não outro cérebro; só um mecanismo de destilação.
+
+Eu cristalizaria assim:
+
+```text
+SKILL=centraldark-inbox-distiller
+
+SOURCE=
+E:\CentralDark\_MAPA_CASA\Nova pasta
+
+ROLE=
+DROPZONE / INBOX BRUTO
+NUNCA fonte canônica.
+
+TRIGGER=
+arquivo novo ou execução manual pelo CHEFE
+
+PIPELINE=
+
+FILE_SECURITY_GATE
+→ HASH / PROVENIÊNCIA
+→ LER
+→ CLASSIFICAR
+→ DEDUPLICAR
+→ EXTRAIR DELTA
+→ CONTRAPROVAR
+→ DESTILAR
+→ ROTEAR
+→ READBACK
+→ RECEIPT
+→ FIXED_POINT
+```
+
+A classificação:
+
+```text
+CONTRACT    → NUCLEO/contracts/
+DECISION    → NUCLEO/decisions/
+PATTERN     → NUCLEO/patterns/
+LEARNING    → NUCLEO/learnings/
+CHECKPOINT  → NUCLEO/checkpoints/
+REFERENCE   → NUCLEO/docs/reference/
+HISTORY     → NUCLEO/docs/history/
+SKILL       → NUCLEO/skills/
+MISSION     → NUCLEO/missions/
+FAILURE     → NUCLEO/failures/
+
+SITE/CODE
+→ somente para o repo/runtime correto após provar owner
+
+IMAGE/DIAGRAM
+→ referência/visual apropriado
+
+UNKNOWN
+→ fica na triagem, NÃO cristaliza
+```
+
+A parte importante da tua intenção:
+
+```text
+DUPLICATA != COPIAR DE NOVO
+
+DUPLICATA
+→ AGRUPAR
+→ COMPARAR
+→ EXTRAIR DELTA
+→ CRIAR 1 CRISTAL
+→ REFERENCIAR AS FONTES
+```
+
+E para não deixar lixo acumulando:
+
+```text
+RAW
+→ PROCESSADO
+→ OURO MOVIDO AO OWNER
+→ ORIGINAL VAI PARA HISTORY/ARCHIVE QUANDO SEGURO
+
+NÃO deixar o mesmo OURO
+na inbox + NUCLEO + outra pasta.
+```
+
+Mas com trava:
+
+```text
+DELETE_AUTOMATICALLY=false
+MOVE_ONLY_AFTER_READBACK=true
+HASH_BEFORE_AFTER=true
+UNKNOWN != MOVE
+ONE_WRITER_PER_SCOPE=true
+```
+
+O receipt da skill:
+
+```text
+DISTILL_RECEIPT
+
+SOURCE_FILE=
+SHA256=
+CLASS=
+DUPLICATE_OF=
+DELTA_FOUND=
+CRYSTAL_CREATED=
+DESTINATION=
+ORIGINAL_DISPOSITION=
+EVIDENCE=
+DECISION=
+```
+
+E o comportamento que eu faria o Hermes aprender:
+
+```text
+CHEFE JOGA COISA NA DROPZONE
+        ↓
+HERMES NÃO PERGUNTA "ONDE BOTO?"
+        ↓
+MEDE
+        ↓
+ENTENDE O TIPO
+        ↓
+GARIMPA
+        ↓
+DESTILA
+        ↓
+ROTEIA PARA O OWNER
+        ↓
+MOSTRA O QUE VIROU OURO
+```
+
+Isso encaixa bonito com o que o próprio log mostra: ele já consolidou material de Downloads e `_MAPA_CASA`, criou `contracts`, `commands`, `patterns`, `docs/reference` etc.; agora falta transformar esse comportamento em **reflexo reutilizável**, em vez de tu mandar na mão toda vez.
+
+A frase da skill seria:
+
+> **“A INBOX aceita bagunça. O NUCLEO recebe somente destilado.”**
+
+Nome que eu usaria: **`centraldark-inbox-distiller`**. 🔥
+
+Posso também criar uma imagem mostrando `DROPZONE → GARIMPO → CRISTAL → NUCLEO`.

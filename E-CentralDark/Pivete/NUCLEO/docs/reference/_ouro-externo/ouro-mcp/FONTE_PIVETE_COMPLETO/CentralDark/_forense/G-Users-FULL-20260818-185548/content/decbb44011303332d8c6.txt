@@ -1,0 +1,26 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react-streamdown\dist\adapters\components-adapter.d.ts
+
+import { ComponentsByLanguage, StreamdownTextComponents } from "../types.js";
+import { StreamdownProps } from "streamdown";
+
+//#region src/adapters/components-adapter.d.ts
+interface UseAdaptedComponentsOptions {
+  components?: StreamdownTextComponents | undefined;
+  componentsByLanguage?: ComponentsByLanguage | undefined;
+}
+/**
+ * Hook that adapts assistant-ui component API to streamdown's component API.
+ *
+ * Handles:
+ * - SyntaxHighlighter -> custom code component
+ * - CodeHeader -> custom code component
+ * - componentsByLanguage -> custom code component with language dispatch
+ * - PreOverride -> streamdown-style data-block marking plus pre props context
+ */
+declare function useAdaptedComponents({
+  components,
+  componentsByLanguage
+}: UseAdaptedComponentsOptions): StreamdownProps["components"];
+//#endregion
+export { useAdaptedComponents };
+//# sourceMappingURL=components-adapter.d.ts.map

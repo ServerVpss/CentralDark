@@ -1,0 +1,33 @@
+# MISSAO - set-sdk-processing-metadata.js.map
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\.bun\install\cache\@sentry\core@10.71.0@@@1\build\cjs\integrations\express\set-sdk-processing-metadata.js.map
+**SHA:** 53e1d96b834bc552
+**Timestamp:** 2026-08-28T02:21:48.687453
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Gaps
+- {"version":3,"file":"set-sdk-processing-metadata.js","sources":["../../../../src/integrations/express/set-sdk-processing-metadata.ts"],"sourcesContent":["/**\n * Platform-portable Express tracing inte
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+{"version":3,"file":"set-sdk-processing-metadata.js","sources":["../../../../src/integrations/express/set-sdk-processing-metadata.ts"],"sourcesContent":["/**\n * Platform-portable Express tracing integration.\n *\n * @module\n *\n * This Sentry integration is a derivative work based on the OpenTelemetry\n * Express instrumentation.\n *\n * <https://github.com/open-telemetry/opentelemetry-js-contrib/tree/main/packages/instrumentation-express>\n *\n * Extended under the terms of the Apache 2.0 license linked below:\n *\n * ----\n *\n * Copyright The OpenTelemetry Authors\n *\n * Licensed under the Apache License, Version 2.0 (the \"License\");\n * you may not use this file except in compliance with the License.\n * You may obtain a copy of the License at\n *\n *      https://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\n\n/**\n * Abstract this out because we call it in multiple places, and it's cheaper to\n * only do one time for any given request.\n */\n\nimport type { ExpressRequest } from './types';\nimport { getIsolationScope } from '../../currentScopes';\nimport { httpRequestToRequestData } from '../../utils/request';\n\n// TODO: consider moving this into a core util, eg\n// setSDKProcessingMetadataFromRequest(..), if other integrations need it.\nexport function setSDKProcessingMetadata(request: ExpressRequest) {\n  const sdkProcMeta = getIsolationScope()?.getScopeData()?.sdkProcessingMetadata;\n  if (!sdkProcMeta?.normalizedRequest) {\n    const normalizedRequest = httpRequestToRequestData(request);\n    getIsolationScope().setSDKProcessingMetadata({ normalizedRequest });\n  }\n}\n"],"names":["request","getIsolationScope","httpRequestToRequestData"],"mappings":";;;;;AAwCO,SAAS,yBAAyBA,SAAA,EAAyB;AAChE,EAAA,MAAM,WAAA,GAAcC,+BAAA,EAAkB,EAAG,YAAA,EAAa,EAAG,qBAAA;AACzD,EAAA,IAAI,CAAC,aAAa,iBAAA,EAAmB;AACnC,IAAA,MAAM,iBAAA,GAAoBC,iCAAyBF,SAAO,CAAA;AAC1D,IAAAC,+BAAA,EAAkB,CAAE,wBAAA,CAAyB,EAAE,iBAAA,EAAmB,CAAA;AAAA,EACpE;AACF;;;;"}
+```
+
+---
+
+# MISSAO - set-sdk-processing-metadata.js.map
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\.bun\install\cache\@sentry\core@10.71.0@@@1\build\esm\integrations\express\set-sdk-processing-metadata.js.map
+**SHA:** b6d53f976ae375ee
+**Timestamp:** 2026-08-28T02:22:02.063196
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Gaps
+- {"version":3,"file":"set-sdk-processing-metadata.js","sources":["../../../../src/integrations/express/set-sdk-processing-metadata.ts"],"sourcesContent":["/**\n * Platform-portable Express tracing inte
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+{"version":3,"file":"set-sdk-processing-metadata.js","sources":["../../../../src/integrations/express/set-sdk-processing-metadata.ts"],"sourcesContent":["/**\n * Platform-portable Express tracing integration.\n *\n * @module\n *\n * This Sentry integration is a derivative work based on the OpenTelemetry\n * Express instrumentation.\n *\n * <https://github.com/open-telemetry/opentelemetry-js-contrib/tree/main/packages/instrumentation-express>\n *\n * Extended under the terms of the Apache 2.0 license linked below:\n *\n * ----\n *\n * Copyright The OpenTelemetry Authors\n *\n * Licensed under the Apache License, Version 2.0 (the \"License\");\n * you may not use this file except in compliance with the License.\n * You may obtain a copy of the License at\n *\n *      https://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\n\n/**\n * Abstract this out because we call it in multiple places, and it's cheaper to\n * only do one time for any given request.\n */\n\nimport type { ExpressRequest } from './types';\nimport { getIsolationScope } from '../../currentScopes';\nimport { httpRequestToRequestData } from '../../utils/request';\n\n// TODO: consider moving this into a core util, eg\n// setSDKProcessingMetadataFromRequest(..), if other integrations need it.\nexport function setSDKProcessingMetadata(request: ExpressRequest) {\n  const sdkProcMeta = getIsolationScope()?.getScopeData()?.sdkProcessingMetadata;\n  if (!sdkProcMeta?.normalizedRequest) {\n    const normalizedRequest = httpRequestToRequestData(request);\n    getIsolationScope().setSDKProcessingMetadata({ normalizedRequest });\n  }\n}\n"],"names":[],"mappings":";;;AAwCO,SAAS,yBAAyB,OAAA,EAAyB;AAChE,EAAA,MAAM,WAAA,GAAc,iBAAA,EAAkB,EAAG,YAAA,EAAa,EAAG,qBAAA;AACzD,EAAA,IAAI,CAAC,aAAa,iBAAA,EAAmB;AACnC,IAAA,MAAM,iBAAA,GAAoB,yBAAyB,OAAO,CAAA;AAC1D,IAAA,iBAAA,EAAkB,CAAE,wBAAA,CAAyB,EAAE,iBAAA,EAAmB,CAAA;AAAA,EACpE;AACF;;;;"}
+```

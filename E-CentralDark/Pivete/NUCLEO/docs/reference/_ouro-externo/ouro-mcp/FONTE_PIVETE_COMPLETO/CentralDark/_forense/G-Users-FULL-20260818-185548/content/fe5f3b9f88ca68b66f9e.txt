@@ -1,0 +1,35 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\runtime\base\default-thread-composer-runtime-core.d.ts
+
+import { AppendMessage } from "../../types/message.js";
+import { AttachmentAdapter } from "../../adapters/attachment.js";
+import { Unsubscribe } from "../../types/unsubscribe.js";
+import { DictationAdapter } from "../../adapters/speech.js";
+import { QueueItemState } from "../../store/scopes/queue-item.js";
+import { SendOptions, ThreadComposerRuntimeCore } from "../interfaces/composer-runtime-core.js";
+import { ThreadRuntimeCore } from "../interfaces/thread-runtime-core.js";
+import { BaseComposerRuntimeCore } from "./base-composer-runtime-core.js";
+import "../../index.js";
+//#region src/runtime/base/default-thread-composer-runtime-core.d.ts
+declare class DefaultThreadComposerRuntimeCore extends BaseComposerRuntimeCore implements ThreadComposerRuntimeCore {
+  private _canCancel;
+  get canCancel(): boolean;
+  get canSend(): boolean;
+  get queue(): readonly QueueItemState[];
+  steerQueueItem(queueItemId: string): void;
+  removeQueueItem(queueItemId: string): void;
+  protected getAttachmentAdapter(): AttachmentAdapter | undefined;
+  protected getDictationAdapter(): DictationAdapter | undefined;
+  private runtime;
+  constructor(runtime: Omit<ThreadRuntimeCore, "composer"> & {
+    adapters?: {
+      attachments?: AttachmentAdapter | undefined;
+      dictation?: DictationAdapter | undefined;
+    } | undefined;
+  });
+  connect(): Unsubscribe;
+  handleSend(message: Omit<AppendMessage, "parentId" | "sourceId">, options?: SendOptions): Promise<void>;
+  handleCancel(): Promise<void>;
+}
+//#endregion
+export { DefaultThreadComposerRuntimeCore };
+//# sourceMappingURL=default-thread-composer-runtime-core.d.ts.map

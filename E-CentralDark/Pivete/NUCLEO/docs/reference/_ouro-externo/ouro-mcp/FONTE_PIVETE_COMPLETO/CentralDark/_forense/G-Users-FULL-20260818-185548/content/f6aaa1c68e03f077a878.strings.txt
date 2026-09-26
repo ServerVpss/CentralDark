@@ -1,0 +1,224 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\lib\perl5\core_perl\auto\Encode\Byte\Byte.dll
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.edata
+@.idata
+@.reloc
+AVAUATUWVSH
+CpH;Cx
+ [^_]A\A]A^
+ [^_]A\A]A^
+Encode::XS
+Encode::define_encoding
+v5.42.0
+Byte.c
+viscii
+nextstep
+koi8-u
+koi8-r
+koi8-f
+iso-8859-16
+iso-8859-15
+iso-8859-14
+iso-8859-13
+iso-8859-11
+iso-8859-10
+iso-8859-9
+iso-8859-8
+iso-8859-7
+iso-8859-6
+iso-8859-5
+iso-8859-4
+iso-8859-3
+iso-8859-2
+hp-roman8
+cp1258
+cp1257
+cp1256
+cp1255
+cp1254
+cp1253
+cp1251
+cp1250
+cp1006
+MacUkrainian
+MacTurkish
+MacThai
+MacSami
+MacRumanian
+MacRomanian
+MacRoman
+MacIcelandic
+MacHebrew
+MacGreek
+MacFarsi
+MacCyrillic
+MacCroatian
+MacCentralEurRoman
+MacArabic
+AdobeStandardEncoding
+ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+{[lP}M]\Nk`Ka
+z^L~no|
+ !"#$%&
+()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_
+abcdefghijklmnopqrstuvwxyz{|}~
+0123456789
+?@ABCDEFGHIJKLMNOPQRSTUVWXYZ
+`abcdefghijklmnopqrstuvwxyz
+@ABCDEFGHIJKLMNOPQRSTUVWXYZ
+^_`abcdefghijklmnopqrstuvwxyz
+')*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+ !"#$%&(
+ABCDEFGHIQRSTUVWXYbcdefghiq
+')(*+,-./0123456789:;<=>?
+{ABCDEFGHI}JKLMNOPQR
+~stuvwxyz
+`:#@'="
+.<(+|&
+!$*);,%_>?}]{[|
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+Byte.dll
+AdobeStandardEncoding_encoding
+MacArabic_encoding
+MacCentralEurRoman_encoding
+MacCroatian_encoding
+MacCyrillic_encoding
+MacFarsi_encoding
+MacGreek_encoding
+MacHebrew_encoding
+MacIcelandic_encoding
+MacRoman_encoding
+MacRomanian_encoding
+MacRumanian_encoding
+MacSami_encoding
+MacThai_encoding
+MacTurkish_encoding
+MacUkrainian_encoding
+__gcc_deregister_frame
+__gcc_register_frame
+boot_Encode__Byte
+cp1006_encoding
+cp1250_encoding
+cp1251_encoding
+cp1253_encoding
+cp1254_encoding
+cp1255_encoding
+cp1256_encoding
+cp1257_encoding
+cp1258_encoding
+cp424_encoding
+cp437_encoding
+cp737_encoding
+cp775_encoding
+cp850_encoding
+cp852_encoding
+cp855_encoding
+cp856_encoding
+cp857_encoding
+cp858_encoding
+cp860_encoding
+cp861_encoding
+cp862_encoding
+cp863_encoding
+cp864_encoding
+cp865_encoding
+cp866_encoding
+cp869_encoding
+cp874_encoding
+hp_roman8_encoding
+iso_8859_10_encoding
+iso_8859_11_encoding
+iso_8859_13_encoding
+iso_8859_14_encoding
+iso_8859_15_encoding
+iso_8859_16_encoding
+iso_8859_2_encoding
+iso_8859_3_encoding
+iso_8859_4_encoding
+iso_8859_5_encoding
+iso_8859_6_encoding
+iso_8859_7_encoding
+iso_8859_8_encoding
+iso_8859_9_encoding
+koi8_f_encoding
+koi8_r_encoding
+koi8_u_encoding
+nextstep_encoding
+viscii_encoding
+_impure_ptr
+calloc
+cygwin_internal
+dll_dllcrt0
+malloc
+msys_detach_dll
+posix_memalign
+realloc
+strlen
+GetModuleHandleA
+Perl_call_pv
+Perl_gv_stashpv
+Perl_markstack_grow
+Perl_more_sv
+Perl_newSViv
+Perl_newSVpvn
+Perl_stack_grow
+Perl_sv_2mortal
+Perl_sv_bless
+Perl_sv_free2
+Perl_xs_boot_epilog
+Perl_xs_handshake
+msys-2.0.dll
+KERNEL32.dll
+msys-perl5_42.dll
+__lib64_libkernel32_a_iname
+__imp_calloc
+__imp_Perl_gv_stashpv
+_head_msys_2_0_dll
+__imp_cygwin_internal
+__imp_Perl_call_pv
+__imp_posix_memalign
+__imp_free
+msys_perl5_42_dll_iname
+__nm__impure_ptr
+__imp_Perl_newSVpvn
+__IAT_end__
+__imp_dll_dllcrt0
+__imp_Perl_newSViv
+_head_lib64_libkernel32_a
+__imp_Perl_more_sv
+__imp_msys_detach_dll
+__imp_GetModuleHandleA
+__imp_strlen
+__imp_malloc
+__imp__impure_ptr
+__imp_Perl_sv_2mortal
+__imp_Perl_stack_grow
+__imp_realloc
+__IAT_start__
+__imp_Perl_sv_bless
+__imp_Perl_xs_handshake
+_head_msys_perl5_42_dll
+__imp_Perl_xs_boot_epilog
+__imp_Perl_markstack_grow
+__imp_Perl_sv_free2
+msys_2_0_dll_iname
+ !"#$%&'()*+,-./0123456789:;<=>?@AB

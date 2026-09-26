@@ -1,0 +1,39 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\__pycache__\sqlite_util.cpython-311.pyc
+
+Shared SQLite primitives for the small per-profile / board stores.
+The projects and kanban stores open WAL SQLite files with the same two
+primitives 
+ an idempotent column-add migration and an IMMEDIATE write
+transaction. One definition here keeps the two stores from drifting.
+annotationsN
+sqlite3.Connection
+column
+return
+``ALTER TABLE <table> ADD COLUMN <ddl>``, idempotent across races.
+    Returns ``True`` when this call added the column. Swallows the
+    ``duplicate column name`` error a concurrent migrator may have run first
+    (issue #21708). ``column`` is the human-readable name for the call site;
+    ``ddl`` carries the actual definition.
+ALTER TABLE z
+ ADD COLUMN Tz
+duplicate column nameNF)
+execute
+sqlite3
+OperationalErrorr
+lower)
+JC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\sqlite_util.py
+add_column_if_missingr
+An IMMEDIATE write transaction: at most one concurrent writer wins.
+    The explicit ROLLBACK is guarded so a SQLite auto-rollback (no active
+    transaction left under EIO / lock contention / corruption) cannot shadow
+    the original exception with a spurious rollback error.
+BEGIN IMMEDIATE
+COMMIT
+ROLLBACKN)
+Exceptionr
+write_txnr
+__doc__
+__future__r
+contextlibr
+contextmanagerr
+<module>r

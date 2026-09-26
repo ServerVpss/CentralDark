@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@peculiar\asn1-schema\build\cjs\storage.js
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.schemaStorage = void 0;
+const schema_1 = require("./schema");
+exports.schemaStorage = new schema_1.AsnSchemaStorage();

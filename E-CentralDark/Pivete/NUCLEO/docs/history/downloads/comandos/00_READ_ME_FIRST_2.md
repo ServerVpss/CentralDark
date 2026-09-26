@@ -1,0 +1,48 @@
+
+# CENTRALDARK — CRISTAL COMPLETO DA SESSÃO
+
+Este diretório é extensão do pacote anterior, sem reescrever os bytes antigos.
+
+## Âncoras
+- Parent ZIP SHA-256: `fac5ec9325152f4afcc1f5e16f8487a3d49c50ba759fc8f3d6f9f4bc4db42b07`
+- Parent successor root: `d7a2e739f7f88ce40aabf234197872ec02bdc2ebd1d1cec48e91fa311a953ff1`
+- GitHub main medido nesta sessão: `94b6780bbbdf26a64acbadd1d7be03c22d32322d`
+
+## Fio consolidado
+
+```text
+SEGREDO/CHEFE
+→ INTENÇÃO / DESTINO / EXPERIÊNCIA VIVIDA
+→ PAPAGAIO_OFF
+→ ESTADO VIVO
+→ CALIBRAÇÃO
+→ PERCEPÇÃO PARALELA
+→ CONTRAPROVA
+→ REALIDADE MATERIAL DO ESCOPO
+→ REMEDIAÇÃO
+→ REMEDIÇÃO/REMEDIÇÃO DE ESTADO
+→ FIXED POINT
+→ REGISTRO
+→ PRÓXIMO BOOT
+```
+
+## Lei do ouro
+
+```text
+PERDER != GANHAR
+
+PERDER
++ PRESERVAR EVIDÊNCIA
++ CONTRAPROVA
++ MECANISMO/CAUSA SUFICIENTEMENTE PROVADO
++ DELTA MÍNIMO
++ TESTE NEGATIVO/POSITIVO
++ REGRESSÃO
++ GATE
++ REGISTRO
++ REUSO NO PRÓXIMO EVENTO
+
+= GANHO INFORMACIONAL E OPERACIONAL
+```
+
+Uma derrota só vira ouro se não for desperdiçada.

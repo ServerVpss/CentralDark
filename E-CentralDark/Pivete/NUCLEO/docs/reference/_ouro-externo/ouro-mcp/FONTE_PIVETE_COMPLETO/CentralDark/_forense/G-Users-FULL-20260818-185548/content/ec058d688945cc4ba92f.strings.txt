@@ -1,0 +1,77 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\gateway\__pycache__\media_policy.cpython-311.pyc
+
+Shared config
+env bridge for media-delivery policy.
+``validate_media_delivery_path`` (gateway/platforms/base.py) reads its policy
+from environment variables:
+  - ``HERMES_MEDIA_DELIVERY_STRICT``    <- gateway.strict
+  - ``HERMES_MEDIA_ALLOW_DIRS``         <- gateway.media_delivery_allow_dirs
+  - ``HERMES_MEDIA_TRUST_RECENT_FILES`` <- gateway.trust_recent_files
+Historically the config.yaml -> env translation ran ONLY in gateway startup
+(gateway/run.py), so any process that delivers media without booting the
+gateway 
+ a manual ``hermes cron run`` in the CLI, ``hermes send``, a
+standalone cron tick 
+ filtered MEDIA paths under DIFFERENT policy than the
+gateway's scheduled deliveries. In strict/allowlisted enterprise deployments
+that divergence silently dropped attachments from manual cron runs while
+scheduled runs delivered them (text is unaffected 
+ only media goes through
+path validation).
+``apply_media_policy_env()`` is that same translation as a shared, idempotent
+helper. Gateway startup calls it, and every standalone delivery entrypoint
+calls it immediately before filtering media paths.
+Precedence: an explicitly-set environment variable WINS over config.yaml.
+This preserves both the operator contract (env overrides are how deployments
+pin behavior) and gateway/run.py's historical shape (it only wrote the env
+var when the config key was present; we additionally refuse to overwrite a
+pre-existing env value so a shell-exported override survives).
+annotationsN)
+Optional
+HERMES_MEDIA_DELIVERY_STRICT
+HERMES_MEDIA_ALLOW_DIRS
+HERMES_MEDIA_TRUST_RECENT_FILES
+config
+Optional[Dict[str, Any]]
+return
+Dict[str, Any]c
+load_config
+gateway)
+hermes_cli.configr
+Exception
+isinstance
+gateway_cfgs
+HC:\Users\danda\AppData\Local\hermes\hermes-agent\gateway\media_policy.py
+_load_gateway_cfgr
+Bridge gateway media-policy settings from config.yaml into the env.
+    Idempotent and env-wins: a variable already present in the environment is
+    never overwritten, so gateway startup (which runs this same helper) and
+    operator shell exports keep precedence. Never raises 
+ a policy-bridge
+    failure must not break delivery; the validator falls back to its
+    defaults exactly as before.
+strict
+media_delivery_allow_dirsc
+<genexpr>z)apply_media_policy_env.<locals>.<genexpr>N
+trust_recent_filesz
+apply_media_policy_env failedT)
+exc_info)
+environ
+_STRICT_ENV
+_ALLOW_DIRS_ENVr
+pathsep
+_TRUST_RECENT_ENVr
+logger
+debug)
+allow_dirs
+allow_dirs_str
+trust_recents
+      r
+apply_media_policy_envr7
+__doc__
+__future__r
+loggingr)
+typingr
+getLogger
+__name__r2
+<module>r?

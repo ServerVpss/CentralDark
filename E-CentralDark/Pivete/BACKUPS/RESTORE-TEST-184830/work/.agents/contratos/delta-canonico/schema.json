@@ -1,0 +1,265 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "centraldark://contrato/delta-canonico/v1",
+  "title": "Contrato Delta Canônico — Schema Máquina v1",
+  "description": "Schema JSON para contrato Delta permanente e reutilizável, separado de instância transitória.",
+  "type": "object",
+  "required": ["schema_version", "contract_id", "contract_type", "states", "instance"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "enum": [1],
+      "description": "Versão do schema (bloqueia incompatibilidade futura)"
+    },
+    "contract_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$",
+      "description": "Identificador permanente do contrato (nunca muda)"
+    },
+    "contract_type": {
+      "type": "string",
+      "enum": ["DELTA_REUTILIZAVEL"],
+      "description": "Tipo de contrato (determina formato e comportamento)"
+    },
+    "contract_description": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 500
+    },
+    "states": {
+      "type": "object",
+      "required": ["valid_states", "transitions", "forbidden_transitions"],
+      "additionalProperties": false,
+      "properties": {
+        "valid_states": {
+          "type": "array",
+          "items": {"type": "string", "enum": ["IDLE", "ACTIVE", "blocked", "CHECKPOINTED", "READY_FOR_REVIEW", "DONE", "ARCHIVED"]},
+          "minItems": 7,
+          "uniqueItems": true,
+          "description": "Estados válidos (enum protegido)"
+        },
+        "transitions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["from", "to"],
+            "additionalProperties": false,
+            "properties": {
+              "from": {"type": "string"},
+              "to": {"type": "string"},
+              "requires": {"type": "array", "items": {"type": "string"}, "description": "Campos obrigatórios antes de transição"}
+            }
+          },
+          "description": "Transições válidas (whitelist)"
+        },
+        "forbidden_transitions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["from", "to", "reason"],
+            "additionalProperties": false,
+            "properties": {
+              "from": {"type": "string"},
+              "to": {"type": "string"},
+              "reason": {"type": "string"}
+            }
+          },
+          "description": "Transições bloqueadas (fail-closed)"
+        }
+      }
+    },
+    "instance": {
+      "type": "object",
+      "description": "Schema para instâncias transitórias (estado de uma missão)",
+      "required": ["schema_version", "contract_id", "instance_id", "mission_id", "identity", "governance", "status", "head", "last_proof", "next_gate"],
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {"type": "integer", "enum": [1]},
+        "contract_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$", "description": "Deve referenciar o contract_id do contrato permanente"},
+        "instance_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 único da instância"
+        },
+        "mission_id": {
+          "type": "string",
+          "minLength": 10,
+          "description": "Identificador da missão (estável)"
+        },
+        "programa_pai": {
+          "type": "string",
+          "description": "Programa pai (ex: HERMES-CASA-MENTE-ESTENDIDA-01)"
+        },
+        "identity": {
+          "type": "object",
+          "required": ["owner", "coordinator", "role"],
+          "additionalProperties": false,
+          "properties": {
+            "owner": {"type": "string", "description": "Autoridade final (ex: PIVETE)"},
+            "coordinator": {"type": "string", "description": "Coordenadora visível (ex: SOL)"},
+            "role": {"type": "string", "enum": ["EXECUTOR", "DEBUGGER", "REVIEWER", "JUDGE", "HERMES", "READ_ONLY"], "description": "Papel da IA nesta instância"}
+          }
+        },
+        "governance": {
+          "type": "object",
+          "required": ["writer", "readers", "scope_allowed", "scope_denied", "prohibited"],
+          "additionalProperties": false,
+          "properties": {
+            "writer": {
+              "type": "object",
+              "required": ["agent", "workspace"],
+              "additionalProperties": false,
+              "properties": {
+                "agent": {"type": ["string", "null"], "description": "Nome do escritor único ativo (null até o primeiro handoff)"},
+                "workspace": {"type": ["string", "null"], "description": "Branch/worktree/ambiente (null até o primeiro handoff)"},
+                "ownership_since": {"type": "string", "format": "date-time"}
+              }
+            },
+            "readers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["agent", "role"],
+                "properties": {
+                  "agent": {"type": "string"},
+                  "role": {"type": "string"}
+                }
+              }
+            },
+            "scope_allowed": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Caminhos/componentes autorizado"
+            },
+            "scope_denied": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Caminhos/componentes proibidos"
+            },
+            "prohibited": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Ações globalmente proibidas"
+            }
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": ["IDLE", "ACTIVE", "BLOCKED", "CHECKPOINTED", "READY_FOR_REVIEW", "DONE", "ARCHIVED"],
+          "description": "Estado atual"
+        },
+        "phase": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Fase atual (ex: AUDITORIA, IMPLEMENTACAO, TESTES)"
+        },
+        "gate": {
+          "type": "string",
+          "description": "Gate atual (próxima verificação)"
+        },
+        "head": {
+          "type": "object",
+          "required": ["repository", "branch", "sha"],
+          "additionalProperties": false,
+          "properties": {
+            "repository": {"type": "string"},
+            "branch": {"type": ["string", "null"], "description": "null até o primeiro handoff definir o workspace"},
+            "sha": {"type": ["string", "null"], "pattern": "^[a-f0-9]{40}$", "description": "Git commit SHA completo; null até o primeiro handoff"},
+            "tree_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$", "description": "Git tree SHA quando aplicável"}
+          }
+        },
+        "last_proof": {
+          "type": ["object", "null"],
+          "description": "null até existir prova (teste/check/aprovação); objeto obrigatório para transições READY_FOR_REVIEW e DONE",
+          "required": ["type", "reference"],
+          "additionalProperties": false,
+          "properties": {
+            "type": {"type": "string", "enum": ["test", "check", "log", "diff", "manual_validation"]},
+            "reference": {"type": "string", "description": "ID/SHA/URL da prova"}
+          }
+        },
+        "pending": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Pendências não resolvidas"
+        },
+        "next_gate": {
+          "type": "string",
+          "description": "Próxima verificação objetiva"
+        },
+        "next_safe_command": {
+          "type": "string",
+          "enum": ["boot", "calibrar", "reload", "handoff", "close", "reset-instance", "validate"],
+          "description": "Próximo comando seguro a executar"
+        },
+        "created_at": {"type": "string", "format": "date-time"},
+        "updated_at": {"type": "string", "format": "date-time"}
+      }
+    }
+  },
+  "examples": [
+    {
+      "schema_version": 1,
+      "contract_id": "delta-canonico-v1",
+      "contract_type": "DELTA_REUTILIZAVEL",
+      "contract_description": "Contrato Delta permanente para orquestração multi-IA com escritor único e comunicação em delta",
+      "states": {
+        "valid_states": ["IDLE", "ACTIVE", "BLOCKED", "CHECKPOINTED", "READY_FOR_REVIEW", "DONE", "ARCHIVED"],
+        "transitions": [
+          {"from": "IDLE", "to": "ACTIVE"},
+          {"from": "ACTIVE", "to": "BLOCKED"},
+          {"from": "ACTIVE", "to": "CHECKPOINTED"},
+          {"from": "ACTIVE", "to": "READY_FOR_REVIEW"},
+          {"from": "READY_FOR_REVIEW", "to": "DONE"}
+        ],
+        "forbidden_transitions": [
+          {"from": "IDLE", "to": "DONE", "reason": "Deve passar por ACTIVE"},
+          {"from": "DONE", "to": "ACTIVE", "reason": "Mesma instância não volta"}
+        ]
+      },
+      "instance": {
+        "schema_version": 1,
+        "contract_id": "delta-canonico-v1",
+        "instance_id": "a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f9",
+        "mission_id": "CENTRALDARK-CONTRATO-DELTA-REUTILIZAVEL-01",
+        "programa_pai": "HERMES-CASA-MENTE-ESTENDIDA-01",
+        "identity": {
+          "owner": "PIVETE",
+          "coordinator": "SOL",
+          "role": "EXECUTOR"
+        },
+        "governance": {
+          "writer": {
+            "agent": "HAIKU_4_5",
+            "workspace": "feature/delta-canonico-core-20260731"
+          },
+          "readers": [
+            {"agent": "DEBUGGER", "role": "causa_raiz"},
+            {"agent": "REVIEWER", "role": "delta_review"}
+          ],
+          "scope_allowed": [".agents/contratos/delta-canonico/"],
+          "scope_denied": [".agents/skills/meta-lupa/", ".github/workflows/"],
+          "prohibited": ["mergear_main", "deploy", "restart_servico", "alterar_vps"]
+        },
+        "status": "ACTIVE",
+        "phase": "TESTES",
+        "gate": "schema_validation",
+        "head": {
+          "repository": "ServerVpss/CentralDark",
+          "branch": "feature/delta-canonico-core-20260731",
+          "sha": "5f7573492cb13ef5923d388af51ebd3c3abe60f4"
+        },
+        "last_proof": {
+          "type": "test",
+          "reference": "test_schema_validation.py::test_valid_instance"
+        },
+        "pending": [],
+        "next_gate": "state_machine_transitions",
+        "next_safe_command": "validate",
+        "created_at": "2026-07-31T00:00:00Z",
+        "updated_at": "2026-07-31T00:00:00Z"
+      }
+    }
+  ]
+}

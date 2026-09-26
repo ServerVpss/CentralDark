@@ -1,0 +1,1163 @@
+schema: CENTRALDARK_MASTER
+schema_version: 2
+external_interface:
+  master_event: CENTRALDARK
+  accepted:
+  - '!CENTRALDARK'
+  - '#CENTRALDARK'
+  case_insensitive: true
+  single_command_required: true
+  inline_objective: true
+  other_triggers_optional_for_chefe: true
+trigger_router:
+  prefixes:
+  - '!'
+  - '#'
+  prefix_semantics_identical: true
+  normalization: trim -> parse prefix -> uppercase -> alias -> canonical_event
+  fail_closed_unknown: true
+  aliases:
+    VAMOS_MELHORAR_OQUE_JA_EXITE: IMPROVE_EXISTING
+    MELHORE_OQUE_JA_EXITE: IMPROVE_EXISTING
+    VAMOS_MELHORAR_OQUE_JA_EXISTE: IMPROVE_EXISTING
+    MELHORE_OQUE_JA_EXISTE: IMPROVE_EXISTING
+    MULTIBUSSOLA_META: MULTIBUSSOLA
+    MULTIBÚSSOLA_META: MULTIBUSSOLA
+    CRISTALIZAR: CRISTALIZAR
+    CRYSTALIZAR: CRISTALIZAR
+    CRYSTALAIZAR: CRISTALIZAR
+    REALITY_JUDGE: REALITY_JUDGE
+    META_LUPA: META_LUPA
+    RECONCILIAR: RECONCILIAR
+    CONTRAPROVA: CONTRAPROVA
+    BOOT: BOOT
+    DELTAUTIL: DELTAUTIL
+  default_centraldark_policy:
+  - IMPROVE_EXISTING
+  - REUSE_BEFORE_CREATE
+  - PEGATUDO
+  - ZERO_REGRESSION
+  operator_tokens:
+    '>>': FORWARD_CONTINUE
+    '>>>': FORWARD_CONTINUE
+    '<<': REVERSE_REMEASURE
+    <<<: REVERSE_REMEASURE
+  operator_tokens_are_shell_redirection: false
+  operator_tokens_require_master_context: true
+master_chain:
+  entry: CENTRALDARK
+  steps:
+  - ACORDAR
+  - CRISTALIZAR_MEASURE
+  - CRISTALIZAR_FALLBACK
+  - CALIBRAR
+  - PEGATUDO
+  - UNIVERSAL_INVENTORY
+  - DELTAUTIL_RECONCILE
+  - TOTAL_RECONCILIATION_GATE
+  - BRAIN_CONTEXT_RECONCILE
+  - PACKAGE_ACCEPTANCE_GATE
+  - TRUE_NORTH_LOCK
+  - MULTIBUSSOLA
+  - RESOLVE_REQUIRED_BEARINGS
+  - EXECUTE_MATERIAL_BEARINGS
+  - FORWARD_ROUTE
+  - REVERSE_ROUTE
+  - INVERSE_ROUTE_WHEN_DISCRIMINANT
+  - CROSS_BEARING_RENDEZVOUS
+  - DIVERGENCE_HANDLER
+  - MATERIAL_CHANGE_HANDLER
+  - LOCAL_FIXED_POINT_LOOP
+  - META_LUPA_WHEN_APPLICABLE
+  - RECONCILIAR_WHEN_APPLICABLE
+  - CONTRAPROVA
+  - REMEDICAO_T1
+  - REALITY_JUDGE
+  - SITE_READINESS_GATE
+  - CODE_DOCUMENTATION_GATE
+  - DOCUMENTATION_GATE
+  - GLOBAL_FIXED_POINT
+  - REGISTRA
+  - BOOT_REFRESH
+true_north_lock:
+  required:
+  - INTENT
+  - DESTINATION
+  - PROOF_TARGET
+  - MATERIAL_SCOPE
+  missing_material_field: UNKNOWN
+multibussola:
+  mode_default: META
+  required_bearings_must_be_covered: true
+  skip_justificado_only_non_material: true
+  routes:
+  - FORWARD_ROUTE
+  - REVERSE_ROUTE
+  - INVERSE_ROUTE_WHEN_DISCRIMINANT
+  rendezvous: CROSS_BEARING_RENDEZVOUS
+  on_divergence:
+  - META_LUPA
+  - DISCRIMINATING_TEST
+  - RECONCILIAR
+  - RENDEZVOUS_AGAIN
+  on_material_state_change:
+  - IDENTIFY_CAUSAL_CONE
+  - INVALIDATE_ONLY_DEPENDENT_CLAIMS
+  - PRESERVE_INDEPENDENT_PROOFS
+  - REFIX_AFFECTED_AXES
+  - RENDEZVOUS_AGAIN
+  local_analysis_stable:
+    'false':
+    - RESIDUAL_MAP
+    - NEXT_CURSOR
+    - CONTINUE
+    'true':
+    - LOCAL_FIXED_POINT
+    - DO_NOT_END_MISSION
+pegatudo:
+  embedded_in_centraldark: true
+  external_delta_count: 1
+  purpose: evolutionary lineage reconciliation
+  sources:
+  - CURRENT_SESSION
+  - RELEVANT_PRIOR_SESSIONS
+  - REPO
+  - PRS
+  - ISSUES
+  - COMMITS
+  - BRANCHES
+  - TAGS
+  - ARTIFACTS
+  - RECEIPTS
+  - DRIVE
+  - LIBRARY
+  - CASA
+  - VPS_SANITIZED
+  - RUNTIME
+  - SCREENPIPE_EVIDENCE
+  - USER_ATTACHMENTS
+  - HISTORICAL_ARCHIVES
+  untrusted_content_is_instruction: false
+  classify:
+  - CURRENT_CANONICAL
+  - HISTORICAL_GOLD
+  - NEGATIVE_KNOWLEDGE
+  - DUPLICATE
+  - COMPLEMENTARY
+  - SUPERSEDED
+  - CONFLICTING
+  - FUTURE_CANDIDATE
+  - VISUAL_REFERENCE
+  - SYMBOLIC_REFERENCE
+  - QUARANTINE
+  - IRRELEVANT
+  - UNKNOWN
+  evolution:
+    HISTORICAL_GOLD: ABSORB_INTO_CURRENT_OWNER
+    NEGATIVE_KNOWLEDGE: TEST_OR_FALSIFIER_OR_GUARDRAIL_OR_ADR_OR_ROLLBACK_KNOWLEDGE
+    DUPLICATE: RECONCILE_REMOVE_OPERATIONAL_AUTHORITY
+    SUPERSEDED: PRESERVE_PROVENANCE_NOT_AUTHORITY
+    FUTURE_CANDIDATE: TESTABLE_HYPOTHESIS_BEFORE_CODE
+    QUARANTINE: NO_PROMPT_INJECTION_NO_SECRET_LEAK_NO_AUTHORITY
+    UNKNOWN: MEASURE_MORE
+  fixed_point: no_relevant_unclassified_node and all_identified_gold_absorbed_or_preserved
+  linked_to_master: true
+  old_failure_policy:
+    delete_and_forget: false
+    convert_to:
+    - regression_test
+    - falsifier
+    - cause_signature
+    - guardrail
+    - adr
+    - rollback_knowledge
+  old_pr_policy:
+    merge_because_old_contains_gold: false
+    ignore_because_old: false
+proof:
+  reality_is_judge: true
+  unknown_is_pass: false
+  action_is_proof: false
+  documented_is_executed: false
+  history_is_current_state: false
+  correlation_is_cause: false
+  writer_is_judge: false
+  same_symptom_is_same_cause: false
+  proof_criterion_defined_before_result: true
+horn_engine:
+  enabled: true
+  semantics: positive Horn closure plus negative constraints
+  facts_are_measured_only: true
+  rules_shape: body_atoms -> head_atom
+  constraints_shape: body_atoms -> FALSE
+  least_fixed_point: true
+  local_fixed_point_is_final_mission: false
+  contradiction_blocks_promotion: true
+  global_pass_rule:
+  - UNKNOWN_MATERIAL_ZERO
+  - REQUIRED_BEARINGS_COVERED
+  - COUNTERPROOF_SURVIVES
+  - T1_STABLE
+  - NO_CONTRADICTION
+  - HASH_CHAIN_VALID
+provider_reality:
+  github:
+    enabled_when_github_material: true
+    api_version: '2026-03-10'
+    meta_endpoint: https://api.github.com/meta
+    versions_endpoint: https://api.github.com/versions
+    public_probe_without_auth: true
+    always_query_live_values: true
+    receipt_fields:
+    - observed_at
+    - api_version
+    - meta_sha256
+    - domains_sha256
+    - hooks_sha256
+    - api_ranges_sha256
+    - actions_ranges_sha256
+    - ssh_fingerprints_sha256
+    - commit_signing_keys_sha256
+    meta_is_webhook_authentication: false
+    webhook_signature_still_required: true
+    provider_state_role: SENSOR_NOT_AUTHORITY
+screenpipe_evidence_provider:
+  role: GLOBAL_SENSORY_PROVIDER
+  owner: CENTRALDARK
+  second_recorder_forbidden: true
+  local_first: true
+  query_order:
+  - ACTIVITY_SUMMARY
+  - SEARCH
+  - FRAME_CONTEXT
+  - ELEMENTS
+  - OCR_IF_NEEDED
+  - RAW_SQL_READ_ONLY_IF_NEEDED
+  - FILESYSTEM_LOGS_FOR_DIAGNOSTIC
+  sensitive_state_generic_context_forbidden: true
+  sensor_failure_is_world_failure: false
+integrity:
+  algorithm: SHA-256
+  purpose: tamper-evident identity/fingerprint
+  hash_alone_is_authentication: false
+  bind_to:
+  - timestamp
+  - origin
+  - head_when_applicable
+  - receipt
+  - source_class
+  manifest_required: true
+  receipt_chain_required: true
+infra:
+  review_before_execution: true
+  extension_over_replacement: true
+  zero_regression_required: true
+  preserve_legacy_db_and_architecture: true
+  reuse_before_create: true
+  forbid_parallel_versions:
+  - V2
+  - V3
+  - V4
+  - -novo
+  - -final
+  - second_brain
+  - second_router
+  - second_judge
+  new_structure_only_if_gap_real_proven: true
+deploy:
+  select_not_assume: true
+  smallest_safe_first: MICRO_DEPLOY
+  strategies:
+  - MICRO_DEPLOY
+  - ROLLING
+  - CANARY
+  - BLUE_GREEN
+  risk_inputs:
+  - change_surface
+  - blast_radius
+  - rollback_cost
+  - statefulness
+  - traffic_exposure
+  - observability_gap
+  - dual_environment_cost
+  risk_formula: 0.20*change_surface + 0.20*blast_radius + 0.15*rollback_cost + 0.15*statefulness + 0.10*traffic_exposure +
+    0.10*observability_gap + 0.10*dual_environment_cost
+  old_state_available_until_new_proven: true
+  recalculate_after_material_change: true
+global_fixed_point:
+  PASS:
+  - UNKNOWN_MATERIAL=0
+  - REQUIRED_BEARINGS_COVERED
+  - COUNTERPROOF_SURVIVES
+  - T1_STABLE
+  - NO_CONTRADICTION
+  - HASH_CHAIN_VALID
+  - CODE_DOCUMENTATION_GATE_PASS
+  - DOCUMENTATION_GATE_PASS
+  FAIL: stable_material_failure
+  BLOCKED: stable_real_external_boundary_or_required_human_authority
+  no_false_green: true
+register:
+  fields:
+  - timestamp_with_timezone
+  - origin
+  - source_class
+  - head_when_applicable
+  - sha256
+  - proof_target
+  - result
+  - counterproof
+  - links
+  - provenance
+  boot_refresh_after_receipt: true
+visual_layer:
+  role: EXPLANATION_AND_CANONICAL_MAP
+  technical_proof: false
+  user_supplied_art_preserved: true
+  symbolic_sources_never_override_technical_sources: true
+final_rule: MELHORAR O QUE JA EXISTE; PEGAR TUDO; PROVAR; RECONCILIAR; MUDAR O MINIMO; PRESERVAR O OURO; NUNCA REGREDIR.
+mission:
+  external_delta_count: 1
+  create_parallel_system: false
+  preserve_thread: true
+master_command: '#ACORDAR !CALIBRAR #PEGATUDO !CENTRALDARK'
+delta:
+  external_count: 1
+  internal_components: N
+  user_visible_count: 1
+branch_reconciliation:
+  required_before_material_validation: true
+  target_base: main
+  stale_base_is_not_repo_defect: true
+  stale_base_resolution_order:
+  - FETCH_TARGET_BASE
+  - COMPARE_MERGE_BASE
+  - CLASSIFY_BASE_DRIFT
+  - MERGE_TARGET_BASE_INTO_PR_BRANCH_WHEN_SHARED
+  - RERUN_VALIDATORS
+  - ONLY_THEN_MUTATE_OWNER_FILES
+  shared_pr_branch_policy: MERGE_BASE_UPDATE_PREFERRED
+  rebase_shared_branch_without_explicit_policy: false
+  plain_force_push_forbidden: true
+  validator_baseline_must_not_be_weakened_to_match_stale_branch: true
+  parallel_existing_rule: SYNC_BASE_THEN_RERUN; NEVER_CHANGE_EXPECTED_1_TO_STALE_12
+meta_lupa_identity:
+  skill_path: .agents/skills/meta-lupa/SKILL.md
+  identity_path: .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
+  identity_algorithm: GIT_BLOB_OBJECT_ID
+  compute_from_current_branch_bytes: true
+  manual_stale_sha_forbidden: true
+  regenerate_after_skill_change_or_base_sync: true
+  verify_with_git_hash_object: true
+  failure_class: IDENTITY_DRIFT_NOT_CONTENT_FAILURE
+pr_1388_observed_repair:
+  source: USER_SCREENSHOT_2026-08-31
+  observed_problem:
+  - PR_BRANCH_WAS_STALE_AGAINST_MAIN_WITH_PR_1386_EFFECTS
+  - VALIDATOR_REPORTED_PARALLEL_EXISTING_12_WHERE_CURRENT_BASE_EXPECTED_1
+  - META_LUPA_IDENTITY_SHA_NEEDED_REGENERATION_FROM_CURRENT_SKILL_BYTES
+  repair:
+  - SYNC_PR_BRANCH_WITH_CURRENT_MAIN
+  - RERUN_VALIDAR_MAPA_WITHOUT_WEAKENING_EXPECTATION
+  - REGENERATE_AUTOLUPA_CANONICAL_SHA_FROM_SKILL_MD
+  - RERUN_IDENTITY_AND_GLOBAL_GATES
+  - COMMIT_ARCHITECTURE_AND_REPAIR_TO_SAME_PR_BRANCH
+  github_write_status: BLOCKED_CONNECTOR_UNAVAILABLE_THIS_RUN
+universal_master_funnel:
+  enabled: true
+  master_event: CENTRALDARK
+  any_recognized_external_trigger_enters_master_once: true
+  direct_subtrigger_bypass_forbidden: true
+  master_reentry_guard: true
+  canonical_phase_prefix:
+  - ACORDAR
+  - CRISTALIZAR_MEASURE
+  - CRISTALIZAR_FALLBACK
+  fallback_switch_requires_proven_material_failure: true
+  material_action_requires:
+  - MASTER_CONTEXT_ACTIVE
+  - ACORDAR_DONE
+  - CRISTALIZAR_MEASURE_DONE
+  - FALLBACK_EVALUATED
+  - REQUIRED_CANONICAL_PHASES_SATISFIED
+  - NO_MATERIAL_UNKNOWN
+  fail_action:
+  - BLOCK_MATERIAL_ACTION
+  - EMIT_RECEIPT
+  - NEXT_CURSOR
+hub_capability_fabric:
+  reuse_existing_hub: true
+  hub_is_container_not_single_app: true
+  one_hub_n_capabilities: true
+  one_hub_n_apps: true
+  one_hub_n_providers: true
+  one_hub_n_connectors: true
+  one_hub_n_models: true
+  second_hub_forbidden: true
+  second_authority_forbidden: true
+  n_capabilities_implies_n_authorities: false
+  n_apps_implies_n_masters: false
+  n_providers_implies_n_truths: false
+centraldark_router_gemini_context_fabric:
+  reuse_existing_centraldark_router: true
+  second_router_forbidden: true
+  router_is_authority: false
+  router_requires_master_context: true
+  gemini:
+    role: READ_ONLY_SPECIALIZED_READER
+    may_write: false
+    may_judge: false
+    may_self_approve: false
+    raw_secrets_allowed: false
+    output_class: EVIDENCE_CANDIDATE
+    operational_ready_requires_live_measurement: true
+  safe_path:
+  - SOURCE_ADAPTERS
+  - SANITIZE_AND_QUARANTINE
+  - CENTRALDARK_ROUTER
+  - GEMINI_SWEEP
+  - REALITY_SCOPE_GATE
+  - RENDEZVOUS
+  - RECONCILE
+  - CURRENT_REALITY
+  - EXISTING_OWNER
+  - ONE_WRITER
+  - TEST
+  - FALSIFIER
+  - REALITY_JUDGE
+  - RECEIPT
+  - DURABLE_CONTEXT
+  durable_context:
+    drive_workspace_is_authority: false
+    persist_raw_secrets: false
+    persist_full_raw_external_sources_by_default: false
+    persist:
+    - FACT
+    - SOURCE_REF
+    - REVISION_OR_HEAD
+    - SHA256
+    - OWNER
+    - PROOF
+    - COUNTERPROOF
+    - RECEIPT
+    - NEXT_CURSOR
+adversarial_falsifier:
+  role: READ_ONLY_SPECIALIZED_READER
+  may_write: false
+  may_self_approve: false
+  reports_evidence_not_patches: true
+  attacks:
+  - FALSE_GREEN
+  - STALE_STATE
+  - SCOPE_REDUCTION
+  - OWNER_MISMATCH
+  - REGRESSION
+  - BYPASS
+  - WEAK_TEST
+  - UNPROVEN_CLAIM
+  - FALLBACK_GAP
+  - WRITER_COLLISION
+  - DUPLICATE_ENGINE
+google_workspace_control_plane:
+  credential_plane_is_agent_plane: false
+  raw_secret_in_agent_context: false
+  reuse_compatible_oauth_client_project: true
+  missing_scopes_require_reauthorization_when_provider_requires: true
+  human_consent_when_google_requires: true
+  capabilities:
+  - DRIVE
+  - DOCS
+  - SHEETS
+  - GMAIL
+  - CALENDAR
+  - CONTACTS
+  - GEMINI
+  ui_off_only_visual: false
+  off_blocks_calls: true
+  hard_disconnect_separate_action: true
+package_runtime_boundary:
+  architecture_contract_is_runtime_proof: false
+  github_remote_state: UNKNOWN_THIS_PACKAGE_BUILD_UNLESS_LIVE_MEASURED
+  gemini_router_ready: UNKNOWN_UNLESS_LIVE_MEASURED
+  google_oauth_authenticated: UNKNOWN_UNLESS_LIVE_MEASURED
+documentation_hub:
+  enabled: true
+  reuse_existing_hub: true
+  second_documentation_authority_forbidden: true
+  panel_tab: DOCUMENTACAO
+  material_change_requires_documentation_gate: true
+  missing_required_documentation_is_pass: false
+  port_state_requires_expected_observed_and_proof: true
+  knowledge_library_scope_default: AUTHORIZED_CENTRALDARK_ONLY
+  multi_account_namespace: GOOGLE/<account_alias>/<capability>
+  raw_secrets_in_documentation: false
+  raw_secrets_in_gemini_context: false
+  categories_alphabetical:
+  - AUDIO
+  - CODIGO
+  - DADOS
+  - DESIGN-E-ARTES
+  - DOCS
+  - IMAGENS
+  - PDF
+  - TEXTO
+  - VIDEO
+swarm_graph_fabric:
+  mode: EXTEND_EXISTING_ONLY
+  adaptive_fanout_min: 1
+  adaptive_fanout_max: 10
+  mirror_factor_max: 5
+  mirror_depth_default: 1
+  mirror_depth_hard_max: 2
+  mirror_readers_only: true
+  triaxial_axes:
+  - TOP_DOWN
+  - BOTTOM_UP
+  - CROSS_GRAPH
+  rendezvous_before_reconcile: true
+  graph_is_authority: false
+  model_identity_is_architectural_identity: false
+  provider_selected_by_centraldark_router: true
+tui_visual_fabric:
+  mode: EXTEND_EXISTING_ONLY
+  default_profile: professional
+  canonical_id_immutable_by_display_alias: true
+  semantic_icons_optional: true
+  rgb_configurable: true
+  no_color_supported: true
+  reduced_motion_supported: true
+  machine_receipts_plain_text: true
+  emoji_registry: ui/emoji-tui/emoji-registry.json
+universal_inventory:
+  enabled: true
+  goal: inventory all materially relevant system surfaces before promotion or deploy
+  adaptive_parallel_readers: true
+  reader_fronts_max: 10
+  mirror_factor_max: 5
+  readers_may_write: false
+  sources:
+  - REPO
+  - GITHUB_REMOTE
+  - DRIVE
+  - WORKSPACE
+  - LOCAL_WORKTREES
+  - RUNTIME
+  - ROUTER
+  - HUB
+  - SKILLS
+  - CONTRACTS
+  - TESTS
+  - DOCS
+  - RECEIPTS
+  - LIBRARY
+  - PROVIDERS
+  fronts:
+  - code_graph
+  - contracts_and_gates
+  - tests_and_falsifiers
+  - skills_and_aliases
+  - hub_and_ui
+  - providers_and_oauth
+  - runtime_and_routes
+  - github_and_worktrees
+  - drive_workspace_library
+  - security_docs_receipts
+  axes:
+  - TOP_DOWN
+  - BOTTOM_UP
+  - CROSS_GRAPH
+  rendezvous_required: true
+  deduplicate_by:
+  - CANONICAL_ID
+  - OWNER
+  - SOURCE_REF
+  - SHA256_WHEN_AVAILABLE
+  output:
+  - INVENTORY_GRAPH
+  - MATERIAL_GAPS
+  - OWNER_MAP
+  - DEPENDENCY_MAP
+  - READINESS_MAP
+  - NEXT_CURSOR
+  unknown_is_gap_not_pass: true
+one_command_execution:
+  entry: '!CENTRALDARK <objective?>'
+  bare_master_means: CONTINUE_CURRENT_DURABLE_MISSION_FROM_NEXT_CURSOR
+  objective_inline_supported: true
+  inventory_first: true
+  prepare_to_percent: 90
+  final_percent_reserved_for:
+  - human_names_and_labels_when_requested
+  - irreducible_external_authority
+  - final_deploy_or_activation_when_objective_requires
+  deploy_requires:
+  - DEPLOY_INTENT_ACTIVE
+  - SITE_READINESS_PASS
+  - DOCUMENTATION_GATE_PASS
+  - COUNTERPROOF_SURVIVES
+  - NO_MATERIAL_UNKNOWN
+  - ONE_WRITER_SCOPE_PRESERVED
+  no_deploy_intent: STOP_AT_READY_FOR_DEPLOY
+  explicit_deploy_objective: SELECT_DEPLOY_AND_EXECUTE
+  never_assume_deploy_from_inventory_only: true
+site_readiness_gate:
+  required_before_deploy: true
+  checks:
+  - inventory_complete_for_material_scope
+  - owners_known
+  - routes_resolved
+  - hub_registry_consistent
+  - oauth_secretrefs_valid
+  - docs_indexed
+  - tests_pass
+  - falsifier_survives
+  - rollback_or_recovery_known
+  - observability_ready
+  pass_output: READY_FOR_DEPLOY
+  fail_output: NEXT_CURSOR
+capability_harvest:
+  enabled: true
+  owner: PEGATUDO
+  search_only_is_completion: false
+  material_discovery_requires_reconcile: true
+  useful_discovery_must_be_disposed: true
+  disposition:
+  - ABSORB_INTO_EXISTING_OWNER
+  - CONVERT_TO_TEST_OR_FALSIFIER
+  - PRESERVE_PROVENANCE
+  - QUARANTINE
+  - NEXT_CURSOR
+  - IRRELEVANT_WITH_REASON
+  named_skill_resolution:
+    exact_name_missing_is_new_skill_permission: false
+    flow:
+    - RESOLVE_EXACT_SKILL
+    - IF_MISSING_SEARCH_BY_CAPABILITY
+    - MATCH_EXISTING_OWNER
+    - LOAD_CLOSEST_COMPATIBLE_CONTRACT
+    - PROVE_COMPATIBILITY
+    - CONTINUE_WITHOUT_INVENTING_SKILL
+    unresolved_material_ambiguity: UNKNOWN
+  fable:
+    role: AUXILIARY_REVIEW_METHOD
+    authority: false
+    master_replacement: false
+    meta_lupa_replacement: false
+    missing_fable_named_skill_may_be_fabricated: false
+media_caption_intake:
+  mode: EXTEND_EXISTING_LIBRARY_AND_DOCUMENTATION_HUB
+  source_debug_json_is_full_caption_payload: false
+  youtube_debug_locator_fields:
+  - debug_videoId
+  - docid
+  - cc
+  - au_d
+  - len
+  - origin
+  - timestamp
+  - reqBlocked
+  caption_track_identity_source:
+  - OBSERVED_TIMEDTEXT_REQUEST
+  - PLAYER_RESPONSE_CAPTION_TRACKS
+  - AUTHORIZED_TRANSCRIPT_SOURCE
+  timedtext_locator_fields:
+  - v
+  - lang
+  - kind
+  - name
+  - tlang
+  - fmt
+  captions_js_is_stable_api_contract: false
+  raw_media_is_authority: false
+  extracted_text_is_current_reality_without_reconcile: false
+  promotion_path:
+  - IDENTIFY_MEDIA
+  - LOCATE_CAPTION_TRACK
+  - ACQUIRE_COMPLETE_AUTHORIZED_TEXT
+  - PROVE_COMPLETENESS
+  - NORMALIZE
+  - DEDUPE
+  - REALITY_SCOPE_GATE
+  - RECONCILE
+  - CAPABILITY_HARVEST
+  - EXISTING_OWNER
+  - TEST_OR_FALSIFIER_WHEN_MATERIAL
+  - DOCUMENTATION_GATE
+  - RECEIPT
+dense_skill_handoff:
+  enabled: true
+  purpose: HIGH_DENSITY_MACHINE_HANDOFF
+  sacrifice_grammar_for_concision: true
+  sacrifice_semantic_fields: false
+  required_fields:
+  - SKILL
+  - TRIG
+  - OWNER
+  - IN
+  - PRE
+  - EXEC
+  - OUT
+  - PROOF
+  - FAIL
+  - NEXT
+  - REV
+  prose_required: false
+  secrets_allowed: false
+  successor_must_remeasure: true
+delta_utils:
+  enabled: true
+  canonical_owner: DELTAUTIL
+  reuse_existing_deltautil_owner: true
+  second_delta_engine_forbidden: true
+  role: SEMANTIC_DELTA_RECONCILER
+  grammar_may_compress: true
+  semantic_fields_may_drop: false
+  proof_fields_may_drop: false
+  history_may_be_replaced_by_digest: false
+  compact_index: docs/DELTAUTIL-COMPACT-SEMANTIC.yml
+  flow:
+  - INGEST_CANDIDATE
+  - NORMALIZE
+  - SECRET_SCRUB
+  - SEMANTIC_DIGEST
+  - OWNER_MATCH
+  - COMPATIBILITY_SCORE
+  - SECURITY_GATE_COVERAGE
+  - REGRESSION_RISK
+  - GEMINI_READ_ONLY_REVIEW_WHEN_AVAILABLE
+  - FALSIFIER
+  - PREVIEW
+  - ONE_WRITER_IF_APPROVED
+  - TEST
+  - DOCUMENTATION_GATE
+  - RECEIPT
+  percentages_are_proof: false
+  unknown_score_may_be_faked: false
+gemini_modal:
+  enabled: true
+  reuse_existing_hub: true
+  route_via_existing_centraldark_router: true
+  gemini_role: READ_ONLY_ANALYST
+  gemini_may_write: false
+  gemini_may_install: false
+  gemini_may_self_approve: false
+  surface: HUB_MODAL
+  displays:
+  - candidate_summary
+  - source_and_provenance
+  - owner_match
+  - compatibility_percent
+  - evidence_coverage_percent
+  - integration_readiness_percent
+  - security_gate_coverage_percent
+  - regression_risk_percent
+  - projected_gain_percent_or_unknown
+  - before_after_graph
+  - conflicts
+  - missing_proof
+  actions:
+  - PREVIEW
+  - TEST
+  - IMPORT
+  - MERGE_INTO_EXISTING_OWNER
+  - REJECT
+  status_dots:
+    ACTIVE_PASS: GREEN
+    PENDING_UNKNOWN: YELLOW
+    BLOCKED_CONFLICT: RED
+    AVAILABLE_INFO: BLUE
+    DISABLED: BLACK
+  color_is_proof: false
+workspace_plugin_surface:
+  enabled: true
+  hub_sections:
+  - WORKSPACES
+  - PLUGINS
+  - CONNECTIONS
+  - DELTA_INBOX
+  - GEMINI_MODAL
+  prefer_internal_admin_surface: true
+  external_navigation_minimized: true
+  embed_order:
+  - NATIVE_ADAPTER
+  - SAFE_IFRAME_IF_PROVIDER_ALLOWS
+  - SERVER_SIDE_API_ADAPTER
+  - ONE_TIME_EXTERNAL_AUTH_IF_PROVIDER_REQUIRES
+  iframe_requires_frame_policy_pass: true
+  iframe_must_respect_csp_frame_ancestors: true
+  iframe_must_respect_x_frame_options: true
+  iframe_may_bypass_provider_security: false
+  iframe_unknown_policy: DO_NOT_EMBED
+  plugin_install:
+    sources:
+    - GITHUB_URL
+    - DRIVE_FILE
+    - MARKDOWN
+    - ZIP
+    - MANIFEST
+    - AUTHORIZED_WEBHOOK
+    - CHAT_WINDOW
+    - PERSONAL_CONTEXT
+    - SCHEDULED_TASKS
+    - LOCAL_SYNC_SURFACE
+    requires_secret_scrub: true
+    requires_owner_match: true
+    requires_compatibility_preview: true
+    requires_falsifier: true
+    requires_tests: true
+    requires_receipt: true
+    direct_install_without_master: false
+    install_creates_second_engine: false
+update_fabric:
+  owner: DELTAUTIL
+  activation: WHEN_UPDATE_OR_DISTRIBUTION_OR_BUILDER_INTENT_IS_MATERIAL
+  mandatory_global_phase: false
+  same_package_same_lineage: true
+  parallel_package_for_update_forbidden: true
+  accepted_ingress:
+  - DRIVE
+  - GITHUB
+  - CLI
+  - TERMINAL
+  - SSH
+  - AUTHORIZED_WEBHOOK
+  - HUB_UPLOAD
+  - CURRENT_CHAT
+  - PERSONAL_CONTEXT
+  - SCHEDULED_TASKS
+  - LOCAL_SYNC_SURFACE
+  flow:
+  - INGEST
+  - NORMALIZE
+  - SECRET_SCRUB
+  - DEDUPE
+  - REALITY_SCOPE_GATE
+  - EXISTING_OWNER_MATCH
+  - DELTAUTIL_RECONCILE
+  - UPDATE_FABRIC_RECONCILE
+  - TEST
+  - COUNTERPROOF
+  - DOCUMENTATION_GATE
+  - SAME_PACKAGE_REGISTER
+  - RECEIPT
+  deploy_requires_explicit_intent: true
+  builder_is_factory_not_authority: true
+  bidirectional_sync:
+    enabled: true
+    rule: MISSING_DELTA_ONLY
+    source_failure_is_world_failure: false
+    conflict_action: STOP_WRITE_AND_RECONCILE
+temporal_identity_display:
+  machine_date: YYYY-MM-DD
+  package_partition: YYYY-MM-DD
+  human_locale: pt-BR
+  human_datetime: DD/MM/YYYY HH:mm:ss
+  timezone_required: true
+  preferred_timezone: America/Sao_Paulo
+  canonical_timestamp_storage: RFC3339_WITH_OFFSET
+  user_display:
+  - display_name
+  - handle_or_alias_if_available
+  - source_role
+  - author_revision
+  secret_or_sensitive_identity_in_receipt: false
+  display_format_is_authority: false
+cross_session_reconciliation:
+  enabled: true
+  owner: DELTAUTIL
+  sources:
+  - CURRENT_CHAT
+  - OTHER_CHAT_WINDOWS
+  - PERSONAL_CONTEXT
+  - SCHEDULED_TASKS
+  - DRIVE
+  - GITHUB_WHEN_AVAILABLE
+  - LOCAL_CLI
+  - LOCAL_WORKTREE
+  - AUTHORIZED_WEBHOOK
+  rules:
+    history_is_current_state: false
+    chat_memory_is_authority: false
+    scheduled_task_is_runtime_proof: false
+    source_failure_is_world_failure: false
+    secret_values_may_persist: false
+    same_fact_dedup_by_source_revision_hash: true
+    unknown_remains_unknown: true
+  flow:
+  - INGEST
+  - SECRET_SCRUB
+  - DEDUPE
+  - CLASSIFY_HISTORY_CURRENT_UNKNOWN
+  - OWNER_MATCH
+  - RENDEZVOUS
+  - RECONCILE
+  - MATERIALITY_GATE
+  - DOCUMENTATION_GATE
+  - RECEIPT
+  - NEXT_CURSOR
+  forgotten_work_disposition:
+  - CURRENT_ACTIONABLE
+  - HISTORICAL_ONLY
+  - SUPERSEDED
+  - DUPLICATE
+  - BLOCKED
+  - UNKNOWN
+  - ARCHIVE_CANDIDATE
+oauth_bootstrap_control:
+  enabled: true
+  owner: HUB_CONNECTIONS
+  authorization_code_is_access_token: false
+  authorization_code_is_refresh_token: false
+  authorization_code_persist_allowed: false
+  raw_token_in_docs: false
+  raw_token_in_receipts: false
+  secretref_only_after_exchange: true
+  buttons:
+  - CONNECT_OAUTH
+  - REAUTHORIZE
+  - REFRESH_IF_SUPPORTED
+  - TEST
+  - DETAILS
+  - DISABLE
+  - REVOKE_DISCONNECT
+  flow:
+  - DISCOVER_PROVIDER
+  - BUILD_AUTH_URL
+  - HUMAN_CONSENT_IF_REQUIRED
+  - RECEIVE_EPHEMERAL_AUTH_CODE
+  - EXCHANGE_IN_CREDENTIAL_PLANE
+  - STORE_SECRETREF
+  - MEASURE_GRANTED_CAPABILITIES
+  - TEST
+  - REGISTER
+  - REFRESH_IF_SUPPORTED
+  - REMEASURE
+  - RECEIPT
+  plugin_rule: EACH_PLUGIN_APP_USES_ITS_OWN_PROVIDER_AUTH_CONFIG_AND_CALLBACK; NEVER_REUSE_RANDOM_CALLBACK_CODE_AS_GENERIC_PLUGIN_TOKEN
+hermes_speed_fabric:
+  enabled: true
+  owner: CENTRALDARK_RUNTIME_TOOLING
+  goal: MINIMUM_DISCRIMINANT_LATENCY_WITHOUT_DUPLICATE_WORK
+  engines:
+    PYTHON:
+    - AST
+    - HASH
+    - STRUCTURED_INDEX
+    - JSON_YAML
+    - GRAPH
+    - BATCH_CLASSIFY
+    POWERSHELL7:
+    - WINDOWS_PROCESS
+    - SERVICE
+    - PORT
+    - FILESYSTEM
+    - REGISTRY_WHEN_AUTHORIZED
+    - PARALLEL_READS
+    RIPGREP_IF_PRESENT:
+    - TEXT_SEARCH
+    FD_IF_PRESENT:
+    - PATH_DISCOVERY
+  routing:
+  - FEATURE_DETECT
+  - CHOOSE_CHEAPEST_PROVEN_ENGINE
+  - CACHE_BY_PATH_MTIME_SIZE_HASH_HEAD
+  - DELTA_SCAN_FIRST
+  - FULL_SCAN_ONLY_WHEN_DISCRIMINANT
+  - ADAPTIVE_FANOUT_K
+  - RENDEZVOUS
+  - RECONCILE
+  rules:
+    n_agents_same_file: false
+    busy_loop: false
+    ocr_continuous_without_demand: false
+    blind_global_rescan: false
+    cache_is_truth: false
+    k_is_minimum_parallelism_for_next_discriminant: true
+scheduled_task_ledger:
+  enabled: true
+  owner: DOCUMENTATION_HUB
+  active_task_snapshot:
+  - title: CentralDark Status
+    cadence: DAILY
+    state: ACTIVE
+    source: AUTOMATIONS_LIVE_MEASURED_2026-08-31
+  disabled_tasks_promoted_as_active: false
+  panel: TASKS_AND_NEXT_CURSOR
+visual_cli_capability_catalog:
+  owner: TUI_VISUAL_FABRIC
+  status: OPTIONAL_NOT_INSTALLED_UNLESS_MEASURED
+  candidates:
+  - FASTFETCH
+  - BTOP
+  - CAVA
+  - PIPES_SH
+  - AAFIRE
+  professional_default: true
+  effects_never_replace_telemetry: true
+  install_state_unknown_is_installed: false
+house_documentation_standard:
+  enabled: true
+  owner: DOCUMENTATION_HUB
+  human_language: pt-BR
+  code_identifiers: ENGLISH
+  technical_view_required: true
+  mental_map_required: true
+  mental_map_may_replace_technical_view: false
+  material_line_traceability_required: true
+  comment_every_line_required: false
+  touched_material_code_requires_doc_delta: true
+  exported_public_symbol_requires_contract: true
+  missing_parser_is_pass: false
+  missing_owner_is_pass: false
+  missing_doc_is_pass: false
+  stale_doc_is_pass: false
+  raw_secret_allowed: false
+  standard_file: docs/CODE-DOCUMENTATION-HOUSE-STANDARD.yml
+communication_modes:
+  default: TRABALHO
+  human_language: pt-BR
+  resenha_requires_explicit_operator_intent: true
+  work_mode:
+    objective_first: true
+    parrot_request: false
+    unnecessary_jargon: false
+    status_emoji_only_when_semantic: true
+    exact_paths_links_heads_when_available: true
+  resenha_mode:
+    baianes_allowed: true
+    biblical_context_allowed: true
+    humor_allowed: true
+    authority_rules_unchanged: true
+    truth_rules_unchanged: true
+  standard_file: docs/COMMUNICATION-MODES.yml
+plug_play_capability_package:
+  enabled: true
+  owner: UPDATE_FABRIC
+  contract: plugin/capability-package-contract.yml
+  same_lineage_improves_in_place: true
+  install_to_guessed_path: false
+  parallel_owner_allowed: false
+  raw_secret_allowed: false
+  documentation_gate_required: true
+  tests_and_falsifier_required: true
+  rollback_required: true
+  receipt_required: true
+hermes_upstream_bridge:
+  enabled: true
+  owner: DELTAUTIL
+  hermes_upstream_is_capability_source_not_local_authority: true
+  centraldark_cli_is_operator_owned_shell: true
+  preserve_visual_shell: true
+  preserve_skills_and_governance: true
+  blind_upstream_merge_forbidden: true
+  check_before_apply: true
+  sandbox_before_promotion: true
+  capability_diff_required: true
+  adapter_or_overlay_preferred: true
+  backup_required: true
+  rollback_required: true
+  restart_requires_explicit_intent: true
+  update_button_default: CHECK_ONLY
+  integration_contract: integration/documentation-upstream-hermes.yml
+js_ts_toolchain_research:
+  observed_at: '2026-08-31'
+  status: RESEARCHED_NOT_INSTALLED
+  candidates:
+  - OXLINT
+  - BIOME
+  - ROLLDOWN
+  - TYPEDOC
+  shadow_before_replace: true
+  rust_alone_is_not_adoption_proof: true
+  reference: docs/JS-TS-RUST-TOOLCHAIN-CANDIDATES-2026-08-31.yml
+github_profile_continuous:
+  enabled: true
+  profile_readme_is_continuous_state: true
+  global_centraldark_may_be_marked_finalized: false
+  delivery_can_be_completed: true
+  status_requires_observation_date_or_revision: true
+  template: docs/GITHUB-PROFILE-CONTINUOUS-README.md
+  remote_mutation_requires_live_github_connector: true
+
+
+total_reconciliation:
+  enabled: true
+  owner: DELTAUTIL
+  master: CENTRALDARK
+  mode: RECONCILE_EXISTING_ONLY
+  command_contract: commands/RECONCILIAR-TOTAL.yml
+  source_authority_matrix: docs/SOURCE-AUTHORITY-MATRIX.yml
+  brain_contract: docs/BRAIN-RECONCILIATION.yml
+  generation_handoff: docs/AGENT-GENERATIONAL-HANDOFF.md
+  source_roles:
+    GITHUB_LIVE: DESIRED_VERSIONED_TRUTH
+    CASA_LIVE: ACTUAL_STATE_SENSOR
+    VPS_LIVE: ACTUAL_STATE_SENSOR
+    DRIVE_CENTRALDARK: DURABLE_LIBRARY_AND_MIRROR_NOT_CANONICAL
+    ESPELHOS_DO_GITHUB: REFERENCE_MIRROR_NOT_AUTHORITY
+    CHAT_SESSION: INTENT_AND_TRANSIENT_CONTEXT_NOT_PERSISTENCE
+  invariants:
+    improve_existing_only: true
+    no_parallel_v2_v3_v4: true
+    one_writer_per_mutable_scope: true
+    executor_self_approval_allowed: false
+    judge_may_mutate: false
+    unknown_is_pass: false
+    secret_values_may_enter_receipt: false
+    destructive_cleanup_without_specific_authority: false
+    direct_main_push_allowed: false
+    force_push_allowed: false
+    drive_mirror_may_override_live_github: false
+    runtime_state_may_override_desired_state_without_reconciliation: false
+  technical_acceptance:
+    automatic_review_all_package_capabilities: true
+    auto_mark_pass_without_proof: false
+    requires_owner_resolved: true
+    requires_contract: true
+    requires_documentation: true
+    requires_tests: true
+    requires_falsifier_or_counterproof: true
+    requires_exact_tested_head_equals_candidate_head: true
+    requires_ci_latest_head_green_when_ci_material: true
+    merge_is_separate_authority: true
+    deploy_is_separate_authority: true
+  transport_fallback:
+    github_order:
+    - GITHUB_CONNECTOR
+    - GH_CLI_IF_ALREADY_AUTHENTICATED
+    - GIT_REMOTE_READ
+    - DRIVE_MIRROR_REFERENCE_ONLY
+    github_unavailable_and_no_remote_sensor: REMOTE_CURRENT_UNKNOWN
+    drive_order:
+    - DRIVE_CONNECTOR
+    - EXISTING_AUTHENTICATED_LOCAL_PROVIDER
+    - LOCAL_SYNCED_MIRROR_IF_MEASURED
+    drive_unavailable: DRIVE_CURRENT_UNKNOWN
+    transport_failure_is_world_failure: false
+  webhook_policy:
+    role: ACCELERATOR_NOT_SOLE_RECONCILER
+    idempotency_required: true
+    signature_required_when_supported: true
+    repo_and_branch_scope_required: true
+    webhook_event_triggers_measure_not_blind_apply: true
+    periodic_or_boot_reconciliation_required: true
+  scope_collision_guard:
+    enabled: true
+    bind_every_document_to_declared_repo_owner_runtime_before_promotion: true
+    cross_project_rules_may_be_generalized_only_after_owner_neutral_proof: true
+    port_or_webhook_from_other_repo_may_become_global_truth: false
+  brain_reconciliation:
+    discover_live_before_binding: true
+    primary_brain_owner: DISCOVER_LIVE
+    second_brain_candidate_from_mirror: docs/BRAIN
+    ia_memory_candidate_from_mirror: docs/CONSCIENCIA
+    exg_or_exigia_owner: DISCOVER_EXACT_NAME_LIVE
+    missing_candidate_creates_new_brain: false
+    mirror_brain_is_authority: false
+  loop:
+    max_cycles: 10
+    stop_on:
+    - FIXED_POINT_PASS
+    - BLOCKED_EXTERNAL_AUTHORITY
+    - NO_PROGRESS_WITH_RECEIPT
+    stable_failure_action: RECEIPT_AND_NEXT_CURSOR

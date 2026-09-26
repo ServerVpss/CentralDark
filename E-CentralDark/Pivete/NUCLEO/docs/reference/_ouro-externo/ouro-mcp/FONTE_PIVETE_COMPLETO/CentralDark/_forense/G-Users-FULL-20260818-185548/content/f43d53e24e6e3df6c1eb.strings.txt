@@ -1,0 +1,188 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\__pycache__\checkpoints.cpython-311.pyc
+
+`hermes checkpoints` CLI subcommand.
+Gives users direct visibility and control over the filesystem checkpoint
+store at ``~/.hermes/checkpoints/``.  Actions:
+    hermes checkpoints               # same as `status`
+    hermes checkpoints status        # total size, project count, breakdown
+    hermes checkpoints list          # per-project checkpoint counts + workdir
+    hermes checkpoints prune [opts]  # force a sweep (ignores the 24h marker)
+    hermes checkpoints clear [-f]    # nuke the entire base (asks first)
+    hermes checkpoints clear-legacy  # delete just the legacy-* archives
+Examples::
+    hermes checkpoints
+    hermes checkpoints prune --retention-days 3 --max-size-mb 200
+    hermes checkpoints clear -f
+None of these require the agent to be running.  Safe to call any time.
+annotationsN)
+datetime)
+Optional)
+format_bytes
+return
+%Y-%m-%d %H:%M
+fromtimestamp
+strftime
+TypeError
+ValueError)
+JC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\checkpoints.py
+_fmt_tsr
+s agoi
+m agoi
+h agoz
+d ago)
+_fmt_ager
+argparse.Namespacer
+store_status
+Checkpoint base: z
+Total size:      
+total_size_bytesz
+  store/         
+store_size_bytesz
+  legacy-*       
+legacy_size_bytesz
+Projects:        
+project_count
+projectsc
+last_touchr
+<lambda>z
+cmd_status.<locals>.<lambda>E
+reverse
+WORKDIRz
+COMMITSz
+LAST TOUCHz
+  STATE
+workdir
+(unknown)r
+exists
+orphan
+commitsr'
+legacy_archivesz
+Legacy archives (z
+mtimer
+cmd_status.<locals>.<lambda>Y
+size_bytes
+>10z+Clear with: hermes checkpoints clear-legacy)
+tools.checkpoint_managerr
+_fmt_bytes
+sorted
+hasattrr2
+infor 
+stater9
+legacy
+             r
+cmd_statusrN
+cmd_listrP
+prune_checkpointsr
+<listcomp>z
+cmd_prune.<locals>.<listcomp>t
+cmd_prune.<locals>.<listcomp>x
+pre_v2_projectsz
+This will permanently delete zG orphan checkpoint project(s) whose workdir is not currently reachable:r4
+ commit(s))z
+  (pre-v2 shadow repo)z=A workdir can be unreachable because the project was deleted,z<or because an external volume / network share / VPN is down.z0Pass --keep-orphans to prune stale entries only.z
+Delete these orphan projects?
+Aborted.
+<setcomp>z
+cmd_prune.<locals>.<setcomp>
+pathNr^
+<genexpr>z
+cmd_prune.<locals>.<genexpr>
+Pruning checkpoint store
+  retention_days:    z
+  delete_orphans:    z
+  max_total_size_mb: )
+retention_days
+delete_orphans
+max_total_size_mb
+orphan_allowlistz
+Scanned:         
+scannedz
+Deleted orphan:  
+deleted_orphanz
+Deleted stale:   
+deleted_stalez
+Errors:          
+errorsz
+Bytes reclaimed: 
+bytes_freed)
+max_size_mb
+keep_orphans
+forcer)
+_confirm
+updaterD
+orphans
+pre_v2_orphansr*
+results
+             r
+cmd_prunert
+prompt
+ [y/N]: F>
+EOFError
+KeyboardInterruptrC
+CHECKPOINT_BASE
+clear_allr
+Nothing to clear 
+ checkpoint base does not exist.z/This will delete the ENTIRE checkpoint base at r 
+  size:        z
+  projects:    r$
+  legacy dirs: r:
+z?All /rollback history for every working directory will be lost.z
+Proceed?rZ
+deletedz
+Cleared. Reclaimed rk
+.z+Could not clear checkpoint base (see logs).
+      r
+cmd_clearr
+clear_legacyr
+No legacy archives to clear.c
+z#cmd_clear_legacy.<locals>.<genexpr>
+Found z
+ legacy archive(s), total 
+zALegacy archives hold pre-v2 per-project shadow repos, moved asidez?during the single-store migration. Delete when you're confidentz)you don't need the old /rollback history.z
+Delete all legacy archives?rZ
+Deleted r
+ archive(s), reclaimed rk
+totalrM
+        r
+cmd_clear_legacyr
+parser
+argparse.ArgumentParser
+)$z8Wire subcommands onto the ``hermes checkpoints`` parser.)
+checkpoints_command
+COMMAND)
+metavar
+statusz9Show total size, project count, and per-project breakdown)
+--limitr3
+z!Max projects to list (default 20))
+defaultr
+Alias for 'status')
+prunez0Delete orphan/stale checkpoints and GC the storez
+--retention-days
+z?Drop projects whose last_touch is older than N days (default 7)z
+--max-size-mbi
+z`After orphan/stale prune, drop oldest commits per project until total size <= this (default 500)z
+--keep-orphans
+store_truez5Skip deleting projects whose workdir no longer exists)
+actionr
+--forcez,Skip the orphan-deletion confirmation prompt
+clearz9Delete the entire checkpoint base (all /rollback history)z
+Skip confirmation promptz
+clear-legacyz7Delete only the legacy-<ts>/ archives from v1 migrationN)
+set_defaultsrN
+add_subparsers
+add_parser
+add_argumentr
+p_status
+p_list
+p_prune
+p_clear
+p_legacys
+       r
+register_clir
+__doc__
+__future__r
+argparser
+pathlibr
+typingr
+hermes_cli.sizefmtr
+<module>r

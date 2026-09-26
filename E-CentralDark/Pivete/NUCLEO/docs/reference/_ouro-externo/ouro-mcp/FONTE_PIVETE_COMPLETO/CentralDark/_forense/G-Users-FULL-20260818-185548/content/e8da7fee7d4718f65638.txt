@@ -1,0 +1,12 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@dnd-kit\core\dist\store\constructors.d.ts
+
+import type { UniqueIdentifier } from '../types';
+import type { DroppableContainer } from './types';
+declare type Identifier = UniqueIdentifier | null | undefined;
+export declare class DroppableContainersMap extends Map<UniqueIdentifier, DroppableContainer> {
+    get(id: Identifier): DroppableContainer | undefined;
+    toArray(): DroppableContainer[];
+    getEnabled(): DroppableContainer[];
+    getNodeFor(id: Identifier): HTMLElement | undefined;
+}
+export {};

@@ -1,0 +1,283 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\web_routers\__pycache__\mcp.cpython-311.pyc
+
+d9d"e-d
+d9d"e-d
+d9d"e-d'e
+d*e-d'e
+d*e-d'e
+d:d.e-d/e
+d9d"e-d
+MCP dashboard routes (extracted verbatim from web_server.py).
+Handler bodies are byte-identical.  The OAuth flow registry
+(``_mcp_oauth_flows`` + lock + pending cap) and the worker/helpers stay in
+web_server - reached via the late-binding seam in :mod:`hermes_cli.web_deps`
+(``late`` for callables, ``LateState`` for the mutable registry/lock/limit) so
+tests that mutate ``web_server._mcp_oauth_flows`` or
+``monkeypatch.setattr(web_server, "_run_dashboard_mcp_oauth", ...)`` keep
+working unchanged.
+Optional)
+APIRouter
+HTTPException
+Request)
+HTMLResponse)
+LateState)
+MCPCatalogInstall
+MCPEnabledToggle
+MCPServerCreate
+MCPServersReplacez
+hermes_cli.web_server
+_config_profile_scope
+_gc_mcp_oauth_flows
+_mcp_install_action_name
+_mcp_oauth_callback_url
+_mcp_server_summary
+_normalize_mcp_server_create
+_profile_cli_args
+_profile_scope
+_require_token
+_run_dashboard_mcp_oauth
+_spawn_hermes_action
+load_config
+save_config
+save_env_value
+_mcp_oauth_flows
+_mcp_oauth_flows_lock
+_MAX_PENDING_MCP_OAUTH_FLOWS
+_CONFIG_MUTATION_LOCKz
+/api/mcp/servers
+profilec
+_get_mcp_serversc
+NC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\web_routers\mcp.py
+_readz
+list_mcp_servers.<locals>._readA
+serversc
+<listcomp>z$list_mcp_servers.<locals>.<listcomp>G
+hermes_cli.mcp_configr%
+asyncio
+to_thread
+sorted
+items)
+`  @r*
+list_mcp_serversr;
+_save_bearer_auth_token
+_save_mcp_server
+status_code
+detailc
+Server 'z
+' already existsrA
+headersr@
+z1' rejected: suspicious command/args configuration)
+bearer_tokenr<
+server_configs
+add_mcp_server.<locals>._runZ
+POST /api/mcp/servers failed)
+ValueErrorr
+Exception
+exceptionr
+``  @@@@@@r*
+add_mcp_serverrQ
+Replace the entire ``mcp_servers`` map (the GUI mcp.json editor's save).
+    The generic ``/api/config`` endpoint deep-merges maps, so it can never
+    delete a server key, drop an ``enabled: false`` flag, or remove a nested
+    field 
+ edits looked saved but the stale entry survived on disk.  This
+    endpoint sets the whole map so removals actually persist.  Storage stays
+    the config.yaml ``mcp_servers`` key the CLI/TUI already read.
+_replace_mcp_serversc
+z!replace_mcp_servers.<locals>._run
+issuesrS
+``   @r*
+replace_mcp_serversrX
+/api/mcp/servers/{name}r2
+_remove_mcp_serverc
+remove_mcp_server.<locals>._run
+' not foundrA
+removedrZ
+``  @r*
+remove_mcp_serverr_
+/api/mcp/servers/{name}/testc
+zFConnect to the server, list its tools, disconnect.  Returns tool list.r
+_oauth_tokens_present
+_probe_single_serverc
+test_mcp_server.<locals>._read
+oauthc
+detailsT)
+token_presentra
+needs_oauth_tokenr"
+_probe_scopedz&test_mcp_server.<locals>._probe_scoped
+errorrh
+OAuth authentication required 
+ no token found.
+schema_charsTc
+descriptionrm
+isinstance
+z#test_mcp_server.<locals>.<listcomp>
+prompts
+resources)
+``     @@@@@@@r*
+test_mcp_serverrw
+/api/mcp/servers/{name}/auth
+requestc
+)#zHStart MCP OAuth and hand the authorization URL to the dashboard browser.r
+DashboardOAuthFlow)
+get_hermes_homeF
+strictc
+expanduser
+resolve)
+auth_mcp_server.<locals>._read
+z2stdio servers authenticate via env keys, not OAuthrG
+z/This server uses header/API-key auth, not OAuth
+redirect_uri)
+flow_id
+server_namer"
+hermes_homer
+reconnect_livec
+worker_done)
+<genexpr>z"auth_mcp_server.<locals>.<genexpr>
+z0Too many MCP OAuth flows are already in progressc
+flow_homer2
+z"auth_mcp_server.<locals>.<genexpr>
+MCP OAuth for 'z
+' is already in progressTz
+mcp-oauth-)
+target
+daemonr2
+timeout)!r6
+tools.mcp_dashboard_oauthrz
+hermes_constantsr{
+dictrq
+secrets
+token_urlsafer
+valuesr 
+threading
+Threadr
+wait_for_authorization_urlrM
+mark_error
+snapshot)
+process_homer+
+pendingrP
+` `         @@@r*
+auth_mcp_serverr
+/api/mcp/oauth/flows/{flow_id}r
+OAuth flow not found or expiredrA
+    r*
+mcp_oauth_flow_statusr
+Cancel an in-flight MCP OAuth flow (the desktop's inline-card/pill
+    cancel). mark_error unblocks both worker waits, so the worker exits and
+    frees the per-server "already in progress" slot 
+ without this, a renderer
+    that stops polling leaves the flow squatting until its 300s callback
+    timeout and every retry 409s. Idempotent: an already-settled flow is left
+    as-is (approved stays approved).NT
+expired)
+statusz
+Cancelled by userr
+cancel_mcp_oauth_flowr
+z*/api/mcp/oauth/callback/{server_name:path}r
+staterl
+authorization_required)
+z&mcp_oauth_callback.<locals>.<listcomp>X
+expected_stater
+compare_digest)
+candidater
+z%mcp_oauth_callback.<locals>.<genexpr>_
+zA<h1>OAuth flow expired</h1><p>Return to Hermes and try again.</p>r\
+already receivedrE
+zP<h1>OAuth callback rejected</h1><p>The callback was invalid or already used.</p>zA<h1>Authorization failed</h1><p>Return to Hermes for details.</p>zR<h1>Authorization received</h1><p>You can close this tab and return to Hermes.</p>)
+deliver_callbackrK
+candidatesr
+reasonrB
+` `      r*
+mcp_oauth_callbackr
+/api/mcp/servers/{name}/enabledc
+Enable or disable an MCP server (takes effect on next session/gateway).
+    Toggles the ``enabled`` key on the server's config.yaml entry 
+ the same
+    flag the agent reads at startup.  Disabled servers stay in config so they
+    can be re-enabled without re-entering their settings.
+mcp_serversr\
+Malformed server config
+enabledT)
+z$set_mcp_server_enabled.<locals>._run
+``` r*
+set_mcp_server_enabledr
+/api/mcp/catalogc
+Browse the Nous-approved MCP catalog (the optional-mcps/ manifests).
+    Each entry reports whether it's already installed and enabled so the UI
+    can show install / enabled state inline.  This is the same catalog
+    `hermes mcp catalog` / `hermes mcp install` read.  ``profile`` scopes
+    the installed/enabled annotations (the catalog itself is repo-shipped
+    and identical for every profile).
+mcp_catalogz
+mcp_catalog import failed
+Catalog unavailable: rA
+is_installed
+is_enabled)
+<dictcomp>z3list_mcp_catalog.<locals>._read.<locals>.<dictcomp>
+list_catalog)
+catalogr
+list_mcp_catalog.<locals>._read
+source
+transport
+auth_type
+required_envc
+prompt
+requiredr
+z$list_mcp_catalog.<locals>.<listcomp>
+commandr
+install_url
+install_ref
+bootstrap
+default_enabled
+post_install
+suggest)
+keywords
+needs_install
+installed)
+list_mcp_catalog failedc
+messager0
+    r*
+z$list_mcp_catalog.<locals>.<listcomp>
+entries
+diagnostics)
+hermes_clir
+install
+appendr2
+getattrr
+catalog_diagnostics)
+catalog_entries
+installed_state
+entryrd
+`          @r*
+list_mcp_catalogr
+/api/mcp/catalog/installc
+Install a catalog MCP into config.yaml.
+    For HTTP/stdio entries with required env vars, those are written to .env
+    via the standard env path so the agent can read them at session start.
+    Entries that need a git bootstrap (``needs_install``) are installed via
+    the CLI action path because the clone can take time.
+No catalog entry '
+effective_profiles
+_write_envz-install_mcp_catalog_entry.<locals>._write_env
+Install failed: T)
+background
+actionc
+enable)
+install_entryr
+_install_scopedz2install_mcp_catalog_entry.<locals>._install_scoped
+z install_mcp_catalog_entry failedr@
+get_entryr
+`      @@@r*
+install_mcp_catalog_entryr
+__doc__r7
+loggingr
+typingr
+fastapir
+fastapi.responsesr
+hermes_cli.web_depsr
+hermes_cli.web_modelsr
+getLoggerrN
+routerr
+postrQ
+deleter_
+<module>r

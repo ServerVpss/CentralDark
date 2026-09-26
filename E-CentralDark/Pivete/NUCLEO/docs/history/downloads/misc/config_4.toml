@@ -1,0 +1,5 @@
+[projects.'c:\users\danda']
+trust_level = "trusted"
+
+[projects.'c:\centraldark\pivete\centraldark']
+trust_level = "trusted"

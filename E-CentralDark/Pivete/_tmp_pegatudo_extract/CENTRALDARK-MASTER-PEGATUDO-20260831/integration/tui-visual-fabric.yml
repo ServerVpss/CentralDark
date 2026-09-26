@@ -1,0 +1,75 @@
+schema: CENTRALDARK_TUI_VISUAL_FABRIC
+schema_version: 1
+mode: EXTEND_EXISTING_ONLY
+semantics:
+  canonical_id_immutable_by_visual_alias: true
+  display_name_is_semantic_id: false
+  emoji_is_semantic_id: false
+  color_is_health_proof: false
+profiles:
+  professional:
+    default: true
+    max_decorative_emoji_per_line: 2
+    animations: subtle
+    rgb: restrained
+  expressive:
+    max_decorative_emoji_per_line: 5
+    animations: moderate
+    rgb: configurable
+  plain:
+    emoji: false
+    animation: false
+    rgb: false
+accessibility:
+  respect_no_color: true
+  respect_non_tty: true
+  reduced_motion_supported: true
+  plain_text_receipts_required: true
+visual_tokens:
+  MEASURE: "🔎"
+  ACORDAR: "👑"
+  CRISTALIZAR: "💎"
+  FALLBACK: "🔐"
+  PASS: "✅"
+  FAIL: "❌"
+  UNKNOWN: "❓"
+  BLOCKED: "⛔"
+  WARNING: "⚠️"
+  INFO: "ℹ️"
+  SEARCH: "🔍"
+  TEST: "🧪"
+  ROUTE: "🔀"
+  GRAPH: "🕸️"
+  RECEIPT: "🧾"
+  DRIVE: "📚"
+  GITHUB: "🔗"
+  AGENT: "🤖"
+  WRITER: "✍️"
+  JUDGE: "⚖️"
+  FALSIFIER: "🕵️"
+rgb:
+  configurable: true
+  variables:
+    CD_RGB_ACCENT: "255,165,0"
+    CD_RGB_OK: "0,200,120"
+    CD_RGB_WARN: "255,190,0"
+    CD_RGB_FAIL: "255,80,80"
+    CD_RGB_INFO: "100,180,255"
+  never_encode_only_by_color: true
+animation:
+  non_blocking: true
+  modes:
+    - spinner
+    - progress_bar
+    - typewriter_short
+    - graph_pulse
+  forbidden_for:
+    - machine_readable_json
+    - receipts
+    - error_stack_raw
+    - redirected_non_tty_output
+emoji_registry:
+  local_registry: ui/emoji-tui/emoji-registry.json
+  themes: ui/emoji-tui/themes.yml
+  external_reference_adapter: ui/emoji-tui/external-sources.yml
+  external_source_is_authority: false

@@ -1,0 +1,2014 @@
+{
+  "updatedAt": "2026-07-30T19:06:31.203Z",
+  "updatedAtBR": "30/07/2026, 16:06:31 BRT",
+  "project": {
+    "name": "CentralDark",
+    "subtitle": "Mega painel vivo do projeto",
+    "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
+    "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
+    "branch": "main",
+    "lastCommit": "fix(ci): remove gitlink órfão telepainel — ressuscita o Juiz autônomo (#574)",
+    "lastPR": "#103 mergeado · #106 mergeado",
+    "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
+    "lastReport": "docs/agente/elite-mapper/relatorios/",
+    "summary": "Cérebro Vivo Fase 1 concluída: 10 skills documentadas em AGENTS-LIBRARY, bot /arsenal exibindo tabela completa, apelidos PT-BR no roteador de intenção, 4 diagramas Mermaid do sistema. Obsidian-writer criado com INDEX automático. Pendência A9: tela Arsenal de Skills no TelePainel (Lovable) documentada e aguardando execução. Guardião com polling reduzido (1.0s) eliminou 22% CPU. 10 issues sentinela abertas (automáticas, sem falha real).",
+    "overallProgress": 100,
+    "liveFallback": {
+      "mcpStatus": "online",
+      "mcpToolCount": 95,
+      "mcpVersion": "0.4.0"
+    },
+    "mcpStatus": "online",
+    "mcpMode": "producao",
+    "mcpToolCount": 95,
+    "mcpVersion": "0.4.0"
+  },
+  "health": {
+    "githubActions": "ok",
+    "githubActionsNote": "Vigia ativo — sem falhas detectadas. CodeQL corrigido. Bot-controller e PR-review aguardam gatilho (PR aberto).",
+    "vps": "ok",
+    "mcp": "ok",
+    "telegram": "ok",
+    "telegramNote": "@srver1bot online · webhook · canal ativo · PM2 CentralDark-HubBot online. Notifica deploy/painel/vigia/healthcheck.",
+    "statusSite": "ok"
+  },
+  "telegram": {
+    "bot": "@srver1bot",
+    "botId": "✅ configurado",
+    "botNome": "CentralDark — BOT",
+    "status": "online",
+    "webhook": "webhook ativo",
+    "canal": "CentralDark — Status & Alertas",
+    "canalId": "✅ ativo",
+    "grupo": "CentralDark — Monitoramento",
+    "grupoId": "✅ ativo",
+    "notificacoes": {
+      "vigia_vermelho": true,
+      "vigia_recuperado": true,
+      "deploy_sucesso": true,
+      "painel_atualizado": true,
+      "vps_healthcheck": true
+    }
+  },
+  "pm2": {
+    "CentralDark-ArsenalAdapter": "online",
+    "CentralDark-ArsenalProxy": "online",
+    "CentralDark-BotServer": "online",
+    "CentralDark-ContasAdmin": "online",
+    "CentralDark-EliteAnthropic": "online",
+    "CentralDark-EliteHTTP": "online",
+    "CentralDark-EliteWS": "online",
+    "CentralDark-EvolucaoIAs": "online",
+    "CentralDark-GrafoVivo": "online",
+    "CentralDark-GraphPanel": "online",
+    "CentralDark-GuardiaoAnalista": "online",
+    "CentralDark-GuardiaoConsciencia": "online",
+    "CentralDark-Hermes": "online",
+    "CentralDark-HubBot": "online",
+    "CentralDark-MCP": "online",
+    "CentralDark-Memoria": "online",
+    "CentralDark-OAuthBroker": "online",
+    "CentralDark-RefreshIAs": "online",
+    "CentralDark-Respiracao": "online",
+    "CentralDark-SyncDrive": "online",
+    "CentralDark-TelePainelDeploy": "online",
+    "CentralDark-TelegramMTProto": "online",
+    "CentralDark-WebhookDeploy": "online",
+    "CentralDark-Zentinel": "online"
+  },
+  "docker": {
+    "CentralDark-Bolt": "healthy",
+    "portainer": "running",
+    "open-webui": "healthy",
+    "multizap-gateway-wuzapi": "running",
+    "multizap-gateway-postgres": "healthy"
+  },
+  "pendencias": [
+    {
+      "id": "SKILLS-LINKED-MCP",
+      "titulo": "Sistema de Skills linkado — base para novo MCP/Hub",
+      "status": "em_andamento",
+      "prioridade": "alta",
+      "data": "2026-06-29",
+      "descricao": "Skills executáveis conectadas ao Claude API (brainstorming), motor de consciência ativo no bot, memória persistente entre sessões, skills memoria-longa e painel-status criadas. Quando o novo MCP/Hub for construído, este sistema será integrado nativamente como camada de skills do hub."
+    },
+    {
+      "id": "GOVERNANCE-29JUN",
+      "titulo": "Governança: Áreas Protegidas + agent-notify Padrão CentralDark + issues-scanner",
+      "status": "concluido",
+      "prioridade": "alta",
+      "commit": "f6375ab",
+      "detalhe": "CLAUDE.md Seção 9 travas. agent-notify.mjs: Telegram tudo em pre monospace (padrão Pivete). issues-scanner.md. workspace multi-root."
+    },
+    {
+      "id": "GUARDIAO-DECISOR",
+      "titulo": "Guardião: camada de decisão anti-spam + heartbeat do painel",
+      "status": "concluido",
+      "prioridade": "alta",
+      "commit": "e6124592b",
+      "detalhe": "925→18 propostas; cache+decisor calibrado; 403/406 do painel resolvidos"
+    },
+    {
+      "id": "ELITE-MAPPER",
+      "titulo": "Elite Mapper v1.0 — agente Python de mapeamento e limpeza cirúrgica",
+      "status": "concluido",
+      "prioridade": "alta",
+      "detalhe": "21.3GB varridos em 8.3s — 3.1GB de lixo identificado — 7 relatórios Markdown em docs/agente/elite-mapper/relatorios/"
+    },
+    {
+      "id": "P7",
+      "titulo": "MCP tool atualizar_painel — painel-data.json + git push automático",
+      "status": "concluido",
+      "prioridade": "alta",
+      "commit": "980a440c7"
+    },
+    {
+      "id": "P8",
+      "titulo": "Ativar CodeRabbit grátis no repo ServerVpss/CentralDark",
+      "status": "concluido",
+      "prioridade": "media",
+      "detalhe": "Instalar CodeRabbit App no GitHub — toda PR recebe review automático de IA"
+    },
+    {
+      "id": "P9",
+      "titulo": "Regra obrigatória: toda IA chama atualizar_painel ao concluir tarefa",
+      "status": "concluido",
+      "prioridade": "media",
+      "commit": "91ceb939f"
+    },
+    {
+      "id": "GH-WORKFLOWS",
+      "titulo": "6 workflows vermelhos — #71 vps-healthcheck · #72 GitHubBotController · #73 painel-validacao · #74 supabase-bot · #81 CodeQL · #124 PR Review Multi-IA",
+      "status": "concluido",
+      "prioridade": "alta",
+      "detalhe": "Diagnóstico 2026-06-22: info desatualizada. Vigia detecta zero falhas reais. 4/6 success, CodeQL corrigido, 2/6 aguardam gatilho."
+    },
+    {
+      "id": "ANTHROPIC-KEY",
+      "titulo": "Proxy Anthropic configurado — Claude Sonnet ativo no PR Review Multi-IA",
+      "status": "concluido",
+      "prioridade": "media",
+      "detalhe": "ANTHROPIC_API_KEY no GitHub Secrets + proxy configurado no pr-agent.yml. Testado: sonnet-4-6, opus-4-8, haiku-4-5, sonnet-4-5 → todos HTTP 200 (28/06/2026)"
+    },
+    {
+      "id": "LINEAR-KEY",
+      "titulo": "LINEAR_API_KEY adicionada — Linear configurado em português",
+      "status": "concluido",
+      "prioridade": "media",
+      "detalhe": "22 labels + 9 estados + 10 projetos criados via linear-setup.mjs"
+    },
+    {
+      "id": "P4",
+      "titulo": "MultiZap-BOT errored — investigar causa raiz",
+      "status": "pendente",
+      "prioridade": "baixa"
+    },
+    {
+      "id": "P5",
+      "titulo": "Fotos do grupo e canal Telegram via setChatPhoto",
+      "status": "concluido",
+      "prioridade": "baixa",
+      "commit": "2a0407baf"
+    },
+    {
+      "id": "P6",
+      "titulo": "VPS healthcheck — notificações Telegram",
+      "status": "concluido",
+      "prioridade": "media",
+      "commit": "a1cce1ebd"
+    },
+    {
+      "id": "COGNITIVO-29JUN",
+      "titulo": "Base cognitiva CentralDark",
+      "status": "concluido",
+      "data": "2026-06-29",
+      "descricao": "CAPACIDADES-COGNITIVAS.md (System2/CoT/Meta/ReAct), ARTEFATOS/, BOAS-PRATICAS-MCP universal, unificação pasta EN→PT"
+    },
+    {
+      "id": "PM2-NAMING-PADRAO",
+      "titulo": "Padronizar nomes PM2 para CentralDark-*",
+      "status": "concluido",
+      "data": "2026-06-29",
+      "descricao": "Renomear: monitor_tarefas, Install-Callback, telepainel-deploy, guardiao-consciencia, guardiao-analista, MCP-CentralDark (invertido), CentralDark - Respiracao (espaco), contas-admin. Padrao: CentralDark-NomeDoServico",
+      "commit": "c3c919626"
+    },
+    {
+      "id": "OBSIDIAN-MCP-BRIDGE",
+      "titulo": "Obsidian tool no novo MCP/Hub — obsidian_write nativo",
+      "status": "pendente",
+      "prioridade": "alta",
+      "data": "2026-06-29",
+      "descricao": "Quando o novo MCP/Hub for construído: adicionar tool obsidian_write(folder, title, content) que chama obsidian-writer.cjs via executor. Cada skill executável vira ferramenta MCP. O Hub passa a escrever notas Zettelkasten no vault do Pivete diretamente via MCP tool."
+    },
+    {
+      "id": "A9",
+      "titulo": "Tela Arsenal de Skills no TelePainel (Lovable)",
+      "status": "pendente",
+      "prioridade": "media",
+      "data": "2026-06-29",
+      "descricao": "Criar página no TelePainel (React/Lovable) exibindo as 10 skills em cards com emoji, apelido, nome técnico, categoria colorida e descrição. Contexto completo documentado em docs/BRAIN/RETOMADA-Tela-Arsenal-Skills-TelePainel.md"
+    }
+  ],
+  "fases": [
+    {
+      "id": "F1",
+      "titulo": "MCP paths + fallback GitHub 401",
+      "status": "concluido",
+      "commit": "374d97acd",
+      "pr": "#103"
+    },
+    {
+      "id": "F2",
+      "titulo": "Workflows críticos → self-hosted (billing fix)",
+      "status": "concluido",
+      "commit": "fa6055fc1"
+    },
+    {
+      "id": "F3",
+      "titulo": "atualizar-painel-vivo.mjs commitado + painel vivo",
+      "status": "concluido",
+      "commit": "b6341d470"
+    },
+    {
+      "id": "F4",
+      "titulo": "Token GitHub com workflow scope (GITHUB_PAT_PERFIL)",
+      "status": "concluido"
+    },
+    {
+      "id": "F5",
+      "titulo": "Bot renomeado, config migrada, vigia + Telegram",
+      "status": "concluido",
+      "commit": "0559216e7"
+    },
+    {
+      "id": "F6",
+      "titulo": "P1+P2+P3: ~38 workflows self-hosted, Telegram deploy/painel, PM2 bot",
+      "status": "concluido"
+    },
+    {
+      "id": "F7",
+      "titulo": "P5: Bot consolidado em apps/bot-telegram/, fotos grupo+canal, menu corrigido",
+      "status": "concluido",
+      "commit": "2a0407baf"
+    },
+    {
+      "id": "F8",
+      "titulo": "P6: VPS healthcheck notifica canal Telegram (dedup por mudança de estado)",
+      "status": "concluido",
+      "commit": "a1cce1ebd"
+    },
+    {
+      "id": "F9",
+      "titulo": "P7: MCP tool atualizar_painel — painel se atualiza automaticamente via IA",
+      "status": "concluido",
+      "commit": "980a440c7"
+    },
+    {
+      "id": "F10",
+      "titulo": "P8: Multi-IA PR Review — switcher panel + 5 provedores (gemini/groq/anthropic/openai/ollama)",
+      "status": "concluido",
+      "commit": "4c09a7e02"
+    },
+    {
+      "id": "F11",
+      "titulo": "Cérebro Vivo Fase 1 — 10 skills + bot /arsenal + Obsidian-writer + diagramas",
+      "status": "concluido",
+      "commit": "fa4d130",
+      "pr": "#snapshot"
+    },
+    {
+      "id": "WEBUI-LOVABLE-BRIDGE",
+      "titulo": "Bridge Lovable no Open WebUI estável",
+      "status": "concluido"
+    }
+  ],
+  "lastConsolidation": {
+    "github": "2026-06-28T19:30:00Z",
+    "vps": "2026-06-28T19:30:00Z",
+    "statusMap": "2026-06-28T19:30:00Z",
+    "telegram": "2026-06-28T19:30:00Z"
+  },
+  "publicEndpoints": [
+    {
+      "name": "MCP CentralDark",
+      "url": "https://mcp.centralldark.com/health",
+      "type": "health"
+    },
+    {
+      "name": "Status Site (painel-data.json)",
+      "url": "https://status.centralldark.com/painel-data.json",
+      "type": "data"
+    },
+    {
+      "name": "Elite HTTP Gateway",
+      "url": "https://api.centralldark.com/v1/models",
+      "type": "health"
+    }
+  ],
+  "mcpTest": {
+    "endpoints": {
+      "status": "https://mcp.centralldark.com/status.json",
+      "health": "https://mcp.centralldark.com/health",
+      "readme": "https://raw.githubusercontent.com/ServerVpss/CentralDark/main/README.md",
+      "consciencia": "https://raw.githubusercontent.com/ServerVpss/CentralDark/main/docs/CONSCIENCIA/PROMPT-MESTRE-MCP-UNIVERSAL.md",
+      "pendencias": "https://status.centralldark.com/painel-data.json",
+      "relatorios": "https://mcp.centralldark.com/status.json"
+    }
+  },
+  "milestones": [
+    {
+      "title": "F1-F6: Infraestrutura base — MCP, workflows, Telegram, PM2",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "P5: Bot Telegram consolidado + fotos grupo/canal",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "P6: VPS healthcheck notifica canal Telegram",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "P7: MCP tool atualizar_painel — painel automático",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "P9: Regra obrigatória atualizar_painel nos docs",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "P8: Multi-IA PR Review — Groq/Gemini/Anthropic/OpenAI/Ollama",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "P4: MultiZap-BOT errored — investigar causa raiz",
+      "status": "later",
+      "percent": 0
+    },
+    {
+      "title": "Cérebro Vivo Fase 1 — 10 skills, /arsenal, Obsidian-writer, diagramas",
+      "status": "done",
+      "percent": 100
+    }
+  ],
+  "phases": [
+    {
+      "name": "Fase 1 — Infraestrutura MCP + Workflows",
+      "percent": 100,
+      "status": "concluido",
+      "items": [
+        "MCP v0.4.0 (91 tools)",
+        "~38 workflows self-hosted",
+        "Telegram deploy+painel",
+        "PM2 CentralDark-TelegramBot"
+      ]
+    },
+    {
+      "name": "Fase 2 — Bot Telegram + VPS healthcheck",
+      "percent": 100,
+      "status": "concluido",
+      "items": [
+        "Skills consolidadas em apps/bot-telegram/",
+        "Fotos grupo+canal (setChatPhoto)",
+        "VPS healthcheck notifica Telegram",
+        "Deduplicação por mudança de estado"
+      ]
+    },
+    {
+      "name": "Fase 3 — Painel automático via MCP",
+      "percent": 100,
+      "status": "concluido",
+      "items": [
+        "MCP tool atualizar_painel",
+        "Git commit+push automático",
+        "Regra nos docs (AGENTS.md seção 14)",
+        "P7+P9 concluídos"
+      ]
+    },
+    {
+      "name": "Fase 4 — Qualidade e monitoramento contínuo",
+      "percent": 75,
+      "status": "doing",
+      "items": [
+        "✅ P8: Multi-IA PR Review — Groq + Gemini em paralelo",
+        "✅ Pipeline 9-estágios — PR→Telegram→Painel (pipeline-notify.yml)",
+        "✅ Painel vivo — PM2 + Docker + dots pulsantes + tarefasAtivas",
+        "✅ Pendências GitHub listadas e refletidas no painel",
+        "⏳ 6 workflows vermelhos — #71 #72 #73 #74 #81 #124 (alta prioridade)",
+        "⏳ ANTHROPIC_API_KEY — ativar Claude Sonnet no PR Review",
+        "⏳ LINEAR_API_KEY — conectar Linear ao painel",
+        "⏳ P4: MultiZap-BOT errored (baixa prioridade)"
+      ]
+    },
+    {
+      "name": "Fase 5 — Cérebro Vivo + Arsenal de Skills",
+      "percent": 50,
+      "status": "doing",
+      "items": [
+        "✅ 10 skills documentadas em AGENTS-LIBRARY",
+        "✅ Bot /arsenal com tabela completa",
+        "✅ Apelidos PT-BR no roteador de intenção",
+        "✅ 4 diagramas Mermaid do sistema",
+        "✅ Obsidian-writer + INDEX automático",
+        "⏳ A9: Tela Arsenal de Skills no TelePainel (Lovable)",
+        "⏳ Fechar 10 issues sentinela automáticas"
+      ]
+    }
+  ],
+  "aiReview": {
+    "mode": "parallel",
+    "activeProviders": [
+      "groq",
+      "gemini",
+      "anthropic"
+    ],
+    "provider": "groq",
+    "model": "llama3-70b-8192",
+    "cost": "gratuito",
+    "switcherUrl": "/ai-review.html",
+    "note": "Modo paralelo: 3 IAs revisam cada PR simultaneamente. Groq (Llama3-70B) + Gemini Flash + Claude Sonnet."
+  },
+  "nextSteps": [
+    "✅ Cérebro Vivo Fase 1 concluída — 10 skills, bot /arsenal, apelidos, diagramas",
+    "✅ Obsidian-writer + INDEX automático — segundo cérebro conectado",
+    "✅ Guardião com polling reduzido (1.0s) — 22% CPU recuperado",
+    "🔑 Pendência A9: criar tela Arsenal de Skills no TelePainel (Lovable) — contexto pronto",
+    "🔑 Fechar 10 issues sentinela abertas (automáticas, sem falha real)",
+    "⚠️ P4: MultiZap-BOT errored — investigar causa raiz (baixa prioridade)",
+    "📋 REGRA: toda IA chama atualizar_painel() ao concluir qualquer tarefa"
+  ],
+  "githubIssuesOpen": [
+    {
+      "number": 23,
+      "title": "Endpoint Install status fora do ar (HTTP 502)",
+      "severity": "p2",
+      "type": "vigia",
+      "url": "https://github.com/ServerVpss/CentralDark/issues/23"
+    },
+    {
+      "number": 22,
+      "title": "Workflow vermelho: supabase-bot",
+      "severity": "p2",
+      "type": "vigia",
+      "url": "https://github.com/ServerVpss/CentralDark/issues/22"
+    },
+    {
+      "number": 21,
+      "title": "Workflow vermelho: GitHub Bot Controller",
+      "severity": "p2",
+      "type": "vigia",
+      "url": "https://github.com/ServerVpss/CentralDark/issues/21"
+    },
+    {
+      "number": 17,
+      "title": "Endpoint Painel fora do ar (HTTP 404)",
+      "severity": "p2",
+      "type": "vigia",
+      "url": "https://github.com/ServerVpss/CentralDark/issues/17"
+    },
+    {
+      "number": 16,
+      "title": "Workflow vermelho: VPS SSH Exec",
+      "severity": "p2",
+      "type": "vigia",
+      "url": "https://github.com/ServerVpss/CentralDark/issues/16"
+    },
+    {
+      "number": 13,
+      "title": "Workflow vermelho: painel-validacao",
+      "severity": "p2",
+      "type": "vigia",
+      "url": "https://github.com/ServerVpss/CentralDark/issues/13"
+    },
+    {
+      "number": 4,
+      "title": "CORS: MCP sem CORS no painel: MCP tools",
+      "severity": "p2",
+      "type": "vigia",
+      "url": "https://github.com/ServerVpss/CentralDark/issues/4"
+    },
+    {
+      "number": 3,
+      "title": "CORS: MCP sem CORS no painel: MCP status",
+      "severity": "p2",
+      "type": "vigia",
+      "url": "https://github.com/ServerVpss/CentralDark/issues/3"
+    },
+    {
+      "number": 2,
+      "title": "CORS: MCP sem CORS no painel: MCP health",
+      "severity": "p2",
+      "type": "vigia",
+      "url": "https://github.com/ServerVpss/CentralDark/issues/2"
+    },
+    {
+      "number": 1,
+      "title": "Endpoint API fora do ar (HTTP 404)",
+      "severity": "p2",
+      "type": "vigia",
+      "url": "https://github.com/ServerVpss/CentralDark/issues/1"
+    }
+  ],
+  "blockers": [
+    "10 issues sentinela abertas (automáticas — sem falha real, mas precisam ser fechadas)",
+    "ANTHROPIC_API_KEY ausente — Claude Sonnet inativo no PR Review",
+    "MultiZap-BOT errored — não crítico",
+    "Pendência A9: executar tela Arsenal de Skills no Lovable"
+  ],
+  "nextIA": "Pivete ajusta URL do conector Lovable para `/mcp` e clica em Adicionar novamente.",
+  "linearSync": {
+    "statusConexao": "ok",
+    "statusConexaoDetalhe": "Conectado — workspace Segredo (SEG) configurado em português",
+    "teamAtivo": "Segredo (SEG)",
+    "labelsAtivos": 22,
+    "estadosAtivos": 9,
+    "projetosAtivos": 10,
+    "issuesAbertas": 3,
+    "issuesCriticas": 1,
+    "ultimoSync": "2026-06-22T18:49:33Z",
+    "proxAcao": "Corrigir 6 workflows vermelhos (SEG-41) — próxima sessão",
+    "issuesCriadas": [
+      "SEG-41: 6 workflows vermelhos no GitHub Actions (urgente)",
+      "SEG-42: ANTHROPIC_API_KEY ausente — Claude inativo no PR Review (alta)",
+      "SEG-43: MultiZap-BOT errored — investigar causa raiz (média)"
+    ]
+  },
+  "handoffAtual": {
+    "iaAtual": "Claude Code — Claude Sonnet 4.6",
+    "sessaoIniciada": "2026-06-22",
+    "ultimaAcao": "3 issues criadas no Linear (SEG-41, SEG-42, SEG-43) para pendências abertas do CentralDark",
+    "proximaIARecomendada": "Claude Code ou ChatGPT",
+    "proximaAcaoExata": "Corrigir 6 workflows vermelhos do GitHub Actions (SEG-41)",
+    "handoffSalvoEm": "docs/CONTINUIDADE/proxima-ia.md"
+  },
+  "segurancaAreaProtegida": {
+    "whatsappWuzapi": "NUNCA SEM CONFIRMAÇÃO — reset/logout/sessões bloqueados",
+    "docker": "NUNCA SEM CONFIRMAÇÃO — subir/parar/remover containers",
+    "caddy": "NUNCA SEM CONFIRMAÇÃO — alterar roteamento ou recarregar",
+    "pm2Sensivel": "CONFIRMAR ANTES — restart/stop/delete de processos",
+    "supabaseReal": "CONFIRMAR ANTES — banco de produção, migrations",
+    "dns": "NUNCA SEM CONFIRMAÇÃO — alterar domínios públicos",
+    "gitAddPonto": "PROIBIDO — sempre adicionar arquivos específicos pelo nome",
+    "secretsEnv": "NUNCA EXPOR — apenas validação booleana (presente: sim/não)"
+  },
+  "maturity": [
+    {
+      "name": "🧠 Memória e consciência",
+      "value": 97,
+      "status": "forte",
+      "detail": "Cérebro Vivo Fase 1. 10 skills documentadas. Obsidian-writer + INDEX automático. Bot /arsenal ativo."
+    },
+    {
+      "name": "🔌 MCP / conector",
+      "value": 92,
+      "status": "ativo",
+      "detail": "MCP v0.4.0, 95 tools, online, produção."
+    },
+    {
+      "name": "📢 Telegram / Notificações",
+      "value": 98,
+      "status": "forte",
+      "detail": "@srver1bot online. /arsenal exibe skills. HubBot PM2 online."
+    },
+    {
+      "name": "🔄 GitHub Actions",
+      "value": 90,
+      "status": "forte",
+      "detail": "10 issues sentinela abertas (automáticas). Workflows self-hosted operacionais."
+    },
+    {
+      "name": "🖥️ VPS / PM2",
+      "value": 88,
+      "status": "rodando",
+      "detail": "13/15 serviços online. MultiZap-BOT errored. whatsapp-server stopped."
+    },
+    {
+      "name": "🎨 Frontend / Painel",
+      "value": 90,
+      "status": "forte",
+      "detail": "status.centralldark.com OK. Pendência A9: Arsenal de Skills no TelePainel."
+    }
+  ],
+  "events": [
+    {
+      "time": "2026-07-30T19:06:31.203Z",
+      "titulo": "Push na main · 749077ad694babc494f9b0f2e9d713d92bdd0360",
+      "detalhe": "fix(ci): remove gitlink órfão telepainel — ressuscita o Juiz autônomo (#574)",
+      "area": "Repositório",
+      "sha": "749077a",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-30T18:17:16.547Z",
+      "titulo": "Push na main · 47ec683c1b31c3a2f2933dd5fe5bca1f41d33762",
+      "detalhe": "fix(autonomia): disparar varredura também após push na main (#572)",
+      "area": "Repositório",
+      "sha": "47ec683",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-30T18:05:45.514Z",
+      "titulo": "Push na main · be2505183a0d69f2f6c874072a180f426b8d2d8d",
+      "detalhe": "fix(autonomia): adicionar varredura observável e fallback eventual (#571)",
+      "area": "Repositório",
+      "sha": "be25051",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-30T17:55:21.421Z",
+      "titulo": "Push na main · 2e55133db8015c936816affd8f4534b3beae7a0a",
+      "detalhe": "fix(autonomia): tornar todos os gates obrigatórios e reexecutáveis (#569)",
+      "area": "Repositório",
+      "sha": "2e55133",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-30T17:37:21.694Z",
+      "titulo": "Push na main · f39b6384e42830044f0d9e9e0e942246ab02513b",
+      "detalhe": "fix(autonomia): promover PR autorizado sem clique e sem falso verde (#568)",
+      "area": "Repositório",
+      "sha": "f39b638",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-30T17:24:59.817Z",
+      "titulo": "Push na main · e804fea58134bace70988d75d821178902a01507",
+      "detalhe": "fix(governança): fechar duplicação e contratos canônicos no repositório inteiro (#566)",
+      "area": "Repositório",
+      "sha": "e804fea",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-30T16:37:42.939Z",
+      "titulo": "Push na main · ae34338aa8608042fd0e6b125a1b1adeaf26e6bc",
+      "detalhe": "fix(gate): distinguir segredo literal de referência process.env",
+      "area": "Repositório",
+      "sha": "ae34338",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-30T16:16:28.089Z",
+      "titulo": "Push na main · 9b63e3bc50cfc1ef31d164875e23fb62b1bbe1d7",
+      "detalhe": "docs: remover referência residual a Monitoramento24h em README/PENDENCIAS (#565)",
+      "area": "Repositório",
+      "sha": "9b63e3b",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-30T10:13:01.145Z",
+      "titulo": "Push na main · e73094b7e76b1a858f45853df48a6dfa3bb57162",
+      "detalhe": "feat(governança): boot universal e método delta para qualquer IA (#553)",
+      "area": "Repositório",
+      "sha": "e73094b",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-30T09:36:27.257Z",
+      "titulo": "Push na main · f251e315a70454fe98850fbcd6fcc712cbeb01ff",
+      "detalhe": "fix(sentinela): automatizar drift GitHub-VPS e remover entrada vazia do mapa (#551)",
+      "area": "Repositório",
+      "sha": "f251e31",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-30T09:33:27.305Z",
+      "titulo": "Push na main · 4c2179ec9d81b35cdd5eddb83623226ad4ed37f9",
+      "detalhe": "docs(arquitetura): registrar Jarvis em delta e escritor único (#552)",
+      "area": "Repositório",
+      "sha": "4c2179e",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-30T09:11:19.329Z",
+      "titulo": "Push na main · 2f114a94aef72c5193cdc0652b83af10e7eb5eb6",
+      "detalhe": "docs(memoria): preservar lembrança pessoal Viver em Paz (#550)",
+      "area": "Repositório",
+      "sha": "2f114a9",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-28T22:19:23.458Z",
+      "titulo": "Push na main · beeb17b075497f1b006b9a97b04aa5bddb9b1ce2",
+      "detalhe": "feat(meta-lupa): add canonical gate validation",
+      "area": "Repositório",
+      "sha": "beeb17b",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-28T21:10:16.426Z",
+      "titulo": "Push na main · 90d4877e52e0a5bc011c3d6d106ad3dbd1a2485f",
+      "detalhe": "test(meta-lupa): Opus 5 guardrails; Fable causalidade pendente",
+      "area": "Repositório",
+      "sha": "90d4877",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-28T19:54:25.263Z",
+      "titulo": "Push na main · 5c082450cd0709c9db6cffb579810b1cd6a1a5bc",
+      "detalhe": "fix(ci): avoid blank line in generated retomada state",
+      "area": "Repositório",
+      "sha": "5c08245",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-28T19:51:16.733Z",
+      "titulo": "Push na main · 49f91866cb32c5ccc24a80612d401308b8a0f733",
+      "detalhe": "feat(skills): auditoria-pr e selo-xp",
+      "area": "Repositório",
+      "sha": "49f9186",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-28T19:46:40.417Z",
+      "titulo": "Push na main · b422a0d4321ccc34fb4ed7b4c44eac82fb725da2",
+      "detalhe": "fix(ci): consertar agentes autonomos e porta canonica",
+      "area": "Repositório",
+      "sha": "b422a0d",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-28T19:20:43.227Z",
+      "titulo": "Push na main · 1cb687e96190cd46d48d8b255fd9830803a0015c",
+      "detalhe": "fix(meta-lupa): fail closed on invalid ledger input (#446)",
+      "area": "Repositório",
+      "sha": "1cb687e",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-28T12:04:04.183Z",
+      "titulo": "Push na main · e36d4b273a122156d97ed22e44f7c6ed38b16de1",
+      "detalhe": "fix(mcp): quarentena registrada não pode deixar o boot não-pronto (#436)",
+      "area": "Repositório",
+      "sha": "e36d4b2",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-28T11:52:33.141Z",
+      "titulo": "Push na main · feb825d4b6329353795b0de3a671655453217313",
+      "detalhe": "fix(mcp): manifesto aprovado de destrutivas — tira os números mágicos do guard (#435)",
+      "area": "Repositório",
+      "sha": "feb825d",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-28T11:50:55.641Z",
+      "titulo": "Push na main · abf033643a7d12558e1ee218b56008b49031dfd4",
+      "detalhe": "fix(mcp): rotas e OpenAPI honestos — fecha itens 2,3,4,5,7 da issue #148 (#434)",
+      "area": "Repositório",
+      "sha": "abf0336",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-28T09:57:17.666Z",
+      "titulo": "Push na main · 2c16e7008fefa111ee4b9cdf3ff31ed2493878c9",
+      "detalhe": "docs(mcp): registro da limpeza e do conserto do dispatcher (28/07/2026)",
+      "area": "Repositório",
+      "sha": "2c16e70",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-28T09:26:26.832Z",
+      "titulo": "Push na main · 699c98467e5eb2345c792241624de233ffe21850",
+      "detalhe": "docs(mcp): corrige RECONECTAR-CONECTOR — 2 endpoints, URL admin e afirmacoes falsas",
+      "area": "Repositório",
+      "sha": "699c984",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-28T02:20:05.784Z",
+      "titulo": "Push na main · 061b6822e06c2bd81186f8dbaf982724f01fd8e0",
+      "detalhe": "Merge pull request #410 from ServerVpss/fix/meta-lupa-recibo-xp-20260727",
+      "area": "Repositório",
+      "sha": "061b682",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-28T02:18:58.788Z",
+      "titulo": "Push na main · 4171ccb0c6fecf6b75bc32405e4d95ffa511042e",
+      "detalhe": "Merge pull request #421 from ServerVpss/chore/eliminar-duplicatas-consciencia-brain-20260727",
+      "area": "Repositório",
+      "sha": "4171ccb",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-27T20:48:49.164Z",
+      "titulo": "Push na main · a5f27ec90b52564b0118117c37a2b08647eddd89",
+      "detalhe": "aprendizado(#7): github_commit (MCP) não deleta arquivo; duplicatas CONSCIENCIA/BRAIN nasceram do mesmo commit de bot",
+      "area": "Repositório",
+      "sha": "a5f27ec",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-27T20:19:43.689Z",
+      "titulo": "Push na main · 1bef425e3f58067b94392efcfb4fb20b764edcf1",
+      "detalhe": "aprendizado(#6): A porta de entrada nunca existiu: por que nenhuma IA lia as regras da casa",
+      "area": "Repositório",
+      "sha": "1bef425",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-27T19:56:22.133Z",
+      "titulo": "Push na main · ff26701471b5615f92ce5f0cf85dca89f2b7d53e",
+      "detalhe": "aprendizado(#5): Workflow promovido sem o script que ele executa: o bot autônomo nunca rodou",
+      "area": "Repositório",
+      "sha": "ff26701",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-27T19:24:36.596Z",
+      "titulo": "Push na main · 87d03951ca34d5f231f38329a05d30c85d4f66ee",
+      "detalhe": "aprendizado(#4): Auditoria não vale sem HEAD_SHA declarado: 4 escopos, 3 lacunas falsas no PR #410",
+      "area": "Repositório",
+      "sha": "87d0395",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-27T18:16:08.455Z",
+      "titulo": "Push na main · bc8dd9ec6b2cb72bd210236793651d10538154cb",
+      "detalhe": "aprendizado(#3): Auditoria do gatilho de XP da META LUPA: motor correto, defeito era de exposição na saída",
+      "area": "Repositório",
+      "sha": "bc8dd9e",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-27T17:30:53.653Z",
+      "titulo": "Push na main · 354f74d70618bf57806bd451949aba292cac3e11",
+      "detalhe": "Merge pull request #409 from ServerVpss/evol/meta-lupa-falso-verde-20260727",
+      "area": "Repositório",
+      "sha": "354f74d",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-27T07:14:32.556Z",
+      "titulo": "Push na main · 76daaf98e9e29422d922576fa7daeb8d25d813c7",
+      "detalhe": "docs(pendencias): fecha #53",
+      "area": "Repositório",
+      "sha": "76daaf9",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-27T07:07:23.439Z",
+      "titulo": "Push na main · 50bcc613c8ee98b50d69f5896ce5ae68c03b279b",
+      "detalhe": "Merge pull request #396 from ServerVpss/feat/bolt-ligar-classificador-20260727",
+      "area": "Repositório",
+      "sha": "50bcc61",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-27T06:36:20.821Z",
+      "titulo": "Push na main · 94f993c13069a82005b35cfcb27ca66f5adef67f",
+      "detalhe": "aprendizado(#2): git status limpo pode esconder pasta vazia: gitlink órfão entregava o Bolt vazio em todo clone",
+      "area": "Repositório",
+      "sha": "94f993c",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-27T06:35:52.977Z",
+      "titulo": "Push na main · 4d9f020a1f6f608bdc42b158bf722e6222fc3e0f",
+      "detalhe": "aprendizado(#1): Gate de CI bloqueia qualquer caminho .env.* pelo NOME, antes de olhar o conteúdo",
+      "area": "Repositório",
+      "sha": "4d9f020",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-27T06:31:03.878Z",
+      "titulo": "Push na main · aa901e220cf0cae28fd507bc1436c36255dd1577",
+      "detalhe": "docs(pendencias): nova #53 Ligar o error-classifier ao ActionRunner do Bolt",
+      "area": "Repositório",
+      "sha": "aa901e2",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-27T06:30:21.921Z",
+      "titulo": "Push na main · 4c637f4d30f2c42f8d24e5c78899de5a8feae416",
+      "detalhe": "Merge pull request #395 from ServerVpss/feat/bolt-error-classifier-20260727",
+      "area": "Repositório",
+      "sha": "4c637f4",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-27T06:24:34.382Z",
+      "titulo": "Push na main · e87b9f2e656b37b64f3d23b8032be7e8b3565375",
+      "detalhe": "Merge pull request #394 from ServerVpss/feat/bolt-vendor-restore-20260727",
+      "area": "Repositório",
+      "sha": "e87b9f2",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-27T06:19:31.447Z",
+      "titulo": "Push na main · 7c3204f5bdaff9b7a3e81cbf260997df0a4bd119",
+      "detalhe": "Merge pull request #393 from ServerVpss/feat/bolt-lovable-bridge-2026-07-26",
+      "area": "Repositório",
+      "sha": "7c3204f",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-27T05:08:56.549Z",
+      "titulo": "Push na main · 57ae376219306bf97c4b91ca3e1a9c7bfc339a0f",
+      "detalhe": "docs(operacoes): runbook de recuperação de acesso SSH",
+      "area": "Repositório",
+      "sha": "57ae376",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-27T02:22:47.013Z",
+      "titulo": "Push na main · 507dc621f666bce463f2bf7ade25d3aff1f79a73",
+      "detalhe": "Merge pull request #385 from ServerVpss/promover-mae-meta-lupa-20260727",
+      "area": "Repositório",
+      "sha": "507dc62",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-26T23:14:38.311Z",
+      "titulo": "Push na main · cad7eb97443a75c4c8d536429ae4bee5e2acd605",
+      "detalhe": "Merge pull request #384 from ServerVpss/feat/bolt-lovable-bridge-2026-07-26",
+      "area": "Repositório",
+      "sha": "cad7eb9",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-26T16:11:36.153Z",
+      "titulo": "Push na main · 1da3aef759f98f3fd80bf2829df3cac0b9daa826",
+      "detalhe": "Merge pull request #377 from ServerVpss/test/desafio-omega-autolupa-2026-07-22",
+      "area": "Repositório",
+      "sha": "1da3aef",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-25T21:01:11.051Z",
+      "titulo": "Push na main · f577e4d5a7ce25c5f0cb0ed3b0f7bdaf6df5e253",
+      "detalhe": "Turno C — Nível 7: build determinístico + workflow CI (DRAFT) (#340)",
+      "area": "Repositório",
+      "sha": "f577e4d",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-25T20:55:04.283Z",
+      "titulo": "Push na main · 531c4cca6f1a15c4b62e13cac479183fb106d114",
+      "detalhe": "test(lupa): conformidade AutoLupa 15-checks + XP-3 comitê + hash-guard canônico (#316)",
+      "area": "Repositório",
+      "sha": "531c4cc",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-24T23:30:25.846Z",
+      "titulo": "Push na main · da64364f14af83a79fb8d5e986ff1b4568359698",
+      "detalhe": "🔧 fix(ci): bump actions/checkout@v4→v5 + adiciona .gitmodules do Bolt/source (#341)",
+      "area": "Repositório",
+      "sha": "da64364",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-23T22:14:24.481Z",
+      "titulo": "Push na main · 6362c55443c7dc8ed4a74d5d682b7bdef0a7472b",
+      "detalhe": "docs(consciencia): registrar JEITO-CORRETO-DO-PIVETE canônico",
+      "area": "Repositório",
+      "sha": "6362c55",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-22T20:17:32.850Z",
+      "titulo": "Push na main · a94cba6128f3c073207ef86e7e34f73da510dbb0",
+      "detalhe": "docs(consciencia): registrar valor de cada peca da arquitetura",
+      "area": "Repositório",
+      "sha": "a94cba6",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-22T20:06:25.666Z",
+      "titulo": "Push na main · f1fd903a9bc188d48c060b433aacd6c8774cbff3",
+      "detalhe": "docs(consciencia): registrar valor de cada peca da arquitetura",
+      "area": "Repositório",
+      "sha": "f1fd903",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-22T17:02:42.237Z",
+      "titulo": "Push na main · 5c1b9b23ec02c4a3e4a574b93596c8467a694591",
+      "detalhe": "chore(issues): zera 16 issues com evidencia + classifica restantes (#309)",
+      "area": "Repositório",
+      "sha": "5c1b9b2",
+      "actor": "segredounlock"
+    }
+  ],
+  "agents": [
+    {
+      "emoji": "🧠",
+      "name": "Claude Code — Sonnet 4.6",
+      "role": "Arquiteto / Dev principal",
+      "power": 99,
+      "description": "Agente principal do projeto. Código, MCP, deploy, docs, painel. Chama atualizar_painel() ao concluir tarefas."
+    },
+    {
+      "emoji": "⚡",
+      "name": "Groq — Llama3-70B",
+      "role": "PR Reviewer (gratuito)",
+      "power": 85,
+      "description": "Review automático de PRs via GitHub Actions. Ultrarrápido, 100 req/dia grátis."
+    },
+    {
+      "emoji": "✨",
+      "name": "Gemini — Flash 1.5",
+      "role": "PR Reviewer (Google)",
+      "power": 80,
+      "description": "Review de PRs via Google AI Studio. Gratuito no tier básico."
+    },
+    {
+      "emoji": "🤖",
+      "name": "Claude — Sonnet 4.6 (PR)",
+      "role": "PR Reviewer (Anthropic)",
+      "power": 90,
+      "description": "Review de PRs via pr-agent + ANTHROPIC_API_KEY. ~$0.01/PR. Aguardando secret para ativar."
+    }
+  ],
+  "iaCards": [
+    {
+      "id": "ia-claude-dev",
+      "type": "ia",
+      "title": "Claude Code — Sonnet 4.6",
+      "sector": "Dev / Arquitetura",
+      "owner": "Claude",
+      "status": "ativo",
+      "severity": "p3",
+      "evidence": "Agente principal. Código, MCP, deploy, docs, painel. Chama atualizar_painel() em cada tarefa.",
+      "progress": 99,
+      "criteriaDone": 99,
+      "criteriaTotal": 100,
+      "nextAction": "Cards do painel alimentados com dados reais",
+      "source": "Claude Code CLI",
+      "links": [
+        {
+          "label": "GitHub",
+          "url": "https://github.com/ServerVpss/CentralDark"
+        }
+      ]
+    },
+    {
+      "id": "ia-groq-llama",
+      "type": "ia",
+      "title": "Groq — Llama3-70B",
+      "sector": "PR Review",
+      "owner": "Groq",
+      "status": "ativo",
+      "severity": "p3",
+      "evidence": "Review automático de PRs via GitHub Actions. GROQ_API_KEY configurado. Gratuito (100 req/dia).",
+      "progress": 100,
+      "criteriaDone": 1,
+      "criteriaTotal": 1,
+      "nextAction": "Aguardando próximo PR para review automático",
+      "source": "GitHub Actions: review-groq",
+      "links": [
+        {
+          "label": "Actions",
+          "url": "https://github.com/ServerVpss/CentralDark/actions"
+        }
+      ]
+    },
+    {
+      "id": "ia-gemini-flash",
+      "type": "ia",
+      "title": "Gemini — Flash 1.5",
+      "sector": "PR Review",
+      "owner": "Google",
+      "status": "ativo",
+      "severity": "p3",
+      "evidence": "Review automático de PRs via Google AI Studio. GEMINI_API_KEY configurado. Gratuito no tier básico.",
+      "progress": 100,
+      "criteriaDone": 1,
+      "criteriaTotal": 1,
+      "nextAction": "Aguardando próximo PR para review automático",
+      "source": "GitHub Actions: review-gemini",
+      "links": [
+        {
+          "label": "Actions",
+          "url": "https://github.com/ServerVpss/CentralDark/actions"
+        }
+      ]
+    },
+    {
+      "id": "ia-claude-reviewer",
+      "type": "ia",
+      "title": "Claude — Sonnet 4.6 (PR Review)",
+      "sector": "PR Review",
+      "owner": "Anthropic",
+      "status": "pendente",
+      "severity": "p2",
+      "evidence": "ANTHROPIC_API_KEY não configurado no GitHub Secrets. Job pula graciosamente até ser ativado.",
+      "progress": 0,
+      "criteriaDone": 0,
+      "criteriaTotal": 1,
+      "nextAction": "Adicionar ANTHROPIC_API_KEY em Settings › Secrets › Actions",
+      "source": "GitHub Actions: review-claude",
+      "links": [
+        {
+          "label": "Adicionar secret",
+          "url": "https://github.com/ServerVpss/CentralDark/settings/secrets/actions/new"
+        },
+        {
+          "label": "Gerar API key",
+          "url": "https://console.anthropic.com/settings/keys"
+        }
+      ]
+    }
+  ],
+  "botCards": [
+    {
+      "id": "bot-telegram",
+      "type": "bot",
+      "title": "CentralDark TelegramBot",
+      "sector": "Telegram",
+      "owner": "PM2",
+      "status": "rodando",
+      "severity": "p3",
+      "evidence": "@srver1bot online · polling · script restaurado do git + bootstrap Multizap removido (28/06)",
+      "progress": 98,
+      "criteriaDone": 98,
+      "criteriaTotal": 100,
+      "nextAction": "Monitorar uptime via PM2",
+      "source": "PM2: CentralDark-TelegramBot"
+    },
+    {
+      "id": "bot-botserver",
+      "type": "bot",
+      "title": "CentralDark BotServer",
+      "sector": "API",
+      "owner": "PM2",
+      "status": "rodando",
+      "severity": "p3",
+      "evidence": "Servidor de bot online. Lote 11 pendente (Issue #128).",
+      "progress": 90,
+      "criteriaDone": 9,
+      "criteriaTotal": 10,
+      "nextAction": "Aplicar Lote 11 na VPS (Issue #128)",
+      "source": "PM2: CentralDark-BotServer",
+      "links": [
+        {
+          "label": "Issue #128",
+          "url": "https://github.com/ServerVpss/CentralDark/issues/128"
+        }
+      ]
+    },
+    {
+      "id": "bot-multizap",
+      "type": "bot",
+      "title": "MultiZap-BOT",
+      "sector": "WhatsApp",
+      "owner": "PM2",
+      "status": "erro",
+      "severity": "p1",
+      "evidence": "PM2 status: errored. Causa raiz não investigada (baixa prioridade — P4).",
+      "progress": 0,
+      "criteriaDone": 0,
+      "criteriaTotal": 1,
+      "nextAction": "Investigar causa raiz — aguardar pedido do Pivete (P4)",
+      "source": "PM2: MultiZap-BOT"
+    },
+    {
+      "id": "bot-deploy",
+      "type": "bot",
+      "title": "DEPLOY Webhook",
+      "sector": "CI/CD",
+      "owner": "PM2",
+      "status": "rodando",
+      "severity": "p3",
+      "evidence": "Recebe push do GitHub via webhook e puxa código novo automaticamente.",
+      "progress": 95,
+      "criteriaDone": 95,
+      "criteriaTotal": 100,
+      "nextAction": "Monitorar deploys",
+      "source": "PM2: CentralDark-DEPLOY"
+    },
+    {
+      "id": "bot-vigia",
+      "type": "bot",
+      "title": "Vigia (monitor_tarefas)",
+      "sector": "Monitoramento",
+      "owner": "PM2",
+      "status": "rodando",
+      "severity": "p3",
+      "evidence": "Monitora serviços e notifica canal Telegram em caso de alerta.",
+      "progress": 95,
+      "criteriaDone": 95,
+      "criteriaTotal": 100,
+      "nextAction": "Monitorar alertas",
+      "source": "PM2: monitor_tarefas"
+    }
+  ],
+  "sectorCards": [
+    {
+      "id": "sector-mcp",
+      "type": "setor",
+      "title": "MCP CentralDark",
+      "sector": "Plataforma",
+      "owner": "Claude",
+      "status": "ativo",
+      "severity": "p3",
+      "evidence": "v0.4.0 · 92 tools · online em mcp.centralldark.com · OAuth MCP ativo",
+      "progress": 92,
+      "criteriaDone": 92,
+      "criteriaTotal": 100,
+      "nextAction": "Manter uptime e expandir tools",
+      "source": "mcp.centralldark.com",
+      "links": [
+        {
+          "label": "Health",
+          "url": "https://mcp.centralldark.com/health"
+        }
+      ]
+    },
+    {
+      "id": "sector-github",
+      "type": "setor",
+      "title": "GitHub Actions",
+      "sector": "CI/CD",
+      "owner": "Self-hosted runner",
+      "status": "ativo",
+      "severity": "p3",
+      "evidence": "~38 workflows self-hosted. PR review 3 IAs em paralelo. Vigia + deploy notificam Telegram.",
+      "progress": 95,
+      "criteriaDone": 95,
+      "criteriaTotal": 100,
+      "nextAction": "Testar PR com 3 IAs em paralelo",
+      "source": "GitHub",
+      "links": [
+        {
+          "label": "Actions",
+          "url": "https://github.com/ServerVpss/CentralDark/actions"
+        }
+      ]
+    },
+    {
+      "id": "sector-telegram",
+      "type": "setor",
+      "title": "Telegram",
+      "sector": "Notificações",
+      "owner": "@srver1bot",
+      "status": "ativo",
+      "severity": "p3",
+      "evidence": "Canal + grupo ativos. Deploy, painel, VPS healthcheck notificam. Fotos robô OK.",
+      "progress": 98,
+      "criteriaDone": 98,
+      "criteriaTotal": 100,
+      "nextAction": "Monitorar canal",
+      "source": "PM2: CentralDark-TelegramBot"
+    },
+    {
+      "id": "sector-vps",
+      "type": "setor",
+      "title": "VPS / PM2",
+      "sector": "Infra",
+      "owner": "VPS",
+      "status": "parcial",
+      "severity": "p2",
+      "evidence": "7/9 serviços PM2 online. MultiZap-BOT errored. whatsapp-server stopped (não crítico).",
+      "progress": 78,
+      "criteriaDone": 7,
+      "criteriaTotal": 9,
+      "nextAction": "Investigar MultiZap-BOT (P4, baixa prioridade)",
+      "source": "PM2 status"
+    },
+    {
+      "id": "sector-dashboard",
+      "type": "setor",
+      "title": "Status Dashboard",
+      "sector": "Frontend",
+      "owner": "GitHub Pages",
+      "status": "ativo",
+      "severity": "p3",
+      "evidence": "status.centralldark.com OK · auto-atualiza 30s · painel-data.json vivo · cards com dados reais",
+      "progress": 95,
+      "criteriaDone": 95,
+      "criteriaTotal": 100,
+      "nextAction": "Manter dados atualizados via atualizar_painel()",
+      "source": "status.centralldark.com",
+      "links": [
+        {
+          "label": "Dashboard",
+          "url": "https://status.centralldark.com"
+        }
+      ]
+    },
+    {
+      "id": "sector-whatsapp",
+      "type": "setor",
+      "title": "MultiZap / WhatsApp",
+      "sector": "WhatsApp",
+      "owner": "clone-deck",
+      "status": "parcial",
+      "severity": "p1",
+      "evidence": "MultiZap-BOT errored. Gateway online. Módulo separado em bot.multizap.dev.",
+      "progress": 60,
+      "criteriaDone": 6,
+      "criteriaTotal": 10,
+      "nextAction": "Investigar MultiZap-BOT errored (P4)",
+      "source": "PM2: MultiZap-Gateway"
+    }
+  ],
+  "tarefasAtivas": [
+    {
+      "id": "pr-90",
+      "tipo": "PR",
+      "titulo": "docs: registrar padrão de resposta do Pivete",
+      "numero": 90,
+      "author": "segredounlock",
+      "estagio": "MERGEADO",
+      "emoji": "🟢",
+      "label": "MERGEADO",
+      "url": "https://github.com/ServerVpss/CentralDark/pull/90",
+      "createdAt": "2026-06-23T00:06:14Z",
+      "updatedAt": "2026-06-23T00:06:14Z",
+      "historico": [
+        {
+          "estagio": "MERGEADO",
+          "emoji": "🟢",
+          "label": "MERGEADO",
+          "time": "2026-06-23T00:06:14Z"
+        }
+      ]
+    },
+    {
+      "id": "pipeline-sessao-hoje",
+      "tipo": "SESSAO",
+      "titulo": "Sessão de hoje — painel vivo, cards, pipeline, PM2+Docker, progresso automático",
+      "numero": 0,
+      "author": "SegredoiDev",
+      "estagio": "CONSOLIDADO",
+      "emoji": "🏁",
+      "label": "CONSOLIDADO",
+      "url": "https://github.com/ServerVpss/CentralDark/commits/main",
+      "createdAt": "2026-06-22T08:00:00Z",
+      "updatedAt": "2026-06-22T15:30:00Z",
+      "historico": [
+        {
+          "estagio": "GITHUB",
+          "emoji": "☁️",
+          "label": "GitHub",
+          "time": "2026-06-22T08:48:00Z"
+        },
+        {
+          "estagio": "MERGEADO",
+          "emoji": "🟢",
+          "label": "Mergeado",
+          "time": "2026-06-22T10:00:00Z"
+        },
+        {
+          "estagio": "VPS",
+          "emoji": "🚀",
+          "label": "VPS",
+          "time": "2026-06-22T10:05:00Z"
+        },
+        {
+          "estagio": "CONSOLIDADO",
+          "emoji": "🏁",
+          "label": "Consolidado",
+          "time": "2026-06-22T15:30:00Z"
+        }
+      ]
+    }
+  ],
+  "humanReview": [
+    {
+      "kind": "Issue",
+      "number": 124,
+      "title": "PR Review Multi-IA falhou — workflow pr-agent",
+      "summary": "GitHub Actions: review-groq, review-gemini ou review-claude falharam num PR recente. Verificar log e se os secrets GROQ_API_KEY / GEMINI_API_KEY estão válidos.",
+      "status": "aguardando_revisao_humana",
+      "severity": "p2",
+      "bot": "Vigia",
+      "nextAction": "Abrir log do run no GitHub Actions e ver qual job falhou",
+      "url": "https://github.com/ServerVpss/CentralDark/issues/124"
+    },
+    {
+      "kind": "Issue",
+      "number": 75,
+      "title": "Consolidar Protocolo Reload Universal Multi-IA",
+      "summary": "Documentação do protocolo reload (como uma nova IA retoma o contexto) precisa ser consolidada e atualizada com o padrão atual.",
+      "status": "aguardando_revisao_humana",
+      "severity": "p3",
+      "bot": "Claude Code",
+      "nextAction": "Revisar docs/CONTINUIDADE/ e consolidar em um único doc de onboarding",
+      "url": "https://github.com/ServerVpss/CentralDark/issues/75"
+    },
+    {
+      "kind": "Config",
+      "number": 0,
+      "title": "LINEAR_API_KEY não configurada",
+      "summary": "Para listar issues do Linear no painel, precisa de uma API key. Gerar em linear.app/settings/api e adicionar nas variáveis de ambiente do MCP como LINEAR_API_KEY.",
+      "status": "aguardando_revisao_humana",
+      "severity": "p3",
+      "bot": "MCP",
+      "nextAction": "Gerar LINEAR_API_KEY em linear.app/settings/api e adicionar ao mcp.env",
+      "url": "https://linear.app/settings/api"
+    }
+  ],
+  "iaTimeline": [
+    {
+      "time": "2026-07-30T19:06:31.203Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 749077ad694babc494f9b0f2e9d713d92bdd0360 (749077a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-30T18:17:16.547Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 47ec683c1b31c3a2f2933dd5fe5bca1f41d33762 (47ec683)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-30T18:05:45.514Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · be2505183a0d69f2f6c874072a180f426b8d2d8d (be25051)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-30T17:55:21.421Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 2e55133db8015c936816affd8f4534b3beae7a0a (2e55133)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-30T17:37:21.694Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f39b6384e42830044f0d9e9e0e942246ab02513b (f39b638)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-30T17:24:59.817Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e804fea58134bace70988d75d821178902a01507 (e804fea)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-30T16:37:42.939Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ae34338aa8608042fd0e6b125a1b1adeaf26e6bc (ae34338)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-30T16:16:28.089Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 9b63e3bc50cfc1ef31d164875e23fb62b1bbe1d7 (9b63e3b)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-30T10:13:01.145Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e73094b7e76b1a858f45853df48a6dfa3bb57162 (e73094b)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-30T09:36:27.257Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f251e315a70454fe98850fbcd6fcc712cbeb01ff (f251e31)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-30T09:33:27.305Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 4c2179ec9d81b35cdd5eddb83623226ad4ed37f9 (4c2179e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-30T09:11:19.329Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 2f114a94aef72c5193cdc0652b83af10e7eb5eb6 (2f114a9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-28T22:19:23.458Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · beeb17b075497f1b006b9a97b04aa5bddb9b1ce2 (beeb17b)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-28T21:10:16.426Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 90d4877e52e0a5bc011c3d6d106ad3dbd1a2485f (90d4877)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-28T19:54:25.263Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 5c082450cd0709c9db6cffb579810b1cd6a1a5bc (5c08245)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-28T19:51:16.733Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 49f91866cb32c5ccc24a80612d401308b8a0f733 (49f9186)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-28T19:46:40.417Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · b422a0d4321ccc34fb4ed7b4c44eac82fb725da2 (b422a0d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-28T19:20:43.227Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 1cb687e96190cd46d48d8b255fd9830803a0015c (1cb687e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-28T12:04:04.183Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e36d4b273a122156d97ed22e44f7c6ed38b16de1 (e36d4b2)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-28T11:52:33.141Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · feb825d4b6329353795b0de3a671655453217313 (feb825d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-28T11:50:55.641Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · abf033643a7d12558e1ee218b56008b49031dfd4 (abf0336)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-28T09:57:17.666Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 2c16e7008fefa111ee4b9cdf3ff31ed2493878c9 (2c16e70)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-28T09:26:26.832Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 699c98467e5eb2345c792241624de233ffe21850 (699c984)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-28T02:20:05.784Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 061b6822e06c2bd81186f8dbaf982724f01fd8e0 (061b682)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-28T02:18:58.788Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 4171ccb0c6fecf6b75bc32405e4d95ffa511042e (4171ccb)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-27T20:48:49.164Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a5f27ec90b52564b0118117c37a2b08647eddd89 (a5f27ec)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-27T20:19:43.689Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 1bef425e3f58067b94392efcfb4fb20b764edcf1 (1bef425)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-27T19:56:22.133Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ff26701471b5615f92ce5f0cf85dca89f2b7d53e (ff26701)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-27T19:24:36.596Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 87d03951ca34d5f231f38329a05d30c85d4f66ee (87d0395)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-27T18:16:08.455Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · bc8dd9ec6b2cb72bd210236793651d10538154cb (bc8dd9e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-27T17:30:53.653Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 354f74d70618bf57806bd451949aba292cac3e11 (354f74d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-27T07:14:32.556Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 76daaf98e9e29422d922576fa7daeb8d25d813c7 (76daaf9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-27T07:07:23.439Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 50bcc613c8ee98b50d69f5896ce5ae68c03b279b (50bcc61)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-27T06:36:20.821Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 94f993c13069a82005b35cfcb27ca66f5adef67f (94f993c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-27T06:35:52.977Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 4d9f020a1f6f608bdc42b158bf722e6222fc3e0f (4d9f020)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-27T06:31:03.878Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · aa901e220cf0cae28fd507bc1436c36255dd1577 (aa901e2)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-27T06:30:21.921Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 4c637f4d30f2c42f8d24e5c78899de5a8feae416 (4c637f4)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-27T06:24:34.382Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e87b9f2e656b37b64f3d23b8032be7e8b3565375 (e87b9f2)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-27T06:19:31.447Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 7c3204f5bdaff9b7a3e81cbf260997df0a4bd119 (7c3204f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-27T05:08:56.549Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 57ae376219306bf97c4b91ca3e1a9c7bfc339a0f (57ae376)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-27T02:22:47.013Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 507dc621f666bce463f2bf7ade25d3aff1f79a73 (507dc62)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-26T23:14:38.311Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · cad7eb97443a75c4c8d536429ae4bee5e2acd605 (cad7eb9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-26T16:11:36.153Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 1da3aef759f98f3fd80bf2829df3cac0b9daa826 (1da3aef)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-25T21:01:11.051Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f577e4d5a7ce25c5f0cb0ed3b0f7bdaf6df5e253 (f577e4d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-25T20:55:04.283Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 531c4cca6f1a15c4b62e13cac479183fb106d114 (531c4cc)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-24T23:30:25.846Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · da64364f14af83a79fb8d5e986ff1b4568359698 (da64364)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-23T22:14:24.481Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 6362c55443c7dc8ed4a74d5d682b7bdef0a7472b (6362c55)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-22T20:17:32.850Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a94cba6128f3c073207ef86e7e34f73da510dbb0 (a94cba6)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-22T20:06:25.666Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f1fd903a9bc188d48c060b433aacd6c8774cbff3 (f1fd903)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-22T17:02:42.237Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 5c1b9b23ec02c4a3e4a574b93596c8467a694591 (5c1b9b2)",
+      "area": "Repositório",
+      "status": "sucesso"
+    }
+  ],
+  "telemetry": {
+    "cpu": "16.0%",
+    "ram": "12.4GB / 23.5GB",
+    "ramPercent": "52.7",
+    "disco": "46%",
+    "load": "1.43 / 1.20 / 1.01",
+    "timestamp": "2026-06-27T19:13:47.825Z",
+    "brtTimestamp": "27/06/2026, 16:13:47",
+    "receivedAt": "2026-06-27T19:13:47.829Z"
+  },
+  "safeRules": [
+    "Nenhuma IA mexe no que já foi corrigido sem confirmação explícita",
+    "Nenhuma IA apaga arquivo/pasta sem plano, backup e confirmação",
+    "Nunca usar git add . — somente arquivos específicos pelo nome",
+    "Nunca expor token, .env, secret, cookie, sessão, key ou connection string",
+    "Nunca resetar WhatsApp ou apagar sessão WuzAPI",
+    "Nunca mexer em Caddy, Docker, PM2 sensível, banco real ou DNS sem confirmação",
+    "Toda alteração relevante: relatório + memória + painel + handoff",
+    "ChatGPT é o revisor final junto com o usuário",
+    "Toda IA deixa mensagem + prompt para próxima IA ao encerrar sessão importante",
+    "Mega Painel é fonte da verdade operacional junto com GitHub e memórias"
+  ],
+  "gateways": {
+    "eliteHttpGateway": {
+      "status": "online",
+      "url": "https://api.centralldark.com/v1",
+      "pm2": "elite-http-gateway",
+      "version": "2.3",
+      "multiContas": true,
+      "mcpTools": [
+        "elite_gateway_chat",
+        "elite_gateway_status",
+        "elite_gateway_logs"
+      ],
+      "boltIntegration": {
+        "status": "configurado",
+        "url": "https://builder.centralldark.com",
+        "apiBase": "https://api.centralldark.com/v1"
+      }
+    },
+    "zentinelHealth": {
+      "status": "online",
+      "pm2": "zentinel-health",
+      "funcao": "Monitor de latência — alerta se degradação detectada",
+      "intervalo": "45s"
+    }
+  },
+  "mcpBloqueios24h": {
+    "titulo": "Bloqueios MCP (últimas 24h)",
+    "descricao": "Comandos barrados pelo MCP por falta de configuração. Fonte: logs/mcp-blocked-YYYY-MM-DD.jsonl (event=mcp_command_bloqueado_config).",
+    "total": 2,
+    "atualizadoEm": "2026-06-26T06:35:37.109032+00:00",
+    "ultimos": [
+      {
+        "timestamp": "2026-06-26T06:31:04.283Z",
+        "tool": "execute_command",
+        "flag": "MCP_ALLOW_VPS_COMMANDS",
+        "motivo": "MCP_ALLOW_VPS_COMMANDS precisa ser true para executar comandos.",
+        "valorAtual": "(undefined)"
+      },
+      {
+        "timestamp": "2026-06-26T06:30:09.200Z",
+        "tool": "execute_command",
+        "flag": "MCP_ALLOW_VPS_COMMANDS",
+        "motivo": "MCP_ALLOW_VPS_COMMANDS precisa ser true para executar comandos.",
+        "valorAtual": "(undefined)"
+      }
+    ],
+    "porFlag": {
+      "MCP_ALLOW_VPS_COMMANDS": 2
+    },
+    "porTool": {
+      "execute_command": 2
+    }
+  },
+  "aiSuggestions": [
+    {
+      "id": "mcp-bloqueios-card-2026-06-26",
+      "title": "Auditoria de bloqueios do MCP no painel",
+      "origin": "Tarefa do admin",
+      "suggestion": "Bloqueios por flag desativada agora ficam em logs/mcp-blocked-YYYY-MM-DD.jsonl. Painel mostra total + últimos 10."
+    }
+  ],
+  "eventos": [
+    {
+      "time": "2026-06-29T09:34:53.000Z",
+      "titulo": "Segundo Cérebro conectado — BRAIN.md + obsidian-writer + INDEX automático",
+      "detalhe": "BRAIN.md reescrito com mapa completo da infra. Skill obsidian-writer.cjs criada (write/link/index/list). Workflow obsidian-index.yml ativo. INDEX.md gerado com 7 notas. Pendência OBSIDIAN-MCP-BRIDGE registrada para o novo Hub.",
+      "area": "ia"
+    },
+    {
+      "time": "2026-06-29T09:00:00.000Z",
+      "titulo": "Sistema de Skills — motor de consciência + Claude + memória persistente",
+      "detalhe": "brainstorming conectado à API Anthropic; consciousness.think() integrado ao bot; skills memoria-longa e painel-status criadas; base para integração no novo MCP/Hub.",
+      "area": "ia"
+    },
+    {
+      "time": "2026-06-29T08:14:27.000Z",
+      "titulo": "PM2 padronizado + painel sanitizado",
+      "detalhe": "PM2: 6 processos → CentralDark-*; 3 órfãos deletados. painel-data.json: IDs Telegram, project_ref Supabase, paths secrets removidos do JSON público.",
+      "area": "infra"
+    },
+    {
+      "time": "2026-06-29T16:28:41.008Z",
+      "titulo": "Snapshot 29/06 — Cérebro Vivo + Skills + Painel atualizado",
+      "detalhe": "Snapshot completo do sistema. Cérebro Vivo Fase 1 concluída. 10 skills documentadas. Bot /arsenal. Pendência A9 documentada para Lovable. 10 issues sentinela identificadas.",
+      "area": "snapshot"
+    }
+  ],
+  "ultimo_commit": "fa4d130",
+  "ultimo_evento": "Hermes aprendeu e concluiu hub v2 sozinho (77 etapas, typecheck zero)",
+  "evento_area": "painel-vivo",
+  "nextia": "Fase 2 disponível: dividir APRENDIZADOS.md (259KB) em 3 arquivos por tema. Aguardar autorização do Pivete.",
+  "updated_at": "2026-07-05T00:23:32.630Z",
+  "iasVivas": [
+    {
+      "nome": "CentralDark-EliteAnthropic",
+      "apelido": "Fabler",
+      "pmId": 52,
+      "papel": "Proxy Anthropic (Claude)",
+      "endpoint": "https://api.centralldark.com",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-EliteHTTP",
+      "apelido": "Elite HTTP",
+      "pmId": 51,
+      "papel": "Gateway ChatGPT (Zendriver)",
+      "endpoint": "http://localhost:8080",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-EliteWS",
+      "apelido": "Elite WS",
+      "pmId": 50,
+      "papel": "Gateway WebSocket ChatGPT",
+      "endpoint": "ws://localhost:8081",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-MCP",
+      "apelido": "MCP",
+      "pmId": 33,
+      "papel": "MCP Hub (100+ tools)",
+      "endpoint": "local dispatcher",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-GraphPanel",
+      "apelido": "Graph Panel",
+      "pmId": 53,
+      "papel": "Indexação por grafo",
+      "endpoint": "http://localhost:8090",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-RefreshIAs",
+      "apelido": "Refresh IAs",
+      "pmId": 54,
+      "papel": "Atualiza status das IAs no painel (10s)",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-HubBot",
+      "apelido": "@srver1bot",
+      "pmId": 27,
+      "papel": "Bot Telegram Central",
+      "endpoint": "telegram://@srver1bot",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-GuardiaoConsciencia",
+      "apelido": "Guardião Consciência",
+      "pmId": 28,
+      "papel": "Vigia da consciência viva",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-GuardiaoAnalista",
+      "apelido": "Guardião Analista",
+      "pmId": 29,
+      "papel": "Análise contínua",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-ContasAdmin",
+      "apelido": "Contas Admin",
+      "pmId": 30,
+      "papel": "OAuth admin panel",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-Respiracao",
+      "apelido": "Respiração",
+      "pmId": 31,
+      "papel": "Heartbeat do sistema",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-TelePainelDeploy",
+      "apelido": "TelePainel Deploy",
+      "pmId": 34,
+      "papel": "Deploy do TelePainel",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-EvolucaoIAs",
+      "apelido": "Evolução IAs",
+      "pmId": 45,
+      "papel": "Evolução automática",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-SyncDrive",
+      "apelido": "Sync Drive",
+      "pmId": 46,
+      "papel": "Sincronia Google Drive",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-Zentinel",
+      "apelido": "Zentinel",
+      "pmId": 49,
+      "papel": "Health monitor",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-BotServer",
+      "apelido": "Bot Server",
+      "pmId": 4,
+      "papel": "Servidor de bots",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-WebhookDeploy",
+      "apelido": "Webhook Deploy",
+      "pmId": 5,
+      "papel": "Webhook GitHub → VPS",
+      "endpoint": "interno",
+      "status": "online"
+    }
+  ]
+}

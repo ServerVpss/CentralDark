@@ -1,0 +1,595 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\chown.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+.reloc
+AVAUATVSH
+AVAUATH
+ A\A]A^
+ A\A]A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+T$'"T$TH
+x[^_]A\A]A^A_
+D$@u?L
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AUATUWVSH
+X[^_]A\A]
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+h[^_]A\A]A^A_
+AVAUATUWVSH
+0[^_]A\A]A^
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+TUUUUUUU1
+SUUUUUUUL9
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AVAUATUWVS
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+@xH9Bx
+H9w8s*H
+AUATVSH
+([^A\A]
+AWAVAUATWVSH
+D$ 9Fpu
+D$(H9Fx
+[^_A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AUATSH
+ [A\A]
+AWAVAUATSH
+ [A\A]A^A_
+A9D$puOM
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+([^_]A\A]
+([^_]A\A]
+AUATSH
+ATWVSH
+8[^_A\
+8[^_A\
+AVAUATVSH
+P[^A\A]A^
+P[^A\A]A^
+P[^A\A]A^
+|$ POSIt
+ATUWVSH
+ [^_]A\
+ [^_]A\
+ [^_]A\
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+ATWVSH
+([^_A\
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+AVAUATWVSH
+([^_A\A]A^
+ATWVSH
+([^_A\
+AVAUATSH
+x[A\A]A^
+x[A\A]A^
+x[A\A]A^
+x[A\A]A^
+AUATUWVSH
+H[^_]A\A]
+H[^_]A\A]
+AUATSH
+ [A\A]
+ [A\A]
+AWAVAUATSH
+ [A\A]A^A_
+AVAUATWVSH
+([^_A\A]A^
+AVAUATUWVSH
+[^_]A\A]A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+ invocation
+Try '%s --help' for more information.
+Usage: %s [OPTION]... [OWNER][:[GROUP]] FILE...
+  or:  %s [OPTION]... --reference=RFILE FILE...
+Change the owner and/or group of each FILE to OWNER and/or GROUP.
+With --reference, change the owner and group of each FILE to those of RFILE.
+  -c, --changes          like verbose but report only when a change is made
+  -f, --silent, --quiet  suppress most error messages
+  -v, --verbose          output a diagnostic for every file processed
+      --dereference      affect the referent of each symbolic link (this is
+                         the default), rather than the symbolic link itself
+  -h, --no-dereference   affect symbolic links instead of any referenced file
+                         (useful only on systems that can change the
+                         ownership of a symlink)
+      --from=CURRENT_OWNER:CURRENT_GROUP
+                         change the owner and/or group of each file only if
+                         its current owner and/or group match those specified
+                         here.  Either may be omitted, in which case a match
+                         is not required for the omitted attribute
+      --no-preserve-root  do not treat '/' specially (the default)
+      --preserve-root    fail to operate recursively on '/'
+      --reference=RFILE  use RFILE's owner and group rather than
+                         specifying OWNER:GROUP values
+  -R, --recursive        operate on files and directories recursively
+The following options modify how a hierarchy is traversed when the -R
+option is also specified.  If more than one is specified, only the final
+one takes effect.
+  -H                     if a command line argument is a symbolic link
+                         to a directory, traverse it
+  -L                     traverse every symbolic link to a directory
+                         encountered
+  -P                     do not traverse any symbolic links (default)
+      --help     display this help and exit
+      --version  output version information and exit
+Owner is unchanged if missing.  Group is unchanged if missing, but changed
+to login group if implied by a ':' following a symbolic OWNER.
+OWNER and GROUP may be numeric as well as symbolic.
+Examples:
+  %s root /u        Change the owner of /u to "root".
+  %s root:staff /u  Likewise, but also change its group to "staff".
+  %s -hR root /u    Change the owner of /u and subfiles to "root".
+test invocation
+coreutils
+Multi-call invocation
+sha224sum
+sha2 utilities
+sha256sum
+sha384sum
+sha512sum
+%s online help: <%s>
+https://www.gnu.org/software/coreutils/
+GNU coreutils
+Report any translation bugs to <https://translationproject.org/team/>
+Full documentation <%s%s>
+or available locally via: info '(coreutils) %s%s'
+/usr/share/locale
+%s: %s
+Jim Meyering
+David MacKenzie
+HLPRcfhv
+-R --dereference requires either -H or -L
+missing operand
+missing operand after %s
+failed to get attributes of %s
+recursive
+changes
+dereference
+no-dereference
+no-preserve-root
+preserve-root
+silent
+reference
+verbose
+version
+fts_read failed
+it is dangerous to operate recursively on %s
+it is dangerous to operate recursively on %s (same as %s)
+use --no-preserve-root to override this failsafe
+cannot access %s
+cannot read directory %s
+WARNING: Circular directory structure.
+This almost certainly means that you have a corrupted file system.
+NOTIFY YOUR SYSTEM MANAGER.
+The following directory is part of the cycle:
+cannot dereference %s
+changing ownership of %s
+changing group of %s
+neither symbolic link %s nor referent has been changed
+changed ownership of %s from %s to %s
+changed group of %s from %s to %s
+no change to ownership of %s
+failed to change group of %s from %s to %s
+failed to change ownership of %s
+failed to change ownership of %s to %s
+failed to change group of %s to %s
+group of %s retained as %s
+ownership of %s retained
+fts_close failed
+ownership of %s retained as %s
+failed to change ownership of %s from %s to %s
+write error
+%s: %s
+A NULL argv[0] was passed through an exec system call.
+/.libs/
+literal
+shell-always
+shell-escape
+shell-escape-always
+c-maybe
+escape
+locale
+clocale
+invalid user
+invalid group
+invalid spec
+%s (%s) %s
+License GPLv3+: GNU GPL version 3 or later <%s>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+https://gnu.org/licenses/gpl.html
+Written by %s.
+Written by %s and %s.
+Written by %s, %s, and %s.
+Written by %s, %s, %s,
+and %s.
+Written by %s, %s, %s,
+%s, and %s.
+Written by %s, %s, %s,
+%s, %s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+%s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+%s, %s, and others.
+Report bugs to: %s
+bug-coreutils@gnu.org
+%s home page: <%s>
+https://www.gnu.org/software/coreutils/
+GNU coreutils
+General help using GNU software: <%s>
+https://www.gnu.org/gethelp/
+Copyright %s %d Free Software Foundation, Inc.
+memory exhausted
+errno != EINVAL
+../coreutils-8.32/lib/xfts.c
+xfts_open
+0 <= strtol_base && strtol_base <= 36
+../coreutils-8.32/lib/xstrtol.c
+xstrtoul
+/proc/self/fd
+/proc/self/fd/%d/../fd
+/proc/self/fd/%d/
+state->magic == 9827862
+../coreutils-8.32/lib/cycle-check.c
+cycle_check
+# entries:         %lu
+# buckets:         %lu
+# buckets used:    %lu (%.2f%%)
+max bucket length: %lu
+US-ASCII
+LC_ALL
+LC_CTYPE
+CP1361
+CP20127
+CP20866
+KOI8-R
+CP20936
+GB2312
+CP21866
+KOI8-RU
+CP28591
+ISO-8859-1
+CP28592
+ISO-8859-2
+CP28593
+ISO-8859-3
+CP28594
+ISO-8859-4
+CP28595
+ISO-8859-5
+CP28596
+ISO-8859-6
+CP28597
+ISO-8859-7
+CP28598
+ISO-8859-8
+CP28599
+ISO-8859-9
+CP28605
+ISO-8859-15
+CP38598
+ISO-8859-8
+CP51932
+EUC-JP
+CP51936
+GB2312
+CP51949
+EUC-KR
+CP51950
+EUC-TW
+CP54936
+GB18030
+CP65001
+unable to record current working directory
+failed to return to initial working directory
+! close_fail
+../coreutils-8.32/lib/chdir-long.c
+0 < len
+4096 <= len
+*dir != '/'
+dir <= dir_end
+slash - dir < 4096
+cdb_free
+chdir_long
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+libintl_bindtextdomain
+libintl_gettext
+libintl_setlocale
+libintl_textdomain
+__assert_func
+__cxa_atexit
+__errno
+__getreent
+__locale_ctype_ptr
+__locale_mb_cur_max
+__main
+__memcpy_chk
+__sprintf_chk
+__strcpy_chk
+_dll_crt0
+_impure_ptr
+access
+calloc
+closedir
+cygwin_internal
+dll_dllcrt0
+endgrent
+endpwent
+fchdir
+fchown
+fclose
+fdopendir
+fprintf
+fputc_unlocked
+fputs_unlocked
+fstatat
+fwrite
+getcwd
+getenv
+getgrgid
+getgrnam
+getopt_long
+getpwnam
+getpwuid
+iswprint
+lchown
+malloc
+mbrtowc
+mbsinit
+memchr
+memcmp
+memcpy
+memmove
+memrchr
+memset
+msys_detach_dll
+nl_langinfo
+openat
+optarg
+optind
+posix_memalign
+printf
+program_invocation_name
+program_invocation_short_name
+pthread_mutex_lock
+pthread_mutex_unlock
+readdir
+realloc
+setlocale
+sprintf
+stpcpy
+strchr
+strcmp
+strcpy
+strlen
+strncmp
+strrchr
+strspn
+strtoul
+GetACP
+GetModuleHandleA
+GetModuleHandleW
+msys-intl-8.dll
+msys-2.0.dll
+KERNEL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__imp_optarg
+__nm_optarg
+__imp_abort
+__lib64_libkernel32_a_iname
+_head_msys_intl_8_dll
+__imp__dll_crt0
+__imp_fputs_unlocked
+__imp_getgrnam
+__imp_memrchr
+__imp_GetModuleHandleW
+__imp_calloc
+__nm_optind
+__imp_setlocale
+__imp_strspn
+__imp_chdir
+__imp_getenv
+_head_msys_2_0_dll
+__imp_strcmp
+__imp_fchown
+__imp___strcpy_chk
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_strrchr
+__imp_free
+__nm_program_invocation_name
+__imp___errno
+__imp_readdir
+__imp_fstatat
+__nm__impure_ptr
+__imp_pthread_mutex_unlock
+__imp_memchr
+__imp_getcwd
+__imp_fputc_unlocked
+__imp_openat
+__imp__exit
+__imp_endpwent
+__imp_strcpy
+__imp_memset
+__IAT_end__
+__imp_getgrgid
+__imp_memcpy
+__imp___memcpy_chk
+__imp_chown
+__imp_memmove
+__imp_dll_dllcrt0
+__imp_access
+__imp_fstat
+__imp___locale_ctype_ptr
+__imp_fwrite
+__imp_strtoul
+_head_lib64_libkernel32_a
+__imp_libintl_setlocale
+__imp_msys_detach_dll
+__imp_open
+__imp_chmod
+__imp_iswprint
+__imp_nl_langinfo
+__imp_getpwnam
+__imp_program_invocation_short_name
+__imp___locale_mb_cur_max
+__nm_program_invocation_short_name
+__imp___getreent
+__imp_mbsinit
+__imp_GetModuleHandleA
+__imp___main
+__imp_strlen
+__imp_malloc
+__imp_libintl_textdomain
+__imp__impure_ptr
+__imp___assert_func
+__imp_stat
+__imp_realloc
+__imp_exit
+__imp_fchdir
+__imp_mbrtowc
+__IAT_start__
+__imp_fdopendir
+__imp_libintl_bindtextdomain
+__imp_program_invocation_name
+__imp_libintl_gettext
+__imp_stpcpy
+__imp___cxa_atexit
+__imp_fcntl
+__imp_closedir
+__imp_fprintf
+__imp_endgrent
+msys_intl_8_dll_iname
+__imp_dirfd
+__imp_optind
+__imp_qsort
+__imp_fclose
+__imp_getpwuid
+__imp_error
+__imp_strncmp
+__imp_strchr
+__imp_close
+__imp_getopt_long
+__imp_sprintf
+__imp_lstat
+__imp_printf
+__imp_lchown
+__imp_pthread_mutex_lock
+__imp_GetACP
+__imp___sprintf_chk
+__imp_memcmp
+msys_2_0_dll_iname

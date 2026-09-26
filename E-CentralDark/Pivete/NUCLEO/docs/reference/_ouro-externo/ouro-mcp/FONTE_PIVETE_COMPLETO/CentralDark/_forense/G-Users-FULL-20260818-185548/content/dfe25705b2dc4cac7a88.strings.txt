@@ -1,0 +1,10055 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\apps\desktop\release\win-unpacked\ffmpeg.dll
+
+!This program cannot be run in DOS mode.$
+`.rdata
+@.data
+.pdata
+@.fptable
+_RDATA
+@.reloc
+x(D$ H
+x(D$ H
+x(D$ H
+x(D$ H
+(t$(][^_
+|(%-j1
+(t$(][^_
+|(%M{%
+|(%Lb1
+|(%Ca1
+|(=0z%
+|(==5%
+(t$(][^_
+|(%(/%
+|(-$+%
+|(%\*%
+|(=T)%
+(t$(][^_
+(t$(][^_
+(t$(][^_
+(t$(][^_
+|(=pU$
+(t$(][^_
+|W%-R$
+|(-TR$
+(t$(][^_
+x(D$ H
+(t$ [^_
+x(D$ H
+(t$ [^_
+WVSUAVAWATAUI
+(t$HA]A\A_A^][^_
+WVSUAVAWATAUI
+(t$HA]A\A_A^][^_
+APUAVAWATAQI
+A\A_A^]AX
+WVSUAVAWATAUI
+(t$HA]A\A_A^][^_
+T$(SARAQAPR
+x(D$ H
+x(D$ H
+)L$0fD
+(t$ [^_
+x(D$ H
+(t$ [^_
+x(D$ H
+x(D$ H
+)L$0Mc
+x(D$ H
+x(D$ H
+x(D$ H
+x(D$ H
+x)L$0L
+x(D$ H
+x(D$0H
+UAWAVAUATVWSH
+H[_^A\A]A^A_]I
+H[_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+AWAVAUATVWSH
+@[_^A\A]A^A_
+AWAVATVWSH
+8[_^A\A^A_
+AVVWSH
+8[_^A^
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+H[]_^A\A]A^A_
+AVVWSH
+([_^A^
+([_^A^
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVATVWUSH
+WHLcGPH
+ []_^A\A^A_
+AWAVATVWUSH
+ []_^A\A^A_
+AWAVVWUSH
+8[]_^A^A_
+8[]_^A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVATVWUSH
+@[]_^A\A^A_
+FpA)Fl
+HcFpD9
+Fl)FpA
+FlHcFpH
+AVVWSH
+([_^A^
+AVVWSH
+([_^A^
+HcNhH9
+HcFlH9
+AVVWUSH
+ []_^A^
+AWAVATVWUSH
+0[]_^A\A^A_
+IcL$DH
+AWAVVWUSH
+8[]_^A^A_
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+AWAVAUATVWSH
+ [_^A\A]A^A_
+AWAVVWUSH
+HcFpHc
+8[]_^A^A_
+AWAVVWUSH
+[]_^A^A_
+AWAVVWSH
+0[_^A^A_
+0[_^A^A_
+AVVWSI
+AWAVVWUSH
+8[]_^A^A_
+sHcOdH
+AVVWSH
+([_^A^
+([_^A^
+AWAVATVWSH
+t6LcF M
+([_^A\A^A_
+AWAVATVWUSH
+0[]_^A\A^A_
+AVVWSH
+([_^A^
+AWAVAUATVWSH
+ [_^A\A]A^A_
+AVVWSH
+0LcG M
+([_^A^
+8LcF M
+AWAVVWUSH
+([]_^A^A_
+8McG M
+AWAVAUATVWSH
+@[_^A\A]A^A_
+AWAVVWSH
+ [_^A^A_
+AWAVAUATVWUSH
+e`IcMhH
+ShIcElA9EhI
+X[]_^A\A]A^A_
+AWAVATVWUSH
+ []_^A\A^A_I
+ []_^A\A^A_
+u@IcL$DL
+AWAVVWSH
+ [_^A^A_H
+ [_^A^A_
+AWAVATVWSH
+([_^A\A^A_
+([_^A\A^A_H
+AWAVVWUSH
+([]_^A^A_
+([]_^A^A_
+AWAVAUATVWUSH
+VXH;V`
+H[]_^A\A]A^A_
+AVVWSH
+H[_^A^
+AWAVAUATVWUS
+[]_^A\A]A^A_
+AWAVAUATVWUS
+[]_^A\A]A^A_
+:fLaCtF
+AWAVATVWUSH
+z Lcf 
+ []_^A\A^A_
+AWAVVWSH
+ [_^A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVATVWUSH
+ []_^A\A^A_
+ []_^A\A^A_I
+AVVWUSH
+ []_^A^
+AWAVATVWSH
+([_^A\A^A_
+AWAVAUATVWUSH
+T$ ~$Lc
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+GhHcJ<H
+x[]_^A\A]A^A_
+AWAVAUATVWUSH
+8Lcr$D;q,
+8[]_^A\A]A^A_
+L$(LcC HcS$
+tPM9oHt
+AWAVATVWUSH
+ []_^A\A^A_
+IcD$,H
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+G0IcM,H
+G0IcM,H
+E,A;E,u
+G0HcN$H
+AWAVAUATVWUSH
+F0HcO$L
+F0HcO$L
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+LcG$LcW Ii
+AWAVAUATVWUSH
+D;d$@D
+l$8u,H
+F0HcM$H
+[]_^A\A]A^A_
+L;|$8H
+Q`E+QP~SH
+I+IHMc
+DD$`H9D$P
+H;|$@M
+HcD$8H9
+|$0L;l$`M
+F0HcO$H
+L$@H9A(u
+T$@HcB$Hk
+<LcR H
+IcT$$H
+McL$ L
+I9D$0u
+T$@LcB L
+u)L;t$@A
+AWAVAUATVWUSH
+x[]_^A\A]A^A_
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+p8L9x@H
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+Hct$PA
+h[]_^A\A]A^A_
+AWAVAUATVWUSH
+x[]_^A\A]A^A_
+matroskaH
+AWAVAUATVWUSH
+oL$pfA
+D$pstsdH
+[]_^A\A]A^A_
+SorensonH3L$pH
+son H263H3T$uH
+lpcmu&
+dfxpt,
+mp4st$I)
+"=`i53~Q=`i55
+=ai53t\=ai15
+O=`i5p~`=`i5q~
+=aivxt:=ai5q
+-=ai5pt&=ai1q
+=ai12t
+=ai52t
+=ai56t
+=AVint
+AWAVAUATVWUSH
+=roott
+=moovt
+H[]_^A\A]A^A_
+AWAVVWUSLcI
+jxl u!
+[]_^A^A_
+uuidt%
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+yLExif
+T$HA9J
+yLExift
+L$HHcI I9
+FL=iovl
+D$@A;H
+LcD$PB
+L$XHcT$PLcD$@
+AWAVAUATVWUSH
+~D0t}I
+[]_^A\A]A^A_
+D$H;D$Tr
+D$P+D$HH
+D$P9D$Tw4D
+T$8+Q(H
+'D;D$8
+AWAVATVWUSH
+>hvcCtu1
+@[]_^A\A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+iD$l@B
+t$0tmA
+T$H;J@
+D$0=lociH
+[]_^A\A]A^A_
+=disku
+D$0=stikH
+=gnreu
+=rtngu
+%=apID
+=akIDu
+=namet
+ARTuzH
+mod~D=qtng
+=`ART~K=
+alb~"=
+PRD~5=?PRM
+=ronm~;=
+]=sonmt
+url~$=
+=rosn~
+=tvnnt
+=lanu~1=
+n=manut
+=ocst~*=pcstt
+=cprtukH
+chp~*=
+=soart
+disu#H
+=@PRMu H
+=XMP_t
+D$0=tvesH
+D$0=tvsnH
+D$0=cpilH
+D$0=pgapH
+D$0=hdvdH
+=tvenu
+D$0=trknH
+D$0=HMMTH
+[]_^A\A]A^A_
+=descu
+D$0=egidH
+AVVWSH
+stcou=1
+([_^A^
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+H9D$0t$H
+D$09D$8sGL
+L$,+L$8H
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AVVWUSH
+qt  3D$0
+aaxc3D$0
+@[]_^A^
+AWAVATVWUSH
+0[]_^A\A^A_
+=mdtau
+8=rubp
+M=sounugH
+=subpt
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+=hdlru
+AWAVVWUSH
+([]_^A^A_
+AWAVVWSH
+ [_^A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+\$0uiH
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+Lc\$4H
+Hc|$8M
+Lc\$<I
+Hct$@H
+HcL$DL
+[]_^A\A]A^A_
+AWAVATVWUSH
+t3HcQLH
+P[]_^A\A^A_
+Anevia
+H9D$ u
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+D$pL+D
+AWAVATVWUSH
+ []_^A\A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+H;D$8t)H9
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+L$(HcA
+[]_^A\A]A^A_
+H;\$0r
+$HcD$PH
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUS
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+D$XuhL
+[]_^A\A]A^A_
+9RIFFt
+9RIFXt
+9RF64t
+9BW64u
+H0HcP,;L
+HDHcP@;L
+HXHcPT;L
+AWAVAUATVWSH
+)\$pfD
+)T$`fD
+)L$PfD
+[_^A\A]A^A_
+AWAVVWUSH
+([]_^A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AVVWUSH
+ []_^A^
+AWAVATVWUSH
+P[]_^A\A^A_
+AWAVVWSH
+ [_^A^A_
+AVVWSH
+8[_^A^
+AWAVVWSH
+0[_^A^A_
+AWAVVWSH
+0[_^A^A_
+%UUUUA
+%3333A
+UUUUE)
+UUUUA)
+UUUUA)
+AVVWUSH
+[]_^A^
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AVVWSH
+H[_^A^
+AVVWSH
+([_^A^
+5ve<Bt1H
+AWAVATVWUSH
+t$ uAL
+[]_^A\A^A_
+AWAVATVWUSH
+@[]_^A\A^A_
+AWAVATVWUSH
+)\$pfD
+)T$`fD
+)L$PfD
+[]_^A\A^A_
+F`L18H
+AVVWUSH
+@[]_^A^
+AWAVVWUSH
+8[]_^A^A_
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+AWAVATVWUSH
+@[]_^A\A^A_
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+Oh;Nhu
+Ol;Nlt
+8[]_^A\A]A^A_
+Oh;Nhu
+AWAVVWSH
+^`H9v`
+ [_^A^A_
+ [_^A^A_
+AVVWUSH
+D$HHcAh
+P[]_^A^
+)Nh)Fl1
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWSH
+([_^A\A^A_
+AVVWSH
+([_^A^
+AVVWSH
+([_^A^
+AVVWSH
+([_^A^
+AWAVVWUSH
+8[]_^A^A_
+x"HcD$(D
+8[]_^A^A_
+8[]_^A^A_
+8[]_^A^A_
+8[]_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+|$X-t)
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVAUATVWSH
+@[_^A\A]A^A_
+AVVWSH
+([_^A^
+AWAVVWSH
+ [_^A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+L9l$(u
+AVVWUSH
+ []_^A^
+ []_^A^
+ []_^A^
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+LcT$,H
+HcT$4H
+Lc\$0Mc
+AVVWSH
+([_^A^
+([_^A^
+AVVWUSH
+ []_^A^
+ []_^A^
+AWAVAUATVWSH
+ [_^A\A]A^A_
+AWAVATVWSH
+8[_^A\A^A_
+|$(A97u2I
+AWAVATVWSH
+([_^A\A^A_
+AWAVATVWSH
+([_^A\A^A_
+AWAVAUATVWUSH
+|$(tcD
+H[]_^A\A]A^A_
+AVVWUSH
+P[]_^A^
+AWAVAUATVWUSH
+x[]_^A\A]A^A_
+D;AdtF
+AWAVAUATVWUSH
+CdD;Cht
+Cd;ChH
+[]_^A\A]A^A_
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+HcN$Hk
+HcN Lk
+T$@xZA
+AVVWSH
+([_^A^
+AVVWUSH
+ []_^A^
+AWAVATVWUSH
+@[]_^A\A^A_
+L$0!QPH
+L$0!QPH
+L$0!QPH
+L$0!QPH
+L$0!QPH
+L$0!QP
+L$0!QP
+D$0!HP
+D$0!PT
+L$0!ATA
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+D$X t:fA
+D$`9D$p
+D:T$H@
+tOD:T$H
+RLcF<I
+RLcf@I
+D:d$XA
+u8D:d$XtHD:
+AVVWUSH
+[]_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+x[]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWSI
+q A;A(|k
+[_^A\A^A_
+AWAVVWUSH
+8[]_^A^A_
+AWAVATVWUSH
+[]_^A\A^A_
+AVVWUSH
+ []_^A^
+AWAVAUATVWUSH
+F0;F4uh
+h[]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+nhA;kh
+nlA;kl
+ntA;kt
+[]_^A\A]A^A_
+D$HD;hhuNE
+D$HD;hlu>E
+D$HD;htu.F
+D$X8L9d$PtDI
+l$XA;E
+D$PLcl$PM9
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWUSI
+[]_^A\A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUS
+;PxuCA
+D;@|u2D
+[]_^A\A]A^A_
+T$HH;L$Hu
+Pl;Qlu
+D$PJcD
+T$PD+bhH
+D$PJcD
+ADD;BDuJL
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+D$X2D$T
+D$X2D$T
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVVWUSH
+X[]_^A^A_
+AVVWSH
+8[_^A^
+AWAVVWUSH
+([]_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+[]_^A\A]A^A_
+u'D;|$8
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+tqHcP@D
+L$pHcP@H
+L$xHcPDH
+AWAVAUATVWUS
+L9|$`H
+[]_^A\A]A^A_
+AWAVATVWUSH
+[]_^A\A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+T$/t.A
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSI
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+D9T$xtBH
+H9D$0u
+L$@9L$x
+AWAVATVWUSH
+AuthentiH3L$X
+GenuineIH3D$X
+p[]_^A\A^A_
+UAWAVVWSH
+[_^A^A_]
+UAWAVVWSH
+UAWAVVWSH
+8[_^A^A_]
+UAWAVVWSH
+8[_^A^A_]
+UAWAVVWSH
+8[_^A^A_]
+UAWAVVWSH
+8[_^A^A_]
+UAWAVVWSH
+8[_^A^A_]
+UAWAVVWSH
+8[_^A^A_]
+UAWAVVWSH
+8[_^A^A_]
+UAWAVVWSH
+8[_^A^A_]
+UAWAVVWSH
+8[_^A^A_]
+UAWAVVWSH
+8[_^A^A_]
+fffff.
+UAWAVVWSH
+8[_^A^A_]
+fffff.
+UAWAVVWSH
+8[_^A^A_]
+UAVVWSH
+@[_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+@[_^A^]
+UAVVWSH
+ [_^A^]
+AWAVATVWSH
+([_^A\A^A_
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+H;A tFD
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+I;E t&1
+H;C tnE1
+[_^A\A]A^A_]
+H;C tM
+ffffff.
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+I;D$ t&1
+H;C toE1
+[_^A\A]A^A_]
+H;C tJ
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+I;D$ t41
+H;C twH
+[_^A\A]A^A_]
+H;C tT
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+I;E t-1
+H;C tjH
+[_^A\A]A^A_]
+H;C tY
+H;G t$@
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+I;D$ t-1
+H;C tuE1
+[_^A\A]A^A_]
+H;C tS
+H;G t$@
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+H;A t!@
+fffff.
+UAWAVAUATVWSH
+x[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+H;A t!@
+fffff.
+UAWAVAUATVWSH
+x[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+fffff.
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+H;A t/H
+[_^A\A]A^A_]
+H;A t/H
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+H;A t/H
+[_^A\A]A^A_]
+H;A t/H
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+H;A t1H
+[_^A\A]A^A_]
+H;A t3H
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+H;A t/H
+[_^A\A]A^A_]
+H;A t3H
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+H;A t/H
+[_^A\A]A^A_]
+H;A t3H
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+x[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+x[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+x[_^A\A]A^A_]
+UAVVWSH
+ABCDEFxXH
+P[_^A^]
+UAVVWSH
+ [_^A^]
+UAWAVVWSH
+x[_^A^A_]
+O0H;O8t
+fffff.
+UAWAVVWSH
+8[_^A^A_]
+UAWAVVWSH
+8[_^A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVVWSH
+x[_^A^A_]
+O0H;O8u
+ffffff.
+UAWAVVWSH
+8[_^A^A_]
+UAWAVVWSH
+8[_^A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+H;A t2
+H;A t3D
+H;A t9
+H;A tp
+H;A tXE1
+H;A tP
+UAWAVAUATVWSH
+fffff.
+UAWAVAUATVWSH
+X[_^A\A]A^A_]
+UAWAVATVWSH
+`[_^A\A^A_]
+UAWAVATVWSH
+@[_^A\A^A_]
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+H;A t.
+H;A t>
+fffff.
+UAWAVAUATVWSH
+fffff.
+UAWAVAUATVWSH
+X[_^A\A]A^A_]
+UAWAVAUATVWSH
+h[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+UAWAVAUATVWSH
+X[_^A\A]A^A_]
+ffffff.
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+fffff.
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+x[_^A\A]A^A_]
+UAWAVAUATVWSH
+x[_^A\A]A^A_]
+UAWAVAUATVWSH
+x[_^A\A]A^A_]
+UAVVWSH
+p[_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+ [_^A^]
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+([]_^A\A]A^A_
+fffff.
+UAVVWSH
+`[_^A^]
+ffffff.
+UAVVWSH
+0[_^A^]
+UAVVWSH
+`[_^A^]
+ffffff.
+UAVVWSH
+0[_^A^]
+AVVWUSI
+[]_^A^
+AVVWSH
+H[_^A^
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVATVWUSH
+ []_^A\A^A_
+AVVWSH
+H[_^A^
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVATVWUSH
+ []_^A\A^A_
+UAWAVAUATVWSH
+X[_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+AWAVAUATVWSH
+P[_^A\A]A^A_
+AWAVATVWUSH
+ []_^A\A^A_
+UAWAVAUATVWSH
+eH[_^A\A]A^A_]
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+HcD$|H
+[]_^A\A]A^A_
++|$dtWD
+UAWAVAUATVWSH
+eX[_^A\A]A^A_]
+AWAVAUATVWUSPA
+[]_^A\A]A^A_
+AWAVVWUSD
+[]_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+AWAVVWUSH
+8[]_^A^A_
+AWAVAUATVWUSH
++D$0A)
+h[]_^A\A]A^A_
+L$4}SA
+UAWAVAUATVWSH
+h[_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+|$PMcWDI
+[]_^A\A]A^A_
+HcD$hH
+L$HHcQ
+D$HHc@
+D$hHcL
+D$XD;XDA
+D$hLcD
+D$hNcd
+D$hLc|
+H9T$Xt
+L9D$Pt
+AWAVAUATVWUSH
+Lc|$0M
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+H9D$HH
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+D;B0|8
+H;l$ M
+([]_^A\A]A^A_
+H;l$ M
+AWAVATVWUSH
+ []_^A\A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+UAWAVVWSH
+8[_^A^A_]
+8[_^A^A_]
+UAWAVVWSH
+([_^A^A_]
+AVVWSH
+([_^A^
+AWAVATVWSH
+([_^A\A^A_
+fffff.
+UAWAVAUATVWSH
+ABCDEFxXH
+H;A t{H
+[_^A\A]A^A_]
+H;J t9H
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+([_^A\A]A^A_]
+UAWAVAUATVWSH
+EpL+E`H
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+AWAVVWSH
+ [_^A^A_
+AVVWSH
+([_^A^
+AWAVATVWSH
+([_^A\A^A_
+AWAVVWUSH
+([]_^A^A_
+AWAVVWUSH
+([]_^A^A_
+AWAVATVWSH
+8[_^A\A^A_
+AWAVVWUSH
+[]_^A^A_
+AWAVATVWUSH
+ []_^A\A^A_
+AWAVVWUSH
+([]_^A^A_
+AWAVAUATVWUSH
+)t$ D9
+X[]_^A\A]A^A_
+UAWAVAUATVWSH
+e([_^A\A]A^A_]
+AWAVVWUSH
+([]_^A^A_
+fffff.
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+ffffff.
+fffff.
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+fffff.
+AWAVAUATVWUSH
+fffff.
+LcD$(Ic
+8[]_^A\A]A^A_
+UAWAVAUATVWSH
+uP+u D
+GLIcN0E
+GLIcN0E
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+ffffff.
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+D$$9D$(
+x[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+ L;mXucH
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+D$hD9l$`u
+AWAVAUATVWUSH
+ffffff.
+[]_^A\A]A^A_
+fffff.
+UAWAVATVWSH
+[_^A\A^A_]
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+UAWAVATVWSH
+[_^A\A^A_]
+|$ AVH
+WATAUAVAWH
+A_A^A]A\_
+8T$(ua
+t$ WATAUAVAWH
+~ND;t;
+ A_A^A]A\_
+WATAUAVAWH
+A_A^A]A\_
+x ATAVAWH
+A_A^A\
+H;xXu5
+s WATAUAVAWH
+L$v8\$vt*8Y
+T$v8\$vt?8Z
+A_A^A]A\_
+@USVWATAVAWH
+A_A^A\_^[]
+sL@8w(u
+D$@H;F
+<htl<jt\<lt4<tt$<wt
+UWATAVAWH
+A_A^A\_]
+S(HcS0
+S(HcS0
+S(HcS0
+WATAUAVAWH
+0A_A^A]A\_
+t$ UWAVH
+SUVWATAVAWH
+A_A^A\_^][
+UVWATAUAVAWH
+0A_A^A]A\_^]
+t$ WATAUAVAWH
+t$HA_A^A]A\_
+UVWATAUAVAWH
+L$<;L$H
+D$8+D$@
+D$P90}
+A_A^A]A\_^]
+@HcC(H
+L$0H;K
+t\<jtLA
+!,X< w
+@8(u&I
+@8|$Pu
+8\$PtF
+tA8_:t
+8\$PtH
+tC8_:t
+WAVAWH
+ A_A^_
+VWATAVAWH
+0A_A^A\_^
+ tQD8c:u0M
+t$ WATAUAVAWH
+@8i(u:
+0A_A^A]A\_
+UVWATAUAVAWH
+@A_A^A]A\_^]
+UVWATAUAVAWH
+H;l$ u
+@A_A^A]A\_^]
+t$ WATAUAVAWH
+L;|$0u
+H+D$ L
+A_A^A]A\_
+UVWATAUAVAWH
+H;|$`u
+ A_A^A]A\_^]
+t$ WATAUAVAWH
+L;t$ u
+A_A^A]A\_
+t$ WATAUAVAWH
+L;t$(u
+A_A^A]A\_
+t$ WATAUAVAWH
+L;t$0u
+H+D$ L
+A_A^A]A\_
+UVWATAUAVAWH
+H;|$`u
+ A_A^A]A\_^]
+t$ WATAUAVAWH
+L;t$ u
+A_A^A]A\_
+u3HcH<H
+x ATAVAWH
+ A_A^A\
+@USVWATAUAVAWH
+A_A^A]A\_^[]
+9Cu,fD9y
+fD9,xu
+t$XfD9+t#
+H SUVWH
+WAVAWH
+fE98t'
+0A_A^_
+\$ UVWATAUAVAWH
+fD9,pu
+f9t$bu
+A_A^A]A\_^]
+H9D$HtTH
+WATAUAVAWH
+0A_A^A]A\_
+\$ UVWATAUAVAWH
+fD9,Au
+A_A^A]A\_^]
+|$ AVH
+UVWATAUAVAWH
+fE9,Fu
+A_A^A]A\_^]
+UVWAVAWH
+0A_A^_^]
+x ATAVAWH
+ A_A^A\
+WAVAWH
+ A_A^_
+WAVAWH
+ A_A^_
+D$@H=@W
+WAVAWH
+fA9,@u
+fA9,vu
+0A_A^_
+w`HcE H
+Hc;9E0t
+HcE H+
+fD94H}aD
+|$ UAVAWH
+u$D8r(t
+D81u`L9r
+uPD8r(t
+vWD8s(t
+x UATAUAVAWH
+A_A^A]A\]
+f9)u4H9j
+u%@8j(t
+WATAUAVAWH
+ A_A^A]A\_
+(|$PfH
+)t$ I;
+WATAUAVAWH
+0A_A^A]A\_
+WATAUAVAWH
+0A_A^A]A\_
+UVWATAUAVAWH
+rsf;\$d
+r_f;\$l
+rKf;\$t
+r7f;\$|
+f;\$4r
+f;\$<r
+f;\$Dr
+rvf;\$d
+rbf;\$l
+rNf;\$t
+r:f;\$|
+A_A^A]A\_^]
+x AUAVAWH
+H9\$`t
+ A_A^A]
+t$ WATAUAVAWH
+0A_A^A]A\_
+WATAUAVAWH
+A_A^A]A\_
+VWATAVAWH
+A_A^A\_^
+ffffff
+>ffffff
+ffffff
+L$ VWAVH
+UVWAVAWH
+A8^8}WD
+u,9\$0~NL
+PA_A^_^]
+t$ WATAUAVAWH
+0A_A^A]A\_
+D$(H!L$ E3
+;D$hsL
+t$ UWATAUAVH
+D8b9t1fD
+E8f8}zH
+M8fD9$H}#H
+0A^A]A\_]
+)t$`fH
+)D$@H#
+fffffff
+ATAUAVAWH
+L$ |+L;
+A_A^A]A\
+t$ UWAUAVAWH
+A_A^A]_]
+fffffff
+fffffff
+fffffff
+^8U)zj
+0ffffff
+|$ AVH
+UVWATAUAVAWH
+@A_A^A]A\_^]
+H!T$ E3
+L$ VWAVH
+~18^0t
+LcA<E3
+UVWATAUAVAWH
+ A_A^A]A\_^]
+D$ I;R
+D$ I9P
+SVWATAUAVAWH
+|$ Hc^
+0A_A^A]A\_^[
+@SVWATAUAVAWH
+D$0HcH
+pA_A^A]A\_^[
+SVWATAUAVAWH
+A_A^A]A\_^[
+@SVWATAUAVAWH
+A_A^A]A\_^[
+B(I9A(u
+UVWATAUAVAWH
+|$hHcX
+ A_A^A]A\_^]
+WAVAWH
+ A_A^_
+x ATAVAWH
+ A_A^A\
+AUAVAWH
+u4I9}(
+9I9}(tgH
+0A_A^A]
+AUAVAWH
+u4I9}(
+9I9}(tgH
+0A_A^A]
+WAVAWH
+x ATAVAWH
+9h@u(D93t#D9
+A_A^A\
+@USVWATAUAVAWH
+L$pHcX
+A_A^A]A\_^[]
+@USVWATAUAVAWH
+D$h;D$x
+A_A^A]A\_^[]
+UVWATAUAVAWH
+`A_A^A]A\_^]
+UVWATAUAVAWH
+A_A^A]A\_^]
+UVWATAUAVAWH
+`A_A^A]A\_^]
+@USVWATAUAVAWH
+A_A^A]A\_^[]
+@SUVWATAVAWH
+A_A^A\_^][
+@UAVAWH
+e0A_A^]
+@UATAUAVAWH
+e0A_A^A]A\]
+@UATAUAVAWH
+A_A^A]A\]
+t$ WATAUAVAWH
+ A_A^A]A\_
+fD9t$b
+l$ VWATAVAWH
+L$&8\$&t,8Y
+A_A^A\_^
+D$0@8{
+t$ WATAUAVAWH
+D!|$xA
+A_A^A]A\_
+{ AUAVAWH
+0A_A^A]
+t$xt*3
+x ATAVAWH
+ A_A^A\
+t$ WATAUAVAWH
+gfffffffH
+A_A^A]A\_
+WAVAWH
+ A_A^_
+L$ VWAVH
+@SUVWATAVAWH
+@A_A^A\_^][
+D$@H!D$ 3
+u+!D$0
+UATAUAVAWH
+A_A^A]A\]
+WATAUAVAWH
+A_A^A]A\_
+UATAUAVAWH
+A_A^A]A\]
+WATAUAVAWH
+fD9(tPH
+fG9,Lu
+0A_A^A]A\_
+x ATAVAWH
+ A_A^A\
+fB9<@u
+|$ AVH
+fD94Ju
+fD94Au
+fD91u H
+fB9<Bu
+fB94Ou
+fB9<Hu
+t}f91txH
+@USVWATAVAWH
+tzfD9 ttH
+tQfD9 tK
+fD9$Hu
+@A_A^A\_^[]
+WAVAWH
+ A_A^_
+fB9<Hu
+fB9<@u
+fD94Au
+fD94iu
+fB9<Bu
+tSf91tNH
+tZ;|$0tM
+UVWATAUAVAWH
+PA_A^A]A\_^]
+u$D8r(t
+fD91u_L9r
+uPD8r(t
+vVD8s(t
+WATAUAVAWH
+0A_A^A]A\_
+H9>u+A
+@USVWATAUAVH
+D8t$ht
+D8t$ht
+A^A]A\_^[]
+@SUAVH
+VATAUAVAWH
+0A_A^A]A\^
+AUAVAWH
+ A_A^A]
+UVWATAUAVAWH
+@8t$HtzL
+`A_A^A]A\_^]
+UVWATAUAVAWH
+0A_A^A]A\_^]
+\$ UVWATAUAVAWH
+_f9l$pu
+f9l$pt<f
+0A_A^A]A\_^]
+WATAUAVAWH
+L;5D  
+ht?fB94ht8H
+xaI96t\I
+fC94wu
+0A_A^A]A\_
+\$ UVWH
+@USVWATAVAWH
+fD9$Ou
+0A_A^A\_^[]
+fD9$wu
+}HfD9#A
+T$xD;D$x
+p WATAUAVAWH
+A_A^A]A\_
+@USVWATAUAVAWH
+H!D$ E
+hA_A^A]A\_^[]
+VATAUAVAWH
+0A_A^A]A\^
+UVWATAUAVAWH
+fB9<I}1L
+A_A^A]A\_^]
+VWATAVAW
+A_A^A\_^
+UWATAVAWH
+A_A^A\_]
+|$ UATAUAVAWH
+9^ t"H
+A_A^A]A\]
+@UVWATAUAVAWH
+e0A_A^A]A\_^]
+WAVAWH
+D8|$`t
+ A_A^_
+|$ AVH
+@USVAVH
+@USVAVH
+x)L$PH
+x(L$PH
+)t$ I;
+D$0H9D$8
+E81t"A
+fD94Q}
+WATAVH
+0A^A\_
+@USVWATAUAVAWH
+xA_A^A]A\_^[]
+WATAVH
+0A^A\_
+x(L$0H
+x(\$ M
+WATAUAVAWH
+ A_A^A]A\_
+vyfffff
+vyfffff
+WAVAWH
+ A_A^_
+USVWATAVAWH
+A_A^A\_^[]
+fffffff
+fffffff
+ffffff
+fffffff
+)\$PI#
+(L$pH%
+WATAUAVAWH
+A_A^A]A\_
+ffffff
+ffffff
+fffffff
+ffffff
+|$ ATAVAWH
+@A_A^A\
+fffffff
+fffffff
+-ffffff
+T$@L9\$@u
+H9D$@r
+x)D$pH
+x)L$`H
+x)T$PH
+x)\$@H+
+x(L$`A
+x(t$ L
+WATAUAVAWH
+x)L$ H
+x(L$ E
+A_A^A]A\_
+VWATAVAWH
+A_A^A\_^
+ffffff
+@ffffff
+fffffff
+fffffff
+fffffff
+ffffff
+vKfffff
+AWAVATVWSH
+([_^A\A^A_
+AWAVATVWSH
+([_^A\A^A_
+AWAVATVWSH
+([_^A\A^A_
+H;A tL
+AWAVATVWUSH
+[]_^A\A^A_
+AWAVATVWUSH
+)T$pfD
+)L$`fD
+[]_^A\A^A_
+AVVWSH
+8[_^A^
+AWAVVWUSH
+x[]_^A^A_
+AVVWUSH
+ []_^A^
+AWAVAUATVWSH
+ [_^A\A]A^A_
+AWAVATVWUSH
+ []_^A\A^A_
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+t^HcNtLc
+0|8Hc^XLcvTL
+AVVWUSH
+\$(t[H
+P[]_^A^
+AWAVVWSH
+[_^A^A_
+AWAVATVWUSH
+ []_^A\A^A_
+AVVWSH
+([_^A^
+AVVWSH
+([_^A^
+AWAVVWUSH
+([]_^A^A_
+AVVWSH
+H[_^A^
+AVVWSH
+H[_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+HcL$PH
+F@@t%H
+HcD$@H
+HcL$HE1
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+AWAVVWSH
+ [_^A^A_
+AWAVAUATVWUSH
+D$@tdA
+L$8u,H
+H[]_^A\A]A^A_
+|$0+|$@
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+H;D$8H
+FOVEON
+9FUJIH
+OLYMD1
+OLYMPUS
+PanasoniL1
+SONY DSCL1
+NikoD1
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+D$X;D$\
+fC9D/ t'I
+AWAVATVWUSH
+ []_^A\A^A_
+AWAVVWUSH
+([]_^A^A_
+AWAVVWUSH
+([]_^A^A_
+8fLaCu
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+l$ht0E
+[]_^A\A]A^A_
+HcD$|I
+AWAVATVWSH
+([_^A\A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWSH
+ [_^A\A]A^A_
+AWAVAUATVWUSH
+F89C8E
+McV$M9
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AVVWSH
+h[_^A^
+AVVWUSH
+ []_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+HcNHI9
+D;\$8}@D
+HcVHH9
+HcVHH9
+HcNHH9
+AWAVVWUSH
+([]_^A^A_
+([]_^A^A_
+AVVWUSH
+ []_^A^
+AWAVVWSH
+ [_^A^A_
+AWAVATVWUSH
+[]_^A\A^A_
+AWAVVWUSH
+[]_^A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+;\$ |!
+AWAVVWUSH
+H[]_^A^A_
+AWAVAUATVWUSH
+L$4~OI
+x[]_^A\A]A^A_
+HcD$dM
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVVWUSH
+[]_^A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+x[]_^A\A]A^A_
+L;l$Ht
+D+d$ E
+AWAVAUATVWUSH
+l$0u"A
+H[]_^A\A]A^A_
+L$ ~DM
+AWAVATVWUSH
+ []_^A\A^A_
+AWAVATVWSH
+([_^A\A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AVVWSH
+8[_^A^
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVVWSH
+ [_^A^A_
+AVVWSH
+([_^A^H
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVAUATVWSH
+ [_^A\A]A^A_
+AWAVAUATVWUSH
+ElIcOdH
+8[]_^A\A]A^A_
+AWAVVWSH
+ [_^A^A_
+AVVWSH
+([_^A^
+([_^A^
+AVVWSH
+([_^A^
+AVVWUSH
+P[]_^A^
+AVVWUSH
+ []_^A^
+VUUUUUUUH
+AVVWUSH
+[]_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWUSH
+[]_^A^
+AVVWUSf
+[]_^A^
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AVVWUSD
+[]_^A^
+AWAVATVWUSH
+`[]_^A\A^A_
+Hc|$8H
+AWAVATVWSH
+([_^A\A^A_
+AVVWUSH
+`[]_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+D9L$0L
+D9L$0}
+HcL$`H
+t;;T$0L
+\$@}5H
+\$@;T$0L
+L;|$xt
+ ;D$0}
+ ;D$0}
+tO;T$0L
+\$@}IH
+\$@;T$0L
+H9L$xu
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWUSH
+[]_^A\A^A_
+AWAVATVWSH
+([_^A\A^A_
+AWAVAUATVWUSH
+t$pt0H
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+H+L$@L9
+AWAVAUATVWUSH
+HcD$TH
+h[]_^A\A]A^A_
+AVVWSH
+8[_^A^
+AWAVAUATVWSH
+Mc|$ A
+ [_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+Hct$<L
+H[]_^A\A]A^A_
+H[]_^A\A]A^A_
+HcD$,I
+AVVWSH
+x[_^A^
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVVWUSH
+H[]_^A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AVVWSH
+8[_^A^
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWSH
+([_^A\A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AVVWSH
+([_^A^
+AWAVVWSH
+ [_^A^A_
+AWAVVWUSH
+([]_^A^A_
+([]_^A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AVVWSH
+8[_^A^
+AVVWUSH
+ []_^A^
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVVWSH
+0[_^A^A_
+AWAVATVWUSH
+[]_^A\A^A_
+A9v,uWI
+A9v,u!I
+AVVWSH
+8[_^A^
+AWAVAUATVWUSH
+d$pt7H
+[]_^A\A]A^A_
+AVVWSH
+LcHdLc@h1
+tkHcC Hi
+HcS$H9
+([_^A^
+t*McF,M
+AWAVVWSH
+ [_^A^A_
+AWAVATVWSH
+([_^A\A^A_
+AWAVVWSH
+ [_^A^A_
+AVVWSH
+([_^A^
+AVVWUSH
+@[]_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+D+D$8v
+|$"Gt5H
+AVVWUSH
+[]_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+D$4@tkH
+D$H;\$X
+USLTt3H
+AWAVAUATVWSH
+8GEOBL
+8APICL
+8CHAPL
+8PRIVL
+0[_^A\A]A^A_
+9GEOBt>
+9APICt-A
+9CHAPtzH
+AWAVAUATVWSH
+D$xL9(
+0[_^A\A]A^A_
+AWAVVWUSH
+8[]_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVVWUSH
+H[]_^A^A_
+AWAVVWUSH
+H[]_^A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVVWUSH
+8[]_^A^A_
+8[]_^A^A_
+AWAVAUATVWUSH
+x[]_^A\A]A^A_
+Lcd$,M
+AWAVATVWUSH
+@[]_^A\A^A_
+|$0Ttm
+;F t#H
+AWAVATVWUSH
+p[]_^A\A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+\$8uAA
+l$xw(H
+IcD$XIcL$\Hi
+\$8t2H
+W8McG(
+L$8t'H
+SMI uR
+AVVWUSH
+HcF$Hi
+ []_^A^
+AWAVATVWUSH
+ []_^A\A^A_
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+D$4t(H
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVATVWSH
+8[_^A\A^A_
+AVVWUSH
+ []_^A^
+AVVWSH
+([_^A^
+AVVWUSH
+ []_^A^
+ []_^A^
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+T$@u(Ic
+H;L$pu
+l$PtUA
+L9d$pu
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AVVWSH
+([_^A^
+AWAVVWSH
+ [_^A^A_
+AWAVAUATVWUSH
+;Q,r/H
+8[]_^A\A]A^A_
+;G,smH
+AWAVVWUSH
+([]_^A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+=mdtau
+AWAVVWSH
+0[_^A^A_
+AVVWUSH
+=@Vdn~Q=AVdnt\=AVin
+t=AVd1t
+@[]_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVVWUSH
+|$(nclxt
+|$(nclct
+|$(prof
+|$(prof
+|$(nclxu
+8[]_^A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVATVWUSH
+[]_^A\A^A_
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+D$0x4;
+D;|$,L
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+>H;D$@
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+L;|$PL
+AVVWSH
+([_^A^
+AVVWSH
+([_^A^
+AWAVVWSH
+ [_^A^A_
+AWAVATVWSH
+([_^A\A^A_
+AVVWSH
+([_^A^
+AVVWUSH
+ []_^A^
+AWAVATVWSH
+([_^A\A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+l$P~pO
+L9T$@t7
+L9T$@t H
+AWAVVWUSH
+8[]_^A^A_
+amrfu_L
+AVVWUSH
+0[]_^A^
+AVVWUSH
+0[]_^A^
+=mdatu
+AVVWSH
+([_^A^
+AWAVVWUSH
+([]_^A^A_
+AVVWSH
+([_^A^
+AWAVVWUSH
+([]_^A^A_
+AWAVATVWUSH
+=rap t
+ []_^A\A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+meantE
+namet6
+=encvt
+=encau"H
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVVWUSH
+8[]_^A^A_
+8[]_^A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+AVVWSH
+([_^A^
+AVVWSH
+8[_^A^
+AWAVAUATVWUSH
+=svhdu
+8[]_^A\A]A^A_
+=proju
+=prhdu
+equitGA
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+=pkinu
+=overt
+=sideu
+=packt
+=proju
+=primt A
+=rectt
+=fisht
+=bams~s=cams
+=cmfyu
+=stritg=hero
+AVVWSH
+([_^A^
+AVVWSH
+([_^A^
+AWAVATVWUSH
+ []_^A\A^A_
+AWAVVWSH
+ [_^A^A_
+AWAVVWUSH
+[]_^A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+D$$t#H
+D9@ t.L9
+AWAVVWSH
+ipcmtM
+fpcmu7
+ [_^A^A_
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+EL=grid
+t$@L)v
+T$0t01
+H9t$8u
+H9t$8u
+AWAVAUATVWUSH
+HcD$DH
+X[]_^A\A]A^A_
+D$0ipcoH
+D$0ipcoH
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+E9} t,H9
+AWAVVWSH
+ [_^A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVATVWSH
+([_^A\A^A_
+AWAVVWUSH
+([]_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+D$l;D$hH
+AVVWUSH
+ []_^A^
+AVVWUSH
+ []_^A^
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AVVWSH
+([_^A^
+([_^A^
+AVVWUSH
+P[]_^A^
+AWAVATVWSH
+8[_^A\A^A_
+AWAVVWUSH
+[]_^A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AVVWSH
+8[_^A^
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+H;\$`t=H
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AVVWUSH
+ []_^A^
+ []_^A^
+UUUUA)
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVVWSH
+0[_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+M,=gniXt
+cvaLuV
+=IRBVu4H
+\$lIcF
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+H+D$8H
+D$09D$,
+l$,x,1
+AWAVAUATVWSH
+@[_^A\A]A^A_
+Hc\$4H
+V0HcL$4H
+AWAVAUATVWUSH
+Hcl$lH
+x[]_^A\A]A^A_
+HcT$,A
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+I9D$`t
+X[]_^A\A]A^A_
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+9D$Ht*H
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWSH
+0[_^A\A]A^A_
+AWAVAUATVWSH
+ [_^A\A]A^A_
+ [_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVVWSH
+ [_^A^A_
+AWAVVWSH
+p[_^A^A_
+AWAVAUATVWSH
+0[_^A\A]A^A_
+AWAVVWSH
+OpusTagsH9
+0[_^A^A_
+AWAVAUATVWUSH
+OpusHeadI9
+OpusTagsI9
+8[]_^A\A]A^A_
+npLcFlE9
+AVVWUSH
+ []_^A^
+AWAVATVWUSH
+@[]_^A\A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+JpLcJlA
+L9I(u.M9
+AWAVAUATVWUSH
+x[]_^A\A]A^A_
+|$Pt2H
+QPLcD$XE1
+HcT$XH
+AWAVATVWSH
+([_^A\A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+H9B(u'E1
+D$pA;D$lu
+H[]_^A\A]A^A_
+AWAVVWSH
+ [_^A^A_
+LcXlE9
+AVVWSH
+([_^A^
+AWAVATVWUSH
+0[]_^A\A^A_
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+L$L3L$\H
+L$@3L$\H
+qH3D$T
+L$43L$\H
+tD$PfD
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVVWSH
+IcG LcG$L
+IcG$HcW H
+ [_^A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AVVWUSH
+@[]_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+IcG McE$L
+IcG$IcU H
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+H9D$0L
+AWAVVWSH
+ [_^A^A_
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+D$@H;D$H
+D$@H;D$H~mH
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+HcH Li
+H[]_^A\A]A^A_
+IcD$ LcG$L
+IcD$$HcW H
+x;A;o$u
+IcF McD$$L
+IcF$IcT$ H
+AWAVATVWUSH
+0[]_^A\A^A_
+0[]_^A\A^A_
+0[]_^A\A^A_
+AWAVAUATVWUSH
+=RF64t
+ =RIFFt
+=WAVEubE
+=ds64uJH
+[]_^A\A]A^A_
+l$`t(H
+=INFOu
+D$x~hL
+AWAVAUATVWUSH
+IcG0IcW(H
+datatlA
+([]_^A\A]A^A_
+AWAVVWSH
+ [_^A^A_
+ [_^A^A_
+AWAVATVWUSH
+0[]_^A\A^A_
+AWAVAUATVWUSH
+L$D2D$E
+D$E2T$F
+T$FD2D$GD
+D$G2L$H
+L$H2D$I
+D$I2T$J
+T$JD2D$KD
+D$K2L$L
+L$L2D$M
+D$M2T$N
+T$ND2D$OD
+80D$RA
+80D$S1
+2L$D2D$E2T$FD2D$G
+2L$H2D$I2T$JD2D$K
+2L$L2D$M2T$ND2D$O
+2L$P2D$Q2T$RD2D$S
+2L$T2D$U2T$VD2D$W
+0L$X0D$Y0T$ZD0D$[A
+HcD$(A
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AVVWSH
+!%UUUUA)
+%3333A
+LcT$(E
+A0IcI,;D
+ADIcI@;D
+AXIcIT;D
+AWAVVWUSH
+([]_^A^A_
+AWAVVWUSH
+([]_^A^A_
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+X[]_^A\A]A^A_
+H9t$Pt
+AWAVATVWSH
+([_^A\A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AVVWSH
+[_^A^I
+AWAVAUATVWUSH
+l$(~BE1
+D$8~,J
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+L#|$PM
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+d$0~;E1
+D$@~)H
+H[]_^A\A]A^A_
+AWAVATVWSH
+)T$`fD
+)t$ Lc11
+[_^A\A^A_
+AWAVVWSH
+ [_^A^A_
+AWAVAUATVWUSH
+)\$pfD
+)T$`fD
+)L$PfD
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVVWUSH
+H[]_^A^A_
+AWAVVWUSH
+([]_^A^A_
+AWAVAUATVWUSH
+I Hc)D
+L9\$0tDIc
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+D$8<L;t$@
+)D$PE1
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+I Lc9L
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+I Lc9L
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+I Lc9L
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+I Lc)L
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+I Lc9L
+l$dIcD
+\$$IcD
+L$4IcD
+T$lIcD
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+)L$pfD
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+)L$pfD
+[]_^A\A]A^A_
+AWAVVWUSH
+([]_^A^A_
+AVVWSH
+H[_^A^
+AWAVVWUSH
+x[]_^A^A_
+AVVWUSH
+0[]_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWSH
+([_^A^
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+([_^A^
+AWAVVWUSH
+x[]_^A^A_
+AVVWUSH
+ []_^A^
+AVVWSL
+[_^A^I
+AWAVVWSH
+ [_^A^A_
+AWAVATVWSH
+H[_^A\A^A_
+AVVWSH
+H[_^A^
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AVVWSH
+([_^A^
+AWAVATVWUSH
+ []_^A\A^A_
+AWAVATVWUSH
+ []_^A\A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+([]_^A\A]A^A_
+AVVWSH
+8[_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+UUUUE)
+UUUUE)
+AWAVATVWUSH
+@[]_^A\A^A_
+~4H=?P
+@[]_^A\A^A_
+AVVWSH
+H[_^A^
+UUUUD)
+AVVWSH
+AVVWUSH
+ []_^A^
+AWAVATVWUSH
+ []_^A\A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVVWUSH
+([]_^A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AVVWSH
+([_^A^
+AVVWSH
+8[_^A^
+AWAVAUATVWUSH
+L$0r4H
+L$8r-H
+L$@r&H
+x[]_^A\A]A^A_
+AWAVVWUSH
+8[]_^A^A_
+8[]_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVVWUSH
+8[]_^A^A_
+AVVWSH
+8[_^A^
+AWAVATVWUSH
+ []_^A\A^A_
+CtD;A@u
+;CtuJH
+ []_^A\A^A_
+A<;Ftu
+AVVWSH
+([_^A^
+([_^A^
+AWAVVWUSH
+([]_^A^A_
+([]_^A^A_
+AVVWSH
+([_^A^
+AVVWUSH
+ []_^A^
+AWAVVWSH
+ [_^A^A_
+AVVWSH
+([_^A^
+([_^A^
+([_^A^
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+)D$@HcQ
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+D$PH9D$@t
+AWAVATVWSH
+8[_^A\A^A_
+8[_^A\A^A_
+8[_^A\A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+AWAVVWSH
+ [_^A^A_
+EDDDDDD
+AVVWUSH
+p[]_^A^
+AWAVVWSH
+0[_^A^A_
+AVVWUSH
+[]_^A^
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVVWSH
+ [_^A^A_
+AWAVATVWUSH
+u HcD$4
+@[]_^A\A^A_
+AWAVAUATVWUSH
+$D3|$$A1
+D1T$(E1
+1|$4D1l$
+1l$<D1d$
+D1d$$1|$0E
+D1t$@1l$ D1d$(E
+D1\$4A
+1l$8D1\$DE1
+$D1d$@D1|$<D1\$$D
+\$8D3d$
+D1\$ D
+t$4D3d$
+1|$,D1D$0D1
+|$8D3t$
+D1d$(D
+D1d$ 1|$$A
+D1L$<D
+h[]_^A\A]A^A_
+AWAVAUATVWUSH
+D3T$pL
+[]_^A\A]A^A_
+AWAVATVWSH
+([_^A\A^A_
+AWAVAUATVWSH
+ [_^A\A]A^A_
+AVVWSH
+([_^A^
+AWAVVWUSH
+A97t`H
+H[]_^A^A_
+AWAVATVWUSH
+@[]_^A\A^A_
+AWAVATVWUSH
+P[]_^A\A^A_
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+H;l$Pt
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+8[]_^A\A]A^A_H
+gfffffffH
+gfffffffH
+AVVWUS
+[]_^A^
+EDDDDDD
+AWAVATVWSH
+h[_^A\A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVVWUSH
+([]_^A^A_
+AWAVAUATVWUS
+_E;E`L
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+|$ IcD$HH
+[]_^A\A]A^A_
+AVVWUSH
+[]_^A^
+AVVWUSH
+@[]_^A^
+AWAVVWUSH
+([]_^A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+d$H~6L
+X[]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+T$Xt)fG
+u8:T$`t
+AVVWUSH
+[]_^A^
+AVVWUSH
+ []_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWUSH
+[]_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+L+l$XH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+H+T$XH
+[]_^A\A]A^A_
+AWAVATVWUSH
+[]_^A\A^A_
+AWAVATVWUSH
+ []_^A\A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+HcD$XH
+HcD$XH
+LcD$`H
+Lc\$HC
+HcD$HL
+;HcD$HL
+HcD$HH
+;HcD$HL
+AWAVAUATVWUSH
+HcT$PH
+D$hHcT$PL
+D$`HcT$PH
+D$xHcT$PH
+@hLc|$PL
+D$`HcT$PH
+D$xHcT$PH
+Lc|$PH
+D$hLc|$PH
+CxHct$PH
+[]_^A\A]A^A_
+EhLcd$PL
+E`Hct$PL
+CxHct$PH
+[]_^A\A]A^A_
+HcT$PH
+D$hHcT$PL
+D$`HcT$PH
+D$xHcT$PH
+@hLc|$PL
+D$`HcT$PH
+D$xHcT$PH
+Lc|$PH
+D$hLc|$PH
+CxHct$PH
+G`Hct$PL
+D$hLcd$PL
+G`Hct$PL
+CxHct$PH
+ChHcT$PH
+@hHcT$PH
+HcT$PH
+HcT$PH
+ChHcT$PH
+D$`HcT$PH
+D$xHcT$PH
+D$xHcT$PH
+D$xHcT$PH
+D$hHcT$PL
+D$hHct$PL
+D$hHcT$PL
+D$hHct$PL
+D$hHcT$PL
+D$hHct$PL
+D$`HcT$PH
+D$xHcT$PH
+D$xHcT$PH
+D$xHcT$P
+D$`HcT$PH
+D$`HcT$PL
+D$`Hct$PL
+D$`HcT$PL
+D$`Hct$PL
+D$`HcT$PL
+D$`Hct$PL
+ChHcT$PH
+@hHcT$PH
+HcT$PH
+HcT$PH
+ChHcT$PH
+D$`HcT$PH
+D$xHcT$PH
+D$xHcT$PH
+D$hHcT$PL
+D$hHct$PL
+D$hHcT$PL
+D$hHct$PL
+D$hHcT$PL
+D$hHct$PL
+D$`HcT$PH
+D$xHcT$PH
+D$xHcT$PH
+D$xHcT$P
+D$`HcT$PH
+D$`HcT$PL
+D$`Hct$PL
+D$`HcT$PL
+D$`Hct$PL
+D$`HcT$PL
+D$`Hct$PL
+D$hHcT$PL
+D$hHct$PH
+D$`HcT$PH
+D$xHcT$PH
+D$xHcT$PH
+D$xHcT$P
+D$`HcT$PH
+D$`HcT$PL
+D$`Lct$PH
+D$hHcT$PL
+D$hHct$PH
+D$`HcT$PH
+D$xHcT$PH
+D$xHcT$PH
+D$xHcT$P
+D$`HcT$PH
+D$`HcT$PL
+D$`Hct$PL
+D$`HcT$PH
+D$`HcT$PH
+G`Hct$PL
+D$`HcT$PH
+D$`HcT$PH
+D$`HcT$PH
+D$`HcT$PH
+D$`HcT$PH
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+AA9C(A
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+@A9F(@
+JA9N(@
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+HcL$PH
+HcL$PH
+HcL$PI
+HcL$PH
+HcL$PH
+HcL$PH
+[]_^A\A]A^A_I
+HcL$PH
+HcL$PH
+HcL$PH
+HcL$PH
+HcL$PI
+HcL$PH
+[]_^A\A]A^A_
+HcL$PH
+HcL$PH
+HcL$PI
+AWAVATVWUSH
+LH`[]_^A\A^A_
+AWAVAUATVWUSH
+HcL$XH
+HcL$XH
+HcL$XI
+HcL$XH
+HcL$XH
+HcL$XI
+[]_^A\A]A^A_I
+HcL$XH
+HcL$XH
+HcL$XI
+HcL$XH
+HcL$XH
+HcL$XI
+[]_^A\A]A^A_
+HcL$XH
+HcL$XH
+HcL$XI
+AWAVAUATVWUSH
+t$T|SE
+l$T|LE
+[]_^A\A]A^A_
+l$x|UE
+AWAVAUATVWUSH
+d$X|FE
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+|$du/H
+l$p|LE
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+|$p|>E
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+|$\u/H
+d$\|]A
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUS
+D$HHc@\H
+D$HHc@`H
+t1L9s0u+L
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+t#D;|$$A
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+HcI,H9
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVVWUSD
+[]_^A^A_
+AWAVAUATVWUSI
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+ []_^A\A]A^A_
+AWAVVWUS
+[]_^A^A_
+AWAVVWUS
+[]_^A^A_
+AWAVVWUS
+[]_^A^A_
+AWAVATVWUS
+[]_^A\A^A_
+AWAVATVWUS
+[]_^A\A^A_
+AWAVATVWUS
+[]_^A\A^A_
+AWAVVWUS
+[]_^A^A_
+AWAVVWUS
+[]_^A^A_
+AWAVVWUS
+[]_^A^A_
+AWAVATVWUS
+[]_^A\A^A_
+AWAVATVWUS
+[]_^A\A^A_
+AWAVATVWUS
+[]_^A\A^A_
+AVVWSH
+H[_^A^
+AVVWSH
+([_^A^
+AVVWUSH
+[]_^A^
+AVVWUSH
+[]_^A^
+AVVWUSH
+[]_^A^
+AVVWUSH
+[]_^A^
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+AWAVAUATVWUSH
+ []_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+0[]_^A\A]A^A_
+AWAVAUATVWUSE
+7[]_^A\A]A^A_
+AWAVAUATVWUSE
+7[]_^A\A]A^A_
+AWAVAUATVWUSPE
+[]_^A\A]A^A_
+AWAVAUATVWUSE
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVVWUSH
+Q[]_^A^A_
+AVVWUSI
+[]_^A^
+AVVWUSH
+[]_^A^
+AVVWUSH
+[]_^A^
+AVVWUSH
+[]_^A^
+AVVWUSH
+[]_^A^
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+AWAVAUATVWUSH
+ []_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+0[]_^A\A]A^A_
+AWAVAUATVWUSB
+7[]_^A\A]A^A_
+AWAVAUATVWUSB
+7[]_^A\A]A^A_
+AWAVAUATVWUSPA
+[]_^A\A]A^A_
+AWAVAUATVWUSA
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVVWUSH
+Q[]_^A^A_
+AVVWUSI
+[]_^A^
+AVVWUSH
+[]_^A^
+AVVWUSH
+[]_^A^
+AVVWUSH
+[]_^A^
+AVVWUSH
+[]_^A^
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+AWAVAUATVWUSH
+ []_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+0[]_^A\A]A^A_
+AWAVAUATVWUSA
+7[]_^A\A]A^A_
+AWAVAUATVWUSA
+7[]_^A\A]A^A_
+AWAVAUATVWUSPA
+[]_^A\A]A^A_
+AWAVAUATVWUSA
+[]_^A\A]A^A_
+AWAVAUATVWUSA
+[]_^A\A]A^A_
+AWAVVWUSH
+Q[]_^A^A_
+AVVWUSI
+[]_^A^
+AVVWUSH
+[]_^A^
+AVVWUSH
+[]_^A^
+AVVWUSH
+[]_^A^
+AVVWUSH
+[]_^A^
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+AWAVAUATVWUSH
+ []_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+0[]_^A\A]A^A_
+AWAVAUATVWUSA
+7[]_^A\A]A^A_
+AWAVAUATVWUSA
+7[]_^A\A]A^A_
+AWAVAUATVWUSPA
+[]_^A\A]A^A_
+AWAVAUATVWUSA
+[]_^A\A]A^A_
+AWAVAUATVWUSA
+[]_^A\A]A^A_
+AWAVVWUSH
+Q[]_^A^A_
+AVVWUSI
+[]_^A^
+AVVWUSH
+[]_^A^
+AVVWUSH
+[]_^A^
+AVVWUSH
+[]_^A^
+AVVWUSH
+[]_^A^
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+0[]_^A\A]A^A_
+AWAVAUATVWUSD
+6[]_^A\A]A^A_
+AWAVAUATVWUSD
+6[]_^A\A]A^A_
+AWAVAUATVWUSPH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVVWUSH
+[]_^A^A_
+AVVWUSH
+[]_^A^
+AVVWUS
+[]_^A^
+AWAVAUATVWUSH
+@[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSD
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+`[]_^A\A]A^A_
+GD+l$XA
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSD
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+`[]_^A\A]A^A_
+GD+l$XA
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVAUATVWUSD
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+`[]_^A\A]A^A_
+GD+l$XA
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVAUATVWUSD
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+`[]_^A\A]A^A_
+GD+l$XA
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSM
+Q[]_^A\A]A^A_
+AWAVAUATVWUSI
+[]_^A\A]A^A_
+AWAVAUATVWUSPM
+[]_^A\A]A^A_
+AWAVATVWUSI
+Q[]_^A\A^A_
+AWAVAUATVWUSI
+Q[]_^A\A]A^A_
+AWAVAUATVWUSPI
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSPI
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+@[]_^A\A]A^A_
+AWAVAUATVWUSH
+p[]_^A\A]A^A_
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+AWAVAUATVWUSH
+`[]_^A\A]A^A_
+AWAVAUATVWUSH
+`[]_^A\A]A^A_
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+AWAVAUATVWUSI
+A[]_^A\A]A^A_
+AWAVVWUSI
+[]_^A^A_
+AWAVAUATVWUSI
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWUSH
+[]_^A\A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWSH
+AWAVAUATVWUSH
+`[]_^A\A]A^A_
+AVVWSI
+AWAVAUATVWUSH
+0[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWUSH
+[]_^A^
+AVVWSH
+AVVWUSM
+[]_^A^
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AVVWSI
+AVVWUSH
+[]_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AVVWSI
+AVVWUSH
+[]_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AVVWSI
+AVVWUSH
+[]_^A^
+AWAVAUATVWUSE
+[]_^A\A]A^A_
+AWAVAUATVWUSL
+[]_^A\A]A^A_
+AWAVAUATVWUSPM
+[]_^A\A]A^A_
+AWAVATVWUSL
+[]_^A\A^A_
+AWAVAUATVWUSC
+[]_^A\A]A^A_
+AWAVAUATVWUSD
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWUSD
+[]_^A\A^A_
+AWAVAUATVWUSH
+@[]_^A\A]A^A_
+AWAVAUATVWUSH
+p[]_^A\A]A^A_
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+AWAVAUATVWUSH
+`[]_^A\A]A^A_
+AWAVAUATVWUSH
+`[]_^A\A]A^A_
+AWAVAUATVWUSH
+X[]_^A\A]A^A_
+AWAVAUATVWUSD
+[]_^A\A]A^A_
+AWAVAUATVWUSD
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWUSLc
+[]_^A\A^A_
+AWAVAUATVWUSH
+ []_^A\A]A^A_
+AWAVVWUS
+[]_^A^A_
+AWAVAUATVWUSH
+P[]_^A\A]A^A_
+AWAVAUATVWUSLc
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVVWUSL
+[]_^A^A_
+@`LcZ N
+@`HcB D
+AWAVAUATVWUSPH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSD
+[]_^A\A]A^A_
+AVVWSH
+AWAVAUATVWUSHc
+[]_^A\A]A^A_
+AWAVVWS
+[_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWSH
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+h[_^A^
+AVVWSH
+h[_^A^
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AVVWSH
+8[_^A^
+AVVWSH
+8[_^A^
+AWAVATVWUSH
+`[]_^A\A^A_
+AWAVVWSH
+p[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+p[_^A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVATVWUSH
+`[]_^A\A^A_
+AWAVVWSH
+p[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+p[_^A^A_
+AWAVVWSH
+[_^A^A_
+AVVWSH
+([_^A^
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWUSH
+[]_^A\A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+h[_^A^
+AVVWSH
+h[_^A^
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AVVWSH
+8[_^A^
+AWAVAUATVWUSIc
+[]_^A\A]A^A_
+AVVWSH
+8[_^A^
+AWAVATVWUSH
+`[]_^A\A^A_
+AWAVVWSH
+p[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+p[_^A^A_
+AWAVAUATVWUSH
+x[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVATVWUSH
+`[]_^A\A^A_
+AWAVVWSH
+p[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+p[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWSH
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWSH
+AVVWSH
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AVVWSH
+H[_^A^
+AVVWSH
+H[_^A^
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AVVWSH
+([_^A^
+AWAVATVWSH
+[_^A\A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWUSH
+[]_^A\A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWSH
+AVVWSH
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AVVWSH
+H[_^A^
+AWAVAUATVWUSA
+.[]_^A\A]A^A_
+AVVWSH
+H[_^A^
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWSH
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWSH
+AVVWSH
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AVVWSH
+H[_^A^
+AVVWSH
+H[_^A^
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AVVWSH
+([_^A^
+AWAVATVWSH
+[_^A\A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWUSH
+[]_^A\A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWSH
+AVVWSH
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AVVWSH
+H[_^A^
+AWAVAUATVWUSA
+.[]_^A\A]A^A_
+AVVWSH
+H[_^A^
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUS
+[]_^A\A]A^A_
+AVVWSH
+AWAVAUATVWUS
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWSH
+AVVWSH
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AVVWSH
+H[_^A^
+AVVWSH
+H[_^A^
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AVVWSH
+([_^A^
+AWAVATVWSH
+[_^A\A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWUS
+[]_^A\A]A^A_
+AWAVATVWUSH
+[]_^A\A^A_
+AWAVAUATVWUS
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWSH
+AVVWSH
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AVVWSH
+H[_^A^
+AWAVAUATVWUSA
+.[]_^A\A]A^A_
+AVVWSH
+H[_^A^
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUS
+[]_^A\A]A^A_
+AVVWSH
+AWAVAUATVWUS
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWSH
+AVVWSH
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AVVWSH
+H[_^A^
+AVVWSH
+H[_^A^
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AVVWSH
+([_^A^
+AWAVATVWSH
+[_^A\A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWUS
+[]_^A\A]A^A_
+AWAVATVWUSH
+[]_^A\A^A_
+AWAVAUATVWUS
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWSH
+AVVWSH
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVAUATVWSH
+[_^A\A]A^A_
+AVVWSH
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AVVWSH
+H[_^A^
+AWAVAUATVWUSA
+.[]_^A\A]A^A_
+AVVWSH
+H[_^A^
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVVWSH
+[_^A^A_
+AWAVATVWSH
+([_^A\A^A_
+AWAVAUATVWUSPIc
+[]_^A\A]A^A_
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+p[]_^A\A]A^A_
+AWAVATVWUSIc
+[]_^A\A^A_
+AWAVAUATVWUSMc
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+x[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWSH
+([_^A\A^A_
+AWAVAUATVWUSPA
+[]_^A\A]A^A_
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWUSA
+[]_^A\A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+ []_^A\A]A^A_
+AWAVAUATVWUSA
+.[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWSH
+([_^A\A^A_
+AWAVAUATVWUSPA
+[]_^A\A]A^A_
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWUSA
+[]_^A\A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+ []_^A\A]A^A_
+AWAVAUATVWUSA
+.[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWSH
+([_^A\A^A_
+AWAVAUATVWUSPA
+[]_^A\A]A^A_
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+AWAVATVWUSA
+[]_^A\A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+ []_^A\A]A^A_
+AWAVAUATVWUSA
+.[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+AWAVATVWSH
+([_^A\A^A_
+AWAVAUATVWUSPA
+[]_^A\A]A^A_
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+AWAVATVWUSA
+[]_^A\A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+ []_^A\A]A^A_
+AWAVAUATVWUSA
+.[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+AWAVAUATVWUS
+[]_^A\A]A^A_
+HcD$0H
+HcL$4D
+AVVWSH
+([_^A^
+AWAVVWUSH
+[]_^A^A_
+AWAVAUATVWUSH
+`[]_^A\A]A^A_
+D$@Hc@\H
+AWAVATVWUSH
+ []_^A\A^A_
+AWAVVWSH
+ [_^A^A_
+AWAVVWSH
+ [_^A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AVVWUSI
+[]_^A^
+AWAVAUATVWUSH
+D$(Hc@\
+[]_^A\A]A^A_
+T$pJcT
+AWAVAUATVWSH
+ [_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVVWUSH
+[]_^A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVVWSH
+0[_^A^A_
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+H;|$xt
+AWAVVWUSI
+[]_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+l$,HcD$LH
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+|$HtUA
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+x[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+AWAVAUATVWUS
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+)t$0E1
+[]_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+T$,fD3P E
+AWAVAUATVWUSH
+L$(~5A
+[]_^A\A]A^A_
+L$Bf)T\@
+L$(fA9
+)fE9+}
+9fA9;}
+9fA9;}
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+L$(fA9
+AWAVATVWUSH
+D$$fD3
+0[]_^A\A^A_
+AWAVVWUSH
+[]_^A^A_
+2fD93}
+AWAVAUATVWUSH
+L$@t`D
+X[]_^A\A]A^A_
+D$00M9
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+D$XHcX
+H9T$h}
+D$pD;(A
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+l$PupH
+[]_^A\A]A^A_
+AWAVAUATVWSH
+ [_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWUSI
+[]_^A^
+AWAVVWSH
+@[_^A^A_
+AWAVAUATVWUS
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+APETAGEXH9D$(t41
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AVVWUSH
+0[]_^A^
+0[]_^A^
+AVVWUSH
+0[]_^A^
+0[]_^A^
+AWAVAUATVWUSH
+)D$@E1
+[]_^A\A]A^A_
+AWAVAUATVWSH
+[_^A\A]A^A_
+AWAVAUATVWUS
+D;d$4|
+D9d$0u
+[]_^A\A]A^A_
+AWAVAUATVWUS
+D;d$4|
+D9d$0u
+[]_^A\A]A^A_
+AWAVAUATVWUS
+D;d$4|
+D9d$0u
+[]_^A\A]A^A_
+AWAVAUATVWUS
+D;d$4|
+D9d$0u
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+x[]_^A\A]A^A_
+AVVWSH
+8[_^A^
+AVVWSH
+H[_^A^
+AWAVVWSH
+[_^A^A_
+AVVWSH
+H[_^A^
+AVVWSH
+AVVWSH
+AVVWSH
+8[_^A^
+AVVWSH
+H[_^A^
+AWAVVWSH
+[_^A^A_
+AVVWSH
+H[_^A^
+AVVWSH
+8[_^A^
+AVVWSH
+H[_^A^
+AWAVVWSH
+[_^A^A_
+AVVWSH
+H[_^A^
+AVVWSH
+AVVWSH
+AVVWSH
+8[_^A^
+AVVWSH
+H[_^A^
+AWAVVWSH
+[_^A^A_
+AVVWSH
+H[_^A^
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AWAVVWSH
+[_^A^A_
+AWAVVWSH
+[_^A^A_
+AWAVVWSH
+[_^A^A_
+AWAVVWSH
+[_^A^A_
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AWAVATVWSH
+[_^A\A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVATVWSH
+[_^A\A^A_
+AVVWSH
+AVVWSH
+AVVWSH
+AVVWSH
+AWAVATVWSH
+[_^A\A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVATVWSH
+[_^A\A^A_
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AWAVVWSH
+[_^A^A_
+AWAVVWSH
+[_^A^A_
+AWAVVWSH
+[_^A^A_
+AWAVVWSH
+[_^A^A_
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AWAVVWSH
+[_^A^A_
+AWAVVWSH
+[_^A^A_
+AWAVVWSH
+[_^A^A_
+AWAVVWSH
+[_^A^A_
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AWAVATVWSH
+[_^A\A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVATVWSH
+[_^A\A^A_
+AVVWSH
+AVVWSH
+AVVWSH
+AVVWSH
+AWAVATVWSH
+[_^A\A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVATVWSH
+[_^A\A^A_
+AWAVATVWSH
+[_^A\A^A_
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AWAVVWSH
+[_^A^A_
+AWAVVWSH
+[_^A^A_
+AWAVVWSH
+[_^A^A_
+AWAVVWSH
+[_^A^A_
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AVVWUSH
+[]_^A^
+AVVWSH
+x[_^A^
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+H[]_^A\A]A^A_I
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+H[]_^A\A]A^A_I
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+AWAVVWUSH
+H[]_^A^A_
+AVVWSH
+([_^A^
+([_^A^
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+L9|$@t
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+AVVWSH
+([_^A^
+AWAVAUATVWUSH
+h[]_^A\A]A^A_
+L9|$@t
+AVVWSH
+([_^A^
+AVVWUSH
+P[]_^A^
+AVVWUSH
+P[]_^A^
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+UAVVWSH
+0[_^A^]
+UAVVWSH
+ [_^A^]
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+UAWAVAUATVWSH
+x[_^A\A]A^A_]
+H;A t;
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+AWAVVWSH
+`[_^A^A_
+UAWAVVWSH
+X[_^A^A_]
+UAWAVVWSH
+8[_^A^A_]
+UAWAVVWSH
+X[_^A^A_]
+ffffff.
+UAWAVVWSH
+8[_^A^A_]
+UAVVWSH
+@[_^A^]
+UAVVWSH
+0[_^A^]
+UAWAVAUATVWSH
+h[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+AVVWSH
+([_^A^
+AVVWSH
+8[_^A^
+H;A tR
+H;A t8H
+AWAVATVWUSH
+H;A t.
+0[]_^A\A^A_
+UAWAVAUATVWSH
+x[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+AWAVVWSH
+`[_^A^A_
+UAWAVVWSH
+X[_^A^A_]
+UAWAVVWSH
+8[_^A^A_]
+UAWAVVWSH
+X[_^A^A_]
+ffffff.
+UAWAVVWSH
+8[_^A^A_]
+UAVVWSH
+@[_^A^]
+UAVVWSH
+0[_^A^]
+UAWAVAUATVWSH
+h[_^A\A]A^A_]
+UAWAVAUATVWSH
+H[_^A\A]A^A_]
+AVVWSH
+([_^A^
+AVVWSH
+8[_^A^
+H;A t)
+AWAVATVWUSH
+H;A t7
+0[]_^A\A^A_
+AVVWSH
+O0H;O8t
+AWAVAUATVWUSH
+O0H;O8u
+[]_^A\A]A^A_
+AWAVVWSH
+[_^A^A_
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+fffff.
+UAWAVAUATVWSH
+X[_^A\A]A^A_]
+UAWAVAUATVWSH
+X[_^A\A]A^A_]
+UAWAVAUATVWSH
+X[_^A\A]A^A_]
+UAWAVVWSH
+[_^A^A_]
+ffffff.
+UAWAVVWSH
+UAWAVVWSH
+X[_^A^A_]
+UAWAVVWSH
+X[_^A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+UAWAVAUATVWSH
+h[_^A\A]A^A_]
+UAWAVAUATVWSH
+h[_^A\A]A^A_]
+UAWAVAUATVWSH
+h[_^A\A]A^A_]
+UAWAVVWSH
+[_^A^A_]
+UAWAVVWSH
+UAWAVVWSH
+X[_^A^A_]
+ffffff.
+UAWAVVWSH
+X[_^A^A_]
+UAWAVAUATVWSH
+8[_^A\A]A^A_]
+UAWAVAUATVWSH
+UAVVWSH
+@[_^A^]
+fffff.
+UAVVWSH
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+L;0t\H
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWUSH
+H[]_^A\A]A^A_
+AVVWSH
+X[_^A^
+AWAVVWUSL
+[]_^A^A_
+AVVWSH
+X[_^A^
+AWAVAUATVWUSL
+[]_^A\A]A^A_
+AVVWSH
+X[_^A^
+AVVWSH
+X[_^A^
+AWAVVWUSL
+[]_^A^A_
+WednesdaH
+ThursdayH
+SaturdayH
+FebruaryH
+SeptembeH
+DecemberH
+UAVVWSH
+@[_^A^]
+@[_^A^]
+UAVVWSH
+AWAVVWUSH
+H9|$(tP
+h[]_^A^A_
+H9|$(t
+UAVVWSH
+`[_^A^]
+UAVVWSH
+0[_^A^]
+UAVVWSH
+`[_^A^]
+UAVVWSH
+0[_^A^]
+UAVVWSH
+`[_^A^]
+UAVVWSH
+ [_^A^]
+UAVVWSH
+`[_^A^]
+UAVVWSH
+ [_^A^]
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AWAVATVWSH
+([_^A\A^A_
+AWAVVWSH
+ [_^A^A_
+AWAVVWUSH
+8[]_^A^A_
+AWAVVWUSH
+8[]_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVATVWUSE
+[]_^A\A^A_
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+AWAVATVWSH
+([_^A\A^A_
+AWAVATVWUSH
+ []_^A\A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AVVWUSH
+`[]_^A^
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+AWAVAUATVWSH
+ [_^A\A]A^A_
+AVVWUSH
+ []_^A^
+AWAVVWSH
+[_^A^A_
+UAWAVAUATVWSH
+E McE$L
+E$McE(L
+E(McE,L
+E,McE0L
+E0McE4L
+E4McE8L
+E8McE<L
+}8~6Ic
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+e([_^A\A]A^A_]
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+AVVWUSH
+[]_^A^
+AWAVAUATVWUSH
+8[]_^A\A]A^A_
+UAWAVAUATVWSH
+eh[_^A\A]A^A_]
+AVVWSH
+8[_^A^
+UAWAVAUATVWSPH
+[_^A\A]A^A_]
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVVWUSH
+[]_^A^A_
+AWAVAUATVWUSH
+[]_^A\A]A^A_
+Mc)Nc4
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+AWAVAUATVWUSH
+([]_^A\A]A^A_
+UAWAVAUATVWSH
+e8[_^A\A]A^A_]
+e8[_^A\A]A^A_]
+AVVWSH
+([_^A^
+([_^A^
+AVVWUSH
+ []_^A^
+UAWAVAUATVWSH
+e([_^A\A]A^A_]
+AWAVVWUSH
+([]_^A^A_
+AWAVATVWUSH
+p[]_^A\A^A_
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+AVVWSH
+AWAVAUATVWUSH
+)t$ Mc
+X[]_^A\A]A^A_
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+AVVWSH
+8[_^A^
+UAWAVAUATVWSH
+ HcupL
+[_^A\A]A^A_]
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+UAWAVAUATVWSPH
+[_^A\A]A^A_]
+AVVWUSH
+ []_^A^
+UAWAVAUATVWS
+[_^A\A]A^A_]
+m Lcm(L
+m(Lcm0L
+m0Lcm8L
+m8Lcm@L
+m@LcmHL
+mHLcmPL
+mPLcmXL
+mXLcm`L
+m`LcmhL
+mhLcmpL
+mpLcmxL
+UAWAVAUATVWSH
+[_^A\A]A^A_]
+AWAVATVWSH
+([_^A\A^A_
+5?D)_?D)_?D)_?D)_?
+&'45<=67>?DELMFGNO\]de^_fglmtunovw
+bad allocation
+bad array new length
+bad exception
+ !"#$%&'()*+,-./0123456789:;<=>?@abcdefghijklmnopqrstuvwxyz[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`ABCDEFGHIJKLMNOPQRSTUVWXYZ{|}~
+(null)
+[aOni*{
+~ $s%r
+@b;zO]
+v2!L.2
+IND)ind)d
+No error
+Operation not permitted
+No such file or directory
+No such process
+Interrupted function call
+Input/output error
+No such device or address
+Arg list too long
+Exec format error
+Bad file descriptor
+No child processes
+Resource temporarily unavailable
+Not enough space
+Permission denied
+Bad address
+Unknown error
+Resource device
+File exists
+Improper link
+No such device
+Not a directory
+Is a directory
+Invalid argument
+Too many open files in system
+Too many open files
+Inappropriate I/O control operation
+File too large
+No space left on device
+Invalid seek
+Read-only file system
+Too many links
+Broken pipe
+Domain error
+Result too large
+Resource deadlock avoided
+Filename too long
+No locks available
+Function not implemented
+Directory not empty
+Illegal byte sequence
+address in use
+address not available
+address family not supported
+connection already in progress
+bad message
+operation canceled
+connection aborted
+connection refused
+connection reset
+destination address required
+host unreachable
+identifier removed
+operation in progress
+already connected
+too many symbolic link levels
+message size
+network down
+network reset
+network unreachable
+no buffer space
+no message available
+no link
+no message
+no protocol option
+no stream resources
+not a stream
+not connected
+state not recoverable
+not a socket
+not supported
+operation not supported
+value too large
+owner dead
+protocol error
+protocol not supported
+wrong protocol type
+stream timeout
+timed out
+text file busy
+operation would block
+CorExitProcess
+ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+IND)ind)
+[*ncd>TQ
+\>$hkDh$h>
+GfZ+?p
+>+>ZQ"v
+ ]Acosh
+= {[8V
+?N]TUUU
+?UUUUUU
+?UUUUUU
+?UUUUUU
+?UUUUUU
+?UUUUUU
+_hypot
+UUUUUU
+UUUUUU
+?UUUUUU
+[*ncd>TQ
+\>$hkDh$h>
+GfZ+?p
+>+>ZQ"v
+ ]Asinh
+?UUUUUU
+?UUUUUU
+[*ncd>TQ
+\>$hkDh$h>
+__based(
+__cdecl
+__stdcall
+__thiscall
+__fastcall
+__vectorcall
+__preserve_none
+__clrcall
+__eabi
+__swift_1
+__swift_2
+__swift_3
+__ptr64
+__restrict
+__unaligned
+restrict(
+ delete
+operator
+`vftable'
+`vbtable'
+`vcall'
+`typeof'
+`local static guard'
+`string'
+`vbase destructor'
+`vector deleting destructor'
+`default constructor closure'
+`scalar deleting destructor'
+`vector constructor iterator'
+`vector destructor iterator'
+`vector vbase constructor iterator'
+`virtual displacement map'
+`eh vector constructor iterator'
+`eh vector destructor iterator'
+`eh vector vbase constructor iterator'
+`copy constructor closure'
+`udt returning'
+`local vftable'
+`local vftable constructor closure'
+ new[]
+ delete[]
+`omni callsig'
+`placement delete closure'
+`placement delete[] closure'
+`managed vector constructor iterator'
+`managed vector destructor iterator'
+`eh vector copy constructor iterator'
+`eh vector vbase copy constructor iterator'
+`dynamic initializer for '
+`dynamic atexit destructor for '
+`vector copy constructor iterator'
+`vector vbase copy constructor iterator'
+`managed vector copy constructor iterator'
+`local static thread guard'
+operator "" 
+operator co_await
+operator<=>
+ Type Descriptor'
+ Base Class Descriptor at (
+ Base Class Array'
+ Class Hierarchy Descriptor'
+ Complete Object Locator'
+`anonymous namespace'
+AreFileApisANSI
+CompareStringEx
+EnumSystemLocalesEx
+FlsGetValue2
+GetDateFormatEx
+GetLocaleInfoEx
+GetTimeFormatEx
+GetUserDefaultLocaleName
+IsValidLocaleName
+LCMapStringEx
+LCIDToLocaleName
+LocaleNameToLCID
+RoInitialize
+RoUninitialize
+AppPolicyGetProcessTerminationMethod
+AppPolicyGetThreadInitializationType
+Sunday
+Monday
+Tuesday
+Wednesday
+Thursday
+Friday
+Saturday
+January
+February
+August
+September
+October
+November
+December
+MM/dd/yy
+dddd, MMMM dd, yyyy
+HH:mm:ss
+NAN(SNAN)
+nan(snan)
+NAN(IND)
+nan(ind)
+UUUUUU
+UUUUUU
+@^8U)zj
+8Csinf
+[*ncd>TQ
+\>$hkDh$h>
+GfZ+?p
+>+>ZQ"v
+?8bunz8
+?@En[vP
+[*ncd>0
+S>$hkDh$h>[2
+UA>N0Wl
+_nextafter
+A03>A|
+Q5rHg,>
+j>>A?1
+.>PJ;I:qE>
+:>t6k'
+])6M>&
+CWD>~3
+_oD>Kg
+N>O=I9
+F>qUxv
+/2GG>!B
+zY;>u:m
+P>q_Y~
+0><[cZUg^>
+Y>kX>M
+H[><y5
+?UUUUUU
+?7zQ6$
+[*ncd>TQ
+\>$hkDh$h>
+GfZ+?p
+>+>ZQ"v
+[*ncd>TQ
+\>$hkDh$h>
+FlsAlloc
+FlsFree
+FlsGetValue
+FlsSetValue
+InitializeCriticalSectionEx
+1#QNAN
+1#SNAN
+UUUUUU
+UUUUUU
+=imb;D
+/>58d%
+>jtm}S
+)>6{1n
++f)>0'
+;H9>&X
+*StO9>T
+n03>Pu
+K~Je#>!
+bp(=>?g
+BC?>6t9^
+K&>.yC
+.xJ>Hf
+y\PD>!
+|b=})>
+c [1>H'
+uzKs@>
+3>N;kU
+kE>fvw
+V6E>`"(5
+codec_whitelist
+unknown
+%s: %s
+, %d reference frame%s
+ (%s / 0x%04X)
+%d bpc, 
+%s/%s/%s, 
+progressive
+top first
+bottom first
+top coded first (swapped)
+bottom coded first (swapped)
+%s%dx%d
+ (%dx%d)
+ [SAR %d:%d DAR %d:%d]
+, %d/%d
+, q=%d-%d
+, Closed Captions
+, Film Grain
+, lossless
+%d Hz, 
+ (%d bit)
+, delay %d
+, padding %d
+, %dx%d
+, pass 1
+, pass 2
+, %lld kb/s
+, max. %lld kb/s
+DCT algorithm
+autoselect a good one
+fastint
+accurate integer
+altivec
+select IDCT implementation
+simple
+simplemmx
+simplearm
+simplearmv5te
+simplearmv6
+simpleneon
+xvidmmx
+simpleauto
+AVBSFContext
+bsf_list
+bsf_list(
+mpeg1video
+MPEG-1 video
+mpeg2video
+MPEG-2 video
+H.263 / H.263-1996, H.263+ / H.263-1998 / H.263 version 2
+RealVideo 1.0
+RealVideo 2.0
+Motion JPEG
+image/jpeg
+mjpegb
+Apple MJPEG-B
+Lossless JPEG
+Sunplus JPEG (SP5X)
+jpegls
+JPEG-LS
+MPEG-4 part 2
+rawvideo
+raw video
+msmpeg4v1
+MPEG-4 part 2 Microsoft variant version 1
+msmpeg4v2
+MPEG-4 part 2 Microsoft variant version 2
+msmpeg4v3
+MPEG-4 part 2 Microsoft variant version 3
+Windows Media Video 7
+Windows Media Video 8
+H.263+ / H.263-1998 / H.263 version 2
+Intel H.263
+FLV / Sorenson Spark / Sorenson H.263 (Flash Video)
+Sorenson Vector Quantizer 1 / Sorenson Video 1 / SVQ1
+Sorenson Vector Quantizer 3 / Sorenson Video 3 / SVQ3
+dvvideo
+DV (Digital Video)
+huffyuv
+HuffYUV
+Creative YUV (CYUV)
+H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+indeo3
+Intel Indeo 3
+On2 VP3
+theora
+Theora
+ASUS V1
+ASUS V2
+FFmpeg video codec #1
+4X Movie
+ATI VCR1
+Cirrus Logic AccuPak
+Sony PlayStation MDEC (Motion DECoder)
+id RoQ video
+interplayvideo
+Interplay MVE video
+xan_wc3
+Wing Commander III / Xan
+xan_wc4
+Wing Commander IV / Xxan
+QuickTime video (RPZA)
+cinepak
+Cinepak
+ws_vqa
+Westwood Studios VQA (Vector Quantized Animation) video
+Microsoft RLE
+msvideo1
+Microsoft Video 1
+id Quake II CIN video
+QuickTime 8BPS video
+QuickTime Graphics (SMC)
+Autodesk Animator Flic video
+truemotion1
+Duck TrueMotion 1.0
+vmdvideo
+Sierra VMD video
+LCL (LossLess Codec Library) MSZH
+LCL (LossLess Codec Library) ZLIB
+QuickTime Animation (RLE) video
+TechSmith Screen Capture Codec
+IBM UltiMotion
+Apple QuickDraw
+Miro VideoXL
+Q-team QPEG
+PNG (Portable Network Graphics) image
+image/png
+PPM (Portable PixelMap) image
+PBM (Portable BitMap) image
+PGM (Portable GrayMap) image
+pgmyuv
+PGMYUV (Portable GrayMap YUV) image
+PAM (Portable AnyMap) image
+image/x-portable-pixmap
+ffvhuff
+Huffyuv FFmpeg variant
+RealVideo 3.0
+RealVideo 4.0
+SMPTE VC-1
+Windows Media Video 9
+Winnov WNV1
+Autodesk RLE
+indeo2
+Intel Indeo 2
+truemotion2
+Duck TrueMotion 2.0
+BMP (Windows and OS/2 bitmap)
+image/x-ms-bmp
+CamStudio
+mmvideo
+American Laser Games MM Video
+Zip Motion Blocks Video
+AVS (Audio Video Standard) video
+smackvideo
+Smacker video
+NuppelVideo/RTJPEG
+Karl Morton's video codec
+flashsv
+Flash Screen Video v1
+Chinese AVS (Audio Video Standard) (AVS1-P2, JiZhun profile)
+jpeg2000
+JPEG 2000
+image/jp2
+VMware Screen Codec / VMware Video
+On2 VP5
+On2 VP6
+On2 VP6 (Flash version)
+Truevision Targa image
+image/x-targa
+image/x-tga
+dsicinvideo
+Delphine Software International CIN video
+tiertexseqvideo
+Tiertex Limited SEQ video
+TIFF image
+image/tiff
+CompuServe GIF (Graphics Interchange Format)
+image/gif
+Feeble Files/ScummVM DXA
+VC3/DNxHD
+Nintendo Gamecube THP video
+SGI image
+Interplay C93
+bethsoftvid
+Bethesda VID video
+V.Flash PTX image
+Renderware TXD (TeXture Dictionary) image
+On2 VP6 (Flash version, with alpha channel)
+AMV Video
+Beam Software VB
+PC Paintbrush PCX image
+image/x-pcx
+sunrast
+Sun Rasterfile image
+indeo4
+Intel Indeo Video Interactive 4
+indeo5
+Intel Indeo Video Interactive 5
+RL2 video
+escape124
+Escape 124
+Brute Force & Ignorance
+Electronic Arts CMV video
+motionpixels
+Motion Pixels video
+Electronic Arts TGV video
+Electronic Arts TGQ video
+Electronic Arts TQI video
+Auravision AURA
+Auravision Aura 2
+Uncompressed 4:2:2 10-bit
+8088flex TMV
+DPX (Digital Picture Exchange) image
+Electronic Arts Madcow Video
+Forward Uncompressed
+flashsv2
+Flash Screen Video v2
+cdgraphics
+CD Graphics video
+Uncompressed RGB 10-bit
+Deluxe Paint Animation
+binkvideo
+Bink video
+iff_ilbm
+IFF ACBM/ANIM/DEEP/ILBM/PBM/RGB8/RGBN
+Kega Game Video
+Psygnosis YOP Video
+On2 VP8
+pictor
+Pictor/PC Paint
+ASCII/ANSI art
+a64_multi
+Multicolor charset for Commodore 64
+a64_multi5
+Multicolor charset for Commodore 64, extended with 5th color (colram)
+AJA Kona 10-bit RGB Codec
+Mobotix MxPEG video
+lagarith
+Lagarith lossless
+prores
+Apple ProRes (iCodec Pro)
+Bitmap Brothers JV video
+Chronomaster DFA
+wmv3image
+Windows Media Video 9 Image
+vc1image
+Windows Media Video 9 Image v2
+utvideo
+Ut Video
+bmv_video
+Discworld II BMV video
+VBLE Lossless Codec
+dxtory
+Dxtory
+Uncompressed 4:4:4 10-bit
+XWD (X Window Dump) image
+image/x-xwindowdump
+Commodore CDXL video
+XBM (X BitMap) image
+image/x-xbitmap
+zerocodec
+ZeroCodec Lossless Video
+MS Screen 1
+MS ATC Screen
+TechSmith Screen Codec 2
+MS Expression Encoder Screen
+Canopus Lossless Codec
+MS Windows Media Video V9 Screen
+Google VP9
+Apple Intermediate Codec
+escape130
+Escape 130
+Go2Meeting
+image/webp
+hnm4video
+HNM 4 video
+H.265 / HEVC (High Efficiency Video Coding)
+Mirillis FIC
+alias_pix
+Alias/Wavefront PIX image
+brender_pix
+BRender PIX image
+paf_video
+Amazing Studio Packed Animation File Video
+OpenEXR image
+On2 VP7
+LucasArts SANM/SMUSH video
+sgirle
+SGI RLE 8-bit
+Silicon Graphics Motion Video Compressor 1
+Silicon Graphics Motion Video Compressor 2
+Canopus HQX
+hq_hqa
+Canopus HQ/HQA
+Vidvox Hap
+DirectDraw Surface image decoder
+Resolume DXV
+screenpresso
+Screenpresso
+innoHeim/Rsupport Screen Capture Codec
+AVS2-P2/IEEE1857.4
+PGX (JPEG2000 Test Format)
+AVS3-P2/IEEE1857.10
+Microsoft Paint (MSP) version 2
+H.266 / VVC (Versatile Video Coding)
+Uncompressed YUV 4:1:1 12-bit
+Avid 1:1 10-bit RGB Packer
+Avid Meridien Uncompressed
+targa_y216
+Pinnacle TARGA CineWave YUV16
+Uncompressed packed 4:4:4
+Uncompressed packed QT 4:4:4:4
+Uncompressed packed 4:2:0
+Avid AVI Codec
+CPiA video format
+X-face image
+smvjpeg
+Sigmatel Motion Video
+APNG (Animated Portable Network Graphics) image
+GoPro CineForm HD
+truemotion2rt
+Duck TrueMotion 2.0 Real Time
+Matrox Uncompressed SD
+magicyuv
+MagicYUV video
+sheervideo
+BitJazz SheerVideo
+YUY2 Lossless Codec
+Photoshop PSD file
+pixlet
+Apple Pixlet
+speedhq
+NewTek SpeedHQ
+FM Screen Capture Codec
+ScreenPressor
+clearvideo
+Iterated Systems ClearVideo
+XPM (X PixMap) image
+image/x-xpixmap
+Alliance for Open Media AV1
+bitpacked
+Bitpacked
+Mandsoft Screen Capture Codec
+Screen Recorder Gold Codec
+Scalable Vector Graphics
+image/svg+xml
+Gremlin Digital Video
+FITS (Flexible Image Transport System)
+Infinity IMM4
+prosumer
+Brooktree ProSumer Video
+MatchWare Screen Capture Codec
+WinCAM Motion Video
+RemotelyAnywhere Screen Capture
+HuffYUV MT
+Gryphon's Anim Compressor
+Amuse Graphics Movie
+LEAD Screen Capture
+On2 VP4
+Infinity IMM5
+MidiVid VQ
+MidiVid Archive Codec
+cdtoons
+CDToons video
+MidiVid 3.0
+notchlc
+NotchLC
+PFM (Portable FloatMap) image
+mobiclip
+MobiClip Video
+photocd
+Kodak Photo CD
+IPU Video
+Argonaut Games Video
+Cintel RAW
+simbiosis_imx
+Simbiosis Interactive IMX Video
+Digital Pictures SGA Video
+GEM Raster image
+Vizrt Binary Image
+jpegxl
+JPEG XL
+image/jxl
+QOI (Quite OK Image)
+PHM (Portable HalfFloatMap) image
+HDR (Radiance RGBE format) image
+WBMP (Wireless Application Protocol Bitmap) image
+media100
+Media 100i
+ViewQuest VQC
+PDV (PlayDate Video)
+MPEG-5 EVC (Essential Video Coding)
+RTV1 (RivaTuner Video)
+vMix Video
+LEAD MCMP
+DNxUncompressed / SMPTE RDD 50
+RealVideo 6.0
+jpegxl_anim
+JPEG XL animated
+Advanced Professional Video
+prores_raw
+Apple ProRes RAW
+pcm_s16le
+PCM signed 16-bit little-endian
+pcm_s16be
+PCM signed 16-bit big-endian
+pcm_u16le
+PCM unsigned 16-bit little-endian
+pcm_u16be
+PCM unsigned 16-bit big-endian
+pcm_s8
+PCM signed 8-bit
+pcm_u8
+PCM unsigned 8-bit
+pcm_mulaw
+PCM mu-law / G.711 mu-law
+pcm_alaw
+PCM A-law / G.711 A-law
+pcm_s32le
+PCM signed 32-bit little-endian
+pcm_s32be
+PCM signed 32-bit big-endian
+pcm_u32le
+PCM unsigned 32-bit little-endian
+pcm_u32be
+PCM unsigned 32-bit big-endian
+pcm_s24le
+PCM signed 24-bit little-endian
+pcm_s24be
+PCM signed 24-bit big-endian
+pcm_u24le
+PCM unsigned 24-bit little-endian
+pcm_u24be
+PCM unsigned 24-bit big-endian
+pcm_s24daud
+PCM D-Cinema audio signed 24-bit
+pcm_s16le_planar
+PCM signed 16-bit little-endian planar
+pcm_dvd
+PCM signed 20|24-bit big-endian
+pcm_f32be
+PCM 32-bit floating point big-endian
+pcm_f32le
+PCM 32-bit floating point little-endian
+pcm_f64be
+PCM 64-bit floating point big-endian
+pcm_f64le
+PCM 64-bit floating point little-endian
+pcm_bluray
+PCM signed 16|20|24-bit big-endian for Blu-ray media
+pcm_lxf
+PCM signed 20-bit little-endian planar
+SMPTE 302M
+pcm_s8_planar
+PCM signed 8-bit planar
+pcm_s24le_planar
+PCM signed 24-bit little-endian planar
+pcm_s32le_planar
+PCM signed 32-bit little-endian planar
+pcm_s16be_planar
+PCM signed 16-bit big-endian planar
+pcm_s64le
+PCM signed 64-bit little-endian
+pcm_s64be
+PCM signed 64-bit big-endian
+pcm_f16le
+PCM 16.8 floating point little-endian
+pcm_f24le
+PCM 24.0 floating point little-endian
+pcm_vidc
+PCM Archimedes VIDC
+pcm_sga
+PCM SGA
+adpcm_ima_qt
+ADPCM IMA QuickTime
+adpcm_ima_wav
+ADPCM IMA WAV
+adpcm_ima_dk3
+ADPCM IMA Duck DK3
+adpcm_ima_dk4
+ADPCM IMA Duck DK4
+adpcm_ima_ws
+ADPCM IMA Westwood
+adpcm_ima_smjpeg
+ADPCM IMA Loki SDL MJPEG
+adpcm_ms
+ADPCM Microsoft
+adpcm_4xm
+ADPCM 4X Movie
+adpcm_xa
+ADPCM CDROM XA
+adpcm_adx
+SEGA CRI ADX ADPCM
+adpcm_ea
+ADPCM Electronic Arts
+adpcm_g726
+G.726 ADPCM
+adpcm_ct
+ADPCM Creative Technology
+adpcm_swf
+ADPCM Shockwave Flash
+adpcm_yamaha
+ADPCM Yamaha
+adpcm_sbpro_4
+ADPCM Sound Blaster Pro 4-bit
+adpcm_sbpro_3
+ADPCM Sound Blaster Pro 2.6-bit
+adpcm_sbpro_2
+ADPCM Sound Blaster Pro 2-bit
+adpcm_thp
+ADPCM Nintendo THP
+adpcm_ima_amv
+ADPCM IMA AMV
+adpcm_ea_r1
+ADPCM Electronic Arts R1
+adpcm_ea_r3
+ADPCM Electronic Arts R3
+adpcm_ea_r2
+ADPCM Electronic Arts R2
+adpcm_ima_ea_sead
+ADPCM IMA Electronic Arts SEAD
+adpcm_ima_ea_eacs
+ADPCM IMA Electronic Arts EACS
+adpcm_ea_xas
+ADPCM Electronic Arts XAS
+adpcm_ea_maxis_xa
+ADPCM Electronic Arts Maxis CDROM XA
+adpcm_ima_iss
+ADPCM IMA Funcom ISS
+adpcm_g722
+G.722 ADPCM
+adpcm_ima_apc
+ADPCM IMA CRYO APC
+adpcm_vima
+LucasArts VIMA audio
+adpcm_afc
+ADPCM Nintendo Gamecube AFC
+adpcm_ima_oki
+ADPCM IMA Dialogic OKI
+adpcm_dtk
+ADPCM Nintendo Gamecube DTK
+adpcm_ima_rad
+ADPCM IMA Radical
+adpcm_g726le
+G.726 ADPCM little-endian
+adpcm_thp_le
+ADPCM Nintendo THP (Little-Endian)
+adpcm_psx
+ADPCM Playstation
+adpcm_aica
+ADPCM Yamaha AICA
+adpcm_ima_dat4
+ADPCM IMA Eurocom DAT4
+adpcm_mtaf
+ADPCM MTAF
+adpcm_agm
+ADPCM AmuseGraphics Movie AGM
+adpcm_argo
+ADPCM Argonaut Games
+adpcm_ima_ssi
+ADPCM IMA Simon & Schuster Interactive
+adpcm_zork
+ADPCM Zork
+adpcm_ima_apm
+ADPCM IMA Ubisoft APM
+adpcm_ima_alp
+ADPCM IMA High Voltage Software ALP
+adpcm_ima_mtf
+ADPCM IMA Capcom's MT Framework
+adpcm_ima_cunning
+ADPCM IMA Cunning Developments
+adpcm_ima_moflex
+ADPCM IMA MobiClip MOFLEX
+adpcm_ima_acorn
+ADPCM IMA Acorn Replay
+adpcm_xmd
+ADPCM Konami XMD
+adpcm_ima_xbox
+ADPCM IMA Xbox
+adpcm_sanyo
+ADPCM Sanyo
+adpcm_ima_hvqm4
+ADPCM IMA HVQM4
+adpcm_ima_pda
+ADPCM IMA PlayDate
+adpcm_n64
+ADPCM Silicon Graphics N64
+adpcm_ima_hvqm2
+ADPCM IMA HVQM2
+adpcm_ima_magix
+ADPCM IMA Magix
+adpcm_psxc
+ADPCM Playstation C
+adpcm_circus
+ADPCM Circus
+adpcm_ima_escape
+ADPCM IMA Acorn Escape
+amr_nb
+AMR-NB (Adaptive Multi-Rate NarrowBand)
+amr_wb
+AMR-WB (Adaptive Multi-Rate WideBand)
+ra_144
+RealAudio 1.0 (14.4K)
+ra_288
+RealAudio 2.0 (28.8K)
+roq_dpcm
+DPCM id RoQ
+interplay_dpcm
+DPCM Interplay
+xan_dpcm
+DPCM Xan
+sol_dpcm
+DPCM Sol
+sdx2_dpcm
+DPCM Squareroot-Delta-Exact
+gremlin_dpcm
+DPCM Gremlin
+derf_dpcm
+DPCM Xilam DERF
+wady_dpcm
+DPCM Marble WADY
+cbd2_dpcm
+DPCM Cuberoot-Delta-Exact
+MP2 (MPEG audio layer 2)
+MP3 (MPEG audio layer 3)
+AAC (Advanced Audio Coding)
+ATSC A/52A (AC-3)
+DCA (DTS Coherent Acoustics)
+vorbis
+Vorbis
+dvaudio
+DV audio
+Windows Media Audio 1
+Windows Media Audio 2
+MACE (Macintosh Audio Compression/Expansion) 3:1
+MACE (Macintosh Audio Compression/Expansion) 6:1
+vmdaudio
+Sierra VMD audio
+FLAC (Free Lossless Audio Codec)
+mp3adu
+ADU (Application Data Unit) MP3 (MPEG audio layer 3)
+mp3on4
+MP3onMP4
+shorten
+Shorten
+ALAC (Apple Lossless Audio Codec)
+westwood_snd1
+Westwood Audio (SND1)
+QDesign Music Codec 2
+Cook / Cooker / Gecko (RealAudio G2)
+truespeech
+DSP Group TrueSpeech
+TTA (True Audio)
+smackaudio
+Smacker audio
+QCELP / PureVoice
+wavpack
+WavPack
+dsicinaudio
+Delphine Software International CIN audio
+IMC (Intel Music Coder)
+musepack7
+Musepack SV7
+MLP (Meridian Lossless Packing)
+gsm_ms
+GSM Microsoft variant
+atrac3
+ATRAC3 (Adaptive TRansform Acoustic Coding 3)
+Monkey's Audio
+nellymoser
+Nellymoser Asao
+musepack8
+Musepack SV8
+wmavoice
+Windows Media Audio Voice
+wmapro
+Windows Media Audio 9 Professional
+wmalossless
+Windows Media Audio Lossless
+atrac3p
+ATRAC3+ (Adaptive TRansform Acoustic Coding 3+)
+ATSC A/52B (AC-3, E-AC-3)
+RealAudio SIPR / ACELP.NET
+MP1 (MPEG audio layer 1)
+twinvq
+VQF TwinVQ
+truehd
+TrueHD
+mp4als
+MPEG-4 Audio Lossless Coding (ALS)
+atrac1
+ATRAC1 (Adaptive TRansform Acoustic Coding)
+binkaudio_rdft
+Bink Audio (RDFT)
+binkaudio_dct
+Bink Audio (DCT)
+aac_latm
+AAC LATM (Advanced Audio Coding LATM syntax)
+QDesign Music
+Constrained Energy Lapped Transform (CELT)
+g723_1
+G.723.1
+8svx_exp
+8SVX exponential
+8svx_fib
+8SVX fibonacci
+bmv_audio
+Discworld II BMV audio
+RealAudio Lossless
+IAC (Indeo Audio Coder)
+iLBC (Internet Low Bitrate Codec)
+Opus (Opus Interactive Audio Codec)
+comfortnoise
+RFC 3389 Comfort Noise
+TAK (Tom's lossless Audio Kompressor)
+metasound
+Voxware MetaSound
+paf_audio
+Amazing Studio Packed Animation File Audio
+On2 Audio for Video Codec
+dss_sp
+Digital Speech Standard - Standard Play mode (DSS SP)
+codec2
+codec2 (very low bitrate speech codec)
+wavesynth
+Wave synthesis pseudo-codec
+sonicls
+Sonic lossless
+EVRC (Enhanced Variable Rate Codec)
+SMV (Selectable Mode Vocoder)
+dsd_lsbf
+DSD (Direct Stream Digital), least significant bit first
+dsd_msbf
+DSD (Direct Stream Digital), most significant bit first
+dsd_lsbf_planar
+DSD (Direct Stream Digital), least significant bit first, planar
+dsd_msbf_planar
+DSD (Direct Stream Digital), most significant bit first, planar
+4GV (Fourth Generation Vocoder)
+interplayacm
+Interplay ACM
+Xbox Media Audio 1
+Xbox Media Audio 2
+DST (Direct Stream Transfer)
+atrac3al
+ATRAC3 AL (Adaptive TRansform Acoustic Coding 3 Advanced Lossless)
+atrac3pal
+ATRAC3+ AL (Adaptive TRansform Acoustic Coding 3+ Advanced Lossless)
+dolby_e
+Dolby E
+aptX (Audio Processing Technology for Bluetooth)
+aptx_hd
+aptX HD (Audio Processing Technology for Bluetooth)
+SBC (low-complexity subband codec)
+atrac9
+ATRAC9 (Adaptive TRansform Acoustic Coding 9)
+HCOM Audio
+acelp.kelvin
+Sipro ACELP.KELVIN
+mpegh_3d_audio
+MPEG-H 3D Audio
+CRI HCA
+fastaudio
+MobiClip FastAudio
+msnsiren
+MSN Siren
+DFPWM (Dynamic Filter Pulse Width Modulation)
+Bonk audio
+Micronas SC-4 Audio
+Marian's A-pac audio
+FTR Voice
+wavarc
+Waveform Archiver
+RKA (RK Audio)
+OSQ (Original Sound Quality)
+QOA (Quite OK Audio)
+LC3 (Low Complexity Communication Codec)
+CRI AHX
+dvd_subtitle
+DVD subtitles
+dvb_subtitle
+DVB subtitles
+raw UTF-8 text
+SSA (SubStation Alpha) subtitle
+mov_text
+MOV text
+hdmv_pgs_subtitle
+HDMV Presentation Graphic Stream subtitles
+dvb_teletext
+DVB teletext
+SubRip subtitle with embedded timing
+microdvd
+MicroDVD subtitle
+eia_608
+EIA-608 closed captions
+jacosub
+JACOsub subtitle
+SAMI subtitle
+realtext
+RealText subtitle
+Spruce subtitle format
+subviewer1
+SubViewer v1 subtitle
+subviewer
+SubViewer subtitle
+subrip
+SubRip subtitle
+webvtt
+WebVTT subtitle
+MPL2 subtitle
+vplayer
+VPlayer subtitle
+PJS (Phoenix Japanimation Society) subtitle
+ASS (Advanced SSA) subtitle
+hdmv_text_subtitle
+HDMV Text subtitle
+Timed Text Markup Language
+arib_caption
+ARIB STD-B24 caption
+ivtv_vbi
+ivtv VBI captions
+TrueType font
+application/x-truetype-font
+application/x-font
+scte_35
+SCTE 35 Message Queue
+Electronic Program Guide
+bintext
+Binary text
+eXtended BINary text
+iCEDraw text
+OpenType font
+application/vnd.ms-opentype
+SMPTE 336M Key-Length-Value (KLV) metadata
+dvd_nav_packet
+DVD Nav packet
+timed_id3
+timed ID3 metadata
+bin_data
+binary data
+application/octet-stream
+smpte_2038
+SMPTE ST 2038 VANC in MPEG-2 TS
+LCEVC (Low Complexity Enhancement Video Coding) / MPEG-5 LCEVC / MPEG-5 part 2
+smpte_436m_anc
+MXF SMPTE-436M ANC
+mpegts
+raw MPEG-TS stream
+application/MP2T
+wrapped_avframe
+AVFrame to AVPacket passthrough
+Null video codec
+Null audio codec
+Orientation
+f@GPSVersionID
+GPSLatitudeRef
+GPSLatitude
+GPSLongitudeRef
+GPSLongitude
+GPSAltitudeRef
+GPSAltitude
+GPSTimeStamp
+GPSSatellites
+GPSStatus
+GPSMeasureMode
+GPSDOP
+GPSSpeedRef
+GPSSpeed
+GPSTrackRef
+GPSTrack
+GPSImgDirectionRef
+GPSImgDirection
+GPSMapDatum
+GPSDestLatitudeRef
+GPSDestLatitude
+GPSDestLongitudeRef
+GPSDestLongitude
+GPSDestBearingRef
+GPSDestBearing
+GPSDestDistanceRef
+GPSDestDistance
+GPSProcessingMethod
+GPSAreaInformation
+GPSDateStamp
+GPSDifferential
+ImageWidth
+ImageLength
+BitsPerSample
+Compression
+PhotometricInterpretation
+Orientation
+SamplesPerPixel
+PlanarConfiguration
+YCbCrSubSampling
+YCbCrPositioning
+XResolution
+YResolution
+ResolutionUnit
+StripOffsets
+RowsPerStrip
+StripByteCounts
+JPEGInterchangeFormat
+JPEGInterchangeFormatLength
+TransferFunction
+WhitePoint
+PrimaryChromaticities
+YCbCrCoefficients
+ReferenceBlackWhite
+DateTime
+ImageDescription
+Software
+Artist
+Copyright
+ExifVersion
+FlashpixVersion
+ColorSpace
+ComponentsConfiguration
+CompressedBitsPerPixel
+PixelXDimension
+PixelYDimension
+MakerNote
+UserComment
+RelatedSoundFile
+DateTimeOriginal
+DateTimeDigitized
+SubSecTime
+SubSecTimeOriginal
+SubSecTimeDigitized
+ImageUniqueID
+ExposureTime
+FNumber
+ExposureProgram
+SpectralSensitivity
+ISOSpeedRatings
+ShutterSpeedValue
+ApertureValue
+BrightnessValue
+ExposureBiasValue
+MaxApertureValue
+SubjectDistance
+MeteringMode
+LightSource
+FocalLength
+SubjectArea
+FlashEnergy
+SpatialFrequencyResponse
+FocalPlaneXResolution
+FocalPlaneYResolution
+FocalPlaneResolutionUnit
+SubjectLocation
+ExposureIndex
+SensingMethod
+FileSource
+SceneType
+CFAPattern
+CustomRendered
+ExposureMode
+WhiteBalance
+DigitalZoomRatio
+FocalLengthIn35mmFilm
+SceneCaptureType
+GainControl
+Contrast
+Saturation
+Sharpness
+DeviceSettingDescription
+SubjectDistanceRange
+RelatedImageFileFormat
+RelatedImageWidth
+RelatedImageLength
+PrintImageMatching
+ExifIFD
+GPSInfo
+InteropIFD
+GlobalParametersIFD
+ProfileIFD
+FOVEON
+FUJIOLYMP
+OLYMPUS
+IIPanasonic
+SONY DSC 
+0x%04X
+%s%7i:%-7i
+%s%.15g
+FLAC decoder
+use_buggy_lpc
+emulate old buggy lavc behavior
+        
+       
+libopus
+libopus Opus
+libopusdec
+apply_phase_inv
+Apply intensity stereo phase inversion
+ $(+.0368:<>@BDFHJLMOPRTUWXZ[\^_`bcdfghiklmnoprstuvwxyz{|}~
+ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+#*1892+$
+%,3:;4-&
+'.5<=6/7>?
+&.8DTf
+ &.4<D:6
+ &.6>FL$
+ &.4<D:6
+ &.4<D:6
+ &.4<D:6
+ (08@LZ
+UETS5D%R
+4PC3$B
+UTES5D%R
+Q4CP3$B
+wgvWufGtVe7sFUTc'rd
+wgvufGtWUVe7sFET5S'rd
+p6c`D%R
+aQ4PC3$B
+wgvWufGteV7sU'rFd
+p6cETD
+fGtVes
+p6cET&b5
+Q4CP$B3
+Ve7sF'rd
+p6cET&b
+`5aSD%R
+P4C$B3A
+V7seF'rdU
+qp6cET&b
+`S5D%RQ
+4CP$B3
+ps7'rFdUq6cET&b
+`5SD%R
+PQ4C$B3
+###???
+AVCodecContext
+set bitrate (in bits/s)
+Set video bitrate tolerance (in bits/s). In 1-pass mode, bitrate tolerance specifies how far ratecontrol is willing to deviate from the target average bitrate value. This is not related to minimum/maximum bitrate. Lowering tolerance too much has an adverse effect on quality.
+unaligned
+allow decoders to produce unaligned output
+use four motion vectors per macroblock (MPEG-4)
+use 1/4-pel motion compensation
+use loop filter
+qscale
+use fixed qscale
+recon_frame
+export reconstructed frames
+copy_opaque
+propagate opaque values
+frame_duration
+use frame durations
+use internal 2-pass ratecontrol in first  pass mode
+use internal 2-pass ratecontrol in second pass mode
+only decode/encode grayscale
+error[?] variables will be set during encoding
+use interlaced DCT
+low_delay
+force low delay
+global_header
+place global headers in extradata instead of every keyframe
+bitexact
+use only bitexact functions (except (I)DCT)
+H.263 advanced intra coding / MPEG-4 AC prediction
+interlaced motion estimation
+closed GOP
+output_corrupt
+Output even potentially corrupted frames
+flags2
+allow non-spec-compliant speedup tricks
+skip bitstream encoding
+ignorecrop
+ignore cropping information from sps
+local_header
+place global headers at every keyframe instead of in extradata
+chunks
+Frame data might be split into multiple chunks
+showall
+Show all frames before the first keyframe
+export_mvs
+export motion vectors through frame side data
+skip_manual
+do not skip samples and export skip information as frame side data
+ass_ro_flush_noop
+do not reset ASS ReadOrder field on flush
+icc_profiles
+generate/parse embedded ICC profiles from/to colorimetry tags
+export_side_data
+Export metadata as side data
+export Producer Reference Time through packet side data
+venc_params
+export video encoding parameters through frame side data
+film_grain
+export film grain parameters through frame side data
+enhancements
+export picture enhancement metadata through frame side data
+time_base
+set the group of picture (GOP) size
+set audio sampling rate (in Hz)
+cutoff
+set cutoff bandwidth
+frame_size
+frame_number
+video quantizer scale compression (VBR). Constant of ratecontrol equation. Recommended range for default rc_eq: 0.0-1.0
+video quantizer scale blur (VBR)
+minimum video quantizer scale (VBR)
+maximum video quantizer scale (VBR)
+maximum difference between the quantizer scales (VBR)
+set maximum number of B-frames between non-B-frames
+b_qfactor
+QP factor between P- and B-frames
+codec_tag
+work around not autodetected encoder bugs
+autodetect
+xvid_ilace
+Xvid interlacing bug (autodetected if FOURCC == XVIX)
+(autodetected if FOURCC == UMP4)
+no_padding
+padding bug (autodetected)
+qpel_chroma
+std_qpel
+old standard qpel (autodetected per FOURCC/version)
+qpel_chroma2
+direct_blocksize
+direct-qpel-blocksize bug (autodetected per FOURCC/version)
+edge padding bug (autodetected per FOURCC/version)
+hpel_chroma
+dc_clip
+work around various bugs in Microsoft's broken decoders
+truncated frames
+strict
+how strictly to follow the standards
+strictly conform to a older more strict version of the spec or reference software
+strictly conform to all the things in the spec no matter what the consequences
+normal
+unofficial
+allow unofficial extensions
+experimental
+allow non-standardized experimental things
+b_qoffset
+QP offset between P- and B-frames
+err_detect
+set error detection flags
+crccheck
+verify embedded CRCs
+bitstream
+detect bitstream specification deviations
+buffer
+detect improper bitstream length
+explode
+abort decoding on minor error detection
+ignore_err
+ignore errors
+careful
+consider things that violate the spec, are fast to check and have not been seen in the wild as errors
+compliant
+consider all spec non compliancies as errors
+aggressive
+consider things that a sane encoder should not do as an error
+has_b_frames
+block_align
+rc_override_count
+maxrate
+maximum bitrate (in bits/s). Used for VBV together with bufsize.
+minrate
+minimum bitrate (in bits/s). Most useful in setting up a CBR encode. It is of little use otherwise.
+bufsize
+set ratecontrol buffer size (in bits)
+i_qfactor
+QP factor between P- and I-frames
+i_qoffset
+QP offset between P- and I-frames
+fast integer
+floating point AAN DCT
+lumi_mask
+compresses bright areas stronger than medium ones
+tcplx_mask
+temporal complexity masking
+scplx_mask
+spatial complexity masking
+p_mask
+inter masking
+dark_mask
+compresses dark areas stronger than medium ones
+deprecated, for compatibility only
+floating point AAN IDCT
+set error concealment strategy
+guess_mvs
+iterative motion vector (MV) search (slow)
+deblock
+use strong deblock filter for damaged MBs
+favor_inter
+favor predicting from the previous frame
+bits_per_coded_sample
+aspect
+sample aspect ratio
+print specific debug info
+picture info
+rate control
+mb_type
+macroblock (MB) type
+per-block quantization parameter (QP)
+dct_coeff
+green_metadata
+startcode
+error recognition
+memory management control operations (H.264)
+buffers
+picture buffer allocations
+thread_ops
+threading operations
+skip motion compensation
+dia_size
+diamond type & size for motion estimation
+last_pred
+amount of motion predictors from the previous frame
+pre_dia_size
+diamond type & size for motion estimation pre-pass
+sub-pel motion estimation quality
+me_range
+limit motion vectors range (1023 for DivX player)
+global_quality
+slice_flags
+macroblock decision algorithm (high quality mode)
+use mbcmp
+use fewest bits
+use best rate distortion
+rc_init_occupancy
+number of bits which should be loaded into the rc buffer before decoding starts
+threads
+set the number of threads
+autodetect a suitable number of threads to use
+intra_dc_precision
+nsse weight
+skip_top
+number of macroblock rows at the top which are skipped
+skip_bottom
+number of macroblock rows at the bottom which are skipped
+profile
+avctx.profile
+main10
+encoding level, usually corresponding to the profile level, codec-specific
+avctx.level
+lowres
+decode at 1= 1/2, 2=1/4, 3=1/8 resolutions
+full-pel ME compare function
+cmp_func
+subcmp
+sub-pel ME compare function
+macroblock compare function
+ildctcmp
+interlaced DCT compare function
+precmp
+pre motion estimation compare function
+sum of absolute differences, fast
+sum of squared errors
+sum of absolute Hadamard transformed differences
+sum of absolute DCT transformed differences
+sum of squared quantization errors (avoid, low quality)
+number of bits needed for the block
+rate distortion optimal, slow
+sum of absolute vertical differences
+sum of squared vertical differences
+noise preserving sum of squared differences
+dctmax
+chroma
+sum of absolute differences, median predicted
+mblmin
+minimum macroblock Lagrange factor (VBR)
+mblmax
+maximum macroblock Lagrange factor (VBR)
+skip_loop_filter
+skip loop filtering process for the selected frames
+avdiscard
+skip_idct
+skip IDCT/dequantization for the selected frames
+skip_frame
+skip decoding for the selected frames
+discard no frame
+default
+discard useless frames
+discard all non-reference frames
+discard all bidirectional frames
+nointra
+discard all frames except I frames
+discard all frames except keyframes
+discard all frames
+bidir_refine
+refine the two motion vectors used in bidirectional macroblocks
+keyint_min
+minimum interval between IDR-frames
+reference frames to consider for motion compensation
+trellis
+rate-distortion optimal quantization
+mv0_threshold
+compression_level
+bits_per_raw_sample
+ch_layout
+rc_max_vbv_use
+rc_min_vbv_use
+color_primaries
+color primaries
+color_primaries_type
+BT.709
+Unspecified
+bt470m
+BT.470 M
+bt470bg
+BT.470 BG
+smpte170m
+SMPTE 170 M
+smpte240m
+SMPTE 240 M
+bt2020
+BT.2020
+smpte428
+SMPTE 428-1
+smpte428_1
+smpte431
+SMPTE 431-2
+smpte432
+SMPTE 422-1
+jedec-p22
+JEDEC P22
+ebu3213
+EBU 3213-E
+unspecified
+color_trc
+color transfer characteristics
+color_trc_type
+gamma22
+gamma28
+linear
+Linear
+log100
+log316
+Log square root
+iec61966-2-4
+IEC 61966-2-4
+bt1361e
+BT.1361
+iec61966-2-1
+IEC 61966-2-1
+bt2020-10
+BT.2020 - 10 bit
+bt2020-12
+BT.2020 - 12 bit
+smpte2084
+SMPTE 2084
+arib-std-b67
+ARIB STD-B67
+log_sqrt
+iec61966_2_4
+bt1361
+iec61966_2_1
+bt2020_10bit
+bt2020_12bit
+colorspace
+color space
+colorspace_type
+bt2020nc
+BT.2020 NCL
+bt2020c
+BT.2020 CL
+smpte2085
+SMPTE 2085
+chroma-derived-nc
+Chroma-derived NCL
+chroma-derived-c
+Chroma-derived CL
+ipt-c2
+IPT-C2
+ycgco-re
+YCgCo-R, even add.
+ycgco-ro
+YCgCo-R, odd add.
+bt2020_ncl
+bt2020_cl
+color_range
+color range
+color_range_type
+MPEG (219*2^(n-8))
+JPEG (2^n-1)
+limited
+chroma_sample_location
+chroma sample location
+chroma_sample_location_type
+center
+Center
+topleft
+Top-left
+bottomleft
+Bottom-left
+bottom
+Bottom
+alpha_mode
+alpha mode
+alpha_mode_type
+premultiplied
+Premultiplied
+straight
+Straight
+log_level_offset
+set the log level offset
+slices
+set the number of slices, used in parallelized encoding
+thread_type
+select multithreading type
+audio_service_type
+audio service type
+Main Audio Service
+Effects
+Visually Impaired
+Hearing Impaired
+Dialogue
+Commentary
+Emergency
+Voice Over
+Karaoke
+request_sample_fmt
+sample format audio decoders should prefer
+pkt_timebase
+sub_charenc
+set input text subtitles character encoding
+sub_charenc_mode
+set input text subtitles character encoding mode
+do_nothing
+pre_decoder
+ignore
+apply_cropping
+skip_alpha
+Skip processing alpha
+field_order
+Field order
+dump_separator
+set information dump field separator
+List of decoders that are allowed to be used
+pixel_format
+set pixel format
+video_size
+set video size
+max_pixels
+Maximum number of pixels
+max_samples
+Maximum number of samples
+hwaccel_flags
+ignore_level
+ignore level even if the codec level used is unknown or higher than the maximum supported level reported by the hardware driver
+allow_high_depth
+allow to output YUV pixel formats with a different chroma sampling than 4:2:0 and/or other than 8 bits per component
+allow_profile_mismatch
+attempt to decode anyway if HW accelerated decoder's supported profiles do not exactly match the stream
+unsafe_output
+allow potentially unsafe hwaccel frame output that might require special care to process successfully
+extra_hw_frames
+Number of extra hardware frames to allocate for the user
+discard_damaged_percentage
+Percentage of damaged samples to discard a frame
+side_data_prefer_packet
+Comma-separated list of side data types for which user-supplied (container) data is preferred over coded bytestream
+side_data_pkt
+replaygain
+displaymatrix
+spherical
+stereo3d
+mastering_display_metadata
+content_light_level
+icc_profile
+forced
+OpusHead
+Stereo 3D
+Mastering display metadata
+Content light level metadata
+Spherical Mapping
+Ambient viewing environment
+LCEVC NAL data
+EXIF metadata
+HE-AAC
+HE-AACv2
+xHE-AAC
+DTS-ES
+DTS 96/24
+DTS-HD HRA
+DTS-HD MA
+DTS-HD MA + DTS:X
+DTS-HD MA + DTS:X IMAX
+DTS Express
+Dolby Digital Plus + Dolby Atmos
+Dolby TrueHD + Dolby Atmos
+DNXHR LB
+DNXHR SQ
+DNXHR HQ
+DNXHR HQX
+DNXHR 444
+Baseline
+Constrained Baseline
+Extended
+High 10
+High 10 Intra
+High 4:2:2
+High 4:2:2 Intra
+High 4:4:4
+High 4:4:4 Predictive
+High 4:4:4 Intra
+CAVLC 4:4:4
+Multiview High
+Stereo High
+Main 10
+Main 10 4:4:4
+Main Still Picture
+Multiview Main
+JPEG 2000 codestream restriction 0
+JPEG 2000 codestream restriction 1
+JPEG 2000 no codestream restrictions
+JPEG 2000 digital cinema 2K
+JPEG 2000 digital cinema 4K
+Spatially Scalable
+SNR Scalable
+Simple
+Reserved
+Simple Profile
+Simple Scalable Profile
+Core Profile
+Main Profile
+N-bit Profile
+Scalable Texture Profile
+Simple Face Animation Profile
+Basic Animated Texture Profile
+Hybrid Profile
+Advanced Real Time Simple Profile
+Code Scalable Profile
+Advanced Coding Profile
+Advanced Core Profile
+Advanced Scalable Texture Profile
+Simple Studio Profile
+Advanced Simple Profile
+Complex
+Advanced
+Profile 0
+Profile 1
+Profile 2
+Profile 3
+Professional
+Standard
+RAW HQ
+Sequential
+Progressive
+Lossless
+JPEG LS
+Profile A
+Profile C
+av:%.7s:df%d
+SetThreadDescription
+unknown_codec
+14P;=4p
+d4Ums4
+&57{15
+=5^LI5;aV5
+u&62G16t
+I6e"V6
+c8nPr8
+`H9SfU9
+/=mJ;=@vG=
+;G>M.T>7
+|?Kg~?
+<*S"=JvW=
+>dp)>A
+\>/8w>
+1?~y8?
+q?>ft?
+v?hmx?
+f#<?dY<
+;>"tH>
+b>SQp>
+$?tk(?>
+/?+D3?m
+g?!]i?
+l?g\n?
+|?)+}?
+(=ef5=
+?m=)T|=
+X>p`_>(
+W)?h.+?'
+0?3b2?
+A?|3C?]
+J?h[L?
+M?#=O?
+R?KeS?
+V?rYW?
+L\?qz]?]
+k?f`l?
+n?a|o?v5p?
+q?5@r?
+v?ZKw?
+y?O3z?
+}?:F}?)z}?>
+~?K.~?
+6<C@D<
++=G&2=
+8=aR?=
+4>-"7>X<:>
+a>2id>I
+b!?~U"?dG#?
+,?@u-?
+\.??C/?
+4?zt5?
+??qd@?t3A?7
+S??gT?g
+U?VaV?
+W?>NX?
+Z?2f[?!
+^?b|_?
+`?P&a?L
+b?FIc?G
+d?XTe?d
+g?k8h?
+h?R#i?
+m?0+n?D
+n?@Mo?*
+q?Clq?
+-v?Hov?
+z?k {?pH{?
+%|?qG|?lh|?
+8}?|S}?sm}?
+~?B$~?,8~?xK~?+^~?Fp~?
+7=7T:=
+G=#8K=
+N=I,R=(
+U=7=Y=s
+v=`kz=
+(>20*>
+.>@;0>~
+4>{\6>6
+7>Lu9>
+B>bvD>
+G>uAI>
+O>JXQ>B
+^>|6`>z
+h>,Vj>6
+uo>3-q>
+t>ZZv>K
+?w2 ?Z
+'?/0(?
+*?l~*?
+,?;;-?6
+0?HF1?
+3?(]4?
+9?)c:?0
+<?]|<?
+<?,Q=?!
+??~0@?P
+A?u4B?
+C?@fC?
+D?{]E?'
+H?S3I?
+I?YSJ?
+K?MpK?
+L?YDM?
+P?B+Q?
+Q?=4R?
+S?{<T?
+V?S0W?y
+Z?;UZ?
+Z?{?[?
+[?a&\?
+_?HX_?d
+_?~/`?{v`?
+a?3Ia?
+1d?ord?r
+d?Z4e??te?
+f? )g?
+i?E@i?
+9k?4pk?5
+m?`Im?,|m?
+p?6Lp?uyp?]
+r?c+r?
+Tr?.~r?
+s?qGs?
+t?P.t?
+u?L-u?{Pu?\su?
+v?@>v?
+_x?.{x?
+4y?UNy?
+>z?`Uz?
+>{?MR{?
+e{?+y{?D
+|?(.|?
+O|?A`|?
+}?G$}?
+~?K)~?@3~?
+F~?3P~?
+t~?x}~?
+;<,"?<
+,=` .=
+/=cW1=
+<=8|>=
+C=/:E=3
+O=1LQ=
+YX=Z!Z=
+Ra=X#c=
+h=Nxj=
+Rl={-n=
+_{=7I}=
+c">] #>&
+'>XQ(>
+->fU.>z
+_1>E#2>
+7>[K8>
+g;>q/<>
+>>YR?>
+zB>sEC>
+E>>tF>
+vJ>,DK>
+~W>AQX>
+k>gwl>
+!?sD!?5
+!?47"?
+"?2)#?
+%?86&?
+$'?O`'?
+(?y:)?
+)?>&*?
++?i5,?
+-?@X-?=
+.?|&/?
+0?fE0?
+'3?W`3?
+4?"A4?*y4?!
+66?ln6?
+7?mK7?
+7?R'8?
+H:?2~:?5
+;?@,<?
+>?'?>?
+@?zJ@?c~@?8
+A?>MA?
+DE?nvE?D
+F?H=F?
+(H?QYH?
+I?rKI?
+J?v;J?6kJ?
+J?Z)K?
+L?&-M?
+N?l&O?
+5P?kbP?4
+Q?wAQ?
+R?,JR?
+R?L$S?
+LV?$vV?
+9X?~bX?
+\?x9\?
+]?JB]?
+F^?Vk^?
+!_?1F_?Xj_?f
+`?FA`?
+Za?Z}a?
+Yc?S{c?
+ d?nAd? bd?
+e?R$e?\De?Nde?)
+"f?WAf?
+g?e8g?
+Vg?;ug?
+)h?EGh?
+k?0,k?vGk?
+8l??Sl?
+7n?!Pn?
+)o?jAo?
+Wp?.np?
+Kq?raq?
+Jr?I_r?
+=s?JQs?
+ds?}xs?
+7t?^Jt?
+u?t$u?
+Gu?;Yu?
+v?{%v?
+6v?xFv?
+Vv?(gv?dwv?
+%w?u4w?
+bw?(qw?'
+x?o x?
+fx?Mtx?
+!y?w.y?C;y?
+Ty?Bay?
+my?Bzy?
+9z?iDz?
+Zz?3fz?Vqz?j|z?o
+{?x%{?
+9{?|C{?`M{?5W{?
+j{?\t{?
+|?V!|?
+)|?h2|?
+:|?CC|?
+S|?'\|?Xd|?|l|?
+.}?f5}?*<}?
+I}?0P}?
+V}?N]}?
+c}?>j}?
+w}?P}}?
+:~?{?~?ND~?
+R~?:W~?
+[~?v`~?
+n~?~r~?
+v~?K{~?
+*9?/79
+::%JA:
+6O:t[V:-
+l:*$t:
+.;S 2;Bl5;
+<;g~?;;
+P;0sT;V
+}j;REn;
+%<RX'<i
+*<T#,<(
+7<p?9<
+<<~I><T
+H<gNJ<
+V<E}X<
+a<jpc<DJe<
+p<{tr<
+Hv<_5x<"$z<
+*=;V+=
+.=&T/=
+2=x]3=
+6=*r7=xD8=:
+F=|[G=e6H=
+L=VaM=h?N=
+R=E}S=}^T=(@U=E"V=
+Z=ex[=
+]\=[C]=
+ar=6Rs=
+Ct=Y4u=
+$>b(%>8
+%>*E&>E
+(>~@)>O
+*>3`*>H
+*>r +>
++>yA,>
+->Ic->
+1>1T2>
+3>+z3>U
+:>)n:>
+;>xa<>
+?>ZN@>K
+A>o}A>
+C>9xC>
+E>*AF>W
+K>IFL>
+P>"$Q>x
+Q>_]R>
+V>[IW>
+Y>|-Z>
+[>r@\>
+]>MU^>
+`>wBa>
+c>I3d> 
+e>;Of>q
+h><Fi>
+p>7dq>K
+q>q@r>
+s>=ht>
+t>sEu>(
+x>P,y>
+ ?8# ?
+A ?2` ?
+!?A5!?
+("?YF"?
+#?K8#?{V#?
+$?v)$?
+&?H'&?(E&?
+3'?pQ'?.o'?
+(?[!(?
+\(?Cz(?
++)?<I)?
+4*?YR*?
+=+?RZ+?
+C,?!a,?B~,?_
+.?g1.?KN.?+k.?
+Q/?\n/?
+S0?Mp0?
+T2?Zp2?
+63?BR3?ln3?
+34?%O4?)k4?)
+6?!)6?
+`6?D|6?
+=7?4Y7?
+58?mP8?
+*9?9F9?ra9?
+;?x-;?^H;??c;?
+9<?TT<?
+=?])=?
+C=?o^=?
+1>?TL>?
+#@?}=@?vW@?jq@?Z
+&A?Z@A?!ZA?
+'B?AAB?
+ZB?ftB?
+&C?/@C?
+=D?KVD?toD?
+IF?lbF?({F?
+'G?G@G?
+XG?ZqG?
+4H?'MH?yeH?
+I?B'I?c?I?
+/J?hGJ?H_J?"wJ?
+K?15K?
+LK?~dK?
+ L?G8L?
+gL?|~L?
+gM?>~M?]
+MN?vdN?]{N?>
+1O?}HO?+_O?
+P?O*P?
+@P?5WP?
+Q?& Q?]6Q?
+R?C)R?5?R?"UR?
+S?%/S?
+DS?yZS?
+1T?.GT?
+U?%1U?GFU?c[U?ypU?
+V?<-V?
+:W?,OW?
+cW?:xW?
+DX?_XX?
+7Z?fKZ?
+[?b"[?
+5[?+I[?
+]?"&]?
+K]?d^]?
+*^?Q=^?
+O^?$b^?
++_?$=_?=O_?Pa_?]s_?e
+&`?b8`?(J`?
+/a?}@a?
+Qa?Mca?
+!b?<2b?TCb?eTb?qeb?wvb?w
+c?+0c?
+Qc?Sbc?
+(d?>9d?
+Yd?Hjd?
+e?V,e?[<e?[Le?T\e?Gle?5|e?
+9f?&If?
+Xf?Uhf?
+g?|!g?
+@g?@Og?v^g?
+]h?Nlh?
+Ui?Udi?
+k?[%k?
+@k?DNk?
+[k?mik?
+%l?C2l?y?l?
+m?r)m?<6m?
+Om?w\m?*im?
+%n?[1n?
+In?EVn?
+/o?};o?UGo?)So?
+p?X$p?
+/p?(;p?
+Qp?8]p?
+0q?m;q?QFq?/Qq?
+qq?r|q?6
+r?+&r?
+;r?gEr?
+Zr?sdr?
+Bs?^Ls?5Vs?
+ss?^}s?
+t?8 t?
+3t?]<t?
+Ot?TXt?
+tt?W}t?
+:u?SCu?
+]u?Qfu?
+v?V!v?
+1v?":v?\Bv?
+cv?9kv?Vsv?p{v?
+w?@!w?
+0w?H8w?
+Gw?'Ow?
+Vw?O^w?
+ew?emw?
+tw?i|w?
+2x?'9x?-@x?.Gx?,Nx?$Ux?
+$y?B+y?
+8y?t>y?
+Dy?*Ky?
+^y?edy?
+py?&wy?]}y?
+*z?q0z?+6z?
+Az??Gz?
+Rz?0Xz?
+]z?gcz?
+^{?kc{?Gh{?
+|?{#|?
+,|?H0|?
+<|?*A|?ZE|?
+Z|?4^|?Mb|?bf|?tj|?
+&}?r)}?
+,}?K0}?
+7}?z:}?
+=}?6A}?
+G}?8K}?
+Q}?!U}?hX}?
+^}?.b}?je}?
+o}?=r}?ju}?
+~?t ~?
+2~?|4~?
+6~?e9~?
+;~?D>~?
+G~?HJ~?
+O~?`Q~?
+V~?cX~?
+]~?Q_~?
+c~?)f~?lh~?
+l~?(o~?bq~?
+x~?3z~?b|~?
+Vorbis parser
+raw FLAC
+WAVEFORMATEXTENSIBLE_CHANNEL_MASK
+AVFormatContext
+avioflags
+direct
+reduce buffering
+probesize
+set probing size
+formatprobesize
+number of bytes to probe file format
+packetsize
+set packet size
+fflags
+flush_packets
+reduce the latency by flushing out packets immediately
+ignidx
+ignore index
+genpts
+generate pts
+nofillin
+do not fill in missing values that can be exactly calculated
+noparse
+disable AVParsers, this needs nofillin too
+igndts
+ignore dts
+discardcorrupt
+discard corrupted frames
+sortdts
+try to interleave outputted packets by dts
+fastseek
+fast but inaccurate seeks
+nobuffer
+reduce the latency introduced by optional buffering
+do not write random/volatile data
+autobsf
+add needed bsfs automatically
+seek2any
+allow seeking to non-keyframes on demuxer level when supported
+analyzeduration
+specify how many microseconds are analyzed to probe the input
+cryptokey
+decryption key
+indexmem
+max memory used for timestamp index (per stream)
+rtbufsize
+max memory used for buffering real-time frames
+fdebug
+max_delay
+maximum muxing or demuxing delay in microseconds
+start_time_realtime
+wall-clock time when stream begins (PTS==0)
+fpsprobesize
+number of frames used to probe fps
+audio_preload
+microseconds by which audio packets should be interleaved earlier
+chunk_duration
+microseconds for each chunk
+chunk_size
+size in bytes for each chunk
+f_err_detect
+set error detection flags (deprecated; use err_detect, save via avconv)
+consider things that a sane encoder shouldn't do as an error
+use_wallclock_as_timestamps
+use wallclock as timestamps
+skip_initial_bytes
+set number of bytes to skip before reading header and frames
+correct_ts_overflow
+correct single timestamp overflows
+enable flushing of the I/O context after each packet
+metadata_header_padding
+set number of bytes to be written as padding in a metadata header
+output_ts_offset
+set output timestamp offset
+max_interleave_delta
+maximum buffering duration for interleaving
+f_strict
+how strictly to follow the standards (deprecated; use strict, save via avconv)
+allow non-standardized experimental variants
+max_ts_probe
+maximum number of packets to read while waiting for the first timestamp
+avoid_negative_ts
+shift timestamps so they start at 0
+enabled when required by target format
+disabled
+do not change timestamps
+make_non_negative
+shift timestamps so they are non negative
+make_zero
+format_whitelist
+List of demuxers that are allowed to be used
+protocol_whitelist
+List of protocols that are allowed to be used
+protocol_blacklist
+List of protocols that are not allowed to be used
+max_streams
+maximum number of streams
+skip_estimate_duration_from_pts
+skip duration calculation in estimate_timings_from_pts
+max_probe_packets
+Maximum number of packets to probe a codec
+duration_probesize
+Maximum number of bytes to probe the durations of the streams in estimate_timings_from_pts
+AVStream
+AVStreamGroup
+disposition
+original
+comment
+lyrics
+karaoke
+hearing_impaired
+visual_impaired
+clean_effects
+attached_pic
+timed_thumbnails
+non_diegetic
+captions
+descriptions
+metadata
+dependent
+still_image
+multilayer
+Set group id
+AVStreamGroupTileGrid
+grid_size
+size of the output canvas
+output_size
+size of valid pixels in output image meant for presentation
+background_color
+set a background color for unused pixels
+horizontal_offset
+vertical_offset
+AVStreamGroupLCEVC
+size of video after LCEVC enhancement has been applied
+discard
+%0*lld
+0123456789ABCDEF0123456789abcdef%Y-%m-%dT%H:%M:%S
+.%06dZ
+AVIOContext
+URLContext
+rw_timeout
+Timeout for IO operations (in microseconds)
+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-.
+subfile,
+https:
+subfile
+image2
+skip_clear
+dvbsub
+dvbtxt
+mjpeg_2000
+mpegvideo
+mov,mp4,m4a,3gp,3g2,mj2
+unknown codec
+unspecified frame size
+unspecified sample format
+unspecified sample rate
+unspecified number of channels
+no decodable DTS frames
+unspecified size
+unspecified pixel format
+no frame in rv30/40 and no sar
+extract_extradata
+skip_changes
+:Feje$
+$iH0@.
+language
+mime_type
+Classic Rock
+Country
+Grunge
+Hip-Hop
+New Age
+Oldies
+Reggae
+Techno
+Industrial
+Alternative
+Death Metal
+Pranks
+Soundtrack
+Euro-Techno
+Ambient
+Trip-Hop
+Jazz+Funk
+Fusion
+Trance
+Classical
+Instrumental
+Sound Clip
+Gospel
+AlternRock
+Meditative
+Instrumental Pop
+Instrumental Rock
+Ethnic
+Gothic
+Darkwave
+Techno-Industrial
+Electronic
+Pop-Folk
+Eurodance
+Southern Rock
+Comedy
+Gangsta
+Top 40
+Christian Rap
+Pop/Funk
+Jungle
+Native American
+Cabaret
+New Wave
+Psychedelic
+Showtunes
+Trailer
+Tribal
+Acid Punk
+Acid Jazz
+Musical
+Rock & Roll
+Hard Rock
+Folk-Rock
+National Folk
+Fast Fusion
+Revival
+Celtic
+Bluegrass
+Avantgarde
+Gothic Rock
+Progressive Rock
+Psychedelic Rock
+Symphonic Rock
+Slow Rock
+Big Band
+Chorus
+Easy Listening
+Acoustic
+Humour
+Speech
+Chanson
+Chamber Music
+Sonata
+Symphony
+Booty Bass
+Primus
+Porn Groove
+Satire
+Slow Jam
+Folklore
+Ballad
+Power Ballad
+Rhythmic Soul
+Freestyle
+Punk Rock
+Drum Solo
+A Cappella
+Euro-House
+Dance Hall
+Drum & Bass
+Club-House
+Hardcore Techno
+Terror
+BritPop
+Negerpunk
+Polsk Punk
+Christian Gangsta Rap
+Heavy Metal
+Black Metal
+Crossover
+Contemporary Christian
+Christian Rock
+Merengue
+Thrash Metal
+Synthpop
+Abstract
+Art Rock
+Baroque
+Bhangra
+Big Beat
+Breakbeat
+Chillout
+Downtempo
+Eclectic
+Electro
+Electroclash
+Experimental
+Garage
+Global
+Illbient
+Industro-Goth
+Jam Band
+Krautrock
+Leftfield
+Lounge
+Math Rock
+New Romantic
+Nu-Breakz
+Post-Punk
+Post-Rock
+Psytrance
+Shoegaze
+Space Rock
+Trop Rock
+World Music
+Neoclassical
+Audiobook
+Audio Theatre
+Neue Deutsche Welle
+Podcast
+Indie Rock
+G-Funk
+Dubstep
+Garage Rock
+Psybient
+artist
+composer
+copyright
+encoded_by
+album_artist
+performer
+publisher
+encoder
+compilation
+creation_time
+album-sort
+artist-sort
+title-sort
+grouping
+32x32 pixels 'file icon'
+Other file icon
+Cover (front)
+Cover (back)
+Leaflet page
+Media (e.g. label side of CD)
+Lead artist/lead performer/soloist
+Artist/performer
+Conductor
+Band/Orchestra
+Composer
+Lyricist/text writer
+Recording Location
+During recording
+During performance
+Movie/video screen capture
+A bright coloured fish
+Illustration
+Band/artist logotype
+Publisher/Studio logotype
+image/gif
+image/jpeg
+image/jpg
+image/png
+image/tiff
+image/bmp
+image/webp
+id3v2_priv.%s
+\x%02x
+lyrics-%s%s%s
+-%.2s-%.2s
+ %.2s:%.2s
+urn:mpeg:dash:role:2011
+caption
+commentary
+description
+forced-subtitle
+sac3gP
+DTS (P
+agsm;P
+MAC6*P
+nmos!P
+QDM22P
+QDMC#P
+spex#P
+SPXNGP
+sevcHP
+fLaC,P
+mlpa<P
+Opus[P
+A_ALAC
+A_ATRAC/AT1
+A_EAC3
+A_FLAC
+A_MPEG/L2
+A_MPEG/L1
+A_MPEG/L3
+A_OPUS
+A_OPUS/EXPERIMENTAL
+A_PCM/FLOAT/IEEE
+A_PCM/FLOAT/IEEE
+A_PCM/INT/BIG
+A_PCM/INT/BIG
+A_PCM/INT/BIG
+A_PCM/INT/LIT
+A_PCM/INT/LIT
+A_PCM/INT/LIT
+A_PCM/INT/LIT
+A_QUICKTIME/QDMC
+A_QUICKTIME/QDM2
+A_REAL/14_4
+A_REAL/28_8
+A_REAL/ATRC
+A_REAL/COOK
+A_REAL/SIPR
+A_TRUEHD
+A_TTA1
+A_VORBIS
+A_WAVPACK4
+D_WEBVTT/SUBTITLES
+D_WEBVTT/CAPTIONS
+D_WEBVTT/DESCRIPTIONS
+D_WEBVTT/METADATA
+S_TEXT/UTF8
+S_TEXT/UTF8
+S_TEXT/ASCII
+S_TEXT/ASS
+S_TEXT/SSA
+S_VOBSUB
+S_DVBSUB
+S_HDMV/PGS
+S_HDMV/TEXTST
+S_ARIBSUB
+V_AVS2
+V_AVS3
+V_DIRAC
+V_FFV1
+V_JPEG2000
+V_MJPEG
+V_MPEG1
+V_MPEG2
+V_MPEG4/ISO/ASP
+V_MPEG4/ISO/AP
+V_MPEG4/ISO/SP
+V_MPEG4/ISO/AVC
+V_MPEGH/ISO/HEVC
+V_MPEGI/ISO/VVC
+V_MPEG4/MS/V3
+V_PRORES
+V_REAL/RV10
+V_REAL/RV20
+V_REAL/RV30
+V_REAL/RV40
+V_SNOW
+V_THEORA
+V_UNCOMPRESSED
+LEAD_PERFORMER
+PART_NUMBER
+left_right
+bottom_top
+top_bottom
+checkerboard_rl
+checkerboard_lr
+row_interleaved_rl
+row_interleaved_lr
+col_interleaved_rl
+col_interleaved_lr
+anaglyph_cyan_red
+right_left
+anaglyph_green_magenta
+block_lr
+block_rl
+Bmatroska,webm
+Matroska / WebM
+mkv,mk3d,mka,mks,webm
+audio/webm,audio/x-matroska,video/webm,video/x-matroska
+matroska
+filename
+mimetype
+image/gif
+image/jpeg
+image/png
+image/tiff
+application/x-truetype-font
+application/x-font
+application/vnd.ms-opentype
+binary
+(none)
+enc_key_id
+A_MS/ACM
+A_QUICKTIME
+stereo_mode
+V_MS/VFW/FOURCC
+V_QUICKTIME
+Lavf57.%d.%d
+background
+D_WEBVTT/CAPTIONS
+D_WEBVTT/DESCRIPTIONS
+D_WEBVTT/METADATA
+CbCr 8-bit 4:2:0Planar Y'CbCr 8-
+7QuickTime / MOV
+mov,mp4,m4a,3gp,3g2,mj2,psp,m4b,ism,ismv,isma,f4v,avif,heic,heif
+vendor_id
+compatible_brands
+reel_name
+major_brand
+minor_version
+handler_name
+systemBitrate="
+<GSpherical:StitchingSoftware>
+<GSpherical:Spherical>
+<GSpherical:Stitched>
+<GSpherical:ProjectionType>
+equirectangular
+<GSpherical:StereoMode>
+left-right
+top-bottom
+<GSpherical:InitialViewHeadingDegrees>
+<GSpherical:InitialViewPitchDegrees>
+<GSpherical:InitialViewRollDegrees>
+iTunSMPB
+%*X %X %X %X
+premiere_version
+quicktime_version
+account_type
+account_id
+category
+episode_uid
+firmware
+hd_video
+keywords
+synopsis
+podcast
+gapless_playback
+purchase_date
+rating
+sort_album_artist
+sort_album
+sort_artist
+sort_composer
+sort_name
+sort_show
+media_type
+episode_id
+episode_sort
+network
+season_number
+producer
+chapter
+director
+disclaimer
+edit_date
+original_format
+host_computer
+original_artist
+performers
+playback_requirements
+original_source
+subtitle
+warning
+location
+com.apple.quicktime.artwork
+HandBrake %d.%d.%d
+%+08.4f%+09.4f
+use_absolute_path
+allow using absolute path when opening alias, this is a possible security issue
+seek_streams_individually
+Seek each stream individually to the closest point
+ignore_editlist
+Ignore the edit list atom.
+advanced_editlist
+Modify the AVIndex according to the editlists. Use this option to decode in the order specified by the edits.
+ignore_chapters
+use_mfra_for
+use mfra for fragment timestamps
+use_tfdt
+use tfdt for fragment timestamps
+export_all
+Export unrecognized metadata entries
+export_xmp
+Export full XMP metadata
+activation_bytes
+Secret bytes for Audible AAX files
+audible_key
+AES-128 Key for Audible AAXC files
+audible_iv
+AES-128 IV for Audible AAXC files
+audible_fixed_key
+Fixed key used for handling Audible AAX files
+77214d4b196a87cd520045fd20a51d67
+decryption_key
+The media decryption key (hex)
+enable_drefs
+Enable external track support.
+max_stts_delta
+treat offsets above this value as invalid
+interleaved_read
+Interleave packets from multiple tracks at demuxer level
+timecode
+%02d:%02d:%02d%c%02d
+MP2/3 (MPEG audio layer 2/3)
+mp2,mp3,m2a,mpa
+audio/mpeg
+usetoc
+use table of contents
+skip_id3v1_tags
+Direct Show Samples embedded in Ogg
+OpusHead
+fishead
+fisbone
+theora
+vorbis
+METADATA_BLOCK_PICTURE
+CHAPTER
+%02d:%02d:%02d.%03d
+fffff3ff
+f3ff33f3
+3ff3f33f
+33f33333
+wwwUUUDDD"""
+generic raw demuxer
+raw_packet_size
+REPLAYGAIN_TRACK_GAIN
+REPLAYGAIN_TRACK_PEAK
+REPLAYGAIN_ALBUM_GAIN
+REPLAYGAIN_ALBUM_PEAK
+ALBUMARTIST
+TRACKNUMBER
+DISCNUMBER
+DESCRIPTION
+333333
+WAV / WAVE (Waveform Audio)
+WAV demuxer
+ignore_length
+Ignore length
+max_size
+max size of single packet
+originator
+originator_reference
+origination_date
+origination_time
+time_reference
+0x%016llX%016llX%016llX%016llX
+0x%016llX%016llX%016llX%016llX%016llX%016llX%016llX%016llX
+coding_history
+O?qxs?qxs?
+fft2_ns_float_c
+fft4_ns_float_c
+fft8_ns_float_c
+fft16_ns_float_c
+fft32_ns_float_c
+fft64_ns_float_c
+fft128_ns_float_c
+fft256_ns_float_c
+fft512_ns_float_c
+fft1024_ns_float_c
+fft2048_ns_float_c
+fft4096_ns_float_c
+fft8192_ns_float_c
+fft16384_ns_float_c
+fft32768_ns_float_c
+fft65536_ns_float_c
+fft131072_ns_float_c
+fft3_ns_float_c
+fft5_ns_float_c
+fft7_ns_float_c
+fft9_ns_float_c
+fft15_ns_float_c
+fft3_fwd_float_c
+fft5_fwd_float_c
+fft7_fwd_float_c
+fft9_fwd_float_c
+fft_float_c
+fft_inplace_float_c
+fft_inplace_small_float_c
+fft_pfa_float_c
+fft_pfa_ns_float_c
+fft_naive_float_c
+fft_naive_small_float_c
+mdct_fwd_float_c
+mdct_inv_float_c
+mdct_pfa_3xM_fwd_float_c
+mdct_pfa_5xM_fwd_float_c
+mdct_pfa_7xM_fwd_float_c
+mdct_pfa_9xM_fwd_float_c
+mdct_pfa_15xM_fwd_float_c
+mdct_pfa_3xM_inv_float_c
+mdct_pfa_5xM_inv_float_c
+mdct_pfa_7xM_inv_float_c
+mdct_pfa_9xM_inv_float_c
+mdct_pfa_15xM_inv_float_c
+mdct_naive_fwd_float_c
+mdct_naive_inv_float_c
+mdct_inv_full_float_c
+rdft_r2c_float_c
+rdft_r2r_float_c
+rdft_r2r_mod2_float_c
+rdft_r2i_float_c
+rdft_r2i_mod2_float_c
+rdft_c2r_float_c
+dctII_float_c
+dctIII_float_c
+dctI_float_c
+dstI_float_c
+attachment
+?456789:;<=
+ !"#$%&'()*+,-./0123
+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
+&apos;
+&quot;
+AMBI%d
+ambisonic 
+%d channels (%[^)]
+ channels
+%d channels (
+%d channels
+front left
+front right
+front center
+low frequency
+back left
+back right
+front left-of-center
+front right-of-center
+back center
+side left
+side right
+top center
+top front left
+top front center
+top front right
+top back left
+top back center
+top back right
+downmix left
+downmix right
+wide left
+wide right
+surround direct left
+surround direct right
+low frequency 2
+top side left
+top side right
+bottom front center
+bottom front left
+bottom front right
+side surround left
+side surround right
+top surround left
+top surround right
+binaural left
+binaural right
+stereo
+3.0(back)
+quad(side)
+5.0(side)
+5.1(side)
+6.0(front)
+hexagonal
+6.1(back)
+6.1(front)
+7.0(front)
+7.1(wide)
+7.1(wide-side)
+5.1.2(back)
+octagonal
+hexadecagonal
+binaural
+downmix
+ambisonic %d
+Error number %d occurred
+BSF_NOT_FOUND
+Bitstream filter not found
+Internal bug, should not have happened
+BUFFER_TOO_SMALL
+Buffer too small
+DECODER_NOT_FOUND
+Decoder not found
+DEMUXER_NOT_FOUND
+Demuxer not found
+ENCODER_NOT_FOUND
+Encoder not found
+End of file
+Immediate exit requested
+EXTERNAL
+Generic error in an external library
+FILTER_NOT_FOUND
+Filter not found
+INPUT_CHANGED
+Input changed
+INVALIDDATA
+Invalid data found when processing input
+MUXER_NOT_FOUND
+Muxer not found
+OPTION_NOT_FOUND
+Option not found
+OUTPUT_CHANGED
+Output changed
+PATCHWELCOME
+Not yet implemented in FFmpeg, patches welcome
+PROTOCOL_NOT_FOUND
+Protocol not found
+STREAM_NOT_FOUND
+Stream not found
+UNKNOWN
+Unknown error occurred
+EXPERIMENTAL
+Experimental feature
+INPUT_AND_OUTPUT_CHANGED
+Input and output changed
+HTTP_BAD_REQUEST
+Server returned 400 Bad Request
+HTTP_UNAUTHORIZED
+Server returned 401 Unauthorized (authorization failed)
+HTTP_FORBIDDEN
+Server returned 403 Forbidden (access denied)
+HTTP_NOT_FOUND
+Server returned 404 Not Found
+HTTP_TOO_MANY_REQUESTS
+Server returned 429 Too Many Requests
+HTTP_OTHER_4XX
+Server returned 4XX Client Error, but not one of 40{0,1,3,4}
+HTTP_SERVER_ERROR
+Server returned 5XX Server Error reply
+Argument list too long
+EACCES
+Permission denied
+EAGAIN
+Resource temporarily unavailable
+Bad file descriptor
+Device or resource busy
+ECHILD
+No child processes
+EDEADLK
+Resource deadlock avoided
+Numerical argument out of domain
+EEXIST
+File exists
+EFAULT
+Bad address
+File too large
+EILSEQ
+Illegal byte sequence
+Interrupted system call
+EINVAL
+Invalid argument
+I/O error
+EISDIR
+Is a directory
+EMFILE
+Too many open files
+EMLINK
+Too many links
+ENAMETOOLONG
+File name too long
+ENFILE
+Too many open files in system
+ENODEV
+No such device
+ENOENT
+No such file or directory
+ENOEXEC
+Exec format error
+ENOLCK
+No locks available
+ENOMEM
+Cannot allocate memory
+ENOSPC
+No space left on device
+ENOSYS
+Function not implemented
+ENOTDIR
+Not a directory
+ENOTEMPTY
+Directory not empty
+ENOTTY
+Inappropriate I/O control operation
+No such device or address
+Operation not permitted
+Broken pipe
+ERANGE
+Result too large
+Read-only file system
+ESPIPE
+Illegal seek
+No such process
+Cross-device link
+QP2LAMBDA
+opencl
+mediacodec
+vulkan
+ohcodec
+AVIAMFParamDefinition
+parameter_id
+set parameter_id
+parameter_rate
+set parameter_rate
+duration
+set duration
+constant_subblock_duration
+set constant_subblock_duration
+AVIAMFMixGain
+subblock_duration
+set subblock_duration
+animation_type
+set animation_type
+start_point_value
+set start_point_value
+end_point_value
+set end_point_value
+control_point_value
+set control_point_value
+control_point_relative_time
+set control_point_relative_time
+AVIAMFDemixingInfo
+dmixp_mode
+set dmixp_mode
+AVIAMFReconGain
+AVIAMFAudioElement
+audio_element_type
+set audio_element_type
+channel
+default_w
+set default_w
+AVIAMFLayer
+set ch_layout
+set flags
+recon_gain
+Recon gain is present
+output_gain_flags
+set output_gain_flags
+Left channel
+Right channel
+Left surround channel
+Right surround channel
+Left top front channel
+Right top front channel
+output_gain
+set output_gain
+ambisonics_mode
+set ambisonics_mode
+projection
+AVIAMFSubmixElement
+headphones_rendering_mode
+Headphones rendering mode
+default_mix_gain
+Default mix gain
+annotations
+Annotations
+AVIAMFSubmixLayout
+layout_type
+Layout type
+loudspeakers
+sound_system
+Sound System
+integrated_loudness
+Integrated loudness
+digital_peak
+Digital peak
+true_peak
+True peak
+dialog_anchored_loudness
+Anchored loudness (Dialog)
+album_anchored_loudness
+Anchored loudness (Album)
+AVIAMFMixPresentation
+set annotations
+AVIAMFSubmix
+%H:%M:%S
+$]WsAb`
+%;KZr?
+true,y,yes,enable,enabled,on
+false,n,no,disable,disabled,off
+%d%*1[:/]%d%c
+0x%08X
+0x%02x%02x%02x%02x
+INT64_MAX
+INT64_MIN
+%lld:%02d:%02d.%06d
+%d:%02d.%06d
+%d.%06d
+<flags>
+<int64>
+<double>
+<float>
+<string>
+<rational>
+<binary>
+<dictionary>
+<uint64>
+<image_size>
+<pix_fmt>
+<sample_fmt>
+<video_rate>
+<duration>
+<color>
+<boolean>
+<channel_layout>
+<unsigned>
+%d:%d%c
+random
+bikeshed
+0123456789ABCDEFabcdef
+%Y - %m - %d
+%Y%m%d
+%H%M%S
+%J:%M:%S
+ntsc-film
+wqsxga
+wquxga
+whsxga
+whuxga
+hd1080
+quadhd
+2kflat
+2kscope
+4kflat
+4kscope
+fwqvga
+uhd2160
+uhd4320
+AliceBlue
+AntiqueWhite
+Aquamarine
+Bisque
+BlanchedAlmond
+BlueViolet
+BurlyWood
+CadetBlue
+Chartreuse
+Chocolate
+CornflowerBlue
+Cornsilk
+Crimson
+DarkBlue
+DarkCyan
+DarkGoldenRod
+DarkGray
+DarkGreen
+DarkKhaki
+DarkMagenta
+DarkOliveGreen
+Darkorange
+DarkOrchid
+DarkRed
+DarkSalmon
+DarkSeaGreen
+DarkSlateBlue
+DarkSlateGray
+DarkTurquoise
+DarkViolet
+DeepPink
+DeepSkyBlue
+DimGray
+DodgerBlue
+FireBrick
+FloralWhite
+ForestGreen
+Fuchsia
+Gainsboro
+GhostWhite
+GoldenRod
+GreenYellow
+HoneyDew
+HotPink
+IndianRed
+Indigo
+Lavender
+LavenderBlush
+LawnGreen
+LemonChiffon
+LightBlue
+LightCoral
+LightCyan
+LightGoldenRodYellow
+LightGreen
+LightGrey
+LightPink
+LightSalmon
+LightSeaGreen
+LightSkyBlue
+LightSlateGray
+LightSteelBlue
+LightYellow
+LimeGreen
+Magenta
+Maroon
+MediumAquaMarine
+MediumBlue
+MediumOrchid
+MediumPurple
+MediumSeaGreen
+MediumSlateBlue
+MediumSpringGreen
+MediumTurquoise
+MediumVioletRed
+MidnightBlue
+MintCream
+MistyRose
+Moccasin
+NavajoWhite
+OldLace
+OliveDrab
+Orange
+OrangeRed
+Orchid
+PaleGoldenRod
+PaleGreen
+PaleTurquoise
+PaleVioletRed
+PapayaWhip
+PeachPuff
+PowderBlue
+Purple
+RosyBrown
+RoyalBlue
+SaddleBrown
+Salmon
+SandyBrown
+SeaGreen
+SeaShell
+Sienna
+Silver
+SkyBlue
+SlateBlue
+SlateGray
+SpringGreen
+SteelBlue
+Thistle
+Tomato
+Turquoise
+Violet
+WhiteSmoke
+Yellow
+YellowGreen
+january
+february
+august
+september
+october
+november
+december
+yuv420p
+yuyv422
+yuv422p
+yuv444p
+yuv410p
+yuv411p
+gray8,y8
+yuvj420p
+yuvj422p
+yuvj444p
+uyvy422
+uyyvyy411
+bgr4_byte
+rgb4_byte
+gray16be
+gray16le
+yuv440p
+yuvj440p
+yuva420p
+rgb48be
+rgb48le
+rgb565be
+rgb565le
+rgb555be
+rgb555le
+bgr565be
+bgr565le
+bgr555be
+bgr555le
+yuv420p16le
+yuv420p16be
+yuv422p16le
+yuv422p16be
+yuv444p16le
+yuv444p16be
+dxva2_vld
+rgb444le
+rgb444be
+bgr444le
+bgr444be
+gray8a
+bgr48be
+bgr48le
+yuv420p9be
+yuv420p9le
+yuv420p10be
+yuv420p10le
+yuv422p10be
+yuv422p10le
+yuv444p9be
+yuv444p9le
+yuv444p10be
+yuv444p10le
+yuv422p9be
+yuv422p9le
+gbrp9be
+gbrp9le
+gbrp10be
+gbrp10le
+gbrp16be
+gbrp16le
+yuva422p
+yuva444p
+yuva420p9be
+yuva420p9le
+yuva422p9be
+yuva422p9le
+yuva444p9be
+yuva444p9le
+yuva420p10be
+yuva420p10le
+yuva422p10be
+yuva422p10le
+yuva444p10be
+yuva444p10le
+yuva420p16be
+yuva420p16le
+yuva422p16be
+yuva422p16le
+yuva444p16be
+yuva444p16le
+xyz12le
+xyz12be
+nv20le
+nv20be
+rgba64be
+rgba64le
+bgra64be
+bgra64le
+yvyu422
+ya16be
+ya16le
+gbrap16be
+gbrap16le
+d3d11va_vld
+yuv420p12be
+yuv420p12le
+yuv420p14be
+yuv420p14le
+yuv422p12be
+yuv422p12le
+yuv422p14be
+yuv422p14le
+yuv444p12be
+yuv444p12le
+yuv444p14be
+yuv444p14le
+gbrp12be
+gbrp12le
+gbrp14be
+gbrp14le
+yuvj411p
+bayer_bggr8
+bayer_rggb8
+bayer_gbrg8
+bayer_grbg8
+bayer_bggr16le
+bayer_bggr16be
+bayer_rggb16le
+bayer_rggb16be
+bayer_gbrg16le
+bayer_gbrg16be
+bayer_grbg16le
+bayer_grbg16be
+yuv440p10le
+yuv440p10be
+yuv440p12le
+yuv440p12be
+ayuv64le
+ayuv64be
+videotoolbox_vld
+p010le
+p010be
+gbrap12be
+gbrap12le
+gbrap10be
+gbrap10le
+gray12be
+gray12le
+gray10be
+gray10le
+p016le
+p016be
+gray9be
+gray9le
+gbrpf32be
+gbrpf32le
+gbrapf32be
+gbrapf32le
+drm_prime
+gray14be
+gray14le
+grayf32be
+yf32be
+grayf32le
+yf32le
+yuva422p12be
+yuva422p12le
+yuva444p12be
+yuva444p12le
+y210be
+y210le
+x2rgb10le
+x2rgb10be
+x2bgr10le
+x2bgr10be
+p210be
+p210le
+p410be
+p410le
+p216be
+p216le
+p416be
+p416le
+rgbaf16be
+rgbaf16le
+p012le
+p012be
+y212be
+y212le
+xv30be
+xv30le
+xv36be
+xv36le
+rgbf32be
+rgbf32le
+rgbaf32be
+rgbaf32le
+p212be
+p212le
+p412be
+p412le
+gbrap14be
+gbrap14le
+vyu444
+v30xbe
+v30xle
+rgbf16be
+rgbf16le
+rgba128be
+rgba128le
+rgb96be
+rgb96le
+y216be
+y216le
+xv48be
+xv48le
+gbrpf16be
+gbrpf16le
+gbrapf16be
+gbrapf16le
+grayf16be
+grayf16le
+gray32be
+gray32le
+yaf32be
+yaf32le
+yaf16be
+yaf16le
+gbrap32be
+gbrap32le
+yuv444p10msbbe
+yuv444p10msble
+yuv444p12msbbe
+yuv444p12msble
+gbrp10msbbe
+gbrp10msble
+gbrp12msbbe
+gbrp12msble
+reserved
+vgamut
+AVPanScan
+ATSC A53 Part 4 Closed Captions
+AVMatrixEncoding
+Metadata relevant to a downmix procedure
+AVReplayGain
+3x3 displaymatrix
+Active format description
+Motion vectors
+Skip samples
+Audio service type
+GOP timecode
+ICC profile
+SMPTE 12-1 timecode
+HDR Dynamic Metadata SMPTE2094-40 (HDR10+)
+Regions Of Interest
+Video encoding parameters
+H.26[45] User Data Unregistered SEI message
+Film grain parameters
+Bounding boxes for object detection and classification
+Dolby Vision RPU Data
+Dolby Vision Metadata
+HDR Dynamic Metadata CUVA 005.1 2021 (Vivid)
+Encoding video hint
+View ID
+3D Reference Displays Information
+%s%02d:%02d:%02d%c%0*d
+%02u:%02u:%02u%c%02u
+inverse
+forward
+For transform of length %i, %s, 
+, found %i matches%s
+fft_float
+mdct_float
+rdft_float
+dctI_float
+dstI_float
+fft_double
+mdct_double
+rdft_double
+dctI_double
+dstI_double
+fft_int32
+mdct_int32
+rdft_int32
+dctI_int32
+dstI_int32
+flags: [
+aligned
+%sunaligned
+%sinplace
+%sout_of_place
+%sfwd_only
+%sinv_only
+%spreshuf
+%simdct_full
+%sreal_to_real
+%sreal_to_imaginary
+%sasm_call
+%s - type: 
+, len: 
+%s, factors
+[%i]: [
+%s, factor: %i, 
+, prio: %i
+{{ttooiidd__ZZUUQQMMIIEEBB>>;;88553300..++))''%%##!!  
+zzttnnhhcc^^YYUUPPLLHHEEAA>>;;88552200--++))''%%##!!
+{{uuooiidd__ZZVVQQMMIIEEBB??;;88663300..++))''%%##!!  
+zzttnnhhcc^^YYUUPPLLHHEEAA>>;;88552200--++))''%%##!!
+~MLMLKJKJKJIHIHIHGFGFGFEDEDCBCBCBA@A@?>=<=<=<;:;:9876765454321010/.-,-,+*+*'&'&%$%$! ! 
+ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}|}~
+x264 - core %d
+x264 - core 0000
+&'45<=67>?DELMFGNO\]de^_fglmtunovw
+ !"#$%&'()*+,-./0123456789:;<=>?
+ $(-28?GPZeq
+ !"$(&)
+#%*,!"$('+-.
+(&$ :".+
+  !""##$$%%%&&&''''
+ !"##$%&&'(())**+++,,,----
+ !"#$%&'())*+,,-..//001112223333
+ !"#$%&'()*+,-.//012234455667778889999
+ !"#$%&'()*+,-./012345567889::;;<<===>>>????
+ !"#$%&'()*+,-./0123456789:;;<=>>?@@AABBCCCDDDEEEE
+ !"#$%&'()*+,-./0123456789:;<=>?@AABCDDEFFGGHHIIIJJJKKKK
+H264 Decoder
+is_avc
+is avc
+nal_length_size
+enable_er
+Enable error resilience on damaged frames (unsafe)
+x264_build
+Assume this x264 version if no x264 version found in any SEI
+skip_gray
+Do not return gray gap frames
+noref_gray
+Avoid using gray gap frames as references
+EkIfRm
+Q@GMTZ`gmtz
+ -------,,,,+++**))((''&&%$$#""! 
+ --,+*)'&$"
+ -,*(%"
+!$'*,---,+(&"
+ %),--,)&!
+!'+--+& 
+$),-,(#
+%+-,("
+#)--*$
+AAC decoder
+dual_mono_mode
+Select the channel to decode for dual mono
+autoselection
+Select Main/Left channel
+Select Sub/Right channel
+Select both channels
+channel_order
+Order in which the channels are to be exported
+normal libavcodec channel order
+order in which the channels are coded in the bitstream
+libfaac %d.%d
+yy11??
+    !!!!!!!!!!!!!!!!!!!!!!!
+!'-6BN*fBNZfr~Z
+<X=:=]
+F*'=9,
+o=pE{=
+wa="'K=
+h%? _*?
+M?sVP?
+R?sVP?
+*/? _*?
+2="'K=
+9V9'hb7
+@?fff?H
+z?6<5?
+h;@QR;
+&=AL,=$
+X=L0^=
+7d=T"j=
+u=pE{=ga
+V="'K=r
+'? _*?
+-8?}M:?
+O?sVP?M
+Q?sVP?
+^<?}M:?
+,? _*?+
+>="'K=8
+o=T"j=
+7d=L0^=
+2=AL,=
+m:;@QR;o
+!P?8Ki?h"|?
+~?4:v?l)e?
+JL?Qw,?B
+))/113//+++((((.111..***((%%)+++++'''%%
+!!&((())%%%""
+ ! 1 A Q a q 
+ " 2 B R b r 
+ # 3 C S c s 
+ $ 4 D T d t 
+ % 5 E U e u 
+ & 6 F V f v 
+ ' 7 G W g w 
+ ( 8 H X h x 
+ ) 9 I Y i y 
+ * : J Z j z 
+ + ; K [ k { 
+ , < L \ l | 
+ - = M ] m } 
+ . > N ^ n ~ 
+ / ? O _ o 
+! !0!@!P!`!p!
+795Q4<0
+4n2/1b.
++$*M)]'q%
+9;2O/&+@%
+<8<s:h8
+1:1L04/
+8P7O7N7
+:x:p9[8a7
+;<&603
+3737373,
+57$57578-!)
+-68)67$6878
+ # #68$;$&)
+<!)68678!
+ ;) #$!$!$;
+<!)<!*<;"
+# 89< 
+#) #!$ 
+ ;) ;) ;
+55 !7!$
+"(*3..***''
+"(*3//+++((
+"=Ze3=`
+C=pOT=
+P>$zU>
+aZ>bN_>
+7x>*A}>
+y+?Xs,?
+b.?6X/?sL0?T?1?
+E?AYF?W'G?
+}T?a)U?
+U?$|V?
+Z?Fy[?
+]?qW^?^
+^?Xo_?c
+l?.Om?
+n?Cwn?
+p?k^p?<qp?
+q?W3q?
+Kr?3er?y
+;s?`Vs?
+Rt?pot?W
+v?Z0v?tOv?
+Mw?omw?
+Sx?Ytx?
+y?N>y?X`y?y
+z?q.z?
+E{?4i{?
+|?#>|?
+}?%9}?2]}?M
+~?H`~?B
+z?%[z?$
+x?CVx?s
+t??|s?
+q?\"q?@
+h?5wg?
+a?@o`?
+]?l$]?
+%[?L{Z?
+#Y?=wX?
+S?SWR?u
+N?7-N?|vM?p
+L?1SK?
+B?X^A?
+<?@D<?
+:?a*:?Mw9?O
+8?ZN7?
+5?L?4?kv3?
+1?5 1?\\0?
+z>)Ex>
+d>,Yb>
+Q>ptO>
+8>SR6>
+s->7E+>
+-=J3)=
+p<Q=e<
+c;0yj;
+r;'>k;
+{S;-%K;
++:Gn0:
+9:g&=:
+ZI:i/K:
+vL:w1M:wdM:
+G:v|E:n
+(:L`%:b
+o88 W8
+b`9A!i9*
+|9Nxp9
+=_U'=]A9=j
+<>q4A>BZF>4
+-)?z;*?
+G+?"R,?%[-?
+n4?rk5?nf6?
+M9?cB:?U5;?
+H?UzI?
+pQ?>1R?
+Z?;2[?
+[?zs\?
+^?Xo_?t
+a?:4b?
+i?$Fj?
+j?l#k?
+l?fHm?
+Vp?^ip?C
+Es?.cs?
+t?)4t?
+Rt?\qt?4
+v?Z0v?
+1x?FUx?
+y?1,y?rPy?
+z?",z?
+Qz?0vz?Z
+0{?bV{?
+|?a9|?s_|?
+}?(E}?
+S~?qz~?R
+z?q>z?
+r?=6r?
+k?qHk?
+c?'2c?
+a?a!a?Go`?m
+\?&7\?Q
+W?H0W?
+O?aRN?
+>?f&>?
+4?Z-3?(V2?n
+?.?Uu-?
++?>Z*?u
+H#?Ut"?J
+f>Uqc>
+V>"PT>
+;>Nr9>l
+4>/P2>
+->CP+>M
+y=`]t=Y
+6=G01=/o,=^
+;b<[QV<w
+^/;Q[8;
+;L9|;+"u;/
+3:;S?1;
+9: ,>:
+cM:w1M:
+MB9H_59
+#_8M.F8
+5$9l5Y
+84U$8(
+a8wxx8
+i9/>\9%
+Ab;=erj=<l
+Ab;=erj
+erj=Ab;
+j?(X3>
+M{?ANF
+k<;Gq\
+*{?.cu
+mWZ?Nq
+*?VEw?
+qNt?GA0?
+k+c?sjP
+[??L:7
+U?KGV?^3
+v?Jfw?M
+xk?SB*?
+?DaL?{
+'^??dy
+v?-vb?
+Y{?#F}
+#?N@ >
+'He?7".>
+Qt?qSx?
+r?o>T?
+=?GpC?$
+<<Zp?m
+T?.5@?
+~j?*B{
+0?Ah9?p
+I?=MQ?SHX?
+y?(;|?$
+raw ADTS AAC (Advanced Audio Coding)
+audio/aac,audio/aacp,audio/x-aac
+pgmyuv
+mpg1-img
+mpg2-img
+mpg4-img
+sunras
+fft2_float_sse3
+fft2_asm_float_sse3
+fft4_fwd_float_sse2
+fft4_fwd_asm_float_sse2
+fft4_inv_asm_float_sse2
+fft4_inv_float_sse2
+fft8_float_sse3
+fft8_asm_float_sse3
+fft8_ns_float_sse3
+fft8_float_avx
+fft8_asm_float_avx
+fft8_ns_float_avx
+fft16_float_avx
+fft16_asm_float_avx
+fft16_ns_float_avx
+fft16_float_fma3
+fft16_asm_float_fma3
+fft16_ns_float_fma3
+fft32_float_avx
+fft32_asm_float_avx
+fft32_ns_float_avx
+fft32_float_fma3
+fft32_asm_float_fma3
+fft32_ns_float_fma3
+fft_sr_float_avx
+fft_sr_asm_float_avx
+fft_sr_ns_float_avx
+fft_sr_float_fma3
+fft_sr_asm_float_fma3
+fft_sr_ns_float_fma3
+fft15_float_avx2
+fft15_ns_float_avx2
+fft_sr_float_avx2
+fft_sr_asm_float_avx2
+fft_sr_ns_float_avx2
+fft_pfa_15xM_float_avx2
+fft_pfa_15xM_asm_float_avx2
+fft_pfa_15xM_ns_float_avx2
+mdct_inv_float_avx2
+assertion failed: start_idx > 0
+00010203040506070809101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899
+;GetSystemTimePreciseAsFileTime
+basic_string
+Unknown exception
+bad array new length
+bad cast
+vector
+iostream
+unspecified iostream_category error
+ios_base::clear
+unsupported locale for standard input
+0123456789abcdefABCDEFxX+-pPiInN
+%H:%M:%S%m/%d/%y%Y-%m-%d%I:%M:%S %p%H:%M%H:%M:%S
+0123456789
+money_get error
+0123456789
+locale not supported
+0123456789abcdefghijklmnopqrstuvwxyz
+000000010010001101000101011001111000100110101011110011011110111101
+0001020304050607101112131415161720212223242526273031323334353637404142434445464750515253545556576061626364656667707172737475767701234567
+000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff0123456789abcdef
+bad allocation
+unknown error %d
+F..\..\third_party\opus\src\src\opus_multistream_decoder.c
+assertion failed: (opus_multistream_decoder_ctl(st, 4029, ((&Fs) + ((&Fs) - (opus_int32*)(&Fs))))) == OPUS_OK
+?..\..\third_party\opus\src\src\opus_decoder.c
+assertion failed: pcm_count == frame_size
+assertion failed: ret==frame_size-packet_frame_size
+assertion failed: ret==packet_frame_size
+assertion failed: st->channels == 1 || st->channels == 2
+assertion failed: st->Fs == 48000 || st->Fs == 24000 || st->Fs == 16000 || st->Fs == 12000 || st->Fs == 8000
+assertion failed: st->DecControl.API_sampleRate == st->Fs
+assertion failed: st->DecControl.internalSampleRate == 0 || st->DecControl.internalSampleRate == 16000 || st->DecControl.internalSampleRate == 12000 || st->DecControl.internalSampleRate == 8000
+assertion failed: st->DecControl.nChannelsAPI == st->channels
+assertion failed: st->DecControl.nChannelsInternal == 0 || st->DecControl.nChannelsInternal == 1 || st->DecControl.nChannelsInternal == 2
+assertion failed: st->DecControl.payloadSize_ms == 0 || st->DecControl.payloadSize_ms == 10 || st->DecControl.payloadSize_ms == 20 || st->DecControl.payloadSize_ms == 40 || st->DecControl.payloadSize_ms == 60
+assertion failed: st->arch >= 0
+assertion failed: st->arch <= OPUS_ARCHMASK
+assertion failed: st->stream_channels == 1 || st->stream_channels == 2
+assertion failed: 0
+assertion failed: (opus_custom_decoder_ctl(celt_dec, 10012, (((void)((endband) == (opus_int32)0)), (opus_int32)(endband)))) == OPUS_OK
+assertion failed: (opus_custom_decoder_ctl(celt_dec, 10008, (((void)((st->stream_channels) == (opus_int32)0)), (opus_int32)(st->stream_channels)))) == OPUS_OK
+assertion failed: (opus_custom_decoder_ctl(celt_dec, 10010, (((void)((0) == (opus_int32)0)), (opus_int32)(0)))) == OPUS_OK
+assertion failed: (opus_custom_decoder_ctl(celt_dec, 4031, ((&redundant_rng) + ((&redundant_rng) - (opus_uint32*)(&redundant_rng))))) == OPUS_OK
+assertion failed: (opus_custom_decoder_ctl(celt_dec, 10010, (((void)((start_band) == (opus_int32)0)), (opus_int32)(start_band)))) == OPUS_OK
+assertion failed: (opus_custom_decoder_ctl(celt_dec, 4028)) == OPUS_OK
+assertion failed: (opus_custom_decoder_ctl(celt_dec, 10015, ((&celt_mode) + ((&celt_mode) - (const OpusCustomMode**)(&celt_mode))))) == OPUS_OK
+R;876.
+..\..\third_party\opus\src\silk\resampler_private_down_FIR.c
+..\..\third_party\opus\src\silk\resampler.c
+assertion failed: inLen >= S->Fs_in_kHz
+assertion failed: S->inputDelay <= S->Fs_in_kHz
+xnbUH<1( 
+|obXOF>82,'#
+"+=N]r
+!*=L]y
+%0@Thv
+l`UROM=;98310-*)(&$"
+}rf[QG<4+#
+tCR;\HdY\
+cB$$"$""""SE$4"tfFDD
+fDD"AUDT$t
+df"DDdD
+&6EUdt
+)7ESbp
+"3=N\j~
+$2?O_n~
+%3;NYk{
+ 3CQ`p
+%3AObq~
+"7?NWlv
+ $8O[lv
++:JYix
+!.<K\k{
+,9JYiy
+.9GXdx
+#.8M\j{
+-5?KYks
+(8GXgw
+$09LWiv
+6GQ^h~
+1>O\kw
+$-=L[ly
+-<L[k{
++5FSgr
+#*:N]n}
+"2CScs
+)BIV_o
+%4?K\fw
+4DXgu~
+/=LZjw
+#2=IVanw
+wsqnmcb_OD420-+ 
+|nhZNLFE9-"
+D>B<HuUZv
+dffDD$"`
+f@B$""
+{wwgEbDgxvvfGb
+yk 1"""
+dFDFBB"
+$$BD#`
+..\..\third_party\opus\src\silk\decoder_set_fs.c
+assertion failed: fs_kHz == 8 || fs_kHz == 12 || fs_kHz == 16
+assertion failed: psDec->nb_subfr == MAX_NB_SUBFR || psDec->nb_subfr == MAX_NB_SUBFR/2
+assertion failed: psDec->frame_length > 0 && psDec->frame_length <= MAX_FRAME_LENGTH
+G2*&#!
+|m`TG=3* 
+{ri`XPH@92,&!
+..\..\third_party\opus\src\silk\decode_indices.c
+assertion failed: psDec->psNLSF_CB->order == psDec->LPC_order
+gSB5*!
+#,6AMZhw
+1CMR]c
+.BNW^h
+^hmpsv
+5EPX_f..\..\third_party\opus\src\silk\decode_pulses.c
+assertion failed: frame_length == 12 * 10
+..\..\third_party\opus\src\silk\decode_pitch.c
+assertion failed: nb_subfr == PE_MAX_NB_SUBFR >> 1
+..\..\third_party\opus\src\silk\decode_core.c
+assertion failed: psDec->LPC_order == 10 || psDec->LPC_order == 16
+..\..\third_party\opus\src\silk\decode_frame.c
+assertion failed: L > 0 && L <= MAX_FRAME_LENGTH
+assertion failed: psDec->ltp_mem_length >= psDec->frame_length
+assertion failed: psDec->prevSignalType >= 0 && psDec->prevSignalType <= 2
+8..\..\third_party\opus\src\silk\dec_API.c
+assertion failed: decControl->nChannelsInternal == 1 || decControl->nChannelsInternal == 2
+~3s..\..\third_party\opus\src\silk\PLC.c
+assertion failed: idx > 0
+assertion failed: psDec->LPC_order >= 10
+..\..\third_party\opus\src\silk\sort.c
+assertion failed: L > 0
+..\..\third_party\opus\src\silk\NLSF2A.c
+assertion failed: d==10 || d==16
+..\..\third_party\opus\src\silk\LPC_analysis_filter.c
+assertion failed: d >= 6
+assertion failed: (d & 1) == 0
+assertion failed: d <= len
+..\..\third_party\opus\src\silk\CNG.c
+..\..\third_party\opus\src\celt\entenc.c
+assertion failed: _ft>1
+assertion failed: _bits>0
+..\..\third_party\opus\src\celt\entdec.c
+ZPKE?81("
+ndZTNGA:3-' 
+vng]VPKFA;5/(
+~wph_YSNHB<6/' 
+xrga[UNHB<6/)#
+|qke_XRLF@93-'!
+{uoib\VPJC=71+$
+yslf`ZTMGA;5.
+}vpjd^WQKE?8-
+8>0RF>
+'?t|+??Z/?
+:H?'mK?
+^?sYa?
+k?n_m?P
+y?srz?''{?
+}?tt}?
+z?Mbz?H5z?
+y?Zzy?
+x?sMx?
+w?:ww?
+v?/\v?
+mu?B0u?A
+t?;tt?74t?
+s?&ps?v-s?
+r?dar?
+o? Bo?
+n?SZn?
+k?P+k?@
+j?2*j?5
+{i?M#i?d
+g?``g?H
+f?3Jf?6
+e?W.e?w
+a?wSa?\
+Y?'WY?
+X?OsX?
+V?V/V?
+U?:CU?K
+D?28D?/
+;?uX;?
+9?Gw8?Q
+6?k 6?t
+-?'v,?k
++?78+?
+(?3s'?
+$?aB$?
+!?[_ ?
+gx>/'u>
+n>sak><
+}T>k6Q>]
+)>Bd&>
+|=Fvo=]
+d~?i3~?A
+|?MD|?
+t?Dlt?e
+f?|>f?
+d?Z<c?
+B?:oA?4U@?
+d8?":7?
+-?Vb,?H$+?Z
+#?#>"?u
+g>M-a>Y
+F>F_@>
+}?RJ}?H
+|?(;|?
++w?FFv?
+Vu?N\t?8Ws?vGr?
+m?@Zl?~
+`?m'_?&~]?(
+Z?SHX?
+D?AdB?
+;?Bh9?
+*?5z(?
+oz>!km>
+\`>)CS>
+`?NH]?E
+%??t ?m-
+Q>0P7>
+"$&')*+,-.//123456779:;<=>??ABCDEFGG(
+!)059=@BEGIKLNPRUWY[\^`begiklnpruwy{|~
+'3<CIOSW[^adfikosvy|~
+1ANYckrx~
+!:Oap}
+6uu?uj
+qxs?z7
+O-p?A6
+>>?%L+
+i->gM|
+\0 >gM|
+x@?:B&
+0|t?uj
+gM|?\0 
+?:^V=/
+Y}?\0 >%
+i->gM|?
+>wcv?uj
+>6uu?L
+>0|t?z7
+D?:B&?
+x@?%L+?
+>>?%L+?
+B?:B&?
+>O-p?A6
+>qxs?z7
+>0|t?L
+>6uu?uj
+>wcv?>
+:>gM|?
+|?\0 >
+?:^V=y
+..\..\third_party\opus\src\celt\laplace.c
+assertion failed: fl<32768
+assertion failed: fl<=fm
+assertion failed: fm<IMIN(fl+fs,32768)
+\N\O\NZOt)s(r(
+=rF`JXKXWJYB[Cd;l2x(z%a+N2SNTQXKVJWGZI]J]Jm(r$u"u"
+6s?fBbEcJYG[I[NYVP\B]@f;g<h<u4{,
+a&M-=Z]<i*k)n-t&q&p&|
+;nGVKUTS[BXIWH\KbHi:k6s4r7p8
+b#M**y`Bl+o(u,{ x$w!
+?rJRTS\Rg>`H`CeIkHq7v4}4v4u7
+  !""#$$%%..\..\third_party\opus\src\celt\rate.c
+assertion failed: codedBands > start
+assertion failed: bits[j] >= 0
+assertion failed: ebits[j] >= 0
+assertion failed: C*ebits[j]<<BITRES == bits[j]
+..\..\third_party\opus\src\celt\cwrs.c
+assertion failed: _k>0
+9=aA\E
+Tassertion failed: _n>=2
+assertion failed: _n>1
+..\..\third_party\opus\src\celt\vq.c
+assertion failed: K>0
+alg_quant() needs at least one pulse
+assertion failed: N>1
+alg_quant() needs at least two dimensions
+assertion failed: K>0
+alg_unquant() needs at least one pulse
+assertion failed: N>1
+alg_unquant() needs at least two dimensions
+=fff?(\O?
+L?333?
++..\..\third_party\opus\src\celt\pitch.c
+assertion failed: max_pitch>0
+assertion failed: len>0
+:..\..\third_party\opus\src\celt\celt_lpc.c
+assertion failed: x != y
+assertion failed: (ord&3)==0
+assertion failed: n>0
+assertion failed: overlap>=0
+..\..\third_party\opus\src\celt\kiss_fft.c
+assertion failed: m==4
+..\..\third_party\opus\src\celt\celt_decoder.c
+assertion failed: st->mode == opus_custom_mode_create(48000, 960, NULL)
+assertion failed: st->overlap == 120
+assertion failed: st->end <= 21
+assertion failed: st->downsample > 0
+assertion failed: st->start == 0 || st->start == 17
+assertion failed: st->start < st->end
+assertion failed: st->last_pitch_index <= PLC_PITCH_LAG_MAX
+assertion failed: st->last_pitch_index >= PLC_PITCH_LAG_MIN || st->last_pitch_index == 0
+assertion failed: st->postfilter_period < MAX_PERIOD
+assertion failed: st->postfilter_period >= COMBFILTER_MINPERIOD || st->postfilter_period == 0
+assertion failed: st->postfilter_period_old < MAX_PERIOD
+assertion failed: st->postfilter_period_old >= COMBFILTER_MINPERIOD || st->postfilter_period_old == 0
+assertion failed: st->postfilter_tapset <= 2
+assertion failed: st->postfilter_tapset >= 0
+assertion failed: st->postfilter_tapset_old <= 2
+assertion failed: st->postfilter_tapset_old >= 0
+~|wmW)
+..\..\third_party\opus\src\celt\bands.c
+assertion failed: start <= end
+assertion failed: N > 0
+assertion failed: stride>0
+assertion failed: itheta>=0
+k`uassertion failed: qn <= 256
+Q>.3Z<
+P|> ,o
+Cy2@K>
+`>n>w%
+z>@G'h
+M'y>0y
+GrJoq>@
+?8UUUUU
+UUUUUU
+?UUUUUU
+?kxG2)
+?TY,>5
+?!5WOo
+?E=$% B
+?49HoKC
+UUUUUU
+?UUUUUU
+?UUUUUU
+?<TUUUU
+?/#+d)E
+Y$;en<
+</]7X&g
+<8bunz8
+l,kg<i
+<@En[v
+`UUUUU
+hV/M)|
+hV/M)|
+?i!VPCr(
+Q>.3Z<
+P|> ,o
+Cy2@K>
+`>n>w%
+z>@G'h
+M'y>0y
+GrJoq>@
+?8bunz8
+?@En[v
+UUUUUU
+UUUUUU
+LLD PDB.
+ffmpeg.dll.pdb
+ffmpeg.dll
+av_buffer_create
+av_buffer_get_opaque
+av_dict_count
+av_dict_free
+av_dict_get
+av_dict_set
+av_force_cpu_flags
+av_frame_alloc
+av_frame_clone
+av_frame_free
+av_frame_unref
+av_free
+av_get_bytes_per_sample
+av_get_cpu_flags
+av_image_check_size
+av_init_packet
+av_log_set_level
+av_malloc
+av_max_alloc
+av_new_packet
+av_packet_alloc
+av_packet_copy_props
+av_packet_free
+av_packet_get_side_data
+av_packet_unref
+av_read_frame
+av_rescale_q
+av_samples_get_buffer_size
+av_seek_frame
+av_strdup
+av_stream_get_first_dts
+av_strerror
+avcodec_align_dimensions
+avcodec_alloc_context3
+avcodec_descriptor_get
+avcodec_descriptor_next
+avcodec_find_decoder
+avcodec_flush_buffers
+avcodec_free_context
+avcodec_get_name
+avcodec_open2
+avcodec_parameters_to_context
+avcodec_receive_frame
+avcodec_send_packet
+avformat_alloc_context
+avformat_close_input
+avformat_find_stream_info
+avformat_free_context
+avformat_open_input
+avio_alloc_context
+avio_close
+AcquireSRWLockExclusive
+CloseHandle
+CompareStringW
+CreateFileW
+CreateThread
+DeleteCriticalSection
+EncodePointer
+EnterCriticalSection
+EnumSystemLocalesW
+ExitProcess
+ExitThread
+FindClose
+FindFirstFileExW
+FindNextFileW
+FlsAlloc
+FlsFree
+FlsGetValue
+FlsSetValue
+FlushFileBuffers
+FreeEnvironmentStringsW
+FreeLibrary
+FreeLibraryAndExitThread
+GetACP
+GetCPInfo
+GetCommandLineA
+GetCommandLineW
+GetConsoleMode
+GetConsoleOutputCP
+GetCurrentProcess
+GetCurrentProcessId
+GetCurrentThread
+GetCurrentThreadId
+GetDateFormatW
+GetEnvironmentStringsW
+GetFileSizeEx
+GetFileType
+GetLastError
+GetLocaleInfoW
+GetModuleFileNameW
+GetModuleHandleExW
+GetModuleHandleW
+GetOEMCP
+GetProcAddress
+GetProcessAffinityMask
+GetProcessHeap
+GetStartupInfoW
+GetStdHandle
+GetStringTypeW
+GetSystemTimeAsFileTime
+GetTimeFormatW
+GetTimeZoneInformation
+GetUserDefaultLCID
+HeapAlloc
+HeapFree
+HeapQueryInformation
+HeapReAlloc
+HeapSize
+InitOnceBeginInitialize
+InitOnceComplete
+InitializeConditionVariable
+InitializeCriticalSectionAndSpinCount
+InitializeCriticalSectionEx
+InitializeSListHead
+InitializeSRWLock
+InterlockedFlushSList
+IsDebuggerPresent
+IsProcessorFeaturePresent
+IsValidCodePage
+IsValidLocale
+LCMapStringW
+LeaveCriticalSection
+LoadLibraryExW
+MultiByteToWideChar
+QueryPerformanceCounter
+QueryPerformanceFrequency
+RaiseException
+ReadConsoleW
+ReadFile
+ReleaseSRWLockExclusive
+RtlCaptureContext
+RtlLookupFunctionEntry
+RtlPcToFileHeader
+RtlUnwind
+RtlUnwindEx
+RtlVirtualUnwind
+SetEnvironmentVariableW
+SetFilePointerEx
+SetLastError
+SetStdHandle
+SetUnhandledExceptionFilter
+SleepConditionVariableSRW
+TerminateProcess
+TlsAlloc
+TlsFree
+TlsGetValue
+TlsSetValue
+UnhandledExceptionFilter
+VirtualProtect
+WaitForSingleObjectEx
+WakeAllConditionVariable
+WakeConditionVariable
+WideCharToMultiByte
+WriteConsoleW
+WriteFile
+KERNEL32.dll
+                          
+abcdefghijklmnopqrstuvwxyz
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+                          
+abcdefghijklmnopqrstuvwxyz
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+.?AV?$basic_ios@_WU?$char_traits@_W@__Cr@std@@@__Cr@std@@
+.?AV?$basic_streambuf@_WU?$char_traits@_W@__Cr@std@@@__Cr@std@@
+.?AV?$basic_istream@_WU?$char_traits@_W@__Cr@std@@@__Cr@std@@
+.?AV?$basic_ostream@_WU?$char_traits@_W@__Cr@std@@@__Cr@std@@
+.?AVlength_error@std@@
+.?AVlogic_error@std@@
+.?AVexception@std@@
+.?AVbad_array_new_length@std@@
+.?AVbad_alloc@std@@
+.?AVsystem_error@__Cr@std@@
+.?AVruntime_error@std@@
+.?AV__shared_count@__Cr@std@@
+.?AV?$basic_istream@DU?$char_traits@D@__Cr@std@@@__Cr@std@@
+.?AV?$basic_ios@DU?$char_traits@D@__Cr@std@@@__Cr@std@@
+.?AVios_base@__Cr@std@@
+.?AV?$basic_streambuf@DU?$char_traits@D@__Cr@std@@@__Cr@std@@
+.?AVbad_cast@std@@
+.?AV?$basic_ostream@DU?$char_traits@D@__Cr@std@@@__Cr@std@@
+.?AV__do_message@__Cr@std@@
+.?AVerror_category@__Cr@std@@
+.?AV__iostream_category@__Cr@std@@
+.?AVfailure@ios_base@__Cr@std@@
+.?AV?$__stdinbuf@D@__Cr@std@@
+.?AV?$__stdoutbuf@D@__Cr@std@@
+.?AV?$__stdinbuf@_W@__Cr@std@@
+.?AV?$__stdoutbuf@_W@__Cr@std@@
+%m/%d/%y
+%H:%M:%S
+(%a %b %d %H:%M:%S %Y
+%I:%M:%S %p
+.?AV?$collate@D@__Cr@std@@
+.?AVfacet@locale@__Cr@std@@
+.?AV?$collate@_W@__Cr@std@@
+.?AV?$num_get@DV?$istreambuf_iterator@DU?$char_traits@D@__Cr@std@@@__Cr@std@@@__Cr@std@@
+.?AU?$__num_get@D@__Cr@std@@
+.?AU__num_get_base@__Cr@std@@
+.?AV?$num_get@_WV?$istreambuf_iterator@_WU?$char_traits@_W@__Cr@std@@@__Cr@std@@@__Cr@std@@
+.?AU?$__num_get@_W@__Cr@std@@
+.?AV?$num_put@DV?$ostreambuf_iterator@DU?$char_traits@D@__Cr@std@@@__Cr@std@@@__Cr@std@@
+.?AU?$__num_put@D@__Cr@std@@
+.?AU__num_put_base@__Cr@std@@
+.?AV?$num_put@_WV?$ostreambuf_iterator@_WU?$char_traits@_W@__Cr@std@@@__Cr@std@@@__Cr@std@@
+.?AU?$__num_put@_W@__Cr@std@@
+.?AV?$time_get@DV?$istreambuf_iterator@DU?$char_traits@D@__Cr@std@@@__Cr@std@@@__Cr@std@@
+.?AVtime_base@__Cr@std@@
+.?AV?$__time_get_c_storage@D@__Cr@std@@
+.?AV?$time_get@_WV?$istreambuf_iterator@_WU?$char_traits@_W@__Cr@std@@@__Cr@std@@@__Cr@std@@
+.?AV?$__time_get_c_storage@_W@__Cr@std@@
+.?AV?$time_put@DV?$ostreambuf_iterator@DU?$char_traits@D@__Cr@std@@@__Cr@std@@@__Cr@std@@
+.?AV__time_put@__Cr@std@@
+.?AV?$time_put@_WV?$ostreambuf_iterator@_WU?$char_traits@_W@__Cr@std@@@__Cr@std@@@__Cr@std@@
+.?AV?$moneypunct@D$0A@@__Cr@std@@
+.?AVmoney_base@__Cr@std@@
+.?AV?$moneypunct@D$00@__Cr@std@@
+.?AV?$moneypunct@_W$0A@@__Cr@std@@
+.?AV?$moneypunct@_W$00@__Cr@std@@
+.?AV?$money_get@DV?$istreambuf_iterator@DU?$char_traits@D@__Cr@std@@@__Cr@std@@@__Cr@std@@
+.?AV?$__money_get@D@__Cr@std@@
+.?AV?$money_get@_WV?$istreambuf_iterator@_WU?$char_traits@_W@__Cr@std@@@__Cr@std@@@__Cr@std@@
+.?AV?$__money_get@_W@__Cr@std@@
+.?AV?$money_put@DV?$ostreambuf_iterator@DU?$char_traits@D@__Cr@std@@@__Cr@std@@@__Cr@std@@
+.?AV?$__money_put@D@__Cr@std@@
+.?AV?$money_put@_WV?$ostreambuf_iterator@_WU?$char_traits@_W@__Cr@std@@@__Cr@std@@@__Cr@std@@
+.?AV?$__money_put@_W@__Cr@std@@
+.?AV?$messages@D@__Cr@std@@
+.?AVmessages_base@__Cr@std@@
+.?AV?$messages@_W@__Cr@std@@
+.?AV?$codecvt@DDU_Mbstatet@@@__Cr@std@@
+.?AVcodecvt_base@__Cr@std@@
+.?AV?$codecvt@_WDU_Mbstatet@@@__Cr@std@@
+.?AV?$codecvt@_SDU_Mbstatet@@@__Cr@std@@
+.?AV?$codecvt@_UDU_Mbstatet@@@__Cr@std@@
+.?AV?$codecvt@_S_QU_Mbstatet@@@__Cr@std@@
+.?AV?$codecvt@_U_QU_Mbstatet@@@__Cr@std@@
+.?AV__imp@locale@__Cr@std@@
+.?AV?$ctype@D@__Cr@std@@
+.?AVctype_base@__Cr@std@@
+.?AV?$ctype@_W@__Cr@std@@
+.?AV?$numpunct@D@__Cr@std@@
+.?AV?$numpunct@_W@__Cr@std@@
+.?AVbad_exception@std@@
+.?AVtype_info@@
+         (((((                  H
+         (((((                  H
+      (                          
+(null)
+minkernel\crts\ucrt\inc\corecrt_internal_strtox.h
+__crt_strtox::floating_point_value::as_double
+_is_double
+__crt_strtox::floating_point_value::as_float
+!_is_double
+mscoree.dll
+LC_ALL
+LC_COLLATE
+LC_CTYPE
+LC_MONETARY
+LC_NUMERIC
+LC_TIME
+api-ms-win-core-datetime-l1-1-1
+api-ms-win-core-fibers-l1-1-2
+api-ms-win-core-file-l1-2-4
+api-ms-win-core-file-l1-2-2
+api-ms-win-core-file-l2-1-4
+api-ms-win-core-localization-l1-2-1
+api-ms-win-core-localization-obsolete-l1-2-0
+api-ms-win-core-processthreads-l1-1-2
+api-ms-win-core-string-l1-1-0
+api-ms-win-core-synch-l1-2-0
+api-ms-win-core-sysinfo-l1-2-1
+api-ms-win-core-winrt-l1-1-0
+api-ms-win-core-xstate-l2-1-0
+api-ms-win-rtcore-ntuser-window-l1-1-0
+api-ms-win-security-systemfunctions-l1-1-0
+ext-ms-win-ntuser-dialogbox-l1-1-0
+ext-ms-win-ntuser-windowstation-l1-1-0
+advapi32
+kernel32
+kernelbase
+api-ms-win-appmodel-runtime-l1-1-2
+user32
+api-ms-
+ext-ms-
+Sunday
+Monday
+Tuesday
+Wednesday
+Thursday
+Friday
+Saturday
+January
+February
+August
+September
+October
+November
+December
+MM/dd/yy
+dddd, MMMM dd, yyyy
+HH:mm:ss
+american
+american english
+american-english
+australian
+belgian
+canadian
+chinese
+chinese-hongkong
+chinese-simplified
+chinese-singapore
+chinese-traditional
+dutch-belgian
+english-american
+english-aus
+english-belize
+english-can
+english-caribbean
+english-ire
+english-jamaica
+english-nz
+english-south africa
+english-trinidad y tobago
+english-uk
+english-us
+english-usa
+french-belgian
+french-canadian
+french-luxembourg
+french-swiss
+german-austrian
+german-lichtenstein
+german-luxembourg
+german-swiss
+irish-english
+italian-swiss
+norwegian
+norwegian-bokmal
+norwegian-nynorsk
+portuguese-brazilian
+spanish-argentina
+spanish-bolivia
+spanish-chile
+spanish-colombia
+spanish-costa rica
+spanish-dominican republic
+spanish-ecuador
+spanish-el salvador
+spanish-guatemala
+spanish-honduras
+spanish-mexican
+spanish-modern
+spanish-nicaragua
+spanish-panama
+spanish-paraguay
+spanish-peru
+spanish-puerto rico
+spanish-uruguay
+spanish-venezuela
+swedish-finland
+america
+britain
+england
+great britain
+holland
+hong-kong
+new-zealand
+pr china
+pr-china
+puerto-rico
+slovak
+south africa
+south korea
+south-africa
+south-korea
+trinidad & tobago
+united-kingdom
+united-states
+api-ms-win-core-fibers-l1-1-1
+zh-CHS
+az-AZ-Latn
+uz-UZ-Latn
+kok-IN
+syr-SY
+div-MV
+quz-BO
+sr-SP-Latn
+az-AZ-Cyrl
+uz-UZ-Cyrl
+quz-EC
+sr-SP-Cyrl
+quz-PE
+smj-NO
+bs-BA-Latn
+smj-SE
+sr-BA-Latn
+sma-NO
+sr-BA-Cyrl
+sma-SE
+sms-FI
+smn-FI
+zh-CHT
+az-az-cyrl
+az-az-latn
+bs-ba-latn
+div-mv
+kok-in
+quz-bo
+quz-ec
+quz-pe
+sma-no
+sma-se
+smj-no
+smj-se
+smn-fi
+sms-fi
+sr-ba-cyrl
+sr-ba-latn
+sr-sp-cyrl
+sr-sp-latn
+syr-sy
+uz-uz-cyrl
+uz-uz-latn
+zh-chs
+zh-cht
+CONOUT$
+ 08@P`p
+ (08@P`p
+ 08@P`p
+ (08@P`p
+ (08@P`p
+kernelbase.dll
+q+-1mp
+QQQQQQ@@
+ 0@P`p
+!1AQaq
+"2BRbr
+#3CScs
+$4DTdt
+%5EUeu
+&6FVfv
+'7GWgw
+(8HXhx
+a[H4&"
+`ZN<2/
+upgYQN
+vsW-$"
+ $(,048@HPX`lx
+ $(,048@HPXdp|
+ $(08@HPX`lx
+ $(08@HPX`lx
+ $(,4<DLT\dlt|
+ (08@HPXdp|
+$0<HT`lx
+ $(,048@HPX`lx
+ $(,048@HPXdp|
+ $(08@HPX`lx
+ $(,4<DLT\dlt|
+ (08@HPXdp|
+$0<HT`lx
+ $(,048@HPX`lx
+ $(,048@HPXdp|
+ $(08@HPX`lx
+ $(,4<DLT\dlt|
+ (08@HPXdp|
+$0<HT`lx
+ $(,048<DLT\dp|
+ $(,048@HPX`lx
+ $(,4<DP\hx
+ $(,048@HPX`lx
+ $(,048<@HPX`hp|
+ $(,4<DP\hx
+$,8DP`p
+$,4@L\l
+ (0<HXl
+$,4<HXl
+ (0@\x
+$,8DP`px
+$,4@L\lx
+ (0<HXlx
+$,4<HXlx
+ (0@\`
+$,8DP`
+$,4@L\`
+ (0<HX`
+$,4<HX`
+        5555
+@@@@@@@@
+kernel32.dll
+%H:%M:%S%m/%d/%y%Y-%m-%d%I:%M:%S %p%H:%M%H:%M:%S
+%a %b %d %H:%M:%S %Y
+%I:%M:%S %p
+,Wednesday
+Thursday
+Saturday
+February
+September
+November
+December
+"(0<Nd
+)))RR{
+)))){{{
+)))))))){{{{
+{{{{{{{{
+ !"#$%&'()*+,-./012
+%m/%d/%y
+%H:%M:%S

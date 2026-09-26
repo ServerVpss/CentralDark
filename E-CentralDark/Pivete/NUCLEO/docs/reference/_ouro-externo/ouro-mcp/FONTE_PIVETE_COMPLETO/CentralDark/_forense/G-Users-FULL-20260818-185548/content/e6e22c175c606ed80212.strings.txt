@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\primitives\thread\topAnchor\mountTopAnchorReserve.d.ts.map
+
+{"version":3,"file":"mountTopAnchorReserve.d.ts","names":[],"sources":["../../../../src/primitives/thread/topAnchor/mountTopAnchorReserve.ts"],"mappings":";;AAmBA;;;;KAAY,cAAA;EACV,QAAA;IACE,UAAA;IACA,OAAA;MACE,QAAA,EAAU,WAAA;MACV,MAAA,EAAQ,WAAA;MACR,MAAA,EAAQ,WAAA;IAAA;IAEV,YAAA;MACE,UAAA;MACA,aAAA;IAAA;EAAA;EAGJ,SAAA,CAAU,EAAA;AAAA;AAAA,cAuBC,qBAAA,GAAyB,KAAqB,EAAd,cAAc"}

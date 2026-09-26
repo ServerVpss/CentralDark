@@ -1,0 +1,968 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\libexec\git-core\GitLab.dll
+
+!This program cannot be run in DOS mode.
+`.rsrc
+@.reloc
+E.{@s|
+p=rn@s|
+p=rn@s|
+E.{@s|
+p=rn@s|
+p=rn@s|
+/!AvaloniaResourceXamlInfo
+<AvaloniaResourceXamlInfo xmlns="http://schemas.datacontract.org/2004/07/Avalonia.Markup.Xaml.PortableXaml" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"><ClassToResourcePathIndex xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:KeyValueOfstringstring><a:Key>GitLab.UI.Views.CredentialsView</a:Key><a:Value>/UI/Views/CredentialsView.axaml</a:Value></a:KeyValueOfstringstring></ClassToResourcePathIndex></AvaloniaResourceXamlInfo>BSJB
+v4.0.30319
+#Strings
+<GenerateCredentialAsync>d__10
+<>9__8_0
+<IsSupported>b__8_0
+CreateInnerServiceProviderV1
+<ExecuteAsync>d__1
+<GetAuthenticationAsync>d__1
+<>u__1
+Build_1
+XamlClosure_1
+Func`1
+Nullable`1
+IEnumerable`1
+Task`1
+Action`1
+ICollection`1
+Option`1
+AsyncTaskMethodBuilder`1
+TaskAwaiter`1
+IEnumerator`1
+IValueDescriptor`1
+IList`1
+AvaloniaList`1
+IReadOnlyList`1
+Context`1
+StyledProperty`1
+set_Geometry1
+<GetCredentialAsync>d__12
+<service>5__2
+<viewModel>5__2
+<oauthClient>5__2
+<httpClient>5__2
+<GetAuthenticationViaUiAsync>d__2
+<>u__2
+Build_2
+Func`2
+IDictionary`2
+IReadOnlyDictionary`2
+ITrace2
+get_Trace2
+trace2
+set_Geometry2
+<IsOAuthTokenExpired>d__13
+CreateRootServiceProviderV3
+DeferredTransformationFactoryV3
+<credential>5__3
+<>u__3
+<refreshService>5__4
+<GetAuthenticationViaHelperAsync>d__4
+<GenerateOAuthCredentialAsync>d__15
+<GetOAuthTokenViaBrowserAsync>d__5
+<RefreshOAuthCredentialAsync>d__16
+<GetOAuthTokenViaRefresh>d__6
+Func`7
+<Module>
+GitCredentialManager.UI
+System.IO
+_parentSP
+IsMacOS
+value__
+Avalonia.Media
+Avalonia
+Avalonia.Data
+GitLab
+mscorlib
+System.Collections.Generic
+CanSignInBasic
+GetAuthorizationCodeAsync
+GetTokenByAuthorizationCodeAsync
+ExecuteAsync
+GetAuthenticationViaUiAsync
+EraseCredentialAsync
+GenerateCredentialAsync
+GenerateOAuthCredentialAsync
+RefreshOAuthCredentialAsync
+GetCredentialAsync
+GetTokenByRefreshTokenAsync
+GetAuthenticationAsync
+GetAuthenticationViaHelperAsync
+InvokeHelperAsync
+GetOAuthTokenViaBrowserAsync
+GetAsync
+ShowViewAsync
+ShowAsync
+get_Id
+DevOAuthClientId
+IsGitLabDotComClientId
+GetClientId
+clientId
+TryLoad
+RaiseCanExecuteChanged
+System.ComponentModel.ITypeDescriptorContext.OnComponentChanged
+add_PropertyChanged
+SetAndRaisePropertyChanged
+OnPropertyChanged
+get_IsGuiPromptsEnabled
+ThrowIfUserInteractionDisabled
+ThrowIfTerminalPromptsDisabled
+ThrowIfWindowCancelled
+set_IsFilled
+IsOAuthTokenExpired
+AddDeferred
+ThrowIfDisposed
+AwaitUnsafeOnCompleted
+get_IsCompleted
+IsSupported
+<SelectedMode>k__BackingField
+<AuthenticationMode>k__BackingField
+<Credential>k__BackingField
+<RefreshToken>k__BackingField
+<AccessToken>k__BackingField
+ICommand
+get_SignInBasicCommand
+set_SignInBasicCommand
+_signInBasicCommand
+get_SignInTokenCommand
+set_SignInTokenCommand
+_signInTokenCommand
+get_SignUpCommand
+set_SignUpCommand
+_signUpCommand
+TryFindHelperCommand
+helperCommand
+get_SignInBrowserCommand
+set_SignInBrowserCommand
+_signInBrowserCommand
+CredentialsCommand
+RelayCommand
+command
+Append
+UriKind
+NavigationMethod
+netstandard
+GitCredentialManager.ICredential.Password
+GitCredentialManager.ICredential.get_Password
+set_Password
+_password
+IsNullOrWhiteSpace
+set_ClrNamespace
+ITrace
+get_Trace
+GetService
+System.ComponentModel.ITypeDescriptorContext.Instance
+System.ComponentModel.ITypeDescriptorContext.get_Instance
+!XamlIlPopulateOverride
+get_StatusCode
+HttpStatusCode
+get_SelectedMode
+set_SelectedMode
+set_GeometryCombineMode
+get_AuthenticationMode
+Avalonia.LogicalTree
+IImage
+DrawingImage
+get_Message
+HttpResponseMessage
+Invoke
+get_IsWebBrowserAvailable
+IEnumerable
+ParentStackEnumerable
+_parentStackEnumerable
+IDisposable
+IFocusable
+Avalonia.Media.Immutable
+Layoutable
+Double
+RuntimeTypeHandle
+GetTypeFromHandle
+GetParentWindowHandle
+set_Title
+get_OAuthModeTitle
+IStyle
+get_Name
+set_Name
+GetRefreshTokenServiceName
+GetServiceName
+get_UserName
+set_UserName
+get_TokenUserName
+set_TokenUserName
+_tokenUserName
+_userName
+set_ClrAssemblyName
+get_PropertyName
+Avalonia.Markup.Xaml.XamlIl.Runtime
+System.CommandLine
+WriteLine
+IAsyncStateMachine
+SetStateMachine
+stateMachine
+!XamlIlPopulateTrampoline
+get_None
+INameScope
+AvaloniaNameScope
+FindNameScope
+SetNameScope
+ValueType
+OfType
+GetType
+System.Core
+gcmcore
+ICredentialStore
+get_CredentialStore
+!IndexerAccessorFactoryClosure
+Avalonia.Base
+StyleBase
+AuthenticationBase
+SetterBase
+get_OrdinalIgnoreCase
+response
+System.IDisposable.Dispose
+TryParse
+AddOrUpdate
+TryCreate
+!XamlIlPopulate
+EditorBrowsableState
+<>1__state
+Complete
+AssemblyMetadataAttribute
+EmbeddedAttribute
+CompilerGeneratedAttribute
+GeneratedCodeAttribute
+ExcludeFromCodeCoverageAttribute
+AttributeUsageAttribute
+DebuggableAttribute
+EditorBrowsableAttribute
+AssemblyTitleAttribute
+AsyncStateMachineAttribute
+TargetFrameworkAttribute
+DebuggerHiddenAttribute
+AssemblyFileVersionAttribute
+AssemblyInformationalVersionAttribute
+AssemblyConfigurationAttribute
+InternalsVisibleToAttribute
+RefSafetyRulesAttribute
+FlagsAttribute
+CompilationRelaxationsAttribute
+AssemblyProductAttribute
+AssemblyCompanyAttribute
+RuntimeCompatibilityAttribute
+set_Value
+ProvideValue
+AuthenticationHeaderValue
+TryGetValue
+Remove
+set_FontSize
+ISupportInitialize
+System.Threading
+System.CommandLine.Binding
+IBinding
+System.ComponentModel.ITypeDescriptorContext.OnComponentChanging
+Avalonia.Styling
+System.Runtime.Versioning
+ToString
+TryGetSetting
+set_Drawing
+GeometryDrawing
+QuoteCmdArg
+GetOAuthTokenViaRefresh
+IBrush
+set_Brush
+ImmutableSolidColorBrush
+GitCredentialManager.Authentication.OAuth
+_gitLabAuth
+get_WwwAuth
+AvaloniaUi
+get_Uri
+get_BaseUri
+set_BaseUri
+_baseUri
+GetRemoteUri
+OAuthTokenEndpointRelativeUri
+OAuthAuthorizationEndpointRelativeUri
+DevOAuthRedirectUri
+GetRedirectUri
+targetUri
+get_DirectParentsStack
+SetDock
+TextBlock
+set_Watermark
+get_Task
+ILogical
+ICredential
+get_Credential
+set_Credential
+OAuthCredential
+GitCredential
+credential
+ITerminal
+get_Terminal
+Visual
+System.ComponentModel
+CredentialsViewModel
+WindowViewModel
+viewModel
+StackPanel
+DockPanel
+WrapPanel
+GitLab.dll
+NotNull
+Avalonia.Markup.Xaml
+CompiledAvaloniaXaml
+loadXaml
+Build:/UI/Assets/Images.axaml
+Populate:/UI/Assets/Images.axaml
+NamespaceInfo:/UI/Assets/Images.axaml
+NamespaceInfo:/UI/Views/CredentialsView.axaml
+get_Protocol
+_authModesTabControl
+UserControl
+SelectingItemsControl
+HeaderedContentControl
+get_Url
+set_Url
+get_Item
+set_Item
+TabItem
+set_AutoScrollToSelectedItem
+TerminalMenuItem
+System
+IsGitLabDotCom
+IsAssignableFrom
+set_Transform
+TranslateTransform
+TimeSpan
+get_Token
+set_Token
+get_RefreshToken
+refreshToken
+CanSignInToken
+CancellationToken
+get_AccessToken
+accessToken
+_token
+get_Children
+get_ShowBasicLogin
+set_ShowBasicLogin
+_showBasicLogin
+get_ShowTokenLogin
+set_ShowTokenLogin
+_showTokenLogin
+get_ShowBrowserLogin
+set_ShowBrowserLogin
+_showBrowserLogin
+set_Margin
+DynamicResourceExtension
+ReflectionBindingExtension
+Version
+get_IsDesktopSession
+GitCredentialManager.Authentication
+IGitLabAuthentication
+GitConfiguration
+set_Orientation
+set_Authorization
+Action
+System.Reflection
+DrawingCollection
+ItemCollection
+GeometryCollection
+AddOption
+Trace2Exception
+NotSupportedException
+ArgumentOutOfRangeException
+Trace2InvalidOperationException
+SetException
+ArgumentException
+StringComparison
+Singleton
+_signInBrowserButton
+CreateNamespaceInfo
+AvaloniaXamlIlXmlNamespaceInfo
+_innerSp
+SignUp
+System.Net.Http
+Avalonia.Markup
+DrawingGroup
+GeometryGroup
+System.Linq
+set_PasswordChar
+set_Header
+StreamReader
+!XamlLoader
+IServiceProvider
+IResourceProvider
+IAvaloniaXamlIlParentStackProvider
+IAvaloniaXamlIlEagerParentStackProvider
+AsEagerParentStackProvider
+IAvaloniaXamlIlXmlNamespaceInfoProvider
+IRootObjectProvider
+get_ParentProvider
+GitLabHostProvider
+StringBuilder
+UriBuilder
+<>t__builder
+sender
+GitCredentialManager
+ISessionManager
+get_SessionManager
+_sessionManager
+HttpMessageInvoker
+SetHandler
+PropertyChangedEventHandler
+System.CodeDom.Compiler
+System.ComponentModel.ITypeDescriptorContext.Container
+IContainer
+System.ComponentModel.ITypeDescriptorContext.get_Container
+DefaultAuthenticationHelper
+StringComparer
+IOAuth2WebBrowser
+OAuth2SystemWebBrowser
+SignInBrowser
+OpenBrowser
+browser
+TaskAwaiter
+GetAwaiter
+TextWriter
+ItemsPresenter
+set_Converter
+IValueConverter
+Register
+Setter
+get_Error
+IEnumerator
+System.Collections.IEnumerable.GetEnumerator
+_parentEnumerator
+.cctor
+set_Selector
+System.ComponentModel.ITypeDescriptorContext.PropertyDescriptor
+System.ComponentModel.ITypeDescriptorContext.get_PropertyDescriptor
+System.Diagnostics
+GitLab.UI.Commands
+FromSeconds
+CreateNamespaces
+get_XmlNamespaces
+_xmlNamespaces
+System.Runtime.CompilerServices
+set_Resources
+!AvaloniaResources
+ReleaseManagedResources
+DebuggingModes
+GetSupportedAuthenticationModes
+DotComAuthenticationModes
+get_MergedDictionaries
+EnvironmentVariables
+get_Styles
+XamlIlTrampolines
+GitLabOAuthScopes
+scopes
+set_Figures
+PathFigures
+get_Classes
+get_AllowUnsafeRemotes
+Avalonia.Controls.Primitives
+ISettings
+get_Settings
+settings
+PropertyChangedEventArgs
+<>4__this
+System.Diagnostics.CodeAnalysis
+Microsoft.CodeAnalysis
+System.Threading.Tasks
+Equals
+GitLab.UI.ViewModels
+GitCredentialManager.UI.ViewModels
+PlatformUtils
+GitCredentialManager.UI.Controls
+Avalonia.Controls
+HelpUrls
+get_Streams
+IStandardStreams
+get_Items
+Contains
+NameScopeExtensions
+Avalonia.Markup.Xaml.MarkupExtensions
+SessionManagerExtensions
+AvaloniaObjectExtensions
+OAuth2ClientExtensions
+Avalonia.Collections
+System.Collections
+OAuth2WebBrowserOptions
+System.Net.Http.Headers
+get_Headers
+HttpResponseHeaders
+HttpHeaders
+HttpRequestHeaders
+get_DefaultRequestHeaders
+_staticProviders
+KeyModifiers
+XamlIlRuntimeHelpers
+XamlIlHelpers
+Avalonia.Controls.Presenters
+Avalonia.Data.Converters
+StringConverters
+XamlDynamicSetters
+Selectors
+Thickness
+AttributeTargets
+GitLabConstants
+InputArguments
+Avalonia.Markup.Xaml.XamlIl.Runtime.IAvaloniaXamlIlParentStackProvider.Parents
+Avalonia.Markup.Xaml.XamlIl.Runtime.IAvaloniaXamlIlParentStackProvider.get_Parents
+get_Points
+CreateEndpoints
+OAuth2ServerEndpoints
+SetFocus
+GitLab.UI.Views
+RemoveAt
+Concat
+AppendFormat
+AvaloniaObject
+DisposableObject
+Avalonia.Markup.Xaml.IProvideValueTarget.TargetObject
+Avalonia.Markup.Xaml.IProvideValueTarget.get_TargetObject
+ProvideTargetObject
+Avalonia.Markup.Xaml.IRootObjectProvider.RootObject
+Avalonia.Markup.Xaml.IRootObjectProvider.get_RootObject
+Avalonia.Markup.Xaml.IRootObjectProvider.IntermediateRootObject
+Avalonia.Markup.Xaml.IRootObjectProvider.get_IntermediateRootObject
+System.Net
+TTarget
+IProvideValueTarget
+DevOAuthClientSecret
+GetClientSecret
+PromptSecret
+System.Collections.Generic.IEnumerator`1<System.Object>.Reset
+set_Height
+set_FontWeight
+EndInit
+BeginInit
+set_IsDefault
+OAuth2AuthorizationCodeResult
+WriteResult
+GetCredentialResult
+OAuth2TokenResult
+oAuth2TokenResult
+GetResult
+SetResult
+AuthenticationPromptResult
+get_WindowResult
+ToLowerInvariant
+IOAuth2Client
+GitLabOAuth2Client
+CreateClient
+get_HttpClient
+_httpClient
+StyledElement
+InputElement
+set_VerticalAlignment
+set_HorizontalAlignment
+set_VerticalContentAlignment
+EnsureArgument
+InitializeComponent
+PushParent
+PopParent
+get_Current
+_current
+set_Content
+IDeferredContent
+get_Count
+get_Account
+IntermediateRoot
+Accept
+Prompt
+TryGetHostAndPort
+_parentList
+get_Host
+set_Host
+set_Timeout
+Avalonia.Layout
+Avalonia.Input
+System.Windows.Input
+System.Collections.Generic.IEnumerator`1<System.Object>.MoveNext
+System.Text
+set_Text
+get_Context
+get_DataContext
+ICommandContext
+CreateContext
+IUriContext
+XamlIlContext
+ITypeDescriptorContext
+context
+TerminalMenu
+CredentialsView
+set_SelectedIndex
+_listIndex
+_passwordTextBox
+_patUserNameTextBox
+_userNameTextBox
+_tokenTextBox
+IResourceDictionary
+IHttpClientFactory
+get_HttpClientFactory
+set_Geometry
+CombinedGeometry
+PolylineGeometry
+PathGeometry
+GetAuthenticationViaTty
+EnsureCapacity
+op_Equality
+IsNullOrEmpty
+IsNotNullOrEmpty
+set_Property
+AvaloniaProperty
+IsEnabledProperty
+CommandProperty
+SourceProperty
+IsVisibleProperty
+Avalonia.Markup.Xaml.IProvideValueTarget.TargetProperty
+Avalonia.Markup.Xaml.IProvideValueTarget.get_TargetProperty
+ProvideTargetProperty
+MinHeightProperty
+HorizontalAlignmentProperty
+TextProperty
+AllowMultiple
+Inherited
+8GitLab.GitLabAuthentication+<GetAuthenticationAsync>d__1
+=GitLab.GitLabAuthentication+<GetAuthenticationViaUiAsync>d__2
+AGitLab.GitLabAuthentication+<GetAuthenticationViaHelperAsync>d__4
+>GitLab.GitLabAuthentication+<GetOAuthTokenViaBrowserAsync>d__5
+9GitLab.GitLabAuthentication+<GetOAuthTokenViaRefresh>d__6
+8GitLab.GitLabHostProvider+<GenerateCredentialAsync>d__10
+3GitLab.GitLabHostProvider+<GetCredentialAsync>d__12
+4GitLab.GitLabHostProvider+<IsOAuthTokenExpired>d__13
+=GitLab.GitLabHostProvider+<GenerateOAuthCredentialAsync>d__15
+<GitLab.GitLabHostProvider+<RefreshOAuthCredentialAsync>d__16
+BAvalonia.Generators.NameGenerator.InitializeComponentCodeGenerator
+11.1.3.0
+8GitLab.UI.Commands.CredentialsCommand+<ExecuteAsync>d__1
+WrapNonExceptionThrows
+GitLab.Tests
+.NETFramework,Version=v4.7.2
+FrameworkDisplayName
+.NET Framework 4.7.2
+GitLab
+Release
+2.7.3.0
+.2.7.3+5fa7116896c82164996a609accd1c5ad90fe730a
+$AvaloniaUseCompiledBindingsByDefault
+RSDSC~
+D:\a\_work\1\s\out\shared\GitLab\obj\Release\net472\Avalonia\GitLab.pdb
+SHA256
+_CorDllMain
+mscoree.dll
+<?xml version="1.0" encoding="utf-8"?>
+<assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
+  <assemblyIdentity version="2.7.3.0" name="GitLab"/>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!-- Windows 10 and Windows 11 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/>
+      <!-- Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/>
+      <!-- Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!-- Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+    </application>
+  </compatibility>
+</assembly>
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 20110
+250619182137Z
+260617182137Z0t1
+Washington1
+Redmond1
+Microsoft Corporation1
+Microsoft Corporation0
+Microsoft Corporation1
+230012+5053590
+Chttp://www.microsoft.com/pkiops/crl/MicCodSigPCA2011_2011-07-08.crl0a
+Ehttp://www.microsoft.com/pkiops/certs/MicCodSigPCA2011_2011-07-08.crt0
+Washington1
+Redmond1
+Microsoft Corporation1200
+)Microsoft Root Certificate Authority 20110
+110708205909Z
+260708210909Z0~1
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 20110
+Ihttp://crl.microsoft.com/pki/crl/products/MicRooCerAut2011_2011_03_22.crl0^
+Bhttp://www.microsoft.com/pki/certs/MicRooCerAut2011_2011_03_22.crt0
+3http://www.microsoft.com/pkiops/docs/primarycps.htm0@
+*?*kXIc
+QEX82q'
+WqVNHE
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 2011
+https://www.microsoft.com 0
+ :%6j?
+20260211154345.141Z0
+Washington1
+Redmond1
+Microsoft Corporation1%0#
+Microsoft America Operations1'0%
+nShield TSS ESN:A400-05E0-D9471%0#
+Microsoft Time-Stamp Service
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+250130194244Z
+260422194244Z0
+Washington1
+Redmond1
+Microsoft Corporation1%0#
+Microsoft America Operations1'0%
+nShield TSS ESN:A400-05E0-D9471%0#
+Microsoft Time-Stamp Service0
+Nhttp://www.microsoft.com/pkiops/crl/Microsoft%20Time-Stamp%20PCA%202010(1).crl0l
+Phttp://www.microsoft.com/pkiops/certs/Microsoft%20Time-Stamp%20PCA%202010(1).crt0
+VUPg*M
+>r#p.H
+Washington1
+Redmond1
+Microsoft Corporation1200
+)Microsoft Root Certificate Authority 20100
+210930182225Z
+300930183225Z0|1
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+3http://www.microsoft.com/pkiops/Docs/Repository.htm0
+Ehttp://crl.microsoft.com/pki/crl/products/MicRooCerAut_2010-06-23.crl0Z
+>http://www.microsoft.com/pki/certs/MicRooCerAut_2010-06-23.crt0
+as.,k{n?,
+Washington1
+Redmond1
+Microsoft Corporation1%0#
+Microsoft America Operations1'0%
+nShield TSS ESN:A400-05E0-D9471%0#
+Microsoft Time-Stamp Service
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+20260211114636Z
+20260212114636Z0t0:
+;"sIQV
+,<W Er
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 2010
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 2010
+d<dec#)kU
+QrE|%n4
+&#)$+%
+$#%#&%)(*(+(
+Enter GitLab credentials for '{0}'...
+Username
+Username: {0}
+Password
+Personal access token
+At least one AuthenticationModes must be supplied
+Select an authentication method for '{0}'
+Web browser
+Username/password
+GCM_GITLAB_HELPER
+gitLabHelper
+GitLab.UI
+Must specify at least one AuthenticationModes
+prompt
+ --username {0}
+ --url {0}
+ --basic
+ --browser
+ --pat
+Missing 'mode' in response
+browser
+Missing 'pat' in response
+username
+Missing 'username' in response
+password
+Missing 'password' in response
+Unknown mode value in response '
+Browser authentication requires a desktop session
+info: please complete authentication in your browser...
+172b9f227872b5dde33f4d9b1db06a6a5515ae79508e7a00c973c85ce490671e
+https://gitlab.com
+http://127.0.0.1/
+/oauth/authorize
+/oauth/token
+gitLabAuth
+gitlab
+GitLab
+X-Gitlab-Feature-Category
+GCM_GITLAB_AUTHMODES
+credential
+gitLabAuthModes
+Supported authentication modes override present: {0}
+D:\a\_work\1\s\src\shared\GitLab\GitLabHostProvider.cs
+GetSupportedAuthenticationModes
+Invalid value for supported authentication modes override setting: '
+warning: missing OAuth configuration for 
+ - see https://aka.ms/gcm/gitlab for more information
+oauth-refresh-token.
+oauth2
+write_repository
+read_repository
+realm="GitLab"
+Unencrypted HTTP is not recommended for GitLab. Ensure the repository remote URL is using HTTPS or see https://aka.ms/gcm/unsaferemotes about how to allow unsafe remotes.
+promptResult
+Removing expired OAuth access token...
+GetCredentialAsync
+Refreshing OAuth token...
+OAuth token refresh failed: 
+Pre-emptively storing OAuth access and refresh tokens...
+/oauth/token/info
+Bearer
+OAuth token info request failed: 
+GCM_DEV_GITLAB_REDIRECTURI
+gitLabDevRedirectUri
+GCM_DEV_GITLAB_CLIENTID
+gitLabDevClientId
+GCM_DEV_GITLAB_CLIENTSECRET
+gitLabDevClientSecret
+_authModesTabControl
+_signInBrowserButton
+_patUserNameTextBox
+_tokenTextBox
+_userNameTextBox
+_passwordTextBox
+avares://GitLab/UI/Views/CredentialsView.axaml
+GitLabLogo
+GitLabLogoType
+Sign in
+Don't have an account?
+Sign up
+SignUpCommand
+hyperlink
+ShowBrowserLogin
+$self.IsEnabled
+OAuthModeTitle
+Sign in with your browser
+SignInBrowserCommand
+accent
+ShowTokenLogin
+Username or email (optional)
+TokenUserName
+SignInTokenCommand
+ShowBasicLogin
+Username or email
+UserName
+SignInBasicCommand
+sessionManager
+Connect to GitLab
+https://about.gitlab.com/
+Browser
+Show authentication prompt.
+GitLab instance URL.
+--username
+Username or email.
+--basic
+Enable username/password (basic) authentication.
+--browser
+Enable browser-based OAuth authentication.
+Enable personal access token authentication.
+Enable all available authentication options.
+User cancelled dialog.
+avares://GitLab/UI/Assets/Images.axaml
+Avalonia
+Avalonia.Base
+Avalonia.Animation
+Avalonia.Animation.Easings
+Avalonia.Controls
+Avalonia.Data
+Avalonia.Data.Converters
+Avalonia.Input
+Avalonia.Input.GestureRecognizers
+Avalonia.Input.TextInput
+Avalonia.Layout
+Avalonia.LogicalTree
+Avalonia.Media
+Avalonia.Media.Imaging
+Avalonia.Media.Transformation
+Avalonia.Styling
+Avalonia.Automation
+Avalonia.Controls.Embedding
+Avalonia.Controls.Presenters
+Avalonia.Controls.Primitives
+Avalonia.Controls.Shapes
+Avalonia.Controls.Templates
+Avalonia.Controls.Notifications
+Avalonia.Controls.Chrome
+Avalonia.Controls.Documents
+Avalonia.Markup
+Avalonia.Markup.Data
+Avalonia.Markup.Xaml.MarkupExtensions
+Avalonia.Markup.Xaml
+Avalonia.Markup.Xaml.Styling
+Avalonia.Markup.Xaml.Templates
+Avalonia.Themes.Fluent
+M442.097,243.57h-87.12l37.425-115.224c1.919-5.895,10.282-5.895,12.27,0L442.097,243.57L442.097,243.57zM292.778,434.892L292.778,434.892l62.199-191.322H230.669L292.778,434.892L292.778,434.892zM143.549,243.57h87.12l-37.494-115.224c-1.919-5.895-10.282-5.895-12.27,0L143.549,243.57L143.549,243.57z
+M442.097,243.57L442.097,243.57l18.873,58.126c1.714,5.278-0.137,11.104-4.661,14.394L292.778,434.892L442.097,243.57L442.097,243.57zM143.549,243.57L143.549,243.57l-18.941,58.126c-1.714,5.278,0.137,11.104,4.661,14.394l163.509,118.801L143.549,243.57L143.549,243.57z
+M13,188.892c-5.5,5.7-14.6,11.4-27,11.4c-16.6,0-23.3-8.2-23.3-18.9 c0-16.1,11.2-23.8,35-23.8c4.5,0,11.7,0.5,15.4,1.2v30.1H13z M-9.6,90.392c-17.6,0-33.8,6.2-46.4,16.7l7.7,13.4 c8.9-5.2,19.8-10.4,35.5-10.4c17.9,0,25.8,9.2,25.8,24.6v7.9c-3.5-0.7-10.7-1.2-15.1-1.2c-38.2,0-57.6,13.4-57.6,41.4 c0,25.1,15.4,37.7,38.7,37.7c15.7,0,30.8-7.2,36-18.9l4,15.9h15.4v-83.2C34.3,107.992,22.9,90.392-9.6,90.392L-9.6,90.392z
+M-17.7,201.192c-8.2,0-15.4-1-20.8-3.5v-67.3v-7.8c7.4-6.2,16.6-10.7,28.3-10.7 c21.1,0,29.2,14.9,29.2,39C19,185.092,5.9,201.192-17.7,201.192 M-8.5,90.592c-19.5,0-30,13.3-30,13.3v-21l-0.1-27.8h-9.8h-11.5 l0.1,158.5c10.7,4.5,25.3,6.9,41.2,6.9c40.7,0,60.3-26,60.3-70.9C41.6,114.092,23.5,90.592-8.5,90.592
+M18.3,72.192c19.3,0,31.8,6.4,39.9,12.9l9.4-16.3c-12.7-11.2-29.9-17.2-48.3-17.2 c-46.4,0-78.9,28.3-78.9,85.4c0,59.8,35.1,83.1,75.2,83.1c20.1,0,37.2-4.7,48.4-9.4l-0.5-63.9v-7.5v-12.6H4v20.1h38l0.5,48.5 c-5,2.5-13.6,4.5-25.3,4.5c-32.2,0-53.8-20.3-53.8-63C-36.7,93.292-14.4,72.192,18.3,72.192
+M-37.7,55.592H-59l0.1,27.3v11.2v6.5v11.4v65v0.2c0,26.3,11.4,43.9,43.9,43.9 c4.5,0,8.9-0.4,13.1-1.2v-19.1c-3.1,0.5-6.4,0.7-9.9,0.7c-17.9,0-25.8-9.2-25.8-24.6v-65h35.7v-17.8h-35.7L-37.7,55.592 L-37.7,55.592z
+                    M839.7,198.192h-21.8l0.1,162.5h88.3v-20.1h-66.5L839.7,198.192L839.7,198.192z
+                    M680.4,360.692h21.3v-124h-21.3V360.692L680.4,360.692z
+                    M680.4,219.592h21.3v-21.3h-21.3V219.592L680.4,219.592z
+                
+GitLab.UI.ViewModels
+converters
+GitCredentialManager.UI.Converters
+gcmcore
+GitLab.UI
+172b9f227872b5dde33f4d9b1db06a6a5515ae79508e7a00c973c85ce490671e
+GCM_DEV_GITLAB_CLIENTID
+GCM_DEV_GITLAB_CLIENTSECRET
+GCM_DEV_GITLAB_REDIRECTURI
+GCM_GITLAB_AUTHMODES
+GCM_GITLAB_HELPER
+gitLabAuthModes
+gitLabDevClientId
+gitLabDevClientSecret
+gitLabDevRedirectUri
+gitLabHelper
+https://aka.ms/gcm/gitlab
+VS_VERSION_INFO
+VarFileInfo
+Translation
+StringFileInfo
+000004b0
+CompanyName
+GitLab
+FileDescription
+GitLab
+FileVersion
+2.7.3.0
+InternalName
+GitLab.dll
+LegalCopyright
+OriginalFilename
+GitLab.dll
+ProductName
+GitLab
+ProductVersion
+2.7.3+5fa7116896c82164996a609accd1c5ad90fe730a
+Assembly Version
+2.7.3.0
+Legal_policy_statement
+Microsof

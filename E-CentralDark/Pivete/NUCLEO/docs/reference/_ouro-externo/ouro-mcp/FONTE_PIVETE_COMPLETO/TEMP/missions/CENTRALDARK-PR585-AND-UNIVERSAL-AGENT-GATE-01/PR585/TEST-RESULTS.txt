@@ -1,0 +1,30 @@
+=== pytest .agents/skills/meta-lupa/testes/ (suite completa) ===
+.............ssss....................................................... [ 48%]
+........................................................................ [ 97%]
+....                                                                     [100%]
+144 passed, 4 skipped in 13.30s
+
+=== mutation RED (git HEAD antigo) / GREEN (worktree atual) ===
+MODE=head FIXED=0/10
+  STILL_BROKEN  coderabbit_fail_commit_status
+  STILL_BROKEN  coderabbit_master_plan_path
+  STILL_BROKEN  coderabbit_issue_enrichment
+  STILL_BROKEN  jarvis_authority_note
+  STILL_BROKEN  leia_me_ia_source_split
+  STILL_BROKEN  loop_doc_no_false_approval
+  STILL_BROKEN  loop_doc_origin_normalization
+  STILL_BROKEN  loop_doc_secret_exposure_fail_closed
+  STILL_BROKEN  loop_doc_pass_not_approval
+  STILL_BROKEN  loop_doc_receipt_target_field
+
+MODE=worktree FIXED=10/10
+  FIXED  coderabbit_fail_commit_status
+  FIXED  coderabbit_master_plan_path
+  FIXED  coderabbit_issue_enrichment
+  FIXED  jarvis_authority_note
+  FIXED  leia_me_ia_source_split
+  FIXED  loop_doc_no_false_approval
+  FIXED  loop_doc_origin_normalization
+  FIXED  loop_doc_secret_exposure_fail_closed
+  FIXED  loop_doc_pass_not_approval
+  FIXED  loop_doc_receipt_target_field

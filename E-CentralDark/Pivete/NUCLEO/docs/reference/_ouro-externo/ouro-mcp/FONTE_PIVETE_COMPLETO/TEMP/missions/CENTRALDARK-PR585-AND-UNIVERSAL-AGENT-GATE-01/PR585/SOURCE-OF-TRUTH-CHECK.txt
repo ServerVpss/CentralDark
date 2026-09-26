@@ -1,0 +1,9 @@
+=== source_of_truth: campo unico, sem mistura com evidencia observada ===
+LEIA-ME-IA.md:5:source_of_truth: "Este arquivo"
+LEIA-ME-IA.md:59:  source_of_truth: "ServerVpss/CentralDark"
+docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md:5:source_of_truth: "ServerVpss/CentralDark"
+
+=== observed_evidence: campo separado (novo) ===
+60:  observed_evidence: "estado medido agora (branch, HEAD, PR, worktree) — insumo operacional, nunca autoridade canônica"
+
+SOURCE_OF_TRUTH_DRIFT=0 (todas as fontes apontam para ServerVpss/CentralDark; evidencia observada agora tem campo proprio em LEIA-ME-IA.md)

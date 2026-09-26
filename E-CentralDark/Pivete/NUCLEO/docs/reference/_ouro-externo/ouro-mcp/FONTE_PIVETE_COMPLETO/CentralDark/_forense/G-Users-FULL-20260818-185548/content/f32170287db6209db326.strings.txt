@@ -1,0 +1,5086 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\bin\gcmcore.dll
+
+!This program cannot be run in DOS mode.
+`.rsrc
+@.reloc
+%-"&(r
+&+!r*`
+%% MMM
+/!AvaloniaResourceXamlInfo
+<AvaloniaResourceXamlInfo xmlns="http://schemas.datacontract.org/2004/07/Avalonia.Markup.Xaml.PortableXaml" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"><ClassToResourcePathIndex xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:KeyValueOfstringstring><a:Key>GitCredentialManager.UI.AvaloniaApp</a:Key><a:Value>/UI/AvaloniaApp.axaml</a:Value></a:KeyValueOfstringstring><a:KeyValueOfstringstring><a:Key>GitCredentialManager.UI.Controls.AboutWindow</a:Key><a:Value>/UI/Controls/AboutWindow.axaml</a:Value></a:KeyValueOfstringstring><a:KeyValueOfstringstring><a:Key>GitCredentialManager.UI.Controls.DialogWindow</a:Key><a:Value>/UI/Controls/DialogWindow.axaml</a:Value></a:KeyValueOfstringstring><a:KeyValueOfstringstring><a:Key>GitCredentialManager.UI.Controls.ProgressWindow</a:Key><a:Value>/UI/Controls/ProgressWindow.axaml</a:Value></a:KeyValueOfstringstring><a:KeyValueOfstringstring><a:Key>GitCredentialManager.UI.Views.CredentialsView</a:Key><a:Value>/UI/Views/CredentialsView.axaml</a:Value></a:KeyValueOfstringstring><a:KeyValueOfstringstring><a:Key>GitCredentialManager.UI.Views.DefaultAccountView</a:Key><a:Value>/UI/Views/DefaultAccountView.axaml</a:Value></a:KeyValueOfstringstring><a:KeyValueOfstringstring><a:Key>GitCredentialManager.UI.Views.DeviceCodeView</a:Key><a:Value>/UI/Views/DeviceCodeView.axaml</a:Value></a:KeyValueOfstringstring><a:KeyValueOfstringstring><a:Key>GitCredentialManager.UI.Views.EnableNtlmView</a:Key><a:Value>/UI/Views/EnableNtlmView.axaml</a:Value></a:KeyValueOfstringstring><a:KeyValueOfstringstring><a:Key>GitCredentialManager.UI.Views.OAuthView</a:Key><a:Value>/UI/Views/OAuthView.axaml</a:Value></a:KeyValueOfstringstring></ClassToResourcePathIndex></AvaloniaResourceXamlInfo>
+v4.0.30319
+#Strings
+ sV!^8
+ `Pu8Q
+3Z4.5;5Z5m5
+8(8P8Y8p8z8
+H+HDHSHkHwH
+YIZqZxZ
+a9aEaRabaza
+a)b*c0c4c:eYeye
+j!j+j=j
+yIz"{~{
+/4/</?0O0f0
+=%=1=7=
+@*@4@t@
+AFBTBcBmB
+H0IQI|I
+K.K1K9KKK
+M*NCNJN
+P}QZReR
+W3Z7[?[2asa
+l&m-mwm
+ngpwpvq
+wox6yEy
+libglib-2.0.so.0
+libgobject-2.0.so.0
+libsecret-1.so.0
+<inProgressMsg>5__10
+<WriteDictionaryAsync>d__10
+<GetRegex>d__10
+Build_10
+<GetOAuthAccessToken>d__20
+<>c__DisplayClass10_0
+<>9__0_0
+<TryGet>b__0_0
+<>c__DisplayClass0_0
+<GetProxyConfiguration>g__TryGetUriSetting|51_0
+<>9__1_0
+<.ctor>b__1_0
+<.cctor>b__1_0
+<>c__DisplayClass1_0
+<>9__12_0
+<GetAccounts>b__12_0
+<>c__DisplayClass22_0
+<>9__2_0
+<Deserialize>b__2_0
+<>c__DisplayClass13_0
+<WriteDictionarySecrets>g__WriteSecretLine|13_0
+<>9__3_0
+<OnDataContextChanged>b__3_0
+<Register>b__3_0
+<GetAccounts>b__3_0
+<>c__DisplayClass3_0
+<>c__DisplayClass14_0
+<>9__4_0
+<GetProviderAsync>b__4_0
+<ShowViewAsync>b__4_0
+<.cctor>b__4_0
+<>c__DisplayClass4_0
+<>9__15_0
+<WriteLineSecrets>b__15_0
+<>c__DisplayClass15_0
+<>9__5_0
+<Dispose>b__5_0
+<ToDictionary>b__5_0
+<>c__DisplayClass5_0
+<GetSystemWebViewOptions>g__OpenBrowserFunc|16_0
+<>9__6_0
+<ShowWindowAsync>b__6_0
+<GetSettingValues>b__6_0
+<GetAccounts>b__6_0
+<CreateClient>b__6_0
+<>c__DisplayClass6_0
+<HandleInterceptedRequestAsync>g__FormatError|6_0
+<>9__7_0
+<ShowWindowAsync>b__7_0
+<>c__DisplayClass7_0
+<>c__DisplayClass8_0
+<>c__DisplayClass19_0
+<GetOSVersion>g__GetLinuxDistroVersion|19_0
+<>c__DisplayClass9_0
+<GitCredentialManager.IConfigurableComponent.ConfigureAsync>b__0
+<GitCredentialManager.IConfigurableComponent.UnconfigureAsync>b__0
+<CreatePublicClientApplicationAsync>b__0
+<InvokeHelperAsync>b__0
+<InterceptRequestsAsync>b__0
+<ShowViewAsync>b__0
+<ShowWindowAsync>b__0
+<GetAccessTokenSilentlyAsync>b__0
+<Enumerate>b__0
+<QuoteCmdArg>b__0
+<IsDirectoryOnPath>b__0
+<ShowWindowInternal>b__0
+<.ctor>b__0
+<InitializeWriters>b__0
+<AddOptionSet>b__0
+<TryGetMultiProperty>b__0
+<WriteResponseAsync>d__0
+<ReadAsFormContentAsync>d__0
+<>n__0
+<RunInternalAsync>g__NoGuiOptionHandler|0
+<ShowAndGetHandle>g__CreateWindow|0
+<RegisterTokenCacheAsync>d__11
+CreateInnerServiceProviderV1
+<>c__DisplayClass0_1
+<GetProxyConfiguration>g__CreateConfiguration|51_1
+<>9__1_1
+<.ctor>b__1_1
+<>c__DisplayClass1_1
+<OnDataContextChanged>b__3_1
+<.cctor>b__4_1
+<>c__DisplayClass4_1
+<>9__5_1
+<ToDictionary>b__5_1
+<>9__8_1
+<TryGetMultiProperty>b__8_1
+<>c__DisplayClass8_1
+<>8__1
+<CreatePublicClientApplicationAsync>b__1
+<GetProviderAsync>b__1
+<InvokeHelperAsync>b__1
+<ShowWindowAsync>b__1
+<ShowAndGetHandle>b__1
+<ShowWindowInternal>b__1
+<.ctor>b__1
+<AddOptionSet>b__1
+<CreateClient>b__1
+<GetAuthenticationModeAsync>d__1
+<ExecuteAsync>d__1
+<ExecuteInternalAsync>d__1
+<RunInternalAsync>d__1
+<>u__1
+Build_1
+XamlClosure_1
+<>XamlDynamicSetter_1
+<>c__4`1
+<>c__6`1
+<>c__7`1
+DispatcherJob`1
+Func`1
+RelayCommand`1
+TaskCompletionSource`1
+Nullable`1
+IComparable`1
+IEnumerable`1
+IEquatable`1
+ConfiguredTaskAwaitable`1
+Predicate`1
+ConcurrentQueue`1
+Task`1
+ReadOnlySpan`1
+Action`1
+ICollection`1
+HttpHeaderValueCollection`1
+BlockingCollection`1
+IProducerConsumerCollection`1
+Option`1
+AsyncTaskMethodBuilder`1
+BaseAbstractApplicationBuilder`1
+BaseAbstractAcquireTokenParameterBuilder`1
+EventHandler`1
+IEqualityComparer`1
+TaskAwaiter`1
+IEnumerator`1
+IValueDescriptor`1
+HashSet`1
+ValidateSymbolResult`1
+IList`1
+AvaloniaList`1
+IReadOnlyList`1
+Context`1
+StyledProperty`1
+pReserved1
+reserved1
+KeyringAttribute1
+<>7__wrap1
+CS$<>8__locals1
+<>m__Finally1
+__StaticArrayInitTypeSize=12
+<GetAuthorizationCodeAsync>d__12
+Advapi32
+Kernel32
+Shell32
+Avalonia.Win32
+Microsoft.Win32
+UseWin32
+GetWindowRectWin32
+SetWindowParentWin32
+User32
+SetWindowLongPtr32
+SInt32
+MultiUInt32
+FromUInt32
+<0>__ToInt32
+<1>__CFNumberToInt32
+TryToInt32
+<>9__0_2
+<AddOptionSet>b__0_2
+<>9__4_2
+<.cctor>b__4_2
+<>c__DisplayClass8_2
+<formData>5__2
+<sb>5__2
+<numFailed>5__2
+<normalized>5__2
+<mid>5__2
+<state>5__2
+<config>5__2
+<log>5__2
+<canProbeUri>5__2
+<uri>5__2
+<viewModel>5__2
+<schemeAndDelim>5__2
+<vm>5__2
+<region>5__2
+<app>5__2
+<listener>5__2
+<helper>5__2
+<oauthUser>5__2
+<types>5__2
+<providers>5__2
+<uiCts>5__2
+<promptCts>5__2
+<resultDict>5__2
+<dict>5__2
+<git>5__2
+<httpClient>5__2
+<anyAccount>5__2
+<credList>5__2
+<input>5__2
+<>9__2
+<CreatePublicClientApplicationAsync>b__2
+<OnDataContextChanged>b__2
+<ShowWindowInternal>b__2
+<.ctor>b__2
+<CreateClient>b__2
+<ReadLineAsync>d__2
+<GetAuthenticationModeViaUiAsync>d__2
+<RunInternalAsync>d__2
+<AskEnableNtlmAsync>d__2
+<GetTokenForUserAsync>d__2
+<GetCredentialsAsync>d__2
+<>u__2
+Build_2
+XamlClosure_2
+<>XamlDynamicSetter_2
+<>c__DisplayClass13_0`2
+<>c__DisplayClass13_1`2
+<>c__DisplayClass13_2`2
+<>c__5`2
+Func`2
+IGrouping`2
+Action`2
+FuncValueConverter`2
+FuncMultiValueConverter`2
+KeyValuePair`2
+IDictionary`2
+IReadOnlyDictionary`2
+reserved2
+ITrace2
+get_Trace2
+_trace2
+X509Certificate2
+KeyringAttribute2
+<>7__wrap2
+<GetProviderAsync>g__MatchProviderAsync|2
+<GetDeviceCodeAsync>d__13
+<GetRemotes>d__13
+CreateRootServiceProviderV3
+DeferredTransformationFactoryV3
+<>9__4_3
+<GetProviderAsync>b__4_3
+<.cctor>b__4_3
+<>9__6_3
+<CreateClient>b__6_3
+<numSkipped>5__3
+<httpsResponse>5__3
+<contextTask>5__3
+<retryInterval>5__3
+<buffer>5__3
+<codeVerifier>5__3
+<useBroker>5__3
+<entries>5__3
+<lines>5__3
+<additionalProps>5__3
+<success>5__3
+<tokenCts>5__3
+<client>5__3
+<requestContent>5__3
+<count>5__3
+<host>5__3
+<regex>5__3
+<.ctor>b__3
+<AddOptionSet>b__3
+<GetCredentialsViaUiAsync>d__3
+<GetTokenForServicePrincipalAsync>d__3
+<InvokeHelperAsync>d__3
+<GetAuthenticationTypesAsync>d__3
+<>u__3
+Build_3
+<>XamlDynamicSetter_3
+Func`3
+pReserved3
+reserved3
+<>7__wrap3
+<GetTokenByAuthorizationCodeAsync>d__14
+<GetCredentialAsync>d__14
+set_ContentLength64
+SetWindowLongPtr64
+<>9__0_4
+<AddOptionSet>b__0_4
+<lastWasCR>5__4
+<responseData>5__4
+<refreshService>5__4
+<scope>5__4
+<ptrSize>5__4
+<i>5__4
+<redirectUri>5__4
+<cancelTask>5__4
+<promptTask>5__4
+<exception>5__4
+<app>5__4
+<outputDir>5__4
+<requestContent>5__4
+<port>5__4
+<request>5__4
+<GetProviderAsync>b__4
+<GetAuthenticationCodeAsync>d__4
+<ConfigureAsync>d__4
+<RunInternalAsync>d__4
+<GetProviderAsync>d__4
+<GetAuthenticationModeViaHelperAsync>d__4
+<GetTokenForManagedIdentityAsync>d__4
+<>u__4
+Build_4
+Func`4
+reserved4
+<>7__wrap4
+<GetCredentialAsync>d__15
+<GetTokenByRefreshTokenAsync>d__15
+<InvokeHelperAsync>d__15
+791C82E638452ACEDF400C173D7BBED439E7A1397779C63D36572476C83BE8B5
+<response>5__5
+<logFilePath>5__5
+<path>5__5
+<i>5__5
+<localResponseTask>5__5
+<tokenTask>5__5
+<refreshToken>5__5
+<additionalFiles>5__5
+<result>5__5
+<request>5__5
+<context>5__5
+<GetProviderAsync>b__5
+<UnconfigureAsync>d__5
+<ExecuteAsync>d__5
+<GetCredentialsViaHelperAsync>d__5
+<GetTokenByBrowserAsync>d__5
+<InterceptRequestsAsync>d__5
+<UseDefaultAccountAsync>d__5
+<GetGitConfigurationScopes>d__5
+<SendHttpRequest>d__5
+Build_5
+Func`5
+reserved5
+<GetTokenByDeviceCodeAsync>d__16
+<ConvertToBypassRegexArray>d__16
+SHA256
+PkceChallengeMethodS256
+Sha256
+<localResponse>5__6
+<response>5__6
+<hasExistingUser>5__6
+<extraLogs>5__6
+<GetProviderAsync>b__6
+<GetTokenByDeviceCodeAsync>d__6
+<RunAsync>d__6
+<HandleInterceptedRequestAsync>d__6
+<ReadDictionaryAsync>d__6
+<GetSettingValues>d__6
+Build_6
+Func`6
+reserved6
+<fullLog>5__7
+<RunInternalAsync>d__7
+<GetAccessTokenSilentlyAsync>d__7
+<ReadMultiDictionaryAsync>d__7
+Build_7
+reserved7
+<>7__wrap7
+<GenerateCredentialAsync>d__18
+<Enumerate>d__18
+get_UTF8
+kCFStringEncodingUTF8
+<CreatePublicClientApplicationAsync>d__8
+<Enumerate>d__8
+Build_8
+CreateCFStringUtf8
+<diagnostic>5__9
+<CreateConfidentialClientApplicationAsync>d__9
+<GetTokenByDeviceCodeViaTtyAsync>d__9
+<GetAll>d__9
+Build_9
+<Module>
+<PrivateImplementationDetails>
+DisableAAA
+GWL_USERDATA
+PARENB
+CSTOPB
+get_SendX5C
+set_SendX5C
+WithSendX5C
+O_CLOEXEC
+MakeFullSIC
+RequireFullSIC
+O_TRUNC
+O_ASYNC
+O_SYNC
+GWL_WNDPROC
+EXTPROC
+PARODD
+S_ISGID
+S_ISUID
+GWL_ID
+CFGetTypeID
+CFDataGetTypeID
+CFStringGetTypeID
+CFNumberGetTypeID
+CFArrayGetTypeID
+CFDictionaryGetTypeID
+O_APPEND
+GWL_HINSTANCE
+ECHOKE
+WSF_VISIBLE
+O_LARGEFILE
+GWL_EXSTYLE
+GWL_STYLE
+SECRET_SCHEMA_DONT_MATCH_NAME
+FILETIME
+SECRET_SCHEMA_NONE
+SECRET_SERVICE_NONE
+SECRET_SEARCH_NONE
+CIGNORE
+ALTWERASE
+RPC_E_TOO_LATE
+MDMBUF
+SECRET_SCHEMA_ATTRIBUTE_STRING
+S_IRWXG
+NOFLSH
+TCSAFLUSH
+O_PATH
+S_IROTH
+S_IWOTH
+S_IXOTH
+get_ASCII
+GitCredentialManager.UI
+O_NONBLOCK
+SECRET_SEARCH_UNLOCK
+IGNBRK
+PARMRK
+CLOCAL
+O_EXCL
+IMAXBEL
+SECRET_SEARCH_ALL
+SIGKILL
+ECHONL
+ECHOCTL
+SIGTERM
+CRED_TYPE_MAXIMUM
+SECRET_SCHEMA_ATTRIBUTE_BOOLEAN
+IEXTEN
+TCSADRAIN
+PENDIN
+SECRET_SERVICE_OPEN_SESSION
+VER_NT_WORKSTATION
+ICANON
+NOKERNINFO
+FLUSHO
+System.IO
+S_IRWXO
+ISTRIP
+TOSTOP
+S_IRGRP
+S_IWGRP
+S_IXGRP
+_parentSP
+IGNPAR
+SECRET_SCHEMA_ATTRIBUTE_INTEGER
+VER_NT_DOMAIN_CONTROLLER
+VER_NT_SERVER
+S_IRUSR
+S_IWUSR
+S_IXUSR
+O_RDWR
+OXTABS
+USEROBJECTFLAGS
+UOI_FLAGS
+ACCESSPERMS
+SECRET_SERVICE_LOAD_COLLECTIONS
+GitCredentialManager.Interop.MacOS
+Termios_MacOS
+termios_MacOS
+EnsureMacOS
+IsMacOS
+CRTSCTS
+SECRET_SEARCH_LOAD_SECRETS
+O_CREAT
+O_DIRECT
+ONLRET
+SIGQUIT
+DEFAULT
+GWL_HWNDPARENT
+SIGINT
+BRKINT
+ONOEOT
+SIGABRT
+ECHOPRT
+S_IRWXU
+CDTR_IFLOW
+CRTS_IFLOW
+CCAR_OFLOW
+CDSR_OFLOW
+CCTS_OFLOW
+O_NOFOLLOW
+TCSANOW
+CredReadW
+CreateFileW
+ReadConsoleW
+WriteConsoleW
+CredEnumerateW
+CredDeleteW
+CredWriteW
+CredPackAuthenticationBufferW
+CredUnPackAuthenticationBufferW
+CredUIPromptForWindowsCredentialsW
+CommandLineToArgvW
+RTL_OSVERSIONINFOEX
+CRED_TYPE_MAXIMUM_EX
+get_OSX
+S_ISVTX
+TABDLY
+O_RDONLY
+O_WRONLY
+O_DIRECTORY
+O_NOCTTY
+value__
+get_ExtendClientArea
+set_ExtendClientArea
+_extendClientArea
+GcmAllowWia
+Avalonia.Media
+Avalonia.Skia
+UseSkia
+Avalonia
+GetSchema
+SecretSchema
+schema
+Avalonia.Data
+set_Data
+CleanUpManagedData
+ProtectedData
+SecKeychainItemFreeAttributesAndData
+SecKeychainItemModifyAttributesAndData
+SecKeychainItemCopyAttributesAndData
+passwordData
+theData
+kSecValueData
+CleanUpNativeData
+get_OffsetToStringData
+kSecReturnData
+outData
+get_RawData
+System.Web
+LibCLib
+CoreFoundationFrameworkLib
+SecurityFrameworkLib
+LibSystemLib
+Stdlib
+mscorlib
+AddJob
+IDispatcherJob
+CredentialBlob
+Dynamic
+System.Collections.Generic
+IDiagnostic
+AddDiagnostic
+CredentialStoreDiagnostic
+NetworkingDiagnostic
+FileSystemDiagnostic
+MicrosoftAuthenticationDiagnostic
+GitDiagnostic
+EnvironmentDiagnostic
+diagnostic
+_createPipeFunc
+GHashFunc
+GEqualFunc
+viewFunc
+_mainWindowFunc
+windowFunc
+free_func
+hash_func
+key_equal_func
+value_destroy_func
+key_destroy_func
+HeadAsync
+ReadAsync
+SendAsync
+GetDeviceCodeAsync
+GetTokenByDeviceCodeAsync
+GetAuthenticationCodeAsync
+GetAuthorizationCodeAsync
+GetTokenByAuthorizationCodeAsync
+GetAuthenticationModeAsync
+RegisterTokenCacheAsync
+InvokeAsync
+ReadLineAsync
+WriteLineAsync
+GitCredentialManager.IConfigurableComponent.ConfigureAsync
+GitCredentialManager.IConfigurableComponent.UnconfigureAsync
+WriteResponseAsync
+CreateAsync
+WriteAsync
+ExecuteAsync
+ReadAsStringAsync
+ShowDeviceCodeViaUiAsync
+GetAuthenticationModeViaUiAsync
+GetCredentialsViaUiAsync
+StoreCredentialAsync
+EraseCredentialAsync
+GenerateCredentialAsync
+GetCredentialAsync
+ExecuteInternalAsync
+RunInternalAsync
+GetTokenForServicePrincipalAsync
+AskEnableNtlmAsync
+GetTokenByRefreshTokenAsync
+CreatePublicClientApplicationAsync
+CreateConfidentialClientApplicationAsync
+RunAsync
+CopyToAsync
+GetProviderAsync
+ShowDeviceCodeViaHelperAsync
+GetAuthenticationModeViaHelperAsync
+GetCredentialsViaHelperAsync
+InvokeHelperAsync
+GetTokenForUserAsync
+OpenWithChromeEdgeBrowserAsync
+set_OpenBrowserAsync
+GetTokenByBrowserAsync
+GetAuthenticationTypesAsync
+GetCredentialsAsync
+GetAccountsAsync
+InterceptRequestsAsync
+GetAsync
+ReadAsFormContentAsync
+UseDefaultAccountAsync
+HandleInterceptedRequestAsync
+GetContextAsync
+ShowViewAsync
+ShowWindowAsync
+ShowAsync
+ReadAsByteArrayAsync
+GetAccessTokenSilentlyAsync
+ReadDictionaryAsync
+WriteDictionaryAsync
+ReadMultiDictionaryAsync
+GetTokenByDeviceCodeViaTtyAsync
+GetTokenForManagedIdentityAsync
+secret_service_store_sync
+secret_item_delete_sync
+secret_service_search_sync
+secret_service_unlock_sync
+secret_service_clear_sync
+secret_service_get_sync
+secret_item_load_secret_sync
+BackgroundWriterThreadProc
+cAuthSvc
+asAuthSvc
+<<GetProviderAsync>g__MatchProviderAsync|2>d
+get_Id
+set_Id
+get_ManagedThreadId
+get_CurrentManagedThreadId
+<>l__initialThreadId
+WithUserAssignedResourceId
+MacOSBundleId
+GetGpgId
+dwPlatformId
+GetWindowsSessionId
+_windowsSessionId
+sessionId
+_appId
+providerId
+DevBoxPartnerId
+get_TenantId
+set_TenantId
+MsaHomeTenantId
+WithTenantId
+MsaTransferTenantId
+get_ClientId
+set_ClientId
+GiteaClientId
+WithUserAssignedClientId
+OAuthClientId
+_clientId
+get_HomeAccountId
+get_ParentWindowId
+set_ParentWindowId
+ManagedIdentityId
+get_Head
+GenericRead
+CredRead
+numberOfCharsToRead
+numberOfCharsRead
+get_UIThread
+get_Thread
+set_Thread
+get_IsThreadPoolThread
+get_MainThread
+set_MainThread
+_writerThread
+get_CurrentThread
+_thread
+TryLoad
+ParseAdd
+TryAdd
+add_Loaded
+lpnLengthNeeded
+succeeded
+DomainExtended
+LineFeed
+c_ispeed
+c_ospeed
+MarshalNativeToManaged
+add_CanExecuteChanged
+remove_CanExecuteChanged
+RaiseCanExecuteChanged
+System.ComponentModel.ITypeDescriptorContext.OnComponentChanged
+OnDataContextChanged
+add_PropertyChanged
+remove_PropertyChanged
+SetAndRaisePropertyChanged
+OnPropertyChanged
+INotifyPropertyChanged
+WaitForDebuggerAttached
+get_IsAttached
+secret_item_get_locked
+unlocked
+Interlocked
+get_IsMsalTracingEnabled
+GetTracingEnabled
+get_IsSecretTracingEnabled
+set_IsSecretTracingEnabled
+get_IsDebuggingEnabled
+get_IsCertificateVerificationEnabled
+get_IsWindowsIntegratedAuthenticationEnabled
+GcmGuiPromptsEnabled
+get_IsGuiPromptsEnabled
+set_IsGuiPromptsEnabled
+get_IsTerminalPromptsEnabled
+ThrowIfUserInteractionDisabled
+ThrowIfGuiPromptsDisabled
+ThrowIfTerminalPromptsDisabled
+add_Canceled
+remove_Canceled
+SetCanceled
+get_Failed
+set_Failed
+ErrorSecAuthFailed
+ThrowIfWindowCancelled
+get_SystemAssigned
+Overlapped
+Stopped
+ErrorSecInteractionRequired
+set_IsRequired
+AddDeferred
+add_Closed
+ThrowIfDisposed
+_isDisposed
+add_PointerPressed
+Window_PointerPressed
+Compressed
+NtlmSuppressed
+GcmAuthorityDeprecated
+set_ShowActivated
+get_IsAddingCompleted
+AwaitUnsafeOnCompleted
+OnFrameworkInitializationCompleted
+get_IsCompleted
+add_Exited
+remove_Exited
+ProcessOnExited
+IsPathRooted
+add_Accepted
+remove_Accepted
+Encrypted
+_isAppStarted
+NotStarted
+IsWindowsBrokerSupported
+IsSupported
+ThrowIfCancellationRequested
+fReserved
+wReserved
+reserved
+get_IsWindowsAuthAllowed
+get_IsInteractionAllowed
+ErrorSecInteractionNotAllowed
+NotContentIndexed
+System.Collections.Specialized
+appInitialized
+_initialized
+get_Pid
+set_Pid
+get_Sid
+set_Sid
+CreateSid
+get__id
+ThrowIfInvalid
+get_IsInvalid
+getppid
+getpid
+NewGuid
+geteuid
+Avalonia.Styling.Setter,Avalonia.Base.Value!Field
+Avalonia.Data.MultiBinding,Avalonia.Markup.Bindings!Field
+<Trace2>k__BackingField
+<SendX5C>k__BackingField
+<Id>k__BackingField
+<TenantId>k__BackingField
+<ClientId>k__BackingField
+<Thread>k__BackingField
+<MainThread>k__BackingField
+<IsSecretTracingEnabled>k__BackingField
+<Failed>k__BackingField
+<Pid>k__BackingField
+<Sid>k__BackingField
+<Password>k__BackingField
+<Namespace>k__BackingField
+<Trace>k__BackingField
+<Service>k__BackingField
+<ConfigurationService>k__BackingField
+<IsDeprecatedSource>k__BackingField
+<Code>k__BackingField
+<DeviceCode>k__BackingField
+<UserCode>k__BackingField
+<ErrorCode>k__BackingField
+<ExitCode>k__BackingField
+<SelectedMode>k__BackingField
+<Message>k__BackingField
+<ParameterizedMessage>k__BackingField
+<GitErrorMessage>k__BackingField
+<File>k__BackingField
+<Title>k__BackingField
+<Name>k__BackingField
+<SubName>k__BackingField
+<UserName>k__BackingField
+<DefaultUserName>k__BackingField
+<TargetName>k__BackingField
+<Time>k__BackingField
+<ElapsedTime>k__BackingField
+<RelativeTime>k__BackingField
+<Line>k__BackingField
+<Scope>k__BackingField
+<TokenType>k__BackingField
+<CredentialStore>k__BackingField
+<Certificate>k__BackingField
+<Value>k__BackingField
+<Exe>k__BackingField
+<Size>k__BackingField
+<EndPadding>k__BackingField
+<BeginPadding>k__BackingField
+<Nesting>k__BackingField
+<DiagnosticLog>k__BackingField
+<FullPath>k__BackingField
+<ApplicationPath>k__BackingField
+<Depth>k__BackingField
+<Uri>k__BackingField
+<RemoteUri>k__BackingField
+<VerificationUri>k__BackingField
+<RedirectUri>k__BackingField
+<Credential>k__BackingField
+<Terminal>k__BackingField
+<PollingInterval>k__BackingField
+<Label>k__BackingField
+<UseShell>k__BackingField
+<SuccessResponseHtml>k__BackingField
+<FetchUrl>k__BackingField
+<PushUrl>k__BackingField
+<FileSystem>k__BackingField
+<ExpiresIn>k__BackingField
+<RefreshToken>k__BackingField
+<AccessToken>k__BackingField
+<Classification>k__BackingField
+<SelectedOption>k__BackingField
+<Exception>k__BackingField
+<Description>k__BackingField
+<Repo>k__BackingField
+<UseAuthHeader>k__BackingField
+<SessionManager>k__BackingField
+<ProcessManager>k__BackingField
+<CodeVerifier>k__BackingField
+<Error>k__BackingField
+<Properties>k__BackingField
+<AdditionalProperties>k__BackingField
+<AdditionalFiles>k__BackingField
+<Scopes>k__BackingField
+<FormatTargetsAndValues>k__BackingField
+<Settings>k__BackingField
+<Streams>k__BackingField
+<Sections>k__BackingField
+<IsSuccess>k__BackingField
+<Process>k__BackingField
+<Address>k__BackingField
+<Endpoints>k__BackingField
+<FailureResponseHtmlFormat>k__BackingField
+<FailureRedirectFormat>k__BackingField
+<SuccessRedirect>k__BackingField
+<ClientSecret>k__BackingField
+<Git>k__BackingField
+<WindowResult>k__BackingField
+<Environment>k__BackingField
+<Event>k__BackingField
+<TokenEndpoint>k__BackingField
+<AuthorizationEndpoint>k__BackingField
+<Account>k__BackingField
+<UseDefaultAccount>k__BackingField
+<StoreRoot>k__BackingField
+<Evt>k__BackingField
+<Context>k__BackingField
+<Argv>k__BackingField
+<NoProxyRaw>k__BackingField
+<Key>k__BackingField
+<Category>k__BackingField
+<HttpClientFactory>k__BackingField
+<InstallationDirectory>k__BackingField
+FixedElementField
+set_Child
+TrimEnd
+ReadToEnd
+ICommand
+AddCommand
+get_OnceCommand
+set_OnceCommand
+_onceCommand
+get_SignInDeviceCodeCommand
+set_SignInDeviceCodeCommand
+_signInDeviceCodeCommand
+get_LearnMoreCommand
+set_LearnMoreCommand
+_learnMoreCommand
+StoreCommand
+ConfigureCommand
+UnconfigureCommand
+EraseCommand
+DiagnoseCommand
+CreateCommand
+get_ContinueCommand
+set_ContinueCommand
+_continueCommand
+OAuthCommand
+get_VerificationUrlCommand
+set_VerificationUrlCommand
+_verificationUrlCommand
+get_SignInCommand
+set_SignInCommand
+_signInCommand
+get_NoCommand
+set_NoCommand
+_noCommand
+ProviderCommand
+TryFindHelperCommand
+get_SignInBrowserCommand
+set_SignInBrowserCommand
+_signInBrowserCommand
+RegisterCommand
+CredentialsCommand
+get_AlwaysCommand
+set_AlwaysCommand
+_alwaysCommand
+GetCommand
+get_OtherAccountCommand
+set_OtherAccountCommand
+_otherAccountCommand
+DefaultAccountCommand
+RootCommand
+RelayCommand
+command
+SslBackend
+get_TlsBackend
+Append
+DateTimeKind
+UriKind
+FileNotFound
+ErrorSecItemNotFound
+set_Foreground
+set_Background
+set_IsBackground
+parentHwnd
+OAuth2PkceChallengeMethod
+challengeMethod
+NavigationMethod
+HttpMethod
+method
+RequireSmartCard
+netstandard
+get_Password
+set_Password
+SecKeychainAddGenericPassword
+SecKeychainFindGenericPassword
+kSecClassGenericPassword
+DomainVisiblePassword
+DomainPassword
+IncorrectPassword
+secret_value_unref_to_password
+Unistd
+_parentHwd
+NetworkInterface
+Replace
+<0>__IsNullOrWhiteSpace
+NotNullOrWhiteSpace
+get_Namespace
+GcmCredNamespace
+get_CredentialNamespace
+DefaultCredentialNamespace
+set_ClrNamespace
+_namespace
+ITrace
+get_Trace
+get_StackTrace
+GcmTrace
+LogToTrace
+_trace
+Device
+get_Service
+IConfigurationService
+get_ConfigurationService
+_configurationService
+kSecAttrService
+GetService
+ValidateSecretService
+GetSecretService
+<>3__service
+GitTrace2Performance
+System.ComponentModel.ITypeDescriptorContext.Instance
+System.ComponentModel.ITypeDescriptorContext.get_Instance
+ManagedInstance
+FirstPipeInstance
+CreateInstance
+NativeInstance
+GetInstance
+_instance
+SecKeychainItemCopyFromPersistentReference
+VerifyPersistence
+CreateNonce
+TSource
+set_Source
+get_IsDeprecatedSource
+isDeprecatedSource
+TraceSource
+CancellationTokenSource
+FormatSource
+GetSource
+resource
+get_ShowCustomChromeOverride
+set_ShowCustomChromeOverride
+_showCustomChromeOverride
+!XamlIlPopulateOverride
+get_ProviderOverride
+get_LegacyAuthorityOverride
+GcmHttpProxyGuide
+get_Code
+set_Code
+get_DeviceCode
+set_DeviceCode
+SignInWithDeviceCode
+AcquireTokenWithDeviceCode
+get_SupportsDeviceCode
+deviceCode
+GetHashCode
+get_UserCode
+set_UserCode
+_userCode
+get_ErrorCode
+get_NativeErrorCode
+errorCode
+get_IsSuccessStatusCode
+get_ExitCode
+set_ExitCode
+exitCode
+get_SelectedMode
+set_SelectedMode
+NativeFileMode
+fileMode
+GetConsoleMode
+SetConsoleMode
+consoleMode
+shareMode
+Win32RenderingMode
+set_RenderingMode
+_originalMode
+InsertMode
+UrlDecode
+get_Unicode
+UrlEncode
+CredFree
+LocalFree
+Avalonia.LogicalTree
+secret_password_free
+g_free
+g_error_free
+authPackage
+IImage
+DrawingImage
+Trace2Message
+get_Message
+set_Message
+get_ParameterizedMessage
+set_ParameterizedMessage
+parameterizedMessage
+HttpResponseMessage
+WriteMessage
+RegionLeaveMessage
+OnMsalLogMessage
+RegionMessage
+VersionMessage
+RegionEnterMessage
+set_ErrorMessage
+get_GitErrorMessage
+gitErrorMessage
+defaultErrorMessage
+errorMessage
+gitMessage
+ChildExitMessage
+GetEventMessage
+ChildStartMessage
+CreateRequestMessage
+HttpRequestMessage
+_message
+AddRange
+InRange
+CompareExchange
+CreatePkceCodeChallenge
+_extConfigCache
+ValidateCredentialCache
+ITokenCache
+get_AppTokenCache
+get_UserTokenCache
+set_NoCache
+RegisterCache
+ManagedCookie
+NativeCookie
+cookie
+TryTake
+EndInvoke
+BeginInvoke
+GHashTable
+GitSidVariable
+SplitPathVariable
+GetEnvironmentVariable
+SetEnvironmentVariable
+variable
+GetIsNetworkAvailable
+get_IsWebBrowserAvailable
+_isWebBrowserAvailable
+GetWebBrowserAvailable
+cancellable
+NotCapable
+IComparable
+IEnumerable
+ParentStackEnumerable
+_parentStackEnumerable
+IDisposable
+IFocusable
+focusable
+hash_table
+CFArrayCreateMutable
+CFDictionaryCreateMutable
+TryLocateExecutable
+Avalonia.Media.Immutable
+Layoutable
+Double
+TrimMiddle
+get_Handle
+InvalidHandle
+RuntimeFieldHandle
+SafeHandle
+SafeFileHandle
+consoleHandle
+RuntimeTypeHandle
+GetTypeFromHandle
+IPlatformHandle
+TryGetPlatformHandle
+ShowAndGetHandle
+GetParentHandle
+parentHandle
+consoleInputHandle
+consoleOutputHandle
+GetParentWindowHandle
+handle
+get_File
+set_File
+WithLinuxUnprotectedFile
+CookieFile
+SparseFile
+CreateFile
+templateFile
+DeleteFile
+IniFile
+DecryptFile
+EncryptFile
+IsInRole
+WindowsBuiltInRole
+IConsole
+ReadConsole
+WriteConsole
+get_Title
+set_Title
+DefaultWindowTitle
+_title
+get_MainModule
+ProcessModule
+IStyle
+GitCredentialManager.IConfigurableComponent.Name
+GitCredentialManager.IConfigurableComponent.get_Name
+set_Name
+KeyringSchemaName
+get_SubName
+subName
+BuildThreadName
+WslCommandName
+TtyDeviceName
+CreateServiceName
+MacKeyChainServiceName
+GetServiceName
+serviceName
+get_FileName
+set_FileName
+CacheFileName
+GetFileName
+fileName
+TryGetPipeName
+StoreName
+ServiceAttributeName
+AccountAttributeName
+configName
+ConsoleInName
+domainName
+IniSectionName
+appName
+<>3__envarName
+memberName
+WslViewShellHandlerName
+get_UserName
+set_UserName
+PersonalAccessTokenUserName
+GetUserName
+get_DefaultUserName
+set_DefaultUserName
+OAuthDefaultUserName
+_userName
+GetName
+get_TargetName
+CreateTargetName
+targetName
+set_ElementName
+DefaultWslSysDriveMountName
+InvalidAccountName
+MacKeyChainAccountName
+accountName
+ConvertName
+ConsoleOutName
+W365PartnerIdKeyName
+IsW365EnvironmentKeyName
+set_ClrAssemblyName
+LibraryName
+GcmDataDirectoryName
+GetDirectoryName
+get_PropertyName
+propertyName
+<>3__name
+filename
+pathname
+get_Username
+ValidateUsername
+CompleteUsername
+KeepUsername
+username
+FluentTheme
+get_Scheme
+WwwAuthenticateBasicScheme
+WwwAuthenticateNegotiateScheme
+WwwAuthenticateNtlmScheme
+WwwAuthenticateBearerScheme
+get_Time
+set_Time
+get_ElapsedTime
+set_ElapsedTime
+DateTime
+get_RelativeTime
+set_RelativeTime
+relativeTime
+ToLocalTime
+get_ExitTime
+get__exitTime
+_applicationStartTime
+_startTime
+IApplicationLifetime
+get_ApplicationLifetime
+IClassicDesktopStyleApplicationLifetime
+Avalonia.Markup.Xaml.XamlIl.Runtime
+get_ShowCustomChrome
+ZeroOrOne
+kSecMatchLimitOne
+ExactlyOne
+get_Line
+set_Line
+ReadLine
+lpCmdLine
+System.CommandLine
+GetCommandLine
+AppendLine
+ParseLine
+WriteLine
+ParseMultiLine
+get_NewLine
+set_NewLine
+Combine
+IAsyncStateMachine
+SetStateMachine
+stateMachine
+LocalMachine
+Offline
+Inline
+!XamlIlPopulateTrampoline
+get_None
+Escape
+get_Scope
+set_Scope
+INameScope
+AvaloniaNameScope
+FindNameScope
+SetNameScope
+DataProtectionScope
+kCFNumberFloat32Type
+kCFNumberSInt32Type
+kCFNumberFloat64Type
+kCFNumberSInt64Type
+kCFNumberSInt16Type
+kCFNumberSInt8Type
+GetOSType
+X509FindType
+theType
+kCFNumberDoubleType
+AuthorizationCodeResponseType
+SecretSchemaAttributeType
+UnsetValueType
+OfType
+kCFNumberLongLongType
+kCFNumberLongType
+CredentialType
+OperatingSystemType
+get_TokenType
+set_TokenType
+tokenType
+GitConfigurationType
+comparisonType
+kCFNumberCharType
+CFNumberType
+kCFNumberNSIntegerType
+StandardCursorType
+SecKeychainAttrType
+osType
+kCFNumberCGFloatType
+kCFNumberFloatType
+wProductType
+GetType
+targetType
+GridUnitType
+kCFNumberIntType
+DeviceCodeGrantType
+AuthorizationCodeGrantType
+RefreshTokenGrantType
+PlainTextContentType
+kCFNumberShortType
+MicrosoftAuthenticationFlowType
+GetFlowType
+kCFNumberCFIndexType
+<>3__type
+content_type
+FileShare
+fileShare
+Compare
+SessionAware
+AddMiddleware
+Avalonia.Data.Core
+System.Core
+OneOrMore
+ZeroOrMore
+gcmcore
+_pathsToIgnore
+X509Store
+get_ExtraStore
+CredentialCacheStore
+EnsureBackingStore
+get_CredentialBackingStore
+_backingStore
+ICredentialStore
+get_CredentialStore
+DpapiCredentialStore
+NullCredentialStore
+GcmCredentialStore
+GpgPassCredentialStore
+PlaintextCredentialStore
+GetDefaultStore
+get_Secure
+set_Secure
+Configure
+GenericFailure
+!IndexerAccessorFactoryClosure
+get_OSArchitecture
+GetCpuArchitecture
+CreateCredentialFromStructure
+PtrToStructure
+get_InvariantCulture
+culture
+Capture
+Avalonia.Base
+ConfigurationCommandBase
+GitCommandBase
+StyleBase
+NativeMenuItemBase
+IClientApplicationBase
+AuthenticationBase
+CollectionBase
+SetterBase
+EnvironmentBase
+WindowBase
+ToSnakeCase
+get_OrdinalIgnoreCase
+CFRelease
+Enterprise
+kCFBooleanFalse
+get_Response
+probeResponse
+TryCreateExceptionFromResponse
+HttpListenerResponse
+AuthorizationGrantResponse
+response
+DeleteOnClose
+System.IDisposable.Dispose
+TryParse
+TimeDate
+predicate
+X509Certificate
+get_Certificate
+set_Certificate
+GenericCertificate
+WithCertificate
+DomainCertificate
+get_WwwAuthenticate
+AddOrUpdate
+SecAccessCreate
+TryCreate
+MulticastDelegate
+Aggregate
+Negotiate
+!XamlIlPopulate
+set_IsIndeterminate
+AutoImpersonate
+CredEnumerate
+EditorBrowsableState
+set_WindowState
+<>1__state
+Activate
+CredDelete
+SecKeychainItemDelete
+Complete
+GenericWrite
+CredWrite
+numberOfCharsToWrite
+SessionIsRemote
+GitRemote
+SecretSchemaAttribute
+AssemblyMetadataAttribute
+EmbeddedAttribute
+JsonRequiredAttribute
+CompilerGeneratedAttribute
+GeneratedCodeAttribute
+UnverifiableCodeAttribute
+ExcludeFromCodeCoverageAttribute
+AttributeUsageAttribute
+DebuggableAttribute
+NullableAttribute
+EditorBrowsableAttribute
+AssemblyTitleAttribute
+CallerMemberNameAttribute
+JsonPropertyNameAttribute
+AsyncStateMachineAttribute
+IteratorStateMachineAttribute
+UnsafeValueTypeAttribute
+GetStringAttribute
+CallerFilePathAttribute
+TargetFrameworkAttribute
+GetCustomAttribute
+InAttribute
+DebuggerHiddenAttribute
+SecKeychainAttribute
+ExtensionAttribute
+AssemblyFileVersionAttribute
+AssemblyInformationalVersionAttribute
+AssemblyConfigurationAttribute
+InternalsVisibleToAttribute
+DefaultMemberAttribute
+CallerLineNumberAttribute
+JsonPropertyOrderAttribute
+FixedBufferAttribute
+UnmanagedFunctionPointerAttribute
+RefSafetyRulesAttribute
+FlagsAttribute
+CompilationRelaxationsAttribute
+AssemblyProductAttribute
+NullableContextAttribute
+DebuggerDisplayAttribute
+ParamArrayAttribute
+IsReadOnlyAttribute
+AssemblyCompanyAttribute
+RuntimeCompatibilityAttribute
+GenericExecute
+get_UseShellExecute
+set_UseShellExecute
+useShellExecute
+CanExecute
+_canExecute
+_execute
+DispatcherJobQueue
+_queue
+Dequeue
+Enqueue
+TValue
+get_Value
+set_Value
+CFDictionaryAddValue
+ProvideValue
+CFPreferencesCopyAppValue
+CacheControlHeaderValue
+AuthenticationHeaderValue
+ProductInfoHeaderValue
+MediaTypeWithQualityHeaderValue
+get_HasValue
+CFNumberGetValue
+TryGetValue
+CFDictionaryGetValue
+SetValue
+SecretValue
+UnsetValue
+defaultValue
+Continue
+kCFBooleanTrue
+GcmNewIssue
+WriteRegionLeave
+RegistryHive
+Archive
+upperInclusive
+lowerInclusive
+GitCredentialManager.Interop.MacOS.Native
+GitCredentialManager.Interop.Windows.Native
+GitCredentialManager.Interop.Posix.Native
+GitCredentialManager.Interop.Linux.Native
+MarshalManagedToNative
+Negative
+GcmInteractive
+AcquireTokenInteractive
+set_PropertyNameCaseInsensitive
+Positive
+Remove
+get_Exe
+set_Exe
+get_Size
+set_Size
+GetNativeDataSize
+CredentialBlobSize
+BufferReadSize
+DefaultMaxQueueSize
+maxQueueSize
+PixelSize
+FromSize
+dwOSVersionInfoSize
+inAuthBufferSize
+outAuthBufferSize
+authBufferSize
+inBufferSize
+bufferSize
+packedCredentialsSize
+get_ClientSize
+set_FontSize
+Serialize
+Deserialize
+ISupportInitialize
+SuppressFinalize
+set_CanResize
+bufsize
+SizeOf
+<1>__TrimUntilIndexOf
+TruncateFromIndexOf
+TrimUntilLastIndexOf
+<0>__TruncateFromLastIndexOf
+kSecValueRef
+persistentItemRef
+itemRef
+keychainRef
+kSecReturnRef
+accessRef
+kSecReturnPersistentRef
+g_object_ref
+g_hash_table_unref
+secret_value_unref
+<0>__g_object_unref
+fprintf
+setbuf
+c_cflag
+c_iflag
+c_lflag
+c_oflag
+BeginMoveDrag
+GenericOAuthConfig
+Microsoft.Identity.Client.AppConfig
+config
+Avalonia.Threading
+System.Threading
+CompleteAdding
+set_Padding
+get_EndPadding
+set_EndPadding
+includePadding
+PkceIncludeBase64UrlPadding
+get_BeginPadding
+set_BeginPadding
+AuthorizationPending
+System.CommandLine.Binding
+IBinding
+MultiBinding
+UTF8Encoding
+get_Encoding
+ManagedEncoding
+NativeEncoding
+CFStringEncoding
+Utf8NoBomEncoding
+_utf8NoBomEncoding
+set_StandardOutputEncoding
+encoding
+Avalonia.Logging
+WithLogging
+System.ComponentModel.ITypeDescriptorContext.OnComponentChanging
+SecItemCopyMatching
+DynamicCloaking
+StaticCloaking
+get_RenderScaling
+scaling
+Avalonia.Styling
+System.Runtime.Versioning
+set_TextWrapping
+Stopping
+grouping
+_win32SoftwareRendering
+get_UseSoftwareRendering
+GcmGuiSoftwareRendering
+NoBuffering
+FromBase64String
+ToBase64String
+CFStringCreateWithCString
+CFStringGetCString
+EscapeDataString
+BuildPerformanceString
+ToPerformanceString
+theString
+FalseString
+TrueString
+cfString
+BuildNormalString
+ToNormalString
+get_OriginalString
+_originalString
+TryTrimString
+get_VersionString
+versionString
+<0>__CFStringToString
+GetCredentialBlobAsString
+GetString
+get_QueryString
+ParseQueryString
+ToQueryString
+queryString
+Substring
+WithLinuxKeyring
+disposing
+System.CommandLine.Parsing
+Preprompting
+SetupWithoutStarting
+get_Nesting
+set_Nesting
+TruncateExisting
+OpenExisting
+TryGetPathSetting
+TryGetSetting
+set_Drawing
+GeometryDrawing
+SetWindowLong
+get_DiagnosticLog
+set_DiagnosticLog
+QuoteCmdArg
+GetCanonicalizeTypeArg
+GetLevelFilterArg
+GcmDebug
+CreateServiceSlug
+Launch
+cpuArch
+IsMatch
+WriteThrough
+set_MsaPassthrough
+ComputeHash
+<1>__g_str_hash
+Refresh
+set_AutoFlush
+IBrush
+set_Brush
+ImmutableSolidColorBrush
+HKWindows365Path
+get_Path
+set_Path
+shellExecPath
+execPath
+GpgExecutablePath
+_NSGetExecutablePath
+GitExecutablePath
+get_CustomCertificateBundlePath
+certBundlePath
+get_CacheFilePath
+get_CustomCookieFilePath
+WslConfFilePath
+_filePath
+IsSamePath
+get_UserHomePath
+GcmDpapiStorePath
+GpgPassStorePath
+GcmPlaintextStorePath
+HKAppBasePath
+get_AbsolutePath
+GetGpgPath
+_gpgPath
+get_FullPath
+GetFullPath
+fullPath
+IsWslPath
+GetWslPath
+RemoveDirectoryFromPath
+IsDirectoryOnPath
+get_ApplicationPath
+set_ApplicationPath
+GetEntryApplicationPath
+HKConfigurationPath
+AddDirectoryToPath
+ConvertToDistroPath
+GetTempPath
+GetGitConfigAppPath
+appPath
+UseHttpPath
+GetFolderPath
+<>3__isPath
+GetGitPath
+_gitPath
+GetSystemDriveMountPath
+_sysDriveMountPath
+get_UserDataDirectoryPath
+LinuxAppDefaultsDirectoryPath
+directoryPath
+GetMacOSEntryPath
+GetNativeEntryPath
+GetWindowsEntryPath
+GetLinuxEntryPath
+resolved_path
+realpath
+set_Width
+SourceColumnMaxWidth
+sourceColumnMaxWidth
+get_Length
+set_Length
+dataLength
+GridLength
+passwordLength
+serviceNameLength
+accountNameLength
+nLength
+CFDataGetLength
+CFStringGetLength
+length
+EndsWith
+StartsWith
+get_Depth
+set_Depth
+GetProcessDepth
+GitCredentialManager.Authentication.OAuth
+_basicAuth
+MutualAuth
+AllowNtlmAuth
+_winAuth
+GcmTraceMsAuth
+get_WwwAuth
+_oauth
+AvaloniaUi
+CredUi
+AlwaysShowUi
+containspii
+ValidateDpapi
+get_Uri
+set_Uri
+get_BaseUri
+set_BaseUri
+_baseUri
+get_RemoteUri
+set_RemoteUri
+GetRemoteUri
+remoteUri
+get_AbsoluteUri
+get_IsAbsoluteUri
+listenUri
+get_VerificationUri
+set_VerificationUri
+verificationUri
+authorizationUri
+TestHttpUri
+errorUri
+TestHttpsUri
+LocalIPv4RedirectUri
+get_RedirectUri
+set_RedirectUri
+UpdateRedirectUri
+WithRedirectUri
+OAuthRedirectUri
+_redirectUri
+requestUri
+<>3__uri
+PtrToStringAnsi
+StringToHGlobalAnsi
+PasswordOnlyOk
+ConvertBack
+AsyncCallback
+LogCallback
+RemoteCertificateValidationCallback
+set_ServerCertificateValidationCallback
+validationCallback
+GitConfigurationEnumerationCallback
+TestHttpUriFallback
+useLinuxFallback
+callback
+get_IsLoopback
+get_DirectParentsStack
+add_Click
+CloseButton_Click
+ProjectButton_Click
+SetDock
+_writersLock
+TextBlock
+get_Link
+OpenLink
+set_HelpLink
+get_Dark
+set_Watermark
+SecurityFramework
+wSuiteMask
+SecretMask
+get_Task
+get_CompletedTask
+AllocHGlobal
+<3>__FreeHGlobal
+GetGlobal
+ILogical
+NoCustomMarshal
+Win32Credential
+ICredential
+get_Credential
+set_Credential
+SecretServiceCredential
+FileCredential
+SerializeCredential
+TryDeserializeCredential
+NetworkCredential
+MacOSKeychainCredential
+ServerCredential
+WindowsCredential
+GitCredential
+credential
+UriPartial
+GitTrace2Normal
+Signal
+get_Ordinal
+ITerminal
+MacOSTerminal
+get_Terminal
+WindowsTerminal
+PosixTerminal
+LinuxTerminal
+_terminal
+OpenBrowserInternal
+ShowWindowInternal
+GetCurrentRepositoryInternal
+SetParentExternal
+System.Security.Principal
+WindowsPrincipal
+Microsoft.Identity.Client.Extensions.Msal
+SequenceEqual
+AreEqual
+op_GreaterThanOrEqual
+op_LessThanOrEqual
+<2>__g_str_equal
+Visual
+get_PollingInterval
+set_PollingInterval
+interval
+get_Label
+set_Label
+kSecAttrLabel
+KeyringSecretLabel
+secret_item_get_label
+set_IsCancel
+System.Collections.ObjectModel
+System.ComponentModel
+DeviceCodeViewModel
+OAuthViewModel
+EnableNtlmViewModel
+CredentialsViewModel
+DefaultAccountViewModel
+WindowViewModel
+viewModel
+StackPanel
+DockPanel
+get_UseCustomCertificateBundleWithSchannel
+EnsureSpecificLevel
+LogLevel
+RpcAuthnLevel
+GitConfigurationLevel
+RpcImpLevel
+TopLevel
+LogEventLevel
+<>3__level
+GenericAll
+ReplaceAll
+GetAll
+UnsetAll
+kSecMatchLimitAll
+OpenNoRecall
+ole32.dll
+advapi32.dll
+kernel32.dll
+Shell32.dll
+user32.dll
+gcmcore.dll
+credui.dll
+ntdll.dll
+get_UseShell
+set_UseShell
+useShell
+PowerShell
+WindowsShell
+NotNull
+g_list_free_full
+g_hash_table_new_full
+Avalonia.Markup.Xaml
+CompiledAvaloniaXaml
+loadXaml
+Build:/UI/Assets/Base.axaml
+Populate:/UI/Assets/Base.axaml
+NamespaceInfo:/UI/Assets/Base.axaml
+Build:/UI/Assets/ButtonHyperlink.axaml
+Populate:/UI/Assets/ButtonHyperlink.axaml
+NamespaceInfo:/UI/Assets/ButtonHyperlink.axaml
+NamespaceInfo:/UI/AvaloniaApp.axaml
+Build:/UI/Assets/Images.axaml
+Populate:/UI/Assets/Images.axaml
+NamespaceInfo:/UI/Assets/Images.axaml
+Build:/UI/Assets/Controls.axaml
+Populate:/UI/Assets/Controls.axaml
+NamespaceInfo:/UI/Assets/Controls.axaml
+NamespaceInfo:/UI/Views/DeviceCodeView.axaml
+NamespaceInfo:/UI/Views/OAuthView.axaml
+NamespaceInfo:/UI/Views/EnableNtlmView.axaml
+NamespaceInfo:/UI/Views/CredentialsView.axaml
+NamespaceInfo:/UI/Views/DefaultAccountView.axaml
+NamespaceInfo:/UI/Controls/DialogWindow.axaml
+NamespaceInfo:/UI/Controls/ProgressWindow.axaml
+NamespaceInfo:/UI/Controls/AboutWindow.axaml
+get_SuccessResponseHtml
+set_SuccessResponseHtml
+DefaultSuccessHtml
+Symbol
+symbol
+get_Protocol
+CredentialProtocol
+TemplatedControl
+set_CacheControl
+UserControl
+AccessControl
+ContentControl
+get_Url
+set_Url
+get_FetchUrl
+fetchUrl
+get_PushUrl
+pushUrl
+get_VerificationUrl
+set_VerificationUrl
+OpenVerificationUrl
+_verificationUrl
+get_ProjectUrl
+GcmProjectUrl
+OpenSsl
+OpenFileStream
+get_BaseStream
+NamedPipeClientStream
+get_OutputStream
+_stream
+WindowLongParam
+program
+get_Item
+set_Item
+ErrorSecDuplicateItem
+CreateCredentialFromItem
+SecretItem
+AccountItem
+NativeMenuItem
+TerminalMenuItem
+/System/Library/Frameworks/System.framework/System
+LibSystem
+IFileSystem
+MacOSFileSystem
+get_FileSystem
+WindowsFileSystem
+PosixFileSystem
+LinuxFileSystem
+_fileSystem
+get_Is64BitOperatingSystem
+system
+HashAlgorithm
+ManualResetEventSlim
+GcmNtlm
+UTF8NoBom
+IsAssignableFrom
+bottom
+_originalTerm
+Avalonia.Platform
+IsOSPlatform
+BigNum
+get_In
+_stdIn
+CanSignIn
+get_ExpiresIn
+set_ExpiresIn
+SequentialScan
+Boolean
+op_GreaterThan
+op_LessThan
+BuildSpan
+BuildPerformanceSpan
+EmptyPerformanceSpan
+BuildTimeSpan
+BuildRepoSpan
+AsSpan
+PerformanceFormatSpan
+BuildCategorySpan
+maxPasswordLen
+maxDomainNameLen
+maxUsernameLen
+Hidden
+get_Token
+get_RefreshToken
+set_RefreshToken
+refreshToken
+appCancelToken
+CancellationToken
+cancellationToken
+bearerToken
+get_AccessToken
+set_AccessToken
+GetOAuthAccessToken
+accessToken
+fdopen
+dlopen
+get_Children
+numberOfCharsWritten
+LastWritten
+X509Chain
+WithMacKeyChain
+ValidateMacOSKeychain
+ErrorSecInvalidKeychain
+ErrorSecNoSuchKeychain
+keychain
+PkceChallengeMethodPlain
+get_Domain
+set_Domain
+domain
+CFRetain
+Origin
+get_ShowDeviceCodeLogin
+set_ShowDeviceCodeLogin
+_showDeviceCodeLogin
+get_ShowBrowserLogin
+set_ShowBrowserLogin
+_showBrowserLogin
+set_Margin
+SetColumn
+CreateRegion
+op_Division
+DynamicResourceExtension
+StaticResourceExtension
+get_CredentialFileExtension
+ReflectionBindingExtension
+BrokerExtension
+GetFileNameWithoutExtension
+szCSDVersion
+get_OSVersion
+GetOSVersion
+get_Version
+WriteVersion
+get_InformationalVersion
+GetWslVersion
+_wslVersion
+get_GcmVersion
+_gcmVersion
+OperatingSystemVersion
+TypeConfigMinVersion
+_linuxDistroVersion
+ClrVersion
+clrVersion
+dwMajorVersion
+dwMinorVersion
+osVersion
+eventFormatVersion
+RtlGetVersion
+GitVersion
+TryGetAssemblyVersion
+_version
+NoSuchLogonSession
+get_IsDesktopSession
+CallerSecuritySession
+session
+GcmTlsVerification
+get_Classification
+set_Classification
+HelperApplication
+IPublicClientApplication
+IConfidentialClientApplication
+IManagedIdentityApplication
+GitCredentialManager.Authentication
+IBasicAuthentication
+IWindowsIntegratedAuthentication
+IOAuthAuthentication
+IMicrosoftAuthentication
+StoreLocation
+set_WindowStartupLocation
+System.CommandLine.Invocation
+/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation
+SharingViolation
+ExpectConfirmation
+RuntimeInformation
+System.Net.NetworkInformation
+GetPlatformInformation
+lpVersionInformation
+GetUserObjectInformation
+DispatcherOperation
+CancellationTokenRegistration
+ReadExternalConfiguration
+GitProcessConfiguration
+GetConfiguration
+IGitConfiguration
+GetProxyConfiguration
+GetProcessWindowStation
+set_Orientation
+isExternalRepresentation
+System.Globalization
+System.Text.Json.Serialization
+set_Authorization
+DeviceAuthorization
+Action
+op_Subtraction
+IniSection
+TryGetSection
+System.Reflection
+X509Certificate2Collection
+ICollection
+SecretServiceCollection
+InlineCollection
+NameValueCollection
+KeyringCollection
+DrawingCollection
+GroupCollection
+X509ChainElementCollection
+HttpListenerPrefixCollection
+collection
+PipeDirection
+<>3__section
+op_Addition
+ColumnDefinition
+get_Position
+set_Position
+FileCreationDisposition
+creationDisposition
+CallingConvention
+AddOption
+get_SelectedOption
+set_SelectedOption
+ClientCertificateOption
+noGuiOption
+AddGlobalOption
+HttpCompletionOption
+completionOption
+HasOption
+SelectOption
+defaultOption
+Win32Exception
+w32Exception
+Trace2Exception
+Trace2OAuth2Exception
+IOException
+get_Exception
+set_Exception
+TaskCanceledException
+OperationCanceledException
+MsalUiRequiredException
+ObjectDisposedException
+NotImplementedException
+PlatformNotSupportedException
+Trace2FileNotFoundException
+KeyNotFoundException
+DirectoryNotFoundException
+NullReferenceException
+MsalCachePersistenceException
+ArgumentOutOfRangeException
+AggregateException
+WriteException
+MarshalDirectiveException
+ArgumentNullException
+OnException
+Trace2InvalidOperationException
+ToException
+Trace2InteropException
+get_InnerException
+innerException
+UnauthorizedAccessException
+SetException
+Trace2GitException
+CreateGitException
+ArgumentException
+InvalidCastException
+HttpRequestException
+TimeoutException
+exception
+get_Description
+set_Description
+get_FrameworkDescription
+errorDescription
+_description
+option
+IsWslDistribution
+distribution
+GitCredentialManager.Authentication.OAuth.Json
+System.Text.Json
+MimeTypeJson
+ErrorResponseJson
+TokenEndpointResponseJson
+DeviceAuthorizationEndpointResponseJson
+TryDeserializeJson
+ToJson
+StringComparison
+Singleton
+ToggleButton
+get_AccountUpn
+searchPattern
+CanRun
+SlowDown
+Shutdown
+WellKnown
+Unknown
+CompareTo
+SchannelUseSslCaInfo
+GitSslCaInfo
+credInfo
+CreateNamespaceInfo
+AvaloniaXamlIlXmlNamespaceInfo
+CultureInfo
+SecKeychainAttributeInfo
+credUiInfo
+CredentialUiInfo
+MemberInfo
+get_UserInfo
+RemoveUriUserInfo
+TryGetUserInfo
+WithoutUserInfo
+SessionGetInfo
+get_StartInfo
+set_StartInfo
+ProcessStartInfo
+get__startInfo
+DirectoryInfo
+IPropertyInfo
+ClrPropertyInfo
+noLogo
+get_Repo
+set_Repo
+NegativeOrZero
+PositiveOrZero
+ProviderIdAuto
+AuthorityIdAuto
+PtrToStringAuto
+_innerSp
+add_KeyUp
+Window_KeyUp
+EoAuthnCap
+MainLoop
+GitCredentialManager.Interop
+AvaloniaApp
+System.Net.Http
+UriSchemeHttp
+g_hash_table_lookup
+Avalonia.Markup
+_cleanup
+DrawingGroup
+System.Linq
+ProgressBar
+set_ShowInTaskbar
+set_PasswordChar
+DeleteChar
+DirectorySeparatorChar
+SidEnvar
+WslInteropEnvar
+PasswordStoreDirEnvar
+dwBuildNumber
+_lineNumber
+cfNumber
+number
+set_Header
+_addAuthHeader
+get_UseAuthHeader
+set_UseAuthHeader
+OAuthClientAuthHeader
+AddBasicAuthenticationHeader
+AddBearerAuthenticationHeader
+get_ShowProductHeader
+set_ShowProductHeader
+_showProductHeader
+StringReader
+GitStreamReader
+TextReader
+reader
+!XamlLoader
+IDiagnosticProvider
+ICommandProvider
+IServiceProvider
+IResourceProvider
+IAvaloniaXamlIlParentStackProvider
+IAvaloniaXamlIlEagerParentStackProvider
+AsEagerParentStackProvider
+GcmProvider
+IAvaloniaXamlIlXmlNamespaceInfoProvider
+RegisterProvider
+IFormatProvider
+IRootObjectProvider
+IThemeVariantProvider
+get_ParentProvider
+IHostProvider
+GenericHostProvider
+hostProvider
+provider
+System.CommandLine.Builder
+AsyncVoidMethodBuilder
+AsyncTaskMethodBuilder
+CommandLineBuilder
+StringBuilder
+UriBuilder
+PublicClientApplicationBuilder
+ConfidentialClientApplicationBuilder
+ManagedIdentityApplicationBuilder
+AppBuilder
+AcquireTokenWithDeviceCodeParameterBuilder
+AcquireTokenInteractiveParameterBuilder
+AcquireTokenForClientParameterBuilder
+AcquireTokenSilentParameterBuilder
+AcquireTokenForManagedIdentityParameterBuilder
+StoragePropertiesBuilder
+StorageCreationPropertiesBuilder
+propsBuilder
+<>t__builder
+SpecialFolder
+_contentHolder
+sender
+MiddlewareOrder
+get_ShowCustomWindowBorder
+<szCSDVersion>e__FixedBuffer
+inAuthBuffer
+outAuthBuffer
+authBuffer
+CredPackAuthenticationBuffer
+CredUnPackAuthenticationBuffer
+CreateCredentialInfoBuffer
+InsufficientBuffer
+pvBuffer
+WowBuffer
+buffer
+ValidateWindowsCredentialManager
+GitCredentialManager
+ISessionManager
+MacOSSessionManager
+get_SessionManager
+WindowsSessionManager
+PosixSessionManager
+LinuxSessionManager
+_sessionManager
+IProcessManager
+get_ProcessManager
+WindowsProcessManager
+_processManager
+ServicePointManager
+GetInteger
+Debugger
+Dispatcher
+get_CodeVerifier
+CreatePkceCodeVerifier
+codeVerifier
+Microsoft.Identity.Client.Broker
+enableBroker
+MsAuthUseBroker
+CanUseBroker
+WithBroker
+HttpMessageInvoker
+U8StringMarshaler
+ICustomMarshaler
+HttpMessageHandler
+TryGetShellExecuteHandler
+UseExceptionHandler
+SetHandler
+HttpClientHandler
+PropertyChangedEventHandler
+System.CodeDom.Compiler
+AddListener
+TcpListener
+HttpListener
+listener
+System.ComponentModel.ITypeDescriptorContext.Container
+InlineUIContainer
+System.ComponentModel.ITypeDescriptorContext.get_Container
+set_CookieContainer
+GetRootOwner
+UIHelper
+MsalCacheHelper
+GcmUiHelper
+DefaultUiHelper
+IsUpper
+CurlAllProxyUpper
+CurlNoProxyUpper
+CurlHttpsProxyUpper
+ScopeComparer
+StringComparer
+SectionComparer
+GitConfigurationKeyComparer
+keyComparer
+PropertyComparer
+comparer
+IsElevatedUser
+includeUser
+EnumerateCurrentUser
+CurlCookieParser
+LinuxConfigParser
+IOAuth2WebBrowser
+OAuth2SystemWebBrowser
+SignInWithBrowser
+OpenBrowser
+browser
+ClientIdParameter
+InvalidParameter
+PkceChallengeMethodParameter
+DeviceCodeParameter
+AuthorizationCodeParameter
+ErrorCodeParameter
+PkceChallengeParameter
+ScopeParameter
+ResponseTypeParameter
+GrantTypeParameter
+StateParameter
+ErrorUriParameter
+RedirectUriParameter
+RefreshTokenParameter
+ErrorDescriptionParameter
+PkceVerifierParameter
+ClientSecretParameter
+parameter
+ConfiguredTaskAwaiter
+GetAwaiter
+SchemeDelimiter
+ITrace2Writer
+AddWriter
+DebugTraceWriter
+Trace2FileWriter
+_traceFileWriter
+Trace2StreamWriter
+Trace2CollectorWriter
+TextWriter
+_writer
+filter
+WriteRegionEnter
+ContentPresenter
+ToPointer
+_childProcCounter
+set_Converter
+IValueConverter
+IMultiValueConverter
+U8StringConverter
+JsonStringEnumConverter
+JsonConverter
+BoolToThicknessConverter
+converter
+Register
+Avalonia.Styling.Setter,Avalonia.Base.Value!Getter
+Avalonia.Data.MultiBinding,Avalonia.Markup.Bindings!Getter
+Avalonia.Styling.Setter,Avalonia.Base.Value!Setter
+Avalonia.Data.MultiBinding,Avalonia.Markup.Bindings!Setter
+ToLower
+IsLower
+IniSerializer
+JsonSerializer
+FindResultFor
+wServicePackMajor
+set_Color
+get_ForegroundColor
+set_ForegroundColor
+ConsoleColor
+WriteColor
+fgColor
+wServicePackMinor
+GetLastWin32Error
+GError
+get_Error
+set_Error
+get_StandardError
+OpenStandardError
+set_RedirectStandardError
+WriteError
+ThrowIfError
+authError
+GetLastError
+Cursor
+allocator
+AddValidator
+IEnumerator
+System.Collections.Generic.IEnumerable<GitCredentialManager.GitRemote>.GetEnumerator
+System.Collections.Generic.IEnumerable<System.String>.GetEnumerator
+System.Collections.Generic.IEnumerable<GitCredentialManager.FileCredential>.GetEnumerator
+System.Collections.Generic.IEnumerable<GitCredentialManager.Interop.Windows.WindowsCredential>.GetEnumerator
+System.Collections.IEnumerable.GetEnumerator
+_parentEnumerator
+IDictionaryEnumerator
+IOAuth2CodeGenerator
+get_CodeGenerator
+set_CodeGenerator
+OAuth2CryptographicCodeGenerator
+_codeGenerator
+RandomNumberGenerator
+Decorator
+RequestAdministrator
+Activator
+.cctor
+set_Selector
+Monitor
+MsalHttpClientFactoryAdaptor
+PosixFileDescriptor
+System.ComponentModel.ITypeDescriptorContext.PropertyDescriptor
+System.ComponentModel.ITypeDescriptorContext.get_PropertyDescriptor
+descriptor
+GetAncestor
+_stdErr
+CreateAppIdPtr
+CFDataGetBytePtr
+valuePtr
+SetWindowLongPtr
+inBufferPtr
+ReadIntPtr
+ErrorSecNoSuchAttr
+tcgetattr
+tcsetattr
+DefaultAutoDetectProviderTimeoutMs
+TargetAlias
+BackupSemantics
+PosixSemantics
+System.Diagnostics
+GitCredentialManager.Diagnostics
+GetDiagnostics
+_diagnostics
+get_SupportedAuthorityIds
+GitCredentialManager.UI.Commands
+GitCredentialManager.Commands
+_providerCommands
+_commands
+AddSeconds
+get_TotalSeconds
+FromSeconds
+get_TotalMilliseconds
+FromMilliseconds
+CreateNamespaces
+get_XmlNamespaces
+_xmlNamespaces
+System.Runtime.InteropServices
+System.Runtime.CompilerServices
+MacOSPreferences
+set_Resources
+!AvaloniaResources
+ReleaseManagedResources
+ReleaseUnmanagedResources
+DebuggingModes
+OAuthAuthenticationModes
+set_UseCookies
+get_MergedDictionaries
+get_ThemeDictionaries
+EnumerateDirectories
+_configEntries
+dwCapabilities
+get_Properties
+get_AdditionalProperties
+set_AdditionalProperties
+StorageCreationProperties
+get_Variables
+ExpandEnvironmentVariables
+GetEnvironmentVariables
+GetCurrentVariables
+_variables
+Microsoft.Win32.SafeHandles
+EnumerateFiles
+get_AdditionalFiles
+set_AdditionalFiles
+additionalFiles
+get_Styles
+CredentialStoreNames
+Avalonia.Controls.ApplicationLifetimes
+ReadAllLines
+get_Inlines
+XamlIlTrampolines
+Avalonia.Controls.Shapes
+System.IO.Pipes
+get_Scopes
+set_Scopes
+OAuthScopes
+GetGitConfigurationScopes
+scopes
+System.Runtime.InteropServices.ComTypes
+CredGetSessionTypes
+WindowsAuthenticationTypes
+set_Expires
+ParseExpires
+expires
+GcmCredentialStores
+get_Classes
+System.Security.Cryptography.X509Certificates
+get_Certificates
+ExcludeCertificates
+RequireCertificates
+get_AutomaticallyUseClientCertificates
+GcmUnsafeRemotes
+get_AllowUnsafeRemotes
+GcmAllowUnsafeRemotes
+GetRemotes
+flagsAndAttributes
+FileAttributes
+CreateCredentialFromAttributes
+kSecReturnAttributes
+securityAttributes
+secret_item_get_attributes
+CFStringCreateWithBytes
+numBytes
+GetBytes
+get_Values
+get_FormatTargetsAndValues
+set_FormatTargetsAndValues
+CFDictionaryGetKeysAndValues
+GetSettingValues
+GetValues
+values
+Avalonia.Controls.Primitives
+get_Prefixes
+SecureRefs
+SecretSchemaFlags
+InvalidFlags
+SecretServiceFlags
+NullableFlags
+CredentialEnumerateFlags
+SecretSearchFlags
+CredentialUiFlags
+uiFlags
+CredentialPackFlags
+packFlags
+LocalFlags
+AllFlags
+ControlFlags
+OpenFlags
+SetActionFlags
+GetAncestorFlags
+X509ChainStatusFlags
+CredentialUiWindowsFlags
+InputFlags
+OutputFlags
+dwFlags
+get_Bindings
+set_Bindings
+GetTrace2Settings
+ISettings
+MacOSSettings
+get_Settings
+WindowsSettings
+LinuxSettings
+_settings
+GetCommandLineArgs
+pNumArgs
+PropertyChangedEventArgs
+PointerPressedEventArgs
+RoutedEventArgs
+KeyEventArgs
+<>4__this
+System.Diagnostics.CodeAnalysis
+Microsoft.CodeAnalysis
+valueCallBacks
+keyCallBacks
+callbacks
+ResolveSymbolicLinks
+System.Threading.Tasks
+ICredentials
+set_Credentials
+GenericCredentials
+packedCredentials
+ProtectedCredentials
+saveCredentials
+AllCredentials
+CredUIPromptForWindowsCredentials
+UsernameTargetCredentials
+set_UseDefaultCredentials
+Equals
+GitCredentialManager.UI.ViewModels
+X509Utils
+TraceUtils
+WslUtils
+PlatformUtils
+InteropUtils
+ConvertUtils
+AssemblyUtils
+GitCredentialManager.UI.Controls
+Avalonia.Controls
+get_ShowDebugControls
+set_ShowDebugControls
+_showDebugControls
+HelpUrls
+get_Streams
+IStandardStreams
+suppressStreams
+_streams
+extraQueryParams
+get_Items
+_items
+OperatingSystems
+Contains
+EnumerateAdmins
+CommandExtensions
+EnumerableExtensions
+NameScopeExtensions
+CustomAttributeExtensions
+LoggingExtensions
+StringExtensions
+UriExtensions
+TerminalExtensions
+StreamExtensions
+Win32ApplicationExtensions
+SkiaApplicationExtensions
+BasicAuthenticationExtensions
+GitConfigurationExtensions
+NameValueCollectionExtensions
+Avalonia.Markup.Xaml.MarkupExtensions
+CommandLineBuilderExtensions
+SessionManagerExtensions
+HttpListenerExtensions
+ParserExtensions
+AvaloniaObjectExtensions
+GitExtensions
+ParseResultExtensions
+OAuth2ClientExtensions
+HttpClientExtensions
+EnvironmentExtensions
+HttpContentExtensions
+HttpRequestExtensions
+DictionaryExtensions
+MemoryExtensions
+System.Text.RegularExpressions
+optActions
+get_Sections
+Avalonia.Collections
+System.Collections
+set_ColumnDefinitions
+GcmCredCacheOptions
+PipeOptions
+set_ClientCertificateOptions
+Win32PlatformOptions
+BrokerOptions
+OAuth2WebBrowserOptions
+JsonSerializerOptions
+StringSplitOptions
+WithEmbeddedWebViewOptions
+GetEmbeddedWebViewOptions
+WithSystemWebViewOptions
+GetSystemWebViewOptions
+RegexOptions
+_options
+RegexPatterns
+termios
+CreateAppTokenCacheProps
+CreateUserTokenCacheProps
+UriSchemeHttps
+get_Groups
+get_Chars
+needsQuoteChars
+System.Net.Http.Headers
+get_Headers
+HttpResponseHeaders
+HttpHeaders
+HttpRequestHeaders
+get_DefaultRequestHeaders
+headers
+_staticProviders
+_hostProviders
+others
+KeyModifiers
+get_HasListeners
+XamlIlRuntimeHelpers
+GcmDevUseLegacyUiHelpers
+XamlIlHelpers
+impers
+GcmMultipleUsers
+GetQueryParameters
+InitializeWriters
+_writers
+Avalonia.Controls.Presenters
+GitCredentialManager.UI.Converters
+Avalonia.Data.Converters
+get_Converters
+WindowClientAreaConverters
+BoolConverters
+XamlDynamicSetters
+SslPolicyErrors
+errors
+Selectors
+ValidateGpgPass
+kSecClass
+itemClass
+Trace2ProcessClass
+processClass
+SessionHasGraphicAccess
+desiredAccess
+FileAccess
+fileAccess
+CheckAccess
+initialAccess
+RandomAccess
+VerifyAccess
+get_Success
+get_IsSuccess
+set_IsSuccess
+success
+get_Process
+ChildProcess
+CreateProcess
+CreateWindowsShellProcess
+CreateWslProcess
+get_Is64BitProcess
+GitProcess
+GetCurrentProcess
+process
+set_Thickness
+ToThickness
+IPAddress
+get_Address
+proxyAddress
+objects
+AttributeTargets
+System.Net.Sockets
+GcmTraceSecrets
+WriteLineSecrets
+WriteDictionarySecrets
+secrets
+SessionAttributeBits
+UseDefaults
+OAuth2Constants
+get_ChainElements
+Avalonia.Controls.Documents
+get_Arguments
+set_Arguments
+EnsureMinimumInputArguments
+_components
+Avalonia.Markup.Xaml.XamlIl.Runtime.IAvaloniaXamlIlParentStackProvider.Parents
+Avalonia.Markup.Xaml.XamlIl.Runtime.IAvaloniaXamlIlParentStackProvider.get_Parents
+contents
+set_ExtendClientAreaChromeHints
+BoolToChromeHints
+get_Endpoints
+set_Endpoints
+OAuth2ServerEndpoints
+_endpoints
+GetAccounts
+GitTerminalPrompts
+ISystemPrompts
+WindowsSystemPrompts
+FileExists
+AlreadyExists
+DirectoryExists
+SetFocus
+CornerRadius
+Anonymous
+get_Status
+X509ChainStatus
+get_ChainStatus
+status
+GitCredentialManager.UI.Views
+GitCredentialManager.Interop.Windows
+get_Windows
+EnsureWindows
+IsWindows
+CreateAlways
+OpenAlways
+get_Keys
+get_AllKeys
+secretKeys
+RemoveAt
+Concat
+AppendFormat
+messageFormat
+NormalPerfTimeFormat
+CssmDbAttributeFormat
+DefaultFailureHtmlFormat
+get_FailureResponseHtmlFormat
+set_FailureResponseHtmlFormat
+get_FailureRedirectFormat
+set_FailureRedirectFormat
+format
+PixelRect
+lpRect
+CenterRect
+GetClientRect
+GetWindowRect
+AvaloniaObject
+DisposableObject
+Avalonia.Markup.Xaml.IProvideValueTarget.TargetObject
+Avalonia.Markup.Xaml.IProvideValueTarget.get_TargetObject
+ProvideTargetObject
+Avalonia.Markup.Xaml.IRootObjectProvider.RootObject
+Avalonia.Markup.Xaml.IRootObjectProvider.get_RootObject
+Avalonia.Markup.Xaml.IRootObjectProvider.IntermediateRootObject
+Avalonia.Markup.Xaml.IRootObjectProvider.get_IntermediateRootObject
+Gobject
+Select
+Connect
+get_SuccessRedirect
+set_SuccessRedirect
+GcmAutoDetect
+Protect
+Unprotect
+theDict
+cfDict
+Distinct
+TryGet
+System.Net
+AddOptionSet
+secret_value_get
+TTarget
+PerformanceTarget
+EnvironmentVariableTarget
+IProvideValueTarget
+NormalTarget
+ConfigurationTarget
+Trace2FormatTarget
+_formatTarget
+EventTarget
+eventTarget
+target
+get_ClientSecret
+set_ClientSecret
+WithClientSecret
+OAuthClientSecret
+_clientSecret
+PromptSecret
+secret_item_get_secret
+Libsecret
+System.Collections.Generic.IEnumerator`1<System.Object>.Reset
+System.Collections.IEnumerator.Reset
+DateTimeOffset
+set_Height
+set_MinHeight
+set_MaxHeight
+set_FontWeight
+get_Git
+ConfigureAwait
+op_Implicit
+op_Explicit
+QuickEdit
+TrySplit
+kSecMatchLimit
+EndInit
+BeginInit
+fInherit
+WriteChildExit
+WriteExit
+WaitForExit
+get_Default
+TryGetExternalDefault
+GetValueOrDefault
+GetMultiArgumentOrDefault
+GetArgumentOrDefault
+FirstOrDefault
+ToBooleanyOrDefault
+GetBooleanyOrDefault
+set_IsDefault
+TResult
+DiagnosticResult
+IAsyncResult
+CommandResult
+OAuth2DeviceCodeResult
+deviceCodeResult
+OAuth2AuthorizationCodeResult
+authorizationCodeResult
+get_ParseResult
+WriteResult
+CredentialUiResult
+GetCredentialResult
+MsalResult
+_msalResult
+SymbolResult
+FromResult
+OAuth2TokenResult
+IMicrosoftAuthenticationResult
+OptionResult
+ToResult
+GetResult
+SetResult
+TryCreateTokenEndpointResult
+get_WindowResult
+set_WindowResult
+result
+hWndInt
+Descendant
+ThemeVariant
+ToLowerInvariant
+WriteLineIndent
+TestOutputIndent
+get_UserAgent
+GetHttpUserAgent
+Microsoft.Identity.Client
+IOAuth2Client
+_pipeClient
+CreateClient
+get_HttpClient
+GetHttpClient
+_httpClient
+AcquireTokenForClient
+client
+AcquireTokenSilent
+StyledElement
+X509ChainElement
+InputElement
+set_Fragment
+Comment
+set_VerticalAlignment
+set_HorizontalAlignment
+set_TextAlignment
+IEnvironment
+MacOSEnvironment
+get_Environment
+PrepareEnvironment
+WindowsEnvironment
+PosixEnvironment
+_environment
+EnsureArgument
+TryGetMultiArgument
+TryGetArgument
+AddComponent
+IConfigurableComponent
+InitializeComponent
+component
+PushParent
+PopParent
+GetParent
+System.Collections.Generic.IEnumerator<GitCredentialManager.GitRemote>.Current
+System.Collections.Generic.IEnumerator<System.String>.Current
+System.Collections.Generic.IEnumerator<GitCredentialManager.FileCredential>.Current
+System.Collections.Generic.IEnumerator<GitCredentialManager.Interop.Windows.WindowsCredential>.Current
+System.Collections.IEnumerator.Current
+System.Collections.Generic.IEnumerator<GitCredentialManager.GitRemote>.get_Current
+System.Collections.Generic.IEnumerator<System.String>.get_Current
+System.Collections.Generic.IEnumerator<GitCredentialManager.FileCredential>.get_Current
+System.Collections.Generic.IEnumerator<GitCredentialManager.Interop.Windows.WindowsCredential>.get_Current
+System.Collections.IEnumerator.get_Current
+GetCurrent
+<>2__current
+System.Collections.Concurrent
+CFDictionaryGetValueIfPresent
+get_Content
+set_Content
+FormUrlEncodedContent
+IDeferredContent
+SecKeychainItemFreeContent
+SecKeychainItemCreateFromContent
+set_SizeToContent
+HttpContent
+SecKeychainItemCopyContent
+content
+Avalonia.Themes.Fluent
+GitTrace2Event
+get_Event
+set_Event
+set_ExtendClientAreaToDecorationsHint
+IPEndPoint
+OpenReparsePoint
+PixelPoint
+OAuthDeviceEndpoint
+get_LocalEndpoint
+get_TokenEndpoint
+GiteaTokenEndpoint
+OAuthTokenEndpoint
+tokenEndpoint
+get_AuthorizationEndpoint
+get_DeviceAuthorizationEndpoint
+set_DeviceAuthorizationEndpoint
+_deviceAuthorizationEndpoint
+authorizationEndpoint
+GiteaAuthzEndpoint
+OAuthAuthzEndpoint
+get_Thumbprint
+GetCertificateByThumbprint
+thumbprint
+get_Count
+AttributeCount
+GetByteCount
+CFArrayGetCount
+CFDictionaryGetCount
+maximumPersistCount
+GitCredentialManager.ICredential.Account
+IAccount
+GitCredentialManager.ICredential.get_Account
+get_OperatingSystemAccount
+OtherAccount
+kSecAttrAccount
+SelectAccount
+get_UseDefaultAccount
+set_UseDefaultAccount
+MsAuthUseDefaultAccount
+get_UseMsAuthDefaultAccount
+GcmDefaultAccount
+<>3__account
+get_StoreRoot
+EnsureStoreRoot
+storeRoot
+IntermediateRoot
+SessionIsRoot
+GetRoot
+get_Accept
+SecurePrompt
+WithPrompt
+ShowCredentialPrompt
+DisplayCredentialPrompt
+prompt
+BannerArt
+GetLeftPart
+ThreadStart
+WriteChildStart
+WriteStart
+TrimStart
+SslAutoClientCert
+Insert
+g_hash_table_insert
+Base64UrlConvert
+TryConvert
+convert
+get_Port
+set_Port
+TryGetHostAndPort
+GetFreeTcpPort
+get_IsDefaultPort
+Import
+EnableNtlmSupport
+get_Request
+SendHttpRequest
+HttpListenerRequest
+request
+trustedList
+AppendAvailableStoreList
+SecKeychainAttributeList
+GetNormalizedValueList
+pAuthList
+kSecMatchItemList
+ToList
+attrList
+credentialsList
+set_BypassList
+_parentList
+CredentialPersist
+maximumPersist
+CanPersist
+DoNoPersist
+get_Host
+set_Host
+get_Post
+set_Topmost
+TryGetFirst
+get_Out
+_stdOut
+set_Timeout
+probeTimeout
+get_AutoDetectProviderTimeout
+GcmAutoDetectTimeout
+Avalonia.Layout
+Avalonia.Input
+System.Windows.Input
+ProcessedInput
+get_StandardInput
+OpenStandardInput
+set_RedirectStandardInput
+standardInput
+LineInput
+MouseInput
+EchoInput
+WindowInput
+get_StandardOutput
+OpenStandardOutput
+set_RedirectStandardOutput
+WrapAtEolOutput
+output
+ProcessedOuput
+get_Evt
+set_Evt
+System.Collections.Generic.IEnumerator`1<System.Object>.MoveNext
+System.Text
+set_Text
+MessageText
+responseText
+ReadAllText
+AppendAllText
+WriteAllText
+CaptionText
+FormatText
+ValidatePlaintext
+get_Context
+get_DataContext
+set_DataContext
+dataContext
+ICommandContext
+_commandContext
+CreateContext
+IUriContext
+XamlIlContext
+InvocationContext
+invocationContext
+AppContext
+HttpListenerContext
+ITypeDescriptorContext
+CreateTtyContext
+_context
+NativeMenu
+TerminalMenu
+SetMenu
+get_Argv
+set_Argv
+get_NoProxyRaw
+noProxyRaw
+WithUseEmbeddedWebView
+EnsureCanUseEmbeddedWebView
+EnsureCanUseSystemWebView
+DeviceCodeView
+OAuthView
+EnableNtlmView
+CredentialsView
+DefaultAccountView
+RegistryView
+g_hash_table_new
+secret_value_new
+get_Now
+get_UtcNow
+Pack32Wow
+TWindow
+GetConsoleWindow
+DialogWindow
+set_MainWindow
+WithParentActivityOrWindow
+ProgressWindow
+GcmParentWindow
+AboutWindow
+window
+MsAuthFlow
+NtlmAllow
+ConsoleEx
+EncodingEx
+RtlGetVersionEx
+BoolConvertersEx
+FindIndex
+nIndex
+CFArrayGetValueAtIndex
+CFArrayInsertValueAtIndex
+FindLastIndex
+_listIndex
+<>3__nameRegex
+LineRegex
+<>3__valueRegex
+SectionRegex
+GetRegex
+PropertyRegex
+Complex
+TargetNameLegacyGenericPrefix
+WslUncPrefix
+WslLocalHostUncPrefix
+DefaultWslMountPrefix
+keySuffix
+GitCredentialManager.Interop.Posix
+EnsurePosix
+IsPosix
+CheckBox
+_passwordTextBox
+_userNameTextBox
+IsDevBox
+ShowSaveCheckbox
+GitCredentialManager.Interop.Linux
+Termios_Linux
+termios_Linux
+get_Linux
+EnsureLinux
+IsLinux
+get_DebuggerDisplay
+theArray
+ToByteArray
+InitializeArray
+ToArray
+keychainOrArray
+ConvertToBypassRegexArray
+isLegacy
+PktPrivacy
+SnakeCaseNamingPolicy
+JsonNamingPolicy
+X509ChainPolicy
+get_ChainPolicy
+get_Key
+set_Key
+OpenSubKey
+OpenBaseKey
+NtlmKey
+ContainsKey
+RegistryKey
+IsFalsey
+SslVerify
+GitSslNoVerify
+Identify
+GDestroyNotify
+System.Security.Cryptography
+IsTruthy
+GetExecutingAssembly
+GetEntryAssembly
+FontFamily
+InCredOnly
+AuthPackageOnly
+set_HttpOnly
+Readonly
+WhenAny
+ConcatMany
+SelectMany
+ToBooleany
+g_hash_table_destroy
+IDictionary
+ReadDictionary
+IResourceDictionary
+WriteDictionary
+ReadMultiDictionary
+<2>__CFDictionaryToDictionary
+GetDictionary
+dictionary
+Temporary
+get_Query
+set_Query
+CreateSearchQuery
+Trace2Category
+get_Category
+set_Category
+_category
+System.Memory
+NotEnoughMemory
+IHttpClientFactory
+get_HttpClientFactory
+WithHttpClientFactory
+IMsalHttpClientFactory
+_factory
+CacheDirectory
+get_BaseDirectory
+CreateDirectory
+set_WorkingDirectory
+_workingDirectory
+get_InstallationDirectory
+GetInstallationDirectory
+get_CurrentDirectory
+GetCurrentDirectory
+IsInsideRepository
+GetCurrentRepository
+set_Geometry
+GitConfigurationEntry
+MakeGitCredentialsEntry
+isSecretEntry
+DictionaryEntry
+IHostProviderRegistry
+_hostProviderRegistry
+_providerRegistry
+WindowsRegistry
+GetAuthenticationModeViaTty
+GetCredentialsViaTty
+ShowDeviceCodeInTty
+SessionHasTty
+set_Capacity
+EnsureCapacity
+capacity
+op_Equality
+op_Inequality
+WebUtility
+HttpUtility
+OptionArity
+PktIntegrity
+WithAuthority
+GcmAuthority
+AnyAuthority
+authority
+BindingPriority
+HostProviderPriority
+DispatcherPriority
+priority
+System.Security
+System.Net.Security
+/System/Library/Frameworks/Security.framework/Security
+CoInitializeSecurity
+GcmWamComSecurity
+AcquireTokenForManagedIdentity
+GetManagedIdentity
+managedIdentity
+ServicePrincipalIdentity
+WindowsIdentity
+Avalonia.Interactivity
+IsNullOrEmpty
+NotNullOrEmpty
+Avalonia.Styling.Setter,Avalonia.Base.Value!Property
+Avalonia.Data.MultiBinding,Avalonia.Markup.Bindings!Property
+set_Property
+AvaloniaProperty
+IsCheckedProperty
+CommandProperty
+ForegroundProperty
+BackgroundProperty
+SourceProperty
+IsVisibleProperty
+TitleProperty
+PaddingProperty
+BorderBrushProperty
+IniProperty
+TryGetMultiProperty
+FillProperty
+PenProperty
+ColorProperty
+CursorProperty
+BorderThicknessProperty
+ExtendClientAreaChromeHintsProperty
+CornerRadiusProperty
+TryGetProperty
+Avalonia.Markup.Xaml.IProvideValueTarget.TargetProperty
+Avalonia.Markup.Xaml.IProvideValueTarget.get_TargetProperty
+ProvideTargetProperty
+VerticalContentAlignmentProperty
+ContentProperty
+ExtendClientAreaToDecorationsHintProperty
+TextProperty
+FontFamilyProperty
+IsReadOnlyProperty
+<>3__property
+set_Proxy
+IWebProxy
+set_UseProxy
+TryCreateProxy
+CurlAllProxy
+CurlNoProxy
+<>3__noProxy
+CurlHttpProxy
+GcmHttpProxy
+CurlHttpsProxy
+AllowMultiple
+Inherited
+AllowMultiple
+Inherited
+AllowMultiple
+Inherited
+7GitCredentialManager.Application+<RunInternalAsync>d__7
+>GitCredentialManager.ConfigurationService+<ConfigureAsync>d__4
+@GitCredentialManager.ConfigurationService+<UnconfigureAsync>d__5
+BGitCredentialManager.GenericHostProvider+<GetCredentialAsync>d__15
+GGitCredentialManager.GenericHostProvider+<GenerateCredentialAsync>d__18
+CGitCredentialManager.GenericHostProvider+<GetOAuthAccessToken>d__20
+1GitCredentialManager.GitProcess+<GetRemotes>d__13
+8GitCredentialManager.GitProcess+<InvokeHelperAsync>d__15
+9GitCredentialManager.GitProcessConfiguration+<GetAll>d__9
+<GitCredentialManager.GitProcessConfiguration+<GetRegex>d__10
+8GitCredentialManager.GitStreamReader+<ReadLineAsync>d__2
+;GitCredentialManager.HostProvider+<GetCredentialAsync>d__14
+@GitCredentialManager.HostProviderRegistry+<GetProviderAsync>d__4
+kGitCredentialManager.HostProviderRegistry+<>c__DisplayClass4_0+<<GetProviderAsync>g__MatchProviderAsync|2>d
+GGitCredentialManager.HttpContentExtensions+<ReadAsFormContentAsync>d__0
+{DebuggerDisplay}
+>GitCredentialManager.PlaintextCredentialStore+<Enumerate>d__18
+XSystem.Char, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+HGitCredentialManager.ProxyConfiguration+<ConvertToBypassRegexArray>d__16
+4GitCredentialManager.Settings+<GetSettingValues>d__6
+?GitCredentialManager.StreamExtensions+<ReadDictionaryAsync>d__6
+DGitCredentialManager.StreamExtensions+<ReadMultiDictionaryAsync>d__7
+AGitCredentialManager.StreamExtensions+<WriteDictionaryAsync>d__10
+thread
+child_id
+child_class
+use_shell
+nesting
+category
+BGitCredentialManager.UriExtensions+<GetGitConfigurationScopes>d__5
+@GitCredentialManager.UI.HelperApplication+<RunInternalAsync>d__2
+BAvalonia.Generators.NameGenerator.InitializeComponentCodeGenerator
+11.1.3.0
+FGitCredentialManager.UI.Commands.CredentialsCommand+<ExecuteAsync>d__1
+IGitCredentialManager.UI.Commands.DefaultAccountCommand+<ExecuteAsync>d__1
+EGitCredentialManager.UI.Commands.DeviceCodeCommand+<ExecuteAsync>d__1
+@GitCredentialManager.UI.Commands.OAuthCommand+<ExecuteAsync>d__1
+MGitCredentialManager.Interop.Windows.WindowsCredentialManager+<Enumerate>d__8
+:GitCredentialManager.Diagnostics.Diagnostic+<RunAsync>d__6
+YGitCredentialManager.Diagnostics.MicrosoftAuthenticationDiagnostic+<RunInternalAsync>d__1
+LGitCredentialManager.Diagnostics.NetworkingDiagnostic+<RunInternalAsync>d__4
+KGitCredentialManager.Diagnostics.NetworkingDiagnostic+<SendHttpRequest>d__5
+@GitCredentialManager.Commands.DiagnoseCommand+<ExecuteAsync>d__5
+CGitCredentialManager.Commands.GetCommand+<ExecuteInternalAsync>d__1
+?GitCredentialManager.Commands.GitCommandBase+<ExecuteAsync>d__5
+NGitCredentialManager.Authentication.AuthenticationBase+<InvokeHelperAsync>d__3
+QGitCredentialManager.Authentication.BasicAuthentication+<GetCredentialsAsync>d__2
+VGitCredentialManager.Authentication.BasicAuthentication+<GetCredentialsViaUiAsync>d__3
+ZGitCredentialManager.Authentication.BasicAuthentication+<GetCredentialsViaHelperAsync>d__5
+VGitCredentialManager.Authentication.MicrosoftAuthentication+<GetTokenForUserAsync>d__2
+bGitCredentialManager.Authentication.MicrosoftAuthentication+<GetTokenForServicePrincipalAsync>d__3
+aGitCredentialManager.Authentication.MicrosoftAuthentication+<GetTokenForManagedIdentityAsync>d__4
+XGitCredentialManager.Authentication.MicrosoftAuthentication+<UseDefaultAccountAsync>d__5
+]GitCredentialManager.Authentication.MicrosoftAuthentication+<GetAccessTokenSilentlyAsync>d__7
+dGitCredentialManager.Authentication.MicrosoftAuthentication+<CreatePublicClientApplicationAsync>d__8
+jGitCredentialManager.Authentication.MicrosoftAuthentication+<CreateConfidentialClientApplicationAsync>d__9
+ZGitCredentialManager.Authentication.MicrosoftAuthentication+<RegisterTokenCacheAsync>d__11
+XGitCredentialManager.Authentication.OAuthAuthentication+<GetAuthenticationModeAsync>d__1
+]GitCredentialManager.Authentication.OAuthAuthentication+<GetAuthenticationModeViaUiAsync>d__2
+aGitCredentialManager.Authentication.OAuthAuthentication+<GetAuthenticationModeViaHelperAsync>d__4
+TGitCredentialManager.Authentication.OAuthAuthentication+<GetTokenByBrowserAsync>d__5
+WGitCredentialManager.Authentication.OAuthAuthentication+<GetTokenByDeviceCodeAsync>d__6
+]GitCredentialManager.Authentication.OAuthAuthentication+<GetTokenByDeviceCodeViaTtyAsync>d__9
+\GitCredentialManager.Authentication.WindowsIntegratedAuthentication+<AskEnableNtlmAsync>d__2
+eGitCredentialManager.Authentication.WindowsIntegratedAuthentication+<GetAuthenticationTypesAsync>d__3
+YGitCredentialManager.Authentication.OAuth.HttpListenerExtensions+<WriteResponseAsync>d__0
+WGitCredentialManager.Authentication.OAuth.OAuth2Client+<GetAuthorizationCodeAsync>d__12
+PGitCredentialManager.Authentication.OAuth.OAuth2Client+<GetDeviceCodeAsync>d__13
+^GitCredentialManager.Authentication.OAuth.OAuth2Client+<GetTokenByAuthorizationCodeAsync>d__14
+YGitCredentialManager.Authentication.OAuth.OAuth2Client+<GetTokenByRefreshTokenAsync>d__15
+WGitCredentialManager.Authentication.OAuth.OAuth2Client+<GetTokenByDeviceCodeAsync>d__16
+aGitCredentialManager.Authentication.OAuth.OAuth2SystemWebBrowser+<GetAuthenticationCodeAsync>d__4
+]GitCredentialManager.Authentication.OAuth.OAuth2SystemWebBrowser+<InterceptRequestsAsync>d__5
+dGitCredentialManager.Authentication.OAuth.OAuth2SystemWebBrowser+<HandleInterceptedRequestAsync>d__6
+device_code
+user_code
+verification_uri
+expires_in
+interval
+error_description
+error_uri
+access_token
+token_type
+refresh_token
+WrapNonExceptionThrows
+Core.Tests
+GitHub.Tests
+Atlassian.Bitbucket.Tests
+.NETFramework,Version=v4.7.2
+FrameworkDisplayName
+.NET Framework 4.7.2
+gcmcore
+Release
+2.7.3.0
+.2.7.3+5fa7116896c82164996a609accd1c5ad90fe730a
+$AvaloniaUseCompiledBindingsByDefault
+System.Security.Permissions.SecurityPermissionAttribute, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+SkipVerification
+D:\a\_work\1\s\out\shared\Core\obj\Release\net472\Avalonia\gcmcore.pdb
+SHA256
+_CorDllMain
+mscoree.dll
+<?xml version="1.0" encoding="utf-8"?>
+<assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
+  <assemblyIdentity version="2.7.3.0" name="gcmcore"/>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!-- Windows 10 and Windows 11 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/>
+      <!-- Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/>
+      <!-- Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!-- Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+    </application>
+  </compatibility>
+</assembly>
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 20110
+250619182137Z
+260617182137Z0t1
+Washington1
+Redmond1
+Microsoft Corporation1
+Microsoft Corporation0
+Microsoft Corporation1
+230012+5053590
+Chttp://www.microsoft.com/pkiops/crl/MicCodSigPCA2011_2011-07-08.crl0a
+Ehttp://www.microsoft.com/pkiops/certs/MicCodSigPCA2011_2011-07-08.crt0
+Washington1
+Redmond1
+Microsoft Corporation1200
+)Microsoft Root Certificate Authority 20110
+110708205909Z
+260708210909Z0~1
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 20110
+Ihttp://crl.microsoft.com/pki/crl/products/MicRooCerAut2011_2011_03_22.crl0^
+Bhttp://www.microsoft.com/pki/certs/MicRooCerAut2011_2011_03_22.crt0
+3http://www.microsoft.com/pkiops/docs/primarycps.htm0@
+*?*kXIc
+QEX82q'
+WqVNHE
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 2011
+https://www.microsoft.com 0
+20260211154354.222Z0
+Washington1
+Redmond1
+Microsoft Corporation1%0#
+Microsoft America Operations1'0%
+nShield TSS ESN:3303-05E0-D9471%0#
+Microsoft Time-Stamp Service
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+250130194304Z
+260422194304Z0
+Washington1
+Redmond1
+Microsoft Corporation1%0#
+Microsoft America Operations1'0%
+nShield TSS ESN:3303-05E0-D9471%0#
+Microsoft Time-Stamp Service0
+45gWLl
+Nhttp://www.microsoft.com/pkiops/crl/Microsoft%20Time-Stamp%20PCA%202010(1).crl0l
+Phttp://www.microsoft.com/pkiops/certs/Microsoft%20Time-Stamp%20PCA%202010(1).crt0
+Washington1
+Redmond1
+Microsoft Corporation1200
+)Microsoft Root Certificate Authority 20100
+210930182225Z
+300930183225Z0|1
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+3http://www.microsoft.com/pkiops/Docs/Repository.htm0
+Ehttp://crl.microsoft.com/pki/crl/products/MicRooCerAut_2010-06-23.crl0Z
+>http://www.microsoft.com/pki/certs/MicRooCerAut_2010-06-23.crt0
+as.,k{n?,
+Washington1
+Redmond1
+Microsoft Corporation1%0#
+Microsoft America Operations1'0%
+nShield TSS ESN:3303-05E0-D9471%0#
+Microsoft Time-Stamp Service
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+20260211073355Z
+20260212073355Z0t0:
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 2010
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 2010
+Mv(gzS
+A$`QI^
+),*-,7.8/;1<5=7>9B>EFFGGJIKKMROSQVSZU]V^Y_[r_s`tcwfzi|p~r
+$#%#&#'#(
++*2198?>@>A>CBDBHGIGJGRQSQUTYX`_dcecfegchclkmkonutvtyx{z
+providerRegistry
+configurationService
+fatal: {0} [{1}]
+fatal: {0} [0x{1:x}]
+fatal: {0}
+Git Credential Manager
+credential.helper
+Configuring for config level '{0}'.
+D:\a\_work\1\s\src\shared\Core\Application.cs
+ConfigureAsync
+Credential helper configuration is already set correctly.
+Updating Git credential helper configuration...
+Unconfiguring for config level '{0}'.
+UnconfigureAsync
+Removing Git credential helper configuration...
+--no-ui
+Do not use graphical user interface prompts
+Version: {0}
+RunInternalAsync
+Runtime: 
+Platform: 
+OSVersion: 
+AppPath: 
+InstallDir: 
+Arguments: 
+context
+Waiting for debugger to be attached...
+warning: unable to trace to file '
+warning: unknown value for GCM_TRACE '
+Tracing of secrets is enabled. Trace output may contain sensitive information.
+D:\a\_work\1\s\src\shared\Core\ApplicationBase.cs
+RunAsync
+D:\a\_work\1\s\src\shared\Core\ChildProcess.cs
+git.exe
+GIT_EXEC_PATH
+Using Git executable from GIT_EXEC_PATH: 
+D:\a\_work\1\s\src\shared\Core\CommandContext.cs
+GetGitPath
+Using PATH-located Git executable: 
+Can only specify one of: 
+Require exactly one of: 
+ does not support options: 
+Require at least one of: 
+Configuring component '
+D:\a\_work\1\s\src\shared\Core\ConfigurationService.cs
+Unconfiguring component '
+Git-Credential-Manager/{0} ({1}; {2}) CLR/{3}
+e3171dd9-9a5f-e5be-b36c-cc7c4f3f3bcf
+9188040d-6c67-4c5b-b112-36a304b66dad
+f8cdef31-a31e-4b4a-93e4-5f571e91255a
+credential-cache get 
+username
+password
+credential-cache store 
+credential-cache erase 
+wincredman
+keychain
+secretservice
+plaintext
+Unknown credential store '
+No credential store has been selected.
+D:\a\_work\1\s\src\shared\Core\CredentialStore.cs
+{3}Set the {0} environment variable or the {1}.{2} Git configuration setting to one of the following options:{3}{3}
+GCM_CREDENTIAL_STORE
+credential
+credentialStore
+See https://aka.ms/gcm/credstores for more information.
+  {1,-13} : Windows Credential Manager (not available over network/SSH sessions){0}
+  {1,-13} : DPAPI protected files{0}
+  {1,-13} : macOS Keychain{0}
+  {1,-13} : freedesktop.org Secret Service (requires graphical interface){0}
+  {1,-13} : GNU `pass` compatible credential storage (requires GPG and `pass`){0}
+  {1,-13} : Git's in-memory credential cache{0}
+  {1,-13} : store credentials in plain-text files (UNSECURE){0}
+  {1, -13} : disable internal credential storage{0}
+Can only use the 'wincredman' credential store on Windows.
+Unable to persist credentials with the 'wincredman' credential store.
+Can only use the 'dpapi' credential store on Windows.
+GCM_DPAPI_STORE_PATH
+dpapiStorePath
+dpapi_store
+Can only use the 'keychain' credential store on macOS.
+Can only use the 'secretservice' credential store on Linux.
+Cannot use the 'secretservice' credential backing store without a graphical interface present.
+Can only use the 'gpg' credential store on POSIX systems.
+GPG_TTY
+SSH_TTY
+GPG_TTY is not set; add `export GPG_TTY=$(tty)` to your profile.
+PASSWORD_STORE_DIR
+gpgPassStorePath
+.password-store
+.gpg-id
+Password store has not been initialized at '{0}'; run `pass init <gpg-id>` to initialize the store.
+Can not use the 'cache' credential store on Windows due to lack of UNIX socket support in Git for Windows.
+GCM_CREDENTIAL_CACHE_OPTIONS
+cacheOptions
+GCM_PLAINTEXT_STORE_PATH
+plaintextStorePath
+GCM_GPG_PATH
+Using Git executable from GCM_GPG_PATH: 
+GetGpgPath
+GPG executable does not exist with path '{0}'
+Using PATH-located GPG (gpg2) executable: 
+Using PATH-located GPG (gpg) executable: 
+#HttpOnly_
+Invalid cookie line: 
+D:\a\_work\1\s\src\shared\Core\CurlCookie.cs
+{0}={1}
+Argument cannot be empty.
+Argument cannot be empty or white space.
+Argument must be an absolute URI.
+Argument must be positive or zero (non-negative).
+Argument must be positive.
+Argument must be negative or zero (non-positive).
+Argument must be negative.
+Argument must be greater than or equal to {0}.
+Argument must be strictly greater than {0}.
+Argument must be less than or equal to {0}.
+Argument must be strictly less than {0}.
+fileSystem
+variables
+Failed to locate '
+' executable on the path.
+basicAuth
+winAuth
+generic
+Generic
+Not storing empty credential.
+D:\a\_work\1\s\src\shared\Core\GenericHostProvider.cs
+StoreCredentialAsync
+Storing credential with service=
+ account=
+Credential was successfully stored.
+Erasing stored credential in store with service=
+EraseCredentialAsync
+Credential was successfully erased.
+No credential was erased.
+.allowNTLMAuth
+Failed to set Git configuration to enable NTLM support for {0}
+EnableNtlmSupport
+warning: use of unencrypted HTTP remote URLs is not recommended; see https://aka.ms/gcm/unsaferemotes for more information.
+Found generic OAuth configuration for '{0}':
+GenerateCredentialAsync
+AuthzEndpoint   = {0}
+TokenEndpoint   = {0}
+DeviceEndpoint  = {0}
+ClientId        = 
+ClientSecret    = 
+RedirectUri     = {0}
+Scopes          = [
+UseAuthHeader   = {0}
+DefaultUserName = 
+Checking host '
+' for Windows Integrated Authentication...
+Host does not support WIA.
+Host supports WIA.
+suppressed
+NTLM support has been suppressed by Git - showing warning.
+Enabling NTLM support just once.
+Enabling NTLM support for {0}.
+User declined to enable NTLM support. Showing basic auth prompt.
+Returning empty username/password to trigger current user auth with WIA.
+Skipping check for Windows Integrated Authentication on 
+Windows Integrated Authentication detection has been disabled.
+Prompting for basic credentials...
+Looking for existing credential in store with service=
+GetCredentialAsync
+No existing credentials found.
+Creating new credential...
+Existing credential found.
+refresh_token.
+Failed to use refresh token.
+GetOAuthAccessToken
+GCM_OAUTH_AUTHMODES
+oauthAuthModes
+Supported authentication modes override present: {0}
+Invalid value for supported authentication modes override setting: '
+No authentication mode selected!
+Using universal Gitea OAuth configuration
+D:\a\_work\1\s\src\shared\Core\GenericOAuthConfig.cs
+TryGet
+e90ee53c-94e2-48ac-9358-a874fb9e0662
+/login/oauth/authorize
+/login/oauth/access_token
+GCM_OAUTH_AUTHORIZE_ENDPOINT
+oauthAuthorizeEndpoint
+Invalid OAuth configuration - missing/invalid authorize endpoint: 
+GCM_OAUTH_TOKEN_ENDPOINT
+oauthTokenEndpoint
+Invalid OAuth configuration - missing/invalid token endpoint: 
+GCM_OAUTH_DEVICE_ENDPOINT
+oauthDeviceEndpoint
+Invalid OAuth configuration - invalid device endpoint: 
+GCM_OAUTH_CLIENTID
+oauthClientId
+GCM_OAUTH_CLIENTSECRET
+oauthClientSecret
+GCM_OAUTH_REDIRECTURI
+oauthRedirectUri
+http://127.0.0.1
+GCM_OAUTH_SCOPES
+oauthScopes
+GCM_OAUTH_USE_CLIENT_AUTH_HEADER
+oauthUseClientAuthHeader
+GCM_OAUTH_DEFAULT_USERNAME
+oauthDefaultUserName
+OAUTH_USER
+Basic realm="Gitea"
+trace2
+processManager
+gitPath
+version
+^git version (?'value'.*)
+rev-parse --absolute-git-dir
+Failed to get current Git repository
+{0} (exit={1})
+D:\a\_work\1\s\src\shared\Core\Git.cs
+GetCurrentRepositoryInternal
+remote -v show
+not a git repository
+Failed to enumerate Git remotes
+GetRemotes
+Failed to start Git helper '{0}'
+Unknown
+helper error ({0}): {1}
+config --null 
+ --list
+Failed to enumerate config entries (exit={0}, level={1})
+D:\a\_work\1\s\src\shared\Core\GitConfiguration.cs
+Enumerate
+Failed to enumerate all Git configuration entries
+Invalid Git configuration output. Expected newline terminator (\n) after key.
+Invalid Git configuration output. Expected null terminator (\0) after value.
+Failed to read Git configuration entry '{0}'. (exit={1}, level={2})
+config 
+Failed to set config entry '{0}' to value '{1}' (exit={2}, level={3})
+Failed to set Git configuration entry '
+ --add 
+Failed to add config entry '{0}' with value '{1}' (exit={2}, level={3})
+Failed to add Git configuration entry '
+ --unset 
+Failed to unset config entry '{0}' (exit={1}, level={2})
+Failed to unset Git configuration entry '
+ --replace-all 
+Failed to replace all multivar '{0}' and value regex '{1}' with new value '{2}' (exit={3}, level={4})
+ReplaceAll
+Failed to replace all Git configuration multi-valued entries '
+ --unset-all 
+Failed to unset all multivar '{0}' with value regex '{1}' (exit={2}, level={3})
+UnsetAll
+Failed to unset all Git configuration multi-valued entries '
+Must have a specific configuration level filter to modify values.
+--system
+--global
+--local
+--type=bool
+--type=path
+--bool
+--path
+ --get-all 
+Failed to get all config entries '{0}' (exit={1}, level={2})
+GetAll
+Failed to get all Git configuration entries '
+ --get-regex 
+Failed to get all multivar regex '{0}' and value regex '{1}' (exit={2}, level={3})
+GetRegex
+Failed to get Git configuration multi-valued entries with name regex '
+Git configuration entry with the name '
+' was not found.
+A GitVersion object is required for comparison.
+gpgPath
+sessionManager
+--batch --decrypt "
+Failed to start gpg.
+Failed to decrypt file '{0}' with gpg. exit={1}, out={2}, err={3}
+--encrypt --batch --recipient "
+" --output "
+Failed to encrypt file '{0}' with gpg. exit={1}, out={2}, err={3}
+D:\a\_work\1\s\src\shared\Core\HostProvider.cs
+Credential created.
+hostProvider
+A host provider cannot be registered with the ID 'auto'
+A host provider cannot be registered with the legacy authority ID 'auto'
+Checking against {0} host providers registered with priority '{1}'.
+D:\a\_work\1\s\src\shared\Core\HostProviderRegistry.cs
+GetProviderAsync
+Querying remote URL for host provider auto-detection.
+warning: auto-detection of host provider took too long (>{0}ms)
+warning: see https://aka.ms/gcm/autodetect for more information.
+warning: failed to probe '{0}' to detect provider
+warning: 
+Host provider override was set id='
+No host provider was found with ID '
+'.. falling back to auto-detection.
+warning: a host provider override was set but no such provider '
+' was found. Falling back to auto-detection.
+Host provider authority override was set authority='
+warning: the `credential.authority` and `GCM_AUTHORITY` settings are deprecated.
+warning: see https://aka.ms/gcm/authority for more information.
+No host provider was found with authority '
+warning: a supported authority override was set but no such provider supporting authority '
+Performing auto-detection of host provider.
+Unable to detect host provider without a remote URL
+Auto-detect probe timeout is {0} ms.
+No host provider available to service this request.
+{0}.{1}.{2}
+provider
+Remembering host provider for '{0}' as '{1}'...
+Failed to set host provider!
+warning: failed to remember result of host provider detection!
+warning: try setting this manually: `git config --global 
+settings
+streams
+Creating new HTTP client instance...
+D:\a\_work\1\s\src\shared\Core\HttpClientFactory.cs
+CreateClient
+HTTP client is using the configured proxy.
+Git's SSL/TLS backend is: {0}
+Configured to automatically send TLS client certificates.
+TLS certificate verification has been disabled.
+warning: ----------------- SECURITY WARNING ----------------
+warning: | TLS certificate verification has been disabled! |
+warning: ---------------------------------------------------
+warning: HTTPS connections may not be secure. See https://aka.ms/gcm/tlsverify for more information.
+Custom certificate verification has been enabled with certificate bundle at 
+Custom certificate bundle not found at path: {0}
+Custom cookie file has been enabled with 
+Configured to automatically send cookie header.
+Using a deprecated proxy configuration.
+TryCreateProxy
+warning: Using a deprecated proxy configuration. See https://aka.ms/gcm/httpproxy for more information.
+NO_PROXY value set to "*"; disabling proxy settings
+address
+useDefaultCredentials
+noProxy
+bypass
+Failed to convert proxy bypass hosts to regular expressions; ignoring bypass list
+<< failed to convert >>
+Created a WebProxy instance:
+{0}:{1}
+Bearer
+{0} "{1}" [Properties: {2}]
+{0} [Properties: {1}]
+Missing section header
+^\[[^\S#]*(?'name'[^\s#\]]*?)(?:\s+"(?'sub'.+)")?\s*\]
+^[^\S#]*?(?'name'[^\s#]+)\s*=(?'value'.*)?$
+protocol
+wwwauth
+Not a valid URI: '
+Can only open HTTP/HTTPS URIs
+Opening browser using framework shell-execute: 
+D:\a\_work\1\s\src\shared\Core\ISessionManager.cs
+OpenBrowserInternal
+message
+warning: unrecognized format target '{0}', disabling TRACE2 tracing.
+storeRoot
+.credential
+account
+service
+service={0}
+account={0}
+{0}{1}
+SOFTWARE\Microsoft\Windows365
+IsW365Environment
+PartnerId
+/proc/self/cmdline
+Windows
+{0}.{1} (build {2})
+x86-64
+/etc/os-release
+/usr/lib/os-release
+PRETTY_NAME
+VERSION
+VERSION_ID
+VERSION_CODENAME
+Unknown-Linux
+GIT_TRACE2_PARENT_SID
+{0}/{1:D}
+(\.|\:\/\/)
+environment
+GCM_DEBUG
+GIT_TERMINAL_PROMPT
+GCM_GUI_PROMPT
+guiPrompt
+GCM_INTERACTIVE
+interactive
+GCM_TRACE
+GCM_GUI_SOFTWARE_RENDERING
+guiSoftwareRendering
+GCM_ALLOW_UNSAFE_REMOTES
+allowUnsafeRemotes
+GIT_TRACE2_EVENT
+eventtarget
+GIT_TRACE2
+normaltarget
+GIT_TRACE2_PERF
+perftarget
+GCM_TRACE_SECRETS
+traceSecrets
+GCM_TRACE_MSAUTH
+traceMsAuth
+GCM_PROVIDER
+GCM_AUTHORITY
+authority
+GCM_ALLOW_WINDOWSAUTH
+allowWindowsAuth
+GIT_SSL_NO_VERIFY
+sslVerify
+sslAutoClientCert
+GIT_SSL_CAINFO
+sslCAInfo
+cookieFile
+sslBackend
+schannelUseSSLCAInfo
+GCM_AUTODETECT_TIMEOUT
+autoDetectTimeout
+httpsProxy
+httpProxy
+https_proxy
+HTTPS_PROXY
+http_proxy
+all_proxy
+ALL_PROXY
+GCM_HTTP_PROXY
+GCM_MODAL_PARENTHWND
+GCM_NAMESPACE
+namespace
+GCM_MSAUTH_USEDEFAULTACCOUNT
+msauthUseDefaultAccount
+no_proxy
+NO_PROXY
+defaultOption
+Select an option
+ (enter for default)
+option
+ (default)
+  {0}. {1}{2}
+No default option is configured.
+Invalid option '
+'. Expected a number.
+! error: '
+       > '
+{0}={1}
+filePath
+lineNumber
+memberName
+{0:HH:mm:ss.ffffff} {1,-23} trace: [{2}] {3}
+{0}{1}={2}
+********
+af_unix:
+\\.\pipe\
+//./pipe/
+af_unix:dgram:
+af_unix:stream:
+gcmVersion
+thread_pool_{0}
+createPipeFunc
+maxQueueSize
+Trace2CollectorWriter
+D:\a\_work\1\s\src\shared\Core\Trace2Exception.cs
+message: {0} error code: {1}
+message: '{0}' error code: '{1}' git message: '{{0}}'
+HH:mm:ss.ffffff
+{0} {1,-33} {2} {3}
+{0} {1,-29}| d{2} | {3,-24} | {4,-12} {5} | {6}
+|     |           |           |             
+|     |
+|           |             
+elapsed:{0} code:{1}
+[ch{0}]
+|             
+ pid:{0} code:{1} elapsed:{2}
+|           |
+WSL_INTEROP
+/proc/version
+[Mm]icrosoft
+\\wsl$\
+\\wsl.localhost\
+--distribution {0} 
+--exec {0}
+Windows/cmd.exe
+/C {0}
+Windows/System32/WindowsPowerShell/v1.0/powershell.exe
+ -NoProfile -NonInteractive -ExecutionPolicy Bypass
+ -Command "{0} {1}"
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; [Console]::InputEncoding = [System.Text.Encoding]::UTF8; 
+(Get-Process -ID $PID).SessionId
+/etc/wsl.conf
+automount
+System32
+Must provide a WSL path
+Invalid WSL path prefix
+WSL is not supported on 32-bit operating systems
+%WINDIR%\SysNative
+%WINDIR%\System32
+wsl.exe
+avares://gcmcore/UI/AvaloniaApp.axaml
+About Git Credential Manager
+Setup must be called before the Avalonia application is started.
+Not running on the dispatcher thread.
+Dispatcher has already started.
+Dispatcher is shutting down.
+Dispatcher has shut down.
+Dispatcher is not running.
+Dispatcher is already shutting down.
+Dispatcher has already shut down.
+_userNameTextBox
+_passwordTextBox
+avares://gcmcore/UI/Views/CredentialsView.axaml
+ShowProductHeader
+GcmLogo
+Description
+Username
+UserName
+Password
+Continue
+SignInCommand
+accent
+avares://gcmcore/UI/Views/DefaultAccountView.axaml
+Do you want to continue with the current account?
+HelpIcon
+Learn more about operating system accounts
+LearnMoreCommand
+hyperlink
+PersonIcon
+ContinueCommand
+Use another account
+OtherAccountCommand
+avares://gcmcore/UI/Views/DeviceCodeView.axaml
+Visit the URL below, sign in, and enter the following device code to continue.
+UserCode
+monospace
+VerificationUrl
+VerificationUrlCommand
+avares://gcmcore/UI/Views/EnableNtlmView.axaml
+NTLM support in Git has been disabled. Do you wish to re-enable NTLM authentication?
+WarningIcon
+NTLM authentication is no longer considered secure, and should only be used with trusted remotes.
+Learn more
+Yes - just this time
+OnceCommand
+Yes - always for this remote
+AlwaysCommand
+No - do not enable NTLM
+NoCommand
+avares://gcmcore/UI/Views/OAuthView.axaml
+Sign in with your browser
+SignInBrowserCommand
+ShowBrowserLogin
+Sign in with a code
+SignInDeviceCodeCommand
+ShowDeviceCodeLogin
+https://aka.ms/gcm/defaultaccount
+Device code authentication
+https://aka.ms/gcm/ntlm
+ShowDebugControls
+ShowCustomChromeOverride
+ShowCustomChrome
+ShowCustomWindowBorder
+ExtendClientArea
+Version {0}
+https://aka.ms/gcm
+window
+avares://gcmcore/UI/Controls/AboutWindow.axaml
+WindowBackgroundBrush
+VersionString
+Secure, cross-platform Git credential storage for popular Git hosting services.
+ProjectUrl
+Copyright 
+ GitHub
+_contentHolder
+avares://gcmcore/UI/Controls/DialogWindow.axaml
+DialogWindowBorderBrush
+PART_ContentPresenter
+DialogWindowCloseButtonBrush
+F1M8.583,8L13,12.424 12.424,13 8,8.583 3.576,13 3,12.424 7.417,8 3,3.576 3.576,3 8,7.417 12.424,3 13,3.576z
+!ShowCustomChrome
+DEBUG:
+Extend Client Area
+Show Custom Chrome
+avares://gcmcore/UI/Controls/ProgressWindow.axaml
+Show basic authentication prompt.
+--title
+Window title (optional).
+--resource
+Resource name or URL (optional).
+--username
+User name (optional).
+--no-logo
+Hide the Git Credential Manager logo and logotype.
+Enter your credentials
+Enter your credentials for '
+User cancelled dialog.
+default-account
+Show prompt to confirm use of the default OS account.
+User name to display.
+use_default_account
+device
+Show device code prompt.
+--code
+User code.
+Verification URL.
+Show OAuth authentication prompt.
+--browser
+Show browser authentication option.
+--device-code
+Show device code authentication option.
+Select a sign-in option
+Sign in to '
+browser
+devicecode
+{0} [0x{1:x}]
+U8StringMarshaler.Native
+U8StringMarshaler.Managed
+Invalid marshaler cookie
+Cannot marshal a non-string
+Failed to write item to store.
+Unknown error.
+LegacyGeneric:target=
+{0}://
+Failed to enumerate credentials.
+SOFTWARE\GitCredentialManager\Configuration
+Default setting found in registry: 
+D:\a\_work\1\s\src\shared\Core\Interop\Windows\WindowsSettings.cs
+TryGetExternalDefault
+resource
+Enter credentials for '
+Unable to determine credential buffer size.
+Unable to write to credential buffer.
+Failed to show credential prompt.
+Failed to unpack credential buffer.
+CONOUT$
+Not a TTY, abandoning write line.
+D:\a\_work\1\s\src\shared\Core\Interop\Windows\WindowsTerminal.cs
+WriteLine
+CONIN$
+Not a TTY, abandoning prompt.
+Prompt
+Failed to write prompt text
+Unable to read prompt input from standard input
+Failed to write final newline in secret prompting
+stream
+Failed to get initial console mode
+Setting console echo state to '{0}'
+Failed to set console mode
+Failed to restore console mode
+Dispose
+Cannot find GPG ID in '
+'; password store has not been initialized
+{1}service={0}{1}
+account={0}{1}
+File descriptor is invalid
+DISPLAY
+WAYLAND_DISPLAY
+/dev/tty
+D:\a\_work\1\s\src\shared\Core\Interop\Posix\PosixTerminal.cs
+Exiting POSIX terminal prompt read-loop unexpectedly (nr={0})
+Intercepted SIGINT during terminal prompt read-loop - sending SIGINT to self (pid={0})
+HOMEBREW_PREFIX
+Homebrew/Library/Homebrew/shims/shared/git
+Unknown keychain search result type CFTypeID: {0}.
+Could not update existing item
+Could not create new item
+ [Service: 
+, Account: 
+git-credential-manager
+configuration
+Default setting found in app preferences: 
+D:\a\_work\1\s\src\shared\Core\Interop\MacOS\MacOSSettings.cs
+Failed to read default setting from app preferences.
+Failed to get initial terminal settings
+Setting terminal echo state to '{0}'
+D:\a\_work\1\s\src\shared\Core\Interop\MacOS\MacOSTerminal.cs
+Failed to set terminal settings
+Failed to get restore terminal settings (error: {0:x}
+/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation
+kCFBooleanTrue
+kCFBooleanFalse
+cfString
+Object is not a CFString.
+Failed to convert CFString to C string.
+cfNumber
+Object is not a CFNumber.
+Failed to convert CFNumber to Int32.
+cfDict
+Object is not a CFDictionary.
+/System/Library/Frameworks/Security.framework/Security
+kSecClass
+kSecMatchLimit
+kSecReturnAttributes
+kSecReturnRef
+kSecReturnPersistentRef
+kSecClassGenericPassword
+kSecMatchLimitAll
+kSecMatchLimitOne
+kSecMatchItemList
+kSecAttrLabel
+kSecAttrAccount
+kSecAttrService
+kSecValueRef
+kSecValueData
+kSecReturnData
+The keychain does not exist.
+The keychain is not valid.
+Authorization/Authentication failed.
+The item already exists.
+The item cannot be found.
+Interaction with the Security Server is not allowed.
+User interaction is required.
+The attribute does not exist.
+Invalid config line format: 
+D:\a\_work\1\s\src\shared\Core\Interop\Linux\LinuxConfigParser.cs
+^\s*(?<key>[a-zA-Z0-9\.-]+)\s*=\s*(?<value>.+?)\s*(?:#.*)?$
+Failed to locate a utility to launch the default web browser.
+Opening browser using '
+D:\a\_work\1\s\src\shared\Core\Interop\Linux\LinuxSessionManager.cs
+Could not locate a shell execute handler for Linux - browser is not available.
+GetWebBrowserAvailable
+This is a WSL distribution, but Windows session 0 was detected - browser is not available.
+This is a WSL distribution - browser is available.
+VSCODE_IPC_HOOK_CLI
+BROWSER
+SSH_CONNECTION
+VSCode (Remote SSH) detected - browser is available.
+REMOTE_CONTAINERS
+VSCode (Dev Containers) detected - browser is available.
+VSCode (Remote Tunnel) detected - browser is not available.
+xdg-open
+gnome-open
+kfmclient
+wslview
+Default setting found in app configuration directory: 
+D:\a\_work\1\s\src\shared\Core\Interop\Linux\LinuxSettings.cs
+/etc/git-credential-manager/config.d
+Failed to read default setting from app configuration directory.
+ReadExternalConfiguration
+D:\a\_work\1\s\src\shared\Core\Interop\Linux\LinuxTerminal.cs
+Failed to search for credentials
+Failed to unlock item
+plain/text
+Failed to store credentials
+Failed to erase credentials
+Failed to load secret
+Failed to open secret service session
+com.microsoft.GitCredentialManager
+[Service: 
+Credential storage
+ICredentialStore instance is of type: 
+https://example.com/{0:N}
+Writing test credential...
+john.doe
+letmein123
+Reading test credential...
+ Failed
+Test credential object is null!
+Test credential account did not match!
+Expected: john.doe
+Actual: 
+Test credential password did not match!
+Expected: letmein123
+Deleting test credential...
+Environment
+OSType: 
+Reading environment variables...
+ Variables:
+File system
+Temporary directory is '
+Checking basic file I/O...
+Writing to temporary file '
+Hello, GCM!
+Reading from temporary file '
+File data did not match!
+Expected: Hello, GCM!
+Deleting temporary file '
+Testing IFileSystem instance...
+UserHomePath: 
+UserDataDirectoryPath: 
+GetCurrentDirectory(): 
+Getting Git version...
+Git version is '
+Locating current repository...
+Not inside a Git repository.
+Git repository at '
+Listing all Git configuration...
+config --list --show-origin
+Git configuration:
+Microsoft authentication (AAD/MSA)
+Broker is not enabled.
+Broker is enabled.
+Flow type is: {0}
+Gathering MSAL token cache data...
+CacheDirectory: 
+CacheFileName: 
+CacheFilePath: 
+MacKeyChainAccountName: 
+MacKeyChainServiceName: 
+KeyringCollection: 
+KeyringSchemaName: 
+KeyringSecretLabel: 
+KeyringAttribute1: (
+KeyringAttribute2: (
+Creating cache helper...
+Verifying MSAL token cache persistence...
+Networking
+Checking networking and HTTP stack...
+Creating HTTP client...
+IsNetworkAvailable: {0}
+Sending HEAD request to https://example.com...
+https://example.com
+Acquiring free TCP port...
+Failed to acquire local TCP port - cannot test local HTTP loopback connections!
+Testing local HTTP loopback connections...
+http://localhost:{0}/
+Creating new HTTP listener for 
+Waiting for loopback connection...
+Writing response...
+Waiting for response data...
+Loopback connection data did not match!
+Loopback connection data OK
+http://example.com
+http://httpforever.com
+Sending HEAD request to 
+ warning: HEAD request failed
+Modify the system-wide Git configuration instead of the current user
+configure
+Configure Git Credential Manager as the Git credential helper
+unconfigure
+Unconfigure Git Credential Manager as the Git credential helper
+diagnose
+Run diagnostics and gather logs to diagnose problems with Git Credential Manager
+--output
+Output directory for diagnostic logs.
+Running diagnostics...
+No diagnostics to run.
+gcm-diagnose.log
+Diagnose log at {0:s}Z
+Version: [!] Failed to get version information [!]
+Version: 
+------------
+Diagnostic: 
+Skipped: True
+[SKIP]
+  >>>>  
+Skipped: False
+Success: {0}
+Exception: None
+Exception:
+[FAIL]
+[ OK ]
+[!] Encountered an exception [!]
+[*] Diagnostic test log [*]
+Failed to copy additional file '
+Diagnostic summary: {0} passed, {1} skipped, {2} failed.
+Log files:
+Caution: Log files may include sensitive information - redact before sharing.
+Diagnostics indicate a possible problem with your installation.
+Please open an issue at https://aka.ms/gcm/bug and include log files.
+[Git] Erase a stored credential
+[Git] Return a stored credential
+Writing credentials to output:
+D:\a\_work\1\s\src\shared\Core\Commands\GetCommand.cs
+ExecuteInternalAsync
+hostProviderRegistry
+Missing 'protocol' input argument
+Invalid 'protocol' input argument (cannot be empty)
+Missing 'host' input argument
+Invalid 'host' input argument (cannot be empty)
+Start '
+' command...
+D:\a\_work\1\s\src\shared\Core\Commands\GitCommandBase.cs
+ExecuteAsync
+Detecting host provider for input:
+Host provider '
+' was selected.
+Commands for interacting with the 
+ host provider
+[Git] Store a credential
+Missing 'username' input argument
+Missing 'password' input argument
+{0}.{1}
+ is false/never; user interactivity has been disabled.
+D:\a\_work\1\s\src\shared\Core\Authentication\AuthenticationBase.cs
+ThrowIfUserInteractionDisabled
+Cannot prompt because user interactivity has been disabled.
+GIT_TERMINAL_PROMPT is 0; GUI prompts have been disabled.
+ThrowIfGuiPromptsDisabled
+Cannot show prompt because GUI prompts have been disabled.
+GIT_TERMINAL_PROMPT is 0; terminal prompts have been disabled.
+ThrowIfTerminalPromptsDisabled
+Cannot prompt because terminal prompts have been disabled.
+UI helper override specified as the empty string.
+TryFindHelperCommand
+UI helper override specified: '
+No default UI supplied.
+GCM_DEV_USELEGACYUIHELPERS
+devUseLegacyUiHelpers
+Using default legacy UI helper: '
+UI helper found at '
+UI helper was not found at '
+warning: could not find configured UI helper '
+Found in-box native UI helper: '
+dotnet
+dotnet.exe
+Unable to run UI helper '
+' without the .NET CLI.
+warning: could not find .NET CLI to run UI helper '
+Found in-box framework-dependent UI helper: '
+Found UI helper on PATH: '
+UI helper '
+warning: could not find UI helper '
+Starting helper process: 
+InvokeHelperAsync
+Failed to start helper process: {0} {1}
+Enter basic credentials for '{0}':
+Username: {0}
+GCM_UI_HELPER
+uiHelper
+git-credential-manager-ui
+ --resource {0}
+ --username {0}
+Missing 'username' in response
+Missing 'password' in response
+GCM_MSAUTH_FLOW
+msauthFlow
+Microsoft auth flow overriden to '
+D:\a\_work\1\s\src\shared\Core\Authentication\MicrosoftAuthentication.cs
+GetFlowType
+embedded
+system
+warning: unknown Microsoft Authentication flow type '
+'; using 'auto'
+.IdentityService
+.local
+msal.cache
+Microsoft.Developer.IdentityService
+MSALCache
+default
+MsalClientID
+1.0.0.0
+Invalid managed identity value.
+app.cache
+GitCredentialManager.MSAL
+AppCache
+GCM_MSAUTH_USEBROKER
+msauthUseBroker
+Embedded web view is not available without a desktop session.
+System web view is not available without a way to start a browser.
+System web view is not available for this service configuration.
+microsoft
+microsoftaccount
+azuredirectory
+liveconnect
+liveid
+Failed to open system web browser - using MSAL fallback
+GetSystemWebViewOptions
+factory
+Creating confidential client application for 
+CreateConfidentialClientApplicationAsync
+Using certificate with thumbprint: '{0}'
+Using client secret: '{0}'
+Service principal identity does not contain a certificate or client secret.
+Using provided parent window ID '{0}' for MSAL authentication dialogs.
+CreatePublicClientApplicationAsync
+Using console parent window ID '{0}' for MSAL authentication dialogs.
+Using progress parent window for MSAL authentication dialogs.
+Attempting to acquire token silently for current operating system account...
+GetAccessTokenSilentlyAsync
+Attempting to acquire token silently for user '
+No cached account found for user '
+Failed to acquire token silently; user interaction is required.
+Failed to acquire token silently.
+Failed to acquire token for user managed identity '{0:D}'.
+Failed to acquire token for system managed identity.
+GetTokenForManagedIdentityAsync
+Sending with X5C: '{0}'.
+GetTokenForServicePrincipalAsync
+Failed to acquire token for service principal '
+OS broker is not available or enabled.
+OS broker is available and enabled.
+GetTokenForUserAsync
+MSA passthrough is enabled.
+Performing interactive auth with broker...
+Performing interactive auth with embedded web view...
+Performing interactive auth with system web view...
+Performing interactive auth with device code...
+Configuring MSAL token cache...
+RegisterTokenCacheAsync
+Token cache integration is not supported on 
+Cannot persist Microsoft Authentication data securely!
+warning: cannot persist Microsoft authentication token cache securely!
+warning: there is a problem accessing the login Keychain - either manually lock and unlock the login Keychain, or restart the computer to remedy this
+warning: using plain-text fallback token cache
+Using fall-back plaintext token cache on Linux.
+error: failed to set up token cache!
+Failed to integrate with token cache!
+Token cache configured.
+Missing use_default_account in response
+Continue with current account (
+No, use another account
+Select an authentication method for '
+Web browser
+Device code
+ --code {0} 
+ --url {0}
+Must specify at least one OAuthAuthenticationModes
+ --browser
+ --device-code
+Missing 'mode' in response
+Unknown mode value in response '
+Browser authentication requires a desktop session
+User canceled device code authentication
+To complete authentication please visit {0} and enter the following code:
+integrated
+windows
+kerberos
+Re-enable NTLM support in Git?
+Yes - always for {0}
+HTTP: HEAD {0}
+D:\a\_work\1\s\src\shared\Core\Authentication\WindowsIntegratedAuthentication.cs
+GetAuthenticationTypesAsync
+HTTP: Response code ignored.
+Inspecting WWW-Authenticate headers...
+Negotiate
+Found WWW-Authenticate header for Negotiate
+Found WWW-Authenticate header for NTLM
+application/json
+D:\a\_work\1\s\src\shared\Core\Authentication\OAuth\OAuth2Client.cs
+Unknown OAuth error: {0}
+response_type
+client_id
+code_challenge_method
+code_challenge
+Extra query parameter '
+' would override required standard OAuth parameters.
+extraQueryParams
+redirect_uri
+Missing 'state' in response.
+Missing 'code' in response.
+get device code
+oauth2
+No device authorization endpoint has been configured for this client.
+get token by auth code
+grant_type
+authorization_code
+code_verifier
+client_secret
+urn:ietf:params:oauth:grant-type:device_code
+device_code
+authorization_pending
+slow_down
+get token by refresh token
+refresh_token
+challengeMethod
+Unknown PKCE code challenge method.
+authorizationEndpoint
+tokenEndpoint
+options
+Only localhost is supported as a redirect URI.
+unknown
+redirectUri
+error_description
+error_uri
+<!DOCTYPE html><html><head>
+<style>body{{font-family:sans-serif;}}dt{{font-weight:bold;}}dd{{margin-bottom:10px;}}</style>
+<title>Authentication failed</title></head>
+<body><h1>Authentication failed</h1><dl>
+<dt>Error:</dt><dd>{0}</dd>
+<dt>Description:</dt><dd>{1}</dd>
+<dt>URL:</dt><dd>{2}</dd>
+</dl></body></html>
+<!DOCTYPE html><html><head>
+<style>body{font-family:sans-serif;}dt{font-weight:bold;}dd{margin-bottom:10px;}</style>
+<title>Authentication successful</title></head>
+<body><h1>Authentication successful</h1><p>You can now close this page.</p></body>
+</html>
+ [{0}]
+Bindings
+avares://gcmcore/UI/Assets/Base.axaml
+avares://gcmcore/UI/Assets/ButtonHyperlink.axaml
+avares://gcmcore/UI/Assets/Controls.axaml
+avares://gcmcore/UI/Assets/Images.axaml
+SystemControlHyperlinkTextBrush
+:pointerover
+SystemControlHyperlinkBaseHighBrush
+:disabled
+TextControlForegroundDisabled
+SF Mono, Courier New, Courier, monospace
+:focus
+WindowBackgroundColor
+IconColor
+WarningColor
+IconBrush
+WarningBrush
+WarningPen
+InfoIcon
+Avalonia
+Avalonia.Base
+Avalonia.Animation
+Avalonia.Animation.Easings
+Avalonia.Controls
+Avalonia.Data
+Avalonia.Data.Converters
+Avalonia.Input
+Avalonia.Input.GestureRecognizers
+Avalonia.Input.TextInput
+Avalonia.Layout
+Avalonia.LogicalTree
+Avalonia.Media
+Avalonia.Media.Imaging
+Avalonia.Media.Transformation
+Avalonia.Styling
+Avalonia.Automation
+Avalonia.Controls.Embedding
+Avalonia.Controls.Presenters
+Avalonia.Controls.Primitives
+Avalonia.Controls.Shapes
+Avalonia.Controls.Templates
+Avalonia.Controls.Notifications
+Avalonia.Controls.Chrome
+Avalonia.Controls.Documents
+Avalonia.Markup
+Avalonia.Markup.Data
+Avalonia.Markup.Xaml.MarkupExtensions
+Avalonia.Markup.Xaml
+Avalonia.Markup.Xaml.Styling
+Avalonia.Markup.Xaml.Templates
+Avalonia.Themes.Fluent
+m 127.74219 0 c -4.21881 0 -8.43843 1.6093415 -11.65821 4.828125 L 92.875 28.041016 122.31445 57.482422 c 6.84425 -2.310946 14.68947 -0.761046 20.14258 4.693359 5.48141 5.488392 7.0192 13.400136 4.65039 20.267578 l 28.37696 28.376951 c 6.86492 -2.36579 14.78398 -0.83727 20.26562 4.6543 7.66374 7.66179 7.66374 20.07642 0 27.74023 -7.66486 7.66631 -20.07893 7.66631 -27.74805 0 -5.76254 -5.76724 -7.18821 -14.23373 -4.26953 -21.33398 l -26.46289 -26.464844 -0.002 69.640624 c 1.8684 0.92496 3.63248 2.16064 5.18945 3.71094 7.66148 7.6609 7.66148 20.07236 0 27.74609 -7.66374 7.66066 -20.08459 7.66066 -27.74023 0 -7.66262 -7.67305 -7.66262 -20.08452 0 -27.74609 1.89369 -1.89039 4.08382 -3.32218 6.42187 -4.28125 V 94.199219 c -2.33912 -0.955028 -4.52734 -2.375687 -6.42383 -4.28125 -5.80409 -5.799832 -7.20125 -14.319608 -4.22461 -21.447266 L 81.466797 39.443359 4.8300781 116.08203 c -6.4393305 6.44252 -6.4393305 16.88229 0 23.32031 L 42.5 177.07227 V 162.70508 C 35.078345 157.16403 29.678851 149.02425 27.328125 140.07617 19.76286 115.647 40.902921 87.908596 66.359375 88.345703 76.747705 88.003924 87.132367 91.94485 94.875 98.837891 c 18.78493 15.372969 17.87151 47.496839 -0.888672 62.484379 l -2.566406 1.3457 0.222656 12.46503 -8.160156 8.24395 v 34.67578 l 33.119138 33.11915 c 6.43505 6.43757 16.87041 6.43757 23.31446 0 L 251.17188 139.92969 c 6.43732 -6.4407 6.43732 -16.88336 0 -23.32227 l 0.002 -0.01 L 139.39453 4.828125 C 136.1788 1.6093415 131.96099 0 127.74219 0 Z
+M 67.333984 94.333984 A 35.333332 35.333332 0 0 0 32 129.66602 A 35.333332 35.333332 0 0 0 48.5 159.54688 L 48.5 234.5 L 54.5 240 L 67 240 L 79 228 L 79 216.5 L 73 210 L 79 203.5 L 73 197 L 79 191 L 73 185.5 L 85.5 173 L 85.5 159.92188 A 35.333332 35.333332 0 0 0 102.66602 129.66602 A 35.333332 35.333332 0 0 0 67.333984 94.333984 z M 66.777344 109 A 9 9 0 0 1 75.777344 118 A 9 9 0 0 1 66.777344 127 A 9 9 0 0 1 57.777344 118 A 9 9 0 0 1 66.777344 109 z M 54.5 168 L 60.5 173 L 60.5 234.5 L 54.5 228 L 54.5 168 z 
+M12 2.5a5.5 5.5 0 0 1 3.096 10.047 9.005 9.005 0 0 1 5.9 8.181.75.75 0 1 1-1.499.044 7.5 7.5 0 0 0-14.993 0 .75.75 0 0 1-1.5-.045 9.005 9.005 0 0 1 5.9-8.18A5.5 5.5 0 0 1 12 2.5ZM8 8a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z
+M13 7.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm-3 3.75a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 .75.75v4.25h.75a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1 0-1.5h.75V12h-.75a.75.75 0 0 1-.75-.75Z
+M12 1c6.075 0 11 4.925 11 11s-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1ZM2.5 12a9.5 9.5 0 0 0 9.5 9.5 9.5 9.5 0 0 0 9.5-9.5A9.5 9.5 0 0 0 12 2.5 9.5 9.5 0 0 0 2.5 12Z
+M10.97 8.265a1.45 1.45 0 0 0-.487.57.75.75 0 0 1-1.341-.67c.2-.402.513-.826.997-1.148C10.627 6.69 11.244 6.5 12 6.5c.658 0 1.369.195 1.934.619a2.45 2.45 0 0 1 1.004 2.006c0 1.033-.513 1.72-1.027 2.215-.19.183-.399.358-.579.508l-.147.123a4.329 4.329 0 0 0-.435.409v1.37a.75.75 0 1 1-1.5 0v-1.473c0-.237.067-.504.247-.736.22-.28.486-.517.718-.714l.183-.153.001-.001c.172-.143.324-.27.47-.412.368-.355.569-.676.569-1.136a.953.953 0 0 0-.404-.806C12.766 8.118 12.384 8 12 8c-.494 0-.814.121-1.03.265ZM13 17a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z
+M12,2 L22,20 L2,20 Z
+M12,8 L12,14
+M11,16 a1,1 0 1,0 2,0 a1,1 0 1,0 -2,0
+GitCredentialManager
+gcmcore
+GitCredentialManager.UI.ViewModels
+converters
+GitCredentialManager.UI.Converters
+sharedVms
+Git Credential Manager
+PersonalAccessToken
+git-credential-manager-ui
+/etc/git-credential-manager/config.d
+git-credential-manager
+suppressed
+wincredman
+keychain
+secretservice
+plaintext
+GCM_TRACE
+GCM_TRACE_SECRETS
+GCM_TRACE_MSAUTH
+GCM_DEBUG
+GCM_PROVIDER
+GCM_AUTHORITY
+GIT_TERMINAL_PROMPT
+GCM_ALLOW_WINDOWSAUTH
+GIT_TRACE2_EVENT
+GIT_TRACE2
+GIT_TRACE2_PERF
+no_proxy
+NO_PROXY
+https_proxy
+HTTPS_PROXY
+http_proxy
+all_proxy
+ALL_PROXY
+GCM_HTTP_PROXY
+GIT_SSL_NO_VERIFY
+GIT_SSL_CAINFO
+GCM_INTERACTIVE
+GCM_MODAL_PARENTHWND
+GCM_MSAUTH_FLOW
+GCM_MSAUTH_USEBROKER
+GCM_MSAUTH_USEDEFAULTACCOUNT
+GCM_NAMESPACE
+GCM_CREDENTIAL_STORE
+GCM_CREDENTIAL_CACHE_OPTIONS
+GCM_PLAINTEXT_STORE_PATH
+GCM_DPAPI_STORE_PATH
+GIT_EXEC_PATH
+GCM_GPG_PATH
+GCM_AUTODETECT_TIMEOUT
+GCM_GUI_PROMPT
+GCM_UI_HELPER
+GCM_OAUTH_AUTHMODES
+GCM_OAUTH_CLIENTID
+GCM_OAUTH_CLIENTSECRET
+GCM_OAUTH_REDIRECTURI
+GCM_OAUTH_SCOPES
+GCM_OAUTH_AUTHORIZE_ENDPOINT
+GCM_OAUTH_TOKEN_ENDPOINT
+GCM_OAUTH_DEVICE_ENDPOINT
+GCM_OAUTH_USE_CLIENT_AUTH_HEADER
+GCM_OAUTH_DEFAULT_USERNAME
+GCM_DEV_USELEGACYUIHELPERS
+GCM_GUI_SOFTWARE_RENDERING
+GCM_ALLOW_UNSAFE_REMOTES
+Bearer
+Negotiate
+application/json
+credential
+helper
+traceSecrets
+traceMsAuth
+provider
+authority
+allowWindowsAuth
+httpProxy
+httpsProxy
+useHttpPath
+interactive
+msauthFlow
+msauthUseBroker
+namespace
+credentialStore
+cacheOptions
+plaintextStorePath
+dpapiStorePath
+username
+autoDetectTimeout
+guiPrompt
+uiHelper
+devUseLegacyUiHelpers
+msauthUseDefaultAccount
+guiSoftwareRendering
+gpgPassStorePath
+allowUnsafeRemotes
+oauthAuthModes
+oauthClientId
+oauthClientSecret
+oauthRedirectUri
+oauthScopes
+oauthAuthorizeEndpoint
+oauthTokenEndpoint
+oauthDeviceEndpoint
+oauthUseClientAuthHeader
+oauthDefaultUserName
+schannelUseSSLCAInfo
+sslBackend
+sslVerify
+sslCAInfo
+sslAutoClientCert
+cookieFile
+allowNTLMAuth
+remote
+pushUrl
+trace2
+eventtarget
+normaltarget
+perftarget
+SOFTWARE\GitCredentialManager
+SOFTWARE\GitCredentialManager\Configuration
+SOFTWARE\Microsoft\Windows365
+IsW365Environment
+PartnerId
+https://aka.ms/gcm
+https://aka.ms/gcm/bug
+https://aka.ms/gcm/authority
+https://aka.ms/gcm/httpproxy
+https://aka.ms/gcm/tlsverify
+https://aka.ms/gcm/credstores
+https://aka.ms/gcm/wamadmin
+https://aka.ms/gcm/autodetect
+https://aka.ms/gcm/defaultaccount
+https://aka.ms/gcm/multipleusers
+https://aka.ms/gcm/unsaferemotes
+https://aka.ms/gcm/ntlm
+e90ee53c-94e2-48ac-9358-a874fb9e0662
+/login/oauth/authorize
+/login/oauth/access_token
+GIT_TRACE2_PARENT_SID
+********
+HH:mm:ss.ffffff
+|     |           |           |             
+\\wsl$\
+\\wsl.localhost\
+wsl.exe
+WSL_INTEROP
+/etc/wsl.conf
+wslview
+U8StringMarshaler.Native
+U8StringMarshaler.Managed
+LegacyGeneric:target=
+CONIN$
+CONOUT$
+advapi32.dll
+credui.dll
+kernel32.dll
+ole32.dll
+shell32.dll
+user32.dll
+Unknown error.
+PASSWORD_STORE_DIR
+/dev/tty
+/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation
+/System/Library/Frameworks/System.framework/System
+/System/Library/Frameworks/Security.framework/Security
+com.microsoft.GitCredentialManager
+service
+account
+plain/text
+libglib-2.0.so.0
+libgobject-2.0.so.0
+libsecret-1.so.0
+http://example.com
+http://httpforever.com
+https://example.com
+client_id
+client_secret
+redirect_uri
+oauth2
+response_type
+code_challenge
+code_challenge_method
+error_description
+error_uri
+grant_type
+authorization_code
+refresh_token
+code_verifier
+device_code
+urn:ietf:params:oauth:grant-type:device_code
+authorization_pending
+slow_down
+<!DOCTYPE html><html><head>
+<style>body{font-family:sans-serif;}dt{font-weight:bold;}dd{margin-bottom:10px;}</style>
+<title>Authentication successful</title></head>
+<body><h1>Authentication successful</h1><p>You can now close this page.</p></body>
+</html>
+<!DOCTYPE html><html><head>
+<style>body{{font-family:sans-serif;}}dt{{font-weight:bold;}}dd{{margin-bottom:10px;}}</style>
+<title>Authentication failed</title></head>
+<body><h1>Authentication failed</h1><dl>
+<dt>Error:</dt><dd>{0}</dd>
+<dt>Description:</dt><dd>{1}</dd>
+<dt>URL:</dt><dd>{2}</dd>
+</dl></body></html>
+VS_VERSION_INFO
+VarFileInfo
+Translation
+StringFileInfo
+000004b0
+CompanyName
+gcmcore
+FileDescription
+gcmcore
+FileVersion
+2.7.3.0
+InternalName
+gcmcore.dll
+LegalCopyright
+OriginalFilename
+gcmcore.dll
+ProductName
+gcmcore
+ProductVersion
+2.7.3+5fa7116896c82164996a609accd1c5ad90fe730a
+Assembly Version
+2.7.3.0
+Legal_policy_statement
+Microsof

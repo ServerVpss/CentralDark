@@ -1,0 +1,72 @@
+# Docker Sandbox Configuration Template
+# Used by OpenClaw for agent code execution isolation
+#
+# Variables to replace:
+#   {AGENT_NAME} - Agent identifier
+#   {WORKSPACE_DIR} - Host workspace directory
+#
+# Security principles (steipete ST_002 - Fail-Closed):
+#   - Alpine base (minimal attack surface)
+#   - Non-root user (nobody)
+#   - No network access (network: none)
+#   - Read-only root filesystem
+#   - Limited resources
+
+version: "3.8"
+
+services:
+  sandbox-{AGENT_NAME}:
+    image: alpine:3.19
+    user: "nobody"
+    read_only: true
+    network_mode: "none"
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+
+    # Workspace mount (only the agent's workspace)
+    volumes:
+      - type: bind
+        source: "{WORKSPACE_DIR}/{AGENT_NAME}"
+        target: /workspace
+        read_only: false
+      - type: tmpfs
+        target: /tmp
+        tmpfs:
+          size: 100M
+
+    # Security options
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - DAC_OVERRIDE  # Needed for file operations in workspace
+
+    # Working directory
+    working_dir: /workspace
+
+    # Install runtime tools (Node.js for skill execution)
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["apk add --no-cache nodejs npm && exec sh"]
+
+    # Healthcheck
+    healthcheck:
+      test: ["CMD", "echo", "ok"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

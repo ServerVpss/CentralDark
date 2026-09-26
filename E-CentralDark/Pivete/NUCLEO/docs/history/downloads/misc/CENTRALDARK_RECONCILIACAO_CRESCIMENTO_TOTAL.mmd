@@ -1,0 +1,18 @@
+flowchart TD
+    I[INTENÇÃO DO CHEFE] --> M[MEDIR CASA VIVA]
+    M --> INV[Inventariar fontes, arquivos, runtime e histórico]
+    INV --> CLS{Classificar}
+    CLS -->|já existe| REUSE[REUSE / REFINE]
+    CLS -->|duplicado| DEDUPE[DEDUPE + preservar ouro]
+    CLS -->|histórico| HIST[HISTORICAL → revalidar]
+    CLS -->|gap real| GAP[GAP_REAL]
+    REUSE --> OWNER[Owner canônico]
+    DEDUPE --> OWNER
+    HIST --> OWNER
+    GAP --> OWNER
+    OWNER --> DELTA[Menor delta suficiente]
+    DELTA --> WRITER[ONE_WRITER_PER_SCOPE]
+    WRITER --> TESTE[Teste + contraprova]
+    TESTE --> JUDGE[REALITY = JUDGE]
+    JUDGE -->|resíduo| M
+    JUDGE -->|sem resíduo material| FP[FIXED_POINT]

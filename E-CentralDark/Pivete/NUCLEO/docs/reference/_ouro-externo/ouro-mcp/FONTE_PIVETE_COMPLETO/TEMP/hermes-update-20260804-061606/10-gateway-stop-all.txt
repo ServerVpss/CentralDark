@@ -1,0 +1,2 @@
+﻿Ô£ô Gateway stopped (drained cleanly)
+Ô£ô Stopped 1 gateway process(es) across all profiles

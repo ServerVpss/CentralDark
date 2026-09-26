@@ -1,0 +1,66 @@
+schema: CENTRALDARK_PR_REPAIR
+target:
+  repository: ServerVpss/CentralDark
+  pr: 1388
+  base: main
+  same_pr_required: true
+  new_pr_forbidden: true
+  parallel_architecture_forbidden: true
+master_trigger: '!CENTRALDARK'
+objective: 'reconcile PR #1388 with current main, preserve all proven fixes, integrate CentralDark master architecture, close
+  every known gate without weakening any validator, commit and push only after current-head proof'
+invariants:
+  UNKNOWN_IS_NOT_PASS: true
+  REUSE_BEFORE_CREATE_REQUIRED: true
+  ARCHITECTURE_LOCK: true
+  EXECUTOR_CANNOT_SELF_APPROVE: true
+  JUDGE_DOES_NOT_MUTATE: true
+  GRAPH_IS_DERIVED_NOT_AUTHORITY: true
+  NEVER_CHANGE_EXPECTED_1_TO_STALE_12: true
+  PLAIN_FORCE_PUSH_FORBIDDEN: true
+  NO_GATE_WEAKENING: true
+  NO_V2_V3_V4: true
+known_lineage:
+- fact: 'PR #1388 branch may be behind main that already contains #1386 consolidation'
+  action: fetch main, compare merge-base, merge current main into shared PR branch if materially behind
+- fact: parallel_existing=12 on stale branch is not the new baseline
+  action: sync base then rerun validar-mapa; preserve expected canonical state
+- fact: AUTOLUPA_CANONICAL_SHA must match current .agents/skills/meta-lupa/SKILL.md blob
+  action: regenerate with git hash-object after base sync and after any SKILL.md change
+- fact: LEIA-ME-IA.md core was observed missing required governance markers
+  action: insert only missing canonical markers, idempotently; do not weaken adapter tests
+- fact: earlier fixes mentioned aiox, CRLF and adapter behavior
+  action: verify their deltas are already present after base reconciliation; do not duplicate or revert them
+execution:
+- PROVE_REPO_AND_PR_CONTEXT
+- PROVE_CLEAN_OR_CLASSIFY_WORKTREE
+- FETCH_ORIGIN_MAIN
+- COMPARE_MERGE_BASE
+- MERGE_MAIN_IF_MATERIAL_BASE_DRIFT
+- VERIFY_EARLIER_FIXES_PRESERVED
+- ENSURE_CORE_MARKERS
+- RECONCILE_META_LUPA_IDENTITY
+- INTEGRATE_EXISTING_CENTRALDARK_MASTER_DELTA
+- RUN_NEGATIVE_GATES
+- RUN_REPO_VALIDATORS
+- RUN_IDENTITY_GATES
+- RUN_ADAPTER_GATES
+- RUN_TESTS
+- COUNTERPROVE_CURRENT_HEAD
+- COMMIT_IF_NEEDED
+- RERUN_GATES_ON_COMMITTED_HEAD
+- PUSH_SAME_BRANCH
+- VERIFY_PR_HEAD_MOVED_TO_PUSHED_SHA
+- EMIT_RECEIPT
+stop_conditions:
+  PASS: all required gates pass on the exact committed HEAD and pushed PR head equals tested HEAD
+  BLOCKED: real external/auth/merge-conflict/human-authority boundary
+  FAIL: stable material contradiction or regression after remediation
+forbidden_shortcuts:
+- change validator expected value to accommodate stale branch
+- skip failing gate because local reasoning says runner is flaky
+- merge red PR
+- create parallel architecture or second owner
+- treat local PASS on a different HEAD as PR PASS
+- force-push plain
+- discard historical fixes without proving they are superseded

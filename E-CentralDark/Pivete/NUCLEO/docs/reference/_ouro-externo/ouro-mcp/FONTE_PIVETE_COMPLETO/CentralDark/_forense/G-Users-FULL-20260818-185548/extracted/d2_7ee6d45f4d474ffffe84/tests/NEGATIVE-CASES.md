@@ -1,0 +1,2 @@
+# Casos negativos obrigatórios
+1 auth sem permissão -> DENY; 2 sessão revogada falha; 3 token inválido sem fallback; 4 payload gigante rejeita; 5 rate limit; 6 erro sem stack/secret; 7 client com secret -> FAIL; 8 tabela exposta sem RLS -> FAIL; 9 grant excessivo -> FAIL; 10 worker tenta autoautorizar -> deny; 11 audit adulterado -> mismatch; 12 backup sem restore -> UNKNOWN; 13 control sem evidence -> UNPROVEN; 14 host sem medição -> UNKNOWN; 15 decoy com credencial real/outbound ofensivo -> FAIL; 16 outro Writer -> READ_ONLY.

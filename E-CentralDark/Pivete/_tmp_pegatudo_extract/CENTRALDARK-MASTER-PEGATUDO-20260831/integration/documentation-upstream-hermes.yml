@@ -1,0 +1,62 @@
+schema: CENTRALDARK_DOCUMENTATION_AND_HERMES_UPSTREAM_BRIDGE
+schema_version: 1
+master: CENTRALDARK
+owners:
+  documentation: DOCUMENTATION_HUB
+  update: DELTAUTIL
+  cli_shell: CENTRALDARK_CLI
+strategy:
+  hermes_upstream_role: UPSTREAM_RUNTIME_AND_CAPABILITY_SOURCE
+  centraldark_cli_role: OPERATOR_OWNED_SHELL_AND_CONTROL_PLANE
+  direct_blind_merge_into_custom_cli: false
+  preserve_centraldark_visual_shell: true
+  preserve_local_skills_and_governance: true
+update_sources:
+  - HERMES_UPDATE_CHECK
+  - HERMES_RELEASES
+  - HERMES_OFFICIAL_DOCS
+  - OPERATOR_SUPPLIED_URL
+  - LOCAL_UPSTREAM_CHECKOUT
+check_flow:
+  - MEASURE_CURRENT_HERMES_VERSION
+  - MEASURE_CENTRALDARK_CLI_REVISION
+  - HERMES_UPDATE_CHECK_READ_ONLY
+  - FETCH_RELEASE_OR_DIFF_METADATA
+  - CLASSIFY_UPSTREAM_CHANGES
+  - EXTRACT_USEFUL_CAPABILITIES
+  - MAP_TO_EXISTING_CENTRALDARK_OWNER
+  - BUILD_COMPATIBILITY_MATRIX
+  - PREVIEW_GAIN_RISK_BREAKAGE
+  - STAGE_IN_SANDBOX_OR_DISPOSABLE_WORKTREE
+  - RUN_UPSTREAM_TESTS_WHEN_AVAILABLE
+  - RUN_CENTRALDARK_GATES
+  - CODE_DOCUMENTATION_GATE
+  - COUNTERPROOF
+  - PROMOTE_ONLY_COMPATIBLE_DELTA
+  - RECEIPT
+apply_policy:
+  update_official_runtime_directly_only_after_proof: true
+  update_custom_shell_by_adapter_or_overlay: true
+  upstream_source_is_not_local_authority: true
+  upstream_new_feature_is_not_auto_required: true
+  breaking_change_requires_adapter_revision: true
+  backup_before_material_apply: true
+  rollback_required: true
+  deploy_or_restart_requires_explicit_intent: true
+button:
+  label_ptbr: Atualizar CentralDark
+  default_action: CHECK_ONLY
+  inputs:
+    - official_upstream
+    - url_optional
+  shows:
+    - versão atual
+    - atualização disponível
+    - capabilities novas
+    - capabilities removidas
+    - configurações novas
+    - risco de compatibilidade
+    - arquivos afetados
+    - testes necessários
+    - rollback
+  apply_requires_explicit_confirmation: true

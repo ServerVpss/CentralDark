@@ -1,0 +1,88 @@
+/goal
+
+MODO=FABLE_ADVERSARIAL_META_AUTOLUPA_EXECUCAO_UNICA
+ALVO=O ZIP ANEXADO INTEIRO
+
+AUTORIDADE=SEGREDO/CHEFE
+PAPEL=ADVERSARIO_READ_ONLY_ATE_PROVAR_CAUSA
+
+NÃO CONFIE NO NOME DO ARQUIVO, NO RECIBO, NO HASH INFORMADO, EM QUALQUER CONTAGEM VERDE OU NO RELATO DO EXECUTOR.
+ABRA O ZIP REAL, EXTRAIA EM DIRETÓRIO LIMPO E MEÇA O QUE ELE ENTREGA.
+
+APLIQUE EM UMA ÚNICA MISSÃO COESA:
+
+1. Fixe SHA-256, tamanho, total de arquivos e árvore extraída.
+2. Leia SKILL.md, manifest.json, runtime, testes, skil.txt e AUDITORIA.
+3. Liste as promessas operacionais do pacote.
+4. Para cada promessa, crie uma contraprova executável que deveria falhar no pacote antigo.
+5. Reproduza todas as contraprovas nomeadas de tests/contraprovas-p0.test.mjs e as provas de learning em policy-learning.test.mjs.
+6. Procure lacunas novas fora do denominador atual: positivo, negativo, limite, concorrência, symlink/junction, suíte vazia, receipt adulterado, sanitização e proveniência.
+7. Separe rigorosamente:
+   - BUG ATUAL no território local do Pivete;
+   - RISCO CONDICIONADO a outro território;
+   - HARDENING OPCIONAL;
+   - CHECKLIST DECORATIVO sem contraprova.
+8. Agrupe achados por INVARIANTE VIOLADO e CAUSA COMUM. Não remende na ordem em que apareceram.
+9. Se encontrar falha real, entregue:
+   ERRO_EXATO
+   CONTRAPROVA
+   CAUSA
+   IMPACTO NO TERRITÓRIO REAL
+   CORREÇÃO MÍNIMA
+   TESTE PERMANENTE
+10. Não altere teste para aceitar código quebrado.
+11. Não leia .env, secrets, tokens, sessions, SSH ou qualquer valor de credencial.
+12. Não faça merge, deploy, VPS, produção, force-push, rebase ou reset --hard.
+13. Se nenhum mutante novo sobreviver, declare somente o que foi efetivamente provado; não use “100%”.
+
+GATES OBRIGATÓRIOS:
+
+- missão ausente não pode ser declarada preservada;
+- FAIL/SKIPPED/UNKNOWN/fora-do-escopo="SIM" não podem equivaler a zero;
+- zero testes não pode produzir PASS;
+- realpath fora da raiz deve ser bloqueado;
+- sourceIds placeholders, receipt ausente/adulterado e HEAD não-SHA não promovem learning;
+- chamadas simultâneas do mesmo eventId executam uma vez;
+- quebra de linha não injeta campos no delta;
+- github_pat/JWT e demais tokens são redigidos;
+- INCONCLUSIVO não avança checkpoint;
+- maxMatches externo nunca ultrapassa 3;
+- manifest não aceita paths duplicados;
+- learning concorrente gera um único registro;
+- lock envelhecido não pode ser roubado enquanto o PID dono estiver vivo;
+- aprendizado armazenado adulterado não pode ser reutilizado;
+- chaves sensíveis em camelCase devem ser redigidas;
+- AUDITORIA/FILE-HASHES.sha256 deve detectar alteração, remoção e arquivo novo não auditado.
+
+PROVA FINAL:
+
+node runtime/orchestrator.mjs --self-map
+node runtime/orchestrator.mjs --verify
+node --test tests/contraprovas-p0.test.mjs
+
+SAÍDA:
+
+VEREDITO=APROVADO|CORRIGIR|BLOQUEAR
+ZIP_SHA256=
+FILES_TOTAL=
+MANIFEST_ENTRIES=
+SELF_MAP=
+NODE_CHECK=
+SHELL_SYNTAX=
+TEST_FILES=
+TESTS_TOTAL=
+PASS=
+FAIL=
+SKIPPED=
+MUTANTES_ANTIGO=
+MUTANTES_ATUAL=
+BUGS_ATUAIS=
+RISCOS_CONDICIONADOS=
+HARDENING_OPCIONAL=
+FALSO_VERDE_BLOQUEADO=
+AUDIT_HASH_MANIFEST=
+LEARNING_RECEIPTS=
+LEARNING_TAMPER_REJECTED=
+LIVE_LOCK_OWNER_PRESERVED=
+CAMELCASE_SECRET_KEYS_REDACTED=
+RISCO_RESIDUAL=

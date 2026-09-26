@@ -1,0 +1,670 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\bin\git-credential-manager.exe
+
+!This program cannot be run in DOS mode.
+`.rsrc
+v4.0.30319
+#Strings
+ConfiguredTaskAwaitable`1
+Task`1
+Avalonia.Win32
+UseWin32
+ITrace2
+get_Trace2
+<Module>
+GitCredentialManager.UI
+Avalonia.Skia
+UseSkia
+Avalonia
+GitLab
+mscorlib
+GitHub
+RunAsync
+get_MainThread
+CreateSid
+LogToTrace
+_exitCode
+IDisposable
+set_Name
+gcmcore
+Configure
+Avalonia.Base
+ApplicationBase
+Dispose
+EmbeddedAttribute
+CompilerGeneratedAttribute
+AttributeUsageAttribute
+DebuggableAttribute
+AssemblyTitleAttribute
+TargetFrameworkAttribute
+AssemblyFileVersionAttribute
+AssemblyInformationalVersionAttribute
+AssemblyConfigurationAttribute
+RefSafetyRulesAttribute
+CompilationRelaxationsAttribute
+AssemblyProductAttribute
+AssemblyCompanyAttribute
+RuntimeCompatibilityAttribute
+git-credential-manager.exe
+Initialize
+System.Threading
+Avalonia.Logging
+System.Runtime.Versioning
+get_ApplicationPath
+LogEventLevel
+Program
+System
+<0>__AppMain
+Version
+Application
+System.Reflection
+Shutdown
+BuildAvaloniaApp
+RegisterProvider
+IHostProvider
+GitLabHostProvider
+GitHubHostProvider
+GenericHostProvider
+AzureReposHostProvider
+BitbucketHostProvider
+AppBuilder
+GitCredentialManager
+ProcessManager
+git-credential-manager
+Dispatcher
+ConfiguredTaskAwaiter
+GetAwaiter
+System.Diagnostics
+System.Runtime.CompilerServices
+!AvaloniaResources
+DebuggingModes
+Microsoft.CodeAnalysis
+System.Threading.Tasks
+Avalonia.Controls
+LoggingExtensions
+Win32ApplicationExtensions
+SkiaApplicationExtensions
+Microsoft.AzureRepos
+AttributeTargets
+Object
+Atlassian.Bitbucket
+DateTimeOffset
+ConfigureAwait
+GetResult
+Environment
+ParameterizedThreadStart
+ICommandContext
+get_UtcNow
+HostProviderPriority
+WrapNonExceptionThrows
+.NETFramework,Version=v4.7.2
+FrameworkDisplayName
+.NET Framework 4.7.2
+git-credential-manager
+Release
+2.7.3.0
+.2.7.3+5fa7116896c82164996a609accd1c5ad90fe730a
+AllowMultiple
+Inherited
+/!__AvaloniaDefaultWindowIcon
+/!AvaloniaResourceXamlInfoq
+V,220R
+V332210R
+V3232322)Q
+V3323232210Q
+V323232323220Q
+Z3323232323222)R
+4322323232323220Q
+4232122222323232)R
+323232*=<-2221222)Q
+22321B
+M03232210Q
+K2232322)Q
+,2322322*Q
+523232232)Q
+-232232322)R
+j22323223232)Q
+.2321232323210Q
+Z432,i
+.23223232321232)Q
+,223222212212322)R
+,232233<<31223232)Q
+,3232C
+M22123220Q
+J2323232)R
+022323220lK222N
+-23223232EE232H
++32323122Kl012>
+V22232321,o
+.23231223V
+YYM-22323213V
+/02223231223V
+X4321T
+/12232323213V
+sF2222C
+/22323231223V
+Q)23@GIG922223<
+;12232323213V
+Q022323232322Y
+;22323231223V
+Q)2323232322
+-2232323213V
+Q0223212322q
+,323231223V
+Q)2323220.
+V322323213V
+Q)22230.
+.23231223V
+Q)220.
+hkL522323213V
+/02223231223V
+/22322323213V
+/03223231223V
+;22323223213V
+/02232231223V
+Q)232132113V
+Q)1112223V
+Q)22223V
+R022,V
+BIDATx
+\PG  .
+reee0u
+D@=QE 
+w7d.?v
+8^5#u`]
+=z4466
+CECJ~r+
+_=V8;_@
+LKi_r'
+OOO OOO DDD
+ccc&UUU
+LLLNJJJ
+c^Be,Q
+c]@A'N
+`Z=\.N
+icFA'N
+[U8\-N
+plYD>`
+pkUF?\
+jjL./N
+PK,H-N
+QL/H0O
+PL9K:_
+WUImPON
+PL0&D^
+WTB^JJH
+\YEeBg
+XT>aLLL
+ojN3;Y
+VQ7HOl
+OOOPWWWxJJJ
+ZU;GA^
+VVVlLLL
+idD(9Z
+\X@SLLL
+nnnJPPP
+YT;M>e
+\X?BNNI
+c`KjQPK
+zt_!=^
+gcJPRQG
+[W>`QN@
+gaA8kw
+\V8 mgT
+PPP RRR
+UUUYPPP
+```_III
+kkkUHHH
+kkkUHHH
+kkkUHHH
+idG1+M
+kkkUHHH
+[U8j,O
+kkkUHHH
+[U8H,P
+kkkUHHH
+d_AO,P
+kkkUHHH
+ZT7d+N
+kkkUHHH
+okT6,Q
+kkkUGGG
+kkkdNNN
+%VS=wPOI
+0XT;vMLF
+c\@;OME
+^X8G6T
+QQQGOOO
+zd]CDONE
+ccc?TTT
+eee8NNN
+VT7N9X
+1_X9ITP8
+c]>UL_
+SSS_LLL
+MMMVFFC
+QQQJLLL
+NNMmHE1
+LLL[VVV
+JF.EHb
+KKK[```
+KKKyMMM
+LK=c4T
+KKK[```
+JJJyMMM
+KKK[```
+JJJyMMM
+KKK[```
+JJJyLLL
+LJI[```
+JJJyMMM
+QH<[```
+JJJyLLL
+QF5\``^
+JJJyLLL
+ULHIhdc`
+HJPm]\X
+INbd-N
+RMIjNMK
+JMP^4V
+[cd?PNB
+oWR7xKJF
+XW7f3S
+SSSDPPP
+\\\VMMM
+VP3w6X
+ZYh@PNA
+UUUESSS
+pa[F_QOC
+dbXW6V
+qW[eETO3
+RRRtKKJ
+QQQtLLL
+QQQtLKK
+QQQtLKK
+YV<y-P
+QQQtJJI
+XS;~,O
+QQQtJJJ
+SVba4V
+XULgMLA
+TTTFNNN
+UUUmlll
+PUjd2R
+YXH|;Y
+[[[ MMLrOJFDcH5
+QQQ^PPP
+S?.?6H
+UUU[TTT
+UUU[TTT
+VVQ[TTT
+XUD[TTR
+3NRnuWVQ
+RRRXNNN
+TTSyMLF
+KJ@i>9;
+OOO6PPP
+RRO5UUU
+WWA5TTT
+YVB8UTN
+SSSkMLG
+<AvaloniaResourceXamlInfo xmlns="http://schemas.datacontract.org/2004/07/Avalonia.Markup.Xaml.PortableXaml" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"><ClassToResourcePathIndex xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/></AvaloniaResourceXamlInfo>
+D:\a\_work\1\s\out\shared\Git-Credential-Manager\obj\Release\net472\win-x64\git-credential-manager.pdb
+SHA256
+V,220R
+V332210R
+V3232322)Q
+V3323232210Q
+V323232323220Q
+Z3323232323222)R
+4322323232323220Q
+4232122222323232)R
+323232*=<-2221222)Q
+22321B
+M03232210Q
+K2232322)Q
+,2322322*Q
+523232232)Q
+-232232322)R
+j22323223232)Q
+.2321232323210Q
+Z432,i
+.23223232321232)Q
+,223222212212322)R
+,232233<<31223232)Q
+,3232C
+M22123220Q
+J2323232)R
+022323220lK222N
+-23223232EE232H
++32323122Kl012>
+V22232321,o
+.23231223V
+YYM-22323213V
+/02223231223V
+X4321T
+/12232323213V
+sF2222C
+/22323231223V
+Q)23@GIG922223<
+;12232323213V
+Q022323232322Y
+;22323231223V
+Q)2323232322
+-2232323213V
+Q0223212322q
+,323231223V
+Q)2323220.
+V322323213V
+Q)22230.
+.23231223V
+Q)220.
+hkL522323213V
+/02223231223V
+/22322323213V
+/03223231223V
+;22323223213V
+/02232231223V
+Q)232132113V
+Q)1112223V
+Q)22223V
+R022,V
+BIDATx
+\PG  .
+reee0u
+D@=QE 
+w7d.?v
+8^5#u`]
+=z4466
+CECJ~r+
+_=V8;_@
+LKi_r'
+OOO OOO DDD
+ccc&UUU
+LLLNJJJ
+c^Be,Q
+c]@A'N
+`Z=\.N
+icFA'N
+[U8\-N
+plYD>`
+pkUF?\
+jjL./N
+PK,H-N
+QL/H0O
+PL9K:_
+WUImPON
+PL0&D^
+WTB^JJH
+\YEeBg
+XT>aLLL
+ojN3;Y
+VQ7HOl
+OOOPWWWxJJJ
+ZU;GA^
+VVVlLLL
+idD(9Z
+\X@SLLL
+nnnJPPP
+YT;M>e
+\X?BNNI
+c`KjQPK
+zt_!=^
+gcJPRQG
+[W>`QN@
+gaA8kw
+\V8 mgT
+PPP RRR
+UUUYPPP
+```_III
+kkkUHHH
+kkkUHHH
+kkkUHHH
+idG1+M
+kkkUHHH
+[U8j,O
+kkkUHHH
+[U8H,P
+kkkUHHH
+d_AO,P
+kkkUHHH
+ZT7d+N
+kkkUHHH
+okT6,Q
+kkkUGGG
+kkkdNNN
+%VS=wPOI
+0XT;vMLF
+c\@;OME
+^X8G6T
+QQQGOOO
+zd]CDONE
+ccc?TTT
+eee8NNN
+VT7N9X
+1_X9ITP8
+c]>UL_
+SSS_LLL
+MMMVFFC
+QQQJLLL
+NNMmHE1
+LLL[VVV
+JF.EHb
+KKK[```
+KKKyMMM
+LK=c4T
+KKK[```
+JJJyMMM
+KKK[```
+JJJyMMM
+KKK[```
+JJJyLLL
+LJI[```
+JJJyMMM
+QH<[```
+JJJyLLL
+QF5\``^
+JJJyLLL
+ULHIhdc`
+HJPm]\X
+INbd-N
+RMIjNMK
+JMP^4V
+[cd?PNB
+oWR7xKJF
+XW7f3S
+SSSDPPP
+\\\VMMM
+VP3w6X
+ZYh@PNA
+UUUESSS
+pa[F_QOC
+dbXW6V
+qW[eETO3
+RRRtKKJ
+QQQtLLL
+QQQtLKK
+QQQtLKK
+YV<y-P
+QQQtJJI
+XS;~,O
+QQQtJJJ
+SVba4V
+XULgMLA
+TTTFNNN
+UUUmlll
+PUjd2R
+YXH|;Y
+[[[ MMLrOJFDcH5
+QQQ^PPP
+S?.?6H
+UUU[TTT
+UUU[TTT
+VVQ[TTT
+XUD[TTR
+3NRnuWVQ
+RRRXNNN
+TTSyMLF
+KJ@i>9;
+OOO6PPP
+RRO5UUU
+WWA5TTT
+YVB8UTN
+SSSkMLG
+<?xml version="1.0" encoding="utf-8"?>
+<assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
+  <assemblyIdentity version="2.7.3.0" name="git-credential-manager"/>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!-- Windows 10 and Windows 11 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/>
+      <!-- Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/>
+      <!-- Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!-- Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+    </application>
+  </compatibility>
+</assembly>
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 20110
+250619182135Z
+260617182135Z0t1
+Washington1
+Redmond1
+Microsoft Corporation1
+Microsoft Corporation0
+4(_si0
+I0G1-0+
+$Microsoft Ireland Operations Limited1
+230012+5053620
+Chttp://www.microsoft.com/pkiops/crl/MicCodSigPCA2011_2011-07-08.crl0a
+Ehttp://www.microsoft.com/pkiops/certs/MicCodSigPCA2011_2011-07-08.crt0
+eV!g*!
+Washington1
+Redmond1
+Microsoft Corporation1200
+)Microsoft Root Certificate Authority 20110
+110708205909Z
+260708210909Z0~1
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 20110
+Ihttp://crl.microsoft.com/pki/crl/products/MicRooCerAut2011_2011_03_22.crl0^
+Bhttp://www.microsoft.com/pki/certs/MicRooCerAut2011_2011_03_22.crt0
+3http://www.microsoft.com/pkiops/docs/primarycps.htm0@
+*?*kXIc
+QEX82q'
+WqVNHE
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 2011
+1|[h6z
+https://www.microsoft.com 0
+nH2:#@J
+20260211154346.048Z0
+Washington1
+Redmond1
+Microsoft Corporation1-0+
+$Microsoft Ireland Operations Limited1'0%
+nShield TSS ESN:3605-05E0-D9471%0#
+Microsoft Time-Stamp Service
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+250814184817Z
+261113184817Z0
+Washington1
+Redmond1
+Microsoft Corporation1-0+
+$Microsoft Ireland Operations Limited1'0%
+nShield TSS ESN:3605-05E0-D9471%0#
+Microsoft Time-Stamp Service0
+Z^:4x3s
+Nhttp://www.microsoft.com/pkiops/crl/Microsoft%20Time-Stamp%20PCA%202010(1).crl0l
+Phttp://www.microsoft.com/pkiops/certs/Microsoft%20Time-Stamp%20PCA%202010(1).crt0
+Washington1
+Redmond1
+Microsoft Corporation1200
+)Microsoft Root Certificate Authority 20100
+210930182225Z
+300930183225Z0|1
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+3http://www.microsoft.com/pkiops/Docs/Repository.htm0
+Ehttp://crl.microsoft.com/pki/crl/products/MicRooCerAut_2010-06-23.crl0Z
+>http://www.microsoft.com/pki/certs/MicRooCerAut_2010-06-23.crt0
+as.,k{n?,
+Washington1
+Redmond1
+Microsoft Corporation1-0+
+$Microsoft Ireland Operations Limited1'0%
+nShield TSS ESN:3605-05E0-D9471%0#
+Microsoft Time-Stamp Service
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+20260211121408Z
+20260212121408Z0t0:
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 2010
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 2010
+yR;P#e
+->_A`93
+AppMain
+D:\a\_work\1\s\src\shared\Git-Credential-Manager\Program.cs
+/ P6pL
+,/KPip
+/-P?pR
+/ P6pL
+,/KPip
+/-P?pR
+/ P6pL
+,/KPip
+/-P?pR
+/ P6pL
+,/KPip
+/-P?pR
+/ P6pL
+,/KPip
+/-P?pR
+/ P6pL
+,/KPip
+/-P?pR
+VS_VERSION_INFO
+VarFileInfo
+Translation
+StringFileInfo
+000004b0
+CompanyName
+git-credential-manager
+FileDescription
+git-credential-manager
+FileVersion
+2.7.3.0
+InternalName
+git-credential-manager.exe
+LegalCopyright
+OriginalFilename
+git-credential-manager.exe
+ProductName
+git-credential-manager
+ProductVersion
+2.7.3+5fa7116896c82164996a609accd1c5ad90fe730a
+Assembly Version
+2.7.3.0
+Legal_policy_statement
+Microsof

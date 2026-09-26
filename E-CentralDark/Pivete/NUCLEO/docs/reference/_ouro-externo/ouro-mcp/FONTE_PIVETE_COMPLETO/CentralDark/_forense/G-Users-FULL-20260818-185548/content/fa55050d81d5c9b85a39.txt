@@ -1,0 +1,5 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@radix-ui\react-use-previous\dist\index.d.ts
+
+declare function usePrevious<T>(value: T): T;
+
+export { usePrevious };

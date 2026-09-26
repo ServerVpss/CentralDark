@@ -1,0 +1,14 @@
+﻿
+Path                                                                                     Hash                                                            
+----                                                                                     ----                                                            
+E:\CentralDark\Pivete\TEMP\hermes-update-preflight-20260804-060822\00-resumo.txt         E4C2B1ACB23CCB2FDED283BE11A025DEA75139158AC22BEEDE6DA25FF988ECAA
+E:\CentralDark\Pivete\TEMP\hermes-update-preflight-20260804-060822\01-hermes-path.txt    A6D7214EAE90358BCFF4291FE01F527204FA2168ED062162B7A5086605146592
+E:\CentralDark\Pivete\TEMP\hermes-update-preflight-20260804-060822\02-version.txt        9F5FAC3DF89577D627AE74CC7C70F340ABD3C73A87C1CBF4E179E7BFCDA161BC
+E:\CentralDark\Pivete\TEMP\hermes-update-preflight-20260804-060822\03-update-check.txt   33006615B50D1A91089B67B289D28DF55B1E3BDD4ED49553843A20D45C4A0BC1
+E:\CentralDark\Pivete\TEMP\hermes-update-preflight-20260804-060822\04-profiles.txt       10F20A73B3F1F1CFC0513848E0320C3E6CA56B716A660A749945CB8772F0A7C6
+E:\CentralDark\Pivete\TEMP\hermes-update-preflight-20260804-060822\05-status-all.txt     13AD558E84EAD6970F7CBD7914620BCF05A260716E4A731F2F0A4C9FC4058FDA
+E:\CentralDark\Pivete\TEMP\hermes-update-preflight-20260804-060822\06-gateway-status.txt F29AB0A10C444E4F499239036F013AAB507EDAD783AFE46B33DFFA169CB1B58C
+E:\CentralDark\Pivete\TEMP\hermes-update-preflight-20260804-060822\07-config-path.txt    5A6EEB8140A5B1C0822AE29A6F8B2025815CB46F1F240FDA341B4F9BB510D223
+E:\CentralDark\Pivete\TEMP\hermes-update-preflight-20260804-060822\08-processos.txt      BE53F9015E6E962C94A2040EAF5C58D510FDD5D2F49B1EC9C7B62B98369E8F79
+
+

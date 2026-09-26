@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\primitives\composer\ComposerDictate.d.ts.map
+
+{"version":3,"file":"ComposerDictate.d.ts","names":[],"sources":["../../../src/primitives/composer/ComposerDictate.ts"],"mappings":";;;cASM,kBAAA;AAAA,kBAMW,wBAAA;EAAA,KACH,OAAA,GAAU,mBAAA;EAAA,KACV,KAAA,GAAQ,iBAAA,QAAyB,kBAAA;AAAA;;AAJ9C;AAED;;;;;;;;;;cAiBa,wBAAA,kBAAwB,yBAAA,CAAA,IAAA,CAAA,IAAA,iBAAA,eAAA,CAAA,iBAAA,oBAAA,oBAAA,CAAA,iBAAA"}

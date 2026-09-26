@@ -1,0 +1,10 @@
+{
+  "schema": "centraldark.executor.boot.v1",
+  "timestamp_utc": "2026-08-14T23:41:03.333244+00:00",
+  "package": {
+    "mission_sha256": "e4d971ec5593776e08e37dea3d92a5cf1e582728c57944d98f5005095e77ee1a",
+    "master_sha256": "5f142b1552fa8cc74d6783873e58151f68870106f1439f268434fb279d8dbbb5"
+  },
+  "repo": null,
+  "status": "BLOCKED_REPO_NOT_FOUND"
+}

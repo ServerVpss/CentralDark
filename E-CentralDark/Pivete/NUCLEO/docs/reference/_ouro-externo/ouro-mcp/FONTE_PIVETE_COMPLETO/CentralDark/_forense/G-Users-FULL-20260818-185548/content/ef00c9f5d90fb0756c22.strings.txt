@@ -1,0 +1,492 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\lang\menu_hu_hu.iso_8859-2.vim
+
+" Menu Translations:
+Hungarian (Magyar)
+" Original Translation:
+" Maintained By:
+Kontra Gergely <kgergely@mcl.hu>
+" Last Change:
+2020 Apr 23
+" This file was converted from menu_hu_hu.iso_8859-2.vim.  See there for
+" remarks.
+" Generated from menu_hu_hu.utf-8.vim, DO NOT EDIT
+" Quit when menu translations have already been done.
+if exists("did_menu_trans")
+  finish
+let did_menu_trans = 1
+let s:keepcpo= &cpo
+set cpo&vim
+scriptencoding iso-8859-2
+" Help menu
+menutrans &Help
+menutrans &Overview<Tab><F1>
+&ttekint
+s<Tab><F1>
+menutrans &How-to\ links
+&HOGYAN\ linkek
+menutrans &User\ Manual
+menutrans &Credits
+&Szerz
+menutrans Co&pying
+menutrans O&rphans
+menutrans &Find\.\.\.
+Ke&res
+s\.\.\.
+menutrans &Version
+&Verzi
+menutrans &About
+" File menu
+menutrans &File
+menutrans &Open\.\.\.<Tab>:e
+Meg&nyit
+s\.\.\.<Tab>:e
+menutrans Sp&lit-Open\.\.\.<Tab>:sp
+Megnyit
+j\ a&blakba\.\.\.<Tab>:sp
+menutrans &New<Tab>:enew
+j\ dok&umentum<Tab>:enew
+menutrans &Close<Tab>:close
+s<Tab>:close
+menutrans &Save<Tab>:w
+s<Tab>:w
+menutrans Split\ &Diff\ with\.\.\.
+ssze&hasonl
+s\.\.\.
+menutrans Split\ Patched\ &By\.\.\.
+sszehasonl
+s\ &patch\ -el\.\.\.
+menutrans Save\ &As\.\.\.<Tab>:sav
+nt\.\.\.<Tab>:w
+menutrans &Print
+Nyomt&at
+menutrans Sa&ve-Exit<Tab>:wqa
+s\ k&il
+s<Tab>:wqa
+menutrans E&xit<Tab>:qa
+s<Tab>:qa
+" Edit menu
+menutrans &Edit
+S&zerkeszt
+menutrans &Undo<Tab>u
+&Visszavon
+s<Tab>u
+menutrans &Redo<Tab>^R
+&gis<Tab>^R
+menutrans Rep&eat<Tab>\.
+t<Tab>\.
+menutrans Cu&t<Tab>"+x
+s<Tab>"+x
+menutrans &Copy<Tab>"+y
+s<Tab>"+y
+menutrans &Paste<Tab>"+gP
+&Beilleszt
+s<Tab>"+gP
+menutrans Put\ &Before<Tab>[p
+s\ e&l
+<Tab>[p
+menutrans Put\ &After<Tab>]p
+<Tab>]p
+menutrans &Delete<Tab>x
+s<Tab>x
+menutrans &Select\ all<Tab>ggVG
+sszes\ kijel
+se<Tab>ggvG
+menutrans &Find\.\.\.
+Ke&res
+s\.\.\.
+menutrans Find\ and\ Rep&lace\.\.\.
+s\ c&sere\.\.\.
+menutrans Find\ and\ Rep&lace<Tab>:%s
+s\ c&sere<Tab>:%s
+menutrans Find\ and\ Rep&lace
+s\ c&sere
+menutrans Find\ and\ Rep&lace<Tab>:s
+s\ c&sere<Tab>:s
+menutrans Settings\ &Window
+&Ablak\ be
+menutrans &Global\ Settings
+nos\ be
+menutrans F&ile\ Settings
+jl\ be
+menutrans C&olor\ Scheme
+menutrans &Keymap
+Billent&y
+zetkioszt
+" Edit.Global Settings
+menutrans Toggle\ Pattern\ &Highlight<Tab>:set\ hls!
+&Minta\ kiemel
+s\ BE/KI<Tab>:set\ hls!
+menutrans Toggle\ &Ignore-case<Tab>:set\ ic!
+&Kis/nagybet
+\ azonos/k
+<Tab>:set\ ic!
+menutrans Toggle\ &Showmatch<Tab>:set\ sm!
+r\ mutat
+sa\ BE/KI<Tab>:set\ sm!
+menutrans &Context\ lines
+&Kurzor\ ablak\ sz
+menutrans &Virtual\ Edit
+&Virtu
+lis\ szerkeszt
+menutrans Never
+menutrans Block\ Selection
+&Blokk\ kijel
+menutrans Insert\ mode
+veg\ bevitelekor
+menutrans Block\ and\ Insert
+Bl&okk\ kijel
+sekor\ 
+veg\ bevitelekor
+menutrans Always
+&Mindig
+menutrans Toggle\ Insert\ &Mode<Tab>:set\ im!
+vegbeviteli\ m
+d\ BE/KI<Tab>:set\ im!
+menutrans Toggle\ Vi\ C&ompatible<Tab>:set\ cp!
+&Vi\ kompat
+bilis\ m
+d\ BE/Ki<Tab>:set\ cp!
+menutrans Search\ &Path\.\.\.
+Ke&res
+tvonal\.\.\.
+menutrans Ta&g\ Files\.\.\.
+&Tag\ f
+jl\.\.\.
+menutrans Toggle\ &Toolbar
+r\ BE/KI
+menutrans Toggle\ &Bottom\ Scrollbar
+zszintes\ G
+v\ BE/KI
+menutrans Toggle\ &Left\ Scrollbar
+&Bal\ g
+v\ BE/KI
+menutrans Toggle\ &Right\ Scrollbar
+&Jobb\ g
+v\ BE/KI
+menutrans None
+" Edit.File Settings
+menutrans Toggle\ Line\ &Numbering<Tab>:set\ nu!
+s\ BE/KI<Tab>:set\ nu!
+menutrans Toggle\ &List\ Mode<Tab>:set\ list!
+&Lista\ m
+d\ BE/KI<Tab>:set\ list!
+menutrans Toggle\ Line\ &Wrap<Tab>:set\ wrap!
+s\ BE/KI<Tab>:set\ wrap!
+menutrans Toggle\ W&rap\ at\ word<Tab>:set\ lbr!
+s\ s&z
+l\ BE/KI<tab>:set\ lbr!
+menutrans Toggle\ &expand-tab<Tab>:set\ et!
+&Tab\ kifejt
+s\ BE/KI<Tab>:set\ et!
+menutrans Toggle\ &auto-indent<Tab>:set\ ai!
+&Automatikus\ beh
+s\ BE/KI<Tab>:set\ ai!
+menutrans Toggle\ &C-indenting<Tab>:set\ cin!
+&C-beh
+s\ BE/KI<Tab>:set\ cin!
+menutrans &Shiftwidth
+ke\ ('sw')
+menutrans Soft\ &Tabstop
+T&abul
+ke\ ('sts')
+menutrans Te&xt\ Width\.\.\.
+veg\ sz
+ge\.\.\.
+menutrans &File\ Format\.\.\.
+jlform
+tum\.\.\.
+" Tools menu
+menutrans &Tools
+menutrans &Jump\ to\ this\ tag<Tab>g^]
+s\ a\ taghoz<Tab>g^]
+menutrans Jump\ &back<Tab>^T
+s\ &vissza<Tab>^T
+menutrans Build\ &Tags\ File
+&Tag\ f
+menutrans &Folding
+&Behajt
+menutrans &Make<Tab>:make
+s<Tab>:make
+menutrans &List\ Errors<Tab>:cl
+k\ list
+ja<Tab>:cl
+menutrans L&ist\ Messages<Tab>:cl!
+&zenetek\ list
+ja<Tab>:cl!
+menutrans &Next\ Error<Tab>:cn
+vetkez
+\ &hiba<Tab>:cn
+menutrans &Previous\ Error<Tab>:cp
+\ hiba<Tab>:cp
+menutrans &Older\ List<Tab>:cold
+gebbi\ lista<Tab>:cold
+menutrans N&ewer\ List<Tab>:cnew
+jabb\ lista<Tab>:cnew
+menutrans Error\ &Window
+Hibaablak
+menutrans &Update<Tab>:cwin
+&Friss
+s<Tab>:cwin
+menutrans &Open<Tab>:copen
+M&egnyit
+s<Tab>:copen
+menutrans &Close<Tab>:cclose
+s<Tab>:cclose
+menutrans &Convert\ to\ HEX<Tab>:%!xxd
+l->HEX\ n
+zet<Tab>:%!xxd
+menutrans Conve&rt\ back<Tab>:%!xxd\ -r
+HEX->Norm
+zet<Tab>:%!xxd\ -r
+menutrans &Set\ Compiler
+\ &megad
+" Tools.Folding
+menutrans &Enable/Disable\ folds<Tab>zi
+Behajt
+sok\ BE&/KI<Tab>zi
+menutrans &View\ Cursor\ Line<Tab>zv
+lis\ sor\ l
+tszik<Tab>zv
+menutrans Vie&w\ Cursor\ Line\ only<Tab>zMzx
+&Csak\ aktu
+lis\ sor\ l
+tszik<Tab>zMzx
+menutrans C&lose\ more\ folds<Tab>zm
+vetkez
+\ szint\ be&z
+sa<Tab>zm
+menutrans &Close\ all\ folds<Tab>zM
+sszes\ hajt
+s\ &bez
+sa<Tab>zM
+menutrans O&pen\ more\ folds<Tab>zr
+vetkez
+\ szint\ ki&nyit
+sa<Tab>zr
+menutrans &Open\ all\ folds<Tab>zR
+sszes\ hajt
+s\ &kinyit
+sa<Tab>zR
+menutrans Fold\ Met&hod
+Behajt
+sok\ &l
+trehoz
+menutrans M&anual
+menutrans I&ndent
+menutrans E&xpression
+Ki&fejez
+menutrans S&yntax
+&Szintaxis
+menutrans &Diff
+&Diff-k
+menutrans Ma&rker
+menutrans Create\ &Fold<Tab>zf
+&j\ behajt
+s<Tab>zf
+menutrans &Delete\ Fold<Tab>zd
+Behajt
+se<Tab>zd
+menutrans Delete\ &All\ Folds<Tab>zD
+ss&zes\ behajt
+se<Tab>zD
+menutrans Fold\ col&umn\ width
+Behajt
+sok\ a\ &marg
+n\ x\ oszlopban
+" Tools.Diff
+menutrans &Update
+&Friss
+menutrans &Get\ Block
+Block\ &BE
+menutrans &Put\ Block
+Block\ &KI
+" Names for buffer menu.
+menutrans &Buffers
+&Pufferok
+menutrans &Refresh\ menu
+&Friss
+menutrans Delete
+menutrans &Alternate
+&Csere
+menutrans &Next
+vetkez
+menutrans &Previous
+" Window menu
+menutrans &Window
+&Ablak
+menutrans &New<Tab>^Wn
+&j<Tab>^Wn
+menutrans S&plit<Tab>^Ws
+&Feloszt
+s<Tab>^Ws
+menutrans Sp&lit\ To\ #<Tab>^W^^
+Feloszt
+s\ &#-val<Tab>^W^^
+menutrans Split\ &Vertically<Tab>^Wv
+Feloszt
+legesen<Tab>^Wv
+menutrans Split\ File\ E&xplorer
+j\ &int
+menutrans &Close<Tab>^Wc
+s<Tab>^Wc
+menutrans Close\ &Other(s)<Tab>^Wo
+bbi\ bez
+sa<Tab>^Wo
+menutrans Ne&xt<Tab>^Ww
+vetkez
+<Tab>^Ww
+menutrans P&revious<Tab>^WW
+<Tab>^WW
+menutrans &Equal\ Size<Tab>^W=
+&Azonos\ magass
+g<Tab>^W=
+menutrans &Max\ Height<Tab>^W_
+Ma&x\ magass
+g<Tab>^W_
+menutrans M&in\ Height<Tab>^W1_
+&Min\ magass
+g<Tab>^W1_
+menutrans Max\ &Width<Tab>^W\|
+Max\ &sz
+g<Tab>^W\|
+menutrans Min\ Widt&h<Tab>^W1\|
+Mi&n\ sz
+g<Tab>^W1\|
+menutrans Move\ &To
+&Elmozd
+menutrans &Top<Tab>^WK
+&Fel<Tab>^WK
+menutrans &Bottom<Tab>^WJ
+&Le<Tab>^WJ
+menutrans &Left\ side<Tab>^WH
+&Balra<Tab>^WH
+menutrans &Right\ side<Tab>^WL
+&Jobbra<Tab>^WL
+menutrans Rotate\ &Up<Tab>^WR
+s\ &felfel
+<Tab>^WR
+menutrans Rotate\ &Down<Tab>^Wr
+s\ &lefel
+<Tab>^Wr
+menutrans Select\ Fo&nt\.\.\.
+pus\.\.\.
+" The popup menu
+menutrans &Undo
+&Visszavon
+menutrans Cu&t
+menutrans &Copy
+menutrans &Paste
+&Beilleszt
+menutrans &Delete
+menutrans Select\ Blockwise
+s\ blo&kk
+menutrans Select\ &Word
+\ kijel
+menutrans Select\ &Line
+&Sor\ kijel
+menutrans Select\ &Block
+B&lokk\ kijel
+menutrans Select\ &All
+sszes\ kijel
+" The GUI toolbar
+if has("toolbar")
+  if exists("*Do_toolbar_tmenu")
+    delfun Do_toolbar_tmenu
+  endif
+  fun Do_toolbar_tmenu()
+    tmenu ToolBar.Open
+Megnyit
+    tmenu ToolBar.Save
+    tmenu ToolBar.SaveAll
+Mindet menti
+    tmenu ToolBar.Print
+Nyomtat
+    tmenu ToolBar.Undo
+Visszavon
+    tmenu ToolBar.Redo
+    tmenu ToolBar.Cut
+    tmenu ToolBar.Copy
+    tmenu ToolBar.Paste
+Beilleszt
+    tmenu ToolBar.Find
+    tmenu ToolBar.FindNext
+bb keres
+    tmenu ToolBar.FindPrev
+s visszafel
+    tmenu ToolBar.Replace
+s/csere
+    tmenu ToolBar.LoadSesn
+Munkamenet beolvas
+    tmenu ToolBar.SaveSesn
+Munkamenet ment
+    tmenu ToolBar.RunScript
+Vim program ind
+    tmenu ToolBar.Make
+Projekt 
+    tmenu ToolBar.Shell
+Shell ind
+    tmenu ToolBar.RunCtags
+    tmenu ToolBar.TagJump
+s a kurzor alatti tagra
+    tmenu ToolBar.Help
+    tmenu ToolBar.FindHelp
+s a Vim s
+  endfun
+" Syntax menu
+menutrans &Syntax
+Sz&intaxis
+menutrans &Show\ filetypes\ in\ menu
+pusok\ men
+menutrans Set\ '&syntax'\ only
+Csak\ '&syntax'
+menutrans Set\ '&filetype'\ too
+'&filetype'\ is
+menutrans &Off
+menutrans &Manual
+menutrans A&utomatic
+A&utomatikus
+menutrans on/off\ for\ &This\ file
+&BE/KI\ enn
+l\ a\ f
+menutrans Co&lor\ test
+nteszt
+menutrans &Highlight\ test
+Kiemel
+s\ &teszt
+menutrans &Convert\ to\ HTML
+&HTML\ oldal\ k
+" dialog texts
+let menutrans_no_file = "[Nincs file]"
+let menutrans_help_dialog = "
+rd be a k
+t vagy parancsot:\n\n A sz
+vegbeviteli parancsok el
+rj i_-t (pl.: i_CTRL-X)\nA sorszerkesz
+ parancsok el
+ c_-t (pl.: c_<Del>)\nA v
+kat a ' jellel vedd k
+l (pl.: 'shiftwidth')"
+let g:menutrans_path_dialog = "
+rd be a keresett f
+jl lehets
+ges el
+tjait, vessz
+vel elv
+lasztva"
+let g:menutrans_tags_dialog = "
+rd be a tag f
+jl lehets
+ges el
+tjait, vessz
+vel elv
+lasztva"
+let g:menutrans_textwidth_dialog = "
+rd be a sz
+veg sz
+t (0 = form
+s kikapcsolva)"
+let g:menutrans_fileformat_dialog = "V
+laszd ki a f
+jl form
+let &cpo = s:keepcpo
+unlet s:keepcpo

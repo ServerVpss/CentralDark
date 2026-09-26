@@ -1,0 +1,153 @@
+{
+  "schema": "centraldark.artifact.manifest.v1",
+  "mission": "BIOCOGNITIVE_OPENAI_NEURAL_ATLAS",
+  "canonical_family": "CENTRALDARK_BIOCOGNITIVE_OPENAI_NEURAL_ATLAS",
+  "delivery_contract": "ONE_FINAL_ZIP_ONLY",
+  "session_animal_inventory_count": 15,
+  "session_coverage": "15/15",
+  "zero_regression_scope": "RECOVERED_SESSION_INVENTORY",
+  "openai_public_state_remeasured_this_revision": false,
+  "global_100_percent_declared": false,
+  "files": [
+    {
+      "path": "BIOCOGNITIVE_CATALOG.md",
+      "bytes": 3755,
+      "sha256": "6ef592cfb2ab1b660a95abc7d5bd95e9d235b8d313cdcfbd3ef64064cb72d09f"
+    },
+    {
+      "path": "CAPABILITY_MATRIX.csv",
+      "bytes": 821,
+      "sha256": "ababe371f72374b8105f8cc14e412524834f36bd323dec1cd8a6b7d71f8223b6"
+    },
+    {
+      "path": "CENTRALDARK_BIOCOGNITIVE_OPENAI_NEURAL_ATLAS.md",
+      "bytes": 4565,
+      "sha256": "acba54f213abff87ed9e6d913e6c0d9c88ebf9acf130e7455bd0a90067793661"
+    },
+    {
+      "path": "CENTRALDARK_BIOCOGNITIVE_OPENAI_NEURAL_ATLAS.mmd",
+      "bytes": 1692,
+      "sha256": "b1393ed0957ad5f06acdc7603d632f4e87c58b85056373646cb1c648c1fbf5b8"
+    },
+    {
+      "path": "CENTRALDARK_BIOCOGNITIVE_OPENAI_NEURAL_ATLAS.png",
+      "bytes": 243933,
+      "sha256": "dff238912d216f573db0002d9aaebe3f61cba90428d597d4039051bba1772960"
+    },
+    {
+      "path": "COUNTERPROOF.md",
+      "bytes": 985,
+      "sha256": "951ecd3b925a358e58172ff108c4f0de3ecbd7e9da203eda6779a6710d7e5f40"
+    },
+    {
+      "path": "CROSS_AGENT_DENOMINATOR.md",
+      "bytes": 951,
+      "sha256": "d5260774803b81639181057259f961076aa587e5051469b90c46311c1d848f80"
+    },
+    {
+      "path": "HISTORY.md",
+      "bytes": 539,
+      "sha256": "b08d443ad48fbf619a5c775445a6c942be94630c760996b881cbd2b0a7f7b297"
+    },
+    {
+      "path": "LIVE_STATE.md",
+      "bytes": 718,
+      "sha256": "d79dd5ab8808d26cac53769a6bfbf9466b7b304265a468aec4f535862f9bb25a"
+    },
+    {
+      "path": "OPENAI_NEURAL_ARCHITECTURES.md",
+      "bytes": 1604,
+      "sha256": "aded015f78176d3b9b5f0eda41965bd0775252162188c24acd3704da6dcd9a91"
+    },
+    {
+      "path": "RASTRO.md",
+      "bytes": 839,
+      "sha256": "cfd1ee5011c9596fa6c05ef36ce1cd2d0728d5f397d570b1d49fd74cd92c5e80"
+    },
+    {
+      "path": "RECEIPT.md",
+      "bytes": 779,
+      "sha256": "d37b32b0cb01d2735dd59bb10b6f434a498c21ca6106a8cc1d142179bf74de7d"
+    },
+    {
+      "path": "SESSION_ANIMAL_INVENTORY.json",
+      "bytes": 3923,
+      "sha256": "b2bb737aaed58524569477ae3912f8e0c117d850fccdc47db7ce767f310d7392"
+    },
+    {
+      "path": "SHA256SUMS.txt",
+      "bytes": 2854,
+      "sha256": "beac51be364f0289ccf169c4969ee6490c58679afe272f1ac327aa88faca8e6a"
+    },
+    {
+      "path": "SOURCE_INDEX.md",
+      "bytes": 3191,
+      "sha256": "690158c018798355dd04ece02cf94a894c491838671959148d47848f546a700a"
+    },
+    {
+      "path": "SUPERSEDED/2026-08-24_before_session_inventory_reconciliation/BIOCOGNITIVE_CATALOG.md",
+      "bytes": 2796,
+      "sha256": "807f1522a918e588270206db1265794690e1320c8ef1efe84b809fdb97b9b92c"
+    },
+    {
+      "path": "SUPERSEDED/2026-08-24_before_session_inventory_reconciliation/CENTRALDARK_BIOCOGNITIVE_OPENAI_NEURAL_ATLAS.md",
+      "bytes": 7121,
+      "sha256": "dce83f35972dcf3786818c300797820f76029d6b5583ea13b9ac36623963da2a"
+    },
+    {
+      "path": "SUPERSEDED/2026-08-24_before_session_inventory_reconciliation/CENTRALDARK_BIOCOGNITIVE_OPENAI_NEURAL_ATLAS.mmd",
+      "bytes": 1771,
+      "sha256": "a5cb7e77f996f2b2048d25e116db8fcfaafcd03b80b49e4f3347a0cc6054ab6b"
+    },
+    {
+      "path": "SUPERSEDED/2026-08-24_before_session_inventory_reconciliation/CENTRALDARK_BIOCOGNITIVE_OPENAI_NEURAL_ATLAS.png",
+      "bytes": 2235973,
+      "sha256": "024a583798c7ac7d1099e9893cfdd015b4a8d26fcad01a4383a47d29af009518"
+    },
+    {
+      "path": "SUPERSEDED/2026-08-24_before_session_inventory_reconciliation/COUNTERPROOF.md",
+      "bytes": 1323,
+      "sha256": "930bb2f227e29aba971add3ab802a1205730ad67e45cdd093fb49b609d76f703"
+    },
+    {
+      "path": "SUPERSEDED/2026-08-24_before_session_inventory_reconciliation/RASTRO.md",
+      "bytes": 961,
+      "sha256": "29f15950b7e2ba57eb1433edcc0b33310d8274658d5c471093dd9e36207179d7"
+    },
+    {
+      "path": "SUPERSEDED/2026-08-24_before_session_inventory_reconciliation/REASON.md",
+      "bytes": 345,
+      "sha256": "125bafba09e83375b7b143d34fb3522e3f282bfaa339b0cf776c231e51ba9ef8"
+    },
+    {
+      "path": "SUPERSEDED/2026-08-24_before_session_inventory_reconciliation/RECEIPT.md",
+      "bytes": 913,
+      "sha256": "8579e0a4b95741f8f30c6d14c6535311921b3cacfacf7de02da67f546c26e7b6"
+    },
+    {
+      "path": "SUPERSEDED/README.md",
+      "bytes": 180,
+      "sha256": "17805dc7b76f6ac7f9a29f145237b25fcfe9c84f9eb7512110d6c40c30332a96"
+    },
+    {
+      "path": "TAXONOMY_DEDUPE.md",
+      "bytes": 1456,
+      "sha256": "6241640129d20fc34d45e031209c018aab236eae81f6ae2c0d97ed95d636161a"
+    },
+    {
+      "path": "TRACE.jsonl",
+      "bytes": 1257,
+      "sha256": "398526ce6107522f03796faf0a9db5696a03096bc43fa522f33034cd1757f1c6"
+    },
+    {
+      "path": "VERIFY-RESULT.txt",
+      "bytes": 93,
+      "sha256": "e333aee4d6f718aa1dcc95a4d0c5c9bd0beb4f88f97b978f86c05c93291257fd"
+    },
+    {
+      "path": "verify_pack.py",
+      "bytes": 1912,
+      "sha256": "c0754e49bba8bae4bece9d66edb2b409eeb6a2c49954db8221d69a27b5c4a357"
+    }
+  ]
+}

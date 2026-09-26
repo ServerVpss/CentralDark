@@ -1,0 +1,9 @@
+metric,baseline_median,blocked_median,delta_ms,delta_pct
+ttfb,725.4,216.8,-508.6,-70.1
+fcp,1012,560,-452,-44.7
+domContentLoaded,2962.9,2574.9,-388.0,-13.1
+loadEvent,3209,2669.7,-539.3,-16.8
+longTaskCount,0,0,0,0
+longTaskSum,0,0,0,0
+longTaskMax,0,0,0,0
+jsBytes,321031,228991,-92040,-28.7

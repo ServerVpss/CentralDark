@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\lib\tcl8.6\msgs\it_ch.msg
+
+# created by tools/loadICU.tcl -- do not edit
+namespace eval ::tcl::clock {
+    ::msgcat::mcset it_CH DATE_FORMAT "%e. %B %Y"
+    ::msgcat::mcset it_CH TIME_FORMAT "%H:%M:%S"
+    ::msgcat::mcset it_CH DATE_TIME_FORMAT "%e. %B %Y %H:%M:%S %z"

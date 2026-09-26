@@ -1,0 +1,34 @@
+{
+  "observado_em": "session_20260906_desktop_concerto",
+  "auth_json_credential_pool_schema": {
+    "credential_pool": {
+      "exemplo": {
+        "gemini": [
+          {
+            "id": "867f12",
+            "label": "GOOGLE_API_KEY",
+            "auth_type": "api_key",
+            "priority": 0,
+            "source": "env:GOOGLE_API_KEY",
+            "last_status": null,
+            "last_status_at": null,
+            "base_url": "https://generativelanguage.googleapis.com/v1beta",
+            "request_count": 0,
+            "secret_fingerprint": "sha256:c7394e2849e79101"
+          }
+        ]
+      }
+    },
+    "interpretação_de_source": {
+      "env:VAR_NAME": "a credential depende da variável de ambiente VAR_NAME presente no sistema. O agente não pode confirmar o valor pelo auth.json sozinho.",
+      "manual:device_code": "credential obtida por fluxo manual/terminal, não por env.",
+      "gh_cli": "credential extraída do GitHub CLI.",
+      "oauth": "credential OAuth com access_token e refresh_token, pode estar expirada."
+    },
+    "campos_de_status_para_diag": {
+      "last_status": "null ou ok/exhausted — pendência a ser validada.",
+      "last_error_code": "código de erro se falhou.",
+      "last_error_reason": "motivo se falhou."
+    }
+  }
+}

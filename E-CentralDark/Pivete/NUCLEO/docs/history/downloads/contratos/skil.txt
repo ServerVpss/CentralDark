@@ -1,0 +1,129 @@
+/goal
+
+MODO=
+ATIVAR_QA_AUTOCONSULTATIVO_COM_CONTRAPROVA_EM_EXECUCAO_UNICA
+
+ALVO=
+C:\Users\danda\AppData\Local\hermes\profiles\pivete\skills\qa.teste-de-software.MARKDOWN
+
+TRAVA_DE_CONTINUIDADE=
+
+Este goal NÃO cria missão nova.
+Primeiro localize e prove a missão atual, objetivo, escopo, Writer, worktree,
+branch, HEAD, checkpoint, progresso e próximo estado já ativos.
+
+Se `mission.id` não puder ser provado, responda exatamente:
+
+STATUS=BLOCKED_MISSION_REQUIRED
+MISSAO_ATUAL_PRESERVADA=NAO
+PROXIMO_ESTADO=INALTERADO
+
+E PARE sem inventar missão, estado ou próxima etapa.
+
+Quando a missão existir:
+
+- preserve-a integralmente;
+- não execute outro /goal;
+- não reinicie do zero;
+- não crie V1/V2/V3/NOVO/FINAL;
+- não abandone alteração em andamento;
+- não adapte teste para esconder defeito;
+- não leia secrets, .env, tokens, sessions ou SSH;
+- não execute Enxame/API sem pedido explícito;
+- não faça merge, deploy, VPS, produção, force, rebase ou reset --hard.
+
+RESPOSTA_INICIAL_APOS_PROVA_DA_MISSAO=
+
+DELTA_RECEBIDO=SIM
+MISSAO_ATUAL_PRESERVADA=SIM
+VERSAO_PARALELA=NAO
+PROXIMO_ESTADO=<ESTADO_REAL_JA_PRESERVADO>
+
+EXECUCAO_UNICA_COESA=
+
+1. Entrar exatamente no ALVO.
+2. Ler SKILL.md integralmente.
+3. Congelar as promessas do pacote e a fronteira de confiança real.
+4. Executar `node runtime/orchestrator.mjs --self-map`.
+5. Se houver DRIFT, corrigir o mesmo manifest e revalidar; não criar mapa paralelo.
+6. Executar `node runtime/orchestrator.mjs --verify`.
+7. Executar a matriz de contraprovas de `tests/contraprovas-p0.test.mjs`.
+8. Agrupar falhas por invariante e causa comum, não pela ordem em que apareceram.
+9. Aplicar uma correção coesa por causa e adicionar regressões permanentes.
+10. Reexecutar positivo, negativo, limite, concorrência, sanitização e suíte vazia.
+11. Extrair/copy para diretório limpo e repetir self-map + verify.
+12. Só declarar DELTA_INCORPORADO=SIM quando a extração limpa provar PASS.
+
+NUNCA ACEITAR COMO VERDE=
+
+- missão ausente declarada preservada;
+- próximo estado inventado;
+- FAIL/SKIPPED/UNKNOWN=SIM tratados como zero;
+- suíte com zero testes;
+- path lexical sem `realpath`;
+- learning sem receipt:<sha256> real, contract digest correspondente e HEAD SHA;
+- evento concorrente sem claim atômico;
+- quebra de linha injetando campo em receipt;
+- PAT/JWT/token não sanitizado;
+- INCONCLUSIVO marcado como processado;
+- resposta vazia ou erro HTTP transformado em veredito.
+
+ENXAME=
+
+Somente se a missão atual pedir explicitamente:
+node runtime/orchestrator.mjs --enxame
+
+O Fable adversarial deve produzir contraprova executável, não checklist decorativo.
+Fallback permitido:
+CENTRALDARK_API_KEY → OPENAI_API_KEY → ANTHROPIC_API_KEY → ENXAME_UNAVAILABLE
+
+Nunca procurar chave em arquivo.
+Nunca imprimir chave.
+
+RECIBO_FINAL=
+
+STATUS=
+MISSAO_ATUAL_PRESERVADA=
+PROXIMO_ESTADO_PRESERVADO=
+MANIFEST_STATUS=
+MANIFEST_HASH=
+GATILHOS_INDEXADOS=
+NODE_CHECK_TOTAL=
+TEST_FILES=
+TESTS_TOTAL=
+PASS=
+FAIL=
+SKIPPED=
+CANCELLED=
+TODO=
+CONTRAPROVAS_ANTIGO=
+CONTRAPROVAS_NOVO=
+DEMO=
+CONSULTA_SELETIVA=
+MAX_MATCHES_CLAMPADO=
+PATH_DUPLICADO_BLOQUEADO=
+SYMLINK_ESCAPE_BLOQUEADO=
+MISSAO_AUSENTE_BLOQUEADA=
+ZERO_TESTS_BLOQUEADO=
+POLICY_SIM_COMO_ZERO_BLOQUEADO=
+LEARNING_FALSO_BLOQUEADO=
+LEARNING_RECEIPT_CONTENT_ADDRESSED=
+LEARNING_ADULTERADO_NAO_REUTILIZADO=
+LOCK_CONCORRENCIA=
+LOCK_VIVO_NAO_ROUBADO=
+INJECAO_RECEIPT_BLOQUEADA=
+PAT_JWT_SANITIZADOS=
+CHAVES_CAMELCASE_SANITIZADAS=
+INCONCLUSIVO_NAO_CHECKPOINTADO=
+AUDIT_HASH_MANIFEST=
+FABLE_ADVERSARIAL_PRESENTE=
+API_FALLBACK=
+LEITURA_DE_ENV_FILE=NAO
+AUTO_APPLY=
+VERSAO_PARALELA=NAO
+MERGE=NAO
+DEPLOY=NAO
+VPS=INTOCADA
+PRODUCAO=INTOCADA
+DELTA_INCORPORADO=
+PROXIMO_ESTADO=

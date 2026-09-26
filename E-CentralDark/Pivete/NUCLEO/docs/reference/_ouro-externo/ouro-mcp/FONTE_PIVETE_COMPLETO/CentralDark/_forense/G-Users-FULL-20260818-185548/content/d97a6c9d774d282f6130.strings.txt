@@ -1,0 +1,153 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\agent\__pycache__\browser_registry.cpython-311.pyc
+
+Browser Provider Registry
+=========================
+Central map of registered cloud browser providers. Populated by plugins at
+import-time via :meth:`PluginContext.register_browser_provider`; consumed by
+:func:`tools.browser_tool._get_cloud_provider` to route each cloud-mode
+``browser_*`` tool call to the active backend.
+Active selection
+----------------
+The active provider is chosen by configuration with this precedence:
+1. ``browser.cloud_provider`` in ``config.yaml`` (explicit override).
+2. Legacy preference order 
+ ``browser-use`` 
+ ``browserbase`` 
+ filtered by
+   availability. Matches the historic auto-detect order in
+   :func:`tools.browser_tool._get_cloud_provider` (Browser Use checked first
+   because it covers both the managed Nous gateway and direct API key path;
+   Browserbase as the older direct-credentials fallback). ``firecrawl`` is
+   intentionally NOT in the legacy walk 
+ users only get Firecrawl as a
+   cloud browser when they explicitly set ``browser.cloud_provider:
+   firecrawl``, matching pre-migration behaviour where Firecrawl was never
+   auto-selected.
+3. Otherwise ``None`` 
+ the dispatcher falls back to local browser mode.
+The explicit-config branch (rule 1) intentionally ignores ``is_available()``
+so the dispatcher surfaces a typed "X_API_KEY is not set" error to the user
+instead of silently switching backends. Matches the legacy
+:func:`tools.browser_tool._get_cloud_provider` behaviour for configured names.
+Note: there is no "capability" split here (unlike the web subsystem, which
+has search/extract/crawl). Every browser provider implements the full
+:class:`agent.browser_provider.BrowserProvider` lifecycle; the registry's
+job is purely selection, not capability routing.
+annotationsN)
+Optional)
+BrowserProvider)
+hermes_home_keyz
+Dict[str, BrowserProvider]
+_providersz%Dict[str, Dict[str, BrowserProvider]]
+_scoped_providersz
+Dict[str, int]
+_scoped_generations)
+providerr
+Optional[str]
+return
+Register a cloud browser provider.
+    Re-registration (same ``name``) overwrites the previous entry and logs
+    a debug message 
+ makes hot-reload scenarios (tests, dev loops) behave
+    predictably.
+    z<register_provider() expects a BrowserProvider instance, got z1Browser provider .name must be a non-empty stringN
+z,Browser provider '%s' re-registered (was %r)z%Registered browser provider '%s' (%s))
+isinstancer
+TypeError
+__name__
+ValueError
+_lockr
+setdefault
+_generationr
+logger
+debug)
+raw_namer
+target
+existings
+      
+JC:\Users\danda\AppData\Local\hermes\hermes-agent\agent\browser_registry.py
+register_providerr%
+List[BrowserProvider]c
+z0Return all registered providers, sorted by name.Nc
+<lambda>z list_providers.<locals>.<lambda>c
+updater
+values
+sorted)
+merged
+itemss
+list_providersr5
+Optional[BrowserProvider]c
+z5Return the provider registered under *name*, or None.N)
+get_providerr8
+snapshot_registrationr:
+tuple[int, int]c
+z?Return a cache fingerprint for the global base and one profile.r
+active_scopes
+registry_generationr>
+current
+previous
+zERestore a plugin registration only when *current* is still installed.NFr
+      r$
+restore_registrationrD
+browser-use
+browserbase
+configuredc
+Resolve the active browser provider.
+    Resolution rules (in order):
+    1. **Explicit "local".** Returns None 
+ the dispatcher disables cloud
+       mode entirely. Mirrors legacy short-circuit in
+       :func:`tools.browser_tool._get_cloud_provider`.
+    2. **Explicit config wins, ignoring availability.** If ``configured``
+       names a registered provider, return it even if its
+       :meth:`is_available` returns False 
+ the dispatcher will surface a
+       precise "X_API_KEY is not set" error instead of silently routing
+       somewhere else.
+    3. **Legacy preference walk, filtered by availability.** Walk
+       :data:`_LEGACY_PREFERENCE` (``browser-use`` 
+ ``browserbase``) looking
+       for a provider whose ``is_available()`` is True.
+    There is intentionally NO "single-eligible shortcut" rule here (unlike
+    :func:`agent.web_search_registry._resolve`). Pre-migration, the
+    auto-detect branch in ``tools.browser_tool._get_cloud_provider`` only
+    considered Browser Use and Browserbase; Firecrawl was reachable only
+    via an explicit ``browser.cloud_provider: firecrawl`` config key.
+    Preserving that gate matters because Firecrawl shares its API key with
+    the *web* extract plugin (``plugins/web/firecrawl/``), so users who set
+    ``FIRECRAWL_API_KEY`` for web extract must NOT get silently routed to a
+    paid cloud browser on a fresh install. Third-party browser-provider
+    plugins added under ``~/.hermes/plugins/browser/<vendor>/`` are subject
+    to the same gate 
+ they must be explicitly configured to take effect.
+    Returns None when no provider is configured AND no available provider
+    matches the legacy preference; the dispatcher then falls back to local
+    browser mode.
+    Nr*
+zDWrap ``is_available()`` so a buggy provider doesn't kill resolution.uH
+Browser provider %s.is_available() raised %s 
+ treating as unavailableT)
+exc_infoNF)
+is_available
+Exceptionr
+warningr
+_is_available_safez$_resolve.<locals>._is_available_safe
+localzVbrowser cloud_provider '%s' configured but not registered; falling back to auto-detect)
+_LEGACY_PREFERENCE)
+snapshotrN
+legacys
+     r$
+_resolverS
+z"Clear the registry. **Test-only.**r
+clearr
+_reset_for_testsrW
+__doc__
+__future__r
+logging
+threading
+typingr
+agent.browser_providerr
+hermes_constantsr
+getLoggerr
+__annotations__r
+<module>rb

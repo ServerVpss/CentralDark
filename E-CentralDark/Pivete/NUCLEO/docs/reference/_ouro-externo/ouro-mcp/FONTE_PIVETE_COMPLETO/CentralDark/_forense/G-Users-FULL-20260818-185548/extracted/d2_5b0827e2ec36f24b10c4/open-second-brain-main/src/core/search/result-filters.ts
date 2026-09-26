@@ -1,0 +1,327 @@
+/**
+ * Frontmatter-driven post-rank filters and annotations over a ranked
+ * result set: the shared per-call frontmatter read cache, property /
+ * visibility-scope / agent-ownership filtering, terminal-status
+ * collection for evidence downranking, and inline trust metadata.
+ */
+
+import { statSync } from "node:fs";
+import { join } from "node:path";
+
+import { parseFrontmatterWithNotices } from "../vault.ts";
+import { BRAIN_STATE_REL } from "../brain/paths.ts";
+import { DEGRADATION_CODE } from "../integrity/degradation.ts";
+import type { FrontmatterMap } from "../types.ts";
+import { isVisible, pageVisibility } from "../graph/visibility.ts";
+import { isOwnerVisible, pageOwner } from "../graph/agent-scope.ts";
+import { scopeAxisReachable, scopeFromFrontmatter, type CompositeScope } from "../scope-key.ts";
+import { applyDegreeFilters, filterByProperties, type DegreePredicate } from "./property-filter.ts";
+import { degreeForPath, getGraphSnapshot } from "../brain/link-graph/graph-index.ts";
+import type { Store } from "./store.ts";
+import { deriveTrust, hasSupersededRelation } from "./enrich.ts";
+import { isTerminalStatus } from "./evidence-pack.ts";
+import { isTombstoned } from "../brain/lifecycle/tombstone.ts";
+import { SUPERSEDE_FADE_MULTIPLIER } from "./ranker.ts";
+import {
+  keepVerdict,
+  multiplyVerdict,
+  type RankAdjuster,
+  type RankAdjustVerdict,
+} from "./rank-adjust.ts";
+import type { BrainSearchResult } from "./types.ts";
+
+/**
+ * A cached frontmatter read, plus whether the file could be read at all.
+ *
+ * The two are inseparable because `parseFrontmatter` resolves an
+ * unreadable file to EMPTY metadata, which is byte-indistinguishable from
+ * a genuinely field-less page. Every fail-open filter is right to ignore
+ * the difference; the ownership boundary is not, and would leak an
+ * owner-private page the moment its file is deleted, renamed, or made
+ * unreadable after the last index run.
+ */
+export interface CachedFrontmatter {
+  readonly meta: FrontmatterMap;
+  /** True when the file itself could not be READ, so nothing is known. */
+  readonly unreadable: boolean;
+}
+
+/** Per-`search()`-call frontmatter read cache, keyed by vault-relative path. */
+export type FrontmatterCache = Map<string, CachedFrontmatter>;
+
+/**
+ * One frontmatter read per (vault, path) pair, shared across every filter
+ * stage of a single `search()` call, carrying the read verdict alongside
+ * the parsed map — see {@link CachedFrontmatter}.
+ */
+export function readCachedFrontmatterEntry(
+  cache: FrontmatterCache,
+  vault: string,
+  path: string,
+): CachedFrontmatter {
+  const cached = cache.get(path);
+  if (cached !== undefined) return cached;
+  const [meta, , notices] = parseFrontmatterWithNotices(join(vault, path), {
+    site: FRONTMATTER_CACHE_SITE,
+  });
+  const entry: CachedFrontmatter = Object.freeze({
+    meta,
+    unreadable: notices.some((n) => n.code === DEGRADATION_CODE.frontmatterUnreadable),
+  });
+  cache.set(path, entry);
+  return entry;
+}
+
+/** Attribution recorded on the notices this cache's reads produce. */
+const FRONTMATTER_CACHE_SITE = "search.result-filters";
+
+/**
+ * The parsed map alone, for the filters that treat an unreadable page and
+ * a field-less page identically (every fail-open one). The ownership
+ * boundary must use {@link readCachedFrontmatterEntry} instead.
+ */
+export function readCachedFrontmatter(
+  cache: FrontmatterCache,
+  vault: string,
+  path: string,
+): FrontmatterMap {
+  return readCachedFrontmatterEntry(cache, vault, path).meta;
+}
+
+const EXACT_STATE_LANE_PREFIX = `${BRAIN_STATE_REL}/`;
+
+/**
+ * Retrieval-time staleness barrier (t_b0c9d0a3). The overwrite-only
+ * exact-state lane is excluded from indexing going forward, but a lane
+ * artifact indexed by an OLDER build (before the exclusion shipped) could
+ * still surface a superseded value through recall. This barrier drops every
+ * exact-state lane result from the ranked pool, from any retrieval source,
+ * so a stale "current" value can never resurface.
+ *
+ * Path-based and I/O-free: a vault that never used the lane has no lane
+ * results, so the same array is returned unchanged (byte-identical no-op).
+ */
+export function applyExactStateBarrier(
+  results: ReadonlyArray<BrainSearchResult>,
+): ReadonlyArray<BrainSearchResult> {
+  if (!results.some((r) => r.path.startsWith(EXACT_STATE_LANE_PREFIX))) return results;
+  return results.filter((r) => !r.path.startsWith(EXACT_STATE_LANE_PREFIX));
+}
+
+/**
+ * Build the set of terminal-state paths for evidence-pack downranking.
+ * Reads each unique candidate path's frontmatter `status:` field once
+ * and includes the path when the declared status is terminal (controlled
+ * vocabulary). A missing or unreadable status is non-terminal. This is
+ * the language-agnostic replacement for scanning note prose for English
+ * status words.
+ */
+export function buildTerminalPaths(
+  vault: string,
+  results: ReadonlyArray<BrainSearchResult>,
+  frontmatterCache: FrontmatterCache,
+): ReadonlySet<string> {
+  const terminal = new Set<string>();
+  const seen = new Set<string>();
+  for (const r of results) {
+    if (seen.has(r.path)) continue;
+    seen.add(r.path);
+    try {
+      const meta = readCachedFrontmatter(frontmatterCache, vault, r.path);
+      if (isTerminalStatus((meta as Record<string, unknown>)["status"])) terminal.add(r.path);
+    } catch {
+      // Unreadable frontmatter is non-terminal.
+    }
+  }
+  return terminal;
+}
+
+/**
+ * Belief lifecycle suite (t_7d5a3589): drop tombstoned (incl.
+ * superseded-non-tip) rows from a ranked result set. A tombstoned memory
+ * stays on disk for audit but must not be recalled. Reads each unique
+ * path's cached frontmatter once; a vault with no tombstoned entries
+ * passes through byte-identically (nothing is dropped).
+ */
+export function applyStatusFilter(
+  ranked: ReadonlyArray<BrainSearchResult>,
+  vault: string,
+  frontmatterCache: FrontmatterCache,
+): ReadonlyArray<BrainSearchResult> {
+  return ranked.filter((r) => {
+    try {
+      return !isTombstoned(readCachedFrontmatter(frontmatterCache, vault, r.path));
+    } catch {
+      // Unreadable frontmatter is not a tombstone; leave the row in.
+      return true;
+    }
+  });
+}
+
+export function applyPropertyFilter(
+  ranked: ReadonlyArray<BrainSearchResult>,
+  filters: ReadonlyMap<string, ReadonlyArray<string>>,
+  vault: string,
+  frontmatterCache: FrontmatterCache,
+): ReadonlyArray<BrainSearchResult> {
+  const reader = (path: string): Record<string, unknown> | null => {
+    try {
+      return readCachedFrontmatter(frontmatterCache, vault, path) as Record<string, unknown>;
+    } catch {
+      return null;
+    }
+  };
+  return filterByProperties(ranked, filters, reader);
+}
+
+/**
+ * Stamp inline trust metadata (Search & Recall Quality Suite) onto each
+ * result: age from the document mtime, plus the superseded / conflict
+ * flags from the typed relations the result already carries. Read-time
+ * and never stored. One `statSync` per surfaced result (≤ limit); a path
+ * that cannot be stat'd is left without trust rather than reporting a
+ * bogus age.
+ */
+export function attachTrustMetadata(
+  vault: string,
+  results: ReadonlyArray<BrainSearchResult>,
+): ReadonlyArray<BrainSearchResult> {
+  const nowMs = Date.now();
+  return results.map((r) => {
+    let mtimeMs: number;
+    try {
+      mtimeMs = statSync(join(vault, r.path)).mtimeMs;
+    } catch {
+      return r;
+    }
+    return Object.freeze({
+      ...r,
+      trust: deriveTrust({ mtimeMs, nowMs, ...(r.relations ? { relations: r.relations } : {}) }),
+    });
+  });
+}
+
+/** Namespace name kernel 1 uses when attributing the fade. */
+export const SUPERSEDE_FADE_ADJUSTER_NAME = "supersede_fade";
+
+/**
+ * Relation-only supersede fade (t_c4a9cef8): the second consumer of
+ * kernel 1. Fade any candidate whose surfaced typed relations mark it
+ * superseded - reusing {@link hasSupersededRelation}, the exact source of
+ * truth `attachTrustMetadata` / `deriveTrust` use for display - by the
+ * named-constant {@link SUPERSEDE_FADE_MULTIPLIER}. The caller supplies a
+ * documentId → relations lookup (the per-query typed-relations fetch in
+ * search.ts) so the adjuster does no I/O of its own. A candidate with no
+ * supersede relation is kept unchanged, so a pool with no such relation
+ * ranks byte-identically. This is orthogonal to the superseded-non-tip
+ * tombstone drop, which removes tombstoned rows before the fade runs.
+ */
+export function supersedeFadeAdjuster(
+  relationsFor: (documentId: number) => ReadonlyArray<{ readonly relation: string }>,
+): RankAdjuster {
+  return {
+    name: SUPERSEDE_FADE_ADJUSTER_NAME,
+    adjust(result: BrainSearchResult): RankAdjustVerdict {
+      if (!hasSupersededRelation(relationsFor(result.documentId))) return keepVerdict();
+      return multiplyVerdict(SUPERSEDE_FADE_MULTIPLIER, "superseded");
+    },
+  };
+}
+
+/**
+ * Graph-degree cardinality filter (t_9bee8f0b): drop rows whose
+ * backlink/outlink counts do not satisfy every predicate. Degree data
+ * comes from the memoized link-graph snapshot, so a repeat query against
+ * an unchanged index does no graph rebuild. An empty predicate list is a
+ * byte-identical pass-through (the caller gates on that, but this stays
+ * safe if called directly).
+ */
+export function applyDegreeFilter(
+  ranked: ReadonlyArray<BrainSearchResult>,
+  predicates: ReadonlyArray<DegreePredicate>,
+  store: Store,
+): ReadonlyArray<BrainSearchResult> {
+  if (predicates.length === 0) return ranked;
+  const snapshot = getGraphSnapshot(store);
+  return applyDegreeFilters(ranked, predicates, (path) => degreeForPath(snapshot, path));
+}
+
+export function applyVisibilityScope(
+  ranked: ReadonlyArray<BrainSearchResult>,
+  scope: ReadonlySet<string>,
+  vault: string,
+  frontmatterCache: FrontmatterCache,
+): ReadonlyArray<BrainSearchResult> {
+  const tagsFor = (path: string): string[] => {
+    try {
+      return pageVisibility(readCachedFrontmatter(frontmatterCache, vault, path));
+    } catch {
+      return [];
+    }
+  };
+  return ranked.filter((r) => isVisible(tagsFor(r.path), scope));
+}
+
+/**
+ * Composite scope filter (t_37c05a34): drop results outside the requested
+ * session/project scope. Per axis, a null request does not filter and an
+ * unscoped page is shared, so a request scoping nothing is byte-identical.
+ * An unparseable page fails OPEN here (kept): session/project are recall
+ * conveniences, not an isolation boundary like owner scope. The caller only
+ * invokes this when at least one axis is requested.
+ */
+export function applyScopeFilter(
+  ranked: ReadonlyArray<BrainSearchResult>,
+  requested: CompositeScope,
+  vault: string,
+  frontmatterCache: FrontmatterCache,
+): ReadonlyArray<BrainSearchResult> {
+  return ranked.filter((r) => {
+    let pageScope: CompositeScope;
+    try {
+      pageScope = scopeFromFrontmatter(readCachedFrontmatter(frontmatterCache, vault, r.path));
+    } catch {
+      return true; // fail open: keep on unreadable frontmatter
+    }
+    return (
+      scopeAxisReachable(pageScope.session, requested.session) &&
+      scopeAxisReachable(pageScope.project, requested.project)
+    );
+  });
+}
+
+/**
+ * May a caller scoped to `scope` see the page at this vault-relative
+ * path? The one place the ownership rule meets the filesystem, so every
+ * surface that owns a path - ranked search results, source-derived
+ * pages, any future one - resolves ownership identically.
+ *
+ * FAILS CLOSED: a page whose file cannot be READ has an unknowable owner
+ * and is hidden under an active scope rather than leaked - the routine
+ * trigger being a document still in the index whose file was deleted,
+ * renamed, or made unreadable since the last index run. The verdict comes
+ * from {@link readCachedFrontmatterEntry} rather than from an empty
+ * metadata map, because the parser resolves an unreadable file to `{}`
+ * and never throws, so a `catch` arm here would be dead code. This is
+ * stricter than visibility scoping's fail-open default - deliberate,
+ * because agent-scope is an isolation boundary.
+ */
+export function isPathOwnerVisible(
+  vault: string,
+  path: string,
+  scope: string,
+  frontmatterCache: FrontmatterCache,
+): boolean {
+  const entry = readCachedFrontmatterEntry(frontmatterCache, vault, path);
+  if (entry.unreadable) return false;
+  return isOwnerVisible(pageOwner(entry.meta), scope);
+}
+
+export function applyAgentScope(
+  ranked: ReadonlyArray<BrainSearchResult>,
+  scope: string,
+  vault: string,
+  frontmatterCache: FrontmatterCache,
+): ReadonlyArray<BrainSearchResult> {
+  return ranked.filter((r) => isPathOwnerVisible(vault, r.path, scope, frontmatterCache));
+}

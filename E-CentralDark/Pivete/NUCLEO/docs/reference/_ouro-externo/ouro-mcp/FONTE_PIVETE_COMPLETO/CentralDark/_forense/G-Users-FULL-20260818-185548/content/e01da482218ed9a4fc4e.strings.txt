@@ -1,0 +1,386 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\bin\lzmadec.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.pdata
+@.xdata
+.idata
+@.reloc
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+8MZuDHcP<H
+xoLc5/
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+ATUWVSH
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+H=CCG t}
+([^_]H
+AUATUWVS
+[^_]A\A]
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+@$A9@(~
+AWAVAUATUWVSH
+C$9C(~
+H[^_]A\A]A^A_
+S$9S(~
+S$9S(~
+UAWAVAUATWVSH
+C$9C(~
+C$9C(~
+[^_A\A]A^A_]
+UAWAVAUATWVSH
+C$9C(~
+C$9C(~
+[^_A\A]A^A_]
+UAVWVSH
+C$9C(~
+[^_A^]
+[^_A^]
+=UUUUw
+S$9S(~
+AUATUWVSH
+X[^_]A\A]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+D$L)D$`
+T$8HcD$L;B
+D$`+D$H
+ATUWVSLcY
+[^_]A\
+[^_]A\
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+WVSHcA
+T$(rVH
+([^_]H
+HcT$xH
+AWAVAUATUWVSH
+Internal error (bug)
+File format not recognized
+Unsupported compression options
+File is corrupt
+Unexpected end of input
+%s: Error reading input file: %s
+Cannot write to standard output: %s
+%s: %s
+(stdin)
+Usage: %s [OPTION]... [FILE]...
+Decompress files in the .lzma format to standard output.
+  -d, --decompress   (ignored, only decompression is supported)
+  -k, --keep         (ignored, files are never deleted)
+  -c, --stdout       (ignored, output is always written to standard output)
+  -q, --quiet        specify *twice* to suppress errors
+  -Q, --no-warn      (ignored, the exit status 2 is never used)
+  -h, --help         display this help and exit
+  -V, --version      display the version number and exit
+With no FILE, or when FILE is -, read standard input.
+Report bugs to <xz@tukaani.org> (in English or Finnish).
+XZ Utils home page: <https://tukaani.org/xz/>
+lzmadec (XZ Utils) 5.8.3
+liblzma %s
+stdout
+to-stdout
+decompress
+uncompress
+no-warn
+version
+cdkhqQV
+Unknown error
+Writing to standard output failed
+%s: %s: %s
+Argument domain error (DOMAIN)
+Argument singularity (SIGN)
+Overflow range error (OVERFLOW)
+Partial loss of significance (PLOSS)
+Total loss of significance (TLOSS)
+The result is too small to be represented (UNDERFLOW)
+Unknown error
+_matherr(): %s in %s(%g, %g)  (retval=%g)
+Mingw-w64 runtime failure:
+Address %p has no image-section
+  VirtualQuery failed for %d bytes at address %p
+  VirtualProtect failed with code 0x%x
+  Unknown pseudo relocation protocol version %d.
+  Unknown pseudo relocation bit size %d.
+%d bit pseudo relocation at %p out of range, targeting %p, yielding the value %p.
+POSIXLY_CORRECT
+unknown option -- %s
+unknown option -- %c
+option doesn't take an argument -- %.*s
+ambiguous option -- %.*s
+option requires an argument -- %s
+option requires an argument -- %c
+*** stack smashing detected ***: terminated
+(null)
+Infinity
+msvcrt.dll
+rand_s
+SystemFunction036
+msvcrt.dll
+getenv_s
+kernel32.dll
+IsDBCSLeadByteEx
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+lzma_alone_decoder
+lzma_code
+lzma_version_string
+DeleteCriticalSection
+EnterCriticalSection
+GetCPInfo
+GetCurrentProcess
+GetLastError
+GetModuleHandleA
+GetProcAddress
+InitializeCriticalSection
+IsProcessorFeaturePresent
+LeaveCriticalSection
+LoadLibraryW
+MultiByteToWideChar
+SetUnhandledExceptionFilter
+TerminateProcess
+TlsGetValue
+VirtualProtect
+VirtualQuery
+WideCharToMultiByte
+__C_specific_handler
+___lc_codepage_func
+___mb_cur_max_func
+__getmainargs
+__initenv
+__iob_func
+__set_app_type
+__setusermatherr
+_amsg_exit
+_cexit
+_commode
+_errno
+_fileno
+_fmode
+_initterm
+_setmode
+_unlock
+_write
+atexit
+calloc
+fclose
+ferror
+fflush
+fprintf
+fwrite
+getenv
+iswctype
+localeconv
+malloc
+memcpy
+setlocale
+setvbuf
+signal
+strchr
+strerror
+strlen
+strncmp
+strrchr
+vfprintf
+wcslen
+liblzma-5.dll
+KERNEL32.dll
+msvcrt.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+    <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+        <application>
+            <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/> <!-- Vista -->
+            <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/> <!-- 7 -->
+            <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/> <!-- 8 -->
+            <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> <!-- 8.1 -->
+            <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> <!-- 10/11 -->
+        </application>
+    </compatibility>
+    <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+        <security>
+            <requestedPrivileges>
+                <requestedExecutionLevel level="asInvoker"/>
+            </requestedPrivileges>
+        </security>
+    </trustInfo>
+    <application xmlns="urn:schemas-microsoft-com:asm.v3">
+        <windowsSettings>
+            <longPathAware xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">true</longPathAware>
+            <activeCodePage xmlns="http://schemas.microsoft.com/SMI/2019/WindowsSettings">UTF-8</activeCodePage>
+        </windowsSettings>
+    </application>
+</assembly>
+_head_liblzma_5_dll
+__imp_abort
+__lib64_libkernel32_a_iname
+__imp__fmode
+__imp____mb_cur_max_func
+__imp__lock
+_head_lib64_libmsvcrt_def_a
+__imp_ferror
+__imp_calloc
+__imp_LoadLibraryW
+__imp_fileno
+__imp_GetCPInfo
+__imp_setlocale
+__imp_DeleteCriticalSection
+__imp_lzma_version_string
+__imp_fputc
+__imp__amsg_exit
+__imp_IsProcessorFeaturePresent
+__imp__errno
+__imp___msvcrt_iswctype
+__imp_getenv
+__imp_MultiByteToWideChar
+__imp___C_specific_handler
+__imp_strrchr
+__imp_GetLastError
+__imp_free
+__imp_lzma_alone_decoder
+__imp_LeaveCriticalSection
+__imp_feof
+__imp_write
+__IAT_end__
+__imp_memcpy
+liblzma_5_dll_iname
+__lib64_libmsvcrt_def_a_iname
+__imp_strerror
+__imp_setmode
+__imp_fwrite
+__imp_setvbuf
+__imp___getmainargs
+_head_lib64_libkernel32_a
+__imp_EnterCriticalSection
+__imp_TerminateProcess
+__imp_GetProcAddress
+__imp_signal
+__imp_GetModuleHandleA
+__imp_WideCharToMultiByte
+__imp_strlen
+__imp_malloc
+__imp_InitializeCriticalSection
+__imp_exit
+__imp_vfprintf
+__imp___initenv
+__imp_lzma_code
+__IAT_start__
+__imp__cexit
+__imp_SetUnhandledExceptionFilter
+__imp_Sleep
+__imp___setusermatherr
+__imp_TlsGetValue
+__imp_fprintf
+__imp__crt_atexit
+__imp_VirtualProtect
+__imp_VirtualQuery
+__imp__initterm
+__imp_fclose
+__imp___iob_func
+__imp_localeconv
+__imp_strncmp
+__imp_strchr
+__imp_wcslen
+__imp____lc_codepage_func
+__imp_fflush
+__imp__unlock
+__imp___set_app_type
+__imp_fread
+__imp__commode
+__imp_fopen
+__imp_GetCurrentProcess
+(null)
+sadvapi32.dll
+VS_VERSION_INFO
+StringFileInfo
+040904b0
+CompanyName
+The Tukaani Project <https://tukaani.org/>
+FileDescription
+lzmadec decompression tool for .lzma files
+FileVersion
+InternalName
+lzmadec
+OriginalFilename
+lzmadec.exe
+ProductName
+XZ Utils <https://tukaani.org/xz/>
+ProductVersion
+VarFileInfo
+Translation

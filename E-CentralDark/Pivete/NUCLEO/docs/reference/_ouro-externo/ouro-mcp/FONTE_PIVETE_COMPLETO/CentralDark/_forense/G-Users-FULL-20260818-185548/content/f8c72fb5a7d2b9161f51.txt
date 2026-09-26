@@ -1,0 +1,13 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@babel\helpers\lib\helpers\readOnlyError.js
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _readOnlyError;
+function _readOnlyError(name) {
+  throw new TypeError('"' + name + '" is read-only');
+}
+
+//# sourceMappingURL=readOnlyError.js.map

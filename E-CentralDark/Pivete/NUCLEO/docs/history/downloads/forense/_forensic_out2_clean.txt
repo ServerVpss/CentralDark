@@ -1,0 +1,308 @@
+﻿=== FORENSIC PHASE2 2026-08-22T05:12:31.4083723-03:00 ===
+
+=== REG LAST WRITE (policy / defender) ===
+HKLM\SOFTWARE\Policies\Microsoft\Windows Defender  lastWrite=22/08/2026 04:42:02
+HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection  lastWrite=17/07/2025 16:42:07
+HKLM\SOFTWARE\Microsoft\Windows Defender  lastWrite=21/02/2025 15:17:34
+HKLM\SOFTWARE\Microsoft\Windows Defender\Features  lastWrite=21/02/2025 15:17:34
+HKLM\SYSTEM\CurrentControlSet\Services\WinDefend  lastWrite=05/05/2025 11:03:01
+HKLM\SYSTEM\CurrentControlSet\Services\WdNisSvc  lastWrite=05/05/2025 11:03:01
+HKLM\SYSTEM\CurrentControlSet\Services\WdFilter  lastWrite=05/05/2025 11:03:01
+HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Exclusions  ERR Exceção ao chamar "GetLastWrite" com "2" argumento(s): "missing"
+HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System  lastWrite=22/08/2026 03:42:48
+
+=== LOCAL GPO FILES ===
+
+FullName                                             Length LastWriteTime       CreationTime       
+--------                                             ------ -------------       ------------       
+C:\Windows\System32\GroupPolicy\Machine                     08/06/2025 23:24:53 08/06/2025 23:24:53
+C:\Windows\System32\GroupPolicy\User                        08/06/2025 23:24:53 08/06/2025 23:24:53
+C:\Windows\System32\GroupPolicy\gpt.ini              128    11/06/2025 05:41:38 08/06/2025 23:24:53
+C:\Windows\System32\GroupPolicy\Machine\Registry.pol 150    11/06/2025 05:41:38 08/06/2025 23:24:53
+
+=== REGISTRY.POL HEX HEAD ===
+Registry.pol size=150 created=08/06/2025 23:24:53 written=11/06/2025 05:41:38
+POL_TEXT_SNIP:
+剐来[Software\Microsoft\Windows\CurrentVersion\Policies\Explorer;;;;]
+
+=== RUN KEYS ===
+-- HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run --
+
+
+RtkAudUService : "C:\WINDOWS\System32\RtkAudUService64.exe" -background
+iTunesHelper   : "C:\Program Files\iTunes\iTunesHelper.exe"
+BdVpnApp       : "C:\Program Files\Bitdefender\Bitdefender VPN\BdVpnApp.exe" startup
+PSPath         : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+PSParentPath   : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion
+PSChildName    : Run
+PSDrive        : HKLM
+PSProvider     : Microsoft.PowerShell.Core\Registry
+-- HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce --
+
+-- HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run --
+
+
+Lightshot        : C:\Program Files (x86)\Skillbrains\lightshot\Lightshot.exe
+Adobe CCXProcess : C:\Program Files (x86)\Adobe\Adobe Creative Cloud Experience\CCXProcess.exe
+PSPath           : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\Curren
+                   tVersion\Run
+PSParentPath     : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\Curren
+                   tVersion
+PSChildName      : Run
+PSDrive          : HKLM
+PSProvider       : Microsoft.PowerShell.Core\Registry
+-- HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run --
+
+
+OneDrive                                                    : "C:\Users\danda\AppData\Local\Microsoft\OneDrive\OneDrive
+                                                              .exe" /background
+Discord                                                     : "C:\Users\danda\AppData\Local\Discord\Update.exe" 
+                                                              --processStart Discord.exe
+Opera GX Stable                                             : "C:\Users\danda\AppData\Local\Programs\Opera 
+                                                              GX\opera.exe" --autostart
+AvastBrowserAutoLaunch_7A2F33E11A3FB4F555AABF7B216D79D8     : "C:\Program Files\AVAST 
+                                                              Software\Browser\Application\AvastBrowser.exe" 
+                                                              --check-run=src=logon --auto-launch-at-startup 
+                                                              --profile-directory="Default"
+XiaomiAuth User Client                                      : C:\Program Files\HyperAuthTool\FRP_FDL\UserClient.exe
+MicrosoftEdgeAutoLaunch_D06D40255917388E0B5EB9F10508162E    : "C:\Program Files 
+                                                              (x86)\Microsoft\Edge\Application\msedge.exe" 
+                                                              --win-session-start
+MicrosoftCopilotAutoLaunch_D49D03811FA10E476D994B234BF70FD5 : "C:\Program Files 
+                                                              (x86)\Microsoft\Copilot\Application\mscopilot.exe" 
+                                                              --no-startup-window --win-session-start
+Visual Studio Code Tunnel                                   : "c:\Users\danda\AppData\Local\Programs\Microsoft VS 
+                                                              Code\bin\code-tunnel.exe" --verbose --cli-data-dir 
+                                                              C:\Users\danda\.vscode\cli tunnel service internal-run 
+                                                              --log-to-file 
+                                                              C:\Users\danda\.vscode\cli\tunnel-service.log
+GoogleChromeAutoLaunch_4AA7C11489E20CF640699BDA029E8729     : "C:\Program Files\Google\Chrome\Application\chrome.exe" 
+                                                              --no-startup-window /prefetch:5
+OpenClawTray                                                : "E:\OpenClawTray\OpenClaw.Tray.WinUI.exe"
+Opera GX Browser Assistant                                  : C:\Users\danda\AppData\Local\Programs\Opera 
+                                                              GX\assistant\browser_assistant.exe
+PSPath                                                      : Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\SOF
+                                                              TWARE\Microsoft\Windows\CurrentVersion\Run
+PSParentPath                                                : Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\SOF
+                                                              TWARE\Microsoft\Windows\CurrentVersion
+PSChildName                                                 : Run
+PSDrive                                                     : HKCU
+PSProvider                                                  : Microsoft.PowerShell.Core\Registry
+-- HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce --
+
+-- HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run --
+(missing)
+-- HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run --
+(missing)
+
+=== STARTUP FOLDERS ===
+-- C:\Users\danda\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup --
+25/03/2025 06:28:03 1413 C:\Users\danda\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\Audio system.lnk
+21/02/2025 15:17:54 174 C:\Users\danda\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\desktop.ini
+18/07/2026 03:49:44 426 C:\Users\danda\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\Hermes_Gateway.vbs
+28/07/2026 12:18:27 472 C:\Users\danda\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\Hermes_Gateway_pivete.vbs
+08/08/2026 18:29:21 460 C:\Users\danda\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\Hermes_Gateway_sol.vbs
+26/06/2026 17:45:18 1445 C:\Users\danda\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\LivePaper.lnk
+08/05/2026 16:44:22 3229 C:\Users\danda\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\WhatsApp Web.lnk
+-- C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup --
+01/04/2024 04:24:04 174 C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\desktop.ini
+01/03/2026 10:00:49 2054 C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\FxSound.lnk
+
+=== IFEO DEBUGGER ===
+
+=== APPINIT / IFEO SILENT / KNOWN DLLS ===
+AppInit_DLLs= LoadAppInit_DLLs=0 RequireSignedAppInit_DLLs=
+Wow AppInit_DLLs= Load=1
+
+=== WMI EVENT CONSUMERS / FILTERS ===
+FILTER Name=SCM Event Log Filter Query=select * from MSFT_SCMEventLogEvent
+BIND Filter=__EventFilter (Name = "SCM Event Log Filter") Consumer=NTEventLogEventConsumer (Name = "SCM Event Log Consumer")
+
+=== SCHEDULED TASKS (non-Microsoft, or AV-related) ===
+TASK [\AMDInstallLauncher] State=Ready User=danda Exec=C:\Program Files\AMD\CIM\Bin64\InstallManagerApp.exe /InstallAUEP
+TASK [\AMDLinkUpdate] State=Ready User=danda Exec=C:\Program Files\AMD\CIM\Bin64\InstallManagerApp.exe -AMDLinkUpdate
+TASK [\CCleaner 7 - Skip UAC - S-1-5-21-200212632-3624053253-2615606181-1001] State=Ready User=danda Exec="C:\Program Files\Piriform\CCleaner 7\CCleaner.exe" $(Arg0)
+TASK [\CreateExplorerShellUnelevatedTask] State=Running User=danda Exec=C:\WINDOWS\explorer.exe /NoUACCheck
+TASK [\cua-driver-serve] State=Ready User=danda Exec=powershell.exe -NoProfile -WindowStyle Hidden -NonInteractive -Command "Start-Process -FilePath 'C:\Users\danda\.cua-driver\packages\releases\0.16.0-x86_64-pc-windows-msvc\cua-driver.exe' -ArgumentList 'serve' -WindowStyle Hidden -WorkingDirectory 'C:\Users\danda'"
+TASK [\Driver Booster Scheduler] State=Ready User=Administrador Exec="C:\Program Files (x86)\IObit\Driver Booster\13.5.0\Scheduler.exe" /scheduler
+TASK [\Driver Booster SkipUAC (danda)] State=Ready User=danda Exec="C:\Program Files (x86)\IObit\Driver Booster\13.5.0\DriverBooster.exe" /skipuac
+TASK [\Driver Booster Update] State=Ready User=Administrador Exec="C:\Program Files (x86)\IObit\Driver Booster\13.5.0\AutoUpdate.exe" /auto
+TASK [\OneDrive Reporting Ta[REDIGIDO-PRESERVACAO]] State=Ready User=danda Exec=%localappdata%\Microsoft\OneDrive\OneDriveStandaloneUpdater.exe /reporting
+TASK [\OneDrive Standalone Update Ta[REDIGIDO-PRESERVACAO]] State=Ready User=danda Exec=%localappdata%\Microsoft\OneDrive\OneDriveStandaloneUpdater.exe 
+TASK [\OneDrive Startup Ta[REDIGIDO-PRESERVACAO]] State=Ready User=danda Exec=C:\Users\danda\AppData\Local\Microsoft\OneDrive\26.145.0728.0010\OneDriveLauncher.exe /startInstances
+TASK [\Opera GX scheduled assistant Autoupdate 1744217490] State=Ready User=danda Exec=C:\Users\danda\AppData\Local\Programs\Opera GX\autoupdate\opera_autoupdate.exe --scheduledtask --productiscomponent --installdir="C:\Users\danda\AppData\Local\Programs\Opera GX\assistant" --producttype=assistant $(Arg0)
+TASK [\Opera GX scheduled assistant Autoupdate 1786474582] State=Ready User=danda Exec=C:\Users\danda\AppData\Local\Programs\Opera GX\autoupdate\opera_autoupdate.exe --scheduledtask --productiscomponent --installdir="C:\Users\danda\AppData\Local\Programs\Opera GX\assistant" --producttype=assistant $(Arg0)
+TASK [\Opera GX scheduled Autoupdate 1743612449] State=Ready User=danda Exec=C:\Users\danda\AppData\Local\Programs\Opera GX\autoupdate\opera_autoupdate.exe --scheduledtask $(Arg0)
+TASK [\Opera GX scheduled Autoupdate 1786474581] State=Ready User=danda Exec=C:\Users\danda\AppData\Local\Programs\Opera GX\autoupdate\opera_autoupdate.exe --scheduledtask $(Arg0)
+TASK [\StartCN] State=Ready User= Exec="C:\Program Files\AMD\CNext\CNext\cncmd.exe" startwithdelay
+TASK [\StartDVR] State=Ready User= Exec="C:\Program Files\AMD\CNext\CNext\RSServCmd.exe" 
+TASK [\update-S-1-5-21-200212632-3624053253-2615606181-1001] State=Ready User=danda Exec=C:\Program Files (x86)\Skillbrains\Updater\Updater.exe -runmode=checkupdate
+TASK [\User_Feed_Synchronization-{36A00F1C-4C83-4EFA-B072-9A6082F65CC8}] State=Ready User=danda Exec=C:\WINDOWS\system32\msfeedssync.exe sync
+TASK [\Apple\AppleSoftwareUpdate] State=Ready User= Exec=C:\Program Files (x86)\Apple Software Update\SoftwareUpdate.exe -task
+TASK [\Microsoft\Windows\DirectX\DirectXDatabaseUpdater] State=Ready User=SISTEMA Exec=%windir%\system32\directxdatabaseupdater.exe 
+TASK [\Microsoft\Windows\DiskCleanup\SilentCleanup] State=Ready User= Exec=%windir%\system32\cleanmgr.exe /autocleanstoragesense /d %systemdrive%
+TASK [\Microsoft\Windows\InstallService\ScanForUpdates] State=Ready User=SISTEMA Exec= 
+TASK [\Microsoft\Windows\InstallService\ScanForUpdatesAsUser] State=Ready User= Exec= 
+TASK [\Microsoft\Windows\InstallService\WakeUpAndContinueUpdates] State=Disabled User=SISTEMA Exec= 
+TASK [\Microsoft\Windows\InstallService\WakeUpAndScanForUpdates] State=Disabled User=SISTEMA Exec= 
+TASK [\Microsoft\Windows\Maps\MapsUpdateTask] State=Ready User=SERVIÇO DE REDE Exec= 
+TASK [\Microsoft\Windows\PCRPF\PCR Prediction Framework Firmware Update Task] State=Ready User=SISTEMA Exec=%windir%\system32\rundll32.exe %windir%\system32\pcrpf.dll,NotifyFirmwareUpdateStaged
+TASK [\Microsoft\Windows\Shell\UpdateUserPictureTask] State=Ready User= Exec= 
+TASK [\Microsoft\Windows\Shell\UpdateUserPictureTaskContained] State=Ready User= Exec= 
+TASK [\Microsoft\Windows\Windows Media Sharing\UpdateLibrary] State=Ready User= Exec="%ProgramFiles%\Windows Media Player\wmpnscfg.exe" 
+TASK [\SoftLanding\S-1-5-21-200212632-3624053253-2615606181-1001\SoftLandingCreativeManagementTask] State=Ready User=danda Exec= 
+TASK [\SoftLanding\S-1-5-21-200212632-3624053253-2615606181-1001\SoftLandingDeferralTask-{439caf03-be19-4212-a73e-4b6a15236aef}] State=Ready User=danda Exec= 
+TASK [\SoftLanding\S-1-5-21-200212632-3624053253-2615606181-1001\SoftLandingTriggerTask-128000000001615609-render-{a4c7e693-5252-4076-9b82-68e14ab097e0}] State=Disabled User=danda Exec= 
+
+=== BITDEFENDER / MALWAREBYTES / CCLEANER SIGNATURES ===
+LIVE CCLEANER pid=4888 path=
+LIVE CCLEANER pid=9512 path=
+FILE C:\Program Files\Bitdefender Agent\redline\bdredline.exe
+  size=2426992 created=21/08/2026 01:19:11 written=03/07/2025 12:21:51 sha256=FE5F4A2D0FA53EF254F41FAA2D1ABF3ACA28158AF2E77C5037326AB7E423C7C0
+  sigStatus=Valid signer=CN=Bitdefender SRL, OU=DEVSUP CLINSTALLER, O=Bitdefender SRL, L=Bucuresti, C=RO issuer=CN=DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA1, O="DigiCert, Inc.", C=US
+FILE C:\Program Files\Bitdefender Agent\ProductAgentService.exe
+  size=784504 created=21/08/2026 01:19:10 written=11/08/2026 04:51:52 sha256=E8EF252E6ED684391322FA61C21FF1312A462E6B58A066EB7B4A9881D4AC9E67
+  sigStatus=Valid signer=CN=Bitdefender SRL, OU=DEVSUP CLINSTALLER, O=Bitdefender SRL, L=Bucuresti, C=RO issuer=CN=DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA1, O="DigiCert, Inc.", C=US
+FILE C:\Program Files\Bitdefender\Bitdefender VPN\bdvpnapp.exe
+  size=500968 created=21/08/2026 02:07:39 written=13/07/2026 08:09:24 sha256=713BAB4F688C9732FED4BA91148C69829DB8F1FF753866EE77B9F3DC3DD5D351
+  sigStatus=Valid signer=CN=Bitdefender SRL, OU=DEVSUP CONSUMER APPS, O=Bitdefender SRL, L=Bucuresti, C=RO issuer=CN=DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA1, O="DigiCert, Inc.", C=US
+FILE C:\Program Files\Bitdefender\Bitdefender VPN\bdvpnservice.exe
+  size=496840 created=21/08/2026 02:07:39 written=13/07/2026 08:09:56 sha256=9771321C53882238B33CB18EB647BEEEF3B5F16293FA6B97A613FAB50AA4AB6E
+  sigStatus=Valid signer=CN=Bitdefender SRL, OU=DEVSUP CONSUMER APPS, O=Bitdefender SRL, L=Bucuresti, C=RO issuer=CN=DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA1, O="DigiCert, Inc.", C=US
+FILE C:\Program Files\Malwarebytes\Anti-Malware\Malwarebytes.exe
+  size=311368 created=01/11/2024 00:27:19 written=21/08/2026 17:02:19 sha256=F668F511118090E7AB4CCDD32BF497DBB5FD5572D2BD1E1F94BA340024CAD192
+  sigStatus=Valid signer=CN=Malwarebytes Inc, O=Malwarebytes Inc, L=Santa Clara, S=California, C=US, SERIALNUMBER=5430750, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=Delaware, OID.1.3.6.1.4.1.311.60.2.1.3=US issuer=CN=DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA1, O="DigiCert, Inc.", C=US
+FILE C:\Program Files\Malwarebytes\Anti-Malware\MBAMService.exe
+  size=11671792 created=01/11/2024 00:27:18 written=21/08/2026 17:02:19 sha256=F15590CEAF07889E9BD1997128E1466EFA94C8B1C93A5C36A78B934EBB65EE48
+  sigStatus=Valid signer=CN=Malwarebytes Inc, O=Malwarebytes Inc, L=Santa Clara, S=California, C=US, SERIALNUMBER=5430750, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=Delaware, OID.1.3.6.1.4.1.311.60.2.1.3=US issuer=CN=DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA1, O="DigiCert, Inc.", C=US
+MISSING C:\Program Files\CCleaner\CCleaner64.exe
+MISSING C:\Program Files\CCleaner\CCleaner.exe
+MISSING C:\Program Files (x86)\CCleaner\CCleaner.exe
+FILE C:\Program Files\Windows Defender\MsMpEng.exe
+  size=282480 created=09/12/2025 15:32:37 written=09/12/2025 15:32:37 sha256=C02655606C199BA276D2B01A796E6EBBA07A41EEDE9C85FE516D9A5851290155
+  sigStatus=Valid signer=CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US issuer=CN=Microsoft Windows Production PCA 2011, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+
+=== BITDEFENDER TREE (top) ===
+C:\Program Files\Bitdefender Agent\27.1.1.45
+C:\Program Files\Bitdefender Agent\apps_data
+C:\Program Files\Bitdefender Agent\redline
+C:\Program Files\Bitdefender Agent\settings
+C:\Program Files\Bitdefender Agent\ProductAgentDP.dll
+C:\Program Files\Bitdefender Agent\ProductAgentService.exe
+C:\Program Files\Bitdefender Agent\ProductAgentUI.exe
+C:\Program Files\Bitdefender Agent\version.json
+C:\Program Files\Bitdefender Agent\WebView2Loader.dll
+C:\Program Files\Bitdefender\Bitdefender Security
+C:\Program Files\Bitdefender\Bitdefender Security App
+C:\Program Files\Bitdefender\Bitdefender VPN
+C:\Program Files\Bitdefender\Bitdefender Security\atcuf
+C:\Program Files\Bitdefender\Bitdefender Security\bdamsi
+C:\Program Files\Bitdefender\Bitdefender Security\bdhkm
+ATC FEEDBACK missing (no CVE-2025-7073 reparse artifact)
+
+=== COWORK / REMOTE ACCESS ===
+PID=9704 PPID=1724 NAME=cowork-svc.exe PATH= CMD=
+SVC bdredline_agent state=Running start=Auto path="C:\Program Files\Bitdefender Agent\redline\bdredline.exe"
+SVC bdvpnservice state=Stopped start=Auto path="C:\Program Files\Bitdefender\Bitdefender VPN\bdvpnservice.exe" "service"
+SVC CCleaner7 state=Running start=Auto path="C:\Program Files\Piriform\CCleaner 7\CCleaner_service.exe" service run
+SVC CoworkVMService state=Running start=Auto path="C:\Program Files\WindowsApps\Claude_1.26832.0.0_x64__pzs8sxrjxfjjc\app\resources\cowork-svc.exe"
+SVC MBAMService state=Running start=Auto path="C:\Program Files\Malwarebytes\Anti-Malware\MBAMService.exe"
+SVC MBVpnTunnelService state=Stopped start=Manual path="C:\Program Files\Malwarebytes\Anti-Malware\MBVpnTunnelService.exe"
+SVC ProductAgentService state=Running start=Auto path="C:\Program Files\Bitdefender Agent\ProductAgentService.exe"
+SVC TeamViewer state=Stopped start=Auto path="C:\Program Files\TeamViewer\TeamViewer_Service.exe"
+
+=== NETWORK ESTABLISHED (non-loopback, interesting owners) ===
+2804:d47:6364:8400:304c:4876:1216:17f:61433 -> 2603:1030:210:f:::443 pid=8356 svchost.exe
+2804:d47:6364:8400:304c:4876:1216:17f:60718 -> 2800:3f0:4003:c00::bc:5228 pid=22268 chrome.exe
+2804:d47:6364:8400:304c:4876:1216:17f:60413 -> 2606:4700::6812:1dea:443 pid=23556 grok.exe
+2804:d47:6364:8400:304c:4876:1216:17f:60411 -> 2800:3f0:4003:c03::54:443 pid=22268 chrome.exe
+2804:d47:6364:8400:304c:4876:1216:17f:60092 -> 2001:4860:4826:200:::443 pid=22268 chrome.exe
+2804:d47:6364:8400:304c:4876:1216:17f:59815 -> 2800:3f0:4003:c00::bc:5228 pid=22268 chrome.exe
+2804:d47:6364:8400:304c:4876:1216:17f:56978 -> 2606:4700::6812:1dea:443 pid=23556 grok.exe
+2804:d47:6364:8400:304c:4876:1216:17f:56908 -> 2800:3f0:4004:811::200e:443 pid=22268 chrome.exe
+2804:d47:6364:8400:304c:4876:1216:17f:55795 -> 2800:3f0:4003:c03::54:443 pid=22268 chrome.exe
+2804:d47:6364:8400:304c:4876:1216:17f:55072 -> 2606:4700::6812:1cea:443 pid=23556 grok.exe
+2804:d47:6364:8400:304c:4876:1216:17f:54203 -> 2606:4700::6811:6b6c:443 pid=8540 ProductAgentService.exe
+2804:d47:6364:8400:304c:4876:1216:17f:51301 -> 2001:4860:4828:7700:::443 pid=22268 chrome.exe
+2804:d47:6364:8400:304c:4876:1216:17f:50540 -> 2001:4860:482a:7700:::443 pid=22268 chrome.exe
+2804:d47:6364:8400:304c:4876:1216:17f:49280 -> 2606:4700::6812:1dea:443 pid=23556 grok.exe
+2804:d47:6364:8400:304c:4876:1216:17f:49279 -> 2606:4700::6812:1dea:443 pid=23556 grok.exe
+2804:d47:6364:8400:304c:4876:1216:17f:49268 -> 2800:3f0:4003:c03::54:443 pid=22268 chrome.exe
+192.168.100.5:56967 -> 35.190.25.25:443 pid=23556 grok.exe
+192.168.100.5:50060 -> 54.236.196.245:443 pid=22268 chrome.exe
+
+=== LISTENING PORTS (non-typical) ===
+LISTEN :::49867 pid=1724 services.exe 
+LISTEN ::1:49794 pid=8312 jhi_service.exe 
+LISTEN :::49673 pid=5984 spoolsv.exe 
+LISTEN ::1:42050 pid=26476 OneDrive.Sync.Service.exe C:\Users\danda\AppData\Local\Microsoft\OneDrive\26.145.0728.0010\OneDrive.Sync.Service.exe
+LISTEN :::2869 pid=4 System 
+LISTEN 127.0.0.1:55588 pid=25468 explorer.exe C:\WINDOWS\explorer.exe
+LISTEN 0.0.0.0:49867 pid=1724 services.exe 
+LISTEN 0.0.0.0:49673 pid=5984 spoolsv.exe 
+LISTEN 127.0.0.1:27015 pid=7784 AppleMobileDeviceService.exe 
+LISTEN 127.0.0.1:1001 pid=4 System 
+
+=== DEFENDER EVENT LOG (last 80) ===
+2025-02-21T15:17:32.3805419-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\Diagnostics\CleanupComponentProgress = UninitializeWscLib Novo valor: H
+2025-02-21T15:17:32.3800820-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\ProductAppDataPath = C:\ProgramData\Microsoft\Windows Defender Novo val
+2025-02-21T15:17:19.5535487-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: Default\ProductAppDataPath = C:\ProgramData\Microsoft\Windows Defender Novo valor: HKLM\SOFTWARE\Microsoft\Windo
+2025-02-21T15:17:19.5535435-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\ServiceStartStates = 0x1001 Novo valor: Default\ServiceStartStates = 0x
+2025-02-21T15:17:17.2717891-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\Diagnostics\InitializingComponentProgress = LoadingEngine Novo valor: H
+2025-02-21T15:17:17.2707026-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\CoreService\WdConfigHash = 0x766414F1 Novo valor: HKLM\SOFTWARE\Microso
+2025-02-21T15:17:11.8204407-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\Diagnostics\InitializingComponentProgress = PostPlatformUpdate Novo val
+2025-02-21T15:17:11.8197754-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: Default\ServiceStartStates = 0x0 Novo valor: HKLM\SOFTWARE\Microsoft\Windows Defender\ServiceStartStates = 0x100
+2025-02-21T15:17:07.0085516-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\Diagnostics\InitializingComponentProgress = InitializeMiscConfigLibrary
+2025-02-21T15:17:07.0067436-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\CoreService\WdConfigHash = 0x64661B8D Novo valor: HKLM\SOFTWARE\Microso
+2025-02-21T07:40:41.1212830-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\Diagnostics\CleanupComponentProgress = CleanupCompleted Novo valor: HKL
+2025-02-21T07:40:27.8681962-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\Features\Controls\105 = 0x1 Novo valor: 
+2025-02-21T07:40:27.8681933-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: Novo valor: HKLM\SOFTWARE\Microsoft\Windows Defender\Features\Controls\_5 = 0x1
+2025-02-21T07:40:27.8671300-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\Diagnostics\InitializingComponentProgress = LoadingEngine Novo valor: H
+2025-02-21T07:40:27.8667114-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\CoreService\WdConfigHash = 0x766414F1 Novo valor: HKLM\SOFTWARE\Microso
+2025-02-21T07:40:27.3926258-03:00 Id=2000 Microsoft Defender Antivírus versão atualizada do Security Intelligence. Versão atual do Security Intelligence: 1.419.757.0 Versão anterior do Security Intelligence: 1.419.715.0 Security intelligence Type: Anti-spyware Tipo de Atualização: Delta Usuário: AUTORIDADE NT\SISTEMA Versão atual do Engine:
+2025-02-21T07:40:27.3922305-03:00 Id=2000 Microsoft Defender Antivírus versão atualizada do Security Intelligence. Versão atual do Security Intelligence: 1.419.757.0 Versão anterior do Security Intelligence: 1.419.715.0 Security intelligence Type: Antivírus Tipo de Atualização: Delta Usuário: AUTORIDADE NT\SISTEMA Versão atual do Engine: 1.
+2025-02-21T07:40:21.7141726-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\Diagnostics\InitializingComponentProgress = PostPlatformUpdate Novo val
+2025-02-21T07:40:15.6388041-03:00 Id=2014 Microsoft Defender Antivírus atualização da plataforma 4.18.24080.9 êxito. 
+2025-02-21T07:40:15.4488803-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\Features\EcsConfigs\MpFC_M365ToastCurrentVerRollout = 0x0 Novo valor: H
+2025-02-21T07:40:15.4488752-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\Features\EcsConfigs\MpFC_M365StablePackVer = 0x960DA98 Novo valor: HKLM
+2025-02-21T07:40:15.4488714-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: Novo valor: HKLM\SOFTWARE\Microsoft\Windows Defender\Features\EcsConfigs\MpFC_CoreSvc_ResMon_MemLimit = 0x190
+2025-02-21T07:40:15.4488675-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: Novo valor: HKLM\SOFTWARE\Microsoft\Windows Defender\Features\EcsConfigs\MpEnableNoMetaStoreProcessInfoContainer
+2025-02-21T07:40:15.4488628-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\Features\EcsConfigs\MpFC_M365SsoFeature = 0x0 Novo valor: HKLM\SOFTWARE
+2025-02-21T07:40:15.4488566-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\Features\EcsConfigs\MpFC_M365CurrentPackVer = 0x960DE80 Novo valor: HKL
+2025-02-21T07:40:15.4488492-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: Novo valor: HKLM\SOFTWARE\Microsoft\Windows Defender\Features\EcsConfigs\MpFC_DC_EnableAadSidCache = 0x1
+2025-02-21T07:40:15.4488433-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\Features\EcsConfigs\MpFC_M365ToastFeature = 0x0 Novo valor: HKLM\SOFTWA
+2025-02-21T07:40:15.4488359-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: HKLM\SOFTWARE\Microsoft\Windows Defender\Features\EcsConfigs\MpFC_M365SsoCurrentVerRollout = 0x0 Novo valor: HKL
+2025-02-21T07:40:15.4488314-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: Novo valor: HKLM\SOFTWARE\Microsoft\Windows Defender\Features\EcsConfigs\MpFC_SAC_ClientWaitForRpc = 0x0
+2025-02-21T07:40:15.4488268-03:00 Id=5007 A Configuração do Microsoft Defender Antivírus foi alterada. Se este é um evento inesperado, convém verificar as configurações, pois isso pode ser o resultado de um malware. Valor antigo: Novo valor: HKLM\SOFTWARE\Microsoft\Windows Defender\Features\EcsConfigs\MpFC_Kernel_PreventBindfltAbuse = 0x1
+
+=== SYSTEM LOG SERVICE CONTROL WinDefend (last 40) ===
+2026-08-22T04:45:46.8846775-03:00 Id=7040 O tipo de inicialização do serviço Bitdefender Protected Service foi alterado de iniciar automaticamente para desativado.
+2026-08-22T04:45:46.2391411-03:00 Id=7040 O tipo de inicialização do serviço Bitdefender Safepay Service foi alterado de iniciar automaticamente para desativado.
+2026-08-22T04:45:46.0477151-03:00 Id=7040 O tipo de inicialização do serviço Bitdefender App Service foi alterado de iniciar automaticamente para desativado.
+2026-08-22T04:45:45.8406408-03:00 Id=7040 O tipo de inicialização do serviço Bitdefender Auxiliary Service foi alterado de iniciar automaticamente para desativado.
+2026-08-21T19:06:18.4923754-03:00 Id=7045 Foi instalado um serviço no sistema Nome do Serviço: VPN Host Service: bdvpnservice_2 Nome do Arquivo de Serviço: "C:\Program Files\Bitdefender\Bitdefender VPN\WireGuard\amd64\VpnHostService.exe" /service "C:\Program Files\Bitdefender\Bitdefender VPN\settings\wireguard\bdvpnservi
+2026-08-21T18:40:29.6577401-03:00 Id=7045 Foi instalado um serviço no sistema Nome do Serviço: VPN Host Service: bdvpnservice_1 Nome do Arquivo de Serviço: "C:\Program Files\Bitdefender\Bitdefender VPN\WireGuard\amd64\VpnHostService.exe" /service "C:\Program Files\Bitdefender\Bitdefender VPN\settings\wireguard\bdvpnservi
+2026-08-21T17:27:07.3807323-03:00 Id=7045 Foi instalado um serviço no sistema Nome do Serviço: VPN Host Service: bdvpnservice_2 Nome do Arquivo de Serviço: "C:\Program Files\Bitdefender\Bitdefender VPN\WireGuard\amd64\VpnHostService.exe" /service "C:\Program Files\Bitdefender\Bitdefender VPN\settings\wireguard\bdvpnservi
+2026-08-21T17:02:46.1102381-03:00 Id=7040 O tipo de inicialização do serviço Malwarebytes Service foi alterado de desativado para iniciar automaticamente.
+2026-08-21T17:02:37.4244114-03:00 Id=7040 O tipo de inicialização do serviço Malwarebytes Service foi alterado de iniciar automaticamente para desativado.
+2026-08-21T17:02:37.2868624-03:00 Id=7045 Foi instalado um serviço no sistema Nome do Serviço: Malwarebytes Updater Service Nome do Arquivo de Serviço: C:\ProgramData\Malwarebytes\MBAMService\ctlrupdate\mbupdatr.exe Tipo de Serviço: serviço de modo de usuário Tipo de Início de Serviço: iniciar automaticamente Conta de Se
+2026-08-21T02:07:53.2976903-03:00 Id=7045 Foi instalado um serviço no sistema Nome do Serviço: bdvpn_callout Nome do Arquivo de Serviço: C:\Program Files\Bitdefender\Bitdefender VPN\Drivers\x64\netfilter.sys Tipo de Serviço: driver de modo kernel Tipo de Início de Serviço: iniciar demanda Conta de Serviço: 
+2026-08-21T02:07:43.6726689-03:00 Id=7045 Foi instalado um serviço no sistema Nome do Serviço: Serviço Bitdefender VPN Nome do Arquivo de Serviço: "C:\Program Files\Bitdefender\Bitdefender VPN\bdvpnservice.exe" "service" Tipo de Serviço: serviço de modo de usuário Tipo de Início de Serviço: iniciar automaticamente Conta 
+2026-08-21T01:21:15.3177166-03:00 Id=7040 O tipo de inicialização do serviço Bitdefender Safepay Service foi alterado de desativado para iniciar automaticamente.
+2026-08-21T01:21:15.1735730-03:00 Id=7040 O tipo de inicialização do serviço Bitdefender App Service foi alterado de desativado para iniciar automaticamente.
+2026-08-21T01:21:15.0305116-03:00 Id=7040 O tipo de inicialização do serviço Bitdefender Auxiliary Service foi alterado de desativado para iniciar automaticamente.
+2026-08-21T01:21:14.8816005-03:00 Id=7040 O tipo de inicialização do serviço Bitdefender Virus Shield foi alterado de desativado para iniciar automaticamente.
+2026-08-21T01:21:12.0428325-03:00 Id=7045 Foi instalado um serviço no sistema Nome do Serviço: Bitdefender RedLine Service Nome do Arquivo de Serviço: "C:\Program Files\Common Files\Bitdefender\SetupInformation\Bitdefender RedLine\bdredline.exe" Tipo de Serviço: serviço de modo de usuário Tipo de Início de Serviço: inici
+2026-08-21T01:21:08.8553444-03:00 Id=7040 O tipo de inicialização do serviço Bitdefender Protected Service foi alterado de desativado para iniciar automaticamente.
+2026-08-21T01:21:08.6684607-03:00 Id=7045 Foi instalado um serviço no sistema Nome do Serviço: Bitdefender Protected Service Nome do Arquivo de Serviço: "C:\Program Files\Bitdefender\Bitdefender Security\bdservicehost.exe" "settings\services\configs\bdprotsrv_config.json" Tipo de Serviço: serviço de modo de usuário Tipo 
+2026-08-21T01:21:08.0214030-03:00 Id=7045 Foi instalado um serviço no sistema Nome do Serviço: Bitdefender Desktop Update Service Nome do Arquivo de Serviço: "C:\Program Files\Bitdefender\Bitdefender Security\updatesrv.exe" /service Tipo de Serviço: serviço de modo de usuário Tipo de Início de Serviço: iniciar automatica
+2026-08-21T01:20:59.1234792-03:00 Id=7045 Foi instalado um serviço no sistema Nome do Serviço: Bitdefender Safepay Service Nome do Arquivo de Serviço: "C:\Program Files\Bitdefender\Bitdefender Security App\Safepay\bdservicehost.exe" "settings/services/configs/bdsafepaysrv_config.json" Tipo de Serviço: serviço de modo de 
+2026-08-21T01:20:58.8968552-03:00 Id=7045 Foi instalado um serviço no sistema Nome do Serviço: Bitdefender App Service Nome do Arquivo de Serviço: "C:\Program Files\Bitdefender\Bitdefender Security App\bdservicehost.exe" "settings/services/configs/bdappsrv_config.json" Tipo de Serviço: serviço de modo de usuário Tipo de 
+2026-08-21T01:20:58.5186204-03:00 Id=7045 Foi instalado um serviço no sistema Nome do Serviço: Bitdefender Auxiliary Service Nome do Arquivo de Serviço: "C:\Program Files\Bitdefender\Bitdefender Security\bdservicehost.exe" "settings/services/configs/bdauxsrv_config.json" Tipo de Serviço: serviço de modo de usuário Tipo d
+2026-08-21T01:20:58.3405861-03:00 Id=7045 Foi instalado um serviço no sistema Nome do Serviço: Bitdefender Virus Shield Nome do Arquivo de Serviço: "C:\Program Files\Bitdefender\Bitdefender Security\bdservicehost.exe" "settings/services/configs/bdshieldsrv_config.json" Tipo de Serviço: serviço de modo de usuário Tipo de 
+2026-08-21T01:19:15.1327134-03:00 Id=7040 O tipo de inicialização do serviço Bitdefender Product Agent Service foi alterado de desativado para iniciar automaticamente.
+2026-08-21T01:19:12.4783688-03:00 Id=7045 Foi instalado um serviço no sistema Nome do Serviço: Bitdefender Product Agent Service Nome do Arquivo de Serviço: "C:\Program Files\Bitdefender Agent\ProductAgentService.exe" Tipo de Serviço: serviço de modo de usuário Tipo de Início de Serviço: desativado Conta de Serviço: Loca
+2026-08-21T01:19:11.8679618-03:00 Id=7045 Foi instalado um serviço no sistema Nome do Serviço: Bitdefender Agent RedLine Service Nome do Arquivo de Serviço: "C:\Program Files\Bitdefender Agent\redline\bdredline.exe" Tipo de Serviço: serviço de modo de usuário Tipo de Início de Serviço: iniciar automaticamente Conta de Se
+
+=== POWERSHELL 4104 / 4103 recent (script blocks mentioning defender/disable) ===
+DONE_PHASE2

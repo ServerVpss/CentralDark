@@ -1,0 +1,140 @@
+{
+  "audit_target": {
+    "name": "qa-skillmaster-FULL-CORRIGIDO(2).zip",
+    "sha256": "10b1ca28563beb090c06dc939cad8cf70ed354a609ad92ae6739bfc4e20f4ac8",
+    "files_total": 51,
+    "manifest_entries": 17
+  },
+  "reproduced_baseline": {
+    "self_map": "SYNCED",
+    "node_check": {
+      "total": 15,
+      "pass": 15,
+      "fail": 0
+    },
+    "shell_syntax": {
+      "total": 4,
+      "pass": 4,
+      "fail": 0
+    },
+    "tests": {
+      "total": 44,
+      "pass": 44,
+      "fail": 0,
+      "skipped": 0
+    },
+    "demo": "PASS",
+    "archive_extraction": "PASS"
+  },
+  "calibrated_status": "BLOCKED_CALIBRATION_REQUIRED",
+  "confirmed_gaps": [
+    {
+      "id": "GAP-001",
+      "severity": "P0",
+      "title": "Preservação de missão é declarada sem missão comprovada",
+      "counterproof": {
+        "mission_id": null,
+        "mission_state": null,
+        "route_mission_preserved": true,
+        "delta": "MISSAO_ATUAL_PRESERVADA=SIM",
+        "invented_next_state": "TESTE_DISCRIMINATIVO_VERDE"
+      },
+      "required_fix": "Bloquear quando missão/checkpoint/nextState não forem localizados e comprovados."
+    },
+    {
+      "id": "GAP-002",
+      "severity": "P0",
+      "title": "Policy Gate interpreta SIM como zero",
+      "counterproof": {
+        "FAIL": "SIM",
+        "SKIPPED": "SIM",
+        "UNKNOWN": "SIM",
+        "ARQUIVOS_FORA_DO_ESCOPO": "SIM",
+        "gate_allowed": true
+      },
+      "required_fix": "Separar booleanos *_ZERO dos contadores brutos; contadores só aceitam número 0."
+    },
+    {
+      "id": "GAP-003",
+      "severity": "P0",
+      "title": "Verificador produz PASS com zero testes",
+      "counterproof": {
+        "tests_directory_removed": true,
+        "tests_total": 0,
+        "tests_pass": 0,
+        "verify_status": "PASS"
+      },
+      "required_fix": "Exigir total > 0, pass == total, fail/skipped/cancelled/todo == 0 e receipt parseado."
+    },
+    {
+      "id": "GAP-004",
+      "severity": "P1",
+      "title": "Symlink escapa da raiz apesar do path traversal lexical",
+      "counterproof": {
+        "manifest_path": "inside.md",
+        "inside_md_symlink_target": "outside-secret.md",
+        "outside_content_read": "SECRET_SENTINEL_123"
+      },
+      "required_fix": "Comparar realpath do arquivo e da raiz; rejeitar symlink ou alvo fora da raiz."
+    },
+    {
+      "id": "GAP-005",
+      "severity": "P1",
+      "title": "Aprendizado inventado é promovido como prova completa",
+      "counterproof": {
+        "source_ids": [
+          "inventado"
+        ],
+        "final_head": "banana",
+        "declared_tests": [
+          "FAIL",
+          "PASS",
+          "PASS",
+          "PASS"
+        ],
+        "promoted": true,
+        "reason": "PROVA_COMPLETA"
+      },
+      "required_fix": "Validar SHA canônico e receipts referenciados; declarações do próprio input não bastam como prova."
+    },
+    {
+      "id": "GAP-006",
+      "severity": "P1",
+      "title": "Deduplicação quebra sob concorrência",
+      "counterproof": {
+        "same_event_concurrent_calls": 2,
+        "orchestrator_calls": 2,
+        "first": "PROCESSED",
+        "second": "ENOENT during atomic rename"
+      },
+      "required_fix": "Lock/claim atômico por eventId e nome temporário único; single writer no checkpoint."
+    },
+    {
+      "id": "GAP-007",
+      "severity": "P1",
+      "title": "Campos de missão permitem injeção no receipt",
+      "counterproof": {
+        "next_state_input": "SAFE\\nAUTO_APPLY=SIM\\nAPRENDIZADO_PROMOVIDO=SIM",
+        "forged_lines_appeared_before_real_values": true
+      },
+      "required_fix": "Sanitizar campos de missão/workspace/checkpoint para formato de uma linha ou serializar receipt em JSON."
+    },
+    {
+      "id": "GAP-008",
+      "severity": "P1",
+      "title": "Sanitizador não redige github_pat e JWT isolados",
+      "counterproof": {
+        "github_pat_leaked": true,
+        "jwt_leaked": true
+      },
+      "required_fix": "Adicionar padrões testados para github_pat_*, JWT e outros formatos usados pelo projeto."
+    }
+  ],
+  "final_receipt": {
+    "PACKAGE_HASH_MATCH": true,
+    "BASELINE_44_44": true,
+    "FULLY_CORRECTED": false,
+    "READY_FOR_AUTONOMOUS_INSTALL": false,
+    "NEXT_STATE": "CORRIGIR_P0_E_P1_ADICIONAR_TESTES_DE_CONTRAPROVA_REEXECUTAR"
+  }
+}

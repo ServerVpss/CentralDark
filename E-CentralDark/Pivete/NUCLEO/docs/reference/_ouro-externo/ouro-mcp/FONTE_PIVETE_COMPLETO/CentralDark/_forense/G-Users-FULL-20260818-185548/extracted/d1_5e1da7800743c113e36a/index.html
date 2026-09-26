@@ -1,0 +1,38 @@
+<!doctype html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><meta charset="UTF-8"><meta name="format-detection" content="telephone=no"/><meta name="referrer" content="origin"/><link rel="icon" type="image/png" href="static/favicon.png"/><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-5R468X4');</script><script id="helper-methods">/*eslint-disable indent*/
+        /*eslint-disable prefer-template*/
+        /*eslint-disable vars-on-top*/
+        /*eslint-disable func-names*/
+        // window.dataLayer = []; //google optimize
+        window.getUrlVars = function getUrlVars() {
+            var vars = {};
+            window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+                vars[key] = value;
+            });
+            return vars;
+        };
+        window.getCookie = function getCookie(cname) {
+            var name = cname + '=';
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) === ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) === 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return null;
+        };
+        window.setCookie = function setCookie(cname, cvalue, exdays) {
+            exdays = exdays || 0;
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            const expires = 'expires=' + d.toUTCString();
+            document.cookie = cname + '=' + cvalue + ';' + (exdays ? expires + ';' : '') + 'path=/';
+        };</script></head><body style="margin: 0; padding: 0;"><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5R468X4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script id="gui"></script><div id="app"></div><script id="start-app" src="static/js/start.js"></script></body></html>

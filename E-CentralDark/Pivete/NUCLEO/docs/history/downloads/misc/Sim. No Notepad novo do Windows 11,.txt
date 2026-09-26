@@ -1,0 +1,32 @@
+Sim. No Notepad novo do Windows 11, as abas não salvas costumam ficar na área de estado do próprio app.
+
+No teu Executar (Win+R), cola primeiro:
+
+%LOCALAPPDATA%\Packages\Microsoft.WindowsNotepad_8wekyb3d8bbwe\LocalState\TabState
+
+Esse é o local mais citado para o conteúdo das abas/sessões que o Notepad consegue restaurar; normalmente aparecem arquivos .bin.
+
+A pasta-pai é:
+
+%LOCALAPPDATA%\Packages\Microsoft.WindowsNotepad_8wekyb3d8bbwe\LocalState
+
+e nela podem existir:
+
+TabState
+WindowState
+
+Também há versões recentes do Notepad/Windows em que dados temporários aparecem em:
+
+%LOCALAPPDATA%\Packages\Microsoft.WindowsNotepad_8wekyb3d8bbwe\TempState
+
+Então, para teu garimpo, eu olharia TabState primeiro e TempState depois.
+
+⚠️ Importante: não fecha as abas do Notepad nem clica “Não salvar” antes de copiar o que interessa. Há relatos de que, ao descartar explicitamente uma aba, o estado temporário correspondente pode ser removido.
+
+No teu caso, como você está procurando aquelas mensagens que ficava digitando sem salvar em .txt, o alvo mais forte é:
+
+C:\Users\danda\AppData\Local\Packages\Microsoft.WindowsNotepad_8wekyb3d8bbwe\LocalState\TabState
+
+KKKKK é justamente esse tipo de mina que o garimpo do LocalState estava pescando ontem. ⛏️
+
+E não confunde com %TEMP%: o Notepad moderno usa o sandbox do pacote dele; o TabState é muito mais específico para restaurar abas não salvas.

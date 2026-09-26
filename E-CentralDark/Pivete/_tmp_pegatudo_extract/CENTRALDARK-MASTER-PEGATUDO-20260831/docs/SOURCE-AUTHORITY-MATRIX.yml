@@ -1,0 +1,36 @@
+schema: CENTRALDARK_SOURCE_AUTHORITY_MATRIX
+schema_version: 1
+observed_at: 2026-08-31
+roles:
+  GITHUB_SERVERVPSS_CENTRALDARK:
+    role: DESIRED_VERSIONED_TRUTH
+    status_this_pack_build: REMOTE_NOT_MEASURED_BY_THIS_SESSION
+    rule: must_measure_live_before_remote-current claim
+  CASA:
+    role: ACTUAL_STATE_SENSOR
+    authority: runtime_evidence_only
+  VPS:
+    role: ACTUAL_STATE_SENSOR
+    authority: runtime_evidence_only
+  GOOGLE_DRIVE_CENTRALDARK:
+    role: DURABLE_LIBRARY_AND_MIRROR
+    canonical: false
+    allowed_scope: Google Drive/CentralDark
+  ESPELHOS_DO_GITHUB:
+    role: REFERENCE_MIRROR
+    canonical: false
+  CHAT:
+    role: HUMAN_INTENT_AND_TRANSIENT_CONTEXT
+    canonical: false
+observed_contracts:
+  drive_scope:
+    says_source_of_truth: GitHub ServerVpss/CentralDark + measured real state
+    mirror_policy: ESPELHOS-DO-GITHUB never replaces GitHub canonical
+    unknown_policy: do not move until sufficient evidence
+  mirror_scope_collision:
+    GITHUB_ACCESS_md_declared_repo: segredounlock/clone-deck
+    WEBHOOKS_md_declared_repo: segredounlock/clone-deck
+    rule: project-specific rules remain project-scoped unless generalized into an existing owner after proof
+security:
+  no_secret_values_in_docs_or_receipts: true
+  connector_capability_is_authorization: false

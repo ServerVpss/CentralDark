@@ -1,0 +1,8 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@simple-git\argv-parser\dist\src\flags\parse-global-flags.d.ts
+
+import type { Flag } from './flags.helpers';
+export interface GlobalFlags {
+    flags: Flag[];
+    taskIndex: number;
+}
+export declare function parseGlobalFlags(tokens: readonly unknown[], flags?: Flag[]): GlobalFlags;

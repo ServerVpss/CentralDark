@@ -1,0 +1,390 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\lib\engines-3\loader_attic.dll
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.pdata
+@.xdata
+.edata
+@.idata
+.reloc
+B.debug
+AUATUWVSH
+od$ E1
+[^_]A\A]
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+HcD$TL
+DSS2u@A
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AVATUWVSH
+t$<=RSA2
+H[^_]A\A^
+H[^_]A\A^
+AWAVAUATUWVSH
+HcT$\L
+=RSA2t
+[^_]A\A]A^A_
+=RSA1t
+HcD$\L
+=DSS2u
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AVUWVSH
+D$8=RSA2
+@[^_]A^
+@[^_]A^
+AVUWVSH
+@[^_]A^
+D$8=RSA2
+@[^_]A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVATUWVSH
+[^_]A\A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVATUWVSH
+[^_]A\A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AVATUWVSH
+X[^_]A\A^
+X[^_]A\A^
+ATUWVSH
+0[^_]A\
+AWAVWVSH
+[^_A^A_
+HcD$DH
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+([^_]H
+AVWVSH
+x[^_A^
+x[^_A^
+AWAVWVSH
+ [^_A^A_
+../openssl-3.5.6/crypto/pem/pvkfmt.c
+PVKKDF
+digest
+properties
+i2b_PVK
+i2b_PVK_bio_ex
+do_PVK_body_key
+do_PVK_key_bio
+ossl_do_PVK_header
+check_bitlen_dsa
+check_bitlen_rsa
+ossl_b2i_RSA_after_header
+ossl_b2i_DSA_after_header
+ossl_b2i_bio
+evp_pkey_new0_key
+do_b2i_key
+ossl_do_blob_header
+PRIVATE KEY
+PUBLIC KEY
+X509 CRL
+TRUSTED CERTIFICATE
+X509 CERTIFICATE
+CERTIFICATE
+../openssl-3.5.6/engines/e_loader_attic.c
+-----BEGIN 
+../openssl-3.5.6/engines/e_loader_attic_err.c
+PARAMETERS
+PKCS12 import
+ENCRYPTED PRIVATE KEY
+PKCS8 decrypt pass phrase
+localhost/
+calling stat(%s)
+PEM pass phrase
+PVK pass phrase
+PEM type is '
+loader_attic
+'file:' loader
+ERR_ATTIC_error
+file_open_ex
+file_load
+X509CRL
+X509Certificate
+params
+PUBKEY
+PrivateKey
+PKCS8Encrypted
+PKCS12
+ambiguous content type
+bad password read
+error verifying pkcs12 mac
+init failed
+passphrase callback error
+path must be absolute
+search only supported for directories
+ui process interrupted or cancelled
+unsupported content type
+unsupported search type
+uri authority unsupported
+Mingw-w64 runtime failure:
+Address %p has no image-section
+  VirtualQuery failed for %d bytes at address %p
+  VirtualProtect failed with code 0x%x
+  Unknown pseudo relocation protocol version %d.
+  Unknown pseudo relocation bit size %d.
+%d bit pseudo relocation at %p out of range, targeting %p, yielding the value %p.
+kernel32.dll
+AreFileApisANSI
+kernel32.dll
+IsDBCSLeadByteEx
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+loader_attic.dll
+bind_engine
+v_check
+BIO_ctrl
+BIO_f_buffer
+BIO_free
+BIO_free_all
+BIO_new
+BIO_new_file
+BIO_pop
+BIO_push
+BIO_read
+BIO_snprintf
+BIO_write
+BN_CTX_free
+BN_CTX_new
+BN_bn2lebinpad
+BN_free
+BN_lebin2bn
+BN_mod_exp
+BN_new
+BN_num_bits
+BN_set_flags
+BN_set_word
+BUF_MEM_free
+BUF_MEM_new
+CRYPTO_clear_free
+CRYPTO_free
+CRYPTO_malloc
+CRYPTO_secure_clear_free
+CRYPTO_set_mem_functions
+CRYPTO_strdup
+CRYPTO_zalloc
+DSA_free
+DSA_get0_key
+DSA_get0_pqg
+DSA_new
+DSA_set0_key
+DSA_set0_pqg
+ENGINE_get_first
+ENGINE_get_next
+ENGINE_get_pkey_asn1_meths
+ENGINE_get_static_state
+ENGINE_set_destroy_function
+ENGINE_set_finish_function
+ENGINE_set_id
+ENGINE_set_init_function
+ENGINE_set_name
+ERR_add_error_data
+ERR_clear_last_mark
+ERR_get_next_error_library
+ERR_load_strings
+ERR_new
+ERR_peek_error
+ERR_peek_last_error
+ERR_pop_to_mark
+ERR_set_debug
+ERR_set_error
+ERR_set_mark
+ERR_unload_strings
+EVP_CIPHER_CTX_free
+EVP_CIPHER_CTX_new
+EVP_CIPHER_fetch
+EVP_CIPHER_free
+EVP_DecryptFinal_ex
+EVP_DecryptInit_ex
+EVP_DecryptUpdate
+EVP_EncryptFinal_ex
+EVP_EncryptInit_ex
+EVP_EncryptUpdate
+EVP_KDF_CTX_free
+EVP_KDF_CTX_new
+EVP_KDF_derive
+EVP_KDF_fetch
+EVP_KDF_free
+EVP_PKCS82PKEY_ex
+EVP_PKEY_asn1_find_str
+EVP_PKEY_asn1_get0
+EVP_PKEY_asn1_get0_info
+EVP_PKEY_asn1_get_count
+EVP_PKEY_free
+EVP_PKEY_get0_DSA
+EVP_PKEY_get0_RSA
+EVP_PKEY_get_id
+EVP_PKEY_is_a
+EVP_PKEY_new
+EVP_PKEY_set1_DSA
+EVP_PKEY_set1_RSA
+OPENSSL_DIR_end
+OPENSSL_DIR_read
+OPENSSL_cleanse
+OPENSSL_init_crypto
+OPENSSL_sk_new_null
+OPENSSL_sk_num
+OPENSSL_sk_pop_free
+OPENSSL_sk_push
+OPENSSL_sk_shift
+OPENSSL_sk_value
+OPENSSL_strlcat
+OPENSSL_strncasecmp
+OSSL_PARAM_construct_end
+OSSL_PARAM_construct_octet_string
+OSSL_PARAM_construct_utf8_string
+OSSL_STACK_OF_X509_free
+OSSL_STORE_INFO_free
+OSSL_STORE_INFO_get0_data
+OSSL_STORE_INFO_get_type
+OSSL_STORE_INFO_new
+OSSL_STORE_INFO_new_CERT
+OSSL_STORE_INFO_new_CRL
+OSSL_STORE_INFO_new_NAME
+OSSL_STORE_INFO_new_PARAMS
+OSSL_STORE_INFO_new_PKEY
+OSSL_STORE_INFO_new_PUBKEY
+OSSL_STORE_LOADER_free
+OSSL_STORE_LOADER_new
+OSSL_STORE_LOADER_set_attach
+OSSL_STORE_LOADER_set_close
+OSSL_STORE_LOADER_set_ctrl
+OSSL_STORE_LOADER_set_eof
+OSSL_STORE_LOADER_set_error
+OSSL_STORE_LOADER_set_expect
+OSSL_STORE_LOADER_set_find
+OSSL_STORE_LOADER_set_load
+OSSL_STORE_LOADER_set_open
+OSSL_STORE_LOADER_set_open_ex
+OSSL_STORE_SEARCH_get0_name
+OSSL_STORE_SEARCH_get_type
+OSSL_STORE_register_loader
+OSSL_STORE_unregister_loader
+PEM_def_callback
+PEM_do_header
+PEM_get_EVP_CIPHER_INFO
+PEM_read_bio
+PEM_read_bio_ex
+PKCS12_free
+PKCS12_mac_present
+PKCS12_parse
+PKCS12_pbe_crypt
+PKCS12_verify_mac
+PKCS8_PRIV_KEY_INFO_free
+RAND_bytes_ex
+RSA_bits
+RSA_free
+RSA_get0_crt_params
+RSA_get0_factors
+RSA_get0_key
+RSA_new
+RSA_set0_crt_params
+RSA_set0_factors
+RSA_set0_key
+RSA_size
+UI_add_input_string
+UI_add_user_data
+UI_construct_prompt
+UI_free
+UI_new
+UI_process
+UI_set_method
+X509_CRL_free
+X509_NAME_hash_ex
+X509_SIG_free
+X509_SIG_get0
+X509_free
+X509_new_ex
+asn1_d2i_read_bio
+d2i_KeyParams
+d2i_PKCS12
+d2i_PKCS8_PRIV_KEY_INFO
+d2i_PUBKEY
+d2i_PrivateKey_ex
+d2i_X509
+d2i_X509_AUX
+d2i_X509_CRL
+d2i_X509_SIG
+CloseHandle
+CreateFileA
+DeleteCriticalSection
+EnterCriticalSection
+GetCPInfo
+GetFileInformationByHandle
+GetFileType
+GetLastError
+GetModuleHandleA
+GetProcAddress
+InitializeCriticalSection
+LeaveCriticalSection
+TlsGetValue
+VirtualProtect
+VirtualQuery
+___lc_codepage_func
+__iob_func
+_amsg_exit
+_close
+_errno
+_fstat64
+_get_osfhandle
+_initterm
+_open_osfhandle
+_stat64
+_unlock
+calloc
+fprintf
+malloc
+memcpy
+realloc
+strcmp
+strlen
+strncmp
+strpbrk
+strstr
+tolower
+vfprintf
+libcrypto-3-x64.dll
+KERNEL32.dll
+msvcrt.dll
+D:\git-sdk-64-full\usr\src\MINGW-packages\mingw-w64-openssl\src\build-MINGW64\engines\loader_attic.pdb

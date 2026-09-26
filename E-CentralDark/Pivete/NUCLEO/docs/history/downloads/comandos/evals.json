@@ -1,0 +1,104 @@
+{
+  "skill_name": "issuer-brief",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create an Issuer Brief for Apple Inc.",
+      "expected_output": "Single fenced ```html code block containing a complete standalone HTML document built from the Issuer Brief template. Target = Apple Inc. with 3 credit peers from getEntityPeers, all 27 pib-* placeholders populated, 19x8 financial table mostly filled (with '--' allowed), 5 valuation tables, peers/rating/KI tables, strategy and segments lists, risk + rating + ESG tables, monthly price and debt-maturity SVG charts, and a populated sources list.",
+      "files": [],
+      "assertions": [
+        "Output is a complete standalone HTML document (doctype + </html>)",
+        "Report uses the skill's template scaffold (core pib-* table IDs present)",
+        "All 27 core pib-* placeholders defined in the document",
+        "6 narrative sections (overview, industry, mgmt, credit, risks, esg) all populated",
+        "Financial table >= 100/152 cells populated (19 rows x 8 year cols, allowing '--' placeholders)",
+        "Peers comparison table has >= 3 <tr> rows",
+        "Peers rating table has >= 3 <tr> rows",
+        "Rating history table has >= 1 <tr> row",
+        "Risk table has >= 3 <tr> rows",
+        "Strategy list (#pib-strategy-list) has >= 3 <li> entries",
+        "Segments list (#pib-segments-list) has >= 2 <li> entries",
+        "Share price monthly chart and credit chart both contain <svg>",
+        "ESG table (E/S/G) all 3 rows populated (focus + score)",
+        "Sources section contains >= 5 entries"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I need a full company report for Tesla Inc. \u2014 an Issuer Brief covering everything from financials to ESG",
+      "expected_output": "Single fenced ```html code block with the full Issuer Brief HTML for Tesla + 3 peers. Same structural requirements as eval-1 (all 27 pib-* placeholders, 5 valuation tables, peers/rating/KI tables, monthly + credit SVGs, E/S/G scores, and >= 5 sources), tested via a natural-language phrasing.",
+      "files": [],
+      "assertions": [
+        "Output is a complete standalone HTML document (doctype + </html>)",
+        "Report uses the skill's template scaffold (core pib-* table IDs present)",
+        "All 27 core pib-* placeholders defined in the document",
+        "6 narrative sections (overview, industry, mgmt, credit, risks, esg) all populated",
+        "Financial table >= 100/152 cells populated (19 rows x 8 year cols, allowing '--' placeholders)",
+        "Peers comparison table has >= 3 <tr> rows",
+        "Peers rating table has >= 3 <tr> rows",
+        "Rating history table has >= 1 <tr> row",
+        "Risk table has >= 3 <tr> rows",
+        "Strategy list (#pib-strategy-list) has >= 3 <li> entries",
+        "Segments list (#pib-segments-list) has >= 2 <li> entries",
+        "Share price monthly chart and credit chart both contain <svg>",
+        "ESG table (E/S/G) all 3 rows populated (focus + score)",
+        "Sources section contains >= 5 entries"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Generate an Issuer Brief for The Walt Disney Company in USD",
+      "expected_output": "Single fenced ```html code block with the full Issuer Brief HTML for Disney + 3 peers in USD. Tests currency parameter handling plus structural compliance (all 27 pib-* placeholders, financials, peers, credit, ESG, sources).",
+      "files": [],
+      "assertions": [
+        "Output is a complete standalone HTML document (doctype + </html>)",
+        "Report uses the skill's template scaffold (core pib-* table IDs present)",
+        "All 27 core pib-* placeholders defined in the document",
+        "6 narrative sections (overview, industry, mgmt, credit, risks, esg) all populated",
+        "Financial table >= 100/152 cells populated (19 rows x 8 year cols, allowing '--' placeholders)",
+        "Peers comparison table has >= 3 <tr> rows",
+        "Peers rating table has >= 3 <tr> rows",
+        "Rating history table has >= 1 <tr> row",
+        "Risk table has >= 3 <tr> rows",
+        "Strategy list (#pib-strategy-list) has >= 3 <li> entries",
+        "Segments list (#pib-segments-list) has >= 2 <li> entries",
+        "Share price monthly chart and credit chart both contain <svg>",
+        "ESG table (E/S/G) all 3 rows populated (focus + score)",
+        "Sources section contains >= 5 entries"
+      ]
+    }
+  ]
+}
+ns)",
+        "Section 1 (Overview) has >= 4 subsection-title headers",
+        "Section 2 (Macro) has >= 3 subsection-title headers",
+        "Section 3 (Financial) has >= 3 subsection-title headers",
+        "Section 4 (Structure) has >= 4 subsection-title headers",
+        "Section 5 (Risks) has >= 5 subsection-title headers",
+        "Section 3 contains >= 5 concrete numeric metrics ($/€/£/% values)",
+        "Section 4 includes Porter's Five Forces with High/Moderate/Low ratings (>= 5 rating tokens)",
+        "Section 6 (Outlook) is paragraph-only and states Positive/Stable/Negative",
+        "Executive Summary is paragraph-only (no <li> bullets)",
+        "Inline citations use cite-ref class on <a> or <span> tags (>= 8 occurrences), preferring clickable <a class=\"cite-ref\" href=\"...\"> when the source has a URL",
+        "Sources list contains >= 6 entries (source-item divs or <li>)"
+      ]
+    }
+  ]
+}
+lls in <script> blocks",
+        "rating_pitch.html contains >= 6 <table> elements",
+        "SWOT section present with 4 quadrants (Strengths, Weaknesses, Opportunities, Threats) each containing >= 2 <li> bullets",
+        "Peer summary table has >= 3 company columns",
+        "Peer financials table has >= 3 company columns and >= 5 financial metric rows",
+        "Macro GDP table has >= 3 country rows",
+        "Rating history line chart present with >= 2 data points",
+        "Scorecard table has >= 3 factor rows",
+        "ESG table has >= 1 data row",
+        "Sources section present with >= 5 listed references",
+        "payload.json target_company field contains JPMorgan and sector field contains Banking",
+        "payload.json matches the skill schema (report_date, target_company, sector, currency, companies, sources, sections)",
+        "Peer debt and profitability bar charts include period labels on each bar and a value-axis title with unit"
+      ]
+    }
+  ]
+}

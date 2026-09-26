@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@babel\runtime\helpers\esm\classCheckPrivateStaticFieldDescriptor.js
+
+function _classCheckPrivateStaticFieldDescriptor(t, e) {
+  if (void 0 === t) throw new TypeError("attempted to " + e + " private static field before its declaration");
+}
+export { _classCheckPrivateStaticFieldDescriptor as default };

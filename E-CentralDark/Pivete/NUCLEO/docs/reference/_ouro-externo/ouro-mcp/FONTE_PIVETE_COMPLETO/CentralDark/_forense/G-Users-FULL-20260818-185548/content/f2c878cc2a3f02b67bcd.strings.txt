@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\utils\json\is-json.d.ts.map
+
+{"version":3,"file":"is-json.d.ts","names":[],"sources":["../../../src/utils/json/is-json.ts"],"mappings":";;;iBAMgB,QAAA,CAAS,KAAA,YAAiB,KAAA,IAAS,MAAM;AAAA,iBAIzC,WAAA,CACd,KAAA,WACA,YAAA,YACC,KAAA,IAAS,iBAAiB;AAAA,iBAiCb,WAAA,CAAY,KAAA,YAAiB,KAAA,IAAS,iBAAiB;AAAA,iBAIvD,YAAA,CAAa,KAAA,YAAiB,KAAA,IAAS,kBAAkB"}

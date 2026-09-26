@@ -1,0 +1,16 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@eslint\js\types\index.d.ts
+
+import type { Linter } from "eslint";
+
+declare const js: {
+	readonly meta: {
+		readonly name: string;
+		readonly version: string;
+	};
+	readonly configs: {
+		readonly recommended: { readonly rules: Readonly<Linter.RulesRecord> };
+		readonly all: { readonly rules: Readonly<Linter.RulesRecord> };
+	};
+};
+
+export = js;

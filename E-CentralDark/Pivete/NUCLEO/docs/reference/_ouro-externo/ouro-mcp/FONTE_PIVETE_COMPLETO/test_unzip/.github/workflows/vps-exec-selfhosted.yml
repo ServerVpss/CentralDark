@@ -1,0 +1,141 @@
+name: VPS Deploy canônico (self-hosted)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/modulos/mcp/**"
+      - "apps/modulos/mapeamento/**"
+      - "apps/modulos/HERMES-CORE/agents/Log-Verificador/**"
+      - "scripts/vps/deploy-operational-guards.sh"
+      - ".github/workflows/vps-exec-selfhosted.yml"
+      - "scripts/webhook/github-webhook-deploy.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  statuses: write
+
+concurrency:
+  group: centraldark-vps-production
+  cancel-in-progress: false
+
+jobs:
+  deploy-mcp:
+    name: Deploy canônico do CentralDark-MCP
+    if: github.repository == 'ServerVpss/CentralDark'
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 25
+    env:
+      REPO_DIR: /root/CentralDark
+      MCP_DIR: /root/CentralDark/apps/modulos/mcp
+      PM2_APP: CentralDark-MCP
+      WEBHOOK_APP: CentralDark-WebhookDeploy
+      HEALTH_URL: http://127.0.0.1:9100/health
+      AUDIT_DIR: /root/CentralDark/logs
+      BEFORE_SHA: ${{ github.event.before || '' }}
+    steps:
+      - name: Validar SHA, construir isolado, promover e comprovar
+        id: deploy
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          exec 9>/tmp/centraldark-mcp-deploy.lock
+          flock -w 90 9 || { echo "DEPLOY_LOCK_TIMEOUT"; exit 21; }
+
+          TARGET_SHA='${{ github.sha }}'
+          [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "TARGET_SHA_INVALID"; exit 22; }
+          [[ -d "$REPO_DIR/.git" ]] || { echo "REPO_DIR_INVALID"; exit 23; }
+          cd "$REPO_DIR"
+          CURRENT_BRANCH="$(git symbolic-ref --quiet --short HEAD || true)"
+          [[ -n "$CURRENT_BRANCH" ]] || CURRENT_BRANCH="DETACHED"
+          ORIGIN_URL="$(git remote get-url origin)"
+          [[ "$ORIGIN_URL" =~ github\.com[:/]ServerVpss/CentralDark(\.git)?$ ]] || { echo "ORIGIN_REPOSITORY_MISMATCH"; exit 25; }
+          if [[ "${GITHUB_EVENT_NAME:-}" == "push" && "${BEFORE_SHA:-}" =~ ^[0-9a-f]{40}$ && ! "${BEFORE_SHA}" =~ ^0{40}$ ]]; then
+            git fetch --no-tags origin main
+            if git cat-file -e "$BEFORE_SHA^{commit}" 2>/dev/null && git diff --quiet "$BEFORE_SHA" "$TARGET_SHA" -- \
+              apps/modulos/mcp \
+              .github/workflows/vps-exec-selfhosted.yml \
+              scripts/webhook/github-webhook-deploy.mjs; then
+              echo "MCP_SCOPE_UNCHANGED"
+              echo "deployed=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+
+          # FASE 0 — Capturar evidência pré-deploy (cadeado-trancado)
+          - name: Capturar evidência pré-deploy (fase 0)
+            id: capture_evidence
+            shell: bash
+            run: |
+              set -Eeuo pipefail
+              umask 077
+              TS="$(date -u +%Y%m%dT%H%M%SZ)"
+              OUT="/root/centraldark-evidence/capture-${TS}"
+              mkdir -p "$OUT"
+              { echo "=== HOST ==="; hostname; date -u; uptime; echo; echo "=== UFW ==="; ufw status verbose || true; ufw status numbered || true; echo; echo "=== SS LISTEN TCP ==="; ss -lntp || true; echo; echo "=== FAIL2BAN ==="; fail2ban-client ping || true; fail2ban-client status sshd 2>/dev/null || true; echo; echo "=== PM2 ==="; pm2 jlist 2>/dev/null | node -e 'let s=""; process.stdin.on("data",d=>s+=d).on("end",()=>{for(const x of JSON.parse(s||"[]")){const e=x.pm2_env||{};console.log([x.name,"status="+e.status,"restarts="+e.restart_time,"pid="+x.pid].join("	"))}})' || true; echo; echo "=== DOCKER PS ==="; docker ps --format 'table {{.Names}}	{{.Ports}}	{{.Status}}' 2>/dev/null || true; } | tee "$OUT/report.txt"
+              sha256sum "$OUT/report.txt" | tee "$OUT/report.sha256"
+              echo "EVIDENCE_DIR=$OUT" >> "$GITHUB_OUTPUT"
+          DIRTY_TRACKED_FILE="$(mktemp "$RUNNER_TEMP/centraldark-dirty.XXXXXX")"
+          DIRTY_MCP_FLAG="$(mktemp "$RUNNER_TEMP/centraldark-mcp-dirty.XXXXXX")"
+          chmod 600 "$DIRTY_TRACKED_FILE" "$DIRTY_MCP_FLAG"
+          git status --porcelain=v1 -z --untracked-files=no > "$DIRTY_TRACKED_FILE"
+          if [[ -s "$DIRTY_TRACKED_FILE" ]]; then
+            python3 - "$DIRTY_TRACKED_FILE" "$DIRTY_MCP_FLAG" <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+          denied = re.compile(r'(^|/)(\.env(?:\.|$)|secrets?(?:/|$)|tokens?(?:/|$)|sessions?(?:/|$)|\.ssh(?:/|$)|[^/]+\.(?:pem|key)$)', re.I)
+          dependency_manifests = {
+              'apps/modulos/mcp/package.json',
+              'apps/modulos/mcp/package-lock.json',
+          }
+          for raw in Path(sys.argv[1]).read_bytes().split(b'\0'):
+              if not raw:
+                  continue
+              item = raw.decode('utf-8', 'replace')
+              code = item[:2] if len(item) >= 2 else '??'
+              path = item[3:] if len(item) >= 4 else item
+              shown = 'SENSITIVE_TRACKED_PATH_REDACTED' if denied.search(path) else path
+              print(f'TRACKED_DIRTY_PRESERVED {code} {shown}')
+              if path in dependency_manifests:
+                  Path(sys.argv[2]).write_text('dirty', encoding='utf-8')
+          PY
+            if [[ -s "$DIRTY_MCP_FLAG" ]]; then
+              echo "MCP_DEPENDENCY_MANIFEST_DIRTY"
+              exit 26
+            fi
+            echo "TRACKED_DIRTY_TREE_PRESERVED_ATOMIC_DIST_ONLY"
+          fi
+
+          # A porta 9300 só pode pertencer ao webhook legado conhecido. Ele é
+          # aposentado antes de qualquer mutação Git para eliminar a corrida.
+          WEBHOOK_JSON="$(pm2 jlist | jq -c --arg app "$WEBHOOK_APP" '.[] | select(.name == $app)' | head -n1)"
+          if [[ -n "$WEBHOOK_JSON" ]]; then
+            WEBHOOK_PID="$(jq -r '.pid // 0' <<<"$WEBHOOK_JSON")"
+            WEBHOOK_EXEC="$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$WEBHOOK_JSON")"
+            [[ "$WEBHOOK_EXEC" == "$REPO_DIR/scripts/webhook/github-webhook-deploy.mjs" ]] || { echo "WEBHOOK_PM2_TARGET_MISMATCH"; exit 27; }
+            PORT_PID="$(ss -ltnp 'sport = :9300' 2>/dev/null | sed -n 's/.*pid=\([0-9][0-9]*\).*/\1/p' | head -n1)"
+            [[ -z "$PORT_PID" || "$PORT_PID" == "$WEBHOOK_PID" ]] || { echo "PORT_9300_OWNERSHIP_MISMATCH"; exit 28; }
+            pm2 stop "$WEBHOOK_APP" >/dev/null
+            pm2 save --force >/dev/null
+          fi
+          for _ in $(seq 1 20); do
+            ss -ltn 'sport = :9300' | grep -q LISTEN || break
+            sleep 1
+          done
+          ! ss -ltn 'sport = :9300' | grep -q LISTEN || { echo "PORT_9300_STILL_LISTENING"; exit 29; }
+
+          git fetch --prune origin main
+
+          # FASE 6 — PM2 stability recommendations (cadeado-trancado)
+          - name: Gerar recomendações PM2 stability (fase 6)
+            id: pm2_stability
+            shell: bash
+            run: |
+              set -Eeuo pipefail
+              echo "=== Restart counts ==="
+              pm2 jlist 2>/dev/null | node .github/scripts/pm2-stability.js
+              echo "STATUS=RECOMMENDATION_ONLY" >> "$GITHUB_OUTPUT"
+

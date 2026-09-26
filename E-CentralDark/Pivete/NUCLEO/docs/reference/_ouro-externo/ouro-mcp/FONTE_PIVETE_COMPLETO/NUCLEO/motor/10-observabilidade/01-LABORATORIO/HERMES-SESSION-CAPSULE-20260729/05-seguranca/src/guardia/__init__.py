@@ -1,0 +1,1 @@
+"""CentralDark Guardiã reference implementation."""

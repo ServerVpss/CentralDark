@@ -1,0 +1,119 @@
+schema: CENTRALDARK_ROUTER_GEMINI_HUB
+schema_version: 1
+mode: EXTEND_EXISTING_ONLY
+master:
+  required: true
+  event: CENTRALDARK
+  mandatory_phases:
+  - ACORDAR
+  - CRISTALIZAR_MEASURE
+  - CRISTALIZAR_FALLBACK
+  material_action_without_master: FAIL
+router:
+  owner: centraldark-router
+  reuse_existing: true
+  second_router_forbidden: true
+  authority: false
+  requires_master_context: true
+  runtime_ready_claim_requires_measurement: true
+gemini_sweeper:
+  role: READ_ONLY_SPECIALIZED_READER
+  may_write: false
+  may_judge: false
+  may_self_approve: false
+  raw_secrets_allowed: false
+  output_class: EVIDENCE_CANDIDATE
+  delegated_tasks:
+  - large_context_sweep
+  - duplicate_candidate_detection
+  - lineage_candidate_detection
+  - contradiction_candidate_detection
+  - missing_owner_candidate_detection
+  - source_summary_with_provenance
+  promotion_path:
+  - REALITY_SCOPE_GATE
+  - RENDEZVOUS
+  - RECONCILE
+  - CURRENT_REALITY
+source_adapters:
+  sanitize_before_router: true
+  quarantine_credential_like_content: true
+  providers:
+    github:
+      role: CODE_AND_REMOTE_STATE_PROVIDER
+      on_failure: DRIVE_RECEIPT_AND_GITHUB_SYNC_PENDING
+    google_drive_workspace:
+      role: DURABLE_CONTEXT_AND_WORKSPACE_PROVIDER
+      on_failure: GITHUB_RECEIPT_AND_DRIVE_SYNC_PENDING
+    repo_runtime:
+      role: LIVE_LOCAL_STATE_PROVIDER
+    attachments_receipts:
+      role: UNTRUSTED_DATA_AND_PROVENANCE
+context_persistence:
+  persist_raw_secrets: false
+  persist_full_raw_external_sources_by_default: false
+  persist:
+  - material_fact
+  - source_reference
+  - revision_or_head
+  - sha256
+  - owner
+  - proof_target
+  - counterproof
+  - receipt
+  - next_cursor
+  drive_workspace_is_authority: false
+  github_receipt_is_drive_revision: false
+  drive_receipt_is_github_head: false
+hub:
+  reuse_existing: true
+  second_hub_forbidden: true
+  model: ONE_HUB_N_CAPABILITIES
+  capability_families:
+  - GOOGLE_DRIVE
+  - GOOGLE_DOCS
+  - GOOGLE_SHEETS
+  - GMAIL
+  - GOOGLE_CALENDAR
+  - GOOGLE_CONTACTS
+  - GEMINI
+  - FUTURE_PROVIDER_ADAPTERS
+  each_capability_requires:
+  - policy_on_off
+  - authentication_state
+  - granted_scope_inventory
+  - health
+  - owner
+  - receipt
+  off_means_calls_blocked: true
+  hard_disconnect_is_separate_action: true
+governance:
+  many_readers: true
+  one_writer_per_conflict_scope: true
+  independent_falsifier: true
+  judge_mutates: false
+  unknown_is_pass: false
+  extension_over_replacement: true
+  zero_regression_required: true
+  no_v2_v3_v4: true
+proof:
+  operational_ready_requires:
+  - provider_measured
+  - auth_measured
+  - route_measured
+  - capability_health_measured
+  promotion_requires:
+  - required_tests_pass
+  - counterproof_survives
+  - falsifier_survives
+  - no_material_unknown
+  - receipt_written
+  - exact_head_equality_when_github_material
+documentation_hub:
+  reuse_existing_hub: true
+  tab: DOCUMENTACAO
+  material_change_requires_documentation_gate: true
+  knowledge_library_scope: AUTHORIZED_CENTRALDARK_ONLY
+  multi_account_namespaced: true
+  raw_secrets_allowed: false
+  gemini_reads_safe_indexed_representations: true

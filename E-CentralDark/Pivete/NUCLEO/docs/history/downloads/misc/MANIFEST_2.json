@@ -1,0 +1,23 @@
+{
+  "name": "CENTRALDARK_CAJADO_PAPAGAIO_PROPAGACAO",
+  "generated_at": "2026-08-24T06:50:41.884080+00:00",
+  "pattern": "IMAGE -> MARKDOWN -> MERMAID -> ZIP",
+  "images": [
+    {
+      "file": "CENTRALDARK_CAJADO_PAPAGAIO_PROPAGACAO_01.png",
+      "sha256": "41a2a72463e003e84dfd0a641df9ebd72c9ff0cf4a884f61cabba55b06c9c4f1"
+    },
+    {
+      "file": "CENTRALDARK_CAJADO_PAPAGAIO_PROPAGACAO_02.png",
+      "sha256": "82ec7ac29c571c58e65a23fbe7f8b9491495a4da1d4182fbf5be193f58edd9ef"
+    },
+    {
+      "file": "CENTRALDARK_CAJADO_PAPAGAIO_PROPAGACAO_03.png",
+      "sha256": "de61fd8a67d0e1883f557b2f2bed07dab0f09478eed3010dda5c04f129decb10"
+    },
+    {
+      "file": "CENTRALDARK_CAJADO_PAPAGAIO_PROPAGACAO_04.png",
+      "sha256": "6193424dc71f634c7b625e837e55b342e129f25d40f8c5d594b83b9e80cfa712"
+    }
+  ]
+}

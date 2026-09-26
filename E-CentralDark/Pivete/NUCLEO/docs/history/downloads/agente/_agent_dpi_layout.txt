@@ -1,0 +1,275 @@
+RELATORIO LIVE — layout multi-monitor e DPI
+Host: SEGREDO    Usuario: danda    Dominio: SEGREDO
+OS: Windows 11 Pro 10.0.26200 (build 26200)
+GPU: AMD Radeon RX 580 Series  (driver 31.0.21924.61)  — NAO ha NVIDIA
+Coleta SOMENTE LEITURA. Nenhum setting foi alterado por este agente.
+Data da coleta: 2026-08-22
+Nota: o layout MUDOU durante a investigacao (primary saiu do AOC retrato). Ha dois snapshots.
+
+==============================================================================
+VEREDICTO (PT-BR)
+==============================================================================
+
+A UI GIGANTE / "grau" / aspeto de super-resolution de camera NAO e porque o
+Windows esteja em escala 125/150/200%. O DPI do sistema esta em 96 (100%).
+
+CAUSA PRINCIPAL: o monitor PRINCIPAL estava (e um AOC ainda esta) em
+ORIENTACAO RETRATO 1080x1920. O Windows passou a tratar um desktop de apenas
+1080 px de largura como referencia. Os AOC 24G2W1G4 sao paineis nativos
+1920x1080 paisagem. Se o monitor fisico esta DEITADO e o Windows manda
+retrato, o scaler da GPU/monitor ESTICA 1080 px na largura de 1920 — exatamente
+o look de zoom digital / camera / "super-res", texto graudo e granuloso.
+
+NAO e desktop combinado (NVIDIA Surround / AMD Eyefinity / Intel Collage /
+Mosaic / Span). Sao 4 monitores em modo ESTENDIDO (SM_CMONITORS=4, 4 objetos
+Screen com bounds distintos, 4 sources AMD mapeadas).
+
+O dummy CL@ / NOEDID / CM 3316 NAO e o primary agora. E fantasma (Present=False)
+no mesmo UID260 que hoje e o LG. Nao e ele que esta a explodir a escala dos AOCs.
+
+O que o utilizador deve clicar em Definicoes > Sistema > Ecra
+(Settings > System > Display):
+
+  1) Identificar  — anote os numeros 1/2/3/4 nos cantos dos monitores.
+  2) Clique no AOC em que VOCE SENTA (o 24G2 a 144 Hz, agora DISPLAY4).
+  3) Marque "Tornar este o meu monitor principal".
+  4) Escala = 100%   Resolucao = 1920 x 1080 (recomendado).
+  5) Orientacao = Paisagem  (NAO Retrato), a nao ser que o painel esteja
+     FISICAMENTE rodado na peca de pivot.
+  6) No OUTRO AOC (o que ainda aparece 1080x1920): se ele esta deitado na mesa,
+     mude Retrato -> Paisagem. Isto elimina o look de camera.
+  7) Arraste os retangulos para coincidir com a mesa real (agora ha um LG
+     "a flutuar" acima, e um AOC retrato a direita).
+  8) Nao ative combinar/span/Eyefinity.
+  9) Feche a Lupa (Magnifier esta a correr desde 06:12, zoom 100% — nao
+     aumenta, mas nao precisa estar aberta).
+ 10) Software AMD: Display > GPU Scaling em "Preserve aspect ratio" ou desligado;
+     desligar Virtual Super Resolution, Integer Scaling e Radeon Image Sharpening
+     se o "grau"/granulacao continuar.
+
+==============================================================================
+1) System.Windows.Forms.Screen.AllScreens
+==============================================================================
+
+SNAPSHOT A (inicio da coleta — coincide com o sintoma conhecido
+SM_CXSCREEN=1080 SM_CYSCREEN=1920, virtual 4920x2862):
+
+  #1 \\.\DISPLAY1  Primary=True   bpp=32  Bounds=(0,0 1080x1920)     Work=(0,0 1080x1872)       RETRATO
+  #2 \\.\DISPLAY2  Primary=False  bpp=32  Bounds=(-2279,-942 1920x1080) Work=(-2279,-942 1920x1032) PAISAGEM
+  #3 \\.\DISPLAY3  Primary=False  bpp=32  Bounds=(-1920,139 1920x1080)  Work=(-1920,139 1920x1032)  PAISAGEM
+  #4 \\.\DISPLAY4  Primary=False  bpp=32  Bounds=(-3840,138 1920x1080)  Work=(-3840,138 1920x1032)  PAISAGEM
+
+SNAPSHOT B (LIVE agora, apos mudanca de primary durante a sessao):
+
+  #1 \\.\DISPLAY1  Primary=False  bpp=32  Bounds=(1920,-139 1080x1920)  Work=(1920,-139 1080x1872) RETRATO
+  #2 \\.\DISPLAY3  Primary=False  bpp=32  Bounds=(-359,-1081 1920x1080) Work=(-359,-1081 1920x1032) PAISAGEM
+  #3 \\.\DISPLAY4  Primary=True   bpp=32  Bounds=(0,0 1920x1080)        Work=(0,0 1920x1032)        PAISAGEM
+  #4 \\.\DISPLAY2  Primary=False  bpp=32  Bounds=(-1920,-1 1920x1080)   Work=(-1920,-1 1920x1032)   PAISAGEM
+
+  SM_CXSCREEN=1920  SM_CYSCREEN=1080  SM_CMONITORS=4
+  SM_CXVIRTUALSCREEN=4920  SM_CYVIRTUALSCREEN=2862
+  SM_XVIRTUALSCREEN=-1920  SM_YVIRTUALSCREEN=-1081
+  GetDpiForSystem=96
+  GDI LOGPIXELSX/Y=96  HORZRES=1920x1080  DESKTOPHORZ/VERT=1920x1080
+  WPF PrimaryScreen=1920x1080  Work=1920x1032  CaptionHeight=22 (normal a 96 DPI)
+
+Desktop virtual 4920x2862 NAS DUAS fotos: e o bounding-box dos 4 ecra
+estendidos (inclui o AOC retrato de 1920 px de altura + o LG deslocado em Y).
+NAO e um unico painel combinado.
+
+==============================================================================
+2) WmiMonitorID + WmiMonitorBasicDisplayParams  (4 ativos)
+==============================================================================
+
+Active=True  DISPLAY\AOC2402\...\UID256   AOC  2402  "24G2W1G4"  SN=ATNMBXA002919  2022-W45
+  Digital 53x30 cm (~24")   VideoOutputTechnology=10 DisplayPort_EXT   119 Hz LIVE retrato
+
+Active=True  DISPLAY\GSM5B54\...\UID260   GSM  5B54  "LG FULL HD"  SN=16843009  2016-W1
+  48x27 cm (~21.5")   VideoOutputTechnology=10 DisplayPort_EXT   60 Hz paisagem
+  EDID tem bloco analogico (VGA capability); ligacao atual e DP.
+
+Active=True  DISPLAY\DEL41F2\...\UID264   DEL  41F2  "DELL S2421HN"  SN=4JD4DQ3  2023-W18
+  Digital 53x30 cm (~24")   VideoOutputTechnology=5 HDMI   59 Hz paisagem
+
+Active=True  DISPLAY\AOC2402\...\UID265   AOC  2402  "24G2W1G4"  SN=ATNM4XA002193  2022-W17
+  Digital 53x30 cm (~24")   VideoOutputTechnology=5 HDMI   144 Hz  **PRIMARY LIVE**
+
+Modos nativos EDID (preferred alto): TODOS 1920x1080 (AOC tambem 1920x1080 @148.5 MHz e ~172.8 MHz).
+Nenhum painel e nativo 1080x1920. O 1080x1920 e ROTACAO Windows.
+
+PnP fantasmas (Present=False, mesmo UID260 do LG):
+  DISPLAY\DEFAULT_MONITOR\UID260  "ACER S271HL"
+  DISPLAY\CL@0C5E\UID260          "Generic Monitor (CM 3316)"   <-- dummy/capture antigo
+
+Win32_DesktopMonitor so listou 1: DesktopMonitor1 = AOC UID256 (o retrato).
+Win32_VideoController: RX 580  1920x1080  (refresh reportado 119, o do AOC DP).
+
+==============================================================================
+3) DPI — LogPixels, Win8DpiScaling, AppliedDPI, DpiValue
+==============================================================================
+
+HKCU\Control Panel\Desktop:
+  LogPixels            = AUSENTE
+  DesktopDPIOverride   = AUSENTE
+  Win8DpiScaling       = 0
+  DpiScalingVer        = 4096   (Per-Monitor v2 ligado)
+HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontDPI\LogPixels = 96
+HKCU\Control Panel\Desktop\WindowMetrics\AppliedDPI = 96
+GetDpiForSystem = 96
+GDI LOGPIXELS = 96
+
+Conclusao: escala do Windows = 100%. Nao ha override classico de 125/150%.
+
+PerMonitorSettings (HKCU)  DpiValue:
+  AOC2402 ATNM4XA002193 ...  DpiValue=0          -> recomendado (24" 1080p = 100%)
+  AOC2402 ATNMBXA002919 ...  DpiValue=0          -> 100%
+  AOC2402 ATNMBXA002919 ...  DpiValue=0          -> 100%  (2a chave do mesmo AOC)
+  CL@0C5E0_10_07E0_0D  ...  DpiValue=4294967294 = DWORD de -2
+
+Significado de DpiValue = -2 (0xFFFFFFFE):
+  No Windows 10/11 este valor NAO e um DPI absoluto. E um DESLOCAMENTO em
+  passos de 25% em relacao a escala RECOMENDADA daquele monitor:
+      0  = recomendado
+     +1  = recomendado + 25%
+     -1  = recomendado - 25%
+     -2  = recomendado - 50%
+  Se o EDID do CL@/CM 3316 fazia o Windows recomendar 150%, -2 = 100%.
+  Se recomendasse 100%, -2 seria 50% (raro). E chave de um monitor DESLIGADO.
+  ScaleFactors HKLM do mesmo CL@ esta DpiValue=0. Nao governa os AOCs.
+
+ScaleFactors HKLM (lixo historico de monitores ja desligados): AOC, CL@, DEL,
+  GSM, SAM 7016/7017, NOEDID_1002_67DF (AMD RX 580 sem EDID), MSNILNOEDID,
+  MSNILAOC.... Quase todos DpiValue=0. SAM7017 = 4294967291 (-5), residual.
+
+DEVMODE.dmLogPixels reportou 120 em TODOS os 4 (campo do driver AMD, frequentemente
+stale). CONTRADITO pelo OS: GetDpiForSystem=96, AppliedDPI=96, DpiValue=0.
+Nao tratar 120 como prova de 125% na UI do Windows.
+
+==============================================================================
+4) Primary e dummy/clone/NOEDID/CL@ ?
+==============================================================================
+
+LIVE EnumDisplayDevices (so AMD, 4 ativos + 3 DISPLAY5-7 inativos):
+
+  \\.\DISPLAY1  AOC 24G2W1G4 UID256  SN ATNMBXA002919  DP   1080x1920 @119Hz  orient=PORTRAIT
+                Pos=(1920,-139)  NAO primary
+  \\.\DISPLAY2  DELL S2421HN UID264  SN 4JD4DQ3        HDMI 1920x1080 @59Hz   LANDSCAPE
+                Pos=(-1920,-1)
+  \\.\DISPLAY3  LG FULL HD   UID260  SN 16843009       DP   1920x1080 @60Hz   LANDSCAPE
+                Pos=(-359,-1081)
+  \\.\DISPLAY4  AOC 24G2W1G4 UID265  SN ATNM4XA002193  HDMI 1920x1080 @144Hz  LANDSCAPE
+                Pos=(0,0)  **PRIMARY**  State=ACTIVE|PRIMARY
+  \\.\DISPLAY5/6/7  RX 580  inativos, sem modo
+
+O CL@0C5E "CM 3316" NAO aparece em EnumDisplayDevices. Present=False.
+Historico do UID260 (porta do LG): ACER S271HL -> CL@ CM 3316 -> LG FULL HD.
+NOEDID_1002_67DF e MSNILNOEDID so existem em ScaleFactors (lixo).
+
+Resposta a hipotese "dummy e o PRIMARY e por isso 1080x1920 retrato rebenta
+os AOCs": FALSO no estado atual. O 1080x1920 e um AOC 24G2 REAL em Retrato.
+No snapshot A ESSE AOC retrato ERA o primary — ai sim a UI/metricas do
+sistema (SM_CXSCREEN=1080) ficavam presas a 1080x1920 e o resto "explodida"
+se o scaler esticasse. Agora o primary ja foi mudado para o outro AOC 144 Hz
+paisagem; o retrato ainda esta ativo a direita e continua a distorcer AQUELE
+painel se ele estiver fisicamente deitado.
+
+Nao ha clone/mirror (nenhum StateFlags MIRROR). Extended, 4 destinos.
+
+AMD DAL MappingInfo_Source_0/1/2/3 -> DisplayPath 0, 8, 4, 9 (4 paths, nao 1).
+BestViewOption em todos = dwords 0,0,3,1,8,...  (3 ~= GPU Scaling "aspect ratio",
+nao Eyefinity span).
+
+==============================================================================
+5) ClearType / FontSmoothing
+==============================================================================
+
+FontSmoothing=2              (ligado)
+FontSmoothingType=2          (ClearType)
+FontSmoothingGamma=1000      (default)
+FontSmoothingOrientation=0   (RGB horizontal / BGR default)
+
+ClearType LIGADO com Orientation=0 num painel em RETRATO aplica o filtro no
+eixo errado -> texto borroso/"grau" no AOC retrato. Nao aumenta o tamanho,
+mas piora o aspeto de camera.
+
+==============================================================================
+6) HDR / Advanced Color
+==============================================================================
+
+Nenhuma chave AdvancedColorEnabled / HDREnabled / SDRWhiteLevel encontrada
+em HKCU VideoSettings (ausente) nem no recurse de GraphicsDrivers.
+RX 580: KMD_10BitMode=2, 10BitPixelFormat_NA=0, DynamicContrast_NA=0,
+freesync_runtime_component_na=false, imagesharpening_runtime_component_na=false,
+IntegerScalingPerAppSupport=1, DalAllowAutoVSROnEmbeddedDisplay=1.
+CCD Configuration/Connectivity: ACESSO NEGADO (nao foi possivel ler topologia CCD).
+MonitorDataStore: AutoColorManagementSupported=1 em AOC/CL@/DEL/GSM/NOEDID/SAM.
+Veredicto HDR: sem evidencia de HDR/Advanced Color ativo. Nao explica UI gigante.
+
+==============================================================================
+7) CalibratedDisplayProfile-0.icc
+==============================================================================
+
+Ficheiro: C:\WINDOWS\System32\spool\drivers\color\CalibratedDisplayProfile-0.icc
+  size=10264  created=2026-05-03  lastwrite=2026-08-11 11:54:30
+
+HKCU\...\ICM\ProfileAssociations\Display\{4d36e96e-...}\0000
+  UsePerUserProfiles=1
+  ICMProfile=(vazio)
+  ICMProfileSnapshot=CalibratedDisplayProfile-0.icc
+
+A associacao 0000 e o primeiro instance da classe Monitor — no EnumDisplayDevices
+DISPLAY1\Monitor0 (AOC UID256 retrato) usa Class\...\0000.
+O snapshot existe; o perfil corrente ICMProfile esta vazio (calibracao guardada,
+nao necessariamente aplicada agora). Pode alterar contraste/"grau" de cor nesse
+AOC, NAO o tamanho da UI.
+
+==============================================================================
+Lista do amigo (Surround / DSR / VSR / etc.) — estado neste PC
+==============================================================================
+
+NVIDIA Surround / Mosaic / DSR / DLDSR     NAO APLICA (sem NVIDIA)
+Intel Collage                              NAO APLICA
+AMD Eyefinity                              4 sources separadas, nao 1 surface
+Display Span / Multi-Monitor Span          NAO (4 Screen objects)
+AMD VSR                                    chave HKCU\Software\AMD\CN\VirtualSuperResolution
+                                           so AlreadyNotified=1 (notificacao, nao prova de ON)
+GPU Scaling                                BestViewOption presente (aspect)
+Integer Scaling                            so capability IntegerScalingPerAppSupport=1
+Sharpness                                  componente AMD Image Sharpening existe
+HDR / Dynamic Contrast / Local Dimming     HDR nao ativo; Local Dimming nao encontrado
+ClearType                                  LIGADO (ver seccao 5)
+Super Resolution "de camera"               EFEITO do retrato 1080x1920 esticado no
+                                           painel nativo 1920x1080, nao DSR
+
+Lupa: inicio RunningState=0 Magnification=100; agora processo Magnify PID 5696
+desde 2026-08-22 06:12:42, RunningState=1, Magnification=100, UseBitmapSmoothing=0.
+ColorFiltering HotkeyEnabled=0. Tema escuro, transparencia OFF. High Contrast
+Flags=122 (bit ON desligado).
+
+==============================================================================
+Mapa fisico LIVE (origens relativas ao primary)
+==============================================================================
+
+                    [ LG 21.5" DISPLAY3 1920x1080 @60Hz ]
+                    pos (-359, -1081)
+
+ [ DELL S2421HN DISPLAY2 1920x1080 @59Hz ]  [ AOC 24G2 PRIMARY DISPLAY4 1920x1080 @144Hz ]
+ pos (-1920, -1)                              pos (0,0) PAISAGEM  <-- sentar aqui
+
+                                              [ AOC 24G2 DISPLAY1 1080x1920 @119Hz ]
+                                              pos (1920, -139) RETRATO  <-- corrigir orientacao
+
+==============================================================================
+Acao resumida
+==============================================================================
+
+Nao e DPI>100%. Nao e Surround. Nao e o dummy CL@ como primary.
+E o AOC 24G2 em Retrato (foi primary; ainda esta ligado em 1080x1920).
+
+Definicoes > Sistema > Ecra:
+  Identificar -> escolher o AOC 144 Hz em que se trabalha ->
+  "Tornar este o meu monitor principal" ->
+  Escala 100% -> Resolucao 1920x1080 -> Orientacao Paisagem ->
+  no AOC da direita, se o painel esta deitado: mudar Retrato para Paisagem ->
+  arrastar os retangulos para a posicao real.
+)

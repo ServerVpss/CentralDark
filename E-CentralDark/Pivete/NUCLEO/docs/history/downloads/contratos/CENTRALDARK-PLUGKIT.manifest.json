@@ -1,0 +1,17 @@
+{
+  "name": "CentralDark ONE FLOW Plug Kit",
+  "date": "2026-08-23",
+  "purpose": "Architecture + contracts + reference pipeline + tests + Hermes handoff",
+  "new_system": false,
+  "new_pr": false,
+  "deploy": false,
+  "mutation": false,
+  "target_owner_policy": "REUSE_EXISTING_OWNER",
+  "active_pr_hint": 1119,
+  "safety": {
+    "credential_harvest": false,
+    "cookie_harvest": false,
+    "auth_session_harvest": false,
+    "destructive_actions": false
+  }
+}

@@ -1,0 +1,130 @@
+/goal
+
+MODO=
+IMPLEMENTAR_QA_AUTOCONSULTATIVO_POR_GATILHO
+
+ALVO=
+C:\Users\danda\AppData\Local\hermes\profiles\pivete\skills\qa.teste-de-software.MARKDOWN
+
+OBJETIVO=
+
+Evoluir a estrutura existente para funcionar como biblioteca QA
+autoconsultativa ativada por eventos, sem transformar todo o conteúdo
+em uma SKILL.md gigante.
+
+ANTES DE CRIAR:
+
+1. mapear integralmente a estrutura existente;
+2. localizar SKILL.md, README.md, manifests, scripts e testes existentes;
+3. identificar o caminho que o runtime Hermes realmente carrega;
+4. verificar se existe mecanismo equivalente;
+5. evoluir o mecanismo existente quando houver;
+6. não criar V1, V2, V3, NOVO, FINAL ou cópia paralela.
+
+ARQUITETURA_DESEJADA=
+
+SKILL.md pequeno
+→ roteador JavaScript
+→ manifest de gatilhos
+→ consulta seletiva de Markdown
+→ DELTA para a missão atual
+→ teste discriminativo
+→ regressão
+→ aprendizado comprovado
+→ reutilização em sessões futuras.
+
+USAR_COMO_INDICE_PRIMARIO=
+
+05-ESPECIALIDADES\agentTesting\heuristicas\manifest.json
+
+O roteador deve receber:
+
+EVENTO
+MISSAO_ATUAL
+ESTADO_ATUAL
+PROXIMO_ESTADO
+WORKTREE
+BRANCH
+HEAD
+COMANDO_QUE_FALHOU
+EXIT_CODE
+ERRO
+ARQUIVOS_AFETADOS
+TESTES
+CHECKPOINT
+
+O roteador deve:
+
+1. preservar a missão atual;
+2. consultar primeiro somente o manifest;
+3. selecionar no máximo três documentos;
+4. carregar apenas trechos relevantes;
+5. nunca carregar o acervo inteiro sem necessidade;
+6. devolver QA_CONTEXT_DELTA;
+7. não alterar código automaticamente sem Policy Gate;
+8. não adaptar testes para aceitar código quebrado;
+9. não promover tentativa vermelha;
+10. registrar aprendizado somente após prova completa.
+
+GATILHOS_INICIAIS=
+
+TEST_FAILED
+NODE_CHECK_FAILED
+SEMANTIC_FAILURE_WITH_SYNTAX_PASS
+REGRESSION_FAILED
+TIMEOUT
+STATE_TRANSITION_ERROR
+NON_IDEMPOTENT_RESULT
+REPEATED_ERROR
+SESSION_CHECKPOINT
+SESSION_RESUME
+
+AUTO_APPLY_ALLOWED somente quando:
+
+MATCH_PROVADO=SIM
+ALTERACAO_LOCAL=SIM
+REVERSIVEL=SIM
+WRITER_UNICO=SIM
+ESCOPO_AUTORIZADO=SIM
+TESTE_DISCRIMINATIVO_EXISTE=SIM
+ROLLBACK_EXISTE=SIM
+SECRETS=NAO
+MERGE=NAO
+DEPLOY=NAO
+VPS=NAO
+PRODUCAO=NAO
+
+TESTES OBRIGATORIOS=
+
+1. escolhe a heurística correta para erro conhecido=
+
+1. escolhe a heurística correta para erro conhecido;
+2. não carrega documentos não relacionados;
+3. limita a consulta a três documentos;
+4. mantém missão, worktree, branch, HEAD e próximo estado;
+5. não promove tentativa vermelha;
+6. não altera teste para fabricar verde;
+7. segunda execução é idempotente;
+8. sessão nova reutiliza aprendizado comprovado;
+9. evento ambíguo retorna INCONCLUSIVO;
+10. ausência de match não é PASS.
+
+RECIBO=
+
+STATUS=
+MAPA_EXISTENTE=
+ARQUIVOS_REUTILIZADOS=
+ARQUIVOS_CRIADOS=
+JUSTIFICATIVA_DOS_NOVOS=
+MANIFEST_USADO=
+GATILHOS_IMPLEMENTADOS=
+TESTS_TOTAL=
+PASS=
+FAIL=
+SKIPPED=
+UNKNOWN=
+CONSULTA_SELETIVA=
+IDEMPOTENCIA=
+REUTILIZACAO_ENTRE_SESSOES=
+VERSAO_PARALELA=NAO
+MISSAO_ATUAL_PRESERVADA=SIM

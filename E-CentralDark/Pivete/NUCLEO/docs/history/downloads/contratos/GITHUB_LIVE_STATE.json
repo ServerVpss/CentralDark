@@ -1,0 +1,42 @@
+{
+  "observed_at": "2026-08-24T06:32:00-03:00",
+  "repository": "ServerVpss/CentralDark",
+  "visibility": "private",
+  "default_branch": "main",
+  "main_head": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+  "main_head_message": "chore(painel): registrar push 07942a2",
+  "pr_1115": {
+    "state": "open",
+    "draft": true,
+    "mergeable": true,
+    "base": "main",
+    "base_sha": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+    "head": "feat/teto-util-convergencia-organograma-20260822",
+    "head_sha": "b917ca3a19ed59d26c04ab2234280a93ee19513b",
+    "updated_at": "2026-08-24T05:56:22Z",
+    "writer": "SOL",
+    "writer_scope": "META_GENERALIZACAO_ORQUESTRACAO_TOTAL"
+  },
+  "current_package_scope": {
+    "repo_mutation": false,
+    "github_role": "READ_ONLY",
+    "local_artifact_writer": "SOL",
+    "writer_scope": "SESSION_MASTER_HANDOFF"
+  },
+  "canonical_file_shas": {
+    "LEIA-ME-IA.md": "e2744a767b3bc8adbe620ddfce7e82ba3be62082",
+    "AGENTS.md": "cb952d540da94e5656837562885146172e2b816a",
+    "SOUL-SOL.md": "6c26ae1f50cc973594b5c87b75e79be46bebde9c",
+    "00-PORTA-DE-ENTRADA-IA.md": "714691885af3d3c125b8d8b03a25a5da9bfeeeaf",
+    "CAPACIDADES-COGNITIVAS.md": "6c3d15cf27f294ca046a4e3c6d81c0d0fb3ce4b4",
+    "JEITO-CORRETO-DO-PIVETE.md": "b9294aae207e1dc4aa1f3f2e6b481bdf783046ff",
+    "2026-06-20-padrao-resposta-pivete.md": "2f8af5f8194a62c2a882b614c463a1912e4dd1b9",
+    "DICIONARIO-PIVETE-GITHUB.md": "d9a5c35581ffd6525a740168317615426918cfd2",
+    "CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json": "e947c22b0a49a00523b736dcf22b0356b1f14d59",
+    "PROOF-OWNERSHIP.json": "3aa88450b5ea1b3953c4cbeb192429bf1ca943bb",
+    "METACOGNICAO-OPERACIONAL.md": "7ba0a71aa13197b35653a89edc17d3df90168ebc",
+    "JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md": "b14e61b370445c95a2d5db34474ce0cfac198ab0",
+    "DESIGN-SISTEMA.md": "c684ac9225ab2bb8fc5b9c7f86895a8a00cbe0ce",
+    "FREQUENCIAS-OPERACIONAIS-SOL.md": "f450fc77c57109d4fec59f8266225b916a0f4a13"
+  }
+}

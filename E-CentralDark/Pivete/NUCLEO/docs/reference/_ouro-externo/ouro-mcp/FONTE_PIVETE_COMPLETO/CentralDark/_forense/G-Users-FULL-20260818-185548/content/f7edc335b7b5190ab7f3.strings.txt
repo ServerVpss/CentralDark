@@ -1,0 +1,111 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\keymap\greek_iso-8859-7.vim
+
+" Vim Keymap file for greek
+" Maintainer: Grigorios Magklis <maglis@cs.rochester.edu>
+" Last Updated: Tue 10 Jul 2001 16:50:50
+" This keyboard layout allows all Greek symbols to be typed,
+" including accented capitals, diaeresis & accent on the same
+" vowel, and the Greek semicolon sign.
+" accent
+";" + letter
+" diaeresis
+":" + letter
+" diaeresis + accent
+";" + ":" (or ":" + ";") + letter
+" semicolon
+" colon
+" greek semicolon
+" sigma at end of word
+" greek left double-quote
+"<" twice
+" greek right double-quote
+">" twice
+" Use this short name in the status line.
+let b:keymap_name = "greek"
+loadkeymap
+" capital
+<char-193>
+<char-194>
+<char-195>
+<char-196>
+<char-197>
+<char-198>
+<char-199>
+<char-200>
+<char-201>
+<char-202>
+<char-203>
+<char-204>
+<char-205>
+<char-206>
+<char-207>
+<char-208>
+<char-209>
+<char-211>
+<char-212>
+<char-213>
+<char-214>
+<char-215>
+<char-216>
+<char-217>
+" small
+<char-225>
+<char-226>
+<char-227>
+<char-228>
+<char-229>
+<char-230>
+<char-231>
+<char-232>
+<char-233>
+<char-234>
+<char-235>
+<char-236>
+<char-237>
+<char-238>
+<char-239>
+<char-240>
+<char-241>
+<char-242>
+<char-243>
+<char-244>
+<char-245>
+<char-246>
+<char-247>
+<char-248>
+<char-249>
+" accented capital
+<char-182>
+<char-184>
+<char-185>
+<char-186>
+<char-190>
+<char-188>
+<char-191>
+<char-218>
+<char-219>
+" accented small
+<char-220>
+<char-221>
+<char-222>
+<char-223>
+<char-253>
+<char-252>
+<char-254>
+<char-250>
+<char-251>
+<char-192>
+<char-192>
+<char-224>
+<char-224>
+" symbols
+<char-183>
+<char-180>
+<char-168>
+<char-181>
+<char-181>
+" quotes
+<char-171>
+<char-187>
+" <char-161>
+" <char-162>

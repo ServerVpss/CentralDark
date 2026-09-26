@@ -1,0 +1,15 @@
+flowchart TD
+  A[Alteração material] --> B[CODE_DOCUMENTATION_GATE]
+  B --> C{Ficha técnica + mapa mental + owner + linhas?}
+  C -- não --> X[FAIL + NEXT_CURSOR]
+  C -- sim --> D[Testes]
+  D --> E[Contraprova]
+  E --> F[DOCUMENTATION_GATE]
+  F --> G[Receipt]
+
+  H[Hermes upstream] --> I[Update check / release metadata]
+  I --> J[Inventário de capabilities]
+  J --> K[Owner match CentralDark]
+  K --> L[Sandbox / worktree descartável]
+  L --> D
+  G --> M[Adapter / overlay CentralDark]

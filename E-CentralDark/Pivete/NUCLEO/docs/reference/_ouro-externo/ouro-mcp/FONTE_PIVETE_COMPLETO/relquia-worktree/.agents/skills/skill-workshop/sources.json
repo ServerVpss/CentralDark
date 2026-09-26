@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "claude-skills",
+      "repository": "alirezarezvani/claude-skills",
+      "commit": "aa8d778811a557a2c28ccadda4cf3d0bd028a4cc",
+      "kind": "index-json",
+      "index_path": ".codex/skills-index.json",
+      "license": "MIT",
+      "enabled": true
+    },
+    {
+      "id": "claude-code-settings",
+      "repository": "feiskyer/claude-code-settings",
+      "commit": "6e19e61753435cf7b6550bd0f2c4382f24740059",
+      "kind": "skill-tree",
+      "prefix": "skills/",
+      "license": "MIT",
+      "enabled": true
+    },
+    {
+      "id": "anthropic-frontend-design",
+      "repository": "anthropics/claude-code",
+      "commit": "0fa8c19d50f70f9f383fb6ff5ce5209575267d21",
+      "kind": "skill-tree",
+      "prefix": "plugins/frontend-design/skills/",
+      "license": "SEE_UPSTREAM",
+      "enabled": true
+    },
+    {
+      "id": "reverse-skill",
+      "repository": "zhaoxuya520/reverse-skill",
+      "commit": "ea582f30d53e4d616881df06a8e0f7e9f661ea21",
+      "kind": "skill-tree",
+      "prefix": "",
+      "license": "MIXED_SEE_UPSTREAM",
+      "enabled": true,
+      "capabilities": [
+        {
+          "name": "ctf-sandbox-orchestrator",
+          "category": "security-routing",
+          "description": "Roteamento para tarefas CTF multi-tipo, quando o conteúdo fica fora da árvore principal de skills.",
+          "document_path": "README.md"
+        }
+      ]
+    },
+    {
+      "id": "skills-manage",
+      "repository": "iamzhihuix/skills-manage",
+      "commit": "467d0423beaf71a31c520d4e3795ec88acae5ab2",
+      "kind": "capability-doc",
+      "document_path": "README.md",
+      "license": "Apache-2.0",
+      "enabled": true,
+      "capabilities": [
+        {"name":"central-skill-library","category":"skill-management","description":"Biblioteca central de skills com instalação por plataforma a partir de uma fonte comum."},
+        {"name":"skill-collections","category":"skill-management","description":"Coleções reutilizáveis para organizar e instalar conjuntos de skills."},
+        {"name":"skill-discovery","category":"skill-management","description":"Descoberta de bibliotecas de skills em projetos e plataformas."},
+        {"name":"github-skill-import","category":"skill-management","description":"Importação de skills e metadados a partir de repositórios GitHub."},
+        {"name":"large-library-search","category":"skill-management","description":"Busca eficiente em bibliotecas grandes com indexação e carregamento progressivo."}
+      ]
+    },
+    {
+      "id": "repowise",
+      "repository": "repowise-dev/repowise",
+      "commit": "0c746bd2c44d6329bf565d6e3397fc85ace47d70",
+      "kind": "capability-doc",
+      "document_path": "README.md",
+      "license": "AGPL-3.0",
+      "enabled": true,
+      "capabilities": [
+        {"name":"codebase-graph-intelligence","category":"codebase-intelligence","description":"Grafo de dependências, símbolos, chamadas e fluxo de execução para contexto de código."},
+        {"name":"git-behavioral-intelligence","category":"codebase-intelligence","description":"Sinais de histórico Git, hotspots, ownership, co-change e histórico de correções."},
+        {"name":"decision-mining","category":"codebase-intelligence","description":"Recuperação de decisões arquiteturais com evidência e proveniência."},
+        {"name":"deterministic-code-health","category":"codebase-intelligence","description":"Saúde de código e planos de refatoração por detectores determinísticos."},
+        {"name":"command-output-distillation","category":"context-efficiency","description":"Destilação reversível de saída de comandos para reduzir ruído sem perder acesso ao detalhe."},
+        {"name":"change-risk","category":"codebase-intelligence","description":"Risco de mudança e impacto antes de merge com sinais de testes e co-change."},
+        {"name":"impacted-tests","category":"testing","description":"Seleção de testes impactados por uma mudança usando inteligência do repositório."},
+        {"name":"task-shaped-mcp-tools","category":"tooling","description":"Ferramentas MCP orientadas a tarefas para recuperar contexto completo em menos chamadas."}
+      ]
+    }
+  ]
+}

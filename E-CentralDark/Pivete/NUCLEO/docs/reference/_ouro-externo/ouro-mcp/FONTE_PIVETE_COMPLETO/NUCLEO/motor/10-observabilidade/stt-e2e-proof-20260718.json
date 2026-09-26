@@ -1,0 +1,64 @@
+{
+  "class": [
+    {
+      "label": "voice",
+      "telegram_type": "VOICE",
+      "name": "sample.ogg",
+      "mime": "audio/ogg",
+      "class": "voice_or_document_audio",
+      "magic_ok_ogg": true,
+      "magic_mp3": false
+    },
+    {
+      "label": "audio",
+      "telegram_type": "AUDIO",
+      "name": "sample.mp3",
+      "mime": "audio/mpeg",
+      "class": "audio",
+      "magic_ok_ogg": false,
+      "magic_mp3": true
+    },
+    {
+      "label": "document",
+      "telegram_type": "DOCUMENT",
+      "name": "audio_message.ogg.bin",
+      "mime": "audio/ogg",
+      "class": "voice_or_document_audio",
+      "magic_ok_ogg": true,
+      "magic_mp3": false
+    }
+  ],
+  "stt": {
+    "voice_ogg": {
+      "ok": true,
+      "transcript": "Teste STT Hermes Pivette Fasi 2.",
+      "error": null,
+      "elapsed": 6.71,
+      "provider": "local"
+    },
+    "audio_mp3": {
+      "ok": true,
+      "transcript": "Teste STT, Hermes Pivette, fase 2.",
+      "error": null,
+      "elapsed": 3.23,
+      "provider": "local"
+    },
+    "document_ogg_bin": {
+      "ok": false,
+      "transcript": "",
+      "error": "Unsupported format: .bin. Supported: .aac, .flac, .m4a, .mp3, .mp4, .mpeg, .mpga, .ogg, .wav, .webm",
+      "elapsed": 0.0,
+      "provider": null
+    }
+  },
+  "binding": {
+    "chat_id": "1901426549",
+    "message_ids": {
+      "card": 497,
+      "voice": 498,
+      "reply": 499
+    },
+    "phrase": "teste stt hermes pivete fase dois"
+  },
+  "phrase": "teste stt hermes pivete fase dois"
+}

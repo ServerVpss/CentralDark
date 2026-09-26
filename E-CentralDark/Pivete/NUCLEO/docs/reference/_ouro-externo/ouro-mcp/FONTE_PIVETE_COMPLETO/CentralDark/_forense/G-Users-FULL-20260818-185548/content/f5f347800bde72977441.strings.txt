@@ -1,0 +1,1020 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\agent\proxy_sources\__pycache__\iron_proxy.cpython-311.pyc
+
+d!d"d#d$
+d%d&d#d$
+d'd(d)d$
+Z0d+e.d,<
+Z8d6e.d7<
+Z?dDdE
+Z@dDdJ
+ZGdDdJ
+ZJdDdJ
+a\dge.d
+iron-proxy (`ironsh/iron-proxy`) integration for credential-injecting egress control.
+Remote terminal sandboxes (Docker, Modal, SSH) currently see real upstream
+API credentials.  A prompt-injected agent inside one of these sandboxes can
+``cat ~/.config/openrouter/auth.json`` or ``printenv | grep -i key`` and
+exfiltrate them.
+iron-proxy is a TLS-intercepting egress firewall (Apache-2.0, Go binary, by
+ironsh).  It sits between the sandbox and the internet, enforces a default-deny
+allowlist on outbound hosts, and *swaps proxy tokens for real credentials*
+on the way out.  The sandbox only ever holds opaque proxy tokens 
+ leaking
+them is useless, since they only work behind the configured trusted proxy
+boundary (the CA private key and proxy endpoint integrity are part of that
+boundary: if traffic can be redirected to attacker-controlled proxy
+infrastructure, the guarantee no longer holds).
+Design summary
+--------------
+* The ``iron-proxy`` binary is auto-installed into ``<hermes_home>/bin/iron-proxy``
+  on first use.  Hermes pins one upstream version (``_IRON_PROXY_VERSION``)
+  and downloads the matching tar.gz from the official GitHub Releases page,
+  verifying the SHA-256 against the release's ``checksums.txt``.
+* A long-lived CA at ``<hermes_home>/proxy/ca.{crt,key}`` is generated on
+  first ``hermes egress setup``.  Sandboxes trust this CA so iron-proxy can
+  terminate TLS and rewrite headers.
+* The proxy config lives at ``<hermes_home>/proxy/proxy.yaml``.  It enumerates
+  the per-provider allowlists and the ``secrets`` transform that does the
+  Authorization-header swap.
+* Token mappings (proxy token -> real credential lookup) live alongside the
+  config.  The real credential is **never** written to the config 
+ iron-proxy
+  reads it from its own environment via ``{type: env, var: NAME}``.  When
+  Bitwarden Secrets Manager is configured, the real value is pulled there
+  at proxy startup instead.
+* The proxy runs as a managed subprocess (``hermes egress start``), pidfile
+  at ``<hermes_home>/proxy/iron-proxy.pid``.  Daemon output (including
+  per-request records on v0.39) goes to ``<hermes_home>/proxy/iron-proxy.log``;
+  ``audit.log`` is pre-created but reserved for a future pin that supports
+  ``log.audit_path``.
+* Failures (binary missing, port collision, bad config) emit a one-line
+  warning and do *not* block agent startup.  The Docker backend refuses to
+  start a sandbox with the proxy enabled-but-down, with a clear error.
+This module is intentionally subprocess-driven rather than depending on any
+iron-proxy Python bindings 
+ a single cross-platform binary is easier to
+lazy-install than a wheels-with-extension dependency, and we keep maintenance
+to a "bump the pinned version" loop.
+annotationsN)
+dataclass
+field)
+Optional
+Tuplez
+0.39.0z8https://github.com/ironsh/iron-proxy/releases/download/vz
+checksums.txtz
+checksums.txt.ascz
+public-key.asc
+HERMES_IRON_PROXY_MGMT_KEY
+openrouter.ai
+*.openrouter.ai
+api.openai.com
+api.anthropic.com
+!generativelanguage.googleapis.com
+api.x.ai
+api.mistral.ai
+api.groq.com
+api.together.xyz
+api.deepseek.com
+inference.nousresearch.com
+Tuple[str, ...]
+_DEFAULT_ALLOWED_HOSTS)
+OPENROUTER_API_KEY
+OPENAI_API_KEY
+GROQ_API_KEY
+TOGETHER_API_KEY
+DEEPSEEK_API_KEY
+MISTRAL_API_KEY
+XAI_API_KEY
+NOUS_API_KEYz
+Dict[str, Tuple[str, ...]]
+_BEARER_PROVIDERS)
+x-api-key
+Authorization
+match_headers
+aliases)
+*.openai.azure.comz
+*.cognitiveservices.azure.comz
+*.services.ai.azure.com)
+api-keyr'
+x-goog-api-key)
+GOOGLE_API_KEY)
+ANTHROPIC_API_KEY
+AZURE_OPENAI_API_KEY
+GEMINI_API_KEYz%Dict[str, Dict[str, Tuple[str, ...]]]
+_HEADER_AUTH_PROVIDERS)
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+GOOGLE_APPLICATION_CREDENTIALS
+_NON_BEARER_PROVIDERS)
+127.0.0.0/8z
+::1/128z
+169.254.0.0/16z
+fe80::/10z
+10.0.0.0/8z
+172.16.0.0/12z
+192.168.0.0/16z
+fc00::/7z
+::ffff:0:0/96z
+100.64.0.0/10z
+198.18.0.0/15
+_DEFAULT_UPSTREAM_DENY_CIDRS)
+TMPDIR
+LC_ALL
+LC_CTYPE
+NO_COLOR
+SSL_CERT_DIR
+SSL_CERT_FILE
+SYSTEMROOT
+USERPROFILE
+_PROXY_SUBPROCESS_ENV_ALLOWLIST)
+HTTPS_PROXY
+https_proxy
+HTTP_PROXY
+http_proxy
+ALL_PROXY
+all_proxy
+NO_PROXY
+no_proxy
+_PROXY_SUBPROCESS_ENV_STRIP
+SIGKILL
+Dict[str, str]
+_VERSION_CACHEc
+ProxyStatusz8Snapshot of the iron-proxy installation + runtime state.F
+enabledN
+Optional[Path]
+binary_path
+Optional[str]
+binary_version
+config_path
+ca_cert_path
+Optional[int]
+listening
+tunnel_port)
+default_factory
+List[str]
+warnings
+returnc
+exists
+RC:\Users\danda\AppData\Local\hermes\hermes-agent\agent\proxy_sources\iron_proxy.py
+installedz
+ProxyStatus.installed9
+configuredz
+ProxyStatus.configured=
+__name__
+__module__
+__qualname__
+__doc__rR
+__annotations__rT
+_DEFAULT_TUNNEL_PORTr]
+listr`
+propertyrh
+TokenMappinguL
+Map a sandbox-visible proxy token to a real upstream credential lookup.
+    ``real_env_name`` is the env-var name iron-proxy reads at egress time.
+    When Bitwarden is configured as the credential source for the proxy,
+    iron-proxy's *own* environment is populated from bws on startup 
+    sandbox still sees only ``proxy_token``.
+    ``match_headers`` names the request headers iron-proxy scans for the
+    proxy token (default: ``Authorization`` for bearer providers; e.g.
+    ``("x-api-key", "Authorization")`` for Anthropic native).
+    ``alias_env_names`` are additional env-var names the SANDBOX receives
+    the same proxy token under (e.g. ``GOOGLE_API_KEY`` for
+    ``GEMINI_API_KEY``).  They do not appear in the iron-proxy config 
+    only one secrets rule is emitted per mapping, keyed on
+    ``real_env_name``.
+proxy_token
+real_env_namer
+upstream_hosts
+alias_env_namesN)
+get_hermes_home
+hermes_constantsr
+_hermes_bin_dirr
+Return the proxy state dir without creating it.
+    Read-only callers (status probes, pidfile reads, version queries) use
+    this 
+ there's no reason to materialize ``~/.hermes/proxy/`` just to
+    check whether a pidfile exists.
+proxyr
+_proxy_state_dir_ror
+Return the proxy state dir, creating it with 0o700 if absent.
+    Writable callers (CA gen, config write, mappings write, start_proxy)
+    use this.  We force 0o700 
+ the dir holds the CA signing key, audit
+    log, and pidfile, so traversal by other local users is undesirable.
+    The chmod is unconditional so a pre-existing dir with a slack umask
+    gets tightened on first access.
+parents
+exist_ok
+OSError)
+_proxy_state_dirr
+Windowsz
+iron-proxy.exe
+iron-proxy)
+platform
+systemr(
+_platform_binary_namer
+Map (uname, arch) 
+ upstream release asset filename.
+    iron-proxy ships ``iron-proxy_<version>_<os>_<arch>.tar.gz``.
+    Windows builds aren't published upstream as of v0.39.0; we raise a
+    clear error for callers on Windows.
+Linux)
+aarch64r
+amd64z
+iron-proxy_
+_linux_z
+.tar.gz
+Darwin
+_darwin_r
+z8iron-proxy does not ship native Windows binaries as of vz5. Run the proxy on a Linux/macOS host, or inside WSL.z2Unsupported platform for iron-proxy auto-install: 
+machine
+_IRON_PROXY_VERSION
+RuntimeError)
+_platform_asset_namer
+install_if_missingr
+Return a path to a usable ``iron-proxy`` binary, or None.
+    Resolution order:
+      1. ``<hermes_home>/bin/iron-proxy``  (our managed copy 
+ preferred)
+      2. ``shutil.which("iron-proxy")``    (system PATH)
+    When ``install_if_missing`` is True and neither resolves, calls
+    :func:`install_iron_proxy` to download and verify the pinned version.
+z"iron-proxy auto-install failed: %sN)
+access
+shutil
+whichr
+install_iron_proxy
+Exception
+logger
+warning)
+managedr
+    rg
+find_iron_proxyr
+forcer
+Download, verify, and install the pinned ``iron-proxy`` binary.
+    Returns the path to the installed executable.  Raises on any failure
+    (network, checksum, extraction).  Callers in the auto-install path catch
+    these; the user-facing ``hermes proxy install`` surface lets them
+    propagate so the wizard can show a clear error.
+    Tr
+hermes-iron-proxy-
+prefixz
+Downloading %sz
+Checksum mismatch for z
+: expected z
+, got z
+filterNz
+.iron-proxy_)
+Installed iron-proxy %s at %s)+r
+_IRON_PROXY_RELEASE_BASE
+_IRON_PROXY_CHECKSUM_NAME
+tempfile
+TemporaryDirectoryr
+_http_download
+_verify_checksums_signature
+_expected_sha256
+_sha256_filer
+tarfile
+_pick_tar_member
+extract
+TypeError
+mkstemprw
+closer
+copy2r
+S_IRUSR
+S_IWUSR
+S_IXUSR
+S_IRGRP
+S_IXGRP
+S_IROTH
+S_IXOTH
+replacerN
+bin_dir
+target
+asset_name
+asset_url
+checksum_url
+tmpdir
+archive_path
+checksum_path
+expected
+actual
+member
+extracted
+stageds
+                 rg
+User-Agentz
+hermes-agent)
+headers
+timeout
+Failed to download 
+urllib
+request
+Request
+urlopen
+_DOWNLOAD_TIMEOUTr
+copyfileobj
+URLErrorr
+      rg
+Best-effort GPG verification of ``checksums.txt`` (maxpetrusenko P1).
+    Downloads the detached signature (``checksums.txt.asc``) and the release
+    signing key (``public-key.asc``), imports the key into an ephemeral
+    keyring, and verifies the signature over ``checksum_path``.
+    Returns True when the signature is verified. Returns False (with a warning)
+    when verification is unavailable 
+ ``gpg`` not installed, or the signature /
+    public-key assets are missing from the release. Raises RuntimeError ONLY
+    when verification actively FAILS (a present-but-bad signature), which is a
+    tamper signal we must not ignore.
+    Rationale for graceful degradation on "unavailable": the SHA-256 check
+    against ``checksums.txt`` remains in force regardless, and many install
+    hosts (CI, minimal containers) won't have gpg. We harden when we can and
+    never make gpg a hard dependency for a working install.
+gpg not found on PATH 
+ skipping iron-proxy release-signature verification (SHA-256 checksum check still enforced).Fr
+iron-proxy release signature assets unavailable (%s) 
+ skipping GPG verification (SHA-256 checksum check still enforced).N
+gnupgr
+--homedirz
+--batchz
+--no-ttyz
+--import
+capture_outputr
+Could not import iron-proxy signing key 
+ skipping GPG verification (SHA-256 still enforced): %s
+utf-8r
+--verifyu~
+iron-proxy checksums.txt failed GPG signature verification 
+ refusing to install (possible release-channel tampering). gpg: i,
+z0Verified iron-proxy checksums.txt GPG signature.)
+_IRON_PROXY_CHECKSUM_SIG_NAME
+_IRON_PROXY_PUBKEY_NAMEr
+subprocess
+returncode
+stderr
+decoder
+sig_url
+pubkey_url
+sig_path
+pubkey_pathr
+gnupg_home
+base_cmd
+verifys
+            rg
+checksum_filer
+z?Parse the standard ``sha256sum`` output: ``<hex>  <filename>``.r
+encoding
+errorsr
+No checksum entry for z
+read_text
+splitlines
+partss
+     rg
+<lambda>z
+_sha256_file.<locals>.<lambda>
+hashlib
+sha256r
+update
+hexdigest)
+chunkr
+   @rg
+tarfile.TarFile
+binary_name
+tarfile.TarInfoc
+Find the binary inside the upstream tar.
+    iron-proxy's archive is typically flat (binary at root) but we tolerate
+    a top-level directory.  Members must be regular files with a leaf name
+    matching ``binary_name``, no absolute paths, and no ``..`` traversal.
+Could not find z% inside downloaded archive (members: c
+<listcomp>z$_pick_tar_member.<locals>.<listcomp>
+z"_pick_tar_member.<locals>.<lambda>
+getmembers
+isfiler
+startswithr
+appendr
+candidatesr
+    rg
+binaryc
+Return ``iron-proxy --version`` output, stripped.  Empty on failure.
+    Cached by binary path: ``get_status`` is called per Docker container
+    create, but the version string is constant for a given binary.  A
+    single subprocess invocation is plenty.
+    Nz
+--versionTr
+environrB
+_RUN_TIMEOUTr
+TimeoutExpired
+stdoutr
+cached
+minimal_env
+parentr
+        rg
+iron_proxy_versionrM
+Tuple[Path, Path]c
+Generate (or return existing) iron-proxy CA cert + key.
+    Uses the host's ``openssl`` binary.  We don't try to bind to a Python
+    crypto library 
+ openssl is universally available on the platforms we
+    support, and it sidesteps cryptography-package licensing/distribution
+    surface.
+ca.crtz
+ca.key
+opensslNzpopenssl not found on PATH. Install OpenSSL (apt: `openssl`, brew: `openssl`) to generate the iron-proxy CA cert.z
+hermes-proxy-ca-r
+genrsaz
+4096Tr
+checkr
+-x509z
+-nodesz
+-sha256z
+-subjz
+/CN=hermes iron-proxy CAz
+-addextz!basicConstraints=critical,CA:TRUEz
+keyUsage=critical,keyCertSignz
+.staged
+O_NOFOLLOW
+Generated iron-proxy CA at %s)&r
+read_bytes
+with_suffix
+suffixr
+O_WRONLY
+O_CREAT
+O_TRUNC
+hasattrrV
+unlink
+FileNotFoundErrorr
+fdopen
+writer
+write_bytesr
+ca_crt
+ca_keyr
+tmp_key
+tmp_crt
+key_bytes
+crt_bytes
+key_staged
+open_flagsr
+              rg
+ensure_ca_certrm
+hermes-proxyr
+Mint a fresh opaque token to hand to the sandbox.
+    The token has no internal structure beyond a recognizable prefix 
+    iron-proxy matches on exact equality.  We use a 128-bit random suffix
+    (32 hex chars from a SHA-256 of 32 bytes of os.urandom).  At that
+    entropy the birthday-bound collision probability is below 2^-64 for
+    up to 2^32 tokens, which is plenty for a proxy-scoped namespace.
+urandomr+
+mint_proxy_tokenrs
+management.token
+_management_token_pathrw
+Return the management-API bearer key, minting it on first call.
+    Stored at ``<hermes_home>/proxy/management.token`` with 0600 perms.
+    The daemon receives it via the ``HERMES_IRON_PROXY_MGMT_KEY`` env var
+    (named in the generated config's ``management.api_key_env``);
+    ``hermes egress reload`` reads the same file to authenticate.
+hermes-mgmtr
+getattr
+fchmod
+AttributeErrorrb
+encoder
+existing
+tokenr
+     rg
+ensure_management_tokenr
+_read_management_tokenr
+Optional[Tuple[str, int]]c
+zBReturn ``(host, port)`` of the management listener, if configured.
+proxy.yamlNr
+management
+listenrB
+127.0.0.1
+ImportError
+safe_loadr
+YAMLErrorrC
+isinstancerw
+rpartitionr\
+ValueError)
+port_s
+         rg
+#_read_management_listen_from_configr
+Hot-reload the running daemon's ruleset via the management API.
+    POSTs to ``/v1/reload`` on the loopback management listener; the daemon
+    re-reads proxy.yaml and atomically swaps the transform pipeline 
+    validation failures leave the running config untouched (HTTP 422).
+    Returns True on a successful reload.  Raises ``RuntimeError`` with an
+    actionable message when the daemon isn't running, the config predates
+    management-API support (no ``management`` block 
+ restart required),
+    or the reload is rejected.
+    uL
+iron-proxy is not running 
+ nothing to reload.  Run `hermes egress start`.Nz
+The generated proxy.yaml has no management listener (written before reload support).  Re-run `hermes egress setup` and use `hermes egress restart` this one time.u[
+management.token is missing 
+ re-run `hermes egress setup`, then `hermes egress restart`.r
+http://r
+/v1/reload
+POSTr'
+Bearer ri
+methodr
+Tz*management API returned unexpected status rB
+zZiron-proxy rejected the new config (validation failed; the running ruleset is unchanged): i
+management API rejected our key (401).  The running daemon was started with a different management.token 
+ run `hermes egress restart`.z
+management reload failed (HTTP z
+): z&could not reach the management API at z
+ (zV).  If the daemon was started before reload support, run `hermes egress restart` once.)
+_read_pid
+_pid_aliver
+urllib.error
+urllib.requestr
+_MGMT_RELOAD_TIMEOUT
+statusr
+HTTPErrorr%
+          rg
+reload_proxyr
+Build the single host:port bind the proxy should listen on.
+    iron-proxy v0.39 supports exactly ONE ``proxy.http_listen`` bind per
+    daemon process, so this returns a one-element list and the choice of
+    host matters:
+    * **Linux:** bind the docker bridge gateway (``172.17.0.1`` by
+      default).  Sandboxes reach the proxy via
+      ``host.docker.internal:host-gateway``, which Docker resolves to
+      exactly this bridge gateway IP on Linux 
+ a loopback-only bind is
+      unreachable from inside containers there.  The bridge IP is still
+      host-local (it's an address on the host's ``docker0`` interface),
+      so host-side tooling and the status probe can reach it too.  When
+      no docker bridge is detected (docker not installed / not started),
+      fall back to loopback 
+ there are no sandboxes to serve in that
+      state, and the operator gets a warning.
+    * **macOS / Windows Docker Desktop:** ``host.docker.internal``
+      resolves via VPNkit to the host, so a loopback bind is reachable
+      from containers and is the least-exposed choice.
+    We never bind ``0.0.0.0`` 
+ that would expose the proxy (and, with a
+    leaked sandbox token, the user's API quota) to anyone on the local
+    network.  The bridge-gateway bind is reachable by other containers
+    on the default bridge network, which is unavoidable given v0.39's
+    single-bind limit; requests still require a minted proxy token and
+    an allowlisted upstream.
+No docker bridge (docker0) detected 
+ binding iron-proxy to loopback only.  Docker sandboxes will NOT be able to reach the proxy until it is restarted with docker running.
+127.0.0.1:)
+_detect_docker_bridge_ipr
+bridge_ips
+_default_http_listenr
+Return the docker0 bridge IPv4, if present, else None.
+    Best-effort: we try ``ip -4 addr show docker0`` first.  Anything that
+    fails, doesn't parse as a strict IPv4, or parses as an address we
+    must NOT bind to (unspecified, loopback, multicast, reserved, public)
+    returns None 
+ callers handle that as "no bridge bind".
+    SECURITY: a hostile ``ip`` shim earlier on the operator's PATH used
+    to be able to inject ``0.0.0.0`` here and re-open INADDR_ANY binding
+    that the rest of the bind-policy work explicitly closed.  We
+    validate via :mod:`ipaddress` and reject anything that isn't
+    plausibly a docker bridge IP (private + non-special).
+    N)
+docker0Tr
+zORefusing suspicious docker bridge IP %s reported by `ip`; skipping bridge bind.)
+enumerater
+ipaddress
+IPv4Address
+AddressValueErrorr
+is_unspecified
+is_loopback
+is_multicast
+is_reserved
+is_link_local
+is_globalr
+candidaterK
+       rg
+audit_log
+allowed_hosts
+upstream_deny_cidrs
+http_listen
+mappings
+List[TokenMapping]
+ca_certrf
+Optional[List[str]]r
+Build the iron-proxy YAML config (as a dict) for a given mapping set.
+    The dict is YAML-serializable via ``yaml.safe_dump``.  iron-proxy reads
+    real secrets from its OWN environment via ``source: {type: env, var: ...}``;
+    the sandbox never sees them.
+    Bind policy: the sandbox-facing listeners (``tunnel_listen`` on
+    ``tunnel_port``, plain-HTTP ``http_listen`` on ``tunnel_port + 1``)
+    bind the docker bridge gateway on Linux (``172.17.0.1`` or whatever
+    ``docker0`` resolves to 
+ that's what ``host.docker.internal``
+    resolves to inside containers there) and loopback on macOS / Windows
+    Docker Desktop.  We do NOT bind ``0.0.0.0`` 
+ a LAN peer with a
+    leaked sandbox token could otherwise spend the operator's API quota
+    against any allowlisted upstream.
+    SSRF policy: ``upstream_deny_cidrs`` defaults to a conservative deny
+    list covering loopback, link-local (incl. AWS/GCP/Azure IMDS at
+    169.254.169.254), and RFC1918.  Pass an explicit ``[]`` to opt out of
+    the deny list entirely (only sensible in hermetic tests).
+    Schema mirrors the official iron-proxy schema as of v0.39.0.  Notable
+    points:
+    * The ``dns`` section is required by the binary even when we only use the
+      CONNECT tunnel.  We point it at loopback so it doesn't conflict with
+      anything else and disable the listener.
+    * The ``proxy.tunnel_listen`` is what sandboxes hit via ``HTTPS_PROXY``.
+      ``http_listen`` / ``https_listen`` are present (loopback only) so the
+      proxy boots; sandboxes never route directly to them.
+    * ``allowlist`` transform takes ``domains:`` and ``cidrs:``, not ``hosts:``.
+    * ``secrets`` transform takes ``secrets:`` (plural), each with a
+      ``source``, a ``replace.proxy_value`` (the sandbox-visible token), and
+      a list of ``rules`` saying which hosts the swap should fire on.
+    r{
+varTF)
+proxy_valuer*
+match_query
+match_body
+requirec
+z&build_proxy_config.<locals>.<listcomp>
+sourcer
+rulesNr
+levelr
+127.0.0.1:0)
+proxy_ipi
+tunnel_listenr
+https_listen
+max_request_body_bytes
+max_response_body_bytes
+ upstream_response_header_timeoutr
+api_key_envi
+cert_cache_size
+leaf_cert_expiry_hours
+allowlist
+domains)
+config
+secrets)
+metricsr
+transforms
+rsplit
+_MGMT_PORT_OFFSET
+_MGMT_API_KEY_ENVrw
+secrets_rulesr*
+deny_cidrs
+listens
+primary_listen
+bind_host
+plain_http_listen
+log_blockr
+                    rg
+build_proxy_configr
+audit_pathc
+Create the audit log file with private permissions (0o600).
+    Called from the wizard right before ``start_proxy``.  On the pinned
+    v0.39 the daemon never writes this file (no ``log.audit_path``
+    config field), so the pre-create is purely forward-compat: when the
+    pin moves to a version that supports a dedicated audit stream, the
+    file already exists with tight permissions and the daemon inherits
+    them instead of creating it under the default umask.
+    Raises :class:`RuntimeError` on any OSError (planted symlink,
+    immutable parent dir, full disk) so the caller can decide how to
+    surface it.  The wizard treats this as a WARNING on v0.39 
+    file is non-load-bearing until the version bump 
+ but the qualified
+    message keeps operators from wiring monitoring to a path that can't
+    exist.
+    rV
+z2Refusing to start: could not pre-create audit log z
+ with restrictive permissions (z;).  Move or chmod any existing file at that path and retry.N)
+O_APPENDr^
+    rg
+ensure_audit_logr
+Serialize the config dict to ``<hermes_home>/proxy/proxy.yaml``.
+    Uses ``yaml.safe_dump`` so we never emit Python tags.
+NzGPyYAML is required to write the iron-proxy config but is not installed.r
+.proxy.yaml.tmp
+default_flow_style
+sort_keys)
+safe_dumpr
+tmp_pathr
+       rg
+write_proxy_configr
+Persist the sandbox-visible proxy tokens to ``mappings.json``.
+    The Docker backend reads this file to inject the right tokens as env
+    vars when starting a sandbox.  The file is NOT read by iron-proxy
+    itself 
+ the mapping is already baked into ``proxy.yaml``.
+mappings.jsonr
+env_namerz
+z"write_mappings.<locals>.<listcomp>x
+version
+tokensz
+.mappings.json.tmpr
+indentN)
+payloadr
+      rg
+write_mappingsr
+z;Read mappings.json, if it exists.  Empty list on any error.r
+z+Failed to read iron-proxy mappings.json: %sNr
+loadsr
+JSONDecodeErrorr
+KeyErrorr
+      rg
+load_mappingsr
+available_env_namesr
+Mint a TokenMapping for every known provider whose env var is set.
+    Pass ``available_env_names`` to override the lookup source (used by the
+    Bitwarden adapter so we mint mappings for keys that *will* be in the
+    proxy's environment even if they aren't in the host process env right
+    now).
+    Nc
+<setcomp>z-discover_provider_mappings.<locals>.<setcomp>
+_api_keyrB
+namess
+<genexpr>z-discover_provider_mappings.<locals>.<genexpr>
+itemsr&
+specr+
+      @rg
+discover_provider_mappingsr$
+Return env-var names for providers we recognize but can't proxy.
+    AWS Bedrock (SigV4) and GCP Vertex (SDK-minted OAuth) can't be swapped
+    by a static header replacement.  When any of these are configured, the
+    sandbox is holding real credentials that the proxy can't strip 
+    isolation guarantee is incomplete for those providers.
+    The wizard and ``hermes egress status`` use this to print a warning.
+    (Anthropic / Azure OpenAI / Gemini used to be here; they're now
+    first-class swapped providers via ``_HEADER_AUTH_PROVIDERS``.)
+    Nc
+z/discover_uncovered_providers.<locals>.<setcomp>
+z0discover_uncovered_providers.<locals>.<listcomp>
+discover_uncovered_providersr)
+rotater
+discoveredr*
+Combine an existing mapping set with freshly discovered providers.
+    By default this PRESERVES tokens for providers already in ``existing`` 
+    re-running ``hermes egress setup`` should not invalidate the tokens
+    baked into containers that are already running.  Only newly added
+    providers get freshly minted tokens.
+    When ``rotate=True``, every token in the result is freshly minted
+    regardless of overlap.  The wizard exposes this via ``--rotate-tokens``
+    for the rare case where the operator wants to roll all tokens
+    deliberately (e.g. after a suspected token leak).
+    Providers that are in ``existing`` but no longer in ``discovered``
+    (operator removed the env var since last setup) are dropped.
+<dictcomp>z"merge_mappings.<locals>.<dictcomp>
+by_namerL
+priors
+       rg
+merge_mappingsr1
+iron-proxy.pidrv
+_pidfiler4
+HERMES_IRON_PROXY_NONCE
+_proxy_noncerZ
+Return /proc/<pid>/stat[21] (starttime) on Linux, else None.
+    Comparing starttime is the standard cheap way to detect PID recycling
+    without relying on cmdline scanning.  When None, callers fall back to
+    the cmdline + nonce check.
+/proc/z
+/statr
+rfindr
+rparen
+fieldss
+    rg
+_pid_proc_starttimer@
+Path to the on-disk sibling of the pidfile that stores the nonce.
+    Written by ``_write_pidfile_safely`` after ``start_proxy`` plants
+    the nonce in the iron-proxy child env, read by ``_pid_alive`` in a
+    later CLI invocation (``stop`` / ``status``) so cross-process
+    PID-recycling defense holds.
+iron-proxy.nonce)
+_persisted_nonce_pathrB
+Read the on-disk nonce written next to the pidfile.
+    Returns None when the file is missing, unreadable, or empty 
+    callers fall back to argv0 basename matching in that case.
+    rV
+getuid
+ignorer
+O_RDONLYr^
+st_uidrD
+flagsr
+     rg
+_read_persisted_noncerL
+Return True iff ``pid`` is alive AND is an iron-proxy process.
+    Defends against PID reuse via three signals (in priority order):
+    1. ``/proc/<pid>/environ`` contains our nonce  (most reliable, Linux)
+    2. ``/proc/<pid>/cmdline`` basename matches the managed binary
+    3. ``ps -p <pid>`` command line contains the binary path
+    The legacy ``"iron-proxy" in cmdline`` match was loose enough to match
+    ``tail iron-proxy.log`` or an editor with that file open.  We tighten
+    on argv[0] basename plus an in-process nonce instead.
+/environ
+/cmdline
+comm=r
+psutil
+pid_existsr
+ProcessLookupError
+PermissionErrorr
+_HERMES_IRON_PROXY_NONCE_ENVr}
+basenamer;
+nonce_candidates
+on_disk
+env_bytes
+needle
+cmdline_pathr
+argv0_baserK
+             rg
+extra_envr
+refresh_secrets_from_bitwarden
+bitwarden_configra
+Optional[Dict[str, str]]rb
+Optional[Dict]c
+Spawn iron-proxy as a managed background subprocess.
+    Idempotent 
+ if the proxy is already running with the expected PID,
+    just returns the live status.
+    ``refresh_secrets_from_bitwarden=True`` re-fetches upstream secrets
+    via ``bws secret list`` at startup and injects them into the child
+    env.  This delivers the rotation promise that distinguishes
+    ``credential_source: bitwarden`` from ``credential_source: env``.
+    Without this flag (or with ``bitwarden_config=None``) the proxy still
+    starts but uses whatever the host process env happens to contain.
+iron-proxy binary not available 
+ run `hermes egress install`.r
+iron-proxy config not found at z". Run `hermes egress setup` first.
+refresh_from_bitwardenrc
+iron-proxy.logrV
+z!Refusing to write iron-proxy log r
+'.  Remove that path manually and retry.rD
+iron-proxy log 
+ has unexpected owner uid=z
+; refusing to write.)
+stdinrG
+start_new_sessionz
+-configz
+failed to spawn iron-proxy: r
+grace_secondsr
+_kill_and_waitr_
+KeyboardInterrupt)
+_signum
+_frame
+pidfile
+_interrupt_handlerz'start_proxy.<locals>._interrupt_handler
+linesz$iron-proxy exited immediately (code z
+). Last log lines:
+iron-proxy did not bind r
+ within z)s.  Process was killed.  Last log lines:
+z#Started iron-proxy pid=%s config=%s)>r
+get_statusr
+_build_proxy_subprocess_envr
+DEVNULL
+STDOUTr
+Popenr4
+_write_pidfile_safelyrZ
+_read_http_listen_from_configrr
+threading
+current_thread
+main_thread
+signal
+SIGINT
+SIGTERM
+_STARTUP_GRACE_SECONDS
+_tail_logr_
+_port_listening
+sleepr
+bin_pathr
+log_path
+log_open_flags
+log_fdr
+popen_kwargs
+listen_hp
+probe_hostr]
+prev_sigint
+prev_sigterm
+install_handlers
+deadline
+tailru
+                          @@rg
+start_proxyr
+Write ``pid`` to ``pidfile`` with O_EXCL + O_NOFOLLOW + ownership check.
+    O_EXCL means "another start is in progress" if the file already
+    exists with a live owner 
+ we cleanly fail rather than racing.  When
+    the existing pidfile points at a dead pid (stale crash), we
+    explicitly unlink it before retrying once.
+    Side effect: also persists the in-process nonce to disk so
+    cross-CLI-invocation ``_pid_alive`` checks (start in one process,
+    stop in another) can still defeat PID recycling.
+    rV
+z<Another iron-proxy start appears to be in progress (pidfile z
+ -> pid z4).  Run `hermes egress stop` if that proxy is stuck.z
+Refusing to write pidfile r
+pidfile rk
+.noncer
+O_EXCLr^
+FileExistsErrorr
+existing_pidr
+noncefile
+nopens
+          rg
+'subprocess.Popen'ro
+Best-effort SIGTERM 
+ wait 
+ SIGKILL for a child we own.Nr
+terminater
+Construct the minimal env for the iron-proxy subprocess.
+    Allowlists infrastructure vars (PATH, HOME, locale) plus the env vars
+    named in ``load_mappings()`` (the real upstream secrets the proxy
+    needs to do the swap).  Everything else is stripped 
+    ``_PROXY_SUBPROCESS_ENV_STRIP`` for proxy chain protection.
+    When ``refresh_from_bitwarden=True`` AND ``bitwarden_config`` is
+    populated, fetches upstream secrets via the BSM SDK at startup and
+    merges them in.  This is what delivers the rotation guarantee
+    promised by ``credential_source: bitwarden`` 
+ without it, rotating
+    a key in the Bitwarden web app doesn't reach the proxy.
+    r(
+bitwarden
+access_token_env
+BWS_ACCESS_TOKENrB
+project_idF)
+access_tokenr
+cache_ttl_seconds
+use_cache
+allow_env_fallbackz-Bitwarden refresh did not return secrets for z
+.  Either add the secrets to your BWS project, switch to credential_source: env via `hermes egress setup --no-bitwarden`, or set `proxy.allow_env_fallback: true` in config.yaml to opt into the legacy host-env fallback.uw
+Bitwarden refresh did not return secrets for %s 
+ falling back to host env for those names (allow_env_fallback=true).z[Bitwarden refresh produced %d warning(s); run `hermes secrets bitwarden status` for detail.z
+credential_source=bitwarden but the access-token env or project_id is empty.  Either set both, switch to credential_source: env, or set `proxy.allow_env_fallback: true` to opt into the legacy fallback behaviour.u
+credential_source=bitwarden but access-token env or project_id is empty 
+ proxy will fall back to parent env (allow_env_fallback=true).a
+Bitwarden refresh module unavailable at proxy start (credential_source=bitwarden with proxy.allow_env_fallback: false).  Either fix the import, switch to credential_source: env, or set `proxy.allow_env_fallback: true` to opt into the legacy fallback behaviour.zmBitwarden refresh module unavailable at proxy start, falling back to parent env (allow_env_fallback=true): %sNr=
+agent.secret_sourcesr
+fetch_bitwarden_secrets
+sortedr
+setdefault)
+alias_sources
+neededr5
+access_token_namer
+missingr(
+                   rg
+z=Stop the managed iron-proxy.  Returns True if it was running.ra
+z1Best-effort cleanup of pidfile + persisted nonce.T)
+missing_okN)
+_cleanup_state_filesz(stop_proxy.<locals>._cleanup_state_files
+z?iron-proxy pid=%s appears recycled before SIGKILL; not killing.z
+Stopped iron-proxy pid=%sT
+_KILL_SIGNALr
+starttime_beforer
+starttime_after
+recycleds
+      rg
+stop_proxyr
+Snapshot the current proxy state 
+ does NOT start anything.
+    Crucially, this is called per Docker-container-create when egress
+    enforcement is on.  It must not have side-effects (no mkdir, no
+    binary version subprocess that takes 30s on a hung binary).  The
+    state dir is read-only here.
+    Nr
+        rg
+_read_tunnel_port_from_configr
+Return ``(host, port)`` of the configured sandbox-facing listener.
+    Reads ``proxy.tunnel_listen`` 
+ the CONNECT/MITM listener sandboxes
+    hit via ``HTTPS_PROXY`` 
+ falling back to ``proxy.http_listen`` for
+    configs written before the tunnel/http listener-role split.
+    The bind host matters for liveness probes: on Linux the daemon binds
+    the docker bridge gateway (e.g. ``172.17.0.1``), where a loopback
+    connect would report "not listening" for a perfectly healthy daemon.
+proxy_blockr
+         rg
+Cheap TCP connect probe 
+ True iff something accepts on host:port.r
+socket
+create_connectionr
+(no log file)i
+(could not read log: r;
+    rg
+Clear module-level caches so tests get a fresh start.
+    This module owns two mutable globals that need reset between tests:
+    - ``_VERSION_CACHE`` 
+ subprocess output cache keyed by binary path.
+    - ``_proxy_nonce`` 
+ the strong-proof token written by ``start_proxy``
+      and read by ``_pid_alive`` to defeat PID recycling.
+    Today the repo's tests run each file in its own subprocess (per
+    AGENTS.md) so leakage is bounded, but any in-process caller
+    (notebooks, ad-hoc scripts, ``pytest -p no:xdist``) would otherwise
+    see whichever values were probed first regardless of subsequent
+    ``install_iron_proxy(force=True)`` or ``start_proxy`` calls.
+    N)
+clearr8
+_reset_for_testsr
+__future__r
+loggingr
+dataclassesr
+pathlibr
+typingr
+getLoggerrm
+__all__r(
+<module>r

@@ -1,0 +1,78 @@
+
+CENTRALDARK:
+  category_descriptive:
+    name: Human-Intent-Governed Adversarial Learning Control Plane
+    short: HIG-ALCP
+    portuguese: Plano de Controle Adversarial e Auto-Corretivo Governado por Intenção Humana
+    status: DESCRIPTIVE_CLASSIFICATION_NOT_EXTERNAL_STANDARD
+
+  roles:
+    SEGREDO_CHEFE:
+      owns: [INTENT, DESTINATION, HUMAN_LIVED_REALITY, FINAL_HUMAN_AUTHORIZATION]
+    SOL:
+      owns: [COORDINATION, RECONCILIATION, COUNTERPROOF_ORCHESTRATION]
+      forbidden: [STEAL_AUTHORSHIP, INVENT_THIRD_REALITY, CHANGE_DESTINATION, SELF_APPROVE]
+    HERMES:
+      owns: [EXECUTION, PRESERVATION, CONTINUITY]
+    MODEL:
+      status: REPLACEABLE_ENGINE
+    REALITY:
+      role: CLAIM_MATCHED_MATERIAL_JUDGE
+
+  invariants:
+    UNKNOWN_IS_NOT_PASS: true
+    HISTORY_IS_NOT_CURRENT_STATE: true
+    DOCUMENTED_IS_NOT_EXECUTED: true
+    ACTION_IS_NOT_PROOF: true
+    MODEL_CONSENSUS_IS_NOT_REALITY: true
+    REUSE_BEFORE_CREATE: true
+    ONE_SYSTEM_ONLY: true
+    ONE_WRITER_PER_SCOPE: true
+    PARALLEL_PERCEPTION: true
+    SERIALIZED_MUTATION: true
+    NO_V2_V3_V4_PARALLEL_SYSTEM: true
+
+  anti_papagaio:
+    purpose: >
+      Não gerar incerteza artificial sobre comando/intenção/experiência humana;
+      atacar inferência técnica, autoaprovação, falsa precisão e estado não medido.
+
+  reality_reconciliation:
+    human_event_can_coexist_with_system_result: true
+    rule: >
+      Ação humana e resultado técnico são fatos de camadas diferentes.
+      Reconciliar sem apagar nenhum lado.
+
+  learning:
+    states:
+      RAW_MATERIAL: "erro/log/histórico/correção/arquivo"
+      CANDIDATE_LEARNING: "hipótese útil ainda não promovida"
+      GOLD: "mecanismo generalizável que sobreviveu contraprova no escopo"
+      CRYSTAL: "gold + owner + test + gate + provenance + consumer + route"
+    promotion:
+      requires:
+        - PROVENANCE
+        - COUNTERPROOF
+        - NEGATIVE_TEST_WHEN_APPLICABLE
+        - POSITIVE_TEST_WHEN_APPLICABLE
+        - REGRESSION
+        - OWNER_BINDING
+        - GATE_OR_EQUIVALENT_ENFORCEMENT
+        - NEXT_EVENT_REUSE
+    anti_poison:
+      CRYSTAL_CANDIDATE_IS_NOT_CRYSTAL: true
+      SELF_DECLARED_LEARNING_IS_NOT_PROOF: true
+      REPEATED_CHEFE_RETEACH_AFTER_PROMOTION: LEARNING_TRANSFER_FAIL
+
+  new_guards_from_latest_counterproof:
+    SOURCE_VERSION_RENDEZVOUS: true
+    CLAIM_DENOMINATOR_REQUIRED_FOR_ZERO: true
+    INDEPENDENT_COUNTERPROOF_WHERE_MATERIAL: true
+    RECEIPT_TRUST_BOUNDARY_DECLARATION: true
+    INTENT_SCOPE_NARROWING: true
+    RETRIEVED_CONTENT_IS_DATA_NOT_AUTHORITY: true
+    CANARY_SLO_WHERE_RUNTIME_PRODUCTION_CLAIM_REQUIRES_IT: true
+
+  proof_typing:
+    modes: [LIVE, SIMULATION, STATIC_ANALYSIS, HISTORICAL, USER_STATED]
+    rule: SIMULATION_IS_NOT_LIVE

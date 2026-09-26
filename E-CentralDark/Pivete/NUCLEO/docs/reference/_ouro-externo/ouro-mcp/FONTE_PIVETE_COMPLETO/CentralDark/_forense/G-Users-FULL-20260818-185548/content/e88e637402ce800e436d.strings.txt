@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\react\client\DataRenderers.d.ts.map
+
+{"version":3,"file":"DataRenderers.d.ts","names":[],"sources":["../../../src/react/client/DataRenderers.ts"],"mappings":";;cAmEa,2CAAa,SAAA"}

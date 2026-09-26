@@ -1,0 +1,43 @@
+name: lupa-conformance
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize, ready_for_review, labeled, unlabeled]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lupa-conformance-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Instalar pytest
+        run: pip install pytest
+      - name: Validar hash canônico da Lupa
+        run: python scripts/lupa/validar_autolupa_hash.py
+      - name: Rodar testes de conformidade (fixture PASS)
+        env:
+          AUTOLUPA_REPORT: .agents/skills/meta-lupa/testes/fixtures/exemplo_ok.md
+        run: pytest .agents/skills/meta-lupa/testes/test_autolupa_conformance.py -v
+
+      # Evidência executada para todo PR; promoção autônoma nunca espera um
+      # workflow que pode não existir por filtro de path.
+      - name: Motor determinístico (test_lupa.py)
+        working-directory: .agents/skills/meta-lupa
+        run: python testes/test_lupa.py
+      - name: Guardrail do selo de ponto fixo (exige AutoLupa executada)
+        working-directory: .agents/skills/meta-lupa
+        run: python guardrails/validar_selo_ponto_fixo.py
+      - name: Regressão do selo e do recibo de XP
+        working-directory: .agents/skills/meta-lupa
+        run: python testes/test_selo_ponto_fixo.py

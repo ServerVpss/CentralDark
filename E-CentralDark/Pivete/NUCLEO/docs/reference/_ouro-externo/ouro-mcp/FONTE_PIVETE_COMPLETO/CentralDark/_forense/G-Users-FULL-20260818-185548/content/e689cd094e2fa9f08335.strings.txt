@@ -1,0 +1,4 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\contributors\emails\nformenton@gmail.com
+
+Nicolas-Formenton
+# PR #84984 (desktop: drag to reorder profile groups in the All-profiles sidebar)

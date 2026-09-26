@@ -1,0 +1,353 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\bin\libtre-5.dll
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.pdata
+@.xdata
+.edata
+@.idata
+.reloc
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+Hct$<H
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+C8HcFHH
+IcT$ H
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+L$Xt0I
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+|$@ff.
+t$@L9f 
+t$@L9f s
+Lc\$PE1
+AVAUATUWVSH
+0[^_]A\A]A^
+ATUWVSH
+ [^_]A\
+unHcAH1
+ATUWVSH
+`[^_]A\
+AWAVAUATWVS
+uzLcc8K
+9s$|UD
+S(D9R@}KD
+S4D9RL}AA
+)IcE8H
+},9yD}
+}49yL}
+LcV8E9
+MPHcMPf
+A9v$|*K
+urE9U<
+[^_A\A]A^A_]
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+([^_]H
+@$A9@(~
+AWAVAUATUWVSH
+C$9C(~
+H[^_]A\A]A^A_
+S$9S(~
+S$9S(~
+UAWAVAUATWVSH
+C$9C(~
+C$9C(~
+[^_A\A]A^A_]
+UAWAVAUATWVSH
+C$9C(~
+C$9C(~
+[^_A\A]A^A_]
+UAVWVSH
+C$9C(~
+[^_A^]
+[^_A^]
+=UUUUw
+S$9S(~
+AUATUWVSH
+X[^_]A\A]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+D$L)D$`
+T$8HcD$L;B
+D$`+D$H
+ATUWVSLcY
+[^_]A\
+[^_]A\
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+WVSHcA
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+TRE %s (BSD)
+[[:alnum:]_]
+[^[:alnum:]_]
+[[:space:]]
+[^[:space:]]
+[[:digit:]]
+[^[:digit:]]
+Unknown error
+No error
+No match
+Invalid regexp
+Unknown collating element
+Unknown character class name
+Trailing backslash
+Invalid back reference
+Missing ']'
+Missing ')'
+Missing '}'
+Invalid contents of {}
+Invalid character range
+Out of memory
+Invalid use of repetition operators
+Maximum repetition in {} larger than 255
+Mingw-w64 runtime failure:
+Address %p has no image-section
+  VirtualQuery failed for %d bytes at address %p
+  VirtualProtect failed with code 0x%x
+  Unknown pseudo relocation protocol version %d.
+  Unknown pseudo relocation bit size %d.
+%d bit pseudo relocation at %p out of range, targeting %p, yielding the value %p.
+*** stack smashing detected ***: terminated
+(null)
+Infinity
+msvcrt.dll
+rand_s
+SystemFunction036
+xdigit
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+libtre-5.dll
+tre_ast_new_catenation
+tre_ast_new_iter
+tre_ast_new_literal
+tre_ast_new_node
+tre_ast_new_union
+tre_compile
+tre_config
+tre_fill_pmatch
+tre_free
+tre_have_approx
+tre_have_backrefs
+tre_mem_alloc_impl
+tre_mem_destroy
+tre_mem_new_impl
+tre_parse
+tre_regaexec
+tre_regaexecb
+tre_reganexec
+tre_regaparams_default
+tre_regawexec
+tre_regawnexec
+tre_regcomp
+tre_regcompb
+tre_regerror
+tre_regexec
+tre_regexecb
+tre_regfree
+tre_regncomp
+tre_regncompb
+tre_regnexec
+tre_regnexecb
+tre_reguexec
+tre_regwcomp
+tre_regwexec
+tre_regwncomp
+tre_regwnexec
+tre_stack_destroy
+tre_stack_new
+tre_stack_num_objects
+tre_stack_pop_int
+tre_stack_pop_voidptr
+tre_stack_push_int
+tre_stack_push_voidptr
+tre_tnfa_run_approx
+tre_tnfa_run_backtrack
+tre_tnfa_run_parallel
+tre_version
+libintl_gettext
+DeleteCriticalSection
+EnterCriticalSection
+GetCurrentProcess
+GetLastError
+GetModuleHandleA
+GetProcAddress
+InitializeCriticalSection
+IsProcessorFeaturePresent
+LeaveCriticalSection
+LoadLibraryW
+MultiByteToWideChar
+TerminateProcess
+TlsGetValue
+VirtualProtect
+VirtualQuery
+WideCharToMultiByte
+___lc_codepage_func
+___mb_cur_max_func
+__iob_func
+_amsg_exit
+_errno
+_initterm
+_unlock
+_write
+calloc
+fprintf
+isleadbyte
+iswctype
+localeconv
+malloc
+memchr
+memcmp
+memcpy
+memset
+realloc
+strchr
+strcmp
+strerror
+strlen
+strncmp
+strncpy
+strtol
+towlower
+towupper
+vfprintf
+wcslen
+wcsncmp
+wcsncpy
+libintl-8.dll
+KERNEL32.dll
+msvcrt.dll
+__imp_isleadbyte
+__imp_abort
+__lib64_libkernel32_a_iname
+__imp____mb_cur_max_func
+__imp__lock
+_head_lib64_libmsvcrt_def_a
+__imp_calloc
+__imp_LoadLibraryW
+__imp_towlower
+__imp_DeleteCriticalSection
+libintl_8_dll_iname
+__imp_fputc
+__imp__amsg_exit
+__imp_IsProcessorFeaturePresent
+__imp__errno
+__imp_strncpy
+__imp_strtol
+__imp_strcmp
+__imp_MultiByteToWideChar
+__imp_GetLastError
+__imp_free
+__imp_LeaveCriticalSection
+__imp_wcsncmp
+__imp_wcsncpy
+__imp_memchr
+__imp_write
+__imp_memset
+__IAT_end__
+__imp_memcpy
+__lib64_libmsvcrt_def_a_iname
+__imp_strerror
+__imp_iswctype
+_head_lib64_libkernel32_a
+__imp_EnterCriticalSection
+__imp_TerminateProcess
+__imp_GetProcAddress
+__imp_GetModuleHandleA
+__imp_WideCharToMultiByte
+__imp_strlen
+__imp_malloc
+__imp_InitializeCriticalSection
+__imp_realloc
+__imp_vfprintf
+__IAT_start__
+__imp_libintl_gettext
+__imp_towupper
+__imp_Sleep
+__imp_TlsGetValue
+__imp_fprintf
+__imp_VirtualProtect
+_head_libintl_8_dll
+__imp_qsort
+__imp_VirtualQuery
+__imp__initterm
+__imp___iob_func
+__imp_localeconv
+__imp_strncmp
+__imp_strchr
+__imp_wcslen
+__imp____lc_codepage_func
+__imp__unlock
+__imp_GetCurrentProcess
+__imp_memcmp
+(null)
+sadvapi32.dll
+ !"#$%&'()*+,-.

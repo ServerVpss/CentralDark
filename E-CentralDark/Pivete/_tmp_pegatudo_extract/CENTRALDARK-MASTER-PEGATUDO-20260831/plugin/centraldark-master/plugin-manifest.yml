@@ -1,0 +1,19 @@
+schema: CENTRALDARK_PORTABLE_PLUGIN
+name: centraldark-master
+mode: adapter_to_existing_owner
+platform_installation_claimed: false
+entrypoints:
+  - "!CENTRALDARK"
+  - "#CENTRALDARK"
+loads:
+  - "../../02-CENTRALDARK-MASTER.yml"
+  - "../../architecture/00-ARQUITETURA-MASTER.md"
+  - "../../pr-1388/APPLY-TO-PR-1388.yml"
+  - "SKILL.md"
+contract:
+  one_external_command: true
+  pegatudo_embedded: true
+  improve_existing_default: true
+  no_parallel_authority: true
+  self_improvement_requires_tests: true
+  successor_agent_handoff_required: true

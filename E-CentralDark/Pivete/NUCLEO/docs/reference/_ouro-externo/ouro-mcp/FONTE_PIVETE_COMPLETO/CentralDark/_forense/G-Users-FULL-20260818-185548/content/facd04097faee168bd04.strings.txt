@@ -1,0 +1,4 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\contributors\emails\stephenlopez2030@gmail.com
+
+Slopez2023
+# PR #71668 salvage (desktop: gated /api/health readiness probe)

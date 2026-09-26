@@ -1,0 +1,27 @@
+CHECKPOINT DISCO — 04/08/2026 (pre-missao gigante)
+==================================================
+Ler isto se o chat foi /compress. Isto esta no DISCO.
+
+1) Profile pivete + gateway Telegram ON
+2) Francisca TTS = edge + pt-BR-FranciscaNeural; /voice no topo do menu
+3) Cron pivete: 4 jobs ativos
+   - gateway-watchdog a cada 5 min
+   - atualizar-manual-sessao a cada 6 h
+   - atualizar-mapa-hermes a cada 6 h
+   - GATE0-destilar-3-temp a cada 4 h  (GRAVA HOJE -> SEMANA -> REGRAS)
+4) Painel cron: http://127.0.0.1:9119/cron?profile=pivete
+   (mesma fila CLI / Desktop / Telegram no profile pivete)
+5) Segredo memoria 2026 (ler com calma):
+   SEGREDO-MEMORIA-HERMES-2026.txt  (nesta mesma pasta)
+6) LEIA-PRIMEIRO.md + BOOT-IA.md + MANUAL.html (nesta pasta)
+7) SOUL do pivete: na duvida de Hermes, ler docs oficiais
+   https://hermes-agent.nousresearch.com/docs
+8) 3 temperaturas:
+   E:\CentralDark\Pivete\NUCLEO\motor\03-memoria\memoria\
+   HOJE.md / SEMANA.md / REGRAS.md
+
+Memoria boa Hermes (resumo 1 linha):
+fato curto no prompt + historia no state.db + procedimento em skill
++ provider externo no maximo 1 (Casa = nativas + 3T; Hindsight nao agora)
+
+Pronto pra missao nova. Historico longo do chat pode ir embora; o disco fica.

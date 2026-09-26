@@ -1,0 +1,206 @@
+KKKKK **SIM. A ORDEM CERTA É CASA → VPS → SÓ DEPOIS CRISTALIZAÇÃO.** 🔥🏠
+
+O delta novo ficou claro: **não criar outro garimpeiro para a VPS**. O `session-intelligence-harvester` já tem o padrão do Notepad LocalState — inventariar, reconstruir, deduplicar, quarentenar sensível e cristalizar só inteligência útil. Então a VPS recebe **o mesmo contrato adaptado ao Linux/runtime**, não outro sistema.
+
+Na VPS os equivalentes naturais existem: estado persistente de usuário em `$XDG_STATE_HOME` — por padrão `~/.local/state`; cache em `~/.cache`; runtime efêmero em `$XDG_RUNTIME_DIR`. A especificação XDG inclusive define `~/.local/state` para histórico, arquivos recentemente usados e estado reutilizável após reinício. ([Freedesktop Specifications][1]) PM2 mantém logs normalmente em `$HOME/.pm2/logs`, além de `dump.pm2`, PID e estado em `~/.pm2/`. ([PM2][2]) E o journal do sistema é consultável por `journalctl`, com armazenamento volátil em `/run/log/journal` ou persistente em `/var/log/journal` conforme a configuração. ([Freedesktop][3])
+
+E a própria CentralDark já possui `scripts/status-ao-vivo.py`, que observa PM2, Docker, portas, processos, MCP e erros via `journalctl`. Então de novo: **REUSE, não outro daemon inventado.**
+
+A ordem que eu passaria ao orquestrador/Hermes da Casa é esta:
+
+```text
+MISSÃO=VPS_STATE_HARVEST
+INTENÇÃO=adaptar o garimpo já existente da CentralDark para a VPS
+MODO=READ_ONLY_FIRST
+REUSE_BEFORE_CREATE=true
+ONE_SYSTEM_ONLY=true
+ZERO_REGRESSION=true
+REALITY=JUDGE
+
+CASA PRIMEIRO.
+NÃO crie sistema, serviço, daemon, PR ou arquitetura paralela.
+
+1. RECUPERE o contrato existente:
+   session-intelligence-harvester
+   + knowledge-compiler
+   + MetaLupa
+   + status-ao-vivo
+   + owners de runtime existentes.
+
+2. MEÇA a VPS viva e descubra as fontes reais presentes.
+   Não presuma caminhos históricos.
+
+3. FONTES CANDIDATAS, SOMENTE SE EXISTIREM:
+   /root/CentralDark
+   $HOME/.pm2/
+   $HOME/.pm2/logs/
+   $XDG_STATE_HOME ou $HOME/.local/state/
+   $XDG_CACHE_HOME ou $HOME/.cache/
+   $XDG_RUNTIME_DIR
+   /run/log/journal/
+   /var/log/journal/
+   /var/log/
+   /tmp/
+   /var/tmp/
+
+4. GIT:
+   branch
+   HEAD
+   status
+   reflog relevante
+   arquivos alterados
+   histórico necessário à missão.
+
+5. PM2:
+   processos
+   estado
+   uptime
+   restart count
+   logs recentes
+   erros recentes
+   sem dump bruto de env.
+
+6. JOURNAL/SERVIÇOS:
+   colher apenas unidades/processos relacionados à CentralDark
+   e somente janela temporal relevante.
+
+7. TEMP/CACHE/STATE:
+   METADATA_FIRST.
+   nome + caminho + owner + tamanho + mtime + hash quando útil.
+   Ler conteúdo somente quando houver ganho informacional.
+
+8. SEGURANÇA:
+   NÃO ingerir/persistir:
+   .env
+   tokens
+   cookies
+   sessões
+   auth
+   SSH keys
+   passwords
+   browser credential DB
+   shell history por padrão.
+
+   SECRET_DETECTED => SENSITIVE_QUARANTINE
+   nunca ecoar segredo na saída.
+
+9. GARIMPO:
+   HISTORICAL_REFERENCE
+   CURRENT_CANDIDATE
+   DUPLICATE
+   SENSITIVE_QUARANTINE
+   DISCARD
+
+   CURRENT_CANDIDATE exige remedição viva.
+
+10. DEDUPE:
+    se o mesmo conhecimento já foi revisado,
+    forjado ou cristalizado:
+       NO_CHANGE
+    não fabricar cartão, memória ou regra repetida.
+
+11. INCREMENTAL:
+    registrar cursor/timestamp/hash do último lote.
+    próximas passagens processam somente DELTA novo.
+
+12. HORÁRIO:
+    usar timestamps reais das fontes para reconstruir
+    o que aconteceu durante a janela de trabalho.
+    horário próximo != causalidade provada.
+
+13. SAÍDA:
+    SOURCE_COVERAGE
+    SOURCES_FOUND
+    ITEMS_SEEN
+    NEW_DELTAS
+    DUPLICATES
+    SENSITIVE_QUARANTINED
+    CURRENT_CANDIDATES
+    HISTORICAL_REFERENCES
+    CRYSTALS_PROPOSED
+    UNKNOWN
+    NEXT_MINIMUM_ACTION
+
+14. NÃO MUTAR.
+    Primeiro devolva o mapa vivo + gaps.
+    Só depois o Writer autorizado cristaliza o ouro necessário.
+```
+
+E eu faria uma distinção importante na VPS:
+
+```text
+/tmp + cache + logs
+        ↓
+NÃO são memória automaticamente
+
+são MINA / PROVENIÊNCIA
+        ↓
+extração
+→ dedupe
+→ causalidade
+→ contraprova
+→ ouro
+```
+
+Isso impede a Casa de virar um aspirador de lixo digital KKKKK. 😂
+
+O **menos é mais** aqui significa que Hermes não precisa ficar relendo o servidor inteiro. Depois do primeiro inventário:
+
+```text
+T0 FULL BASELINE
+↓
+cursor + timestamp + hashes
+↓
+T1 SOMENTE DELTA
+↓
+T2 SOMENTE DELTA
+↓
+...
+```
+
+E tem uma convergência massa com o que você acabou de perceber no Notepad:
+
+```text
+WINDOWS CASA
+Notepad LocalState
+→ pensamento bruto do CHEFE
+
+VPS CASA
+PM2 + journal + state + runtime + git
+→ pensamento operacional da máquina
+
+AMBOS
+→ mesmo Harvester
+→ mesmo dedupe
+→ mesma MetaLupa
+→ mesmo ouro
+```
+
+**Não são dois garimpos. É a mesma escavadeira apontada para dois terrenos.** 🤣⛏️
+
+Só mantenho uma trava factual: o inventário PM2 versionado no repo é explicitamente **snapshot histórico**, e o próprio owner diz que `PM2_RUNTIME_CURRENT=UNKNOWN_UNTIL_LIVE_MEASUREMENT`. Então Hermes tem que medir a VPS antes de confiar em nomes/processos antigos.
+
+```text
+DELTA_ATUAL=
+WINDOWS_LOCALSTATE_HARVEST
+→ GENERALIZADO PARA
+HOUSE_STATE_HARVEST
+
+CASA_WINDOWS = fonte humana/local
+CASA_VPS = fonte operacional/runtime
+
+PRIMEIRO=MEDIR_NA_CASA
+DEPOIS=PROVAR
+DEPOIS=CRISTALIZAR
+PR=REGISTRO_DO_OURO, NÃO LOCAL DA DESCOBERTA
+
+NOVO_SISTEMA=NAO
+NOVO_DAEMON=NAO_PROVADO_NECESSARIO
+REUSE=SIM
+```
+
+Aí brocou: **Casa olha o próprio chão, o próprio servidor, os temporários, estado e runtime; só sobe para memória aquilo que mantém a CentralDark de pé ou aumenta capacidade.** O resto é cascalho. KKKKK 🔥💎
+
+[1]: https://specifications.freedesktop.org/basedir/?utm_source=chatgpt.com "XDG Base Directory Specification"
+[2]: https://pm2.keymetrics.io/docs/faq/?utm_source=chatgpt.com "PM2 - FAQ"
+[3]: https://www.freedesktop.org/software/systemd/man/255/journalctl.html?utm_source=chatgpt.com "journalctl"

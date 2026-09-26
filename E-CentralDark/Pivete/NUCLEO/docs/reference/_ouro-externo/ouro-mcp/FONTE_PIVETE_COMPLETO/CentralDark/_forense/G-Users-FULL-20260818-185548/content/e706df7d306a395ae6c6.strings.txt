@@ -1,0 +1,375 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\bin\Microsoft.Bcl.AsyncInterfaces.dll
+
+!This program cannot be run in DOS mode.
+`.rsrc
+@.reloc
+v4.0.30319
+#Strings
+<>9__21_0
+<SignalCompletion>b__21_0
+<>9__22_0
+<InvokeContinuation>b__22_0
+<>9__19_0
+<OnCompleted>b__19_0
+IAsyncEnumerable`1
+ConfiguredCancelableAsyncEnumerable`1
+ConfiguredValueTaskAwaitable`1
+ManualResetValueTaskSourceCore`1
+ValueTask`1
+Action`1
+IAsyncEnumerator`1
+get_Item1
+Tuple`2
+get_Item2
+<Module>
+value__
+mscorlib
+System.Collections.Generic
+DisposeAsync
+MoveNextAsync
+Interlocked
+ManualResetValueTaskSourceCoreShared
+AwaitUnsafeOnCompleted
+AwaitOnCompleted
+_completed
+<ParameterName>k__BackingField
+<LibraryName>k__BackingField
+<StringMarshallingCustomType>k__BackingField
+<ReturnValue>k__BackingField
+<ParameterValue>k__BackingField
+<StringMarshalling>k__BackingField
+<SetLastError>k__BackingField
+<Members>k__BackingField
+<EntryPoint>k__BackingField
+<RunContinuationsAsynchronously>k__BackingField
+_source
+CompareExchange
+Invoke
+_enumerable
+IAsyncDisposable
+ConfiguredAsyncDisposable
+ConfiguredValueTaskAwaitable
+RuntimeTypeHandle
+GetTypeFromHandle
+get_ParameterName
+parameterName
+get_LibraryName
+libraryName
+TStateMachine
+IAsyncStateMachine
+stateMachine
+get_None
+stateMachineType
+ValueType
+get_StringMarshallingCustomType
+set_StringMarshallingCustomType
+GetType
+Capture
+Create
+_continuationState
+Complete
+AssemblyMetadataAttribute
+EmbeddedAttribute
+CompilerGeneratedAttribute
+AttributeUsageAttribute
+DebuggableAttribute
+NullableAttribute
+AssemblyTitleAttribute
+AsyncIteratorStateMachineAttribute
+DoesNotReturnIfAttribute
+TargetFrameworkAttribute
+MaybeNullAttribute
+NotNullIfNotNullAttribute
+MemberNotNullAttribute
+AllowNullAttribute
+DisallowNullAttribute
+MaybeNullWhenAttribute
+MemberNotNullWhenAttribute
+ExtensionAttribute
+AssemblyFileVersionAttribute
+AssemblyInformationalVersionAttribute
+EnumeratorCancellationAttribute
+AssemblyDescriptionAttribute
+DoesNotReturnAttribute
+AssemblyDefaultAliasAttribute
+RefSafetyRulesAttribute
+DefaultDllImportSearchPathsAttribute
+CompilationRelaxationsAttribute
+AssemblyProductAttribute
+AssemblyCopyrightAttribute
+CLSCompliantAttribute
+LibraryImportAttribute
+NullableContextAttribute
+ParamArrayAttribute
+NullablePublicOnlyAttribute
+IsReadOnlyAttribute
+AssemblyCompanyAttribute
+RuntimeCompatibilityAttribute
+get_ReturnValue
+returnValue
+get_ParameterValue
+parameterValue
+System.Threading
+get_StringMarshalling
+set_StringMarshalling
+System.Runtime.Versioning
+String
+DllImportSearchPath
+SendOrPostCallback
+ContextCallback
+ValueTask
+CompletionSentinel
+s_sentinel
+Microsoft.Bcl.AsyncInterfaces.dll
+System
+Custom
+ValidateToken
+CancellationToken
+_cancellationToken
+get_Version
+_version
+WithCancellation
+InvokeContinuation
+_continuation
+System.Reflection
+SignalCompletion
+INotifyCompletion
+ICriticalNotifyCompletion
+OperationCanceledException
+get_SourceException
+ArgumentNullException
+InvalidOperationException
+SetException
+ExceptionDispatchInfo
+member
+AsyncTaskMethodBuilder
+AsyncIteratorMethodBuilder
+_methodBuilder
+get_ObjectIdForDebugger
+TaskScheduler
+TAwaiter
+awaiter
+get_SetLastError
+set_SetLastError
+_error
+GetAsyncEnumerator
+_enumerator
+.cctor
+System.Diagnostics
+Microsoft.Bcl.AsyncInterfaces
+System.Runtime.ExceptionServices
+System.Runtime.InteropServices
+System.Runtime.CompilerServices
+System.Threading.Tasks.Sources
+DebuggingModes
+ValueTaskSourceOnCompletedFlags
+NullableFlags
+System.Diagnostics.CodeAnalysis
+Microsoft.CodeAnalysis
+System.Threading.Tasks
+IncludesInternals
+System.Threading.Tasks.Extensions
+TaskAsyncEnumerableExtensions
+TaskCreationOptions
+get_Members
+members
+AttributeTargets
+ValueTaskSourceStatus
+GetStatus
+Object
+ConfigureAwait
+get_Default
+TResult
+GetResult
+SetResult
+_result
+get_Current
+get_EntryPoint
+set_EntryPoint
+MoveNext
+_continueOnCapturedContext
+_capturedContext
+SynchronizationContext
+ExecutionContext
+_executionContext
+StartNew
+get_RunContinuationsAsynchronously
+set_RunContinuationsAsynchronously
+get_Factory
+TaskFactory
+op_Inequality
+WrapNonExceptionThrows
+.NETFramework,Version=v4.6.2
+FrameworkDisplayName
+.NET Framework 4.6.2
+Serviceable
+PreferInbox
+Microsoft.Bcl.AsyncInterfaces
+IsTrimmable
+Microsoft Corporation
+ Microsoft Corporation. All rights reserved.
+CProvides the IAsyncEnumerable<T> and IAsyncDisposable interfaces and helper types for .NET Standard 2.0. This package is not required starting with .NET Standard 2.1 and .NET Core 3.0.
+Commonly Used Types:
+System.IAsyncDisposable
+System.Collections.Generic.IAsyncEnumerable
+System.Collections.Generic.IAsyncEnumerator
+8.0.23.53103
+.8.0.0+5535e31a712343a63f5d7d796cd874e563e5ac14
+Microsoft
+RepositoryUrl!https://github.com/dotnet/runtime
+AllowMultiple
+Inherited
+AllowMultiple
+Inherited
+AllowMultiple
+Inherited
+Inherited
+Inherited
+Inherited
+AllowMultiple
+Inherited
+Inherited
+Inherited
+AllowMultiple
+AllowMultiple
+Inherited
+Inherited
+AllowMultiple
+/_/artifacts/obj/Microsoft.Bcl.AsyncInterfaces/Release/net462/Microsoft.Bcl.AsyncInterfaces.pdb
+SHA256
+_CorDllMain
+mscoree.dll
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 20110
+250619182135Z
+260617182135Z0t1
+Washington1
+Redmond1
+Microsoft Corporation1
+Microsoft Corporation0
+4(_si0
+I0G1-0+
+$Microsoft Ireland Operations Limited1
+230012+5053620
+Chttp://www.microsoft.com/pkiops/crl/MicCodSigPCA2011_2011-07-08.crl0a
+Ehttp://www.microsoft.com/pkiops/certs/MicCodSigPCA2011_2011-07-08.crt0
+eV!g*!
+Washington1
+Redmond1
+Microsoft Corporation1200
+)Microsoft Root Certificate Authority 20110
+110708205909Z
+260708210909Z0~1
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 20110
+Ihttp://crl.microsoft.com/pki/crl/products/MicRooCerAut2011_2011_03_22.crl0^
+Bhttp://www.microsoft.com/pki/certs/MicRooCerAut2011_2011_03_22.crt0
+3http://www.microsoft.com/pkiops/docs/primarycps.htm0@
+*?*kXIc
+QEX82q'
+WqVNHE
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 2011
+https://www.microsoft.com 0
+80sLH9j
+.?-q(&
+20260211154343.793Z0
+Washington1
+Redmond1
+Microsoft Corporation1-0+
+$Microsoft Ireland Operations Limited1'0%
+nShield TSS ESN:321A-05E0-D9471%0#
+Microsoft Time-Stamp Service
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+250814184828Z
+261113184828Z0
+Washington1
+Redmond1
+Microsoft Corporation1-0+
+$Microsoft Ireland Operations Limited1'0%
+nShield TSS ESN:321A-05E0-D9471%0#
+Microsoft Time-Stamp Service0
+Nhttp://www.microsoft.com/pkiops/crl/Microsoft%20Time-Stamp%20PCA%202010(1).crl0l
+Phttp://www.microsoft.com/pkiops/certs/Microsoft%20Time-Stamp%20PCA%202010(1).crt0
+OuN'mg
+cqvm|B
+!vUPNi
+Washington1
+Redmond1
+Microsoft Corporation1200
+)Microsoft Root Certificate Authority 20100
+210930182225Z
+300930183225Z0|1
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+3http://www.microsoft.com/pkiops/Docs/Repository.htm0
+Ehttp://crl.microsoft.com/pki/crl/products/MicRooCerAut_2010-06-23.crl0Z
+>http://www.microsoft.com/pki/certs/MicRooCerAut_2010-06-23.crt0
+as.,k{n?,
+Washington1
+Redmond1
+Microsoft Corporation1-0+
+$Microsoft Ireland Operations Limited1'0%
+nShield TSS ESN:321A-05E0-D9471%0#
+Microsoft Time-Stamp Service
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+20260211133955Z
+20260212133955Z0t0:
+'K9L8#
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 2010
+GhUO=Xr
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 2010
+L]tP(g
+->/N1Ny
+continuation
+VS_VERSION_INFO
+VarFileInfo
+Translation
+StringFileInfo
+000004b0
+Comments
+Provides the IAsyncEnumerable<T> and IAsyncDisposable interfaces and helper types for .NET Standard 2.0. This package is not required starting with .NET Standard 2.1 and .NET Core 3.0.
+Commonly Used Types:
+System.IAsyncDisposable
+System.Collections.Generic.IAsyncEnumerable
+System.Collections.Generic.IAsyncEnumerator
+CompanyName
+Microsoft Corporation
+FileDescription
+Microsoft.Bcl.AsyncInterfaces
+FileVersion
+8.0.23.53103
+InternalName
+Microsoft.Bcl.AsyncInterfaces.dll
+LegalCopyright
+ Microsoft Corporation. All rights reserved.
+OriginalFilename
+Microsoft.Bcl.AsyncInterfaces.dll
+ProductName
+Microsoft
+ProductVersion
+8.0.0+5535e31a712343a63f5d7d796cd874e563e5ac14
+Assembly Version
+8.0.0.0
+Legal_policy_statement
+Microsof

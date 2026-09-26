@@ -1,0 +1,94 @@
+{
+  "generated": "2026-07-28T13:24:36.236560",
+  "entries": {
+    "A1_04-COMUNICACAO.md": {
+      "present": true,
+      "orig": "E:\\CentralDark\\Pivete\\NUCLEO\\motor\\01-identidade\\04-COMUNICACAO.md",
+      "sha256": "c22e8bb0edb56a65bada1a18f74f1a9749e0ffb9c5696e56daef83ad0757ca23",
+      "size": 2989,
+      "mtime": "2026-07-28T12:40:00.937135"
+    },
+    "A2_HOJE.md": {
+      "present": true,
+      "orig": "E:\\CentralDark\\Pivete\\NUCLEO\\motor\\03-memoria\\memoria\\HOJE.md",
+      "sha256": "1e1b9bfe530e16d4fee16742b076edb1a65539d5f6814780f36213c01b21cfe1",
+      "size": 4286,
+      "mtime": "2026-07-28T09:19:04.109416"
+    },
+    "A3_SEMANA.md": {
+      "present": true,
+      "orig": "E:\\CentralDark\\Pivete\\NUCLEO\\motor\\03-memoria\\memoria\\SEMANA.md",
+      "sha256": "fdad6d183ea83084d3b7ddf682831835b605e0ffb9e893f4e07fc35435ad3f5d",
+      "size": 1385,
+      "mtime": "2026-07-28T09:19:04.244137"
+    },
+    "A4_REGRAS.md": {
+      "present": true,
+      "orig": "E:\\CentralDark\\Pivete\\NUCLEO\\motor\\03-memoria\\memoria\\REGRAS.md",
+      "sha256": "64e14f71244078853e0cb1602eb7f9386af0ba2af2162a29f104e6096d5c91ab",
+      "size": 6853,
+      "mtime": "2026-07-28T13:09:37.591513"
+    },
+    "B1_SOUL.md": {
+      "present": true,
+      "orig": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\SOUL.md",
+      "sha256": "618f86921aecc65908cd2725c8cf1590f3a7c3fbc6316d43ad6525af2cdc26b8",
+      "size": 23189,
+      "mtime": "2026-07-27T17:13:40.591422"
+    },
+    "B2_config.yaml": {
+      "present": true,
+      "orig": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\config.yaml",
+      "sha256": "cd06ee66c83ce01dc983ff92e8d0e4a163e2064107e1269648ef444d51d4a4d6",
+      "size": 12906,
+      "mtime": "2026-07-28T12:44:11.848754"
+    },
+    "B3_vision-fallback-autoresilient": {
+      "present": true,
+      "orig": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\vision-fallback-autoresilient\\SKILL.md",
+      "sha256": "94998ce306d1e5ab6f6e7c62af32bc0a8e3fcf5708f6b9424872ac83ae4377f3",
+      "size": 1884,
+      "mtime": "2026-07-28T13:02:43.534724"
+    },
+    "B4_pivete-resposta": {
+      "present": true,
+      "orig": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\pivete-resposta\\SKILL.md",
+      "sha256": "737f5673182479590e94c6b896f50a8735b98eaf5c912c809e6ff5ef9eeea323",
+      "size": 4112,
+      "mtime": "2026-07-28T09:37:08.791295"
+    },
+    "B5_meta-lupa": {
+      "present": true,
+      "orig": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\meta-lupa\\SKILL.md",
+      "sha256": "5e1d36895ab2136bd92bc4f3502ec60f05680c8fc935207382309ecb20bef519",
+      "size": 18412,
+      "mtime": "2026-07-26T15:38:55.020237"
+    }
+  },
+  "skill_proof": {
+    "B3_vision-fallback-autoresilient": {
+      "skill_dir_exists": true,
+      "skill_dir_is_link": false,
+      "skill_md_exists": true,
+      "sha256": "94998ce306d1e5ab6f6e7c62af32bc0a8e3fcf5708f6b9424872ac83ae4377f3",
+      "size": 1884,
+      "mtime": "2026-07-28T13:02:43.534724"
+    },
+    "B4_pivete-resposta": {
+      "skill_dir_exists": true,
+      "skill_dir_is_link": false,
+      "skill_md_exists": true,
+      "sha256": "737f5673182479590e94c6b896f50a8735b98eaf5c912c809e6ff5ef9eeea323",
+      "size": 4112,
+      "mtime": "2026-07-28T09:37:08.791295"
+    },
+    "B5_meta-lupa": {
+      "skill_dir_exists": true,
+      "skill_dir_is_link": false,
+      "skill_md_exists": true,
+      "sha256": "5e1d36895ab2136bd92bc4f3502ec60f05680c8fc935207382309ecb20bef519",
+      "size": 18412,
+      "mtime": "2026-07-26T15:38:55.020237"
+    }
+  }
+}

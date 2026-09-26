@@ -1,0 +1,202 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\__pycache__\logs.cpython-311.pyc
+
+d8d&d'd
+Z!d9d7
+``hermes logs`` 
+ view and filter Hermes log files.
+Supports tailing, following, session filtering, level filtering,
+component filtering, and relative time ranges.  All log files live
+under ``~/.hermes/logs/``.
+Usage examples::
+    hermes logs                    # last 50 lines of agent.log
+    hermes logs -f                 # follow agent.log in real time
+    hermes logs errors             # last 50 lines of errors.log
+    hermes logs gateway -n 100    # last 100 lines of gateway.log
+    hermes logs gui -f            # follow gui.log (dashboard/pty/ws)
+    hermes logs desktop -f        # follow desktop.log (Electron app boot/backend)
+    hermes logs --level WARNING    # only WARNING+ lines
+    hermes logs --session abc123   # filter by session ID substring
+    hermes logs --component tools  # only tool-related lines
+    hermes logs --since 1h         # lines from the last hour
+    hermes logs --since 30m -f     # follow, starting 30 min ago
+datetime
+timedelta)
+Optional
+Sequence)
+get_hermes_home
+display_hermes_homez
+agent.logz
+errors.logz
+gateway.logz
+gui.logz
+desktop.logz
+mcp-stderr.log)
+errors
+gateway
+desktop
+mcpz(^(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})z'\s(DEBUG|INFO|WARNING|ERROR|CRITICAL)\sz?\s(?:DEBUG|INFO|WARNING|ERROR|CRITICAL)(?:\s+\[.*?\])?\s+(\S+):
+WARNING
+CRITICAL
+since_str
+returnc
+Parse a relative time string like '1h', '30m', '2d' into a datetime cutoff.
+    Returns None if the string can't be parsed.
+^(\d+)\s*([smhd])$Nr
+seconds)
+minutes)
+hours)
+groupr
+deltas
+CC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\logs.py
+_parse_sincer/
+zAExtract timestamp from a log line. Returns None if not parseable.Nr
+%Y-%m-%d %H:%M:%S)
+_TS_REr'
+strptimer)
+ValueError
+_parse_line_timestampr7
+z"Extract the log level from a line.r
+_LEVEL_RE
+searchr)
+_extract_levelr;
+z(Extract the logger name from a log line.r
+_LOGGER_NAME_REr:
+_extract_logger_namer>
+prefixesc
+z@Check if a log line's logger name starts with any of *prefixes*.NF)
+startswith
+tuple)
+_line_matches_componentrD
+min_level
+session_filter
+component_prefixesrF
+z.Check if a log line passes all active filters.NFr
+_LEVEL_ORDER
+levels
+       r.
+_matches_filtersrO
+num_lines
+followrN
+sessionrH
+component
+log_namerQ
+Read and display log lines, optionally following in real time.
+    Parameters
+    ----------
+    log_name
+        Which log to read: ``"agent"``, ``"errors"``, ``"gateway"``, ``"gui"``.
+    num_lines
+        Number of recent lines to show (before follow starts).
+    follow
+        If True, keep watching for new lines (Ctrl+C to stop).
+    level
+        Minimum log level to show (e.g. ``"WARNING"``).
+    session
+        Session ID substring to filter on.
+    since
+        Relative time string (e.g. ``"1h"``, ``"30m"``).
+    component
+        Component name to filter by (e.g. ``"gateway"``, ``"tools"``).
+    Nz
+Unknown log: z
+. Available: z
+Log file not found: u?
+(Logs are created when Hermes runs 
+ try 'hermes chat' first)z
+Invalid --since value: z$. Use format like '1h', '30m', '2d'.z
+Invalid --level: z/. Use DEBUG, INFO, WARNING, ERROR, or CRITICAL.r
+COMPONENT_PREFIXESz
+Unknown component: 
+has_filtersrF
+Permission denied: z
+level>=z
+session=z
+component=z
+since=z
+/logs/z
+ (Ctrl+C to stop) ---z
+ (last z
+--- stopped ---)
+LOG_FILESrL
+sorted
+existsr/
+upperrK
+hermes_loggingrX
+_read_tail
+PermissionError
+appendr
+_follow_log
+KeyboardInterrupt)
+filename
+log_path
+since_dtrF
+component_lower
+availablerZ
+filter_parts
+filter_descr1
+                    r.
+tail_logrv
+pathrZ
+Read the last *num_lines* matching lines from a log file.
+    When filters are active, we read more raw lines to find enough matches.
+<listcomp>z
+_read_tail.<locals>.<listcomp>
+_read_last_n_lines
+raw_lines
+filtereds
+   ````  r.
+Efficiently read the last N lines from a file.
+    For files under 1MB, reads the whole file (fast, simple).
+    For larger files, reads chunks from the end.
+replace
+encodingr
+latin-1)
+st_size
+readlines
+splitr$
+decode
+Exception)
+all_lines
+chunk_sizers
+read_size
+chunk_lines
+decoded
+             r.
+z9Poll a log file for new content and print matching lines.r
+g333333
+readlinerO
+stdout
+sleep)
+       r.
+z%Print available log files with sizes.rW
+No logs directory at r]
+Log files in z
+/logs/:
+just nowi
+m agoi
+h agoz
+%Y-%m-%dz
+   Tu;
+  (no log files yet 
+ run 'hermes chat' to generate logs))
+iterdir
+is_file
+suffixr
+fromtimestamp
+st_mtimer*
+total_secondsr(
+strftimerC
+log_dir
+entryr
+size_str
+age_strs
+        r.
+list_logsr
+__doc__r&
+pathlibr
+typingr
+hermes_constantsr
+compiler3
+boolrD
+listri
+<module>r

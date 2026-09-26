@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "status": "CANDIDATE_CRYSTALS_FROM_USER_PROVIDED_SESSION_EVIDENCE",
+  "owner_policy": "RECONCILE_WITH_EXISTING_KNOWLEDGE_COMPILER_BEFORE_PROMOTION",
+  "crystals": [
+    {
+      "signature": "OMIT_DEV_CAUSES_VITE_ABSENCE",
+      "ecosystem": "npm",
+      "hypothesis": "vite declared as devDependency can be absent on disk when dev dependencies are omitted",
+      "measure": ["package.json devDependencies", "effective npm omit config", "NODE_ENV", "physical node_modules/vite", "vite resolution"],
+      "minimal_remediation": "include dev dependencies for the install when omission is proven",
+      "counterproof": "clean install under intended environment/config then verify vite resolution and build",
+      "status": "PLAUSIBLE_PATTERN_REQUIRES_RUNTIME_MATCH"
+    },
+    {
+      "signature": "OPTIONAL_DEPS_OMITTED_ESBUILD",
+      "ecosystem": "npm",
+      "hypothesis": "platform binary can be absent when optional dependencies are omitted",
+      "measure": ["effective omit config", "platform/arch", "esbuild package tree", "physical platform package"],
+      "minimal_remediation": "include optional dependencies when omission is proven",
+      "counterproof": "clean install with intended config then execute the real build",
+      "status": "PLAUSIBLE_PATTERN_REQUIRES_RUNTIME_MATCH"
+    },
+    {
+      "signature": "OPTIONAL_DEPS_OMITTED_ROLLUP",
+      "ecosystem": "npm",
+      "hypothesis": "native Rollup package can be absent when optional dependencies are omitted",
+      "measure": ["effective omit config", "platform/arch", "rollup package tree", "physical native package"],
+      "minimal_remediation": "include optional dependencies when omission is proven",
+      "counterproof": "clean install with intended config then execute the real build",
+      "status": "PLAUSIBLE_PATTERN_REQUIRES_RUNTIME_MATCH"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+Entrada imutável de demonstração.

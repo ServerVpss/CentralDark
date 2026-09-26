@@ -1,0 +1,108 @@
+schema: CENTRALDARK_DOCUMENTATION_HUB
+schema_version: 1
+mode: EXTEND_EXISTING_HUB
+panel:
+  tab: DOCUMENTACAO
+  searchable: true
+  sections:
+    - INDEX
+    - TRIGGERS
+    - PORTS_AND_SERVICES
+    - API_ROUTES
+    - PROVIDERS_AND_ACCOUNTS
+    - LIBRARY
+    - PR_WORKTREES
+    - DIAGRAMS
+    - RECEIPTS_AND_PROOFS
+    - GLOSSARY
+    - GLOBAL_SEARCH
+api_contract:
+  runtime_status: UNKNOWN_UNTIL_IMPLEMENTED_AND_MEASURED
+  routes:
+    - GET /api/documentation/index
+    - GET /api/documentation/search?q=
+    - GET /api/documentation/triggers
+    - GET /api/documentation/ports
+    - GET /api/documentation/services
+    - GET /api/documentation/providers
+    - GET /api/documentation/library
+    - GET /api/documentation/receipts
+    - POST /api/documentation/ingest
+documentation_gate:
+  required_for_material_change: true
+  required_fields:
+    - human_name
+    - purpose
+    - owner
+    - interface
+    - dependency
+    - proof_source
+    - tests
+    - rollback_or_recovery
+    - links
+    - receipt
+    - next_cursor
+  missing_required_field: FAIL
+  raw_secret_can_satisfy_field: false
+port_registry:
+  independent_dimensions: [EXPECTED_STATE, OBSERVED_STATE, PROOF]
+  none_means_defect_without_expectation: false
+knowledge_library:
+  scope_default: AUTHORIZED_CENTRALDARK_ONLY
+  account_namespace: GOOGLE/<account_alias>/<capability>
+  categories_alphabetical:
+    - AUDIO
+    - CODIGO
+    - DADOS
+    - DESIGN-E-ARTES
+    - DOCS
+    - IMAGENS
+    - PDF
+    - TEXTO
+    - VIDEO
+  persist_raw_secrets: false
+  raw_corpus_prompt_dump: false
+  index_fields:
+    - source_ref
+    - provider
+    - account_alias
+    - media_class
+    - title
+    - mime_type
+    - revision_or_hash
+    - owner
+    - tags
+    - safe_search_text
+multi_account:
+  one_hub_n_accounts: true
+  account_is_authority: false
+  cross_account_secret_sharing: false
+  per_account_scope_inventory: true
+  per_account_health_receipt: true
+self_configuration:
+  allowed_inputs:
+    - SECRET_REF
+    - ENV_BINDING
+    - SECRET_MANAGER_BINDING
+    - OAUTH_CLIENT_METADATA
+    - SCOPE_NAMES
+  forbidden_inputs:
+    - RAW_API_KEY_IN_DOCUMENTATION
+    - RAW_CLIENT_SECRET_IN_DOCUMENTATION
+    - RAW_REFRESH_TOKEN_IN_DOCUMENTATION
+    - PRIVATE_KEY_IN_DOCUMENTATION
+  human_consent_when_provider_requires: true
+gemini:
+  role: READ_ONLY_SWEEPER
+  raw_secret_context: false
+  outputs: EVIDENCE_CANDIDATES_WITH_PROVENANCE
+  promotion_requires:
+    - REALITY_SCOPE_GATE
+    - RENDEZVOUS
+    - RECONCILE
+    - ONE_WRITER
+    - TEST
+    - FALSIFIER
+    - REALITY_JUDGE
+    - DOCUMENTATION_GATE
+    - RECEIPT

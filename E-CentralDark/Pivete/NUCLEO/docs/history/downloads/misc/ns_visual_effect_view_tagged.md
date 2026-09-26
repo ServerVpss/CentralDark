@@ -1,0 +1,121 @@
+# OUTRO - ns_visual_effect_view_tagged.rs
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\window-vibrancy-0.6.0\src\macos\ns_visual_effect_view_tagged.rs
+**SHA:** 9cc799cd7c06d9fb
+**Timestamp:** 2026-08-28T02:36:54.324425
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Gaps
+- /// TODO: Does not seem to be public?
+- // TODO: consider public & documented approach instead, visual effect is the same
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+use objc2::{
+    define_class, msg_send,
+    rc::{Allocated, Retained},
+    DeclaredClass,
+};
+use objc2_app_kit::{
+    NSAutoresizingMaskOptions, NSVisualEffectBlendingMode, NSVisualEffectMaterial,
+    NSVisualEffectState, NSVisualEffectView,
+};
+use objc2_core_foundation::CGFloat;
+use objc2_foundation::{NSInteger, NSRect};
+
+/// NSVisualEffectViewTagged state.
+/// Forced to be public by declare_class! macro.
+#[derive(Default, Debug, PartialEq, Eq)]
+pub struct NSVisualEffectViewTaggedIvars {
+    /// NSView tag to identify the view
+    pub tag: NSInteger,
+}
+
+define_class!(
+    /// A custom NSVisualEffectView subclass
+    /// that overrides the tag method to provide a custom tag, to later identify the view
+    #[unsafe(super(NSVisualEffectView))]
+    #[name = "NSVisualEffectViewTagged"]
+    #[ivars = NSVisualEffectViewTaggedIvars]
+    pub struct NSVisualEffectViewTagged;
+
+    impl NSVisualEffectViewTagged {
+        #[unsafe(method(tag))]
+        fn tag(&self) -> NSInteger {
+            self.ivars().tag
+        }
+    }
+);
+
+#[allow(non_snake_case)]
+impl NSVisualEffectViewTagged {
+    /// # Safety
+    ///
+    /// This method is unsafe because it calls an Objective-C method.
+    pub unsafe fn initWithFrame(
+        this: Allocated<Self>,
+        frame_rect: NSRect,
+        tag: NSInteger,
+    ) -> Retained<Self> {
+        let state = NSVisualEffectViewTaggedIvars { tag };
+        let this = this.set_ivars(state);
+
+        msg_send![super(this), initWithFrame: frame_rect]
+    }
+
+    /// <https://developer.apple.com/documentation/appkit/nsvisualeffectview/material-swift.property>
+    ///
+    /// # Safety
+    ///
+    /// This method is unsafe because it calls an Objective-C method.
+    pub unsafe fn setMaterial(&self, material: NSVisualEffectMaterial) {
+        let () = msg_send![self, setMaterial: material];
+    }
+
+    /// <https://developer.apple.com/documentation/appkit/nsvisualeffectview/blendingmode-swift.property>
+    ///
+    /// # Safety
+    ///
+    /// This method is unsafe because it calls an Objective-C method.
+    pub unsafe fn setBlendingMode(&self, blending_mode: NSVisualEffectBlendingMode) {
+        let () = msg_send![self, setBlendingMode: blending_mode];
+    }
+
+    /// <https://developer.apple.com/documentation/appkit/nsvisualeffectview/state-swift.property>
+    ///
+    /// # Safety
+    ///
+    /// This method is unsafe because it calls an Objective-C method.
+    pub unsafe fn setState(&self, state: NSVisualEffectState) {
+        let () = msg_send![self, setState: state];
+    }
+
+    /// NSView inherited method
+    /// <https://developer.apple.com/documentation/appkit/nsview/autoresizingmask-swift.property>
+    ///
+    /// # Safety
+    ///
+    /// This method is unsafe because it calls an Objective-C method.
+    pub unsafe fn setAutoresizingMask(&self, mask: NSAutoresizingMaskOptions) {
+        let () = msg_send![self, setAutoresizingMask: mask];
+    }
+
+    /// TODO: Does not seem to be public?
+    /// Method is not listed in Apple documentation, might be private, but it works
+    ///
+    /// # Safety
+    ///
+    /// This method is unsafe because it calls an Objective-C method.
+    pub unsafe fn setCornerRadius(&self, radius: CGFloat) {
+        let () = msg_send![self, setCornerRadius: radius];
+
+        // TODO: consider public & documented approach instead, visual effect is the same
+        // self.setWantsLayer(true);
+        // if let Some(layer) = self.layer() {
+        //     layer.setCornerRadius(radius);
+        // }
+    }
+}
+
+```

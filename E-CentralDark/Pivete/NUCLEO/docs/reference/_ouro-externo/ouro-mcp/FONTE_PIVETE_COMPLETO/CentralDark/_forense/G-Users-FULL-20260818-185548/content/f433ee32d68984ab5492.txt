@@ -1,0 +1,2 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\cron\.fire-c2b2c409549a5ed3adc6436eea670aa8.lock
+

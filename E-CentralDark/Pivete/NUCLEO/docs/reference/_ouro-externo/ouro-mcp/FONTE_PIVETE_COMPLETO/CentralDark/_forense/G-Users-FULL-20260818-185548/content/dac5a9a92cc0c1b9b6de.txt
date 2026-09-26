@@ -1,0 +1,32 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@hapi\hoek\lib\assert.js
+
+'use strict';
+
+const AssertError = require('./assertError');
+const Stringify = require('./stringify');
+
+
+const internals = {};
+
+
+const assert = module.exports = function (condition, ...args) {
+
+    if (condition) {
+        return;
+    }
+
+    if (args.length === 1 &&
+        args[0] instanceof Error) {
+
+        throw args[0];
+    }
+
+    const msgs = args
+        .filter((arg) => arg !== '')
+        .map((arg) => {
+
+            return typeof arg === 'string' ? arg : arg instanceof Error ? arg.message : Stringify(arg);
+        });
+
+    throw new AssertError(msgs.join(' '), assert);
+};

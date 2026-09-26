@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\apps\desktop\release\win-unpacked\resources\app.asar.unpacked\dist\assets\IconLoader2-D2qHg0gc.js
+
+import{z as e}from"./i18n-D5qq-9fH.js";var t=e(`outline`,`loader-2`,`Loader2`,[[`path`,{d:`M12 3a9 9 0 1 0 9 9`,key:`svg-0`}]]);export{t};

@@ -1,0 +1,25 @@
+schema_version: 2
+suite: CENTRALDARK_LIVING_LEARNING_OS_CONFORMANCE
+tests:
+  - {id: LLO-001, name: off_means_no_capture, expect: PASS}
+  - {id: LLO-002, name: private_means_no_environment_ingestion, expect: PASS}
+  - {id: LLO-003, name: teach_requires_explicit_session, expect: PASS}
+  - {id: LLO-004, name: hidden_capture_is_impossible, expect: PASS}
+  - {id: LLO-005, name: kill_switch_stops_new_capture, expect: PASS}
+  - {id: LLO-006, name: kill_switch_stops_new_writes, expect: PASS}
+  - {id: LLO-007, name: queue_percent_means_queue_only, expect: PASS}
+  - {id: LLO-008, name: learned_item_has_source_and_destination, expect: PASS}
+  - {id: LLO-009, name: candidate_cannot_edit_its_judge, expect: BLOCK}
+  - {id: LLO-010, name: unknown_cannot_crystallize, expect: BLOCK}
+  - {id: LLO-011, name: obsidian_is_projection_not_authority, expect: PASS}
+  - {id: LLO-012, name: one_writer_per_memory_scope, expect: PASS}
+  - {id: LLO-013, name: file_without_security_pass_cannot_enter_runtime, expect: BLOCK}
+  - {id: LLO-014, name: external_human_private_tracking_blocked, expect: BLOCK}
+  - {id: LLO-015, name: source_identity_conflict_remains_unresolved, expect: PASS}
+  - {id: LLO-016, name: mirrors_do_not_fake_consensus, expect: PASS}
+  - {id: LLO-017, name: old_source_does_not_define_current_position, expect: PASS}
+  - {id: LLO-018, name: intent_drift_requires_human_review, expect: PASS}
+  - {id: LLO-019, name: blind_retry_rejected, expect: PASS}
+  - {id: LLO-020, name: e2e_url_to_crystal_to_dashboard, expect: PASS}
+  - {id: LLO-021, name: e2e_personal_session_to_review_to_crystal, expect: PASS}
+  - {id: LLO-022, name: original_hmr_tests_remain_green, expect: PASS}

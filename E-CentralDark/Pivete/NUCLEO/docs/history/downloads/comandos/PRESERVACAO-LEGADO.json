@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "source_zip_sha256": "d9192ee1e690344a72b3d17554e0151a61d7761da814d0afa5291232cf880dc4",
+  "original_files_total": 51,
+  "byte_identical_files": 44,
+  "intentional_changes_total": 7,
+  "missing": [],
+  "unexpected_changes": [],
+  "intentional_changes": [
+    {
+      "path": "02-KIT-ENXAME-OMEGA/README.md",
+      "reason": "documenta wrappers Node e fallback de provedores",
+      "original_sha256": "e6102f8ce40028b1ca6347a064b6ae32e645068eeac08b3fa2bd657cf17d5b0a",
+      "final_sha256": "e571d73fd8029f799ca28c9cc1a6320cc7798794d4a81b97abd5a4ddca719a6a"
+    },
+    {
+      "path": "02-KIT-ENXAME-OMEGA/enxame-econo-5.sh",
+      "reason": "wrapper mínimo para runtime/enxame-runner.mjs",
+      "original_sha256": "616199a1c677695c3a7dd4cda18f562859b667940cbbbbe11495950cc36e5a1b",
+      "final_sha256": "2f2e09ee872c9bc2f5dfb303c9c60eb792d45ab0c9b58f4bd8e1e4f0eba25f29"
+    },
+    {
+      "path": "02-KIT-ENXAME-OMEGA/enxame-padrao-10.sh",
+      "reason": "wrapper mínimo para runtime/enxame-runner.mjs",
+      "original_sha256": "49ec68a4f1e4f703f1c91d9ae85f7efcb549a086297d96a0e9a88736c488a1be",
+      "final_sha256": "e432c694e5e89d1dd208610def230b983f7707852b1175ea5623e7e5ae099d9d"
+    },
+    {
+      "path": "02-KIT-ENXAME-OMEGA/enxame-titanico-20.sh",
+      "reason": "wrapper mínimo para runtime/enxame-runner.mjs",
+      "original_sha256": "ded20d7357414b51ffab0d65c222a6548efd7e2f2d4a480df9602ee09252db32",
+      "final_sha256": "ef1a2523d8bebbbd9af020a0c621c4250f431fa14afd42c0afaa484e2308f4c2"
+    },
+    {
+      "path": "02-KIT-ENXAME-OMEGA/hypernova-50.sh",
+      "reason": "wrapper mínimo para runtime/enxame-runner.mjs",
+      "original_sha256": "21f006e1968963824c204a67813c1c9df0a1e8f29b1740af6102188809435bc6",
+      "final_sha256": "373ed456d0d5a349c3d3d01bd5895a12afafcd837f6b5a385b4da0cfe31d8797"
+    },
+    {
+      "path": "05-BOOTS-PROMPTS/PROMPT-MISSAO-ENXAME.md",
+      "reason": "alinha missão ao runtime fail-closed atual",
+      "original_sha256": "77d0b979101739c4e5fb62273a7d5a4bdbe1449951e486e67f49f48e37ec0954",
+      "final_sha256": "714509adf518b6dec4503d8c415fb8abdc1314a4ffd5e5416d99f2061f22f5dc"
+    },
+    {
+      "path": "README.md",
+      "reason": "integra contrato SkillMaster e instruções operacionais",
+      "original_sha256": "26b0e8aae31beb5107ba1abe3da076b73aa7a09ae52044897adf39ea4c19bb86",
+      "final_sha256": "591593815286f893bbe3ef56b80f515092e764a103f7646c6b9a925514acac18"
+    }
+  ],
+  "rule": "Arquivos legados permanecem byte a byte idênticos, salvo os sete pontos explicitamente evoluídos no mesmo caminho canônico."
+}

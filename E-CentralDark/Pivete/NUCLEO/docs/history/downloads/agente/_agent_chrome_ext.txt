@@ -1,0 +1,221 @@
+AUDITORIA SOMENTE LEITURA — Extensões do Google Chrome
+======================================================
+Host:            SEGREDO
+Usuário Windows: danda
+Data:            2026-08-22
+Chrome:          151.0.7922.174 (pasta Application atual)
+Escopo:          C:\Users\danda\AppData\Local\Google\Chrome\User Data\
+Modo:            READ-ONLY (nenhuma alteração em Chrome, registro ou ficheiros, excepto este relatório)
+
+Nenhum perfil "Default". Pastas de perfil com Preferences:
+  Profile 9, Profile 12, Profile 13, Profile 14, Profile 15, System Profile
+
+Local State (info_cache / last_used):
+  Profile 14 = "Seu Chrome" / Fulano DONE / sonasmarcas@gmail.com  [LAST USED, last_active]
+  Profile 15 = "Segredo"    / Segredo Unlock / contacobra3467@gmail.com
+  Profile 9 / 12 / 13 não estão no info_cache (restos / perfis inativos)
+  Profile 9  Preferences.profile.name = Seu Chrome
+  Profile 12 Preferences.profile.name = Seu Chrome
+  Profile 13 Preferences.profile.name = Pessoa 1
+  System Profile: sem extensions.settings
+
+
+1) REGISTO E POLÍTICAS
+----------------------
+HKLM/HKCU:\SOFTWARE\Policies\Google\Chrome                    = NÃO EXISTE
+ExtensionInstallForcelist / Allowlist / Blocklist / Settings  = NÃO EXISTE
+Nenhuma extensão force-installed por política/GPO.
+
+HKLM:\SOFTWARE\Google\Chrome\Extensions
+HKLM:\SOFTWARE\WOW6432Node\Google\Chrome\Extensions
+HKCU:\SOFTWARE\Google\Chrome\Extensions
+  ID: ngpampappnmepgilojfohadhhmbhlaek
+  Nome esperado: IDM Integration Module (Internet Download Manager 6.42.64)
+  path: C:\Program Files (x86)\Internet Download Manager\IDMGCExt.crx
+  version: 6.42.64
+  ESTADO: CRX AUSENTE no disco. IDMMsgHost.json também AUSENTE.
+  NÃO aparece em nenhum extensions.settings dos perfis.
+  = leftover de instalação IDM (registro órfão; extensão NÃO carregada).
+
+install_source:
+  location 5  = COMPONENT (embutida no Chrome)
+  location 10 = EXTERNAL_COMPONENT (componente Google, CWS Payments)
+  location 4  = UNPACKED  → NENHUMA encontrada
+  Registro    = EXTERNAL_REGISTRY (IDM, falhou por CRX em falta)
+
+
+2) MANIFESTS EM DISCO (...\Extensions\<id>\<versão>\manifest.json)
+-------------------------------------------------------------------
+Único pacote de utilizador/componente externo em disco, em 3 perfis:
+
+  Profile 9  \Extensions\nmmhkkegccagdldgiimedpiccmgmieda\1.0.0.6_0\manifest.json
+  Profile 14 \Extensions\nmmhkkegccagdldgiimedpiccmgmieda\1.0.0.6_0\manifest.json
+  Profile 15 \Extensions\nmmhkkegccagdldgiimedpiccmgmieda\1.0.0.6_0\manifest.json
+
+  name:        __MSG_APP_NAME__  (= Pagamentos da Chrome Web Store)
+  version:     1.0.0.6
+  description: __MSG_APP_DESCRIPTION__
+  permissions: identity, webview,
+               https://www.google.com/, https://www.googleapis.com/*,
+               https://payments.google.com/payments/v4/js/integrator.js,
+               https://sandbox.google.com/payments/v4/js/integrator.js
+  externally_connectable: (não declarado no manifest.json)
+  update_url:  https://clients2.google.com/service/update2/crx
+
+Componentes embutidos (location=5) apontam para
+  C:\Program Files\Google\Chrome\Application\151.0.7922.17{3|4}\resources\...
+  Os ficheiros manifest.json desses resources NÃO estão expostos em disco
+  (empacotados no Chrome). Dados abaixo vêm de Secure Preferences.
+
+Profile 12 / 13 / System Profile: pasta Extensions inexistente.
+
+
+3) TABELA PRINCIPAL
+-------------------
+Legenda enabled: Sim = componente ativo (sem disable_reasons; state vazio = default ON)
+                 Não = fantasma/residual (sem path, sem manifest, sem pasta)
+                 N/A = só registro, não carregada no perfil
+store?: Sim = from_webstore true / CWS; Comp = componente Chrome; Não = fora da loja / residual
+
+perfil      | nome                                      | id                               | versão  | enabled | store? | motivo
+------------+-------------------------------------------+----------------------------------+---------+---------+--------+--------------------------------------------------------------
+Profile 9   | Google Network Speech                     | fignfifoniblkonapihmkfakmlgkbkcf | 1.0     | Sim     | Comp   | OK — componente TTS Google (location=5)
+Profile 9   | Chrome PDF Viewer                         | mhjfbmdgcfjbbpaeojofohoefgiehjai | 1       | Sim     | Comp   | OK — visualizador PDF embutido
+Profile 9   | Google Hangouts                           | nkeimhogjdpnpccoofpliimaahmaaome | 1.3.26  | Sim     | Comp   | OK — hangout_services (Meet); externally_connectable meet.google.com
+Profile 9   | Pagamentos da Chrome Web Store            | nmmhkkegccagdldgiimedpiccmgmieda | 1.0.0.6 | Sim     | Sim    | OK — componente Google (location=10, was_installed_by_default)
+Profile 12  | Google Network Speech                     | fignfifoniblkonapihmkfakmlgkbkcf | 1.0     | Sim     | Comp   | OK — componente TTS
+Profile 12  | Chrome PDF Viewer                         | mhjfbmdgcfjbbpaeojofohoefgiehjai | 1       | Sim     | Comp   | OK — PDF embutido
+Profile 12  | Google Hangouts                           | nkeimhogjdpnpccoofpliimaahmaaome | 1.3.26  | Sim     | Comp   | OK — hangout_services
+Profile 13  | Google Network Speech                     | fignfifoniblkonapihmkfakmlgkbkcf | 1.0     | Sim     | Comp   | OK — componente TTS
+Profile 13  | Chrome PDF Viewer                         | mhjfbmdgcfjbbpaeojofohoefgiehjai | 1       | Sim     | Comp   | OK — PDF embutido
+Profile 13  | Google Hangouts                           | nkeimhogjdpnpccoofpliimaahmaaome | 1.3.26  | Sim     | Comp   | OK — hangout_services
+Profile 14  | Google Network Speech                     | fignfifoniblkonapihmkfakmlgkbkcf | 1.0     | Sim     | Comp   | OK — componente TTS (first_install 2026-08-21 15:46)
+Profile 14  | Chrome PDF Viewer                         | mhjfbmdgcfjbbpaeojofohoefgiehjai | 1       | Sim     | Comp   | OK — PDF embutido
+Profile 14  | Google Hangouts                           | nkeimhogjdpnpccoofpliimaahmaaome | 1.3.26  | Sim     | Comp   | OK — hangout_services
+Profile 14  | Pagamentos da Chrome Web Store            | nmmhkkegccagdldgiimedpiccmgmieda | 1.0.0.6 | Sim     | Sim    | OK — componente Google (first_install 2026-08-21 15:59)
+Profile 14  | Bitdefender Anti-tracker (residual)       | khndhdhbebhaddchcgnalcjlaekbbeof | (n/d)   | Não     | Sim    | FLAG residual — external_uninstalls + install_signature; pasta/manifest ausentes. Bitdefender leftover.
+Profile 14  | Cookie-Master (residual)                  | gbjchpboopdaijjlnlabnnjmckcgakhl | (n/d)   | Não     | ?      | FLAG residual — só lastpingday. Ferramenta de cookies/login (histórico arriscado). NÃO em execução.
+Profile 14  | FVD Video Downloader (residual)           | lfmhcpmkbdkbgbmkjoiopeeegenkdikp | (n/d)   | Não     | Não*   | FLAG residual — PUP histórico (CWS removeu por unwanted software). Só lastping. NÃO em execução.
+Profile 14  | Grok Easy Automation (residual)           | nddblaobekhedajmmdfpeeobebjbfcnm | (n/d)   | Não     | ?      | FLAG residual — disable_reasons=[1] (desativada pelo utilizador). Sem pasta. NÃO em execução.
+Profile 14  | Delete All Facebook Posts (residual)      | mnjffgbbcofcajpmooahlcnjgpfmpifk | (n/d)   | Não     | ?      | FLAG residual — lastping + pasta Sync Extension Settings órfã. NÃO em execução.
+Profile 14  | Facebook Message Deleter (residual)       | fgghniogdmjoobgdgfncblbhokgaijmi | (n/d)   | Não     | ?      | FLAG residual — lastping + incognito:true no stub. NÃO em execução.
+Profile 14  | Invite all Facebook friends (residual)    | jkaiginiaigndjcfdichbigjlecheofe | (n/d)   | Não     | ?      | FLAG residual — só lastping. NÃO em execução.
+Profile 14  | OldNewsFeed (Facebook layout) (residual)  | jacjkeodiliklmpildjkfaciknopckaa | (n/d)   | Não     | ?      | FLAG residual — disable_reasons=[1]. NÃO em execução.
+Profile 14  | Facebook Speed Dial (residual)            | jjjlhadbhdaejpgaainnmanecekcdfoh | (n/d)   | Não     | ?      | FLAG residual — disable_reasons=[1]. NÃO em execução.
+Profile 14  | (nome desconhecido, residual)             | chkpgpejeflhoodlogeghpajbdohljek | (n/d)   | Não     | ?      | FLAG residual — só lastpingday 2026-08-21 04:00. Sem pasta.
+Profile 14  | (nome desconhecido, residual)             | doaaifppmpcnbkmpegmpkkcnlobgifid | (n/d)   | Não     | ?      | FLAG residual — só lastpingday. Sem pasta.
+Profile 14  | (nome desconhecido, residual)             | mdkcnjilphobikfgkibhhpomoahgnijc | (n/d)   | Não     | ?      | FLAG residual — só lastpingday. Sem pasta.
+Profile 15  | Google Network Speech                     | fignfifoniblkonapihmkfakmlgkbkcf | 1.0     | Sim     | Comp   | OK — componente TTS (first_install 2026-08-21 19:18)
+Profile 15  | Chrome PDF Viewer                         | mhjfbmdgcfjbbpaeojofohoefgiehjai | 1       | Sim     | Comp   | OK — PDF embutido
+Profile 15  | Google Hangouts                           | nkeimhogjdpnpccoofpliimaahmaaome | 1.3.26  | Sim     | Comp   | OK — hangout_services
+Profile 15  | Pagamentos da Chrome Web Store            | nmmhkkegccagdldgiimedpiccmgmieda | 1.0.0.6 | Sim     | Sim    | OK — componente Google
+Profile 15  | Bitdefender Anti-tracker (residual)       | khndhdhbebhaddchcgnalcjlaekbbeof | (n/d)   | Não     | Sim    | FLAG residual — external_uninstalls + install_signature. Sem pasta. Bitdefender leftover.
+System      | (nenhuma)                                 | —                                | —       | —       | —      | OK — sem extensions.settings
+(registro)  | IDM Integration Module                    | ngpampappnmepgilojfohadhhmbhlaek | 6.42.64 | N/A     | Não    | FLAG leftover — HKLM/HKCU apontam para IDMGCExt.crx INEXISTENTE; não carregada em nenhum perfil.
+
+* FVD: estava na CWS historicamente; Google removeu por política de software indesejado. Não está na loja agora.
+
+
+4) PERMISSÕES RELEVANTES (extensões ATIVAS)
+-------------------------------------------
+Nenhuma extensão ATIVA tem: <all_urls>, debugger, nativeMessaging, proxy, webRequest, cookies, management.
+
+Google Network Speech
+  permissions: metricsPrivate, offscreen, systemPrivate, ttsEngine
+  hosts:       https://www.google.com/
+
+Chrome PDF Viewer
+  permissions: contentSettings, metricsPrivate, pdfViewerPrivate, resourcesPrivate, tabs, fileSystem(+write)
+  hosts:       chrome://resources/*, chrome://webui-test/*
+
+Google Hangouts (hangout_services)
+  permissions: enterprise.hardwarePlatform, processes, system.cpu, webrtcLoggingPrivate
+  externally_connectable: ids de clientes Google Meet + https://*.meet.google.com/*
+
+Pagamentos da Chrome Web Store
+  permissions: identity, webview + hosts Google Payments / googleapis
+  from_webstore=true, location=10, ack_external=true
+
+
+5) OUTROS SINAIS
+----------------
+Profile 14 Secure Preferences: extensions.ui.developer_mode = true
+  → modo programador ATIVO (permite "Load unpacked"). Nenhuma extensão unpacked (location=4) está instalada.
+
+Nenhum chrome_url_overrides (sem hijack de new tab / homepage via extensão).
+
+Datas first_install (Chrome FILETIME µs → hora local):
+  Profile 9  componentes/payments: 2026-08-21 01:30
+  Profile 12 componentes:          2026-08-21 01:47
+  Profile 13 componentes:          2026-08-21 01:47
+  Profile 14 componentes:          2026-08-21 15:46
+  Profile 14 payments:             2026-08-21 15:59
+  Profile 14 leftovers lastping:   2026-08-21 04:00
+  Profile 15 componentes/payments: 2026-08-21 19:18
+
+Hosts Native Messaging (registro; as extensões Chrome correspondentes NÃO estão nos perfis):
+  com.tonec.idm                                              → IDM (JSON em falta)
+  mbambgnativemsg.exe                                        → Malwarebytes Browser Guard (IDs ngbcfleeejkdengkccgdgffdakelafga / ihcjicgdanjaechkgeegckofjjedodee / …) — extensão NÃO instalada
+  com.microsoft.defender.browser_extension.native_message_host → Defender BE (echcggldkblhodogklpincgchnpgcdco / …) — extensão NÃO instalada
+  com.google.chrome.remote_desktop / remote_assistance / remote_webauthn → Chrome Remote Desktop (inomeogfingihgjfjlpeplalcfajhgai) — extensão NÃO neste User Data
+  com.anthropic.claude_browser_extension                     → Claude (dihbgbndebgnbjfmelmegjepbnkhlgni / …) — extensão NÃO instalada
+  com.clockworkmod.adb                                       → Vysor/ADB — extensão NÃO instalada
+  com.microsoft.browsercore / onedrive.nucleus               → Windows/OneDrive (não é hijacker)
+
+IDs conhecidos de hijackers / Avast / IObit / MBAM / Claude NÃO presentes em extensions.settings.
+
+
+6) AVAST / BITDEFENDER / IOBIT (pedido explícito)
+-------------------------------------------------
+Extensão Avast no Chrome (gomekmidlodglbbmalcneegieacbdmki Online Security, eofcbnmajmjmplflapaojjnihcjkigck SafePrice):
+  AUSENTE de todos os perfis.
+
+Extensão IObit no Chrome (imgpenhngnbnmhdkpdfnfhdpmfgmihdn Surfing Protection, bbmegnmpleoagolcnjnejdacakedpcgd Advanced SystemCare Surfing):
+  AUSENTE de todos os perfis.
+
+Extensão Bitdefender Anti-tracker (khndhdhbebhaddchcgnalcjlaekbbeof):
+  NÃO instalada / NÃO em execução.
+  Residual: Preferences.extensions.external_uninstalls + install_signature.ids nos Profile 14 e 15.
+  Software Bitdefender no disco: Bitdefender Agent 27.1.1.45, Bitdefender VPN 27.3.4.19, Bitdefender Security (pastas atualizadas 2026-08-22).
+
+Avast no disco (NÃO é extensão Chrome):
+  Avast Secure Browser 136.0.30453.115 (instalado 2025-06-03) em C:\Program Files\AVAST Software\Browser
+  Avast Update Helper 1.8.1993.6
+  Pastas AppData Local/Roaming\AVAST Software\Browser (2025-06-03)
+  = leftover de Avast Secure Browser, não da extensão Chrome.
+
+IObit no disco (NÃO é extensão Chrome):
+  C:\Program Files (x86)\IObit\IObit Unlocker (presente; UnlockerExtension.dll é shell/Windows, não Chrome)
+  Sem IObit Malware Fighter / Advanced SystemCare / Surfing Protection no Chrome.
+
+IDM 6.42.64 instalado; integração Chrome partida (CRX/JSON em falta, só chaves de registro).
+
+
+7) VEREDITO
+-----------
+Há extensão malware-like ATIVA no Chrome deste PC?
+  NÃO. Nenhum add-on de terceiros está realmente instalado e ligado.
+  Apenas componentes oficiais do Chrome (PDF, TTS, Hangouts/Meet, Pagamentos CWS).
+  Sem force-install, sem unpacked, sem hijack de new-tab, sem permissões perigosas ativas
+  (debugger / proxy / webRequest / cookies / management / nativeMessaging / <all_urls>).
+
+Há leftover Avast / Bitdefender / IObit no Chrome?
+  Bitdefender Anti-tracker: SIM, residual (desinstalada; stubs em Profile 14 e 15).
+  Avast (extensão Chrome): NÃO. Existe leftover do Avast Secure Browser no disco.
+  IObit (extensão Chrome): NÃO. Existe IObit Unlocker no disco (não é extensão Chrome).
+
+Outros leftovers dignos de nota (NÃO em execução):
+  - Fantasmas no Profile 14 (lastping 2026-08-21): Cookie-Master, FVD Video Downloader (PUP histórico),
+    Grok Easy Automation (desligada pelo utilizador), várias ferramentas Facebook,
+    3 IDs sem nome público fiável.
+  - Sync Extension Settings órfã: mnjffgbbcofcajpmooahlcnjgpfmpifk (Delete All Facebook Posts).
+  - Registro IDM Chrome (ngpampappnmepgilojfohadhhmbhlaek) com CRX em falta.
+  - Native hosts de Malwarebytes / Defender / Claude / CRD / Vysor sem a extensão correspondente no Chrome.
+  - Profile 14 com developer_mode=true (risco só se alguém carregar unpacked).
+
+Conclusão: superfície de extensões Chrome está limpa no momento. Os flags são resíduos
+de desinstalações recentes (perfis recriados em 2026-08-21) e software de terceiros no
+sistema (Bitdefender, IDM, Avast Browser, IObit Unlocker, Malwarebytes), não malware
+ativo via extensão.
+
+Fim do relatório.

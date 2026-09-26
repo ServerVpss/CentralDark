@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Painel de Logs ao Vivo — CentralDark</title>
+<link rel="stylesheet" href="painel.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand"><span class="dot live"></span> CentralDark · Logs</div>
+    <div class="spacer"></div>
+    <button class="btn" id="btnTema">🌗 Tema</button>
+    <button class="btn" id="btnErros">⚠️ Só erros</button>
+    <button class="btn primary" onclick="location.reload()">↻ Atualizar</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <h1>O que o Hermes está fazendo agora</h1>
+    <p id="sub">Página estática — rode o gerador com <code>--watch</code> para atualizar sozinha.
+       Lê direto de <code>profiles/&lt;perfil&gt;/logs/</code>, sem cópia.</p>
+  </div>
+
+  <section class="verdict" id="verdict">
+    <div>
+      <div class="big" id="vTitulo">Carregando…</div>
+      <div class="why" id="vTexto">Gere os dados com <code>node scripts/gerar-painel-logs.mjs</code>.</div>
+    </div>
+  </section>
+
+  <section class="grid" id="cards"></section>
+
+  <div id="secoes"></div>
+
+  <p class="foot">Painel local · funciona offline · nenhum valor de chave é exibido, só o tamanho</p>
+</main>
+
+<script src="dados-logs.js" onerror="console.info('sem dados-logs.js')"></script>
+<script>
+document.getElementById('btnTema').onclick = () => {
+  const r = document.documentElement;
+  const n = r.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  r.setAttribute('data-theme', n); localStorage.setItem('cd-tema', n);
+};
+const s = localStorage.getItem('cd-tema'); if (s) document.documentElement.setAttribute('data-theme', s);
+
+let soErros = false;
+document.getElementById('btnErros').onclick = e => {
+  soErros = !soErros;
+  e.target.classList.toggle('primary', soErros);
+  document.querySelectorAll('.ev').forEach(el => {
+    el.style.display = (soErros && !el.classList.contains('is-bad')) ? 'none' : '';
+  });
+};
+
+const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const D = window.DADOS_LOGS;
+
+if (D) {
+  document.getElementById('sub').innerHTML =
+    `Gerado em <b>${D.gerado}</b> · perfil <b style="color:var(--emerald)">${D.perfil}</b>`;
+
+  const erros = D.erros || 0;
+  const v = document.getElementById('verdict');
+  v.className = 'verdict ' + (erros === 0 ? '' : erros > 20 ? 'bad' : 'warn');
+  document.getElementById('vTitulo').textContent =
+    erros === 0 ? 'Rodando limpo ✅' : `${erros} erro(s) nos registros recentes`;
+  document.getElementById('vTexto').textContent =
+    erros === 0 ? 'Nenhum erro nos logs recentes. Processos no ar.'
+                : 'Abra a seção de erros abaixo — cada linha tem a dica do que fazer.';
+
+  // cards
+  const cards = document.getElementById('cards');
+  (D.cards || []).forEach(c => {
+    const linhas = (c.linhas || []).length
+      ? c.linhas.map(l => `<div class="row"><span>${esc(l.nome)}</span><span class="pill ${l.estado}">${esc(l.valor)}</span></div>`).join('')
+      : '<div class="vazio">Nada aqui.</div>';
+    cards.insertAdjacentHTML('beforeend', `<div class="card"><h3>${esc(c.titulo)}</h3>${linhas}</div>`);
+  });
+
+  // seções de eventos, com busca
+  const sec = document.getElementById('secoes');
+  (D.secoes || []).forEach((s, i) => {
+    const evs = (s.eventos || []).map(e => `
+      <div class="ev ${e.nivel === 'erro' ? 'is-bad' : e.nivel === 'aviso' ? 'is-warn' : ''}">
+        <span class="h">${esc(e.hora)}</span>
+        <span class="t">${esc(e.texto)}${e.dica ? `<span class="dica"><b>o que fazer:</b> ${esc(e.dica)}</span>` : ''}</span>
+      </div>`).join('') || '<div class="vazio">Nenhum evento.</div>';
+    sec.insertAdjacentHTML('beforeend', `
+      <details ${i === 0 ? 'open' : ''}>
+        <summary>${esc(s.icone || '📄')} ${esc(s.titulo)} <span class="cnt">${(s.eventos || []).length}</span></summary>
+        <div class="toolbar"><input type="search" placeholder="filtrar nesta seção…" data-sec="${i}"></div>
+        <div class="list" id="lista-${i}">${evs}</div>
+      </details>`);
+  });
+
+  document.querySelectorAll('.toolbar input').forEach(inp => {
+    inp.addEventListener('input', () => {
+      const q = inp.value.toLowerCase();
+      document.querySelectorAll(`#lista-${inp.dataset.sec} .ev`).forEach(el => {
+        el.style.display = el.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+    });
+  });
+}
+</script>
+</body>
+</html>

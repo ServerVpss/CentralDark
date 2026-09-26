@@ -1,0 +1,84 @@
+schema: CENTRALDARK_SWARM_GRAPH_MIRROR
+schema_version: 1
+mode: EXTEND_EXISTING_ONLY
+master:
+  required: true
+  event: CENTRALDARK
+  no_second_orchestrator: true
+  no_parallel_authority: true
+swarm:
+  role: PARALLEL_PERCEPTION_ONLY
+  fanout:
+    adaptive: true
+    min: 1
+    max: 10
+    selection_inputs:
+      - material_scope
+      - dependency_width
+      - uncertainty
+      - regression_risk
+      - provider_divergence
+  fronts:
+    - code_structure
+    - tests_and_falsifiers
+    - docs_and_contracts
+    - runtime_and_routes
+    - github_remote
+    - drive_and_workspace
+    - security_and_secrets
+    - dependency_graph
+    - lineage_and_receipts
+    - ui_and_operator_experience
+  subdelegation:
+    allowed_for_readers: true
+    default_depth_max: 1
+    hard_depth_max: 2
+    requires_material_question: true
+    requires_expected_discriminating_evidence: true
+mirror:
+  factor_max: 5
+  depth_max: 1
+  read_only: true
+  may_write: false
+  may_judge: false
+  may_self_approve: false
+  purpose:
+    - independent_cross_check
+    - edge_consistency
+    - source_divergence_detection
+    - regression_candidate_detection
+    - stale_claim_detection
+triaxial_graph_sweep:
+  axes:
+    TOP_DOWN:
+      path: owner_to_consumers
+    BOTTOM_UP:
+      path: observation_to_owner
+    CROSS_GRAPH:
+      path: sibling_dependency_provider_edges
+  rendezvous_required: true
+  graph_is_authority: false
+rendezvous:
+  output: EVIDENCE_CANDIDATES
+  next:
+    - REALITY_SCOPE_GATE
+    - RECONCILE
+    - CURRENT_REALITY
+    - ONE_WRITER
+provider_policy:
+  model_is_replaceable: true
+  preferred_fast_reader_role: ROUTER_SELECTED_FAST_MODEL
+  examples_only:
+    - gemini_flash_family
+    - haiku_class_model
+    - other_authorized_fast_reader
+  centraldark_router_selects_provider: true
+proof:
+  mirror_count_is_not_confidence: true
+  majority_vote_is_not_truth: true
+  contradiction_requires_discriminating_test: true
+  promotion_requires:
+    - provenance_preserved
+    - material_unknown_resolved_or_blocked
+    - falsifier_survives
+    - one_writer_scope_preserved

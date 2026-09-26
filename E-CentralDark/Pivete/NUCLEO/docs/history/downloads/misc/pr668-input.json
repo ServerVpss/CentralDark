@@ -1,0 +1,18 @@
+{
+  "repository": "ServerVpss/CentralDark",
+  "pr_number": 668,
+  "head_sha": "4566636ec93fcdebb2d956ff3dd692a6e205a275",
+  "base_sha": "f692e3118304724c0c860b56bb00a33e18edeac5",
+  "title": "feat(pr): artefato automático de aprendizado e suporte por capacidade",
+  "author": "segredounlock",
+  "body": "AI_CAPABILITIES:\n  mermaid: SIM\n  canvas_html: SIM\n  structured_yaml: SIM",
+  "files": [
+    {"filename":".github/pull_request_template.md","status":"modified","additions":25,"deletions":0},
+    {"filename":".github/workflows/dispatcher-bots.yml","status":"modified","additions":49,"deletions":12},
+    {"filename":".github/workflows/pr-learning-artifact.yml","status":"added","additions":248,"deletions":0},
+    {"filename":"docs/BOTS/PR-LEARNING-ARTIFACT.md","status":"added","additions":132,"deletions":0},
+    {"filename":"docs/BOTS/README.md","status":"modified","additions":11,"deletions":3},
+    {"filename":"scripts/lupa/pr-learning-artifact.mjs","status":"added","additions":381,"deletions":0},
+    {"filename":"scripts/lupa/pr-learning-artifact.test.mjs","status":"added","additions":126,"deletions":0}
+  ]
+}

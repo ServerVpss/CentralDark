@@ -1,0 +1,333 @@
+
+Mode   LastWriteTime       Length FullName                                                                             
+----   -------------       ------ --------                                                                             
+d----- 18/08/2026 12:45:14        C:\CentralDark\Pivete\CentralDark\.agents                                            
+d----- 26/07/2026 13:20:54        C:\CentralDark\Pivete\CentralDark\.artifacts                                         
+d----- 05/08/2026 10:06:00        C:\CentralDark\Pivete\CentralDark\.claude                                            
+d----- 30/07/2026 15:47:03        C:\CentralDark\Pivete\CentralDark\.cursor                                            
+d----- 18/08/2026 12:45:14        C:\CentralDark\Pivete\CentralDark\.github                                            
+d----- 18/08/2026 12:45:14        C:\CentralDark\Pivete\CentralDark\.grok                                              
+d----- 21/07/2026 08:44:17        C:\CentralDark\Pivete\CentralDark\.lovable                                           
+d----- 22/07/2026 18:45:38        C:\CentralDark\Pivete\CentralDark\.pytest_cache                                      
+d----- 06/08/2026 18:30:47        C:\CentralDark\Pivete\CentralDark\.worktrees                                         
+d----- 21/07/2026 08:44:17        C:\CentralDark\Pivete\CentralDark\apps                                               
+d----- 21/07/2026 08:44:17        C:\CentralDark\Pivete\CentralDark\backups                                            
+d----- 22/07/2026 16:16:21        C:\CentralDark\Pivete\CentralDark\desafios                                           
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\docs                                               
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\evidence                                           
+d----- 21/07/2026 08:44:21        C:\CentralDark\Pivete\CentralDark\infra                                              
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\mem                                                
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\missoes                                            
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\prompts                                            
+d----- 26/07/2026 13:20:54        C:\CentralDark\Pivete\CentralDark\public                                             
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\scripts                                            
+d----- 21/07/2026 08:44:17        C:\CentralDark\Pivete\CentralDark\SEGURANCA                                          
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\src                                                
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\supabase                                           
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\tmp-hub-refactor                                   
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\tools                                              
+-a---- 18/08/2026 12:45:14 7300   C:\CentralDark\Pivete\CentralDark\.coderabbit.yaml                                   
+-a---- 21/07/2026 08:44:17 786    C:\CentralDark\Pivete\CentralDark\.env                                               
+-a---- 18/08/2026 12:45:14 2698   C:\CentralDark\Pivete\CentralDark\.gitignore                                         
+-a---- 21/07/2026 08:44:17 1951   C:\CentralDark\Pivete\CentralDark\.graphifyignore                                    
+-a---- 18/08/2026 12:45:14 2597   C:\CentralDark\Pivete\CentralDark\.windsurfrules                                     
+-a---- 18/08/2026 12:45:14 26560  C:\CentralDark\Pivete\CentralDark\AGENTS.md                                          
+-a---- 21/07/2026 08:44:17 3028   C:\CentralDark\Pivete\CentralDark\analyze_workflows.py                               
+-a---- 21/07/2026 08:44:18 387    C:\CentralDark\Pivete\CentralDark\busca_profunda.sh                                  
+-a---- 21/07/2026 08:44:17 1331   C:\CentralDark\Pivete\CentralDark\CentralDark.code-workspace                         
+-a---- 18/08/2026 12:45:14 4479   C:\CentralDark\Pivete\CentralDark\CHATGPT.md                                         
+-a---- 18/08/2026 12:45:14 3938   C:\CentralDark\Pivete\CentralDark\CLAUDE.md                                          
+-a---- 18/08/2026 12:45:14 4943   C:\CentralDark\Pivete\CentralDark\CODEX.md                                           
+-a---- 21/07/2026 08:44:18 434    C:\CentralDark\Pivete\CentralDark\components.json                                    
+-a---- 21/07/2026 08:44:17 1571   C:\CentralDark\Pivete\CentralDark\CONTINGENCY.md                                     
+-a---- 21/07/2026 08:44:17 0      C:\CentralDark\Pivete\CentralDark\Diagnóstico                                        
+-a---- 21/07/2026 08:44:21 97442  C:\CentralDark\Pivete\CentralDark\ecosystem.config.cjs                               
+-a---- 21/07/2026 08:44:21 4853   C:\CentralDark\Pivete\CentralDark\ecosystem.config.example.js                        
+-a---- 21/07/2026 08:44:21 93789  C:\CentralDark\Pivete\CentralDark\ecosystem.config.js.bak-20260705-133220            
+-a---- 21/07/2026 08:44:21 93789  C:\CentralDark\Pivete\CentralDark\ecosystem.config.js.bak-20260705-133359            
+-a---- 21/07/2026 08:44:21 93789  C:\CentralDark\Pivete\CentralDark\ecosystem.config.js.bak-20260705-134317            
+-a---- 21/07/2026 08:44:21 791    C:\CentralDark\Pivete\CentralDark\eslint.config.js                                   
+-a---- 18/08/2026 12:45:14 3213   C:\CentralDark\Pivete\CentralDark\GEMINI.md                                          
+-a---- 21/07/2026 08:44:21 1863   C:\CentralDark\Pivete\CentralDark\index.html                                         
+-a---- 21/07/2026 08:44:17 4015   C:\CentralDark\Pivete\CentralDark\INSTALACAO.md                                      
+-a---- 21/07/2026 08:44:21 50556  C:\CentralDark\Pivete\CentralDark\install.sh                                         
+-a---- 21/07/2026 08:44:21 2066   C:\CentralDark\Pivete\CentralDark\leak_report.py                                     
+-a---- 21/07/2026 08:44:21 7824   C:\CentralDark\Pivete\CentralDark\legacy_scripts.txt                                 
+-a---- 18/08/2026 12:45:14 20804  C:\CentralDark\Pivete\CentralDark\LEIA-ME-IA.md                                      
+-a---- 21/07/2026 08:44:21 532    C:\CentralDark\Pivete\CentralDark\listar_tools_api.sh                                
+-a---- 21/07/2026 08:44:22 797    C:\CentralDark\Pivete\CentralDark\monitor_centraldark.sh                             
+-a---- 21/07/2026 08:44:22 1365   C:\CentralDark\Pivete\CentralDark\monitor_unificado.sh                               
+-a---- 21/07/2026 08:44:22 265    C:\CentralDark\Pivete\CentralDark\novo_scripts.txt                                   
+-a---- 21/07/2026 08:44:22 472903 C:\CentralDark\Pivete\CentralDark\package-lock.json                                  
+-a---- 21/07/2026 08:44:22 3356   C:\CentralDark\Pivete\CentralDark\package.json                                       
+-a---- 21/07/2026 08:44:22 679    C:\CentralDark\Pivete\CentralDark\payload_test.py                                    
+-a---- 21/07/2026 08:44:22 87     C:\CentralDark\Pivete\CentralDark\postcss.config.js                                  
+-a---- 21/07/2026 08:44:22 1771   C:\CentralDark\Pivete\CentralDark\probe.py                                           
+-a---- 18/08/2026 12:45:14 4390   C:\CentralDark\Pivete\CentralDark\README.md                                          
+-a---- 21/07/2026 08:44:22 1863   C:\CentralDark\Pivete\CentralDark\recon.sh                                           
+-a---- 21/07/2026 08:44:17 0      C:\CentralDark\Pivete\CentralDark\Regra                                              
+-a---- 21/07/2026 08:44:22 33411  C:\CentralDark\Pivete\CentralDark\script.js                                          
+-a---- 21/07/2026 08:44:22 5217   C:\CentralDark\Pivete\CentralDark\smoke_test.ts                                      
+-a---- 21/07/2026 08:44:17 0      C:\CentralDark\Pivete\CentralDark\Solução                                            
+-a---- 21/07/2026 08:44:22 23680  C:\CentralDark\Pivete\CentralDark\style.css                                          
+-a---- 21/07/2026 08:44:22 4315   C:\CentralDark\Pivete\CentralDark\tailwind.config.ts                                 
+-a---- 21/07/2026 08:44:22 3116   C:\CentralDark\Pivete\CentralDark\test_leak.py                                       
+-a---- 21/07/2026 08:44:22 714    C:\CentralDark\Pivete\CentralDark\tsconfig.app.json                                  
+-a---- 21/07/2026 08:44:22 419    C:\CentralDark\Pivete\CentralDark\tsconfig.json                                      
+-a---- 21/07/2026 08:44:22 503    C:\CentralDark\Pivete\CentralDark\tsconfig.node.json                                 
+-a---- 21/07/2026 08:44:22 863    C:\CentralDark\Pivete\CentralDark\varredura_chaves.sh                                
+-a---- 21/07/2026 08:44:22 1253   C:\CentralDark\Pivete\CentralDark\varredura_prod.sh                                  
+-a---- 21/07/2026 08:44:22 860    C:\CentralDark\Pivete\CentralDark\ver_logs.sh                                        
+-a---- 21/07/2026 08:44:22 574    C:\CentralDark\Pivete\CentralDark\ver_logs_api.sh                                    
+-a---- 21/07/2026 08:44:22 515    C:\CentralDark\Pivete\CentralDark\vite.config.ts                                     
+-a---- 21/07/2026 08:44:22 411    C:\CentralDark\Pivete\CentralDark\vitest.config.ts                                   
+d----- 31/07/2026 00:09:19        C:\CentralDark\Pivete\CentralDark\.agents\contratos                                  
+d----- 18/08/2026 12:45:14        C:\CentralDark\Pivete\CentralDark\.agents\skills                                     
+-a---- 18/08/2026 12:45:14 4924   C:\CentralDark\Pivete\CentralDark\.agents\ACORDO-TRI-AGENTES-20260809.json           
+d----- 18/08/2026 12:45:14        C:\CentralDark\Pivete\CentralDark\.artifacts\meta-lupa-mission                       
+d----- 21/07/2026 08:44:17        C:\CentralDark\Pivete\CentralDark\.claude\agents                                     
+d----- 21/07/2026 08:44:17        C:\CentralDark\Pivete\CentralDark\.claude\commands                                   
+d----- 18/08/2026 12:45:14        C:\CentralDark\Pivete\CentralDark\.claude\prompts                                    
+d----- 18/08/2026 12:45:14        C:\CentralDark\Pivete\CentralDark\.claude\rules                                      
+-a---- 21/07/2026 08:44:17 0      C:\CentralDark\Pivete\CentralDark\.claude\.gitkeep                                   
+-a---- 21/07/2026 08:44:17 380    C:\CentralDark\Pivete\CentralDark\.claude\BOAS-PRATICAS-MCP.md                       
+-a---- 05/08/2026 10:06:00 848    C:\CentralDark\Pivete\CentralDark\.claude\settings.json                              
+d----- 18/08/2026 12:45:14        C:\CentralDark\Pivete\CentralDark\.cursor\rules                                      
+d----- 22/07/2026 08:30:28        C:\CentralDark\Pivete\CentralDark\.github\codex                                      
+d----- 18/08/2026 12:45:31        C:\CentralDark\Pivete\CentralDark\.github\workflows                                  
+-a---- 30/07/2026 17:35:15 2063   C:\CentralDark\Pivete\CentralDark\.github\CODEOWNERS                                 
+-a---- 18/08/2026 12:45:14 1810   C:\CentralDark\Pivete\CentralDark\.github\copilot-instructions.md                    
+-a---- 18/08/2026 12:45:14 714    C:\CentralDark\Pivete\CentralDark\.github\dependabot.yml                             
+-a---- 18/08/2026 12:45:14 2024   C:\CentralDark\Pivete\CentralDark\.github\pull_request_template.md                   
+d----- 18/08/2026 12:45:14        C:\CentralDark\Pivete\CentralDark\.grok\skills                                       
+d----- 21/07/2026 08:44:17        C:\CentralDark\Pivete\CentralDark\.lovable\mem                                       
+d----- 21/07/2026 08:44:17        C:\CentralDark\Pivete\CentralDark\.lovable\memory                                    
+-a---- 21/07/2026 08:44:17 4614   C:\CentralDark\Pivete\CentralDark\.lovable\plan.md                                   
+d----- 22/07/2026 18:45:38        C:\CentralDark\Pivete\CentralDark\.pytest_cache\v                                    
+-a---- 22/07/2026 18:45:38 37     C:\CentralDark\Pivete\CentralDark\.pytest_cache\.gitignore                           
+-a---- 22/07/2026 18:45:38 191    C:\CentralDark\Pivete\CentralDark\.pytest_cache\CACHEDIR.TAG                         
+-a---- 22/07/2026 18:45:38 302    C:\CentralDark\Pivete\CentralDark\.pytest_cache\README.md                            
+d----- 18/08/2026 12:45:14        C:\CentralDark\Pivete\CentralDark\apps\bot-telegram                                  
+d----- 30/07/2026 17:35:14        C:\CentralDark\Pivete\CentralDark\apps\modulos                                       
+d----- 21/07/2026 08:44:17        C:\CentralDark\Pivete\CentralDark\backups\2026-07-03-hermes-darkai                   
+d----- 21/07/2026 08:44:18        C:\CentralDark\Pivete\CentralDark\backups\docs-unificacao                            
+d----- 26/07/2026 13:20:54        C:\CentralDark\Pivete\CentralDark\desafios\omega_autolupa                            
+d----- 21/07/2026 08:44:21        C:\CentralDark\Pivete\CentralDark\docs\agente                                        
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\docs\APRENDIZADOS                                  
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\docs\ARQUITETURA                                   
+d----- 21/07/2026 08:44:18        C:\CentralDark\Pivete\CentralDark\docs\AUDITORIAS                                    
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\docs\BOTS                                          
+d----- 18/08/2026 12:45:39        C:\CentralDark\Pivete\CentralDark\docs\BRAIN                                         
+d----- 21/07/2026 08:44:18        C:\CentralDark\Pivete\CentralDark\docs\CODEX                                         
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\docs\CONSCIENCIA                                   
+d----- 21/07/2026 08:44:19        C:\CentralDark\Pivete\CentralDark\docs\CONTINUIDADE                                  
+d----- 21/07/2026 08:44:19        C:\CentralDark\Pivete\CentralDark\docs\DOMINIOS                                      
+d----- 21/07/2026 08:44:19        C:\CentralDark\Pivete\CentralDark\docs\GATEWAY                                       
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\docs\GOVERNANCA                                    
+d----- 21/07/2026 08:44:19        C:\CentralDark\Pivete\CentralDark\docs\HUB                                           
+d----- 21/07/2026 08:44:19        C:\CentralDark\Pivete\CentralDark\docs\IA-TAREFAS                                    
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\docs\INSTALADOR                                    
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\docs\INTEGRACOES                                   
+d----- 21/07/2026 08:44:19        C:\CentralDark\Pivete\CentralDark\docs\NOTIFY                                        
+d----- 30/07/2026 15:47:05        C:\CentralDark\Pivete\CentralDark\docs\operacoes                                     
+d----- 21/07/2026 08:44:21        C:\CentralDark\Pivete\CentralDark\docs\PENDENCIAS                                    
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\docs\RELATORIOS                                    
+d----- 21/07/2026 08:44:21        C:\CentralDark\Pivete\CentralDark\docs\SEGURANCA                                     
+d----- 30/07/2026 15:47:05        C:\CentralDark\Pivete\CentralDark\docs\sentinela                                     
+d----- 21/07/2026 08:44:21        C:\CentralDark\Pivete\CentralDark\docs\tarefas                                       
+d----- 21/07/2026 08:44:21        C:\CentralDark\Pivete\CentralDark\docs\TREINAMENTO-IAS                               
+d----- 21/07/2026 08:44:21        C:\CentralDark\Pivete\CentralDark\docs\WHATSAPP-API                                  
+d----- 21/07/2026 08:44:21        C:\CentralDark\Pivete\CentralDark\docs\_LEGADO_ROOT_DOCS_CONFLITOS                   
+-a---- 18/08/2026 12:45:15 1538   C:\CentralDark\Pivete\CentralDark\docs\AGENTS.md                                     
+-a---- 21/07/2026 08:44:18 5393   C:\CentralDark\Pivete\CentralDark\docs\AI_AUTONOMY_CURRENT_STATUS.md                 
+-a---- 21/07/2026 08:44:21 1625   C:\CentralDark\Pivete\CentralDark\docs\architecture.md                               
+-a---- 21/07/2026 08:44:18 2705   C:\CentralDark\Pivete\CentralDark\docs\BOT_COMMANDS.md                               
+-a---- 21/07/2026 08:44:18 626    C:\CentralDark\Pivete\CentralDark\docs\CADEADO-FONTE-OFICIAL.md                      
+-a---- 21/07/2026 08:44:18 17448  C:\CentralDark\Pivete\CentralDark\docs\CHANGELOG_TECNICO.md                          
+-a---- 21/07/2026 08:44:18 12     C:\CentralDark\Pivete\CentralDark\docs\CLAUDE.md                                     
+-a---- 21/07/2026 08:44:18 0      C:\CentralDark\Pivete\CentralDark\docs\COISAS QUE FICO PRA TRAZZ ENTENDER RESOLVER...
+-a---- 21/07/2026 08:44:19 24916  C:\CentralDark\Pivete\CentralDark\docs\CONSOLIDACAO-CENTRALDARK-V2.md                
+-a---- 21/07/2026 08:44:19 19446  C:\CentralDark\Pivete\CentralDark\docs\CONSOLIDACAO-CENTRALDARK.md                   
+-a---- 21/07/2026 08:44:19 4619   C:\CentralDark\Pivete\CentralDark\docs\CRON_JOBS_SETUP.md                            
+-a---- 21/07/2026 08:44:21 1377   C:\CentralDark\Pivete\CentralDark\docs\deploy.md                                     
+-a---- 21/07/2026 08:44:19 4334   C:\CentralDark\Pivete\CentralDark\docs\EDGE_FUNCTIONS.md                             
+-a---- 06/08/2026 17:30:34 3257   C:\CentralDark\Pivete\CentralDark\docs\ESTADO-DA-RETOMADA.md                         
+-a---- 21/07/2026 08:44:19 2847   C:\CentralDark\Pivete\CentralDark\docs\FARM_LOG.md                                   
+-a---- 21/07/2026 08:44:19 3341   C:\CentralDark\Pivete\CentralDark\docs\GITHUB_ACCESS.md                              
+-a---- 21/07/2026 08:44:19 2472   C:\CentralDark\Pivete\CentralDark\docs\GLOSSARIO_TECNICO_LEIGO.md                    
+-a---- 21/07/2026 08:44:19 16     C:\CentralDark\Pivete\CentralDark\docs\LEIA-ME-IA.md                                 
+-a---- 21/07/2026 08:44:21 142    C:\CentralDark\Pivete\CentralDark\docs\lovable-sync-check.md                         
+-a---- 21/07/2026 08:44:19 2422   C:\CentralDark\Pivete\CentralDark\docs\MAPA_EVENTOS_WUZAPI.md                        
+-a---- 21/07/2026 08:44:19 2656   C:\CentralDark\Pivete\CentralDark\docs\MAPA_LEIGO_DO_SISTEMA.md                      
+-a---- 21/07/2026 08:44:19 6259   C:\CentralDark\Pivete\CentralDark\docs\MAPEAMENTO-ENV.md                             
+-a---- 21/07/2026 08:44:19 113    C:\CentralDark\Pivete\CentralDark\docs\NEXT_SESSION_PROMPT.md                        
+-a---- 21/07/2026 08:44:19 2952   C:\CentralDark\Pivete\CentralDark\docs\ORGANIZACAO_VPS.md                            
+-a---- 21/07/2026 08:44:19 356    C:\CentralDark\Pivete\CentralDark\docs\ORQUESTRADOR_WORKFLOW_VPS.md                  
+-a---- 30/07/2026 15:47:05 76032  C:\CentralDark\Pivete\CentralDark\docs\PENDENCIAS.md                                 
+-a---- 30/07/2026 15:47:05 24396  C:\CentralDark\Pivete\CentralDark\docs\PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NE...
+-a---- 18/08/2026 12:45:15 1502   C:\CentralDark\Pivete\CentralDark\docs\PROTOCOLO-BOOT.md                             
+-a---- 21/07/2026 08:44:19 22201  C:\CentralDark\Pivete\CentralDark\docs\README.md                                     
+-a---- 21/07/2026 08:44:21 2455   C:\CentralDark\Pivete\CentralDark\docs\STATE.md                                      
+-a---- 21/07/2026 08:44:21 2721   C:\CentralDark\Pivete\CentralDark\docs\STATUS_ATUAL_DO_PROJETO.md                    
+-a---- 21/07/2026 08:44:21 1013   C:\CentralDark\Pivete\CentralDark\docs\structure.md                                  
+-a---- 21/07/2026 08:44:21 3194   C:\CentralDark\Pivete\CentralDark\docs\SUPABASE_WORKFLOW.md                          
+-a---- 21/07/2026 08:44:21 619    C:\CentralDark\Pivete\CentralDark\docs\SYNC_REPOS.md                                 
+-a---- 21/07/2026 08:44:21 15     C:\CentralDark\Pivete\CentralDark\docs\TESTE-MCP.md                                  
+-a---- 21/07/2026 08:44:21 3379   C:\CentralDark\Pivete\CentralDark\docs\WEBHOOKS.md                                   
+-a---- 21/07/2026 08:44:21 3551   C:\CentralDark\Pivete\CentralDark\docs\WHATSAPP_CONNECTION_MAP.md                    
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\evidence\session-completa-20260806                 
+d----- 21/07/2026 08:44:21        C:\CentralDark\Pivete\CentralDark\infra\caddy                                        
+d----- 21/07/2026 08:44:21        C:\CentralDark\Pivete\CentralDark\infra\fail2ban                                     
+d----- 21/07/2026 08:44:21        C:\CentralDark\Pivete\CentralDark\infra\guardiao                                     
+d----- 21/07/2026 08:44:21        C:\CentralDark\Pivete\CentralDark\infra\hub-migrations                               
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\infra\mcp                                          
+d----- 21/07/2026 08:44:21        C:\CentralDark\Pivete\CentralDark\infra\notify                                       
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\mem\architecture                                   
+d----- 21/07/2026 08:44:21        C:\CentralDark\Pivete\CentralDark\mem\constraints                                    
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\mem\preferences                                    
+-a---- 18/08/2026 12:45:15 1923   C:\CentralDark\Pivete\CentralDark\mem\index.md                                       
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\missoes\MAPA-VIVO                                  
+-a---- 21/07/2026 08:44:22 4394   C:\CentralDark\Pivete\CentralDark\prompts\upgrade-hub.md                             
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\public\data                                        
+d----- 26/07/2026 13:20:54        C:\CentralDark\Pivete\CentralDark\public\downloads                                   
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\public\jarvis-lab                                  
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\public\jarvis-lab-v2                               
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\public\jarvis-lab-v3                               
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\public\jarvis-lab-v4                               
+-a---- 21/07/2026 08:44:22 9922   C:\CentralDark\Pivete\CentralDark\public\centraldark-voice.zip                       
+-a---- 21/07/2026 08:44:22 20373  C:\CentralDark\Pivete\CentralDark\public\favicon.ico                                 
+-a---- 21/07/2026 08:44:22 1525   C:\CentralDark\Pivete\CentralDark\public\manifest.json                               
+-a---- 21/07/2026 08:44:22 3253   C:\CentralDark\Pivete\CentralDark\public\placeholder.svg                             
+-a---- 21/07/2026 08:44:22 174    C:\CentralDark\Pivete\CentralDark\public\robots.txt                                  
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\bots                                       
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\scripts\casa                                       
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\catalog-sync                               
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\scripts\checker                                    
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\ci                                         
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\cloudflare                                 
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\contas-admin                               
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\deploy                                     
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\dev                                        
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\scripts\estado                                     
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\scripts\evidence                                   
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\scripts\grafo-vivo                                 
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\guarda                                     
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\ia                                         
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\installer                                  
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\issues-agent                               
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\lib                                        
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\lovable-agent                              
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\scripts\lupa                                       
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\manutencao-diaria                          
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\mcp                                        
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\scripts\memory-linker                              
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\menu                                       
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\migrations                                 
+d----- 26/07/2026 13:20:54        C:\CentralDark\Pivete\CentralDark\scripts\nivel-7                                    
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\notify-claude                              
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\scripts\notion-sync                                
+d----- 26/07/2026 13:20:54        C:\CentralDark\Pivete\CentralDark\scripts\router                                     
+d----- 30/07/2026 15:47:05        C:\CentralDark\Pivete\CentralDark\scripts\run-once                                   
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\scripts\sentinela                                  
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\sync                                       
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\telegram-mtproto                           
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\validate                                   
+d----- 22/07/2026 08:30:29        C:\CentralDark\Pivete\CentralDark\scripts\vps                                        
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\scripts\vps-organizacao                            
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\vps-patches                                
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\watchdog                                   
+d----- 18/08/2026 12:45:15        C:\CentralDark\Pivete\CentralDark\scripts\webhook                                    
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\scripts\workflows                                  
+-a---- 18/08/2026 12:45:15 10499  C:\CentralDark\Pivete\CentralDark\scripts\agent-call.md                              
+-a---- 18/08/2026 12:45:15 25143  C:\CentralDark\Pivete\CentralDark\scripts\agent-call.mjs                             
+-a---- 18/08/2026 12:45:15 12699  C:\CentralDark\Pivete\CentralDark\scripts\agent-call.test.mjs                        
+-a---- 21/07/2026 08:44:22 4263   C:\CentralDark\Pivete\CentralDark\scripts\agent-notify.mjs                           
+-a---- 21/07/2026 08:44:22 2614   C:\CentralDark\Pivete\CentralDark\scripts\apply-caddy-landings.sh                    
+-a---- 21/07/2026 08:44:22 2411   C:\CentralDark\Pivete\CentralDark\scripts\audit-pages.mjs                            
+-a---- 21/07/2026 08:44:22 1740   C:\CentralDark\Pivete\CentralDark\scripts\audit-rls.sql                              
+-a---- 21/07/2026 08:44:22 9095   C:\CentralDark\Pivete\CentralDark\scripts\backup-whatsapp-session.sh                 
+-a---- 21/07/2026 08:44:22 1111   C:\CentralDark\Pivete\CentralDark\scripts\build-lovable.mjs                          
+-a---- 21/07/2026 08:44:22 690    C:\CentralDark\Pivete\CentralDark\scripts\check-stability.sh                         
+-a---- 21/07/2026 08:44:22 3792   C:\CentralDark\Pivete\CentralDark\scripts\cleanup-pm2-caddy.sh                       
+-a---- 18/08/2026 12:45:15 3166   C:\CentralDark\Pivete\CentralDark\scripts\clone-deck-gh-pull-with-deploy.sh          
+-a---- 21/07/2026 08:44:22 1086   C:\CentralDark\Pivete\CentralDark\scripts\cron-sync-centraldark.sh                   
+-a---- 21/07/2026 08:44:22 747    C:\CentralDark\Pivete\CentralDark\scripts\deploy-hub.sh                              
+-a---- 21/07/2026 08:44:22 9980   C:\CentralDark\Pivete\CentralDark\scripts\diag-crm-build.sh                          
+-a---- 21/07/2026 08:44:22 7965   C:\CentralDark\Pivete\CentralDark\scripts\diag-full-vps.sh                           
+-a---- 21/07/2026 08:44:22 2485   C:\CentralDark\Pivete\CentralDark\scripts\diag-vps.sh                                
+-a---- 21/07/2026 08:44:22 2032   C:\CentralDark\Pivete\CentralDark\scripts\enxame-3ias.sh                             
+-a---- 21/07/2026 08:44:22 3669   C:\CentralDark\Pivete\CentralDark\scripts\farm-pr.sh                                 
+-a---- 21/07/2026 08:44:22 9856   C:\CentralDark\Pivete\CentralDark\scripts\fix-caddy-ssl.sh                           
+-a---- 21/07/2026 08:44:22 2438   C:\CentralDark\Pivete\CentralDark\scripts\fix-crm-build.sh                           
+-a---- 21/07/2026 08:44:22 624    C:\CentralDark\Pivete\CentralDark\scripts\gen-token.sh                               
+-a---- 18/08/2026 12:45:15 8537   C:\CentralDark\Pivete\CentralDark\scripts\generate-artifact-session-report.mjs       
+-a---- 21/07/2026 08:44:22 2068   C:\CentralDark\Pivete\CentralDark\scripts\get-infra-map.sh                           
+-a---- 18/08/2026 12:45:15 7075   C:\CentralDark\Pivete\CentralDark\scripts\github-autonomia-green-guard.mjs           
+-a---- 18/08/2026 12:45:15 4579   C:\CentralDark\Pivete\CentralDark\scripts\github-autonomia-green-guard.test.mjs      
+-a---- 18/08/2026 12:45:15 25166  C:\CentralDark\Pivete\CentralDark\scripts\github-autonomia-promocao.mjs              
+-a---- 18/08/2026 12:45:15 10195  C:\CentralDark\Pivete\CentralDark\scripts\github-autonomia-promocao.test.mjs         
+-a---- 18/08/2026 12:45:15 17111  C:\CentralDark\Pivete\CentralDark\scripts\github-autonomia-varredura.mjs             
+-a---- 18/08/2026 12:45:15 6035   C:\CentralDark\Pivete\CentralDark\scripts\github-autonomia-varredura.test.mjs        
+-a---- 30/07/2026 15:47:05 6504   C:\CentralDark\Pivete\CentralDark\scripts\github-bot-controller.mjs                  
+-a---- 21/07/2026 08:44:22 1141   C:\CentralDark\Pivete\CentralDark\scripts\graphify-tudo.sh                           
+-a---- 21/07/2026 08:44:22 565    C:\CentralDark\Pivete\CentralDark\scripts\instalar-consciencia.sh                    
+-a---- 21/07/2026 08:44:22 1100   C:\CentralDark\Pivete\CentralDark\scripts\install-auto-deploy.sh                     
+-a---- 21/07/2026 08:44:22 4966   C:\CentralDark\Pivete\CentralDark\scripts\limpeza-autonoma.sh                        
+-a---- 21/07/2026 08:44:22 7429   C:\CentralDark\Pivete\CentralDark\scripts\master-graphify.sh                         
+-a---- 21/07/2026 08:44:22 1046   C:\CentralDark\Pivete\CentralDark\scripts\mcp-restart-with-env.sh                    
+-a---- 21/07/2026 08:44:22 4732   C:\CentralDark\Pivete\CentralDark\scripts\monitor_condefonte.sh                      
+-a---- 21/07/2026 08:44:22 2210   C:\CentralDark\Pivete\CentralDark\scripts\notificar-rollout-arsenal.mjs              
+-a---- 21/07/2026 08:44:22 1376   C:\CentralDark\Pivete\CentralDark\scripts\patch-gateway-dual-forward.sh              
+-a---- 21/07/2026 08:44:22 8483   C:\CentralDark\Pivete\CentralDark\scripts\patch-painel-data.mjs                      
+-a---- 21/07/2026 08:44:22 11671  C:\CentralDark\Pivete\CentralDark\scripts\post-deploy.sh                             
+-a---- 18/08/2026 12:45:15 3852   C:\CentralDark\Pivete\CentralDark\scripts\postdeploy-healthcheck.sh                  
+-a---- 21/07/2026 08:44:22 2289   C:\CentralDark\Pivete\CentralDark\scripts\register-github-webhook.sh                 
+-a---- 21/07/2026 08:44:22 2688   C:\CentralDark\Pivete\CentralDark\scripts\rename-pm2.sh                              
+-a---- 21/07/2026 08:44:22 1383   C:\CentralDark\Pivete\CentralDark\scripts\rollback-mcp.sh                            
+-a---- 21/07/2026 08:44:22 2896   C:\CentralDark\Pivete\CentralDark\scripts\run-graphify.sh                            
+-a---- 21/07/2026 08:44:22 1037   C:\CentralDark\Pivete\CentralDark\scripts\run-once-executor.sh                       
+-a---- 21/07/2026 08:44:22 748    C:\CentralDark\Pivete\CentralDark\scripts\run-once-wrapper.sh                        
+-a---- 21/07/2026 08:44:22 781    C:\CentralDark\Pivete\CentralDark\scripts\run-proxy-test.sh                          
+-a---- 21/07/2026 08:44:22 6044   C:\CentralDark\Pivete\CentralDark\scripts\set-centraldark-gateway.ps1                
+-a---- 21/07/2026 08:44:22 7990   C:\CentralDark\Pivete\CentralDark\scripts\setup-caddy-domains.sh                     
+-a---- 21/07/2026 08:44:22 2764   C:\CentralDark\Pivete\CentralDark\scripts\setup-centraldark-portal.sh                
+-a---- 21/07/2026 08:44:22 8063   C:\CentralDark\Pivete\CentralDark\scripts\smoke-ai-requests.mjs                      
+-a---- 21/07/2026 08:44:22 3742   C:\CentralDark\Pivete\CentralDark\scripts\smoke-hub-apikeys.mjs                      
+-a---- 21/07/2026 08:44:22 4567   C:\CentralDark\Pivete\CentralDark\scripts\socorro-pm2.sh                             
+-a---- 21/07/2026 08:44:22 11612  C:\CentralDark\Pivete\CentralDark\scripts\status-ao-vivo.py                          
+-a---- 21/07/2026 08:44:22 617    C:\CentralDark\Pivete\CentralDark\scripts\status-ao-vivo.sh                          
+-a---- 21/07/2026 08:44:22 1795   C:\CentralDark\Pivete\CentralDark\scripts\sync-bootstrap-public.sh                   
+-a---- 21/07/2026 08:44:22 3027   C:\CentralDark\Pivete\CentralDark\scripts\sync-connections.sh                        
+-a---- 21/07/2026 08:44:22 149    C:\CentralDark\Pivete\CentralDark\scripts\sync-loop.sh                               
+-a---- 21/07/2026 08:44:22 242    C:\CentralDark\Pivete\CentralDark\scripts\sync-memoria.sh                            
+-a---- 21/07/2026 08:44:22 4087   C:\CentralDark\Pivete\CentralDark\scripts\sync-para-centraldark-monorepo.sh          
+-a---- 21/07/2026 08:44:22 2314   C:\CentralDark\Pivete\CentralDark\scripts\test-proxy-anthropic.sh                    
+-a---- 21/07/2026 08:44:22 2890   C:\CentralDark\Pivete\CentralDark\scripts\update-pipeline.py                         
+-a---- 18/08/2026 12:45:15 2884   C:\CentralDark\Pivete\CentralDark\scripts\validar-painel-vivo.mjs                    
+-a---- 21/07/2026 08:44:22 2600   C:\CentralDark\Pivete\CentralDark\scripts\vps-clean-clone-deck-untracked.sh          
+-a---- 21/07/2026 08:44:22 5338   C:\CentralDark\Pivete\CentralDark\scripts\vps-quarantine-duplicate-clones.sh         
+-a---- 21/07/2026 08:44:22 3310   C:\CentralDark\Pivete\CentralDark\scripts\vps-reporter.js                            
+-a---- 21/07/2026 08:44:22 3547   C:\CentralDark\Pivete\CentralDark\scripts\vps-routes-diagnostic-report.sh            
+-a---- 21/07/2026 08:44:22 3854   C:\CentralDark\Pivete\CentralDark\scripts\vps-setup-domains.sh                       
+-a---- 21/07/2026 08:44:22 2341   C:\CentralDark\Pivete\CentralDark\scripts\vps-setup-supabase-sync.sh                 
+-a---- 21/07/2026 08:44:22 2274   C:\CentralDark\Pivete\CentralDark\scripts\vps-setup-telegram-bot.sh                  
+-a---- 21/07/2026 08:44:22 334    C:\CentralDark\Pivete\CentralDark\scripts\watchdog-actions-runner.sh                 
+-a---- 21/07/2026 08:44:17 6663   C:\CentralDark\Pivete\CentralDark\SEGURANCA\AI-PROXY-ARQUITETURA.md                  
+-a---- 21/07/2026 08:44:17 5427   C:\CentralDark\Pivete\CentralDark\SEGURANCA\validate-ai-proxy.sh                     
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\src\apps                                           
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\src\integrations                                   
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\src\lib                                            
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\src\shared                                         
+-a---- 21/07/2026 08:44:22 9783   C:\CentralDark\Pivete\CentralDark\src\App.tsx                                        
+-a---- 21/07/2026 08:44:22 16990  C:\CentralDark\Pivete\CentralDark\src\index.css                                      
+-a---- 21/07/2026 08:44:22 269    C:\CentralDark\Pivete\CentralDark\src\main.tsx                                       
+-a---- 21/07/2026 08:44:22 39     C:\CentralDark\Pivete\CentralDark\src\vite-env.d.ts                                  
+d----- 06/08/2026 17:30:34        C:\CentralDark\Pivete\CentralDark\supabase\.temp                                     
+d----- 06/08/2026 17:30:34        C:\CentralDark\Pivete\CentralDark\supabase\functions                                 
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\supabase\migrations                                
+-a---- 21/07/2026 08:44:22 1694   C:\CentralDark\Pivete\CentralDark\supabase\config.toml                               
+-a---- 21/07/2026 08:44:22 6590   C:\CentralDark\Pivete\CentralDark\tmp-hub-refactor\DashboardLayout.tsx               
+-a---- 21/07/2026 08:44:22 3478   C:\CentralDark\Pivete\CentralDark\tmp-hub-refactor\index.css                         
+d----- 21/07/2026 08:44:22        C:\CentralDark\Pivete\CentralDark\tools\vault-server                                 
+
+

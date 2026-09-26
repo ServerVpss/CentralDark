@@ -1,0 +1,19 @@
+{
+  "package": "CENTRALDARK_SESSION_MASTER_HANDOFF.zip",
+  "zip_sha256": "bbd5e6551c9c186e2546ec741e24b18cf895cea2334613a529567fe4f95b0dcb",
+  "zip_bytes": 12067220,
+  "package_files": 34,
+  "project_instructions_chars": 6033,
+  "internal_validator": [
+    "PASS",
+    "project_instructions_chars=6033",
+    "required_files=34",
+    "hashes=PASS",
+    "nested_zips=PASS"
+  ],
+  "zip_testzip": "PASS",
+  "sidecar_verification": "PASS",
+  "final_remeasurement": "NO_MATERIAL_DELTA_OBSERVED",
+  "fixed_point_scope": "PACKAGE_HANDOFF_ONLY",
+  "final_verdict": "PASS"
+}

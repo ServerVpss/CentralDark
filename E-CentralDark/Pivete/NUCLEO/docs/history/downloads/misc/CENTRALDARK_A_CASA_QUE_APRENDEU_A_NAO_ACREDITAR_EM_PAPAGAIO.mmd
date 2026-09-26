@@ -1,0 +1,30 @@
+flowchart TD
+    CHEFE["SEGREDO / CHEFE<br/>INTENÇÃO"] --> CASA["CENTRALDARK<br/>A CASA"]
+
+    subgraph PERCEPCAO["PERCEPÇÃO E TRIAGEM"]
+        INPUTS["Arquivos • Screens • Conversas • Logs • Eventos"]
+        FILTRO["Triagem / Filtro<br/>ruído → contexto → evidência"]
+        INPUTS --> FILTRO
+    end
+
+    CASA --> PERCEPCAO
+    FILTRO --> ESTADO["Estado Vivo<br/>medição atual"]
+
+    ESTADO --> HERMES["HERMES / PIVETE<br/>execução e preservação"]
+    HERMES --> ACAO["Ação mínima"]
+    ACAO --> EVID["Evidência"]
+    EVID --> CONTRA["Contraprova"]
+    CONTRA --> JUDGE["REALITY JUDGE"]
+
+    JUDGE -->|PASS provado| LEARN["Aprendizado real"]
+    JUDGE -->|FAIL / UNKNOWN| REMED["Remediação / nova hipótese"]
+    REMED --> ESTADO
+
+    LEARN --> MEM["Memória / Grafo<br/>fatos • decisões • causas • provas"]
+    MEM --> TRAJ["Trajetória / Narrativa<br/>EVENTOS → DREAM REVIEW → HISTÓRIA"]
+    TRAJ --> NEXT["NEXT BOOT<br/>LAST_GOOD_STATE"]
+    NEXT --> CASA
+
+    PAP["PAPAGAIO<br/>ruído • eco • repetição"] -. "REPETIÇÃO != COMPREENSÃO" .-> FILTRO
+
+    RULES["INVARIANTES<br/>REALITY = JUDGE<br/>UNKNOWN != PASS<br/>ACTION != PROOF<br/>HISTORY != CURRENT_STATE"] --- JUDGE

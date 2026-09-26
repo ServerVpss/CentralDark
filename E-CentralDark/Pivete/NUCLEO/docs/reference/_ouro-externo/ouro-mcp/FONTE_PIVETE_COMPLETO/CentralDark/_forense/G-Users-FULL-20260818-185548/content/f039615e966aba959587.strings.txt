@@ -1,0 +1,680 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\lang\menu_zh_cn.utf-8.vim
+
+" Menu Translations:    Simplified Chinese
+" Maintainer:           Ada (Haowen) Yu <me@yuhaowen.com>
+" Previous Maintainer:  Shun Bai <baishunde@gmail.com>, Yuheng Xie <elephant@linux.net.cn>
+" Last Change:          2026 Feb 19
+" Original translations
+" Generated with the scripts from:
+"       https://github.com/adaext/vim-menutrans-helper
+" Quit when menu translations have already been done.
+if exists("did_menu_trans")
+  finish
+let did_menu_trans = 1
+let s:keepcpo = &cpo
+set cpo&vim
+scriptencoding utf-8
+" Help menu
+menutrans &Help 
+" Help menuitems and dialog {{{1
+menutrans &Overview<Tab><F1> 
+(&O)<Tab><F1>
+menutrans &User\ Manual 
+menutrans &How-to\ Links 
+menutrans &Find\.\.\. 
+(&F)\.\.\.
+menutrans &Credits 
+menutrans Co&pying 
+menutrans &Sponsor 
+menutrans O&rphans 
+menutrans &Version 
+menutrans &About 
+" fun! s:Helpfind()
+if !exists("g:menutrans_help_dialog")
+  let g:menutrans_help_dialog = "
+: i_CTRL-X)\n
+: c_<Del>)\n
+: 'shiftwidth')"
+" File menu
+menutrans &File 
+" File menuitems {{{1
+menutrans &Open\.\.\.<Tab>:e 
+(&O)\.\.\.<Tab>:e
+menutrans Sp&lit-Open\.\.\.<Tab>:sp 
+(&L)\.\.\.<Tab>:sp
+menutrans Open\ &Tab\.\.\.<Tab>:tabnew 
+(&T)\.\.\.<Tab>:tabnew
+menutrans &New<Tab>:enew 
+(&N)<Tab>:enew
+menutrans &Close<Tab>:close 
+(&C)<Tab>:close
+menutrans &Save<Tab>:w 
+(&S)<Tab>:w
+menutrans Save\ &As\.\.\.<Tab>:sav 
+(&A)\.\.\.<Tab>:sav
+menutrans Split\ &Diff\ With\.\.\. 
+(Diff)(&D)\.\.\.
+menutrans Split\ Patched\ &By\.\.\. 
+(Patch)(&B)\.\.\.
+menutrans &Print 
+menutrans Sa&ve-Exit<Tab>:wqa 
+(&V)<Tab>:wqa
+menutrans E&xit<Tab>:qa 
+(&X)<Tab>:qa
+" Edit menu
+menutrans &Edit 
+" Edit menuitems {{{1
+menutrans &Undo<Tab>u 
+(&U)<Tab>u
+menutrans &Redo<Tab>^R 
+(&R)<Tab>^R
+menutrans Rep&eat<Tab>\. 
+(&E)<Tab>\.
+menutrans Cu&t<Tab>"+x 
+(&T)<Tab>"+x
+menutrans &Copy<Tab>"+y 
+(&C)<Tab>"+y
+menutrans &Paste<Tab>"+gP 
+(&P)<Tab>"+gP
+menutrans Put\ &Before<Tab>[p 
+(&B)<Tab>[p
+menutrans Put\ &After<Tab>]p 
+(&A)<Tab>]p
+menutrans &Delete<Tab>x 
+(&D)<Tab>x
+menutrans &Select\ All<Tab>ggVG 
+(&S)<Tab>ggVG
+menutrans &Find\.\.\. 
+(&F)\.\.\.
+menutrans Find\ and\ Rep&lace\.\.\. 
+(&L)\.\.\.
+menutrans &Find<Tab>/ 
+(&F)<Tab>/
+menutrans Find\ and\ Rep&lace<Tab>:%s 
+(&L)<Tab>:%s
+menutrans Find\ and\ Rep&lace<Tab>:s 
+(&L)<Tab>:s
+menutrans Settings\ &Window 
+menutrans Startup\ &Settings 
+" Edit/Global Settings
+menutrans &Global\ Settings 
+" Edit.Global Settings menuitems and dialogs {{{2
+menutrans Toggle\ Pattern\ &Highlight<Tab>:set\ hls! 
+(&H)<Tab>:set\ hls!
+menutrans Toggle\ &Ignoring\ Case<Tab>:set\ ic! 
+(&I)<Tab>:set\ ic!
+menutrans Toggle\ &Showing\ Matched\ Pairs<Tab>:set\ sm! 
+(&S)<Tab>:set\ sm!
+menutrans &Context\ Lines 
+menutrans &Virtual\ Edit 
+" Edit.Global Settings.Virtual Edit menuitems {{{3
+menutrans Never 
+menutrans Block\ Selection 
+menutrans Insert\ Mode 
+menutrans Block\ and\ Insert 
+menutrans Always 
+menutrans Toggle\ Insert\ &Mode<Tab>:set\ im! 
+(&M)<Tab>:set\ im!
+menutrans Toggle\ Vi\ C&ompatibility<Tab>:set\ cp! 
+\ Vi\ 
+(&O)<Tab>:set\ cp!
+menutrans Search\ &Path\.\.\. 
+(&P)\.\.\.
+menutrans Ta&g\ Files\.\.\. 
+(Tags)(&G)\.\.\.
+" GUI options
+menutrans Toggle\ &Toolbar 
+menutrans Toggle\ &Bottom\ Scrollbar 
+menutrans Toggle\ &Left\ Scrollbar 
+menutrans Toggle\ &Right\ Scrollbar 
+" fun! s:SearchP()
+if !exists("g:menutrans_path_dialog")
+  let g:menutrans_path_dialog = "
+" fun! s:TagFiles()
+if !exists("g:menutrans_tags_dialog")
+  let g:menutrans_tags_dialog = "
+(Tags)
+" Edit/File Settings
+menutrans F&ile\ Settings 
+" Edit.File Settings menuitems and dialogs {{{2
+" Boolean options
+menutrans Toggle\ Line\ &Numbering<Tab>:set\ nu! 
+(&N)<Tab>:set\ nu!
+menutrans Toggle\ Relati&ve\ Line\ Numbering<Tab>:set\ rnu! 
+(&V)<Tab>:set\ rnu!
+menutrans Toggle\ &List\ Mode<Tab>:set\ list! 
+(&L)<Tab>:set\ list!
+menutrans Toggle\ Line\ &Wrapping<Tab>:set\ wrap! 
+(&W)<Tab>:set\ wrap!
+menutrans Toggle\ W&rapping\ at\ Word<Tab>:set\ lbr! 
+(&R)<Tab>:set\ lbr!
+menutrans Toggle\ Tab\ &Expanding<Tab>:set\ et! 
+(&E)<Tab>:set\ et!
+menutrans Toggle\ &Auto\ Indenting<Tab>:set\ ai! 
+(&A)<Tab>:set\ ai!
+menutrans Toggle\ &C-Style\ Indenting<Tab>:set\ cin! 
+(&C)<Tab>:set\ cin!
+" other options
+menutrans &Shiftwidth 
+menutrans Soft\ &Tabstop 
+(Soft\ Tabstop)(&T)
+menutrans Te&xt\ Width\.\.\. 
+(&X)\.\.\.
+menutrans &File\ Format\.\.\. 
+(&F)\.\.\.
+" fun! s:TextWidth()
+if !exists("g:menutrans_textwidth_dialog")
+  let g:menutrans_textwidth_dialog = "
+" fun! s:FileFormat()
+if !exists("g:menutrans_fileformat_dialog")
+  let g:menutrans_fileformat_dialog = "
+if !exists("g:menutrans_fileformat_choices")
+  let g:menutrans_fileformat_choices = "&Unix\n&Dos\n&Mac\n
+menutrans Show\ C&olor\ Schemes\ in\ Menu 
+menutrans C&olor\ Scheme 
+menutrans Show\ &Keymaps\ in\ Menu 
+menutrans &Keymap 
+menutrans Select\ Fo&nt\.\.\. 
+(&N)\.\.\.
+" Programming menu
+menutrans &Tools 
+" Tools menuitems {{{1
+menutrans &Jump\ to\ This\ Tag<Tab>g^] 
+(Tag)(&J)<Tab>g^]
+menutrans Jump\ &Back<Tab>^T 
+(&B)<Tab>^T
+menutrans Build\ &Tags\ File 
+(Tags)(&T)
+" Tools.Spelling Menu
+menutrans &Spelling 
+" Tools.Spelling menuitems and dialog {{{2
+menutrans &Spell\ Check\ On 
+menutrans Spell\ Check\ &Off 
+menutrans To\ &Next\ Error<Tab>]s 
+(&N)<Tab>]s
+menutrans To\ &Previous\ Error<Tab>[s 
+(&P)<Tab>[s
+menutrans Suggest\ &Corrections<Tab>z= 
+(&C)<Tab>z=
+menutrans &Repeat\ Correction<Tab>:spellrepall 
+(&R)<Tab>:spellrepall
+menutrans Set\ Language\ to\ "en" 
+\ "en"
+menutrans Set\ Language\ to\ "en_au" 
+\ "en_au"
+menutrans Set\ Language\ to\ "en_ca" 
+\ "en_ca"
+menutrans Set\ Language\ to\ "en_gb" 
+\ "en_gb"
+menutrans Set\ Language\ to\ "en_nz" 
+\ "en_nz"
+menutrans Set\ Language\ to\ "en_us" 
+\ "en_us"
+menutrans &Find\ More\ Languages 
+" func! s:SpellLang()
+if !exists("g:menutrans_set_lang_to")
+  let g:menutrans_set_lang_to = "
+" Tools.Fold Menu
+menutrans &Folding 
+" Tools.Fold menuitems {{{2
+" open close folds
+menutrans &Enable/Disable\ Folds<Tab>zi 
+(&E)<Tab>zi
+menutrans &View\ Cursor\ Line<Tab>zv 
+(&V)<Tab>zv
+menutrans Vie&w\ Cursor\ Line\ Only<Tab>zMzx 
+(&W)<Tab>zMzx
+menutrans C&lose\ More\ Folds<Tab>zm 
+(&L)<Tab>zm
+menutrans &Close\ All\ Folds<Tab>zM 
+(&C)<Tab>zM
+menutrans O&pen\ More\ Folds<Tab>zr 
+(&P)<Tab>zr
+menutrans &Open\ All\ Folds<Tab>zR 
+(&O)<Tab>zR
+" fold method
+menutrans Fold\ Met&hod 
+" Tools.Fold.Fold Method menuitems {{{3
+menutrans M&anual 
+menutrans I&ndent 
+menutrans E&xpression 
+menutrans S&yntax 
+menutrans &Diff 
+(Diff)(&D)
+menutrans Ma&rker 
+(Marker)(&R)
+" create and delete folds
+menutrans Create\ &Fold<Tab>zf 
+(&F)<Tab>zf
+menutrans &Delete\ Fold<Tab>zd 
+(&D)<Tab>zd
+menutrans Delete\ &All\ Folds<Tab>zD 
+(&A)<Tab>zD
+" moving around in folds
+menutrans Fold\ Col&umn\ Width 
+" Tools.Diff Menu
+menutrans &Diff 
+(Diff)(&D)
+" Tools.Diff menuitems {{{2
+menutrans &Update 
+menutrans &Get\ Block 
+menutrans &Put\ Block 
+menutrans &Make<Tab>:make 
+(Make)(&M)<Tab>:make
+menutrans &List\ Errors<Tab>:cl 
+(&L)<Tab>:cl
+menutrans L&ist\ Messages<Tab>:cl! 
+(&I)<Tab>:cl!
+menutrans &Next\ Error<Tab>:cn 
+(&N)<Tab>:cn
+menutrans &Previous\ Error<Tab>:cp 
+(&P)<Tab>:cp
+menutrans &Older\ List<Tab>:cold 
+(&O)<Tab>:cold
+menutrans N&ewer\ List<Tab>:cnew 
+(&E)<Tab>:cnew
+menutrans Error\ &Window 
+" Tools.Error Window menuitems {{{2
+menutrans &Update<Tab>:cwin 
+(&U)<Tab>:cwin
+menutrans &Open<Tab>:copen 
+(&O)<Tab>:copen
+menutrans &Close<Tab>:cclose 
+(&C)<Tab>:cclose
+menutrans Show\ Compiler\ Se&ttings\ in\ Menu 
+menutrans Se&t\ Compiler 
+menutrans &Convert\ to\ HEX<Tab>:%!xxd 
+(&C)<Tab>:%!xxd
+menutrans Conve&rt\ Back<Tab>:%!xxd\ -r 
+(&R)<Tab>:%!xxd\ -r
+" Buffer menu
+menutrans &Buffers 
+" Buffer menuitems and dialog {{{1
+menutrans &Refresh\ Menu 
+menutrans &Delete 
+menutrans &Alternate 
+menutrans &Next 
+menutrans &Previous 
+" func! s:BMMunge(fname, bnum)
+if !exists("g:menutrans_no_file")
+  let g:menutrans_no_file = "[
+" Window menu
+menutrans &Window 
+" Window menuitems {{{1
+menutrans &New<Tab>^Wn 
+(&N)<Tab>^Wn
+menutrans S&plit<Tab>^Ws 
+(&P)<Tab>^Ws
+menutrans Sp&lit\ To\ #<Tab>^W^^ 
+\ #(&L)<Tab>^W^^
+menutrans Split\ &Vertically<Tab>^Wv 
+(&V)<Tab>^Wv
+menutrans Split\ File\ E&xplorer 
+menutrans &Close<Tab>^Wc 
+(&C)<Tab>^Wc
+menutrans Close\ &Other(s)<Tab>^Wo 
+(&O)<Tab>^Wo
+menutrans Move\ &To 
+menutrans &Top<Tab>^WK 
+(&T)<Tab>^WK
+menutrans &Bottom<Tab>^WJ 
+(&B)<Tab>^WJ
+menutrans &Left\ Side<Tab>^WH 
+(&L)<Tab>^WH
+menutrans &Right\ Side<Tab>^WL 
+(&R)<Tab>^WL
+menutrans Rotate\ &Up<Tab>^WR 
+(&U)<Tab>^WR
+menutrans Rotate\ &Down<Tab>^Wr 
+(&D)<Tab>^Wr
+menutrans &Equal\ Size<Tab>^W= 
+(&E)<Tab>^W=
+menutrans &Max\ Height<Tab>^W_ 
+(&M)<Tab>^W
+menutrans M&in\ Height<Tab>^W1_ 
+(&I)<Tab>^W1_
+menutrans Max\ &Width<Tab>^W\| 
+(&W)<Tab>^W\|
+menutrans Min\ Widt&h<Tab>^W1\| 
+(&H)<Tab>^W1\|
+" The popup menu {{{1
+menutrans &Undo 
+menutrans Cu&t 
+menutrans &Copy 
+menutrans &Paste 
+menutrans &Delete 
+menutrans Select\ Blockwise 
+menutrans Select\ &Word 
+menutrans Select\ &Sentence 
+menutrans Select\ Pa&ragraph 
+menutrans Select\ &Line 
+menutrans Select\ &Block 
+menutrans Select\ &All 
+" func! <SID>SpellPopup()
+if !exists("g:menutrans_spell_change_ARG_to")
+  let g:menutrans_spell_change_ARG_to = '
+\ "%s"\ 
+if !exists("g:menutrans_spell_add_ARG_to_word_list")
+  let g:menutrans_spell_add_ARG_to_word_list = '
+\ "%s"\ 
+if !exists("g:menutrans_spell_ignore_ARG")
+  let g:menutrans_spell_ignore_ARG = '
+\ "%s"'
+" The GUI toolbar {{{1
+if has("toolbar")
+  if exists("*Do_toolbar_tmenu")
+    delfun Do_toolbar_tmenu
+  endif
+  fun Do_toolbar_tmenu()
+    let did_toolbar_tmenu = 1
+    tmenu ToolBar.Open 
+    tmenu ToolBar.Save 
+    tmenu ToolBar.SaveAll 
+    tmenu ToolBar.Print 
+    tmenu ToolBar.Undo 
+    tmenu ToolBar.Redo 
+    tmenu ToolBar.Cut 
+    tmenu ToolBar.Copy 
+    tmenu ToolBar.Paste 
+    if !has("gui_athena")
+      tmenu ToolBar.Replace 
+      tmenu ToolBar.FindNext 
+      tmenu ToolBar.FindPrev 
+    endif
+    tmenu ToolBar.LoadSesn 
+    tmenu ToolBar.SaveSesn 
+    tmenu ToolBar.RunScript 
+    tmenu ToolBar.Make 
+ (:make)
+    tmenu ToolBar.RunCtags 
+(Tags) (!ctags -R .)
+    tmenu ToolBar.TagJump 
+    tmenu ToolBar.Help Vim 
+    tmenu ToolBar.FindHelp 
+  endfun
+" Syntax menu
+menutrans &Syntax 
+" Syntax menuitems {{{1
+menutrans &Show\ File\ Types\ in\ Menu 
+menutrans &Off 
+menutrans &Manual 
+menutrans A&utomatic 
+menutrans On/Off\ for\ &This\ File 
+menutrans Co&lor\ Test 
+menutrans &Highlight\ Test 
+menutrans &Convert\ to\ HTML 
+\ HTML(&C)
+" From synmenu.vim
+menutrans Set\ '&syntax'\ Only 
+\ 'syntax'(&S)
+menutrans Set\ '&filetype'\ Too 
+\ 'filetype'(&F)
+menutrans Oracle\ config Oracle\ 
+menutrans Vim\ help\ file Vim\ 
+menutrans Vim\ script Vim\ 
+menutrans Viminfo\ file Vim\ 
+menutrans Virata\ config Virata\ 
+menutrans Whitespace\ (add) 
+" Netrw menu {{{1
+" Plugin loading may be after menu translation
+" So giveup testing if Netrw Plugin is loaded
+" if exists("g:loaded_netrwPlugin")
+  menutrans Help<tab><F1> 
+<tab><F1>
+  menutrans Bookmarks 
+  menutrans History 
+  menutrans Go\ Up\ Directory<tab>- 
+<tab>-
+  menutrans Apply\ Special\ Viewer<tab>x 
+<tab>x
+  menutrans Bookmarks\ and\ History 
+  " Netrw.Bookmarks and History menuitems {{{2
+  menutrans Bookmark\ Current\ Directory<tab>mb 
+<tab>mb
+  menutrans Bookmark\ Delete 
+  menutrans Goto\ Prev\ Dir\ (History)<tab>u 
+)<tab>u
+  menutrans Goto\ Next\ Dir\ (History)<tab>U 
+)<tab>U
+  menutrans List<tab>qb 
+<tab>qb
+  " }}}
+  menutrans Browsing\ Control 
+  " Netrw.Browsing Control menuitems {{{2
+  menutrans Horizontal\ Split<tab>o 
+<tab>o
+  menutrans Vertical\ Split<tab>v 
+<tab>v
+  menutrans New\ Tab<tab>t 
+<tab>t
+  menutrans Preview<tab>p 
+<tab>p
+  menutrans Edit\ File\ Hiding\ List<tab><ctrl-h> 
+(Hiding\ List)<tab><ctrl-h>
+  menutrans Edit\ Sorting\ Sequence<tab>S 
+(Sorting\ Sequence)<tab>S
+  menutrans Quick\ Hide/Unhide\ Dot\ Files<tab>gh 
+<tab>gh
+  menutrans Refresh\ Listing<tab><ctrl-l> 
+<tab><ctrl-l>
+  menutrans Settings/Options<tab>:NetrwSettings 
+<tab>:NetrwSettings
+  " }}}
+  menutrans Delete\ File/Directory<tab>D 
+<tab>D
+  menutrans Edit\ File/Dir 
+  " Netrw.Edit File menuitems {{{2
+  menutrans Create\ New\ File<tab>% 
+<tab>%
+  menutrans In\ Current\ Window<tab><cr> 
+<tab><cr>
+  menutrans Preview\ File/Directory<tab>p 
+<tab>p
+  menutrans In\ Previous\ Window<tab>P 
+<tab>P
+  menutrans In\ New\ Window<tab>o 
+<tab>o
+  menutrans In\ New\ Tab<tab>t 
+<tab>t
+  menutrans In\ New\ Vertical\ Window<tab>v 
+<tab>v
+  " }}}
+  menutrans Explore 
+  " Netrw.Explore menuitems {{{2
+  menutrans Directory\ Name 
+  menutrans Filenames\ Matching\ Pattern\ (curdir\ only)<tab>:Explore\ */ 
+)<tab>:Explore\ */
+  menutrans Filenames\ Matching\ Pattern\ (+subdirs)<tab>:Explore\ **/ 
+)<tab>:Explore\ **/
+  menutrans Files\ Containing\ String\ Pattern\ (curdir\ only)<tab>:Explore\ *// 
+)<tab>:Explore\ *//
+  menutrans Files\ Containing\ String\ Pattern\ (+subdirs)<tab>:Explore\ **// 
+)<tab>:Explore\ **//
+  menutrans Next\ Match<tab>:Nexplore 
+<tab>:Nexplore
+  menutrans Prev\ Match<tab>:Pexplore 
+<tab>:Pexplore
+  " }}}
+  menutrans Make\ Subdirectory<tab>d 
+<tab>d
+  menutrans Marked\ Files 
+(Marked)
+  " Netrw.Marked Files menuitems {{{2
+  menutrans Mark\ File<tab>mf 
+(Mark)/
+<tab>mf
+  menutrans Mark\ Files\ by\ Regexp<tab>mr 
+(Regexp)
+<tab>mr
+  menutrans Hide-Show-List\ Control<tab>a 
+<tab>a
+  menutrans Copy\ To\ Target<tab>mc 
+<tab>mc
+  menutrans Delete<tab>D 
+<tab>D
+  menutrans Diff<tab>md 
+(Diff)<tab>md
+  menutrans Edit<tab>me 
+<tab>me
+  menutrans Exe\ Cmd<tab>mx 
+<tab>mx
+  menutrans Move\ To\ Target<tab>mm 
+<tab>mm
+  menutrans Obtain<tab>O 
+<tab>O
+  menutrans Print<tab>mp 
+<tab>mp
+  menutrans Replace<tab>R 
+<tab>R
+  menutrans Set\ Target<tab>mt 
+<tab>mt
+  menutrans Tag<tab>mT 
+(Tags)<tab>mT
+  menutrans Zip/Unzip/Compress/Uncompress<tab>mz 
+<tab>mz
+  " }}}
+  menutrans Obtain\ File<tab>O 
+<tab>O
+  menutrans Style 
+  " Netrw.Style menuitems {{{2
+  menutrans Listing 
+  " Netrw.Style.Listing menuitems {{{3
+  menutrans thin<tab>i 
+<thin)<tab>i
+  menutrans long<tab>i 
+(long)<tab>i
+  menutrans wide<tab>i 
+(wide)<tab>i
+  menutrans tree<tab>i 
+(tree)<tab>i
+  " }}}
+  menutrans Normal-Hide-Show 
+  " Netrw.Style.Normal-Hide_show menuitems {{{3
+  menutrans Show\ All<tab>a 
+  menutrans Normal<tab>a 
+  menutrans Hidden\ Only<tab>a 
+  " }}}
+  menutrans Reverse\ Sorting\ Order<tab>r 
+<tab>r
+  menutrans Sorting\ Method 
+  " Netrw.Style.Sorting Method menuitems {{{3
+  menutrans Name<tab>s 
+<tab>s
+  menutrans Time<tab>s 
+<tab>s
+  menutrans Size<tab>s 
+<tab>s
+  menutrans Exten<tab>s 
+<tab>s
+  " }}}
+  " }}}
+  menutrans Rename\ File/Directory<tab>R 
+<tab>R
+  menutrans Set\ Current\ Directory<tab>c 
+\ Vim\ 
+<tab>c
+  menutrans Targets 
+" endif
+" Shellmenu menu
+" Shellmenu menuitems {{{1
+" From shellmenu.vim
+menutrans ShellMenu Shell\ 
+menutrans Statements 
+menutrans Test 
+menutrans Existence 
+menutrans Existence\ -\ file 
+menutrans Existence\ -\ file\ (not\ empty) 
+menutrans Existence\ -\ directory 
+menutrans Existence\ -\ executable 
+menutrans Existence\ -\ readable 
+menutrans Existence\ -\ writable 
+menutrans String\ is\ empty 
+menutrans String\ is\ not\ empty 
+menutrans Strings\ are\ equal 
+menutrans Strings\ are\ not\ equal 
+menutrans Value\ is\ greater\ than 
+menutrans Value\ is\ greater\ equal 
+menutrans Values\ are\ equal 
+menutrans Values\ are\ not\ equal 
+menutrans Value\ is\ less\ than 
+menutrans Value\ is\ less\ equal 
+menutrans ParmSub 
+menutrans Substitute\ word\ if\ parm\ not\ set 
+menutrans Set\ parm\ to\ word\ if\ not\ set 
+menutrans Substitute\ word\ if\ parm\ set\ else\ nothing 
+menutrans If\ parm\ not\ set\ print\ word\ and\ exit 
+menutrans SpShVars Shell\ 
+menutrans Number\ of\ positional\ parameters 
+menutrans All\ positional\ parameters\ (quoted\ spaces) 
+(quoted\ spaces)
+menutrans All\ positional\ parameters\ (unquoted\ spaces) 
+(unquoted\ spaces)
+menutrans Flags\ set 
+menutrans Return\ code\ of\ last\ command 
+menutrans Process\ number\ of\ this\ shell shell\ 
+menutrans Process\ number\ of\ last\ background\ command 
+menutrans Environ 
+menutrans Mark\ created\ or\ modified\ variables\ for\ export 
+menutrans Exit\ when\ command\ returns\ non-zero\ status 
+menutrans Disable\ file\ name\ expansion 
+menutrans Locate\ and\ remember\ commands\ when\ being\ looked\ up 
+menutrans All\ assignment\ statements\ are\ placed\ in\ the\ environment\ for\ a\ command 
+menutrans Read\ commands\ but\ do\ not\ execute\ them 
+menutrans Exit\ after\ reading\ and\ executing\ one\ command 
+menutrans Treat\ unset\ variables\ as\ an\ error\ when\ substituting 
+menutrans Print\ shell\ input\ lines\ as\ they\ are\ read 
+\ shell\ 
+menutrans Print\ commands\ and\ their\ arguments\ as\ they\ are\ executed 
+" termdebug menu
+" termdebug menuitems {{{1
+" From termdebug.vim
+menutrans Set\ breakpoint 
+menutrans Clear\ breakpoint 
+menutrans Run\ until 
+menutrans Evaluate 
+menutrans WinBar 
+menutrans Step 
+menutrans Next 
+menutrans Finish 
+menutrans Cont 
+menutrans Stop 
+" debchangelog menu
+" debchangelog menuitems {{{1
+" From debchangelog.vim
+menutrans &Changelog 
+menutrans &New\ Version 
+menutrans &Add\ Entry 
+menutrans &Close\ Bug 
+\ Bug(&C)
+menutrans Set\ &Distribution 
+menutrans &unstable 
+menutrans Set\ &Urgency 
+menutrans &low 
+menutrans &medium 
+menutrans &high 
+menutrans U&nfinalise 
+menutrans &Finalise 
+" ada menu
+" ada menuitems {{{1
+" From ada.vim
+menutrans Tag 
+menutrans List 
+menutrans Jump 
+menutrans Create\ File 
+menutrans Create\ Dir 
+menutrans Highlight 
+menutrans Toggle\ Space\ Errors 
+menutrans Toggle\ Lines\ Errors 
+menutrans Toggle\ Rainbow\ Color 
+menutrans Toggle\ Standard\ Types 
+" gnat menu
+" gnat menuitems {{{1
+" From gnat.vim
+menutrans Build 
+menutrans Pretty\ Print 
+menutrans Find 
+menutrans Set\ Projectfile\.\.\. 
+\.\.\.
+let &cpo = s:keepcpo
+unlet s:keepcpo
+" vim: set ts=4 sw=4 noet fdm=marker fdc=4 :

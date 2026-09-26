@@ -1,0 +1,664 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\apps\desktop\dist\node_modules\node-pty\build\Release\conpty\conpty.dll
+
+!This program cannot be run in DOS mode.
+!'Xp"&
+!'Xp%&
+!'Xp$&
+!'Op(&
+!'Op!&
+!'Op#&
+!'Rich
+`.rdata
+@.data
+.pdata
+@.rsrc
+@.reloc
+L$ SWH
+\$ UVWAVAWH
+A_A^_^]
+t$ WATAUAVAWH
+tYfD9*tSH
+tpD8*tkH
+tjD8*teH
+trD8*tmH
+tpD8*tkH
+tjD8*teH
+trD8*tmH
+twfD9*tqH
+tqD8*tlH
+t[fD9*tUfD9lr
+ A_A^A]A\_
+SVWAVAWH
+`A_A^_^[
+`A_A^_^[
+`A_A^_^[
+UVWATAUAVAWH
+@A_A^A]A\_^]
+l$ VWAWH
+D$0f9(t
+t&HcL$$HcD$ H
+UVATAUAVH
+~HM9f@t
+H9/s4H
+ A^A]A\^]
+\$ UVWAVAWH
+tGL9;tBA
+ A_A^_^]
+\$ UVWATAUAVAWH
+D$,@8=EH
+|$ AVH
+@USVWATAVAWH
+A_A^A\_^[]
+\$ UVWAVAWH
+0A_A^_^]
+UATAUAVAWH
+A_A^A]A\]
+@SWATAUAVAWH
+xA_A^A]A\_[
+l$pt]H
+UVWATAUAVAWH
+A_A^A]A\_^]
+@UVATAUAVAWH
+HA_A^A]A\^]
+fA92tkM
+UVWAVAWH
+GD$`fD
+A_A^_^]
+\$ VWAVH
+\$ UVWATAUAVAWH
+D9d$(|
+@SVAVAWH
+8A_A^^[
+8A_A^^[
+\$ UVWH
+SVAUAWH
+HA_A]^[
+WAVAWH
+@A_A^_
+@SVAWH
+@SVATAUAVH
+@A^A]A\^[
+@SUVAVH
+8A^^][
+t$ UWATAVAWH
+A_A^A\_]
+@UVWAVH
+8A^_^]
+8A^_^]
+l$ VWAVH
+l$ VWAVH
+@SUVAWH
+HA_^][
+@SUVAVH
+8A^^][
+SVAUAWH
+XA_A]^[
+@SVWAVH
+XA^_^[
+|$ AVH
+8T$(ua
+x ATAVAWH
+A_A^A\
+H;xXu5
+WATAUAVAWH
+A_A^A]A\_
+AUAVAWH
+u4I9}(
+9I9}(tgH
+0A_A^A]
+UVWATAUAVAWH
+`A_A^A]A\_^]
+@USVWATAUAVAWH
+D$h;D$x
+A_A^A]A\_^[]
+@USVWATAUAVAWH
+A_A^A]A\_^[]
+WAVAWH
+ A_A^_
+x ATAVAWH
+ A_A^A\
+x ATAVAWH
+9h@u(D93t#D9
+A_A^A\
+@SVWATAUAVAWH
+A_A^A]A\_^[
+B(I9A(u
+SVWATAUAVAWH
+A_A^A]A\_^[
+UVWATAUAVAWH
+|$hHcX
+ A_A^A]A\_^]
+UVWATAUAVAWH
+ A_A^A]A\_^]
+D$ I;R
+D$ I9P
+WATAUAVAWH
+ A_A^A]A\_
+LcA<E3
+UVWAVAWH
+A_A^_^]
+fffffff
+ffffff
+vKfffff
+fffffff
+fffffff
+|$ AVH
+bad exception
+__based(
+__cdecl
+__stdcall
+__thiscall
+__fastcall
+__vectorcall
+__preserve_none
+__clrcall
+__eabi
+__swift_1
+__swift_2
+__swift_3
+__ptr64
+__restrict
+__unaligned
+restrict(
+ delete
+operator
+`vftable'
+`vbtable'
+`vcall'
+`typeof'
+`local static guard'
+`string'
+`vbase destructor'
+`vector deleting destructor'
+`default constructor closure'
+`scalar deleting destructor'
+`vector constructor iterator'
+`vector destructor iterator'
+`vector vbase constructor iterator'
+`virtual displacement map'
+`eh vector constructor iterator'
+`eh vector destructor iterator'
+`eh vector vbase constructor iterator'
+`copy constructor closure'
+`udt returning'
+`local vftable'
+`local vftable constructor closure'
+ new[]
+ delete[]
+`omni callsig'
+`placement delete closure'
+`placement delete[] closure'
+`managed vector constructor iterator'
+`managed vector destructor iterator'
+`eh vector copy constructor iterator'
+`eh vector vbase copy constructor iterator'
+`dynamic initializer for '
+`dynamic atexit destructor for '
+`vector copy constructor iterator'
+`vector vbase copy constructor iterator'
+`managed vector copy constructor iterator'
+`local static thread guard'
+operator "" 
+operator co_await
+operator<=>
+ Type Descriptor'
+ Base Class Descriptor at (
+ Base Class Array'
+ Class Hierarchy Descriptor'
+ Complete Object Locator'
+`anonymous namespace'
+FlsAlloc
+FlsFree
+FlsGetValue
+FlsSetValue
+InitializeCriticalSectionEx
+bad allocation
+success
+address family not supported
+address in use
+address not available
+already connected
+argument list too long
+argument out of domain
+bad address
+bad file descriptor
+bad message
+broken pipe
+connection aborted
+connection already in progress
+connection refused
+connection reset
+cross device link
+destination address required
+device or resource busy
+directory not empty
+executable format error
+file exists
+file too large
+filename too long
+function not supported
+host unreachable
+identifier removed
+illegal byte sequence
+inappropriate io control operation
+interrupted
+invalid argument
+invalid seek
+io error
+is a directory
+message size
+network down
+network reset
+network unreachable
+no buffer space
+no child process
+no link
+no lock available
+no message available
+no message
+no protocol option
+no space on device
+no stream resources
+no such device or address
+no such device
+no such file or directory
+no such process
+not a directory
+not a socket
+not a stream
+not connected
+not enough memory
+not supported
+operation canceled
+operation in progress
+operation not permitted
+operation not supported
+operation would block
+owner dead
+permission denied
+protocol error
+protocol not supported
+read only file system
+resource deadlock would occur
+resource unavailable try again
+result out of range
+state not recoverable
+stream timeout
+text file busy
+timed out
+too many files open in system
+too many files open
+too many links
+too many symbolic link levels
+value too large
+wrong protocol type
+unknown error
+Unknown exception
+Exception
+ReturnNt
+ReturnHr
+FailFast
+RtlDisownModuleHeapAllocation
+RaiseFailFastException
+WIL Exception
+C:\__w\1\s\packages\Microsoft.Windows.ImplementationLibrary.1.0.240122.1\include\wil\resource.h
+WilError_03
+C:\__w\1\s\src\winconpty\winconpty.cpp
+C:\__w\1\s\packages\Microsoft.Windows.ImplementationLibrary.1.0.240122.1\include\wil\win32_helpers.h
+system
+unknown error
+generic
+exists
+invalid string position
+string too long
+bad array new length
+C:\__w\1\s\src\server\WinNTControl.cpp
+NtOpenFile
+C:\__w\1\s\bin\x64\Release\conpty.pdb
+.text$di
+.text$mn
+.text$mn$00
+.text$mn$21
+.text$x
+.text$yd
+.idata$5
+.00cfg
+.CRT$XCA
+.CRT$XCU
+.CRT$XCZ
+.CRT$XIA
+.CRT$XIZ
+.CRT$XLA
+.CRT$XLZ
+.CRT$XPA
+.CRT$XPZ
+.CRT$XTA
+.CRT$XTZ
+.gfids
+.rdata
+.rdata$00
+.rdata$T
+.rdata$r
+.rdata$voltmd
+.rdata$zzzdbg
+.rtc$IAA
+.rtc$IZZ
+.rtc$TAA
+.rtc$TZZ
+.tls$ZZZ
+.xdata
+.xdata$x
+.edata
+.idata$2
+.idata$3
+.idata$4
+.idata$6
+.data$r
+.data$rs
+.pdata
+.rsrc$01
+.rsrc$02
+conpty.dll
+ClearPseudoConsole
+ClosePseudoConsole
+ConptyClearPseudoConsole
+ConptyClosePseudoConsole
+ConptyCreatePseudoConsole
+ConptyCreatePseudoConsoleAsUser
+ConptyPackPseudoConsole
+ConptyReleasePseudoConsole
+ConptyReparentPseudoConsole
+ConptyResizePseudoConsole
+ConptyShowHidePseudoConsole
+CreatePseudoConsole
+ReleasePseudoConsole
+ResizePseudoConsole
+GetModuleFileNameA
+CreateSemaphoreExW
+HeapFree
+SetLastError
+ReleaseSemaphore
+GetModuleHandleExW
+WaitForSingleObject
+GetCurrentThreadId
+ReleaseMutex
+FormatMessageW
+GetLastError
+OutputDebugStringW
+WaitForSingleObjectEx
+OpenSemaphoreW
+CloseHandle
+HeapAlloc
+GetProcAddress
+CreateMutexExW
+GetCurrentProcessId
+GetProcessHeap
+GetModuleHandleW
+WideCharToMultiByte
+DebugBreak
+IsDebuggerPresent
+api-ms-win-core-libraryloader-l1-2-0.dll
+api-ms-win-core-synch-l1-1-0.dll
+api-ms-win-core-heap-l1-1-0.dll
+api-ms-win-core-errorhandling-l1-1-0.dll
+api-ms-win-core-processthreads-l1-1-0.dll
+api-ms-win-core-localization-l1-2-0.dll
+api-ms-win-core-debug-l1-1-0.dll
+api-ms-win-core-handle-l1-1-0.dll
+api-ms-win-core-string-l1-1-0.dll
+_invalid_parameter_noinfo
+__stdio_common_vswprintf
+_errno
+api-ms-win-crt-runtime-l1-1-0.dll
+api-ms-win-crt-stdio-l1-1-0.dll
+RtlCaptureContext
+RtlLookupFunctionEntry
+RtlVirtualUnwind
+UnhandledExceptionFilter
+SetUnhandledExceptionFilter
+GetCurrentProcess
+TerminateProcess
+IsProcessorFeaturePresent
+QueryPerformanceCounter
+GetSystemTimeAsFileTime
+InitializeSListHead
+RtlUnwindEx
+InterlockedFlushSList
+EncodePointer
+RaiseException
+DeleteCriticalSection
+InitializeCriticalSectionAndSpinCount
+TlsAlloc
+TlsGetValue
+TlsSetValue
+TlsFree
+FreeLibrary
+LoadLibraryExW
+RtlPcToFileHeader
+api-ms-win-core-rtlsupport-l1-1-0.dll
+api-ms-win-core-processthreads-l1-1-1.dll
+api-ms-win-core-profile-l1-1-0.dll
+api-ms-win-core-sysinfo-l1-1-0.dll
+api-ms-win-core-interlocked-l1-1-0.dll
+api-ms-win-core-util-l1-1-0.dll
+terminate
+_seh_filter_dll
+_configure_narrow_argv
+_initialize_narrow_environment
+_initialize_onexit_table
+_register_onexit_function
+_execute_onexit_table
+_crt_atexit
+_cexit
+_initterm
+_initterm_e
+malloc
+strcpy_s
+strlen
+strcmp
+calloc
+wcsncmp
+api-ms-win-crt-heap-l1-1-0.dll
+api-ms-win-crt-string-l1-1-0.dll
+_invoke_watson
+IsWow64Process2
+DeleteProcThreadAttributeList
+CreatePipe
+SetHandleInformation
+InitializeProcThreadAttributeList
+UpdateProcThreadAttribute
+CreateProcessAsUserW
+WriteFile
+DuplicateHandle
+GetSystemDirectoryW
+K32GetModuleFileNameExW
+GetModuleFileNameW
+CreateFileW
+FindClose
+FindFirstFileW
+GetFileAttributesExW
+AreFileApisANSI
+GetFileInformationByHandleEx
+FormatMessageA
+LocalFree
+GetLocaleInfoEx
+ReleaseSRWLockExclusive
+AcquireSRWLockExclusive
+WakeAllConditionVariable
+SleepConditionVariableSRW
+api-ms-win-core-wow64-l1-1-1.dll
+api-ms-win-core-namedpipe-l1-1-0.dll
+api-ms-win-core-file-l1-1-0.dll
+api-ms-win-core-psapi-l1-1-0.dll
+api-ms-win-core-file-l1-2-2.dll
+api-ms-win-core-file-l2-1-0.dll
+api-ms-win-core-heap-l2-1-0.dll
+api-ms-win-core-synch-l1-2-0.dll
+___lc_codepage_func
+_callnewh
+api-ms-win-crt-locale-l1-1-0.dll
+.?AVbad_exception@std@@
+.?AVlogic_error@std@@
+.?AVlength_error@std@@
+.?AVout_of_range@std@@
+.?AVbad_alloc@std@@
+.?AVResultException@wil@@
+.?AVexception@std@@
+.?AVfilesystem_error@filesystem@std@@
+.?AVsystem_error@std@@
+.?AV_System_error@std@@
+.?AVruntime_error@std@@
+.?AVbad_array_new_length@std@@
+.?AVtype_info@@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<assembly xmlns='urn:schemas-microsoft-com:asm.v1' manifestVersion='1.0'>
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level='asInvoker' uiAccess='false' />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+</assembly>
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 20110
+250619182137Z
+260617182137Z0t1
+Washington1
+Redmond1
+Microsoft Corporation1
+Microsoft Corporation0
+Microsoft Corporation1
+230012+5053590
+Chttp://www.microsoft.com/pkiops/crl/MicCodSigPCA2011_2011-07-08.crl0a
+Ehttp://www.microsoft.com/pkiops/certs/MicCodSigPCA2011_2011-07-08.crt0
+Washington1
+Redmond1
+Microsoft Corporation1200
+)Microsoft Root Certificate Authority 20110
+110708205909Z
+260708210909Z0~1
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 20110
+Ihttp://crl.microsoft.com/pki/crl/products/MicRooCerAut2011_2011_03_22.crl0^
+Bhttp://www.microsoft.com/pki/certs/MicRooCerAut2011_2011_03_22.crt0
+3http://www.microsoft.com/pkiops/docs/primarycps.htm0@
+*?*kXIc
+QEX82q'
+WqVNHE
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 2011
+http://www.microsoft.com0
+20251009021400.845Z0
+Washington1
+Redmond1
+Microsoft Corporation1%0#
+Microsoft America Operations1'0%
+nShield TSS ESN:A400-05E0-D9471%0#
+Microsoft Time-Stamp Service
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+250130194244Z
+260422194244Z0
+Washington1
+Redmond1
+Microsoft Corporation1%0#
+Microsoft America Operations1'0%
+nShield TSS ESN:A400-05E0-D9471%0#
+Microsoft Time-Stamp Service0
+Nhttp://www.microsoft.com/pkiops/crl/Microsoft%20Time-Stamp%20PCA%202010(1).crl0l
+Phttp://www.microsoft.com/pkiops/certs/Microsoft%20Time-Stamp%20PCA%202010(1).crt0
+VUPg*M
+>r#p.H
+Washington1
+Redmond1
+Microsoft Corporation1200
+)Microsoft Root Certificate Authority 20100
+210930182225Z
+300930183225Z0|1
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+3http://www.microsoft.com/pkiops/Docs/Repository.htm0
+Ehttp://crl.microsoft.com/pki/crl/products/MicRooCerAut_2010-06-23.crl0Z
+>http://www.microsoft.com/pki/certs/MicRooCerAut_2010-06-23.crt0
+as.,k{n?,
+Washington1
+Redmond1
+Microsoft Corporation1%0#
+Microsoft America Operations1'0%
+nShield TSS ESN:A400-05E0-D9471%0#
+Microsoft Time-Stamp Service
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+20251008235012Z
+20251009235012Z0t0:
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 2010
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 2010
+iZ.}1|
+op}*ES,%
+api-ms-win-core-fibers-l1-1-1
+api-ms-win-core-synch-l1-2-0
+kernel32
+api-ms-
+!x-sys-default-locale
+%hs(%u)\%hs!%p: 
+%hs!%p: 
+(caller: %p) 
+%hs(%d) tid(%x) %08X %ws
+Msg:[%ws] 
+CallContext:[%hs] 
+[%hs(%hs)]
+ntdll.dll
+kernelbase.dll
+std::exception: %hs
+Local\SM0:%lu:%lu:%hs
+\conhost.exe
+OpenConsole.exe
+\Reference
+--textMeasurement graphemes 
+--textMeasurement wcswidth 
+--textMeasurement console 
+--inheritcursor 
+"%s" --headless %s%s--width %hd --height %hd --signal 0x%tx --server 0x%tx
+\Device\ConDrv\Server
+VS_VERSION_INFO
+StringFileInfo
+040904b0
+CompanyName
+Microsoft Corporation
+FileDescription
+ConPTY Interface Library
+FileVersion
+1.23.2510.08001
+InternalName
+winconptydll
+LegalCopyright
+Microsoft Corporation.  All rights reserved.
+OriginalFilename
+conpty.dll
+ProductVersion
+1.23.251008001
+ProductName
+Windows Terminal
+VarFileInfo
+Translation
+Legal_policy_statement
+Microsof

@@ -1,0 +1,14 @@
+{
+  "name": "qa-skillmaster",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "verify": "node runtime/orchestrator.mjs --verify",
+    "demo": "node runtime/orchestrator.mjs",
+    "self-map": "node runtime/orchestrator.mjs --self-map"
+  }
+}

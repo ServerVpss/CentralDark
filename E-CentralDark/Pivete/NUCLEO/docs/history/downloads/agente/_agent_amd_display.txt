@@ -1,0 +1,176 @@
+VEREDITO AMD DISPLAY — SEGREDO / danda — 2026-08-22 (somente leitura)
+GPU: Radeon RX 580 Series  driver 31.0.21924.61  Adrenalin 26.1.1
+Adapter: HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000
+Chave 0001: NAO EXISTE
+
+================================================================
+1) PROCESSOS AMD AGORA
+================================================================
+LIGADOS (nao ha Radeon Software / CN / overlay):
+  amdfendrsr.exe  PID 3752  sessao 0
+    servico: AMD Crash Defender Service (Auto)
+    PathName: C:\WINDOWS\System32\amdfendrsr.exe
+    CommandLine: inacessivel (processo protegido)
+  atiesrxx.exe    PID 3812  sessao 0
+    servico: AMD External Events Utility (Auto)
+    PathName: C:\WINDOWS\System32\DriverStore\FileRepository\u0197843.inf_amd64_82ec9e2b79afe28f\B025592\atiesrxx.exe
+    CommandLine: inacessivel
+  atieclxx.exe    PID 17456 sessao 2  (helper do External Events)
+    Path: mesmo FileRepository\...\atieclxx.exe
+    CommandLine: inacessivel
+
+DESLIGADOS (confirmado por Get-Process + tasklist):
+  RadeonSoftware.exe, AMDRSServ.exe, AMDRSSrcExt.exe, amdow.exe,
+  cncmd.exe, EyefinityPro.exe, CCC / CNext UI
+Binarios EXISTEM em C:\Program Files\AMD\CNext\CNext\ mas nao estao em execucao.
+dwm.exe esta a correr (compositor Windows, nao e AMD).
+
+Conclusao: painel Adrenalin NAO esta aberto; nao ha servico RS a aplicar
+RIS/VSR/Eyefinity em runtime alem do que o KMD/DAL ja persistiu no registo.
+
+================================================================
+2) VALORES CURRENT (nao so _NA/_DEF) — Class\0000
+================================================================
+PRESENTES:
+  DALGameGammaScale                  = 6579300  (0x646464 = 100,100,100 → escala 1.00, DEFAULT)
+  DalAllowAutoVSROnEmbeddedDisplay   = 1        (flag de portatil/eDP; RX 580 e desktop)
+  KMD_SlsConfigCount                 = 0        (ZERO configs Eyefinity/SLS)
+  EnableSlsSupport                   = 28       (0x1C, bitmask de CAPACIDADE, nao “ligado”)
+  IntegerScalingPerAppSupport        = 1        (capacidade per-app, nao estado ON)
+  imagesharpening_runtime_component_na = false  (UI/componente EXISTE)
+  ColorVibrance_NA                   = 0        (recurso disponivel)
+  DynamicContrast_NA                 = 0        (recurso disponivel)
+  Gamma_NA                           = 1        (controlo gamma desktop NA)
+  StaticGamma_NA                     = 0
+  ColourDesktopGamma_DEF             = 1.0 1.0 1.0
+  ColourDesktopContrast_DEF          = 1.0 1.0 1.0
+  ColourDesktopBrightness_DEF        = 0 0 0
+
+AUSENTES (nao ha valor CURRENT persistido → driver usa default / OFF):
+  ColourDesktopGamma, ColourDesktopContrast, ColourDesktopBrightness
+  ImageSharpening, RSSharpening, DalMnImageSharpening
+  EnableVSR, DalEnableVSR, KMD_EnableVSR, VirtualSuperResolution
+  GPUScaling, Scaling, DalEnableGPUScaling, EnableGPUScaling
+  Eyefinity, SLS, SLSEnabled, SLSGrid, Bezel, Topology, EyefinityEnabled
+  ColorVibrance (desktop), DynamicContrast (desktop), IntegerScaling
+  CAS, RIS, RadeonImageSharpening
+
+UMD (3D): sem ImageSharpening / VSR / GPUScaling / IntegerScaling / ColorVibrance.
+  Main3D=3  GI=1  Tessellation=64  (defaults de qualidade, nao RIS)
+
+DAL2_DATA__2_0 (cor/escala por saida) — 4 fontes independentes:
+  MappingInfo_Source_0→DisplayPath_0
+  MappingInfo_Source_1→DisplayPath_4
+  MappingInfo_Source_2→DisplayPath_9
+  MappingInfo_Source_3→DisplayPath_8
+  Em Adjustment (paths 0/4/8/9):
+    Brightness=0  Contrast=100  Saturation=100  Hue=0  Temperature=6500K
+    (tudo DEFAULT; 6500K = D65, nao “branco frio” tipo 9300K)
+  BestViewOption=1 (default)
+  BestViewOption_Hdmi=3 nos paths 8 e 9 (escala/overscan HDMI, tipico 0% overscan)
+  Sem chaves Sharpen/VSR/SLS/Eyefinity/Bezel no DAL2.
+
+UMD\DXVA (pipeline de VIDEO, nao o desktop inteiro):
+  ColorVibrance=40  ColorVibrance_ENABLE=1     LIGADO (default AMD video)
+  BlueStretch=1     BlueStretch_ENABLE=1       LIGADO (default; empurra azul/branco no video)
+  DynamicContrast_ENABLE=0                     DESLIGADO
+  StaticGamma=100   StaticGamma_ENABLE=0       DESLIGADO
+  Detail_ENABLE=0   SharpnessValue=vazio       DESLIGADO
+  TrueWhite=0  Fleshtone_ENABLE=0  Denoise_ENABLE=0
+
+================================================================
+3) SOFTWARE\AMD e SOFTWARE\ATI (HKLM/HKCU)
+================================================================
+Nenhum valor CURRENT de Eyefinity / SLS / Surround / VSR / Sharpen / RIS / CAS
+encontrado como “ligado”.
+Unico rasto VSR: HKCU\SOFTWARE\AMD\CN\VirtualSuperResolution\AlreadyNotified=1
+  (so “ja mostrou o toast”, NAO ativa VSR).
+HKCU\SOFTWARE\AMD\CN\WizardProfile=PROFILE_PERFORMANCE (escolha do wizard; nao e RIS/VSR).
+HKCU\SOFTWARE\ATI\ACE\Settings quase vazio (Language=pt_BR).
+Sem perfil ACE/ADL de Eyefinity.
+
+================================================================
+4) TOPOLOGIA WINDOWS — 4 ecras INDEPENDENTES, nao Eyefinity
+================================================================
+SM_CXSCREEN=1080  SM_CYSCREEN=1920  (primario em RETRATO)
+SM_CMONITORS=4
+SM_CXVIRTUALSCREEN=4920  SM_CYVIRTUALSCREEN=2862
+SM_XVIRTUALSCREEN=-3840  SM_YVIRTUALSCREEN=-942
+SM_SAMEDISPLAYFORMAT=1
+
+WinForms Screen (4 dispositivos GDI distintos, nao 1 painel SLS):
+  \\.\DISPLAY1 PRIMARY  1080x1920  (0,0)        retrato
+  \\.\DISPLAY2          1920x1080  (-2279,-942)
+  \\.\DISPLAY3          1920x1080  (-1920,139)
+  \\.\DISPLAY4          1920x1080  (-3840,138)
+
+Monitores PnP ativos:
+  AOC 24G2W1G4  SN ATNMBXA002919
+  LG FULL HD    SN 16843009
+  DELL S2421HN  SN 4JD4DQ3
+  AOC 24G2W1G4  SN ATNM4XA002193
+
+KMD_SlsConfigCount=0 + 4 DISPLAY* + 4 MappingInfo_Source = NAO ha desktop
+unico “spanned” tipo Eyefinity. CCD Configuration/Connectivity: acesso negado;
+QDC nativo nao compilou a tempo. A evidencia GDI/WMI/DAL2 e suficiente.
+
+DPI: AppliedDPI=96, Graphics DpiX/Y=96, Win8DpiScaling=0.
+Per-monitor AOC atuais DpiValue=0 (100%). Residual CL@0C5E0 DpiValue=-2 (150%)
+e SAM7017 ScaleFactors=-5 parecem monitores ANTIGOS, nao os 4 atuais.
+QueryDisplayConfig (scaling IDENTITY vs STRETCHED): NAO AMOSTRADO (timeout).
+
+ICM: monitor class 0000 tem ICMProfile=CalibratedDisplayProfile-0.icc
+  (snapshot HKCU UsePerUserProfiles=1). Ficheiro SEM tag vcgt (nao carrega
+  rampa no DAC). CalibrationManagementEnabled=0. Nao explica rampa de video-card.
+  ACER_S271HL.icm esta num monitor class 0003 residual, nao nos 4 atuais.
+
+Rampa GDI GetDeviceGammaRamp: NAO AMOSTRADA (Add-Type/csc timeout).
+Pelo DAL2, gamma desktop esta em default.
+
+================================================================
+5) LIGADO vs DESLIGADO — o que explica “escala gigante + branco forte”
+================================================================
+DESLIGADO / NAO ATIVO (nao explica o sintoma):
+  Eyefinity / SLS / Surround / Bezel     OFF (SlsConfigCount=0, 4 ecras GDI)
+  Virtual Super Resolution (VSR)         OFF (sem EnableVSR/DalEnableVSR)
+  Radeon Image Sharpening / RIS / CAS    OFF (sem ImageSharpening/RSSharpening)
+  Integer Scaling                        OFF (so flag de suporte=1)
+  GPU Scaling persistido                 NAO (sem DalEnableGPUScaling; BestView default)
+  Dynamic Contrast (video e desktop)     OFF
+  Gamma/contraste/brilho desktop AMD     DEFAULT (1.0 / 100 / 0, 6500K)
+  Painel AMD Software / AMDRSServ        NAO a correr
+
+LIGADO (mas NAO faz 4 monitores virarem um “painel gigante”):
+  Color Vibrance VIDEO=40 ENABLE=1       default do decoder; afeta VIDEO, nao o DWM
+  Blue Stretch VIDEO ENABLE=1            default; pode deixar video mais “branco/azul”
+  DalAllowAutoVSROnEmbeddedDisplay=1     irrelevante neste desktop
+  EnableSlsSupport=28                    so capacidade
+  Wizard PROFILE_PERFORMANCE             so perfil inicial do Adrenalin
+
+O QUE REALMENTE BATE COM O SINTOMA:
+  “Escala gigante” NAO e Eyefinity nem VSR. O Windows ve 4 displays independentes.
+  O desktop virtual e enorme (4920x2862) porque ha 4 paineis + primario em RETRATO
+  1080x1920 (SM_CXSCREEN=1080). Apps que usam o primario ou o rectangulo virtual
+  inteiro parecem “gigantes” / mal escaladas. Layout com origens negativas e
+  DISPLAY2 “acima” (Y=-942) aumenta a area virtual.
+  GPU Scaling HDMI=3 no maximo preenche o painel HDMI (overscan 0%); a 1920x1080
+  nativo nao cria super-resolucao nem um span.
+
+  “Branco forte / gamma de camera / nitidez”:
+  - NAO vem de RIS/CAS (off) nem de gamma desktop AMD (default).
+  - NAO vem de Dynamic Contrast (off).
+  - Color Vibrance + Blue Stretch LIGADOS no DXVA podem dar video “camera/HDR”
+    (brancos/azuis empurrados), mas so em reproducao de video.
+  - Perfil ICM CalibratedDisplayProfile-0.icc esta associado mas sem vcgt;
+    pouco provavel como rampa global.
+  - Causa mais provavel do “branco forte” no DESKTOP: OSD dos proprios
+    monitores (AOC 24G2 Game/FPS mode, Overdrive, Low Blue Light off, contraste
+    alto) ou Night Light/WCS — Night Light keys existem mas o blob nao foi
+    lido. Nao e um efeito Eyefinity/VSR/RIS ativo.
+
+RESUMO NUMA FRASE:
+  Nenhum de Eyefinity, VSR, GPU Scaling, Integer Scaling, RIS/CAS ou Dynamic
+  Contrast esta ATIVO como feature AMD a fundir ou agucar os 4 ecras; o
+  “gigante” e layout Windows 4x independente + primario retrato; o “branco
+  forte” nao esta no gamma DAL desktop (default). So o video AMD tem
+  Color Vibrance + Blue Stretch ON (defaults).

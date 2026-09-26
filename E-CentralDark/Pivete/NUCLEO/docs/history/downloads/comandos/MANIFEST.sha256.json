@@ -1,0 +1,70 @@
+{
+  "package": "CentralDark-Runtime-Closed-Loop-01",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "1c83264caf1b21024a366249b98d766f700ef93ebee0c188f83081f16119e743",
+      "bytes": 1833
+    },
+    {
+      "path": "config/model-routing.yaml",
+      "sha256": "bbcd51a13bff0796490cf8dd56d7ed00aa289994c860216d06d817dbbde39628",
+      "bytes": 1248
+    },
+    {
+      "path": "docs/DETECTORS.md",
+      "sha256": "4860a26b0cd9897a5da9dbb7a683b3c57b83b7e5a75140a5f18f9eab30d391e4",
+      "bytes": 964
+    },
+    {
+      "path": "docs/IMPLEMENTATION-GATES.md",
+      "sha256": "8a3918b2ecac0ded5a911dc93d4f40246064c5d94c42784d2fb73c6e99f7bbf6",
+      "bytes": 899
+    },
+    {
+      "path": "docs/MODEL-DECISION.md",
+      "sha256": "df4fb0b82569f083146df84d574274019261aa6d6f6dac8b882988e1f6b01499",
+      "bytes": 751
+    },
+    {
+      "path": "prompts/00-master-orchestrator.md",
+      "sha256": "a4e9a7e8cf9f40efa35b87dd61f9343aad53319358ce34d2e16fc50f63d99fab",
+      "bytes": 2239
+    },
+    {
+      "path": "prompts/01-local-triage.md",
+      "sha256": "85fb5f689d2a3702014bfdd3fd46670ccc299ff8b63079354e0a50988ada816f",
+      "bytes": 741
+    },
+    {
+      "path": "prompts/02-frontier-agent.md",
+      "sha256": "7ae2615c42723e9ec6c33d8c72b69efb504c1cf4c36223e6c8c7b3b363eca17d",
+      "bytes": 504
+    },
+    {
+      "path": "prompts/03-independent-judge.md",
+      "sha256": "9579e38e7d152e5d8cdf380a5e65d86f607529f2ff6be66b747d8cb56265a662",
+      "bytes": 600
+    },
+    {
+      "path": "schemas/finding.schema.json",
+      "sha256": "d90e4e2647f95aa4970d86ea375a939e0aad8ec2fc52fdbf0cb5d7ff2337f11e",
+      "bytes": 859
+    },
+    {
+      "path": "schemas/runtime-receipt.schema.json",
+      "sha256": "ccdfafae3a2a3ea551ce79a791750882b8ca10b8e477a9ace89f755fe9490700",
+      "bytes": 1706
+    },
+    {
+      "path": "scripts/00-discovery-readonly.sh",
+      "sha256": "3bd67dcedfab431530859aa48ef64266d59f86839f20fcb077baa175cae56334",
+      "bytes": 3299
+    },
+    {
+      "path": "scripts/01-model-runtime-probe.sh",
+      "sha256": "08ed3470680b37764fd632e899f4283fc26fad81351f066b70868d99f2afe26a",
+      "bytes": 1838
+    }
+  ]
+}

@@ -1,0 +1,565 @@
+/**
+ * MCP tool registry. As of v0.10.8 the advertised surface is composed
+ * from four sibling slices:
+ *
+ *   - Core read/health tools (`second_brain_status`,
+ *     `second_brain_query`, `vault_health`) — defined inline in this
+ *     file because they only need `ServerContext` and the shared
+ *     coercion helpers.
+ *   - Brain tools (`brain_feedback`, `brain_apply_evidence`,
+ *     `brain_note`, `brain_dream`, `brain_digest`, `brain_query`,
+ *     `brain_doctor`, `brain_backlinks`) — `./brain-tools.ts`
+ *     (`BRAIN_TOOLS`).
+ *   - Brain Search (`brain_search`) — `./search-tools.ts`
+ *     (`SEARCH_TOOLS`).
+ *   - Brain schema administration (`schema_*`) — `./schema-tools.ts`
+ *     (`SCHEMA_TOOLS`).
+ *   - Brain watchdog recovery probes (`brain_watchdog`) —
+ *     `./watchdog-tools.ts` (`WATCHDOG_TOOLS`).
+ *
+ * Each slice owns its own handlers and tool definitions; this file
+ * only assembles them in a stable order and applies scope filtering.
+ */
+
+import {
+  ConfigReadError,
+  discoverConfig,
+  redactMapping,
+  resolveExposeHostPaths,
+  vaultStoreReference,
+} from "../core/config.ts";
+import type { ConfigDiscovery } from "../core/types.ts";
+import { REMOVED_TOOLS } from "../core/removed-surfaces.ts";
+import { computeBrainStatus } from "../core/brain/status.ts";
+import { doctor } from "../core/doctor.ts";
+import { nextCommandField } from "../core/brain/next-step.ts";
+import { collectRuntimeNotices } from "../core/brain/runtime-notices.ts";
+import { probeVaultDirectory, type UnresolvedField } from "../core/vault-presence.ts";
+import { resolveVaultScope, walkVaultScope } from "../core/vault-scope/index.ts";
+import { BRAIN_TOOLS } from "./brain-tools.ts";
+import { SEARCH_TOOLS, buildSearchStatusBlock } from "./search-tools.ts";
+import { SCHEMA_TOOLS } from "./schema-tools.ts";
+import { WATCHDOG_TOOLS } from "./watchdog-tools.ts";
+import { SKILL_TOOLS } from "./skill-tools.ts";
+import { buildHydrateTool, TOOL_HYDRATE_NAME } from "./hydrate-tool.ts";
+import { normalizeAgentArgument, PLACEHOLDER_AGENT_VALUES } from "../core/agent-identity.ts";
+import { vaultRelative } from "../core/path-safety.ts";
+import { isOwnerVisible, normalizeAgentScope, pageOwner } from "../core/graph/agent-scope.ts";
+import { listVaultPages } from "../core/vault.ts";
+import { DEGRADATION_CODE, type DegradationNotice } from "../core/integrity/degradation.ts";
+import { INVALID_PARAMS, METHOD_NOT_FOUND, MCPError } from "./protocol.ts";
+import { AGENT_SCOPE_SCHEMA, coerceAgentScope, coerceStr, coerceInt } from "./coerce.ts";
+import type { OutputSchema } from "./output-contract.ts";
+import { MCP_PREVIEW_BUDGET } from "./preview-budget.ts";
+import { CAPABILITY_DIAGNOSTIC_TOOL } from "./capabilities.ts";
+import type {
+  ServerContext,
+  ToolCapabilityReport,
+  ToolDefinition,
+  ToolScope,
+} from "./tool-contract.ts";
+
+// PLACEHOLDER_AGENT_VALUES + normalizeAgentArgument live in
+// `src/core/agent-identity.ts` so the OpenClaw native plugin can import
+// the same constants without reaching across to the MCP module. Re-exported
+// at the bottom of this file for callers that previously imported them
+// from here.
+
+/**
+ * Wrapper that swallows path-escape errors and returns the raw input —
+ * used in tool *output* paths where we'd rather hand back the unsafe
+ * string than throw mid-render. Keep this as a separate verb so callers
+ * deliberately opt into the lenient behaviour.
+ */
+function vaultRelpath(target: string, vault: string): string {
+  try {
+    return vaultRelative(target, vault);
+  } catch {
+    return target;
+  }
+}
+
+/**
+ * A field whose value could not be resolved, carrying the reason. Same
+ * shape `toolStatus` already degrades the `vault` block to when the vault
+ * scope cannot be resolved, and `buildSearchStatusBlock` its own: the
+ * failure is a value the consumer reads, never a key it has to notice is
+ * missing.
+ */
+
+function unresolved(err: Error): UnresolvedField {
+  return { error: err.message };
+}
+
+/**
+ * The `vault_path` field for an MCP response. By default this is the
+ * opaque, stable store reference (`vault://<hex>`) rather than the
+ * absolute host path, since MCP responses land in model context. The
+ * `expose_host_paths` config escape hatch restores the raw path for
+ * operators whose tooling depends on it (D2).
+ *
+ * Both branches read the device-local config - the escape hatch is a
+ * config flag and the reference is keyed by a config-held secret - so an
+ * unreadable config leaves this field, and ONLY this field, unresolvable.
+ * It reports the reason rather than raising, because raising here took
+ * down whole diagnostic payloads on their very last field. Degrading to
+ * the raw host path instead would breach the redaction contract this
+ * function exists to enforce, so there is no value to fall back to.
+ */
+function vaultPathField(ctx: ServerContext): string | UnresolvedField {
+  const configPath = ctx.configPath ?? undefined;
+  try {
+    return resolveExposeHostPaths(configPath)
+      ? ctx.vault
+      : vaultStoreReference(ctx.vault, configPath);
+  } catch (err) {
+    if (err instanceof ConfigReadError) return unresolved(err);
+    throw err;
+  }
+}
+
+// ── Tool implementations ────────────────────────────────────────────────────
+
+/**
+ * `discoverConfig`, or the reason it could not answer.
+ *
+ * `second_brain_status` exists to report what this install sees in its
+ * config, so a config it cannot read is the tool's SUBJECT, not a reason to
+ * fail: raising here cost the caller `config_path`, `config_exists`,
+ * `config_keys` and `config` - every field that answers the question - and
+ * returned an error naming nothing the operator could act on beyond what
+ * the payload would have said anyway.
+ */
+function discoverConfigOrReason(configPath: string | undefined): ConfigDiscovery | ConfigReadError {
+  try {
+    return discoverConfig(configPath);
+  } catch (err) {
+    if (err instanceof ConfigReadError) return err;
+    throw err;
+  }
+}
+
+async function toolStatus(ctx: ServerContext): Promise<Record<string, unknown>> {
+  const discovered = discoverConfigOrReason(ctx.configPath ?? undefined);
+  const broken = discovered instanceof ConfigReadError ? discovered : null;
+  // `exists: true` on the broken branch is the whole point of the read
+  // split: the file IS there, and `false` would say this install was never
+  // configured. `config_keys` and `config` cannot be known, so they carry
+  // the reason rather than an empty list an agent would read as "no keys".
+  const discovery: ConfigDiscovery =
+    broken === null
+      ? (discovered as ConfigDiscovery)
+      : { path: broken.path, exists: true, data: {} };
+  // Three blocks below are gated on this answer, and on the UNEXAMINABLE
+  // branch each is built carrying the reason rather than skipped: an
+  // omitted block reads as the same confident negative the bare `false`
+  // did, which is precisely what the probe could not determine. The absent
+  // branch keeps omitting them, because there the omission IS the answer.
+  const { present: vaultExists, unexaminable } = probeVaultDirectory(ctx.vault);
+  const configKeys = broken === null ? Object.keys(discovery.data).toSorted() : unresolved(broken);
+  // Safe to call on a vault that has no Brain layer yet — returns
+  // `present: false` with zero counts.
+  const brain = vaultExists ? computeBrainStatus(ctx.vault) : unexaminable;
+  // On the broken branch this gate is unresolvable, so the block is built
+  // rather than skipped: `buildSearchStatusBlock` resolves its own config
+  // and degrades to `{ exists: false, error }` naming the same file. A skip
+  // would have been the silent omission - a missing block reads as "search
+  // is off", which is exactly the answer the gate could not give.
+  const searchDisabled = discovery.data["search_enabled"] === "false";
+  const search = searchDisabled
+    ? null
+    : vaultExists
+      ? await buildSearchStatusBlock(ctx)
+      : unexaminable;
+  // v0.10.9 — `vault` block exposes the shared exclusion policy plus
+  // aggregate include/exclude counts. Per-path detail lives in the CLI
+  // (`o2b vault status`); MCP payloads stay small.
+  //
+  // `resolveVaultScope` fails closed when `_brain.yaml` is malformed
+  // (design §5) — the right call for walkers that would otherwise
+  // silently drop the operator's policy. But this MCP tool is a
+  // read-only diagnostic, and the operator wants the brain / search /
+  // config blocks visible even when the vault scope cannot be
+  // resolved. Catch and degrade to `{ error: "..." }` instead of
+  // taking the whole `second_brain_status` payload down with it.
+  let vault: Record<string, unknown> | UnresolvedField | null = unexaminable;
+  if (vaultExists) {
+    try {
+      const scope = resolveVaultScope(ctx.vault);
+      const walk = walkVaultScope(ctx.vault, scope);
+      vault = {
+        ignore_source: scope.source,
+        rules: scope.rules.map((r) => ({ raw: r.raw, kind: r.kind })),
+        included: { files: walk.includedFiles, dirs: walk.includedDirs },
+        excluded: {
+          dirs: walk.excludedDirs.length,
+          files: walk.excludedFiles.length,
+        },
+      };
+    } catch (err) {
+      vault = { error: (err as Error)?.message ?? String(err) };
+    }
+  }
+  return {
+    config_path: String(discovery.path),
+    config_exists: discovery.exists,
+    config_keys: configKeys,
+    config: broken === null ? redactMapping(discovery.data) : unresolved(broken),
+    vault_path: vaultPathField(ctx),
+    // `boolean | { error }`. Both answerable cases keep their exact literal
+    // - `true` when the directory is there, `false` when it is genuinely
+    // not - and the third value exists only for the case that previously
+    // impersonated the second.
+    vault_exists: unexaminable ?? vaultExists,
+    ...(vault ? { vault } : {}),
+    ...(brain ? { brain } : {}),
+    ...(search ? { search } : {}),
+  };
+}
+
+async function toolQuery(
+  ctx: ServerContext,
+  args: Record<string, unknown>,
+): Promise<Record<string, unknown>> {
+  // Refusing either way, but not with the same reason: an operator told
+  // their vault is missing goes and creates one, which is the wrong move
+  // when the directory is there behind a parent it cannot traverse.
+  const presence = probeVaultDirectory(ctx.vault);
+  if (presence.unexaminable !== null) {
+    throw new MCPError(INVALID_PARAMS, presence.unexaminable.error);
+  }
+  if (!presence.present) {
+    throw new MCPError(INVALID_PARAMS, `vault directory missing: ${ctx.vault}`);
+  }
+  const pattern = coerceStr(args, "pattern", false);
+  const limit = coerceInt(args, "limit", 50, 1, 500);
+  // Owner-scope isolation (context-integrity-gates, Unit A). This
+  // surface lists pages straight off the filesystem rather than through
+  // search, so it applies the rule itself - over the frontmatter
+  // `listVaultPages` has already parsed, so an unscoped call does no
+  // extra work and returns exactly what it always did.
+  //
+  // FAILS CLOSED, matching `isPathOwnerVisible` on the search path: the
+  // walk's diagnostic sink names every page whose file it could not read,
+  // and an unreadable page has an unknowable owner. Without the sink an
+  // unreadable page parses to empty metadata, reads as ownerless, and is
+  // shared with every scope. The sink is collected only under an active
+  // scope, so an unscoped call allocates nothing extra.
+  const scope = normalizeAgentScope(coerceAgentScope(ctx, args, false));
+
+  const notices: DegradationNotice[] = [];
+  const listed =
+    scope === null ? listVaultPages(ctx.vault) : listVaultPages(ctx.vault, { notices });
+  const unreadable = new Set(
+    notices
+      .filter((n) => n.code === DEGRADATION_CODE.frontmatterUnreadable)
+      .map((n) => n.path)
+      .filter((path): path is string => path !== undefined),
+  );
+  const pages =
+    scope === null
+      ? listed
+      : listed.filter(
+          (p) => !unreadable.has(p.path) && isOwnerVisible(pageOwner(p.metadata), scope),
+        );
+  const needle = pattern ? pattern.toLowerCase() : null;
+  const matched: Array<Record<string, unknown>> = [];
+  for (const p of pages) {
+    if (needle !== null && !p.title.toLowerCase().includes(needle)) continue;
+    matched.push({
+      title: p.title,
+      path: vaultRelpath(p.path, ctx.vault),
+      metadata: p.metadata,
+    });
+    if (matched.length >= limit) break;
+  }
+  return {
+    vault_path: vaultPathField(ctx),
+    total_pages: pages.length,
+    returned: matched.length,
+    limit,
+    pattern,
+    pages: matched,
+  };
+}
+
+async function toolVaultHealth(
+  ctx: ServerContext,
+  args: Record<string, unknown>,
+): Promise<Record<string, unknown>> {
+  const repoArg = coerceStr(args, "repo", false);
+  const repoRoot = repoArg ?? ctx.repoRoot;
+  const results = doctor({
+    vault: ctx.vault,
+    config: ctx.configPath,
+    repoRoot: repoRoot ?? null,
+  });
+  const payload = results.map((r) => ({
+    name: r.name,
+    ok: r.ok,
+    message: r.message,
+    ...(r.fix !== undefined ? { fix: r.fix } : {}),
+  }));
+  // Runtime-state notices (transient operational conditions) surfaced for
+  // pull consumers, mirroring the proactive SessionStart injection push.
+  // The projection carries the notice's structured next command when it has
+  // one, so a machine consumer reads the exit as a field instead of parsing
+  // it back out of `message`; a condition with no registered exit
+  // contributes no key at all.
+  const notices = collectRuntimeNotices(ctx.vault, {
+    configPath: ctx.configPath ?? undefined,
+  }).map((n) => ({
+    code: n.code,
+    severity: n.severity,
+    message: n.message,
+    ...nextCommandField(n.code),
+  }));
+
+  return {
+    vault_path: vaultPathField(ctx),
+    config_path: ctx.configPath ? String(ctx.configPath) : null,
+    repo_root: repoRoot ? String(repoRoot) : null,
+    ok: payload.every((c) => c.ok),
+    checks: payload,
+    notices,
+  };
+}
+
+async function toolArtifactGet(
+  ctx: ServerContext,
+  args: Record<string, unknown>,
+): Promise<Record<string, unknown>> {
+  const artifactId = coerceStr(args, "artifact_id", true) as string;
+  if (!ctx.artifactStore) {
+    throw new Error("artifact store unavailable in this context");
+  }
+  let content: string | null;
+  try {
+    content = ctx.artifactStore.get(artifactId);
+  } catch (err) {
+    // Malformed id (path-traversal attempt) → invalid params.
+    throw new MCPError(INVALID_PARAMS, (err as Error)?.message ?? String(err));
+  }
+  if (content === null) {
+    // Well-formed but absent / expired → tool-level error envelope.
+    throw new Error(`unknown or expired artifact_id: ${artifactId}`);
+  }
+  return { artifact_id: artifactId, full_chars: content.length, content };
+}
+
+function toolCapabilities(ctx: ServerContext): ToolCapabilityReport {
+  if (!ctx.capabilityReport) {
+    throw new Error("capability report unavailable in this context");
+  }
+  return ctx.capabilityReport;
+}
+
+const ARTIFACT_GET_OUTPUT_SCHEMA: OutputSchema = {
+  type: "object",
+  required: ["artifact_id", "full_chars", "content"],
+  properties: {
+    artifact_id: { type: "string" },
+    full_chars: { type: "integer" },
+    content: { type: "string" },
+  },
+};
+
+const CAPABILITIES_OUTPUT_SCHEMA: OutputSchema = {
+  type: "object",
+  required: [
+    "scope",
+    "server_name",
+    "static_tool_count",
+    "available_tool_count",
+    "available",
+    "withheld",
+  ],
+  properties: {
+    scope: { type: "string", enum: ["full", "writer", "catalog"] },
+    server_name: { type: "string" },
+    static_tool_count: { type: "integer" },
+    available_tool_count: { type: "integer" },
+    available: {
+      type: "array",
+      items: {
+        type: "object",
+        required: ["name", "reason"],
+        properties: { name: { type: "string" }, reason: { type: "string" } },
+      },
+    },
+    withheld: {
+      type: "array",
+      items: {
+        type: "object",
+        required: ["name", "reason"],
+        properties: { name: { type: "string" }, reason: { type: "string" } },
+      },
+    },
+  },
+};
+
+/**
+ * Tombstones for the deprecated aliases removed in 1.0.0 (epic
+ * t_a77ade0a). The token-diet pass (t_3920db77) consolidated these 18
+ * tools into `brain_brief` / `brain_analytics` / `schema_inspect`
+ * views and kept the old names callable as hidden aliases; the 1.0.0
+ * sweep deletes the alias layer entirely. Calling a tombstoned name
+ * answers INVALID_PARAMS with the exact replacement instead of a
+ * generic METHOD_NOT_FOUND, so a stale client learns the migration
+ * from the error message itself. Zero token cost: tombstones are
+ * never advertised. The canonical map lives in core
+ * (src/core/removed-surfaces.ts) so `brain_doctor` shares it without
+ * importing the MCP layer; re-exported here for the server and tests.
+ */
+export { REMOVED_TOOLS };
+
+// The set is named after the original payload (mutating writers). As
+// of v0.10.10 it also hosts `brain_context`, a *reader* tool that has
+// to be always-loaded to be useful at session start. Renaming the
+// MCP server itself is deferred — see
+// `docs/plans/2026-05-20-v0.10.10-design.md` §12.
+const WRITER_TOOL_NAMES: ReadonlySet<string> = new Set([
+  "brain_apply_evidence",
+  "brain_context",
+  "brain_feedback",
+  "brain_note",
+  "brain_pinned_context",
+]);
+
+// First-pass surface of the two-pass catalog scope (Agent Surface
+// Suite): the always-available diagnostic, the writer set, and the
+// hydration tool. Everything else stays callable but unadvertised.
+const CATALOG_ADVERTISED_NAMES: ReadonlySet<string> = new Set([
+  CAPABILITY_DIAGNOSTIC_TOOL,
+  ...WRITER_TOOL_NAMES,
+  TOOL_HYDRATE_NAME,
+]);
+
+export function buildToolTable(scope: ToolScope = "full"): ToolDefinition[] {
+  const all: ToolDefinition[] = [
+    {
+      name: CAPABILITY_DIAGNOSTIC_TOOL,
+      description:
+        "Report runtime MCP tool availability and withheld-tool reasons for this server process.",
+      inputSchema: {
+        type: "object",
+        properties: {},
+        additionalProperties: false,
+      },
+      outputSchema: CAPABILITIES_OUTPUT_SCHEMA,
+      handler: toolCapabilities,
+    },
+    {
+      name: "second_brain_status",
+      description: "Report Open Second Brain configuration and vault status.",
+      inputSchema: {
+        type: "object",
+        properties: {},
+        additionalProperties: false,
+      },
+      // No previewBudget: a vault with an indexed search and a populated
+      // Brain layer easily exceeds the default MCP preview cap, and
+      // the `search.*` / `brain.*` blocks are the whole point of the
+      // tool. Without this override, large payloads came back wrapped
+      // in a `{ preview_truncated, artifact_id, bytes_preview }`
+      // envelope — tests parsing `content[0].text` as JSON then lost
+      // every block the operator asked for.
+      handler: toolStatus,
+    },
+    {
+      name: "second_brain_query",
+      description: "List vault pages with optional title substring filter.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          pattern: {
+            type: "string",
+            description: "Optional case-insensitive substring matched against page titles.",
+          },
+          limit: {
+            type: "integer",
+            minimum: 1,
+            maximum: 500,
+            description: "Maximum number of matched pages to return (default 50).",
+          },
+          agent_scope: AGENT_SCOPE_SCHEMA,
+        },
+        additionalProperties: false,
+      },
+      previewBudget: MCP_PREVIEW_BUDGET,
+      handler: toolQuery,
+    },
+    // `second_brain_capture` and `event_log_append` were retired from
+    // the MCP surface in §32 (v0.10.8); Brain tools replace agent-side
+    // writes.
+    ...BRAIN_TOOLS,
+    ...SEARCH_TOOLS,
+    {
+      name: "vault_health",
+      description: "Run vault, config, and plugin manifest health checks.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          repo: {
+            type: "string",
+            description: "Optional repository root to validate plugin manifests.",
+          },
+        },
+        additionalProperties: false,
+      },
+      handler: toolVaultHealth,
+    },
+    {
+      name: "brain_artifact_get",
+      description:
+        "Fetch the full payload of a previously preview-truncated tool result by its artifact_id. Read-only.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          artifact_id: {
+            type: "string",
+            description: "The artifact_id returned in a preview-truncated tool result envelope.",
+          },
+        },
+        required: ["artifact_id"],
+        additionalProperties: false,
+      },
+      outputSchema: ARTIFACT_GET_OUTPUT_SCHEMA,
+      handler: toolArtifactGet,
+    },
+    ...SCHEMA_TOOLS,
+    ...WATCHDOG_TOOLS,
+    ...SKILL_TOOLS,
+  ];
+  if (scope === "writer") return all.filter((t) => WRITER_TOOL_NAMES.has(t.name));
+  // The hydrate tool closes over the finished table (itself included)
+  // so its catalog and schema lookups always reflect this process's
+  // real surface.
+  all.push(buildHydrateTool(() => all));
+  if (scope === "full") return all;
+  // Catalog scope: the compact first-pass set stays advertised; every
+  // other tool keeps `hidden` semantics - callable, not listed.
+  return all.map((t) =>
+    CATALOG_ADVERTISED_NAMES.has(t.name) || t.hidden === true ? t : { ...t, hidden: true },
+  );
+}
+
+export function findTool(tools: ReadonlyArray<ToolDefinition>, name: string): ToolDefinition {
+  const tool = tools.find((t) => t.name === name);
+  if (!tool) {
+    const tombstone = REMOVED_TOOLS[name];
+    if (tombstone !== undefined) {
+      throw new MCPError(
+        INVALID_PARAMS,
+        `${name} was removed in ${tombstone.removedIn}; call ${tombstone.target} with view="${tombstone.view}"`,
+      );
+    }
+    throw new MCPError(METHOD_NOT_FOUND, `unknown tool: ${name}`);
+  }
+  return tool;
+}
+
+// Re-export for callers that previously imported these from here. The
+// canonical home is `src/core/agent-identity.ts`; new code should import
+// from there.
+export { PLACEHOLDER_AGENT_VALUES, normalizeAgentArgument };

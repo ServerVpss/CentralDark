@@ -1,0 +1,12 @@
+﻿
+ Profile          Model                        Gateway      Alias        Distribution
+ ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ Ôùådefault         grok-4.5                     stopped      ÔÇö            ÔÇö
+  123             openrouter/free              stopped      ÔÇö            ÔÇö
+  1234            openrouter/free              stopped      ÔÇö            ÔÇö
+  claude          claude-sonnet-4-5            stopped      ÔÇö            ÔÇö
+  pivete          nous/hermes-3-llama-3.1-40   stopped      ÔÇö            ÔÇö
+  sol             gpt-5.5                      stopped      sol          ÔÇö
+  teste           anthropic/claude-opus-4.6    stopped      teste        ÔÇö
+
+

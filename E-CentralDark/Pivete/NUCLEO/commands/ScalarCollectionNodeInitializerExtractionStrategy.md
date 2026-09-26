@@ -1,0 +1,121 @@
+# COMANDO - ScalarCollectionNodeInitializerExtractionStrategy.java
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\.gradle\wrapper\dists\gradle-8.14.3-all\10utluxaxniiv4wxiphsi49nj\gradle-8.14.3\src\model-core\org\gradle\model\internal\manage\schema\extract\ScalarCollectionNodeInitializerExtractionStrategy.java
+**SHA:** 017fb4ee544d0d2a
+**Timestamp:** 2026-08-28T02:50:52.028852
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Contratos
+- this.delegate = delegate;
+- this.delegate = delegate;
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+/*
+ * Copyright 2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.gradle.model.internal.manage.schema.extract;
+
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
+import org.gradle.internal.Cast;
+import org.gradle.model.internal.core.ModelPath;
+import org.gradle.model.internal.core.ModelViewState;
+import org.gradle.model.internal.core.MutableModelNode;
+import org.gradle.model.internal.core.NodeInitializer;
+import org.gradle.model.internal.core.NodeInitializerContext;
+import org.gradle.model.internal.core.TypeCompatibilityModelProjectionSupport;
+import org.gradle.model.internal.core.rule.describe.ModelRuleDescriptor;
+import org.gradle.model.internal.inspect.ModelElementProjection;
+import org.gradle.model.internal.inspect.ProjectionOnlyNodeInitializer;
+import org.gradle.model.internal.manage.schema.CollectionSchema;
+import org.gradle.model.internal.manage.schema.ScalarValueSchema;
+import org.gradle.model.internal.type.ModelType;
+import org.gradle.model.internal.type.ModelTypes;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
+
+public class ScalarCollectionNodeInitializerExtractionStrategy extends CollectionNodeInitializerExtractionSupport {
+    public final static List<ModelType<?>> TYPES = ImmutableList.<ModelType<?>>of(
+        ModelType.of(List.class),
+        ModelType.of(Set.class)
+    );
+
+    @Override
+    protected <T, E> NodeInitializer extractNodeInitializer(CollectionSchema<T, E> schema, NodeInitializerContext<T> context) {
+        ModelType<T> type = schema.getType();
+        Class<? super T> rawClass = type.getRawClass();
+        ModelType<? super T> rawCollectionType = ModelType.of(rawClass);
+        if (TYPES.contains(rawCollectionType) && (schema.getElementTypeSchema() instanceof ScalarValueSchema)) {
+            Optional<NodeInitializerContext.PropertyContext> propertyContext = context.getPropertyContextOptional();
+            boolean writable = !propertyContext.isPresent() || propertyContext.get().isWritable();
+            if (schema.getType().getRawClass() == List.class) {
+                return new ProjectionOnlyNodeInitializer(
+                    ScalarCollectionModelProjection.forList(schema.getElementType(), !writable),
+                    new ModelElementProjection(schema.getType())
+                );
+            } else {
+                return new ProjectionOnlyNodeInitializer(
+                    ScalarCollectionModelProjection.forSet(schema.getElementType(), !writable),
+                    new ModelElementProjection(schema.getType())
+                );
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Iterable<ModelType<?>> supportedTypes() {
+        return ImmutableList.copyOf(TYPES);
+    }
+
+    private abstract static class ScalarCollectionModelProjection<E, C extends Collection<E>> extends TypeCompatibilityModelProjectionSupport<C> {
+
+        public ScalarCollectionModelProjection(ModelType<C> type) {
+            super(type);
+        }
+
+        @Override
+        public Optional<String> getValueDescription(MutableModelNode modelNodeInternal) {
+            Collection<?> values = modelNodeInternal.asImmutable(getType(), null).getInstance();
+            if (values == null) {
+                return Optional.of("null");
+            }
+            return Optional.of(values.toString());
+        }
+
+        @Override
+        protected abstract ScalarCollectionModelView<E, C> toView(MutableModelNode modelNode, ModelRuleDescriptor ruleDescriptor, boolean readOnly);
+
+        public static <E> ScalarCollectionModelProjection<E, List<E>> forList(final ModelType<E> elementType, final boolean readOnly) {
+            return new ScalarCollectionModelProjection<E, List<E>>(ModelTypes.list(elementType)) {
+                @Override
+                protected ScalarCollectionModelView<E, List<E>> toView(MutableModelNode modelNode, ModelRuleDescriptor ruleDescriptor, boolean mutable) {
+                    return new ListModelView<E>(modelNode.getPath(), elementType, modelNode, ruleDescriptor, readOnly, mutable);
+                }
+            };
+        }
+
+        public static <E> ScalarCollectionModelProjection<E, Set<E>> forSet(final ModelType<E> elementType, final boolean readOnly) {
+            return new ScalarCollectionModelProjection<E, Set<
+```

@@ -1,0 +1,24 @@
+flowchart TD
+  A[Any recognized trigger] --> M[!CENTRALDARK]
+  M --> W[#ACORDAR]
+  W --> C[#CRISTALIZAR MEASURE/FALLBACK]
+  C --> I[Parallel READ-ONLY inventory]
+  I --> G[GitHub desired state]
+  I --> H[Casa actual state]
+  I --> V[VPS actual state]
+  I --> D[Drive durable mirror/library]
+  I --> P[Package capabilities]
+  G & H & V & D & P --> R[Rendezvous + reconcile]
+  R --> S{Material contradiction?}
+  S -- yes --> X[STOP-WRITE / measure discriminant]
+  X --> R
+  S -- no --> O[Resolve existing owner]
+  O --> K[One writer / minimum delta]
+  K --> T[Tests + falsifiers + docs]
+  T --> J[Reality Judge]
+  J --> CI{Latest candidate HEAD green?}
+  CI -- no --> F[Fix minimum / rerun]
+  F --> T
+  CI -- yes --> A1[Technical acceptance]
+  A1 --> B[Sync derived Drive mirrors + receipts]
+  B --> N[Handoff + NEXT_CURSOR]

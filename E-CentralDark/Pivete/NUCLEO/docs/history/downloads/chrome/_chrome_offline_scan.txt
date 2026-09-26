@@ -1,0 +1,216 @@
+﻿=== CHROME OFFLINE/LOG SCAN 2026-08-22T07:08:54.9875454-03:00 ===
+
+=== FILES IN Application (non-locale) ===
+21/08/2026 19:06:23            1 151.0.7922.174
+14/04/2026 10:37:41            1 PlatformExperienceHelper
+21/08/2026 19:07:38            1 SetupMetrics
+19/08/2026 22:08:11      4026008 chrome.exe
+21/08/2026 19:06:24          413 chrome.VisualElementsManifest.xml
+19/08/2026 22:08:13      2505368 chrome_proxy.exe
+24/10/2024 19:01:26       705762 initial_preferences
+
+=== LOG-LIKE UNDER Application ===
+2024-10-24 19:01     705762 C:\Program Files\Google\Chrome\Application\initial_preferences
+2026-08-19 22:08      16536 C:\Program Files\Google\Chrome\Application\151.0.7922.174\eventlog_provider.dll
+2026-08-19 17:00        106 C:\Program Files\Google\Chrome\Application\151.0.7922.174\vk_swiftshader_icd.json
+2026-08-19 17:00         99 C:\Program Files\Google\Chrome\Application\151.0.7922.174\Extensions\external_extensions.json
+2026-08-19 17:00        114 C:\Program Files\Google\Chrome\Application\151.0.7922.174\IwaKeyDistribution\manifest.json
+2026-08-19 17:00        238 C:\Program Files\Google\Chrome\Application\151.0.7922.174\MEIPreload\manifest.json
+2026-08-19 17:00        122 C:\Program Files\Google\Chrome\Application\151.0.7922.174\PrivacySandboxAttestationsPreloaded\manifest.json
+2026-08-19 17:00      28131 C:\Program Files\Google\Chrome\Application\151.0.7922.174\VisualElements\Logo.png
+2026-08-19 17:00      24214 C:\Program Files\Google\Chrome\Application\151.0.7922.174\VisualElements\LogoBeta.png
+2026-08-19 17:00      28016 C:\Program Files\Google\Chrome\Application\151.0.7922.174\VisualElements\LogoCanary.png
+2026-08-19 17:00      24504 C:\Program Files\Google\Chrome\Application\151.0.7922.174\VisualElements\LogoDev.png
+2026-08-19 17:00       9938 C:\Program Files\Google\Chrome\Application\151.0.7922.174\VisualElements\SmallLogo.png
+2026-08-19 17:00       8859 C:\Program Files\Google\Chrome\Application\151.0.7922.174\VisualElements\SmallLogoBeta.png
+2026-08-19 17:00       9741 C:\Program Files\Google\Chrome\Application\151.0.7922.174\VisualElements\SmallLogoCanary.png
+2026-08-19 17:00       8959 C:\Program Files\Google\Chrome\Application\151.0.7922.174\VisualElements\SmallLogoDev.png
+2026-08-19 17:00        939 C:\Program Files\Google\Chrome\Application\151.0.7922.174\WidevineCdm\manifest.json
+
+=== SetupMetrics ===
+
+=== CRX ANYWHERE CHROME + DOWNLOADS + EDGE ===
+CRX 2026-03-12 08:06    5469471 C:\Users\danda\AppData\Local\Google\Chrome\User Data\RecoveryImproved\148.0.7730.0\Recovery.crx3
+CRX 2023-03-28 21:55    2050438 C:\Users\danda\AppData\Local\Microsoft\Edge\User Data\RecoveryImproved\1.3.173.55\recovery-component-inner.crx
+CRX 1980-01-01 00:00      46740 C:\Users\danda\Downloads\Compressed\Nova pasta\CADEADO TRANCADO  SO COM PERMITO SEGREDO\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\00-INTERROMPIDO-GATILHO\GATILHO-UNIVERSAL-IA-RIGOR-MAXIMO.zip
+CRX 1980-01-01 00:00    1522490 C:\Users\danda\Downloads\Compressed\Nova pasta\CADEADO TRANCADO  SO COM PERMITO SEGREDO\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\01-ARQUIVOS-DA-CONVERSA\DOSSIER-TRUSTED-ACCESS-CENTRALDARK-20260806.zip
+CRX 1980-01-01 00:00    1379485 C:\Users\danda\Downloads\Compressed\Nova pasta\CADEADO TRANCADO  SO COM PERMITO SEGREDO\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\01-ARQUIVOS-DA-CONVERSA\PACOTAO-CENTRALDARK (1).zip
+CRX 1980-01-01 00:00    1442278 C:\Users\danda\Downloads\Compressed\Nova pasta\CADEADO TRANCADO  SO COM PERMITO SEGREDO\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\01-ARQUIVOS-DA-CONVERSA\PACOTAO-CENTRALDARK-RIGOR-MAXIMO(1).zip
+CRX 1980-01-01 00:00    1442278 C:\Users\danda\Downloads\Compressed\Nova pasta\CADEADO TRANCADO  SO COM PERMITO SEGREDO\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\01-ARQUIVOS-DA-CONVERSA\PACOTAO-CENTRALDARK-RIGOR-MAXIMO.zip
+CRX 1980-01-01 00:00    1234596 C:\Users\danda\Downloads\Compressed\Nova pasta\CADEADO TRANCADO  SO COM PERMITO SEGREDO\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\01-ARQUIVOS-DA-CONVERSA\qa-skillmaster-FULL-CORRIGIDO(2).zip
+CRX 1980-01-01 00:00      18963 C:\Users\danda\Downloads\Compressed\Nova pasta\CADEADO TRANCADO  SO COM PERMITO SEGREDO\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\01-ARQUIVOS-DA-CONVERSA\qa-skillmaster-R2-AUDITORIA-EXECUTAVEL.zip
+CRX 1980-01-01 00:00    1242624 C:\Users\danda\Downloads\Compressed\Nova pasta\CADEADO TRANCADO  SO COM PERMITO SEGREDO\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\01-ARQUIVOS-DA-CONVERSA\qa-skillmaster-RIGOR-MAXIMO(2).zip
+CRX 1980-01-01 00:00    1442278 C:\Users\danda\Downloads\Compressed\Nova pasta\CADEADO TRANCADO  SO COM PERMITO SEGREDO\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\02-SNAPSHOT-TRABALHO\trusted-access-centraldark-20260806\PACOTAO-CENTRALDARK-RIGOR-MAXIMO.zip
+CRX 1980-01-01 00:00    1522490 C:\Users\danda\Downloads\Compressed\Nova pasta\CADEADO TRANCADO  SO COM PERMITO SEGREDO\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\02-SNAPSHOT-TRABALHO\DOSSIER-TRUSTED-ACCESS-CENTRALDARK-20260806.zip
+CRX 1980-01-01 00:00    1379485 C:\Users\danda\Downloads\Compressed\Nova pasta\CADEADO TRANCADO  SO COM PERMITO SEGREDO\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\02-SNAPSHOT-TRABALHO\PACOTAO-CENTRALDARK (1).zip
+CRX 1980-01-01 00:00    1442278 C:\Users\danda\Downloads\Compressed\Nova pasta\CADEADO TRANCADO  SO COM PERMITO SEGREDO\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\02-SNAPSHOT-TRABALHO\PACOTAO-CENTRALDARK-RIGOR-MAXIMO(1).zip
+CRX 1980-01-01 00:00    1234596 C:\Users\danda\Downloads\Compressed\Nova pasta\CADEADO TRANCADO  SO COM PERMITO SEGREDO\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\02-SNAPSHOT-TRABALHO\qa-skillmaster-FULL-CORRIGIDO(2).zip
+CRX 1980-01-01 00:00      18963 C:\Users\danda\Downloads\Compressed\Nova pasta\CADEADO TRANCADO  SO COM PERMITO SEGREDO\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\02-SNAPSHOT-TRABALHO\qa-skillmaster-R2-AUDITORIA-EXECUTAVEL.zip
+CRX 1980-01-01 00:00       7072 C:\Users\danda\Downloads\Compressed\Nova pasta\CADEADO TRANCADO  SO COM PERMITO SEGREDO\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\02-SNAPSHOT-TRABALHO\qa-skillmaster-R3-AUDITORIA-EXECUTAVEL.zip
+CRX 1980-01-01 00:00    1242624 C:\Users\danda\Downloads\Compressed\Nova pasta\CADEADO TRANCADO  SO COM PERMITO SEGREDO\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\02-SNAPSHOT-TRABALHO\qa-skillmaster-RIGOR-MAXIMO(2).zip
+CRX 2026-08-18 00:50  126749058 C:\Users\danda\Downloads\Compressed\Nova pasta\CADEADO TRANCADO  SO COM PERMITO SEGREDO.zip
+CRX 2026-07-31 22:41      14711 C:\Users\danda\Downloads\Compressed\Nova pasta\centraldark-hardening-pack.zip
+CRX 2026-07-27 14:08      44818 C:\Users\danda\Downloads\Compressed\Nova pasta\CENTRALDARK-MANDATO-CELESTIAL-CORRIGIDO.zip
+CRX 2026-07-31 19:39      13111 C:\Users\danda\Downloads\Compressed\Nova pasta\CentralDark-Runtime-Closed-Loop-01.zip
+CRX 2026-08-18 00:46   64755751 C:\Users\danda\Downloads\Compressed\Nova pasta\Nova pasta.zip
+CRX 2026-07-29 05:40     186940 C:\Users\danda\Downloads\Compressed\Nova pasta\self-learning-skills-main.zip
+CRX 2026-08-09 17:12      75989 C:\Users\danda\Downloads\Telegram Desktop\HERMES_ORGANISMO_CANONICO_01-36_COMPLETO.zip
+CRX 2026-08-03 22:46      18019 C:\Users\danda\Downloads\AGENTES-DESAFIO-NIVEL-7-3557ddc6.zip
+CRX 2026-08-03 22:31      25448 C:\Users\danda\Downloads\centraldark-atualizacao-kit.zip
+CRX 2026-08-03 22:52      23737 C:\Users\danda\Downloads\centraldark-casa-windows.zip
+CRX 2026-08-04 20:27     949147 C:\Users\danda\Downloads\centraldark-kit-vozes.zip
+CRX 2026-08-04 16:30       6178 C:\Users\danda\Downloads\cot-react-loop-hermes.zip
+CRX 2023-05-05 10:18    3621334 C:\Users\danda\Desktop\Token\TOKEN 02-05\AMD Ryzen 3 3200G macOS Monterey EFI.zip
+CRX 2023-05-05 10:56   64780302 C:\Users\danda\Desktop\Token\TOKEN 02-05\ASUS-TUF-GAMING-B460M-PLUS-RX5600XT-Hackintosh-Opencore-master.zip
+CRX 2023-05-05 10:35    6418903 C:\Users\danda\Desktop\Token\TOKEN 02-05\CCG.zip
+CRX 2023-05-05 10:38    4964914 C:\Users\danda\Desktop\Token\TOKEN 02-05\EFI.OpenCore.Desktop.SandyBridge.MOD.zip
+CRX 2023-05-05 10:17    3954247 C:\Users\danda\Desktop\Token\TOKEN 02-05\EFI_OC_0.6.4_Gigabyte-B460M-DS3H.zip
+CRX 2023-05-05 10:01    2018160 C:\Users\danda\Desktop\Token\TOKEN 02-05\EFI_OC_0.6.4_Gigabyte_Z490_Aorus_Master.zip
+CRX 2023-05-05 12:10   37930298 C:\Users\danda\Desktop\Token\TOKEN 02-05\get-plist.zip
+CRX 2023-05-05 09:48     524921 C:\Users\danda\Desktop\Token\TOKEN 02-05\gibMacOS-master.zip
+CRX 2023-05-05 04:48     344533 C:\Users\danda\Desktop\Token\TOKEN 02-05\IC PlistTool.zip
+CRX 2023-05-05 05:13     344533 C:\Users\danda\Desktop\Token\TOKEN 02-05\IC_PlistTool.zip
+CRX 2023-05-05 06:06   16657940 C:\Users\danda\Desktop\Token\TOKEN 02-05\ventoy-1.0.91-windows.zip
+CRX 2023-05-01 20:48      20303 C:\Users\danda\Desktop\Token\1682642932-act-req.token.zip
+CRX 2023-05-01 20:41      16471 C:\Users\danda\Desktop\Token\1682782366-act-req.token.zip
+CRX 2023-05-01 22:43      16734 C:\Users\danda\Desktop\Token\1682894918-act-req.token.zip
+CRX 2023-06-12 10:26      20118 C:\Users\danda\Desktop\Tokens\junho12\TokensZip\1686576402-act-req.plist.zip
+CRX 2023-06-12 10:27      20178 C:\Users\danda\Desktop\Tokens\junho12\TokensZip\1686576434-act-req.plist.zip
+CRX 2023-06-12 10:27      20183 C:\Users\danda\Desktop\Tokens\junho12\TokensZip\1686576462-act-req.plist.zip
+CRX 2023-06-12 10:33      17508 C:\Users\danda\Desktop\Tokens\junho12\TokensZip\1686576824-act-req.plist.zip
+CRX 2023-06-12 10:34      17484 C:\Users\danda\Desktop\Tokens\junho12\TokensZip\1686576858-act-req.plist.zip
+CRX 2023-06-12 10:34      17501 C:\Users\danda\Desktop\Tokens\junho12\TokensZip\1686576890-act-req.plist.zip
+CRX 2023-06-12 10:35      17461 C:\Users\danda\Desktop\Tokens\junho12\TokensZip\1686576925-act-req.plist.zip
+CRX 2023-06-12 10:35      17537 C:\Users\danda\Desktop\Tokens\junho12\TokensZip\1686576957-act-req.plist.zip
+CRX 2023-06-12 11:04      17481 C:\Users\danda\Desktop\Tokens\junho12\TokensZip\1686578662-act-req.plist.zip
+CRX 2023-06-12 11:04      17517 C:\Users\danda\Desktop\Tokens\junho12\TokensZip\1686578696-act-req.plist.zip
+CRX 2023-06-12 11:05      17505 C:\Users\danda\Desktop\Tokens\junho12\TokensZip\1686578732-act-req.plist.zip
+CRX 2023-06-12 11:06      17472 C:\Users\danda\Desktop\Tokens\junho12\TokensZip\1686578765-act-req.plist.zip
+CRX 2023-06-12 11:06      17480 C:\Users\danda\Desktop\Tokens\junho12\TokensZip\1686578798-act-req.plist.zip
+CRX 2023-06-12 11:56        182 C:\Users\danda\Desktop\Tokens\junho12\TokensZip\1686581735-act-req.plist.zip
+CRX 2023-06-13 10:53      20098 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1655625611-act-req.plist.zip
+CRX 2023-06-13 10:54      20079 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1655625639-act-req.plist.zip
+CRX 2023-06-13 10:54      20109 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1655625664-act-req.plist.zip
+CRX 2023-06-13 10:54      20116 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1655625693-act-req.plist.zip
+CRX 2023-06-13 10:55      20091 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1655625718-act-req.plist.zip
+CRX 2023-06-13 11:02        182 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1681908361-act-req.plist.zip
+CRX 2023-06-13 11:05        182 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1681908505-act-req.plist.zip
+CRX 2023-06-13 11:07        182 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1681908645-act-req.plist.zip
+CRX 2023-06-13 09:56      19715 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1686605280-act-req.plist.zip
+CRX 2023-06-13 09:56      19781 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1686605312-act-req.plist.zip
+CRX 2023-06-13 09:57      19745 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1686605339-act-req.plist.zip
+CRX 2023-06-13 09:57      19755 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1686605366-act-req.plist.zip
+CRX 2023-06-13 09:58      19739 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1686605389-act-req.plist.zip
+CRX 2023-06-13 09:13      17295 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1686658412-act-req.plist.zip
+CRX 2023-06-13 09:13      17283 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1686658438-act-req.plist.zip
+CRX 2023-06-13 09:14      17291 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1686658460-act-req.plist.zip
+CRX 2023-06-13 09:14      17310 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1686658483-act-req.plist.zip
+CRX 2023-06-13 09:15      17301 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1686658505-act-req.plist.zip
+CRX 2023-06-13 10:05      19756 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1686661520-act-req.plist.zip
+CRX 2023-06-13 10:05      19715 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1686661549-act-req.plist.zip
+CRX 2023-06-13 10:06      19739 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1686661576-act-req.plist.zip
+CRX 2023-06-13 10:06      19739 C:\Users\danda\Desktop\Tokens\junho13\TokensZip\1686661602-act-req.plist.zip
+
+=== USER DATA LOGS ===
+24/10/2024 19:01:37 1 Crashpad
+21/08/2026 19:06:41 1048576 CrashpadMetrics-active.pma
+LOG 2026-08-21 01:47         57 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 12\Extension Rules\000003.log
+LOG 2026-08-21 01:47         57 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 12\Extension Scripts\000003.log
+LOG 2026-08-21 01:47        171 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 12\Extension State\000003.log
+LOG 2026-08-21 01:47          0 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 12\GCM Store\000003.log
+LOG 2026-08-21 01:47          0 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 12\GCM Store\Encryption\000003.log
+LOG 2026-08-22 02:02          0 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 12\Local Storage\leveldb\000004.log
+LOG 2026-08-21 01:47       1263 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 12\Service Worker\Database\000003.log
+LOG 2026-08-21 02:04        220 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 12\Session Storage\000003.log
+LOG 2026-08-21 02:04      13148 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 12\shared_proto_db\000003.log
+LOG 2026-08-21 01:47       1050 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 12\shared_proto_db\metadata\000003.log
+LOG 2026-08-21 02:05        184 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 12\Site Characteristics Database\000003.log
+LOG 2026-08-21 01:47       3138 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 12\Sync Data\LevelDB\000003.log
+LOG 2026-08-21 01:47         57 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 13\Extension Rules\000003.log
+LOG 2026-08-21 01:47         57 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 13\Extension Scripts\000003.log
+LOG 2026-08-21 01:47        171 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 13\Extension State\000003.log
+LOG 2026-08-21 01:47          0 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 13\GCM Store\000003.log
+LOG 2026-08-21 01:47          0 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 13\GCM Store\Encryption\000003.log
+LOG 2026-08-22 02:02          0 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 13\Local Storage\leveldb\000004.log
+LOG 2026-08-21 01:47       1263 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 13\Service Worker\Database\000003.log
+LOG 2026-08-21 02:07        258 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 13\Session Storage\000003.log
+LOG 2026-08-21 01:49      12647 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 13\shared_proto_db\000003.log
+LOG 2026-08-21 01:47       1050 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 13\shared_proto_db\metadata\000003.log
+LOG 2026-08-21 01:47         40 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 13\Site Characteristics Database\000003.log
+LOG 2026-08-21 01:47       3138 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 13\Sync Data\LevelDB\000003.log
+LOG 2026-08-21 15:59        114 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\Extension Rules\000003.log
+LOG 2026-08-21 15:59        114 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\Extension Scripts\000003.log
+LOG 2026-08-21 15:59        190 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\Extension State\000003.log
+LOG 2026-08-22 04:54          0 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\File System\001\t\Paths\000003.log
+LOG 2026-08-22 05:41        278 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\File System\002\t\Paths\000003.log
+LOG 2026-08-22 05:41        189 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\File System\Origins\000003.log
+LOG 2026-08-22 04:24       6259 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\GCM Store\000003.log
+LOG 2026-08-21 19:01        269 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\GCM Store\Encryption\000003.log
+LOG 2026-08-22 05:16       1893 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\IndexedDB\https_accounts.x.ai_0.indexeddb.leveldb\000003.log
+LOG 2026-08-22 04:22          0 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\IndexedDB\https_apps.microsoft.com_0.indexeddb.leveldb\000004.log
+LOG 2026-08-22 06:46       4883 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\IndexedDB\https_dash.cloudflare.com_0.indexeddb.leveldb\000003.log
+LOG 2026-08-22 06:24          0 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\IndexedDB\https_docs.google.com_0.indexeddb.leveldb\000004.log
+LOG 2026-08-22 06:04    2901818 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\IndexedDB\https_drive.google.com_0.indexeddb.leveldb\000003.log
+LOG 2026-08-22 04:16       1447 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\IndexedDB\https_github.com_0.indexeddb.leveldb\000003.log
+LOG 2026-08-22 05:01         38 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\IndexedDB\https_grok.com_0.indexeddb.leveldb\000004.log
+LOG 2026-08-22 05:14       4515 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\IndexedDB\https_www.coursera.org_0.indexeddb.leveldb\000003.log
+
+=== CRASHPAD ===
+24/10/2024 19:01:37 1 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Crashpad\attachments
+21/08/2026 01:25:25 1 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Crashpad\reports
+21/08/2026 01:25:25 16 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Crashpad\metadata
+22/08/2026 06:59:35 40 C:\Users\danda\AppData\Local\Google\Chrome\User Data\Crashpad\settings.dat
+
+=== POLICIES / EXTERNAL EXT ===
+-- HKLM:\SOFTWARE\Policies\Google\Chrome --
+missing
+-- HKCU:\SOFTWARE\Policies\Google\Chrome --
+missing
+-- HKLM:\SOFTWARE\Google\Chrome --
+
+  sub Extensions
+  sub NativeMessagingHosts
+-- HKLM:\SOFTWARE\WOW6432Node\Google\Chrome\Extensions --
+
+  sub ngpampappnmepgilojfohadhhmbhlaek
+
+=== GHOST IDS IN PROFILE 14 SECURE PREFS (raw snippets) ===
+ID chkpgpejeflhoodlogeghpajbdohljek
+  SNIP fa_pro_hp_01_hao123_br","https://www.google.com/"]}},"extensions":{"settings":{"chkpgpejeflhoodlogeghpajbdohljek":{"lastpingday":"13431769201754141"},"doaaifppmpcnbkmpegmpkkcnlobgifid":{"lastpingday":"13431769201754141"},"fgghniogdmjoobgdgfncblbhokgaijmi":{"incognito":true,"lastpingday":"13431769201754141"},"fignfifoniblkonapihmkfakmlgkbkcf":{"account_extension_type":0,"active_permissions":{"api":["metricsPrivate","systemPrivate","ttsEngine","offscreen"],"explicit_host":["https://www.google.com/
+  DISK=False
+ID doaaifppmpcnbkmpegmpkkcnlobgifid
+  SNIP tings":{"chkpgpejeflhoodlogeghpajbdohljek":{"lastpingday":"13431769201754141"},"doaaifppmpcnbkmpegmpkkcnlobgifid":{"lastpingday":"13431769201754141"},"fgghniogdmjoobgdgfncblbhokgaijmi":{"incognito":true,"lastpingday":"13431769201754141"},"fignfifoniblkonapihmkfakmlgkbkcf":{"account_extension_type":0,"active_permissions":{"api":["metricsPrivate","systemPrivate","ttsEngine","offscreen"],"explicit_host":["https://www.google.com/*"],"manifest_permissions":[],"scriptable_host":[]},"commands":{},"cont
+  DISK=False
+ID fgghniogdmjoobgdgfncblbhokgaijmi
+  SNIP 54141"},"doaaifppmpcnbkmpegmpkkcnlobgifid":{"lastpingday":"13431769201754141"},"fgghniogdmjoobgdgfncblbhokgaijmi":{"incognito":true,"lastpingday":"13431769201754141"},"fignfifoniblkonapihmkfakmlgkbkcf":{"account_extension_type":0,"active_permissions":{"api":["metricsPrivate","systemPrivate","ttsEngine","offscreen"],"explicit_host":["https://www.google.com/*"],"manifest_permissions":[],"scriptable_host":[]},"commands":{},"content_settings":[],"creation_flags":1,"disable_reasons":[],"first_install
+  DISK=False
+ID gbjchpboopdaijjlnlabnnjmckcgakhl
+  SNIP Engine.onStop"],"was_installed_by_default":false,"was_installed_by_oem":false},"gbjchpboopdaijjlnlabnnjmckcgakhl":{"lastpingday":"13431769201754141"},"jacjkeodiliklmpildjkfaciknopckaa":{"disable_reasons":[1],"lastpingday":"13431769201754141"},"jjjlhadbhdaejpgaainnmanecekcdfoh":{"disable_reasons":[1],"lastpingday":"13431769201754141"},"jkaiginiaigndjcfdichbigjlecheofe":{"lastpingday":"13431769201754141"},"khndhdhbebhaddchcgnalcjlaekbbeof":{},"lfmhcpmkbdkbgbmkjoiopeeegenkdikp":{"lastpingday":"1343
+  DISK=False
+ID jacjkeodiliklmpildjkfaciknopckaa
+  SNIP :false},"gbjchpboopdaijjlnlabnnjmckcgakhl":{"lastpingday":"13431769201754141"},"jacjkeodiliklmpildjkfaciknopckaa":{"disable_reasons":[1],"lastpingday":"13431769201754141"},"jjjlhadbhdaejpgaainnmanecekcdfoh":{"disable_reasons":[1],"lastpingday":"13431769201754141"},"jkaiginiaigndjcfdichbigjlecheofe":{"lastpingday":"13431769201754141"},"khndhdhbebhaddchcgnalcjlaekbbeof":{},"lfmhcpmkbdkbgbmkjoiopeeegenkdikp":{"lastpingday":"13431769201754141"},"mdkcnjilphobikfgkibhhpomoahgnijc":{"lastpingday":"1343
+  DISK=False
+ID jjjlhadbhdaejpgaainnmanecekcdfoh
+  SNIP mpildjkfaciknopckaa":{"disable_reasons":[1],"lastpingday":"13431769201754141"},"jjjlhadbhdaejpgaainnmanecekcdfoh":{"disable_reasons":[1],"lastpingday":"13431769201754141"},"jkaiginiaigndjcfdichbigjlecheofe":{"lastpingday":"13431769201754141"},"khndhdhbebhaddchcgnalcjlaekbbeof":{},"lfmhcpmkbdkbgbmkjoiopeeegenkdikp":{"lastpingday":"13431769201754141"},"mdkcnjilphobikfgkibhhpomoahgnijc":{"lastpingday":"13431769201754141"},"mhjfbmdgcfjbbpaeojofohoefgiehjai":{"account_extension_type":0,"active_permis
+  DISK=False
+ID jkaiginiaigndjcfdichbigjlecheofe
+  SNIP pgaainnmanecekcdfoh":{"disable_reasons":[1],"lastpingday":"13431769201754141"},"jkaiginiaigndjcfdichbigjlecheofe":{"lastpingday":"13431769201754141"},"khndhdhbebhaddchcgnalcjlaekbbeof":{},"lfmhcpmkbdkbgbmkjoiopeeegenkdikp":{"lastpingday":"13431769201754141"},"mdkcnjilphobikfgkibhhpomoahgnijc":{"lastpingday":"13431769201754141"},"mhjfbmdgcfjbbpaeojofohoefgiehjai":{"account_extension_type":0,"active_permissions":{"api":["contentSettings","fileSystem","fileSystem.write","metricsPrivate","tabs","res
+  DISK=False
+ID khndhdhbebhaddchcgnalcjlaekbbeof
+  SNIP 54141"},"jkaiginiaigndjcfdichbigjlecheofe":{"lastpingday":"13431769201754141"},"khndhdhbebhaddchcgnalcjlaekbbeof":{},"lfmhcpmkbdkbgbmkjoiopeeegenkdikp":{"lastpingday":"13431769201754141"},"mdkcnjilphobikfgkibhhpomoahgnijc":{"lastpingday":"13431769201754141"},"mhjfbmdgcfjbbpaeojofohoefgiehjai":{"account_extension_type":0,"active_permissions":{"api":["contentSettings","fileSystem","fileSystem.write","metricsPrivate","tabs","resourcesPrivate","pdfViewerPrivate"],"explicit_host":["chrome://resources
+  DISK=False
+ID lfmhcpmkbdkbgbmkjoiopeeegenkdikp
+  SNIP ofe":{"lastpingday":"13431769201754141"},"khndhdhbebhaddchcgnalcjlaekbbeof":{},"lfmhcpmkbdkbgbmkjoiopeeegenkdikp":{"lastpingday":"13431769201754141"},"mdkcnjilphobikfgkibhhpomoahgnijc":{"lastpingday":"13431769201754141"},"mhjfbmdgcfjbbpaeojofohoefgiehjai":{"account_extension_type":0,"active_permissions":{"api":["contentSettings","fileSystem","fileSystem.write","metricsPrivate","tabs","resourcesPrivate","pdfViewerPrivate"],"explicit_host":["chrome://resources/*","chrome://webui-test/*"],"manifest
+  DISK=False
+ID mdkcnjilphobikfgkibhhpomoahgnijc
+  SNIP eof":{},"lfmhcpmkbdkbgbmkjoiopeeegenkdikp":{"lastpingday":"13431769201754141"},"mdkcnjilphobikfgkibhhpomoahgnijc":{"lastpingday":"13431769201754141"},"mhjfbmdgcfjbbpaeojofohoefgiehjai":{"account_extension_type":0,"active_permissions":{"api":["contentSettings","fileSystem","fileSystem.write","metricsPrivate","tabs","resourcesPrivate","pdfViewerPrivate"],"explicit_host":["chrome://resources/*","chrome://webui-test/*"],"manifest_permissions":[],"scriptable_host":[]},"commands":{},"content_settings"
+  DISK=False
+ID mnjffgbbcofcajpmooahlcnjgpfmpifk
+  SNIP preferences":{},"was_installed_by_default":false,"was_installed_by_oem":false},"mnjffgbbcofcajpmooahlcnjgpfmpifk":{"lastpingday":"13431769201754141"},"nddblaobekhedajmmdfpeeobebjbfcnm":{"disable_reasons":[1],"lastpingday":"13431769201754141"},"nkeimhogjdpnpccoofpliimaahmaaome":{"account_extension_type":0,"active_permissions":{"api":["processes","webrtcLoggingPrivate","system.cpu","enterprise.hardwarePlatform"],"explicit_host":[],"manifest_permissions":[],"scriptable_host":[]},"commands":{},"cont
+  DISK=False
+ID nddblaobekhedajmmdfpeeobebjbfcnm
+  SNIP :false},"mnjffgbbcofcajpmooahlcnjgpfmpifk":{"lastpingday":"13431769201754141"},"nddblaobekhedajmmdfpeeobebjbfcnm":{"disable_reasons":[1],"lastpingday":"13431769201754141"},"nkeimhogjdpnpccoofpliimaahmaaome":{"account_extension_type":0,"active_permissions":{"api":["processes","webrtcLoggingPrivate","system.cpu","enterprise.hardwarePlatform"],"explicit_host":[],"manifest_permissions":[],"scriptable_host":[]},"commands":{},"content_settings":[],"creation_flags":1,"disable_reasons":[],"events":[],"f
+  DISK=False
+
+=== COMPONENT CRX CACHE NAMES ===
+DONE

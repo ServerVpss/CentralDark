@@ -1,0 +1,14 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\react\primitive-hooks\useThreadIsRunning.js
+
+import { useAuiState } from "@assistant-ui/store";
+//#region src/react/primitive-hooks/useThreadIsRunning.ts
+const useThreadIsRunning = () => {
+	return useAuiState(_temp);
+};
+function _temp(s) {
+	return s.thread.isRunning;
+}
+//#endregion
+export { useThreadIsRunning };
+
+//# sourceMappingURL=useThreadIsRunning.js.map

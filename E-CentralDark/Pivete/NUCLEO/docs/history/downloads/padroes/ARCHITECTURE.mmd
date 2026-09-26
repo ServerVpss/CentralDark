@@ -1,0 +1,24 @@
+flowchart TD
+    CHEFE["👑 SEGREDO/CHEFE<br/>intenção + autoridade final"]
+    BOOT["#ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA"]
+    SOL["☀️ SOL<br/>coordena / reconcilia"]
+    PER["Percepção READ_ONLY<br/>Grafo / Vigia / braços"]
+    WR["✎ ONE WRITER PER SCOPE"]
+    HER["☿ HERMES / PIVETE<br/>executa / preserva"]
+    EX["Executar → Medir → Remediar"]
+    OG["OUTPUT_GUARD<br/>claim ↔ proof"]
+    J["⚖ REALITY JUDGE"]
+    F["FALHOU<br/>causa → owner → delta → reteste"]
+    P["PROVOU<br/>evidence → receipt"]
+    MI["MATERIAL_INGEST / MOINHO"]
+    KC["KNOWLEDGE_COMPILER / FORJA"]
+    ST["RAW → CANDIDATE → GOLD → CRYSTAL → FLASH"]
+    POM["🕊️ POMBO CHECKSUM<br/>SHA + UNKNOWN + residual + NEXT_CURSOR"]
+    NEXT["PRÓXIMO #ACORDAR"]
+
+    CHEFE --> BOOT --> SOL --> PER --> WR --> HER --> EX --> OG --> J
+    J -->|FAILED| F
+    J -->|PROVEN| P
+    F --> MI
+    P --> MI
+    MI --> KC --> ST --> POM --> NEXT --> BOOT

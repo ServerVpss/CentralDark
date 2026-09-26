@@ -1,0 +1,10 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\lib\perl5\vendor_perl\auto\Net\SSLeay\head_http4.al
+
+# NOTE: Derived from blib/lib/Net/SSLeay.pm.
+# Changes made here will be lost when autosplit is run again.
+# See AutoSplit.pm.
+package Net::SSLeay;
+#line 2050 "blib/lib/Net/SSLeay.pm (autosplit into blib/lib/auto/Net/SSLeay/head_http4.al)"
+sub head_http4 { do_httpx4(HEAD => 0, @_) }
+# Either https or http
+# end of Net::SSLeay::head_http4

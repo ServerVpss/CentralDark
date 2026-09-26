@@ -1,0 +1,28 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\cron\executions.db
+
+TABLES=["executions"]
+
+=== TABLE executions ===
+CREATE TABLE executions (
+             id TEXT PRIMARY KEY,
+             job_id TEXT NOT NULL,
+             source TEXT NOT NULL,
+             process_id TEXT NOT NULL,
+             pid INTEGER NOT NULL,
+             process_started_at INTEGER,
+             status TEXT NOT NULL CHECK(status IN
+               ('claimed','running','completed','failed','unknown')),
+             claimed_at TEXT NOT NULL,
+             started_at TEXT,
+             finished_at TEXT,
+             error TEXT
+           )
+('4af21a6d5ca94077a6008702cd14e5bd', '4d93e021a736', 'direct', 'fde1d970bf734ca4815a8b666eca48e4', 24800, 178706700419, 'completed', '2026-08-18T12:30:05.667315-03:00', '2026-08-18T12:30:05.885942-03:00', '2026-08-18T12:30:10.123518-03:00', None)
+('6b6905b4a2c349e89610262ec6f533d6', '4d93e021a736', 'direct', '5ac51c44d46c4ebcbcd5c01fe758bfe9', 21312, 178706896493, 'completed', '2026-08-18T13:02:46.395439-03:00', '2026-08-18T13:02:46.904489-03:00', '2026-08-18T13:02:51.384248-03:00', None)
+('eeec7af7a05d418da782f36b81883799', '4d93e021a736', 'builtin', '062fcc4820644584a3236920b59ead0d', 29176, 178706694655, 'completed', '2026-08-18T14:03:43.918305-03:00', '2026-08-18T14:03:44.250385-03:00', '2026-08-18T14:03:58.713047-03:00', None)
+('1238c7dab75049f69c784a6c4610244e', '4d93e021a736', 'builtin', 'eb6a4cd698ed4c66bcb749423375a54b', 25916, 178707434323, 'completed', '2026-08-18T15:08:36.795870-03:00', '2026-08-18T15:08:37.038340-03:00', '2026-08-18T15:08:51.271156-03:00', None)
+('d4e149d9f57d48e2ab160971606dcf74', 'e6fa3379b8c3', 'builtin', 'eb6a4cd698ed4c66bcb749423375a54b', 25916, 178707434323, 'failed', '2026-08-18T15:30:46.191306-03:00', '2026-08-18T15:30:46.509534-03:00', '2026-08-18T15:31:03.443057-03:00', "RuntimeError: HTTP 404: Model 'anthropic/claude-sonnet-4' requires available credits. Your account balance is too low to use paid models — add credits at https://portal.nousresearch.com or pick a free model.")
+('8e0be0591d6e471dab7d221dc7528bba', '4d93e021a736', 'builtin', 'eb6a4cd698ed4c66bcb749423375a54b', 25916, 178707434323, 'completed', '2026-08-18T16:08:53.203645-03:00', '2026-08-18T16:08:53.473570-03:00', '2026-08-18T16:09:08.352886-03:00', None)
+('32329f9e8614480ab82b9fc7622e0ace', '4d93e021a736', 'builtin', 'eb6a4cd698ed4c66bcb749423375a54b', 25916, 178707434323, 'completed', '2026-08-18T17:09:09.689849-03:00', '2026-08-18T17:09:10.041973-03:00', '2026-08-18T17:09:24.487443-03:00', None)
+('92be149c1481449ba524eb6763fade0c', '4d93e021a736', 'builtin', 'b9fa6b98e6b4430f9853051d2181a512', 14028, 178708539601, 'completed', '2026-08-18T18:10:18.381051-03:00', '2026-08-18T18:10:18.640797-03:00', '2026-08-18T18:10:33.243043-03:00', None)
+('16159693f8174299b4e7da96a4e80cd9', '4d93e021a736', 'builtin', 'b9fa6b98e6b4430f9853051d2181a512', 14028, 178708539601, 'completed', '2026-08-18T19:11:26.946547-03:00', '2026-08-18T19:11:27.233726-03:00', '2026-08-18T19:11:42.616853-03:00', None)

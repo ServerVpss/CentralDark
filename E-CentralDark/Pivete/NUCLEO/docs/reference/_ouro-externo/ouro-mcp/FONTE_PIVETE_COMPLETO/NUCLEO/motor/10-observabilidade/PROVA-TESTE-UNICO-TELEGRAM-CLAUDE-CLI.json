@@ -1,0 +1,11 @@
+{
+  "ts": "2026-07-18T22:20:00-03:00",
+  "origem": "Claude Code CLI, fora do gateway/agent loop, comando hermes send",
+  "comando": "hermes --profile pivete send --to telegram \"[TESTE mission_panel]...\" --json",
+  "success": true,
+  "platform": "telegram",
+  "chat_id": "1901426549",
+  "message_id": "534",
+  "mirrored": true,
+  "observacao": "Chamada unica de conectividade, nao usa o plugin mission_panel (ainda desligado) nem o Card Hermes formatado -- so confirma que hermes send chega no chat real do Pivete."
+}

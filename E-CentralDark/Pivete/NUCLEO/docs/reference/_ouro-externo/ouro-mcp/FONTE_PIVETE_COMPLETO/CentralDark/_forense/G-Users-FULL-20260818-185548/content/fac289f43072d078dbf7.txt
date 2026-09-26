@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\tap\dist\react-hooks\useMemo.d.ts
+
+//#region src/react-hooks/useMemo.d.ts
+declare const useMemo: <T>(fn: () => T, deps: readonly unknown[]) => T;
+//#endregion
+export { useMemo };
+//# sourceMappingURL=useMemo.d.ts.map

@@ -1,0 +1,17 @@
+{
+  "package_family": "CENTRALDARK_CANONICAL_PROJECT",
+  "handoff": "CANONICAL_HANDOFF_ENVELOPE",
+  "created_at_utc": "2026-08-24T10:17:39+00:00",
+  "canonical_inner_zip": "02_CANONICAL_ZIP_OBJECT/CENTRALDARK_CANONICAL_PROJECT_FINAL.zip",
+  "canonical_inner_zip_sha256": "0443d87a6ffe64de4c6ffeea3932a2dd1cf5cedb65e6d7c296ba3392458654cc",
+  "canonical_inner_zip_entries": 49,
+  "canonical_tree_extracted": true,
+  "extraction_equivalence": "SHA256 per file",
+  "live_main": "fe98e4b70a8bbf6ab1fed9481ad50c48c6636f5f",
+  "hermes_runtime_now": "UNKNOWN",
+  "handoff_payload_inside_envelope_percent": 100,
+  "envelope_package_fixed_point": "PENDING_EXTERNAL_COUNTERPROOF",
+  "project_global_fixed_point": "NOT_PROVEN",
+  "self_hash_rule": "final envelope SHA is external; self-hash inside final object is impossible without circularity",
+  "history_policy": "preserve superseded evidence; never let it govern current state"
+}

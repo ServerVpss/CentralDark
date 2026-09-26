@@ -1,0 +1,17 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@babel\types\lib\comments\addComment.js
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = addComment;
+var _addComments = require("./addComments.js");
+function addComment(node, type, content, line) {
+  return (0, _addComments.default)(node, type, [{
+    type: line ? "CommentLine" : "CommentBlock",
+    value: content
+  }]);
+}
+
+//# sourceMappingURL=addComment.js.map

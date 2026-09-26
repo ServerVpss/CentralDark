@@ -1,0 +1,132 @@
+# COMANDO - deploy-vps-infra.md
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\aiox-core\squads\autoclaw\tasks\deploy-vps-infra.md
+**SHA:** 7c5e258be492cc41
+**Timestamp:** 2026-08-28T02:19:27.149161
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Contratos
+- quality_gate: "INFRA_READY (wf-whitelabel-deploy.yaml)"
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+# Deploy VPS Infrastructure (Hetzner via Playwright)
+
+## Task Anatomy
+
+```yaml
+task_name: Deploy VPS Infrastructure
+status: active
+responsible: "@devops (Gage)"
+responsible_executor: "@devops (Gage)"
+execution_type: Hybrid
+deadline: "Phase 1-2 of wf-whitelabel-deploy (Day 1)"
+estimated_time: "2-3h"
+dependencies: []
+quality_gate: "INFRA_READY (wf-whitelabel-deploy.yaml)"
+input:
+  - "User logged into Hetzner console in their browser"
+  - "Tailscale account + auth key (user provides)"
+  - "SSH public key (ed25519 preferred)"
+  - "squads/autoclaw/data/OPENCLAW-WHITELABEL-INSTALL-GUIDE.md (Phases 1-3)"
+  - "squads/autoclaw/checklists/hetzner-server-checklist.md"
+output:
+  - "Running Hetzner CX22 VPS with Ubuntu 22.04"
+  - "Node.js 22 + pnpm + Docker installed"
+  - "Tailscale connected (VPS + desktop in same tailnet)"
+  - "OpenClaw cloned, built, running as systemd service"
+  - "Gateway responding on port 18789 (loopback only)"
+  - "Completed hetzner-server-checklist.md with all items checked"
+  - "Screenshots of each provisioning step"
+action_items:
+  - "PHASE A: PLAYWRIGHT - HETZNER PROVISIONING (browser automation)"
+  - "  1. Ask user to open https://console.hetzner.cloud/ and login"
+  - "  2. User confirms they're logged in (handles 2FA themselves)"
+  - "  3. Playwright takes over:"
+  - "     browser_navigate -> https://console.hetzner.cloud/"
+  - "     browser_snapshot -> verify logged in state"
+  - "     browser_take_screenshot -> capture initial state"
+  - "  4. Navigate to Projects:"
+  - "     browser_click -> 'New Project' button"
+  - "     browser_type -> project name: openclaw-{agent-name}"
+  - "     browser_click -> 'Create' / 'Add Project'"
+  - "     browser_take_screenshot -> confirm project created"
+  - "  5. Add SSH Key to project:"
+  - "     browser_navigate -> project Settings > SSH Keys"
+  - "     browser_click -> 'Add SSH Key'"
+  - "     browser_type -> paste public key content"
+  - "     browser_type -> key name: openclaw-deploy"
+  - "     browser_click -> 'Add SSH Key' confirm"
+  - "     browser_take_screenshot -> confirm key added"
+  - "  6. Create Server:"
+  - "     browser_click -> 'Add Server'"
+  - "     browser_click -> Location: Helsinki (hel1)"
+  - "     browser_click -> Image: Ubuntu 22.04"
+  - "     browser_click -> Type: Shared vCPU > CX22 (2 vCPU, 4GB RAM)"
+  - "     browser_click -> Networking: Public IPv4 (check enabled)"
+  - "     browser_click -> SSH Key: select openclaw-deploy"
+  - "     browser_type -> Server name: openclaw-{agent-name}"
+  - "     browser_take_screenshot -> confirm all selections before submit"
+  - "     ASK USER: 'Server will cost EUR 3.99/mo. Confirm creation?'"
+  - "     browser_click -> 'Create & Buy now'"
+  - "     browser_wait_for -> server status Running"
+  - "     browser_take_screenshot -> capture server details (IP address)"
+  - "  7. Extract server IP from page:"
+  - "     browser_snapshot -> find public IPv4 in page content"
+  - "     Record IP for SSH steps"
+  - ""
+  - "PHASE B: SSH - INITIAL SERVER SETUP (terminal automation)"
+  - "  8. SSH into server:"
+  - "     ssh root@{ipv4}"
+  - "  9. System update:"
+  - "     apt update && apt upgrade -y"
+  - " 10. Create non-root user:"
+  - "     adduser --disabled-password openclaw"
+  - "     usermod -aG sudo,docker openclaw"
+  - "     mkdir -p /home/openclaw/.ssh"
+  - "     cp ~/.ssh/authorized_keys /home/openclaw/.ssh/"
+  - "     chown -R openclaw:openclaw /home/openclaw/.ssh"
+  - " 11. Configure SSH security:"
+  - "     Edit /etc/ssh/sshd_config:"
+  - "       PermitRootLogin no"
+  - "       PasswordAuthentication no"
+  - "       PubkeyAuthentication yes"
+  - "     systemctl restart sshd"
+  - " 12. Configure UFW firewall:"
+  - "     ufw default deny incoming"
+  - "     ufw default allow outgoing"
+  - "     ufw allow 22/tcp    # SSH"
+  - "     ufw allow 41641/udp # Tailscale"
+  - "     ufw enable"
+  - "     NOTE: Do NOT open 18789 - gateway stays on loopback"
+  - ""
+  - "PHASE C: SSH - RUNTIME STACK"
+  - " 13. Install Node.js 22:"
+  - "     curl -fsSL https://deb.nodesource.com/setup_22.x | bash -"
+  - "     apt install -y nodejs"
+  - "     node -v  # Must show v22.x"
+  - " 14. Install pnpm:"
+  - "     npm install -g pnpm"
+  - " 15. Install Docker:"
+  - "     apt install -y docker.io docker-compose-plugin"
+  - "     systemctl enable --now docker"
+  - " 16. Install essential tools:"
+  - "     apt install -y git curl wget jq htop"
+  - ""
+  - "PHASE D: SSH - TAILSCALE MESH VPN"
+  - " 17. Install Tailscale on VPS:"
+  - "     curl -fsSL https://tailscale.com/install.sh | sh"
+  - "     tailscale up --hostname=openclaw-{agent-name}"
+  - "     # If auth link needed, user opens it"
+  - " 18. Verify Tailscale on VPS:"
+  - "     tailscale status"
+  - "     tailscale ip -4  # Note the 100.x.x.x IP"
+  - " 19. Verify desktop connectivity:"
+  - "     tailscale ping openclaw-{agent-name}  # Must succeed"
+  - ""
+  - "PHASE E: SSH - OPENCLAW DEPLOYMENT"
+  - " 20. Clone and build OpenClaw:"
+  - "     cd /opt"
+  - "     
+```

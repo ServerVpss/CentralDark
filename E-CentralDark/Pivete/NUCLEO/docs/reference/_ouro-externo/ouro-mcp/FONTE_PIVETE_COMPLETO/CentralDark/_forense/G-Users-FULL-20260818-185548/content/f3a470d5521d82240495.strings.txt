@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\Session Storage\LOG.old
+
+2026/08/18-04:16:00.113 6560 Reusing MANIFEST C:\Users\danda\AppData\Local\Google\Chrome\User Data\Default\Session Storage/MANIFEST-000001
+2026/08/18-04:16:00.118 6560 Recovering log #4
+2026/08/18-04:16:00.118 6560 Level-0 table #7: started
+2026/08/18-04:16:00.216 6560 Level-0 table #7: 20110 bytes OK
+2026/08/18-04:16:00.305 6560 Delete type=0 #4

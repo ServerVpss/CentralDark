@@ -1,0 +1,220 @@
+﻿AUDITORIA SÓ-LEITURA — Extensões Microsoft Edge
+================================================
+Anfitrião     : SEGREDO
+Utilizador    : danda (segredo\danda)
+Data          : 2026-08-22
+Edge          : 151.0.4129.101 (BLBeacon)
+Âmbito        : C:\Users\danda\AppData\Local\Microsoft\Edge\User Data\
+Modo          : READ-ONLY (Edge não foi alterado; único ficheiro escrito = este relatório)
+
+1. PERFIS ENCONTRADOS
+---------------------
+Local State info_cache: 1 perfil.
+
+  Pasta     Nome visível    Conta Microsoft    Último uso
+  --------  --------------  -----------------  ----------
+  Default   Perfil 1        não autenticada    last_used=Default
+
+Não existem Profile 1, Profile 2, Guest Profile nem System Profile.
+Pastas de componentes (Ad Blocking, WidevineCdm, etc.) NÃO são perfis de utilizador.
+
+Ficheiros do perfil Default:
+  Preferences         289 478 bytes  (sem extensions.settings; tem external_uninstalls)
+  Secure Preferences   88 684 bytes  (extensions.settings = 25 IDs)
+  Extensions\         1 ID no disco: jmjflgjpcpepeafmmgdpfkogkghcpiha\1.2.1_0\manifest.json
+
+2. LEGENDA
+----------
+location Chromium/Edge:
+  5  = COMPONENT (nativo, empacotado no Edge)
+  10 = EXTERNAL_COMPONENT (componente externo / CDN Microsoft)
+  4  = UNPACKED (carregada em modo programador)  — NENHUMA
+  3  = EXTERNAL_REGISTRY (instalada via HKCU/HKLM\...\Edge\Extensions)
+
+enabled: state=1 ou componente sem disable_reasons => sim
+         state=0 ou stub vazio => não
+         presente só em external_uninstalls / registo órfão => residual
+
+store?: sim = update_url da Edge Add-ons / Chrome Web Store
+        nativo = location=5 (não é loja)
+        não = sideload / CRX local / registo
+        n/a = stub sem pacote
+
+Flags procuradas (pedido):
+  unpacked, not-store, <all_urls>, debugger, nativeMessaging, proxy,
+  webRequest, cookies, hijacker, IObit/Avast, force-install
+
+3. TABELA PRINCIPAL
+-------------------
+profile | name | id | version | enabled | store? | flag
+Default | Web Store | ahfgeienlihckogmohjhadlkjgocpleb | 0.2 | sim | nativo | componente; management (esperado)
+Default | Microsoft Clipboard Extension | dgiklkfkllikcanfonkcabmbdfmgleag | 1.0 | sim | nativo | clipboard Office Online; caminho 130.x obsoleto
+Default | Suppress Consent Prompt | epdpgaljfdjmcemiaplofbiholoaepem | 1.0.0 | sim | nativo | content_scripts login.live.com
+Default | Media Internals Services Extension | fikbjbembnmfhppjfnmfkahdhfohhjmg | 2.0.0 | sim | nativo | mediaInternalsPrivate
+Default | Microsoft Store | iglcjdemknebjbklcgkfaebgojjphkec | 0.2 | sim | nativo | management; identity
+Default | Edge Feedback | ihmafllikibpmigkcoadcmckbfhibefp | 1.0.0.1 | sim | nativo | debugger (nativo); NÃO é extensão de utilizador
+Default | Microsoft Voices | jdiccldimpdaibmpdkjnbmckianbfold | 1.0 | sim | nativo | ttsEngine; https://*.bing.com/
+Default | Edge relevant text changes | jmjflgjpcpepeafmmgdpfkogkghcpiha | 1.2.1 | sim | sim (Edge Add-ons CDN) | 1.ª parte Microsoft; default-install; só chrome.google.com/webstore + chromewebstore.google.com; DISCO PRESENTE
+Default | Microsoft Edge PDF Viewer | mhjfbmdgcfjbbpaeojofohoefgiehjai | 1 | sim | nativo | visualizador PDF; contentSettings
+Default | WebRTC Internals Extension | ncbjelpjchkpbikbpkcchkhkblodoama | 2.0.4 | sim | nativo | webrtcInternalsPrivate; Teams/Skype
+Default | Edge Copilot Bridge | ndcpkimcihhghdcddljkfmmjccdmcmof | 151.0.4129.100 | sim | nativo | webNavigation+tabs (nativo Copilot); service worker activo
+Default | WebRTC Extension | nkeimhogjdpnpccoofpliimaahmaaome | 4.3.26 | sim | nativo | hangout_services; Teams/Skype
+Default | (stub vazio) | cjneempfhkonkkbcmnfdibgobmhbagaj | - | não | n/a | placeholder sync; sem manifest
+Default | (stub vazio) | ehlmnljdoejdahfjdfobmpfancoibmig | - | não | n/a | placeholder sync; sem manifest
+Default | (stub vazio) | fjngpfnaikknjdhkckmncgicobbkcnle | - | não | n/a | placeholder sync; sem manifest
+Default | (stub vazio) | gbihlnbpmfkodghomcinpblknjhneknc | - | não | n/a | placeholder sync; sem manifest
+Default | (stub vazio) | gbmoeijgfngecijpcnbooedokgafmmji | - | não | n/a | placeholder sync; sem manifest
+Default | (stub vazio) | gcinnojdebelpnodghnoicmcdmamjoch | - | não | n/a | placeholder sync; sem manifest
+Default | (stub vazio) | gecfnmoodchdkebjjffmdcmeghkflpib | - | não | n/a | placeholder sync; sem manifest
+Default | (stub vazio) | hfmgbegjielnmfghmoohgmplnpeehike | - | não | n/a | placeholder sync; sem manifest
+Default | (stub vazio) | jbleckejnaboogigodiafflhkajdmpcl | - | não | n/a | placeholder sync; sem manifest
+Default | (stub vazio) | kfihiegbjaloebkmglnjnljoljgkkchm | - | não | n/a | placeholder sync; sem manifest
+Default | (stub vazio) | nkbndigcebkoaejohleckhekfmcecfja | - | não | n/a | placeholder sync; sem manifest
+Default | (stub vazio) | ofefcgjbeghpigppfmkologfjadafddi | - | não | n/a | placeholder sync; sem manifest
+Default | (desinstalada, ID oculto Microsoft) | dbconhplchnbippmjabbcedokimacfjl | - | residual | n/a | em external_uninstalls; settings={}; SEM pasta em Extensions\
+Default | IDM Integration Module (IDM) | llbjbkhnmlidjebalopleeepgdfgcpec | 6.42.60 (registo) / 6.42.50.2 (updateclient) | residual | NÃO | not-store; nativeMessaging órfão; CRX em falta; desinstalada do perfil
+Default | Google Docs Offline | ghbmnnjooekpmoecnnnilnnbdlolhkhi | 1.109.1 (updateclient) | residual | sim (CWS, desinstalada) | em external_uninstalls + install_signature; SEM disco
+
+4. DISCO — manifest.json
+------------------------
+Único pacote em Default\Extensions:
+
+  C:\Users\danda\AppData\Local\Microsoft\Edge\User Data\Default\Extensions\jmjflgjpcpepeafmmgdpfkogkghcpiha\1.2.1_0\manifest.json
+
+  name        : Edge relevant text changes
+  version     : 1.2.1
+  MV          : 3
+  update_url  : https://edge.microsoft.com/extensionwebstorebase/v1/crx
+  permissions : (nenhuma)
+  host_perm.  : (nenhuma)
+  content_scripts:
+    https://chrome.google.com/webstore/*
+    https://chromewebstore.google.com/*
+  descrição   : "Edge relevant text changes on select websites..."
+  key         : presente (assinatura Microsoft)
+  ficheiros   : content.js, content_new.js, _metadata, manifest.json
+
+Caminhos de componentes no Secure Preferences apontam para
+  C:\Program Files (x86)\Microsoft\Edge\Application\130.0.2849.56\resources\...
+  C:\Program Files (x86)\Microsoft\Edge\Application\144.0.3719.82\resources\...
+Essas pastas JÁ NÃO EXISTEM (Edge actual = 151.0.4129.101). Metadados obsoletos;
+os componentes nativos passam a viver no binário/pak. Copilot Bridge
+(151.0.4129.101\resources\edge_copilot_bridge_extension) também não está em pasta
+solta — esperado nesta versão.
+
+external_extensions.json do instalador 151: {} (vazio).
+
+5. REGISTO
+----------
+HKCU:\SOFTWARE\Microsoft\Edge\Extensions
+  llbjbkhnmlidjebalopleeepgdfgcpec
+    path    = C:\Program Files (x86)\Internet Download Manager\IDMEdgeExt.crx   [FICHEIRO INEXISTENTE]
+    version = 6.42.60
+  => leftover IDM (sideload via CRX). Perfil já a desinstalou (external_uninstalls).
+
+HKLM:\SOFTWARE\Microsoft\Edge\Extensions              NÃO EXISTE
+HKLM:\SOFTWARE\WOW6432Node\Microsoft\Edge\Extensions  existe, VAZIO
+
+Políticas (force-install / allow / block / ExtensionSettings):
+  HKCU:\SOFTWARE\Policies\Microsoft\Edge\*            NÃO EXISTE
+  HKLM:\SOFTWARE\Policies\Microsoft\Edge\*            NÃO EXISTE
+  ExtensionInstallForcelist                           NÃO EXISTE
+  => NENHUMA extensão force-install.
+
+6. NATIVE MESSAGING
+-------------------
+HKCU\SOFTWARE\Microsoft\Edge\NativeMessagingHosts
+  com.tonec.idm
+    -> C:\Program Files (x86)\Internet Download Manager\IDMMsgHost.json
+    -> JSON e host AUSENTES no disco. Extensão IDM NÃO está no perfil.
+    FLAG: nativeMessaging leftover (IDM)
+  com.anthropic.claude_browser_extension
+    -> chave VAZIA (0 valores). Sem manifest.
+    No Chrome a mesma chave aponta para
+      C:\Users\danda\AppData\Local\Packages\Claude_pzs8sxrjxfjjc\...\com.anthropic.claude_browser_extension.json
+    FLAG: leftover vazio no Edge (Claude Desktop). NÃO há extensão Claude em extensions.settings.
+
+HKLM\SOFTWARE\Microsoft\Edge\NativeMessagingHosts
+  com.microsoft.defender.browser_extension.native_message_host
+    -> Windows Defender Platform 4.18.24080.9-0 (JSON presente)
+    allowed_origins: echcggldkblhodogklpincgchnpgcdco, lcmcgbabdcbngcbcfabdncmoppkajglo,
+                     nhepdlojobjcnniaggfkkgeekccgmaji
+    Nenhuma destas IDs está instalada no perfil Edge.
+  mbambgnativemsg.exe
+    -> C:\Program Files\Malwarebytes\Anti-Malware\mbam.manifest.json (presente)
+    allowed_origins: ngbcfleeejkdengkccgdgffdakelafga, ihcjicgdanjaechkgeegckofjjedodee,
+                     bdnmbmckbekibamnoenjkgmllboffdca, bojobppfploabceghnmlahpoonbcbacn
+    Nenhuma destas IDs está instalada no perfil Edge.
+    (também em WOW6432Node)
+
+7. DESINSTALAÇÕES / RESÍDUOS
+----------------------------
+Preferences.extensions.external_uninstalls:
+  - llbjbkhnmlidjebalopleeepgdfgcpec  IDM
+  - ghbmnnjooekpmoecnnnilnnbdlolhkhi  Google Docs Offline
+  - dbconhplchnbippmjabbcedokimacfjl  extensão oculta Microsoft (sem pacote)
+
+updateclientdata.apps (ainda rastreados pelo actualizador, não = instaladas):
+  cgjgjfacjflmgphhhepmbhhbgjieaecn     (componente Omaha; sem settings)
+  kfbdpdaobnofkbopebjglnaadopfikhh     (componente Omaha; sem settings)
+  jmjflgjpcpepeafmmgdpfkogkghcpiha     Edge relevant text changes
+  ghbmnnjooekpmoecnnnilnnbdlolhkhi     Google Docs Offline (pv=1.109.1) — DESINSTALADA
+  llbjbkhnmlidjebalopleeepgdfgcpec     IDM (pv=6.42.50.2) — DESINSTALADA do perfil
+
+install_signature.ids: ghbmnnjooekpmoecnnnilnnbdlolhkhi (assinatura CWS antiga)
+microsoft_install_signature.ids: jmjflgjpcpepeafmmgdpfkogkghcpiha (assinatura Microsoft, expire 2026-11-13)
+
+8. FLAGS — RESULTADO DA PROCURA
+-------------------------------
+unpacked            : NÃO (nenhum location=4; nenhum path C:\Users\... fora de Extensions\<id>)
+not-store           : SIM residual — IDM via HKCU CRX local (ficheiro em falta)
+<all_urls>          : NÃO
+debugger            : SIM só no componente nativo "Edge Feedback" (esperado)
+nativeMessaging     : SIM residual — IDM (órfão), Claude (chave vazia), Defender/MBAM hosts sem extensão
+proxy               : NÃO
+webRequest          : NÃO
+cookies             : NÃO (Clipboard nativo usa clipboardRead/Write só em officeapps)
+hijacker-like names : NÃO
+IObit leftovers     : NÃO
+Avast leftovers     : NÃO
+force-install       : NÃO
+
+9. DATAS (convertidas de timestamp Chrome)
+------------------------------------------
+Instalação inicial componentes Default : 2024-10-24 19:37
+Edge relevant text changes instalada   : 2024-10-24 19:37
+Copilot Bridge first_install           : 2026-08-10 12:14
+Copilot Bridge last_update             : 2026-08-22 04:01
+relevant text last update check        : 2026-08-22 07:12
+
+10. VEREDICTO
+-------------
+Risco: BAIXO.
+
+Não há hijacker, unpacked, force-install, IObit/Avast, <all_urls>, proxy,
+webRequest nem cookies em extensões de terceiros.
+
+A única extensão de utilizador com código em disco é «Edge relevant text changes»
+(jmjflgjpcpepeafmmgdpfkogkghcpiha), 1.ª parte Microsoft, instalada por omissão,
+update_url da loja Edge, permissões mínimas (só Web Store Google). Legítima.
+
+O restante em extensions.settings é componente nativo Microsoft (PDF, Copilot,
+Voices, Store, Feedback, WebRTC, Clipboard) mais 12 stubs vazios desactivados
+(sync placeholders, sem manifest).
+
+Pontos de higiene (não malware activo):
+  1) IDM: chave HKCU Extensions + NativeMessagingHosts aponta para CRX/JSON
+     inexistentes; perfil já desinstalou a extensão. Lixo de registo.
+  2) Claude: chave NativeMessagingHosts vazia no Edge (sem extensão).
+  3) Google Docs Offline e dbconhpl... constam como desinstaladas.
+  4) Hosts nativos Defender e Malwarebytes registados, mas as extensões
+     correspondentes NÃO estão no perfil Edge.
+
+Acção sugerida (não executada — auditoria só-leitura):
+  - Remover HKCU\SOFTWARE\Microsoft\Edge\Extensions\llbjbkhnmlidjebalopleeepgdfgcpec
+    se IDM já não for usado no Edge.
+  - Remover HKCU\...\NativeMessagingHosts\com.tonec.idm e
+    com.anthropic.claude_browser_extension (chave vazia).
+  - Nada a forçar-desinstalar no perfil: sem add-on de terceiros activo.
+
+Fim do relatório.

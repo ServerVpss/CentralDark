@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@dnd-kit\core\dist\components\DragOverlay\index.d.ts
+
+export { DragOverlay } from './DragOverlay';
+export type { Props } from './DragOverlay';
+export { defaultDropAnimation, defaultDropAnimationSideEffects } from './hooks';
+export type { DropAnimation, DropAnimationFunction, DropAnimationFunctionArguments, DropAnimationKeyframeResolver, DropAnimationSideEffects, } from './hooks';

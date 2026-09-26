@@ -1,0 +1,14 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@exodus\bytes\encoding-lite.js
+
+export {
+  TextDecoder,
+  TextEncoder,
+  TextDecoderStream,
+  TextEncoderStream,
+  normalizeEncoding,
+  getBOMEncoding,
+  labelToName,
+  legacyHookDecode,
+  isomorphicDecode,
+  isomorphicEncode,
+} from './fallback/encoding.js'

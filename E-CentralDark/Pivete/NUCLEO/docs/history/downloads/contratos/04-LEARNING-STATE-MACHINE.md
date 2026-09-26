@@ -1,0 +1,67 @@
+# LEARNING STATE MACHINE
+
+Estados válidos:
+
+```text
+RAW
+NORMALIZED
+INDEXED_REFERENCE
+PROCESSING
+CANDIDATE
+NEEDS_EVIDENCE
+VALIDATED
+HUMAN_REVIEW
+CRYSTALLIZED
+REJECTED
+NOISE
+BLOCKED
+UNKNOWN
+ERROR
+PAUSED_BACKPRESSURE
+```
+
+Transições:
+
+```text
+RAW
+→ NORMALIZED
+→ PROCESSING
+→ CANDIDATE
+→ VALIDATED
+→ CRYSTALLIZED
+```
+
+Saídas alternativas:
+
+```text
+CANDIDATE → NEEDS_EVIDENCE
+CANDIDATE → HUMAN_REVIEW
+CANDIDATE → REJECTED
+RAW/CANDIDATE → NOISE
+ANY → BLOCKED
+ANY → UNKNOWN
+ANY → ERROR
+QUEUE → PAUSED_BACKPRESSURE
+```
+
+Promoção para `CRYSTALLIZED` exige:
+
+```text
+SOURCE_ORIGIN_KNOWN_OR_EXPLICIT_UNKNOWN=true
+PROVENANCE_RECORDED=true
+DEDUP_DONE=true
+COUNTERPROOF_DONE=true
+MATERIAL_UNKNOWN=false
+DESTINATION_OWNER_RESOLVED=true
+WRITER_LEASE_VALID=true
+```
+
+Para preferência/intenção humana:
+
+```text
+INFERRED_PREFERENCE != CRYSTALLIZED_PREFERENCE
+```
+
+Preferência pessoal nova exige declaração explícita ou confirmação material apropriada.
+
+Nenhum candidato pode alterar os testes/contratos usados para julgar sua própria promoção.

@@ -1,0 +1,17 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\utils\useToolArgsFieldStatus.d.ts
+
+//#region src/utils/useToolArgsFieldStatus.d.ts
+declare const useToolArgsFieldStatus: (fieldPath: (string | number)[]) => {
+  readonly type: "running";
+} | {
+  readonly type: "complete";
+} | {
+  readonly type: "incomplete";
+  readonly reason: "cancelled" | "length" | "content-filter" | "other" | "error";
+  readonly error?: unknown;
+} | {
+  type: string;
+};
+//#endregion
+export { useToolArgsFieldStatus };
+//# sourceMappingURL=useToolArgsFieldStatus.d.ts.map

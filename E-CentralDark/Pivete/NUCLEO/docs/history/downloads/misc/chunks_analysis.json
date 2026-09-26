@@ -1,0 +1,244 @@
+[
+  {
+    "chunk": "0kgwx97w.yjrb.js",
+    "kb": 433.6,
+    "libs": [
+      [
+        "react-dom",
+        3
+      ],
+      [
+        "react",
+        2
+      ],
+      [
+        "next/app-router",
+        2
+      ],
+      [
+        "sentry",
+        2
+      ],
+      [
+        "next/turbopack",
+        1
+      ]
+    ],
+    "module_hints": [
+      ".client.config.ts"
+    ]
+  },
+  {
+    "chunk": "17-r5~e9uf6xa.js",
+    "kb": 209.2,
+    "libs": [
+      [
+        "supabase",
+        1
+      ]
+    ],
+    "module_hints": [
+      "/.well-known/jwks.js"
+    ]
+  },
+  {
+    "chunk": "0-ybf0_clt~hk.js",
+    "kb": 138.0,
+    "libs": [
+      [
+        "next/app-router",
+        2
+      ],
+      [
+        "react-dom",
+        1
+      ]
+    ],
+    "module_hints": []
+  },
+  {
+    "chunk": "0w~b7kexmgdhn.js",
+    "kb": 100.0,
+    "libs": [
+      [
+        "framer-motion",
+        1
+      ],
+      [
+        "supabase",
+        1
+      ],
+      [
+        "zod",
+        1
+      ],
+      [
+        "lucide",
+        1
+      ]
+    ],
+    "module_hints": [
+      "/stripe.ts",
+      "/webhook.ts",
+      "/api/checkout.ts",
+      "/api/founders.ts",
+      "/auth/middleware.ts",
+      "/checkout.ts",
+      "/auth/refresh.spec.ts",
+      "/tmp/scout.js"
+    ]
+  },
+  {
+    "chunk": "0vwdfinz4vq~v.js",
+    "kb": 50.9,
+    "libs": [],
+    "module_hints": []
+  },
+  {
+    "chunk": "152k2ttyoaood.js",
+    "kb": 43.4,
+    "libs": [
+      [
+        "next/app-router",
+        1
+      ]
+    ],
+    "module_hints": []
+  },
+  {
+    "chunk": "0ox50v55czn97.js",
+    "kb": 40.8,
+    "libs": [
+      [
+        "next/app-router",
+        1
+      ],
+      [
+        "lucide",
+        1
+      ]
+    ],
+    "module_hints": []
+  },
+  {
+    "chunk": "0b_sd_9lfds66.js",
+    "kb": 36.0,
+    "libs": [
+      [
+        "next/app-router",
+        1
+      ],
+      [
+        "supabase",
+        1
+      ],
+      [
+        "lucide",
+        1
+      ]
+    ],
+    "module_hints": []
+  },
+  {
+    "chunk": "0mmsy~3klyrw7.js",
+    "kb": 32.5,
+    "libs": [
+      [
+        "react",
+        1
+      ],
+      [
+        "next/app-router",
+        1
+      ]
+    ],
+    "module_hints": []
+  },
+  {
+    "chunk": "0ocr-4y1b4zj7.js",
+    "kb": 19.6,
+    "libs": [
+      [
+        "next/app-router",
+        1
+      ],
+      [
+        "lucide",
+        1
+      ]
+    ],
+    "module_hints": []
+  },
+  {
+    "chunk": "0y_i~u-cow8xw.js",
+    "kb": 18.0,
+    "libs": [
+      [
+        "next/app-router",
+        1
+      ],
+      [
+        "supabase",
+        1
+      ]
+    ],
+    "module_hints": []
+  },
+  {
+    "chunk": "0np.x2gcr2bdv.js",
+    "kb": 13.0,
+    "libs": [],
+    "module_hints": []
+  },
+  {
+    "chunk": "turbopack-0h98090pak8a4.js",
+    "kb": 10.4,
+    "libs": [
+      [
+        "next/turbopack",
+        2
+      ]
+    ],
+    "module_hints": [
+      "/chunks/0np.x2gcr2bdv.js",
+      "/chunks/0kgwx97w.yjrb.js",
+      "/chunks/152k2ttyoaood.js"
+    ]
+  },
+  {
+    "chunk": "15vcnx3bn.nxn.js",
+    "kb": 5.4,
+    "libs": [],
+    "module_hints": [
+      "//cdn.firstpromoter.com/fpr.js"
+    ]
+  },
+  {
+    "chunk": "0t.vyw6ofd8u~.js",
+    "kb": 5.3,
+    "libs": [
+      [
+        "next/app-router",
+        1
+      ]
+    ],
+    "module_hints": []
+  },
+  {
+    "chunk": "09hit0insv75_.js",
+    "kb": 4.3,
+    "libs": [
+      [
+        "next/app-router",
+        1
+      ]
+    ],
+    "module_hints": []
+  },
+  {
+    "chunk": "0ahongyghlsfv.js",
+    "kb": 1.4,
+    "libs": [],
+    "module_hints": []
+  }
+]

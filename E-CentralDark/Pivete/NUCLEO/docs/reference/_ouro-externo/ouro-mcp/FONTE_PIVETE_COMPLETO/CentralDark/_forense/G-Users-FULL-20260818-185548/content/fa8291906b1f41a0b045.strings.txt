@@ -1,0 +1,693 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\stat.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+.reloc
+ATWVSH
+H9D$(u
+AVAUATSH
+([A\A]A^
+([A\A]A^
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+UAVAUATSH
+[A\A]A^]
+[A\A]A^]
+[A\A]A^]
+UAVAUATSH
+[A\A]A^]
+[A\A]A^]
+AVAUATH
+0A\A]A^
+0A\A]A^
+AWAVAUATVSH
+8[^A\A]A^A_
+AVAUATVSH
+UAVAUATSH
+[A\A]A^]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+ATWVSH
+8[^_A\
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATH
+(A\A]A^A_
+ATUWVSH
+ [^_]A\
+gfffffffA
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+gfffffffH
+AWAVAUATUWVSH
+T$'"T$TH
+x[^_]A\A]A^A_
+D$@u?L
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AUATUWVSH
+X[^_]A\A]
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+TUUUUUUU1
+SUUUUUUUL9
+UAVAUATVSH
+[^A\A]A^]
+AVAUATWVSH
+([^_A\A]A^
+ATWVSH
+8[^_A\
+8[^_A\
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AUATSH
+ [A\A]
+ [A\A]
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+AVAUATSH
+([A\A]A^
+([A\A]A^
+([A\A]A^
+([A\A]A^
+AWAVAUATH
+(A\A]A^A_
+(A\A]A^A_
+(A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+T$(3T$,D
+T$ 3T$$
+[^_]A\A]A^A_
+|$ POSIt
+AUATUWVSH
+H[^_]A\A]
+H[^_]A\A]
+AWAVAUATSH
+ [A\A]A^A_
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+AVAUATUWVSH
+ [^_]A\A]A^
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+H;D$8A
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+ATUWVSH
+[^_]A\
+ATUWVSH
+P[^_]A\
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+AVWVSH
+AVUWVSH
+[^_]A^
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+H9L$@t
+H9L$@t
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+cannot read table of mounted file systems
+%Y-%m-%d %H:%M:%S.%N %z
+%s.%09d
+  File: "%n"
+    ID: %-8i Namelen: %-7l Type: %T
+Block size: %-10s Fundamental block size: %S
+Blocks: Total: %-10b Free: %-10f Available: %a
+Inodes: Total: %-10c Free: %d
+  File: %N
+  Size: %-10s
+Blocks: %-10b IO Block: %-6o %F
+Device: %Dh/%dd
+Inode: %-10i  Links: %-5h Device type: %t,%T
+Device: %Dh/%dd
+Inode: %-10i  Links: %h
+Access: (%04a/%10.10A)  Uid: (%5u/%8U)   Gid: (%5g/%8G)
+Access: %x
+Modify: %y
+Change: %z
+ Birth: %w
+%s%.*d%-*.*d
+%s: invalid directive
+warning: backslash at end of format
+warning: unrecognized escape '\%c'
+using %s to denote standard input does not work in file system mode
+cannot read file system information for %s
+cannot stat standard input
+cannot stat %s
+UNKNOWN (0x%lx)
+UNKNOWN
+cannot read symbolic link %s
+failed to canonicalize %s
+failed to get security context of %s
+ invocation
+Try '%s --help' for more information.
+Usage: %s [OPTION]... FILE...
+Display file or file system status.
+Mandatory arguments to long options are mandatory for short options too.
+  -L, --dereference     follow links
+  -f, --file-system     display file system status instead of file status
+      --cached=MODE     specify how to use cached attributes;
+                          useful on remote file systems. See MODE below
+  -c  --format=FORMAT   use the specified FORMAT instead of the default;
+                          output a newline after each use of FORMAT
+      --printf=FORMAT   like --format, but interpret backslash escapes,
+                          and do not output a mandatory trailing newline;
+                          if you want a newline, include \n in FORMAT
+  -t, --terse           print the information in terse form
+      --append-exe      append .exe if cygwin magic was needed
+      --help     display this help and exit
+      --version  output version information and exit
+The --cached MODE argument can be; always, never, or default.
+`always` will use cached attributes if available, while
+`never` will try to synchronize with the latest attributes, and
+`default` will leave it up to the underlying file system.
+The valid format sequences for files (without --file-system):
+  %a   permission bits in octal (note '#' and '0' printf flags)
+  %A   permission bits and file type in human readable form
+  %b   number of blocks allocated (see %B)
+  %B   the size in bytes of each block reported by %b
+  %C   SELinux security context string
+  %d   device number in decimal
+  %D   device number in hex
+  %f   raw mode in hex
+  %F   file type
+  %g   group ID of owner
+  %G   group name of owner
+  %h   number of hard links
+  %i   inode number
+  %m   mount point
+  %n   file name
+  %N   quoted file name with dereference if symbolic link
+  %o   optimal I/O transfer size hint
+  %s   total size, in bytes
+  %t   major device type in hex, for character/block device special files
+  %T   minor device type in hex, for character/block device special files
+  %u   user ID of owner
+  %U   user name of owner
+  %w   time of file birth, human-readable; - if unknown
+  %W   time of file birth, seconds since Epoch; 0 if unknown
+  %x   time of last access, human-readable
+  %X   time of last access, seconds since Epoch
+  %y   time of last data modification, human-readable
+  %Y   time of last data modification, seconds since Epoch
+  %z   time of last status change, human-readable
+  %Z   time of last status change, seconds since Epoch
+Valid format sequences for file systems:
+  %a   free blocks available to non-superuser
+  %b   total data blocks in file system
+  %c   total file nodes in file system
+  %d   free file nodes in file system
+  %f   free blocks in file system
+  %i   file system ID in hex
+  %l   maximum length of filenames
+  %n   file name
+  %s   block size (for faster transfers)
+  %S   fundamental block size (for block counts)
+  %t   file system type in hex
+  %T   file system type in human readable form
+--terse is equivalent to the following FORMAT:
+    %s
+--terse --file-system is equivalent to the following FORMAT:
+    %s
+NOTE: your shell may have its own version of %s, which usually supersedes
+the version described here.  Please refer to your shell's documentation
+for details about the options it supports.
+test invocation
+coreutils
+Multi-call invocation
+sha224sum
+sha2 utilities
+sha256sum
+sha384sum
+sha512sum
+%s online help: <%s>
+https://www.gnu.org/software/coreutils/
+GNU coreutils
+Report any translation bugs to <https://translationproject.org/team/>
+Full documentation <%s%s>
+or available locally via: info '(coreutils) %s%s'
+/usr/share/locale
+--cached
+Michael Meskes
+missing operand
+QUOTING_STYLE
+ignoring invalid value of environment variable QUOTING_STYLE: %s
+dereference
+file-system
+format
+printf
+cached
+append-exe
+version
+default
+always
+%n %s %b %f %u %g %D %i %h %t %T %X %Y %Z %W %o
+%n %i %l %t %s %S %b %f %a %c %d
+'-+ #0I
+0123456789
+cannot get current directory
+cannot change to directory %s
+cannot stat current directory (now %s)
+cannot stat %s
+failed to return to initial working directory
+invalid argument %s for %s
+ambiguous argument %s for %s
+Valid arguments are:
+  - %s
+write error
+%s: %s
+regular empty file
+regular file
+directory
+symbolic link
+block special file
+character special file
+socket
+weird file
+%m/%d/%y
+%Y-%m-%d
+%H:%M:%S
+A NULL argv[0] was passed through an exec system call.
+/.libs/
+literal
+shell-always
+shell-escape
+shell-escape-always
+c-maybe
+escape
+locale
+clocale
+%s (%s) %s
+License GPLv3+: GNU GPL version 3 or later <%s>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+https://gnu.org/licenses/gpl.html
+Written by %s.
+Written by %s and %s.
+Written by %s, %s, and %s.
+Written by %s, %s, %s,
+and %s.
+Written by %s, %s, %s,
+%s, and %s.
+Written by %s, %s, %s,
+%s, %s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+%s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+%s, %s, and others.
+Report bugs to: %s
+bug-coreutils@gnu.org
+%s home page: <%s>
+https://www.gnu.org/software/coreutils/
+GNU coreutils
+General help using GNU software: <%s>
+https://www.gnu.org/gethelp/
+Copyright %s %d Free Software Foundation, Inc.
+memory exhausted
+! close_fail
+../coreutils-8.32/lib/chdir-long.c
+0 < len
+4096 <= len
+*dir != '/'
+dir <= dir_end
+slash - dir < 4096
+cdb_free
+chdir_long
+/etc/mtab
+autofs
+debugfs
+devpts
+fusectl
+mqueue
+rpc_pipefs
+kernfs
+ignore
+US-ASCII
+LC_ALL
+LC_CTYPE
+CP1361
+CP20127
+CP20866
+KOI8-R
+CP20936
+GB2312
+CP21866
+KOI8-RU
+CP28591
+ISO-8859-1
+CP28592
+ISO-8859-2
+CP28593
+ISO-8859-3
+CP28594
+ISO-8859-4
+CP28595
+ISO-8859-5
+CP28596
+ISO-8859-6
+CP28597
+ISO-8859-7
+CP28598
+ISO-8859-8
+CP28599
+ISO-8859-9
+CP28605
+ISO-8859-15
+CP38598
+ISO-8859-8
+CP51932
+EUC-JP
+CP51936
+GB2312
+CP51949
+EUC-KR
+CP51950
+EUC-TW
+CP54936
+GB18030
+CP65001
+H%+.2d
+?UUUUUU
+(NULL)
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+libintl_bindtextdomain
+libintl_gettext
+libintl_setlocale
+libintl_textdomain
+__assert_func
+__cxa_atexit
+__errno
+__getreent
+__locale_ctype_ptr
+__locale_mb_cur_max
+__main
+__memcpy_chk
+__sprintf_chk
+__strcpy_chk
+__swbuf_r
+_dll_crt0
+_impure_ptr
+calloc
+canonicalize_file_name
+cygwin_internal
+dll_dllcrt0
+endmntent
+fchdir
+fclose
+fprintf
+fputc_unlocked
+fputs_unlocked
+fwrite
+getcwd
+getenv
+getgrgid
+getmntent
+getopt_long
+getpwuid
+gmtime_r
+iswprint
+localeconv
+localtime_r
+malloc
+mbrtowc
+mbsinit
+memchr
+memcmp
+memcpy
+memrchr
+memset
+mktime
+msys_detach_dll
+nl_langinfo
+openat
+optarg
+optind
+posix_memalign
+printf
+program_invocation_name
+program_invocation_short_name
+pthread_mutex_lock
+pthread_mutex_unlock
+putc_unlocked
+readlink
+realloc
+setenv
+setlocale
+setmntent
+snprintf
+sprintf
+statfs
+stpcpy
+strcasecmp
+strchr
+strcmp
+strcpy
+strftime
+strlen
+strncmp
+strrchr
+strspn
+strstr
+strtol
+strtoul
+timegm
+tolower
+toupper
+unsetenv
+GetACP
+GetDriveTypeA
+GetModuleHandleA
+GetModuleHandleW
+msys-intl-8.dll
+msys-2.0.dll
+KERNEL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__imp_optarg
+__nm_optarg
+__imp_abort
+__lib64_libkernel32_a_iname
+_head_msys_intl_8_dll
+__imp__dll_crt0
+__imp_tolower
+__imp_fputs_unlocked
+__imp_memrchr
+__imp_GetModuleHandleW
+__imp_calloc
+__imp_GetDriveTypeA
+__imp_tzset
+__nm_optind
+__imp_setlocale
+__imp_getmntent
+__imp_strspn
+__imp_chdir
+__imp_getenv
+__imp_timegm
+_head_msys_2_0_dll
+__imp_mktime
+__imp_strtol
+__imp_strcmp
+__imp___strcpy_chk
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_strrchr
+__imp_free
+__nm_program_invocation_name
+__imp___errno
+__nm__impure_ptr
+__imp_pthread_mutex_unlock
+__imp_memchr
+__imp_getcwd
+__imp_fputc_unlocked
+__imp_openat
+__imp__exit
+__imp_frexp
+__imp_strcpy
+__imp_memset
+__IAT_end__
+__imp_getgrgid
+__imp_memcpy
+__imp___memcpy_chk
+__imp_localtime_r
+__imp_dll_dllcrt0
+__imp_fstat
+__imp___locale_ctype_ptr
+__imp_fwrite
+__imp_strtoul
+_head_lib64_libkernel32_a
+__imp_libintl_setlocale
+__imp_msys_detach_dll
+__imp_strftime
+__imp_strstr
+__imp_open
+__imp_gmtime_r
+__imp_iswprint
+__imp_nl_langinfo
+__imp_toupper
+__imp_statfs
+__imp_snprintf
+__imp_program_invocation_short_name
+__imp_putc_unlocked
+__imp___locale_mb_cur_max
+__nm_program_invocation_short_name
+__imp___getreent
+__imp_mbsinit
+__imp_GetModuleHandleA
+__imp___main
+__imp_strlen
+__imp_malloc
+__imp_libintl_textdomain
+__imp__impure_ptr
+__imp___assert_func
+__imp_stat
+__imp_realloc
+__imp_exit
+__imp_fchdir
+__imp_mbrtowc
+__IAT_start__
+__imp_libintl_bindtextdomain
+__imp_program_invocation_name
+__imp_libintl_gettext
+__imp_stpcpy
+__imp___cxa_atexit
+__imp_fcntl
+__imp_fprintf
+__imp_setenv
+msys_intl_8_dll_iname
+__imp_canonicalize_file_name
+__imp_optind
+__imp_fclose
+__imp_getpwuid
+__imp_localeconv
+__imp_error
+__imp___swbuf_r
+__imp_endmntent
+__imp_strcasecmp
+__imp_strncmp
+__imp_strchr
+__imp_close
+__imp_setmntent
+__imp_ldexp
+__imp_getopt_long
+__imp_unsetenv
+__imp_sprintf
+__imp_lstat
+__imp_printf
+__imp_readlink
+__imp_pthread_mutex_lock
+__imp_GetACP
+__imp___sprintf_chk
+__imp_memcmp
+msys_2_0_dll_iname
+(NULL)

@@ -1,0 +1,2464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <script>
+    /* No-flash theme init: a saved choice wins, else the OS preference.
+       Runs before paint so light mode never flashes dark on load. */
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blake Crosley - Designer &amp; Desenvolvedor</title>
+  <meta name="description" content="Designer, desenvolvedor, pai. CTO na Introl, construindo infraestrutura de IA. Crio estratégias abrangentes de produto e aplicações que fazem os usuários sorrirem.">
+
+  <!-- SEO Meta Tags -->
+  <meta name="author" content="Blake Crosley">
+  
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow">
+  
+  
+  <link rel="canonical" href="https://blakecrosley.com/pt-BR/">
+
+  <!-- Keywords (still used by some engines) -->
+  <meta name="keywords" content="Blake Crosley, product design, UX design, iOS development, ZipRecruiter, 941 Apps, branding, user experience, Pasadena designer">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Blake Crosley - Designer &amp; Desenvolvedor">
+  <meta property="og:description" content="Designer, desenvolvedor, pai. CTO na Introl, construindo infraestrutura de IA. Crio estratégias abrangentes de produto e aplicações que fazem os usuários sorrirem.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://blakecrosley.com/pt-BR/">
+  <meta property="og:image" content="https://blakecrosley.com/og/page/home.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Blake Crosley">
+  <meta property="og:locale" content="pt_BR">
+  
+  <meta property="og:locale:alternate" content="en_US">
+  
+  <meta property="og:locale:alternate" content="zh_CN">
+  
+  <meta property="og:locale:alternate" content="zh_TW">
+  
+  <meta property="og:locale:alternate" content="fr_FR">
+  
+  <meta property="og:locale:alternate" content="de_DE">
+  
+  <meta property="og:locale:alternate" content="ja_JP">
+  
+  <meta property="og:locale:alternate" content="ko_KR">
+  
+  <meta property="og:locale:alternate" content="pl_PL">
+  
+  <meta property="og:locale:alternate" content="es_ES">
+  
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@blakecrosley">
+  <meta name="twitter:creator" content="@blakecrosley">
+  <meta name="twitter:title" content="Blake Crosley - Designer &amp; Desenvolvedor">
+  <meta name="twitter:description" content="Designer, desenvolvedor, pai. CTO na Introl, construindo infraestrutura de IA. Crio estratégias abrangentes de produto e aplicações que fazem os usuários sorrirem.">
+  <meta name="twitter:image" content="https://blakecrosley.com/og/page/home.png">
+  <meta name="twitter:image:alt" content="Blake Crosley - Designer &amp; Desenvolvedor">
+
+  <!-- Mobile Browser Theme -->
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/static/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/images/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="Blake Crosley Blog" href="/blog/feed.xml">
+
+  <!-- Hreflang for internationalization -->
+  
+  <link rel="alternate" hreflang="en" href="https://blakecrosley.com/">
+  
+  <link rel="alternate" hreflang="zh-Hans" href="https://blakecrosley.com/zh-Hans/">
+  
+  <link rel="alternate" hreflang="zh-Hant" href="https://blakecrosley.com/zh-Hant/">
+  
+  <link rel="alternate" hreflang="fr" href="https://blakecrosley.com/fr/">
+  
+  <link rel="alternate" hreflang="de" href="https://blakecrosley.com/de/">
+  
+  <link rel="alternate" hreflang="ja" href="https://blakecrosley.com/ja/">
+  
+  <link rel="alternate" hreflang="ko" href="https://blakecrosley.com/ko/">
+  
+  <link rel="alternate" hreflang="pl" href="https://blakecrosley.com/pl/">
+  
+  <link rel="alternate" hreflang="pt-BR" href="https://blakecrosley.com/pt-BR/">
+  
+  <link rel="alternate" hreflang="es" href="https://blakecrosley.com/es/">
+  
+  <link rel="alternate" hreflang="x-default" href="https://blakecrosley.com/">
+  
+
+  <!-- No external script dependencies - all self-hosted -->
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/static/css/styles.css?v=206b894406">
+  <!-- Print / Save-as-PDF stylesheet (reading pages) -->
+  <link rel="stylesheet" href="/static/css/print.css?v=677b5f6bf7" media="print">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://blakecrosley.com/#website",
+        "url": "https://blakecrosley.com/",
+        "name": "Blake Crosley",
+        "description": "Designer, developer, dad. Portfolio of Blake Crosley, CTO at Introl building AI infrastructure.",
+        "publisher": {
+          "@id": "https://blakecrosley.com/#person"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://blakecrosley.com/search?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        },
+"inLanguage": "pt-BR"
+      },
+      {
+        "@type": "Person",
+        "@id": "https://blakecrosley.com/#person",
+        "name": "Blake Crosley",
+        "url": "https://blakecrosley.com/",
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://blakecrosley.com/static/images/blake-crosley.jpg",
+          "width": 800,
+          "height": 800
+        },
+        "sameAs": [
+          "https://github.com/blakecrosley",
+          "https://x.com/blakecrosley",
+          "https://www.linkedin.com/in/blakecrosley/",
+          "https://www.instagram.com/dream_of_electric/",
+          "https://941apps.com",
+          "https://dreamofelectric.com",
+          "https://introl.com/blog/local-llm-hardware-pricing-guide-2025",
+          "https://introl.com/blog/deepseek-v3-2-open-source-ai-cost-advantage",
+          "https://introl.com/blog/google-tpu-architecture-complete-guide-7-generations",
+          "https://introl.com/blog/h100-vs-h200-vs-b200-choosing-the-right-nvidia-gpus-for-your-ai-workload",
+          "https://introl.com/blog/nvidia-vera-rubin-gpu-600kw-racks-2027",
+          "https://introl.com/blog/smr-nuclear-power-ai-data-centers-2025",
+          "https://introl.com/blog/deepseek-mhc-architecture-breakthrough",
+          "https://introl.com/blog/gpu-memory-pooling-sharing-multi-tenant-kubernetes-2025",
+          "https://introl.com/blog/ray-clusters-distributed-ai-computing-infrastructure-guide-2025",
+          "https://resumegeni.com",
+          "https://resumegeni.com/about/blake-crosley",
+          "https://wayofyawara.com"
+        ],
+        "jobTitle": "Chief Technology Officer",
+        "hasOccupation": [
+          {
+            "@type": "Occupation",
+            "name": "Chief Technology Officer",
+            "occupationLocation": {
+              "@type": "City",
+              "name": "Pasadena, California"
+            },
+            "skills": ["AI Infrastructure", "GPU Computing", "Technical Leadership", "Product Strategy"]
+          },
+          {
+            "@type": "Occupation",
+            "name": "Product Designer",
+            "skills": ["Design Systems", "User Research", "Prototyping", "iOS Development"]
+          },
+          {
+            "@type": "Occupation",
+            "name": "iOS Developer",
+            "skills": ["SwiftUI", "SwiftData", "iOS 26+", "HealthKit", "StoreKit"]
+          }
+        ],
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Introl",
+          "url": "https://introl.com",
+          "description": "GPU cluster deployments and AI infrastructure"
+        },
+        "affiliation": {
+          "@type": "Organization",
+          "name": "941 Apps",
+          "url": "https://941apps.com",
+          "description": "iOS apps and digital products"
+        },
+        "alumniOf": {
+          "@type": "Organization",
+          "name": "ZipRecruiter",
+          "url": "https://ziprecruiter.com",
+          "description": "NYSE-listed employment marketplace"
+        },
+        "knowsAbout": [
+          "Product Design",
+          "User Experience Design",
+          "iOS Development",
+          "SwiftUI",
+          "Branding",
+          "Design Leadership",
+          "Claude Code",
+          "AI-Assisted Development",
+          "Midjourney",
+          "AI Image Generation",
+          "Design Principles",
+          "FastAPI",
+          "Python",
+          "GPU Computing",
+          "AI Infrastructure",
+          "NVIDIA GPUs",
+          "Distributed Systems",
+          "LLM Hardware",
+          "Kubernetes",
+          "Ray Clusters",
+          "Applicant Tracking Systems",
+          "Resume Optimization",
+          "Hiring Technology",
+          "Recruiter Workflows",
+          "Job Search UX",
+          "ATS Parsing"
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Pasadena",
+          "addressRegion": "CA",
+          "addressCountry": "US"
+        }
+      }
+    ]
+  }
+  </script>
+
+  
+<style>
+  /* Return project card — device montage (iPad + iPhone + Watch) */
+  .project-card__image--return-montage {
+    background: radial-gradient(ellipse at 35% 30%, rgba(89, 178, 204, 0.14) 0%, transparent 55%),
+                radial-gradient(ellipse at 75% 80%, rgba(102, 192, 89, 0.10) 0%, transparent 55%),
+                linear-gradient(140deg, #0f1419 0%, #0a0d12 100%);
+    border-radius: var(--radius-md);
+    position: relative;
+    min-height: 420px;
+    overflow: hidden;
+  }
+  .return-montage {
+    position: absolute;
+    inset: 8%;
+  }
+  /* Each device is a single composite image (bezel + screen baked in). */
+  .return-montage__ipad,
+  .return-montage__iphone,
+  .return-montage__watch {
+    position: absolute;
+    transform-origin: center center;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
+  }
+  .return-montage > div > img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .return-montage__ipad {
+    width: 48%;
+    left: 0;
+    bottom: 0;
+    z-index: 1;
+    transform: rotate(-2deg);
+  }
+  .return-montage__iphone {
+    width: 19%;
+    left: 54%;
+    bottom: 8%;
+    z-index: 2;
+    transform: rotate(1deg);
+  }
+  .return-montage__watch {
+    width: 17%;
+    right: 2%;
+    top: 10%;
+    z-index: 3;
+    transform: rotate(-3deg);
+  }
+  @media (max-width: 768px) {
+    .project-card__image--return-montage {
+      min-height: clamp(320px, 62vw, 480px);
+    }
+    .return-montage {
+      inset: 6%;
+    }
+    .return-montage__ipad   { width: 50%; bottom: 2%; left: 0; }
+    .return-montage__iphone { width: 20%; left: 54%; bottom: 6%; }
+    .return-montage__watch  { width: 18%; right: 0; top: 10%; }
+  }
+
+
+  /* 941 Tiles project card — live demo (messy desktop -> one click -> grid).
+     Always on a dark plum "screen" like the Return/Get Bananas montage cards. */
+  .project-card__image--tile-demo {
+    background: radial-gradient(ellipse at 30% 24%, rgba(233,70,149,0.16) 0%, transparent 55%),
+                radial-gradient(ellipse at 78% 82%, rgba(233,70,149,0.08) 0%, transparent 55%),
+                linear-gradient(140deg, #1a0a12 0%, #0c0509 100%);
+    border-radius: var(--radius-md);
+    position: relative;
+    min-height: 420px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .tile-home-demo {
+    --tile-primary:#E94695; --tile-text:#F4E9EF; --tile-background:#10050B;
+    --tile-surface:#1C0A14; --tile-muted:#B596A6; --tile-border:#3A1426;
+    --tile-glow:rgba(233,70,149,0.25);
+    width: 78%;
+  }
+.tile-home-demo .tiles-demo {
+    position: relative;
+    aspect-ratio: 4 / 2.9;
+    background: var(--tile-surface);
+    border: 1px solid var(--tile-border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25), 0 0 18px color-mix(in srgb, var(--tile-glow) 45%, transparent);
+}
+
+.tile-home-demo .demo-menubar {
+    position: absolute; top: 0; left: 0; right: 0; height: 9%;
+    display: flex; align-items: center; gap: 3%;
+    padding: 0 3.5%;
+    background: color-mix(in srgb, var(--tile-background) 82%, transparent);
+    border-bottom: 1px solid var(--tile-border);
+    font-size: clamp(9px, 1.6vw, 12px);
+    color: var(--tile-muted);
+    z-index: 3;
+}
+.tile-home-demo .demo-menubar-title { font-weight: 600; color: var(--tile-text); }
+.tile-home-demo .demo-menubar-spacer { flex: 1; }
+.tile-home-demo .demo-menubar-clock { font-variant-numeric: tabular-nums; }
+
+.tile-home-demo .demo-grid-icon {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5px;
+    width: 13px; height: 13px; padding: 1px; border-radius: 3px;
+    animation: demo-icon-flash 7s infinite;
+}
+.tile-home-demo .demo-grid-icon span { background: var(--tile-muted); border-radius: 1px; }
+@keyframes demo-icon-flash {
+    0%, 13% { background: transparent; }
+    15%, 24% { background: var(--tile-glow); }
+    26%, 100% { background: transparent; }
+}
+
+.tile-home-demo .demo-menu {
+    position: absolute; top: 10%; right: 6%;
+    width: 44%;
+    background: color-mix(in srgb, var(--tile-background) 92%, transparent);
+    border: 1px solid var(--tile-border);
+    border-radius: 10px;
+    padding: 4% 3%;
+    z-index: 4;
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+    animation: demo-menu-pop 7s infinite;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+@keyframes demo-menu-pop {
+    0%, 15% { opacity: 0; transform: translateY(-6px) scale(0.98); }
+    18%, 40% { opacity: 1; transform: translateY(0) scale(1); }
+    44%, 100% { opacity: 0; transform: translateY(-6px) scale(0.98); }
+}
+.tile-home-demo .demo-menu-row {
+    display: flex; align-items: center; gap: 6%;
+    padding: 3.5% 5%;
+    border-radius: 6px;
+    font-size: clamp(9px, 1.5vw, 12px);
+    color: var(--tile-text);
+}
+.tile-home-demo .demo-menu-row--target { animation: demo-row-flash 7s infinite; }
+@keyframes demo-row-flash {
+    0%, 26% { background: transparent; }
+    29%, 36% { background: var(--tile-glow); }
+    40%, 100% { background: transparent; }
+}
+.tile-home-demo .demo-menu-appdot { width: 10px; height: 10px; border-radius: 3px; background: var(--tile-primary); flex: none; }
+.tile-home-demo .demo-menu-name { font-weight: 600; }
+.tile-home-demo .demo-menu-count { margin-left: auto; color: var(--tile-muted); font-variant-numeric: tabular-nums; }
+.tile-home-demo .demo-menu-row--dim { color: var(--tile-muted); }
+.tile-home-demo .demo-menu-gap { font-size: clamp(8px, 1.3vw, 11px); }
+.tile-home-demo .demo-menu-slider { flex: 1; height: 3px; border-radius: 2px; background: var(--tile-border); position: relative; }
+.tile-home-demo .demo-menu-slider i { position: absolute; left: 30%; top: -3.5px; width: 10px; height: 10px; border-radius: 50%; background: var(--tile-muted); }
+
+.tile-home-demo .demo-desktop { position: absolute; inset: 9% 0 0 0; }
+
+.tile-home-demo .demo-window {
+    position: absolute;
+    background: color-mix(in srgb, var(--tile-background) 88%, transparent);
+    border: 1px solid var(--tile-border);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+    animation-duration: 7s;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(0.3, 1.4, 0.4, 1);
+}
+.tile-home-demo .demo-titlebar { display: flex; gap: 4px; align-items: center; height: 16%; min-height: 11px; padding: 0 6%; background: color-mix(in srgb, var(--tile-text) 7%, transparent); }
+.tile-home-demo .demo-titlebar i { width: 5px; height: 5px; border-radius: 50%; background: color-mix(in srgb, var(--tile-text) 24%, transparent); }
+.tile-home-demo .demo-bars { padding: 7% 8%; display: flex; flex-direction: column; gap: 12%; height: 84%; }
+.tile-home-demo .demo-bars b { display: block; height: 8%; min-height: 4px; border-radius: 3px; background: var(--tile-primary); }
+
+/* Jumbled -> grid. Grid cells (within .demo-desktop, % of its box):
+   gap 4%, two columns/rows. */
+.tile-home-demo .demo-w1 { animation-name: demo-move-w1; left: 6%; top: 12%; width: 44%; height: 46%; z-index: 1; }
+.tile-home-demo .demo-w2 { animation-name: demo-move-w2; left: 36%; top: 6%;  width: 48%; height: 52%; z-index: 2; }
+.tile-home-demo .demo-w3 { animation-name: demo-move-w3; left: 16%; top: 38%; width: 50%; height: 48%; z-index: 3; }
+.tile-home-demo .demo-w4 { animation-name: demo-move-w4; left: 54%; top: 34%; width: 42%; height: 50%; z-index: 4; }
+
+@keyframes demo-move-w1 {
+    0%, 40% { left: 6%; top: 12%; width: 44%; height: 46%; }
+    52%, 86% { left: 3%; top: 6%; width: 45.5%; height: 42%; }
+    98%, 100% { left: 6%; top: 12%; width: 44%; height: 46%; }
+}
+@keyframes demo-move-w2 {
+    0%, 42% { left: 36%; top: 6%; width: 48%; height: 52%; }
+    54%, 86% { left: 51.5%; top: 6%; width: 45.5%; height: 42%; }
+    98%, 100% { left: 36%; top: 6%; width: 48%; height: 52%; }
+}
+@keyframes demo-move-w3 {
+    0%, 44% { left: 16%; top: 38%; width: 50%; height: 48%; }
+    56%, 86% { left: 3%; top: 52%; width: 45.5%; height: 42%; }
+    98%, 100% { left: 16%; top: 38%; width: 50%; height: 48%; }
+}
+@keyframes demo-move-w4 {
+    0%, 46% { left: 54%; top: 34%; width: 42%; height: 50%; }
+    58%, 86% { left: 51.5%; top: 52%; width: 45.5%; height: 42%; }
+    98%, 100% { left: 54%; top: 34%; width: 42%; height: 50%; }
+}
+
+.tile-home-demo .demo-cursor {
+    position: absolute; width: 12px; height: 12px; z-index: 5;
+    background: var(--tile-text);
+    clip-path: polygon(0 0, 100% 38%, 46% 46%, 38% 100%);
+    left: 55%; top: 70%;
+    animation: demo-cursor-path 7s infinite ease-in-out;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4));
+}
+@keyframes demo-cursor-path {
+    0% { left: 55%; top: 70%; }
+    12% { left: 84%; top: -4%; }   /* to the grid icon */
+    15% { left: 84%; top: -4%; transform: scale(0.85); }
+    17% { transform: scale(1); }
+    27% { left: 62%; top: 8%; }    /* to the menu row */
+    30% { left: 62%; top: 8%; transform: scale(0.85); }
+    32% { transform: scale(1); }
+    48% { left: 55%; top: 70%; }   /* drift away */
+    100% { left: 55%; top: 70%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tile-home-demo .demo-window, .tile-home-demo .demo-cursor, .tile-home-demo .demo-menu, .tile-home-demo .demo-grid-icon, .tile-home-demo .demo-menu-row--target { animation: none !important; }
+    .tile-home-demo .demo-menu { opacity: 0; }
+    .tile-home-demo .demo-cursor { display: none; }
+    .tile-home-demo .demo-w1 { left: 3%; top: 6%; width: 45.5%; height: 42%; }
+    .tile-home-demo .demo-w2 { left: 51.5%; top: 6%; width: 45.5%; height: 42%; }
+    .tile-home-demo .demo-w3 { left: 3%; top: 52%; width: 45.5%; height: 42%; }
+    .tile-home-demo .demo-w4 { left: 51.5%; top: 52%; width: 45.5%; height: 42%; }
+  }
+
+  @media (max-width: 768px) {
+    .project-card__image--tile-demo { min-height: clamp(300px, 58vw, 440px); }
+    .tile-home-demo { width: 84%; }
+  }
+
+  /* Get Bananas project card — device montage (Mac + iPhone + Watch).
+     Mirrors return-montage shape with a yellow-tinted "ripe banana" wash
+     instead of Return's water/forest greens. */
+  .project-card__image--gb-montage {
+    background: radial-gradient(ellipse at 30% 25%, rgba(244, 196, 48, 0.10) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 85%, rgba(244, 196, 48, 0.06) 0%, transparent 55%),
+                linear-gradient(140deg, #14110a 0%, #0a0d0a 100%);
+    border-radius: var(--radius-md);
+    position: relative;
+    min-height: 420px;
+    overflow: hidden;
+  }
+  .gb-montage {
+    position: absolute;
+    inset: 8%;
+  }
+  .gb-montage__mac,
+  .gb-montage__iphone,
+  .gb-montage__watch {
+    position: absolute;
+    transform-origin: center center;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
+  }
+  .gb-montage > div > img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  /* Mac is wider (landscape) so it occupies most of the frame, behind
+     the iPhone. Bleeds slightly past the left edge for a stronger anchor. */
+  .gb-montage__mac {
+    width: 72%;
+    left: -6%;
+    top: 14%;
+    z-index: 1;
+  }
+  /* iPhone is tall portrait, foreground. Width matches Return's montage
+     iPhone (19%) for visual parity across the work-card grid. */
+  .gb-montage__iphone {
+    width: 19%;
+    right: 6%;
+    bottom: 4%;
+    z-index: 2;
+    transform: rotate(2deg);
+  }
+  /* Watch is small, anchored top-right corner with extra right-edge bleed
+     so it stays clearly distinct from the iPhone below. */
+  .gb-montage__watch {
+    width: 18%;
+    right: -8%;
+    top: 2%;
+    z-index: 3;
+    transform: rotate(-3deg);
+  }
+  @media (max-width: 768px) {
+    .project-card__image--gb-montage {
+      min-height: clamp(320px, 62vw, 480px);
+    }
+    .gb-montage { inset: 6%; }
+    .gb-montage__mac    { width: 76%; top: 18%; left: -4%; }
+    .gb-montage__iphone { width: 20%; right: 2%; bottom: 4%; }
+    .gb-montage__watch  { width: 20%; right: -6%; top: 2%; }
+  }
+</style>
+
+</head>
+<body data-copy-label="Copy" data-copied-label="Copied">
+  <!-- Skip to content for accessibility -->
+  <a href="#main" class="sr-only">Pular para o conteúdo</a>
+
+  <!-- Mobile Nav State -->
+  <div x-data="{ navOpen: false, langOpen: false }" @keydown.escape.window="navOpen = false; langOpen = false">
+    <!-- Header -->
+    <header class="header">
+      <div class="header__inner">
+        <div class="header__logo">
+          <a href="/pt-BR/" aria-label="Blake Crosley - Home">Blake Crosley</a>
+        </div>
+
+        <div class="header__actions">
+          
+          <button type="button"
+                  class="language-switcher-trigger language-mobile-btn"
+                  @click="langOpen = !langOpen; navOpen = false"
+                  :aria-expanded="langOpen">
+            <span class="language-current">Português</span>
+            <svg class="language-switcher-icon" :class="{ 'rotated': langOpen }"
+                 xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <button
+            class="nav__toggle"
+            @click="navOpen = !navOpen; langOpen = false"
+            x-bind:aria-expanded="navOpen"
+            x-bind:class="navOpen ? 'nav__toggle is-open' : 'nav__toggle'"
+            aria-label="Toggle navigation"
+          >
+            <span class="nav__toggle-icon">
+              <span class="nav__toggle-bar"></span>
+              <span class="nav__toggle-bar"></span>
+              <span class="nav__toggle-bar"></span>
+            </span>
+          </button>
+        </div>
+
+        <nav class="nav nav--desktop" aria-label="Main navigation">
+          <a href="/pt-BR/about">Sobre</a>
+          <a href="/pt-BR/#work">Trabalho</a>
+          <a href="/pt-BR/writing">Textos</a>
+          <a href="/pt-BR/guides">Guias</a>
+          <a href="/pt-BR/fun">Fun</a>
+          <a href="/pt-BR/#contact">Contato</a>
+          <a href="/pt-BR/search" class="nav__search" aria-label="Search" title="Search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          </a>
+        </nav>
+
+        
+        <div class="header__end">
+          
+          <button type="button" class="theme-toggle" aria-label="Toggle light and dark mode" title="Toggle light/dark"
+                  onclick="(function(){var d=document.documentElement;if(d.getAttribute('data-theme')==='light'){d.removeAttribute('data-theme');try{localStorage.setItem('theme','dark')}catch(e){}}else{d.setAttribute('data-theme','light');try{localStorage.setItem('theme','light')}catch(e){}}})()">
+            <svg class="theme-toggle__icon theme-toggle__icon--sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+            <svg class="theme-toggle__icon theme-toggle__icon--moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+
+          <div class="language-switcher"
+     x-data="{ open: false }"
+     @click.away="open = false"
+     @keydown.escape.window="open = false">
+
+  
+  <button type="button"
+          class="language-switcher-trigger"
+          @click="open = !open"
+          :aria-expanded="open"
+          aria-haspopup="listbox"
+          aria-label="Selecionar idioma">
+    <span class="language-current">Português</span>
+    <svg class="language-switcher-icon"
+         :class="{ 'rotated': open }"
+         xmlns="http://www.w3.org/2000/svg"
+         width="16" height="16"
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </button>
+
+  
+  <ul class="language-switcher-menu"
+      role="listbox"
+      :class="{ 'is-open': open }"
+      :aria-hidden="!open"
+      x-cloak><li role="option"
+        class="language-option"
+        :aria-selected="false">
+      <a href="/"
+         hreflang="en"
+         @click.prevent="document.cookie = 'locale=en; path=/; max-age=31536000; SameSite=Lax; Secure'; window.location.href = $el.href"
+         class="language-option-link">
+        <span class="language-native">English</span></a>
+    </li><li role="option"
+        class="language-option"
+        :aria-selected="false">
+      <a href="/zh-Hans/"
+         hreflang="zh-Hans"
+         @click.prevent="document.cookie = 'locale=zh-Hans; path=/; max-age=31536000; SameSite=Lax; Secure'; window.location.href = $el.href"
+         class="language-option-link">
+        <span class="language-native">简体中文</span></a>
+    </li><li role="option"
+        class="language-option"
+        :aria-selected="false">
+      <a href="/zh-Hant/"
+         hreflang="zh-Hant"
+         @click.prevent="document.cookie = 'locale=zh-Hant; path=/; max-age=31536000; SameSite=Lax; Secure'; window.location.href = $el.href"
+         class="language-option-link">
+        <span class="language-native">繁體中文</span></a>
+    </li><li role="option"
+        class="language-option"
+        :aria-selected="false">
+      <a href="/fr/"
+         hreflang="fr"
+         @click.prevent="document.cookie = 'locale=fr; path=/; max-age=31536000; SameSite=Lax; Secure'; window.location.href = $el.href"
+         class="language-option-link">
+        <span class="language-native">Français</span></a>
+    </li><li role="option"
+        class="language-option"
+        :aria-selected="false">
+      <a href="/de/"
+         hreflang="de"
+         @click.prevent="document.cookie = 'locale=de; path=/; max-age=31536000; SameSite=Lax; Secure'; window.location.href = $el.href"
+         class="language-option-link">
+        <span class="language-native">Deutsch</span></a>
+    </li><li role="option"
+        class="language-option"
+        :aria-selected="false">
+      <a href="/ja/"
+         hreflang="ja"
+         @click.prevent="document.cookie = 'locale=ja; path=/; max-age=31536000; SameSite=Lax; Secure'; window.location.href = $el.href"
+         class="language-option-link">
+        <span class="language-native">日本語</span></a>
+    </li><li role="option"
+        class="language-option"
+        :aria-selected="false">
+      <a href="/ko/"
+         hreflang="ko"
+         @click.prevent="document.cookie = 'locale=ko; path=/; max-age=31536000; SameSite=Lax; Secure'; window.location.href = $el.href"
+         class="language-option-link">
+        <span class="language-native">한국어</span></a>
+    </li><li role="option"
+        class="language-option"
+        :aria-selected="false">
+      <a href="/pl/"
+         hreflang="pl"
+         @click.prevent="document.cookie = 'locale=pl; path=/; max-age=31536000; SameSite=Lax; Secure'; window.location.href = $el.href"
+         class="language-option-link">
+        <span class="language-native">Polski</span></a>
+    </li><li role="option"
+        class="language-option active"
+        :aria-selected="true">
+      <a href="/pt-BR/"
+         hreflang="pt-BR"
+         @click.prevent="document.cookie = 'locale=pt-BR; path=/; max-age=31536000; SameSite=Lax; Secure'; window.location.href = $el.href"
+         class="language-option-link">
+        <span class="language-native">Português</span><svg class="check-icon"
+             xmlns="http://www.w3.org/2000/svg"
+             width="16" height="16"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg></a>
+    </li><li role="option"
+        class="language-option"
+        :aria-selected="false">
+      <a href="/es/"
+         hreflang="es"
+         @click.prevent="document.cookie = 'locale=es; path=/; max-age=31536000; SameSite=Lax; Secure'; window.location.href = $el.href"
+         class="language-option-link">
+        <span class="language-native">Español</span></a>
+    </li></ul>
+</div>
+
+<style>
+.language-switcher {
+  position: relative;
+  display: inline-block;
+}
+
+.language-switcher-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.375rem;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.15s ease;
+}
+
+.language-switcher-trigger:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.language-switcher-trigger:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+.language-switcher-icon {
+  transition: transform 0.15s ease;
+}
+
+.language-switcher-icon.rotated {
+  transform: rotate(180deg);
+}
+
+.language-switcher-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  z-index: 50;
+  min-width: 180px;
+  padding: 0.5rem 0;
+  margin: 0;
+  list-style: none;
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  display: none;
+}
+
+.language-switcher-menu.is-open {
+  display: block;
+}
+
+.language-option {
+  margin: 0;
+}
+
+.language-option-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: background 0.1s ease;
+  white-space: nowrap;
+}
+
+.language-option-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.language-option.active .language-option-link {
+  color: #fff;
+}
+
+.language-native {
+  flex: 1;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+
+.check-icon {
+  color: #4ade80;
+}
+
+/* Mobile - full screen panel with grid */
+@media (max-width: 768px) {
+  .language-switcher {
+    position: static;
+  }
+
+  .language-switcher-menu {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    min-width: unset;
+    width: 100%;
+    padding: 1.5rem 1rem;
+    margin: 0;
+    background: #0a0a0a;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    z-index: 100;
+    overflow-y: auto;
+    display: none;
+  }
+
+  .language-switcher-menu.is-open {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    align-content: start;
+  }
+
+  .language-option {
+    margin: 0;
+  }
+
+  .language-option-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.875rem 0.5rem;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.06);
+    font-size: 0.9375rem;
+    text-align: center;
+    min-height: 48px;
+  }
+
+  .language-option-link:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .language-option.active .language-option-link {
+    background: rgba(74, 222, 128, 0.15);
+    border: 1px solid rgba(74, 222, 128, 0.4);
+  }
+
+  .language-native {
+    flex: unset;
+  }
+
+  .check-icon {
+    display: none;
+  }
+}
+</style>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu (outside header) -->
+    <div class="mobile-menu" x-show="navOpen" x-cloak>
+      <nav class="mobile-menu__nav" aria-label="Mobile navigation">
+        <a href="/pt-BR/about" @click="navOpen = false">Sobre</a>
+        <a href="/pt-BR/#work" @click="navOpen = false">Trabalho</a>
+        <a href="/pt-BR/writing" @click="navOpen = false">Textos</a>
+        <a href="/pt-BR/guides" @click="navOpen = false">Guias</a>
+        <a href="/pt-BR/fun" @click="navOpen = false">Fun</a>
+        <a href="/pt-BR/#contact" @click="navOpen = false">Contato</a>
+        <a href="/pt-BR/search" @click="navOpen = false">Search</a>
+      </nav>
+      
+      <button type="button" class="mobile-menu__theme theme-toggle" aria-label="Toggle light and dark mode"
+              onclick="(function(){var d=document.documentElement;if(d.getAttribute('data-theme')==='light'){d.removeAttribute('data-theme');try{localStorage.setItem('theme','dark')}catch(e){}}else{d.setAttribute('data-theme','light');try{localStorage.setItem('theme','light')}catch(e){}}})()">
+        <svg class="theme-toggle__icon theme-toggle__icon--sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+        <svg class="theme-toggle__icon theme-toggle__icon--moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        <span class="theme-toggle__label theme-toggle__label--dark">Modo escuro</span>
+        <span class="theme-toggle__label theme-toggle__label--light">Modo claro</span>
+      </button>
+    </div>
+
+    <!-- Mobile Language Panel -->
+    <div class="mobile-language-panel" x-show="langOpen" x-cloak>
+      <div class="mobile-language-grid"><a href="/"
+           hreflang="en"
+           @click="document.cookie = 'locale=en; path=/; max-age=31536000; SameSite=Lax'; langOpen = false"
+           class="mobile-language-option">
+          English
+        </a><a href="/zh-Hans/"
+           hreflang="zh-Hans"
+           @click="document.cookie = 'locale=zh-Hans; path=/; max-age=31536000; SameSite=Lax'; langOpen = false"
+           class="mobile-language-option">
+          简体中文
+        </a><a href="/zh-Hant/"
+           hreflang="zh-Hant"
+           @click="document.cookie = 'locale=zh-Hant; path=/; max-age=31536000; SameSite=Lax'; langOpen = false"
+           class="mobile-language-option">
+          繁體中文
+        </a><a href="/fr/"
+           hreflang="fr"
+           @click="document.cookie = 'locale=fr; path=/; max-age=31536000; SameSite=Lax'; langOpen = false"
+           class="mobile-language-option">
+          Français
+        </a><a href="/de/"
+           hreflang="de"
+           @click="document.cookie = 'locale=de; path=/; max-age=31536000; SameSite=Lax'; langOpen = false"
+           class="mobile-language-option">
+          Deutsch
+        </a><a href="/ja/"
+           hreflang="ja"
+           @click="document.cookie = 'locale=ja; path=/; max-age=31536000; SameSite=Lax'; langOpen = false"
+           class="mobile-language-option">
+          日本語
+        </a><a href="/ko/"
+           hreflang="ko"
+           @click="document.cookie = 'locale=ko; path=/; max-age=31536000; SameSite=Lax'; langOpen = false"
+           class="mobile-language-option">
+          한국어
+        </a><a href="/pl/"
+           hreflang="pl"
+           @click="document.cookie = 'locale=pl; path=/; max-age=31536000; SameSite=Lax'; langOpen = false"
+           class="mobile-language-option">
+          Polski
+        </a><a href="/pt-BR/"
+           hreflang="pt-BR"
+           @click="document.cookie = 'locale=pt-BR; path=/; max-age=31536000; SameSite=Lax'; langOpen = false"
+           class="mobile-language-option active">
+          Português
+        </a><a href="/es/"
+           hreflang="es"
+           @click="document.cookie = 'locale=es; path=/; max-age=31536000; SameSite=Lax'; langOpen = false"
+           class="mobile-language-option">
+          Español
+        </a></div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main" role="main">
+    
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <div class="hero__content">
+      <h1 class="hero__title">Olá, sou o Blake</h1>
+      <p class="hero__subtitle">
+        Designer, desenvolvedor, pai e marido dedicado. Liderei equipes para criar estratégias abrangentes de produto, desenvolvi branding para empresas como Instacart e ZipRecruiter, e criei aplicações que fazem os usuários sorrirem.
+      </p>
+      <p class="hero__subtitle">
+        Moro em Pasadena, CA, onde sou dono e opero um estúdio de design e desenvolvimento chamado 941 Apps.
+        <a href="https://941apps.com" target="_blank" rel="noopener">941 Apps</a>.
+        Veja também minha arte generativa em
+        <a href="https://dreamofelectric.com" target="_blank" rel="noopener">Dream of Electric</a>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Personal Photo Section -->
+<section class="personal-photos">
+  <div class="container">
+    <div class="personal-photos__single">
+      
+      <picture>
+        <source
+          type="image/webp"
+          srcset="/static/images/optimized/blake-skiing-400w.webp 400w, /static/images/optimized/blake-skiing-600w.webp 600w, /static/images/optimized/blake-skiing-800w.webp 800w"
+          sizes="(max-width: 600px) calc(100vw - 48px), 504px">
+        <img
+          src="/static/images/optimized/blake-skiing-fallback.jpg"
+          alt="Blake skiing"
+          width="800"
+          height="999"
+          loading="eager"
+          fetchpriority="high">
+      </picture>
+    </div>
+  </div>
+</section>
+
+<!-- Companies Section -->
+<section class="companies">
+  <div class="container">
+    <h2 class="companies__title">Empresas com as quais trabalhei</h2>
+    <div class="companies__logos">
+      
+      
+      
+      <img
+        src="/static/images/logos/apple.svg"
+        alt="Apple"
+        class="companies__logo companies__logo--dark"
+        loading="lazy"
+        width="34"
+        height="40">
+      <img
+        src="/static/images/logos/apple-light.svg"
+        alt="Apple"
+        class="companies__logo companies__logo--light"
+        loading="lazy"
+        width="34"
+        height="40">
+      
+      
+      
+      
+      <img
+        src="/static/images/logos/disney.svg"
+        alt="Disney"
+        class="companies__logo companies__logo--dark"
+        loading="lazy"
+        width="87"
+        height="36">
+      <img
+        src="/static/images/logos/disney-light.svg"
+        alt="Disney"
+        class="companies__logo companies__logo--light"
+        loading="lazy"
+        width="87"
+        height="36">
+      
+      
+      
+      
+      <img
+        src="/static/images/logos/penguin.svg"
+        alt="Penguin Random House"
+        class="companies__logo companies__logo--dark"
+        loading="lazy"
+        width="85"
+        height="36">
+      <img
+        src="/static/images/logos/penguin-light.svg"
+        alt="Penguin Random House"
+        class="companies__logo companies__logo--light"
+        loading="lazy"
+        width="85"
+        height="36">
+      
+      
+      
+      
+      <img
+        src="/static/images/logos/marvel.svg"
+        alt="Marvel"
+        class="companies__logo"
+        loading="lazy"
+        width="90"
+        height="36">
+      
+      
+      
+      
+      <img
+        src="/static/images/logos/ziprecruiter.svg"
+        alt="ZipRecruiter"
+        class="companies__logo companies__logo--dark"
+        loading="lazy"
+        width="120"
+        height="27">
+      <img
+        src="/static/images/logos/ziprecruiter-light.svg"
+        alt="ZipRecruiter"
+        class="companies__logo companies__logo--light"
+        loading="lazy"
+        width="120"
+        height="27">
+      
+      
+      
+      
+      <img
+        src="/static/images/logos/instacart.svg"
+        alt="Instacart"
+        class="companies__logo companies__logo--dark"
+        loading="lazy"
+        width="125"
+        height="20">
+      <img
+        src="/static/images/logos/instacart-light.svg"
+        alt="Instacart"
+        class="companies__logo companies__logo--light"
+        loading="lazy"
+        width="125"
+        height="20">
+      
+      
+      
+      
+      <img
+        src="/static/images/logos/harpercollins.svg"
+        alt="HarperCollins"
+        class="companies__logo companies__logo--dark"
+        loading="lazy"
+        width="125"
+        height="20">
+      <img
+        src="/static/images/logos/harpercollins-light.svg"
+        alt="HarperCollins"
+        class="companies__logo companies__logo--light"
+        loading="lazy"
+        width="125"
+        height="20">
+      
+      
+      
+      
+      <img
+        src="/static/images/logos/introl.svg"
+        alt="Introl"
+        class="companies__logo companies__logo--dark"
+        loading="lazy"
+        width="115"
+        height="28">
+      <img
+        src="/static/images/logos/introl-light.svg"
+        alt="Introl"
+        class="companies__logo companies__logo--light"
+        loading="lazy"
+        width="115"
+        height="28">
+      
+      
+    </div>
+  </div>
+</section>
+
+<!-- Recent Work Section -->
+<section
+  class="projects"
+  id="work"
+  x-data="{ lightbox: { open: false, src: '', alt: '' } }"
+  @keydown.escape.window="lightbox.open = false"
+>
+  <div class="container">
+    <div class="projects__header">
+      <h2 class="projects__title">Trabalhos Recentes</h2>
+    </div>
+    <div class="projects__list">
+      
+      <article class="project-card project-card--image-left">
+        
+        <div
+          class="project-card__image"
+          data-lightbox
+          @click="lightbox = { open: true, src: $el.querySelector('img').src, alt: '941 Reps' }"
+        >
+          
+          <picture>
+            <source
+              type="image/webp"
+              srcset="/static/images/optimized/reps-400w.webp 400w, /static/images/optimized/reps-600w.webp 600w, /static/images/optimized/reps-800w.webp 800w, /static/images/optimized/reps-1200w.webp 1200w"
+              sizes="(max-width: 480px) calc(100vw - 64px), (max-width: 768px) calc(100vw - 96px), 650px">
+            <img
+              src="/static/images/optimized/reps-fallback.jpg"
+              alt="941 Reps — workout log for iPhone, iPad, and Apple Watch"
+              width="1200"
+              height="1045"
+              loading="lazy">
+          </picture>
+        </div>
+        
+        <div class="project-card__content">
+          <h3 class="project-card__title">941 Reps</h3>
+          <p class="project-card__description">
+            
+              Um diário de treino rápido e privado para iPhone, iPad e Apple Watch. Design de caderno manuscrito, dezessete idiomas e um conector que permite que o Claude leia seu histórico de treinos e planeje sua próxima sessão por um único caminho de escrita validado.
+            
+          </p>
+          <a
+            href="/pt-BR/work/reps"
+            class="project-card__link"
+            
+            aria-label="View Work: 941 Reps"
+            onclick="window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'reps',dest:'/pt-BR/work/reps',type:'view_work'})"
+          >
+            
+              Ver Trabalho
+            
+          </a>
+          <div class="project-card__badges">
+            
+            <a href="https://941reps.com" target="_blank" rel="noopener" class="project-card__badge project-card__badge--website" onclick="event.stopPropagation();window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'reps',dest:'https://941reps.com',type:'website'})">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              <span>Website</span>
+            </a>
+            
+            
+            <a href="https://apps.apple.com/us/app/941-reps/id6776044339" target="_blank" rel="noopener" class="project-card__app-store" onclick="event.stopPropagation();window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'reps',dest:'https://apps.apple.com/us/app/941-reps/id6776044339',type:'app_store'})">
+              <img src="/static/images/app-store-badge.png" alt="Download on the App Store" width="120" height="40" loading="lazy">
+            </a>
+            
+          </div>
+        </div>
+      </article>
+      
+      <article class="project-card project-card--image-right">
+        
+        <div class="project-card__image project-card__image--return-montage">
+          <div class="return-montage" aria-hidden="true">
+            <div class="return-montage__ipad">
+              <img src="/static/return/home/home-ipad-forest.webp" width="1200" height="1565" alt="" loading="eager">
+            </div>
+            <div class="return-montage__iphone">
+              <img src="/static/return/home/home-iphone-water.webp" width="1200" height="2486" alt="" loading="eager">
+            </div>
+            <div class="return-montage__watch">
+              <img src="/static/return/home/home-watch-fire.webp" width="600" height="960" alt="" loading="eager">
+            </div>
+          </div>
+        </div>
+        
+        <div class="project-card__content">
+          <h3 class="project-card__title">Return</h3>
+          <p class="project-card__description">
+            
+              Um cronômetro de meditação zen e foco para iPhone, iPad, Apple Watch, Apple TV e Mac. Desenvolvido de ponta a ponta em SwiftUI para iOS 26 com Liquid Glass, registro de minutos de atenção plena no HealthKit e sincronização de sessões via iCloud em todos os dispositivos.
+            
+          </p>
+          <a
+            href="/pt-BR/work/return"
+            class="project-card__link"
+            
+            aria-label="View Work: Return"
+            onclick="window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'return',dest:'/pt-BR/work/return',type:'view_work'})"
+          >
+            
+              Ver Trabalho
+            
+          </a>
+          <div class="project-card__badges">
+            
+            <a href="https://941return.com" target="_blank" rel="noopener" class="project-card__badge project-card__badge--website" onclick="event.stopPropagation();window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'return',dest:'https://941return.com',type:'website'})">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              <span>Website</span>
+            </a>
+            
+            
+            <a href="https://apps.apple.com/us/app/return/id6756242021" target="_blank" rel="noopener" class="project-card__app-store" onclick="event.stopPropagation();window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'return',dest:'https://apps.apple.com/us/app/return/id6756242021',type:'app_store'})">
+              <img src="/static/images/app-store-badge.png" alt="Download on the App Store" width="120" height="40" loading="lazy">
+            </a>
+            
+          </div>
+        </div>
+      </article>
+      
+      <article class="project-card project-card--image-left">
+        
+        <div class="project-card__image project-card__image--gb-montage">
+          <div class="gb-montage" aria-hidden="true">
+            <div class="gb-montage__mac">
+              <img src="/static/images/get-bananas/mac-checked.webp" width="900" height="592" alt="" loading="lazy">
+            </div>
+            <div class="gb-montage__iphone">
+              <img src="/static/images/get-bananas/iphone-en.webp" width="328" height="685" alt="" loading="lazy">
+            </div>
+            <div class="gb-montage__watch">
+              <img src="/static/images/get-bananas/watch-en.webp" width="396" height="634" alt="" loading="lazy">
+            </div>
+          </div>
+        </div>
+        
+        <div class="project-card__content">
+          <h3 class="project-card__title">Get Bananas</h3>
+          <p class="project-card__description">
+            
+              Uma lista de compras com estilo manuscrito para iPhone, iPad, Mac e Apple Watch — com uma extensão do Claude Desktop que permite que o Claude leia e atualize sua lista. SwiftUI em todos os dispositivos, um servidor MCP no bundle, um único arquivo JSON no seu contêiner do iCloud.
+            
+          </p>
+          <a
+            href="/pt-BR/work/get-bananas"
+            class="project-card__link"
+            
+            aria-label="View Work: Get Bananas"
+            onclick="window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'get-bananas',dest:'/pt-BR/work/get-bananas',type:'view_work'})"
+          >
+            
+              Ver Trabalho
+            
+          </a>
+          <div class="project-card__badges">
+            
+            <a href="https://941getbananas.com" target="_blank" rel="noopener" class="project-card__badge project-card__badge--website" onclick="event.stopPropagation();window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'get-bananas',dest:'https://941getbananas.com',type:'website'})">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              <span>Website</span>
+            </a>
+            
+            
+            <a href="https://apps.apple.com/us/app/get-bananas/id6756241534" target="_blank" rel="noopener" class="project-card__app-store" onclick="event.stopPropagation();window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'get-bananas',dest:'https://apps.apple.com/us/app/get-bananas/id6756241534',type:'app_store'})">
+              <img src="/static/images/app-store-badge.png" alt="Download on the App Store" width="120" height="40" loading="lazy">
+            </a>
+            
+          </div>
+        </div>
+      </article>
+      
+      <article class="project-card project-card--image-right">
+        
+        <div class="project-card__image project-card__image--tile-demo">
+          <div class="tile-home-demo">
+            <div class="tiles-demo" role="img" aria-label="Animated demo: a messy macOS desktop; one click tiles an app's windows into an even grid.">
+              <div class="demo-menubar">
+                <span class="demo-menubar-apple">&#63743;</span>
+                <span class="demo-menubar-title">Ghostty</span>
+                <span class="demo-menubar-spacer"></span>
+                <span class="demo-grid-icon" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                <span class="demo-menubar-clock">9:41</span>
+              </div>
+              <div class="demo-menu" aria-hidden="true">
+                <div class="demo-menu-row demo-menu-row--target">
+                  <span class="demo-menu-appdot"></span>
+                  <span class="demo-menu-name">Ghostty</span>
+                  <span class="demo-menu-count">4</span>
+                </div>
+                <div class="demo-menu-row demo-menu-row--dim">
+                  <span class="demo-menu-gap">Gap</span>
+                  <span class="demo-menu-slider"><i></i></span>
+                </div>
+              </div>
+              <div class="demo-desktop" aria-hidden="true">
+                <div class="demo-window demo-w1"><div class="demo-titlebar"><i></i><i></i><i></i></div><div class="demo-bars"><b style="width:62%"></b><b style="width:78%"></b><b style="width:45%"></b></div></div>
+                <div class="demo-window demo-w2"><div class="demo-titlebar"><i></i><i></i><i></i></div><div class="demo-bars"><b style="width:70%"></b><b style="width:52%"></b></div></div>
+                <div class="demo-window demo-w3"><div class="demo-titlebar"><i></i><i></i><i></i></div><div class="demo-bars"><b style="width:55%"></b><b style="width:72%"></b><b style="width:40%"></b></div></div>
+                <div class="demo-window demo-w4"><div class="demo-titlebar"><i></i><i></i><i></i></div><div class="demo-bars"><b style="width:66%"></b><b style="width:44%"></b><b style="width:58%"></b></div></div>
+                <div class="demo-cursor" aria-hidden="true"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="project-card__content">
+          <h3 class="project-card__title">941 Tiles</h3>
+          <p class="project-card__description">
+            
+              Um organizador de janelas com um clique para macOS. Quando o sandbox da Mac App Store proibiu a API de Acessibilidade da qual todos os outros organizadores dependem, lancei mesmo assim, delegando os movimentos de janela ao motor do próprio Shortcuts da Apple. Swift nativo, 17 idiomas, não coleta nada.
+            
+          </p>
+          <a
+            href="/pt-BR/work/tile"
+            class="project-card__link"
+            
+            aria-label="View Work: 941 Tiles"
+            onclick="window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'tile',dest:'/pt-BR/work/tile',type:'view_work'})"
+          >
+            
+              Ver Trabalho
+            
+          </a>
+          <div class="project-card__badges">
+            
+            <a href="https://941tiles.com" target="_blank" rel="noopener" class="project-card__badge project-card__badge--website" onclick="event.stopPropagation();window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'tile',dest:'https://941tiles.com',type:'website'})">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              <span>Website</span>
+            </a>
+            
+            
+            <a href="https://apps.apple.com/app/941-tiles/id6758425339" target="_blank" rel="noopener" class="project-card__app-store" onclick="event.stopPropagation();window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'tile',dest:'https://apps.apple.com/app/941-tiles/id6758425339',type:'app_store'})">
+              <img src="/static/images/app-store-badge.png" alt="Download on the App Store" width="120" height="40" loading="lazy">
+            </a>
+            
+          </div>
+        </div>
+      </article>
+      
+      <article class="project-card project-card--image-left">
+        
+        <div
+          class="project-card__image"
+          data-lightbox
+          @click="lightbox = { open: true, src: $el.querySelector('img').src, alt: 'Vision Sprint' }"
+        >
+          
+          <picture>
+            <source
+              type="image/webp"
+              srcset="/static/images/optimized/vision-sprint-400w.webp 400w, /static/images/optimized/vision-sprint-600w.webp 600w, /static/images/optimized/vision-sprint-800w.webp 800w, /static/images/optimized/vision-sprint-1200w.webp 1200w"
+              sizes="(max-width: 480px) calc(100vw - 64px), (max-width: 768px) calc(100vw - 96px), 650px">
+            <img
+              src="/static/images/optimized/vision-sprint-fallback.jpg"
+              alt="Vision Sprint"
+              width="1200"
+              height="1045"
+              loading="lazy">
+          </picture>
+        </div>
+        
+        <div class="project-card__content">
+          <h3 class="project-card__title">Vision Sprint</h3>
+          <p class="project-card__description">
+            
+              O ápice dos meus doze anos de trabalho na ZipRecruiter como VP de Design de Produto. Explora como pode ser o futuro do trabalho.
+            
+          </p>
+          <a
+            href="/pt-BR/work/vision-sprint"
+            class="project-card__link"
+            
+            aria-label="View Case Study: Vision Sprint"
+            onclick="window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'vision-sprint',dest:'/pt-BR/work/vision-sprint',type:'view_work'})"
+          >
+            
+              Ver Estudo de Caso
+            
+          </a>
+          <div class="project-card__badges">
+            
+            
+          </div>
+        </div>
+      </article>
+      
+      <article class="project-card project-card--image-right">
+        
+        <div
+          class="project-card__image"
+          data-lightbox
+          @click="lightbox = { open: true, src: $el.querySelector('img').src, alt: 'Project eLLMo' }"
+        >
+          
+          <picture>
+            <source
+              type="image/webp"
+              srcset="/static/images/optimized/ellmo-400w.webp 400w, /static/images/optimized/ellmo-600w.webp 600w, /static/images/optimized/ellmo-800w.webp 800w, /static/images/optimized/ellmo-1200w.webp 1200w"
+              sizes="(max-width: 480px) calc(100vw - 64px), (max-width: 768px) calc(100vw - 96px), 650px">
+            <img
+              src="/static/images/optimized/ellmo-fallback.jpg"
+              alt="Project eLLMo"
+              width="1200"
+              height="1116"
+              loading="lazy">
+          </picture>
+        </div>
+        
+        <div class="project-card__content">
+          <h3 class="project-card__title">Project eLLMo</h3>
+          <p class="project-card__description">
+            
+              Compreendendo preferências de trabalho e qualificações dos usuários por meio de linguagem natural, utilizando LLMs de última geração.
+            
+          </p>
+          <a
+            href="/pt-BR/work/ellmo"
+            class="project-card__link"
+            
+            aria-label="View Case Study: Project eLLMo"
+            onclick="window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'ellmo',dest:'/pt-BR/work/ellmo',type:'view_work'})"
+          >
+            
+              Ver Estudo de Caso
+            
+          </a>
+          <div class="project-card__badges">
+            
+            
+          </div>
+        </div>
+      </article>
+      
+      <article class="project-card project-card--image-left">
+        
+        <div
+          class="project-card__image"
+          data-lightbox
+          @click="lightbox = { open: true, src: $el.querySelector('img').src, alt: 'Introl Branding' }"
+        >
+          
+          <picture>
+            <source
+              type="image/webp"
+              srcset="/static/images/optimized/introl-400w.webp 400w, /static/images/optimized/introl-600w.webp 600w, /static/images/optimized/introl-800w.webp 800w, /static/images/optimized/introl-1200w.webp 1200w"
+              sizes="(max-width: 480px) calc(100vw - 64px), (max-width: 768px) calc(100vw - 96px), 650px">
+            <img
+              src="/static/images/optimized/introl-fallback.jpg"
+              alt="Introl Branding"
+              width="1200"
+              height="1347"
+              loading="lazy">
+          </picture>
+        </div>
+        
+        <div class="project-card__content">
+          <h3 class="project-card__title">Introl Branding</h3>
+          <p class="project-card__description">
+            
+              <a href="https://introl.com" target="_blank" rel="noopener">Introl.com</a> é uma empresa de TI especializada em implantações de clusters de GPU. Eles me pediram para atualizar sua marca para transmitir uma empresa rápida, eficiente e bem estabelecida que &#34;resolve <strong>*</strong>o problema.&#34;
+            
+          </p>
+          <a
+            href="/pt-BR/work/introl"
+            class="project-card__link"
+            
+            aria-label="View Work: Introl Branding"
+            onclick="window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'introl',dest:'/pt-BR/work/introl',type:'view_work'})"
+          >
+            
+              Ver Trabalho
+            
+          </a>
+          <div class="project-card__badges">
+            
+            
+          </div>
+        </div>
+      </article>
+      
+      <article class="project-card project-card--image-right">
+        
+        <div
+          class="project-card__image"
+          data-lightbox
+          @click="lightbox = { open: true, src: $el.querySelector('img').src, alt: 'Ace Citizenship' }"
+        >
+          
+          <picture>
+            <source
+              type="image/webp"
+              srcset="/static/images/optimized/ace-citizenship-400w.webp 400w, /static/images/optimized/ace-citizenship-600w.webp 600w, /static/images/optimized/ace-citizenship-800w.webp 800w, /static/images/optimized/ace-citizenship-1200w.webp 1200w"
+              sizes="(max-width: 480px) calc(100vw - 64px), (max-width: 768px) calc(100vw - 96px), 650px">
+            <img
+              src="/static/images/optimized/ace-citizenship-fallback.jpg"
+              alt="Ace Citizenship"
+              width="1200"
+              height="1347"
+              loading="lazy">
+          </picture>
+        </div>
+        
+        <div class="project-card__content">
+          <h3 class="project-card__title">Ace Citizenship</h3>
+          <p class="project-card__description">
+            
+              Um aplicativo iOS gratuito que ajuda imigrantes a se prepararem para o teste de naturalização do USCIS através de repetição espaçada. Projetado, desenvolvido e construído à mão.
+            
+          </p>
+          <a
+            href="/pt-BR/work/ace-citizenship"
+            class="project-card__link"
+            
+            aria-label="View Work: Ace Citizenship"
+            onclick="window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'ace-citizenship',dest:'/pt-BR/work/ace-citizenship',type:'view_work'})"
+          >
+            
+              Ver Trabalho
+            
+          </a>
+          <div class="project-card__badges">
+            
+            <a href="https://acecitizenship.app" target="_blank" rel="noopener" class="project-card__badge project-card__badge--website" onclick="event.stopPropagation();window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'ace-citizenship',dest:'https://acecitizenship.app',type:'website'})">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              <span>Website</span>
+            </a>
+            
+            
+            <a href="https://apps.apple.com/us/app/ace-citizenship/id6532592671" target="_blank" rel="noopener" class="project-card__app-store" onclick="event.stopPropagation();window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'ace-citizenship',dest:'https://apps.apple.com/us/app/ace-citizenship/id6532592671',type:'app_store'})">
+              <img src="/static/images/app-store-badge.png" alt="Download on the App Store" width="120" height="40" loading="lazy">
+            </a>
+            
+          </div>
+        </div>
+      </article>
+      
+      <article class="project-card project-card--image-left">
+        
+        <div
+          class="project-card__image"
+          data-lightbox
+          @click="lightbox = { open: true, src: $el.querySelector('img').src, alt: 'Tappy Color' }"
+        >
+          
+          <picture>
+            <source
+              type="image/webp"
+              srcset="/static/images/optimized/tappy-color-400w.webp 400w, /static/images/optimized/tappy-color-600w.webp 600w, /static/images/optimized/tappy-color-800w.webp 800w, /static/images/optimized/tappy-color-1200w.webp 1200w"
+              sizes="(max-width: 480px) calc(100vw - 64px), (max-width: 768px) calc(100vw - 96px), 650px">
+            <img
+              src="/static/images/optimized/tappy-color-fallback.jpg"
+              alt="Tappy Color"
+              width="800"
+              height="899"
+              loading="lazy">
+          </picture>
+        </div>
+        
+        <div class="project-card__content">
+          <h3 class="project-card__title">Tappy Color</h3>
+          <p class="project-card__description">
+            
+              Tappy Color foi criado no verão de 2016 por Chris Greer e Blake Crosley. O jogo apresenta um peixe chamado Tappy que você salva tocando na tela, o que levanta o nível da água.
+            
+          </p>
+          <a
+            href="/pt-BR/work/tappy-color"
+            class="project-card__link"
+            
+            aria-label="View Work: Tappy Color"
+            onclick="window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'tappy-color',dest:'/pt-BR/work/tappy-color',type:'view_work'})"
+          >
+            
+              Ver Trabalho
+            
+          </a>
+          <div class="project-card__badges">
+            
+            
+            <a href="https://apps.apple.com/us/app/tappy-color-remastered/id6581480913" target="_blank" rel="noopener" class="project-card__app-store" onclick="event.stopPropagation();window._941&&window._941.trackEvent&&window._941.trackEvent('Project Click','custom',{project:'tappy-color',dest:'https://apps.apple.com/us/app/tappy-color-remastered/id6581480913',type:'app_store'})">
+              <img src="/static/images/app-store-badge.png" alt="Download on the App Store" width="120" height="40" loading="lazy">
+            </a>
+            
+          </div>
+        </div>
+      </article>
+      
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div
+    class="lightbox"
+    :class="{ 'is-open': lightbox.open }"
+    @click.self="lightbox.open = false"
+  >
+    <img
+      class="lightbox__image"
+      :src="lightbox.src"
+      :alt="lightbox.alt"
+      @click.stop
+    >
+    <button
+      class="lightbox__close"
+      @click="lightbox.open = false"
+      aria-label="Close lightbox"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+</section>
+
+<!-- Hiring Technology Section -->
+<section class="lab-section" id="hiring-tech">
+  <div class="container">
+    <header class="section-header">
+      <span class="section-label">Escrita</span>
+      <h2 class="section-title">Tecnologia de recrutamento</h2>
+      <p class="section-subtitle" style="color: var(--color-text-secondary); margin-top: 0.5rem; font-size: 0.95rem;">Fruto de 12 anos projetando produtos de recrutamento na ZipRecruiter</p>
+    </header>
+
+    <div class="lab-grid">
+      <a href="/work/resumegeni" class="lab-card" style="--index: 0">
+        <div class="lab-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+        </div>
+        <h3 class="lab-card__name">ResumeGeni</h3>
+        <p class="lab-card__domain">Estudo de caso</p>
+        <p class="lab-card__description">Construindo um criador de currículos com AI a partir de 12 anos dentro da tecnologia de recrutamento</p>
+        <span class="lab-card__arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M7 17L17 7M17 7H7M17 7v10"/>
+          </svg>
+        </span>
+      </a>
+
+      <a href="/work/ats-insider" class="lab-card" style="--index: 1">
+        <div class="lab-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+        <h3 class="lab-card__name">Como funcionam os sistemas ATS</h3>
+        <p class="lab-card__domain">Bastidores</p>
+        <p class="lab-card__description">Como Workday, Greenhouse, Taleo, iCIMS e Lever interpretam currículos de formas diferentes</p>
+        <span class="lab-card__arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M7 17L17 7M17 7H7M17 7v10"/>
+          </svg>
+        </span>
+      </a>
+
+      <a href="/work/ai-resume-optimization" class="lab-card" style="--index: 2">
+        <div class="lab-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <h3 class="lab-card__name">Otimização de currículo com AI</h3>
+        <p class="lab-card__domain">Análise</p>
+        <p class="lab-card__description">Por que a maioria das ferramentas de currículo com AI erra na otimização — densidade de palavras-chave vs compatibilidade com ATS</p>
+        <span class="lab-card__arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M7 17L17 7M17 7H7M17 7v10"/>
+          </svg>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Apple Ecosystem Series Section -->
+<section class="lab-section" id="apple-ecosystem">
+  <div class="container">
+    <header class="section-header">
+      <span class="section-label">Série</span>
+      <h2 class="section-title"><a href="/writing/series/apple-ecosystem" style="color: inherit; text-decoration: none;">Ecossistema Apple</a></h2>
+      <p class="section-subtitle" style="color: var(--color-text-secondary); margin-top: 0.5rem; font-size: 0.95rem;">Padrões de produção para apps SwiftUI que se integram com Apple Intelligence, MCP, Liquid Glass, implantação multiplataforma e HealthKit. Extraídos do Water, do Get Bananas e do Return.</p>
+    </header>
+
+    <div class="lab-grid">
+      <a href="/blog/app-intents-are-apples-new-api-to-your-app" class="lab-card" style="--index: 0">
+        <div class="lab-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <h3 class="lab-card__name">App Intents</h3>
+        <p class="lab-card__domain">Apple Intelligence</p>
+        <p class="lab-card__description">A superfície de API tipada da Apple para a AI do sistema: como App Intents expõem seu app à Siri, ao Spotlight e à Apple Intelligence no próprio dispositivo.</p>
+        <span class="lab-card__arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M7 17L17 7M17 7H7M17 7v10"/>
+          </svg>
+        </span>
+      </a>
+
+      <a href="/blog/mcp-server-living-alongside-ios-app" class="lab-card" style="--index: 1">
+        <div class="lab-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+        </div>
+        <h3 class="lab-card__name">Servidor MCP ao lado do iOS</h3>
+        <p class="lab-card__domain">Agentes multi-LLM</p>
+        <p class="lab-card__description">Como o Get Bananas expõe a mesma lista de compras ao Claude Desktop e à Apple Intelligence por meio de um arquivo JSON no iCloud Drive.</p>
+        <span class="lab-card__arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M7 17L17 7M17 7H7M17 7v10"/>
+          </svg>
+        </span>
+      </a>
+
+      <a href="/blog/liquid-glass-swiftui-patterns" class="lab-card" style="--index: 2">
+        <div class="lab-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 3a9 9 0 010 18M3 12h18"/>
+          </svg>
+        </div>
+        <h3 class="lab-card__name">Padrões de Liquid Glass</h3>
+        <p class="lab-card__domain">SwiftUI no iOS 26</p>
+        <p class="lab-card__description">Três padrões de produção do Return: vidro em um Shape personalizado, reflexo espelhado, HUDs na camada funcional.</p>
+        <span class="lab-card__arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M7 17L17 7M17 7H7M17 7v10"/>
+          </svg>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- In the Lab Section -->
+
+<section class="lab-section" id="lab">
+  <div class="container">
+    <header class="section-header">
+      <span class="section-label">No Laboratório</span>
+      <h2 class="section-title">O Que Está em Desenvolvimento</h2>
+    </header>
+
+    <div class="lab-grid">
+      
+      <a href="https://resumegeni.com" target="_blank" rel="noopener" class="lab-card" style="--index: 0">
+        <div class="lab-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <h3 class="lab-card__name">ResumeGeni</h3>
+        <p class="lab-card__domain">resumegeni.com</p>
+        <p class="lab-card__description">Otimização de currículo com IA</p>
+        <span class="lab-card__status">
+          <span class="lab-card__pulse"></span>
+          
+            Em Desenvolvimento
+          
+        </span>
+        <span class="lab-card__arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M7 17L17 7M17 7H7M17 7v10"/>
+          </svg>
+        </span>
+      </a>
+      
+      <a href="https://apps.apple.com/us/app/return/id6756242021" target="_blank" rel="noopener" class="lab-card" style="--index: 1">
+        <div class="lab-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <h3 class="lab-card__name">Return</h3>
+        <p class="lab-card__domain">941return.com</p>
+        <p class="lab-card__description">Monitoramento de saúde e insights</p>
+        <span class="lab-card__status">
+          <span class="lab-card__pulse"></span>
+          
+            Live
+          
+        </span>
+        <span class="lab-card__arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M7 17L17 7M17 7H7M17 7v10"/>
+          </svg>
+        </span>
+      </a>
+      
+      <a href="https://941getbananas.com" target="_blank" rel="noopener" class="lab-card" style="--index: 2">
+        <div class="lab-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <h3 class="lab-card__name">Banana List</h3>
+        <p class="lab-card__domain">941getbananas.com</p>
+        <p class="lab-card__description">Listas de compras inteligentes</p>
+        <span class="lab-card__status">
+          <span class="lab-card__pulse"></span>
+          
+            Em Desenvolvimento
+          
+        </span>
+        <span class="lab-card__arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M7 17L17 7M17 7H7M17 7v10"/>
+          </svg>
+        </span>
+      </a>
+      
+      <a href="https://h3arted.com" target="_blank" rel="noopener" class="lab-card" style="--index: 3">
+        <div class="lab-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <h3 class="lab-card__name">H3arted</h3>
+        <p class="lab-card__domain">h3arted.com</p>
+        <p class="lab-card__description">Plataforma de conexão social</p>
+        <span class="lab-card__status">
+          <span class="lab-card__pulse"></span>
+          
+            Em Desenvolvimento
+          
+        </span>
+        <span class="lab-card__arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M7 17L17 7M17 7H7M17 7v10"/>
+          </svg>
+        </span>
+      </a>
+      
+    </div>
+  </div>
+</section>
+
+
+<!-- Social Section -->
+
+<section class="social" id="social">
+  <div class="container">
+    <h2 class="social__title">Social</h2>
+    <div class="social__grid">
+      
+      <a
+        href="https://www.linkedin.com/in/blakecrosley/"
+        class="social-card"
+        style="--index: 0"
+        target="_blank"
+        rel="noopener"
+      >
+        <div class="social-card__image">
+          <img
+            src="/static/images/IMG_0673-1-362dc9ac.png"
+            alt=""
+            width="300"
+            height="300"
+            loading="lazy"
+            aria-hidden="true"
+          >
+        </div>
+        <span class="social-card__name">LinkedIn</span>
+      </a>
+      
+      <a
+        href="https://www.instagram.com/dream_of_electric/"
+        class="social-card"
+        style="--index: 1"
+        target="_blank"
+        rel="noopener"
+      >
+        <div class="social-card__image">
+          <img
+            src="/static/images/Mask-group-1-min-81868ee6.png"
+            alt=""
+            width="300"
+            height="300"
+            loading="lazy"
+            aria-hidden="true"
+          >
+        </div>
+        <span class="social-card__name">Instagram</span>
+      </a>
+      
+      <a
+        href="https://dreamofelectric.com"
+        class="social-card"
+        style="--index: 2"
+        target="_blank"
+        rel="noopener"
+      >
+        <div class="social-card__image">
+          <img
+            src="/static/images/Mask-group-min-d5b4c3da.png"
+            alt=""
+            width="300"
+            height="300"
+            loading="lazy"
+            aria-hidden="true"
+          >
+        </div>
+        <span class="social-card__name">Dream of Electric</span>
+      </a>
+      
+      <a
+        href="https://941apps.com"
+        class="social-card"
+        style="--index: 3"
+        target="_blank"
+        rel="noopener"
+      >
+        <div class="social-card__image">
+          <img
+            src="/static/images/Mask-group-2-min-9900930c.png"
+            alt=""
+            width="300"
+            height="300"
+            loading="lazy"
+            aria-hidden="true"
+          >
+        </div>
+        <span class="social-card__name">941 Apps</span>
+      </a>
+      
+      <a
+        href="https://music.apple.com/us/artist/dream-of-electric/1737635277"
+        class="social-card"
+        style="--index: 4"
+        target="_blank"
+        rel="noopener"
+      >
+        <div class="social-card__image">
+          <img
+            src="/static/images/blakec85_A_serene_ultra-futuristic_lofi-inspired_shot_by_Shinka_5629dea3-f698-4469-8f52-838c629f9862-22575c09.jpeg"
+            alt=""
+            width="300"
+            height="300"
+            loading="lazy"
+            aria-hidden="true"
+          >
+        </div>
+        <span class="social-card__name">Apple Music</span>
+      </a>
+      
+      <a
+        href="https://open.spotify.com/artist/2bKW7J0fYTXxImWj5w6niN"
+        class="social-card"
+        style="--index: 5"
+        target="_blank"
+        rel="noopener"
+      >
+        <div class="social-card__image">
+          <img
+            src="/static/images/blakec85_As_the_Shanghai_Tower_pierces_the_night_its_spiraling__63154746-d86e-4972-a324-6c36c6b4e236-Enhanced-SR-e3a20e38.jpeg"
+            alt=""
+            width="300"
+            height="300"
+            loading="lazy"
+            aria-hidden="true"
+          >
+        </div>
+        <span class="social-card__name">Spotify</span>
+      </a>
+      
+    </div>
+  </div>
+</section>
+
+
+<!-- Guides Section -->
+<section class="guides-section" id="guides">
+  <div class="container">
+    <h2 class="guides-section__title">Guias</h2>
+
+    <div class="guides-listing">
+      <div class="guides-listing__header">
+        <span class="guides-listing__prompt">$</span> ls ./guides/
+      </div>
+      <div class="guides-listing__entries">
+        <a href="/pt-BR/guides/claude-code" class="guides-listing__entry">
+          <span class="guides-listing__accent guides-listing__accent--orange" aria-hidden="true">&#9656;</span>
+          <span class="guides-listing__name">Guia do Claude Code</span>
+          <span class="guides-listing__desc">A referência definitiva para a CLI agêntica da Anthropic. Hooks, skills, servidores MCP e fluxos de trabalho avançados.</span>
+          <span class="guides-listing__cta">$ cat guide.md &rarr;</span>
+        </a>
+        <a href="/pt-BR/guides/agent-architecture" class="guides-listing__entry">
+          <span class="guides-listing__accent guides-listing__accent--orange" aria-hidden="true">&#9656;</span>
+          <span class="guides-listing__name">Arquitetura de agentes</span>
+          <span class="guides-listing__desc">Construa harnesses de desenvolvimento com IA. Skills, hooks, memória, subagentes e orquestração.</span>
+          <span class="guides-listing__cta">$ cat harness.md &rarr;</span>
+        </a>
+        <a href="/pt-BR/guides/ios-agent-development" class="guides-listing__entry">
+          <span class="guides-listing__accent guides-listing__accent--blue" aria-hidden="true">&#9656;</span>
+          <span class="guides-listing__name">Agentes iOS</span>
+          <span class="guides-listing__desc">Lance apps iOS com agentes de AI. Claude Code, Codex CLI, Xcode 26.3 e configuração de MCP.</span>
+          <span class="guides-listing__cta">$ xcodebuild &rarr;</span>
+        </a>
+        <a href="/pt-BR/guides/hermes" class="guides-listing__entry">
+          <span class="guides-listing__accent guides-listing__accent--orange" aria-hidden="true">&#9656;</span>
+          <span class="guides-listing__name">Hermes Agent</span>
+          <span class="guides-listing__desc">A referência do praticante para construir e operar o framework de agentes Hermes.</span>
+          <span class="guides-listing__cta">$ hermes model &rarr;</span>
+        </a>
+        <a href="/pt-BR/guides/codex" class="guides-listing__entry">
+          <span class="guides-listing__accent guides-listing__accent--cyan" aria-hidden="true">&#9656;</span>
+          <span class="guides-listing__name">Codex CLI</span>
+          <span class="guides-listing__desc">A referência definitiva para o CLI agêntico da OpenAI. Sandbox, configuração, MCP e CI/CD.</span>
+          <span class="guides-listing__cta">$ codex exec &rarr;</span>
+        </a>
+        <a href="/pt-BR/guides/midjourney" class="guides-listing__entry">
+          <span class="guides-listing__accent guides-listing__accent--purple" aria-hidden="true">&#9656;</span>
+          <span class="guides-listing__name">Guia do Midjourney</span>
+          <span class="guides-listing__desc">Domine a geração de imagens com IA usando prompts V7, parâmetros e técnicas para resultados visuais impressionantes.</span>
+          <span class="guides-listing__cta">/imagine &rarr;</span>
+        </a>
+        <a href="/pt-BR/guides/fastapi-htmx" class="guides-listing__entry">
+          <span class="guides-listing__accent guides-listing__accent--green" aria-hidden="true">&#9656;</span>
+          <span class="guides-listing__name">FastAPI + HTMX</span>
+          <span class="guides-listing__desc">Full-stack sem build. HTMX, Alpine.js, templates Jinja2 e CSS puro.</span>
+          <span class="guides-listing__cta">$ less guide.md &rarr;</span>
+        </a>
+        <a href="/pt-BR/guides/obsidian" class="guides-listing__entry">
+          <span class="guides-listing__accent guides-listing__accent--indigo" aria-hidden="true">&#9656;</span>
+          <span class="guides-listing__name">Obsidian + AI</span>
+          <span class="guides-listing__desc">Transforme um vault do Obsidian em infraestrutura de IA. Recuperação híbrida e integração MCP.</span>
+          <span class="guides-listing__cta">$ search vault &rarr;</span>
+        </a>
+        <a href="/pt-BR/guides/suno" class="guides-listing__entry">
+          <span class="guides-listing__accent guides-listing__accent--amber" aria-hidden="true">&#9656;</span>
+          <span class="guides-listing__name">Suno</span>
+          <span class="guides-listing__desc">Geração de música com IA a partir de prompts de texto. Metatags, Creative Sliders e Studio DAW.</span>
+          <span class="guides-listing__cta">$ generate track &rarr;</span>
+        </a>
+        <a href="/pt-BR/guides/design" class="guides-listing__entry">
+          <span class="guides-listing__accent guides-listing__accent--gray" aria-hidden="true">&#9656;</span>
+          <span class="guides-listing__name">Princípios de Design</span>
+          <span class="guides-listing__desc">Design fundamental para engenheiros. Gestalt, tipografia, teoria das cores e princípios atemporais dos mestres.</span>
+          <span class="guides-listing__cta">$ read principles &rarr;</span>
+        </a>
+      </div>
+      <div class="guides-listing__footer">
+        <a href="/pt-BR/guides" class="guides-listing__btn">
+          Ver todos os 10 guias &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="contact__inner">
+      <h2 class="contact__title">Entre em contato</h2>
+      <div class="contact__content">
+        <p class="contact__subtitle">
+          Interessado em trabalhar juntos? Preencha algumas informações e entrarei em contato em breve.
+        </p>
+
+        <form
+          class="contact-form"
+          hx-post="/api/contact"
+          hx-target="#contact-form-response"
+          hx-swap="innerHTML"
+          x-data="{ sending: false }"
+          @htmx:before-request="sending = true"
+          @htmx:after-request="sending = false"
+          @htmx:after-settle="if (document.querySelector('.contact-success')) window._941&&window._941.trackEvent&&window._941.trackEvent('Contact Form','custom',{status:'success'})"
+        >
+          
+          <input type="hidden" name="csrf_token" value="1786122007:5ce85b5a5e8800c4c0996e853d23c7ed:9e12792067c38a039b2e7518cb731384cef7cce5e98a53cbe2cd6e6063359ef3">
+
+          <div class="contact-form__row">
+            <div class="contact-form__group" role="group" aria-labelledby="name-group-label">
+              <span id="name-group-label" class="contact-form__label">Nome <span class="contact-form__required">(obrigatório)</span></span>
+              <div class="contact-form__name-fields">
+                <div class="contact-form__field">
+                  <label for="first-name" class="contact-form__field-label">Nome</label>
+                  <input
+                    type="text"
+                    id="first-name"
+                    name="first_name"
+                    class="contact-form__input"
+                    required
+                    aria-required="true"
+                  >
+                </div>
+                <div class="contact-form__field">
+                  <label for="last-name" class="contact-form__field-label">Sobrenome</label>
+                  <input
+                    type="text"
+                    id="last-name"
+                    name="last_name"
+                    class="contact-form__input"
+                    required
+                    aria-required="true"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form__group">
+            <label for="phone" class="contact-form__label">Telefone</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              class="contact-form__input"
+            >
+          </div>
+
+          <div class="contact-form__group">
+            <label for="email" class="contact-form__label">E-mail <span class="contact-form__required">(obrigatório)</span></label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="contact-form__input"
+              required
+              aria-required="true"
+            >
+          </div>
+
+          <div class="contact-form__group">
+            <label for="message" class="contact-form__label">Mensagem</label>
+            <textarea
+              id="message"
+              name="message"
+              class="contact-form__input contact-form__textarea"
+              rows="4"
+              placeholder="Conte-me sobre seu projeto ou dúvida..."
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            class="contact-form__submit"
+            :class="{ 'is-sending': sending }"
+            :disabled="sending"
+          >
+            <span class="contact-form__submit-idle">
+              <span class="contact-form__submit-label">Enviar Mensagem</span>
+              <span class="contact-form__submit-arrow-wrap">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </span>
+            <span class="contact-form__submit-sending">
+              <span class="contact-form__submit-prompt">&gt;</span>
+              transmitindo<span class="contact-form__submit-cursor">_</span>
+            </span>
+          </button>
+        </form>
+
+        <div id="contact-form-response" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </main>
+
+  <!-- Footer -->
+  <!-- ============================================================
+     941 Apps family strip — portable cross-property component.
+     Self-contained: own <style>, own squircle clip, root-relative
+     /static/images/family/ assets. No site CSS vars / framework / Jinja
+     globals required.
+
+     To add to a property:
+       1. Copy this file to templates/components/family-strip.html
+       2. Copy the family/ image folder to static/images/family/
+       3. Add the include tag below the footer markup (see README).
+
+     Container width defaults to 1320px (Bootstrap xxl). Override per
+     site with:  .family-strip { --fs-maxw: 1140px; }
+     ============================================================ -->
+<style>
+/* "More from 941 Apps" family strip — portable, self-contained.
+   No dependency on the host site's CSS variables, framework, or fonts.
+   Adapts to light/dark via [data-theme="dark"] (manual-toggle sites) and
+   prefers-color-scheme (auto sites). Inherits the host's text colour. */
+/* blakecrosley.com adaptation: dark is the site default (no data-theme attr);
+   light only under html[data-theme="light"]. */
+.family-strip { --fs-muted:#9ca3af; --fs-border:#27272a; --fs-hover:rgba(255,255,255,.05);
+  padding:52px 0 44px; border-top:1px solid var(--fs-border); }
+html[data-theme="light"] .family-strip { --fs-muted:#6b7280; --fs-border:#e4e4e7; --fs-hover:rgba(0,0,0,.045); }
+.family-strip__container { max-width:var(--fs-maxw,1200px); margin:0 auto; padding:0 24px; }
+.family-strip__heading { margin:0 0 1.5rem; font-size:.8rem; font-weight:600; line-height:1;
+  text-transform:uppercase; letter-spacing:.05em; color:var(--fs-muted); }
+.family-strip__grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem 2rem; }
+@media (max-width:991px) { .family-strip__grid { grid-template-columns:repeat(2,1fr); } }
+@media (max-width:576px) { .family-strip__grid { grid-template-columns:1fr; } }
+.family-strip__lockup { display:flex; align-items:center; gap:.85rem; padding:.75rem; margin:-.75rem 0;
+  border-radius:12px; text-decoration:none; color:inherit; transition:background-color .15s ease; }
+.family-strip__lockup:hover { background-color:var(--fs-hover); }
+.family-strip__lockup img { width:44px; height:44px; flex-shrink:0; object-fit:cover;
+  border-radius:10px; clip-path:url(#family-squircle); }
+.family-strip__text { display:flex; flex-direction:column; min-width:0; }
+.family-strip__title { font-size:.95rem; font-weight:700; line-height:1.35; color:inherit; }
+.family-strip__sub { font-size:.95rem; font-weight:400; line-height:1.35; color:var(--fs-muted); }
+</style>
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+    <defs>
+        <clipPath id="family-squircle" clipPathUnits="objectBoundingBox">
+            <path transform="scale(0.0009765625)" d="M1024 651C1024 665.24 1024 679.48 1023.92 693.73C1023.85 705.73 1023.71 717.72 1023.39 729.71C1022.68 755.84 1021.14 782.2 1016.5 808.05C1011.79 834.27 1004.1 858.67 991.97 882.49C980.05 905.9 964.48 927.33 945.9 945.9C927.32 964.47 905.9 980.05 882.49 991.97C858.67 1004.09 834.27 1011.79 808.05 1016.5C782.21 1021.15 755.85 1022.68 729.71 1023.39C717.72 1023.72 705.72 1023.85 693.73 1023.92C679.49 1024.01 665.25 1024 651 1024H373C358.76 1024 344.52 1024 330.27 1023.92C318.27 1023.85 306.28 1023.71 294.29 1023.39C268.16 1022.68 241.8 1021.14 215.95 1016.5C189.73 1011.79 165.33 1004.1 141.51 991.97C118.1 980.05 96.6703 964.48 78.1003 945.9C59.5303 927.32 43.9503 905.9 32.0303 882.49C19.9103 858.67 12.2103 834.27 7.50033 808.05C2.85033 782.21 1.32033 755.85 0.610331 729.71C0.280331 717.72 0.150331 705.72 0.0803306 693.73C-0.00966939 679.49 0.000330575 665.25 0.000330575 651V373C0.000330575 358.76 0.00033062 344.52 0.0803306 330.27C0.150331 318.27 0.290331 306.28 0.610331 294.29C1.32033 268.16 2.86033 241.8 7.50033 215.95C12.2103 189.73 19.9003 165.33 32.0303 141.51C43.9503 118.1 59.5203 96.6703 78.1003 78.1003C96.6803 59.5303 118.1 43.9503 141.51 32.0303C165.33 19.9103 189.73 12.2103 215.95 7.50033C241.79 2.85033 268.15 1.32033 294.29 0.610331C306.28 0.280331 318.28 0.150331 330.27 0.0803306C344.51 -0.00966939 358.75 0.000330575 373 0.000330575H651C665.24 0.000330575 679.48 0.00033062 693.73 0.0803306C705.73 0.150331 717.72 0.290331 729.71 0.610331C755.84 1.32033 782.2 2.86033 808.05 7.50033C834.27 12.2103 858.67 19.9003 882.49 32.0303C905.9 43.9503 927.33 59.5203 945.9 78.1003C964.47 96.6803 980.05 118.1 991.97 141.51C1004.09 165.33 1011.79 189.73 1016.5 215.95C1021.15 241.79 1022.68 268.15 1023.39 294.29C1023.72 306.28 1023.85 318.28 1023.92 330.27C1024.01 344.51 1024 358.75 1024 373V651Z"/>
+        </clipPath>
+    </defs>
+</svg>
+<section class="family-strip" aria-label="More from 941 Apps">
+    <div class="family-strip__container">
+        <h2 class="family-strip__heading">More from 941 Apps</h2>
+        <div class="family-strip__grid">
+            <a class="family-strip__lockup" href="https://resumegeni.com" target="_blank" rel="noopener">
+                <img src="/static/images/family/resumegeni.png" alt="ResumeGeni icon" width="44" height="44" loading="lazy">
+                <span class="family-strip__text">
+                    <span class="family-strip__title">ResumeGeni</span>
+                    <span class="family-strip__sub">AI resume builder for ATS optimization</span>
+                </span>
+            </a>
+            <a class="family-strip__lockup" href="https://acecitizenship.app" target="_blank" rel="noopener">
+                <img src="/static/images/family/ace-citizenship.png" alt="Ace Citizenship icon" width="44" height="44" loading="lazy">
+                <span class="family-strip__text">
+                    <span class="family-strip__title">Ace Citizenship</span>
+                    <span class="family-strip__sub">USCIS test prep with spaced repetition</span>
+                </span>
+            </a>
+            <a class="family-strip__lockup" href="https://941getbananas.com" target="_blank" rel="noopener">
+                <img src="/static/images/family/get-bananas.png" alt="Get Bananas icon" width="44" height="44" loading="lazy">
+                <span class="family-strip__text">
+                    <span class="family-strip__title">Get Bananas</span>
+                    <span class="family-strip__sub">Hand-drawn family shopping list</span>
+                </span>
+            </a>
+            <a class="family-strip__lockup" href="https://941return.com" target="_blank" rel="noopener">
+                <img src="/static/images/family/return.png" alt="Return icon" width="44" height="44" loading="lazy">
+                <span class="family-strip__text">
+                    <span class="family-strip__title">Return</span>
+                    <span class="family-strip__sub">Zen meditation timer for Apple devices</span>
+                </span>
+            </a>
+            <a class="family-strip__lockup" href="https://941ki.com" target="_blank" rel="noopener">
+                <img src="/static/images/family/ki.png" alt="Ki icon" width="44" height="44" loading="lazy">
+                <span class="family-strip__text">
+                    <span class="family-strip__title">Ki</span>
+                    <span class="family-strip__sub">Private iPhone browser</span>
+                </span>
+            </a>
+            <a class="family-strip__lockup" href="https://941apps.com/tappy-color" target="_blank" rel="noopener">
+                <img src="/static/images/family/tappy-color.png" alt="Tappy Color icon" width="44" height="44" loading="lazy">
+                <span class="family-strip__text">
+                    <span class="family-strip__title">Tappy Color</span>
+                    <span class="family-strip__sub">Fast-paced color matching game</span>
+                </span>
+            </a>
+            <a class="family-strip__lockup" href="https://941apps.com/captains-log" target="_blank" rel="noopener">
+                <img src="/static/images/family/captains-log.png" alt="Captain's Log icon" width="44" height="44" loading="lazy">
+                <span class="family-strip__text">
+                    <span class="family-strip__title">Captain's Log</span>
+                    <span class="family-strip__sub">Daily operational journal for builders</span>
+                </span>
+            </a>
+            <a class="family-strip__lockup" href="https://941tiles.com" target="_blank" rel="noopener">
+                <img src="/static/images/family/tile.png" alt="941 Tiles icon" width="44" height="44" loading="lazy">
+                <span class="family-strip__text">
+                    <span class="family-strip__title">941 Tiles</span>
+                    <span class="family-strip__sub">One-click macOS window manager</span>
+                </span>
+            </a>
+            <a class="family-strip__lockup" href="https://learnmateria.com" target="_blank" rel="noopener">
+                <img src="/static/images/family/learn-materia.png" alt="Learn Materia icon" width="44" height="44" loading="lazy">
+                <span class="family-strip__text">
+                    <span class="family-strip__title">Learn Materia</span>
+                    <span class="family-strip__sub">Print-first kindergarten homework</span>
+                </span>
+            </a>
+            <a class="family-strip__lockup" href="https://941reps.com" target="_blank" rel="noopener">
+                <img src="/static/images/family/reps.png" alt="Reps icon" width="44" height="44" loading="lazy">
+                <span class="family-strip__text">
+                    <span class="family-strip__title">Reps</span>
+                    <span class="family-strip__sub">Strength training on every Apple screen</span>
+                </span>
+            </a>
+            <a class="family-strip__lockup" href="https://941apps.com/cels" target="_blank" rel="noopener">
+                <img src="/static/images/family/cels.png" alt="Cels icon" width="44" height="44" loading="lazy">
+                <span class="family-strip__text">
+                    <span class="family-strip__title">Cels</span>
+                    <span class="family-strip__sub">Floating glass notes for macOS 26</span>
+                </span>
+            </a>
+        </div>
+
+        </section>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__brand">
+          <picture>
+            <source type="image/webp" srcset="/static/images/blake-avatar.webp?v=79e9c2969f">
+            <img src="/static/images/blake-avatar.jpg?v=f85d874a66" alt="Blake Crosley" width="64" height="64" loading="lazy" class="footer__avatar">
+          </picture>
+          <a href="/pt-BR/" class="footer__logo">Blake Crosley</a>
+          <p class="footer__tagline">Designer, desenvolvedor e criador de coisas.</p>
+        </div>
+        <div class="footer__columns">
+          <div class="footer__column">
+            <h3 class="footer__heading">Navegação</h3>
+            <nav class="footer__nav" aria-label="Footer navigation">
+              <a href="/pt-BR/about" class="footer__link">Sobre</a>
+              <a href="/pt-BR/#work" class="footer__link">Trabalho</a>
+              <a href="/pt-BR/writing" class="footer__link">Textos</a>
+              <a href="/pt-BR/guides" class="footer__link">Guias</a>
+              <a href="/pt-BR/fun" class="footer__link">Fun</a>
+              <a href="/pt-BR/#contact" class="footer__link">Contato</a>
+            </nav>
+          </div>
+          <div class="footer__column">
+            <h3 class="footer__heading">Guias</h3>
+            <nav class="footer__nav" aria-label="Guide links">
+              <a href="/pt-BR/guides/hermes" class="footer__link">Hermes Agent</a>
+              <a href="/pt-BR/guides/claude-code" class="footer__link">Claude Code</a>
+              <a href="/pt-BR/guides/suno" class="footer__link">Suno</a>
+              <a href="/pt-BR/guides/ios-agent-development" class="footer__link">iOS Agents</a>
+              <a href="/pt-BR/guides/codex" class="footer__link">Codex CLI</a>
+              <a href="/pt-BR/guides/shortcuts" class="footer__link">Mac Shortcuts</a>
+              <a href="/pt-BR/guides" class="footer__link">All guides &rarr;</a>
+            </nav>
+          </div>
+          <div class="footer__column">
+            <h3 class="footer__heading">Projetos</h3>
+            <nav class="footer__nav" aria-label="External projects">
+              <a href="https://941apps.com" target="_blank" rel="noopener" class="footer__link">941 Apps</a>
+              <a href="https://h3arted.com" target="_blank" rel="noopener" class="footer__link">h3arted</a>
+              <a href="https://dreamofelectric.com" target="_blank" rel="noopener" class="footer__link">Dream of Electric</a>
+              <a href="https://wayofyawara.com" target="_blank" rel="noopener" class="footer__link">Way of Yawara</a>
+            </nav>
+          </div>
+          <div class="footer__column">
+            <h3 class="footer__heading">Conectar</h3>
+            <nav class="footer__nav" aria-label="Social links">
+              <a href="/cdn-cgi/l/email-protection#0e6c626f656b4e373a3f6f7e7e7d206d6163" class="footer__link"><span class="__cf_email__" data-cfemail="13717f727876532a2722726363603d707c7e">[email&#160;protected]</span></a>
+              <a href="https://www.linkedin.com/in/blakecrosley/" target="_blank" rel="noopener" class="footer__link">LinkedIn</a>
+              <a href="https://www.instagram.com/dream_of_electric/" target="_blank" rel="noopener" class="footer__link">Instagram</a>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copyright">&copy; 2026 Blake Crosley. All rights reserved.</p>
+        <p class="footer__location">Pasadena, California</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts (deferred for performance) -->
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script defer src="/static/js/vendor/alpine.min.js?v=b600e363d9"></script>
+  <script defer src="/static/js/vendor/htmx.min.js?v=e209dda5c8"></script>
+  <script defer src="/static/js/main.js?v=c83719849a"></script>
+  <script defer src="/static/js/copy-code.js?v=aa93e86346"></script>
+
+  
+  <!-- Privacy-first analytics (self-hosted, no third-party tracking) -->
+  <script defer src="https://941-analytics.analytics-941.workers.dev/track.js" data-endpoint="https://941-analytics.analytics-941.workers.dev/collect" data-site="blakecrosley.com"></script>
+  
+
+  
+  
+  <!-- Cloudflare Web Analytics (privacy-first, no cookies, no PII) -->
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "ae2557283cca4b7ebfcf0832668326e9"}'></script>
+  
+  
+
+  
+</body>
+</html>

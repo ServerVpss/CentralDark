@@ -1,0 +1,3897 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\awk.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+@.rsrc
+@.reloc
+ATUWVSH
+ [^_]A\H
+AVWVSH
+([^_A^
+([^_A^
+AVATUWVSH
+H[^_]A\A^
+H[^_]A\A^
+H[^_]A\A^
+ATUWVSH
+0[^_]A\
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+X[^_]A\A]A^A_
+X[^_]A\A]A^A_H
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+8[^_]A\A]A^A_H
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_H
+)t$ E1
+x$Ru'1
+ATUWVSH
+ [^_]A\
+ [^_]A\
+ATUWVSH
+l$(H98t;H
+#H98t>H
+0[^_]A\
+0[^_]A\
+ATUWVSH
+9y$uuH
+ [^_]A\
+ATUWVSH
+ [^_]A\
+z$ouDH
+AVWVSH
+X[^_A^
+X[^_A^
+AVWVSH
+AVATUWVSH
+H[^_]A\A^
+AVUWVSH
+P[^_]A^
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AVUWVSH
+@[^_]A^
+AVAUATUWVSH
+P[^_]A\A]A^
+P[^_]A\A]A^
+P[^_]A\A]A^
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+ATUWVSH
+0[^_]A\
+LcL$hH
+LcL$hH
+AVWVSH
+H[^_A^
+H[^_A^
+D$ u)H
+AVWVSH
+AWAVUWVSH
+8[^_]A^A_
+8[^_]A^A_
+8[^_]A^A_
+8[^_]A^A_
+ATUWVSH
+ [^_]A\
+AWAVWVSH
+`[^_A^A_
+oD$0E1
+`[^_A^A_
+ItNH9H
+AVAUATUWVSH
+[^_]A\A]A^
+AVWVSH
+8[^_A^
+8[^_A^
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+L;|$Ht
+[^_]A\A]A^A_
+oD$PE1
+L$pH9H
+HcD$`H
+L$P9L$h|/
+HcT$PH
+HcL$PA
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AVWVSH
+8[^_A^
+8[^_A^
+AVAUATUWVSH
+ [^_]A\A]A^
+ [^_]A\A]A^
+ [^_]A\A]A^
+ATUWVSH
+H9Cht2H9
+@[^_]A\
+@[^_]A\
+@[^_]A\
+(t$@fH
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_H
+I+D$@H
+AVATUWVSH
+{0H9{H
+[^_]A\A^
+(|$pE1
+[^_]A\A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AVUWVSH
+[^_]A^
+[^_]A^
+AWAVATUWVSH
+[^_]A\A^A_H
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AUATUWVSH
+8[^_]A\A]
+AUATUWVSH
+8[^_]A\A]
+AWAVAUATUWVSH
+L$PH9L$h
+l$pH9L$h
+[^_]A\A]A^A_H
+T$PH9T$ht
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AVATUWVSH
+H[^_]A\A^
+H[^_]A\A^
+AVAUATUWVSH
+P[^_]A\A]A^H
+AVAUATUWVSH
+P[^_]A\A]A^H
+AVAUATUWVSH
+P[^_]A\A]A^H
+ATUWVSH
+0[^_]A\
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+(t$PE1
+h[^_]A\A]A^A_
+AVAUATUWVSH
+P[^_]A\A]A^
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AVAUATUWVSH
+@[^_]A\A]A^
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+ATUWVSH
+ [^_]A\
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AVUWVSH
+P[^_]A^
+D+I@L)
+P[^_]A^
+P[^_]A^H
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+([^_]A\A]A^A_
+ATUWVSH
+ [^_]A\
+ [^_]A\
+ATUWVSH
+ [^_]A\
+ [^_]A\
+ATUWVSH
+ [^_]A\
+ [^_]A\
+ [^_]A\
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+functionH
+n @eval(H
+functionH
+n @eval(H
+AWAVAUATUWVSH
+L;d$`t
+[^_]A\A]A^A_
+HcD$hH
+AVWVSH
+([^_A^
+([^_A^
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+H;P8~0H
+AUATUWVSH
+X[^_]A\A]
+}$et21
+X[^_]A\A]
+AVAUATUWVSH
+ [^_]A\A]A^
+AVUWVSH
+P[^_]A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+AVAUATUWVSH
+0[^_]A\A]A^
+0[^_]A\A]A^
+0[^_]A\A]A^
+0[^_]A\A]A^
+ATUWVSH
+@[^_]A\
+@[^_]A\
+AWAVAUATUWVSH
+~$huvfA9
+H[^_]A\A]A^A_
+{$hu-fA9
+}gH9C0tYH
+9_(~2H
+AUATUWVSH
+X[^_]A\A]
+AWAVAUATUWVSH
+D9|$<~
+H[^_]A\A]A^A_H
+H[^_]A\A]A^A_H
+H[^_]A\A]A^A_H
+H[^_]A\A]A^A_
+AVAUATUWVSH
+[^_]A\A]A^
+L;d$@s
+H;\$@s5H
+H;\$@r
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+AWAVATUWVSH
+`[^_]A\A^A_
+ATUWVSH
+ [^_]A\
+ [^_]A\
+AVWVSH
+8[^_A^
+8[^_A^
+8[^_A^
+AVAUATUWVSH
+0[^_]A\A]A^
+0[^_]A\A]A^
+0[^_]A\A]A^
+AVAUATUWVSH
+P[^_]A\A]A^
+AVWVSH
+L9K0tzM
+L$(L9K0u
+H[^_A^
+H[^_A^
+H[^_A^
+AWAVATUWVSH
+`[^_]A\A^A_
+u@H9u@
+t$8I9t$8
+AVAUATUWVSH
+@[^_]A\A]A^
+HcL$\H
+HcL$\H
+ATUWVSH
+HcD$LH
+HcD$LH
+[^_]A\
+HcD$LH
+HcD$LH
+D$PLcL$LI
+ATUWVSH
+ [^_]A\
+ [^_]A\
+AWAVAUATUWVSH
+HcD$hI
+[^_]A\A]A^A_
+AVUWVSH
+P[^_]A^
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+8[^_]A\A]A^A_
+AVUWVSH
+P[^_]A^
+@LcA`H
+tFLcA`I
+AWAVUWVSH
+H[^_]A^A_
+H[^_]A^A_H
+H[^_]A^A_
+AUATUWVSH
+([^_]A\A]
+AWAVWVSH
+P[^_A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AVWVSH
+8[^_A^
+8[^_A^
+AVAUATUWVSH
+ [^_]A\A]A^
+AVUWVSH
+@[^_]A^
+AWAVAUATUWVSH
+|$pff.
+D$pHcP8H
+[^_]A\A]A^A_
+g0A;L$@
+AWAVAUATUWVSH
+Ic|$`M
+t8L9-~
+[^_]A\A]A^A_
+Ic|$`M
+g0A;L$@
+AVAUATUWVSH
+@[^_]A\A]A^
+@[^_]A\A]A^
+AWAVATUWVSH
+@[^_]A\A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+D$(L;x
+AVWVSH
+H[^_A^
+AVAUATUWVSH
+P[^_]A\A]A^
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVUWVSH
+H[^_]A^A_
+H[^_]A^A_
+A0H+A(H
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_H
+AUATUWVSH
+h[^_]A\A]
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+G0L9C0
+D$F[\\]
+D$F[\\
+A0L9C0
+x$ctqM
+AWAVWVSH
+P[^_A^A_
+P[^_A^A_
+Be u H
+AWAVUWVSH
+X[^_]A^A_
+X[^_]A^A_
+@e tcK
+AVAUATUWVSH
+P[^_]A\A]A^
+P[^_]A\A]A^
+AVWVSH
+([^_A^
+([^_A^
+Be uXM
+L$<tZI
+K09L$ t
+C8H9D$(
+T$(L9T$H
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+D$HH;B8
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+I;L$8r
+H[^_]A\A]A^A_
+I;|$8r
+<wt%<atAH
+AVUWVSH
+@[^_]A^
+@[^_]A^
+ATUWVSH
+[^_]A\
+9/inet
+<4tQ<6te</u
+tcp/t\A
+AVAUATUWVSH
+0[^_]A\A]A^
+L;H0rZ1
+0[^_]A\A]A^
+ATUWVSH
+ [^_]A\
+ [^_]A\
+ATUWVSH
+ [^_]A\
+ [^_]A\
+AVUWVSH
+@[^_]A^
+@[^_]A^
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+LcD$PL
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVWVSH
+[^_A^A_
+[^_A^A_
+L$(H9L$8
+AVAUATUWVSH
+ [^_]A\A]A^
+ [^_]A\A]A^
+ [^_]A\A]A^
+ [^_]A\A]A^
+ATUWVSH
+0[^_]A\
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+ATUWVSH
+@[^_]A\
+A9D$ u
+AVUWVSH
+@[^_]A^
+@[^_]A^
+AVATUWVSH
+8[^_]A\A^
+8[^_]A\A^H
+8[^_]A\A^H
+ATUWVSH
+ [^_]A\
+ [^_]A\
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+B0M9A0
+AVWVSH
+X[^_A^
+X[^_A^
+AVUWVSH
+@[^_]A^
+AVWVSH
+X[^_A^
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AVWVSH
+H[^_A^
+H[^_A^
+H[^_A^
+AVUWVSH
+0[^_]A^
+0[^_]A^H
+0[^_]A^
+9C u"f.
+ATUWVSH
+ [^_]A\
+ [^_]A\
+ATUWVSH
+ [^_]A\
+ [^_]A\
+ [^_]A\
+AVUWVSH
+0[^_]A^
+0[^_]A^
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVATUWVSH
+H9t$Hr
+P[^_]A\A^A_
+ATUWVSH
+@[^_]A\
+9F t!ff.
+AUATUWVSH
+8[^_]A\A]
+ATUWVSH
+@[^_]A\
+AVAUATUWVSH
+ [^_]A\A]A^
+AVAUATUWVSH
+ [^_]A\A]A^
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVATUWVSH
+0[^_]A\A^A_
+AWAVWVSH
+@[^_A^A_
+AUATUWVSH
+X[^_]A\A]
+AWAVAUATUWVSH
+C0L+k(I9
+h[^_]A\A]A^A_
+AVUWVSH
+[^_]A^
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+<It!<Nu
+AVUWVSH
+P[^_]A^
+AVWVSH
+X[^_A^
+X[^_A^
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AVAUATUWVSH
+@[^_]A\A]A^
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+h[^_]A\A]A^A_
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+? D$`H
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+ATUWVSH
+ [^_]A\
+ATUWVSH
+ [^_]A\
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVWVSH
+@[^_A^A_
+AWAVAUATUWVSH
+H9t$HtfH
+T$XH+D$P
+H9t$Hu
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVWVSH
+<3:t@H
+@[^_A^A_
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AVWVSH
+H[^_A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AUATUWVSH
+8[^_]A\A]
+AUATUWVSH
+8[^_]A\A]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AVUWVSH
+P[^_]A^
+P[^_]A^
+AVAUATUWVSH
+ [^_]A\A]A^
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+D$HH;B8
+AVAUATUWVSH
+ [^_]A\A]A^
+AVUWVSH
+P[^_]A^
+P[^_]A^
+P[^_]A^
+ATUWVSH
+0[^_]A\
+0[^_]A\
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+AWAVUWVSH
+H[^_]A^A_
+AUATUWVSH
+([^_]A\A]
+u59BXt7
+t$ ff.
+AVWVSH
+X[^_A^
+X[^_A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVWVSH
+P[^_A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+8[^_]A\A]A^A_
+AVWVSH
+8[^_A^
+H+t$(M
+8[^_A^
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+H9sh~&H
+ATUWVSH
+0[^_]A\
+0[^_]A\
+0[^_]A\
+ATUWVSH
+@[^_]A\
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+K`H;Cp|'H
+AVWVSH
+)D$`ff.
+)D$`f.
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+uu2T$(
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AUATUWVSH
+([^_]A\A]
+AVAUATUWVSD
+F0[^_]A\A]A^
+AWAVAUATUWVSH
+LcL$0D
+K4D;K0}
+x[^_]A\A]A^A_
+LcL$0D
+AUATUWVSH
+8[^_]A\A]
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AVUWVS
+[^_]A^
+[^_]A^
+L$Ht*I
+AUATUWVSH
+([^_]A\A]
+AVWVSH
+8[^_A^
+8[^_A^
+AUATUWVSH
+([^_]A\A]
+H9T$(t
+H9T$0u-K
+H9T$(t
+H9T$(t
+ATUWVSH
+ [^_]A\
+L$Ht+I
+AVAUATUWVSH
+0[^_]A\A]A^
+L$Ht+I
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+8[^_]A\A]A^A_
+ATUWVSH
+0[^_]A\
+0[^_]A\
+0[^_]A\
+0[^_]A\
+0[^_]A\
+ATUWVSH
+H;^ s@H
+0[^_]A\
+AWAVAUATUWVSH
+|$<^tiH
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+x0|tVH
+[^_]A\A]A^A_
+{0|u;M9
+H9D$8t
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+@`H+GPL
+C`H+CP
+C`H+CP
+C`H+CP
+H+D$ H
+HcR89PH
+LcH8D;H,t
+-u/HcP8D
+D;H@}2A
+<:tN<=tZ<.u
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AVWVSH
+H[^_A^
+AVAUATUWVSH
+0[^_]A\A]A^
+AUATUWVSH
+HcS(Hc
+x[^_]A\A]
+AWAVAUATUWVSH
+Hck(Hc
+[^_]A\A]A^A_
+{@9{D~
+AVWVSH
+8[^_A^
+8[^_A^
+ATUWVSH
+ [^_]A\
+A@HcY,9
+ATUWVSH
+ [^_]A\
+AVAUATUWVSH
+ [^_]A\A]A^
+ATUWVSH
+0[^_]A\
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+,H+T$ D
+@HcB8I
+HcB8;B,t
+;B@|#A
+u%HcB8
+AWAVAUATUWVSH
+L$@HcE
+X[^_]A\A]A^A_
+AWAVUWVSH
+8[^_]A^A_
+9yH~hE8
+8[^_]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AVUWVSH
+G0LcO$E
+ [^_]A^
+ATUWVSH
+ [^_]A\
+ [^_]A\
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AUATUWVSH
+([^_]A\A]
+AUATUWVSH
+H[^_]A\A]
+H[^_]A\A]
+ATUWVSH
+D9 tmH
+0[^_]A\
+0[^_]A\
+AVAUATUWVSH
+\$0IcC
+P[^_]A\A]A^
+P[^_]A\A]A^
+P[^_]A\A]A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+Lcl$hO
+[^_]A\A]A^A_
+Lcl$hH
+/;A@}*
+ATUWVSH
+P[^_]A\
+P[^_]A\
+AWAVAUATUWVSH
+D$XHcA8I
+[^_]A\A]A^A_
+~0A9w,
+D;#~!E;o,
+Lcl$`A
+AVATUWVSH
+HHcj8L
+H[^_]A\A^
+AVAUATUWVS
+[^_]A\A]A^A_
+H9D$xt
+AVAUATUWVSH
+p[^_]A\A]A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+HcE89EH
+~*HcG0
+D9T$8t@H
+L9d$8t
+D$lt>H
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+|$Hff.
+UPH9UHt
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+\$@tIH
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+ATUWVSH
+F8H9F0
+^0H;^8s,
+0[^_]A\
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVWVSH
+`[^_A^A_
+`[^_A^A_
+`[^_A^A_
+H9X0s/H
+H;p8r|H
+L+D$(H
+H;X0r,H;X8s&H
+H;B0r0H;B8s*H
+AWAVAUATUWVSH
+(END OF FILE)
+syntax error
+ !"#$%&'()*+,-./0123456789:;<=>?@abcdefghijklmnopqrstuvwxyz[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+pqrstuvwxyzabcdefghijklmno
+abfnrtv\
+abfnrtv
+.*+(){}[]|?^$\
+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+symbol->table_size == 0
+array.c
+<unused>
+<(null)>
+"%.*s"
+%.*R*g
+<%.*g>
+stfmt=%d, 
+FMT="%s"
+, ROUNDMODE="%c"
+r->valref > 0
+r == NULL || r->valref > 0
+symbol->xarray == NULL
+n->type == Node_var_array
+n1_pos != -1 && n2_pos != -1
+internal error: file %s, line %d: %s: expected Node_val: got %s
+newsymb->vname != NULL
+%s:%d: erealloc called with zero bytes
+%s:%d:%s: %s: cannot reallocate %zu bytes of memory: %s
+["%s"]
+%s:%d: emalloc called with zero bytes
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+from %s
+message
+array `%s' is empty
+attempt to use array `%s' in a scalar context
+attempt to use a scalar value as array
+attempt to use scalar parameter `%s' as an array
+attempt to use scalar `%s' as an array
+symbol->type == Node_var_array
+delete: index `%.*s' not in array `%s'
+attempt to use scalar `%s["%.*s"]' as an array
+I: [%s:
+V: [scalar: 
+V: [user_defined_function
+V: [external_function
+V: [builtin_function
+internal error: file %s, line %d: unexpected node type %s
+%s: first argument is not an array
+`%s' is invalid as a function name
+sort comparison function `%s' is not defined
+asorti
+@val_type_asc
+@ind_str_asc
+%s: second argument is not an array
+%s: cannot use %s as second argument
+%s: first argument cannot be SYMTAB without a second argument
+%s: first argument cannot be FUNCTAB without a second argument
+asort/asorti: using the same array as source and destination without a third argument is silly.
+%s: cannot use a subarray of first argument for second argument
+%s: cannot use a subarray of second argument for first argument
+internal error: file %s, line %d: asort_actual: got unexpected type %s
+new_array_element
+fixtype
+do_sort_up_value_type
+assoc_list
+@ind_num_asc
+@val_str_asc
+@val_num_asc
+@ind_str_desc
+@ind_num_desc
+@val_str_desc
+@val_num_desc
+@val_type_desc
+@unsorted
+adjust_fcall_stack
+do_delete
+concat_exp
+array_vname
+make_aname
+assoc_copy
+null_array
+null_lookup
+cmd. line
+In file included from
+                 from
+%s %s:%d%c
+i3->opcode == Op_push_lhs
+awkgram.y
+count > 0
+#: %s:%d
+msgid 
+msgstr ""
+ugh. fdopen: %s
+AWKREADFUNC
+debugging read/close screwed up!
+warning: 
+fatal: 
+ip != list->nexti
+statement has no effect
+ip->opcode == opc
+ip->target_jmp == tp
+error: 
+function `%s': parameter `%s' shadows global variable
+lineno > 0
+s1 != NULL && s1->opcode == Op_list
+error: invalid character '\%03o' in source code
+r == NULL || r->valref > 0
+%s:%d: erealloc called with zero bytes
+%s:%d:%s: %s: cannot reallocate %zu bytes of memory: %s
+%s:%d: emalloc called with zero bytes
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+unexpected newline or end of string
+source files / command-line arguments must contain complete functions or rules
+%s:%d: ezalloc called with zero bytes
+cannot assign a value to the result of a field post-increment expression
+invalid target of assignment (opcode %s)
+n->stptr
+pnames
+function `%s': cannot use function name as parameter name
+function `%s': parameter `%s': POSIX disallows using a special variable as a function parameter
+function `%s': parameter `%s' cannot contain a namespace
+function `%s': parameter #%d, `%s', duplicates parameter #%d
+tokstart
+c1->opcode == Op_comment
+c2->opcode == Op_comment
+buffer
+fp->name
+thisfunc != NULL
+tp != NULL
+%s::%s
+source file does not end in newline
+empty program text on command line
+cannot open source file `%s' for reading: %s
+sourcefile->buf
+cannot read source file `%s': %s
+source file `%s' is empty
+nexp > 0
+%d is invalid as number of arguments for %s
+gensub
+%s: string literal as last argument of substitute has no effect
+%s third parameter is not a changeable object
+match: regexp constant as first argument is probably not what you want
+match: third argument is a gawk extension
+close: second argument is a gawk extension
+use of dcgettext(_"...") is incorrect: remove leading underscore
+use of dcngettext(_"...") is incorrect: remove leading underscore
+msgid_plural 
+msgstr[0] ""
+msgstr[1] ""
+index: regexp constant as second argument is not allowed
+division by zero attempted
+division by zero attempted in `%%'
+awk::%s
+reason unknown
+cannot open shared library `%s' for reading: %s
+cannot include `%s' and use it as a program file
+already included source file `%s'
+already loaded shared library `%s'
+@include is a gawk extension
+empty filename after @include
+@load is a gawk extension
+empty filename after @load
+uninitialized scalar
+@/%.*s/
+%.17R*g
+?? flags %s
+could not open `%s' for writing: %s
+sending variable list to standard error
+%s: close failed: %s
+shadow_funcs() called twice!
+there were shadowed variables
+function `%s' called with space between name and `(',
+or used as a variable or an array
+type == Node_regex || type == Node_dynregex
+identifier %s: qualified names not allowed in traditional / POSIX mode
+identifier %s: namespace separator is two colons, not one
+qualified identifier `%s' is badly formed
+identifier `%s': namespace separator can only appear once in a qualified name
+unterminated regexp ends with `\' at end of file
+unterminated regexp
+unterminated regexp at end of file
+backslash not last character on line
+multidimensional arrays are a gawk extension
+POSIX does not allow operator `%s'
+operator `%s' is not supported in old awk
+unterminated string
+POSIX does not allow physical newlines in string values
+backslash string continuation is not portable
+numeric constant `%.*s' treated as octal
+numeric constant `%.*s' treated as hexadecimal
+invalid char '%c' in expression
+using reserved identifier `%s' as a namespace is not allowed
+using reserved identifier `%s' as second component of a qualified name is not allowed
+internal error: file %s, line %d: bad value %d for want_param_names
+`%s' is a gawk extension
+POSIX does not allow `%s'
+`%s' is not supported in old awk
+tokkey
+`continue' is not allowed outside a loop
+`break' is not allowed outside a loop or switch
+`goto' considered harmful!
+%s blocks must have an action part
+each rule must have a pattern or an action part
+@namespace is a gawk extension
+namespace name `%s' must meet identifier naming rules
+old awk does not support multiple `BEGIN' or `END' rules
+`%s' is a built-in function, it cannot be redefined
+function name `%s' previously defined
+regexp constant `//' looks like a C++ comment, but is not
+regexp constant `/%s/' looks like a C comment, but is not
+duplicate case values in switch body: %s
+case_values
+duplicate `default' detected in switch body
+`next' used in %s action
+`nextfile' used in %s action
+`return' used outside function context
+plain `print' in BEGIN or END rule should probably be `print ""'
+`delete' is not allowed with SYMTAB
+`delete' is not allowed with FUNCTAB
+(yyvsp[0]->memory->flags & REGEX) == REGEX
+multistage two-way pipelines don't work
+concatenation as I/O `>' redirection target is ambiguous
+yyvsp[0]->memory->comment_type == BLOCK_COMMENT
+regular expression on right of assignment
+regular expression on left of `~' or `!~' operator
+yyvsp[0]->opcode == Op_push_re && (yyvsp[0]->memory->flags & REGEX) != 0
+old awk does not support the keyword `in' except after `for'
+regular expression on right of comparison
+n1->stptr
+non-redirected `getline' invalid inside `%s' rule
+non-redirected `getline' undefined inside END action
+old awk does not support multidimensional arrays
+call of `length' without parentheses is not portable
+indirect function calls are a gawk extension
+cannot use special variable `%s' for indirect function call
+attempt to use non-function `%s' in function call
+regexp constant for parameter #%d yields boolean value
+invalid subscript expression
+syntax error
+memory exhausted
+function `%s' called but never defined
+function `%s' defined but never called directly
+args_array
+make_regnode
+parse_program
+yyerror
+count_expressions
+qualify_name
+func_use
+add_lint
+set_profile_text
+mk_getline
+mk_boolean
+mk_expression_list
+merge_comments
+optimize_assignment
+check_params
+do_add_srcfile
+mk_function
+find_line
+tokexpand
+get_src_buf
+yyparse
+BEGINFILE
+ENDFILE
+_dump_node
+asorti
+bindtextdomain
+continue
+dcgettext
+dcngettext
+default
+delete
+fflush
+function
+getline
+include
+isarray
+length
+lshift
+mkbool
+mktime
+namespace
+nextfile
+nsinclude
+patsplit
+printf
+return
+rshift
+sprintf
+strftime
+strtonum
+substr
+switch
+system
+systime
+tolower
+toupper
+typeof
+NOOOOOPPPPPPPQQQRRRSSSTTTTTTTUVVVVWWYX[Z\]]^^^__``````````aaaaabaadceccffggghhiiiiiijjkklmlnnooppqqrrsssssttuuvvvvvvwwxxxxxxyyzz{{{{{{{{{{|||}}~~
+&jg`AF
+`QP`,`
+FG?=:>
+ !"#$%&'()*+,-./01234567Cawk
+builtin.c
+reason unknown
+standard output
+standard error
+%s to "%s" failed: %s
+LC_MESSAGES
+dcgettext: `%s' is not a valid locale category
+r->valref > 0
+r == NULL || r->valref > 0
+%s: called with %d arguments
+attempt to use array `%s' in a scalar context
+internal error: file %s, line %d: %s: expected Node_val: got %s
+%s: received non-numeric argument
+exp: argument %g is out of range
+fflush
+%s: received non-string argument
+fflush: cannot flush: pipe `%.*s' opened for reading, not writing
+fflush: cannot flush: file `%.*s' opened for reading, not writing
+fflush: cannot flush file `%.*s': %s
+fflush: cannot flush: two-way pipe `%.*s' has closed write end
+/dev/stderr
+/dev/stdout
+fflush: `%.*s' is not an open file, pipe or co-process
+%s: received non-string first argument
+%s: received non-string second argument
+isarray
+length
+tmp->type == Node_val
+%s: received negative argument %g
+substr
+%s: received non-numeric third argument
+%s: received non-numeric second argument
+substr: length %g is not >= 1
+substr: length %g is not >= 0
+substr: non-integer length %g will be truncated
+substr: length %g too big for string indexing, truncating to %g
+substr: start index %g is invalid, using 1
+substr: non-integer start index %g will be truncated
+substr: source string is zero length
+substr: start index %g is past end of string
+substr: length %g at start index %g exceeds length of first argument (%lu)
+%s:%d: emalloc called with zero bytes
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+strftime
+strftime: format value in PROCINFO["strftime"] has numeric type
+strftime: second argument less than 0 or too big for time_t
+strftime: second argument out of range for time_t
+strftime: received empty format string
+%s:%d: erealloc called with zero bytes
+%s:%d:%s: %s: cannot reallocate %zu bytes of memory: %s
+systime
+mktime
+%ld %d %d %d %d %d %d
+mktime: at least one of the values is out of the default range
+system
+'system' function not allowed in sandbox mode
+/bin/sh
+nargs <= max_args
+print: attempt to write to closed write end of two-way pipe
+nargs == 0
+reference to uninitialized field `$%d'
+tolower
+toupper
+%s: received non-numeric first argument
+gensub
+gensub: third argument `%.*s' treated as 1
+mb_indices
+buf != NULL
+%s: can be called indirectly only with two arguments
+indirect call to gensub requires three or four arguments
+indirect call to %s requires two to four arguments
+lshift
+lshift(%f, %f): negative values are not allowed
+lshift(%f, %f): fractional values will be truncated
+lshift(%f, %f): too large shift value returns zero
+rshift
+rshift(%f, %f): negative values are not allowed
+rshift(%f, %f): fractional values will be truncated
+rshift(%f, %f): too large shift value returns zero
+%s: called with less than two arguments
+%s: argument %d is non-numeric
+%s: argument %d negative value %g is not allowed
+compl(%f): negative value is not allowed
+compl(%f): fractional value will be truncated
+hexadecimal floating point constants require an exponent
+strtonum
+dcgettext
+%s: received non-string third argument
+dcngettext
+%s: received non-string fifth argument
+%s: received non-string fourth argument
+bindtextdomain
+string
+number|bool
+number
+strnum
+regexp
+unassigned
+unknown
+untyped
+typeof
+typeof: second argument is not an array
+array_type
+%s_highwater
+%s_active
+typeof detected invalid flags combination `%s'; please file a bug report
+typeof: unknown argument type `%s'
+SYMTAB
+FUNCTAB
+match: third argument is not an array
+%s: cannot use %s as third argument
+indirect call to match requires two or three arguments
+MB_CUR_MAX = %u
+sizeof(int) = %zu
+sizeof(long) = %zu
+sizeof(long long) = %zu
+sizeof(void *) = %zu
+sort -n
+array_base
+array_capacity
+array_funcs
+array_size
+buckets
+code_ptr
+comment_type
+cur_idx
+dup_ent
+elemnew_parent
+elemnew_vname
+for_array
+for_list
+for_list_size
+fparms
+func_node
+mpg_numbr
+orig_array
+param_cnt
+parent_array
+prev_array
+prev_frame_size
+re_cnt
+re_exp
+re_flags
+re_reg
+re_text
+strndmode
+table_size
+typed_re
+valref
+var_assign
+var_update
+var_value
+wstlen
+wstptr
+xarray
+do_typeof
+LC_ALL
+LC_COLLATE
+LC_CTYPE
+LC_MONETARY
+LC_NUMERIC
+LC_TIME
+do_sub
+do_match
+do_print_rec
+do_print
+do_strftime
+do_substr
+do_length
+fixtype
+i >= 0
+cint_array.c
+k >= 0
+r == NULL || r->valref > 0
+sub-array
+%s `%s'
+array_func: cint_array_func
+flags: %s
+NHAT: %d
+THRESHOLD: %ld
+table_size: %lu (total), %ld (cint), %ld (int + str)
+array_capacity: %lu
+Load Factor: %.2g
+memory: %.2g kB (total)
+list != NULL
+%s:%d:%s: %s: cannot reallocate %zu bytes of memory: %s
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+symbol->nodes != NULL
+%s:%d: ezalloc called with zero bytes
+cannot add a new file (%.*s) to ARGV in sandbox mode
+symbol->table_size > 0
+tree->nodes == NULL
+tree->nodes != NULL
+array->nodes
+symbol->table_size == 0
+symbol->nodes
+leaf_lookup
+tree_find
+tree_lookup
+cint_lookup
+tree_exists
+cint_clear
+tree_remove
+cint_hash
+cint_remove
+tree_list
+cint_list
+leaf_copy
+tree_copy
+cint_copy
+cmd_idx >= 0
+command.y
+error: 
+option
+undefined command: %s
+r == NULL || r->valref > 0
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+%s:%d: emalloc called with zero bytes
+%s:%d: erealloc called with zero bytes
+%s:%d:%s: %s: cannot reallocate %zu bytes of memory: %s
+stmt_list->a_string
+breakpoint
+watchpoint
+cannot read command: %s
+cannot read command: %s
+invalid character in command
+unknown command - `%.*s', try help
+unterminated string
+invalid character
+Type (g)awk statement(s). End with the command `end'
+len > 2 && str[len - 2] == '}'
+invalid frame number: %d
+info: invalid option - `%s'
+source: `%s': already sourced
+save: `%s': command not permitted
+cannot use command `commands' for breakpoint/watchpoint commands
+no breakpoint/watchpoint has been set yet
+invalid breakpoint/watchpoint number
+Type commands for when %s %d is hit, one per line.
+End with the command `end'
+`end' valid only in command `commands' or `eval'
+`silent' valid only in command `commands'
+trace: invalid option - `%s'
+condition: invalid breakpoint/watchpoint number
+argument not a string
+option: invalid parameter - `%s'
+no such function - `%s'
+enable: invalid option - `%s'
+invalid range specification: %d - %d
+non-numeric value for field number
+non-numeric value found, numeric expected
+non-zero integer value
+syntax error
+memory exhausted
+concat_args
+mk_cmdarg
+find_argument
+append_statement
+zzparse
+display
+functions
+locals
+source
+sources
+variables
+backtrace
+backtrace [N] - print trace of all or N innermost (outermost if N < 0) frames
+break [[filename:]N|function] - set breakpoint at the specified location
+clear [[filename:]N|function] - delete breakpoints previously set
+commands
+commands [num] - starts a list of commands to be executed at a breakpoint(watchpoint) hit
+condition
+condition num [expr] - set or clear breakpoint or watchpoint condition
+continue
+continue [COUNT] - continue program being debugged
+delete
+delete [breakpoints] [range] - delete specified breakpoints
+disable
+disable [breakpoints] [range] - disable specified breakpoints
+display [var] - print value of variable each time the program stops
+down [N] - move N frames down the stack
+dump [filename] - dump instructions to file or stdout
+enable
+enable [once|del] [breakpoints] [range] - enable specified breakpoints
+end - end a list of commands or awk statements
+eval stmt|[p1, p2, ...] - evaluate awk statement(s)
+exit - (same as quit) exit debugger
+finish
+finish - execute until selected stack frame returns
+frame [N] - select and print stack frame number N
+help [command] - print list of commands or explanation of command
+ignore
+ignore N COUNT - set ignore-count of breakpoint number N to COUNT
+info topic - source|sources|variables|functions|break|frame|args|locals|display|watch
+list [-|+|[filename:]lineno|function|range] - list specified line(s)
+next [COUNT] - step program, proceeding through subroutine calls
+nexti [COUNT] - step one instruction, but proceed through subroutine calls
+option [name[=value]] - set or display debugger option(s)
+print var [var] - print value of a variable or array
+printf
+printf format, [arg], ... - formatted output
+quit - exit debugger
+return
+return [value] - make selected stack frame return to its caller
+run - start or restart executing program
+save filename - save commands from the session to file
+set var = value - assign value to a scalar variable
+silent
+silent - suspends usual message when stopped at a breakpoint/watchpoint
+source file - execute commands from file
+step [COUNT] - step program until it reaches a different source line
+stepi [COUNT] - step one instruction exactly
+tbreak
+tbreak [[filename:]N|function] - set a temporary breakpoint
+trace on|off - print instruction before executing
+undisplay
+undisplay [N] - remove variable(s) from automatic display list
+until [[filename:]N|function] - execute until program reaches a different line or line N within current frame
+unwatch
+unwatch [N] - remove variable(s) from watch list
+up [N] - move N frames up the stack
+watch var - set a watchpoint for a variable
+where [N] - (same as backtrace) print trace of all or N innermost (outermost if N < 0) frames
+;<<===>>>>>????@@@@AABCDEDFFGGGGGGGGGHGIGGGGGJGGKGLGMGGGGGGGGGNGGOPPQQRRRRSSSTUUUVWWWWWXYXXZXX[[\\]]^^__```aaaabbcccdddddddddefffgggghhhiijjkkklllmmnnoopppq
+./012b3o
+45PQSRUV
+#Rvwy*zx
+b8>P0D;C
+l'itpr)q
+RWV~|}{
+ !"#$%&'()*+,-./0}
+function @eval(){
+ in file `%s', line %d
+main()
+ at `%s':%d
+untyped variable
+untyped element
+array, %ld elements
+`function'
+$%ld = uninitialized field
+$%ld = 
+Nnull_string
+func != NULL
+debug.c
+element - %p
+num >= 0
+prog_running == true
+num <= fcall_count
+fcall_list[num] != NULL
+code != NULL
+it->opcode == Op_K_print_rec
+it->opcode == Op_no_op
+fcall_count >= stop.fcall_count
+no symbol `%s' in current context
+r == NULL || r->valref > 0
+r->valref > 0
+------[Enter] to continue or [q] + [Enter] to quit------
+%s:%d: erealloc called with zero bytes
+%s:%d:%s: %s: cannot reallocate %zu bytes of memory: %s
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+%s%c%d%c%d%c%d%c%d%c%d%c
+%d%c%d%c%s%c%d%c
+%lu%c%.*s%c
+%d%c%d%c%d%c
+%d%c%d%c%s%c
+%s%c%d%c
+%s%c%s%c
+commands %d
+'finish' not meaningful with non-local jump '%s'
+'until' not meaningful with non-local jump '%s'
+Returned value = 
+%d: subscript "%.*s" is not in array `%s'
+%d: %s["%.*s"] = 
+%d: %s = 
+Note: breakpoint %d (enabled, ignore next %ld hits), also set at %s:%d
+Note: breakpoint %d (enabled), also set at %s:%d
+Note: breakpoint %d (disabled, ignore next %ld hits), also set at %s:%d
+Note: breakpoint %d (disabled), also set at %s:%d
+ip->source_line == lineno
+Breakpoint %d set at file `%s', line %d
+sz > 0
+reset_record()
+invalidate_field0()
+cmd. line
+gensub
+CSUBSEP
+[      :%p] %-20.20s: 
+# Function: %s (
+[%6d:%p] %-20.20s: 
+[branch_if = %p] [branch_else = %p] [branch_else->lasti = %p]
+[branch_end = %p]
+[while_body = %p] [target_break = %p]
+[doloop_cond = %p] [target_break = %p]
+ [comment = %p]
+[forloop_cond = %p] 
+[forloop_body = %p] 
+[target_break = %p] [target_continue = %p]
+ [comment = %p]
+[switch_start = %p] [switch_end = %p]
+[start_comment = %p]
+[end_comment = %p]
+[stmt_start = %p] [stmt_end = %p]
+[update_%s()]
+[set_%s()]
+ [assign_ctxt = %s]
+[target_assign = %p] [do_reference = %s]
+[param_cnt = %d] [source_file = %s]
+[ns_list = %p]
+[into_var = %s] [redir_type = "%s"]
+[into_var = %s]
+%*s[target_beginfile = %p] [target_endfile = %p]
+[redir_type = "%s"]
+[expr_count = %ld] [redir_type = "%s"]
+[func_name = %s] [arg_count = %ld]
+[target_newfile = %p] [target_endfile = %p]
+[target_jmp = %p] [target_endfile = %p]
+%*s[target_get_record = %p]
+[target_newfile = %p]
+[target_jmp = %p]
+[target_end = %p] [target_atexit = %p]
+[target_jmp = %p] [match_exp = %s]
+[namespace = %s]
+[nexti = %p]
+[comment = %p]
+[array_var = %s] [target_jmp = %p]
+[triggered = %ld] [target_jmp = %p]
+[line_range = %p] [target_jmp = %p]
+%s [arg_count = %ld] [sub_flags = %s]
+%s [arg_count = %ld]
+[sub_count = %ld]
+ [sub_count = %ld]
+[sub_count = %ld] [do_reference = %s]
+[expr_count = %ld]
+[expr_count = %ld] [concat_flag = %s]
+[in_rule = %s] [source_file = %s]
+[lint_type = %s]
+[exec_count = %llu]
+ [do_reference = %s]
+ [comment_type = %s]
+array `%s' is empty
+@ind_str_asc
+["%.*s"] = 
+["%s"]
+error: 
+no current source file
+cannot find source file named `%s': %s
+cannot open source file `%s' for reading: %s
+warning: source file `%s' modified since program compilation.
+%s:%d: emalloc called with zero bytes
+s->line_offset
+cannot read source file `%s': %s
+source file `%s' is empty.
+line number %d out of range; `%s' has %d lines
+nlines > 0
+%s: %s
+linebuf
+%-4d:b=>
+%-4d  =>
+%-4d:b  
+unexpected eof while reading file `%s', line %d
+b != NULL
+Breakpoint %d, 
+Watchpoint %d: 
+["%.*s"]
+  Old value: 
+element not in array
+  New value: 
+Stopping in %s ...
+`%s' is a function
+`%s' is not an array
+count > 0
+watchpoint %d is unconditional
+no symbol `%s' in current context
+no display item numbered %ld
+no watch item numbered %ld
+attempt to use scalar value as array
+/dev/stdout
+stdout
+stderr
+/dev/stderr
+reason unknown
+could not open `%s' for writing: %s
+sending output to stdout
+DGAWK_RESTART
+Failed to restart debugger
+attempt to use array `%s' in a scalar context
+fatal error during eval, need to restart.
+`%s' not allowed in current context; statement ignored
+`return' not allowed in current context; statement ignored
+sourceline > 0
+internal error: file %s, line %d: unexpected symbol type %s
+invalid number
+%s:%d:%s: program not running
+rp != NULL
+cannot set breakpoint in file `%s'
+line number %d in file `%s' is out of range
+internal error: cannot find rule
+cannot set breakpoint at `%s':%d
+cannot set breakpoint in function `%s'
+breakpoint %d set at file `%s', line %d is unconditional
+arg != NULL
+arg->type == D_int
+`%s' is not a scalar variable
+attempt to use array `%s["%.*s"]' in a scalar context
+%s["%.*s"] = 
+attempt to use scalar `%s["%.*s"]' as array
+field_num >= 0
+Watchpoint %d deleted because parameter is out of scope.
+Display %d deleted because parameter is out of scope.
+More stack frames follow ...
+invalid frame number
+line number %d in file `%s' out of range
+No breakpoint(s) at entry to function `%s'
+Deleted breakpoint %d
+No breakpoint at file `%s', line #%d
+invalid breakpoint number
+Delete all breakpoints? (y or n) 
+Will ignore next %ld crossing(s) of breakpoint %d.
+Will stop next time breakpoint %d is reached.
+history_size
+The program is running. Exit anyway (y/n)? 
+./.gawk_history
+./.gawkrc
+option %s = "%s"
+option %s = %d
+Not stopped at any breakpoint; argument ignored.
+invalid breakpoint number %d
+Will ignore next %ld crossings of breakpoint %d.
+'finish' not meaningful in the outermost frame main()
+stop.fcall_count >= 0
+Run until return from 
+'return' not meaningful in the outermost frame main()
+stop.pc->opcode == Op_K_return
+cannot find specified location in function `%s'
+invalid source line %d in file `%s'
+cannot find specified location %d in file `%s'
+%s = "%s"
+%s = %d
+Current source file: %s
+Number of lines: %d
+Source file (lines): %s (%d)
+Number  Disp  Enabled  Location
+%-6d  %-4.4s  %-7.7s  file %s, line #%d
+number of hits = %ld
+ignore next %ld hit(s)
+stop condition: %s
+commands:
+Current frame: 
+Called by frame: 
+Caller of frame: 
+None in main().
+No arguments.
+No locals.
+All defined variables:
+All defined functions:
+Auto-display variables:
+Watch variables:
+a->a_count > 0
+subscript "%.*s" is not in array `%s'
+`%s["%.*s"]' is not an array
+(b != NULL) || (w != NULL)
+commands != NULL
+["%.*s"] not in array `%s'
+%-15.15s - %s
+f != NULL
+this_frame->stack
+Program already running. Restart from beginning (y/n)? 
+Program not restarted
+error: cannot restart, operation not allowed
+error (%s): cannot restart, ignoring rest of the commands
+Starting program:
+Program exited abnormally with exit value: %d
+Program exited normally with exit value: %d
+Can only debug programs provided with the `-f' option.
+gawk> 
+Restarting ...
+push_cmd_src
+do_eval
+do_print_f
+do_commands
+gprintf
+do_until
+check_return
+do_return
+do_finish
+next_step
+do_continue
+unserialize_list_item
+g_readline
+next_command
+serialize_list
+print_memory
+LINT_illegal
+LINT_assign_in_cond
+LINT_no_effect
+GENSUB
+LITERAL
+debug_pre_execute
+do_enable_breakpoint
+do_clear
+mk_breakpoint
+add_breakpoint
+set_breakpoint
+do_down
+print_cur_frame_and_sourceline
+do_frame
+do_backtrace
+parse_condition
+add_item
+do_add_item
+do_set_var
+print_array
+do_print_var
+find_frame
+print_numbered_frame
+do_info
+find_lines
+print_lines
+do_list
+set or show the number of lines to keep in history file
+listsize
+set or show the list command window size
+outfile
+set or show gawk output file
+prompt
+set or show debugger prompt
+save_history
+(un)set or show saving of command history (value=on|off)
+save_options
+(un)set or show saving of options (value=on|off)
+(un)set or show instruction tracing (value=on|off)
+DGAWK_BREAK
+DGAWK_WATCH
+DGAWK_DISPLAY
+DGAWK_HISTORY
+DGAWK_OPTION
+behavior of `for' loop on untyped variable is not defined by POSIX
+%s:%d: erealloc called with zero bytes
+%s:%d:%s: %s: cannot reallocate %zu bytes of memory: %s
+r == NULL || r->valref > 0
+r->valref > 0
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+eval.c
+unknown nodetype %d
+internal error: file %s, line %d: %s: expected Node_val: got %s
+%s:%d: emalloc called with zero bytes
+fmt_list
+bad `%sFMT' specification `%s'
+unknown opcode %d
+opcode %s not an operator or keyword
+buffer overflow in genflags2str
+# Function Call Stack:
+# %3ld. %s
+# %3ld. -- main --
+`IGNORECASE' is a gawk extension
+`BINMODE' is a gawk extension
+BINMODE value `%s' is invalid, treated as 3
+invalid
+no-ext
+turning off `--lint' due to assignment to `LINT'
+stack_bottom
+function `%s' called with more arguments than declared
+internal error: file %s, line %d: unexpected parameter type %s
+fcall_list
+attempt to use array `%s' in a scalar context
+internal error: file %s, line %d: unexpected variable type %s
+reference to uninitialized argument `%s'
+reference to uninitialized variable `%s'
+attempt to field reference from non-numeric value
+attempt to field reference from null string
+attempt to access field %ld
+reference to uninitialized field `$%ld'
+fcall_count >= 0
+unwind_stack: unexpected type `%s'
+GAWK_STACKSIZE
+n->type == Node_elem_new
+division by zero attempted in `/='
+division by zero attempted in `%%='
+interpret.h
+reference to uninitialized element `%s["%.*s"] is not allowed'
+FUNCTAB
+SYMTAB
+reference to uninitialized element `%s["%.*s"]'
+subscript of array `%s' is null string
+FUNCTAB is a gawk extension
+SYMTAB is a gawk extension
+r->elemnew_vname == NULL
+attempt to use scalar `%s["%.*s"]' as an array
+attempt to use array `%s["%.*s"]' in a scalar context
+cannot assign to elements of FUNCTAB
+cannot assign to arbitrary elements of SYMTAB
+set_idx == NULL
+assignment used in conditional context
+internal error: file %s, line %d: unexpected lint type value %d
+operator `+' used on two string values
+pc->target_jmp != NULL
+division by zero attempted
+division by zero attempted in `%%'
+assign != NULL
+t1->stptr
+t1->wstptr
+sorted_in
+@unsorted
+for loop: array `%s' changed size from %ld to %ld during loop execution
+r->type == Node_arrayfor
+%s: called with %lu arguments, expecting at least %lu
+%s: called with %lu arguments, expecting no more than %lu
+(m->flags & REGEX) != 0
+indirect function call requires a simple scalar value
+`%s' is not a function, so it cannot be called indirectly
+the_func != NULL
+bc->opcode == Op_symbol
+function called indirectly through `%s' does not exist
+function `%s' not defined
+Op_K_return_from_eval
+internal error: file %s, line %d: unexpected opcode %s
+non-redirected `getline' invalid inside `%s' rule
+ni->opcode == Op_newfile || ni->opcode == Op_K_getline
+error reading input file `%s': %s
+`nextfile' cannot be called from a `%s' rule
+ni->opcode == Op_K_getline || ni->opcode == Op_newfile
+`exit' cannot be called in the current context
+`next' cannot be called from a `%s' rule
+Sorry, don't know how to interpret `%s'
+elem_new_reset
+init_interpret
+h_interpret
+push_exec_state
+push_frame
+setup_frame
+r_interpret
+pop_frame
+grow_stack
+efgEFG
+fmt_index
+set_OFS
+fixtype
+MALLOC
+STRING
+STRCUR
+NUMCUR
+NUMBER
+USER_INPUT
+INTLSTR
+NUMINT
+INTIND
+WSTRCUR
+NO_EXT_SET
+NULL_FIELD
+ARRAYMAXED
+HALFHAT
+XARRAY
+NUMCONSTSTR
+Op_illegal
+Op_times
+Op_times_i
+Op_quotient
+Op_quotient_i
+Op_mod
+Op_mod_i
+Op_plus
+Op_plus_i
+Op_minus
+Op_minus_i
+Op_exp
+Op_exp_i
+Op_concat
+Op_line_range
+Op_cond_pair
+Op_subscript
+Op_sub_array
+Op_preincrement
+Op_predecrement
+Op_postincrement
+Op_postdecrement
+Op_unary_minus
+Op_unary_plus
+Op_field_spec
+Op_not
+Op_assign
+Op_store_var
+Op_store_sub
+Op_store_field
+Op_store_field_exp
+Op_assign_times
+Op_assign_quotient
+Op_assign_mod
+Op_assign_plus
+Op_assign_minus
+Op_assign_exp
+Op_assign_concat
+Op_and
+Op_and_final
+Op_or_final
+Op_equal
+Op_notequal
+Op_less
+Op_greater
+Op_leq
+Op_geq
+Op_match
+Op_match_rec
+Op_nomatch
+Op_rule
+Op_K_case
+Op_K_default
+default
+Op_K_break
+Op_K_continue
+continue
+Op_K_print
+Op_K_print_rec
+Op_K_printf
+printf
+Op_K_next
+Op_K_exit
+Op_K_return
+return
+Op_K_delete
+delete
+Op_K_delete_loop
+Op_K_getline_redir
+getline
+Op_K_getline
+Op_K_nextfile
+nextfile
+Op_K_namespace
+@namespace
+Op_builtin
+Op_sub_builtin
+Op_ext_builtin
+Op_in_array
+Op_func_call
+Op_indirect_func_call
+Op_push
+Op_push_arg
+Op_push_arg_untyped
+Op_push_i
+Op_push_re
+Op_push_array
+Op_push_param
+Op_push_lhs
+Op_subscript_lhs
+Op_field_spec_lhs
+Op_no_op
+Op_pop
+Op_jmp
+Op_jmp_true
+Op_jmp_false
+Op_get_record
+Op_newfile
+Op_arrayfor_init
+Op_arrayfor_incr
+Op_arrayfor_final
+Op_var_update
+Op_var_assign
+Op_field_assign
+Op_subscript_assign
+Op_after_beginfile
+Op_after_endfile
+Op_func
+Op_comment
+Op_exec_count
+Op_breakpoint
+Op_lint
+Op_lint_plus
+Op_atexit
+Op_stop
+Op_token
+Op_symbol
+Op_list
+Op_K_do
+Op_K_for
+Op_K_arrayfor
+Op_K_while
+Op_K_switch
+switch
+Op_K_if
+Op_K_else
+Op_K_function
+function
+Op_cond_exp
+Op_parens
+Op_final --- this should never appear
+Node_illegal
+Node_val
+Node_regex
+Node_dynregex
+Node_var
+Node_var_array
+Node_var_new
+Node_elem_new
+Node_param_list
+Node_func
+Node_ext_func
+Node_builtin_func
+Node_array_ref
+Node_array_tree
+Node_array_leaf
+Node_dump_array
+Node_arrayfor
+Node_frame
+Node_instruction
+Node_final --- this should never appear
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+@dummy@
+/no/such/path
+MAGIC_XYZZY
+extensions are not allowed in sandbox mode
+extension `%s': trying to load %s, was previously loaded from %s
+-l / @load are gawk extensions
+load_ext: received NULL lib_name
+load_ext: cannot open library `%s': %s
+plugin_is_GPL_compatible
+load_ext: library `%s': does not define `plugin_is_GPL_compatible': %s
+dl_load
+load_ext: library `%s': cannot call function `%s': %s
+load_ext: library `%s' initialization routine `%s' failed
+make_builtin: missing function name
+name_space != NULL
+make_builtin: cannot use gawk built-in `%s' as function name
+make_builtin: cannot use gawk built-in `%s' as namespace name
+%s::%s
+make_builtin: cannot redefine function `%s'
+make_builtin: function `%s' already defined
+make_builtin: function name `%s' previously defined
+make_builtin: negative argument count for function `%s'
+function `%s': argument #%d: attempt to use scalar as an array
+function `%s': argument #%d: attempt to use array as a scalar
+t->type == Node_var_array || t->type == Node_val
+get_actual_argument
+make_builtin
+search_ext_list
+init_extension_list
+r == NULL || r->valref > 0
+r->valref > 0
+field.c
+%s:%d: erealloc called with zero bytes
+%s:%d:%s: %s: cannot reallocate %zu bytes of memory: %s
+fields_arr
+%s:%d: emalloc called with zero bytes
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+r->stptr
+FIELDWIDTHS
+assignment to FS/FIELDWIDTHS/FPAT has no effect when using --csv
+newfield
+NF != -1
+(n->flags & WSTRCUR) == 0
+(fields_arr[0]->flags & MALLOC) == 0 ? fields_arr[0]->valref == 1 : true
+databuf
+input record too large
+NF set to negative value
+decrementing NF is not portable to many awk versions
+accessing fields from an END rule may not be portable
+split: fourth argument is a gawk extension
+split: fourth argument is not an array
+%s: cannot use %s as fourth argument
+split: second argument is not an array
+%s: cannot use %s as second argument
+multidimensional arrays are a gawk extension
+split: cannot use the same array for second and fourth args
+split: cannot use a subarray of second arg for fourth arg
+split: cannot use a subarray of fourth arg for second arg
+attempt to use array `%s' in a scalar context
+split: null string for third arg is a non-standard extension
+patsplit
+patsplit: fourth argument is not an array
+patsplit: second argument is not an array
+patsplit: third argument must be non-null
+patsplit: cannot use the same array for second and fourth args
+patsplit: cannot use a subarray of second arg for fourth arg
+patsplit: cannot use a subarray of fourth arg for second arg
+`FIELDWIDTHS' is a gawk extension
+`*' must be the last designator in FIELDWIDTHS
+invalid FIELDWIDTHS value, for field %d, near `%s'
+null string for `FS' is a gawk extension
+old awk does not support regexps as value of `FS'
+FPAT is a gawk extension
+set_FIELDWIDTHS
+set_NF
+purge_record
+set_record
+rebuild_record
+grow_fields_arr
+comma_parse_field
+init_fields
+gawkapi.c
+cannot find end of BEGINFILE rule
+cannot open unrecognized file type `%s' for `%s'
+error: 
+fatal: 
+warning: 
+add_ext_func: received NULL name_space parameter
+r == NULL || r->valref > 0
+(node->flags & MALLOC) == 0
+%s:%d: erealloc called with zero bytes
+%s:%d:%s: %s: cannot reallocate %zu bytes of memory: %s
+scopy.strings
+%s:%d: emalloc called with zero bytes
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+name_space != NULL
+name != NULL
+%s::%s
+remove_element: received null array
+remove_element: received null subscript
+node_to_awk_value: received null node
+node_to_awk_value: received null val
+node_to_awk_value: detected invalid numeric flags combination `%s'; please file a bug report
+internal error: file %s, line %d: %s: expected Node_val: got %s
+node_to_awk_value detected invalid flags combination `%s'; please file a bug report
+(node->flags & MALLOC) != 0
+node->stptr[node->stlen] == '\0'
+(node->flags & BOOLVAL) != 0
+@unsorted
+unknown type! (%d)
+api_flatten_array_typed: could not convert index %d to %s
+api_flatten_array_typed: could not convert value %d to %s
+awk_value_to_node: received null retval
+awk_value_to_node: not in MPFR mode
+awk_value_to_node: invalid number type `%d'
+api_awk_atexit
+api_register_ext_version
+ns_lookup
+AWK_UNDEFINED
+AWK_NUMBER
+AWK_STRING
+AWK_REGEX
+AWK_STRNUM
+AWK_ARRAY
+AWK_SCALAR
+AWK_VALUE_COOKIE
+assign_regex
+assign_string
+assign_bool
+fixtype
+api_flatten_array_typed
+api_get_mpfr
+api_get_mpz
+posix/gawkmisc.c
+can't stat fd %d (%s)
+AWKBUFSIZE
+%s %s `%s': could not get fd flags: (fcntl F_GETFD: %s)
+%s %s `%s': could not set close-on-exec: (fcntl F_SETFD: %s)
+:/usr/lib/gawk
+.:/usr/share/awk
+symbol->buckets != NULL
+int_array.c
+INT_CHAIN_MAX
+list != NULL
+%s:%d:%s: %s: cannot reallocate %zu bytes of memory: %s
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+r == NULL || r->valref > 0
+%s:%d: ezalloc called with zero bytes
+symbol->table_size > 0
+b->aicount == 1
+sub-array
+%s `%s'
+array_func: int_array_func
+flags: %s
+INT_CHAIN_MAX: %lu
+array_size: %lu (int)
+table_size: %lu (total), %lu (int), %lu (str)
+Avg # of items per chain (int): %.2g
+memory: %.2g kB (total)
+Hash distribution:
+[>=%lu]:%lu
+[%lu]:%lu
+grow_int_table
+int_find
+int_remove
+int_list
+int_copy
+reached system limit for open files: starting to multiplex file descriptors
+too many pipes or input files open
+close of `%s' failed: %s
+support for the UDP protocol is obsolete and will eventually be removed
+internal error: file %s, line %d: invalid open mode "%s"
+input parser `%s' conflicts with previously installed input parser `%s'
+input parser `%s' failed to open `%s'
+r == NULL || r->valref > 0
+r->valref > 0
+output wrapper `%s' conflicts with previously installed output wrapper `%s'
+output wrapper `%s' failed to open `%s'
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+data file `%s' is empty
+%s:%d: emalloc called with zero bytes
+iop->buf
+errcode != NULL
+pi->awkpath
+/dev/null
+close of fd %d (`%s') failed: %s
+sub->valref == 1
+%s:%d: erealloc called with zero bytes
+%s:%d:%s: %s: cannot reallocate %zu bytes of memory: %s
+sub->stptr
+%s%.*s%s
+GAWK_SOCK_RETRIES
+GAWK_MSEC_SLEEP
+local port %s invalid in `/inet': %s
+remote host and port information (%s, %s) invalid: %s
+READ_TIMEOUT
+rc >= 0
+could not allocate more input memory
+recm.rt_start != NULL
+recm.start != NULL
+GAWK_READ_TIMEOUT
+iop != NULL
+command line argument `%s' is a directory: skipped
+cannot open file `%s' for reading: %s
+RED_NONE
+/dev/stdout
+/dev/stderr
+fflush: cannot flush standard output: %s
+fflush: cannot flush standard error: %s
+error writing standard output: %s
+error writing standard error: %s
+pipe flush of `%s' failed: %s
+co-process flush of pipe to `%s' failed: %s
+file flush of `%s' failed: %s
+stdout
+stderr
+iop->public.fd != INVALID_HANDLE
+to/from
+redirection not allowed in sandbox mode
+internal error: file %s, line %d: invalid redirection type %d
+expression in `%s' redirection is a number
+expression for `%s' redirection has null string value
+filename `%.*s' for `%s' redirection may be result of logical expression
+newstr
+get_file cannot create pipe `%s' with fd %d
+open_pipes
+gawk_popen_write: failed to move pipe fd to standard input
+/bin/sh
+cannot open pipe `%s' for output: %s
+cannot open pipe `%s': %s
+close of stdout in child failed: %s
+moving pipe to stdout in child failed (dup: %s)
+close of pipe failed: %s
+cannot create child process for `%s' (fork: %s)
+cannot open pipe `%s' for input: %s
+socket
+two-way processor `%s' conflicts with previously installed two-way processor `%s'
+two way processor `%s' failed to open `%s'
+internal error: file %s, line %d: %s: expected Node_val: got %s
+/dev/pty%c0
+/dev/pty%c%x
+could not open `%s', mode `%s'
+close of master pty failed: %s
+moving slave pty to stdout in child failed (dup: %s)
+close of stdin in child failed: %s
+moving slave pty to stdin in child failed (dup: %s)
+close of slave pty failed: %s
+could not create child process or open pty
+moving pipe to stdin in child failed (dup: %s)
+cannot open two way pipe `%s' for input/output: %s
+cannot redirect from `%s': %s
+cannot redirect to `%s': %s
+close: redirection `%s' not opened with `|&', second argument ignored
+failure status (%d) on pipe close of `%s': %s
+failure status (%d) on two-way pipe close of `%s': %s
+failure status (%d) on file close of `%s': %s
+no explicit close of socket `%s' provided
+no explicit close of co-process `%s' provided
+no explicit close of pipe `%s' provided
+no explicit close of file `%s' provided
+attempt to use array `%s' in a scalar context
+close: second argument must be `to' or `from'
+close: `%.*s' is not an open file, pipe or co-process
+close of redirection that was never opened
+redirtype != redirect_none
+getline: attempt to read from closed read end of two-way pipe
+file_ext
+file_awk
+register_input_parser: received NULL pointer
+register_output_wrapper: received NULL pointer
+register_output_processor: received NULL pointer
+assignment to RS has no effect when using --csv
+multicharacter value of RS is a gawk extension
+IOP_IS_TTY
+IOP_AT_EOF
+IOP_CLOSED
+IOP_AT_START
+init_awkpath
+do_find_source
+find_source
+do_getline_redir
+fixtype
+BUFFERPIPE
+gawk_popen_write
+`%.*s' used for input file and for output file
+`%.*s' used for input file and input pipe
+`%.*s' used for input file and two-way pipe
+`%.*s' used for input file and output pipe
+unnecessary mixing of `>' and `>>' for file `%.*s'
+`%.*s' used for input pipe and output file
+`%.*s' used for output file and output pipe
+`%.*s' used for output file and two-way pipe
+`%.*s' used for input pipe and output pipe
+`%.*s' used for input pipe and two-way pipe
+`%.*s' used for output pipe and two-way pipe
+redirect_string
+RED_FILE
+RED_PIPE
+RED_READ
+RED_WRITE
+RED_APPEND
+RED_FLUSH
+RED_EOF
+RED_TWOWAY
+RED_PTY
+RED_SOCKET
+RED_TCP
+grow_iop_buffer
+in_PROCINFO
+get_a_record
+iop_finish
+iop_alloc
+nextfile
+after_beginfile
+AWKLIBPATH
+AWKPATH
+NONFATAL
+?main.c
+error writing standard output: %s
+%d.%d.%d
+Usage: %s [POSIX or GNU style options] -f progfile [--] file ...
+Usage: %s [POSIX or GNU style options] [--] %cprogram%c file ...
+POSIX options:
+GNU long options: (standard)
+-f progfile
+--file=progfile
+--field-separator=fs
+-v var=val
+--assign=var=val
+Short options:
+GNU long options: (extensions)
+--characters-as-bytes
+--traditional
+--copyright
+-d[file]
+--dump-variables[=file]
+-D[file]
+--debug[=file]
+-e 'program-text'
+--source='program-text'
+-E file
+--exec=file
+--gen-pot
+--help
+-i includefile
+--include=includefile
+--trace
+-l library
+--load=library
+-L[fatal|invalid|no-ext]
+--lint[=fatal|invalid|no-ext]
+--bignum
+--use-lc-numeric
+--non-decimal-data
+-o[file]
+--pretty-print[=file]
+--optimize
+-p[file]
+--profile[=file]
+--posix
+--re-interval
+--no-optimize
+--sandbox
+--lint-old
+--version
+To report bugs, use the `gawkbug' program.
+For full instructions, see the node `Bugs' in `gawk.info'
+which is section `Reporting Problems and Bugs' in the
+printed version.  This same information may be found at
+https://www.gnu.org/software/gawk/manual/html_node/Bugs.html.
+PLEASE do NOT try to report bugs by posting in comp.lang.awk,
+or by using a web forum such as Stack Overflow.
+Source code for gawk may be obtained from
+%s/gawk-%s.tar.gz
+gawk is a pattern scanning and processing language.
+By default it reads standard input and writes standard output.
+Examples:
+%s '{ sum += $1 }; END { print sum }' file
+%s -F: '{ print $1 }' /etc/passwd
+error writing standard error: %s
+floating point exception
+fatal error: internal error
+internal error: file %s, line %d: unexpected signal, number %d (%s)
+r == NULL || r->valref > 0
+%s:%d: emalloc called with zero bytes
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+preassigns
+%s:%d: erealloc called with zero bytes
+%s:%d:%s: %s: cannot reallocate %zu bytes of memory: %s
+%s: `%s' argument to `-v' not in `var=value' form
+`%s' is not a legal variable name
+`%s' is not a variable name, looking for file `%s=%s'
+cannot use gawk builtin `%s' as variable name
+cannot use function `%s' as variable name
+POSIX does not allow physical newlines in string values
+GAWK_PERSIST_FILE
+%s: fatal: cannot stat %s: %s
+%s: fatal: using persistent memory is not allowed when running as root.
+%s: warning: %s is not owned by euid %d.
+%s: fatal: persistent memory allocator failed to initialize: return value %d, pma.c line: %d.
+TIDYMEM
+GAWK_LOCALE_DIR
+/dev/null
+d_argv
+empty argument to `-e/--source' ignored
+invalid
+no-ext
+`--profile' overrides `--pretty-print'
+awkprof.out
+/some/file
+Use `GAWK_PERSIST_FILE=%s gawk ...' instead of --persist.
+%s: option `-W %s' unrecognized, ignored
++F:f:v:W;bcCd::D::e:E:ghi:kIl:L::nNo::Op::MPrSstVYZ:G
+%s: option requires an argument -- %c
+GAWK_GNU_MATCHERS
+POSIXLY_CORRECT
+environment variable `POSIXLY_CORRECT' set: turning on `--posix'
+`--posix' overrides `--traditional'
+`--posix'/`--traditional' overrides `--non-decimal-data'
+`--posix' overrides `--characters-as-bytes'
+`--posix' and `--csv' conflict
+running %s setuid root may be a security problem
+The -r/--re-interval options no longer have any effect
+groupset
+PROCINFO
+version
+strftime
+platform
+GNU MPFR %s
+mpfr_version
+GNU MP %s
+gmp_version
+prec_max
+prec_min
+api_major
+api_minor
+pgrpid
+group%d
+ENVIRON
+AWKPATH
+AWKLIBPATH
+-Ft does not set FS to tab in POSIX awk
+cannot set binary mode on stdin: %s
+cannot set binary mode on stdout: %s
+cannot set binary mode on stderr: %s
+, API %d.%d
+, PMA %s
+, (GNU MPFR %s, GNU MP %s)
+no program text at all!
+estrdup
+arg_assign
+https://ftp.gnu.org/gnu/gawk
+https://www.skeeve.com/gawk
+init_groupset
+You should have received a copy of the GNU General Public License
+along with this program. If not, see http://www.gnu.org/licenses/.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+Copyright (C) 1989, 1991-%d Free Software Foundation.
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+add_preassign
+save_argv
+ARGIND
+BINMODE
+CONVFMT
+FIELDWIDTHS
+FILENAME
+[^[:space:]]+
+IGNORECASE
+RLENGTH
+ROUNDMODE
+RSTART
+SUBSEP
+TEXTDOMAIN
+messages
+assign
+bignum
+characters-as-bytes
+copyright
+dump-variables
+field-separator
+gen-pot
+include
+lint-old
+non-decimal-data
+no-optimize
+optimize
+persist
+pretty-print
+profile
+re-interval
+sandbox
+source
+traditional
+use-lc-numeric
+%a %b %e %H:%M:%S %Z %Y
+/usr/share/locale
+awkvars.out
+r != NULL
+mpfr.c
+r->valref > 0
+r == NULL || r->valref > 0
+internal error: file %s, line %d: invalid comparison type %d
+internal error: file %s, line %d: invalid node for mpg_update_var%s
+internal error: file %s, line %d: invalid node for mpg_set_var%s
+internal error: file %s, line %d: %s: expected Node_val: got %s
+PREC value `%.*s' is invalid
+ROUNDMODE value `%.*s' is invalid
+division by zero attempted
+division by zero attempted in `%%'
+++ %s: mpg_interpret
+attempt to use array `%s' in a scalar context
+%s: received non-numeric argument
+%s: received negative argument %.*s
+atan2: received non-numeric first argument
+atan2: received non-numeric second argument
+int: received non-numeric argument
+strtonum
+srand: received non-numeric argument
+compl: received non-numeric argument
+compl(%Rg): negative value is not allowed
+comp(%Rg): fractional value will be truncated
+compl(%Zd): negative values are not allowed
+%s: received non-numeric argument #%d
+%s: argument #%d has invalid value %Rg, using 0
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+%s: argument #%d negative value %Rg is not allowed
+%s: argument #%d fractional value %Rg will be truncated
+%s: argument #%d negative value %Zd is not allowed
+lshift
+rshift
+and: called with less than two arguments
+or: called with less than two arguments
+xor: called with less than two arguments
+get_intval
+fixtype
+single
+double
+mpg_format_val
+GAWK_MSG_SRC
+LINENO
+%s:%d:
+cmd. line:
+(val->flags & MPZN) != 0
+FILENAME=%.*s 
+FNR=%Zd) 
+FNR=%ld) 
+warning: 
+error: 
+fatal: 
+node.c
+old awk does not support the `\%c' escape sequence
+POSIX does not allow `\x' escapes
+no hex digits in `\x' escape sequence
+hex escape \x%.*s of %d characters probably not interpreted the way you expect
+POSIX does not allow `\u' escapes
+no hex digits in `\u' escape sequence
+invalid `\u' escape sequence
+escape sequence `\%c' treated as plain `%c'
+n->valref == 1
+(n->flags & WSTRCUR) != 0
+%s:%d: emalloc called with zero bytes
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+newval
+n->type == Node_val
+n->wstptr != NULL
+r == NULL || r->valref > 0
+(n->flags & (STRING|STRCUR)) != 0
+%s:%d: ezalloc called with zero bytes
+n->wstptr
+Invalid multibyte data detected. There may be a mismatch between your data and your locale
+sp - n->stptr == n->stlen
+%s:%d: erealloc called with zero bytes
+%s:%d:%s: %s: cannot reallocate %zu bytes of memory: %s
+r != NULL
+s->stptr
+size >= sizeof(struct block_item)
+r->stptr
+r->wstptr
+nbytes > 0
+backslash at end of string
+backslash string continuation is not portable
+could not make typed regex
+more_blocks
+r_free_wstr
+wstr2str
+str2wstr
+make_str_node
+r_dupnode
+r_format_val
+bucket
+r->valref > 0
+flags->base == 0
+printf.c
+internal error: file %s, line %d: %s
+diouxX
+%s:%d: emalloc called with zero bytes
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+flags->alt
+flags->base != 10
+newbuf
+%s:%d: erealloc called with zero bytes
+%s:%d:%s: %s: cannot reallocate %zu bytes of memory: %s
+aAeEfFgG
+[s]printf: value %s is out of range for `%%%c' format
+[s]printf: value %g is out of range for `%%%c' format
+*.*R*%c
+format_mpg_integer called on nan or inf
+buflen > 0
+field width is ignored for `%%' specifier
+precision is ignored for `%%' specifier
+field width and precision are ignored for `%%' specifier
+fatal: `$' is not permitted in awk formats
+fatal: argument index with `$' must be > 0
+fatal: argument index %ld greater than total number of supplied arguments
+must use `count$' on all formats or none
+fatal: must use `count$' on all formats or none
+fatal: no `$' supplied for positional field width or precision
+`%c' is meaningless in awk formats; ignored
+fatal: `%c' is not permitted in POSIX awk formats
+internal error: file %s, line %d: %s: expected Node_val: got %s
+[s]printf: value %g is not a valid wide character
+cp == arg->stptr || cp == cpbuf.buf
+%%%c format is POSIX standard but not portable to other awks
+ignoring unknown format specifier character `%c': no argument converted
+^ ran out for this one
+fatal: not enough arguments to satisfy format string
+[s]printf: format specifier does not have control letter
+too many arguments supplied for format string
+attempt to use array `%s' in a scalar context
+%s: received non-string format string argument
+printf/sprintf
+printf: no arguments
+nargs > 0 && nargs <= max_args
+printf: attempt to write to closed write end of two-way pipe
+printf
+sprintf: no arguments
+printf_common
+format_float
+add_alt_format
+fill_to_field_width
+zero_fill_to_precision
+add_plus_or_space_and_fill
+0123456789abcdef
+0123456789ABCDEF
+format_integer_digits
+add_thousands
+format_mpg_integer_digits
+format_signed_integer
+fixtype
+DHhjLltwz
+format_args
+%6llu  
+indent_level >= 0
+profile.c
+pc->comment->comment == NULL
+@namespace "%s"
+%s:%d: emalloc called with zero bytes
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+delim == '"' || delim == '/'
+%s:%d: erealloc called with zero bytes
+%s:%d:%s: %s: cannot reallocate %zu bytes of memory: %s
+pp_args
+strlen(paren) == 2
+Program indentation level too deep. Consider refactoring your code
+awk::%s
+file != NULL
+could not open `%s' for writing: %s
+sending profile to standard error
+(n->flags & NUMCONSTSTR) != 0
+gensub
+# %s rule(s)
+# Rule(s)
+ # %llu
+internal error: %s with null vname
+internal error: file %s, line %d: got unexpected type %s
+%s%s%s
+%s%s%s%s
+%s%s%s%.*s %s
+%s %s[%s]
+internal error: file %s, line %d: unexpected opcode %s
+internal error: builtin with null fname
+redir2str: unknown redirection type %d
+(pc->memory->flags & REGEX) != 0
+} %s (%s)
+%s (%s%s%s) {
+%s %s:
+pc->opcode == Op_cond_exp
+%s ? %s : %s
+%s ? %s%.*s   %s : %s%.*s   %s
+%s ? %s%.*s   %s : %s
+%s ? %s : %s%.*s   %s
+# gawk profile, created %s
+%s# Loaded extensions (-l and/or @load)
+%s@load "%s"
+# Included files (-i and/or @include and/or @nsinclude)
+# @include "%s"
+# Functions, listed alphabetically
+%s %s(
+pp_number
+indent_out
+indent_in
+pp_group3
+pp_parenthesize
+pp_list
+adjust_namespace
+pp_string_or_typed_regex
+pp_concat
+pprint
+indent
+print_comment
+set_prof_file
+\"\000
+{}()|*+?.^$\[]/-
+<>`'BywWsS{}()|*+?.^$\[]/-
+behavior of matching a regexp containing NUL characters is not defined by POSIX
+GAWK_NO_DFA
+regexp component `%.*s' should probably be `[%.*s]'
+%s:%d: emalloc called with zero bytes
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+%s:%d: erealloc called with zero bytes
+%s:%d:%s: %s: cannot reallocate %zu bytes of memory: %s
+invalid NUL byte in dynamic regexp
+internal error: file %s, line %d: received bad result %d from parse_escape(), nbytes = %zu
+regexp escape sequence `\%c' treated as plain `%c'
+regexp escape sequence `\%c' is not a known regexp operator
+rp->pat.fastmap
+%s: /%s/
+invalid regexp: %s: /%s/
+rp->mre_regs
+\*+|?{}
+t->type == Node_regex
+r == NULL || r->valref > 0
+RE_SYNTAX_EMACS
+MINRX_REG_NOTBOL
+MINRX_REG_NOTEOL
+MINRX_REG_FIRSTSUB
+MINRX_REG_NOSUBRESET
+MINRX_REG_RESUME
+MINRX_REG_NOFIRSTBYTES
+MINRX_REG_EXTENDED
+MINRX_REG_ICASE
+MINRX_REG_MINIMAL
+MINRX_REG_NEWLINE
+MINRX_REG_NOSUB
+MINRX_REG_BRACE_COMPAT
+MINRX_REG_BRACK_ESCAPE
+MINRX_REG_EXTENSIONS_BSD
+MINRX_REG_EXTENSIONS_GNU
+MINRX_REG_NATIVE1B
+MINRX_REG_MINDISABLE
+RE_BACKSLASH_ESCAPE_IN_LISTS
+RE_BK_PLUS_QM
+RE_CHAR_CLASSES
+RE_CONTEXT_INDEP_ANCHORS
+RE_CONTEXT_INDEP_OPS
+RE_CONTEXT_INVALID_OPS
+RE_DOT_NEWLINE
+RE_DOT_NOT_NULL
+RE_HAT_LISTS_NOT_NEWLINE
+RE_INTERVALS
+RE_LIMITED_OPS
+RE_NEWLINE_ALT
+RE_NO_BK_BRACES
+RE_NO_BK_PARENS
+RE_NO_BK_REFS
+RE_NO_BK_VBAR
+RE_NO_EMPTY_RANGES
+RE_UNMATCHED_RIGHT_PAREN_ORD
+RE_NO_POSIX_BACKTRACKING
+RE_NO_GNU_OPS
+RE_DEBUG
+RE_INVALID_INTERVAL_ORD
+RE_ICASE
+RE_CARET_ANCHORS_HERE
+RE_CONTEXT_INVALID_DUP
+RE_NO_SUB
+re_update
+get_minrx_regerror
+[:alpha:]
+[:digit:]
+[:alnum:]
+[:upper:]
+[:lower:]
+[:space:]
+[:xdigit:]
+[:punct:]
+[:print:]
+[:graph:]
+[:cntrl:]
+[:blank:]
+make_regexp
+sub-array
+%s `%s'
+array_func: str_array_func
+flags: %s
+STR_CHAIN_MAX: %lu
+array_size: %lu
+table_size: %lu
+Avg # of items per chain: %.2g
+memory: %.2g kB
+Hash distribution:
+[>=%lu]:%lu
+[%lu]:%lu
+STR_CHAIN_MAX
+AWK_HASH
+symbol->table_size > 0
+str_array.c
+%s:%d: ezalloc called with zero bytes
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+r == NULL || r->valref > 0
+val != NULL
+env_store
+grow_table
+str_list
+str_copy
+r == NULL || r->valref > 0
+@unsorted
+symbol.c
+%s:%d: emalloc called with zero bytes
+%s:%d:%s: %s: cannot allocate %zu bytes of memory: %s
+r->type == Node_func
+FUNCTAB
+SYMTAB
+root_pointers
+%s was created by version `%s', but the current version is `%s'
+current setting of -M/--bignum does not match saved setting in PMA backing file
+! root_pointers->first
+func->type == Node_func
+p->type == Node_param_list
+cp->pool_size >= 1 && cp->pool_size <= MAX_INSTRUCTION_ALLOC
+table != NULL
+array, %ld elements
+untyped variable
+internal error: file %s, line %d: unexpected node type: %s
+identifiers
+extension
+scalar
+untyped
+builtin
+internal error: file %s, line %d: unexpected node type %s
+function `%s': cannot use function `%s' as a parameter name
+size >= 1 && size <= MAX_INSTRUCTION_ALLOC
+curr_ctxt != NULL
+cannot pop main context
+ctxt_level > 0
+curr_ctxt != ctxt
+free_context
+in_main_context
+pop_context
+new_context
+bcalloc
+bcfree
+foreach_func
+print_vars
+get_symbols
+remove_params
+install_params
+make_params
+pma_save_free_lists
+init_symbol_table
+GNU Awk 5.4.0
+unbalanced [
+xalloc: malloc failed: %s
+xstrdup: null parameter
+invalid character class
+character class syntax is [[:space:]], not [:space:]
+unfinished \ escape
+? at start of expression
+* at start of expression
++ at start of expression
+invalid content of \{\}
+regular expression too big
+^[:space:]]
+^_[:alnum:]]
+stray \ before unprintable character
+stray \ before white space
+stray \ before %s
+stray \
+{...} at start of expression
+unbalanced (
+no syntax specified
+unbalanced )
+!"neither LPAREN nor RPAREN may appear here"
+!mp->prev
+dfamust
+transit_state_singlebyte
+xdigit
+POSIXLY_CORRECT
+%s: option '%s' is ambiguous; possibilities:
+ '--%s'
+%s: option '--%s' doesn't allow an argument
+%s: option '%c%s' doesn't allow an argument
+%s: option '--%s' requires an argument
+%s: unrecognized option '--%s'
+%s: unrecognized option '%c%s'
+%s: invalid option -- '%c'
+%s: option requires an argument -- '%c'
+%s: option '-W %s' is ambiguous
+%s: option '-W %s' doesn't allow an argument
+%s: option '-W %s' requires an argument
+thekey->start > elem->end
+charset.c
+set != NULL && cclass != NULL && errcode != NULL && is_new != NULL
+[:space:]]
+^[:space:]]
+[:alnum:]_]
+^[:alnum:]_]
+unknown error code
+success
+bad pattern
+invalid contents of {}
+? * + or {interval} not preceded by valid subpattern
+unbalanced {
+unbalanced [
+invalid collating element
+invalid character class name
+invalid trailing backslash
+unbalanced (
+invalid range endpoint
+memory allocation failed
+invalid \digit
+match not found
+item_compare_for_searching
+find_class_in_cache
+xdigit
+random: not enough state (%ld bytes); ignored.
+xdigit
+Success
+No match
+Invalid regular expression
+Invalid collation character
+Invalid character class name
+Trailing backslash
+Invalid back reference
+Unmatched [, [^, [:, [., or [=
+Unmatched ( or \(
+Unmatched \{
+Invalid content of \{\}
+Invalid range end
+Memory exhausted
+Invalid preceding regular expression
+Premature end of regular expression
+Regular expression too big
+Unmatched ) or \)
+0 == (iu) || 1 == (iu)
+0 == (piu) || 1 == (piu)
+0 == (grown) || 1 == (grown)
+pma.c:299: FYI: initializing UB[]
+NFL > c
+NFL - 1 == c
+VAO(p)
+pma.c:327: FYI: fli(%p) h == %p h->fn %p h->fp %p
+pma.c:197: FYI: integrity_check called from line %d
+h && h == h->mapaddr
+VAF(a)
+32 <= AOSZ(a)
+next > a && next <= h->abound
+pma.c:209: Warning: integrity check discontinued; anext list too long (call at line %d)
+tpiu == tiu || 1 + tpiu == tiu
+pma.c:219: FYI: anext list length: %d  tiu %d  tpiu %d  nallocs %lu  nfrees %lu
+h->nallocs >= h->nfrees
+h->nallocs - h->nfrees == (uint64_t)tiu
+f->fnext == f
+p && iu && piu && grown
+0 == getbit(p, IU)
+VAF(p)
+nfwd == nrev
+capwords <= UB[i]
+capwords > UB[i-1]
+pma.c:245: FYI: total free aos: %d  naddfree %d  integrity check line %d
+tf == naddfree
+ (ignore)
+0 == LOBH(p)
+    AO at %p:  size %lu B / %lu w
+      hdr %p (H 0%lo L 0%lo) iu %d piu %d grown %d
+      fp  %p%s
+      fn  %p%s
+      ft  %p%s
+n > p && n <= state.hdr->abound
+pma.c:604: FYI: coalesce(%p)
+pma.c:254: ERROR: not initialized
+pma.c:255: ERROR: check_and_dump not meaningful in fallback mode
+pma.c:257: check data structures and dump
+2022.10Oct.30.1667172241 (Avon 8-g1)
+header version:    %s
+software version:  %s
+sizeof state:  %lu
+sizeof header: %lu
+state:
+  init: %d
+0 == state.init || 1 == state.init || 2 == state.init
+  vrb:  %d
+0 <= state.vrb && 3 >= state.vrb
+  file: %p "%s"
+  hdr:  %p
+header:
+  mapaddr: %p
+  bf_vers: %lu
+  root:   %p
+NULL == h->root || (h->root >= VS h->afirst && h->root < VS h->abound)
+  afirst: %p
+VS h->afirst > h->mapaddr
+  abound: %p
+h->abound > h->afirst
+  all allocated objects in addr order:
+HIBH(a->anext) > a
+  free list of size class %d UB %lu (prev %lu) list head %p:
+pma.c:392: FYI: pma_init(%d,"%s")
+PMA_VERBOSITY
+pma.c:395: ERROR: parsing envar verbosity "%s"
+pma.c:396: ERROR: bad envar verbosity %d
+pma.c:398: Warning: envar verbosity over-ride %d -> %d
+pma.c:400: ERROR: already initialized
+pma.c:401: FYI: software version '%s' expects backing file format version %d
+pma.c:415: Warning: no backing file provided; falling back on standard malloc
+pma.c:422: ERROR: bad page size %ld, errno '%s'
+pma.c:426: ERROR: page size %ld not a reasonable power of two
+pma.c:428: ERROR: open() errno => '%s'
+pma.c:429: ERROR: fstat() errno => '%s'
+pma.c:430: ERROR: %s not regular file
+pma.c:431: ERROR: read() errno => '%s'
+pma.c:356: FYI: addrgap(%jd)
+pma.c:357: ERROR: file size %zu too small
+Max < M
+pma.c:367: ERROR: munmap() errno => '%s'
+pma.c:370: FYI: max gap: %zu bytes at %p
+pma.c:372: ERROR: max gap %zu too small for required %zu
+pma.c:379: FYI: addrgap returns %p == %lu
+pma.c:433: ERROR: addrgap() errno => '%s'
+pma.c:434: FYI: map at %p
+pma.c:435: ERROR: mmap() errno => '%s'
+pma.c:436: ERROR: close() errno => '%s'
+pma.c:443: FYI: initializing persistent heap
+pma.c:445: ERROR: backing file size %jd not multiple of page size %ld
+0 == h->bf_vers && 0 == h->nallocs && 0 == h->nfrees && 0 == h->res_0 && NULL == h->root && NULL == h->afirst && NULL == h->abound
+NULL == h->free[i].anext && NULL == h->free[i].fprev && NULL == h->free[i].fnext
+0 == AOSZ(w) % WDSZ && WDSZ < AOSZ(w)
+pma.c:480: FYI: persistent heap already initialized
+pma.c:485: Warning: backing file size %jd not multiple of page size %ld
+pma.c:487: ERROR: backing file version mismatch: %d vs. %lu
+pma.c:534: FYI: malloc(%zu)
+pma.c:535: ERROR: not initialized
+pma.c:539: Warning: malloc(%zu) argument <= zero
+NULL == LOBH(p)
+c >= s && 0 == c % WDSZ
+pma.c:507: FYI: split_ao(%p,%zu) AOCAP %zu words req %zu words cap %zu
+pma.c:512: FYI: splitting at %p
+AOCAP(p) >= s
+n <= state.hdr->abound
+pma.c:555: FYI: malloc returning %p
+pma.c:561: Warning: malloc(%zu) cannot satisfy request at this time
+pma.c:568: FYI: calloc(%zu,%zu)
+pma.c:569: ERROR: not initialized
+pma.c:572: Warning: calloc(%zu,%zu) argument <= zero
+pma.c:575: Warning: calloc(%zu,%zu) arguments overflow
+pma.c:622: FYI: free(%p)
+pma.c:623: ERROR: not initialized
+pma.c:628: ERROR: freed ptr %p outside allocatable area bounds %p %p
+0 == (uintptr_t)ptr % WDSZ
+p < n && n <= state.hdr->abound
+1 == getbit(p, IU)
+1 == getbit(n, PIU)
+pma.c:643: FYI: merge with right/higher ao
+pma.c:645: FYI: %s
+prev < p
+pma.c:649: FYI: merge with left/lower ao
+pma.c:583: FYI: realloc(%p,%zu)
+pma.c:584: ERROR: not initialized
+pma.c:669: FYI: set_root(%p)
+pma.c:670: ERROR: not initialized
+pma.c:671: ERROR: set_root not meaningful in fallback mode
+pma.c:672: ERROR: bad root %p
+pma.c:680: FYI: get_root()
+pma.c:681: ERROR: not initialized
+pma.c:682: ERROR: get_root not meaningful in fallback mode
+NULL == p || VAO(p)
+pma.c:690: FYI: set_avail_mem(0x%lx)
+pma.c:691: ERROR: not initialized
+pma.c:692: ERROR: set_avail_mem not meaningful in fallback mode
+pma_set_avail_mem
+pma_get_root
+pma_set_root
+coalesce
+pma_free
+pma_realloc
+pma_calloc
+split_ao
+pma_malloc
+addrgap
+pma_init
+integrity_check
+pma_check_and_dump
+2022.10Oct.30.1667172241 (Avon 8-g1)
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+__gmp_randinit_mt
+__gmp_randseed
+__gmp_set_memory_functions
+__gmp_version
+__gmpz_add
+__gmpz_add_ui
+__gmpz_addmul_ui
+__gmpz_and
+__gmpz_clear
+__gmpz_cmp
+__gmpz_com
+__gmpz_divexact
+__gmpz_divisible_p
+__gmpz_fdiv_q_2exp
+__gmpz_fdiv_q_ui
+__gmpz_get_d
+__gmpz_get_si
+__gmpz_init
+__gmpz_ior
+__gmpz_mul
+__gmpz_mul_2exp
+__gmpz_pow_ui
+__gmpz_scan1
+__gmpz_set
+__gmpz_set_d
+__gmpz_set_si
+__gmpz_set_str
+__gmpz_set_ui
+__gmpz_sizeinbase
+__gmpz_sub
+__gmpz_sub_ui
+__gmpz_tdiv_r
+__gmpz_xor
+libintl_bindtextdomain
+libintl_dcgettext
+libintl_dcngettext
+libintl_dgettext
+libintl_gettext
+libintl_setlocale
+libintl_textdomain
+__gmpfr_fprintf
+__gmpfr_mpfr_get_uj
+__gmpfr_vasprintf
+mpfr_add
+mpfr_add_si
+mpfr_add_z
+mpfr_atan2
+mpfr_check_range
+mpfr_clear
+mpfr_cmp3
+mpfr_cmp_z
+mpfr_cos
+mpfr_div
+mpfr_exp
+mpfr_fits_intmax_p
+mpfr_fmod
+mpfr_free_str
+mpfr_get_d
+mpfr_get_si
+mpfr_get_version
+mpfr_get_z
+mpfr_init
+mpfr_init2
+mpfr_integer_p
+mpfr_log
+mpfr_mul
+mpfr_mul_z
+mpfr_neg
+mpfr_number_p
+mpfr_pow
+mpfr_pow_z
+mpfr_set4
+mpfr_set_d
+mpfr_set_default_prec
+mpfr_set_default_rounding_mode
+mpfr_set_emax
+mpfr_set_emin
+mpfr_set_erangeflag
+mpfr_set_prec
+mpfr_set_z
+mpfr_sin
+mpfr_snprintf
+mpfr_sqrt
+mpfr_strtofr
+mpfr_sub
+mpfr_sub_z
+mpfr_subnormalize
+mpfr_urandomb
+mpfr_z_sub
+__assert_func
+__cxa_atexit
+__errno
+__getreent
+__locale_ctype_ptr
+__locale_mb_cur_max
+__main
+_dll_crt0
+_impure_ptr
+_setmode
+accept
+access
+bsearch
+c32rtomb
+calloc
+clock_gettime
+connect
+cygwin_internal
+dlerror
+dll_dllcrt0
+dlopen
+environ
+execvp
+fclose
+fdopen
+fflush
+fileno
+floorl
+fprintf
+freeaddrinfo
+fwrite
+fwrite_unlocked
+gai_strerror
+getaddrinfo
+getdtablesize
+getegid
+getenv
+geteuid
+getgid
+getgroups
+getpgrp
+getpid
+getppid
+getuid
+gmtime
+grantpt
+isalnum
+isalpha
+isatty
+isblank
+iscntrl
+isdigit
+isgraph
+islower
+isprint
+ispunct
+isspace
+isupper
+iswalnum
+iswctype
+iswlower
+iswprint
+iswspace
+iswupper
+isxdigit
+listen
+localeconv
+localtime
+longjmp
+malloc
+mbrlen
+mbrtoc32
+mbsinit
+memchr
+memcmp
+memcpy
+memmove
+memset
+mktime
+msys_detach_dll
+munmap
+nl_langinfo
+pclose
+posix_memalign
+posix_openpt
+printf
+ptsname
+putchar
+realloc
+recvfrom
+select
+setbuf
+setenv
+setjmp
+setlocale
+setsid
+setsockopt
+shutdown
+sigaction
+sigaddset
+sigemptyset
+signal
+sigprocmask
+snprintf
+socket
+sprintf
+sscanf
+stpcpy
+strcasecmp
+strcat
+strchr
+strcmp
+strcoll
+strcpy
+strerror
+strftime
+strlen
+strncasecmp
+strncmp
+strrchr
+strsignal
+strstr
+strtod
+strtol
+strtoul
+sysconf
+tcgetattr
+tcsetattr
+timegm
+tolower
+toupper
+towlower
+towupper
+unlockpt
+unsetenv
+usleep
+vfprintf
+vsnprintf
+waitpid
+wcrtomb
+wcsnrtombs
+wctype
+add_history
+history_expand
+history_length
+history_list
+history_truncate_file
+previous_history
+read_history
+readline
+rl_attempted_completion_function
+rl_attempted_completion_over
+rl_completion_matches
+rl_get_screen_size
+rl_inhibit_completion
+rl_line_buffer
+rl_outstream
+rl_readline_name
+rl_reset_terminal
+using_history
+write_history
+GetModuleHandleA
+GetModuleHandleW
+msys-gmp-10.dll
+msys-intl-8.dll
+msys-mpfr-6.dll
+msys-2.0.dll
+msys-readline8.dll
+KERNEL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__imp_mpfr_get_version
+__imp_setsockopt
+__imp___gmpz_cmp
+__imp___gmpz_addmul_ui
+__imp_mpfr_check_range
+__imp_getgroups
+__imp_dlopen
+__imp_getuid
+__imp_mpfr_neg
+__imp_wcrtomb
+__imp_rl_line_buffer
+__imp_mpfr_snprintf
+__imp_mbrlen
+__imp_mpfr_set_erangeflag
+msys_readline8_dll_iname
+__imp_mpfr_cos
+__imp_abort
+__lib64_libkernel32_a_iname
+__imp_popen
+__imp_btowc
+__imp_mpfr_get_z
+__imp_mpfr_get_d
+__imp_mpfr_free_str
+__imp_fwrite_unlocked
+__imp_mpfr_add_si
+_head_msys_intl_8_dll
+__imp__dll_crt0
+__imp_tolower
+__imp_recvfrom
+__imp_longjmp
+__imp_GetModuleHandleW
+msys_mpfr_6_dll_iname
+__imp_freeaddrinfo
+__imp_calloc
+__imp_strsignal
+__imp_towlower
+__imp_getpid
+__imp_iswalnum
+__imp_rl_reset_terminal
+__imp_ceil
+__imp_fileno
+__imp_rl_attempted_completion_over
+__imp___gmpz_sub_ui
+__imp_islower
+__imp_setlocale
+__imp_mpfr_atan2
+__imp_ispunct
+__imp_ctime
+__imp_readline
+__imp_fputc
+__imp_history_truncate_file
+__imp_mpfr_fmod
+__imp_mpfr_set_d
+__imp_getegid
+__imp_mpfr_set4
+__imp_write_history
+__imp_sigemptyset
+__imp_mpfr_pow_z
+__imp_mpfr_cmp_z
+__imp___gmpz_mul_2exp
+__imp_libintl_dcngettext
+__imp___gmpz_and
+__nm_rl_attempted_completion_over
+__imp_getenv
+__imp_ptsname
+__imp_mpfr_set_emin
+__imp_timegm
+__imp_environ
+_head_msys_2_0_dll
+__imp_listen
+__nm_rl_outstream
+__imp_mktime
+__imp_sysconf
+__imp___gmpz_clear
+__imp_exp
+__imp___gmpz_tdiv_r
+__imp_fmod
+__imp_shutdown
+__imp_sigaction
+__imp_strtol
+__imp_strcmp
+__imp_read
+__imp___gmpz_sub
+__imp_mpfr_get_si
+__imp_mpfr_clear
+__imp_putchar
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_strrchr
+__imp_mpfr_sin
+__imp_free
+__imp_fdopen
+__imp_getpgrp
+__imp_kill
+__imp_wctype
+__imp___errno
+__imp_sigprocmask
+__imp_c32rtomb
+__imp___gmpz_com
+__imp_rl_attempted_completion_function
+__imp_tcgetattr
+__imp_sin
+__nm__impure_ptr
+__imp_mpfr_add
+__imp_rl_readline_name
+__imp_isalnum
+__imp___gmpz_get_d
+__imp_mpfr_number_p
+__imp_memchr
+__imp_mpfr_sub_z
+__nm_rl_inhibit_completion
+__imp___gmpz_mul
+__nm_rl_readline_name
+__imp_wctob
+__imp_dup2
+__imp_puts
+__imp__exit
+__imp_dup
+__imp_getgid
+__imp___gmp_randseed
+__imp_fputs
+__imp_mpfr_urandomb
+__imp_mpfr_z_sub
+__imp_strcpy
+__imp_libintl_dgettext
+__imp_memset
+__imp__setmode
+__imp_bsearch
+__imp_mpfr_add_z
+__IAT_end__
+__imp_mpfr_set_default_prec
+__imp_memcpy
+__imp_isalpha
+__imp_lseek
+__imp_iswlower
+__imp_fork
+__imp_memmove
+__imp___gmp_set_memory_functions
+__imp_dll_dllcrt0
+__imp_history_length
+__imp___gmpz_set_si
+__imp_execvp
+__imp_mpfr_set_z
+__imp_mpfr_init2
+__imp_select
+__imp_access
+__imp_fstat
+__imp_strerror
+__imp_iswctype
+__imp_setbuf
+__imp_history_expand
+__imp___locale_ctype_ptr
+__imp_using_history
+__imp___gmpz_set_d
+__imp_fwrite
+__imp_strtoul
+__nm_history_length
+__imp_putc
+_head_lib64_libkernel32_a
+__imp_dlsym
+__imp_libintl_setlocale
+__imp_pipe
+__imp_msys_detach_dll
+__imp_strftime
+__imp_rl_outstream
+__imp_sqrt
+__imp___gmpfr_mpfr_get_uj
+__imp_floor
+__imp_strstr
+__imp_read_history
+_head_msys_gmp_10_dll
+__imp_mpfr_pow
+__imp_open
+_head_msys_readline8_dll
+__imp_setsid
+__imp_chmod
+__imp_bind
+__imp_iswprint
+__imp_mpfr_cmp3
+__imp_previous_history
+__imp_nl_langinfo
+__imp_toupper
+__imp_isblank
+__imp_sscanf
+__imp_snprintf
+__imp_add_history
+__imp_signal
+__imp_atan2
+__imp___locale_mb_cur_max
+__imp___getreent
+__imp_vsnprintf
+__imp_mpfr_mul_z
+__imp_ioctl
+__imp_mbsinit
+__imp___gmpz_pow_ui
+__imp_GetModuleHandleA
+__imp___main
+__imp_mpfr_mul
+__imp_setjmp
+__imp_strlen
+__imp_isupper
+__imp_atof
+__imp_malloc
+__imp_libintl_textdomain
+__imp_mpfr_set_emax
+__imp_mpfr_set_prec
+__imp_dlerror
+__imp__impure_ptr
+__imp_gmtime
+__imp_cos
+__imp___assert_func
+__imp_stat
+__imp_realloc
+__imp_mpfr_strtofr
+__imp_exit
+__imp_execl
+__imp_mpfr_integer_p
+__imp_vfprintf
+__imp_time
+__imp___gmpz_set
+__nm_rl_attempted_completion_function
+__imp_rl_inhibit_completion
+__IAT_start__
+__imp_strcoll
+__imp_strcat
+__imp_rl_get_screen_size
+__imp___gmpz_divexact
+__imp_libintl_bindtextdomain
+__imp___gmpz_init
+__imp_isatty
+__imp_libintl_gettext
+__imp_towupper
+__imp_history_list
+__imp___cxa_atexit
+__imp_stpcpy
+__imp_iswspace
+__imp_posix_openpt
+__imp___gmp_version
+__imp_unlockpt
+__imp___gmpz_get_si
+__imp_log
+__imp___gmpz_divisible_p
+__imp_fcntl
+__imp_accept
+__imp_mpfr_sqrt
+__imp_mpfr_subnormalize
+__imp_fprintf
+__imp___gmpz_sizeinbase
+__imp_sigaddset
+__imp_setenv
+_head_msys_mpfr_6_dll
+msys_intl_8_dll_iname
+__imp_iswupper
+__imp___gmp_randinit_mt
+__imp_strncasecmp
+__imp_qsort
+__imp_iscntrl
+__imp___gmpfr_vasprintf
+__imp_tcsetattr
+__imp_fclose
+__imp_localtime
+__imp_localeconv
+__imp_munmap
+__imp___gmpz_add_ui
+__imp___gmpfr_fprintf
+__imp_strcasecmp
+__imp_geteuid
+__imp_strtod
+__imp_waitpid
+__imp_strncmp
+__imp_getdtablesize
+__imp_getppid
+__imp_strchr
+__imp_mpfr_div
+__imp_mpfr_fits_intmax_p
+__imp_close
+msys_gmp_10_dll_iname
+__imp_mpfr_set_default_rounding_mode
+__imp_mpfr_exp
+__imp_mpfr_init
+__imp_socket
+__imp_mbrtoc32
+__imp_isgraph
+__imp_mmap
+__imp_isxdigit
+__imp_fflush
+__nm_rl_line_buffer
+__imp___gmpz_xor
+__nm_environ
+__imp_pow
+__imp___gmpz_add
+__imp_unsetenv
+__imp_sprintf
+__imp_fgets
+__imp_lstat
+__imp_printf
+__imp___gmpz_fdiv_q_2exp
+__imp_rl_completion_matches
+__imp___gmpz_ior
+__imp_mpfr_sub
+__imp_isspace
+__imp_mpfr_log
+__imp_clock_gettime
+__imp___gmpz_fdiv_q_ui
+__imp_fopen
+__imp_isprint
+__imp_isdigit
+__imp_connect
+__imp_getaddrinfo
+__imp_wcsnrtombs
+__imp___gmpz_set_ui
+__imp_memcmp
+__imp_grantpt
+__imp___gmpz_scan1
+__imp_libintl_dcgettext
+__imp_usleep
+__imp_floorl
+__imp_pclose
+__nm___gmp_version
+__imp_gai_strerror
+__imp___gmpz_set_str
+msys_2_0_dll_iname
+efghijklmnop6I
+G{Fvefghijklmnop
+6MM6J,-
+=>?@AG
+,-./0=>?@A67D
+'EFGH,-./
+EF8H:;<
+}}23LQ<
+????????????V,
+Q}}QQ]
+Xdghiqrj
+v`a#$%&'(7
+2~9?,9
+/'&2$%$$5%
+C&'4&'%%9C5:552:&::$8:39
+$%'*$56$%056'2
+4$56q9$%654xx&q9$%5v'x$531$$563275'&&2&%'1b
+()*+,-./
+n8?88pZ
+z`a|u:
+|8kv:{
+%&'()*+,
+t23456789

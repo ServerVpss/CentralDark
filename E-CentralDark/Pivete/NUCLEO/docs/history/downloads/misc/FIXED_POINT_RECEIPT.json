@@ -1,0 +1,86 @@
+{
+  "scope": "PACKAGE_HANDOFF_ONLY",
+  "destination_proved": true,
+  "package_fixed_point": true,
+  "checks": [
+    {
+      "name": "required_files_present",
+      "pass": true,
+      "detail": "27/27"
+    },
+    {
+      "name": "project_instructions_under_8000",
+      "pass": true,
+      "detail": "6033"
+    },
+    {
+      "name": "manifest_json_valid",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "sha256_recalculation",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "historical_zips_integrity",
+      "pass": true,
+      "detail": "04_HANDOFF_HISTORY/01_CENTRALDARK_REVISAO_FIEL_READ_ONLY.zip: OK; 04_HANDOFF_HISTORY/02_CENTRALDARK_LACUNA_FECHADA_PACK.zip: OK; 04_HANDOFF_HISTORY/03_CENTRALDARK_PADRAO_OPERACIONAL_COMPACTO_PACK.zip: OK"
+    },
+    {
+      "name": "section7_distinction",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "all_transformations_present",
+      "pass": true,
+      "detail": "Curiosidade,Memória,Dúvida,Intuição,Experiência,Equipe,Disciplina,Aprendizado,Criatividade,Julgamento"
+    },
+    {
+      "name": "self_application_loop_present",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "superseded_not_canonical",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "source_hash_preserved",
+      "pass": true,
+      "detail": "4694ed7e23473db3fc6f20571891961c68af1c9c5797d19c971a3feb0b8926d3"
+    },
+    {
+      "name": "github_scope_read_only",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "material_unknowns": [],
+  "eligible_work_remaining": [],
+  "semantic_limit": "Does not prove global CentralDark runtime behavior.",
+  "github_mutated": false,
+  "verdict": "PASS_PACKAGE_INTERNAL",
+  "final_remeasurement": {
+    "pr_1115_base_sha": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+    "pr_1115_head_sha": "b917ca3a19ed59d26c04ab2234280a93ee19513b",
+    "material_delta_observed": false
+  },
+  "self_remediation_events": [
+    {
+      "signature": "ZIP_SIDECAR_CWD_MISMATCH",
+      "cause": "relative sidecar verified from wrong working directory",
+      "remediation": "verify from ZIP directory",
+      "status": "PASS_INTERNAL_RETEST"
+    },
+    {
+      "signature": "TOOL_TIMEOUT_DURING_FULL_RETEST",
+      "cause": "compression + chained checks exceeded tool time window",
+      "remediation": "ZIP_STORED + decoupled final checks",
+      "status": "PASS_AFTER_RETEST"
+    }
+  ]
+}

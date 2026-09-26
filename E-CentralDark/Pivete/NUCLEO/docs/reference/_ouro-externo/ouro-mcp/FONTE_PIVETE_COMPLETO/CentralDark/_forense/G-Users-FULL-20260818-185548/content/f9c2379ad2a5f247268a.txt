@@ -1,0 +1,14 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@babel\core\lib\transformation\read-input-source-map-file-browser.js
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = readInputSourceMapFile;
+function readInputSourceMapFile() {
+  throw new Error("Reading input source map files is not supported in browsers");
+}
+0 && 0;
+
+//# sourceMappingURL=read-input-source-map-file-browser.js.map

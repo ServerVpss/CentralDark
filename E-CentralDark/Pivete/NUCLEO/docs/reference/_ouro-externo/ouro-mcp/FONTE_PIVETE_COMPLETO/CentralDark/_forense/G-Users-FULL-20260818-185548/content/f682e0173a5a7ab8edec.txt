@@ -1,0 +1,64 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@mermaid-js\parser\dist\chunks\mermaid-parser.core\chunk-YOTPTUD7.mjs
+
+import {
+  AbstractMermaidTokenBuilder,
+  AbstractMermaidValueConverter,
+  EmptyFileSystem,
+  MermaidGeneratedSharedModule,
+  PieGrammarGeneratedModule,
+  __name,
+  createDefaultCoreModule,
+  createDefaultSharedCoreModule,
+  inject,
+  lib_exports
+} from "./chunk-KEIR6QF5.mjs";
+
+// src/language/pie/tokenBuilder.ts
+var PieTokenBuilder = class extends AbstractMermaidTokenBuilder {
+  static {
+    __name(this, "PieTokenBuilder");
+  }
+  constructor() {
+    super(["pie", "showData"]);
+  }
+};
+
+// src/language/pie/valueConverter.ts
+var PieValueConverter = class extends AbstractMermaidValueConverter {
+  static {
+    __name(this, "PieValueConverter");
+  }
+  runCustomConverter(rule, input, _cstNode) {
+    if (rule.name !== "PIE_SECTION_LABEL") {
+      return void 0;
+    }
+    return input.replace(/"/g, "").trim();
+  }
+};
+
+// src/language/pie/module.ts
+var PieModule = {
+  parser: {
+    TokenBuilder: /* @__PURE__ */ __name(() => new PieTokenBuilder(), "TokenBuilder"),
+    ValueConverter: /* @__PURE__ */ __name(() => new PieValueConverter(), "ValueConverter")
+  }
+};
+function createPieServices(context = EmptyFileSystem) {
+  const shared = inject(
+    createDefaultSharedCoreModule(context),
+    MermaidGeneratedSharedModule
+  );
+  const Pie = inject(
+    createDefaultCoreModule({ shared }),
+    PieGrammarGeneratedModule,
+    PieModule
+  );
+  shared.ServiceRegistry.register(Pie);
+  return { shared, Pie };
+}
+__name(createPieServices, "createPieServices");
+
+export {
+  PieModule,
+  createPieServices
+};

@@ -1,0 +1,13 @@
+sequenceDiagram
+  participant G as Guard
+  participant B as Buzz Bridge
+  participant S as SOL
+  participant H as Hermes
+  participant P as Painel
+  G->>B: EVENT observation
+  B->>S: channel notify
+  B->>P: node state ALERT/READING
+  S->>B: MESSAGE correlate
+  Note over H: execução só com spec+ZT
+  H->>B: RESULT report
+  B->>P: node PROVEN/FAILED

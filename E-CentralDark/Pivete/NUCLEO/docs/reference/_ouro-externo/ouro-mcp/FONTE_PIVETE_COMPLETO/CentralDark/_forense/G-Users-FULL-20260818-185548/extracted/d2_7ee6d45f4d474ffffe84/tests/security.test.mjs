@@ -1,0 +1,11 @@
+import test from'node:test';import assert from'node:assert/strict';
+import{decideSecurityAction}from'../security/policy.mjs';import{TokenBucketLimiter}from'../security/rate-limit.mjs';import{authorize}from'../security/authz.mjs';import{sanitizeObject,publicError}from'../security/sanitize.mjs';import{CircuitBreaker}from'../security/circuit-breaker.mjs';import{makeAuditEvent,hashAuditEvent}from'../security/audit.mjs';
+test('default deny',()=>assert.equal(decideSecurityAction({}).decision,'DENY'));
+test('revoked not allowed',()=>assert.equal(decideSecurityAction({authorized:true,sessionRevoked:true}).decision,'REVOKE_SESSION'));
+test('critical drops',()=>assert.equal(decideSecurityAction({authorized:true,criticalPolicyViolation:true}).decision,'DROP'));
+test('rate limit',()=>{let n=0;const r=new TokenBucketLimiter({capacity:2,refillPerSecond:1,now:()=>n});assert.equal(r.consume('x').allowed,true);assert.equal(r.consume('x').allowed,true);assert.equal(r.consume('x').allowed,false);n=1000;assert.equal(r.consume('x').allowed,true)});
+test('authz explicit',()=>{assert.equal(authorize({principal:{id:'u'},action:'r',resource:'x'}).allowed,false);assert.equal(authorize({principal:{id:'u'},action:'r',resource:'x',policy:()=>true}).allowed,true)});
+test('redact',()=>assert.equal(sanitizeObject({password:'x'}).password,'[REDACTED]'));
+test('public error hides internals',()=>assert.equal(JSON.stringify(publicError(Error('secret stuff'),'r')).includes('secret stuff'),false));
+test('circuit',()=>{let n=0;const c=new CircuitBreaker({failureThreshold:2,resetAfterMs:1000,now:()=>n});c.failure();c.failure();assert.equal(c.state,'OPEN');n=1000;assert.equal(c.canAttempt(),true);c.success();assert.equal(c.state,'CLOSED')});
+test('audit tamper',()=>{const e=makeAuditEvent({event_id:'12345678',observed_at:'2026-01-01T00:00:00Z',kind:'X',decision:'DENY',request_id:'r1234'});assert.notEqual(hashAuditEvent({...e,decision:'ALLOW'},e.previous_hash||''),e.event_hash)});

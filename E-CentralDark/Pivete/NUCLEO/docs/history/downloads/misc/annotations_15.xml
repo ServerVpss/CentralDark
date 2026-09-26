@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <item name="androidx.core.net.ConnectivityManagerCompat int getRestrictBackgroundStatus(android.net.ConnectivityManager)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.net.ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_DISABLED, androidx.core.net.ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_WHITELISTED, androidx.core.net.ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_ENABLED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.net.ConnectivityManagerCompat.RestrictBackgroundStatus">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.net.ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_DISABLED, androidx.core.net.ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_WHITELISTED, androidx.core.net.ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_ENABLED}" />
+    </annotation>
+  </item>
+</root>
+

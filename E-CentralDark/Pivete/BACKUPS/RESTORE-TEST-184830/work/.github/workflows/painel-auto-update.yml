@@ -1,0 +1,77 @@
+name: painel auto-update
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "apps/modulos/status/painel-data.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: painel-auto-update
+  cancel-in-progress: false
+
+jobs:
+  registrar:
+    name: 📊 Registrar push no painel
+    runs-on: [self-hosted, Linux]
+    if: github.repository == 'ServerVpss/CentralDark' && github.actor != 'github-actions[bot]'
+    timeout-minutes: 5
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          submodules: false
+          fetch-depth: 0
+
+      - name: 🔄 Regerar + commitar + push (retry loop)
+        env:
+          PAINEL_EVENTO: "Push na main · ${{ github.sha }}"
+          PAINEL_EVENTO_DETALHE: "${{ github.event.head_commit.message }}"
+          PAINEL_EVENTO_AREA: "Repositório"
+          SHA: ${{ github.sha }}
+          ACTOR: ${{ github.actor }}
+          MSG: ${{ github.event.head_commit.message }}
+        run: |
+          set -e
+          git config user.name 'CentralDark Bot'
+          git config user.email 'bot@centralldark.com'
+
+          MAX_TRIES=3
+          for TRY in $(seq 1 $MAX_TRIES); do
+            echo "🔄 Tentativa $TRY/$MAX_TRIES"
+            git fetch origin main
+            git reset --hard origin/main
+            node apps/modulos/status/atualizar-painel-vivo.mjs
+            if git diff --quiet -- apps/modulos/status/painel-data.json; then
+              echo "✅ Nada a commitar."
+              exit 0
+            fi
+            git add -- apps/modulos/status/painel-data.json
+            git commit -m "chore(painel): registrar push ${GITHUB_SHA:0:7}
+
+          Co-authored-by: SegredoiDev <bot@centralldark.com>"
+            if git push origin HEAD:main; then
+              echo "✅ Painel atualizado (tentativa $TRY)."
+              exit 0
+            fi
+            echo "⚠️ Push rejeitado (concorrência), retry..."
+            sleep 2
+          done
+          echo "❌ Falhou após $MAX_TRIES tentativas."
+          exit 1
+
+      - name: 📢 Notificar Telegram
+        if: success()
+        env:
+          BOT: ${{ secrets.SRVER1_BOT_TOKEN }}
+          CHAT: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+        run: |
+          MSG="📊 <b>Painel atualizado</b>\n▸ Commit: <code>${GITHUB_SHA:0:7}</code>\n▸ <a href=\"https://status.centralldark.com\">Ver painel</a>"
+          curl -s -X POST "https://api.telegram.org/bot${BOT}/sendMessage" \
+            -H "Content-Type: application/json" \
+            -d "{\"chat_id\":\"${CHAT}\",\"parse_mode\":\"HTML\",\"text\":\"${MSG}\",\"disable_web_page_preview\":true}" > /dev/null || true

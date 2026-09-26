@@ -1,0 +1,85 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\.curator_backups\blobs\d9a39228649a685a1230d988519c28c19fc5041441333ac88ede4aa921a48d9a
+
+name: llm-provider-diagnosis
+description: "Diagnose failing LLM providers without leaking secrets."
+version: 0.1.0
+author: Hermes Agent
+license: MIT
+platforms: [linux, macos, windows]
+metadata:
+  hermes:
+    tags: [llm, provider, minimax, mistral, api-key, diagnosis, hermes, troubleshooting]
+    related_skills: [hermes-agent]
+# LLM Provider Diagnosis (secret-safe)
+Use when an LLM provider errors in a chat/agent session: model auto-switches, responses hang ("travo"), fallback fires, or `APIConnectionError`/`401`/`402`/`404` appear. Goal: find the real root cause and prove whether the provider responds now, without ever printing a secret.
+## When to Use
+- Provider repeatedly fails or falls back to another model.
+- User asks "why is X model erroring" or "test if X responds".
+- Hunting "lost tokens" across providers (MiniMax, Mistral, OpenRouter, GLM, Kimi, etc.).
+- Read-only investigation only 
+ no key creation, no config writes unless the user explicitly authorizes.
+## Procedure
+### 1. Locate config without leaking secrets
+Hermes stores keys in `$LOCALAPPDATA/hermes/.env` (Windows) / `~/.hermes/.env` and settings in `config.yaml`. Read them, but mask every secret value:
+```bash
+cd "$LOCALAPPDATA/hermes"            # Windows
+grep -niE "minimax|mistral|api_key|api_token|base_url|token|provider" .env | sed -E 's/(=.{8}).*/\1***REDACTED***/'
+# real (non-comment) values, key presence only:
+grep -vE '^\s*#' .env | grep -vE '^\s*$' | sed -E 's/=(.{0,6}).*/=\1***[LEN]***/'
+`hermes config set KEY VAL` writes to `config.yaml` (settings/URLs), NOT `.env` (keys). `.env` is protected from agent writes 
+ that is correct; do not bypass it.
+### 2. Read the logs for the failure signature
+```bash
+ls -la "$LOCALAPPDATA/hermes/logs" 2>/dev/null
+grep -c -i minimax "$LOCALAPPDATA/hermes/logs/errors.log"
+grep -i -E "minimax|mistral" "$LOCALAPPDATA/hermes/logs/agent.log" | tail -40
+Common signatures:
+- `base_url=https://api.minimax.io/anthropic` 
+ malformed (starts with `/anthropic`, not a valid URL) 
+ `APIConnectionError` / `Connection error`.
+- `base_url=https://api.minimax.io/v1` + `404 page not found` 
+ endpoint path mismatch in how the client mounts the route.
+- `402 insufficient_balance` 
+ key is VALID and authenticated; the account is out of credit. NOT a code bug.
+- `401/403` 
+ key invalid or wrong base URL auth scheme.
+### 3. Prove the provider responds (read-only probe, key from env in memory)
+Extract the key into a variable, force the CORRECT base URL, send one tiny completion, and report only status/error 
+ never the key:
+```python
+import os, urllib.request, json
+env={}
+for line in open('.env', encoding='utf-8'):
+    line=line.strip()
+    if line and not line.startswith('#') and '=' in line:
+        k,v=line.split('=',1); env[k]=v
+key=env.get('MINIMAX_API_KEY')
+base='https://api.minimax.io/v1'           # CORRECT endpoint, forced for the test
+url=base.rstrip('/')+'/chat/completions'
+payload=json.dumps({"model":"MiniMax-M2.7","messages":[{"role":"user","content":"ping"}],"max_tokens":5}).encode()
+req=urllib.request.Request(url, data=payload, headers={"Authorization":f"Bearer {key}",'Content-Type':'application/json'})
+    r=urllib.request.urlopen(req, timeout=30)
+    print('STATUS:', r.status)
+except urllib.error.HTTPError as e:
+    print('HTTPError:', e.code, e.read(400).decode())   # 402 => key valid, balance empty
+Interpreting results:
+- `402 insufficient_balance` 
+ the URL and key are correct; the account needs top-up. This is the proof the config is now right.
+- `404` with forced-correct URL 
+ wrong mount/path or model name; check the provider's OpenAI-compat base.
+- `401` 
+ key wrong/expired.
+- `Connection error` 
+ base URL malformed (e.g. `/anthropic`).
+### 4. Hunting "lost tokens"
+Scan ALL provider blocks, not just the named one. A token is "lost" if it appears in comments or logs but has no live `KEY=value`. MiniMax and Mistral are frequent: MiniMax uses `MINIMAX_API_KEY` + `MINIMAX_BASE_URL`; Mistral is often only referenced in STT comments and never configured. Report precisely: present / absent / malformed-URL.
+## Pitfalls
+- Do NOT print full API keys, tokens, or secrets. Mask with `***` and report only presence/length.
+- `.env` is intentionally write-protected for agents. Use `hermes config set` only for non-secret settings (URLs); never hand-edit `.env`.
+- A `402` is success of diagnosis: it proves auth + endpoint are correct and the only blocker is account credit.
+- `hermes chat -q` may fail with "Nous Portal out of credits" even when the provider key is fine 
+ that is the Hermes plan, not the provider.
+- MiniMax OpenAI-compatible base is `https://api.minimax.io/v1`; `/anthropic` is a common copy-paste mistake and breaks every call.
+- A malformed `base_url` in `.env` is NOT overridden by `config.yaml` for the env var itself; `config.yaml` only overrides Hermes-level settings.
+## Verification
+After a fix, re-run the read-only probe: expect either a real completion (status 200) or a clear `402`/`401` that names the remaining blocker. Report the exact status and what it implies; never claim "works" on a 402.

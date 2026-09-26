@@ -1,0 +1,18 @@
+schema: CENTRALDARK_EMOJI_EXTERNAL_SOURCES
+schema_version: 1
+sources:
+  emoji_keyboard_pt:
+    url: https://emojikeyboard.top/pt/
+    role: REFERENCE_PROVIDER
+    sync: ON_DEMAND
+    expected_site_claim_count: 3953
+    ingest:
+      store_unicode_symbols_only: true
+      store_external_prose: false
+      deduplicate: true
+      normalize_variation_selectors: preserve
+      canonicalize_into_local_registry: true
+    authority: false
+canonical_rule:
+  external_source_failure_is_visual_pack_failure: false
+  external_source_changes_canonical_semantics: false

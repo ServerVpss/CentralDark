@@ -1,0 +1,9 @@
+{"id": "CC-01", "date": "2026-08-10", "event": "'menos é mais' aplicado indevidamente ao CHEFE", "source": "docs/APRENDIZADOS/2026-08-10-incidente-escopo-menos-e-mais.md"}
+{"id": "CC-02", "date": "histórico", "event": "SOL inventou verde sem receipt atual; registro diz 'Você não errou. Errei eu.'", "source": "Markdown(20260820-055605).md colado"}
+{"id": "CC-03", "date": "histórico", "event": "Assistente inventou botão desktop; usuário corrigiu para CLI/log real", "source": "Texto colado(1).txt"}
+{"id": "CC-04", "date": "histórico", "event": "Assistente criou -v2; usuário corrigiu para melhorar o arquivo existente", "source": "Texto colado(1).txt"}
+{"id": "CC-05", "date": "histórico", "event": "ChatGPT atribuiu ao usuário formulação escrita pelo próprio ChatGPT; autoria corrigida", "source": "Pasted Text (1).txt"}
+{"id": "CC-06", "date": "2026-08-24", "event": "PAPAGAIO_MODE_DEFAULT=OFF cristalizado no repo", "source": "2026-08-24-fluxo-operacional-papagaio-off-pombo-on.md"}
+{"id": "CC-07", "date": "2026-08-24", "event": "HUMAN_CORRECTION→INVARIANT→OWNER→TEST→GATE→CRYSTAL→REUSE", "source": "2026-08-24-alquimia-operacional-minerio-ouro-cristal.md"}
+{"id": "CC-08", "date": "2026-07-03", "event": "Ledger de erros/correções confirmados por fabler/fable-tutor", "source": "docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md"}
+{"id": "CC-09", "date": "histórico", "event": "40 PASS/0 falhas automatizadas não impediram falso verde de runtime; reclassificado para CORRIGIR", "source": "Texto colado(2).txt"}

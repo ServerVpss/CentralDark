@@ -1,0 +1,2295 @@
+{
+  "_schema_version": 3,
+  "_source_fingerprint": {
+    "config_yaml": {
+      "path": "E:\\CentralDark\\Pivete\\config.yaml",
+      "mtime_ns": 1787464278422837900,
+      "size": 2278
+    },
+    "auth_json": {
+      "path": "E:\\CentralDark\\Pivete\\auth.json",
+      "semantic_sha256": "e6974641cd334b1ee46f65ca099131c5a57ba6cd42e6dc3faedb94ba52c122e3"
+    },
+    "catalog": {
+      "provider_catalog_sha256": "8a92312b214a91cc5d0def754096de726c7226e86ace93e068edb435f6fd7b89",
+      "codex_models_cache": {
+        "path": "C:\\Users\\danda\\.codex\\models_cache.json",
+        "mtime_ns": 1785666889128004400,
+        "size": 283366
+      }
+    }
+  },
+  "active_provider": "nous",
+  "default_model": "z-ai/glm-5.2",
+  "configured_model_badges": {
+    "nous/z-ai/glm-5.2": {
+      "role": "primary",
+      "label": "Primary",
+      "provider": "nous"
+    },
+    "@nous:z-ai/glm-5.2": {
+      "role": "primary",
+      "label": "Primary",
+      "provider": "nous"
+    }
+  },
+  "groups": [
+    {
+      "provider": "Nous Portal (15 of 371)",
+      "provider_id": "nous",
+      "models": [
+        {
+          "id": "@nous:z-ai/glm-5.2",
+          "label": "GLM 5.2 (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-opus-4.6",
+          "label": "Claude Opus 4.6 (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-sonnet-4.6",
+          "label": "Claude Sonnet 4.6 (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.4-mini",
+          "label": "GPT 5.4 Mini (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-3.1-pro-preview",
+          "label": "Gemini 3.1 PRO Preview (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-fable-5",
+          "label": "Claude Fable 5 (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-opus-5",
+          "label": "Claude Opus 5 (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-opus-4.8",
+          "label": "Claude Opus 4.8 (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-sonnet-5",
+          "label": "Claude Sonnet 5 (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-haiku-4.5",
+          "label": "Claude Haiku 4.5 (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.6-sol",
+          "label": "GPT 5.6 SOL (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.6-sol-pro",
+          "label": "GPT 5.6 SOL PRO (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.6-terra",
+          "label": "GPT 5.6 Terra (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.6-terra-pro",
+          "label": "GPT 5.6 Terra PRO (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.6-luna",
+          "label": "GPT 5.6 Luna (via Nous)"
+        }
+      ],
+      "extra_models": [
+        {
+          "id": "@nous:openai/gpt-5.6-luna-pro",
+          "label": "GPT 5.6 Luna PRO (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.5",
+          "label": "GPT 5.5 (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.5-pro",
+          "label": "GPT 5.5 PRO (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-3.6-flash",
+          "label": "Gemini 3.6 Flash (via Nous)"
+        },
+        {
+          "id": "@nous:x-ai/grok-4.5",
+          "label": "Grok 4.5 (via Nous)"
+        },
+        {
+          "id": "@nous:deepseek/deepseek-v4-pro",
+          "label": "Deepseek V4 PRO (via Nous)"
+        },
+        {
+          "id": "@nous:deepseek/deepseek-v4-flash",
+          "label": "Deepseek V4 Flash (via Nous)"
+        },
+        {
+          "id": "@nous:deepseek/deepseek-v4-flash-0731",
+          "label": "Deepseek V4 Flash 0731 (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.8-max",
+          "label": "Qwen3.8 MAX (via Nous)"
+        },
+        {
+          "id": "@nous:moonshotai/kimi-k3",
+          "label": "Kimi K3 (via Nous)"
+        },
+        {
+          "id": "@nous:minimax/minimax-m3",
+          "label": "MiniMax M3 (via Nous)"
+        },
+        {
+          "id": "@nous:z-ai/glm-5.1",
+          "label": "GLM 5.1 (via Nous)"
+        },
+        {
+          "id": "@nous:xiaomi/mimo-v2.5-pro",
+          "label": "Mimo V2.5 PRO (via Nous)"
+        },
+        {
+          "id": "@nous:tencent/hy3",
+          "label": "Hy3 (via Nous)"
+        },
+        {
+          "id": "@nous:stepfun/step-3.7-flash",
+          "label": "Step 3.7 Flash (via Nous)"
+        },
+        {
+          "id": "@nous:nvidia/nemotron-3-super-120b-a12b",
+          "label": "Nemotron 3 Super 120B A12b (via Nous)"
+        },
+        {
+          "id": "@nous:sakana/fugu-ultra",
+          "label": "Fugu Ultra (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-opus-4",
+          "label": "Claude Opus 4 (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-opus-4.1",
+          "label": "Claude Opus 4.1 (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-opus-4.1:batch",
+          "label": "Claude Opus 4.1 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-opus-4.5",
+          "label": "Claude Opus 4.5 (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-opus-4.5:batch",
+          "label": "Claude Opus 4.5 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-opus-4.6:batch",
+          "label": "Claude Opus 4.6 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-opus-4.7",
+          "label": "Claude Opus 4.7 (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-opus-4.7-fast",
+          "label": "Claude Opus 4.7 Fast (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-opus-4.7:batch",
+          "label": "Claude Opus 4.7 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-opus-4.8-fast",
+          "label": "Claude Opus 4.8 Fast (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-opus-4.8:batch",
+          "label": "Claude Opus 4.8 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-opus-5-fast",
+          "label": "Claude Opus 5 Fast (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-opus-5:batch",
+          "label": "Claude Opus 5 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:~anthropic/claude-opus-latest",
+          "label": "Claude Opus Latest (via Nous)"
+        },
+        {
+          "id": "@nous:amazon/nova-pro-v1",
+          "label": "Nova PRO V1 (via Nous)"
+        },
+        {
+          "id": "@nous:deepseek/deepseek-v4-pro-0813",
+          "label": "Deepseek V4 PRO 0813 (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-2.5-pro",
+          "label": "Gemini 2.5 PRO (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-2.5-pro-preview",
+          "label": "Gemini 2.5 PRO Preview (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-2.5-pro-preview-05-06",
+          "label": "Gemini 2.5 PRO Preview 05 06 (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-2.5-pro:batch",
+          "label": "Gemini 2.5 PRO (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-3-pro-image",
+          "label": "Gemini 3 PRO Image (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-3.1-pro-preview-customtools",
+          "label": "Gemini 3.1 PRO Preview Customtools (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-3.1-pro-preview:batch",
+          "label": "Gemini 3.1 PRO Preview (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:kwaipilot/kat-coder-pro-v2",
+          "label": "KAT Coder PRO V2 (via Nous)"
+        },
+        {
+          "id": "@nous:kwaipilot/kat-coder-pro-v2.5",
+          "label": "KAT Coder PRO V2.5 (via Nous)"
+        },
+        {
+          "id": "@nous:nex-agi/nex-n2-pro",
+          "label": "NEX N2 PRO (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5-pro",
+          "label": "GPT 5 PRO (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5-pro:batch",
+          "label": "GPT 5 PRO (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.2-pro",
+          "label": "GPT 5.2 PRO (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.2-pro:batch",
+          "label": "GPT 5.2 PRO (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.4-pro",
+          "label": "GPT 5.4 PRO (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.4-pro:batch",
+          "label": "GPT 5.4 PRO (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.5-pro:batch",
+          "label": "GPT 5.5 PRO (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.6-luna-pro:batch",
+          "label": "GPT 5.6 Luna PRO (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.6-sol-pro:batch",
+          "label": "GPT 5.6 SOL PRO (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.6-terra-pro:batch",
+          "label": "GPT 5.6 Terra PRO (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/o3-pro",
+          "label": "O3 PRO (via Nous)"
+        },
+        {
+          "id": "@nous:openai/o3-pro:batch",
+          "label": "O3 PRO (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:upstage/solar-pro-3",
+          "label": "Solar PRO 3 (via Nous)"
+        },
+        {
+          "id": "@nous:upstage/solar-pro4",
+          "label": "Solar Pro4 (via Nous)"
+        },
+        {
+          "id": "@nous:upstage/solar-pro4:free",
+          "label": "Solar Pro4 (Free) (via Nous)"
+        },
+        {
+          "id": "@nous:~google/gemini-pro-latest",
+          "label": "Gemini PRO Latest (via Nous)"
+        },
+        {
+          "id": "@nous:aion-labs/aion-2.0",
+          "label": "Aion 2.0 (via Nous)"
+        },
+        {
+          "id": "@nous:aion-labs/aion-3.0",
+          "label": "Aion 3.0 (via Nous)"
+        },
+        {
+          "id": "@nous:aion-labs/aion-3.0-mini",
+          "label": "Aion 3.0 Mini (via Nous)"
+        },
+        {
+          "id": "@nous:amazon/nova-2-lite-v1",
+          "label": "Nova 2 Lite V1 (via Nous)"
+        },
+        {
+          "id": "@nous:amazon/nova-lite-v1",
+          "label": "Nova Lite V1 (via Nous)"
+        },
+        {
+          "id": "@nous:amazon/nova-micro-v1",
+          "label": "Nova Micro V1 (via Nous)"
+        },
+        {
+          "id": "@nous:amazon/nova-premier-v1",
+          "label": "Nova Premier V1 (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-3-haiku",
+          "label": "Claude 3 Haiku (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-fable-5:batch",
+          "label": "Claude Fable 5 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-haiku-4.5:batch",
+          "label": "Claude Haiku 4.5 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:arcee-ai/trinity-large-thinking",
+          "label": "Trinity Large Thinking (via Nous)"
+        },
+        {
+          "id": "@nous:arcee-ai/virtuoso-large",
+          "label": "Virtuoso Large (via Nous)"
+        },
+        {
+          "id": "@nous:baai/bge-base-en-v1.5",
+          "label": "BGE Base EN V1.5 (via Nous)"
+        },
+        {
+          "id": "@nous:baai/bge-large-en-v1.5",
+          "label": "BGE Large EN V1.5 (via Nous)"
+        },
+        {
+          "id": "@nous:baai/bge-m3",
+          "label": "BGE M3 (via Nous)"
+        },
+        {
+          "id": "@nous:bytedance-seed/seed-1.6",
+          "label": "Seed 1.6 (via Nous)"
+        },
+        {
+          "id": "@nous:bytedance-seed/seed-1.6-flash",
+          "label": "Seed 1.6 Flash (via Nous)"
+        },
+        {
+          "id": "@nous:bytedance-seed/seed-2-1-turbo",
+          "label": "Seed 2 1 Turbo (via Nous)"
+        },
+        {
+          "id": "@nous:bytedance-seed/seed-2.0-code",
+          "label": "Seed 2.0 Code (via Nous)"
+        },
+        {
+          "id": "@nous:bytedance-seed/seed-2.0-lite",
+          "label": "Seed 2.0 Lite (via Nous)"
+        },
+        {
+          "id": "@nous:bytedance-seed/seed-2.0-mini",
+          "label": "Seed 2.0 Mini (via Nous)"
+        },
+        {
+          "id": "@nous:cohere/command-r-08-2024",
+          "label": "Command R 08 2024 (via Nous)"
+        },
+        {
+          "id": "@nous:cohere/command-r-plus-08-2024",
+          "label": "Command R Plus 08 2024 (via Nous)"
+        },
+        {
+          "id": "@nous:deepseek/deepseek-chat",
+          "label": "Deepseek Chat (via Nous)"
+        },
+        {
+          "id": "@nous:deepseek/deepseek-chat-v3-0324",
+          "label": "Deepseek Chat V3 0324 (via Nous)"
+        },
+        {
+          "id": "@nous:deepseek/deepseek-chat-v3.1",
+          "label": "Deepseek Chat V3.1 (via Nous)"
+        },
+        {
+          "id": "@nous:deepseek/deepseek-r1",
+          "label": "Deepseek R1 (via Nous)"
+        },
+        {
+          "id": "@nous:deepseek/deepseek-r1-0528",
+          "label": "Deepseek R1 0528 (via Nous)"
+        },
+        {
+          "id": "@nous:deepseek/deepseek-v3.1-terminus",
+          "label": "Deepseek V3.1 Terminus (via Nous)"
+        },
+        {
+          "id": "@nous:deepseek/deepseek-v3.2",
+          "label": "Deepseek V3.2 (via Nous)"
+        },
+        {
+          "id": "@nous:deepseek/deepseek-v3.2-exp",
+          "label": "Deepseek V3.2 EXP (via Nous)"
+        },
+        {
+          "id": "@nous:deepseek/deepseek-v4-flash-vision-exp",
+          "label": "Deepseek V4 Flash Vision EXP (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-2.5-flash",
+          "label": "Gemini 2.5 Flash (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-2.5-flash-lite",
+          "label": "Gemini 2.5 Flash Lite (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-2.5-flash-lite:batch",
+          "label": "Gemini 2.5 Flash Lite (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-2.5-flash:batch",
+          "label": "Gemini 2.5 Flash (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-3-flash-preview",
+          "label": "Gemini 3 Flash Preview (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-3-flash-preview:batch",
+          "label": "Gemini 3 Flash Preview (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-3.1-flash-lite",
+          "label": "Gemini 3.1 Flash Lite (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-3.1-flash-lite-preview",
+          "label": "Gemini 3.1 Flash Lite Preview (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-3.1-flash-lite:batch",
+          "label": "Gemini 3.1 Flash Lite (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-3.5-flash",
+          "label": "Gemini 3.5 Flash (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-3.5-flash-lite",
+          "label": "Gemini 3.5 Flash Lite (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-3.5-flash-lite:batch",
+          "label": "Gemini 3.5 Flash Lite (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-3.5-flash:batch",
+          "label": "Gemini 3.5 Flash (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-3.6-flash:batch",
+          "label": "Gemini 3.6 Flash (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-3.7-flash",
+          "label": "Gemini 3.7 Flash (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-3.7-flash:batch",
+          "label": "Gemini 3.7 Flash (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-embedding-001",
+          "label": "Gemini Embedding 001 (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-embedding-2",
+          "label": "Gemini Embedding 2 (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemini-embedding-2-preview",
+          "label": "Gemini Embedding 2 Preview (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemma-3-12b-it",
+          "label": "Gemma 3 12B IT (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemma-3-27b-it",
+          "label": "Gemma 3 27B IT (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemma-4-26b-a4b-it",
+          "label": "Gemma 4 26B A4b IT (via Nous)"
+        },
+        {
+          "id": "@nous:google/gemma-4-31b-it",
+          "label": "Gemma 4 31B IT (via Nous)"
+        },
+        {
+          "id": "@nous:ibm-granite/granite-4.1-8b",
+          "label": "Granite 4.1 8B (via Nous)"
+        },
+        {
+          "id": "@nous:inception/mercury-2",
+          "label": "Mercury 2 (via Nous)"
+        },
+        {
+          "id": "@nous:inclusionai/ling-2.6-1t",
+          "label": "Ling 2.6 1T (via Nous)"
+        },
+        {
+          "id": "@nous:inclusionai/ling-2.6-flash",
+          "label": "Ling 2.6 Flash (via Nous)"
+        },
+        {
+          "id": "@nous:inclusionai/ling-3.0-flash",
+          "label": "Ling 3.0 Flash (via Nous)"
+        },
+        {
+          "id": "@nous:inclusionai/ring-2.6-1t",
+          "label": "Ring 2.6 1T (via Nous)"
+        },
+        {
+          "id": "@nous:intfloat/e5-base-v2",
+          "label": "E5 Base V2 (via Nous)"
+        },
+        {
+          "id": "@nous:intfloat/e5-large-v2",
+          "label": "E5 Large V2 (via Nous)"
+        },
+        {
+          "id": "@nous:intfloat/multilingual-e5-large",
+          "label": "Multilingual E5 Large (via Nous)"
+        },
+        {
+          "id": "@nous:kwaipilot/kat-coder-air-v2.5",
+          "label": "KAT Coder AIR V2.5 (via Nous)"
+        },
+        {
+          "id": "@nous:meituan/longcat-2.0",
+          "label": "Longcat 2.0 (via Nous)"
+        },
+        {
+          "id": "@nous:meituan/longcat-2.0:free",
+          "label": "Longcat 2.0 (Free) (via Nous)"
+        },
+        {
+          "id": "@nous:meta-llama/llama-3.1-70b-instruct",
+          "label": "Llama 3.1 70B Instruct (via Nous)"
+        },
+        {
+          "id": "@nous:meta-llama/llama-3.1-8b-instruct",
+          "label": "Llama 3.1 8B Instruct (via Nous)"
+        },
+        {
+          "id": "@nous:meta-llama/llama-3.3-70b-instruct",
+          "label": "Llama 3.3 70B Instruct (via Nous)"
+        },
+        {
+          "id": "@nous:meta-llama/llama-4-maverick",
+          "label": "Llama 4 Maverick (via Nous)"
+        },
+        {
+          "id": "@nous:meta-llama/llama-4-scout",
+          "label": "Llama 4 Scout (via Nous)"
+        },
+        {
+          "id": "@nous:meta/muse-glimmer-30b",
+          "label": "Muse Glimmer 30B (via Nous)"
+        },
+        {
+          "id": "@nous:meta/muse-spark-1.1",
+          "label": "Muse Spark 1.1 (via Nous)"
+        },
+        {
+          "id": "@nous:meta/muse-spark-1.2",
+          "label": "Muse Spark 1.2 (via Nous)"
+        },
+        {
+          "id": "@nous:meta/muse-spark-1.2-contributor",
+          "label": "Muse Spark 1.2 Contributor (via Nous)"
+        },
+        {
+          "id": "@nous:minimax/minimax-m1",
+          "label": "MiniMax M1 (via Nous)"
+        },
+        {
+          "id": "@nous:minimax/minimax-m2",
+          "label": "MiniMax M2 (via Nous)"
+        },
+        {
+          "id": "@nous:minimax/minimax-m2.1",
+          "label": "MiniMax M2.1 (via Nous)"
+        },
+        {
+          "id": "@nous:minimax/minimax-m2.5",
+          "label": "MiniMax M2.5 (via Nous)"
+        },
+        {
+          "id": "@nous:minimax/minimax-m2.7",
+          "label": "MiniMax M2.7 (via Nous)"
+        },
+        {
+          "id": "@nous:minimax/minimax-m3:batch",
+          "label": "MiniMax M3 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/codestral-2508",
+          "label": "Codestral 2508 (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/codestral-embed-2505",
+          "label": "Codestral Embed 2505 (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/ministral-14b-2512",
+          "label": "Ministral 14B 2512 (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/ministral-3b-2512",
+          "label": "Ministral 3B 2512 (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/ministral-8b-2512",
+          "label": "Ministral 8B 2512 (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/mistral-embed-2312",
+          "label": "Mistral Embed 2312 (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/mistral-large",
+          "label": "Mistral Large (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/mistral-large-2407",
+          "label": "Mistral Large 2407 (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/mistral-large-2512",
+          "label": "Mistral Large 2512 (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/mistral-medium-3",
+          "label": "Mistral Medium 3 (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/mistral-medium-3-5",
+          "label": "Mistral Medium 3 5 (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/mistral-medium-3.1",
+          "label": "Mistral Medium 3.1 (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/mistral-nemo",
+          "label": "Mistral Nemo (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/mistral-saba",
+          "label": "Mistral Saba (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/mistral-small-2603",
+          "label": "Mistral Small 2603 (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/mistral-small-3.2-24b-instruct",
+          "label": "Mistral Small 3.2 24B Instruct (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/mixtral-8x22b-instruct",
+          "label": "Mixtral 8X22B Instruct (via Nous)"
+        },
+        {
+          "id": "@nous:mistralai/voxtral-small-24b-2507",
+          "label": "Voxtral Small 24B 2507 (via Nous)"
+        },
+        {
+          "id": "@nous:moonshotai/kimi-k2",
+          "label": "Kimi K2 (via Nous)"
+        },
+        {
+          "id": "@nous:moonshotai/kimi-k2-0905",
+          "label": "Kimi K2 0905 (via Nous)"
+        },
+        {
+          "id": "@nous:moonshotai/kimi-k2-thinking",
+          "label": "Kimi K2 Thinking (via Nous)"
+        },
+        {
+          "id": "@nous:moonshotai/kimi-k2.5",
+          "label": "Kimi K2.5 (via Nous)"
+        },
+        {
+          "id": "@nous:moonshotai/kimi-k2.6",
+          "label": "Kimi K2.6 (via Nous)"
+        },
+        {
+          "id": "@nous:moonshotai/kimi-k2.7-code",
+          "label": "Kimi K2.7 Code (via Nous)"
+        },
+        {
+          "id": "@nous:moonshotai/kimi-k2.7-code:batch",
+          "label": "Kimi K2.7 Code (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:nex-agi/nex-n2-mini",
+          "label": "NEX N2 Mini (via Nous)"
+        },
+        {
+          "id": "@nous:nvidia/nemotron-3-nano-30b-a3b",
+          "label": "Nemotron 3 Nano 30B A3b (via Nous)"
+        },
+        {
+          "id": "@nous:nvidia/nemotron-3-ultra-550b-a55b",
+          "label": "Nemotron 3 Ultra 550B A55b (via Nous)"
+        },
+        {
+          "id": "@nous:nvidia/nemotron-3-ultra-550b-a55b:batch",
+          "label": "Nemotron 3 Ultra 550B A55b (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:nvidia/nemotron-3.5-lightning",
+          "label": "Nemotron 3.5 Lightning (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-3.5-turbo",
+          "label": "GPT 3.5 Turbo (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-3.5-turbo-0613",
+          "label": "GPT 3.5 Turbo 0613 (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-3.5-turbo-16k",
+          "label": "GPT 3.5 Turbo 16K (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-3.5-turbo:batch",
+          "label": "GPT 3.5 Turbo (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4",
+          "label": "GPT 4 (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4-turbo",
+          "label": "GPT 4 Turbo (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4-turbo-preview",
+          "label": "GPT 4 Turbo Preview (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4-turbo:batch",
+          "label": "GPT 4 Turbo (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4.1",
+          "label": "GPT 4.1 (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4.1-mini",
+          "label": "GPT 4.1 Mini (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4.1-mini:batch",
+          "label": "GPT 4.1 Mini (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4.1-nano",
+          "label": "GPT 4.1 Nano (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4.1-nano:batch",
+          "label": "GPT 4.1 Nano (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4.1:batch",
+          "label": "GPT 4.1 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4o",
+          "label": "GPT 4O (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4o-2024-05-13",
+          "label": "GPT 4O 2024 05 13 (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4o-2024-08-06",
+          "label": "GPT 4O 2024 08 06 (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4o-2024-11-20",
+          "label": "GPT 4O 2024 11 20 (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4o-mini",
+          "label": "GPT 4O Mini (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4o-mini-2024-07-18",
+          "label": "GPT 4O Mini 2024 07 18 (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4o-mini:batch",
+          "label": "GPT 4O Mini (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-4o:batch",
+          "label": "GPT 4O (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5",
+          "label": "GPT 5 (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5-codex:batch",
+          "label": "GPT 5 Codex (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5-mini",
+          "label": "GPT 5 Mini (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5-mini:batch",
+          "label": "GPT 5 Mini (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5-nano",
+          "label": "GPT 5 Nano (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5-nano:batch",
+          "label": "GPT 5 Nano (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.1",
+          "label": "GPT 5.1 (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.1-codex",
+          "label": "GPT 5.1 Codex (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.1-codex-max",
+          "label": "GPT 5.1 Codex MAX (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.1-codex-mini",
+          "label": "GPT 5.1 Codex Mini (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.1:batch",
+          "label": "GPT 5.1 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.2",
+          "label": "GPT 5.2 (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.2-chat",
+          "label": "GPT 5.2 Chat (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.2-codex",
+          "label": "GPT 5.2 Codex (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.2:batch",
+          "label": "GPT 5.2 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.3-codex",
+          "label": "GPT 5.3 Codex (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.4",
+          "label": "GPT 5.4 (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.4-mini:batch",
+          "label": "GPT 5.4 Mini (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.4-nano",
+          "label": "GPT 5.4 Nano (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.4-nano:batch",
+          "label": "GPT 5.4 Nano (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.4:batch",
+          "label": "GPT 5.4 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.5:batch",
+          "label": "GPT 5.5 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.6-luna:batch",
+          "label": "GPT 5.6 Luna (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.6-sol:batch",
+          "label": "GPT 5.6 SOL (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5.6-terra:batch",
+          "label": "GPT 5.6 Terra (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-5:batch",
+          "label": "GPT 5 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-audio",
+          "label": "GPT Audio (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-audio-mini",
+          "label": "GPT Audio Mini (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-chat-latest",
+          "label": "GPT Chat Latest (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-oss-120b",
+          "label": "GPT OSS 120B (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-oss-20b",
+          "label": "GPT OSS 20B (via Nous)"
+        },
+        {
+          "id": "@nous:openai/gpt-oss-safeguard-20b",
+          "label": "GPT OSS Safeguard 20B (via Nous)"
+        },
+        {
+          "id": "@nous:openai/o1",
+          "label": "O1 (via Nous)"
+        },
+        {
+          "id": "@nous:openai/o1:batch",
+          "label": "O1 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/o3",
+          "label": "O3 (via Nous)"
+        },
+        {
+          "id": "@nous:openai/o3-mini",
+          "label": "O3 Mini (via Nous)"
+        },
+        {
+          "id": "@nous:openai/o3-mini-high",
+          "label": "O3 Mini High (via Nous)"
+        },
+        {
+          "id": "@nous:openai/o3-mini-high:batch",
+          "label": "O3 Mini High (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/o3-mini:batch",
+          "label": "O3 Mini (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/o3:batch",
+          "label": "O3 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/o4-mini",
+          "label": "O4 Mini (via Nous)"
+        },
+        {
+          "id": "@nous:openai/o4-mini-high",
+          "label": "O4 Mini High (via Nous)"
+        },
+        {
+          "id": "@nous:openai/o4-mini-high:batch",
+          "label": "O4 Mini High (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/o4-mini:batch",
+          "label": "O4 Mini (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/text-embedding-3-large",
+          "label": "Text Embedding 3 Large (via Nous)"
+        },
+        {
+          "id": "@nous:openai/text-embedding-3-large:batch",
+          "label": "Text Embedding 3 Large (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:openai/text-embedding-3-small",
+          "label": "Text Embedding 3 Small (via Nous)"
+        },
+        {
+          "id": "@nous:openai/text-embedding-ada-002",
+          "label": "Text Embedding ADA 002 (via Nous)"
+        },
+        {
+          "id": "@nous:openai/text-embedding-ada-002:batch",
+          "label": "Text Embedding ADA 002 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:perplexity/pplx-embed-v1-0.6b",
+          "label": "Pplx Embed V1 0.6B (via Nous)"
+        },
+        {
+          "id": "@nous:perplexity/pplx-embed-v1-4b",
+          "label": "Pplx Embed V1 4B (via Nous)"
+        },
+        {
+          "id": "@nous:poolside/laguna-s-2.1",
+          "label": "Laguna S 2.1 (via Nous)"
+        },
+        {
+          "id": "@nous:poolside/laguna-s-2.1:free",
+          "label": "Laguna S 2.1 (Free) (via Nous)"
+        },
+        {
+          "id": "@nous:poolside/laguna-xs-2.1",
+          "label": "Laguna XS 2.1 (via Nous)"
+        },
+        {
+          "id": "@nous:poolside/laguna-xs-2.1:free",
+          "label": "Laguna XS 2.1 (Free) (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen-2.5-72b-instruct",
+          "label": "Qwen 2.5 72B Instruct (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen-2.5-7b-instruct",
+          "label": "Qwen 2.5 7B Instruct (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen-plus",
+          "label": "Qwen Plus (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen-plus-2025-07-28",
+          "label": "Qwen Plus 2025 07 28 (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen-plus-2025-07-28:thinking",
+          "label": "Qwen Plus 2025 07 28 (Thinking) (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-14b",
+          "label": "Qwen3 14B (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-235b-a22b",
+          "label": "Qwen3 235B A22b (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-235b-a22b-2507",
+          "label": "Qwen3 235B A22b 2507 (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-235b-a22b-thinking-2507",
+          "label": "Qwen3 235B A22b Thinking 2507 (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-30b-a3b",
+          "label": "Qwen3 30B A3b (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-30b-a3b-instruct-2507",
+          "label": "Qwen3 30B A3b Instruct 2507 (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-30b-a3b-thinking-2507",
+          "label": "Qwen3 30B A3b Thinking 2507 (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-32b",
+          "label": "Qwen3 32B (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-8b",
+          "label": "Qwen3 8B (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-coder",
+          "label": "Qwen3 Coder (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-coder-30b-a3b-instruct",
+          "label": "Qwen3 Coder 30B A3b Instruct (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-coder-flash",
+          "label": "Qwen3 Coder Flash (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-coder-next",
+          "label": "Qwen3 Coder Next (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-coder-plus",
+          "label": "Qwen3 Coder Plus (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-embedding-4b",
+          "label": "Qwen3 Embedding 4B (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-embedding-8b",
+          "label": "Qwen3 Embedding 8B (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-max",
+          "label": "Qwen3 MAX (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-max-thinking",
+          "label": "Qwen3 MAX Thinking (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-next-80b-a3b-instruct",
+          "label": "Qwen3 Next 80B A3b Instruct (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-next-80b-a3b-thinking",
+          "label": "Qwen3 Next 80B A3b Thinking (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-vl-235b-a22b-instruct",
+          "label": "Qwen3 VL 235B A22b Instruct (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-vl-235b-a22b-thinking",
+          "label": "Qwen3 VL 235B A22b Thinking (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-vl-30b-a3b-instruct",
+          "label": "Qwen3 VL 30B A3b Instruct (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-vl-30b-a3b-thinking",
+          "label": "Qwen3 VL 30B A3b Thinking (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-vl-32b-instruct",
+          "label": "Qwen3 VL 32B Instruct (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-vl-8b-instruct",
+          "label": "Qwen3 VL 8B Instruct (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3-vl-8b-thinking",
+          "label": "Qwen3 VL 8B Thinking (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.5-122b-a10b",
+          "label": "Qwen3.5 122B A10b (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.5-27b",
+          "label": "Qwen3.5 27B (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.5-35b-a3b",
+          "label": "Qwen3.5 35B A3b (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.5-397b-a17b",
+          "label": "Qwen3.5 397B A17b (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.5-9b",
+          "label": "Qwen3.5 9B (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.5-flash-02-23",
+          "label": "Qwen3.5 Flash 02 23 (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.5-plus-02-15",
+          "label": "Qwen3.5 Plus 02 15 (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.5-plus-20260420",
+          "label": "Qwen3.5 Plus 20260420 (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.6-27b",
+          "label": "Qwen3.6 27B (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.6-35b-a3b",
+          "label": "Qwen3.6 35B A3b (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.6-flash",
+          "label": "Qwen3.6 Flash (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.6-max-preview",
+          "label": "Qwen3.6 MAX Preview (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.6-plus",
+          "label": "Qwen3.6 Plus (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.7-flash",
+          "label": "Qwen3.7 Flash (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.7-max",
+          "label": "Qwen3.7 MAX (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.7-plus",
+          "label": "Qwen3.7 Plus (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.8-2.4t-a95b",
+          "label": "Qwen3.8 2.4T A95b (via Nous)"
+        },
+        {
+          "id": "@nous:qwen/qwen3.8-27b",
+          "label": "Qwen3.8 27B (via Nous)"
+        },
+        {
+          "id": "@nous:rekaai/reka-edge",
+          "label": "Reka Edge (via Nous)"
+        },
+        {
+          "id": "@nous:relace/relace-search",
+          "label": "Relace Search (via Nous)"
+        },
+        {
+          "id": "@nous:sakana/sakana-namazu",
+          "label": "Sakana Namazu (via Nous)"
+        },
+        {
+          "id": "@nous:sao10k/l3.1-euryale-70b",
+          "label": "L3.1 Euryale 70B (via Nous)"
+        },
+        {
+          "id": "@nous:sentence-transformers/all-minilm-l12-v2",
+          "label": "ALL Minilm L12 V2 (via Nous)"
+        },
+        {
+          "id": "@nous:sentence-transformers/all-minilm-l6-v2",
+          "label": "ALL Minilm L6 V2 (via Nous)"
+        },
+        {
+          "id": "@nous:sentence-transformers/all-mpnet-base-v2",
+          "label": "ALL Mpnet Base V2 (via Nous)"
+        },
+        {
+          "id": "@nous:sentence-transformers/multi-qa-mpnet-base-dot-v1",
+          "label": "Multi QA Mpnet Base DOT V1 (via Nous)"
+        },
+        {
+          "id": "@nous:sentence-transformers/paraphrase-minilm-l6-v2",
+          "label": "Paraphrase Minilm L6 V2 (via Nous)"
+        },
+        {
+          "id": "@nous:stealth/ox-alpha",
+          "label": "OX Alpha (via Nous)"
+        },
+        {
+          "id": "@nous:stepfun/step-3.5-flash",
+          "label": "Step 3.5 Flash (via Nous)"
+        },
+        {
+          "id": "@nous:stepfun/step-3.7-flash:free",
+          "label": "Step 3.7 Flash (Free) (via Nous)"
+        },
+        {
+          "id": "@nous:tencent/hy3-preview",
+          "label": "Hy3 Preview (via Nous)"
+        },
+        {
+          "id": "@nous:tencent/hy3:free",
+          "label": "Hy3 (Free) (via Nous)"
+        },
+        {
+          "id": "@nous:thedrummer/unslopnemo-12b",
+          "label": "Unslopnemo 12B (via Nous)"
+        },
+        {
+          "id": "@nous:thenlper/gte-base",
+          "label": "GTE Base (via Nous)"
+        },
+        {
+          "id": "@nous:thenlper/gte-large",
+          "label": "GTE Large (via Nous)"
+        },
+        {
+          "id": "@nous:thinkingmachines/inkling",
+          "label": "Inkling (via Nous)"
+        },
+        {
+          "id": "@nous:thinkingmachines/inkling-small",
+          "label": "Inkling Small (via Nous)"
+        },
+        {
+          "id": "@nous:thinkingmachines/inkling:batch",
+          "label": "Inkling (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:voyageai/voyage-4",
+          "label": "Voyage 4 (via Nous)"
+        },
+        {
+          "id": "@nous:voyageai/voyage-4-large",
+          "label": "Voyage 4 Large (via Nous)"
+        },
+        {
+          "id": "@nous:voyageai/voyage-4-lite",
+          "label": "Voyage 4 Lite (via Nous)"
+        },
+        {
+          "id": "@nous:voyageai/voyage-code-4",
+          "label": "Voyage Code 4 (via Nous)"
+        },
+        {
+          "id": "@nous:voyageai/voyage-multimodal-3.5",
+          "label": "Voyage Multimodal 3.5 (via Nous)"
+        },
+        {
+          "id": "@nous:x-ai/grok-4.20",
+          "label": "Grok 4.20 (via Nous)"
+        },
+        {
+          "id": "@nous:x-ai/grok-4.3",
+          "label": "Grok 4.3 (via Nous)"
+        },
+        {
+          "id": "@nous:x-ai/grok-4.6",
+          "label": "Grok 4.6 (via Nous)"
+        },
+        {
+          "id": "@nous:x-ai/grok-build-0.1",
+          "label": "Grok Build 0.1 (via Nous)"
+        },
+        {
+          "id": "@nous:xiaomi/mimo-v2.5",
+          "label": "Mimo V2.5 (via Nous)"
+        },
+        {
+          "id": "@nous:z-ai/glm-4.5",
+          "label": "GLM 4.5 (via Nous)"
+        },
+        {
+          "id": "@nous:z-ai/glm-4.5-air",
+          "label": "GLM 4.5 AIR (via Nous)"
+        },
+        {
+          "id": "@nous:z-ai/glm-4.5v",
+          "label": "GLM 4.5V (via Nous)"
+        },
+        {
+          "id": "@nous:z-ai/glm-4.6",
+          "label": "GLM 4.6 (via Nous)"
+        },
+        {
+          "id": "@nous:z-ai/glm-4.6v",
+          "label": "GLM 4.6V (via Nous)"
+        },
+        {
+          "id": "@nous:z-ai/glm-4.7",
+          "label": "GLM 4.7 (via Nous)"
+        },
+        {
+          "id": "@nous:z-ai/glm-4.7-flash",
+          "label": "GLM 4.7 Flash (via Nous)"
+        },
+        {
+          "id": "@nous:z-ai/glm-5",
+          "label": "GLM 5 (via Nous)"
+        },
+        {
+          "id": "@nous:z-ai/glm-5-turbo",
+          "label": "GLM 5 Turbo (via Nous)"
+        },
+        {
+          "id": "@nous:z-ai/glm-5.2:US",
+          "label": "GLM 5.2 (US) (via Nous)"
+        },
+        {
+          "id": "@nous:z-ai/glm-5.2:batch",
+          "label": "GLM 5.2 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:z-ai/glm-5.3",
+          "label": "GLM 5.3 (via Nous)"
+        },
+        {
+          "id": "@nous:z-ai/glm-5v-turbo",
+          "label": "GLM 5V Turbo (via Nous)"
+        },
+        {
+          "id": "@nous:~anthropic/claude-fable-latest",
+          "label": "Claude Fable Latest (via Nous)"
+        },
+        {
+          "id": "@nous:~anthropic/claude-haiku-latest",
+          "label": "Claude Haiku Latest (via Nous)"
+        },
+        {
+          "id": "@nous:~deepseek/deepseek-v4-flash-latest",
+          "label": "Deepseek V4 Flash Latest (via Nous)"
+        },
+        {
+          "id": "@nous:~google/gemini-flash-latest",
+          "label": "Gemini Flash Latest (via Nous)"
+        },
+        {
+          "id": "@nous:~moonshotai/kimi-latest",
+          "label": "Kimi Latest (via Nous)"
+        },
+        {
+          "id": "@nous:~openai/gpt-latest",
+          "label": "GPT Latest (via Nous)"
+        },
+        {
+          "id": "@nous:~openai/gpt-mini-latest",
+          "label": "GPT Mini Latest (via Nous)"
+        },
+        {
+          "id": "@nous:~x-ai/grok-latest",
+          "label": "Grok Latest (via Nous)"
+        },
+        {
+          "id": "@nous:~z-ai/glm-latest",
+          "label": "GLM Latest (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-sonnet-4",
+          "label": "Claude Sonnet 4 (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-sonnet-4.5",
+          "label": "Claude Sonnet 4.5 (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-sonnet-4.5:batch",
+          "label": "Claude Sonnet 4.5 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-sonnet-4.6:batch",
+          "label": "Claude Sonnet 4.6 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:anthropic/claude-sonnet-5:batch",
+          "label": "Claude Sonnet 5 (Batch) (via Nous)"
+        },
+        {
+          "id": "@nous:~anthropic/claude-sonnet-latest",
+          "label": "Claude Sonnet Latest (via Nous)"
+        }
+      ]
+    },
+    {
+      "provider": "MiniMax",
+      "provider_id": "minimax",
+      "models": [
+        {
+          "id": "@minimax:MiniMax-M3",
+          "label": "Minimax M3"
+        },
+        {
+          "id": "@minimax:MiniMax-M2.7",
+          "label": "Minimax M2.7"
+        },
+        {
+          "id": "@minimax:MiniMax-M2.5",
+          "label": "Minimax M2.5"
+        },
+        {
+          "id": "@minimax:MiniMax-M2.1",
+          "label": "Minimax M2.1"
+        },
+        {
+          "id": "@minimax:MiniMax-M2",
+          "label": "Minimax M2"
+        }
+      ]
+    },
+    {
+      "provider": "NVIDIA NIM",
+      "provider_id": "nvidia",
+      "models": [
+        {
+          "id": "nvidia/nemotron-3-ultra-550b-a55b",
+          "label": "Nemotron 3 Ultra 550b A55b"
+        },
+        {
+          "id": "nvidia/nemotron-3-super-120b-a12b",
+          "label": "Nemotron 3 Super 120b A12b"
+        },
+        {
+          "id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "label": "Nemotron 3 Nano Omni 30B A3B Reasoning"
+        },
+        {
+          "id": "z-ai/glm-5.2",
+          "label": "GLM 5.2"
+        },
+        {
+          "id": "moonshotai/kimi-k2.6",
+          "label": "Kimi K2.6"
+        },
+        {
+          "id": "minimaxai/minimax-m3",
+          "label": "Minimax M3"
+        },
+        {
+          "id": "01-ai/yi-large",
+          "label": "YI Large"
+        },
+        {
+          "id": "adept/fuyu-8b",
+          "label": "Fuyu 8B"
+        },
+        {
+          "id": "ai21labs/jamba-1.5-large-instruct",
+          "label": "Jamba 1.5 Large Instruct"
+        },
+        {
+          "id": "aisingapore/sea-lion-7b-instruct",
+          "label": "SEA Lion 7B Instruct"
+        },
+        {
+          "id": "baai/bge-m3",
+          "label": "BGE M3"
+        },
+        {
+          "id": "bigcode/starcoder2-15b",
+          "label": "Starcoder2 15B"
+        },
+        {
+          "id": "databricks/dbrx-instruct",
+          "label": "Dbrx Instruct"
+        },
+        {
+          "id": "deepseek-ai/deepseek-coder-6.7b-instruct",
+          "label": "Deepseek Coder 6.7b Instruct"
+        },
+        {
+          "id": "deepseek-ai/deepseek-v4-flash-0731",
+          "label": "Deepseek V4 Flash 0731"
+        }
+      ],
+      "extra_models": [
+        {
+          "id": "google/codegemma-1.1-7b",
+          "label": "Codegemma 1.1 7B"
+        },
+        {
+          "id": "google/codegemma-7b",
+          "label": "Codegemma 7B"
+        },
+        {
+          "id": "google/deplot",
+          "label": "Deplot"
+        },
+        {
+          "id": "google/diffusiongemma-26b-a4b-it",
+          "label": "Diffusiongemma 26B A4B IT"
+        },
+        {
+          "id": "google/gemma-2b",
+          "label": "Gemma 2B"
+        },
+        {
+          "id": "google/gemma-3-12b-it",
+          "label": "Gemma 3 12B IT"
+        },
+        {
+          "id": "google/gemma-3-4b-it",
+          "label": "Gemma 3 4B IT"
+        },
+        {
+          "id": "google/gemma-4-31b-it",
+          "label": "Gemma 4 31B IT"
+        },
+        {
+          "id": "google/recurrentgemma-2b",
+          "label": "Recurrentgemma 2B"
+        },
+        {
+          "id": "ibm/granite-3.0-3b-a800m-instruct",
+          "label": "Granite 3.0 3B A800m Instruct"
+        },
+        {
+          "id": "ibm/granite-3.0-8b-instruct",
+          "label": "Granite 3.0 8B Instruct"
+        },
+        {
+          "id": "ibm/granite-34b-code-instruct",
+          "label": "Granite 34B Code Instruct"
+        },
+        {
+          "id": "ibm/granite-8b-code-instruct",
+          "label": "Granite 8B Code Instruct"
+        },
+        {
+          "id": "meta/codellama-70b",
+          "label": "Codellama 70B"
+        },
+        {
+          "id": "meta/llama-3.1-70b-instruct",
+          "label": "Llama 3.1 70B Instruct"
+        },
+        {
+          "id": "meta/llama-3.1-8b-instruct",
+          "label": "Llama 3.1 8B Instruct"
+        },
+        {
+          "id": "meta/llama-3.2-11b-vision-instruct",
+          "label": "Llama 3.2 11B Vision Instruct"
+        },
+        {
+          "id": "meta/llama-3.2-1b-instruct",
+          "label": "Llama 3.2 1B Instruct"
+        },
+        {
+          "id": "meta/llama-3.2-3b-instruct",
+          "label": "Llama 3.2 3B Instruct"
+        },
+        {
+          "id": "meta/llama-3.2-90b-vision-instruct",
+          "label": "Llama 3.2 90B Vision Instruct"
+        },
+        {
+          "id": "meta/llama-3.3-70b-instruct",
+          "label": "Llama 3.3 70B Instruct"
+        },
+        {
+          "id": "meta/llama-guard-4-12b",
+          "label": "Llama Guard 4 12B"
+        },
+        {
+          "id": "meta/llama2-70b",
+          "label": "Llama2 70B"
+        },
+        {
+          "id": "meta/muse-glimmer-30b",
+          "label": "Muse Glimmer 30B"
+        },
+        {
+          "id": "microsoft/kosmos-2",
+          "label": "Kosmos 2"
+        },
+        {
+          "id": "microsoft/phi-3-vision-128k-instruct",
+          "label": "PHI 3 Vision 128k Instruct"
+        },
+        {
+          "id": "microsoft/phi-3.5-moe-instruct",
+          "label": "PHI 3.5 MOE Instruct"
+        },
+        {
+          "id": "mistralai/codestral-22b-instruct-v0.1",
+          "label": "Codestral 22B Instruct V0.1"
+        },
+        {
+          "id": "mistralai/mistral-7b-instruct-v0.3",
+          "label": "Mistral 7B Instruct V0.3"
+        },
+        {
+          "id": "mistralai/mistral-large",
+          "label": "Mistral Large"
+        },
+        {
+          "id": "mistralai/mistral-large-2-instruct",
+          "label": "Mistral Large 2 Instruct"
+        },
+        {
+          "id": "mistralai/mistral-nemotron",
+          "label": "Mistral Nemotron"
+        },
+        {
+          "id": "mistralai/mixtral-8x22b-v0.1",
+          "label": "Mixtral 8x22b V0.1"
+        },
+        {
+          "id": "moonshotai/kimi-k3",
+          "label": "Kimi K3"
+        },
+        {
+          "id": "nv-mistralai/mistral-nemo-12b-instruct",
+          "label": "Mistral Nemo 12B Instruct"
+        },
+        {
+          "id": "nvidia/ai-synthetic-video-detector",
+          "label": "AI Synthetic Video Detector"
+        },
+        {
+          "id": "nvidia/cosmos-reason2-8b",
+          "label": "Cosmos Reason2 8B"
+        },
+        {
+          "id": "nvidia/embed-qa-4",
+          "label": "Embed QA 4"
+        },
+        {
+          "id": "nvidia/ising-calibration-1.5-31b",
+          "label": "Ising Calibration 1.5 31B"
+        },
+        {
+          "id": "nvidia/llama-3.1-nemoguard-8b-content-safety",
+          "label": "Llama 3.1 Nemoguard 8B Content Safety"
+        },
+        {
+          "id": "nvidia/llama-3.1-nemoguard-8b-topic-control",
+          "label": "Llama 3.1 Nemoguard 8B Topic Control"
+        },
+        {
+          "id": "nvidia/llama-3.1-nemotron-51b-instruct",
+          "label": "Llama 3.1 Nemotron 51B Instruct"
+        },
+        {
+          "id": "nvidia/llama-3.1-nemotron-70b-instruct",
+          "label": "Llama 3.1 Nemotron 70B Instruct"
+        },
+        {
+          "id": "nvidia/llama-3.1-nemotron-nano-8b-v1",
+          "label": "Llama 3.1 Nemotron Nano 8B V1"
+        },
+        {
+          "id": "nvidia/llama-3.1-nemotron-nano-vl-8b-v1",
+          "label": "Llama 3.1 Nemotron Nano VL 8B V1"
+        },
+        {
+          "id": "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
+          "label": "Llama 3.1 Nemotron Safety Guard 8B V3"
+        },
+        {
+          "id": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+          "label": "Llama 3.1 Nemotron Ultra 253b V1"
+        },
+        {
+          "id": "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
+          "label": "Llama 3.2 Nemoretriever 1B VLM Embed V1"
+        },
+        {
+          "id": "nvidia/llama-3.2-nv-embedqa-1b-v1",
+          "label": "Llama 3.2 NV Embedqa 1B V1"
+        },
+        {
+          "id": "nvidia/llama-3.3-nemotron-super-49b-v1",
+          "label": "Llama 3.3 Nemotron Super 49B V1"
+        },
+        {
+          "id": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+          "label": "Llama 3.3 Nemotron Super 49B V1.5"
+        },
+        {
+          "id": "nvidia/llama-nemotron-embed-1b-v2",
+          "label": "Llama Nemotron Embed 1B V2"
+        },
+        {
+          "id": "nvidia/llama-nemotron-embed-vl-1b-v2",
+          "label": "Llama Nemotron Embed VL 1B V2"
+        },
+        {
+          "id": "nvidia/llama3-chatqa-1.5-70b",
+          "label": "Llama3 Chatqa 1.5 70B"
+        },
+        {
+          "id": "nvidia/mistral-nemo-minitron-8b-8k-instruct",
+          "label": "Mistral Nemo Minitron 8B 8K Instruct"
+        },
+        {
+          "id": "nvidia/nemoretriever-parse",
+          "label": "Nemoretriever Parse"
+        },
+        {
+          "id": "nvidia/nemotron-3-embed-1b",
+          "label": "Nemotron 3 Embed 1B"
+        },
+        {
+          "id": "nvidia/nemotron-3-nano-30b-a3b",
+          "label": "Nemotron 3 Nano 30B A3B"
+        },
+        {
+          "id": "nvidia/nemotron-3.5-content-safety",
+          "label": "Nemotron 3.5 Content Safety"
+        },
+        {
+          "id": "nvidia/nemotron-3.5-lightning-30b-a3b",
+          "label": "Nemotron 3.5 Lightning 30B A3B"
+        },
+        {
+          "id": "nvidia/nemotron-4-340b-instruct",
+          "label": "Nemotron 4 340b Instruct"
+        },
+        {
+          "id": "nvidia/nemotron-4-340b-reward",
+          "label": "Nemotron 4 340b Reward"
+        },
+        {
+          "id": "nvidia/nemotron-mini-4b-instruct",
+          "label": "Nemotron Mini 4B Instruct"
+        },
+        {
+          "id": "nvidia/nemotron-nano-12b-v2-vl",
+          "label": "Nemotron Nano 12B V2 VL"
+        },
+        {
+          "id": "nvidia/nemotron-nano-3-30b-a3b",
+          "label": "Nemotron Nano 3 30B A3B"
+        },
+        {
+          "id": "nvidia/nemotron-parse",
+          "label": "Nemotron Parse"
+        },
+        {
+          "id": "nvidia/neva-22b",
+          "label": "Neva 22B"
+        },
+        {
+          "id": "nvidia/nv-embed-v1",
+          "label": "NV Embed V1"
+        },
+        {
+          "id": "nvidia/nv-embedcode-7b-v1",
+          "label": "NV Embedcode 7B V1"
+        },
+        {
+          "id": "nvidia/nv-embedqa-e5-v5",
+          "label": "NV Embedqa E5 V5"
+        },
+        {
+          "id": "nvidia/nv-embedqa-mistral-7b-v2",
+          "label": "NV Embedqa Mistral 7B V2"
+        },
+        {
+          "id": "nvidia/nvclip",
+          "label": "Nvclip"
+        },
+        {
+          "id": "nvidia/nvidia-nemotron-nano-9b-v2",
+          "label": "Nvidia Nemotron Nano 9B V2"
+        },
+        {
+          "id": "nvidia/riva-translate-4b-instruct",
+          "label": "Riva Translate 4B Instruct"
+        },
+        {
+          "id": "nvidia/riva-translate-4b-instruct-v1.1",
+          "label": "Riva Translate 4B Instruct V1.1"
+        },
+        {
+          "id": "nvidia/riva-translate-4b-instruct-v2",
+          "label": "Riva Translate 4B Instruct V2"
+        },
+        {
+          "id": "nvidia/vila",
+          "label": "Vila"
+        },
+        {
+          "id": "openai/gpt-oss-120b",
+          "label": "GPT OSS 120b"
+        },
+        {
+          "id": "openai/gpt-oss-20b",
+          "label": "GPT OSS 20B"
+        },
+        {
+          "id": "poolside/laguna-xs-2.1",
+          "label": "Laguna XS 2.1"
+        },
+        {
+          "id": "snowflake/arctic-embed-l",
+          "label": "Arctic Embed L"
+        },
+        {
+          "id": "stepfun-ai/step-3.7-flash",
+          "label": "Step 3.7 Flash"
+        },
+        {
+          "id": "thinkingmachines/inkling",
+          "label": "Inkling"
+        },
+        {
+          "id": "writer/palmyra-creative-122b",
+          "label": "Palmyra Creative 122b"
+        },
+        {
+          "id": "writer/palmyra-fin-70b-32k",
+          "label": "Palmyra FIN 70B 32K"
+        },
+        {
+          "id": "writer/palmyra-med-70b",
+          "label": "Palmyra MED 70B"
+        },
+        {
+          "id": "writer/palmyra-med-70b-32k",
+          "label": "Palmyra MED 70B 32K"
+        },
+        {
+          "id": "zyphra/zamba2-7b-instruct",
+          "label": "Zamba2 7B Instruct"
+        }
+      ]
+    },
+    {
+      "provider": "OpenAI API",
+      "provider_id": "openai-api",
+      "models": [
+        {
+          "id": "@openai-api:gpt-5.6-sol",
+          "label": "GPT 5.6 SOL",
+          "supports_fast_tier": true
+        },
+        {
+          "id": "@openai-api:gpt-5.6-sol-pro",
+          "label": "GPT 5.6 SOL PRO",
+          "supports_fast_tier": true
+        },
+        {
+          "id": "@openai-api:gpt-5.6-terra",
+          "label": "GPT 5.6 Terra",
+          "supports_fast_tier": true
+        },
+        {
+          "id": "@openai-api:gpt-5.6-terra-pro",
+          "label": "GPT 5.6 Terra PRO",
+          "supports_fast_tier": true
+        },
+        {
+          "id": "@openai-api:gpt-5.6-luna",
+          "label": "GPT 5.6 Luna",
+          "supports_fast_tier": true
+        },
+        {
+          "id": "@openai-api:gpt-5.6-luna-pro",
+          "label": "GPT 5.6 Luna PRO",
+          "supports_fast_tier": true
+        },
+        {
+          "id": "@openai-api:gpt-5.5",
+          "label": "GPT 5.5",
+          "supports_fast_tier": true
+        },
+        {
+          "id": "@openai-api:gpt-5.5-pro",
+          "label": "GPT 5.5 PRO",
+          "supports_fast_tier": true
+        },
+        {
+          "id": "@openai-api:gpt-5.4",
+          "label": "GPT 5.4",
+          "supports_fast_tier": true
+        },
+        {
+          "id": "@openai-api:gpt-5.4-mini",
+          "label": "GPT 5.4 Mini",
+          "supports_fast_tier": true
+        },
+        {
+          "id": "@openai-api:gpt-5.4-nano",
+          "label": "GPT 5.4 Nano",
+          "supports_fast_tier": true
+        },
+        {
+          "id": "@openai-api:gpt-5-mini",
+          "label": "GPT 5 Mini",
+          "supports_fast_tier": true
+        },
+        {
+          "id": "@openai-api:gpt-5.3-codex",
+          "label": "GPT 5.3 Codex",
+          "supports_fast_tier": false
+        },
+        {
+          "id": "@openai-api:gpt-4.1",
+          "label": "GPT 4.1",
+          "supports_fast_tier": true
+        },
+        {
+          "id": "@openai-api:gpt-4o",
+          "label": "GPT 4O",
+          "supports_fast_tier": true
+        },
+        {
+          "id": "@openai-api:gpt-4o-mini",
+          "label": "GPT 4O Mini",
+          "supports_fast_tier": true
+        }
+      ]
+    },
+    {
+      "provider": "OpenRouter",
+      "provider_id": "openrouter",
+      "models": [
+        {
+          "id": "anthropic/claude-fable-5",
+          "label": "anthropic/claude-fable-5"
+        },
+        {
+          "id": "anthropic/claude-opus-5",
+          "label": "anthropic/claude-opus-5"
+        },
+        {
+          "id": "anthropic/claude-opus-5-fast",
+          "label": "anthropic/claude-opus-5-fast"
+        },
+        {
+          "id": "anthropic/claude-opus-4.8",
+          "label": "anthropic/claude-opus-4.8"
+        },
+        {
+          "id": "anthropic/claude-opus-4.8-fast",
+          "label": "anthropic/claude-opus-4.8-fast"
+        },
+        {
+          "id": "anthropic/claude-sonnet-5",
+          "label": "anthropic/claude-sonnet-5"
+        },
+        {
+          "id": "anthropic/claude-haiku-4.5",
+          "label": "anthropic/claude-haiku-4.5"
+        },
+        {
+          "id": "openai/gpt-5.6-sol",
+          "label": "openai/gpt-5.6-sol"
+        },
+        {
+          "id": "openai/gpt-5.6-sol-pro",
+          "label": "openai/gpt-5.6-sol-pro"
+        },
+        {
+          "id": "openai/gpt-5.6-terra",
+          "label": "openai/gpt-5.6-terra"
+        },
+        {
+          "id": "openai/gpt-5.6-terra-pro",
+          "label": "openai/gpt-5.6-terra-pro"
+        },
+        {
+          "id": "openai/gpt-5.6-luna",
+          "label": "openai/gpt-5.6-luna"
+        },
+        {
+          "id": "openai/gpt-5.6-luna-pro",
+          "label": "openai/gpt-5.6-luna-pro"
+        },
+        {
+          "id": "openai/gpt-5.5",
+          "label": "openai/gpt-5.5"
+        },
+        {
+          "id": "@openrouter:z-ai/glm-5.2",
+          "label": "z-ai/glm-5.2 (OpenRouter)"
+        }
+      ],
+      "extra_models": [
+        {
+          "id": "openai/gpt-5.4-mini",
+          "label": "openai/gpt-5.4-mini"
+        },
+        {
+          "id": "google/gemini-3.1-pro-preview",
+          "label": "google/gemini-3.1-pro-preview"
+        },
+        {
+          "id": "google/gemini-3.7-flash",
+          "label": "google/gemini-3.7-flash"
+        },
+        {
+          "id": "x-ai/grok-4.6",
+          "label": "x-ai/grok-4.6"
+        },
+        {
+          "id": "deepseek/deepseek-v4-pro",
+          "label": "deepseek/deepseek-v4-pro"
+        },
+        {
+          "id": "deepseek/deepseek-v4-pro-0813",
+          "label": "deepseek/deepseek-v4-pro-0813"
+        },
+        {
+          "id": "deepseek/deepseek-v4-flash",
+          "label": "deepseek/deepseek-v4-flash"
+        },
+        {
+          "id": "deepseek/deepseek-v4-flash-0731",
+          "label": "deepseek/deepseek-v4-flash-0731"
+        },
+        {
+          "id": "qwen/qwen3.8-max",
+          "label": "qwen/qwen3.8-max"
+        },
+        {
+          "id": "@openrouter:moonshotai/kimi-k3",
+          "label": "moonshotai/kimi-k3 (OpenRouter)"
+        },
+        {
+          "id": "minimax/minimax-m3",
+          "label": "minimax/minimax-m3"
+        },
+        {
+          "id": "z-ai/glm-5.3",
+          "label": "z-ai/glm-5.3"
+        },
+        {
+          "id": "openai/gpt-5.5-pro",
+          "label": "openai/gpt-5.5-pro"
+        },
+        {
+          "id": "xiaomi/mimo-v2.5-pro",
+          "label": "xiaomi/mimo-v2.5-pro"
+        },
+        {
+          "id": "tencent/hy3",
+          "label": "tencent/hy3"
+        },
+        {
+          "id": "stepfun/step-3.7-flash",
+          "label": "stepfun/step-3.7-flash"
+        },
+        {
+          "id": "@openrouter:nvidia/nemotron-3-super-120b-a12b",
+          "label": "nvidia/nemotron-3-super-120b-a12b (OpenRouter)"
+        },
+        {
+          "id": "meta/muse-spark-1.2",
+          "label": "meta/muse-spark-1.2"
+        },
+        {
+          "id": "sakana/fugu-ultra",
+          "label": "sakana/fugu-ultra"
+        },
+        {
+          "id": "stealth/ox-alpha",
+          "label": "stealth/ox-alpha"
+        },
+        {
+          "id": "z-ai/glm-5.2:free",
+          "label": "z-ai/glm-5.2:free"
+        },
+        {
+          "id": "poolside/laguna-s-2.1:free",
+          "label": "poolside/laguna-s-2.1:free"
+        },
+        {
+          "id": "poolside/laguna-xs-2.1:free",
+          "label": "poolside/laguna-xs-2.1:free"
+        },
+        {
+          "id": "nvidia/nemotron-3-super-120b-a12b:free",
+          "label": "nvidia/nemotron-3-super-120b-a12b:free"
+        },
+        {
+          "id": "nvidia/nemotron-3-ultra-550b-a55b:free",
+          "label": "nvidia/nemotron-3-ultra-550b-a55b:free"
+        },
+        {
+          "id": "nvidia/nemotron-3.5-lightning:free",
+          "label": "nvidia/nemotron-3.5-lightning:free"
+        },
+        {
+          "id": "dots-studio/dots-3-note-preview:free",
+          "label": "Dots Studio: Dots3-Note Preview (free)"
+        },
+        {
+          "id": "liquid/lfm-2.5-2.6b:free",
+          "label": "LiquidAI: LFM2.5-2.6B (free)"
+        },
+        {
+          "id": "thinkingmachines/inkling-small:free",
+          "label": "Thinking Machines: Inkling Small (free)"
+        },
+        {
+          "id": "thinkingmachines/inkling:free",
+          "label": "Thinking Machines: Inkling (free)"
+        },
+        {
+          "id": "cohere/north-mini-code:free",
+          "label": "Cohere: North Mini Code (free)"
+        },
+        {
+          "id": "nvidia/nemotron-3.5-content-safety:free",
+          "label": "NVIDIA: Nemotron 3.5 Content Safety (free)"
+        },
+        {
+          "id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+          "label": "NVIDIA: Nemotron 3 Nano Omni (free)"
+        },
+        {
+          "id": "google/gemma-4-26b-a4b-it:free",
+          "label": "Google: Gemma 4 26B A4B  (free)"
+        },
+        {
+          "id": "google/gemma-4-31b-it:free",
+          "label": "Google: Gemma 4 31B (free)"
+        },
+        {
+          "id": "google/lyria-3-pro-preview",
+          "label": "Google: Lyria 3 Pro Preview (free)"
+        },
+        {
+          "id": "google/lyria-3-clip-preview",
+          "label": "Google: Lyria 3 Clip Preview (free)"
+        },
+        {
+          "id": "openrouter/free",
+          "label": "Free Models Router (free)"
+        },
+        {
+          "id": "nvidia/nemotron-3-nano-30b-a3b:free",
+          "label": "NVIDIA: Nemotron 3 Nano 30B A3B (free)"
+        },
+        {
+          "id": "nvidia/nemotron-nano-12b-v2-vl:free",
+          "label": "NVIDIA: Nemotron Nano 12B 2 VL (free)"
+        },
+        {
+          "id": "nvidia/nemotron-nano-9b-v2:free",
+          "label": "NVIDIA: Nemotron Nano 9B V2 (free)"
+        }
+      ]
+    }
+  ],
+  "_webui_version": "unknown"
+}

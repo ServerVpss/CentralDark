@@ -1,0 +1,12 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@peculiar\json-schema\build\types\errors\key_error.d.ts
+
+import { IJsonSchema } from "../schema";
+import { ParserError } from "./parser_error";
+export interface IKeyErrors {
+    [key: string]: Error;
+}
+export declare class KeyError extends ParserError {
+    keys: string[];
+    errors: IKeyErrors;
+    constructor(schema: IJsonSchema, keys: string[], errors?: IKeyErrors);
+}

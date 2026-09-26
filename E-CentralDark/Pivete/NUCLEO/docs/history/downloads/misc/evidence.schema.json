@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "evidence_id",
+    "kind",
+    "command",
+    "exit_code",
+    "stdout_sha256",
+    "stderr_sha256",
+    "timestamp"
+  ],
+  "properties": {
+    "evidence_id": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "command": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "exit_code": {
+      "type": "integer"
+    },
+    "stdout_sha256": {
+      "type": "string"
+    },
+    "stderr_sha256": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "duration_ms": {
+      "type": "integer"
+    },
+    "stdout_excerpt": {
+      "type": "string"
+    },
+    "stderr_excerpt": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

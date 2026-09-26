@@ -1,0 +1,1689 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\Service Worker\ScriptCache\d0757ff92c7cde0a_1
+
+__webpack_modules__
+__webpack_module_cache__
+__webpack_require__
+loaded
+chrome-extension://khndhdhbebhaddchcgnalcjlaekbbeof/background.js
+thirdPartyDomainExceptions
+cookiesSet
+trackersMap
+^www\.google\.[^.]{2,3}(?:.[^.]{2,3})?$
+ssl.gstatic.com
+www.gstatic.com
+fonts.gstatic.com
+encrypted-(.+)\.gstatic.com
+apis.google.com
+fonts.googleapis.com
+(.+)\.googleusercontent\.com$
+drive.google.com
+docs.google.com
+www.google.com
+accounts.google.com
+play.google.com
+clients([0-9]+)\.google\.com$
+^www\.facebook\.[^.]{2,3}(?:.[^.]{2,3})?$
+static.xx.fbcdn.net
+fbcdn.net
+^www\.twitter\.[^.]{2,3}(?:.[^.]{2,3})?$
+abs.twimg.com
+challenges.cloudflare.com
+nosdn.127.net
+bnet.163.com
+123greetings.com
+122.2o7.net
+112.2o7.net
+5min.com
+accuweather.com
+actionnetwork.org
+imagesrv.adition.com
+auth.adobe.com
+wwwimages.adobe.com
+xsdownload.adobe.com
+assets.adobedtm.com
+affirm.com
+akamai.net
+akamaihd.net
+akamaized.net
+al.com
+alert60.com
+alexa.com
+ally.com
+s3.amazonaws.com
+amazonaws.com
+coin.amazonpay.com
+coin-eu.amazonpay.com
+americanhomecomings.com
+ancestry.com
+angularjs.org
+anonymto.me
+up.anv.bz
+anvato.net
+tkx-acc.apis.anvato.net
+cdn.anvato.net
+tkx2-prod.anvato.net
+$PgNO#
+mcp-media5.anvato.net
+aol.com
+aolcdn.com
+ap.org
+apnewsregistry.com
+hiroservers.appspot.com
+snapabug.appspot.com
+appspot.com
+PdZ;z)
+arcgis.com
+arcgisonline.com
+archive.org
+secure5.arcot.com
+arcot.com
+cdn.arstechnica.net
+art19.com
+aspnetcdn.com
+c64.assets-yammer.com
+assetfiles.com
+assets-cdk.com
+auth0.com
+authorize.net
+autoforums.com
+azureedge.net
+bac-assets.com
+api.map.baidu.com
+sapi.map.baidu.com
+bandcamp.com
+bankid.no
+bankrate.com
+bazaarvoice.com
+bcbits.com
+betterttv.net
+static.beyondmenu.com
+www.beyondmenu.com
+bigcommerce.com
+www.bing.com
+bit.ly
+bizrate.com
+blockstack.org
+blogblog.com
+blogger.com
+blogher.org
+blogspot.com
+bp.blogspot.com
+bloxcms.com
+boldchat.com
+bootstrapcdn.com
+braintreegateway.com
+brcdn.com
+break.com
+breakingburner.com
+brightcove.com
+players.brightcove.net
+bungie.net
+buzzfed.com
+buzzfeed.com
+cachefly.net
+cardinalcommerce.com
+cars.com
+cbsi.com
+cbsimg.net
+cbsistatic.com
+cdninstagram.com
+cdnpk.com
+cern.ch
+charter.com
+pwc.chase.com
+civicscience.com
+cleanprint.net
+cleveland.com
+cloudflare.com
+cloudfront.net
+cloudinary.com
+bbb.org
+grapeshot.co.uk
+w.graphiq.com
+s.graphiq.com
+s2.graphiq.com
+s3.graphiq.com
+files.graphiq.com
+gr-assets.com
+guardian.co.uk
+media-imdb.com
+mediaworks.co.nz
+cc.cnetcontent.com
+cdn.cnetcontent.com
+ws.cnetcontent.com
+Pcn4\L
+com.com
+complex.com
+convio.net
+copyscape.com
+corporate-ir.net
+coupons.com
+craveonline.com
+creativecommons.org
+crowdynews.com
+cstv.com
+cursecdn.com
+custhelp.com
+d3js.org
+dailymotion.com
+danid.dk
+dealer.com
+dealerinspire.com
+delicious.com
+delvenetworks.com
+denverpost.com
+deviantart.com
+deviantart.net
+digitalriver.com
+digitalrivercontent.net
+cdn.discourse.org
+discovery.com
+disqus.com
+disquscdn.com
+a.disquscdn.com
+uploads.disquscdn.com
+dmcdn.net
+dmcdn.com
+screendoor.dobt.co
+documentcloud.org
+ PfF+-
+domainnamesales.com
+donorbox.org
+dotsub.com
+dl.dropboxusercontent.com
+dudamobile.com
+dumpert.nl
+duosecurity.com
+cdn.dynamicyield.com
+cdn-eu.dynamicyield.com
+rcom.dynamicyield.com
+rcom-eu.dynamicyield.com
+static.dynamicyield.com
+st.dynamicyield.com
+st-eu.dynamicyield.com
+ebayimg.com
+ebayrtm.com
+ebaystatic.com
+ecwid.com
+edgecastcdn.net
+edgefcs.net
+edgekey.net
+editmysite.com
+files.edx.org
+ehc.com
+elasticbeanstalk.com
+eltrafiko.com
+api-cdn.embed.ly
+api.embed.ly
+PdN,%]
+cdn.embed.ly
+cdn.embedly.com
+i-cdn.embed.ly
+i.embed.ly
+epoch.com
+epoq.de
+estara.com
+et4.de
+ethn.io
+evcdn.com
+ebmedia.eventbrite.com
+everyaction.com
+s-static.ak.facebook.com
+staticxx.facebook.com
+fansonly.com
+travis-ci-org.global.ssl.fastly.net
+fastly.net
+attachment.fbsbx.com
+feedburner.com
+filepicker.io
+financialcontent.com
+findnsave.com
+firstlook.org
+flipcause.com
+framasoft.org
+frz.io
+build.origami.ft.com
+fzcdn.net
+hello.firefox.com
+flattr.com
+flickr.com
+fling.com
+flowplayer.org
+flyertown.ca
+adm.fwmrm.net
+fontawesome.com
+fontdeck.com
+fonts.com
+fonts.net
+force.com
+fuseservice.com
+140cc.v.fwmrm.net
+fyre.co
+gannett-cdn.com
+gannettonline.com
+gannett-tv.com
+gasbuddy.com
+gawkerassets.com
+geenstijl.nl
+geetest.com
+geoplugin.net
+geotrust.com
+getpocket.com
+giant.gfycat.com
+gfycat.com
+ggpht.com
+gigya.com
+giphy.com
+github.com
+githubusercontent.com
+gmodules.com
+go.com
+godaddy.com
+godatafeed.com
+gogousenet.com
+books.google.com
+calendar.google.com
+checkout.google.com
+clients1.google.com
+clients6.google.com
+consent.google.com
+cse.google.com
+developers.google.com
+feedburner.google.com
+feedproxy.google.com
+fonts.google.com
+fusiontables.google.com
+kh.google.com
+khms0.google.com
+khms1.google.com
+khms2.google.com
+khms3.google.com
+khms4.google.com
+labs.google.com
+mapsengine.google.com
+maps.google.com
+mt0.google.com
+mt1.google.com
+mts0.google.com
+mts1.google.com
+mw1.google.com
+mw2.google.com
+pay.google.com
+picasaweb.google.com
+plus.google.com
+sites.google.com
+smartlock.google.com
+spreadsheets.google.com
+talkgadget.google.com
+translate.google.com
+trends.google.com
+video.google.com
+ajax.googleapis.com
+storage.googleapis.com
+googleapis.com
+googlecode.com
+googlecommerce.com
+googletagservices.com
+cdn.leafletjs.com
+lh4.googleusercontent.com
+googleusercontent.com
+googlevideo.com
+governmentjobs.com
+gravatar.com
+greenhouse.io
+gscdn.nl
+gstatic.com
+guildwars2.com
+hackerone-user-content.com
+helium.com
+hellobar.com
+herokuapp.com
+code.highcharts.com
+homestead.com
+cdn.hometogo.net
+honcode.ch
+hootsuite.com
+howaboutwe.com
+hwcdn.net
+hypothes.is
+ibsys.com
+ibtimes.com
+icbdr.com
+mpsnare.iesnare.com
+imagecorn.com
+imageg.net
+imagehost123.com
+ Pf&4{}
+images-amazon.com
+imageshack.us
+imagetwist.com
+imagevenue.com
+www.img-bahn.de
+imgchili.com
+imgfarm.com
+imgspice.com
+imgur.com
+imgix.net
+imshopping.com
+indeed.com
+inergizedigital.com
+inq.com
+instagram.com
+instantservice.com
+instapaper.com
+intellicast.com
+intensedebate.com
+intercom.io
+members.internetdefenseleague.org
+investingchannel.com
+script.ioam.de
+issuu.com
+janrain.com
+jquery.com
+jquerytools.org
+jsdelivr.net
+jsonip.com
+jtvnw.net
+justin.tv
+jwpcdn.com
+jwpltx.com
+content.jwplatform.com
+jwpsrv.com
+cdnapi.kaltura.com
+cdnapisec.kaltura.com
+cdnbakmi.kaltura.com
+cdnsecakmi.kaltura.com
+cfvod.kaltura.com
+PeB^#n
+www.kaltura.com
+kampyle.com
+kataweb.it
+kickapps.com
+kickstarter.com
+kickstatic.com
+kingfeatures.com
+kinja-static.com
+klarna.com
+klarnacdn.net
+klm.com
+kxcdn.com
+ddragon.leagueoflegends.com
+libsyn.com
+licdn.com
+licensebuttons.net
+addon.lidl.de
+media.lidl.com
+linkwithin.com
+list-manage.com
+i.lithium.com
+messenger.live.com
+officeapps.live.com
+onedrive.live.com
+livechatinc.com
+livefyre.com
+livehelpnow.net
+liveperson.net
+livestream.com
+llnwd.net
+loggly.com
+logos.com
+lphbs.com
+mail.ru
+mailchimp.com
+mapbox.com
+mapquestapi.com
+marketo.com
+masslive.com
+mathjax.org
+maxmind.com
+mcclatchyinteractive.com
+meebocdn.net
+mfstatic.cz
+mlive.com
+mncdn.com
+mobify.com
+verify.monzo.com
+loop.services.mozilla.com
+mozilla.net
+mozilla.org
+mozu.com
+mqcdn.com
+msecnd.net
+msn.com
+mtv.com
+mtvnservices.com
+mycapture.com
+myportfolio.com
+myshopify.com
+mzstatic.com
+nationbuilder.com
+nationalgeographic.com
+nbcuni.com
+neighborsink.com
+netdna-cdn.com
+netdna-ssl.com
+nos.netease.com
+networksolutions.com
+newsinc.com
+newslook.com
+newstogram.com
+nextopiasoftware.com
+nfl.com
+nflcdn.com
+assets.nflxext.com
+cdn3.nflxext.com
+nflxext.com
+ngfiles.com
+ngpvan.com
+nj.com
+nmcdn.us
+nola.com
+npmcdn.com
+nrcdn.com
+nsimg.net
+media.nu.nl
+nyt.com
+nytimes.com
+c.o0bg.com
+Pc2'w1
+ocdn.eu
+ocsn.com
+olark.com
+omroep.nl
+amazoncustomerservice.d2.sc.omtrdc.net
+omny.fm
+attservicesinc.tt.omtrdc.net
+dsw.tt.omtrdc.net
+onswipe.com
+api.ooyala.com
+c.ooyala.com
+l.ooyala.com
+opf.ooyala.com
+player.ooyala.com
+secure-cf-c.ooyala.com
+tile.opencyclemap.org
+tile2.opencyclemap.org
+openlayers.org
+openlibrary.org
+openload.co
+tile.openstreetmap.fr
+openstreetmap.org
+optimizely.com
+oregonlive.com
+outlook.com
+paddle.com
+ Pf"]YO
+pandacommerce.net
+parastorage.com
+passwordbox.com
+paypal.com
+ PfzCW&
+paypalobjects.com
+pdf.yt
+pennlive.com
+performgroup.com
+pgcdn.com
+phncdn.com
+photobucket.com
+phplist.com
+piclens.com
+Pd.fRo
+pinimg.com
+piratebay.org
+pistachio-cdn.graze.com
+pixietrixcomix.com
+plex.tv
+plot.ly
+web.poecdn.com
+poll.fm
+polldaddy.com
+postimg.org
+powerreviews.com
+pricegrabber.com
+printfriendly.com
+prismic.io
+providesupport.com
+psswrdbx.com
+publiekeomroep.nl
+img.purch.com
+qualtrics.com
+quotemedia.com
+api.razorpay.com
+checkout.razorpay.com
+razorpay.com
+rackcdn.com
+rackspacecloud.com
+radikal.ru
+rambler.ru
+ Pf~eVB
+images.rapgenius.com
+readability.com
+readthedocs.org
+recaptcha.net
+recurly.com
+redcdn.pl
+redefine.pl
+cdngeneral.rentcafe.com
+resellerratings.com
+resultspage.com
+rewardstyle.com
+rpxnow.com
+rssinclude.com
+salesforce.com
+salesforceliveagent.com
+salsalabs.com
+sbnation.com
+schd.ws
+sched.org
+schibsted.com
+schibsted.io
+schibsted.no
+schibsted.tech
+scribd.com
+scribdassets.com
+www.searchanise.com
+securesuite.co.uk
+securitymetrics.com
+PezV)4
+seeclickfix.com
+sgizmo.com
+shopping.com
+shop-pro.jp
+shoprunner.com
+sidearmsports.com
+siteimprove.com
+shield.sitelock.com
+sketchfab.com
+slidedeck.com
+$PgJM!
+public.slidesharecdn.com
+s-msft.com
+s-msn.com
+smugmug.com
+snapengage.com
+sndcdn.com
+auth.api.sonyentertainmentnetwork.com
+cdn-a.sonyentertainmentnetwork.com
+api.soundcloud.com
+feeds.soundcloud.com
+springboardplatform.com
+squarespace.com
+squareup.com
+squirt.io
+ssl-images-amazon.com
+cdn.sstatic.net
+sstatic.net
+stackexchange.com
+stackoverflow.com
+staticamzn.com
+cdn.static-economist.com
+staticflickr.com
+steampowered.com
+store.akamai.steamstatic.com
+steamusercontent.com
+ Pf&X75
+stellaservice.com
+stripe.com
+stripecdn.com
+surveygizmo.com
+surveymonkey.com
+swiftype.com
+syracuse.com
+public.tableausoftware.com
+c.tadst.com
+taleo.net
+uploads.tapatalk-cdn.com
+targetimg1.com
+targetimg2.com
+technorati.com
+tegna-media.com
+textalk.se
+theplatform.com
+tile.thunderforest.com
+timeinc.net
+tinypass.com
+tinypic.com
+tinyurl.com
+tiqcdn.com
+tmsbuyatoyota.com
+torbit.com
+townnews.com
+cookieblock.trackersimulate.org
+tradingview.com
+trb.com
+trbimg.com
+trumba.com
+privacy-policy.truste.com
+trustkeeper.net
+trustwave.com
+ttvnw.net
+tumblr.com
+turner.com
+turnto.com
+twimg.com
+api.twisto.cz
+static.twisto.cz
+api.twisto.pl
+twitch.tv
+twitter.com
+platform.twitter.com
+syndication.twitter.com
+typeform.com
+typekit.com
+typekit.net
+typepad.com
+typography.com
+assets.ubuntu.com
+uicdn.com
+ui-portal.de
+Pe>XGG
+ultimedia.com
+ultraimg.com
+unicornmedia.com
+uplynk.com
+usa.gov
+viafoura.net
+viddler.com
+videobash.com
+vidible.tv
+viduki.com
+vimeo.com
+vimeocdn.com
+virtualearth.net
+visa.com
+vmixcore.com
+voxmedia.com
+vox-cdn.com
+w3.org
+wallst.com
+weather.com
+weather.gov
+weatherbug.com
+weathernationtv.com
+weatherzone.com.au
+webflow.com
+webs.com
+websimages.com
+webtype.com
+weebly.com
+where.com
+widgetserver.com
+wikidata.org
+wikimedia.org
+wikipedia.org
+wildapricot.org
+windy.com
+wishabi.com
+wistia.net
+wistia.com
+wix.com
+wixapps.net
+gatherer.wizards.com
+s.w.org
+ts.w.org
+ps.w.org
+wnyc.org
+wordpress.com
+worldnow.com
+wp.com
+wpengine.com
+wufoo.com
+wunderground.com
+wxc.com
+wxug.com
+y3.analytics.yahoo.com
+pipes.yahoo.com
+search.yahoo.com
+yahooapis.com
+api-maps.yandex.ru
+img-fotki.yandex.ru
+yardbarker.com
+yastatic.net
+yellowpages.com
+seatme.yelp.com
+yelpcdn.com
+yimg.com
+yottaa.net
+youku.com
+youtube-nocookie.com
+youwatch.org
+ytimg.com
+zap2it.com
+zdassets.com
+zencdn.net
+zendesk.com
+ziplist.com
+zlcdn.com
+zoho.com
+zoho.eu
+zohopublic.com
+zohostatic.com
+zombaio.com
+zope.net
+zopim.com
+zvents.com
+categories
+SITE_ANALYTICS
+CUSTOMER_INTERACTION`
+SOCIAL_MEDIA`
+ESSENTIAL
+COOKIE
+UNKNOWN
+rulesets
+advertising
+analytics
+customer_interaction
+social_media
+essential
+domain_cookies
+exceptions
+special_offers
+rule_ids
+user_exceptions
+session_exceptions
+rule_priorities
+categoryStringToId
+ Pf6Oj
+categoryIdToString
+categoriesToRulesetOptions
+urlListToAllowRulesOptions
+urlFilterRulesToUrlList
+loadCatTrackers
+loadTrackers
+isTracker
+blockDomainCookie
+getDomainCookies
+isThirdPartyDomainException
+disableRulesetIds
+enableRulesetIdsc(
+priority
+addRules
+action
+allowAllRequests
+condition
+urlFilter
+resourceTypes
+main_frame
+sub_frame
+initiatorDomains
+NO_FILTER
+fromHost
+toHost
+module
+__WEBPACK_AMD_DEFINE_FACTORY__
+__WEBPACK_AMD_DEFINE_ARRAY__
+__WEBPACK_AMD_DEFINE_RESULT__
+punycode
+escapeRegEx
+getType
+filterArrayValues
+arrayContains
+arraysEqual
+trimSlashes
+escapeForDumbFirefox36
+$Pg:@Va
+strictEncodeURIComponent
+_protocol
+_hostname
+undefined is not a valid argument for URI
+null is not a valid argument for URI
+absoluteTo
+^[0-9]+$
+([.*+?^=!:${}()|[\]\/\\])
+Undefined
+^\/+|\/+$
+[!'()*]
+generateSimpleAccessor
+_parts
+generatePrefixAccessor
+1.19.11
+version
+protocolB
+usernameB
+passwordB
+hostnameB
+fragmentB
+preventInvalidHostname
+duplicateQueryParameters
+escapeQuerySpace
+^[a-z][a-z0-9.+-]*$
+protocol_expression
+[^a-z0-9\._-]
+idn_expression
+(xn--)
+punycode_expression
+^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$
+ip4_expression
+^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$
+ip6_expression
+find_uri_expression
+parens
+\b(?:([a-z][a-z0-9.+-]*:\/\/)|www\.)
+[\s\r\n]|$
+(\([^\)]*\)|\[[^\]]*\]|\{[^}]*\}|<[^>]*>)
+findUri
+^[\x00-\x20\u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]+
+leading_whitespace_expression
+[\u0009\u000A\u000D]+
+ascii_tab_whitespace
+gopher
+defaultPorts
+hostProtocols
+[^a-zA-Z0-9\.\-:_]
+invalid_hostname_characters
+blockquote
+iframe
+domAttributes
+getDomAttribute
+encode
+decode
+iso8859
+pathname
+reserved
+urnpath
+expression
+Pb~eOl
+%(24|26|2B|2C|3B|3D|3A|40)
+[\/\?#]
+%(21|23|24|26|27|28|29|2A|2B|2C|2F|3A|3B|3D|3F|40|5B|5D)
+%(21|24|27|28|29|2A|2B|2C|3B|3D|40)
+[\/\?#:]
+characters
+encodeQuery
+decodeQuery
+_group
+generateAccessor`
+PathSegment
+UrnPathSegment
+_innerCodingFuncName
+_codingFuncName
+generateSegmentedPathFunction
+actualCodingFunc`
+decodePathSegment
+decodePath
+decodeUrnPathSegment
+decodeUrnPath
+encodePathSegment
+recodePath
+encodeUrnPathSegment
+PejQou
+recodeUrnPath
+encodeReserved
+^(https?|ftp|wss?)?:+[/\\]*
+^[/\\]{2,}
+parseAuthority
+ensureValidHostname
+ensureValidPort
+parseHost
+parseUserinfo
+^\?*&*|&+$
+parseQuery
+buildAuthority
+buildHost
+buildUserinfo
+buildQueryParameter
+buildQuery
+addQuery
+URI.addQuery() accepts an object, string as the name parameter
+setQuery
+LPq"q2L>
+URI.setQuery() accepts an object, string as the name parameter
+removeQuery
+URI.removeQuery() accepts an object, string, RegExp as the first parameter
+Pc&?S-
+hasQuery
+URI.hasQuery() accepts a string, regular expression or object as the name parameter
+URI.hasQuery() accepts undefined, boolean, string, number, RegExp, Function as the value parameter
+joinPaths
+commonPath
+[a-z0-9-]=["']?$
+ignoreHtml
+ignore
+withinString
+Hostname cannot be empty, if protocol is 
+Hostname "
+\Pu.<xPN
+" contains characters other than [A-Z0-9.-:_] and Punycode.js is not available
+toASCII
+" contains characters other than [A-Z0-9.-:_]
+Port "
+" is not a valid port
+noConflict
+URITemplate
+SecondLevelDomains
+_deferred_build
+_string
+invalid input
+relative
+absolute
+:(\/\/)?$
+Protocol "
+" contains characters other than [A-Z0-9.+-] or doesn't start with [A-Z]
+scheme
+" contains characters other than [A-Z0-9.-]
+PdB"Sb
+authority
+userinfo
+resource
+Domains cannot contain colons
+subdomain
+cannot set domain empty
+cannot set TLD empty
+[^a-zA-Z0-9-]
+" contains characters other than [A-Z0-9]
+cannot set TLD on non-domain host
+filename
+directory
+normalizePath
+^[a-z0-9%]+$
+suffix
+Bad segment "
+", must be 0-based integer
+segmentCoded
+setSearch
+addSearch
+removeSearch
+hasSearch
+normalizeProtocol
+normalizeQuery
+normalizeFragment
+normalizeHostname
+normalizePort
+(\/(\.\/)+)|(\/\.$)
+\/{2,}
+^(\.\.\/)+
+\/\.\.(\/|$)
+normalizePathname
+normalizeSearch
+normalizeHash
+toUnicode
+readable
+URNs do not have any generally defined hierarchical components
+$PgZu4N
+URI is already relative
+Cannot calculate a URI relative to another relative URI
+[^\/]*$
+equals
+maxInt
+initialBias
+initialN
+delimiter
+regexPunycode
+regexNonASCII
+regexSeparators
+baseMinusTMin
+stringFromCharCode
+mapDomain
+ucs2decode
+ucs2encode
+basicToDigit
+digitToBasic
+not-basic
+invalid-input
+[^\x20-\x7E]
+[\x2E\u3002\uFF0E\uFF61]
+Overflow: input needs wider integers to process
+Illegal input >= 0x80 (not a basic code point)
+Invalid input
+bestPresentation`
+fmtShort
+fmtLong
+plural
+^(-?(?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$
+val is not a non-empty string or a valid number. val=
+_SecondLevelDomains
+ com gov mil net org 
+ ac co gov mil name net org pro sch 
+ com edu gov net org 
+ com edu gov mil net org 
+ co ed gv it og pb 
+ com edu gob gov int mil net org tur 
+ ac co gv or 
+ asn com csiro edu gov id net org 
+ co com edu gov mil net org rs unbi unmo unsa untz unze 
+ biz co com edu gov info net org store tv 
+ biz cc com edu gov info net org 
+ com edu gob gov int mil net org tv 
+ adm adv agr am arq art ato b bio blog bmd cim cng cnt com coop ecn edu eng esp etc eti far flog fm fnd fot fst g12 ggf gov imb ind inf jor jus lel mat med mil mus net nom not ntr odo org ppg pro psc psi qsl rec slg srv tmp trd tur tv vet vlog wiki zlg 
+ du et om ov rg 
+ ab bc mb nb nf nl ns nt nu on pe qc sk yk 
+ biz co edu gen gov info net org 
+ ac ah bj com cq edu fj gd gov gs gx gz ha hb he hi hl hn jl js jx ln mil net nm nx org qh sc sd sh sn sx tj tw xj xz yn zj 
+ com edu gov mil net nom org 
+ ac c co ed fi go or sa 
+ ac biz com ekloges gov ltd name net org parliament press pro tm 
+ art com edu gob gov mil net org sld web 
+ art asso com edu gov net org pol 
+ com edu fin gov info med mil net org pro 
+ com edu eun gov mil name net org sci 
+ com edu gov ind mil net org rochest w 
+ com edu gob nom org 
+ biz com edu gov info name net org 
+ ac biz com info mil name net org pro 
+ ac co gov net nom org 
+ asso com f gouv nom prd presse tm 
+Pdbj:+
+ co net org 
+$Pg:E+R
+ com edu gov mil org 
+ ac com gov net org 
+ com edu gob ind mil net org 
+ com edu gov idv net org 
+ 2000 agrar bolt casino city co erotica erotika film forum games hotel info ingatlan jogasz konyvelo lakas media news org priv reklam sex shop sport suli szex tm tozsde utazas video 
+ ac co go mil net or sch web 
+ ac co gov idf k12 muni net org 
+ ac co edu ernet firm gen gov i ind mil net nic org res 
+ com edu gov i mil net org 
+ ac co dnssec gov i id net org sch 
+ edu gov 
+ com edu gov mil name net org sch 
+ ac ad co ed go gr lg ne or 
+ ac co go info me mobi ne or sc 
+ com edu gov mil net org per 
+ biz com de edu gov info mob net org tel 
+dPwN?W
+ asso com coop edu gouv k medecin mil nom notaires pharmaciens presse tm veterinaire 
+ edu gov net org 
+ ac busan chungbuk chungnam co daegu daejeon es gangwon go gwangju gyeongbuk gyeonggi gyeongnam hs incheon jeju jeonbuk jeonnam k kg mil ms ne or pe re sc seoul ulsan 
+ assn com edu gov grp hotel int ltd net ngo org sch soc web 
+ asn com conf edu gov id mil net org 
+ com edu gov id med net org plc sch 
+ ac co gov m net org press 
+ asso tm 
+ ac co edu gov its net org priv 
+ com edu gov mil nom org prd tm 
+ com edu gov inf name net org pro 
+ com edu gov net org presse 
+PeJ.TL
+ edu gov org 
+ aero biz com coop edu gov info int mil museum name net org pro 
+ ac co com coop edu gov int museum net org 
+ com edu gob net org 
+ arts com firm info net other per rec store web 
+ biz com edu gov mil mobi name net org sch 
+ ac co com edu gob mil net nom org 
+ biz com edu gov info net org 
+ ac biz co com edu gov med mil museum net org pro sch 
+ com edu gob mil net nom org sld 
+ com edu gov i mil net ngo org 
+ biz com edu fam gob gok gon gop gos gov net org web 
+ art bialystok biz com edu gda gdansk gorzow gov info katowice krakow lodz lublin mil net ngo olsztyn org poznan pwr radom slupsk szczecin torun warszawa waw wroc wroclaw zgora 
+ ac biz com edu est gov info isla name net org pro prof 
+ com edu gov net org plo sec 
+ belau co ed go ne or 
+ arts com firm info nom nt org rec store tm www 
+ ac co edu gov in org 
+ co com edu gov net nom org 
+ co com consulado edu embaixada gov mil net org principe saotome store 
+ com edu gob org red 
+ ac co org 
+XPt"DC
+ av bbs bel biz com dr edu gen gov info k12 name net org pol tel tsk tv web 
+ aero biz cat co com coop edu gov info int jobs mil mobi museum name net org pro tel travel 
+ club com ebiz edu game gov idv mil net org 
+(Phv`7
+ ac co com gov net or org 
+ ac co edu gov org 
+ co com 
+ ac co cri geek gen govt health iwi maori mil net org parliament school 
+8Pl"b"N,
+ abo ac com edu gob ing med net nom org sld 
+ com edu gov int net nome org publ 
+ asso com nom 
+ ac adygeya altai amur arkhangelsk astrakhan bashkiria belgorod bir bryansk buryatia cbg chel chelyabinsk chita chukotka chuvashia com dagestan e-burg edu gov grozny int irkutsk ivanovo izhevsk jar joshkar-ola kalmykia kaluga kamchatka karelia kazan kchr kemerovo khabarovsk khakassia khv kirov koenig komi kostroma kranoyarsk kuban kurgan kursk lipetsk magadan mari mari-el marine mil mordovia mosreg msk murmansk nalchik net nnov nov novosibirsk nsk omsk orenburg org oryol penza perm pp pskov ptz rnd ryazan sakhalin samara saratov simbirsk smolensk spb stavropol stv surgut tambov tatarstan tom tomsk tsaritsyn tsk tula tuva tver tyumen udm udmurtia ulan-ude vladikavkaz vladimir vladivostok volgograd vologda voronezh vrn vyatka yakutia yamal yekaterinburg yuzhno-sakhalinsk 
+ ac co com edu gouv gov int mil net 
+ com edu gov med net org pub sch 
+ com edu gov info med net org tv 
+XPtbJ_
+ a ac b bd c d e f g h i k l m n o org p parti pp press r s t tm u w x y z 
+ com edu gov idn net org per 
+ art com edu gouv org perso univ 
+ com edu gov mil net news org 
+ ac co go in mi net or 
+ ac biz co com edu go gov info int mil name net nic org test web 
+ agrinet com defense edunet ens fin gov ind info intl mincom nat net org perso rnrt rns rnu tourism 
+ ac co go ne or 
+ biz cherkassy chernigov chernovtsy ck cn co com crimea cv dn dnepropetrovsk donetsk dp edu gov if in ivano-frankivsk kh kharkov kherson khmelnitskiy kiev kirovograd km kr ks kv lg lugansk lutsk lviv me mk net nikolaev od odessa org pl poltava pp rovno rv sebastopol sumy te ternopil uzhgorod vinnica vn zaporizhzhe zhitomir zp zt 
+ ac co go ne or org sc 
+Pb68YC
+ ac bl british-library co cym gov govt icnet jet lea ltd me mil mod national-library-scotland nel net nhs nic nls org orgn parliament plc police sch scot soc 
+ dni fed isa kids nsn 
+ com edu gub mil net org 
+ co com edu gob info mil net org web 
+ co com k12 net org 
+ ac biz com edu gov health info int name net org pro 
+ co com gov ltd me net org plc 
+ ac agric alt bourse city co cybernet db edu gov grondar iaccess imt inca landesign law mil net ngo nis nom olivetti org pix school tm web 
+ ac co com edu gov net org sch 
+ar br cn de eu gb gr hu jpn kr no qc ru sa se uk us uy za 
+gb jp se uk 
+createDebug
+extend
+toNamespace
+colors
+selectColor
+namespace
+prevTime
+enableOverride
+namespacesCache
+enabledCache
+enabled
+coerce
+%([a-zA-Z%])
+formatters
+formatArgs
+useColors
+destroy
+namespaces
+PcZgFH
+[\s,]+
+enable
+disable
+\.\*\?$
+Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.
+humanize
+process
+renderer
+__nwjs
+userAgent
+(edge|trident)\/(\d+)
+WebkitAppearance
+firebug
+firefox\/(\d+)
+applewebkit\/(\d+)
+color: 
+color: inherit
+%[a-zA-Z%]
+storage
+setItem
+removeItem
+getItem
+bdat:*
+localstorage`
+warned
+#0000CC
+#0000FF
+#0033CC
+#0033FF
+#0066CC
+#0066FF
+#0099CC
+#0099FF
+#00CC00
+#00CC33
+#00CC66
+#00CC99
+#00CCCC
+#00CCFF
+Pcf{K$
+#3300CC
+#3300FF
+Pc"3Q-
+#3333CC
+#3333FF
+#3366CC
+#3366FF
+#3399CC
+#3399FF
+#33CC00
+#33CC33
+#33CC66
+#33CC99
+#33CCCC
+#33CCFF
+#6600CC
+#6600FF
+#6633CC
+#6633FF
+#66CC00
+#66CC33
+#9900CC
+#9900FF
+#9933CC
+#9933FF
+Pc>PpT
+#99CC00
+#99CC33
+#CC0000
+#CC0033
+#CC0066
+#CC0099
+#CC00CC
+#CC00FF
+#CC3300
+#CC3333
+#CC3366
+#CC3399
+#CC33CC
+#CC33FF
+#CC6600
+#CC6633
+#CC9900
+#CC9933
+#CCCC00
+#CCCC33
+#FF0000
+#FF0033
+#FF0066
+#FF0099
+#FF00CC
+#FF00FF
+#FF3300
+#FF3333
+#FF3366
+#FF3399
+#FF33CC
+#FF33FF
+#FF6600
+#FF6633
+#FF9900
+#FF9933
+#FFCC00
+#FFCC33
+[UnexpectedJSONParseError]: 
+__esModule
+return this
+tracking_default
+defaultState
+browser_default
+COLOURS
+getLangMap
+extensionLangFromProductLang
+URI_default
+parseUrl
+scripts_compat
+CategoryInfo
+setCategoryInfo
+setCategoryStatus
+setBadgeColor
+Pe^X:-
+setBadgeMessage
+clearBadgeMessage
+TAB_INFO_TRANSITION
+copyTabInfo
+copyTabStack
+(Ph6Uv
+getTabStackTrackersBlocked
+updateUiStack
+updateUiPageLoad
+getTelemetryJson
+isBdTrackingIds
+TabInfo
+TELEMETRY_EVENT_TYPE
+BROWSER_CONTEXT
+getPathFromUrl
+getTabUrl
+getBrowserContext
+canBlockWebRequest
+getDomain
+ Pfb20
+isThirdPartyDomain
+replaceStringInObjectProperties
+web_scan
+tab_events
+local_comm
+callback`
+loadAndInitStoredState
+chrome
+whitelist
+ PfjI7n
+mustSyncWhitelist
+acceptedAppPolicy
+blocked
+className
+getString
+$PgbE@
+setBadgeBackgroundColor
+rgb(0,0,255)i
+setBadgeText
+compat
+transition
+trackersBlocked
+pageLoad`
+pageLoadStartTime
+trackersUrls
+COMMITED
+inputTabStack
+active
+currentWindow
+runtime
+sendMessage
+update_tab_stack
+tabStack
+Pej>Tx
+sessionWhitelist
+lastError
+update_page_load
+method
+send_telemetry
+browser_context
+telemetry_info
+bitdefender
+assets.adobedtm.com/launch-en6b51aa9552f941f88576315ed8766e3f
+assets.adobedtm.com/4b7ac0a30c6cfe2deb06368f62d41f996c29744e/satelliteLib-3a8d5287cf775324dc6c68719a1ddc96c5a139ba
+gtm-pljjb3
+gtm-mq8rtn
+assets.adobedtm.com/launch-ENa82c50bdc4c541bdb7d581931510efc5
+assets.adobedtm.com/8a93f8486ba4/62c1fd5cdcbd/launch-b77a56f2d5f1
+assets.adobedtm.com/8a93f8486ba4/0f17a64d87b7/launch-c3512379eccf
+assets.adobedtm.com/8a93f8486ba4/5492896ad67e/launch-b1f76be4d2ee
+assets.adobedtm.com/extensions/EP308220a2a4c4403f97fc1960100db40f/AppMeasurement
+assets.adobedtm.com/extensions/EP308220a2a4c4403f97fc1960100db40f/AppMeasurement_Module_AudienceManagement
+assets.adobedtm.com/extensions/EPef068a8d6dd34a43866d9a80cc98baab/AppMeasurement
+assets.adobedtm.com/extensions/EPef068a8d6dd34a43866d9a80cc98baab/AppMeasurement_Module_ActivityMap
+assets.adobedtm.com/8a93f8486ba4/df27e7ff35f3/6ad1b33eca05/RC22febb28520c43e3af9acfb4f9bfa34f
+BROWSER_CONTEXT_EDGE_CHROMIUM
+BROWSER_CONTEXT_CHROME
+firefox
+BROWSER_CONTEXT_FIREFOX
+getURL
+home.html
+moz-extension
+extension://
+chrome-extension://
+bdtbe@bitdefender.com
+BROWSER_CONTEXT_UNKNOWN
+https://
+getDomain: [
+isThirdPartyDomainException: [
+] <- [
+isThirdPartyDomain: [
+featureStatus
+specialOffers
+globalBlocked
+lightblue
+purple
+orange
+restore
+BdLogging
+remove
+bdLogging
+generateMessage
+log_Log
+langMap
+BdLang
+getMessage
+schema
+executeScript
+getBrowserAction
+available
+declarativeNetRequest
+getDnrAvailable
+getDnrDebugAvailable
+getDnrActionAvailable
+dynamic
+session
+getDnrRulesetsAvailable
+getDnrDynamicRulesAvailable
+getDnrSessionRulesAvailable
+getDnrApi
+compat_compat
+scripting
+frameIds
+PcnyT1
+frameId
+onRuleMatchedDebug
+setExtensionActionOptions
+updateEnabledRulesets
+updateDynamicRules
+updateSessionRules
+browserAction
+PROVISIONAL
+CATEGORY`
+SETTINGS`
+PcbGZi
+ENABLED
+ADVERTISING
+ANALYTICS
+INTERACTION
+SPECIAL_OFFERS
+BROWSER_CONTEXT_ALL
+BROWSER_CONTEXT_IE
+BROWSER_CONTEXT_IE64`
+startListeners
+onBeforeRequest
+onDnrRuleMatchedDebug
+onBeforeSendHeaders
+onHeadersReceived
+BdWebScan
+http://*/*
+https://*/*
+[dnr] v3 activating dnr debug logging
+addListener
+blocking
+webRequest
+requestHeaders
+OnBeforeSendHeadersOptions
+EXTRA_HEADERS
+extraHeaders
+responseHeaders
+OnHeadersReceivedOptions
+isValidRequest
+cancel
+isScanEnabled
+getTabStack
+tabId: 
+ tab url: 
+ v3 cannot block: 
+tabs_map
+ url blocked: 
+isTrackerExist
+updateTabStack
+session_whitelist
+[dnr] onDnrRuleMatchedDebug: 
+onBeforeSendHeaders, Third party cookie blocking not enabled
+onBeforeSendHeaders, Third party cookie blocked: 
+onHeadersReceived, Third party cookie blocking not enabled
+set-cookie
+onHeadersReceived, Third party cookie blocked: 
+BdTabEvents
+isUserInitiatedAction
+isAutomaticRedirect
+isFirefoxHeuristicRedirect
+isCommitRedirecta
+onTabCreateda
+onTabActivated
+onTabUpdateda
+onTabRemoveda
+onTabReplaced
+onBeforeNavigatea
+onCommitted
+onCompletedNavigate
+webNavigation
+onCompleted
+onCreated
+onActivated
+onUpdated
+onRemoved
+onReplaced
+onTabCreated:
+active_tab_info
+onTabActivated: 
+chrome-extension:
+onActivated: ignore chrome extension url: 
+exception: 
+onActivated NOT found tabId
+onTabActivated, blocked: 
+onTabUpdated:
+onTabUpdated: tabId not found
+onTabUpdated: tabStack undefined or null
+onTabUpdated: tab_info undefined or null
+extension disabled
+setIcon
+assets/bdlogo_disabled.png
+status tab undefined
+tab undefined
+status tab: H
+loading
+onTabRemoved: 
+onTabReplaced: addedTabId: 
+ removedTabId: 
+onBeforeNavigate, tabId: 
+, frameId: 
+, url: [
+onBeforeNavigate: tabId not found
+same navigation target
+tab hostname: 
+onBeforeNavigate, pageLoad: 
+transitionType
+auto_bookmark
+generated
+auto_toplevel
+reload
+keyword
+keyword_generated
+transitionQualifiers
+from_address_bar
+forward_back
+server_redirect
+client_redirect
+Firefox redirect heuristic!
+onCommitted, tabId: 
+onCommitted: tabId not found
+onCommitted, pageLoad: 
+onCompletedNavigate, tabId: 
+onCompletedNavigate: tabId not found
+onCompletednavigate: pageLoad:
+on_set_settings
+postNativeMessage
+onNativeMessage
+onDisconnected
+nativeMessageHandler
+disconnectedHandler
+com.bitdefender.webtrackers.v1
+native_hostname
+connectNative
+onMessage
+onDisconnect
+get_settings
+get_whitelist
+post native message: 
+cannot post native message: not connected
+Message received from native host: 
+Method not found
+set_flags
+ Pf"(k1
+received set_flags: 
+bad format for set_flags
+add_flag
+received add_flag: 
+set_settings
+feature_status
+received feature status: 
+settings
+set_module_status
+module_status
+received module status: 
+onModuleStatusChanged
+update
+onUpdateState
+disconnect
+whitelist_add
+received whitelist_add url: 
+onWhitelistAdd
+whitelist_remove
+received whitelist_remove url: 
+onWhitelistRemove
+set_whitelist
+received set_whitelist: 
+onSetWhitelist
+bad format for set_whitelisth
+Get settings object failed
+Get enable failed
+Get categories failed
+current lang: 
+getUILanguage
+_locales/
+/messages.json
+loadLang
+received settings feature_status: 
+, enabled: 
+, categories: 
+onSettingsChanged
+LocalComm
+onNewState
+onGetCurrentTabStacka
+onWhitelistChanged
+onSessionWhitelistChanged
+onSpecialOffers
+setState
+send msg to nmh: 
+isUpdate
+is_update
+lang_map
+add whitelist url: 
+remove whitelist url: 
+setSessionWhitelist
+disabled
+newtab
+sending msg to nmh: 
+onMessage: 
+new_state
+get_current_tab_stack
+whitelist_changed
+sessionWhitelist_changed
+importScripts
+updateDnrRulesets
+updateDnrDynamicRules
+restoreDnrSessionRules
+updateDnrSessionRules
+updateDnrSpecialOffers
+reloadExtension
+tracking/trackers.json
+Bitdefender Anti-tracker is ready!
+setSessionWhitelist, current: 
+setSessionWhitelist, new: 
+setState, current_state: 
+setState, new state: 
+assets/bdlogo.png
+XPtJI?<I
+[dnr] rulesets not available! cannot handle toggling on/off & categories!
+[dnr] updateEnabledRulesets: [
+[dnr] dynamic rules not available! cannot handle exceptions!
+getDynamicRules
+prevDynamicIds
+updateDynamicWhitelist
+[dnr] getDynamicRules: 
+[dnr] updateDynamicRules (removeRuleIds): 
+[dnr] updateDynamicRules: 
+removeRuleIds
+[dnr] updateDynamicRules removed rules: 
+[dnr] session rules not available! cannot restore session whitelist!
+getSessionRules
+[dnr] getSessionRules: 
+[dnr] prevSessionWhitelist: 
+[dnr] session rules not available! cannot handle session whitelist!
+prevSessionIds
+[dnr] updateSessionRules (removeRuleIds): 
+[dnr] updateSessionRules: 
+updateSessionWhitelist
+[dnr] rulesets not available! cannot handle toggling on/off special offers!
+[dnr] updateDnrSpecialOffers: [
+extension not enabled
+empty tab url
+local-ntp
+chrome new tab url
+ignore bd tracking ids: 
+ignore url by session whitelist: 
+ignore url by global whitelist: 
+onUpdateState: 
+onSettingsChanged feature_status: 
+onModuleStatusChanged feature: 
+, module_status: 
+onWhitelistAdd url: 
+add url to global whitelist: 
+onWhitelistRemove url: 
+remove url from global whitelist: 
+newWhitelist`
+onSetWhitelist whitelist: 
+compatibilityWhitelist
+skip main frame
+stylesheet
+skip resource type: 
+background load local storage state: 
+v3 cannot use blocking requests
+[dnr] v3 activating dnr action badge
+displayActionCountAsBadgeText
+,'($d."
+\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?
+[`!()\[\]{};:'".,<>?

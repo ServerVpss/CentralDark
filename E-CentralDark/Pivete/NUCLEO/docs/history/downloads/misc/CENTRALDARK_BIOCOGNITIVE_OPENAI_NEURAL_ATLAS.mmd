@@ -1,0 +1,46 @@
+flowchart TD
+    CHEFE["SEGREDO / CHEFE<br/>INTENÇÃO"] --> ATLAS["CENTRALDARK BIO-COGNITIVE + OPENAI NEURAL ATLAS<br/>MESMA FAMÍLIA CANÔNICA"]
+
+    subgraph BIO["SESSION ANIMAL INVENTORY — 15 ENTIDADES/GRUPOS"]
+      ANT["Formigas"]
+      BEE["Abelhas"]
+      OCT["Polvos"]
+      CORV["Corvídeos"] --> CROW["Corvo<br/>planejamento"]
+      PAR["Papagaios<br/>comunicação + linguagem reproduzível"]
+      ELE["Elefantes<br/>memória + continuidade"]
+      CET["Cetáceos"]
+      PRI["Primatas"] --> MON["Macaco<br/>reconhecimento de padrões"]
+      ROD["Roedores"]
+      FISH["Peixes"]
+      INV["Invertebrados"]
+      DYN["Dinâmica predador–presa"] --> PRED["Predador<br/>antecipação"]
+      DYN --> PREY["Presa<br/>detecção de ameaça"]
+    end
+
+    subgraph OAI["OPENAI — CAMADA COMPUTACIONAL DOCUMENTADA NO PACOTE"]
+      GPT4["GPT-4<br/>Transformer-style"]
+      OSS["gpt-oss<br/>Transformer + MoE"]
+      WH["Whisper<br/>Encoder-Decoder Transformer"]
+      CLIP["CLIP<br/>Visual + Text Encoders"]
+      AG["Agents SDK<br/>Model + Tools + Instructions"]
+    end
+
+    ATLAS --> BIO
+    ATLAS --> OAI
+
+    BIO --> CAP["CAPABILITY MATRIX<br/>15 EIXOS"]
+    CAP --> HYP["ANALOGIA COMPUTACIONAL"]
+    OAI --> HYP
+    HYP --> TEST["TESTE"]
+    TEST --> CP["CONTRAPROVA"]
+    CP --> J["REALITY JUDGE"]
+    J -->|PASS| CR["CRISTAL / ABSORÇÃO"]
+    J -->|FAIL ou UNKNOWN| RE["REABRIR / REMEDIAR"]
+    RE --> HYP
+
+    T1["PAPAGAIO = linguagem"] --- CAP
+    T2["MACACO = padrão"] --- CAP
+    T3["ELEFANTE = continuidade"] --- CAP
+    G1["TAXONOMY_DEDUPE != GRANULARITY_LOSS"] --- BIO
+    G2["BIOLOGICAL_INSPIRATION != OPENAI_BLUEPRINT"] --- HYP
+    G3["UNKNOWN != PASS"] --- J

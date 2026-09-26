@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3.4 Prioridade e camadas | O Manual Oculto da IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    .code-box { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace; }
+
+    /* Dark mode - bordas e linhas divisorias mais suaves */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+
+    /* SVG adaptado ao tema claro (so atinge os diagramas) */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+
+    /* Pulso para os blocos do SVG */
+    @keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+      .wf-a:nth-child(2){animation-delay:.25s}
+      .wf-a:nth-child(3){animation-delay:.5s}
+      .wf-a:nth-child(4){animation-delay:.75s}
+    }
+
+    /* ===== LIGHT MODE OVERRIDES — Parte 1: Base ===== */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-200 { color: #1f2937; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* ===== Parte 2: Cores de acento (trilha Purple — T3) ===== */
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .text-purple-300 { color: #6d28d9; }
+    html:not(.dark) .text-purple-200 { color: #5b21b6; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .bg-purple-900\/30 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .bg-purple-900\/20 { background-color: rgba(124, 58, 237, 0.06); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+    html:not(.dark) .border-purple-500\/20 { border-color: rgba(124, 58, 237, 0.18); }
+    html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124, 58, 237, 0.18); }
+    html:not(.dark) .hover\:border-purple-500\/30:hover { border-color: rgba(124, 58, 237, 0.25); }
+
+    /* sky (ciano secundario) */
+    html:not(.dark) .bg-sky-500\/10 { background-color: rgba(14, 165, 233, 0.08); }
+    html:not(.dark) .bg-sky-900\/30 { background-color: rgba(14, 165, 233, 0.08); }
+    html:not(.dark) .border-sky-500\/30 { border-color: rgba(14, 165, 233, 0.25); }
+    html:not(.dark) .text-sky-300 { color: #0284c7; }
+
+    /* ===== Parte 3: Remove gradientes + cores especiais ===== */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(185, 28, 28, 0.06); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(185, 28, 28, 0.22); }
+    html:not(.dark) .border-red-500\/20 { border-color: rgba(185, 28, 28, 0.18); }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+
+    /* ===== Parte 4: Navbar ===== */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <!-- Logo + INEMA.CLUB -->
+        <div class="flex items-center space-x-3">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300 transition-colors">
+            <span class="text-xl">🧠</span>
+            <span class="font-bold text-base hidden sm:inline">Manual Oculto da IA</span>
+          </a>
+          <span class="text-neutral-600 hidden sm:inline">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition-colors">INEMA.CLUB</a>
+        </div>
+
+        <!-- Trilhas + Theme Toggle -->
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <!-- Trilha 1 (inativa) -->
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <!-- Trilha 2 (inativa) -->
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span><span class="hidden sm:inline">Prática</span>
+          </a>
+          <!-- Trilha 3 (ativa) -->
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10">
+            <span class="sm:hidden">T3</span><span class="hidden sm:inline">Avançado</span>
+          </a>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1">
+            <svg id="theme-toggle-dark-icon" class="hidden w-4 h-4 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-4 h-4 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Breadcrumb -->
+    <div class="flex items-center space-x-2 text-sm text-neutral-500 mb-6">
+      <a href="../../index.html" class="hover:text-purple-400 transition-colors">Início</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-purple-400 transition-colors">Trilha 3</a>
+      <span>/</span>
+      <span class="text-purple-400">Módulo 3.4</span>
+    </div>
+
+    <!-- Header do Módulo -->
+    <div class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 rounded-2xl border border-purple-500/30 p-6 sm:p-8 mb-8">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-2xl">
+          🪜
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center space-x-3 mb-2">
+            <span class="text-xs font-semibold text-purple-400 bg-purple-500/10 border border-purple-500/30 px-2 py-1 rounded-full uppercase tracking-wider">MÓDULO 3.4</span>
+            <span class="text-xs text-neutral-500">Trilha 3 — Avançado</span>
+          </div>
+          <h1 class="text-2xl font-bold text-neutral-100 mb-2">🪜 Prioridade e camadas</h1>
+          <p class="text-neutral-300 leading-relaxed">
+            Um prompt de produção não é uma lista plana de regras — é um <strong class="text-purple-400">sistema de camadas com precedência</strong>.
+            Quando duas instruções se contradizem, alguém tem que mandar; e parte do que o modelo lê nem vem do prompt, mas de uma camada
+            <strong class="text-purple-400">dinâmica</strong> que o harness injeta por turno. Este módulo monta a pilha inteira: a cadeia de
+            prioridade, o <span class="code-box text-purple-400">&lt;system-reminder&gt;</span> e a regra de ouro <em>usuário &gt; memória</em>.
+          </p>
+          <!-- Stats -->
+          <div class="flex flex-wrap gap-4 mt-4">
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-purple-400">📋</span><span>6 tópicos</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-purple-400">⏱</span><span>~40 min</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-purple-400">🎯</span><span>Avançado</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-purple-400">🪜</span><span>Arquitetura</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SVG FUTURISTA: a pilha de prioridade + as duas camadas (estável × dinâmica) -->
+    <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-4 mb-10 overflow-hidden">
+      <svg viewBox="0 0 960 400" class="w-full h-auto" role="img" aria-label="Diagrama em duas partes: à esquerda, uma pilha de prioridade com a segurança no topo, abaixo a política inegociável, depois a instrução do usuário, depois os defaults e, na base, a preferência de estilo — quem está mais acima vence em conflito. À direita, duas camadas lado a lado: a camada estável, que é o system prompt com identidade e regras permanentes, e a camada dinâmica, o system-reminder injetado pelo harness por turno, que é contexto e não ordem do usuário.">
+        <defs>
+          <linearGradient id="m34-grad-pu" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#c084fc"/><stop offset="1" stop-color="#7c3aed"/>
+          </linearGradient>
+          <linearGradient id="m34-grad-cy" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#0ea5e9"/>
+          </linearGradient>
+          <filter id="m34-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="1.8" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <pattern id="m34-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+            <circle cx="1.2" cy="1.2" r="1.2" fill="#c084fc" opacity="0.10"/>
+          </pattern>
+          <marker id="m34-ah" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#c084fc"/>
+          </marker>
+          <marker id="m34-ahc" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/>
+          </marker>
+        </defs>
+
+        <!-- Fundo grid -->
+        <rect x="0" y="0" width="960" height="400" fill="url(#m34-grid)" rx="16"/>
+
+        <!-- Rótulos de coluna -->
+        <text x="232" y="30" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="12" opacity="0.7">a PILHA DE PRIORIDADE (quem manda em conflito)</text>
+        <text x="710" y="30" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="12" opacity="0.7">as DUAS CAMADAS (estável × dinâmica)</text>
+        <line x1="468" y1="18" x2="468" y2="384" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="6,6" opacity="0.35"/>
+
+        <!-- LADO ESQUERDO: a pilha (segurança no topo → estilo na base) -->
+        <!-- seta "vence" subindo pela lateral -->
+        <path d="M70,338 L70,72" fill="none" stroke="#c084fc" stroke-width="1.6" opacity="0.6" marker-end="url(#m34-ah)"/>
+        <text x="56" y="210" text-anchor="middle" fill="#a78bfa" font-family="Inter,sans-serif" font-size="10" opacity="0.8" transform="rotate(-90 56 210)">vence em conflito ↑</text>
+
+        <!-- 1. SEGURANÇA (topo, destaque/glow) -->
+        <g filter="url(#m34-glow)">
+          <rect x="98" y="52" width="300" height="48" rx="11" fill="#1a1430" stroke="url(#m34-grad-pu)" stroke-width="2.3"/>
+        </g>
+        <text x="118" y="74" fill="#c084fc" font-family="Inter,sans-serif" font-size="13" font-weight="700">🛡️ Segurança</text>
+        <text x="118" y="91" fill="#d8b4fe" font-family="Inter,sans-serif" font-size="9.5">o teto absoluto — nada a anula</text>
+
+        <!-- 2. política inegociável -->
+        <rect x="110" y="108" width="288" height="42" rx="10" fill="#1a1430" stroke="#a855f7" stroke-width="1.8" class="wf-a"/>
+        <text x="130" y="126" fill="#c084fc" font-family="Inter,sans-serif" font-size="11.5" font-weight="600">⚖️ Política inegociável</text>
+        <text x="130" y="141" fill="#c4b5fd" font-family="Inter,sans-serif" font-size="9">copyright NON-NEGOTIABLE · except safety</text>
+
+        <!-- 3. usuário -->
+        <rect x="122" y="158" width="276" height="42" rx="10" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.8" class="wf-a"/>
+        <text x="142" y="176" fill="#38bdf8" font-family="Inter,sans-serif" font-size="11.5" font-weight="600">🧑 Instrução do usuário</text>
+        <text x="142" y="191" fill="#9ad6ff" font-family="Inter,sans-serif" font-size="9">vence tudo abaixo · não vence o que está acima</text>
+
+        <!-- 4. defaults -->
+        <rect x="134" y="208" width="264" height="42" rx="10" fill="#0d1117" stroke="#6b7280" stroke-width="1.6" class="wf-a"/>
+        <text x="154" y="226" fill="#cbd5e1" font-family="Inter,sans-serif" font-size="11.5" font-weight="600">⚙️ Defaults do sistema</text>
+        <text x="154" y="241" fill="#94a3b8" font-family="Inter,sans-serif" font-size="9">comportamento-padrão, cede ao usuário</text>
+
+        <!-- 5. estilo (base) -->
+        <rect x="146" y="258" width="252" height="42" rx="10" fill="#0d1117" stroke="#4b5563" stroke-width="1.4"/>
+        <text x="166" y="276" fill="#9ca3af" font-family="Inter,sans-serif" font-size="11.5" font-weight="600">🎨 Preferência de estilo</text>
+        <text x="166" y="291" fill="#6b7280" font-family="Inter,sans-serif" font-size="9">a base da pilha — a primeira a ceder</text>
+
+        <!-- legenda da cadeia -->
+        <rect x="98" y="312" width="300" height="40" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.3"/>
+        <text x="248" y="330" text-anchor="middle" fill="#9ad6ff" font-family="JetBrains Mono,monospace" font-size="9.5">segurança &gt; inegociável &gt; usuário</text>
+        <text x="248" y="345" text-anchor="middle" fill="#7ec8f5" font-family="JetBrains Mono,monospace" font-size="9.5">&gt; defaults &gt; estilo</text>
+
+        <!-- LADO DIREITO: as duas camadas lado a lado -->
+        <!-- camada ESTÁVEL -->
+        <rect x="506" y="52" width="186" height="226" rx="13" fill="#1a1430" stroke="url(#m34-grad-pu)" stroke-width="1.8"/>
+        <text x="599" y="76" text-anchor="middle" fill="#c084fc" font-family="Inter,sans-serif" font-size="12.5" font-weight="700">camada ESTÁVEL</text>
+        <text x="599" y="93" text-anchor="middle" fill="#a78bfa" font-family="Inter,sans-serif" font-size="9.5">o system prompt</text>
+        <rect x="522" y="106" width="154" height="30" rx="7" fill="#0d1117" stroke="#7c3aed" stroke-width="1.2"/>
+        <text x="599" y="125" text-anchor="middle" fill="#d8b4fe" font-family="Inter,sans-serif" font-size="10">🪪 identidade</text>
+        <rect x="522" y="142" width="154" height="30" rx="7" fill="#0d1117" stroke="#7c3aed" stroke-width="1.2"/>
+        <text x="599" y="161" text-anchor="middle" fill="#d8b4fe" font-family="Inter,sans-serif" font-size="10">📜 regras permanentes</text>
+        <rect x="522" y="178" width="154" height="30" rx="7" fill="#0d1117" stroke="#7c3aed" stroke-width="1.2"/>
+        <text x="599" y="197" text-anchor="middle" fill="#d8b4fe" font-family="Inter,sans-serif" font-size="10">🪜 a hierarquia</text>
+        <text x="599" y="232" text-anchor="middle" fill="#a78bfa" font-family="Inter,sans-serif" font-size="9">sempre verdade ·</text>
+        <text x="599" y="246" text-anchor="middle" fill="#a78bfa" font-family="Inter,sans-serif" font-size="9">só muda com redeploy</text>
+        <text x="599" y="266" text-anchor="middle" fill="#7c8aa0" font-family="Inter,sans-serif" font-size="8.5">não recarrega por turno</text>
+
+        <!-- camada DINÂMICA -->
+        <rect x="708" y="52" width="186" height="226" rx="13" fill="#0e1b26" stroke="url(#m34-grad-cy)" stroke-width="1.8"/>
+        <text x="801" y="76" text-anchor="middle" fill="#38bdf8" font-family="Inter,sans-serif" font-size="12.5" font-weight="700">camada DINÂMICA</text>
+        <text x="801" y="93" text-anchor="middle" fill="#7ec8f5" font-family="Inter,sans-serif" font-size="9.5">o &lt;system-reminder&gt;</text>
+        <rect x="724" y="106" width="154" height="30" rx="7" fill="#0d1117" stroke="#0ea5e9" stroke-width="1.2"/>
+        <text x="801" y="125" text-anchor="middle" fill="#9ad6ff" font-family="Inter,sans-serif" font-size="10">📅 data de hoje</text>
+        <rect x="724" y="142" width="154" height="30" rx="7" fill="#0d1117" stroke="#0ea5e9" stroke-width="1.2"/>
+        <text x="801" y="161" text-anchor="middle" fill="#9ad6ff" font-family="Inter,sans-serif" font-size="10">⚠️ avisos contextuais</text>
+        <rect x="724" y="178" width="154" height="30" rx="7" fill="#0d1117" stroke="#0ea5e9" stroke-width="1.2"/>
+        <text x="801" y="197" text-anchor="middle" fill="#9ad6ff" font-family="Inter,sans-serif" font-size="10">🔄 reminder conversa longa</text>
+        <text x="801" y="232" text-anchor="middle" fill="#7ec8f5" font-family="Inter,sans-serif" font-size="9">injetado pelo harness ·</text>
+        <text x="801" y="246" text-anchor="middle" fill="#7ec8f5" font-family="Inter,sans-serif" font-size="9">por turno, não pelo usuário</text>
+        <text x="801" y="266" text-anchor="middle" fill="#6f93ad" font-family="Inter,sans-serif" font-size="8.5">é contexto, não ordem</text>
+
+        <!-- selo: o prompt ensina a ler a camada dinâmica -->
+        <rect x="506" y="296" width="388" height="56" rx="11" fill="#0d1117" stroke="#4b5563" stroke-width="1.4"/>
+        <text x="700" y="318" text-anchor="middle" fill="#c084fc" font-family="Inter,sans-serif" font-size="11" font-weight="700">a camada estável ensina a interpretar a dinâmica</text>
+        <text x="700" y="337" text-anchor="middle" fill="#94a3b8" font-family="Inter,sans-serif" font-size="9.5">o prompt define o comportamento; o reminder traz o estado do turno</text>
+
+        <!-- seta ligando as duas camadas -->
+        <path d="M692,165 C700,165 700,165 707,165" fill="none" stroke="#38bdf8" stroke-width="1.6" opacity="0.55" marker-end="url(#m34-ahc)"/>
+      </svg>
+    </div>
+
+    <!-- CONTEÚDO DETALHADO -->
+    <h2 class="text-2xl font-bold mb-6">Conteúdo detalhado</h2>
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">1</span>
+        <h2 class="text-2xl font-bold">Hierarquia de prioridade: quem manda quando há conflito</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Num prompt de produção, instruções se contradizem o tempo todo. O usuário pede algo que a política proíbe; um arquivo de projeto
+        diz uma coisa e o chat diz outra; uma skill quer relatório longo e o default pede concisão. Sem uma <strong class="text-purple-400">ordem
+        de precedência declarada</strong>, o comportamento em conflito é indeterminado — e indeterminado, num modelo, significa duas coisas
+        ruins: <em>explorável</em> (prompt injection encontra a brecha) e <em>frustrante</em> (ora obedece, ora não).
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3 flex items-center"><span class="mr-2">🪜</span> A ideia em uma frase</h3>
+        <p class="text-neutral-300 leading-relaxed mb-3">
+          Um conflito sem desempate é um bug de comportamento. A solução é declarar, dentro do próprio prompt e junto das regras de maior
+          prioridade, <strong class="text-purple-400">quem vence quando</strong>. A hierarquia transforma o indeterminado em previsível — e o
+          previsível é o que separa um sistema robusto de um que "oscila entre execuções".
+        </p>
+        <p class="text-neutral-300 leading-relaxed text-sm">
+          Não é luxo de prompt grande: <span class="code-box text-purple-400">sempre que houver mais de uma fonte de instruções</span>, a
+          hierarquia é necessária. Em prompt único e fechado, ela se reduz a uma linha — <em>segurança &gt; usuário &gt; defaults</em> —, mas
+          em qualquer agente real, com skills e arquivos, ela vira a espinha dorsal.
+        </p>
+      </div>
+
+      <!-- O que e -->
+      <div class="bg-dark-800 border border-purple-500/30 rounded-xl p-5 mb-4">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">O que é</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          A <strong class="text-purple-400">hierarquia de prioridade</strong> é a cadeia explícita que decide qual instrução vence quando duas
+          se chocam. Ela vive no prompt estável, perto do topo, e funciona como um grafo de precedência: cada <span class="code-box">"takes
+          precedence over"</span> e cada <span class="code-box">"except"</span> é uma aresta que diz quem está acima de quem.
+        </p>
+      </div>
+
+      <!-- Por que aprender -->
+      <div class="bg-dark-800 border border-dark-600 rounded-xl p-5 mb-4">
+        <h3 class="text-lg font-semibold text-neutral-200 mb-3">Por que aprender</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          Porque o prompt amador empilha regras sem nunca dizer qual ganha — e aí o modelo decide no susto. O resultado é o pior dos mundos:
+          comportamento que <em>varia</em> entre execuções idênticas, e uma superfície de ataque onde basta encontrar a regra mais fraca para
+          dobrar o sistema. Declarar a hierarquia é o que fecha essa porta: o conflito deixa de ser sorteio e vira decisão.
+        </p>
+      </div>
+
+      <!-- Grid ✓/✗ : prompt sem hierarquia vs com hierarquia -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">✗</span>
+            <span>Conflito indeterminado</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Duas regras contraditórias, nenhum desempate declarado</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>O modelo escolhe diferente a cada execução</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Injection acha a regra fraca e dobra o sistema</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Usuários reclamam: "ora obedece, ora não"</span></li>
+          </ul>
+        </div>
+        <div class="bg-purple-900/20 border border-purple-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-purple-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-purple-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>Precedência declarada</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>A cadeia está escrita, junto das regras de maior prioridade</span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>O conflito tem resposta única e repetível</span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>A regra fraca não pode anular a forte</span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>Comportamento estável, audível, defensável</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-primary text-lg flex-shrink-0">💡</span>
+          <div>
+            <p class="text-sm font-semibold text-primary mb-1">Hierarquia é segurança, não burocracia</p>
+            <p class="text-sm text-neutral-300">
+              Pense na precedência como o <strong>grafo de prioridade</strong> do seu sistema. Não é uma formalidade de prompt corporativo: é
+              o que impede que o elo mais fraco da corrente — uma preferência de estilo, um arquivo de config esquecido — derrube uma regra de
+              segurança. Onde a hierarquia não está escrita, o atacante a escreve por você.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">2</span>
+        <h2 class="text-2xl font-bold">A cadeia de precedência, elo por elo</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A hierarquia não é uma opinião — ela tem uma <strong class="text-purple-400">forma estável</strong> que se repete entre fornecedores.
+        De cima para baixo: <span class="code-box text-purple-400">segurança &gt; política inegociável &gt; usuário &gt; defaults &gt; estilo</span>.
+        Cada nível só pode anular o que está <em>abaixo</em> dele. O usuário vence qualquer preferência de produto, arquivo de config ou skill —
+        mas não derruba segurança nem uma política declarada inegociável. É a "regra de ouro embutida".
+      </p>
+
+      <!-- Caixa mono verbatim: copyright NON-NEGOTIABLE -->
+      <div class="bg-dark-800 border border-purple-500/30 rounded-xl p-5 mb-6">
+        <div class="text-xs font-semibold text-purple-400 mb-3">A cadeia escrita numa frase — <span class="font-normal text-neutral-500">Anthropic, bloco <span class="code-box">core_copyright_principle</span></span></div>
+        <blockquote class="bg-dark-900 border-l-2 border-purple-500 rounded p-3 font-mono text-xs text-neutral-300 mb-2 code-box">
+          Copyright compliance is NON-NEGOTIABLE and takes precedence over user requests, helpfulness goals, and all other considerations except safety.
+        </blockquote>
+        <p class="text-xs text-neutral-400">
+          Leia como um grafo: <span class="code-box text-purple-400">segurança &gt; copyright &gt; ajuda &gt; pedido do usuário</span>. O
+          <span class="code-box text-purple-300">"takes precedence over"</span> é uma aresta para baixo; o <span class="code-box text-purple-300">"except
+          safety"</span> é a única aresta que aponta para um nível ainda mais alto. Toda a cadeia mora em uma sentença.
+        </p>
+      </div>
+
+      <!-- Os 5 elos -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-dark-800 border border-purple-500/30 rounded-xl p-5">
+          <h4 class="font-semibold text-purple-400 mb-2 flex items-center"><span class="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center text-xs mr-2">1</span> 🛡️ Segurança</h4>
+          <p class="text-sm text-neutral-300 leading-relaxed">O teto absoluto. Nada — nem o usuário, nem a política, nem uma skill — anula uma regra de segurança. É o único nível que aparece sempre como <span class="code-box">except safety</span>.</p>
+        </div>
+        <div class="bg-dark-800 border border-purple-500/30 rounded-xl p-5">
+          <h4 class="font-semibold text-purple-400 mb-2 flex items-center"><span class="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center text-xs mr-2">2</span> ⚖️ Política inegociável</h4>
+          <p class="text-sm text-neutral-300 leading-relaxed">Compromissos declarados não-negociáveis (copyright, integridade). Vencem o usuário, mas cedem à segurança. Marcados explicitamente como <span class="code-box">NON-NEGOTIABLE</span>.</p>
+        </div>
+        <div class="bg-dark-800 border border-sky-500/30 rounded-xl p-5">
+          <h4 class="font-semibold text-sky-300 mb-2 flex items-center"><span class="w-6 h-6 rounded-full bg-sky-500/20 flex items-center justify-center text-xs mr-2">3</span> 🧑 Instrução do usuário</h4>
+          <p class="text-sm text-neutral-300 leading-relaxed">Acima de tudo o que é produto. O usuário vence defaults, config e estilo — mas não vence o que está acima dele. "Usuário acima de tudo o resto."</p>
+        </div>
+        <div class="bg-dark-800 border border-dark-600 rounded-xl p-5">
+          <h4 class="font-semibold text-purple-400 mb-2 flex items-center"><span class="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center text-xs mr-2">4</span> ⚙️ Defaults &amp; 🎨 estilo</h4>
+          <p class="text-sm text-neutral-300 leading-relaxed">A base da pilha. O comportamento-padrão e as preferências de tom são os primeiros a ceder — qualquer instrução direta do usuário os sobrepõe.</p>
+        </div>
+      </div>
+
+      <!-- Box: convergência entre fornecedores -->
+      <div class="bg-sky-900/30 border border-sky-500/30 rounded-xl p-5 mb-5">
+        <h3 class="text-lg font-semibold text-sky-300 mb-2 flex items-center"><span class="mr-2">🔭</span> O mesmo grafo, em vários laboratórios</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed mb-3">
+          O padrão é consistente entre fornecedores: <strong class="text-sky-300">segurança no topo, usuário acima de todo o resto</strong>. A
+          xAI declara em duas frases — <span class="code-box">"core policies take highest precedence. System messages take precedence over user
+          messages"</span> — e, para agentes de código: <span class="code-box">"direct user instructions in the chat always take precedence over
+          any project instruction file."</span>
+        </p>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          É o mesmo modelo do Claude Code: <strong class="text-purple-400">instruções do usuário &gt; skills/plugins &gt; defaults</strong>.
+          Convergência entre concorrentes raramente é coincidência — é a forma que sobrevive ao contato com a realidade.
+        </p>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-purple-400 text-lg mb-1">🛡️</div>
+          <div class="text-xs font-semibold text-neutral-200">Segurança</div>
+          <div class="text-xs text-neutral-500 mt-1">o teto absoluto</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-purple-400 text-lg mb-1">⚖️</div>
+          <div class="text-xs font-semibold text-neutral-200">Inegociável</div>
+          <div class="text-xs text-neutral-500 mt-1">except safety</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-sky-300 text-lg mb-1">🧑</div>
+          <div class="text-xs font-semibold text-neutral-200">Usuário</div>
+          <div class="text-xs text-neutral-500 mt-1">acima do resto</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-purple-400 text-lg mb-1">🎨</div>
+          <div class="text-xs font-semibold text-neutral-200">Defaults / estilo</div>
+          <div class="text-xs text-neutral-500 mt-1">a base, cede primeiro</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">3</span>
+        <h2 class="text-2xl font-bold">Lembrete de Sistema: a camada dinâmica do harness</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Nem tudo que o modelo precisa saber é estável. A data de hoje muda; avisos contextuais aparecem; o estado de uma ferramenta varia; a
+        aderência às instruções <em>degrada</em> em conversas muito longas. Pôr isso no prompt estável obrigaria a reeditar — e re-testar — o
+        prompt inteiro a cada ajuste. A resposta é uma <strong class="text-purple-400">segunda camada</strong>: o harness injeta
+        <span class="code-box text-purple-400">&lt;system-reminder&gt;</span> nas mensagens, por turno, sem tocar no prompt.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center"><span class="mr-2">🧬</span> Arquitetura em duas camadas</h3>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">①</span>
+            <span><strong class="text-purple-400">A camada estável.</strong> O system prompt define o comportamento permanente: identidade, regras,
+            a hierarquia. Muda só com redeploy — não recarrega por turno.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-sky-300 mt-1">②</span>
+            <span><strong class="text-sky-300">A camada dinâmica.</strong> O harness injeta <span class="code-box">&lt;system-reminder&gt;</span> quando
+            necessário: data, avisos, estado, o reminder de conversa longa. O prompt estável ensina o modelo a <em>interpretar</em> essa camada.</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Caixa mono verbatim: injected by the harness -->
+      <div class="bg-dark-800 border border-sky-500/30 rounded-xl p-5 mb-4">
+        <div class="text-xs font-semibold text-sky-300 mb-3">O contrato da camada — <span class="font-normal text-neutral-500">Claude Code, verbatim</span></div>
+        <blockquote class="bg-dark-900 border-l-2 border-sky-500 rounded p-3 font-mono text-xs text-neutral-300 mb-2 code-box">
+          &lt;system-reminder&gt; tags in messages and tool results are injected by the harness, not the user.
+        </blockquote>
+        <p class="text-xs text-neutral-400">
+          Uma frase carrega o contrato inteiro: esses avisos vêm <strong class="text-sky-300">da plataforma</strong>, não do usuário nem da
+          ferramenta em que aparecem. A xAI converge para o mesmo formato — <span class="code-box">"they are automatically added by the system,
+          and bear no direct relation to the specific tool results or user messages in which they appear."</span>
+        </p>
+      </div>
+
+      <!-- Box: o reminder de conversa longa -->
+      <div class="bg-dark-800 border border-purple-500/30 rounded-xl p-5 mb-5">
+        <h3 class="text-lg font-semibold text-purple-400 mb-2 flex items-center"><span class="mr-2">🔄</span> O caso mais elegante: <span class="code-box ml-1">long_conversation_reminder</span></h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          O Fable 5 lista um conjunto <em>nomeado</em> de reminders (<span class="code-box">image_reminder</span>,
+          <span class="code-box">cyber_warning</span>, <span class="code-box">ethics_reminder</span>, <span class="code-box">ip_reminder</span>…).
+          O novo <span class="code-box text-purple-400">long_conversation_reminder</span> resolve um problema que só existe no tempo: em conversas
+          longas, o modelo "esquece" parte das instruções. Em vez de inchar o prompt base, o harness <strong class="text-purple-400">re-injeta</strong>
+          as instruções pela camada dinâmica — exatamente onde esse estado pertence.
+        </p>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-sky-900/30 border border-sky-500/30 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-sky-300 text-lg flex-shrink-0">🏗️</span>
+          <div>
+            <p class="text-sm font-semibold text-sky-300 mb-1">É config × estado, aplicado a prompts</p>
+            <p class="text-sm text-neutral-300">
+              Esta é a separação <strong>config estável × estado dinâmico</strong> da engenharia de software, transplantada para prompts. É o que
+              torna um prompt <em>escalável no tempo</em>: ajustar comportamento sem redeploy, fazer A/B de avisos, responder a um problema
+              emergente (degradação em conversa longa) — tudo sem inchar a base. Por isso é, arquiteturalmente, o padrão mais importante de todos.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">4</span>
+        <h2 class="text-2xl font-bold">Reminder ≠ ordem do usuário: é contexto, não instrução</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Aqui mora a sutileza que faz a camada dinâmica funcionar — e que, se ignorada, abre um buraco de segurança. Um
+        <span class="code-box text-purple-400">&lt;system-reminder&gt;</span> aparece <em>dentro</em> de uma mensagem ou de um resultado de
+        ferramenta, mas <strong class="text-purple-400">não é</strong> uma ordem do usuário. É contexto de fundo, vindo da plataforma. O modelo
+        precisa aprender a tratá-lo como <em>informação</em>, não como comando — e a não confundir um com o outro.
+      </p>
+
+      <!-- Grid ✓/✗ : o que reminder É vs o que NÃO É -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-purple-900/20 border border-purple-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-purple-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-purple-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>O que o reminder É</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>Contexto de fundo injetado pelo harness</span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>Informação para usar <em>se relevante</em></span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>Estado do turno: data, avisos, lembretes</span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>Vem da plataforma — fica abaixo do usuário na pilha</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">✗</span>
+            <span>O que o reminder NÃO é</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Uma ordem direta do usuário</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Algo a obedecer cegamente, sempre</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Conteúdo a mencionar de volta ao usuário</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Relacionado à ferramenta em que apareceu</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Caixa mono verbatim: may or may not be relevant -->
+      <div class="bg-dark-800 border border-purple-500/30 rounded-xl p-5 mb-5">
+        <div class="text-xs font-semibold text-purple-400 mb-3">Como reagir a um reminder — <span class="font-normal text-neutral-500">Claude Code, verbatim</span></div>
+        <blockquote class="bg-dark-900 border-l-2 border-purple-500 rounded p-3 font-mono text-xs text-neutral-300 mb-2 code-box">
+          IMPORTANT: this context may or may not be relevant to your tasks. You should not respond to this context unless it is highly relevant to your task.
+        </blockquote>
+        <p class="text-xs text-neutral-400">
+          Note o tom: o reminder é tratado como <strong class="text-purple-400">talvez útil</strong>, não como ordem. A Cursor diz o mesmo de
+          outro jeito — <span class="code-box text-purple-300">"heed them, but do not mention them directly in your response as the user cannot
+          see them."</span> O modelo usa se servir, e não devolve o aviso ao usuário.
+        </p>
+      </div>
+
+      <!-- Box Alerta: o risco se confundir -->
+      <div class="bg-red-900/20 border border-red-500/30 rounded-xl p-5 mb-5">
+        <h3 class="text-lg font-semibold text-red-400 mb-2 flex items-center"><span class="mr-2">⚠️</span> Por que essa distinção é de segurança</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          Se o modelo tratasse todo texto dentro de uma mensagem como ordem do usuário, qualquer conteúdo que chegasse por uma ferramenta —
+          uma página web, o retorno de uma API — poderia se passar por instrução e <strong>sequestrar</strong> o comportamento. Dizer
+          explicitamente <em>"injected by the harness, not the user"</em> é o que ancora o reminder no lugar certo da pilha: abaixo do usuário,
+          como contexto. A distinção não é semântica — é o que impede a injeção de virar comando.
+        </p>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-primary text-lg flex-shrink-0">💡</span>
+          <div>
+            <p class="text-sm font-semibold text-primary mb-1">A regra de três linhas</p>
+            <p class="text-sm text-neutral-300">
+              Quando você controla o harness, ensine o modelo a ler a camada dinâmica com três frases: <strong>(1)</strong> mensagens podem
+              conter <span class="code-box">&lt;system-reminder&gt;</span> injetados pelo harness, não pelo usuário; <strong>(2)</strong> são
+              contexto de fundo, não instruções; <strong>(3)</strong> use se relevante, não mencione ao usuário. Esse é o contrato mínimo.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">5</span>
+        <h2 class="text-2xl font-bold">Comportamento estável vs estado dinâmico: por que separar</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        As duas camadas não são uma curiosidade arquitetural — elas resolvem uma tensão concreta. O que é <strong class="text-purple-400">sempre
+        verdade</strong> (identidade, regras, hierarquia) não pode ser poluído pelo que <strong class="text-purple-400">muda a cada turno</strong>
+        (data, avisos, estado). Misturar os dois é o antipadrão <em>tudo-no-prompt</em>: cada mudança de contexto vira uma edição, e o diff entre
+        versões vira ruído. Separar é o que mantém o prompt limpo, testável e escalável.
+      </p>
+
+      <!-- Timeline: o caminho do antipadrão à arquitetura limpa -->
+      <div class="space-y-4 mb-6">
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center">
+            <span class="text-red-400 text-lg">🗃️</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-red-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-red-400 mb-1">1. O antipadrão: tudo-no-prompt</h4>
+            <p class="text-sm text-neutral-500 mb-2">Data, avisos e estado misturados ao comportamento estável, no mesmo bloco de texto.</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              <strong class="text-red-400">Sintoma:</strong> o prompt precisa de edição a cada mudança de contexto, e o diff entre versões vira
+              ruído. Você não consegue mais distinguir "mudamos a identidade do modelo" de "atualizamos a data de hoje".
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center">
+            <span class="text-purple-400 text-lg">✂️</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-purple-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-purple-400 mb-1">2. O corte: estável de um lado, dinâmico do outro</h4>
+            <p class="text-sm text-neutral-500 mb-2">O que é sempre verdade fica no prompt; o que muda por turno entra por system-reminder.</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              <strong class="text-purple-400">Resultado:</strong> o prompt estável encolhe e fica legível; o estado dinâmico vive na sua própria
+              camada. O diff entre versões volta a contar só decisões de <em>comportamento</em>, não troca de contexto.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
+            <span class="text-sky-300 text-lg">🚀</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-sky-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-sky-300 mb-1">3. O ganho: escalável no tempo</h4>
+            <p class="text-sm text-neutral-500 mb-2">Ajustar avisos sem redeploy; A/B de reminders; resposta a problemas emergentes.</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              <strong class="text-sky-300">Ganho:</strong> um problema novo (degradação em conversa longa) vira um reminder novo
+              (<span class="code-box">long_conversation_reminder</span>), não um parágrafo a mais no prompt estável. A base não incha até colapsar.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Box: a tabela mental estável × dinâmico -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-5">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center"><span class="mr-2">🧭</span> Em que camada vai cada coisa?</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+          <div class="bg-dark-700 rounded-lg p-4">
+            <div class="text-purple-400 font-semibold mb-2">Estável (no prompt)</div>
+            <ul class="space-y-1.5 text-neutral-300">
+              <li class="flex items-start space-x-2"><span class="text-purple-400">·</span><span>Identidade do modelo</span></li>
+              <li class="flex items-start space-x-2"><span class="text-purple-400">·</span><span>Regras permanentes e políticas</span></li>
+              <li class="flex items-start space-x-2"><span class="text-purple-400">·</span><span>A hierarquia de prioridade</span></li>
+              <li class="flex items-start space-x-2"><span class="text-purple-400">·</span><span>Como interpretar a camada dinâmica</span></li>
+            </ul>
+          </div>
+          <div class="bg-dark-700 rounded-lg p-4">
+            <div class="text-sky-300 font-semibold mb-2">Dinâmico (no reminder)</div>
+            <ul class="space-y-1.5 text-neutral-300">
+              <li class="flex items-start space-x-2"><span class="text-sky-300">·</span><span>Data de hoje</span></li>
+              <li class="flex items-start space-x-2"><span class="text-sky-300">·</span><span>Avisos contextuais do turno</span></li>
+              <li class="flex items-start space-x-2"><span class="text-sky-300">·</span><span>Estado de ferramentas / arquivos abertos</span></li>
+              <li class="flex items-start space-x-2"><span class="text-sky-300">·</span><span>Reforço em conversa longa</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Box Alerta: quando NÃO há harness -->
+      <div class="bg-red-900/20 border border-red-500/30 rounded-xl p-5">
+        <h3 class="text-lg font-semibold text-red-400 mb-2 flex items-center"><span class="mr-2">⚠️</span> E quando você não controla o harness?</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          A camada dinâmica exige controle da plataforma — quem só escreve o prompt não tem como injetar reminders. Mas a <strong>disciplina
+          mental</strong> permanece: separe, no próprio texto, o que é estável do que é contextual. Mesmo num prompt de chat simples, saber qual
+          frase pertenceria a qual camada já te impede de inchar a base com estado que deveria viver fora dela.
+        </p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">6</span>
+        <h2 class="text-2xl font-bold">A regra de ouro: usuário &gt; memória</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Toda a pilha desemboca numa regra prática que volta o tempo todo em agentes com memória: a <strong class="text-purple-400">instrução
+        direta do usuário no chat sempre vence o conteúdo guardado</strong> — memória, arquivo de projeto, preferência salva. A memória é
+        contexto persistente; ela informa, mas não <em>manda</em>. Quando o que está na memória contradiz o que o usuário acabou de pedir,
+        o usuário ganha. Memória nunca derruba instrução direta.
+      </p>
+
+      <!-- Caixa mono verbatim: a hierarquia das skills -->
+      <div class="bg-dark-800 border border-purple-500/30 rounded-xl p-5 mb-6">
+        <div class="text-xs font-semibold text-purple-400 mb-3">A hierarquia das skills — <span class="font-normal text-neutral-500">Superpowers, vista em Claude Code</span></div>
+        <blockquote class="bg-dark-900 border-l-2 border-purple-500 rounded p-3 font-mono text-xs text-neutral-300 mb-2 code-box">
+          1. User's explicit instructions — highest priority.<br>
+          2. Skills — override default system behavior.<br>
+          3. Default system prompt — lowest priority.
+        </blockquote>
+        <p class="text-xs text-neutral-400">
+          A cadeia em três linhas: <span class="code-box text-purple-400">usuário &gt; skill &gt; default</span>. A skill (assim como a memória ou
+          um arquivo de projeto) sobrepõe o comportamento-padrão, mas <strong class="text-purple-400">cede à instrução explícita do usuário</strong>.
+          É o mesmo formato do arquivo de projeto da xAI — <span class="code-box text-purple-300">"direct user instructions always take precedence."</span>
+        </p>
+      </div>
+
+      <!-- Grid ✓/✗ : memória como ditadura vs memória como contexto -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">✗</span>
+            <span>Memória que manda (errado)</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>"Sempre uso tom formal" salvo → ignora pedido de tom casual agora</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Preferência antiga sobrepõe instrução nova</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>O usuário "não consegue mudar de ideia"</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>A memória vira uma jaula, não uma ajuda</span></li>
+          </ul>
+        </div>
+        <div class="bg-purple-900/20 border border-purple-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-purple-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-purple-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>Memória como contexto (certo)</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>A memória informa o default quando não há pedido contrário</span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>O pedido direto do usuário sempre sobrepõe</span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>O usuário pode contrariar a si mesmo a qualquer turno</span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>A memória ajuda; a instrução manda</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Box Conceito Principal: onde a memória entra na pilha -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-5">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3 flex items-center"><span class="mr-2">🪜</span> Onde a memória mora na pilha</h3>
+        <p class="text-neutral-300 leading-relaxed mb-3 text-sm">
+          Memória, skills e arquivos de projeto vivem <strong class="text-purple-400">abaixo do usuário</strong> e acima dos defaults. Eles
+          moldam o comportamento-padrão — mas a instrução direta no chat passa por cima de todos eles. A pilha inteira, do topo à base:
+        </p>
+        <blockquote class="bg-dark-900 border-l-2 border-purple-500 rounded p-3 font-mono text-xs text-neutral-300 code-box">
+          <span class="text-purple-400">segurança</span> &gt; <span class="text-purple-400">política inegociável</span> &gt; <span class="text-sky-300">instrução do usuário (chat)</span> &gt; memória / skill / arquivo &gt; <span class="text-neutral-400">defaults</span> &gt; <span class="text-neutral-400">estilo</span>
+        </blockquote>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-sky-900/30 border border-sky-500/30 rounded-xl p-4 mb-5">
+        <div class="flex items-start space-x-3">
+          <span class="text-sky-300 text-lg flex-shrink-0">🧭</span>
+          <div>
+            <p class="text-sm font-semibold text-sky-300 mb-1">O teste do conflito</p>
+            <p class="text-sm text-neutral-300">
+              Diante de qualquer choque, suba a pilha e pergunte: <strong>"a fonte mais alta nesta cadeia o quê?"</strong> Se o usuário pediu
+              algo que a memória contradiz, o usuário vence — a menos que segurança ou uma política inegociável digam o contrário. A pilha não é
+              decoração: é o algoritmo que você roda, em silêncio, toda vez que duas instruções se cruzam.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-sky-300 text-lg mb-1">🧑</div>
+          <div class="text-xs font-semibold text-neutral-200">Usuário</div>
+          <div class="text-xs text-neutral-500 mt-1">a instrução manda</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-purple-400 text-lg mb-1">🧠</div>
+          <div class="text-xs font-semibold text-neutral-200">Memória</div>
+          <div class="text-xs text-neutral-500 mt-1">informa, não manda</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-purple-400 text-lg mb-1">🧩</div>
+          <div class="text-xs font-semibold text-neutral-200">Skill / arquivo</div>
+          <div class="text-xs text-neutral-500 mt-1">cede ao usuário</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-sky-300 text-lg mb-1">🪜</div>
+          <div class="text-xs font-semibold text-neutral-200">A pilha</div>
+          <div class="text-xs text-neutral-500 mt-1">o algoritmo do conflito</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUMO FINAL -->
+    <div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-2xl border border-purple-500/30 p-6 sm:p-8 mb-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📝</span> Resumo do Módulo</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <ul class="space-y-3 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5 flex-shrink-0">✓</span><span>Conflito sem desempate é bug: a <strong class="text-purple-400">hierarquia de prioridade</strong> torna o indeterminado previsível</span></li>
+          <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5 flex-shrink-0">✓</span><span>A cadeia: <strong class="text-purple-400">segurança &gt; inegociável &gt; usuário &gt; defaults &gt; estilo</strong> — cada nível só anula o de baixo</span></li>
+          <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5 flex-shrink-0">✓</span><span>O <strong>Lembrete de Sistema</strong> é a camada dinâmica que o harness injeta por turno (<span class="code-box">&lt;system-reminder&gt;</span>)</span></li>
+        </ul>
+        <ul class="space-y-3 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5 flex-shrink-0">✓</span><span>Reminder ≠ ordem do usuário: é <strong class="text-purple-400">contexto, não instrução</strong> — vem da plataforma, não do usuário</span></li>
+          <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5 flex-shrink-0">✓</span><span>Separar <strong>comportamento estável de estado dinâmico</strong> é o que torna o prompt escalável no tempo</span></li>
+          <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5 flex-shrink-0">✓</span><span>A regra de ouro: <strong class="text-purple-400">usuário &gt; memória</strong> — memória informa, instrução direta manda</span></li>
+        </ul>
+      </div>
+
+      <div class="bg-dark-800/50 rounded-lg p-4 mb-6 border border-purple-500/20">
+        <h3 class="font-semibold text-purple-400 mb-1 flex items-center"><span class="mr-2">➡️</span> Próximo Módulo</h3>
+        <p class="text-neutral-300 text-sm">
+          <strong>3.5 — 🧠 Destilação: recuperar o cérebro.</strong> Você já sabe ler a evolução, consolidar e montar as camadas. Agora o
+          movimento inverso: destilar um prompt inchado de volta ao seu núcleo de princípios — recuperar o cérebro por trás das mil regras.
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="inline-flex items-center justify-start space-x-2 text-neutral-400 hover:text-purple-400 text-sm font-medium px-4 py-2.5 rounded-xl bg-dark-700 hover:bg-dark-600 transition-colors">
+          <span>←</span><span>Voltar à Trilha 3</span>
+        </a>
+        <a href="modulo-3-5.html" class="inline-flex items-center justify-start space-x-2 bg-purple-600 hover:bg-purple-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition-colors">
+          <span>Próximo: 3.5 Destilação</span><span>→</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
+        <div class="text-sm text-neutral-500">
+          <span class="text-purple-400 font-medium">O Manual Oculto da IA</span> · Módulo 3.4 · Trilha 3 · 2026
+        </div>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm transition-colors">INEMA.CLUB</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

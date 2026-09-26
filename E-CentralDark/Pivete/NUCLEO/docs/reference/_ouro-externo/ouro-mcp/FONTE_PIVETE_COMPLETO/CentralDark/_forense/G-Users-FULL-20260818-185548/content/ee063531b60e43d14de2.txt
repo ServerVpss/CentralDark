@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@babel\runtime\helpers\tdz.js
+
+function _tdzError(e) {
+  throw new ReferenceError(e + " is not defined - temporal dead zone");
+}
+module.exports = _tdzError, module.exports.__esModule = true, module.exports["default"] = module.exports;

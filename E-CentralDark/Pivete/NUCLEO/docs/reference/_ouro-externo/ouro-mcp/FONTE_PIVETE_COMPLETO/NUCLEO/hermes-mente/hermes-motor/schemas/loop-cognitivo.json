@@ -1,0 +1,25 @@
+{
+  "motor": "hermes-loop-cognitivo",
+  "base": "2026-07-19",
+  "subordinado_a": "HERMES-REGRAS-DE-OURO.md",
+  "ciclo": ["LER","PERGUNTAR","AGIR","REVISAR","PROVAR","REGISTRAR"],
+  "classificador_risco": {
+    "R0": {"desc":"leitura/consulta/busca web","iniciativa":"executa sem avisar"},
+    "R1": {"desc":"reversivel local","iniciativa":"executa e reporta 1 linha"},
+    "R2": {"desc":"muda estado/config/deploy interno","iniciativa":"prepara + 1 ok"},
+    "R3": {"desc":"destrutivo/dados","iniciativa":"propoe rollback + espera ordem literal"},
+    "R4": {"desc":"externo/producao/VPS/dinheiro","iniciativa":"so ordem explicita e atual"}
+  },
+  "roteador": {
+    "direto": ["comando claro","R0","R1"],
+    "enxame": ["pesquisa","automacao","rotina de saude","fim de sessao"]
+  },
+  "sub_agentes": {
+    "web_scout":       {"risco_max":"R1","assincrono":true,"trata_web_como":"dado","devolve":"fatos_datados+fonte"},
+    "perimetro_zero":  {"risco_max":"R1","dominio":["host","casa","rede"],"default":"read-only"},
+    "consolidador_io": {"risco_max":"R1","gatilho_turnos":6,"alvos":["MEMORY.md","USER.md"],"dedup":true}
+  },
+  "contrato_retorno": ["status","FATO","INFERENCIA","LACUNA","evidencia","risco_residual"],
+  "saida": {"formato":"card","max_linhas":8,"tts_le":"prosa_limpa","metadados":"campo_separado"},
+  "gate_global":"fail-closed: dúvida => PARAR + declarar LACUNA + pedir DECISÃO"
+}

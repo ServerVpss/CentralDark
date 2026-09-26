@@ -1,0 +1,516 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\bin\bzcat.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.pdata
+@.xdata
+.idata
+@.reloc
+ATUWVSH
+ [^_]A\
+ [^_]A\
+AVAUATUWVSH
+D$XI+E
+`[^_]A\A]A^
+AVAUATUWVS
+D$xH+D$pH
+[^_]A\A]A^A_
+AVAUATUWVS
+D$hH+D$`H
+HcL$TL
+[^_]A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+AUATUWVS
+HcL$DL
+[^_]A\A]A^
+AVAUATUWVSH
+[^_]A\A]A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+ATUWVSH
+ [^_]A\H
+:MZuYHcB<H
+C$9C(~
+ u HcS$
+AWAVAUATUWVSH
+C$9C(~
+H[^_]A\A]A^A_
+S$9S(~
+S$9S(~
+UAWAVAUATWVSH
+C$9C(~
+C$9C(~
+[^_A\A]A^A_]
+UAWAVAUATWVSH
+C$9C(~
+S$9S(~
+[^_A\A]A^A_]
+UATWVSH
+C$9C(~
+[^_A\]
+[^_A\]
+=UUUUw
+S$9S(~
+AUATUWVSH
+X[^_]A\A]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+xnHcD$hA;E
+D)d$pH
+ATUWVSHcY
+[^_]A\
+[^_]A\
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+WVSHcA
+AVAUATUWVSH
+0[^_]A\A]A^
+ATUWVSH
+@[^_]A\
+AVAUATUWVSH
+@[^_]A\A]A^
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+%s: Deleting output file %s, if it exists.
+%s: WARNING: deletion of output file (apparently) failed.
+%s: WARNING: deletion of output file suppressed
+%s:    since input file no longer exists.  Output file
+%s:    `%s' may be incomplete.
+%s:    I suggest doing an integrity test (bzip2 -tv) of it.
+%s: WARNING: some files have not been processed:
+%s:    %d specified on command line, %d not processed yet.
+%s: Control-C or similar caught, quitting.
+bzip2, a block-sorting file compressor.  Version %s.
+   Copyright (C) 1996-2019 by Julian Seward.
+   This program is free software; you can redistribute it and/or modify
+   it under the terms set out in the LICENSE file, which is included
+   in the bzip2 source distribution.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   LICENSE file for more details.
+%s: %s is redundant in versions 0.9.5 and above
+bzip2, a block-sorting file compressor.  Version %s.
+   usage: %s [flags and input files in any order]
+   -h --help           print this message
+   -d --decompress     force decompression
+   -z --compress       force compression
+   -k --keep           keep (don't delete) input files
+   -f --force          overwrite existing output files
+   -t --test           test compressed file integrity
+   -c --stdout         output to standard out
+   -q --quiet          suppress noncritical error messages
+   -v --verbose        be verbose (a 2nd -v gives more)
+   -L --license        display software version & license
+   -V --version        display software version & license
+   -s --small          use less memory (at most 2500k)
+   -1 .. -9            set block size to 100k .. 900k
+   --fast              alias for -1
+   --best              alias for -9
+   If invoked as `bzip2', default action is to compress.
+              as `bunzip2',  default action is to decompress.
+              as `bzcat', default action is to decompress to stdout.
+   If no file names are given, bzip2 compresses or decompresses
+   from standard input to standard output.  You can combine
+   short flags, so `-v -4' means the same as -v4 or -4v, &c.
+bzip2: I'm not configured correctly for this platform!
+I require Int32, Int16 and Char to have sizes
+of 4, 2 and 1 bytes to run properly, and they don't.
+Probably you can fix this by defining them correctly,
+and recompiling.  Bye!
+Input file = %s, output file = %s
+%s: couldn't allocate enough memory
+%s: PANIC -- internal consistency error:
+This is a BUG.  Please report it to:
+bzip2-devel@sourceware.org
+%s: I/O or other error, bailing out.  Possible reason follows.
+It is possible that the compressed file(s) have become corrupted.
+You can use the -tvv option to test integrity of such files.
+You can use the `bzip2recover' program to attempt to recover
+data from undamaged sections of corrupted files.
+%s: Caught a SIGSEGV or SIGBUS whilst compressing.
+   Possible causes are (most likely first):
+   (1) This computer has unreliable memory or cache hardware
+       (a surprisingly common problem; try a different machine.)
+   (2) A bug in the compiler used to create this executable
+       (unlikely, if you didn't compile bzip2 yourself.)
+   (3) A real bug in bzip2 -- I hope this should never be the case.
+   The user's manual, Section 4.3, has more info on (1) and (2).
+   If you suspect this is a bug in bzip2, or are unsure about (1)
+   or (2), feel free to report it to: bzip2-devel@sourceware.org.
+   Section 4.3 of the user's manual describes the info a useful
+   bug report should have.  If the manual is available on your
+   system, please try and read it before mailing me.  If you don't
+   have the manual or can't be bothered to read it, mail me anyway.
+%s: Caught a SIGSEGV or SIGBUS whilst decompressing.
+   Possible causes are (most likely first):
+   (1) The compressed data is corrupted, and bzip2's usual checks
+       failed to detect this.  Try bzip2 -tvv my_file.bz2.
+   (2) This computer has unreliable memory or cache hardware
+       (a surprisingly common problem; try a different machine.)
+   (3) A bug in the compiler used to create this executable
+       (unlikely, if you didn't compile bzip2 yourself.)
+   (4) A real bug in bzip2 -- I hope this should never be the case.
+   The user's manual, Section 4.3, has more info on (2) and (3).
+   If you suspect this is a bug in bzip2, or are unsure about (2)
+   or (3), feel free to report it to: bzip2-devel@sourceware.org.
+   Section 4.3 of the user's manual describes the info a useful
+   bug report should have.  If the manual is available on your
+   system, please try and read it before mailing me.  If you don't
+   have the manual or can't be bothered to read it, mail me anyway.
+bzip2: file name
+is suspiciously (more than %d chars) long.
+Try using a reasonable file name instead.  Sorry! :-)
+Input-file size: %ld
+%.2f%% done
+, new size: %.2f%%
+ no data compressed.
+%6.3f:1, %6.3f bits/byte, %5.2f%% saved, %s in, %s out.
+compress:unexpected error
+%.2f%% done
+decompress:bzReadGetUnused
+%s: Data integrity error when decompressing.
+%s: Compressed file ends unexpectedly;
+perhaps it is corrupted?  *Possible* reason follows.
+%s: %s: trailing garbage after EOF ignored
+decompress:unexpected error
+test:bzReadGetUnused
+%s: %s: 
+data integrity (CRC) error in data
+file ends unexpectedly
+bad magic number (file not created by bzip2)
+trailing garbage after EOF ignored
+test:unexpected error
+testf: bad modes
+(none)
+(stdin)
+%s: There are no files matching `%s'.
+%s: Can't open input %s: %s.
+%s: Input file %s is a directory.
+%s: I won't read compressed data from a terminal.
+%s: For help, type: `%s --help'.
+%s: Can't open input file %s:%s.
+testf: bad srcMode
+  %s: 
+compress: bad modes
+(stdout)
+%s: Can't open input file %s: %s.
+%s: Input file %s already has %s suffix.
+%s: Input file %s is not a normal file.
+%s: Output file %s already exists.
+%s: Input file %s has %d other link%s.
+%s: I won't write compressed data to a terminal.
+%s: Can't create output file %s: %s.
+compress: bad srcMode
+uncompress: bad modes
+%s: Can't guess original name for %s -- using %s
+uncompress: bad srcMode
+not a bzip2 file.
+%s: %s is not a bzip2 file.
+%s: Bad flag `%s'
+--stdout
+--decompress
+--compress
+--force
+--test
+--keep
+--small
+--quiet
+--show-progress
+--version
+--license
+--exponential
+--repetitive-best
+--repetitive-fast
+--fast
+--best
+--verbose
+--help
+%s: -c and -t cannot be used together.
+You can use the `bzip2recover' program to attempt to recover
+data from undamaged sections of corrupted files.
+Argument domain error (DOMAIN)
+Argument singularity (SIGN)
+Overflow range error (OVERFLOW)
+Partial loss of significance (PLOSS)
+Total loss of significance (TLOSS)
+The result is too small to be represented (UNDERFLOW)
+Unknown error
+_matherr(): %s in %s(%g, %g)  (retval=%g)
+Mingw-w64 runtime failure:
+Address %p has no image-section
+  VirtualQuery failed for %d bytes at address %p
+  VirtualProtect failed with code 0x%x
+  Unknown pseudo relocation protocol version %d.
+  Unknown pseudo relocation bit size %d.
+%d bit pseudo relocation at %p out of range, targeting %p, yielding the value %p.
+*** stack smashing detected ***: terminated
+*** buffer overflow detected ***: terminated
+(null)
+Infinity
+rand_s
+SystemFunction036
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+GCC: (Rev2, Built by MSYS2 project) 13.2.0
+BZ2_bzRead
+BZ2_bzReadClose
+BZ2_bzReadGetUnused
+BZ2_bzReadOpen
+BZ2_bzWrite
+BZ2_bzWriteClose64
+BZ2_bzWriteOpen
+BZ2_bzlibVersion
+DeleteCriticalSection
+EnterCriticalSection
+GetCurrentProcess
+GetLastError
+GetModuleHandleW
+GetProcAddress
+InitializeCriticalSection
+IsDBCSLeadByteEx
+IsProcessorFeaturePresent
+LeaveCriticalSection
+LoadLibraryW
+MultiByteToWideChar
+SetUnhandledExceptionFilter
+TerminateProcess
+TlsGetValue
+VirtualProtect
+VirtualQuery
+WideCharToMultiByte
+__C_specific_handler
+___lc_codepage_func
+___mb_cur_max_func
+__getmainargs
+__initenv
+__iob_func
+__set_app_type
+__setusermatherr
+_amsg_exit
+_cexit
+_commode
+_errno
+_filelengthi64
+_fileno
+_fileno
+_fmode
+_initterm
+_isatty
+_onexit
+_setmode
+_stat64
+_time64
+_unlock
+_write
+calloc
+fclose
+ferror
+fflush
+fgetpos
+fprintf
+fsetpos
+fwrite
+getenv
+isspace
+localeconv
+malloc
+memcpy
+memset
+perror
+remove
+rewind
+signal
+strcmp
+strerror
+strlen
+strncmp
+strncpy
+strstr
+ungetc
+vfprintf
+wcslen
+libbz2-1.dll
+KERNEL32.dll
+msvcrt.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__imp_fgetpos
+__imp_BZ2_bzWrite
+__imp_abort
+__lib64_libkernel32_a_iname
+__imp__fmode
+__imp____mb_cur_max_func
+__imp__lock
+_head_lib64_libmsvcrt_def_a
+__imp_ferror
+__imp_GetModuleHandleW
+__imp_calloc
+__imp_LoadLibraryW
+__imp_fileno
+__imp_BZ2_bzReadOpen
+__imp_DeleteCriticalSection
+__imp_fputc
+__imp__amsg_exit
+__imp_IsProcessorFeaturePresent
+__imp__errno
+__imp_getenv
+__imp_strncpy
+__imp_strcmp
+__imp_MultiByteToWideChar
+__imp___C_specific_handler
+__imp_GetLastError
+__imp_free
+__imp__filelengthi64
+__imp_BZ2_bzWriteOpen
+__imp_LeaveCriticalSection
+__imp_fsetpos
+__imp_write
+__imp_memset
+__IAT_end__
+__imp_memcpy
+__lib64_libmsvcrt_def_a_iname
+__imp_rewind
+__imp_strerror
+__imp_setmode
+__imp_fwrite
+__imp___getmainargs
+_head_lib64_libkernel32_a
+__imp_strstr
+__imp_EnterCriticalSection
+__imp_TerminateProcess
+__imp_GetProcAddress
+__imp_signal
+__imp_WideCharToMultiByte
+__imp_strlen
+__imp_BZ2_bzReadClose
+__imp_malloc
+libbz2_1_dll_iname
+__imp_InitializeCriticalSection
+__imp_exit
+_head_libbz2_1_dll
+__imp_vfprintf
+__imp_IsDBCSLeadByteEx
+__imp___initenv
+__IAT_start__
+__imp__cexit
+__imp_SetUnhandledExceptionFilter
+__imp_ungetc
+__imp_perror
+__imp__onexit
+__imp_isatty
+__imp_BZ2_bzWriteClose64
+__imp_Sleep
+__imp_BZ2_bzlibVersion
+__imp___setusermatherr
+__imp_BZ2_bzReadGetUnused
+__imp_TlsGetValue
+__imp_fprintf
+__imp_remove
+__imp_VirtualProtect
+__imp_VirtualQuery
+__imp__initterm
+__imp_fclose
+__imp___iob_func
+__imp_localeconv
+__imp_BZ2_bzRead
+__imp_strncmp
+__imp__time64
+__imp_wcslen
+__imp____lc_codepage_func
+__imp_fflush
+__imp__unlock
+__imp___set_app_type
+__imp_fgetc
+__imp__fileno
+__imp_fread
+__imp_isspace
+__imp__commode
+__imp_fopen
+__imp__stat64
+__imp_GetCurrentProcess
+__imp_fseek
+(null)
+msvcrt.dll
+advapi32.dll

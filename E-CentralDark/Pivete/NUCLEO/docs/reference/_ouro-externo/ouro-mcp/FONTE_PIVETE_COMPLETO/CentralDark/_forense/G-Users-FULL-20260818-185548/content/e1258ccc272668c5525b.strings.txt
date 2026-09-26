@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@electron\universal\node_modules\minimatch\dist\esm\escape.d.ts.map
+
+{"version":3,"file":"escape.d.ts","sourceRoot":"","sources":["../../src/escape.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,gBAAgB,EAAE,MAAM,YAAY,CAAA;AAC7C;;;;;;;;GAQG;AACH,eAAO,MAAM,MAAM,GACjB,GAAG,MAAM,EACT,4BAEG,IAAI,CAAC,gBAAgB,EAAE,sBAAsB,CAAM,WAQvD,CAAA"}

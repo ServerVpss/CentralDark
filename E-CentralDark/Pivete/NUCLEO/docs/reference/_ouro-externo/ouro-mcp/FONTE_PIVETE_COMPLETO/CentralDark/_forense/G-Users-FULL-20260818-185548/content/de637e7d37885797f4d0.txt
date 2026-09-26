@@ -1,0 +1,9 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@humanfs\node\src\index.js
+
+/**
+ * @fileoverview This file exports everything for this package.
+ * @author Nicholas C. Zakas
+ */
+
+export * from "./node-hfs.js";
+export { Hfs } from "@humanfs/core";

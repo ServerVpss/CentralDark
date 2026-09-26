@@ -1,0 +1,137 @@
+TUTORIAL — Claude Code no Terminal via Proxy (Universal)
+
+Este tutorial ensina como usar o Claude Code no terminal através de um proxy,
+sem precisar estar logado na conta oficial da Anthropic.
+
+============================================================
+1. O QUE É ISSO?
+============================================================
+
+É uma forma de rodar o Claude Code no terminal mesmo quando:
+- Sua conta oficial atingiu o limite de uso
+- Você quer usar outro modelo (Opus, Sonnet, Haiku)
+- Você quer uma forma rápida e leve de trabalhar
+
+O proxy funciona como uma "ponte" que redireciona suas requisições.
+
+============================================================
+2. ARQUIVOS NECESSÁRIOS
+============================================================
+
+Você precisa de 3 arquivos na mesma pasta:
+
+- install.sh          → Instalador
+- claude-proxy.sh     → Script principal do proxy
+- anthropic.env       → Arquivo com sua chave da API
+
+============================================================
+3. COMO INSTALAR (Passo a passo)
+============================================================
+
+Passo 1: Crie uma pasta e coloque os 3 arquivos dentro dela
+
+mkdir -p ~/claude-proxy
+cd ~/claude-proxy
+
+# Agora copie os 3 arquivos para dentro dessa pasta
+
+Passo 2: Dê permissão de execução no instalador
+
+chmod +x install.sh
+
+Passo 3: Rode o instalador
+
+./install.sh
+
+O instalador vai:
+- Criar a pasta ~/.claude-proxy
+- Copiar os arquivos para lá
+- Instalar comandos no seu terminal
+
+Passo 4: Atualize o terminal
+
+source ~/.bashrc
+
+ou simplesmente abra um terminal novo.
+
+============================================================
+4. COMANDOS DISPONÍVEIS
+============================================================
+
+Depois de instalado, você pode usar:
+
+claude-proxy          → Liga o proxy e já abre o Claude Code
+proxy-on              → Liga o proxy no terminal atual
+proxy-off             → Desliga o proxy
+proxy-status          → Mostra se está ligado e qual modelo está ativo
+proxy-models          → Lista os modelos disponíveis
+proxy-switch          → Abre menu para trocar de modelo
+
+Exemplos:
+
+claude-proxy
+proxy-on
+proxy-switch sonnet-4.6
+proxy-status
+
+============================================================
+5. COMO CONFIGURAR SUA CHAVE
+============================================================
+CENTRALDARK_GATEWAY_URL
+Edite o arquivo de configuração:
+
+nano ~/.claude-proxy/anthropic.env
+
+Cole o seguinte conteúdo:
+
+ANTHROPIC_AUTH_TOKEN=sua-chave-aqui
+ANTHROPIC_BASE_URL=https://claude.ap7.site
+
+Salve e feche (Ctrl+O → Enter → Ctrl+X)
+
+============================================================
+6. COMO TROCAR DE MODELO
+============================================================
+
+Você tem duas formas:
+[REDIGIDO-PRESERVACAO] https://claude.ap7.site/
+Forma fácil (menu):
+    proxy-switch
+
+Forma direta:
+    proxy-switch sonnet-4.6
+    proxy-switch opus-4.8
+    proxy-switch haiku-4.6
+
+============================================================
+7. DICAS IMPORTANTES
+============================================================
+
+- O proxy só fica ligado enquanto o terminal estiver aberto.
+- Ao fechar o terminal, o proxy desliga automaticamente.
+- Para usar sempre via proxy, use o comando `claude-proxy` toda vez.
+- Para voltar a usar sua conta normal, rode `proxy-off`.
+
+============================================================
+8. DESINSTALAR
+============================================================
+
+Se quiser remover tudo:
+
+rm -rf ~/.claude-proxy
+
+Depois abra o arquivo ~/.bashrc e apague as linhas que começam com:
+# === claude-proxy aliases
+
+Depois rode:
+source ~/.bashrc
+
+============================================================
+9. SEGURANÇA
+============================================================
+
+- Sua chave fica salva apenas em ~/.claude-proxy/anthropic.env
+- Esse arquivo NÃO é enviado para lugar nenhum
+- Nunca compartilhe esse arquivo com ninguém
+
+Pronto. Agora é só usar.

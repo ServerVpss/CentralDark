@@ -1,0 +1,388 @@
+Registrando o momento atual
+Vou verificar os arquivos disponíveis, confirmar o pacote e seu hash, revisar as imagens e localizar o registro correto no repositório. Depois, organizarei evidências, links e os padrões fornecidos para contato.
+
+Relembrando
+Identificando seu registro no CentralDark
+Confirmando seu pacote PACOTAO
+Revisando seu PR #668 atual
+Localizando seus caminhos canônicos
+Corrigindo o enquadramento
+Estou distinguindo “convite” de “possibilidade de candidatura”: a evidência disponível parece indicar elegibilidade para se candidatar, não um convite formal. Vou registrar isso com precisão, junto do pacote atual, hash, links e comprovações.
+
+Pensou por 3m 4s
+Pronto
+
+Analisado
+from pathlib import Path
+import hashlib, json, shutil, zipfile, os, datetime
+
+base = Path("/mnt/data")
+out_dir = base / "trusted-access-centraldark-20260806"
+out_dir.mkdir(exist_ok=True)
+
+package_src = base / "PACOTAO-CENTRALDARK-RIGOR-MAXIMO(1).zip"
+img1_src = base / "image(20260806-103744).png"
+img2_src = base / "image(20260806-103909).png"
+
+package_dst = out_dir / "PACOTAO-CENTRALDARK-RIGOR-MAXIMO.zip"
+img1_dst = out_dir / "EVIDENCIA-UI-GPT-5.6-SOL-TRUSTED-ACCESS-20260806-0737.png"
+img2_dst = out_dir / "EVIDENCIA-MENSAGEM-TRUSTED-ACCESS-20260806-0737.png"
+
+shutil.copyfile(package_src, package_dst)
+shutil.copyfile(img1_src, img1_dst)
+shutil.copyfile(img2_src, img2_dst)
+
+def sha256(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+package_sha = sha256(package_dst)
+img1_sha = sha256(img1_dst)
+img2_sha = sha256(img2_dst)
+
+report = f"""# Registro de evidência — Trusted Access for Cyber
+
+**Data local do evento:** 2026-08-06  
+**Horário visível na captura:** 07:37 (UTC-03:00)  
+**Projeto:** CentralDark  
+**Autor da intenção:** SEGREDO/CHEFE  
+**Classificação:** evidência de encaminhamento para candidatura ao Trusted Access for Cyber
+
+## Fato observado na interface
+
+A interface do ChatGPT exibiu a mensagem:
+
+> Este conteúdo não pode ser exibido. Temos cuidado redobrado com solicitações de cibersegurança. Se você é um profissional de segurança, talvez possa se candidatar ao Trusted Access.
+
+Na mesma captura, a interface mostra:
+
+- inteligência configurada em **Alto**;
+- modelo selecionado **GPT-5.6 Sol**;
+- superfície de produto: **ChatGPT Web**;
+- data/hora local visível: **06/08/2026 07:37**.
+
+## Classificação de prova
+
+```text
+ENCAMINHAMENTO_PARA_CANDIDATURA=PROVADO
+MENSAGEM_DE_CIBERSEGURANCA=PROVADA
+MODELO_VISIVEL=GPT-5.6_SOL
+SUPERFICIE=CHATGPT_WEB
+CONVITE_FORMAL_INDIVIDUAL=NAO_PROVADO
+APROVACAO_TRUSTED_ACCESS=NAO_PROVADA
+ACESSO_GPT-5.5-CYBER=NAO_PROVADO
+A captura prova que a plataforma apresentou um caminho de candidatura. Ela não prova, isoladamente, aprovação, provisionamento ou convite formal individual. Essa separação evita falso verde e preserva a força da evidência real.
+
+Pacote técnico atual — não usar versão antiga
+PACOTE=PACOTAO-CENTRALDARK-RIGOR-MAXIMO.zip
+SHA256_FINAL={package_sha}
+SIZE_BYTES={package_dst.stat().st_size}
+ZIP_FILES=79
+ZIP_ENTRIES=93
+PATHS_PERIGOSOS=0
+SYMLINKS_DENTRO_DO_ZIP=0
+Prova limpa reexecutada nesta sessão
+MANIFEST_ENTRIES=17
+SELF_MAP=SYNCED
+
+AUDIT_HASH_MANIFEST=PASS
+FILES_IMUTAVEIS_VERIFICADOS=76
+HASH_MISMATCH=0
+ARQUIVO_NOVO_NAO_AUDITADO=0
+
+NODE_CHECK=16/16
+SHELL_SYNTAX=4/4
+
+TEST_FILES=6
+TESTS_TOTAL=59
+PASS=59
+FAIL=0
+SKIPPED=0
+CANCELLED=0
+TODO=0
+
+SECRET_FILE_READ_SCAN=PASS
+DEMO=PASS
+Limite honesto do pacote
+A validação é local e determinística. Nenhuma chamada live à API CentralDark, OpenAI ou Anthropic foi executada sem credenciais. O pacote cobre fallback, resposta vazia, troca de modelo e indisponibilidade por mocks determinísticos.
+
+Evidências visuais
+EVIDENCIA_1=EVIDENCIA-UI-GPT-5.6-SOL-TRUSTED-ACCESS-20260806-0737.png
+SHA256_EVIDENCIA_1={img1_sha}
+SIZE_EVIDENCIA_1={img1_dst.stat().st_size}
+
+EVIDENCIA_2=EVIDENCIA-MENSAGEM-TRUSTED-ACCESS-20260806-0737.png
+SHA256_EVIDENCIA_2={img2_sha}
+SIZE_EVIDENCIA_2={img2_dst.stat().st_size}
+Links oficiais atuais
+Visão geral: https://help.openai.com/pt-br/articles/20001258-trusted-access-for-cyber
+
+Candidatura individual: https://chatgpt.com/cyber
+
+Candidatura de organização: https://openai.com/pt-BR/form/enterprise-trusted-access-for-cyber/
+
+Solução de problemas: https://help.openai.com/pt-br/articles/20001259-trusted-access-for-cyber-common-issues-and-troubleshooting
+
+Uso declarado para candidatura
+O objetivo é trabalho defensivo e autorizado sobre sistemas, aplicações, repositórios, infraestrutura e dados que SEGREDO/CHEFE possui, opera ou está explicitamente autorizado a testar. O acesso não será revendido, roteado ou disponibilizado a clientes ou terceiros. Para o Trusted Access, deverá ser usado um workspace interno separado de qualquer tráfego voltado a clientes.
+
+Estado
+REGISTRO_DOCUMENTAL=CRIADO
+PACOTE_ATUAL_VERIFICADO=SIM
+CANDIDATURA_ENVIADA=NAO
+APROVACAO=NAO_PROVADA
+MERGE=NAO
+DEPLOY=NAO
+RESTART=NAO
+PRODUCAO_ALTERADA=NAO
+"""
+
+contact = f"""# Mensagem de contato — OpenAI Trusted Access for Cyber
+
+Versão em português
+Assunto: Solicitação de Trusted Access for Cyber — engenharia defensiva autorizada no CentralDark
+
+Olá, equipe OpenAI.
+
+Ao trabalhar no ChatGPT Web em 6 de agosto de 2026, às 07:37 UTC-03:00, usando o modelo exibido como GPT-5.6 Sol com inteligência em Alto, recebi a mensagem de segurança cibernética que orienta profissionais de segurança a se candidatarem ao Trusted Access.
+
+Meu uso pretendido é exclusivamente defensivo, interno e autorizado. Trabalho no projeto privado CentralDark, em sistemas, aplicações, repositórios e infraestrutura que possuo, opero ou tenho autorização explícita para testar. Não pretendo revender, compartilhar, rotear ou disponibilizar o acesso a clientes ou terceiros. O workspace destinado ao Trusted Access será separado de tráfego voltado a clientes.
+
+O trabalho técnico que motivou a solicitação envolve validação de segurança e confiabilidade de sistemas distribuídos e agentes de IA, incluindo:
+
+proveniência de artefatos e prevenção de aprendizado falso;
+
+concorrência, locks órfãos, deduplicação e checkpoints;
+
+validação semântica contra falsos positivos;
+
+detecção de respostas vazias tratadas incorretamente como sucesso;
+
+contratos de migração e preservação de compatibilidade;
+
+testes de fronteira, regressão e contraprovas executáveis;
+
+sanitização de tokens e bloqueio de leitura de arquivos sensíveis.
+
+Anexo um pacote de evidência reprodutível:
+
+PACOTE=PACOTAO-CENTRALDARK-RIGOR-MAXIMO.zip
+SHA256={package_sha}
+SIZE_BYTES={package_dst.stat().st_size}
+ZIP_FILES=79
+ZIP_ENTRIES=93
+PATHS_PERIGOSOS=0
+SYMLINKS=0
+TEST_FILES=6
+TESTS_TOTAL=59
+PASS=59
+FAIL=0
+SKIPPED=0
+NODE_CHECK=16/16
+SHELL_SYNTAX=4/4
+SECRET_FILE_READ_SCAN=PASS
+Também anexo duas capturas da mensagem exibida no produto, com seus hashes SHA-256 no manifesto de evidências.
+
+Peço a avaliação da minha candidatura individual ou a orientação sobre o caminho de organização mais adequado. Posso fornecer identificação, informações profissionais adicionais, escopo de autorização, detalhes do workspace e quaisquer evidências necessárias para a análise.
+
+Atenciosamente,
+SEGREDO/CHEFE
+Projeto privado: ServerVpss/CentralDark
+Website: segredounlock.com
+País de uso: Brasil
+
+English version
+Subject: Trusted Access for Cyber request — authorized defensive engineering for CentralDark
+
+Hello OpenAI team,
+
+While working in ChatGPT Web on August 6, 2026 at 07:37 UTC-03:00, using the model displayed as GPT-5.6 Sol with the intelligence setting on High, I received the cyber-safety message directing security professionals to apply for Trusted Access.
+
+My intended use is strictly defensive, internal, and authorized. I work on the private CentralDark project and only analyze systems, applications, repositories, infrastructure, and data that I own, operate, or am explicitly authorized to test. I will not resell, share, proxy, route, or provide Trusted Access to customers or third parties. The Trusted Access workspace will be separated from any customer-facing traffic.
+
+The technical work behind this request includes:
+
+artifact provenance and prevention of false learning promotion;
+
+concurrency, orphan locks, deduplication, and checkpoint integrity;
+
+semantic validation against false positives;
+
+detection of empty responses incorrectly treated as success;
+
+migration contracts and compatibility preservation;
+
+boundary testing, regression testing, and executable counterproofs;
+
+token sanitization and prevention of sensitive-file reads.
+
+I am attaching a reproducible evidence package:
+
+PACKAGE=PACOTAO-CENTRALDARK-RIGOR-MAXIMO.zip
+SHA256={package_sha}
+SIZE_BYTES={package_dst.stat().st_size}
+ZIP_FILES=79
+ZIP_ENTRIES=93
+DANGEROUS_PATHS=0
+SYMLINKS=0
+TEST_FILES=6
+TESTS_TOTAL=59
+PASS=59
+FAIL=0
+SKIPPED=0
+NODE_CHECK=16/16
+SHELL_SYNTAX=4/4
+SECRET_FILE_READ_SCAN=PASS
+I am also attaching two screenshots of the product message, with their SHA-256 hashes recorded in the evidence manifest.
+
+Please evaluate my individual application or advise me on the appropriate organizational intake path. I am ready to provide identity verification, additional professional information, authorization scope, workspace details, and any further evidence needed for review.
+
+Sincerely,
+SEGREDO/CHEFE
+Private project: ServerVpss/CentralDark
+Website: segredounlock.com
+Country of use: Brazil
+"""
+
+fields = """# Campos sugeridos para a candidatura
+
+Preencha somente com dados verdadeiros e verificáveis.
+
+Escolha de rota
+Pessoa física: use a candidatura individual em https://chatgpt.com/cyber.
+
+Organização: use o formulário em https://openai.com/pt-BR/form/enterprise-trusted-access-for-cyber/.
+
+Identificação
+NOME_LEGAL_DA_ENTIDADE=[PREENCHER]
+NOME_FANTASIA=Segredo Unlock / CentralDark
+WEBSITE_PUBLICO=https://segredounlock.com
+PRIMEIRO_NOME=[PREENCHER]
+SOBRENOME=[PREENCHER]
+CARGO=Founder / Security Engineering Lead
+EQUIPE=CentralDark Security Engineering
+EMAIL_PROFISSIONAL=[PREENCHER]
+TELEFONE_PROFISSIONAL=[PREENCHER]
+PAIS_DE_USO=Brasil
+Superfícies pretendidas
+Marcar apenas as que realmente serão usadas:
+
+CHATGPT/CODEX_COM_LOGIN=SIM
+CODEX_API=[SIM|NAO]
+APLICACAO_PROPRIA_VIA_API=[SIM|NAO]
+AWS=[SIM|NAO]
+Descrição curta do caso de uso
+Uso interno de IA para engenharia defensiva autorizada no CentralDark:
+revisão segura de código, validação de vulnerabilidades, modelagem de ameaças,
+testes de regressão, validação de patches, sanitização de credenciais,
+proveniência de artefatos, concorrência e integridade de checkpoints.
+Declarações essenciais
+SISTEMAS_PROPRIOS_OU_AUTORIZADOS=SIM
+ACESSO_REPASSADO_A_CLIENTES_OU_TERCEIROS=NAO
+WORKSPACE_INTERNO_SEPARADO=SIM
+USO_DEFENSIVO_E_AUTORIZADO=SIM
+DADOS_FORNECIDOS_SAO_VERDADEIROS=SIM
+Evidência para suporte em caso de bloqueio
+A OpenAI recomenda informar:
+
+MENSAGEM_EXATA=Este conteúdo não pode ser exibido...
+MODELO_VISIVEL=GPT-5.6 Sol
+SUPERFICIE=ChatGPT Web
+DATA_HORA=2026-08-06 07:37 UTC-03:00
+REQUEST_ID=NAO_VISIVEL_NA_CAPTURA
+DESCRICAO_EDITADA=Validação defensiva de integridade, concorrência e falsos positivos em sistema próprio/autorizado.
+"""
+
+manifest = {
+"schema": "centraldark.trusted-access-evidence.v1",
+"generated_at_local": "2026-08-06T07:40:00-03:00",
+"intent_author": "SEGREDO/CHEFE",
+"event_classification": {
+"cyber_safety_message": "PROVED_BY_SCREENSHOT",
+"application_path_presented": "PROVED_BY_SCREENSHOT",
+"formal_invitation": "NOT_PROVED",
+"approval": "NOT_PROVED",
+"trusted_access_enabled": "NOT_PROVED"
+},
+"package": {
+"name": package_dst.name,
+"sha256": package_sha,
+"size_bytes": package_dst.stat().st_size,
+"zip_files": 79,
+"zip_entries": 93,
+"dangerous_paths": 0,
+"symlinks": 0,
+"runtime_verification": {
+"manifest_entries": 17,
+"self_map": "SYNCED",
+"immutable_files_checked": 76,
+"hash_mismatch": 0,
+"new_unaudited_files": 0,
+"node_check": {"pass": 16, "total": 16},
+"shell_syntax": {"pass": 4, "total": 4},
+"test_files": 6,
+"tests": {"total": 59, "pass": 59, "fail": 0, "skipped": 0, "cancelled": 0, "todo": 0},
+"secret_file_read_scan": "PASS",
+"demo": "PASS"
+}
+},
+"screenshots": [
+{"name": img1_dst.name, "sha256": img1_sha, "size_bytes": img1_dst.stat().st_size},
+{"name": img2_dst.name, "sha256": img2_sha, "size_bytes": img2_dst.stat().st_size}
+],
+"official_links": {
+"overview_pt_br": "https://help.openai.com/pt-br/articles/20001258-trusted-access-for-cyber",
+"individual_application": "https://chatgpt.com/cyber",
+"organization_application_pt_br": "https://openai.com/pt-BR/form/enterprise-trusted-access-for-cyber/",
+"troubleshooting_pt_br": "https://help.openai.com/pt-br/articles/20001259-trusted-access-for-cyber-common-issues-and-troubleshooting"
+},
+"safety_scope": {
+"authorized_defensive_use_only": True,
+"third_party_access": False,
+"customer_facing_traffic": False,
+"separate_internal_workspace_required": True
+}
+}
+
+(out_dir / "REGISTRO-TRUSTED-ACCESS-2026-08-06.md").write_text(report, encoding="utf-8")
+(out_dir / "MENSAGEM-CONTATO-OPENAI-TRUSTED-ACCESS.md").write_text(contact, encoding="utf-8")
+(out_dir / "CAMPOS-SUGERIDOS-CANDIDATURA.md").write_text(fields, encoding="utf-8")
+(out_dir / "MANIFEST-EVIDENCIAS.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+Hash list before dossier creation
+hash_lines = []
+for p in sorted(out_dir.iterdir()):
+if p.is_file():
+hash_lines.append(f"{sha256(p)} {p.name}")
+(out_dir / "SHA256SUMS.txt").write_text("\n".join(hash_lines) + "\n", encoding="utf-8")
+
+dossier = base / "DOSSIER-TRUSTED-ACCESS-CENTRALDARK-20260806.zip"
+with zipfile.ZipFile(dossier, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
+for p in sorted(out_dir.iterdir()):
+z.write(p, arcname=p.name)
+
+dossier_sha = sha256(dossier)
+result = {
+"package_current": str(package_dst),
+"package_sha256": package_sha,
+"dossier": str(dossier),
+"dossier_sha256": dossier_sha,
+"dossier_size_bytes": dossier.stat().st_size,
+"files": [p.name for p in sorted(out_dir.iterdir())],
+}
+print(json.dumps(result, ensure_ascii=False, indent=2))
+
+Analisado
+Analisado
+from pathlib import Path
+receipt = Path("/mnt/data/DOSSIER-TRUSTED-ACCESS-CENTRALDARK-20260806.sha256.txt")
+receipt.write_text(
+    "7bc4501064e41a14250a730f255e6a198bfca76a8370f14dce3196b5b1eea00e  "
+    "DOSSIER-TRUSTED-ACCESS-CENTRALDARK-20260806.zip\n",
+    encoding="utf-8"
+)
+print(str(receipt))
+Digitando código

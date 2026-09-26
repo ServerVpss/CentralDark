@@ -1,0 +1,153 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\Service Worker\ScriptCache\2a0afd649b00527b_1
+
+https://superbet.bet.br/mtechgtwy/_/service_worker/68d0/sw.js?path=%2Fmtechgtwy
+^[\s\xa0]*$
+Unknown base64 encoding at char: 
+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
+Pb:6di
+ciphertext too short
+IV must be 12 bytes
+AES-GCM
+tagLength
+additionalData
+subtle
+decrypt
+Pbbe"=
+encrypt
+unsupported AES key size: ${n}
+importKey
+Pcn%qG
+unknown curve: 
+algorithm
+namedCurve
+namedCurve must be provided
+public
+deriveBits
+generateKey
+deriveKey
+exportKey
+crv must be provided
+x must be provided
+y must be provided
+x-coordinate byte-length is invalid (got: 
+, want: 
+y-coordinate byte-length is invalid (got: 
+failed to import key
+invalid point
+Curve has to be defined.
+Unexpected key length: 
+input must be a non null Uint8Array
+invalid tag size, must be an integer
+tag too short, must be at least 
+ bytes
+SHA-256
+SHA-384
+SHA-512
+tag too long, must not be larger than 20 bytes
+tag too long, must not be larger than 32 bytes
+tag too long, must not be larger than 48 bytes
+tag too long, must not be larger than 64 bytes
+ is not supported
+verify
+length must be an integer
+length must be positive
+length too large
+Both byte arrays should be of the same length
+message limit reached
+psk_id_hash
+info_hash
+secret
+base_nonce
+publicKey
+privateKey
+private
+keyPair 
+ key was of type 
+ key should be ECDH but found 
+eae_prk
+shared_secret
+TEST_ONLY
+Unknown HPKE parameters: 
+Context has already been used
+hpkePublicKey
+params
+version
+DHKEM_P256_HKDF_SHA256
+HKDF_SHA256
+AES_128_GCM
+getEncryptionKeyId
+cipherText
+timestamp
+send_pixel
+method
+templates
+processResponse
+attributionReporting
+attribution_reporting
+process_response
+event: message
+data: 
+fallback_url
+fallback_url_method
+encode
+digest
+&gap.ch=
+encryptionKeyString
+&gap.ch=4
+failureType
+command
+url required.
+Cross-origin command blocked
+pathname
+/_/service_worker
+/g/collect
+Invalid command path blocked
+Invalid command URL: 
+commandType
+Command with type 
+ unknown.
+referer
+soReferrer
+\${([^${}]*?)}
+Unknown filter: 
+Failed to inject template values: 
+credentials
+include
+keepalive
+redirect
+follow
+X-Effective-Origin
+X-Effective-Referer
+headers
+no-cors
+Fetch failed
+Fetch failed: 
+emkid.
+&_est=
+&_es=15
+&_es=16
+sha256
+encrypt_with_memo
+targetId
+clientCount
+totalLifeMs
+heartbeatCount
+clientLifeMs
+clientId
+result
+failure
+install
+skipWaiting
+activate
+waitUntil
+clients
+SecurityException
+InvalidArgumentsException
+HPKE-v1
+LPq^k%$=
+\[object (Boolean|Number|String|Function|Array|Date|RegExp)\]
+attributionsrc
+eventSourceEligible
+triggerEligible
+^[0-9A-Fa-f]{64}$
+%/L#-N

@@ -1,0 +1,1376 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\lib\gnupg\gpg-protect-tool.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+@.rsrc
+@.reloc
+AUATUWVSH
+[^_]A\A]
+H;C@s[H
+D$X.key
+AWAVATUWVSH
+[^_]A\A^A_
+shadowedH3B
+-privateH3J
+private-I9
+ATUWVSH
+0[^_]A\
+AWAVAUATUWVSH
+(12:protH
+ected-atH
+[^_]A\A]A^A_
+t8<:t4L
+private-I9C
+(21:protL
+otected-I
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+protecteH3C
+d-privatH3S
+vate-keyH9C
+protecteM
+protecteM
+<(t(<)uCI
+HcD$pH
+(11:privL
+ate-key
+H+D$PH
+protecteH3B
+d-privatH3J
+vate-keyI9@
+shadowedI3
+-privateI3P
+protecteHc
+private-I9
+openpgp-H9A
+p-nativeH9A
+protectiHc
+ATUWVSH
+\$ ff.
+@[^_]A\
+AWAVUWVSH
+H[^_]A^A_
+H[^_]A^A_
+public-kH9B
+(20:shadI
+owed-priH
+ate-key
+wed-privH
+H[^_]A^A_
+t;<:t7H
+shadowedH3B
+-privateH3J
+shadowedf
+;tpm2u
+t@<:t<E1
+<:t0E1
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+H[^_]A\A]A^A_
+AVUWVSH
+ [^_]A^
+ [^_]A^
+ [^_]A^
+ [^_]A^
+AWAVAUATUWVSH
+fD9d$`
+LcD$xH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+H;D$Hr
+ATUWVSH
+[^_]A\
+[^_]A\
+[^_]A\
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+T$htTH
+ATUWVSH
+ [^_]A\
+ [^_]A\
+ATUWVSH
+ [^_]A\
+ [^_]A\
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+<(t)<)uCA
+AWAVAUATUWVSH
+(10:publH
+ic-key(3
+D$J)(1:L
+c-key(3:H
+rsa(1:n
+D$F)))
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+private-H9
+public-kH9
+|$Lff.
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+public-kH9
+T$\;T$<
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+shadowedH3
+-privateH3H
+public-kH9
+private-H9
+L;t$`D
+AVUWVSH
+0[^_]A^
+8eddsu
+8Ed44u
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AUATUWVSH
+[^_]A\A]
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AWAVATUWVSH
+p[^_]A\A^A_
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+D$`L;D$(
+D$`L;D$(
+ATUWVSH
+0[^_]A\
+0[^_]A\
+<%t?ff.
+ATUWVSH
+ [^_]A\
+AVAUATUWVSH
+ [^_]A\A]A^
+AVAUATUWVSH
+ [^_]A\A]A^
+L$H9L$<
+L$L9L$@
+AWAVATUWVSH
+ [^_]A\A^A_
+AWAVATUWVSH
+ [^_]A\A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+AUATUWVSH
+([^_]A\A]
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+ATUWVSH
+ [^_]A\
+ [^_]A\
+AVAUATUWVSH
+ [^_]A\A]A^
+ATUWVSH
+ [^_]A\
+AVATUWVSH
+[^_]A\A^
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AUATUWVSH
+X[^_]A\A]
+X[^_]A\A]
+X[^_]A\A]
+ATUWVSH
+0[^_]A\
+0[^_]A\
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+AVAUATUWVSH
+[^_]A\A]A^
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AUATUWVSH
+[^_]A\A]
+[^_]A\A]
+[^_]A\A]
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+ATUWVSH
+ [^_]A\
+ [^_]A\
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+ATUWVSH
+ [^_]A\
+ [^_]A\
+ATUWVSH
+;@:>t'
+ [^_]A\
+ [^_]A\
+ATUWVSH
+[^_]A\
+AUATUWVSH
+([^_]A\A]
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AVAUATUWVSH
+@[^_]A\A]A^
+AVWVSL
+AVWVSH
+8[^_A^
+8[^_A^
+AVATUWVSH
+8[^_]A\A^
+8[^_]A\A^
+u}LcL$<A
+AVAUATUWVSH
+@[^_]A\A]A^
+AWAVAUATUWVSH
+<$agen
+[^_]A\A]A^A_
+AVWVSH
+X[^_A^
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+ATUWVSH
+ [^_]A\
+GPG_TTY
+ATUWVSH
+ [^_]A\
+ [^_]A\
+AVAUATUWVSH
+0[^_]A\A]A^
+0[^_]A\A]A^
+AUATUWVSH
+AVAUATUWVSH
+[^_]A\A]A^
+ATUWVSH
+[^_]A\
+[^_]A\
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+H9t$Xu
+AWAVUWVSH
+(8:31323H
+3342:43)H
+GPL-3.0-or-later
+gpg-protect-tool (GnuPG)
+Copyright (C) 2025 g10 Code GmbH
+Cygwin
+Please report bugs to <@EMAIL@>.
+Usage: gpg-protect-tool [options] (-h for help)
+Syntax: gpg-protect-tool [options] [args]
+Secret key maintenance tool
+error reading '[stdin]': %s
+can't open '%s': %s
+can't stat '%s': %s
+error reading '%s': %s
+Extended key format is not supported by this tool
+invalid S-Expression in '%s' (off=%u): %s
+protect-tool.c
+invalid canonical S-Expression (off=%u): %s
+Please enter the passphrase or the PIN
+needed to complete this operation.
+Passphrase:
+cancelled
+error while asking for the passphrase: %s
+gpg-protect-tool
+error allocating connection control data: %s
+protecting the key failed: %s
+[PROTECT-TOOL:] bad-passphrase
+unprotecting the key failed: %s
+key protection done at %.4s-%.2s-%.2s %.2s:%.2s:%s
+key protection done at [unknown]
+malformed key: %s
+shadowing the key failed: %s
+resultlen
+get_shadow_info failed: %s
+infolen
+gcry_sexp_new failed
+can't calculate keygrip
+keylen
+# Begin dump of %s
+%s%s# End dump of %s
+show_file
+show_shadow_info
+read_and_shadow
+make_advanced
+get_passphrase
+make_canonical
+@Commands:
+protect
+protect a private key
+unprotect
+unprotect a private key
+shadow
+create a shadow entry for a public key
+show-shadow-info
+return the shadow info
+show-keygrip
+show the "keygrip"
+s2k-calibration
+Options:
+verbose
+write output in advanced format
+canonical
+write output in canonical format
+passphrase
+|STRING|use passphrase STRING
+have-cert
+certificate to export provided on STDIN
+store the created key in the appropriate place
+force overwriting
+no-fail-on-exist
+homedir
+prompt
+|ESCSTRING|use ESCSTRING as prompt in pinentry
+enable-status-msg
+agent-program
+debug-use-ocb
+shadowed-private-key
+private-key
+Ed25519
+123456789abcdef0
+saltsalt
+protect.c
+there is a bug at %s:%d:%s
+S2K calibration: %lu -> %lums
+private-key
+p - outbuf == outlen
+openpgp-s2k3-ocb-aes
+(9:protected%d:%s((4:sha18:%n_8bytes_%u:%s)%d:%n%*s)%d:%n%*s)
+p - *result == *resultlen
+protected-private-key
+protected-at
+protected
+*s == '('
+s[-1] == ')'
+shared-secret
+openpgp-native
+protection
+shadowed-private-key
+public-key
+(8:shadowed%d:%s
+tpm2-v1
+merge_lists
+openpgp-s2k3-sha1-aes-cbc
+openpgp-s2k3-sha1-aes256-cbc
+do_encryption
+agent_protect
+calibrate_s2k_count_one
+nedpqu
+pabgnqd
+secret key parts are not available
+public key algorithm %d (%s) is not supported
+(private-key(ecc(curve %s)(flags eddsa)(q%m)(d%m)))
+(private-key(ecc(curve %s)(flags djb-tweak)(q%m)(d%m)))
+(private-key(ecc(curve %s)(q%m)(d%m)))
+protection algorithm %d (%s) is not supported
+protection hash algorithm %d (%s) is not supported
+failed to open cipher_algo %d: %s
+not enough bytes for SHA-1 checksum
+cvt-openpgp.c
+there is a bug at %s:%d:%s
+not enough bytes for checksum
+skeylen <= skeysize
+nskey - npkey <= 10
+(private-key(dsa(p%m)(q%m)(g%m)(y%m)(x%m)))
+(private-key(elg(p%m)(g%m)(y%m)(x%m)))
+(private-key(rsa(n%m)(e%m)(d%m)(p%m)(q%m)(u%m)))
+Ed25519
+Curve25519
+(public-key(ecc(curve %s)(flags eddsa)(q%m)))
+(public-key(ecc(curve %s)(flags djb-tweak)(q%m)))
+(public-key(ecc(curve %s)(q%m)))
+(protected-private-key(ecc(curve %s)(flags eddsa)(q%m)(protected openpgp-native%S)))
+(protected-private-key(ecc(curve %s)(flags djb-tweak)(q%m)(protected openpgp-native%S)))
+(protected-private-key(ecc(curve %s)(q%m)(protected openpgp-native%S)))
+openpgp-private-key
+version
+protection
+(public-key(dsa(p%m)(q%m)(g%m)(y%m)))
+(public-key(elg(p%m)(g%m)(y%m)))
+(public-key(rsa(n%m)(e%m)))
+(protected-private-key(dsa(p%m)(q%m)(g%m)(y%m)(protected openpgp-native%S)))
+(protected-private-key(elg(p%m)(g%m)(y%m)(protected openpgp-native%S)))
+(protected-private-key(rsa(n%m)(e%m)(protected openpgp-native%S)))
+ned?p?q?u?
+pqgyx?
+shadowed-private-key
+protected-private-key
+private-key
+invalid private key format
+npkey < nskey
+nskey < DIM (bufarr)
+p == data + ndata - 20
+(openpgp-private-key
+ (version 1:4)
+ (algo %s)
+ (protection sha1 aes %b 1:3 sha1 %b %s))
+apply_protection
+extract_private_key
+do_unprotect
+gnupg2
+%s is too old (need %s, have %s)
+libgcrypt
+sexputil.c
+there is a bug at %s:%d:%s
+[invalid S-expression]
+invalid S-exp in cmp_simple_canon_sexp
+invalid S-exp in %s
+sig-val
+public-key
+private-key
+shadowed-private-key
+q_toklen < q_ptrlen
+E_no_key
+E_no_algo
+X_algo_%d
+E_unknown
+sha256
+sha512
+sha384
+sha224
+sha3-224
+sha3-256
+sha3-384
+sha3-512
+ripemd160
+rmd160
+uncompress_ecc_q_in_canon_sexp
+cmp_canon_sexp
+sexp_to_string
+/proc/curproc/file
+GNUPG_BUILD_ROOT
+error reading symlink '%s': %s
+/bin/gpgconf
+trying fallback '%s'
+value too large
+/bin/gpgconf.ctl
+error opening '%s': %s
+error getting %s from gpgconf.ctl: %s
+.enable
+sysconfdir
+socketdir
+error reading '%s': %s
+invalid rootdir '%s' specified in gpgconf.ctl
+invalid sysconfdir '%s' specified in gpgconf.ctl
+invalid socketdir '%s' specified in gpgconf.ctl
+/usr/bin
+~/.gnupg
+GNUPGHOME
+can't create directory '%s': %s
+directory '%s' created
+common.conf
+wx,mode=-rw-r
+error creating '%s': %s
+use-keyboxd
+error writing to '%s': %s
+error closing '%s': %s
+%s/user/%u
+/etc/gnupg
+/usr/lib/gnupg
+/libexec
+/usr/share/gnupg
+/share/gnupg
+/usr/share/locale
+/share/locale
+S.gpg-agent
+S.dirmngr
+S.keyboxd
+homedir.c
+! gnupg_module_name_called
+! gnupg_build_directory
+/agent/gpg-agent
+/gpg-agent
+/scd/scdaemon
+/scdaemon
+/tpm2d/tpm2daemon
+/tpm2daemon
+/dirmngr/dirmngr
+/dirmngr
+/kbx/keyboxd
+/keyboxd
+/agent/gpg-protect-tool
+/gpg-protect-tool
+/dirmngr/dirmngr_ldap
+/dirmngr_ldap
+/tools/gpg-check-pattern
+/gpg-check-pattern
+/sm/gpgsm
+/gpgsm
+/g10/gpg
+/g10/gpgv
+/tools/gpg-connect-agent
+/gpg-connect-agent
+/tools/gpgconf
+/gpgconf
+/tools/gpg-card
+/gpg-card
+/tools/gpgtar
+/gpgtar
+there is a bug at %s:%d:%s
+/pinentry
+/pinentry-basic
+gnupg_module_name
+gnupg_set_builddir
+rootdir
+/var/run
+gettime.c
+there is a bug at %s:%d:%s
+time() failed
+%04d%02d%02dT%02d%02d%02d
+%04d%02d%02dT120000
+%uy%ud%uh%um
+time-warp
+%ud%uh%um%us
+%uh%um%us
+%um%us
+%04d-%02d-%02d
+%04d-%02d-%02d %02d:%02d:%02d
+JanFebMarAprMayJunJulAugSepOctNovDec
+SunMonTueWedThuFriSat
+%.3s, %02d %.3s %04d %02d:%02d:%02d +0000
+[none]
+%.4s-%.2s-%.2s %.2s:%.2s:%s
+days_per_month
+gnupg_copy_time
+ybndrfg8ejkmcpqxot1uwisza345h769convert.c
+there is a bug at %s:%d:%s
+hex2str_alloc
+n == nbytes
+percent.c
+%%%02X
+do_plus_or_plain_unescape
+libgcrypt problem: %s
+out of core in secure memory while allocating %lu bytes
+out of core while allocating %lu bytes
+error allocating enough memory: %s
+AES128
+%s:%u: obsolete option "%s" - it has no effect
+WARNING: "%s%s" is an obsolete option - it has no effect
+[stdout]
+[stdin]
+enabled debug flags:
+available debug flags:
+ %5u %s
+unknown debug flag '%s' ignored
+enabled compatibility flags:
+available compatibility flags:
+unknown compatibility flag '%s' ignored
+estream_asprintf failed: %s
+(public-key(ecc(curve %s)))
+1.3.6.1.4.1.11591.2.12242973
+Curve25519
+E_error
+unknown_%u
+%s: table getting too large - possible DoS
+get_keyalgo_string
+1.3.6.1.4.1.3029.1.5.1
+cv25519
+Ed25519
+1.3.6.1.4.1.11591.15.1
+ed25519
+1.3.101.110
+1.3.101.112
+1.3.101.111
+1.3.101.113
+NIST P-256
+1.2.840.10045.3.1.7
+nistp256
+NIST P-384
+1.3.132.0.34
+nistp384
+NIST P-521
+1.3.132.0.35
+nistp521
+brainpoolP256r1
+1.3.36.3.3.2.8.1.1.7
+brainpoolP384r1
+1.3.36.3.3.2.8.1.1.11
+brainpoolP512r1
+1.3.36.3.3.2.8.1.1.13
+secp256k1
+1.3.132.0.10
+PINENTRY_LAUNCHED
+ignoring gpg-agent inquiry '%s'
+OPTION allow-pinentry-notify
+--check 
+GETINFO cmd_has_option GET_PASSPHRASE repeat
+GET_PASSPHRASE --data %s--repeat=%d -- %s %s %s %s
+CLEAR_PASSPHRASE %s
+map_static_macro_string failed: %s
+map_static_strings failed: %s
+https://bugs.gnupg.org
+GPG_AGENT
+gpg-agent
+SCDAEMON
+scdaemon
+TPM2DAEMON
+tpm2daemon
+DIRMNGR
+dirmngr
+GPGCONF
+gpgconf
+GPGTAR
+gpgtar
+stringhelp.c
+(char*)(result + n + 1) == buffer
+there is a bug at %s:%d:%s
+fatal: getcwd failed: %s
+fatal: too many args for xstrconcat
+fatal: out of memory
+do_strtokenize
+do_make_filename
+%3%2%0
+conversion from '%s' to '%s' not available
+iconv_open failed: %s
+\x%02x
+utf8conv.c
+there is a bug at %s:%d:%s
+conversion from '%s' to '%s' failed: %s
+iso-8859-1
+8859-1
+ANSI_X3.4-1968
+do_utf8_to_native
+error setting envvar %s to '%s': %s
+can't disable core dumps: %s
+/dev/null
+%s: WARNING: standard output reopened
+%s: WARNING: standard input reopened
+%s: WARNING: standard error reopened
+%s: fatal: unable to reopen standard input, output, or error
+gnupg_allow_set_foregound_window
+%s called with invalid pid %lu
+renaming '%s' to '%s' failed: %s
+XXXXXX
+user '%s' not found
+LOGNAME
+/usr/local/bin:/usr/bin:/bin
+GNUPGHOME
+error unsetting envvar %s: %s
+error setting supplementary groups for '%s': %s
+error switching to user '%s': %s
+could not getsockname(%d): %s
+file descriptor %d is not a unix-domain socket
+socket name not present for file descriptor %d
+socket name for file descriptor %d was truncated (passed %zu bytes, wanted %u)
+failed to allocate memory for name of fd %d: %s
+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+putenv=
+OPTION %s%s=%s
+ASSUAN_DEBUG
+GPG_TTY
+lc-ctype
+lc-messages
+starting_agent ? 0 0
+gpg-agent
+starting_dirmngr ? 0 0
+dirmngr
+starting_keyboxd ? 0 0
+keyboxd
+gnupg_spawn_agent_sentinel
+gnupg_spawn_dirmngr_sentinel
+gnupg_spawn_keyboxd_sentinel
+gnupg_spawn_unknown_sentinel
+error allocating assuan context: %s
+S.gpg-agent
+S.dirmngr
+S.keyboxd
+connection to the %s established
+no running %s - starting '%s'
+error building filename: %s
+error flushing pending output: %s
+--homedir
+--use-standard-socket
+--daemon
+failed to start %s '%s': %s
+waiting for the dirmngr to come up ... (%ds)
+waiting for the keyboxd to come up ... (%ds)
+waiting for the agent to come up ... (%ds)
+connection to the dirmngr established
+connection to the keyboxd established
+connection to the agent established
+can't connect to the %s: %s
+GETINFO restricted
+connection to the agent is in restricted mode
+SCD GETINFO version
+GETINFO version
+error getting version from '%s': %s
+server '%s' is older than us (%s < %s)
+WARNING: %s
+Note: Outdated servers may lack important security fixes.
+Note: Use the command "%s" to restart them.
+gpgconf --kill all
+server_version_mismatch 0
+: signal 
+0123456789
+ caught ... exiting
+signal.c
+signals are already blocked
+signals are not blocked
+gnupg_init_signals
+GPG_TTY,TERM,DISPLAY
+%s: error allocating string: %s
+GPG_TTY
+session_env_list_stdenvnames
+ttyname
+ttytype
+DISPLAY
+display
+XAUTHORITY
+xauthority
+XMODIFIERS
+WAYLAND_DISPLAY
+XDG_SESSION_TYPE
+QT_QPA_PLATFORM
+GTK_IM_MODULE
+DBUS_SESSION_BUS_ADDRESS
+QT_IM_MODULE
+INSIDE_EMACS
+PINENTRY_USER_DATA
+pinentry-user-data
+PINENTRY_GEOM_HINT
+r,nonblock
+w,nonblock
+error creating a pipe: %s
+error creating a stream for a pipe: %s
+/dev/null
+failed to open '%s': %s
+dup2 std%s failed: %s
+error forking process: %s
+waiting for process %d to terminate failed: %s
+error running '%s': probably not installed
+error running '%s': exit status %d
+error running '%s': terminated
+waiting for processes to terminate failed: %s
+PID %d was reused
+waitpid failed in gnupg_spawn_process_detached: %s
+error opening lockfile '%s': %s
+error reading lockfile '%s'
+error reading lockfile '%s': %s
+invalid size of lockfile '%s'
+invalid pid %d in lockfile '%s'
+(deadlock?) 
+lock not made: open(O_EXCL) of '%s' failed: %s
+lock not made: writing to '%s' failed: %s
+lock not made: Oops: stat of tmp file failed: %s
+cannot read lockfile
+lockfile disappeared
+removing stale lockfile (created by %d)
+waiting for lock (held by %d%s) %s...
+unknown
+%.*s/.#lk%p.
+failed to create temporary file '%s': %s
+can't check whether hardlinks are supported for '%s': %s
+error writing to '%s': %s
+Oops, '%s' is already locked
+Oops, '%s' is not locked
+release_dotlock: lockfile error
+release_dotlock: not our lock (pid=%d)
+release_dotlock: error removing lockfile '%s'
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+assuan_new
+assuan_release
+assuan_set_log_cb
+assuan_socket_connect
+assuan_transact
+_gcry_mpi_get_const
+gcry_calloc
+gcry_calloc_secure
+gcry_check_version
+gcry_cipher_algo_info
+gcry_cipher_algo_name
+gcry_cipher_authenticate
+gcry_cipher_checktag
+gcry_cipher_close
+gcry_cipher_ctl
+gcry_cipher_decrypt
+gcry_cipher_encrypt
+gcry_cipher_get_algo_blklen
+gcry_cipher_get_algo_keylen
+gcry_cipher_gettag
+gcry_cipher_map_name
+gcry_cipher_open
+gcry_cipher_setiv
+gcry_cipher_setkey
+gcry_control
+gcry_create_nonce
+gcry_free
+gcry_kdf_derive
+gcry_malloc
+gcry_malloc_secure
+gcry_md_algo_info
+gcry_md_algo_name
+gcry_md_close
+gcry_md_ctl
+gcry_md_hash_buffer
+gcry_md_map_name
+gcry_md_open
+gcry_md_read
+gcry_md_write
+gcry_mpi_add
+gcry_mpi_add_ui
+gcry_mpi_aprint
+gcry_mpi_get_flag
+gcry_mpi_get_nbits
+gcry_mpi_get_opaque
+gcry_mpi_mod
+gcry_mpi_mul
+gcry_mpi_new
+gcry_mpi_powm
+gcry_mpi_print
+gcry_mpi_release
+gcry_mpi_rshift
+gcry_mpi_scan
+gcry_mpi_set_flag
+gcry_mpi_set_opaque
+gcry_mpi_set_opaque_copy
+gcry_mpi_sub
+gcry_mpi_test_bit
+gcry_pk_algo_info
+gcry_pk_algo_name
+gcry_pk_get_curve
+gcry_pk_get_keygrip
+gcry_pk_get_nbits
+gcry_pk_get_param
+gcry_pk_map_name
+gcry_pk_testkey
+gcry_realloc
+gcry_set_fatalerror_handler
+gcry_set_log_handler
+gcry_set_outofcore_handler
+gcry_sexp_build
+gcry_sexp_build_array
+gcry_sexp_cadr
+gcry_sexp_canon_len
+gcry_sexp_extract_param
+gcry_sexp_find_token
+gcry_sexp_length
+gcry_sexp_new
+gcry_sexp_nth
+gcry_sexp_nth_data
+gcry_sexp_nth_string
+gcry_sexp_release
+gcry_sexp_sprint
+gcry_sexp_sscan
+gcry_strdup
+gcry_xcalloc
+gcry_xmalloc
+gcry_xrealloc
+gcry_xstrdup
+_gpgrt_get_std_stream
+_gpgrt_log_assert
+gpg_err_code_from_errno
+gpg_err_code_from_syserror
+gpg_err_code_to_errno
+gpg_err_init
+gpg_err_set_errno
+gpg_strerror
+gpgrt_access
+gpgrt_argparse
+gpgrt_asprintf
+gpgrt_chdir
+gpgrt_fclose
+gpgrt_fdopen
+gpgrt_ferror
+gpgrt_fflush
+gpgrt_fileno
+gpgrt_fopen
+gpgrt_fputs
+gpgrt_fread
+gpgrt_get_errorcount
+gpgrt_getcwd
+gpgrt_log
+gpgrt_log_bug
+gpgrt_log_debug
+gpgrt_log_error
+gpgrt_log_fatal
+gpgrt_log_get_prefix
+gpgrt_log_info
+gpgrt_log_printf
+gpgrt_log_set_prefix
+gpgrt_log_set_socket_dir_cb
+gpgrt_log_string
+gpgrt_logv
+gpgrt_mkdir
+gpgrt_read_line
+gpgrt_reallocarray
+gpgrt_set_alloc_func
+gpgrt_set_binary
+gpgrt_set_fixed_string_mapper
+gpgrt_set_strusage
+gpgrt_set_usage_outfnc
+gpgrt_snprintf
+gpgrt_strusage
+gpgrt_usage
+gpgrt_vasprintf
+gpgrt_write_sanitized
+__assert_func
+__cxa_atexit
+__errno
+__getreent
+__locale_ctype_ptr
+__main
+_dll_crt0
+_impure_ptr
+calloc
+clock_gettime
+closedir
+cygwin_internal
+difftime
+dll_dllcrt0
+explicit_bzero
+fflush
+fprintf
+fwrite
+getenv
+geteuid
+getpid
+getppid
+getpwnam
+getpwuid
+getrlimit
+getsockname
+getuid
+gmtime
+gmtime_r
+initgroups
+localtime
+malloc
+memcmp
+memcpy
+memmove
+memset
+mktime
+msys_detach_dll
+nanosleep
+nl_langinfo
+opendir
+posix_memalign
+printf
+putchar
+putenv
+readdir
+readlink
+realloc
+remove
+rename
+select
+setenv
+setrlimit
+setsid
+setuid
+sigaction
+sigemptyset
+sigfillset
+sigprocmask
+sprintf
+stpcpy
+strchr
+strcmp
+strcpy
+strcspn
+strerror
+strftime
+strlen
+strlwr
+strncasecmp
+strncmp
+strncpy
+strpbrk
+strrchr
+strstr
+strtol
+strtoul
+sys_siglist
+sysconf
+timegm
+tmpfile
+toupper
+ttyname
+uname_x
+unlink
+unsetenv
+waitpid
+libiconv
+libiconv_close
+libiconv_open
+libintl_bind_textdomain_codeset
+libintl_bindtextdomain
+libintl_gettext
+libintl_setlocale
+libintl_textdomain
+GetModuleHandleA
+GetModuleHandleW
+msys-assuan-9.dll
+msys-gcrypt-20.dll
+msys-gpg-error-0.dll
+msys-2.0.dll
+msys-iconv-2.dll
+msys-intl-8.dll
+KERNEL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__imp_gcry_cipher_authenticate
+__imp_setuid
+__imp_explicit_bzero
+__imp_getuid
+__imp_gcry_md_open
+__imp_gcry_cipher_encrypt
+__imp_abort
+__imp_gcry_xmalloc
+__lib64_libkernel32_a_iname
+__imp_getsockname
+__imp_gcry_malloc_secure
+__imp_gcry_pk_algo_info
+_head_msys_intl_8_dll
+__imp__dll_crt0
+__imp_gcry_sexp_release
+__imp_GetModuleHandleW
+__imp_gcry_sexp_length
+__imp_calloc
+__imp_gpgrt_log_error
+__imp_gcry_mpi_release
+__imp_gcry_mpi_get_nbits
+__imp_getpid
+__imp_gcry_sexp_nth
+__imp_gcry_mpi_set_opaque
+__imp_gcry_pk_get_curve
+__imp_gcry_malloc
+__imp_gcry_free
+__imp_uname_x
+__imp_gpgrt_log_bug
+__imp_chdir
+__imp_sleep
+__imp_sigemptyset
+__imp_gcry_kdf_derive
+__imp_gpgrt_set_strusage
+__imp_uname
+__imp_gcry_sexp_find_token
+__imp_gpgrt_fread
+__imp_nanosleep
+__imp_strpbrk
+__imp_getenv
+__imp_timegm
+__imp_strncpy
+__imp_libiconv_close
+__imp_gpgrt_set_binary
+__imp_gcry_sexp_build_array
+_head_msys_2_0_dll
+__imp_gcry_md_read
+__imp_gcry_cipher_gettag
+__imp_mktime
+__imp_sysconf
+__imp_sigaction
+__imp_strtol
+__imp_gpgrt_log
+__imp_gcry_calloc
+__imp_gpgrt_argparse
+__imp_strcmp
+__imp_assuan_release
+__imp_read
+__imp_gpg_strerror
+__imp_gcry_sexp_nth_string
+__imp_gpgrt_set_usage_outfnc
+__imp_putchar
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_gpgrt_log_fatal
+__imp_strrchr
+__imp__gpgrt_log_assert
+__imp_free
+__imp_gpgrt_log_set_socket_dir_cb
+__imp_gcry_mpi_mul
+__imp_kill
+__imp_gcry_cipher_setiv
+__imp_gcry_cipher_setkey
+__imp_gcry_create_nonce
+__imp___errno
+__imp_gpgrt_fputs
+__imp_readdir
+__imp_gcry_cipher_checktag
+__imp_gcry_md_close
+__imp_gpgrt_log_debug
+__imp_sigprocmask
+__imp_gcry_mpi_aprint
+__imp_difftime
+__nm__impure_ptr
+__imp_gpgrt_reallocarray
+__imp_gpgrt_fileno
+__imp_gcry_md_write
+__imp_gpgrt_get_errorcount
+__imp_link
+__imp_gpgrt_read_line
+__imp_gcry_sexp_cadr
+__imp_dup2
+__imp__gpgrt_get_std_stream
+__imp_atoi
+__imp_write
+__imp__exit
+__imp_dup
+__imp_gpgrt_vasprintf
+__imp_gpgrt_log_get_prefix
+__imp_gpgrt_log_info
+__imp_gcry_cipher_algo_name
+msys_gcrypt_20_dll_iname
+__imp_strcpy
+__imp_memset
+__imp_putenv
+__imp_gpgrt_asprintf
+__IAT_end__
+__imp_gpgrt_usage
+__imp_memcpy
+__imp_strlwr
+__imp_gcry_mpi_set_flag
+__imp_gpg_err_code_from_errno
+__imp_fork
+__imp_memmove
+__imp_dll_dllcrt0
+__imp_gcry_mpi_sub
+msys_gpg_error_0_dll_iname
+__imp_gcry_calloc_secure
+__imp_select
+__imp_fstat
+__imp_strerror
+__imp_gpgrt_set_alloc_func
+__imp_gcry_sexp_new
+__imp_gpgrt_ferror
+__imp_gcry_pk_testkey
+__imp___locale_ctype_ptr
+__imp_fwrite
+__imp_strtoul
+__imp_putc
+_head_lib64_libkernel32_a
+__imp_libintl_setlocale
+__imp_pipe
+__imp_gcry_mpi_mod
+__imp_msys_detach_dll
+__imp_strftime
+__imp_strstr
+__imp_gcry_strdup
+__imp_gcry_md_hash_buffer
+__imp_gcry_set_outofcore_handler
+__imp_getrlimit
+__imp_open
+__imp_gcry_mpi_print
+__imp_gpgrt_mkdir
+__imp_setsid
+__imp_gmtime_r
+__imp_chmod
+_head_msys_assuan_9_dll
+__imp_gcry_control
+__imp_rmdir
+__imp_gpgrt_write_sanitized
+__imp_gpgrt_getcwd
+__imp_nl_langinfo
+__imp_toupper
+__imp_gcry_md_algo_info
+__imp_getpwnam
+__imp_tmpfile
+__imp_gcry_mpi_powm
+__imp___getreent
+__imp_sigfillset
+__imp_gcry_check_version
+__imp_GetModuleHandleA
+msys_iconv_2_dll_iname
+__imp___main
+__imp_sys_siglist
+__imp_gcry_md_algo_name
+__imp_gcry_set_fatalerror_handler
+__imp_strlen
+__imp_malloc
+__imp_libintl_textdomain
+_head_msys_iconv_2_dll
+__imp_gpgrt_fflush
+__imp__impure_ptr
+__imp_gmtime
+__imp___assert_func
+__imp_stat
+__imp_realloc
+__imp_exit
+__imp_gcry_mpi_add_ui
+__imp_ttyname
+__imp_gpgrt_fopen
+__imp_gcry_mpi_rshift
+__imp_gcry_cipher_get_algo_blklen
+__imp_gcry_sexp_sprint
+__imp_gcry_pk_get_keygrip
+__imp_time
+__imp_gcry_sexp_nth_data
+__imp_gpg_err_code_to_errno
+__imp_gcry_md_map_name
+__IAT_start__
+__imp_gpg_err_set_errno
+_head_msys_gpg_error_0_dll
+__imp_assuan_set_log_cb
+__imp_gcry_mpi_get_opaque
+__imp_gcry_mpi_test_bit
+msys_assuan_9_dll_iname
+__imp_libintl_bindtextdomain
+__imp__gcry_mpi_get_const
+__imp_gcry_cipher_map_name
+__imp_gcry_xcalloc
+__imp_libintl_gettext
+__nm_sys_siglist
+__imp_gpgrt_fclose
+__imp_gcry_mpi_scan
+__imp_unlink
+__imp___cxa_atexit
+__imp_stpcpy
+__imp_gcry_md_ctl
+__imp_gcry_mpi_get_flag
+__imp_gpgrt_strusage
+__imp_fcntl
+__imp_strcspn
+__imp_closedir
+__imp_fprintf
+__imp_gpgrt_log_printf
+__imp_setenv
+__imp_gcry_pk_get_nbits
+__imp_gpg_err_init
+__imp_remove
+__imp_gcry_sexp_canon_len
+__imp_gcry_mpi_new
+__imp_rename
+msys_intl_8_dll_iname
+__imp_gpg_err_code_from_syserror
+__imp_gcry_mpi_add
+__imp_gcry_xrealloc
+__imp_strncasecmp
+__imp_gcry_pk_algo_name
+__imp_gcry_xstrdup
+__imp_assuan_transact
+__imp_gcry_cipher_algo_info
+__imp_localtime
+__imp_getpwuid
+__imp_gcry_mpi_set_opaque_copy
+__imp_geteuid
+__imp_raise
+__imp_waitpid
+__imp_strncmp
+__imp_getppid
+__imp_strchr
+__imp_gpgrt_access
+__imp_gcry_pk_map_name
+__imp_initgroups
+__imp_close
+__imp_gpgrt_fdopen
+__imp_gpgrt_chdir
+__imp_gcry_realloc
+__imp_setrlimit
+__imp_fflush
+__imp_gpgrt_set_fixed_string_mapper
+__imp_gpgrt_log_set_prefix
+__imp_gpgrt_log_string
+__imp_libiconv_open
+__imp_unsetenv
+__imp_gpgrt_snprintf
+__imp_sprintf
+__imp_printf
+__imp_gcry_cipher_decrypt
+__imp_readlink
+__imp_gcry_cipher_get_algo_keylen
+_head_msys_gcrypt_20_dll
+__imp_gcry_cipher_open
+__imp_assuan_new
+__imp_opendir
+__imp_clock_gettime
+__imp_libiconv
+__imp_gcry_pk_get_param
+__imp_execv
+__imp_libintl_bind_textdomain_codeset
+__imp_assuan_socket_connect
+__imp_gcry_set_log_handler
+__imp_gcry_cipher_close
+__imp_gcry_sexp_extract_param
+__imp_gpgrt_logv
+__imp_gcry_sexp_sscan
+__imp_memcmp
+msys_2_0_dll_iname
+__imp_gcry_cipher_ctl
+__imp_gcry_sexp_build

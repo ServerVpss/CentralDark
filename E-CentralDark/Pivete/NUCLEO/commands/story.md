@@ -1,0 +1,253 @@
+# COMANDO - story.hbs
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\aiox-core\.aios-core\product\templates\story.hbs
+**SHA:** 5a51064b2e371b3e
+**Timestamp:** 2026-08-28T02:02:21.435094
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Comandos
+- prompt: "Story ID (e.g., 3.6):"
+- prompt: "Story title:"
+- prompt: "Parent epic reference (e.g., EPIC-S3):"
+- prompt: "Sprint number:"
+- prompt: "Story points (1, 2, 3, 5, 8, 13, 21):"
+- prompt: "As a [persona]:"
+- prompt: "I want [functionality]:"
+- prompt: "So that [business value]:"
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+---
+template_id: story
+template_name: User Story
+version: 2.0
+variables:
+  - name: id
+    type: string
+    required: true
+    prompt: "Story ID (e.g., 3.6):"
+  - name: title
+    type: string
+    required: true
+    prompt: "Story title:"
+  - name: epicRef
+    type: string
+    required: true
+    prompt: "Parent epic reference (e.g., EPIC-S3):"
+  - name: sprint
+    type: number
+    required: true
+    prompt: "Sprint number:"
+  - name: points
+    type: number
+    required: true
+    prompt: "Story points (1, 2, 3, 5, 8, 13, 21):"
+  - name: priority
+    type: choice
+    required: true
+    choices: [Critical, High, Medium, Low]
+    default: Medium
+  - name: status
+    type: choice
+    required: true
+    choices: [Draft, Ready, In Progress, In Review, Done, Blocked]
+    default: Draft
+  - name: asA
+    type: string
+    required: true
+    prompt: "As a [persona]:"
+  - name: iWant
+    type: string
+    required: true
+    prompt: "I want [functionality]:"
+  - name: soThat
+    type: string
+    required: true
+    prompt: "So that [business value]:"
+---
+
+# STORY {{id}}: {{title}}
+
+**ID:** {{id}} | **Epic:** [{{epicRef}}](../../../epics/{{lowercase epicRef}}.md)
+**Sprint:** {{sprint}} | **Points:** {{points}} | **Priority:** {{#ifEqual priority "Critical"}}🔴{{/ifEqual}}{{#ifEqual priority "High"}}🟠{{/ifEqual}}{{#ifEqual priority "Medium"}}🟡{{/ifEqual}}{{#ifEqual priority "Low"}}🟢{{/ifEqual}} {{priority}}
+**Created:** {{formatDate now "YYYY-MM-DD"}}
+**Status:** {{#ifEqual status "Draft"}}📋{{/ifEqual}}{{#ifEqual status "Ready"}}✅{{/ifEqual}}{{#ifEqual status "In Progress"}}🔄{{/ifEqual}}{{#ifEqual status "In Review"}}👀{{/ifEqual}}{{#ifEqual status "Done"}}✔️{{/ifEqual}}{{#ifEqual status "Blocked"}}🚫{{/ifEqual}} {{status}}
+
+{{#if predecessor}}
+**Predecessor:** {{predecessor}}
+{{/if}}
+
+---
+
+## User Story
+
+**Como** {{asA}},
+**Quero** {{iWant}},
+**Para que** {{soThat}}.
+
+---
+
+## Acceptance Criteria
+
+{{#if acceptanceCriteria}}
+{{#each acceptanceCriteria}}
+- [{{#if this.completed}}x{{else}} {{/if}}] {{this.id}}: {{this.description}}
+{{/each}}
+{{else}}
+_Acceptance criteria to be defined._
+{{/if}}
+
+---
+
+## Scope
+
+{{#if scope}}
+{{scope}}
+{{else}}
+_Scope to be defined._
+{{/if}}
+
+---
+
+## Tasks
+
+{{#if tasks}}
+{{#each tasks}}
+### {{this.id}} ({{default this.estimate "TBD"}})
+- [{{#if this.completed}}x{{else}} {{/if}}] {{this.description}}
+{{#if this.subtasks}}
+{{#each this.subtasks}}
+  - [{{#if this.completed}}x{{else}} {{/if}}] {{this.id}}: {{this.description}}
+{{/each}}
+{{/if}}
+{{/each}}
+{{else}}
+_Tasks to be defined._
+{{/if}}
+
+---
+
+## Dev Notes
+
+{{#if devNotes}}
+{{devNotes}}
+{{else}}
+_Developer notes to be added during implementation._
+{{/if}}
+
+### Testing
+
+{{#if testing}}
+| Test ID | Name | Type | Priority |
+|---------|------|------|----------|
+{{#each testing}}
+| {{this.id}} | {{this.name}} | {{default this.type "Unit"}} | {{default this.priority "P0"}} |
+{{/each}}
+{{else}}
+_Test scenarios to be defined._
+{{/if}}
+
+---
+
+## 🤖 CodeRabbit Integration
+
+{{#if coderabbitIntegration}}
+### Story Type Analysis
+
+**Primary Type:** {{coderabbitIntegration.storyType}}
+{{#if coderabbitIntegration.secondaryTypes}}
+**Secondary Type(s):** {{join coderabbitIntegration.secondaryTypes ", "}}
+{{/if}}
+{{#if coderabbitIntegration.complexity}}
+**Complexity:** {{coderabbitIntegration.complexity}}
+{{/if}}
+
+### Specialized Agent Assignment
+
+{{#if coderabbitIntegration.primaryAgents}}
+**Primary Agents:**
+{{#each coderabbitIntegration.primaryAgents}}
+- {{this}}
+{{/each}}
+{{/if}}
+
+{{#if coderabbitIntegration.supportingAgents}}
+**Supporting Agents:**
+{{#each coderabbitIntegration.supportingAgents}}
+- {{this}}
+{{/each}}
+{{/if}}
+
+{{#if coderabbitIntegration.selfHealing}}
+### Self-Healing Configuration
+
+**Expected Self-Healing:**
+- Primary Agent: {{coderabbitIntegration.selfHealing.primaryAgent}}
+- Max Iterations: {{coderabbitIntegration.selfHealing.maxIterations}}
+- Timeout: {{coderabbitIntegration.selfHealing.timeout}}
+- Severity Filter: {{coderabbitIntegration.selfHealing.severityFilter}}
+{{/if}}
+
+{{#if coderabbitIntegration.focusAreas}}
+### Focus Areas
+
+**Primary Focus:**
+{{#each coderabbitIntegration.focusAreas.primary}}
+- {{this}}
+{{/each}}
+
+{{#if coderabbitIntegration.focusAreas.secondary}}
+**Secondary Focus:**
+{{#each coderabbitIntegration.focusAreas.secondary}}
+- {{this}}
+{{/each}}
+{{/if}}
+{{/if}}
+{{else}}
+_CodeRabbit integration to be configured._
+{{/if}}
+
+---
+
+## Dependencies
+
+{{#if dependencies}}
+**Depends on:**
+{{#each dependencies.dependsOn}}
+- {{this}}
+{{/each}}
+
+{{#if dependencies.blocks}}
+**Blocks:**
+{{#each dependencies.blocks}}
+- {{this}}
+{{/each}}
+{{/if}}
+{{else}}
+_No dependencies._
+{{/if}}
+
+---
+
+## Definition of Done
+
+{{#if definitionOfDone}}
+{{#each definitionOfDone}}
+- [{{#if this.completed}}x{{else}} {{/if}}] {{this.criteria}}
+{{/each}}
+{{else}}
+- [ ] All acceptance criteria met
+- [ ] All tests passing
+- [ ] Code reviewed
+- [ ] Documentation updated
+- [ ] PR created and approved
+{{/if}}
+
+---
+
+## Dev Agent Record
+
+{{#if devAgentRecord}}
+### Agen
+```

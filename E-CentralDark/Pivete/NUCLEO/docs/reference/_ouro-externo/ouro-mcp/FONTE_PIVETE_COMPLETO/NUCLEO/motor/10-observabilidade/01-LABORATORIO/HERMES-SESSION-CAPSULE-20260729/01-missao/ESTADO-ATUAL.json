@@ -1,0 +1,46 @@
+{
+  "mission": "INVENTARIO-TOTAL-HERMES-01",
+  "parent_mission": "ORGANIZAR-CASA-HERMES-01",
+  "nonce": "BBC03689F2C4",
+  "phase": "MAPEAMENTO_READ_ONLY",
+  "folder_current": null,
+  "mutation_authorized": false,
+  "profile_runtime": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete",
+  "profile_runtime_proven": true,
+  "hermes_version": "0.19.0 (2026.7.20)",
+  "upstream": "9bf1f737",
+  "executable": "C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\hermes.exe",
+  "gateway_at_observation": "running",
+  "skills_at_observation": 106,
+  "env_exists_content_read": false,
+  "soul_exists_content_changed": false,
+  "last_valid_profile_report_sha256": "bb03aa8abe3799437c69128eb0cb47fc9524960bdac4d1817cde1158de1aac6e",
+  "last_proven_instrument": "PREPARE_NUL_DIAGNOSTIC_SCRIPT_V2_RESULT",
+  "last_proven_instrument_status": "INVALID",
+  "scripts_prepared": {
+    "stage-05b": {
+      "path": "stage-05b-reserved-entry-nul-diagnostic.ps1",
+      "sha256": "6b8a532c53b47b7530407fe84ae043732e4dd9986c9e3a6f7f47ceaafb644205",
+      "lines": 337,
+      "status": "REJECTED"
+    },
+    "stage-05c": {
+      "path": "stage-05c-reserved-entry-nul-diagnostic.ps1",
+      "sha256": "ff095024e6af0315c5ae406be6b37469267bd9f827cd96b9f2c16a4c32b92d2c",
+      "lines": 190,
+      "status": "REJECTED_LINE_LIMIT"
+    },
+    "stage-05d": {
+      "path": "stage-05d-reserved-entry-nul-diagnostic.ps1",
+      "sha256": "00ba8aad5f0058cab9f1cbba07619aaf7da09a12a29a053b21fdb9065b22f6e5",
+      "lines": 180,
+      "status": "PREPARED"
+    }
+  },
+  "last_proven_script_executed": false,
+  "next_script_05d": "INTENCAO_DECLARADA_NAO_COMPROVADA",
+  "next_gate": "PIVETE_OR_SOL_REVIEW",
+  "new_collector_started": false,
+  "capsule_created": true,
+  "capsule_timestamp": "2026-07-29T06:02:00-03:00"
+}

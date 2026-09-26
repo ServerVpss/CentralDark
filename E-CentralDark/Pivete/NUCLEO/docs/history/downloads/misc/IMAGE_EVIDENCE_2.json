@@ -1,0 +1,66 @@
+[
+  {
+    "source": "10c14d39-4bbf-4630-a50a-0c4d6706ae8e.png",
+    "original_sha256": "9732a600c65e50cb1e9c6bc9b46ade9fddfc1908ca83c7d9d19a756b1c09c21c",
+    "copy": "02_EVIDENCE/images/user_screenshots/10c14d39-4bbf-4630-a50a-0c4d6706ae8e.png",
+    "copy_sha256": "9732a600c65e50cb1e9c6bc9b46ade9fddfc1908ca83c7d9d19a756b1c09c21c",
+    "redacted": false
+  },
+  {
+    "source": "17bca710-eef2-4dc2-88fe-38eacfa27935.png",
+    "original_sha256": "253eabe2f7bc2c346a1132863bc4f3edef73e5c6cf1c72ac5484e3612bbfc3f1",
+    "copy": "02_EVIDENCE/images/user_screenshots/17bca710-eef2-4dc2-88fe-38eacfa27935.png",
+    "copy_sha256": "253eabe2f7bc2c346a1132863bc4f3edef73e5c6cf1c72ac5484e3612bbfc3f1",
+    "redacted": false
+  },
+  {
+    "source": "47104b5e-f5a9-4665-ad4d-ad8daae72cbf.png",
+    "original_sha256": "f14ceed61b2fdc4760be787f1c6fa4e56d36e0d950eeb9e5c1b8319769e9d906",
+    "copy": "02_EVIDENCE/images/user_screenshots/47104b5e-f5a9-4665-ad4d-ad8daae72cbf.png",
+    "copy_sha256": "f14ceed61b2fdc4760be787f1c6fa4e56d36e0d950eeb9e5c1b8319769e9d906",
+    "redacted": false
+  },
+  {
+    "source": "95fcb831-b550-4fab-9702-c2529e5541cf.png",
+    "original_sha256": "e44f5833c5982acaa42c2fbc3803375a7f44ddcd8f2e332e7ad9442c6c66bdd5",
+    "copy": "02_EVIDENCE/images/user_screenshots/95fcb831-b550-4fab-9702-c2529e5541cf.png",
+    "copy_sha256": "e44f5833c5982acaa42c2fbc3803375a7f44ddcd8f2e332e7ad9442c6c66bdd5",
+    "redacted": false
+  },
+  {
+    "source": "961addf2-a86b-4814-8916-ce5b1fe8fe90.png",
+    "original_sha256": "131efb179f15b8ba8af15a05f5e2eeedd6b3d75495e1633bd808b7b777fd7fae",
+    "copy": "02_EVIDENCE/images/user_screenshots/961addf2-a86b-4814-8916-ce5b1fe8fe90.png",
+    "copy_sha256": "131efb179f15b8ba8af15a05f5e2eeedd6b3d75495e1633bd808b7b777fd7fae",
+    "redacted": false
+  },
+  {
+    "source": "a1d8a004-50b5-41aa-be8d-1c5992210598.png",
+    "original_sha256": "2169819af05561731f40e01895dbb87115b251d190db5bad3fa396608b6dad25",
+    "copy": "02_EVIDENCE/images/user_screenshots/a1d8a004-50b5-41aa-be8d-1c5992210598.png",
+    "copy_sha256": "2169819af05561731f40e01895dbb87115b251d190db5bad3fa396608b6dad25",
+    "redacted": false
+  },
+  {
+    "source": "cca49e03-f510-4a11-a3b0-27c16341ddaf.png",
+    "original_sha256": "0a73fa923fffaeda518ac977430d1e4f8f838b15e6806401682fdaae70510074",
+    "copy": "02_EVIDENCE/images/user_screenshots/cca49e03-f510-4a11-a3b0-27c16341ddaf.png",
+    "copy_sha256": "0a73fa923fffaeda518ac977430d1e4f8f838b15e6806401682fdaae70510074",
+    "redacted": false
+  },
+  {
+    "source": "ec83b96b-13fb-4aa6-8b2b-e84df6abf8aa.png",
+    "original_sha256": "33b8b58fa7e821652f44c266f9341943962a1e361ae508c21f01d6d78f0f475e",
+    "original_size": 44932,
+    "copy": "02_EVIDENCE/images/user_screenshots/current_screenshot_REDACTED.png",
+    "copy_sha256": "c303e0e8b176a486b956cdd216247ec5ecb45ca7055d3d337a92f28140eb830d",
+    "redacted": true
+  },
+  {
+    "source": "fluxo_geral_frente_1115.png",
+    "original_sha256": "9f312cfe348daca8bb4f1b281e109af1920c44bbd1e1ea4ea67f1f862b52465f",
+    "copy": "02_EVIDENCE/images/generated_reference/fluxo_geral_frente_1115.png",
+    "redacted": false,
+    "kind": "generated"
+  }
+]

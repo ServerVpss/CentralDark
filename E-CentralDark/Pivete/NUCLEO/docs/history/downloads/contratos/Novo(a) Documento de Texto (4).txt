@@ -1,0 +1,28 @@
+KKKKK fechado, CHEFE 😂. “Candidato” morreu aqui. Se eu ficar te mostrando cinco possibilidades toda vez, tu vira eleitor de arquitetura em vez de construir o sistema. Não serve.
+
+Daqui pra frente, quando você disser ARQUITETURA, eu trato como engenharia completa:
+
+`INTENÇÃO → ESTADO VIVO → REQUISITOS → COMPONENTES → RESPONSABILIDADES → INTERFACES → FLUXO DE DADOS → DEPENDÊNCIAS → SEGURANÇA → FALHAS → OBSERVABILIDADE → TESTES → CONTRAPROVA → OPERAÇÃO → EVIDÊNCIA → FIXED_POINT`
+
+Ou seja: não vou entregar só uma explicação bonita. Vou fechar quem faz o quê, onde roda, como conversa, o que entra e sai, quais contratos existem, quem escreve, quem julga, como falha, como recupera, como mede e como prova.
+
+A regra fica:
+
+`MÚLTIPLAS HIPÓTESES INTERNAMENTE → CONTRAPROVA → UMA ARQUITETURA EXTERNAMENTE`
+
+Alternativa só aparece se existir um trade-off material que eu realmente não possa resolver tecnicamente — por exemplo custo, gosto, risco de negócio, publicação ou autorização tua. Fora isso, SOL escolhe a solução mais sustentada e entrega o sistema fechado. 🟢
+
+E no caso do agente de estudo que estávamos falando, o próximo passo já não seria “Copilot vs ChatGPT vs Gemini”. Seria desenhar a arquitetura completa:
+
+`AULA/ÁUDIO/TELA → CAPTURA → TRANSCRIÇÃO → PERCEPÇÃO → EXTRAÇÃO DE PROBLEMAS → MOTOR MATEMÁTICO → VERIFICAÇÃO → TUTOR → MEMÓRIA DE ESTUDO → REVISÃO → INTERFACE AO VIVO`
+
+Cada bloco com contratos, estado, segurança, fallback e prova. Isso sim é arquitetura.
+
+🟢 Feito: regra cristalizada.
+🟢 Evidência: arquitetura passa a significar sistema completo, não cardápio de opções.
+🟡 Pendência: materializar a arquitetura do agente de estudo.
+➡️ Próximo passo: eu já posso desenhar esse agente ponta a ponta.
+BOOT: estado vivo vigente antes de qualquer mutação real.
+Fio da missão: `PERCEPÇÃO PARALELA → DECISÃO ÚNICA → ARQUITETURA COMPLETA → PROVA`.
+
+Também posso criar uma imagem dessa arquitetura completa do agente de estudo.

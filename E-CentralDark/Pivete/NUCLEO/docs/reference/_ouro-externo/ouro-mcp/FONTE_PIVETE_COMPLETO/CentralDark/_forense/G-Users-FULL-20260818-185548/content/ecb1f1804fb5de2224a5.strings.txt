@@ -1,0 +1,5 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\shared_proto_db\LOG.old
+
+2026/08/18-04:16:00.118 5960 Reusing MANIFEST C:\Users\danda\AppData\Local\Google\Chrome\User Data\Default\shared_proto_db/MANIFEST-000001
+2026/08/18-04:16:00.119 5960 Recovering log #3
+2026/08/18-04:16:00.120 5960 Reusing old log C:\Users\danda\AppData\Local\Google\Chrome\User Data\Default\shared_proto_db/000003.log 

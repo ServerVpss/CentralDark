@@ -1,0 +1,10 @@
+{
+  "algorithm": "SHA-256",
+  "construction": "SHA256(parent_zip_sha256 + LF + parent_proof_root + LF + delta_manifest_sha256 + LF)",
+  "parent_zip_sha256": "10edaf7df173f49be10cea28571821d903bc4bf849f257ad30fc91f803e53f91",
+  "parent_proof_root": "d869c8d00b0fd94e156934965c67fd22d7dde0c07c977dc43be5b104ebcfa4d1",
+  "delta_manifest_sha256": "43cc07173e2b87b86c296f22aab0c943a86e6eaa41d0e3762ee36d4d07b22730",
+  "successor_proof_root": "d7a2e739f7f88ce40aabf234197872ec02bdc2ebd1d1cec48e91fa311a953ff1",
+  "zero_regression_baseline_bytes": "PASS",
+  "new_evidence_screenshot_sha256": "3dad838d4806bbc8ed1286da1d83bd24ab0cf14c06fe2ad038753264baab0276"
+}

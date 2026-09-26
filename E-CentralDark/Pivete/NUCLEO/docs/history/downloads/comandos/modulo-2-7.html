@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.7 Verificação e relato fiel | O Manual Oculto da IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    .code-box { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace; }
+
+    /* Dark mode - bordas e linhas divisorias mais suaves */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+
+    /* SVG adaptado ao tema claro (so atinge os diagramas) */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+
+    /* Pulso para os blocos do SVG */
+    @keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+      .wf-a:nth-child(2){animation-delay:.25s}
+      .wf-a:nth-child(3){animation-delay:.5s}
+      .wf-a:nth-child(4){animation-delay:.75s}
+    }
+
+    /* ===== LIGHT MODE OVERRIDES — Parte 1: Base ===== */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-200 { color: #1f2937; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* ===== Parte 2: Cores de acento (trilha Blue — T2) ===== */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .text-blue-300 { color: #1d4ed8; }
+    html:not(.dark) .text-blue-200 { color: #1e40af; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .bg-blue-900\/30 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.06); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .border-blue-500\/20 { border-color: rgba(37, 99, 235, 0.18); }
+    html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37, 99, 235, 0.18); }
+    html:not(.dark) .hover\:border-blue-500\/30:hover { border-color: rgba(37, 99, 235, 0.25); }
+
+    /* sky (ciano secundario) */
+    html:not(.dark) .bg-sky-500\/10 { background-color: rgba(14, 165, 233, 0.08); }
+    html:not(.dark) .bg-sky-900\/30 { background-color: rgba(14, 165, 233, 0.08); }
+    html:not(.dark) .border-sky-500\/30 { border-color: rgba(14, 165, 233, 0.25); }
+    html:not(.dark) .text-sky-300 { color: #0284c7; }
+
+    /* ===== Parte 3: Remove gradientes + cores especiais ===== */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(185, 28, 28, 0.06); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(185, 28, 28, 0.22); }
+    html:not(.dark) .border-red-500\/20 { border-color: rgba(185, 28, 28, 0.18); }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+
+    /* ===== Parte 4: Navbar ===== */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <!-- Logo + INEMA.CLUB -->
+        <div class="flex items-center space-x-3">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300 transition-colors">
+            <span class="text-xl">🧠</span>
+            <span class="font-bold text-base hidden sm:inline">Manual Oculto da IA</span>
+          </a>
+          <span class="text-neutral-600 hidden sm:inline">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition-colors">INEMA.CLUB</a>
+        </div>
+
+        <!-- Trilhas + Theme Toggle -->
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <!-- Trilha 1 (inativa) -->
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <!-- Trilha 2 (ativa) -->
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+            <span class="sm:hidden">T2</span><span class="hidden sm:inline">Prática</span>
+          </a>
+          <!-- Trilha 3 (inativa) -->
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span><span class="hidden sm:inline">Avançado</span>
+          </a>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1">
+            <svg id="theme-toggle-dark-icon" class="hidden w-4 h-4 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-4 h-4 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Breadcrumb -->
+    <div class="flex items-center space-x-2 text-sm text-neutral-500 mb-6">
+      <a href="../../index.html" class="hover:text-blue-400 transition-colors">Início</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-blue-400 transition-colors">Trilha 2</a>
+      <span>/</span>
+      <span class="text-blue-400">Módulo 2.7</span>
+    </div>
+
+    <!-- Header do Módulo -->
+    <div class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 rounded-2xl border border-blue-500/30 p-6 sm:p-8 mb-8">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-2xl">
+          ✅
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center space-x-3 mb-2">
+            <span class="text-xs font-semibold text-blue-400 bg-blue-500/10 border border-blue-500/30 px-2 py-1 rounded-full uppercase tracking-wider">MÓDULO 2.7</span>
+            <span class="text-xs text-neutral-500">Trilha 2 — Prática</span>
+          </div>
+          <h1 class="text-2xl font-bold text-neutral-100 mb-2">✅ Verificação e relato fiel</h1>
+          <p class="text-neutral-300 leading-relaxed">
+            O último módulo da Prática, e o que separa quem "acha que funcionou" de quem
+            <strong class="text-blue-400">sabe que funcionou</strong>. Uma edição é só uma hipótese; um check de verdade é a prova.
+            Aqui você instala o reflexo de rodar o teste real, confirmar antes do irreversível, recuperar de erro com método e
+            relatar o que aconteceu sem rodeios. É a peça que faz uma IA digna de confiança.
+          </p>
+          <!-- Stats -->
+          <div class="flex flex-wrap gap-4 mt-4">
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-blue-400">📋</span><span>6 tópicos</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-blue-400">⏱</span><span>~35 min</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-blue-400">🎯</span><span>Prático</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-blue-400">🔬</span><span>Verificação</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SVG FUTURISTA: o ciclo EDIT -> VERIFY -> NARRATE com o loop de recuperacao -->
+    <div class="rounded-2xl border border-blue-500/30 bg-dark-900/40 p-4 mb-10 overflow-hidden">
+      <svg viewBox="0 0 960 360" class="w-full h-auto" role="img" aria-label="Diagrama do ciclo de verificação: uma edição (a hipótese) passa por um check real; se o check passa, o resultado é narrado fielmente; se falha, entra o loop de recuperação — diagnosticar, corrigir e re-verificar — em vez de repetir o mesmo comando cego">
+        <defs>
+          <linearGradient id="m27-grad-bl" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#2563eb"/>
+          </linearGradient>
+          <linearGradient id="m27-grad-cy" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#0ea5e9"/>
+          </linearGradient>
+          <filter id="m27-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="1.8" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <pattern id="m27-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+            <circle cx="1.2" cy="1.2" r="1.2" fill="#60a5fa" opacity="0.10"/>
+          </pattern>
+          <marker id="m27-ah" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#60a5fa"/>
+          </marker>
+          <marker id="m27-ahc" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/>
+          </marker>
+          <marker id="m27-ahr" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#f87171"/>
+          </marker>
+        </defs>
+
+        <!-- Fundo grid -->
+        <rect x="0" y="0" width="960" height="360" fill="url(#m27-grid)" rx="16"/>
+
+        <!-- Rótulos -->
+        <text x="480" y="30" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="12" opacity="0.7">o ciclo da verificação — uma edição é uma hipótese; um check que passa é a evidência</text>
+
+        <!-- LINHA FELIZ: EDIT -> VERIFY -> NARRATE -->
+        <!-- EDIT (hipotese) -->
+        <rect x="56" y="70" width="220" height="92" rx="14" fill="#0e1830" stroke="url(#m27-grad-bl)" stroke-width="2.5" class="wf-a"/>
+        <text x="166" y="100" text-anchor="middle" fill="#93c5fd" font-family="Inter,sans-serif" font-size="14" font-weight="700">EDIT</text>
+        <text x="166" y="120" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="11">você muda algo</text>
+        <text x="166" y="138" text-anchor="middle" fill="#60a5fa" font-family="Inter,sans-serif" font-size="11" font-style="italic">= uma hipótese</text>
+        <text x="166" y="154" text-anchor="middle" fill="#6b7280" font-family="Inter,sans-serif" font-size="10">ainda não provada</text>
+
+        <!-- VERIFY (check real) -->
+        <g filter="url(#m27-glow)">
+          <rect x="368" y="70" width="224" height="92" rx="14" fill="#0e1b26" stroke="url(#m27-grad-cy)" stroke-width="2.5" class="wf-a"/>
+        </g>
+        <text x="480" y="100" text-anchor="middle" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="14" font-weight="700">VERIFY</text>
+        <text x="480" y="120" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="11">rode o teste/build REAL</text>
+        <text x="480" y="138" text-anchor="middle" fill="#38bdf8" font-family="Inter,sans-serif" font-size="11" font-style="italic">= a evidência</text>
+        <text x="480" y="154" text-anchor="middle" fill="#6b7280" font-family="Inter,sans-serif" font-size="10">não um ls / echo</text>
+
+        <!-- NARRATE -->
+        <rect x="684" y="70" width="220" height="92" rx="14" fill="#0e1830" stroke="url(#m27-grad-bl)" stroke-width="2.5" class="wf-a"/>
+        <text x="794" y="100" text-anchor="middle" fill="#93c5fd" font-family="Inter,sans-serif" font-size="14" font-weight="700">NARRATE</text>
+        <text x="794" y="120" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="11">relate o que houve</text>
+        <text x="794" y="138" text-anchor="middle" fill="#60a5fa" font-family="Inter,sans-serif" font-size="11" font-style="italic">= sem rodeios</text>
+        <text x="794" y="154" text-anchor="middle" fill="#6b7280" font-family="Inter,sans-serif" font-size="10">passou / falhou / pulou</text>
+
+        <!-- setas da linha feliz -->
+        <path d="M276,116 L362,116" fill="none" stroke="#60a5fa" stroke-width="2" marker-end="url(#m27-ah)"/>
+        <path d="M592,116 L678,116" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#m27-ahc)"/>
+        <text x="319" y="108" text-anchor="middle" fill="#60a5fa" font-family="Inter,sans-serif" font-size="10">testa</text>
+        <text x="635" y="108" text-anchor="middle" fill="#38bdf8" font-family="Inter,sans-serif" font-size="10">passou ✓</text>
+
+        <!-- LOOP DE RECUPERACAO (saindo de VERIFY pra baixo quando falha) -->
+        <path d="M480,162 L480,206" fill="none" stroke="#f87171" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#m27-ahr)"/>
+        <text x="520" y="190" text-anchor="middle" fill="#f87171" font-family="Inter,sans-serif" font-size="10">falhou ✗</text>
+
+        <!-- caixa de recuperacao -->
+        <rect x="120" y="210" width="720" height="118" rx="14" fill="#1a1014" stroke="#f87171" stroke-width="1.6" opacity="0.95"/>
+        <text x="140" y="234" fill="#f87171" font-family="Inter,sans-serif" font-size="12" font-weight="700">loop de recuperação — diagnostique, não repita cego</text>
+
+        <!-- 1 diagnostica -->
+        <rect x="140" y="248" width="150" height="62" rx="10" fill="#0e1830" stroke="#60a5fa" stroke-width="1.6"/>
+        <text x="215" y="272" text-anchor="middle" fill="#93c5fd" font-family="Inter,sans-serif" font-size="12" font-weight="600">① diagnostica</text>
+        <text x="215" y="290" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="10">leia o erro</text>
+        <text x="215" y="303" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="10">inspecione o estado</text>
+
+        <!-- 2 corrige -->
+        <rect x="318" y="248" width="150" height="62" rx="10" fill="#0e1830" stroke="#60a5fa" stroke-width="1.6"/>
+        <text x="393" y="272" text-anchor="middle" fill="#93c5fd" font-family="Inter,sans-serif" font-size="12" font-weight="600">② corrige</text>
+        <text x="393" y="290" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="10">forme a correção</text>
+        <text x="393" y="303" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="10">aplique a mudança</text>
+
+        <!-- 3 re-verifica -->
+        <rect x="496" y="248" width="150" height="62" rx="10" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.6"/>
+        <text x="571" y="272" text-anchor="middle" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="12" font-weight="600">③ re-verifica</text>
+        <text x="571" y="290" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="10">rode o check de novo</text>
+        <text x="571" y="303" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="10">o erro sumiu?</text>
+
+        <!-- 4 não resolveu? relate -->
+        <rect x="674" y="248" width="150" height="62" rx="10" fill="#0e1830" stroke="#60a5fa" stroke-width="1.6"/>
+        <text x="749" y="272" text-anchor="middle" fill="#93c5fd" font-family="Inter,sans-serif" font-size="12" font-weight="600">④ não deu?</text>
+        <text x="749" y="290" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="10">diga claramente</text>
+        <text x="749" y="303" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="10">nunca em silêncio</text>
+
+        <!-- setas internas do loop -->
+        <path d="M290,279 L314,279" fill="none" stroke="#60a5fa" stroke-width="1.6" marker-end="url(#m27-ah)"/>
+        <path d="M468,279 L492,279" fill="none" stroke="#60a5fa" stroke-width="1.6" marker-end="url(#m27-ah)"/>
+        <path d="M646,279 L670,279" fill="none" stroke="#38bdf8" stroke-width="1.6" marker-end="url(#m27-ahc)"/>
+
+        <!-- re-verifica volta pra VERIFY (passou) -->
+        <path d="M571,248 C571,200 571,180 522,162" fill="none" stroke="#38bdf8" stroke-width="1.6" stroke-dasharray="5,4" marker-end="url(#m27-ahc)"/>
+        <text x="612" y="200" text-anchor="middle" fill="#38bdf8" font-family="Inter,sans-serif" font-size="10">re-testa</text>
+      </svg>
+    </div>
+
+    <!-- CONTEÚDO DETALHADO -->
+    <h2 class="text-2xl font-bold mb-6">Conteúdo detalhado</h2>
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">1</span>
+        <h2 class="text-2xl font-bold">Uma edição é uma hipótese</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Você acabou de mudar uma linha do prompt, ou pedir uma correção, e ela <em>parece</em> certa. Pare aí: <strong class="text-blue-400">parecer
+        certo não é evidência de nada</strong>. Uma edição é só um palpite com aparência de solução — uma hipótese. A pergunta que importa
+        não é "ficou bom?", é "como eu sei que ficou bom?". E a resposta é sempre a mesma: porque um check de verdade passou.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">🔬</span> A ideia em uma frase</h3>
+        <p class="text-neutral-300 leading-relaxed mb-3">
+          Toda mudança que você faz é uma <strong class="text-blue-400">hipótese</strong> — uma aposta de que o problema some. Ela vira
+          conhecimento só quando você roda a verificação e <em>vê</em> o resultado. Antes disso, você não corrigiu nada; você
+          <em>propôs</em> uma correção.
+        </p>
+        <p class="text-neutral-300 leading-relaxed text-sm">
+          Esse é o pensamento que muda tudo: separar o ato de mudar (barato, rápido, incerto) do ato de provar (o que de fato te dá
+          confiança). Quem confunde os dois entrega "provavelmente funciona" achando que é "está feito".
+        </p>
+      </div>
+
+      <!-- Verbatim em caixa mono -->
+      <div class="bg-dark-800 border border-sky-500/30 rounded-xl p-5 mb-6">
+        <div class="text-xs font-semibold text-sky-300 mb-3">Do Fable Mindset — verbatim <span class="font-normal text-neutral-500">an edit is a hypothesis</span></div>
+        <pre class="bg-dark-900 border-l-2 border-sky-500 rounded p-4 font-mono text-xs text-neutral-300 overflow-x-auto code-box leading-relaxed">"An edit is a hypothesis. A passing check is the evidence."</pre>
+        <p class="text-neutral-400 text-xs mt-3 leading-relaxed">
+          Duas frases. A primeira te tira a falsa sensação de pronto; a segunda te diz onde ela mora de verdade — no check, não no
+          seu otimismo.
+        </p>
+      </div>
+
+      <!-- Por que aprender -->
+      <div class="bg-dark-800 border border-dark-600 rounded-xl p-5 mb-4">
+        <h3 class="text-lg font-semibold text-neutral-200 mb-3">Por que isso importa pra você</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          Porque a IA, por padrão, é otimista: ela tende a relatar sucesso que não conferiu. Se você não exige a prova — no prompt e
+          no seu próprio hábito — você herda esse otimismo. Tratar cada mudança como hipótese é o antídoto: força a pergunta "qual
+          check provaria isso?" antes de qualquer "pronto".
+        </p>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">💡</div>
+          <div class="text-xs font-semibold text-neutral-200">Edição = palpite</div>
+          <div class="text-xs text-neutral-500 mt-1">ainda não provada</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🧾</div>
+          <div class="text-xs font-semibold text-neutral-200">Check = prova</div>
+          <div class="text-xs text-neutral-500 mt-1">a evidência real</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🚫</div>
+          <div class="text-xs font-semibold text-neutral-200">"Parece certo"</div>
+          <div class="text-xs text-neutral-500 mt-1">não conta</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">❓</div>
+          <div class="text-xs font-semibold text-neutral-200">"Como eu sei?"</div>
+          <div class="text-xs text-neutral-500 mt-1">a pergunta-chave</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">2</span>
+        <h2 class="text-2xl font-bold">Rode o check REAL, não um teatro</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Aqui está o erro mais comum, e o mais invisível: rodar um check que <em>parece</em> verificação, mas não verifica nada. Um
+        <span class="code-box">ls</span> que confirma que o arquivo existe. Um <span class="code-box">echo</span> que imprime "ok". Um
+        comando qualquer que saiu com código zero. Nada disso prova que a sua mudança funcionou. <strong class="text-blue-400">O check
+        real é o teste, o build, o lint ou o typecheck que o projeto de fato usa</strong> — e rodar a coisa de verdade, não um substituto reconfortante.
+      </p>
+
+      <!-- Grid: check real vs teatro de verificação -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-blue-900/20 border border-blue-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-blue-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-blue-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>Check real (a evidência)</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Rodar o <strong>teste do projeto</strong> e ler o que passou/falhou</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Rodar o <strong>build</strong> inteiro e ver se compila de fato</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Dar a <strong>tarefa real</strong> à IA e checar a saída contra o critério</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Abrir a coisa e <strong>observar o comportamento</strong>, não só o exit code</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">✗</span>
+            <span>Teatro de verificação (prova nada)</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Um <span class="code-box">ls</span> que só mostra que o arquivo está lá</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Um <span class="code-box">echo "funcionou"</span> que você mesmo escreveu</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Um comando <strong>não relacionado</strong> que saiu com código 0</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>"Olhei e <strong>parece</strong> certo" — leitura no lugar de execução</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Box Conceito: full suite -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">🎯</span> Se o projeto pede a suíte inteira, rode a suíte inteira</h3>
+        <p class="text-neutral-300 leading-relaxed text-sm mb-3">
+          A tentação é rodar só o teste do pedacinho que você mexeu. Mas a sua mudança pode ter quebrado outra coisa longe dali —
+          e um subconjunto escolhido a dedo não pega isso. <strong class="text-blue-400">Verificação escopada estreito é o jeito mais
+          fácil de declarar "passou" com algo quebrado fora do seu campo de visão.</strong>
+        </p>
+        <p class="text-neutral-300 leading-relaxed text-sm">
+          Esta é, segundo o próprio acervo, a disciplina <em>mais</em> negligenciada — rodar o check real após editar acontece numa
+          minoria das vezes. Por isso ela é inegociável: é exatamente onde dá pra ser melhor que a média.
+        </p>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-sky-900/30 border border-sky-500/30 rounded-xl p-4 mb-5">
+        <div class="flex items-start space-x-3">
+          <span class="text-sky-300 text-lg flex-shrink-0">🎯</span>
+          <div>
+            <p class="text-sm font-semibold text-sky-300 mb-1">No prompt: nomeie o check, não deixe a IA inventar</p>
+            <p class="text-sm text-neutral-300">
+              No bloco <span class="code-box text-sky-300">&lt;loop&gt;</span>, a etapa VERIFY tem que dizer <em>qual</em> é o check real
+              do seu caso: "rode <span class="code-box">npm test</span>", "rode o build", "dê a tarefa X e confira a saída". Se você não
+              nomear, a IA escolhe o caminho mais barato — e o mais barato costuma ser o teatro.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🧪</div>
+          <div class="text-xs font-semibold text-neutral-200">Teste de verdade</div>
+          <div class="text-xs text-neutral-500 mt-1">o do projeto</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-red-400 text-lg mb-1">🎭</div>
+          <div class="text-xs font-semibold text-neutral-200">Nada de ls/echo</div>
+          <div class="text-xs text-neutral-500 mt-1">não é prova</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-sky-300 text-lg mb-1">🧰</div>
+          <div class="text-xs font-semibold text-neutral-200">Suíte inteira</div>
+          <div class="text-xs text-neutral-500 mt-1">se o projeto pede</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">📖</div>
+          <div class="text-xs font-semibold text-neutral-200">Leia o resultado</div>
+          <div class="text-xs text-neutral-500 mt-1">não só o exit code</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">3</span>
+        <h2 class="text-2xl font-bold">Confirme antes do irreversível</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Verificar é sobre o que já aconteceu. Confirmar é sobre o que ainda vai acontecer — e é especialmente importante quando a ação
+        é <strong class="text-blue-400">difícil de desfazer ou sai pra fora</strong>. Deletar, sobrescrever, publicar, enviar um e-mail,
+        chamar um serviço externo: nessas, o certo é checar antes. Um "pode?" curto custa um segundo; um e-mail enviado por engano
+        custa um relacionamento.
+      </p>
+
+      <!-- Caixa mono: a clausula de confirmacao -->
+      <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5 mb-6">
+        <div class="text-xs font-semibold text-blue-400 mb-3">Bloco 11 da biblioteca — confirmação antes do irreversível <span class="font-normal text-neutral-500">cole no &lt;seguranca&gt;</span></div>
+        <pre class="bg-dark-900 border-l-2 border-blue-500 rounded p-4 font-mono text-xs text-neutral-300 overflow-x-auto code-box leading-relaxed"><span class="text-blue-400">&lt;seguranca&gt;</span>
+Para ações difíceis de reverter ou voltadas para fora (deletar, sobrescrever,
+publicar, enviar a serviço externo): confirme antes, a menos que duravelmente
+autorizado ou mandado prosseguir.
+Aprovação num contexto não se estende ao próximo.
+Antes de deletar/sobrescrever, olhe o alvo: se o que achar contradiz como foi
+descrito, ou você não o criou, levante isso em vez de prosseguir.
+<span class="text-blue-400">&lt;/seguranca&gt;</span></pre>
+      </div>
+
+      <!-- Grid: confirma vs não precisa confirmar -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">!</span>
+            <span>Pare e confirme primeiro</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">⚠</span><span><strong>Deletar</strong> arquivos, registros, branches</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">⚠</span><span><strong>Sobrescrever</strong> algo que você não criou</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">⚠</span><span><strong>Publicar / enviar</strong> a um destino externo (e-mail, post, deploy)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">⚠</span><span>Qualquer coisa <strong>cara de desfazer</strong> ou que afeta outras pessoas</span></li>
+          </ul>
+        </div>
+        <div class="bg-blue-900/20 border border-blue-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-blue-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-blue-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>Pode seguir sem perguntar</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Ler, listar, buscar, inspecionar (<strong>reversível</strong>)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Editar um rascunho que <strong>você mesmo</strong> está montando</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Quando o usuário <strong>já autorizou</strong> aquela ação dur, ou mandou prosseguir</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Passos internos sem efeito pra fora do seu espaço</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-primary text-lg flex-shrink-0">💡</span>
+          <div>
+            <p class="text-sm font-semibold text-primary mb-1">"Aprovação num contexto não se estende ao próximo"</p>
+            <p class="text-sm text-neutral-300">
+              Você liberou enviar <em>um</em> e-mail? Isso não vira passe livre pra enviar todos. Cada ação irreversível pede sua
+              própria luz verde — a menos que você tenha autorizado <strong>duravelmente</strong> ("pode sempre enviar sem me mostrar").
+              Esse detalhe evita que um "ok" vire um "ok pra tudo".
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">4</span>
+        <h2 class="text-2xl font-bold">Relato fiel, sem hedging</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Verificou? Agora <strong class="text-blue-400">conte a verdade do que aconteceu</strong>. Se o teste falhou, diga que falhou e
+        mostre a saída. Se você pulou uma etapa, diga que pulou. Se está feito e verificado, afirme sem rodeios, sem "acho que", sem
+        "provavelmente". Confiança se constrói com relato preciso — não com relato otimista. A IA que enfeita um resultado não
+        verificado como pronto está corroendo a única coisa que a torna útil: você poder acreditar no que ela diz.
+      </p>
+
+      <!-- Verbatim em caixa mono (o pedido) -->
+      <div class="bg-dark-800 border border-sky-500/30 rounded-xl p-5 mb-6">
+        <div class="text-xs font-semibold text-sky-300 mb-3">Regra de ouro — relato fiel <span class="font-normal text-neutral-500">bloco 7 da biblioteca, verbatim</span></div>
+        <pre class="bg-dark-900 border-l-2 border-sky-500 rounded p-4 font-mono text-xs text-neutral-300 overflow-x-auto code-box leading-relaxed">"Report outcomes faithfully: if tests fail, say so with the output; if a step was skipped, say that; when something is done and verified, state it plainly without hedging."</pre>
+      </div>
+
+      <!-- Grid: relato fiel vs relato otimista -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+        <div class="bg-blue-900/20 border border-blue-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-blue-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-blue-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>Relato fiel</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>"Os testes passam — <strong>eis a saída</strong>: 14 ok, 0 falhas."</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>"<strong>Falhou</strong> em 2 casos; o erro foi X. Aqui está o log."</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>"<strong>Pulei</strong> o build porque o ambiente não tinha a dependência."</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>"Feito e verificado." — dito <strong>sem rodeios</strong>, porque o check passou</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">✗</span>
+            <span>Relato otimista (hedging)</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>"Deve estar funcionando agora!" — <strong>sem ter rodado nada</strong></span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>"Pronto!" quando o teste falhou e ela <strong>não contou</strong></span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Omitir a etapa pulada e deixar você <strong>achar que rodou</strong></span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>"Provavelmente resolve" disfarçado de <strong>"está resolvido"</strong></span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-primary text-lg flex-shrink-0">💡</span>
+          <div>
+            <p class="text-sm font-semibold text-primary mb-1">"Provavelmente funciona" não é pronto</p>
+            <p class="text-sm text-neutral-300">
+              Existe um teste de uma frase pra saber se um relato é fiel: ele distingue <strong>"provavelmente funciona"</strong> de
+              <strong>"testes passam, eis a saída"</strong>? O primeiro é palpite vestido de conclusão. O segundo é pronto de verdade.
+              Cobre isso da IA — e de você.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">5</span>
+        <h2 class="text-2xl font-bold">Recuperar de erro, sem flailing</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Erro é normal — o que separa disciplina de sorte é a <strong class="text-blue-400">resposta</strong> ao erro. O reflexo ruim é
+        rodar o mesmo comando de novo, igualzinho, torcendo por um resultado diferente. Isso é tatear no escuro. O reflexo bom é um
+        loop curto: <strong class="text-blue-400">diagnosticar → corrigir → re-verificar</strong>. Você lê o erro, entende o estado, forma
+        uma correção informada e só então tenta de novo. Olhe o diagrama lá em cima: é exatamente esse o caminho de baixo.
+      </p>
+
+      <!-- Timeline: o loop de recuperação -->
+      <div class="space-y-4 mb-6">
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center">
+            <span class="text-red-400 text-lg">✗</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-red-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-red-400 mb-1">0. A falha acontece</h4>
+            <p class="text-sm text-neutral-500 mb-2">O check não passou. Ponto de partida — não de pânico.</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              O teste vermelho, o build que quebrou, a saída errada. Isso é <em>informação</em>, não fracasso. A falha está te dizendo
+              onde olhar. O pior que você pode fazer agora é ignorá-la ou repetir o comando às cegas.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+            <span class="text-blue-400 text-lg">🔍</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-blue-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-blue-400 mb-1">1. Diagnostique — leia o erro, inspecione o estado</h4>
+            <p class="text-sm text-neutral-500 mb-2">A etapa que quase todo mundo pula. É onde a correção nasce.</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              <strong class="text-blue-400">Leia a mensagem de erro inteira.</strong> Re-rode com mais visibilidade se precisar. Abra o
+              arquivo ou o estado que importa. Você está procurando a <em>causa</em>, não tapando o sintoma. Sem diagnóstico, qualquer
+              correção é chute.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+            <span class="text-blue-400 text-lg">🔧</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-blue-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-blue-400 mb-1">2. Corrija — uma mudança informada</h4>
+            <p class="text-sm text-neutral-500 mb-2">Agora sim você muda algo — mas guiado pelo que o erro revelou.</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              Forme a correção a partir do diagnóstico e aplique. Note que esta correção é, de novo, uma <strong class="text-blue-400">hipótese</strong> —
+              fecha o ciclo do tópico 1. Você ainda não sabe se resolveu; só vai saber no próximo passo.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
+            <span class="text-sky-300 text-lg">✅</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-sky-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-sky-300 mb-1">3. Re-verifique — rode o check de novo</h4>
+            <p class="text-sm text-neutral-500 mb-2">Sem este passo, você não corrigiu — só mexeu.</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              Rode o mesmo check real. Passou? O erro morreu — siga e relate. Falhou de novo? Volte ao passo 1 com a nova informação,
+              <strong class="text-sky-300">não repita cego</strong>. E se depois de tentar você não resolver, vá pro tópico 6: diga
+              claramente, com a evidência.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Caixa mono: o bloco de recuperação -->
+      <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5 mb-5">
+        <div class="text-xs font-semibold text-blue-400 mb-3">Bloco 6 da biblioteca — recuperação de erro <span class="font-normal text-neutral-500">cole no &lt;loop&gt; ou solto</span></div>
+        <pre class="bg-dark-900 border-l-2 border-blue-500 rounded p-4 font-mono text-xs text-neutral-300 overflow-x-auto code-box leading-relaxed"><span class="text-blue-400">&lt;recuperacao&gt;</span>
+Quando um comando falha: não repita igual esperando resultado diferente.
+Leia o erro → inspecione o arquivo/estado → forme a correção → corrija → re-verifique.
+Nunca largue um turno que falhou em silêncio. Se não resolver, diga claramente, com a evidência.
+<span class="text-blue-400">&lt;/recuperacao&gt;</span></pre>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-sky-900/30 border border-sky-500/30 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-sky-300 text-lg flex-shrink-0">🔁</span>
+          <div>
+            <p class="text-sm font-semibold text-sky-300 mb-1">Repetir o comando igual é o antipadrão #1</p>
+            <p class="text-sm text-neutral-300">
+              Se o comando falhou e você roda ele de novo sem mudar nada, ele vai falhar de novo — o estado não mudou sozinho. Cada
+              nova tentativa precisa carregar <strong>uma informação nova</strong>: ou você mudou a coisa, ou mudou o que está olhando.
+              Tentativa sem novidade é só ruído.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">6</span>
+        <h2 class="text-2xl font-bold">Nunca largue um turno em silêncio</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A última regra, e a mais simples de cumprir: <strong class="text-blue-400">não suma</strong>. Se uma tarefa travou e você não
+        conseguiu resolver, isso não é desculpa pra terminar o turno fingindo que deu certo, nem pra ir embora sem dizer nada. Diga
+        claramente o que aconteceu, mostre a evidência, e seja honesto sobre onde parou. Um "não consegui, e foi por isto" vale
+        infinitamente mais que um silêncio que deixa você descobrir o estrago depois.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📣</span> O que "não largar em silêncio" quer dizer</h3>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">①</span>
+            <span><strong class="text-blue-400">Não abandone:</strong> um turno que falhou nunca termina como se nada tivesse acontecido. O erro é parte do relato.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">②</span>
+            <span><strong class="text-blue-400">Não disfarce:</strong> resultado não verificado não vira "pronto". Se você não provou, diga que não provou.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">③</span>
+            <span><strong class="text-blue-400">Não vá dark:</strong> numa tarefa longa, narre as transições. Não suma por vinte passos e apareça só no fim.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">④</span>
+            <span><strong class="text-blue-400">Peça ajuda com a evidência:</strong> "travei aqui, eis o erro e o que já tentei" é um pedido útil — não uma derrota.</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- O que "done" significa -->
+      <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5 mb-5">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">🏁</span> O que "feito" significa de verdade</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed mb-4">
+          Juntando os seis tópicos: um turno está <strong>feito</strong> quando a meta foi atingida, a mudança foi verificada por um
+          check real, e o resultado foi relatado com honestidade — incluindo o que falhou ou foi pulado. Tudo o que falta um desses três não está feito.
+        </p>
+        <div class="flex flex-col sm:flex-row items-stretch gap-3 text-sm">
+          <div class="flex-1 bg-dark-900 rounded-lg p-3 border border-dark-600 text-center">
+            <div class="text-blue-400 text-lg mb-1">🎯</div>
+            <div class="font-semibold text-neutral-200 mb-1">Meta atingida</div>
+            <div class="text-neutral-500 text-xs">o objetivo do turno saiu</div>
+          </div>
+          <div class="flex items-center justify-center text-blue-400 font-bold">+</div>
+          <div class="flex-1 bg-dark-900 rounded-lg p-3 border border-dark-600 text-center">
+            <div class="text-blue-400 text-lg mb-1">✅</div>
+            <div class="font-semibold text-neutral-200 mb-1">Check real passou</div>
+            <div class="text-neutral-500 text-xs">a evidência, não o palpite</div>
+          </div>
+          <div class="flex items-center justify-center text-blue-400 font-bold">+</div>
+          <div class="flex-1 bg-dark-900 rounded-lg p-3 border border-dark-600 text-center">
+            <div class="text-blue-400 text-lg mb-1">🗣️</div>
+            <div class="font-semibold text-neutral-200 mb-1">Relatado com fidelidade</div>
+            <div class="text-neutral-500 text-xs">o que houve, sem hedging</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Box Alerta / nuance -->
+      <div class="bg-red-900/20 border border-red-500/30 rounded-xl p-5 mb-5">
+        <h3 class="text-lg font-semibold text-red-400 mb-2 flex items-center"><span class="mr-2">⚠️</span> O silêncio é o pior dos erros</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed mb-3">
+          De todos os jeitos de fechar um turno, um único é imperdoável: o silêncio sobre uma falha. Errar e dizer é confiável.
+          Travar e pedir ajuda é confiável. Mas <strong class="text-red-400">esconder que algo deu errado</strong> destrói a confiança
+          de uma vez — porque o estrago aparece sem aviso, no pior momento possível.
+        </p>
+        <ul class="space-y-2 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Terminar com "pronto!" quando o teste estava vermelho</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Omitir que uma etapa crítica foi pulada</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Encerrar o turno sem mencionar o erro que apareceu no meio</span></li>
+        </ul>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">📣</div>
+          <div class="text-xs font-semibold text-neutral-200">Sempre fale</div>
+          <div class="text-xs text-neutral-500 mt-1">nada de silêncio</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🧾</div>
+          <div class="text-xs font-semibold text-neutral-200">Com a evidência</div>
+          <div class="text-xs text-neutral-500 mt-1">erro + o que tentou</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🏁</div>
+          <div class="text-xs font-semibold text-neutral-200">Feito = 3 coisas</div>
+          <div class="text-xs text-neutral-500 mt-1">meta + check + relato</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🤝</div>
+          <div class="text-xs font-semibold text-neutral-200">Confiança</div>
+          <div class="text-xs text-neutral-500 mt-1">vem da fidelidade</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ENTREGÁVEL PRÁTICO -->
+    <div class="bg-dark-800 border border-blue-500/30 rounded-2xl p-6 sm:p-8 mb-8">
+      <h2 class="text-2xl font-bold mb-3 flex items-center"><span class="mr-3">🔬</span> Mão na massa: seu entregável</h2>
+      <p class="text-neutral-300 leading-relaxed mb-5 text-sm">
+        Feche a Trilha 2 instalando a verificação no seu próprio PMV. Em 15 minutos você sai com uma cláusula de verificação de verdade.
+      </p>
+      <ol class="space-y-3 text-sm text-neutral-300 mb-2">
+        <li class="flex items-start space-x-3">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex-shrink-0">1</span>
+          <span>Pegue o PMV que você montou nos módulos anteriores. Nomeie, em uma frase, qual é o <strong class="text-blue-400">check real</strong> do seu caso — o teste/build/tarefa que prova que a coisa funciona (não um <span class="code-box">ls</span>).</span>
+        </li>
+        <li class="flex items-start space-x-3">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex-shrink-0">2</span>
+          <span>Cole no prompt os blocos 6 (<span class="code-box">&lt;recuperacao&gt;</span>) e 11 (confirmação antes do irreversível), e acrescente a regra de relato fiel — diga "se falhar, mostre a saída; se pular, avise".</span>
+        </li>
+        <li class="flex items-start space-x-3">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex-shrink-0">3</span>
+          <span>Dê à IA uma tarefa que <em>vai</em> dar errado de propósito (peça algo impossível ou com um detalhe quebrado). Observe: ela diagnostica e tenta de novo com método, ou repete cego? Ela <strong>conta</strong> que falhou?</span>
+        </li>
+        <li class="flex items-start space-x-3">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex-shrink-0">4</span>
+          <span>Ajuste a regra até o relato sair fiel: falha admitida com evidência, sucesso afirmado só quando o check passou. Esse é o seu prompt de produção saindo da Trilha 2.</span>
+        </li>
+      </ol>
+    </div>
+
+    <!-- RESUMO FINAL -->
+    <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-2xl border border-blue-500/30 p-6 sm:p-8 mb-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📝</span> Resumo do Módulo</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <ul class="space-y-3 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span>Uma <strong class="text-blue-400">edição é uma hipótese</strong>; um check que passa é a evidência — "parece certo" não conta</span></li>
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span>Rode o <strong class="text-blue-400">check REAL</strong> (teste/build/lint do projeto), nunca um <span class="code-box">ls</span>/<span class="code-box">echo</span>; suíte inteira se o projeto pedir</span></li>
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-blue-400">Confirme antes do irreversível</strong>: deletar, sobrescrever, publicar, enviar a externo</span></li>
+        </ul>
+        <ul class="space-y-3 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-blue-400">Relato fiel, sem hedging</strong>: se falhou, diga; se pulou, diga; se passou, afirme sem rodeios</span></li>
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-blue-400">Recupere de erro</strong> com método: diagnostique → corrija → re-verifique, nunca repita cego</span></li>
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-blue-400">Nunca largue um turno em silêncio</strong> — "feito" = meta + check real + relato honesto</span></li>
+        </ul>
+      </div>
+
+      <div class="bg-dark-800/50 rounded-lg p-4 mb-6 border border-blue-500/20">
+        <h3 class="font-semibold text-blue-400 mb-1 flex items-center"><span class="mr-2">🎓</span> Você terminou a Trilha 2</h3>
+        <p class="text-neutral-300 text-sm">
+          Saiu da teoria e montou, rodou, podou e verificou um prompt de verdade. Você agora tem um PMV de produção e o reflexo de
+          provar o que afirma. A próxima trilha sobe o nível: personas consistentes, agentes com loop completo, segurança por
+          princípio e os padrões avançados do acervo.
+        </p>
+      </div>
+
+      <div class="bg-dark-800/50 rounded-lg p-4 mb-6 border border-sky-500/30">
+        <h3 class="font-semibold text-sky-300 mb-1 flex items-center"><span class="mr-2">➡️</span> Próxima Trilha</h3>
+        <p class="text-neutral-300 text-sm">
+          <strong>🧠 Avançado (Trilha 3).</strong> Dos blocos prontos para a maestria: persona em quatro eixos, o loop operacional
+          completo, hierarquia de prioridade e segurança por princípio — para construir o "agente pessoal consistente" que o método persegue.
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="inline-flex items-center justify-start space-x-2 text-neutral-400 hover:text-blue-400 text-sm font-medium px-4 py-2.5 rounded-xl bg-dark-700 hover:bg-dark-600 transition-colors">
+          <span>←</span><span>Voltar para Trilha</span>
+        </a>
+        <a href="../trilha3/index.html" class="inline-flex items-center justify-start space-x-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition-colors">
+          <span>Próxima Trilha: 🧠 Avançado (Trilha 3)</span><span>→</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
+        <div class="text-sm text-neutral-500">
+          <span class="text-blue-400 font-medium">O Manual Oculto da IA</span> · Módulo 2.7 · Trilha 2 · 2026
+        </div>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm transition-colors">INEMA.CLUB</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

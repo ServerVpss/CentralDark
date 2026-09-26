@@ -1,0 +1,28 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\WebStorage\9\CacheStorage\8fad20f8-15c4-464d-bb82-e5199e0e1c7e\a8a671841547e3ad_0
+
+https://id-preview--ef4dca86-83fc-4333-81fd-ca8d4042699a.lovable.app/registerSW.js?__WB_REVISION__=1872c500de691dce40960bb85481de07if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/sw.js', { scope: '/' })})}
+cache-control
+#no-cache, no-store, must-revalidate"
+cf-ray
+a2bcc2d0ea986282-GRU"
+content-encoding
+content-security-policy
+frame-ancestors 'self' https://lovable.dev https://beta.lovable.dev https://*.beta.lovable.dev https://*.dwl.lovable.dev https://*.sandcastle.lovable.net https://gptengineer.app http://localhost:* http://*.localhost:*"
+content-type
+text/javascript"%
+Sun, 16 Aug 2026 01:45:41 GMT",
+$W/"1872c500de691dce40960bb85481de07""2
+referrer-policy
+strict-origin-when-cross-origin"
+server
+cloudflare"@
+strict-transport-security
+#max-age=31536000; includeSubDomains"!
+x-content-type-options
+nosniff"F
+x-lovable-project-revision
+(2ec97d4733a65a7d2843f02c80ec9130cdf4cba1"!
+x-robots-tag
+noindex, nofollow0
+BRhttps://id-preview--ef4dca86-83fc-4333-81fd-ca8d4042699a.lovable.app/registerSW.jsP
+text/javascriptr

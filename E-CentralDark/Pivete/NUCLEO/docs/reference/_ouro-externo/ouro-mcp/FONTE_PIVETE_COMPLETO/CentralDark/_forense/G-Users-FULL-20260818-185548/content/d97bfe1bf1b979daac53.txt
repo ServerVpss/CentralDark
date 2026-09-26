@@ -1,0 +1,22 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\src\legacy-runtime\runtime-cores\assistant-transport\useConvertedState.ts
+
+import { useMemo } from "react";
+import type {
+  AssistantTransportCommand,
+  AssistantTransportState,
+  AssistantTransportStateConverter,
+} from "./types";
+import type { ToolExecutionStatus } from "@assistant-ui/core";
+
+export function useConvertedState<T>(
+  converter: AssistantTransportStateConverter<T>,
+  agentState: T,
+  pendingCommands: AssistantTransportCommand[],
+  isSending: boolean,
+  toolStatuses: Record<string, ToolExecutionStatus>,
+): AssistantTransportState {
+  return useMemo(
+    () => converter(agentState, { pendingCommands, isSending, toolStatuses }),
+    [converter, agentState, pendingCommands, isSending, toolStatuses],
+  );
+}

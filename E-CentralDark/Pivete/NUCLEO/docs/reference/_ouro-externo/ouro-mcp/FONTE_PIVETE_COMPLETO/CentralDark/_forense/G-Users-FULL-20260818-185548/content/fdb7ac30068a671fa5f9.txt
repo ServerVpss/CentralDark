@@ -1,0 +1,17 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\primitives\message.d.ts
+
+import { MessagePrimitiveRoot } from "./message/MessageRoot.js";
+import { MessagePrimitivePartByIndex as MessagePrimitivePartByIndexBase, MessagePrimitiveParts } from "./message/MessageParts.js";
+import { MessagePrimitiveIf } from "./message/MessageIf.js";
+import { MessagePrimitiveAttachmentByIndex, MessagePrimitiveAttachments } from "./message/MessageAttachments.js";
+import { MessagePrimitiveError } from "./message/MessageError.js";
+import { MessagePrimitiveUnstable_PartsGrouped, MessagePrimitiveUnstable_PartsGroupedByParentId } from "./message/MessagePartsGrouped.js";
+import { MessagePrimitiveGenerativeUI as GenerativeUI, MessagePrimitiveGroupedParts as GroupedParts, MessagePrimitiveQuote as Quote } from "@assistant-ui/core/react";
+
+//#region src/primitives/message.d.ts
+declare namespace message_d_exports {
+  export { MessagePrimitiveAttachmentByIndex as AttachmentByIndex, MessagePrimitiveAttachments as Attachments, MessagePrimitiveParts as Content, MessagePrimitiveError as Error, GenerativeUI, GroupedParts, MessagePrimitiveIf as If, MessagePrimitivePartByIndexBase as PartByIndex, MessagePrimitiveParts as Parts, Quote, MessagePrimitiveRoot as Root, MessagePrimitiveUnstable_PartsGrouped as Unstable_PartsGrouped, MessagePrimitiveUnstable_PartsGroupedByParentId as Unstable_PartsGroupedByParentId };
+}
+//#endregion
+export { MessagePrimitiveAttachmentByIndex as AttachmentByIndex, MessagePrimitiveAttachments as Attachments, MessagePrimitiveParts as Content, MessagePrimitiveError as Error, GenerativeUI, GroupedParts, MessagePrimitiveIf as If, MessagePrimitivePartByIndexBase as PartByIndex, MessagePrimitiveParts as Parts, Quote, MessagePrimitiveRoot as Root, MessagePrimitiveUnstable_PartsGrouped as Unstable_PartsGrouped, MessagePrimitiveUnstable_PartsGroupedByParentId as Unstable_PartsGroupedByParentId, message_d_exports };
+//# sourceMappingURL=message.d.ts.map

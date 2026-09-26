@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@dnd-kit\accessibility\README.md
+
+# @dnd-kit/accessibility
+
+[![Stable release](https://img.shields.io/npm/v/@dnd-kit/accessibility.svg)](https://npm.im/@dnd-kit/accessibility)
+
+A generic set of components and hooks to help with live region announcements and screen reader instructions. This package is used internally by `@dnd-kit/core`.

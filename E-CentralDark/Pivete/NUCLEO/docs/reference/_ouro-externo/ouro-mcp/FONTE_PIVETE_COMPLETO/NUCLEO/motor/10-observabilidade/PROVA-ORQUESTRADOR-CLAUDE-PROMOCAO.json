@@ -1,0 +1,43 @@
+{
+  "ts": "2026-07-18T22:49:21.191828+00:00",
+  "claude_http_oauth": {
+    "claude-opus-4-6": {
+      "ok": false,
+      "http": 429,
+      "error": "HTTP Error 429: Too Many Requests",
+      "body": "{\"type\":\"error\",\"error\":{\"type\":\"rate_limit_error\",\"message\":\"Error\"},\"request_id\":\"req_011CdALdCRmdBaMeSktAeVEW\"}"
+    },
+    "claude-sonnet-4-6": {
+      "ok": false,
+      "http": 429,
+      "error": "HTTP Error 429: Too Many Requests",
+      "body": "{\"type\":\"error\",\"error\":{\"type\":\"rate_limit_error\",\"message\":\"Error\"},\"request_id\":\"req_011CdALdGWLXX6fRSrtM5gQp\"}"
+    },
+    "claude-haiku-4-5-20251001": {
+      "ok": true,
+      "http": 200,
+      "text": "Oi! 👋 Tudo bem? Como posso",
+      "model": "claude-haiku-4-5-20251001"
+    }
+  },
+  "orch_pick": "claude-haiku-4-5-20251001",
+  "xai": {
+    "grok-4.5": {
+      "ok": true,
+      "http": 200,
+      "text": "oi! how can I help you today?"
+    },
+    "grok-build-0.1": {
+      "ok": true,
+      "http": 200,
+      "text": "Oi! Tudo bem? 😊"
+    },
+    "grok-composer-2.5-fast": {
+      "ok": true,
+      "http": 200,
+      "text": "Oi! How’s it going? What can I"
+    }
+  },
+  "base": "https://api.anthropic.com",
+  "env_base": null
+}

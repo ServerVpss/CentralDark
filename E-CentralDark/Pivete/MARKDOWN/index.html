@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Central Dark — MARKDOWN (organizado)</title>
+  <style>
+    :root { --bg:#0b0f0e; --card:#121a18; --fg:#e8f5f0; --muted:#8aa89c; --acc:#3dd68c; --line:#1e2e28; }
+    * { box-sizing: border-box; }
+    body { margin:0; font:15px/1.55 system-ui,sans-serif; background:var(--bg); color:var(--fg); }
+    header { padding:1.5rem 1.25rem; border-bottom:1px solid var(--line); }
+    h1 { margin:0 0 .35rem; font-size:1.25rem; color:var(--acc); }
+    h2 { margin:1.5rem 0 .6rem; font-size:1rem; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+    p { margin:.25rem 0; color:var(--muted); }
+    main { max-width:920px; margin:0 auto; padding:1.25rem; }
+    .grid { display:grid; gap:.65rem; }
+    a.card { display:block; padding:.9rem 1rem; background:var(--card); border:1px solid var(--line); border-radius:10px; color:inherit; text-decoration:none; }
+    a.card:hover { border-color:var(--acc); }
+    a.card strong { color:var(--acc); }
+    .tag { display:inline-block; font-size:.68rem; padding:.12rem .4rem; border:1px solid var(--line); border-radius:999px; color:var(--muted); margin-right:.3rem; }
+    .tag.ai { border-color:var(--acc); color:var(--acc); }
+    footer { padding:2rem 1.25rem; color:var(--muted); font-size:.85rem; text-align:center; }
+    code { color:var(--acc); font-size:.85rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Central Dark · MARKDOWN organizado</h1>
+    <p>Só docs locais · sem tocar infra</p>
+    <p><code>E:\CentralDark\grok-tela\MARKDOWN\</code></p>
+  </header>
+  <main>
+    <h2>02-ia · para o modelo</h2>
+    <div class="grid">
+      <a class="card" href="02-ia/AI-CONTEXT-MASTER.md"><span class="tag ai">1º</span><strong>AI-CONTEXT-MASTER.md</strong></a>
+      <a class="card" href="02-ia/AI-SCHEMA.json"><span class="tag ai">JSON</span><strong>AI-SCHEMA.json</strong></a>
+      <a class="card" href="02-ia/AI-SWARM-PROMPT.md"><span class="tag ai">ENXAME</span><strong>AI-SWARM-PROMPT.md</strong></a>
+      <a class="card" href="02-ia/08-prompt-contexto-sonnet-vps.md"><span class="tag">VPS</span><strong>08-prompt Sonnet single</strong></a>
+    </div>
+
+    <h2>03-central-dark · conversão + páginas + roadmap Sonnet</h2>
+    <div class="grid">
+      <a class="card" href="03-central-dark/12-MVP-MINIMO-VIABLE.md"><span class="tag ai">MVP</span><strong>12 · MÍNIMO VIÁVEL</strong><br/>12 itens IN · pra app não falhar · faça SÓ isso agora</a>
+      <a class="card" href="03-central-dark/11-ROADMAP-COMPLETO-PARA-SONNET.md"><span class="tag">DEPOIS</span><strong>11 · ROADMAP COMPLETO</strong><br/>Visão longa P0–P5 (não bloquear MVP)</a>
+      <a class="card" href="03-central-dark/07-mapa-conversao-central-dark.md"><span class="tag">CD</span><strong>07 · Conversão Central Dark</strong></a>
+      <a class="card" href="03-central-dark/10-mapa-paginas-site.md"><span class="tag">FUNIL</span><strong>10 · Dashboard Planos Baixar Direção Ajuda</strong></a>
+    </div>
+
+    <h2>01-humano · negócio e arquitetura</h2>
+    <div class="grid">
+      <a class="card" href="01-humano/01-visao-geral-referencia.md"><strong>01 · Visão geral</strong></a>
+      <a class="card" href="01-humano/02-arvore-produto-funcional.md"><strong>02 · Árvore</strong></a>
+      <a class="card" href="01-humano/03-modelo-de-negocio.md"><strong>03 · Modelo de negócio</strong></a>
+      <a class="card" href="01-humano/04-como-o-negocio-se-sustenta.md"><strong>04 · Sustentabilidade</strong></a>
+      <a class="card" href="01-humano/05-arquitetura-conceitual.md"><strong>05 · Arquitetura</strong></a>
+      <a class="card" href="01-humano/06-fluxos-usuario-e-valor.md"><strong>06 · Fluxos</strong></a>
+      <a class="card" href="01-humano/09-glossario-e-checklist.md"><strong>09 · Glossário</strong></a>
+    </div>
+  </main>
+  <footer>Organizado · só E:\CentralDark\grok-tela\MARKDOWN · infra intocada</footer>
+</body>
+</html>

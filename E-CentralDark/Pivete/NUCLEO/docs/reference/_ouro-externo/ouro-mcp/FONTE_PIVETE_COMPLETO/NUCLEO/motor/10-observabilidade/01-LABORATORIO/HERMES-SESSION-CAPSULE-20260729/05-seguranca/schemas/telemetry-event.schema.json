@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "centraldark.telemetry.event.v1",
+  "type": "object",
+  "required": ["event_id", "observed_at", "event_type", "source", "target", "severity"],
+  "properties": {
+    "event_id": {"type":"string"},
+    "observed_at": {"type":"string"},
+    "event_type": {"type":"string"},
+    "source": {"type":"string"},
+    "target": {"type":"string"},
+    "severity": {"enum":["INFO","NOTICE","WARN","HIGH","CRITICAL"]},
+    "head_or_checksum": {"type":["string","null"]},
+    "evidence": {"type":"array","items":{"type":"string"}},
+    "unknown": {"type":"array","items":{"type":"string"}},
+    "metadata": {"type":"object"}
+  }
+}

@@ -1,0 +1,30 @@
+schema_version: 2
+component: CENTRALDARK_LIVING_LEARNING_OS
+role: INTEGRATION_LAYER
+must_reuse:
+  - existing_hermes_runtime
+  - existing_sol_operator_surface
+  - existing_human_mind_router
+  - existing_nucleo
+  - existing_obsidian_projection
+  - existing_dispatcher_or_queue
+  - existing_security_gate_if_present
+must_not:
+  - create_second_brain
+  - create_second_orchestrator
+  - create_second_dispatcher
+  - clone_human_personality
+  - hidden_capture
+  - infer_human_final_intent
+authority:
+  chefe: FINAL_HUMAN_AUTHORITY
+  sol: COORDINATOR_INTERFACE
+  hermes: EXECUTOR
+  model: REPLACEABLE_ENGINE
+  reality: FACT_JUDGE
+writer:
+  one_writer_per_scope: true
+error_semantics:
+  unknown_is_pass: false
+  skipped_is_pass: false
+  error_is_pass: false

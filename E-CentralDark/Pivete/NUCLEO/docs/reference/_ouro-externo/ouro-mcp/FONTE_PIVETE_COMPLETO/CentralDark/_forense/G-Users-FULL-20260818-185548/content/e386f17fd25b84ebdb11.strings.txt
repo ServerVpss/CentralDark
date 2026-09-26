@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@jridgewell\trace-mapping\types\by-source.d.cts
+
+import type { ReverseSegment, SourceMapSegment } from './sourcemap-segment.cts';
+export type Source = ReverseSegment[][];
+export =       function buildBySources(decoded: readonly SourceMapSegment[][], memos: unknown[]): Source[];
+//# sourceMappingURL=by-source.d.ts.map

@@ -1,0 +1,40 @@
+schema: CENTRALDARK_BRAIN_RECONCILIATION
+schema_version: 1
+owner: DELTAUTIL
+principle: identity labels may change; contracts and proven knowledge persist
+roles:
+  PRIMARY_BRAIN:
+    owner: DISCOVER_LIVE
+    purpose: current operational/cognitive contract used by active agents
+    mirror_path_may_define_it: false
+  SECOND_BRAIN:
+    owner: DISCOVER_LIVE
+    mirror_candidate: docs/BRAIN
+    purpose: durable human-readable knowledge graph/vault if still present live
+    canonical_source: false
+  IA_MEMORY:
+    owner: DISCOVER_LIVE
+    mirror_candidate: docs/CONSCIENCIA
+    purpose: technical/operational AI memory if still present live
+  EXIGIA:
+    owner: DISCOVER_EXACT_NAME_LIVE
+    aliases_to_search: [EXIGIA, Exigia, exg, EXG]
+    create_if_missing: false
+rules:
+  second_brain_means_second_authority: false
+  duplicate_brain_owner_allowed: false
+  historical_brain_is_current_without_measure: false
+  each_agent_reads_same_canonical_contract: true
+  each_agent_remeasures_current_state: true
+  agent_personality_is_architecture: false
+  derived_indexes_may_exist: true
+  derived_indexes_must_point_to_owner: true
+reconcile:
+  - DISCOVER_LIVE_PATHS
+  - HASH_OR_REVISION_MAP
+  - CLASSIFY_CURRENT_HISTORICAL_DUPLICATE_COMPLEMENTARY_UNKNOWN
+  - SELECT_EXISTING_OWNER_PER_ROLE
+  - CONVERT_DUPLICATE_AUTHORITY_TO_DERIVED_MIRROR_OR_HISTORY
+  - UPDATE_INDEXES
+  - TEST_CONSUMER_LOAD
+  - RECEIPT

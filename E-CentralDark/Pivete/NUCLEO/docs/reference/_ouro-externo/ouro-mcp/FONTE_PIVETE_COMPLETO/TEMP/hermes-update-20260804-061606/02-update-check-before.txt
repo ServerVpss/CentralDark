@@ -1,0 +1,4 @@
+﻿ÔåÆ Fetching from origin...
+ÔÜò Update available (behind origin/main).
+  Run 'hermes update' to install.
+

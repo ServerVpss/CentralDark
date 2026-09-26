@@ -1,0 +1,36 @@
+{
+  "alertasAtivos": {
+    "CentralDark-GuardiaoConsciencia|aviso|": {
+      "ts": 1783219640308,
+      "servico": "CentralDark-GuardiaoConsciencia",
+      "nivel": "aviso"
+    },
+    "CentralDark-MCP|aviso|": {
+      "ts": 1783219640308,
+      "servico": "CentralDark-MCP",
+      "nivel": "aviso"
+    },
+    "CentralDark-EvolucaoIAs|aviso|": {
+      "ts": 1783219640308,
+      "servico": "CentralDark-EvolucaoIAs",
+      "nivel": "aviso"
+    },
+    "CentralDark-ArsenalAdapter|aviso|": {
+      "ts": 1783219640308,
+      "servico": "CentralDark-ArsenalAdapter",
+      "nivel": "aviso"
+    },
+    "CentralDark-GuardiaoAnalista|aviso|": {
+      "ts": 1783221170311,
+      "servico": "CentralDark-GuardiaoAnalista",
+      "nivel": "aviso"
+    },
+    "CentralDark-EliteAnthropic|erro|": {
+      "ts": 1783258805981,
+      "servico": "CentralDark-EliteAnthropic",
+      "nivel": "erro"
+    }
+  },
+  "ultimoResumo": 1783256069754,
+  "restarts24h": {}
+}

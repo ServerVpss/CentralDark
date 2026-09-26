@@ -1,0 +1,209 @@
+schema: centraldark.persistent-autonomous-zords.v1
+status: CANONICAL_PERSISTENT_BINDING
+authority: SEGREDO/CHEFE
+system_owner: CENTRALDARK
+boot_owner: CENTRALDARK_AI_BOOT.yaml
+megazord_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml
+engine_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+master_cycle_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+capability_router: .agents/skills/capability-contract-router/SKILL.md
+
+purpose: >-
+  Tornar persistentes, no mesmo motor CentralDark, os Zords de deduplicacao estrutural
+  e revisao consultiva com fallback, sem criar segundo cerebro, segundo juiz, segundo
+  orquestrador ou workflow paralelo por funcao. O boot existente descobre/ativa a
+  capacidade quando material e o Persistent Gap Sweep continua ate fixed point ou
+  fronteira humana comprovada.
+
+inherit:
+  - ONE_SYSTEM_ONLY
+  - REUSE_BEFORE_CREATE
+  - ONE_WRITER_PER_SCOPE
+  - PARALLELIZE_READ_ONLY_PERCEPTION
+  - SERIALIZE_MUTATION
+  - UNKNOWN_IS_NOT_PASS
+  - ACTION_IS_NOT_PROOF
+  - REALITY_IS_JUDGE
+  - CURRENT_OVER_HISTORY
+  - SAME_HEAD_REMEASUREMENT
+  - META_LUPA_CONTINUOUS
+  - MULTIBUSSOLA_CONTINUOUS
+  - VERTEX_INVERSO
+  - CARACOL_FORWARD_REVERSE
+  - FIXED_POINT
+  - REGISTRA
+  - NEXT_CURSOR
+
+persistent_activation:
+  with_centraldark_boot: true
+  with_megazord: true
+  user_repetition_required: false
+  one_shot_mode: false
+  new_tab_is_new_mission: false
+  model_change_is_reset: false
+  same_rules_every_activation: true
+  continue_until: FIXED_POINT_OR_PROVEN_HUMAN_FRONTIER
+  no_new_information: REUSE_PROOF_NO_REPEAT
+  same_failure_signature: REUSE_CRYSTAL_NOT_RETHINK
+  already_proven_without_reopen_cause: REUSE_PROOF
+
+zords:
+  ZORD_WORKFLOW_DEDUPE:
+    role: DETERMINISTIC_STRUCTURE_DEDUPLICATION
+    registry: .github/workflow-reuse-registry.json
+    radar_script: scripts/ci/workflow_dedupe_radar.py
+    radar_workflow: .github/workflows/workflow-dedupe-radar.yml
+    scan:
+      - WORKFLOW
+      - JOB
+      - RUNNER
+      - STEP_BLOCK
+      - FUNCTION
+      - REUSABLE_WORKFLOW
+      - COMPOSITE_ACTION
+      - HELPER_SCRIPT
+    classify:
+      UNIQUE: KEEP
+      REUSE_CANDIDATE: REUSE_EXISTING_OWNER_FIRST
+      INTENTIONAL_PARALLEL: KEEP_WITH_REASON
+      UNKNOWN: PRESERVE_AND_MEASURE
+    reuse_order:
+      - EXISTING_SCRIPT_OR_ACTION
+      - EXISTING_REUSABLE_WORKFLOW
+      - MATRIX_JOB
+      - COMPOSITE_ACTION
+      - REUSABLE_WORKFLOW
+      - NEW_CODE_LAST
+    exact_duplicate_job: REUSE_CANDIDATE
+    same_runner_only: NOT_DUPLICATION_BY_ITSELF
+    parallel_runners_allowed_when_logic_differs: true
+    auto_refactor_without_semantic_equivalence_proof: false
+    mutation_requires_single_writer: true
+    exact_head_remeasurement_required: true
+
+  ZORD_REVIEW_FALLBACK:
+    role: CONSULTATIVE_CODE_REVIEW_ROUTER
+    review_is_proof: false
+    review_is_merge_authority: false
+    review_may_mutate_code: false
+    preferred_route:
+      - CODEX_REVIEW_WHEN_AVAILABLE_AND_MEASURED
+      - ZENDRIVE_REVIEW_FALLBACK_WHEN_CODEX_UNAVAILABLE_OR_UNUSABLE
+      - CODERABBIT_REVIEW_AS_PARALLEL_OR_SECONDARY_CONSULTATIVE_SIGNAL
+    zendrive:
+      role: REVIEW_ONLY
+      existing_bridge: scripts/coderabbit-bridge.mjs
+      local_session_or_profile_is_runtime_capability: true
+      configured_is_available: false
+      availability_requires_measurement: true
+      number_of_local_profiles_is_not_governance: true
+      no_repo_secret_materialization: true
+      no_merge_authority: true
+    coderabbit:
+      role: REVIEW_ONLY
+      config_owner: .coderabbit.yaml
+      bridge: scripts/coderabbit-bridge.mjs
+      no_merge_authority: true
+    signal_watcher:
+      owner: apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.mjs
+      role: NORMALIZE_FINDING_AND_PRESERVE_PROVENANCE
+    hermes:
+      role: EXECUTE_TEST_COUNTERPROVE
+      review_signal_is_candidate_only: true
+      finding_requires_discriminating_test: true
+      final_positive_claim_requires_receipt: true
+    flow:
+      - MEASURE_REVIEW_CAPABILITIES
+      - SELECT_MINIMUM_SUFFICIENT_REVIEW_ROUTE
+      - CODEX_IF_AVAILABLE_ELSE_ZENDRIVE
+      - INGEST_CODERABBIT_WHEN_AVAILABLE
+      - NORMALIZE_FINDINGS
+      - DEDUPE_SAME_FINDING
+      - HERMES_REPRODUCE_AND_TEST
+      - META_LUPA_COUNTERPROOF
+      - REALITY_JUDGE
+      - CRYSTALLIZE_LEARNING
+      - WRITE_RECEIPT
+      - CONTINUE_NEXT_CURSOR
+
+learning:
+  never_discard: true
+  candidate_pass: CRYSTAL_GOLD
+  candidate_refuted: REFUTED_MINERAL
+  candidate_unknown: UNRESOLVED_MINERAL
+  refuted_mineral_fields:
+    - CLAIM
+    - FAILURE_SIGNATURE
+    - CAUSE
+    - EVIDENCE_REFS
+    - TEST
+    - COUNTERPROOF
+    - OWNER
+    - OBSERVED_AT
+    - REOPEN_CAUSE
+    - NEXT_CURSOR
+  silent_drop: FORBIDDEN
+  same_refuted_finding_without_new_information: REUSE_MINERAL_NO_RETRY
+  mineral_may_reenter_meta_lupa_when: NEW_CAUSAL_EVIDENCE
+
+persistent_failure_sweep:
+  enabled: true
+  scan_every_activation_when_material: true
+  scan_surfaces:
+    - CURRENT_PR_AND_EXACT_HEAD
+    - OPEN_FAILED_OR_BLOCKED_CHECKS
+    - CURRENT_MAIN_DRIFT
+    - RELEVANT_OPEN_ISSUES
+    - DEPENDABOT_QUEUE
+    - CONFLICT_QUEUE
+    - WORKFLOW_JOB_FUNCTION_RUNNER_DUPLICATION
+    - REVIEW_CAPABILITY_GAP
+    - OWNER_DRIFT
+    - RUNTIME_DRIFT_WHEN_IN_SCOPE
+    - STALE_OR_CONTRADICTORY_EVIDENCE
+    - UNRESOLVED_MINERALS_WITH_NEW_INFORMATION
+  iteration:
+    - MEASURE
+    - DEDUPE_ALREADY_PROVEN
+    - CLASSIFY_FAILURE_SIGNATURE
+    - SEARCH_EXISTING_CRYSTAL_OR_MINERAL
+    - IDENTIFY_CAUSAL_OWNER
+    - SELECT_MINIMUM_SUFFICIENT_ZORDS
+    - EXECUTE_MINIMAL_SAFE_REMEDIATION_WITHIN_AUTHORITY
+    - RETEST
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - SEAL_OR_MINERALIZE
+    - REMEASURE
+    - CONTINUE_NEXT_CURSOR
+  stop_only_when:
+    - NO_MATERIAL_FAILURES_REMAIN_IN_AUTHORIZED_SCOPE
+    - PROVEN_HUMAN_FRONTIER
+  destructive_or_irreversible_without_authority: BLOCKED
+  infinite_retry_without_information_gain: FORBIDDEN
+
+main_promotion_boundary:
+  deterministic_checks_remain_authority: true
+  ai_review_is_consultative: true
+  zendrive_review_is_consultative: true
+  coderabbit_review_is_consultative: true
+  hermes_test_is_evidence_not_self_approval: true
+  same_head_gate_required_when_applicable: true
+  merged_is_not_deployed: true
+  documented_is_not_executed: true
+
+proof_status_at_creation:
+  persistent_dedupe_binding_source: PROVED_ON_MAIN_BEFORE_THIS_FILE
+  workflow_reuse_registry_source: PROVED_ON_MAIN_BEFORE_THIS_FILE
+  persistent_gap_sweep_source: PROVED_ON_MAIN_BEFORE_THIS_FILE
+  zendrive_review_bridge_source: PROVED_ON_MAIN_BEFORE_THIS_FILE
+  coderabbit_review_config_source: PROVED_ON_MAIN_BEFORE_THIS_FILE
+  hermes_signal_watcher_invariants_source: PROVED_ON_MAIN_BEFORE_THIS_FILE
+  codex_to_zendrive_runtime_fallback_e2e: UNKNOWN_UNTIL_RUNTIME_RECEIPT
+  autonomous_zero_failure_global_fixed_point: NOT_PROVEN_UNTIL_CURRENT_SWEEP_COMPLETES
+
+invariant: >-
+  CENTRALDARK_BOOT -> MEGAZORD -> MINIMUM_SUFFICIENT_ZORDS -> DEDUPE/REVIEW ->
+  HERMES_TEST -> META_LUPA -> REALITY_JUDGE -> CRYSTAL_OR_MINERAL -> RECEIPT ->
+  NEXT_CURSOR -> REPEAT_UNTIL_FIXED_POINT; sem descartar aprendizado e sem repetir
+  claim ja selado sem causa nova.

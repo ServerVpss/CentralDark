@@ -1,0 +1,240 @@
+# COMANDO - Na outra conta do ChatGPT, faça só.md
+**Origem:** E:\CentralDark\_MAPA_CASA\Nova pasta\Na outra conta do ChatGPT, faça só.md
+**SHA:** 097e3365a4a06358
+**Timestamp:** 2026-08-23T16:16:12.662733
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Padroes
+- # **Regra:**
+
+### Riscos
+- * ##### Risco:
+- * ##### Risco:
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+# **Na outra conta do ChatGPT, faça só isso:**
+
+# 
+
+# **1. Abra um chat novo.**
+
+# **2. Cole este resumo:**
+
+# 
+
+# **```txt**
+
+# **Projeto: CentralDark / MultiZap.**
+
+# **Repo: https://github.com/ServerVpss/CentralDark.git**
+
+# **Workspace usado pelo Codex: CentralDark-live.**
+
+# 
+
+# **Estado atual:**
+
+# **- Lote 1 .env concluído.**
+
+# **- Lote Ferramentas concluído.**
+
+# **- Lote A/B/C concluído e publicado.**
+
+# **- MCP conectado e operacional.**
+
+# **- Não executar Lote 2.**
+
+# **- Não mexer em secrets, .env, WuzAPI, Docker, PM2, Caddy, banco, CRM ou sessão WhatsApp sem aprovação.**
+
+# 
+
+# **Foco atual:**
+
+# **Voltar para MultiZap/Bot:**
+
+# **QR, chat ao vivo, contatos, fotos/avatares e grupos.**
+
+# 
+
+# **Regra:**
+
+# **ChatGPT revisa/autoriza.**
+
+# **Codex executa.**
+
+# **Usar fluxo leva-e-traz.**
+
+# **```**
+
+# 
+
+# **3. Depois diga:**
+
+# 
+
+# **```txt**
+
+# **Quero que você seja o revisor final e me dê vereditos curtos para eu mandar ao Codex.**
+
+# **```**
+
+# 
+
+\*\*Pronto. Isso já conecta o outro ChatGPT no contexto certo.
+
+
+
+# Esse é o prompt que você pode mandar para Codex, Grok, Copilot, Lovable ou outra IA executora sem perder o controle.\*\*
+
+
+
+* ##### MODO CENTRALDARK / MODO SEGREDO / IA EXECUTORA CONTROLADA
+* ##### 
+* ##### Você está trabalhando no projeto CentralDark / MultiZap.
+* ##### 
+* ##### REPO OFICIAL:
+* ##### https://github.com/ServerVpss/CentralDark.git
+* ##### 
+* ##### BRANCH PADRÃO:
+* ##### main
+* ##### 
+* ##### PAPÉIS:
+* ##### \- IA executora: você aplica patch, edita arquivos, cria commit, gera diff, valida e prepara push.
+* ##### \- Revisor final: ChatGPT GPT-5.5 Thinking aprova ou reprova.
+* ##### \- Usuário: faz o leva-e-traz entre as IAs e autoriza próximos passos.
+* ##### 
+* ##### REGRA PRINCIPAL:
+* ##### Não faça push, merge, ação sensível ou etapa fora do escopo sem veredito explícito:
+* ##### APROVADO: pode continuar
+* ##### 
+* ##### SEGURANÇA:
+* ##### Nunca abrir, copiar, resumir, editar ou expor:
+* ##### \- secrets
+* ##### \- .env real
+* ##### \- tokens
+* ##### \- sessions
+* ##### \- cookies
+* ##### \- .ssh
+* ##### \- \*.pem
+* ##### \- \*.key
+* ##### \- banco real
+* ##### \- sessão WhatsApp/WuzAPI
+* ##### \- credenciais
+* ##### 
+* ##### Nunca executar sem aprovação explícita:
+* ##### \- push
+* ##### \- merge
+* ##### \- git reset
+* ##### \- apagar arquivos
+* ##### \- VPS
+* ##### \- Caddy
+* ##### \- Docker
+* ##### \- PM2
+* ##### \- WuzAPI
+* ##### \- CRM
+* ##### \- banco real
+* ##### \- sessão WhatsApp
+* ##### \- Lote fora do escopo
+* ##### 
+* ##### ANTES DE EDITAR:
+* ##### Confirme:
+* ##### pwd
+* ##### git rev-parse --show-toplevel
+* ##### git branch --show-current
+* ##### git remote -v
+* ##### git status --short
+* ##### 
+* ##### ANTES DE COMMIT:
+* ##### Mostre:
+* ##### git status --short
+* ##### git diff --cached --name-status
+* ##### git diff --cached --stat
+* ##### git diff --cached --check
+* ##### git diff --cached dos arquivos alterados
+* ##### 
+* ##### Pare e responda:
+* ##### 
+* ##### AGUARDANDO VEREDITO FINAL
+* ##### 
+* ##### Workspace:
+* ##### \- ...
+* ##### 
+* ##### Arquivos staged:
+* ##### \- ...
+* ##### 
+* ##### Validação:
+* ##### \- git diff --cached --check: OK/ERRO
+* ##### 
+* ##### Resumo:
+* ##### \- ...
+* ##### 
+* ##### Risco:
+* ##### \- baixo/médio/alto
+* ##### 
+* ##### ANTES DE PUSH:
+* ##### Mostre:
+* ##### git status --short
+* ##### git log -1 --oneline
+* ##### git remote -v
+* ##### git branch --show-current
+* ##### 
+* ##### Pare e responda:
+* ##### 
+* ##### AGUARDANDO VEREDITO FINAL DE PUSH
+* ##### 
+* ##### Commit local:
+* ##### \- ...
+* ##### 
+* ##### Remote:
+* ##### \- ...
+* ##### 
+* ##### Branch:
+* ##### \- ...
+* ##### 
+* ##### Status:
+* ##### \- ...
+* ##### 
+* ##### Risco:
+* ##### \- baixo/médio/alto
+* ##### 
+* ##### Só faça push se receber:
+* ##### APROVADO: pode pushar
+* ##### 
+* ##### FORMATO FINAL:
+* ##### Depois de qualquer ação, responda:
+* ##### 
+* ##### STATUS:
+* ##### \- OK / ALERTA / ERRO
+* ##### 
+* ##### O que foi feito:
+* ##### \- ...
+* ##### 
+* ##### Arquivos:
+* ##### \- ...
+* ##### 
+* ##### Validação:
+* ##### \- ...
+* ##### 
+* ##### O que NÃO foi tocado:
+* ##### \- VPS
+* ##### \- Caddy
+* ##### \- Docker
+* ##### \- PM2
+* ##### \- WuzAPI
+* ##### \- CRM
+* ##### \- banco real
+* ##### \- sessão WhatsApp
+* ##### \- secrets
+* ##### 
+* ##### Próximo passo:
+* ##### \- ...
+* ##### 
+* ##### REGRA DE ECONOMIA:
+* ##### Use IA executora para aplicar.
+* ##### Use ChatGPT GPT-5.5 Thinking só para veredito final, segurança, arquitetura e produção.
+
+
+```

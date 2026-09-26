@@ -1,0 +1,78 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\dashboard_auth\__pycache__\registry.cpython-311.pyc
+
+Module-level registry for DashboardAuthProvider instances.
+Plugins call ``register_provider`` via the plugin context hook at startup.
+The auth gate middleware iterates ``list_providers()`` and uses
+``get_provider`` to dispatch on the session's ``provider`` field.
+annotationsN)
+Optional)
+hermes_home_key)
+DashboardAuthProvider
+assert_protocol_compliance
+ dict[str, DashboardAuthProvider]
+_providersz+dict[str, dict[str, DashboardAuthProvider]]
+_scoped_providers
+Optional[str]
+returnc
+updater
+providerss
+VC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\dashboard_auth\registry.py
+_mergedr
+providerr
+Register a provider.
+    Raises:
+        TypeError: on protocol violation.
+        ValueError: if a provider with the same name is already registered.
+    Nz,dashboard-auth provider already registered: z+dashboard-auth: registered provider %r (%s))
+_lockr
+setdefaultr
+ValueError
+display_name)
+target
+effectives
+register_providerr&
+Optional[DashboardAuthProvider]c
+z@Return the registered provider for ``name``, or None if unknown.N)
+get_providerr*
+snapshot_registrationr,
+current
+previous
+zBRestore a host-owned provider registration if it is still current.NFT)
+     r
+restore_registrationr2
+List[DashboardAuthProvider]c
+z0All registered providers, in registration order.N)
+valuesr
+list_providersr7
+Registered providers that support non-interactive token auth.
+    The subset of ``list_providers()`` whose ``supports_token`` flag is True,
+    in registration order. The ``token_auth`` middleware seam consults these
+    (and only these) when a token-authable route is hit, so OAuth/password-only
+    providers are never asked to ``verify_token``. Returns an empty list when
+    no token provider is registered 
+ a token-authable route then fails
+    closed (401), never open.
+supports_tokenF
+getattr
+<listcomp>z(list_token_providers.<locals>.<listcomp>r
+list_token_providersrC
+Registered providers with supports_session True (interactive cookie
+    sessions). The login page, /auth/login, and the gate's verify/refresh loops
+    consult only these. Mirror of list_token_providers.
+supports_sessionTr;
+z*list_session_providers.<locals>.<listcomp>z
+list_session_providersrG
+z"Test-only: drop all registrations.N)
+clearr
+clear_providersrJ
+__doc__
+__future__r
+logging
+threading
+typingr
+hermes_constantsr
+hermes_cli.dashboard_auth.baser
+getLogger
+__name__r!
+__annotations__r
+<module>rV

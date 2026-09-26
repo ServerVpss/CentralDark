@@ -1,0 +1,268 @@
+{
+  "schema": "centraldark.executor.unico.v1",
+  "mission_id": "CENTRALDARK_EXECUTOR_UNICO",
+  "mode": "AUTO_EXECUTE",
+  "language": "pt-BR",
+  "repo": {
+    "preferred": "ServerVpss/CentralDark",
+    "discover_live": true,
+    "source_of_truth": "LIVE_STATE",
+    "read_first": [
+      "AGENTS.md",
+      "LEIA-ME-IA.md"
+    ],
+    "do_not_assume_head": true
+  },
+  "authority": {
+    "human": "SEGREDO/CHEFE",
+    "final_authority": "SEGREDO/CHEFE",
+    "sol": "COORDINATOR",
+    "pivete": "OPERATIONAL_PROFILE",
+    "hermes": "EXECUTOR",
+    "models": "REPLACEABLE_ENGINES"
+  },
+  "execution": {
+    "auto_execute": true,
+    "human_reask_same_scope": false,
+    "reuse_before_create": true,
+    "one_scope_one_writer": true,
+    "writer_is_not_judge": true,
+    "parallelize_perception": true,
+    "serialize_mutation": true,
+    "same_agent_self_confrontation": true,
+    "independent_judges": true,
+    "pr_mother": {
+      "discover_existing_first": true,
+      "reuse_equivalent": true,
+      "create_if_absent_and_scope_free": true,
+      "merge": false
+    }
+  },
+  "allowed": {
+    "repo_read": true,
+    "repo_write_if_writer_lock": true,
+    "tests": true,
+    "git_branch": true,
+    "commit": true,
+    "push_branch_if_scope_proved": true,
+    "create_or_update_pr": true,
+    "read_web_primary_sources": true,
+    "read_connected_tools": true
+  },
+  "forbidden": {
+    "force_push": true,
+    "reset_hard": true,
+    "merge_without_gate": true,
+    "deploy": true,
+    "vps_write": true,
+    "dns_write": true,
+    "secret_value_to_model": true,
+    "secret_in_logs": true,
+    "secret_in_git": true,
+    "parallel_writer_same_scope": true,
+    "v2_v3_parallel_architecture_without_gap": true
+  },
+  "capability_map": [
+    "multi-model",
+    "multi-window",
+    "multi-channel",
+    "multi-device",
+    "multi-session",
+    "state-reconciliation",
+    "mission-continuity",
+    "self-confrontation",
+    "independent-judge",
+    "MetaLupa",
+    "archaeology",
+    "causal-compression",
+    "held-out-reconstruction",
+    "Git/GitHub-proof",
+    "CI/CD-gates",
+    "Casa",
+    "Hermes",
+    "VPS-boundary",
+    "observability",
+    "memory-provenance",
+    "security-status-without-secret-values",
+    "setup-admin-control-plane",
+    "external-knowledge-mining",
+    "scientist-of-scientists"
+  ],
+  "epistemic_classes": [
+    "FATO_HISTORICO",
+    "EVIDENCIA_TECNICA",
+    "HIPOTESE",
+    "TEORIA",
+    "CRENCA_RELIGIOSA",
+    "METAFORA",
+    "FANTASIA",
+    "SIMBOLO",
+    "DESCONHECIDO"
+  ],
+  "compression": {
+    "goal": "MINIMUM_IRREDUCIBLE_RESIDUE",
+    "line_target_is_not_gate": true,
+    "gate": {
+      "capability_after_gte_before": true,
+      "complexity_after_lt_before": true,
+      "held_out_required": true,
+      "reconstruction_required": true
+    }
+  },
+  "states": {
+    "pass_states": [
+      "PASS"
+    ],
+    "non_pass": [
+      "FAIL",
+      "SKIPPED",
+      "UNKNOWN",
+      "PENDING",
+      "QUEUED",
+      "TELEMETRY",
+      "NO_OP"
+    ],
+    "terminal": [
+      "PASS_COMPROVADO",
+      "BLOCKED_REAL",
+      "CHEFE_NECESSARIO"
+    ]
+  },
+  "arena_24h": {
+    "enabled_only_if_explicitly_selected": true,
+    "isolation": {
+      "prefer_microvm_plus_container": true,
+      "host_mounts": "NONE",
+      "docker_socket": "NONE",
+      "privileged": false,
+      "capabilities": "DROP_ALL",
+      "secrets": "ZERO",
+      "host_network": false,
+      "resource_limits": true,
+      "time_limit_hours": 24
+    },
+    "objective": "REDUCE_STRUCTURE_WITHOUT_CAPABILITY_LOSS"
+  },
+  "receipt_required": [
+    "STATUS",
+    "MISSION",
+    "SCOPE",
+    "REPOSITORY",
+    "BRANCH",
+    "BASE_SHA",
+    "HEAD_SHA",
+    "PR_MAE",
+    "WRITER",
+    "WRITER_SCOPE",
+    "JUDGES",
+    "FACTS",
+    "INFERENCES",
+    "HYPOTHESES",
+    "UNKNOWN",
+    "ROOT_CAUSE",
+    "DELTA_MATERIAL",
+    "FILES_CHANGED",
+    "APPLICABLE_GATES",
+    "PASS",
+    "FAIL",
+    "NOT_APPLICABLE",
+    "SKIPPED",
+    "UNKNOWN_GATES",
+    "DENOMINATOR",
+    "NUMERATOR",
+    "PERCENT",
+    "SELF_CONFRONTATION",
+    "JUDGE",
+    "META_LUPA",
+    "COMPRESSION_BEFORE",
+    "COMPRESSION_AFTER",
+    "COMPRESSION_RATIO",
+    "CAPABILITY_LOSS",
+    "HELD_OUT_RESULTS",
+    "PROVENANCE",
+    "PENDENCY",
+    "BLOCKED_REAL",
+    "NEXT_MINIMAL_ACTION"
+  ],
+  "human_gate_only_for": [
+    "NEW_INTENT",
+    "TASTE_OR_VISUAL",
+    "BUSINESS_CHOICE",
+    "SPEND",
+    "PUBLICATION_OR_DEPLOY",
+    "IRREVERSIBLE_RISK",
+    "SECRET_ENTRY",
+    "REAL_PHYSICAL_BLOCKER",
+    "UNRESOLVABLE_INTENT_CONFLICT"
+  ],
+  "output_contract": {
+    "principle": "MAX_INTERNAL_DILATION_MINIMUM_SUFFICIENT_HUMAN_OUTPUT",
+    "process": [
+      "DILATE",
+      "RESEARCH",
+      "COLLIDE",
+      "TEST",
+      "FALSIFY",
+      "REWORK",
+      "MEASURE",
+      "COMPRESS",
+      "FINAL"
+    ],
+    "human_output_default": [
+      "FEITO",
+      "EVIDENCIA_USADA",
+      "PENDENCIA",
+      "PROXIMO_PASSO",
+      "BOOT",
+      "FIO_DA_MISSAO"
+    ],
+    "material_exceptions": [
+      "BLOCKED_REAL",
+      "UNKNOWN",
+      "CHEFE_NECESSARIO"
+    ],
+    "forbid_as_final_delivery": [
+      "Defining Authorship Roles",
+      "Planning",
+      "Analyzing",
+      "Thinking",
+      "Exploring options",
+      "chronological_attempt_narration"
+    ],
+    "telemetry_is_not_result": true,
+    "maximum_truth_density_per_line": true
+  },
+  "role_model_independence": {
+    "provider_agnostic": true,
+    "roles": [
+      "WRITER",
+      "JUDGE",
+      "DELTA_PARTNER",
+      "DEBUGGER",
+      "RESEARCHER",
+      "ARCHAEOLOGIST",
+      "VALIDATOR",
+      "COMPRESSOR",
+      "RECONSTRUCTOR"
+    ],
+    "model_is_not_role": true,
+    "role_is_not_authority": true,
+    "final_authority": "SEGREDO/CHEFE",
+    "default_three_surface_pattern": {
+      "surface_1": "WRITER",
+      "surface_2": "JUDGE",
+      "surface_3": "META_JUDGE_COMPRESSOR"
+    }
+  },
+  "authorship": {
+    "intent_origin": "SEGREDO/CHEFE",
+    "model_contribution_types": [
+      "FORMALIZATION",
+      "COUNTERPROOF",
+      "TEST",
+      "COMPRESSION"
+    ],
+    "preserve_provenance": true,
+    "model_must_not_claim_human_intent_authorship": true
+  }
+}

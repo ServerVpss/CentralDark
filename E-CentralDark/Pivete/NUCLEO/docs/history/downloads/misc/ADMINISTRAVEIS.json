@@ -1,0 +1,31 @@
+{
+  "schema": "centraldark-administraveis",
+  "date_recovered": "2026-08-24",
+  "scopes": [
+    {
+      "path": "E:\\CentralDark",
+      "role": "HOUSE_TARGET",
+      "mutation": "REQUIRES_PROOF"
+    },
+    {
+      "path": "C:\\Users\\danda",
+      "role": "USER_PROFILE_DISCOVERY",
+      "mutation": "READ_ONLY_FIRST"
+    },
+    {
+      "path": "C:\\CentralDark",
+      "role": "LEGACY_OR_COMPATIBILITY_CANDIDATE",
+      "mutation": "READ_ONLY_FIRST"
+    },
+    {
+      "path": "AppData",
+      "role": "TOOL_RUNTIME_STATE",
+      "mutation": "DO_NOT_MOVE_BLINDLY"
+    },
+    {
+      "path": "GitHub:ServerVpss/CentralDark",
+      "role": "REMOTE_CANONICAL_REPOSITORY",
+      "mutation": "SERIALIZED"
+    }
+  ]
+}

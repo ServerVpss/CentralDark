@@ -1,0 +1,22 @@
+#ACORDAR !CALIBRAR
+
+Leia integralmente:
+1. CENTRALDARK-EXECUTOR.md
+2. mission.json
+3. .runtime/BOOT.json se existir
+
+Se .runtime/BOOT.json não existir, execute primeiro:
+- Windows: ./RUN.ps1
+- Linux/macOS: ./run.sh
+
+Depois EXECUTE a missão no estado vivo do repositório.
+
+Não volte com outro plano.
+Não peça confirmação para passos técnicos reversíveis já autorizados.
+Procure PR-mãe equivalente antes de criar.
+Um Writer por escopo; demais modelos/janelas são Judge/Delta Partner.
+Auto-confronte toda mutação.
+MetaLupa sobre MetaLupa.
+Comprima sem perda de capacidade.
+Zero deploy, zero VPS write, zero force-push, zero secret value.
+Pare somente em PASS_COMPROVADO, BLOCKED_REAL ou CHEFE_NECESSARIO.

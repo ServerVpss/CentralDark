@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CentralDark — Catálogo de Vozes</title>
+<style>
+  :root{
+    --fundo:#052e2b; --fundo2:#0a3d38; --card:#0d4741;
+    --esmeralda:#10b981; --esmeralda2:#34d399; --texto:#e8f5f1; --suave:#8fbfb5;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(160deg,var(--fundo),var(--fundo2));color:var(--texto);
+    font-family:system-ui,-apple-system,"Segoe UI",sans-serif;padding:24px 16px 60px}
+  header{max-width:900px;margin:0 auto 28px}
+  h1{margin:0 0 6px;font-size:26px;letter-spacing:.5px}
+  h1 span{color:var(--esmeralda2)}
+  .sub{color:var(--suave);font-size:14px;line-height:1.6}
+  .grade{max-width:900px;margin:0 auto;display:grid;gap:14px;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+  .card{background:var(--card);border:1px solid rgba(52,211,153,.18);border-radius:14px;padding:16px;
+    transition:border-color .2s,transform .2s}
+  .card:hover{border-color:var(--esmeralda);transform:translateY(-2px)}
+  .nome{font-size:18px;font-weight:700;color:var(--esmeralda2);margin:0 0 2px}
+  .tag{display:inline-block;font-size:11px;color:var(--fundo);background:var(--esmeralda2);
+    border-radius:99px;padding:2px 9px;font-weight:700;margin-bottom:8px}
+  .desc{font-size:13px;color:var(--suave);margin:0 0 12px;min-height:36px;line-height:1.5}
+  audio{width:100%;height:36px;filter:hue-rotate(105deg) saturate(1.4)}
+  .bloco{max-width:900px;margin:34px auto 0;background:var(--card);border-radius:14px;padding:18px;
+    border:1px solid rgba(52,211,153,.18)}
+  .bloco h2{margin:0 0 10px;font-size:17px;color:var(--esmeralda2)}
+  pre{background:#03211f;border-radius:10px;padding:14px;overflow-x:auto;font-size:12.5px;
+    color:#b8ede0;line-height:1.6;margin:0 0 12px}
+  code{color:var(--esmeralda2)}
+  ul{margin:0;padding-left:18px;font-size:13.5px;color:var(--suave);line-height:1.9}
+</style>
+</head>
+<body>
+<header>
+  <h1>CentralDark — <span>Catálogo de Vozes</span></h1>
+  <p class="sub">13 vozes testadas na rota <code>/audio-speech</code>. Clica no play de cada uma e escolhe a tua.</p>
+</header>
+
+<div class="grade" id="grade"></div>
+
+<div class="bloco">
+  <h2>Rota oficial</h2>
+  <pre>POST https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/audio-speech
+Content-Type: application/json
+apikey: &lt;chave publica do projeto&gt;
+
+{
+  "input": "texto que voce quer ouvir",
+  "voice": "nova",
+  "response_format": "mp3",
+  "instructions": "Fale em portugues brasileiro nativo, tom natural."
+}</pre>
+  <h2>Campos aceitos</h2>
+  <ul>
+    <li><code>input</code> — o texto (obrigatorio, ate 4000 caracteres)</li>
+    <li><code>voice</code> — uma das 13 acima (padrao: <code>alloy</code>)</li>
+    <li><code>response_format</code> — <code>mp3</code>, <code>wav</code>, <code>opus</code>, <code>aac</code>, <code>flac</code></li>
+    <li><code>instructions</code> — direcao de sotaque, emocao e ritmo</li>
+    <li><code>speed</code> — de 0.25 a 4.0 (padrao 1.0)</li>
+    <li><code>stream_format: "sse"</code> — streaming em tempo real</li>
+  </ul>
+</div>
+
+<script>
+const vozes = [
+  ["alloy","neutra","Equilibrada e limpa. Boa pra tudo, o padrao seguro."],
+  ["ash","firme","Grave e seria. Cai bem em alerta e aviso de sistema."],
+  ["ballad","suave","Calma e emotiva. Pra narracao mais lenta."],
+  ["coral","clara","Feminina viva e simpatica. Otima pra atendimento."],
+  ["echo","seca","Masculina direta, sem enfeite. Boa pra relatorio."],
+  ["fable","narrador","Tom de contador de historia. Cativa na leitura longa."],
+  ["onyx","grave","Masculina profunda, autoridade. Cara de locutor."],
+  ["nova","energica","Feminina rapida e animada. A mais usada em bot."],
+  ["sage","madura","Serena e sabia. Boa pra explicacao tecnica."],
+  ["shimmer","leve","Feminina doce e aberta. Boa pra boas-vindas."],
+  ["verse","expressiva","A mais teatral. Varia bem a entonacao."],
+  ["marin","moderna","Natural e conversacional. Parece gente falando."],
+  ["cedar","calorosa","Masculina proxima e amigavel. Boa pra papo."]
+];
+document.getElementById("grade").innerHTML = vozes.map(([n,t,d]) => `
+  <div class="card">
+    <p class="nome">${n}</p>
+    <span class="tag">${t}</span>
+    <p class="desc">${d}</p>
+    <audio controls preload="none" src="vozes/${n}.mp3"></audio>
+  </div>`).join("");
+</script>
+</body>
+</html>

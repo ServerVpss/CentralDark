@@ -1,0 +1,247 @@
+{
+  "main": {
+    "id": "76001cca9d045c81",
+    "type": "split",
+    "children": [
+      {
+        "id": "4c1089ef9de7b8fe",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b388021daef35bd6",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Visualização em gráfico"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "7aace1d7f5ab0261",
+    "type": "split",
+    "children": [
+      {
+        "id": "0dc46723844b2ef5",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b891c7bed78b7063",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorador de arquivos"
+            }
+          },
+          {
+            "id": "727793040ee2c995",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Procurar"
+            }
+          },
+          {
+            "id": "eeb85b672905e4a3",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Marcadores"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "right": {
+    "id": "f9249f98109ec7a2",
+    "type": "split",
+    "children": [
+      {
+        "id": "9530591bd1ef80c0",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "db5b00dbdf000c0b",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "🧾CHECK-LIST DIARIO🤖.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Links inversos"
+            }
+          },
+          {
+            "id": "bc66fa1d7743787c",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "🧾CHECK-LIST DIARIO🤖.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Links de saída para 🧾CHECK-LIST DIARIO🤖"
+            }
+          },
+          {
+            "id": "eb0cb98b21a4eab9",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiquetas"
+            }
+          },
+          {
+            "id": "110d917d69c9638c",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Todas as propriedades"
+            }
+          },
+          {
+            "id": "ff2e010a726f5165",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "🧾CHECK-LIST DIARIO🤖.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Sumário de 🧾CHECK-LIST DIARIO🤖"
+            }
+          },
+          {
+            "id": "27e2315bfac6f142",
+            "type": "leaf",
+            "state": {
+              "type": "centraldark-grafo-vivo-view",
+              "state": {},
+              "icon": "git-fork",
+              "title": "Grafo Vivo CentralDark"
+            }
+          }
+        ],
+        "currentTab": 5
+      }
+    ],
+    "direction": "horizontal",
+    "width": 236.5
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir a troca rápida": false,
+      "graph:Abrir visualização em gráfico": false,
+      "canvas:Criar novo canvas": false,
+      "daily-notes:Abrir a nota de hoje": false,
+      "templates:Inserir modelo": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Criar nova base": false,
+      "centraldark-grafo-vivo:Abrir Grafo Vivo CentralDark": false,
+      "centraldark-grafo-vivo:Abrir Grafo 3D · Jarvis": false
+    }
+  },
+  "active": "b388021daef35bd6",
+  "lastOpenFiles": [
+    "🧾CHECK-LIST DIARIO🤖.md",
+    "GRAPH-INVESTIGATOR.md",
+    "LACUNA_BANDA_INTENCAO_UNICA.md",
+    "INTENT_SYNC_STATE.md",
+    "SEMANTIC-LINKER.md",
+    "BANDA_COMPASSO_GLOBAL.md",
+    "BANDA_INTENCAO_UNICA_COMPASSO.md",
+    "Sem título.canvas",
+    "00-CANONICO/docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.md",
+    "00-CANONICO/docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-controle-total.md",
+    "00-CANONICO/docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-intuicao-refinada.md",
+    "00-CANONICO/docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/HUB-PERSISTENT-SWEEP.md",
+    "00-CANONICO/docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-03-REGISTER-BEFORE-REPORT-RECEIPT.md",
+    "00-CANONICO/docs/BRAIN/07-APRENDIZADOS-MEMORIAS/PONTOS-E-NIVEIS-CHEFE.md",
+    "00-CANONICO/docs/BRAIN/07-APRENDIZADOS-MEMORIAS/HISTORIA-CHEFE.md",
+    "00-CANONICO/docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/BIBLIOTECA_CHATGPT/Retrato Cósmico do Guardião Cibernético.png",
+    "00-CANONICO/docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/BIBLIOTECA_CHATGPT/Pôster futurista Centraldark_ Sol, Hermes e Jarviz.png",
+    "00-CANONICO/docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/BIBLIOTECA_CHATGPT/Portão de Segurança de Arquivos.png",
+    "00-CANONICO/docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/BIBLIOTECA_CHATGPT/Portão de Segurança de Arquivos.7z",
+    "00-CANONICO/docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/BIBLIOTECA_CHATGPT/Pombo-Correio com Checklist Neon.png",
+    "00-CANONICO/docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/BIBLIOTECA_CHATGPT/Plano CentralDark_ Reconciliação e Build Local.png",
+    "00-CANONICO/docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/BIBLIOTECA_CHATGPT/Plano Canônico_ Fable Loop Operacional.png",
+    "00-CANONICO/docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/BIBLIOTECA_CHATGPT/Painel Operacional CentralDark.png",
+    "00-CANONICO/docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/BIBLIOTECA_CHATGPT/Painel de Reconciliação Técnica CentralDark V8 e Vite.png",
+    "00-CANONICO/docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/BIBLIOTECA_CHATGPT/Painel de controle CentralDark Hub.png",
+    "00-CANONICO/docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/BIBLIOTECA_CHATGPT/Painel CentralDark_ Evidências e Artefatos.png",
+    "00-CANONICO/docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/BIBLIOTECA_CHATGPT",
+    "00-CANONICO/docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-09-CRISTAL-FULL-SESSAO-CENTRALDARK.md",
+    "00-CANONICO/docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-06-OMNIROUTE-CAPABILITY-ABSORPTION.md",
+    "00-CANONICO/docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-05-CONVERGENCIA-MAIN-PR-MAE-ABSORVIDO.md",
+    "00-CANONICO/docs/BRAIN/07-APRENDIZADOS-MEMORIAS/02-SESSOES/2026-09-09-squash-horn-fixed-point.md",
+    "00-CANONICO/docs/BRAIN/07-APRENDIZADOS-MEMORIAS/02-SESSOES/2026-09-09-dependabot-resolver-trusted-source-cristal.md",
+    "00-CANONICO/docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/SETORES/ML-CIENCIA-DE-DADOS/sector-manifest.json",
+    "00-CANONICO/docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/SETORES/ML-CIENCIA-DE-DADOS/LOCAL-OFFLINE-CORPUS.md",
+    "00-CANONICO/docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/SETORES/ML-CIENCIA-DE-DADOS/README.md",
+    "00-CANONICO/docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/SETORES/ML-CIENCIA-DE-DADOS",
+    "00-CANONICO/docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/SETORES",
+    "90-CONFLITOS/2026-09-18-brain-sync/vault/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.md",
+    "90-CONFLITOS/2026-09-18-brain-sync/vault/01-CONCEITOS/02-BANDA",
+    "90-CONFLITOS/2026-09-18-brain-sync/vault/01-CONCEITOS",
+    "90-CONFLITOS/2026-09-18-brain-sync/repo/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.md",
+    "90-CONFLITOS/2026-09-18-brain-sync/repo/01-CONCEITOS/02-BANDA",
+    "90-CONFLITOS/2026-09-18-brain-sync/repo/01-CONCEITOS",
+    "00-CANONICO/docs/BRAIN/00-MAPA-SISTEMA/01-HUB/POSTURA-SEGREDO-CHEFE.md",
+    "90-CONFLITOS/2026-09-18-brain-sync/repo/00 - Mapa do Sistema/GRAFO-VIVO.md",
+    "90-CONFLITOS/2026-09-18-brain-sync/vault/00 - Mapa do Sistema/GRAFO-VIVO.md",
+    "90-CONFLITOS/2026-09-18-brain-sync/repo/00 - Mapa do Sistema",
+    "00-CANONICO/docs/BRAIN/09-RASCUNHO/Sem título 5.canvas"
+  ]
+}

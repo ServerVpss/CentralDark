@@ -1,0 +1,11 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\react\providers\QueueItemByIndexProvider.d.ts
+
+import { FC, PropsWithChildren } from "react";
+//#region src/react/providers/QueueItemByIndexProvider.d.ts
+type QueueItemByIndexProviderProps = PropsWithChildren<{
+  index: number;
+}>;
+declare const QueueItemByIndexProvider: FC<QueueItemByIndexProviderProps>;
+//#endregion
+export { QueueItemByIndexProvider, QueueItemByIndexProviderProps };
+//# sourceMappingURL=QueueItemByIndexProvider.d.ts.map

@@ -1,0 +1,7 @@
+status=READY
+support_required=false
+blocked=false
+capability_source=DECLARED_UNVERIFIED
+missing_capabilities=
+support_labels=🤖 AUTO
+artifact_digest=ff96d47b229cc9e2b43d9f58ab9634b940104a670aca7727c3c3e19d0bae0c58

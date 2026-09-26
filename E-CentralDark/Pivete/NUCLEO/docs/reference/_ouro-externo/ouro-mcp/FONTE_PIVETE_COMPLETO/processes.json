@@ -1,0 +1,22 @@
+[
+  {
+    "session_id": "proc_3501ec0ad0c6",
+    "command": "cd /c/CentralDark/hermes-webui && /c/Users/danda/AppData/Local/hermes/hermes-agent/venv/Scripts/python.exe server.py 2>&1",
+    "pid": 7976,
+    "pid_scope": "host",
+    "host_start_time": 178745018595,
+    "cwd": "C:\\CentralDark\\hermes-webui",
+    "started_at": 1787450185.938276,
+    "task_id": "default",
+    "session_key": "20260822_212523_da1915",
+    "watcher_platform": "",
+    "watcher_chat_id": "",
+    "watcher_user_id": "",
+    "watcher_user_name": "",
+    "watcher_thread_id": "",
+    "watcher_message_id": "",
+    "watcher_interval": 0,
+    "notify_on_complete": false,
+    "watch_patterns": []
+  }
+]

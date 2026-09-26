@@ -1,0 +1,14 @@
+{
+  "marker": "DEDUPE-1784411750",
+  "card_id": 530,
+  "voice_id": 531,
+  "voice_ok": true,
+  "stt": {
+    "v": true,
+    "a": true,
+    "d": true
+  },
+  "tts_path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\tts_20260718_185552.ogg",
+  "tts_suffix": ".ogg",
+  "no_bin": true
+}

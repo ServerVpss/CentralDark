@@ -1,0 +1,9 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\perl5\core_perl\Encode\_T.e2x
+
+use strict;
+# Adjust the number here!
+use Test::More tests => 2;
+BEGIN {
+    use_ok('Encode');
+    use_ok('Encode::$_Name_');
+# Add more test here!

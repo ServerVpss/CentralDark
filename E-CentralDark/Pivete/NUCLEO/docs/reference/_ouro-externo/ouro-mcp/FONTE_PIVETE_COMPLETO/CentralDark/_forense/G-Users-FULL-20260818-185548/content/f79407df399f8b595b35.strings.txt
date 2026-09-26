@@ -1,0 +1,15 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\ftplugin\treetop.vim
+
+" Vim filetype plugin file
+" Language:             Treetop
+" Previous Maintainer:  Nikolai Weibull <now@bitwi.se>
+" Latest Revision:      2011-03-14
+if exists("b:did_ftplugin")
+  finish
+let b:did_ftplugin = 1
+let s:cpo_save = &cpo
+set cpo&vim
+setlocal comments=b:# commentstring=#\ %s formatoptions-=tcroq formatoptions+=l
+let b:undo_ftplugin = "setl com< cms< fo<"
+let &cpo = s:cpo_save
+unlet s:cpo_save

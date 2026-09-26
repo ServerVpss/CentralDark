@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\WebStorage\9\CacheStorage\8fad20f8-15c4-464d-bb82-e5199e0e1c7e\a8a671841547e3ad_1
+
+https://id-preview--ef4dca86-83fc-4333-81fd-ca8d4042699a.lovable.app/registerSW.js?__WB_REVISION__=1872c500de691dce40960bb85481de07
+Pev{*!
+serviceWorker
+/sw.js
+https://id-preview--ef4dca86-83fc-4333-81fd-ca8d4042699a.lovable.app/registerSW.js?__WB_REVISION__=1872c500de691dce40960bb85481de07

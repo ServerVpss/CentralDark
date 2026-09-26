@@ -1,0 +1,9 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\legacy-runtime\runtime-cores\assistant-transport\useLatestRef.d.ts
+
+//#region src/legacy-runtime/runtime-cores/assistant-transport/useLatestRef.d.ts
+declare function useLatestRef<T>(value: T): {
+  current: T;
+};
+//#endregion
+export { useLatestRef };
+//# sourceMappingURL=useLatestRef.d.ts.map

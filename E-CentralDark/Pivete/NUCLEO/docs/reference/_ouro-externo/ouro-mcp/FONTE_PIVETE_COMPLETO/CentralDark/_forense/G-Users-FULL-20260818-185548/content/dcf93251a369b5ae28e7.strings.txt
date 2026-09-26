@@ -1,0 +1,218 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\lib\sasl2\msys-gssapiv2-3.dll
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.edata
+@.idata
+.reloc
+AWAVAUATUWVSH
+GSSAPI EH
+Error: 
+x[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AUATUWVSH
+h[^_]A\A]
+h[^_]A\A]
+AUATUWVSH
+[^_]A\A]
+ATUWVSH
+ [^_]A\
+ [^_]A\
+AVAUATUWVSH
+[^_]A\A]A^
+ATUWVSH
+ [^_]A\
+ATUWVSH
+ [^_]A\
+ATUWVSH
+ [^_]A\
+ATUWVSH
+P[^_]A\
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+ [^_]A\A]A^
+ATUWVSH
+ [^_]A\
+Out of Memory in gssapi.c near line %d
+GSSAPI Failure: (could not get major error message)
+GSSAPI Failure (could not get major error message)
+GSSAPI Failure: (could not get minor error message)
+GSSAPI Failure (could not get minor error message)
+token too short
+token too long
+GSSAPI client step %d
+Please enter your authorization name
+GSSAPI Failure: no serverFQDN
+GSSAPI warning: no credentials were passed
+GSSAPI Failure
+ad_compat
+GSSAPI
+Invalid GSSAPI client step %d
+Parameter Error in gssapi.c near line %d
+GSSAPI Failure: gss_accept_sec_context
+maj_stat == GSS_S_COMPLETE
+gssapi.c
+GSSAPI Failure: gss_canonicalize_name
+GSSAPI Failure: gss_display_name
+GSSAPI Failure: gss_import_name
+GSSAPI Failure: gss_compare_name
+GSSAPI server is not expecting data at this stage
+GSSAPI needs a security layer but one is forbidden
+protocol violation: client requested invalid layer
+Invalid GSSAPI server step %d
+GSSAPI server step failed: %d
+keytab
+Could not find keytab file: %s: %m
+path to keytab is > 1024 characters
+Version mismatch in GSSAPI
+gssapi_server_mech_authneg
+GSS-SPNEGO
+Parameter Error in plugin_common.c near line %d
+Out of Memory in plugin_common.c near line %d
+Unexpectedly missing a prompt result in _plug_get_simple
+Unexpectedly missing a prompt result in _plug_get_password
+Unexpectedly missing a prompt result in _plug_challenge_prompt
+Unexpectedly missing a prompt result in _plug_get_realm
+make_prompts() called with no actual prompts
+Authorization Name
+Authentication Name
+Password
+encoded packet size too big (%d > %d)
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+msys-gssapiv2-3.dll
+sasl_client_plug_init
+sasl_server_plug_init
+__gss_c_nt_hostbased_service_oid_desc
+gss_accept_sec_context
+gss_acquire_cred
+gss_canonicalize_name
+gss_compare_name
+gss_delete_sec_context
+gss_display_name
+gss_display_status
+gss_import_name
+gss_init_sec_context
+gss_inquire_context
+gss_inquire_sec_context_by_oid
+gss_release_buffer
+gss_release_buffer_set
+gss_release_cred
+gss_release_name
+gss_unwrap
+gss_wrap
+gss_wrap_size_limit
+gsskrb5_register_acceptor_identity
+__assert_func
+__cxa_atexit
+__locale_ctype_ptr
+_impure_ptr
+access
+calloc
+cygwin_internal
+dll_dllcrt0
+freeaddrinfo
+getaddrinfo
+malloc
+memcpy
+memset
+msys_detach_dll
+posix_memalign
+realloc
+snprintf
+sprintf
+strcat
+strchr
+strcpy
+strdup
+strerror
+strlen
+strncpy
+uname_x
+GetModuleHandleA
+msys-gssapi-3.dll
+msys-2.0.dll
+KERNEL32.dll
+__lib64_libkernel32_a_iname
+__imp_freeaddrinfo
+__imp_calloc
+__imp___gss_c_nt_hostbased_service_oid_desc
+__imp_uname_x
+__imp_uname
+__imp_strncpy
+_head_msys_2_0_dll
+__imp_gss_release_name
+msys_gssapi_3_dll_iname
+__imp_gss_display_name
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_free
+__imp_gss_compare_name
+__imp_gss_release_buffer_set
+__imp_gss_accept_sec_context
+__nm__impure_ptr
+__imp_gss_wrap
+__imp_strdup
+__imp_strcpy
+__imp_memset
+__IAT_end__
+__imp_memcpy
+__imp_dll_dllcrt0
+__imp_access
+__imp_strerror
+__imp___locale_ctype_ptr
+_head_lib64_libkernel32_a
+__imp_msys_detach_dll
+__imp_gsskrb5_register_acceptor_identity
+__imp_gss_inquire_context
+__imp_gss_display_status
+__imp_gss_acquire_cred
+__imp_snprintf
+__imp_GetModuleHandleA
+__imp_gss_import_name
+__imp_strlen
+__imp_gss_release_buffer
+__imp_malloc
+__imp_gss_canonicalize_name
+__imp__impure_ptr
+__imp___assert_func
+__imp_realloc
+_head_msys_gssapi_3_dll
+__IAT_start__
+__imp_strcat
+__imp___cxa_atexit
+__nm___gss_c_nt_hostbased_service_oid_desc
+__imp_gss_init_sec_context
+__imp_gss_inquire_sec_context_by_oid
+__imp_gss_release_cred
+__imp_strchr
+__imp_sprintf
+__imp_gss_unwrap
+__imp_gss_delete_sec_context
+__imp_getaddrinfo
+__imp_gss_wrap_size_limit
+msys_2_0_dll_iname

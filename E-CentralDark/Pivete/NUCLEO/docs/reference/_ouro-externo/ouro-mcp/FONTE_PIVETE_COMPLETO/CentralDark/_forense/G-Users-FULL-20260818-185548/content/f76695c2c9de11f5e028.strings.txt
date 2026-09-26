@@ -1,0 +1,28 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\__pycache__\insights.cpython-311.pyc
+
+``hermes insights`` subcommand parser.
+Extracted from ``hermes_cli/main.py:main()`` (god-file Phase 2 follow-up).
+Handler injected to avoid importing ``main``.
+annotations)
+Callable
+cmd_insightsr
+return
+z5Attach the ``insights`` subcommand to ``subparsers``.
+insightsz!Show usage insights and analyticszVAnalyze session history to show token usage, costs, tool patterns, and activity trends)
+descriptionz
+--days
+z'Number of days to analyze (default: 30))
+defaultr
+--sourcez1Filter by platform (cli, telegram, discord, etc.))
+funcN)
+add_parser
+add_argument
+set_defaults)
+subparsersr
+insights_parsers
+SC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\insights.py
+build_insights_parserr
+__doc__
+__future__r
+typingr
+<module>r

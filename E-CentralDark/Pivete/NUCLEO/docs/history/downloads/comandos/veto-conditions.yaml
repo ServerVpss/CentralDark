@@ -1,0 +1,225 @@
+# VETO CONDITIONS ENGINE - AutoClaw
+# Centralized veto conditions for OpenClaw whitelabel deployment
+# Version: 1.0
+# Last Updated: 2026-02-14
+
+veto_engine:
+  version: "1.0"
+  philosophy: |
+    "Fail-closed security. Start locked, explicitly open. Never the reverse."
+    Security vetos are ABSOLUTE. No override. No exception.
+    [SOURCE: steipete ST_002 - Fail-Closed Default]
+
+  outcomes:
+    APPROVE: "Proceed to next phase"
+    REVIEW: "Address concerns before proceeding"
+    VETO: "BLOCKED - Cannot proceed until resolved"
+
+  conditions:
+    # ============================================
+    # INFRASTRUCTURE VETOS (Phase 1-2)
+    # ============================================
+    AC_VC_001:
+      name: "No Hetzner Account"
+      phase: "infrastructure"
+      trigger: "User has no Hetzner account or account not funded"
+      action: "VETO - Cannot provision VPS"
+      severity: "BLOCKING"
+
+    AC_VC_002:
+      name: "No Tailscale Account"
+      phase: "infrastructure"
+      trigger: "User has no Tailscale account"
+      action: "VETO - No secure networking possible"
+      severity: "BLOCKING"
+
+    AC_VC_003:
+      name: "Tailscale Ping Fails"
+      phase: "infrastructure"
+      trigger: "tailscale ping from desktop fails"
+      action: "VETO - No mesh = no secure access"
+      severity: "BLOCKING"
+
+    AC_VC_004:
+      name: "Gateway Health Fail"
+      phase: "infrastructure"
+      trigger: "curl http://localhost:18789/health does not return OK"
+      action: "VETO - Fix gateway before proceeding"
+      severity: "BLOCKING"
+
+    AC_VC_005:
+      name: "Insufficient VPS Resources"
+      phase: "infrastructure"
+      trigger: "VPS has less than 4GB RAM (below CX22)"
+      action: "VETO - CX22 minimum for OpenClaw + Docker"
+      severity: "BLOCKING"
+
+    # ============================================
+    # IDENTITY VETOS (Phase 3)
+    # ============================================
+    AC_VC_006:
+      name: "Directory Incomplete"
+      phase: "identity"
+      trigger: "apps/{agent-name}/ missing required subdirs"
+      action: "VETO - Agent won't load without proper structure"
+      severity: "BLOCKING"
+
+    AC_VC_007:
+      name: "Name Conflict"
+      phase: "identity"
+      trigger: "Agent name conflicts with existing agent"
+      action: "VETO - Resolve naming before proceeding"
+      severity: "BLOCKING"
+
+    AC_VC_008:
+      name: "No SOUL.md"
+      phase: "identity"
+      trigger: "SOUL.md missing from agent directory"
+      action: "VETO - Agent without personality produces generic slop"
+      severity: "BLOCKING"
+      source: "steipete ST_024"
+
+    # ============================================
+    # ARCHITECTURE VETOS (Phase 4)
+    # ============================================
+    AC_VC_009:
+      name: "No API Keys"
+      phase: "architecture"
+      trigger: "No API keys configured for any LLM provider"
+      action: "VETO - Router without keys = dead system"
+      severity: "BLOCKING"
+
+    AC_VC_010:
+      name: "Invalid Router YAML"
+      phase: "architecture"
+      trigger: "llm-router-config.yaml parse error"
+      action: "VETO - No routing possible"
+      severity: "BLOCKING"
+
+    AC_VC_011:
+      name: "Premium Tier Uses Cheap Model"
+      phase: "architecture"
+      trigger: "Premium tier configured with budget/weak model"
+      action: "VETO - Cheap models are DANGEROUS for system access"
+      severity: "BLOCKING"
+      source: "steipete ST_013 - Lex Fridman #491"
+
+    # ============================================
+    # IMPLEMENTATION VETOS (Phase 5a)
+    # ============================================
+    AC_VC_012:
+      name: "NPM Install Fails"
+      phase: "implementation"
+      trigger: "npm install returns errors"
+      action: "VETO - Dependencies broken"
+      severity: "BLOCKING"
+
+    AC_VC_013:
+      name: "Bridge Not Detecting"
+      phase: "implementation"
+      trigger: "bridge.js does not detect service"
+      action: "VETO - No integration with Claude Code"
+      severity: "BLOCKING"
+
+    # ============================================
+    # SECURITY VETOS (Phase 5b) - ZERO TOLERANCE
+    # ============================================
+    AC_VC_014:
+      name: "Blocklist Not Blocking"
+      phase: "security"
+      trigger: "Dangerous commands not rejected by blocklist"
+      action: "VETO - STOP IMMEDIATELY. Security breach risk."
+      severity: "CRITICAL"
+      zero_tolerance: true
+
+    AC_VC_015:
+      name: "Sandbox Not Isolated"
+      phase: "security"
+      trigger: "Docker sandbox can reach network or host filesystem"
+      action: "VETO - Container escape = full system access"
+      severity: "CRITICAL"
+      zero_tolerance: true
+
+    AC_VC_016:
+      name: "Secrets In Logs"
+      phase: "security"
+      trigger: "API keys or passwords visible in plain text in logs"
+      action: "VETO - Fix redaction before continuing"
+      severity: "CRITICAL"
+      zero_tolerance: true
+
+    AC_VC_017:
+      name: "DM Pairing Broken"
+      phase: "security"
+      trigger: "Unpaired user can reach agent via DM"
+      action: "VETO - Open agent = security risk"
+      severity: "CRITICAL"
+      zero_tolerance: true
+      source: "steipete ST_002"
+
+    AC_VC_018:
+      name: "Port Exposed"
+      phase: "security"
+      trigger: "Port 18789 reachable from public internet"
+      action: "VETO - Gateway must be loopback only"
+      severity: "CRITICAL"
+      zero_tolerance: true
+      source: "steipete ST_002"
+
+    AC_VC_019:
+      name: "Root SSH Enabled"
+      phase: "security"
+      trigger: "PermitRootLogin not set to no"
+      action: "VETO - Disable root SSH immediately"
+      severity: "CRITICAL"
+      zero_tolerance: true
+
+    AC_VC_020:
+      name: "Password Auth Enabled"
+      phase: "security"
+      trigger: "PasswordAuthentication not set to no"
+      action: "VETO - Keys only. No password auth."
+      severity: "CRITICAL"
+      zero_tolerance: true
+
+    # ============================================
+    # VALIDATION VETOS (Phase 6)
+    # ============================================
+    AC_VC_021:
+      name: "Security Test Failure"
+      phase: "validation"
+      trigger: "Any security test in post-deployment-validation fails"
+      action: "VETO - Non-negotiable. Fix and re-validate."
+      severity: "CRITICAL"
+      zero_tolerance: true
+
+    AC_VC_022:
+      name: "No Channels Connected"
+      phase: "validation"
+      trigger: "Zero channels connected and responding"
+      action: "VETO - Agent has no way to communicate"
+      severity: "BLOCKING"
+
+    AC_VC_023:
+      name: "LLM Router All Tiers Fail"
+      phase: "validation"
+      trigger: "All 3 LLM tiers return errors"
+      action: "VETO - Agent has no brain"
+      severity: "BLOCKING"
+
+  # ============================================
+  # SUMMARY
+  # ============================================
+  summary:
+    total_conditions: 23
+    by_phase:
+      infrastructure: 5
+      identity: 3
+      architecture: 3
+      implementation: 2
+      security: 7
+      validation: 3
+    by_severity:
+      CRITICAL: 8
+      BLOCKING: 15
+    zero_tolerance_count: 8

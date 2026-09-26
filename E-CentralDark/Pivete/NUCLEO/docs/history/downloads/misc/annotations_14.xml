@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <item name="androidx.core.location.GnssStatusCompat int getConstellationType(int)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.location.GnssStatusCompat.CONSTELLATION_UNKNOWN, androidx.core.location.GnssStatusCompat.CONSTELLATION_GPS, androidx.core.location.GnssStatusCompat.CONSTELLATION_SBAS, androidx.core.location.GnssStatusCompat.CONSTELLATION_GLONASS, androidx.core.location.GnssStatusCompat.CONSTELLATION_QZSS, androidx.core.location.GnssStatusCompat.CONSTELLATION_BEIDOU, androidx.core.location.GnssStatusCompat.CONSTELLATION_GALILEO, androidx.core.location.GnssStatusCompat.CONSTELLATION_IRNSS}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.location.GnssStatusCompat.ConstellationType">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.location.GnssStatusCompat.CONSTELLATION_UNKNOWN, androidx.core.location.GnssStatusCompat.CONSTELLATION_GPS, androidx.core.location.GnssStatusCompat.CONSTELLATION_SBAS, androidx.core.location.GnssStatusCompat.CONSTELLATION_GLONASS, androidx.core.location.GnssStatusCompat.CONSTELLATION_QZSS, androidx.core.location.GnssStatusCompat.CONSTELLATION_BEIDOU, androidx.core.location.GnssStatusCompat.CONSTELLATION_GALILEO, androidx.core.location.GnssStatusCompat.CONSTELLATION_IRNSS}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.location.LocationRequestCompat LocationRequestCompat(long, int, long, int, long, float, long) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.location.LocationRequestCompat.QUALITY_LOW_POWER, androidx.core.location.LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY, androidx.core.location.LocationRequestCompat.QUALITY_HIGH_ACCURACY}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.location.LocationRequestCompat int getQuality()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.location.LocationRequestCompat.QUALITY_LOW_POWER, androidx.core.location.LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY, androidx.core.location.LocationRequestCompat.QUALITY_HIGH_ACCURACY}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.location.LocationRequestCompat mQuality">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.location.LocationRequestCompat.QUALITY_LOW_POWER, androidx.core.location.LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY, androidx.core.location.LocationRequestCompat.QUALITY_HIGH_ACCURACY}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.location.LocationRequestCompat.Builder androidx.core.location.LocationRequestCompat.Builder setQuality(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.location.LocationRequestCompat.QUALITY_LOW_POWER, androidx.core.location.LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY, androidx.core.location.LocationRequestCompat.QUALITY_HIGH_ACCURACY}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.location.LocationRequestCompat.Builder mQuality">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.location.LocationRequestCompat.QUALITY_LOW_POWER, androidx.core.location.LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY, androidx.core.location.LocationRequestCompat.QUALITY_HIGH_ACCURACY}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.location.LocationRequestCompat.Quality">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.location.LocationRequestCompat.QUALITY_LOW_POWER, androidx.core.location.LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY, androidx.core.location.LocationRequestCompat.QUALITY_HIGH_ACCURACY}" />
+    </annotation>
+  </item>
+</root>
+

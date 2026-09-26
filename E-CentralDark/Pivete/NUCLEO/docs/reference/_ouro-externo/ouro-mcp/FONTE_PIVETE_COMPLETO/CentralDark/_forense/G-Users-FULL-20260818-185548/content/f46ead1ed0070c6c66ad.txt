@@ -1,0 +1,9 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@dnd-kit\accessibility\dist\components\HiddenText\HiddenText.d.ts
+
+/// <reference types="react" />
+interface Props {
+    id: string;
+    value: string;
+}
+export declare function HiddenText({ id, value }: Props): JSX.Element;
+export {};

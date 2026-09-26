@@ -1,0 +1,6 @@
+logical_package: CENTRALDARK-MASTER-PEGATUDO
+current_date_key: '2026-08-31'
+release_ref: releases/2026-08-31/RELEASE.yml
+parallel_package: false
+updated_at: '2026-08-31T13:25:00-03:00'
+current_release: '2026-08-31'

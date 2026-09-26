@@ -1,0 +1,125 @@
+/**
+ * `o2b brain batch-plan <source-dir>` (A3 / t_9eeb8ca2): plan a large-folder
+ * ingest into bounded parallel batches.
+ *
+ * Discovers the ingestible (text-bearing) files under the directory, skips
+ * everything the content-hash manifest classifies `unchanged` since the last
+ * ingest, and packs the new/modified remainder into batches bounded by
+ * `--max-bytes` and `--max-files`. Read-only and deterministic — the caller
+ * dispatches each printed batch as a parallel ingest subagent; the kernel
+ * spawns nothing itself.
+ */
+
+import { planBatches } from "../../../core/brain/ingest/batch-plan.ts";
+import { reconcilePlan } from "../../../core/brain/ingest/reconcile.ts";
+import { formatIgnoreWarning } from "../../../core/fs/git-discovery.ts";
+import { serializeBatchPlan } from "../../../mcp/brain/ingest-tools.ts";
+import { brainVerbContext, fail, info, ok, okJson, parse, usageError } from "../helpers.ts";
+
+/** Default caps, mirroring the MCP surface (1 MiB / 25 files per batch). */
+const DEFAULT_MAX_BATCH_BYTES = 1024 * 1024;
+const DEFAULT_MAX_BATCH_FILES = 25;
+
+function parseCap(raw: unknown, name: string, fallback: number): number {
+  if (raw === undefined) return fallback;
+  const n = Number(raw);
+  if (!Number.isInteger(n) || n <= 0) {
+    throw new Error(`${name} must be a positive integer, got ${String(raw)}`);
+  }
+  return n;
+}
+
+export async function cmdBrainBatchPlan(argv: string[]): Promise<number> {
+  const { flags, positional } = parse(argv, {
+    vault: { type: "string" },
+    "max-bytes": { type: "string" },
+    "max-files": { type: "string" },
+    "src-subpath": { type: "string" },
+    exclude: { type: "string-array" },
+    resume: { type: "boolean" },
+    reconcile: { type: "boolean" },
+    json: { type: "boolean" },
+  });
+  const sourceDir = positional[0];
+  if (!sourceDir) {
+    return usageError(
+      "usage: o2b brain batch-plan <source-dir> [--max-bytes N] [--max-files N] " +
+        "[--src-subpath PATH] [--exclude PATTERN]... [--resume] [--reconcile] [--json]",
+    );
+  }
+
+  try {
+    const { vault } = brainVerbContext(flags);
+    const maxBatchBytes = parseCap(flags["max-bytes"], "--max-bytes", DEFAULT_MAX_BATCH_BYTES);
+    const maxBatchFiles = parseCap(flags["max-files"], "--max-files", DEFAULT_MAX_BATCH_FILES);
+    const resume = flags["resume"] === true;
+    const srcSubpath = flags["src-subpath"] as string | undefined;
+    const exclude = (flags["exclude"] as string[] | undefined) ?? [];
+    const reconcile = flags["reconcile"] === true;
+    const plan = planBatches(vault, sourceDir, {
+      maxBatchBytes,
+      maxBatchFiles,
+      resume,
+      ...(srcSubpath !== undefined ? { srcSubpath } : {}),
+      ...(exclude.length > 0 ? { exclude } : {}),
+    });
+    // The reconcile is read-only: it diffs the plan's dispatched set against the
+    // checkpoint and reports the gap; it never re-dispatches.
+    const report = reconcile ? reconcilePlan(vault, plan) : undefined;
+
+    if (flags["json"]) {
+      okJson({
+        // One serializer feeds both machine surfaces (the MCP tool owns it), so
+        // a field added to the plan can never reach one and miss the other.
+        ...serializeBatchPlan(plan),
+        // Only present with --reconcile, so the default output is unchanged.
+        ...(report !== undefined
+          ? {
+              reconcile: {
+                dispatched: [...report.dispatched],
+                ingested: [...report.ingested],
+                missing: [...report.missing],
+                complete: report.complete,
+              },
+            }
+          : {}),
+      });
+      return 0;
+    }
+
+    ok(`batch-plan: ${plan.sourceDir} (plan ${plan.planId})`);
+    ok(
+      `  ${plan.totalFiles} file(s) to ingest in ${plan.batches.length} batch(es); ` +
+        `${plan.skipped.length} unchanged skipped` +
+        (plan.resumedCompleted > 0 ? `; ${plan.resumedCompleted} resumed (checkpointed)` : ""),
+    );
+    for (const b of plan.batches) {
+      ok(`  batch ${b.index}: ${b.files.length} file(s), ${b.totalBytes} byte(s)`);
+      for (const f of b.files) ok(`    - ${f.path} (${f.status}, ${f.bytes}B)`);
+    }
+    if (plan.skipped.length > 0) {
+      info(`  ${plan.skipped.length} unchanged file(s) skipped:`);
+      for (const p of plan.skipped) info(`    - ${p}`);
+    }
+    if (plan.skippedNonExtractable.length > 0) {
+      info(`  ${plan.skippedNonExtractable.length} non-extractable page(s) skipped:`);
+      for (const s of plan.skippedNonExtractable) info(`    - ${s.path} (${s.reason})`);
+    }
+    if (plan.ignoreWarnings.length > 0) {
+      info(`  ${plan.ignoreWarnings.length} ignore warning(s):`);
+      // Same wording as the hygiene scan's stderr sink: one formatter.
+      for (const w of plan.ignoreWarnings) info(`    - ${formatIgnoreWarning(w)}`);
+    }
+    if (report !== undefined) {
+      if (report.complete) {
+        ok(`  reconcile: all ${report.dispatched.length} dispatched source(s) ingested`);
+      } else {
+        info(`  reconcile: ${report.missing.length} dispatched source(s) never ingested:`);
+        for (const p of report.missing) info(`    - ${p}`);
+      }
+    }
+    return 0;
+  } catch (err) {
+    return fail((err as Error).message ?? String(err));
+  }
+}

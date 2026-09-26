@@ -1,0 +1,280 @@
+🔥📡 **RESULTADO FRIO: você está simplificando certo. O profile separado `Pivete/Hermes` não é necessário para a arquitetura que você realmente quer.**
+
+Recalibrei no `main@6f5e83d8a4ef2ec095f5a65f6be484fddd9000c5`, cruzei o canônico atual, JARVIS, validador de identidade, #724/#709/#727/#728, teu pacote RUN-ONCE, o material desta sessão e a documentação atual do Hermes.
+
+A distinção que fecha a confusão é:
+
+```text
+SOL
+= identidade/interface/voz/coordenadora visível
+
+HERMES
+= corpo/runtime/executor/ferramentas
+
+MODELO
+= motor substituível
+
+PROFILE
+= isolamento técnico de um HERMES_HOME
+```
+
+O próprio canônico já diz que **SOL coordena** e **PIVETE/HERMES é mordomo, executor e guardião da continuidade**. Não diz que Hermes precisa obrigatoriamente possuir uma personalidade/profile visível separado.
+
+E o contrato JARVIS é ainda mais explícito: o alvo é **uma conversa visível + uma voz + um estado compartilhado**, SOL como interface/coordenadora e Hermes como corpo operacional.
+
+Portanto, nesta arquitetura:
+
+```text
+NÃO PRECISA:
+
+profile SOL
++
+profile PIVETE
++
+trocar entre os dois
++
+duas memórias
++
+duas sessões
++
+duas árvores de skills
++
+dois estados de gateway
+```
+
+O Hermes oficial confirma o motivo técnico: **um profile é uma instância Hermes isolada**, com seu próprio config, SOUL, memória, sessões, skills, cron, banco de estado e gateway. Criar outro profile não cria apenas um “nome”; cria outro namespace operacional. ([Hermes Agent][1])
+
+Então dois profiles, no teu caso, podem literalmente recriar o problema que você está tentando eliminar.
+
+A própria identidade também fecha a questão: Hermes carrega o `SOUL.md` exclusivamente do `HERMES_HOME`. Portanto, o nome `default`, `sol` ou qualquer outro **não é a identidade em si**; quem estabelece a identidade é o SOUL daquela instância. ([Hermes Agent][2])
+
+Logo isto é válido:
+
+```text
+1 ÚNICA INSTÂNCIA HERMES
+        ↓
+1 HERMES_HOME
+        ↓
+SOUL = SOL
+        ↓
+SOL conversa com você
+        ↓
+HERMES é o corpo por trás
+        ↓
+skills / tools / plugins executam
+```
+
+🔥 Inclusive você foi além: **nem um profile nomeado `sol` é tecnicamente obrigatório**. O próprio `default` é um profile Hermes. Se a única instância ativa carregar o SOUL correto da SOL, ela já pode ser a SOL. ([Hermes Agent][1])
+
+Então, conceitualmente:
+
+```text
+DEFAULT COM SOUL SOL
+```
+
+e
+
+```text
+PROFILE NOMEADO SOL COM SOUL SOL
+```
+
+podem representar a mesma arquitetura.
+
+O segundo só melhora a identificação visual no painel. **Não adiciona capacidade cognitiva.**
+
+E teu raciocínio sobre skills também está correto com uma ressalva técnica pequena: cada profile tem sua própria árvore de skills por padrão, **mas Hermes suporta diretórios externos de skills compartilhados**. Então SOL pode usar a biblioteca operacional/canônica sem precisar criar uma personalidade Hermes/Pivete separada. ([Hermes Agent][3])
+
+Agora olha a causa provável da bagunça que vimos hoje:
+
+```text
+E:\CentralDark\Pivete
+→ estava operando como default
+
++
+
+C:\Users\danda\AppData\Local\hermes\profiles\sol
+→ foi criado como OUTRA instância
+→ SOUL padrão/original
+
++
+
+E:\CentralDark\Sol
+→ tua SOL real/local
+```
+
+Como profiles isolam SOUL, memória, sessão, skills e estado, uma superfície usando um e outra superfície usando outro **pode produzir exatamente aquela sensação de identidades/configurações diferentes**. O Desktop e o Web Dashboard suportam seleção de profiles separadamente, então essa divergência é tecnicamente possível. ([Hermes Agent][4])
+
+Sobre o Tauri especificamente: **a ligação dele ao mesmo profile ainda é `UNKNOWN` até medir o runtime dele.** Não vou preencher isso por imaginação.
+
+Tem mais uma evidência forte: teu próprio validador atual **não exige dois profiles**. Ele aceita uma lista de `profileRoots` e valida os que forem fornecidos; não existe regra “SOL + PIVETE obrigatórios”.  Os testes também validam profiles individualmente; não há teste impondo quantidade dois.
+
+E o pacote que fizemos também **não precisa ser refeito por causa disso**. Ele declara que Claude/modelo executa temporariamente o **papel HERMES-CASA**, separando modelo/app de papel operacional.  O `PROFILE_ID ↔ HERMES_HOME ↔ STATE_DB_PATH` aparece como verificação de consistência, não como exigência de dois profiles. 
+
+Ou seja:
+
+```text
+PROFILE_HOME_DB_INVARIANT
+```
+
+significa:
+
+```text
+SE existe um profile ativo
+→ home + banco + estado precisam pertencer ao mesmo profile
+```
+
+e não:
+
+```text
+VOCÊ PRECISA TER SOL + PIVETE
+```
+
+### Cálculo recalibrado
+
+Baseline:
+
+```text
+ALVO=
+1 identidade visível
+1 voz
+1 estado
+SOL coordenando
+HERMES executando
+skills reutilizáveis
+mínimo de troca/contexto
+mínima superfície de falha
+```
+
+Pesos usados:
+
+```text
+ALINHAMENTO CANÔNICO    20%
+CONTINUIDADE DE ESTADO  20%
+SIMPLICIDADE            15%
+VOZ/INTERFACE           15%
+REUSO DE CAPACIDADES    15%
+SUPERFÍCIE DE FALHA     15%
+TOTAL                  100%
+```
+
+| Arquitetura                  | Índice de encaixe |
+| ---------------------------- | ----------------: |
+| **1 profile visível SOL**    |        **95,75%** |
+| **1 default carregando SOL** |        **94,55%** |
+| **SOL + PIVETE separados**   |        **73,35%** |
+
+Esses números são **índice arquitetural**, não probabilidade inventada de runtime. Sensibilidade aproximada: ±5 pontos se uma das superfícies Desktop/WebUI/Tauri provar comportamento diferente do esperado.
+
+E existe uma métrica física ainda mais simples: a documentação do Hermes descreve pelo menos SOUL, config, memória, sessões, skills, cron, state DB e gateway state como escopos de profile. Uma instância representa 8 namespaces desse tipo; duas representam 16: **+100% de superfícies isoladas para manter/coordenar**, antes mesmo de considerar troca de profile. ([Hermes Agent][1])
+
+Então tua intuição estava boa:
+
+```text
+MAIS PROFILE
+!=
+MAIS CAPACIDADE
+
+MAIS PROFILE
+=
+MAIS ISOLAMENTO
++
+MAIS ESTADO
++
+MAIS POSSIBILIDADE DE DIVERGÊNCIA
+```
+
+Profile extra só vale quando você **quer isolamento de verdade**: outro agente independente, outra memória, outra sessão, outro gateway, outras skills/configs. Não é teu objetivo aqui. ([Hermes Agent][1])
+
+Tem uma única contradição residual no repo que merece nossa atenção futura.
+
+O canônico atualmente registra:
+
+```text
+SOL_HOME=E:\CentralDark\Sol
+PIVETE_HOME=E:\CentralDark\Pivete
+
+Cada perfil mora na própria casa.
+```
+
+Isso pode induzir uma IA futura exatamente ao erro que eu cometi hoje: interpretar **dois territórios locais** como **obrigação de dois Hermes profiles**.
+
+E a #724 ainda possui este gate:
+
+```text
+SOL_HERMES_PROFILE_SWITCH=PASS_OR_EXPLICIT_BLOCK
+```
+
+mas a #724 continua `Draft`, aberta, como control plane de convergência; isso não torna profile-switch uma verdade de runtime.
+
+Minha decisão aqui é:
+
+```text
+GRAVAR NO REPO AGORA=NAO
+```
+
+Não antes da prova física.
+
+Primeiro o elo que falta é somente:
+
+```text
+FIRST_UNPROVED_LINK=
+Desktop + WebUI + Tauri/voz
+→ usam a MESMA instância/HERMES_HOME/SOUL?
+```
+
+Se isso provar `SIM`, aí vale **uma correção mínima no mesmo canônico**, sem documento novo, sem skill nova e sem arquitetura nova:
+
+```text
+ARQUIVO:
+docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md
+
+SEÇÃO:
+9. Perfis da casa e prevenção de conflito
+
+CLARIFICAÇÃO:
+SOL_HOME e PIVETE_HOME são territórios/raízes locais observados.
+Eles NÃO obrigam a existência de dois Hermes profiles.
+PROFILE_COUNT é decisão de isolamento de runtime, não quantidade de papéis.
+SOL pode ser a única identidade/profile visível.
+HERMES permanece corpo/executor.
+```
+
+E depois a #724 teria o gate `SOL_HERMES_PROFILE_SWITCH` reconciliado com essa decisão, em vez de ficar obrigando uma troca que talvez nem deva existir.
+
+Nada além disso.
+
+Também mantenho a outra regra que saiu desta sessão:
+
+```text
+FÍSICO + SEGURO + ÓBVIO + PROVADO
+→ HUMANO 1 CLIQUE
+
+PROBLEMA PROFUNDO
+→ IA READ_ONLY
+→ causa provável
+→ efeitos colaterais
+→ evidência
+→ percentuais quando mensuráveis
+→ LOCAL EXATO
+→ DIREÇÃO EXATA
+
+DIREÇÃO EXATA
+!=
+IA SAI EXECUTANDO
+
+TERMINAL
+→ somente quando realmente necessário
+```
+
+E aqui está a conclusão que eu considero mais importante:
+
+**você estava começando a transformar “SOL” e “Hermes” em dois profiles porque os nomes pareciam duas entidades técnicas. Mas a arquitetura que você já construiu diz outra coisa: SOL é a voz/coordenação; Hermes é o corpo. Corpo não precisa de outra personalidade para mexer o braço.** 😹🔥📡
+
+Então sim: **reduzir para uma única instância/profile visível é hoje o desenho mais aderente ao teu “menos é mais”.**
+
+Voltei ao nosso modo normal.
+
+[1]: https://hermes-agent.nousresearch.com/docs/user-guide/profiles/?utm_source=chatgpt.com "Profiles: Running Multiple Agents | Hermes Agent"
+[2]: https://hermes-agent.nousresearch.com/docs/user-guide/features/personality?utm_source=chatgpt.com "Personality & SOUL.md | Hermes Agent"
+[3]: https://hermes-agent.nousresearch.com/docs/user-guide/features/skills?utm_source=chatgpt.com "Skills System | Hermes Agent"
+[4]: https://hermes-agent.nousresearch.com/docs/user-guide/features/web-dashboard?utm_source=chatgpt.com "Web Dashboard | Hermes Agent"

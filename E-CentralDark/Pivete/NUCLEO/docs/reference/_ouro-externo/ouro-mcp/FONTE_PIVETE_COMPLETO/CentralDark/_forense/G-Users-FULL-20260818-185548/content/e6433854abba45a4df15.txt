@@ -1,0 +1,15 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\react\primitives\message\MessageQuote.d.ts
+
+import { QuoteInfo } from "../../../types/quote.js";
+import { ReactNode } from "react";
+//#region src/react/primitives/message/MessageQuote.d.ts
+declare namespace MessagePrimitiveQuote {
+  type Props = {
+    /** Render function called when a quote is present. Receives quote info. */
+    children: (value: QuoteInfo) => ReactNode;
+  };
+}
+declare const MessagePrimitiveQuote: import("react").NamedExoticComponent<MessagePrimitiveQuote.Props>;
+//#endregion
+export { MessagePrimitiveQuote };
+//# sourceMappingURL=MessageQuote.d.ts.map

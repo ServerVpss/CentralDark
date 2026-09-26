@@ -1,0 +1,1 @@
+The index.lock file indicates another git process was active or crashed. To safely recover:\n1. Remove the lock: `rm .git/index.lock`.\n2. Re‑run git commands (fetch, add, commit).\nThis file is used by `centraldark` scripts to quickly resolve lock issues.

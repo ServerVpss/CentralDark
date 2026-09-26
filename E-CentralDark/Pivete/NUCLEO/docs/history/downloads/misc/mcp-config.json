@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "CentralDark Admin": {
+      "tools": [
+        "*"
+      ],
+      "timeout": 180000,
+      "type": "http",
+      "url": "https://mcp.centralldark.com/admin/mcp"
+    },
+    "Vercel Next Dev Tools": {
+      "tools": [
+        "*"
+      ],
+      "type": "local",
+      "command": "npx",
+      "args": [
+        "-y",
+        "next-devtools-mcp@0.3.6"
+      ]
+    }
+  }
+}

@@ -1,0 +1,235 @@
+name: codex-validate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, edited, labeled, unlabeled]
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codex-validate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-canonical-map:
+    name: Validate canonical map and consolidated areas
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact PR HEAD
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          submodules: false
+
+      - name: Test deterministic map and provider guards
+        run: |
+          set -euo pipefail
+          node --test apps/modulos/mapeamento/tests/validar-mapa.test.mjs
+          node --test apps/modulos/HERMES-CORE/agents/Log-Verificador/provider-health.test.mjs
+          bash -n scripts/vps/deploy-operational-guards.sh
+
+      - name: Enforce unique map and consolidated locks
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          PIVETE_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-pivete') || contains(github.event.pull_request.body || '', 'PERMITO PIVETE') }}
+        run: |
+          set -euo pipefail
+          node apps/modulos/mapeamento/core/validar-mapa.mjs \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --base-sha "$BASE_SHA" \
+            --head-sha "$HEAD_SHA" \
+            --approved "$PIVETE_APPROVED"
+
+  validate:
+    name: Validate Codex operational kit
+    runs-on: [self-hosted, Linux]
+    steps:
+      - name: Prepare isolated checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          checkout_dir="$GITHUB_WORKSPACE/.ci-codex-validate"
+          if [[ "$checkout_dir" != "$GITHUB_WORKSPACE/.ci-codex-validate" ]]; then
+            echo "Unsafe checkout directory: $checkout_dir"
+            exit 1
+          fi
+          rm -rf "$checkout_dir"
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          path: .ci-codex-validate
+          submodules: false
+
+      - name: Validate required Codex files
+        shell: bash
+        working-directory: .ci-codex-validate
+        run: |
+          set -euo pipefail
+
+          required=(
+            "AGENTS.md"
+            "CODEX.md"
+            ".github/codex/prompts/centraldark-system.md"
+            ".github/pull_request_template.md"
+          )
+
+          for file in "${required[@]}"; do
+            test -f "$file" || {
+              echo "Missing required file: $file"
+              exit 1
+            }
+          done
+
+      - name: Check official repository references
+        shell: bash
+        working-directory: .ci-codex-validate
+        run: |
+          set -euo pipefail
+
+          grep -q "ServerVpss/CentralDark" AGENTS.md
+          grep -q "ServerVpss/CentralDark" CODEX.md
+          grep -q "ServerVpss/CentralDark" .github/codex/prompts/centraldark-system.md
+          grep -q "ServerVpss/CentralDark" .github/pull_request_template.md
+
+      - name: Check sensitive-file guardrails are explicit
+        shell: bash
+        working-directory: .ci-codex-validate
+        run: |
+          set -euo pipefail
+
+          docs=(
+            "AGENTS.md"
+            "CODEX.md"
+            ".github/codex/prompts/centraldark-system.md"
+            ".github/pull_request_template.md"
+          )
+
+          for file in "${docs[@]}"; do
+            grep -q "arquivos sensíveis\|Arquivos sensíveis" "$file" || {
+              echo "Missing sensitive-file guardrail wording in $file"
+              exit 1
+            }
+          done
+
+          grep -q "Não li, abri, copiei, editei ou usei como contexto arquivos sensíveis" .github/pull_request_template.md
+          grep -q "Verifiquei comentários de agentes no PR antes do merge" .github/pull_request_template.md
+          grep -q "\.env" AGENTS.md
+          grep -q "secrets""/" AGENTS.md
+          grep -q "sessions""/" CODEX.md
+          grep -q "\.ssh""/" .github/codex/prompts/centraldark-system.md
+
+      - name: Check docs do not contain real secret values
+        shell: bash
+        working-directory: .ci-codex-validate
+        run: |
+          set -euo pipefail
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          files = [
+              Path("AGENTS.md"),
+              Path("CODEX.md"),
+              Path(".github/codex/prompts/centraldark-system.md"),
+              Path(".github/pull_request_template.md"),
+          ]
+
+          patterns = [
+              re.compile(r"-----BEGIN (?:RSA |OPENSSH |EC |DSA )?PRIVATE KEY-----", re.I),
+              re.compile(r"(?i)\b(?:token|password|passwd|secret|cookie|session|connection_string|database_url|api_key|apikey)\b\s*[:=]\s*['\"]?([^'\"\s<>`]{12,})"),
+          ]
+
+          allowed_placeholders = {
+              "***OCULTO***",
+              "REDACTED",
+              "CHANGEME",
+              "EXAMPLE",
+              "PLACEHOLDER",
+          }
+
+          findings = []
+
+          for file in files:
+              text = file.read_text(encoding="utf-8")
+              for pattern in patterns:
+                  for match in pattern.finditer(text):
+                      value = match.group(1) if match.groups() else match.group(0)
+                      normalized = value.strip().strip("\"'")
+                      if normalized in allowed_placeholders:
+                          continue
+                      findings.append(f"{file}: possible real secret value near: {match.group(0)[:40]}")
+
+          if findings:
+              print("Potential real secret-like values found in Codex docs:")
+              for item in findings:
+                  print("-", item)
+              sys.exit(1)
+
+          print("OK: no real secret-like values found in Codex docs")
+          PY
+
+      - name: Validate Markdown presence
+        shell: bash
+        working-directory: .ci-codex-validate
+        run: |
+          set -euo pipefail
+          grep -q "Repositório oficial" AGENTS.md
+          grep -q "Alvo obrigatório" CODEX.md
+          grep -q "Autoajuste consciente" .github/codex/prompts/centraldark-system.md
+          grep -q "Ações sensíveis" .github/pull_request_template.md
+
+  validate-admin-guard:
+    name: Validate MCP admin guard and runtime build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/modulos/mcp/package-lock.json
+
+      - name: Install dependencies
+        working-directory: apps/modulos/mcp
+        run: npm ci --ignore-scripts
+
+      - name: Typecheck
+        working-directory: apps/modulos/mcp
+        run: npm run typecheck
+
+      - name: Run admin guard tests
+        working-directory: apps/modulos/mcp
+        run: node --test tests/admin-guard.test.mjs
+
+      - name: Build runtime dist
+        working-directory: apps/modulos/mcp
+        run: npm run build
+
+      - name: Verify committed runtime matches build
+        working-directory: apps/modulos/mcp
+        run: |
+          set -euo pipefail
+          test -f dist/lib/admin-guard.js
+          git diff --exit-code -- dist
+
+      - name: Upload compiled runtime evidence
+        uses: actions/upload-artifact@v6
+        with:
+          name: mcp-dist-${{ github.sha }}
+          path: apps/modulos/mcp/dist
+          if-no-files-found: error
+          retention-days: 2

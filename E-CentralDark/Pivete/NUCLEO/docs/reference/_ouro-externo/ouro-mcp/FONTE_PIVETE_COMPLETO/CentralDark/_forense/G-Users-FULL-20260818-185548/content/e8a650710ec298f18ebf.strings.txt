@@ -1,0 +1,132 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\__pycache__\linux_desktop_entry.cpython-311.pyc
+
+Install and remove the Linux desktop entry (``hermes.desktop``).
+``hermes desktop`` builds and launches the Electron app. On Linux, a
+freshly-built app has no launcher presence: no menu item, no icon. This
+module writes the XDG desktop entry that gives it one.
+``hermes uninstall --gui`` removes the entry again.
+Two values must be absolute for the entry to work:
+  - ``Exec`` 
+ the launcher runs without shell ``PATH`` customizations, so
+    a bare ``hermes desktop`` fails when hermes lives in ``~/.local/bin``
+    or a venv. Resolve the real binary and write its full path.
+  - ``Icon`` 
+ an unqualified icon name needs an indexed icon theme. The
+    spec allows an absolute path instead, so point at the app icon in the
+    checkout. Do not copy the icon: ``Exec`` already depends on that tree.
+Cache refresh is best-effort and tool-gated: ``update-desktop-database``
+for the freedesktop menu cache, and ``kbuildsycoca6``/``kbuildsycoca5``
+for Plasma. Run each tool only when it exists. A missing tool is not an
+error.
+Import-light and side-effect-free at import time: the uninstaller and the
+Electron main process both use this without loading the full CLI.
+annotationsN)
+Optionalz
+hermes.desktop
+return
+z0XDG desktop entries exist only on Linux and BSD.)
+freebsd
+openbsd
+netbsd)
+platform
+startswith
+RC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\linux_desktop_entry.py
+is_supportedr
+XDG_DATA_HOMEz
+.local
+share)
+environ
+stripr
+expanduser
+_xdg_data_homer
+z)Where the ``hermes.desktop`` entry lives.
+applications)
+DESKTOP_ENTRY_NAMEr
+desktop_entry_pathr"
+project_rootc
+z.The app icon shipped in the desktop workspace.
+desktop
+assetsz
+icon.pngr
+icon_pathr(
+Build the absolute ``Exec=`` command line for ``hermes desktop``.
+    Prefer the real ``hermes`` executable (argv[0] or PATH). When Hermes
+    runs as a module with no launcher installed, use the current
+    interpreter, also absolute.
+resolve_hermes_binr&
+hermes_cli.main
+_quote_exec_arg)
+<genexpr>z'resolve_exec_command.<locals>.<genexpr>J
+hermes_cli.relaunchr+
+resolver
+executable
+bin_path
+resolve_exec_commandr9
+Quote one ``Exec`` argument per the desktop entry spec.
+    Reserved characters require double quotes. Inside the quotes, escape
+    a backslash and a double quote with a backslash.
+z"_quote_exec_arg.<locals>.<genexpr>S
+"'\><~|&;$*?#()`
+replace)
+escapeds
+exec_command
+Nzk[Desktop Entry]
+Type=Application
+Name=Hermes
+GenericName=Hermes Desktop
+Comment=Launch Hermes Desktop
+Exec=z
+Icon=zM
+Terminal=false
+Categories=Utility;
+StartupNotify=true
+StartupWMClass=Hermes
+render_desktop_entryrF
+applications_dir
+'list[str]'c
+Reindex the menu caches. Run each tool only when it exists.
+    Return the names of the tools that ran (for logging and tests).
+update-desktop-database)
+kbuildsycoca6
+kbuildsycoca5z
+--noincremental)
+shutil
+_run_quietr)
+append)
+update_db
+resolveds
+     r
+refresh_desktop_databasesrT
+stdout
+stderr
+timeoutr
+subprocess
+DEVNULL
+OSError
+SubprocessError
+returncode)
+results
+Optional[Path]c
+Write (or refresh) the Hermes desktop entry. Return its path.
+    Return ``None`` on non-Linux platforms or when the write fails. This
+    is a convenience, never a reason to fail a launch.
+hermesT)
+parents
+exist_okz
+utf-8)
+encodingi
+is_filer)
+parent
+read_text
+write_text
+chmodr_
+entry_pathrD
+icon_value
+contentss
+     r
+install_desktop_entryrr
+__doc__
+__future__r
+pathlibr
+typingr
+<module>rw

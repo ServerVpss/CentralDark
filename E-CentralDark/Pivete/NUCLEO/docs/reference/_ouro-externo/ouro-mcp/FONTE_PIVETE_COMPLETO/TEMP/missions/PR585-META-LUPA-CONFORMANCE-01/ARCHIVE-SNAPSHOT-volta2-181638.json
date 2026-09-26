@@ -1,0 +1,40 @@
+{
+  "mission_id": "PR585-META-LUPA-CONFORMANCE-01",
+  "volta": 2,
+  "timestamp_utc": "2026-08-01T18:14:18Z",
+  "status": "AGUARDANDO_RE_VEREDICTO_JUDGE_D1",
+  "base_head": "5d84b562120a5021421bd4bc287abc53b833586c",
+  "heads_match": "3/3 (worktree=remote=pr)",
+  "lupa_usage_id": "720eaff4504f9ebc6f6b6b141d276876ccba6ad5b5b6b202f478bf162f21ec4d",
+  "begin_preceded_first_write": false,
+  "method_violations": [
+    "WRITE_BEFORE_BEGIN",
+    "CONTAGEM_8_9",
+    "EDICAO_RESOLVED_T7_REVERTIDA"
+  ],
+  "gates": {
+    "MUTATION_GATE": "PASS 6/6 (2a volta; 1a: detector T156 emaranhado com T160, desemaranhado)",
+    "INSTRUMENT_ENCODING_TEST": "PASS (cp1252 provado cego, UTF-8 estrito passa)",
+    "SCOPE_GATE": "PASS 15/15",
+    "JUDGE_R1": "CORRIGIR (D1: enum reason vs obrigatoriedade; 6/6 fechados, 3/3 intocados)",
+    "D1_FIX": "aplicado — reason obrigatorio somente em BLOCKED",
+    "JUDGE_R2": "EM_EXECUCAO (mesmo agente, delta apenas)"
+  },
+  "evidencias": [
+    "BEFORE-status.txt",
+    "BEFORE-diff.patch",
+    "BEFORE-threads.json",
+    "BEFORE-heads.json",
+    "BEFORE-sha256.txt",
+    "MUTATION-PROOFS.json"
+  ],
+  "meta_lupa_evolution_defects_registrados": [
+    "ledger_check fail-open (pula registro sem record_hash; forja aceita com OK=1)",
+    "BEGIN retroativo nao rejeitado tecnicamente",
+    "escrita antes de BEGIN sem trava tecnica (provado nesta propria sessao)",
+    "FINAL manual fora da cadeia aceito",
+    "instrumentos cegos a encoding (cp1252) geram falso-FAIL/falso-PASS"
+  ],
+  "publicado": false,
+  "merge": false
+}

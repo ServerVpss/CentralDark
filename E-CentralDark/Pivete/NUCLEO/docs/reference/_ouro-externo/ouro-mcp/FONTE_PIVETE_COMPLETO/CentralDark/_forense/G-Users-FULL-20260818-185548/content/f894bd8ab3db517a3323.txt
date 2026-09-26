@@ -1,0 +1,11 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@mermaid-js\parser\dist\chunks\mermaid-parser.core\gitGraph-TEB2WS4Q.mjs
+
+import {
+  GitGraphModule,
+  createGitGraphServices
+} from "./chunk-CYSBUYHQ.mjs";
+import "./chunk-KEIR6QF5.mjs";
+export {
+  GitGraphModule,
+  createGitGraphServices
+};

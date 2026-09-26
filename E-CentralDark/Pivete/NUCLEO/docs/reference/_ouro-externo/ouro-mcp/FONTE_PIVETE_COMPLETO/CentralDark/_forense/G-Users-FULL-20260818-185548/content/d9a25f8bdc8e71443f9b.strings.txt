@@ -1,0 +1,170 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\agent\__pycache__\empty_response_guard.cpython-311.pyc
+
+Z d2d)
+Z!d3d*
+Deterministic-empty detection and cost-aware retry budgets (NS-503).
+When a provider returns an empty completion, the agent loop retries up to
+3 times and then walks the fallback chain. Every attempt re-sends the full
+conversation input 
+ at large context on paid routes this bills the user
+repeatedly for a turn that produces no text (the "charged ~$2.33 for an
+empty answer" incident class).
+Signaled refusals (``finish_reason="content_filter"``, Anthropic
+``stop_reason="refusal"``, Bedrock guardrails) are already terminal and
+never reach the empty-retry loop. This module addresses the *unsignaled*
+empties: the provider reports a successful completion with zero output
+tokens and a generic finish reason (portal-proxied refusals commonly look
+like this).
+Two independent guards, both failing OPEN to today's behaviour:
+1. **Deterministic-empty detection** 
+ two consecutive empty attempts,
+   both with usage present and ``output_tokens == 0``, from the same
+   (model, provider, finish_reason), are treated as deterministic: the
+   same prompt will keep producing the same empty. Remaining retries are
+   skipped and the loop proceeds straight to the fallback chain (a
+   different model may behave differently). Attempts with missing usage
+   or ``output_tokens > 0`` (model generated *something* 
+ think-block
+   stripping, whitespace, flaky decoding) never classify as deterministic
+   and keep the full retry budget.
+2. **Cost-aware retry budget** 
+ when the estimated input cost of a
+   single empty attempt exceeds the configured threshold (default
+   $0.25), the empty-retry budget for this streak drops from 3 to 1.
+   Unknown pricing, missing usage, or included/subscription routes
+   leave the budget untouched.
+Configured via the additive ``agent.empty_response_guard`` section in
+``config.yaml`` (resolved once at agent init by ``agent_init``)::
+    agent:
+      empty_response_guard:
+        enabled: true            # false = legacy fixed 3-retry behaviour
+        cost_threshold_usd: 0.25 # per-attempt cost that halves the budget
+Per project policy, no ``HERMES_*`` environment variables are involved 
+``.env`` is reserved for credentials; behavioural settings live in
+``config.yaml``.
+annotationsN)
+dataclass)
+Decimal)
+Optional
+_empty_attempt_history
+_empty_streak_cost_usd
+_empty_guard_enabled
+_empty_guard_cost_threshold_usd)
+frozenc
+EmptyAttemptz8One observed empty completion within the current streak.
+provider
+finish_reason
+usage_present
+zero_output
+return
+tuplec
+NC:\Users\danda\AppData\Local\hermes\hermes-agent\agent\empty_response_guard.py
+signaturez
+EmptyAttempt.signatureR
+__name__
+__module__
+__qualname__
+__doc__
+__annotations__
+propertyr 
+sectionr
+Tuple[bool, Decimal]c
+Resolve ``agent.empty_response_guard`` config into (enabled, threshold).
+    Tolerant of malformed input: anything that isn't a well-formed dict
+    (or well-formed values within it) falls back to the schema defaults.
+    Called once per agent at init; the resolved values are stashed on the
+    agent object so the hot loop never re-reads config.
+enabled)
+cost_threshold_usdNr
+z9empty-guard: invalid cost_threshold_usd %r, using default)
+isinstance
+DEFAULT_GUARD_ENABLED
+DEFAULT_COST_THRESHOLD_USD
+lowerr
+Exception
+logger
+debug)
+enabled_rawr,
+threshold
+threshold_raw
+candidates
+      r
+resolve_guard_settingsr@
+agentr
+Whether the guard is enabled for this agent (config-resolved).
+    Agents built before the config was threaded through (tests, embedded
+    callers) simply get the default: enabled.
+getattr
+_ENABLED_ATTRr4
+values
+guard_enabledrG
+_THRESHOLD_ATTRr2
+_cost_threshold_usdrJ
+List[EmptyAttempt]c
+_ATTEMPTS_ATTR
+setattr)
+attemptss
+_attemptsrP
+response
+Optional[Decimal]c
+z<Best-effort USD estimate for one attempt. None when unknown.
+usageNr
+estimate_usage_cost
+normalize_usager
+api_mode
+base_url
+api_key)
+z#empty-guard: cost estimation failedT
+exc_info
+amount_usd)
+agent.usage_pricingrU
+raw_usagerU
+canonical
+results
+       r
+_estimate_attempt_costrc
+zAReturn (usage_present, zero_output) for a response, failing open.rT
+z'empty-guard: usage normalization failedTr\
+output_tokens
+prompt_tokens
+reasoning_tokens)
+output
+reasonings
+       r
+_zero_outputrj
+Record one empty completion in the current streak.
+    Must be called before ``_empty_content_retries`` is incremented for
+    this attempt: a counter of 0 marks the start of a new streak and
+    clears prior history (this transparently follows every existing
+    counter-reset site).
+_empty_content_retriesr
+clearrN
+_STREAK_COST_ATTRr
+appendr
+priors
+        r
+record_empty_attemptrs
+True when the current streak looks deterministic.
+    Requires >= 2 consecutive attempts, ALL with usage present, zero
+    output tokens, and an identical (model, provider, finish_reason)
+    signature. Any attempt with missing usage or non-zero output keeps
+    this False (fail open 
+ transients deserve their retries).
+    FN
+firsts
+<genexpr>z&deterministic_empty.<locals>.<genexpr>
+deterministic_emptyr}
+Empty-retry budget for the current streak (3, or 1 when a single
+    attempt is estimated to cost more than the configured threshold).)
+DEFAULT_EMPTY_RETRY_BUDGETrc
+REDUCED_EMPTY_RETRY_BUDGET)
+empty_retry_budgetr
+zAAccumulated estimated cost of the current empty streak, if known.Nr
+streak_cost_usdr
+__future__r
+logging
+dataclassesr
+decimalr
+typingr
+getLoggerr"
+<module>r

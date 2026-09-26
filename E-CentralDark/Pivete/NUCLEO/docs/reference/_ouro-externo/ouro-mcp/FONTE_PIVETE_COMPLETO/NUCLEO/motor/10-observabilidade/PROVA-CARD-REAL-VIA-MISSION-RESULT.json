@@ -1,0 +1,10 @@
+{
+  "ts": "2026-07-18T22:25:00-03:00",
+  "origem": "Claude Code CLI, agent.mission_result.build_mission_result -> _telegram_card_chunks (adapter existente, nao redesenhado) -> hermes send -f",
+  "success": true,
+  "platform": "telegram",
+  "chat_id": "1901426549",
+  "message_id": "535",
+  "mirrored": true,
+  "observacao": "Primeira vez que um MissionResult (mission_result.py, secao 20-21) vira Card Hermes real entregue no Telegram. Renderizador _telegram_card_chunks usado sem alteracao. mission_panel (plugin) continua desligado -- essa chamada foi manual/direta, nao automatica."
+}

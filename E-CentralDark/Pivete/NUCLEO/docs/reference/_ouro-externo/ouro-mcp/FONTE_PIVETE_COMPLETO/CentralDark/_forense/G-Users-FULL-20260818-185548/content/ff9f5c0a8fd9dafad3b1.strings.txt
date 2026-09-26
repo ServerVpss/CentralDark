@@ -1,0 +1,711 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\lib\gnupg\gpg-check-pattern.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+@.rsrc
+@.reloc
+AWAVAUATUWVSH
+ATUWVSH
+ [^_]A\
+ [^_]A\
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AUATUWVSH
+[^_]A\A]
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+L$H9L$<
+L$L9L$@
+AWAVATUWVSH
+ [^_]A\A^A_
+AWAVATUWVSH
+ [^_]A\A^A_
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AUATUWVSH
+X[^_]A\A]
+X[^_]A\A]
+X[^_]A\A]
+ATUWVSH
+0[^_]A\
+0[^_]A\
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+AVAUATUWVSH
+[^_]A\A]A^
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AUATUWVSH
+[^_]A\A]
+[^_]A\A]
+[^_]A\A]
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+ATUWVSH
+ [^_]A\
+ [^_]A\
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+ATUWVSH
+ [^_]A\
+ [^_]A\
+ATUWVSH
+;@:>t'
+ [^_]A\
+ [^_]A\
+ATUWVSH
+[^_]A\
+AUATUWVSH
+([^_]A\A]
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AVWVSH
+8[^_A^
+8[^_A^
+AVATUWVSH
+8[^_]A\A^
+8[^_]A\A^
+u}LcL$<A
+ATUWVSH
+;S4}]Lc
+ [^_]A\
+ATUWVSH
+0[^_]A\
+0[^_]A\
+AVAUATUWVSH
+0[^_]A\A]A^
+0[^_]A\A]A^
+(LcI0A
+I A;@4}4A
+@ McH0
+;S4}BH
+tXHcC0
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+FPI9FH
+D$,;D$L
+FHI9FP
+FHI9FP
+AWAVAUATUWVSH
+d$@HcW0H
+X[^_]A\A]A^A_
+;G4}w1
+<>]u)O
+AVAUATUWVSH
+@[^_]A\A]A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+GPL-3.0-or-later
+gpg-check-pattern (@GnuPG@)
+Copyright (C) 2025 g10 Code GmbH
+Cygwin
+Please report bugs to <@EMAIL@>.
+Usage: gpg-check-pattern [options] patternfile (-h for help)
+Syntax: gpg-check-pattern [options] patternfile
+Check a passphrase given on stdin against the patternfile
+accepted
+rejected
+zero length input line - ignored
+matching regexp failed: %s
+gpg-check-pattern.c
+there is a bug at %s:%d:%s
+input line %lu matches pattern at line %u - %s
+input line %lu too long - rejected
+input read error at line %lu: %s - rejected
+no input line matches the pattern - %s
+gpg-check-pattern
+error reading '[stdin]': %s
+can't open '%s': %s
+can't stat '%s': %s
+error reading '%s': %s
+[case]
+[icase]
+[accept]
+[reject]
+arrayidx < arraysize
+invalid regexp at line %u: %s
+future warning: do no start a string with '[' but use a regexp (line %u)
+warning: pattern list ends with a singleton accept or reject tag
+match_p
+parse_pattern_file
+@Options:
+verbose
+homedir
+run only a syntax check on the patternfile
+input is expected to be null delimited
+gnupg2
+%s is too old (need %s, have %s)
+libgcrypt
+/proc/curproc/file
+GNUPG_BUILD_ROOT
+error reading symlink '%s': %s
+/bin/gpgconf
+trying fallback '%s'
+value too large
+/bin/gpgconf.ctl
+error opening '%s': %s
+error getting %s from gpgconf.ctl: %s
+.enable
+sysconfdir
+socketdir
+error reading '%s': %s
+invalid rootdir '%s' specified in gpgconf.ctl
+invalid sysconfdir '%s' specified in gpgconf.ctl
+invalid socketdir '%s' specified in gpgconf.ctl
+/usr/bin
+~/.gnupg
+GNUPGHOME
+can't create directory '%s': %s
+directory '%s' created
+common.conf
+wx,mode=-rw-r
+error creating '%s': %s
+use-keyboxd
+error writing to '%s': %s
+error closing '%s': %s
+%s/user/%u
+/etc/gnupg
+/usr/lib/gnupg
+/libexec
+/usr/share/gnupg
+/share/gnupg
+/usr/share/locale
+/share/locale
+S.gpg-agent
+S.dirmngr
+S.keyboxd
+homedir.c
+! gnupg_module_name_called
+! gnupg_build_directory
+/agent/gpg-agent
+/gpg-agent
+/scd/scdaemon
+/scdaemon
+/tpm2d/tpm2daemon
+/tpm2daemon
+/dirmngr/dirmngr
+/dirmngr
+/kbx/keyboxd
+/keyboxd
+/agent/gpg-protect-tool
+/gpg-protect-tool
+/dirmngr/dirmngr_ldap
+/dirmngr_ldap
+/tools/gpg-check-pattern
+/gpg-check-pattern
+/sm/gpgsm
+/gpgsm
+/g10/gpg
+/g10/gpgv
+/tools/gpg-connect-agent
+/gpg-connect-agent
+/tools/gpgconf
+/gpgconf
+/tools/gpg-card
+/gpg-card
+/tools/gpgtar
+/gpgtar
+there is a bug at %s:%d:%s
+/pinentry
+/pinentry-basic
+gnupg_module_name
+gnupg_set_builddir
+rootdir
+/var/run
+ybndrfg8ejkmcpqxot1uwisza345h769libgcrypt problem: %s
+out of core in secure memory while allocating %lu bytes
+out of core while allocating %lu bytes
+error allocating enough memory: %s
+AES128
+%s:%u: obsolete option "%s" - it has no effect
+WARNING: "%s%s" is an obsolete option - it has no effect
+[stdout]
+[stdin]
+enabled debug flags:
+available debug flags:
+ %5u %s
+unknown debug flag '%s' ignored
+enabled compatibility flags:
+available compatibility flags:
+unknown compatibility flag '%s' ignored
+map_static_macro_string failed: %s
+map_static_strings failed: %s
+https://bugs.gnupg.org
+GPG_AGENT
+gpg-agent
+SCDAEMON
+scdaemon
+TPM2DAEMON
+tpm2daemon
+DIRMNGR
+dirmngr
+GPGCONF
+gpgconf
+GPGTAR
+gpgtar
+stringhelp.c
+(char*)(result + n + 1) == buffer
+there is a bug at %s:%d:%s
+fatal: getcwd failed: %s
+fatal: too many args for xstrconcat
+fatal: out of memory
+do_strtokenize
+do_make_filename
+%3%2%0
+conversion from '%s' to '%s' not available
+iconv_open failed: %s
+\x%02x
+utf8conv.c
+there is a bug at %s:%d:%s
+conversion from '%s' to '%s' failed: %s
+iso-8859-1
+8859-1
+ANSI_X3.4-1968
+do_utf8_to_native
+error setting envvar %s to '%s': %s
+can't disable core dumps: %s
+/dev/null
+%s: WARNING: standard output reopened
+%s: WARNING: standard input reopened
+%s: WARNING: standard error reopened
+%s: fatal: unable to reopen standard input, output, or error
+gnupg_allow_set_foregound_window
+%s called with invalid pid %lu
+renaming '%s' to '%s' failed: %s
+XXXXXX
+user '%s' not found
+LOGNAME
+/usr/local/bin:/usr/bin:/bin
+GNUPGHOME
+error unsetting envvar %s: %s
+error setting supplementary groups for '%s': %s
+error switching to user '%s': %s
+could not getsockname(%d): %s
+file descriptor %d is not a unix-domain socket
+socket name not present for file descriptor %d
+socket name for file descriptor %d was truncated (passed %zu bytes, wanted %u)
+failed to allocate memory for name of fd %d: %s
+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+: signal 
+0123456789
+ caught ... exiting
+signal.c
+signals are already blocked
+signals are not blocked
+gnupg_init_signals
+<>mMwWdDsSAZ
+^$.[()|?{+*
+Bad error code
+success
+no match
+bad pattern
+null argument
+unknown error
+too big
+out of memory
+too many ()
+parentheses () not balanced
+braces {} not balanced
+invalid repetition count(s)
+extra characters
+*+ of empty atom
+nested count
+internal error
+count follows nothing
+invalid escape \ sequence
+corrupted program
+contains null char
+brackets [] not balanced
+:alpha:
+:alnum:
+:space:
+:blank:
+:upper:
+:lower:
+:digit:
+:xdigit:
+:cntrl:
+:graph:
+:print:
+:punct:
+,P, ,Q,!,R,",S,#,T,$,U,%,V,&,W,',X,(,Y,),Z,*,[,+,\,,,],-,^,.,_,/,a,`,e,:
+h,g,j,i,l,k,s,r,v,u,
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+gcry_calloc
+gcry_check_version
+gcry_cipher_algo_name
+gcry_control
+gcry_create_nonce
+gcry_free
+gcry_malloc
+gcry_malloc_secure
+gcry_md_hash_buffer
+gcry_realloc
+gcry_set_fatalerror_handler
+gcry_set_log_handler
+gcry_set_outofcore_handler
+gcry_strdup
+gcry_xcalloc
+gcry_xmalloc
+gcry_xrealloc
+gcry_xstrdup
+_gpgrt_get_std_stream
+_gpgrt_log_assert
+gpg_err_code_from_syserror
+gpg_err_code_to_errno
+gpg_err_init
+gpg_err_set_errno
+gpg_strerror
+gpgrt_access
+gpgrt_argparse
+gpgrt_chdir
+gpgrt_fclose
+gpgrt_ferror
+gpgrt_fflush
+gpgrt_fileno
+gpgrt_fopen
+gpgrt_fputs
+gpgrt_fread
+gpgrt_get_errorcount
+gpgrt_getcwd
+gpgrt_log
+gpgrt_log_bug
+gpgrt_log_error
+gpgrt_log_fatal
+gpgrt_log_get_prefix
+gpgrt_log_info
+gpgrt_log_printf
+gpgrt_log_set_prefix
+gpgrt_log_set_socket_dir_cb
+gpgrt_logv
+gpgrt_mkdir
+gpgrt_read_line
+gpgrt_reallocarray
+gpgrt_set_alloc_func
+gpgrt_set_binary
+gpgrt_set_fixed_string_mapper
+gpgrt_set_strusage
+gpgrt_set_usage_outfnc
+gpgrt_snprintf
+gpgrt_usage
+gpgrt_vasprintf
+gpgrt_write_sanitized
+__assert_func
+__cxa_atexit
+__errno
+__getreent
+__locale_ctype_ptr
+__main
+_dll_crt0
+_impure_ptr
+bsearch
+calloc
+closedir
+cygwin_internal
+dll_dllcrt0
+explicit_bzero
+fprintf
+fwrite
+getenv
+getpwnam
+getpwuid
+getrlimit
+getsockname
+getuid
+initgroups
+malloc
+memchr
+memcmp
+memcpy
+memmove
+memset
+msys_detach_dll
+nanosleep
+nl_langinfo
+opendir
+posix_memalign
+readdir
+readlink
+realloc
+remove
+rename
+setenv
+setrlimit
+setuid
+sigaction
+sigemptyset
+sigfillset
+sigprocmask
+snprintf
+sprintf
+stpcpy
+strcasecmp
+strchr
+strcmp
+strcpy
+strcspn
+strerror
+strlen
+strncasecmp
+strncmp
+strncpy
+strpbrk
+strrchr
+strtoul
+sys_siglist
+tmpfile
+toupper
+unsetenv
+libiconv
+libiconv_close
+libiconv_open
+libintl_bind_textdomain_codeset
+libintl_bindtextdomain
+libintl_gettext
+libintl_setlocale
+libintl_textdomain
+GetModuleHandleA
+GetModuleHandleW
+msys-gcrypt-20.dll
+msys-gpg-error-0.dll
+msys-2.0.dll
+msys-iconv-2.dll
+msys-intl-8.dll
+KERNEL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__imp_setuid
+__imp_explicit_bzero
+__imp_getuid
+__imp_abort
+__imp_gcry_xmalloc
+__lib64_libkernel32_a_iname
+__imp_getsockname
+__imp_gcry_malloc_secure
+_head_msys_intl_8_dll
+__imp__dll_crt0
+__imp_GetModuleHandleW
+__imp_calloc
+__imp_gpgrt_log_error
+__imp_gcry_malloc
+__imp_gcry_free
+__imp_gpgrt_log_bug
+__imp_sleep
+__imp_sigemptyset
+__imp_gpgrt_set_strusage
+__imp_gpgrt_fread
+__imp_nanosleep
+__imp_strpbrk
+__imp_getenv
+__imp_strncpy
+__imp_libiconv_close
+__imp_gpgrt_set_binary
+_head_msys_2_0_dll
+__imp_sigaction
+__imp_gpgrt_log
+__imp_gcry_calloc
+__imp_gpgrt_argparse
+__imp_strcmp
+__imp_gpg_strerror
+__imp_gpgrt_set_usage_outfnc
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_gpgrt_log_fatal
+__imp_strrchr
+__imp__gpgrt_log_assert
+__imp_free
+__imp_gpgrt_log_set_socket_dir_cb
+__imp_gcry_create_nonce
+__imp___errno
+__imp_gpgrt_fputs
+__imp_readdir
+__imp_sigprocmask
+__nm__impure_ptr
+__imp_gpgrt_reallocarray
+__imp_gpgrt_fileno
+__imp_gpgrt_get_errorcount
+__imp_memchr
+__imp_gpgrt_read_line
+__imp__gpgrt_get_std_stream
+__imp_atoi
+__imp_write
+__imp_dup
+__imp_gpgrt_vasprintf
+__imp_gpgrt_log_get_prefix
+__imp_gpgrt_log_info
+__imp_gcry_cipher_algo_name
+msys_gcrypt_20_dll_iname
+__imp_strcpy
+__imp_memset
+__imp_bsearch
+__IAT_end__
+__imp_gpgrt_usage
+__imp_memcpy
+__imp_memmove
+__imp_dll_dllcrt0
+msys_gpg_error_0_dll_iname
+__imp_fstat
+__imp_strerror
+__imp_gpgrt_set_alloc_func
+__imp_gpgrt_ferror
+__imp___locale_ctype_ptr
+__imp_fwrite
+__imp_strtoul
+__imp_putc
+_head_lib64_libkernel32_a
+__imp_libintl_setlocale
+__imp_msys_detach_dll
+__imp_gcry_strdup
+__imp_gcry_md_hash_buffer
+__imp_gcry_set_outofcore_handler
+__imp_getrlimit
+__imp_open
+__imp_gpgrt_mkdir
+__imp_chmod
+__imp_gcry_control
+__imp_rmdir
+__imp_gpgrt_write_sanitized
+__imp_gpgrt_getcwd
+__imp_nl_langinfo
+__imp_toupper
+__imp_snprintf
+__imp_getpwnam
+__imp_tmpfile
+__imp___getreent
+__imp_sigfillset
+__imp_gcry_check_version
+__imp_GetModuleHandleA
+msys_iconv_2_dll_iname
+__imp___main
+__imp_sys_siglist
+__imp_gcry_set_fatalerror_handler
+__imp_strlen
+__imp_malloc
+__imp_libintl_textdomain
+_head_msys_iconv_2_dll
+__imp_gpgrt_fflush
+__imp__impure_ptr
+__imp___assert_func
+__imp_stat
+__imp_realloc
+__imp_exit
+__imp_gpgrt_fopen
+__imp_gpg_err_code_to_errno
+__IAT_start__
+__imp_gpg_err_set_errno
+_head_msys_gpg_error_0_dll
+__imp_libintl_bindtextdomain
+__imp_gcry_xcalloc
+__imp_libintl_gettext
+__nm_sys_siglist
+__imp_gpgrt_fclose
+__imp___cxa_atexit
+__imp_stpcpy
+__imp_fcntl
+__imp_strcspn
+__imp_closedir
+__imp_fprintf
+__imp_gpgrt_log_printf
+__imp_setenv
+__imp_gpg_err_init
+__imp_remove
+__imp_rename
+msys_intl_8_dll_iname
+__imp_gpg_err_code_from_syserror
+__imp_gcry_xrealloc
+__imp_strncasecmp
+__imp_gcry_xstrdup
+__imp_getpwuid
+__imp_strcasecmp
+__imp_raise
+__imp_strncmp
+__imp_strchr
+__imp_gpgrt_access
+__imp_initgroups
+__imp_close
+__imp_gpgrt_chdir
+__imp_gcry_realloc
+__imp_setrlimit
+__imp_gpgrt_set_fixed_string_mapper
+__imp_gpgrt_log_set_prefix
+__imp_libiconv_open
+__imp_unsetenv
+__imp_gpgrt_snprintf
+__imp_sprintf
+__imp_readlink
+_head_msys_gcrypt_20_dll
+__imp_opendir
+__imp_libiconv
+__imp_libintl_bind_textdomain_codeset
+__imp_gcry_set_log_handler
+__imp_gpgrt_logv
+__imp_memcmp
+__imp_getc
+msys_2_0_dll_iname

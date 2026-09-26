@@ -1,0 +1,60 @@
+name: painel-vivo
+
+on:
+  workflow_dispatch:
+    inputs:
+      evento:
+        description: 'Título do acontecimento'
+        required: true
+      detalhe:
+        description: 'Detalhe em linguagem simples'
+        required: false
+        default: ''
+      area:
+        description: 'Área do projeto'
+        required: false
+        default: 'Projeto'
+      geral:
+        description: 'Progresso geral 0-100'
+        required: false
+        default: ''
+      marco:
+        description: 'Marco para atualizar/criar'
+        required: false
+        default: ''
+      marco_pct:
+        description: 'Progresso do marco 0-100'
+        required: false
+        default: ''
+      marco_status:
+        description: 'done, doing, next ou later'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar-painel:
+    runs-on: [self-hosted, Linux]
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Atualizar painel vivo
+        env:
+          PAINEL_EVENTO: ${{ inputs.evento }}
+          PAINEL_EVENTO_DETALHE: ${{ inputs.detalhe }}
+          PAINEL_EVENTO_AREA: ${{ inputs.area }}
+          PAINEL_GERAL: ${{ inputs.geral }}
+          PAINEL_MARCO: ${{ inputs.marco }}
+          PAINEL_MARCO_PCT: ${{ inputs.marco_pct }}
+          PAINEL_MARCO_STATUS: ${{ inputs.marco_status }}
+        run: node CentralDark/apps/projeto-dashboard/atualizar-painel-vivo.mjs
+
+      - name: Commit painel vivo
+        run: |
+          git config user.name 'CentralDark Bot'
+          git config user.email 'actions@github.com'
+          git add -- CentralDark/apps/projeto-dashboard/painel-data.json
+          git commit -m "chore(painel): atualizar mapa vivo" || exit 0
+          git push

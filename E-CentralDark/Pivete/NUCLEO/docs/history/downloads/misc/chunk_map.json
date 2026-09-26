@@ -1,0 +1,184 @@
+{
+  "0kgwx97w.yjrb.js": {
+    "size_kb": 433.6,
+    "libs": {
+      "react-dom": 3,
+      "react": 37,
+      "stripe": 5,
+      "next-app-router": 75,
+      "sentry": 9
+    },
+    "features": {
+      "auth": 54,
+      "releases": 25
+    },
+    "top_symbols": []
+  },
+  "17-r5~e9uf6xa.js": {
+    "size_kb": 209.2,
+    "libs": {
+      "supabase": 45
+    },
+    "features": {
+      "checkout": 39,
+      "auth": 307,
+      "dashboard": 1
+    },
+    "top_symbols": []
+  },
+  "0-ybf0_clt~hk.js": {
+    "size_kb": 138.0,
+    "libs": {
+      "next-app-router": 27
+    },
+    "features": {},
+    "top_symbols": []
+  },
+  "0w~b7kexmgdhn.js": {
+    "size_kb": 100.5,
+    "libs": {
+      "react": 7,
+      "zod": 2,
+      "lucide": 2
+    },
+    "features": {
+      "checkout": 38,
+      "auth": 20,
+      "dashboard": 11,
+      "hero": 30
+    },
+    "top_symbols": []
+  },
+  "0vwdfinz4vq~v.js": {
+    "size_kb": 50.9,
+    "libs": {
+      "stripe": 1,
+      "next-app-router": 50
+    },
+    "features": {},
+    "top_symbols": []
+  },
+  "152k2ttyoaood.js": {
+    "size_kb": 43.4,
+    "libs": {
+      "next-app-router": 39
+    },
+    "features": {},
+    "top_symbols": []
+  },
+  "0ox50v55czn97.js": {
+    "size_kb": 40.8,
+    "libs": {
+      "react": 3,
+      "next-app-router": 2,
+      "lucide": 17
+    },
+    "features": {
+      "checkout": 22,
+      "auth": 2,
+      "dashboard": 2,
+      "hero": 2
+    },
+    "top_symbols": []
+  },
+  "0b_sd_9lfds66.js": {
+    "size_kb": 36.0,
+    "libs": {
+      "next-app-router": 2,
+      "lucide": 18
+    },
+    "features": {
+      "checkout": 25,
+      "auth": 4,
+      "dashboard": 4,
+      "releases": 2
+    },
+    "top_symbols": []
+  },
+  "0mmsy~3klyrw7.js": {
+    "size_kb": 32.5,
+    "libs": {
+      "react": 1,
+      "next-app-router": 7
+    },
+    "features": {},
+    "top_symbols": []
+  },
+  "0ocr-4y1b4zj7.js": {
+    "size_kb": 20.3,
+    "libs": {
+      "react": 3,
+      "next-app-router": 8,
+      "next-image": 3,
+      "lucide": 3
+    },
+    "features": {},
+    "top_symbols": []
+  },
+  "0y_i~u-cow8xw.js": {
+    "size_kb": 18.0,
+    "libs": {
+      "next-app-router": 2
+    },
+    "features": {
+      "auth": 31,
+      "dashboard": 2
+    },
+    "top_symbols": []
+  },
+  "0np.x2gcr2bdv.js": {
+    "size_kb": 13.0,
+    "libs": {
+      "react": 2
+    },
+    "features": {},
+    "top_symbols": []
+  },
+  "turbopack-0h98090pak8a4.js": {
+    "size_kb": 10.4,
+    "libs": {
+      "react": 2
+    },
+    "features": {},
+    "top_symbols": []
+  },
+  "15vcnx3bn.nxn.js": {
+    "size_kb": 5.4,
+    "libs": {},
+    "features": {
+      "auth": 1,
+      "dashboard": 4
+    },
+    "top_symbols": []
+  },
+  "0t.vyw6ofd8u~.js": {
+    "size_kb": 5.3,
+    "libs": {
+      "next-app-router": 2
+    },
+    "features": {},
+    "top_symbols": []
+  },
+  "09hit0insv75_.js": {
+    "size_kb": 4.3,
+    "libs": {
+      "next-app-router": 2
+    },
+    "features": {},
+    "top_symbols": []
+  },
+  "0ahongyghlsfv.js": {
+    "size_kb": 1.5,
+    "libs": {},
+    "features": {},
+    "top_symbols": []
+  },
+  "email-decode.min.js": {
+    "size_kb": 1.2,
+    "libs": {
+      "react": 1
+    },
+    "features": {},
+    "top_symbols": []
+  }
+}

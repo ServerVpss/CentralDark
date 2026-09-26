@@ -1,0 +1,20 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\syntax\objcpp.vim
+
+" Vim syntax file
+" Language:
+    Objective C++
+" Maintainer:
+    Kazunobu Kuriyama <kazunobu.kuriyama@nifty.com>
+" Ex-Maintainer:    Anthony Hodsdon <ahodsdon@fastmail.fm>
+" Last Change:
+    2007 Oct 29
+" quit when a syntax file was already loaded
+if exists("b:current_syntax")
+   finish
+" Read in C++ and ObjC syntax files
+runtime! syntax/cpp.vim
+unlet b:current_syntax
+runtime! syntax/objc.vim
+syn keyword objCppNonStructure    class template namespace transparent contained
+syn keyword objCppNonStatement    new delete friend using transparent contained
+let b:current_syntax = "objcpp"

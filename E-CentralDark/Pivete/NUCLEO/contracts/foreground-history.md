@@ -1,0 +1,110 @@
+# CONTRATO - foreground-history.ts
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\.bun\install\cache\pi-subagents@0.57.0@@@1\src\runs\foreground\foreground-history.ts
+**SHA:** b3d81c30c241184c
+**Timestamp:** 2026-08-28T02:24:56.396917
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Comandos
+- function compactRun(run: ForegroundResumeRun): ForegroundResumeRun | undefined {
+- const run = value as Partial<ForegroundResumeRun>;
+
+### Contratos
+- ...(child.resumeContract ? { resumeContract: child.resumeContract } : {}),
+- const contract = value as NonNullable<ForegroundResumeChild["resumeContract"]>;
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+import * as fs from "node:fs";
+import * as path from "node:path";
+import type { ForegroundResumeChild, ForegroundResumeRun, SubagentState } from "../../shared/types.ts";
+import { DIRS } from "../../shared/types.ts";
+import { writePrivateAtomicJson } from "../../shared/atomic-json.ts";
+import { utf8Tail } from "../../shared/utf8.ts";
+import { validateAcceptanceInput } from "../shared/acceptance.ts";
+
+export const MAX_REMEMBERED_FOREGROUND_RUNS = 50;
+const HISTORY_VERSION = 1;
+const MAX_INLINE_OUTPUT_BYTES = 64 * 1024;
+const MAX_RESUME_CONTRACT_BYTES = 64 * 1024;
+
+interface ForegroundHistoryIndex {
+	version: 1;
+	runs: ForegroundResumeRun[];
+}
+
+function historyPath(resultsDir: string): string {
+	return path.join(resultsDir, "foreground-history.json");
+}
+
+function boundedTail(value: string): string {
+	return utf8Tail(value, MAX_INLINE_OUTPUT_BYTES).text;
+}
+
+function compactChild(child: ForegroundResumeChild): ForegroundResumeChild {
+	const outputPath = child.artifactPaths?.outputPath ?? child.savedOutputPath;
+	return {
+		agent: child.agent,
+		index: child.index,
+		...(child.context ? { context: child.context } : {}),
+		...(child.sessionFile ? { sessionFile: child.sessionFile } : {}),
+		...(child.model ? { model: child.model } : {}),
+		...(child.thinking ? { thinking: child.thinking } : {}),
+		status: child.status,
+		...(child.activityState ? { activityState: child.activityState } : {}),
+		...(child.lastActivityAt !== undefined ? { lastActivityAt: child.lastActivityAt } : {}),
+		...(child.currentTool ? { currentTool: child.currentTool } : {}),
+		...(child.currentToolStartedAt !== undefined ? { currentToolStartedAt: child.currentToolStartedAt } : {}),
+		...(child.currentPath ? { currentPath: child.currentPath } : {}),
+		...(child.turnCount !== undefined ? { turnCount: child.turnCount } : {}),
+		...(child.tokens !== undefined ? { tokens: child.tokens } : {}),
+		...(child.toolCount !== undefined ? { toolCount: child.toolCount } : {}),
+		...(child.exitCode !== undefined ? { exitCode: child.exitCode } : {}),
+		...(child.error ? { error: child.error } : {}),
+		...(!outputPath && child.finalOutput ? { finalOutput: boundedTail(child.finalOutput) } : {}),
+		...(child.outputState ? { outputState: child.outputState } : {}),
+		...(child.outputMode ? { outputMode: child.outputMode } : {}),
+		...(child.savedOutputPath ? { savedOutputPath: child.savedOutputPath } : {}),
+		...(child.outputSaveError ? { outputSaveError: child.outputSaveError } : {}),
+		...(child.artifactPaths ? { artifactPaths: child.artifactPaths } : {}),
+		...(child.transcriptPath ? { transcriptPath: child.transcriptPath } : {}),
+		...(child.transcriptError ? { transcriptError: child.transcriptError } : {}),
+		...(child.acceptance ? { acceptance: child.acceptance } : {}),
+		...(child.resumeContract ? { resumeContract: child.resumeContract } : {}),
+		...(child.launchContractDigest ? { launchContractDigest: child.launchContractDigest } : {}),
+		...(child.extensionBindings ? { extensionBindings: child.extensionBindings } : {}),
+		...(child.capabilityCeiling ? { capabilityCeiling: child.capabilityCeiling } : {}),
+		...(child.updatedAt !== undefined ? { updatedAt: child.updatedAt } : {}),
+	};
+}
+
+function isRestorableForegroundStatus(status: unknown): status is ForegroundResumeChild["status"] {
+	return status === "completed" || status === "failed" || status === "paused" || status === "stopped";
+}
+
+function isRestorableResumeContract(value: unknown): boolean {
+	if (value === undefined) return true;
+	if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+	try {
+		if (Buffer.byteLength(JSON.stringify(value), "utf8") > MAX_RESUME_CONTRACT_BYTES) return false;
+	} catch {
+		return false;
+	}
+	const contract = value as NonNullable<ForegroundResumeChild["resumeContract"]>;
+	if (Object.keys(contract).some((key) => !["outputSchema", "agentContract", "acceptance", "output", "outputMode"].includes(key))) return false;
+	if (contract.outputSchema !== undefined && (!contract.outputSchema || typeof contract.outputSchema !== "object" || Array.isArray(contract.outputSchema))) return false;
+	if (contract.agentContract !== undefined && (!contract.agentContract || typeof contract.agentContract !== "object" || Array.isArray(contract.agentContract) || contract.agentContract.version !== 1)) return false;
+	if (validateAcceptanceInput(contract.acceptance).length > 0) return false;
+	if (contract.output !== undefined && typeof contract.output !== "string" && typeof contract.output !== "boolean") return false;
+	return contract.outputMode === undefined || contract.outputMode === "inline" || contract.outputMode === "file-only";
+}
+
+function compactRun(run: ForegroundResumeRun): ForegroundResumeRun | undefined {
+	if (!run.sessionId) return undefined;
+	if (run.children.length === 0 || !run.children.every((child) => isRestorableForegroundStatus(child.status) && isRestorableResumeContract(child.resumeContract))) return undefined;
+	return {
+		runId: run.runId,
+		mode: run.mode,
+	
+```

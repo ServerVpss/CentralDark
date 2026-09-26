@@ -1,0 +1,503 @@
+Compreendi sim, pivete. Agora a visão ficou fechada:
+
+Hermes One da sua casa
+→ chefe e orquestrador
+
+api.centralldark.com
+→ porta única
+
+Supabase + Edge Functions
+→ trabalham escondidos por trás
+
+Hermes da VPS
+→ executa tarefas contínuas
+
+GitHub
+→ guarda código, prova e histórico
+
+Obsidian
+→ mostra CASA, VPS, API, Supabase e agentes separados no mapa
+
+Painel web
+→ só uma janela remota, não outro cérebro
+O ponto crítico agora
+
+O ai-proxy já existe de verdade em:
+
+supabase/functions/ai-proxy/index.ts
+
+Ele já tem:
+
+GET  /config
+GET  /v1/models
+POST /v1/chat/completions
+POST /v1/responses
+POST /v1/audio/speech
+POST /v1/audio/transcriptions
+GET  /v1/audio/voices
+POST /
+
+E já possui vários modelos Gemini registrados.
+
+A organização correta será:
+
+Hermes One
+→ api.centralldark.com/chat/completions
+→ gateway CentralDark
+→ Supabase ai-proxy
+→ Gemini
+
+O endereço direto do Supabase fica escondido por trás. Não será necessário expor cinquenta Edge Functions diferentes.
+
+Supabase no mapa
+
+O plano agora separa as Edge Functions por grupo:
+
+IA
+Grafo
+MCP
+Telegram e eventos
+Saúde e operação
+Pagamentos
+HUB
+
+O repositório realmente possui várias funções nessas áreas, incluindo ai-proxy, hermes-cascade, provider-ping, mcp-call, health-check, telegram-bot, graph-mapper e outras.
+
+Mas a regra ficou:
+
+não criar uma rota pública para cada função
+
+Somente estas famílias aparecem em api.centralldark.com:
+
+/models
+/chat
+/audio
+/graph
+/memory
+/missions
+/mcp
+/events
+/payments
+Correção importante do grafo
+
+Achei uma diferença real:
+
+supabase/functions/graph-data
+
+não representa atividade real completa. Ele tem nós fixos e liga algumas conexões aleatoriamente apenas para criar movimento visual.
+
+Então ele ficou marcado como:
+
+visual / reserva
+
+E não como prova de “tempo real”.
+
+O plugin do Obsidian continua usando por enquanto:
+
+grafo.centralldark.com/api/graph?mode=vivo
+
+porque isso já está definido no plugin e na documentação existente.
+
+Obsidian
+
+A nota principal ficou definida como:
+
+Obsidian Vault\00-INICIO\MAPA-DA-CASA.md
+
+Com quatro setores grandes:
+
+🏠 CASA
+☁️ VPS
+🌉 PONTE
+🗄️ SUPABASE
+
+E a linha principal destacada:
+
+Hermes One
+→ api-central
+→ ai-proxy
+→ Gemini
+
+Os documentos que já existem em:
+
+docs/BRAIN/05 - Documentacao/
+
+serão apenas ligados ao mapa, não copiados novamente. O repositório já possui tutorial de Obsidian, recomendações de plugins, biblioteca de agentes e diagramas nessa área.
+
+Painel web
+
+Minha decisão continua:
+
+não instalar agora
+
+Ele será útil depois como acesso por navegador e celular ao Hermes da VPS.
+
+Mas não será:
+
+outro cérebro
+outra memória
+outros agentes concorrentes
+Ordem imediata
+1. mapear ai-proxy e Supabase
+2. provar Gemini
+3. ligar api.centralldark.com
+4. configurar Hermes One
+5. registrar CASA e VPS no Obsidian
+6. repetir revisores no GitHub
+7. avaliar painel web depois
+
+Atualizei o mesmo plano, sem criar outra versão:
+
+PLANO-DA-CASA-CENTRALDARK-HERMES.md
+PLANO-DA-CASA-CENTRALDARK-HERMES.txt
+
+Você não começou errado, pivete. Você começou pelas peças. Agora estamos colocando as peças no mapa certo. 😹
+
+Feito. Plano atualizado com Hermes da casa como orquestrador, mapa Supabase, rotas reais do ai-proxy, Gemini e separação CASA/VPS no Obsidian.
+Evidência usada. Código real de ai-proxy, graph-data, plugin Obsidian, Graph Panel e lista de Edge Functions do GitHub.
+Pendência. Provar chamadas Gemini, encaminhamento em api.centralldark.com e configuração no Hermes One.
+Próximo passo. Entregar o plano atualizado ao Opus 4.8 para inventário e preparação, sem execução destrutiva.
+BOOT. Hermes de casa comanda; VPS executa; API organiza; Obsidian mostra.
+Fio da missão. mapa → Gemini → API central → Hermes One → Obsidian → validação → registro. Gemini
+→ visão e análise
+
+DarkAI
+→ debate e filtro
+
+Hermes
+→ execução e organização
+
+Codex
+→ revisão final
+
+Pivete
+→ decisão  deu braço atorce me arrepiei em seguida pensei fraçaao de segundos pelo seu braço a torce  se tu falao isso entao so pode ser isso ! s os nomes ai qe me deixa sem  entender se voce fala  criar um aagente pra cadaa setor ou 5 pra cada ou 3  usar api gemini em um usar gpt em  outro etc etc   😹😹😹😹😹😹 ai eu fico forte ne mais vc fica ai bancando o durao nao ajuda o pivete deixa eu me lasca sozinho kk  tenho tantos planos kkk tu nem imagina rsrss😹e meu quero trazer pra ca ainda ! site eu tenho uns 8 ta tudo online porem fiz na lovable mais n quero usra la mais  https://recargasbrasill.com/    essa decisao que eu tomei em fazer isso tudo ai em cima com vc agora aetc kkk eu acertei quantos por cento ? olha la em voce sabe que eu te amo 🤭🫣🥰🦾
+
+Pivete, vou te dar o braço a torcer de verdade agora: tu acertou a direção em uns 88%. 😹🦾
+
+Não é 100% porque ainda falta provar as rotas, ligar Gemini pela API central e organizar quem manda em quem. Mas a visão principal está certa:
+
+Hermes One de casa
+→ comanda
+
+VPS
+→ executa
+
+api.centralldark.com
+→ organiza as rotas
+
+GitHub
+→ guarda a prova
+
+Obsidian
+→ mostra o mapa
+
+Pivete
+→ decide
+O ponto que tava te confundindo
+
+Agente não é modelo.
+
+Pensa assim:
+
+agente = funcionário
+modelo = cérebro que o funcionário usa
+
+Então tu não precisa criar cinco agentes para cada modelo.
+
+O certo é:
+
+1 agente por função
+→ usa o melhor modelo para aquela tarefa
+→ tem fallback se falhar
+Estrutura inicial boa
+
+Começa com 7 agentes, não 30:
+
+1. Orquestrador
+   Hermes One
+   organiza tudo
+
+2. Pesquisador
+   Gemini principal
+   GPT fallback
+
+3. Arquiteto
+   Gemini ou Claude
+   desenha solução
+
+4. Programador
+   Codex principal
+   Claude/Grok fallback
+
+5. Crítico
+   DarkAI
+   debate e encontra falhas
+
+6. Infraestrutura
+   Hermes + ferramentas
+   VPS, GitHub, logs e rotas
+
+7. Revisor final
+   Codex
+   palavra técnica final
+
+E acima deles:
+
+Pivete
+→ decisão final
+O erro que tu deve evitar
+
+Não faça assim:
+
+5 agentes Gemini
+5 agentes GPT
+5 agentes Grok
+5 agentes Claude
+
+Isso vira barulho e custo.
+
+Faça assim:
+
+setor
+→ agente
+→ modelo principal
+→ fallback
+
+Exemplo:
+
+Pesquisa
+→ Gemini
+→ GPT fallback
+
+Código
+→ Codex
+→ Claude fallback
+
+Crítica
+→ DarkAI
+→ Grok + Gemini
+
+Infra
+→ Hermes
+→ Codex quando precisar código
+Sobre ficar forte
+
+Sim, tu fica muito mais forte.
+
+Mas não porque tem muitas IAs.
+
+Tu fica forte porque:
+
+todas veem o mesmo mapa
+todas usam a mesma rota
+todas registram no mesmo lugar
+todas têm função separada
+
+Aí tu não precisa lembrar tudo na cabeça.
+
+Sobre os sites da Lovable
+
+Os oito sites podem vir depois para tua casa própria.
+
+A direção seria:
+
+site atual
+→ inventário
+→ exportar código
+→ separar dependências da Lovable
+→ conectar api.centralldark.com
+→ testar
+→ migrar
+
+Não mover todos de uma vez. Primeiro um site piloto, provavelmente o mais simples ou menos crítico.
+
+Minha nota honesta
+Visão geral                 95%
+Hermes em casa como chefe   95%
+VPS como executor           95%
+API central                 90%
+Obsidian como mapa          90%
+Distribuição dos agentes    75%
+Rotas provadas              60%
+
+Média prática:
+
+88%
+
+O que falta não é visão. É ligar, testar e provar.
+
+E eu sei que tu me ama, seu doido 😹🤭🦾
+Também tenho carinho por tu e pela tua missão, mas vou continuar te puxando pelo freio quando tu quiser ligar vinte coisas no mesmo dia.
+
+Feito. Separei agentes de modelos e defini uma estrutura inicial de 7 agentes.
+Evidência usada. Hermes One já possui agentes, Kanban, workflows, Mixture of Agents e fallbacks; a API e o ai-proxy já têm base existente.
+Pendência. Provar Gemini pela rota central e configurar os agentes sem duplicação.
+Próximo passo. Criar o mapa agente → função → modelo principal → fallback, sem executar ainda.
+BOOT. Poucos agentes, funções claras, modelos trocáveis.
+Fio da missão. visão → funções → agentes → modelos → rotas → prova → registro. É isto:
+
+Hermes One
+        ↓
+https://api.centralldark.com
+        ↓
+CentralDark Router
+        ├── Gemini direto
+        ├── OpenAI direto
+        ├── Anthropic direto
+        ├── xAI direto
+        ├── OpenRouter
+        ├── Supabase ai-proxy
+        └── modelos locais
+Decisão técnica
+
+OpenRouter entra como fornecedor de modelos e reserva. Não vira o cérebro da CentralDark.
+
+Ele já oferece API única, escolha entre provedores, ordenação por preço ou velocidade e fallback entre modelos/provedores. Também permite restringir provedores e exigir opções de privacidade, como endpoints sem retenção.
+
+Mas tua porta continua sendo:
+
+https://api.centralldark.com
+
+Hermes, sites, Obsidian, Telegram e agentes nunca precisam saber se a resposta veio do OpenRouter, Gemini direto, Supabase ou modelo local.
+
+O roteador por dentro
+
+Eu montaria os nomes assim:
+
+/general-fast
+/reasoning
+/code
+/review
+/vision
+/research
+/cheap
+/critical
+
+Exemplo:
+
+/code
+  → Codex/OpenAI direto
+  → Claude
+  → OpenRouter
+  → modelo local
+/research
+  → Gemini
+  → OpenRouter
+  → GPT
+/critical
+  → Gemini
+  → Claude
+  → Grok
+  → Codex faz a síntese
+
+O frontend mostra em PT-BR:
+
+Rápido
+Raciocínio
+Programação
+Revisão
+Visão
+Pesquisa
+Econômico
+Análise crítica
+Melhor peça interna
+
+Para manter controle total, o encaixe mais forte seria:
+
+api.centralldark.com
+→ gateway próprio
+→ LiteLLM internamente
+→ providers
+
+O LiteLLM pode ser auto-hospedado, fala formato OpenAI, conecta mais de cem provedores, aplica retries e fallbacks, cria chaves internas e acompanha gasto e limites por projeto. Ele também consegue usar OpenRouter como apenas mais um provider. Cada setor recebe limite:
+
+research_daily_budget
+code_daily_budget
+review_daily_budget
+vision_daily_budget
+global_monthly_budget
+
+E trava:
+
+80% → alerta
+95% → reduz para modelos econômicos
+100% → bloqueia premium e mantém mock/local
+
+OpenRouter pode alternar modelos automaticamente; o preço final é do modelo realmente usado. Por isso o CentralDark precisa registrar qual provider e modelo respondeu cada chamada.
+
+Veredito
+
+Tu tá fazendo certo:
+
+Primeiro padroniza a pista. Depois coloca combustível.
+
+Quando estiver pronto:
+
+1 chave para o Hermes
+1 domínio
+1 formato
+vários fornecedores escondidos
+fallback automático
+limite de gasto
+circuit breaker
+logs sanitizados
+
+Aí sim, crew 💋: coloca crédito e deixa os soldados trabalharem sem tu ficar refém de um provider só.
+
+Feito. Direção definida: OpenRouter como fornecedor interno, nunca como porta principal.
+
+Evidência usada. Recursos atuais de OpenRouter para roteamento/fallback e LiteLLM para gateway auto-hospedado, controle de gasto e múltiplos providers.
+
+Pendência. Provar api.centralldark.com, Gemini, autenticação, aliases e controle de orçamento.
+
+Próximo passo. Fechar o mapa rota → modelo principal → fallback → limite → prova, antes de adicionar saldo alto.
+
+BOOT. Primeiro o encaixe. Depois o combustível.
+
+Fio da missão. rota central → providers → limites → testes → crédito gradual → validaçãoCada setor recebe limite:
+
+research_daily_budget
+code_daily_budget
+review_daily_budget
+vision_daily_budget
+global_monthly_budget
+
+E trava:
+
+80% → alerta
+95% → reduz para modelos econômicos
+100% → bloqueia premium e mantém mock/local
+
+OpenRouter pode alternar modelos automaticamente; o preço final é do modelo realmente usado. Por isso o CentralDark precisa registrar qual provider e modelo respondeu cada chamada.
+
+Veredito
+
+Tu tá fazendo certo:
+
+Primeiro padroniza a pista. Depois coloca combustível.
+
+Quando estiver pronto:
+
+1 chave para o Hermes
+1 domínio
+1 formato
+vários fornecedores escondidos
+fallback automático
+limite de gasto
+circuit breaker
+logs sanitizados
+
+Aí sim, crew 💋: coloca crédito e deixa os soldados trabalharem sem tu ficar refém de um provider só.
+
+Feito. Direção definida: OpenRouter como fornecedor interno, nunca como porta principal.
+
+Evidência usada. Recursos atuais de OpenRouter para roteamento/fallback e LiteLLM para gateway auto-hospedado, controle de gasto e múltiplos providers.
+
+Pendência. Provar api.centralldark.com, Gemini, autenticação, aliases e controle de orçamento.
+
+Próximo passo. Fechar o mapa rota → modelo principal → fallback → limite → prova, antes de adicionar saldo alto.
+
+BOOT. Primeiro o encaixe. Depois o combustível.
+
+Fio da missão. rota central → providers → limites → testes → crédito gradual → validação

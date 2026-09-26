@@ -1,0 +1,16 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@react-dnd\asap\dist\types\AsapQueue.d.ts
+
+import type { Task } from './types.js';
+export declare class AsapQueue {
+    private queue;
+    private pendingErrors;
+    private flushing;
+    private requestFlush;
+    private requestErrorThrow;
+    private index;
+    private capacity;
+    constructor();
+    enqueueTask(task: Task): void;
+    private flush;
+    registerPendingError: (err: any) => void;
+}

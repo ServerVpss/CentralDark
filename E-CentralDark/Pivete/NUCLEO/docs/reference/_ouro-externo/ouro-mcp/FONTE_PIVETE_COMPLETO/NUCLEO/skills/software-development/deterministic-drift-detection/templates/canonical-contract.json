@@ -1,0 +1,137 @@
+{
+  "metadata": {
+    "name": "canonical-contract",
+    "version": "1.0.0",
+    "created_at": "{{TIMESTAMP}}",
+    "created_by": "{{WRITER_IDENTITY}}",
+    "profile": "{{PROFILE_NAME}}",
+    "description": "Contrato determinístico para {{SURFACE_NAME}}"
+  },
+  "canonical": {
+    "SURFACE_URL": {
+      "value": "{{DYNAMIC_URL}}",
+      "how_to_measure": "Probe runtime (ports, health endpoints, CLI)",
+      "source": "runtime_discovery",
+      "risk_if_changed": "Loss of visibility, broken automation",
+      "action_allowed": "Read, discover dynamically",
+      "action_prohibited": "Hardcode port or URL"
+    },
+    "CLI_VERSION": {
+      "value": "{{CLI_VERSION}}",
+      "how_to_measure": "Run `{{CLI_CMD}} --version` and parse first line only",
+      "source": "cli_output",
+      "risk_if_changed": "Compatibility break with automation",
+      "action_allowed": "Verify at runtime",
+      "action_prohibited": "Assume fixed version"
+    },
+    "CLI_COMMANDS": {
+      "value": {{CLI_COMMANDS_JSON}},
+      "how_to_measure": "Run `{{CLI_CMD}} SUBCOMMAND --help` and parse subcommands",
+      "source": "cli_help",
+      "risk_if_changed": "Command removed/changed breaks automation",
+      "action_allowed": "Use listed commands",
+      "action_prohibited": "Invent flags not in help"
+    },
+    "RESOURCE_NAME": {
+      "value": "{{RESOURCE_NAME}}",
+      "how_to_measure": "Query current resource via CLI/API",
+      "source": "cli_or_api",
+      "risk_if_changed": "Resource switched without notice",
+      "action_allowed": "Read current resource",
+      "action_prohibited": "Create parallel resource"
+    },
+    "VALID_STATES": {
+      "value": {{VALID_STATES_JSON}},
+      "how_to_measure": "Read from upstream constants",
+      "source": "upstream_constants",
+      "risk_if_changed": "Invalid state breaks processor",
+      "action_allowed": "Use only valid states",
+      "action_prohibited": "Invent custom states"
+    },
+    "VALID_TYPES": {
+      "value": {{VALID_TYPES_JSON}},
+      "how_to_measure": "Read from upstream constants",
+      "source": "upstream_constants",
+      "risk_if_changed": "Type rejected by upstream",
+      "action_allowed": "Use only valid types",
+      "action_prohibited": "Invent custom types"
+    },
+    "ITEM_FIELDS": {
+      "value": {{ITEM_FIELDS_JSON}},
+      "how_to_measure": "Schema introspection (PRAGMA, DESCRIBE, etc.)",
+      "source": "schema",
+      "risk_if_changed": "Schema migration breaks readers",
+      "action_allowed": "Read fields dynamically",
+      "action_prohibited": "Assume fixed schema"
+    },
+    "ITEM_ACTIONS": {
+      "value": {{ITEM_ACTIONS_JSON}},
+      "how_to_measure": "CLI help subcommands that modify items",
+      "source": "cli_help",
+      "risk_if_changed": "Action removed breaks automation",
+      "action_allowed": "Execute via CLI with authorization",
+      "action_prohibited": "Direct storage writes"
+    },
+    "ERROR_CLASSES": {
+      "value": {{ERROR_CLASSES_JSON}},
+      "how_to_measure": "Map observed errors to canonical classes via detector",
+      "source": "upstream_constants + runtime_observation",
+      "risk_if_changed": "Misclassification blocks correct recovery",
+      "action_allowed": "Classify deterministically",
+      "action_prohibited": "Guess class from title alone"
+    },
+    "STATE_TRANSITIONS": {
+      "value": {{STATE_TRANSITIONS_JSON}},
+      "how_to_measure": "Observe valid transitions in upstream + runtime",
+      "source": "upstream_constants + observation",
+      "risk_if_changed": "Invalid transition breaks processor",
+      "action_allowed": "Follow proven transitions",
+      "action_prohibited": "Force invalid transitions"
+    },
+    "PROCESSOR_SIGNALS": {
+      "value": {{PROCESSOR_SIGNALS_JSON}},
+      "how_to_measure": "CLI help + daemon code + config",
+      "source": "processor_implementation",
+      "risk_if_changed": "Processor behavior changes silently",
+      "action_allowed": "Monitor dispatch, respect limits",
+      "action_prohibited": "Disable circuit breaker"
+    },
+    "WORKER_SIGNALS": {
+      "value": {{WORKER_SIGNALS_JSON}},
+      "how_to_measure": "Toolset definition + worker logs",
+      "source": "worker_toolset",
+      "risk_if_changed": "Worker cannot signal state",
+      "action_allowed": "Monitor events",
+      "action_prohibited": "Assume worker healthy without heartbeat"
+    },
+    "CIRCUIT_BREAKER_SIGNALS": {
+      "value": {{CIRCUIT_BREAKER_SIGNALS_JSON}},
+      "how_to_measure": "Upstream constants + item outcomes",
+      "source": "upstream_constants",
+      "risk_if_changed": "Infinite retry loops",
+      "action_allowed": "Respect limits",
+      "action_prohibited": "Override limits without evidence"
+    },
+    "WRITER_IDENTITY": {
+      "value": "{{WRITER_IDENTITY}}",
+      "how_to_measure": "Config + single writer rule",
+      "source": "config + policy",
+      "risk_if_changed": "Concurrent writes corrupt state",
+      "action_allowed": "Single writer per scope",
+      "action_prohibited": "Concurrent modifications"
+    }
+  },
+  "runtime_snapshot": {
+    "timestamp": "{{TIMESTAMP}}",
+    "items": {},
+    "schema_hash": "{{DATABASE_SCHEMA_HASH}}",
+    "adapter_hash": "{{ADAPTER_CODE_HASH}}",
+    "surface_url": "{{DYNAMIC_URL}}",
+    "cli_version": "{{CLI_VERSION}}",
+    "resource": "{{RESOURCE_NAME}}",
+    "counts": {
+      "total": 0,
+      "by_state": {}
+    }
+  }
+}

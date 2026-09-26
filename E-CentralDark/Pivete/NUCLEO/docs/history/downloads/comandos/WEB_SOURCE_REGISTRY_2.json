@@ -1,0 +1,60 @@
+{
+  "retrieved_at_utc": "2026-08-26T17:32:39.151994+00:00",
+  "sources": [
+    {
+      "name": "NIST SSDF SP 800-218",
+      "url": "https://csrc.nist.gov/pubs/sp/800/218/final",
+      "supports": "secure development practices; root-cause remediation to prevent recurrence"
+    },
+    {
+      "name": "NIST Zero Trust Architecture SP 800-207",
+      "url": "https://csrc.nist.gov/pubs/sp/800/207/final",
+      "supports": "no implicit trust based solely on location/ownership; resource-focused authorization"
+    },
+    {
+      "name": "NIST AI RMF Core",
+      "url": "https://airc.nist.gov/airmf-resources/airmf/5-sec-core/",
+      "supports": "Govern, Map, Measure, Manage; continuous risk management and independent review"
+    },
+    {
+      "name": "SLSA v1.2 Build Requirements",
+      "url": "https://slsa.dev/spec/v1.2/build-requirements",
+      "supports": "provenance, authenticity, isolation, hosted/hardened builds"
+    },
+    {
+      "name": "SLSA v1.2 Source Requirements",
+      "url": "https://slsa.dev/spec/v1.2/source-requirements",
+      "supports": "source history/provenance, technical controls, source levels"
+    },
+    {
+      "name": "OWASP Top 10 for Agentic Applications 2026",
+      "url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/",
+      "supports": "agentic risk framework"
+    },
+    {
+      "name": "OWASP Agentic Top 10 release",
+      "url": "https://genai.owasp.org/2025/12/09/owasp-top-10-for-agentic-applications-the-benchmark-for-agentic-security-in-the-age-of-autonomous-ai/",
+      "supports": "goal hijack, tool misuse, identity/privilege abuse, supply chain, unexpected code execution"
+    },
+    {
+      "name": "OWASP SAMM Model",
+      "url": "https://owaspsamm.org/model/",
+      "supports": "Governance, Design, Implementation, Verification, Operations"
+    },
+    {
+      "name": "Google SRE Canarying Releases",
+      "url": "https://sre.google/workbook/canarying-releases/",
+      "supports": "canary release safety and error-budget-aware rollout"
+    },
+    {
+      "name": "GitHub Rulesets",
+      "url": "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets",
+      "supports": "required PRs/status checks/signed commits/code scanning/block force pushes"
+    },
+    {
+      "name": "IETF Internet-Draft — Intent Provenance Protocol",
+      "url": "https://www.ietf.org/archive/id/draft-haberkamp-ipp-00.html",
+      "supports": "cryptographically verified human intent, bounded delegation, provenance chain; work in progress"
+    }
+  ]
+}

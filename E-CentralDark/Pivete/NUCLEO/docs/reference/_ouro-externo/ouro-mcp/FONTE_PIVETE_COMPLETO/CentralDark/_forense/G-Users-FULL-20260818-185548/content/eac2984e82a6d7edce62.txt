@@ -1,0 +1,8 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\apps\desktop\src\themes\index.ts
+
+export { ingestBackendSkin } from './backend-sync'
+export { ThemeProvider, useTheme } from './context'
+export { BUILTIN_THEME_LIST, BUILTIN_THEMES, DEFAULT_SKIN_NAME } from './presets'
+export { skinToDesktopTheme } from './skin'
+export type { DesktopTheme, DesktopThemeColors, DesktopThemeTypography } from './types'
+export type { HermesSkin } from '@hermes/shared/skin'

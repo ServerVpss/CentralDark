@@ -1,0 +1,92 @@
+{
+  "schema": "centraldark.multi-source-receipt.v1",
+  "mission_id": "test-001",
+  "timestamp": "2026-09-02T07:04:21.916365Z",
+  "intent": "testar metodo multi-source read-only",
+  "cognitive_chain": [
+    "ACORDAR",
+    "CALIBRAR",
+    "RECONCILIAR",
+    "DELTAUTIL",
+    "CONTRAPROVA",
+    "FIXED_POINT",
+    "REGISTRA",
+    "BOOT"
+  ],
+  "sources": [
+    {
+      "type": "git",
+      "ref": "origin/main",
+      "sha": "0542cee586e55be5334ba1e8d369d3b040ee1178",
+      "provenance": "CURRENT_PROVEN",
+      "measured_at": "2026-09-02T07:02:32.452833Z"
+    },
+    {
+      "type": "gh",
+      "open_prs": 2,
+      "prs": [
+        {
+          "number": 1393,
+          "title": "🧠 Cristalizar SOUL Reanchor Bootstrap"
+        },
+        {
+          "number": 1381,
+          "title": "🧭 FEAT(FIXED-POINT): PROVAR CASA + VPS + GITHUB + SCREENPIPE"
+        }
+      ],
+      "provenance": "CURRENT_PROVEN",
+      "measured_at": "2026-09-02T07:02:33.568513Z"
+    },
+    {
+      "type": "runtime",
+      "ports_alive": [
+        {
+          "port": 3030,
+          "pid": "33196"
+        }
+      ],
+      "provenance": "CURRENT_PROVEN",
+      "measured_at": "2026-09-02T07:03:14.889490Z"
+    },
+    {
+      "type": "local",
+      "status": [
+        "M .gitignore",
+        "?? _HANDOFF_CHRISTOFER_20260901.md",
+        "?? scripts/drive_reconcile.py"
+      ],
+      "provenance": "CURRENT_PROVEN",
+      "measured_at": "2026-09-02T07:03:15.115690Z"
+    }
+  ],
+  "delta": {
+    "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/DELTA-CONTINUO.md",
+    "owner_exists": true,
+    "reuse_before_create": true,
+    "no_v2_v3": true,
+    "files_changed": 1,
+    "lines_added": 0,
+    "lines_removed": 0,
+    "extracted_at": "2026-09-02T07:03:15.173757Z"
+  },
+  "counterproof": {
+    "passed": false,
+    "tests": [
+      {
+        "name": "node --test",
+        "passed": true,
+        "output": "skipped: package.json parse error"
+      },
+      {
+        "name": "reality_judge_ports",
+        "passed": false,
+        "output": "0"
+      }
+    ],
+    "run_at": "2026-09-02T07:04:21.916290Z"
+  },
+  "fixed_point": {
+    "achieved": true
+  },
+  "next_cursor": "BOOT"
+}

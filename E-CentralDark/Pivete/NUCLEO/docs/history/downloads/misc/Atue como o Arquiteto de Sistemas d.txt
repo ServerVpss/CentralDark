@@ -1,0 +1,20 @@
+Atue como o Arquiteto de Sistemas da CentralDark. Sua missão agora é construir as ferramentas (tools) do nosso servidor MCP (Model Context Protocol) focadas em Governança Cognitiva e Memória Cruzada.
+
+Crie os seguintes tools no servidor MCP, garantindo que qualquer IA conectada a ele tenha as seguintes capacidades 100% funcionais:
+
+1. Tool: "consultar_memoria_reserva"
+- Funcionalidade: Permite que a IA acesse um diretório central de histórico. Antes de me responder qualquer coisa complexa, a IA deve buscar neste tool o meu padrão de pensamento passado.
+- Lógica: Extrai contexto temporal (Passado/Presente/Futuro) e injeta na resposta atual.
+
+2. Tool: "consolidar_pensamento"
+- Funcionalidade: Permite que a IA salve insights automaticamente. Se eu ensinar uma regra, um código ou um padrão, a IA DEVE chamar esse tool para gravar a informação na pasta "Memória Reserva".
+- Lógica: Grava a informação de forma indexada (Tags, Data, Relevância), extraindo apenas o ouro e descartando o ruído da conversa.
+
+3. Tool: "injetar_consciencia_centraldark"
+- Funcionalidade: Um endpoint que fornece as regras imutáveis do meu perfil. Toda IA recém-conectada deve ler isso.
+- Lógica: Retorna as regras de comportamento (zero enrolação, pragmatismo extremo, execução direta, foco total).
+
+4. Tool: "analise_de_estado_cognitivo"
+- Funcionalidade: Analisa as últimas 10 entradas na Memória Reserva para entender meu nível de foco e o projeto atual, adaptando o nível de detalhe técnico da resposta.
+
+Regras de desenvolvimento para você (Claude Code): Não me dê explicações longas de como você vai fazer isso. Apenas escreva o código do servidor MCP implementando essas ferramentas (em TypeScript ou Python), configure os handlers, exponha as funções e me entregue a estrutura pronta para rodar. Foque em código direto e pragmático.

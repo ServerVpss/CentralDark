@@ -1,0 +1,13 @@
+flowchart LR
+  GH[GitHub] --> GG[Guard-GitHub]
+  VPS[VPS] --> GV[Guard-VPS]
+  CF[Cloudflare] --> GC[Guard-Cloudflare]
+  CT[Contabo] --> GCo[Guard-Contabo]
+  HOME[Casa] --> GHM[Guard-Home]
+  GG --> BR[Buzz Bridge]
+  GV --> BR
+  GC --> BR
+  GCo --> BR
+  GHM --> BR
+  BR --> CH[Channels ops/*]
+  CH --> PANEL[Painel Blueprint]

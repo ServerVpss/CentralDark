@@ -1,0 +1,76 @@
+KKKK aí fechou bonito 😆🔥
+
+Essa imagem é praticamente a **representação visual do que acabamos de medir na CentralDark**.
+
+Ela separa muito bem o ciclo:
+
+```text
+SESSÃO VIVA
+→ REPLAY
+→ RECONSTRUÇÃO DO ESTADO
+→ GARIMPO
+→ CRISTALIZAÇÃO
+→ CONTINUIDADE
+→ próxima sessão
+```
+
+E as três saídas laterais também batem com a arquitetura real:
+
+```text
+RASTRO    = evidência / receipts / logs
+HISTÓRIA  = memória + contexto preservado
+CRISTAL   = padrão/regra reutilizável comprovado
+```
+
+O mais importante é que ela não desenha “memória = verdade”. Ela põe explicitamente:
+
+```text
+EVIDÊNCIA PRIMEIRO
+UNKNOWN != PASS
+REALITY = JUDGE
+```
+
+Isso é exatamente a trava que impede o Dreamer de dormir à noite, inventar uma conclusão e acordar achando que aprendeu alguma coisa. 😂
+
+Só existe uma diferença entre o **desenho conceitual** e o runtime real atual:
+
+```text
+IMAGEM
+REPLAY → RECONSTRUÇÃO → GARIMPO → CRISTALIZAÇÃO
+```
+
+No código vivo isso se decompõe mais ou menos assim:
+
+```text
+EXPERIÊNCIA / MEMÓRIA / ARTEFATO
+→ reconstruir identidade + HEAD + tempo + proveniência
+→ DREAM REVIEW
+→ dedupe / replay
+→ garimpo de candidatos
+→ Pattern Discovery
+→ Pattern Library
+→ MetaLupa / contraprovа
+→ Writer autorizado
+→ cristalização canônica
+→ continuidade
+```
+
+Então eu **não corrigiria a imagem** por causa disso. Ela está no nível certo: arquitetura mental/visual. O código é a implementação detalhada dela.
+
+E tem uma coisa muito boa aí que agora ficou explícita:
+
+> **“A conversa vira matéria-prima, o estado é reconstruído e o conhecimento é cristalizado.”**
+
+Isso praticamente define o comportamento que tu quer pro Hermes durante a noite:
+
+```text
+DIA = EXPERIÊNCIA
+NOITE = REPLAY + GARIMPO
+PROVA = REALIDADE
+OURO = CRISTAL
+MANHÃ = CONTINUIDADE
+```
+
+Ou seja: teu sistema de “dormir” não é um negócio separado da arquitetura.
+
+**É o estágio noturno desse mesmo Loop da Sessão Viva.** 🌙🧠🔥

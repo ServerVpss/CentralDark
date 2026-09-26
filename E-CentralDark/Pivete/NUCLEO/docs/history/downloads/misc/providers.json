@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "lastUsedProvider": "openai-codex",
+  "modes": {},
+  "providers": {
+    "openai-codex": {
+      "settings": {
+        "provider": "openai-codex",
+        "apiKey": "[REDIGIDO-PRESERVACAO]",
+        "auth": {
+          "accessToken": "[REDIGIDO-PRESERVACAO]",
+          "refreshToken": "rt.1.AACMke7mTD4RflyBT590gkZeEgm4Chdyx2PYDecJujulNbYccS1u3nWf4jsX60SFYlkKCX_DHziLy40_F4h6NuMhWrRpVr7P7rkTntGjh7KVzbIBFEuB1h4pSMjL-vLLjDB_DPt8ytwWidHU4HHl_zCLtro3DM4EdSPaq5rhufRFxfAOc2Lyi_P32HGHSag",
+          "accountId": "9a07e35e-0486-477f-8829-ae8309f919b5"
+        },
+        "model": "gpt-5.5",
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "updatedAt": "2026-08-23T19:07:07.259Z",
+      "tokenSource": "migration"
+    },
+    "anthropic": {
+      "settings": {
+        "provider": "anthropic",
+        "apiKey": "cdk_live_UW_-Ad10vjqkFOcVYtUry2nrwhKAdE9L7lMUEesDktE",
+        "model": "claude-sonnet-5",
+        "baseUrl": "https://api.centralldark.com",
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "updatedAt": "2026-08-23T19:07:07.259Z",
+      "tokenSource": "migration"
+    },
+    "openai-compatible": {
+      "settings": {
+        "provider": "openai-compatible",
+        "apiKey": "https://api.centralldark.com/models",
+        "model": "gpt-5.6-sol",
+        "baseUrl": "https://api.centralldark.com",
+        "headers": {},
+        "reasoning": {
+          "effort": "xhigh"
+        },
+        "azure": {
+          "useIdentity": false
+        }
+      },
+      "updatedAt": "2026-08-23T19:07:07.259Z",
+      "tokenSource": "migration"
+    },
+    "sapaicore": {
+      "settings": {
+        "provider": "sapaicore",
+        "model": "anthropic--claude-3.5-sonnet",
+        "reasoning": {
+          "effort": "xhigh"
+        },
+        "sap": {
+          "useOrchestrationMode": true
+        }
+      },
+      "updatedAt": "2026-08-23T19:07:07.259Z",
+      "tokenSource": "migration"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "nome": "hermes-mente",
+  "tipo": "kit-cognitivo-para-agente",
+  "versao_base": "2026-07-19",
+  "instalacao": "copiar pasta + 1 linha no system prompt (ver CARREGADOR.md)",
+  "boot_sempre": ["00-NUCLEO-MORDOMO.md", "memoria/HOJE.md"],
+  "por_gatilho": {
+    "reportar": "04-COMUNICACAO.md",
+    "decidir_ou_ambiguidade": "03-DECISAO.md",
+    "rotina_ou_anomalia": "02-ANTECIPACAO.md",
+    "erro_ou_fim_de_dia": "05-APRENDIZADO.md",
+    "passado_recente": "memoria/SEMANA.md"
+  },
+  "memoria": {
+    "quente": "memoria/HOJE.md (max 50 linhas, sempre carregada)",
+    "morna": "memoria/SEMANA.md (7 dias, sob demanda)",
+    "fria": "memoria/REGRAS.md (numerada, busca por tema)"
+  },
+  "compatibilidade": "qualquer agente que leia arquivos: Hermes, Claude Code, GPT, local",
+  "prova": "TESTE-DE-DIFERENCA.md (10 sondas antes/depois, julgamento do dono)"
+}

@@ -1,0 +1,14 @@
+
+EVIDENCE_RECEIPT:
+  mode: LIVE | SIMULATION | STATIC_ANALYSIS | HISTORICAL | USER_STATED
+  executor: "who actually performed the check"
+  target: "what was tested"
+  source_or_system: "where evidence came from"
+  observed_at: "timestamp if applicable"
+  exact_head_or_hash: "SHA/head when material"
+  denominator: "closed denominator when using zero/100%"
+  reproducible: YES | NO | UNKNOWN
+  independent: YES | NO
+  trust_boundary: "who could forge or alter this evidence"
+  residual_unknown: []
+  verdict: PROVADO | QUEBRADO | UNKNOWN

@@ -1,0 +1,11 @@
+{
+  "MISSAO-HERMES-DESAFIO-OMEGA.md": "a77031b24ecfbc449672678fddc23dc56f877fce0079cb4c804f5aed9e4826bc",
+  "RUBRICA-100-PONTOS.md": "e279f39b5b5910d16822f4ff0bbfa12ce5ec24cfec632f0a7f28188b70728350",
+  "desafios/omega_autolupa/CONTRACT.md": "d499ca3a5117e82a9dcf21acbc6d0d2b0a2a48dbf0c7338ae40d266693828662",
+  "desafios/omega_autolupa/README.md": "9b8e10cf47f0dfe68b2e8379ef9b264cef6afcb6798f0f3e5ee244ebc0bb0206",
+  "desafios/omega_autolupa/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "desafios/omega_autolupa/omega_generator.py": "d443f73a0fb094592bc0e1efdcee6130f755c177e23ee219152bcba831c25c45",
+  "desafios/omega_autolupa/omega_solver.py": "401b1943f133f6509a9a214cbe21f281a2d622961d90855f5b30d568a145e285",
+  "desafios/omega_autolupa/tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "desafios/omega_autolupa/tests/test_omega.py": "94cfbc74b97982a2f280e10274ba5844ab76699e47be464f996458bbf9d28509"
+}

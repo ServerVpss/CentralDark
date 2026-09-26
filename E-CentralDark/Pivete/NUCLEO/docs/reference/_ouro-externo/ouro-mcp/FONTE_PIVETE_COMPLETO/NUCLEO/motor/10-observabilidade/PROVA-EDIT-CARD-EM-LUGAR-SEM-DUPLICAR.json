@@ -1,0 +1,8 @@
+{
+  "ts_brasilia": "18/07/2026 23:10:00 -03:00",
+  "origem": "Claude Code CLI -> plugins.observability.mission_panel.telegram_card.send_or_edit_card",
+  "mission_id_teste": "teste-edit-card-01",
+  "passo_1_send": {"success": true, "chat_id": "1901426549", "message_id": "536"},
+  "passo_2_edit": {"success": true, "chat_id": "1901426549", "message_id": "536", "edited": true},
+  "observacao": "Mesmo message_id nos dois passos -- prova que o segundo card EDITOU no lugar (editMessageText), nao mandou mensagem nova. Estado persistido em mission_card_messages.json (novo, arquivo piano, sem banco novo)."
+}

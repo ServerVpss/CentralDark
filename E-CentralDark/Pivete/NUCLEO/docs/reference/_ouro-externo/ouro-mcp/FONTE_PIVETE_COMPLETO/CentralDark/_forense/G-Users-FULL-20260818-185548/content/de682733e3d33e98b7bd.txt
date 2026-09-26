@@ -1,0 +1,13 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\store\runtime-clients\thread-list-runtime-client.d.ts
+
+import { ThreadListRuntime } from "../../runtime/api/thread-list-runtime.js";
+import { AssistantRuntime } from "../../runtime/api/assistant-runtime.js";
+import { ClientOutput } from "@assistant-ui/store";
+//#region src/store/runtime-clients/thread-list-runtime-client.d.ts
+declare const ThreadListClient: import("@assistant-ui/tap").Resource<ClientOutput<"threads">, [{
+  runtime: ThreadListRuntime;
+  __internal_assistantRuntime: AssistantRuntime;
+}]>;
+//#endregion
+export { ThreadListClient };
+//# sourceMappingURL=thread-list-runtime-client.d.ts.map

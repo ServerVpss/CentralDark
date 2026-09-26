@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <item name="androidx.core.util.TypedValueCompat float deriveDimension(int, float, android.util.DisplayMetrics) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.util.TypedValue.COMPLEX_UNIT_PX, android.util.TypedValue.COMPLEX_UNIT_DIP, android.util.TypedValue.COMPLEX_UNIT_SP, android.util.TypedValue.COMPLEX_UNIT_PT, android.util.TypedValue.COMPLEX_UNIT_IN, android.util.TypedValue.COMPLEX_UNIT_MM}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.util.TypedValueCompat int getUnitFromComplexDimension(int)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.util.TypedValue.COMPLEX_UNIT_PX, android.util.TypedValue.COMPLEX_UNIT_DIP, android.util.TypedValue.COMPLEX_UNIT_SP, android.util.TypedValue.COMPLEX_UNIT_PT, android.util.TypedValue.COMPLEX_UNIT_IN, android.util.TypedValue.COMPLEX_UNIT_MM}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.util.TypedValueCompat.Api34Impl float deriveDimension(int, float, android.util.DisplayMetrics) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.util.TypedValue.COMPLEX_UNIT_PX, android.util.TypedValue.COMPLEX_UNIT_DIP, android.util.TypedValue.COMPLEX_UNIT_SP, android.util.TypedValue.COMPLEX_UNIT_PT, android.util.TypedValue.COMPLEX_UNIT_IN, android.util.TypedValue.COMPLEX_UNIT_MM}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.util.TypedValueCompat.ComplexDimensionUnit">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.util.TypedValue.COMPLEX_UNIT_PX, android.util.TypedValue.COMPLEX_UNIT_DIP, android.util.TypedValue.COMPLEX_UNIT_SP, android.util.TypedValue.COMPLEX_UNIT_PT, android.util.TypedValue.COMPLEX_UNIT_IN, android.util.TypedValue.COMPLEX_UNIT_MM}" />
+    </annotation>
+  </item>
+</root>
+

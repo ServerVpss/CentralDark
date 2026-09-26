@@ -1,0 +1,14 @@
+/goal
+
+ALVO=C:\Users\danda\AppData\Local\hermes\profiles\pivete\skills\GATILHO-UNIVERSAL-IA
+
+1. Leia SKILL.md.
+2. Execute node scripts\verify.mjs.
+3. Execute node scripts\contraprovas.mjs.
+4. Não leia .env nem arquivos de segredo.
+5. Não altere config/providers.json sem comparar a rota atual.
+6. Use:
+   .\run.ps1 "#auditar" "C:\ALVO"
+   .\run.ps1 "!fable" "C:\ALVO"
+7. Para integrar na API, leia docs\INTEGRAR-NA-SUA-API.md.
+8. Só declare operacional após verify PASS e contraprovas PASS.

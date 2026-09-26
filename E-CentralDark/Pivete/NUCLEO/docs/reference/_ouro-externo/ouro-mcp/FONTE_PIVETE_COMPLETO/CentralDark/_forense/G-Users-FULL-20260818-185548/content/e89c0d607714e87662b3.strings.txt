@@ -1,0 +1,45 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\Service Worker\CacheStorage\b500f1faf61f180de1748705af17dc1a8e8ccb3b\921934df-27cd-4876-abf8-f2e96abb6a9d\12a912351de4211e_0
+
+https://www.gstatic.com/devrel-devsite/prod/v0f3a5b8b76e4a120372a69044e02756e703b6140f9f1812c6e4a0407b19864b7/images/video-placeholder.svg<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 640 360" style="enable-background:new 0 0 640 360;" xml:space="preserve">
+<rect fill="#fed303" width="640" height="360"/>
+<path fill="#ffffff" d="M365.97,160.84c0,0-0.94-6.6-3.81-9.5c-3.64-3.81-7.72-3.83-9.59-4.05c-13.4-0.97-33.52-0.85-33.52-0.85
+s-20.12-0.12-33.52,0.85c-1.87,0.22-5.95,0.24-9.59,4.05c-2.87,2.9-3.81,9.5-3.81,9.5s-0.96,7.74-1.14,15.49v7.26
+c0.18,7.75,1.14,15.49,1.14,15.49s0.93,6.6,3.81,9.5c3.64,3.81,8.43,3.69,10.56,4.09c7.53,0.72,31.7,0.89,32.54,0.9
+c0.01,0,20.14,0.03,33.54-0.94c1.87-0.22,5.95-0.24,9.59-4.05c2.87-2.9,3.81-9.5,3.81-9.5s0.96-7.75,1.02-15.49v-7.26
+C366.93,168.58,365.97,160.84,365.97,160.84z"/>
+<line fill="none" stroke="#fed303" stroke-width="4" x1="370.01" y1="135.99" x2="274" y2="232.01"/>
+<line fill="none" stroke="#fed303" stroke-width="4" x1="363.01" y1="128.99" x2="267" y2="225.01"/>
+<line fill="none" stroke="#ffffff" stroke-width="6" x1="367.01" y1="131.99" x2="271" y2="228.01"/>
+</svg>
+accept-ranges
+bytes" 
+access-control-allow-origin
+46042"9
+alt-svc
+.h3=":443"; ma=2592000,h3-29=":443"; ma=2592000")
+cache-control
+public, max-age=31536000"
+content-encoding
+content-length
+#content-security-policy-report-only
+\require-trusted-types-for 'script'; report-uri https://csp.withgoogle.com/csp/devrel-devsite"
+content-type
+image/svg+xml"E
+cross-origin-opener-policy
+'same-origin; report-to="devrel-devsite"",
+cross-origin-resource-policy
+cross-origin"%
+Tue, 18 Aug 2026 06:04:03 GMT"(
+expires
+Wed, 18 Aug 2027 06:04:03 GMT".
+last-modified
+Tue, 18 Aug 2026 03:46:13 GMT"
+report-to
+|{"group":"devrel-devsite","max_age":2592000,"endpoints":[{"url":"https://csp.withgoogle.com/csp/report-to/devrel-devsite"}]}"
+server
+Accept-Encoding"!
+x-content-type-options
+nosniff"
+x-xss-protection
+https://www.gstatic.com/devrel-devsite/prod/v0f3a5b8b76e4a120372a69044e02756e703b6140f9f1812c6e4a0407b19864b7/images/video-placeholder.svgP(Z
+image/svg+xmlr

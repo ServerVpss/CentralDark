@@ -1,0 +1,8 @@
+# TESTE PASTA CHEFE
+
+COMANDO: teste_pasta_chefe
+PROMPT: verifica se pasta do chefe é monitorada
+GATE: FILE_SECURITY_GATE v2
+RISCO: nenhum
+GAP: nenhum
+DATA: 2026-08-23T18:00:00

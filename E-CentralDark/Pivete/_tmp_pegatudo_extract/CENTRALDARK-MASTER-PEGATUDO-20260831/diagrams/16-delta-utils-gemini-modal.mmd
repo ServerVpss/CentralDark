@@ -1,0 +1,17 @@
+flowchart TD
+  A[Chat / GitHub / Drive / MD / ZIP / Webhook] --> B[!CENTRALDARK]
+  B --> C[DELTAUTIL_RECONCILE]
+  C --> D[Scrub + Dedupe + Reality Scope]
+  D --> E[Semantic Digest]
+  E --> F[Existing Owner Match]
+  F --> G[Scores: Compatibility / Evidence / Readiness / Protection / Risk / Gain]
+  G --> H[Gemini Modal - READ ONLY]
+  H --> I[Falsifier]
+  I --> J{Admin decision}
+  J -->|Preview/Test| H
+  J -->|Import/Merge| K[ONE_WRITER]
+  J -->|Reject| R[Receipt]
+  K --> L[Test + Documentation Gate]
+  L --> R
+  H -. iframe only if CSP/XFO allow .-> W[Workspace/Plugin Surface]
+  W -. otherwise .-> X[Native/API Adapter]

@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.2 As peças de um prompt | O Manual Oculto da IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    .code-box { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace; }
+
+    /* Dark mode - bordas e linhas divisorias mais suaves */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+
+    /* SVG adaptado ao tema claro (so atinge os diagramas) */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+
+    /* Flutuacao dos blocos "explodidos" do SVG */
+    @keyframes wf-float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-4px) } }
+    @media (prefers-reduced-motion: no-preference) {
+      .wf-a { animation: wf-float 3.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+      .wf-a:nth-child(2){animation-delay:.3s}
+      .wf-a:nth-child(3){animation-delay:.6s}
+      .wf-a:nth-child(4){animation-delay:.9s}
+      .wf-a:nth-child(5){animation-delay:1.2s}
+    }
+
+    /* ===== LIGHT MODE OVERRIDES — Parte 1: Base ===== */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-200 { color: #1f2937; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* ===== Parte 2: Cores de acento (trilha Emerald — T1) ===== */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .text-emerald-300 { color: #047857; }
+    html:not(.dark) .text-emerald-200 { color: #065f46; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .bg-emerald-900\/30 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5, 150, 105, 0.06); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .border-emerald-500\/20 { border-color: rgba(5, 150, 105, 0.18); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5, 150, 105, 0.18); }
+    html:not(.dark) .hover\:border-emerald-500\/30:hover { border-color: rgba(5, 150, 105, 0.25); }
+
+    /* sky (ciano secundario) */
+    html:not(.dark) .bg-sky-500\/10 { background-color: rgba(14, 165, 233, 0.08); }
+    html:not(.dark) .bg-sky-900\/30 { background-color: rgba(14, 165, 233, 0.08); }
+    html:not(.dark) .border-sky-500\/30 { border-color: rgba(14, 165, 233, 0.25); }
+    html:not(.dark) .text-sky-300 { color: #0284c7; }
+
+    /* ===== Parte 3: Remove gradientes + cores especiais ===== */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(185, 28, 28, 0.06); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(185, 28, 28, 0.22); }
+    html:not(.dark) .border-red-500\/20 { border-color: rgba(185, 28, 28, 0.18); }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+
+    /* ===== Parte 4: Navbar ===== */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <!-- Logo + INEMA.CLUB -->
+        <div class="flex items-center space-x-3">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300 transition-colors">
+            <span class="text-xl">🧠</span>
+            <span class="font-bold text-base hidden sm:inline">Manual Oculto da IA</span>
+          </a>
+          <span class="text-neutral-600 hidden sm:inline">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition-colors">INEMA.CLUB</a>
+        </div>
+
+        <!-- Trilhas + Theme Toggle -->
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <!-- Trilha 1 (ativa) -->
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10">
+            <span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <!-- Trilha 2 (inativa) -->
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span><span class="hidden sm:inline">Prática</span>
+          </a>
+          <!-- Trilha 3 (inativa) -->
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span><span class="hidden sm:inline">Avançado</span>
+          </a>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1">
+            <svg id="theme-toggle-dark-icon" class="hidden w-4 h-4 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-4 h-4 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Breadcrumb -->
+    <div class="flex items-center space-x-2 text-sm text-neutral-500 mb-6">
+      <a href="../../index.html" class="hover:text-emerald-400 transition-colors">Início</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-emerald-400 transition-colors">Trilha 1</a>
+      <span>/</span>
+      <span class="text-emerald-400">Módulo 1.2</span>
+    </div>
+
+    <!-- Header do Módulo -->
+    <div class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 rounded-2xl border border-emerald-500/30 p-6 sm:p-8 mb-8">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-2xl">
+          🧩
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center space-x-3 mb-2">
+            <span class="text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-1 rounded-full uppercase tracking-wider">MÓDULO 1.2</span>
+            <span class="text-xs text-neutral-500">Trilha 1 — Fundamentos</span>
+          </div>
+          <h1 class="text-2xl font-bold text-neutral-100 mb-2">🧩 As peças de um prompt</h1>
+          <p class="text-neutral-300 leading-relaxed">
+            No módulo anterior você descobriu que existe um bilhete invisível. Agora vamos <strong class="text-emerald-400">abrir esse
+            bilhete</strong> e ver as peças por dentro. Um bom system prompt não é um textão solto — é um kit de peças encaixáveis:
+            identidade, tom, ferramentas, segurança e prioridade. Você vai aprender o que cada peça faz e como elas se encaixam,
+            tudo com exemplos <strong class="text-emerald-400">reais</strong> de prompts de verdade.
+          </p>
+          <!-- Stats -->
+          <div class="flex flex-wrap gap-4 mt-4">
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-emerald-400">📋</span><span>6 tópicos</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-emerald-400">⏱</span><span>~35 min</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-emerald-400">🎯</span><span>Básico</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-emerald-400">📖</span><span>Teoria + Exemplos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SVG FUTURISTA: vista explodida dos blocos de um prompt -->
+    <div class="rounded-2xl border border-emerald-500/30 bg-dark-900/40 p-4 mb-10 overflow-hidden">
+      <svg viewBox="0 0 960 380" class="w-full h-auto" role="img" aria-label="Vista explodida de um system prompt: as cinco peças — identidade, tom, ferramentas, segurança e prioridade — aparecem como caixas nomeadas separadas, flutuando afastadas umas das outras, e à direita se encaixam empilhadas dentro de um único compartimento que forma o prompt completo">
+        <defs>
+          <linearGradient id="m12-grad-em" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#10b981"/>
+          </linearGradient>
+          <linearGradient id="m12-grad-cy" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#0ea5e9"/>
+          </linearGradient>
+          <filter id="m12-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="1.8" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <pattern id="m12-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+            <circle cx="1.2" cy="1.2" r="1.2" fill="#34d399" opacity="0.10"/>
+          </pattern>
+          <marker id="m12-ah" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/>
+          </marker>
+        </defs>
+
+        <!-- Fundo grid -->
+        <rect x="0" y="0" width="960" height="380" fill="url(#m12-grid)" rx="16"/>
+
+        <!-- Rótulos de coluna -->
+        <text x="250" y="32" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="12" opacity="0.7">as PEÇAS, vista explodida</text>
+        <text x="720" y="32" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="12" opacity="0.7">encaixadas = o PROMPT</text>
+        <line x1="500" y1="20" x2="500" y2="362" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="6,6" opacity="0.35"/>
+
+        <!-- LADO ESQUERDO: 5 pecas flutuando separadas, com linhas guia -->
+        <!-- linhas guia da explosao -->
+        <line x1="445" y1="78" x2="540" y2="92" stroke="#34d399" stroke-width="1.2" stroke-dasharray="4,4" opacity="0.35"/>
+        <line x1="445" y1="138" x2="540" y2="146" stroke="#34d399" stroke-width="1.2" stroke-dasharray="4,4" opacity="0.35"/>
+        <line x1="445" y1="198" x2="540" y2="200" stroke="#34d399" stroke-width="1.2" stroke-dasharray="4,4" opacity="0.35"/>
+        <line x1="445" y1="258" x2="540" y2="254" stroke="#34d399" stroke-width="1.2" stroke-dasharray="4,4" opacity="0.35"/>
+        <line x1="445" y1="318" x2="540" y2="308" stroke="#34d399" stroke-width="1.2" stroke-dasharray="4,4" opacity="0.35"/>
+
+        <!-- peca 1: identidade -->
+        <g class="wf-a">
+          <rect x="70" y="58" width="370" height="40" rx="10" fill="#0e2018" stroke="url(#m12-grad-em)" stroke-width="1.8"/>
+          <text x="86" y="76" fill="#34d399" font-family="Inter,sans-serif" font-size="12" font-weight="700">🪪 &lt;identity&gt;</text>
+          <text x="86" y="91" fill="#bdf0dd" font-family="Inter,sans-serif" font-size="10">"You are an AI coding assistant…"</text>
+        </g>
+        <!-- peca 2: tom -->
+        <g class="wf-a">
+          <rect x="70" y="118" width="370" height="40" rx="10" fill="#0e2018" stroke="url(#m12-grad-em)" stroke-width="1.8"/>
+          <text x="86" y="136" fill="#34d399" font-family="Inter,sans-serif" font-size="12" font-weight="700">🎙️ &lt;tone_and_style&gt;</text>
+          <text x="86" y="151" fill="#bdf0dd" font-family="Inter,sans-serif" font-size="10">"Only use emojis if the user requests it…"</text>
+        </g>
+        <!-- peca 3: ferramentas -->
+        <g class="wf-a">
+          <rect x="70" y="178" width="370" height="40" rx="10" fill="#0e2018" stroke="url(#m12-grad-em)" stroke-width="1.8"/>
+          <text x="86" y="196" fill="#34d399" font-family="Inter,sans-serif" font-size="12" font-weight="700">🛠️ &lt;tool_calling&gt;</text>
+          <text x="86" y="211" fill="#bdf0dd" font-family="Inter,sans-serif" font-size="10">"You have tools at your disposal…"</text>
+        </g>
+        <!-- peca 4: seguranca -->
+        <g class="wf-a">
+          <rect x="70" y="238" width="370" height="40" rx="10" fill="#0e1b26" stroke="url(#m12-grad-cy)" stroke-width="1.8"/>
+          <text x="86" y="256" fill="#38bdf8" font-family="Inter,sans-serif" font-size="12" font-weight="700">🛡️ &lt;safety&gt;</text>
+          <text x="86" y="271" fill="#bfe6ff" font-family="Inter,sans-serif" font-size="10">"NEVER create files unless… ALWAYS prefer…"</text>
+        </g>
+        <!-- peca 5: prioridade -->
+        <g class="wf-a">
+          <rect x="70" y="298" width="370" height="40" rx="10" fill="#0e1b26" stroke="url(#m12-grad-cy)" stroke-width="1.8"/>
+          <text x="86" y="316" fill="#38bdf8" font-family="Inter,sans-serif" font-size="12" font-weight="700">🪜 &lt;policy&gt;</text>
+          <text x="86" y="331" fill="#bfe6ff" font-family="Inter,sans-serif" font-size="10">"…take highest precedence."</text>
+        </g>
+
+        <!-- LADO DIREITO: o compartimento que junta tudo -->
+        <g filter="url(#m12-glow)">
+          <rect x="540" y="60" width="380" height="282" rx="16" fill="#0d1117" stroke="url(#m12-grad-em)" stroke-width="2.5"/>
+        </g>
+        <text x="560" y="84" fill="#6ee7b7" font-family="Inter,sans-serif" font-size="12" font-weight="700">&lt;system_prompt&gt;</text>
+
+        <!-- blocos empilhados dentro -->
+        <rect x="560" y="92" width="340" height="36" rx="8" fill="#0e2018" stroke="#34d399" stroke-width="1.5"/>
+        <text x="576" y="114" fill="#34d399" font-family="Inter,sans-serif" font-size="11" font-weight="600">🪪 identidade — quem ela é</text>
+
+        <rect x="560" y="134" width="340" height="36" rx="8" fill="#0e2018" stroke="#34d399" stroke-width="1.5"/>
+        <text x="576" y="156" fill="#34d399" font-family="Inter,sans-serif" font-size="11" font-weight="600">🎙️ tom — como ela fala</text>
+
+        <rect x="560" y="176" width="340" height="36" rx="8" fill="#0e2018" stroke="#34d399" stroke-width="1.5"/>
+        <text x="576" y="198" fill="#34d399" font-family="Inter,sans-serif" font-size="11" font-weight="600">🛠️ ferramentas — o que ela faz</text>
+
+        <rect x="560" y="218" width="340" height="36" rx="8" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.5"/>
+        <text x="576" y="240" fill="#7fd4ff" font-family="Inter,sans-serif" font-size="11" font-weight="600">🛡️ segurança — o que ela não faz</text>
+
+        <rect x="560" y="260" width="340" height="36" rx="8" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.5"/>
+        <text x="576" y="282" fill="#7fd4ff" font-family="Inter,sans-serif" font-size="11" font-weight="600">🪜 prioridade — quem manda na dúvida</text>
+
+        <text x="560" y="324" fill="#6ee7b7" font-family="Inter,sans-serif" font-size="12" font-weight="700">&lt;/system_prompt&gt;</text>
+
+        <!-- seta: pecas -> compartimento -->
+        <path d="M455,200 C490,200 500,200 532,200" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.7" marker-end="url(#m12-ah)"/>
+        <text x="490" y="190" text-anchor="middle" fill="#38bdf8" font-family="Inter,sans-serif" font-size="10" opacity="0.85">encaixa</text>
+      </svg>
+    </div>
+
+    <!-- CONTEÚDO DETALHADO -->
+    <h2 class="text-2xl font-bold mb-6">Conteúdo detalhado</h2>
+
+    <!-- TÓPICO 1 — IDENTIDADE -->
+    <section id="topico-1" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl flex-shrink-0">1</span>
+        <h2 class="text-2xl font-bold">Identidade: quem a IA é</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A primeira peça — e a mais importante — é a <strong class="text-emerald-400">identidade</strong>. Quase todo system prompt do
+        mundo começa com duas palavrinhas: <span class="code-box text-emerald-400">"You are..."</span> ("Você é..."). Em uma frase, a IA
+        já sabe quem é, para quem trabalha e o que veio fazer. É a âncora: tudo que vem depois no bilhete se apoia nela.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-3 flex items-center"><span class="mr-2">🪪</span> A ideia em uma frase</h3>
+        <p class="text-neutral-300 leading-relaxed">
+          A identidade é o <strong class="text-emerald-400">crachá</strong> da IA. Sem ela, a IA "deriva": muda de personagem no meio da
+          conversa, inventa poderes que não tem. Por isso vem no <strong class="text-emerald-200">topo</strong> e em poucas linhas — é
+          âncora, não biografia.
+        </p>
+      </div>
+
+      <!-- Grid: identidade forte vs fraca -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-emerald-900/20 border border-emerald-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-emerald-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-emerald-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>Identidade forte (no topo)</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Fica no personagem certo a conversa toda</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Sabe o que é e o que veio fazer</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Curta e clara — âncora, não biografia</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">✗</span>
+            <span>Identidade fraca ou enterrada</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>"Vira" outro personagem no meio do papo</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Inventa ferramentas que não existem</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Backstory inútil enterra o que importa</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Exemplo verbatim Cursor identidade -->
+      <div class="bg-dark-800 border border-emerald-500/30 rounded-xl p-5 mb-4">
+        <div class="text-xs font-semibold text-emerald-400 mb-3">Cursor (assistente de programação) — <span class="font-normal text-neutral-500">cursor.md, primeiras linhas</span></div>
+        <blockquote class="bg-dark-900 border-l-2 border-emerald-500 rounded p-3 font-mono text-xs text-neutral-300 mb-2 code-box">
+          You are an AI coding assistant, powered by &#123;model_name&#125;.<br>
+          You operate in Cursor.<br>
+          You are a coding agent in the Cursor IDE that helps the USER with software engineering tasks.
+        </blockquote>
+        <p class="text-xs text-neutral-400">
+          Três linhas, três informações: <strong class="text-neutral-200">quem é</strong> ("coding assistant"),
+          <strong class="text-neutral-200">com o quê</strong> (&#123;model_name&#125;) e <strong class="text-neutral-200">onde está</strong> ("in Cursor").
+          A IA não decora qual modelo roda — a Cursor preenche o espacinho &#123;model_name&#125; na hora.
+        </p>
+      </div>
+
+      <!-- O que e -->
+      <div class="bg-dark-800 border border-emerald-500/30 rounded-xl p-5 mb-4">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-3">O que é</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          A peça que declara, logo na abertura, <strong class="text-emerald-400">quem</strong> a IA é (produto + função), para quem
+          trabalha e os limites do que ela sabe. É a única peça que aparece em <em>todos</em> os prompts reais, sem exceção.
+        </p>
+      </div>
+
+      <!-- Por que aprender -->
+      <div class="bg-dark-800 border border-dark-600 rounded-xl p-5 mb-4">
+        <h3 class="text-lg font-semibold text-neutral-200 mb-3">Por que aprender</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          Porque é a peça que mais "segura" a IA no personagem certo. Quando uma IA "esquece quem é" no meio do papo, ou inventa que
+          pode fazer coisas que não pode, quase sempre o problema é uma identidade fraca ou enterrada lá no fundo do bilhete.
+        </p>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">🪪</div>
+          <div class="text-xs font-semibold text-neutral-200">"You are..."</div>
+          <div class="text-xs text-neutral-500 mt-1">a 1ª linha clássica</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">⚓</div>
+          <div class="text-xs font-semibold text-neutral-200">É âncora</div>
+          <div class="text-xs text-neutral-500 mt-1">o resto se apoia nela</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">⬆️</div>
+          <div class="text-xs font-semibold text-neutral-200">Vem no topo</div>
+          <div class="text-xs text-neutral-500 mt-1">antes de tudo</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">✂️</div>
+          <div class="text-xs font-semibold text-neutral-200">Curta</div>
+          <div class="text-xs text-neutral-500 mt-1">âncora, não biografia</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 — TOM -->
+    <section id="topico-2" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl flex-shrink-0">2</span>
+        <h2 class="text-2xl font-bold">Tom: como a IA fala</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A segunda peça é o <strong class="text-emerald-400">tom</strong> — o jeito de falar: formal ou descontraído, com emoji ou sem,
+        prolixo ou direto. A identidade diz <em>quem</em> ela é; o tom diz <em>como</em> ela se expressa. É a diferença entre um
+        atendente de banco e um amigo te explicando algo no bar: mesma língua, "tons" completamente diferentes.
+      </p>
+
+      <!-- Exemplo verbatim Cursor tone -->
+      <div class="bg-dark-800 border border-emerald-500/30 rounded-xl p-5 mb-4">
+        <div class="text-xs font-semibold text-emerald-400 mb-3">Cursor — <span class="font-normal text-neutral-500">cursor.md, bloco &lt;tone_and_style&gt;</span></div>
+        <blockquote class="bg-dark-900 border-l-2 border-emerald-500 rounded p-3 font-mono text-xs text-neutral-300 mb-2 code-box">
+          &lt;tone_and_style&gt;<br>
+          - Only use emojis if the user explicitly requests it. Avoid using emojis in all communication unless asked.<br>
+          - Do not use a colon before tool calls. ...text like "Let me read the file:" ... should just be "Let me read the file." with a period.<br>
+          &lt;/tone_and_style&gt;
+        </blockquote>
+        <p class="text-xs text-neutral-400">
+          Repare como o tom desce ao detalhe: <strong class="text-neutral-200">nada de emoji</strong> sem pedido, e até a regra de não usar
+          dois-pontos antes de uma ação. Tom não é só "seja simpático" — são escolhas concretas de escrita.
+        </p>
+      </div>
+
+      <!-- O que e -->
+      <div class="bg-dark-800 border border-emerald-500/30 rounded-xl p-5 mb-4">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-3">O que é</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          A peça que define o <strong class="text-emerald-400">jeito de falar</strong>: nível de formalidade, uso de emoji, tamanho das
+          respostas, formatação. É o que dá a "voz" da IA — e o que mais muda a sensação de conversar com ela.
+        </p>
+      </div>
+
+      <!-- Por que aprender -->
+      <div class="bg-dark-800 border border-dark-600 rounded-xl p-5 mb-4">
+        <h3 class="text-lg font-semibold text-neutral-200 mb-3">Por que aprender</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          Porque é a peça que você mais <em>sente</em>. "Por que essa IA fala tão robótico?" "Por que aquela enche de emoji?" Está tudo
+          no bloco de tom. Saber que ele existe te mostra que o "jeitão" da IA é uma escolha — e uma escolha que dá pra mudar.
+        </p>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-4 mb-5">
+        <div class="flex items-start space-x-3">
+          <span class="text-primary text-lg flex-shrink-0">💡</span>
+          <div>
+            <p class="text-sm font-semibold text-primary mb-1">Tom anda junto com honestidade</p>
+            <p class="text-sm text-neutral-300">
+              Muitos prompts juntam, no mesmo bloco, "como falar" e "como ser honesto" — por exemplo, não fingir certeza que não tem,
+              não inventar fatos. Faz sentido: as duas coisas são sobre <strong>o jeito de se comunicar</strong> com você. Tom não é só
+              estilo; é também a postura de dizer a verdade do jeito certo.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">🎙️</div>
+          <div class="text-xs font-semibold text-neutral-200">A voz</div>
+          <div class="text-xs text-neutral-500 mt-1">formal × descontraído</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">😶</div>
+          <div class="text-xs font-semibold text-neutral-200">Emoji?</div>
+          <div class="text-xs text-neutral-500 mt-1">só se pedirem</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">📏</div>
+          <div class="text-xs font-semibold text-neutral-200">Tamanho</div>
+          <div class="text-xs text-neutral-500 mt-1">curto × prolixo</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">🤝</div>
+          <div class="text-xs font-semibold text-neutral-200">+ honestidade</div>
+          <div class="text-xs text-neutral-500 mt-1">vem junto no bloco</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 — FERRAMENTAS -->
+    <section id="topico-3" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl flex-shrink-0">3</span>
+        <h2 class="text-2xl font-bold">Ferramentas: o que a IA faz</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Algumas IAs só conversam. Outras <strong class="text-emerald-400">fazem coisas</strong>: leem arquivos, buscam na web, rodam
+        comandos. Essas ações são as <strong class="text-emerald-400">ferramentas</strong>. Mas dar uma ferramenta não basta — a IA
+        precisa saber <em>quando</em> e <em>como</em> usar cada uma. Essa peça é o "manual de uso" das ferramentas.
+      </p>
+
+      <!-- Timeline: regras de ferramenta -->
+      <div class="space-y-4 mb-6">
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+            <span class="text-emerald-400 text-lg">📋</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-emerald-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-emerald-400 mb-1">1. Liste o que existe</h4>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              A IA precisa saber quais ferramentas tem na mão. Sem a lista, ela ignora um recurso útil ou inventa um que não existe —
+              como uma caixa de ferramentas sem etiqueta.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+            <span class="text-emerald-400 text-lg">🎯</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-emerald-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-emerald-400 mb-1">2. Diga quando usar cada uma</h4>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              Cada ferramenta vem com a condição de uso. A Cursor manda usar a ferramenta certa pra cada coisa — e <strong class="text-emerald-200">não</strong>
+              usar comandos de terminal pra ler ou editar arquivos quando existe uma ferramenta dedicada.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+            <span class="text-emerald-400 text-lg">🔗</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-dark-600 rounded-xl p-5">
+            <h4 class="font-semibold text-emerald-400 mb-1">3. Defina a ordem (pré-requisitos)</h4>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              Às vezes uma ação só vem depois de outra. "Ler antes de editar" é o clássico: a IA <strong class="text-emerald-200">precisa</strong>
+              ler o arquivo ao menos uma vez antes de mudá-lo — senão edita no escuro.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exemplo verbatim Cursor tool_calling -->
+      <div class="bg-dark-800 border border-emerald-500/30 rounded-xl p-5 mb-4">
+        <div class="text-xs font-semibold text-emerald-400 mb-3">Cursor — <span class="font-normal text-neutral-500">cursor.md, &lt;tool_calling&gt; e &lt;making_code_changes&gt;</span></div>
+        <blockquote class="bg-dark-900 border-l-2 border-emerald-500 rounded p-3 font-mono text-xs text-neutral-300 mb-2 code-box">
+          1. Don't refer to tool names when speaking to the USER. Instead, just say what the tool is doing in natural language.<br>
+          2. Use specialized tools instead of terminal commands when possible... don't use cat/head/tail to read files, don't use sed/awk to edit files...<br>
+          <span class="text-emerald-400">// em &lt;making_code_changes&gt;:</span><br>
+          1. You MUST use the Read tool at least once before editing.
+        </blockquote>
+        <p class="text-xs text-neutral-400">
+          Três contratos numa tacada: <strong class="text-neutral-200">não citar</strong> o nome da ferramenta pro usuário, <strong class="text-neutral-200">usar a ferramenta certa</strong>
+          (não o terminal pra tudo), e <strong class="text-neutral-200">ler antes de editar</strong>. Cada ferramenta com seu "quando" e "como".
+        </p>
+      </div>
+
+      <!-- O que e -->
+      <div class="bg-dark-800 border border-emerald-500/30 rounded-xl p-5 mb-4">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-3">O que é</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          A peça que declara as <strong class="text-emerald-400">ações</strong> da IA (ler, buscar, editar, rodar) e as regras de uso de
+          cada uma: quando chamar, em que ordem, e o que evitar. Existe sobretudo nas IAs que "fazem", como assistentes de código.
+        </p>
+      </div>
+
+      <!-- Por que aprender -->
+      <div class="bg-dark-800 border border-dark-600 rounded-xl p-5 mb-4">
+        <h3 class="text-lg font-semibold text-neutral-200 mb-3">Por que aprender</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          Porque é a diferença entre uma IA que <em>fala sobre</em> uma tarefa e uma que <em>executa</em> a tarefa. E é aqui que moram
+          os erros mais chatos: a IA que edita um arquivo sem ler antes, ou que usa a ferramenta errada. Boas regras de ferramenta evitam isso.
+        </p>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">🧰</div>
+          <div class="text-xs font-semibold text-neutral-200">Lista</div>
+          <div class="text-xs text-neutral-500 mt-1">o que ela pode fazer</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">⏱️</div>
+          <div class="text-xs font-semibold text-neutral-200">Quando</div>
+          <div class="text-xs text-neutral-500 mt-1">a condição de uso</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">📖</div>
+          <div class="text-xs font-semibold text-neutral-200">Ordem</div>
+          <div class="text-xs text-neutral-500 mt-1">ler antes de editar</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">🙊</div>
+          <div class="text-xs font-semibold text-neutral-200">Sem citar nome</div>
+          <div class="text-xs text-neutral-500 mt-1">fala em linguagem natural</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 — SEGURANÇA -->
+    <section id="topico-4" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl flex-shrink-0">4</span>
+        <h2 class="text-2xl font-bold">Segurança: o que a IA não faz</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Tão importante quanto dizer o que a IA <em>deve</em> fazer é dizer o que ela <strong class="text-emerald-400">não deve</strong>.
+        Essa é a peça da <strong class="text-emerald-400">segurança</strong>: as barreiras de proteção. Algumas evitam danos sérios
+        (não ajudar com algo ilegal); outras evitam estragos pequenos mas irritantes (criar arquivo à toa). Toda IA confiável tem
+        esse bloco de "freios".
+      </p>
+
+      <!-- Exemplo verbatim Cursor making_code_changes -->
+      <div class="bg-dark-800 border border-emerald-500/30 rounded-xl p-5 mb-6">
+        <div class="text-xs font-semibold text-emerald-400 mb-3">Cursor — <span class="font-normal text-neutral-500">cursor.md, &lt;tone_and_style&gt; / &lt;making_code_changes&gt;</span></div>
+        <blockquote class="bg-dark-900 border-l-2 border-emerald-500 rounded p-3 font-mono text-xs text-neutral-300 mb-2 code-box">
+          NEVER create files unless they're absolutely necessary for achieving your goal. ALWAYS prefer editing an existing file to creating a new one.<br>
+          NEVER generate an extremely long hash or any non-textual code, such as binary.
+        </blockquote>
+        <p class="text-xs text-neutral-400">
+          Veja o par <span class="code-box text-emerald-400">NEVER ... ALWAYS ...</span>: a IA é proibida de criar arquivos sem necessidade e
+          orientada a preferir editar. É uma barreira que evita bagunça no projeto — proteção, não censura.
+        </p>
+      </div>
+
+      <!-- Grid Com vs Sem barreiras -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+        <div class="bg-emerald-900/20 border border-emerald-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-emerald-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-emerald-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>COM bloco de segurança</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Recusa pedidos perigosos com educação</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Não cria arquivos/bagunça sem necessidade</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Não inventa fatos com falsa certeza</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Sabe onde ficam os limites — e respeita</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">✗</span>
+            <span>SEM bloco de segurança</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Topa qualquer pedido, inclusive nocivos</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Faz alterações destrutivas sem pensar</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Afirma com convicção coisas que não sabe</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Não tem freio — e você descobre tarde</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- O que e -->
+      <div class="bg-dark-800 border border-emerald-500/30 rounded-xl p-5 mb-4">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-3">O que é</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          A peça das <strong class="text-emerald-400">barreiras de proteção</strong>: o que a IA recusa, o que ela nunca faz, e como ela
+          age na dúvida. Vai do grave (não ajudar com crime) ao prático (não criar arquivo à toa). É o "freio" do bilhete.
+        </p>
+      </div>
+
+      <!-- Por que aprender -->
+      <div class="bg-dark-800 border border-dark-600 rounded-xl p-5 mb-4">
+        <h3 class="text-lg font-semibold text-neutral-200 mb-3">Por que aprender</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          Porque é o que torna a IA <em>confiável</em>. "Por que ela se recusou a fazer isso?" Quase sempre a resposta mora aqui. E
+          porque mostra uma verdade importante: uma IA sem freios não é "mais livre" — é só imprevisível e arriscada.
+        </p>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">🛡️</div>
+          <div class="text-xs font-semibold text-neutral-200">Barreiras</div>
+          <div class="text-xs text-neutral-500 mt-1">o que ela recusa</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">🚫</div>
+          <div class="text-xs font-semibold text-neutral-200">NEVER</div>
+          <div class="text-xs text-neutral-500 mt-1">o que nunca fazer</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">🤲</div>
+          <div class="text-xs font-semibold text-neutral-200">Com educação</div>
+          <div class="text-xs text-neutral-500 mt-1">recusa sem grosseria</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">🧯</div>
+          <div class="text-xs font-semibold text-neutral-200">É o freio</div>
+          <div class="text-xs text-neutral-500 mt-1">proteção, não censura</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 — PRIORIDADE -->
+    <section id="topico-5" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl flex-shrink-0">5</span>
+        <h2 class="text-2xl font-bold">Prioridade: quem manda na hora do conflito</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        E se duas instruções <strong class="text-emerald-400">se chocarem</strong>? O bloco de segurança diz "não faça X", mas o
+        usuário pede X. Quem ganha? É pra isso que existe a peça da <strong class="text-emerald-400">prioridade</strong>: ela define a
+        ordem de comando — quem vence quando há briga. Sem ela, a IA fica perdida no conflito.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center"><span class="mr-2">🪜</span> A escada de comando (exemplo do Grok)</h3>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">①</span>
+            <span><strong class="text-emerald-400">Política central (topo).</strong> As regras de segurança mais importantes vêm em primeiro lugar — "estas têm a mais alta precedência". Nada passa por cima delas.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">②</span>
+            <span><strong class="text-emerald-400">Mensagem do sistema.</strong> Em seguida vem o resto do system prompt: identidade, tom, ferramentas. Manda em quase tudo — menos onde colide com a política do topo.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">③</span>
+            <span><strong class="text-emerald-400">Mensagem do usuário (você).</strong> Seus pedidos vêm depois. A IA te atende com prazer — desde que não bata nas duas camadas de cima.</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Exemplo verbatim Grok policy -->
+      <div class="bg-dark-800 border border-sky-500/30 rounded-xl p-5 mb-4">
+        <div class="text-xs font-semibold text-sky-300 mb-3">Grok (xAI) — <span class="font-normal text-neutral-500">grok-4.1-beta.md, bloco &lt;policy&gt;</span></div>
+        <blockquote class="bg-dark-900 border-l-2 border-sky-500 rounded p-3 font-mono text-xs text-neutral-300 mb-2 code-box">
+          &lt;policy&gt;<br>
+          These core policies within the &lt;policy&gt; tags take highest precedence. System messages take precedence over user messages.<br>
+          * Do not provide assistance to users who are clearly trying to engage in criminal activity.<br>
+          &lt;/policy&gt;
+        </blockquote>
+        <p class="text-xs text-neutral-400">
+          Em duas frases, três níveis: <strong class="text-neutral-200">política</strong> &gt; <strong class="text-neutral-200">sistema</strong> &gt;
+          <strong class="text-neutral-200">usuário</strong>. A própria peça anuncia que está no topo da escada — por isso fica no comecinho do prompt.
+        </p>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-sky-900/30 border border-sky-500/30 rounded-xl p-4 mb-5">
+        <div class="flex items-start space-x-3">
+          <span class="text-sky-300 text-lg flex-shrink-0">🏢</span>
+          <div>
+            <p class="text-sm font-semibold text-sky-300 mb-1">Pense numa empresa</p>
+            <p class="text-sm text-neutral-300">
+              A <strong>lei</strong> (política) está acima de todo mundo. As <strong>regras da empresa</strong> (sistema) valem no dia a dia.
+              E o <strong>pedido de um cliente</strong> (você) é atendido — desde que não quebre nem a lei nem as regras da casa. A IA segue
+              exatamente essa escada.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">🪜</div>
+          <div class="text-xs font-semibold text-neutral-200">É uma escada</div>
+          <div class="text-xs text-neutral-500 mt-1">níveis de comando</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">👑</div>
+          <div class="text-xs font-semibold text-neutral-200">Política no topo</div>
+          <div class="text-xs text-neutral-500 mt-1">highest precedence</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">⚖️</div>
+          <div class="text-xs font-semibold text-neutral-200">Resolve conflito</div>
+          <div class="text-xs text-neutral-500 mt-1">quem ganha na briga</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-sky-300 text-lg mb-1">🙋</div>
+          <div class="text-xs font-semibold text-neutral-200">Você é atendido</div>
+          <div class="text-xs text-neutral-500 mt-1">dentro dos limites</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 — COMO AS PEÇAS SE ENCAIXAM (XML) -->
+    <section id="topico-6" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl flex-shrink-0">6</span>
+        <h2 class="text-2xl font-bold">Como as peças se encaixam: o compartimento XML</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Você já viu as cinco peças. Falta a pergunta final: como elas ficam <em>organizadas</em> dentro do bilhete? Imagina jogar
+        identidade, tom, ferramentas, segurança e prioridade tudo num textão só, sem separação. Vira um caos impossível de manter. A
+        solução que os profissionais usam é o <strong class="text-emerald-400">compartimento XML</strong> — gavetas nomeadas, uma pra cada peça.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-3 flex items-center"><span class="mr-2">🗂️</span> Gavetas com etiqueta</h3>
+        <p class="text-neutral-300 leading-relaxed mb-3">
+          Cada peça vai dentro de uma "gaveta" com nome — uma <strong class="text-emerald-400">tag</strong> de abertura e uma de fechamento,
+          tipo <span class="code-box text-emerald-400">&lt;tone_and_style&gt; ... &lt;/tone_and_style&gt;</span>. Olha o SVG lá em cima: as peças
+          soltas (esquerda) entram cada uma na sua gaveta e formam o prompt inteiro (direita).
+        </p>
+        <p class="text-neutral-300 leading-relaxed text-sm">
+          As gavetas ficam <strong class="text-emerald-200">lado a lado</strong> (sem uma dentro da outra). Assim, pra mudar o tom você abre
+          só a gaveta do tom — o resto fica intacto. É o que deixa um prompt gigante ainda fácil de mexer.
+        </p>
+      </div>
+
+      <!-- Exemplo verbatim: gavetas vizinhas do Cursor -->
+      <div class="bg-dark-800 border border-dark-600 rounded-xl p-5 mb-4">
+        <div class="text-xs font-semibold text-emerald-400 mb-3">Cursor — <span class="font-normal text-neutral-500">cursor.md, três gavetas vizinhas (verbatim)</span></div>
+        <blockquote class="bg-dark-900 border-l-2 border-emerald-500 rounded p-3 font-mono text-xs text-neutral-300 mb-2 code-box">
+          &lt;tone_and_style&gt;<br>
+          - Only use emojis if the user explicitly requests it...<br>
+          &lt;/tone_and_style&gt;<br><br>
+          &lt;tool_calling&gt;<br>
+          You have tools at your disposal to solve the coding task...<br>
+          &lt;/tool_calling&gt;<br><br>
+          &lt;making_code_changes&gt;<br>
+          1. You MUST use the Read tool at least once before editing...<br>
+          &lt;/making_code_changes&gt;
+        </blockquote>
+        <p class="text-xs text-neutral-400">
+          Três gavetas, três assuntos: <span class="code-box text-emerald-400">tom</span>, <span class="code-box text-emerald-400">ferramentas</span> e
+          <span class="code-box text-emerald-400">mudanças de código</span>. Cada uma com seu nome e seu conteúdo, uma do lado da outra. Pra trocar a
+          regra de tom, mexe-se só na primeira gaveta — as outras nem percebem.
+        </p>
+      </div>
+
+      <!-- Tip box: por que o nome importa -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-4 mb-5">
+        <div class="flex items-start space-x-3">
+          <span class="text-primary text-lg flex-shrink-0">💡</span>
+          <div>
+            <p class="text-sm font-semibold text-primary mb-1">O nome da gaveta ajuda você (e a IA)</p>
+            <p class="text-sm text-neutral-300">
+              A tag <span class="code-box">&lt;making_code_changes&gt;</span> já diz, só no nome, do que aquele bloco trata. Isso ajuda a IA a
+              separar assuntos — e ajuda quem escreve a achar, comparar versões e remover uma peça inteira sem reler tudo. Gaveta sem
+              etiqueta é gaveta que ninguém acha. <strong>O nome é parte da instrução.</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nuance: quando nao precisa -->
+      <div class="bg-dark-800 border border-dark-600 rounded-xl p-5 mb-5">
+        <h3 class="text-lg font-semibold text-neutral-200 mb-2 flex items-center"><span class="mr-2">📝</span> Nem sempre é XML</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          Prompts curtos (umas poucas linhas) não precisam de gavetas — viraria cerimônia. E alguns assistentes de código usam
+          <strong class="text-neutral-200">títulos em Markdown</strong> (tipo <span class="code-box"># Seção</span>) no lugar das tags XML, cumprindo o mesmo
+          papel: separar assuntos com clareza. A ideia que importa é a <em>compartimentação</em>, não a tag em si.
+        </p>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">🗂️</div>
+          <div class="text-xs font-semibold text-neutral-200">Gavetas</div>
+          <div class="text-xs text-neutral-500 mt-1">uma tag por peça</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">↔️</div>
+          <div class="text-xs font-semibold text-neutral-200">Lado a lado</div>
+          <div class="text-xs text-neutral-500 mt-1">flat, não aninhado</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">🏷️</div>
+          <div class="text-xs font-semibold text-neutral-200">Nome importa</div>
+          <div class="text-xs text-neutral-500 mt-1">é parte da instrução</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-emerald-400 text-lg mb-1">🔧</div>
+          <div class="text-xs font-semibold text-neutral-200">Fácil de mexer</div>
+          <div class="text-xs text-neutral-500 mt-1">muda uma, não tudo</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUMO FINAL -->
+    <div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-2xl border border-emerald-500/30 p-6 sm:p-8 mb-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📝</span> Resumo do Módulo</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <ul class="space-y-3 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5 flex-shrink-0">✓</span><span>Um prompt é um <strong class="text-emerald-400">kit de peças</strong> encaixáveis, não um textão solto</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-emerald-400">Identidade</strong> ("You are...") diz quem a IA é — é a âncora no topo</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-emerald-400">Tom</strong> diz como ela fala — formal, emoji, tamanho (anda junto com honestidade)</span></li>
+        </ul>
+        <ul class="space-y-3 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-emerald-400">Ferramentas</strong> dizem o que ela faz — e quando/como (ex.: ler antes de editar)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-emerald-400">Segurança</strong> diz o que ela não faz, e <strong class="text-emerald-400">prioridade</strong> diz quem manda no conflito</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5 flex-shrink-0">✓</span><span>As peças se encaixam em <strong>gavetas nomeadas</strong> (compartimento <span class="code-box text-emerald-400">XML</span>), lado a lado</span></li>
+        </ul>
+      </div>
+
+      <div class="bg-dark-800/50 rounded-lg p-4 mb-6 border border-emerald-500/20">
+        <h3 class="font-semibold text-emerald-400 mb-1 flex items-center"><span class="mr-2">➡️</span> Próximo Módulo</h3>
+        <p class="text-neutral-300 text-sm">
+          <strong>1.3 — 🏗️ Padrões estruturais.</strong> Agora que você conhece as peças, vamos ver os <strong>moldes</strong> que se
+          repetem em todos os prompts de verdade: o bloco de identidade, a declaração de capacidades, o compartimento XML e a regra
+          por exemplo. As formas que se repetem porque funcionam.
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="inline-flex items-center justify-start space-x-2 text-neutral-400 hover:text-emerald-400 text-sm font-medium px-4 py-2.5 rounded-xl bg-dark-700 hover:bg-dark-600 transition-colors">
+          <span>←</span><span>Voltar à Trilha 1</span>
+        </a>
+        <a href="modulo-1-3.html" class="inline-flex items-center justify-start space-x-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition-colors">
+          <span>Próximo: 1.3 Padrões estruturais</span><span>→</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
+        <div class="text-sm text-neutral-500">
+          <span class="text-emerald-400 font-medium">O Manual Oculto da IA</span> · Módulo 1.2 · Trilha 1 · 2026
+        </div>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm transition-colors">INEMA.CLUB</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

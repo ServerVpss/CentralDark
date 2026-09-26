@@ -1,0 +1,10 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@codemirror\lang-java\dist\index.d.cts
+
+import { LRLanguage, LanguageSupport } from '@codemirror/language';
+A language provider based on the [Lezer Java
+parser](https://github.com/lezer-parser/java), extended with
+highlighting and indentation information.
+declare const javaLanguage: LRLanguage;
+Java language support.
+declare function java(): LanguageSupport;
+export { java, javaLanguage };

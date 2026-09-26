@@ -1,0 +1,100 @@
+* 7e61c1bd5 (origin/main, origin/HEAD) chore(estado): regenerar ESTADO DA RETOMADA [skip ci]
+* c56c4e3ef chore(estado): regenerar ESTADO DA RETOMADA [skip ci]
+| * 00537f212 (origin/docs/acorda-rebuilder-20260801) test(report): aceitar qualquer bloqueio válido do template inerte
+| * 01e55f8d9 fix(ci): usar paths válidos para receipts
+| * cf1fa357f test(progress): provar receipts, HEAD e emissor oficial
+| * 3d9c6610a fix(progress): consumir receipts determinísticos no HEAD
+| * 44d25de71 ci(receipts): prender testes e Meta Lupa ao HEAD
+| * 006555193 test(school): provar lições, contrato único e receipts
+| * b3b10dfc3 fix(school): provar lições e impedir contrato concorrente
+| * 1ed079a02 test(visual): bloquear divergência fonte-pacote
+| * 3ba1c91d0 fix(visual): exigir paridade entre fonte e pacote
+| * e6afec542 fix(visual): alinhar SVG versionado ao manifesto
+| * e1422482b fix(pr): estruturar gates e papel do emissor
+| * f635044e1 test(report): falsificar modo curto, autoridade e coleta
+| * 7833bb24c fix(report): validar estrutura, gates e coleta
+| * b113c7e56 fix(refactor): remover saída concorrente
+| * f5faae5d7 fix(report): estruturar gates, emissor e autoridade
+| * a018b686a fix(pr): restaurar gate de ações sensíveis
+| * 2f45139c1 fix(pr): preservar guardrails do kit Codex
+| * b815482b9 test(progress): provar HEAD real e gates concluíveis
+| * 849b4cbd2 fix(progress): prender HEAD e concluir artefatos por prova
+| * a32efcadc test(school): provar padrão global e bloquear atalhos
+| * a14385a57 fix(school): validar módulos, frontmatter e superfícies globais
+| * a7ac7d7db test(report): provar PR global e Mermaid em PT-BR
+| * 868e05428 feat(report): validar fluxo visual e corpo de PR
+| * 22f58debb feat(school): registrar superfícies globais obrigatórias
+| * f5bacde50 feat(pr): padronizar todo PR no relato Pivete
+| * ba2ffbcc6 ci(global): aplicar escola em todo commit e PR
+| * eff35320f fix(review): tornar CodeRabbit PT-BR global e válido
+| * 5c27b501c feat(school): aplicar contrato em todo commit e PR
+| * 4866b8fb8 feat(report): tornar padrão Pivete global e visual
+| * 3a5f5377f test(report): provar emissor oficial no contrato Pivete
+| * c3ccf30aa fix(report): emitir contrato Pivete pelo motor oficial
+| * 8a8c160ef test(governance): corrigir contraprova de ordem do relato
+| * e573ff128 feat(review): alinhar CodeRabbit ao contrato Pivete
+| * c0f142987 ci(governance): testar contrato unificado de relato Pivete
+| * 0d68bc224 docs(skill): tornar relato Pivete obrigatório e econômico
+| * 589c6fa5c test(school): exigir contrato unificado em todo boot
+| * 57c8524db feat(school): tornar contrato de relato parte do boot
+| * 7592b2f02 feat(school): carregar contrato unificado em todo boot
+| * e2a065557 test(governance): provar contrato unificado de relato Pivete
+| * 169702227 feat(governance): validar relato Pivete de forma determinística
+| * 67352851e docs(governance): consolidar contrato unificado de relato Pivete
+| * a458dc8e5 docs(status): separar operação de conclusão integral
+| * e9a55d39c ci(status): exigir operação sem fingir entrega completa
+| * 0439d9a17 test(status): provar operacional sem alegar completo
+| * 936f323c6 fix(status): separar operacional de completo
+| * 4ac0feeb4 test(status): impedir receipt de virar anexo original
+| * 5d4cc00f9 fix(status): separar curso condensado do anexo original
+| * 79084c0e2 fix(ci): testar e registrar o PR_HEAD exato
+| * 59fffb805 docs(skill): corrigir custódia da fonte do curso
+| * d78e7ce16 docs(skill): distinguir curso executável de receipt externo
+| * 1ea4c9534 test(skill): provar receipt do curso e bloqueio por SHA
+| * 8ac04e5bc fix(skill): validar receipt do curso e conteúdo condensado
+| * e3b551fe3 fix(skill): registrar receipt do curso sem fingir cópia integral
+| * 0c058d6c1 fix(skill): substituir fonte truncada por receipt verificável
+| * f88c5ca0e test(visual): cobrir hashes distintos entre fonte e pacote
+| * 9e04e87d0 fix(visual): validar hash próprio da fonte versionada
+| * ecb262466 test(visual): provar hashes separados da fonte e do ZIP
+| * 7b4d00a4e fix(visual): validar hash da fonte separado do membro ZIP
+| * e3525b1f6 fix(visual): separar hash do pacote e da fonte versionada
+| * cda989c53 test(boot): prender identidade do contrato de calibração
+| * 6ff8d0936 test(boot): provar contrato e escola sem grep frágil
+| * f48fbdfad feat(boot): validar contrato estrutural e escola agentic
+| * d222f0aba feat(boot): conectar escola agentic à porta universal
+| * b79d567d4 ci(boot): tornar escola agentic obrigatória e determinística
+| * da1ccaa22 fix(status): remover fotografia estática de progresso
+| * 26907a978 test(status): bloquear percentual e conclusão falsos
+| * ef3c4cd31 fix(status): derivar progresso vivo e registrar limite binário
+| * 9a2eba3e9 docs(visual): versionar fonte SVG editável
+| * 03203af72 docs(visual): versionar manifesto do Agentic Loop 4K
+| * 73b393f2c test(skill): provar fontes e ZIP opcional
+| * 1c33b27cc fix(skill): validar ZIP recebido sem fingir armazenamento binário
+| * 23be0ce94 docs(skill): registrar limite binário de forma honesta
+| * 6104ab5af fix(skill): documentar prova visual sem bytes ocultos
+| * cca8c0048 fix(skill): registrar limite binário sem falso verde
+| * e3f02b889 test(skill): validar fontes textuais do visual
+| * 2d1f8c0c0 fix(skill): validar fontes visuais versionadas
+| * 9a8103c2e test(skill): bloquear pacote visual alterado
+| * b1faabce6 feat(skill): validar pacote visual reproduzível
+| * 274aba2b7 test(skill): provar loader e aprendizado seguro
+| * eefc8cb19 feat(skill): adicionar loader determinístico da escola
+| * c52f3a18d fix(skill): tornar fontes reproduzíveis pelo manifesto
+| * f7f38ac83 fix(skill): apontar curso integral compactado
+| * 82eb79f71 fix(skill): apontar para fonte compactada verificável
+| * c50efe529 docs(skill): preservar curso original compactado e verificável
+| * 16fcc7841 feat(skill): criar ledger seguro de aprendizados
+| * 7e163f032 feat(skill): adicionar manifesto determinístico da escola
+| * 3e942ba09 docs(skill): adicionar módulo zero regressão
+| * f2b9c2951 docs(skill): criar escola operacional modular
+| * d70a701a5 feat(skill): transformar loop em escola bootável
+| * 4f61bd974 ci(boot): tornar Agentic Loop 4K obrigatório na porta
+| * eaea47954 docs(status): medir Agentic Loop 4K em porcentagem auditável
+| * 8bc8759e4 test(ci): bloquear porcentagem falsa no loop agentic
+| * 77ff06fbb feat(ci): calcular progresso agentic fail-closed
+| * ae1f0b645 feat(skill): registrar loop agentic de CI no Jeito Pivete
+| * 4c869056e test(boot): provar quarta porta e descoberta repo-wide
+| * 9b2a97a6b fix(boot): descobrir todas as definições concorrentes no repo
+| * bb477a375 docs(boot): delegar quarta porta ao protocolo canônico
+| * e90f4c2c9 test(boot): cobrir contradições e recibo efetivo

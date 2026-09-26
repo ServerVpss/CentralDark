@@ -1,0 +1,20 @@
+MISSION_ID=CENTRALDARK-PM2-MCP-FORENSIC-PRECHECK-01
+STATUS=CONCLUIDO
+MODE=READ_ONLY
+MUTATIONS_PERFORMED=false
+SECRET_VALUES_EXPOSED=false
+
+RESUMO EM UMA LINHA:
+21 processos PM2 (19 online, 2 parados). Dois deles rodam SEM codigo no disco e morrem
+se forem reiniciados. O ecosystem.config.js nao representa mais o estado vivo. O MCP esta
+funcional e fecha corretamente sem credencial, mas nenhuma das 7 ferramentas da allowlist
+desejada existe — logo, nao esta pronto para integracao externa.
+
+TOP 3 ACHADOS:
+F-01 CRITICO  LovableBridge (pid 3583381) e AiPromptAPI (pid 3583363) rodam de memoria,
+              com o arquivo .mjs ausente do disco. NAO REINICIAR.
+F-02 ALTO     State drift: 12 servicos declarados nao rodam, 15 rodam sem declaracao.
+F-03 ALTO     MCP: 102 ferramentas vivas, 0 das 7 desejadas. Catalogo inclui execute_command,
+              vps_run_once_script, vps_write_file_safe e ~23 github_* mutaveis.
+
+MCP_READY_FOR_CODERABBIT=false

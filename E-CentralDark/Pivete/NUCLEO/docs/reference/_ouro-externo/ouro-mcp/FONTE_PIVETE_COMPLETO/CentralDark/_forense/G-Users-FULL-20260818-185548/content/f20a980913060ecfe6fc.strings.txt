@@ -1,0 +1,38 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\Service Worker\CacheStorage\379f1cbab5b08b6fc9e08681e42d8be311441c88\2ce6458a-4e5a-498a-9a81-53c72338dabb\38720ab1369ba567_0
+
+https://www.gstatic.com/youtube/img/icons/web/youtube_fill/unplugged_logo/v2/24px.svg<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+    <path fill="#FF0033" d="M21,17H3c-0.55,0-1-0.45-1-1V6c0-0.55,0.45-1,1-1h18c0.55,0,1,0.45,1,1v10C22,16.55,21.55,17,21,17z    M19,19.2v-0.9c0-0.17-0.13-0.3-0.3-0.3H5.3C5.13,18,5,18.13,5,18.3v0.9c0,0.17,0.13,0.3,0.3,0.3h13.4C18.87,19.5,19,19.37,19,19.2   z"/>
+    <polygon fill="#FFFFFF" points="10,14 15,11 10,8  "/>
+  </g>
+</svg>
+accept-ranges
+bytes"6
+access-control-allow-origin
+https://www.youtube.com"
+264675"9
+alt-svc
+.h3=":443"; ma=2592000,h3-29=":443"; ma=2592000")
+cache-control
+public, max-age=31536000"
+content-encoding
+content-length
+content-type
+image/svg+xml">
+cross-origin-opener-policy
+ same-origin; report-to="youtube"",
+cross-origin-resource-policy
+cross-origin"%
+Wed, 12 Aug 2026 22:09:22 GMT"(
+expires
+Thu, 12 Aug 2027 22:09:22 GMT".
+last-modified
+Mon, 31 Mar 2025 23:38:00 GMT"{
+report-to
+n{"group":"youtube","max_age":2592000,"endpoints":[{"url":"https://csp.withgoogle.com/csp/report-to/youtube"}]}"
+server
+Accept-Encoding, Origin"!
+x-content-type-options
+nosniff"
+x-xss-protection
+BUhttps://www.gstatic.com/youtube/img/icons/web/youtube_fill/unplugged_logo/v2/24px.svgP(Z
+image/svg+xmlr

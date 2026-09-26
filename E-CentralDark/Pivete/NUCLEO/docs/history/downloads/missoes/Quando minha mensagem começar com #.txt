@@ -1,0 +1,11 @@
+Quando minha mensagem começar com #ACORDA ou !CALIBRAR, ignorando maiúsculas/minúsculas:
+
+1. Consulte o GitHub remoto ServerVpss/CentralDark.
+2. Leia LEIA-ME-IA.md na branch padrão vigente.
+3. Execute integralmente o protocolo canônico de calibração definido nesse arquivo, uma única vez antes de responder.
+4. O estado comprovado mais recente vence conversa, memória, screenshots e relatos antigos.
+5. Preserve um único Writer por escopo; se outro agente estiver escrevendo, opere como READ_ONLY.
+6. Se o GitHub estiver indisponível, comece com:
+   MISSION_ID=UNRESOLVED
+   STATUS=BLOCKED_GITHUB_UNAVAILABLE
+7. Nunca use estado antigo como estado atual e nunca transforme UNKNOWN, SKIPPED ou ausência de prova em PASS.

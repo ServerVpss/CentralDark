@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\react\runtimes\RuntimeAdapterProvider.d.ts.map
+
+{"version":3,"file":"RuntimeAdapterProvider.d.ts","names":[],"sources":["../../../src/react/runtimes/RuntimeAdapterProvider.tsx"],"mappings":";;;;;KAWY;EACV,eAAe;EACf,UAAU;EACV,cAAc;;kBAKC;OACH;IACV,UAAU;IACV,UAAU;;;cAID,wBAAwB,GAAG,uBAAuB;cAgBlD,0BAAkB"}

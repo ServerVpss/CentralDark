@@ -1,0 +1,16 @@
+{
+  "candidate_ref": "cot-react-loop@2.0.0",
+  "level": 1,
+  "tier": "OPACA",
+  "total_xp": 0,
+  "history": [
+    {
+      "event": "skill_created",
+      "xp": 0,
+      "timestamp": "2026-08-13T00:00:00Z",
+      "fingerprint": "sha256:skill_created_initial"
+    }
+  ],
+  "current_level": 1,
+  "xp_to_next_level": 100
+}

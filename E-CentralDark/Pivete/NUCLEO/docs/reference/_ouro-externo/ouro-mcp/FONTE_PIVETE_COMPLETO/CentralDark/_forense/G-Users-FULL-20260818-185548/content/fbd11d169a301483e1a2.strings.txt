@@ -1,0 +1,28 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\observability\__pycache__\__init__.cpython-311.pyc
+
+z.First-party Hermes observability integrations.
+annotationsN)
+hook_name
+kwargsr
+return
+zEDispatch a Hermes lifecycle event to built-in observability features.
+relay_shared_metricsN)
+_safe_observe
+observe_lifecycle)
+UC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\observability\__init__.pyr
+zAReturn whether any built-in observability feature handles a hook.r
+handles_hook)
+callback
+dict[str, Any]c
+Nz&Built-in observability hook failed: %sT)
+exc_info)
+Exception
+logger
+warning)
+__doc__
+__future__r
+logging
+typingr
+getLogger
+__name__r
+<module>r$

@@ -1,0 +1,14 @@
+{
+  "claims": [
+    {"claim":"main HEAD dcf70053f2af1d95bd86867e6f043fb634e919d0","status":"PROVED_REMOTE"},
+    {"claim":"PR1115 open draft head b917ca3a19ed59d26c04ab2234280a93ee19513b","status":"PROVED_REMOTE"},
+    {"claim":"perception-orchestra exists on main","status":"PROVED_REMOTE"},
+    {"claim":"knowledge-compiler exists on main","status":"PROVED_REMOTE"},
+    {"claim":"five locally reported skill names exist on remote main","status":"NOT_FOUND_REMOTE_SEARCH"},
+    {"claim":"five locally reported skills exist right now on E drive","status":"UNKNOWN_CURRENT_RUNTIME"},
+    {"claim":"omit=dev is unconditional npm12+ default","status":"REJECTED_OFFICIAL_DOCS"},
+    {"claim":"include can override omit for same dependency type","status":"SUPPORTED_OFFICIAL_DOCS"},
+    {"claim":"legacy-peer-deps is universal safe default","status":"REJECTED_AS_STANDARD"},
+    {"claim":"full intent-to-fixed-point loop is proven live end-to-end in Hermes process","status":"UNKNOWN_END_TO_END_RUNTIME"}
+  ]
+}

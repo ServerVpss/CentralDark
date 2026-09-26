@@ -1,0 +1,89 @@
+Pensando
+Pesquisando em support.microsoft.com
+Pensou por 8s
+Pronto
+
+Fontes
+·
+24
+Suporte Microsoft
+Use live captions to better understand audio | Microsoft Support
+Suporte Microsoft
+Usar legendas ao vivo para entender melhor o áudio | Microsoft Support
+Suporte Microsoft
+Change caption settings | Microsoft Support
+
+microsoft.com
+WINDOWS 实时字幕崩溃（live caption crack） - Microsoft Q&A
+14 de julho de 2026 — WINDOWS 实时字幕崩溃（LIVE CAPTION CRACK） Senlong Chen 0 信誉分 2026年7月15日 21:01 出错应用程序名称： LiveCaptions.exe，版本： 10.0.26100.4202，时间戳： 0x0f512f74 出错模块名称： LiveCaptionsBackendDll.dll， 版本： 2125.18100.0.0，时间戳： 0...
+
+microsoft.com
+LiveCaptions翻译为中文时崩溃 - Microsoft Q&A
+5 de março de 2026 — LIVECAPTIONS翻译为中文时崩溃 Y_z00 0 信誉分 2026年3月6日 22:24 出错应用程序名称： LiveCaptions.exe，版本： 10.0.26100.7705，时间戳： 0x2e3888e6 出错模块名称： LiveCaptionsBackendDll.dll， 版本： 2126.2700.0.0，时间戳： 0x69789c06 异常代码： 0xc000...
+microsoft.com
+March 27, 2025—KB5053656 (OS Build 26100.3624) Preview | Microsoft Support
+26 de março de 2025 — * New! A new experience to improve the discoverability of the emoji and more panels in Windows 11 with the introduction of a new system tray icon on the taskbar. This change will initially be availabl...
+
+microsoft.com
+window实时字幕崩溃 - Microsoft Q&A
+26 de março de 2025 — WINDOW实时字幕崩溃 匿名 2025年3月27日 13:53 错误应用程序名称: LiveCaptions.exe，版本: 10.0.22621.3672，时间戳: 0x5116ae04 错误模块名称: ucrtbase.dll，版本: 10.0.22621.3593，时间戳: 0x10c46e71 异常代码: 0xc0000409 错误偏移量: 0x000000000007f6...
+
+microsoft.com
+window实时字幕崩溃 - Microsoft Q&A
+26 de março de 2025 — 通过 WINDOW实时字幕崩溃 匿名 2025-03-27T05:53:17+00:00 错误应用程序名称: LiveCaptions.exe，版本: 10.0.22621.3672，时间戳: 0x5116ae04 错误模块名称: ucrtbase.dll，版本: 10.0.22621.3593，时间戳: 0x10c46e71 异常代码: 0xc0000409 错误偏移量: 0x0...
+
+microsoft.com
+Live Captions not working - Microsoft Q&A
+16 de agosto de 2024 — LIVE CAPTIONS NOT WORKING Anonymous Aug 17, 2024, 3:47 AM Hi, I've updated my Windows to Windows 11 Home 23H2. However, the Live Captions does not seem to open. I've restarted my PC and tried to g...
+microsoft.com
+May 24, 2023—Windows configuration update | Microsoft Support
+23 de maio de 2023 — MAY 24, 2023—WINDOWS CONFIGURATION UPDATE Applies To Windows 11 version 22H2, all editions Note * For information, see Get Windows updates as soon as they're available for your device and Deliver...
+
+microsoft.com
+is there a software like windowss 11 live captions for windows 10? - Microsoft Q&A
+1 de março de 2023 — IS THERE A SOFTWARE LIKE WINDOWSS 11 LIVE CAPTIONS FOR WINDOWS 10? Anonymous Mar 2, 2023, 5:09 AM * * * Windows for home | Windows 10 | Accessibility Windows for home | Windows 10 | Accessibilit...
+
+microsoft.com
+How to turn sub titles on - Microsoft Q&A
+16 de janeiro de 2023 — HOW TO TURN SUB TITLES ON Anonymous Jan 17, 2023, 3:23 AM On Sunday I updated from Win 10 (64) fully updated to Win 11 Pro. Overall good but some specific irritations. a) Using Slimjet I had pre...
+
+microsoft.com
+Missing Live captions toggle button - Microsoft Q&A
+24 de agosto de 2022 — MISSING LIVE CAPTIONS TOGGLE BUTTON Anonymous Aug 25, 2022, 4:50 AM Hi! My problem is this: before I made a computer format, I was able to run live caption. Now, after installing windows 11 21H2,...
+
+microsoft.com
+Is it possible to save a transcript of live captions in Windows 11? - Microsoft Q&A
+7 de agosto de 2022 — IS IT POSSIBLE TO SAVE A TRANSCRIPT OF LIVE CAPTIONS IN WINDOWS 11? Anonymous Aug 8, 2022, 1:21 PM The live captions in Windows 11 (dev channel build) are working great so far! Is it possible to s...
+
+microsoft.com
+Live Captions in Windows 11 - Microsoft Q&A
+9 de julho de 2022 — LIVE CAPTIONS IN WINDOWS 11 Anonymous Jul 10, 2022, 6:14 AM I am currently on Windows 11 Pro Version 21H2 (OS Build 22000.778). I am having a problem with Live Captions feature in Accessibility....
+
+microsoft.com
+I cannot turn off live captions - Microsoft Q&A
+20 de junho de 2022 — Ask a question I CANNOT TURN OFF LIVE CAPTIONS Anonymous Jun 21, 2022, 8:18 AM Good morning/afternoon/evening/whatever everyone, As you can tell by the title, I am having trouble turning live ca...
+microsoft.com
+Use legendas ao vivo para entender melhor o áudio | Microsoft Support
+USE LEGENDAS AO VIVO PARA ENTENDER MELHOR O ÁUDIO As legendas ao vivo ajudam todos, incluindo pessoas surdas ou com deficiência auditiva, a entender melhor o áudio, fornecendo transcrição automática...
+microsoft.com
+Use live captions to better understand audio | Microsoft Support
+PERSONALIZE HOW YOUR CAPTIONS ARE DISPLAYED To choose where captions are displayed on your desktop: 1. Select the Settings Image: settings button in the live captions window. 2. Select Position. 3...
+microsoft.com
+Troubleshooting live captions or voice access setup issues | Microsoft Support
+TROUBLESHOOTING LIVE CAPTIONS OR VOICE ACCESS SETUP ISSUES Image Get help with Copilot Note * Live captions is available in Windows 11, version 22H2 and later. Live translation is available on Co...
+microsoft.com
+Utilizar legendas em tempo real para compreender melhor o áudio | Microsoft Support
+UTILIZAR LEGENDAS EM TEMPO REAL PARA COMPREENDER MELHOR O ÁUDIO As legendas ao vivo ajudam todos, incluindo pessoas surdas ou com dificuldades auditivas, a compreender melhor o áudio ao fornecer tra...
+microsoft.com
+Utilizar legendas em direto para compreender melhor o áudio | Microsoft Support
+UTILIZAR LEGENDAS EM DIRETO PARA COMPREENDER MELHOR O ÁUDIO As legendas em tempo real ajudam todas as pessoas, incluindo as surdas ou com dificuldades auditivas, a compreender melhor o áudio ao forn...
+microsoft.com
+Make Windows easier to hear | Microsoft Support
+MAKE NOTIFICATIONS STICK AROUND LONGER By default, Windows notifications disappear five seconds after they appear. If you want more time to read them, you can increase how long they're displayed. S...
+microsoft.com
+Usar subtítulos en directo para comprender mejor el audio | Microsoft Support
+USAR SUBTÍTULOS EN DIRECTO PARA COMPRENDER MEJOR EL AUDIO Los subtítulos en directo ayudan a todos los usuarios, incluidas las personas sordas o con dificultades auditivas, a comprender mejor el aud...
+
+microsoft.com
+Use Live Captions In Windows To Better Understand Audio - Training | Microsoft Learn
+1100 XP USE LIVE CAPTIONS IN WINDOWS TO BETTER UNDERSTAND AUDIO * 25 min * Module * 10 Units

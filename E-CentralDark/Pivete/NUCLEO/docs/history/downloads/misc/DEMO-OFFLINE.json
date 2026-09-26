@@ -1,0 +1,6 @@
+{
+  "status": "PASS",
+  "output": "DEMO_OFFLINE_PASS",
+  "provider": "centraldark",
+  "model": "demo-model"
+}

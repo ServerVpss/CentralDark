@@ -1,0 +1,13 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\compiler\tcl.vim
+
+" Vim compiler file
+" Compiler:
+" Maintainer:
+Doug Kearns <dougkearns@gmail.com>
+" Last Change:
+2024 Apr 03
+if exists("current_compiler")
+  finish
+let current_compiler = "tcl"
+CompilerSet makeprg=tcl
+CompilerSet errorformat=%EError:\ %m,%+Z\ %\\{4}(file\ \"%f\"\ line\ %l),%-G%.%#

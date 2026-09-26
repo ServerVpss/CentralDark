@@ -1,0 +1,16 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\OptimizationGuideModelsManifest\1.20260810.11\proofreader_small_expert_model_solution_config.binarypb
+
+.optimization_guide.proto.ProofreaderApiRequest
+%s%s%s2
+<ctrl3>label
+)ProofreadOptions.include_correction_types
+correction
+<ctrl2>proofread
+correction
+correction
+ <ctrl1>
+)ProofreadOptions.include_correction_types
+correction
+ <ctrl1>(
+/optimization_guide.proto.ProofreaderApiResponse
+output0

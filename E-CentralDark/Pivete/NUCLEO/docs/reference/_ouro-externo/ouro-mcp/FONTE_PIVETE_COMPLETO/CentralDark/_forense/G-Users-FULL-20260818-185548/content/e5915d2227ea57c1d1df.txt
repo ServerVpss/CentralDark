@@ -1,0 +1,39 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@eslint\config-array\dist\esm\types.d.ts
+
+/**
+ * @fileoverview Types for the config-array package.
+ * @author Nicholas C. Zakas
+ */
+/**
+ * A file matcher used in `files` and `ignores`.
+ */
+export type FileMatcher = string | ((filePath: string) => boolean);
+/**
+ * An entry in a config's `files` array.
+ *
+ * A subarray means all matchers must match.
+ */
+export type FilesMatcher = FileMatcher | FileMatcher[];
+/**
+ * The config types allowed in the `extraConfigTypes` option.
+ */
+export type ExtraConfigType = "array" | "function";
+export interface ConfigObject {
+    /**
+     * The base path for files and ignores.
+     */
+    basePath?: string;
+    /**
+     * The files to include.
+     */
+    files?: FilesMatcher[];
+    /**
+     * The files to exclude.
+     */
+    ignores?: FileMatcher[];
+    /**
+     * The name of the config object.
+     */
+    name?: string;
+    [key: string]: unknown;
+}

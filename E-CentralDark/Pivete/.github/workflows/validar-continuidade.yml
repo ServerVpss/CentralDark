@@ -1,0 +1,48 @@
+name: Validar Continuidade Global
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  validar-continuidade-global:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Validate global continuity
+        id: continuity-check
+        run: |
+          # Determine base SHA for comparison
+          if [ "${{ github.event_name }}" = "push" ]; then
+            # For push events, compare against the before commit
+            BASE_SHA="${{ github.event.before }}"
+          else
+            # For pull_request events, use the base commit
+            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          fi
+          
+          # Fallback if BASE_SHA is empty or all zeros
+          if [ -z "$BASE_SHA" ] || [ "$BASE_SHA" = "0000000000000000000000000000000000000000" ]; then
+            echo "BASE_SHA is invalid or unset. Using HEAD~1 as fallback."
+            BASE_SHA="HEAD~1"
+          fi
+          
+          # Validate that BASE_SHA is a real commit
+          if ! git rev-parse --verify "$BASE_SHA" >/dev/null 2>&1; then
+            echo "ERROR: BASE_SHA '$BASE_SHA' is not a valid commit. Aborting."
+            exit 1
+          fi
+          
+          # Check if BASE_SHA is an ancestor of HEAD (current commit)
+          if git merge-base --is-ancestor "$BASE_SHA" "${{ github.sha }}"; then
+            echo "✅ Continuity validation passed: $BASE_SHA is ancestor of ${{ github.sha }}"
+            exit 0
+          else
+            echo "❌ Continuity validation failed: $BASE_SHA is NOT ancestor of ${{ github.sha }}"
+            exit 1
+          fi

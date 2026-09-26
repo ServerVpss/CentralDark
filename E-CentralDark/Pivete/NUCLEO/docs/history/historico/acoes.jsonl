@@ -1,0 +1,4 @@
+{"ts":"2026-07-27T09:10:00","quando":"27/07/2026 09:10:00","autor":"Hermes","acao":"Sessao iniciada — BOOT-IA.md lido","area":"docs","status":"ok","detalhe":"Contrato aceito. Ultimas 10 acoes revisadas."}
+{"ts":"2026-07-27T09:22:00","quando":"27/07/2026 09:22:00","autor":"Hermes","acao":"Mapeando o roteador de intencao","area":"pesquisa","status":"ok","detalhe":"4 tiers identificados: FREE, BARATO, MEDIO, TOPO."}
+{"ts":"2026-07-27T09:41:00","quando":"27/07/2026 09:41:00","autor":"Hermes","acao":"Escrevendo scripts/roteador.mjs","area":"codigo","status":"andamento","detalhe":"Cascata de fallback em construcao."}
+{"ts":"2026-07-27T09:44:00","quando":"27/07/2026 09:44:00","autor":"Hermes","acao":"Chave do provedor recusada (401)","area":"infra","status":"erro","detalhe":"Tier BARATO fora. Caiu pro FREE automaticamente."}

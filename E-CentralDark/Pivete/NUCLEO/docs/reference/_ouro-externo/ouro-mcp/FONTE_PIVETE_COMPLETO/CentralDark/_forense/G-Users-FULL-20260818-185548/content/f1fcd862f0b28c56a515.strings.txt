@@ -1,0 +1,19 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\share\doc\git-doc\git-unpack-file.adoc
+
+git-unpack-file(1)
+==================
+git-unpack-file - Creates a temporary file with a blob's contents
+SYNOPSIS
+--------
+[verse]
+'git unpack-file' <blob>
+DESCRIPTION
+-----------
+Creates a file holding the contents of the blob specified by sha1. It
+returns the name of the temporary file in the following format:
+.merge_file_XXXXX
+OPTIONS
+-------
+<blob>::
+Must be a blob id
+Part of the linkgit:git[1] suite

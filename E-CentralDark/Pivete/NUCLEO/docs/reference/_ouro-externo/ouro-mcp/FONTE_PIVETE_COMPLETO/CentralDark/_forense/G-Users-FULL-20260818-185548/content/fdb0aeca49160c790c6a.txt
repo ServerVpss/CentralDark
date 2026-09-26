@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@nous-research\ui\dist\ui\components\separator.d.ts
+
+export declare function Separator({ className, orientation, ...props }: SeparatorProps): import("react").JSX.Element;
+interface SeparatorProps extends React.HTMLAttributes<HTMLDivElement> {
+    orientation?: 'horizontal' | 'vertical';
+}
+export {};

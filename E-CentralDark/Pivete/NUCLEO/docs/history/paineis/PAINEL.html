@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>CentralDark — Painel de Casa</title>
+<link rel="stylesheet" href="painel.css">
+<style>
+  .tl{display:flex;flex-direction:column}
+  .tl .ev{display:grid;grid-template-columns:78px 1fr auto;gap:12px;align-items:baseline}
+  .tl .hora{font:12px/1.4 ui-monospace,Consolas,monospace;color:var(--ink-soft)}
+  .tl .txt b{display:block;font-size:14.5px}
+  .tl .txt span{display:block;font-size:12.8px;color:var(--ink-soft);margin-top:2px}
+  @media (max-width:640px){
+    .tl .ev{grid-template-columns:1fr auto}
+    .tl .hora{grid-column:1/-1;order:-1}
+  }
+  .pulse{animation:pl 1.4s ease-in-out infinite}
+  @keyframes pl{0%,100%{opacity:1}50%{opacity:.35}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand"><span class="dot" id="dotStatus"></span> CentralDark · Casa</div>
+    <div class="spacer"></div>
+    <button class="btn" id="btnTema">🌗 Tema</button>
+    <button class="btn" onclick="location.reload()">↻ Recarregar</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <h1>O que o Hermes andou fazendo aqui</h1>
+    <p id="subGerado">Sem leitura ainda — dê dois cliques em <code>PAINEL.bat</code>.</p>
+  </div>
+
+  <section class="verdict" id="verdict">
+    <div>
+      <div class="big" id="verdictTitulo">Aguardando leitura</div>
+      <div class="why" id="verdictTexto">
+        Rode <code>ATUALIZAR.bat</code> ou <code>PAINEL.bat</code>. Esta tela se preenche sozinha
+        a partir de <code>paineis\dados.js</code>.
+      </div>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card"><h3>Ações registradas</h3><div class="kpi" id="kAcoes">—<small id="kAcoesSub">histórico local</small></div></div>
+    <div class="card"><h3>Fazendo agora</h3><div class="kpi" id="kAndamento">—<small>tarefas em andamento</small></div></div>
+    <div class="card"><h3>Sua versão</h3><div class="kpi" id="kHead">—<small id="kBranch">branch —</small></div></div>
+    <div class="card"><h3>Trabalho não salvo</h3><div class="kpi" id="kSujo">—<small>arquivos que ainda não foram pro GitHub</small></div></div>
+  </section>
+
+  <div id="boxAvisos"></div>
+
+  <details open>
+    <summary>🕒 Linha do tempo <span class="cnt" id="cntTl">0</span></summary>
+    <div class="toolbar">
+      <input type="search" id="busca" placeholder="Filtrar por texto, área ou status…">
+    </div>
+    <div class="list tl" id="listaTl"><div class="vazio">Nenhuma ação registrada ainda.</div></div>
+  </details>
+
+  <details>
+    <summary>🔀 Estado do repositório</summary>
+    <div style="padding:14px 18px">
+      <div class="row"><span>Branch</span><span id="rBranch">—</span></div>
+      <div class="row"><span>Sua versão</span><span id="rHead">—</span></div>
+      <div class="row"><span>Versão no GitHub</span><span id="rRemoto">—</span></div>
+      <div class="row"><span>Último commit</span><span id="rCommit">—</span></div>
+      <div class="row"><span>Atrás / à frente</span><span id="rDiff">—</span></div>
+      <div class="row"><span>Arquivos não salvos</span><span id="rSujos">—</span></div>
+    </div>
+  </details>
+
+  <details>
+    <summary>🤖 O contrato do Hermes (BOOT obrigatório)</summary>
+    <div style="padding:14px 18px">
+      <ol class="steps">
+        <li class="done"><b>1 · Ler o BOOT</b><span>Ao abrir a pasta, lê <code>BOOT-IA.md</code> inteiro. Sem exceção.</span></li>
+        <li class="done"><b>2 · Olhar onde parou</b><span>Lê as últimas linhas de <code>historico\acoes.jsonl</code>.</span></li>
+        <li class="now"><b>3 · Trabalhar</b><span>Só dentro desta pasta. Área protegida exige <code>PERMITO PIVETE</code>.</span></li>
+        <li><b>4 · Registrar (obrigatório)</b><span>Toda ação vira linha no histórico e atualiza este painel.</span></li>
+        <li><b>5 · Fechar a sessão</b><span>Uma linha de resumo. Sem registro, a tarefa não conta como feita.</span></li>
+      </ol>
+      <p style="margin:14px 0 4px;color:var(--ink-soft);font-size:13.5px"><b>Comando que a IA precisa rodar:</b></p>
+      <div class="cmd">powershell -ExecutionPolicy Bypass -File scripts\registrar.ps1 -Acao "o que fiz" -Area codigo -Status ok<button onclick="copiar(this)">copiar</button></div>
+      <p style="margin:12px 0 4px;color:var(--ink-soft);font-size:13.5px"><b>Painel ao vivo (atualiza a cada 30s):</b></p>
+      <div class="cmd">VIGIA.bat<button onclick="copiar(this)">copiar</button></div>
+    </div>
+  </details>
+
+  <details>
+    <summary>🔒 Áreas protegidas <span class="cnt" id="cntProt">0</span></summary>
+    <div class="scroll"><table id="tabProt"><thead><tr><th>Caminho</th><th>Regra</th></tr></thead><tbody></tbody></table></div>
+  </details>
+
+  <p class="foot">CentralDark · painel local do Windows · funciona offline, abre com dois cliques</p>
+</main>
+
+<script src="dados.js" onerror="console.info('sem dados.js ainda')"></script>
+<script>
+function copiar(b){
+  const t = b.parentElement.textContent.replace(/copiar$/,'').trim();
+  navigator.clipboard.writeText(t).then(()=>{ b.textContent='copiado!'; setTimeout(()=>b.textContent='copiar',1400); });
+}
+document.getElementById('btnTema').onclick = () => {
+  const r = document.documentElement;
+  const novo = r.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  r.setAttribute('data-theme', novo); localStorage.setItem('cd-tema', novo);
+};
+const salvo = localStorage.getItem('cd-tema');
+if (salvo) document.documentElement.setAttribute('data-theme', salvo);
+
+const VEREDITOS = {
+  TRABALHANDO:    ['warn','Hermes trabalhando agora','Tem tarefa em andamento. A linha do tempo abaixo mostra o que ele está mexendo.'],
+  JA_ATUALIZADO:  ['ok',  'Tudo em dia ✅','Sua cópia está igual ao GitHub e não tem nada solto. Pode mandar a próxima missão.'],
+  ATUALIZADO:     ['ok',  'Atualizado agora ✅','Baixamos as novidades sem apagar nada. Backup guardado antes de mexer.'],
+  PENDENTE:       ['warn','Tem novidade esperando','Existem commits novos no GitHub. Rode ATUALIZAR.bat e escolha a opção 2.'],
+  NAO_SALVO:      ['warn','Tem trabalho não salvo','Existem arquivos mexidos que ainda não foram pro GitHub. Commite antes de atualizar.'],
+  BLOQUEADO_SUJO: ['bad', 'Parei pra não te atrapalhar','Você tem trabalho não salvo. Commite ou guarde (git stash) e rode de novo.'],
+  CONFLITO:       ['bad', 'Históricos divergiram','Não deu pra atualizar direto. Precisa revisão manual — nada foi forçado.'],
+  PRECISA_CLONE:  ['warn','Essa pasta veio de ZIP','Não dá pra atualizar por git. Use ATUALIZAR.bat opção 3: clono AO LADO, sem apagar nada.'],
+  CLONADO:        ['ok',  'Clone novo criado ✅','Copie seu trabalho antigo pra dentro do clone e continue por lá.'],
+  CLONE_JA_EXISTE:['warn','Já existe um clone','Encontrei a pasta de destino. Não toquei em nada.'],
+  NADA_A_FAZER:   ['warn','Nada a fazer','O script não encontrou ação necessária.']
+};
+const ICO = { codigo:'💻', docs:'📄', infra:'🛠️', git:'🔄', painel:'📊', pesquisa:'🔍' };
+
+const D = window.DADOS;
+if (D) {
+  document.getElementById('subGerado').innerHTML =
+    `Leitura de <b>${D.gerado}</b> · pasta <code>${D.pasta}</code>`;
+
+  const [cls, tit, txt] = VEREDITOS[D.resultado] || ['warn', D.resultado, ''];
+  const v = document.getElementById('verdict');
+  v.className = 'verdict ' + (cls === 'ok' ? '' : cls);
+  document.getElementById('verdictTitulo').textContent = tit;
+  document.getElementById('verdictTexto').textContent = txt;
+  const dot = document.getElementById('dotStatus');
+  dot.className = 'dot' + (cls === 'ok' ? ' live' : '');
+  if (cls !== 'ok') { dot.style.background = `var(--${cls === 'bad' ? 'bad' : 'warn'})`; }
+  if (D.resultado === 'TRABALHANDO') dot.classList.add('pulse');
+
+  document.getElementById('kAcoes').firstChild.textContent = D.totalAcoes ?? 0;
+  document.getElementById('kAcoesSub').textContent = (D.erros ? D.erros + ' com erro' : 'nenhum erro');
+  document.getElementById('kAndamento').firstChild.textContent = D.emAndamento ?? 0;
+  document.getElementById('kHead').firstChild.textContent = D.headLocal || '—';
+  document.getElementById('kBranch').textContent = 'branch ' + (D.branch || '—');
+  document.getElementById('kSujo').firstChild.textContent = D.sujo ? 'SIM' : 'não';
+
+  document.getElementById('rBranch').textContent  = D.branch || '—';
+  document.getElementById('rHead').textContent    = D.headLocal || '—';
+  document.getElementById('rRemoto').textContent  = D.headRemoto || '—';
+  document.getElementById('rCommit').textContent  = D.ultimoCommit || '—';
+  document.getElementById('rDiff').textContent    = `${D.commitsAtras||0} atrás / ${D.commitsFrente||0} à frente`;
+  document.getElementById('rSujos').textContent   = (D.arquivosSujos||[]).length + ' arquivo(s)';
+
+  if (!D.ehRepo) {
+    const av = document.getElementById('boxAvisos');
+    const d = document.createElement('div');
+    d.className = 'card'; d.style.borderLeft = '4px solid var(--warn)'; d.style.marginBottom = '10px';
+    d.innerHTML = `<span class="pill warn">atenção</span> <span style="margin-left:8px">Esta pasta não é um clone git (veio de ZIP). O histórico do Hermes funciona, mas atualizar por git só com a opção 3 do ATUALIZAR.bat.</span>`;
+    av.appendChild(d);
+  }
+
+  const acoes = D.acoes || [];
+  const lista = document.getElementById('listaTl');
+  document.getElementById('cntTl').textContent = acoes.length;
+  function render(filtro){
+    const f = (filtro||'').toLowerCase();
+    const itens = acoes.filter(a => !f || JSON.stringify(a).toLowerCase().includes(f));
+    lista.innerHTML = '';
+    if (!itens.length) { lista.innerHTML = '<div class="vazio">Nada encontrado.</div>'; return; }
+    itens.forEach(a => {
+      const el = document.createElement('div');
+      el.className = 'ev ' + (a.status === 'erro' ? 'is-bad' : a.status === 'andamento' ? 'is-warn' : '');
+      const pill = a.status === 'ok' ? 'ok' : a.status === 'erro' ? 'bad' : 'warn';
+      el.innerHTML =
+        `<div class="hora">${(a.quando||'').slice(11) || (a.quando||'')}<br><small>${(a.quando||'').slice(0,10)}</small></div>
+         <div class="txt"><b>${ICO[a.area]||'•'} ${a.acao||''}</b><span>${a.detalhe||''}</span></div>
+         <div><span class="pill ${pill}">${a.status}</span></div>`;
+      lista.appendChild(el);
+    });
+  }
+  render('');
+  document.getElementById('busca').addEventListener('input', e => render(e.target.value));
+
+  const prot = D.protegidos || [];
+  document.getElementById('cntProt').textContent = prot.length;
+  const tb = document.querySelector('#tabProt tbody');
+  prot.forEach(p => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="mono">${p}</td><td>exige PERMITO PIVETE</td>`;
+    tb.appendChild(tr);
+  });
+}
+</script>
+</body>
+</html>

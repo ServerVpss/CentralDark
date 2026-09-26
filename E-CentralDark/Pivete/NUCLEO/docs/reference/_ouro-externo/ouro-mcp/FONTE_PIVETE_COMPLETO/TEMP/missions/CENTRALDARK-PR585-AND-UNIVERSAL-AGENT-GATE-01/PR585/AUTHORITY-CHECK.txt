@@ -1,0 +1,13 @@
+=== Autoridade unica: ocorrencias de 'autoridade final' em cada fonte ===
+AGENTS.md:44:- SEGREDO/CHEFE permanece autoridade humana final;
+docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md:24:"Pivete" como autoridade final (Seção 3 e a Fórmula final da Seção 12), trata-se
+docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md:28:autoridade final), ele permanece subordinado a `SEGREDO/CHEFE`, sem alteração de
+docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md:57:- continua sendo a autoridade final.
+docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md:103:- não assume autoridade final nem substitui SOL ou Pivete.
+docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md:312:10. Pivete continua com autoridade final e uma única interface visível.
+docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md:19:SEGREDO/CHEFE = autoridade humana final; define intenção, autoriza promoção e encerra o LOOP
+
+=== Nota de precedencia no JARVIS (deve existir) ===
+23:**Nota de precedência (fecha ambiguidade de autoridade):** onde este documento usa
+
+AUTHORITY_CONFLICT=0 (todas as ocorrencias de 'Pivete = autoridade final' no JARVIS agora estao explicitamente reconciliadas com SEGREDO/CHEFE pela nota de precedencia)

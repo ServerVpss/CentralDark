@@ -1,0 +1,3131 @@
+{
+  "nodes": [
+    {
+      "id": "centraldark",
+      "label": "CentralDark",
+      "group": "raiz",
+      "size": 26
+    },
+    {
+      "id": "ver_logs.sh",
+      "label": "ver_logs.sh",
+      "group": "sh",
+      "title": "ver_logs.sh"
+    },
+    {
+      "id": "INSTALACAO.md",
+      "label": "INSTALACAO.md",
+      "group": "md",
+      "title": "INSTALACAO.md"
+    },
+    {
+      "id": "install.sh",
+      "label": "install.sh",
+      "group": "sh",
+      "title": "install.sh"
+    },
+    {
+      "id": "postcss.config.js",
+      "label": "postcss.config.js",
+      "group": "js",
+      "title": "postcss.config.js"
+    },
+    {
+      "id": "monitor_centraldark.sh",
+      "label": "monitor_centraldark.sh",
+      "group": "sh",
+      "title": "monitor_centraldark.sh"
+    },
+    {
+      "id": "tailwind.config.ts",
+      "label": "tailwind.config.ts",
+      "group": "ts",
+      "title": "tailwind.config.ts"
+    },
+    {
+      "id": "package.json",
+      "label": "package.json",
+      "group": "json",
+      "title": "package.json"
+    },
+    {
+      "id": "vite.config.ts",
+      "label": "vite.config.ts",
+      "group": "ts",
+      "title": "vite.config.ts"
+    },
+    {
+      "id": "ver_logs_api.sh",
+      "label": "ver_logs_api.sh",
+      "group": "sh",
+      "title": "ver_logs_api.sh"
+    },
+    {
+      "id": "varredura_prod.sh",
+      "label": "varredura_prod.sh",
+      "group": "sh",
+      "title": "varredura_prod.sh"
+    },
+    {
+      "id": "tsconfig.json",
+      "label": "tsconfig.json",
+      "group": "json",
+      "title": "tsconfig.json"
+    },
+    {
+      "id": "vitest.config.ts",
+      "label": "vitest.config.ts",
+      "group": "ts",
+      "title": "vitest.config.ts"
+    },
+    {
+      "id": "analyze_workflows.py",
+      "label": "analyze_workflows.py",
+      "group": "py",
+      "title": "analyze_workflows.py"
+    },
+    {
+      "id": "components.json",
+      "label": "components.json",
+      "group": "json",
+      "title": "components.json"
+    },
+    {
+      "id": "README.md",
+      "label": "README.md",
+      "group": "md",
+      "title": "README.md"
+    },
+    {
+      "id": "eslint.config.js",
+      "label": "eslint.config.js",
+      "group": "js",
+      "title": "eslint.config.js"
+    },
+    {
+      "id": "listar_tools_api.sh",
+      "label": "listar_tools_api.sh",
+      "group": "sh",
+      "title": "listar_tools_api.sh"
+    },
+    {
+      "id": "varredura_chaves.sh",
+      "label": "varredura_chaves.sh",
+      "group": "sh",
+      "title": "varredura_chaves.sh"
+    },
+    {
+      "id": "monitor_unificado.sh",
+      "label": "monitor_unificado.sh",
+      "group": "sh",
+      "title": "monitor_unificado.sh"
+    },
+    {
+      "id": "tsconfig.app.json",
+      "label": "tsconfig.app.json",
+      "group": "json",
+      "title": "tsconfig.app.json"
+    },
+    {
+      "id": "tsconfig.node.json",
+      "label": "tsconfig.node.json",
+      "group": "json",
+      "title": "tsconfig.node.json"
+    },
+    {
+      "id": "busca_profunda.sh",
+      "label": "busca_profunda.sh",
+      "group": "sh",
+      "title": "busca_profunda.sh"
+    },
+    {
+      "id": "src",
+      "label": "src",
+      "group": "pasta"
+    },
+    {
+      "id": "src/App.tsx",
+      "label": "App.tsx",
+      "group": "tsx",
+      "title": "src/App.tsx"
+    },
+    {
+      "id": "src/vite-env.d.ts",
+      "label": "vite-env.d.ts",
+      "group": "ts",
+      "title": "src/vite-env.d.ts"
+    },
+    {
+      "id": "src/main.tsx",
+      "label": "main.tsx",
+      "group": "tsx",
+      "title": "src/main.tsx"
+    },
+    {
+      "id": "src/integrations",
+      "label": "integrations",
+      "group": "pasta"
+    },
+    {
+      "id": "src/integrations/supabase",
+      "label": "supabase",
+      "group": "pasta"
+    },
+    {
+      "id": "src/integrations/supabase/hubClient.ts",
+      "label": "hubClient.ts",
+      "group": "ts",
+      "title": "src/integrations/supabase/hubClient.ts"
+    },
+    {
+      "id": "src/integrations/supabase/types.ts",
+      "label": "types.ts",
+      "group": "ts",
+      "title": "src/integrations/supabase/types.ts"
+    },
+    {
+      "id": "src/integrations/supabase/client.ts",
+      "label": "client.ts",
+      "group": "ts",
+      "title": "src/integrations/supabase/client.ts"
+    },
+    {
+      "id": "src/lib",
+      "label": "lib",
+      "group": "pasta"
+    },
+    {
+      "id": "src/lib/notifications-events.ts",
+      "label": "notifications-events.ts",
+      "group": "ts",
+      "title": "src/lib/notifications-events.ts"
+    },
+    {
+      "id": "src/shared",
+      "label": "shared",
+      "group": "pasta"
+    },
+    {
+      "id": "src/shared/assets",
+      "label": "assets",
+      "group": "pasta"
+    },
+    {
+      "id": "src/shared/assets/maozinha.webm.asset.json",
+      "label": "maozinha.webm.asset.json",
+      "group": "json",
+      "title": "src/shared/assets/maozinha.webm.asset.json"
+    },
+    {
+      "id": "src/shared/assets/maozinha-clean.webm.asset.json",
+      "label": "maozinha-clean.webm.asset.json",
+      "group": "json",
+      "title": "src/shared/assets/maozinha-clean.webm.asset.json"
+    },
+    {
+      "id": "src/shared/ui",
+      "label": "ui",
+      "group": "pasta"
+    },
+    {
+      "id": "src/shared/ui/input-otp.tsx",
+      "label": "input-otp.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/input-otp.tsx"
+    },
+    {
+      "id": "src/shared/ui/use-toast.ts",
+      "label": "use-toast.ts",
+      "group": "ts",
+      "title": "src/shared/ui/use-toast.ts"
+    },
+    {
+      "id": "src/shared/ui/sheet.tsx",
+      "label": "sheet.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/sheet.tsx"
+    },
+    {
+      "id": "src/shared/ui/tabs.tsx",
+      "label": "tabs.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/tabs.tsx"
+    },
+    {
+      "id": "src/shared/ui/toast.tsx",
+      "label": "toast.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/toast.tsx"
+    },
+    {
+      "id": "src/shared/ui/breadcrumb.tsx",
+      "label": "breadcrumb.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/breadcrumb.tsx"
+    },
+    {
+      "id": "src/shared/ui/separator.tsx",
+      "label": "separator.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/separator.tsx"
+    },
+    {
+      "id": "src/shared/ui/command.tsx",
+      "label": "command.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/command.tsx"
+    },
+    {
+      "id": "src/shared/ui/dialog.tsx",
+      "label": "dialog.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/dialog.tsx"
+    },
+    {
+      "id": "src/shared/ui/progress.tsx",
+      "label": "progress.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/progress.tsx"
+    },
+    {
+      "id": "src/shared/ui/pagination.tsx",
+      "label": "pagination.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/pagination.tsx"
+    },
+    {
+      "id": "src/shared/ui/switch.tsx",
+      "label": "switch.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/switch.tsx"
+    },
+    {
+      "id": "src/shared/ui/form.tsx",
+      "label": "form.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/form.tsx"
+    },
+    {
+      "id": "src/shared/ui/sonner.tsx",
+      "label": "sonner.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/sonner.tsx"
+    },
+    {
+      "id": "src/shared/ui/select.tsx",
+      "label": "select.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/select.tsx"
+    },
+    {
+      "id": "src/shared/ui/textarea.tsx",
+      "label": "textarea.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/textarea.tsx"
+    },
+    {
+      "id": "src/shared/ui/menubar.tsx",
+      "label": "menubar.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/menubar.tsx"
+    },
+    {
+      "id": "src/shared/ui/toggle.tsx",
+      "label": "toggle.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/toggle.tsx"
+    },
+    {
+      "id": "src/shared/ui/dropdown-menu.tsx",
+      "label": "dropdown-menu.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/dropdown-menu.tsx"
+    },
+    {
+      "id": "src/shared/ui/label.tsx",
+      "label": "label.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/label.tsx"
+    },
+    {
+      "id": "src/shared/ui/scroll-area.tsx",
+      "label": "scroll-area.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/scroll-area.tsx"
+    },
+    {
+      "id": "src/shared/ui/chart.tsx",
+      "label": "chart.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/chart.tsx"
+    },
+    {
+      "id": "src/shared/ui/context-menu.tsx",
+      "label": "context-menu.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/context-menu.tsx"
+    },
+    {
+      "id": "src/shared/ui/checkbox.tsx",
+      "label": "checkbox.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/checkbox.tsx"
+    },
+    {
+      "id": "src/shared/ui/table.tsx",
+      "label": "table.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/table.tsx"
+    },
+    {
+      "id": "src/shared/ui/drawer.tsx",
+      "label": "drawer.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/drawer.tsx"
+    },
+    {
+      "id": "src/shared/ui/toaster.tsx",
+      "label": "toaster.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/toaster.tsx"
+    },
+    {
+      "id": "src/shared/ui/sync-status-icon.tsx",
+      "label": "sync-status-icon.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/sync-status-icon.tsx"
+    },
+    {
+      "id": "src/shared/ui/radio-group.tsx",
+      "label": "radio-group.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/radio-group.tsx"
+    },
+    {
+      "id": "src/shared/ui/card.tsx",
+      "label": "card.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/card.tsx"
+    },
+    {
+      "id": "src/shared/ui/button.tsx",
+      "label": "button.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/button.tsx"
+    },
+    {
+      "id": "src/shared/ui/slider.tsx",
+      "label": "slider.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/slider.tsx"
+    },
+    {
+      "id": "src/shared/ui/alert.tsx",
+      "label": "alert.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/alert.tsx"
+    },
+    {
+      "id": "src/shared/ui/collapsible.tsx",
+      "label": "collapsible.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/collapsible.tsx"
+    },
+    {
+      "id": "src/shared/ui/navigation-menu.tsx",
+      "label": "navigation-menu.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/navigation-menu.tsx"
+    },
+    {
+      "id": "src/shared/ui/tooltip.tsx",
+      "label": "tooltip.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/tooltip.tsx"
+    },
+    {
+      "id": "src/shared/ui/skeleton.tsx",
+      "label": "skeleton.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/skeleton.tsx"
+    },
+    {
+      "id": "src/shared/ui/motion.tsx",
+      "label": "motion.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/motion.tsx"
+    },
+    {
+      "id": "src/shared/ui/calendar.tsx",
+      "label": "calendar.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/calendar.tsx"
+    },
+    {
+      "id": "src/shared/ui/input.tsx",
+      "label": "input.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/input.tsx"
+    },
+    {
+      "id": "src/shared/ui/carousel.tsx",
+      "label": "carousel.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/carousel.tsx"
+    },
+    {
+      "id": "src/shared/ui/toggle-group.tsx",
+      "label": "toggle-group.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/toggle-group.tsx"
+    },
+    {
+      "id": "src/shared/ui/alert-dialog.tsx",
+      "label": "alert-dialog.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/alert-dialog.tsx"
+    },
+    {
+      "id": "src/shared/ui/popover.tsx",
+      "label": "popover.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/popover.tsx"
+    },
+    {
+      "id": "src/shared/ui/resizable.tsx",
+      "label": "resizable.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/resizable.tsx"
+    },
+    {
+      "id": "src/shared/ui/badge.tsx",
+      "label": "badge.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/badge.tsx"
+    },
+    {
+      "id": "src/shared/ui/sidebar.tsx",
+      "label": "sidebar.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/sidebar.tsx"
+    },
+    {
+      "id": "src/shared/ui/accordion.tsx",
+      "label": "accordion.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/accordion.tsx"
+    },
+    {
+      "id": "src/shared/ui/hover-card.tsx",
+      "label": "hover-card.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/hover-card.tsx"
+    },
+    {
+      "id": "src/shared/ui/aspect-ratio.tsx",
+      "label": "aspect-ratio.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/aspect-ratio.tsx"
+    },
+    {
+      "id": "src/shared/ui/avatar.tsx",
+      "label": "avatar.tsx",
+      "group": "tsx",
+      "title": "src/shared/ui/avatar.tsx"
+    },
+    {
+      "id": "src/shared/aprovacao",
+      "label": "aprovacao",
+      "group": "pasta"
+    },
+    {
+      "id": "src/shared/aprovacao/ApprovalProvider.tsx",
+      "label": "ApprovalProvider.tsx",
+      "group": "tsx",
+      "title": "src/shared/aprovacao/ApprovalProvider.tsx"
+    },
+    {
+      "id": "src/shared/lib",
+      "label": "lib",
+      "group": "pasta"
+    },
+    {
+      "id": "src/shared/lib/hostRouting.ts",
+      "label": "hostRouting.ts",
+      "group": "ts",
+      "title": "src/shared/lib/hostRouting.ts"
+    },
+    {
+      "id": "src/shared/lib/viewAsMode.ts",
+      "label": "viewAsMode.ts",
+      "group": "ts",
+      "title": "src/shared/lib/viewAsMode.ts"
+    },
+    {
+      "id": "src/shared/lib/animations.ts",
+      "label": "animations.ts",
+      "group": "ts",
+      "title": "src/shared/lib/animations.ts"
+    },
+    {
+      "id": "src/shared/lib/menuReveal.ts",
+      "label": "menuReveal.ts",
+      "group": "ts",
+      "title": "src/shared/lib/menuReveal.ts"
+    },
+    {
+      "id": "src/shared/lib/utils.ts",
+      "label": "utils.ts",
+      "group": "ts",
+      "title": "src/shared/lib/utils.ts"
+    },
+    {
+      "id": "src/shared/lib/queryValidation.ts",
+      "label": "queryValidation.ts",
+      "group": "ts",
+      "title": "src/shared/lib/queryValidation.ts"
+    },
+    {
+      "id": "src/shared/transitions",
+      "label": "transitions",
+      "group": "pasta"
+    },
+    {
+      "id": "src/shared/transitions/MenuRevealTransition.tsx",
+      "label": "MenuRevealTransition.tsx",
+      "group": "tsx",
+      "title": "src/shared/transitions/MenuRevealTransition.tsx"
+    },
+    {
+      "id": "src/shared/transitions/PageSplash.tsx",
+      "label": "PageSplash.tsx",
+      "group": "tsx",
+      "title": "src/shared/transitions/PageSplash.tsx"
+    },
+    {
+      "id": "src/shared/transitions/SplashController.tsx",
+      "label": "SplashController.tsx",
+      "group": "tsx",
+      "title": "src/shared/transitions/SplashController.tsx"
+    },
+    {
+      "id": "src/shared/test",
+      "label": "test",
+      "group": "pasta"
+    },
+    {
+      "id": "src/shared/test/setup.ts",
+      "label": "setup.ts",
+      "group": "ts",
+      "title": "src/shared/test/setup.ts"
+    },
+    {
+      "id": "src/shared/test/splash.test.tsx",
+      "label": "splash.test.tsx",
+      "group": "tsx",
+      "title": "src/shared/test/splash.test.tsx"
+    },
+    {
+      "id": "src/shared/test/example.test.ts",
+      "label": "example.test.ts",
+      "group": "ts",
+      "title": "src/shared/test/example.test.ts"
+    },
+    {
+      "id": "src/shared/theme",
+      "label": "theme",
+      "group": "pasta"
+    },
+    {
+      "id": "src/shared/theme/ThemeToggle.tsx",
+      "label": "ThemeToggle.tsx",
+      "group": "tsx",
+      "title": "src/shared/theme/ThemeToggle.tsx"
+    },
+    {
+      "id": "src/shared/theme/ThemeProvider.tsx",
+      "label": "ThemeProvider.tsx",
+      "group": "tsx",
+      "title": "src/shared/theme/ThemeProvider.tsx"
+    },
+    {
+      "id": "src/shared/pwa",
+      "label": "pwa",
+      "group": "pasta"
+    },
+    {
+      "id": "src/shared/pwa/InstallPrompt.tsx",
+      "label": "InstallPrompt.tsx",
+      "group": "tsx",
+      "title": "src/shared/pwa/InstallPrompt.tsx"
+    },
+    {
+      "id": "src/shared/auth",
+      "label": "auth",
+      "group": "pasta"
+    },
+    {
+      "id": "src/shared/auth/AuthProvider.tsx",
+      "label": "AuthProvider.tsx",
+      "group": "tsx",
+      "title": "src/shared/auth/AuthProvider.tsx"
+    },
+    {
+      "id": "src/shared/auth/ProtectedRoute.tsx",
+      "label": "ProtectedRoute.tsx",
+      "group": "tsx",
+      "title": "src/shared/auth/ProtectedRoute.tsx"
+    },
+    {
+      "id": "src/shared/auth/ViewAsBanner.tsx",
+      "label": "ViewAsBanner.tsx",
+      "group": "tsx",
+      "title": "src/shared/auth/ViewAsBanner.tsx"
+    },
+    {
+      "id": "src/shared/auth/AdminRoute.tsx",
+      "label": "AdminRoute.tsx",
+      "group": "tsx",
+      "title": "src/shared/auth/AdminRoute.tsx"
+    },
+    {
+      "id": "src/shared/hooks",
+      "label": "hooks",
+      "group": "pasta"
+    },
+    {
+      "id": "src/shared/hooks/use-toast.ts",
+      "label": "use-toast.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/use-toast.ts"
+    },
+    {
+      "id": "src/shared/hooks/useNotifications.ts",
+      "label": "useNotifications.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useNotifications.ts"
+    },
+    {
+      "id": "src/shared/hooks/useMcpStatus.ts",
+      "label": "useMcpStatus.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useMcpStatus.ts"
+    },
+    {
+      "id": "src/shared/hooks/useNotificationRoutes.ts",
+      "label": "useNotificationRoutes.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useNotificationRoutes.ts"
+    },
+    {
+      "id": "src/shared/hooks/useSystemSetting.ts",
+      "label": "useSystemSetting.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useSystemSetting.ts"
+    },
+    {
+      "id": "src/shared/hooks/useAdminData.ts",
+      "label": "useAdminData.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useAdminData.ts"
+    },
+    {
+      "id": "src/shared/hooks/useBackup.ts",
+      "label": "useBackup.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useBackup.ts"
+    },
+    {
+      "id": "src/shared/hooks/useQueryHistory.ts",
+      "label": "useQueryHistory.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useQueryHistory.ts"
+    },
+    {
+      "id": "src/shared/hooks/useModuleHealth.ts",
+      "label": "useModuleHealth.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useModuleHealth.ts"
+    },
+    {
+      "id": "src/shared/hooks/usePixTransactions.ts",
+      "label": "usePixTransactions.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/usePixTransactions.ts"
+    },
+    {
+      "id": "src/shared/hooks/useSecurity.ts",
+      "label": "useSecurity.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useSecurity.ts"
+    },
+    {
+      "id": "src/shared/hooks/useBotSettings.ts",
+      "label": "useBotSettings.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useBotSettings.ts"
+    },
+    {
+      "id": "src/shared/hooks/useAuth.ts",
+      "label": "useAuth.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useAuth.ts"
+    },
+    {
+      "id": "src/shared/hooks/use-mobile.tsx",
+      "label": "use-mobile.tsx",
+      "group": "tsx",
+      "title": "src/shared/hooks/use-mobile.tsx"
+    },
+    {
+      "id": "src/shared/hooks/useVpsDeploy.ts",
+      "label": "useVpsDeploy.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useVpsDeploy.ts"
+    },
+    {
+      "id": "src/shared/hooks/useProviderStatus.ts",
+      "label": "useProviderStatus.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useProviderStatus.ts"
+    },
+    {
+      "id": "src/shared/hooks/usePayments.ts",
+      "label": "usePayments.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/usePayments.ts"
+    },
+    {
+      "id": "src/shared/hooks/useIsAdmin.ts",
+      "label": "useIsAdmin.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useIsAdmin.ts"
+    },
+    {
+      "id": "src/shared/hooks/useAdminUsers.ts",
+      "label": "useAdminUsers.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useAdminUsers.ts"
+    },
+    {
+      "id": "src/shared/hooks/useRoadmap.ts",
+      "label": "useRoadmap.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useRoadmap.ts"
+    },
+    {
+      "id": "src/shared/hooks/useApiUsageHistory.ts",
+      "label": "useApiUsageHistory.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useApiUsageHistory.ts"
+    },
+    {
+      "id": "src/shared/hooks/useAuditLogs.ts",
+      "label": "useAuditLogs.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useAuditLogs.ts"
+    },
+    {
+      "id": "src/shared/hooks/useNotificationsLog.ts",
+      "label": "useNotificationsLog.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useNotificationsLog.ts"
+    },
+    {
+      "id": "src/shared/hooks/useBotAnalytics.ts",
+      "label": "useBotAnalytics.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useBotAnalytics.ts"
+    },
+    {
+      "id": "src/shared/hooks/useApiStatus.ts",
+      "label": "useApiStatus.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useApiStatus.ts"
+    },
+    {
+      "id": "src/shared/hooks/useScheduledBroadcasts.ts",
+      "label": "useScheduledBroadcasts.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useScheduledBroadcasts.ts"
+    },
+    {
+      "id": "src/shared/hooks/usePWA.ts",
+      "label": "usePWA.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/usePWA.ts"
+    },
+    {
+      "id": "src/shared/hooks/useTelegramBots.ts",
+      "label": "useTelegramBots.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/useTelegramBots.ts"
+    },
+    {
+      "id": "src/shared/hooks/telegram",
+      "label": "telegram",
+      "group": "pasta"
+    },
+    {
+      "id": "src/shared/hooks/telegram/useBotOperations.ts",
+      "label": "useBotOperations.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/telegram/useBotOperations.ts"
+    },
+    {
+      "id": "src/shared/hooks/telegram/types.ts",
+      "label": "types.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/telegram/types.ts"
+    },
+    {
+      "id": "src/shared/hooks/telegram/index.ts",
+      "label": "index.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/telegram/index.ts"
+    },
+    {
+      "id": "src/shared/hooks/telegram/useBotSecuritySettings.ts",
+      "label": "useBotSecuritySettings.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/telegram/useBotSecuritySettings.ts"
+    },
+    {
+      "id": "src/shared/hooks/telegram/useTelegramBots.ts",
+      "label": "useTelegramBots.ts",
+      "group": "ts",
+      "title": "src/shared/hooks/telegram/useTelegramBots.ts"
+    },
+    {
+      "id": "src/shared/layout",
+      "label": "layout",
+      "group": "pasta"
+    },
+    {
+      "id": "src/shared/layout/MobileAvatarMenu.tsx",
+      "label": "MobileAvatarMenu.tsx",
+      "group": "tsx",
+      "title": "src/shared/layout/MobileAvatarMenu.tsx"
+    },
+    {
+      "id": "src/shared/layout/Header.tsx",
+      "label": "Header.tsx",
+      "group": "tsx",
+      "title": "src/shared/layout/Header.tsx"
+    },
+    {
+      "id": "src/shared/layout/BottomNav.tsx",
+      "label": "BottomNav.tsx",
+      "group": "tsx",
+      "title": "src/shared/layout/BottomNav.tsx"
+    },
+    {
+      "id": "src/shared/layout/Logo.tsx",
+      "label": "Logo.tsx",
+      "group": "tsx",
+      "title": "src/shared/layout/Logo.tsx"
+    },
+    {
+      "id": "src/shared/layout/Sidebar.tsx",
+      "label": "Sidebar.tsx",
+      "group": "tsx",
+      "title": "src/shared/layout/Sidebar.tsx"
+    },
+    {
+      "id": "src/shared/layout/DashboardLayout.tsx",
+      "label": "DashboardLayout.tsx",
+      "group": "tsx",
+      "title": "src/shared/layout/DashboardLayout.tsx"
+    },
+    {
+      "id": "src/apps",
+      "label": "apps",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/web",
+      "label": "web",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/web/README.md",
+      "label": "README.md",
+      "group": "md",
+      "title": "src/apps/web/README.md"
+    },
+    {
+      "id": "src/apps/web/pages",
+      "label": "pages",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/web/pages/LandingCentralDark.tsx",
+      "label": "LandingCentralDark.tsx",
+      "group": "tsx",
+      "title": "src/apps/web/pages/LandingCentralDark.tsx"
+    },
+    {
+      "id": "src/apps/web/pages/Auth.tsx",
+      "label": "Auth.tsx",
+      "group": "tsx",
+      "title": "src/apps/web/pages/Auth.tsx"
+    },
+    {
+      "id": "src/apps/web/pages/README.md",
+      "label": "README.md",
+      "group": "md",
+      "title": "src/apps/web/pages/README.md"
+    },
+    {
+      "id": "src/apps/web/pages/Status.tsx",
+      "label": "Status.tsx",
+      "group": "tsx",
+      "title": "src/apps/web/pages/Status.tsx"
+    },
+    {
+      "id": "src/apps/web/pages/Portal.tsx",
+      "label": "Portal.tsx",
+      "group": "tsx",
+      "title": "src/apps/web/pages/Portal.tsx"
+    },
+    {
+      "id": "src/apps/hub",
+      "label": "hub",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/hub/HubPage.tsx",
+      "label": "HubPage.tsx",
+      "group": "tsx",
+      "title": "src/apps/hub/HubPage.tsx"
+    },
+    {
+      "id": "src/apps/modulos",
+      "label": "modulos",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/README.md",
+      "label": "README.md",
+      "group": "md",
+      "title": "src/apps/modulos/README.md"
+    },
+    {
+      "id": "src/apps/modulos/bot-whatsapp",
+      "label": "bot-whatsapp",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/bot-whatsapp/README.md",
+      "label": "README.md",
+      "group": "md",
+      "title": "src/apps/modulos/bot-whatsapp/README.md"
+    },
+    {
+      "id": "src/apps/modulos/bot-whatsapp/pages",
+      "label": "pages",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/bot-whatsapp/pages/README.md",
+      "label": "README.md",
+      "group": "md",
+      "title": "src/apps/modulos/bot-whatsapp/pages/README.md"
+    },
+    {
+      "id": "src/apps/modulos/bot-whatsapp/pages/LandingWhatsapp.tsx",
+      "label": "LandingWhatsapp.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/bot-whatsapp/pages/LandingWhatsapp.tsx"
+    },
+    {
+      "id": "src/apps/modulos/financeiro",
+      "label": "financeiro",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/financeiro/README.md",
+      "label": "README.md",
+      "group": "md",
+      "title": "src/apps/modulos/financeiro/README.md"
+    },
+    {
+      "id": "src/apps/modulos/financeiro/pages",
+      "label": "pages",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/financeiro/pages/LandingFinanceiro.tsx",
+      "label": "LandingFinanceiro.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/financeiro/pages/LandingFinanceiro.tsx"
+    },
+    {
+      "id": "src/apps/modulos/financeiro/pages/README.md",
+      "label": "README.md",
+      "group": "md",
+      "title": "src/apps/modulos/financeiro/pages/README.md"
+    },
+    {
+      "id": "src/apps/modulos/telepainel",
+      "label": "telepainel",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/README.md",
+      "label": "README.md",
+      "group": "md",
+      "title": "src/apps/modulos/telepainel/README.md"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages",
+      "label": "pages",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/DevTransitions.tsx",
+      "label": "DevTransitions.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/DevTransitions.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/PonteMCP.tsx",
+      "label": "PonteMCP.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/PonteMCP.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/SubscriptionAudit.tsx",
+      "label": "SubscriptionAudit.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/SubscriptionAudit.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/Docs.tsx",
+      "label": "Docs.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/Docs.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/MapaSite.tsx",
+      "label": "MapaSite.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/MapaSite.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/Index.tsx",
+      "label": "Index.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/Index.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/Security.tsx",
+      "label": "Security.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/Security.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/Cofre.tsx",
+      "label": "Cofre.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/Cofre.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/TesteModulos.tsx",
+      "label": "TesteModulos.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/TesteModulos.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/MigrateSubscriptions.tsx",
+      "label": "MigrateSubscriptions.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/MigrateSubscriptions.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/Consultas.tsx",
+      "label": "Consultas.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/Consultas.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/Settings.tsx",
+      "label": "Settings.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/Settings.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/NotFound.tsx",
+      "label": "NotFound.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/NotFound.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/Bots.tsx",
+      "label": "Bots.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/Bots.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/PixTransactions.tsx",
+      "label": "PixTransactions.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/PixTransactions.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/UsuariosPainel.tsx",
+      "label": "UsuariosPainel.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/UsuariosPainel.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/WebAppResult.tsx",
+      "label": "WebAppResult.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/WebAppResult.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/README.md",
+      "label": "README.md",
+      "group": "md",
+      "title": "src/apps/modulos/telepainel/pages/README.md"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/LandingTelePainel.tsx",
+      "label": "LandingTelePainel.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/LandingTelePainel.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/UsuarioPerfil.tsx",
+      "label": "UsuarioPerfil.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/UsuarioPerfil.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/BotSettings.tsx",
+      "label": "BotSettings.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/BotSettings.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/MenuTips.tsx",
+      "label": "MenuTips.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/MenuTips.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/Plans.tsx",
+      "label": "Plans.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/Plans.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/MegaPainel.tsx",
+      "label": "MegaPainel.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/MegaPainel.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/TelegramUsers.tsx",
+      "label": "TelegramUsers.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/TelegramUsers.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/DatabaseInfo.tsx",
+      "label": "DatabaseInfo.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/DatabaseInfo.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/pages/QueryLogs.tsx",
+      "label": "QueryLogs.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/pages/QueryLogs.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components",
+      "label": "components",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/settings",
+      "label": "settings",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/settings/SignupToggle.tsx",
+      "label": "SignupToggle.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/settings/SignupToggle.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/settings/CleanupSettings.tsx",
+      "label": "CleanupSettings.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/settings/CleanupSettings.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/ponte-mcp",
+      "label": "ponte-mcp",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/ponte-mcp/CardConectarIA.tsx",
+      "label": "CardConectarIA.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/ponte-mcp/CardConectarIA.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/ponte-mcp/BotaoOAuth.tsx",
+      "label": "BotaoOAuth.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/ponte-mcp/BotaoOAuth.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/ponte-mcp/CardBoasVindas.tsx",
+      "label": "CardBoasVindas.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/ponte-mcp/CardBoasVindas.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/bots",
+      "label": "bots",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/bots/EdgeFunctionsStatus.tsx",
+      "label": "EdgeFunctionsStatus.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/bots/EdgeFunctionsStatus.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/bots/FakeEngagementSettings.tsx",
+      "label": "FakeEngagementSettings.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/bots/FakeEngagementSettings.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/bots/MessageEffectSettings.tsx",
+      "label": "MessageEffectSettings.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/bots/MessageEffectSettings.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/bots/QueryModulesManager.tsx",
+      "label": "QueryModulesManager.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/bots/QueryModulesManager.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/bots/BotHealthMonitor.tsx",
+      "label": "BotHealthMonitor.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/bots/BotHealthMonitor.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/bots/BroadcastDialog.tsx",
+      "label": "BroadcastDialog.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/bots/BroadcastDialog.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/bots/TypingReactionsSettings.tsx",
+      "label": "TypingReactionsSettings.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/bots/TypingReactionsSettings.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/bots/ScheduledBroadcastManager.tsx",
+      "label": "ScheduledBroadcastManager.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/bots/ScheduledBroadcastManager.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/bots/EngagementMessagesManager.tsx",
+      "label": "EngagementMessagesManager.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/bots/EngagementMessagesManager.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/bots/ButtonEmojiConfig.tsx",
+      "label": "ButtonEmojiConfig.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/bots/ButtonEmojiConfig.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/bots/BotConfigCard.tsx",
+      "label": "BotConfigCard.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/bots/BotConfigCard.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/admin",
+      "label": "admin",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/admin/AuditLogsViewer.tsx",
+      "label": "AuditLogsViewer.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/admin/AuditLogsViewer.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/dashboard",
+      "label": "dashboard",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/dashboard/AnalyticsChart.tsx",
+      "label": "AnalyticsChart.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/dashboard/AnalyticsChart.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/dashboard/ApiStatusCard.tsx",
+      "label": "ApiStatusCard.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/dashboard/ApiStatusCard.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/dashboard/BotStatusCard.tsx",
+      "label": "BotStatusCard.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/dashboard/BotStatusCard.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/dashboard/QuickActions.tsx",
+      "label": "QuickActions.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/dashboard/QuickActions.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/dashboard/SystemStatus.tsx",
+      "label": "SystemStatus.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/dashboard/SystemStatus.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/dashboard/BotsSection.tsx",
+      "label": "BotsSection.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/dashboard/BotsSection.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/dashboard/ActivityFeed.tsx",
+      "label": "ActivityFeed.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/dashboard/ActivityFeed.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/dashboard/DashboardAnalyticsChart.tsx",
+      "label": "DashboardAnalyticsChart.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/dashboard/DashboardAnalyticsChart.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/dashboard/QueryMonitor.tsx",
+      "label": "QueryMonitor.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/dashboard/QueryMonitor.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/dashboard/StatsCard.tsx",
+      "label": "StatsCard.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/dashboard/StatsCard.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/dashboard/HeroStatsCard.tsx",
+      "label": "HeroStatsCard.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/dashboard/HeroStatsCard.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/dashboard/MaintenanceToggle.tsx",
+      "label": "MaintenanceToggle.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/dashboard/MaintenanceToggle.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/security",
+      "label": "security",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/security/SecurityHeader.tsx",
+      "label": "SecurityHeader.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/security/SecurityHeader.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/security/SecurityAdvanced.tsx",
+      "label": "SecurityAdvanced.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/security/SecurityAdvanced.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/security/SecurityToggles.tsx",
+      "label": "SecurityToggles.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/security/SecurityToggles.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/security/SecurityStats.tsx",
+      "label": "SecurityStats.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/security/SecurityStats.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/security/SecurityHistory.tsx",
+      "label": "SecurityHistory.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/security/SecurityHistory.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/security/index.ts",
+      "label": "index.ts",
+      "group": "ts",
+      "title": "src/apps/modulos/telepainel/components/security/index.ts"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/gamification",
+      "label": "gamification",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/gamification/ConfettiCelebration.tsx",
+      "label": "ConfettiCelebration.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/gamification/ConfettiCelebration.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/pix",
+      "label": "pix",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/pix/OperationalCostConfig.tsx",
+      "label": "OperationalCostConfig.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/pix/OperationalCostConfig.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/pix/PixCharts.tsx",
+      "label": "PixCharts.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/pix/PixCharts.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/pix/PixFinancialSummary.tsx",
+      "label": "PixFinancialSummary.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/pix/PixFinancialSummary.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/pix/PixTransactionsTable.tsx",
+      "label": "PixTransactionsTable.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/pix/PixTransactionsTable.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/pix/BreakEvenGoal.tsx",
+      "label": "BreakEvenGoal.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/pix/BreakEvenGoal.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/consultation",
+      "label": "consultation",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/consultation/ProviderStatusList.tsx",
+      "label": "ProviderStatusList.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/consultation/ProviderStatusList.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/consultation/QueryInput.tsx",
+      "label": "QueryInput.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/consultation/QueryInput.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/consultation/MonospaceResultDisplay.tsx",
+      "label": "MonospaceResultDisplay.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/consultation/MonospaceResultDisplay.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/consultation/ResultDisplay.tsx",
+      "label": "ResultDisplay.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/consultation/ResultDisplay.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/consultation/QueryHistoryList.tsx",
+      "label": "QueryHistoryList.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/consultation/QueryHistoryList.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/search",
+      "label": "search",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/search/GlobalSearch.tsx",
+      "label": "GlobalSearch.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/search/GlobalSearch.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/devops",
+      "label": "devops",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/devops/McpStatusCard.tsx",
+      "label": "McpStatusCard.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/devops/McpStatusCard.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/devops/IPhonePreviewModal.tsx",
+      "label": "IPhonePreviewModal.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/devops/IPhonePreviewModal.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/devops/VpsDeployPlugin.tsx",
+      "label": "VpsDeployPlugin.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/devops/VpsDeployPlugin.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/devops/DeployHistoryList.tsx",
+      "label": "DeployHistoryList.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/devops/DeployHistoryList.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/devops/RoadmapList.tsx",
+      "label": "RoadmapList.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/devops/RoadmapList.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/devops/NotificationsFeedCard.tsx",
+      "label": "NotificationsFeedCard.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/devops/NotificationsFeedCard.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/landing",
+      "label": "landing",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/landing/ModuleLanding.tsx",
+      "label": "ModuleLanding.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/landing/ModuleLanding.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/backup",
+      "label": "backup",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/backup/BackupManager.tsx",
+      "label": "BackupManager.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/backup/BackupManager.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/webapp",
+      "label": "webapp",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/webapp/NewsTicker.tsx",
+      "label": "NewsTicker.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/webapp/NewsTicker.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/payments",
+      "label": "payments",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/payments/PaymentGatewaysGrid.tsx",
+      "label": "PaymentGatewaysGrid.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/payments/PaymentGatewaysGrid.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/payments/PaymentGatewaySettings.tsx",
+      "label": "PaymentGatewaySettings.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/payments/PaymentGatewaySettings.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/payments/EfiGatewayConfig.tsx",
+      "label": "EfiGatewayConfig.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/payments/EfiGatewayConfig.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/payments/PixPaymentDialog.tsx",
+      "label": "PixPaymentDialog.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/payments/PixPaymentDialog.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/payments/MisticPayGatewayConfigDialog.tsx",
+      "label": "MisticPayGatewayConfigDialog.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/payments/MisticPayGatewayConfigDialog.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/payments/EfiGatewayConfigDialog.tsx",
+      "label": "EfiGatewayConfigDialog.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/payments/EfiGatewayConfigDialog.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/payments/SubscriptionStatus.tsx",
+      "label": "SubscriptionStatus.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/payments/SubscriptionStatus.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/consultas",
+      "label": "consultas",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/consultas/VehicleResultModal.tsx",
+      "label": "VehicleResultModal.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/consultas/VehicleResultModal.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/consultas/QueryResultFormatter.tsx",
+      "label": "QueryResultFormatter.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/consultas/QueryResultFormatter.tsx"
+    },
+    {
+      "id": "src/apps/modulos/telepainel/components/consultas/UniversalResultModal.tsx",
+      "label": "UniversalResultModal.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/telepainel/components/consultas/UniversalResultModal.tsx"
+    },
+    {
+      "id": "src/apps/modulos/crm",
+      "label": "crm",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/crm/README.md",
+      "label": "README.md",
+      "group": "md",
+      "title": "src/apps/modulos/crm/README.md"
+    },
+    {
+      "id": "src/apps/modulos/crm/pages",
+      "label": "pages",
+      "group": "pasta"
+    },
+    {
+      "id": "src/apps/modulos/crm/pages/LandingCRM.tsx",
+      "label": "LandingCRM.tsx",
+      "group": "tsx",
+      "title": "src/apps/modulos/crm/pages/LandingCRM.tsx"
+    },
+    {
+      "id": "src/apps/modulos/crm/pages/README.md",
+      "label": "README.md",
+      "group": "md",
+      "title": "src/apps/modulos/crm/pages/README.md"
+    },
+    {
+      "id": "supabase",
+      "label": "supabase",
+      "group": "pasta"
+    },
+    {
+      "id": "supabase/functions",
+      "label": "functions",
+      "group": "pasta"
+    },
+    {
+      "id": "supabase/functions/webapp-get-result",
+      "label": "webapp-get-result",
+      "group": "pasta"
+    },
+    {
+      "id": "supabase/functions/webapp-get-result/index.ts",
+      "label": "index.ts",
+      "group": "ts",
+      "title": "supabase/functions/webapp-get-result/index.ts"
+    },
+    {
+      "id": "supabase/functions/dev-test-modules",
+      "label": "dev-test-modules",
+      "group": "pasta"
+    },
+    {
+      "id": "supabase/functions/dev-test-modules/index.ts",
+      "label": "index.ts",
+      "group": "ts",
+      "title": "supabase/functions/dev-test-modules/index.ts"
+    },
+    {
+      "id": "supabase/functions/api-query",
+      "label": "api-query",
+      "group": "pasta"
+    },
+    {
+      "id": "supabase/functions/api-query/index.ts",
+      "label": "index.ts",
+      "group": "ts",
+      "title": "supabase/functions/api-query/index.ts"
+    },
+    {
+      "id": "supabase/functions/health-check",
+      "label": "health-check",
+      "group": "pasta"
+    },
+    {
+      "id": "supabase/functions/health-check/index.ts",
+      "label": "index.ts",
+      "group": "ts",
+      "title": "supabase/functions/health-check/index.ts"
+    },
+    {
+      "id": "supabase/functions/notify-telegram",
+      "label": "notify-telegram",
+      "group": "pasta"
+    },
+    {
+      "id": "supabase/functions/notify-telegram/index.ts",
+      "label": "index.ts",
+      "group": "ts",
+      "title": "supabase/functions/notify-telegram/index.ts"
+    },
+    {
+      "id": "supabase/functions/efi-webhook",
+      "label": "efi-webhook",
+      "group": "pasta"
+    },
+    {
+      "id": "supabase/functions/efi-webhook/index.ts",
+      "label": "index.ts",
+      "group": "ts",
+      "title": "supabase/functions/efi-webhook/index.ts"
+    },
+    {
+      "id": "supabase/functions/ponte-mcp",
+      "label": "ponte-mcp",
+      "group": "pasta"
+    },
+    {
+      "id": "supabase/functions/ponte-mcp/index.ts",
+      "label": "index.ts",
+      "group": "ts",
+      "title": "supabase/functions/ponte-mcp/index.ts"
+    },
+    {
+      "id": "supabase/functions/telegram-format-result",
+      "label": "telegram-format-result",
+      "group": "pasta"
+    },
+    {
+      "id": "supabase/functions/telegram-format-result/index.ts",
+      "label": "index.ts",
+      "group": "ts",
+      "title": "supabase/functions/telegram-format-result/index.ts"
+    }
+  ],
+  "edges": [
+    {
+      "from": "centraldark",
+      "to": "ver_logs.sh"
+    },
+    {
+      "from": "centraldark",
+      "to": "INSTALACAO.md"
+    },
+    {
+      "from": "centraldark",
+      "to": "install.sh"
+    },
+    {
+      "from": "centraldark",
+      "to": "postcss.config.js"
+    },
+    {
+      "from": "centraldark",
+      "to": "monitor_centraldark.sh"
+    },
+    {
+      "from": "centraldark",
+      "to": "tailwind.config.ts"
+    },
+    {
+      "from": "centraldark",
+      "to": "package.json"
+    },
+    {
+      "from": "centraldark",
+      "to": "vite.config.ts"
+    },
+    {
+      "from": "centraldark",
+      "to": "ver_logs_api.sh"
+    },
+    {
+      "from": "centraldark",
+      "to": "varredura_prod.sh"
+    },
+    {
+      "from": "centraldark",
+      "to": "tsconfig.json"
+    },
+    {
+      "from": "centraldark",
+      "to": "vitest.config.ts"
+    },
+    {
+      "from": "centraldark",
+      "to": "analyze_workflows.py"
+    },
+    {
+      "from": "centraldark",
+      "to": "components.json"
+    },
+    {
+      "from": "centraldark",
+      "to": "README.md"
+    },
+    {
+      "from": "centraldark",
+      "to": "eslint.config.js"
+    },
+    {
+      "from": "centraldark",
+      "to": "listar_tools_api.sh"
+    },
+    {
+      "from": "centraldark",
+      "to": "varredura_chaves.sh"
+    },
+    {
+      "from": "centraldark",
+      "to": "monitor_unificado.sh"
+    },
+    {
+      "from": "centraldark",
+      "to": "tsconfig.app.json"
+    },
+    {
+      "from": "centraldark",
+      "to": "tsconfig.node.json"
+    },
+    {
+      "from": "centraldark",
+      "to": "busca_profunda.sh"
+    },
+    {
+      "from": "centraldark",
+      "to": "src"
+    },
+    {
+      "from": "src",
+      "to": "src/App.tsx"
+    },
+    {
+      "from": "src",
+      "to": "src/vite-env.d.ts"
+    },
+    {
+      "from": "src",
+      "to": "src/main.tsx"
+    },
+    {
+      "from": "src",
+      "to": "src/integrations"
+    },
+    {
+      "from": "src/integrations",
+      "to": "src/integrations/supabase"
+    },
+    {
+      "from": "src/integrations/supabase",
+      "to": "src/integrations/supabase/hubClient.ts"
+    },
+    {
+      "from": "src/integrations/supabase",
+      "to": "src/integrations/supabase/types.ts"
+    },
+    {
+      "from": "src/integrations/supabase",
+      "to": "src/integrations/supabase/client.ts"
+    },
+    {
+      "from": "src",
+      "to": "src/lib"
+    },
+    {
+      "from": "src/lib",
+      "to": "src/lib/notifications-events.ts"
+    },
+    {
+      "from": "src",
+      "to": "src/shared"
+    },
+    {
+      "from": "src/shared",
+      "to": "src/shared/assets"
+    },
+    {
+      "from": "src/shared/assets",
+      "to": "src/shared/assets/maozinha.webm.asset.json"
+    },
+    {
+      "from": "src/shared/assets",
+      "to": "src/shared/assets/maozinha-clean.webm.asset.json"
+    },
+    {
+      "from": "src/shared",
+      "to": "src/shared/ui"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/input-otp.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/use-toast.ts"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/sheet.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/tabs.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/toast.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/breadcrumb.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/separator.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/command.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/dialog.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/progress.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/pagination.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/switch.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/form.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/sonner.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/select.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/textarea.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/menubar.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/toggle.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/dropdown-menu.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/label.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/scroll-area.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/chart.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/context-menu.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/checkbox.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/table.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/drawer.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/toaster.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/sync-status-icon.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/radio-group.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/card.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/button.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/slider.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/alert.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/collapsible.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/navigation-menu.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/tooltip.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/skeleton.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/motion.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/calendar.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/input.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/carousel.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/toggle-group.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/alert-dialog.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/popover.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/resizable.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/badge.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/sidebar.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/accordion.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/hover-card.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/aspect-ratio.tsx"
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/ui/avatar.tsx"
+    },
+    {
+      "from": "src/shared",
+      "to": "src/shared/aprovacao"
+    },
+    {
+      "from": "src/shared/aprovacao",
+      "to": "src/shared/aprovacao/ApprovalProvider.tsx"
+    },
+    {
+      "from": "src/shared",
+      "to": "src/shared/lib"
+    },
+    {
+      "from": "src/shared/lib",
+      "to": "src/shared/lib/hostRouting.ts"
+    },
+    {
+      "from": "src/shared/lib",
+      "to": "src/shared/lib/viewAsMode.ts"
+    },
+    {
+      "from": "src/shared/lib",
+      "to": "src/shared/lib/animations.ts"
+    },
+    {
+      "from": "src/shared/lib",
+      "to": "src/shared/lib/menuReveal.ts"
+    },
+    {
+      "from": "src/shared/lib",
+      "to": "src/shared/lib/utils.ts"
+    },
+    {
+      "from": "src/shared/lib",
+      "to": "src/shared/lib/queryValidation.ts"
+    },
+    {
+      "from": "src/shared",
+      "to": "src/shared/transitions"
+    },
+    {
+      "from": "src/shared/transitions",
+      "to": "src/shared/transitions/MenuRevealTransition.tsx"
+    },
+    {
+      "from": "src/shared/transitions",
+      "to": "src/shared/transitions/PageSplash.tsx"
+    },
+    {
+      "from": "src/shared/transitions",
+      "to": "src/shared/transitions/SplashController.tsx"
+    },
+    {
+      "from": "src/shared",
+      "to": "src/shared/test"
+    },
+    {
+      "from": "src/shared/test",
+      "to": "src/shared/test/setup.ts"
+    },
+    {
+      "from": "src/shared/test",
+      "to": "src/shared/test/splash.test.tsx"
+    },
+    {
+      "from": "src/shared/test",
+      "to": "src/shared/test/example.test.ts"
+    },
+    {
+      "from": "src/shared",
+      "to": "src/shared/theme"
+    },
+    {
+      "from": "src/shared/theme",
+      "to": "src/shared/theme/ThemeToggle.tsx"
+    },
+    {
+      "from": "src/shared/theme",
+      "to": "src/shared/theme/ThemeProvider.tsx"
+    },
+    {
+      "from": "src/shared",
+      "to": "src/shared/pwa"
+    },
+    {
+      "from": "src/shared/pwa",
+      "to": "src/shared/pwa/InstallPrompt.tsx"
+    },
+    {
+      "from": "src/shared",
+      "to": "src/shared/auth"
+    },
+    {
+      "from": "src/shared/auth",
+      "to": "src/shared/auth/AuthProvider.tsx"
+    },
+    {
+      "from": "src/shared/auth",
+      "to": "src/shared/auth/ProtectedRoute.tsx"
+    },
+    {
+      "from": "src/shared/auth",
+      "to": "src/shared/auth/ViewAsBanner.tsx"
+    },
+    {
+      "from": "src/shared/auth",
+      "to": "src/shared/auth/AdminRoute.tsx"
+    },
+    {
+      "from": "src/shared",
+      "to": "src/shared/hooks"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/use-toast.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useNotifications.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useMcpStatus.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useNotificationRoutes.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useSystemSetting.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useAdminData.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useBackup.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useQueryHistory.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useModuleHealth.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/usePixTransactions.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useSecurity.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useBotSettings.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useAuth.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/use-mobile.tsx"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useVpsDeploy.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useProviderStatus.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/usePayments.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useIsAdmin.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useAdminUsers.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useRoadmap.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useApiUsageHistory.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useAuditLogs.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useNotificationsLog.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useBotAnalytics.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useApiStatus.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useScheduledBroadcasts.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/usePWA.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/useTelegramBots.ts"
+    },
+    {
+      "from": "src/shared/hooks",
+      "to": "src/shared/hooks/telegram"
+    },
+    {
+      "from": "src/shared/hooks/telegram",
+      "to": "src/shared/hooks/telegram/useBotOperations.ts"
+    },
+    {
+      "from": "src/shared/hooks/telegram",
+      "to": "src/shared/hooks/telegram/types.ts"
+    },
+    {
+      "from": "src/shared/hooks/telegram",
+      "to": "src/shared/hooks/telegram/index.ts"
+    },
+    {
+      "from": "src/shared/hooks/telegram",
+      "to": "src/shared/hooks/telegram/useBotSecuritySettings.ts"
+    },
+    {
+      "from": "src/shared/hooks/telegram",
+      "to": "src/shared/hooks/telegram/useTelegramBots.ts"
+    },
+    {
+      "from": "src/shared",
+      "to": "src/shared/layout"
+    },
+    {
+      "from": "src/shared/layout",
+      "to": "src/shared/layout/MobileAvatarMenu.tsx"
+    },
+    {
+      "from": "src/shared/layout",
+      "to": "src/shared/layout/Header.tsx"
+    },
+    {
+      "from": "src/shared/layout",
+      "to": "src/shared/layout/BottomNav.tsx"
+    },
+    {
+      "from": "src/shared/layout",
+      "to": "src/shared/layout/Logo.tsx"
+    },
+    {
+      "from": "src/shared/layout",
+      "to": "src/shared/layout/Sidebar.tsx"
+    },
+    {
+      "from": "src/shared/layout",
+      "to": "src/shared/layout/DashboardLayout.tsx"
+    },
+    {
+      "from": "src",
+      "to": "src/apps"
+    },
+    {
+      "from": "src/apps",
+      "to": "src/apps/web"
+    },
+    {
+      "from": "src/apps/web",
+      "to": "src/apps/web/README.md"
+    },
+    {
+      "from": "src/apps/web",
+      "to": "src/apps/web/pages"
+    },
+    {
+      "from": "src/apps/web/pages",
+      "to": "src/apps/web/pages/LandingCentralDark.tsx"
+    },
+    {
+      "from": "src/apps/web/pages",
+      "to": "src/apps/web/pages/Auth.tsx"
+    },
+    {
+      "from": "src/apps/web/pages",
+      "to": "src/apps/web/pages/README.md"
+    },
+    {
+      "from": "src/apps/web/pages",
+      "to": "src/apps/web/pages/Status.tsx"
+    },
+    {
+      "from": "src/apps/web/pages",
+      "to": "src/apps/web/pages/Portal.tsx"
+    },
+    {
+      "from": "src/apps",
+      "to": "src/apps/hub"
+    },
+    {
+      "from": "src/apps/hub",
+      "to": "src/apps/hub/HubPage.tsx"
+    },
+    {
+      "from": "src/apps",
+      "to": "src/apps/modulos"
+    },
+    {
+      "from": "src/apps/modulos",
+      "to": "src/apps/modulos/README.md"
+    },
+    {
+      "from": "src/apps/modulos",
+      "to": "src/apps/modulos/bot-whatsapp"
+    },
+    {
+      "from": "src/apps/modulos/bot-whatsapp",
+      "to": "src/apps/modulos/bot-whatsapp/README.md"
+    },
+    {
+      "from": "src/apps/modulos/bot-whatsapp",
+      "to": "src/apps/modulos/bot-whatsapp/pages"
+    },
+    {
+      "from": "src/apps/modulos/bot-whatsapp/pages",
+      "to": "src/apps/modulos/bot-whatsapp/pages/README.md"
+    },
+    {
+      "from": "src/apps/modulos/bot-whatsapp/pages",
+      "to": "src/apps/modulos/bot-whatsapp/pages/LandingWhatsapp.tsx"
+    },
+    {
+      "from": "src/apps/modulos",
+      "to": "src/apps/modulos/financeiro"
+    },
+    {
+      "from": "src/apps/modulos/financeiro",
+      "to": "src/apps/modulos/financeiro/README.md"
+    },
+    {
+      "from": "src/apps/modulos/financeiro",
+      "to": "src/apps/modulos/financeiro/pages"
+    },
+    {
+      "from": "src/apps/modulos/financeiro/pages",
+      "to": "src/apps/modulos/financeiro/pages/LandingFinanceiro.tsx"
+    },
+    {
+      "from": "src/apps/modulos/financeiro/pages",
+      "to": "src/apps/modulos/financeiro/pages/README.md"
+    },
+    {
+      "from": "src/apps/modulos",
+      "to": "src/apps/modulos/telepainel"
+    },
+    {
+      "from": "src/apps/modulos/telepainel",
+      "to": "src/apps/modulos/telepainel/README.md"
+    },
+    {
+      "from": "src/apps/modulos/telepainel",
+      "to": "src/apps/modulos/telepainel/pages"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/DevTransitions.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/PonteMCP.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/SubscriptionAudit.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/Docs.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/MapaSite.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/Index.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/Security.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/Cofre.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/TesteModulos.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/MigrateSubscriptions.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/Consultas.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/Settings.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/NotFound.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/Bots.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/PixTransactions.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/UsuariosPainel.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/WebAppResult.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/README.md"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/LandingTelePainel.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/UsuarioPerfil.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/BotSettings.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/MenuTips.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/Plans.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/MegaPainel.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/TelegramUsers.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/DatabaseInfo.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/pages",
+      "to": "src/apps/modulos/telepainel/pages/QueryLogs.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel",
+      "to": "src/apps/modulos/telepainel/components"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components",
+      "to": "src/apps/modulos/telepainel/components/settings"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/settings",
+      "to": "src/apps/modulos/telepainel/components/settings/SignupToggle.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/settings",
+      "to": "src/apps/modulos/telepainel/components/settings/CleanupSettings.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components",
+      "to": "src/apps/modulos/telepainel/components/ponte-mcp"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/ponte-mcp",
+      "to": "src/apps/modulos/telepainel/components/ponte-mcp/CardConectarIA.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/ponte-mcp",
+      "to": "src/apps/modulos/telepainel/components/ponte-mcp/BotaoOAuth.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/ponte-mcp",
+      "to": "src/apps/modulos/telepainel/components/ponte-mcp/CardBoasVindas.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components",
+      "to": "src/apps/modulos/telepainel/components/bots"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/bots",
+      "to": "src/apps/modulos/telepainel/components/bots/EdgeFunctionsStatus.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/bots",
+      "to": "src/apps/modulos/telepainel/components/bots/FakeEngagementSettings.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/bots",
+      "to": "src/apps/modulos/telepainel/components/bots/MessageEffectSettings.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/bots",
+      "to": "src/apps/modulos/telepainel/components/bots/QueryModulesManager.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/bots",
+      "to": "src/apps/modulos/telepainel/components/bots/BotHealthMonitor.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/bots",
+      "to": "src/apps/modulos/telepainel/components/bots/BroadcastDialog.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/bots",
+      "to": "src/apps/modulos/telepainel/components/bots/TypingReactionsSettings.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/bots",
+      "to": "src/apps/modulos/telepainel/components/bots/ScheduledBroadcastManager.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/bots",
+      "to": "src/apps/modulos/telepainel/components/bots/EngagementMessagesManager.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/bots",
+      "to": "src/apps/modulos/telepainel/components/bots/ButtonEmojiConfig.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/bots",
+      "to": "src/apps/modulos/telepainel/components/bots/BotConfigCard.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components",
+      "to": "src/apps/modulos/telepainel/components/admin"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/admin",
+      "to": "src/apps/modulos/telepainel/components/admin/AuditLogsViewer.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components",
+      "to": "src/apps/modulos/telepainel/components/dashboard"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/dashboard",
+      "to": "src/apps/modulos/telepainel/components/dashboard/AnalyticsChart.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/dashboard",
+      "to": "src/apps/modulos/telepainel/components/dashboard/ApiStatusCard.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/dashboard",
+      "to": "src/apps/modulos/telepainel/components/dashboard/BotStatusCard.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/dashboard",
+      "to": "src/apps/modulos/telepainel/components/dashboard/QuickActions.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/dashboard",
+      "to": "src/apps/modulos/telepainel/components/dashboard/SystemStatus.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/dashboard",
+      "to": "src/apps/modulos/telepainel/components/dashboard/BotsSection.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/dashboard",
+      "to": "src/apps/modulos/telepainel/components/dashboard/ActivityFeed.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/dashboard",
+      "to": "src/apps/modulos/telepainel/components/dashboard/DashboardAnalyticsChart.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/dashboard",
+      "to": "src/apps/modulos/telepainel/components/dashboard/QueryMonitor.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/dashboard",
+      "to": "src/apps/modulos/telepainel/components/dashboard/StatsCard.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/dashboard",
+      "to": "src/apps/modulos/telepainel/components/dashboard/HeroStatsCard.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/dashboard",
+      "to": "src/apps/modulos/telepainel/components/dashboard/MaintenanceToggle.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components",
+      "to": "src/apps/modulos/telepainel/components/security"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/security",
+      "to": "src/apps/modulos/telepainel/components/security/SecurityHeader.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/security",
+      "to": "src/apps/modulos/telepainel/components/security/SecurityAdvanced.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/security",
+      "to": "src/apps/modulos/telepainel/components/security/SecurityToggles.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/security",
+      "to": "src/apps/modulos/telepainel/components/security/SecurityStats.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/security",
+      "to": "src/apps/modulos/telepainel/components/security/SecurityHistory.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/security",
+      "to": "src/apps/modulos/telepainel/components/security/index.ts"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components",
+      "to": "src/apps/modulos/telepainel/components/gamification"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/gamification",
+      "to": "src/apps/modulos/telepainel/components/gamification/ConfettiCelebration.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components",
+      "to": "src/apps/modulos/telepainel/components/pix"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/pix",
+      "to": "src/apps/modulos/telepainel/components/pix/OperationalCostConfig.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/pix",
+      "to": "src/apps/modulos/telepainel/components/pix/PixCharts.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/pix",
+      "to": "src/apps/modulos/telepainel/components/pix/PixFinancialSummary.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/pix",
+      "to": "src/apps/modulos/telepainel/components/pix/PixTransactionsTable.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/pix",
+      "to": "src/apps/modulos/telepainel/components/pix/BreakEvenGoal.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components",
+      "to": "src/apps/modulos/telepainel/components/consultation"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/consultation",
+      "to": "src/apps/modulos/telepainel/components/consultation/ProviderStatusList.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/consultation",
+      "to": "src/apps/modulos/telepainel/components/consultation/QueryInput.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/consultation",
+      "to": "src/apps/modulos/telepainel/components/consultation/MonospaceResultDisplay.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/consultation",
+      "to": "src/apps/modulos/telepainel/components/consultation/ResultDisplay.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/consultation",
+      "to": "src/apps/modulos/telepainel/components/consultation/QueryHistoryList.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components",
+      "to": "src/apps/modulos/telepainel/components/search"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/search",
+      "to": "src/apps/modulos/telepainel/components/search/GlobalSearch.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components",
+      "to": "src/apps/modulos/telepainel/components/devops"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/devops",
+      "to": "src/apps/modulos/telepainel/components/devops/McpStatusCard.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/devops",
+      "to": "src/apps/modulos/telepainel/components/devops/IPhonePreviewModal.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/devops",
+      "to": "src/apps/modulos/telepainel/components/devops/VpsDeployPlugin.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/devops",
+      "to": "src/apps/modulos/telepainel/components/devops/DeployHistoryList.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/devops",
+      "to": "src/apps/modulos/telepainel/components/devops/RoadmapList.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/devops",
+      "to": "src/apps/modulos/telepainel/components/devops/NotificationsFeedCard.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components",
+      "to": "src/apps/modulos/telepainel/components/landing"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/landing",
+      "to": "src/apps/modulos/telepainel/components/landing/ModuleLanding.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components",
+      "to": "src/apps/modulos/telepainel/components/backup"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/backup",
+      "to": "src/apps/modulos/telepainel/components/backup/BackupManager.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components",
+      "to": "src/apps/modulos/telepainel/components/webapp"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/webapp",
+      "to": "src/apps/modulos/telepainel/components/webapp/NewsTicker.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components",
+      "to": "src/apps/modulos/telepainel/components/payments"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/payments",
+      "to": "src/apps/modulos/telepainel/components/payments/PaymentGatewaysGrid.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/payments",
+      "to": "src/apps/modulos/telepainel/components/payments/PaymentGatewaySettings.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/payments",
+      "to": "src/apps/modulos/telepainel/components/payments/EfiGatewayConfig.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/payments",
+      "to": "src/apps/modulos/telepainel/components/payments/PixPaymentDialog.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/payments",
+      "to": "src/apps/modulos/telepainel/components/payments/MisticPayGatewayConfigDialog.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/payments",
+      "to": "src/apps/modulos/telepainel/components/payments/EfiGatewayConfigDialog.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/payments",
+      "to": "src/apps/modulos/telepainel/components/payments/SubscriptionStatus.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components",
+      "to": "src/apps/modulos/telepainel/components/consultas"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/consultas",
+      "to": "src/apps/modulos/telepainel/components/consultas/VehicleResultModal.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/consultas",
+      "to": "src/apps/modulos/telepainel/components/consultas/QueryResultFormatter.tsx"
+    },
+    {
+      "from": "src/apps/modulos/telepainel/components/consultas",
+      "to": "src/apps/modulos/telepainel/components/consultas/UniversalResultModal.tsx"
+    },
+    {
+      "from": "src/apps/modulos",
+      "to": "src/apps/modulos/crm"
+    },
+    {
+      "from": "src/apps/modulos/crm",
+      "to": "src/apps/modulos/crm/README.md"
+    },
+    {
+      "from": "src/apps/modulos/crm",
+      "to": "src/apps/modulos/crm/pages"
+    },
+    {
+      "from": "src/apps/modulos/crm/pages",
+      "to": "src/apps/modulos/crm/pages/LandingCRM.tsx"
+    },
+    {
+      "from": "src/apps/modulos/crm/pages",
+      "to": "src/apps/modulos/crm/pages/README.md"
+    },
+    {
+      "from": "centraldark",
+      "to": "supabase"
+    },
+    {
+      "from": "supabase",
+      "to": "supabase/functions"
+    },
+    {
+      "from": "supabase/functions",
+      "to": "supabase/functions/webapp-get-result"
+    },
+    {
+      "from": "supabase/functions/webapp-get-result",
+      "to": "supabase/functions/webapp-get-result/index.ts"
+    },
+    {
+      "from": "supabase/functions",
+      "to": "supabase/functions/dev-test-modules"
+    },
+    {
+      "from": "supabase/functions/dev-test-modules",
+      "to": "supabase/functions/dev-test-modules/index.ts"
+    },
+    {
+      "from": "supabase/functions",
+      "to": "supabase/functions/api-query"
+    },
+    {
+      "from": "supabase/functions/api-query",
+      "to": "supabase/functions/api-query/index.ts"
+    },
+    {
+      "from": "supabase/functions",
+      "to": "supabase/functions/health-check"
+    },
+    {
+      "from": "supabase/functions/health-check",
+      "to": "supabase/functions/health-check/index.ts"
+    },
+    {
+      "from": "supabase/functions",
+      "to": "supabase/functions/notify-telegram"
+    },
+    {
+      "from": "supabase/functions/notify-telegram",
+      "to": "supabase/functions/notify-telegram/index.ts"
+    },
+    {
+      "from": "supabase/functions",
+      "to": "supabase/functions/efi-webhook"
+    },
+    {
+      "from": "supabase/functions/efi-webhook",
+      "to": "supabase/functions/efi-webhook/index.ts"
+    },
+    {
+      "from": "supabase/functions",
+      "to": "supabase/functions/ponte-mcp"
+    },
+    {
+      "from": "supabase/functions/ponte-mcp",
+      "to": "supabase/functions/ponte-mcp/index.ts"
+    },
+    {
+      "from": "supabase/functions",
+      "to": "supabase/functions/telegram-format-result"
+    },
+    {
+      "from": "supabase/functions/telegram-format-result",
+      "to": "supabase/functions/telegram-format-result/index.ts"
+    }
+  ],
+  "meta": {
+    "source": "fallback-local",
+    "backend": "fallback-local",
+    "model": "static",
+    "generatedAt": "2026-07-02T11:08:18.495297+00:00"
+  }
+}

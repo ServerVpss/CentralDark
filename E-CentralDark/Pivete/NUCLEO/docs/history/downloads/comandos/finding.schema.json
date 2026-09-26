@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CentralDark Runtime Finding",
+  "type": "object",
+  "required": [
+    "finding_id",
+    "detector",
+    "status",
+    "severity",
+    "facts",
+    "evidence",
+    "sanitized"
+  ],
+  "properties": {
+    "finding_id": {
+      "type": "string"
+    },
+    "detector": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "UNKNOWN",
+        "ERROR"
+      ]
+    },
+    "severity": {
+      "enum": [
+        "P1",
+        "P2",
+        "P3"
+      ]
+    },
+    "facts": {
+      "type": "array"
+    },
+    "evidence": {
+      "type": "array"
+    },
+    "sanitized": {
+      "const": true
+    },
+    "autofix_candidate": {
+      "type": "boolean"
+    },
+    "human_gate": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": false
+}

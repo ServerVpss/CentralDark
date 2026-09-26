@@ -1,0 +1,329 @@
+```text
+CENTRALDARK_AI_BOOT:
+  governance: LOADED
+  github_dictionary: LOADED
+  delta_method: LOADED
+  context_reconciliation: LOADED
+  history_preservation: ACTIVE
+  source_of_truth: "ServerVpss/CentralDark"
+  observed_evidence: "GitHub remoto medido agora"
+  alignment: "SEGREDO/CHEFE > SOL/COORDENADOR > PIVETE/HERMES + ESPECIALISTAS"
+  role: "READ_ONLY"
+  writer: "NONE"
+```
+
+```text
+REPOSITORY=ServerVpss/CentralDark
+ACCESS_MODE=READ_ONLY
+DEFAULT_BRANCH=main
+MAIN_HEAD=6f5e83d8a4ef2ec095f5a65f6be484fddd9000c5
+MAIN_TREE_SHA=809a768058f054403f653f000d15b88a793863e6
+
+MAIN_REF_RESOLUTION=PASS
+COMMIT_OBJECT_RESOLUTION=PASS
+TREE_OBJECT_RESOLUTION=PASS
+
+RECURSIVE_TREE_API_CALL=PASS
+RECURSIVE_TREE_FULL_ENUMERATION_PROOF=UNPROVEN
+REASON=connector output da árvore recursiva foi truncado na apresentação
+
+REQUESTED_PATH_SET_DIRECT_VALIDATION=PASS
+REQUESTED_FILES_MISSING=0
+REQUESTED_FILES_SKIPPED=0
+WRITE_OPERATIONS=0
+```
+
+A `main` medida agora aponta exatamente para `6f5e83d8a4ef2ec095f5a65f6be484fddd9000c5`; esse commit aponta para a tree `809a768058f054403f653f000d15b88a793863e6`.
+
+```text
+================================================================
+TESTE SEQUENCIAL — CADEIA FÍSICA DO BOOT
+================================================================
+
+[T00]
+OBJECT=refs/heads/main
+EXPECTED=branch padrão vigente
+OBSERVED=main
+COMMIT_SHA=6f5e83d8a4ef2ec095f5a65f6be484fddd9000c5
+VERDICT=PASS
+
+[T01]
+PATH=docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md
+EXPECTED_BLOB=b6468cb2cc99df1f9e4cfb2b3a7cec8ac74a6870
+OBSERVED_BLOB=b6468cb2cc99df1f9e4cfb2b3a7cec8ac74a6870
+MATCH=true
+SELF_STATUS=CANÔNICO
+ROLE=CHECKPOINT/PORTA_DE_ENTRADA
+VERDICT=PASS
+
+[T02]
+PATH=LEIA-ME-IA.md
+EXPECTED_BLOB=3e198fa12b367c5474e008249f1a786196ba20b2
+OBSERVED_BLOB=3e198fa12b367c5474e008249f1a786196ba20b2
+MATCH=true
+SELF_STATUS=CANÔNICO
+SELF_SCOPE=Porta de entrada única para qualquer IA que conectar no CentralDark
+ROLE=BOOT_UNIVERSAL
+VERDICT=PASS
+
+[T03]
+PATH=AGENTS.md
+OBSERVED_BLOB=1c437ca3dcbcc796751abcc771f132676500cea4
+ROLE=CONTRATO_GERAL_DOS_AGENTES
+BOOT_REQUIRED=true
+REUSE_BEFORE_CREATE_REQUIRED=true
+META_LUPA_FOR_CRITICAL_SCOPE=true
+VERDICT=PASS
+
+[T04]
+PATH=docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+OBSERVED_BLOB=6289208fc275a886f06ba3ec825430dbacf83d68
+CONTRACT_ID=CENTRALDARK_RECONCILIATION_BEFORE_CREATION
+SCHEMA_VERSION=1
+STATUS=CANONICAL
+MARKER=REUSE_BEFORE_CREATE_REQUIRED
+VERDICT=PASS
+
+[T05]
+PATH=docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
+OBSERVED_BLOB=b08de506063b0d36183ac6fac709dd9dc4c4328f
+ROLE=CONTRATO_ARQUITETURAL_COMPLEMENTAR
+STATUS_DECLARADO=canônico após merge na main
+OBSERVED_BRANCH=main
+VERDICT=PASS
+
+[T06]
+REQUESTED_ALIAS=JEITO-CORRETO-DO-PIVETE.md
+CANONICAL_PATH=docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md
+OBSERVED_BLOB=43b644eb9897e487f8948c3e806611070e576764
+SELF_STATUS=CANÔNICO
+ROLE=MÉTODO_SEGREDO_SOL_HERMES_ESPECIALISTAS
+VERDICT=PASS
+
+[T07]
+REQUESTED_ALIAS=padrão-resposta-pivete.md
+CANONICAL_PATH=docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md
+OBSERVED_BLOB=254e8a1d586ca1a0ee7862d65fd2a1235bc32e16
+SELF_STATUS=ativo
+BOOT_REQUIREMENT=MANDATORY_BY_LEIA-ME-IA
+ROLE=FORMATO_DE_COMUNICAÇÃO
+VERDICT=PASS
+
+[T08]
+REQUESTED_ALIAS=DICIONARIO-PIVETE-GITHUB.md
+CANONICAL_PATH=docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md
+OBSERVED_BLOB=d9a5c35581ffd6525a740168317615426918cfd2
+SELF_STATUS=CANÔNICO
+ROLE=VOCABULÁRIO/PERMISSÕES_GITHUB
+VERDICT=PASS
+
+[T09]
+PATH=.agents/skills/meta-lupa/SKILL.md
+OBSERVED_BLOB=c124497474f381ec86047fb93407b9e04fbdcf58
+ROLE=MOTOR_DE_AUDITORIA
+VERDICT=PASS
+
+[T10]
+PATH=.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
+OBSERVED_FILE_BLOB=1cbd3b7979a6341eece00101d11470b45ff2608c
+DECLARED_META_LUPA_BLOB=c124497474f381ec86047fb93407b9e04fbdcf58
+OBSERVED_META_LUPA_BLOB=c124497474f381ec86047fb93407b9e04fbdcf58
+IDENTITY_MATCH=true
+VERDICT=PASS
+```
+
+A porta física confirma literalmente os gatilhos `#ACORDA`, `#ACORDAR` e `!CALIBRAR` e manda seguir `LEIA-ME-IA.md → AGENTS.md → contrato de reconciliação → JARVIS`, medir branch/HEAD/escritor/evidência e somente depois responder ou agir. O blob observado coincide byte-identitariamente pelo Git object ID com o SHA que você forneceu.
+
+`LEIA-ME-IA.md` confirma os três documentos de entrada, o boot universal, `AGENTS.md`, JARVIS, contrato de reconciliação, Meta Lupa, `AUTOLUPA_CANONICAL_SHA` e a obrigação de medir estado atual. Também declara que a própria porta é verificada por `scripts/lupa/validar-porta-de-entrada.mjs` e `apps/modulos/mapeamento/core/validar-mapa.mjs`.
+
+```text
+================================================================
+PREFLIGHT DE RECONCILIAÇÃO
+================================================================
+
+USER_INTENT=
+  executar calibração/varredura estritamente READ_ONLY;
+  resolver cadeia física do boot;
+  validar paths/blobs;
+  não criar nem alterar nada.
+
+EXISTING_CAPABILITIES=
+  docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md
+  LEIA-ME-IA.md
+  AGENTS.md
+  CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+  JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
+  JEITO-CORRETO-DO-PIVETE.md
+  2026-06-20-padrao-resposta-pivete.md
+  DICIONARIO-PIVETE-GITHUB.md
+  .agents/skills/meta-lupa/SKILL.md
+  .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
+
+EVIDENCE_OPENED=
+  SIM
+
+PRIMARY_IMPLEMENTATION/CONTRACT_FILES_OPENED=
+  SIM
+
+CROSS_REFERENCE_WITH_REQUEST=
+  SIM
+
+AUTHORITY_CLASSIFICATION=
+  00-PORTA-DE-ENTRADA-IA      -> CANONICAL
+  LEIA-ME-IA                  -> CANONICAL/SOURCE_OF_TRUTH_DO_BOOT
+  AGENTS                      -> REQUIRED_BY_CANONICAL_BOOT
+  RECONCILIATION_CONTRACT     -> CANONICAL
+  JARVIS_DELTA_WRITER         -> CANONICAL_ON_MAIN
+  JEITO_CORRETO               -> CANONICAL
+  PADRAO_RESPOSTA             -> ACTIVE + REQUIRED_BY_CANONICAL_BOOT
+  DICIONARIO_GITHUB           -> CANONICAL
+  META_LUPA                   -> CANONICAL_IDENTITY_PROVED_BY_BLOB_MATCH
+
+REUSE_DECISION=
+  REUSE_CANONICAL_BOOT_CHAIN
+
+REAL_GAP=
+  NONE_FOR_REQUESTED_READ_ONLY_PREFLIGHT
+
+CREATE=
+  NO
+
+MINIMAL_ACTION=
+  READ_ONLY_REPORT
+
+CONTEXT_RECONCILIATION_FAILURE=
+  false
+
+UNKNOWN_TO_PASS=
+  0
+
+SKIPPED_TO_PASS=
+  0
+
+PRELIGHT_VERDICT=
+  PASS
+```
+
+O contrato JSON físico define exatamente a sequência `resolve_user_intent → search_existing_capabilities → open_primary_implementation_files → cross_reference_capabilities_with_request → classify_authority_and_runtime_state → reuse_or_extend_before_create`; também declara que proposta sem inventário bloqueia o boot e que caminho encontrado sem cross-reference é falha de reconciliação.
+
+```text
+================================================================
+WRITER / CONCORRÊNCIA
+================================================================
+
+CURRENT_OPERATION=READ_ONLY
+CURRENT_WRITE_SCOPE=NONE
+CURRENT_WRITER_FOR_THIS_OPERATION=NONE
+WRITE_ATTEMPTED=false
+HANDOFF_REQUIRED=false
+
+ONE_WRITER_RULE_LOADED=true
+JUDGE_SELF_APPROVAL_FORBIDDEN=true
+STALE_STATE_ALLOWED=false
+```
+
+`AGENTS.md` exige explicitamente estado novo comprovado sobre contexto antigo, um único escritor por escopo, handoff explícito para troca, revisor somente leitura e HEAD exato para revisão.
+
+O contrato JARVIS formaliza a separação: leitura/pesquisa/auditoria podem ser paralelas; alteração de arquivo/commit/label/PR/merge/deploy só pode ter um escritor por escopo e por vez; o escritor precisa aparecer no snapshot e a troca exige `WRITER_HANDOFF`.
+
+```text
+================================================================
+VALIDAÇÃO DA IDENTIDADE META LUPA
+================================================================
+
+CANONICAL_IDENTITY_FILE=
+.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
+
+CANONICAL_IDENTITY_FILE_BLOB=
+1cbd3b7979a6341eece00101d11470b45ff2608c
+
+DECLARED_SKILL_BLOB=
+c124497474f381ec86047fb93407b9e04fbdcf58
+
+OBSERVED_SKILL_BLOB=
+c124497474f381ec86047fb93407b9e04fbdcf58
+
+DECLARED == OBSERVED
+true
+
+META_LUPA_IDENTITY=
+PASS
+```
+
+O arquivo de identidade contém literalmente `c124497474f381ec86047fb93407b9e04fbdcf58 .agents/skills/meta-lupa/SKILL.md`, e o blob obtido diretamente para `SKILL.md` é exatamente o mesmo.
+
+```text
+================================================================
+INVARIANTES CARREGADOS
+================================================================
+
+NEWEST_PROVED_STATE_WINS=true
+REUSE_BEFORE_CREATE_REQUIRED=true
+ONE_WRITER_PER_SCOPE=true
+UNKNOWN_IS_PASS=false
+SKIPPED_IS_PASS=false
+ABSENCE_OF_ERROR_IS_SUCCESS=false
+MODEL_NAME_GRANTS_AUTHORITY=false
+SELF_APPROVAL_ALLOWED=false
+HISTORY_REWRITE_REQUIRED=false
+READ_ONLY_OPERATION=true
+```
+
+A Meta Lupa observada bloqueia explicitamente falso verde baseado somente em painel verde, `Scheduled`, HTTP 200, ausência de erro ou listagem de recurso; distingue ausência de resultado de ausência no sistema e exige prova por canais adequados.
+
+```text
+================================================================
+RESULTADO FINAL DA VARREDURA SOLICITADA
+================================================================
+
+STATUS=PASS_REQUESTED_PATH_SET
+
+DEFAULT_BRANCH=main
+HEAD_SHA=6f5e83d8a4ef2ec095f5a65f6be484fddd9000c5
+TREE_SHA=809a768058f054403f653f000d15b88a793863e6
+
+PORTA_BLOB=b6468cb2cc99df1f9e4cfb2b3a7cec8ac74a6870
+LEIA_ME_IA_BLOB=3e198fa12b367c5474e008249f1a786196ba20b2
+AGENTS_BLOB=1c437ca3dcbcc796751abcc771f132676500cea4
+RECONCILIATION_BLOB=6289208fc275a886f06ba3ec825430dbacf83d68
+JARVIS_BLOB=b08de506063b0d36183ac6fac709dd9dc4c4328f
+JEITO_BLOB=43b644eb9897e487f8948c3e806611070e576764
+PADRAO_RESPOSTA_BLOB=254e8a1d586ca1a0ee7862d65fd2a1235bc32e16
+DICIONARIO_BLOB=d9a5c35581ffd6525a740168317615426918cfd2
+META_LUPA_BLOB=c124497474f381ec86047fb93407b9e04fbdcf58
+AUTOLUPA_IDENTITY_FILE_BLOB=1cbd3b7979a6341eece00101d11470b45ff2608c
+
+EXPECTED_PORTA_SHA_MATCH=true
+EXPECTED_LEIA_ME_IA_SHA_MATCH=true
+META_LUPA_DECLARED_SHA_MATCH=true
+
+REQUESTED_FILES=9
+REQUESTED_FILES_DIRECTLY_RESOLVED=9
+REQUESTED_FILES_SKIPPED=0
+
+RECURSIVE_TREE_REQUEST=EXECUTED
+WHOLE_REPOSITORY_CONTENT_READ=UNPROVEN
+WHOLE_REPOSITORY_ENUMERATION_VISIBLE_TO_MODEL=UNPROVEN
+REASON=recursive Git tree response was truncated by connector presentation
+
+NO_FALSE_GREEN=true
+NO_WRITE=true
+NO_COMMIT=true
+NO_PUSH=true
+NO_MERGE=true
+NO_DEPLOY=true
+NO_RESTART=true
+```
+
+`JEITO-CORRETO-DO-PIVETE.md` ainda reforça o comportamento de continuação: `UNKNOWN_NAO_PASSA=true`, exige mesma `HEAD_SHA` para progresso, mantém `BLOCKED` quando gates faltam e proíbe retomada órfã com SHA/receipt divergente.
+
+O `DICIONARIO-PIVETE-GITHUB.md` foi resolvido no caminho canônico e lido em continuidade; ele mantém o mesmo artefato como destino de evolução e proíbe criar cópia `v2`.
+
+```text
+CALIBRATION_RESULT=PASS
+PREFLIGHT_RECONCILIATION=PASS
+PHYSICAL_BLOB_CHAIN=PASS
+META_LUPA_IDENTITY=PASS
+RECURSIVE_WHOLE_REPO_PROOF=UNPROVEN
+WRITE_STATE=ZERO
+```

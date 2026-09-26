@@ -1,0 +1,37 @@
+{
+  "ts": "2026-07-18T22:44:50.463723+00:00",
+  "process_env_clean": false,
+  "resolve_ok": true,
+  "token_oauth": true,
+  "token_len": 108,
+  "hermes_client_base_url": "https://api.anthropic.com",
+  "base_is_local_proxy": false,
+  "claude_sdk": {
+    "ok": false,
+    "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': 'Error'}, 'request_id': 'req_011CdALJ78VkLf8kw184d57w'}"
+  },
+  "claude_http_direct": {
+    "ok": true,
+    "http": 200,
+    "model": "claude-sonnet-4-6",
+    "text": "CLAUDE-HTTP-OK"
+  },
+  "xai_token_present": true,
+  "grok": {
+    "grok-4.5": {
+      "ok": true,
+      "http": 200,
+      "preview": "GROK-OK"
+    },
+    "grok-build-0.1": {
+      "ok": true,
+      "http": 200,
+      "preview": "GROK-OK"
+    },
+    "grok-composer-2.5-fast": {
+      "ok": true,
+      "http": 200,
+      "preview": "GROK-OK"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+services:
+  sealed-box:
+    build:
+      context: ..
+      dockerfile: container/Dockerfile
+    network_mode: "none"
+    read_only: true
+    init: true
+    user: "10001:10001"
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 128
+    mem_limit: 512m
+    cpus: 1.0
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev,size=64m
+      - /work:rw,noexec,nosuid,nodev,size=128m
+      - /out:rw,noexec,nosuid,nodev,size=128m
+      - /control:rw,noexec,nosuid,nodev,size=4m
+    volumes:
+      - ../examples/input:/input:ro
+      - ../examples/mission.container.json:/mission/mission.json:ro
+    command: ["/mission/mission.json"]

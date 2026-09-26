@@ -1,0 +1,1 @@
+{"job_id": "3057c878c146", "name": "Morning briefing", "expr": "0 8 * * *", "stored_next_run_at": "2026-09-07T08:00:00-03:00", "normalized_next_run_at": "2026-09-07T09:00:00-02:00", "fired_at": "2026-09-12T17:02:19.878015-02:00"}

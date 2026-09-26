@@ -1,0 +1,50 @@
+$R="C:\CentralDark\Pivete\CentralDark"
+$O="$R\_forense\$(Get-Date -Format yyyyMMdd-HHmmss)"
+$F=(Get-Date).AddDays(-30).ToString("o")
+New-Item -ItemType Directory -Force $O | Out-Null
+
+git -C $R log --all --since="$F" --date=iso-strict `
+  --pretty=format:"%ad`tGIT`t%H`t%D`t%s" |
+  Set-Content "$O\git.tsv"
+
+gh api -X GET "repos/ServerVpss/CentralDark/actions/runs?per_page=100" --paginate `
+  --jq '.workflow_runs[] | [.created_at,"GHA",(.id|tostring),.name,.head_sha,.status,(.conclusion//""),.html_url] | @tsv' |
+  Set-Content "$O\github-actions.tsv"
+
+@("$HOME\.hermes","$HOME\.pm2\logs","$R\state","$R\logs","$R\.git\logs") |
+  ForEach-Object {
+    Get-ChildItem $_ -Recurse -File -ErrorAction SilentlyContinue |
+      Where-Object LastWriteTime -gt (Get-Date).AddDays(-30) |
+      ForEach-Object { "{0:o}`tLOCAL_FILE`t{1}`t{2}" -f $_.LastWriteTime,$_.FullName,$_.Length }
+  } | Set-Content "$O\local-files.tsv"
+
+if ($env:CHATGPT_EXPORT -and (Test-Path $env:CHATGPT_EXPORT)) {
+@'
+import json,os,datetime
+d=json.load(open(os.environ["CHATGPT_EXPORT"],encoding="utf-8"))
+for c in d:
+    for n in c.get("mapping",{}).values():
+        m=n.get("message")
+        if not m: continue
+        t=m.get("create_time")
+        p=(m.get("content") or {}).get("parts") or []
+        s=" ".join(x for x in p if isinstance(x,str)).replace("\n"," ")
+        if t and s:
+            ts=datetime.datetime.fromtimestamp(t,datetime.timezone.utc).isoformat()
+            print(ts,"CHAT",c.get("title",""),s[:1000],sep="\t")
+'@ | python - | Set-Content "$O\chat.tsv"
+}
+
+if ($env:CD_VPS) {
+  ssh $env:CD_VPS `
+    "journalctl --since '30 days ago' -o short-iso-precise --no-pager; echo '=== PM2 ==='; pm2 logs --nostream --lines 5000 --timestamp" |
+    Set-Content "$O\vps.log"
+}
+
+Get-Content "$O\*.tsv" |
+  Sort-Object |
+  Set-Content "$O\timeline.tsv"
+
+Write-Host "`nFORENSE => $O"
+Write-Host "TIMELINE => $O\timeline.tsv"
+Write-Host "VPS      => $O\vps.log"

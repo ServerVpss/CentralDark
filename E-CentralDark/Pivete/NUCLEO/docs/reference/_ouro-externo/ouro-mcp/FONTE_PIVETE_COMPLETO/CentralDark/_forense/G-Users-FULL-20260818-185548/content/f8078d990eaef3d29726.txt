@@ -1,0 +1,17 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@electron\osx-sign\dist\esm\sign.d.ts
+
+import { SignOptions } from './types';
+/**
+ * Signs a macOS application.
+ * @returns A void Promise once the signing operation is complete.
+ *
+ * @category Codesign
+ */
+export declare function signApp(_opts: SignOptions): Promise<void>;
+/**
+ * This function is a legacy callback implementation.
+ *
+ * @deprecated Please use the Promise-based {@link signAsync} method instead.
+ * @category Codesign
+ */
+export declare const sign: (opts: SignOptions, cb?: ((error?: Error) => void) | undefined) => void;

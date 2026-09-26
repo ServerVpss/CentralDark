@@ -1,0 +1,59 @@
+**C — ajusta primeiro.** A arquitetura está boa, mas eu mudaria **4 pontos** antes de virar skill, senão a Casa corre risco de transformar uma metáfora boa em engine paralelo.
+
+```text
+1. “TUDO = SUSPEITO”
+   ↓
+   UNTRUSTED_FOR_EXECUTION_BY_DEFAULT
+
+2. “AGÊNCIA META_LUPA”
+   ↓
+   META_LUPA_BATCH_PROFILE
+   # perfil do owner existente, não nova agência/engine
+
+3. “GRAVAÇÃO → E:\CentralDark”
+   ↓
+   MATERIAL_INGEST → KNOWLEDGE_COMPILER/FORJA → CRYSTAL
+   # só grava depois de owner + prova + contraprova
+
+4. GUARDIÃO CASA
+   ↓
+   BOUNDARY/GUARDRAIL
+   # pergunta “essa ação pode atravessar?”
+   # não vira juiz, writer ou orquestrador
+```
+
+A cadeia que eu cristalizaria seria:
+
+```text
+PERCEPÇÃO READ_ONLY
+→ CLASSIFICAR
+→ META_LUPA N-ITENS
+→ CONTRAPROVA
+→ REALITY_JUDGE
+→ CORRIGIR CLAIM
+→ LEARNING_TRANSFER
+→ MATERIAL_INGEST
+→ GOLD
+→ CRYSTAL
+→ GATE/REFLEXO
+```
+
+E os **3 vértices** estão excelentes como núcleo:
+
+```text
+DESCONHECIDO NÃO GANHA EXECUÇÃO
+PESSOA NÃO PERDE PRIVACIDADE
+DECLARAÇÃO NÃO GANHA STATUS DE PROVA
+```
+
+A única correção conceitual importante é esta:
+
+> `LEARNING_TRANSFER` não é simplesmente “lembrar do erro”; é **o sistema aplicar a correção na próxima ocorrência sem você precisar ensinar novamente**.
+
+Então o nome da arquitetura, em uma linha:
+
+**SISTEMA NERVOSO EPISTEMOLÓGICO AUTOCORRETIVO.**
+
+Depois desses ajustes, aí sim eu aprovaria transformar isso numa skill — **reutilizando Meta Lupa + Material Ingest + Knowledge Compiler**, sem criar “Agência V2”. 🔐🕊️
+
+Posso também criar uma imagem desse fluxo lógico.

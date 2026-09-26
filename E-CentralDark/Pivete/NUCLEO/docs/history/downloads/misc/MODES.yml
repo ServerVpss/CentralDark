@@ -1,0 +1,35 @@
+schema_version: 1
+modes:
+  OFF:
+    local_capture: false
+    external_radar: false
+    learning: false
+    writes: false
+  OBSERVE:
+    local_capture: explicit_sources_only
+    external_radar: optional
+    learning: false
+    writes: references_only
+  LEARN:
+    local_capture: explicit_sources_only
+    external_radar: optional
+    learning: true
+    writes: candidates_and_approved_crystals
+  TEACH:
+    local_capture: explicit_session_only
+    external_radar: false
+    learning: true
+    human_signal_priority: high
+  EXTERNAL_RADAR:
+    local_capture: false
+    external_radar: true
+    public_professional_only: true
+  PRIVATE:
+    local_capture: false
+    local_ingestion: false
+    learning_from_environment: false
+    writes_from_environment: false
+  REVIEW:
+    new_capture: false
+    learning: false
+    review_queue: true

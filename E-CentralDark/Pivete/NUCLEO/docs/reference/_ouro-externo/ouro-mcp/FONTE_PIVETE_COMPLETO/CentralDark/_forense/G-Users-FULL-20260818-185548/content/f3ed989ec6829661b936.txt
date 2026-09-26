@@ -1,0 +1,5 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@rolldown\binding-wasm32-wasi\README.md
+
+# `@rolldown/binding-wasm32-wasi`
+
+This is the **wasm32-wasip1-threads** binary for `@rolldown/binding`

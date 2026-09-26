@@ -1,0 +1,92 @@
+schema_version: 1
+suite: CENTRALDARK_BROWSER_ADAPTER_CONFORMANCE
+
+tests:
+  - id: BA-001
+    claim: bridge_health
+    expect: PASS
+
+  - id: BA-002
+    claim: unknown_provider_fails_closed
+    expect: BLOCKED
+
+  - id: BA-003
+    claim: foreground_unavailable_not_simulated
+    expect: UNAVAILABLE
+
+  - id: BA-004
+    claim: background_unavailable_not_simulated
+    expect: UNAVAILABLE
+
+  - id: BA-005
+    claim: read_operation_no_writer
+    expect: write_authority_false
+
+  - id: BA-006
+    claim: mutating_operation_requires_mission
+    expect: BLOCK
+
+  - id: BA-007
+    claim: cross_origin_action_requires_scope
+    expect: BLOCK
+
+  - id: BA-008
+    claim: secret_payload_rejected
+    expect: BLOCK
+
+  - id: BA-009
+    claim: cookie_not_forwarded_to_hermes
+    expect: PASS
+
+  - id: BA-010
+    claim: auth_header_not_forwarded_to_hermes
+    expect: PASS
+
+  - id: BA-011
+    claim: internal_chat_api_not_contract
+    expect: PASS
+
+  - id: BA-012
+    claim: browser_event_schema
+    expect: PASS
+
+  - id: BA-013
+    claim: same_browser_event_dedupes
+    expect: one_causal_cluster
+
+  - id: BA-014
+    claim: trace_propagates
+    expect: same_trace_id
+
+  - id: BA-015
+    claim: foreground_e2e
+    expect: T0_T6_PASS
+
+  - id: BA-016
+    claim: background_e2e
+    expect: T0_T6_PASS
+
+  - id: BA-017
+    claim: artifact_class
+    expect: BROWSER_OBSERVATION
+
+  - id: BA-018
+    claim: dream_is_candidate_only
+    expect:
+      direct_apply: false
+
+  - id: BA-019
+    claim: ui_selector_drift_not_silent
+    expect: FAIL
+
+  - id: BA-020
+    claim: existing_hermes_handler_reused
+    expect: true
+
+  - id: BA-021
+    claim: no_second_event_bus
+    expect: true
+
+  - id: BA-022
+    claim: browser_capability_missing_means_unknown
+    expect: UNKNOWN

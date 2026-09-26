@@ -1,0 +1,36 @@
+# Hermes Runtime Hooks - Configuração do Pipeline Regenerativo
+# Arquivo de configuração para o runtime regenerativo
+
+regenerative_pipeline:
+  enabled: true
+  mode: "always"                    # always, on_demand, scheduled
+  scope: "all_skills"               # all_skills, specific_skills
+  mode_execution: "until_fixed_point"  # until_fixed_point, single_pass, incremental
+  
+  triggers:
+    on_skill_create: true           # Nova skill -> pipeline completo
+    on_skill_update: true           # Skill editada -> pipeline incremental
+    on_skill_test: "verify_only"    # verify_only, full, skip
+    on_skill_load: "verify_fixed_point"  # verify_fixed_point, skip, full
+    on_pre_push: true               # Antes de git push
+  
+  policy:
+    auto_accept_if_fixed_point: true      # Auto-aceita se FIXED_POINT
+    require_manual_approval_on: "regression_detected"  # regression_detected, never, always
+    max_generations_per_session: 50       # Limite de gerações por sessão
+    timeout_per_skill_minutes: 30         # Timeout por skill
+    auto_accept_if_fixed_point: true
+  
+  exclusions: []  # Skills excluídas do pipeline (ex: ["legacy-skill"])
+  
+  # Configurações de execução
+  max_generations_per_session: 50
+  timeout_per_skill_minutes: 30
+  max_concurrent_skills: 1
+  
+  # Condições de Fixed Point
+  fixed_point_conditions:
+    objective_closed: true
+    counterproof_survived: true
+    applicable_invariants_hold: true
+    no_material_unknown: true

@@ -1,0 +1,37 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.13, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\danda\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: E:\CentralDark\Pivete\CentralDark\.agents\contratos\delta-canonico
+plugins: anyio-4.14.1
+collecting ... collected 27 items
+
+tests/test_delta_contract.py::TestDeltaContractNegative::test_calibrar_from_blocked_rejected PASSED [  3%]
+tests/test_delta_contract.py::TestDeltaContractNegative::test_close_without_judge_approval_rejected PASSED [  7%]
+tests/test_delta_contract.py::TestDeltaContractNegative::test_double_writer_collision PASSED [ 11%]
+tests/test_delta_contract.py::TestDeltaContractNegative::test_forbidden_blocked_to_done_without_proof PASSED [ 14%]
+tests/test_delta_contract.py::TestDeltaContractNegative::test_forbidden_done_to_active PASSED [ 18%]
+tests/test_delta_contract.py::TestDeltaContractNegative::test_forbidden_idle_to_done PASSED [ 22%]
+tests/test_delta_contract.py::TestDeltaContractNegative::test_handoff_with_correct_observed_sha_succeeds PASSED [ 25%]
+tests/test_delta_contract.py::TestDeltaContractNegative::test_invalid_sha_rejected PASSED [ 29%]
+tests/test_delta_contract.py::TestDeltaContractNegative::test_non_deterministic_detection PASSED [ 33%]
+tests/test_delta_contract.py::TestDeltaContractNegative::test_redact_secrets_by_key_name_unit PASSED [ 37%]
+tests/test_delta_contract.py::TestDeltaContractNegative::test_secret_field_injection_rejected_by_schema PASSED [ 40%]
+tests/test_delta_contract.py::TestDeltaContractNegative::test_secret_in_legitimate_field_redacted_from_calibrar_receipt PASSED [ 44%]
+tests/test_delta_contract.py::TestDeltaContractNegative::test_secret_never_in_receipt_of_valid_instance PASSED [ 48%]
+tests/test_delta_contract.py::TestDeltaContractNegative::test_stale_message_does_not_rewind PASSED [ 51%]
+tests/test_delta_contract.py::TestDeltaContractPositive::test_boot_valid_instance PASSED [ 55%]
+tests/test_delta_contract.py::TestDeltaContractPositive::test_calibrate_checkpoints PASSED [ 59%]
+tests/test_delta_contract.py::TestDeltaContractPositive::test_full_cycle_boot_to_reset PASSED [ 62%]
+tests/test_delta_contract.py::TestDeltaContractPositive::test_handoff_valid PASSED [ 66%]
+tests/test_delta_contract.py::TestDeltaContractPositive::test_idempotence_boot PASSED [ 70%]
+tests/test_delta_contract.py::TestDeltaContractSchemaEnforcement::test_additional_properties_rejected_root_and_nested PASSED [ 74%]
+tests/test_delta_contract.py::TestDeltaContractSchemaEnforcement::test_missing_multiple_required_fields_rejected PASSED [ 77%]
+tests/test_delta_contract.py::TestDeltaContractSchemaEnforcement::test_missing_required_field_identity_rejected PASSED [ 81%]
+tests/test_delta_contract.py::TestDeltaContractSchemaEnforcement::test_pattern_and_enum_violations_rejected PASSED [ 85%]
+tests/test_delta_contract.py::TestDeltaContractSchemaEnforcement::test_valid_instance_with_null_progressive_fields_accepted PASSED [ 88%]
+tests/test_delta_contract.py::TestDeltaContractDeterminism::test_hash_deterministic PASSED [ 92%]
+tests/test_delta_contract.py::TestDeltaContractDeterminism::test_schema_validation_deterministic PASSED [ 96%]
+tests/test_delta_contract.py::TestDeltaContractDeterminism::test_transition_validation_deterministic PASSED [100%]
+
+============================= 27 passed in 0.12s ==============================
+suite exit=0

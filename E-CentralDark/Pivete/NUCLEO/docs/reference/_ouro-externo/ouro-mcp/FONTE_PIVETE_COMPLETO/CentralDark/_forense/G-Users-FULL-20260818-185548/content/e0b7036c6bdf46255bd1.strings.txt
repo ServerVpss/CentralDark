@@ -1,0 +1,24 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\ftplugin\kconfig.vim
+
+" Vim filetype plugin file
+" Vim syntax file
+" Maintainer:
+Christian Brabandt <cb@256bit.org>
+" Previous Maintainer:
+Nikolai Weibull <now@bitwi.se>
+" Latest Revision:
+2025 Jan 20
+" License:
+Vim (see :h license)
+" Repository:
+https://github.com/chrisbra/vim-kconfig
+if exists("b:did_ftplugin")
+  finish
+let b:did_ftplugin = 1
+let b:undo_ftplugin = "setl inc< com< cms< fo<"
+setlocal include=source\\s\\+
+setlocal comments=:# commentstring=#\ %s formatoptions-=t formatoptions+=croql
+" For matchit.vim
+if exists("loaded_matchit")
+  let b:match_words = '^\<menu\>:\<endmenu\>,^\<if\>:\<endif\>,^\<choice\>:\<endchoice\>'
+  let b:undo_ftplugin .= "| unlet! b:match_words"

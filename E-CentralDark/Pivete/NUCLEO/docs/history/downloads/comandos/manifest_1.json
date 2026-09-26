@@ -1,0 +1,249 @@
+[
+  {
+    "id": "failure",
+    "name": "Failure / Error Analysis",
+    "path": "SKILL.md",
+    "triggers": [
+      "test_failed",
+      "node_check_failed",
+      "semantic_failure_with_syntax_pass",
+      "regression_failed",
+      "timeout",
+      "blocked",
+      "exit code",
+      "falha",
+      "erro",
+      "exception",
+      "trailer",
+      "parser",
+      "escape duplicado"
+    ],
+    "priority": 10
+  },
+  {
+    "id": "enxame",
+    "name": "Enxame Omega Multi-Agent",
+    "path": "04-DOUTRINAS/DOUTRINA-ENXAME-OMEGA.md",
+    "triggers": [
+      "enxame_request",
+      "enxame",
+      "multi agent",
+      "debate",
+      "paralelo",
+      "swarm",
+      "judge",
+      "juiz",
+      "adversarial",
+      "fable"
+    ],
+    "priority": 20
+  },
+  {
+    "id": "protecao",
+    "name": "Doutrina de Protecao Estrategica",
+    "path": "04-DOUTRINAS/DOUTRINA-PROTECAO-ESTRATEGICA.md",
+    "triggers": [
+      "secret",
+      "deploy",
+      "force push",
+      "producao",
+      "vps",
+      "history rewrite",
+      "reset hard",
+      "escopo autorizado",
+      "rollback"
+    ],
+    "priority": 30
+  },
+  {
+    "id": "fluxo-ouro",
+    "name": "Fluxo de Ouro 5-Point",
+    "path": "04-DOUTRINAS/FLUXO-DE-OURO-5-POINT.md",
+    "triggers": [
+      "github",
+      "fonte da verdade",
+      "vps",
+      "supabase",
+      "gateway",
+      "cerebro vivo",
+      "fluxo"
+    ],
+    "priority": 15
+  },
+  {
+    "id": "card-hermes",
+    "name": "Card Hermes v1.3",
+    "path": "04-DOUTRINAS/CARD-HERMES-V1.3.md",
+    "triggers": [
+      "notificar",
+      "telegram",
+      "card hermes",
+      "status",
+      "admin",
+      "canal"
+    ],
+    "priority": 5
+  },
+  {
+    "id": "desafio-v8",
+    "name": "Desafio V8 Profiler",
+    "path": "01-KIT-DESAFIOS-STAFF/01-v8-profiler.md",
+    "triggers": [
+      "v8",
+      "profiler",
+      "cpuprofile",
+      "cpu",
+      "performance",
+      "overclock",
+      "longtask"
+    ],
+    "priority": 12
+  },
+  {
+    "id": "desafio-adversarial",
+    "name": "Desafio Enxame Adversarial",
+    "path": "01-KIT-DESAFIOS-STAFF/02-enxame-adversarial.md",
+    "triggers": [
+      "adversarial",
+      "defesa",
+      "evidencia",
+      "iteracao"
+    ],
+    "priority": 11
+  },
+  {
+    "id": "desafio-ab",
+    "name": "Desafio A/B Empirico",
+    "path": "01-KIT-DESAFIOS-STAFF/03-ab-empirico.md",
+    "triggers": [
+      "a/b",
+      "ab test",
+      "empirico",
+      "mensurado",
+      "prova"
+    ],
+    "priority": 11
+  },
+  {
+    "id": "desafio-atribuicao",
+    "name": "Desafio Atribuicao Cirurgica",
+    "path": "01-KIT-DESAFIOS-STAFF/04-atribuicao-cirurgica.md",
+    "triggers": [
+      "minificado",
+      "source map",
+      "atribuicao",
+      "funcao"
+    ],
+    "priority": 11
+  },
+  {
+    "id": "desafio-plano",
+    "name": "Desafio Plano Verificavel",
+    "path": "01-KIT-DESAFIOS-STAFF/05-plano-verificavel.md",
+    "triggers": [
+      "plano",
+      "verificavel",
+      "fix minimo",
+      "metricas"
+    ],
+    "priority": 11
+  },
+  {
+    "id": "boot-economico",
+    "name": "Boot CentralDark Economico",
+    "path": "05-BOOTS-PROMPTS/BOOT-CENTRALDARK-ECONOMICO.md",
+    "triggers": [
+      "boot",
+      "identidade",
+      "onboarding",
+      "colaborador",
+      "pivete"
+    ],
+    "priority": 8
+  },
+  {
+    "id": "boot-universal",
+    "name": "Boot Universal Completo",
+    "path": "05-BOOTS-PROMPTS/BOOT-UNIVERSAL-COMPLETO.md",
+    "triggers": [
+      "boot universal",
+      "infra",
+      "bots",
+      "srver1bot",
+      "segredopuxadas"
+    ],
+    "priority": 8
+  },
+  {
+    "id": "prompt-missao",
+    "name": "Prompt Missao Enxame",
+    "path": "05-BOOTS-PROMPTS/PROMPT-MISSAO-ENXAME.md",
+    "triggers": [
+      "missao enxame",
+      "prompt missao",
+      "vps root"
+    ],
+    "priority": 9
+  },
+  {
+    "id": "overclock-ouro",
+    "name": "Relatorio Overclock Ouro",
+    "path": "03-KIT-RELATORIOS-OVERCLOCK/OURO-OVERCLOCK.md",
+    "triggers": [
+      "overclock",
+      "ouro",
+      "relatorio perf",
+      "diagnostic"
+    ],
+    "priority": 12
+  },
+  {
+    "id": "state-analysis",
+    "name": "State / Mission Preservation",
+    "path": "references/state-analysis.md",
+    "triggers": [
+      "session_resume",
+      "session_checkpoint",
+      "state_transition_error",
+      "non_idempotent_result",
+      "repeated_error",
+      "missao",
+      "proximo estado",
+      "invariavel",
+      "checkpoint",
+      "retomada"
+    ],
+    "priority": 18
+  },
+  {
+    "id": "rcrcrc",
+    "name": "RCRCRC Heuristic (Reproduce-Confirm)",
+    "path": "references/rcrcrc.md",
+    "triggers": [
+      "reproduzir",
+      "confirmar",
+      "regressao",
+      "reteste",
+      "rcrcrc",
+      "idempotencia",
+      "caso negativo"
+    ],
+    "priority": 14
+  },
+  {
+    "id": "regras-operacionais",
+    "name": "Regras Operacionais do Pivete",
+    "path": "04-DOUTRINAS/REGRAS-OPERACIONAIS-PIVETE.md",
+    "triggers": [
+      "backup",
+      "git pull",
+      "git push",
+      "reset",
+      "pm2",
+      "nginx",
+      "script oficial",
+      "regra operacional"
+    ],
+    "priority": 16
+  }
+]

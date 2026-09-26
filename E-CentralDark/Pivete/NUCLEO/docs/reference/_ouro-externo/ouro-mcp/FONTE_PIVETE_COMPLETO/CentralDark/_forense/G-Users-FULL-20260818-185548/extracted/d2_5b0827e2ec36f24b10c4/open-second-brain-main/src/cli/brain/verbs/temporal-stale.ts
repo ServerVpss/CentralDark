@@ -1,0 +1,50 @@
+import { buildTimelineIndex } from "../../../core/brain/temporal/build-index.ts";
+import { findStaleEntries } from "../../../core/brain/temporal/stale-watch.ts";
+import { loadTemporalConfigSafe } from "../../../core/brain/policy.ts";
+import { brainVerbContext, parse } from "../helpers.ts";
+
+/**
+ * `o2b brain stale [--vault PATH] [--json]`
+ *
+ * Pure structural staleness report. Thresholds come from the
+ * `temporal:` block in `_brain.yaml` (defaults apply when the block
+ * is absent).
+ */
+export async function cmdBrainStale(argv: string[]): Promise<number> {
+  const { flags } = parse(argv, {
+    vault: { type: "string" },
+    json: { type: "boolean" },
+  });
+  const { vault } = brainVerbContext(flags);
+
+  const cfg = loadTemporalConfigSafe(vault);
+  const index = buildTimelineIndex(vault, {});
+  const report = findStaleEntries(index, vault, cfg);
+
+  if (flags["json"]) {
+    process.stdout.write(JSON.stringify(report, null, 2) + "\n");
+    return 0;
+  }
+
+  // An empty report names no forward exit, deliberately. This verb IS the
+  // exit other surfaces name - the `stale-notes` registry entry resolves to
+  // it - and what to do with a stale entry (pin it, retire it, refresh its
+  // evidence) is a judgement over content, so naming any one of them would
+  // be a guess dressed as an instruction.
+  process.stdout.write(
+    `Stale entries (pref >= ${cfg.stale_pref_days}d, signal >= ${cfg.stale_signal_days}d, log >= ${cfg.stale_log_days}d):\n`,
+  );
+  process.stdout.write(`  preferences: ${report.stalePreferences.length}\n`);
+  for (const p of report.stalePreferences) {
+    process.stdout.write(`    ${p.prefId}  age=${p.ageDays}d  ${p.path}\n`);
+  }
+  process.stdout.write(`  signals: ${report.staleSignals.length}\n`);
+  for (const s of report.staleSignals) {
+    process.stdout.write(`    ${s.signalId}  age=${s.ageDays}d  ${s.path}\n`);
+  }
+  process.stdout.write(`  log files: ${report.staleLogFiles.length}\n`);
+  for (const l of report.staleLogFiles) {
+    process.stdout.write(`    ${l.path}  age=${l.ageDays}d\n`);
+  }
+  return 0;
+}

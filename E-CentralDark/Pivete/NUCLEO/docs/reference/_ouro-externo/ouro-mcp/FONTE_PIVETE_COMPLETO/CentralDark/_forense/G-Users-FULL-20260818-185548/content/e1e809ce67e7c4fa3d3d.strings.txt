@@ -1,0 +1,1421 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\tutor\tutor1.sv
+
+===============================================================================
+ l k o m m e n  t i l l  V I M - h a n d l e d n i n g e n  - Ver. 1.7  =
+===============================================================================
+    K A P I T E L   E T T
+      =
+===============================================================================
+     Vim 
+r en v
+ldigt kraftfull redigerare som har m
+nga kommandon, alltf
+     m
+nga att f
+rklara i en handledning som denna. Den h
+r handledningen 
+     gjord f
+r att beskriva tillr
+ckligt m
+nga kommandon s
+ att du enkelt ska
+     kunna anv
+nda Vim som en redigerare f
+r alla 
+     Den ber
+knade tiden f
+r att slutf
+ra denna handledning 
+r 30 minuter,
+     beroende p
+ hur mycket tid som l
+ggs ned p
+ experimentering.
+     OBSERVERA:
+     Kommandona i lektionerna kommer att modifiera texten. G
+r en kopia av den
+     h
+r filen att 
+ (om du startade "vimtutor" 
+r det h
+r redan en kopia).
+     Det 
+r viktigt att komma ih
+g att den h
+r handledningen 
+r konstruerad
+     att l
+ra vid anv
+ndning. Det betyder att du m
+ra kommandona f
+     l
+ra dig dem ordentligt. Om du bara l
+ser texten s
+ kommer du att gl
+     kommandona!
+     F
+kra dig nu om att din Caps-Lock-tangent INTE 
+r aktiv och tryck p
+     j-tangenten tillr
+ckligt m
+nger f
+r att f
+rflytta mark
+     Lektion 1.1.1 fyller sk
+rmen helt.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lektion 1.1.1: FLYTTA MARK
+   ** F
+r att flytta mark
+ren, tryck p
+ tangenterna h,j,k,l som indikerat. **
+     ^
+     k
+Tips:  h-tangenten 
+r till v
+nster och flyttar v
+nster.
+       < h
+       l-tangenten 
+r till h
+ger och flyttar h
+     j
+       j-tangenten ser ut som en pil ned.
+     v
+  1. Flytta runt mark
+rmen tills du k
+nner dig bekv
+  2. H
+ll ned tangenten (j) tills den repeterar.
+     Nu vet du hur du tar dig till n
+sta lektion.
+  3. Flytta till Lektion 1.1.2, med hj
+lp av ned-tangenten.
+NOTERA: Om du 
+gonting du skrev, tryck <ESC> f
+r att placera
+dig i Normall
+ge. Skriv sedan om kommandot du ville anv
+NOTERA: Piltangenterna borde ocks
+ fungera. Men om du anv
+nder hjkl s
+ kommer
+du att kunna flytta runt mycket snabbare, n
+r du v
+l vant dig vid det.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Lektion 1.1.2: AVSLUTA VIM
+  !! NOTERA: Innan du utf
+gon av punkterna nedan, l
+s hela lektionen!!
+  1. Tryck <ESC>-tangenten (f
+r att se till att du 
+r i Normall
+  2. Skriv:
+:q! <ENTER>.
+     Detta avslutar redigeraren UTAN att spara n
+ndringar.
+  3. Kom tillbaka hit genom att k
+ra kommandot som tog dig till den h
+     handledningen. Det kan vara:  vimtutor <ENTER>
+  4. Om du har memorerat dessa steg och k
+nner dig s
+ker, k
+r steg 1 till 3
+     f
+r att avsluta och starta om redigeraren.
+NOTERA: :q! <ENTER> kastar alla 
+ndringar du gjort. Om n
+gra lektioner l
+du dig hur du sparar 
+ndringar till en fil.
+  5. Flytta ned mark
+ren till Lektion 1.1.3.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     Lektion 1.1.3: TEXTREDIGERING - BORTTAGNING
+   ** Tryck  x  f
+r att ta bort tecknet under mark
+ren. **
+  1. Flytta mark
+ren till raden nedan markerad med --->.
+  2. F
+r att r
+tta felen, flytta mark
+ren tills den st
+ tecknet som ska
+     tas bort.
+  3. Tryck p
+  x-tangenten f
+r att ta bort det o
+nskade tecknet.
+  4. Upprepa steg 2 till 4 tills meningen 
+r korrekt.
+---> Kkon hoppadee 
+vverr m
+  5. Nu n
+r raden 
+r korrekt, g
+ till Lektion 1.1.4.
+NOTERA: N
+r du g
+r igenom den h
+r handledningen, f
+k inte memorera, l
+genom anv
+ndning.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      Lektion 1.1.4: TEXTREDIGERING - INFOGNING
+    ** Tryck  i  f
+r att infoga text. **
+  1. Flytta mark
+ren till f
+rsta raden nedan markerad med --->.
+  2. F
+r att g
+rsta raden likadan som den andra, flytta mark
+ren till
+     tecknet F
+RE vilket texten ska infogas.
+  3. Tryck  i  och skriv in de n
+ndiga till
+  4. N
+r varje fel 
+ttat, tryck <ESC> f
+r att 
+ till Normall
+     Upprepa steg 2 till 4 f
+r att r
+tta meningen.
+---> Det saknas lit fr
+n den h
+---> Det saknas lite text fr
+n den h
+r raden.
+  5. N
+r du k
+nner dig bekv
+m med att infoga text, g
+ till Lektion 1.1.5.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     Lektion 1.1.5: TEXTREDIGERING - L
+GGA TILL
+    ** Tryck  A  f
+r att l
+gga till text. **
+  1. Flytta mark
+ren till f
+rsta raden nedan markerad med --->.
+     Det spelar ingen roll p
+ vilket tecken mark
+ den raden.
+  2. Tryck  A  och skriv in de n
+ndiga till
+  3. N
+r texten har lagts till, tryck <ESC> f
+r att 
+ till Normall
+  4. Flytta mark
+ren till den andra raden markerad ---> och upprepa
+     steg 2 och 3 f
+r att r
+tta denna mening.
+---> Det saknas lite text fr
+     Det saknas lite text fr
+n den h
+r raden.
+---> Det saknas ocks
+ lite tex
+     Det saknas ocks
+ lite text h
+  5. N
+r du k
+nner dig bekv
+m med att l
+gga till text, g
+ till Lektion 1.1.6.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     Lektion 1.1.6: REDIGERA EN FIL
+    ** Anv
+nd  :wq  f
+r att spara en fil och avsluta. **
+  !! NOTERA: Innan du utf
+gon av punkterna nedan, l
+s hela lektionen!!
+  1.  Om du har tillg
+ng till en annan terminal, g
+ljande d
+      Annars, avsluta denna handledning som i Lektion 1.1.2:  :q!
+  2. Vid skalprompten, skriv detta kommando:  vim fil.txt <ENTER>
+     'vim' 
+r kommandot f
+r att starta Vim-redigeraren, 'fil.txt' 
+r namnet p
+     filen du vill redigera. Anv
+nd ett namn p
+ en fil som du kan 
+  3. Infoga och ta bort text som du l
+rt dig i tidigare lektioner.
+  4. Spara filen med 
+ndringar och avsluta Vim med:  :wq <ENTER>
+  5. Om du avslutade vimtutor i steg 1, starta om vimtutor och flytta ned till
+     f
+ljande sammanfattning.
+  6. Efter att ha l
+st stegen ovan och f
+tt dem: g
+r det.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       Lektion 1.1 SAMMANFATTNING
+  1. Mark
+ren flyttas med antingen piltangenterna eller hjkl-tangenterna.
+nster)
+j (ned)       k (upp)
+    l (h
+  2. F
+r att starta Vim fr
+n skalprompten, skriv:  vim FILNAMN <ENTER>
+  3. F
+r att avsluta Vim, skriv:   <ESC>   :q!
+<ENTER>  f
+r att kasta 
+ndringar.
+     ELLER skriv:
+   <ESC>   :wq
+<ENTER>  f
+r att spara 
+ndringar.
+  4. F
+r att ta bort tecknet vid mark
+ren, skriv:  x
+  5. F
+r att infoga eller l
+gga till text, skriv:
+ i   skriv infogad text   <ESC>
+infoga f
+re mark
+ A   skriv tillagd text   <ESC>         l
+gg till efter raden
+NOTERA: Att trycka <ESC> placerar dig i Normall
+ge eller avbryter ett
+nskat och delvis slutf
+rt kommando.
+tt nu med Lektion 1.2.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lektion 1.2.1: BORTTAGNINGSKOMMANDON
+       ** Skriv  dw  f
+r att ta bort ett ord. **
+  1. Tryck  <ESC>  f
+r att se till att du 
+r i Normall
+  2. Flytta mark
+ren till raden nedan markerad med --->.
+  3. Flytta mark
+ren till b
+rjan av ett ord som beh
+ver tas bort.
+  4. Skriv   dw
+r att f
+ ordet att f
+rsvinna.
+NOTERA: Bokstaven  d  kommer att synas p
+ sista raden p
+rmen n
+skriver den. Vim v
+ntar p
+ att du ska skriva  w . Om du ser ett annat
+tecken 
+n  d  skrev du fel; tryck <ESC> och b
+rja om.
+---> Det finns a n
+gra ord kul som inte h
+r hemma papper i den h
+r meningen.
+  5. Upprepa steg 3 och 4 tills meningen 
+r korrekt och g
+ till Lektion 1.2.2.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      Lektion 1.2.2: FLER BORTTAGNINGSKOMMANDON
+   ** Skriv  d$  f
+r att ta bort till slutet av raden. **
+  1. Tryck  <ESC>  f
+r att se till att du 
+r i Normall
+  2. Flytta mark
+ren till raden nedan markerad med --->.
+  3. Flytta mark
+ren till slutet av den korrekta raden (EFTER den f
+rsta . ).
+  4. Skriv    d$    f
+r att ta bort till slutet av raden.
+---> N
+gon skrev slutet av denna rad tv
+nger. slutet av denna rad tv
+  5. G
+ vidare till Lektion 1.2.3 f
+r att f
+ vad som h
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     Lektion 1.2.3: OM OPERATORER OCH R
+RELSER
+nga kommandon som 
+ndrar text 
+r gjorda av en operator och en r
+relse.
+  Formatet f
+r ett borttagningskommando med  d  borttagningsoperatorn 
+    d      - 
+r borttagningsoperatorn.
+relse - 
+r vad operatorn ska operera p
+ (listad nedan).
+  En kort lista med r
+relser:
+    w - till b
+rjan av n
+sta ord, EXKLUSIVE dess f
+rsta tecken.
+    e - till slutet av nuvarande ord, INKLUSIVE det sista tecknet.
+    $ - till slutet av raden, INKLUSIVE det sista tecknet.
+  Allts
+ kommer  de  att ta bort fr
+n mark
+ren till slutet av ordet.
+NOTERA: Att bara trycka r
+relsen i Normall
+ge utan operator kommer att flytta
+ren som specificerat.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     Lektion 1.2.4: ANV
+NDA ANTAL F
+R EN R
+   ** Att skriva ett nummer f
+re en r
+relse repeterar den s
+nger. **
+  1. Flytta mark
+ren till b
+rjan av raden nedan markerad med --->.
+  2. Skriv  2w  f
+r att flytta mark
+ren tv
+ ord fram
+  3. Skriv  3e  f
+r att flytta mark
+ren till slutet av det tredje ordet fram
+  4. Skriv  0  (noll) f
+r att flytta till b
+rjan av raden.
+  5. Upprepa steg 2 och 3 med olika nummer.
+---> Detta 
+r bara en rad med ord som du kan flytta runt i.
+  6. G
+ vidare till Lektion 1.2.5.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     Lektion 1.2.5: ANV
+NDA ANTAL F
+R ATT TA BORT MER
+   ** Att skriva ett nummer med en operator repeterar den s
+nger. **
+  I kombinationen av borttagningsoperatorn och en r
+relse n
+mnd ovan kan du
+  infoga ett antal f
+relsen f
+r att ta bort mer:
+ d   antal   r
+  1. Flytta mark
+ren till det f
+rsta VERSALA ordet p
+ raden markerad med --->.
+  2. Skriv  d2w  f
+r att ta bort de tv
+ VERSALA orden.
+  3. Upprepa steg 1 och 2 med olika antal f
+r att ta bort de efterf
+ljande
+     VERSALA orden med ett kommando.
+--->  denna ABC DE rad FGHI JK LMN OP av ord 
+r Q RS TUV st
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Lektion 1.2.6: OPERERA P
+ RADER
+   ** Skriv  dd   f
+r att ta bort en hel rad. **
+ grund av hur vanligt det 
+r att ta bort hela rader, beslutade Vis
+  konstrukt
+rer att det skulle vara enklare att bara skriva tv
+  ta bort en rad.
+  1. Flytta mark
+ren till den andra raden i frasen nedan.
+  2. Skriv  dd  f
+r att ta bort raden.
+  3. Flytta nu till den fj
+rde raden.
+  4. Skriv   2dd   f
+r att ta bort tv
+ rader.
+--->  1)  Rosor 
+--->  2)  Lera 
+r kul,
+--->  3)  Violer 
+--->  4)  Jag har en bil,
+--->  5)  Klockor visar tid,
+--->  6)  Socker 
+--->  7)  Och det 
+r du med.
+Att dubbla f
+r att operera p
+ en rad fungerar ocks
+r operatorer n
+mnda nedan.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Lektion 1.2.7: 
+NGRA-KOMMANDOT
+   ** Tryck  u  f
+r att 
+ngra senaste kommandot,  U  f
+r att fixa en hel rad. **
+  1. Flytta mark
+ren till raden nedan markerad ---> och placera den p
+     f
+rsta felet.
+  2. Skriv  x  f
+r att ta bort det f
+rsta o
+nskade tecknet.
+  3. Skriv nu  u  f
+r att 
+ngra det senast k
+rda kommandot.
+  4. Denna g
+tta alla fel p
+ raden med  x  kommandot.
+  5. Skriv nu ett stort  U  f
+r att 
+lla raden till dess ursprungliga tillst
+  6. Skriv nu  u  n
+nger f
+r att 
+ngra  U  och f
+ende kommandon.
+  7. Tryck nu CTRL-R (h
+ll CTRL nedtryckt medan du trycker R) n
+     f
+r att g
+ra om kommandona (
+ngringarna).
+---> R
+tta feelen p
+ dennna rad ochh ers
+tt dem meed 
+  8. Dessa 
+r mycket anv
+ndbara kommandon. G
+ nu vidare till Lektion 1.2 Sammanfattning.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       Lektion 1.2 SAMMANFATTNING
+  1. F
+r att ta bort fr
+n mark
+ren till n
+sta ord, skriv:       dw
+  2. F
+r att ta bort fr
+n mark
+ren till slutet av ordet, skriv: de
+  3. F
+r att ta bort fr
+n mark
+ren till slutet av raden, skriv: d$
+  4. F
+r att ta bort en hel rad, skriv:                         dd
+  5. F
+r att repetera en r
+relse, s
+tt ett nummer f
+re den:   2w
+  6. Formatet f
+r ett 
+ndringskommando 
+               operator   [antal]   r
+     d
+       operator - 
+r vad som ska g
+ras, s
+som  d  f
+r ta bort
+       [antal]  - 
+r ett valfritt antal f
+r att repetera r
+relsen
+       r
+relse  - r
+r sig 
+ver texten att operera p
+som  w (ord),
+  e (slut p
+ ord),  $ (slut p
+ rad), osv.
+  7. F
+r att flytta till b
+rjan av raden, anv
+nd noll:  0
+  8. F
+r att 
+ngra tidigare handlingar, skriv:         u  (litet u)
+     F
+r att 
+ngra alla 
+ndringar p
+ en rad, skriv:    U  (stort U)
+     F
+r att 
+ngringarna, skriv:                 CTRL-R
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Lektion 1.3.1: KLISTRA IN-KOMMANDOT
+       ** Skriv  p  f
+r att klistra in tidigare borttagen text efter mark
+ren. **
+  1. Flytta mark
+ren till den f
+rsta raden nedan markerad med --->.
+  2. Skriv  dd  f
+r att ta bort raden och lagra den i ett Vim-register.
+  3. Flytta mark
+ren till rad c), OVANF
+r den borttagna raden ska vara.
+  4. Skriv   p   f
+r att l
+gga raden under mark
+  5. Upprepa steg 2 till 4 f
+r att l
+gga alla rader i korrekt ordning.
+---> d) Kan du ocks
+ra dig?
+---> b) Violer 
+---> c) Intelligens 
+---> a) Rosor 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       Lektion 1.3.2: ERS
+TT-KOMMANDOT
+       ** Skriv  rx  f
+r att ers
+tta tecknet vid mark
+ren med  x . **
+  1. Flytta mark
+ren till den f
+rsta raden nedan markerad med --->.
+  2. Flytta mark
+ att den 
+r ovanp
+ det f
+rsta felet.
+  3. Skriv   r
+och sedan tecknet som borde vara d
+  4. Upprepa steg 2 och 3 tills den f
+rsta raden 
+r lika som den andra.
+--->  N
+e danne rad skrevs in, tryckte n
+gra felaktiga tangenter!
+--->  N
+r denna rad skrevs in, tryckte n
+gra felaktiga tangenter!
+  5. G
+ nu vidare till Lektion 1.3.3.
+NOTERA: Kom ih
+g att du b
+ra dig genom att g
+ra, inte genom att memorera.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lektion 1.3.3: 
+NDRA-OPERATORN
+   ** F
+r att 
+ndra till slutet av ett ord, skriv  ce . **
+  1. Flytta mark
+ren till den f
+rsta raden nedan markerad med --->.
+  2. Placera mark
+  u  i  kubw.
+  3. Skriv  ce  och det korrekta ordet (i detta fall, skriv  ine ).
+  4. Tryck <ESC> och flytta till n
+sta tecken som beh
+ndras.
+  5. Upprepa steg 3 och 4 tills den f
+rsta meningen 
+r likadan som den andra.
+---> Denna kubw har n
+gra otf som mfpr 
+ndras anef 
+ndra-operatorn.
+---> Denna rad har n
+gra ord som beh
+ndras med 
+ndra-operatorn.
+Observera att  ce  tar bort ordet och placerar dig i Infogningsl
+               cc  g
+r samma sak f
+r hela raden.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       Lektion 1.3.4: FLER 
+NDRINGAR MED c
+     ** 
+ndra-operatorn anv
+nds med samma r
+relser som borttagning. **
+ndra-operatorn fungerar p
+ samma s
+tt som borttagning. Formatet 
+         c    [antal]   r
+  2. R
+relserna 
+r desamma, s
+som   w (ord) och  $ (slutet av raden).
+  3. Flytta mark
+ren till den f
+rsta raden nedan markerad med --->.
+  4. Flytta mark
+ren till det f
+rsta felet.
+  5. Skriv  c$  och skriv resten av raden som den andra och tryck <ESC>.
+---> Slutet av denna rad beh
+ver hj
+r att bli som den andra.
+---> Slutet av denna rad beh
+ttas med c$ kommandot.
+NOTERA: Du kan anv
+nda Backsteg-tangenten f
+r att r
+tta misstag n
+r du skriver.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       Lektion 1.3 SAMMANFATTNING
+  1. F
+r att klistra tillbaka text som just tagits bort, skriv   p . Detta
+     l
+gger den borttagna texten EFTER mark
+ren (om en rad togs bort hamnar
+     den p
+ raden under mark
+  2. F
+r att ers
+tta tecknet under mark
+ren, skriv   r   och sedan tecknet
+     du vill ha d
+ndra-operatorn l
+ter dig 
+ndra fr
+n mark
+ren till dit r
+relsen tar dig.
+     T.ex. Skriv  ce  f
+r att 
+ndra fr
+n mark
+ren till slutet av ordet,
+     c$  f
+r att 
+ndra till slutet av raden.
+  4. Formatet f
+ c   [antal]   r
+ nu vidare till n
+sta lektion.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Lektion 1.4.1: MARK
+RPOSITION OCH FILSTATUS
+  ** Skriv CTRL-G f
+r att visa din position i filen och filstatus.
+     Skriv  G  f
+r att flytta till en rad i filen. **
+  NOTERA: L
+s hela denna lektion innan du utf
+got av stegen!!
+  1. H
+ll ned Ctrl-tangenten och tryck  g . Vi kallar detta CTRL-G.
+     Ett meddelande kommer att visas l
+ngst ned p
+ sidan med filnamnet och
+     positionen i filen. Kom ih
+g radnumret f
+r Steg 3.
+NOTERA: Du kanske ser mark
+rpositionen i nedre h
+rnet av sk
+Detta h
+nder n
+r 'ruler'-alternativet 
+r satt (se  :help 'ruler'  )
+  2. Tryck  G  f
+r att flytta dig till botten av filen.
+     Skriv  gg  f
+r att flytta dig till b
+rjan av filen.
+  3. Skriv numret p
+ raden du var p
+ och sedan  G . Detta tar dig tillbaka
+     till raden du var p
+r du f
+rst tryckte CTRL-G.
+  4. Om du k
+nner dig s
+ detta, utf
+r steg 1 till 3.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lektion 1.4.2: S
+K-KOMMANDOT
+     ** Skriv  /  f
+ljt av en fras f
+r att s
+ka efter frasen. **
+  1. I Normall
+ge, skriv  /  tecknet. L
+rke till att det och mark
+     visas l
+ngst ned p
+rmen som med  :  kommandot.
+  2. Skriv nu 'feeeel' <ENTER>. Detta 
+r ordet du vill s
+ka efter.
+  3. F
+r att s
+ka efter samma fras igen, skriv helt enkelt  n .
+     F
+r att s
+ka efter samma fras i motsatt riktning, skriv  N .
+  4. F
+r att s
+ka efter en fras bakl
+nges, anv
+nd  ?  ist
+llet f
+r  / .
+  5. F
+r att g
+ tillbaka dit du kom ifr
+n, tryck  CTRL-O  (h
+ll Ctrl nedtryckt
+     medan du trycker bokstaven o). Upprepa f
+r att g
+ngre tillbaka. CTRL-I
+     g
+r fram
+---> "feeeel" 
+r inte hur man stavar feel; feeeel 
+r ett fel.
+NOTERA: N
+kningen n
+r slutet av filen forts
+tter den fr
+rjan, s
+inte 'wrapscan'-alternativet har 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Lektion 1.4.3: S
+KA MATCHANDE PARENTESER
+      ** Skriv  %  f
+r att hitta en matchande ), ] eller }. **
+  1. Placera mark
+gon (, [ eller { p
+ raden nedan markerad med --->.
+  2. Skriv nu  %  tecknet.
+  3. Mark
+ren kommer att flytta till den matchande parentesen eller hakparentesen.
+  4. Skriv  %  f
+r att flytta mark
+ren till den andra matchande parentesen.
+  5. Flytta mark
+ren till en annan (, ), [, ], { eller } och se vad  %  g
+---> Detta ( 
+r en testrad med (, [ ] och { } i den. ))
+NOTERA: Detta 
+ldigt anv
+ndbart vid fels
+kning av ett program med
+omatchade parenteser!
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      Lektion 1.4.4: ERS
+TT-KOMMANDOT
+** Skriv  :s/gammalt/nytt/g  f
+r att ers
+tta 'gammalt' med 'nytt'. **
+  1. Flytta mark
+ren till raden nedan markerad med --->.
+  2. Skriv  :s/denn/den/ <ENTER> . Notera att detta kommando bara 
+ndrar den
+     f
+rsta f
+rekomsten av "denn" p
+ raden.
+  3. Skriv nu  :s/denn/den/g . Att l
+gga till  g  flaggan betyder att ers
+     globalt p
+ raden, och 
+ndrar alla f
+rekomster av "denn" p
+ raden.
+---> denn b
+sta tiden att se denn blomman 
+r under denn sommarn.
+  4. F
+r att 
+ndra varje f
+rekomst av en teckenstr
+ng mellan tv
+ rader,
+     skriv  :#,#s/gammalt/nytt/g  d
+r #,# 
+r radnumren p
+ de tv
+ raderna f
+         intervallet d
+ttningen ska g
+     Skriv  :%s/gammalt/nytt/g  f
+r att 
+ndra varje f
+rekomst i hela filen.
+     Skriv  :%s/gammalt/nytt/gc f
+r att hitta varje f
+rekomst i hela filen,
+         med en prompt om du vill ers
+tta eller inte.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       Lektion 1.4 SAMMANFATTNING
+  1. CTRL-G  visar din position i filen och filstatus.
+     G  flyttar till slutet av filen.
+     antal  G  flyttar till det radnumret.
+    gg  flyttar till f
+rsta raden.
+  2. Att skriva  /  f
+ljt av en fras s
+ker FRAM
+T efter frasen.
+     Att skriva  ?  f
+ljt av en fras s
+ker BAK
+T efter frasen.
+     Efter en s
+kning, skriv  n  f
+r att hitta n
+rekomst i samma
+     riktning eller  N  f
+r att s
+ka i motsatt riktning.
+     CTRL-O tar dig tillbaka till 
+ldre positioner, CTRL-I till nyare positioner.
+  3. Att skriva  %  medan mark
+ en (, ), [, ], { eller } hittar dess
+     matchande par.
+  4. F
+r att ers
+tta ny f
+r den f
+rsta gammalt p
+ en rad, skriv    :s/gammalt/nytt
+     F
+r att ers
+tta ny f
+r alla gammalt p
+ en rad, skriv          :s/gammalt/nytt/g
+     F
+r att ers
+tta fraser mellan tv
+ radnummer, skriv            :#,#s/gammalt/nytt/g
+     F
+r att ers
+tta alla f
+rekomster i filen, skriv               :%s/gammalt/nytt/g
+     F
+r att f
+ga om bekr
+ftelse varje g
+gg till 'c'     :%s/gammalt/nytt/gc
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lektion 1.5.1: HUR MAN K
+R ETT EXTERNT KOMMANDO
+   ** Skriv  :!  f
+ljt av ett externt kommando f
+r att k
+ra det kommandot. **
+  1. Skriv det v
+lbekanta kommandot  :  f
+r att placera mark
+ngst ned
+     p
+rmen. Detta l
+ter dig skriva ett kommandorads-kommando.
+  2. Skriv nu  !  (utropstecken). Detta l
+ter dig k
+ra vilket externt
+     skalkommando som helst.
+  3. Som ett exempel, skriv   ls   efter ! och tryck sedan <ENTER>. Detta
+     kommer att visa dig en lista 
+ver din katalog, precis som om du var vid
+     en skalprompt. Eller anv
+nd  :!dir  om  ls  inte fungerar.
+NOTERA: Det 
+jligt att k
+ra vilket externt kommando som helst p
+ detta s
+ med argument.
+NOTERA: Alla  :  kommandon m
+ste avslutas genom att trycka <ENTER>
+n och med nu n
+mner vi inte alltid det.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      Lektion 1.5.2: MER OM ATT SPARA FILER
+r att spara 
+ndringarna i filen, skriv  :w FILNAMN . **
+  1. Skriv  :!ls  eller  :!dir  f
+r att f
+ en lista 
+ver din katalog.
+     Du vet redan att du m
+ste trycka <ENTER> efter detta.
+  2. V
+lj ett filnamn som inte finns 
+nnu, s
+som TEST.
+  3. Skriv nu:
+ :w TEST   (d
+r TEST 
+r filnamnet du valde.)
+  4. Detta sparar hela filen (Vim Tutor) under namnet TEST.
+     F
+r att verifiera detta, skriv   :!ls   eller  :!dir  igen f
+r att se
+     din katalog.
+NOTERA: Om du skulle avsluta Vim och starta igen med  vim TEST , skulle filen
+vara en exakt kopia av handledningen n
+r du sparade den.
+  5. Ta nu bort filen genom att skriva (MS-DOS):    :!del TEST
+   eller (Unix):    :!rm TEST
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Lektion 1.5.3: V
+LJA TEXT ATT SPARA
+r att spara del av filen, skriv  v  r
+relse  :w FILNAMN **
+  1. Flytta mark
+ren till denna rad.
+  2. Tryck  v  och flytta mark
+ren till det femte objektet nedan. L
+     till att texten markeras.
+  3. Tryck  :  tecknet. L
+ngst ned p
+rmen visas  :'<,'>  .
+  4. Skriv  w TEST  , d
+r TEST 
+r ett filnamn som inte finns 
+nnu. Verifiera
+     att du ser  :'<,'>w TEST  innan du trycker <ENTER>.
+  5. Vim kommer att skriva de markerade raderna till filen TEST. Anv
+nd  :!ls
+     eller  :!dir  f
+r att se den. Ta inte bort den 
+nnu! Vi kommer att
+     anv
+nda den i n
+sta lektion.
+NOTERA: Att trycka  v  startar Visuell markering. Du kan flytta mark
+ren runt
+r att g
+ra markeringen st
+rre eller mindre. Sedan kan du anv
+nda en
+operator f
+r att g
+got med texten. Till exempel,  d  tar bort texten.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Lektion 1.5.4: H
+MTA OCH SAMMANFOGA FILER
+       ** F
+r att infoga inneh
+llet av en fil, skriv  :r FILNAMN  **
+  1. Placera mark
+ren precis ovanf
+r denna rad.
+NOTERA: Efter att ha k
+rt Steg 2 kommer du att se text fr
+n Lektion 1.5.3.
+Flytta sedan NED f
+r att se denna lektion igen.
+  2. H
+mta nu din TEST-fil med kommandot   :r TEST   d
+r TEST 
+r namnet p
+     filen du anv
+     Filen du h
+mtar placeras under mark
+rens rad.
+  3. F
+r att verifiera att en fil h
+mtades, flytta mark
+ren tillbaka och l
+     m
+rke till att det nu finns tv
+ kopior av Lektion 1.5.3, originalet och
+     filversionen.
+NOTERA: Du kan ocks
+sa utdata fr
+n ett externt kommando. Till exempel,
+:r !ls  l
+ser utdata fr
+n ls kommandot och l
+gger det under mark
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       Lektion 1.5 SAMMANFATTNING
+  1.  :!kommando  k
+r ett externt kommando.
+      N
+gra anv
+ndbara exempel 
+ (MS-DOS)
+  (Unix)
+  :!dir
+   :!ls
+   -  visar en kataloglista.
+  :!del FILNAMN
+   :!rm FILNAMN    -  tar bort filen FILNAMN.
+  2.  :w FILNAMN  sparar nuvarande Vim-fil till disk med namnet FILNAMN.
+  3.  v  r
+relse  :w FILNAMN  sparar de Visuellt markerade raderna i filen
+      FILNAMN.
+  4.  :r FILNAMN  h
+mtar diskfilen FILNAMN och l
+gger den under mark
+      position.
+  5.  :r !ls  l
+ser utdata fr
+n ls kommandot och l
+gger det under mark
+      position.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lektion 1.6.1: 
+PPNA-KOMMANDOT
+   ** Skriv  o  f
+r att 
+ppna en rad under mark
+      och placera dig i Infogningsl
+ge. **
+  1. Flytta mark
+ren till raden nedan markerad med --->.
+  2. Skriv det lilla  o  f
+r att 
+ppna en rad UNDER mark
+ren och placera dig
+     i Infogningsl
+  3. Kopiera nu raden markerad ---> och tryck <ESC> f
+r att avsluta
+     Infogningsl
+---> N
+r du har tryckt  o  placeras mark
+ppna raden i Infogningsl
+  4. F
+r att 
+ppna en rad OVANF
+R mark
+ren, skriv helt enkelt ett stort  O ,
+     ist
+llet f
+r ett litet  o . Prova detta p
+ raden nedan.
+ppna en rad ovanf
+r denna genom att skriva O medan mark
+ denna rad.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lektion 1.6.2: L
+GG TILL-KOMMANDOT
+    ** Skriv  a  f
+r att infoga text EFTER mark
+ren. **
+  1. Flytta mark
+ren till b
+rjan av raden nedan markerad med --->.
+  2. Tryck  e  tills mark
+ slutet av  ra .
+  3. Skriv ett  a  (litet) f
+r att l
+gga till text EFTER mark
+  4. Slutf
+r ordet som p
+ raden under det. Tryck <ESC> f
+r att avsluta
+     Infogningsl
+  5. Anv
+nd  e  f
+r att flytta till n
+sta ofullst
+ndiga ord och upprepa
+     steg 3 och 4.
+---> Denna ra l
+ter dig 
+ att l
+g till te i en rad.
+---> Denna rad l
+ter dig 
+ att l
+gga till text i en rad.
+NOTERA: a, i och A g
+r alla till samma Infogningsl
+ge, den enda skillnaden 
+var tecknen infogas.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Lektion 1.6.3: ETT ANNAT S
+TT ATT ERS
+      ** Skriv ett stort  R  f
+r att ers
+tta fler 
+n ett tecken. **
+  1. Flytta mark
+ren till den f
+rsta raden nedan markerad med --->. Flytta
+     mark
+ren till b
+rjan av det f
+rsta  xxx .
+  2. Tryck nu  R  och skriv numret nedan det p
+ den andra raden, s
+ att det
+     ers
+tter xxx .
+  3. Tryck <ESC> f
+r att l
+mna Ers
+ttningsl
+rke till att resten
+     av raden f
+rblir of
+ndrad.
+  4. Upprepa stegen f
+r att ers
+tta det 
+ende xxx .
+---> Att l
+gga 123 till xxx ger dig xxx.
+---> Att l
+gga 123 till 456 ger dig 579.
+NOTERA: Ers
+ttningsl
+r som Infogningsl
+ge, men varje skrivet tecken tar
+bort ett existerande tecken.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Lektion 1.6.4: KOPIERA OCH KLISTRA IN TEXT
+  ** Anv
+nd  y  operatorn f
+r att kopiera text och  p  f
+r att klistra in den **
+  1. G
+ till raden nedan markerad med ---> och placera mark
+ren efter "a)".
+  2. Starta Visuellt l
+ge med  v  och flytta mark
+ren till precis f
+rsta".
+  3. Skriv  y  f
+r att kopiera (yank) den markerade texten.
+  4. Flytta mark
+ren till slutet av n
+sta rad:  j$
+  5. Skriv  p  f
+r att klistra in texten. Skriv sedan:  ett andra <ESC> .
+  6. Anv
+nd Visuellt l
+r att markera " objekt.", kopiera det med  y ,
+     flytta till slutet av n
+sta rad med  j$  och klistra in texten d
+r med  p .
+--->  a) detta 
+r det f
+rsta objektet.
+      b)
+NOTERA: du kan ocks
+nda  y  som en operator;  yw  kopierar ett ord.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Lektion 1.6.5: ST
+LLA IN ALTERNATIV
+  ** St
+ll in ett alternativ s
+kningar och ers
+ttningar ignorerar skiftl
+  1. S
+k efter 'ignorera' genom att skriva:   /ignorera <ENTER>
+     Upprepa flera g
+nger genom att trycka  n  tangenten.
+  2. St
+ll in 'ic' (Ignorera skiftl
+ge) alternativet genom att skriva:  :set ic
+  3. S
+k nu efter 'ignorera' igen genom att trycka  n
+     L
+rke till att Ignorera och IGNORERA nu ocks
+ hittas.
+  4. St
+ll in 'hlsearch' och 'incsearch' alternativen:  :set hls is
+  5. Skriv nu in s
+kkommandot igen och se vad som h
+nder:  /ignorera <ENTER>
+  6. F
+r att inaktivera skiftl
+nslighet, skriv:  :set noic
+NOTERA: F
+r att ta bort markeringen av tr
+ffar, skriv:   :nohlsearch
+NOTERA: Om du vill ignorera skiftl
+r bara en s
+kning, anv
+nd  \c
+i frasen:  /ignorera\c  <ENTER>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       Lektion 1.6 SAMMANFATTNING
+  1. Skriv  o  f
+r att 
+ppna en rad UNDER mark
+ren och starta Infogningsl
+     Skriv  O  f
+r att 
+ppna en rad OVANF
+R mark
+  2. Skriv  a  f
+r att infoga text EFTER mark
+     Skriv  A  f
+r att infoga text efter slutet av raden.
+  3. Det stora  e  kommandot flyttar till slutet av ett ord.
+  4. Operatorn  y  kopierar text,  p  klistrar in den.
+  5. Att skriva ett stort  R  startar Ers
+ttningsl
+ge tills  <ESC>  trycks.
+  6. Att skriva ":set xxx" st
+ller in alternativet "xxx". N
+gra alternativ 
+'ic' 'ignorecase'
+ignorera versaler/gemener vid s
+'is' 'incsearch'
+visa delmatchningar f
+r en s
+'hls' 'hlsearch'
+markera alla matchande fraser
+     Du kan anv
+nda antingen det l
+nga eller korta alternativnamnet.
+  7. S
+tt "no" f
+re ett alternativnamn f
+r att st
+nga av det:  :set noic
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      Lektion 1.7: ONLINE-HJ
+       ** Anv
+nd online-hj
+lpsystemet **
+  Vim har ett omfattande online-hj
+lpsystem. F
+r att komma ig
+ng, prova en
+  av dessa tre:
+- tryck <HJ
+LP>-tangenten (om du har en)
+- tryck <F1>-tangenten (om du har en)
+- skriv   :help <ENTER>
+s texten i hj
+nstret f
+r att ta reda p
+ hur hj
+lpen fungerar.
+  Skriv  CTRL-W CTRL-W   f
+r att hoppa fr
+n ett f
+nster till ett annat.
+  Skriv    :q <ENTER>    f
+r att st
+nga hj
+nstret.
+  Du kan hitta hj
+lp om n
+stan allt genom att ge ett argument till
+  ":help"-kommandot.  Prova dessa (gl
+m inte att trycka <ENTER>):
+:help w
+:help c_CTRL-D
+:help insert-index
+:help user-manual
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Lektion 1.8: SKAPA ETT STARTSKRIPT
+  ** Aktivera Vim-funktioner **
+  Vim har m
+nga fler funktioner 
+n Vi, men de flesta 
+r inaktiverade som
+  standard. F
+r att b
+rja anv
+nda fler funktioner beh
+ver du skapa en
+  "vimrc"-fil.
+  1. B
+rja redigera "vimrc"-filen. Detta beror p
+ ditt system:
+:e ~/.vimrc
+r Unix
+:e ~/_vimrc
+r MS-Windows
+  2. L
+s nu in exempel-"vimrc"-filens inneh
+:r $VIMRUNTIME/vimrc_example.vim
+  3. Skriv filen med:
+ng du startar Vim kommer den att anv
+nda syntaxmarkering.
+  Du kan l
+gga till alla dina f
+redragna inst
+llningar i denna "vimrc"-fil.
+r mer information, skriv  :help vimrc-intro
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       Lektion 1.9: SLUTSATS
+  Detta var t
+nkt att ge en kort 
+versikt av Vim-redigeraren, precis tillr
+ckligt
+r att du ska kunna anv
+nda redigeraren ganska enkelt. Det 
+ngt ifr
+  komplett eftersom Vim har m
+nga fler kommandon. L
+ndarhandboken
+st: ":help user-manual".
+r vidare l
+sning och studier rekommenderas denna bok:
+Vim - Vi Improved - av Steve Oualline
+ggare: New Riders
+  Den f
+rsta boken helt till
+gnad Vim. S
+rskilt anv
+ndbar f
+rjare.
+  Det finns m
+nga exempel och bilder.
+  Se https://iccf-holland.org/click5.html
+  Denna 
+ldre bok handlar mer om Vi 
+n Vim, men rekommenderas ocks
+Learning the Vi Editor - av Linda Lamb
+ggare: O'Reilly & Associates Inc.
+  Det 
+r en bra bok f
+r att l
+ra sig n
+stan allt du vill g
+ra med Vi.
+  Den sj
+tte upplagan inkluderar ocks
+ information om Vim.
+  Denna handledning skrevs av Michael C. Pierce och Robert K. Ware,
+  Colorado School of Mines med id
+er av Charles Smith,
+  Colorado State University.  E-post: bware@mines.colorado.edu.
+  Modifierad f
+r Vim av Bram Moolenaar.
+  Svensk 
+ttning av Johan Svedberg och Daniel Nylander.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

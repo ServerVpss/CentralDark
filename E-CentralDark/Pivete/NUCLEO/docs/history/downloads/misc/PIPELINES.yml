@@ -1,0 +1,61 @@
+schema_version: 1
+system: CENTRALDARK_HUMAN_MIND_ROUTER
+
+living_update:
+  input: PUBLIC_PROFESSIONAL_SOURCE
+  stages:
+    - DISCOVER
+    - RECOVER_SOURCE
+    - NORMALIZE_PROVENANCE
+    - COMPUTE_SOURCE_IDENTITY
+    - FINGERPRINT
+    - DEDUPE
+    - EXTRACT_CLAIMS
+    - BIND_TO_HUMAN_ROUTER
+    - COMPARE_WITH_PRIOR_POSITION
+    - CLASSIFY_DELTA
+    - STORE_AS_REFERENCE_OR_CANDIDATE
+  terminal_states: [NO_CHANGE, CANDIDATE, SOURCE_CHANGED, SOURCE_MISSING, SOURCE_CONFLICT, UNKNOWN]
+
+freshness:
+  webhook_or_event_feed: EVENT_DRIVEN
+  rss_or_atom: FREQUENT_PULL
+  public_github: CHANGE_FEED_OR_PERIODIC
+  static_site: PERIODIC_DISCOVERY
+  web_search: FALLBACK_DISCOVERY
+  no_current_observation: UNKNOWN
+
+problem_routing:
+  stages:
+    - CLASSIFY_PROBLEM_DOMAINS
+    - SELECT_MINIMUM_SUFFICIENT_LENSES
+    - RECOVER_CURRENT_EVIDENCE
+    - FAN_OUT_READ_ONLY
+    - NORMALIZE_EVIDENCE
+    - CLUSTER_BY_SOURCE_CAUSE_CLAIM_SCOPE_TIME
+    - DEDUPE
+    - IDENTIFY_CONFLICTS
+    - ARBITRATE_BY_TEST
+    - RETURN_CANDIDATE_DELTA
+  min_lenses: 1
+  max_lenses: 10
+  selection: ADAPTIVE
+  all_lenses_required: false
+
+convergence:
+  allowed_results: [CONVERGED, PARTIAL_CONVERGENCE, MATERIAL_DISAGREEMENT, UNKNOWN, NO_NEW_INFORMATION]
+  voting_is_truth_mechanism: false
+  test_discriminant_required_for_material_conflict: true
+  reality_decides: true
+
+promotion:
+  stages:
+    - CANDIDATE_DELTA
+    - DEDUPE_WITH_CANONICAL
+    - LOCATE_CANONICAL_OWNER
+    - COUNTERPROOF
+    - TEST_SAME_TARGET
+    - SINGLE_WRITER_MINIMAL_MUTATION
+    - VERIFY
+    - ABSORB_REUSABLE_DELTA_OR_NO_CHANGE
+  external_source_can_self_promote: false

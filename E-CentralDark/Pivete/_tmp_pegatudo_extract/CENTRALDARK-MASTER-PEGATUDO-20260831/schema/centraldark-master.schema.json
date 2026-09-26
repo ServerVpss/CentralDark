@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CENTRALDARK_MASTER",
+  "type": "object",
+  "required": [
+    "schema",
+    "master_command",
+    "mission",
+    "truth",
+    "pegatudo",
+    "delta",
+    "execution",
+    "multi_agent",
+    "metrics",
+    "command_output",
+    "self_review"
+  ],
+  "properties": {
+    "schema": {
+      "const": "CENTRALDARK_MASTER"
+    },
+    "master_command": {
+      "type": "string",
+      "pattern": "#PEGATUDO.*!CENTRALDARK"
+    },
+    "mission": {
+      "type": "object",
+      "required": [
+        "external_delta_count",
+        "create_parallel_system"
+      ],
+      "properties": {
+        "external_delta_count": {
+          "const": 1
+        },
+        "create_parallel_system": {
+          "const": false
+        }
+      }
+    },
+    "truth": {
+      "type": "object",
+      "required": [
+        "reality_is_judge",
+        "unknown_is_pass"
+      ],
+      "properties": {
+        "reality_is_judge": {
+          "const": true
+        },
+        "unknown_is_pass": {
+          "const": false
+        }
+      }
+    },
+    "pegatudo": {
+      "type": "object",
+      "required": [
+        "linked_to_master",
+        "preserve_useful_information",
+        "preserve_secrets",
+        "old_pr_policy",
+        "old_failure_policy"
+      ],
+      "properties": {
+        "linked_to_master": {
+          "const": true
+        },
+        "preserve_useful_information": {
+          "const": true
+        },
+        "preserve_secrets": {
+          "const": false
+        }
+      }
+    },
+    "delta": {
+      "type": "object",
+      "required": [
+        "external_count"
+      ],
+      "properties": {
+        "external_count": {
+          "const": 1
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "required": [
+        "proof_criterion_defined_before_result"
+      ],
+      "properties": {
+        "proof_criterion_defined_before_result": {
+          "const": true
+        }
+      }
+    },
+    "multi_agent": {
+      "type": "object",
+      "required": [
+        "max_writers_per_conflict_scope",
+        "executor_self_approves",
+        "meta_lupa"
+      ],
+      "properties": {
+        "max_writers_per_conflict_scope": {
+          "const": 1
+        },
+        "executor_self_approves": {
+          "const": false
+        }
+      }
+    },
+    "command_output": {
+      "type": "object",
+      "required": [
+        "format",
+        "yaml_required",
+        "prose_instead_of_yaml"
+      ],
+      "properties": {
+        "format": {
+          "const": "YAML"
+        },
+        "yaml_required": {
+          "const": true
+        },
+        "prose_instead_of_yaml": {
+          "const": "fail"
+        }
+      }
+    }
+  }
+}

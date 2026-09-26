@@ -1,0 +1,11 @@
+[folders.'C:\Users\danda\CentralDark']
+trusted = true
+decided_at = 1787804443
+
+[folders.'C:\Windows\System32']
+trusted = true
+decided_at = 1785665646
+
+[folders.'E:\CentralDark\Pivete\CentralDark']
+trusted = true
+decided_at = 1787645344

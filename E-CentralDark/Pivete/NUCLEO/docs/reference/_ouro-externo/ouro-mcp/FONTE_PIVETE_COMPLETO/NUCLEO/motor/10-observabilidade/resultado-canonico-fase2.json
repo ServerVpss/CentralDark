@@ -1,0 +1,30 @@
+{
+  "mission_id": "20260718_040020_c23e466e",
+  "phase": "plano-chatgpt-fechamento",
+  "profile": "pivete",
+  "verdict": "CONDICIONADO",
+  "summary": "Ordem ChatGPT executada. UI/default travado grok-4.5. Claude Opus/Sonnet revalidacao agora HTTP 429 rate_limit (OAuth OK, base api.anthropic.com). Orquestrador operacional = grok-4.5 CONDICIONADO. PROVA-OI anterior 6/6 200 preservada. Verde herdado nao refeito. Gateway pivete running.",
+  "ui_default": "xai-oauth:grok-4.5",
+  "orchestrator_designated": "anthropic:claude-opus-4-6 se 200 else claude-sonnet-4-6 se 200 else grok-4.5",
+  "orchestrator_live": "xai-oauth:grok-4.5",
+  "critic": "xai-oauth:grok-4.5",
+  "executor": "xai-oauth:grok-build-0.1",
+  "fast": "xai-oauth:grok-composer-2.5-fast",
+  "evidence": {
+    "prova_revalidacao": "PROVA-REVALIDACAO-ORDEM-CHATGPT.json",
+    "prova_oi": "PROVA-OI-MODELOS-ORQUESTRACAO.json",
+    "claude_opus_http_now": 429,
+    "claude_sonnet_http_now": 429,
+    "grok_4_5_http_now": 200,
+    "client_base": "https://api.anthropic.com",
+    "env_anthropic_base_url": null,
+    "gateway_pid": 78864,
+    "default_model_config": "grok-4.5",
+    "default_provider_config": "xai-oauth",
+    "verde_herdado": "fases1-9/voz/stt/dedupe/rollback nao refeitos"
+  },
+  "pending": [
+    "Promover Claude a orquestrador live quando Opus ou Sonnet retornar HTTP 200 (sem mudar UI default)"
+  ],
+  "ts": "2026-07-18T19:56:25"
+}

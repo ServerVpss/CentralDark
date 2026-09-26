@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-08-24T06:02:27.054Z",
+  "primary_cause": "npm cache corruption / extraction failure",
+  "evidence": "package-lock.json has vite but node_modules/vite missing",
+  "all_candidates": [
+    {
+      "cause": "npm cache corruption / extraction failure",
+      "evidence": "package-lock.json has vite but node_modules/vite missing",
+      "likelihood": "high"
+    }
+  ],
+  "requires_nuclear_reset": true,
+  "minimal_remediation": "nuclear_reset_with_rollback"
+}

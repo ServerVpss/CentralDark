@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@icons-pack\react-simple-icons\icons\SiStackoverflow.d.ts
+
+import { IconType } from '../types';
+declare const defaultColor = "#F58025";
+declare const SiStackoverflow: IconType;
+export { SiStackoverflow as default, defaultColor };

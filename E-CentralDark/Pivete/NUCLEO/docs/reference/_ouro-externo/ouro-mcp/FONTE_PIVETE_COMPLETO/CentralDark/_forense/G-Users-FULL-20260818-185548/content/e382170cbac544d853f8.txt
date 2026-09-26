@@ -1,0 +1,4 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@shikijs\langs\dist\lisp.mjs
+
+/* Alias lisp for common-lisp */
+export { default } from './common-lisp.mjs'

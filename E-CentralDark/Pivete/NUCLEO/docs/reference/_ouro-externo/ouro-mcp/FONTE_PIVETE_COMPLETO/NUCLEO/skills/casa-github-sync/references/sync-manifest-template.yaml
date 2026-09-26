@@ -1,0 +1,100 @@
+# sync-manifest-template.yaml
+# Casa↔GitHub Sync — modelo de manifesto de decisão.
+# Preencher uma instância por sync e arquivar em BACKUPS/sync-manifest-{timestamp}.yaml
+# SHA-256 do próprio manifesto entra no card para auditoria.
+
+# === METADATA ===
+manifest_id: sync-{YYYYMMDD-HHMMSS}
+profile: pivete
+autor: Hermes
+autorizado_por: <Pivete>            # nome/handle do CHEFE
+authorization_token: <sha256(minutas do OK)>  # hash do OK literal, NÃO o texto
+
+# === ESTADO DO REPO ===
+repo_path: <path absoluto>           # confirmado via git rev-parse --is-inside-work-tree
+repo_verified: true                  # obrigatório = true antes de executar FASE 4
+branch: <git rev-parse --abbrev-ref HEAD>
+upstream: <remote>/<branch>          # geralmente origin/main
+remote_v: <git ls-remote --heads origin main>   # SHA remoto no momento
+local_sha: <git rev-parse HEAD>      # SHA local antes do sync
+
+# === BACKUP FRIO ===
+backup_path: BACKUPS/sync-{timestamp}.tar.gz
+backup_sha256: <sha256sum output>
+backup_includes:
+  - motor/03-memoria/memoria/HOJE.md
+  - motor/03-memoria/memoria/SEMANA.md
+  - motor/03-memoria/memoria/REGRAS.md
+  - motor/03-memoria/memoria/CARTAO-MESTRE.md
+  - <outros artefatos aprovados>
+
+# === INVENTÁRIO ===
+untracked_count: <N>
+drift_pontos:
+  - arquivo: <path>
+    divergencia: <hashA vs hashB, linhas diferentes, tamanho>
+    decisao: <manter / consolidar / descartar>
+  # ...
+
+# === CLASSIFICAÇÃO DOS ARTEFATOS ===
+entram_no_commit:
+  - path: <path relativo>
+    motivo: <doc canônico / skill / regra / README>
+    backup_pre: <sha256 do arquivo antes>
+  - ...
+
+ficam_de_fora:
+  - path: <path>
+    motivo: <proibido / só-casa / duplicado / não-classificado>
+  - path: ".env"
+    motivo: "PROIBIDO — secret/credential, nunca versionado"
+  - path: "MEMORY.md"
+    motivo: "PROIBIDO — perfil runtime, Pivete-only"
+
+duvidosos_para_decisao:
+  - path: <path>
+    opcoes:
+      - A: commitar
+      - B: ignorar
+      - C: perguntar de novo
+    escolhido: <null até aprovação do Pivete>
+
+# === FASES EXECUTADAS ===
+fase_0_desconfiar:
+  done: <true/false>
+  evidência: <listagem de dir, diff, backup>
+fase_1_provar:
+  done: <true/false>
+  git_status: <output>
+  git_log_1: <output>
+fase_2_drift:
+  done: <true/false>
+  drift_pontos_count: <N>
+fase_3_decidir:
+  done: <true/false>
+  aprovado_por: <Pivete>
+  aprovacao_timestamp: <ISO>
+fase_4_executar:
+  done: <true/false>
+  git_add_args: <lista explícita>
+  commit_message: "vX.Y.Z.W type(scope): …"
+  commit_sha: <git rev-parse HEAD após commit>
+  push_done: <true/false>
+  push_remote_sha: <git ls-remote origin HEAD após push>
+fase_5_provar:
+  done: <true/false>
+  git_log_1_confere: <true/false>
+  git_status_limpo: <true/false>
+  origin_main_igual_local: <true/false>
+fase_6_regressao:
+  done: <true/false>
+  hoje_bate: <true/false>
+  semana_bate: <true/false>
+  regras_bate: <true/false>
+  card_atualizado: <true/false>
+
+# === RECIBO FINAL ===
+sync_completo: <true/false>
+pendencias: <lista>
+riscos_residuais: <lista>
+proximo_passo: <ação>

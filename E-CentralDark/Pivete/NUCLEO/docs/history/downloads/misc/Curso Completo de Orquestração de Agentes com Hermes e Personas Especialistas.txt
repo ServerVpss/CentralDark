@@ -1,0 +1,12 @@
+No Google Drive, o arquivo localizado é o documento **"Curso Completo de Orquestração de Agentes com Hermes e Personas Especialistas"**, que aborda o debate sobre loops de controle e traz a referência direta ao material em vídeo.
+
+O link exato do YouTube contido nas referências do documento é o [The Great Loops Debate — Dex Horthy, Geoff Huntley, Ian Livingstone, Greg Pstrucha](https://www.youtube.com/watch?v=c35YoMdnI78&vl=pt-BR).
+
+---
+
+Feito: Varredura no Google Drive e identificação do documento que cataloga o debate de loops de agentes e o respectivo link do YouTube.
+Evidência: Ocorrência confirmada no documento "Curso Completo de Orquestração de Agentes com Hermes e Personas Especialistas", apontando para a URL oficial do debate de agentes autônomos.
+Pendência: Nenhuma.
+Próximo passo: Acessar o link do debate para consulta técnica ou prosseguir com a estruturação aditiva baseada nas malhas de controle documentadas.
+Qual BOOT usar: Arquiteto de Sistemas / Especialista em Orquestração de Agentes.
+Fio da missão: Revisar criticamente qualquer planejamento DE INFRA antes da execução, aplicando filtros rigorosos para barrar regressões, riscos operacionais ou complexidade inútil. Garantir a estabilidade absoluta do ambiente de produção, exigindo que toda e qualquer alteração seja uma extensão segura (nunca uma substituição) e garantindo zero regressão no que já funciona. Aplique o rigor técnico em qualquer projeto alvo, preservando o banco de dados e a arquitetura legado. Sendo assim, não faça V3, V4, etc. Atualize e melhore o que já existe!

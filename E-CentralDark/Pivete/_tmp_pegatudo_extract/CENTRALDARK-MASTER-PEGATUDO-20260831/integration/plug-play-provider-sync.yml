@@ -1,0 +1,57 @@
+schema: CENTRALDARK_PLUG_PLAY_PROVIDER_SYNC
+schema_version: 1
+mode: EXTEND_EXISTING_ONLY
+
+entry:
+  any_recognized_trigger_enters: CENTRALDARK
+  required_prefix:
+    - ACORDAR
+    - CRISTALIZAR_MEASURE
+    - CRISTALIZAR_FALLBACK
+
+package:
+  canonical_name: CENTRALDARK-MASTER-PEGATUDO-20260831
+  no_v2_v3_v4: true
+  update_same_lineage: true
+
+providers:
+  github:
+    role: CODE_VERSION_REMOTE_STATE
+    target_repo: ServerVpss/CentralDark
+    preferred_existing_pr: 1389
+    before_write:
+      - measure_repo
+      - measure_pr
+      - measure_head
+      - measure_base
+      - detect_writer_collision
+    unavailable:
+      - mark_GITHUB_SYNC_PENDING
+      - persist_receipt_to_drive_when_available
+  google_drive_workspace:
+    role: DURABLE_CONTEXT_RECEIPTS_PACKAGE
+    canonical_owner_id: 1ZFhlcoPclDuNPXtD4FSfq4_Zfyb4L0vwBAcselkyC_E
+    canonical_zip_id: 12SU2Xn_z8n8o-sEyma-Le5r-a-6Fgg0P
+    before_write:
+      - read_current_revision_or_metadata
+      - preserve_same_file_id_when_replacing_zip
+    unavailable:
+      - mark_DRIVE_SYNC_PENDING
+      - persist_receipt_to_github_when_available
+
+recovery:
+  recovered_provider_flow:
+    - REMEASURE
+    - RENDEZVOUS
+    - RECONCILE
+    - DEDUPE
+    - PRESERVE_PROVENANCE
+    - WRITE_MISSING_DELTA_ONLY
+    - PROOF
+
+invariants:
+  mirror_is_second_owner: false
+  backup_is_source_of_truth: false
+  persistence_is_promotion: false
+  chat_only_material_state_allowed: false
+  blind_overwrite_allowed: false

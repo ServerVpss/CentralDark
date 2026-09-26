@@ -1,0 +1,43 @@
+﻿======== CHROME ========
+UserData=C:\Users\danda\AppData\Local\Google\Chrome\User Data
+
+-- PROFILE Profile 12 --
+no extensions.settings in Preferences
+
+-- PROFILE Profile 13 --
+no extensions.settings in Preferences
+
+-- PROFILE Profile 14 --
+no extensions.settings in Preferences
+DISK id=nmmhkkegccagdldgiimedpiccmgmieda verdir=1.0.0.6_0 name=__MSG_APP_NAME__ ver=1.0.0.6 perms=identity,webview,https://www.google.com/,https://www.googleapis.com/*,https://payments.google.com/payments/v4/js/integrator.js,https://sandbox.google.com/payments/v4/js/integrator.js
+
+-- PROFILE Profile 15 --
+no extensions.settings in Preferences
+DISK id=nmmhkkegccagdldgiimedpiccmgmieda verdir=1.0.0.6_0 name=__MSG_APP_NAME__ ver=1.0.0.6 perms=identity,webview,https://www.google.com/,https://www.googleapis.com/*,https://payments.google.com/payments/v4/js/integrator.js,https://sandbox.google.com/payments/v4/js/integrator.js
+
+-- PROFILE Profile 9 --
+no extensions.settings in Preferences
+DISK id=nmmhkkegccagdldgiimedpiccmgmieda verdir=1.0.0.6_0 name=__MSG_APP_NAME__ ver=1.0.0.6 perms=identity,webview,https://www.google.com/,https://www.googleapis.com/*,https://payments.google.com/payments/v4/js/integrator.js,https://sandbox.google.com/payments/v4/js/integrator.js
+
+-- FORCE POLICY CHROME --
+KEY HKLM:\SOFTWARE\Google\Chrome\Extensions
+
+KEY HKLM:\SOFTWARE\WOW6432Node\Google\Chrome\Extensions
+
+KEY HKLM:\SOFTWARE\WOW6432Node\Microsoft\Edge\Extensions
+
+======== EDGE ========
+UserData=C:\Users\danda\AppData\Local\Microsoft\Edge\User Data
+
+-- PROFILE Default --
+no extensions.settings in Preferences
+DISK id=jmjflgjpcpepeafmmgdpfkogkghcpiha verdir=1.2.1_0 name=Edge relevant text changes ver=1.2.1 perms=
+
+-- FORCE POLICY EDGE --
+KEY HKLM:\SOFTWARE\Google\Chrome\Extensions
+
+KEY HKLM:\SOFTWARE\WOW6432Node\Google\Chrome\Extensions
+
+KEY HKLM:\SOFTWARE\WOW6432Node\Microsoft\Edge\Extensions
+
+DONE

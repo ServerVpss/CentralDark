@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@icons-pack\react-simple-icons\icons\SiTalend.d.ts
+
+import { IconType } from '../types';
+declare const defaultColor = "#FF6D70";
+declare const SiTalend: IconType;
+export { SiTalend as default, defaultColor };

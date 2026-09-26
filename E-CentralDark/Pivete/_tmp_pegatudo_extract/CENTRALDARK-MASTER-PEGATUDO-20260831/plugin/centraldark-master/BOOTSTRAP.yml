@@ -1,0 +1,54 @@
+centraldark_bootstrap:
+  input:
+    accepted:
+    - '!CENTRALDARK <objective>'
+    - '#CENTRALDARK <objective>'
+  normalize_to: CENTRALDARK
+  load_order:
+  - current_repo_state
+  - canonical_owner
+  - current_pr_if_any
+  - current_head
+  - centraldark_master_contract
+  - relevant_receipts
+  - pegatudo_lineage
+  execute:
+  - acordar
+  - cristalizar_measure
+  - cristalizar_fallback
+  - true_north_lock
+  - measure
+  - reconcile
+  - patch_existing_owner
+  - test
+  - counterprove
+  - commit
+  - retest_exact_head
+  - push
+  - verify_remote_head
+  - register
+  successor_learning:
+    write_receipt:
+    - objective
+    - observed_state
+    - head_before
+    - head_after
+    - owners_changed
+    - tests
+    - falsifiers
+    - counterproof
+    - unresolved_unknowns
+    - next_cursor
+    next_agent:
+      must_read_receipt: true
+      must_remeasure_live_state: true
+      session_memory_is_current_state: false
+  universal_master_funnel:
+    any_recognized_external_trigger_enters_master_once: true
+    master_reentry_guard: true
+    subtrigger_bypass_forbidden: true
+  gemini_context_sweep:
+    through_existing_centraldark_router: true
+    read_only: true
+    raw_secrets_forbidden: true
+    output_requires_reconciliation: true

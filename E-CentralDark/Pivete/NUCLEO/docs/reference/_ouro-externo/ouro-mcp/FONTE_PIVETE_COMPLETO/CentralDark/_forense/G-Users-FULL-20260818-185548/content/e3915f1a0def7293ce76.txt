@@ -1,0 +1,36 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\src\react\providers\AttachmentByIndexProvider.tsx
+
+import type { FC, PropsWithChildren } from "react";
+import { useAui, AuiProvider, Derived } from "@assistant-ui/store";
+
+export const MessageAttachmentByIndexProvider: FC<
+  PropsWithChildren<{
+    index: number;
+  }>
+> = ({ index, children }) => {
+  const aui = useAui({
+    attachment: Derived({
+      source: "message",
+      query: { type: "index", index },
+      get: (aui) => aui.message().attachment({ index }),
+    }),
+  });
+
+  return <AuiProvider value={aui}>{children}</AuiProvider>;
+};
+
+export const ComposerAttachmentByIndexProvider: FC<
+  PropsWithChildren<{
+    index: number;
+  }>
+> = ({ index, children }) => {
+  const aui = useAui({
+    attachment: Derived({
+      source: "composer",
+      query: { type: "index", index },
+      get: (aui) => aui.composer().attachment({ index }),
+    }),
+  });
+
+  return <AuiProvider value={aui}>{children}</AuiProvider>;
+};

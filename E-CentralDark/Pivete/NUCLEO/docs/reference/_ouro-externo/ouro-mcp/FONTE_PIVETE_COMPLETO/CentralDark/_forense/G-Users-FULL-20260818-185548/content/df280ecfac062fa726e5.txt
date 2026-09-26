@@ -1,0 +1,11 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\.anthropic_oauth.json
+
+{
+
+  "accessToken": "[REDIGIDO-PRESERVACAO]",
+
+  "refreshToken": "[REDIGIDO-PRESERVACAO]",
+
+  "expiresAt": 1787102718092
+
+}

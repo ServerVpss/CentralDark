@@ -1,0 +1,17 @@
+browser_rule: "browser talks to CentralDark origin; internal service URLs stay server-side when possible"
+candidate_routes:
+  - /api/agents
+  - /api/missions
+  - /api/chat
+  - /api/buzz
+  - /api/memory
+  - /api/graph
+  - /api/tools
+  - /api/git
+  - /api/ci
+  - /api/workflows
+  - /api/voice
+  - /api/models
+  - /api/system
+  - /api/receipts
+warning: "target contracts only; discover/reuse existing equivalent routes before creating anything"

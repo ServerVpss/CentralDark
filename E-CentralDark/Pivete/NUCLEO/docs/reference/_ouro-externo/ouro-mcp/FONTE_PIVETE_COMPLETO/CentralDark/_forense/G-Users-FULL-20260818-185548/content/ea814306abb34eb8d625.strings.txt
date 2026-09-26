@@ -1,0 +1,506 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\lang\menu_vi_vn.vim
+
+" Menu Translations:
+Vietnamese
+" Maintainer:
+Phan Vinh Thinh <teppi@vnlinux.org>
+" Last Change:
+12 Mar 2005
+" Original translations
+" URL:
+http://iatp.vspu.ac.ru/phan/vietvim/lang/menu_vi_vn.vim
+" Adopted for VietVim project by Phan Vinh Thinh.
+" First translation: Phan Vinh Thinh <teppi@vnlinux.org>
+" Quit when menu translations have already been done.
+if exists("did_menu_trans")
+   finish
+let did_menu_trans = 1
+let s:keepcpo= &cpo
+set cpo&vim
+scriptencoding utf-8
+menutrans &File
+p\ tin
+menutrans &Edit
+menutrans &Tools
+&ng\ c
+menutrans &Syntax
+menutrans &Buffers
+menutrans &Window
+menutrans &Help
+" Help menu
+menutrans &Overview<Tab><F1>
+ng\ quan<Tab><F1>
+menutrans &User\ Manual
+menutrans &How-to\ links
+menutrans &Find\.\.\.
+m\ &ki
+m\.\.\.
+"--------------------
+menutrans &Credits
+menutrans Co&pying
+n\ quy
+menutrans &Sponsor/Register
+menutrans O&rphans
+"--------------------
+menutrans &Version
+menutrans &About
+" File menu
+menutrans &Open\.\.\.<Tab>:e
+\.\.\.<Tab>:e
+menutrans Sp&lit-Open\.\.\.<Tab>:sp
+&Chia-M
+\.\.\.<Tab>:sp
+menutrans &New<Tab>:enew
+&i<Tab>:enew
+menutrans &Close<Tab>:close
+&ng<Tab>:close
+"--------------------
+menutrans &Save<Tab>:w
+&Ghi\ nh
+<Tab>:w
+menutrans Save\ &As\.\.\.<Tab>:sav
+Ghi\ n&h
+\.\.\.<Tab>:sav
+"--------------------
+menutrans Split\ &Diff\ with\.\.\.
+&So\ s
+i\.\.\.
+menutrans Split\ Patched\ &By\.\.\.
+i\.\.\.
+"--------------------
+menutrans &Print
+In\ &ra
+menutrans Sa&ve-Exit<Tab>:wqa
+Ghi\ nh
+i\ th&o
+t\ <Tab>:wqa
+menutrans E&xit<Tab>:qa
+t<Tab>:qa
+" Edit menu
+menutrans &Undo<Tab>u
+c<Tab>u
+menutrans &Redo<Tab>^R
+i<Tab>^R
+menutrans Rep&eat<Tab>\.
+i<Tab>\.
+"--------------------
+menutrans Cu&t<Tab>"+x
+t<Tab>"+x
+menutrans &Copy<Tab>"+y
+&Sao\ ch
+p<Tab>"+y
+menutrans &Paste<Tab>"+gP
+n<Tab>"+gP
+menutrans Put\ &Before<Tab>[p
+&c<Tab>[p
+menutrans Put\ &After<Tab>]p
+n\ sa&u<Tab>]p
+menutrans &Delete<Tab>x
+a<Tab>x
+menutrans &Select\ All<Tab>ggVG
+<Tab>ggVG
+"--------------------
+menutrans &Find\.\.\.<Tab>/
+m\.\.\.<Tab>/
+menutrans Find\ and\ Rep&lace\.\.\.     T
+\ thay\ th
+\.\.\.
+menutrans Find\ and\ Rep&lace\.\.\.<Tab>:%s     T
+\ thay\ th
+\.\.\.<Tab>:%s
+menutrans Find\ and\ Rep&lace\.\.\.<Tab>:s     T
+\ thay\ th
+\.\.\<Tab>:s
+"--------------------
+menutrans Settings\ &Window
+menutrans &Global\ Settings
+p\ t&o
+menutrans F&ile\ Settings
+p\ t&in
+menutrans C&olor\ Scheme
+menutrans &Keymap
+menutrans Select\ Fo&nt\.\.\.
+n\ &ph
+ng\ ch
+\.\.\.
+">>>----------------- Edit/Global settings
+menutrans Toggle\ Pattern\ &Highlight<Tab>:set\ hls!     &Chi
+y\ <Tab>:set\ hls!
+menutrans Toggle\ &Ignore-case<Tab>:set\ ic!
+<Tab>:set\ ic!
+menutrans Toggle\ &Showmatch<Tab>:set\ sm!
+ Cho\ &bi
+p<Tab>:set\ sm!
+menutrans &Context\ lines
+ng\ quanh\ con\ tr
+menutrans &Virtual\ Edit
+menutrans Toggle\ Insert\ &Mode<Tab>:set\ im!
+&n<Tab>:set\ im!
+menutrans Toggle\ Vi\ C&ompatible<Tab>:set\ cp!
+ng\ th
+i\ &Vi<Tab>:set\ cp!
+menutrans Search\ &Path\.\.\.
+m\ &ki
+m\.\.\.
+menutrans Ta&g\ Files\.\.\.
+p\ tin\ t&h
+\ ghi\.\.\.
+menutrans Toggle\ &Toolbar
+n\ th&anh\ c
+menutrans Toggle\ &Bottom\ Scrollbar
+n\ thanh\ k
+menutrans Toggle\ &Left\ Scrollbar
+n\ thanh\ k
+menutrans Toggle\ &Right\ Scrollbar
+n\ thanh\ k
+n\ &ph
+">>>->>>------------- Edit/Global settings/Virtual edit
+menutrans Never
+menutrans Block\ Selection
+ Khi\ ch
+menutrans Insert\ mode
+ Trong\ ch
+menutrans Block\ and\ Insert
+ Khi\ ch
+menutrans Always
+">>>----------------- Edit/File settings
+menutrans Toggle\ Line\ &Numbering<Tab>:set\ nu!
+nh\ &s
+ng<Tab>:set\ nu!
+menutrans Toggle\ &List\ Mode<Tab>:set\ list!
+\ danh\ s
+ch<Tab>:set\ list!
+menutrans Toggle\ Line\ &Wrap<Tab>:set\ wrap!
+i<Tab>:set\ wrap!
+menutrans Toggle\ W&rap\ at\ word<Tab>:set\ lbr!
+\ nguy
+n<Tab>:set\ lbr!
+menutrans Toggle\ &expand-tab<Tab>:set\ et!
+ng\ thay\ cho\ tab<Tab>:set\ et!
+menutrans Toggle\ &auto-indent<Tab>:set\ ai!
+ng\ th
+ng<Tab>:set\ ai!
+menutrans Toggle\ &C-indenting<Tab>:set\ cin!
+ng\ ki
+u\ C<Tab>:set\ cin!
+">>>---
+menutrans &Shiftwidth
+ng\ th
+menutrans Soft\ &Tabstop
+ng\ T&ab
+menutrans Te&xt\ Width\.\.\.
+n\.\.\.
+menutrans &File\ Format\.\.\.
+&p\ tin\.\.\.
+">>>----------------- Edit/File settings/Color Scheme
+menutrans default
+">>>----------------- Edit/File settings/Keymap
+menutrans None
+menutrans arabic
+menutrans czech
+menutrans esperanto
+Etperant
+menutrans greek
+menutrans hebrew
+Do\ th
+menutrans hebrewp
+Do\ th
+menutrans lithuania-baltic
+t-vi\ Bal-t
+menutrans magyar
+Hungari
+menutrans persian-iranian
+Iran\ Ba\ T
+menutrans persian
+menutrans russian-jcuken
+Nga\ jcuken
+menutrans russian-jcukenwin
+Nga\ jcukenwin
+menutrans russian-yawerty
+Nga\ yawerty
+menutrans serbian-latin
+c-bi\ La-tinh
+menutrans serbian
+menutrans slovak
+slovak
+" Tools menu
+menutrans &Jump\ to\ this\ tag<Tab>g^]
+\ ghi<Tab>g^]
+menutrans Jump\ &back<Tab>^T
+&Quay\ l
+i<Tab>^T
+menutrans Build\ &Tags\ File
+p\ tin\ th
+"-------------------
+menutrans &Folding
+menutrans &Diff
+t\ (diff)
+"-------------------
+menutrans &Make<Tab>:make
+ch<Tab>:make
+menutrans &List\ Errors<Tab>:cl
+&Danh\ s
+i<Tab>:cl
+menutrans L&ist\ Messages<Tab>:cl!
+Danh\ &s
+ch\ th
+o<Tab>:cl!
+menutrans &Next\ Error<Tab>:cn
+p\ theo<Tab>:cn
+menutrans &Previous\ Error<Tab>:cp
+i\ t&r
+c<Tab>:cp
+menutrans &Older\ List<Tab>:cold
+Danh\ s
+ch\ &c
+n<Tab>:cold
+menutrans N&ewer\ List<Tab>:cnew
+Danh\ s
+ch\ &m
+n<Tab>:cnew
+menutrans Error\ &Window
+menutrans &Set\ Compiler
+nh\ bi
+"-------------------
+menutrans &Convert\ to\ HEX<Tab>:%!xxd
+nh\ HEX<Tab>:%!xxd
+menutrans Conve&rt\ back<Tab>:%!xxd\ -r
+\ HE&X<Tab>:%!xxd\ -r
+">>>---------------- Folds
+menutrans &Enable/Disable\ folds<Tab>zi
+p<Tab>zi
+menutrans &View\ Cursor\ Line<Tab>zv
+&Xem\ d
+\ con\ tr
+<Tab>zv
+menutrans Vie&w\ Cursor\ Line\ only<Tab>zMzx
+\ xem\ d
+\ con\ tr
+<Tab>zMzx
+menutrans C&lose\ more\ folds<Tab>zm
+ng\ &nhi
+n<Tab>zm
+menutrans &Close\ all\ folds<Tab>zM
+p<Tab>zM
+menutrans &Open\ all\ folds<Tab>zR
+p<Tab>zR
+menutrans O&pen\ more\ folds<Tab>zr
+\ n&hi
+n<Tab>zr
+menutrans Fold\ Met&hod
+ng\ ph
+menutrans Create\ &Fold<Tab>zf
+p<Tab>zf
+menutrans &Delete\ Fold<Tab>zd
+p<Tab>zd
+menutrans Delete\ &All\ Folds<Tab>zD
+p<Tab>zD
+menutrans Fold\ col&umn\ width
+">>>->>>----------- Tools/Folds/Fold Method
+menutrans M&anual
+menutrans I&ndent
+menutrans E&xpression
+menutrans S&yntax
+menutrans Ma&rker
+">>>--------------- Tools/Diff
+menutrans &Update
+menutrans &Get\ Block
+&Thay\ 
+menutrans &Put\ Block
+T&hay\ 
+">>>--------------- Tools/Diff/Error window
+menutrans &Update<Tab>:cwin
+t<Tab>:cwin
+menutrans &Close<Tab>:cclose
+&ng<Tab>:cclose
+menutrans &Open<Tab>:copen
+<Tab>:copen
+" Syntax menu
+menutrans &Show\ filetypes\ in\ menu
+p\ tin\ trong\ tr
+menutrans Set\ '&syntax'\ only
+\ thay\ 
+\ 'syntax'
+menutrans Set\ '&filetype'\ too
+Th&ay\ 
+\ 'filetype'
+menutrans &Off
+menutrans &Manual
+ng\ tay
+menutrans A&utomatic
+menutrans on/off\ for\ &This\ file
+t\ &cho\ t
+p\ tin\ n
+menutrans Co&lor\ test
+m\ tra\ m
+menutrans &Highlight\ test
+m\ tra\ chi
+menutrans &Convert\ to\ HTML
+nh\ HTML
+">>>---------------- Syntax/AB
+menutrans Apache\ config
+nh\ Apache
+menutrans Ant\ build\ file
+p\ tin\ bi
+ch\ Ant
+menutrans Apache-style\ config
+nh\ phong\ c
+ch\ Apache
+menutrans Arc\ Macro\ Language
+\ Macro\ Arc
+menutrans Arch\ inventory
+\ Arch
+menutrans ASP\ with\ VBScript
+ASP\ v
+i\ VBScript
+menutrans ASP\ with\ Perl
+ASP\ v
+i\ Perl
+menutrans BC\ calculator
+nh\ BC
+menutrans BDF\ font
+ng\ ch
+menutrans blank
+">>>---------------- Syntax/C
+menutrans Calendar
+menutrans Cheetah\ template
+u\ Cheetah
+menutrans Config
+" Buffers menu
+menutrans &Refresh\ menu
+menutrans Delete
+menutrans &Alternate
+Xen\ &k
+menutrans &Next
+&p\ theo
+menutrans &Previous
+menutrans [No\ File]
+p\ tin]
+" Window menu
+menutrans &New<Tab>^Wn
+i<Tab>^Wn
+menutrans S&plit<Tab>^Ws
+&Chia\ 
+i<Tab>^Ws
+menutrans Sp&lit\ To\ #<Tab>^W^^
+Chia\ &t
+i\ #<Tab>^W^^
+menutrans Split\ &Vertically<Tab>^Wv
+Chia\ &d
+c<Tab>^Wv
+menutrans Split\ File\ E&xplorer
+nh\ &duy
+p\ tin
+menutrans &Close<Tab>^Wc
+&ng<Tab>^Wc
+menutrans Close\ &Other(s)<Tab>^Wo
+c<Tab>^Wo
+menutrans Move\ &To
+menutrans Rotate\ &Up<Tab>^WR
+n<Tab>^WR
+menutrans Rotate\ &Down<Tab>^Wr
+i<Tab>^Wr
+menutrans &Equal\ Size<Tab>^W=
+ch\ th
+c<Tab>^W=
+menutrans &Max\ Height<Tab>^W_
+u\ c&ao\ l
+t<Tab>^W_
+menutrans M&in\ Height<Tab>^W1_
+u\ ca&o\ nh
+t<Tab>^W1_
+menutrans Max\ &Width<Tab>^W\|
+t<Tab>^W\|
+menutrans Min\ Widt&h<Tab>^W1\|
+ng\ nh
+t<Tab>^W1\|
+">>>----------------- Window/Move To
+menutrans &Top<Tab>^WK
+&u<Tab>^WK
+menutrans &Bottom<Tab>^WJ
+i<Tab>^WJ
+menutrans &Left\ side<Tab>^WH
+i<Tab>^WH
+menutrans &Right\ side<Tab>^WL
+i<Tab>^WL
+" The popup menu
+menutrans &Undo
+menutrans Cu&t
+menutrans &Copy
+&Sao\ ch
+menutrans &Paste
+menutrans &Delete
+menutrans Select\ Blockwise
+n\ &theo\ kh
+menutrans Select\ &Word
+menutrans Select\ &Line
+menutrans Select\ &Block
+n\ &kh
+menutrans Select\ &All
+" The GUI toolbar
+if has("toolbar")
+  if exists("*Do_toolbar_tmenu")
+    delfun Do_toolbar_tmenu
+  endif
+  fun Do_toolbar_tmenu()
+    tmenu ToolBar.Open
+    tmenu ToolBar.Save
+Ghi nh
+    tmenu ToolBar.SaveAll
+Ghi nh
+    tmenu ToolBar.Print
+    tmenu ToolBar.Undo
+    tmenu ToolBar.Redo
+    tmenu ToolBar.Cut
+    tmenu ToolBar.Copy
+Sao ch
+    tmenu ToolBar.Paste
+    tmenu ToolBar.Find
+    tmenu ToolBar.FindNext
+p theo
+    tmenu ToolBar.FindPrev
+    tmenu ToolBar.Replace
+Thay th
+    tmenu ToolBar.LoadSesn
+    tmenu ToolBar.SaveSesn
+Ghi nh
+    tmenu ToolBar.RunScript
+y script c
+    tmenu ToolBar.Make
+    tmenu ToolBar.Shell
+    tmenu ToolBar.RunCtags
+p tin th
+    tmenu ToolBar.TagJump
+    tmenu ToolBar.Help
+    tmenu ToolBar.FindHelp
+m trong tr
+  endfun
+" Dialog texts
+" Find in help dialog
+let g:menutrans_help_dialog = "H
+m:\n\nTh
+p Input (V
+, i_CTRL-X)\nTh
+_<Del>)\nTh
+p cho m
+, 'shiftwidth')"
+" Searh path dialog
+let g:menutrans_path_dialog = "H
+p tin.\nT
+ch nhau b
+" Tag files dialog
+let g:menutrans_tags_dialog = "Nh
+p tin th
+ ghi (ph
+y).\n"
+" Text width dialog
+let g:menutrans_textwidth_dialog = "H
+i.\nNh
+" File format dialog
+let g:menutrans_fileformat_dialog = "H
+p tin."
+let g:menutrans_fileformat_choices = "&Unix\n&Dos\n&Mac\n&H
+let menutrans_no_file = "[kh
+p tin]"
+let &cpo = s:keepcpo
+unlet s:keepcpo

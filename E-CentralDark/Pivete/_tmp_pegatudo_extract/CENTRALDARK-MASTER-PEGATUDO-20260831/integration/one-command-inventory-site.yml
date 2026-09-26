@@ -1,0 +1,77 @@
+schema: CENTRALDARK_ONE_COMMAND_INVENTORY_TO_DEPLOY
+schema_version: 1
+mode: EXTEND_EXISTING_ONLY
+entry:
+  canonical: "!CENTRALDARK"
+  aliases: ["#CENTRALDARK"]
+  bare_command: CONTINUE_CURRENT_DURABLE_MISSION_FROM_NEXT_CURSOR
+  inline_objective: true
+operators:
+  ">>": FORWARD_CONTINUE
+  ">>>": FORWARD_CONTINUE
+  "<<": REVERSE_REMEASURE
+  "<<<": REVERSE_REMEASURE
+  shell_redirection: false
+  require_master_context: true
+flow:
+  - ACORDAR
+  - CRISTALIZAR_MEASURE
+  - CRISTALIZAR_FALLBACK
+  - CALIBRAR
+  - PEGATUDO
+  - UNIVERSAL_INVENTORY
+  - TRUE_NORTH_LOCK
+  - SWARM_READERS
+  - TRIAXIAL_GRAPH_SWEEP
+  - RENDEZVOUS
+  - RECONCILE
+  - REALITY_SCOPE_GATE
+  - OWNER_RESOLUTION
+  - ONE_WRITER
+  - PATCH_MINIMUM
+  - TEST
+  - FALSIFIER
+  - COUNTERPROOF
+  - SITE_READINESS_GATE
+  - DOCUMENTATION_GATE
+  - REALITY_JUDGE
+  - GLOBAL_FIXED_POINT
+  - REGISTER
+  - BOOT_REFRESH
+  - DEPLOY_IF_INTENT_ACTIVE
+inventory:
+  adaptive_fronts_max: 10
+  mirror_factor_max: 5
+  readers_only: true
+  sources:
+    - repo
+    - github_remote
+    - drive_workspace
+    - local_worktrees
+    - runtime
+    - centraldark_router
+    - hub
+    - skills
+    - tests
+    - documentation
+    - receipts
+    - providers
+outputs:
+  - INVENTORY_GRAPH
+  - OWNER_MAP
+  - DEPENDENCY_MAP
+  - MATERIAL_GAPS
+  - READINESS_MAP
+  - NEXT_CURSOR
+readiness:
+  target_before_deploy_percent: 90
+  deploy_without_explicit_intent: false
+  on_no_deploy_intent: READY_FOR_DEPLOY
+  explicit_deploy_objective_runs_selector: true
+proof:
+  unknown_is_pass: false
+  majority_vote_is_truth: false
+  sensor_failure_is_world_failure: false
+  graph_is_authority: false
+  one_writer_per_conflict_scope: true
+  zero_regression_required: true

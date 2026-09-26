@@ -1,0 +1,27 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\__pycache__\dump.cpython-311.pyc
+
+``hermes dump`` subcommand parser.
+Extracted verbatim from ``hermes_cli/main.py:main()`` (god-file Phase 2).
+Handler injected to avoid importing ``main``.
+annotations)
+Callable
+cmd_dumpr
+return
+z1Attach the ``dump`` subcommand to ``subparsers``.
+dumpz(Dump setup summary for support/debuggingzyOutput a compact, plain-text summary of your Hermes setup that can be copy-pasted into Discord/GitHub for support context)
+descriptionz
+--show-keys
+store_truezOShow redacted API key prefixes (first/last 4 chars) instead of just set/not set)
+actionr
+funcN)
+add_parser
+add_argument
+set_defaults)
+subparsersr
+dump_parsers
+OC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\dump.py
+build_dump_parserr
+__doc__
+__future__r
+typingr
+<module>r

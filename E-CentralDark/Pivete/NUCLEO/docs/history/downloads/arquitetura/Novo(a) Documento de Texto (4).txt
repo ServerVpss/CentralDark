@@ -1,0 +1,98 @@
+Aí sim, peguei tua visão 😹🔥. Tu tá pensando numa arquitetura de **dois planos**:
+
+```text
+VPS / APIs / WORKERS PESADOS
+→ vídeo
+→ podcast
+→ transcrição
+→ busca
+→ OCR
+→ modelos grandes
+→ processamento bruto
+→ garimpo inicial
+
+             ↓ API
+
+HERMES CASA
+→ recebe só a nata
+→ fonte + evidência + delta
+→ contraprove
+→ dedupe
+→ comprime
+→ cristaliza
+→ NÚCLEO / Obsidian
+```
+
+Isso faz bastante sentido. A VPS vira **mina + fornalha**, não cérebro soberano. O PC de casa não precisa ficar gastando CPU/GPU processando horas de áudio, vídeo e OCR; ele recebe os resultados estruturados e mantém o que realmente interessa.
+
+Eu só colocaria uma trava importante:
+
+```text
+VPS_OUTPUT != VERDADE
+
+VPS
+→ CANDIDATE
+
+CASA
+→ VALIDATE
+→ CRYSTALLIZE
+```
+
+E na API eu faria chegar um pacote pequeno tipo:
+
+```text
+SOURCE_ID=
+SOURCE_URL=
+TIMESTAMP=
+CLAIM=
+SUMMARY=
+LEARNING_DELTA=
+EVIDENCE=
+CONFIDENCE_CLASS=
+CONTENT_HASH=
+```
+
+Nada de mandar 4 horas de transcrição pro Hermes toda vez. 😹
+
+Depois vem exatamente o que tu falou: **compressão progressiva**.
+
+```text
+4h vídeo
+↓
+transcrição
+↓
+80 ideias
+↓
+17 úteis
+↓
+5 novidades
+↓
+2 padrões
+↓
+1 cristal
+```
+
+Aí começa a ficar bonito, porque o sistema vai envelhecendo **mais leve**, não mais gordo.
+
+E eu faria três camadas de retenção:
+
+```text
+BRUTO
+VPS / temporário
+
+DESTILADO
+claims + evidências + fontes
+
+CRISTAL
+Casa / NÚCLEO
+```
+
+Se amanhã tu trocar Screenpipe, modelo, API, VPS ou qualquer ferramenta, foda-se KKKK — o **cristal continua teu**.
+
+Só não mandaria conteúdo pessoal bruto automaticamente pra VPS. Para aula pública, vídeo, podcast e material técnico, tranquilo dentro das tuas configurações; para tua voz/rotina privada, eu deixaria `LOCAL_ONLY` por padrão.
+
+Então tua frase arquitetural fica:
+
+> **A VPS mastiga o mundo. A Casa guarda só o que sobreviveu à digestão.** 😹🔥
+
+E sim: depois dá pra ir comprimindo inclusive os próprios cristais — vários aprendizados → padrão → regra → skill/reflexo. Posso também criar uma imagem dessa arquitetura `VPS FORNALHA → API → HERMES CASA → CRISTAL`.

@@ -1,0 +1,116 @@
+{
+  "welcomeViewCompleted": true,
+  "__vscodeMigrationVersion": 3,
+  "clineVersion": "4.1.16",
+  "remoteRulesToggles": {},
+  "remoteWorkflowToggles": {},
+  "remoteSkillsToggles": {},
+  "openAiHeaders": {},
+  "sapAiCoreUseOrchestrationMode": true,
+  "ocaMode": "internal",
+  "planModeApiProvider": "openai-codex",
+  "planModeOpenRouterModelId": "deepseek/deepseek-v4-flash",
+  "planModeOpenRouterModelInfo": {
+    "maxTokens": 384000,
+    "contextWindow": 1048576,
+    "supportsImages": false,
+    "supportsPromptCache": false,
+    "inputPrice": 0.08399999999999999,
+    "outputPrice": 0.16799999999999998,
+    "cacheReadsPrice": 0.016800000000000002,
+    "description": "DeepSeek V4 Flash is an efficiency-optimized Mixture-of-Experts model from DeepSeek with 284B total parameters and 13B activated parameters, supporting a 1M-token context window. It is designed for fast inference and...",
+    "thinkingConfig": {
+      "maxBudget": 6000
+    }
+  },
+  "actModeApiProvider": "openai-codex",
+  "actModeOpenRouterModelId": "deepseek/deepseek-v4-flash",
+  "actModeOpenRouterModelInfo": {
+    "maxTokens": 384000,
+    "contextWindow": 1048576,
+    "supportsImages": false,
+    "supportsPromptCache": false,
+    "inputPrice": 0.08399999999999999,
+    "outputPrice": 0.16799999999999998,
+    "cacheReadsPrice": 0.016800000000000002,
+    "description": "DeepSeek V4 Flash is an efficiency-optimized Mixture-of-Experts model from DeepSeek with 284B total parameters and 13B activated parameters, supporting a 1M-token context window. It is designed for fast inference and...",
+    "thinkingConfig": {
+      "maxBudget": 6000
+    }
+  },
+  "anthropicBaseUrl": "https://api.centralldark.com",
+  "planModeReasoningEffort": "xhigh",
+  "actModeReasoningEffort": "xhigh",
+  "lastShownAnnouncementId": "4.0",
+  "dismissedBanners": [
+    {
+      "bannerId": "cline-pass-home-promo-v2",
+      "dismissedAt": 1783715840646
+    }
+  ],
+  "autoApprovalSettings": {
+    "version": 2,
+    "enabled": true,
+    "favorites": [],
+    "maxRequests": 20,
+    "actions": {
+      "readFiles": true,
+      "readFilesExternally": false,
+      "editFiles": false,
+      "editFilesExternally": false,
+      "executeSafeCommands": true,
+      "executeAllCommands": false,
+      "useBrowser": false,
+      "useMcp": true
+    },
+    "enableNotifications": false
+  },
+  "workspaceRoots": [
+    {
+      "path": "C:\\Users\\danda\\Desktop",
+      "name": "Desktop",
+      "vcs": "none"
+    }
+  ],
+  "primaryRootIndex": 0,
+  "globalWorkflowToggles": {},
+  "globalClineRulesToggles": {},
+  "planModeApiModelId": "gpt-5.5",
+  "actModeApiModelId": "gpt-5.5",
+  "openAiBaseUrl": "https://api.centralldark.com",
+  "planModeOpenAiModelId": "gpt-5.6-sol",
+  "actModeOpenAiModelId": "gpt-5.6-sol",
+  "azureApiVersion": "",
+  "azureIdentity": false,
+  "planModeOpenAiModelInfo": {
+    "maxTokens": -1,
+    "contextWindow": 128000,
+    "supportsImages": false,
+    "supportsPromptCache": false,
+    "inputPrice": 0,
+    "outputPrice": 0,
+    "temperature": 0,
+    "isR1FormatRequired": false
+  },
+  "actModeOpenAiModelInfo": {
+    "maxTokens": -1,
+    "contextWindow": 128000,
+    "supportsImages": false,
+    "supportsPromptCache": false,
+    "inputPrice": 0,
+    "outputPrice": 0,
+    "temperature": 0,
+    "isR1FormatRequired": false
+  },
+  "geminiBaseUrl": "",
+  "vscodeTerminalExecutionMode": "backgroundExec",
+  "__vscodeLegacyMcpSettingsMigration": {
+    "sources": {
+      "vscodeGlobalStorage": {
+        "path": "c:\\Users\\danda\\AppData\\Roaming\\Code\\User\\globalStorage\\saoudrizwan.claude-dev\\settings\\cline_mcp_settings.json",
+        "migratedAt": 1787512026891
+      }
+    }
+  },
+  "telemetrySetting": "enabled"
+}

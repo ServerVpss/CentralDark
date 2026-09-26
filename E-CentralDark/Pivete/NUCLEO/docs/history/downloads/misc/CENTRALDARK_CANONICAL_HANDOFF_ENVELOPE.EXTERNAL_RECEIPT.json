@@ -1,0 +1,17 @@
+{
+  "package": "CENTRALDARK_CANONICAL_HANDOFF_ENVELOPE.zip",
+  "sha256": "e038e2abba8fdc973619e6006b0a17ac762f951b9632244abbea32fe0d0dca61",
+  "bytes": 70080288,
+  "entries": 65,
+  "zip_crc": "PASS",
+  "extracted_verifier": "PASS",
+  "inner_canonical_zip_sha256": "0443d87a6ffe64de4c6ffeea3932a2dd1cf5cedb65e6d7c296ba3392458654cc",
+  "inner_canonical_zip_entries": 49,
+  "handoff_payload_inside_envelope_percent": 100,
+  "envelope_package_fixed_point": "TRUE",
+  "project_global_fixed_point": "NOT_PROVEN",
+  "hermes_runtime_now": "UNKNOWN",
+  "external_audit_file": "CENTRALDARK_CANONICAL_HANDOFF_ENVELOPE.FINAL_AUDIT.txt",
+  "external_audit_sha256": "532d57ab0b4a3b41de7eb9a3f06c182587fa212538c3eb419b033a23e6ce9cc9",
+  "self_hash_boundary": "this external receipt proves the final envelope; it cannot be inside the byte-object it proves"
+}

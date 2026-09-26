@@ -1,0 +1,17 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\tutor\en\vim-02-beginner.tutor.json
+
+{
+  "expect": {
+    "28": -1,
+    "36": -1,
+    "49": -1,
+    "71": -1,
+    "72": "b) In this capacity, Edward will have sole cookie discretionary powers",
+    "99": "I have forgotten the exact number of seconds in a day, is it 86400",
+    "100": -1,
+    "126": -1,
+    "158": -1,
+    "169": -1,
+    "218": -1
+  }
+}

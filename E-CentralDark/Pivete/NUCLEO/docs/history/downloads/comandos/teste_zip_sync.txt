@@ -1,0 +1,5 @@
+# TESTE ZIP SYNC
+
+COMANDO: teste_zip_sync
+PROMPT: verifica processamento sincrono
+GATE: FILE_SECURITY_GATE

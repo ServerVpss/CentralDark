@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\react\runtimes\createMessageConverter.d.ts.map
+
+{"version":3,"file":"createMessageConverter.d.ts","names":[],"sources":["../../../src/react/runtimes/createMessageConverter.ts"],"mappings":";;;;cAWa,yBAA0B,kBACrC,UAAU,4BAA4B,SAAS;EAQ1C,sBAAA,UAAA,WAAA,cAAA;IACD,UAAU;IACV;IACA,eAAe;IACf,WAAW,4BAA4B;QACxC;EAUW,mBAAA,UAAA,KAAG,qBAAA,WAEH,4BAA4B,aAAQ;EAKvC,qBAAA,OAAA,cAAc,gBAAgB;EAO9B,oBAAA,OAAA,cAAc,gBAAgB"}

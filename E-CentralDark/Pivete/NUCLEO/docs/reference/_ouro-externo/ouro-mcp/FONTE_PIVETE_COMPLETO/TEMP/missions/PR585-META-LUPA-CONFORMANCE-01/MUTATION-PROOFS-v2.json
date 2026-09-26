@@ -1,0 +1,31 @@
+{
+  "novos": [
+    {
+      "thread": "C",
+      "file": ".coderabbit.yaml",
+      "negativa_reproduz": true,
+      "positiva_livre": true,
+      "mutant_sha16": "530a6f7b10112096",
+      "veredicto": "PASS"
+    },
+    {
+      "thread": "D",
+      "file": ".coderabbit.yaml",
+      "negativa_reproduz": true,
+      "positiva_livre": true,
+      "mutant_sha16": "142f7b007333a559",
+      "veredicto": "PASS"
+    },
+    {
+      "thread": "E",
+      "file": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+      "negativa_reproduz": true,
+      "positiva_livre": true,
+      "mutant_sha16": "1fc7e62e0bc1f12e",
+      "veredicto": "PASS"
+    }
+  ],
+  "regressao_ok": true,
+  "falhas": [],
+  "instrument_encoding_test": "PASS"
+}

@@ -1,0 +1,8 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@dnd-kit\core\dist\utilities\rect\index.d.ts
+
+export { adjustScale } from './adjustScale';
+export { getRectDelta } from './getRectDelta';
+export { getAdjustedRect } from './rectAdjustment';
+export { getClientRect, getTransformAgnosticClientRect } from './getRect';
+export { getWindowClientRect } from './getWindowClientRect';
+export { Rect } from './Rect';

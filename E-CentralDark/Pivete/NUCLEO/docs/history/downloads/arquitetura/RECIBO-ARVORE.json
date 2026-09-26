@@ -1,0 +1,104 @@
+{
+  "status": "PASS_LOCAL_DETERMINISTICO",
+  "generated_at": "2026-08-06T06:37:00-03:00",
+  "scope": "pacote único QA SkillMaster + conteúdo integral PACOTAO-CENTRALDARK; sem chamada live a API externa",
+  "source_packages": {
+    "PACOTAO-CENTRALDARK.zip": {
+      "sha256": "d9192ee1e690344a72b3d17554e0151a61d7761da814d0afa5291232cf880dc4",
+      "bytes": 1379485
+    },
+    "qa-skillmaster-FULL-CORRIGIDO.zip": {
+      "sha256": "10b1ca28563beb090c06dc939cad8cf70ed354a609ad92ae6739bfc4e20f4ac8",
+      "bytes": 1234596
+    }
+  },
+  "tree": {
+    "files_total_before_zip": 79,
+    "bytes_total_before_zip": 16257631,
+    "immutable_files_hashed": 76,
+    "hash_manifest": "AUDITORIA/FILE-HASHES.sha256",
+    "hash_manifest_sha256": "02b1daed4cc8b98c337e6c88222346e229cbc650bd9bfaabf0ddaf6d638a4672",
+    "mutable_exclusion": [
+      "learning/**"
+    ],
+    "self_reference_exclusion": [
+      "AUDITORIA/FILE-HASHES.sha256",
+      "AUDITORIA/RECIBO-ARVORE.json",
+      "AUDITORIA/VALIDACAO-FINAL.json"
+    ],
+    "final_zip_sha256": "EXTERNAL_VALIDATION_REQUIRED_SELF_REFERENCE_AVOIDED"
+  },
+  "manifest": {
+    "count": 17,
+    "hash": "f274fc4b968391eda23b1cb9f8591915d451dd133fe775301be1023d5b9f6115",
+    "selfMap": {
+      "totalMarkdownDetected": 24,
+      "indexedUniquePaths": 17,
+      "missing": [],
+      "status": "SYNCED",
+      "applied": 0
+    }
+  },
+  "audit_hash_manifest": {
+    "pass": true,
+    "entries": 76,
+    "checked": 76,
+    "manifestSha256": "02b1daed4cc8b98c337e6c88222346e229cbc650bd9bfaabf0ddaf6d638a4672",
+    "errors": []
+  },
+  "syntax": {
+    "node_check_total": 16,
+    "node_check_fail": 0,
+    "shell_syntax_total": 4,
+    "shell_syntax_fail": 0
+  },
+  "tests": {
+    "files": 6,
+    "total": 59,
+    "pass": 59,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "complete": true
+  },
+  "legacy_preservation": {
+    "status": "PASS",
+    "original_files_total": 51,
+    "byte_identical_files": 44,
+    "intentional_changes_total": 7,
+    "missing": 0,
+    "unexpected_changes": 0
+  },
+  "closed_contracts": [
+    "GAP-001",
+    "GAP-002",
+    "GAP-003",
+    "GAP-004",
+    "GAP-005",
+    "GAP-006",
+    "GAP-007",
+    "GAP-008",
+    "GAP-009",
+    "GAP-010",
+    "GAP-011",
+    "GAP-012",
+    "GAP-013",
+    "GAP-014",
+    "GAP-015",
+    "GAP-016"
+  ],
+  "runtime_proof": {
+    "demo_status_ok": true,
+    "secret_file_read_scan_pass": true,
+    "api_live_call": "NOT_RUN_NO_CREDENTIALS"
+  },
+  "prohibited_actions": {
+    "merge": false,
+    "deploy": false,
+    "vps_touched": false,
+    "production_touched": false,
+    "secrets_read": false
+  },
+  "honest_limit": "Sem credenciais no ambiente de validação: nenhuma chamada live a CENTRALDARK/OpenAI/Anthropic. Fallback, resposta vazia, troca de modelo e indisponibilidade são cobertos por fetch determinístico mockado."
+}

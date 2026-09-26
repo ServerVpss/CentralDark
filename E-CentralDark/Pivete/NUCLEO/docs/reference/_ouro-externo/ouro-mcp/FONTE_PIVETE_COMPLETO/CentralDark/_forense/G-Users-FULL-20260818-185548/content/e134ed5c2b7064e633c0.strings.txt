@@ -1,0 +1,115 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\__pycache__\moa_cmd.cpython-311.pyc
+
+)%z.CLI helpers for configuring Mixture of Agents.
+annotations)
+load_config
+save_config)
+build_models_payload
+load_picker_context)
+DEFAULT_MOA_PRESET_NAME
+normalize_moa_config
+list[str]
+default
+returnc
+curses_radiolist)
+selected
+cancel_returns
+hermes_cli.curses_uir
+Exception
+enumerate
+ValueError)
+       
+FC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\moa_cmd.py
+_prompt_choicer(
+list[dict[str, Any]]c
+include_unconfigured
+picker_hints
+canonical_order
+pricing
+capabilities
+max_models
+providersc
+models)
+<listcomp>z"_model_options.<locals>.<listcomp>+
+payloadr2
+_model_optionsr?
+current
+dict[str, str] | None
+dict[str, str]c
+Nz>No configured model providers found. Run `hermes model` first.
+provider
+current_providers
+<genexpr>z
+_pick_slot.<locals>.<genexpr>:
+namer4
+_pick_slot.<locals>.<listcomp>=
+Select providerr6
+Provider r4
+ has no selectable models
+modelz
+Select model for )
+RuntimeErrorr7
+indexr
+provider_default
+provider_rowsrD
+current_model
+model_defaultrM
+         @r'
+_pick_slotrV
+dict[str, Any]c
+reasoning_effortrE
+ [reasoning=
+efforts
+_format_slotr_
+config
+Mixture of Agents presetsz
+Default: 
+default_preset
+active_presetz
+(off)z
+Active in config: 
+presets
+  Reference models:
+reference_modelsr
+aggregatorz
+  Aggregator: )
+isinstance
+dictr7
+itemsr
+activerK
+preset
+markerr$
+         r'
+_print_configrs
+z'Manage Mixture of Agents model presets.
+moa_commandNrP
+configurer5
+Configure MoA preset: z=Pick at least one reference model; choose Done when finished.ri
+enabledr
+Add another reference model?z
+Add another
+Configure aggregator model.rj
+Saved MoA preset: 
+deleterE
+Usage: hermes moa delete <name>z
+Unknown MoA preset: z!Cannot delete the only MoA presetrd
+Deleted MoA preset: z
+Unknown moa subcommand: )
+getattrrs
+appendr(
+setdefaultr
+SystemExitrO
+argsrn
+preset_namer@
+existingr$
+picked
+choices
+            r'
+cmd_moar
+__doc__
+__future__r
+typingr
+hermes_cli.configr
+hermes_cli.inventoryr
+hermes_cli.moa_configr
+<module>r

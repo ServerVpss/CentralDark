@@ -1,0 +1,14 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\indent\bib.vim
+
+" Vim indent file
+" Language:      BibTeX
+" Maintainer:    Dorai Sitaram <ds26@gte.com>
+" URL:
+ http://www.ccs.neu.edu/~dorai/vimplugins/vimplugins.html
+" Last Change:   2005 Mar 28
+" Only do this when not done yet for this buffer
+if exists("b:did_indent")
+  finish
+let b:did_indent = 1
+setlocal cindent
+let b:undo_indent = "setl cin<"

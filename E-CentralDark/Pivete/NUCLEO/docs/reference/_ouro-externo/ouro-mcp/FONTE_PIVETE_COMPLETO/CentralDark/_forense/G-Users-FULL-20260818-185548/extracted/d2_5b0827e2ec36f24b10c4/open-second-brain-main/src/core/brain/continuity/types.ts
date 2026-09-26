@@ -1,0 +1,102 @@
+/**
+ * Contract-wide continuity schema version (Memory Observability Suite,
+ * t_26040ee8), stamped on every new record at `buildRecord()`.
+ *
+ * Evolution rule: additive optional fields do NOT bump the version;
+ * renames, removals, or semantic changes bump to `o2b.continuity.v2`.
+ * Records written before the stamp existed carry no `schema` field and
+ * are read as v1. Existing JSONL files are never migrated.
+ */
+export const CONTINUITY_SCHEMA_VERSION = "o2b.continuity.v1";
+
+/** Payload key carrying a record's session correlation id. */
+export const CONTINUITY_SESSION_ID_KEY = "session_id";
+/** Payload key carrying the authoring agent's id (t_5be0654d). */
+export const CONTINUITY_AGENT_ID_KEY = "agent_id";
+/** Payload key carrying a record's turn correlation id. */
+export const CONTINUITY_TURN_ID_KEY = "turn_id";
+
+/**
+ * Identity keys guaranteed to survive any output-budget clip of a
+ * continuity payload (t_5be0654d). A clip may drop other keys to fit a
+ * budget but MUST retain these, so a clipped record stays correlatable to
+ * its session and its authoring agent. See {@link clipPayloadToBudget}.
+ */
+export const CLIP_PROTECTED_PAYLOAD_KEYS: ReadonlyArray<string> = Object.freeze([
+  CONTINUITY_SESSION_ID_KEY,
+  CONTINUITY_AGENT_ID_KEY,
+]);
+
+export type ContinuityRecordKind =
+  | "context_receipt"
+  | "recall_telemetry"
+  | "gate_telemetry"
+  | "pre_compact_extract"
+  | "post_compact_audit"
+  | "session_turn"
+  | "recent_turn"
+  | "session_summary_node"
+  | "session_summary_digest"
+  | "generation_report"
+  | "ingest_dedup"
+  | "mcp_route_latency"
+  | "token_impact"
+  | "token_impact_outcome"
+  | "context_pack_outcome"
+  | "context_pack_evidence"
+  | "host_memory_write"
+  | "recall_observed_use"
+  | "skill_invoked"
+  | "source_invalidation"
+  /**
+   * One typed negative-recall verdict and the coverage receipt behind it
+   * (silence-is-not-an-answer, U2). Written by the recall gate under the
+   * `recall_gate_telemetry` opt-in so the corpus statement a "no" rested
+   * on stays auditable after the answer has been given.
+   */
+  | "negative_recall";
+
+export type ContinuityPayload = Readonly<Record<string, unknown>>;
+
+export interface ContinuitySourceRef {
+  readonly id: string;
+  readonly path?: string;
+  readonly hash?: string;
+  readonly kind?: string;
+}
+
+export interface ContinuityRecord {
+  /**
+   * Schema version of the record's on-disk shape. `undefined` on legacy
+   * records written before the stamp existed - readers treat that as v1.
+   * Deliberately EXCLUDED from `recordId()` so identical records dedupe
+   * identically across the stamp transition.
+   */
+  readonly schema?: string;
+  readonly id: string;
+  readonly kind: ContinuityRecordKind;
+  readonly createdAt: string;
+  readonly sourceRefs: ReadonlyArray<ContinuitySourceRef>;
+  readonly payload: ContinuityPayload;
+  readonly private: boolean;
+  readonly redacted: boolean;
+}
+
+export interface AppendContinuityRecordInput {
+  readonly kind: Exclude<ContinuityRecordKind, "source_invalidation">;
+  readonly createdAt: string;
+  readonly sourceRefs?: ReadonlyArray<ContinuitySourceRef>;
+  readonly payload?: ContinuityPayload;
+}
+
+export interface ContinuityRecordFilter {
+  readonly kind?: ContinuityRecordKind;
+  readonly sourceId?: string;
+  readonly since?: string;
+  readonly until?: string;
+}
+
+export interface ContinuityRecordPage {
+  readonly records: ReadonlyArray<ContinuityRecord>;
+  readonly nextCursor: string | null;
+}

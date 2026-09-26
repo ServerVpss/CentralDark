@@ -1,0 +1,79 @@
+﻿=== PHASE4 2026-08-22T05:18:17.6684511-03:00 ===
+
+=== SERVICES DISPLAYNAME CONTAINING BIT/DEFEND/SHIELD/SAFE ===
+Name=AMD Crash Defender Service Disp=AMD Crash Defender Service State=Running Start=Auto
+Name=bdredline_agent Disp=Bitdefender Agent RedLine Service State=Running Start=Auto
+Name=bdvpnservice Disp=Serviço Bitdefender VPN State=Stopped Start=Auto
+Name=MDCoreSvc Disp=Serviço Microsoft Defender Core State=Running Start=Auto
+Name=mpssvc Disp=Windows Defender Firewall State=Running Start=Auto
+Name=ProductAgentService Disp=Bitdefender Product Agent Service State=Running Start=Auto
+Name=Sense Disp=Windows Defender Advanced Threat Protection Service State=Stopped Start=Manual
+Name=WdNisSvc Disp=Serviço de Inspeção de Rede do Microsoft Defender Antivírus State=Stopped Start=Disabled
+Name=WinDefend Disp=Serviço Microsoft Defender Antivírus State=Stopped Start=Disabled
+
+=== SC QUERY BD* ===
+Get-Service BDESVC / Serviço de Criptografia de Unidade de Disco BitLocker Status=Stopped StartType=Manual
+Get-Service bdredline_agent / Bitdefender Agent RedLine Service Status=Running StartType=Automatic
+Get-Service bdvpnservice / Serviço Bitdefender VPN Status=Stopped StartType=Automatic
+Get-Service ProductAgentService / Bitdefender Product Agent Service Status=Running StartType=Automatic
+
+=== BDSERVICEHOST LIVE? ===
+
+=== ASW / AVAST LEFTOVER ===
+DRV aswArDisk State=Running Start=Unknown Path=
+DRV aswArPot State=Running Start=Unknown Path=
+DRV aswbidsdriver State=Running Start=Unknown Path=
+DRV aswbidsh State=Running Start=Unknown Path=
+DRV aswbuniv State=Running Start=Unknown Path=
+DRV aswDrvBrg State=Stopped Start=Unknown Path=
+DRV aswElam State=Running Start=Unknown Path=
+DRV aswKbd State=Running Start=Unknown Path=
+DRV aswMonFlt State=Running Start=Unknown Path=
+DRV aswNetHub State=Stopped Start=Unknown Path=
+DRV aswRdr State=Running Start=Unknown Path=
+DRV aswRvrt State=Running Start=Unknown Path=
+DRV aswSnx State=Running Start=Unknown Path=
+DRV aswSP State=Running Start=Unknown Path=
+DRV aswStm State=Stopped Start=Unknown Path=
+DRV aswVmm State=Running Start=Unknown Path=
+
+=== INNER HERMES GATEWAY VBS ===
+-- C:\Users\danda\AppData\Local\hermes\gateway-service\Hermes_Gateway.vbs --
+' Hermes Agent Gateway - Messaging Platform Integration
+Option Explicit
+Dim sh, env, existing_pp
+Set sh = CreateObject("WScript.Shell")
+Set env = sh.Environment("PROCESS")
+env.Item("HERMES_HOME") = "C:\Users\danda\AppData\Local\hermes"
+env.Item("PYTHONIOENCODING") = "utf-8"
+env.Item("HERMES_GATEWAY_DETACHED") = "1"
+env.Item("VIRTUAL_ENV") = "C:\Users\danda\AppData\Local\hermes\hermes-agent\venv"
+existing_pp = env.Item("PYTHONPATH")
+If Len(existing_pp) > 0 Then
+  env.Item("PYTHONPATH") = "C:\Users\danda\AppData\Local\hermes\hermes-agent;" & existing_pp
+Else
+  env.Item("PYTHONPATH") = "C:\Users\danda\AppData\Local\hermes\hermes-agent"
+End If
+sh.CurrentDirectory = "C:\Users\danda\AppData\Local\hermes"
+sh.Run "C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\python.exe -m hermes_cli.main gateway run", 0, False
+-- C:\Users\danda\AppData\Local\hermes\profiles\pivete\gateway-service\Hermes_Gateway_pivete.vbs --
+MISSING
+-- C:\Users\danda\AppData\Local\hermes\profiles\sol\gateway-service\Hermes_Gateway_sol.vbs --
+' Hermes Agent Gateway - Messaging Platform Integration
+Option Explicit
+Dim sh, env, existing_pp
+Set sh = CreateObject("WScript.Shell")
+Set env = sh.Environment("PROCESS")
+env.Item("HERMES_HOME") = "C:\Users\danda\AppData\Local\hermes\profiles\sol"
+env.Item("PYTHONIOENCODING") = "utf-8"
+env.Item("HERMES_GATEWAY_DETACHED") = "1"
+env.Item("VIRTUAL_ENV") = "C:\Users\danda\AppData\Local\hermes\hermes-agent\venv"
+existing_pp = env.Item("PYTHONPATH")
+If Len(existing_pp) > 0 Then
+  env.Item("PYTHONPATH") = "C:\Users\danda\AppData\Local\hermes\hermes-agent;C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages;" & existing_pp
+Else
+  env.Item("PYTHONPATH") = "C:\Users\danda\AppData\Local\hermes\hermes-agent;C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages"
+End If
+sh.CurrentDirectory = "C:\Users\danda\AppData\Local\hermes\profiles\sol"
+sh.Run "C:\Users\danda\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\pythonw.exe -m hermes_cli.main --profile sol gateway run", 0, False
+DONE

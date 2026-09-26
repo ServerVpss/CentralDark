@@ -1,0 +1,8 @@
+id,requisito,implementacao,prova,status
+REQ-001,Mesmo agente produz e se confronta,runtime/adapters.py,tests/test_orchestrator.py,PASS
+REQ-002,Mecanismo do erro obrigatório,runtime/gates.py,tests/test_false_green.py,PASS
+REQ-003,Transferência em casos novos,runtime/orchestrator.py,tests/test_orchestrator.py,PASS
+REQ-004,SIM/NÃO/NÃO_VERIFICADO,runtime/gates.py,tests/test_gates.py,PASS
+REQ-005,Não repetição,runtime/gates.py,tests/test_false_green.py,PASS
+REQ-006,Ledger íntegro,runtime/ledger.py,tests/test_ledger.py,PASS
+REQ-007,Contêiner sem rede,container/compose.yaml,inspeção,NÃO_EXECUTADO

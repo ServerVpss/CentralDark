@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "package": "CENTRALDARK_CANONICAL_PROJECT_FINAL",
+  "created_at_utc": "2026-08-24T10:09:57+00:00",
+  "canonical_scope": "PROJECT_WIDE_RECONCILIATION_HANDOFF",
+  "package_fixed_point_candidate": true,
+  "project_global_fixed_point": "NOT_PROVEN",
+  "principles": [
+    "ONE_SYSTEM_ONLY",
+    "REUSE_BEFORE_CREATE",
+    "ONE_OWNER_PER_CAPABILITY",
+    "ONE_WRITER_PER_SCOPE",
+    "REALITY=JUDGE",
+    "UNKNOWN!=PASS",
+    "HISTORY!=CURRENT_STATE"
+  ],
+  "payload_files": [
+    {
+      "path": "00_START_HERE/CANONICAL_VERDICT.md",
+      "sha256": "ac08b593c182407002aa9d0d6ff6eb3529a3db02b0ef9351e4ef9634b8f5bc56",
+      "bytes": 1087
+    },
+    {
+      "path": "00_START_HERE/README.md",
+      "sha256": "edb19ea1f4760a77d36de3d54b66121c380b55f821920637f3245f4aa8d2731f",
+      "bytes": 1133
+    },
+    {
+      "path": "01_CANONICAL/CENTRALDARK_PROJECT_CANONICAL.mmd",
+      "sha256": "0390ab8ae96735eee8c230de38a1b9d198e0ee1207eeddaaef084c9b7c7c7f25",
+      "bytes": 967
+    },
+    {
+      "path": "01_CANONICAL/CENTRALDARK_PROJECT_CONTRACT.md",
+      "sha256": "8c819e799fc465f50c1d3d012cbab233fb3ea135c606eb34349fc846376c6345",
+      "bytes": 2146
+    },
+    {
+      "path": "01_CANONICAL/FIRST_MILESTONE.md",
+      "sha256": "b11bff11dbb861c2e7da4839165382438c2d761f77f1f43ee6b505338ff80647",
+      "bytes": 842
+    },
+    {
+      "path": "01_CANONICAL/PROJECT_FIXED_POINT_POLICY.md",
+      "sha256": "96823b2fc26d17ff151f051d4b870f6a6d1f9df67e763744aa0817283438fca9",
+      "bytes": 496
+    },
+    {
+      "path": "02_STATE_RECONCILIATION/CURRENT_VS_HISTORICAL.md",
+      "sha256": "8442b27d2af048831c780301a542d5078f5619daf7e45c38d1d964560a18c3f0",
+      "bytes": 1138
+    },
+    {
+      "path": "02_STATE_RECONCILIATION/LIVE_STATE.json",
+      "sha256": "caed7c325ccaada4864c5625f4522c33a199b88f0726a1e65c087771b317f1f5",
+      "bytes": 680
+    },
+    {
+      "path": "02_STATE_RECONCILIATION/LIVE_STATE.md",
+      "sha256": "8422303a2a8c70eacce289a6ef57922a7abadfc61cfea39021987d8470830eb7",
+      "bytes": 441
+    },
+    {
+      "path": "02_STATE_RECONCILIATION/STATE_CLAIM_MATRIX.json",
+      "sha256": "2431bfa999409013da42d6becb69fe5ff29f530b3fddb8f43b2f2fa0dc06d61a",
+      "bytes": 727
+    },
+    {
+      "path": "03_CHATGPT_CROSS_SESSION/ACCESS_LIMITATIONS.md",
+      "sha256": "3f5b79692ea92446520ffd6c3d766dade400882b4279ba5a8ad64f343f297e83",
+      "bytes": 614
+    },
+    {
+      "path": "03_CHATGPT_CROSS_SESSION/ASSISTANT_CONTRADICTIONS_AND_REMEDIATIONS.md",
+      "sha256": "c3f743b6912fa9d5d762a23199a43ffa7658cf7b24d698c92b865cbef727b7a8",
+      "bytes": 1630
+    },
+    {
+      "path": "03_CHATGPT_CROSS_SESSION/COVERAGE_RECEIPT.json",
+      "sha256": "af34770ae5f65709ddff30f0637090e4767b0d21eeaef04813d33ab3c6e5dfe1",
+      "bytes": 793
+    },
+    {
+      "path": "03_CHATGPT_CROSS_SESSION/RECOVERED_CONTEXT_INDEX.md",
+      "sha256": "b4da336683fdc4ac1638e2166acd39b8af3091d15d7cb5cf8b6210beae9816d6",
+      "bytes": 1395
+    },
+    {
+      "path": "04_RUNTIME_HERMES/EXISTING_ORGANS_AND_GAPS.md",
+      "sha256": "1f6233a9e135589babee1999efb670f041174abbf6ee9f662d4e77e808639290",
+      "bytes": 803
+    },
+    {
+      "path": "04_RUNTIME_HERMES/HERMES_CONTROL_LOOP.md",
+      "sha256": "8355d3ebc9f55472813868f7ebf9a775cfa10db4329c9c8c0151664c0307b15c",
+      "bytes": 603
+    },
+    {
+      "path": "04_RUNTIME_HERMES/INTEGRATION_DELTA.md",
+      "sha256": "0d1307578ae6b2a1a075601e7118ba89b960da6928239abef202e9d98d5941eb",
+      "bytes": 590
+    },
+    {
+      "path": "05_SKILLS_KNOWLEDGE/NPM_ZERO_TRUST_CORRECTIONS.md",
+      "sha256": "20181bea10edeea3e4444e0837b7514f837cf673d8348581a82bf58364143095",
+      "bytes": 1020
+    },
+    {
+      "path": "05_SKILLS_KNOWLEDGE/PROJECT_WIDE_CRYSTALLIZATION_POLICY.md",
+      "sha256": "21e53948890c5dab7d5b606578f618cb5bc70adb7854f58ae17394581a16599c",
+      "bytes": 799
+    },
+    {
+      "path": "05_SKILLS_KNOWLEDGE/SKILL_STATUS_MATRIX.json",
+      "sha256": "afa4b2e38b6dc8d6b78f6d5861de97eff130d03fa760d3b10b27dab35f706f86",
+      "bytes": 1454
+    },
+    {
+      "path": "06_PROOF_COUNTERPROOF/COUNTERPROOF.md",
+      "sha256": "4185d1be10fcdd4b9c037470f72a8685b64224e6b88a7521374df14cc3a63fff",
+      "bytes": 877
+    },
+    {
+      "path": "06_PROOF_COUNTERPROOF/PROJECT_FIXED_POINT_CHECK.json",
+      "sha256": "a1f67390ddc2278e5b5ba27439dcc495c44bbd295ad06708f47bd9be0303902b",
+      "bytes": 565
+    },
+    {
+      "path": "06_PROOF_COUNTERPROOF/PROOF.md",
+      "sha256": "7a76a70228ebb81f4f2d96182f11c5974c69f50ede2f6f78f1d08a1fc41399a9",
+      "bytes": 661
+    },
+    {
+      "path": "06_PROOF_COUNTERPROOF/SELF_APPLICATION_TRACE.md",
+      "sha256": "18c9db1f923f5809a277ba3d13c9ea69d5647b51ed77858df9cdf78a940f2fe0",
+      "bytes": 552
+    },
+    {
+      "path": "07_HANDOFF_HISTORY/CENTRALDARK_LACUNA_FECHADA_PACK.zip",
+      "sha256": "ae0bb9981d57f6259c8d18ce25d46ad0f231964180c471ee71861069726a8ee5",
+      "bytes": 1609410
+    },
+    {
+      "path": "07_HANDOFF_HISTORY/CENTRALDARK_OURO_RUNTIME_SKILLS_PACK.EXTERNAL_RECEIPT.json",
+      "sha256": "8cba82be2d5ddb4ce6201f36158c12cf5ee483b48082f86c936c3d094d4ee76c",
+      "bytes": 421
+    },
+    {
+      "path": "07_HANDOFF_HISTORY/CENTRALDARK_OURO_RUNTIME_SKILLS_PACK.zip",
+      "sha256": "1a036a0b59de1ac0ba85ca4cf2d2e127df95f6032f560c08a9d9962de330e2a2",
+      "bytes": 15832456
+    },
+    {
+      "path": "07_HANDOFF_HISTORY/CENTRALDARK_PADRAO_OPERACIONAL_COMPACTO_PACK.zip",
+      "sha256": "cd1fce5d6c27197db75476b6215530c4ab12ee7a39e32cd3f639d7aaea18e60c",
+      "bytes": 2137508
+    },
+    {
+      "path": "07_HANDOFF_HISTORY/CENTRALDARK_REVISAO_FIEL_READ_ONLY.zip",
+      "sha256": "a93e63f5f03a85db173f649ee8aa94e6815de51c3ca34c1507c3158146789f58",
+      "bytes": 28436
+    },
+    {
+      "path": "07_HANDOFF_HISTORY/CENTRALDARK_SESSION_MASTER_HANDOFF.EXTERNAL_RECEIPT.json",
+      "sha256": "1770c26c184081e06e489fe17a2a1bedbd9cacf6cc2ebf124fa3f62e1eecb643",
+      "bytes": 564
+    },
+    {
+      "path": "07_HANDOFF_HISTORY/CENTRALDARK_SESSION_MASTER_HANDOFF.zip",
+      "sha256": "bbd5e6551c9c186e2546ec741e24b18cf895cea2334613a529567fe4f95b0dcb",
+      "bytes": 12067220
+    },
+    {
+      "path": "07_HANDOFF_HISTORY/STATUS.md",
+      "sha256": "f9a7f988da37008a2e5334b4f68e7acbbc2b23afc6ed49f6e3b3f3c7a069107d",
+      "bytes": 407
+    },
+    {
+      "path": "08_VISUAL/CENTRALDARK_LACUNA_FECHADA_BASELINE.png",
+      "sha256": "4844460c1cfad7914d6f73e7b93c452d9ec330e3f540c8abf02ba43e6dd63de5",
+      "bytes": 1617743
+    },
+    {
+      "path": "08_VISUAL/CENTRALDARK_MASTER_BASELINE.png",
+      "sha256": "d0cf983f097fbad749d20a9bb90780667db61d0b9fc968097fdd4147ebf62176",
+      "bytes": 2145209
+    },
+    {
+      "path": "08_VISUAL/CENTRALDARK_PROJECT_CANONICAL.dot",
+      "sha256": "e93f163ad36ad90e26bbb1da232637c76c3a91ce5c6f2048b398339aa6e8ff18",
+      "bytes": 1391
+    },
+    {
+      "path": "08_VISUAL/CENTRALDARK_PROJECT_CANONICAL.png",
+      "sha256": "f377b2f4bf058c9cf60c0883626d4980da6f4d295b6c11ec37b43424e4032ca3",
+      "bytes": 84264
+    },
+    {
+      "path": "08_VISUAL/README.md",
+      "sha256": "08936244b63c59b48d90fc41bb4c2e9e1595b8d5d16b83d46f134a288ac30952",
+      "bytes": 218
+    },
+    {
+      "path": "09_SOURCES/CURRENT_BIG_PASTE_20260824.txt",
+      "sha256": "537b3d52c18fb7d6eb47784da389e80a2752720260f0c2204da01d8af2c35c04",
+      "bytes": 15671
+    },
+    {
+      "path": "09_SOURCES/RECOVERED_LIBRARY_RAW/Markdown(20260808-063647).md colado",
+      "sha256": "3769e2b671e5e5cbefb2daf16efb33f2911cb8d5d37a80d305a4ef58ffbda841",
+      "bytes": 14347
+    },
+    {
+      "path": "09_SOURCES/RECOVERED_LIBRARY_RAW/Markdown(20260816-133256).md colado",
+      "sha256": "bf8e9a4f564303b8c56304547dc6127bc892232f971bc425beb3daacd9d70ded",
+      "bytes": 24238
+    },
+    {
+      "path": "09_SOURCES/RECOVERED_LIBRARY_RAW/Screenpipe Activity reshapes CentralDark integratio1n.html",
+      "sha256": "728680bcd012acf0ec3dad889c3af5b2556d42e2160e9418f2f627cca17878a6",
+      "bytes": 813057
+    },
+    {
+      "path": "09_SOURCES/SOURCE_INDEX.json",
+      "sha256": "9c5ad5f9b7e523558959a32deb091f58305995fecda84cc0cf8dcf00755c17f1",
+      "bytes": 1051
+    },
+    {
+      "path": "09_SOURCES/Untitled-2.txt",
+      "sha256": "4694ed7e23473db3fc6f20571891961c68af1c9c5797d19c971a3feb0b8926d3",
+      "bytes": 60551
+    }
+  ],
+  "integrity_model": "FINAL_RECEIPT_INTERNAL is inside ZIP; SHA256SUMS hashes all files except itself; external sidecar hashes final ZIP bytes."
+}

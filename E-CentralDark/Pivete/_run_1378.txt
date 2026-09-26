@@ -1,0 +1,1288 @@
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	﻿2026-08-30T12:01:31.8418784Z Current runner version: '2.336.0'
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:31.8430376Z Runner name: 'vmi3256920-centraldark'
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:31.8431836Z Runner group name: 'Default'
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:31.8433401Z Machine name: 'vmi3256920'
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:31.8438866Z ##[group]GITHUB_TOKEN Permissions
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:31.8442939Z Contents: read
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:31.8444143Z Metadata: read
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:31.8445142Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:31.8449195Z Secret source: Actions
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:31.8451328Z Prepare workflow directory
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:31.9221629Z Prepare all required actions
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:31.9321921Z Getting action download info
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.1948253Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.5790785Z Complete job name: Porta, identidade e governança canônica estão íntegras?
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8272487Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8274543Z with:
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8275422Z   ref: ef6d10f75b880fe527004ff794a353cbd4a6895e
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8276571Z   persist-credentials: false
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8277513Z   fetch-depth: 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8278328Z   submodules: false
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8281748Z   repository: ServerVpss/CentralDark
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8290831Z   token: ***
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8291655Z   ssh-strict: true
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8292468Z   ssh-user: git
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8293260Z   clean: true
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8294096Z   sparse-checkout-cone-mode: true
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8295176Z   fetch-tags: false
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8296011Z   show-progress: true
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8296852Z   lfs: false
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8297656Z   set-safe-directory: true
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8298708Z   allow-unsafe-pr-checkout: false
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:32.8301044Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.0430695Z Syncing repository: ServerVpss/CentralDark
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.0436911Z ##[group]Getting Git version info
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.0438681Z Working directory is '/opt/actions-runner-centraldark/_work/CentralDark/CentralDark'
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.0441034Z [command]/usr/bin/git version
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.0441984Z git version 2.34.1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.0447198Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.0457072Z Copying '/root/.gitconfig' to '/opt/actions-runner-centraldark/_work/_temp/da4fe357-d237-4327-9c39-90dafff0acd9/.gitconfig'
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.0488018Z Temporarily overriding HOME='/opt/actions-runner-centraldark/_work/_temp/da4fe357-d237-4327-9c39-90dafff0acd9' before making global git config changes
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.0491461Z Adding repository directory to the temporary git global config as a safe directory
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.0516557Z [command]/usr/bin/git config --global --add safe.directory /opt/actions-runner-centraldark/_work/CentralDark/CentralDark
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.0592502Z [command]/usr/bin/git config --local --get remote.origin.url
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.0663997Z https://github.com/ServerVpss/CentralDark
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.0712933Z ##[group]Removing previously created refs, to avoid conflicts
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.0812599Z [command]/usr/bin/git rev-parse --symbolic-full-name --verify --quiet HEAD
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.0814369Z HEAD
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.0857847Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.0933896Z [command]/usr/bin/git submodule status
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.1411014Z ##[group]Cleaning the repository
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.1412922Z [command]/usr/bin/git clean -ffdx
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.1618962Z [command]/usr/bin/git reset --hard HEAD
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.2758470Z HEAD is now at ef6d10f75b880 fix(governanca): sanitizar referencias externas proibidas sem perder proveniencia (porta-de-entrada)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.3035052Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.3042959Z ##[group]Disabling automatic garbage collection
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.3044618Z [command]/usr/bin/git config --local gc.auto 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.3107746Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.3109595Z ##[group]Setting up auth
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.3110751Z Removing SSH command configuration
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.3118197Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.3193682Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.3717725Z Removing HTTP extra header
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.3720834Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.3782753Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.4305906Z Removing includeIf entries pointing to credentials config files
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.4314931Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.4384424Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.4868971Z [command]/usr/bin/git config --file /opt/actions-runner-centraldark/_work/_temp/git-credentials-000c6c88-254e-4b4a-ab7d-d4374c8ed45e.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.4965530Z [command]/usr/bin/git config --local includeIf.gitdir:/opt/actions-runner-centraldark/_work/CentralDark/CentralDark/.git.path /opt/actions-runner-centraldark/_work/_temp/git-credentials-000c6c88-254e-4b4a-ab7d-d4374c8ed45e.config
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.5060847Z [command]/usr/bin/git config --local includeIf.gitdir:/opt/actions-runner-centraldark/_work/CentralDark/CentralDark/.git/worktrees/*.path /opt/actions-runner-centraldark/_work/_temp/git-credentials-000c6c88-254e-4b4a-ab7d-d4374c8ed45e.config
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.5161770Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-000c6c88-254e-4b4a-ab7d-d4374c8ed45e.config
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.5235870Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-000c6c88-254e-4b4a-ab7d-d4374c8ed45e.config
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.5299979Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.5303776Z ##[group]Fetching the repository
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:33.5308497Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.3384011Z [command]/usr/bin/git rev-parse --verify --quiet ef6d10f75b880fe527004ff794a353cbd4a6895e^{object}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.3620555Z ef6d10f75b880fe527004ff794a353cbd4a6895e
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.3666908Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.3667856Z ##[group]Determining the checkout info
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.3668751Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.3672768Z [command]/usr/bin/git sparse-checkout disable
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.3873538Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.3922417Z ##[group]Checking out the ref
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.3928242Z [command]/usr/bin/git checkout --progress --force ef6d10f75b880fe527004ff794a353cbd4a6895e
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.4967903Z HEAD is now at ef6d10f75b880 fix(governanca): sanitizar referencias externas proibidas sem perder proveniencia (porta-de-entrada)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.5248155Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.5518474Z [command]/usr/bin/git log -1 --format=%H
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.5753334Z ef6d10f75b880fe527004ff794a353cbd4a6895e
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.5826521Z ##[group]Removing auth
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.5827758Z Removing SSH command configuration
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.5830721Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.5918134Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.6514345Z Removing HTTP extra header
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.6520301Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.6596093Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7158329Z Removing includeIf entries pointing to credentials config files
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7161523Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7204628Z includeif.gitdir:/opt/actions-runner-centraldark/_work/CentralDark/CentralDark/.git.path
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7206485Z includeif.gitdir:/opt/actions-runner-centraldark/_work/CentralDark/CentralDark/.git/worktrees/*.path
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7210299Z includeif.gitdir:/github/workspace/.git.path
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7211350Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7218381Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/opt/actions-runner-centraldark/_work/CentralDark/CentralDark/.git.path
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7254259Z /opt/actions-runner-centraldark/_work/_temp/git-credentials-000c6c88-254e-4b4a-ab7d-d4374c8ed45e.config
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7276407Z [command]/usr/bin/git config --local --unset includeif.gitdir:/opt/actions-runner-centraldark/_work/CentralDark/CentralDark/.git.path \/opt\/actions\-runner\-centraldark\/_work\/_temp\/git\-credentials\-000c6c88\-254e\-4b4a\-ab7d\-d4374c8ed45e\.config
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7434449Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/opt/actions-runner-centraldark/_work/CentralDark/CentralDark/.git/worktrees/*.path
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7546744Z /opt/actions-runner-centraldark/_work/_temp/git-credentials-000c6c88-254e-4b4a-ab7d-d4374c8ed45e.config
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7562681Z [command]/usr/bin/git config --local --unset includeif.gitdir:/opt/actions-runner-centraldark/_work/CentralDark/CentralDark/.git/worktrees/*.path \/opt\/actions\-runner\-centraldark\/_work\/_temp\/git\-credentials\-000c6c88\-254e\-4b4a\-ab7d\-d4374c8ed45e\.config
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7656949Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7720967Z /github/runner_temp/git-credentials-000c6c88-254e-4b4a-ab7d-d4374c8ed45e.config
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7736441Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-000c6c88\-254e\-4b4a\-ab7d\-d4374c8ed45e\.config
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7803313Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7858770Z /github/runner_temp/git-credentials-000c6c88-254e-4b4a-ab7d-d4374c8ed45e.config
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7878310Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-000c6c88\-254e\-4b4a\-ab7d\-d4374c8ed45e\.config
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.7984949Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.8437675Z Removing credentials config '/opt/actions-runner-centraldark/_work/_temp/git-credentials-000c6c88-254e-4b4a-ab7d-d4374c8ed45e.config'
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.8440461Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.8859703Z ##[group]Run set -euo pipefail
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.8860304Z ^[[36;1mset -euo pipefail^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.8860639Z ^[[36;1mactual="$(git rev-parse HEAD)"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.8861010Z ^[[36;1mtest "$actual" = "$HEAD_SHA" || {^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.8861492Z ^[[36;1m  echo "CHECKOUT_HEAD_MISMATCH expected=$HEAD_SHA actual=$actual"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.8861946Z ^[[36;1m  exit 1^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.8862180Z ^[[36;1m}^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.8900334Z shell: /usr/bin/bash -e {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.8900853Z env:
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.8901266Z   HEAD_SHA: ef6d10f75b880fe527004ff794a353cbd4a6895e
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.8902468Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.9332067Z Prepare all required actions
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:34.9333246Z Getting action download info
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.0074233Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3795463Z ##[group]Run ./.github/actions/setup-node24-selfhosted
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3795886Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3912530Z ##[start-action display=Detect Node 24 (system ou tool-cache);id=__self.detect]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3959965Z ##[group]Run set -euo pipefail
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3960589Z ^[[36;1mset -euo pipefail^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3961015Z ^[[36;1mhit=miss^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3961373Z ^[[36;1m^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3961754Z ^[[36;1mif command -v node >/dev/null 2>&1; then^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3962355Z ^[[36;1m  ver="$(node -v 2>/dev/null || true)"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3962884Z ^[[36;1m  if [[ "$ver" == v24.* ]]; then^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3963641Z ^[[36;1m    echo "NODE_HIT=system version=$ver path=$(command -v node)"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3964413Z ^[[36;1m    echo "hit=system" >> "$GITHUB_OUTPUT"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3964939Z ^[[36;1m    exit 0^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3965281Z ^[[36;1m  fi^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3965698Z ^[[36;1m  echo "NODE_PRESENT_NOT_24 version=$ver"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3966197Z ^[[36;1mfi^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3966531Z ^[[36;1m^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3966886Z ^[[36;1mtc="${RUNNER_TOOL_CACHE:-}"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3967486Z ^[[36;1mif [[ -z "$tc" && -n "${AGENT_TOOLSDIRECTORY:-}" ]]; then^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3968111Z ^[[36;1m  tc="$AGENT_TOOLSDIRECTORY"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3968567Z ^[[36;1mfi^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3969432Z ^[[36;1mif [[ -n "$tc" && -d "$tc/node" ]]; then^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3970140Z ^[[36;1m  # Prefer exact 24.x binary already extracted by setup-node^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3970815Z ^[[36;1m  while IFS= read -r bin; do^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3971305Z ^[[36;1m    [[ -z "$bin" ]] && continue^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3971911Z ^[[36;1m    if "$bin" -v 2>/dev/null | grep -q '^v24\.'; then^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3972573Z ^[[36;1m      dir="$(cd "$(dirname "$bin")" && pwd)"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3973131Z ^[[36;1m      echo "$dir" >> "$GITHUB_PATH"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3973684Z ^[[36;1m      echo "NODE_HIT=toolcache path=$bin"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3974434Z ^[[36;1m      echo "hit=toolcache" >> "$GITHUB_OUTPUT"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3976988Z ^[[36;1m      exit 0^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3977413Z ^[[36;1m    fi^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3977925Z ^[[36;1m  done < <(find "$tc/node" -type f -name node 2>/dev/null | head -n 20)^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3978595Z ^[[36;1mfi^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3978931Z ^[[36;1m^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3979558Z ^[[36;1mecho "NODE_HIT=miss — setup-node will download once"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.3980874Z ^[[36;1mecho "hit=miss" >> "$GITHUB_OUTPUT"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.4014833Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.4015514Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.4199364Z NODE_PRESENT_NOT_24 version=v22.22.2
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5313733Z NODE_HIT=toolcache path=/opt/actions-runner-centraldark/_work/_tool/node/24.19.0/x64/bin/node
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5358816Z ##[end-action id=__self.detect;outcome=success;conclusion=success;duration_ms=144]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5362460Z ##[start-action display=Install Node 24 only on cache miss;id=__self.__actions_setup-node]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5385736Z ##[end-action id=__self.__actions_setup-node;outcome=skipped;conclusion=skipped;duration_ms=0]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5388633Z ##[start-action display=Prove Node 24 on PATH;id=__self.__run]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5433095Z ##[group]Run set -euo pipefail
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5433615Z ^[[36;1mset -euo pipefail^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5434074Z ^[[36;1mcommand -v node^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5434557Z ^[[36;1mver="$(node -v)"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5435030Z ^[[36;1mecho "NODE_VERSION=$ver"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5435471Z ^[[36;1mcase "$ver" in^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5435787Z ^[[36;1m  v24.*) echo "NODE24_READY=1" ;;^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5436921Z ^[[36;1m  *) echo "NODE24_READY=0 unexpected=$ver"; exit 1 ;;^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5437323Z ^[[36;1mesac^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5469467Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5470064Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5547774Z /opt/actions-runner-centraldark/_work/_tool/node/24.19.0/x64/bin/node
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5627928Z NODE_VERSION=v24.19.0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5628790Z NODE24_READY=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5648402Z ##[end-action id=__self.__run;outcome=success;conclusion=success;duration_ms=25]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5720024Z ##[group]Run set -euo pipefail
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5720693Z ^[[36;1mset -euo pipefail^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5721779Z ^[[36;1mpython3 scripts/trigger-fabric/verify_repo_contract.py . | tee "$RUNNER_TEMP/centraldark-contract.txt"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5723139Z ^[[36;1mgrep -q '^REPO_CONTRACT_VERIFY=PASS$' "$RUNNER_TEMP/centraldark-contract.txt"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5724310Z ^[[36;1mgrep -q '^CANONICAL_RUNNER_POLICY=PASS$' "$RUNNER_TEMP/centraldark-contract.txt"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5725529Z ^[[36;1mgrep -q '^SELF_HEALING_CONTRACT=PASS$' "$RUNNER_TEMP/centraldark-contract.txt"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5758060Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.5758804Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6464096Z {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6465128Z   "checks": [
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6472888Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6473339Z       "path": "LEIA-ME-IA.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6474057Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6475825Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6476622Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6477525Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6477853Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6478363Z       "path": "CENTRALDARK_AI_BOOT.yaml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6478980Z       "classification": "LIVE_BOOT_PAYLOAD_CONTRACT",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6479801Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6480778Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6481164Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6481803Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6482213Z       "path": "CENTRALDARK_AI_BOOT.yaml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6492387Z       "classification": "NO_FROZEN_BOOT_SNAPSHOT",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6493235Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6493499Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6493969Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6495683Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6496422Z       "path": "AGENTS.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6497183Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6498263Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6499139Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6500076Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6500424Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6500863Z       "path": "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6501463Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6501917Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6502281Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6502613Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6502907Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6503315Z       "path": "docs/CONSCIENCIA/MULTIBUSSOLA.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6503873Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6504305Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6504631Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6504961Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6505240Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6505595Z       "path": ".agents/skills/meta-lupa/SKILL.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6506091Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6506650Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6507022Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6507344Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6507645Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6508905Z       "path": "docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6531113Z       "classification": "CANONICAL_HANDOFF_POMBO_CHECKSUM",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6532762Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6533174Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6533471Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6533745Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6534513Z       "path": "docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-alquimia-operacional-minerio-ouro-cristal.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6536369Z       "classification": "ALCHEMICAL_OPERATIONAL_LEARNING_CRYSTAL",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6536938Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6537272Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6537795Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6538272Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6538927Z       "path": "docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-estabilidade-sob-perturbacao-liberdade-com-fronteira.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6539808Z       "classification": "RESILIENT_AUTONOMY_BOUNDARY_CRYSTAL",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6540204Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6540904Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6541165Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6541380Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6541802Z       "path": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6542432Z       "classification": "MATERIAL_STATE_MACHINE_AND_DETERMINISTIC_SCAFFOLD",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6542890Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6543141Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6543388Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6543599Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6543948Z       "path": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6544423Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6544859Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6545199Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6545551Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6545862Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6546335Z       "path": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6547005Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6547533Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6547849Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6548150Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6548415Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6548905Z       "path": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6549723Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6550126Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6550445Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6550772Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6551052Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6551466Z       "path": "apps/modulos/HERMES-CORE/prompts/hermes-core.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6552032Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6552441Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6552748Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6553073Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6553356Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6553741Z       "path": "apps/modulos/HERMES-CORE/core/orchestrator.mjs",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6554335Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6554791Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6555112Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6555450Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6555731Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6556206Z       "path": "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6556809Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6557232Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6557540Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6557841Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6558136Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6558464Z       "path": "scripts/memory-linker/README.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6558955Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6559738Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6561688Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6562131Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6562732Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6563141Z       "path": "scripts/memory-linker/dream-review-run.mjs",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6563706Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6564038Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6564341Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6564661Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6564945Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6565361Z       "path": "scripts/memory-linker/pattern-discovery.mjs",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6565926Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6566351Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6566708Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6567077Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6567402Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6569702Z       "path": ".agents/skills/session-intelligence-harvester/SKILL.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6570229Z       "classification": "DECLARED_HOOK_NOT_RUNTIME_PROOF",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6570615Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6570858Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6571130Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6571439Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6571896Z       "path": ".agents/skills/knowledge-compiler/SKILL.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6572397Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6572732Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6573387Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6573750Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6574056Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6574422Z       "path": ".agents/skills/vector-memory/SKILL.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6574871Z       "classification": "CONTRACT_EXISTS_RUNTIME_NOT_PROVEN",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6575261Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6575502Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6575813Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6576146Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6576595Z       "path": ".github/workflows/porta-de-entrada.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6577188Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6577725Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6578075Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6578387Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6578608Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6578909Z       "path": ".github/workflows/autonomia-promocao.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6579465Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6579798Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6580047Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6580322Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6580608Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6581000Z       "path": ".github/workflows/trigger-fabric-package.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6581549Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6581961Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6582277Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6582600Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6582918Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6583309Z       "path": "docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6583880Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6584323Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6584635Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6584947Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6585239Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6585958Z       "path": "docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6586775Z       "classification": "POMBO_CHECKSUM_HANDOFF_CONTRACT",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6587338Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6587656Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6587986Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6588256Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6588578Z       "path": ".github/workflows/*.{yml,yaml}",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6589117Z       "classification": "GLOBAL_RUNNER_POLICY",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6589812Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6590176Z       "missing": [],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6590601Z       "files_scanned": 45
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6590998Z     }
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6591274Z   ],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6591597Z   "failed": 0,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6591885Z   "runner_violations": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6592167Z }
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6592402Z REPO_CONTRACT_VERIFY=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6592697Z BOT_ENTRY_CONTRACT=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6592985Z OUTPUT_GUARD_CONTRACT=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6593281Z WORKFLOW_REUSE_CONTRACT=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6593603Z CANONICAL_RUNNER_POLICY=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6594020Z SELF_HEALING_CONTRACT=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6594459Z OPERATIONAL_RULE_LEARNING_CONTRACT=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6594951Z CANONICAL_HANDOFF_POMBO_CHECKSUM=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6595394Z POMBO_CHECKSUM_HANDOFF_CONTRACT=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6595734Z PROOF_CARRYING_CLOSED_LOOP_CONTROL=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6596097Z ALCHEMICAL_OPERATIONAL_LEARNING_CRYSTAL=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6596500Z RESILIENT_AUTONOMY_BOUNDARY_CRYSTAL=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6597020Z MATERIAL_STATE_MACHINE_AND_LEARNING_BINDING=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6597621Z DETERMINISTIC_SCAFFOLD_CONTRACT=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6599203Z NOTE=PASS proves repository contract/path/runner-policy facts only; it does not prove live Windows/VPS/runtime inheritance.
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6706525Z ##[group]Run node scripts/lupa/validar-continuidade-global.mjs
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6707346Z ^[[36;1mnode scripts/lupa/validar-continuidade-global.mjs^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6738702Z shell: /usr/bin/bash -e {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.6739391Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.7490774Z CONTINUIDADE_GLOBAL=PASS MAIN_WRITERS=7 EXTENSION=PASS INPUT_AUTHORITY=PASS COUNTERPROOF=PASS ERRORS=0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.7706247Z ##[group]Run node --test scripts/lupa/authority-approval.test.mjs
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.7707160Z ^[[36;1mnode --test scripts/lupa/authority-approval.test.mjs^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.7736974Z shell: /usr/bin/bash -e {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.7737445Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9313579Z ✔ label canônica presente autoriza (7.730525ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9326392Z ✔ alias histórico normaliza para a label canônica (0.382821ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9359165Z ✔ receipt autenticado transporta intenção vigente sem criar nova autoridade (0.681715ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9365442Z ✔ texto solto nunca concede nem transporta autorização (0.267296ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9371307Z ✔ autor fora da allowlist não transporta (0.299356ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9376013Z ✔ fork ou repo diferente não transporta (0.214739ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9381569Z ✔ receipt incompleto não transporta (0.253951ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9386674Z ✔ label legada do executor não vira autoridade humana (0.23703ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9402451Z ✔ prompt injection isolada continua DATA, não ORDER (1.310143ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9409592Z ✔ materialização derivada do corpo permanece bloqueada (1.179992ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9417943Z ✔ ausência de autoridade é BLOCKED, nunca PASS por silêncio (0.295258ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9589104Z ℹ tests 11
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9590099Z ℹ suites 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9590764Z ℹ pass 11
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9591112Z ℹ fail 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9591767Z ℹ cancelled 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9592459Z ℹ skipped 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9592774Z ℹ todo 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9593062Z ℹ duration_ms 128.732384
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9799923Z ##[group]Run node scripts/lupa/authority-approval.mjs
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9800721Z ^[[36;1mnode scripts/lupa/authority-approval.mjs^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9836663Z shell: /usr/bin/bash -e {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:35.9837147Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.0445878Z AUTHORITY_APPROVED=false AUTHORITY=NONE SOURCE=none DERIVED=false TRANSPORTED=false
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.0661825Z ##[group]Run node --test scripts/lupa/validar-identidade-operacional.test.mjs
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.0662559Z ^[[36;1mnode --test scripts/lupa/validar-identidade-operacional.test.mjs^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.0696099Z shell: /usr/bin/bash -e {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.0700093Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.8810627Z ✔ contrato canônico válido passa (17.874381ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.8823178Z ✔ promotor paralelo é bloqueado pelo guardrail (6.637104ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.8845376Z ✔ identidade operacional da SOUL usa o contrato vivo (15.977249ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.8866171Z ✔ ouro informacional é invariante da SOUL (10.23182ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.8867226Z ✔ MetaLupa não pode restaurar AUTORIZACAO_DO_PIVETE (7.000569ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.8881277Z ✔ atribuir autoridade final ao Pivete falha com caminho e linha (0.355199ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.8891986Z ✔ PIVETE COMANDA em superfície operacional ativa é regressão (7.300145ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.8936572Z ✔ PIVETE MANDA em superfície operacional ativa é regressão (4.497481ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.8938031Z ✔ PIVETE DECIDE em superfície operacional ativa é regressão (6.622347ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.8947927Z ✔ Pivete como orquestrador humano é regressão (0.452711ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.8988400Z ✔ SOL não pode ser fixada a um modelo (0.299657ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.8990172Z ✔ AGENTS conflitante bloqueia (5.96706ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.8992386Z ✔ loader antigo por glob é bloqueado (7.120972ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9025810Z ✔ estratégia de concatenação total é bloqueada (6.458013ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9028158Z ✔ sync legado não pode voltar a ler/escrever pivete_consciencia (6.592742ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9038201Z ✔ sync legado não pode voltar a ler service-role (7.484168ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9045148Z ✔ UNKNOWN=PASS é conflito canônico (5.168958ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9058584Z ✔ token obrigatório ausente não vira verde (0.17183ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9072119Z ✔ perfil local com PERMITO PIVETE aponta local sem publicar conteúdo (1.608528ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9091972Z ✔ perfil local não lê caminhos sensíveis conhecidos (3.341735ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9125580Z ✔ conteúdo multilinha de perfil permanece redigido (1.434735ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9155815Z ✔ UNKNOWN e escritor único são invariantes, não decoração (7.310705ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9196383Z ✔ política de alegação bloqueia promessa permanente sem mecanismo provado (4.675863ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9215380Z ✔ NOT_MEASURED não pode ser classificado como amarelo (4.445545ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9241572Z ✔ Meta Lupa com AUTORIZACAO_DO_PIVETE falha no próprio gate (4.471664ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9256285Z ✔ arquivo de identidade da Meta Lupa com PERMITO PIVETE falha (6.129352ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9285671Z ✔ UI externa não pode ser declarada mecanicamente governada pelo repo (3.598361ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9299462Z ✔ bot injeta os aprendizados mais recentes, não o início truncado do canônico (3.827637ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9316722Z ✔ fronteira bloqueia projeto externo em superfície rastreável (1.800904ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9384026Z ✔ fronteira bloqueia organização externa em workflow (0.790367ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9396508Z ✔ fronteira bloqueia domínio externo em configuração (0.949784ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9405168Z ✔ fronteira cobre caminho sensível rastreado sem revelar conteúdo (0.906594ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9429997Z ✔ segunda camada bloqueia execução remota e override de instruções em texto (3.551835ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9444699Z ✔ segunda camada exige Action e container imutáveis (0.696955ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9459103Z ✔ segunda camada bloqueia dependência, embed e busca Git externos (0.803714ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9464166Z ✔ segunda camada protege manifesto e lockfile contra resolução mutável (0.734714ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9468061Z ✔ segunda camada mede o delta Git e não reabre dívida histórica (201.075458ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9473994Z ✔ segunda camada bloqueia submódulo, binário e dependência vendorizada (209.415675ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9478797Z ✔ segunda camada não bloqueia o próprio guardrail (19.891597ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9482644Z ✔ fronteira limpa permanece verde e integra o gate canônico (18.675097ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9708788Z ℹ tests 40
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9709830Z ℹ suites 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9711439Z ℹ pass 40
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9711971Z ℹ fail 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9712344Z ℹ cancelled 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9712749Z ℹ skipped 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9713119Z ℹ todo 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9713519Z ℹ duration_ms 839.947753
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9883028Z ##[group]Run node --test scripts/lupa/agent-core-adapters.test.mjs
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9883769Z ^[[36;1mnode --test scripts/lupa/agent-core-adapters.test.mjs^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9919134Z shell: /usr/bin/bash -e {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:36.9919772Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3330436Z ✔ LEIA-ME-IA permanece o core singleton e contém invariantes roteadores (12.995212ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3375130Z ✔ todos os adapters ativos são finos, substituíveis e apontam somente para o core (1.982811ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3416924Z ✔ adapters não formam cadeia; só Claude autoload pode atravessar Claude.md antes do core (2.241983ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3480555Z ✔ round-trip de qualquer engine termina no mesmo core (1.054839ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3481505Z ✔ CARACOL fecha ida e volta sem fragmento e bloqueia duplicata (86.147168ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3482608Z ✔ Runtime Plug valida manifesto, resource-fit, lease e swap A↔B (62.179763ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3483903Z ✔ Claude descobre subagentes sem inverter autoridade do core (2.948456ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3485615Z ✔ prompt universal é ponte gerada, não segunda governança manual (0.456038ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3741657Z ℹ tests 8
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3742366Z ℹ suites 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3745355Z ℹ pass 8
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3745863Z ℹ fail 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3748788Z ℹ cancelled 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3749479Z ℹ skipped 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3752318Z ℹ todo 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3752866Z ℹ duration_ms 314.590766
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3987469Z ##[group]Run node scripts/lupa/validar-identidade-operacional.mjs \
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3988539Z ^[[36;1mnode scripts/lupa/validar-identidade-operacional.mjs \^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3989475Z ^[[36;1m  --base-ref "$BASE_SHA" \^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.3989924Z ^[[36;1m  --head-ref "$HEAD_SHA"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.4024497Z shell: /usr/bin/bash -e {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.4024863Z env:
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.4025201Z   BASE_SHA: ef6d10f75b880fe527004ff794a353cbd4a6895e
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.4025645Z   HEAD_SHA: ef6d10f75b880fe527004ff794a353cbd4a6895e
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:37.4026135Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:38.1706890Z IDENTIDADE_OK=1 AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES AGENT_CLAIM=AGENT_CLAIM_CAPABILITY_REQUIRED EXTERNAL_DELTA=PASS ERROS=0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:38.1816001Z IDENTIDADE_OK=1 AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES SOUL=CANONICA MERGE=AUTO_SQUASH_IF_CLEAN ERROS=0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:38.1818352Z IDENTIDADE_OK=1 AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES LOADER=CANONICAL_ALLOWLIST LEGACY_SYNC=DISABLED MERGE=AUTO_SQUASH_IF_CLEAN LEARNING=INFORMATION_GAIN ERROS=0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:38.2084618Z ##[group]Run node --test scripts/lupa/portable-kernel.test.mjs
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:38.2085499Z ^[[36;1mnode --test scripts/lupa/portable-kernel.test.mjs^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:38.2120867Z shell: /usr/bin/bash -e {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:38.2121360Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2517955Z ✔ decência operacional preserva crédito sem transformar crédito em autoridade ou prova (4.205749ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2534425Z ✔ trabalhar estudar e ensinar é contrato obrigatório e transversal antes da camada simples (0.927232ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2546656Z ✔ camada final simples e fechamento semântico são contratos obrigatórios do sistema (0.712944ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2556435Z ✔ imagem é sensor e nunca substitui medição viva (1.59904ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2571577Z ✔ kernel FULL deriva DNA condensado e hashes do mesmo HEAD vivo (201.885192ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2585810Z ✔ kernel COMPACT reproduz o mesmo DNA sem carregar conteúdo integral dos owners (347.94937ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2590794Z ✔ DNA fail-closed se um owner perder marcador de capacidade condensada (321.872576ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2772841Z ℹ tests 7
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2773517Z ℹ suites 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2773868Z ℹ pass 7
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2774194Z ℹ fail 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2774527Z ℹ cancelled 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2774960Z ℹ skipped 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2775337Z ℹ todo 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2775722Z ℹ duration_ms 995.658413
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2955946Z ##[group]Run set -euo pipefail
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2956522Z ^[[36;1mset -euo pipefail^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2958673Z ^[[36;1mnode scripts/lupa/portable-kernel.mjs \^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2960849Z ^[[36;1m  --export "$RUNNER_TEMP/CENTRALDARK-PORTABLE-KERNEL.json" \^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2962193Z ^[[36;1m  --json^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2963413Z ^[[36;1msha256sum "$RUNNER_TEMP/CENTRALDARK-PORTABLE-KERNEL.json"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2998268Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.2998893Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4652581Z {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4739832Z   "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4741936Z   "status": "PASS",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4742313Z   "mode": "FULL",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4742712Z   "package_id": "CENTRALDARK_PORTABLE_KERNEL",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4743300Z   "head_sha": "ef6d10f75b880fe527004ff794a353cbd4a6895e",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4743822Z   "branch": "DETACHED",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4744162Z   "dirty": false,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4744618Z   "members": 20,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4745733Z   "capabilities": 15,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4746004Z   "source_bytes": 360248,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4746294Z   "condensed_dna_bytes": 11462,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4746822Z   "capability_dna_sha256": "e3c3fa56da8019840e6b2ba59691b9520661e0ef953e8c8b72eb15cf9595bad3",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4747774Z   "source_fingerprint_sha256": "a209d686d2a05d262e458194fb37247ac33c88af855dd8ea6e8df0cb214c732b",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4748794Z   "package_sha256": "b062120c7eebc0df1df2e1262e8f5ceb8f18e5916fff0d4abab05bf98d1e1b08",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4750230Z   "export_path": "/opt/actions-runner-centraldark/_work/_temp/CENTRALDARK-PORTABLE-KERNEL.json",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4751475Z   "image_sensor_policy": "PASS",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4753054Z   "portable_boot_policy": "PASS",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4755914Z   "semantic_safety_boundary": "PASS",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4758261Z   "evidence_causality_ontology": "PASS",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4759192Z   "runtime_claim": "UNPROVEN_BY_PORTABLE_KERNEL"
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4760342Z }
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.4899815Z 8c1e2d1d4aef35f1ccc283572f6eadb79d102d97280b7d4fbe1849a26736fae5  /opt/actions-runner-centraldark/_work/_temp/CENTRALDARK-PORTABLE-KERNEL.json
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.5008582Z ##[group]Run node --test scripts/lupa/proof-ownership.test.mjs
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.5009991Z ^[[36;1mnode --test scripts/lupa/proof-ownership.test.mjs^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.5036213Z shell: /usr/bin/bash -e {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.5036696Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7148676Z ✔ grafo válido passa somente como topologia parcial (6.097493ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7172641Z ✔ contrato inválido retorna shape determinístico (1.356097ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7173274Z ✔ cobertura FULL é falso verde e reprova (0.717691ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7173793Z ✔ escopo diferente de TOPOLOGY_ONLY reprova (0.889221ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7174271Z ✔ classe livre não canônica reprova (0.685253ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7175151Z ✔ mesma responsabilidade com provadores diferentes reprova mesmo em classes diferentes (0.601838ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7175913Z ✔ source igual consumer reprova (0.418578ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7176606Z ✔ path não string reprova (2.75193ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7187706Z ✔ path traversal reprova antes de consultar exists (0.914779ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7188668Z ✔ helper rejeita absolutos Windows Unix e traversal (0.424378ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7189631Z ✔ contraprova booleana sem artefato reprova (0.512472ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7227373Z ✔ negative_test_suite precisa ser o negative_test executável (0.762997ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7228617Z ✔ negative_test precisa ter nome de teste (0.379014ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7229960Z ✔ provador igual teste ou consumidor reprova (0.436491ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7245237Z ✔ âncora github exige event_field (0.890344ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7246213Z ✔ depends_on é obrigatório e só aceita ids string (0.562195ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7252960Z ✔ ciclo explícito e implícito reprova (1.025624ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7257097Z ✔ required_registered_invariants impede sumiço silencioso (0.384304ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7262502Z ✔ invariável conhecida não pode estar simultaneamente registrada e UNPROVEN (0.24774ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7269004Z ✔ status de execução é explicitamente fora do escopo deste detector (0.355852ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7272997Z ✔ contrato canônico exige enforcement proporcional para qualquer claim operacional registrado (1.641128ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7275847Z ✔ cobertura total exige tentativa real, denominador e separa inventário de leitura (1.309242ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7283044Z ✔ política operacional não pode ser trocada por YAML ou tecnologia única (0.626333ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7284437Z ✔ claim operacional sem cadeia completa ou com estado stale reprova (0.780439ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7287950Z ✔ fixed point operacional precisa declarar escopo e judge não pode ser o prover (1.16893ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7527264Z ℹ tests 25
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7527734Z ℹ suites 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7528091Z ℹ pass 25
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7528429Z ℹ fail 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7530461Z ℹ cancelled 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7532316Z ℹ skipped 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7532768Z ℹ todo 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7533247Z ℹ duration_ms 182.081067
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7715309Z ##[group]Run node scripts/lupa/proof-ownership.mjs
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7716062Z ^[[36;1mnode scripts/lupa/proof-ownership.mjs^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7744367Z shell: /usr/bin/bash -e {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.7744945Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.8401326Z PROOF_GRAPH_STRUCTURE_OK=1 OPERATIONAL_CLAIM_POLICY=1 COVERAGE=PARTIAL_EXPLICIT TOPOLOGY_ONLY=1 INVARIANT_PROOF=0 INVARIANTS=1 UNREGISTERED_KNOWN=2 CLASSES=1 ERROS=0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.8547284Z ##[group]Run node --test scripts/memory-linker/dream-review.test.mjs
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.8547985Z ^[[36;1mnode --test scripts/memory-linker/dream-review.test.mjs^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.8574322Z shell: /usr/bin/bash -e {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:39.8574793Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.0792801Z ✔ gera somente candidato isolado e nunca aplica direto (9.389936ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.0810323Z ✔ deduplica observacoes equivalentes sem perder fontes e evidencias (2.042905ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.0827526Z ✔ fonte externa nao confiavel fica em quarentena e nunca auto-absorve sozinha (0.602439ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.0839160Z ✔ fonte web nao pode se autodeclarar HUMAN_AUTHORITY (0.784016ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.0853556Z ✔ confirmacao medida mais dono e consumidor verificados torna ouro elegivel sem apagar proveniencia externa (0.999375ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.0887557Z ✔ evidencia apenas declarada sem PASS verificado nao torna ouro elegivel (0.602619ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.0910482Z ✔ confirmacao medida sem prova de consumidor continua candidata mas nao auto-absorvivel (0.68359ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.0927118Z ✔ dono e consumidor verificados sem TOOL_MEASURED ainda nao auto-absorvem (0.506702ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.0944001Z ✔ separa tempo do evento do tempo de observacao (0.486945ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.0970112Z ✔ rejeita evento sem evidencia e nao fabrica aprendizado (0.503734ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.0971816Z ✔ rejeita evento sem HEAD em vez de cola-lo artificialmente ao estado atual (2.582807ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1010803Z ✔ rejeita evento vinculado a outro HEAD (0.486694ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1012460Z ✔ rejeita evento sem delta reutilizavel (0.278107ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1014478Z ✔ rejeita candidato sem dono/consumidor alvo (0.324593ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1016336Z ✔ sanitiza segredo sintetico antes de materializar candidato (2.49321ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1022790Z ✔ sanitizador nao altera texto comum (0.302061ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1026848Z ✔ escrita da proposta e atomica/idempotente e distingue no-op de update (10.974829ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1028169Z ✔ validador reprova proposta que tenta aplicar direto (1.716998ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1105819Z ✔ validador reprova tentativa de desligar MetaLupa ou revalidacao no mesmo HEAD (0.740384ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1107504Z ✔ validador bloqueia falso ouro auto-absorvivel dentro de quarentena (0.714748ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1110425Z ✔ validador bloqueia auto-absorcao sem consumidor e dono evidenciados (0.763367ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1111902Z ✔ HEAD invalido falha fechado (0.784557ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1378384Z ℹ tests 22
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1378765Z ℹ suites 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1381109Z ℹ pass 22
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1385534Z ℹ fail 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1386221Z ℹ cancelled 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1387120Z ℹ skipped 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1387506Z ℹ todo 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1387815Z ℹ duration_ms 222.339091
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1560047Z ##[group]Run set -euo pipefail
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1560661Z ^[[36;1mset -euo pipefail^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1561233Z ^[[36;1mnode --check scripts/memory-linker/library-router.mjs^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1562075Z ^[[36;1mnode --test scripts/memory-linker/library-router.test.mjs^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1588418Z shell: /usr/bin/bash -e {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.1588906Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3867689Z ✔ catálogo válido aceita PDF + EPUB + JWPUB sem fingir que conteúdo já foi ingerido (3.932412ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3879639Z ✔ Google Drive entra como referência com proveniência explícita, sem fingir INGESTED (0.645859ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3882137Z ✔ fonte Google Drive sem proveniência falha fechado (0.843146ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3883773Z ✔ fonte marcada INGESTED exige SHA-256 real (0.548689ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3884888Z ✔ fonte em quarentena sensível não pode alimentar entrada cognitiva (0.660516ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3889574Z ✔ continuidade + entrada-saída roteia Salmo 121 (1.376136ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3891475Z ✔ ameaça + proteção distingue 91 de 27 (0.557224ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3912677Z ✔ ameaça + coragem distingue 27 de 91 (1.843012ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3926465Z ✔ referência contextual fica silenciosa quando relevância é baixa (0.591789ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3932729Z ✔ referência contextual cita referência, não inventa texto da fonte (0.891445ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3937442Z ✔ uma entrada pode alimentar cognição, skill candidata e conversa sem virar três cópias (0.348117ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3938917Z ✔ deliberação persiste resumo auditável, não cadeia privada de pensamento (0.739513ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3940108Z ✔ ids duplicados falham fechado (0.483808ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3941071Z ✔ identidade estável usa external_id e versão, não nome nem caminho móvel (0.977805ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3942205Z ✔ arquivo movido com mesmo SHA-256 é reencontrado e atualiza locator (0.963839ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3943234Z ✔ mesmo nome com locator diferente vira SOURCE_CONFLICT (0.317589ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3952181Z ✔ conteúdo alterado na mesma fonte vira SOURCE_CHANGED (0.718965ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3953553Z ✔ fonte removida vira SOURCE_MISSING e referência não pode ser citada (0.789736ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3959612Z ✔ citação exige retrieval observado na sessão; referência inventada é rejeitada (0.279389ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3964891Z ✔ claim cristaliza identidade, nova sessão recupera a fonte e cita referência atual nova (1.17356ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3997573Z ✔ retrieval sem referência observável mantém REFERENCE_STALE (0.410863ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.3999089Z ✔ SOURCE_CHANGED não reaproveita referência corrente de uma evidência antiga (0.393881ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.4000743Z ✔ deliberação não cristaliza turnXfileY efêmero como evidência canônica (0.331114ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.4258186Z ℹ tests 23
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.4258572Z ℹ suites 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.4258904Z ℹ pass 23
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.4259461Z ℹ fail 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.4259884Z ℹ cancelled 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.4260299Z ℹ skipped 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.4260634Z ℹ todo 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.4261045Z ℹ duration_ms 166.040993
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.4429370Z ##[group]Run node --check scripts/memory-linker/dream-review.mjs
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.4430218Z ^[[36;1mnode --check scripts/memory-linker/dream-review.mjs^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.4457373Z shell: /usr/bin/bash -e {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.4457803Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.5030017Z ##[group]Run set +e
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.5030516Z ^[[36;1mset +e^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.5031165Z ^[[36;1moutput="$(node --test apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs 2>&1)"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.5031944Z ^[[36;1mstatus=$?^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.5032291Z ^[[36;1mset -e^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.5032615Z ^[[36;1mprintf '%s\n' "${output}"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.5033031Z ^[[36;1mif [ "${status}" -ne 0 ]; then^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.5033706Z ^[[36;1m  detail="$(printf '%s\n' "${output}" | tail -n 40 | tr '\n' ' ' | sed 's/%/%25/g; s/\r/%0D/g')"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.5035037Z ^[[36;1m  echo "::error file=apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs,title=HERMES_CONTINUITY_TEST_FAIL::${detail}"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.5036167Z ^[[36;1m  exit "${status}"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.5036558Z ^[[36;1mfi^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.5061272Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.5061904Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6884740Z file:///opt/actions-runner-centraldark/_work/CentralDark/CentralDark/apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs:22
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6887434Z import { aplicarGatePercepcao } from './decisor.mjs';
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6888416Z          ^^^^^^^^^^^^^^^^^^^^
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6892274Z SyntaxError: The requested module './decisor.mjs' does not provide an export named 'aplicarGatePercepcao'
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6897660Z     at #asyncInstantiate (node:internal/modules/esm/module_job:327:21)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6898922Z     at async ModuleJob.run (node:internal/modules/esm/module_job:431:5)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6900207Z     at async node:internal/modules/esm/loader:643:26
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6901116Z     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6903817Z 
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6904676Z Node.js v24.19.0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6905809Z ✖ apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs (97.816517ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6906480Z ℹ tests 1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6906986Z ℹ suites 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6907634Z ℹ pass 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6908198Z ℹ fail 1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6908837Z ℹ cancelled 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6909548Z ℹ skipped 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6909965Z ℹ todo 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6910483Z ℹ duration_ms 112.707958
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6910866Z 
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6911173Z ✖ failing tests:
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6911551Z 
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6912015Z test at apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs:1:1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6913036Z ✖ apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs (97.816517ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.6913889Z   'test failed'
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7005426Z ##[error]file:///opt/actions-runner-centraldark/_work/CentralDark/CentralDark/apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs:22 import { aplicarGatePercepcao } from './decisor.mjs';          ^^^^^^^^^^^^^^^^^^^^ SyntaxError: The requested module './decisor.mjs' does not provide an export named 'aplicarGatePercepcao'     at #asyncInstantiate (node:internal/modules/esm/module_job:327:21)     at async ModuleJob.run (node:internal/modules/esm/module_job:431:5)     at async node:internal/modules/esm/loader:643:26     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)  Node.js v24.19.0 ✖ apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs (97.816517ms) ℹ tests 1 ℹ suites 0 ℹ pass 0 ℹ fail 1 ℹ cancelled 0 ℹ skipped 0 ℹ todo 0 ℹ duration_ms 112.707958  ✖ failing tests:  test at apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs:1:1 ✖ apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs (97.816517ms)   'test failed' 
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7054438Z ##[error]Process completed with exit code 1.
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7220645Z ##[group]Run set -uo pipefail
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7221081Z ^[[36;1mset -uo pipefail^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7221360Z ^[[36;1mstatus=0^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7221774Z ^[[36;1mpython3 scripts/trigger-fabric/verify_repo_contract.py . || status=1^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7222349Z ^[[36;1mnode apps/modulos/mapeamento/core/validar-mapa.mjs \^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7222793Z ^[[36;1m  --repo-root "$GITHUB_WORKSPACE" \^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7223152Z ^[[36;1m  --base-sha "$BASE_SHA" \^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7223506Z ^[[36;1m  --head-sha "$HEAD_SHA" \^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7223911Z ^[[36;1m  --approved "$AUTHORITY_APPROVED" || status=1^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7224665Z ^[[36;1mnode scripts/lupa/validar-continuidade-global.mjs --json || status=1^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7225454Z ^[[36;1mnode scripts/lupa/validar-porta-de-entrada.mjs \^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7226050Z ^[[36;1m  --base-sha "$BASE_SHA" \^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7226486Z ^[[36;1m  --head-sha "$HEAD_SHA" \^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7226983Z ^[[36;1m  --json || status=1^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7227567Z ^[[36;1mnode scripts/lupa/validar-identidade-operacional.mjs \^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7228161Z ^[[36;1m  --base-ref "$BASE_SHA" \^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7228617Z ^[[36;1m  --head-ref "$HEAD_SHA" \^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7229033Z ^[[36;1m  --json || status=1^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7229607Z ^[[36;1mnode --test scripts/lupa/agent-core-adapters.test.mjs || status=1^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7230189Z ^[[36;1mnode scripts/lupa/portable-kernel.mjs --json || status=1^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7231057Z ^[[36;1mnode scripts/lupa/proof-ownership.mjs || status=1^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7231647Z ^[[36;1mnode --test scripts/webhook/lib/safe-git-deploy.test.mjs || status=1^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7232625Z ^[[36;1mnode .agents/skills/git-state-safety/scripts/validate.mjs || status=1^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7233235Z ^[[36;1mexit "$status"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7259992Z shell: /usr/bin/bash -e {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7260443Z env:
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7260939Z   BASE_SHA: ef6d10f75b880fe527004ff794a353cbd4a6895e
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7261554Z   HEAD_SHA: ef6d10f75b880fe527004ff794a353cbd4a6895e
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7262147Z   AUTHORITY_APPROVED: false
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.7262570Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8082249Z {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8083065Z   "checks": [
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8084150Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8084646Z       "path": "LEIA-ME-IA.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8085298Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8086161Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8087859Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8088361Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8089075Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8089935Z       "path": "CENTRALDARK_AI_BOOT.yaml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8090853Z       "classification": "LIVE_BOOT_PAYLOAD_CONTRACT",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8091652Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8092227Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8107131Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8107989Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8108532Z       "path": "CENTRALDARK_AI_BOOT.yaml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8109560Z       "classification": "NO_FROZEN_BOOT_SNAPSHOT",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8110270Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8110755Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8111165Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8111536Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8111956Z       "path": "AGENTS.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8119643Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8120307Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8120812Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8121349Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8121773Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8122303Z       "path": "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8123047Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8123664Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8124141Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8124592Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8125087Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8125544Z       "path": "docs/CONSCIENCIA/MULTIBUSSOLA.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8126113Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8127512Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8128145Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8128638Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8129547Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8130108Z       "path": ".agents/skills/meta-lupa/SKILL.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8130786Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8131514Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8131808Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8132062Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8132280Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8134058Z       "path": "docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8134702Z       "classification": "CANONICAL_HANDOFF_POMBO_CHECKSUM",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8135198Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8135513Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8135824Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8136089Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8136755Z       "path": "docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-alquimia-operacional-minerio-ouro-cristal.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8137737Z       "classification": "ALCHEMICAL_OPERATIONAL_LEARNING_CRYSTAL",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8138286Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8138602Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8138951Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8139381Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8140162Z       "path": "docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-estabilidade-sob-perturbacao-liberdade-com-fronteira.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8141053Z       "classification": "RESILIENT_AUTONOMY_BOUNDARY_CRYSTAL",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8141633Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8142523Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8142829Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8143183Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8143768Z       "path": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8144563Z       "classification": "MATERIAL_STATE_MACHINE_AND_DETERMINISTIC_SCAFFOLD",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8146718Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8147062Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8147604Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8148002Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8148809Z       "path": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8149583Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8149998Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8150305Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8150609Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8150914Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8151426Z       "path": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8152136Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8152600Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8152915Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8153226Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8153499Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8153995Z       "path": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8154664Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8155089Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8155327Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8155560Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8155762Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8156101Z       "path": "apps/modulos/HERMES-CORE/prompts/hermes-core.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8156630Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8157068Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8157384Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8157692Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8157910Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8158291Z       "path": "apps/modulos/HERMES-CORE/core/orchestrator.mjs",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8158828Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8159815Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8160073Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8160305Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8160508Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8160889Z       "path": "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8161530Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8161941Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8162248Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8162549Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8162835Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8163678Z       "path": "scripts/memory-linker/README.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8164170Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8164585Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8164910Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8165217Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8165499Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8165887Z       "path": "scripts/memory-linker/dream-review-run.mjs",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8166442Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8166873Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8167193Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8167525Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8167821Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8168228Z       "path": "scripts/memory-linker/pattern-discovery.mjs",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8169203Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8169794Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8170092Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8170406Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8170686Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8171141Z       "path": ".agents/skills/session-intelligence-harvester/SKILL.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8171826Z       "classification": "DECLARED_HOOK_NOT_RUNTIME_PROOF",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8172327Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8172655Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8172974Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8173254Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8173636Z       "path": ".agents/skills/knowledge-compiler/SKILL.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8174161Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8174600Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8174938Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8175659Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8175945Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8176338Z       "path": ".agents/skills/vector-memory/SKILL.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8176975Z       "classification": "CONTRACT_EXISTS_RUNTIME_NOT_PROVEN",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8177539Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8177880Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8178205Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8178504Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8178904Z       "path": ".github/workflows/porta-de-entrada.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8179959Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8180428Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8180780Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8181152Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8181479Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8181907Z       "path": ".github/workflows/autonomia-promocao.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8182493Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8182964Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8183325Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8183667Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8183947Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8184352Z       "path": ".github/workflows/trigger-fabric-package.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8184883Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8185303Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8185621Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8185940Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8186280Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8186717Z       "path": "docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8187270Z       "classification": "PROVEN_IN_REPO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8187987Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8188300Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8188603Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8188878Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8189556Z       "path": "docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8190302Z       "classification": "POMBO_CHECKSUM_HANDOFF_CONTRACT",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8190773Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8191069Z       "missing": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8191374Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8191671Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8191986Z       "path": ".github/workflows/*.{yml,yaml}",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8192486Z       "classification": "GLOBAL_RUNNER_POLICY",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8192961Z       "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8193311Z       "missing": [],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8214949Z       "files_scanned": 45
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8215478Z     }
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8215737Z   ],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8216000Z   "failed": 0,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8216317Z   "runner_violations": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8218852Z }
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8219212Z REPO_CONTRACT_VERIFY=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8219814Z BOT_ENTRY_CONTRACT=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8220184Z OUTPUT_GUARD_CONTRACT=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8220556Z WORKFLOW_REUSE_CONTRACT=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8220934Z CANONICAL_RUNNER_POLICY=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8221321Z SELF_HEALING_CONTRACT=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8221766Z OPERATIONAL_RULE_LEARNING_CONTRACT=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8222266Z CANONICAL_HANDOFF_POMBO_CHECKSUM=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8222778Z POMBO_CHECKSUM_HANDOFF_CONTRACT=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8223272Z PROOF_CARRYING_CLOSED_LOOP_CONTROL=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8223817Z ALCHEMICAL_OPERATIONAL_LEARNING_CRYSTAL=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8224372Z RESILIENT_AUTONOMY_BOUNDARY_CRYSTAL=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8224911Z MATERIAL_STATE_MACHINE_AND_LEARNING_BINDING=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8225457Z DETERMINISTIC_SCAFFOLD_CONTRACT=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:40.8226413Z NOTE=PASS proves repository contract/path/runner-policy facts only; it does not prove live Windows/VPS/runtime inheritance.
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5017786Z {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5019024Z   "ok": false,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5020162Z   "source_of_truth": "apps/modulos/mapeamento/config/mapa-canonico.json",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5023617Z   "errors": [
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5025174Z     "consumidor sem token [ai-universal-entrypoint] CLAUDE.md: docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5026907Z     "consumidor sem token [ai-universal-entrypoint] .claude/rules/00-centraldark-boot-universal.md: docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5035577Z     "consumidor sem token [ai-universal-entrypoint] .claude/rules/00-centraldark-boot-universal.md: CENTRALDARK_AI_BOOT",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5036902Z     "consumidor sem token [meta-lupa-identity] CLAUDE.md: .agents/skills/meta-lupa/SKILL.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5038004Z     "consumidor sem token [meta-lupa-identity] CLAUDE.md: .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5039526Z     "consumidor sem token [meta-lupa-identity] .claude/rules/00-centraldark-boot-universal.md: .agents/skills/meta-lupa/SKILL.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5041176Z     "consumidor sem token [meta-lupa-identity] .claude/rules/00-centraldark-boot-universal.md: .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA"
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5042262Z   ],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5042571Z   "warnings": [
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5043013Z     "caminho consolidado ausente no checkout: secrets/",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5043811Z     "caminho consolidado ausente no checkout: apps/modulos/clone-deck/",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5045599Z     "candidato a versão paralela já existente: apps/modulos/Bolt/source/app/lib/common/prompts/new-prompt.ts",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5046840Z     "candidato a versão paralela já existente: docs/CONSCIENCIA/INSTALADOR/backup/README.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5048089Z     "candidato a versão paralela já existente: docs/CONSCIENCIA/INSTALADOR/backup/install.sh.GOLD-MASTER",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5052312Z     "candidato a versão paralela já existente: docs/INSTALADOR/backup/README.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5053806Z     "candidato a versão paralela já existente: docs/INSTALADOR/backup/install.sh.GOLD-MASTER",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5054609Z     "candidato a versão paralela já existente: public/jarvis-lab-v2/index.html",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5055324Z     "candidato a versão paralela já existente: public/jarvis-lab-v3/index.html",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5056034Z     "candidato a versão paralela já existente: public/jarvis-lab-v4/index.html",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5056924Z     "candidato a versão paralela já existente: scripts/backup-whatsapp-session.sh",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5057812Z     "candidato a versão paralela já existente: src/apps/modulos/telepainel/components/backup/BackupManager.tsx",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5058819Z     "candidato a versão paralela já existente: src/funcionalidades/telepainel/components/backup/BackupManager.tsx",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5060540Z     "candidato a versão paralela já existente: supabase/functions/data-backup/index.ts"
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5061249Z   ],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5061545Z   "changed_files": 0,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5062043Z   "diff_base_sha": "ef6d10f75b880fe527004ff794a353cbd4a6895e",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5062618Z   "touched_locks": [],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5063556Z   "touched_evidence_locks": [],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5064101Z   "consolidation_proven": 0,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5064582Z   "consolidation_protected_unproven": 38,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5064950Z   "consolidation_invalid": 0,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5065333Z   "new_modules": [],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5065608Z   "tracked_files": 4576,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5066934Z   "canonical_contracts": [
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5067351Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5067716Z       "id": "ai-universal-entrypoint",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5068189Z       "source": "LEIA-ME-IA.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5068592Z       "consumers": 9
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5068944Z     },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5069379Z     {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5069756Z       "id": "meta-lupa-identity",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5070447Z       "source": ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5071038Z       "target": ".agents/skills/meta-lupa/SKILL.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5071791Z       "expected": "42691e008ba50ee55646ca81113bf0abfde87af2",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5072316Z       "head": "42691e008ba50ee55646ca81113bf0abfde87af2",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5073355Z       "worktree": "42691e008ba50ee55646ca81113bf0abfde87af2"
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5073729Z     }
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5074348Z   ],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5076724Z   "parallel_existing": 12
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5077256Z }
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5698780Z {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5699598Z   "guardrail": "validar-continuidade-global",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5700479Z   "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5701374Z   "extension": "docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5702066Z   "scope": "GLOBAL",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5702511Z   "temporal_scope": "CONTINUOUS",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5702921Z   "main_writers": [
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5703299Z     ".github/workflows/notion-sync.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5703823Z     ".github/workflows/painel-vivo.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5704307Z     ".github/workflows/obsidian-index.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5704809Z     ".github/workflows/estado-retomada.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5705336Z     ".github/workflows/painel-validacao.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5705880Z     ".github/workflows/painel-auto-update.yml",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5706491Z     ".github/workflows/linear-pendencias-sync.yml"
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5706990Z   ],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5707453Z   "shared_writer_push": "scripts/lupa/writer-safe-push-main.sh",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5708073Z   "input_authority_boundary": "PASS",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5708540Z   "counterproof": "PASS",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5708920Z   "errors": [],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5709352Z   "ok": true
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.5709654Z }
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8050796Z {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8051745Z   "guardrail": "validar-porta-de-entrada",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8054198Z   "porta": "LEIA-ME-IA.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8054656Z   "porta_viva": "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8055284Z   "contrato_delta": "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8056038Z   "contrato_reconciliacao": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8056666Z   "estrutura_vps": "docs/CONSCIENCIA/04-ESTRUTURA-VPS.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8057124Z   "contrato_reconciliacao_schema_expected": 3,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8057514Z   "contrato_reconciliacao_schema_observed": 3,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8057947Z   "arquitetura_padrao_marker": "ONE_CORE_MANY_ARMS_STANDARD",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8058665Z   "identidade_lupa": ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8059424Z   "reuse_before_create_required": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8059764Z   "centraldark_root_only_required": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8060846Z   "workflow_reuse_required": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8061397Z   "ai_deterministic_fallback_required": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8061920Z   "base_sha": "ef6d10f75b880fe527004ff794a353cbd4a6895e",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8062501Z   "head_sha": "ef6d10f75b880fe527004ff794a353cbd4a6895e",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8063007Z   "adaptadores_obrigatorios": [
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8063423Z     "AGENTS.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8063786Z     "CHATGPT.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8064108Z     "CODEX.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8064387Z     "CLAUDE.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8064622Z     "README.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8064928Z     ".claude/rules/00-centraldark-boot-universal.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8065331Z     ".github/copilot-instructions.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8065652Z     "GEMINI.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8066056Z     ".cursor/rules/centraldark-governanca.mdc",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8066546Z     ".windsurfrules"
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8066891Z   ],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8067219Z   "adaptadores_encontrados": [
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8067570Z     "AGENTS.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8067822Z     "CHATGPT.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8068158Z     "CODEX.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8068393Z     "CLAUDE.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8068628Z     "README.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8068944Z     ".claude/rules/00-centraldark-boot-universal.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8069518Z     ".github/copilot-instructions.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8069886Z     "GEMINI.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8070173Z     ".cursor/rules/centraldark-governanca.mdc",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8070550Z     ".windsurfrules"
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8071068Z   ],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8071431Z   "canonicos_encontrados": 20,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8071769Z   "canonicos_alcancaveis": 11,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8072070Z   "errors": [
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8072581Z     "ADAPTADOR_SEM_TOKEN:CHATGPT.md:docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8073243Z     "ADAPTADOR_SEM_TOKEN:CHATGPT.md:CENTRALDARK_AI_BOOT",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8073747Z     "ADAPTADOR_SEM_TOKEN:CHATGPT.md:.agents/skills/meta-lupa/SKILL.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8074653Z     "ADAPTADOR_SEM_TOKEN:CHATGPT.md:.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8092764Z     "ADAPTADOR_SEM_TOKEN:CLAUDE.md:docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8093822Z     "ADAPTADOR_SEM_TOKEN:CLAUDE.md:.agents/skills/meta-lupa/SKILL.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8094645Z     "ADAPTADOR_SEM_TOKEN:CLAUDE.md:.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8096376Z     "ADAPTADOR_SEM_TOKEN:[REDIGIDO-PRESERVACAO]:docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8098167Z     "ADAPTADOR_SEM_TOKEN:[REDIGIDO-PRESERVACAO]:CENTRALDARK_AI_BOOT",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8099558Z     "ADAPTADOR_SEM_TOKEN:[REDIGIDO-PRESERVACAO]:.agents/skills/meta-lupa/SKILL.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8101102Z     "ADAPTADOR_SEM_TOKEN:[REDIGIDO-PRESERVACAO]:.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8102446Z     "RECONCILIACAO_SEM_TOKEN:[REDIGIDO-PRESERVACAO]:REUSE_BEFORE_CREATE_REQUIRED",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8103939Z     "RECONCILIACAO_SEM_TOKEN:[REDIGIDO-PRESERVACAO]:docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8105424Z     "RECONCILIACAO_SEM_TOKEN:[REDIGIDO-PRESERVACAO]:FALHA_DE_RECONCILIACAO_DE_CONTEXTO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8106460Z     "RECONCILIACAO_SEM_TOKEN:CHATGPT.md:REUSE_BEFORE_CREATE_REQUIRED",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8107825Z     "RECONCILIACAO_SEM_TOKEN:CHATGPT.md:docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8108887Z     "RECONCILIACAO_SEM_TOKEN:CHATGPT.md:FALHA_DE_RECONCILIACAO_DE_CONTEXTO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8109961Z     "CANONICO_ORFAO:docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8111372Z     "CANONICO_ORFAO:docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/OLHO-BIONICO-ANTI-FLASH.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8112407Z     "CANONICO_ORFAO:docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8113250Z     "CANONICO_ORFAO:docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8113958Z     "CANONICO_ORFAO:docs/CONSCIENCIA/ADMINISTRAVEIS.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8114695Z     "CANONICO_ORFAO:docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8115415Z     "CANONICO_ORFAO:docs/CONSCIENCIA/MAPA-DO-CEREBRO.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8116239Z     "CANONICO_ORFAO:docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8117379Z     "CANONICO_ORFAO:.agents/skills/centraldark-operational-method/references/HUMAN-ACTION-DIRECT-LINK.md"
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8118254Z   ],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8118550Z   "warnings": [],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8118929Z   "known_debt_exceptions": 0,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8119465Z   "ok": false
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:41.8119771Z }
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5615264Z {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5615905Z   "guardrail": "validar-identidade-operacional",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5616534Z   "authority": "SEGREDO/CHEFE",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5616987Z   "coordinator": "SOL",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5617439Z   "executor": "PIVETE/HERMES",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5618507Z   "regional_vocative": "pivete != identidade técnica",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5619184Z   "soul": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5620091Z   "context_recovery": "#ACORDAR",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5620503Z   "context_loader": "CANONICAL_CONTEXT_ALLOWLIST",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5623108Z   "legacy_sync": "DISABLED_CANONICAL_GIT_ONLY",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5623835Z   "deployment": "PRODUCTION_FIRST + CAUSAL_SCOPE_FIRST",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5624706Z   "merge_policy": "INTENT_AUTHORIZED -> AUTO_SQUASH_IF_CLEAN -> MAIN",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5625427Z   "convergence": "FULL_ADVERSARIAL_ONLY_ON_CHEFE_REQUEST",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5626110Z   "learning": "CONFRONTO -> EVIDENCIA -> DELTA_DE_CRENCA -> REGRA|TESTE|GUARDRAIL|MEMORIA -> OURO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5626893Z   "information_gain_required": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5627279Z   "writer_rule": "WRITER_UNICO",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5627700Z   "unknown_rule": "UNKNOWN_NAO_PASSA",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5628371Z   "agent_claim_rule": "AGENT_CLAIM_CAPABILITY_REQUIRED",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5628971Z   "external_delta": {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5629582Z     "status": "PASS",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5630184Z     "base_ref": "ef6d10f75b880fe527004ff794a353cbd4a6895e",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5630824Z     "head_ref": "ef6d10f75b880fe527004ff794a353cbd4a6895e",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5631251Z     "additions": 0,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5631628Z     "findings": []
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5631902Z   },
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5632491Z   "canonical_findings": [],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5632917Z   "profile_reports": [],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5655855Z   "findings": [],
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5656390Z   "ok": true
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.5656917Z }
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.8741619Z ✔ LEIA-ME-IA permanece o core singleton e contém invariantes roteadores (3.753631ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.8743295Z ✔ todos os adapters ativos são finos, substituíveis e apontam somente para o core (1.624897ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.8762285Z ✔ adapters não formam cadeia; só Claude autoload pode atravessar Claude.md antes do core (1.889669ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.8766695Z ✔ round-trip de qualquer engine termina no mesmo core (0.675164ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.8768182Z ✔ CARACOL fecha ida e volta sem fragmento e bloqueia duplicata (74.271084ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.8772506Z ✔ Runtime Plug valida manifesto, resource-fit, lease e swap A↔B (59.312649ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.8862324Z ✔ Claude descobre subagentes sem inverter autoridade do core (3.774629ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.8864079Z ✔ prompt universal é ponte gerada, não segunda governança manual (0.613398ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.8989124Z ℹ tests 8
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.8990956Z ℹ suites 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.8991657Z ℹ pass 8
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.8992545Z ℹ fail 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.8994481Z ℹ cancelled 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.8994952Z ℹ skipped 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.8996320Z ℹ todo 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:42.8996809Z ℹ duration_ms 259.53968
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0427361Z {
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0427919Z   "ok": true,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0428360Z   "status": "PASS",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0428656Z   "mode": "FULL",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0429077Z   "package_id": "CENTRALDARK_PORTABLE_KERNEL",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0433938Z   "head_sha": "ef6d10f75b880fe527004ff794a353cbd4a6895e",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0434695Z   "branch": "DETACHED",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0435144Z   "dirty": false,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0436464Z   "members": 20,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0436866Z   "capabilities": 15,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0437284Z   "source_bytes": 360248,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0437735Z   "condensed_dna_bytes": 11462,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0438587Z   "capability_dna_sha256": "e3c3fa56da8019840e6b2ba59691b9520661e0ef953e8c8b72eb15cf9595bad3",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0440151Z   "source_fingerprint_sha256": "a209d686d2a05d262e458194fb37247ac33c88af855dd8ea6e8df0cb214c732b",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0441407Z   "package_sha256": "b062120c7eebc0df1df2e1262e8f5ceb8f18e5916fff0d4abab05bf98d1e1b08",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0442189Z   "export_path": null,
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0442616Z   "image_sensor_policy": "PASS",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0443116Z   "portable_boot_policy": "PASS",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0443620Z   "semantic_safety_boundary": "PASS",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0445757Z   "evidence_causality_ontology": "PASS",
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0446307Z   "runtime_claim": "UNPROVEN_BY_PORTABLE_KERNEL"
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.0446879Z }
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.1077794Z PROOF_GRAPH_STRUCTURE_OK=1 OPERATIONAL_CLAIM_POLICY=1 COVERAGE=PARTIAL_EXPLICIT TOPOLOGY_ONLY=1 INVARIANT_PROOF=0 INVARIANTS=1 UNREGISTERED_KNOWN=2 CLASSES=1 ERROS=0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.6427383Z ✔ clean behind: observa e aplica somente fast-forward, mesmo chamado de subdiretório (379.073473ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:43.9094838Z ✔ dirty worktree: bloqueia sem stash/reset e preserva bytes locais (268.680223ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:44.1940563Z ✔ untracked worktree: bloqueia em vez de arriscar colisão de caminho (283.911747ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:44.4154212Z ✔ local ahead: bloqueia e preserva commit local não publicado (221.581696ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:44.7194969Z ✔ divergência: bloqueia e não escolhe merge/rebase pelo humano (303.82271ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.1085026Z ✔ rewrite remoto: detecta linhagem quebrada após fetch e preserva branch local (386.810639ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.3057927Z ✔ branch errada ou HEAD destacado: fail-closed sem troca automática (197.820534ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.3084718Z ✔ contrato estático: consumidor não volta a reset --hard/force e exige ff-only (3.213318ms)
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.3297688Z ℹ tests 8
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.3298979Z ℹ suites 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.3299610Z ℹ pass 8
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.3300353Z ℹ fail 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.3300813Z ℹ cancelled 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.3301193Z ℹ skipped 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.3301560Z ℹ todo 0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.3301935Z ℹ duration_ms 2155.933883
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.3896048Z GIT_STATE_SAFETY=PASS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.3905533Z PROVENANCE_SOURCES=9
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.3906652Z MUTATION_POLICY=FAST_FORWARD_ONLY_OR_BLOCK
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.3907436Z FORCE_PUSH=FORBIDDEN
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.3908106Z RESET_HARD_OPERATIONAL=FORBIDDEN
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4004453Z ##[error]Process completed with exit code 1.
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4095354Z ##[group]Run set -euo pipefail
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4095978Z ^[[36;1mset -euo pipefail^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4096578Z ^[[36;1mecho "HEAD_SHA=${HEAD_SHA}"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4097072Z ^[[36;1mecho "EVENT_NAME=${EVENT_NAME}"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4097641Z ^[[36;1mecho "EXECUTOR=self-hosted-linux"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4098240Z ^[[36;1mecho "RUNNER_POLICY_SCOPE=ALL_ROOT_WORKFLOWS"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4098861Z ^[[36;1mecho "GITHUB_HOSTED_RUNNER_ALLOWED=0"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4099554Z ^[[36;1mecho "ANY_BRANCH_PUSH_GATED=1"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4100101Z ^[[36;1mecho "ROTA_PRIMARIA=self-hosted-linux"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4100832Z ^[[36;1mecho "ROTA_FALLBACK=BLOCKED_NO_HOSTED"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4101397Z ^[[36;1mecho "CENTRALDARK_ROOT_ONLY=1"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4101924Z ^[[36;1mecho "WORKFLOW_REUSE_REQUIRED=1"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4102509Z ^[[36;1mecho "AI_DETERMINISTIC_FALLBACK_REQUIRED=1"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4103164Z ^[[36;1mecho "GLOBAL_CONTINUITY_HARD_GATE=1"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4108512Z ^[[36;1mecho "MOTHER_BRANCH_GATED=1"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4109206Z ^[[36;1mecho "CANONICAL_LABELS_REQUIRED=1"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4109887Z ^[[36;1mecho "CENTRALDARK_API_SINGLE_ENTRY=1"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4110574Z ^[[36;1mecho "CENTRALDARK_PORTABLE_KERNEL=1"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4111129Z ^[[36;1mecho "AGENT_CORE_SINGLETON=1"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4111659Z ^[[36;1mecho "AGENT_ADAPTER_DRIFT_GUARD=1"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4112234Z ^[[36;1mecho "IMAGE_INPUT_IS_OPERATIONAL=1"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4112868Z ^[[36;1mecho "PROOF_OWNERSHIP_COVERAGE=PARTIAL_EXPLICIT"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4113743Z ^[[36;1mecho "UNREGISTERED_INVARIANT=UNPROVEN_NOT_OWNED"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4114355Z ^[[36;1mecho "DREAM_REVIEW_ISOLATED=1"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4114906Z ^[[36;1mecho "DREAM_DIRECT_CANONICAL_MUTATION=0"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4115558Z ^[[36;1mecho "LIBRARY_COGNITION_ROUTER=1"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4116082Z ^[[36;1mecho "GIT_STATE_SAFETY_GATE=1"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4117528Z ^[[36;1mecho "GIT_FORCE_PUSH_ALLOWED=0"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4118109Z ^[[36;1mecho "GIT_RESET_HARD_OPERATIONAL_ALLOWED=0"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4118734Z ^[[36;1mecho "SELF_HEALING_CONTRACT_REQUIRED=1"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4119570Z ^[[36;1mecho "NODE24_FAST_PATH=1"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4120638Z ^[[36;1mecho "JOB_STATUS=${JOB_STATUS}"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4121191Z ^[[36;1mif [ "${FORK_BLOCKED:-}" = "true" ]; then^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4121741Z ^[[36;1m  echo "RESULTADO=BLOCKED"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4122270Z ^[[36;1m  echo "CAUSE=${FORK_CAUSE:-FORK_HEAD}"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4122956Z ^[[36;1melif [ "${JOB_STATUS}" = "cancelled" ]; then^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4123524Z ^[[36;1m  echo "RESULTADO=BLOCKED"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4124170Z ^[[36;1m  echo "CAUSE=CANCELLED_OR_RUNNER_UNAVAILABLE"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4124801Z ^[[36;1melif [ "${JOB_STATUS}" = "failure" ]; then^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4126488Z ^[[36;1m  echo "RESULTADO=FAIL"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4127091Z ^[[36;1melif [ "${JOB_STATUS}" = "success" ]; then^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4127641Z ^[[36;1m  echo "RESULTADO=PASS"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4128091Z ^[[36;1melse^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4128473Z ^[[36;1m  echo "RESULTADO=BLOCKED"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4129497Z ^[[36;1m  echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4130424Z ^[[36;1mfi^[[0m
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4162846Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4163459Z env:
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4163889Z   JOB_STATUS: failure
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4164438Z   HEAD_SHA: ef6d10f75b880fe527004ff794a353cbd4a6895e
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4165020Z   EVENT_NAME: workflow_dispatch
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4165460Z   FORK_BLOCKED: 
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4165818Z   FORK_CAUSE: 
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4166165Z ##[endgroup]
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4234972Z HEAD_SHA=ef6d10f75b880fe527004ff794a353cbd4a6895e
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4235698Z EVENT_NAME=workflow_dispatch
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4236366Z EXECUTOR=self-hosted-linux
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4238071Z RUNNER_POLICY_SCOPE=ALL_ROOT_WORKFLOWS
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4241098Z GITHUB_HOSTED_RUNNER_ALLOWED=0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4241423Z ANY_BRANCH_PUSH_GATED=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4241703Z ROTA_PRIMARIA=self-hosted-linux
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4242006Z ROTA_FALLBACK=BLOCKED_NO_HOSTED
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4242336Z CENTRALDARK_ROOT_ONLY=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4242606Z WORKFLOW_REUSE_REQUIRED=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4242900Z AI_DETERMINISTIC_FALLBACK_REQUIRED=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4243223Z GLOBAL_CONTINUITY_HARD_GATE=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4243506Z MOTHER_BRANCH_GATED=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4243765Z CANONICAL_LABELS_REQUIRED=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4244163Z CENTRALDARK_API_SINGLE_ENTRY=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4244459Z CENTRALDARK_PORTABLE_KERNEL=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4244742Z AGENT_CORE_SINGLETON=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4244999Z AGENT_ADAPTER_DRIFT_GUARD=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4245283Z IMAGE_INPUT_IS_OPERATIONAL=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4245606Z PROOF_OWNERSHIP_COVERAGE=PARTIAL_EXPLICIT
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4246809Z UNREGISTERED_INVARIANT=UNPROVEN_NOT_OWNED
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4247293Z DREAM_REVIEW_ISOLATED=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4247791Z DREAM_DIRECT_CANONICAL_MUTATION=0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4248314Z LIBRARY_COGNITION_ROUTER=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4248943Z GIT_STATE_SAFETY_GATE=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4249493Z GIT_FORCE_PUSH_ALLOWED=0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4249920Z GIT_RESET_HARD_OPERATIONAL_ALLOWED=0
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4250478Z SELF_HEALING_CONTRACT_REQUIRED=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4250903Z NODE24_FAST_PATH=1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4251256Z JOB_STATUS=failure
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4251624Z RESULTADO=FAIL
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4439706Z Post job cleanup.
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.4599926Z Post job cleanup.
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.6243088Z [command]/usr/bin/git version
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.6345881Z git version 2.34.1
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.6418055Z Copying '/root/.gitconfig' to '/opt/actions-runner-centraldark/_work/_temp/d865f79c-45c9-4dd0-941d-0d1725a9a502/.gitconfig'
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.6452095Z Temporarily overriding HOME='/opt/actions-runner-centraldark/_work/_temp/d865f79c-45c9-4dd0-941d-0d1725a9a502' before making global git config changes
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.6460023Z Adding repository directory to the temporary git global config as a safe directory
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.6481582Z [command]/usr/bin/git config --global --add safe.directory /opt/actions-runner-centraldark/_work/CentralDark/CentralDark
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.6537574Z Removing SSH command configuration
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.6562201Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.6703199Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.7188832Z Removing HTTP extra header
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.7206158Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.7310972Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.7861877Z Removing includeIf entries pointing to credentials config files
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.7870787Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.7947311Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Porta, identidade e governança canônica estão íntegras?	UNKNOWN STEP	2026-08-30T12:01:45.8728138Z Cleaning up orphan processes

@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "centraldark://contracts/source-envelope",
+  "title": "CentralDark Source Envelope",
+  "type": "object",
+  "required": [
+    "source_id",
+    "kind",
+    "observed_at",
+    "provenance",
+    "payload"
+  ],
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "surface_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "kind": {
+      "enum": [
+        "TEXT",
+        "VOICE",
+        "IMAGE",
+        "SCREEN_REGION",
+        "FILE",
+        "URL",
+        "TAB_CONTEXT",
+        "SAVED_HTML",
+        "RECORDER_EXPORT",
+        "SCREENPIPE_EXPORT",
+        "GITHUB",
+        "RUNTIME",
+        "LOG",
+        "VPS",
+        "WEB"
+      ]
+    },
+    "target": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "operational_scope": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "event_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "observed_at": {
+      "type": "string"
+    },
+    "provenance": {
+      "type": "string"
+    },
+    "previous_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sensitivity": {
+      "enum": [
+        "NORMAL",
+        "SENSITIVE_QUARANTINE"
+      ]
+    },
+    "payload": {}
+  },
+  "additionalProperties": true
+}

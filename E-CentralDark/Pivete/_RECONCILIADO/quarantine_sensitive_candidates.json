@@ -1,0 +1,560 @@
+[
+  {
+    "idx": 113,
+    "sha": "09f765e53d6b0b49",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-23T14:15:54.911960",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 136,
+    "sha": "6e352b865a26a906",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-23T14:15:55.054059",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 139,
+    "sha": "f6334c29af0526fd",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-23T14:15:55.204788",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 140,
+    "sha": "edd16e09305fff10",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-23T14:15:55.472384",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 336,
+    "sha": "b484a9a88f6cbffb",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-23T14:15:58.016026",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 451,
+    "sha": "73fce7c4f30977a9",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-23T14:16:16.781173",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 758,
+    "sha": "838b55f31c89040a",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-23T14:16:58.367099",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 1452,
+    "sha": "edd16e09305fff10cd4726b832b228d7eabb467ef3df13e6f04f4a8b6d235b6d",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-23T23:43:54.537170",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 1483,
+    "sha": "f6334c29af0526fd162abfe577dc4d7399624c71ecafac74bfbb4eb8d98b802a",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-23T23:43:54.567107",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 1578,
+    "sha": "6e352b865a26a906c4cd1427b43c44e0b5073f7d950a4932c488d528e5964501",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-23T23:43:54.667918",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 1654,
+    "sha": "09f765e53d6b0b49703d93a4921284460467c19288498a1a0e1e2db943f5c22a",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-23T23:43:54.795866",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 1759,
+    "sha": "b484a9a88f6cbffbeeaa4fb71d0f6eb515666c9a8f473cb638ea6e074386baa3",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-23T23:43:54.964781",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 1889,
+    "sha": "73fce7c4f30977a9bc81591c9ac728f2245e84cc8dc93b58d78ec36345868fa0",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-23T23:43:54.956868",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 1988,
+    "sha": "838b55f31c89040aae4dfc86dc65896e8f57f4bee868738c220d60a6b300a1ac",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-23T23:43:58.079370",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 2405,
+    "sha": "05a476c0c7e85aab",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-26T18:39:35.489619",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 2666,
+    "sha": "ffb13c4e77471fb3",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-26T18:46:42.506545",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 2867,
+    "sha": "7dd08001d0712226",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-26T18:48:04.741590",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 2884,
+    "sha": "771e6d28139a65fd",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-26T18:48:04.754587",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 2885,
+    "sha": "1c383d7db745330a",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-26T18:48:04.754587",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 2888,
+    "sha": "34f3e97b6d203a1d",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-26T18:48:04.756586",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 2931,
+    "sha": "8e528ec9710471ec",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-26T18:48:04.780587",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 3256,
+    "sha": "b1cce6ffef40e57a",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-26T19:31:08.047138",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 3746,
+    "sha": "14c35e3e9d7e5443",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-26T19:34:23.984111",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 5608,
+    "sha": "dfc3fce14f777fbc",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:02:00.291734",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 5691,
+    "sha": "50d0affb4b69de22",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:02:04.357287",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 5693,
+    "sha": "ef63e5302a7393d4",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:02:04.417381",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 5698,
+    "sha": "5beacac341075d9a",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:02:04.618418",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 5764,
+    "sha": "19a799915c14f843",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:02:06.058031",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 5775,
+    "sha": "11822dddaaea027f",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:02:06.437884",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 5822,
+    "sha": "95873134bd7eb1b0",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:02:08.899990",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 5887,
+    "sha": "f46e020f07b11f64",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:02:10.799709",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 5895,
+    "sha": "3f337082a14cd33d",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:02:11.320947",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 5924,
+    "sha": "e2806a879291b028",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:02:13.506624",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 5942,
+    "sha": "ceb0450fa12fa48f",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:02:14.780316",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 5984,
+    "sha": "be5da24709e4424d",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:02:20.987537",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 5995,
+    "sha": "d937b8d61cdc9e5b",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:02:22.074963",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 5996,
+    "sha": "1e99f1be493b4b3d",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:02:22.075964",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 7045,
+    "sha": "914dc3909e24409c",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:24:47.174879",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 7147,
+    "sha": "273b8d9a3bbc03bf",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:24:58.370338",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 7396,
+    "sha": "1aa1ecc639e09845",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:33:26.427825",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 7437,
+    "sha": "952c763521e34572",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:33:40.065241",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 7502,
+    "sha": "fbf13646df42d453",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:34:16.198945",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 8229,
+    "sha": "ab5a7e70521c6592",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:36:37.292165",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 8399,
+    "sha": "c480a60546670fc1",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:37:40.161397",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 8420,
+    "sha": "8eafe3939a5c17a0",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:37:41.467454",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 8954,
+    "sha": "8a0fb681cb297caa",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:52:34.830198",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 10037,
+    "sha": "333f1b3d8417baa0",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T02:56:47.917416",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 12229,
+    "sha": "dfc3fce14f777fbc",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T13:19:56.743899",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 12291,
+    "sha": "95873134bd7eb1b0",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T13:20:04.684246",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 12355,
+    "sha": "e2806a879291b028",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T13:20:05.700709",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 12373,
+    "sha": "ceb0450fa12fa48f",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T13:20:05.704229",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 12389,
+    "sha": "50d0affb4b69de22",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T13:20:05.716749",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 12393,
+    "sha": "be5da24709e4424d",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T13:20:05.696196",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 12443,
+    "sha": "19a799915c14f843",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T13:20:05.721851",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 12446,
+    "sha": "5beacac341075d9a",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T13:20:05.697700",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 12470,
+    "sha": "ef63e5302a7393d4",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T13:20:05.720453",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 12497,
+    "sha": "11822dddaaea027f",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T13:20:05.898186",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 12518,
+    "sha": "1e99f1be493b4b3d",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T13:20:05.952292",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 12520,
+    "sha": "d937b8d61cdc9e5b",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T13:20:05.961322",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 13305,
+    "sha": "d801b5cad6fc18d7",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T13:25:07.209721",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 13384,
+    "sha": "95435488c5920d9f",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T13:25:24.590947",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  },
+  {
+    "idx": 13391,
+    "sha": "5ffe04d508cefb76",
+    "nome": "",
+    "categoria": "DESCONHECIDO",
+    "timestamp": "2026-08-28T13:25:26.302534",
+    "veredito": "CRISTAL",
+    "sensitive": true
+  }
+]

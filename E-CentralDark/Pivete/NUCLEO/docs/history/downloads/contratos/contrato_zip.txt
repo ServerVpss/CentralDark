@@ -1,0 +1,5 @@
+# CONTRATO DO ZIP
+
+CONTRATO: teste_zip_contrato
+GATE: FILE_SECURITY_GATE v2
+RISCO: nenhum

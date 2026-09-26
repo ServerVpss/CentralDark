@@ -1,0 +1,27 @@
+flowchart TB
+  C["👑 CHEFE<br/>INTENÇÃO + DESTINO"] --> DL[DESTINATION_LOCK]
+  DL --> E[BOT / AGENT ENTRY]
+  E --> B[CENTRALDARK_AI_BOOT]
+  B --> A[#ACORDAR] --> K[!CALIBRAR] --> M[!MULTIBÚSSOLA] --> L[!META_LUPA]
+  L --> S[SEARCH ALL MATERIAL PATHS] --> O[CANONICAL OWNER] --> W[ONE WRITER] --> X[HERMES EXECUTA]
+  X --> G[OUTPUT_GUARD] --> J[REALITY JUDGE]
+  J -->|PROVEN| R[RECEIPT] --> C1[CRYSTAL / LAST_GOOD_STATE] --> N[NEXT CURSOR] --> E
+  J -->|FAILED| H[SELF-HEAL] --> J
+  J -->|UNKNOWN| Q[MEASURE REALITY] --> L
+
+  subgraph CI[ANY PR / ANY COMMIT]
+    P[REMEASURE HEAD] --> RP[RUNNER POLICY<br/>self-hosted Linux default]
+    RP --> RW[REUSE EXISTING WORKFLOW]
+    RW --> GT[RUN GATES]
+    GT --> FS[FAILURE SIGNATURE]
+  end
+  FS --> H
+
+  subgraph LABELS[LABELS = SINAIS]
+    LA[👑 PERMITO-SEGREDO]
+    LG[🔄 GIT]
+    AU[🤖 AUTO]
+    RV[🟡 IA-PRECISA-REVISAR]
+    OK[✅ PR CONFIRMADO pós-prova]
+  end
+  LABELS -. roteia .-> CI

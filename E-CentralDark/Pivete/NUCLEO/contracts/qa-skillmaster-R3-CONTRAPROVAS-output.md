@@ -1,0 +1,126 @@
+# CONTRATO - qa-skillmaster-R3-CONTRAPROVAS-output.json
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\02-SNAPSHOT-TRABALHO\qa-skillmaster-R3-CONTRAPROVAS-output.json
+**SHA:** 4d0e0b667aa374a0
+**Timestamp:** 2026-08-26T19:10:23.410430
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Riscos
+- "AUTO_APPLY_BLOQUEIO=MATCH_PROVADO=NAO | ALTERACAO_LOCAL=NAO | REVERSIVEL=NAO | WRITER_UNICO=NAO | ESCOPO_AUTORIZADO=NAO | MUDANCA_MINIMA=NAO | TESTE_DISCRIMINATIVO_EXISTE=NAO | TESTE_ANTES_FALHOU=NAO
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+{
+  "status": "BLOCKED_R3_COUNTERPROOFS",
+  "targetRoot": "/mnt/data/audit-rigor/qa.teste-de-software.MARKDOWN",
+  "findings": [
+    {
+      "id": "R3-001",
+      "title": "Enxame retorna OK com todas as respostas vazias",
+      "reproduced": true,
+      "evidence": {
+        "callProviderTextLength": 0,
+        "status": "OK",
+        "agentsUsed": [
+          "diagnostico-causal",
+          "qa-regressao",
+          "fable-adversarial",
+          "seguranca-escopo",
+          "implementacao-minima"
+        ],
+        "failCount": 0
+      }
+    },
+    {
+      "id": "R3-002",
+      "title": "Recibo autogerado sem raiz de confiança promove aprendizado inventado",
+      "reproduced": true,
+      "evidence": {
+        "receiptId": "receipt:76f368ce82537f9fe07e3f423e747a815ccac49ab178a451c5c8f36552700e72",
+        "contractDigest": "cf720413a808cd40abd3232a6f43dff5e06c34cea82c210d2476b451d2780c3c",
+        "promoted": true,
+        "reason": "PROVA_COMPLETA",
+        "learningId": "1298f95c4a766d7d"
+      }
+    },
+    {
+      "id": "R3-003",
+      "title": "Manifesto mutável permite PASS com runtime aninhado inválido que lê .env",
+      "reproduced": true,
+      "evidence": {
+        "hashEntries": 77,
+        "verifierExitCode": 0,
+        "verifierStatus": "PASS",
+        "nodeCheckTotal": 16,
+        "secretReadScan": {
+          "pass": true,
+          "files": []
+        }
+      }
+    },
+    {
+      "id": "R3-004",
+      "title": "Resumo TAP forjado esconde teste pulado depois de atualização legítima do manifesto",
+      "reproduced": true,
+      "evidence": {
+        "hashEntries": 77,
+        "verifierExitCode": 0,
+        "verifierStatus": "PASS",
+        "parsedSummary": {
+          "total": 60,
+          "pass": 60,
+          "fail": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0
+        },
+        "testFiles": 7
+      }
+    },
+    {
+      "id": "R3-005",
+      "title": "Mesmo delta afirma e nega a prova de regressão",
+      "reproduced": true,
+      "evidence": {
+        "lines": [
+          "STATUS=OK",
+          "REGRESSAO_PRESERVADA=SIM",
+          "MISSAO_ATUAL_PRESERVADA=SIM",
+          "AUTO_APPLY=NAO",
+          "AUTO_APPLY_BLOQUEIO=MATCH_PROVADO=NAO | ALTERACAO_LOCAL=NAO | REVERSIVEL=NAO | WRITER_UNICO=NAO | ESCOPO_AUTORIZADO=NAO | MUDANCA_MINIMA=NAO | TESTE_DISCRIMINATIVO_EXISTE=NAO | TESTE_ANTES_FALHOU=NAO | TESTE_DEPOIS_PASSOU=NAO | REGRESSAO_PASSOU=NAO | CASO_NEGATIVO_PASSOU=NAO | IDEMPOTENCIA_PASSOU=NAO | ROLLBACK_EXISTE=NAO | HEAD_FIXADO=NAO | SEM_CONFLITO_CANONICO=NAO | ARQUIVOS_FORA_ESCOPO_ZERO=NAO | FAIL_ZERO=NAO | SKIPPED_ZERO=NAO | UNKNOWN_ZERO=NAO | SECRETS=DESCONHECIDO | MERGE=DESCONHECIDO | DEPLOY=DESCONHECIDO | VPS=DESCONHECIDO | PRODUCAO=DESCONHECIDO | HISTORY_REWRITE=DESCONHECIDO"
+        ],
+        "policyState": "AUTO_APPLY_BLOCKED",
+        "policyReasons": [
+          "MATCH_PROVADO=NAO",
+          "ALTERACAO_LOCAL=NAO",
+          "REVERSIVEL=NAO",
+          "WRITER_UNICO=NAO",
+          "ESCOPO_AUTORIZADO=NAO",
+          "MUDANCA_MINIMA=NAO",
+          "TESTE_DISCRIMINATIVO_EXISTE=NAO",
+          "TESTE_ANTES_FALHOU=NAO",
+          "TESTE_DEPOIS_PASSOU=NAO",
+          "REGRESSAO_PASSOU=NAO",
+          "CASO_NEGATIVO_PASSOU=NAO",
+          "IDEMPOTENCIA_PASSOU=NAO",
+          "ROLLBACK_EXISTE=NAO",
+          "HEAD_FIXADO=NAO",
+          "SEM_CONFLITO_CANONICO=NAO",
+          "ARQUIVOS_FORA_ESCOPO_ZERO=NAO",
+          "FAIL_ZERO=NAO",
+          "SKIPPED_ZERO=NAO",
+          "UNKNOWN_ZERO=NAO",
+          "SECRETS=DESCONHECIDO",
+          "MERGE=DESCONHECIDO",
+          "DEPLOY=DESCONHECIDO",
+          "VPS=DESCONHECIDO",
+          "PRODUCAO=DESCONHECIDO",
+          "HISTORY_REWRITE=DESCONHECIDO"
+        ]
+      }
+    }
+  ]
+}
+
+```

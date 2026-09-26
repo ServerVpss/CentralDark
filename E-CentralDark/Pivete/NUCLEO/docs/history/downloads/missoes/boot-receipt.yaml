@@ -1,0 +1,41 @@
+# TEMPLATE DO RECIBO DE BOOT — CENTRALDARK
+
+Emitir **uma vez** no início de sessão técnica ou ao assumir missão existente.
+
+```yaml
+CENTRALDARK_AI_BOOT:
+  governance: LOADED
+  github_dictionary: LOADED
+  delta_method: LOADED
+  history_preservation: ACTIVE
+  source_of_truth: "ServerVpss/CentralDark"
+  observed_evidence: "branch/HEAD/PR/worktree medidos agora — insumo operacional, nunca autoridade canônica"
+  alignment: "SEGREDO/CHEFE > SOL/COORDENADOR > PIVETE/HERMES + ESPECIALISTAS"
+  role: "COORDINATOR|EXECUTOR|DEBUGGER|REVIEWER|JUDGE|HERMES|READ_ONLY"
+  writer: "NONE|nome-do-escritor-atual"
+```
+
+## Campos
+
+| Campo | Valor | Obrigatório |
+|-------|-------|-------------|
+| `governance` | `LOADED` se LEIA-ME-IA.md + AGENTS.md + JARVIS... lidos | Sim |
+| `github_dictionary` | `LOADED` se DICIONARIO-PIVETE-GITHUB.md lido | Sim |
+| `delta_method` | `LOADED` se JARVIS-ORQUESTRACAO... lido | Sim |
+| `history_preservation` | `ACTIVE` se continuidade preservada | Sim |
+| `source_of_truth` | `"ServerVpss/CentralDark"` fixo | Sim |
+| `observed_evidence` | Estado medido AGORA (branch, HEAD, PR, worktree) | Sim |
+| `alignment` | Hierarquia de autoridade fixa | Sim |
+| `role` | Papel operacional atual | Sim |
+| `writer` | `NONE` ou nome do writer atual | Sim |
+
+## O que o recibo NÃO faz
+
+- Não prova identidade pessoal
+- Não concede permissão
+- Não substitui teste, log, diff, check ou autorização de SEGREDO/CHEFE
+- Não é evidência de PASS
+
+## Mensagens atrasadas
+
+Tratadas em delta: comparar com estado atual, aproveitar somente o que ainda serve, não repetir investigação concluída, não retroceder a missão.

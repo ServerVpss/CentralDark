@@ -1,0 +1,10 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@jridgewell\trace-mapping\types\flatten-map.d.cts
+
+import { TraceMap } from './trace-mapping.cts';
+import type { SectionedSourceMapInput, Ro } from './types.cts';
+type FlattenMap = {
+    new (map: Ro<SectionedSourceMapInput>, mapUrl?: string | null): TraceMap;
+    (map: Ro<SectionedSourceMapInput>, mapUrl?: string | null): TraceMap;
+export declare const FlattenMap: FlattenMap;
+export {};
+//# sourceMappingURL=flatten-map.d.ts.map

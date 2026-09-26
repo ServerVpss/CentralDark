@@ -1,0 +1,49 @@
+{
+  "status": "PASS_LOCAL_DETERMINISTICO",
+  "scope": "pacote único QA SkillMaster + conteúdo integral PACOTAO-CENTRALDARK; sem chamada live a API externa",
+  "baseline_mutation_proof": {
+    "old_corrected_package": {
+      "counterproofs_executed": 9,
+      "pass": 0,
+      "fail": 9,
+      "exit_code": 1,
+      "provenance": "rodada adversarial anterior preservada; não recontada como execução nova"
+    }
+  },
+  "current_suite": {
+    "test_files": 6,
+    "tests": 59,
+    "pass": 59,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0
+  },
+  "closed_gaps": [
+    {"id": "GAP-001", "contract": "missão ausente bloqueada", "proof": "BLOCKED_MISSION_REQUIRED + MISSAO_ATUAL_PRESERVADA=NAO + PROXIMO_ESTADO=INALTERADO"},
+    {"id": "GAP-002", "contract": "SIM não equivale a zero", "proof": "Policy Gate bloqueia FAIL/SKIPPED/UNKNOWN/fora-do-escopo=SIM"},
+    {"id": "GAP-003", "contract": "suíte vazia falha", "proof": "verify exige test files > 0 e pass === total > 0"},
+    {"id": "GAP-004", "contract": "symlink/junction fora da raiz bloqueado", "proof": "fs.realpath + relative root check"},
+    {"id": "GAP-005", "contract": "learning rejeita placeholders e HEAD textual", "proof": "sourceIds tipados + HEAD SHA de 40/64 hex"},
+    {"id": "GAP-006", "contract": "deduplicação concorrente", "proof": "claim atômico por eventId"},
+    {"id": "GAP-007", "contract": "receipt sem injeção multiline", "proof": "singleLineField + conteúdo externo prefixado"},
+    {"id": "GAP-008", "contract": "tokens sanitizados", "proof": "github_pat, JWT, Slack, Stripe, Telegram, Bearer e connection strings"},
+    {"id": "GAP-009", "contract": "INCONCLUSIVO reavaliável", "proof": "não avança checkpoint"},
+    {"id": "GAP-010", "contract": "top-3 real", "proof": "maxMatches clampado e paths únicos"},
+    {"id": "GAP-011", "contract": "learning concorrente único", "proof": "lock por fingerprint e deduplicação"},
+    {"id": "GAP-012", "contract": "lock vivo não é roubado por timeout", "proof": "stale lock só é removido quando o PID dono não está vivo"},
+    {"id": "GAP-013", "contract": "chaves sensíveis camelCase são redigidas", "proof": "centraldarkApiKey/githubAccessToken/dbPassword redigidos sem depender do valor"},
+    {"id": "GAP-014", "contract": "árvore imutável presa a manifesto SHA-256", "proof": "alteração, remoção e arquivo novo não auditado derrubam verify"},
+    {"id": "GAP-015", "contract": "sourceId formatado sem recibo real não promove", "proof": "exige receipt:<sha256> existente em learning/receipts"},
+    {"id": "GAP-016", "contract": "aprendizado armazenado adulterado não é reutilizado", "proof": "recalcula fingerprint, contractDigest, contrato e receipt na leitura"}
+  ],
+  "legacy_preservation": {
+    "original_files": 51,
+    "byte_identical": 44,
+    "intentional_changes": 7,
+    "missing": 0,
+    "unexpected_changes": 0,
+    "receipt": "AUDITORIA/PRESERVACAO-LEGADO.json"
+  },
+  "honest_limit": "Sem credenciais no ambiente de validação: nenhuma chamada live a CENTRALDARK/OpenAI/Anthropic. Fallback, resposta vazia, troca de modelo e indisponibilidade são cobertos por fetch determinístico mockado."
+}

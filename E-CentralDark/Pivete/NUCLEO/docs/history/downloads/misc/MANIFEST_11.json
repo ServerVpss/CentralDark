@@ -1,0 +1,50 @@
+{
+  "package": "CENTRALDARK_MAPA_CANONICO_DA_CASA_2_0_CARD_RODADA_1138",
+  "family": "CENTRALDARK_MAPA_CANONICO_DA_CASA_2_0",
+  "round_visual": 1138,
+  "created_at": "2026-08-24T18:42:10.302813-03:00",
+  "scope": "visual_artifact_integrity_and_continuity",
+  "runtime_claims": "NOT_MEASURED_IN_THIS_PACK",
+  "files": [
+    {
+      "path": "CENTRALDARK_MAPA_CANONICO_DA_CASA_2_0_CARD_RODADA_1138.png",
+      "bytes": 2235065,
+      "sha256": "db0426eafad9157b761fe3605f6ac5a8045395921db8fe7dc0d3773bdb000ab3"
+    },
+    {
+      "path": "CENTRALDARK_MAPA_CANONICO_DA_CASA_2_0_CARD_RODADA_1138.md",
+      "bytes": 2496,
+      "sha256": "ec37b6dd1fb9a140aaf2ac21d078af0d727ed151da4c0e009708ea32174c40aa"
+    },
+    {
+      "path": "CENTRALDARK_MAPA_CANONICO_DA_CASA_2_0_CARD_RODADA_1138.mmd",
+      "bytes": 1308,
+      "sha256": "3113591116494f258e9fe05d27ed441e68361b002b6c7708014ce23f2e433721"
+    },
+    {
+      "path": "RASTRO.md",
+      "bytes": 1089,
+      "sha256": "334800880270eb1a718486fef0ba251ee306b09b5ae4316281ff467b3a3902e2"
+    },
+    {
+      "path": "COUNTERPROOF.md",
+      "bytes": 773,
+      "sha256": "8d811807ad5cf9699e62411738a47bc860cb7c5ab5910ca514980ae261d3c200"
+    },
+    {
+      "path": "LIVE_STATE.md",
+      "bytes": 333,
+      "sha256": "66a03ddcf507e26a09aa9a440ea10da6b53d2671e26f78f63a2d4c1fc7c816e0"
+    },
+    {
+      "path": "RECEIPT.md",
+      "bytes": 377,
+      "sha256": "d6d09c7572a5a78f177afc096840ccd7eeec84edc27e0f975d13a317e3ffd1cf"
+    },
+    {
+      "path": "verify_pack.py",
+      "bytes": 731,
+      "sha256": "f54aae3510d0a99d2453fef1ca628f7be79364817bd07190dcbf456a12250f69"
+    }
+  ]
+}

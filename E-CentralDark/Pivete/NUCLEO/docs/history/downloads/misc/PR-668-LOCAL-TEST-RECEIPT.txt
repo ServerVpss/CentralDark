@@ -1,0 +1,76 @@
+TAP version 13
+# Subtest: normaliza estados em PT-BR e inglês
+ok 1 - normaliza estados em PT-BR e inglês
+  ---
+  duration_ms: 3.553778
+  type: 'test'
+  ...
+# Subtest: extrai capacidades declaradas
+ok 2 - extrai capacidades declaradas
+  ---
+  duration_ms: 3.373932
+  type: 'test'
+  ...
+# Subtest: capacidade ausente solicita suporte sem transferir Writer
+ok 3 - capacidade ausente solicita suporte sem transferir Writer
+  ---
+  duration_ms: 32.191091
+  type: 'test'
+  ...
+# Subtest: YAML ausente roteia suporte ao Codex
+ok 4 - YAML ausente roteia suporte ao Codex
+  ---
+  duration_ms: 1.829713
+  type: 'test'
+  ...
+# Subtest: todas capacidades SIM geram READY
+ok 5 - todas capacidades SIM geram READY
+  ---
+  duration_ms: 1.513366
+  type: 'test'
+  ...
+# Subtest: markdown contém marker, Mermaid, YAML, fallback e receipt
+ok 6 - markdown contém marker, Mermaid, YAML, fallback e receipt
+  ---
+  duration_ms: 9.241643
+  type: 'test'
+  ...
+# Subtest: canvas HTML é autocontido
+ok 7 - canvas HTML é autocontido
+  ---
+  duration_ms: 1.299755
+  type: 'test'
+  ...
+# Subtest: digest é determinístico mesmo com ordem de arquivos diferente
+ok 8 - digest é determinístico mesmo com ordem de arquivos diferente
+  ---
+  duration_ms: 0.659928
+  type: 'test'
+  ...
+# Subtest: sanitiza tokens, chaves e menções
+ok 9 - sanitiza tokens, chaves e menções
+  ---
+  duration_ms: 0.983354
+  type: 'test'
+  ...
+# Subtest: classifica paths sensíveis sem ler conteúdo
+ok 10 - classifica paths sensíveis sem ler conteúdo
+  ---
+  duration_ms: 1.038154
+  type: 'test'
+  ...
+# Subtest: input inválido bloqueia
+ok 11 - input inválido bloqueia
+  ---
+  duration_ms: 1.968212
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 383.434994

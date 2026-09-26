@@ -1,0 +1,242 @@
+name: Release
+
+# Tag-only SemVer release automation — see issue #7.
+#
+# DESIGN: the annotated git tag `vX.Y.Z` is the SOLE source of truth. This repo
+# has NO Cargo.toml and NO VERSION file, so there is nothing in the tree to
+# rewrite. When a `develop` -> `master` release PR MERGES (or on a manual
+# `workflow_dispatch`) this workflow:
+#   1. reads the highest existing vX.Y.Z git tag,
+#   2. bumps PATCH by default, or MINOR/MAJOR when the merged PR carried a
+#      `release:minor` / `release:major` label,
+#   3. creates + pushes the matching annotated vX.Y.Z tag on the merge commit
+#      (NO commit is written back to the branch — only a tag),
+#   4. publishes a GitHub Release with auto-generated notes, best-effort
+#      appended with the current decomp progress (matched-function /
+#      _rosetta file counts from tools/progress.py), and
+#   5. announces the release to Discord (see docs/RELEASING.md).
+#
+# Why `pull_request_target` and NOT `push: branches: [master]`: a release PR is
+# merged from `develop`, which is saturated with `[skip ci]` commits (the
+# reconcile bot). A SQUASH merge folds all of those commit messages — `[skip ci]`
+# included — into the squash commit's body, and GitHub then SKIPS every workflow
+# for that push (it scans the HEAD commit message for skip markers). A
+# `push: master` trigger therefore silently never fires for a squash-merged
+# release. `pull_request_target` keys off the PR-merge EVENT, not the pushed
+# commit, so it is immune to `[skip ci]` and fires for any merge method
+# (squash / merge / rebase). `workflow_dispatch` is a manual fallback (e.g. to
+# cut a release that a skipped push missed).
+#
+# SAFETY: despite `pull_request_target`, this workflow NEVER checks out or runs
+# PR head code — it checks out `master` and only reads git tags + the merged PR's
+# labels — so the usual `pull_request_target` code-execution risk (running
+# attacker-controlled code with secrets in scope) does not apply.
+#
+# Why NO PAT: unlike the sibling Garlemald-Server/Client release workflows, this
+# workflow pushes ONLY a tag (never a commit back to the branch). Tag pushes are
+# not gated by branch protection (only commits to the branch are), so the default
+# GITHUB_TOKEN (github.token) can push the tag AND create the Release even though
+# `master` is protected — no fine-grained RELEASE_PAT is required.
+#
+# Why NO loop guard: nothing is committed back to `master`, so there is no
+# re-trigger to guard against. The tag push creates no PR-close event and matches
+# no trigger here, so it cannot re-run this workflow. We deliberately add NO
+# bot-identity `if` guard and NO `[skip ci]` marker.
+on:
+  # Fire when a PR INTO master MERGES (a develop -> master release). For
+  # pull_request_target, `branches` filters the BASE (target) branch, so only
+  # master-targeting PRs match; the job `if` further requires merged == true.
+  pull_request_target:
+    types: [closed]
+    branches: [master]
+  # Manual fallback: cut a release on demand (e.g. recover a skipped push). Always
+  # checks out + releases master HEAD regardless of the ref it is dispatched from.
+  workflow_dispatch: {}
+
+# Serialize releases so two quick merges produce monotonic tags (the second run
+# waits for the first to push its tag, then computes the next from it).
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  # Push the annotated tag + create the GitHub Release.
+  contents: write
+  # Needed for the commits/{sha}/pulls label lookup below. Specifying
+  # `permissions` sets every unlisted scope to `none`, so this must be explicit
+  # or the lookup 403s and every release silently falls back to a patch bump.
+  pull-requests: read
+
+jobs:
+  release:
+    # Release only when a PR actually MERGED into master (skip closed-without-merge),
+    # or on a manual dispatch. The pull_request_target `branches` filter already
+    # restricts to master-targeting PRs; the base.ref check is defense-in-depth.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.merged == true &&
+       github.event.pull_request.base.ref == 'master')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master (full history + tags; default token can push a tag)
+        uses: actions/checkout@v6
+        with:
+          # A merged pull_request_target/closed event means master already
+          # contains the merge commit, so `ref: master` checks out the release
+          # HEAD to tag. master is protected, but we only push a TAG (not gated by
+          # branch protection), so the default GITHUB_TOKEN suffices — no RELEASE_PAT.
+          token: ${{ github.token }}
+          fetch-depth: 0
+          ref: master
+
+      - name: Fetch all tags
+        run: git fetch --tags --force --prune
+
+      - name: Determine bump level from the merged PR's labels
+        id: level
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          # Read the release PR's labels via the PR(s) associated with the master
+          # HEAD (= the just-merged commit). We query by the CHECKED-OUT HEAD sha,
+          # NOT github.sha: under pull_request_target, github.sha is the base sha
+          # from BEFORE the merge, whereas master HEAD is the merge commit the
+          # release PR is associated with (under workflow_dispatch it is simply
+          # master HEAD). An empty result is the legitimate "no associated PR" case
+          # (-> patch). A non-zero exit is an API/permission error: warn so a
+          # missed release:minor/major label is visible rather than silently
+          # downgraded.
+          sha="$(git rev-parse HEAD)"
+          if ! labels="$(gh api "repos/${REPO}/commits/${sha}/pulls" --jq '[.[].labels[].name] | join(",")')"; then
+            echo "::warning::Could not query PR labels for ${sha}; defaulting to a patch bump (a release:minor/major label, if any, was NOT applied)."
+            labels=""
+          fi
+          echo "PR labels: ${labels:-<none>}"
+          level="patch"
+          case ",$labels," in
+            *,release:major,*) level="major" ;;
+            *,release:minor,*) level="minor" ;;
+          esac
+          echo "level=$level" >> "$GITHUB_OUTPUT"
+          echo "Bump level: $level"
+
+      - name: Compute next version from the highest tag
+        id: ver
+        run: |
+          set -euo pipefail
+          # Deterministic for double-digit patches via `--sort=-v:refname`.
+          latest="$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | head -n1 || true)"
+          latest="${latest:-v0.0.0}"
+          echo "Highest existing tag: $latest"
+          base="${latest#v}"
+          major="${base%%.*}"; rest="${base#*.}"; minor="${rest%%.*}"; patch="${rest#*.}"
+          case "${{ steps.level.outputs.level }}" in
+            major) major=$((major + 1)); minor=0; patch=0 ;;
+            minor) minor=$((minor + 1)); patch=0 ;;
+            *)     patch=$((patch + 1)) ;;
+          esac
+          new="${major}.${minor}.${patch}"
+          tag="v${new}"
+          echo "Next version: ${new} (tag ${tag})"
+          if git rev-parse -q --verify "refs/tags/${tag}" >/dev/null; then
+            echo "::error::Tag ${tag} already exists — aborting to avoid clobber."
+            exit 1
+          fi
+          echo "new=${new}"  >> "$GITHUB_OUTPUT"
+          echo "tag=${tag}"  >> "$GITHUB_OUTPUT"
+
+      - name: Create and push the annotated tag (tag only — no commit, no file edits)
+        run: |
+          set -euo pipefail
+          tag="${{ steps.ver.outputs.tag }}"
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Tag the checked-out master HEAD — the merge commit for this release.
+          # NOTHING is written into the tree and NO commit is pushed back to
+          # master — only the tag ref. The tag push creates no PR-close event, so
+          # it cannot re-trigger this workflow.
+          git tag -a "${tag}" -m "${tag}"
+          git push origin "refs/tags/${tag}"
+          echo "Pushed tag ${tag}"
+
+      - name: Create the GitHub Release (auto notes + best-effort progress block)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="${{ steps.ver.outputs.tag }}"
+
+          # 1) Create the Release first with GitHub's auto-generated notes.
+          gh release create "${tag}" --title "${tag}" --target master --generate-notes
+          echo "Released ${tag}"
+
+          # 2) Best-effort: append a short decomp-progress block by EDITING the
+          #    release body. We deliberately create-then-edit (rather than
+          #    --notes-file) because `gh release create` cannot combine
+          #    --generate-notes with --notes-file; editing afterwards lets us
+          #    keep GitHub's generated notes AND prepend our progress block.
+          #    The whole attempt is wrapped so a failure (no PyYAML, no network,
+          #    progress.py change, etc.) NEVER fails the release — the tag and
+          #    Release above have already published.
+          set +e
+          progress_block=""
+          pip install --quiet pyyaml >/dev/null 2>&1
+          progress_out="$(python3 tools/progress.py 2>/dev/null)"
+          if [ -n "${progress_out}" ]; then
+            # Keep only the human-meaningful "overall ..." summary lines.
+            overall="$(printf '%s\n' "${progress_out}" | grep -E '^overall \(' || true)"
+            if [ -n "${overall}" ]; then
+              progress_block="$(printf '### Decomp progress at %s\n\n```\n%s\n```' "${tag}" "${overall}")"
+            fi
+          fi
+          if [ -n "${progress_block}" ]; then
+            body="$(gh release view "${tag}" --json body -q .body)"
+            gh release edit "${tag}" --notes "$(printf '%s\n\n---\n\n%s' "${progress_block}" "${body}")" \
+              && echo "Appended decomp-progress block to ${tag} release notes." \
+              || echo "::warning::Could not edit release notes for ${tag}; progress block skipped (release still published)."
+          else
+            echo "::notice::No decomp-progress block captured (tools/progress.py produced no 'overall' lines); release notes left as auto-generated."
+          fi
+          set -e
+
+      - name: Announce the release on Discord
+        # Runs only after the tag + GitHub Release above succeed (a failed step
+        # stops the job before this one), so a release is never announced unless
+        # it actually published. No event guard is needed: both triggers (a merged
+        # develop -> master release PR, and a manual workflow_dispatch) compute and
+        # publish a NEW version, so every reached run is a genuine release.
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_RELEASE_WEBHOOK_URL }}
+          PROJECT: Meteor Decomp
+          TAG: ${{ steps.ver.outputs.tag }}
+          RELEASE_URL: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ steps.ver.outputs.tag }}
+        run: |
+          set -euo pipefail
+          if [ -z "${DISCORD_WEBHOOK:-}" ]; then
+            echo "::warning::DISCORD_RELEASE_WEBHOOK_URL secret is not set — skipping the Discord announcement."
+            exit 0
+          fi
+          # Build the JSON with jq (--arg escapes every value) so the tag can never
+          # break out of the shell or the JSON payload.
+          payload="$(jq -n \
+            --arg project "$PROJECT" \
+            --arg tag "$TAG" \
+            --arg url "$RELEASE_URL" \
+            '{
+              username: ($project + " Releases"),
+              embeds: [{
+                title: ($project + " " + $tag),
+                description: ("A new " + $project + " release is available: " + $tag + "."),
+                url: $url,
+                color: 12595755
+              }]
+            }')"
+          # A notification failure must not fail the release (the tag + Release are
+          # already published).
+          if curl -fsS -X POST "$DISCORD_WEBHOOK" -H "Content-Type: application/json" -d "$payload"; then
+            echo "Announced $TAG to Discord."
+          else
+            echo "::warning::Discord announcement for $TAG failed (webhook unreachable or rejected)."
+          fi

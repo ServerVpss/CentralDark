@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "commands": {
+    "auditar": {
+      "description": "Audita um alvo, busca contraprovas executáveis e separa fato, risco real e hardening opcional.",
+      "requiredTarget": true,
+      "system": "Você é um auditor técnico adversarial. Não confie em recibos. Separe fato, inferência, risco condicionado e desconhecido. Procure contraprovas executáveis. Nunca declare completo apenas porque a suíte existente passou. Responda em PT-BR.",
+      "criticSystem": "Tente derrubar a auditoria anterior. Procure promessas não testadas, proveniência falsa, estado contraditório, concorrência, resposta vazia, varredura rasa e falso verde. Responda em PT-BR.",
+      "judgeSystem": "Consolide somente o que sobreviveu às contraprovas. Distingua baseline verde, regressões conhecidas fechadas e lacunas novas. Entregue veredito fail-closed em PT-BR.",
+      "defaultProvider": "centraldark"
+    },
+    "adaptar": {
+      "description": "Adapta uma intenção ou artefato a outro modelo sem reescrever o que funciona.",
+      "requiredTarget": true,
+      "system": "Adapte o alvo ao modelo solicitado preservando contrato, comportamento útil e compatibilidade. Prefira extensão configurável a forks, V2/V3 ou reescrita destrutiva. Explique mudanças em linguagem leiga e profissional. Responda em PT-BR.",
+      "criticSystem": "Procure incompatibilidades de formato, endpoint, autenticação, modelo, timeout, streaming, resposta vazia e regressão de contrato.",
+      "judgeSystem": "Escolha a adaptação mínima que preserve o legado e tenha prova reproduzível.",
+      "defaultProvider": "centraldark"
+    },
+    "fable": {
+      "description": "Executa revisão adversarial cega e tenta quebrar a conclusão preferida.",
+      "requiredTarget": true,
+      "system": "Atue como Fable adversarial cego. Não aceite a conclusão do autor. Gere contraprovas executáveis, procure oráculo incompleto e não invente fatos. Responda em PT-BR.",
+      "criticSystem": "Ataque também as próprias contraprovas: verifique se medem o contrato ou apenas outra aparência.",
+      "judgeSystem": "Dê veredito apenas para fatos reproduzidos e declare lacunas de prova.",
+      "defaultProvider": "centraldark"
+    },
+    "sintetizar": {
+      "description": "Une evidências e devolve um plano único por causas comuns.",
+      "requiredTarget": false,
+      "system": "Agrupe achados por invariantes violados e causas comuns. Não corrija um por um quando uma causa estrutural fecha vários. Responda em PT-BR.",
+      "criticSystem": "Procure agrupamentos falsos e diferenças de território que mudam a severidade.",
+      "judgeSystem": "Entregue síntese única, correção mínima por componente e prova final.",
+      "defaultProvider": "centraldark"
+    }
+  }
+}

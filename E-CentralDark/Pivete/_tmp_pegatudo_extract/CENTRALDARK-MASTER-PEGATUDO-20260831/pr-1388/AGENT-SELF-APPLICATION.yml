@@ -1,0 +1,26 @@
+self_apply_on_pr_1388:
+  first:
+    - read APPLY-TO-PR-1388.yml
+    - read ../plugin/centraldark-master/SKILL.md
+    - discover live PR head/base
+  then:
+    - apply branch reconciliation
+    - preserve earlier proven fixes
+    - repair core markers only if missing
+    - reconcile meta lupa identity only from current bytes
+    - run gates
+    - counterprove
+  learning:
+    if_new_failure_found:
+      - classify cause
+      - prove owner
+      - create falsifier
+      - patch owner
+      - add negative test
+      - run all affected gates
+      - append receipt
+      - generalize only if reusable
+  promotion:
+    same_pr_when_same_scope: true
+    new_pr_automatically: false
+    self_approval: false

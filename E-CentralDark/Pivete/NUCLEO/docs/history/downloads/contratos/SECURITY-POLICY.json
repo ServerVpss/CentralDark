@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "mode": "LOCAL_FIRST_NO_EXTERNAL_MUTATION",
+  "forbidden": [
+    "CCLEANER_EXECUTION",
+    "BROWSER_STORAGE_DELETE",
+    "COOKIE_CLEAR",
+    "CREDENTIAL_EXTRACTION",
+    "GIT_PUSH",
+    "GIT_PULL",
+    "GIT_FETCH",
+    "FORCE_PUSH",
+    "RESET_HARD",
+    "DEPLOY",
+    "VPS_MUTATION",
+    "RAW_CHAT_DUMP_TO_CANONICAL",
+    "SECRETS_IN_REPORTS"
+  ],
+  "browser_sensitive_files_never_read": [
+    "Cookies",
+    "Network/Cookies",
+    "Login Data",
+    "Web Data"
+  ],
+  "notes": "Browser/Notepad são inventariados somente em metadados pelo launcher. Raw continua local e não canônico."
+}

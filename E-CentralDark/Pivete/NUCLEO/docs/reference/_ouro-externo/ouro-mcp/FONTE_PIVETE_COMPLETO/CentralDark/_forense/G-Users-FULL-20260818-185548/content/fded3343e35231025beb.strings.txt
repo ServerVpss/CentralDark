@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\primitives\branchPicker\BranchPickerPrevious.d.ts.map
+
+{"version":3,"file":"BranchPickerPrevious.d.ts","names":[],"sources":["../../../src/primitives/branchPicker/BranchPickerPrevious.ts"],"mappings":";;;cASM,uBAAA;AAAA,kBAMW,6BAAA;EAAA,KACH,OAAA,GAAU,mBAAA;EAHvB;;;AAAA;EAAA,KAQa,KAAA,GAAQ,iBAAA,QAAyB,uBAAA;AAAA;;;;;;;;;;;;;AAAuB;cAgBzD,6BAAA,kBAA6B,yBAAA,CAAA,IAAA,CAAA,IAAA,iBAAA,eAAA,CAAA,iBAAA,oBAAA,oBAAA,CAAA,iBAAA"}

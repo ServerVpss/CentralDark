@@ -1,0 +1,14 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@radix-ui\react-presence\dist\index.d.ts
+
+import * as React from 'react';
+
+interface PresenceProps {
+    children: React.ReactElement | ((props: {
+        present: boolean;
+    }) => React.ReactElement);
+    present: boolean;
+}
+declare const Presence: React.FC<PresenceProps>;
+declare const Root: React.FC<PresenceProps>;
+
+export { Presence, type PresenceProps, Root };

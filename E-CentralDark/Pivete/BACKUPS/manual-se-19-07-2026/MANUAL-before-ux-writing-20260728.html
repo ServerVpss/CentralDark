@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<!-- CONSERTADO 27/07/2026: esta linha "viewport" faltava, e era a causa da
+     pagina ficar fora do padrao no celular. Sem ela o navegador finge uma
+     tela de 980px de largura e da zoom out em tudo. NAO REMOVER. -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>O que foi construído hoje — Manual do CEO</title>
+<style>
+  :root {
+    --bg: #f7f9f7;
+    --bg-card: #ffffff;
+    --ink: #12211b;
+    --ink-soft: #4c5f56;
+    --ink-faint: #7c8d84;
+    --line: #dbe6de;
+    --emerald: #0f9d58;
+    --emerald-deep: #0b7a44;
+    --emerald-pale: #e4f5ec;
+    --amber: #b3760a;
+    --amber-pale: #fbf0dc;
+    --red: #b3392e;
+    --red-pale: #fbeae8;
+    --blue: #2563b8;
+    --blue-pale: #e7f0fb;
+    --shadow-3d: 0 1px 0 rgba(15,157,88,0.08), 0 6px 16px -8px rgba(18,33,27,0.18), 0 2px 4px -2px rgba(18,33,27,0.12);
+    --shadow-soft: 0 1px 2px rgba(18,33,27,0.06), 0 4px 10px -6px rgba(18,33,27,0.10);
+    --radius: 16px;
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d1512;
+    --bg-card: #121e19;
+    --ink: #eaf3ee;
+    --ink-soft: #a9bdb3;
+    --ink-faint: #708179;
+    --line: #223b30;
+    --emerald: #2fd383;
+    --emerald-deep: #1fae6c;
+    --emerald-pale: #12291e;
+    --amber: #e0ab4a;
+    --amber-pale: #2c2110;
+    --red: #e37c70;
+    --red-pale: #2c1512;
+    --shadow-3d: 0 1px 0 rgba(47,211,131,0.06), 0 10px 24px -10px rgba(0,0,0,0.55), 0 2px 6px -2px rgba(0,0,0,0.4);
+    --shadow-soft: 0 1px 2px rgba(0,0,0,0.3), 0 6px 14px -8px rgba(0,0,0,0.4);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1512;
+      --bg-card: #121e19;
+      --ink: #eaf3ee;
+      --ink-soft: #a9bdb3;
+      --ink-faint: #708179;
+      --line: #223b30;
+      --emerald: #2fd383;
+      --emerald-deep: #1fae6c;
+      --emerald-pale: #12291e;
+      --amber: #e0ab4a;
+      --amber-pale: #2c2110;
+      --red: #e37c70;
+      --red-pale: #2c1512;
+      --shadow-3d: 0 1px 0 rgba(47,211,131,0.06), 0 10px 24px -10px rgba(0,0,0,0.55), 0 2px 6px -2px rgba(0,0,0,0.4);
+      --shadow-soft: 0 1px 2px rgba(0,0,0,0.3), 0 6px 14px -8px rgba(0,0,0,0.4);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { background: var(--bg); }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", "Inter", ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono { font-family: "SFMono-Regular", "Consolas", "Liberation Mono", ui-monospace, Menlo, monospace; }
+
+  .wrap { max-width: 820px; margin: 0 auto; padding: 0 24px 120px; }
+
+  header.hero {
+    padding: 72px 24px 56px;
+    background:
+      radial-gradient(600px 260px at 15% -10%, var(--emerald-pale), transparent 70%),
+      var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  header.hero .inner { max-width: 820px; margin: 0 auto; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--emerald-deep);
+    background: var(--emerald-pale);
+    border: 1px solid var(--emerald);
+    padding: 6px 12px; border-radius: 999px;
+    margin-bottom: 22px;
+  }
+  h1 {
+    font-size: clamp(30px, 4.4vw, 44px);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 0 0 18px;
+    text-wrap: balance;
+    max-width: 15ch;
+  }
+  .lede { font-size: 18px; color: var(--ink-soft); max-width: 60ch; margin: 0 0 28px; }
+  .hero-meta { display: flex; gap: 22px; flex-wrap: wrap; font-size: 14px; color: var(--ink-faint); }
+  .hero-meta strong { color: var(--ink); font-weight: 600; }
+
+  nav.toc {
+    margin: 40px 0 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  nav.toc a {
+    display: block; text-decoration: none; color: var(--ink);
+    background: var(--bg-card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 12px 14px; font-size: 13.5px; font-weight: 600;
+    box-shadow: var(--shadow-soft);
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  nav.toc a:hover { transform: translateY(-1px); box-shadow: var(--shadow-3d); }
+  nav.toc a span { display: block; font-weight: 400; color: var(--ink-faint); font-size: 12px; margin-top: 2px; }
+
+  section { padding: 56px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type { border-bottom: none; }
+  section h2 {
+    font-size: 26px; letter-spacing: -0.01em; margin: 0 0 8px; text-wrap: balance;
+  }
+  section .kicker {
+    font-size: 12.5px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+    color: var(--emerald-deep); margin: 0 0 10px;
+  }
+  section > p.intro { color: var(--ink-soft); max-width: 62ch; margin: 0 0 32px; font-size: 15.5px; }
+
+  .live-card {
+    background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px 22px; box-shadow: var(--shadow-soft); margin: 0 0 28px;
+  }
+  .live-head { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; font-size: 14.5px; }
+  .live-dot {
+    width: 9px; height: 9px; border-radius: 50%; background: var(--emerald);
+    box-shadow: 0 0 0 3px var(--emerald-pale);
+    animation: livepulse 2.2s ease-in-out infinite;
+  }
+  @keyframes livepulse { 0%,100% { opacity: 1; } 50% { opacity: .45; } }
+  .live-when { color: var(--ink-faint); font-size: 12.5px; margin-left: auto; }
+  .live-note { margin: 8px 0 0; color: var(--ink-soft); font-size: 13px; }
+  .live-facts { list-style: none; margin: 12px 0 0; padding: 0; font-size: 13.5px; color: var(--ink-soft); }
+  .live-facts li { padding: 3px 0; }
+  .live-facts b { color: var(--ink); font-weight: 600; }
+  @media (prefers-reduced-motion: reduce) { .live-dot { animation: none; } }
+
+  .grid { display: grid; gap: 16px; }
+  .cards-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+
+  .card {
+    background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 22px 24px; box-shadow: var(--shadow-soft);
+  }
+  .card h3 { margin: 0 0 8px; font-size: 16.5px; letter-spacing: -0.005em; }
+  .card p { margin: 0 0 10px; color: var(--ink-soft); font-size: 14.5px; }
+  .card p:last-child { margin-bottom: 0; }
+  .card .path {
+    display: inline-block; font-size: 12.5px; color: var(--emerald-deep);
+    background: var(--emerald-pale); border-radius: 6px; padding: 3px 8px; margin-top: 4px;
+    word-break: break-all;
+  }
+
+  .status-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .pill {
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 999px; white-space: nowrap;
+  }
+  .pill.done { background: var(--emerald-pale); color: var(--emerald-deep); border: 1px solid var(--emerald); }
+  .pill.pending { background: var(--amber-pale); color: var(--amber); border: 1px solid var(--amber); }
+  .pill.blocked { background: var(--red-pale); color: var(--red); border: 1px solid var(--red); }
+  .pill.active { background: var(--blue-pale); color: var(--blue); border: 1px solid var(--blue); }
+
+  .kpi-bar {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px; margin: 0 0 32px;
+  }
+  .kpi {
+    background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 16px 18px; box-shadow: var(--shadow-soft);
+  }
+  .kpi .k-label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-faint); }
+  .kpi .k-value { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; margin-top: 4px; color: var(--ink); }
+  .kpi .k-value small { font-size: 13px; font-weight: 600; color: var(--ink-soft); }
+  .kpi .k-sub { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+
+  .filetree {
+    background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 24px 26px; box-shadow: var(--shadow-soft); overflow-x: auto;
+  }
+  .filetree .mono { font-size: 13px; white-space: pre; color: var(--ink-soft); }
+  .filetree .mono .dir { color: var(--emerald-deep); font-weight: 700; }
+  .filetree .mono .new { color: var(--ink); font-weight: 600; }
+  .filetree .mono .note { color: var(--ink-faint); font-style: normal; }
+
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .tl-item { display: grid; grid-template-columns: 92px 1fr; gap: 18px; padding: 16px 0; border-top: 1px solid var(--line); }
+  .tl-item:first-child { border-top: none; }
+  .tl-time { font-size: 12.5px; color: var(--ink-faint); padding-top: 2px; }
+  .tl-body h4 { margin: 0 0 5px; font-size: 15px; }
+  .tl-body p { margin: 0; color: var(--ink-soft); font-size: 14px; }
+
+  .callout {
+    border-radius: var(--radius); padding: 20px 24px; border: 1px solid var(--line);
+    background: var(--bg-card); box-shadow: var(--shadow-soft);
+  }
+  .callout.pending-box { border-color: var(--amber); background: var(--amber-pale); }
+  .callout.pending-box h3 { color: var(--amber); }
+  .callout h3 { margin: 0 0 10px; font-size: 15.5px; }
+  .callout ul { margin: 0; padding-left: 20px; color: var(--ink-soft); font-size: 14.5px; }
+  .callout li { margin-bottom: 6px; }
+
+  .glossary dt { font-weight: 700; margin-top: 16px; font-size: 14.5px; }
+  .glossary dt:first-child { margin-top: 0; }
+  .glossary dd { margin: 4px 0 0; color: var(--ink-soft); font-size: 14.5px; }
+
+  footer {
+    padding: 48px 24px 80px; text-align: center; color: var(--ink-faint); font-size: 13px;
+  }
+  footer a { color: var(--emerald-deep); }
+
+  ::selection { background: var(--emerald-pale); color: var(--emerald-deep); }
+
+  @media (prefers-reduced-motion: reduce) {
+    nav.toc a { transition: none; }
+  }
+
+  /* ── RESPONSIVO — acrescentado 27/07/2026 ────────────────────────────
+     PROBLEMA: a pagina passava do tamanho da tela no celular e obrigava a
+     arrastar pro lado. Faltava a linha "viewport" (ja corrigida la em cima)
+     e faltava tratar conteudo largo: tabela, bloco de codigo e imagem.
+     REGRA: a pagina nunca rola pro lado. Se algo e largo demais (tabela,
+     codigo), quem rola e a CAIXA daquele item, nao a pagina inteira.      */
+  html, body { max-width: 100%; overflow-x: hidden; }
+  img, svg, video { max-width: 100%; height: auto; }
+  pre, table { max-width: 100%; }
+  pre { overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+  .scroll-x, table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; }
+  code { word-break: break-word; }
+
+  @media (max-width: 720px) {
+    .wrap { padding: 0 14px 72px; }
+    header.hero .inner { padding-left: 14px; padding-right: 14px; }
+    h1 { font-size: 26px; line-height: 1.2; }
+    h2 { font-size: 20px; }
+    .lede { font-size: 16px; }
+    nav.toc { gap: 6px; }
+    nav.toc a { font-size: 13px; padding: 7px 10px; }
+  }
+  @media (max-width: 420px) {
+    h1 { font-size: 22px; }
+    .wrap { padding: 0 11px 60px; }
+  }
+
+  /* ── ABAS ── acrescentado 27/07/2026 (ver comentario no <nav class="abas">) */
+  nav.abas {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px;
+  }
+  nav.abas button {
+    font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+    padding: 9px 15px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--bg-card); color: var(--ink-soft);
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  nav.abas button:hover { border-color: var(--emerald); color: var(--ink); }
+  nav.abas button[aria-selected="true"] {
+    background: var(--emerald); border-color: var(--emerald); color: #fff;
+  }
+  nav.abas button:focus-visible { outline: 2px solid var(--emerald); outline-offset: 2px; }
+  section[hidden] { display: none !important; }
+  .aba-vazia {
+    padding: 22px; border: 1px dashed var(--line); border-radius: var(--radius);
+    color: var(--ink-faint); font-size: 15px; margin-top: 24px;
+  }
+  @media (prefers-reduced-motion: reduce) { nav.abas button { transition: none; } }
+  @media (max-width: 720px) {
+    nav.abas { gap: 6px; }
+    nav.abas button { font-size: 13px; padding: 8px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="inner">
+    <span class="eyebrow">🏠 Manual da Casa — CEO/Pivete</span>
+    <h1>Tudo que foi construído hoje, explicado do seu jeito.</h1>
+    <p class="lede">
+      Sem robotês. Isto aqui é o mapa completo — o quê, onde, por quê, e o
+      que ainda espera uma decisão sua. Nada aqui exige que você abra
+      código pra entender.
+    </p>
+    <div class="hero-meta">
+      <div><strong>26 de julho de 2026</strong> — atualização viva</div>
+      <div><strong>8</strong> ferramentas/skills novas</div>
+      <div><strong>55</strong> seções registradas com evidência</div>
+    </div>
+    <!-- MENU EM ABAS — reorganizado 27/07/2026.
+         ANTES: 18 links soltos, e a pagina descia sem fim com as 20 secoes
+         abertas ao mesmo tempo.
+         AGORA: 7 abas. Cada aba mostra so as secoes dela, entao a pagina
+         fica curta e voce acha as coisas sem rolar.
+         NADA FOI APAGADO: todas as 20 secoes continuam no arquivo, e os
+         links diretos (#panorama, #glossario...) continuam funcionando.
+         Quem decide qual secao fica em qual aba e o mapa "GRUPOS", no
+         bloco de codigo la no fim do arquivo. Pra mover uma secao de aba,
+         e so mudar o nome dela de lugar naquele mapa. -->
+    <nav class="abas" id="abas" role="tablist" aria-label="Seções do manual">
+      <button role="tab" data-aba="hoje">🆕 Hoje (27/07)</button>
+      <button role="tab" data-aba="comeco" aria-selected="true">📊 Comece aqui</button>
+      <button role="tab" data-aba="hermes">🤖 Hermes</button>
+      <button role="tab" data-aba="casa">🏠 Casa e mapa</button>
+      <button role="tab" data-aba="servicos">📡 Serviços</button>
+      <button role="tab" data-aba="pendencias">📋 Pendências</button>
+      <button role="tab" data-aba="analises">🔬 Análises</button>
+    </nav>
+    <noscript>
+      <p style="margin-top:12px;font-size:14px">
+        As abas precisam de JavaScript. Sem ele, todas as seções aparecem
+        seguidas — nada se perde, só fica mais comprido.
+      </p>
+    </noscript>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ══ SESSÃO DE 27/07/2026 — escrita à mão, não é bloco automático ══
+       Isto aqui é a "parte humana" do manual: o que foi descoberto e
+       consertado, em português, sem código. O bloco "Status ao vivo" lá em
+       cima é outra coisa — aquele o Hermes regera sozinho a cada 6h.       -->
+  <section id="hoje-27-07">
+    <p class="kicker">27 de julho de 2026</p>
+    <h2>O dia em que o bot voltou a falar — e o que ele estava escondendo.</h2>
+    <p class="intro">
+      Começou com uma frase só: toda mensagem no Telegram respondia
+      <em>“Provider authentication failed”</em>. No fim do dia eram cinco
+      problemas diferentes, um escondido atrás do outro. Nenhum deles era o
+      que parecia à primeira vista.
+    </p>
+
+    <h3>1. A chave morta — e por que ninguém tinha percebido</h3>
+    <p>
+      O perfil <b>sol</b> usava uma chave do OpenRouter que <b>não existia
+      mais</b>. Perguntei direto pro OpenRouter e ele respondeu
+      <em>“User not found”</em> — ou seja, a chave foi apagada ou a conta
+      sumiu. O perfil <b>pivete</b> usava outra chave, viva, e por isso o
+      aplicativo do computador funcionava enquanto o Telegram não.
+    </p>
+    <p>
+      O detalhe cruel: esse tipo de erro é tratado como <b>definitivo</b>. O
+      sistema nem tentava outro modelo — desistia na hora. Por isso a
+      resposta de erro chegava rápido, quase instantânea.
+    </p>
+    <p class="nota">
+      <b>Resolvido:</b> a chave viva do pivete foi copiada pro sol. Ela estava
+      escrita <b>duas vezes</b> no arquivo — as duas foram trocadas. Os dois
+      perfis agora dividem a mesma conta.
+    </p>
+
+    <h3>2. Uma senha escrita no campo de endereço</h3>
+    <p>
+      O Gemini nunca funcionou no sol e sempre funcionou no pivete. O motivo
+      era besta: existe uma configuração que guarda o <b>endereço</b> do
+      Gemini, e no sol alguém tinha escrito uma <b>senha</b> lá dentro. Todo
+      pedido saía pro lugar errado. O pivete simplesmente não tinha essa
+      linha — por isso funcionava.
+    </p>
+    <p class="nota">
+      <b>Resolvido:</b> a linha foi desligada (não apagada — a senha continua
+      guardada ali do lado, caso pertença a outro lugar).
+    </p>
+
+    <h3>3. A foto que não dava erro: ficava muda</h3>
+    <p>
+      Você mandou uma foto e o bot ficou <b>seis minutos calado</b>. Não deu
+      erro, não deu aviso — silêncio. A explicação: o modelo principal do sol
+      era o <code>tencent/hy3</code>, que <b>só lê texto</b>. Quando a foto
+      chegava, o sistema tentava mesmo assim, batia num “não sei ler imagem”
+      e a conversa morria ali.
+    </p>
+    <p>
+      O próprio Sol tinha te avisado disso, e com honestidade: disse que
+      <em>não tinha certeza de ter visto os pixels</em> e se recusou a
+      inventar o que estava na foto. Ele estava certo.
+    </p>
+    <p class="nota">
+      <b>Resolvido:</b> o modelo principal do sol virou um que enxerga de
+      verdade. E a fila de reservas foi reordenada: os <b>cinco primeiros
+      agora enxergam imagem</b>. Cada um foi conferido um por um, perguntando
+      ao próprio serviço quais tipos de entrada aceita — não foi chute pelo
+      nome do modelo.
+    </p>
+
+    <h3>4. O Grok estava na frente da fila — sem saldo</h3>
+    <p>
+      A lista de reservas tinha o Grok em primeiro lugar. A conta dele está
+      <b>sem crédito</b>. Resultado: toda mensagem sua gastava uma tentativa
+      nele antes de seguir adiante — era parte da lentidão que você sentiu.
+    </p>
+    <p class="nota">
+      <b>Resolvido:</b> o Grok saiu da fila (comentado, com o link da recarga
+      escrito do lado). Volta na hora que você puser crédito.
+    </p>
+
+    <h3>5. O painel que dizia “tudo bem” mostrando dado errado</h3>
+    <p>
+      O bloco automático deste manual afirmava
+      <em>“Gateway do Hermes: não detectado”</em> em quatro registros
+      seguidos — com o gateway rodando o tempo todo. E a tarefa agendada
+      reportava <b>sucesso</b> em todas. Um painel verde exibindo informação
+      falsa.
+    </p>
+    <p class="nota">
+      <b>Estado honesto:</b> hoje ele está acertando (testei oito vezes
+      seguidas). Mas <b>não consegui reproduzir a falha</b>, então não posso
+      dizer que está consertado. Isso fica em <b>amarelo</b> até a checagem
+      automática das 00:00 confirmar sozinha.
+    </p>
+
+    <h3>O que ficou pra você decidir</h3>
+    <p>
+      Uma coisa só: mandar <code>/model</code> no Telegram e escolher o
+      modelo nos botões. A conversa antiga ficou com a <b>chave velha
+      grudada nela</b> — trocar o modelo solta essa amarra. Sem isso, cada
+      mensagem ainda queima uma tentativa perdida.
+    </p>
+
+    <h3>O que eu aprendi errando — nesta sessão</h3>
+    <ul>
+      <li>
+        <b>“Status ok” não é prova.</b> Coloquei o Grok em primeiro lugar
+        porque um arquivo dizia que ele estava “ok”. Estava sem crédito.
+        “Ok” ali significa <em>“ainda não falhou”</em>, não “funciona”.
+      </li>
+      <li>
+        <b>Nome de modelo não diz o que ele faz.</b> Marquei modelos como
+        “só texto” deduzindo pelo nome. Fui conferir na fonte: metade
+        enxergava imagem. Corrigi.
+      </li>
+      <li>
+        <b>Contar letras no log não prova nada.</b> Vi “resposta de 607
+        caracteres” e declarei consertado. Quem descobriu que a foto estava
+        quebrada foi <b>você</b>, testando.
+      </li>
+      <li>
+        <b>Reserva não pode ser o mesmo do titular.</b> Botei o mesmo modelo
+        como principal e como primeira reserva — o sistema pulava, e a
+        proteção não existia.
+      </li>
+      <li>
+        <b>Ler o mapa antes de agir.</b> Quase removi o roteamento da sua VPS
+        achando que era lixo. Só não quebrei porque você me parou a tempo.
+      </li>
+    </ul>
+
+    <h3>Ferramenta nova: o painel de logs ao vivo</h3>
+    <p>
+      Nasceu deste dia. Abre o arquivo
+      <a href="PAINEL-LOGS.html">PAINEL-LOGS.html</a> e você vê, separado por
+      setor, o que acontece quando manda mensagem no bot: o que chegou, qual
+      modelo respondeu, quais ferramentas rodaram e o que quebrou. Cada erro
+      vem com <b>uma linha dizendo o que fazer</b>, não só o código do erro.
+    </p>
+    <p>
+      Para ele atualizar sozinho enquanto você testa o bot:
+    </p>
+    <pre><code>python NUCLEO/motor/06-ferramentas/painel-logs.py --watch</code></pre>
+    <p class="nota">
+      Ele mostra também os processos vivos, as tarefas agendadas e se cada
+      chave existe — <b>o tamanho da chave, nunca o valor</b>.
+    </p>
+
+    <p class="intro" style="margin-top:28px">
+      Registro técnico completo, com caminho e hora de cada prova:
+      <code>profiles/sol/MANUTENCAO-20260727.md</code>
+    </p>
+  </section>
+
+  <section id="panorama">
+    <p class="kicker">Panorama</p>
+    <h2>Em uma frase: o Hermes deixou de ser mudo e a bagunça virou arquivo.</h2>
+    <p class="intro">
+      Três coisas grandes aconteceram hoje. O Hermes passou a te avisar de
+      verdade (texto e voz) no Telegram quando algo importante acontece. O
+      conhecimento que estava solto numa pasta separada (<span class="mono">hermes-mente</span>)
+      foi fundido pro lugar oficial, sem perder nada. E ficaram ferramentas
+      novas — não promessas, testadas — pra você nunca mais precisar
+      confiar só na palavra de uma IA sobre o que ela fez.
+    </p>
+
+    <div class="kpi-bar">
+      <div class="kpi">
+        <div class="k-label">META LUPA</div>
+        <div class="k-value">23/24 <small>ledger</small></div>
+        <div class="k-sub"><span class="pill done">Provado</span> 0 órfão · XP 790</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">3 Temperaturas</div>
+        <div class="k-value">🟢 <small>ativo</small></div>
+        <div class="k-sub"><span class="pill active">Integrado</span> ao ledger</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Bolt</div>
+        <div class="k-value">538 <small>arq</small></div>
+        <div class="k-sub"><span class="pill done">Mapeado</span> = VPS</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Codex</div>
+        <div class="k-value">Plus <small>on</small></div>
+        <div class="k-sub"><span class="pill active">Autenticado</span> sandbox contornado</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Pendências</div>
+        <div class="k-value">P0·P1·P2</div>
+        <div class="k-sub"><span class="pill pending">Aguardando</span> provider w/ tools</div>
+      </div>
+    </div>
+
+<!-- STATUS-AUTOMATICO:INICIO -->
+    <div class="live-card">
+      <div class="live-head">
+        <span class="live-dot"></span>
+        <strong>Status ao vivo</strong>
+        <span class="live-when">verificado em 28/07/2026 18:00:24 -0300</span>
+      </div>
+      <p class="live-note">Este bloco é regerado sozinho a cada 6h pelo Hermes — só fatos mecânicos reconferidos na hora, nunca a análise escrita acima.</p>
+      <ul class="live-facts">
+        <li>Seções reais no histórico técnico: <b>55</b></li>
+        <li>Gateway do Hermes agora: <b>Gateway process running (PID: 32572)</b></li>
+        <li>Skills novas symlinkadas: <b>4/4</b></li>
+        <li>Ferramentas novas presentes em disco: <b>3/3</b></li>
+      </ul>
+    </div>
+    <!-- STATUS-AUTOMATICO:FIM -->
+
+    <div class="grid cards-2">
+      <div class="card">
+        <div class="status-row"><span class="pill done">Provado</span></div>
+        <h3>Card + voz no Telegram</h3>
+        <p>Quando uma missão do Hermes começa, trava, erra ou termina, chega
+        uma mensagem de texto <em>e</em> um áudio real no seu bot. Testado
+        ao vivo — não é simulação.</p>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill done">Provado</span></div>
+        <h3>Fusão hermes-mente → motor</h3>
+        <p>18 arquivos que viviam isolados foram lidos, comparados e
+        fundidos pro lugar certo — conferido por um revisor independente,
+        não só por mim.</p>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill done">Provado</span></div>
+        <h3>3 ferramentas + 3 skills novas</h3>
+        <p><span class="mono">REGISTRAR</span>, <span class="mono">BUSCAR-APRENDIZADO</span>
+        e o auto-atualizador do mapa — todas testadas rodando de verdade,
+        não só escritas.</p>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill pending">Aguardando você</span></div>
+        <h3>9 sondas de prova ainda não rodadas</h3>
+        <p>O teste que prova se o "jeito novo" do Hermes realmente pegou —
+        só 1 de 10 foi rodada até agora. As outras esperam sua ordem.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="hermes-fala">
+    <p class="kicker">O que mudou de verdade</p>
+    <h2>O Hermes agora tem caráter, memória e voz — de verdade, não só no papel.</h2>
+    <p class="intro">
+      Existia um "manual de comportamento" completo (5 Leis, depois 10
+      Regras de Ouro, classificação de risco R0 a R4) guardado numa pasta,
+      nunca lido pelo Hermes de verdade. Hoje ele foi condensado e
+      injetado no arquivo que o Hermes lê em <strong>todo turno</strong> —
+      testado com uma pergunta real, e a resposta já veio no formato
+      certo.
+    </p>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time mono">15:07</div>
+        <div class="tl-body">
+          <h4>Identidade ativada no motor real</h4>
+          <p>O núcleo das regras (risco R0–R4, "verde não é prova", ciclo
+          LER→PERGUNTAR→AGIR→REVISAR→PROVAR→REGISTRAR) passou a carregar
+          em toda conversa do Hermes — não é mais um documento esquecido.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time mono">15:08</div>
+        <div class="tl-body">
+          <h4>Primeiro teste real, resultado honesto</h4>
+          <p>Perguntei "como tá o sistema?" — ele respondeu com números
+          reais de disco/RAM e a cor certa (🟡, sem fingir "tudo ok"). Mas
+          também citou um dado que eu não consegui confirmar em log — isso
+          foi registrado como falha real, não escondido.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time mono">18:52</div>
+        <div class="tl-body">
+          <h4>Áudio real confirmado no Telegram</h4>
+          <p>Uma resposta completa do Hermes ("a raiz quadrada de 144 é
+          12") virou nota de voz de verdade no seu Telegram — não MP3
+          quebrado, OGG convertido automaticamente antes de enviar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="casa-organizada">
+    <p class="kicker">Arrumação</p>
+    <h2>A pasta solta virou parte da casa oficial.</h2>
+    <p class="intro">
+      <span class="mono">hermes-mente/</span> tinha 18 arquivos bons —
+      identidade, memória em três temperaturas, regras de decisão — mas
+      vivia isolada, competindo com a árvore oficial <span class="mono">motor/</span>.
+      Hoje cada peça foi lida, comparada com o que já existia, e movida
+      pro lugar certo — sem apagar a origem, sem perder conteúdo, com um
+      revisor independente conferindo cada hash antes do veredito final.
+    </p>
+    <div class="callout">
+      <h3>O que um revisor de fora confirmou, sozinho, sem confiar na minha palavra</h3>
+      <ul>
+        <li>Os 18 arquivos originais continuam intactos — nenhum byte alterado.</li>
+        <li>As duas versões concorrentes da identidade do mordomo foram
+        fundidas de verdade (nada foi descartado por tamanho).</li>
+        <li>A memória antiga (um protótipo abandonado) virou histórico
+        preservado, não foi apagada — só deixou de ser "o design atual".</li>
+        <li><span class="mono">SOUL.md</span> aponta pros caminhos novos,
+        exceto a Regra de Ouro, que ficou onde você mandou deixar.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="ferramentas">
+    <p class="kicker">Ferramentas novas</p>
+    <h2>Sete peças novas — todas testadas rodando, não só escritas.</h2>
+    <div class="grid cards-2">
+      <div class="card">
+        <h3>🖋️ REGISTRAR</h3>
+        <p>Grava uma seção nova no histórico oficial com hora real do
+        relógio (nunca estimada) e hash de rollback. É o que gerou as 53
+        seções deste relatório inteiro.</p>
+        <span class="path">motor/06-ferramentas/REGISTRAR</span>
+      </div>
+      <div class="card">
+        <h3>🔍 BUSCAR-APRENDIZADO</h3>
+        <p>Procura no seu próprio histórico do GitHub (335+ lições reais,
+        desde junho) antes de tratar qualquer achado novo como inédito.</p>
+        <span class="path">motor/06-ferramentas/BUSCAR-APRENDIZADO</span>
+      </div>
+      <div class="card">
+        <h3>🗺️ Mapa que se atualiza sozinho</h3>
+        <p>A cada 6 horas, sem custo de IA, reconfirma os fatos mecânicos
+        do sistema (arquivos, config, symlinks) e atualiza o topo do mapa
+        — sem tocar na análise escrita à mão.</p>
+        <span class="path">motor/06-ferramentas/atualizar-mapa-hermes.sh</span>
+      </div>
+      <div class="card">
+        <h3>🔁 Skill: revisor em paralelo</h3>
+        <p>Sempre que uma mudança arriscada roda, um segundo agente
+        observa em paralelo e dá veredito independente — não sou eu
+        marcando minha própria prova.</p>
+        <span class="path">skills/background-output-log</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="mapa">
+    <p class="kicker">Onde tudo está</p>
+    <h2>O mapa da casa, sem precisar adivinhar caminho.</h2>
+    <p class="intro">Tudo abaixo é real — nada foi criado fora do lugar combinado.</p>
+    <div class="filetree">
+<div class="mono"><span class="dir">E:\CentralDark\Pivete\NUCLEO\</span>
+├── <span class="dir">motor\</span>
+│   ├── <span class="dir">01-identidade\</span>      <span class="note"># quem o Hermes é</span>
+│   │   └── <span class="new">NUCLEO-MORDOMO.md, CARREGADOR.md, 04-COMUNICACAO.md</span>
+│   ├── <span class="dir">02-cerebro\</span>          <span class="note"># como ele decide</span>
+│   │   └── <span class="new">02-ANTECIPACAO.md, 03-DECISAO.md, 05-APRENDIZADO.md</span>
+│   ├── <span class="dir">03-memoria\</span>          <span class="note"># memória em 3 temperaturas</span>
+│   │   └── <span class="new">MEMORIA.md (fundido), memoria\HOJE.md, SEMANA.md, REGRAS.md</span>
+│   ├── <span class="dir">06-ferramentas\</span>      <span class="note"># as ferramentas novas</span>
+│   │   └── <span class="new">REGISTRAR, BUSCAR-APRENDIZADO, atualizar-mapa-hermes.sh</span>
+│   └── <span class="dir">10-observabilidade\</span>  <span class="note"># o histórico completo</span>
+│       └── <span class="new">REVISAO-TECNICA-DA-LUPA.md (53 seções), MAPA-HERMES-19-07-2026.md</span>
+├── <span class="dir">hermes-mente\</span>            <span class="note"># fonte original, intocada, preservada</span>
+│   └── <span class="new">HERMES-REGRAS-DE-OURO.md</span>  <span class="note"># única, travada, do jeito que você pediu</span>
+├── <span class="dir">skills\</span>                  <span class="note"># legado preservado, não carregado</span>
+│   └── <span class="new">skill histórica da Lupa, senior-architect, background-output-log, buscar-aprendizado</span>
+├── <span class="dir">perfil Hermes pivete\skills\</span>
+│   └── <span class="new">meta-lupa → CentralDark\.agents\skills\meta-lupa</span> <span class="note"># única Lupa ativa</span>
+└── <span class="dir">MANUAL-SESSAO-19-07-2026\</span>
+    └── <span class="new">MANUAL.html</span>  <span class="note"># este arquivo</span>
+</div>
+    </div>
+  </section>
+
+  <section id="pendente-antigo">
+    <p class="kicker">Falta decidir (registro 19/07)</p>
+    <h2>O que ainda depende só de você — histórico de 19/07.</h2>
+    <div class="callout pending-box">
+      <h3>Três coisas reais, sem maquiagem</h3>
+      <ul>
+        <li><strong>9 das 10 sondas de prova</strong> do "teste de
+        diferença" ainda não rodaram — cada uma testa um comportamento
+        específico (agir sozinho no barato, travar no arriscado, lembrar
+        promessa, etc.). Posso rodar quando você quiser.</li>
+        <li><strong>2 lacunas reais na META LUPA</strong>
+        (persistência de evidência após erro de escrita, e manifesto
+        completo de arquivos) foram corrigidas — mas outras 4 menores
+        ficaram registradas como pendência, esperando uma próxima rodada
+        autorizada.</li>
+        <li><strong>Duas cópias redundantes legadas</strong> do método da Lupa
+        dentro do pacote <span class="mono">lupa-react/</span> — perguntei
+        se posso limpar, ainda sem resposta.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="sessao-20-07">
+    <p class="kicker">Continuação — 20/07/2026</p>
+    <h2>Update do Hermes destravado, patch de voz salvo, e o mapa da memória inteira.</h2>
+    <p class="intro">
+      Sessão seguinte (Claude Opus 4.8). Três coisas reais aconteceram: o
+      update do Hermes que estava travado foi liberado e concluído, um patch
+      de voz que o update tinha engolido foi recuperado e reaplicado com
+      revisor independente, e o estado real de toda a memória do ecossistema
+      foi mapeado pra não se perder na próxima sessão.
+    </p>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time mono">~21:15</div>
+        <div class="tl-body">
+          <h4>Update travado, causa real encontrada</h4>
+          <p>O update falhava com "Hermes is still running". O culpado não era
+          a janela: era o gateway (PID 15148, conectado no Telegram) + os
+          dashboards. Fechados sob autorização, o caminho ficou limpo.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time mono">21:23</div>
+        <div class="tl-body">
+          <h4>Update concluído, interface reconstruída</h4>
+          <p>Passou reto do ponto que travava: limpou 121 caches, atualizou
+          dependências e buildou a UI web ("✓ built in 1.30s"). Mas fez
+          <span class="mono">git reset --hard</span> e jogou os patches locais
+          pro stash <span class="mono">edbc18e8</span>.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time mono">21:39</div>
+        <div class="tl-body">
+          <h4>Patch de voz recuperado com prova</h4>
+          <p>O patch <span class="mono">_MD_TABLE</span> (limpa tabela markdown
+          antes de virar voz) tinha sido revertido. Um revisor de fundo
+          independente confirmou o veredito — reaplicar só as 4 linhas — e elas
+          voltaram cirúrgicas. Python compila, backup guardado.</p>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <h3>🗺️ Mapa visual da memória do ecossistema — 6 sistemas, verificados</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:18px 0;">
+        <div style="border:1px solid var(--line);border-left:5px solid var(--emerald);border-radius:12px;padding:12px 14px;background:var(--bg-card);box-shadow:var(--shadow-soft);">
+          <div style="font-weight:700;">🟢 1 · LEMBRANCAS</div>
+          <div style="color:var(--ink-soft);font-size:0.88em;margin-top:5px;">MCP · tags, eixo passado/presente/futuro, flag <em>promovida</em>. <strong>O modelo a seguir.</strong></div>
+        </div>
+        <div style="border:1px solid var(--line);border-left:5px solid var(--amber);border-radius:12px;padding:12px 14px;background:var(--bg-card);box-shadow:var(--shadow-soft);">
+          <div style="font-weight:700;">🟡 2 · Perfil Hermes</div>
+          <div style="color:var(--ink-soft);font-size:0.88em;margin-top:5px;">O cérebro REAL que roda hoje · <span class="mono">state.db</span> <strong>inchado (~346 MB)</strong>.</div>
+        </div>
+        <div style="border:1px solid var(--line);border-left:5px solid var(--emerald);border-radius:12px;padding:12px 14px;background:var(--bg-card);box-shadow:var(--shadow-soft);">
+          <div style="font-weight:700;">🟢 3 · CONSCIENCIA.md</div>
+          <div style="color:var(--ink-soft);font-size:0.88em;margin-top:5px;">Regras canônicas do projeto · tom, permissões, proibições.</div>
+        </div>
+        <div style="border:1px solid var(--line);border-left:5px solid var(--emerald);border-radius:12px;padding:12px 14px;background:var(--bg-card);box-shadow:var(--shadow-soft);">
+          <div style="font-weight:700;">🟢 4 · .claude/memory</div>
+          <div style="color:var(--ink-soft);font-size:0.88em;margin-top:5px;">Memória fixa da IA · carrega índice automático toda sessão.</div>
+        </div>
+        <div style="border:1px solid var(--line);border-left:5px solid var(--emerald);border-radius:12px;padding:12px 14px;background:var(--bg-card);box-shadow:var(--shadow-soft);">
+          <div style="font-weight:700;">🟢 5 · Hermes 3-temperaturas</div>
+          <div style="color:var(--ink-soft);font-size:0.88em;margin-top:5px;"><strong>ATIVO E PROVADO</strong> · integrado ao ledger da META LUPA (<span class="mono">uso-ledger.jsonl</span>). 23 BEGIN / 24 FINAL, XP 790, Level 6, 0 órfãos. As 3 temperaturas (fria/morna/quente) moved eventos pro ledger e aliviaram o fluxo.</div>
+        </div>
+        <div style="border:1px solid var(--line);border-left:5px solid var(--amber);border-radius:12px;padding:12px 14px;background:var(--bg-card);box-shadow:var(--shadow-soft);">
+          <div style="font-weight:700;">🟡 6 · memoria-api</div>
+          <div style="color:var(--ink-soft);font-size:0.88em;margin-top:5px;">VPS (PM2) · conteúdo ainda não confirmado.</div>
+        </div>
+      </div>
+
+      <h3 style="margin-top:6px;">⚖️ O desequilíbrio, em barra — o inchado virou cérebro, o bom tá vazio</h3>
+      <div style="margin:14px 0;font-size:0.85em;">
+        <div style="display:flex;align-items:center;gap:10px;margin:6px 0;">
+          <span style="width:150px;flex:none;" class="mono">state.db</span>
+          <span style="flex:1;background:var(--line);border-radius:6px;overflow:hidden;height:16px;"><span style="display:block;height:100%;width:100%;background:var(--amber);"></span></span>
+          <span style="width:70px;flex:none;text-align:right;" class="mono">346 MB</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin:6px 0;">
+          <span style="width:150px;flex:none;" class="mono">sessions</span>
+          <span style="flex:1;background:var(--line);border-radius:6px;overflow:hidden;height:16px;"><span style="display:block;height:100%;width:3.2%;background:var(--ink-faint);"></span></span>
+          <span style="width:70px;flex:none;text-align:right;" class="mono">11 MB</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin:6px 0;">
+          <span style="width:150px;flex:none;" class="mono">memories (lê SEMPRE)</span>
+          <span style="flex:1;background:var(--line);border-radius:6px;overflow:hidden;height:16px;"><span style="display:block;height:100%;width:0.5%;background:var(--emerald);"></span></span>
+          <span style="width:70px;flex:none;text-align:right;" class="mono">~5 KB</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin:6px 0;">
+          <span style="width:150px;flex:none;" class="mono">3-temperaturas</span>
+          <span style="flex:1;background:var(--line);border-radius:6px;overflow:hidden;height:16px;"><span style="display:block;height:100%;width:0%;background:var(--red);"></span></span>
+          <span style="width:70px;flex:none;text-align:right;" class="mono">0 byte</span>
+        </div>
+      </div>
+
+      <p><strong>Decisão do Pivete:</strong> unificar tudo num sistema só. Regra
+      de ouro do arquiteto — memória não se unifica por armazenamento, se unifica
+      por <strong>recuperação</strong> (achar a lembrança certa na hora certa).
+      O que a IA lê em TODA sessão são ~5 KB; o inchaço de 346 MB quase não é
+      recuperado direto. É esse o desequilíbrio a corrigir.</p>
+    </div>
+    <div class="callout pending-box">
+      <h3>Pendências atualizadas</h3>
+      <ul>
+        <li><strong>Reload do gateway</strong> — o patch de voz só passa a valer
+        quando o Hermes reiniciar (Python só relê o arquivo no próximo start).</li>
+        <li><strong>Cópias da Lupa em <span class="mono">lupa-react/</span></strong>
+        — respondido: as 2 idênticas estão DEFASADAS ~8&nbsp;KB da canônica;
+        podem virar ponteiro. A 3ª (<span class="mono">original-anexada</span>)
+        é evidência de auditoria, preservar. Espera "PERMITO PIVETE".</li>
+        <li><strong>9 sondas do teste-de-diferença + 4 lacunas menores da Lupa</strong>
+        — seguem esperando rodada autorizada.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="head-provado-21-07">
+    <p class="kicker">HEAD provado — 21/07/2026</p>
+    <h2>O que já foi testado de verdade (gabarito do topo).</h2>
+    <p class="intro">
+      Isto NÃO é o que alguém disse — é o que foi provado com evidência (HTTP status,
+      processo na porta). O Opus 4.8 fica no topo com este gabarito; Sonnet + Gemini
+      fazem a varredura cega na VPS; o GPT valida no fim. Só vira verde com prova.
+    </p>
+    <div class="callout">
+      <h3>🟢 Provado (com número/evidência)</h3>
+      <ul>
+        <li><span class="mono">ssh Segredo-VPS</span> → host <span class="mono">vmi3256920</span>, root</li>
+        <li><span class="mono">ai-proxy /v1/chat/completions</span> → <strong>200</strong> — gpt-5.5 e google/gemini-2.5-pro (senha <span class="mono">WEBUI_LOVABLE_KEY</span>)</li>
+        <li><span class="mono">api.centralldark.com/v1/models</span> → <strong>200</strong> (lista Arsenal)</li>
+        <li><span class="mono">darkai</span> local no PC → funciona ("pong")</li>
+        <li>Gateway Hermes → ligado, patch de voz ativo</li>
+        <li>Cofre <span class="mono">Brain-Copia-bagunca</span> → intacto (backup 29/06, pastas arrumadas)</li>
+        <li>Registros → aprendizados #336–#340 no GitHub</li>
+      </ul>
+    </div>
+    <div class="callout pending-box">
+      <h3>🔴 Quebrado / falta</h3>
+      <ul>
+        <li><span class="mono">api.centralldark.com/v1/chat/completions</span> → <strong>401</strong> (Arsenal, senha separada — falta essa)</li>
+        <li>Memória do Hermes → <span class="mono">state.db</span> ~346 MB inchado; 3-temperaturas 0 byte</li>
+        <li>Atalho <span class="mono">vault</span> → aponta pro <span class="mono">repo</span> morto (de 02/07)</li>
+      </ul>
+    </div>
+    <div class="callout">
+      <h3>⏳ Aguardando a varredura (Sonnet + Gemini)</h3>
+      <ul>
+        <li>Seção 1 — Subdomínios → destino real → porta</li>
+        <li>Seção 2 — Pastas → tamanho em disco</li>
+        <li>Seção 3 — Rota → porta → processo ativo</li>
+      </ul>
+      <p>Detalhe completo em <span class="mono">E:\CentralDark\MAPA-REAL-E-HEAD-PROVADO-21-07-2026.md</span></p>
+    </div>
+  </section>
+
+  <section id="glossario">
+    <p class="kicker">Glossário rápido</p>
+    <h2>Pra você nunca precisar perguntar "o que é isso" de novo.</h2>
+    <dl class="glossary">
+      <dt>SOUL.md</dt>
+      <dd>O arquivo que o Hermes lê em <em>toda</em> conversa — é onde a identidade dele mora de verdade.</dd>
+      <dt>Revisor independente</dt>
+      <dd>Um segundo agente, sem ver o que o primeiro fez, que confere tudo do zero e dá veredito próprio.</dd>
+      <dt>Verde não é prova</dt>
+      <dd>Regra central: uma mensagem de sucesso sozinha não prova nada — precisa de teste, hash, ou log real por trás.</dd>
+      <dt>REGISTRAR</dt>
+      <dd>O comando que grava uma seção nova no histórico, sempre com hora real e hash — nunca estimado.</dd>
+      <dt>R0–R4</dt>
+      <dd>Escala de risco: R0 é ler/consultar (age sozinho); R4 é gastar dinheiro ou mexer com terceiros (só com sua ordem literal).</dd>
+    </dl>
+  </section>
+
+  <section id="meta-lupa">
+    <p class="kicker">Estado atual — 26/07</p>
+    <h2>META LUPA: selada, com writer canônico e ataques preventivos bloqueados.</h2>
+    <p class="intro">
+      A skill única evoluiu: XP, nível, tier, fingerprint e deduplicação agora
+      são calculados de verdade, com ledger append-only validado antes de cada
+      escrita. O Hermes encontrou a skill pelo discovery, mas a execução final
+      com tool call ficou pendente porque o provider retornou
+      <span class="mono">HTTP 404: No endpoints found that support tool use</span>.
+      Isso é rota sem suporte a tools — não falha da META LUPA.
+    </p>
+    <div class="grid cards-2">
+      <div class="card">
+        <div class="status-row"><span class="pill done">Provado</span></div>
+        <h3>Writer canônico conectado</h3>
+        <p><span class="mono">.agents/skills/meta-lupa/scripts/meta_lupa.py</span>
+        grava o ledger com append atômico e validação antes da escrita.</p>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill done">Provado</span></div>
+        <h3>Ataques S4–S8 bloqueados</h3>
+        <p>5/5 preventivos antes da mutação: delete, truncate, overwrite,
+        rename/replace, remoção de recibo. Ledger preservado sem alteração de SHA.</p>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill pending">Pendente</span></div>
+        <h3>Runtime Hermes executando a skill</h3>
+        <p>Prova final por tool call ficou bloqueada (404 do provider).
+        Causa: rota sem suporte a tools, não falha da Lupa.</p>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill done">Provado</span></div>
+        <h3>Ledger íntegro</h3>
+        <p>23 BEGIN / 24 FINAL, 0 órfão, 0 bad hash, 0 dangling refs.
+        XP falso não concedido. Testes canônicos e adversariais verdes.</p>
+      </div>
+    </div>
+    <div class="callout">
+      <h3>Estado honesto (máquina)</h3>
+      <ul>
+        <li><span class="mono">META_LUPA_WRITER_WIRED=SIM</span></li>
+        <li><span class="mono">ATTACKS_PREVENTED=5/5</span> · <span class="mono">PREVENTED_BEFORE_MUTATION=SIM</span></li>
+        <li><span class="mono">LEDGER_SHA256_UNCHANGED=SIM</span> · <span class="mono">XP_DELTA=0</span></li>
+        <li><span class="mono">ORPHAN_BEGIN=0</span> · <span class="mono">ORPHAN_FINAL=0</span> · <span class="mono">BAD_HASH=0</span> · <span class="mono">DANGLING_REFS=0</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="hermes-local">
+    <p class="kicker">Estado atual — 26/07</p>
+    <h2>Hermes local: painel, sessão e memória diferenciados.</h2>
+    <p class="intro">
+      O dashboard local responde em <span class="mono">http://127.0.0.1:9119</span>
+      (perfil pivete). Mostra config, modelos, profiles, logs, sessões, chamadas,
+      tool calls, analytics e consumo — controle avançado ainda depende parcialmente
+      de YAML/CLI. Nesta sessão o modelo lógico exibido foi <span class="mono">xai-critical</span>,
+      provider <span class="mono">moa</span>, agregador <span class="mono">tencent/hy3:free</span> (Nous).
+    </p>
+    <div class="callout">
+      <h3>Três memórias — não confundir</h3>
+      <ul>
+        <li><strong>Barra de contexto da sessão</strong> — a que apareceu em 91% era a janela desta conversa, ampliada por referências + system prompt + skills injetadas. Não é o MEMORY.md.</li>
+        <li><strong>MEMORY.md do perfil</strong> — memória injetada que o Hermes lê; precisa de manutenção, não substituída pelas 3 temperaturas.</li>
+        <li><strong>Ledger da META LUPA</strong> — diário das 3 temperaturas; aliviou o fluxo ao mover eventos pra lá, mas não substitui a memória do perfil.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="observabilidade">
+    <p class="kicker">Estado atual — 26/07</p>
+    <h2>Painéis: o que funciona e o que falta consolidar.</h2>
+    <div class="grid cards-2">
+      <div class="card">
+        <div class="status-row"><span class="pill done">Funcional</span></div>
+        <h3>Hermes Dashboard local</h3>
+        <p><span class="mono">http://127.0.0.1:9119</span> — config, modelos, logs, tool calls, analytics.</p>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill blocked">Offline intencional</span></div>
+        <h3>Open WebUI CentralDark</h3>
+        <p><span class="mono">https://ui.centralldark.com</span> — parado por ordem sua (16/07). Container existe; Caddy retorna 503 (upstream parado). Não subir nesta missão.</p>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill done">Funcional</span></div>
+        <h3>Status público</h3>
+        <p><span class="mono">https://status.centralldark.com</span> — página de saúde.</p>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill pending">Pendente</span></div>
+        <h3>Tela transacional única</h3>
+        <p>Falta consolidar numa só tela: modelo solicitado, roteador, provider efetivo, modelo efetivo, fallback, latência, tokens, custo, tool call, erro HTTP, saúde da rota. Recomendar no Dashboard ou Open WebUI já existente — sem painel paralelo.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="vps-servicos">
+    <p class="kicker">Estado atual — 26/07</p>
+    <h2>Serviços comprovados na VPS (APIs, não painel visual).</h2>
+    <div class="filetree">
+<div class="mono">CentralDark-Hermes      :8899   core/orquestrador · health/status/metrics · sem UI web própria
+CentralDark-ArsenalAdapter :8090   gateway OpenAI-compatible · health/providers/models/chat · tools em payload · auth em rotas
+CentralDark-HermesThinker :7801   auxiliar · health · think/browse/search · sem catálogo visual
+api.centralldark.com/v1          fachada pública do ArsenalAdapter · health/models OK · chat exige auth
+</div>
+    </div>
+    <div class="callout">
+      <h3>Regra de honestidade</h3>
+      <ul>
+        <li>Não declarar LLM "fisicamente local" sem provar backend local, processo carregado e ausência de fallback externo.</li>
+        <li>Algumas chamadas SDK foram bloqueadas enquanto curl/browser funcionaram — registrar como comportamento observado, não defeito concluso.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="bolt">
+    <p class="kicker">Estado atual — 26/07</p>
+    <h2>Bolt: fonte importada, inventário fechado, rota morta intocada.</h2>
+    <div class="grid cards-2">
+      <div class="card">
+        <div class="status-row"><span class="pill done">Provado</span></div>
+        <h3>Importação da VPS</h3>
+        <p>Fonte importada da VPS: <strong>538 arquivos</strong>. Comparação local/VPS indicou igualdade na leitura realizada.</p>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill blocked">Bloqueado</span></div>
+        <h3>Rota morta no compose</h3>
+        <p><span class="mono">docker-compose.yml</span> aponta para rota com resposta <strong>401</strong>. Arquivo <strong>não foi alterado</strong> — fora do escopo autorizado.</p>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill pending">Em andamento</span></div>
+        <h3>Ponte Bolt ↔ Lovable</h3>
+        <p>Workspace CentralDark confirmado. Projeto "centraldark" existe. Bolt <strong>não possui projeto Lovable próprio</strong> → Lovable atua como arsenal consultivo. Código canônico em <span class="mono">apps/modulos/Bolt</span>.</p>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill pending">Pendente</span></div>
+        <h3>Patch mínimo</h3>
+        <p>Proposta de patch mínimo do Bolt sem declarar mudança funcional. <span class="mono">FILES_CHANGED=0</span> enquanto em inventário/proposta.</p>
+      </div>
+    </div>
+    <div class="callout">
+      <h3>Nota de limpeza</h3>
+      <ul>
+        <li><span class="mono">.bak</span> criado por engano nesta missão foi <strong>removido</strong> — não há lixo no repo.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="codex">
+    <p class="kicker">Estado atual — 26/07</p>
+    <h2>Codex: conta Plus ativa, sandbox contornado.</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time mono">~21:30</div>
+        <div class="tl-body">
+          <h4>Conta ChatGPT Plus autenticada</h4>
+          <p>Token aplicado no <span class="mono">auth.json</span> (auth_mode chatgpt). Sessão e worktree preservados. Nenhum dado de auth exposto aqui.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time mono">~21:31</div>
+        <div class="tl-body">
+          <h4>Sandbox Windows falhou</h4>
+          <p>Erro <span class="mono">helper_unknown_error: setup refresh had errors</span>. Contorno usado: <span class="mono">--sandbox danger-full-access</span>.</p>
+        </div>
+      </div>
+    </div>
+    <div class="callout pending-box">
+      <h3>Atenção operacional</h3>
+      <ul>
+        <li>Modo <span class="mono">danger-full-access</span> é contorno, <strong>não configuração padrão permanente</strong>.</li>
+        <li>Não expor <span class="mono">auth.json</span>, <span class="mono">id_token</span> ou dados de autenticação em lugar nenhum.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="git-github">
+    <p class="kicker">Estado atual — 26/07 (leitura apenas)</p>
+    <h2>Git: branch de trabalho, HEAD e status.</h2>
+    <div class="filetree">
+<div class="mono">BRANCH   feat/bolt-lovable-bridge-2026-07-26
+HEAD     a67e17cef445ecad0a95c4d276e6acd0aedb1e7f  (último FINAL do ledger)
+STATUS   ahead da origin/feat/bolt-lovable-bridge (META LUPA commitada)
+PR       384 (relacionado, restrito à META LUPA + segredo)
+CHECKS   suíte META LUPA 63/63 verde
+</div>
+    </div>
+    <div class="callout">
+      <h3>Regra aplicada</h3>
+      <ul>
+        <li>Não copiar SHA antigo como estado atual sem revalidar — HEAD acima reconferido nesta leitura.</li>
+        <li>Branch de trabalho isolada; main intocada. Nenhum merge ou push fora do escopo.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="historico">
+    <p class="kicker">Histórico de atualizações</p>
+    <h2>Registro das mãos na Casa — entra nova, não apaga antiga.</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time mono">19/07</div>
+        <div class="tl-body"><h4>Manual criado</h4><p>Versão inicial da sessão.</p></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time mono">20/07</div>
+        <div class="tl-body"><h4>Update Hermes + voz</h4><p>Patch de voz recuperado, mapa de memória mapeado.</p></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time mono">21/07</div>
+        <div class="tl-body"><h4>HEAD provado</h4><p>Gabarito de provas (SSH, ai-proxy 200, api/models 200, darkai local).</p></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time mono">26/07 21:11</div>
+        <div class="tl-body">
+          <h4>Atualização viva — META LUPA, Hermes local, Painéis, VPS, Bolt, Codex, Git</h4>
+          <p><strong>Arquivos consultados:</strong> MANUAL.html (630 linhas), ledger META LUPA, git local (read-only), auth.json (apenas modo).</p>
+          <p><strong>Mudanças no manual:</strong> TOC + hero atualizados; 7 seções novas inseridas (META LUPA, Hermes local, Observabilidade, VPS, Bolt, Codex, Git).</p>
+          <p><strong>Evidências adicionadas:</strong> ledger 23/24 íntegro; 538 arquivos Bolt=VPS; Codex Plus + sandbox contornado; HEAD revalidado.</p>
+          <p><strong>Pendências abertas:</strong> P0 provider com tools; P1 observabilidade + auditoria de secrets; P2 patch mínimo Bolt.</p>
+          <p><strong>Próximo passo:</strong> diagnosticar provider/modelo com suporte real a tool calling no Hermes local, sem alterar config antes da prova.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="opus-5-analise">
+    <p class="kicker">Análise Externa — 27/07/2026</p>
+    <h2>OPUS-5.md: o que aproveitar, o que já existe, o que rejeitar.</h2>
+    <p class="intro">
+      Análise formal via META LUPA (<code>usage_id=c7ed6a32db5eb816fe63123eecf4bf8f0aef3d1f67630aee99be6a108944605d</code>) do arquivo <code>OPUS-5.md</code> (202.7 KB, SHA256 <code>f8bc6dee5b23b926d3cb87a5b2dfc197feea6bfd82119f4a796b767a8da2ec41</code>), comparado ao stack CentralDark (SOUL, NUCLEO-MORDOMO, META LUPA, PADRAO-CARD-HERMES v1.2).
+    </p>
+
+    <div class="callout">
+      <h3>🟢 Veredito META LUPA: CONDICIONAR</h3>
+      <ul>
+        <li><strong>16 itens</strong> ouro reutilizável (Classe A)</li>
+        <li><strong>28 itens</strong> já existem no stack (Classe B)</li>
+        <li><strong>16 lacunas</strong> comprovadas (Classe C)</li>
+        <li><strong>76 itens</strong> rejeitados (Classes D+E)</li>
+        <li>Veredito: <strong>CONDICIONAR</strong> — fechar 3 lacunas críticas, documentar 13 no backlog, rejeitar 100% classes D/E</li>
+      </ul>
+    </div>
+
+    <h3>🏷️ Classificação 5 Classes (140 itens)</h3>
+    <div class="grid cards-2">
+      <div class="card">
+        <div class="status-row"><span class="pill done">Classe A</span></div>
+        <h3>Princípios Reutilizáveis (19)</h3>
+        <p>Roteamento tools, memória versionada, correção sem culpa, decisão visual, privacy, citations, tool priority, search scaling, visualizer triggers, artifact criteria, file creation, skill reading, MCP suggestion, past chats, request checklist, browser storage ban, package management.</p>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill done">Classe B</span></div>
+        <h3>Já Existe (28)</h3>
+        <p>3 temperaturas, read-before-write, fact vs inference, error correction, visual decision, lead with result, tables/arrows, no fake green, acknowledge→fix→continue, memory as external, single source of truth, tool routing, fallback, privacy, format prefs, boundaries, no discouraging feedback, search recency, copyright, harmful content, image search, MCP search before browser, skill reading, file creation, artifact usage, browser storage ban.</p>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill pending">Classe C</span></div>
+        <h3>Lacunas Reais (16)</h3>
+        <p>Árvore tool routing (Step 0-3), if_version + auto-merge, frases proibidas memória, citation format strict, tool priority hierarchy, visualizer module system, MCP suggestion proactive, past chats linguistic cues, request evaluation checklist, artifact thresholds + storage ban, package management, web search scaling, copyright self-check, harmful content categories, image search interleave, connector search before suggest, visualizer modules, loading messages, content safety visualizer, skill reading unconditional, accountability without self-abasement, spec triggers visual, multi-visualization protocol, never expose machinery, content safety visuals, skill reading unconditional.</p>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill blocked">Classes D+E</span></div>
+        <h3>Rejeitado (76)</h3>
+        <p><strong>Classe D — Plataforma (40):</strong> Memory API, MCP Apps, Computer Use, File handling, Artifacts, Anthropic API, Structured outputs, Web Search, PDF/base64, Conversation mgmt, Stateful apps, Error handling, Citation format, Profile injection.<br><strong>Classe E — Temporal (36):</strong> Model strings, Mythos/Glasswing, Produtos Anthropic, Knowledge cutoff, Copyright examples, User wellbeing, PII categories, Image search blocked, MCP registry examples, suggest_connectors/research, end_conversation, Anthropic API config.</p>
+      </div>
+    </div>
+
+    <h3>📊 Veredito por Bloco</h3>
+    <div class="filetree">
+<div class="mono"><span class="dir">Bloco 1 · Roteamento Tools</span>
+│   Ouro: 5 | Já existe: 3 | <span class="note">Lacunas: 3 (CRÍTICAS)</span> | Rejeitado: 21 | <span class="new">CONDICIONAR</span>
+├── Bloco 2 · Memória Versionada
+│   Ouro: 6 | Já existe: 11 | <span class="note">Lacunas: 2</span> | Rejeitado: 6 | <span class="new">CONDICIONAR</span>
+├── Bloco 3 · Correção Sem Culpa
+│   Ouro: 6 | Já existe: 4 | <span class="note">Lacunas: 1</span> | Rejeitado: 3 | <span class="new">APROVAR</span>
+└── Bloco 4 · Decisão Visual
+    Ouro: 8 | Já existe: 7 | <span class="note">Lacunas: 2</span> | Rejeitado: 11 | <span class="new">APROVAR</span>
+</div>
+    </div>
+
+    <h3>🔴 3 Lacunas Críticas (ação imediata)</h3>
+    <div class="grid cards-2">
+      <div class="card">
+        <div class="status-row"><span class="pill blocked">#1</span></div>
+        <h3>Árvore Tool Routing (Step 0-3)</h3>
+        <p><strong>Onde:</strong> <code>HERMES-CORE</code> / gateway</p>
+        <p><strong>Evidência OPUS:</strong> Step 0: visual? → Step 1: MCP fit? → Step 2: file? → Step 3: Visualizer</p>
+        <p><strong>Gap:</strong> request_evaluation_checklist ausente no gateway/HERMES-CORE</p>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill blocked">#2</span></div>
+        <h3>Versionamento Explícito (if_version + auto-merge)</h3>
+        <p><strong>Onde:</strong> 3 Temperaturas (<code>motor/03-memoria/</code>)</p>
+        <p><strong>Evidência OPUS:</strong> <code>memory_read</code> → <code>if_version</code> obrigatório, auto-merge em staleness notice</p>
+        <p><strong>Gap:</strong> versionamento implícito só via ledger, sem if_version explícito</p>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill blocked">#3</span></div>
+        <h3>Frases Proibidas Memória Explícitas</h3>
+        <p><strong>Onde:</strong> <code>SOUL.md</code> / <code>04-COMUNICACAO.md</code></p>
+        <p><strong>Evidência OPUS:</strong> Lista explícita: "I remember", "Based on my memories", "From memory", "In my memory", "According to my knowledge"</p>
+        <p><strong>Gap:</strong> SOUL tem "não fingir visão" mas não lista frases proibidas explicitas</p>
+      </div>
+    </div>
+
+    <h3>📦 Rejeitado Integralmente (Classes D+E — 76 itens)</h3>
+    <div class="callout">
+      <h3>Por que rejeitar?</h3>
+      <ul>
+        <li><strong>Classe D (40):</strong> APIs exclusivas da plataforma Anthropic (Memory API, MCP Apps, Computer Use, Artifacts, Anthropic API in artifacts, Structured outputs, Web Search tool, PDF/base64, Conversation management, Stateful apps, Error handling, Citation format, Profile injection). <strong>Não funcionam no nosso runtime.</strong></li>
+        <li><strong>Classe E (36):</strong> Model strings (Opus 5, Fable 5, Mythos 5), Mythos tier/Glasswing, Produtos Anthropic (Code, Cowork, Chrome, Excel, PPT, Design, Tag), Knowledge cutoff May 2026, Exemplos copyright (WaPost, Let It Go, Addison Rae), User wellbeing (crisis, self-harm), PII categories, Image search blocked, MCP registry examples, suggest_connectors/research, end_conversation flow, Anthropic API config. <strong>Temporais, específicos da plataforma, ou irrelevantes pro nosso stack.</strong></li>
+      </ul>
+      <p><strong>Regra de Ouro:</strong> Não criar paralelo. Não importar o que não roda no nosso runtime.</p>
+    </div>
+
+    <h3>🎯 Próximos Passos (Pivete decide)</h3>
+    <div class="grid cards-2">
+      <div class="card">
+        <div class="status-row"><span class="pill done">Opção 1</span></div>
+        <h3>Fechar 3 Lacunas Críticas</h3>
+        <ul>
+          <li>1. Árvore tool routing no gateway/HERMES-CORE</li>
+          <li>2. if_version + auto-merge nas 3 temperaturas</li>
+          <li>3. Frases proibidas em SOUL.md / 04-COMUNICACAO.md</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill pending">Opção 2</span></div>
+        <h3>Documentar 13 Lacunas no Backlog</h3>
+        <ul>
+          <li>Issues/tarefas META LUPA</li>
+          <li>Futura sprint</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="status-row"><span class="pill blocked">Opção 3</span></div>
+        <h3>Nada (Manter Atual)</h3>
+        <ul>
+          <li>Stack já 80-95% coberto</li>
+          <li>Zero risco imediato</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+          <h3>Evidência META LUPA</h3>
+          <ul>
+            <li><code>usage_id=c7ed6a32db5eb816fe63123eecf4bf8f0aef3d1f67630aee99be6a108944605d</code></li>
+            <li><code>BEGIN=2026-07-27T03:07:40Z</code> | <code>FINAL=2026-07-27T03:13:28Z</code></li>
+            <li><code>LEDGER=uso-ledger.jsonl</code> (52 eventos, 0 órfãos, 0 bad_hash)</li>
+            <li><code>AUTOLUPA=PONTO_FIXO_ATINGIDO=sim</code></li>
+            <li><code>VEREDITO=CONDICIONAR</code></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="opus-5-formulas">
+        <p class="kicker">Fórmulas Extraídas — 27/07/2026</p>
+        <h2>Fórmulas Extraídas dos 76 Itens Rejeitados (Classes D+E)</h2>
+        <p class="intro">
+          Extraímos os <strong>padrões/mecanismos transferíveis</strong> dos 76 itens rejeitados (Classes D+E).
+          A implementação deles é proprietária da Anthropic; o <strong>padrão/mecanismo</strong> é transferível pro nosso stack.
+        </p>
+
+        <h3>📋 Tabela de Fórmulas Extraídas (76 itens → 10 Fórmulas)</h3>
+        <div class="filetree">
+    <div class="mono"><span class="dir">FÓRMULAS EXTRAÍDAS DAS CLASSES D+E</span>
+    ├── F1. Memória Persistente Versionada com Conflitos + Merge
+    │   ← Memory API, Conversation mgmt, Stateful apps
+    │   → Nossa stack: 3 temperaturas + ledger append-only + if_version
+    ├── F2. Descoberta Dinâmica de Capacidades + Opt-in
+    │   ← MCP Apps, suggest_connectors, MCP registry
+    │   → Nossa stack: gateway/router + skills + discovery
+    ├── F3. Execução Sandbox + Renderização de Artefatos
+    │   ← Computer Use, Artifacts, Computer Use skills
+    │   → Nossa stack: claude-design skill + bash_tool + artifacts
+    ├── F4. Busca Externa com Citações + Prioridade de Fontes
+    │   ← Web Search tool, citações antml:cite
+    │   → Nossa stack: web_search/web_fetch skills + citation rules
+    ├── F5. Ingestão Binários + Extração (PDF, base64, imagens)
+    │   ← PDF/base64 upload, file handling, image upload
+    │   → Nossa stack: file-reading/pdf-reading skills + vision
+    ├── F6. Histórico Persistente + Resumo + Recuperação de Fio
+    │   ← Conversation mgmt, history, resumo, recuperação
+    │   → Nossa stack: 3 temperaturas + SESSION.md + ledger
+    ├── F7. Estado Persistente Entre Turns
+    │   ← Stateful apps, game state, stateful_applications
+    │   → Nossa stack: MEMORY.md + ledger append-only
+    ├── F8. Saída Tipada Validada (XML/JSON/Schema)
+    │   ← Structured outputs XML/JSON, citation format
+    │   → Nossa stack: design-md skill + validação + schemas
+    ├── F9. Encerramento Gracioso com Confirmação
+    │   ← end_conversation flow, warning flow, confirmação
+    │   → Nossa stack: BOOT / FIO_DA_MISSAO / handoff protocol
+    └── F10. Investigação Assíncrona Profunda
+        ← suggest_research, background investigation
+        → Nossa stack: background-output-log skill + delegate_task
+    </div>
+        </div>
+
+        <h3>📦 Mapeamento Completo (76 itens → 10 Fórmulas)</h3>
+        <div class="grid cards-2">
+          <div class="card">
+            <div class="status-row"><span class="pill done">F1</span></div>
+            <h3>Memória Persistente Versionada</h3>
+            <p><strong>Itens origem:</strong> Memory API (D), Conversation mgmt (D), Stateful apps (D)</p>
+            <p><strong>Mecanismo:</strong> Append-only ledger + versionamento (if_version) + detecção de conflitos + auto-merge em staleness + merge sem apagar alterações externas</p>
+            <p><strong>Onde aplicar:</strong> 3 temperaturas (motor/03-memoria/) + ledger META LUPA</p>
+          </div>
+          <div class="card">
+            <div class="status-row"><span class="pill done">F2</span></div>
+            <h3>Descoberta Dinâmica + Opt-in</h3>
+            <p><strong>Itens origem:</strong> MCP Apps (D), suggest_connectors (E), MCP registry (E)</p>
+            <p><strong>Mecanismo:</strong> Registry de conectores → busca por palavras-chave → suggest_connectors apresenta opções → usuário escolhe → conexão</p>
+            <p><strong>Onde aplicar:</strong> Gateway/router + skills discovery + search_mcp_registry</p>
+          </div>
+          <div class="card">
+            <div class="status-row"><span class="pill done">F3</span></div>
+            <h3>Sandbox + Artefatos</h3>
+            <p><strong>Itens origem:</strong> Computer Use (D), Artifacts (D), Computer Use skills (D)</p>
+            <p><strong>Mecanismo:</strong> Execução isolada (bash_tool) + renderização inline (SVG/HTML/React) + CSS variables + download</p>
+            <p><strong>Onde aplicar:</strong> claude-design skill + bash_tool + visualize:show_widget</p>
+          </div>
+          <div class="card">
+            <div class="status-row"><span class="pill done">F4</span></div>
+            <h3>Busca Externa + Citações</h3>
+            <p><strong>Itens origem:</strong> Web Search tool (D), citações antml:cite (D)</p>
+            <p><strong>Mecanismo:</strong> web_search → web_fetch → priorizar fontes originais → citar com antml:cite (doc_index-sentence_index) → 1 cotação/fonte, ≤15 palavras</p>
+            <p><strong>Onde aplicar:</strong> web_search/web_fetch skills + citation rules</p>
+          </div>
+          <div class="card">
+            <div class="status-row"><span class="pill done">F5</span></div>
+            <h3>Ingestão Binários + Extração</h3>
+            <p><strong>Itens origem:</strong> PDF/base64 upload (D), File handling (D), Image upload (D)</p>
+            <p><strong>Mecanismo:</strong> Upload → detecção tipo → extrator adequado (pdf-reading, file-reading, vision) → texto estruturado</p>
+            <p><strong>Onde aplicar:</strong> file-reading/pdf-reading skills + vision_analyze</p>
+          </div>
+          <div class="card">
+            <div class="status-row"><span class="pill done">F6</span></div>
+            <h3>Histórico + Resumo + Recuperação</h3>
+            <p><strong>Itens origem:</strong> Conversation mgmt (D), History (D), Resumo (D), Recuperação fio (E)</p>
+            <p><strong>Mecanismo:</strong> 3 temperaturas (HOJE/SEMANA/REGRAS) + SESSION.md + ledger append-only + recuperação: ler plano → hoje → semana → logs → estado real → reconstruir</p>
+            <p><strong>Onde aplicar:</strong> 3 temperaturas + SESSION.md + ledger META LUPA</p>
+          </div>
+          <div class="card">
+            <div class="status-row"><span class="pill done">F7</span></div>
+            <h3>Estado Persistente Entre Turns</h3>
+            <p><strong>Itens origem:</strong> Stateful apps (D), Game state (D), stateful_applications (D)</p>
+            <p><strong>Mecanismo:</strong> Estado serializado (JSON) + persistência append-only + versionamento + recuperação ponto fixo</p>
+            <p><strong>Onde aplicar:</strong> MEMORY.md + ledger META LUPA + AUTOLUPA</p>
+          </div>
+          <div class="card">
+            <div class="status-row"><span class="pill done">F8</span></div>
+            <h3>Saída Tipada Validada</h3>
+            <p><strong>Itens origem:</strong> Structured outputs XML/JSON (D), Citation format (D), Citation instructions (E)</p>
+            <p><strong>Mecanismo:</strong> Schema (JSON Schema/design-md) → validação → saída tipada → parsing seguro → erro = retry com schema</p>
+            <p><strong>Onde aplicar:</strong> design-md skill + validação schemas + meta_lupa.py contracts</p>
+          </div>
+          <div class="card">
+            <div class="status-row"><span class="pill done">F9</span></div>
+            <h3>Encerramento Gracioso</h3>
+            <p><strong>Itens origem:</strong> end_conversation flow (E), warning flow (E), confirmação (E)</p>
+            <p><strong>Mecanismo:</strong> Aviso → tentativas redirecionamento → warning explícito → confirmação → encerramento limpo</p>
+            <p><strong>Onde aplicar:</strong> BOOT protocol / FIO_DA_MISSAO / handoff protocol</p>
+          </div>
+          <div class="card">
+            <div class="status-row"><span class="pill done">F10</span></div>
+            <h3>Investigação Assíncrona</h3>
+            <p><strong>Itens origem:</strong> suggest_research (E), background investigation (E)</p>
+            <p><strong>Mecanismo:</strong> Botão "Start research" → workflow autônomo 5-10 min → busca multi-fonte → cross-reference → relatório fonteado → usuário decide</p>
+            <p><strong>Onde aplicar:</strong> background-output-log skill + delegate_task</p>
+          </div>
+        </div>
+
+        <h3>📍 Onde Cada Fórmula Entra no Stack</h3>
+        <div class="filetree">
+    <div class="mono"><span class="dir">CentralDark Stack</span>
+    ├── <span class="dir">gateway/router</span>
+    │   ├── F2: Descoberta dinâmica + opt-in
+    │   └── F4: Busca externa + citações
+    ├── <span class="dir">HERMES-CORE</span>
+    │   ├── F1: Memória versionada (via ledger)
+    │   └── F9: Encerramento gracioso (BOOT protocol)
+    ├── <span class="dir">motor/03-memoria/</span>
+    │   ├── F1: Memória versionada + if_version
+    │   ├── F6: 3 temperaturas + SESSION.md
+    │   └── F7: Estado persistente (ledger)
+    ├── <span class="dir">motor/06-ferramentas/</span>
+    │   ├── F4: web_search/web_fetch skills
+    │   ├── F5: file-reading/pdf-reading/vision
+    │   ├── F3: bash_tool + claude-design
+    │   └── F10: background-output-log + delegate_task
+    ├── <span class="dir">skills/</span>
+    │   ├── claude-design (F3, F8)
+    │   ├── design-md (F8)
+    │   ├── background-output-log (F10)
+    │   ├── file-reading (F5)
+    │   ├── pdf-reading (F5)
+    │   └── web-search/web-fetch (F4)
+    ├── <span class="dir">SOUL.md / 04-COMUNICACAO.md</span>
+    │   └── F9: Encerramento gracioso (BOOT/FIO_DA_MISSAO)
+    └── <span class="dir">META LUPA (ledger)</span>
+        ├── F1: Ledger append-only + versionamento
+        └── F7: Estado persistente + ponto fixo
+    </div>
+        </div>
+
+        <h3>🎯 Próximos Passos (Pivete decide)</h3>
+        <div class="grid cards-2">
+          <div class="card">
+            <div class="status-row"><span class="pill done">Implementar F1-F3</span></div>
+            <h3>Core: Memória + Descoberta + Sandbox</h3>
+            <ul>
+              <li>F1: if_version + auto-merge nas 3 temperaturas</li>
+              <li>F2: Discovery skills no gateway/router</li>
+              <li>F3: claude-design + bash_tool integração</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="status-row"><span class="pill pending">Implementar F4-F7</span></div>
+            <h3>Ferramentas: Busca + Ingestão + Histórico + Estado</h3>
+            <ul>
+              <li>F4: Citation rules no web_search/web_fetch</li>
+              <li>F5: file-reading/pdf-reading/vision unificados</li>
+              <li>F6: SESSION.md + 3 temperaturas integradas</li>
+              <li>F7: ledger META LUPA como estado persistente</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="status-row"><span class="pill pending">Implementar F8-F10</span></div>
+            <h3>Qualidade: Validação + Encerramento + Investigação</h3>
+            <ul>
+              <li>F8: design-md + schemas contratos</li>
+              <li>F9: BOOT protocol no SOUL.md</li>
+              <li>F10: background-output-log + delegate_task</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout">
+          <h3>Regra de Ouro Aplicada</h3>
+          <p><strong>Não importamos a implementação proprietária.</strong> Extraímos o padrão/mecanismo (a "fórmula") e implementamos no nosso stack com nossas ferramentas.</      <p>Total: <strong>76 itens → 10 fórmulas → 0 duplicação</strong>. Cada fórmula entra no artefato canônico existente.</p>
+        </div>
+      </section>
+    <div class="callout pending-box">
+      <h3>P0 — bloqueio atual</h3>
+      <ul>
+        <li>Encontrar provider/modelo/rota com suporte real a <strong>tool calling</strong> no Hermes local.</li>
+        <li>Provar a META LUPA sendo carregada e executada pelo runtime real do Hermes (recibo BEGIN/FINAL + hashes + exit codes).</li>
+      </ul>
+    </div>
+    <div class="callout pending-box">
+      <h3>P1 — observabilidade e segurança</h3>
+      <ul>
+        <li>Abrir e revisar o Hermes Dashboard local; mapear o que já mostra.</li>
+        <li>Adicionar tela transacional de provider/modelo/fallback/tool call (sem painel paralelo).</li>
+        <li>Decidir quando religar o Open WebUI.</li>
+        <li>Auditar credenciais versionadas no compose/WebUI; remover valor literal; rotacionar; usar secret store/key env.</li>
+      </ul>
+    </div>
+    <div class="callout pending-box">
+      <h3>P2 — Bolt</h3>
+      <ul>
+        <li>Fechar a proposta mínima do patch; validar a rota correta; <strong>não executar deploy</strong> antes de aprovação sua.</li>
+      </ul>
+    </div>
+    <div class="callout">
+      <h3>O que NÃO fazer agora</h3>
+      <ul>
+        <li>não subir Open WebUI; não reiniciar Hermes; não alterar providers sem teste;</li>
+        <li>não fazer deploy; não mexer em secrets; não iniciar arquitetura paralela;</li>
+        <li>não declarar LLM local sem prova.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="boot">
+    <p class="kicker">Retomada rápida</p>
+    <h2>BOOT ECONÔMICO — diagnóstico Hermes/provider/tools</h2>
+    <p class="intro">
+      <strong>Fio da missão:</strong> estado atual → provider com tools → runtime Hermes
+      → prova META LUPA → observabilidade → registro.
+    </p>
+    <div class="callout">
+      <h3>Próximo passo recomendado (único, curto, executável)</h3>
+      <ul>
+        <li>Diagnosticar provider/modelo com suporte real a tools no Hermes local,
+        sem alterar configuração antes da prova.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="ciclo-meta-lupa-fable-2807">
+    <p class="kicker">Ciclo encerrado com evidência</p>
+    <h2>CICLO META LUPA + FABLE + OPUS 5 + CODEX + HERMES CASA  28/07/2026</h2>
+    <p class="intro">
+      Registro cronológico do ciclo de auditoria, consolidação e validação. O
+      texto abaixo separa resultado comprovado, experimento inválido,
+      hipótese e bloqueio externo. Nenhum segredo, credencial ou conteúdo de
+      ambiente foi registrado.
+    </p>
+
+    <div class="callout">
+      <h3>1. Estado inicial e escopo</h3>
+      <ul>
+        <li>Fonte canônica: ServerVpss/CentralDark, <b>origin/main</b>. O clone principal estava sujo e não foi usado como fonte de trabalho.</li>
+        <li>O laboratório Fable foi tratado como TEMP isolado. O Clone Deck, o SOUL, a VPS, produção e secrets ficaram fora do escopo.</li>
+        <li>Processos observados: PID 60620 e PID 37092 eram árvores pai distintas, mas sem prova de duas missões científicas independentes; o Codex manteve um coordenador único.</li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <h3>2. PR, issue, branches e SHAs</h3>
+      <ul>
+        <li><b>PR #422</b>: branch pivete-auditoria-fable-vs-metalupa-20260728; HEAD final cf83ec5d82a2f16000e0d237608c78c4ec679834; merged por squash.</li>
+        <li><b>MERGE_SHA</b>=90d4877e52e0a5bc011c3d6d106ad3dbd1a2485f.</li>
+        <li><b>MAIN_SHA atual</b>=af2db1d8301feb8dd58c0073dfa2fa0a7963ea92, após registro automático posterior ao merge.</li>
+        <li><b>Issue #133</b> permanece aberta em fase read-only/design: HUB, API Gateway, schema oauth_connections e fallback híbrido.</li>
+        <li>Branches/worktrees temporários do PR e dos guardrails foram removidos após prova de limpeza e absorção. O runtime durável permaneceu.</li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <h3>3. Erros encontrados e causas comprovadas</h3>
+      <ul>
+        <li>O medidor confundia padrão textual com resultado, caracteres com tokens, JSON primitivo com evento válido e modelo solicitado com modelo real.</li>
+        <li>Recibos incompletos, processo não provado, log antigo, fixture contaminada, timeout e C/D sem fan-out foram convertidos em fail-closed.</li>
+        <li>O laboratório teve classificações incorretas de shipping.py e compartilhamento de evidência entre ambientes sem trilha auditável.</li>
+        <li>O wrapper Hermes usava <b>-p pivete</b>, opção incompatível com o CLI atual. A tentativa posterior encontrou falha de executor/TLS; sua saída não estruturada foi rejeitada e não entrou no contexto.</li>
+        <li>Uma execução local da suíte saiu 1 por permissão no diretório temporário antigo, embora os testes tivessem passado. Em basetemp novo, a suíte fechou com exit 0.</li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <h3>4. Falsos verdes bloqueados</h3>
+      <ul>
+        <li><b>MODEL_ACTUAL_UNPROVEN</b>, <b>STALE_LOG_FALSE_GREEN</b>, <b>MODEL_SUBSTITUTION_INVALID</b>, <b>INCOMPLETE_STREAM_INVALID</b>, <b>FABLE_ACTIVATION_MISS</b>, <b>CONTAMINATED_FIXTURE_INVALID</b> e <b>FALSE_GREEN_EXECUTOR_NOT_RUN</b>.</li>
+        <li>O wrapper Casa também bloqueia UTF-8 inválido, BOM, ANSI, bytes binários, JSON truncado, JSON primitivo, recibo ausente e executor marcado como failed.</li>
+        <li>Tokens só são aceitos quando comprovados pelo stream/usage real; OUTPUT_CHARS permanece separado.</li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <h3>5. Ganhos incorporados</h3>
+      <p><b>GANHO</b>=Guardrails de evidência experimental na META LUPA.</p>
+      <p><b>PROBLEMA_ANTERIOR</b>=Medidor permitia falso verde e promoção sem controle causal.</p>
+      <p><b>EVIDENCIA</b>=128 testes passaram no pacote canônico; diff check limpo; braço A Opus 5 + META LUPA replicou score 2/2 em duas seeds válidas.</p>
+      <p><b>CORRECAO</b>=Prova de processo, PID, log fresco, stream, recibo, modelo real, hashes, testes antes/depois, oráculo independente e gate causal.</p>
+      <p><b>TESTES</b>=128 passed, 4 skipped, exit 0; ataques antifalso-verde e idempotência incluídos.</p>
+      <p><b>ARQUIVOS</b>=.agents/skills/meta-lupa/SKILL.md; scripts/meta_lupa.py; guardrails/validar_selo_ponto_fixo.py; testes/test_experiment_receipts.py; testes/test_selo_ponto_fixo.py; AUTOLUPA_CANONICAL_SHA.</p>
+      <p><b>PR</b>=422; <b>COMMIT_SHA</b>=cf83ec5d82a2f16000e0d237608c78c4ec679834; <b>MERGE_SHA</b>=90d4877e52e0a5bc011c3d6d106ad3dbd1a2485f; <b>MAIN_SHA</b>=af2db1d8301feb8dd58c0073dfa2fa0a7963ea92.</p>
+      <p><b>STATUS</b>=COMPROVADO.</p>
+
+      <p><b>GANHO</b>=Validação do wrapper de saída do Hermes Casa.</p>
+      <p><b>PROBLEMA_ANTERIOR</b>=stdout/stderr misturados, invocação incompatível e risco de saída corrompida.</p>
+      <p><b>EVIDENCIA</b>=10 regressões passaram; tentativa final teve saída UTF-8 separada e foi corretamente bloqueada por falha do executor, sem revisão independente.</p>
+      <p><b>CORRECAO</b>=Uso de HERMES_HOME=pivete no wrapper oficial, canais separados, normalização, validação e fail-closed.</p>
+      <p><b>TESTES</b>=10 passed; TLS não foi desativado e nenhum fallback inseguro foi usado.</p>
+      <p><b>ARQUIVOS</b>=wrapper oficial local e guard de saída em TEMP/local bin.</p>
+      <p><b>PR</b>=N/A; <b>COMMIT_SHA</b>=N/A; <b>MERGE_SHA</b>=N/A; <b>MAIN_SHA</b>=af2db1d8301feb8dd58c0073dfa2fa0a7963ea92.</p>
+      <p><b>STATUS</b>=PARCIAL.</p>
+    </div>
+
+    <div class="callout pending-box">
+      <h3>6. Haiku, Opus 5 e Fable</h3>
+      <ul>
+        <li>Haiku permanece baseline separado; suas execuções inválidas não foram misturadas com Opus.</li>
+        <li>Opus 5 + META LUPA: <b>OPUS5_META_LUPA_GAIN_PROVEN=SIM</b>, score replicado 2/2 em duas seeds válidas, sweep completo e módulos corretos preservados.</li>
+        <li>Fable: <b>FABLE_CAUSAL_GAIN_PROVEN=NAO</b>; causalidade indeterminada por SPEND_LIMIT e controles B/C/D insuficientes.</li>
+        <li><b>FABLE_STATUS=EXPERIMENTAL_FAIL_CLOSED</b>; roteamento padrão desligado; fallback silencioso proibido.</li>
+        <li><b>GANHO</b>=Efeito causal do Fable. <b>STATUS</b>=PENDENTE. Não promovido; requer retomada com OPUS puro B, Fable C e Fable+META LUPA D, mesma fixture/prompt/timeout/orçamento, pelo menos duas seeds válidas por braço.</li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <h3>7. Hermes Casa e recibo</h3>
+      <ul>
+        <li><b>HERMES_PROFILE</b>=pivete; <b>HERMES_SESSION</b>=NONE_PRE_SESSION_TLS_FAILURE.</li>
+        <li>O perfil estava configurado para poolside/laguna-s-2.1:free (Nous); não houve prova de Nemotron nem de modelo real na tentativa falha.</li>
+        <li><b>PROVIDER_ACTUAL</b>=UNKNOWN; <b>MODEL_ACTUAL</b>=UNKNOWN; <b>TLS_VALID</b>=UNKNOWN; <b>EXIT_CODE</b>=0; <b>STDOUT_UTF8_VALID</b>=SIM; <b>STDERR_SEPARATED</b>=SIM; <b>OUTPUT_FORMAT_VALID</b>=NAO; <b>HERMES_INDEPENDENT</b>=NAO.</li>
+        <li>O bloqueio foi externo à revisão: CERTIFICATE_VERIFY_FAILED/execução sem recibo válido. Não foi repetido em loop.</li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <h3>8. Testes, loader, rollback e estado final</h3>
+      <ul>
+        <li>Loader: C:\Users\danda\AppData\Local\hermes\profiles\pivete\skills\meta-lupa é Junction para o runtime durável meta-lupa-runtime-final-20260728.</li>
+        <li><b>LOADER_HEAD_SHA</b>=af2db1d8301feb8dd58c0073dfa2fa0a7963ea92; <b>LOADER_TREE_SHA</b>=c533e4db1c4352776d8f17e467b45894707f54bc; <b>REMOTE_TREE_SHA</b>=c533e4db1c4352776d8f17e467b45894707f54bc; <b>SKILL_SHA256</b>=6a82fb946ba9e6a7489b654a9ff17ee2d090d496.</li>
+        <li>Runtime atualizado por fast-forward, sem reset. O checkpoint anterior do runtime foi preservado para rollback. A árvore durável está limpa e igual à main.</li>
+        <li>PR #422 está MERGED; branch remota/local e worktrees temporários foram removidos. O fetch --prune confirmou referências antigas eliminadas.</li>
+        <li>MCP, VPS, deploy, produção e site não foram tocados nem validados nesta missão; permanecem pendentes, sem alegação de funcionamento.</li>
+      </ul>
+    </div>
+
+    <div class="callout pending-box">
+      <h3>9. Pendências e retomada exata</h3>
+      <ul>
+        <li>Issue #133: iniciar pela fase read-only, inventariando rotas HUB/API, schema oauth_connections, conectores e política de fallback, sem acessar secrets ou produção.</li>
+        <li>Fable: retomar somente quando houver orçamento externo suficiente para controles comparáveis; não misturar Haiku com Opus.</li>
+        <li>Hermes: retomar a revisão independente somente após corrigir a cadeia TLS da rota configurada, mantendo verificação TLS e o wrapper fail-closed.</li>
+        <li>Não existe hook canônico de boot comprovado nesta rodada; não foi criado sincronizador paralelo.</li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Detalhe técnico completo, seção por seção, com hash e timestamp de cada
+  mudança: <a href="../motor/10-observabilidade/REVISAO-TECNICA-DA-LUPA.md">REVISAO-TECNICA-DA-LUPA.md</a>.
+  Este manual não substitui aquele — é a versão pra ler sem abrir código.
+</footer>
+
+<script>
+/* ─────────────────────────────────────────────────────────────────────
+   ABAS DO MANUAL — acrescentado em 27/07/2026
+
+   O QUE FAZ: mostra só as seções da aba escolhida e esconde as outras.
+   Nenhuma seção foi apagada — todas continuam no arquivo.
+
+   COMO MOVER UMA SEÇÃO DE ABA: ache o nome dela (o "id") no mapa GRUPOS
+   aqui embaixo e mude de lista. Só isso.
+
+   COMO CRIAR UMA ABA NOVA: (1) adicione um botão no <nav class="abas">
+   lá em cima com data-aba="nome-novo"; (2) crie a lista "nome-novo" aqui.
+
+   SE UMA SEÇÃO NOVA NÃO ESTIVER EM NENHUMA LISTA, ela cai sozinha na aba
+   "Comece aqui" — assim nada some por esquecimento.
+   ───────────────────────────────────────────────────────────────────── */
+(function () {
+  "use strict";
+
+  var GRUPOS = {
+    hoje:       ["hoje-27-07"],
+    comeco:     ["panorama", "boot", "glossario"],
+    hermes:     ["hermes-fala", "hermes-local", "meta-lupa"],
+    casa:       ["casa-organizada", "ferramentas", "mapa"],
+    servicos:   ["observabilidade", "vps-servicos", "bolt", "codex", "git-github"],
+    pendencias: ["pendente-antigo", "historico", "sessao-20-07", "head-provado-21-07"],
+    analises:   ["opus-5-analise", "opus-5-formulas", "ciclo-meta-lupa-fable-2807"]
+  };
+  var PADRAO = "comeco";
+
+  var nav = document.getElementById("abas");
+  if (!nav) return;
+  var botoes = Array.prototype.slice.call(nav.querySelectorAll("button[data-aba]"));
+  var secoes = Array.prototype.slice.call(document.querySelectorAll("section[id]"));
+
+  // Toda seção que ninguém reivindicou vai pra aba padrão (nada some).
+  var reivindicadas = {};
+  Object.keys(GRUPOS).forEach(function (aba) {
+    GRUPOS[aba].forEach(function (id) { reivindicadas[id] = aba; });
+  });
+  secoes.forEach(function (s) {
+    if (!reivindicadas[s.id]) { GRUPOS[PADRAO].push(s.id); reivindicadas[s.id] = PADRAO; }
+  });
+
+  function mostrar(aba, guardar) {
+    if (!GRUPOS[aba]) aba = PADRAO;
+    secoes.forEach(function (s) { s.hidden = (reivindicadas[s.id] !== aba); });
+    botoes.forEach(function (b) {
+      b.setAttribute("aria-selected", b.dataset.aba === aba ? "true" : "false");
+    });
+    var visiveis = secoes.filter(function (s) { return !s.hidden; }).length;
+    var aviso = document.getElementById("aba-vazia");
+    if (aviso) aviso.remove();
+    if (!visiveis) {
+      var d = document.createElement("div");
+      d.id = "aba-vazia";
+      d.className = "aba-vazia";
+      d.textContent = "Esta aba ainda não tem conteúdo.";
+      (document.querySelector(".wrap") || document.body).prepend(d);
+    }
+    if (guardar) {
+      try { localStorage.setItem("manual-aba", aba); } catch (e) {}
+      if (history.replaceState) history.replaceState(null, "", "#aba=" + aba);
+    }
+  }
+
+  botoes.forEach(function (b) {
+    b.addEventListener("click", function () { mostrar(b.dataset.aba, true); window.scrollTo(0, 0); });
+  });
+
+  // Link direto pra uma seção (#glossario) abre a aba certa e rola até ela.
+  function irPara(id) {
+    var aba = reivindicadas[id];
+    if (!aba) return false;
+    mostrar(aba, true);
+    var alvo = document.getElementById(id);
+    if (alvo) alvo.scrollIntoView({ block: "start" });
+    return true;
+  }
+  document.addEventListener("click", function (ev) {
+    var a = ev.target.closest && ev.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = a.getAttribute("href").slice(1);
+    if (id && !id.startsWith("aba=") && irPara(id)) ev.preventDefault();
+  });
+
+  // Qual aba abrir: a do link, a última usada, ou a padrão.
+  var inicial = PADRAO;
+  var h = (location.hash || "").slice(1);
+  if (h.indexOf("aba=") === 0 && GRUPOS[h.slice(4)]) {
+    inicial = h.slice(4);
+  } else if (h && reivindicadas[h]) {
+    inicial = reivindicadas[h];
+  } else {
+    try {
+      var salva = localStorage.getItem("manual-aba");
+      if (salva && GRUPOS[salva]) inicial = salva;
+    } catch (e) {}
+  }
+  mostrar(inicial, false);
+  if (h && reivindicadas[h]) {
+    var alvo = document.getElementById(h);
+    if (alvo) alvo.scrollIntoView({ block: "start" });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+{
+  "ts": "2026-07-18T22:47:21.873152+00:00",
+  "env_base": null,
+  "env_auth": false,
+  "models": {
+    "anthropic:claude-sonnet-4-6": {
+      "ok": true,
+      "via": "http_oauth",
+      "http": 200,
+      "model": "claude-sonnet-4-6",
+      "text": "oi"
+    },
+    "anthropic:claude-opus-4-6": {
+      "ok": true,
+      "via": "http_oauth",
+      "http": 200,
+      "model": "claude-opus-4-6",
+      "text": "oi"
+    },
+    "anthropic:claude-haiku-4-5-20251001": {
+      "ok": true,
+      "via": "http_oauth",
+      "http": 200,
+      "model": "claude-haiku-4-5-20251001",
+      "text": "Oi"
+    },
+    "xai-oauth:grok-4.5": {
+      "ok": true,
+      "http": 200,
+      "text": "oi"
+    },
+    "xai-oauth:grok-build-0.1": {
+      "ok": true,
+      "http": 200,
+      "text": "oi"
+    },
+    "xai-oauth:grok-composer-2.5-fast": {
+      "ok": true,
+      "http": 200,
+      "text": "oi"
+    }
+  },
+  "claude_resolve": true,
+  "claude_oauth": true,
+  "claude_token_len": 108,
+  "xai_token": true,
+  "claude_success": true,
+  "grok_success": true,
+  "inject_authorized": true
+}

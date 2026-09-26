@@ -1,0 +1,58 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\Service Worker\CacheStorage\b500f1faf61f180de1748705af17dc1a8e8ccb3b\921934df-27cd-4876-abf8-f2e96abb6a9d\9499338e1de47967_0
+
+https://developer.chrome.com/static/docs/lighthouse/performance/total-byte-weight/image/a-screenshot-the-lightho-5edd6e4e68e25.png?hl=pt-br
+!!!xwx
+n!!BBK
+hC%dE*
+-$\Hha 
+]ucFyk
+'G8N)W
+tF<JH=
+1Mqv2k
+QH4G3Z
+h<}&py
+vr6.C1
+{b8$M h
+Iq3xwJ
++WLzT`u
+Xb)3?jq
+:Fe\+a
+s^B$td
+KLQXtt(e
+=(g2bg
+/!jM|1\
+(mrjrM"
+#Q49#w
+t%=7ob
+H:bym7x
+!5Zq";
+3"yT[i
+?Zu\E/o
+Yxj{y:+
+T?*pZ6
+alt-svc
+.h3=":443"; ma=2592000,h3-29=":443"; ma=2592000"*
+cache-control
+no-cache, must-revalidate"
+content-length
+20114"
+content-security-policy
+base-uri 'self'; object-src 'none'; script-src 'strict-dynamic' 'unsafe-inline' https: http: 'nonce-IjMNM6+bKYjBrJudlWDWQ544+aG/xp' 'unsafe-eval'; frame-ancestors 'self' https://developers.google.com/_d/analytics-iframe; report-uri https://csp.withgoogle.com/csp/devsite/v2"
+content-type
+image/png"%
+Tue, 18 Aug 2026 18:44:18 GMT"
+expires
+pragma
+no-cache"
+server
+Google Frontend"I
+strict-transport-security
+,max-age=63072000; includeSubdomains; preload"
+Cookie"9
+x-cloud-trace-context
+ fe66a133b49ee3bde7332ab7fe9a1083"!
+x-content-type-options
+nosniff"
+x-xss-protection
+https://developer.chrome.com/static/docs/lighthouse/performance/total-byte-weight/image/a-screenshot-the-lightho-5edd6e4e68e25.png?hl=pt-brP(Z
+image/pngr

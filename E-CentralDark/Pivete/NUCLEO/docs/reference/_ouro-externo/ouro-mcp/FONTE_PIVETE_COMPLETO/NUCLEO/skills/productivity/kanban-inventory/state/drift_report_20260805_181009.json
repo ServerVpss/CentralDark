@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-08-05T18:10:09.782072",
+  "result": "UPSTREAM_DRIFT",
+  "details": {
+    "captured_keys": [
+      "timestamp",
+      "kanban_url",
+      "cli_version",
+      "cli_commands",
+      "board",
+      "cards",
+      "adapter_hash",
+      "schema_hash"
+    ],
+    "differences": {
+      "cli_version": {
+        "expected": "Hermes Agent v0.20.0 (2026.8.3)",
+        "actual": "Hermes Agent v0.20.0 (2026.8.3)\nInstall directory: C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\nPython: 3.11.15\nOpenAI SDK: 2.24.0\nRun 'hermes version' for update status.",
+        "type": "version_changed"
+      }
+    },
+    "normalized_sample": {
+      "timestamp": "2026-08-05T18:10:05.063736",
+      "kanban_url": "http://127.0.0.1:9119/kanban?profile=pivete",
+      "cli_version": "Hermes Agent v0.20.0 (2026.8.3)\nInstall directory: C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\nPython: 3.11.15\nOpenAI SDK: 2.24.0\nRun 'hermes version' for update status.",
+      "cli_commands": "['archive', 'assign', 'assignees', 'attach', 'attach-rm', 'attachments', 'block', 'boards', 'claim', 'comment', 'complete', 'context', 'create', 'daemon', 'decompose', 'diag', 'diagnostics', 'dispatch",
+      "board": "{'name': 'default', 'display': 'Default', 'db_path': 'C:\\\\Users\\\\danda\\\\AppData\\\\Local\\\\hermes\\\\kanban.db', 'tasks': '3 total (blocked=2, done=1)'}",
+      "adapter_hash": "2ea7a19baf731121b3e88e2e554b2681e53eacfb5cbde0f3a4d824cfb2bd2221",
+      "schema_hash": "94fbdc9a83c835eea6156204e9a17ffc504f25030c411d111b60bfa98e8fd6c0"
+    },
+    "card_count": 3
+  },
+  "actions_required": [
+    "NÃO modificar upstream",
+    "Atualizar contrato/seletor pertencente ao Pivete se relação determinística",
+    "Registrar drift no Kanban como cartão material"
+  ],
+  "unknown_factors": [
+    "Comportamento do upstream pode ter mudado - validar manualmente"
+  ],
+  "contract_hash": "2a888b5b7da53d58420bfbcbcd932756795d95159b620dc0345863eb8b990123",
+  "adapter_hash": "2ea7a19baf731121b3e88e2e554b2681e53eacfb5cbde0f3a4d824cfb2bd2221",
+  "schema_hash": "94fbdc9a83c835eea6156204e9a17ffc504f25030c411d111b60bfa98e8fd6c0"
+}

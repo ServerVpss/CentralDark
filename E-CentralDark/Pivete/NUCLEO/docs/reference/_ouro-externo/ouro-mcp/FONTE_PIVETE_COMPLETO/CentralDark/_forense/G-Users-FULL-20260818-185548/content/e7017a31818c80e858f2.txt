@@ -1,0 +1,9 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@mapbox\node-pre-gyp\node_modules\https-proxy-agent\dist\parse-proxy-response.d.ts
+
+/// <reference types="node" />
+import { Readable } from 'stream';
+export interface ProxyResponse {
+    statusCode: number;
+    buffered: Buffer;
+}
+export default function parseProxyResponse(socket: Readable): Promise<ProxyResponse>;

@@ -1,0 +1,23 @@
+﻿=== LAYOUT 2026-08-22T06:01:36.0633500-03:00 ===
+Primary=True Bits=32 Bounds={X=0,Y=0,Width=1080,Height=1920} Work={X=0,Y=0,Width=1080,Height=1872} Device=\\.\DISPLAY1
+Primary=False Bits=32 Bounds={X=-2279,Y=-942,Width=1920,Height=1080} Work={X=-2279,Y=-942,Width=1920,Height=1032} Device=\\.\DISPLAY2
+Primary=False Bits=32 Bounds={X=-1920,Y=139,Width=1920,Height=1080} Work={X=-1920,Y=139,Width=1920,Height=1032} Device=\\.\DISPLAY3
+Primary=False Bits=32 Bounds={X=-3840,Y=138,Width=1920,Height=1080} Work={X=-3840,Y=138,Width=1920,Height=1032} Device=\\.\DISPLAY4
+--- DESKTOP ---
+LogPixels= Win8DpiScaling=0 DesktopDPIOverride=
+AppliedDPI=96
+--- FONT ---
+FontSmoothing=2 FontSmoothingType=2 FontSmoothingGamma=1000
+--- PER MONITOR DPI ---
+AOC2402ATNM4XA002193_11_07E6_A7^B33389B43BD5631EAEBF02DC280C7652 DpiValue=0
+AOC2402ATNMBXA002919_2D_07E6_9E^448D985B6142BD3F74E4E2F5926C102E DpiValue=0
+AOC2402ATNMBXA002919_2D_07E6_E4^EC965AAD759BF8E96982097007B9D8E9 DpiValue=0
+CL@0C5E0_10_07E0_0D^B471350E56A470F5ED21505589B2EF24 DpiValue=4294967294
+--- WMI MONITORS ---
+Active=True Mfr=AOC Name=24G2W1G4
+Active=True Mfr=GSM Name=LG FULL HD
+Active=True Mfr=DEL Name=DELL S2421HN
+Active=True Mfr=AOC Name=24G2W1G4
+--- AMD PROCESSES ---
+amdfendrsr.exe pid=3752 cmd=
+DONE

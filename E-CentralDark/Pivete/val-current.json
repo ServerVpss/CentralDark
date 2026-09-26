@@ -1,0 +1,50 @@
+{
+  "guardrail": "validar-porta-de-entrada",
+  "porta": "LEIA-ME-IA.md",
+  "porta_viva": "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md",
+  "contrato_delta": "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md",
+  "contrato_reconciliacao": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+  "estrutura_vps": "docs/CONSCIENCIA/04-ESTRUTURA-VPS.md",
+  "contrato_reconciliacao_schema_expected": 3,
+  "contrato_reconciliacao_schema_observed": 3,
+  "arquitetura_padrao_marker": "ONE_CORE_MANY_ARMS_STANDARD",
+  "identidade_lupa": ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA",
+  "reuse_before_create_required": true,
+  "centraldark_root_only_required": true,
+  "workflow_reuse_required": true,
+  "ai_deterministic_fallback_required": true,
+  "base_sha": "531aaca18828bb11b77f5b2cf3c50fc9fdd42a1a",
+  "head_sha": "5f4780730c38da5ca181169d8cfaad0c4dda3260",
+  "adaptadores_obrigatorios": [
+    "AGENTS.md",
+    "CHATGPT.md",
+    "CODEX.md",
+    "CLAUDE.md",
+    "README.md",
+    ".claude/rules/00-centraldark-boot-universal.md",
+    ".github/copilot-instructions.md",
+    "GEMINI.md",
+    ".cursor/rules/centraldark-governanca.mdc",
+    ".windsurfrules"
+  ],
+  "adaptadores_encontrados": [
+    "AGENTS.md",
+    "CHATGPT.md",
+    "CODEX.md",
+    "CLAUDE.md",
+    "README.md",
+    ".claude/rules/00-centraldark-boot-universal.md",
+    ".github/copilot-instructions.md",
+    "GEMINI.md",
+    ".cursor/rules/centraldark-governanca.mdc",
+    ".windsurfrules"
+  ],
+  "canonicos_encontrados": 22,
+  "canonicos_alcancaveis": 22,
+  "errors": [
+    "NOVO_WORKFLOW_BLOQUEADO_REUTILIZE_EXISTENTE:.github/workflows/build-centraldark-architecture-package.yml"
+  ],
+  "warnings": [],
+  "known_debt_exceptions": 0,
+  "ok": false
+}

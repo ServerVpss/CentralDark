@@ -1,0 +1,10 @@
+flowchart LR
+  PR[Remote PR #1389] --> W[C:/CDPR1389 isolated worktree]
+  W --> M[Measure branch/base/HEAD]
+  M --> X[Patch/test/falsify]
+  X --> C[Commit exact tested HEAD]
+  C --> P[Push same PR branch]
+  P --> V{Pushed PR HEAD == tested HEAD?}
+  V -- yes --> R[Receipt / promotion candidate]
+  V -- no --> B[BLOCK]
+  W -. not authority .-> A[main remains canonical after promotion]

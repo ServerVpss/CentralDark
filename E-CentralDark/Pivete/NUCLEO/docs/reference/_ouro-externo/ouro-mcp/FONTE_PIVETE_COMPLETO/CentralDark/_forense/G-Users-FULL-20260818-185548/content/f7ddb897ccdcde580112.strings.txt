@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\utils\hooks\useOnScrollToBottom.d.ts.map
+
+{"version":3,"file":"useOnScrollToBottom.d.ts","names":[],"sources":["../../../src/utils/hooks/useOnScrollToBottom.ts"],"mappings":";cAMa,mBAAA,GACX,QAAA,GAAW,MAAA;EAAU,QAAA,EAAU,cAAc;AAAA"}

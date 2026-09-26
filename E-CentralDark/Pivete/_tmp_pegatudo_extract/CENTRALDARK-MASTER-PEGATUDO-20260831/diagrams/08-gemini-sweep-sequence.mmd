@@ -1,0 +1,20 @@
+sequenceDiagram
+  participant M as !CENTRALDARK
+  participant A as Source Adapters
+  participant R as centraldark-router
+  participant G as Gemini Sweeper
+  participant S as Reality Scope Gate
+  participant W as One Writer
+  participant F as Falsifier
+  participant D as Drive/Workspace
+  M->>A: Measure authorized sources
+  A->>A: Sanitize + quarantine secrets
+  A->>R: Safe chunks + source refs/hashes
+  R->>G: Delegate read-only sweep
+  G-->>R: Findings + evidence candidates
+  R->>S: Candidate findings
+  S-->>M: Classified current/legacy/archive/unknown
+  M->>W: Unique material delta only
+  W->>F: Candidate result + tests
+  F-->>W: Counterexample or survives
+  W->>D: Receipt / manifest / NEXT_CURSOR

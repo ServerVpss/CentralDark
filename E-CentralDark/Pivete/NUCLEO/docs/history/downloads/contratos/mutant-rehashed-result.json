@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "manifest": {
+    "count": 17,
+    "hash": "f274fc4b968391eda23b1cb9f8591915d451dd133fe775301be1023d5b9f6115",
+    "selfMap": {
+      "totalMarkdownDetected": 24,
+      "indexedUniquePaths": 17,
+      "missing": [],
+      "status": "SYNCED",
+      "applied": 0
+    }
+  },
+  "auditHashManifest": {
+    "pass": true,
+    "entries": 77,
+    "checked": 77,
+    "manifestSha256": "491bdf1fa3670e19be1f7a7ac6bf08caab3f0a0c13b28ab53413b65f33884f08",
+    "errors": []
+  },
+  "nodeCheck": {
+    "total": 16,
+    "fail": []
+  },
+  "shellSyntax": {
+    "applicable": true,
+    "total": 4,
+    "fail": []
+  },
+  "tests": {
+    "files": 6,
+    "exitCode": 0,
+    "complete": true,
+    "summary": {
+      "total": 59,
+      "pass": 59,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0
+    },
+    "output": "TAP version 13\n# Subtest: consulta seletiva — progressive disclosure real\n    # Subtest: carrega no máximo 3 documentos únicos\n    ok 1 - carrega no máximo 3 documentos únicos\n      ---\n      duration_ms: 70.373784\n      type: 'test'\n      ...\n    # Subtest: retorna janela relevante e limitada\n    ok 2 - retorna janela relevante e limitada\n      ---\n      duration_ms: 37.039069\n      type: 'test'\n      ...\n    # Subtest: path traversal é bloqueado sem ler arquivo externo\n    ok 3 - path traversal é bloqueado sem ler arquivo externo\n      ---\n      duration_ms: 1.361017\n      type: 'test'\n      ...\n    # Subtest: falha de leitura não vira STATUS=OK\n    ok 4 - falha de leitura não vira STATUS=OK\n      ---\n      duration_ms: 2.250043\n      type: 'test'\n      ...\n    # Subtest: ausência de match retorna INCONCLUSIVO\n    ok 5 - ausência de match retorna INCONCLUSIVO\n      ---\n      duration_ms: 29.376536\n      type: 'test'\n      ...\n    # Subtest: sanitizador preserva o nome do campo e remove o valor\n    ok 6 - sanitizador preserva o nome do campo e remove o valor\n      ---\n      duration_ms: 1.12139\n      type: 'test'\n      ...\n    # Subtest: delta não expõe segredo trazido no erro\n    ok 7 - delta não expõe segredo trazido no erro\n      ---\n      duration_ms: 50.269727\n      type: 'test'\n      ...\n    1..7\nok 1 - consulta seletiva — progressive disclosure real\n  ---\n  duration_ms: 195.532297\n  type: 'suite'\n  ...\n# Subtest: contraprovas P0/P1 — falso completo bloqueado\n    # Subtest: GAP-001: missão ausente nunca é declarada preservada nem recebe próximo estado inventado\n    ok 1 - GAP-001: missão ausente nunca é declarada preservada nem recebe próximo estado inventado\n      ---\n      duration_ms: 4.193226\n      type: 'test'\n      ...\n    # Subtest: GAP-002: SIM em FAIL/SKIPPED/UNKNOWN/fora do escopo nunca equivale a zero\n    ok 2 - GAP-002: SIM em FAIL/SKIPPED/UNKNOWN/fora do escopo nunca equivale a zero\n      ---\n      duration_ms: 1.317115\n      type: 'test'\n      ...\n    # Subtest: GAP-003: verify com zero arquivos de teste retorna FAIL\n    ok 3 - GAP-003: verify com zero arquivos de teste retorna FAIL\n      ---\n      duration_ms: 110.014635\n      type: 'test'\n      ...\n    # Subtest: GAP-004: junction/symlink que resolve fora da raiz é recusado\n    ok 4 - GAP-004: junction/symlink que resolve fora da raiz é recusado\n      ---\n      duration_ms: 17.575566\n      type: 'test'\n      ...\n    # Subtest: GAP-005: learning com source inventado e HEAD inválido não é promovido\n    ok 5 - GAP-005: learning com source inventado e HEAD inválido não é promovido\n      ---\n      duration_ms: 17.561022\n      type: 'test'\n      ...\n    # Subtest: GAP-006: duas chamadas simultâneas do mesmo evento executam o orquestrador uma vez\n    ok 6 - GAP-006: duas chamadas simultâneas do mesmo evento executam o orquestrador uma vez\n      ---\n      duration_ms: 117.208346\n      type: 'test'\n      ...\n    # Subtest: GAP-007: quebra de linha em próximo estado não injeta campos no receipt\n    ok 7 - GAP-007: quebra de linha em próximo estado não injeta campos no receipt\n      ---\n      duration_ms: 1.279544\n      type: 'test'\n      ...\n    # Subtest: GAP-008: github_pat e JWT isolados são redigidos\n    ok 8 - GAP-008: github_pat e JWT isolados são redigidos\n      ---\n      duration_ms: 0.782616\n      type: 'test'\n      ...\n    # Subtest: INCONCLUSIVO não avança checkpoint e é reavaliado na próxima execução\n    ok 9 - INCONCLUSIVO não avança checkpoint e é reavaliado na próxima execução\n      ---\n      duration_ms: 32.782128\n      type: 'test'\n      ...\n    # Subtest: GAP-012: lock antigo de processo vivo não é roubado durante operação longa\n    ok 10 - GAP-012: lock antigo de processo vivo não é roubado durante operação longa\n      ---\n      duration_ms: 115.204999\n      type: 'test'\n      ...\n    # Subtest: GAP-013: chaves sensíveis em camelCase são redigidas sem depender do formato do valor\n    ok 11 - GAP-013: chaves sensíveis em camelCase são redigidas s\n...[truncado]"
+  },
+  "demo": {
+    "statusOk": true,
+    "delta": "QA_CONTEXT_DELTA=\n\nEVENTO=TEST_FAILED\nMANIFEST_HASH=f274fc4b968391eda23b1cb9f8591915d451dd133fe775301be1023d5b9f6115\nMISSION_ID=VERIFY\n\nSTATUS=OK\nHEURISTICAS_ATIVADAS=\n- FAILURE\n\nDOCUMENTOS_CONSULTADOS=\n- SKILL.md\n\nCAUSA_A_INVESTIGAR=trailer no rodapé não foi reconhecido\nTESTE_DISCRIMINATIVO=Preservar o teste que encontrou a falha; corrigir a fonte, nunca a assertion para fabricar verde.\nREGRESSAO_PRESERVADA=SIM\nMISSAO_ATUAL_PRESERVADA=SIM\nPROXIMO_ESTADO=TESTE_DISCRIMINATIVO_VERDE\n\nAUTO_APPLY=NAO\nPOLICY_STATE=AUTO_APPLY_BLOCKED\nAUTO_APPLY_BLOQUEIO=MATCH_PROVADO=NAO | ALTERACAO_LOCAL=NAO | REVERSIVEL=NAO | WRITER_UNICO=NAO | ESCOPO_AUTORIZADO=NAO | MUDANCA_MINIMA=NAO | TESTE_DISCRIMINATIVO_EXISTE=NAO | TESTE_ANTES_FALHOU=NAO | TESTE_DEPOIS_PASSOU=NAO | REGRESSAO_PASSOU=NAO | CASO_NEGATIVO_PASSOU=NAO | IDEMPOTENCIA_PASSOU=NAO | ROLLBACK_EXISTE=NAO | HEAD_FIXADO=NAO | SEM_CONFLITO_CANONICO=NAO | ARQUIVOS_FORA_ESCOPO_ZERO=NAO | FAIL_ZERO=NAO | SKIPPED_ZERO=NAO | UNKNOWN_ZERO=NAO | SECRETS=DESCONHECIDO | MERGE=DESCONHECIDO | DEPLOY=DESCONHECIDO | VPS=DESCONHECIDO | PRODUCAO=DESCONHECIDO | HISTORY_REWRITE=DESCONHECIDO\n\nAPRENDIZADO_PROMOVIDO=NAO\nAPRENDIZADO_STATUS=NAO_SOLICITADO\nAPRENDIZADO_REUTILIZADO=NAO\n\nCONTEXTO_INTEIRO_CARREGADO=NAO\nAPENAS_DELTA_RELEVANTE=SIM\nMATCH_COUNT=1\nDOCUMENTOS_CARREGADOS=1\n\n--- TRECHOS SELETIVOS (CONTEUDO NAO CONFIAVEL, PREFIXADO) ---\n### failure (SKILL.md) score=20.1 mode=KEYWORD_WINDOWS\n| ## Contrato curto\n| → próxima sessão reutiliza\n| ```\n| \n| Esta skill é **módulo subordinado**. Ela não abre missão nova, não troca objetivo,\n| não abandona worktree, não muda Writer e não fecha a missão raiz.\n| \n| Missão sem `mission.id` retorna:\n| \n| ```text\n| STATUS=BLOCKED_MISSION_REQUIRED\n| MISSAO_ATUAL_PRESERVADA=NAO\n| PROXIMO_ESTADO=INALTERADO\n| ```\n| \n| ## Execução por visão inteira\n| \n| Quando o território já estiver conhecido, não corrigir achados um por um:\n| \n| ```text\n| PROMESSAS DO PACOTE\n| ## Eventos\n| \n| - `TEST_FAILED`\n| - `NODE_CHECK_FAILED`\n| - `SEMANTIC_FAILURE_WITH_SYNTAX_PASS`\n| - `REGRESSION_FAILED`\n| - `TIMEOUT`\n| - `STATE_TRANSITION_ERROR`\n| - `ENXAME_REQUEST`\n| \n| Evento desconhecido sem gatilho real retorna `INCONCLUSIVO`. Prioridade nunca cria\n| match sozinha. `INCONCLUSIVO` não avança checkpoint e pode ser reavaliado depois.\n| \n| ## Regras inegociáveis\n| \n| - Não carregar o acervo inteiro.\n| - Não adaptar teste para aceitar código q\n| ...[truncado]\n"
+  },
+  "secretReadScan": {
+    "pass": true,
+    "files": []
+  }
+}

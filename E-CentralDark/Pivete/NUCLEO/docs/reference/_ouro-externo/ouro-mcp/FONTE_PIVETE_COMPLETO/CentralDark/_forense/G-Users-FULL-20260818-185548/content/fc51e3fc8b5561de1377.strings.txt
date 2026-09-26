@@ -1,0 +1,8 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\macros\life\click.me
+
+To run the "Conway's game of life" macros:
+  1.  Type ":so life.vim".  This loads the macros.
+  2.  Type "g" to run the macros.
+  3.  Type CTRL-C to interrupt.
+  4.  Type ":q!" to get out.
+See life.vim for more advanced usage.

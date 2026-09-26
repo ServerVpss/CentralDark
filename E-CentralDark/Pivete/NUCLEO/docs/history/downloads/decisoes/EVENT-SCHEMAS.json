@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "learning_event": {
+    "required": [
+      "event_id",
+      "session_id",
+      "timestamp",
+      "source_kind",
+      "state"
+    ],
+    "fields": [
+      "event_id",
+      "session_id",
+      "timestamp",
+      "source_kind",
+      "source_locator",
+      "source_hash",
+      "state",
+      "class",
+      "claim",
+      "evidence",
+      "counterproof",
+      "decision",
+      "canonical_path",
+      "projection_path",
+      "policy_version"
+    ]
+  },
+  "session": {
+    "required": [
+      "session_id",
+      "mode",
+      "started_at",
+      "scope"
+    ],
+    "fields": [
+      "session_id",
+      "mode",
+      "started_at",
+      "ended_at",
+      "scope",
+      "capture_sources",
+      "captured",
+      "processed",
+      "validated",
+      "crystallized",
+      "rejected",
+      "noise",
+      "pending",
+      "unknown",
+      "errors"
+    ]
+  }
+}

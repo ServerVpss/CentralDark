@@ -1,0 +1,285 @@
+{
+  "package": "CENTRALDARK-MANDATO-CELESTIAL",
+  "generated_at": "2026-07-27T17:07:48.415971+00:00",
+  "canonical_core": "mesmo agente reconhece o próprio mecanismo de erro e prova transferência",
+  "tests_exit_code": 0,
+  "demo_exit_code": 0,
+  "contradictions_found": [],
+  "files": [
+    {
+      "path": ".gitignore",
+      "size": 39,
+      "sha256": "42e78aa6a3e7544d9147f13e3763a7f6b3a7871c24d5d55513a94de08f25719f"
+    },
+    {
+      "path": "NOTICE-AUTORIA.md",
+      "size": 317,
+      "sha256": "10ee732c40afafc146701efcfc7f63d75387d292a9ef5cdc7471a2f5f8748201"
+    },
+    {
+      "path": "README.md",
+      "size": 1484,
+      "sha256": "e04bf6019eb9a9bbf31b382f3bdd9a2b8891687506cac836396aba54ddc8a742"
+    },
+    {
+      "path": "container/Dockerfile",
+      "size": 292,
+      "sha256": "f86c16f8ca1ed289ddf52d022e161dc8d4d5d3a1e8befb1eafd3fce8e74e5c68"
+    },
+    {
+      "path": "container/compose.yaml",
+      "size": 648,
+      "sha256": "5c8a28eaf9baf577c95e6dc106c38108869a1e066f6819e9d631a9d60a406515"
+    },
+    {
+      "path": "container/entrypoint.sh",
+      "size": 75,
+      "sha256": "71d8f8a2b8ace016f1b6214900bdb0f21009cf6030786edcf82b5730316541c2"
+    },
+    {
+      "path": "container/seccomp-notes.md",
+      "size": 218,
+      "sha256": "0f01fb167337d9d4995a1ab68ba56147011e7ba7be5f7fa4df1762cd0e9aa399"
+    },
+    {
+      "path": "contracts/evidence.schema.json",
+      "size": 838,
+      "sha256": "495179c79ca591b3763b3d089303b8deb4ab69ebdc0032e5c9243b7ab608b169"
+    },
+    {
+      "path": "contracts/gate_result.schema.json",
+      "size": 460,
+      "sha256": "6ec6a56bbed043f3006ce80649e8bcf0797460d6f39638408ff9fdbddb69c449"
+    },
+    {
+      "path": "contracts/ledger_event.schema.json",
+      "size": 696,
+      "sha256": "709c076f84874832e2aa113bf5f79194f4eec42f18bfdddbc813a31aebbfd08f"
+    },
+    {
+      "path": "contracts/mission.schema.json",
+      "size": 2014,
+      "sha256": "d53b74a7e0e63e62257d937b4d7e0e21f97e9e60b44b103518569f8569036227"
+    },
+    {
+      "path": "contracts/operational_state.schema.json",
+      "size": 460,
+      "sha256": "677882d531a22aa8a47dc97e349a49d24f3d048460cdb8974aa0b3c5ea1d77e3"
+    },
+    {
+      "path": "contracts/release_manifest.schema.json",
+      "size": 857,
+      "sha256": "212ddccd5a0360e24c5f2724ddba6f16dbb36f2e99273fa43f1961b5fe4d1a8b"
+    },
+    {
+      "path": "docs/00-FONTE-DA-VERDADE.md",
+      "size": 919,
+      "sha256": "901d0afa29a54eadc17d5fb3a779524deead9e792205cd39ffcaa8de771654c0"
+    },
+    {
+      "path": "docs/01-ARQUITETURA-COMPLETA.md",
+      "size": 2165,
+      "sha256": "7297ef38618ac4bd2958aa06907c07e64042ede17e4f79cf48afcac497e9b826"
+    },
+    {
+      "path": "docs/02-CIBORGUE-COGNITIVO.md",
+      "size": 572,
+      "sha256": "968f176ce20b9223126f4e006854cb01d2ec1a1d8f956d60b9bcd1bf872b9026"
+    },
+    {
+      "path": "docs/03-CAIXA-PRETA-SELADA.md",
+      "size": 990,
+      "sha256": "1c849ee1654ab72fa829772d5334908ca929c82506fb1e36c37b44c45422159f"
+    },
+    {
+      "path": "docs/04-REACT-METALUPA-AUTOLUPA.md",
+      "size": 683,
+      "sha256": "8961044c81faceac4a5c0755fcc01a3a67a0a8dca3842abb0a9a680b7103270b"
+    },
+    {
+      "path": "docs/05-ESTADOS-GATES-E-SELOS.md",
+      "size": 806,
+      "sha256": "9d4ea8bbd1801ad02295cca074d00adab4e89a98f1b13194770ce404baeff066"
+    },
+    {
+      "path": "docs/06-INTEGRACAO-CENTRALDARK-HERMES-BOLT.md",
+      "size": 678,
+      "sha256": "b7a423958f77414127cc57216744c3fbdae764afc8e4de21a48bb5bc188bb398"
+    },
+    {
+      "path": "docs/07-OBSERVABILIDADE-E-INTERFACE.md",
+      "size": 435,
+      "sha256": "dee42b1e16994b2fd0c734ef7a5be637a1fcb7f16044c81d3b8682addac45d89"
+    },
+    {
+      "path": "docs/08-AMEACAS-E-FALHAS.md",
+      "size": 776,
+      "sha256": "596a6d060b2d6974c1f986df00bfff852bf331802b7e5c9a25dd8787a60bd3b8"
+    },
+    {
+      "path": "docs/09-ROADMAP-DE-PROVA.md",
+      "size": 664,
+      "sha256": "236c9819815cba6b6d5de36cfa29c2802889a16a9349c5203eed7febcbdebdfc"
+    },
+    {
+      "path": "docs/10-GLOSSARIO.md",
+      "size": 695,
+      "sha256": "4c37935996280b064680b4bbc5820c1303d20402a38d93af1e5022e015abf922"
+    },
+    {
+      "path": "docs/11-MATERIA-PRIMA-EXTRAIDA.md",
+      "size": 753,
+      "sha256": "47d281486cb580e498d395272fec017bee4f9eda03bdc3385a2dc9a91a2e5627"
+    },
+    {
+      "path": "docs/12-AUTOAUDITORIA-METALUPA.md",
+      "size": 904,
+      "sha256": "ab09e8899ed2dce3583a7c633e5806d50fb556a37506237a5ac046772ef5682c"
+    },
+    {
+      "path": "evidence/EVIDENCIA-DE-EXECUCAO.md",
+      "size": 4813,
+      "sha256": "f376c684f7aa6baf6ac5eae8714ee1c5b3373c38213cfd724d7a4ff75effac2f"
+    },
+    {
+      "path": "evidence/MATRIZ-DE-RASTREABILIDADE.csv",
+      "size": 617,
+      "sha256": "393bbec2a934f6c71f4297006beb1c73c68a81ee1ae431381a711ba05a153961"
+    },
+    {
+      "path": "examples/input/README.txt",
+      "size": 37,
+      "sha256": "2979cdc225a3784a1029ee4ca325ef8c5087faf252a58e13f21d4d8d35da9949"
+    },
+    {
+      "path": "examples/mission.container.json",
+      "size": 1423,
+      "sha256": "9f62628cc9afa493498d1c4cb58a8d4634dba2d0327eeade1fc0e6c2987364b4"
+    },
+    {
+      "path": "examples/mission.example.json",
+      "size": 1471,
+      "sha256": "4bbcac4636f920fda15103f70572ef88e22fa5c613c60fc6147aba22e7dbad03"
+    },
+    {
+      "path": "examples/sample-output.md",
+      "size": 246,
+      "sha256": "1ae2b39769d38eafb0bba7e7419f8622ef3fcf06a255f0c78827863464e8b723"
+    },
+    {
+      "path": "manual/MANDATO-CELESTIAL.html",
+      "size": 2251,
+      "sha256": "3efe947e05c99bda19fd8da4a6aa1d8ad26724031a949f6218263a40417f858c"
+    },
+    {
+      "path": "prompts/AUTODESTRUIDOR.md",
+      "size": 456,
+      "sha256": "d954b4128f6ebc9ccc50371da5e98a44179515b7343f81b72114a9e96881d52e"
+    },
+    {
+      "path": "prompts/CONSTRUTOR.md",
+      "size": 276,
+      "sha256": "76a21837fc08741b292d064256b5fc2cc75ecdd972ec16681e9a8a1fe1862095"
+    },
+    {
+      "path": "prompts/GOAL-CAIXA-PRETA-SELADA.md",
+      "size": 668,
+      "sha256": "e54f41cd61d0d88924bdd1af00d91b90bb4ffa469b8b85e2380b02da43f2e9c4"
+    },
+    {
+      "path": "prompts/HANDOFF-PIVETE.md",
+      "size": 295,
+      "sha256": "c0f2ad6dd46652b02bd7c9994de53c6988a0a91b044484bb442ccaaf66e0f4a9"
+    },
+    {
+      "path": "prompts/VERIFICADOR-DE-SELO.md",
+      "size": 382,
+      "sha256": "0fdb9128f7aac584745f6874d92020555739af5c5e609d050b2257fc9b4fd533"
+    },
+    {
+      "path": "runtime/__init__.py",
+      "size": 45,
+      "sha256": "2b0e2ca2e921800839da8f22804ad2057383b870d5863a48d77bcaa9e9d53436"
+    },
+    {
+      "path": "runtime/adapters.py",
+      "size": 5740,
+      "sha256": "458ca1b876fdb07b79d10725d31d2f9e2ac41ad2f93a04d049c565f7768cbc79"
+    },
+    {
+      "path": "runtime/cli.py",
+      "size": 1095,
+      "sha256": "6334457de4d5204aff807e4b282d70eec39114c24b758fa204b7efa744451465"
+    },
+    {
+      "path": "runtime/evidence.py",
+      "size": 2174,
+      "sha256": "b58be24be92b6e692010f561e0e8f98c343fa2eebad7c31881d157a3d5622cbc"
+    },
+    {
+      "path": "runtime/gates.py",
+      "size": 2486,
+      "sha256": "77c82bf390ffe185bdba705ff5b70b560c49f55cdc3a53cbf806f183b4421fcc"
+    },
+    {
+      "path": "runtime/ledger.py",
+      "size": 2674,
+      "sha256": "52c9533f80532e1b657899aa1ba64c65d228521b9e375eaa7929f10a8112fde9"
+    },
+    {
+      "path": "runtime/mock_agent.py",
+      "size": 1363,
+      "sha256": "64d539e05d04eabd0d8253c2e3376e530f255bbe7e773aad301a6a70f14c914a"
+    },
+    {
+      "path": "runtime/orchestrator.py",
+      "size": 5335,
+      "sha256": "8173c59df76b629c561588fad6cd6f0c042f7d1426a84781d85626fc5590660c"
+    },
+    {
+      "path": "runtime/types.py",
+      "size": 1545,
+      "sha256": "75afcdd78710e03492643780537d489fae46666f7d16efda1a50fdf6efa47a20"
+    },
+    {
+      "path": "scripts/Start-SealedBox.ps1",
+      "size": 245,
+      "sha256": "4a9bcf3374f08e6d415e5b252206778afcc43eede2e17442db9663b613d1e35c"
+    },
+    {
+      "path": "scripts/Test-Package.ps1",
+      "size": 235,
+      "sha256": "c1bbf53d578807553158052cbe999c3500bda9004b5d0e3ea2f01c3583b8f69c"
+    },
+    {
+      "path": "scripts/Verify-Package.py",
+      "size": 546,
+      "sha256": "26ea5757b2a9b951c5a17194c131320822904c796431936cef531c28bbce138e"
+    },
+    {
+      "path": "tests/test_false_green.py",
+      "size": 1331,
+      "sha256": "72bd64c7af5370c7a16238f7d79a7462891819889353c2122c546f962f5ebd02"
+    },
+    {
+      "path": "tests/test_gates.py",
+      "size": 1613,
+      "sha256": "7437b19d11ed74b25498e0015db5cfce2a45c6bcfee131f3cee2c77f8b41f7e5"
+    },
+    {
+      "path": "tests/test_ledger.py",
+      "size": 572,
+      "sha256": "9cbd7bce9369fa8da6e7ba0f6997489e63baebb5d78fdc18007f356c50c58d56"
+    },
+    {
+      "path": "tests/test_orchestrator.py",
+      "size": 1117,
+      "sha256": "6a637117a2007ecb43802b4c907891c06bb129a8c57b307ee4553aee808a25d5"
+    },
+    {
+      "path": "tests/test_package_integrity.py",
+      "size": 609,
+      "sha256": "4de94f5e2b5e4374feed891cc961520968f07bd98e02559a14c41c3af41c6646"
+    }
+  ]
+}

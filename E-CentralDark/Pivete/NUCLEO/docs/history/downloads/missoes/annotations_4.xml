@@ -1,0 +1,815 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <item name="androidx.webkit.CookieManagerCompat java.util.List&lt;java.lang.String&gt; getCookieInfo(android.webkit.CookieManager, java.lang.String)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;GET_COOKIE_INFO&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.JavaScriptReplyProxy void postMessage(byte[])">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_MESSAGE_ARRAY_BUFFER&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.JavaScriptReplyProxy void postMessage(java.lang.String)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_MESSAGE_LISTENER&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ProcessGlobalConfig androidx.webkit.ProcessGlobalConfig setDataDirectorySuffix(android.content.Context, java.lang.String)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;STARTUP_FEATURE_SET_DATA_DIRECTORY_SUFFIX&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isConfigFeatureSupported(String, Context)&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ProcessGlobalConfig androidx.webkit.ProcessGlobalConfig setDirectoryBasePaths(android.content.Context, java.io.File, java.io.File)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;STARTUP_FEATURE_SET_DIRECTORY_BASE_PATHS&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isConfigFeatureSupported(String, Context)&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.Profile android.webkit.CookieManager getCookieManager()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;MULTI_PROFILE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.Profile android.webkit.GeolocationPermissions getGeolocationPermissions()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;MULTI_PROFILE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.Profile android.webkit.ServiceWorkerController getServiceWorkerController()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;MULTI_PROFILE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.Profile android.webkit.WebStorage getWebStorage()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;MULTI_PROFILE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.Profile java.lang.String getName()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;MULTI_PROFILE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ProfileStore androidx.webkit.Profile getOrCreateProfile(java.lang.String)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;MULTI_PROFILE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ProfileStore androidx.webkit.Profile getProfile(java.lang.String)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;MULTI_PROFILE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ProfileStore androidx.webkit.ProfileStore getInstance()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;MULTI_PROFILE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ProfileStore boolean deleteProfile(java.lang.String)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;MULTI_PROFILE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ProfileStore java.util.List&lt;java.lang.String&gt; getAllProfileNames()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;MULTI_PROFILE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ProxyConfig.Builder androidx.webkit.ProxyConfig.Builder addDirect(java.lang.String) 0">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.webkit.ProxyConfig.MATCH_HTTP, androidx.webkit.ProxyConfig.MATCH_HTTPS, androidx.webkit.ProxyConfig.MATCH_ALL_SCHEMES}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ProxyConfig.Builder androidx.webkit.ProxyConfig.Builder addProxyRule(java.lang.String, java.lang.String) 1">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.webkit.ProxyConfig.MATCH_HTTP, androidx.webkit.ProxyConfig.MATCH_HTTPS, androidx.webkit.ProxyConfig.MATCH_ALL_SCHEMES}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ProxyConfig.Builder androidx.webkit.ProxyConfig.Builder setReverseBypassEnabled(boolean)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;PROXY_OVERRIDE_REVERSE_BYPASS&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ProxyConfig.ProxyScheme">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.webkit.ProxyConfig.MATCH_HTTP, androidx.webkit.ProxyConfig.MATCH_HTTPS, androidx.webkit.ProxyConfig.MATCH_ALL_SCHEMES}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ProxyController androidx.webkit.ProxyController getInstance()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;PROXY_OVERRIDE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.SafeBrowsingResponseCompat void backToSafety(boolean)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SAFE_BROWSING_RESPONSE_BACK_TO_SAFETY&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.SafeBrowsingResponseCompat void proceed(boolean)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SAFE_BROWSING_RESPONSE_PROCEED&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.SafeBrowsingResponseCompat void showInterstitial(boolean)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SAFE_BROWSING_RESPONSE_SHOW_INTERSTITIAL&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ScriptHandler void remove()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;DOCUMENT_START_SCRIPT&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ServiceWorkerControllerCompat androidx.webkit.ServiceWorkerControllerCompat getInstance()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SERVICE_WORKER_BASIC_USAGE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ServiceWorkerWebSettingsCompat boolean getAllowContentAccess()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SERVICE_WORKER_CONTENT_ACCESS&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ServiceWorkerWebSettingsCompat boolean getAllowFileAccess()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SERVICE_WORKER_FILE_ACCESS&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ServiceWorkerWebSettingsCompat boolean getBlockNetworkLoads()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SERVICE_WORKER_BLOCK_NETWORK_LOADS&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ServiceWorkerWebSettingsCompat int getCacheMode()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SERVICE_WORKER_CACHE_MODE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.webkit.WebSettings.LOAD_DEFAULT, android.webkit.WebSettings.LOAD_CACHE_ELSE_NETWORK, android.webkit.WebSettings.LOAD_NO_CACHE, android.webkit.WebSettings.LOAD_CACHE_ONLY}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ServiceWorkerWebSettingsCompat java.util.Set&lt;java.lang.String&gt; getRequestedWithHeaderOriginAllowList()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;REQUESTED_WITH_HEADER_ALLOW_LIST&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ServiceWorkerWebSettingsCompat void setAllowContentAccess(boolean)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SERVICE_WORKER_CONTENT_ACCESS&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ServiceWorkerWebSettingsCompat void setAllowFileAccess(boolean)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SERVICE_WORKER_FILE_ACCESS&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ServiceWorkerWebSettingsCompat void setBlockNetworkLoads(boolean)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SERVICE_WORKER_BLOCK_NETWORK_LOADS&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ServiceWorkerWebSettingsCompat void setCacheMode(int)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SERVICE_WORKER_CACHE_MODE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ServiceWorkerWebSettingsCompat void setCacheMode(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.webkit.WebSettings.LOAD_DEFAULT, android.webkit.WebSettings.LOAD_CACHE_ELSE_NETWORK, android.webkit.WebSettings.LOAD_NO_CACHE, android.webkit.WebSettings.LOAD_CACHE_ONLY}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ServiceWorkerWebSettingsCompat void setRequestedWithHeaderOriginAllowList(java.util.Set&lt;java.lang.String&gt;)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;REQUESTED_WITH_HEADER_ALLOW_LIST&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.ServiceWorkerWebSettingsCompat.CacheMode">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.webkit.WebSettings.LOAD_DEFAULT, android.webkit.WebSettings.LOAD_CACHE_ELSE_NETWORK, android.webkit.WebSettings.LOAD_NO_CACHE, android.webkit.WebSettings.LOAD_CACHE_ONLY}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.TracingConfig TracingConfig(int, java.util.List&lt;java.lang.String&gt;, int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.webkit.TracingConfig.CATEGORIES_NONE, androidx.webkit.TracingConfig.CATEGORIES_ALL, androidx.webkit.TracingConfig.CATEGORIES_ANDROID_WEBVIEW, androidx.webkit.TracingConfig.CATEGORIES_WEB_DEVELOPER, androidx.webkit.TracingConfig.CATEGORIES_INPUT_LATENCY, androidx.webkit.TracingConfig.CATEGORIES_RENDERING, androidx.webkit.TracingConfig.CATEGORIES_JAVASCRIPT_AND_RENDERING, androidx.webkit.TracingConfig.CATEGORIES_FRAME_VIEWER}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.TracingConfig TracingConfig(int, java.util.List&lt;java.lang.String&gt;, int) 2">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.TracingConfig.RECORD_UNTIL_FULL, androidx.webkit.TracingConfig.RECORD_CONTINUOUSLY}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.TracingConfig int getPredefinedCategories()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.webkit.TracingConfig.CATEGORIES_NONE, androidx.webkit.TracingConfig.CATEGORIES_ALL, androidx.webkit.TracingConfig.CATEGORIES_ANDROID_WEBVIEW, androidx.webkit.TracingConfig.CATEGORIES_WEB_DEVELOPER, androidx.webkit.TracingConfig.CATEGORIES_INPUT_LATENCY, androidx.webkit.TracingConfig.CATEGORIES_RENDERING, androidx.webkit.TracingConfig.CATEGORIES_JAVASCRIPT_AND_RENDERING, androidx.webkit.TracingConfig.CATEGORIES_FRAME_VIEWER}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.TracingConfig int getTracingMode()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.TracingConfig.RECORD_UNTIL_FULL, androidx.webkit.TracingConfig.RECORD_CONTINUOUSLY}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.TracingConfig mPredefinedCategories">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.webkit.TracingConfig.CATEGORIES_NONE, androidx.webkit.TracingConfig.CATEGORIES_ALL, androidx.webkit.TracingConfig.CATEGORIES_ANDROID_WEBVIEW, androidx.webkit.TracingConfig.CATEGORIES_WEB_DEVELOPER, androidx.webkit.TracingConfig.CATEGORIES_INPUT_LATENCY, androidx.webkit.TracingConfig.CATEGORIES_RENDERING, androidx.webkit.TracingConfig.CATEGORIES_JAVASCRIPT_AND_RENDERING, androidx.webkit.TracingConfig.CATEGORIES_FRAME_VIEWER}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.TracingConfig mTracingMode">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.TracingConfig.RECORD_UNTIL_FULL, androidx.webkit.TracingConfig.RECORD_CONTINUOUSLY}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.TracingConfig.Builder androidx.webkit.TracingConfig.Builder addCategories(int...) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.webkit.TracingConfig.CATEGORIES_NONE, androidx.webkit.TracingConfig.CATEGORIES_ALL, androidx.webkit.TracingConfig.CATEGORIES_ANDROID_WEBVIEW, androidx.webkit.TracingConfig.CATEGORIES_WEB_DEVELOPER, androidx.webkit.TracingConfig.CATEGORIES_INPUT_LATENCY, androidx.webkit.TracingConfig.CATEGORIES_RENDERING, androidx.webkit.TracingConfig.CATEGORIES_JAVASCRIPT_AND_RENDERING, androidx.webkit.TracingConfig.CATEGORIES_FRAME_VIEWER}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.TracingConfig.Builder androidx.webkit.TracingConfig.Builder setTracingMode(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.TracingConfig.RECORD_UNTIL_FULL, androidx.webkit.TracingConfig.RECORD_CONTINUOUSLY}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.TracingConfig.Builder mPredefinedCategories">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.webkit.TracingConfig.CATEGORIES_NONE, androidx.webkit.TracingConfig.CATEGORIES_ALL, androidx.webkit.TracingConfig.CATEGORIES_ANDROID_WEBVIEW, androidx.webkit.TracingConfig.CATEGORIES_WEB_DEVELOPER, androidx.webkit.TracingConfig.CATEGORIES_INPUT_LATENCY, androidx.webkit.TracingConfig.CATEGORIES_RENDERING, androidx.webkit.TracingConfig.CATEGORIES_JAVASCRIPT_AND_RENDERING, androidx.webkit.TracingConfig.CATEGORIES_FRAME_VIEWER}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.TracingConfig.Builder mTracingMode">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.TracingConfig.RECORD_UNTIL_FULL, androidx.webkit.TracingConfig.RECORD_CONTINUOUSLY}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.TracingConfig.PredefinedCategories">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.webkit.TracingConfig.CATEGORIES_NONE, androidx.webkit.TracingConfig.CATEGORIES_ALL, androidx.webkit.TracingConfig.CATEGORIES_ANDROID_WEBVIEW, androidx.webkit.TracingConfig.CATEGORIES_WEB_DEVELOPER, androidx.webkit.TracingConfig.CATEGORIES_INPUT_LATENCY, androidx.webkit.TracingConfig.CATEGORIES_RENDERING, androidx.webkit.TracingConfig.CATEGORIES_JAVASCRIPT_AND_RENDERING, androidx.webkit.TracingConfig.CATEGORIES_FRAME_VIEWER}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.TracingConfig.TracingMode">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.TracingConfig.RECORD_UNTIL_FULL, androidx.webkit.TracingConfig.RECORD_CONTINUOUSLY}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.TracingController androidx.webkit.TracingController getInstance()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;TRACING_CONTROLLER_BASIC_USAGE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebMessageCompat WebMessageCompat(byte[])">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_MESSAGE_ARRAY_BUFFER&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebMessageCompat WebMessageCompat(byte[], androidx.webkit.WebMessagePortCompat[])">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_MESSAGE_ARRAY_BUFFER&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebMessageCompat int getType()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebMessageCompat.TYPE_STRING, androidx.webkit.WebMessageCompat.TYPE_ARRAY_BUFFER}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebMessageCompat java.lang.String typeToString(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebMessageCompat.TYPE_STRING, androidx.webkit.WebMessageCompat.TYPE_ARRAY_BUFFER}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebMessageCompat mType">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebMessageCompat.TYPE_STRING, androidx.webkit.WebMessageCompat.TYPE_ARRAY_BUFFER}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebMessageCompat void checkType(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebMessageCompat.TYPE_STRING, androidx.webkit.WebMessageCompat.TYPE_ARRAY_BUFFER}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebMessageCompat.Type">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebMessageCompat.TYPE_STRING, androidx.webkit.WebMessageCompat.TYPE_ARRAY_BUFFER}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebMessagePortCompat void close()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_MESSAGE_PORT_CLOSE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebMessagePortCompat void postMessage(androidx.webkit.WebMessageCompat)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_MESSAGE_PORT_POST_MESSAGE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebMessagePortCompat void setWebMessageCallback(android.os.Handler, androidx.webkit.WebMessagePortCompat.WebMessageCallbackCompat)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_MESSAGE_PORT_SET_MESSAGE_CALLBACK&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebMessagePortCompat void setWebMessageCallback(androidx.webkit.WebMessagePortCompat.WebMessageCallbackCompat)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_MESSAGE_PORT_SET_MESSAGE_CALLBACK&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebResourceErrorCompat int getErrorCode()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_RESOURCE_ERROR_GET_CODE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.webkit.WebViewClient.ERROR_UNKNOWN, android.webkit.WebViewClient.ERROR_HOST_LOOKUP, android.webkit.WebViewClient.ERROR_UNSUPPORTED_AUTH_SCHEME, android.webkit.WebViewClient.ERROR_AUTHENTICATION, android.webkit.WebViewClient.ERROR_PROXY_AUTHENTICATION, android.webkit.WebViewClient.ERROR_CONNECT, android.webkit.WebViewClient.ERROR_IO, android.webkit.WebViewClient.ERROR_TIMEOUT, android.webkit.WebViewClient.ERROR_REDIRECT_LOOP, android.webkit.WebViewClient.ERROR_UNSUPPORTED_SCHEME, android.webkit.WebViewClient.ERROR_FAILED_SSL_HANDSHAKE, android.webkit.WebViewClient.ERROR_BAD_URL, android.webkit.WebViewClient.ERROR_FILE, android.webkit.WebViewClient.ERROR_FILE_NOT_FOUND, android.webkit.WebViewClient.ERROR_TOO_MANY_REQUESTS, android.webkit.WebViewClient.ERROR_UNSAFE_RESOURCE}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebResourceErrorCompat java.lang.CharSequence getDescription()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_RESOURCE_ERROR_GET_DESCRIPTION&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebResourceErrorCompat.NetErrorCode">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.webkit.WebViewClient.ERROR_UNKNOWN, android.webkit.WebViewClient.ERROR_HOST_LOOKUP, android.webkit.WebViewClient.ERROR_UNSUPPORTED_AUTH_SCHEME, android.webkit.WebViewClient.ERROR_AUTHENTICATION, android.webkit.WebViewClient.ERROR_PROXY_AUTHENTICATION, android.webkit.WebViewClient.ERROR_CONNECT, android.webkit.WebViewClient.ERROR_IO, android.webkit.WebViewClient.ERROR_TIMEOUT, android.webkit.WebViewClient.ERROR_REDIRECT_LOOP, android.webkit.WebViewClient.ERROR_UNSUPPORTED_SCHEME, android.webkit.WebViewClient.ERROR_FAILED_SSL_HANDSHAKE, android.webkit.WebViewClient.ERROR_BAD_URL, android.webkit.WebViewClient.ERROR_FILE, android.webkit.WebViewClient.ERROR_FILE_NOT_FOUND, android.webkit.WebViewClient.ERROR_TOO_MANY_REQUESTS, android.webkit.WebViewClient.ERROR_UNSAFE_RESOURCE}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebResourceRequestCompat boolean isRedirect(android.webkit.WebResourceRequest)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_RESOURCE_REQUEST_IS_REDIRECT&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat androidx.webkit.UserAgentMetadata getUserAgentMetadata(android.webkit.WebSettings)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;USER_AGENT_METADATA&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat androidx.webkit.WebViewMediaIntegrityApiStatusConfig getWebViewMediaIntegrityApiStatus(android.webkit.WebSettings)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEBVIEW_MEDIA_INTEGRITY_API_STATUS&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat boolean getBackForwardCacheEnabled(android.webkit.WebSettings)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;BACK_FORWARD_CACHE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat boolean getEnterpriseAuthenticationAppLinkPolicyEnabled(android.webkit.WebSettings)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;ENTERPRISE_AUTHENTICATION_APP_LINK_POLICY&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat boolean getOffscreenPreRaster(android.webkit.WebSettings)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;OFF_SCREEN_PRERASTER&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat boolean getSafeBrowsingEnabled(android.webkit.WebSettings)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SAFE_BROWSING_ENABLE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat boolean isAlgorithmicDarkeningAllowed(android.webkit.WebSettings)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;ALGORITHMIC_DARKENING&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat int getAttributionRegistrationBehavior(android.webkit.WebSettings)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;ATTRIBUTION_REGISTRATION_BEHAVIOR&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebSettingsCompat.ATTRIBUTION_BEHAVIOR_DISABLED, androidx.webkit.WebSettingsCompat.ATTRIBUTION_BEHAVIOR_APP_SOURCE_AND_WEB_TRIGGER, androidx.webkit.WebSettingsCompat.ATTRIBUTION_BEHAVIOR_WEB_SOURCE_AND_WEB_TRIGGER, androidx.webkit.WebSettingsCompat.ATTRIBUTION_BEHAVIOR_APP_SOURCE_AND_APP_TRIGGER}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat int getDisabledActionModeMenuItems(android.webkit.WebSettings)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;DISABLED_ACTION_MODE_MENU_ITEMS&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{android.webkit.WebSettings.MENU_ITEM_NONE, android.webkit.WebSettings.MENU_ITEM_SHARE, android.webkit.WebSettings.MENU_ITEM_WEB_SEARCH, android.webkit.WebSettings.MENU_ITEM_PROCESS_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat int getForceDark(android.webkit.WebSettings)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;FORCE_DARK&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebSettingsCompat.FORCE_DARK_OFF, androidx.webkit.WebSettingsCompat.FORCE_DARK_AUTO, androidx.webkit.WebSettingsCompat.FORCE_DARK_ON}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat int getForceDarkStrategy(android.webkit.WebSettings)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;FORCE_DARK_STRATEGY&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebSettingsCompat.DARK_STRATEGY_USER_AGENT_DARKENING_ONLY, androidx.webkit.WebSettingsCompat.DARK_STRATEGY_WEB_THEME_DARKENING_ONLY, androidx.webkit.WebSettingsCompat.DARK_STRATEGY_PREFER_WEB_THEME_OVER_USER_AGENT_DARKENING}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat int getSpeculativeLoadingStatus(android.webkit.WebSettings)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SPECULATIVE_LOADING_STATUS&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebSettingsCompat.SPECULATIVE_LOADING_DISABLED, androidx.webkit.WebSettingsCompat.SPECULATIVE_LOADING_PRERENDER_ENABLED}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat int getWebAuthenticationSupport(android.webkit.WebSettings)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_AUTHENTICATION&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebSettingsCompat.WEB_AUTHENTICATION_SUPPORT_NONE, androidx.webkit.WebSettingsCompat.WEB_AUTHENTICATION_SUPPORT_FOR_APP, androidx.webkit.WebSettingsCompat.WEB_AUTHENTICATION_SUPPORT_FOR_BROWSER}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat java.util.Set&lt;java.lang.String&gt; getRequestedWithHeaderOriginAllowList(android.webkit.WebSettings)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;REQUESTED_WITH_HEADER_ALLOW_LIST&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setAlgorithmicDarkeningAllowed(android.webkit.WebSettings, boolean)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;ALGORITHMIC_DARKENING&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setAttributionRegistrationBehavior(android.webkit.WebSettings, int)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;ATTRIBUTION_REGISTRATION_BEHAVIOR&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setAttributionRegistrationBehavior(android.webkit.WebSettings, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebSettingsCompat.ATTRIBUTION_BEHAVIOR_DISABLED, androidx.webkit.WebSettingsCompat.ATTRIBUTION_BEHAVIOR_APP_SOURCE_AND_WEB_TRIGGER, androidx.webkit.WebSettingsCompat.ATTRIBUTION_BEHAVIOR_WEB_SOURCE_AND_WEB_TRIGGER, androidx.webkit.WebSettingsCompat.ATTRIBUTION_BEHAVIOR_APP_SOURCE_AND_APP_TRIGGER}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setBackForwardCacheEnabled(android.webkit.WebSettings, boolean)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;BACK_FORWARD_CACHE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setDisabledActionModeMenuItems(android.webkit.WebSettings, int)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;DISABLED_ACTION_MODE_MENU_ITEMS&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setDisabledActionModeMenuItems(android.webkit.WebSettings, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{android.webkit.WebSettings.MENU_ITEM_NONE, android.webkit.WebSettings.MENU_ITEM_SHARE, android.webkit.WebSettings.MENU_ITEM_WEB_SEARCH, android.webkit.WebSettings.MENU_ITEM_PROCESS_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setEnterpriseAuthenticationAppLinkPolicyEnabled(android.webkit.WebSettings, boolean)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;ENTERPRISE_AUTHENTICATION_APP_LINK_POLICY&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setForceDark(android.webkit.WebSettings, int)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;FORCE_DARK&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setForceDark(android.webkit.WebSettings, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebSettingsCompat.FORCE_DARK_OFF, androidx.webkit.WebSettingsCompat.FORCE_DARK_AUTO, androidx.webkit.WebSettingsCompat.FORCE_DARK_ON}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setForceDarkStrategy(android.webkit.WebSettings, int)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;FORCE_DARK_STRATEGY&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setForceDarkStrategy(android.webkit.WebSettings, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebSettingsCompat.DARK_STRATEGY_USER_AGENT_DARKENING_ONLY, androidx.webkit.WebSettingsCompat.DARK_STRATEGY_WEB_THEME_DARKENING_ONLY, androidx.webkit.WebSettingsCompat.DARK_STRATEGY_PREFER_WEB_THEME_OVER_USER_AGENT_DARKENING}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setOffscreenPreRaster(android.webkit.WebSettings, boolean)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;OFF_SCREEN_PRERASTER&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setRequestedWithHeaderOriginAllowList(android.webkit.WebSettings, java.util.Set&lt;java.lang.String&gt;)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;REQUESTED_WITH_HEADER_ALLOW_LIST&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setSafeBrowsingEnabled(android.webkit.WebSettings, boolean)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SAFE_BROWSING_ENABLE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setSpeculativeLoadingStatus(android.webkit.WebSettings, int)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SPECULATIVE_LOADING_STATUS&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setSpeculativeLoadingStatus(android.webkit.WebSettings, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebSettingsCompat.SPECULATIVE_LOADING_DISABLED, androidx.webkit.WebSettingsCompat.SPECULATIVE_LOADING_PRERENDER_ENABLED}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setUserAgentMetadata(android.webkit.WebSettings, androidx.webkit.UserAgentMetadata)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;USER_AGENT_METADATA&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setWebAuthenticationSupport(android.webkit.WebSettings, int)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_AUTHENTICATION&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setWebAuthenticationSupport(android.webkit.WebSettings, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebSettingsCompat.WEB_AUTHENTICATION_SUPPORT_NONE, androidx.webkit.WebSettingsCompat.WEB_AUTHENTICATION_SUPPORT_FOR_APP, androidx.webkit.WebSettingsCompat.WEB_AUTHENTICATION_SUPPORT_FOR_BROWSER}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat void setWebViewMediaIntegrityApiStatus(android.webkit.WebSettings, androidx.webkit.WebViewMediaIntegrityApiStatusConfig)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEBVIEW_MEDIA_INTEGRITY_API_STATUS&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat.ForceDark">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebSettingsCompat.FORCE_DARK_OFF, androidx.webkit.WebSettingsCompat.FORCE_DARK_AUTO, androidx.webkit.WebSettingsCompat.FORCE_DARK_ON}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat.ForceDarkStrategy">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebSettingsCompat.DARK_STRATEGY_USER_AGENT_DARKENING_ONLY, androidx.webkit.WebSettingsCompat.DARK_STRATEGY_WEB_THEME_DARKENING_ONLY, androidx.webkit.WebSettingsCompat.DARK_STRATEGY_PREFER_WEB_THEME_OVER_USER_AGENT_DARKENING}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebSettingsCompat.MenuItemFlags">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{android.webkit.WebSettings.MENU_ITEM_NONE, android.webkit.WebSettings.MENU_ITEM_SHARE, android.webkit.WebSettings.MENU_ITEM_WEB_SEARCH, android.webkit.WebSettings.MENU_ITEM_PROCESS_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewClientCompat void onSafeBrowsingHit(android.webkit.WebView, android.webkit.WebResourceRequest, int, android.webkit.SafeBrowsingResponse) 2">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.webkit.WebViewClient.SAFE_BROWSING_THREAT_UNKNOWN, android.webkit.WebViewClient.SAFE_BROWSING_THREAT_MALWARE, android.webkit.WebViewClient.SAFE_BROWSING_THREAT_PHISHING, android.webkit.WebViewClient.SAFE_BROWSING_THREAT_UNWANTED_SOFTWARE, android.webkit.WebViewClient.SAFE_BROWSING_THREAT_BILLING}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewClientCompat void onSafeBrowsingHit(android.webkit.WebView, android.webkit.WebResourceRequest, int, androidx.webkit.SafeBrowsingResponseCompat) 2">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.webkit.WebViewClient.SAFE_BROWSING_THREAT_UNKNOWN, android.webkit.WebViewClient.SAFE_BROWSING_THREAT_MALWARE, android.webkit.WebViewClient.SAFE_BROWSING_THREAT_PHISHING, android.webkit.WebViewClient.SAFE_BROWSING_THREAT_UNWANTED_SOFTWARE, android.webkit.WebViewClient.SAFE_BROWSING_THREAT_BILLING}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewClientCompat void onSafeBrowsingHit(android.webkit.WebView, android.webkit.WebResourceRequest, int, java.lang.reflect.InvocationHandler) 2">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.webkit.WebViewClient.SAFE_BROWSING_THREAT_UNKNOWN, android.webkit.WebViewClient.SAFE_BROWSING_THREAT_MALWARE, android.webkit.WebViewClient.SAFE_BROWSING_THREAT_PHISHING, android.webkit.WebViewClient.SAFE_BROWSING_THREAT_UNWANTED_SOFTWARE, android.webkit.WebViewClient.SAFE_BROWSING_THREAT_BILLING}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewClientCompat.SafeBrowsingThreat">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.webkit.WebViewClient.SAFE_BROWSING_THREAT_UNKNOWN, android.webkit.WebViewClient.SAFE_BROWSING_THREAT_MALWARE, android.webkit.WebViewClient.SAFE_BROWSING_THREAT_PHISHING, android.webkit.WebViewClient.SAFE_BROWSING_THREAT_UNWANTED_SOFTWARE, android.webkit.WebViewClient.SAFE_BROWSING_THREAT_BILLING}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat android.net.Uri getSafeBrowsingPrivacyPolicyUrl()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SAFE_BROWSING_PRIVACY_POLICY_URL&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat android.webkit.WebChromeClient getWebChromeClient(android.webkit.WebView)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;GET_WEB_CHROME_CLIENT&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat android.webkit.WebViewClient getWebViewClient(android.webkit.WebView)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;GET_WEB_VIEW_CLIENT&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat androidx.webkit.Profile getProfile(android.webkit.WebView)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;MULTI_PROFILE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat androidx.webkit.ScriptHandler addDocumentStartJavaScript(android.webkit.WebView, java.lang.String, java.util.Set&lt;java.lang.String&gt;)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;DOCUMENT_START_SCRIPT&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat androidx.webkit.WebMessagePortCompat[] createWebMessageChannel(android.webkit.WebView)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;CREATE_WEB_MESSAGE_CHANNEL&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat androidx.webkit.WebViewRenderProcess getWebViewRenderProcess(android.webkit.WebView)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;GET_WEB_VIEW_RENDERER&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat androidx.webkit.WebViewRenderProcessClient getWebViewRenderProcessClient(android.webkit.WebView)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_VIEW_RENDERER_CLIENT_BASIC_USAGE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat boolean isAudioMuted(android.webkit.WebView)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;MUTE_AUDIO&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat boolean isMultiProcessEnabled()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;MULTI_PROCESS&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat java.lang.String getVariationsHeader()">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;GET_VARIATIONS_HEADER&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat void addWebMessageListener(android.webkit.WebView, java.lang.String, java.util.Set&lt;java.lang.String&gt;, androidx.webkit.WebViewCompat.WebMessageListener)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_MESSAGE_LISTENER&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat void postVisualStateCallback(android.webkit.WebView, long, androidx.webkit.WebViewCompat.VisualStateCallback)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;VISUAL_STATE_CALLBACK&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat void postWebMessage(android.webkit.WebView, androidx.webkit.WebMessageCompat, android.net.Uri)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;POST_WEB_MESSAGE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat void removeWebMessageListener(android.webkit.WebView, java.lang.String)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_MESSAGE_LISTENER&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat void setAudioMuted(android.webkit.WebView, boolean)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;MUTE_AUDIO&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat void setProfile(android.webkit.WebView, java.lang.String)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;MULTI_PROFILE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat void setSafeBrowsingAllowlist(java.util.Set&lt;java.lang.String&gt;, android.webkit.ValueCallback&lt;java.lang.Boolean&gt;)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SAFE_BROWSING_ALLOWLIST&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat void setSafeBrowsingWhitelist(java.util.List&lt;java.lang.String&gt;, android.webkit.ValueCallback&lt;java.lang.Boolean&gt;)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;SAFE_BROWSING_WHITELIST&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat void setWebViewRenderProcessClient(android.webkit.WebView, androidx.webkit.WebViewRenderProcessClient)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_VIEW_RENDERER_CLIENT_BASIC_USAGE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat void setWebViewRenderProcessClient(android.webkit.WebView, java.util.concurrent.Executor, androidx.webkit.WebViewRenderProcessClient)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEB_VIEW_RENDERER_CLIENT_BASIC_USAGE&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewCompat void startSafeBrowsing(android.content.Context, android.webkit.ValueCallback&lt;java.lang.Boolean&gt;)">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;START_SAFE_BROWSING&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewFeature boolean isFeatureSupported(java.lang.String) 0">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.webkit.WebViewFeature.VISUAL_STATE_CALLBACK, androidx.webkit.WebViewFeature.OFF_SCREEN_PRERASTER, androidx.webkit.WebViewFeature.SAFE_BROWSING_ENABLE, androidx.webkit.WebViewFeature.DISABLED_ACTION_MODE_MENU_ITEMS, androidx.webkit.WebViewFeature.START_SAFE_BROWSING, androidx.webkit.WebViewFeature.SAFE_BROWSING_ALLOWLIST, androidx.webkit.WebViewFeature.SAFE_BROWSING_WHITELIST, androidx.webkit.WebViewFeature.SAFE_BROWSING_PRIVACY_POLICY_URL, androidx.webkit.WebViewFeature.SERVICE_WORKER_BASIC_USAGE, androidx.webkit.WebViewFeature.SERVICE_WORKER_CACHE_MODE, androidx.webkit.WebViewFeature.SERVICE_WORKER_CONTENT_ACCESS, androidx.webkit.WebViewFeature.SERVICE_WORKER_FILE_ACCESS, androidx.webkit.WebViewFeature.SERVICE_WORKER_BLOCK_NETWORK_LOADS, androidx.webkit.WebViewFeature.SERVICE_WORKER_SHOULD_INTERCEPT_REQUEST, androidx.webkit.WebViewFeature.RECEIVE_WEB_RESOURCE_ERROR, androidx.webkit.WebViewFeature.RECEIVE_HTTP_ERROR, androidx.webkit.WebViewFeature.SHOULD_OVERRIDE_WITH_REDIRECTS, androidx.webkit.WebViewFeature.SAFE_BROWSING_HIT, androidx.webkit.WebViewFeature.TRACING_CONTROLLER_BASIC_USAGE, androidx.webkit.WebViewFeature.WEB_RESOURCE_REQUEST_IS_REDIRECT, androidx.webkit.WebViewFeature.WEB_RESOURCE_ERROR_GET_DESCRIPTION, androidx.webkit.WebViewFeature.WEB_RESOURCE_ERROR_GET_CODE, androidx.webkit.WebViewFeature.SAFE_BROWSING_RESPONSE_BACK_TO_SAFETY, androidx.webkit.WebViewFeature.SAFE_BROWSING_RESPONSE_PROCEED, androidx.webkit.WebViewFeature.SAFE_BROWSING_RESPONSE_SHOW_INTERSTITIAL, androidx.webkit.WebViewFeature.WEB_MESSAGE_PORT_POST_MESSAGE, androidx.webkit.WebViewFeature.WEB_MESSAGE_PORT_CLOSE, androidx.webkit.WebViewFeature.WEB_MESSAGE_ARRAY_BUFFER, androidx.webkit.WebViewFeature.WEB_MESSAGE_PORT_SET_MESSAGE_CALLBACK, androidx.webkit.WebViewFeature.CREATE_WEB_MESSAGE_CHANNEL, androidx.webkit.WebViewFeature.POST_WEB_MESSAGE, androidx.webkit.WebViewFeature.WEB_MESSAGE_CALLBACK_ON_MESSAGE, androidx.webkit.WebViewFeature.GET_WEB_VIEW_CLIENT, androidx.webkit.WebViewFeature.GET_WEB_CHROME_CLIENT, androidx.webkit.WebViewFeature.GET_WEB_VIEW_RENDERER, androidx.webkit.WebViewFeature.WEB_VIEW_RENDERER_TERMINATE, androidx.webkit.WebViewFeature.WEB_VIEW_RENDERER_CLIENT_BASIC_USAGE, androidx.webkit.WebViewFeature.PROXY_OVERRIDE, androidx.webkit.WebViewFeature.MULTI_PROCESS, androidx.webkit.WebViewFeature.FORCE_DARK, androidx.webkit.WebViewFeature.FORCE_DARK_STRATEGY, androidx.webkit.WebViewFeature.WEB_MESSAGE_LISTENER, androidx.webkit.WebViewFeature.DOCUMENT_START_SCRIPT, androidx.webkit.WebViewFeature.PROXY_OVERRIDE_REVERSE_BYPASS, androidx.webkit.WebViewFeature.GET_VARIATIONS_HEADER, androidx.webkit.WebViewFeature.ALGORITHMIC_DARKENING, androidx.webkit.WebViewFeature.ENTERPRISE_AUTHENTICATION_APP_LINK_POLICY, androidx.webkit.WebViewFeature.GET_COOKIE_INFO, androidx.webkit.WebViewFeature.REQUESTED_WITH_HEADER_ALLOW_LIST, androidx.webkit.WebViewFeature.USER_AGENT_METADATA, androidx.webkit.WebViewFeature.MULTI_PROFILE, androidx.webkit.WebViewFeature.ATTRIBUTION_REGISTRATION_BEHAVIOR, androidx.webkit.WebViewFeature.WEBVIEW_MEDIA_INTEGRITY_API_STATUS, androidx.webkit.WebViewFeature.MUTE_AUDIO}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewFeature boolean isStartupFeatureSupported(android.content.Context, java.lang.String) 1">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.webkit.WebViewFeature.STARTUP_FEATURE_SET_DATA_DIRECTORY_SUFFIX, androidx.webkit.WebViewFeature.STARTUP_FEATURE_SET_DIRECTORY_BASE_PATHS}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewFeature.WebViewStartupFeature">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.webkit.WebViewFeature.STARTUP_FEATURE_SET_DATA_DIRECTORY_SUFFIX, androidx.webkit.WebViewFeature.STARTUP_FEATURE_SET_DIRECTORY_BASE_PATHS}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewFeature.WebViewSupportFeature">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.webkit.WebViewFeature.VISUAL_STATE_CALLBACK, androidx.webkit.WebViewFeature.OFF_SCREEN_PRERASTER, androidx.webkit.WebViewFeature.SAFE_BROWSING_ENABLE, androidx.webkit.WebViewFeature.DISABLED_ACTION_MODE_MENU_ITEMS, androidx.webkit.WebViewFeature.START_SAFE_BROWSING, androidx.webkit.WebViewFeature.SAFE_BROWSING_ALLOWLIST, androidx.webkit.WebViewFeature.SAFE_BROWSING_WHITELIST, androidx.webkit.WebViewFeature.SAFE_BROWSING_PRIVACY_POLICY_URL, androidx.webkit.WebViewFeature.SERVICE_WORKER_BASIC_USAGE, androidx.webkit.WebViewFeature.SERVICE_WORKER_CACHE_MODE, androidx.webkit.WebViewFeature.SERVICE_WORKER_CONTENT_ACCESS, androidx.webkit.WebViewFeature.SERVICE_WORKER_FILE_ACCESS, androidx.webkit.WebViewFeature.SERVICE_WORKER_BLOCK_NETWORK_LOADS, androidx.webkit.WebViewFeature.SERVICE_WORKER_SHOULD_INTERCEPT_REQUEST, androidx.webkit.WebViewFeature.RECEIVE_WEB_RESOURCE_ERROR, androidx.webkit.WebViewFeature.RECEIVE_HTTP_ERROR, androidx.webkit.WebViewFeature.SHOULD_OVERRIDE_WITH_REDIRECTS, androidx.webkit.WebViewFeature.SAFE_BROWSING_HIT, androidx.webkit.WebViewFeature.TRACING_CONTROLLER_BASIC_USAGE, androidx.webkit.WebViewFeature.WEB_RESOURCE_REQUEST_IS_REDIRECT, androidx.webkit.WebViewFeature.WEB_RESOURCE_ERROR_GET_DESCRIPTION, androidx.webkit.WebViewFeature.WEB_RESOURCE_ERROR_GET_CODE, androidx.webkit.WebViewFeature.SAFE_BROWSING_RESPONSE_BACK_TO_SAFETY, androidx.webkit.WebViewFeature.SAFE_BROWSING_RESPONSE_PROCEED, androidx.webkit.WebViewFeature.SAFE_BROWSING_RESPONSE_SHOW_INTERSTITIAL, androidx.webkit.WebViewFeature.WEB_MESSAGE_PORT_POST_MESSAGE, androidx.webkit.WebViewFeature.WEB_MESSAGE_PORT_CLOSE, androidx.webkit.WebViewFeature.WEB_MESSAGE_ARRAY_BUFFER, androidx.webkit.WebViewFeature.WEB_MESSAGE_PORT_SET_MESSAGE_CALLBACK, androidx.webkit.WebViewFeature.CREATE_WEB_MESSAGE_CHANNEL, androidx.webkit.WebViewFeature.POST_WEB_MESSAGE, androidx.webkit.WebViewFeature.WEB_MESSAGE_CALLBACK_ON_MESSAGE, androidx.webkit.WebViewFeature.GET_WEB_VIEW_CLIENT, androidx.webkit.WebViewFeature.GET_WEB_CHROME_CLIENT, androidx.webkit.WebViewFeature.GET_WEB_VIEW_RENDERER, androidx.webkit.WebViewFeature.WEB_VIEW_RENDERER_TERMINATE, androidx.webkit.WebViewFeature.WEB_VIEW_RENDERER_CLIENT_BASIC_USAGE, androidx.webkit.WebViewFeature.PROXY_OVERRIDE, androidx.webkit.WebViewFeature.MULTI_PROCESS, androidx.webkit.WebViewFeature.FORCE_DARK, androidx.webkit.WebViewFeature.FORCE_DARK_STRATEGY, androidx.webkit.WebViewFeature.WEB_MESSAGE_LISTENER, androidx.webkit.WebViewFeature.DOCUMENT_START_SCRIPT, androidx.webkit.WebViewFeature.PROXY_OVERRIDE_REVERSE_BYPASS, androidx.webkit.WebViewFeature.GET_VARIATIONS_HEADER, androidx.webkit.WebViewFeature.ALGORITHMIC_DARKENING, androidx.webkit.WebViewFeature.ENTERPRISE_AUTHENTICATION_APP_LINK_POLICY, androidx.webkit.WebViewFeature.GET_COOKIE_INFO, androidx.webkit.WebViewFeature.REQUESTED_WITH_HEADER_ALLOW_LIST, androidx.webkit.WebViewFeature.USER_AGENT_METADATA, androidx.webkit.WebViewFeature.MULTI_PROFILE, androidx.webkit.WebViewFeature.ATTRIBUTION_REGISTRATION_BEHAVIOR, androidx.webkit.WebViewFeature.WEBVIEW_MEDIA_INTEGRITY_API_STATUS, androidx.webkit.WebViewFeature.MUTE_AUDIO}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewMediaIntegrityApiStatusConfig">
+    <annotation name="androidx.annotation.RequiresFeature">
+      <val name="name" val="&quot;WEBVIEW_MEDIA_INTEGRITY_API_STATUS&quot;" />
+      <val name="enforcement" val="&quot;androidx.webkit.WebViewFeature#isFeatureSupported&quot;" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewMediaIntegrityApiStatusConfig mDefaultStatus">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebViewMediaIntegrityApiStatusConfig.WEBVIEW_MEDIA_INTEGRITY_API_DISABLED, androidx.webkit.WebViewMediaIntegrityApiStatusConfig.WEBVIEW_MEDIA_INTEGRITY_API_ENABLED_WITHOUT_APP_IDENTITY, androidx.webkit.WebViewMediaIntegrityApiStatusConfig.WEBVIEW_MEDIA_INTEGRITY_API_ENABLED}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewMediaIntegrityApiStatusConfig.Builder Builder(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebViewMediaIntegrityApiStatusConfig.WEBVIEW_MEDIA_INTEGRITY_API_DISABLED, androidx.webkit.WebViewMediaIntegrityApiStatusConfig.WEBVIEW_MEDIA_INTEGRITY_API_ENABLED_WITHOUT_APP_IDENTITY, androidx.webkit.WebViewMediaIntegrityApiStatusConfig.WEBVIEW_MEDIA_INTEGRITY_API_ENABLED}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewMediaIntegrityApiStatusConfig.Builder androidx.webkit.WebViewMediaIntegrityApiStatusConfig.Builder addOverrideRule(java.lang.String, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebViewMediaIntegrityApiStatusConfig.WEBVIEW_MEDIA_INTEGRITY_API_DISABLED, androidx.webkit.WebViewMediaIntegrityApiStatusConfig.WEBVIEW_MEDIA_INTEGRITY_API_ENABLED_WITHOUT_APP_IDENTITY, androidx.webkit.WebViewMediaIntegrityApiStatusConfig.WEBVIEW_MEDIA_INTEGRITY_API_ENABLED}" />
+    </annotation>
+  </item>
+  <item name="androidx.webkit.WebViewMediaIntegrityApiStatusConfig.Builder mDefaultStatus">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.webkit.WebViewMediaIntegrityApiStatusConfig.WEBVIEW_MEDIA_INTEGRITY_API_DISABLED, androidx.webkit.WebViewMediaIntegrityApiStatusConfig.WEBVIEW_MEDIA_INTEGRITY_API_ENABLED_WITHOUT_APP_IDENTITY, androidx.webkit.WebViewMediaIntegrityApiStatusConfig.WEBVIEW_MEDIA_INTEGRITY_API_ENABLED}" />
+    </annotation>
+  </item>
+</root>
+

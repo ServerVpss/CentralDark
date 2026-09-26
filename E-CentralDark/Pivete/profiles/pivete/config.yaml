@@ -1,0 +1,9 @@
+fallback_providers: '["centraldark-router"]'
+model:
+  provider: centraldark-router
+  default: auto
+  base_url: http://127.0.0.1:8099/v1
+tts:
+  provider: edge
+  edge:
+    voice: pt-BR-FranciscaNeural

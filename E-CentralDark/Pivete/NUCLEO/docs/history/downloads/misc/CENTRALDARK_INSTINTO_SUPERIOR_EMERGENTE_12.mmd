@@ -1,0 +1,31 @@
+flowchart TB
+    C[SEGREDO / CHEFE\nIntenção • valores • prioridade • limites]
+
+    subgraph CASA["CENTRALDARK — UMA CASA"]
+      P[Percepção paralela\nSessão • memória • logs • workspace • fontes • imagens]
+      S[SOL\nCoordena • reconcilia • sintetiza]
+      Q{Padrão já provado?}
+      R[Reflexo canônico\nmenor mediação consciente repetitiva]
+      M[!MULTIBÚSSOLA + !META_LUPA\nhipóteses concorrentes • falsificação]
+      H[HERMES / PIVETE\nexecuta • preserva • registra]
+      J[REALITY JUDGE\npostcondição observável]
+      CP[Contraprova]
+      REC[Receipt + evidência]
+      MEM[Memória / DREAM\ncristalizar apenas o provado]
+      LGS[LAST_GOOD_STATE\npróximo baseline]
+    end
+
+    C --> P --> S --> Q
+    Q -- "SIM" --> R --> H
+    Q -- "NÃO / UNKNOWN" --> M --> H
+    H --> J
+    J --> CP
+    CP -- "falhou" --> M
+    CP -- "passou" --> REC --> MEM --> LGS --> P
+
+    MOD[Modelos / engines\nsubstituíveis] -. executam capacidades .-> S
+    MOD -. executam capacidades .-> H
+
+    I1["ONE_SYSTEM_ONLY\nREUSE_BEFORE_CREATE\nONE_OWNER_PER_CAPABILITY"] --- CASA
+    I2["ONE_WRITER_PER_SCOPE\nPARALLELIZE_PERCEPTION\nSERIALIZE_MUTATION"] --- CASA
+    I3["UNKNOWN != PASS\nACTION != PROOF\nREALITY = JUDGE"] --- CASA

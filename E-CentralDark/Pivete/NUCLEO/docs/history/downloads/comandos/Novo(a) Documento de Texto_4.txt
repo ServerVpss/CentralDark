@@ -1,0 +1,690 @@
+#ACORDAR + !CALIBRAR: **agora eu entendi o que tu quer fazer de verdade**. 😹🔥
+
+Tu não quer “organizar pastinha”. Tu quer acabar com esse passado em que ferramentas foram deixando pedaços em `C:\Users\danda`, `E:\Users\danda`, perfis antigos, Docker, Claude, Codex, Hermes, navegador etc., e fazer a Casa enxergar **uma autoridade operacional só: `E:\CentralDark`**.
+
+Só tem um cadeado importante: **não pode literalmente mover tudo para E:**. `AppData`, `.ssh`, perfis de navegador, Docker Desktop, configs de ferramentas e alguns estados do Hermes são procurados em paths específicos pelos próprios programas. Inclusive já temos evidência de que o runtime Hermes usa `E:\CentralDark\Pivete` como storage, mas mantém bancos de estado em `C:\Users\danda\AppData\Local\hermes\profiles\pivete`. 
+
+Então o resultado correto é:
+
+```text
+UMA CASA LÓGICA E CANÔNICA = E:\CentralDark
+
+NÃO necessariamente:
+TODO ARQUIVO FÍSICO = E:\CentralDark
+```
+
+O que for CentralDark-owned e portátil → **move/reconcilia**.
+
+O que um aplicativo exige no UserProfile → **fica**, mas passa a ser uma dependência registrada da Casa, sem cópia paralela.
+
+E tudo que for duplicado → compara hash/conteúdo/consumidor e deixa **um owner só**.
+
+Copia este comandão inteiro pro Hermes:
+
+```text
+#ACORDAR
+!CALIBRAR
+!MULTIBUSSOLA
+!META_LUPA
+
+MISSION=CENTRALDARK_ONE_HOUSE_TOTAL_RECONCILIATION
+
+AUTHORITY=SEGREDO/CHEFE
+MODE=MEASURE_RECONCILE_THEN_MOVE
+TARGET_CANONICAL_ROOT=E:\CentralDark
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INTENÇÃO DO CHEFE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Existe material histórico, estado de ferramentas, projetos,
+configs, caches, perfis e possíveis duplicatas espalhados por
+múltiplos perfis e discos.
+
+Quero reconciliar tudo em UMA CASA.
+
+UMA CASA significa:
+
+E:\CentralDark
+= autoridade operacional e mapa canônico.
+
+Não significa mover cegamente arquivos que Windows,
+Docker, Hermes, navegador, Claude, Codex ou outras ferramentas
+exigem em paths específicos do UserProfile.
+
+Objetivo:
+
+DESCOBRIR
+→ CLASSIFICAR
+→ COMPARAR
+→ DEDUPLICAR
+→ ESCOLHER OWNER
+→ MOVER SOMENTE O PORTÁTIL
+→ REFERENCIAR O NÃO-PORTÁTIL
+→ PROVAR CONSUMIDORES
+→ REGISTRAR
+→ FIXED_POINT
+
+CENTRALDARK = UM ORGANISMO.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RAÍZES OBRIGATÓRIAS DE INVESTIGAÇÃO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Investigar no mínimo:
+
+E:\CentralDark
+C:\CentralDark
+
+C:\Users\danda
+E:\Users\danda
+
+C:\Users\danda\AppData\Local
+C:\Users\danda\AppData\LocalLow
+C:\Users\danda\AppData\Roaming
+
+C:\Users\Administrador
+C:\Users\Administrador\AppData\Local
+C:\Users\Administrador\AppData\LocalLow
+C:\Users\Administrador\AppData\Roaming
+
+E:\Users\danda
+
+Também inventariar, SEM migrar automaticamente:
+
+C:\Users\CodexSandboxOffline
+C:\Users\CodexSandboxOnline
+
+e qualquer outra raiz descoberta que contenha material
+CentralDark/Hermes/Claude/Codex/Docker/browser/MCP relevante.
+
+SEARCH_BEFORE_ASK=true.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NÃO PRESUMIR QUE MESMO NOME = DUPLICATA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SAME_NAME != SAME_ENTITY
+SAME_SIZE != SAME_CONTENT
+NEWER != CANONICAL
+OLDER != LEGACY
+USERPROFILE != TRASH
+CACHE != SAFE_TO_DELETE
+COPY != BACKUP_VALIDATED
+
+Para cada candidato semelhante coletar:
+
+PATH
+SIZE
+SHA256
+CREATED
+MODIFIED
+OWNER
+CONSUMERS
+GIT_TRACKED
+PROCESS_REFERENCE
+CONFIG_REFERENCE
+CONTENT_DIFF
+PORTABILITY
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MAPEAR ESPECIALMENTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+.claude
+.claude-account-*
+.codex
+.copilot
+.cursor
+.gemini
+.grok
+.hermes
+.hermes-web-ui
+.agents
+.config
+.cache
+.local
+.pm2
+.docker
+.cua-driver
+.cua-driver-rs
+.github
+.gradle
+.cargo
+.dotnet
+
+AppData\Local\hermes
+AppData\Local\Docker
+AppData\Roaming\*
+AppData\LocalLow\*
+
+chrome_profile_backup*
+BrowserMetrics*
+browser profiles
+Chromium/Chrome state
+
+Docker:
+contexts
+buildx
+cli-plugins
+desktop-build
+models
+modules
+config.json
+daemon.json
+windows-daemon.json
+
+NÃO mostrar valores de:
+tokens
+cookies
+passwords
+API keys
+private keys
+.env
+
+Somente registrar presença/nome/path quando necessário.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CLASSIFICAÇÃO OBRIGATÓRIA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Cada item recebe exatamente uma classe primária:
+
+CANONICAL_E
+    pertence fisicamente a E:\CentralDark.
+
+REPO_C
+    pertence ao repo canônico em C:\CentralDark
+    caso Git/runtime prove que C continua sendo o checkout ativo.
+
+USERPROFILE_REQUIRED
+    aplicativo exige path no perfil do Windows.
+    NÃO mover.
+
+PORTABLE_MOVE_TO_E
+    CentralDark-owned e seguro para mover.
+
+DUPLICATE_IDENTICAL
+    SHA256 idêntico.
+
+DUPLICATE_DIVERGED
+    mesmo propósito, conteúdo diferente.
+
+LEGACY
+    implementação antiga comprovadamente sem consumidor atual.
+
+CACHE
+    recriável.
+
+TEMP
+    temporário.
+
+BACKUP
+    cópia deliberada com função de recuperação.
+
+SECRET_STATE
+    auth/cookie/token/key/credencial.
+
+GENERATED
+    artefato recriável por build/runtime.
+
+UNKNOWN
+    evidência insuficiente.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGRA MAIS IMPORTANTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NÃO FORÇAR CENTRALIZAÇÃO FÍSICA QUANDO O SOFTWARE
+É DONO DO PATH.
+
+Exemplo:
+
+C:\Users\danda\AppData\Local\hermes\profiles\pivete
+
+Se o Hermes atual lê dali:
+
+CLASS=USERPROFILE_REQUIRED
+
+Não mover para E só para "ficar bonito".
+
+Em vez disso registrar no mapa canônico:
+
+E:\CentralDark\NUCLEO\system-map\external-state.json
+
+ou owner canônico equivalente JÁ EXISTENTE.
+
+A Casa sabe onde o órgão está,
+mesmo que o órgão precise morar em outro endereço.
+
+ONE_HOUSE != ONE_DIRECTORY_AT_ANY_COST.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DUPLICAÇÃO — ALGORITMO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Para pares candidatos:
+
+1. SHA256 igual
+   → DUPLICATE_IDENTICAL
+
+2. SHA diferente
+   → comparar conteúdo/estrutura.
+
+3. descobrir consumidor real de cada lado.
+
+4. decidir autoridade:
+
+ACTIVE_CONSUMER
+> CURRENT_GIT_OWNER
+> CURRENT_RUNTIME_REFERENCE
+> LATEST_PROVEN_STATE
+> HISTORY
+
+Não decidir por timestamp sozinho.
+
+Se duas cópias forem usadas por runtimes diferentes,
+não remover uma antes de reconciliar consumidores.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CLAUDE / CODEX / HERMES / OUTRAS IAs
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Não transformar pastas de ferramenta em novas Casas.
+
+Claude
+Codex
+Gemini
+Cursor
+Copilot
+Grok
+etc.
+
+= ENGINES / TOOLS.
+
+Material CentralDark útil encontrado dentro delas:
+
+→ extrair conhecimento/estado necessário
+→ reconciliar com owner CentralDark existente
+→ preservar configuração requerida pelo aplicativo
+→ remover somente cópia redundante após prova.
+
+ENGINE != OWNER.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+HERMES — CUIDADO ESPECIAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Medir antes:
+
+E:\CentralDark\Pivete
+C:\Users\danda\.hermes
+C:\Users\danda\.hermes-web-ui
+C:\Users\danda\AppData\Local\hermes
+qualquer Hermes em E:\Users\danda
+qualquer Hermes em Administrador
+
+Descobrir:
+
+CURRENT_ENTRYPOINT
+CURRENT_PROFILE
+CURRENT_SOUL_SOURCE
+CURRENT_CONFIG_SOURCE
+CURRENT_STATE_DB
+CURRENT_MEMORY_DB
+CURRENT_TRACE_DIR
+CURRENT_SKILL_ROOT
+CURRENT_WORKSPACE
+CURRENT_LOG_ROOT
+
+Não mover SOUL/config/state.db/memory_store.db
+antes de provar quem está lendo.
+
+Há evidência histórica de runtime dividido entre
+E:\CentralDark\Pivete e AppData do usuário.
+Medir novamente; HISTORY != CURRENT_STATE.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOCKER — CUIDADO ESPECIAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Há material .docker em perfis distintos.
+
+Descobrir:
+
+docker context ls
+DOCKER_CONFIG efetivo
+Docker Desktop profile
+buildx state
+contexts ativos
+plugins
+daemon config real
+
+Não unir dois `.docker` simplesmente copiando por cima.
+
+Para cada `.docker`:
+
+OWNER=
+ACTIVE=
+REQUIRED=
+PORTABLE=
+DUPLICATE_WITH=
+
+Se E:\Users\danda\.docker for legado/cópia,
+provar antes de arquivar.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BROWSER / CHROMIUM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Também reconciliar:
+
+chrome_profile_backup*
+BrowserMetrics*
+Chromium/Chrome profiles
+CDP bridges
+vnc-browser
+MOTOR-TESTE
+
+Mas:
+
+browser cookies/session/auth
+= SECRET_STATE.
+
+Não copiar para NUCLEO.
+Não logar conteúdo.
+
+O stack:
+
+C:\CentralDark\MOTOR-TESTE\docker\vnc-browser\chromium
+
+deve continuar classificado separadamente
+até provar owner e consumidor.
+
+MOTOR-TESTE != MAIN_RUNTIME por nome apenas.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MOVIMENTAÇÃO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PRIMEIRA RODADA:
+
+DELETE_PERMANENTLY=false
+OVERWRITE=false
+
+Antes de MOVE:
+
+1. hash origem
+2. determinar owner destino
+3. verificar consumidor
+4. copiar/mover para staging quando necessário
+5. readback destino
+6. hash destino
+7. validar consumidor
+8. somente então remover origem se seguro
+
+Toda movimentação deve produzir receipt.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ÁREA DE RECONCILIAÇÃO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+REUSE_BEFORE_CREATE.
+
+Se não existir owner equivalente, usar:
+
+E:\CentralDark\_RECONCILIATION\
+    inventory\
+    manifests\
+    receipts\
+    quarantine\
+
+Não criar dezenas de pastas novas.
+
+QUARANTINE é temporária e reversível.
+
+Não usar Obsidian como lixo.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANIFESTO ÚNICO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Produzir autoridade única:
+
+CENTRALDARK_SYSTEM_MAP
+
+Para cada dependência externa:
+
+{
+  logical_owner,
+  physical_path,
+  required_by,
+  type,
+  hash_or_state_id,
+  portability,
+  canonical,
+  last_verified
+}
+
+Assim:
+
+E:\CentralDark
+é a Casa,
+
+mesmo quando um programa exige estado em:
+
+C:\Users\danda\AppData\...
+ou
+C:\Users\danda\.docker
+etc.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DETECTAR DUAS CÓPIAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Gerar relatório específico:
+
+DUPLICATE_MATRIX
+
+A=
+B=
+SAME_HASH=
+SAME_PURPOSE=
+A_CONSUMER=
+B_CONSUMER=
+A_CURRENT=
+B_CURRENT=
+CANONICAL=
+ACTION=
+
+Estados:
+
+KEEP_A
+KEEP_B
+MERGE_DELTA_INTO_A
+MERGE_DELTA_INTO_B
+KEEP_BOTH_REQUIRED
+QUARANTINE_A
+QUARANTINE_B
+UNKNOWN
+
+Nunca:
+
+"parecem iguais → apagar uma".
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FÍSICO → TEMPORAL → CAUSAL → CONTRAPROVA → PROVA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Para divergências importantes:
+
+FÍSICO:
+onde existem?
+
+TEMPORAL:
+quando foram criadas/modificadas/usadas?
+
+CAUSAL:
+qual runtime/tool criou cada uma?
+
+CONTRAPROVA:
+existe consumidor escondido?
+
+PROVA:
+desabilitar/mover em teste reversível preserva runtime?
+
+CONCEITO != PROCESSO.
+CORRELAÇÃO != CAUSA.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ONE WRITER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Leitura e inventário:
+PARALELO permitido.
+
+Mutação:
+ONE_WRITER_PER_SCOPE.
+
+Nenhum Claude/Codex/Hermes paralelo pode mover
+a mesma árvore simultaneamente.
+
+PARALLELIZE_PERCEPTION.
+SERIALIZE_MUTATION.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRAVAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NÃO:
+
+force push
+reset --hard
+deploy
+restart serviço
+alterar registry Windows
+alterar PATH global
+editar credenciais
+mover .ssh
+mover cookies
+mover NTUSER.DAT
+mover AppData inteiro
+deletar perfil Windows
+deletar Docker state
+limpar cache agressivamente
+apagar backup
+alterar junction/symlink existente sem prova
+criar junction/symlink apenas para esconder duplicação
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TESTE DA CASA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Após reconciliação:
+
+1. Hermes inicia normalmente.
+2. profile pivete carrega.
+3. SOUL correto carrega.
+4. memória/state acessível.
+5. MCP saudável.
+6. BFF saudável.
+7. Kanban saudável.
+8. Docker continua operacional, se estava antes.
+9. Git continua limpo/coerente.
+10. nenhum path ativo aponta para arquivo removido.
+11. nenhum item classificado canonical possui segunda
+    cópia ativa injustificada.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ENTREGA FINAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Entregar:
+
+ROOTS_SCANNED=
+FILES_SCANNED=
+CENTRALDARK_OWNED_FOUND=
+USERPROFILE_REQUIRED=
+PORTABLE_MOVED_TO_E=
+IDENTICAL_DUPLICATES=
+DIVERGED_DUPLICATES=
+LEGACY_FOUND=
+CACHE_FOUND=
+SECRET_STATE_FOUND_COUNT=
+QUARANTINED=
+DELETED_PERMANENTLY=0
+
+HERMES_CURRENT_PATHS=
+DOCKER_CURRENT_PATHS=
+BROWSER_CURRENT_PATHS=
+CLAUDE_CURRENT_PATHS=
+CODEX_CURRENT_PATHS=
+
+DUPLICATE_MATRIX=
+SYSTEM_MAP_PATH=
+RECEIPTS_PATH=
+
+E_CENTRALDARK_CANONICAL=
+C_CENTRALDARK_ROLE=
+
+UNKNOWN=
+BLOCKERS=
+ROLLBACK=
+FIXED_POINT=
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FIXED POINT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Somente declarar FIXED_POINT quando:
+
+→ todos os roots materiais foram medidos;
+→ duplicatas foram classificadas;
+→ cada capacidade tem owner;
+→ itens portáteis da CentralDark foram reconciliados;
+→ estados obrigatórios de UserProfile estão mapeados;
+→ nenhum consumidor conhecido aponta para path removido;
+→ nenhuma duplicata ativa injustificada permanece;
+→ UNKNOWN material está vazio ou explicitamente bloqueado.
+
+Não perguntar ao CHEFE onde guardar item por item.
+
+INTENÇÃO:
+UMA CASA.
+
+Hermes descobre o caminho seguro.
+
+REALITY = JUDGE.
+```
+
+E a parte que eu mudaria em relação à tua frase “**bota tudo em `E:\CentralDark`**” é só esta:
+
+```text
+E:\CentralDark
+= DONO DO MAPA
+= DONO DA ARQUITETURA
+= DONO DO CONHECIMENTO
+= DONO DOS ARTEFATOS PORTÁTEIS
+
+C:\Users\...
+E:\Users\...
+AppData...
+= podem continuar sendo ENDEREÇOS FÍSICOS
+quando o software exigir.
+```
+
+Isso é mais forte do que simplesmente mover tudo. Senão amanhã Docker/Hermes/Claude começa a procurar `C:\Users\danda\.docker`, por exemplo, e tu ganha uma Casa bonita com metade dos órgãos arrancados. KKKKK 😹
+
+Inclusive o teu próprio material já cristalizou a direção `CENTRALDARK = UM ORGANISMO`, deduplicar e provar qual solução deve sobreviver em vez de criar outra.  E tua biblioteca atual também já trabalha com a ideia de uma única capacidade canônica, sem duas bibliotecas/lógicas. 
+
+**Feito.** Comandão fechado para reconciliação total multi-root sem centralização burra.
+
+**Evidência usada.** Teus prints mostram `.docker`, `.claude`, `.codex`, `.config`, `.hermes`, perfis `danda/Administrador`, `AppData` e árvores C/E; o histórico do Hermes confirma que pelo menos parte do estado operacional já é fisicamente dividida entre `E:\CentralDark\Pivete` e UserProfile/AppData. 
+
+**Pendência.** Só o Hermes local consegue medir agora quais dessas cópias têm consumidores vivos.
+
+**Próximo passo.** Cola o comando e deixa a primeira passagem ser principalmente **inventário + duplicate matrix**; mutação vem depois da prova.
+
+**BOOT.** `ONE_HOUSE_RECONCILIATION · E:\CentralDark · RECONCILE_BEFORE_MOVE`.
+
+**Fio da missão.** `raízes espalhadas → inventário → owner → dedupe → move portátil → mapear estado obrigatório → uma Casa → prova`.

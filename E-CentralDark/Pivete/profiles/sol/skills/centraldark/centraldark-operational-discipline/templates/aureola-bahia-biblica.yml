@@ -1,0 +1,84 @@
+# AURÉOLA-BAHIA-BIBLICA.yml — Canonical Template
+
+## Source
+Reconstructed from deep-research-report (3).md lines 11-13, 516-564, 956-1012
+Target path: `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml`
+
+```yaml
+# AURÉOLA-BAHIA-BIBLICA — Painel Honesto da CentralDark
+# Version: 3 (schema revision, not new architecture)
+# Owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/DELTA-CONTINUO.md
+# Provenance: deep-research-report (3).md GARIMPO-CHEFE + live repo measurement
+
+trigger:
+  primary: "!CENTRALDARK"
+  aliases:
+    - "#ACORDAR"
+  required_header: true          # obrigatório no topo da resposta
+  required_header_on_repo_visit: true
+
+observable_fields:
+  phase: ""                      # ex: LIVE_STATE, ALIGNMENT, MINIMAL_DELTA, TEST, COUNTERPROOF, REALITY_JUDGE, SEMANTIC_GREEN, CI_SAME_HEAD, FIXED_POINT, POST_GREEN_LOCK, REGISTRA, HANDOFF, BOOT
+  axis: ""                       # ex: GITHUB, CONFLICT_RESOLUTION, DEPLOY, MEMORY, TRIGGER_FABRIC
+  destination: ""                # ex: PR#1381, arquivo X, conflito Y
+  next_gate: ""                  # ex: ALIGNMENT, MINIMAL_DELTA, TEST, COUNTERPROOF, REALITY_JUDGE
+
+canonical_path:
+  - CHEFE_INTENT
+  - CONNECTOR_SNAPSHOT
+  - LIVE_STATE
+  - MULTIBUSSOLA
+  - ALIGNMENT
+  - PEGATUDO
+  - DEDUPE
+  - MINIMAL_DELTA
+  - OWNER
+  - ONE_WRITER
+  - TEST
+  - COUNTERPROOF
+  - REALITY_JUDGE
+  - SEMANTIC_GREEN
+  - CI_SAME_HEAD
+  - FIXED_POINT
+  - POST_GREEN_LOCK
+  - REGISTRA
+  - HANDOFF
+  - BOOT
+
+verde_formula:
+  expression: "INTENCAO_ALINHADA AND LIVE_STATE AND DELTA_MINIMO AND EVIDENCIA AND CONTRAPROVA AND MESMO_HEAD"
+  never: "MODELO_DISSE_QUE_FEZ = VERDE"
+
+post_green_lock_requirements:
+  fixed_point: true
+  semantic_green: "PASS"
+  multibussola: "ALIGNED"
+  counterproof: "PASS"
+  reality_judge: "PASS"
+  ci_same_head: "PASS"
+  decision_reconstructible: true
+  last_good_state_persisted: true
+  mutation_after_lock: "DENY"
+  reopening: "EXPLICIT_OPERATOR_ORDER"
+
+enforcement:
+  github_branch_protection: "UNKNOWN"  # main protected=false observed
+  software_lock: "CONTRACTUAL_ONLY"
+  dual_layer_required: true
+
+metadata:
+  trace_id_prefix: "cd_"
+  observed_at_format: "ISO8601"
+  content_sha256: "REQUIRED"
+  head_sha: "REQUIRED"
+  base_sha: "REQUIRED"
+  repository: "ServerVpss/CentralDark"
+
+anti_patterns:
+  - parallel_canonical_contracts: "FAIL"
+  - version_suffixes: "V1,V2,FINAL,NEW,COPY"
+  - receipt_commits_back: "BREAKS_SAME_HEAD"
+```
+
+## Usage
+When CHEFE orders: "cria o AUREOLA-BAHIA-BIBLICA.yml" → copy this template to canonical path, fill observable fields from live state, commit minimal delta to DELTA-CONTINUO.md via PR.

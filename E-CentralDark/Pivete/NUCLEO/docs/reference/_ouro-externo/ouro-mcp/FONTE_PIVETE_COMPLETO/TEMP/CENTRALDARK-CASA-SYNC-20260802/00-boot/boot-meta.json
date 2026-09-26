@@ -1,0 +1,20 @@
+{
+  "mission": "CENTRALDARK-CASA-BACKUP-ORGANIZACAO-SYNC-01",
+  "turn": 10,
+  "nonce": "SOL-PIVETE-20260802-0630",
+  "protocol": "SOL_HERMES_UNIFIED",
+  "boot_start_utc": "2026-08-02T10:47:38.139418Z",
+  "boot_start_local": "2026-08-02T07:47:38.139418",
+  "pivete_version": "profile-pivete",
+  "model_current": "gemini-2.5-flash (local) / Opus-5 (orchestrator)",
+  "evidence_dirs_created": [
+    "E:\\CentralDark\\Pivete\\TEMP\\CENTRALDARK-CASA-SYNC-20260802\\00-boot",
+    "E:\\CentralDark\\Pivete\\TEMP\\CENTRALDARK-CASA-SYNC-20260802\\01-backup",
+    "E:\\CentralDark\\Pivete\\TEMP\\CENTRALDARK-CASA-SYNC-20260802\\02-disk-c",
+    "E:\\CentralDark\\Pivete\\TEMP\\CENTRALDARK-CASA-SYNC-20260802\\03-git-before",
+    "E:\\CentralDark\\Pivete\\TEMP\\CENTRALDARK-CASA-SYNC-20260802\\04-reconciliation",
+    "E:\\CentralDark\\Pivete\\TEMP\\CENTRALDARK-CASA-SYNC-20260802\\05-tests",
+    "E:\\CentralDark\\Pivete\\TEMP\\CENTRALDARK-CASA-SYNC-20260802\\06-git-after",
+    "E:\\CentralDark\\Pivete\\TEMP\\CENTRALDARK-CASA-SYNC-20260802\\07-benchmark"
+  ]
+}

@@ -1,0 +1,5 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\optimization_guide_model_store\15\AC9BF66B1B98B9AD\87DDA7B83489D206\model-info.pb
+
+Wtype.googleapis.com/google.internal.chrome.optimizationguide.v1.PageTopicsModelMetadata
+override_list.pb.gz:
+VERSION.txtH

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "event_id",
+    "mission_id",
+    "event",
+    "timestamp",
+    "payload",
+    "prev_hash",
+    "record_hash"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string"
+    },
+    "mission_id": {
+      "type": "string"
+    },
+    "round_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "event": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "payload": {
+      "type": "object"
+    },
+    "prev_hash": {
+      "type": "string"
+    },
+    "record_hash": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

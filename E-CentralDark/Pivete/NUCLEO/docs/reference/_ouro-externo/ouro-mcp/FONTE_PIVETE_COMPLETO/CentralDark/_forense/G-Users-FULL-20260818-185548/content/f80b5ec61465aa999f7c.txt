@@ -1,0 +1,20 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\types\trigger.d.ts
+
+import { ReadonlyJSONObject } from "assistant-stream/utils";
+//#region src/types/trigger.d.ts
+/** A selectable item displayed inside a trigger popover (e.g. mention, slash command). */
+type Unstable_TriggerItem = {
+  readonly id: string;
+  readonly type: string;
+  readonly label: string;
+  readonly description?: string | undefined;
+  readonly metadata?: ReadonlyJSONObject | undefined;
+};
+/** A grouping of trigger items shown in a trigger popover. */
+type Unstable_TriggerCategory = {
+  readonly id: string;
+  readonly label: string;
+};
+//#endregion
+export { Unstable_TriggerCategory, Unstable_TriggerItem };
+//# sourceMappingURL=trigger.d.ts.map

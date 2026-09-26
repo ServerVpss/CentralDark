@@ -1,0 +1,208 @@
+# MÁQUINA DE ESTADOS — Contrato Delta Canônico v1
+# Fonte: docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
+# Determinístico, reutilizável, testável
+
+schema_version: 1
+contract_id: delta-canonico-v1
+
+states:
+  - name: IDLE
+    description: "Nenhuma missão ativa. Contrato e instância separados."
+    allows_writer: false
+    allows_readers: false
+    initial_state: true
+    archived_state: false
+
+  - name: ACTIVE
+    description: "Missão em execução. Escritor único alterando escopo autorizado."
+    allows_writer: true
+    allows_readers: true
+    initial_state: false
+    archived_state: false
+
+  - name: BLOCKED
+    description: "Missão pausada por risco, decisão ou dependência externa."
+    allows_writer: false
+    allows_readers: true
+    initial_state: false
+    archived_state: false
+
+  - name: CHECKPOINTED
+    description: "Checkpoint canônico capturado. Pronto para revisão ou continuação."
+    allows_writer: false
+    allows_readers: true
+    initial_state: false
+    archived_state: false
+
+  - name: READY_FOR_REVIEW
+    description: "Missão concluída, testes verdes, pronto para aprovação final."
+    allows_writer: false
+    allows_readers: true
+    initial_state: false
+    archived_state: false
+
+  - name: DONE
+    description: "Missão aprovada e finalizada. Recibo arquivado. Reset-instance pronto."
+    allows_writer: false
+    allows_readers: false
+    initial_state: false
+    archived_state: false
+
+  - name: ARCHIVED
+    description: "Instância arquivada. Histórico preservado. Contrato liberado para nova missão."
+    allows_writer: false
+    allows_readers: false
+    initial_state: false
+    archived_state: true
+
+# Transições válidas (whitelist)
+transitions:
+  # IDLE inicio
+  - from: IDLE
+    to: ACTIVE
+    requires: [mission_id, governance.writer, head.sha]
+    description: "Iniciar nova missão"
+
+  # ACTIVE ramificações
+  - from: ACTIVE
+    to: BLOCKED
+    requires: [reason_blocked]
+    description: "Pausar por risco ou dependência"
+
+  - from: BLOCKED
+    to: ACTIVE
+    requires: [reason_unblocked]
+    description: "Retomar após desbloqueio"
+
+  - from: ACTIVE
+    to: CHECKPOINTED
+    requires: [last_proof, head.sha]
+    description: "Capturar checkpoint"
+
+  - from: CHECKPOINTED
+    to: ACTIVE
+    requires: []
+    description: "Continuar de checkpoint"
+
+  - from: ACTIVE
+    to: READY_FOR_REVIEW
+    requires: [last_proof.type=test, tests_pass_count > 0]
+    description: "Submeter para revisão"
+
+  - from: READY_FOR_REVIEW
+    to: ACTIVE
+    requires: [reason_returned]
+    description: "Retornar para correção"
+
+  - from: READY_FOR_REVIEW
+    to: DONE
+    requires: [judge_approval=true, receipt_sha256]
+    description: "Aprovar e finalizar"
+
+  # DONE → ARCHIVED
+  - from: DONE
+    to: ARCHIVED
+    requires: [receipt_hash]
+    description: "Arquivar depois de reset-instance"
+
+  # ARCHIVED → IDLE (reset)
+  - from: ARCHIVED
+    to: IDLE
+    requires: [instance_reset=true]
+    description: "Liberar contrato para nova missão"
+
+# Transições PROIBIDAS (fail-closed)
+forbidden_transitions:
+  - from: IDLE
+    to: DONE
+    reason: "Não há missão em execução. Deve passar por ACTIVE."
+    mitigation: "Transição inválida será bloqueada em runtime"
+
+  - from: IDLE
+    to: ARCHIVED
+    reason: "Não há instância. ARCHIVED só vem de DONE."
+    mitigation: "Validador rejeitará"
+
+  - from: ACTIVE
+    to: ARCHIVED
+    reason: "Deve passar por READY_FOR_REVIEW → DONE → ARCHIVED"
+    mitigation: "Transição inválida será bloqueada"
+
+  - from: BLOCKED
+    to: DONE
+    reason: "Sem prova. Deve desbloquear, ativar e passar por revisão."
+    mitigation: "Hard stop antes de DONE"
+
+  - from: DONE
+    to: ACTIVE
+    reason: "Mesma instância não retorna após DONE. Nova instância = novo contrato."
+    mitigation: "Transição proibida em runtime"
+
+  - from: ARCHIVED
+    to: ACTIVE
+    reason: "Instância arquivada não volta. Contrato reutiliza-se vazio."
+    mitigation: "Validador rejeita"
+
+  - from: CHECKPOINTED
+    to: DONE
+    reason: "Checkpoint não é conclusão. Deve voltar a ACTIVE e passar por revisão."
+    mitigation: "Transição bloqueada"
+
+# Invariantes globais (sempre verdadeiras)
+invariants:
+  - name: "writer_unico"
+    rule: "Somente um escritor por escopo por vez"
+    enforcement: "Validador rejeitará WRITER_HANDOFF com colisão"
+
+  - name: "nao_retroceso"
+    rule: "Mensagem atrasada não retrocede missão"
+    enforcement: "Delta message valida observed_state_sha antes de aplicar"
+
+  - name: "prova_obrigatoria"
+    rule: "DONE exige prova: test, check, judge approval"
+    enforcement: "Schema rejeita DONE sem last_proof e judge_approval"
+
+  - name: "sha_imutavel"
+    rule: "Head SHA congelado até nova autorização"
+    enforcement: "Runner valida SHA antes de qualquer escrita"
+
+  - name: "segredo_nunca"
+    rule: "Nenhum segredo em recibo ou estado vivo"
+    enforcement: "Grep [-sensitive] antes de arquivar"
+
+  - name: "instancia_temporaria"
+    rule: "Instância morre com ARCHIVED; contrato permanece"
+    enforcement: "reset-instance limpa campos operacionais mas preserva contrato"
+
+# Ciclo operacional recomendado
+operational_cycle:
+  step_1: boot
+  step_2: mission_execution (ACTIVE)
+  step_3: checkpoint_optional (CHECKPOINTED)
+  step_4: ready_for_review (READY_FOR_REVIEW)
+  step_5: judge_review (FABLE_JUDGE ou meta-lupa)
+  step_6: close (DONE)
+  step_7: reset_instance (ARCHIVED → IDLE)
+  step_8: reuse_contract (nova missão em IDLE)
+
+# Testes obrigatórios (negativos)
+test_blockers:
+  - name: "transicao_invalida_bloqueada"
+    test: "IDLE → DONE sem ACTIVE"
+    expected: "ValueError: TRANSICAO_PROIBIDA"
+
+  - name: "dois_escritores_bloqueado"
+    test: "WRITER_HANDOFF sem relinquish anterior"
+    expected: "ValueError: CONFLITO_ESCRITOR"
+
+  - name: "sha_imutavel_validado"
+    test: "Alterar head.sha em ACTIVE sem autorização"
+    expected: "ValueError: SHA_CONGELADO"
+
+  - name: "segredo_detectado"
+    test: "Incluir api_key no recibo"
+    expected: "ValueError: SEGREDO_DETECTADO"
+
+  - name: "instancia_nao_retorna"
+    test: "DONE → ACTIVE na mesma instância"
+    expected: "ValueError: INSTANCIA_NAO_RETORNA"

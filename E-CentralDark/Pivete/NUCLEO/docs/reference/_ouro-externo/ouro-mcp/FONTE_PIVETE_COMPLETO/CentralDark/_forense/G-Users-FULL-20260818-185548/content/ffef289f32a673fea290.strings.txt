@@ -1,0 +1,42 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\__pycache__\lifecycle.cpython-311.pyc
+
+z@Hermes lifecycle dispatch for first-party observers and plugins.
+annotationsN)
+hook_name
+kwargsr
+return
+List[Any]c
+zENotify first-party observers, then invoke compatibility plugin hooks.r
+observe_lifecycle
+"Built-in observability hook failedT
+exc_info
+plugins)
+hermes_cli.observabilityr
+Exception
+logger
+warning
+hermes_clir
+invoke_hook)
+HC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\lifecycle.pyr
+z@Return whether a first-party observer or plugin consumes a hook.r
+handles_hookTz.Unable to inspect built-in observability hooksr
+has_hook)
+zBNotify observers and hard-close one core-owned Relay conversation.r
+on_session_finalizer
+session_id
+relay_runtime)
+profile_keyr 
+z&Core Relay session finalization failedr
+agentr"
+SESSION_COORDINATOR
+finalize_conversation
+current_profile_keyr
+     r
+finalize_sessionr)
+__doc__
+__future__r
+logging
+typingr
+getLogger
+__name__r
+<module>r2

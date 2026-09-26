@@ -1,0 +1,273 @@
+
+# - WINBOOT v2024.2.8 - by @DuanyDias e Grupo Sayro Digital
+
+Se estiver executando o Windows 7, 8.1, Server 2008 ou 2012, antes de executar o script 
+"winboot.cmd" execute o programa "AlterarCMD.exe". Fique tranquilo, o sistema não será modificado. 
+Apenas a posição e tamanho da janela, fonte e tamanho da fonte do Prompt de Comando (CMD) serão 
+alterados para o padrão do Windows 10 e 11.
+
+O programa "AlterarCMD.exe" automatiza o processo manual de configuração feita quando o usuário
+acessa as propriedades no canto superior esquerdo da janela do CMD.
+
+===================================================================================================
+# A T E N Ç Ã O ! ! !
+===================================================================================================
+
+No Windows 7, 8.1, Server 2008 e 2012 atualiza o powershell para versão 5.1:
+
+https://www.microsoft.com/en-us/download/details.aspx?id=54616
+
+Pré-requisito: .NET Framework 4.8
+
+https://dotnet.microsoft.com/pt-br/download/dotnet-framework/net48
+
+O script monta e configura o boot de utlitários WinPE que usam "\sources\boot.wim" como pasta e 
+arquivo de boot padrão.
+
+Se a pasta padrão do WinPE na raiz da ISO não for "sources" e o arquivo "*.wim" do WinPE não
+for "boot" altere no script o valor das variáveis "winpefsrc=sources" e "winpename=boot". Por
+exemplo, o Sergei Strelec usa o caminho \SSTR\strelec10x64Eng.wim para o utilitário WinPE do
+Windows 10. Caso queira inicializar esse utilitário as variáveis mencionadas devem ficar assim:
+
+set "winpefsrc=SSTR"
+set "winpename=strelec10x64Eng"
+
+Remova o atributo "Somente leitura" para editar o script.
+
+===================================================================================================
+# O QUE FAZ O SCRIPT "WINBOOT.CMD"?
+===================================================================================================
+
+# OPÇÃO 1 - Criar unidade de boot sem mídia externa
+
+   1. Baixa o DISM e 7-Zip CLI através do powershell usando critérios para que o processo ocorra
+   de forma automática. O 7-Zip é necessário para extrair os arquivos após escolha/seleção da ISO.
+   O DISM para fazer o backup dos drivers quando num sistema onde o dism local não oferece o
+   suporte.
+   
+   2. Pergunta se a partição que será criada será utilizada como partição de instalação do Windows,
+   inicialização de um Utilitário WinPE ou como partição com uma imagem de recuperação.
+   
+   3. Pergunta se quer usar outra unidade de armazenamento conectada para criar uma partição 
+   de boot. Se o usuário responder "N" (Não) a partição do Windows será reduzida. Recomendo 
+   não fazer isso quando houver menos de 40GB de espaço livre na unidade. A redução leva em 
+   consideração o tamanho da ISO.
+   
+   4. Abre uma janela para escolha/seleção de uma imagem ISO. Não é compatível com ISOs dualboot
+   onde os arquivos "install" estão em pastas separadas. Por exemplo, a ISO dualboot feita 
+   pelo MediaCreationTool onde na raiz encontramos as pastas "x86" e "x64" ao invés da pasta 
+   "sources".
+   
+   5. Verifica qual o número da unidade onde o Windows está instalado e qual a tabela de partição
+   (MBR ou GPT). Acessa o registro para verificar qual a edição do Windows e versão instalada.
+   Apenas acessa o registro e ler as informações, não faz qualquer modificação. Pode acontecer 
+   do registro mostrar informações erradas. Isso é algo de longa data que infelizmente a 
+   Microsoft ainda não corrigiu.
+   
+   6. Reduz a partição do Windows ou outra partição escolhida de acordo com o tamanho da ISO 
+   somando mais 6GB. Se não houver espaço para tal será somado apenas 2Gb ao tamanho da ISO 
+   no processo de redução. Se ainda assim não existir espaço livre suficiente o usuário será 
+   informado com uma mensagem na janela do CMD. A partição por padrão terá um tamanho de 32GB
+   se utilizada como partição de recuperação.
+
+   7. Localiza a partição criada e fecha janelas abertas nos processos anteriores.
+
+   8. Descompacta a imgem ISO para a partição localizada.
+
+   9. Verifica versão, arquitetutura, compilação e idioma da imagem do Windows descompactada.
+   
+   10. Faz o backup dos drives se o sistema instalado for da mesma arquitetura da imagem ISO.
+   
+   11. Salva um script na raiz da partição criada para integrar os drives no novo sistema
+   instalado a partir do ambiente do WinPE.
+
+   12. Cria uma entrada junto ao gerenciador de inicialização do Windows editando o arquivo BCD 
+   para que o WINPE (boot.wim) possa ser carregado na memória RAM tal como acontece com a 
+   instalação do Windows executada a partir de um pen drive. Teremos assim uma segunda opção
+   (dualboot com o sistema) onde com as mesmas configurações de boot da ISO serão aplicadas
+   conforme o modo que o sistema atual está instalado. O nome da entrada para escolha será 
+   "Instalação do Windows" ou "WINPE".
+   
+   13. Finalmente escreve os arquivos de configuração para liberar edições do Windows e 
+   pular pré-requisitos.
+   
+# OPÇÃO 2 - Instalar uma edição do Windows em Dual-Boot
+   
+   Após selecionar a opção prossiga com a seleção da partição que deseja reduzir para criar uma 
+   partição de instalação do Windows. Escolha o tamanho da partição em Gigabytes. Em seguida
+   selecione uma imagem do Windows para iniciar a instalação.
+   
+   As entradas e a partição podem ser removidas pela opção 3 do script.
+   
+# OPÇÃO 3 - Remover partição e entradas de boot
+
+   Conforme orientação do script selecione a partição adjacente à partição que contém os arquivos
+   de instalação do Windows ou utilitários para estendê-la. Essa partição pode ser a partição do 
+   Windows ou de uma outra unidade de disco que você particionou. Não é para selecionar a partição 
+   com os arquivos de instalação do Windows ou utilitários. Essa partição será selecionada e apagada 
+   automaticamente. Não se preocupe com a partição que você selecionar. A partição apenas será 
+   estendida.
+   
+   O script sempre vai perguntar se você tem certeza do que está fazendo e nunca vai apagar 
+   partições sem antes abrir a janela para seleção.
+   
+   Todas as entradas de boot correspondentes serão apagadas automaticamente.
+   
+   - Para remover a entrada de boot manualmente:
+   
+   Execute o comando "msconfig", vá na "Inicialização do Sistema" e apague as entradas 
+   "Instalação do Windows" ou "WinPE Utilitários". Em seguida vá no gerenciador de discos do 
+   Windows, apague a partição criada e extenda de volta para a partição do Windows ou para 
+   a outra que escolheu no processo.
+   
+   A opção de número 2 salva um texto com a GUID de entrada de boot e considera esse arquivo
+   para remover as entradas criadas para a instalação do Windows em dual-boot.
+
+# OPÇÃO 4 - Atualizar o Windows
+
+   Monta uma imagem ISO de instalação do Windows para atualizar o sistema.
+   
+   Permite ao usuário escolher para qual edição do Windows atualizar independente da edição
+   instalada. Essa opção só é compatível com as versões do Windows com suporte nativo à
+   montagem de imagens ISO. Em sistemas com suporte não precisa montar pois o script fará 
+   isso automaticamente. Caso queria pular a verificação de pré-requisitos na atualização 
+   para Windows 11, mude o valor da variável "_bpsetup" de "0" para "1". Exemplo:
+   
+   set "_bpsetup=1"
+   
+   A condição não altera o registro. Executa o "setupprep.exe" se existir na pasta "sources"
+   ou o "setup.exe" da raiz da ISO com o parâmetro "/product server". Caso não exista nenhum dos 
+   executaveis mencionados restará apenas o "setup.exe" da pasta "sources" o qual será executado 
+   sem o parâmetro "/product server" pois não é suportado.
+   
+   Considere que a Microsoft pode remover esse parâmetro no futuro. Não culpe o Dev se isso
+   parar de funcionar.
+   
+===================================================================================================
+ # HISTÓRICO DE VERSÕES   
+===================================================================================================
+
+ # v2024.2.8 - 15/10/2024
+  
+  - Tamanho extra aumentado de 4 GB para 8 GB somandos ao tamanho da ISO no processo de redução.
+  
+  Algumas ISOs possuem maior compactação e ao serem descompactadas o espaço criado para elas não era
+  suficiente.
+  
+
+ # v2024.2.7 - 21/08/2024
+ 
+  - Adicionado a versão do descompactador de arquivos 7zip.
+  
+  - Tamanho extra diminuido de 6 GB para 4 GB somandos ao tamanho da ISO no processo de redução.
+
+
+ # v2024.2.6 - 07/08/2024
+ 
+  - Adicionado um comando em powershell para executar o script como Administrador substituindo 
+    a utilização do VBSScript.
+  
+  - Para as versões mais recentes do Windows tendo em vista a remoção do utilitário de linha de 
+    comando WMIC pela Microsoft, os comandos que o utilizam foram substituidos por comandos 
+	em powershell a fim de obter as informações necessárias para o gerenciamento de partições.
+	
+  - Para as versões mais recentes do Windows 11 enquanto houver suporte, o Windows Setup será 
+    executado com parâmetro "/product server". Este parâmetro faz com que a instalação pule a 
+	verificação dos pré-requisitos.
+ 
+ 
+ # v2024.2.5 - 19/05/2024
+ 
+  - Adicionada a opção que permite reduzir uma partição para instalação do Windows em dual-boot.
+  
+  - A aplicação da imagem é feita via DISM com suporte a seleção de arquivos de instalação nos
+    formatos ISO, WIM, ESD e SWM.
+	
+  - Opção suportada a partir do Windows 10. É possível instalar o Windows 7 ou 8.1 desde que o
+    computador ofereça suporte a inicialização desses sistemas.
+	
+
+ # v2024.2.4
+
+ - O script não utiliza mais o registro para obter o nome da edição do Windows. Algumas edições
+   informam o nome errado no registro desde o lançamento do Windows 11.
+   
+ - Adicionada a opção que reduz a partição do Windows para criar uma partição com a imagem de 
+   recuperação do sistema. Para evitar problemas com a remoção de unidades a partição reduzida
+   sempre será a partição do Windows. Por padrão é criada uma partição com o tamanho de 32GB.
+   Isso pode ser ajustado pelo usuário com a edição do script conforme orientação no cabeçalho.
+   
+   Um script é gerado e salvo na partição com o nome "CaptImagem.cmd" para auxiliar na captura
+   da imagem de recuperação do sistema instalado. Isso deve ser feito no ambiente de instalação
+   do Windows após a devida otimização do sistema. Não capturar imagem com arquivos pessoais.
+   Apenas a instalação do Windows com seus programas e configurações. A imagem capturada é salva
+   na pasta "sources" substituindo a imagem original de instalação.
+   
+   Se a partição de recuperação for criada com um Utilitário PE o nome da entrada de boot será:
+   
+   <WinPE e Recuperação>
+   
+   Se a partição for criada com uma ISO de instalação do Windows o nome da entrada de boot será:
+   
+   <Imagem de Recuperação>
+   
+   Essa partição e a sua entrada de boot correspondente pode ser removida com a segunda opção
+   do script.
+   
+ - Adicionado ao script os comandos para a remoção da partição de recuperação as configurações
+   de boot correspondentes.
+
+
+ # v2024.2.3
+
+ - Ajuste dos menus para melhor aparência e leitura.
+ 
+ - Ajuste nas janelas e mudanças de algumas informações de saída para melhor entendimento 
+   do processo.
+   
+
+ # v2024.2.2
+
+ - Adicionada a verificação de integridade dos arquivos de suporte baixados e a exportação 
+   de drivers do sistema instalado. Um script é gerado para importar os drives salvos no 
+   ambiente do WinPE ou WinRE.
+   
+ - Adicionada a função que remove automaticamente as entradas de boot criadas para instalação 
+   do Windows.
+ 
+ - Adicionada a opção que permite atualizar o Windows para uma edição diferente do sistema
+   instalado.
+
+
+ # v2024.2.1
+
+ - Adicionada ao script a opção que permite remover a partição criada para os arquivos
+   de instalação do Windows.
+   
+ - Menu para selecionar entradas de boot para remoção. 
+ 
+
+ # v2024.2.0
+
+ - Adicionado o suporte ISOs de utilitários baseados no WinPE e WinRE. O usuário pode
+   editar variáveis no cabeçalho do script a fim de mapear corretamente o local
+   da pasta do arquivo de boot "*.wim".
+   
+ - Adicionada a opção que permite selecionar outra partição sem ser a do Windows
+   para criar uma unidade de boot.
+   
+ - Mudança do local de download dos arquivos de suporte do Google Drive para o GitHub.
+ 
+
+  # WINBOOT v1.0
+
+  - Ferramenta feita em batch script para a criação de uma unidade de boot sem
+    mídia externa. A partição do Windows é reduzida automaticamente criando assim
+	uma nova partição a qual recebe os arquivos de instalação proveniente de uma
+	imagem ISO do Windows. A partir daí é criado um dualboot com o sistema instalado.
+
+
+
+Grupo Sayro Digital
+https://sayrodigital.net
+

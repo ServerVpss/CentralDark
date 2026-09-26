@@ -1,0 +1,61 @@
+﻿2026-08-22T06:20:16.0415141-03:00 === IOBIT UNINSTALL START ===
+2026-08-22T06:20:16.0510898-03:00 IsAdmin=True
+2026-08-22T06:20:16.0701000-03:00 RUN "C:\Program Files (x86)\IObit\Driver Booster\13.5.0\unins000.exe" /VERYSILENT /NORESTART /SUPPRESSMSGBOXES
+2026-08-22T06:32:54.5139769-03:00 === UNINSTALL2 START ===
+2026-08-22T06:32:54.5826664-03:00 start C:\Program Files (x86)\IObit\Driver Booster\13.5.0\unins000.exe
+2026-08-22T06:32:55.6393774-03:00 unins exit=1
+2026-08-22T06:32:55.6424086-03:00 start C:\Program Files (x86)\IObit\IObit Unlocker\unins000.exe
+2026-08-22T06:33:23.5108378-03:00 exit=0
+2026-08-22T06:33:23.5118260-03:00 RUN "C:\Program Files (x86)\IObit\IObit Unlocker\unins000.exe" /VERYSILENT /NORESTART /SUPPRESSMSGBOXES
+2026-08-22T06:35:24.7879035-03:00 exit=1
+2026-08-22T06:35:30.0878486-03:00 task Driver Booster Scheduler : Nenhum objeto MSFT_ScheduledTask encontrado com a propriedade 'TaskName' igual a 'Driver Booster Scheduler'. Verifique o valor da propriedade e tente de novo.
+2026-08-22T06:35:30.9547597-03:00 task Driver Booster SkipUAC (danda) : Nenhum objeto MSFT_ScheduledTask encontrado com a propriedade 'TaskName' igual a 'Driver Booster SkipUAC (danda)'. Verifique o valor da propriedade e tente de novo.
+2026-08-22T06:35:31.8390838-03:00 task Driver Booster Update : Nenhum objeto MSFT_ScheduledTask encontrado com a propriedade 'TaskName' igual a 'Driver Booster Update'. Verifique o valor da propriedade e tente de novo.
+2026-08-22T06:35:31.8420835-03:00 gone C:\Program Files (x86)\IObit\Driver Booster
+2026-08-22T06:35:31.8648137-03:00 dir fail C:\Program Files (x86)\IObit\IObit Unlocker Não é possível remover o item C:\Program Files (x86)\IObit\IObit Unlocker\IObitUnlocker.dll: O acesso ao caminho 'IObitUnlocker.dll' foi negado.
+2026-08-22T06:35:31.8698127-03:00 dir fail C:\Program Files (x86)\IObit Não é possível remover o item C:\Program Files (x86)\IObit\IObit Unlocker\IObitUnlocker.dll: O acesso ao caminho 'IObitUnlocker.dll' foi negado.
+2026-08-22T06:35:31.8929681-03:00 removed dir C:\ProgramData\IObit\Driver Booster
+2026-08-22T06:35:31.8984779-03:00 removed dir C:\ProgramData\IObit\IObit Unlocker
+2026-08-22T06:35:31.9339986-03:00 removed dir C:\Users\danda\AppData\Roaming\IObit\Driver Booster
+2026-08-22T06:35:31.9409977-03:00 removed dir C:\Users\danda\AppData\Roaming\IObit\IObit Uninstaller
+2026-08-22T06:35:31.9469977-03:00 removed dir C:\Users\danda\AppData\Roaming\IObit\Software Updater
+2026-08-22T06:35:32.5523180-03:00 STILL INSTALLED IObit Unlocker
+2026-08-22T06:35:33.4796863-03:00 === IOBIT UNINSTALL END ===
+2026-08-22T06:35:56.9622237-03:00 unins exit=0
+2026-08-22T06:36:01.1779246-03:00 task Driver Booster Scheduler Nenhum objeto MSFT_ScheduledTask encontrado com a propriedade 'TaskName' igual a 'Driver Booster Scheduler'. Verifique o valor da propriedade e tente de novo.
+2026-08-22T06:36:02.0585360-03:00 task Driver Booster SkipUAC (danda) Nenhum objeto MSFT_ScheduledTask encontrado com a propriedade 'TaskName' igual a 'Driver Booster SkipUAC (danda)'. Verifique o valor da propriedade e tente de novo.
+2026-08-22T06:36:02.9416324-03:00 task Driver Booster Update Nenhum objeto MSFT_ScheduledTask encontrado com a propriedade 'TaskName' igual a 'Driver Booster Update'. Verifique o valor da propriedade e tente de novo.
+2026-08-22T06:36:02.9436327-03:00 already gone C:\Program Files (x86)\IObit\Driver Booster
+2026-08-22T06:36:03.0300098-03:00 removed C:\Program Files (x86)\IObit\IObit Unlocker
+2026-08-22T06:36:03.6511679-03:00 NO IObit in Apps & Features
+2026-08-22T06:36:04.5922937-03:00 === UNINSTALL2 END ===
+2026-08-22T06:39:02.6385681-03:00 === FORCE REMOVE START ===
+2026-08-22T06:39:02.7003031-03:00 IsAdmin=True
+2026-08-22T06:39:03.9458539-03:00 task Driver Booster Scheduler : Nenhum objeto MSFT_ScheduledTask encontrado com a propriedade 'TaskName' igual a 'Driver Booster Scheduler'. Verifique o valor da propriedade e tente de novo.
+2026-08-22T06:39:04.8595039-03:00 task Driver Booster SkipUAC (danda) : Nenhum objeto MSFT_ScheduledTask encontrado com a propriedade 'TaskName' igual a 'Driver Booster SkipUAC (danda)'. Verifique o valor da propriedade e tente de novo.
+2026-08-22T06:39:05.7452808-03:00 task Driver Booster Update : Nenhum objeto MSFT_ScheduledTask encontrado com a propriedade 'TaskName' igual a 'Driver Booster Update'. Verifique o valor da propriedade e tente de novo.
+2026-08-22T06:39:05.7493154-03:00 absent C:\Program Files (x86)\IObit\Driver Booster
+2026-08-22T06:39:05.8360588-03:00 removed C:\Program Files (x86)\IObit\IObit Unlocker
+2026-08-22T06:39:05.8360588-03:00 absent C:\Program Files\IObit
+2026-08-22T06:39:05.8386018-03:00 absent C:\ProgramData\IObit\Driver Booster
+2026-08-22T06:39:05.8396104-03:00 absent C:\ProgramData\IObit\IObit Unlocker
+2026-08-22T06:39:05.8456673-03:00 removed C:\ProgramData\IObit\IObit Uninstaller
+2026-08-22T06:39:05.8496667-03:00 removed C:\ProgramData\IObit\Aegis
+2026-08-22T06:39:05.8526664-03:00 absent C:\Users\danda\AppData\Roaming\IObit\Driver Booster
+2026-08-22T06:39:05.8536689-03:00 absent C:\Users\danda\AppData\Roaming\IObit\IObit Uninstaller
+2026-08-22T06:39:05.8546674-03:00 absent C:\Users\danda\AppData\Roaming\IObit\Software Updater
+2026-08-22T06:39:05.8562034-03:00 absent C:\Users\danda\AppData\Local\IObit
+2026-08-22T06:39:05.8627772-03:00 still in PF IObit Unlocker
+2026-08-22T06:39:05.9158815-03:00 no arp HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Driver Booster_is1
+2026-08-22T06:39:05.9612137-03:00 no arp HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Driver Booster_is1
+2026-08-22T06:39:06.0149463-03:00 no arp HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\IObit Unlocker_is1
+2026-08-22T06:39:06.0606320-03:00 no arp HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\IObit Unlocker_is1
+2026-08-22T06:39:06.6678914-03:00 OK no IObit in Apps
+2026-08-22T06:39:07.6001776-03:00 PF exists=True
+2026-08-22T06:39:07.6011777-03:00 === FORCE REMOVE END ===
+2026-08-22T06:45:52.0634327-03:00 === LEFTOVER SWEEP ===
+2026-08-22T06:45:52.1896679-03:00 removed C:\Program Files (x86)\IObit
+2026-08-22T06:45:52.2021806-03:00 removed C:\Users\danda\AppData\Roaming\IObit
+2026-08-22T06:45:52.2131837-03:00 removed C:\ProgramData\IObit
+2026-08-22T06:45:52.2151820-03:00 PF=True Roaming=False ProgramData=False
+2026-08-22T06:45:52.2161815-03:00 === LEFTOVER END ===

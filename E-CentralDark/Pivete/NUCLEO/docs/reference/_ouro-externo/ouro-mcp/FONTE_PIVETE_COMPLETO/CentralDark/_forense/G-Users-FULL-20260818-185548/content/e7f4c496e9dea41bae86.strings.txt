@@ -1,0 +1,407 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\unzipsfx.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+@.reloc
+AVAUATUWVSH
+@[^_]A\A]A^
+@[^_]A\A]A^
+ATUWVSH
+@[^_]A\
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+{ENTER}
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AVAUATUWVSH
+[^_]A\A]A^
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+1tv[H=
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+D$!.fD
+ATUWVSH
+ [^_]A\
+ [^_]A\
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+HcD$DH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+([^_]A\A]A^A_
+([^_]A\A]A^A_
+AUATUWVSH
+([^_]A\A]
+<\tm<-u
+([^_]A\A]
+ATUWVSI
+[^_]A\
+AWAVAUATUWVSH
+D$pA9E
+[^_]A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+AUATUWVSH
+([^_]A\A]
+ATUWVSH
+@[^_]A\
+@[^_]A\
+AUATUWVSH
+8[^_]A\A]
+AWAVAUATUWVSH
+UTtlfA
+H[^_]A\A]A^A_
+H=ARC0u
+ATUWVSH
+`[^_]A\
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+AVAUATUWVS
+[^_]A\A]A^A_
+AVAUATUWVSH
+`[^_]A\A]A^
+Valid options are -tfupcz and -d <exdir>; modifiers are -abjnoqCL%sV%s.
+UnZipSFX %d.%d%d%s of %s, by Info-ZIP (http://www.info-zip.org).
+caution:  both -n and -o specified; ignoring -o
+error:  -fn or any combination of -c, -l, -p, -t, -u and -v options invalid
+error:  -d option used more than once (only one exdir allowed)
+error:  must specify directory to which to extract with -d option
+caution:  not extracting; -d ignored
+  (please check that you have transferred or created the zipfile in the
+  appropriate BINARY mode and that you have compiled UnZip properly)
+caution: excluded filename not matched:  %s
+caution: filename not matched:  %s
+error [%s]:  attempt to seek before beginning of zipfile
+error:  expected central file header signature not found (file #%lu).
+20 April 2009
+[empty] 
+[text]  
+[binary]
+warning-
+central
+extract
+inflat
+%-22s 
+symlink error
+error [%s]:  bad extra-field CRC %08lx (should be %08lx)
+error:  unsupported extra-field compression type (%u)--skipping
+ compressed WinNT security data missing (%d bytes)%s
+ compressed EA data missing (%d bytes)%s
+ bad CRC %08lx  (should be %08lx)
+%s:  unknown compression method
+warning:  %s is probably truncated
+inflate
+invalid compressed data to 
+not enough memory to 
+  error:  %s%s
+  error:  %s%s %s
+%lu file%s skipped because of unsupported compression or encoding.
+No errors detected in %s for the %lu file%s tested.
+No errors detected in compressed data of %s.
+   skipping: %-22s  encrypted (not supported)
+%s:  stored in VMS format.  Extract anyway? (y/n) 
+Caution:  zero files tested in %s.
+At least one %serror was detected in %s.
+error:  invalid response [%s]
+new name: 
+(EOF or read error, treating as "[N]one" ...)
+replace %s? [y]es, [n]o, [A]ll, [N]one, [r]ename: 
+  %-22s -> %s
+finishing deferred symbolic links:
+warning:  deferred symlink (%s) failed:
+          invalid placeholder file
+warning:  deferred symlink (%s) failed:
+          out of memory
+     failed setting times/attribs for %lu dir entries
+warning:  set times/attribs failed for %s
+warning:  cannot alloc memory to sort dir times/perms/etc.
+warning:  cannot alloc memory for dir times/permissions/UID/GID
+   skipping: %-22s  %svolume label
+warning:  stripped absolute path spec from %s
+  (attempting to re-compensate)
+file #%lu:  bad local header
+local header sig
+%s:  bad file comment length
+%8sing: %-22s  %s%s
+file #%lu:  bad zipfile offset (%s):  %ld
+%s:  bad extra field length (%s)
+%s:  ucsize %s <> csize %s for STORED entry
+         continuing with "compressed" size value
+%s:  bad filename length (%s)
+   skipping: %-22s  unsupported compression method %u
+   skipping: %-22s  need %s compat. v%u.%u (can do v%u.%u)
+bus error
+illegal instruction
+segmentation violation
+ with no real file
+                                                         
+--- Press `Q' to quit, or any other key to continue ---
+--More--(%lu)
+%s exists and is a symbolic link%s.
+error:  zipfile probably corrupt (%s)
+%s:  write error (disk full?).  Continue? (y/n/^C) 
+warning:  extra field too long (%d).  Ignoring...
+warning:  Converted unicode filename too long--truncating.
+warning:  filename too long--truncating.
+error:  zipfile read error
+error:  cannot create %s
+        %s
+error:  cannot rename old %s
+        %s
+error:  cannot delete old %s
+        %s
+error:  cannot open zipfile [ %s ]
+        %s
+++--+-+
+(incomplete l-tree)  
+(incomplete d-tree)  
+%sEmpty zipfile.
+warning:  Unicode Path checksum invalid
+warning:  Unicode Path version > 1
+caution:  zipfile comment truncated
+  End-of-central-directory signature not found.
+error: End-of-centdir-64 signature not where expected (prepended bytes?)
+  (attempting to process anyway)
+fatal error: read failure while seeking for End-of-centdir-64 signature.
+  This zipfile is corrupt.
+error [%s]:  start of central directory not found;
+  zipfile corrupt.
+warning [%s]:  zipfile is empty
+error [%s]:  NULL central directory offset
+  (attempting to process anyway)
+error [%s]:  missing %s bytes in zipfile
+  (attempting to process anyway)
+unzipsfx:  cannot find myself! [%s]
+error:  cannot allocate unzip buffers
+checkdir error:  path too long: %s
+checkdir error:  cannot create %s
+                 %s
+                 unable to process %s.
+checkdir error:  %s exists but is not directory
+                 unable to process %s.
+checkdir warning:  path too long; truncating
+                   %s
+                -> %s
+checkdir:  cannot create extraction directory: %s
+           %s
+warning:  skipped "../" path component(s) in %s
+   creating: %s
+Could not read directory attributes
+chmod (directory attributes) error
+mapname:  conversion of %s failed
+%s: write error (disk full?).   Continue? (y/n/^C) 
+warning:  symbolic link (%s) failed: mem alloc overflow
+warning:  symbolic link (%s) failed: no mem
+warning:  symbolic link (%s) failed
+-> %s 
+fchmod (file attributes) error
+warning:  cannot set permissions for %s
+          %s
+ (warning) cannot set modif./access times
+          %s
+warning:  cannot set modif./access times for %s
+          %s
+ (warning) cannot set UID %lu and/or GID %lu
+          %s
+warning:  cannot set UID %lu and/or GID %lu for %s
+          %s
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+__cxa_atexit
+__errno
+__getreent
+__locale_ctype_ptr
+__locale_mb_cur_max
+__main
+_dll_crt0
+_impure_ptr
+_timezone
+calloc
+cygwin_internal
+dll_dllcrt0
+fchmod
+fchown
+fclose
+fflush
+fileno
+fprintf
+fwrite
+isatty
+lchown
+localtime
+malloc
+memcpy
+memset
+msys_detach_dll
+nl_langinfo
+perror
+posix_memalign
+realloc
+rename
+rewind
+setlocale
+signal
+sprintf
+stpcpy
+strcat
+strcmp
+strcpy
+strerror
+strlen
+strncat
+strncpy
+strrchr
+symlink
+tcgetattr
+tcsetattr
+tolower
+unlink
+wctomb
+GetModuleHandleA
+msys-2.0.dll
+KERNEL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__lib64_libkernel32_a_iname
+__imp_mblen
+__imp__dll_crt0
+__imp_tolower
+__imp_calloc
+__imp_tzset
+__imp_fileno
+__imp_umask
+__imp_setlocale
+__imp_fputc
+__imp_strncpy
+_head_msys_2_0_dll
+__imp_symlink
+__imp_strcmp
+__imp_fchown
+__imp_read
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_strrchr
+__imp_free
+__imp___errno
+__imp_tcgetattr
+__nm__impure_ptr
+__imp_strncat
+__imp_write
+__imp_strcpy
+__imp_memset
+__IAT_end__
+__imp_memcpy
+__imp_lseek
+__imp_chown
+__imp_fchmod
+__imp_dll_dllcrt0
+__imp_rewind
+__imp_strerror
+__imp___locale_ctype_ptr
+__imp_fwrite
+__imp_utime
+__imp_putc
+_head_lib64_libkernel32_a
+__imp__timezone
+__imp_msys_detach_dll
+__imp_open
+__imp_chmod
+__imp_nl_langinfo
+__imp_wctomb
+__imp_signal
+__imp___locale_mb_cur_max
+__imp___getreent
+__imp_ioctl
+__imp_GetModuleHandleA
+__imp___main
+__imp_strlen
+__imp_malloc
+__imp__impure_ptr
+__imp_stat
+__imp_realloc
+__imp_exit
+__imp_mkdir
+__IAT_start__
+__imp_strcat
+__imp_perror
+__imp_isatty
+__imp_unlink
+__imp_stpcpy
+__imp___cxa_atexit
+__nm__timezone
+__imp_fprintf
+__imp_rename
+__imp_qsort
+__imp_tcsetattr
+__imp_fclose
+__imp_localtime
+__imp_close
+__imp_fflush
+__imp_sprintf
+__imp_fgets
+__imp_lstat
+__imp_fread
+__imp_lchown
+__imp_fopen
+msys_2_0_dll_iname
+#+3;CScs

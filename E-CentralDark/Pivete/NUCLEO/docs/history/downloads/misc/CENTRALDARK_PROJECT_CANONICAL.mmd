@@ -1,0 +1,30 @@
+flowchart TD
+    A[CHEFE INTENT] --> B[SELF APPLY]
+    B --> C[LIVE STATE]
+    C --> D[DISCOVER]
+    D --> E[EXPAND MATERIAL FIELD]
+    E --> F[COMPRESS / DEDUPE]
+    F --> G[RECONCILE EXISTING OWNERS]
+    G --> H[PLAN MINIMAL SAFE DELTAS]
+    H --> I[DISTRIBUTE READ-ONLY PERCEPTION]
+    I --> J[ONE WRITER PER SCOPE]
+    J --> K[EXECUTE]
+    K --> L[EVIDENCE]
+    L --> M[COUNTERPROOF]
+    M --> N{SURVIVED?}
+    N -- No --> O[CAUSE + MINIMAL REMEDIATION]
+    O --> K
+    N -- Yes --> P[LEARN / CRYSTALLIZE IF PROVEN]
+    P --> Q[REMEASURE LIVE STATE]
+    Q --> R{FIXED POINT IN THIS SCOPE?}
+    R -- No material residue --> S[RETURN]
+    R -- Residue --> D
+    R -- Human frontier --> T[RETURN BLOCKED WITH EVIDENCE]
+
+    U[PACKAGE FIXED POINT]:::good
+    V[PROJECT GLOBAL FIXED POINT: NOT PROVEN]:::warn
+    S --> U
+    U -. does not imply .-> V
+
+    classDef good fill:#153d2d,stroke:#35d07f,color:#fff;
+    classDef warn fill:#442b18,stroke:#f0a34a,color:#fff;

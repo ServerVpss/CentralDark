@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "centraldark.receipt.v1",
+  "type": "object",
+  "required": ["event_id", "observed_at", "target", "verdict", "next_cursor", "receipt_sha256"],
+  "properties": {
+    "event_id": {"type":"string"},
+    "observed_at": {"type":"string"},
+    "target": {"type":"string"},
+    "verdict": {"enum":["PROVEN","UNKNOWN","FAILED","LOCKED","WORKING"]},
+    "evidence": {"type":"array","items":{"type":"string"}},
+    "counterevidence": {"type":"array","items":{"type":"string"}},
+    "unknown": {"type":"array","items":{"type":"string"}},
+    "residual": {"type":"array","items":{"type":"string"}},
+    "previous_receipt_sha256": {"type":["string","null"]},
+    "receipt_sha256": {"type":"string"},
+    "next_cursor": {"type":"string"}
+  }
+}

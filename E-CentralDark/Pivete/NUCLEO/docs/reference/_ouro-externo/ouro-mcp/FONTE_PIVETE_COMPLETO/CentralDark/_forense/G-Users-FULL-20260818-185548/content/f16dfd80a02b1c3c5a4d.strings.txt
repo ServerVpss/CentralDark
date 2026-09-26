@@ -1,0 +1,13 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\indent\basic.vim
+
+" Vim indent file
+" Language:
+BASIC (QuickBASIC 4.5)
+" Maintainer:
+Doug Kearns <dougkearns@gmail.com>
+" Last Change:
+2022 Jan 24
+" Only load this indent file when no other was loaded.
+if exists("b:did_indent")
+  finish
+runtime! indent/vb.vim

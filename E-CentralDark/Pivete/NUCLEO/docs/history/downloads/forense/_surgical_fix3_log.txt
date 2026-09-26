@@ -1,0 +1,32 @@
+﻿2026-08-22T05:37:13.2525710-03:00 === PHASE3 START ===
+2026-08-22T05:37:13.2637090-03:00 before DisableAntiSpyware=1 DisableAntiVirus=1
+2026-08-22T05:37:13.3302704-03:00 wrote DisableAntiSpyware=0 DisableAntiVirus=0
+2026-08-22T05:37:13.3387200-03:00 WOW policy exists
+2026-08-22T05:37:13.3468835-03:00 PUAProtection : 2
+PSPath        : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Policies\Mi
+                crosoft\Windows Defender
+PSParentPath  : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Policies\Mi
+                crosoft
+PSChildName   : Windows Defender
+PSDrive       : HKLM
+PSProvider    : Microsoft.PowerShell.Core\Registry
+2026-08-22T05:37:13.3468835-03:00 --- MpCmdRun -wdenable ---
+2026-08-22T05:37:13.3552987-03:00 MpCmdRun=C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.24080.9-0\MpCmdRun.exe
+2026-08-22T05:37:13.4631109-03:00 wdenable :: CmdTool: Failed with hr = 0x80070422. Check C:\Users\danda\AppData\Local\Temp\MpCmdRun.log for more information
+2026-08-22T05:37:13.4639384-03:00 --- watch 10s for rewrite ---
+2026-08-22T05:37:15.4743116-03:00 t+2s DisableAntiSpyware=1 DisableAntiVirus=1 WinDefend=Stopped/Automatic REGStart=2
+2026-08-22T05:37:17.4932975-03:00 t+4s DisableAntiSpyware=1 DisableAntiVirus=1 WinDefend=Stopped/Automatic REGStart=2
+2026-08-22T05:37:19.5218187-03:00 t+6s DisableAntiSpyware=1 DisableAntiVirus=1 WinDefend=Stopped/Automatic REGStart=2
+2026-08-22T05:37:21.5302657-03:00 t+8s DisableAntiSpyware=1 DisableAntiVirus=1 WinDefend=Stopped/Automatic REGStart=2
+2026-08-22T05:37:23.5446375-03:00 t+10s DisableAntiSpyware=1 DisableAntiVirus=1 WinDefend=Stopped/Automatic REGStart=2
+2026-08-22T05:37:23.5456389-03:00 --- sc start ---
+2026-08-22T05:37:23.5990535-03:00 sc start :: [SC] StartService FALHA 1058:
+
+O serviço não pode ser iniciado porque está desativado ou não tem dispositivos ativados associados.
+2026-08-22T05:37:26.6019453-03:00 post-start DisableAntiSpyware=1 WinDefend=Stopped/Automatic
+2026-08-22T05:37:27.1746895-03:00 AMRunningMode=Not running
+2026-08-22T05:37:27.1789394-03:00 AntivirusEnabled=False
+2026-08-22T05:37:27.1819372-03:00 RealTimeProtectionEnabled=False
+2026-08-22T05:37:27.1839428-03:00 AMEngineVersion=0.0.0.0
+2026-08-22T05:37:27.1859388-03:00 --- Defender 5007 last 5 min ---
+2026-08-22T05:37:27.2954362-03:00 === PHASE3 END ===

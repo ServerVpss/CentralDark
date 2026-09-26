@@ -1,0 +1,202 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\__pycache__\kanban_swarm.cpython-311.pyc
+
+Kanban Swarm v1: thin swarm topology helpers on top of Kanban.
+This module intentionally does not introduce a second scheduler. It writes a
+small task graph into the existing Kanban kernel:
+    planning root (completed immediately)
+        
+ parallel specialist workers (ready)
+        
+ verifier (todo until all workers done)
+             
+ synthesizer (todo until verifier done)
+The shared blackboard is also deliberately low-tech: structured JSON comments on
+the root task. That keeps all state in existing task_comments/task_events rows,
+so the dashboard, notifier, slash command, and dispatcher keep working without a
+new service.
+annotations)
+dataclass
+fieldN)
+Iterable
+Optional)
+kanban_dbz
+[swarm:blackboard] T)
+frozenc
+SwarmWorkerSpecz)A single parallel worker card in a swarm.
+profile
+default_factory
+list[str]
+skillsr
+priorityNz
+Optional[int]
+max_runtime_seconds)
+__name__
+__module__
+__qualname__
+__doc__
+__annotations__r
+KC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\kanban_swarm.pyr
+SwarmCreatedz%IDs produced by :func:`create_swarm`.r
+root_idr
+worker_ids
+verifier_id
+synthesizer_id
+return
+dict[str, Any]c
+as_dictz
+SwarmCreated.as_dict2
+valuer
+field_namer&
+ is required)
+ValueError)
+_require_textr3
+## Swarm protocol
+- Swarm root / shared blackboard: `z
+- Read sibling/parent handoffs from Kanban context before working.
+- Put machine-readable facts in completion metadata.
+- Put cross-worker notes on the root task using structured comments.
+- Goal: 
+_swarm_contextr8
+sqlite3.Connection
+summary
+metadatar'
+Inline blocked
+done CAS flip + event insert for the swarm root.
+    Runs INSIDE create_swarm's outer write_txn, so it must not call
+    ``kb.complete_task`` 
+ that helper opens its own transaction and fires
+    post-commit side effects (workspace cleanup, failure-counter clear,
+    ``recompute_ready``) that would execute while the outer transaction can
+    still roll back. Instead we do the minimal durable writes here and let
+    the caller run ``recompute_ready`` after the outer commit.
+        UPDATE tasks
+           SET status       = 'done',
+               completed_at = ?,
+               claim_lock   = NULL,
+               claim_expires= NULL,
+               worker_pid   = NULL
+         WHERE id = ?
+           AND status = 'blocked'
+        
+completed)
+outcomer;
+result_lenr;
+run_idT)
+execute
+rowcount
+_synthesize_ended_run
+_append_event)
+        r
+_activate_root_inlinerM
+Verify swarm outputsz
+Synthesize swarm outputsz
+swarm-orchestrator
+scratch)
+root_title
+verifier_title
+synthesizer_title
+tenant
+created_by
+workspace_kind
+workspace_pathr
+idempotency_key
+workers
+Iterable[SwarmWorkerSpec]
+verifier_assignee
+synthesizer_assigneerO
+Optional[str]rP
+zCAtomically create a durable, immediately dispatchable Kanban swarm.z;Swarm topology planned; root remains the shared blackboard.F)
+blocked
+kanban_swarm_v1)
+kindr4
+worker_count)
+z/could not activate the completed swarm topologyT
+kanban_task_completed)
+assigneerC
+write_txn
+_create_swarm_uncommitted
+get_taskr"
+statusrM
+RuntimeError
+recompute_ready
+latest_run
+_fire_kanban_lifecycle_hook
+get_current_boardrc
+activation_summary
+activated
+created
+                   r
+create_swarmrt
+Create a durable Kanban swarm graph.
+    The returned graph is immediately dispatchable: the planning root is marked
+    ``done`` with topology metadata, parallel workers are ``ready``, the verifier
+    waits for every worker, and the synthesizer waits for the verifier.
+    r4
+at least one worker is requiredr?
+startz
+workers[z
+].profilez
+].titlez
+Swarm: r
+Kanban Swarm v1 planning/root card. This card is completed immediately so parallel workers can start while it remains the shared blackboard and audit anchor.
+initial_statusrT
+topologyc
+<listcomp>z-_create_swarm_uncommitted.<locals>.<listcomp>
+parentsrR
+Review every worker handoff and blackboard update. Gate the swarm: complete only with metadata {"gate": "pass"} when evidence is sufficient; otherwise block with exact missing work.z
+requesting-code-review)
+zwSynthesize the verified worker outputs into the final deliverable. Do not start until the verifier has passed the gate.
+humanizer)
+author
+enumerater
+create_task
+splitlines
+latest_blackboard
+isinstance
+dictr!
+append
+post_blackboard_updater+
+worker_specs
+specrr
+existingr#
+context_suffix
+worker_id
+verifier_body
+verifier
+synthesizer_body
+synthesizerrq
+                             r
+z:Append one structured update to the swarm root blackboard.r"
+ensure_ascii
+sort_keys)
+dumpsrG
+add_comment
+BLACKBOARD_PREFIX)
+payloads
+      r
+Merge structured blackboard comments on a root card.
+    Later comments replace earlier values for the same key. ``_authors`` records
+    the author of the winning value for traceability.
+    r/
+_authors)
+list_commentsr
+startswithr
+loadsrh
+JSONDecodeErrorr
+merged
+authors
+commentr
+        r
+z:Parse CLI ``--worker profile:title[:skill,skill]`` values.c
+z$parse_worker_arg.<locals>.<listcomp>
+z9worker must be profile:title or profile:title:skill,skill
+z$parse_worker_arg.<locals>.<listcomp>
+splitrh
+partsr
+parse_worker_argr
+__future__r
+dataclassesr
+sqlite3
+typingr
+hermes_clir
+<module>r

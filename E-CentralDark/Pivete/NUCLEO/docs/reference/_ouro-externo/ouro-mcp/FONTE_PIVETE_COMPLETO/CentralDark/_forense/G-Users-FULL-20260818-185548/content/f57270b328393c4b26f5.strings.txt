@@ -1,0 +1,170 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\agent\__pycache__\verification_stop.cpython-311.pyc
+
+Turn-end verification guard for coding edits.
+This module is intentionally policy-only. It never runs checks itself; it turns
+the passive verification ledger into a bounded follow-up when the model tries to
+finish immediately after editing code without fresh evidence.
+annotationsN)
+Iterable
+.asciidoc
+.markdown>
+notice
+authors
+licence
+license
+changelog
+codeowners
+contributors
+return
+zNReturn True when a changed path is documentation/prose with nothing to verify.FT)
+Exception
+suffix
+_NON_CODE_VERIFY_EXTENSIONS
+_NON_CODE_VERIFY_FILENAMES)
+KC:\Users\danda\AppData\Local\hermes\hermes-agent\agent\verification_stop.py
+_is_non_code_pathr(
+Iterable[str]
+list[str]c
+zODrop documentation/prose paths; keep paths that could have verifiable behavior.c
+<listcomp>z,_filter_verifiable_paths.<locals>.<listcomp>H
+_filter_verifiable_pathsr3
+Whether this turn is delivered over a human messaging channel.
+    Verify-on-stop defaults ON for the interactive coding surfaces and
+    programmatic callers, and OFF on a conversational platform (Telegram,
+    Discord, Slack, ...) where the verification narrative reaches a human as
+    chat noise. The surface classification itself is shared with the other
+    consumers of this distinction 
+    ``gateway.session_context.session_is_messaging_surface``.
+session_is_messaging_surfaceF)
+gateway.session_contextr6
+_session_is_messaging_surfacer8
+config
+dict[str, Any] | Nonec
+Return whether edit -> verify-before-finish behavior is enabled.
+    Precedence: an explicit ``HERMES_VERIFY_ON_STOP`` env var wins, then an
+    explicit ``agent.verify_on_stop`` config value. The default is ``False``
+    (opt-in 
+ see ``DEFAULT_CONFIG``): the v31/v32 migrations already turn
+    the behavior off for existing installs, so fresh installs match. An
+    explicit bool forces the behavior in either direction, and the ``"auto"``
+    sentinel opts into the legacy surface-aware behavior: ON for interactive
+    coding surfaces (CLI, TUI, desktop) and programmatic callers, OFF for
+    conversational messaging surfaces (Telegram, Discord, etc.) where the
+    verification narrative would reach a human as chat noise. A missing or
+    unrecognized value falls back to OFF.
+HERMES_VERIFY_ON_STOPN>
+falser
+load_config_readonly
+verify_on_stop>
+trueTF
+environ
+stripr"
+hermes_cli.configrA
+isinstance
+agent_cfg
+cfg_val
+tokens
+      r'
+verify_on_stop_enabledrT
+list[Path]c
+expanduser
+is_dir
+parentr
+resolver 
+append)
+candidates
+candidate
+resolveds
+       r'
+_candidate_cwdsrd
+session_id
+str | None
+changed_paths
+,tuple[dict[str, Any], dict[str, Any]] | Nonec
+zHReturn ``(status, facts)`` for the first edited workspace needing proof.r
+project_facts_for)
+verification_statusN)
+status
+unverified
+passed)
+agent.coding_contextrj
+agent.verification_evidencerk
+first_snapshotrl
+factsrm
+snapshots
+         r'
+_verification_snapshotru
+z)_format_changed_paths.<locals>.<listcomp>
+- ... and z
+_MAX_CHANGED_PATHS_IN_NUDGE
+remainings
+    r'
+_format_changed_pathsr
+Whether the workspace has a runtime verify recipe ``hermes verify`` can run.
+    True when a saved ``.hermes/environment.json`` manifest exists, or when
+    cheap static detection (:func:`agent.verify.recipes.detect_recipe`) finds a
+    recipe with a start command. Deliberately fail-silent and cheap 
+ this only
+    decorates the nudge text; it must never break or slow the nudge path.
+    Fr
+manifest_pathT)
+detect_recipeN)
+agent.verify.environmentr
+is_file
+agent.verify.recipesr
+startr 
+root_pathr
+recipes
+     r'
+_workspace_has_runnable_reciper
+dict[str, Any]c
+evidence
+canonical_command
+command
+output_summary
+last command `rx
+... [truncated]z
+last output:
+rstripr|
+stater
+summary
+max_summarys
+       r'
+_status_detailr
+attempts
+max_attemptsr
+zGReturn a synthetic follow-up when edited code lacks fresh verification.c
+<setcomp>z-build_verify_on_stop_nudge.<locals>.<setcomp>
+z.build_verify_on_stop_nudge.<locals>.<listcomp>
+verifyCommandsrm
+coding_verify_guidancez
+z+Run the relevant verification command now (z
+<genexpr>z-build_verify_on_stop_nudge.<locals>.<genexpr>
+, ...z@), read any failure, repair the code, and summarize what passed.r
+ For a full check including a runtime boot (build + test + start + readiness), prefer `hermes verify --json` 
+ a passing run records verification evidence for this workspace.a4
+No canonical test/lint/build command was detected, but the project has a runnable verification recipe. Run `hermes verify --json` (detect -> build -> test -> boot -> readiness poll); a passing run records verification evidence for this workspace. Read any failure, repair the code, and summarize what passed.ziNo canonical test/lint/build command was detected. Create a focused temporary verification script under `z
+` using an OS-safe `tempfile` path with a `hermes-verify-` filename prefix, run it against the changed behavior, clean it up when possible, and summarize it explicitly as ad-hoc verification rather than suite green.z
+[System: You edited code in this turn, but the workspace does not have fresh passing verification evidence yet.
+Verification status: z
+Changed paths:
+zn If verification is not possible, explain the concrete blocker instead of claiming the work is fully verified.
+sortedr3
+agent.verify_hooksr
+realpath
+tempfile
+gettempdirr
+verify_commandsr
+guidance
+addendum
+command_instruction
+temp_dirs
+               r'
+build_verify_on_stop_nudger
+__doc__
+__future__r
+pathlibr
+typingr
+frozensetr#
+__all__r.
+<module>r

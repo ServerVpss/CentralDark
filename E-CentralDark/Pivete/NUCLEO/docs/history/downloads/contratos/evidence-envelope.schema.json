@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "centraldark://contracts/evidence-envelope",
+  "title": "CentralDark Evidence Envelope",
+  "type": "object",
+  "required": [
+    "evidence_id",
+    "source_id",
+    "claim",
+    "class",
+    "content_hash",
+    "observed_at"
+  ],
+  "properties": {
+    "evidence_id": {
+      "type": "string"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "target": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "operational_scope": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "event_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "observed_at": {
+      "type": "string"
+    },
+    "provenance": {
+      "type": "string"
+    },
+    "claim": {
+      "type": "string"
+    },
+    "class": {
+      "enum": [
+        "FACT",
+        "INFERENCE",
+        "HYPOTHESIS",
+        "UNKNOWN"
+      ]
+    },
+    "content_hash": {
+      "type": "string"
+    },
+    "previous_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "current_state": {
+      "enum": [
+        "CURRENT",
+        "HISTORICAL_REFERENCE",
+        "UNKNOWN_UNTIL_REMEASURED"
+      ]
+    },
+    "counterexample": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sensitivity": {
+      "enum": [
+        "NORMAL",
+        "SENSITIVE_QUARANTINE"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

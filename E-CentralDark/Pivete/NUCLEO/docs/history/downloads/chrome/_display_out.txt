@@ -1,0 +1,246 @@
+﻿=== DISPLAY CHECK 2026-08-22T05:49:06.1607275-03:00 ===
+
+=== MONITORS / GPU ===
+GPU=Radeon RX 580 Series Driver=31.0.21924.61 Res=1920x1080 Refresh=119 Status=OK AdapterRAM=4293918720 Availability=3
+MON=Monitor Genérico PnP Pixels=x Status=OK
+
+=== DISPLAY CONFIG (CCD) ===
+SM_CXSCREEN=1080 SM_CYSCREEN=1920 SM_CMONITORS=4 SM_CXVIRTUALSCREEN=4920 SM_CYVIRTUALSCREEN=2862
+
+=== SCALE / DPI ===
+LogPixels= Win8DpiScaling=0 DesktopDPIOverride=
+PerMon AOC2402ATNM4XA002193_11_07E6_A7^B33389B43BD5631EAEBF02DC280C7652
+
+
+DpiValue     : 0
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\Control 
+               Panel\Desktop\PerMonitorSettings\AOC2402ATNM4XA002193_11_07E6_A7^B33389B43BD5631EAEBF02DC280C7652
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\Control Panel\Desktop\PerMonitorSettings
+PSChildName  : AOC2402ATNM4XA002193_11_07E6_A7^B33389B43BD5631EAEBF02DC280C7652
+PSProvider   : Microsoft.PowerShell.Core\Registry
+PerMon AOC2402ATNMBXA002919_2D_07E6_9E^448D985B6142BD3F74E4E2F5926C102E
+
+
+DpiValue     : 0
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\Control 
+               Panel\Desktop\PerMonitorSettings\AOC2402ATNMBXA002919_2D_07E6_9E^448D985B6142BD3F74E4E2F5926C102E
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\Control Panel\Desktop\PerMonitorSettings
+PSChildName  : AOC2402ATNMBXA002919_2D_07E6_9E^448D985B6142BD3F74E4E2F5926C102E
+PSProvider   : Microsoft.PowerShell.Core\Registry
+PerMon AOC2402ATNMBXA002919_2D_07E6_E4^EC965AAD759BF8E96982097007B9D8E9
+
+
+DpiValue     : 0
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\Control 
+               Panel\Desktop\PerMonitorSettings\AOC2402ATNMBXA002919_2D_07E6_E4^EC965AAD759BF8E96982097007B9D8E9
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\Control Panel\Desktop\PerMonitorSettings
+PSChildName  : AOC2402ATNMBXA002919_2D_07E6_E4^EC965AAD759BF8E96982097007B9D8E9
+PSProvider   : Microsoft.PowerShell.Core\Registry
+PerMon CL@0C5E0_10_07E0_0D^B471350E56A470F5ED21505589B2EF24
+
+
+DpiValue     : 4294967294
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\Control 
+               Panel\Desktop\PerMonitorSettings\CL@0C5E0_10_07E0_0D^B471350E56A470F5ED21505589B2EF24
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\Control Panel\Desktop\PerMonitorSettings
+PSChildName  : CL@0C5E0_10_07E0_0D^B471350E56A470F5ED21505589B2EF24
+PSProvider   : Microsoft.PowerShell.Core\Registry
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\AOC2402468_23_07E6_DE^24F78AE71E914089454A1D1C59C6BF0E
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\AOC2402ATNM4XA002193_11_07E6_A7^B33389B43BD5631EAEBF02DC280C7652
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\AOC2402ATNMBXA002919_2D_07E6_E4^EC965AAD759BF8E96982097007B9D8E9
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\CL@0C5E0_10_07E0_0D^B471350E56A470F5ED21505589B2EF24
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\DEL41F14JD4DQ3_12_07E7_4D^12249E6EA42AEB2186E9D250E6E40361
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\DEL41F24JD4DQ3_12_07E7_4C^D9C84779455A37762D99A03C82BBFBF8
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\GSM5B5416843009_01_07E0_7C^F2F75C2D8AE3195C05C819736CBF6409
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MSNILAOC2402ATNMBXA002919_2D_07E6_E4_1414_008D_FFFFFFFF_FFFFFFFF_0^D1ECC3A58D606B3448B4F437C7B6BA07
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MSNILNOEDID_1414_008D_FFFFFFFF_FFFFFFFF_0^030B4FCE00727AC1593E5B6FD18648D6
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\NOEDID_1002_67DF_00000001_00000000_104^57FDA09A0C89866FC817ED8CD644059F
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\SAM701616780800_01_07E4_26^D4D062096BB0A39AF272E58FFAF3E69C
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\SAM701716780800_01_07E4_59^D297EAFDBEE7AF5A8A6054155E01C0F9
+
+
+Win8DpiScaling      : 0
+UserPreferencesMask : {144, 18, 7, 128...}
+PSPath              : Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\Control Panel\Desktop
+PSParentPath        : Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\Control Panel
+PSChildName         : Desktop
+PSDrive             : HKCU
+PSProvider          : Microsoft.PowerShell.Core\Registry
+
+=== HDR / ADVANCED COLOR ===
+-- HKLM:\SYSTEM\CurrentControlSet\Control\GraphicsDrivers --
+
+
+PlatformSupportMiracast        : 1
+DxgKrnlVersion                 : 69639
+MinDxgKrnlVersion              : 20499
+UnsupportedMonitorModesAllowed : 1
+PSPath                         : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Contro
+                                 l\GraphicsDrivers
+PSParentPath                   : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Contro
+                                 l
+PSChildName                    : GraphicsDrivers
+PSDrive                        : HKLM
+PSProvider                     : Microsoft.PowerShell.Core\Registry
+-- HKCU:\Software\Microsoft\Windows\CurrentVersion\VideoSettings --
+missing
+-- HKCU:\Software\Microsoft\Windows\DWM --
+
+
+Composition                  : 1
+ColorPrevalence              : 1
+ColorizationColor            : 3288365268
+ColorizationGlassAttribute   : 1
+AccentColor                  : 4292114432
+EnableAeroPeek               : 1
+ColorizationColorBalance     : 89
+ColorizationAfterglow        : 3288365268
+ColorizationAfterglowBalance : 10
+ColorizationBlurBalance      : 1
+EnableWindowColorization     : 1
+PSPath                       : Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM
+PSParentPath                 : Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows
+PSChildName                  : DWM
+PSDrive                      : HKCU
+PSProvider                   : Microsoft.PowerShell.Core\Registry
+
+=== COLOR FILTERS / MAGNIFIER / NIGHT LIGHT ===
+ColorFiltering Active= FilterType= Hotkey=0
+Magnifier Magnification=100 Invert=0 RunningState=0 ZoomIncrement=10 MagnificationMode=
+NightLight blob present=True
+NLKEY default$windows.data.bluelightreduction.bluelightreductionstate
+NLKEY default$windows.data.bluelightreduction.settings
+NLKEY {25a6f366-a3a5-425b-9be8-a629e80b32a8}$windows.data.bluelightreduction.bluelightreductionstateperdevice
+NLKEY {25a6f366-a3a5-425b-9be8-a629e80b32a8}$windows.data.bluelightreduction.settingsperdevice
+
+=== ICC / COLOR MANAGEMENT ===
+HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM\ProfileAssociations
+HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM\ProfileAssociations\Display
+HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM\ProfileAssociations\Display\{4d36e96e-e325-11ce-bfc1-08002be10318}
+HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM\ProfileAssociations\Display\{4d36e96e-e325-11ce-bfc1-08002be10318}\0000
+HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM\ProfileAssociations\Display\{4d36e96e-e325-11ce-bfc1-08002be10318}\0001
+HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM\ProfileAssociations\Display\{4d36e96e-e325-11ce-bfc1-08002be10318}\0002
+HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM\ProfileAssociations\Display\{4d36e96e-e325-11ce-bfc1-08002be10318}\0003
+HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM\ProfileAssociations\Display\{4d36e96e-e325-11ce-bfc1-08002be10318}\0004
+HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM\ProfileAssociations\Print
+HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM\ProfileAssociations\Print\Microsoft Print to PDF
+HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM\RegisteredProfiles
+
+=== GAMMA / CALIBRATION (GDI) ===
+GdiIcm=
+COLORFILE 30/07/2024 09:37:16 ACER_S271HL.icm
+COLORFILE 11/08/2026 11:54:30 CalibratedDisplayProfile-0.icc
+COLORFILE 01/04/2024 04:22:33 RSWOP.icm
+COLORFILE 01/04/2024 04:22:09 sRGB Color Space Profile.icm
+
+=== PROCESSES THAT TINT / SHARPEN / HDR ===
+PID=9512 NAME=CCleaner_service.exe PATH=
+PID=4888 NAME=CCleaner.exe PATH=
+PID=6064 NAME=bdvpnapp.exe PATH=C:\Program Files\Bitdefender\Bitdefender VPN\bdvpnapp.exe
+PID=7636 NAME=Lightshot.exe PATH=C:\Program Files (x86)\Skillbrains\lightshot\5.5.0.7\Lightshot.exe
+PROC amdfendrsr pid=3752 ws=34MB
+PROC dwm pid=13476 ws=217MB
+
+=== AMD / RADEON KEYS ===
+-- HKLM:\SOFTWARE\AMD --
+-- HKCU:\SOFTWARE\AMD --
+-- HKLM:\SOFTWARE\ATI --
+-- HKCU:\SOFTWARE\AMD\CN --
+-- HKLM:\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000 --
+  AutoColorDepthReduction_NA=1
+  color_enhancement_runtime_component_na=false
+  color_mapping_runtime_component_NA=false
+  ColorVibrance_NA=0
+  ColourDesktopContrast_DEF=1.0 1.0 1.0
+  ColourDesktopGamma_DEF=1.0 1.0 1.0
+  ColourFullscreenContrast_DEF=1.0 1.0 1.0
+  ColourFullscreenGamma_DEF=1.0 1.0 1.0
+  DalAllowAutoVSROnEmbeddedDisplay=1
+  DALGameGammaScale=6579300
+  displaycolor_runtime_component_na=false
+  DynamicContrast_NA=0
+  EnableUlps=1
+  EnableUlps_NA=1
+  freesync_runtime_component_na=false
+  Gamma_NA=1
+  imagesharpening_runtime_component_na=false
+  IntegerScalingPerAppSupport=1
+  StaticGamma_NA=0
+ADAPTER 0000 DriverDesc=Radeon RX 580 Series
+  10BitPixelFormat_NA=0
+  3D_Refresh_Rate_Override_DEF=0
+  3to2Pulldown_NA=0
+  575236dd-2453-4518-87eb-7052389c57e1=1
+  6CD6F123-9AE3-4A7D-A182-D90051B6B327=1
+  AAF_NA=0
+  ACE=System.Byte[]
+  Adaptive De-interlacing=1
+  ADL_CDVL=21.09
+  AdvancedMetrics_NA=false
+  AllowRSOverlay=true
+  AllowSkins=true
+  AllowSnapshot=1
+  AllowSubscription=1
+  AMDKMPFD=C:\Windows\System32\AMD\AMDKMPFD
+  AntiAlias_NA=0
+  AreaAniso_NA=1
+  AsicOnLowPower=0
+  ASTT_NA=1
+  audio_ui_component_NA=false
+  AutoColorDepthReduction_NA=1
+  AutoTuneRequest_NA=1
+  b006b667-ca3d-411c-b5f3-9ee727a32ae8=0
+  BD0A7F9820E8B4EFFD3C=System.Byte[]
+  BD0CAC9820E25DEFFD10=System.Byte[]
+  BD1A7F9820E8B4EFFD38=System.Byte[]
+  BD1A7F9820E8B4EFFD3C=System.Byte[]
+  BD1C699820E25DEFFD10=System.Byte[]
+  BD1C699820E25DEFFD18=System.Byte[]
+  BD1C6C9820E25DEFFD10=System.Byte[]
+  BD1C6C9820E25DEFFD18=System.Byte[]
+  BD1C789820E25DEFFD10=System.Byte[]
+  BD1C789820E25DEFFD18=System.Byte[]
+  BD1C999820E25DEFFD10=System.Byte[]
+  BD1C999820E25DEFFD18=System.Byte[]
+  BD1CAB9820E8B4EFFD38=System.Byte[]
+  BD1CAC9820E25DEFFD10=System.Byte[]
+  BD1CAC9820E25DEFFD18=System.Byte[]
+  BD1CBC9820E25DEFFD10=System.Byte[]
+  BD3A7F9820E97DEFFD18=System.Byte[]
+
+=== WINDOWS GRAPHICS SETTINGS HDR ===
+
+
+C:\Program Files (x86)\ASUS\ArmouryDevice\asus_framework.exe                               : GpuPreference=1;
+C:\Program Files\ldplayer9box\Ld9BoxHeadless.exe                                           : SwapEffectUpgradeEnable=0;
+                                                                                             GpuPreference=2;
+D:\LDPlayer\LDPlayer9\dnplayer.exe                                                         : GpuPreference=2;
+C:\Users\danda\AppData\Local\Programs\Loom\resources\binaries\loom-recorder-production.exe : GpuPreference=1;
+C:\Program Files\BlueStacks_nxt\HD-Player.exe                                              : GpuPreference=2;
+C:\Program Files\BlueStacks_nxt\HD-GLCheck.exe                                             : GpuPreference=2;
+C:\Program Files (x86)\K-Lite Codec Pack\MPC-HC64\mpc-hc64.exe                             : GpuPreference=0;
+GraphicsFeaturesNotificationConfig                                                         : 1
+D:\Games\Lens Island\Len's Island.exe                                                      : AppStatus=4;
+C:\Users\danda\Downloads\Len's Island\Len's Island.exe                                     : AppStatus=4;
+DirectXUserGlobalSettings                                                                  : SwapEffectUpgradeEnable=0;
+                                                                                             VRROptimizeEnable=0;
+PSPath                                                                                     : Microsoft.PowerShell.Core\
+                                                                                             Registry::HKEY_CURRENT_USE
+                                                                                             R\Software\Microsoft\Direc
+                                                                                             tX\UserGpuPreferences
+PSParentPath                                                                               : Microsoft.PowerShell.Core\
+                                                                                             Registry::HKEY_CURRENT_USE
+                                                                                             R\Software\Microsoft\Direc
+                                                                                             tX
+PSChildName                                                                                : UserGpuPreferences
+PSDrive                                                                                    : HKCU
+PSProvider                                                                                 : Microsoft.PowerShell.Core\
+                                                                                             Registry
+
+=== DWM / FORCE EFFECT ===
+EnableAeroPeek=1 ColorPrevalence=1 AccentColor=4292114432 EnableWindowColorization=1
+AppsUseLightTheme=0 SystemUsesLightTheme=0 EnableTransparency=0
+
+=== DISPLAY CALIBRATION TASK / GAMMA RAMP ===
+TASK \Microsoft\Windows\WindowsColorSystem\Calibration Loader State=Disabled
+DONE

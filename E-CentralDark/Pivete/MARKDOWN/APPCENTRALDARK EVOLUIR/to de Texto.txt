@@ -1,0 +1,293 @@
+Sim. **Agora você achou a camada que estava faltando.** 🔥😎
+
+Mas a função correta do CodeRabbit é esta:
+
+```text
+CodeRabbit = CARTÓGRAFO + PLANNER + REVISOR + MEMÓRIA DE PREFERÊNCIAS
+SOL/Hermes = ORQUESTRADOR
+Sonnet/Codex = WRITERS
+Meta Lupa/Judge = CONTRAPROVA
+CHEFE = DECISÃO FINAL
+```
+
+Ele não substitui o Hermes, mas pode **tirar uma carga enorme de leitura, mapeamento e planejamento dos modelos pagos**.
+
+## A lacuna atual
+
+O `.coderabbit.yaml` que colocamos no PR `#585` está forte para **review**, mas ainda não ativa a parte pesada de planejamento:
+
+* revisão assertiva;
+* revisão de drafts;
+* instruções por caminhos;
+* chat automático.
+
+Ele ainda não configura explicitamente:
+
+* CodeRabbit Plan por issues;
+* planejamento automático por labels;
+* memória restrita ao CentralDark;
+* contexto de issues e PRs anteriores;
+* MCPs como fonte de conhecimento.
+
+O PR `#585` continua sendo o lugar correto para configurar essa governança, pois permanece aberto como draft e restrito a documentação, regras e configuração dos revisores.
+
+## Um detalhe muito importante da tela que você mostrou
+
+Como já existe um `.coderabbit.yaml` no repositório, **ele tem prioridade sobre várias configurações feitas na interface web**. As configurações não são necessariamente combinadas; sem herança habilitada, o arquivo do repositório pode fazer opções da tela serem ignoradas. ([CodeRabbit][1])
+
+Portanto, não adianta ligar cinquenta botões na interface e deixar o YAML incompleto.
+
+A fonte canônica deve continuar sendo:
+
+```text
+ServerVpss/CentralDark/.coderabbit.yaml
+```
+
+## Arquitetura certa para o comando-mãe
+
+Não devemos colocar todo o plano operacional dentro do PR `#585`.
+
+O desenho correto é:
+
+```text
+PR #585
+└── configura a inteligência e as regras do CodeRabbit
+
+GitHub Issue canônica
+└── CENTRALDARK-UNIFICACAO-OPERACIONAL-TOTAL-01
+    ├── comando-mãe
+    ├── estado GitHub
+    ├── captura sanitizada da VPS
+    ├── estado da Casa
+    ├── PRs e branches existentes
+    ├── proibições V2/V3
+    └── critérios de conclusão
+
+CodeRabbit Plan
+└── pesquisa o repositório
+    ├── encontra arquivos e componentes reais
+    ├── cruza issues e PRs anteriores
+    ├── detecta duplicações
+    ├── cria matriz de ownership
+    ├── divide trilhas e dependências
+    └── gera prompts prontos para os writers
+
+Sonnet/Codex
+└── executam cada escopo isolado
+
+CodeRabbit + Meta Lupa + Judge
+└── revisam o mesmo HEAD
+```
+
+O CodeRabbit Plan foi feito justamente para gerar planos fundamentados no código real, incluindo pesquisa, tarefas e prompts prontos para agentes. A própria documentação afirma que isso permite usar modelos mais rápidos e baratos na execução, porque o trabalho pesado de entendimento já foi feito. ([CodeRabbit][2])
+
+## Configuração que falta no `#585`
+
+O delta correto é semelhante a este:
+
+```yaml
+knowledge_base:
+  learnings:
+    scope: "local"
+
+  issues:
+    scope: "local"
+
+  pull_requests:
+    scope: "local"
+
+  code_guidelines:
+    enabled: true
+
+  web_search:
+    enabled: true
+
+  mcp:
+    usage: "enabled"
+
+issue_enrichment:
+  planning:
+    enabled: true
+    auto_planning:
+      enabled: true
+      labels:
+        - "plan-me"
+        - "!no-plan"
+        - "!blocked"
+```
+
+Isso faria:
+
+```text
+label plan-me
+→ CodeRabbit lê a issue
+→ mapeia o CentralDark
+→ gera o plano
+→ publica o plano na própria issue
+→ permite refinamento por conversa
+→ entrega prompts aos agentes
+```
+
+O planejamento automático por labels é oficialmente suportado em issues do GitHub e pode ser configurado pelo `.coderabbit.yaml`. ([CodeRabbit][3])
+
+## Memória: sim, mas não é a mesma memória do Hermes
+
+As telas representam três coisas diferentes:
+
+### `Learnings`
+
+É a memória de preferências de revisão:
+
+```text
+“não criar V2/V3”
+“não transformar UNKNOWN em PASS”
+“um writer por escopo”
+“não ampliar PR fora do objetivo”
+```
+
+CodeRabbit cria learnings a partir das conversas e aplica as preferências em revisões futuras. Elas podem ser limitadas somente ao repositório com `scope: local`. ([CodeRabbit][4])
+
+Mas regras formais como `AGENTS.md`, `CLAUDE.md` e `GEMINI.md` **não precisam ser copiadas para Learnings**. O CodeRabbit já detecta esses arquivos automaticamente como guidelines. ([CodeRabbit][5])
+
+Seu painel está com zero learnings porque ainda não foi criada uma memória persistente por interação apropriada.
+
+### `Caches`
+
+Seus dois caches do CentralDark já estão prontos, conforme a imagem.
+
+Eles servem para:
+
+```text
+evitar preparar o repositório do zero
+reutilizar dependências
+acelerar futuras revisões
+```
+
+Mas não são memória da missão. Os caches expiram em no máximo sete dias e existem apenas para acelerar reviews. ([CodeRabbit][6])
+
+### `Knowledge Base`
+
+Essa é a camada mais próxima do “mini-Hermes”:
+
+* learnings;
+* guidelines;
+* issues;
+* PRs anteriores;
+* documentação externa;
+* web;
+* repositórios relacionados;
+* MCPs.
+
+([CodeRabbit][7])
+
+## MCP: aqui existe potencial bruto
+
+O seu Pro Plus suporta até **15 conexões MCP**. CodeRabbit pode usar essas fontes automaticamente durante reviews e chats. ([CodeRabbit][8])
+
+Para seu cenário, faria sentido futuramente ligar:
+
+```text
+Context7
+→ documentação atual de bibliotecas
+
+Sentry
+→ erros reais e regressões
+
+DeepWiki ou Notion
+→ documentação e decisões canônicas
+
+MCP CentralDark próprio, read-only
+→ estado sanitizado da VPS
+→ inventário PM2/Docker
+→ status dos serviços
+→ receipts e hashes
+```
+
+Mas existe uma fronteira importante:
+
+> CodeRabbit não consegue enxergar sua Casa ou a VPS viva apenas porque está conectado ao GitHub.
+
+Para cruzar Casa + VPS + GitHub, você precisa fornecer:
+
+```text
+captura sanitizada anexada à issue
+OU
+MCP CentralDark read-only
+OU
+arquivos de evidência versionados
+```
+
+MCP funciona como fonte de contexto: o CodeRabbit atua como cliente e consulta apenas as ferramentas que você conectar. ([CodeRabbit][8])
+
+## E a API que você mostrou?
+
+**Não usaria a API agora para o planejamento.**
+
+Seu plano Pro Plus já inclui:
+
+* CodeRabbit Plan;
+* issue planning;
+* geração de testes;
+* resolução de conflitos;
+* ações antes e depois do merge. ([CodeRabbit][9])
+
+A documentação coloca o acesso geral à API como recurso Enterprise. Há endpoints documentados para casos específicos, como relatórios legados, mas isso não significa que existe uma API Pro Plus completa para controlar o Plan como orquestrador. ([CodeRabbit][9])
+
+Logo:
+
+```text
+USAR API AGORA
+= mais código
++ mais autenticação
++ mais manutenção
++ possível limitação de plano
+
+USAR PLAN + GITHUB ISSUE
+= já incluído
++ menos integração
++ contexto do repo pronto
++ cache existente
++ menos tokens no Claude/Codex
+```
+
+## Veredito
+
+```text
+USAR CODERABBIT PLAN=SIM
+USAR LEARNINGS LOCAL=SIM
+USAR ISSUES/PRS COMO KNOWLEDGE BASE=SIM
+USAR CACHES=SIM
+USAR MCP CONFIÁVEL READ-ONLY=SIM, DEPOIS
+USAR API PARA ORQUESTRAR PLAN=NÃO AGORA
+TRANSFORMAR CODERABBIT EM WRITER CENTRAL=NÃO
+USAR PR #585 PARA CONFIGURÁ-LO=SIM
+USAR ISSUE CANÔNICA PARA O COMANDO-MÃE=SIM
+```
+
+A tacada eficiente é:
+
+```text
+1. ampliar o .coderabbit.yaml dentro do #585;
+2. criar a issue CENTRALDARK-UNIFICACAO-OPERACIONAL-TOTAL-01;
+3. anexar o comando-mãe corrigido e as capturas sanitizadas;
+4. aplicar label plan-me;
+5. chamar @coderabbitai plan;
+6. obrigá-lo a mapear o código antes de propor qualquer arquivo novo;
+7. entregar os prompts resultantes aos writers separados.
+```
+
+A ordem exata para executar isso sem merge nem mutação de VPS é:
+
+```text
+APLICA RABBIT PLAN NO #585
+```
+
+[1]: https://docs.coderabbit.ai/guides/configuration-overview?utm_source=chatgpt.com "CodeRabbit Documentation - AI code reviews on pull requests, IDE, and CLI"
+[2]: https://docs.coderabbit.ai/plan?utm_source=chatgpt.com "CodeRabbit Documentation - AI code reviews on pull requests, IDE, and CLI"
+[3]: https://docs.coderabbit.ai/issues/planner/github "CodeRabbit Documentation - AI code reviews on pull requests, IDE, and CLI"
+[4]: https://docs.coderabbit.ai/knowledge-base/learnings "CodeRabbit Documentation - AI code reviews on pull requests, IDE, and CLI"
+[5]: https://docs.coderabbit.ai/knowledge-base/code-guidelines?utm_source=chatgpt.com "CodeRabbit Documentation - AI code reviews on pull requests, IDE, and CLI"
+[6]: https://docs.coderabbit.ai/reference/caching?utm_source=chatgpt.com "CodeRabbit Documentation - AI code reviews on pull requests, IDE, and CLI"
+[7]: https://docs.coderabbit.ai/knowledge-base?utm_source=chatgpt.com "CodeRabbit Documentation - AI code reviews on pull requests, IDE, and CLI"
+[8]: https://docs.coderabbit.ai/knowledge-base/mcp-context?utm_source=chatgpt.com "CodeRabbit Documentation - AI code reviews on pull requests, IDE, and CLI"
+[9]: https://docs.coderabbit.ai/management/plans?utm_source=chatgpt.com "CodeRabbit Documentation - AI code reviews on pull requests, IDE, and CLI"

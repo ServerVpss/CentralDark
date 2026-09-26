@@ -1,0 +1,19 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@asamuzakjp\css-color\dist\esm\js\common.js
+
+//#region src/js/common.ts
+/**
+* is string
+* @param o - object to check
+* @returns result
+*/
+var isString = (o) => typeof o === "string" || o instanceof String;
+/**
+* is string or number
+* @param o - object to check
+* @returns result
+*/
+var isStringOrNumber = (o) => isString(o) || typeof o === "number";
+//#endregion
+export { isString, isStringOrNumber };
+
+//# sourceMappingURL=common.js.map

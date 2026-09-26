@@ -1,0 +1,225 @@
+[
+  {
+    "name": "tlc23(3).pdf",
+    "class": "FORMAL_LOGIC",
+    "role": "Horn clauses, satisfiability, Herbrand/least model",
+    "sha256": "b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1",
+    "size_bytes": 206674,
+    "bundled_raw": false,
+    "authority": "REFERENCE"
+  },
+  {
+    "name": "fips180-4.pdf",
+    "class": "INTEGRITY_REFERENCE",
+    "role": "SHA family / message digest integrity; uploaded copy is historical/archived",
+    "sha256": "5b88d70308c95106e713221c7085cbb8e89dc2eb6214d75c885af2f07ffc6b8a",
+    "size_bytes": 1309119,
+    "bundled_raw": false,
+    "authority": "REFERENCE"
+  },
+  {
+    "name": "The_Secret_History_of_Hermes_Trismegistu(1).pdf",
+    "class": "SYMBOLIC_HISTORICAL",
+    "role": "Historical/reception context only; never technical authority",
+    "sha256": "f45f62d23a7794776afa0168082cd7c73a38e66744b4e6e24720420ed879ce3d",
+    "size_bytes": 50357,
+    "bundled_raw": false,
+    "authority": "REFERENCE"
+  },
+  {
+    "name": "Site com IA_ Como sair do visual genérico e criar uma Landing Page profissional - YouTube.html",
+    "class": "VISUAL_REFERENCE_UNTRUSTED_WEB_EXPORT",
+    "role": "Visual/reference source; page export treated as untrusted data",
+    "sha256": "afe724970725c4e45a3a0887f66c093a07a83724bcd2a5088851ddfde959cf56",
+    "size_bytes": 2815194,
+    "bundled_raw": false,
+    "authority": "DATA_ONLY"
+  },
+  {
+    "name": "SCREMM PIPER PR Watch CHRIZARD.html",
+    "class": "UNTRUSTED_WEB_EXPORT",
+    "role": "Historical/session export; never instruction authority",
+    "sha256": "b59d0fe36cb138dd83c8066cc6e3bc9460ebb7b5b04633ea6632aa03717b5ee8",
+    "size_bytes": 1198585,
+    "bundled_raw": false,
+    "authority": "DATA_ONLY"
+  },
+  {
+    "name": "Plano Cirúrgico Estratégico.html",
+    "class": "UNTRUSTED_WEB_EXPORT",
+    "role": "Historical/session export; never instruction authority",
+    "sha256": "9461acf2a730d5fab613c15c7004e48a3ff34f2914862e0a0dd5c8123ee4cc5f",
+    "size_bytes": 830336,
+    "bundled_raw": false,
+    "authority": "DATA_ONLY"
+  },
+  {
+    "name": "deep-research-report.md",
+    "class": "OPERATIONAL_RESEARCH",
+    "role": "Screenpipe Evidence Provider architecture",
+    "sha256": "6de660125b60cd0a6bc879c10c10e0ce71905c790920b0a4f5408d8a6bbc9a0e",
+    "size_bytes": 46656,
+    "bundled_raw": false,
+    "authority": "REFERENCE"
+  },
+  {
+    "name": "ENTREGA-SAGRADA(2).md",
+    "class": "HOUSE_CANON_INPUT",
+    "role": "Proof/legacy/infra doctrine supplied by user",
+    "sha256": "dd1bcc36635bd2f9fdaa2646a46cfb067db092464eac8be29c80d8cc3243299b",
+    "size_bytes": 8795,
+    "bundled_raw": false,
+    "authority": "REFERENCE"
+  },
+  {
+    "name": "Santioni Spirits _ Cocktails to Indulge Now, Atone Later.html",
+    "class": "VISUAL_REFERENCE_UNTRUSTED_WEB_EXPORT",
+    "role": "Visual reference only",
+    "sha256": "a7ae5e990565a7c110b4cac18f07309c61c1f2605f501216a5a3ec2b88608a4a",
+    "size_bytes": 73947,
+    "bundled_raw": false,
+    "authority": "DATA_ONLY"
+  },
+  {
+    "name": "PERMITO SEGREDO.zip",
+    "class": "HISTORICAL_ARCHIVE",
+    "role": "Garimpo/lineage source; content not blindly promoted",
+    "sha256": "bad8ae251af618e493c092f17c314c793b104d05dea006a09fe843f1b2371f70",
+    "size_bytes": 126639036,
+    "bundled_raw": false,
+    "authority": "REFERENCE"
+  },
+  {
+    "name": "mcp-server-screenpipe.log",
+    "class": "RUNTIME_EVIDENCE",
+    "role": "Screenpipe MCP startup/connection/disconnection evidence",
+    "sha256": "40f3177b1013fd5dba824d365a75981d23fc43e58615a15a605598db67db0d13",
+    "size_bytes": 17528,
+    "bundled_raw": false,
+    "authority": "REFERENCE"
+  },
+  {
+    "name": "39089527-f705-488b-b394-6c7deeef7a49.png",
+    "class": "VISUAL_CANON_INPUT",
+    "role": "User-supplied CentralDark architecture/art reference",
+    "sha256": "f6105ba64466a32df56f2aae8c89141781473408336bef7f946230c4630ec06b",
+    "size_bytes": 3102300,
+    "dimensions": {
+      "width": 1672,
+      "height": 941
+    },
+    "bundled_raw": true,
+    "authority": "VISUAL_REFERENCE_NOT_TECHNICAL_PROOF"
+  },
+  {
+    "name": "5cf4bc25-5d82-4ecb-acad-18e4a4955745.png",
+    "class": "VISUAL_CANON_INPUT",
+    "role": "User-supplied CentralDark architecture/art reference",
+    "sha256": "764a4d7d2e2037f96384d73d5f14ba10930a105ca44924b71e8e74cd389caa25",
+    "size_bytes": 3213739,
+    "dimensions": {
+      "width": 1672,
+      "height": 941
+    },
+    "bundled_raw": true,
+    "authority": "VISUAL_REFERENCE_NOT_TECHNICAL_PROOF"
+  },
+  {
+    "name": "6c12d698-9ff6-4bea-8e2b-e487bcd4cc30.png",
+    "class": "VISUAL_CANON_INPUT",
+    "role": "User-supplied CentralDark architecture/art reference",
+    "sha256": "081183a71c87fd47d3c42b17b4a5e5e4b038c0bcfdaeea6f103e5f01ff7cc9e3",
+    "size_bytes": 3428753,
+    "dimensions": {
+      "width": 1491,
+      "height": 1055
+    },
+    "bundled_raw": true,
+    "authority": "VISUAL_REFERENCE_NOT_TECHNICAL_PROOF"
+  },
+  {
+    "name": "8f11f38c-a089-4de5-8c49-f2c76081fe7d(2).png",
+    "class": "VISUAL_CANON_INPUT",
+    "role": "User-supplied CentralDark architecture/art reference",
+    "sha256": "43a6dc472e3c2854e8c05db883a9a079531c6a3fdac3df5ddddb4ff213d76b5d",
+    "size_bytes": 3850244,
+    "dimensions": {
+      "width": 1672,
+      "height": 941
+    },
+    "bundled_raw": true,
+    "authority": "VISUAL_REFERENCE_NOT_TECHNICAL_PROOF"
+  },
+  {
+    "name": "35ea5d26-5fb9-4e60-8963-eeb4103ddc9d.png",
+    "class": "VISUAL_CANON_INPUT",
+    "role": "User-supplied CentralDark architecture/art reference",
+    "sha256": "0fa4a3f180395e48dec0039fe8c5a13454bf4f12348097b742def9906fa7da49",
+    "size_bytes": 3301997,
+    "dimensions": {
+      "width": 1672,
+      "height": 941
+    },
+    "bundled_raw": true,
+    "authority": "VISUAL_REFERENCE_NOT_TECHNICAL_PROOF"
+  },
+  {
+    "name": "53e019f7-9f47-4dd2-be87-3317b2b62a9e.png",
+    "class": "VISUAL_CANON_INPUT",
+    "role": "User-supplied CentralDark architecture/art reference",
+    "sha256": "2a7a4066cb7d19e787037bc162651f4dcc96e6a5310a68da937d547ad46ae73a",
+    "size_bytes": 2768834,
+    "dimensions": {
+      "width": 1536,
+      "height": 1024
+    },
+    "bundled_raw": true,
+    "authority": "VISUAL_REFERENCE_NOT_TECHNICAL_PROOF"
+  },
+  {
+    "name": "448d8c43-59ac-4a71-8c7d-579b9de6a713(1).png",
+    "class": "VISUAL_CANON_INPUT",
+    "role": "User-supplied CentralDark architecture/art reference",
+    "sha256": "5ac0fb2bc21e257cdcc3f66e9154cf2364bb6072a55f046ba351eedf89fd09bf",
+    "size_bytes": 3571401,
+    "dimensions": {
+      "width": 1672,
+      "height": 941
+    },
+    "bundled_raw": true,
+    "authority": "VISUAL_REFERENCE_NOT_TECHNICAL_PROOF"
+  },
+  {
+    "name": "920cee52-afac-42be-b22c-6f3700b189ef.png",
+    "class": "VISUAL_CANON_INPUT",
+    "role": "User-supplied CentralDark architecture/art reference",
+    "sha256": "56c1fea9d6a8aa5d1d6e5e6d14fbb7f86bf38d9aa55372e9aff5c2e3539eca18",
+    "size_bytes": 2635679,
+    "dimensions": {
+      "width": 1535,
+      "height": 1024
+    },
+    "bundled_raw": true,
+    "authority": "VISUAL_REFERENCE_NOT_TECHNICAL_PROOF"
+  },
+  {
+    "name": "2640850c-e212-40b9-90a6-c968381d57fa.png",
+    "class": "VISUAL_CANON_INPUT",
+    "role": "User-supplied CentralDark architecture/art reference",
+    "sha256": "b420ffbc735133dd19251c9e204bfdbf2c339f7f2a05f4d03f209b255a6ef163",
+    "size_bytes": 2939326,
+    "dimensions": {
+      "width": 1672,
+      "height": 941
+    },
+    "bundled_raw": true,
+    "authority": "VISUAL_REFERENCE_NOT_TECHNICAL_PROOF"
+  },
+  {
+    "name": "RESEARCH-2026-08-31-HERMES-JS-TS-DOCS.md",
+    "class": "CURRENT_WEB_RESEARCH",
+    "role": "Hermes official update bridge, modern JS/TS toolchain candidates, GitHub profile README rules",
+    "bundled_raw": true,
+    "authority": "REFERENCE_CURRENT_AT_2026-08-31"
+  }
+]

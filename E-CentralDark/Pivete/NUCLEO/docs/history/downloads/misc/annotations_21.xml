@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <item name="androidx.core.view.accessibility.AccessibilityEventCompat int getContentChangeTypes(android.view.accessibility.AccessibilityEvent)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_CONTENT_DESCRIPTION, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_STATE_DESCRIPTION, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_SUBTREE, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_TEXT, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_UNDEFINED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_STARTED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_DROPPED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_CANCELLED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_CONTENT_INVALID, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_ERROR, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_ENABLED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.accessibility.AccessibilityEventCompat void setContentChangeTypes(android.view.accessibility.AccessibilityEvent, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_CONTENT_DESCRIPTION, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_STATE_DESCRIPTION, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_SUBTREE, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_TEXT, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_UNDEFINED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_STARTED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_DROPPED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_CANCELLED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_CONTENT_INVALID, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_ERROR, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_ENABLED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.accessibility.AccessibilityEventCompat.ContentChangeType">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_CONTENT_DESCRIPTION, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_STATE_DESCRIPTION, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_SUBTREE, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_TEXT, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_UNDEFINED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_STARTED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_DROPPED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_CANCELLED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_CONTENT_INVALID, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_ERROR, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_ENABLED}" />
+    </annotation>
+  </item>
+</root>
+

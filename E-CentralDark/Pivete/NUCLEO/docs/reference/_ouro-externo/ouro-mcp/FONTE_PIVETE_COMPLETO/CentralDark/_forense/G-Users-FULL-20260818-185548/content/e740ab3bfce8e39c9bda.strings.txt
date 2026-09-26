@@ -1,0 +1,209 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\agent\__pycache__\native_compaction.cpython-311.pyc
+
+d2d8d+
+Native OpenAI Responses server-side compaction 
+ gpt-5.6 on direct OpenAI routes only.
+OpenAI's Responses API supports server-side compaction: include
+``context_management=[{"type": "compaction", "compact_threshold": N}]`` in a
+``/v1/responses`` request and, when the rendered input crosses N tokens, the
+server summarizes older context into an opaque ``compaction`` output item
+(``encrypted_content``, sealed to the issuing endpoint). Replaying that item
+as an input item on later requests stands in for the pruned history, so the
+model keeps long-horizon recall without the client ever seeing a summary.
+Docs: https://developers.openai.com/api/docs/guides/compaction
+Hermes' support is deliberately narrow (live verification, Aug 2026):
+* **gpt-5.6 family only.** gpt-5.6 and its variants compact correctly.
+  Sending the field to gpt-5.1 / gpt-5.2 reliably fails server-side 
+  HTTP 500 on the blocking path and a permanent stall on the streaming
+  path (90s watchdog x 3 retries = a dead turn). There is no structured
+  "unsupported" rejection to downgrade on, so the only safe gate is an
+  explicit model-family check.
+* **Direct OpenAI routes only:** api.openai.com (API key) or the ChatGPT
+  Codex backend (subscription OAuth). Every other Responses surface
+  (xAI, GitHub/Copilot, relays, local servers) never sees the field 
+  most would 400 on the unknown parameter, and none can mint or decrypt
+  the compaction blob.
+Ownership model: Hermes' local compression stays fully armed as the
+fallback owner. The native threshold is clamped safely below the local
+compressor's trigger so the server compacts first; if it doesn't (native
+disabled mid-session, provider hiccup, non-eligible route), the local
+summarizer fires exactly as before. There is no new custody state 
+captured compaction items ride the existing ``codex_reasoning_items``
+sidecar, which already handles persistence (state.db), gateway session
+replay, cross-issuer stamping, and the encrypted-replay kill switch.
+This module is dependency-free on purpose so the transport, adapter, and
+conversation loop can share the gate without import cycles.
+annotations)
+Optional)
+urlspliti
+gpt-5.6
+Optional[str]
+return
+z-True when the model is in the gpt-5.6 family.
+_ELIGIBLE_MODEL_MARKER
+lower)
+KC:\Users\danda\AppData\Local\hermes\hermes-agent\agent\native_compaction.py
+is_native_compaction_modelr
+is_codex_backend
+base_urlr
+True for api.openai.com or the ChatGPT Codex backend 
+ nothing else.Tr
+api.openai.com)
+hostnamer
+ValueError)
+is_direct_openai_router
+configured_thresholdr
+local_trigger_tokens
+Clamp the configured native threshold below the local compressor trigger.
+    Without the clamp a native threshold above the local trigger would let the
+    local summarizer fire first every time, making native compaction dead
+    config. ``local_trigger_tokens`` is ``ContextCompressor.threshold_tokens``
+    when a compressor is attached, else None.
+TypeErrorr
+DEFAULT_COMPACT_THRESHOLD
+isinstancer
+LOCAL_TRIGGER_SAFETY_MARGIN
+configured
+uppers
+     r
+resolve_compact_thresholdr(
+is_xai_responses
+is_github_responses
+agentr)
+Optional[List[Dict[str, Any]]]c
+Return the ``context_management`` payload for this request, or None.
+    None means "do not send the field" 
+ the request is byte-identical to
+    pre-feature behavior. All gates are re-checked per request so a
+    mid-session model switch or the in-session kill switch
+    (``agent.codex_responses_native_compaction = False``, set by the
+    conversation loop's rejection recovery) takes effect on the next call.
+!codex_responses_native_compactionFN
+compression_enabledTr
+context_compressor
+!codex_responses_compact_threshold
+threshold_tokens
+compaction)
+compact_threshold)
+getattrr
+compressor
+thresholds
+      r
+$native_compaction_context_managementr9
+Cheap chars//4 token estimate 
+ same shape Codex uses for retention.
+_approx_tokensr@
+Dict[str, Any]c
+Extract the retained-budget text of a user-role input item.
+    Returns None when the item carries no measurable text (empty message).
+    Multimodal list content is measured by its ``input_text`` parts; images
+    count as zero, matching Codex's retention accounting.
+contentNr
+input_textr:
+<genexpr>z"_user_item_text.<locals>.<genexpr>
+_user_item_textrP
+List[Dict[str, Any]]
+retained_user_token_budgetc
+Restructure Responses input around the newest compaction checkpoint.
+    The server drops every input item that precedes a replayed ``compaction``
+    item (live-verified Aug 2026), so sending pre-checkpoint history is dead
+    weight AND silently erases the user's plaintext asks. When a checkpoint
+    is present, rebuild the wire as::
+        [checkpoint run] + [retained user messages (newest-first budget)] + [post]
+    - The NEWEST contiguous run of checkpoints wins (the server can emit
+      more than one compaction item in a single response 
+ live-observed
+      Aug 2026 
+ and they arrive adjacent; a run from a newer response
+      cumulatively carries prior windows, so older runs are dropped).
+    - Retained user messages are the user-role items from before the
+      checkpoint, kept verbatim newest-first within
+      ``retained_user_token_budget``; the boundary message is head-truncated
+      when it only partially fits (string content only).
+    - Everything after the checkpoint is untouched, so function_call /
+      function_call_output pairing is preserved (a checkpoint is captured on
+      an assistant response, and that response's own calls and their outputs
+      are all emitted after its reasoning items).
+    - No checkpoint in ``items`` 
+ returned unchanged (self-gating: non-native
+      routes and kill-switched sessions never see a restructured wire).
+    Deterministic for a given history, so the request prefix stays stable
+    across turns and server-side prompt caching keeps working.
+    Nr4
+messagerD
+enumerater!
+reversedrP
+appendr;
+last_cp
+first_cp
+checkpoint_run
+retained_reversed
+remainingr:
+truncateds
+              r
+prune_pre_checkpoint_itemsre
+status_codec
+True when a provider error is a STRUCTURED rejection of the
+    context_management field.
+    Used by the conversation loop's one-shot recovery: strip the field,
+    disable native compaction for the rest of the session, retry. Matching
+    is deliberately narrow 
+ a transient 5xx/timeout whose body merely
+    ECHOES the request (and therefore contains the field name) must NOT
+    permanently downgrade native compaction for the session (#82777).
+    Two conditions, both required when a status is known:
+    * ``status_code`` is 400 (or unknown/None 
+ some transports surface
+      only a message string; field-name matching alone is then the best
+      available signal, preserving pre-#82777 behavior for them), and
+    * the error text names ``context_management`` / ``compact_threshold``
+      alongside rejection language ("unknown", "unsupported", "invalid",
+      "unexpected", "not permitted"...). A bare field-name echo without
+      rejection language does not match.
+context_managementr5
+unknown
+unsupported
+invalid
+unexpectedz
+not permittedz
+not allowed
+unrecognizedz
+extra fieldz
+no suchz
+bad requestz
+not supportedc
+markerr:
+z1is_native_compaction_rejection.<locals>.<genexpr>/
+rejection_markersr:
+is_native_compaction_rejectionru
+Does this ``codex_reasoning_items`` sidecar carry a compaction checkpoint?
+    A ``type: "compaction"`` item is the server-side stand-in for history that
+    has already been pruned 
+ cumulative context, not per-turn reasoning. It
+    rides the same sidecar as ordinary reasoning items, so anything that
+    rewrites or discards that sidecar (or the message carrying it) has to ask
+    this question first: the checkpoint exists in exactly one place, and the
+    request that loses it loses the compacted history with it.
+z,has_compaction_checkpoint.<locals>.<genexpr><
+has_compaction_checkpointry
+prior_items
+new_itemsc
+Merge ``codex_reasoning_items`` across Codex incomplete-continuation
+    dedup, preserving native compaction checkpoints.
+    The incomplete-retry path updates a visually-duplicate interim assistant
+    message in place with the newer response's replay payload. A checkpoint
+    captured on the EARLIER response is a cumulative context carrier the
+    continuation won't re-emit (the replayed checkpoint keeps the server
+    render under threshold), so a blind overwrite drops the only copy and the
+    next request balloons back to full history. Rule: newer items win, but
+    prior checkpoints are prepended unless the newer payload carries its own.
+<listcomp>z1merge_interim_reasoning_items.<locals>.<listcomp>Q
+kept_checkpoints
+new_lists
+merge_interim_reasoning_itemsr
+__doc__
+__future__r
+typingr
+urllib.parser
+"RETAINED_USER_MESSAGE_TOKEN_BUDGETr@
+<module>r

@@ -1,0 +1,36 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@electron\universal\node_modules\fs-extra\lib\ensure\symlink-type.js
+
+'use strict'
+
+const fs = require('../fs')
+const u = require('universalify').fromPromise
+
+async function symlinkType (srcpath, type) {
+  if (type) return type
+
+  let stats
+  try {
+    stats = await fs.lstat(srcpath)
+  } catch {
+    return 'file'
+  }
+
+  return (stats && stats.isDirectory()) ? 'dir' : 'file'
+}
+
+function symlinkTypeSync (srcpath, type) {
+  if (type) return type
+
+  let stats
+  try {
+    stats = fs.lstatSync(srcpath)
+  } catch {
+    return 'file'
+  }
+  return (stats && stats.isDirectory()) ? 'dir' : 'file'
+}
+
+module.exports = {
+  symlinkType: u(symlinkType),
+  symlinkTypeSync
+}

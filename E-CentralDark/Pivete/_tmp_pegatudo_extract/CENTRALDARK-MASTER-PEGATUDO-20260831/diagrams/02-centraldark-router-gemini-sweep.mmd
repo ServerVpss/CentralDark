@@ -1,0 +1,19 @@
+flowchart TD
+  GIT["GitHub adapter"] --> SAN["Sanitize / quarantine secrets"]
+  DRIVE["Drive / Workspace adapter"] --> SAN
+  REPO["Repo / runtime adapter"] --> SAN
+  ATT["Attachments / receipts"] --> SAN
+  SAN --> ROUTER["centraldark-router"]
+  ROUTER --> GEM["Gemini read-only sweeper"]
+  GEM --> FIND["Findings / evidence candidates"]
+  FIND --> SCOPE["REALITY_SCOPE_GATE"]
+  SCOPE --> REN["RENDEZVOUS + RECONCILE"]
+  REN --> DELTA["Unique material delta"]
+  DELTA --> OWNER["Existing owner"]
+  OWNER --> WRITER["ONE_WRITER"]
+  WRITER --> TEST["Tests"]
+  TEST --> FALS["Adversarial falsifier"]
+  FALS --> JUDGE["Reality Judge"]
+  JUDGE --> REC["Receipt + NEXT_CURSOR"]
+  REC --> DRIVEOUT["Drive / Workspace durable context"]
+  REC --> GITOUT["GitHub delta when available"]

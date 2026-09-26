@@ -1,0 +1,4 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@streamdown\code\node_modules\@shikijs\langs\dist\f90.mjs
+
+/* Alias f90 for fortran-free-form */
+export { default } from './fortran-free-form.mjs'

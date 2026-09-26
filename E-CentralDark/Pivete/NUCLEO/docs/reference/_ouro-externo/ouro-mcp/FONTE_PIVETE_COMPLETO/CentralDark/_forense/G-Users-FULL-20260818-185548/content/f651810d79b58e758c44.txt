@@ -1,0 +1,11 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@electron\notarize\node_modules\fs-extra\lib\remove\index.js
+
+'use strict'
+
+const u = require('universalify').fromCallback
+const rimraf = require('./rimraf')
+
+module.exports = {
+  remove: u(rimraf),
+  removeSync: rimraf.sync
+}

@@ -1,0 +1,366 @@
+{
+  "timestamp": "2026-08-24T04:53:04.423Z",
+  "proved": true,
+  "sha256": "fa388bb89fca54e9b08ca5eb2b4ffded0abc8bac20dc738f7bb16495813a3489",
+  "git": {
+    "repo": "https://github.com/ServerVpss/CentralDark.git",
+    "branch": "feat/gatilhos-execucao-reversivel-remediacao",
+    "head_sha": "51e3cd4ca4011ff2bbc31ecf33c7e6998c2c354f",
+    "worktree": "worktree E:/CentralDark/Pivete/CentralDark",
+    "active_prs": "gh unavailable",
+    "active_writers": "UU package-lock.json\nUU package.json\n M vite.config.ts\n?? .github/workflows/tauri-sign.yml",
+    "ci": "arsenal-adapter-tests.yml\nauto-cf-origin-cert.yml\nautonomia-promocao.yml\nbot-server-validate.yml\nbots-labels-seed.yml\ncaddy-telepainel-v2.yml\ncapsula-observavel.yml\ncodeql.yml\ncodex-validate.yml\ncors-validator.yml\ndependabot-auto-merge.yml\ndispatcher-bots.yml\nestado-retomada.yml\nfarm-co-author.yml\ngithub-bot-controller.yml\ninstall-cf-origin-cert.yml\nlinear-pendencias-sync.yml\nlupa-conformance.yml\nlupa-drift-guard.yml\nnivel-7-tests.yml"
+  },
+  "ports": {
+    "live_listening": "LocalAddress  LocalPort OwningProcess\r\n------------  --------- -------------\r\n::                  135          1736\r\n0.0.0.0             135          1736\r\n192.168.100.5       139             4\r\n172.29.96.1         139             4\r\n::                  445             4\r\n127.0.0.1          1001             4\r\n::                 2869             4\r\n0.0.0.0            5040          8716\r\n127.0.0.1          5939          5484\r\n127.0.0.1          6463         14720\r\n::                 7070         35948\r\n0.0.0.0            7070         35948\r\n::                 7680          2132\r\n127.0.0.1          8787         27700\r\n127.0.0.1          8788         37908\r\n::                 8917         74920\r\n127.0.0.1          9100          8900\r\n127.0.0.1         22624         38508\r\n127.0.0.1         27015          5024\r\n0.0.0.0           33000          5144\r\n::1               42050         27512\r\n0.0.0.0           49664          1372\r\n::                49664          1372\r\n0.0.0.0           49665          1284\r\n::                49665          1284\r\n::                49666          2136\r\n0.0.0.0           49666          2136\r\n::                49667          2988\r\n0.0.0.0           49667          2988\r\n::                49669          4652\r\n0.0.0.0           49669          4652\r\n::1               49670          1356\r\n::                49678          1364\r\n0.0.0.0           49678          1364\r\n127.0.0.1         52505          6020\r\n::                52805         35948\r\n0.0.0.0           52805         35948\r\n127.0.0.1         54544         28592\r\n127.0.0.1         55632         38508\r\n127.0.0.1         61677         11196",
+    "classified": {
+      "3030": {
+        "classification": "DECLARED_NOT_LIVE",
+        "owner": "GraphPanel (VPS)"
+      },
+      "8082": {
+        "classification": "DECLARED_NOT_LIVE",
+        "owner": "Elite proxy"
+      },
+      "8090": {
+        "classification": "DECLARED_NOT_LIVE",
+        "owner": "Arsenal adapter"
+      },
+      "8787": {
+        "pid": 27700,
+        "classification": "CANONICAL_PRODUCT",
+        "owner": "hermes-webui"
+      },
+      "8788": {
+        "pid": 32464,
+        "classification": "CANONICAL_DAEMON",
+        "owner": "auto-destilador"
+      },
+      "8917": {
+        "pid": 74920,
+        "classification": "PREVIEW",
+        "owner": "forja-preview"
+      },
+      "9100": {
+        "pid": 8900,
+        "classification": "CANONICAL_MCP",
+        "owner": "MCP CentralDark"
+      },
+      "9200": {
+        "classification": "DECLARED_NOT_LIVE",
+        "owner": "Bot hub-adm"
+      },
+      "9500": {
+        "classification": "DECLARED_NOT_LIVE",
+        "owner": "Bot webhook"
+      }
+    }
+  },
+  "domains": {
+    "found_in_repo": [
+      {
+        "subdomain": "centralldark.com",
+        "status": "DEFAULT_PUBLIC_DOMAIN",
+        "live": true
+      },
+      {
+        "subdomain": "mcp.centralldark.com",
+        "status": "LIVE",
+        "reference": ".claude/settings.json"
+      },
+      {
+        "subdomain": "ui.centralldark.com",
+        "status": "LIVE",
+        "reference": "arsenal adapter"
+      },
+      {
+        "subdomain": "api.centralldark.com",
+        "status": "LIVE",
+        "reference": "bolt tests"
+      },
+      {
+        "subdomain": "status.centralldark.com",
+        "status": "LIVE",
+        "reference": "bot webhook"
+      },
+      {
+        "subdomain": "telepainel.centralldark.com",
+        "status": "PLANNED",
+        "reference": "evolucao-state"
+      },
+      {
+        "subdomain": "*.centralldark.com",
+        "status": "WILDCARD",
+        "reference": "Caddy"
+      }
+    ]
+  },
+  "runtimes": {
+    "hermes_webui": {
+      "port": 8787,
+      "type": "FastAPI/BFF",
+      "status": "LIVE",
+      "pid": 27700,
+      "health": "ok",
+      "uptime_sec": 92571
+    },
+    "auto_destilador": {
+      "port": 8788,
+      "type": "Python daemon",
+      "status": "LIVE",
+      "pid": 32464,
+      "health": "proved:true",
+      "uptime_sec": 31316
+    },
+    "mcp": {
+      "port": 9100,
+      "type": "Node/PM2",
+      "status": "LIVE",
+      "pid": 8900,
+      "health": "ok",
+      "tools": 110
+    },
+    "arsenal_adapter": {
+      "port": 8090,
+      "type": "Node",
+      "status": "DECLARED_NOT_LIVE",
+      "config": "ecosystem.config.cjs"
+    },
+    "elite_proxy": {
+      "port": 8082,
+      "type": "Python",
+      "status": "DECLARED_NOT_LIVE",
+      "config": "ecosystem.config.cjs"
+    },
+    "bot_telegram": {
+      "port": 9500,
+      "type": "Node",
+      "status": "DECLARED_NOT_LIVE",
+      "config": "ecosystem.config.cjs"
+    },
+    "graph_panel": {
+      "port": 3030,
+      "type": "Node",
+      "status": "DECLARED_NOT_LIVE",
+      "config": "ecosystem.config.cjs"
+    }
+  },
+  "frontends": {
+    "canonical_ui_target": {
+      "path": "/e/CentralDark/Pivete/CentralDark/src/App.tsx",
+      "type": "React SPA",
+      "status": "CANONICAL_UI_TARGET"
+    },
+    "hermes_webui": {
+      "path": "C:/CentralDark/hermes-webui/",
+      "type": "FastAPI BFF",
+      "status": "CANONICAL_RUNTIME",
+      "port": 8787
+    },
+    "hub": {
+      "path": "apps/modulos/hub/src/App.tsx",
+      "type": "React SPA",
+      "status": "LIVE",
+      "domain": "hub.centralldark.com"
+    },
+    "graph_panel": {
+      "path": "apps/modulos/graph-panel/public/index.html",
+      "status": "LIVE",
+      "port": 3030
+    },
+    "status": {
+      "path": "apps/modulos/status/index.html",
+      "status": "LIVE"
+    },
+    "mcp_admin": {
+      "path": "apps/modulos/mcp-admin-ui/src/App.tsx",
+      "status": "DECLARED"
+    },
+    "telepainel": {
+      "path": "apps/modulos/telepainel/dist/",
+      "status": "LIVE",
+      "domains": [
+        "centralldark.com",
+        "whatsapp.centralldark.com",
+        "crm.centralldark.com",
+        "financeiro.centralldark.com"
+      ]
+    }
+  },
+  "routers": {},
+  "temp": {
+    "nucleo_docs_reference": {
+      "MAPA-DA-CASA-ARQUITETURA.html": {
+        "size_kb": 31,
+        "classification": "REUSABLE_DELTA",
+        "target": "hermes-webui /mapa"
+      },
+      "BILLING-NOUS-PORTAL.html": {
+        "size_kb": 8,
+        "classification": "REUSABLE_DELTA",
+        "target": "hermes-webui /billing"
+      },
+      "LEGENDA-SESSAO-20260823.html": {
+        "size_kb": 16,
+        "classification": "REUSABLE_DELTA",
+        "target": "hermes-webui /legenda"
+      },
+      "CENTRALDARK-MERMAID-ATUAL.md": {
+        "size_kb": 29,
+        "classification": "REUSABLE_DELTA",
+        "target": "hermes-webui /mermaid"
+      },
+      "LEGENDA-SESSAO-20260823.md": {
+        "size_kb": 9,
+        "classification": "DUPLICATE",
+        "action": "DELETE"
+      },
+      "DIAGNOSTICO-HERMES-ESTADO-ATUAL-MEMORIA-E-NUCLEO.md": {
+        "classification": "REFERENCE"
+      },
+      "PACOTAO-ARQUITETURA-APRENDIZADO-VIVO.md": {
+        "classification": "REFERENCE"
+      }
+    }
+  },
+  "themes": {
+    "theme_provider": "src/shared/theme/ThemeProvider.tsx (light/dark/system)",
+    "tailwind_tokens": "HSL-based (--primary, --background, --foreground, --card, --muted, --accent, --success, --warning, --destructive, --sidebar-*)",
+    "dark_mode": "class strategy",
+    "gap": "Only 2 themes (light/dark) - missing OPERATIONAL, EMERALD, FORGE as global themes",
+    "theme_registry": "MISSING - no central theme registry for 3 global themes"
+  },
+  "skills": {
+    "loaded_in_hermes_profile": [
+      {
+        "name": "centraldark-operational-method",
+        "path": "E:/CentralDark/Pivete/skills/software-development/centraldark-operational-method/SKILL.md"
+      },
+      {
+        "name": "kimetsu-legacy-operational-method",
+        "path": "E:/CentralDark/Pivete/skills/operational-method/kimetsu-legacy-operational-method/SKILL.md"
+      },
+      {
+        "name": "operational-communication",
+        "path": "E:/CentralDark/Pivete/skills/autonomous-ai-agents/operational-communication/SKILL.md"
+      },
+      {
+        "name": "auto-destilador",
+        "path": "E:/CentralDark/Pivete/NUCLEO/skills/auto-destilador/SKILL.md"
+      }
+    ],
+    "canonical_repo": [
+      {
+        "name": "meta-lupa",
+        "path": ".agents/skills/meta-lupa/SKILL.md",
+        "sha": "42691e008ba50ee55646ca81113bf0abfde87af2"
+      }
+    ]
+  },
+  "memory": {
+    "auto_destilador_state": "E:/CentralDark/Pivete/NUCLEO/auto-destilador-state.json (proved)",
+    "rastro_cave": "E:/CentralDark/Pivete/NUCLEO/rastro/rastro.jsonl (20+ entries CRISTAL)",
+    "handoff_receipts": "pending implementation",
+    "dream_proposals": "scripts/memory-linker/ exists, not auto-triggered",
+    "learning_transfer": "not tested"
+  },
+  "security": {
+    "tracked_secrets": [
+      {
+        "name": "SRVER1_BOT_TOKEN",
+        "location": "GitHub Secrets / VPS",
+        "severity": "CRITICAL",
+        "tracked": true
+      },
+      {
+        "name": "CF_API_TOKEN",
+        "location": "GitHub Secrets",
+        "severity": "CRITICAL",
+        "tracked": true
+      },
+      {
+        "name": "GITHUB_PAT_PERFIL",
+        "location": "ecosystem.config.cjs (VPS path)",
+        "severity": "HIGH",
+        "tracked": false,
+        "issue": "hardcoded VPS path"
+      },
+      {
+        "name": "MCP_CENTRALDARK_TOKEN",
+        "location": "ecosystem.config.cjs",
+        "severity": "HIGH",
+        "tracked": false,
+        "issue": "hardcoded"
+      },
+      {
+        "name": "CENTRALDARK_MCP_TOKEN",
+        "location": "ecosystem.config.cjs",
+        "severity": "HIGH",
+        "tracked": false,
+        "issue": "hardcoded"
+      }
+    ]
+  },
+  "collisions": {
+    "port_8917": {
+      "type": "PREVIEW",
+      "ipv6": true,
+      "pid": 74920,
+      "action": "RETIRE after absorb"
+    },
+    "port_8090": {
+      "type": "DECLARED_NOT_LIVE",
+      "owner": "Arsenal adapter",
+      "action": "INVESTIGATE"
+    },
+    "port_8082": {
+      "type": "DECLARED_NOT_LIVE",
+      "owner": "Elite proxy",
+      "action": "INVESTIGATE"
+    },
+    "port_9200": {
+      "type": "DECLARED_NOT_LIVE",
+      "owner": "Bot hub-adm",
+      "action": "INVESTIGATE"
+    },
+    "port_9500": {
+      "type": "DECLARED_NOT_LIVE",
+      "owner": "Bot webhook",
+      "action": "INVESTIGATE"
+    },
+    "soul_divergence": {
+      "type": "DOCUMENTED_DIVERGENCE",
+      "canonical": "E:/CentralDark/Pivete/SOUL.md",
+      "runtime": "C:/Users/danda/AppData/Local/hermes/profiles/pivete/SOUL.md",
+      "action": "DO_NOT_MOVE"
+    }
+  },
+  "residuals": {
+    "vite_build_blocked": "vite not extracting to node_modules/ - npm cache/config issue",
+    "theme_engine_incomplete": "Only 2 themes (light/dark) - missing OPERATIONAL/EMERALD/FORGE",
+    "dream_review_not_automated": "scripts/memory-linker/ exists but not event-driven",
+    "scheduler_owner_undefined": "No owner defined for dream-review scheduler",
+    "triad_sync_contract_missing": "No sync contract between Casa/VPS/Git",
+    "fixed_point_denominators_undefined": "Per-phase denominators not defined",
+    "last_good_state_no_fingerprint": "No boot_fingerprint verification",
+    "profile_inheritance_no_ci_test": "No automated CI test for profile inheritance",
+    "consumer_proof_optional": "Forja gate 5 'when needed' = optional",
+    "skill_promotion_incomplete": "Promotion rule lists 3 criteria, actual requires 5",
+    "self_healing_missing_search_siblings": "Loop skips SEARCH_SIBLINGS (blast radius)",
+    "dream_review_no_mandatory_hook": "No mandatory HANDOFF -> EVENT_STREAM -> DREAM_REVIEW trigger"
+  },
+  "classification": {
+    "summary": {
+      "CANONICAL": 6,
+      "REUSABLE_DELTA": 4,
+      "DUPLICATE": 1,
+      "REFERENCE": 3,
+      "TEMP": 2,
+      "LEGACY": 1,
+      "DECLARED_NOT_LIVE": 5,
+      "DOCUMENTED_DIVERGENCE": 1,
+      "BLOCKED": 1,
+      "UNKNOWN": 4
+    }
+  }
+}

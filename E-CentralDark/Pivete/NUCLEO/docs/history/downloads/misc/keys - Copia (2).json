@@ -1,0 +1,7 @@
+{
+  "keys": [
+    "[REDIGIDO-PRESERVACAO]"
+  ],
+  "upstream": "https://claude.ap7.site",
+  "note": "Adicionar mais keys abaixo para rotação round-robin"
+}

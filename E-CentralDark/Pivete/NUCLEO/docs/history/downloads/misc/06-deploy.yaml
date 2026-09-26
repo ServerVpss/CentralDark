@@ -1,0 +1,34 @@
+domain:
+  primary: centralldark.com
+  www: www.centralldark.com
+  legacy_panel: telepainel.centralldark.com
+  policy: "primary domain is product; legacy panel converges/redirects unless measured need remains"
+
+dns_expected_from_current_docs:
+  centralldark.com: 89.117.78.124
+  www.centralldark.com: 89.117.78.124
+  telepainel.centralldark.com: 89.117.78.124
+
+proxy:
+  existing_owner_doc: docs/INSTALADOR/13-centraldark-portal.md
+  rule: "inspect current Caddy; minimally extend, never invent second proxy stack"
+
+strategy:
+  type: reversible_canary_promotion
+  pre_deploy:
+    - capture current SHA
+    - backup Caddy/config
+    - capture process list
+    - capture DB migration state
+  promotion:
+    - build
+    - start internal services
+    - health
+    - switch routing
+    - external vertical smoke
+  rollback_on:
+    - auth failure
+    - core API unavailable
+    - panel cannot load
+    - critical migration failure
+    - agent vertical flow regression

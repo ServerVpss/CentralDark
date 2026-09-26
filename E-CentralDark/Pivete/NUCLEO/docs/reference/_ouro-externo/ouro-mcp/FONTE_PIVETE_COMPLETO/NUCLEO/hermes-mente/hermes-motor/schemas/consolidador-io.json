@@ -1,0 +1,30 @@
+{
+  "agente": "consolidador-io",
+  "papel": "guardiao da fonte unica de memoria (Regra de Ouro 9)",
+  "flush_min_turns": 6,
+  "flush_tambem_em": ["fim_de_sessao","evento_critico"],
+  "alvos": {
+    "MEMORY.md": {
+      "o_que": "estado/fatos operacionais do sistema e das missoes",
+      "limite_chars": 8000,
+      "politica_estouro": "destilar_mais_antigo_para_1_linha_antes_de_cortar",
+      "formato_linha": "[AAAA-MM-DD HH:MM] [setor] FATO — IMPLICACAO"
+    },
+    "USER.md": {
+      "o_que": "perfil, costumes e preferencias confirmadas do Operador",
+      "limite_chars": 4000,
+      "politica_estouro": "fundir_costume_repetido_em_regra_unica",
+      "prefixo_regra": "[DONO]"
+    }
+  },
+  "anti_duplicata": {
+    "chave": "hash_semantico_da_frase_normalizada",
+    "regra": "se costume ja existe: reforca contador, NAO reescreve nova linha",
+    "novo_costume": "so grava se diferenca real vs. linhas existentes"
+  },
+  "invariantes": [
+    "nunca gravar segredo/token/.env (Regra de Ouro 9)",
+    "estender canonico, nunca criar segunda fonte de verdade",
+    "toda gravacao registra: antes_chars, depois_chars, linhas_add, linhas_fundidas"
+  ]
+}

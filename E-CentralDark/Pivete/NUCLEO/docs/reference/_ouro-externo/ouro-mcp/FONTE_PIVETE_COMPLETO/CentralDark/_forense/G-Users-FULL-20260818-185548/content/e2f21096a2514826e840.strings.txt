@@ -1,0 +1,478 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\msys-tasn1-6.dll
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.edata
+@.idata
+@.reloc
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AVAUATUWVS
+L;d$Xt
+End Of FE
+H;|$ht
+[^_]A\A]A^A_
+L;T$ht
+End Of F
+AVAUATUWVSH
+ [^_]A\A]A^
+_asn1_taI
+_asn1_taH
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+HcT$<L
+LcD$4D
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+VPHcL$@Lc
+V`L9bptdA
+McnXHcD$@L
+HcL$@Hc
+HcL$@H
+LcD$HL
+D$Pt7L
+H;t$Pu
+D$@;D$8
+D$@9D$H
+t$@9t$H
+\$@t4I
+AWAVAUATUWVSH
+D9l$8D
+x[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+D$O9D$<u}
+H;D$XutHcD$P)
+xAHcD$T9D$<~6H
+HcD$,H
+AWAVAUATUWVSH
+ @:|$CuOH
+H;D$HD
+L$<u-D
+D8l$Cu
+L9d$Ht
+X[^_]A\A]A^A_
+L9d$Hu
+AUATUWVSH
+8[^_]A\A]
+8[^_]A\A]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+xPHcT$,
+xEHcT$,
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+HcT$pM
+AWAVATUWVSH
+[^_]A\A^A_
+D$LHcT$HE1
+AWAVUWVSH
+[^_]A^A_
+HcT$8E1
+ATUWVSH
+`[^_]A\
+`[^_]A\
+ATUWVSH
+@[^_]A\
+@[^_]A\
+AWAVWVSH
+P[^_A^A_
+P[^_A^A_
+P[^_A^A_
+t(McAXE
+L$0McAXB
+HcT$LLc
+ATUWVSH
+t!9sDu
+p[^_]A\
+p[^_]A\
+p[^_]A\
+t*LcYXH
+Lc\$(D
+ATUWVSH
+@[^_]A\
+@[^_]A\
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+ATUWVSH
+[^_]A\
+[^_]A\
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+t H9q`t
+AWAVAUATUWVSH
+I9,$t}H
+8[^_]A\A]A^A_
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+([^_]A\A]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+D9D$0u
+D9L$8u
+D9L$8u
+D9L$8u
+D9L$8u
+AUATUWVSH
+[^_]A\A]
+AVUWVSH
+@[^_]A^
+@[^_]A^
+%s file was not found
+%s:%u: name too long (more than %u characters)
+%s:: identifier '%s' not found
+syntax error
+syntax error, unexpected %s, expecting %s
+syntax error, unexpected %s, expecting %s or %s
+syntax error, unexpected %s, expecting %s or %s or %s
+syntax error, unexpected %s, expecting %s or %s or %s or %s
+syntax error, unexpected %s
+%s:%u: Oversize value
+%s:%u: Warning: %s is a built-in ASN.1 type.
+%s:%u: Error: %s near '%s'
+memory exhausted
+OPTIONAL
+INTEGER
+STRING
+SEQUENCE
+UNIVERSAL
+PRIVATE
+DEFAULT
+CHOICE
+OBJECT
+IDENTIFIER
+BOOLEAN
+APPLICATION
+DEFINED
+EXPLICIT
+IMPLICIT
+DEFINITIONS
+UTCTime
+GeneralizedTime
+GeneralString
+IMPORTS
+ENUMERATED
+NumericString
+IA5String
+TeletexString
+PrintableString
+UniversalString
+BMPString
+UTF8String
+VisibleString
+<=>>?@@AABBBCCDDEEFFGGHHHIIJJJKKKLLMMMMNOOPPQQRRSSTTUUVVWWXXYYZZ[[\]]^^^_`aaaaaaaaaaaaaaaaaaaaaaabbcccdeefffggghiijjjjjjjjklmmmnnnoopppqq
+HIJdeKLMNOPQRST
+Z[\]!"#$%&
+xwyuvzst
+)*/13579;=?
+MOPSTUVWXYZ[QRN]b|\`^_
+02468:<>@
+"end of file"
+"invalid token"
+STR_IDENTIFIER
+ASN1_TRUE
+ASN1_FALSE
+TOKEN_NULL
+$accept
+definitions
+pos_num
+neg_num
+pos_neg_num
+num_identifier
+int_identifier
+pos_neg_identifier
+constant
+constant_list
+obj_constant
+obj_constant_list
+tag_type
+default
+pos_neg_list
+integer_def
+boolean_def
+size_def2
+size_def
+generalstring_def
+numericstring_def
+ia5string_def
+teletexstring_def
+printablestring_def
+universalstring_def
+bmpstring_def
+utf8string_def
+visiblestring_def
+octet_string_def
+bit_element
+bit_element_list
+bit_string_def
+enumerated_def
+object_def
+type_assig_right
+type_assig_right_tag
+type_assig_right_tag_default
+type_assig
+type_assig_list
+sequence_def
+set_def
+choise_def
+any_def
+known_string
+type_invalid
+type_def
+constant_def
+type_constant
+type_constant_list
+definitions_id
+explicit_implicit
+ !"#$%&'()*+,-./0
+:: value of element '
+' not found
+type:INTEGER
+type:BOOLEAN
+type:SEQUENCE
+type:BIT_STR
+type:OCT_STR
+type:SEQ_OF
+type:OBJ_ID
+type:SET
+type:SET_OF
+type:NULL
+type:ENUMERATED
+type:GENERALSTRING
+type:NUMERIC_STR
+type:IA5_STR
+type:TELETEX_STR
+type:PRINTABLE_STR
+type:UNIVERSAL_STR
+type:BMP_STR
+type:UTF8_STR
+type:VISIBLE_STR
+type:UTC_TIME
+type:GENERALIZED_TIME
+:: tag error near element '
+ASN1_SUCCESS
+(null)
+LIBTASN1 ERROR: %s
+ASN1_FILE_NOT_FOUND
+ASN1_ELEMENT_NOT_FOUND
+ASN1_IDENTIFIER_NOT_FOUND
+ASN1_DER_ERROR
+ASN1_VALUE_NOT_FOUND
+ASN1_GENERIC_ERROR
+ASN1_VALUE_NOT_VALID
+ASN1_TAG_ERROR
+ASN1_TAG_IMPLICIT
+ASN1_ERROR_TYPE_ANY
+ASN1_SYNTAX_ERROR
+ASN1_MEM_ERROR
+ASN1_MEM_ALLOC_ERROR
+ASN1_DER_OVERFLOW
+ASN1_NAME_TOO_LONG
+ASN1_ARRAY_ERROR
+ASN1_ELEMENT_NOT_EMPTY
+ASN1_TIME_ENCODING_ERROR
+ASN1_RECURSION
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+#include <libtasn1.h>
+const asn1_static_node %s[] = {
+"%s", 
+NULL, 
+"%s"},
+NULL },
+  { NULL, 0, NULL }
+:: identifier '
+' not found
+NULL  
+type:TAG
+type:SIZE
+type:DEFAULT
+type:IDENTIFIER
+type:ANY
+type:CHOICE
+type:DEFINITIONS
+  value:%s
+  value:TRUE
+  value:FALSE
+  value:0x
+  value(%i):
+  value:
+  attr:
+UNIVERSAL,
+PRIVATE,
+APPLICATION,
+EXPLICIT,
+IMPLICIT,
+DEFAULT,
+FALSE,
+MIN_MAX,
+OPTION,
+1_PARAM,
+DEF_BY,
+GENERALIZED,
+NOT_USED,
+ASSIGNMENT,
+type:CONST
+4.21.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+msys-tasn1-6.dll
+asn1_array2tree
+asn1_bit_der
+asn1_check_version
+asn1_copy_node
+asn1_create_element
+asn1_decode_simple_ber
+asn1_decode_simple_der
+asn1_delete_element
+asn1_delete_structure
+asn1_delete_structure2
+asn1_der_coding
+asn1_der_decoding
+asn1_der_decoding2
+asn1_der_decoding_element
+asn1_der_decoding_startEnd
+asn1_dup_node
+asn1_encode_simple_der
+asn1_expand_any_defined_by
+asn1_expand_octet_string
+asn1_find_node
+asn1_find_structure_from_oid
+asn1_get_bit_der
+asn1_get_length_ber
+asn1_get_length_der
+asn1_get_object_id_der
+asn1_get_octet_der
+asn1_get_tag_der
+asn1_length_der
+asn1_number_of_elements
+asn1_object_id_der
+asn1_octet_der
+asn1_parser2array
+asn1_parser2tree
+asn1_perror
+asn1_print_structure
+asn1_read_node_value
+asn1_read_tag
+asn1_read_value
+asn1_read_value_type
+asn1_strerror
+asn1_write_value
+__getreent
+_impure_ptr
+calloc
+cygwin_internal
+dll_dllcrt0
+fclose
+fprintf
+fwrite
+malloc
+memcmp
+memcpy
+memmove
+memset
+msys_detach_dll
+posix_memalign
+realloc
+snprintf
+stpcpy
+strcat
+strchr
+strcmp
+strcpy
+strdup
+strlen
+strncat
+strtol
+strtoul
+strverscmp
+ungetc
+GetModuleHandleA
+msys-2.0.dll
+KERNEL32.dll
+__lib64_libkernel32_a_iname
+__imp_calloc
+__imp_fputc
+_head_msys_2_0_dll
+__imp_strtol
+__imp_strcmp
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_free
+__imp_strverscmp
+__nm__impure_ptr
+__imp_strncat
+__imp_strdup
+__imp_fputs
+__imp_strcpy
+__imp_memset
+__IAT_end__
+__imp_memcpy
+__imp_memmove
+__imp_dll_dllcrt0
+__imp_fwrite
+__imp_strtoul
+_head_lib64_libkernel32_a
+__imp_msys_detach_dll
+__imp_snprintf
+__imp___getreent
+__imp_GetModuleHandleA
+__imp_strlen
+__imp_malloc
+__imp__impure_ptr
+__imp_realloc
+__imp_exit
+__IAT_start__
+__imp_strcat
+__imp_ungetc
+__imp_stpcpy
+__imp_fprintf
+__imp_qsort
+__imp_fclose
+__imp_strchr
+__imp_fgetc
+__imp_fopen
+__imp_memcmp
+msys_2_0_dll_iname
+;<=>?@ABC
+l 3:pg:4:k:8
+#$%&'()*+,-120
+6&'()*+,-
+6:#$%&'()*+,-
+&'()*+,-
+rstuvwxyz
+9:;<=>?@ABC
+9:;<=>?@ABC
+gklmn{
+ !"#$%&'(

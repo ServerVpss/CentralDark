@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\primitives\actionBar\useActionBarFloatStatus.d.ts.map
+
+{"version":3,"file":"useActionBarFloatStatus.d.ts","names":[],"sources":["../../../src/primitives/actionBar/useActionBarFloatStatus.ts"],"mappings":";aAIY,kBAAA;EACV,MAAA;EACA,QAAA;EACA,MAAA;AAAA;AAAA,KAGU,4BAAA;EACV,eAAA;EACA,QAAA;EACA,aAAA;EACA,YAAA;AAAA;AAAA,cAGW,uBAAA;EAA2B,eAAA;EAAA,QAAA;EAAA,aAAA;EAAA;AAAA,GAKrC,4BAAA,KAA4B,kBAAA"}

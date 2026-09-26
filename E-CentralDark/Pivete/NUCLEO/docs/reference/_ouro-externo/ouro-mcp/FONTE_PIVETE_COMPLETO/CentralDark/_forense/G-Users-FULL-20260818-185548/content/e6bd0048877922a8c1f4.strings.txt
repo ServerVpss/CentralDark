@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\share\doc\git-doc\RelNotes\2.16.4.adoc
+
+Git v2.16.4 Release Notes
+=========================
+This release is to forward-port the fixes made in the v2.13.7 version
+of Git.  See its release notes for details.

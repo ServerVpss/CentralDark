@@ -1,0 +1,169 @@
+{
+  "gerado_em": "2026-08-06",
+  "metodo": "skillsllm.com View on GitHub hrefs oficiais + api.github.com default_branch + tree SKILL.md",
+  "instaladas": [],
+  "bloqueio": "AGUARDAR_ORDEM_EXPLICITA_PIVETE",
+  "skills": [
+    {
+      "id": 1,
+      "nome_ui": "ECC",
+      "owner_ui": "affaan-m",
+      "fonte_botao": "https://skillsllm.com/",
+      "github_oficial": "https://github.com/affaan-m/ECC",
+      "default_branch": "main",
+      "skill_entrypoints": [
+        ".agents/skills/*/SKILL.md (pacote multi-skill; NÃO existe SKILL.md na raiz)"
+      ],
+      "skill_paths_amostra": [
+        ".agents/skills/agent-introspection-debugging/SKILL.md",
+        ".agents/skills/agent-sort/SKILL.md",
+        ".agents/skills/api-design/SKILL.md"
+      ],
+      "nota": "everything-claude-code no marketplace aponta para o mesmo repo ECC",
+      "duplicacoes_casa": [
+        "analysis/external-source-analysis/SKILL.md",
+        "autonomous-ai-agents/hermes-agent/SKILL.md",
+        "claude-code-security-gate/SKILL.md",
+        "meta/anti-zona-burra-gate/SKILL.md",
+        "meta/skill-authoring-discipline/SKILL.md",
+        "meta-lupa/SKILL.md",
+        "pivete/organize-memory/SKILL.md",
+        "software-development/brainstorming/SKILL.md",
+        "software-development/external-source-alignment/SKILL.md",
+        "software-development/hermes-agent-skill-authoring/SKILL.md",
+        "software-development/systematic-debugging/SKILL.md",
+        "subagent-driven-development/SKILL.md"
+      ],
+      "status": "CATALOGADA_PRONTA_AUDITORIA",
+      "instalada": false
+    },
+    {
+      "id": 2,
+      "nome_ui": "superpowers",
+      "owner_ui": "obra",
+      "fonte_botao": "https://skillsllm.com/",
+      "github_oficial": "https://github.com/obra/superpowers",
+      "default_branch": "main",
+      "skill_entrypoints": [
+        "skills/*/SKILL.md"
+      ],
+      "skill_paths_amostra": [
+        "skills/brainstorming/SKILL.md",
+        "skills/systematic-debugging/SKILL.md",
+        "skills/subagent-driven-development/SKILL.md",
+        "skills/requesting-code-review/SKILL.md"
+      ],
+      "nota": "Overlap forte com skills locais de mesmo nome",
+      "duplicacoes_casa": [
+        "software-development/brainstorming/SKILL.md",
+        "software-development/requesting-code-review/SKILL.md",
+        "software-development/systematic-debugging/SKILL.md",
+        "software-development/test-driven-development/SKILL.md",
+        "software-development/verification-before-completion/SKILL.md",
+        "software-development/writing-plans/SKILL.md",
+        "subagent-driven-development/SKILL.md"
+      ],
+      "status": "CATALOGADA_PRONTA_AUDITORIA",
+      "instalada": false
+    },
+    {
+      "id": 3,
+      "nome_ui": "hermes-agent",
+      "owner_ui": "NousResearch",
+      "fonte_botao": "https://skillsllm.com/",
+      "github_oficial": "https://github.com/NousResearch/hermes-agent",
+      "default_branch": "main",
+      "skill_entrypoints": [
+        "optional-skills/**/SKILL.md (repo do produto; skill local já existe)"
+      ],
+      "skill_paths_amostra": [
+        "optional-skills/autonomous-ai-agents/antigravity-cli/SKILL.md"
+      ],
+      "nota": "Já é o runtime da Casa; NÃO instalar de novo",
+      "duplicacoes_casa": [
+        "autonomous-ai-agents/hermes-agent/SKILL.md",
+        "hermes/daily-ops/SKILL.md",
+        "hermes/hermes-pivete-local-ops/SKILL.md",
+        "hermes/hermes-windows-runtime-ops/SKILL.md",
+        "hermes/provider-swap/SKILL.md",
+        "software-development/hermes-agent-skill-authoring/SKILL.md",
+        "software-development/hermes-casa-pivete/SKILL.md"
+      ],
+      "status": "CATALOGADA_PRONTA_AUDITORIA",
+      "instalada": false
+    },
+    {
+      "id": 4,
+      "nome_ui": "cc-switch",
+      "owner_ui": "farion1231",
+      "fonte_botao": "https://skillsllm.com/",
+      "github_oficial": "https://github.com/farion1231/cc-switch",
+      "default_branch": "main",
+      "skill_entrypoints": [
+        "NENHUM SKILL.md no repo (app desktop All-in-One, não skill package)"
+      ],
+      "skill_paths_amostra": [],
+      "nota": "Repo sem SKILL.md; é produto/app, não skill instalável via SKILL.md",
+      "duplicacoes_casa": [
+        "automation/hermes-studio-web-ui/SKILL.md",
+        "autonomous-ai-agents/claude-code/SKILL.md",
+        "autonomous-ai-agents/codex/SKILL.md",
+        "autonomous-ai-agents/opencode/SKILL.md",
+        "claude-code-security-gate/SKILL.md",
+        "hermes/provider-swap/SKILL.md",
+        "hermes-desktop-plugins/SKILL.md",
+        "media/hermes-chatgpt-codex-auth/SKILL.md",
+        "software-development/inspecting-hermes-desktop-dom/SKILL.md"
+      ],
+      "status": "CATALOGADA_PRONTA_AUDITORIA",
+      "instalada": false
+    },
+    {
+      "id": 5,
+      "nome_ui": "graphify",
+      "owner_ui": "Graphify-Labs",
+      "fonte_botao": "https://skillsllm.com/",
+      "github_oficial": "https://github.com/Graphify-Labs/graphify",
+      "default_branch": "v8",
+      "skill_entrypoints": [
+        "graphify/skill.md"
+      ],
+      "skill_paths_amostra": [
+        "graphify/skill.md"
+      ],
+      "nota": "Branch padrão é v8 (NÃO main). Arquivo é skill.md minúsculo.",
+      "duplicacoes_casa": [
+        "centraldark/centraldark-consolidated-inventory/SKILL.md",
+        "creative/baoyu-infographic/SKILL.md",
+        "github/codebase-inspection/SKILL.md"
+      ],
+      "status": "CATALOGADA_PRONTA_AUDITORIA",
+      "instalada": false
+    },
+    {
+      "id": 6,
+      "nome_ui": "SkillSpector",
+      "owner_ui": "NVIDIA",
+      "fonte_botao": "https://skillsllm.com/",
+      "github_oficial": "https://github.com/NVIDIA/SkillSpector",
+      "default_branch": "main",
+      "skill_entrypoints": [
+        "scanner Python; SKILL.md só em tests/fixtures (não é skill de agente)"
+      ],
+      "skill_paths_amostra": [
+        "tests/fixtures/safe_skill/SKILL.md"
+      ],
+      "nota": "Ferramenta de auditoria, não skill de workflow",
+      "duplicacoes_casa": [
+        "analysis/external-source-analysis/SKILL.md",
+        "claude-code-security-gate/SKILL.md",
+        "github/pr-adversarial-gate/SKILL.md",
+        "github/pr-auditing/SKILL.md",
+        "meta/skill-authoring-discipline/SKILL.md",
+        "software-development/hermes-agent-skill-authoring/SKILL.md"
+      ],
+      "status": "CATALOGADA_PRONTA_AUDITORIA",
+      "instalada": false
+    }
+  ]
+}

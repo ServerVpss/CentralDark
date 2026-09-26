@@ -1,0 +1,227 @@
+/**
+ * Page-level deduplication for Brain preferences and retired entries.
+ *
+ * The scope is intentionally narrow: detect EXACT duplicates after
+ * Unicode/case normalisation of the rule text. This is the most
+ * common case agents produce (two ingestion sessions covering the
+ * same rule with different slugs), and it ships with a deterministic,
+ * easily-auditable signal. Approximate near-duplicate detection
+ * (shingle / MinHash / semantic) is a follow-up.
+ *
+ * The merge writes a `merged_into:` pointer on the secondary via
+ * {@link setMergedInto} and optionally rewrites any `[[<secondary>]]`
+ * wikilinks across the vault to point at the canonical page.
+ */
+
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { join } from "node:path";
+
+import { atomicWriteFileSync } from "../fs-atomic.ts";
+import { parseFrontmatter } from "../vault.ts";
+import { compositeScopeKey, scopeFromFrontmatter } from "../scope-key.ts";
+import { brainDirs } from "./paths.ts";
+import { setMergedInto } from "./page-meta/page-id.ts";
+import { normalizeForDedup } from "./text/normalize.ts";
+import { assertVaultIdentityForWrite } from "./vault-identity.ts";
+
+export interface PageRecord {
+  /** Page identity (e.g. `pref-no-em-dashes`). */
+  readonly id: string;
+  /** Absolute path to the markdown file. */
+  readonly path: string;
+  /** Normalised dedup key (topic + principle, NFKC + casefold). */
+  readonly key: string;
+  /** Raw topic / principle for reporting. */
+  readonly topic: string;
+  readonly principle: string;
+  /** Creation timestamp from frontmatter; missing entries fall back to mtime. */
+  readonly createdAtMs: number;
+}
+
+export interface DedupCandidate {
+  readonly key: string;
+  /** All pages sharing this key, ordered by createdAtMs ascending. */
+  readonly pages: ReadonlyArray<PageRecord>;
+  /** Recommended canonical (oldest createdAtMs; ties broken by id ascending). */
+  readonly canonical: PageRecord;
+  /** Pages to merge into the canonical. */
+  readonly secondaries: ReadonlyArray<PageRecord>;
+}
+
+export interface DedupReport {
+  readonly candidates: ReadonlyArray<DedupCandidate>;
+  /** Total pages scanned (preferences + retired). */
+  readonly scanned: number;
+}
+
+function readPageRecords(vault: string): PageRecord[] {
+  const dirs = brainDirs(vault);
+  const out: PageRecord[] = [];
+  const sources: Array<{ dir: string; prefix: string }> = [
+    { dir: dirs.preferences, prefix: "pref-" },
+    { dir: dirs.retired, prefix: "ret-" },
+  ];
+  for (const { dir, prefix } of sources) {
+    if (!existsSync(dir)) continue;
+    for (const name of readdirSync(dir)) {
+      if (!name.endsWith(".md") || !name.startsWith(prefix)) continue;
+      const path = join(dir, name);
+      let meta: Record<string, unknown>;
+      try {
+        [meta] = parseFrontmatter(path);
+      } catch {
+        continue;
+      }
+      const id = typeof meta["id"] === "string" ? meta["id"] : name.replace(/\.md$/, "");
+      const topic = typeof meta["topic"] === "string" ? meta["topic"] : "";
+      const principle = typeof meta["principle"] === "string" ? meta["principle"] : "";
+      const createdAtIso = typeof meta["created_at"] === "string" ? meta["created_at"] : "";
+      const createdAtMs = createdAtIso ? Date.parse(createdAtIso) : statSync(path).mtimeMs;
+      // Per-scope keying (t_37c05a34): fold the page's composite scope
+      // (owner/session/project) into the dedup key so identical text in two
+      // scopes is not collapsed. Additive: a scopeless page yields an empty
+      // scope key, so its dedup key is byte-identical to the pre-scope world
+      // and existing merges are never re-collapsed.
+      const scopeKey = compositeScopeKey(scopeFromFrontmatter(meta));
+      const contentKey = normalizeForDedup(`${topic}\0${principle}`);
+      const key = scopeKey === "" ? contentKey : `${contentKey} ${scopeKey}`;
+      out.push({
+        id,
+        path,
+        key,
+        topic,
+        principle,
+        createdAtMs: Number.isFinite(createdAtMs) ? createdAtMs : 0,
+      });
+    }
+  }
+  return out;
+}
+
+/**
+ * Scan the vault and group pages by their dedup key. Only groups
+ * with at least 2 members are returned. The "canonical" pick is the
+ * page with the oldest `created_at` (and the lowest id as
+ * tie-breaker), which biases toward keeping the first-recorded
+ * version of any rule.
+ */
+export function findDuplicateCandidates(vault: string): DedupReport {
+  const records = readPageRecords(vault);
+  const byKey = new Map<string, PageRecord[]>();
+  for (const r of records) {
+    if (r.key.trim().length === 0) continue; // skip empty / malformed pages
+    const arr = byKey.get(r.key);
+    if (arr) arr.push(r);
+    else byKey.set(r.key, [r]);
+  }
+  const candidates: DedupCandidate[] = [];
+  for (const [key, group] of byKey) {
+    if (group.length < 2) continue;
+    group.sort((a, b) => {
+      if (a.createdAtMs !== b.createdAtMs) return a.createdAtMs - b.createdAtMs;
+      return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
+    });
+    const canonical = group[0]!;
+    candidates.push({
+      key,
+      pages: Object.freeze(group.slice()),
+      canonical,
+      secondaries: Object.freeze(group.slice(1)),
+    });
+  }
+  candidates.sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0));
+  return Object.freeze({
+    scanned: records.length,
+    candidates: Object.freeze(candidates),
+  });
+}
+
+/**
+ * Rewrite every `[[<oldTarget>]]` reference inside `<vault>/Brain/`
+ * to `[[<newTarget>]]`. Returns the number of files touched. Reads
+ * every Markdown file under the Brain root once; only writes when
+ * the content actually changes.
+ */
+export function patchWikilinks(vault: string, oldTarget: string, newTarget: string): number {
+  // Vault-identity write guard (context-integrity-gates, Unit J).
+  assertVaultIdentityForWrite(vault);
+  if (oldTarget === newTarget) return 0;
+  const brainRoot = join(vault, "Brain");
+  if (!existsSync(brainRoot)) return 0;
+  let touched = 0;
+  const stack: string[] = [brainRoot];
+  // Escape the oldTarget for use inside a regex. Wikilinks can carry
+  // aliases (`[[oldTarget|some alias]]`) and section anchors
+  // (`[[oldTarget#heading]]`); replace the target portion only.
+  const escaped = oldTarget.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const pattern = new RegExp(`\\[\\[${escaped}(?=[#|\\]])`, "g");
+  while (stack.length > 0) {
+    const dir = stack.pop()!;
+    let names: string[];
+    try {
+      names = readdirSync(dir);
+    } catch {
+      continue;
+    }
+    for (const name of names) {
+      const full = join(dir, name);
+      let info;
+      try {
+        info = statSync(full);
+      } catch {
+        continue;
+      }
+      if (info.isDirectory()) {
+        stack.push(full);
+        continue;
+      }
+      if (!name.endsWith(".md")) continue;
+      let raw: string;
+      try {
+        raw = readFileSync(full, "utf8");
+      } catch {
+        continue;
+      }
+      // Replace `[[oldTarget]]`, `[[oldTarget|alias]]`, `[[oldTarget#sec]]`.
+      const next = raw
+        .replaceAll(`[[${oldTarget}]]`, `[[${newTarget}]]`)
+        .replace(pattern, `[[${newTarget}`);
+      if (next !== raw) {
+        atomicWriteFileSync(full, next);
+        touched++;
+      }
+    }
+  }
+  return touched;
+}
+
+export interface MergePageResult {
+  readonly canonical: string;
+  readonly secondary: string;
+  /** Files whose wikilinks were rewritten to point at the canonical. */
+  readonly wikilinksUpdated: number;
+}
+
+/**
+ * Merge a secondary page into a canonical one:
+ *   1. Stamp `merged_into:` on the secondary.
+ *   2. Rewrite `[[<secondary>]]` wikilinks to `[[<canonical>]]`.
+ *
+ * Returns the number of vault files touched by the wikilink patcher
+ * so the caller can report it. Idempotent: calling twice with the
+ * same arguments leaves the merged-into pointer in place and yields
+ * `wikilinksUpdated: 0` on the second call.
+ */
+export function mergePage(
+  vault: string,
+  secondaryId: string,
+  canonicalId: string,
+): MergePageResult {
+  setMergedInto(vault, secondaryId, canonicalId);
+  const touched = patchWikilinks(vault, secondaryId, canonicalId);
+  return Object.freeze({
+    canonical: canonicalId,
+    secondary: secondaryId,
+    wikilinksUpdated: touched,
+  });
+}

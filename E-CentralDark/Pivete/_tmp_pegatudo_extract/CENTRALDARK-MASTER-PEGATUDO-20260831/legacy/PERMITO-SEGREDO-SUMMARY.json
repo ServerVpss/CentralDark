@@ -1,0 +1,10 @@
+{
+  "archive_sha256": "bad8ae251af618e493c092f17c314c793b104d05dea006a09fe843f1b2371f70",
+  "files": 1496,
+  "unique_hashes": 865,
+  "duplicate_hash_groups": 244,
+  "duplicate_extra_files": 631,
+  "version_or_backup_like_names": 155,
+  "sensitive_name_candidates_quarantined": 5,
+  "policy": "index_everything; promote_nothing_without_reconciliation"
+}

@@ -1,0 +1,25 @@
+required_passes:
+  site_online: "external client loads centralldark.com"
+  panel_single: "all material capabilities reachable from one shell"
+  backend_entry_single: "browser-facing API is one CentralDark origin/gateway"
+  buzz: "relay and channel flow works"
+  agent_handoff: "A produces event; B receives without human copy/paste; B effect recorded"
+  hermes: "mission -> context recovery -> tool -> observable effect -> receipt"
+  mcp: "real tool call produces scoped observable effect"
+  memory: "write -> restart/new session -> recover + current-state reconciliation"
+  graph: "new state -> graph/index update -> query relation"
+  git_ci: "repo branch PR CI visible and refreshes"
+  workflow: "trigger -> execution -> result -> receipt"
+  auth: "private surfaces reject unauthorized access"
+  continuity: "restart/reconnect without mission loss or duplicate mutation"
+  mobile_web: "same centralldark.com works from mobile browser"
+  receipts: "critical claims anchored to target/time/SHA"
+  rollback: "reversible path tested or mechanically verified"
+
+false_green_forbidden:
+  - HTTP 200 alone
+  - process ONLINE alone
+  - Scheduled alone
+  - dashboard green alone
+  - code exists alone
+  - CI green for an untested claim

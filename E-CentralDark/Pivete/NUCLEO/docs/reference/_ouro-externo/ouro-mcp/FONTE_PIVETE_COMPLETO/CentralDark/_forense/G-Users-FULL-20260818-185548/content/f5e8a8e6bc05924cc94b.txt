@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@mapbox\node-pre-gyp\node_modules\semver\functions\minor.js
+
+'use strict'
+
+const SemVer = require('../classes/semver')
+const minor = (a, loose) => new SemVer(a, loose).minor
+module.exports = minor

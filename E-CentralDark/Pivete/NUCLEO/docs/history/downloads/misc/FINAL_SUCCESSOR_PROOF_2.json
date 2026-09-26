@@ -1,0 +1,14 @@
+{
+  "algorithm": "SHA-256",
+  "construction": "SHA256(parent_zip_sha + LF + parent_root + LF + delta_manifest_sha + LF)",
+  "parent_zip_sha256": "fac5ec9325152f4afcc1f5e16f8487a3d49c50ba759fc8f3d6f9f4bc4db42b07",
+  "parent_proof_root": "d7a2e739f7f88ce40aabf234197872ec02bdc2ebd1d1cec48e91fa311a953ff1",
+  "baseline_file_count": 61,
+  "baseline_byte_regression": "PASS",
+  "delta_manifest_sha256": "ed629e0fe62e765031feec9edc84b18794e79a25f302be9b003284348d5b0249",
+  "successor_proof_root": "3b833d2019cd37351ece64ae5924eb6637046a5e9cbcbd7e21138f649fe2b7e5",
+  "github_main_observed": "94b6780bbbdf26a64acbadd1d7be03c22d32322d",
+  "evidence_typing": "LIVE/SIMULATION/STATIC_ANALYSIS/HISTORICAL/USER_STATED",
+  "live_fable_100_runs": false,
+  "fable_proxy_simulation": true
+}

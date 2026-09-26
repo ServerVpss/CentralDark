@@ -1,0 +1,13 @@
+﻿{
+    "urlGrafo":  "https://grafo.centralldark.com/api/graph?mode=vivo",
+    "intervaloSegundos":  5,
+    "abrirNotaAoClicar":  true,
+    "knowledgeHubPublishEnabled":  true,
+    "knowledgeHubUrl":  "https://api.centralldark.com/memoria/ingest",
+    "knowledgeHubToken":  "",
+    "autoUpdateAtivo":  true,
+    "autoUpdateBaseUrl":  "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/plugin-release",
+    "autoUpdateIntervaloMinutos":  10,
+    "semanticRepoRoot":  "E:/CentralDark/CentralDark",
+    "semanticPython":  ""
+}

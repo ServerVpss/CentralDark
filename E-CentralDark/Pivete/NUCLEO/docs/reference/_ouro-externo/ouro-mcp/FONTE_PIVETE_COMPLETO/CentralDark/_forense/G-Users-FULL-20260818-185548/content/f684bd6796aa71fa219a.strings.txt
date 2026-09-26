@@ -1,0 +1,14 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\syntax\opencl.vim
+
+" Vim syntax file
+" Language:
+OpenCL
+" Last Change:
+2024 Nov 19
+" Maintainer:
+Wu, Zhenyu <wuzhenyu@ustc.edu>
+if exists("b:current_syntax")
+  finish
+" TODO: support openCL specific keywords
+runtime! syntax/c.vim
+let current_syntax = "opencl"

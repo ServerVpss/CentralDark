@@ -1,0 +1,214 @@
+﻿===== CHROME C:\Users\danda\AppData\Local\Google\Chrome\User Data =====
+last_used=Profile 14
+PROFILE_CACHE Profile 14 name=Seu Chrome gaia=Fulano DONE
+PROFILE_CACHE Profile 15 name=Segredo gaia=Segredo Unlock
+DIR ActorSafetyLists
+DIR AmountExtractionHeuristicRegexes
+DIR BrowserMetrics
+DIR CaptchaProviders
+DIR CertificateRevocation
+DIR component_crx_cache
+DIR Crashpad
+DIR Crowd Deny
+DIR DeferredBrowserMetrics
+DIR extensions_crx_cache
+DIR FileTypePolicies
+DIR FirstPartySetsPreloaded
+DIR GPUPersistentCache
+DIR GraphiteDawnCache
+DIR GrShaderCache
+DIR hyphen-data
+DIR Local Traces
+DIR MediaFoundationWidevineCdm
+DIR MEIPreload
+DIR Notification Resources
+DIR NotificationHelperMetrics
+DIR OnDeviceHeadSuggestModel
+DIR OptGuideOnDeviceClassifierModel
+DIR OptGuideOnDeviceModel
+DIR OptimizationGuideModelsManifest
+DIR OptimizationHints
+DIR optimization_guide_model_store
+DIR OriginTrials
+DIR PKIMetadata
+DIR PlatformExperienceHelperMetrics
+DIR PrivacySandboxAttestationsPreloaded
+DIR Profile 12
+DIR Profile 13
+DIR Profile 14
+DIR Profile 15
+DIR Profile 9
+DIR RecoveryImproved
+DIR Safe Browsing
+DIR SafetyTips
+DIR screen_ai
+DIR segmentation_platform
+DIR ShaderCache
+DIR SODA
+DIR SODALanguagePacks
+DIR SSLErrorAssistant
+DIR Subresource Filter
+DIR System Profile
+DIR ThirdPartyModuleList64
+DIR TranslateKit
+DIR TrustTokenKeyCommitments
+DIR WasmTtsEngine
+DIR Webstore Downloads
+DIR WidevineCdm
+DIR ZxcvbnData
+
+-- Profile 12 --
+Preferences size=15488
+Preferences has no extensions.settings
+Secure Preferences size=14018
+PREF[Secure Preferences] id=fignfifoniblkonapihmkfakmlgkbkcf name=Google Network Speech ver=1.0 state= webstore=False api= hosts= path=C:\Program Files\Google\Chrome\Application\151.0.7922.173\resources\network_speech_synthesis/mv3
+PREF[Secure Preferences] id=mhjfbmdgcfjbbpaeojofohoefgiehjai name=Chrome PDF Viewer ver=1 state= webstore=False api= hosts= path=C:\Program Files\Google\Chrome\Application\151.0.7922.173\resources\pdf
+PREF[Secure Preferences] id=nkeimhogjdpnpccoofpliimaahmaaome name=Google Hangouts ver=1.3.26 state= webstore=False api= hosts= path=C:\Program Files\Google\Chrome\Application\151.0.7922.173\resources\hangout_services
+no Extensions dir
+
+-- Profile 13 --
+Preferences size=15023
+Preferences has no extensions.settings
+Secure Preferences size=14018
+PREF[Secure Preferences] id=fignfifoniblkonapihmkfakmlgkbkcf name=Google Network Speech ver=1.0 state= webstore=False api= hosts= path=C:\Program Files\Google\Chrome\Application\151.0.7922.173\resources\network_speech_synthesis/mv3
+PREF[Secure Preferences] id=mhjfbmdgcfjbbpaeojofohoefgiehjai name=Chrome PDF Viewer ver=1 state= webstore=False api= hosts= path=C:\Program Files\Google\Chrome\Application\151.0.7922.173\resources\pdf
+PREF[Secure Preferences] id=nkeimhogjdpnpccoofpliimaahmaaome name=Google Hangouts ver=1.3.26 state= webstore=False api= hosts= path=C:\Program Files\Google\Chrome\Application\151.0.7922.173\resources\hangout_services
+no Extensions dir
+
+-- Profile 14 --
+Preferences size=59898
+Preferences has no extensions.settings
+Secure Preferences size=20668
+PREF[Secure Preferences] id=chkpgpejeflhoodlogeghpajbdohljek name= ver= state= webstore= api= hosts= path=
+PREF[Secure Preferences] id=doaaifppmpcnbkmpegmpkkcnlobgifid name= ver= state= webstore= api= hosts= path=
+PREF[Secure Preferences] id=fgghniogdmjoobgdgfncblbhokgaijmi name= ver= state= webstore= api= hosts= path=
+PREF[Secure Preferences] id=fignfifoniblkonapihmkfakmlgkbkcf name=Google Network Speech ver=1.0 state= webstore=False api= hosts= path=C:\Program Files\Google\Chrome\Application\151.0.7922.173\resources\network_speech_synthesis/mv3
+PREF[Secure Preferences] id=gbjchpboopdaijjlnlabnnjmckcgakhl name= ver= state= webstore= api= hosts= path=
+PREF[Secure Preferences] id=jacjkeodiliklmpildjkfaciknopckaa name= ver= state= webstore= api= hosts= path=
+PREF[Secure Preferences] id=jjjlhadbhdaejpgaainnmanecekcdfoh name= ver= state= webstore= api= hosts= path=
+PREF[Secure Preferences] id=jkaiginiaigndjcfdichbigjlecheofe name= ver= state= webstore= api= hosts= path=
+PREF[Secure Preferences] id=khndhdhbebhaddchcgnalcjlaekbbeof name= ver= state= webstore= api= hosts= path=
+PREF[Secure Preferences] id=lfmhcpmkbdkbgbmkjoiopeeegenkdikp name= ver= state= webstore= api= hosts= path=
+PREF[Secure Preferences] id=mdkcnjilphobikfgkibhhpomoahgnijc name= ver= state= webstore= api= hosts= path=
+PREF[Secure Preferences] id=mhjfbmdgcfjbbpaeojofohoefgiehjai name=Chrome PDF Viewer ver=1 state= webstore=False api= hosts= path=C:\Program Files\Google\Chrome\Application\151.0.7922.173\resources\pdf
+PREF[Secure Preferences] id=mnjffgbbcofcajpmooahlcnjgpfmpifk name= ver= state= webstore= api= hosts= path=
+PREF[Secure Preferences] id=nddblaobekhedajmmdfpeeobebjbfcnm name= ver= state= webstore= api= hosts= path=
+PREF[Secure Preferences] id=nkeimhogjdpnpccoofpliimaahmaaome name=Google Hangouts ver=1.3.26 state= webstore=False api= hosts= path=C:\Program Files\Google\Chrome\Application\151.0.7922.173\resources\hangout_services
+PREF[Secure Preferences] id=nmmhkkegccagdldgiimedpiccmgmieda name=Pagamentos da Chrome Web Store ver=1.0.0.6 state= webstore=True api=identity hosts=https://payments.google.com/*,https://sandbox.google.com/*,https://www.google.com/*,https://www.googleapis.com/* path=nmmhkkegccagdldgiimedpiccmgmieda\1.0.0.6_0
+DISK id=nmmhkkegccagdldgiimedpiccmgmieda name=__MSG_APP_NAME__ ver=1.0.0.6 desc=__MSG_APP_DESCRIPTION__ perms=identity|webview|https://www.google.com/|https://www.googleapis.com/*|https://payments.google.com/payments/v4/js/integrator.js|https://sandbox.google.com/payments/v4/js/integrator.js
+
+-- Profile 15 --
+Preferences size=55349
+Preferences has no extensions.settings
+Secure Preferences size=19393
+PREF[Secure Preferences] id=fignfifoniblkonapihmkfakmlgkbkcf name=Google Network Speech ver=1.0 state= webstore=False api= hosts= path=C:\Program Files\Google\Chrome\Application\151.0.7922.174\resources\network_speech_synthesis/mv3
+PREF[Secure Preferences] id=mhjfbmdgcfjbbpaeojofohoefgiehjai name=Chrome PDF Viewer ver=1 state= webstore=False api= hosts= path=C:\Program Files\Google\Chrome\Application\151.0.7922.174\resources\pdf
+PREF[Secure Preferences] id=nkeimhogjdpnpccoofpliimaahmaaome name=Google Hangouts ver=1.3.26 state= webstore=False api= hosts= path=C:\Program Files\Google\Chrome\Application\151.0.7922.174\resources\hangout_services
+PREF[Secure Preferences] id=nmmhkkegccagdldgiimedpiccmgmieda name=Pagamentos da Chrome Web Store ver=1.0.0.6 state= webstore=True api=identity hosts=https://payments.google.com/*,https://sandbox.google.com/*,https://www.google.com/*,https://www.googleapis.com/* path=nmmhkkegccagdldgiimedpiccmgmieda\1.0.0.6_0
+DISK id=nmmhkkegccagdldgiimedpiccmgmieda name=__MSG_APP_NAME__ ver=1.0.0.6 desc=__MSG_APP_DESCRIPTION__ perms=identity|webview|https://www.google.com/|https://www.googleapis.com/*|https://payments.google.com/payments/v4/js/integrator.js|https://sandbox.google.com/payments/v4/js/integrator.js
+
+-- Profile 9 --
+Preferences size=14212
+Preferences has no extensions.settings
+Secure Preferences size=16482
+PREF[Secure Preferences] id=fignfifoniblkonapihmkfakmlgkbkcf name=Google Network Speech ver=1.0 state= webstore=False api= hosts= path=C:\Program Files\Google\Chrome\Application\151.0.7922.173\resources\network_speech_synthesis/mv3
+PREF[Secure Preferences] id=mhjfbmdgcfjbbpaeojofohoefgiehjai name=Chrome PDF Viewer ver=1 state= webstore=False api= hosts= path=C:\Program Files\Google\Chrome\Application\151.0.7922.173\resources\pdf
+PREF[Secure Preferences] id=nkeimhogjdpnpccoofpliimaahmaaome name=Google Hangouts ver=1.3.26 state= webstore=False api= hosts= path=C:\Program Files\Google\Chrome\Application\151.0.7922.173\resources\hangout_services
+PREF[Secure Preferences] id=nmmhkkegccagdldgiimedpiccmgmieda name=Pagamentos da Chrome Web Store ver=1.0.0.6 state= webstore=True api=identity hosts=https://payments.google.com/*,https://sandbox.google.com/*,https://www.google.com/*,https://www.googleapis.com/* path=nmmhkkegccagdldgiimedpiccmgmieda\1.0.0.6_0
+DISK id=nmmhkkegccagdldgiimedpiccmgmieda name=__MSG_APP_NAME__ ver=1.0.0.6 desc=__MSG_APP_DESCRIPTION__ perms=identity|webview|https://www.google.com/|https://www.googleapis.com/*|https://payments.google.com/payments/v4/js/integrator.js|https://sandbox.google.com/payments/v4/js/integrator.js
+===== EDGE C:\Users\danda\AppData\Local\Microsoft\Edge\User Data =====
+last_used=Default
+PROFILE_CACHE Default name=Perfil 1 gaia=
+DIR Ad Blocking
+DIR AmountExtractionHeuristicRegexes
+DIR Autofill
+DIR AutoLaunchProtocolsComponent
+DIR BrowserMetrics
+DIR CertificateRevocation
+DIR component_crx_cache
+DIR CookieReadinessList
+DIR Crashpad
+DIR Default
+DIR DeferredBrowserMetrics
+DIR Domain Actions
+DIR EADPData Component
+DIR EBWebViewMetrics
+DIR Edge Cloud Config
+DIR Edge Data Protection Lists
+DIR Edge Entity Extraction
+DIR Edge Notifications
+DIR Edge Shopping
+DIR Edge Sidebar
+DIR Edge Signal Triggers
+DIR Edge Wallet
+DIR Edge3pSerp
+DIR EdgeArbitration
+DIR EdgeEmojiLocales
+DIR EdgeLanguageDetectionModel
+DIR extensions_crx_cache
+DIR FirstPartySetsPreloaded
+DIR GPUPersistentCache
+DIR GraphiteDawnCache
+DIR GrShaderCache
+DIR hyphen-data
+DIR Local Traces
+DIR MEIPreload
+DIR Notification Resources
+DIR NotificationHelperMetrics
+DIR Nurturing
+DIR OnDeviceHeadSuggestModel
+DIR OpenCookieDatabase
+DIR OriginTrials
+DIR PKIMetadata
+DIR ProbabilisticRevealTokenRegistry
+DIR ProvenanceData
+DIR ProvenanceDataAllowList
+DIR ProvenanceDataTensors
+DIR RecoveryImproved
+DIR Safe Browsing
+DIR SafetyTips
+DIR ShaderCache
+DIR SmartScreen
+DIR Speech Recognition
+DIR Subresource Filter
+DIR Trust Protection Lists
+DIR TrustTokenKeyCommitments
+DIR Typosquatting
+DIR VisualCompanion
+DIR Web Notifications Deny List
+DIR Well Known Domains
+DIR WidevineCdm
+DIR WorkspacesNavigationComponent
+DIR ZxcvbnData
+
+-- Default --
+Preferences size=289478
+Preferences has no extensions.settings
+Secure Preferences size=88684
+PREF[Secure Preferences] id=ahfgeienlihckogmohjhadlkjgocpleb name=Web Store ver=0.2 state=1 webstore=False api= hosts= path=C:\Program Files (x86)\Microsoft\Edge\Application\130.0.2849.56\resources\web_store
+PREF[Secure Preferences] id=cjneempfhkonkkbcmnfdibgobmhbagaj name= ver= state=0 webstore= api= hosts= path=
+PREF[Secure Preferences] id=dbconhplchnbippmjabbcedokimacfjl name= ver= state= webstore= api= hosts= path=
+PREF[Secure Preferences] id=dgiklkfkllikcanfonkcabmbdfmgleag name=Microsoft Clipboard Extension ver=1.0 state=1 webstore=False api= hosts= path=C:\Program Files (x86)\Microsoft\Edge\Application\130.0.2849.56\resources\edge_clipboard
+PREF[Secure Preferences] id=ehlmnljdoejdahfjdfobmpfancoibmig name= ver= state=0 webstore= api= hosts= path=
+PREF[Secure Preferences] id=epdpgaljfdjmcemiaplofbiholoaepem name=Suppress Consent Prompt ver=1.0.0 state=1 webstore=False api= hosts= path=C:\Program Files (x86)\Microsoft\Edge\Application\130.0.2849.56\resources\edge_suppress_consent_prompt
+PREF[Secure Preferences] id=fikbjbembnmfhppjfnmfkahdhfohhjmg name=Media Internals Services Extension ver=2.0.0 state=1 webstore=False api= hosts= path=C:\Program Files (x86)\Microsoft\Edge\Application\130.0.2849.56\resources\media_internals_services
+PREF[Secure Preferences] id=fjngpfnaikknjdhkckmncgicobbkcnle name= ver= state=0 webstore= api= hosts= path=
+PREF[Secure Preferences] id=gbihlnbpmfkodghomcinpblknjhneknc name= ver= state=0 webstore= api= hosts= path=
+PREF[Secure Preferences] id=gbmoeijgfngecijpcnbooedokgafmmji name= ver= state=0 webstore= api= hosts= path=
+PREF[Secure Preferences] id=gcinnojdebelpnodghnoicmcdmamjoch name= ver= state=0 webstore= api= hosts= path=
+PREF[Secure Preferences] id=gecfnmoodchdkebjjffmdcmeghkflpib name= ver= state=0 webstore= api= hosts= path=
+PREF[Secure Preferences] id=hfmgbegjielnmfghmoohgmplnpeehike name= ver= state=0 webstore= api= hosts= path=
+PREF[Secure Preferences] id=iglcjdemknebjbklcgkfaebgojjphkec name=Microsoft Store ver=0.2 state=1 webstore=False api= hosts= path=C:\Program Files (x86)\Microsoft\Edge\Application\130.0.2849.56\resources\microsoft_web_store
+PREF[Secure Preferences] id=ihmafllikibpmigkcoadcmckbfhibefp name=Edge Feedback ver=1.0.0.1 state=1 webstore=False api= hosts= path=C:\Program Files (x86)\Microsoft\Edge\Application\130.0.2849.56\resources\edge_feedback
+PREF[Secure Preferences] id=jbleckejnaboogigodiafflhkajdmpcl name= ver= state=0 webstore= api= hosts= path=
+PREF[Secure Preferences] id=jdiccldimpdaibmpdkjnbmckianbfold name=Microsoft Voices ver=1.0 state=1 webstore=False api= hosts= path=C:\Program Files (x86)\Microsoft\Edge\Application\130.0.2849.56\resources\microsoft_voices
+PREF[Secure Preferences] id=jmjflgjpcpepeafmmgdpfkogkghcpiha name=Edge relevant text changes ver=1.2.1 state= webstore=False api= hosts= path=jmjflgjpcpepeafmmgdpfkogkghcpiha\1.2.1_0
+PREF[Secure Preferences] id=kfihiegbjaloebkmglnjnljoljgkkchm name= ver= state=0 webstore= api= hosts= path=
+PREF[Secure Preferences] id=mhjfbmdgcfjbbpaeojofohoefgiehjai name=Microsoft Edge PDF Viewer ver=1 state=1 webstore=False api= hosts= path=C:\Program Files (x86)\Microsoft\Edge\Application\130.0.2849.56\resources\edge_pdf
+PREF[Secure Preferences] id=ncbjelpjchkpbikbpkcchkhkblodoama name=WebRTC Internals Extension ver=2.0.4 state=1 webstore=False api= hosts= path=C:\Program Files (x86)\Microsoft\Edge\Application\144.0.3719.82\resources\webrtc_internals
+PREF[Secure Preferences] id=ndcpkimcihhghdcddljkfmmjccdmcmof name=Edge Copilot Bridge ver=151.0.4129.100 state= webstore=False api= hosts= path=C:\Program Files (x86)\Microsoft\Edge\Application\151.0.4129.101\resources\edge_copilot_bridge_extension
+PREF[Secure Preferences] id=nkbndigcebkoaejohleckhekfmcecfja name= ver= state=0 webstore= api= hosts= path=
+PREF[Secure Preferences] id=nkeimhogjdpnpccoofpliimaahmaaome name=WebRTC Extension ver=4.3.26 state=1 webstore=False api= hosts= path=C:\Program Files (x86)\Microsoft\Edge\Application\144.0.3719.82\resources\hangout_services
+PREF[Secure Preferences] id=ofefcgjbeghpigppfmkologfjadafddi name= ver= state=0 webstore= api= hosts= path=
+DISK id=jmjflgjpcpepeafmmgdpfkogkghcpiha name=Edge relevant text changes ver=1.2.1 desc=Edge relevant text changes on select websites to improve user experience and precisely surfaces the action they want to take. perms=
+DONE

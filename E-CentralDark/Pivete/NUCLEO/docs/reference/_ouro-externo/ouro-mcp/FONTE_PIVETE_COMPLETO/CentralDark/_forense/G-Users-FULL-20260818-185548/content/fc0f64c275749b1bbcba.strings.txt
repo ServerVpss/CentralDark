@@ -1,0 +1,323 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\libexec\git-core\MicroCom.Runtime.dll
+
+!This program cannot be run in DOS mode.
+`.rsrc
+@.reloc
+v4.0.30319
+#Strings
+<.cctor>b__5_0
+Nullable`1
+List`1
+KeyValuePair`2
+ConcurrentDictionary`2
+Func`3
+<Module>
+get_PPV
+System.Collections.Generic
+Interlocked
+EnsureOwned
+get_IsDisposed
+ManagedObjectInterfaceGuid
+TryGetTypeForGuid
+<Vtable>k__BackingField
+<Target>k__BackingField
+AddMethod
+method
+netstandard
+QueryInterface
+CloneReference
+EndInvoke
+BeginInvoke
+CreateVTable
+RegisterVTable
+IDisposable
+get_Vtable
+vtable
+GCHandle
+RuntimeTypeHandle
+GetTypeFromHandle
+get_OwnsHandle
+_ownsHandle
+GcShadowHandle
+_handle
+IsVolatile
+get_FullName
+MicroCom.Runtime
+MicroComRuntime
+ValueType
+IsInstanceOfType
+GetType
+MicroComVtblBase
+MicroComProxyBase
+UnsafeRelease
+Dispose
+QueryInterfaceDelegate
+_disposeDelegate
+AddRefDelegate
+GetFunctionPointerForDelegate
+MulticastDelegate
+AssemblyMetadataAttribute
+CompilerGeneratedAttribute
+UnverifiableCodeAttribute
+DebuggableAttribute
+AssemblyTitleAttribute
+TargetFrameworkAttribute
+ExtensionAttribute
+AssemblyFileVersionAttribute
+AssemblyInformationalVersionAttribute
+SecurityPermissionAttribute
+AssemblyConfigurationAttribute
+UnmanagedFunctionPointerAttribute
+CompilationRelaxationsAttribute
+AssemblyProductAttribute
+AssemblyCopyrightAttribute
+AssemblyCompanyAttribute
+RuntimeCompatibilityAttribute
+get_Value
+get_HasValue
+TryGetValue
+OnReferencedFromNative
+OnUnreferencedFromNative
+Remove
+get_Size
+get_VTableSize
+ReRegisterForFinalize
+SuppressFinalize
+SizeOf
+UnsafeAddRef
+System.Threading
+System.Runtime.Versioning
+ToString
+disposing
+AsyncCallback
+IMicroComExceptionCallback
+SendOrPostCallback
+callback
+AllocHGlobal
+FreeHGlobal
+Marshal
+MicroCom.Runtime.dll
+get_Item
+set_Item
+System
+Boolean
+SecurityAction
+System.Reflection
+CallingConvention
+COMException
+UnhandledException
+ObjectDisposedException
+RaiseException
+ArgumentNullException
+ArgumentException
+System.Runtime.ConstrainedExecution
+IUnknown
+unknown
+IMicroComShadowContainer
+IsComWrapper
+get_NativePointer
+GetOrCreateNativePointer
+GetNativePointer
+_nativePointer
+Register
+GetGuidFor
+GetVtableFor
+CreateProxyOrNullFor
+CreateProxyFor
+GetEnumerator
+.cctor
+Monitor
+GetNativeIntPtr
+FromIntPtr
+ToIntPtr
+System.Diagnostics
+_guids
+_methods
+System.Runtime.InteropServices
+System.Runtime.CompilerServices
+DebuggingModes
+_factories
+_vtables
+_guidsToTypes
+System.Security.Permissions
+_backShadows
+_shadows
+Concat
+TryUnwrapManagedObject
+pObject
+CriticalFinalizerObject
+object
+get_Target
+target
+op_Explicit
+GetValueOrDefault
+IAsyncResult
+result
+Decrement
+Increment
+get_Current
+System.Collections.Concurrent
+get_Count
+RefCount
+_refCount
+MoveNext
+DisposeOnContext
+SynchronizationContext
+_synchronizationContext
+FreeCcw
+GetObjectFromCcw
+get_Shadow
+set_Shadow
+MicroComShadow
+GetShadow
+get_Key
+proxyFactory
+op_Equality
+System.Security
+System.Security.Permissions.SecurityPermissionAttribute, netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51
+SkipVerification
+WrapNonExceptionThrows
+.NETStandard,Version=v2.0
+FrameworkDisplayName
+MicroCom.Runtime
+Release
+!Copyright 2021 
+ Nikita Tsukanov
+0.11.0.0
+0.11.0
+MicroCom
+RepositoryUrl$https://github.com/kekekeks/MicroCom
+/home/kekekeks/Projects/MicroCom/src/MicroCom.Runtime/obj/Release/netstandard2.0/MicroCom.Runtime.pdb
+SHA256
+_CorDllMain
+mscoree.dll
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 20110
+250619182135Z
+260617182135Z0t1
+Washington1
+Redmond1
+Microsoft Corporation1
+Microsoft Corporation0
+4(_si0
+I0G1-0+
+$Microsoft Ireland Operations Limited1
+230012+5053620
+Chttp://www.microsoft.com/pkiops/crl/MicCodSigPCA2011_2011-07-08.crl0a
+Ehttp://www.microsoft.com/pkiops/certs/MicCodSigPCA2011_2011-07-08.crt0
+eV!g*!
+Washington1
+Redmond1
+Microsoft Corporation1200
+)Microsoft Root Certificate Authority 20110
+110708205909Z
+260708210909Z0~1
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 20110
+Ihttp://crl.microsoft.com/pki/crl/products/MicRooCerAut2011_2011_03_22.crl0^
+Bhttp://www.microsoft.com/pki/certs/MicRooCerAut2011_2011_03_22.crt0
+3http://www.microsoft.com/pkiops/docs/primarycps.htm0@
+*?*kXIc
+QEX82q'
+WqVNHE
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 2011
+https://www.microsoft.com 0
+0p_Gqd
+20260211154344.448Z0
+Washington1
+Redmond1
+Microsoft Corporation1-0+
+$Microsoft Ireland Operations Limited1'0%
+nShield TSS ESN:2A1A-05E0-D9471%0#
+Microsoft Time-Stamp Service
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+250814184812Z
+261113184812Z0
+Washington1
+Redmond1
+Microsoft Corporation1-0+
+$Microsoft Ireland Operations Limited1'0%
+nShield TSS ESN:2A1A-05E0-D9471%0#
+Microsoft Time-Stamp Service0
+)|MS/n
+KH~dz0
+Nhttp://www.microsoft.com/pkiops/crl/Microsoft%20Time-Stamp%20PCA%202010(1).crl0l
+Phttp://www.microsoft.com/pkiops/certs/Microsoft%20Time-Stamp%20PCA%202010(1).crt0
+6Cax^H
+Washington1
+Redmond1
+Microsoft Corporation1200
+)Microsoft Root Certificate Authority 20100
+210930182225Z
+300930183225Z0|1
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+3http://www.microsoft.com/pkiops/Docs/Repository.htm0
+Ehttp://crl.microsoft.com/pki/crl/products/MicRooCerAut_2010-06-23.crl0Z
+>http://www.microsoft.com/pki/certs/MicRooCerAut_2010-06-23.crt0
+as.,k{n?,
+Washington1
+Redmond1
+Microsoft Corporation1-0+
+$Microsoft Ireland Operations Limited1'0%
+nShield TSS ESN:2A1A-05E0-D9471%0#
+Microsoft Time-Stamp Service
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+20260211040840Z
+20260212040840Z0w0=
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 2010
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 2010
+QueryInterface failed
+cd7687c0-a9c2-4563-b08e-a399df50c633
+00000000-0000-0000-C000-000000000046
+pObject
+Unable to create native callable wrapper for type 
+ for instance of type 
+Unable to get a native pointer for 
+VS_VERSION_INFO
+VarFileInfo
+Translation
+StringFileInfo
+000004b0
+CompanyName
+MicroCom.Runtime
+FileDescription
+MicroCom.Runtime
+FileVersion
+0.11.0.0
+InternalName
+MicroCom.Runtime.dll
+LegalCopyright
+Copyright 2021 
+ Nikita Tsukanov
+OriginalFilename
+MicroCom.Runtime.dll
+ProductName
+MicroCom
+ProductVersion
+0.11.0
+Assembly Version
+0.11.0.0
+Legal_policy_statement
+Microsof

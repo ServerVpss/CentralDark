@@ -1,0 +1,36 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\__pycache__\skin.cpython-311.pyc
+
+z"``hermes skin`` subcommand parser.
+annotations)
+Callable
+cmd_skinr
+return
+z1Attach the ``skin`` subcommand to ``subparsers``.
+List, switch, and tweak skinszHManage Hermes skins. `set` tweaks one color of the active skin in place.)
+description
+skin_command)
+List available skins)
+Switch the active skin
+Skin name
+setzDSet one color of the active skin (e.g. `skin set ui_tool '#00FFFF'`)
+keyz/Color key (e.g. ui_tool, ui_accent, background)
+valuez
+Hex color (#rrggbb)z
+--skinz0Target a specific skin instead of the active one)
+funcN)
+add_parser
+add_subparsers
+add_argument
+set_defaults)
+subparsersr
+skin_parser
+skin_subparsers
+skin_use
+skin_sets
+      
+OC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\skin.py
+build_skin_parserr
+__doc__
+__future__r
+typingr
+<module>r%

@@ -1,0 +1,21 @@
+flowchart LR
+  HUB["CentralDark HUB"] --> APPS["N Apps"]
+  HUB --> PROV["N Providers"]
+  HUB --> CONN["N Connectors"]
+  HUB --> MOD["N Models"]
+  HUB --> CAPS["N Capabilities"]
+  HUB --> POL["Policies / PDP"]
+  HUB --> AUD["Audit / Receipts"]
+  HUB --> GW["Gateway"]
+  HUB --> HERMES["Hermes / Agents"]
+  APPS --> MASTER["ONE MASTER FUNNEL"]
+  PROV --> MASTER
+  CONN --> MASTER
+  MOD --> MASTER
+  CAPS --> MASTER
+  MASTER --> AUTH["ONE AUTHORITY MODEL"]
+  AUTH --> WR["ONE WRITER / conflict scope"]
+  AUTH --> READ["MANY READERS"]
+  READ --> FALS["Independent Falsifier"]
+  WR --> J["Reality Judge"]
+  FALS --> J

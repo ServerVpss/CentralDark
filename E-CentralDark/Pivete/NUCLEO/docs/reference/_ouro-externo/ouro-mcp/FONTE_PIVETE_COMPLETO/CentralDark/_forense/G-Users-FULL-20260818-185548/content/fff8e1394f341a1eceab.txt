@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\apps\desktop\release\win-unpacked\resources\app.asar.unpacked\dist\assets\diff-ChtP43wD.js
+
+var e={"+":`inserted`,"-":`deleted`,"@":`meta`},t={name:`diff`,token:function(t){var n=t.string.search(/[\t ]+?$/);if(!t.sol()||n===0)return t.skipToEnd(),(`error `+(e[t.string.charAt(0)]||``)).replace(/ $/,``);var r=e[t.peek()]||t.skipToEnd();return n===-1?t.skipToEnd():t.pos=n,r}};export{t as diff};

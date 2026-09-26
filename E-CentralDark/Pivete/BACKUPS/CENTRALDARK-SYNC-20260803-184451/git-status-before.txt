@@ -1,0 +1,41 @@
+ M .agents/skills/meta-lupa/references/uso-ledger.jsonl
+ M .claude/settings.json
+ M .github/workflows/auto-cf-origin-cert.yml
+ M .github/workflows/bot-server-validate.yml
+ M .github/workflows/caddy-telepainel-v2.yml
+ M .github/workflows/codeql.yml
+ M .github/workflows/farm-co-author.yml
+ M .github/workflows/install-cf-origin-cert.yml
+ M .github/workflows/obsidian-index.yml
+ M .github/workflows/obsidian-plugin-release.yml
+ M .github/workflows/painel-auto-update.yml
+ M .github/workflows/painel-validacao.yml
+ M .github/workflows/painel-vivo.yml
+ M .github/workflows/pipeline-notify.yml
+ M .github/workflows/pr-agent.yml
+ M .github/workflows/sentinela-stale.yml
+ M .github/workflows/setup-telepainel-caddy.yml
+ M .github/workflows/supabase-bot.yml
+ M .github/workflows/vps-healthcheck.yml
+ M .github/workflows/vps-ssh-exec.yml
+ M .github/workflows/wuzapi-sessions-monitor.yml
+ M docs/BRAIN/00-MAPA.md
+ M docs/BRAIN/01-PENDENCIAS.md
+ M docs/BRAIN/BRAIN.md
+ M docs/BRAIN/MOC-MCP.md
+?? .agents/skills/meta-lupa/testes/test_autolupa_conformance.py.bak-26072026
+?? .artifacts/meta-lupa-mission/40-transicao-casa-bolt.md
+?? .hermes/
+?? NUL
+?? "apps/modulos/hub/LEMBRAN\303\207AS DE NOVO E UTIL.txt"
+?? docs/BRAIN/.obsidian/
+?? "docs/BRAIN/Sem t\303\255tulo 1.base"
+?? "docs/BRAIN/Sem t\303\255tulo 2.base"
+?? "docs/BRAIN/Sem t\303\255tulo.base"
+?? supabase/.temp/gotrue-version
+?? supabase/.temp/pooler-url
+?? supabase/.temp/postgres-version
+?? supabase/.temp/project-ref
+?? supabase/.temp/rest-version
+?? supabase/.temp/storage-migration
+?? supabase/.temp/storage-version

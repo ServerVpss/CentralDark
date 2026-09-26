@@ -1,0 +1,77 @@
+00_README/
+00_README/PACKAGE_TREE.txt  2724 bytes
+00_README/README.md  971 bytes
+01_ARCHITECTURE/
+01_ARCHITECTURE/AUTHORSHIP_PROVENANCE.yml  374 bytes
+01_ARCHITECTURE/FIXED_POINT_PR.yml  360 bytes
+01_ARCHITECTURE/HUMAN_SYSTEM_REALITY.yml  410 bytes
+01_ARCHITECTURE/INFRA_PREEXECUTION_GUARD.yml  867 bytes
+01_ARCHITECTURE/LEARNING_CRYSTAL_LOOP.yml  335 bytes
+01_ARCHITECTURE/MASTER_ARCHITECTURE.yml  807 bytes
+01_ARCHITECTURE/MASTER_CYCLE.yml  870 bytes
+01_ARCHITECTURE/NOTE_CYCLE_BINDING.schema.json  1355 bytes
+01_ARCHITECTURE/PAPAGAIO_OFF.yml  520 bytes
+02_EVIDENCE/
+02_EVIDENCE/CLAIM_MATRIX.md  1704 bytes
+02_EVIDENCE/ELECTRON_BYTE_IDENTITY.json  546 bytes
+02_EVIDENCE/cross_chat/
+02_EVIDENCE/cross_chat/CROSS_CHAT_CORRECTIONS.md  1693 bytes
+02_EVIDENCE/cross_chat/raw_sources/
+02_EVIDENCE/cross_chat/raw_sources/CENTRALDARK-RUN-ONCE-CLAUDE-HERMES.md  21226 bytes
+02_EVIDENCE/cross_chat/raw_sources/Markdown(20260820-055605).md colado  271443 bytes
+02_EVIDENCE/cross_chat/raw_sources/Pasted Text (1).txt  29261 bytes
+02_EVIDENCE/images/
+02_EVIDENCE/images/generated_reference/
+02_EVIDENCE/images/generated_reference/fluxo_geral_frente_1115.png  1543308 bytes
+02_EVIDENCE/images/user_screenshots/
+02_EVIDENCE/images/user_screenshots/10c14d39-4bbf-4630-a50a-0c4d6706ae8e.png  59032 bytes
+02_EVIDENCE/images/user_screenshots/17bca710-eef2-4dc2-88fe-38eacfa27935.png  83395 bytes
+02_EVIDENCE/images/user_screenshots/47104b5e-f5a9-4665-ad4d-ad8daae72cbf.png  98861 bytes
+02_EVIDENCE/images/user_screenshots/95fcb831-b550-4fab-9702-c2529e5541cf.png  110513 bytes
+02_EVIDENCE/images/user_screenshots/961addf2-a86b-4814-8916-ce5b1fe8fe90.png  65702 bytes
+02_EVIDENCE/images/user_screenshots/a1d8a004-50b5-41aa-be8d-1c5992210598.png  23394 bytes
+02_EVIDENCE/images/user_screenshots/cca49e03-f510-4a11-a3b0-27c16341ddaf.png  95693 bytes
+02_EVIDENCE/images/user_screenshots/current_screenshot_REDACTED.png  11544 bytes
+02_EVIDENCE/session/
+02_EVIDENCE/session/CURRENT_SESSION_CORRECTIONS.md  2138 bytes
+03_COUNTERPROOF/
+03_COUNTERPROOF/100_HYPOTHESES_SIMULATION.md  3712 bytes
+03_COUNTERPROOF/FABLE_MAX_PROXY_RETEST.md  754 bytes
+03_COUNTERPROOF/SELF_COUNTERPROOF.md  571 bytes
+04_REGISTRY/
+04_REGISTRY/CROSS_CHAT_LEDGER.jsonl  1540 bytes
+04_REGISTRY/IMAGE_EVIDENCE.json  3167 bytes
+04_REGISTRY/PROOF_ROOT.json  493 bytes
+04_REGISTRY/SESSION_LEDGER.jsonl  1993 bytes
+05_SOURCES/
+05_SOURCES/GITHUB_SOURCES.md  1239 bytes
+05_SOURCES/LIBRARY_SOURCES.md  393 bytes
+05_SOURCES/WEB_SOURCES.md  363 bytes
+06_VERIFY/
+06_VERIFY/verify_package.ps1  503 bytes
+06_VERIFY/verify_package.py  604 bytes
+07_VISUAL/
+07_VISUAL/architecture.svg  1090 bytes
+07_VISUAL/centraldark_banner_qr.png  35211 bytes
+07_VISUAL/evidence_contact_sheet.png  229600 bytes
+08_CROSS_CATEGORY/
+08_CROSS_CATEGORY/00_UPDATE_README.md  978 bytes
+08_CROSS_CATEGORY/ABSORB_WITHOUT_REPLACE.md  881 bytes
+08_CROSS_CATEGORY/ANY_CATEGORY_COUNTERPROOF.md  915 bytes
+08_CROSS_CATEGORY/CATEGORY_CLASSIFICATION.md  1033 bytes
+08_CROSS_CATEGORY/CROSS_CATEGORY_BENCHMARK.md  2210 bytes
+08_CROSS_CATEGORY/LIVE_GITHUB_GAP.md  806 bytes
+08_CROSS_CATEGORY/cross_category_banner_qr.png  38511 bytes
+08_CROSS_CATEGORY/evidence/
+08_CROSS_CATEGORY/evidence/cross_category_update_screenshot.png  141464 bytes
+08_CROSS_CATEGORY/sources/
+08_CROSS_CATEGORY/sources/WEB_SOURCE_NOTES.md  945 bytes
+08_CROSS_CATEGORY/sources/WEB_SOURCE_REGISTRY.json  2620 bytes
+08_CROSS_CATEGORY/verification/
+08_CROSS_CATEGORY/verification/DELTA_MANIFEST.sha256  1255 bytes
+08_CROSS_CATEGORY/verification/PARENT_ANCHOR.json  384 bytes
+08_CROSS_CATEGORY/verification/SUCCESSOR_PROOF.json  654 bytes
+08_CROSS_CATEGORY/verification/ZERO_REGRESSION_BASELINE.json  1052 bytes
+08_CROSS_CATEGORY/verification/verify_successor.py  645 bytes
+CORE_MANIFEST.sha256  4228 bytes
+PACKAGE_MANIFEST.sha256  4800 bytes

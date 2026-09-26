@@ -1,0 +1,25 @@
+{
+  "protocol": "CENTRALDARK_BROWSER_BRIDGE_V1",
+  "bind": "127.0.0.1",
+  "port": 0,
+  "providers": {
+    "foreground": {
+      "type": "chrome-devtools-mcp",
+      "enabled": false,
+      "status": "UNPROVEN_UNTIL_MEASURED"
+    },
+    "background": {
+      "type": "zendriver",
+      "enabled": false,
+      "root": "apps/modulos/elite-gateway",
+      "status": "EXISTING_CODE_REQUIRES_RUNTIME_MEASUREMENT"
+    }
+  },
+  "policy": {
+    "readOnlyDefault": true,
+    "allowPrivateInternalApi": false,
+    "forwardCookies": false,
+    "forwardAuthorization": false,
+    "publicBind": false
+  }
+}

@@ -1,0 +1,66 @@
+schema: DELTAUTIL_COMPACT_SEMANTIC_INDEX
+mode: RETRIEVAL_LAYER_NOT_REPLACEMENT
+owner: DELTAUTIL
+master: CENTRALDARK
+entry: '!DELTAUTIL -> !CENTRALDARK -> DELTAUTIL_RECONCILE'
+compress:
+  grammar: ALLOWED
+  semantics: PRESERVE
+  proof: PRESERVE
+  authority: PRESERVE
+  failure_boundary: PRESERVE
+  lineage: PRESERVE
+core:
+  discover: find -> classify -> dedupe
+  reality: scope -> owner -> current consumer/runtime
+  delta: digest -> compatibility -> risk -> gain|UNKNOWN
+  review: Gemini=reader -> falsifier -> preview
+  write: one_writer -> test -> doc_gate -> receipt
+  fallback: sensor_fail != world_fail
+  versions: extend_existing; no V2/V3/V4
+hub:
+  surfaces:
+  - WORKSPACES
+  - PLUGINS
+  - CONNECTIONS
+  - DELTA_INBOX
+  - GEMINI_MODAL
+  embed: native > safe_iframe > api_adapter > one_time_external_auth
+  iframe: CSP/XFO must allow; unknown=do_not_embed
+ui:
+  dots:
+    GREEN: 🟢 active/pass
+    YELLOW: 🟡 pending/unknown
+    RED: 🔴 blocked/conflict
+    BLUE: 🔵 available/info
+    BLACK: ⚫ disabled
+  scores:
+  - compatibility
+  - evidence_coverage
+  - readiness
+  - security_gate_coverage
+  - regression_risk
+  - projected_gain_or_unknown
+  invariant: percent != proof; color != proof
+install:
+  sources:
+  - GITHUB_URL
+  - DRIVE_FILE
+  - MARKDOWN
+  - ZIP
+  - MANIFEST
+  - AUTHORIZED_WEBHOOK
+  - LOCAL_PACKAGE
+  gate: scrub -> owner -> preview -> falsifier -> tests -> one_writer -> receipt
+update_fabric: 'conditional: ingress(any authorized) -> deltautil -> reconcile ->
+  test -> doc_gate -> same_package; deploy only explicit'
+time: machine/package=YYYY-MM-DD; human=pt-BR DD/MM/YYYY HH:mm:ss TZ; store=RFC3339
+  offset
+builder: factory only; candidate -> manifest+deps+docs+tests+recovery+receipt; no
+  authority; no secret
+revision_blocks: each delta block records date_key, author/display alias, source,
+  revision/head, proof, next_cursor
+documentation_house: material_code -> code_doc_gate -> technical_view+mental_map -> test -> counterproof -> receipt
+communication: default=TRABALHO; RESENHA=explicit_only; human=pt-BR; code_identifiers=english
+plug_play: package -> owner_match -> dry_run -> recovery -> apply_minimum -> doc_gate -> tests -> receipt
+hermes_upstream: check_only -> diff_capabilities -> sandbox -> adapters -> gates -> promote; centraldark_cli_shell_preserved

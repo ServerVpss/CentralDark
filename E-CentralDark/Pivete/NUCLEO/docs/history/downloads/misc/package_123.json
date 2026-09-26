@@ -1,0 +1,14 @@
+{
+  "name": "centraldark-one-flow-plugkit",
+  "private": true,
+  "type": "module",
+  "description": "Reference integration kit for CentralDark ONE FLOW; not a second system.",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "verify": "node scripts/verify-package.mjs",
+    "example": "node bin/centraldark-one-flow.mjs --input examples/source-snapshot.json --out out/example-receipt.json"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

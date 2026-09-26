@@ -1,0 +1,18 @@
+# ── MCP Server CentralDark — Python deps ──────────────────────────────────────
+# Testado: Python 3.11+, VPS Linux x86_64 sem GPU
+
+# MCP framework
+fastmcp>=2.0.0
+
+# Busca semântica local
+# Instala torch (CPU-only automaticamente no Linux sem CUDA) + transformers
+sentence-transformers>=3.1.0
+
+# Vetores (já dependência do sentence-transformers, listado explicitamente)
+numpy>=1.26.0
+
+# Servidor HTTP para healthcheck / modo remoto (opcional, stdio não precisa)
+# uvicorn[standard]>=0.30.0
+
+# Utilitários
+python-dotenv>=1.0.0

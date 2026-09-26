@@ -1,0 +1,5 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\WebStorage\6\IndexedDB\indexeddb.leveldb\LOG.old
+
+2026/08/16-08:39:23.852 2a60 Reusing MANIFEST C:\Users\danda\AppData\Local\Google\Chrome\User Data\Default\WebStorage\6\IndexedDB\indexeddb.leveldb/MANIFEST-000001
+2026/08/16-08:39:23.852 2a60 Recovering log #4
+2026/08/16-08:39:23.853 2a60 Reusing old log C:\Users\danda\AppData\Local\Google\Chrome\User Data\Default\WebStorage\6\IndexedDB\indexeddb.leveldb/000004.log 

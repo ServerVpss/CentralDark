@@ -1,0 +1,7 @@
+# TESTE HOOK KANBAN
+
+COMANDO: teste_hook_kanban
+PROMPT: verifica se card é criado automaticamente
+GATE: FILE_SECURITY_GATE v2
+RISCO: nenhum
+GAP: nenhum

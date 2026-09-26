@@ -1,0 +1,110 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\__pycache__\plugins.cpython-311.pyc
+
+``hermes plugins`` subcommand parser.
+Extracted from ``hermes_cli/main.py:main()`` (god-file Phase 2 follow-up).
+Handler injected to avoid importing ``main``.
+annotations)
+Callable
+cmd_pluginsr
+return
+d"d#d$
+d+d,d-g
+dFdGdH
+dRdSdT
+d^d_d`
+)hz4Attach the ``plugins`` subcommand to ``subparsers``.
+pluginsz
+Manage and validate pluginsz
+Install, update, remove, list, or validate native Hermes plugins and portable Agent Plugins v1 packages. Portable packages install disabled.)
+description
+plugins_action)
+installz:Install a plugin from a Git URL, owner/repo, or index name)
+identifierz
+Git URL, owner/repo shorthand (e.g. anpicasso/hermes-plugin-chrome-profiles), or a bare plugin name resolved through the community index (see `hermes plugins search`)z
+--forcez
+store_truez$Remove existing plugin and reinstall)
+actionr
+COMMIT_SHAz9Install exactly one immutable 40-character Git commit SHA)
+metavarr
+--enablez?Auto-enable the plugin after install (skip confirmation prompt)z
+--no-enablez]Install disabled (skip confirmation prompt); enable later with `hermes plugins enable <name>`
+searchz!Search the community plugin index
+z_Search term matched fuzzily against name, description, and tags (omit to browse the full index))
+defaultr
+--jsonz
+Print machine-readable JSONz
+--capability
+CAPz>Filter by declared capability (e.g. tools, platform, commands)z
+--refreshz-Bypass the local cache and re-fetch the index
+updatez+Pull latest changes for an installed plugin
+Plugin name to update
+remove
+uninstallz
+Remove an installed plugin)
+aliasesr
+Plugin directory name to remove
+List installed pluginsz
+--enabledz
+Show only enabled pluginsz
+--userz8Show only user-installed plugins (including git plugins)z
+--no-bundledz
+Hide bundled pluginsz
+--plainz7Print compact plain-text output instead of a Rich table
+enablez
+Enable a disabled pluginz
+Plugin name to enablez
+--allow-tool-overrideztGrant this plugin permission to replace built-in tools (e.g. shell_exec, write_file). Skips the confirmation prompt.z
+--no-allow-tool-overridez=Enable without granting built-in tool override (skip prompt).
+disablez$Disable a plugin without removing itz
+Plugin name to disable
+capabilitiesz0Show declared vs granted capabilities per pluginu
+Show each plugin's declared capabilities (from plugin.yaml) against what the user has granted. Capabilities are a consent and audit layer over host API surfaces 
+ NOT a sandbox.NzAPlugin id to inspect (omit to list all plugins with capabilities)
+doctorz1Validate a plugin with the real runtime contracts
+target
+.z?Plugin path or installed plugin id (default: current directory)z
+--ciz.Exit non-zero when validation reports an error
+packz5Declarative, shareable plugin sets (hermes-pack.yaml)u
+Install, export, or inspect plugin packs 
+ a single YAML file pinning a set of plugins to exact commit SHAs, with optional non-secret config seeds. Installing a pack fans out to ordinary pinned installs; capability consent stays per-plugin.
+pack_actionz7Review and install a pack from a file path or https URL
+sourcez3Path to a hermes-pack.yaml file, or an https:// URLz$Reinstall plugins that already exist
+exportz2Emit a pack YAML for the current install on stdoutz
+--enabled-onlyz1Only include plugins currently in plugins.enabledz
+--namez
+my-hermes-packz'Pack name to embed in the exported YAML)
+showz4Dry-run: parse and display a pack without installing
+infoz:Show details for a single plugin (including emits/listens)z
+Plugin name or key to show)
+add_parser
+add_subparsers
+add_argument
+add_mutually_exclusive_group
+set_defaults)
+subparsersr
+plugins_parser
+plugins_subparsers
+plugins_install
+_install_enable_group
+plugins_search
+plugins_update
+plugins_remove
+plugins_list
+plugins_enable
+_enable_override_group
+plugins_disable
+plugins_capabilities
+plugins_doctor
+plugins_pack
+pack_subparsers
+pack_install
+pack_export
+pack_show
+plugins_shows
+                     
+RC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\plugins.py
+build_plugins_parserrJ
+__doc__
+__future__r
+typingr
+<module>rP

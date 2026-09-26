@@ -1,0 +1,7 @@
+Implementar a gravação automática das missões em missions/pendente e em-andamento quando um agente iniciar, criando os .json no disco de forma consistente. 
+
+Conectar a Sala de Controle ao HUB/cockpit/state real para que o mapa vivo e as abas exibam dados a partir desses arquivos e endpoints, sem depender de mock. 
+
+Criar alertas na Sala de Controle quando missions/pendente estiver vazio por muito tempo ou quando houver falha no barramento, exibindo a causa provável e o status do Hermes-Core/PM2. 
+
+Adicionar no /admin/cockpit uma área de “Rastros” que liste evidências encontradas na VPS e no repo (o que é ouro, lixo e melhorias) com data e link/arquivo relacionado.

@@ -1,0 +1,68 @@
+# OpenClaw Whitelabel Configuration Template
+# Copy to apps/{agent-name}/config.yaml and customize
+#
+# Variables to replace:
+#   {AGENT_NAME} - Your agent's name (e.g., "atlas")
+#   {AGENT_ICON} - Emoji or icon (e.g., "🤖")
+#   {TAILSCALE_IP} - Your VPS Tailscale IP
+#   {OWNER_PHONE} - WhatsApp number for DM pairing (e.g., "+5511999999999")
+
+agent:
+  name: "{AGENT_NAME}"
+  icon: "{AGENT_ICON}"
+  description: "AI assistant powered by OpenClaw"
+
+gateway:
+  host: "127.0.0.1"  # NEVER change to 0.0.0.0 without security review
+  port: 18789
+  cors:
+    origin: "http://localhost:3000"
+
+security:
+  # Layer 1: Access Control
+  auth:
+    enabled: true
+    token: "${OPENCLAW_AUTH_TOKEN}"  # Set in .env
+  dm_pairing:
+    enabled: true
+    owner: "{OWNER_PHONE}"
+  group_chat:
+    require_mention: true
+
+  # Layer 2: Sandboxing
+  sandbox:
+    enabled: true
+    image: "alpine:latest"
+    user: "nobody"
+    network: "none"
+    workspace_access: "rw"
+    workspace_scope: "session"
+
+  # Layer 3: Audit
+  audit:
+    enabled: true
+    redact_secrets: true
+    transcript_retention: true
+    detect_secrets: true
+
+# LLM Router (customize tiers in llm-router-config.yaml)
+llm:
+  config: "./llm-router-config.yaml"
+  default_tier: "standard"
+
+# Channels (enable as needed)
+channels:
+  whatsapp:
+    enabled: false
+    adapter: "baileys"
+  telegram:
+    enabled: false
+    adapter: "grammy"
+  slack:
+    enabled: false
+    adapter: "bolt"
+
+# Skills
+skills:
+  directory: "./skills/"
+  progressive_disclosure: true

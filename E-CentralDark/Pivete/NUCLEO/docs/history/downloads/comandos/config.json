@@ -1,0 +1,32 @@
+// User settings belong in settings.json.
+// This file is managed automatically.
+{
+  "firstLaunchAt": "2026-08-23T00:23:34.673Z",
+  "appTipShown": true,
+  "reasoningSummariesCleanupDone": true,
+  "appInstallNudgeResponded": true,
+  "installedPlugins": [
+    {
+      "name": "security-best-practices",
+      "marketplace": "",
+      "installed_at": "2026-08-26T02:09:11.998Z",
+      "enabled": true,
+      "version": "1.0.0",
+      "cache_path": "C:\\Users\\danda\\.copilot\\installed-plugins\\_direct\\github--awesome-copilot--plugins-security-best-practices",
+      "source": {
+        "source": "github",
+        "repo": "github/awesome-copilot",
+        "path": "plugins/security-best-practices"
+      }
+    },
+    {
+      "name": "azure-devops-copilot-plugin",
+      "marketplace": "copilot-plugins",
+      "version": "0.1.53",
+      "installed_at": "2026-08-26T22:45:13.312Z",
+      "cache_path": "C:\\Users\\danda\\.copilot\\installed-plugins\\copilot-plugins\\azure-devops-copilot-plugin",
+      "source_sha": "638e7439bff07420501caccea50076b2357e3508680f1237ff4b7e42e1e1e3c0",
+      "enabled": true
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\lib\tcl8.6\tzdata\Etc\GMT+12
+
+# created by tools/tclZIC.tcl - do not edit
+set TZData(:Etc/GMT+12) {
+    {-9223372036854775808 -43200 0 -1200}

@@ -1,0 +1,5537 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\apps\desktop\release\win-unpacked.bak\locales\ar.pak
+
+Chromiumar,en-US,enwindows-1256Times New RomanCourier NewConsolasArialComic Sans MSImpactCambria Math,Noto Sans JP,Noto Sans CJK JP,Meiryo,Yu Gothic,BIZ UDGothic,MS Gothic,Noto Serif JP,Noto Serif CJK JP,Yu Mincho,MS PMincho,Noto Sans KR,Noto Sans CJK KR,Malgun Gothic,Noto Serif KR,Noto Serif CJK KR,Batang,Noto Sans SC,Noto Sans CJK SC,Microsoft YaHei,Noto Serif SC,Noto Serif CJK SC,Simsun,Noto Sans TC,Noto Sans CJK TC,Microsoft JhengHei,Noto Serif TC,Noto Serif CJK TC,PMingLiUKaiTiDFKai-SBSegoe UIGulimcheGungsuhNSimsunMingLiU10en-US
+ Chrome
+ Enter 
+ Chrome
+ Chrome
+ Chrome.
+ (Tab) 
+ Enter 
+ Chrome 
+ Chrome
+ Chrome.
+ (Tab) 
+ Enter 
+ Chrome.
+ Chrome
+ (Tab) 
+ Enter 
+ Google".
+ (Tab) 
+ Enter 
+ Google".
+ Google"
+ Chrome: 
+ Chrome 
+ (Tab) 
+ Enter 
+ Chrome 
+ Chrome.
+ Chrome 
+ Chrome
+ Chrome: 
+ Chrome.
+ Enter 
+ Chrome
+ Chrome
+ Chrome.
+ Enter 
+ Chrome
+ Chrome
+ Chrome.
+ (Tab) 
+ Enter 
+ Chrome.
+ Chrome
+ Chrome.
+ (Tab) 
+ Enter 
+ Chrome.
+ Chrome
+ Chrome.
+ (Tab) 
+ Enter 
+ Chrome.
+ Chrome
+ Chrome.
+ (Tab) 
+ Enter 
+ Chrome
+ Chrome
+ Chrome: 
+ Chrome.
+ (Tab) 
+ Enter 
+ Chrome.
+ Chrome
+ Chrome
+ Google 
+ (Tab) 
+ Enter 
+ Google" 
+ Google 
+ Google 
+ (Tab) 
+ Enter 
+ Google" 
+ Google" 
+ Google" 
+ (Tab) 
+ Enter 
+ Google 
+ Google" 
+ Google 
+ Google" 
+ Google" 
+ (Tab) 
+ Enter 
+ Google" 
+ Google" 
+ Google".
+ (Tab) 
+ Enter 
+ Google" 
+ Google" 
+ Google Keep 
+ (Tab) 
+ Enter 
+ Google Keep 
+ Google Keep 
+ Google" 
+ (Tab) 
+ Enter 
+ Google" 
+ Google" 
+ Google: 
+ Google.
+ (Tab) 
+ Enter 
+ Google.
+ Google
+ Google
+ Google: 
+ Google.
+ (Tab) 
+ Enter 
+ Google.
+ Google
+ Google
+ Chrome: 
+ Chrome.
+ Enter 
+ Chrome.
+ Chrome
+ Google.
+ Enter 
+ Google.
+ Google: 
+ Google.
+ Enter 
+ Google.
+ Google
+ Google
+ Chrome: 
+ Chrome.
+ Enter 
+ Chrome.
+ Chrome
+ Chrome: 
+ Chrome.
+ Enter 
+ Chrome.
+ Chrome
+ Chrome: 
+ Chrome.
+ Enter 
+ Chrome.
+ Chrome
+ Chrome
+ Enter 
+ Chrome.
+ Enter 
+ Chrome
+ Chrome
+ Chrome: 
+ Chrome.
+ Enter 
+ Chrome.
+ Chrome
+ Chrome: 
+ Enter 
+ Chrome
+ Enter 
+ Chrome 
+ Chrome 
+ (Tab) 
+ Enter 
+ Chrome 
+ Chrome 
+ Chrome 
+ Chromium.
+ Chromium
+default100
+ Google Cast
+ Chromium 
+$1 - Chromium
+https://chrome.google.com/webstore?hl=arCtrl
+ Chromium
+ Chrome 
+ Google"
+.webp.
+"http://
+ "https://
+ Google
+Facebook
+ GoogleTwitter
+ "$1" 
+ "$1" 
+ Google. 
+ <a href="https://myactivity.google.com/" target="_blank">myactivity.google.com</a>.
+        <br>
+        <br>
+        
+ Google 
+ <a href="https://policies.google.com/" target="_blank">policies.google.com</a>.this module
+ Google Drive.
+        <br>
+        <br>
+        
+ Chrome".Super Duper Module
+        <br>
+        <br>
+        
+ Chrome".
+ Google 
+ Google 
+75%'Segoe UI', Tahoma, sans-serif
+ Chromium
+ Chromium
+ Chromium
+ Chromium
+ Chromium ($1)
+ Chromium 
+Chromium 
+ Chromium 
+ Chromium 
+ Google.
+ Chromium 
+ Chromium 
+ <a href="$1" target="_blank">
+ Google</a>.
+ Chromium 
+ Chromium 
+ Chromium 
+ <a target='_blank' href='$1'>
+ Chromium</a>.
+ <a target='_blank' href='$1'>
+ Chromium</a>.
+ Chromium <a target='_blank' href='$1'>
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium
+ Chromium 
+ Chromium 
+ Chromium 
+ Google. 
+ Google 
+ Chromium 
+ Chromium 
+ Google
+ Chromium
+ Chromium
+ Google" 
+ Gmail 
+ Chromium
+ Chromium
+ Chromium
+ Chromium 
+ <a href="#" id="openSystemSettingsLink" >
+ Chromium 
+ <a href="#" id="openSystemSettingsLink" >
+ Chromium 
+ <a href="#" id="openSystemSettingsLink" >
+</a>To use your camera on these sites, give Chromium access in <a href="#" id="openSystemSettingsLink" >system settings</a>To use your location on these sites, give Chromium access in <a href="#" id="openSystemSettingsLink" >system settings</a>To use your microphone on these sites, give Chromium access in <a href="#" id="openSystemSettingsLink" >system settings</a>
+ Chromium
+ Google 
+ Chromium.
+ Chromium
+ Chromium.
+ Chromium.
+ Chromium 
+ Chromium 
+ Chromium 
+ Google.
+ Google
+ Chromium 
+ Chromium 
+ Chromium
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium
+ Google 
+ Chromium. 
+ Chromium 
+ Google
+ Chromium.
+ <a href="#" id="enhancedProtectionLearnMoreLink" on-click="onEnhancedProtectionLearnMoreClick_">
+ Chromium 
+ Chromium 
+ (DNS).
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium
+ Chromium
+ Chromium 
+ Chromium 
+ Chromium
+ Chromium
+ Chromium 
+ Google 
+ Google
+ Gmail 
+ YouTube 
+ Chromium 
+ Chromium
+ Chromium 
+ Chromium
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Google 
+ Chromium 
+ Google 
+ Chromium 
+ Google
+ Chromium 
+ Google
+ Chromium 
+ Google
+ Chromium 
+ Chromium 
+ Chromium
+ Chromium 
+ Chromium 
+ Google
+ <a href="$1" target="_blank">
+</a>. 
+ Google Pay. 
+ Chromium.
+ Google 
+ <a href="$1" target="_blank">
+ Chromium 
+ Chromium 
+ Google
+ <a href="$1" target="_blank">
+</a>. 
+ Google" 
+ Chromium.
+ <a href="$1" target="_blank">
+ Chromium 
+ Chromium 
+ Google 
+ Chromium 
+ Chromium 
+. <a href="$1" target="_blank" id="learn-more" aria-description="$2">
+ Chromium 
+. <a href="$1" target="_blank" id="learn-more" aria-description="$2">
+ Chromium 
+. <a href="$1" target="_blank" id="learn-more" aria-description="$2">
+ Chromium
+ Chromium 
+ Chromium
+ Chromium 
+ <a is="action-link" target="_blank">
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium
+ <a href="$1" target="_blank">
+ Chromium</a>
+ Chromium
+<a href="$1" target="_blank">
+ Chromium</a> 
+ Chromium 
+ Chromium"
+ Chromium
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ ($3).
+ Chromium 
+ Chromium 
+ Chromium 
+ HTTPS 
+ Chromium 
+ HTTPS.
+ Chromium 
+ Chromium 
+ Chromium 
+ HTTPS.
+ Chromium 
+ Chromium.
+ Chromium. 
+ Chromium Enterprise
+ - Chromium
+ Chromium 
+ Google
+        <br><br>
+          
+ Chromium 
+          <br>
+          
+          <br>
+          
+          <br><br>
+          
+ - Chromium
+ Chromium
+ Chromium$1 - Chromium CanaryThe Chromium Authors
+ {0,date,y} 
+ The Chromium Authors. 
+.Not used in Chromium. Placeholder to keep resource maps in sync.
+ Chromium 
+ Windows XP 
+ Windows Vista.
+ Chromium 
+ Windows 10 
+ Windows 7.
+ Chromium 
+ Windows 10 
+ Windows 8.
+ Chromium 
+ Windows 10 
+ Windows 8.1.
+ Chromium. 
+ Android
+ Chromium 
+ Android
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium
+ Chromium
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium.
+ Chromium.
+ Chromium 
+ Chromium 
+ Chromium 
+ Windows 
+ Chromium 
+ Windows 
+ Chromium 
+ Windows 
+ Chromium 
+ Windows 
+ Chromium 
+ Windows.
+ Chromium 
+ Windows.
+ Chromium. 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Windows 10 
+ Chromium.
+ Chromium 
+ Chromium.
+ Chromium.
+ Chromium 
+ Chromium
+ Chromium
+ Chromium 
+ Chromium
+Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Google"
+ Chromium
+ Chromium.
+ Chromium.
+ Chromium.
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium
+ Chromium 
+ Google 
+ Chromium 
+ Chromium
+ Chromium 
+ Chromium 
+ "$1" 
+ Chromium 
+ Chromium 
+.{NUM_EXTENSIONS,plural, =1{
+ Chromium 
+.}zero{
+ Chromium 
+.}two{
+ Chromium 
+.}few{
+ Chromium 
+.}many{
+ Chromium 
+.}other{
+ Chromium 
+ Chromium 
+. <a href="$1" aria-description="$2" target="_blank">
+</a>{NUM_EXTENSIONS,plural, =1{
+ Chromium 
+. <a href="$1" aria-description="$2" target="_blank">
+</a>}zero{
+ Chromium 
+. <a href="$1" aria-description="$2" target="_blank">
+</a>}two{
+ Chromium 
+. <a href="$1" aria-description="$2" target="_blank">
+</a>}few{
+ Chromium 
+. <a href="$1" aria-description="$2" target="_blank">
+</a>}many{
+ Chromium 
+. <a href="$1" aria-description="$2" target="_blank">
+</a>}other{
+ Chromium 
+. <a href="$1" aria-description="$2" target="_blank">
+</a>}}
+ "$1" 
+ Chromium
+ Chromium 
+ Chrome 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+.{NUM_EXTENSIONS,plural, =1{
+ Chromium 
+}zero{
+ Chromium 
+ Chromium 
+ Chromium 
+}many{
+ Chromium 
+}other{
+ Chromium 
+ Chromium
+ Chromium 
+ Chromium
+ Chromium
+ Chromium.
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium
+ Chromium
+ Chromium 
+ Chromium
+ Chromium
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium
+ Chromium 
+ Chromium. 
+ Chromium 
+ Google
+ Chromium. 
+ Chromium 
+ Google
+ Chromium 
+ ($1) 
+ Chromium
+ Chromium
+ Chromium!
+ Chromium
+ "$1" 
+ Chromium
+ Chromium
+ Chromium 
+ "$1" 
+ Chromium
+ Chromium.
+ Chromium
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium" 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium
+ Chromium
+ Chromium 
+ Chromium. 
+ Chromium 
+ "$1".  
+ Chromium 
+ Chromium
+ Google 
+ Chromium. 
+ Chromium".
+ Google 
+ Chromium. 
+ Google 
+ Google 
+ Chromium
+ Chromium 
+ Google 
+ Chromium
+ Chromium 
+ Google 
+.{count,plural, =1{
+ Chromium 
+ Google 
+.}zero{
+ Chromium 
+ Google 
+ {count} 
+.}two{
+ Chromium 
+ Google 
+ ({count}) 
+.}few{
+ Chromium 
+ Google 
+ {count} 
+.}many{
+ Chromium 
+ Google 
+ {count} 
+.}other{
+ Chromium 
+ Google 
+ {count} 
+ Chromium 
+ Google 
+.{count,plural, =1{
+ Chromium 
+ Google 
+.}zero{
+ Chromium 
+ Google 
+ {count} 
+.}two{
+ Chromium 
+ Google 
+ ({count}) 
+.}few{
+ Chromium 
+ Google 
+ {count} 
+.}many{
+ Chromium 
+ Google 
+ {count} 
+.}other{
+ Chromium 
+ Google 
+ {count} 
+ Chromium
+ Google 
+ Chromium. 
+ Chromium 
+ Chromium 
+ Chromium 
+ Google.
+ Chromium
+ Chromium 
+ Chromium 
+ Google 
+ Chromium 
+ Google 
+ Chromium.
+ Chromium
+ Chromium
+ Chromium
+ Chromium
+ Chromium
+ Chromium
+ Chromium 
+ Chromium 
+ Chromium 
+.{NUM_DEVICES,plural, =0{
+ Chromium 
+ Chromium 
+ Chromium 
+ HID}few{
+ Chromium 
+ HID}many{
+ Chromium 
+ HID}other{
+ Chromium 
+ HID}}{NUM_DEVICES,plural, =0{
+ Chromium 
+ Chromium 
+ Chromium 
+ USB}few{
+ Chromium 
+ USB}many{
+ Chromium 
+ USB}other{
+ Chromium 
+ USB}}
+ Chromium 
+Chromium 
+ Chromium 
+ Google 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium
+ Chromium.
+ Chromium.  
+ Chromium 
+. Chromium (mDNS-In)
+ Chromium 
+ mDNS.
+ Chromium 
+ Google. 
+ Chromium 
+ Google.
+ Google". 
+ Google. 
+ Chromium
+ Chromium
+ Chromium
+{COUNT,plural, =0{
+ Chromium 
+ Chromium 
+.}two{
+ Chromium 
+.}few{
+ Chromium 
+ #.}many{
+ Chromium 
+ #.}other{
+ Chromium 
+ Chromium
+ Chromium
+ Chromium 
+ Chromium 
+ Chromium 
+ Google ($1)
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium. 
+ Chromium
+ Chromium 
+" (System Settings)
+ Chromium 
+" (System Settings).
+ Chromium 
+" (System Settings)
+ Chromium 
+" (System Settings).
+ Chromium.
+" (System Settings) 
+" (System Audio Recording Only) 
+ Chromium
+ Chromium
+ Escape 
+ Escape 
+ Google"
+: %$1 
+: %$1 
+: %$1 
+: %$1 
+. $1When you open Image Search, the page title, URL, and content, including PDFs, will automatically be sent to the server. $1
+ Chromium
+Got itRemind me later
+          **
+ Chromium{0,plural, =0{
+ Chromium}=1{
+ Chromium}two{
+ Chromium 
+ Chromium 
+}many{
+ Chromium 
+}other{
+ Chromium 
+}}{COUNT,plural, =0{
+ Chromium 
+ Chromium 
+.}two{
+ Chromium 
+.}few{
+ Chromium 
+ #.}many{
+ Chromium 
+ #.}other{
+ Chromium 
+ #.}}{0,plural, =1{
+ Chromium 
+}zero{
+ Chromium 
+ Chromium 
+ Chromium 
+}many{
+ Chromium 
+}other{
+ Chromium 
+}}{0,plural, =1{
+ Chromium 
+}zero{
+ Chromium 
+ Chromium 
+ Chromium 
+}many{
+ Chromium 
+}other{
+ Chromium 
+}}{0,plural, =1{
+ Chromium 
+}zero{
+ Chromium 
+ Chromium 
+ Chromium 
+}many{
+ Chromium 
+}other{
+ Chromium 
+}}{0,plural, =0{
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+}many{
+ Chromium 
+}other{
+ Chromium 
+}}{COUNT,plural, =0{
+ Chromium 
+ Chromium 
+.}two{
+ Chromium 
+.}few{
+ Chromium 
+ #.}many{
+ Chromium 
+ #.}other{
+ Chromium 
+ #.}}{COUNT,plural, =0{
+ Chromium 
+ Chromium 
+.}two{
+ Chromium 
+.}few{
+ Chromium 
+.}many{
+ Chromium 
+.}other{
+ Chromium 
+ Chromium
+ Chromium. 
+ Chromium
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium 
+{COUNT,plural, =1{
+ Chromium 
+.}zero{
+ Chromium 
+.}two{
+ Chromium 
+.}few{
+ Chromium 
+.}many{
+ Chromium 
+.}other{
+ Chromium 
+.}}{COUNT,plural, =1{
+ Chromium 
+.}zero{
+ Chromium 
+.}two{
+ Chromium 
+.}few{
+ Chromium 
+.}many{
+ Chromium 
+.}other{
+ Chromium 
+.}}{COUNT,plural, =1{
+ Chromium 
+.}zero{
+ Chromium 
+.}two{
+ Chromium 
+.}few{
+ Chromium 
+.}many{
+ Chromium 
+.}other{
+ Chromium 
+ ChromiumHelp us improve Chromium
+ Chromium.
+ Chromium.
+ Chromium.
+ Chromium.
+ Chromium.
+ Chromium
+ Chromium
+ Chromium
+ Chromium
+ Chromium
+ Chromium. 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium
+ Chromium
+ Chromium 
+ Chromium.To use this profile with Glic, open Chromium and sign in
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium.
+ Chromium.
+ Chromium.
+ Google 
+ Chromium
+ Google 
+ Chromium
+ Chromium 
+ Chromium.
+ Chromium 
+ Chromium
+ Chromium
+ Chromium 
+ Chromium
+ Chromium 
+ Chromium
+ Chromium 
+ Chromium 
+ JavaScript 
+ Chromium 
+ Windows.
+ HTTP 401 
+ HTTP 403 
+: $1$1: 
+: $1. $2
+ Chromium Updater
+ Chromium Updater 
+ Chromium 
+ Chromium 
+ Chromium 
+ Chromium. 
+ Chromium 
+ Chromium 
+.{NUM_TABS,plural, =1{
+ Chromium 
+}zero{
+ Chromium 
+ Chromium 
+ Chromium 
+}many{
+ Chromium 
+}other{
+ Chromium 
+ Google
+ <a href="#" target="_blank">
+ Chromium</a>.
+ Chromium
+ ChromiumTry Gemini in ChromiumOpen Gemini in ChromiumClose Gemini in ChromiumOpen Gemini (Canary)Open Gemini (Dev)Open Gemini (Beta)Close Gemini (Canary)Close Gemini (Dev)Close Gemini (Beta)Toggle Gemini in ChromiumToggle Gemini (Canary)Toggle Gemini (Dev)Toggle Gemini (Beta)To use Gemini in Chromium, sign in with a different Google AccountGemini in ChromiumLet Chromium browse for youGemini in Chromium uses auto browse to work in your tabs and complete tasks you give it. <a href="#">Learn more</a>Choose a Chromium profile to use with <span class="glic-brand-style">Glic</span>Sign into Chromium with your Google Account to use <span class="glic-brand-style">Glic</span>Select the Chromium profile linked to your Google Account to personalize your Glic experienceTo add a new profile and use it with Glic, sign in to Chromium with a Google Account. <a class="learn-more-link" href="#" target="_blank">Learn how to sign in to Chromium</a>To add a new profile and use it with Glic, sign in to Chromium with a different Google Account. <a class="learn-more-link" href="#" target="_blank">Learn how to add a new Chromium profile</a>To open Gemini in Chromium, press $1
+ Chromium
+ Chromium 
+ Chromium 
+ Chromium 
+ Google 
+ Chromium
+ Google 
+ Chromium. $1
+ Chromium
+ Chromium
+ Chromium 
+ Chromium 
+ Chromium 
+ "$1" 
+ Chromium 
+ Chromium 
+ Google".
+ Chromium. 
+ Chromium 
+ Chromecast 
+ Chromecast 
+ Chrome.
+{DAYS,plural, =1{
+.}zero{
+ {DAYS} 
+.}two{
+ ({DAYS}) 
+.}few{
+ {DAYS} 
+.}many{
+ {DAYS} 
+.}other{
+ {DAYS} 
+.}}{HOURS,plural, =1{
+.}zero{
+ {HOURS} 
+.}two{
+ ({HOURS}) 
+.}few{
+ {HOURS} 
+.}many{
+ {HOURS} 
+.}other{
+ {HOURS} 
+.}}{MONTHS,plural, =1{
+.}zero{
+ {MONTHS} 
+.}two{
+ ({MONTHS}) 
+.}few{
+ {MONTHS} 
+.}many{
+ {MONTHS} 
+.}other{
+ {MONTHS} 
+.}}{YEARS,plural, =1{
+.}zero{
+ {YEARS} 
+.}two{
+ ({YEARS}) 
+.}few{
+ {YEARS} 
+.}many{
+ {YEARS} 
+.}other{
+ {YEARS} 
+ <a href="#">
+ Chrome
+. <a href="https://support.google.com/chromebook?p=app_intent" target="_blank">
+ <a href="#">
+ Windows</a>.{FILE_TYPE_COUNT,plural, =1{
+: {FILE_TYPE1}}=2{
+: {FILE_TYPE1} 
+{FILE_TYPE2}}=3{
+: {FILE_TYPE1} 
+{FILE_TYPE2} 
+{FILE_TYPE3}}=4{
+: {FILE_TYPE1} 
+{FILE_TYPE2} 
+{FILE_TYPE3} 
+{FILE_TYPE4}}zero{
+: {FILE_TYPE1} 
+{FILE_TYPE2} 
+{FILE_TYPE3} 
+{FILE_TYPE4} (<a href="{LINK}">
+{OVERFLOW_COUNT} 
+</a>)}few{
+: {FILE_TYPE1} 
+{FILE_TYPE2} 
+{FILE_TYPE3} 
+{FILE_TYPE4} (<a href="{LINK}">
+{OVERFLOW_COUNT} 
+</a>)}many{
+: {FILE_TYPE1} 
+{FILE_TYPE2} 
+{FILE_TYPE3} 
+{FILE_TYPE4} (<a href="{LINK}">
+{OVERFLOW_COUNT} 
+</a>)}other{
+: {FILE_TYPE1} 
+{FILE_TYPE2} 
+{FILE_TYPE3} 
+{FILE_TYPE4} (<a href="{LINK}">
+{OVERFLOW_COUNT} 
+</a>)}}
+ Safari
+{COUNT,plural, =0{&
+}two{&
+ ({COUNT})}few{&
+ ({COUNT}) 
+}many{&
+ ({COUNT}) 
+}other{&
+ ({COUNT}) 
+}}{COUNT,plural, =0{
+ ({COUNT}) 
+ ({COUNT}) 
+}many{
+ ({COUNT}) 
+}other{
+ ({COUNT}) 
+}}{COUNT,plural, =0{
+ ({COUNT}) 
+ ({COUNT}) 
+}many{
+ ({COUNT}) 
+}other{
+ ({COUNT}) 
+}}{COUNT,plural, =0{
+ URL ({COUNT})) 
+ ({COUNT} 
+ URL) 
+}many{
+ ({COUNT} 
+ URL) 
+}other{
+ ({COUNT} 
+ URL) 
+ "$1".
+ iPhone
+ iPhone
+ iPhone
+{NUM_BOOKMARKS,plural, =1{
+}zero{
+ (#). 
+}many{
+}other{
+bookmarks_$1.html
+{COUNT,plural, =1{
+.}zero{
+ {COUNT} 
+.}two{
+ ({COUNT}) 
+.}few{
+ {COUNT} 
+.}many{
+ {COUNT} 
+.}other{
+ {COUNT} 
+ ($1) 
+ ($1) 
+ ($1) 
+ URL (
+ "$1"{COUNT,plural, =1{
+.}zero{
+ {COUNT} 
+.}two{
+ ({COUNT}).}few{
+ {COUNT} 
+.}many{
+ {COUNT} 
+.}other{
+ {COUNT} 
+ '$1'{COUNT,plural, =1{
+.}zero{
+ {COUNT} 
+.}two{
+ ({COUNT}).}few{
+ {COUNT} 
+.}many{
+ {COUNT} 
+.}other{
+ {COUNT} 
+ "$1".
+ "$1".
+ "$1".
+ "$1" 
+ "$2".
+ Gemini
+ Gemini
+ Gemini 
+ Gemini 
+ Gemini 
+ Gemini
+ Gemini
+Gemini 
+ Gemini
+ Gemini
+ <a href="$1" target="_blank">$2</a> 
+ Gemini 
+ Gemini 
+ Gemini 
+ Gemini 
+ Chrome 
+ Gemini
+ Gemini 
+ Gemini Live
+ Gemini 
+ Gemini
+ Gemini
+ Gemini
+ Gemini (
+ Gemini
+ Gemini" (
+ Gemini
+ Gemini
+ Gemini 
+. <a href="#">
+ Gemini 
+. <a href="#">
+ Gemini
+ Gemini 
+https://myactivity.google.com/product/gemini?utm_source=gemini
+ Gemini 
+ Gemini 
+ Gemini
+ Google.
+ Gemini 
+ Gemini. 
+ Google.
+ Gemini
+ Gemini 
+ Gemini
+ Gemini 
+ Gemini 
+ Gemini 
+ Gemini 
+ Google.
+ Gemini 
+ <a href="$1" target="_blank">
+ Gemini 
+<a href="$2" target="_blank">
+ Gemini
+ GeminiGemini
+ Gemini 
+Gemini. 
+ Gemini
+ Gemini{NUM_TABS,plural, =1{
+ Gemini}zero{
+ Gemini}two{
+ Gemini}few{
+ Gemini}many{
+ Gemini}other{
+ Gemini}}{NUM_TABS,plural, =1{
+ Gemini}zero{
+ Gemini}two{
+ Gemini}few{
+ Gemini}many{
+ Gemini}other{
+ Gemini}}{NUM_TABS,plural, =1{
+}zero{
+}many{
+}other{
+ Gemini
+ Gemini
+ "Gemini 
+ Chrome" 
+ "Gemini 
+ Chrome" 
+ "$1"&
+ Chrome 
+: "$1" > "
+" > Chrome
+ Google Cast.
+ Google Cast
+ Google Cast 
+ <a href="$1" target="_blank">
+ Google Cast
+ - DVD
+ <a href="">
+</a> (
+ Chrome 
+ Google Cast 
+ Google 
+ Google.
+    <a href="$1" target="_blank">
+ Google Home</a>
+ Wi-Fi 
+ Wi-Fi 
+ Wi-Fi
+{0,plural, =1{
+}zero{
+ (#)}two{
+ (#)}few{
+ (#)}many{
+ (#)}other{
+ (#)}}
+.{0,plural, =1{
+}zero{# 
+}few{# 
+}many{# 
+}other{# 
+}}{0,plural, =1{
+}zero{# 
+}two{# 
+}few{# 
+}many{# 
+}other{# 
+}}{0,plural, =1{
+}zero{# 
+ (#)}few{# 
+}many{# 
+}other{# 
+$1: $2
+ Google"
+ Google
+ Chrome 
+{0,plural, =1{
+"}zero{
+"}two{
+"}few{
+"}many{
+"}other{
+"}}{0,plural, =1{
+}zero{
+}many{
+}other{
+{0,plural, =1{
+}zero{
+)}two{
+)}few{
+)}many{
+)}other{
+ Google
+{0,plural, =1{
+}zero{
+}many{
+}other{
+ ($1) 
+ ($1) 
+ ($1) 
+ ($1) 
+{BROWSING_HISTORY_COUNT,plural, =1{
+}zero{
+}many{
+}other{
+}}{EXTENSIONS_COUNT,plural, =1{
+}zero{
+}many{
+}other{
+}}{BOOKMARKS_COUNT,plural, =1{
+}zero{
+}many{
+}other{
+ ($4) 
+ ($3) 
+ ($2) 
+ "$1" 
+ Google
+ "$1" 
+ "$1" 
+ ($1).
+ Google" 
+ Google 
+{ITEM_COUNT,plural, =1{
+ Google. 
+.}zero{
+ {ITEM_COUNT} 
+ Google. 
+.}two{
+ ({ITEM_COUNT}) 
+ Google. 
+.}few{
+ {ITEM_COUNT} 
+ Google. 
+.}many{
+ {ITEM_COUNT} 
+ Google. 
+.}other{
+ {ITEM_COUNT} 
+ Google. 
+.}}{PASSWORD_COUNT,plural, =1{
+ Google. 
+.}zero{
+ {PASSWORD_COUNT} 
+ Google. 
+.}two{
+ ({PASSWORD_COUNT}) 
+ Google. 
+.}few{
+ {PASSWORD_COUNT} 
+ Google. 
+.}many{
+ {PASSWORD_COUNT} 
+ Google. 
+.}other{
+ {PASSWORD_COUNT} 
+ Google. 
+.}}{PASSWORD_COUNT,plural, =1{
+ Google. 
+.}zero{
+ {PASSWORD_COUNT} 
+ Google. 
+.}two{
+ ({PASSWORD_COUNT}) 
+ Google. 
+.}few{
+ {PASSWORD_COUNT} 
+ Google. 
+.}many{
+ {PASSWORD_COUNT} 
+ Google. 
+.}other{
+ {PASSWORD_COUNT} 
+ Google. 
+.}}{BOOKMARK_COUNT,plural, =1{
+ Google. 
+.}zero{
+ {BOOKMARK_COUNT} 
+ Google. 
+.}two{
+ ({BOOKMARK_COUNT}) 
+ Google. 
+.}few{
+ {BOOKMARK_COUNT} 
+ Google. 
+.}many{
+ {BOOKMARK_COUNT} 
+ Google. 
+.}other{
+ {BOOKMARK_COUNT} 
+ Google. 
+.}}{BOOKMARK_COUNT,plural, =1{
+ Google. 
+.}zero{
+ {BOOKMARK_COUNT} 
+ Google. 
+.}two{
+ ({BOOKMARK_COUNT}) 
+ Google. 
+.}few{
+ {BOOKMARK_COUNT} 
+ Google. 
+.}many{
+ {BOOKMARK_COUNT} 
+ Google. 
+.}other{
+ {BOOKMARK_COUNT} 
+ Google. 
+.}}{ITEM_COUNT,plural, =1{
+ Google.}zero{
+ {ITEM_COUNT} 
+ Google.}two{
+ ({ITEM_COUNT}) 
+ Google.}few{
+ {ITEM_COUNT} 
+ Google.}many{
+ {ITEM_COUNT} 
+ Google.}other{
+ {ITEM_COUNT} 
+ Google.}}{PASSWORD_COUNT,plural, =1{
+ Google.}zero{
+ {PASSWORD_COUNT} 
+ Google.}two{
+ ({PASSWORD_COUNT}) 
+ Google.}few{
+ {PASSWORD_COUNT} 
+ Google.}many{
+ {PASSWORD_COUNT} 
+ Google.}other{
+ {PASSWORD_COUNT} 
+ Google.}}{PASSWORD_COUNT,plural, =1{
+ Google.}zero{
+ {PASSWORD_COUNT} 
+ Google.}two{
+ ({PASSWORD_COUNT}) 
+ Google.}few{
+ {PASSWORD_COUNT} 
+ Google.}many{
+ {PASSWORD_COUNT} 
+ Google.}other{
+ {PASSWORD_COUNT} 
+ Google.}}{BOOKMARK_COUNT,plural, =1{
+ Google.}zero{
+ {BOOKMARK_COUNT} 
+ Google.}two{
+ ({BOOKMARK_COUNT}) 
+ Google.}few{
+ {BOOKMARK_COUNT} 
+ Google.}many{
+ {BOOKMARK_COUNT} 
+ Google.}other{
+ {BOOKMARK_COUNT} 
+ Google.}}{BOOKMARK_COUNT,plural, =1{
+ Google.}zero{
+ {BOOKMARK_COUNT} 
+ Google.}two{
+ ({BOOKMARK_COUNT}) 
+ Google.}few{
+ {BOOKMARK_COUNT} 
+ Google.}many{
+ {BOOKMARK_COUNT} 
+ Google.}other{
+ {BOOKMARK_COUNT} 
+ Google.}}{SELECTED_ITEMS,plural, =0{
+ ({SELECTED_ITEMS})}two{
+ ({SELECTED_ITEMS})}few{
+ ({SELECTED_ITEMS})}many{
+ ({SELECTED_ITEMS})}other{
+ ({SELECTED_ITEMS})}}{SELECTED_ITEMS,plural, =0{
+ ({SELECTED_ITEMS})}two{
+ ({SELECTED_ITEMS})}few{
+ ({SELECTED_ITEMS})}many{
+ ({SELECTED_ITEMS})}other{
+ ({SELECTED_ITEMS})}}{SELECTED_ITEMS,plural, =0{
+ "{SELECTED_ITEMS}")}two{
+ "{SELECTED_ITEMS}")}few{
+ ({SELECTED_ITEMS} 
+)}many{
+ ({SELECTED_ITEMS} 
+)}other{
+ ({SELECTED_ITEMS} 
+)}}{SELECTED_ITEMS,plural, =0{
+ ({SELECTED_ITEMS})}two{
+ ({SELECTED_ITEMS})}few{
+ ({SELECTED_ITEMS})}many{
+ ({SELECTED_ITEMS})}other{
+ ({SELECTED_ITEMS})}}{SELECTED_ITEMS,plural, =0{
+ ({SELECTED_ITEMS})}two{
+ ({SELECTED_ITEMS})}few{
+ ({SELECTED_ITEMS})}many{
+ ({SELECTED_ITEMS})}other{
+ ({SELECTED_ITEMS})}}
+{ITEM_COUNT,plural, =1{
+ <a href="'#'" id="openBatchUploadLink">
+ Google</a>.}zero{
+ {ITEM_COUNT} 
+ <a href="'#'" id="openBatchUploadLink">
+ Google</a>.}two{
+ ({ITEM_COUNT}) 
+ <a href="'#'" id="openBatchUploadLink">
+ Google</a>.}few{
+ {ITEM_COUNT} 
+ <a href="'#'" id="openBatchUploadLink">
+ Google</a>.}many{
+ {ITEM_COUNT} 
+ <a href="'#'" id="openBatchUploadLink">
+ Google</a>.}other{
+ {ITEM_COUNT} 
+ <a href="'#'" id="openBatchUploadLink">
+ Google</a>.}}{ACCOUNT_EXTENSIONS_COUNT,plural, =1{
+}zero{
+ {ACCOUNT_EXTENSIONS_COUNT} 
+ ({ACCOUNT_EXTENSIONS_COUNT}) 
+ {ACCOUNT_EXTENSIONS_COUNT} 
+}many{
+ {ACCOUNT_EXTENSIONS_COUNT} 
+}other{
+ {ACCOUNT_EXTENSIONS_COUNT} 
+}}{ACCOUNT_EXTENSIONS_COUNT,plural, =1{
+ Google
+}zero{
+ Google
+ Google
+ Google
+}many{
+ Google
+}other{
+ Google
+ Google 
+ Google" 
+ Google
+ Google
+ Google
+ Google 
+ Ctrl 
+: Ctrl 
+{COUNT,plural, =1{
+.}zero{
+ {COUNT} 
+.}two{
+ ({COUNT}) 
+.}few{
+ {COUNT} 
+.}many{
+ {COUNT} 
+.}other{
+ {COUNT} 
+: $1$2  ($3) $4 $5
+ Chrome 
+ Google
+ Chrome 
+ Google.
+AXTree FixingFix the AXTree
+ Google 
+ Chrome
+ <a target="_blank" href="$1">
+ Google Chrome</a> 
+ Google 
+Google Pay
+ (CVC)
+ Google Pay
+ Google Pay. <a target='_blank' href='$1'>
+ Google Pay 
+ <a href="$1" target="_blank">
+ Google</a>
+ Google
+ Google" 
+ <a href="$2" target="_blank">
+ Google Pay 
+ <a href="$1" target="_blank">
+ Google"
+ Google Pay
+ IBAN 
+ IBAN 
+ IBAN 
+ Google
+{COUNT,plural, =0{
+ ({COUNT}) 
+ ({COUNT}) 
+}few{{COUNT} 
+}many{{COUNT} 
+}other{{COUNT} 
+}}{NUM_COMPROMISED,plural, =0{
+ ({NUM_COMPROMISED}) 
+}few{{NUM_COMPROMISED} 
+}many{{NUM_COMPROMISED} 
+}other{{NUM_COMPROMISED} 
+}}{NUM_WEAK,plural, =0{
+ ({NUM_WEAK})}few{{NUM_WEAK} 
+}many{{NUM_WEAK} 
+}other{{NUM_WEAK} 
+}}{NUM_REUSED,plural, =0{
+ ({NUM_REUSED}) 
+{NUM_REUSED} 
+}many{
+{NUM_REUSED} 
+}other{
+{NUM_REUSED} 
+ Google
+ Windows.
+ Windows Hello 
+ Google.
+ Google
+ Chrome
+ Chrome
+ Chrome
+ Chrome
+ Google
+ Google" 
+ <a href="$1" target="_blank">
+ Google (
+ Google
+ Google" 
+ <a href="$1" target="_blank">
+ Google (
+ <a href="$1" target="_blank">
+ Google</a>
+ Google
+ <a href="#" target="_blank">
+ Google
+ <a href="#" target="_blank">
+ Google
+ <a href="#" target="_blank">
+ Google
+ <a href="#" target="_blank">
+ Google
+ Google 
+ Family Link 
+ Chrome.
+ Google.
+ <a target="_blank" href="$1">
+<a target="_blank" href="$2">
+ Google 
+ <a target="_blank" href="$1">
+ Google 
+ Google"
+ Google
+ Gemini"
+ Gemini"
+ Google
+ Google
+ Google 
+ Gemini 
+$1 - $2
+. <a href="$1" target="_blank">
+. <a href="$1" target="_blank" aria-description="$2">
+. <a href="$1" target="_blank" aria-description="$2">
+ Google"
+ Google" 
+ Google
+ Google". 
+ Google.
+ Google.
+ Google 
+ "$1" 
+ Google. 
+ Chrome 
+ Chrome 
+ Chrome 
+<a href="$1" aria-description="$2" target="_blank">
+<a href="$3" aria-description="$4" target="_blank">
+. <a href="$5" aria-description="$6" target="_blank">
+ Chrome 
+ Chrome.
+ Chrome 
+ <a href="$1" target="_blank">
+ Chrome</a>
+ Chrome 
+ Chrome
+ Google 
+ Google
+ Google.
+ Google 
+ Google.
+{NUM_SITES,plural, =1{
+}zero{
+ {NUM_SITES} 
+ ({NUM_SITES})}few{
+ {NUM_SITES} 
+}many{
+ {NUM_SITES} 
+}other{
+ {NUM_SITES} 
+}}{NUM_SITES,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+.}}{NUM_SITES,plural, =1{
+}zero{
+}many{
+}other{
+}}{NUM_SITES,plural, =1{
+.}zero{
+ {NUM_SITES} 
+.}two{
+ ({NUM_SITES}).}few{
+ {NUM_SITES} 
+.}many{
+ {NUM_SITES} 
+.}other{
+ {NUM_SITES} 
+ <a target="_blank" href="$1">
+ Chromium.
+.{NUM_EXTENSIONS,plural, =1{
+.}zero{
+ {NUM_EXTENSIONS} 
+.}two{
+ ({NUM_EXTENSIONS}) 
+.}few{
+ {NUM_EXTENSIONS} 
+.}many{
+ {NUM_EXTENSIONS} 
+.}other{
+ {NUM_EXTENSIONS} 
+.}}{NUM_EXTENSIONS,plural, =1{
+.}zero{
+ {NUM_EXTENSIONS} 
+.}two{
+ ({NUM_EXTENSIONS}) 
+.}few{
+ {NUM_EXTENSIONS} 
+.}many{
+ {NUM_EXTENSIONS} 
+.}other{
+ {NUM_EXTENSIONS} 
+.}}{NUM_EXTENSIONS,plural, =1{
+.}zero{
+ {NUM_EXTENSIONS} 
+.}two{
+ ({NUM_EXTENSIONS}) 
+.}few{
+ {NUM_EXTENSIONS} 
+.}many{
+ {NUM_EXTENSIONS} 
+.}other{
+ {NUM_EXTENSIONS} 
+.}}{NUM_EXTENSIONS,plural, =1{
+}zero{
+ {NUM_EXTENSIONS} 
+ ({NUM_EXTENSIONS}) 
+ {NUM_EXTENSIONS} 
+}many{
+ {NUM_EXTENSIONS} 
+}other{
+ {NUM_EXTENSIONS} 
+.{NUM_NOTIFICATION,plural, =1{
+}zero{{NUM_NOTIFICATION} 
+ ({NUM_NOTIFICATION}) 
+}few{{NUM_NOTIFICATION} 
+}many{{NUM_NOTIFICATION} 
+}other{{NUM_NOTIFICATION} 
+{NUM_SITES,plural, =1{
+.}zero{
+ {NUM_SITES} 
+.}two{
+ ({NUM_SITES}).}few{
+ {NUM_SITES} 
+.}many{
+ {NUM_SITES} 
+.}other{
+ {NUM_SITES} 
+ Google
+ Google
+ (AI) 
+ Google
+ Google 
+ Google.
+ Google.
+ Google" 
+ Google 
+ Google
+ Gmail 
+ Google".
+ Google 
+ "Do Not Track" 
+ Do Not Track
+ Google
+ Google 
+ Google
+ Google 
+ HTTPS 
+ HTTPS 
+ HTTPS/
+ HTTPS 
+" (DNS) 
+ <a target="_blank" href="$1">
+ JavaScript 
+ Chrome 
+ Chrome 
+ Chrome. 
+ Chrome 
+ Chrome
+ Chrome
+@bookmarks" 
+ (Tab) 
+ Chrome.
+@bookmarks". 
+ (Tab)
+ JavaScript 
+ JavaScript
+ JavaScript
+ JavaScript
+ JavaScript
+ JavaScript
+ JavaScript
+ JavaScript 
+ JavaScript 
+ JavaScript 
+ JavaScript
+ JavaScript
+ MIDI 
+ MIDI 
+ MIDI 
+ MIDI 
+ MIDI 
+ Chrome 
+ Chrome 
+. <a target="_blank" href="$1" aria-label="$2" aria-description="$3">
+[*.]google.com" 
+ mail.google.com 
+ google.com.
+ Chrome
+ "$1". 
+ $1{MEMBERS,plural, =1{
+ "{RWS_OWNER}"}zero{
+{MEMBERS} 
+ "{RWS_OWNER}"}two{
+ ({MEMBERS}) 
+ "{RWS_OWNER}"}few{
+{MEMBERS} 
+ "{RWS_OWNER}"}many{
+{MEMBERS} 
+ "{RWS_OWNER}"}other{
+{MEMBERS} 
+ "{RWS_OWNER}"}}
+ Chrome 
+.{COUNT,plural, =0{
+}many{
+}other{
+ (HID)
+{NUM_COOKIES,plural, =1{
+}zero{{NUM_COOKIES} 
+ ({NUM_COOKIES})}few{{NUM_COOKIES} 
+}many{{NUM_COOKIES} 
+}other{{NUM_COOKIES} 
+Google
+ Google
+ Google 
+ Google 
+ <a href="$2" target="_blank">
+ Google</a>.
+Turn off sync and personalization?
+ Google 
+ Google
+ Google 
+ Google
+ Google
+ Google 
+ <a href="$1" target="_blank">
+ Google</a>.
+ Google. 
+.This will sign you out of your Google Accounts. Your parent's choices won't be able to keep you safer online. Your bookmarks, history, passwords, and more will no longer be synced.
+ <a href="$1" target="_blank">
+ Google Pay
+ Chrome.
+ Google 
+ <a href="$1" target="_blank">
+ <a href="$1" target="_blank">
+ <a href="$1" target="_blank">
+ <a href="$1" target="_blank">
+ Google
+ Google 
+ Google
+ Google
+@history
+ (AI) 
+ Google
+ Chrome.
+ Serif
+ Sans-serif
+ Chrome 
+ (PIN)
+.{MIN_PIN_LENGTH,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+ Google
+ Google".
+ Google"
+ Chrome 
+ <a href="$1" target="_blank">
+.{NUM_SITES,plural, =1{
+}zero{
+ {NUM_SITES} 
+ ({NUM_SITES}) 
+ {NUM_SITES} 
+}many{
+ {NUM_SITES} 
+}other{
+ {NUM_SITES} 
+}}{NUM_SITES,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+.}}{NUM_SITES,plural, =1{
+}zero{
+ {NUM_SITES} 
+ ({NUM_SITES})}few{
+ {NUM_SITES} 
+}many{
+ {NUM_SITES} 
+}other{
+ {NUM_SITES} 
+}}{NUM_SITES,plural, =1{
+.}zero{
+ {NUM_SITES} 
+.}two{
+ ({NUM_SITES}) 
+.}few{
+ {NUM_SITES} 
+.}many{
+ {NUM_SITES} 
+.}other{
+ {NUM_SITES} 
+.}}{NUM_SITES,plural, =1{
+.}zero{
+ {NUM_SITES} 
+.}two{
+ ({NUM_SITES}) 
+.}few{
+ {NUM_SITES} 
+.}many{
+ {NUM_SITES} 
+.}other{
+ {NUM_SITES} 
+.}}{NUM_SITES,plural, =1{
+.}zero{
+ {NUM_SITES} 
+.}two{
+ ({NUM_SITES}) 
+.}few{
+ {NUM_SITES} 
+.}many{
+ {NUM_SITES} 
+.}other{
+ {NUM_SITES} 
+ Chrome 
+ (AI) 
+ Google 
+ Google 
+ Chrome
+ (AI) 
+ Google 
+ Google 
+ Google
+ Google
+ Chrome 
+ Google" 
+ Google" 
+ Google"
+ Google
+ $1 subpage.
+ Chrome 
+ Chrome 
+Wi-Fi 
+ Chromebook 
+ "Wi-Fi 
+ Google
+ Chrome 
+ Google 
+ Google 
+ Chrome
+ Google
+ Google 
+ Wi-Fi
+ Google 
+ Google
+ Google 
+ Google
+ Google 
+ Google
+ Chrome"
+ ChromeOS. 
+Chrome Root Store
+ Windows
+ Windows
+ Windows
+ Windows
+ "$1"{COUNT,plural, =0{
+ ({COUNT})}few{
+{COUNT} 
+}many{
+{COUNT} 
+}other{
+{COUNT} 
+ Chrome Root Store 
+      
+ Chrome Root Program
+ Chrome Root Store 
+ Chrome 
+ Chrome
+ ChromeOS
+ (NIC) 
+ Intel WiFi
+ ChromeOS Flex
+ D-Bus
+ ChromeOS
+ Shill 
+ ChromeOS
+ ChromeOS 
+ ChromeOS
+ Chrome 
+ ChromeOS
+ ChromeOS
+ ChromeOS
+ ChromeOS
+ ChromeOS
+ ChromeOS
+ ChromeOS
+ Kiosk 
+ ChromeOS
+ AndroidWi-Fi SSID
+ Google
+ (UUID))
+ (IPP)
+ (EAP)
+ Google(iframe)(
+ Chrome 
+ Chrome 
+ Chrome 
+{LINE_COUNT,plural, =1{<
+>}zero{<
+>}two{<
+ ($1)>}few{<
+>}many{<
+>}other{<
+ $2$1 - 
+ Google. 
+ $1 details page.
+ Chrome 
+Chrome Web Store
+ <a target="_blank" href="https://chrome.google.com/webstore/category/extensions">
+ Chrome 
+ Chrome
+ <a target="_blank" href="$1">
+ Chrome 
+ <a target="_blank" href="$1">
+ Chrome".
+ Chrome 
+ Chrome 
+{NUM_EXTENSIONS,plural, =1{
+}zero{
+ {NUM_EXTENSIONS} 
+ ({NUM_EXTENSIONS})}few{
+ {NUM_EXTENSIONS} 
+}many{
+ {NUM_EXTENSIONS} 
+}other{
+ {NUM_EXTENSIONS} 
+{NUM_EXTENSIONS,plural, =1{
+}zero{
+}many{
+}other{
+}}{NUM_EXTENSIONS,plural, =1{
+ <a href="$1" aria-description="$2" target="_blank">
+ Chrome 
+</a>.}zero{
+ <a href="$1" aria-description="$2" target="_blank">
+ Chrome 
+</a>}two{
+ <a href="$1" aria-description="$2" target="_blank">
+ Chrome 
+</a>}few{
+ <a href="$1" aria-description="$2" target="_blank">
+ Chrome 
+</a>}many{
+ <a href="$1" aria-description="$2" target="_blank">
+ Chrome 
+</a>}other{
+ <a href="$1" aria-description="$2" target="_blank">
+ Chrome 
+</a>}}{NUM_EXTENSIONS,plural, =1{
+}zero{
+}many{
+}other{
+ <a href="$1" aria-description="$2" target="_blank">
+ Chrome 
+ Chrome 
+ Chrome 
+ Chrome 
+ Google 
+ Google 
+ "$1" 
+ Google.
+{COUNT,plural, =1{
+ Google 
+.}zero{
+ Google 
+.}two{
+ Google 
+.}few{
+ Google 
+.}many{
+ Google 
+.}other{
+ Google 
+.}}{COUNT,plural, =1{
+ "$2" 
+ Google.}zero{
+ "$2" 
+ Google.}two{
+ "$2" 
+ Google.}few{
+ "$2" 
+ Google.}many{
+ "$2" 
+ Google.}other{
+ "$2" 
+ Google.}}
+.<br><br>
+ Chromebook 
+"). <a>
+ Chromebook 
+ Android 
+.{COUNT,plural, =1{
+}zero{# 
+}few{# 
+}many{# 
+}other{# 
+}}{COUNT,plural, =1{
+}zero{# 
+}few{# 
+}many{# 
+}other{# 
+}}{COUNT,plural, =1{
+}zero{# 
+}few{# 
+}many{# 
+}other{# 
+}}{COUNT,plural, =1{
+}zero{# 
+}few{# 
+}many{# 
+}other{# 
+}}{COUNT,plural, =1{
+}zero{# 
+}few{# 
+}many{# 
+}other{# 
+: $1{COUNT,plural, =1{
+}zero{# 
+}few{# 
+}many{# 
+}other{# 
+}}{COUNT,plural, =1{
+}zero{# 
+}few{# 
+}many{# 
+}other{# 
+}}{COUNT,plural, =1{
+}zero{# 
+}few{# 
+}many{# 
+}other{# 
+}}{COUNT,plural, =1{
+}zero{# 
+}few{# 
+}many{# 
+}other{# 
+}}{COUNT,plural, =1{
+}zero{# 
+}few{# 
+}many{# 
+}other{# 
+}}{COUNT,plural, =1{
+}zero{# 
+}few{# 
+}many{# 
+}other{# 
+ Wi-Fi
+ Wi-Fi.
+ Wi-Fi.
+ "$1" 
+ "$2" 
+ "$1" 
+ Chromebook 
+ Chromebook. 
+". <a>
+ Wi-Fi{COUNT,plural, =1{
+ ($2) 
+.}zero{
+.}two{
+ ($2) 
+.}few{
+.}many{
+.}other{
+ Wi-Fi 
+ "$1" 
+.{COUNT,plural, =1{
+ $2}zero{
+ $2}two{
+ $2}few{
+ $2}many{
+ $2}other{
+ "$1" 
+ $2{COUNT,plural, =1{
+ $2}zero{
+ $2}two{
+ $2}few{
+ $2}many{
+ $2}other{
+ Wi-Fi{COUNT,plural, =1{
+ $2}zero{
+ $2}two{
+ $2}few{
+ $2}many{
+ $2}other{
+ "$1" 
+ $2{COUNT,plural, =1{
+ $2}zero{
+ $2}two{
+ $2}few{
+ $2}many{
+ $2}other{
+ $2}}{COUNT,plural, =1{
+ $2}zero{
+ $2}two{
+ $2}few{
+ $2}many{
+ $2}other{
+ $2}}{COUNT,plural, =1{
+ $2}zero{
+ $2}two{
+ $2}few{
+ $2}many{
+ $2}other{
+ "$1" 
+. <a target='_blank' href='$1'>
+ "$1" 
+ Google.
+ Google.
+ Chrome
+ <a href="$1" target="_blank">
+ Google.
+ <a href="$1" target="_blank">
+ Google.
+ Google".
+ "<b>$1</b>" 
+ Google". 
+ <b>$2</b> 
+ Google". 
+ <b>$1</b> 
+ Chrome 
+ "$1" 
+ "$1" 
+ "$1" 
+ "$1" 
+: https://www.example.com.
+ 2048 
+ 1,000 
+ 1,000 
+ 1,000 
+ ($2) 
+ "$1".
+ "<span class="bold-text">$1</span>" 
+. <a href="$2" target="_blank">
+ "<span class="bold-text">$1</span>" 
+ "<span class="bold-text">$1</span>"
+.{NUM_PASSWORDS,plural, =1{
+.}zero{
+ {NUM_PASSWORDS} 
+.}two{
+ ({NUM_PASSWORDS}).}few{
+ {NUM_PASSWORDS} 
+.}many{
+ {NUM_PASSWORDS} 
+.}other{
+ {NUM_PASSWORDS} 
+.}}{NUM_PASSWORDS,plural, =1{
+.}zero{
+ {NUM_PASSWORDS} 
+.}two{
+ ({NUM_PASSWORDS}) 
+.}few{
+ {NUM_PASSWORDS} 
+.}many{
+ {NUM_PASSWORDS} 
+.}other{
+ {NUM_PASSWORDS} 
+.}}{NUM_PASSWORDS,plural, =1{
+ "$1" 
+ $2.}zero{
+ {NUM_PASSWORDS} 
+ "$1" 
+ $2.}two{
+ ({NUM_PASSWORDS}) 
+ "$1" 
+ $2.}few{
+ {NUM_PASSWORDS} 
+ "$1" 
+ $2.}many{
+ {NUM_PASSWORDS} 
+ "$1" 
+ $2.}other{
+ {NUM_PASSWORDS} 
+ "$1" 
+ $2.}}{NUM_PASSWORDS,plural, =1{
+ "$1" 
+.}zero{
+ {NUM_PASSWORDS} 
+ "$1" 
+.}two{
+ ({NUM_PASSWORDS}) 
+ "$1" 
+.}few{
+ {NUM_PASSWORDS} 
+ "$1" 
+.}many{
+ {NUM_PASSWORDS} 
+ "$1" 
+.}other{
+ {NUM_PASSWORDS} 
+ "$1" 
+.}}{NUM_PASSWORDS,plural, =1{
+}zero{
+ {NUM_PASSWORDS} 
+ ({NUM_PASSWORDS})}few{
+ {NUM_PASSWORDS} 
+}many{
+ {NUM_PASSWORDS} 
+}other{
+ {NUM_PASSWORDS} 
+ "$1". 
+{COUNT,plural, =0{
+ ({COUNT})}few{
+ {COUNT} 
+}many{
+ {COUNT} 
+}other{
+ {COUNT} 
+{COUNT,plural, =1{
+}zero{
+}many{
+}other{
+}}{COUNT,plural, =0{
+ ({COUNT}) 
+ ({COUNT}) 
+}few{{COUNT} 
+}many{{COUNT} 
+}other{{COUNT} 
+{COUNT,plural, =0{
+ ({COUNT}) 
+ ({COUNT}) 
+}few{{COUNT} 
+}many{{COUNT} 
+}other{{COUNT} 
+ Gemini 
+ Gemini 
+ Gemini 
+ Gemini 
+ $1.{COUNT,plural, =1{
+ ({COUNT})}zero{{COUNT} 
+ ({COUNT})}few{{COUNT} 
+}many{{COUNT} 
+}other{{COUNT} 
+ Google 
+ "$1" 
+ "$1" 
+ "$1" 
+ "$1" 
+ "$1" 
+.{COUNT,plural, =0{
+ ({COUNT})...}two{
+ ({COUNT})
+ {COUNT} 
+}many{
+ {COUNT} 
+}other{
+ {COUNT} 
+{COUNT,plural, =1{
+ ({COUNT}) 
+}zero{
+{COUNT} 
+ ({COUNT}) 
+{COUNT} 
+}many{
+{COUNT} 
+}other{
+{COUNT} 
+ Windows Hello 
+ Windows Hello 
+{COUNT,plural, =0{
+.}two{
+ ({COUNT}).}few{
+ {COUNT} 
+.}many{
+ {COUNT} 
+.}other{
+ {COUNT} 
+ "$1" 
+ $1.$1/$2
+ "$1"{1,plural, =1{
+ "{0}" 
+.}zero{
+ "{0}" 
+.}two{
+ "{0}" 
+.}few{
+ "{0}" 
+.}many{
+ "{0}" 
+.}other{
+ "{0}" 
+ $2{COUNT,plural, =1{
+ ({COUNT}) 
+ <a href='chrome://password-manager/'>
+ Google</a>.}zero{
+ {COUNT} 
+ <a href='chrome://password-manager/'>
+ Google</a>.}two{
+ ({COUNT}) 
+ <a href='chrome://password-manager/'>
+ Google</a>.}few{
+ {COUNT} 
+ <a href='chrome://password-manager/'>
+ Google</a>.}many{
+ {COUNT} 
+ <a href='chrome://password-manager/'>
+ Google</a>.}other{
+ {COUNT} 
+ <a href='chrome://password-manager/'>
+ Google</a>.}}
+ <a href="#" >
+ "$1".
+ "$1" 
+ <a href="#" >
+ CSV</a>.
+ "$1" 
+ <a href="#" >
+ CSV</a>.
+ Google" 
+ Chrome 
+ Android 
+ <a target="_blank" href="$1">passwords.google.com</a>
+ Google".
+ <a target="_blank" href="$1">Android</a> 
+<a target="_blank" href="$2">iOS</a>
+ Google
+ <b>$1</b> 
+ Google. 
+ Google
+ Google
+ Google
+ Windows Hello
+. <a href='https://support.google.com/chrome/?p=passkeys'>
+ "$1" 
+ "$1". 
+$2{COUNT,plural, =0{
+ ({COUNT}) 
+{COUNT} 
+}many{
+{COUNT} 
+}other{
+{COUNT} 
+}}{COUNT,plural, =1{
+}zero{
+{COUNT} 
+ ({COUNT})}few{
+{COUNT} 
+}many{
+{COUNT} 
+}other{
+{COUNT} 
+}}{COUNT,plural, =1{
+}zero{
+{COUNT} 
+ ({COUNT})}few{
+{COUNT} 
+}many{
+{COUNT} 
+}other{
+{COUNT} 
+{COUNT,plural, =1{
+ ({COUNT}) 
+.}zero{
+ {COUNT} 
+.}two{
+ ({COUNT}) 
+.}few{
+ {COUNT} 
+.}many{
+ {COUNT} 
+.}other{
+ {COUNT} 
+.}}$1 
+ <a href='chrome://password-manager/'>
+ Google</a>.
+ Google.
+ Google 
+.{COUNT,plural, =1{
+ Google
+ $1}zero{
+ Google
+ $1}two{
+ Google
+ $1}few{
+ Google
+ $1}many{
+ Google
+ $1}other{
+ Google
+ Google
+ Google
+ ($1).
+ Google
+ ($1) 
+{NUM_PASSWORDS,plural, =1{
+}zero{
+ {NUM_PASSWORDS} 
+ ({NUM_PASSWORDS}). 
+ {NUM_PASSWORDS} 
+}many{
+ {NUM_PASSWORDS} 
+}other{
+ {NUM_PASSWORDS} 
+ Chromium 
+ Google" 
+ $1. $2
+ Google" 
+ Google
+ Google
+ Chromium 
+ Chromium 
+ Google" 
+. <a href="$1" target="_blank">
+ (OTP)
+ (OTP) 
+ "$2" 
+. <br> 
+ 11-13
+ PDF{COUNT,plural, =1{
+}zero{{COUNT} 
+ ({COUNT})}few{{COUNT} 
+}many{{COUNT} 
+}other{{COUNT} 
+}}{COUNT,plural, =1{
+}zero{{COUNT} 
+ ({COUNT})}few{{COUNT} 
+}many{{COUNT} 
+}other{{COUNT} 
+$1x$2 
+ Google 
+ Google" 
+ Google 
+ Google" 
+ Google 
+ Google" 
+ Google 
+ Google" 
+ "$1"$1 
+ Alt+Shift+A 
+          
+ Google
+ $1 window
+Alt + 
+Alt + 
+ "$1"&
+ Google
+ "$2"&
+ "$2" 
+ "$1"&
+ Flash
+{NUM_PROFILES,plural, =1{&
+}zero{&
+)}two{&
+)}few{&
+)}many{&
+)}other{&
+ Google&
+ JavaScript&
+ &window
+ Chrome 
+ Chrome 
+.https://www.google.com/chrome/privacy/eula_text.html
+ "$1".
+ Chrome 
+ Google
+Name$1 (
+.$1 ($2)
+ $1 - $2.
+ Google 
+ Google 
+ Google 
+ $1$1 - $2
+ $3$1 
+ <a href="$1">$2</a>
+{NUM_DOWNLOAD,plural, =1{
+}zero{
+}many{
+}other{
+ Chrome 
+"$1" $2 - 
+ "$1" 
+ "$1" 
+ "$1" 
+ "$1" 
+ "$1" 
+ "$1" 
+ $1.{COUNT,plural, =1{
+}zero{
+}many{
+}other{
+ Google" 
+ Google". 
+ Google" 
+ "$1" 
+ Chrome 
+"$1": $2
+.{NUM_FILES,plural, =1{
+}zero{ 
+}few{ 
+}many{
+}other{
+}}{NUM_DEVICES,plural, =1{
+ USB}zero{
+ USB}two{
+ USB (#)}few{
+ USB}many{
+ USB}other{
+ USB}}
+ "$1" 
+ "$2".
+ JavaScript
+ JavaScript 
+ JavaScript 
+ JavaScript
+ Chrome 
+ Chrome 
+.{COUNT,plural, =0{
+ Chrome 
+ Chrome 
+ Chrome}few{
+ Chrome}many{
+ Chrome}other{
+ Chrome}}{COUNT,plural, =0{
+.}two{
+.}few{
+.}many{
+.}other{
+ Chrome 
+ JavaScript 
+ JavaScript" 
+ JavaScript" 
+ ASCII 
+ Base64
+ ASCII 
+ Base64
+ ASCII 
+ Base64
+ PKCS #7
+PKCS #7
+ SSL (
+ SSL (
+ SSL (
+CNSTOOUdnQualifierCserialNumberLDCMAILUIDemailAddressbusinessCategoryjurisdictionLocalityNamejurisdictionStateOrProvinceNamejurisdictionCountryNameSTREETpostalCode
+ PKCS #1 RSA
+PKCS #1 MD2 
+PKCS #1 MD4 
+PKCS #1 MD5 
+PKCS #1 SHA-1 
+PKCS #1 SHA-256 
+PKCS #1 SHA-384 
+PKCS #1 SHA-512 
+ X9.62 ECDSA 
+ SHA-1
+ X9.62 ECDSA 
+ SHA-256
+ X9.62 ECDSA 
+ SHA-384
+ X9.62 ECDSA 
+ SHA-512
+ SECG 
+ secp256r1
+ (aka ANSI X9.62 prime256v1
+ NIST P-256)
+ SECG 
+ secp384r1
+ (aka NIST P-384)
+ SECG 
+ secp521r1
+ (aka NIST P-521)
+ Netscape
+ Netscape
+ Netscape
+ Netscape
+ Netscape
+ Netscape
+ SSL (
+ Netscape
+ Netscape
+ Netscape
+ Netscape
+ CRL (
+ (CRL)
+ (CA): $1
+ OCSP: $1
+ (CA): $1$1:
+ (DNS)
+ X.400
+ X.500
+ (EDI)
+ (URI)
+ (OID) 
+ Microsoft
+ Microsoft
+ Microsoft
+ (CA) 
+ Microsoft
+ Microsoft
+ Microsoft
+ TLS (
+ TLS (
+ (WWW)
+ OCSPETSI QEVCP-wETSI QNCP-wETSI QcComplianceETSI QcTypeETSI qct-web
+ Microsoft
+ Microsoft
+ Microsoft
+ Microsoft
+ Microsoft
+ Microsoft
+ Microsoft
+ Microsoft Windows
+ Microsoft
+ Microsoft
+ Microsoft
+ Microsoft
+ Microsoft
+ Microsoft
+ Netscape
+ "$1" 
+ DevTools 
+ Chrome 
+ "$1".
+ SQLite
+ JavaScript
+                 
+$1 ($2 
+){NUM_TASKS,plural, =0{{TASK_ROW}}=1{
+{TASK_ROW}. 
+: {OTHER_TASKS}}two{
+{TASK_ROW}. 
+: {OTHER_TASKS}}few{
+{TASK_ROW}. 
+: {OTHER_TASKS}}many{
+{TASK_ROW}. 
+: {OTHER_TASKS}}other{
+{TASK_ROW}. 
+: {OTHER_TASKS}}}
+": $1Preloaded UI RendererPrerender: $1
+ (GPU)
+ Fenced Frame: $1
+ Fenced Frame 
+ Linux 
+ Parallels Desktop: $1
+ Chrome
+ ChromeOS
+ No-opChrome Document Analysis
+ "$1".
+ Google 
+ "$1" 
+ "$1" 
+ "$1" 
+{NUM_EXTENSIONS,plural, =1{
+}zero{
+}many{
+}other{
+}}{NUM_APPS,plural, =1{
+}zero{
+}many{
+}other{
+{NUM_EXTENSIONS,plural, =1{
+}zero{
+}many{
+}other{
+ "$1".$1 
+ "$2"$1 
+ $1($1){1,plural, =1{
+ {0, number,0.0} 
+.}zero{
+ {0, number,0.0} 
+.}two{
+ {0, number,0.0} 
+ (#).}few{
+ {0, number,0.0} 
+.}many{
+ {0, number,0.0} 
+.}other{
+ {0, number,0.0} 
+ Google Drive
+ ChromeOS
+ ChromeOS
+ Measurement Lab
+ measurementlab.net/privacy
+ ChromeOS
+ ChromeOS
+ ChromeOS
+ ChromeOS
+ ChromeOS
+ "$1".
+ "$2".
+ "$2".
+ "$1" 
+ "$2" 
+ "$3" 
+ "$1" 
+ "$1" 
+ "kiosk_only" 
+ Chrome.
+ "$1" 
+ "$2".
+ '$1' 
+ Google.
+ "$1" 
+ "$1" 
+ "$1" 
+ "$1" 
+ ($1).
+        
+ "$1".app
+ "$1" 
+ Family Link 
+ Google Chrome 
+ "$1".
+ {NUM_EXTENSIONS,plural, =1{
+}zero{
+}many{
+}other{
+ "$1" 
+ Chrome.
+ Chrome.
+ Chrome.
+{NUM_EXTENSIONS,plural, =1{
+}zero{
+}many{
+}other{
+ Google
+ "$1" 
+ Google"
+ "$2" 
+ Chrome 
+ Windows 
+) 2022. 
+ Chrome 
+ Chrome 
+ Chrome. 
+ "$2" 
+ "$1" 
+ Chrome 
+ Windows 
+) 2022. 
+ Chrome" 
+{NUM_APPS,plural, =1{
+}zero{
+}many{
+}other{
+}}{NUM_APPS,plural, =1{
+}zero{
+}many{
+}other{
+}}More options for $1
+ "$1" 
+ "$1" 
+ "$1" 
+ "$1" 
+ "$1" 
+ "$2".
+ "$1" 
+{NUM_SUB_APP_INSTALLS,plural, =1{
+}zero{
+}many{
+}other{
+}}{NUM_SUB_APP_INSTALLS,plural, =1{
+ "{APP_NAME}" 
+:}zero{
+ "{APP_NAME}" 
+:}two{
+ "{APP_NAME}" 
+:}few{
+ "{APP_NAME}" 
+:}many{
+ "{APP_NAME}" 
+:}other{
+ "{APP_NAME}" 
+:}}{NUM_SUB_APP_INSTALLS,plural, =1{
+ "$1" 
+. $2}zero{
+ "$1" 
+. $2}two{
+ "$1" 
+. $2}few{
+ "$1" 
+. $2}many{
+ "$1" 
+. $2}other{
+ "$1" 
+. $2}}
+ "$1" 
+ Google" 
+ Google
+ Google.
+ Google 
+ Google
+ "$1" 
+ Google".
+ Google"
+ Google"
+ $1 password?
+ "$1". 
+.{NUM_PASSWORDS,plural, =1{
+}zero{
+}many{
+}other{
+ Google
+ Google.
+ Google
+ Google
+ WebRTC
+ WebRTC 
+ WebRTC ($1)
+ WebRTC 
+ ($1).
+ WebRTC 
+ WebRTC 
+ "$1" 
+: $1. 
+: $1. 
+: $1. 
+https 
+ (LBS)" 
+ (LBS): 
+ (LBS)" 
+ <a href="https://chromeenterprise.google/policies/#BrowserSwitcherEnabled" class="policy-prop">{BrowserSwitcherEnabled}</a>.
+ (LBS)" 
+" (LBS) 
+ http://
+https://
+file://
+ "$2".
+" (LBS) 
+ <a href="https://chromeenterprise.google/policies/#BrowserSwitcherUrlList" class="policy-prop">{BrowserSwitcherUrlList}</a>
+          
+<a href="https://chromeenterprise.google/policies/#BrowserSwitcherExternalSitelistUrl" class="policy-prop">{BrowserSwitcherExternalSitelistUrl}</a>
+           
+<a href="https://chromeenterprise.google/policies/#BrowserSwitcherUseIeSitelist" class="policy-prop">{BrowserSwitcherUseIeSitelist}</a>.
+ <a href="https://chromeenterprise.google/policies/#BrowserSwitcherExternalGreylistUrl" class="policy-prop">{BrowserSwitcherExternalGreylistUrl}</a>
+          
+<a href="https://chromeenterprise.google/policies/#BrowserSwitcherUrlGreylist" class="policy-prop">{BrowserSwitcherUrlGreylist}</a>.
+" (LBS)
+: $1$1 (
+ Enter 
+Thumbs up submits feedback that you like this result.Thumbs down opens a form for submitting detailed feedback on why you dislike this result.
+ Google 
+ Google 
+: "$1"
+ Google 
+ Google 
+ Google"
+ Google": $1
+ Google"
+ Google": $1
+ Google
+ Google". 
+ Enter 
+ Backspace 
+ Google".
+ Google 
+ Google
+jpeg.* 
+jpg.* 
+ Chrome
+ Chrome
+ Chrome
+ <a href="#" id="chromeWebstoreLink">
+ Chrome 
+ Chrome 
+ "$2" 
+ (AI).
+ (AI) 
+ "$2" 
+ "$3".
+ (AI) 
+ "$2" 
+ "$3".
+ "$2" 
+ "$3" 
+ "$4" 
+ "$2".
+ "$2" 
+ "$3".
+ "$2" 
+ "$3".
+ "$2" 
+ "$3" 
+ "$4".
+ (AI) 
+ Chrome
+ Google"
+ Enter 
+.{FILE_COUNT,plural, =1{
+}zero{
+}many{
+}other{
+}}{FILE_LIMIT,plural, =1{
+}zero{
+}many{
+}other{
+ <a target="_blank" href="$1">
+ Google</a>Press Tab to accept this suggestionDeep Search
+ Google 
+ Google 
+ Google 
+ Google 
+ Chrome 
+        <br>
+        <br>
+        
+ Chrome".
+ Google Drive
+ Drive 
+ DriveGoogle Drive
+ SharePoint 
+OneDrive
+ Microsoft SharePoint 
+OneDrive.
+        <br>
+        <br>
+        
+ Chrome".
+ SharePoint 
+OneDrive
+ Google"
+ Google" 
+ Google".
+        <br>
+        <br>
+        
+ Chrome".
+ Google"
+ Google
+ Google"
+ Microsoft
+ Outlook"
+ (Outlook Calendar)Don't show Outlook Calendar
+ Outlook" 
+(Outlook Calendar)
+ Outlook"
+ (Outlook Calendar).
+       <br>
+       <br>
+       
+ Chrome".
+ Google"
+        <br>
+        <br>
+        
+ Chrome".
+        <br>
+        <br>
+        
+ Chrome".
+Microsoft Authentication
+        <br>
+        <br>
+        
+ Chrome".
+{TIME_DIMENSION,plural, =0{
+ ($1)}=2{
+ ($1).}few{
+}many{
+}other{
+ Outlook"
+ (Outlook Calendar) 
+SharePoint 
+OneDrive
+ Microsoft
+ Microsoft 
+ SharePoint 
+OneDrive 
+ Outlook"
+ (Outlook Calendar).
+ Chrome 
+ Chrome 
+ <a href="chrome://extensions">
+ <a href="chrome://extensions">
+ <a href="chrome://extensions">
+.New Tab Footer
+""$1" 
+ Google"
+ Google"
+ Google
+ Google 
+ Google" 
+ "$1".
+ Google
+ "$1" 
+ "$1" 
+{NUM_BOOKMARKS,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+ Google 
+ Google
+ "$1" 
+ "$1"{NUM_TABS,plural, =0{
+}many{
+}other{
+}}{NUM_TABS,plural, =0{
+}many{
+}other{
+{NUM_DAYS,plural, =0{
+}many{
+}other{
+ "$1" $2 
+ Chrome
+iPhoneiPad
+ iPhone
+ Google".
+ Chrome 
+ Google.
+ iPhone
+ iPhone
+ Google" 
+ Google" 
+ Chrome
+.{NUM_EXTENSIONS,plural, =1{
+}zero{
+}many{
+}other{
+}}{NUM_EXTENSIONS,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+ Chrome 
+ Chrome 
+ (Esc).
+ Chrome 
+ Chrome 
+ Chrome 
+ Chrome"
+ Chrome"
+ Google" 
+ Google"
+ Google"
+ Google"
+ Google" 
+ Google" 
+{NUM_PAGES,plural, =1{ 
+}zero{ 
+}few{ 
+}many{ 
+}other{ 
+}}{NUM_PAGES,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+{NUM_PAGES,plural, =1{
+}zero{
+}many{
+}other{
+ Chrome 
+ Chrome
+{COUNT,plural, =1{
+ Google" 
+.}zero{
+ Google" 
+.}two{
+ Google" 
+.}few{
+ Google" 
+.}many{
+ Google" 
+.}other{
+ Google" 
+ Google 
+ Google" 
+ Google"
+ Chrome
+ Google" 
+ Chrome
+ Google"
+ Google"
+.Microsoft Internet ExplorerMicrosoft Edge
+IceweaselSafari
+ Firefox
+ Firefox.
+ Google
+ Google
+ Google 
+ <a href="#" id="sys-info-url">
+ Google 
+ <a href="#" id="autofill-metadata-url">
+          <br>
+          (
+ Intel Wi-Fi 
+: csr.lst 
+fh_regs.lst 
+radio_reg.lst 
+monitor.lst.sysmon. 
+ Intel.
+ Intel
+ Wi-Fi 
+ Intel 
+ <a href="#" id="legal-help-page-url">
+ Google.  
+ <a href="#" id="privacy-policy-url">
+<a href="#" id="terms-of-service-url">
+ Chrome 
+ Google 
+ Google 
+ <a target="_blank" href="$1">myactivity.google.com</a>.
+ ChromeWe were not able to delete all passwords stored in your Google Account. Try again or visit <a target="_blank" href="$1">passwords.google.com</a>.Some passwords were not deletedOk, got it
+ Chrome)
+ ($1%)
+{NUM_TABS,plural, =1{
+}zero{
+}many{
+}other{
+}}{NUM_TABS,plural, =1{
+}zero{
+}many{
+}other{
+}}{NUM_TABS,plural, =1{
+}zero{
+}many{
+}other{
+}}{NUM_TABS,plural, =1{
+}zero{
+}many{
+}other{
+}}{NUM_TABS,plural, =1{
+}zero{
+}many{
+}other{
+{NUM_OTHER_TABS,plural, =0{"$1"}=1{"$1" 
+}two{"$1" 
+}few{"$1" 
+}many{"$1" 
+}other{"$1" 
+}}{NUM_TABS,plural, =1{
+}zero{
+}many{
+}other{
+}}{NUM_TABS,plural, =1{
+}zero{
+}many{
+}other{
+Compare tabs
+{NUM_OPEN_TABS,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+ "$2".
+ "$2".
+ ($1)$1 
+ Google
+ Chrome 
+ Chrome 
+ <a href="#">
+ <a href="#">
+ Google
+ "$1" 
+{NUM_PAGES,plural, =0{$1}=1{$1 
+}two{$1 
+}few{$1 
+}many{$1 
+}other{$1 
+{NUM_TABS,plural, =1{
+}zero{# 
+ (#)}few{# 
+}many{# 
+}other{# 
+{NUM_TABS,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+ Chrome 
+ Google 
+{GROUP_COUNT,plural, =1{
+ $1}zero{
+ $1}two{
+ $1}few{
+ $1}many{
+ $1}other{
+ $1}}{GROUP_COUNT,plural, =1{
+ $1}zero{
+ $1}two{
+ $1}few{
+ $1}many{
+ $1}other{
+ $1}}{GROUP_COUNT,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+.}}{GROUP_COUNT,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+.}}{GROUP_COUNT,plural, =1{
+}zero{
+}many{
+}other{
+}}{GROUP_COUNT,plural, =1{
+}zero{
+}many{
+}other{
+}}{MULTI_GROUP_TAB_COUNT,plural, =0{
+}many{
+}other{
+}}{MULTI_GROUP_TAB_COUNT,plural, =0{
+}many{
+}other{
+}}{GROUP_COUNT,plural, =1{
+}zero{
+}many{
+}other{
+{MEMBER_COUNT,plural, =1{
+}zero{
+}many{
+}other{
+{NUM_OTHER_MEMBERS,plural, =0{
+ "$1"}=1{
+ "$1" 
+ "$1" 
+ "$1" 
+}many{
+ "$1" 
+}other{
+ "$1" 
+ "$1" 
+ "$1" 
+{NUM_GROUPS,plural, =1{
+}zero{
+}many{
+}other{
+}}{NUM_GROUPS,plural, =1{
+}zero{
+}many{
+}other{
+}}{NUM_GROUPS,plural, =1{
+}zero{
+}many{
+}other{
+}}{NUM_GROUPS,plural, =1{
+}zero{
+}many{
+}other{
+ "$1" 
+ "$1" 
+ "$1" 
+ Google.
+ "$2" 
+ Google.
+ Chrome 
+ Chrome
+ Google
+ Chrome"
+{NUM_GROUPS,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+.{NUM_GROUPS,plural, =1{
+}zero{
+}many{
+}other{
+ Enter 
+ Chrome
+ "$1" 
+ Chrome.
+ Chrome 
+ "$1".
+ Chrome 
+ Chrome 
+ Chrome. 
+ "$1" 
+ "$1" 
+ "$2" 
+ Chrome 
+ Chrome 
+ Chrome 
+ Chrome 
+ Google.
+ <a href="$1">
+</a><a href="$1">
+ <a href="$1">
+ <a href="$1">
+ $2 <a href="$1">
+</a>.<a href="$1">
+<a href="$1">
+ $3.<a href="$1">
+ <a href="$1">
+ (HttpOnly)
+ Google 
+ Google" 
+. <a href="$1" target="_blank">
+ $1. <a href="$2" target="_blank">
+ LOCATION[
+ HTML 
+ Chrome 
+ Chrome.
+{NUM_TABS,plural, =1{
+ "$1" - 
+}zero{
+ "$1" - 
+ "$1" - 
+ "$1" - 
+}many{
+ "$1" - 
+}other{
+ "$1" - 
+ Google.
+ Google Pay.
+ Google Pay.
+ Google Pay.
+ Google Pay.
+.{MUTED_NOTIFICATIONS_COUNT,plural, =1{
+}zero{# 
+}few{# 
+}many{# 
+}other{# 
+}}{MUTED_NOTIFICATIONS_COUNT,plural, =1{
+}zero{
+}many{
+}other{
+}}Snooze
+ MIDI 
+ MIDI 
+ MIDI 
+ MIDI 
+ MIDI 
+ MIDI 
+ MIDI 
+ MIDI 
+ $1https://passwords.google.com
+ "$1""$1" 
+ "$1" 
+."$1" 
+{SCREEN_INDEX,plural, =1{
+ #}zero{
+ #}two{
+ #}few{
+ #}many{
+ #}other{
+" (System Settings)
+ "$1" 
+.$1 - 
+"$1 - 
+ HID$1 - 
+ - $2 - $3
+ $2 $1 - $3 - $4
+ $1 - $2
+ $1 - $3
+ $1"$1" - 
+"$1" - 
+ $2"$1" - 
+ - $2"$1" - 
+: chrome://device-log/?refresh=<sec>
+: chrome://device-log/?types=Bluetooth,USB
+ (HID)
+        $2
+        $3
+ USB{NUM_CONNECTION, plural,
+            =0 {Extension "{1}" was accessing devices}
+            =1 {Extension "{1}" is accessing {0} device}
+            other {Extension "{1}" is accessing {0} devices}}
+ [$1:$2]
+ USB ($2:$1)
+ HID ($1:$2)
+{0,plural, =1{unused plural form}zero{
+}many{
+}other{
+}}{FILE_TYPE_COUNT,plural, =1{
+: {FILE_TYPES}}zero{
+: {FILE_TYPES}}two{
+: {FILE_TYPES}}few{
+: {FILE_TYPES}}many{
+: {FILE_TYPES}}other{
+: {FILE_TYPES}}}
+ Windows
+ Chrome 
+ Chrome for Testing 
+ Chrome 
+ Chrome
+{0,plural, =1{
+}zero{
+}many{
+}other{
+ "$2" 
+ "$2" 
+ "$2" 
+ "$2" 
+ "$1" 
+{0,plural,offset:2 =1{{1}}=2{{1} 
+{2}}zero{{1} 
+}few{{1} 
+}many{{1} 
+}other{{1} 
+ ($1) 
+{COUNT,plural, =1{
+.}zero{
+ #.}two{
+.}few{
+ #.}many{
+ #.}other{
+ #.}}{0,plural, =0{
+ Chrome 
+ Chrome 
+.}two{
+ Chrome 
+.}few{
+ Chrome 
+.}many{
+ Chrome 
+.}other{
+ Chrome 
+.}}{0,plural, =0{
+.}two{
+.}few{
+.}many{
+.}other{
+Windows Hello 
+Windows Hello
+ iCloud
+ Windows Hello
+ Windows Hello 
+ "$1".
+ "$1".
+{NUM_CHARACTERS,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+.}}{NUM_ATTEMPTS,plural, =1{
+.}zero{
+.}two{
+ (#).}few{
+.}many{
+.}other{
+.{NUM_ATTEMPTS,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+ "$1".
+ "$1".
+ "$1".
+ "$1" 
+ "$1" 
+ Chrome
+ Google" 
+ Google"
+ Google" 
+ Google" 
+ Google"
+ Google"
+ Google
+ Google"
+ Google"
+ Google"
+ Google" 
+ Google" 
+ Google" 
+ Google"
+ Backspace 
+ Delete 
+{NUM_ATTEMPTS,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+ Google"
+ "$1".
+ Google" 
+ $2. $3
+ "$1" 
+ Android 
+$1 has canceled the request for identity information.
+{NUM_FILES,plural, =0{
+...}=1{
+...}two{
+...}few{
+...}many{
+...}other{
+{NUM_FILES,plural, =0{
+.}two{
+.}few{
+.}many{
+.}other{
+.{NUM_FILES,plural, =0{
+.}two{
+.}few{
+.}many{
+.}other{
+{NUM_FILES,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+.{NUM_FILES,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+ "$1".
+ "$2".
+ Chrome 
+ Chrome.
+ Chrome
+ Chrome 
+ Chrome 
+ ($1) 
+ $2: $3
+ ($1) 
+ Google.com: $2{NUM_SUB_APPS,plural, =1{
+ "{APP_NAME}" 
+:}zero{
+ "{APP_NAME}" 
+:}two{
+ "{APP_NAME}" 
+:}few{
+ "{APP_NAME}" 
+:}many{
+ "{APP_NAME}" 
+:}other{
+ "{APP_NAME}" 
+:}}{NUM_SUB_APPS,plural, =1{
+ "{APP_NAME}" 
+}zero{
+ "{APP_NAME}" 
+ "{APP_NAME}" 
+ "{APP_NAME}" 
+}many{
+ "{APP_NAME}" 
+}other{
+ "{APP_NAME}" 
+ "{APP_NAME}" 
+ Chrome. 
+ "$1" 
+ "$1" 
+"{NUM_EXTENSIONS,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+.}}{NUM_EXTENSIONS,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+.}}{NUM_EXTENSIONS,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+.}}{NUM_EXTENSIONS,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+.}}{NUM_EXTENSIONS,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+ Google".
+ $1 $2 
+ $1 $2 
+ $1 $2 
+ $1 $2 
+ "$1".
+ "$1" 
+ "$2".
+ "$1"."$1" 
+ "$1".
+ "$1".
+ "$1".
+ "$1".
+Automatically sign me in to this website
+{NUM_TABS,plural, =1{
+}zero{
+ {NUM_TABS} 
+ ({NUM_TABS})}few{
+ {NUM_TABS} 
+}many{
+ {NUM_TABS} 
+}other{
+ {NUM_TABS} 
+{NUM_TABS,plural, =1{
+}zero{
+}many{
+}other{
+}}{NUM_TABS,plural, =1{
+}zero{
+}many{
+}other{
+{NUM_TABS,plural, =1{
+}zero{
+}many{
+}other{
+}}{NUM_TABS,plural, =1{
+}zero{
+}many{
+}other{
+"{PAGES,plural, =1{
+"}zero{
+"}two{
+"}few{
+"}many{
+"}other{
+ Chrome
+ Gemini. 
+ "$1" 
+ Chrome.
+: "$1"
+ "$1" 
+Chrome 
+.{MINUTES,plural, =0{
+.}two{
+.}few{
+.}many{
+.}other{
+ Chrome
+ "$1" 
+ Chrome 
+ Chrome
+ Chrome 
+ Google. 
+ Chrome 
+ ChromeDrive
+ Drive
+ Chrome
+ Chrome
+ Google"
+702581
+ "$1".
+{NUM_FILES,plural, =1{
+ ($1) 
+.}zero{
+ ($1) 
+.}two{
+ ($1) 
+.}few{
+ ($1) 
+.}many{
+ ($1) 
+.}other{
+ ($1) 
+.}}{NUM_FILES,plural, =1{
+ ({1})
+ ({2}) 
+.}zero{
+ ({1})
+ ({2}) 
+.}two{
+ ({1})
+ ({2}) 
+.}few{
+ ({1})
+ ({2}) 
+.}many{
+ ({1})
+ ({2}) 
+.}other{
+ ({1})
+ ({2}) 
+ Android
+ "$1" 
+ Wi-Fi
+ Wi-Fi. 
+ Wi-Fi 
+ Wi-Fi. 
+ Wi-Fi 
+ "$2" 
+ ChromeOS 
+ Android{DAYS_UNTIL_DEADLINE,plural, =1{
+.}zero{
+.}few{
+.}many{
+.}other{
+ Chrome 
+.{DAYS_UNTIL_DEADLINE,plural, =1{
+.}zero{
+.}few{
+.}many{
+.}other{
+ Android
+ Android 
+ ChromeOS.
+ %$1 | 
+ ChromeOS 
+ ArcVm
+ Google Pay
+ Chrome
+ (CVC) 
+ Google 
+ Google
+ Google.
+ Google 
+ (CVC) 
+ Google 
+ Google.
+ Google
+ Chrome 
+ Google 
+ Chrome 
+ Google 
+ Chromium
+ Google Pay
+ ChromiumMM/YY
+ (CVC) 
+ (CVC) 
+ (CVC) 
+ (CVC) 
+ (CVC) 
+ (CVC) 
+ (CVC)
+ Google Chrome 
+ Windows Hello 
+ (CVC)
+ Windows Hello
+ Windows Hello 
+ Windows Hello
+ Google Pay
+ IBAN 
+ IBAN 
+ Google
+ Chrome 
+ (CVC) 
+ (CVC) 
+ (CVC) 
+ Google Pay
+ Google Pay.
+ Affirm 
+ Affirm 
+ Klarna
+" (BNPL) 
+ Google Pay
+ Google 
+ Google 
+"$1. $2
+ Google Pay
+ (SCA)
+ "$2" 
+ <a href="$1" aria-description="$2">
+Affirm
+ ZIPAfterPayKlarna
+ Google Pay 
+Affirm
+ Google Pay 
+ Google Pay 
+AfterPay
+ Google Pay 
+Klarna
+ "$1" 
+ Google Pay.
+. <a href="$1" aria-description="$2">
+. <a href="$1" aria-description="$2">
+ <link>
+</link>
+ %1$s 
+ (CVC)
+ (CVC). <a href="#">
+ Google.CVC
+ | %2$s
+ IBAN 
+ Google
+ Google
+ Chrome 
+ IBAN 
+ Google 
+ Google.
+ IBAN 
+ Google. 
+ Chrome 
+ Chrome 
+ IBAN 
+ IBAN 
+ Google
+ Chrome 
+ Chromium
+ Chromium
+ Chromium
+ Google
+ Google" 
+<link> 
+ Google 
+</link>.
+ Chrome
+ Google
+ Google" 
+<link> 
+ Google 
+</link>.
+ <link>
+ Google</link>
+: $1American ExpressAmexDiners Club
+EloJCBMastercardMirTroyChina UnionPayVerveVisa
+Test address from $1 selected.
+Provided by $1Verified by $1Skip confirmation emailsSign in with $1
+ Google"
+ Google.
+ Google
+ Google
+: $1 / $2
+ Google
+ Google
+ Google.
+ Google. 
+ Google
+ Google. 
+ Google
+ Google. 
+ Google
+ ($1).
+ Google. 
+ Google
+ ($1).
+ Google
+ ($1) 
+ Chrome
+ Google 
+Phone numbers, email addresses, shipping addresses, and plus addresses
+ Google
+ Google
+ Google"
+ Chrome. 
+ Google
+ Google
+ Google
+ Google
+ Chrome.
+ Google.
+ Google"
+ Google"
+ (VIN)
+ Google
+ Google"
+ "$1" 
+ "$1" 
+ Google.
+ Google. 
+ $1{COUNT,plural, =0{
+ (#)}few{# 
+}many{# 
+}other{# 
+}}{COUNT,plural, =0{
+ (1) (
+)}two{
+ (#) (
+)}few{# 
+)}many{# 
+)}other{# 
+{DOMAIN_COUNT,plural, =1{
+}zero{
+}many{
+}other{
+}}{DOMAIN_COUNT,plural, =1{
+)}zero{
+)}two{
+)}few{
+)}many{
+)}other{
+ $1 $2
+.{COUNT,plural, =0{
+ $1)}=2{
+ $1)}few{# 
+ $1)}many{# 
+ $1)}other{# 
+ $1)}}{COUNT,plural, =0{
+)}few{# 
+)}many{# 
+)}other{# 
+)}}{COUNT,plural, =0{
+ $1)}two{
+ $1)}few{
+ $1)}many{
+ $1)}other{
+ $1)}}{COUNT,plural, =0{
+.}=1{$1}=2{$1 
+$2}few{$1 
+}many{$1 
+}other{$1 
+}}{COUNT,plural, =1{
+}zero{
+}many{
+}other{
+}}{COUNT,plural, =0{
+ (#)}few{
+}many{
+}other{
+}}{COUNT,plural, =0{
+}two{ 
+ (#)}few{# 
+}many{# 
+}other{# 
+}}{COUNT,plural, =1{
+}zero{
+}many{
+}other{
+}}{COUNT,plural, =1{
+}zero{# 
+ (#)}few{# 
+}many{# 
+}other{# 
+}}{COUNT,plural, =1{
+}zero{# 
+ (#)}few{# 
+}many{# 
+}other{# 
+}}{COUNT, plural,
+     =1 {1 suggestion (device only)}
+     other {# suggestions (device only)}}{COUNT,plural, =1{
+}zero{# 
+ (#)}few{# 
+}many{# 
+}other{# 
+}}{COUNT,plural, =1{
+}zero{# 
+ (#)}few{# 
+}many{# 
+}other{# 
+}}$1 (
+)$1; $2
+.{COUNT,plural, =0{
+}many{
+}other{
+}}{COUNT,plural, =0{
+ Google)}two{
+ Google)}few{
+ Google)}many{
+ Google)}other{
+ Google)}}{COUNT,plural, =0{
+. }two{
+. }few{
+. }many{
+. }other{
+. }}{COUNT,plural, =0{
+ ($1)}=2{
+$2)}few{# 
+)}many{# 
+)}other{# 
+)}}{COUNT,plural, =1{
+}zero{
+}many{
+}other{
+}}{COUNT,plural, =0{
+}many{
+}other{
+}}{COUNT,plural, =1{
+}zero{
+}many{
+}other{
+}}{COUNT,plural, =1{
+}zero{
+}many{
+}other{
+ Google 
+ <a href="#" target="_blank" id="signOutLink">
+ Chrome</a>.
+ Google 
+ Google 
+ Google.Let Google help you find
+discounts for your carts
+ Google 
+ Chrome
+ "$1".
+ "$1".
+Price history across the web for this option
+ Google" 
+ %2$s 
+ %1$s 
+.Add similar products you want to compareOpen
+ $4 $5. $6.
+ Google
+Open product page in new tab
+ "$1"{ITEMS,plural, =1{
+ ({ITEMS})}zero{
+{ITEMS} 
+ ({ITEMS})}few{
+{ITEMS} 
+}many{
+{ITEMS} 
+}other{
+{ITEMS} 
+ ($1) 
+ $1{COUNT,plural, =1{
+ ({COUNT})}zero{
+ {COUNT} 
+ ({COUNT})}few{
+ {COUNT} 
+}many{
+ {COUNT} 
+}other{
+ {COUNT} 
+ Google
+ Google
+ (Tab) 
+ Enter 
+ (Tab) 
+ Enter 
+ Google 
+ Google 
+ Google 
+  <a href="">
+ Google
+    <a href="#" id="enterpriseLearnMore" role="button">
+    <a href="#" role="button">
+ <a href="#" id="signInLink" role="button">
+.This feature is experimental.
+    <a href="#" id="bugLink" role="button">File a bug</a>
+    or fill out our
+    <a href="#" id="surveyLink" role="button">survey</a>
+ (AI) 
+    <a href="#">
+ Google.
+    <a href="#">
+</a>On-device evaluation used.
+ JavaScript 
+ Monospace
+.DOM Distiller
+        
+        
+          
+          
+          $1
+<a href="javascript:portalSignin()">
+ Wi-Fi
+ <strong>chrome://policy</strong> 
+ <a href="$1">
+ <span>$1</span> 
+ <span>$1</span>
+ "<span>$1</span>"
+ <strong>$1</strong> 
+ <strong>$1</strong> 
+ <strong>$1</strong> 
+ <strong>$1</strong> 
+ <strong>$1</strong> 
+ <strong>$1</strong>.
+    <br /><br />
+ <strong>$1</strong>.
+ <strong>$1</strong> 
+:<strong>$1</strong>
+ <strong>$1</strong> 
+ <strong>$1</strong> 
+ <strong>$1</strong> 
+ </abbr>
+ (DNS)
+<abbr id="dnsDefinition"> 
+ <strong>$1</strong>. 
+ <span>$1</span>.
+ <strong>$1</strong> 
+ <strong>$1</strong> 
+ <strong>$1</strong> 
+ <strong>$1</strong> 
+ HTTPS
+ HTTPS.
+<a href="#buttons" onclick="toggleHelpBox()">
+</a><a href="#buttons" onclick="toggleHelpBox()">
+</a><a href="#buttons" onclick="toggleHelpBox()">
+</a><a href="#buttons" onclick="toggleHelpBox()">
+</a><a href="#buttons" onclick="toggleHelpBox()">
+.<a href="$1">
+.<a href="$1">
+</a>..
+ Wi-Fi
+ <span>$1</span>.
+<a href="javascript:diagnoseErrors()" id="diagnose-link">
+ Windows</a>
+<a href="javascript:diagnoseErrors()" id="diagnose-link">
+ Windows</a>.
+ <a href="javascript:diagnoseErrors()" id="diagnose-link">
+ Windows</a>.
+    $1
+Search flagsExperiments
+Warning: Experimental features ahead!By enabling these features, you could lose browser data or
+    compromise your security or privacy. Enabled features apply to all
+    users of this browser. If you are an enterprise admin you should
+    not be using these flags in production.Flags that apply system-wide can only be set by the owner: $1
+No matching experiments
+Unsupported features
+ |$1| + |$2| 
+ |$1| + |$2| 
+ |$1|.
+ |$1|.
+ |$1|$1 - 
+ Chrome.
+ - $2$1
+$3$1 $2 $3 $4 $5
+ $1 $2 
+ Google 
+ <a target="_blank" id="footerGoogleMyActivityLink" href="$1">myactivity.google.com</a>
+ Google <a target="_blank" id="footerGeminiAppsActivityLink" href="$1">
+ Gemini</a>
+ Google 
+ <a target="_blank" id="footerGoogleMyActivityLink" href="$1">myactivity.google.com</a>
+ <a target="_blank" id="footerGeminiAppsActivityLink" href="$2">
+ Gemini</a>
+ "$1".
+exact matchexact matchesbest matchbest matches
+Gemini task
+ Google 
+ Google" 
+ Google 
+ Google" 
+ Google 
+ Google" 
+ Google 
+ Google" 
+ Google
+ Google. 
+.PromoClose promoIn a few words, describe what you
+re looking for, like "comfortable walking shoes" or "vegetarian pasta recipes." As you visit more sites on this device, you
+ll see more results powered by AI.Get answers from your history, powered by AIYou can ask questions like "what ingredients were in that pasta recipe?" Using question words like "what" or "where" helps Chrome give you better answers. Or describe what you're looking for in a few words. As you visit more sites, you'll see more AI-powered results.Manage your history search settingFilter
+ "$1"Best matches from your history
+For a more powerful way to search your browsing history, turn on History search, powered by AITurn onIn a few words, describe what you're searching forTry something like "what was that square pizza place in Chicago?"Try something like "what ingredients were in that pasta recipe?"Try something like "what was the time of the comedy show?"Try something like "how much was the cargo bike?"SummarySearching for a summary
+Visited $1Sorry, I can't help you with that.Preparing AI-powered summary...check back in a few minutes.Something went wrong. Please try again later.
+ Chrome 
+ "$1" 
+ "$1" 
+ Chromium. <a target="_blank" href="$1" aria-label="$2">
+ Chromium. <a target="_blank" href="$1" aria-label="$2">
+. <a target="_blank" href="$1" aria-label="$2">
+ Chrome
+ <a target="_blank" href="https://chromestatus.com/features#browsers.chrome.status%3A%22Deprecated%22" >
+ Chrome Enterprise"
+ Google Cloud 
+ Google Cloud 
+ Google Cloud 
+ Google Cloud 
+ Google Cloud 
+ Chrome
+ Chrome 
+<a target="_blank" href="https://support.google.com/chrome/a/?p=browser_profile_details" >
+ IPChrome Enterprise Connectors
+ Chrome Enterprise" 
+ Chrome Enterprise" 
+ Google Cloud 
+ Chrome 
+ Chrome
+Chrome.
+ "$1" 
+ Chrome Enterprise Core 
+ Chrome Enterprise Core
+ (Ctrl-Shift-N)
+ Google. 
+ Google. 
+</em> Chromium 
+        <ul>
+          <li>
+          <li>
+          <li>
+        </ul>
+</em> 
+        <ul>
+          <li>
+          <li>
+          <li>
+        </ul>
+ Chrome
+ Chrome 
+ (Tab) 
+ Enter 
+ Chrome: 
+ Chrome 
+ Google
+ Enter 
+ Chrome 
+ Google
+ Chrome 
+ Google
+ Enter 
+ Chrome
+ Enter 
+ Chrome.
+ Enter 
+ Chrome.
+ Chrome
+ (Tab)
+ Enter 
+ Chrome 
+ Chrome 
+ Enter 
+ Chrome 
+ Chrome 
+ Enter 
+ Chrome 
+ Google" 
+ Google" 
+ Enter 
+ Google 
+ Google 
+ Google 
+ Enter 
+ Enter 
+ Enter 
+ Enter 
+ Google"
+ Google"<
+ Buganizer
+ Google
+ Google
+ Google
+ Google Drive
+ GoogleGoogle Jamboard
+ Google
+ Google
+ Google
+ Google
+ JiraJSONMarkdownMicrosoft ExcelMicrosoft PowerPointMicrosoft Word
+ OpenDocument
+ OpenDocument
+ OpenDocumentPDF
+Salesforce
+ Slack
+ Quicktime
+ ZIP$1 - $2 - $3
+$1 - $2
+ Chrome.
+ (Tab)
+ Enter 
+ Chrome.
+ Enter 
+ Chrome.
+ (Tab) 
+ Enter 
+ Enter 
+ Enter 
+ AI"$2 $1 location from history
+ $1$1 
+ $2$2 $1 bookmark
+ Enter 
+ Enter 
+ Enter 
+ (Tab) 
+ (Tab) 
+ Enter 
+ Enter 
+ Enter 
+ Enter 
+ Enter 
+ (Tab) 
+ Enter 
+ Enter 
+ Enter 
+ Enter 
+ Enter 
+ Chrome
+ (Tab) 
+ Enter 
+ Chrome.
+ Chrome
+ Enter 
+ Chrome
+ Enter 
+ Google
+ Google"Ask about this page<Enter a question>
+@gemini 
+ Gemini
+ "$1" 
+ Google
+ Chrome: 
+ Enter 
+@history 
+@history 
+$1 = $2
+Enter a question
+ Chrome 
+ Chrome 
+ Chrome 
+ Chrome 
+ Chromium 
+ SHA-1.
+$1, $2 $3$1, $2
+: $1 [$2]
+{NUM_COOKIES,plural, =1{(
+)}zero{(
+)}two{(
+)}few{(# 
+)}many{(# 
+)}other{(# 
+)}}{NUM_COOKIES,plural, =1{1 
+}zero{# 
+}two{# 
+}few{# 
+}many{# 
+}other{# 
+ MIDI 
+ Chrome 
+ Chrome 
+ Chrome 
+ Chrome 
+ Google. 
+ Chromium 
+ Chromium 
+ Google 
+ Chromium 
+ Google 
+ Chromium 
+ Chromium 
+ SHA-256
+{NUM_PERMISSIONS,plural, =1{
+}zero{
+}many{
+}other{
+ Chrome 
+ Chrome 
+ Chrome 
+{NUM_COOKIES,plural, =0{
+}few{# 
+}many{# 
+}other{# 
+ ChromeOS. 
+ "$1".
+ Trustpilot 
+ScamAdviser 
+Google 
+.{NUM_REVIEWS,plural, =0{
+ #}few{
+ #}many{
+ #}other{
+ #}}{NUM_REVIEWS,plural, =0{
+: {1,number,0.0}.}=1{
+: {1,number,0.0}.}two{
+: {1,number,0.0}.}few{
+: {1,number,0.0}.}many{
+: {1,number,0.0}.}other{
+: {1,number,0.0}.}}
+: {0, number, 0.0}.
+ Chrome 
+ Chrome 
+ Paint Preview Compositor
+ Google 
+ Google" 
+ Google 
+ Google 
+ Google 
+ Google 
+ Chromium 
+ Google.
+ Chrome
+ Chrome
+ iCloud
+ Google
+ Windows Hello
+ Google
+ Google Chrome 
+ "$1".
+ Windows Hello
+ Google Chrome 
+ Windows Hello 
+ Google Chrome 
+ Windows Hello 
+ Windows Hello 
+ Windows Hello 
+ $1.SuggestedAll passwordsFill passwordView details
+ Google
+ Google" 
+ BEGIN_LINK
+END_LINK.
+ Chrome 
+ Google ($1)
+ BEGIN_LINK
+END_LINK.
+ Chrome
+ BEGIN_LINK
+END_LINK.
+$1 $2 $3{MORE_ITEMS,plural, =1{
+}zero{# 
+}few{# 
+}many{# 
+}other{# 
+{PAYMENT_METHOD,plural, =0{{1}}=1{{1} 
+}two{{1} 
+}few{{1} 
+}many{{1} 
+}other{{1} 
+}}{SHIPPING_ADDRESS,plural, =0{{1}}=1{{1} 
+}two{{1} 
+ ({2}) 
+}few{{1} 
+}many{{1} 
+}other{{1} 
+}}{SHIPPING_OPTIONS,plural, =0{{1}}=1{{1} 
+}two{{1} 
+ ({2}) 
+}few{{1} 
+}many{{1} 
+}other{{1} 
+}}{CONTACT,plural, =0{{1}}=1{{1} 
+}two{{1} 
+ ({2}) 
+}few{{1} 
+}many{{1} 
+}other{{1} 
+ "$1" 
+ Windows Hello 
+ Windows Hello
+ Windows Hello 
+ $2.Store
+:$1 x $2 ($3)
+$1 x $2 
+.{COUNT,plural, =1{
+ 1}zero{
+ {COUNT}}two{
+ {COUNT}}few{
+ {COUNT}}many{
+ {COUNT}}other{
+ {COUNT}}}{COUNT,plural, =1{
+ ({COUNT})}zero{
+ {COUNT} 
+ ({COUNT})}few{
+ {COUNT} 
+}many{
+ {COUNT} 
+}other{
+ {COUNT} 
+Sans SerifSerif
+ Google.
+ Google.
+ Google 
+ MIDI 
+ ($1) 
+Use your accounts to login to websites
+ApproximatePreciseExact locationNeighborhoodOften used for directions, deliveries, and moreOften used for weather, local news, and more
+ MIDI 
+MacOSChromeOS
+ Kiosk and Signage".
+ SHA-256.
+ "custom"
+ "custom_size" 
+ "custom_size"
+ "custom".
+: http 
+https 
+ URL "$1" 
+ *://example.com/ => *://example.com".
+ "vendor_id".
+ Chrome.
+ $1: $2
+ JSON: $1
+ HTTPS
+ DnsOverHttps 
+ (URI) 
+ DnsOverHttpsTemplates 
+ DnsOverHttpsSalt 
+ DnsOverHttpsSalt 
+ DnsOverHttpsTemplates 
+ DnsOverHttpsMode 
+ 'automatic' 
+ 'secure'.
+ DnsOverHttpsMode.
+ DnsOverHttpsMode.
+ DnsOverHttpsMode 
+ 'secure'.
+ Chrome 
+ Chrome 
+ "$1".
+ http://example.com 
+ https://example.com.
+ "$2": $3.
+ "$1" 
+: "$1"
+ @: "$1".
+ "{searchTerms}"
+ DefaultSearchProviderKeyword
+ SearchAggregatorSettings
+ HTTPS 
+ URL: $1.
+ "$1" 
+ "$1" 
+ "$2".
+ "$1" 
+ Google
+ <a target="_blank" href="https://support.google.com/chrome/a/answer/9122284">
+ GAIA:
+ (Ash)
+Local Server
+ Google
+ PolicyDictionaryMultipleSourceMergeList
+ Chrome 
+ Chrome 
+ "$1": 
+ "$1": 
+ SpellcheckLanguage 
+ "$1" 
+ Android. 
+ Chrome Enterprise Core 
+ chrome://policy/test 
+ Android
+{0,plural, =1{
+}zero{
+}many{
+}other{
+}}{0,plural, =1{
+}zero{
+}many{
+}other{
+}}{0,plural, =1{
+}zero{
+}many{
+}other{
+}}{0,plural, =1{
+}zero{
+}many{
+}other{
+}}{0,plural, =1{
+}zero{
+}many{
+}other{
+}}{0,plural, =1{
+}zero{
+}many{
+}other{
+{0,plural, =1{
+ $1.}zero{
+ $1.}two{
+ $1.}few{
+ $1.}many{
+ $1.}other{
+ $1.}}{0,plural, =1{
+ $1.}zero{
+ $1.}two{
+ $1.}few{
+ $1.}many{
+ $1.}other{
+ $1.}}{0,plural, =1{
+ $1.}zero{
+ $1.}two{
+ $1.}few{
+ $1.}many{
+ $1.}other{
+ $1.}}{0,plural, =1{
+ $1.}zero{
+ $1.}two{
+ $1.}few{
+ $1.}many{
+ $1.}other{
+ $1.}}{0,plural, =1{
+ $1.}zero{
+ $1.}two{
+ $1.}few{
+ $1.}many{
+ $1.}other{
+ $1.}}{0,plural, =1{
+ $1.}zero{
+ $1.}two{
+ $1.}few{
+ $1.}many{
+ $1.}other{
+ $1.}}{0,plural, =1{
+ "$1" 
+.}zero{
+.}two{
+ ($1) 
+.}few{
+.}many{
+.}other{
+{0,plural, =1{
+}zero{
+}many{
+}other{
+{0,plural, =1{
+.}zero{
+.}two{
+.}few{
+.}many{
+.}other{
+.}}{0,plural, =1{
+}zero{
+ ($1)}few{
+}many{
+}other{
+}}{0,plural, =1{
+}zero{
+ ($1)}few{
+}many{
+}other{
+}}{0,plural, =1{
+}zero{
+ ($1)}few{
+}many{
+}other{
+}}{0,plural, =1{
+}zero{
+ ($1)}few{
+}many{
+}other{
+}}{0,plural, =1{
+}zero{
+ ($1)}few{
+}many{
+}other{
+.{0,plural, =1{
+.}zero{
+.}two{
+ ($1) 
+.}few{
+.}many{
+.}other{
+.{0,plural, =1{
+.}zero{
+.}two{
+ ($1) 
+.}few{
+.}many{
+.}other{
+.{0,plural, =1{
+}zero{
+}many{
+}other{
+}}{0,plural, =0{
+}many{
+}other{
+ "$1" 
+ OneDrive 
+ Microsoft OneDrive
+ Microsoft OneDrive 
+Microsoft OneDrive
+ "$1" 
+ "$1" 
+ Microsoft OneDrive
+ Microsoft OneDrive
+ Microsoft OneDrive
+ Microsoft 
+2A0A0A0x3A10A1A1x3A1x4A2A2x3A2x4A2x5A3A3 ExtraA3x3A3x4A3x5A3x6A3x7A4A4 ExtraA4 TabA4x3A4x4A4x5A4x6A4x7A4x8A4x9A5A5 ExtraA6A7A8A9B0B10B1B2B3
+ B5B5 Extra
+ B6/C4
+ B6B7B8B9
+ C6/C5
+ C7/C6
+ DLISO ID-1RA0RA1RA2RA3RA4SRA0SRA1SRA2SRA3SRA4JIS B0JIS B1JIS B2JIS B3JIS B4JIS B5JIS B6JIS B7JIS B8JIS B9JIS B10JIS Exec
+ Chou 2
+ Chou 3
+ Chou 4
+ Chou 40
+ Hagaki
+ Kaku 1
+ Kaku 2
+ Kaku 3
+ Kaku 4
+ Kaku 5
+ Kaku 7
+ Kaku 8
+ Oufuku Hagaki
+ You 4
+ You 610 
+Executive
+Fanfold 
+Fanfold 
+Foolscap44 
+Ledger
+Legal Extra
+Letter ExtraLetter Plus
+ Monarch
+ 14Oficio
+QuartoSuper ASuper B30 
+ 29.5 
+ 31.5 
+ DSC210 
+PRC 16K
+ 2PRC 32K
+ 8ROC 16KROC 8K
+$1 x $2 
+$1 x $2 
+$1 ($2 x $3 
+$1 ($2 x $3 
+ Chrome 
+ Chrome 
+ Chrome 
+ Chrome.
+:</b> 
+ Chrome 
+:</b> 
+ Chrome 
+ Chrome 
+:</b> 
+ Chrome 
+ Chrome 
+ Chrome.
+ Google 
+ Chrome 
+ Chrome.
+:</b> 
+ Chrome 
+:</b> 
+ Chrome 
+:</b> 
+ Chrome 
+ Chrome.
+ Chrome 
+ Chrome 
+ Chrome 
+ Chrome.
+ Chrome
+ Chrome 
+ Chrome
+ Chrome 
+ Chrome 
+ Chrome 
+ Chrome 
+ Chrome 
+ <a href="$1" aria-description="$2" target="_blank">
+ Chrome 
+ "$1" 
+ "$1" 
+ "%1$s" 
+ "%1$s" 
+.<a href="$1" aria-label="$2" aria-description="$3" target="_blank">
+ Chrome
+<a href="$1" aria-description="$2" target="_blank">
+<a href="$3" aria-description="$4" target="_blank">
+. <a href="$5" aria-description="$6" target="_blank">
+. <link>
+</link>
+ (ISP)
+ Chrome 
+. <link>
+</link>
+{COUNT,plural, =1{
+}zero{
+}many{
+}other{
+ Chrome. 
+ Chrome 
+ <strong>$1</strong>. 
+ Chrome
+ Chromium 
+ Chromium 
+ <strong>$1</strong> 
+{NUM_MINS,plural, =1{
+}zero{
+ {NUM_MINS} 
+ ({NUM_MINS})}few{
+ {NUM_MINS} 
+}many{
+ {NUM_MINS} 
+}other{
+ {NUM_MINS} 
+}}{NUM_HOURS,plural, =1{
+}zero{
+ {NUM_HOURS} 
+ ({NUM_HOURS})}few{
+ {NUM_HOURS} 
+}many{
+ {NUM_HOURS} 
+}other{
+ {NUM_HOURS} 
+}}{NUM_DAYS,plural, =1{
+}zero{
+ {NUM_DAYS} 
+ ({NUM_DAYS})}few{
+ {NUM_DAYS} 
+}many{
+ {NUM_DAYS} 
+}other{
+ {NUM_DAYS} 
+}}{NUM_MONTHS,plural, =1{
+}zero{
+ {NUM_MONTHS} 
+ ({NUM_MONTHS})}few{
+ {NUM_MONTHS} 
+}many{
+ {NUM_MONTHS} 
+}other{
+ {NUM_MONTHS} 
+}}{NUM_YEARS,plural, =1{
+}zero{
+ {NUM_YEARS} 
+ ({NUM_YEARS})}few{
+ {NUM_YEARS} 
+}many{
+ {NUM_YEARS} 
+}other{
+ {NUM_YEARS} 
+ Chromium
+ Chromium
+ Chromium 
+ Chromium</b>
+ Chromium.
+ Wi-Fi
+ <strong>$1</strong>.
+ Wi-Fi 
+ <strong>$1</strong>.
+ Wi-Fi 
+ ($1) 
+ <strong>$2</strong>.
+ Wi-Fi 
+ Wi-Fi 
+ ($1) 
+ Chrome 
+ "$1" 
+ "$1" 
+    <ul>
+    <li>
+ "$1" 
+    <li>
+    </ul>
+ "$1" 
+ "$1" 
+ "$1" 
+ "$1" 
+ <a href="#" id="dont-proceed-link">$1</a>
+ <strong>$1</strong> 
+. <a href="#" id="learn-more-link" aria-label="$2">
+: "$1"
+ <strong>$1</strong> 
+. <a href="#" id="learn-more-link" aria-label="$2">
+ <strong>$1</strong> 
+ ($2) 
+ Chromium 
+ <strong>$1</strong> (
+). <a href="#" id="learn-more-link">
+</a><a href="#" id="proceed-link">
+ HSTS. 
+ Chromium 
+ Wi-Fi 
+ Chromium 
+ Chromium 
+ Chrome 
+. <a href="#" id="learn-more-link">
+ Chrome 
+ Google" 
+ <a href="#" id="diagnostic-link">
+ <a href="#" id="proceed-link">
+ <a href="#" id="whitepaper-link">
+ Google. <a id="privacy-link" href="#">
+<a href="#" id="enhanced-protection-link">
+"</a> 
+ Chrome.
+ Chrome 
+. <a href="#" id="learn-more-link">
+ Chrome 
+ Google" 
+ <a href="#" id="diagnostic-link">
+ Chrome 
+. <a href="#" id="learn-more-link">
+ Chrome 
+ Google" 
+ <a href="#" id="diagnostic-link">
+.<br/><br/>
+. <a href="#" id="report-error-link">
+ <a href="#" id="proceed-link">
+. <a href="#" id="proceed-link">
+. <a href="#" id="proceed-link">
+. <a href="#" id="proceed-link">
+. <a href="#" id="proceed-link">
+    <ol>
+    <li>
+.</li>
+    <li>
+.</li>
+    <li>
+.</li>
+    </ol>
+ "<span class="error-code">NET::ERR_CERT_AUTHORITY_INVALID</span>" 
+ "<span class="error-code">ERR_CERT_COMMON_NAME_INVALID</span>" 
+ "<span class="error-code">NET::ERR_CERT_WEAK_SIGNATURE_ALGORITHM</span>" 
+ (SSL)""
+ "<span class="error-code">NET::ERR_CERT_DATE_INVALID</span>"
+    <p>
+ Wi-Fi 
+ <code>http://</code>.</p>
+    <ol>
+    <li>
+ <code>http://</code>
+<a href="http://example.com" target="_blank">http://example.com</a>.</li>
+    <li>
+.</li>
+    </ol>
+    <h4>
+)</h4>
+    <p>
+    <p>
+ Chrome 
+    <h4>
+    <p>
+    <h4>
+    <p>
+ HTTPS" 
+ HTTPS"
+ Chrome 
+    <p>
+    <p>
+    <h4>
+    <p>
+ Wi-Fi 
+    <p>
+ <strong>"
+"</strong> 
+    <p>
+ Chrome 
+ Windows 
+ Superfish 
+ Windows.</p>
+    <p>
+    <ol>
+    <li>
+ <strong>"
+"</strong>
+<strong>"
+"</strong> 
+    <li>
+ <strong>VisualDiscovery</strong>
+    <li>
+ <strong>"
+"</strong>
+ <strong>"
+"</strong>
+    <li>
+ <strong>"
+"</strong>
+ <strong>"
+"</strong>
+    <li>
+ <strong>"
+"</strong>
+ <strong>"
+"</strong>
+    <li>
+ <a href="https://support.google.com/chrome/answer/6098869">
+ Chrome</a> 
+    </ol>
+ Chromium 
+ Chromium 
+ TLS 1.0 
+ 1.1 TLS. 
+ TLS 1.2 
+ HTTPS. <a href="#" id="learn-more-link">
+ HTTPS
+      <li><strong>
+</strong> 
+      <li><strong>
+</strong> 
+ Wi-Fi 
+ Wi-Fi 
+    </ul>
+ HTTPS. <a href="#" id="learn-more-link">
+ Google. <a href="#" id="learn-more-link">
+ Chrome 
+. <a href="#" id="learn-more-link">
+ Chrome 
+. <a href="#" id="learn-more-link">
+ HTTPS 
+". <a href="#" id="learn-more-link">
+ Wi-Fi 
+ Wi-Fi 
+ HTTPS. $1
+ Chrome 
+ Chrome 
+ HTTPS 
+ Google. $1
+JavaScript
+ JavaScript 
+ $2$1 
+ <strong>$1</strong>
+ <strong>$1</strong>
+ <strong>$2</strong>. 
+ URL.{1,plural, =1{
+ <strong>{0}</strong>
+ {2, date, full}. 
+.}zero{
+ <strong>{0}</strong>
+ {2, date, full}. 
+.}two{
+ <strong>{0}</strong>
+ {2, date, full}. 
+.}few{
+ <strong>{0}</strong>
+ {2, date, full}. 
+.}many{
+ <strong>{0}</strong>
+ {2, date, full}. 
+.}other{
+ <strong>{0}</strong>
+ {2, date, full}. 
+.{1,plural, =1{
+ <strong>{0}</strong>
+.}zero{
+ <strong>{0}</strong>
+.}two{
+ <strong>{0}</strong>
+.}few{
+ <strong>{0}</strong>
+.}many{
+ <strong>{0}</strong>
+.}other{
+ <strong>{0}</strong>
+ <strong>$1</strong>
+ <strong>$1</strong>
+ <strong>$1</strong>
+ <strong>$1</strong>
+ <strong>$1</strong>, 
+ <strong>$1</strong>
+ SHA-1)
+<strong>$1</strong>
+ <strong>$1</strong>
+ <strong>$1</strong>
+ <strong>$1</strong>
+ (TLS).
+ (TLS) 
+ <strong>$1</strong>
+ <strong>$1</strong> 
+ Chromium 
+. <a href="#" id="view-certificate-link">
+ Family Link.
+YouTube
+ YouTube 
+ YouTube
+ Family Link.
+ YouTube
+ Google
+ Google
+ <a target="_blank" href="$1">
+.{count,plural, =1{{website_1}}=2{
+{website_1} 
+{website_2}}=3{
+{website_1} 
+{website_2} 
+}zero{
+{website_1} 
+{website_2} 
+{more_count} 
+{website_1} 
+{website_2} 
+{more_count} 
+}many{
+{website_1} 
+{website_2} 
+{more_count} 
+}other{
+{website_1} 
+{website_2} 
+{more_count} 
+}}{count,plural, =0{
+}many{
+}other{
+)(arm64)(
+(cohort: $1)
+ Google" 
+ Google" 
+ Google.
+ Google. 
+ Google"
+ Google"
+ Google"
+ "$1" 
+$1 - $2
+ Chrome 
+ Chrome
+ "$1" 
+ "$1" 
+ Chrome 
+ Chrome
+ Chrome
+ Chrome
+ Chrome
+ Google
+ Chrome 
+ "$1"{TIME_DIMENSION,plural, =0{
+ ($1)}two{
+ ($1)}few{
+}many{
+}other{
+}}\u0020\u2022\u0020%1$s%2$s%3$s
+ "$2" 
+ "$2" 
+ "$2" 
+ "$1" 
+ Google.
+ JSON 
+ '$1' 
+ UTF-8.
+ '$1'. 
+ "$1" 
+ "$1" 
+ JavaScript 
+ js.".
+ "$1" 
+ css.".
+ "$1".
+ '$1'.
+ '$1'.
+ css (
+) '$1' 
+ JavaScript '$1' 
+ "$1".
+ default_locale 
+: '$1'
+ (PKCS#8-format 
+ PEM).
+ crx. 
+ "$2") 
+ "$1" 
+ $2)$1 
+ $2$1 
+ $3)$1 
+ "$1" 
+ "$1" 
+ Mime: $1
+ "$1" 
+ ($2) 
+ "$3".
+ Chrome 
+: "$1".
+: "$1".
+: "$1"
+WebGL 
+ WinHttp
+ "$2" 
+ "$2" 
+ "$1" 
+ "$2".
+ "$1" 
+ "$2".
+ "$1" 
+ "$2".
+ "$1" 
+ "$2" 
+ "$1".
+ ($1) 
+ ($2).
+ ($2).
+0.250.50.751.251.51.752
+ Google
+ Twitter
+ Facebook
+ Google"
+article
+logmain
+{SECONDS,plural, =1{
+}zero{# 
+ (#)}few{# 
+}many{# 
+}other{# 
+}}{SECONDS,plural, =1{
+}zero{# 
+ (#)}few{# 
+}many{# 
+}other{# 
+}}{MINUTES,plural, =1{
+}zero{# 
+ (#)}few{# 
+}many{# 
+}other{# 
+}}{MINUTES,plural, =1{
+ }zero{# 
+ }two{
+ }few{# 
+ }many{# 
+ }other{# 
+ }}{HOURS,plural, =1{
+}zero{# 
+ (#)}few{# 
+}many{# 
+}other{# 
+}}{HOURS,plural, =1{
+ }zero{# 
+ }two{
+ }few{# 
+ }many{# 
+ }other{# 
+ }}{DAYS,plural, =1{
+}zero{# 
+ (#)}few{# 
+}many{# 
+}other{# 
+}}{DAYS,plural, =1{
+ }zero{# 
+ }two{
+ }few{# 
+ }many{# 
+ }other{# 
+ }}{MONTHS,plural, =1{
+}zero{# 
+ (#)}few{# 
+}many{# 
+}other{# 
+}}{YEARS,plural, =1{
+}zero{# 
+ (#)}few{# 
+}many{# 
+}other{# 
+}}{SECONDS,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+}}{SECONDS,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+}}{MINUTES,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+}}{HOURS,plural, =1{
+}zero{
+}two{ 
+ (#)}few{
+}many{
+}other{
+}}{DAYS,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+}}{MONTHS,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+}}{YEARS,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+}}{SECONDS,plural, =1{
+}zero{ 
+}two{ 
+ (#)}few{
+}many{
+}other{
+}}{SECONDS,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+}}{MINUTES,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+}}{SECONDS,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+}}{HOURS,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+}}{DAYS,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+}}{MONTHS,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+}}{YEARS,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+}}{SECONDS,plural, =1{
+}zero{
+}many{
+}other{
+}}{SECONDS,plural, =1{
+}zero{
+}many{
+}other{
+}}{HOURS,plural, =1{
+}zero{
+}many{
+}other{
+}}{DAYS,plural, =1{
+}zero{
+}many{
+}other{
+}}{MONTHS,plural, =1{
+}zero{
+}many{
+}other{
+}}{YEARS,plural, =1{
+}zero{
+}many{
+}other{
+ Web Smart Paste
+.$1. $2.
+ "$1" 
+ "$1" 
+ Del (
+F1F5F6F11Backspace
+AltCommandShiftWin$1 
+ - $1$1+ 
+{MINUTES,plural, =1{
+}zero{# 
+ (#)}few{# 
+}many{# 
+}other{# 
+}}{HOURS,plural, =1{
+}zero{# 
+ (#)}few{# 
+}many{# 
+}other{# 
+}}{DAYS,plural, =1{
+}zero{# 
+ (#)}few{# 
+}many{# 
+}other{# 
+}}{YEARS,plural, =1{
+}zero{# 
+ (#)}few{# 
+}many{# 
+}other{# 
+}}{MINUTES,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+}}{HOURS,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+}}{DAYS,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+}}{YEARS,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+.$1+{MAX_UNREAD_NOTIFICATIONS,plural, =1{
+}zero{
+ (#)}few{
+}many{
+}other{
+{UNREAD_NOTIFICATIONS,plural, =1{
+}zero{
+}few{# 
+}many{# 
+}other{# 
+{DAYS,plural, =0{
+ (#)}few{
+}many{
+}other{
+ $1.{COUNT,plural, =1{
+}zero{
+}many{
+}other{
+}}{COUNT,plural, =1{
+:}zero{
+:}two{
+:}few{
+:}many{
+:}other{
+ <b>chrome://extensions</b> 
+</b>{COUNT,plural, =1{
+}zero{
+}many{
+}other{
+}}{COUNT,plural, =1{
+: <ul id="missing-extensions" ></ul> 
+.}zero{
+: <ul id="missing-extensions" ></ul> 
+.}two{
+: <ul id="missing-extensions" ></ul> 
+.}few{
+: <ul id="missing-extensions" ></ul> 
+.}many{
+: <ul id="missing-extensions" ></ul> 
+.}other{
+: <ul id="missing-extensions" ></ul> 

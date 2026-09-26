@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@icons-pack\react-simple-icons\icons\SiN26.d.ts
+
+import { IconType } from '../types';
+declare const defaultColor = "#48AC98";
+declare const SiN26: IconType;
+export { SiN26 as default, defaultColor };

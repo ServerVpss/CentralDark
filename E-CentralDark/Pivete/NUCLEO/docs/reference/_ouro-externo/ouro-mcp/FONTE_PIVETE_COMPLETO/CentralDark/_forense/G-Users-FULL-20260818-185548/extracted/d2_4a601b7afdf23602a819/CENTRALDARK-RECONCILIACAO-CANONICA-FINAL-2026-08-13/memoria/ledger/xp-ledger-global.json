@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2026-08-13T00:00:00Z",
+  "total_xp_global": 0,
+  "entries": [],
+  "policy": {
+    "mode": "append-only",
+    "checksum": "sha256",
+    "dedup_by": "fingerprint",
+    "min_xp": 0
+  }
+}

@@ -1,0 +1,4 @@
+ M .agents/skills/meta-lupa/references/uso-ledger.jsonl
+ M .coderabbit.yaml
+ M AGENTS.md
+ M docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md

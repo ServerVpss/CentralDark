@@ -1,0 +1,11 @@
+=== validate-operation-receipt: receipt VALIDO (deve ser ALLOWED, exit 0) ===
+{"OPERATION_RECEIPT_VALID": "SIM", "STATUS": "ALLOWED", "approved_for_promotion": false, "chief_decision": "PENDING", "status": "PASS"}
+exit=0
+
+=== validate-operation-receipt: receipt QUEBRADO (target ausente, head_sha invalido, reason sem BLOCKED) - deve ser BLOCKED, exit 13 ===
+{"OPERATION_RECEIPT_VALID": "NAO", "REASON": "OPERATION_RECEIPT_FIELD_MISSING", "STATUS": "BLOCKED", "missing": ["target"]}
+exit=13
+
+=== pytest do validador ===
+...............                                                          [100%]
+15 passed in 0.08s

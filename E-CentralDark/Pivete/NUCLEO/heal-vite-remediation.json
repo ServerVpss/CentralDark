@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-08-24T06:02:27.054Z",
+  "strategy": "nuclear_reset_with_rollback",
+  "steps": [
+    {
+      "step": "backup_package_lock",
+      "path": "E:\\CentralDark\\Pivete\\CentralDark\\package-lock.json.backup.1787551347054",
+      "status": "done"
+    },
+    {
+      "step": "npm_cache_clean",
+      "cmd": "npm cache clean --force",
+      "status": "done"
+    },
+    {
+      "step": "npm_install",
+      "cmd": "npm install --legacy-peer-deps",
+      "status": "done",
+      "output": "up to date, audited 504 packages in 2s\n\n110 packages are looking for funding\n  run `npm fund` for details\n\nfound 0 vulnerabilities",
+      "code": 0
+    }
+  ],
+  "rollback_prepared": false,
+  "backup_paths": [
+    "E:\\CentralDark\\Pivete\\CentralDark\\package-lock.json.backup.1787551347054"
+  ]
+}

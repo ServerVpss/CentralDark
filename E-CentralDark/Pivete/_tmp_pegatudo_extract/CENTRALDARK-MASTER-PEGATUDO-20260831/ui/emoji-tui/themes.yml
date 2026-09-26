@@ -1,0 +1,24 @@
+schema: CENTRALDARK_VISUAL_THEMES
+schema_version: 1
+default: professional
+themes:
+  professional:
+    label: CentralDark Professional
+    icons: semantic_only
+    animation: subtle
+    rgb: restrained
+  matrix:
+    label: Matrix Diagnostics
+    icons: semantic_only
+    animation: graph_pulse
+    rgb: configurable
+  baianes:
+    label: Baianês Operacional
+    icons: expressive
+    animation: subtle
+    rgb: configurable
+  plain:
+    label: Plain / CI
+    icons: false
+    animation: false
+    rgb: false

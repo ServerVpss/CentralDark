@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-08-23",
+  "repo": "ServerVpss/CentralDark",
+  "base_observed": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+  "pr": {
+    "number": 1119,
+    "state": "OPEN",
+    "draft": true,
+    "mergeable": true,
+    "head": "1296396db53a0dd89add7aefa4fe72c3b8d9ba81",
+    "writer": "SOL",
+    "scope": "SESSION_INTELLIGENCE_NAV_TRACKING"
+  },
+  "new_system_required": false,
+  "mutation_performed": false,
+  "runtime_local_current": "UNKNOWN"
+}

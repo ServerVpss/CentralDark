@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\tap\dist\hooks\useTapHost.d.ts.map
+
+{"version":3,"file":"useTapHost.d.ts","names":[],"sources":["../../src/hooks/useTapHost.ts"],"mappings":";kBAQiB;YACE,OAAO;;;;IAItB,OAAO;;;;;;;;IASP;;;cAMS,aAAc,GAAG,gBAAgB,MAAI,WAAW,OAAO"}

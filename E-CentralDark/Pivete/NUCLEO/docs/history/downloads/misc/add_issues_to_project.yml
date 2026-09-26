@@ -1,0 +1,46 @@
+name: Add issues to project
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@v1.0.2
+        with:
+          project-url: https://github.com/users/swstegall/projects/4
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+
+      - name: Apply repo label
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          script: |
+            const labels = context.payload.issue.labels.map(l => l.name);
+            if (!labels.includes('Meteor Decomp')) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.issue.number,
+                labels: ['Meteor Decomp']
+              });
+            }
+
+      - name: Notify Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+        run: |
+          # Build the payload with jq so titles containing quotes, backslashes,
+          # or other JSON-special characters are escaped correctly (a raw
+          # interpolated title broke the JSON -> Discord 50109). Passing the
+          # title/URL via env (rather than inlining template expressions in the
+          # run block) also avoids shell injection from untrusted issue titles.
+          content="$(printf '<@&1510380634349109440>, Issue created for Meteor Decomp.\nTitle: %s\n%s' "$ISSUE_TITLE" "$ISSUE_URL")"
+          jq -n --arg content "$content" '{content: $content}' \
+            | curl -sS -X POST "$DISCORD_WEBHOOK_URL" \
+                -H "Content-Type: application/json" \
+                -d @-

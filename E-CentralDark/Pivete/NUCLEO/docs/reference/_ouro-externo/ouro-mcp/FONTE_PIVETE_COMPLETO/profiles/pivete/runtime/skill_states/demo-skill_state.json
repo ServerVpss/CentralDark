@@ -1,0 +1,23 @@
+{
+  "name": "demo-skill",
+  "path": "E:\\CentralDark\\Pivete\\profiles\\pivete\\skills\\demo-skill",
+  "status": "fixed_point",
+  "generation": 0,
+  "baseline_tests_passed": 0,
+  "baseline_tests_total": 0,
+  "baseline_build": false,
+  "baseline_lint": false,
+  "gaps": [],
+  "gaps_resolved": 0,
+  "gaps_total": 0,
+  "generations": [],
+  "current_generation": 0,
+  "accepted_generations": 0,
+  "rejected_generations": 0,
+  "fixed_point": true,
+  "fixed_point_conditions": {},
+  "created_at": "2026-08-22T20:39:32.104447",
+  "updated_at": "2026-08-22T20:39:32.108449",
+  "fixed_point_at": "2026-08-22T20:39:32.108449",
+  "metadata": {}
+}

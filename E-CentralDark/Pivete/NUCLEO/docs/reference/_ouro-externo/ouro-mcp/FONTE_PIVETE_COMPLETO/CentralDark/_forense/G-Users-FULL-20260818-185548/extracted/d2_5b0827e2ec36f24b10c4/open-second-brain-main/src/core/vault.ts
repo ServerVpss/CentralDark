@@ -1,0 +1,810 @@
+/**
+ * Vault operations: frontmatter parse/write, slugify, wikilink extraction,
+ * Markdown page listing.
+ *
+ * Mirrors `src/open_second_brain/vault.py`. Designed dependency-free; the small
+ * YAML-like emitter handles only the scalar/inline-array shapes that round-trip
+ * through Obsidian and the simple parser.
+ *
+ * ## Frontmatter diagnostics (unit F)
+ *
+ * The frontmatter reader is a line scanner, not a YAML parser, so it cannot
+ * fail — it drops what it does not understand, and the field simply never
+ * reaches the parsed map. That is how commit 426d06f8 (block-style lists
+ * dropped, producing spurious "missing field" errors in the doctor) stayed
+ * invisible until a human noticed the symptom.
+ *
+ * {@link parseFrontmatterTextWithNotices} is the diagnostic-carrying sibling:
+ * same map, same body, plus the notices. The rule for what counts as a
+ * dropped line — and what is legitimately skipped content that must stay
+ * silent — is stated on that function and is the authority for it.
+ * {@link parseFrontmatter} and {@link parseFrontmatterText} delegate to the
+ * siblings and discard the notices, so every call site not yet converted is
+ * byte-identical.
+ *
+ * ### Why most readers keep the two-tuple form
+ *
+ * Two consequences follow from the parser being a scanner rather than a
+ * YAML parser, and they are the reason the conversion is deliberately
+ * partial:
+ *
+ *   1. `parseFrontmatter` CANNOT throw. It reads inside its own `try` and
+ *      everything after that is string work. Every `catch { … }` wrapped
+ *      around nothing but a `parseFrontmatter` call is therefore
+ *      unreachable, and the arm that "handles" the failure has never run.
+ *      Those arms are removed where the `try` guards nothing else; the
+ *      control flow is provably identical because the branch was dead.
+ *   2. A reader that returns a plain value - a list of recipes, a graph
+ *      node, a ranked candidate set - has nowhere to put a notice.
+ *      Widening its return type would create a channel with no consumer,
+ *      which is the same silence in a new shape.
+ *
+ * The condition itself is not lost, because it is observable centrally:
+ * {@link listVaultPages}'s opt-in sink feeds `o2b brain doctor`, which
+ * sweeps the whole `Brain/` tree unconditionally, and the search indexer
+ * reports per-file notices through `IndexStats.frontmatterNotices`. A
+ * per-call channel at every reader would duplicate that, not add to it.
+ */
+
+import { createHash } from "node:crypto";
+import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { dirname, join, relative } from "node:path";
+
+import { WIKILINK_TARGET_RE } from "./brain/wikilink.ts";
+import { atomicCreateFileSyncExclusive, atomicWriteFileSync } from "./fs-atomic.ts";
+import { stem } from "./fs-utils.ts";
+import {
+  DEGRADATION_CODE,
+  type DegradationNotice,
+  emitDegradationNotice,
+} from "./integrity/degradation.ts";
+import type { FrontmatterMap, FrontmatterValue, VaultPage } from "./types.ts";
+
+const FRONTMATTER_RE = /^---\s*\n([\s\S]*?)\n---\s*\n?/;
+/**
+ * The key grammar, written once and used by BOTH directions.
+ *
+ * The scanner has only ever recognised this shape, so it is also the
+ * only shape the emitter may write: a key outside it is a key the
+ * emitter would put on disk and the parser would then drop or, worse,
+ * read as something else. Deriving `KEY_VALUE_RE` from the same source
+ * is what makes "round-trips" a fact rather than a claim two regexes
+ * happen to agree on.
+ */
+const FRONTMATTER_KEY_PATTERN = "[a-zA-Z_][a-zA-Z0-9_-]*";
+const FRONTMATTER_KEY_RE = new RegExp(`^${FRONTMATTER_KEY_PATTERN}$`);
+const KEY_VALUE_RE = new RegExp(`^(${FRONTMATTER_KEY_PATTERN})\\s*:\\s*(.*?)\\s*$`);
+// Block-sequence dash item: `- item` or a bare `-` (empty item). The
+// leading whitespace is required so `-foo` (a dash-prefixed string, not a
+// list item) is NOT matched. Captures the item text after the whitespace.
+const DASH_ITEM_RE = /^-(?:\s+(.*))?$/;
+const PLAIN_SCALAR_RE = /^[A-Za-z0-9_./-](?:[A-Za-z0-9_./ -]*[A-Za-z0-9_./-])?$/;
+const CODE_BLOCK_RE = /```[\s\S]*?```|`[^`]+`/g;
+const SLUG_INVALID_RE = /[^a-z0-9]+/g;
+const SLUG_MAX_LEN = 64;
+
+const MEDIA_EXTENSIONS = new Set([
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".gif",
+  ".svg",
+  ".webp",
+  ".bmp",
+  ".tiff",
+  ".avif",
+  ".mp4",
+  ".webm",
+  ".ogv",
+  ".mov",
+  ".mkv",
+  ".avi",
+  ".mp3",
+  ".wav",
+  ".ogg",
+  ".flac",
+  ".m4a",
+  ".pdf",
+]);
+
+const DEFAULT_SKIP_DIRS = [".git", ".obsidian", ".trash", ".stversions"] as const;
+const DEFAULT_SKIP_FILES = ["index.md", "log.md"] as const;
+
+/**
+ * Parse YAML-like frontmatter from a Markdown file. Returns `[metadata, body]`.
+ * Only simple `key: value` lines are recognized — values are returned as strings,
+ * with surrounding quotes stripped. Inline arrays `[a, b]` are parsed into arrays
+ * of strings. Lines that don't match are silently skipped.
+ *
+ * Delegates to {@link parseFrontmatterWithNotices} and DISCARDS its
+ * diagnostics, so this signature and its output stay exactly as they were.
+ * Prefer the `WithNotices` sibling at any call site that has a report to
+ * carry the trace.
+ */
+export function parseFrontmatter(path: string): readonly [FrontmatterMap, string] {
+  const [metadata, body] = parseFrontmatterWithNotices(path);
+  return [metadata, body];
+}
+
+/**
+ * Same parse as {@link parseFrontmatter} but over an in-memory string,
+ * so a caller that already holds the file content (e.g. the search
+ * indexer) does not pay a second `readFileSync`.
+ *
+ * Delegates to {@link parseFrontmatterTextWithNotices} and discards its
+ * diagnostics — see {@link parseFrontmatter}.
+ */
+export function parseFrontmatterText(text: string): readonly [FrontmatterMap, string] {
+  const [metadata, body] = parseFrontmatterTextWithNotices(text);
+  return [metadata, body];
+}
+
+/** Site recorded on a notice when the caller names none. */
+const FRONTMATTER_SITE = "vault.parseFrontmatter";
+
+/**
+ * Longest run of a dropped source line reproduced in a notice `detail`.
+ * A notice renders as ONE line in doctor / index output, so an unbounded
+ * frontmatter line (a pasted blob, a minified payload) must not be able
+ * to dominate a report.
+ */
+const NOTICE_LINE_MAX = 120;
+const NOTICE_LINE_ELLIPSIS = "…";
+
+/** Attribution for the notices a frontmatter parse emits. */
+export interface FrontmatterNoticeOptions {
+  /**
+   * The subsystem to record as the notice `site`. Defaults to the parser
+   * itself; a converted call site passes its own name so a reader can
+   * tell WHICH walker hit the condition.
+   */
+  readonly site?: string;
+  /**
+   * The file the text came from, when the caller knows it. The path form
+   * ({@link parseFrontmatterWithNotices}) supplies this itself.
+   */
+  readonly path?: string;
+}
+
+/** `[metadata, body, notices]` — the diagnostic-carrying parse result. */
+export type FrontmatterParseWithNotices = readonly [
+  FrontmatterMap,
+  string,
+  ReadonlyArray<DegradationNotice>,
+];
+
+/**
+ * {@link parseFrontmatter} plus the diagnostics it would otherwise drop.
+ *
+ * An unreadable file yields one `frontmatter-unreadable` notice naming
+ * the path, and the same `[{}, ""]` result the two-tuple form has always
+ * returned — the read failure is reported, never raised.
+ */
+export function parseFrontmatterWithNotices(
+  path: string,
+  opts: FrontmatterNoticeOptions = {},
+): FrontmatterParseWithNotices {
+  const site = opts.site ?? FRONTMATTER_SITE;
+  let text: string;
+  try {
+    text = readFileSync(path, "utf8");
+  } catch (err) {
+    const notices: DegradationNotice[] = [];
+    emitDegradationNotice(notices, {
+      code: DEGRADATION_CODE.frontmatterUnreadable,
+      site,
+      path,
+      detail: `frontmatter read failed: ${err instanceof Error ? err.message : String(err)}`,
+    });
+    return [{}, "", notices];
+  }
+  return parseFrontmatterTextWithNotices(text, { site, path });
+}
+
+/**
+ * {@link parseFrontmatterText} plus the diagnostics it would otherwise
+ * drop. The map and body are byte-identical to the two-tuple form; the
+ * third element is the new trace.
+ *
+ * ## What counts as a DROPPED line
+ *
+ * The scanner is line-based, not a YAML parser, so "unsupported grammar"
+ * has to be defined structurally. A line inside the `---` block is
+ * CONSUMED when it is one of:
+ *
+ *   - a `key: value` pair (`KEY_VALUE_RE`), including the empty-value
+ *     form that opens a block sequence or records a null scalar;
+ *   - a dash item (`DASH_ITEM_RE`) while a block sequence is open.
+ *
+ * It is legitimately SKIPPED, with no notice, when it is:
+ *
+ *   - blank, or whitespace-only — structural separation the format
+ *     expects, and a notice per blank line would be noise, not signal;
+ *   - a `#` comment — content the format explicitly discards.
+ *
+ * Everything else is a DROP and emits exactly one
+ * `frontmatter-line-dropped` notice carrying the 1-based line number
+ * within the block and the offending text. That covers the two shapes
+ * seen in the field: grammar the scanner has no branch for (a folded or
+ * literal block scalar, an indented nested mapping, a `-foo` string that
+ * is not a list item) and a dash item with no open key to land in.
+ *
+ * Emitting a notice never changes the parse. A dropped line is still
+ * dropped, exactly as before; only the trace is new.
+ */
+export function parseFrontmatterTextWithNotices(
+  text: string,
+  opts: FrontmatterNoticeOptions = {},
+): FrontmatterParseWithNotices {
+  const notices: DegradationNotice[] = [];
+  const site = opts.site ?? FRONTMATTER_SITE;
+  const match = FRONTMATTER_RE.exec(text);
+  if (!match) {
+    return [{}, text.trim(), notices];
+  }
+
+  const fmBlock = match[1]!;
+  const body = text.slice(match[0].length).trim();
+  const metadata: FrontmatterMap = {};
+
+  // Block-sequence state: when a key is opened with an empty value
+  // (`key:`) and the following lines are dash items (`- a`), we assemble
+  // them into an array. This mirrors standard YAML block lists, which is
+  // what Obsidian's Properties editor and several writers emit — the
+  // original inline-array-only parser silently dropped such lists and
+  // surfaced spurious "missing field" errors in `o2b brain doctor`.
+  const lines = fmBlock.split("\n");
+  let blockKey: string | null = null;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]!.trim();
+    if (!line || line.startsWith("#")) continue;
+
+    const dash = DASH_ITEM_RE.exec(line);
+    if (dash && blockKey !== null) {
+      const arr = (metadata[blockKey] as string[] | undefined) ?? [];
+      arr.push(stripQuotes(dash[1] ?? ""));
+      metadata[blockKey] = arr;
+      continue;
+    }
+
+    // Any non-dash line terminates an open block sequence.
+    blockKey = null;
+
+    const kv = KEY_VALUE_RE.exec(line);
+    if (!kv) {
+      emitDegradationNotice(notices, {
+        code: DEGRADATION_CODE.frontmatterLineDropped,
+        site,
+        ...(opts.path !== undefined ? { path: opts.path } : {}),
+        detail: `frontmatter line ${i + 1} is not a supported key/value or list item: ${clipNoticeLine(line)}`,
+      });
+      continue;
+    }
+    const key = kv[1]!;
+    let value = kv[2]!.trim();
+
+    if (value === "") {
+      // Empty value. Peek at the next meaningful line: if it is a dash
+      // item this is a block-sequence header, otherwise keep the original
+      // empty-string behaviour so a genuine null scalar round-trips.
+      let j = i + 1;
+      let nextMeaningful: string | null = null;
+      while (j < lines.length) {
+        const cand = lines[j]!.trim();
+        if (!cand || cand.startsWith("#")) {
+          j++;
+          continue;
+        }
+        nextMeaningful = cand;
+        break;
+      }
+      if (nextMeaningful !== null && DASH_ITEM_RE.test(nextMeaningful)) {
+        metadata[key] = [];
+        blockKey = key;
+      } else {
+        metadata[key] = "";
+      }
+      continue;
+    }
+
+    if (value.startsWith("[") && value.endsWith("]")) {
+      const inner = value.slice(1, -1).trim();
+      metadata[key] = inner ? splitInlineArray(inner) : [];
+      continue;
+    }
+    metadata[key] = stripQuotes(value);
+  }
+
+  return [metadata, body, notices];
+}
+
+/** Bound one source line to {@link NOTICE_LINE_MAX} for a one-line notice. */
+function clipNoticeLine(line: string): string {
+  return line.length <= NOTICE_LINE_MAX
+    ? line
+    : line.slice(0, NOTICE_LINE_MAX) + NOTICE_LINE_ELLIPSIS;
+}
+
+/**
+ * Whether `key` is a frontmatter key this format can round-trip: one the
+ * emitter may write and the scanner will read back as the same key.
+ *
+ * Exported so a boundary that wants to reject a bad key as the CALLER's
+ * fault, naming the argument, can ask the same question the emitter asks
+ * rather than restating the grammar.
+ */
+export function isFrontmatterKey(key: string): boolean {
+  return FRONTMATTER_KEY_RE.test(key);
+}
+
+/** A frontmatter key this emitter will not write. See {@link formatFrontmatter}. */
+export class FrontmatterKeyError extends Error {
+  /** The offending key, verbatim, so a caller can point at which one. */
+  readonly key: string;
+  constructor(key: string) {
+    super(
+      `frontmatter key ${JSON.stringify(key)} is not a key this format can round-trip; ` +
+        "keys are a letter or underscore followed by letters, digits, '_' or '-'",
+    );
+    this.name = "FrontmatterKeyError";
+    this.key = key;
+  }
+}
+
+/**
+ * Render a Markdown file with YAML-like frontmatter to a string. Pure
+ * function — exposed so callers can decide *how* to persist (atomic,
+ * exclusive, plain) without duplicating the YAML formatter.
+ *
+ * ## Keys are checked, not escaped
+ *
+ * The value side was already sound: {@link formatYamlScalar} quotes and
+ * escapes any scalar that would break the scanner, so no VALUE has ever
+ * been able to add a line to the block. Keys were emitted raw, which
+ * made the same guarantee false in the other direction — a key
+ * containing a newline emitted extra frontmatter lines, and because the
+ * scanner is last-wins and `update_note` merges `{...existing,
+ * ...caller}`, a caller could overwrite a key it was never asked to
+ * touch. That reach was bounded by the `Brain/` machinery-root refusal,
+ * so it was latent rather than live; it is fixed here, at the emitter,
+ * so every writer in the tree inherits the guarantee rather than each
+ * entry point having to remember it.
+ *
+ * Escaping is not the fix, because the reader has no quoted-key form to
+ * escape INTO: a quoted key would fail `KEY_VALUE_RE` and be dropped on
+ * the next parse, which trades an injection for a silent loss. So a key
+ * outside the grammar is a typed {@link FrontmatterKeyError}, raised
+ * before a single byte is rendered.
+ */
+export function formatFrontmatter(metadata: FrontmatterMap, body: string): string {
+  const lines: string[] = ["---"];
+  for (const [key, value] of Object.entries(metadata)) {
+    if (!isFrontmatterKey(key)) throw new FrontmatterKeyError(key);
+    lines.push(`${key}: ${formatYamlValue(value)}`);
+  }
+  lines.push("---");
+  if (body) {
+    lines.push("");
+    lines.push(body);
+  }
+  return lines.join("\n") + "\n";
+}
+
+/**
+ * Write a Markdown file with YAML-like frontmatter. Lists are serialized as
+ * inline arrays. Scalars that would break the simple parser are quoted and
+ * standard control chars are escaped.
+ *
+ * This variant is non-atomic — used for non-critical writes where a torn
+ * file on crash is acceptable (the regenerated `index.md` would just be
+ * rebuilt next run; the bootstrap files are templates that can be
+ * re-emitted). For writes that must survive concurrent agents and
+ * crashes, use `writeFrontmatterAtomic` instead.
+ */
+export function writeFrontmatter(path: string, metadata: FrontmatterMap, body: string): void {
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, formatFrontmatter(metadata, body), "utf8");
+}
+
+export interface WriteFrontmatterAtomicOptions {
+  /**
+   * When `true`, overwrite an existing target atomically (`rename(2)`).
+   * When `false` (default), fail with an `EEXIST`-shaped Error if the
+   * target already exists, atomically (`link(2)` semantics).
+   */
+  readonly overwrite?: boolean;
+  /**
+   * Optional human-readable label for the artifact kind (e.g. `"receipt"`,
+   * `"asset"`, `"pending request"`). When the underlying write hits
+   * `EEXIST` and `overwrite` is false, the resulting error message becomes
+   * `"<kind> already exists: <path>"` instead of the raw `EEXIST: ...`.
+   * The label is purely cosmetic — callers that don't supply it get the
+   * native errno error.
+   */
+  readonly existsErrorKind?: string;
+  /** Vault root used to render the relative path in the EEXIST message. */
+  readonly vaultForRelativePath?: string;
+}
+
+/**
+ * Atomic frontmatter writer with optional exclusive-create semantics.
+ *
+ * Used by the Brain writers where:
+ *   - the file must not be torn on crash → atomic rename/link;
+ *   - "refuse to overwrite" must be race-free across concurrent processes
+ *     (CLI + MCP server, multiple agents) → exclusive `link(2)` instead
+ *     of the TOCTOU-prone `existsSync` + `writeFileSync` pair.
+ *
+ * On EEXIST the function throws either:
+ *   - the native `Error & { code: "EEXIST" }` when no `existsErrorKind`
+ *     was supplied (matches the underlying `link(2)` semantics so callers
+ *     that want to inspect `err.code` still can), or
+ *   - a friendlier `Error("<kind> already exists: <relative-path>")`
+ *     when `existsErrorKind` was supplied — saves every caller from
+ *     re-implementing the same try/catch.
+ */
+export function writeFrontmatterAtomic(
+  path: string,
+  metadata: FrontmatterMap,
+  body: string,
+  opts: WriteFrontmatterAtomicOptions = {},
+): void {
+  const contents = formatFrontmatter(metadata, body);
+  if (opts.overwrite) {
+    atomicWriteFileSync(path, contents);
+    return;
+  }
+  try {
+    atomicCreateFileSyncExclusive(path, contents);
+  } catch (err) {
+    if (opts.existsErrorKind && (err as NodeJS.ErrnoException)?.code === "EEXIST") {
+      const rel = opts.vaultForRelativePath
+        ? path.startsWith(opts.vaultForRelativePath + "/")
+          ? path.slice(opts.vaultForRelativePath.length + 1)
+          : path
+        : path;
+      throw new Error(`${opts.existsErrorKind} already exists: ${rel}`, { cause: err });
+    }
+    throw err;
+  }
+}
+
+const SLUG_FALLBACK_PREFIX = "unnamed";
+const SLUG_FALLBACK_HASH_LEN = 8;
+
+/**
+ * Stable safe basename for a title that slugifies to nothing — empty,
+ * whitespace-only, or punctuation / emoji / combining-mark-only input.
+ *
+ * A bare shared constant (the old `"note"`) is stable but collides: every
+ * punctuation-only title lands on the same basename, so `@`, `!!!`, and an
+ * emoji all fight for one filename in a synced vault. Instead we suffix a
+ * short sha256 digest of the normalized input, which is
+ *   - deterministic — the same empty-slug title yields the same basename on
+ *     every device and under a re-slug, and
+ *   - distinct — different empty-slug titles get different basenames.
+ *
+ * The suffix is hex (`[a-f0-9]`), so the result stays traversal-safe and is
+ * idempotent under a second `slugify` pass.
+ */
+function unnamedFallbackSlug(normalized: string): string {
+  const digest = createHash("sha256")
+    .update(normalized, "utf8")
+    .digest("hex")
+    .slice(0, SLUG_FALLBACK_HASH_LEN);
+  return `${SLUG_FALLBACK_PREFIX}-${digest}`;
+}
+
+/**
+ * Convert a free-form title to a URL-safe slug. Lowercase, alphanumeric
+ * runs joined by `-`, trimmed to 64 chars. Inputs that slugify to nothing
+ * (empty, whitespace-only, punctuation / emoji / combining-mark-only) fall
+ * back to a stable `unnamed-<hash>` basename — see `unnamedFallbackSlug`.
+ */
+export function slugify(value: string): string {
+  const lowered = value.trim().toLowerCase();
+  let slug = lowered.replace(SLUG_INVALID_RE, "-").replace(/^-+|-+$/g, "");
+  if (!slug) return unnamedFallbackSlug(lowered);
+  slug = slug.slice(0, SLUG_MAX_LEN).replace(/-+$/, "");
+  // Defensive only: SLUG_MAX_LEN (64) > 0 and the leading-trim above
+  // guarantees a non-empty alnum-started slug here, so slicing cannot
+  // produce "". Kept so a future SLUG_MAX_LEN or generation change cannot
+  // silently produce an empty slug.
+  return slug || unnamedFallbackSlug(lowered);
+}
+
+/**
+ * Extract unique `[[wikilink]]` targets from Markdown content. Skips media
+ * file extensions and links inside fenced or inline code blocks.
+ */
+export function extractWikilinks(content: string): string[] {
+  const masked = content.replace(CODE_BLOCK_RE, " ");
+  const seen = new Set<string>();
+  const result: string[] = [];
+  for (const m of masked.matchAll(WIKILINK_TARGET_RE)) {
+    const target = m[1]!;
+    const dot = target.lastIndexOf(".");
+    const ext = dot >= 0 ? target.slice(dot).toLowerCase() : "";
+    if (MEDIA_EXTENSIONS.has(ext)) continue;
+    if (!seen.has(target)) {
+      seen.add(target);
+      result.push(target);
+    }
+  }
+  return result;
+}
+
+export interface ListVaultPagesOptions {
+  readonly skipDirs?: ReadonlyArray<string>;
+  readonly skipFiles?: ReadonlyArray<string>;
+  /**
+   * Opt-in diagnostic sink (unit F). When supplied, the walk appends a
+   * notice for every directory it could not read and every frontmatter
+   * line it dropped, each carrying the absolute path it happened to.
+   *
+   * The sink is OPT-IN rather than a widened return type so a caller
+   * that has nowhere to report stays byte-identical and pays nothing.
+   * The walk's control flow does not depend on it: an unreadable
+   * subtree is skipped and a page with a dropped line is still listed,
+   * exactly as before.
+   */
+  readonly notices?: DegradationNotice[];
+  /** Site recorded on the notices; defaults to `vault.listVaultPages`. */
+  readonly site?: string;
+}
+
+const LIST_VAULT_PAGES_SITE = "vault.listVaultPages";
+
+/**
+ * Walk the vault and return every Markdown page with parsed frontmatter
+ * metadata. Pages are sorted by title (case-insensitive). Excluded dirs/files
+ * mirror the Python defaults.
+ *
+ * Pass `opts.notices` to collect what the walk discarded — see
+ * {@link ListVaultPagesOptions}.
+ */
+export function listVaultPages(vaultDir: string, opts: ListVaultPagesOptions = {}): VaultPage[] {
+  const skipDirs = new Set(opts.skipDirs ?? DEFAULT_SKIP_DIRS);
+  const skipFiles = new Set((opts.skipFiles ?? DEFAULT_SKIP_FILES).map((f) => f.toLowerCase()));
+
+  const pages: VaultPage[] = [];
+  walk(vaultDir, vaultDir, skipDirs, skipFiles, pages, {
+    sink: opts.notices,
+    site: opts.site ?? LIST_VAULT_PAGES_SITE,
+  });
+  pages.sort((a, b) => a.title.toLowerCase().localeCompare(b.title.toLowerCase()));
+  return pages;
+}
+
+/** Where {@link walk} reports what it discarded, and under which name. */
+interface WalkNoticeSink {
+  readonly sink: DegradationNotice[] | undefined;
+  readonly site: string;
+}
+
+/**
+ * Cheap basename-only walker over a vault directory. Returns the set
+ * of `.md` basenames (without extension) — no frontmatter parsing.
+ *
+ * Used where callers only need existence-by-basename (Obsidian
+ * wikilink resolution semantics) and the YAML parse cost of
+ * {@link listVaultPages} is unwarranted.
+ *
+ * Honours `opts.notices` exactly as {@link listVaultPages} does. The
+ * option has always been on this signature — it is the same options type
+ * — and until now it was accepted and dropped, so a caller that asked
+ * where the walk went blind was answered with silence.
+ */
+export function listVaultBasenames(
+  vaultDir: string,
+  opts: ListVaultPagesOptions = {},
+): Set<string> {
+  const skipDirs = new Set(opts.skipDirs ?? DEFAULT_SKIP_DIRS);
+  const skipFiles = new Set((opts.skipFiles ?? DEFAULT_SKIP_FILES).map((f) => f.toLowerCase()));
+  const out = new Set<string>();
+  walkBasenames(vaultDir, vaultDir, skipDirs, skipFiles, out, {
+    sink: opts.notices,
+    site: opts.site ?? LIST_VAULT_BASENAMES_SITE,
+  });
+  return out;
+}
+
+const LIST_VAULT_BASENAMES_SITE = "vault.listVaultBasenames";
+
+function walkBasenames(
+  root: string,
+  dir: string,
+  skipDirs: Set<string>,
+  skipFiles: Set<string>,
+  out: Set<string>,
+  notices: WalkNoticeSink,
+): void {
+  let entries;
+  try {
+    entries = readdirSync(dir, { withFileTypes: true });
+  } catch (err) {
+    // Same branch, and the same fail-soft return, as {@link walk}: an
+    // unreadable directory removes a whole subtree from the basename
+    // universe, and a caller resolving links against that universe
+    // cannot tell the missing pages from pages that never existed.
+    if (notices.sink !== undefined) {
+      emitDegradationNotice(notices.sink, {
+        code: DEGRADATION_CODE.vaultWalkEntrySkipped,
+        site: notices.site,
+        path: dir,
+        detail: `directory listing failed: ${err instanceof Error ? err.message : String(err)}`,
+      });
+    }
+    return;
+  }
+  for (const entry of entries) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (skipDirs.has(entry.name)) continue;
+      walkBasenames(root, full, skipDirs, skipFiles, out, notices);
+      continue;
+    }
+    if (!entry.isFile()) continue;
+    if (!entry.name.toLowerCase().endsWith(".md")) continue;
+    if (skipFiles.has(entry.name.toLowerCase())) continue;
+    const rel = relative(root, full);
+    const parts = rel.split(/[\\/]/);
+    if (parts.some((p) => skipDirs.has(p))) continue;
+    out.add(stem(entry.name));
+  }
+}
+
+function walk(
+  root: string,
+  dir: string,
+  skipDirs: Set<string>,
+  skipFiles: Set<string>,
+  out: VaultPage[],
+  notices: WalkNoticeSink,
+): void {
+  let entries;
+  try {
+    entries = readdirSync(dir, { withFileTypes: true });
+  } catch (err) {
+    // Unit F: an unreadable directory used to make an entire subtree
+    // vanish from the listing with no trace. The walk still returns
+    // (fail-soft, as before); the branch is now named.
+    if (notices.sink !== undefined) {
+      emitDegradationNotice(notices.sink, {
+        code: DEGRADATION_CODE.vaultWalkEntrySkipped,
+        site: notices.site,
+        path: dir,
+        detail: `directory listing failed: ${err instanceof Error ? err.message : String(err)}`,
+      });
+    }
+    return;
+  }
+  for (const entry of entries) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (skipDirs.has(entry.name)) continue;
+      walk(root, full, skipDirs, skipFiles, out, notices);
+      continue;
+    }
+    if (!entry.isFile()) continue;
+    if (!entry.name.toLowerCase().endsWith(".md")) continue;
+    if (skipFiles.has(entry.name.toLowerCase())) continue;
+    const rel = relative(root, full);
+    const parts = rel.split(/[\\/]/);
+    if (parts.some((p) => skipDirs.has(p))) continue;
+    // The former `catch { continue }` here was unreachable: the parser
+    // is a line scanner over a string it read inside its own try, so it
+    // cannot throw. What it CAN do is drop a line or fail the read, and
+    // both now reach the sink instead of vanishing. The page is still
+    // listed either way - identical control flow.
+    const [meta, , pageNotices] = parseFrontmatterWithNotices(full, { site: notices.site });
+    if (notices.sink !== undefined) notices.sink.push(...pageNotices);
+    const titleVal = meta["title"];
+    const title = typeof titleVal === "string" && titleVal ? titleVal : stem(entry.name);
+    out.push({ title, path: full, metadata: meta });
+  }
+}
+
+function stripQuotes(s: string): string {
+  if (s.length >= 2 && s.startsWith('"') && s.endsWith('"')) {
+    // Symmetric inverse of `formatYamlScalar`: the formatter escapes
+    // \ " \n \r \t inside double-quoted scalars, so the parser must
+    // unescape the same set. Without this inverse every
+    // parse -> format cycle doubled the backslashes (escape
+    // amplification - the source of the \\\\\\" chains observed in
+    // live preference frontmatter).
+    return unescapeDoubleQuoted(s.slice(1, -1));
+  }
+  if (s.length >= 2 && s.startsWith("'") && s.endsWith("'")) {
+    // The formatter never emits single quotes; treat them as plain
+    // delimiters (hand-written YAML) without escape processing.
+    return s.slice(1, -1);
+  }
+  return s;
+}
+
+const DOUBLE_QUOTED_ESCAPES: Readonly<Record<string, string>> = Object.freeze({
+  "\\": "\\",
+  '"': '"',
+  n: "\n",
+  r: "\r",
+  t: "\t",
+});
+
+function unescapeDoubleQuoted(inner: string): string {
+  // Single pass so `\\n` decodes to `\n` (backslash + n), not a
+  // newline - sequential .replace calls would re-scan their own
+  // output and corrupt exactly the chains we are trying to preserve.
+  return inner.replace(/\\([\\"nrt])/g, (_, ch: string) => DOUBLE_QUOTED_ESCAPES[ch] ?? `\\${ch}`);
+}
+
+/**
+ * Split the body of an inline YAML array on commas, but only on commas that
+ * appear outside quoted runs. Without this, `[plain, "needs, comma"]` would
+ * be split into three tokens (`plain`, `"needs`, `comma"`) — breaking the
+ * round-trip with `formatYamlValue`, which already quotes any element that
+ * contains a comma.
+ */
+function splitInlineArray(inner: string): string[] {
+  const out: string[] = [];
+  let current = "";
+  let inQuote = false;
+  let quoteChar: '"' | "'" | "" = "";
+
+  for (let i = 0; i < inner.length; i++) {
+    const ch = inner[i]!;
+    if (inQuote) {
+      current += ch;
+      if (ch === quoteChar && inner[i - 1] !== "\\") {
+        inQuote = false;
+        quoteChar = "";
+      }
+      continue;
+    }
+    if (ch === '"' || ch === "'") {
+      inQuote = true;
+      quoteChar = ch;
+      current += ch;
+      continue;
+    }
+    if (ch === ",") {
+      out.push(stripQuotes(current.trim()));
+      current = "";
+      continue;
+    }
+    current += ch;
+  }
+  // Trailing element (no trailing comma case).
+  if (current.trim() !== "") {
+    out.push(stripQuotes(current.trim()));
+  }
+  return out;
+}
+
+function formatYamlScalar(value: FrontmatterValue): string {
+  const text = typeof value === "string" ? value : String(value);
+  if (text && PLAIN_SCALAR_RE.test(text) && !text.includes(": ") && !text.includes(" #")) {
+    return text;
+  }
+  const escaped = text
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, "\\n")
+    .replace(/\r/g, "\\r")
+    .replace(/\t/g, "\\t");
+  return `"${escaped}"`;
+}
+
+function formatYamlValue(value: FrontmatterValue): string {
+  if (Array.isArray(value)) {
+    return "[" + value.map((item) => formatYamlScalar(item)).join(", ") + "]";
+  }
+  return formatYamlScalar(value);
+}
+
+/** Re-exported for callers that want the same exclusion lists in JS plugins. */
+export const EXCLUDED_DIRS = DEFAULT_SKIP_DIRS;
+export const EXCLUDED_FILES = DEFAULT_SKIP_FILES;
+
+export { isDir } from "./fs-utils.ts";

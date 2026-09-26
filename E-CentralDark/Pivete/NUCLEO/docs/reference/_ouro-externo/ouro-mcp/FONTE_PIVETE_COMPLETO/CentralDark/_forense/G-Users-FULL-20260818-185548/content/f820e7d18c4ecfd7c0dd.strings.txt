@@ -1,0 +1,58 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\Local Storage\leveldb\LOG
+
+2026/08/18-15:15:45.728 7638 Reusing MANIFEST C:\Users\danda\AppData\Local\Google\Chrome\User Data\Default\Local Storage\leveldb/MANIFEST-000001
+2026/08/18-15:15:46.373 7638 Recovering log #234
+2026/08/18-15:15:46.452 7638 Reusing old log C:\Users\danda\AppData\Local\Google\Chrome\User Data\Default\Local Storage\leveldb/000234.log 
+2026/08/18-15:23:23.798 6b00 Level-0 table #239: started
+2026/08/18-15:23:24.050 6b00 Level-0 table #239: 69622 bytes OK
+2026/08/18-15:23:24.174 6b00 Delete type=0 #234
+2026/08/18-15:23:51.888 6b00 Level-0 table #241: started
+2026/08/18-15:23:52.265 6b00 Level-0 table #241: 32020 bytes OK
+2026/08/18-15:23:52.394 6b00 Delete type=0 #238
+2026/08/18-15:25:11.173 6b00 Level-0 table #243: started
+2026/08/18-15:25:11.774 6b00 Level-0 table #243: 51158 bytes OK
+2026/08/18-15:25:12.344 6b00 Delete type=0 #240
+2026/08/18-15:26:09.327 6b00 Level-0 table #245: started
+2026/08/18-15:26:09.378 6b00 Level-0 table #245: 32857 bytes OK
+2026/08/18-15:26:09.411 6b00 Delete type=0 #242
+2026/08/18-15:26:09.412 6b00 Compacting 4@0 + 2@1 files
+2026/08/18-15:26:09.740 6b00 Generated table #246@0: 339 keys, 2694822 bytes
+2026/08/18-15:26:09.877 6b00 Generated table #247@0: 72 keys, 52244 bytes
+2026/08/18-15:26:09.877 6b00 Compacted 4@0 + 2@1 files => 2747066 bytes
+2026/08/18-15:26:09.915 6b00 compacted to: files[ 0 2 1 0 0 0 0 ]
+2026/08/18-15:26:09.917 6b00 Delete type=2 #145
+2026/08/18-15:26:09.917 6b00 Delete type=2 #236
+2026/08/18-15:26:09.917 6b00 Delete type=2 #239
+2026/08/18-15:26:09.917 6b00 Delete type=2 #241
+2026/08/18-15:26:09.917 6b00 Delete type=2 #243
+2026/08/18-15:26:09.917 6b00 Delete type=2 #245
+2026/08/18-15:27:46.362 6b00 Level-0 table #249: started
+2026/08/18-15:27:46.440 6b00 Level-0 table #249: 42525 bytes OK
+2026/08/18-15:27:46.465 6b00 Delete type=0 #244
+2026/08/18-15:45:47.326 6b00 Level-0 table #251: started
+2026/08/18-15:45:47.410 6b00 Level-0 table #251: 49229 bytes OK
+2026/08/18-15:45:47.469 6b00 Delete type=0 #248
+2026/08/18-15:46:03.794 6b00 Level-0 table #253: started
+2026/08/18-15:46:03.863 6b00 Level-0 table #253: 46949 bytes OK
+2026/08/18-15:46:03.892 6b00 Delete type=0 #250
+2026/08/18-15:47:49.658 6b00 Level-0 table #255: started
+2026/08/18-15:47:49.918 6b00 Level-0 table #255: 39455 bytes OK
+2026/08/18-15:47:49.963 6b00 Delete type=0 #252
+2026/08/18-15:47:49.963 6b00 Compacting 4@0 + 1@1 files
+2026/08/18-15:47:50.102 6b00 Generated table #256@0: 344 keys, 2694026 bytes
+2026/08/18-15:47:50.103 6b00 Compacted 4@0 + 1@1 files => 2694026 bytes
+2026/08/18-15:47:50.131 6b00 compacted to: files[ 0 2 1 0 0 0 0 ]
+2026/08/18-15:47:50.132 6b00 Delete type=2 #246
+2026/08/18-15:47:50.132 6b00 Delete type=2 #249
+2026/08/18-15:47:50.132 6b00 Delete type=2 #251
+2026/08/18-15:47:50.132 6b00 Delete type=2 #253
+2026/08/18-15:47:50.132 6b00 Delete type=2 #255
+2026/08/18-15:48:00.686 6b00 Level-0 table #258: started
+2026/08/18-15:48:00.782 6b00 Level-0 table #258: 45923 bytes OK
+2026/08/18-15:48:00.805 6b00 Delete type=0 #254
+2026/08/18-15:51:09.328 6b00 Level-0 table #260: started
+2026/08/18-15:51:09.446 6b00 Level-0 table #260: 63267 bytes OK
+2026/08/18-15:51:09.475 6b00 Delete type=0 #257
+2026/08/18-17:45:00.867 6b00 Level-0 table #262: started
+2026/08/18-17:45:00.954 6b00 Level-0 table #262: 16568 bytes OK
+2026/08/18-17:45:00.994 6b00 Delete type=0 #259

@@ -1,0 +1,29 @@
+{
+  "schema_version": 2,
+  "recorded_at_utc": "2026-07-29T04:40:00Z",
+  "REGRA_GRAVADA_EM": "C:/Users/danda/AppData/Local/hermes/profiles/pivete/skills/analysis/external-source-analysis/SKILL.md",
+  "GATE_GRAVADO_EM": "C:/Users/danda/AppData/Local/hermes/profiles/pivete/skills/analysis/external-source-analysis/scripts/verify_learning_gate.py",
+  "FILE_SHA256_ANTES": "94b647140d9b53803c1a95c7b9acd835a96625fb0cf217bcab28f9b37e8bdac8",
+  "FILE_SHA256_DEPOIS": "52b3aef1660a4c8e1554d87f74eef3a6a9980bf6b4336ba6b127a817c8157105",
+  "GATE_FILE_SHA256": "ff228974a78c766d81ed6f3fb10979cc46c4f9b6e287663f3202c9d3e9730f08",
+  "TESTE_POSITIVO": "SIM",
+  "TESTE_NEGATIVO": "SIM",
+  "TESTE_LIMITE": "SIM",
+  "WRITE_OCCURRED": "SIM",
+  "ROLLBACK_PROVADO": "NAO",
+  "SESSAO_NOVA": "NAO",
+  "GATE_AUTO_INVOKED": "NAO",
+  "FONTE_PRIMARIA": "NAO_APLICAVEL",
+  "PROVA_CONTRARIA_PROCURADA": "SIM",
+  "DADOS_PRIVADOS_EXPOSTOS": "NAO",
+  "DUPLICATA_ENCONTRADA": "SIM",
+  "DESTINO_DA_DUPLICATA": "external-source-alignment -> external-source-analysis; remoção somente após autorização explícita",
+  "TEMP_RECEIPT_DEPRECATED": "C:/Users/danda/AppData/Local/Temp/meta-lupa-learning-proof-20260729.json",
+  "VEREDITO": "CONDICIONAR",
+  "STATUS": "BLOCKED",
+  "EXPECTED_REASONS": [
+    "ROLLBACK_OBRIGATORIO_APOS_ESCRITA",
+    "SESSAO_NOVA_NAO_COMPROVADO",
+    "GATE_AUTO_INVOKED_NAO_COMPROVADO"
+  ]
+}

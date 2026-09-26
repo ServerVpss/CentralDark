@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O Manual Oculto da IA | Curso INEMA.CLUB</title>
+  <meta name="description" content="Como instruir modelos como os laboratórios fazem — do fundamento ao cérebro do Fable. Aprenda a ler, comparar e escrever system prompts como Anthropic, OpenAI, xAI, Cursor e Perplexity realmente fazem.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- ============ TAILWIND CONFIG (chrome canônico) ============ -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- ============ <head> STYLE BLOCK (landing — as 3 cores de trilha) ============ -->
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .code-box { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace; }
+
+    /* Dark mode - bordas e linhas divisorias mais suaves (OBRIGATORIO) */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+
+    /* SVG pulse animation (somente sob prefers-reduced-motion: no-preference) */
+    @keyframes mo-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .mo-a { animation: mo-pulse 2.6s ease-in-out infinite; }
+      .mo-a:nth-child(2){animation-delay:.3s}
+      .mo-a:nth-child(3){animation-delay:.6s}
+      .mo-a:nth-child(4){animation-delay:.9s}
+    }
+
+    /* ============ LIGHT MODE — Parte 1: Base ============ */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-200 { color: #1f2937; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* ============ LIGHT MODE — Parte 2: as 3 cores de trilha + hover + group-hover ============ */
+    /* T1 Emerald (#059669) */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .text-emerald-300 { color: #047857; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .bg-emerald-900\/30 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5, 150, 105, 0.18); }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .hover\:border-emerald-500\/30:hover { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .hover\:bg-emerald-500:hover { background-color: #059669; }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; }
+    /* T2 Blue (#2563eb) */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .text-blue-300 { color: #1d4ed8; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .bg-blue-900\/30 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37, 99, 235, 0.18); }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .hover\:border-blue-500\/30:hover { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; }
+    /* T3 Purple (#7c3aed) */
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .text-purple-300 { color: #6d28d9; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .bg-purple-900\/30 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+    html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124, 58, 237, 0.18); }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .hover\:border-purple-500\/30:hover { border-color: rgba(124, 58, 237, 0.25); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .group:hover .group-hover\:text-purple-400 { color: #7c3aed; }
+
+    /* sky (ciano secundário — usado no SVG e em destaques) */
+    html:not(.dark) .text-sky-300 { color: #0284c7; }
+    html:not(.dark) .bg-sky-500\/10 { background-color: rgba(14, 165, 233, 0.08); }
+    html:not(.dark) .border-sky-500\/30 { border-color: rgba(14, 165, 233, 0.25); }
+
+    /* ============ LIGHT MODE — Parte 3: Remove gradientes + cores especiais ============ */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .bg-primary\/20 { background-color: rgba(161, 98, 7, 0.12); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+
+    /* ============ LIGHT MODE — Parte 4: Navbar ============ */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+
+    /* ============ LIGHT MODE — SVG adapt (só atinge os diagramas) ============ */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- ============ NAV (landing — T1 em destaque emerald) ============ -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <!-- Logo + INEMA.CLUB -->
+        <div class="flex items-center space-x-3">
+          <a href="index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300 transition-colors">
+            <span class="text-xl">🧠</span>
+            <span class="font-bold text-base hidden sm:inline">Manual Oculto da IA</span>
+          </a>
+          <span class="text-neutral-600 hidden sm:inline">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition-colors">INEMA.CLUB</a>
+        </div>
+
+        <!-- Trilhas + Theme Toggle -->
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <!-- Trilha 1 (destaque emerald) -->
+          <a href="curso/trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 transition-colors">
+            <span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <!-- Trilha 2 (inativa) -->
+          <a href="curso/trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span><span class="hidden sm:inline">Prática</span>
+          </a>
+          <!-- Trilha 3 (inativa) -->
+          <a href="curso/trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span><span class="hidden sm:inline">Avançado</span>
+          </a>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1">
+            <svg id="theme-toggle-dark-icon" class="hidden w-4 h-4 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-4 h-4 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <header class="bg-gradient-to-br from-emerald-900/20 via-dark-900 to-purple-900/20 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+      <span class="inline-block px-3 py-1 bg-primary/10 text-primary border border-primary/30 text-xs font-semibold rounded-full mb-6 uppercase tracking-wider">
+        Curso · INEMA.CLUB
+      </span>
+      <div class="text-6xl sm:text-7xl mb-5">🧠</div>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-5 leading-tight">
+        O Manual Oculto da IA
+      </h1>
+      <p class="text-lg sm:text-xl text-neutral-300 max-w-3xl leading-relaxed mb-5">
+        Como instruir modelos como os laboratórios fazem —
+        <strong class="text-emerald-400">do fundamento</strong>
+        <span class="text-neutral-500">ao</span>
+        <strong class="text-purple-400">cérebro do Fable</strong>.
+      </p>
+      <p class="text-base text-neutral-400 max-w-3xl leading-relaxed mb-8">
+        Este curso destila como as IAs de ponta — <strong class="text-neutral-200">Anthropic, OpenAI, xAI, Cursor, Perplexity</strong>… —
+        são <em>realmente</em> instruídas. E mostra como recuperar o "jeito de trabalhar" de um bom agente
+        a partir dos <strong class="text-neutral-200">logs</strong> das suas sessões — mesmo sem ter os pesos do modelo.
+      </p>
+
+      <!-- CTAs (ESQUERDA) -->
+      <div class="flex flex-col sm:flex-row justify-start gap-4 mb-10">
+        <a href="curso/trilha1/index.html" class="text-center px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-semibold transition-colors">
+          Começar pela Trilha 1 →
+        </a>
+        <a href="#trilhas" class="text-center px-6 py-3 bg-dark-700 hover:bg-dark-600 text-neutral-300 rounded-lg font-semibold transition-colors">
+          Ver as 3 trilhas
+        </a>
+      </div>
+
+      <!-- Stats row -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-emerald-400">3</div>
+          <div class="text-xs text-neutral-400 mt-1">Trilhas</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-blue-400">20</div>
+          <div class="text-xs text-neutral-400 mt-1">Módulos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-purple-400">120</div>
+          <div class="text-xs text-neutral-400 mt-1">Tópicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-primary">Inic. → Avç.</div>
+          <div class="text-xs text-neutral-400 mt-1">Nível</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- ============ HERO IMAGE (inemaimg) ============ -->
+    <div class="rounded-2xl border border-dark-600 overflow-hidden mb-12 shadow-2xl relative">
+      <img src="assets/img/hero.png" alt="Arquitetura em camadas de um system prompt em glow neon — ilustração do curso O Manual Oculto da IA" class="w-full h-auto block" loading="eager">
+      <div class="absolute inset-0 bg-gradient-to-t from-dark-900/60 via-transparent to-transparent pointer-events-none"></div>
+    </div>
+
+    <!-- ============ HERO SVG FUTURISTA (3 cores + ciano): system prompt → comportamento / o manual oculto ============ -->
+    <div class="rounded-2xl border border-dark-600 bg-dark-900/40 p-3 sm:p-4 mb-16 overflow-hidden">
+      <svg viewBox="0 0 1000 320" class="w-full h-auto" role="img" aria-label="O manual oculto da IA: um system prompt invisível, à esquerda, atravessa três camadas de domínio crescente — Fundamentos, Prática e Avançado — e se torna o comportamento observável da IA na tela; do comportamento, os logs voltam por um caminho ciano para destilar de novo o manual, fechando o ciclo entre instrução e ação">
+        <defs>
+          <linearGradient id="mo-grad-em" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#10b981"/>
+          </linearGradient>
+          <linearGradient id="mo-grad-bl" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#2563eb"/>
+          </linearGradient>
+          <linearGradient id="mo-grad-pu" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#c084fc"/><stop offset="1" stop-color="#7c3aed"/>
+          </linearGradient>
+          <linearGradient id="mo-grad-cy" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#0ea5e9"/>
+          </linearGradient>
+          <filter id="mo-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="1.8" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <pattern id="mo-grid" width="30" height="30" patternUnits="userSpaceOnUse">
+            <circle cx="1.3" cy="1.3" r="1.3" fill="#38bdf8" opacity="0.10"/>
+          </pattern>
+          <marker id="mo-ah-em" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#34d399"/></marker>
+          <marker id="mo-ah-bl" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#60a5fa"/></marker>
+          <marker id="mo-ah-pu" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#c084fc"/></marker>
+          <marker id="mo-ah-cy" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/></marker>
+        </defs>
+
+        <!-- Background grid -->
+        <rect x="0" y="0" width="1000" height="320" fill="url(#mo-grid)" rx="16"/>
+
+        <!-- Coluna 1: o manual oculto (system prompt invisível) -->
+        <text x="120" y="58" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="12" font-weight="600">O MANUAL OCULTO</text>
+        <g filter="url(#mo-glow)">
+          <rect x="40" y="116" width="160" height="90" rx="14" fill="#0e1726" stroke="url(#mo-grad-cy)" stroke-width="2.5"/>
+        </g>
+        <text x="120" y="146" text-anchor="middle" fill="#38bdf8" font-family="Inter,sans-serif" font-size="14" font-weight="700">🔒 system prompt</text>
+        <text x="120" y="168" text-anchor="middle" fill="#bfe6ff" font-family="Inter,sans-serif" font-size="10.5">a instrução invisível</text>
+        <text x="120" y="184" text-anchor="middle" fill="#bfe6ff" font-family="Inter,sans-serif" font-size="10.5">que ninguém vê</text>
+        <text x="120" y="232" text-anchor="middle" fill="#6b7280" font-family="Inter,sans-serif" font-size="10">vem ANTES de tudo</text>
+
+        <!-- Seta manual -> 3 camadas -->
+        <g fill="none" stroke-width="1.8" opacity="0.55">
+          <path d="M200,140 C290,140 300,82  392,82"  stroke="#34d399" marker-end="url(#mo-ah-em)"/>
+          <path d="M200,161 C290,161 300,161 392,161" stroke="#60a5fa" marker-end="url(#mo-ah-bl)"/>
+          <path d="M200,182 C290,182 300,240 392,240" stroke="#c084fc" marker-end="url(#mo-ah-pu)"/>
+        </g>
+
+        <!-- Coluna 2: as 3 camadas / trilhas (uma por cor) -->
+        <text x="490" y="40" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="12" font-weight="600">AS 3 CAMADAS DO CURSO</text>
+        <g font-family="Inter,sans-serif" font-size="13" font-weight="600">
+          <g class="mo-a"><rect x="392" y="62"  width="196" height="40" rx="10" fill="#0e2018" stroke="#34d399" stroke-width="2"/><text x="490" y="87"  text-anchor="middle" fill="#34d399">🧱 Fundamentos</text></g>
+          <g class="mo-a"><rect x="392" y="141" width="196" height="40" rx="10" fill="#0e1830" stroke="#60a5fa" stroke-width="2"/><text x="490" y="166" text-anchor="middle" fill="#60a5fa">🛠️ Prática</text></g>
+          <g class="mo-a"><rect x="392" y="220" width="196" height="40" rx="10" fill="#1a1230" stroke="#c084fc" stroke-width="2"/><text x="490" y="245" text-anchor="middle" fill="#c084fc">🧠 Avançado</text></g>
+        </g>
+        <text x="490" y="288" text-anchor="middle" fill="#6b7280" font-family="Inter,sans-serif" font-size="10">do zero jargão ao nível dos laboratórios</text>
+
+        <!-- Setas camadas -> comportamento -->
+        <g fill="none" stroke-width="1.8" opacity="0.5">
+          <path d="M588,82  C680,82  690,150 788,150" stroke="#34d399" marker-end="url(#mo-ah-em)"/>
+          <path d="M588,161 C680,161 690,150 788,150" stroke="#60a5fa" marker-end="url(#mo-ah-bl)"/>
+          <path d="M588,240 C680,240 690,150 788,150" stroke="#c084fc" marker-end="url(#mo-ah-pu)"/>
+        </g>
+
+        <!-- Coluna 3: o comportamento na tela (resultado) -->
+        <text x="884" y="58" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="12" font-weight="600">O COMPORTAMENTO</text>
+        <g filter="url(#mo-glow)">
+          <rect x="788" y="116" width="172" height="90" rx="14" fill="#101a16" stroke="url(#mo-grad-em)" stroke-width="2.5"/>
+        </g>
+        <circle cx="806" cy="135" r="3.5" fill="#f87171"/><circle cx="818" cy="135" r="3.5" fill="#fbbf24"/><circle cx="830" cy="135" r="3.5" fill="#34d399"/>
+        <text x="874" y="162" text-anchor="middle" fill="#6ee7b7" font-family="Inter,sans-serif" font-size="13.5" font-weight="700">🤖 a IA agindo</text>
+        <text x="874" y="184" text-anchor="middle" fill="#bdf0dd" font-family="Inter,sans-serif" font-size="10.5">o que você VÊ na tela</text>
+
+        <!-- Caminho ciano de volta: comportamento -> logs -> destilar o manual (fecha o ciclo) -->
+        <path d="M860,206 C860,300 120,300 120,210" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-dasharray="6,5" opacity="0.6" marker-end="url(#mo-ah-cy)"/>
+        <rect x="452" y="289" width="96" height="22" rx="7" fill="#0e1726" stroke="#38bdf8" stroke-width="1.5"/>
+        <text x="500" y="304" text-anchor="middle" fill="#7dd3fc" font-family="JetBrains Mono,monospace" font-size="10">logs .jsonl</text>
+        <text x="660" y="304" fill="#38bdf8" font-family="Inter,sans-serif" font-size="9.5" opacity="0.85">destilar o manual de volta</text>
+      </svg>
+    </div>
+
+    <!-- ============ SEÇÃO 2 — O QUE VOCÊ VAI APRENDER (3 cards = as 3 trilhas) ============ -->
+    <section id="aprender" class="mb-16">
+      <h2 class="text-3xl font-bold mb-3">O que você vai aprender</h2>
+      <p class="text-neutral-400 max-w-3xl mb-8 leading-relaxed">
+        Três trilhas, três níveis de profundidade. Cada uma é autônoma, mas a ordem conta uma história:
+        primeiro você <strong class="text-emerald-400">entende</strong> o bilhete invisível, depois
+        <strong class="text-blue-400">monta</strong> o seu, por fim faz como os <strong class="text-purple-400">laboratórios</strong>.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Card T1 Emerald -->
+        <a href="curso/trilha1/index.html" class="group bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 hover:border-emerald-500/30 p-7 transition-all">
+          <div class="text-4xl mb-4">🧱</div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Trilha 1 · Fundamentos</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-2 group-hover:text-emerald-400 transition-colors">Ler o bilhete invisível</h3>
+          <p class="text-neutral-300 text-sm leading-relaxed mb-5">
+            O que é um system prompt, suas peças e padrões — sem nenhum jargão, com analogias do dia a dia.
+          </p>
+          <span class="text-emerald-400 text-sm font-semibold">Entrar →</span>
+        </a>
+
+        <!-- Card T2 Blue -->
+        <a href="curso/trilha2/index.html" class="group bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 hover:border-blue-500/30 p-7 transition-all">
+          <div class="text-4xl mb-4">🛠️</div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold text-blue-400 uppercase tracking-wider">Trilha 2 · Prática</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-2 group-hover:text-blue-400 transition-colors">Montar prompts, skills e agentes</h3>
+          <p class="text-neutral-300 text-sm leading-relaxed mb-5">
+            Mão na massa: o Prompt Mínimo Viável, persona, o Contrato de Ferramenta e o Loop operacional.
+          </p>
+          <span class="text-blue-400 text-sm font-semibold">Entrar →</span>
+        </a>
+
+        <!-- Card T3 Purple -->
+        <a href="curso/trilha3/index.html" class="group bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 hover:border-purple-500/30 p-7 transition-all">
+          <div class="text-4xl mb-4">🧠</div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold text-purple-400 uppercase tracking-wider">Trilha 3 · Avançado</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-2 group-hover:text-purple-400 transition-colors">Fazer como os laboratórios</h3>
+          <p class="text-neutral-300 text-sm leading-relaxed mb-5">
+            Ler diffs, consolidar, segurança por princípio e <em>destilar o cérebro</em> de um agente a partir dos logs.
+          </p>
+          <span class="text-purple-400 text-sm font-semibold">Entrar →</span>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ============ SEÇÃO 3 — PARA QUEM É (3 colunas) ============ -->
+    <section id="para-quem" class="mb-16">
+      <h2 class="text-3xl font-bold mb-3">Para quem é</h2>
+      <p class="text-neutral-400 max-w-3xl mb-8 leading-relaxed">
+        Não importa o ponto de partida — há uma trilha que começa no seu nível.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <div class="flex items-center space-x-3 mb-3">
+            <span class="flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 font-bold">1</span>
+            <h3 class="text-lg font-semibold text-emerald-400">Iniciante</h3>
+          </div>
+          <p class="text-neutral-300 text-sm leading-relaxed mb-4">
+            Nunca instruiu uma IA e nem sabe o que é "prompt". Quer entender, sem jargão, o que decide
+            o jeito de cada IA. Começa do absoluto zero.
+          </p>
+          <a href="curso/trilha1/index.html" class="text-emerald-400 text-sm font-semibold hover:text-emerald-400">Vá para a Trilha 1 →</a>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <div class="flex items-center space-x-3 mb-3">
+            <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 font-bold">2</span>
+            <h3 class="text-lg font-semibold text-blue-400">Praticante</h3>
+          </div>
+          <p class="text-neutral-300 text-sm leading-relaxed mb-4">
+            Já usa IA e quer montar de verdade: prompts que funcionam, skills que disparam na hora certa,
+            agentes com disciplina. Quer parar de improvisar.
+          </p>
+          <a href="curso/trilha2/index.html" class="text-blue-400 text-sm font-semibold hover:text-blue-400">Vá para a Trilha 2 →</a>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <div class="flex items-center space-x-3 mb-3">
+            <span class="flex items-center justify-center w-10 h-10 rounded-full bg-purple-500/20 text-purple-400 font-bold">3</span>
+            <h3 class="text-lg font-semibold text-purple-400">Avançado</h3>
+          </div>
+          <p class="text-neutral-300 text-sm leading-relaxed mb-4">
+            Domina o básico e quer o nível dos labs: ler a evolução por diffs, consolidar sem perder
+            comportamento e recuperar o método de um agente a partir dos seus logs.
+          </p>
+          <a href="curso/trilha3/index.html" class="text-purple-400 text-sm font-semibold hover:text-purple-400">Vá para a Trilha 3 →</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============ SEÇÃO 4 — A HISTÓRIA (gancho) ============ -->
+    <section id="historia" class="mb-16">
+      <div class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 rounded-2xl border border-purple-500/30 p-7 sm:p-10">
+        <span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full mb-5 uppercase tracking-wider">
+          A história por trás do curso
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-bold mb-4">Perdemos o Fable. Recuperamos o método.</h2>
+        <p class="text-neutral-300 leading-relaxed mb-4 max-w-3xl">
+          O <strong class="text-purple-400">Fable</strong> era um modelo de uma disciplina rara: pensava antes de agir, conferia o próprio
+          trabalho, narrava as decisões. Aí ele saiu do ar — e ficou a saudade do <em>jeito</em> como ele trabalhava.
+          Sem os pesos do modelo, parecia que aquilo tinha ido embora junto.
+        </p>
+        <p class="text-neutral-300 leading-relaxed mb-6 max-w-3xl">
+          Mas não foi. Toda conversa com um agente deixa um rastro: os arquivos <span class="code-box text-purple-300">.jsonl</span> de cada sessão.
+          Dá pra <strong class="text-purple-400">minerar esses logs</strong> com um script, extrair a disciplina de trabalho — o
+          <strong class="text-purple-400">decision loop</strong> (ground → reason → act → observe → re-evaluate → verify → narrate) — e
+          <strong class="text-purple-400">instalar esse método em outro modelo</strong>. Não recupera o cérebro; recupera o manual de como ele pensava.
+          Essa virada é o coração da Trilha 3.
+        </p>
+
+        <!-- Mini-pipeline da destilação -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+          <div class="bg-dark-800/60 rounded-lg p-3 border border-purple-500/30 text-center">
+            <div class="text-xl mb-1">📄</div>
+            <div class="text-xs font-semibold text-neutral-200">Logs .jsonl</div>
+            <div class="text-xs text-neutral-500 mt-1">429 turnos reais</div>
+          </div>
+          <div class="bg-dark-800/60 rounded-lg p-3 border border-purple-500/30 text-center">
+            <div class="text-xl mb-1">🐍</div>
+            <div class="text-xs font-semibold text-neutral-200">Script reduz</div>
+            <div class="text-xs text-neutral-500 mt-1">sem inchar o contexto</div>
+          </div>
+          <div class="bg-dark-800/60 rounded-lg p-3 border border-purple-500/30 text-center">
+            <div class="text-xl mb-1">📊</div>
+            <div class="text-xs font-semibold text-neutral-200">Perfil em números</div>
+            <div class="text-xs text-neutral-500 mt-1">97% raciocina antes</div>
+          </div>
+          <div class="bg-dark-800/60 rounded-lg p-3 border border-purple-500/30 text-center">
+            <div class="text-xl mb-1">🧠</div>
+            <div class="text-xs font-semibold text-neutral-200">Guia de decisão</div>
+            <div class="text-xs text-neutral-500 mt-1">aponte o modelo novo</div>
+          </div>
+        </div>
+
+        <a href="curso/trilha3/index.html" class="inline-flex items-center justify-start space-x-2 bg-purple-600 hover:bg-purple-500 text-white font-semibold text-sm px-5 py-2.5 rounded-lg transition-colors">
+          <span>Ver a destilação na Trilha 3</span><span>→</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ SEÇÃO 5 — AS 3 TRILHAS EM DETALHE ============ -->
+    <section id="trilhas" class="mb-16">
+      <h2 class="text-3xl font-bold mb-3">As 3 trilhas em detalhe</h2>
+      <p class="text-neutral-400 max-w-3xl mb-8 leading-relaxed">
+        Vinte módulos, cento e vinte tópicos. Cada trilha com seu emoji, sua cor e seu nível.
+      </p>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- T1 detalhe -->
+        <div class="bg-dark-800 rounded-xl border border-emerald-500/30 overflow-hidden flex flex-col">
+          <div class="p-6 border-b border-dark-600">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Trilha 1</span>
+              <span class="text-xs text-neutral-500">Básico</span>
+            </div>
+            <h3 class="text-2xl font-bold mb-1">🧱 Fundamentos</h3>
+            <p class="text-neutral-400 text-sm">O vocabulário e a anatomia do system prompt, do zero.</p>
+          </div>
+          <div class="grid grid-cols-3 divide-x divide-dark-600 border-b border-dark-600">
+            <div class="p-4 text-center"><div class="text-xl font-bold text-emerald-400">6</div><div class="text-xs text-neutral-400">Módulos</div></div>
+            <div class="p-4 text-center"><div class="text-xl font-bold text-emerald-400">36</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+            <div class="p-4 text-center"><div class="text-xl font-bold text-emerald-400">~3.5h</div><div class="text-xs text-neutral-400">Duração</div></div>
+          </div>
+          <div class="p-4 mt-auto">
+            <a href="curso/trilha1/index.html" class="block text-center px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-sm font-semibold transition-colors">Ver trilha →</a>
+          </div>
+        </div>
+
+        <!-- T2 detalhe -->
+        <div class="bg-dark-800 rounded-xl border border-blue-500/30 overflow-hidden flex flex-col">
+          <div class="p-6 border-b border-dark-600">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold text-blue-400 uppercase tracking-wider">Trilha 2</span>
+              <span class="text-xs text-neutral-500">Intermediário</span>
+            </div>
+            <h3 class="text-2xl font-bold mb-1">🛠️ Prática</h3>
+            <p class="text-neutral-400 text-sm">Montar prompts, persona, ferramentas, skills e agentes.</p>
+          </div>
+          <div class="grid grid-cols-3 divide-x divide-dark-600 border-b border-dark-600">
+            <div class="p-4 text-center"><div class="text-xl font-bold text-blue-400">7</div><div class="text-xs text-neutral-400">Módulos</div></div>
+            <div class="p-4 text-center"><div class="text-xl font-bold text-blue-400">42</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+            <div class="p-4 text-center"><div class="text-xl font-bold text-blue-400">~4.5h</div><div class="text-xs text-neutral-400">Duração</div></div>
+          </div>
+          <div class="p-4 mt-auto">
+            <a href="curso/trilha2/index.html" class="block text-center px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-sm font-semibold transition-colors">Ver trilha →</a>
+          </div>
+        </div>
+
+        <!-- T3 detalhe -->
+        <div class="bg-dark-800 rounded-xl border border-purple-500/30 overflow-hidden flex flex-col">
+          <div class="p-6 border-b border-dark-600">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold text-purple-400 uppercase tracking-wider">Trilha 3</span>
+              <span class="text-xs text-neutral-500">Avançado</span>
+            </div>
+            <h3 class="text-2xl font-bold mb-1">🧠 Avançado</h3>
+            <p class="text-neutral-400 text-sm">Diffs, consolidação, segurança e destilar o cérebro do Fable.</p>
+          </div>
+          <div class="grid grid-cols-3 divide-x divide-dark-600 border-b border-dark-600">
+            <div class="p-4 text-center"><div class="text-xl font-bold text-purple-400">7</div><div class="text-xs text-neutral-400">Módulos</div></div>
+            <div class="p-4 text-center"><div class="text-xl font-bold text-purple-400">42</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+            <div class="p-4 text-center"><div class="text-xl font-bold text-purple-400">~5h</div><div class="text-xs text-neutral-400">Duração</div></div>
+          </div>
+          <div class="p-4 mt-auto">
+            <a href="curso/trilha3/index.html" class="block text-center px-4 py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-sm font-semibold transition-colors">Ver trilha →</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============ SEÇÃO BÔNUS — PROMPTS PRONTOS ============ -->
+    <section class="mb-16">
+      <a href="prompts/index.html" class="group block rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-dark-800 to-dark-800 p-8 sm:p-10 hover:border-primary/50 transition-colors">
+        <div class="flex items-start gap-4">
+          <span class="text-4xl">📋</span>
+          <div>
+            <h2 class="text-2xl font-bold mb-2 group-hover:text-primary transition-colors">Bônus — Prompts Prontos pra Copiar</h2>
+            <p class="text-neutral-300 max-w-2xl leading-relaxed mb-3">
+              13 system prompts completos, montados com as técnicas do curso (agente de código, pesquisa,
+              persona, subagente, destilador de cérebro…). Copie, troque os <code class="text-primary font-mono">{campos}</code>, cole.
+            </p>
+            <span class="inline-flex items-center gap-1 text-primary font-semibold">Abrir a biblioteca →</span>
+          </div>
+        </div>
+      </a>
+    </section>
+
+    <!-- ============ SEÇÃO 6 — CTA FINAL ============ -->
+    <section class="mb-8">
+      <div class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-purple-900/20 rounded-2xl border border-dark-600 p-8 sm:p-10">
+        <h2 class="text-2xl sm:text-3xl font-bold mb-3">Comece a instruir IA como os laboratórios</h2>
+        <p class="text-neutral-300 max-w-2xl leading-relaxed mb-7">
+          Trinta minutos na Trilha 1 e você nunca mais vai olhar uma IA do mesmo jeito — vai enxergar o
+          bilhete invisível por trás de cada resposta. O curso é gratuito.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-start gap-4">
+          <a href="curso/trilha1/index.html" class="text-center px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-semibold transition-colors">
+            Começar pela Trilha 1 →
+          </a>
+          <a href="https://inema.club" target="_blank" class="text-center px-6 py-3 bg-dark-700 hover:bg-dark-600 text-neutral-300 rounded-lg font-semibold transition-colors">
+            Conhecer o INEMA.CLUB
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>O Manual Oculto da IA · <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 transition-colors">INEMA.CLUB</a> · 2026</p>
+    </div>
+  </footer>
+
+  <!-- ============ SCRIPTS ============ -->
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

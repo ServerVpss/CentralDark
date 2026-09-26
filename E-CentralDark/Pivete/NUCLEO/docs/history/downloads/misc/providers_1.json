@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "providers": [
+    {
+      "id": "centraldark",
+      "type": "openai-compatible",
+      "enabled": true,
+      "baseUrl": "https://api.centralldark.com",
+      "path": "/v1/chat/completions",
+      "apiKeyEnv": "CENTRALDARK_API_KEY",
+      "modelsEnv": "CENTRALDARK_MODELS",
+      "models": ["gpt-5"],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "openai-compatible",
+      "type": "openai-compatible",
+      "enabled": true,
+      "baseUrlEnv": "OPENAI_BASE_URL",
+      "baseUrl": "https://api.openai.com",
+      "path": "/v1/chat/completions",
+      "apiKeyEnv": "OPENAI_API_KEY",
+      "modelsEnv": "OPENAI_MODELS",
+      "models": ["gpt-5"],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "openai-responses",
+      "type": "openai-responses",
+      "enabled": true,
+      "baseUrl": "https://api.openai.com",
+      "path": "/v1/responses",
+      "apiKeyEnv": "OPENAI_API_KEY",
+      "modelsEnv": "OPENAI_RESPONSES_MODELS",
+      "models": ["gpt-5"],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "anthropic",
+      "type": "anthropic",
+      "enabled": true,
+      "baseUrlEnv": "ANTHROPIC_BASE_URL",
+      "baseUrl": "https://api.anthropic.com",
+      "path": "/v1/messages",
+      "apiKeyEnv": "ANTHROPIC_API_KEY",
+      "modelsEnv": "ANTHROPIC_MODELS",
+      "models": ["claude-sonnet-4-20250514"],
+      "timeoutMs": 60000
+    }
+  ]
+}

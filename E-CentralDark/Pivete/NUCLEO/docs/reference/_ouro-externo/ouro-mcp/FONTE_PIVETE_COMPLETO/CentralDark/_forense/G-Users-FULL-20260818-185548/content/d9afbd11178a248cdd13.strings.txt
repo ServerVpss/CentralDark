@@ -1,0 +1,330 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\false.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+.reloc
+AVAUATVSH
+AWAVAUATUWVSH
+T$'"T$TH
+x[^_]A\A]A^A_
+D$@u?L
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AUATUWVSH
+X[^_]A\A]
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+TUUUUUUU1
+SUUUUUUUL9
+ATWVSH
+8[^_A\
+8[^_A\
+|$ POSIt
+AUATUWVSH
+H[^_]A\A]
+H[^_]A\A]
+AWAVAUATSH
+ [A\A]A^A_
+ invocation
+Usage: %s [ignored command line arguments]
+  or:  %s OPTION
+Exit with a status code indicating failure.
+      --help     display this help and exit
+      --version  output version information and exit
+NOTE: your shell may have its own version of %s, which usually supersedes
+the version described here.  Please refer to your shell's documentation
+for details about the options it supports.
+test invocation
+coreutils
+Multi-call invocation
+sha224sum
+sha2 utilities
+sha256sum
+sha384sum
+sha512sum
+%s online help: <%s>
+https://www.gnu.org/software/coreutils/
+GNU coreutils
+Report any translation bugs to <https://translationproject.org/team/>
+Full documentation <%s%s>
+or available locally via: info '(coreutils) %s%s'
+/usr/share/locale
+--help
+--version
+Jim Meyering
+write error
+%s: %s
+A NULL argv[0] was passed through an exec system call.
+/.libs/
+literal
+shell-always
+shell-escape
+shell-escape-always
+c-maybe
+escape
+locale
+clocale
+%s (%s) %s
+License GPLv3+: GNU GPL version 3 or later <%s>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+https://gnu.org/licenses/gpl.html
+Written by %s.
+Written by %s and %s.
+Written by %s, %s, and %s.
+Written by %s, %s, %s,
+and %s.
+Written by %s, %s, %s,
+%s, and %s.
+Written by %s, %s, %s,
+%s, %s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+%s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+%s, %s, and others.
+Report bugs to: %s
+bug-coreutils@gnu.org
+%s home page: <%s>
+https://www.gnu.org/software/coreutils/
+GNU coreutils
+General help using GNU software: <%s>
+https://www.gnu.org/gethelp/
+Copyright %s %d Free Software Foundation, Inc.
+memory exhausted
+US-ASCII
+LC_ALL
+LC_CTYPE
+CP1361
+CP20127
+CP20866
+KOI8-R
+CP20936
+GB2312
+CP21866
+KOI8-RU
+CP28591
+ISO-8859-1
+CP28592
+ISO-8859-2
+CP28593
+ISO-8859-3
+CP28594
+ISO-8859-4
+CP28595
+ISO-8859-5
+CP28596
+ISO-8859-6
+CP28597
+ISO-8859-7
+CP28598
+ISO-8859-8
+CP28599
+ISO-8859-9
+CP28605
+ISO-8859-15
+CP38598
+ISO-8859-8
+CP51932
+EUC-JP
+CP51936
+GB2312
+CP51949
+EUC-KR
+CP51950
+EUC-TW
+CP54936
+GB18030
+CP65001
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+libintl_bindtextdomain
+libintl_gettext
+libintl_setlocale
+libintl_textdomain
+__cxa_atexit
+__errno
+__getreent
+__locale_ctype_ptr
+__locale_mb_cur_max
+__main
+__memcpy_chk
+__sprintf_chk
+__strcpy_chk
+_dll_crt0
+_impure_ptr
+calloc
+cygwin_internal
+dll_dllcrt0
+fclose
+fprintf
+fputc_unlocked
+fputs_unlocked
+fwrite
+getenv
+iswprint
+malloc
+mbrtowc
+mbsinit
+memcmp
+memcpy
+memset
+msys_detach_dll
+nl_langinfo
+posix_memalign
+printf
+program_invocation_name
+program_invocation_short_name
+pthread_mutex_lock
+pthread_mutex_unlock
+realloc
+setlocale
+strchr
+strcmp
+strcpy
+strlen
+strncmp
+strrchr
+GetACP
+GetModuleHandleA
+GetModuleHandleW
+msys-intl-8.dll
+msys-2.0.dll
+KERNEL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__imp_abort
+__lib64_libkernel32_a_iname
+_head_msys_intl_8_dll
+__imp__dll_crt0
+__imp_fputs_unlocked
+__imp_GetModuleHandleW
+__imp_calloc
+__imp_setlocale
+__imp_getenv
+_head_msys_2_0_dll
+__imp_strcmp
+__imp___strcpy_chk
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_strrchr
+__imp_free
+__nm_program_invocation_name
+__imp___errno
+__nm__impure_ptr
+__imp_pthread_mutex_unlock
+__imp_fputc_unlocked
+__imp__exit
+__imp_strcpy
+__imp_memset
+__IAT_end__
+__imp_memcpy
+__imp___memcpy_chk
+__imp_dll_dllcrt0
+__imp___locale_ctype_ptr
+__imp_fwrite
+_head_lib64_libkernel32_a
+__imp_libintl_setlocale
+__imp_msys_detach_dll
+__imp_iswprint
+__imp_nl_langinfo
+__imp_program_invocation_short_name
+__imp___locale_mb_cur_max
+__nm_program_invocation_short_name
+__imp___getreent
+__imp_mbsinit
+__imp_GetModuleHandleA
+__imp___main
+__imp_strlen
+__imp_malloc
+__imp_libintl_textdomain
+__imp__impure_ptr
+__imp_realloc
+__imp_exit
+__imp_mbrtowc
+__IAT_start__
+__imp_libintl_bindtextdomain
+__imp_program_invocation_name
+__imp_libintl_gettext
+__imp___cxa_atexit
+__imp_fprintf
+msys_intl_8_dll_iname
+__imp_fclose
+__imp_error
+__imp_strncmp
+__imp_strchr
+__imp_printf
+__imp_pthread_mutex_lock
+__imp_GetACP
+__imp___sprintf_chk
+__imp_memcmp
+msys_2_0_dll_iname

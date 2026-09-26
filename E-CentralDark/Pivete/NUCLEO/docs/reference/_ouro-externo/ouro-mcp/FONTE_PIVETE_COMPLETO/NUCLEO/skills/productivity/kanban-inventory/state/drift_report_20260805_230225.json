@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-08-05T23:02:25.895103-03:00",
+  "result": "SAFE_ADAPTER_DRIFT",
+  "details": {
+    "differences": {
+      "adapter_hash": {
+        "expected": "2ea7a19baf731121b3e88e2e554b2681e53eacfb5cbde0f3a4d824cfb2bd2221",
+        "actual": "4c72044766449b27e409e6258dac1775c079c3bcb8bc251507eefae94aab8356",
+        "type": "adapter_code_changed"
+      }
+    },
+    "card_count": 3,
+    "kanban_url": "http://127.0.0.1:9119/kanban?profile=pivete",
+    "cli_version": "Hermes Agent v0.20.0 (2026.8.3)"
+  },
+  "actions_required": [
+    "validate nine conditions",
+    "minimal local correction only if authorized"
+  ],
+  "unknown_factors": [],
+  "contract_hash": "60a3488d7e621710478042525e357b16533afb54999c2faba79ae795cb23d0b7",
+  "adapter_hash": "4c72044766449b27e409e6258dac1775c079c3bcb8bc251507eefae94aab8356",
+  "schema_hash": "94fbdc9a83c835eea6156204e9a17ffc504f25030c411d111b60bfa98e8fd6c0"
+}

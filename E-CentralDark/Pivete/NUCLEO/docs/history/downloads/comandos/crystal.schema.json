@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "centraldark://contracts/crystal",
+  "title": "CentralDark Operational Crystal",
+  "type": "object",
+  "required": [
+    "capability",
+    "boundary",
+    "canonical_owner",
+    "provenance",
+    "counterproof",
+    "dependencies",
+    "result"
+  ],
+  "properties": {
+    "capability": {
+      "type": "string"
+    },
+    "boundary": {
+      "type": "string"
+    },
+    "canonical_owner": {
+      "type": "string"
+    },
+    "callable_skill": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "real_consumer": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "test_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gate_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "provenance": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "counterproof": {
+      "type": "string"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "result": {
+      "enum": [
+        "CRYSTAL",
+        "NO_CHANGE",
+        "UNKNOWN",
+        "BLOCKED"
+      ]
+    }
+  }
+}

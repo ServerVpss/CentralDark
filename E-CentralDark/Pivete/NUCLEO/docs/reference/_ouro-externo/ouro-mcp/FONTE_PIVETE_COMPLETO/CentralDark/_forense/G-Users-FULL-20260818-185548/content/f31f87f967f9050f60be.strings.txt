@@ -1,0 +1,90 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\__pycache__\model_cost_guard.cpython-311.pyc
+
+d"d"d"d"d#
+).zBExpensive-model confirmation helpers for model selection surfaces.
+annotations)
+dataclass)
+Decimal
+InvalidOperation)
+Optional)
+ModelInfo
+PROVIDER_TO_MODELS_DEV
+openai/gpt-5.5-proz&did you mean to select openai/gpt-5.5?T)
+frozenc
+ExpensiveModelWarningz=Confirmation payload for models above Hermes' cost guardrail.
+provider
+Optional[Decimal]
+input_cost_per_million
+output_cost_per_million
+source
+messageN)
+__name__
+__module__
+__qualname__
+__doc__
+__annotations__
+OC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\model_cost_guard.pyr
+object
+returnr
+ValueError
+_to_decimalr%
+unknown
+_format_moneyr)
+model_info
+Optional[ModelInfo]
+0tuple[Optional[Decimal], Optional[Decimal], str]c
+models.dev)
+has_cost_datar%
+cost_input
+cost_output)
+_pricing_from_model_infor2
+Optional[str]c
+lowerr
+normalizeds
+_known_models_dev_providerr9
+provider_idr.
+getattrr5
+expected_provider
+actual_providers
+_can_trust_model_info_pricingr@
+model_name
+base_urlc
+resolve_billing_route
+agent.usage_pricingrD
+Exception
+billing_mode)
+routes
+     r
+_can_trust_pricing_lookuprJ
+api_keyr*
+Optional[ExpensiveModelWarning]c
+Return a warning payload when known pricing exceeds safety thresholds.
+    The guard only triggers when pricing is known. Callers should use this after
+    model resolution so aliases and provider-specific model IDs have settled.
+    r.
+get_model_inforE
+get_pricing_entry)
+!!! EXPENSIVE MODEL WARNING !!!z2 has known pricing above Hermes' safety threshold.z
+Input tokens: z
+Output tokens: zJThreshold: more than $20/M input tokens or more than $100/M output tokens.z
+Pricing source: 
+.z-Confirm only if you intend to use this model.r'
+agent.models_devrN
+GPT55_PRO_OPENROUTER_ID
+INPUT_COST_WARNING_THRESHOLD
+OUTPUT_COST_WARNING_THRESHOLDr)
+append
+GPT55_SUGGESTIONr
+input_cost
+output_costr
+is_known_gpt55_pro_confusion
+over_input
+over_output
+liness
+                r
+expensive_model_warningr`
+__future__r
+dataclassesr
+decimalr
+typingr
+<module>re

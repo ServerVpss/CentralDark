@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\legacy-runtime\hooks\ThreadListItemContext.d.ts.map
+
+{"version":3,"file":"ThreadListItemContext.d.ts","names":[],"sources":["../../../src/legacy-runtime/hooks/ThreadListItemContext.ts"],"mappings":";;;;;AASA;iBAAgB,wBAAA,CAAyB,OAAA;EACvC,QAAA;AAAA,IACE,qBAAqB;AAAA,iBACT,wBAAA,CAAyB,OAAA;EACvC,QAAA;AAAA,IACE,qBAAqB;;AAHA;AACzB;cAqBa,iBAAA;EAAA"}

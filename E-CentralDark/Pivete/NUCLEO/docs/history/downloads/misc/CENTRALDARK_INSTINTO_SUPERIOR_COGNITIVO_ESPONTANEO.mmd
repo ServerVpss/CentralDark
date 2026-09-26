@@ -1,0 +1,31 @@
+flowchart TD
+    H[SEGREDO/CHEFE<br/>INTENÇÃO] --> P[PERCEPÇÃO]
+    P --> S[SÍNTESE ESPONTÂNEA]
+    S --> A[AÇÃO / EXPRESSÃO]
+    A --> R[REALIDADE OBSERVÁVEL]
+    R --> J{REALITY JUDGE}
+
+    J -->|coerente| C[CRISTALIZAÇÃO]
+    C --> N[NEXT EXECUTION BASELINE]
+    N --> P
+
+    J -->|divergiu| I[INVESTIGAÇÃO]
+    I --> H1[HIPÓTESES CONCORRENTES]
+    H1 --> CP[CONTRAPROVA]
+    CP --> CA[CAUSA MAIS SUSTENTADA]
+    CA --> M[REMEDIAÇÃO]
+    M --> R
+
+    U[UNKNOWN<br/>mecanismo interno não presumido] -.-> S
+
+    subgraph CASA["CENTRALDARK — UMA CASA"]
+      SOL[SOL<br/>coordena / reconcilia]
+      HER[HERMES<br/>executa / preserva]
+      RJ[REALITY JUDGE]
+      MEM[CRYSTAL / MEMÓRIA]
+    end
+
+    H --> SOL
+    SOL --> HER
+    HER --> RJ
+    RJ --> MEM

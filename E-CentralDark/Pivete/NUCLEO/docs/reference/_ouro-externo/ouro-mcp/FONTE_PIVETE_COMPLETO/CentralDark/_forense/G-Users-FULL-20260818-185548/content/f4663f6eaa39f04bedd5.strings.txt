@@ -1,0 +1,3792 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\apps\desktop\dist\node_modules\node-pty\prebuilds\win32-x64\conpty\OpenConsole.exe
+
+!This program cannot be run in DOS mode.
+`.rdata
+@.data
+.pdata
+@.didat
+@.reloc
+L$ SWH
+\$ UVWAVAWH
+A_A^_^]
+@SUVWAVH
+A^_^][
+t$ WATAUAVAWH
+tYfD9*tSH
+tpD8*tkH
+tjD8*teH
+trD8*tmH
+tpD8*tkH
+tjD8*teH
+trD8*tmH
+twfD9*tqH
+tqD8*tlH
+t[fD9*tUfD9lr
+ A_A^A]A\_
+SVWAVAWH
+`A_A^_^[
+`A_A^_^[
+`A_A^_^[
+D$0fD9 t
+l$ VWAWH
+D$0f9(t
+t&HcL$$HcD$ H
+UVATAUAVH
+~HM9f@t
+H9/s4H
+ A^A]A\^]
+\$ UVWAVAWH
+tGL9;tBA
+ A_A^_^]
+\$ UVWATAUAVAWH
+D$,@8=
+|$ AVH
+@USVWATAUAVAWH
+A_A^A]A\_^[]
+@USVWATAVAWH
+A_A^A\_^[]
+\$ UVWAVAWH
+0A_A^_^]
+@USVWAVH
+A^_^[]
+UVWAVAWH
+pA_A^_^]
+\$ UVW
+fB94@u
+WATAUAVAWH
+ A_A^A]A\_
+|$ ATAVAWH
+0A_A^A\
+t$ WATAUAVAWH
+A_A^A]A\_
+UVWAVAWH
+pA_A^_^]
+UVWAVAWH
+@A_A^_^]
+t$ WATAUAVAWH
+0A_A^A]A\_
+VWATAVAWH
+ A_A^A\_^
+\$ UVWATAUAVAWH
+@SUVAVH
+(A^^][
+(A^^][
+|$ AVH
+|$ AVH
+UVWATAUAVAWH
+fD9<Gu
+A_A^A]A\_^]
+WAVAWH
+UVWATAUAVAWH
+A_A^A]A\_^]
+@SVWATAUAVAWH
+D$pu"H
+A_A^A]A\_^[
+t$ UWATH
+@SUVWATAVAW
+A_A^A\_^][
+@USVWATAUAVAWH
+A_A^A]A\_^[]
+UVWATAUAVAWH
+A_A^A]A\_^]
+l$ VWAVH
+UVWAVAWH
+GD$hfD
+A_A^_^]
+l$ VWATAVAWH
+ A_A^A\_^
+\$ t$H
+\$ UVWH
+VWAUAVAWH
+A_A^A]_^
+@SUAVH
+UATAUAVAWH
+A_A^A]A\]
+@SUVWAV
+A^_^][
+UVWAVAWH
+A_A^_^]
+@VWATAWH
+HA_A\_^
+WATAUAVAWH
+A_A^A]A\_
+|$ UATAUAVAWH
+Hc}#H+
+A_A^A]A\]
+SUVWATAVAWH
+L$PHcD$HHc
+HcL$TH+
+`A_A^A\_^][
+E+FXA+VT
+|$ AVH
+\$ UVAVH
+HcPxLcP|H
+@USVWATAUAVAWH
+L$PLco
+D;L$Xt
+D;D$\t
+LcD$\LcL$TD;
+A_A^A]A\_^[]
+D$|HcU
+\$ UVWATAUAVAWH
+A_A^A]A\_^]
+HcD$`H+
+HcT$lHcD$dH+
+HcD$`H+
+HcL$lHcD$dH+
+@VATAUH
+|$ UATAUAVAWH
+A_A^A]A\]
+t2H;C(t,H
+HcD$ A
+HcT$$A
+HcL$(H+
+HcL$,H+
+l$ VWATAVAWH
+A_A^A\_^
+@SUVWATAVAWH
+0A_A^A\_^][
+@UVWAVH
+@UVWAVH
+8A^_^]
+8A^_^]
+8A^_^]
+@UVWAVAWH
+PA_A^_^]
+PA_A^_^]
+PA_A^_^]
+\$ UWATAVAWH
+PA_A^A\_]
+@SUVWATAVAWH
+`A_A^A\_^][
+C\A3Hp
+@SVAVH
+t$ WAVAWH
+ A_A^_
+\$ VWATAVAWH
+L;shv*L;s`v
+PA_A^A\_^
+\$ VWATAVAWH
+0A_A^A\_^
+t$ UWATAVAWH
+A_A^A\_]
+t$ WATAUAVAWH
+A_A^A]A\_
+WATAUAVAWH
+A_A^A]A\_
+@SUVAUH
+HA]^][
+@SUVWATAWH
+8A_A\_^][
+t$ WAVAWH
+@A_A^_
+t$ UWAVH
+H9O0t'
+UVWAVAWH
+GD$hfD
+A_A^_^]
+WATAUAVAWH
+0A_A^A]A\_
+WATAUAVAWH
+A_A^A]A\_
+@SUVWAVH
+t2H;CXt,H
+l$ VWATAVAWH
+A_A^A\_^
+UVWAVAWH
+A_A^_^]
+\$ UVWH
+\$ UVWAVAWH
+0A_A^_^]
+t$ WATAUAVAWH
+|tD;d$@}m
+D;d$@|;H
+D$l+D$t
+A_A^A]A\_
+|$ UATAUAVAWH
+A_A^A]A\]
+SVWATAUAVAWH
+(D$pfD
+)D$pA8
+A_A^A]A\_^[
+@SVWATAUAVAWH
+L9GHu`H
+OPH;W`uKH
+H9Wxt&E
+T$4E9P
+A_A^A]A\_^[
+@SVWATAUAVAWH
+A_A^A]A\_^[
+t$ WATAUAVAWH
+A_A^A]A\_
+\$ UVWATAUAVAWH
+A_A^A]A\_^]
+@SVWAVAWH
+PA_A^_^[
+SVWATAUAVAWH
+D9D$h|
+A_A^A]A\_^[
+t$ WATAUAVAWH
+xw;\$(}qH
+A_A^A]A\_
+WATAUAVAWH
+A_A^A]A\_
+t$ WATAUAVAWH
+A_A^A]A\_
+l$ VWAVH
+Hx@8j|
+Hx@8j|
+SWAUAVH
+xA^A]_[
+UVWATAWH
+L$0fff
+A_A\_^]
+SVWATAUAVAWH
+A_A^A]A\_^[
+VWATAVAWH
+PA_A^A\_^
+D$D;D$<
+\$ UVWH
+t$ UWATAVAWH
+A_A^A\_]
+UVWAVAWH
+A_A^_^]
+t$ UWATAVAWH
+A_A^A\_]
+\$ UVWH
+d$ UAVAWH
+UWATAVAWH
+A_A^A\_]
+\$ UVWATAUAVAWH
+fD9,Gu
+fD9,Cu
+fD9,Ju
+A_A^A]A\_^]
+UVWATAUAVAWH
+A_A^A]A\_^]
+\$ UVWAVAWH
+PA_A^_^]
+UVWAVAWH
+`A_A^_^]
+@SWATAUH
+XA]A\_[
+XA]A\_[
+t$ WAVAWH
+@A_A^_
+@SUAVAWH
+XA_A^][
+@SATAVAWH
+HA_A^A\[
+HA_A^A\[
+@SVAVH
+ATAUAVH
+PA^A]A\
+@SUVWAWH
+A__^][
+@SWATAUH
+HA]A\_[
+@SUWAWH
+8A__][
+@SUVAVAWH
+ A_A^^][
+ A_A^^][
+ A_A^^][
+L$ SWH
+L$ SUVWH
+|$ UAVAWH
+UVWATAUAVAWH
+A_A^A]A\_^]
+|$ AVH
+UVWATAUAVAWH
+A_A^A]A\_^]
+WATAUAVAW
+A_A^A]A\_
+SWATAUH
+8A]A\_[
+|$ ATAVAWH
+A_A^A\
+UVWAVAWH
+A_A^_^]
+@SUVWAWH
+A__^][
+D9f<u4D9f8u.H
+D9w<u4D9w8u.H
+UVWATAUAVAWH
+"tqfE;
+pA_A^A]A\_^]
+@UVATAUAVAWH
+(A_A^A]A\^]
+@UVATAUAVAWH
+XA_A^A]A\^]
+@SVWATAUAVAWH
+`A_A^A]A\_^[
+GD$ H;\$0t
+UVWATAUAVAWH
+PA_A^A]A\_^]
+x UATAUAVAWH
+d$ L9a
+A_A^A]A\]
+GL$xH;u
+H;L$htrH
+@SVAVAWH
+(A_A^^[
+l$ VAVAWH
+0A_A^^
+VWATAVAWH
+D$ ;D$(|
+D$$;D$,|
+;D$4|wH
+@A_A^A\_^
+|$ AVH
+GL$@E3
+t$H;^(t
+H9~0t$H;^(t
+@VWATAUAVH
+@A^A]A\_^
+WAVAWH
+WATAUAVAWH
+A_A^A]A\_
+WAVAWH
+PA_A^_
+|$ UAVAWH
+H;G@v)
+T$8tpM
+|$ AWH
+\$ UWATAUAWH
+PA_A]A\_]
+USVWATAVAWH
+A_A^A\_^[]
+@SUVWATAVAWH
+@A_A^A\_^][
+@SVAVAWH
+8A_A^^[
+8A_A^^[
+@SUVWAV
+@SWATAUAWH
+@A_A]A\_[
+WATAUAVAWH
+A_A^A]A\_
+|$ AVH
+@SUVWAVH
+D$(u-H
+@A^_^][
+HcT$H3
+HcD$@H+
+HcD$DHcL$LH+
+HcT$H3
+HcD$@H+
+HcD$DHcL$LH+
+t$ UWAVH
+@SVWAVH
+UVWAVAWH
+\$<t"@
+`A_A^_^]
+L$$9\$8
+O\$89L$<
+T$$IcS
+|$ UATAUAVAWH
+A_A^A]A\]
+VWATAVAWH
+)D$@fD
+d$`+w|A+
+A_A^A\_^
+WAVAWH
+ A_A^_
+D$Lt"A
+UVWAVAWH
+A_A^_^]
+@USATH
+USVATAWH
+t$@@8pzA
+ ;Ux|d
+}X;M||S
+T$8@8pz
+A_A\^[]
+@SVWAUAVH
+A^A]_^[
+@SVWATAUAVAWH
+fD;L$pfD
+B|$pfD
+A_A^A]A\_^[
+UVWATAUAVAWH
+ D+@|I
+ D+H|D+Pxx
+EgD9UgH
+EkD9EkH
+A_A^A]A\_^]
+\$ UVWATAUAVAWH
+`A_A^A]A\_^]
+@SUWATAUAVH
+A^A]A\_][
+A^A]A\_][
+UVWATAUAVAWH
+`A_A^A]A\_^]
+@UATAVAWH
+8A_A^A\]
+8A_A^A\]
+@SVWAVAWH
+0A_A^_^[
+0A_A^_^[
+t$H;_(t
+WAVAWH
+H;D$ u
+WATAUAVAWH
+A_A^A]A\_
+@USVWATAUAVAWH
+hA_A^A]A\_^[]
+@SUVWATAVAWH
+A_A^A\_^][
+WATAUAVAWH
+ ;D$@|
+HcT$`Hc
+HcD$`Hc
+9\$Tu;
+A_A^A]A\_
+|$ UATAUAVAWH
+A_A^A]A\]
+WATAUAVAWH
+A_A^A]A\_
+d$(E)4$
+HcT$8Lc
+d$ UAVAWH
+)D$@fD
+UVWATAUAVAWH
+HcL$4L
+A_A^A]A\_^]
+UVWATAUAVAWH
+A_A^A]A\_^]
+UVWATAUAVAWH
+A_A^A]A\_^]
+x UATAUAVAWH
++t$xD+t$pH
+A_A^A]A\]
+@SWAWH
+UVWATAUAVAWH
+A_A^A]A\_^]
+@SVWATAUAVAWH
+t%L+t$0H
+H+D$@I
+PA_A^A]A\_^[
+WATAUAVAWH
+A_A^A]A\_
+@SVWATAUAVAWH
+D$0L9z
+\$8H;^
+pA_A^A]A\_^[
+@SVWATAUAVAWH
+A_A^A]A\_^[
+|$ UATAUAVAWH
+A_A^A]A\]
+@SVAUAWH
+xA_A]^[
+@UVAVH
+fD9&u)I
+\$ UVWAVAWH
+0A_A^_^]
+t$ WATAUAVAWH
+|$L;D$T
+L$@)T$Dy
+A_A^A]A\_
+@SUVWATAVAWH
+t7D8d$0t
+T$4D8d$1t
+@A_A^A\_^][
+@A_A^A\_^][
+t$ UWAVH
+HcEXH+
+UVWATAUAVAWH
+vGH+|$HL
+A_A^A]A\_^]
+x UATAUAVAWH
+|:H;}Xt$
+}PH;D$x
+H;}Xt,
+E@9A,}#A
+T$XH9T$Pt
++D$hA;
+A_A^A]A\]
+@WATAUAVAWH
+HcD$`H
+D$xL+|$pI
+A_A^A]A\_
+A`HcHL
+\$htlI+
+l$ VWAVH
+@USVWATAVAWH
+A_A^A\_^[]
+USVWATAUAVAWH
+D$`xDH
+A_A^A]A\_^[]
+@UVAUAVAWH
+pA_A^A]^]
+pA_A^A]^]
+@SUVAVH
+HA^^][
+@WATAUAVAWH
+UUUUUUU
+`A_A^A]A\_
+UUUUUUU
+@SUWATAWH
+0A_A\_][
+l$ VAVAWH
+0A_A^^
+@UVWAVH
+HA^_^]
+9k(t>H
+t$ WATAUAVAWH
+ rCH9J
+A_A^A]A\_
+UVWATAUAVAWH
+A_A^A]A\_^]
+\$ UVWAVAWH
+`A_A^_^]
+WAVAWH
+ A_A^_
+|$ AVH
+9s(t>3
+UVWATAUAVAWH
+`A_A^A]A\_^]
+@SUWATAUAVH
+8A^A]A\_][
+@SVWATAUAVAWH
+A_A^A]A\_^[
+\$ UVWATAUAVAWH
+PA_A^A]A\_^]
+\$ UVWATAUAVAWH
+PA_A^A]A\_^]
+fB94@u
+t$ WAVAWH
+WAVAWH
+|$$@8=
+t$ D9|$DD
+PA_A^_
+|$ AVH
+fD94Au
+D9t$pu
+D8t$tu
+L9t$`t?
+WAVAWH
+PA_A^_
+|$ ATAVAWH
+@A_A^A\
+D;t$,|
+;\$(}tH
+HcL$|H+
+D$,D9L$,H
+D$ D;\$,H
+t$ WATAUAVAWH
+A_A^A]A\_
+WATAUAVAWH
+A_A^A]A\_
+|$ AVH
+|$ AVH
+;|$4~sH
+@SVWAVAWH
+A_A^_^[
+L$ SVWATAUAVAW
+HcL$|H+
+D$XD+D$PA
+T$\+T$T
+A_A^A]A\_^[
+WAVAWH
+@SVWATAUAVAWH
+A_A^A]A\_^[
+)D$0E3
+UVWATAUAVAWH
+@A_A^A]A\_^]
+@SVWAVAWH
+PA_A^_^[
+WATAUAVAWH
+H;|$hv
+H;|$hv
+H;|$hv
+A_A^A]A\_
+t$ WATAUAVAWH
+A_A^A]A\_
+}nfD!c
+@SVWATAUAVAWH
+A_A^A]A\_^[
+UVWAVAWH
+PA_A^_^]
+@SUVWAVH
+@A^_^][
+WATAUAVAWH
+A_A^A]A\_
+VWATAVAWH
+PA_A^A\_^
+VWATAVAWH
+PA_A^A\_^
+WAVAWH
+@A_A^_
+WAVAWH
+GT$@L+
+WAVAWH
+GT$(L+
+PA_A^_
+SUATAVH
+t&D;L$L|
+xA^A\][
+UVWATAUAVAWH
+D$0H;\$Ht
+A_A^A]A\_^]
+T$8tjM
+@SVWATAUAVAWH
+A_A^A]A\_^[
+VWATAVAWH
+`A_A^A\_^
+@SVWATAUAVAWH
+@A_A^A]A\_^[
+UVWATAUAVAWH
+E@LcD$4M
+A_A^A]A\_^]
+VWATAVAWH
+PA_A^A\_^
+VWATAVAWH
+PA_A^A\_^
+\$ VWATAVAWH
+L$PH9L$hH
+A_A^A\_^
+VWATAVAWH
+A_A^A\_^
+VWATAVAWH
+A_A^A\_^
+SVWAVH
+@SVWAVH
+@SVWATAUAVAWH
+A_A^A]A\_^[
+@USVWATAUAVAWH
+A_A^A]A\_^[]
+@SVWATAUAVAWH
+A_A^A]A\_^[
+WAVAWH
+@SVWATAUAVAWH
+A_A^A]A\_^[
+@SVWAUAWH
+A_A]_^[
+@SVWATAUAVAWH
+A_A^A]A\_^[
+UVWATAUAVAWH
+@A_A^A]A\_^]
+@UVATAUAWH
+0A_A]A\^]
+t$ WATAUAVAWH
+A_A^A]A\_
+@USVWATAUAVAWH
+I;]8unI
+GD$pfD
+A_A^A]A\_^[]
+t$ WAVAWH
+PA_A^_
+\$ UVWATAUAVAWH
+3333333
+PA_A^A]A\_^]
+t$ AVH
+@USVWAVH
+A^_^[]
+UVWAVAWH
+L$xM9~
+PA_A^_^]
+WATAUAVAW
+A_A^A]A\_
+@SWAVH
+UVWAVAWH
+@A_A^_^]
+@A_A^_^]
+SVWATAUAVAWH
+PA_A^A]A\_^[
+PA_A^A]A\_^[
+PA_A^A]A\_^[
+PA_A^A]A\_^[
+VWATAVAWH
+0A_A^A\_^
+@USVWATAUAVAWH
+A_A^A]A\_^[]
+@UVWAVAWH
+A_A^_^]
+@SUWATAWH
+A_A\_][
+A_A\_][
+L$ USVWAVH
+L$DtbI
+A^_^[]
+Hx@8j|
+Hx@8j|
+@SUVATAVAWH
+L$$D8hzA
+XA_A^A\^][
+UWATAVAWH
+A_A^A\_]
+SUVWATAUAVAWH
+hA_A^A]A\_^][
+UVWATAUAVAWH
+d$$H;D$ 
+pA_A^A]A\_^]
+@SUVATAVAWH
+\$@H9>tKA
+\$@H9>tKA
+d$$H;D$ u
+XA_A^A\^][
+|$ UATAUAVAWH
+A_A^A]A\]
+D$P@8h
+D$,A8q
+@8pXuLL
+ D;@H|;
+}1;PL|,
+\$ UWAVH
+D$@E8p
+UVWATAUAVAWH
+pA_A^A]A\_^]
+UVWATAUAVAWH
+A_A^A]A\_^]
+t$ UWATAVAWH
+A_A^A\_]
+\$ UVWAVAWH
+pA_A^_^]
+@SVWATAUAVAWH
+d$PE;e
+A_A^A]A\_^[
+@SVWATAUAVAWH
+t$0A;t$
+NxE8~zu
+t"A;t$
+A_A^A]A\_^[
+UVWATAUAVAWH
+|$,D;L$(D
+D;t$8|
+D;d$(ua
+D$@D;d$(u
+;\$8|-
+d$ D;d$(ux
+d$ D;d$pD
+A_A^A]A\_^]
+l$ VWATAVAWH
+0A_A^A\_^
+t$ UWATAVAWH
+A_A^A\_]
+T$pH;T$xt
+SUVWAVH
+PA^_^][
+\$ UVWATAUAVAWH
+D8d$ u
+A_A^A]A\_^]
+C0H;C$t
+\$ UVWATAUAVAWH
+0A_A^A]A\_^]
+@SUVAUAVH
+fD9,Zu
+@A^A]^][
+\$ UVWATAUAVAWH
+@A_A^A]A\_^]
+t$ WATAUAVAWH
+fD;I@f
+Gi@fD;
+gfffffffI
+D$0fD)`
+A_A^A]A\_
+UVWAVAWH
+A_A^_^]
+@WL#I0L
+@SUVWATAVAWH
+0A_A^A\_^][
+@SUVWATAVAWH
+tIfE;_@tBH
+fE;_@t?I
+gfffffffH;
+gfffffffH
+gfffffffH
+G@f+D$&f
+A_A^A\_^][
+gfffffffH
+@SUWATAWH
+0A_A\_][
+@SUWATAUAWH
+8A_A]A\_][
+@SUVAUAWH
+DDDDDDD
+@A_A]^][
+t$ WATAUAVAWH
+D$ L)`
+A_A^A]A\_
+t$ WATAUAVAWH
+A_A^A]A\_
+\$Hfff
+\$Hfff
+@SUVWATAVAWH
+0A_A^A\_^][
+@SUVWATAVAWH
+0A_A^A\_^][
+UAVAWH
+L9|$0u
+PA_A^]
+l$(L9|$0u
+UAVAWH
+H;|$8t
+L$ L9|$(u
+`A_A^]
+@SVWAVAWH
+A_A^_^[
+T$@t4I
+@SVWATAUAVH
+(A^A]A\_^[
+00000000H
+00000000H
+@SVWATAVAWH
+XA_A^A\_^[
+00000000H
+@SWATAUAWH
+@A_A]A\_[
+SWAVAWH
+XA_A^_[
+WAVAWH
+@A_A^_
+\$ UVWAVAWH
+FHI+F@H
+A_A^_^]
+SUVWAVH
+PA^_^][
+ ;G`t/H
+VATAVAWH
+T$8fA+
+T$8fA+
+A_A^A\^
+WATAUAVAWH
+A_A^A]A\_
+t$ WATAUAVAWH
+LcL$HE
+\$8fA;
+\$8fA;
+HcD$HL
+A_A^A]A\_
+t$ WATAUAVAWH
+A|H;|$X
+A_A^A]A\_
+@UVWATAUAWH
+XA_A]A\_^]
+D$XfD;A@fD
+GA@fA;
+A H9Ap
+A H9Ap
+A H9Ap
+A H9Ap
+HkSp8H
+t$ WAVAWH
+t$ WATAUAVAWH
+\$@D+?D
+A_A^A]A\_
+UVWATAUAVAWH
+PA_A^A]A\_^]
+UVWAVAWH
+@A_A^_^]
+@UVWATAVAWH
+HA_A^A\_^]
+SWATAUAVH
+,D;S(D
+PA^A]A\_[
+PA^A]A\_[
+WAVAWH
+ A_A^_
+WATAUAVAWH
+JxD8rzu
+JxD8rzu
+~"E;G,}
+A_A^A]A\_
+UVWAVAWH
+PA_A^_^]
+@USVWATH
+pA\_^[]
+t$ WAVAWH
+WATAUAVAWH
+L$0+L$(
+D$4+D$,
+C0H;C8t
+CHH;CPt
+C`H;Cht
+@A_A^A]A\_
+|$ ATAVAWH
+>L9wxtND8
+A_A^A\
+@SUVWATAUAVAWH
+8A_A^A]A\_^][
+@SVWATAUAVAWH
+D$PHcT$DHc
+LcL$TM+
+D$<HcT$@I+
+A_A^A]A\_^[
+t$ WATAUAVAWH
+t$PfD9
+A_A^A]A\_
+SVWAVAWH
+@A_A^_^[
+t$ WATAUAVAWH
+O(+L$ 
+@A_A^A]A\_
+|$ AVH
+@SVWAVAWH
+0A_A^_^[
+WAVAWH
+0A_A^_
+UVWATAUAVAWH
+ A_A^A]A\_^]
+UWATAVAWH
+A_A^A\_]
+VWATAVAWH
+A_A^A\_^
+t$ WAVAWH
+0A_A^_
+\$ UVWATAUAVAWH
+A_A^A]A\_^]
+\$ UVWATAUAVAWH
+@8|$0@
+l$@H;U
+PA_A^A]A\_^]
+UVWATAUAVAWH
+`A_A^A]A\_^]
+UVWATAVH
+ A^A\_^]
+UVWATAWH
+ A_A\_^]
+UVWATAUAVAWH
+pA_A^A]A\_^]
+UVWATAUAVAWH
+pA_A^A]A\_^]
+UVWATAUAVAWH
+A_A^A]A\_^]
+UVWATAUAVAWH
+@A_A^A]A\_^]
+UVWATAUAVAWH
+@A_A^A]A\_^]
+UVWATAUAVAWH
+@A_A^A]A\_^]
+\$ UVWAVAWH
+0A_A^_^]
+@SUATAUAVH
+@A^A]A\][
+\$ UVWATAUAVAWH
+ A_A^A]A\_^]
+l$ VWATAVAWH
+ A_A^A\_^
+UVWATAUAVAWH
+0A_A^A]A\_^]
+|$ ATAVAWH
+0A_A^A\
+x UATAUAVAWH
+L9m u%H
+A_A^A]A\]
+l$ VWAVH
+|$$@8hz
+t$ WATAUAVAWH
+A_A^A]A\_
+UVWATAUAVAWH
+ A_A^A]A\_^]
+\$ VWAVH
+@SVWATAUAVAWH
+D$0ligaH;
+D$4cligH;T$ht
+D$4caltH;T$ht
+ligatp
+cligtX
+caltt@H
+D$`H;D$ht
+D$4wghtH;
+D$4italH;T$Pt
+D$4slntH;T$Pt
+italtw
+wghtt\
+slnttAL
+D$HL;D$Pt
+A_A^A]A\_^[
+USVWATAUAVAWH
+l$H9\$Lu
+A_A^A]A\_^[]
+t$ AWH
+|$ UATAUAVAWH
+A_A^A]A\]
+\$ UVWATAUAVAWH
+0A_A^A]A\_^]
+@SUVATAUH
+@A]A\^][
+@SUVWAVH
+pA^_^][
+@SVWAUH
+XA]_^[
+t$ WAVAWH
+fF9<Bu
+UVWATAUAVAWH
+A_A^A]A\_^]
+@UVWAVH
+(A^_^]
+(A^_^]
+UVWAVAWH
+A_A^_^]
+USVWATAUAVAWH
+A_A^A]A\_^[]
+@SUWATAUAWH
+8A_A]A\_][
+t$ WATAUAVAWH
+A_A^A]A\_
+WATAUAVAWH
+A_A^A]A\_
+x ATAVAWH
+A_A^A\
+UVWATAUAVAWH
+pA_A^A]A\_^]
+UVWAVAWH
+pA_A^_^]
+t$ WATAUAVAWH
+A_A^A]A\_
+l$ VWAVH
+@SVWAWH
+8A__^[
+@USVWATAUAVAWH
+A_A^A]A\_^[]
+CXH9Cpv
+l$ VWAVH
+@SUWAUH
+xA]_][
+UVWATAUAVAWH
+EhI9Epr
+t$`L;t$hH
+A_A^A]A\_^]
+@SUVWH
+FhH9Fpr
+USVWATAUAVAWH
+D9D$`}
+A_A^A]A\_^[]
+@SUVWATAUAVAWH
+xA_A^A]A\_^][
+\$ UVWATAUAVAWH
+A_A^A]A\_^]
+@USVAUAWH
+A_A]^[]
+@VWATAUH
+ChH9Cpr
+8A]A\_^
+@SVWATAUH
+ A]A\_^[
+\$ UVWATAUAVAWH
+FhH9Fpr
+A_A^A]A\_^]
+@VATAUH
+I9D$pr
+pA]A\^
+@SUWAVAWH
+0A_A^_][
+CpH;Chr
+ChH9Cpr
+D$@fD+
+f+l$Xf
+f+t$`fA
+t$ WATAUAVAWH
+A_A^A]A\_
+l$ VWAVH
+UVWATAUAVAWH
+A_A^A]A\_^]
+UVWATAUAVAWH
+\$hH;]
+A_A^A]A\_^]
+SUVWATAUAVAWH
+D$|F8d
+A_A^A]A\_^][
+UVWAVAWH
+pA_A^_^]
+@USVATAWH
+A_A\^[]
+)L$@fD
+@SUVWH
+k VWAVH
+@SUVWH
+@SUVWAVH
+`A^_^][
+@USVWATAUAVAWH
+A_A^A]A\_^[]
+SVWATH
+D9d$,}
+hA\_^[
+hA\_^[
+/D$<sJH
+fA9APt
+K<HcSX
+gfffffffH
+H;D$ u&H
+H;D$(u
+H;D$0u
+\$ VWAVH
+f9D$0t
+f9D$2t
+f9D$4t
+f9D$6t
+|$ UATAUAVAWH
+A_A^A]A\]
+@USVWATAUAVAWH
+;IcL$(A
+GD$PfB
+A_A^A]A\_^[]
+gfffffffH
+|$ ATAVAWH
+UUUUUUU
+0A_A^A\
+@VWATAWH
+UUUUUUU
+(A_A\_^
+UAVAWH
+0A_A^]
+B0H9A0
+B0H9A0s
+L$@9D$@H
+l$d+l$\L
+t$`D+t$XD
+t$ WATAUAVAWH
+HcT$dHc
+A_A^A]A\_
+@SVWATAUAVAWH
+A_A^A]A\_^[
+UVWATAUAVAWH
+L;t$hv
+H;t$hv
+t$pD;|$8}
+A_A^A]A\_^]
+@SVWATAUAVAWH
+A_A^A]A\_^[
+p UWAUAVAWH
+A_A^A]_]
+l$ VWATAVAWH
+0A_A^A\_^
+UVWATAUAVAWH
+gfffffffI
+fffffff
+gfffffffH
+`A_A^A]A\_^]
+UVWATAUAVAWH
+`A_A^A]A\_^]
+l$ VWAVH
+UVWATAUAVAWH
+0A_A^A]A\_^]
+x ATAVAWH
+@A_A^A\
+UVWATAUAVAWH
+@A_A^A]A\_^]
+Lc\$dLcI
+UVWAVAWH
+@A_A^_^]
+@SUVWATAVAWH
+0A_A^A\_^][
+|$ AVH
+WATAUAVAWH
+A_A^A]A\_
+|$ ATAVAWH
+@A_A^A\H
+UVWATAUAVAWH
+MxA8uzu
+Hc\$4H+
+t$0D;u
+A_A^A]A\_^]
+X UVWATAUAVAWH
+~D$`fD
+~t$dfD
+D8|$@u
+D$BfA;F2u
+d$TI;U
+~D$`fD
+Lcd$DM
+A_A^A]A\_^]
+@SUVWATAVAWH
+ A9F4|
+uSA9~0
+`A_A^A\_^][
+|$ AUAVAWH
+A_A^A]
+@SUATAUAVH
+@A^A]A\][
+\$ UVWAVAWH
+0A_A^_^]
+u#HcD$\IcQ
+uwLcT$\LcA
+|$ UATAUAVAWH
+A_A^A]A\]
+t$ WATAUAVAWH
+A+|$(+
+A_A^A]A\_
+L$ SVWH
+H;Q u(H
+I;N u1H
+t$ WAVAWH
+0A_A^_
+UVWATAVH
+A^A\_^]
+9l$ tfH
+|$ UATAUAVAWH
+A_A^A]A\]
+t;H9PPt
+t,H9PPt
+@UVAWH
+t$ WATAUAVAWH
+D;d$|v)H
+D8>uCH
+A_A^A]A\_
+@USVAVAWH
+A_A^^[]
+ ;T$Xu
+t$ UWATAVAWH
+A_A^A\_]
+@USAVH
+t$ UWAVH
+\$ UWAVH
+ ;T$`u
+ ;T$`u
+\$ UVWAVAW
+A_A^_^]
+\$ WAUAVAWM
+A_A^A]_
+l$ VWAUAWI
+A_A]_^
+t$ WAVM
+t$0A^_
+t$0A^_
+@VWAVM
+|$ AVH
+\$ UVWATAUAVAWH
+0A_A^A]A\_^]
+D$(fff
+H;|$(tBH;
+L9t$ u
+L9t$ u
+WATAUAVAWH
+A_A^A]A\_
+@SVWATAUAVAWH
+T$hH;T$pt
+L$@H;D$pt
+T$hH;T$pt
+A_A^A]A\_^[
+UVWAVAWH
+A_A^_^]
+@SUVWH
+@SVWAWH
+\$ UVWATAUAVAWH
+pA_A^A]A\_^]
+\$ UVWATAUAVAWH
+A_A^A]A\_^]
+WATAUAVAWH
+l$hfff
+D$(H9p
+8grayt#H
+A_A^A]A\_
+\$ UVWATAUAVAWH
+L$hD8f
+H;V(u)3
+tAH;V(t;H
+A_A^A]A\_^]
+UVWATAUAVAWH
+@A_A^A]A\_^]
+@SUVWATAVAWH
+`A_A^A\_^][
+UVWATAUAVAWH
+A_A^A]A\_^]
+\$ UVWATAUAVAWH
+A_A^A]A\_^]
+t$ UWATAVAWH
+A_A^A\_]
+@SUVWATAVAWH
+0A_A^A\_^][
+@UVWATH
+HA\_^]
+UAVAWH
+H;|$8t
+L$ L9|$(u
+`A_A^]
+t$ WATAUAVAWH
+A_A^A]A\_
+P @8}o
+H;A(t!
+VWATAVAWH
+@A_A^A\_^
+VWATAVAWH
+0A_A^A\_^
+UVWAVAWH
+pA_A^_^]
+UVWATAUAVAWH
+T$89D$0
+L$4D8HzD
+D$0H;D$8
+A_A^A]A\_^]
+\$ UVWATAUAVAWH
+t$,D8@zA
+A_A^A]A\_^]
+@USVWATAUAVAWH
+Mc(Mc@
+U LcD$\M+
+HcL$`L
+A_A^A]A\_^[]
+@USVWATAUAVAWH
+*Ic0IcH
+T$0HcM
+L$pHcU
+LcD$dL
+A_A^A]A\_^[]
+l$ VWAVH
+L$D8XzH
+|$ UAVAWH
+M$D8@zD
+@UWAUH
+t$huoH
+UWATAVAWH
+A_A^A\_]
+VAVAWH
+UWATAVAWH
+A_A^A\_]
+t$ WAVAWH
+@WATAUAVH
+hA^A]A\_
+@USVATAVAWH
+A_A^A\^[]
+UVWAVAWH
+A_A^_^]
+|$ UATAUAVAWH
+A_A^A]A\]
+s UWATAUAVI
+A^A]A\_]
+UVWATAUAVAWH
+A_A^A]A\_^]
+t$ UWAVH
+UWATAVAWH
+A_A^A\_]
+t$ UWATAVAWH
+A_A^A\_]
+l$ VWAVH
+UVWATAUAVAWH
+A_A^A]A\_^]
+t$ WAVAWH
+|$$D8xzA
+|$ AVH
+D+\$DA
+VWATAVAWH
+T$48Xz
+A_A^A\_^
+VWATAVAWH
+T$48Xz
+A_A^A\_^
+t$ WAVAWH
+UWATAVAWH
+A_A^A\_]H
+|$ UATAUAVAWH
+A_A^A]A\]
+UVWAVAWH
+A_A^_^]
+\$ UVWH
+<@"u&H
+UVWATAUAVAWH
+A_A^A]A\_^]
+UVWAVAWH
+PA_A^_^]
+@SUVATAUAVH
+HA^A]A\^][
+HA^A]A\^][
+s WAVAWH
+USVWAVAWH
+A_A^_^[]
+UVWATAUAVAWH
+A_A^A]A\_^]
+D$ H;Q
+D$ H;Q t
+d$hH;F
+\$PH= q
+tFH=,|
+USVWAVH
+pA^_^[]
+pA^_^[]
+|$ UAVAWH
+|$ UAVAWH
+t$ UWAVH
+t$ WAVAWH
+UVWATAUAVAWH
+A_A^A]A\_^]
+\$ VWAVH
+|$ AVH
+UVWAVAWH
+@A_A^_^]
+@SUVAUH
+HA]^][
+UVWAVAWH
+@A_A^_^]
+UVWATAUAVAWH
+A_A^A]A\_^]
+UVWATAUAVAWH
+A_A^A]A\_^]
+UVWATAUAVAWH
+PA_A^A]A\_^]
+t$ WATAUAVAWH
+\$ fff
+A_A^A]A\_
+X UVWATAUAVAWH
+A_A^A]A\_^]
+@SUVWAVH
+^Hct$hHcD$`H+
+HcL$lHcD$dH+
+A^_^][
+UVWATAUAVAWH
+HcD$hHcL$pH+
+Lc|$tLct$lD
+A_A^A]A\_^]
+UVWAVAWH
+pA_A^_^]
+88888888888
+ !"#$888%8&888'888888888888888888888888888888()*+,-./8801234567
+l$ VWAVH
+C H;C(t
+C H;C(
+HcCHHcKPH+
+D8S@tcL
+HcCHH+
+@SUVATAVH
+ A^A\^][
+Lqd9Y`
+~!8_@u
+HcGHHcWPH+
+y/IcF0A
+CD9C@u0
+CL9CHu(
+C`9C\u H9Shu
+;S(}!A
+~!HcC(
+D$$:D$%u
+@UWAUAWH
+L$(Ic}$
+A_A]_]
+UVWATAUAVAWH
+A_A^A]A\_^]
+UVWATAUAVAWH
+A_A^A]A\_^]
+\$ UVWATAUAVAWH
+A_A^A]A\_^]
+UVWATAUAVAWH
+A_A^A]A\_^]
+UVWATAUAVAWH
+`A_A^A]A\_^]
+UVWAVAWH
+A_A^_^]
+@SWAWH
+\$HH9Whuk
+D$AH;Q
+D$AH;Q
+D$AH;Q
+ChH;Cpt
+UVWAVAWH
+GpH+GhH
+PA_A^_^]
+UVWAVAWH
+9y,tFI
+4@D8{(
+PA_A^_^]
+@SUVAUH
+HA]^][
+t$ AVH
+\$ UVWAVAWH
+A_A^_^]
+USVWATAUAVH
+A^A]A\_^[]
+VWATAVAWH
+u,HiO @B
+H+G8H;
+0A_A^A\_^
+|$ AVL
+UVWATAUAVAWH
+A_A^A]A\_^]
+WAVAWH
+0A_A^_
+@SVWATAUAVAWH
+@A_A^A]A\_^[
+L$0H+L$(I
+VWATAVAWH
+A_A^A\_^
+@SWATAVAWH
+A_A^A\_[
+)t$@H+
+)D$ H;
+)t$@H+
+)D$ H;
+)t$@H;
+SVWAVH
+8A^_^[
+WAVAWH
+@A_A^_
+WAVAWH
+0A_A^_
+u0HcH<
+8T$(ua
+x ATAVAWH
+A_A^A\
+H;xXu5
+WATAUAVAWH
+A_A^A]A\_
+AUAVAWH
+u4I9}(
+9I9}(tgH
+0A_A^A]
+UVWATAUAVAWH
+`A_A^A]A\_^]
+@USVWATAUAVAWH
+D$h;D$x
+A_A^A]A\_^[]
+@USVWATAUAVAWH
+A_A^A]A\_^[]
+WAVAWH
+ A_A^_
+x ATAVAWH
+ A_A^A\
+x ATAVAWH
+9h@u(D93t#D9
+A_A^A\
+@SVWATAUAVAWH
+A_A^A]A\_^[
+B(I9A(u
+SVWATAUAVAWH
+A_A^A]A\_^[
+UVWATAUAVAWH
+|$hHcX
+ A_A^A]A\_^]
+UVWATAUAVAWH
+ A_A^A]A\_^]
+D$ I;R
+D$ I9P
+WATAUAVAWH
+ A_A^A]A\_
+|$ AVD
+r9u+Hc
+r:u,Hc
+UVWAVAWH
+A_A^_^]
+LcA<E3
+D$DDtRH
+ATAVAWH
+0A_A^A\
+|$ UATAUAVAWH
+t'HcC<
+A_A^A]A\]
+fffffff
+fffffff
+fffffff
+ffffff
+vKfffff
+@SUVWH
+|$ AVH
+bad function call
+bad exception
+__based(
+__cdecl
+__stdcall
+__thiscall
+__fastcall
+__vectorcall
+__preserve_none
+__clrcall
+__eabi
+__swift_1
+__swift_2
+__swift_3
+__ptr64
+__restrict
+__unaligned
+restrict(
+ delete
+operator
+`vftable'
+`vbtable'
+`vcall'
+`typeof'
+`local static guard'
+`string'
+`vbase destructor'
+`vector deleting destructor'
+`default constructor closure'
+`scalar deleting destructor'
+`vector constructor iterator'
+`vector destructor iterator'
+`vector vbase constructor iterator'
+`virtual displacement map'
+`eh vector constructor iterator'
+`eh vector destructor iterator'
+`eh vector vbase constructor iterator'
+`copy constructor closure'
+`udt returning'
+`local vftable'
+`local vftable constructor closure'
+ new[]
+ delete[]
+`omni callsig'
+`placement delete closure'
+`placement delete[] closure'
+`managed vector constructor iterator'
+`managed vector destructor iterator'
+`eh vector copy constructor iterator'
+`eh vector vbase copy constructor iterator'
+`dynamic initializer for '
+`dynamic atexit destructor for '
+`vector copy constructor iterator'
+`vector vbase copy constructor iterator'
+`managed vector copy constructor iterator'
+`local static thread guard'
+operator "" 
+operator co_await
+operator<=>
+ Type Descriptor'
+ Base Class Descriptor at (
+ Base Class Array'
+ Class Hierarchy Descriptor'
+ Complete Object Locator'
+`anonymous namespace'
+FlsAlloc
+FlsFree
+FlsGetValue
+FlsSetValue
+InitializeCriticalSectionEx
+FaAbBcCdDeFgGhHIjmMnprRStTuUVwWxXyYzZ
+./?\]_
+)147:;=IJ]
+)14:;EFIJ^de
+)EIWde
+INOWY^_
+FGNOXZ\^~
+no7=?BE
+)14:EFIJNOde\
+ #%&(38:HJLPSUVXZ\^`cefksx}
+success
+address family not supported
+address in use
+address not available
+already connected
+argument list too long
+argument out of domain
+bad address
+bad file descriptor
+bad message
+broken pipe
+connection aborted
+connection already in progress
+connection refused
+connection reset
+cross device link
+destination address required
+device or resource busy
+directory not empty
+executable format error
+file exists
+file too large
+filename too long
+function not supported
+host unreachable
+identifier removed
+illegal byte sequence
+inappropriate io control operation
+interrupted
+invalid argument
+invalid seek
+io error
+is a directory
+message size
+network down
+network reset
+network unreachable
+no buffer space
+no child process
+no link
+no lock available
+no message available
+no message
+no protocol option
+no space on device
+no stream resources
+no such device or address
+no such device
+no such file or directory
+no such process
+not a directory
+not a socket
+not a stream
+not connected
+not enough memory
+not supported
+operation canceled
+operation in progress
+operation not permitted
+operation not supported
+operation would block
+owner dead
+permission denied
+protocol error
+protocol not supported
+read only file system
+resource deadlock would occur
+resource unavailable try again
+result out of range
+state not recoverable
+stream timeout
+text file busy
+timed out
+too many files open in system
+too many files open
+too many links
+too many symbolic link levels
+value too large
+wrong protocol type
+unknown error
+GetTempPath2W
+GetSystemTimePreciseAsFileTime
+0123456789abcdefghijklmnopqrstuvwxyz
+0123456789abcdefghijklmnopqrstuvwxyz
+icu.dll
+}1$_=C
+AcquireSRWLockExclusive
+ReleaseSRWLockExclusive
+Unknown exception
+Exception
+ReturnNt
+ReturnHr
+FailFast
+RtlDisownModuleHeapAllocation
+RaiseFailFastException
+WIL Exception
+C:\__w\1\s\packages\Microsoft.Windows.ImplementationLibrary.1.0.240122.1\include\wil\resource.h
+WilError_03
+C:\__w\1\s\src\host\exe\CConsoleHandoff.cpp
+C:\__w\1\s\src\host\exe\exemain.cpp
+C:\__w\1\s\packages\Microsoft.Windows.ImplementationLibrary.1.0.240122.1\include\wil\result_macros.h
+string too long
+bad array new length
+SV_Position
+shadingType
+renditionScale
+position
+texcoord
+SV_Position
+texcoord
+shadingType
+renditionScale
+a0d2fee425b55d4f5d1a29b713a84f11.pdb
+SV_VERTEXID
+SV_POSITION
+TEXCOORD
+685fe6d7d50b53c600f8d9fea7bcde94.pdb
+SV_Position
+texcoord
+shadingType
+renditionScale
+SV_Target
+c8ff7688dc7895aa34dacdd81a00ac00.pdb
+?DXBC,
+SV_POSITION
+TEXCOORD
+SV_TARGET
+b28cccc7a637a056a02bdeb7899c10a7.pdb
+AAAAAAAA@@@@@@@@A@
+@@@@@@
+@@@@@@
+@@@@@@@
+@@@@@@
+@@@@@@@
+@@@@@@@
+B@@@@@KKKKKKKK
+BB@@@@K@KKKKKK@K@@@KK@@
+@@B@@BB
+@@@@@@@B@@@@KK@KK@@@@@@
+@@K@KK@KKKB
+B@K@@@@@@
+@@@@@@BB
+BB@@@BB@BBB
+@@@KK@@
+@KKK@@@@@
+BBBBB@
+@@@@@BB@
+BB@@@@KKK
+@BB@BBB
+@@@@BB
+@BBBBBBBB@@BB@@@@
+FFFFFFFFGGGGGGGG@@
+BBBBBB
+BBB@@@@BB
+@@@@@B
+@@@@@@
+@@@@BBBB
+@@B@@@
+@L@@@@@@
+@@@@@@LL@@@@@
+@@@@@L@@@@@@@L@
+@@@@LLL@@@@@
+LL@@@@
+@LLLLL
+LLLLLLLL
+LLLLLL@@
+LLLLLL
+@@LLL@L@L@
+@@@@@@@L@@L@@@@
+@@@LLLLL@@@@@
+@@@@@@@
+@@@@@LLL@@@
+@@@@@@@
+BB@@@@@@BBBB
+BB@@@@@@@
+BB@@@@@B
+@@@@FFFFFFF@@@GGGGG@@@@A
+B@@@@@
+@@@BBB
+@@B@DD@@@@
+@@@@BBB
+BBBB@@BBB@@BB@@
+@B@@B@BBB@BB
+@@@@@BB
+@@@@BBBB
+BBBBBB@B@@
+@@@B@@@
+@@@@DDDD
+@@BBBBB@
+DB@@@@
+@@@@@F@@@FFF@@@@@
+@@@@@@
+@@LLLL
+LLLLLLCCCCCCCC
+LLLLLLL
+LLLLLLL
+L@@@@LLLLLL@@@@
+AAAAAA
+3<IA><CMI<
+l<"-y<
+2>a(6>
+ih> Gl>
+V*?=%,?
+1?l{3? X5?
+&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$
+&$&$&$&$
+%$%4%,%
+&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$N
+&$&$&$&$
+&$&$&$&$
+&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$
+&$&$&$&$
+?456789:;<=
+ !"#$%&'()*+,-./0123
+ @`C:\__w\1\s\src\interactivity\base\ServiceLocator.cpp
+C:\__w\1\s\src\interactivity\base\InteractivityFactory.cpp
+C:\__w\1\s\src\interactivity\base\PseudoConsoleWindowAccessibilityProvider.cpp
+ConsoleControl
+EnterReaderModeHelper
+TranslateMessageEx
+SetProcessDpiAwarenessContext
+AdjustWindowRectExForDpi
+GetDpiForWindow
+GetSystemMetricsForDpi
+C:\__w\1\s\src\interactivity\win32\AccessibilityNotifier.cpp
+C:\__w\1\s\src\interactivity\win32\ConsoleInputThread.cpp
+C:\__w\1\s\src\interactivity\win32\WindowMetrics.cpp
+C:\__w\1\s\src\interactivity\win32\SystemConfigurationProvider.cpp
+invalid string_view position
+C:\__w\1\s\src\interactivity\win32\WindowIo.cpp
+Invalid message 0x%x
+CreateWindowsWindow failed
+ImageList_CoCreateInstance
+C:\__w\1\s\src\interactivity\win32\Icon.cpp
+invalid string position
+C:\__w\1\s\packages\Microsoft.Windows.ImplementationLibrary.1.0.240122.1\include\wil\win32_helpers.h
+ConsoleKeyInfo buffer is full
+C:\__w\1\s\src\interactivity\win32\ConsoleKeyInfo.cpp
+C:\__w\1\s\src\interactivity\win32\Clipboard.cpp
+small_vector too long
+C:\__w\1\s\src\interactivity\win32\Window.cpp
+CreateWindow failed
+C:\__w\1\s\src\interactivity\win32\WindowProc.cpp
+C:\__w\1\s\src\interactivity\win32\Menu.cpp
+CPlApplet
+C:\__w\1\s\src\inc\til\size.h
+C:\__w\1\s\src\interactivity\win32\windowUiaProvider.cpp
+unordered_map/set too long
+invalid hash bucket count
+C:\__w\1\s\src\interactivity\win32\screenInfoUiaProvider.cpp
+C:\__w\1\s\src\interactivity\win32\uiaTextRange.cpp
+C:\__w\1\s\src\propslib\ShortcutSerialization.cpp
+C:\__w\1\s\src\server\ApiMessage.cpp
+C:\__w\1\s\src\server\Entrypoints.cpp
+C:\__w\1\s\src\server\ProcessList.cpp
+vector too long
+C:\__w\1\s\src\server\WaitBlock.cpp
+list too long
+C:\__w\1\s\src\server\ProcessPolicy.cpp
+C:\__w\1\s\src\server\ProcessHandle.cpp
+C:\__w\1\s\src\server\ObjectHandle.cpp
+C:\__w\1\s\src\server\WinNTControl.cpp
+NtOpenFile
+C:\__w\1\s\src\server\ConsoleShimPolicy.cpp
+C:\__w\1\s\src\server\ObjectHeader.cpp
+C:\__w\1\s\src\types\Viewport.cpp
+C:\__w\1\s\src\types\ScreenInfoUiaProviderBase.cpp
+C:\__w\1\s\src\types\UiaTextRangeBase.cpp
+invalid vector subscript
+Bad optional access
+0123456789ABCDEF
+0123456789abcdef
+00010203040506070809101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899
+C:\__w\1\s\src\tsf\Implementation.h
+C:\__w\1\s\src\tsf\Implementation.cpp
+C:\__w\1\s\packages\Microsoft.Windows.ImplementationLibrary.1.0.240122.1\include\wil\com.h
+C:\__w\1\s\src\host\srvinit.cpp
+DeviceIoControl failed
+width/precision is out of range
+width/precision is not integer
+argument not found
+C:\__w\1\s\src\host\ConsoleArguments.cpp
+invalid stoi argument
+stoi argument out of range
+C:\__w\1\s\src\host\CursorBlinker.cpp
+C:\__w\1\s\src\host\PtySignalInputThread.cpp
+C:\__w\1\s\src\host\VtIo.cpp
+[?1004h
+[?9001h
+[{};{}H
+string too large
+[?1003;1006h
+[?1049h
+:&;&e&f&c&`&" 
+%B&@&j&k&<&
+ !"#$%Z[\]^_`aC:\__w\1\s\src\host\screenInfo.cpp
+Invalid screen buffer size (0x%x, 0x%x)
+C:\__w\1\s\src\host\settings.cpp
+C:\__w\1\s\src\host\inputBuffer.cpp
+insufficient space left
+deque<T> too long
+PutInputInBuffer: EventsWritten != 1, 1 expected
+C:\__w\1\s\src\host\input.cpp
+Invalid EventType: 0x%x
+C:\__w\1\s\src\host\selection.cpp
+C:\__w\1\s\src\host\scrolling.cpp
+C:\__w\1\s\src\host\selectionInput.cpp
+C:\__w\1\s\src\host\init.cpp
+InitSideBySide failed create an activation context.
+invalid small_vector subscript
+C:\__w\1\s\src\host\stream.cpp
+C:\__w\1\s\src\host\registry.cpp
+C:\__w\1\s\src\host\misc.cpp
+C:\__w\1\s\src\host\readDataCooked.cpp
+C:\__w\1\s\src\host\history.cpp
+C:\__w\1\s\src\host\inputReadHandleData.cpp
+C:\__w\1\s\src\host\renderFontDefaults.cpp
+C:\__w\1\s\src\host\getset.cpp
+C:\__w\1\s\src\host\directio.cpp
+[?1004h
+[?9001h
+C:\__w\1\s\src\host\_stream.cpp
+[?1004h
+[?9001h
+C:\__w\1\s\src\inc\til\u8u16convert.h
+C:\__w\1\s\src\host\_output.cpp
+C:\__w\1\s\src\host\alias.cpp
+C:\__w\1\s\src\host\outputStream.cpp
+C:\__w\1\s\src\host\VtInputThread.cpp
+C:\__w\1\s\src\host\utils.cpp
+C:\__w\1\s\src\host\readDataRaw.cpp
+C:\__w\1\s\src\host\readData.cpp
+C:\__w\1\s\src\host\readDataDirect.cpp
+C:\__w\1\s\src\host\writeData.cpp
+background-color:{};
+font-family:'{}',monospace;
+C:\__w\1\s\src\buffer\out\textBuffer.cpp
+text-decoration:{} {} {};
+text-decoration:underline double {};
+font-size:{}pt;
+color:{};
+text-decoration:underline dashed {};
+text-decoration:underline {};
+text-decoration:underline wavy {};
+text-decoration:underline dotted {};
+StartFragment:{:0>10}
+EndFragment:{:0>10}
+StartHTML:{:0>10}
+EndHTML:{:0>10}
+<!DOCTYPE><HTML><HEAD></HEAD><BODY>
+<!--StartFragment -->
+StartSelection:{:0>10}
+EndSelection:{:0>10}
+white-space:pre;
+padding:4px;
+<DIV STYLE="
+display:inline-block;
+font-weight:bold;
+font-style:italic;
+<SPAN STYLE="
+"><SPAN STYLE="
+overline
+line-through
+</SPAN>
+</BODY></HTML>
+Version:0.9
+</DIV>
+<!--EndFragment -->
+\chshdng0\chcbpat{}
+{{\fonttbl{{\f0\fmodern\fcharset0 {};}}}}
+\red{}\green{}\blue{};
+\ulwave\ulc{}
+\uld\ulc{}
+\uldb\ulc{}
+\rtf1\ansi\ansicpg1252\deff0\nouicompat
+\uldash\ulc{}
+\ul\ulc{}
+\pard\slmult1\f0
+{\colortbl ;
+\viewkind4\uc1
+\strike
+invalid unordered_map<K, T> key
+start_index <= end_index
+C:\__w\1\s\src\buffer\out\textBufferCellIterator.cpp
+position out of range
+C:\__w\1\s\src\buffer\out\Row.cpp
+C:\__w\1\s\src\buffer\out\OutputCell.hpp
+C:\__w\1\s\src\buffer\out\OutputCellIterator.cpp
+bad variant access
+C:\__w\1\s\src\buffer\out\UTextAdapter.cpp
+C:\__w\1\s\src\interactivity\base\RemoteConsoleControl.cpp
+C:\__w\1\s\src\renderer\atlas\AtlasEngine.cpp
+C:\__w\1\s\src\renderer\atlas\AtlasEngine.api.cpp
+C:\__w\1\s\src\renderer\base\FontCache.h
+directory_iterator::operator++
+system
+unknown error
+generic
+directory_iterator::directory_iterator
+HC:\__w\1\s\src\renderer\atlas\BuiltinGlyphs.cpp
+C:\__w\1\s\src\renderer\atlas\DWriteTextAnalysis.cpp
++C:\__w\1\s\src\renderer\atlas\AtlasEngine.r.cpp
+DCompositionCreateSurfaceHandle
+SV_Position
+position
+shadingType
+renditionScale
+C:\__w\1\s\src\renderer\atlas\BackendD3D.cpp
+ps_4_0
+texcoord
+ps_4_1
+ps_5_0
+7xicuU
+C:\__w\1\s\src\renderer\atlas\BackendD2D.cpp
+C:\__w\1\s\src\renderer\atlas\dwrite.cpp
+C:\__w\1\s\src\renderer\atlas\wic.cpp
+C:\__w\1\s\src\renderer\atlas\Backend.cpp
+C:\__w\1\s\src\renderer\gdi\state.cpp
+C:\__w\1\s\src\renderer\gdi\paint.cpp
+C:\__w\1\s\src\renderer\gdi\invalidate.cpp
+invalid til::rect::scale_down
+invalid array<T, N> subscript
+C:\__w\1\s\src\renderer\base\RenderSettings.cpp
+engines array is full
+C:\__w\1\s\src\renderer\base\renderer.cpp
+WTSOFTFONT%016llX
+C:\__w\1\s\src\renderer\base\FontResource.cpp
+C:\__w\1\s\src\renderer\base\RenderEngineBase.cpp
+C:\__w\1\s\src\renderer\base\thread.cpp
+SetThreadDescription
+C:\__w\1\s\src\propslib\DelegationConfig.cpp
+C:\__w\1\s\src\server\ConDrvDeviceComm.cpp
+C:\__w\1\s\src\server\IoDispatchers.cpp
+C:\__w\1\s\src\server\ApiDispatchers.cpp
+C:\__w\1\s\src\inc\til\rect.h
+GetNumberOfConsoleInputEvents
+SetConsoleMode
+GetConsoleMode
+GetConsoleCP
+Deprecated
+WriteConsole
+ReadConsole
+GetConsoleInput
+SetConsoleActiveScreenBuffer
+GenerateConsoleCtrlEvent
+FillConsoleOutput
+GetConsoleLangId
+SetConsoleCursorInfo
+GetConsoleCursorInfo
+SetConsoleCP
+FlushConsoleInputBuffer
+SetConsoleCursorPosition
+SetConsoleScreenBufferSize
+SetConsoleScreenBufferInfo
+GetConsoleScreenBufferInfo
+SetConsoleWindowInfo
+SetConsoleTextAttribute
+ScrollConsoleScreenBuffer
+GetLargestConsoleWindowSize
+WriteConsoleOutputString
+WriteConsoleOutput
+WriteConsoleInput
+ReadConsoleOutputString
+GetNumberOfConsoleMouseButtons
+SetConsoleTitle
+GetConsoleTitle
+ReadConsoleOutput
+GetConsoleDisplayMode
+SetConsoleDisplayMode
+GetCurrentConsoleFont
+GetConsoleFontSize
+GetConsoleAliasExesLength
+GetConsoleAliasesLength
+GetConsoleAlias
+AddConsoleAlias
+SetConsoleNumberOfCommands
+ExpungeConsoleCommandHistory
+GetConsoleAliasExes
+GetConsoleAliases
+GetConsoleSelectionInfo
+GetConsoleWindow
+GetConsoleCommandHistory
+GetConsoleCommandHistoryLength
+SetConsoleCurrentFont
+SetConsoleHistory
+GetConsoleHistory
+GetConsoleProcessList
+Deprecated API attempted: 0x%08x
+C:\__w\1\s\src\server\ApiDispatchersInternal.cpp
+C:\__w\1\s\src\types\CodepointWidthDetector.cpp
+C:\__w\1\s\src\types\utils.cpp
+!$&)+.0368;=@BEGJMORTWY\^acfiknpsuxz}
+  !!!""###$$$%%&&&''((())***++,,,---..///0011122333445556677788899:::;;<<<==>>>??@@@AAABBCCCDDEEEFFGGGHHIIIJJKKKLLLMMNNNOOPPPQQRRRSSTTTUUUVVWWWXXYYYZZ[[[\\]]]^^___```aabbbccddC:\__w\1\s\src\types\convert.cpp
+aquamarine
+antiquewhite
+burlywood
+bisque
+chocolate
+chartreuse
+cadetblue
+darkolivegreen
+darkgoldenrod
+cornsilk
+darkslategray
+darkseagreen
+darkorchid
+darkorange
+firebrick
+dodgerblue
+deepskyblue
+deeppink
+honeydew
+goldenrod
+indianred
+hotpink
+lightcyan
+lightblue
+lemonchiffon
+lavenderblush
+lightskyblue
+lightsalmon
+lightpink
+lightgoldenrod
+maroon
+magenta
+lightyellow
+lightsteelblue
+navajowhite
+mistyrose
+mediumpurple
+mediumorchid
+orchid
+orangered
+orange
+olivedrab
+peachpuff
+palevioletred
+paleturquoise
+palegreen
+purple
+seagreen
+salmon
+royalblue
+rosybrown
+slateblue
+skyblue
+sienna
+seashell
+steelblue
+springgreen
+slategray
+turquoise
+tomato
+thistle
+aliceblue
+yellow
+violetred
+blanchedalmond
+darkblue
+crimson
+cornflowerblue
+blueviolet
+darkgrey
+darkgreen
+darkgray
+darkcyan
+darksalmon
+darkred
+darkmagenta
+darkkhaki
+darkviolet
+darkturquoise
+darkslategrey
+darkslateblue
+forestgreen
+floralwhite
+dimgrey
+dimgray
+ghostwhite
+gainsboro
+fuchsia
+lavender
+indigo
+greenyellow
+lightgray
+lightgoldenrodyellow
+lightcoral
+lawngreen
+lightslateblue
+lightseagreen
+lightgrey
+lightgreen
+limegreen
+lightslategrey
+lightslategray
+mediumseagreen
+mediumblue
+mediumaquamarine
+mediumvioletred
+mediumturquoise
+mediumspringgreen
+mediumslateblue
+moccasin
+mintcream
+midnightblue
+palegoldenrod
+oldlace
+navyblue
+rebeccapurple
+powderblue
+papayawhip
+slategrey
+silver
+sandybrown
+saddlebrown
+webgreen
+webgray
+violet
+webpurple
+webmaroon
+webgrey
+x11grey
+x11green
+x11gray
+whitesmoke
+C:\__w\1\s\src\types\colorTable.cpp
+yellowgreen
+x11purple
+x11maroon
+C:\__w\1\s\src\terminal\input\terminalInput.cpp
+bad allocation
+C:\__w\1\s\src\terminal\adapter\InteractDispatch.cpp
+C:\__w\1\s\src\terminal\parser\OutputStateMachineEngine.cpp
+C:\__w\1\s\src\terminal\parser\stateMachine.cpp
+C:\__w\1\s\src\terminal\parser\InputStateMachineEngine.cpp
+C:\__w\1\s\src\audio\midi\MidiAudio.cpp
+DirectSoundCreate8
+NtOpenProcess
+NtQueryInformationProcess
+NtClose
+C:\__w\1\s\src\host\ntprivapi.cpp
+C:\__w\1\s\src\types\sgrStack.cpp
+2>`?5>
+*?SB.?>
+O?5iv?
+@33#@D
+ScreenInfoUiaProvider::get_SupportedTextSelection
+result
+ScreenInfoUiaProvider::GetVisibleRanges
+result (utr)
+ScreenInfoUiaProvider::RangeFromPoint
+uiaPoint
+result (utr)
+ScreenInfoUiaProvider::GetVisibleRanges
+result (utr)
+ScreenInfoUiaProvider::GetVisibleRanges
+result (utr)
+ScreenInfoUiaProvider::SetFocus
+ScreenInfoUiaProvider::GetSelection
+result (utr)
+ScreenInfoUiaProvider::GetRuntimeId
+ScreenInfoUiaProvider::GetEmbeddedFragmentRoots (UNSUPPORTED)
+ScreenInfoUiaProvider::get_HostRawElementProvider (UNSUPPORTED)
+ScreenInfoUiaProvider::GetPropertyValue
+propertyId
+ScreenInfoUiaProvider::get_ProviderOptions
+patternId
+ScreenInfoUiaProvider::Constructor
+ScreenInfoUiaProvider
+ScreenInfoUiaProvider::get_ProviderOptions
+providerOptions
+UiaTextRange::ScrollIntoView
+alignToTop
+result
+UiaTextRange::AddToSelection (UNSUPPORTED)
+UiaTextRange::AddToSelection (UNSUPPORTED)
+UiaTextRange::RemoveFromSelection (UNSUPPORTED)
+UiaTextRange::MoveEndpointByRange
+endpoint
+otherEndpoint
+result
+UiaTextRange::Select
+UiaTextRange::Move
+textUnit
+resultCount
+result
+UiaTextRange::MoveEndpointByUnit
+endpoint
+textUnit
+resultCount
+result
+UiaTextRange::GetEnclosingElement
+UiaTextRange::GetText
+maxLength
+result
+UiaTextRange::GetAttributeValue
+text attribute ID
+result
+attribute type
+UiaTextRange::GetBoundingRectangles
+UiaTextRange::FindAttribute
+text attribute ID
+text attribute sub-data
+search backwards
+attribute type
+result
+UiaTextRange::FindText
+searchBackward
+ignoreCase
+result
+UiaTextRange::CompareEndpoints
+baseEndpoint
+otherEndpoint
+result
+UiaTextRange::ExpandToEnclosingUnit
+textUnit
+result
+UiaTextRange::Compare
+result
+UiaTextRange::Constructor
+UiaTextRange
+SrvInit_DelegateToTerminalSucceeded
+SrvInit_CreatedDelegationTerminal
+TerminalClsid
+SrvInit_ReceiveHandoff_OpenedClient
+SrvInit_PrepareToCreateDelegationTerminal
+TerminalClsid
+SrvInit_ReceiveHandoff_OpenedPipes
+SrvInit_ReceiveHandoff
+TerminalClsid
+SrvInit_FoundDelegationConsole
+ConsoleClsid
+SrvInit_FoundDelegationTerminal
+TerminalClsid
+Failure
+HResult
+LineNumber
+Function
+Message
+CallingContext
+Module
+ConsoleAttachDetach
+AttachedProcessId
+AttachedProcessCreationTime
+IsAttach
+CookedRead
+AttachedProcessId
+ReadBuffer
+ReadBufferLength
+AttachedProcessCreationTime
+WindowViewport
+ViewHeight
+ViewWidth
+OriginTop
+OriginLeft
+ConPTY WriteFile
+buffer
+ConPTY ReadFile
+buffer
+API_GetConsoleHistory
+OriginatingProcess
+OriginatingThread
+HistoryBufferSize
+NumberOfHistoryBuffers
+dwFlags
+API_SetConsoleHistory
+OriginatingProcess
+OriginatingThread
+HistoryBufferSize
+NumberOfHistoryBuffers
+dwFlags
+API_SetCurrentConsoleFont
+OriginatingProcess
+OriginatingThread
+MaximumWindow
+FontIndex
+FontSize
+FontFamily
+FontWeight
+FaceName
+API_GetConsoleCommandHistory
+OriginatingProcess
+OriginatingThread
+ExeName
+Output
+API_GetConsoleWindow
+OriginatingProcess
+OriginatingThread
+API_GetConsoleSelectionInfo
+OriginatingProcess
+OriginatingThread
+SelectionInfo
+dwFlags
+dwSelectionAnchor
+srSelection
+Bottom
+API_GetConsoleCommandHistoryLengthA
+OriginatingProcess
+OriginatingThread
+ExeName
+CommandHistoryLength
+API_GetConsoleCommandHistoryW
+OriginatingProcess
+OriginatingThread
+ExeName
+Output
+API_SetConsoleNumberOfCommandsW
+OriginatingProcess
+OriginatingThread
+ExeName
+NumCommands
+API_SetConsoleNumberOfCommandsA
+OriginatingProcess
+OriginatingThread
+ExeName
+NumCommands
+API_GetConsoleCommandHistoryLengthW
+OriginatingProcess
+OriginatingThread
+ExeName
+CommandHistoryLength
+API_GetConsoleAliasExesA
+OriginatingProcess
+OriginatingThread
+Output
+API_ExpungeConsoleCommandHistoryW
+OriginatingProcess
+OriginatingThread
+ExeName
+API_ExpungeConsoleCommandHistoryA
+OriginatingProcess
+OriginatingThread
+ExeName
+API_GetConsoleAliasesA
+OriginatingProcess
+OriginatingThread
+ExeName
+Output
+API_GetConsoleAliasExesW
+OriginatingProcess
+OriginatingThread
+Output
+API_GetConsoleAliasExesLengthW
+OriginatingProcess
+OriginatingThread
+Length
+API_GetConsoleAliasExesLengthA
+OriginatingProcess
+OriginatingThread
+Length
+API_GetConsoleAliasesW
+OriginatingProcess
+OriginatingThread
+ExeName
+Output
+API_GetConsoleAliasesLengthW
+OriginatingProcess
+OriginatingThread
+ExeName
+Length
+API_GetConsoleAliasesLengthA
+OriginatingProcess
+OriginatingThread
+ExeName
+Length
+API_GetConsoleAliasW
+OriginatingProcess
+OriginatingThread
+ExeName
+Source
+Output
+API_GetConsoleAliasW
+OriginatingProcess
+OriginatingThread
+ExeName
+Source
+Output
+API_GetConsoleDisplayMode
+OriginatingProcess
+OriginatingThread
+ModeFlags
+API_AddConsoleAliasW
+OriginatingProcess
+OriginatingThread
+ExeName
+Source
+Target
+API_AddConsoleAliasA
+OriginatingProcess
+OriginatingThread
+ExeName
+Source
+Target
+API_GetConsoleFontSize
+OriginatingProcess
+OriginatingThread
+MaximumWindow
+FontIndex
+FontSize
+FontFamily
+FontWeight
+FaceName
+API_SetConsoleDisplayMode
+OriginatingProcess
+OriginatingThread
+dwFlags
+ScreenBufferDimensions
+API_SetConsoleTitleA
+OriginatingProcess
+OriginatingThread
+Buffer
+API_GetConsoleMouseInfo
+OriginatingProcess
+OriginatingThread
+NumButtons
+API_GetConsoleFontSize
+OriginatingProcess
+OriginatingThread
+FontIndex
+FontSize
+API_GetConsoleTitleA
+OriginatingProcess
+OriginatingThread
+Original
+Buffer
+API_SetConsoleTitleW
+OriginatingProcess
+OriginatingThread
+Buffer
+API_ReadConsoleOutput
+OriginatingProcess
+OriginatingThread
+Unicode
+CharRegion
+Bottom
+Records
+API_GetConsoleTitleW
+OriginatingProcess
+OriginatingThread
+Original
+Buffer
+API_WriteConsoleOutputCharacterA
+OriginatingProcess
+OriginatingThread
+WriteCoord
+Buffer
+API_WriteConsoleOutputCharacterW
+OriginatingProcess
+OriginatingThread
+WriteCoord
+Buffer
+API_WriteConsoleOutputAttribute
+OriginatingProcess
+OriginatingThread
+WriteCoord
+Buffer
+API_WriteConsoleOutput
+OriginatingProcess
+OriginatingThread
+Unicode
+CharRegion
+Bottom
+Records
+API_WriteConsoleInput
+OriginatingProcess
+OriginatingThread
+Unicode
+Append
+Records
+API_ReadConsoleOutputAttribute
+OriginatingProcess
+OriginatingThread
+ReadCoord
+Records
+API_ReadConsoleOutputCharacterW
+OriginatingProcess
+OriginatingThread
+ReadCoord
+Records
+API_ReadConsoleOutputCharacterA
+OriginatingProcess
+OriginatingThread
+ReadCoord
+Records
+API_SetConsoleTextAttribute
+OriginatingProcess
+OriginatingThread
+Attributes
+API_SetConsoleWindowInfo
+OriginatingProcess
+OriginatingThread
+IsWindowRectAbsolute
+Window
+Bottom
+API_GetLargestConsoleWindowSize
+OriginatingProcess
+OriginatingThread
+API_ScrollConsoleScreenBuffer
+OriginatingProcess
+OriginatingThread
+ScrollRectangle
+Bottom
+ClipRectangle
+Bottom
+Unicode
+DestinationOrigin
+Attributes
+API_SetConsoleScreenBufferSize
+OriginatingProcess
+OriginatingThread
+BufferSize
+API_SetConsoleCursorPosition
+OriginatingProcess
+OriginatingThread
+CursorPosition
+API_GetConsoleScreenBufferInfo
+OriginatingProcess
+OriginatingThread
+CursorPosition
+ScrollPosition
+Attributes
+CurrentWindowSize
+MaximumWindowSize
+PopupAttributes
+FullscreenSupported
+ColorTable
+API_SetConsoleScreenBufferInfo
+OriginatingProcess
+OriginatingThread
+CursorPosition
+ScrollPosition
+Attributes
+CurrentWindowSize
+MaximumWindowSize
+PopupAttributes
+FullscreenSupported
+ColorTable
+API_GetConsoleCursorInfo
+OriginatingProcess
+OriginatingThread
+CursorSize
+Visible
+API_SetConsoleCursorInfo
+OriginatingProcess
+OriginatingThread
+CursorSize
+Visible
+API_SetConsoleActiveScreenBuffer
+OriginatingProcess
+OriginatingThread
+API_ServerFlushConsoleInputBuffer
+OriginatingProcess
+OriginatingThread
+API_SetConsoleCP
+OriginatingProcess
+OriginatingThread
+InputHandle
+CodePage
+API_FillConsoleOutputCharacterW
+OriginatingProcess
+OriginatingThread
+WriteCoord
+Length
+Character
+API_FillConsoleOutputCharacterA
+OriginatingProcess
+OriginatingThread
+WriteCoord
+Length
+Character
+API_FillConsoleOutputAttribute
+OriginatingProcess
+OriginatingThread
+WriteCoord
+Length
+Attribute
+API_WriteConsoleW
+OriginatingProcess
+OriginatingThread
+NumBytes
+Buffer
+API_WriteConsoleA
+OriginatingProcess
+OriginatingThread
+NumBytes
+Buffer
+API_ReadConsole
+OriginatingProcess
+OriginatingThread
+Unicode
+ProcessControlZ
+ExeName
+InitialChars
+CtrlWakeupMask
+API_GetConsoleInput
+OriginatingProcess
+OriginatingThread
+Unicode
+Records
+API_SetConsoleMode
+OriginatingProcess
+OriginatingThread
+InputHandle
+API_GetNumberOfConsoleInputEvents
+OriginatingProcess
+OriginatingThread
+ReadyEvents
+API_GetConsoleMode
+OriginatingProcess
+OriginatingThread
+InputHandle
+StateMachine_Sequence_OK
+_sequenceTrace.c_str()
+StateMachine_Sequence_FAIL
+_sequenceTrace.c_str()
+StateMachine_PrintRun
+StateMachine_PrintRun
+string.data()
+length
+StateMachine_ExecuteFromEscape
+StateMachine_Event
+StateMachine_NewChar
+gsl::narrow_cast<INT16>(wch)
+StateMachine_EnterState
+StateMachine_Action
+StateMachine_Execute
+Microsoft.Windows.Console.Launcher
+Microsoft.Windows.Console.UIA
+Microsoft.Windows.Console.Host
+Microsoft.Windows.Console.VirtualTerminal.Parser
+C:\__w\1\s\bin\x64\Release\OpenConsole.pdb
+.text$di
+.text$mn
+.text$mn$00
+.text$mn$21
+.text$x
+.text$yd
+.idata$5
+.00cfg
+.CRT$XCA
+.CRT$XCAA
+.CRT$XCC
+.CRT$XCL
+.CRT$XCU
+.CRT$XCZ
+.CRT$XIA
+.CRT$XIAA
+.CRT$XIAC
+.CRT$XIC
+.CRT$XIZ
+.CRT$XLA
+.CRT$XLZ
+.CRT$XPA
+.CRT$XPZ
+.CRT$XTA
+.CRT$XTZ
+.gfids
+.giats
+.rdata
+.rdata$00
+.rdata$T
+.rdata$r
+.rdata$voltmd
+.rdata$zETW0
+.rdata$zETW1
+.rdata$zETW2
+.rdata$zETW9
+.rdata$zzzdbg
+.rtc$IAA
+.rtc$IZZ
+.rtc$TAA
+.rtc$TZZ
+.tls$ZZZ
+.xdata
+.xdata$x
+minATL$__a
+minATL$__f
+minATL$__m
+minATL$__z
+.didat$2
+.didat$3
+.didat$4
+.didat$6
+.didat$7
+.idata$2
+.idata$3
+.idata$4
+.idata$6
+.data$r
+.data$rs
+.pdata
+.didat$5
+.rsrc$01
+.rsrc$02
+z$H&J(:*1
+,P.n2.(.4.
+*$*&**6,
+uregex_setUText
+uregex_find
+uregex_findNext
+utext_close
+uregex_close
+utext_setup
+uregex_open
+uregex_setTimeLimit
+uregex_setStackLimit
+uregex_start64
+uregex_end64
+GetModuleFileNameA
+CreateSemaphoreExW
+HeapFree
+SetLastError
+ReleaseSemaphore
+GetModuleHandleExW
+WaitForSingleObject
+GetCurrentThreadId
+ReleaseMutex
+FormatMessageW
+GetLastError
+OutputDebugStringW
+WaitForSingleObjectEx
+OpenSemaphoreW
+CloseHandle
+HeapAlloc
+GetProcAddress
+CreateMutexExW
+GetCurrentProcessId
+GetProcessHeap
+GetModuleHandleW
+WideCharToMultiByte
+DebugBreak
+IsDebuggerPresent
+DuplicateHandle
+GetCurrentProcess
+RoOriginateError
+EventSetInformation
+EventRegister
+GetStdHandle
+GetCommandLineW
+CoUninitialize
+CoInitializeEx
+EventUnregister
+SetProcessShutdownParameters
+ExitThread
+DecodePointer
+ReleaseSRWLockExclusive
+AcquireSRWLockExclusive
+CoReleaseServerProcess
+CoAddRefServerProcess
+RoRevokeActivationFactories
+CoRevokeClassObject
+SetEvent
+WindowsCreateString
+RoRegisterActivationFactories
+WindowsDeleteString
+CoRegisterClassObject
+CoResumeClassObjects
+InitOnceExecuteOnce
+CreateEventExW
+WindowsIsStringEmpty
+WindowsStringHasEmbeddedNull
+RoOriginateErrorW
+WindowsGetStringRawBuffer
+EncodePointer
+ReleaseSRWLockShared
+AcquireSRWLockShared
+api-ms-win-core-libraryloader-l1-2-0.dll
+api-ms-win-core-synch-l1-1-0.dll
+api-ms-win-core-heap-l1-1-0.dll
+api-ms-win-core-errorhandling-l1-1-0.dll
+api-ms-win-core-processthreads-l1-1-0.dll
+api-ms-win-core-localization-l1-2-0.dll
+api-ms-win-core-debug-l1-1-0.dll
+api-ms-win-core-handle-l1-1-0.dll
+api-ms-win-core-string-l1-1-0.dll
+api-ms-win-core-winrt-error-l1-1-0.dll
+api-ms-win-eventing-provider-l1-1-0.dll
+api-ms-win-core-processenvironment-l1-1-0.dll
+api-ms-win-core-com-l1-1-0.dll
+api-ms-win-core-util-l1-1-0.dll
+api-ms-win-core-winrt-l1-1-0.dll
+api-ms-win-core-winrt-string-l1-1-0.dll
+api-ms-win-core-synch-l1-2-0.dll
+NtQueryVolumeInformationFile
+ntdll.dll
+_invalid_parameter_noinfo
+__stdio_common_vswprintf
+_errno
+_invoke_watson
+wcsnlen
+terminate
+__stdio_common_vswprintf_s
+__stdio_common_vsprintf_s
+wcstol
+wcstoul
+wcscpy_s
+towlower
+api-ms-win-crt-runtime-l1-1-0.dll
+api-ms-win-crt-stdio-l1-1-0.dll
+api-ms-win-crt-string-l1-1-0.dll
+api-ms-win-crt-convert-l1-1-0.dll
+CloseThreadpoolWait
+WaitForThreadpoolWaitCallbacks
+SetThreadpoolWait
+ExitProcess
+FreeLibrary
+UiaReturnRawElementProvider
+LoadLibraryExW
+UiaHostProviderFromHwnd
+LoadLibraryW
+SetProcessDpiAwareness
+GetSystemMetrics
+CreateThread
+SetThreadDescription
+GetMonitorInfoW
+GetDpiForMonitor
+SystemParametersInfoW
+PathFileExistsW
+SearchPathW
+IsValidCodePage
+ExpandEnvironmentStringsW
+GlobalLock
+GlobalUnlock
+GlobalSize
+GlobalAlloc
+GlobalFree
+LoadStringW
+MulDiv
+RegCloseKey
+GetSystemDirectoryW
+UiaRaiseAutomationEvent
+PropVariantToUInt32
+PropVariantToBoolean
+PropVariantToInt16
+LocalFree
+SHCreateItemFromParsingName
+CoTaskMemFree
+PathCchRemoveExtension
+RegOpenCurrentUser
+RegOpenKeyW
+RegCreateKeyW
+RegQueryValueExW
+RegEnumValueW
+DeleteProcThreadAttributeList
+GetStartupInfoW
+InitializeProcThreadAttributeList
+UpdateProcThreadAttribute
+CreateProcessW
+OpenProcessToken
+OpenProcess
+GetProcessTimes
+K32GetModuleFileNameExW
+GetModuleFileNameW
+UiaGetReservedNotSupportedValue
+UiaGetReservedMixedAttributeValue
+EventWriteTransfer
+CoTaskMemAlloc
+CoCreateInstance
+GetOEMCP
+GetACP
+CreateThreadpoolWait
+CreatePipe
+GetWindowsDirectoryW
+CompareStringOrdinal
+CommandLineToArgvW
+CreateThreadpoolTimer
+SetThreadpoolTimer
+CloseThreadpoolTimer
+WaitOnAddress
+WakeByAddressAll
+ReadFile
+WriteFile
+ResetEvent
+CreateActCtxW
+GetEnvironmentVariableW
+RegGetValueW
+SetEnvironmentVariableW
+GetCPInfo
+MultiByteToWideChar
+FindResourceExW
+LoadResource
+LockResource
+WakeAllConditionVariable
+SleepConditionVariableSRW
+RtlCaptureContext
+RtlLookupFunctionEntry
+RtlVirtualUnwind
+UnhandledExceptionFilter
+SetUnhandledExceptionFilter
+TerminateProcess
+IsProcessorFeaturePresent
+QueryPerformanceCounter
+GetSystemTimeAsFileTime
+InitializeSListHead
+RtlUnwindEx
+RtlPcToFileHeader
+RaiseException
+DeleteCriticalSection
+InitializeCriticalSectionAndSpinCount
+TlsAlloc
+TlsGetValue
+TlsSetValue
+TlsFree
+api-ms-win-core-threadpool-l1-2-0.dll
+ext-ms-win-uiacore-l1-1-0.dll
+OLEAUT32.dll
+api-ms-win-core-libraryloader-l1-2-1.dll
+api-ms-win-shcore-scaling-l1-1-1.dll
+api-ms-win-ntuser-sysparams-l1-1-0.dll
+api-ms-win-core-processthreads-l1-1-3.dll
+api-ms-win-core-shlwapi-legacy-l1-1-0.dll
+api-ms-win-core-heap-obsolete-l1-1-0.dll
+api-ms-win-core-heap-l2-1-0.dll
+api-ms-win-core-largeinteger-l1-1-0.dll
+api-ms-win-core-registry-l1-1-0.dll
+api-ms-win-core-sysinfo-l1-1-0.dll
+ext-ms-win-uiacore-l1-1-1.dll
+PROPSYS.dll
+api-ms-win-shell-namespace-l1-1-0.dll
+api-ms-win-core-path-l1-1-0.dll
+api-ms-win-core-registry-l2-1-0.dll
+api-ms-win-core-processthreads-l1-1-1.dll
+api-ms-win-core-psapi-l1-1-0.dll
+api-ms-win-core-namedpipe-l1-1-0.dll
+api-ms-win-shcore-obsolete-l1-1-0.dll
+api-ms-win-core-file-l1-1-0.dll
+api-ms-win-core-sidebyside-l1-1-0.dll
+api-ms-win-core-rtlsupport-l1-1-0.dll
+api-ms-win-core-profile-l1-1-0.dll
+api-ms-win-core-interlocked-l1-1-0.dll
+DestroyWindow
+RegisterClassExW
+CreateWindowExW
+SetWindowLongPtrW
+IsIconic
+ShowWindow
+GetWindowLongPtrW
+DefWindowProcW
+SetFocus
+AdjustWindowRectEx
+NotifyWinEvent
+MonitorFromRect
+MonitorFromWindow
+GetWindowInfo
+GetWindowLongW
+GetCaretBlinkTime
+GetKeyboardState
+ToUnicodeEx
+ScreenToClient
+SetCapture
+ReleaseCapture
+SetWindowsHookExW
+GetMessageW
+DispatchMessageW
+UnhookWindowsHookEx
+GetIconInfo
+CopyImage
+PrivateExtractIconsW
+DestroyIcon
+PostMessageW
+SendMessageW
+LoadIconW
+LoadImageW
+CloseClipboard
+GetClipboardData
+OpenClipboard
+SetClipboardData
+RegisterClipboardFormatW
+EmptyClipboard
+CheckRadioButton
+CheckDlgButton
+SetDlgItemTextW
+SendDlgItemMessageW
+GetDlgItemTextW
+IsDlgButtonChecked
+EndDialog
+DialogBoxParamW
+LoadCursorW
+SetActiveWindow
+SetWindowPos
+EnableScrollBar
+SetScrollInfo
+GetWindowRect
+SetLayeredWindowAttributes
+IsZoomed
+GetDpiForWindow
+OffsetRect
+SetWindowLongW
+GetCursorPos
+GetClientRect
+MapWindowPoints
+ClientToScreen
+TrackPopupMenuEx
+SendMessageTimeoutW
+SetWindowTextW
+BeginPaint
+EndPaint
+SendNotifyMessageW
+GetSystemMenu
+LoadMenuW
+AppendMenuW
+SetMenuItemInfoW
+EnableMenuItem
+IsWindow
+GetSysColor
+KillTimer
+SetTimer
+ShowWindowAsync
+USER32.dll
+DeleteObject
+GetObjectW
+TranslateCharsetInfo
+GDI32.dll
+DragQueryFileW
+DragFinish
+SHELL32.dll
+PlaySoundW
+WINMM.dll
+ImmDisableIME
+IMM32.dll
+ScriptIsComplex
+ScriptStringAnalyse
+ScriptStringOut
+ScriptStringFree
+USP10.dll
+_initialize_onexit_table
+_register_onexit_function
+_crt_atexit
+_cexit
+_callnewh
+malloc
+_seh_filter_exe
+_set_app_type
+__setusermatherr
+_configure_wide_argv
+_initialize_wide_environment
+_get_wide_winmain_command_line
+_initterm
+_initterm_e
+_set_fmode
+_c_exit
+_register_thread_local_exe_atexit_callback
+_configthreadlocale
+_set_new_mode
+__p__commode
+strcpy_s
+strlen
+strcmp
+calloc
+wcsncmp
+roundf
+lroundf
+lround
+api-ms-win-crt-heap-l1-1-0.dll
+api-ms-win-crt-math-l1-1-0.dll
+api-ms-win-crt-locale-l1-1-0.dll
+VirtualAlloc
+VirtualFree
+CreateFileW
+DWriteCreateFactory
+GetUserDefaultLocaleName
+CreateDXGIFactory2
+D3D11CreateDevice
+QueryPerformanceFrequency
+D3DCompileFromFile
+D3DReflect
+FindResourceW
+VerQueryValueW
+WakeByAddressSingle
+IIDFromString
+DeviceIoControl
+GetTickCount64
+QueryUnbiasedInterruptTime
+FormatMessageA
+GetLocaleInfoEx
+FindClose
+FindFirstFileW
+FindFirstFileExW
+FindNextFileW
+GetFileAttributesExW
+AreFileApisANSI
+GetFileInformationByHandleEx
+InitializeCriticalSectionEx
+api-ms-win-core-memory-l1-1-0.dll
+d2d1.dll
+DWrite.dll
+dxgi.dll
+d3d11.dll
+D3DCOMPILER_47.dll
+api-ms-win-core-version-l1-1-0.dll
+api-ms-win-core-io-l1-1-0.dll
+api-ms-win-core-realtime-l1-1-0.dll
+api-ms-win-core-file-l1-2-2.dll
+api-ms-win-core-file-l2-1-0.dll
+NtQueryInformationFile
+MapVirtualKeyW
+VkKeyScanW
+GetKeyState
+ReleaseDC
+IsWindowVisible
+InvertRect
+ScrollWindowEx
+ScrollDC
+FillRect
+GetKeyboardLayout
+GetWindowThreadProcessId
+GetForegroundWindow
+GetDoubleClickTime
+CreateCompatibleDC
+SetGraphicsMode
+GetTextFaceW
+SetStretchBltMode
+ModifyWorldTransform
+SetWorldTransform
+SetTextColor
+SetBkColor
+SetDCBrushColor
+SelectObject
+GetTextMetricsW
+GetOutlineTextMetricsW
+GetStockObject
+CreateFontIndirectW
+GetTextExtentPoint32W
+GetCharABCWidthsW
+DeleteDC
+RemoveFontMemResourceEx
+GetGlyphIndicesW
+CreateCompatibleBitmap
+BitBlt
+GdiFlush
+ExtTextOutW
+PatBlt
+MoveToEx
+LineTo
+SelectClipRgn
+IntersectClipRect
+PolyBezier
+CreateSolidBrush
+ExtCreatePen
+StretchDIBits
+GetCharWidth32W
+AddFontMemResourceEx
+CreateFontIndirectA
+___lc_codepage_func
+_aligned_malloc
+_aligned_free
+GetSystemInfo
+VirtualProtect
+VirtualQuery
+LoadLibraryExA
+floorf
+lrintf
+.?AVbad_function_call@std@@
+.?AVbad_exception@std@@
+.?AVformat_error@v11@fmt@@
+.?AVbad_alloc@std@@
+.?AVResultException@wil@@
+.?AVexception@std@@
+.?AVbad_array_new_length@std@@
+.?AVlength_error@std@@
+.?AVlogic_error@std@@
+.?AV<lambda_1>@?1??StoreSelectionToClipboard@Clipboard@Win32@Interactivity@Console@Microsoft@@AEAAX_N@Z@
+.?AUnarrowing_error@gsl@@
+.?AVbad_optional_access@std@@
+.?AV<lambda_1>@?5??ConsoleAllocateConsole@@YAJPEAU_CONSOLE_API_CONNECTINFO@@@Z@
+.?AVout_of_range@std@@
+.?AVbad_variant_access@std@@
+.?AVfilesystem_error@filesystem@std@@
+.?AVsystem_error@std@@
+.?AV_System_error@std@@
+.?AVruntime_error@std@@
+.?AVinvalid_argument@std@@
+.?AU?$default_delete@VSixelParser@VirtualTerminal@Console@Microsoft@@@std@@
+.?AV<lambda_1>@?4??InvokeMacro@AdaptDispatch@VirtualTerminal@Console@Microsoft@@UEAAXH@Z@
+.?AV<lambda_1>@?7??DefineMacro@AdaptDispatch@VirtualTerminal@Console@Microsoft@@UEAA?AV?$function@$$A6A_N_W@Z@std@@HW4MacroDeleteControl@DispatchTypes@345@W4MacroEncoding@9345@@Z@
+.?AV<lambda_1>@?1??AssignUserPreferenceCharset@AdaptDispatch@VirtualTerminal@Console@Microsoft@@UEAA?AV?$function@$$A6A_N_W@Z@std@@W4CharsetSize@DispatchTypes@345@@Z@
+.?AV<lambda_1>@?1??DownloadDRCS@AdaptDispatch@VirtualTerminal@Console@Microsoft@@UEAA?AV?$function@$$A6A_N_W@Z@std@@HVVTParameter@345@W4DrcsEraseControl@DispatchTypes@345@W4DrcsCellMatrix@DispatchTypes@345@W4DrcsFontSet@DispatchTypes@345@W4DrcsFontUsage@DispatchTypes@345@0W4CharsetSize@DispatchTypes@345@@Z@
+.?AV<lambda_1>@?1??_RestoreTabStops@AdaptDispatch@VirtualTerminal@Console@Microsoft@@AEAA?AV?$function@$$A6A_N_W@Z@std@@XZ@
+.?AV<lambda_1>@?1??_RestoreCursorInformation@AdaptDispatch@VirtualTerminal@Console@Microsoft@@AEAA?AV?$function@$$A6A_N_W@Z@std@@XZ@
+.?AV<lambda_1>@?1??RequestSetting@AdaptDispatch@VirtualTerminal@Console@Microsoft@@UEAA?AV?$function@$$A6A_N_W@Z@std@@XZ@
+.?AV<lambda_1>@?1??_RestoreColorTable@AdaptDispatch@VirtualTerminal@Console@Microsoft@@AEAA?AV?$function@$$A6A_N_W@Z@std@@XZ@
+.?AV<lambda_1>@?4??DefineImage@SixelParser@VirtualTerminal@Console@Microsoft@@QEAA?AV?$function@$$A6A_N_W@Z@std@@HW4SixelBackground@DispatchTypes@345@VVTParameter@345@@Z@
+.?AVtype_info@@
+.?AVerror_category@std@@
+.?AV_Generic_error_category@std@@
+.?AVmemory_resource@pmr@std@@
+.?AV_Identity_equal_resource@pmr@std@@
+.?AV_Aligned_new_delete_resource_impl@pmr@std@@
+wwwwwwwwwwwwwwwwwwwww
+Se%ae`
+cCBR_p
+RRRRP%
+CCCC@40`P@ 
+cG?CCRRRRP`R
+4qaCCRCCCB
+pqacG%%apppppppaB
+prRRRPa
+wwwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwww
+se%%%%% R
+u%6RRRRRPp
+wwwwwwwwwwwwwww
+wwwwwwwwp
+wwwwwwww
+((((&&(&&&(&(&&&&&&(((#&&###
+*)))))))))))))))))))))
+eIDATx
+ """"""""""""""""""""""""""""""""""""""""
+'Px0&D
+XXX8Pvh8v
+],//cuu
+n<DSbb
+!KD4)#
+NDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3"><description>Console Window Host</description><dependency><dependentAssembly><assemblyIdentity type="win32" name="Microsoft.Windows.Common-Controls" version="6.0.0.0" processorArchitecture="*" publicKeyToken="6595b64144ccf1df" language="*"></assemblyIdentity></dependentAssembly></dependency><trustInfo xmlns="urn:schemas-microsoft-com:asm.v3"><security><requestedPrivileges><requestedExecutionLevel level="asInvoker" uiAccess="false"></requestedExecutionLevel></requestedPrivileges></security></trustInfo><application xmlns="urn:schemas-microsoft-com:asm.v3"><windowsSettings><longPathAware xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">true</longPathAware><heapType xmlns="http://schemas.microsoft.com/SMI/2020/WindowsSettings">SegmentHeap</heapType></windowsSettings></application><ms_compatibility:compatibility xmlns:ms_compatibility="urn:schemas-microsoft-com:compatibility.v1" xmlns="urn:schemas-microsoft-com:compatibility.v1"><ms_compatibility:application xmlns:ms_compatibility="urn:schemas-microsoft-com:compatibility.v1"><ms_compatibility:supportedOS xmlns:ms_compatibility="urn:schemas-microsoft-com:compatibility.v1" Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"></ms_compatibility:supportedOS><ms_compatibility:supportedOS xmlns:ms_compatibility="urn:schemas-microsoft-com:compatibility.v1" Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"></ms_compatibility:supportedOS><ms_compatibility:supportedOS xmlns:ms_compatibility="urn:schemas-microsoft-com:compatibility.v1" Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"></ms_compatibility:supportedOS><ms_compatibility:supportedOS xmlns:ms_compatibility="urn:schemas-microsoft-com:compatibility.v1" Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"></ms_compatibility:supportedOS></ms_compatibility:application></ms_compatibility:compatibility></assembly>
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 20110
+250619182137Z
+260617182137Z0t1
+Washington1
+Redmond1
+Microsoft Corporation1
+Microsoft Corporation0
+Microsoft Corporation1
+230012+5053590
+Chttp://www.microsoft.com/pkiops/crl/MicCodSigPCA2011_2011-07-08.crl0a
+Ehttp://www.microsoft.com/pkiops/certs/MicCodSigPCA2011_2011-07-08.crt0
+Washington1
+Redmond1
+Microsoft Corporation1200
+)Microsoft Root Certificate Authority 20110
+110708205909Z
+260708210909Z0~1
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 20110
+Ihttp://crl.microsoft.com/pki/crl/products/MicRooCerAut2011_2011_03_22.crl0^
+Bhttp://www.microsoft.com/pki/certs/MicRooCerAut2011_2011_03_22.crt0
+3http://www.microsoft.com/pkiops/docs/primarycps.htm0@
+*?*kXIc
+QEX82q'
+WqVNHE
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 2011
+http://www.microsoft.com0
+20251009021416.255Z0
+Washington1
+Redmond1
+Microsoft Corporation1%0#
+Microsoft America Operations1'0%
+nShield TSS ESN:3303-05E0-D9471%0#
+Microsoft Time-Stamp Service
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+250130194304Z
+260422194304Z0
+Washington1
+Redmond1
+Microsoft Corporation1%0#
+Microsoft America Operations1'0%
+nShield TSS ESN:3303-05E0-D9471%0#
+Microsoft Time-Stamp Service0
+45gWLl
+Nhttp://www.microsoft.com/pkiops/crl/Microsoft%20Time-Stamp%20PCA%202010(1).crl0l
+Phttp://www.microsoft.com/pkiops/certs/Microsoft%20Time-Stamp%20PCA%202010(1).crt0
+Washington1
+Redmond1
+Microsoft Corporation1200
+)Microsoft Root Certificate Authority 20100
+210930182225Z
+300930183225Z0|1
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+3http://www.microsoft.com/pkiops/Docs/Repository.htm0
+Ehttp://crl.microsoft.com/pki/crl/products/MicRooCerAut_2010-06-23.crl0Z
+>http://www.microsoft.com/pki/certs/MicRooCerAut_2010-06-23.crt0
+as.,k{n?,
+Washington1
+Redmond1
+Microsoft Corporation1%0#
+Microsoft America Operations1'0%
+nShield TSS ESN:3303-05E0-D9471%0#
+Microsoft Time-Stamp Service
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+20251008232237Z
+20251009232237Z0w0=
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 2010
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 2010
+,gS^:K+OXp
+api-ms-win-core-fibers-l1-1-1
+api-ms-win-core-synch-l1-2-0
+kernel32
+api-ms-
+!x-sys-default-locale
+KERNEL32.DLL
+%hs(%u)\%hs!%p: 
+%hs!%p: 
+(caller: %p) 
+%hs(%d) tid(%x) %08X %ws
+Msg:[%ws] 
+CallContext:[%hs] 
+[%hs(%hs)]
+ntdll.dll
+kernelbase.dll
+std::exception: %hs
+Local\SM0:%lu:%lu:%hs
+activatibleClassId
+.\console.dll
+\console.dll
+$*1*7*?GIOW_em***s{
+**************
+***G********
+*******
+********************************
+***********
+*******
+******************
+********
+****************
+**************
+***************************
+********
+*******
+*******************************
+********************
+****************************
+******************
+*********************
+*******
+********
+**************************
+)06>@GL
+J-N-S)[c4
+$%&'()*+,-./0123456789:;<=>?
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghijklmnopqrstuvwxyz
+'()*+,-./0123456789:;<=>?
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghijklmnopqrstuvwxyz
+ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_
+$%&'()*+,-./0123456789:;<=>?
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghijklmnopqrstuvwxyz
+ !"#$%&'()*+,-./0123456789:;<=>?
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghijklmnopqrstuvwxyz
+ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ
+^_`abcdefghijklmnopqrstuvwxyz
+ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ
+^_`abcdefghijklmnopqrstuvwxyz
+ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_
+$%&'()*+,-./0123456789:;<=>?
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+^_`abcdefghijklmnopqrstuvwxyz
+ !"#$%&'()*+,-./0123456789:;<=>?
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghijklmnopqrstuvwxyz
+$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+$%&'()*+,-./0123456789:;<=>?
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+|^_`abcdefghijklmnopqrstuvwxyz
+ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghijklmnopqrstuvwxyz
+$%&'()*+,-./0123456789:;<=>?
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+^_`abcdefghijklmnopqrstuvwxyz
+$%&'()*+,-./0123456789:;<=>?
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghijklmnopqrstuvwxyz
+ !"#$%&'()*+,-./0123456789:;<=>?
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghijklmnopqrstuvwxyz
+ !"#$%&'()*+,-./0123456789:;<=>?
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+^_`abcdefghijklmnopqrstuvwxyz
+ !"#$%&'()*+,-./0123456789:;<=>?
+ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^ 
+ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+A&B(C'D%F#H$PpQqRrSs
+PseudoConsoleWindow
+ext-ms-win-ntuser-window-l1-1-0
+Internal Console Management Window
+user32.dll
+Win32 Window Message Input Thread
+comctl32.dll
+HTML Format
+Rich Text Format
+ConsoleWindowClass
+WindowSize
+ScreenBufferSize
+WindowPosition
+WindowAlpha
+Console Window
+Microsoft Console Host Window
+PopupColors
+InsertMode
+LineSelection
+FilterOnPaste
+LineWrap
+CtrlKeyShortcutsDisabled
+QuickEdit
+FontSize
+FontFamily
+FontWeight
+FaceName
+CursorSize
+HistoryBufferSize
+NumberOfHistoryBuffers
+HistoryNoDup
+ScrollScale
+ScreenColors
+TrimLeadingZeros
+EnableColorSelection
+CursorType
+InterceptCopyPaste
+TerminalScrolling
+AnswerbackMessage
+CopyColor
+TextMeasurement
+EnableBuiltinGlyphs
+VirtualTerminalLevel
+Console
+\Input
+\Reference
+%WINDIR%\system32\cmd.exe
+\Output
+g\Device\ConDrv\Server
+cmd.exe
+pwsh.exe
+powershell.exe
+Text Area
+Microsoft Console Host: Screen Information Text Area
+_id:{} _start:{},{} _end:{},{} _degenerate:{} _wordDelimiters:{} content:{}
+_id:{}
+Character
+UNKNOWN VALUE
+Format
+Paragraph
+Document
+unknown
+Unsupported
+Standard
+ServerSideProvider
+ControlTypePropertyId
+TextPattern
+AutomationIdPropertyId
+NamePropertyId
+IsContentElementPropertyId
+IsControlElementPropertyId
+HasKeyboardFocusPropertyId
+IsKeyboardFocusablePropertyId
+IsEnabledPropertyId
+ProviderDescriptionPropertyId
+Single
+Console Driver Message IO Thread
+p%SystemRoot%
+ --headless --signal {:#x}
+--headless
+--signal
+--server
+-ForceNoHandoff
+-ForceV1
+--width
+--inheritcursor
+--height
+--feature
+--textMeasurement
+-Embedding
+ConPTY Signal Handler Thread
+console
+wcswidth
+__DefaultTTFont__
+__DefaultTTFont__
+ProgramFiles
+ProgramFilesDir
+CommonProgramFiles
+CommonFilesDir
+Software\Microsoft\Windows\CurrentVersion
+WordDelimiters
+AllowAltF4Close
+CodePage
+DefaultForeground
+ColorTable%02u
+CursorColor
+DefaultBackground
+[{};{}H
+{:{}}: 
+[{};{};{};{};;{};{}$v
+[{};{};{};{};{}$x
+        
+ConPTY Input Handler Thread
+                
+Consolas
+pdcomp.dll
+MacType64.Core.dll
+Fixed Miriam Transparent
+Miriam Fixed
+Courier New
+Simplified Arabic Fixed
+Rod Transparent
+Terminal
+kernel32.dll
+Rendering Output Thread
+%%Startup
+DelegationTerminal
+DelegationConsole
+Software\Microsoft\Windows NT\CurrentVersion\Console\TrueTypeFont
+{}1;{}{}
+%d!~%04X
+?27;0;0;5
+>0;10;1c
+?61;4;6;7;14;21;22;23;24;28;32;42c
+?61;4;6;7;14;21;22;23;24;28;32;42;52c
+3;1;1;128;128;1;0x
+2;1;1;128;128;1;0x
+!|00000000
+%d;%dR
+?%d;%d;%dR
+{}{};{}$y
+{};{};{};{};{}"w
+{};rgb:{:04x}/{:04x}/{:04x}
+4;{};rgb:{:04x}/{:04x}/{:04x}
+CmdNotFound
+SetMark
+{}!u{}
+;{}:2::{}:{}:{}
+;{}:5:{}
+1$r{};{}r
+1$r3 q
+1$r2 q
+1$r1 q
+1$r{};{}s
+1$r0 q
+1$r6 q
+1$r5 q
+1$r4 q
+1$r1*x
+1$r2*x
+1$r0"q
+1$r1"q
+1$u{};{};{};{};{};{};{};{};{};{}{}{}{}
+1$r{};{};{},|
+EscDispatch
+Collect
+CsiDispatch
+Vt52EscDispatch
+OscParamCollect
+Ignore
+SubParam
+DcsDispatch
+Ss3Dispatch
+OscDispatch
+OscPut
+CsiEntry
+EscapeIntermediate
+Escape
+Ground
+CsiIntermediate
+CsiIgnore
+CsiSubParam
+CsiParam
+Ss3Entry
+OscTermination
+OscString
+OscParam
+DcsParam
+DcsEntry
+Vt52Param
+Ss3Param
+SosPmApcString
+DcsPassThrough
+DcsIntermediate
+DcsIgnore
+dsound.dll
+        
+IDI_APPICON(
+Ctrl-M
+&Paste
+Ctrl-V
+&Select All
+Ctrl-A
+Scro&ll
+&Find...
+Ctrl-F
+MS Shell Dlg
+Fi&nd what:
+Match &case
+Regula&r expression
+Direction
+&Find Next
+Cancel
+Enter char to copy up to: 
+Enter char to delete up to: 
+Enter command number: 
+Select 
+Scroll 
+&Close
+&Properties
+&Defaults
+VS_VERSION_INFO
+StringFileInfo
+040904b0
+CompanyName
+Microsoft Corporation
+FileDescription
+Console Window and PTY Host (Open Source)
+FileVersion
+1.23.2510.08001
+InternalName
+Host.EXE
+LegalCopyright
+Microsoft Corporation.  All rights reserved.
+OriginalFilename
+OpenConsole.exe
+ProductVersion
+1.23.251008001
+ProductName
+Windows Terminal
+VarFileInfo
+Translation
+Legal_policy_statement
+Microsof

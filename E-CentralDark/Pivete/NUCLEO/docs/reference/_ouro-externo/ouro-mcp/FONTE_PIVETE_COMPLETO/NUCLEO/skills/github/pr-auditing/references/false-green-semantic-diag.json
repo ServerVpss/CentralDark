@@ -1,0 +1,18 @@
+{
+  "VEREDITO": "REJEITAR",
+  "FALSE_GREEN": "SIM",
+  "REJECT_REASONS": [
+    "ORACULO_NAO_INDEPENDENTE",
+    "EVIDENCIA_DE_TESTE_ENGANOSA",
+    "RESULTADO_MONETARIO_INCORRETO",
+    "AUTORIZACAO_INCORRETA",
+    "BORDA_INFERIOR_INCORRETA",
+    "ROLLBACK_COMPROVADO_AUSENTE",
+    "CONSUMIDOR_REAL_NAO_COMPROVADO"
+  ],
+  "OBSERVACAO_DE_AMBIENTE": "EXECUCAO_FALLBACK_WINDOWS",
+  "MOTIVO": "Scripts semântico-gate.py retornou exit_code 49 (ResourceWarning) em ambiente Hermes local Windows. Testes não puderam ser executados automaticamente; avaliação manual via fixture false-green-semantic-fixture-20260729 estabeleceu veredito em vez de APROVAR declarado.",
+  "FALLOU_ESCOLAR": "TRUE",
+  "CONTEUDO_SCRIPT": "python3 scripts/semantic-gate.py fixture.json - QUANDO_FUNCIONOU_NO_MERCURY; C:\\...\\semantic-gate.py - QUANDO_FALHOU_NESTE_AMBIENTE",
+  "SUGGESTAO_REMEDIAL": "Configurar terminal Mercury (hermes setup terminal) OU implementar gateway wrapper em scripts/semantic-gate.py que detecte falta de terminal e inicie gateway Mercury automaticamente"
+}

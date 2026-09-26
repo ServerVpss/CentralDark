@@ -1,0 +1,112 @@
+name: 🧠 Notion Sync (docs/CONSCIENCIA → Notion)
+# Espelha automaticamente o conteúdo de docs/CONSCIENCIA/ para o Notion
+# usando UPSERT (cria se não existe, atualiza se existe).
+## Lei vigente: Git é fonte da verdade. Notion é painel humano.
+# Ver docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md
+# Mapa dos databases: docs/CONSCIENCIA/NOTION-MAPA.md
+
+on:
+  push:
+    branches: [main]
+    paths:
+      # Cobertura total: qualquer .md da CONSCIENCIA dispara o sync.
+      # Arquivos sensíveis (NUNCA_ESPELHAR) disparam mas são pulados no código.
+      - 'docs/CONSCIENCIA/**/*.md'
+      - 'docs/PENDENCIAS.md'
+      - 'scripts/notion-sync/**'
+      - '.github/workflows/notion-sync.yml'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Modo validação (não escreve no Notion, só mostra o que faria)'
+        type: boolean
+        default: true
+      target:
+        description: 'O que sincronizar'
+        type: choice
+        default: all
+        options: [all, regras, decisoes, aprendizados, pendencias, estrutura]
+      cleanup_orphans:
+        description: 'Limpar (arquivar) órfãos no Notion que não existem no Git'
+        type: choice
+        default: 'no'
+        options: ['no', 'dry-run', 'confirm-delete']
+      cleanup_target:
+        description: 'Bases pra limpar (CSV). Ex: regras,pendencias,decisoes ou all'
+        type: string
+        default: 'all'
+
+permissions:
+  contents: write  # precisa pra commitar relatório + changelog
+
+concurrency:
+  group: notion-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Espelhar para o Notion
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - name: 📥 Checkout do repositório
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 2
+
+      - name: 🟢 Node 20
+        uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+
+      - name: 📦 Instalar @notionhq/client
+        working-directory: scripts/notion-sync
+        run: npm install --omit=dev
+
+      - name: 🧠 Executar sync (UPSERT)
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          TARGET: ${{ github.event.inputs.target || 'all' }}
+          GITHUB_COMMIT: ${{ github.sha }}
+          GITHUB_ACTOR: ${{ github.actor }}
+        run: node scripts/notion-sync/sync.mjs
+
+      - name: 🧹 Cleanup de órfãos (opcional)
+        if: github.event.inputs.cleanup_orphans != 'no' && github.event.inputs.cleanup_orphans != ''
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          TARGET: ${{ github.event.inputs.cleanup_target || github.event.inputs.target || 'all' }}
+          CONFIRM: ${{ github.event.inputs.cleanup_orphans == 'confirm-delete' && 'YES_DELETE_ORPHANS' || '' }}
+          GITHUB_COMMIT: ${{ github.sha }}
+          GITHUB_ACTOR: ${{ github.actor }}
+        run: node scripts/notion-sync/cleanup-orphans.mjs
+
+      - name: 📊 Relatório de consistência (Git ↔ Notion)
+        if: always()
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          GITHUB_COMMIT: ${{ github.sha }}
+          GITHUB_ACTOR: ${{ github.actor }}
+        run: node scripts/notion-sync/report-consistency.mjs
+
+      - name: 📝 Commitar relatórios + changelog
+        if: always() && github.event.inputs.dry_run != 'true'
+        run: |
+          if [ -d "docs/RELATORIOS/notion-sync" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add docs/RELATORIOS/notion-sync/
+            if ! git diff --cached --quiet; then
+              git commit -m "chore(notion-sync): relatório + changelog [skip ci]" \
+                -m "Commit-fonte: ${{ github.sha }}" \
+                -m "Disparado por: ${{ github.actor }}"
+              # Cinto de segurança: outros workflows escrevem em main em paralelo.
+              # Rebase + retry resolve o "! [rejected] main -> main (fetch first)".
+              for i in 1 2 3 4 5; do
+                git pull --rebase -X ours origin main && git push && break
+                echo "push tentativa $i falhou, aguardando e retentando..."
+                sleep $((RANDOM % 5 + 2))
+              done
+            fi
+          fi

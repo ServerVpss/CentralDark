@@ -1,0 +1,16 @@
+flowchart TD
+  START["Material receipt to persist"] --> GH{"GitHub available?"}
+  GH -- Yes --> GHP["Persist appropriate GitHub receipt/delta"]
+  GH -- No --> DR{"Drive available?"}
+  DR -- Yes --> DRP["Persist Drive receipt + GITHUB_SYNC_PENDING"]
+  DR -- No --> OTHER{"Other authorized durable route?"}
+  OTHER -- Yes --> OP["Persist receipt + pending sync cursors"]
+  OTHER -- No --> BLOCK["EXTERNAL_PERSISTENCE_BLOCKED\nCHAT_ONLY_STATE forbidden"]
+  GHP --> REC["Recovered provider"]
+  DRP --> REC
+  OP --> REC
+  REC --> REM["REMEASURE"]
+  REM --> REN["RENDEZVOUS / RECONCILE"]
+  REN --> DED["DEDUPE / preserve provenance"]
+  DED --> MISS["WRITE_MISSING_DELTA_ONLY"]
+  MISS --> PROOF["PROOF"]

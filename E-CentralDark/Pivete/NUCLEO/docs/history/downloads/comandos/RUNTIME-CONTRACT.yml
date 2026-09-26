@@ -1,0 +1,60 @@
+schema_version: 1
+component: Human-Mind-Router
+target_path: apps/modulos/HERMES-CORE/agents/Human-Mind-Router/agent.mjs
+role: READ_ONLY_COGNITIVE_ROUTER
+
+must_reuse:
+  - scripts/memory-linker/library-router.mjs
+  - docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/catalog.json
+  - docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
+
+must_not:
+  - create_second_library
+  - create_second_orchestrator
+  - create_second_memory
+  - duplicate_runtime_per_human
+  - grant_write_authority_to_lens
+  - impersonate_human
+  - persist_private_chain_of_thought
+
+api:
+  load_profiles:
+    input: ROUTERS.yml
+    output: normalized_profiles
+  select_lenses:
+    input: [problem, domains, max_lenses]
+    output: selected_lens_ids
+  recover_sources:
+    input: [lens_id, freshness_requirement]
+    output: [evidence_receipts, source_states]
+  build_lens_packet:
+    input: [profile, current_evidence, problem]
+    output_fields:
+      - lens_id
+      - target
+      - observation_time
+      - source_refs
+      - facts
+      - claims
+      - counterclaims
+      - questions_other_lenses_may_miss
+      - tests_to_distinguish_hypotheses
+      - candidate_delta
+      - unknowns
+      - write_authority
+  reconcile:
+    input: lens_packets
+    output: [clusters, conflicts, consensus_state, discriminating_tests, candidate_delta]
+
+security:
+  public_professional_only: true
+  no_private_tracking: true
+  no_authority_escalation: true
+  no_write_by_default: true
+
+error_semantics:
+  missing_source: SOURCE_MISSING
+  changed_source: SOURCE_CHANGED
+  ambiguous_identity: SOURCE_CONFLICT
+  stale_reference: REFERENCE_STALE
+  no_fresh_position: UNKNOWN

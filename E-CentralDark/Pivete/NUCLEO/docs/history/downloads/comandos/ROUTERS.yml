@@ -1,0 +1,110 @@
+schema_version: 1
+system: CENTRALDARK_HUMAN_MIND_ROUTER
+owner: docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/HUMAN-MIND-ROUTERS/README.md
+runtime_model: ONE_GENERIC_RUNTIME_MANY_DECLARATIVE_LENSES
+
+global_rules:
+  human_is_not_agent: true
+  agent_is_not_persona_clone: true
+  public_professional_only: true
+  private_life_tracking: false
+  write_authority: false
+  canonical_authority: false
+  fame_is_authority: false
+  consensus_by_vote: false
+  reality_is_judge: true
+
+routers:
+  - id: GEOFF-HUNTLEY-LENS
+    human_name: Geoff Huntley
+    status: SEED
+    role: COGNITIVE_LENS
+    domains: [agent-loops, ralph-loop, software-factories, context-reset, backpressure]
+    default_questions:
+      - "O loop está simples o suficiente?"
+      - "Qual estado precisa sobreviver fora da janela de contexto?"
+      - "Que feedback determinístico impede o loop de fechar errado?"
+      - "A tarefa é verificável o suficiente para autonomia?"
+    bootstrap_sources:
+      - kind: web
+        canonical_url: https://ghuntley.com/ralph/
+        provider: official-site
+      - kind: github
+        canonical_url: https://github.com/ghuntley/how-to-ralph-wiggum
+        provider: github
+
+  - id: IAN-LIVINGSTONE-LENS
+    human_name: Ian Livingstone
+    status: SEED
+    role: COGNITIVE_LENS
+    domains: [agent-identity, agent-auth, authorization, mission-identity, fleet-control]
+    default_questions:
+      - "Quem está agindo, em nome de quem e com qual missão?"
+      - "A permissão está escopada ao agente e à intenção?"
+      - "Qual identidade/credencial sobrevive à não-determinação?"
+      - "O controle é verificável ou apenas presumido?"
+    bootstrap_sources:
+      - kind: web
+        canonical_url: https://www.insecureagents.com/
+        provider: insecure-agents
+      - kind: web
+        canonical_url: https://www.keycard.sh/
+        provider: keycard
+
+  - id: DEX-HORTHY-LENS
+    human_name: Dex Horthy
+    status: SEED
+    role: COGNITIVE_LENS
+    domains: [context-engineering, human-in-the-loop, agent-harness, alignment, code-quality]
+    default_questions:
+      - "O contexto entregue ao agente é suficiente e relevante?"
+      - "O humano está atuando no ponto de maior alavancagem?"
+      - "O harness previne slop ou só pede melhor comportamento?"
+      - "A revisão consegue provar qualidade?"
+    bootstrap_sources:
+      - kind: web
+        canonical_url: https://www.ycombinator.com/companies/humanlayer
+        provider: ycombinator
+      - kind: github
+        canonical_url: https://github.com/humanlayer
+        provider: github
+
+  - id: GREG-PSTRUCHA-LENS
+    human_name: Greg Pstrucha
+    status: SEED
+    role: COGNITIVE_LENS
+    domains: [observability, tests, linters, evals, guardrails, agent-code-quality]
+    default_questions:
+      - "Que falha o sistema consegue observar?"
+      - "Qual erro o agente consegue gamear?"
+      - "Existe ferramenta determinística melhor que mais prompting?"
+      - "O custo da verificação é menor que o custo da falha?"
+    bootstrap_sources:
+      - kind: web
+        canonical_url: https://sentry.io/
+        provider: sentry
+      - kind: web
+        canonical_url: https://workos.com/blog/sentry-greg-pstrucha-stop-prompting-agent-guardrails
+        provider: interview-reference
+
+  - id: ALLIE-HOWE-LENS
+    human_name: Allie Howe
+    status: SEED
+    role: COGNITIVE_LENS
+    domains: [agentic-security, expert-discovery, debate-curation, security-boundaries, source-expansion]
+    default_questions:
+      - "Que especialista relevante ainda não foi consultado?"
+      - "Que ameaça ou fronteira de segurança ficou fora do debate?"
+      - "Existe contraponto público forte para o consenso atual?"
+      - "A discussão representa perspectivas realmente independentes?"
+    bootstrap_sources:
+      - kind: web
+        canonical_url: https://www.insecureagents.com/
+        provider: insecure-agents
+
+candidates:
+  - id: DICK-HARDT-LENS
+    human_name: Dick Hardt
+    status: CANDIDATE_NOT_SEED
+    reason: "Apareceu no mesmo feed durante a sessão; não fazia parte do Great Loops Debate."
+    auto_promote: false

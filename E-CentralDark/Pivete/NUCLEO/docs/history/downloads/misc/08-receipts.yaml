@@ -1,0 +1,21 @@
+receipt_schema:
+  claim_id: string
+  target: exact_runtime_or_surface
+  sha: git_sha_or_NA
+  time_utc: ISO8601
+  command_or_action: string
+  exit_code: integer_or_NA
+  observed_effect: string
+  counterproof: string
+  artifact_paths: list
+  status: PASS_FAIL_UNKNOWN
+
+final_receipt_required:
+  - main_sha
+  - deploy_sha
+  - external_url
+  - service_versions
+  - migration_versions
+  - test_summary
+  - rollback_reference
+  - material_unknown_count

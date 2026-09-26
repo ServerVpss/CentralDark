@@ -1,0 +1,5 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@radix-ui\react-dismissable-layer\README.md
+
+# `react-dismissable-layer`
+
+This is an internal utility, not intended for public usage.

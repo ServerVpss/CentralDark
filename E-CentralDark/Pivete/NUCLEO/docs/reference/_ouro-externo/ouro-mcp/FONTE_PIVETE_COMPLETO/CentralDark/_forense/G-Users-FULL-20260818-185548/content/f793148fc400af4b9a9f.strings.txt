@@ -1,0 +1,8 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\Sync Data\LevelDB\LOG
+
+2026/08/18-15:15:44.957 77e0 Reusing MANIFEST C:\Users\danda\AppData\Local\Google\Chrome\User Data\Default\Sync Data\LevelDB/MANIFEST-000001
+2026/08/18-15:15:46.372 77e0 Recovering log #19
+2026/08/18-15:15:46.813 77e0 Reusing old log C:\Users\danda\AppData\Local\Google\Chrome\User Data\Default\Sync Data\LevelDB/000019.log 
+2026/08/18-15:45:03.987 77e0 Level-0 table #23: started
+2026/08/18-15:45:04.122 77e0 Level-0 table #23: 214733 bytes OK
+2026/08/18-15:45:04.294 77e0 Delete type=0 #19

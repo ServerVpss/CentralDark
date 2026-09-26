@@ -1,0 +1,114 @@
+Ôxe 😹🌙 agora esses dois arquivos fecharam uma peça importante que estava meio espalhada.
+
+O primeiro é praticamente o veredito cristalizado: ele confirma que o “cérebro que sonha” já existe na CentralDark. dream-review.mjs sanitiza experiência, exige evidência + learning_delta + HEAD, deduplica e deixa tudo como CANDIDATE/QUARANTINE, sem aplicar automaticamente. O runner já conecta Memory Reserve, Pattern Discovery, Pattern Library e roteamento, mantendo DIRECT_APPLY=0.
+
+O segundo é muito mais profundo: ele é praticamente a engenharia do corpo físico para esse cérebro. Ele separa claramente o que já existe do que ainda é proposta:
+
+JÁ EXISTE
+Dream Review
+Pattern Discovery
+Pattern Library
+Memory Reserve bridge
+MetaLupa / gates
+same-HEAD
+direct apply proibido
+
+AINDA NÃO PROVADO
+scheduler noturno da Casa
+adapter do log do dia
+sleep/wake físico
+
+Isso está explícito no próprio material.
+
+E aqui está o ouro maior que eu tiraria desses dois arquivos:
+
+DIA
+experiência / eventos / receipts
+        ↓
+
+NOITE
+Dream Review
+→ sanitiza
+→ dedupe
+→ encontra padrões
+→ Pattern Library
+        ↓
+
+REVIEW OF REVIEW
+mesmo HEAD + mesma entrada
+→ roda novamente
+→ compara SHA
+
+SHA diferente sem informação nova
+→ STATE_DRIFT / NONDETERMINISM
+→ BLOCK
+
+SHA igual
+→ apenas estabilidade
+→ NÃO significa verdade
+
+JUDGE
+→ validadores
+→ testes reais
+
+RESULTADO
+→ CANDIDATOS
+→ zero escrita canônica
+
+MANHÃ
+WAKE
+→ lê receipt
+→ mostra candidatos
+→ devolve controle ao Hermes
+
+O ponto fino é excelente: revisar a própria revisão não vira autoaprovação. O replay serve para detectar instabilidade; depois ainda existem validador e testes.
+
+Isso conversa diretamente com aquela tua ideia do Hermes aprender ao longo do dia. O arquivo encontrou justamente a lacuna: o Dream Review não captura automaticamente tudo que aconteceu durante o dia. Para chegar nisso de forma limpa, precisa de um adaptador estruturado entre a atividade diária e o Dream Review; o próprio texto marca DAY_LOG_EXISTS, DAY_LOG_SCHEMA e DAY_LOG_ADAPTER como UNPROVEN.
+
+Então o desenho mais certo agora fica:
+
+RADAR / ESTUDO / TRABALHO / SESSÃO
+            ↓
+DAY EVENT ADAPTER
+            ↓
+EVENTOS ESTRUTURADOS
+            ↓
+DREAM REVIEW EXISTENTE
+            ↓
+PATTERN DISCOVERY
+            ↓
+PATTERN LIBRARY
+            ↓
+REVIEW OF REVIEW
+            ↓
+JUDGE
+            ↓
+OURO CANDIDATO
+            ↓
+NUCLEO / REVISÃO HUMANA
+
+Ou seja: não precisamos criar outro sistema de aprendizado noturno. O mecanismo cerebral já existe; falta principalmente ligar o dia ao Dream Review e depois ligar scheduler → hard stop → wake ao runtime local. O próprio pack diz para não criar Dream Engine, Night Brain nem segundo scheduler, e para descobrir/reutilizar o owner real antes de instalar qualquer coisa.
+
+Tem outra regra que eu cristalizaria junto, porque ela evita transformar tua “vida inteira” em lixo de memória:
+
+RAW LOG != MEMORY
+RAW LOG != DREAM EVENT
+RAW LOG != PROOF
+
+EXPERIÊNCIA
+→ EXTRAÇÃO ESTRUTURADA
+→ SANITIZAÇÃO
+→ DELTA
+→ DREAM
+
+Então a arquitetura ficou mais forte que o que a gente estava desenhando antes: o Living Learning OS/Radar não precisa ser outro cérebro. Ele vira a camada sensorial diurna, e o Dream Review já existente vira a consolidação ociosa/noturna.
+
+E tem um cuidado: o arquivo 2 contém código e scripts preparados para o pack, inclusive instalação/remoção de scheduler, mas isso não prova que estejam instalados no teu Windows. O material é explícito que a instalação só deve ocorrer depois de medir runtime, paths, scheduler, horários e log reais.
+
+Minha cristalização final disso:
+
+Durante o dia o Hermes vive. À noite ele não inventa outra mente: ele revisa os rastros do mesmo sistema, comprime padrões, tenta quebrar a própria revisão e acorda com candidatos — nunca com verdades autoaprovadas.
+
+Isso aí é uma joia grande, viu. 🌙💎
+
+Posso criar também uma imagem 4K do ciclo DIA → DREAM → REVIEW OF REVIEW → JUDGE → WAKE.

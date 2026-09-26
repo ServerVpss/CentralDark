@@ -1,0 +1,13 @@
+﻿2026-08-22T05:39:55.9480344-03:00 === PHASE4 identify rewriter ===
+2026-08-22T05:39:56.4747122-03:00 STOPPED ProductAgentService
+2026-08-22T05:39:56.4857649-03:00 STOP bdredline_agent FAIL O serviço 'Bitdefender Agent RedLine Service (bdredline_agent)' não pode ser interrompido devido ao seguinte erro: Não é possível parar o serviço bdredline_agent no computador '.'.
+2026-08-22T05:39:56.5526908-03:00 set 0 after stopping BD agent
+2026-08-22T05:39:59.5645266-03:00 DisableAntiSpyware=1 DisableAntiVirus=1
+2026-08-22T05:39:59.5813979-03:00 still rewritten with BD agent stopped â€” trying SecurityHealthService pause is unsafe; skip
+2026-08-22T05:39:59.5813979-03:00 trying MDCoreSvc stop briefly
+2026-08-22T05:39:59.5890596-03:00 MDCoreSvc O serviço 'Serviço Microsoft Defender Core (MDCoreSvc)' não pode ser interrompido devido ao seguinte erro: Não é possível abrir o serviço MDCoreSvc no computador '.'.
+2026-08-22T05:40:02.6055667-03:00 DisableAntiSpyware=1 DisableAntiVirus=1
+2026-08-22T05:40:02.6055667-03:00 restarted MDCoreSvc
+2026-08-22T05:41:02.9466722-03:00 restored ProductAgentService
+2026-08-22T05:41:02.9497364-03:00 restored bdredline_agent
+2026-08-22T05:41:02.9507471-03:00 === PHASE4 END ===

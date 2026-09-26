@@ -1,0 +1,47 @@
+flowchart TD
+    CHEFE["SEGREDO / CHEFE<br/>INTENÇÃO"] --> CASA["CENTRALDARK<br/>UMA CASA"]
+
+    subgraph OAI["OPENAI — CAMADA COMPUTACIONAL PUBLICAMENTE DOCUMENTADA"]
+      GPT4["GPT-4<br/>Transformer-style"]
+      OSS["gpt-oss<br/>Transformer + MoE<br/>dense/sparse attention + GQA + RoPE"]
+      WH["Whisper<br/>Encoder-Decoder Transformer"]
+      CLIP["CLIP<br/>Image Encoder + Text Transformer<br/>Contrastive Embedding"]
+      AG["Agents SDK<br/>Model + Tools + Instructions<br/>Handoffs + Guardrails + Tracing"]
+    end
+
+    subgraph BIO["BIO-COGNITIVE LIBRARY"]
+      ANT["Formigas<br/>coordenação / estigmergia"]
+      BEE["Abelhas<br/>navegação / comunicação"]
+      OCT["Polvos<br/>controle distribuído"]
+      COR["Corvídeos<br/>planejamento / ferramenta"]
+      PAR["Papagaios<br/>comunicação / abstração"]
+      ELE["Elefantes<br/>memória longitudinal"]
+      CET["Cetáceos<br/>cooperação social"]
+      PRI["Primatas<br/>aprendizagem social"]
+      ROD["Roedores<br/>mapa / reforço"]
+      FISH["Peixes<br/>cognição eficiente"]
+      INV["Invertebrados<br/>sistemas compactos"]
+      ADV["Predador–presa<br/>adaptação adversarial"]
+    end
+
+    CASA --> OAI
+    CASA --> BIO
+
+    OAI --> HYP["HIPÓTESES COMPUTACIONAIS"]
+    BIO --> HYP
+
+    HYP --> MB["!MULTIBÚSSOLA"]
+    MB --> ML["!META_LUPA"]
+    ML --> TEST["TESTE DISCRIMINANTE"]
+    TEST --> JUDGE["REALITY JUDGE"]
+
+    JUDGE -->|PASS PROVADO| CRYSTAL["CRISTAL"]
+    JUDGE -->|FAIL / UNKNOWN| REMED["REMEDIAR / REABRIR"]
+    REMED --> HYP
+
+    CRYSTAL --> NEXT["LAST_GOOD_STATE<br/>NEXT BOOT"]
+    NEXT --> CASA
+
+    U1["BIOLOGICAL_INSPIRATION != OPENAI_BLUEPRINT"] --- HYP
+    U2["AGENT_ARCHITECTURE != NEURAL_ARCHITECTURE"] --- OAI
+    U3["UNKNOWN != PASS"] --- JUDGE

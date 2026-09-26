@@ -1,0 +1,14 @@
+flowchart LR
+    RAW[Material bruto\nchat • arquivos • logs • imagens • fontes] --> CAP[CAPTURA]
+    CAP --> PROC[PROCESSAMENTO\nextrair • normalizar • ordenar]
+    PROC --> DED[DEDUPE]
+    DED --> CP[CONTRAPROVA\nfato / claim / inferência / unknown]
+    CP --> DEST[DESTILAÇÃO\nMenos é Mais]
+    DEST --> CR[CRISTAL / MEMÓRIA]
+    DEST --> KB[KANBAN / AÇÃO]
+    DEST --> CTX[LEGENDA / CONTEXTO]
+    DEST --> TRACE[RASTRO TÉCNICO / RECEIPT]
+    CR --> HOUSE[CENTRALDARK]
+    KB --> HOUSE
+    CTX --> HOUSE
+    TRACE --> HOUSE

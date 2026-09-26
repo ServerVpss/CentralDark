@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@react-dnd\shallowequal\dist\index.d.ts
+
+export declare function shallowEqual<T>(objA: T, objB: T, compare?: (a: T, b: T, key?: string) => boolean | void, compareContext?: any): boolean;

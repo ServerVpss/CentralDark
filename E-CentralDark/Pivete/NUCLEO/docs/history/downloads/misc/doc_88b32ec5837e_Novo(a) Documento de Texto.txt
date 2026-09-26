@@ -1,0 +1,656 @@
+SOL_TO: PIVETE
+
+MISSION: CENTRALDARK-CASA-BACKUP-ORGANIZACAO-SYNC-01
+TURN: 10
+NONCE: SOL-PIVETE-20260802-0630
+PROTOCOL: SOL_HERMES_UNIFIED
+
+AUTHORIZATION:
+  ISSUER: CHEFE
+  STATUS: AUTORIZADO
+  SCOPE:
+    - criar backup local automático do Pivete
+    - organizar artefatos temporários do disco C
+    - mover testes e evidências para a Casa do Pivete no disco E
+    - sincronizar controladamente Casa local e GitHub
+    - criar e enviar branch de reconciliação quando os gates passarem
+    - executar benchmarks reais
+  NOT_AUTHORIZED:
+    - merge na main
+    - deploy
+    - restart de serviço
+    - produção ou VPS
+    - force-push
+    - reset --hard
+    - apagar histórico
+    - tocar na Casa da SOL
+    - abrir, ler, copiar ou exibir segredos
+
+ROLES:
+  CHEFE: autoridade final
+  SOL: tutora, coordenadora e reconciliadora READ_ONLY
+  PIVETE: escritor e executor único
+  READERS: leitura independente, sem escrita
+  META_LUPA: judge e gate crítico
+
+CANONICAL_PATHS:
+  PIVETE_HOME: 'E:\CentralDark\Pivete'
+  SOL_HOME_BLOCKED: 'E:\CentralDark\Sol'
+  REPOSITORY: 'E:\CentralDark\Pivete\CentralDark'
+  TEMP_ROOT: 'E:\CentralDark\Pivete\TEMP'
+  BACKUP_ROOT: 'E:\CentralDark\Pivete\BACKUPS'
+  EVIDENCE_ROOT: 'E:\CentralDark\Pivete\TEMP\CENTRALDARK-CASA-SYNC-20260802'
+  REMOTE_REPOSITORY: 'ServerVpss/CentralDark'
+  REMOTE_DEFAULT_BRANCH: main
+
+BENCHMARK_POLICY:
+  NAVIGATION_REFERENCE: 1.019s
+  D0_SERIAL_REFERENCE: 46.546s
+  D1_RATE_LIMIT_RUN:
+    COUNT_AS_BENCHMARK: true
+    CLASS: PROVIDER_THROTTLING_CHAOS
+    CLEAN_PERFORMANCE_COMPARISON: false
+    RESILIENCE_COMPARISON: true
+  RULES:
+    - nunca apagar resultado ruim
+    - registrar falha de provedor como parte da realidade
+    - separar tempo computacional, tempo de provedor e interferência humana
+    - mudar uma variável por experimento
+    - bloquear falso verde
+
+MANDATORY_BOOT:
+  METHOD: /fable-method
+  MODE: full
+  READ_IN_ORDER:
+    - 'LEIA-ME-IA.md'
+    - 'docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md'
+    - 'docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md'
+    - 'docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md'
+    - 'AGENTS.md'
+    - 'docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md'
+    - '.agents/skills/meta-lupa/SKILL.md'
+    - '.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA'
+  VERIFY:
+    - calcular o git-blob SHA da Meta Lupa local
+    - comparar com AUTOLUPA_CANONICAL_SHA
+    - confirmar que origem aponta para ServerVpss/CentralDark
+    - confirmar branch, HEAD local e HEAD remoto ao vivo
+  EXPECTED_CANONICAL_META_LUPA_BLOB: c124497474f381ec86047fb93407b9e04fbdcf58
+  ON_MISMATCH: BLOCKED_META_LUPA_DRIFT
+
+EXECUTION_METHOD:
+  - classificar a missão
+  - definir o estado final comprovável
+  - recolher fatos por canais independentes
+  - decidir pelo menor movimento eficaz
+  - criar backup antes da primeira alteração
+  - agir cirurgicamente
+  - verificar hashes, Git, arquivos e tarefa agendada
+  - executar AutoLupa
+  - reportar resultado primeiro
+
+PARALLEL_READERS:
+  R1_LOCAL_GIT:
+    TASK:
+      - medir branch e HEAD local
+      - medir worktree, staged e untracked
+      - calcular merge-base e ahead/behind
+    WRITE: false
+
+  R2_REMOTE_GIT:
+    TASK:
+      - medir refs/heads/main diretamente no origin
+      - buscar histórico remoto aplicável
+      - confirmar repositório e branch padrão
+    WRITE: false
+
+  R3_DISK_C:
+    TASK:
+      - inventariar artefatos temporários criados por testes
+      - localizar evidências, screenshots, logs, ZIPs e relatórios experimentais
+      - separar runtime ativo de material migrável
+    WRITE: false
+
+  R4_BACKUP:
+    TASK:
+      - verificar se BACKUP_ROOT existe
+      - verificar tarefa agendada anterior
+      - verificar scripts ou mecanismos de backup já existentes
+      - impedir criação duplicada
+    WRITE: false
+
+  JOIN_GATE:
+    - todos devolvem fatos, caminhos e hashes
+    - Pivete reconcilia contradições
+    - somente Pivete escreve
+    - resultado vazio de um leitor não prova ausência
+    - ausência exige segundo canal
+
+META_LUPA_TEMPERATURES:
+  FRIA:
+    - caminhos
+    - processos
+    - hashes
+    - HEADs
+    - ahead e behind
+    - arquivos candidatos
+  MEDIA:
+    - rate limit
+    - drift
+    - arquivo em uso
+    - ref inválido
+    - conflito Git
+    - divergência entre instrumentos
+  QUENTE:
+    - mover arquivo entre discos
+    - criar tarefa agendada
+    - reconciliar histórico
+    - criar branch
+    - push ao GitHub
+    - validar rollback
+
+PHASE_0_EVIDENCE:
+  CREATE:
+    - '${EVIDENCE_ROOT}\00-boot'
+    - '${EVIDENCE_ROOT}\01-backup'
+    - '${EVIDENCE_ROOT}\02-disk-c'
+    - '${EVIDENCE_ROOT}\03-git-before'
+    - '${EVIDENCE_ROOT}\04-reconciliation'
+    - '${EVIDENCE_ROOT}\05-tests'
+    - '${EVIDENCE_ROOT}\06-git-after'
+    - '${EVIDENCE_ROOT}\07-benchmark'
+  RECORD:
+    - UTC e horário local
+    - versão do Pivete
+    - modelo atual
+    - duração de cada fase
+    - erros 429 e rate limits
+    - comandos executados com valores sensíveis redigidos
+    - stdout, stderr e exit code
+  NEVER_RECORD:
+    - tokens
+    - cookies
+    - valores de API key
+    - conteúdo de .env
+    - sessões
+    - chaves ou certificados
+
+PHASE_1_BACKUP_BEFORE_WRITE:
+  ENSURE_DIRECTORIES:
+    - 'E:\CentralDark\Pivete\BACKUPS\snapshots'
+    - 'E:\CentralDark\Pivete\BACKUPS\repository'
+    - 'E:\CentralDark\Pivete\BACKUPS\automation'
+    - 'E:\CentralDark\Pivete\BACKUPS\manifests'
+    - 'E:\CentralDark\Pivete\BACKUPS\rollback'
+
+  SNAPSHOT_NAME: 'PIVETE-${TIMESTAMP}'
+
+  SAFE_ALLOWLIST:
+    - perfil/SOUL.md
+    - perfil/skills
+    - perfil/memórias não sensíveis
+    - perfil/catálogos e referências
+    - cápsulas de missão
+    - scripts operacionais não sensíveis
+    - relatórios e evidências
+    - estado Git por bundle e patches
+
+  BLOCKLIST:
+    - .env
+    - secrets
+    - tokens
+    - sessions
+    - .ssh
+    - credentials
+    - cookies
+    - certificados
+    - arquivos .key, .pem, .pfx, .p12
+    - valores de autenticação
+    - cache ativo do navegador
+
+  CONFIG_HANDLING:
+    - não copiar config bruto quando contiver campo sensível
+    - gerar somente cópia sanitizada
+    - substituir valores de token, key, password e secret por REDACTED
+    - registrar hash do original sem exibir conteúdo
+
+  REPOSITORY_BACKUP:
+    - criar git bundle de todas as refs antes da sincronização
+    - salvar status porcelain v2
+    - salvar diff tracked
+    - salvar diff staged
+    - guardar untracked não sensível em snapshot separado
+    - excluir caminhos sensíveis pelo nome, sem abrir o conteúdo
+    - calcular SHA-256 de cada artefato
+
+  BACKUP_GATE:
+    CONDITIONS:
+      - snapshot criado
+      - manifest criado
+      - hashes recalculados
+      - git bundle verificável
+      - nenhum segredo incluído
+    FAIL_ACTION:
+      - parar antes de mover arquivos
+      - parar antes de alterar Git
+      - reportar BLOCKED_BACKUP
+
+PHASE_2_LOCAL_SCHEDULED_BACKUP:
+  WINDOWS_EQUIVALENT_OF_CRON: Task Scheduler
+  TASK_NAME: CentralDark-Pivete-Backup
+  SCRIPT: 'E:\CentralDark\Pivete\BACKUPS\automation\backup-pivete.ps1'
+
+  BEHAVIOR:
+    - verificar tarefa existente pelo nome e pela ação
+    - atualizar a tarefa existente quando ela possuir a mesma responsabilidade
+    - não criar segunda tarefa concorrente
+    - criar somente quando nenhuma equivalente existir
+    - executar backup ao iniciar sessão do Pivete
+    - executar novamente em intervalo de 6 horas
+    - impedir duas execuções simultâneas
+    - registrar log local
+    - nunca apagar backups antigos nesta missão
+    - não usar GitHub nesta fase
+
+  SCRIPT_REQUIREMENTS:
+    - usar allowlist
+    - aplicar blocklist sensível
+    - criar snapshot imutável por timestamp
+    - criar MANIFEST.sha256
+    - escrever primeiro em pasta staging
+    - promover staging para snapshot somente após hashes passarem
+    - em falha, preservar staging com STATUS=FAILED
+    - retornar exit code diferente de zero em qualquer cópia incompleta
+
+  VALIDATION:
+    - exportar configuração anterior da tarefa, quando existir
+    - executar a tarefa uma vez manualmente
+    - aguardar término real
+    - comprovar novo snapshot
+    - verificar hashes por segunda leitura
+    - comprovar exit code
+    - registrar duração
+
+  ROLLBACK:
+    - preservar XML/configuração anterior
+    - criar comando de restauração
+    - não executar rollback sem falha ou ordem
+
+PHASE_3_ORGANIZE_DISK_C:
+  DESTINATION:
+    ROOT: 'E:\CentralDark\Pivete\TEMP'
+    STRUCTURE:
+      - '00-INBOX-C'
+      - '01-EXPERIMENTOS'
+      - '02-EVIDENCIAS'
+      - '03-BENCHMARKS'
+      - '04-DEBUG'
+      - '05-RECOVERY'
+      - '06-MIGRACAO-C-PARA-E'
+      - '99-QUARENTENA'
+
+  DISCOVERY:
+    - localizar apenas artefatos produzidos por testes e missões do Pivete
+    - usar nome, horário, processo produtor e handle aberto
+    - não presumir que arquivo antigo é descartável
+    - não varrer conteúdo sensível
+    - verificar arquivo em uso antes de mover
+    - detectar colisões de nome
+
+  CLEAR_TEMP_CANDIDATES:
+    - screenshots de testes
+    - logs encerrados
+    - relatórios de benchmark
+    - bundles e patches experimentais
+    - ZIPs de recovery
+    - drafts técnicos
+    - dumps não sensíveis
+    - diretórios de evidência de missões concluídas
+    - arquivos staging encerrados
+
+  NEVER_MOVE:
+    - 'C:\Users\danda\AppData\Local\hermes\hermes-agent'
+    - profile ativo inteiro
+    - SOUL ativo
+    - skills ativas
+    - config ativo bruto
+    - processos ou bancos abertos
+    - sessões
+    - credenciais
+    - cache em uso
+    - repositório Git ativo
+    - qualquer item de 'E:\CentralDark\Sol'
+
+  MOVE_TRANSACTION:
+    - copiar candidato para staging no E
+    - preservar caminho de origem no ledger
+    - preservar timestamps
+    - calcular SHA-256 na origem e no destino
+    - comparar tamanho e hash
+    - verificar que o destino abre como arquivo
+    - somente depois remover a cópia temporária da origem
+    - em diretórios, validar arquivo por arquivo
+    - em dúvida, não remover origem e colocar cópia em 99-QUARENTENA
+    - não sobrescrever colisões; acrescentar hash curto ao nome
+
+  LEDGERS:
+    - MOVE-LEDGER.csv
+    - MIGRATION-MANIFEST.jsonl
+    - MANIFEST-BEFORE.sha256
+    - MANIFEST-AFTER.sha256
+    - rollback-files.ps1
+
+  SUCCESS:
+    - runtime permanece funcionando
+    - todos os itens movidos têm hash idêntico
+    - origem e destino registrados
+    - nenhuma perda
+    - nenhuma Casa da SOL tocada
+
+PHASE_4_REPOSITORY_PREFLIGHT:
+  WORKDIR: 'E:\CentralDark\Pivete\CentralDark'
+
+  MEASURE:
+    - LOCAL_BRANCH
+    - LOCAL_HEAD
+    - LOCAL_TREE
+    - WORKTREE_STATUS
+    - STAGED_STATUS
+    - UNTRACKED_COUNT
+    - REMOTE_MAIN_LIVE
+    - MERGE_BASE
+    - LOCAL_AHEAD
+    - LOCAL_BEHIND
+
+  REMOTE_TRUST:
+    - medir main com git ls-remote origin refs/heads/main
+    - não confiar apenas em origin/main armazenado localmente
+    - executar fetch controlado
+    - medir novamente após fetch
+    - redigir credenciais caso a URL remota as contenha
+    - confirmar owner e repository sem imprimir token
+
+  FETCH_ALLOWED:
+    - fetch origin main
+    - fetch tags aplicáveis
+  FETCH_FORBIDDEN:
+    - prune automático nesta missão
+    - atualização forçada de refs locais
+    - reset
+    - limpeza destrutiva
+
+  PRE_SYNC_REPORT:
+    - LOCAL_HEAD_BEFORE
+    - REMOTE_HEAD_BEFORE
+    - MERGE_BASE
+    - AHEAD
+    - BEHIND
+    - DIRTY_FILES
+    - LOCAL_ONLY_COMMITS
+    - REMOTE_ONLY_COMMITS
+
+PHASE_5_CONTROLLED_RECONCILIATION:
+  BRANCH_NAME: 'reconcile/casa-github-20260802-${HHMMSS}'
+  ISOLATED_WORKTREE: 'E:\CentralDark\Pivete\TEMP\reconcile-${TIMESTAMP}'
+
+  DECISION_TREE:
+    CLEAN_AND_BEHIND_ONLY:
+      - atualizar local somente por fast-forward
+      - provar HEAD final igual ao remoto
+      - nenhuma branch de reconciliação necessária se não houver conteúdo local
+
+    CLEAN_AND_EQUAL:
+      - não executar mudança Git
+      - registrar ALREADY_SYNCHRONIZED
+
+    CLEAN_AND_AHEAD_ONLY:
+      - preservar commits locais
+      - criar branch de reconciliação apontando para o HEAD local
+      - não empurrar a main
+      - testar antes do push
+
+    DIVERGED_OR_DIRTY:
+      - criar worktree isolada a partir do remote main medido ao vivo
+      - criar branch de reconciliação nessa worktree
+      - listar commits locais exclusivos em ordem
+      - incorporar commits locais sem descartar o lado remoto
+      - aplicar alterações tracked e staged preservadas no backup
+      - incorporar untracked somente quando forem parte legítima do repositório
+      - não incorporar TEMP, BACKUPS, evidências ou segredos
+      - resolver conflitos por responsabilidade e intenção
+      - preservar ambos os lados quando forem complementares
+      - conflito sem decisão objetiva vai para CHEFE, não é resolvido por adivinhação
+
+  ZERO_REGRESSION:
+    - comparar merge-base → local
+    - comparar merge-base → remoto
+    - comprovar REMOTE_ONLY_INCORPORATED
+    - comprovar LOCAL_ONLY_PRESERVED
+    - procurar arquivos descartados silenciosamente
+    - verificar gitlinks e submódulos
+    - provar conteúdo por checkout/worktree limpo
+    - rodar os mesmos testes antes e depois quando aplicável
+
+  SINGLE_WRITER:
+    WRITER: PIVETE
+    READERS: não escrevem
+    PARALLEL_WRITES: forbidden
+
+PHASE_6_TESTS_AND_AUTOLUPA:
+  DISCOVER_COMMANDS_FROM_REPOSITORY: true
+  DO_NOT_INVENT_TEST_COMMANDS: true
+
+  REQUIRED:
+    - testes canônicos encontrados no repositório
+    - validação da porta de entrada
+    - validação Meta Lupa
+    - testes relevantes aos arquivos alterados
+    - inspeção de diff final
+    - busca por segredos adicionados
+    - teste em worktree limpa
+    - rollback ensaiado sem destruir o resultado
+    - AutoLupa adversarial do próprio veredito
+
+  GATES:
+    BACKUP: PASS_REQUIRED
+    NO_SECRET: PASS_REQUIRED
+    DISK_HASHES: PASS_REQUIRED
+    LOCAL_RUNTIME: PASS_REQUIRED
+    REPO_IDENTITY: PASS_REQUIRED
+    REMOTE_HEAD_REMEASURED: PASS_REQUIRED
+    LOCAL_CONTENT_PRESERVED: PASS_REQUIRED
+    REMOTE_CONTENT_INCORPORATED: PASS_REQUIRED
+    TESTS: PASS_REQUIRED
+    CLEAN_CHECKOUT: PASS_REQUIRED
+    ROLLBACK: PASS_REQUIRED
+    META_LUPA: PASS_REQUIRED
+
+  FALSE_GREEN:
+    - HTTP 200 sozinho não passa
+    - exit code zero sozinho não passa
+    - branch existente sozinha não passa
+    - push aceito sozinho não passa
+    - status limpo sozinho não passa
+    - resultado vazio sozinho não prova ausência
+
+PHASE_7_GITHUB_SYNC:
+  CONDITION: todos os gates anteriores PASS
+
+  ALLOWED:
+    - push da nova branch de reconciliação
+    - criar upstream da própria branch
+    - verificar SHA remoto por git ls-remote
+    - comparar SHA local e remoto
+    - confirmar main remota inalterada
+
+  BLOCKED:
+    - push direto na main
+    - force-push
+    - merge
+    - abrir PR automaticamente
+    - deploy
+    - alterar proteção de branch
+    - alterar secrets ou Actions
+
+  FINAL_REMOTE_PROOF:
+    - RESULT_BRANCH
+    - RESULT_HEAD_LOCAL
+    - RESULT_HEAD_REMOTE
+    - SHA_MATCH
+    - REMOTE_MAIN_BEFORE
+    - REMOTE_MAIN_AFTER
+    - MAIN_UNCHANGED
+
+PHASE_8_BENCHMARK:
+  CLOCK:
+    - usar relógio monotônico
+    - registrar início e fim de cada fase
+    - não usar estimativa verbal
+
+  SEPARATE:
+    - TEMPO_BOOT
+    - TEMPO_BACKUP
+    - TEMPO_SCHEDULED_TASK
+    - TEMPO_DISK_DISCOVERY
+    - TEMPO_DISK_MOVE
+    - TEMPO_GIT_PREFLIGHT
+    - TEMPO_GIT_RECONCILIATION
+    - TEMPO_TESTS
+    - TEMPO_PUSH
+    - TEMPO_PROVIDER_WAIT
+    - TEMPO_INTERFERENCIA_CHEFE
+
+  CALCULATE:
+    - TOTAL_WALL_CLOCK
+    - TOTAL_COMPUTE_ACTIVE
+    - TOTAL_PROVIDER_WAIT
+    - GANHO_OU_PERDA
+    - THROUGHPUT_FILES_PER_SECOND
+    - THROUGHPUT_BYTES_PER_SECOND
+    - HASH_VERIFICATION_COST
+    - RECOVERY_COST
+    - FALLBACK_COUNT
+
+  CLASSIFICATION:
+    CLEAN: sem interferência e sem throttling
+    CHAOS_HUMANO: tela ou estado alterado pelo CHEFE
+    PROVIDER_THROTTLING: 429 ou rate limit
+    MIXED: mais de uma interferência
+  RULE:
+    - todas as execuções contam
+    - comparar cada execução somente dentro da classe correta
+    - preservar resultado bruto e resultado ajustado
+    - nunca fabricar ganho descontando falha escondida
+
+STOP_CONDITIONS:
+  - segredo encontrado
+  - Meta Lupa divergente
+  - backup não verificável
+  - origem Git incorreta
+  - branch main remota muda durante reconciliação
+  - conflito sem regra objetiva
+  - teste canônico falha
+  - hash origem/destino diverge
+  - runtime ativo quebra
+  - rollback não comprovável
+  - rate limit impede concluir prova crítica
+
+ON_RATE_LIMIT:
+  - registrar fornecedor, modelo, horário e fase
+  - preservar estado parcial
+  - não reiniciar missão do zero
+  - trocar para fallback autorizado quando disponível
+  - retomar do último checkpoint
+  - classificar benchmark como PROVIDER_THROTTLING ou MIXED
+  - continuar sem esconder o custo
+
+RETURN_FORMAT: |
+  PIVETE_TO=SOL
+
+  MISSION=CENTRALDARK-CASA-BACKUP-ORGANIZACAO-SYNC-01
+  STATUS=
+
+  CENTRALDARK_AI_BOOT=
+  FABLE_METHOD=
+  META_LUPA_SHA_EXPECTED=
+  META_LUPA_SHA_OBSERVED=
+  META_LUPA_STATUS=
+
+  BENCHMARK_CLASS=
+  TOTAL_WALL_CLOCK=
+  TOTAL_COMPUTE_ACTIVE=
+  TOTAL_PROVIDER_WAIT=
+  TOTAL_INTERFERENCIA_CHEFE=
+
+  BACKUP_ROOT=
+  BACKUP_SNAPSHOT=
+  BACKUP_FILES=
+  BACKUP_BYTES=
+  BACKUP_MANIFEST=
+  BACKUP_HASH_PASS=
+  GIT_BUNDLE=
+  GIT_BUNDLE_VERIFY=
+  SECRETS_COPIED=NAO
+
+  SCHEDULED_TASK_STATUS=
+  SCHEDULED_TASK_CREATED_OR_UPDATED=
+  SCHEDULED_TASK_TEST_RUN=
+  SCHEDULED_TASK_EXIT_CODE=
+  SCHEDULED_TASK_SNAPSHOT_PROVED=
+
+  C_CANDIDATES=
+  C_MOVED=
+  C_QUARANTINED=
+  C_SKIPPED_ACTIVE=
+  BYTES_REMOVED_FROM_C=
+  MOVE_HASH_PASS=
+  MOVE_LEDGER=
+  FILE_ROLLBACK_SCRIPT=
+
+  LOCAL_HEAD_BEFORE=
+  REMOTE_HEAD_BEFORE=
+  MERGE_BASE=
+  LOCAL_AHEAD=
+  LOCAL_BEHIND=
+  WORKTREE_DIRTY=
+
+  RECONCILIATION_MODE=
+  RESULT_BRANCH=
+  RESULT_HEAD=
+  REMOTE_ONLY_INCORPORATED=
+  LOCAL_ONLY_PRESERVED=
+  CONFLICTS_RESOLVED=
+  CONFLICTS_REQUIRING_CHEFE=
+
+  TESTS_RUN=
+  TESTS_PASS=
+  TESTS_FAIL=
+  CLEAN_CHECKOUT_PROOF=
+  ROLLBACK_PROOF=
+  AUTOLUPA_RESULT=
+
+  PUSH_EXECUTED=
+  REMOTE_BRANCH_HEAD=
+  LOCAL_REMOTE_SHA_MATCH=
+  REMOTE_MAIN_UNCHANGED=
+
+  GATE_BACKUP=
+  GATE_DISK=
+  GATE_REPOSITORY=
+  GATE_TESTS=
+  GATE_ROLLBACK=
+  GATE_FINAL=
+
+  ERRORS=
+  UNKNOWN=
+  EVIDENCE_DIR=
+  PROXIMO_GATE=
+
+FINAL_INSTRUCTION:
+  - execute agora
+  - não retorne apenas plano
+  - use checkpoints após cada fase
+  - não perca trabalho em rate limit
+  - não toque na Casa da SOL
+  - não envie a frase PIVETE ONLINE que permanece no campo
+  - retorne somente depois de concluir ou atingir uma condição real de bloqueio

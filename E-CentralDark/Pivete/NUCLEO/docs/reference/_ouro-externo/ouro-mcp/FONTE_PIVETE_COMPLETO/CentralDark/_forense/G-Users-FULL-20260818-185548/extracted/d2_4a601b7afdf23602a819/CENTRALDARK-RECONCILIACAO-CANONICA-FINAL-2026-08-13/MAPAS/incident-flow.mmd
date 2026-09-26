@@ -1,0 +1,9 @@
+flowchart TD
+  E[Evento/Alerta] --> R[incident/ID room]
+  R --> T[Timeline]
+  R --> M[Messages]
+  R --> EV[Evidence]
+  R --> D[Decisions]
+  D -->|só se autoridade CD| A[Authorized actions]
+  A --> RES[Results]
+  RES --> C[Closure]

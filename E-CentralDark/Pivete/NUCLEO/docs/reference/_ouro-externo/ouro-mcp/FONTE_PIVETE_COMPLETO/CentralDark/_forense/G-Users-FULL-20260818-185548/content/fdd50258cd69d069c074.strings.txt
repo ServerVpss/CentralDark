@@ -1,0 +1,14 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\perl5\core_perl\Encode\_PM.e2x
+
+package Encode::$_Name_;
+our $VERSION = "0.01";
+use Encode;
+use XSLoader;
+XSLoader::load(__PACKAGE__,$VERSION);
+__END__
+=head1 NAME
+Encode::$_Name_ - New Encoding
+=head1 SYNOPSIS
+You got to fill this in!
+=head1 SEE ALSO
+L<Encode>

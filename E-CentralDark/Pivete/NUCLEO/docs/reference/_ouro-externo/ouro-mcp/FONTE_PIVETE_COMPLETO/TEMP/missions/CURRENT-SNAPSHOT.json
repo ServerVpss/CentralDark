@@ -1,0 +1,68 @@
+{
+  "mission_id": "CENTRALDARK-CONTRATO-DELTA-REUTILIZAVEL-01 + CENTRALDARK-PM2-MCP-RECONCILIATION-01",
+  "timestamp": "2026-08-01T17:38:00Z",
+  "active_tasks": [
+    { "lane": "DELTA_JUDGE_R2", "state": "RUNNING", "target_sha": "feba74dac811fc1b4d553cbc22c90cbbc18532e1" },
+    { "lane": "PR585_JUDGE", "state": "RUNNING", "worktree": "E:/CentralDark/Pivete/worktrees/pr585-findings", "target_sha": "5d84b562120a5021421bd4bc287abc53b833586c" },
+    { "lane": "TRILHA_A_FANTASMAS", "state": "RUNNING" },
+    { "lane": "TRILHA_B_MCP", "state": "RUNNING" },
+    { "lane": "TRILHA_C_ECOSYSTEM", "state": "RUNNING" }
+  ],
+  "pr585": {
+    "mission_id": "PR585-META-LUPA-CONFORMANCE-01",
+    "lupa_usage_id": "720eaff4504f9ebc6f6b6b141d276876ccba6ad5b5b6b202f478bf162f21ec4d",
+    "begin_preceded_first_write": false,
+    "method_violations": ["WRITE_BEFORE_BEGIN", "CONTAGEM_8_PARA_9", "EDICAO_EM_THREAD_RESOLVED_T7_REVERTIDA"],
+    "threads": { "total": 9, "open_cobertos": "6/6", "resolved_intocados": "3/3", "extra_findings": 0 },
+    "autolupa": "PASS (2a volta; 1a foi falso-FAIL por encoding cp1252 do instrumento, corrigido e provado)",
+    "candidate_diff": [".coderabbit.yaml", "AGENTS.md", "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md"],
+    "publicado": false
+  },
+  "completed_tasks": [
+    "AUDITORIA_VPS_FORENSE (11 arquivos de evidencia, secret scan limpo)",
+    "DELTA_PONTO_8 provado por script independente (5 casos)",
+    "DELTA_PONTO_9 verificado (54 linhas commitadas byte-identicas)",
+    "JUDGE_R1 = FAIL, 3 defeitos ALTA com PoC",
+    "DELTA_3_DEFEITOS_CORRIGIDOS + 3 testes de regressao",
+    "CONTRAPROVA: 4 ataques do Judge reproduzidos e todos bloqueados",
+    "NODE20_ELIMINADO (17 workflows, zero residuo, YAML valido)",
+    "COMMIT_LOCAL feba74dac (19 arquivos, sem push)",
+    "TRILHA_D_EADDRINUSE causa raiz COMPROVADA"
+  ],
+  "writers": [
+    { "scope": "delta-canonico + workflows", "writer": "OPUS-5", "collisions": 0 }
+  ],
+  "readers": ["JUDGE_R2", "TRILHA_A", "TRILHA_B", "TRILHA_C"],
+  "branches": ["feature/delta-canonico-core-20260731"],
+  "heads": {
+    "antes": "43e04c933808657cc901718784712e7ddbcd2e1a",
+    "atual_congelado": "feba74dac811fc1b4d553cbc22c90cbbc18532e1"
+  },
+  "findings": [
+    { "id": "F-01", "sev": "P0", "status": "ABERTO", "titulo": "2 processos orfaos sem script no disco; restart = morte permanente" },
+    { "id": "F-EADDRINUSE", "sev": "P1", "status": "CAUSA_RAIZ_PROVADA", "titulo": "daemon PM2 morreu 2x em 17/07; orfaos seguraram portas; 2a copia em crash-loop; ocorrencias = restarts ao segundo" },
+    { "id": "F-ORFAO-VIVO", "sev": "P1", "status": "NOVO", "titulo": "guardiao.py orfao ppid=1 desde 10/jul duplicando CentralDark-GuardiaoConsciencia" },
+    { "id": "F-MCP-SIGKILL", "sev": "P1", "status": "PROVADO", "titulo": "MCP nao fecha listener no SIGTERM; PM2 mata com SIGKILL apos 1600ms; proxima instancia nao binda" },
+    { "id": "F-GH-PULL", "sev": "P1", "status": "LATENTE", "titulo": "gh-pull linha 42 tem fallback pm2 restart all; hoje inerte porque o script morre antes" },
+    { "id": "F-8099", "sev": "P1", "status": "NOVO", "titulo": "os 21 processos apontam OPENAI_BASE_URL para 127.0.0.1:8099 e NADA escuta nessa porta" },
+    { "id": "F-MCP-ALLOWLIST", "sev": "P1", "status": "ABERTO", "titulo": "0 de 7 ferramentas da allowlist externa existem; 102 vivas incluindo execute_command visivel" },
+    { "id": "JUDGE-D4", "sev": "P1", "status": "ABERTO", "titulo": "linhas do ledger sem record_hash; escritas a mao, fora da cadeia de integridade" },
+    { "id": "JUDGE-D5", "sev": "P1", "status": "ABERTO", "titulo": "ledger_check.py fail-open: pula registro sem record_hash; aceitou linha forjada com OK=1" },
+    { "id": "SEC-1", "sev": "DEFERRED", "status": "ADIADO", "titulo": "HARDCODED_GATEWAY_TOKEN" },
+    { "id": "SEC-2", "sev": "DEFERRED", "status": "ADIADO", "titulo": "LOCAL_PROXY_AUTH_REVIEW_REQUIRED" },
+    { "id": "SEC-3", "sev": "DEFERRED", "status": "NOVO", "titulo": "webhook.conf com segredo HMAC em texto claro" }
+  ],
+  "evidence_paths": [
+    "/root/centraldark-evidence/pm2-mcp-precheck-20260801T170717Z/",
+    "E:/CentralDark/Pivete/TEMP/centraldark-evidence/pm2-mcp-precheck-20260801T170717Z/",
+    "E:/CentralDark/Pivete/TEMP/delta-canonico-provas-20260801/"
+  ],
+  "evidence_hashes": "10-manifest.sha256 validado nos dois lados: 10/10 OK",
+  "blockers": [
+    "JUDGE_R2 ainda rodando no SHA congelado — sem veredicto nao ha FINAL",
+    "FINAL do ledger so pode ser gerado por meta_lupa.py finish-use (defeito 4), nunca a mao",
+    "GEMINI_SCOUT bloqueado: WEBUI_LOVABLE_KEY ausente em /root/keys.env = SCOUT_FAILED, sem fallback silencioso",
+    "branch VPS depende do /goal Delta encerrar"
+  ],
+  "next_gate": "DELTA_JUDGE_R2 veredicto -> se PASS, gerar FINAL via meta_lupa.py finish-use e encerrar /goal"
+}

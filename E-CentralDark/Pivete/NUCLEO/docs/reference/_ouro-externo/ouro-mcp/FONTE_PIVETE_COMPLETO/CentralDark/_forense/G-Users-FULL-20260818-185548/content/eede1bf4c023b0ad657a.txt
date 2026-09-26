@@ -1,0 +1,4 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@dnd-kit\sortable\dist\strategies\rectSwapping.d.ts
+
+import type { SortingStrategy } from '../types';
+export declare const rectSwappingStrategy: SortingStrategy;

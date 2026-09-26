@@ -1,0 +1,1502 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\etc\pki\ca-trust\extracted\java\cacerts
+
+acraizfnmt-rcm
+FNMT-RCM1
+AC RAIZ FNMT-RCM0
+081029155956Z
+300101000000Z0;1
+FNMT-RCM1
+AC RAIZ FNMT-RCM0
+o03Xq\
+http://www.cert.fnmt.es/dpcs/0
+gMbz?N
+acraizfnmt-rcmservidoresseguros
+FNMT-RCM1
+Ceres1
+VATES-Q2826004J1,0*
+#AC RAIZ FNMT-RCM SERVIDORES SEGUROS0
+181220093733Z
+431220093733Z0x1
+FNMT-RCM1
+Ceres1
+VATES-Q2826004J1,0*
+#AC RAIZ FNMT-RCM SERVIDORES SEGUROS0v0
+'&U9uJ
+accvraiz1
+ACCVRAIZ11
+PKIACCV1
+110505093737Z
+301231093737Z0B1
+ACCVRAIZ11
+PKIACCV1
+-)*Zqzdj
+@http://www.accv.es/fileadmin/Archivos/certificados/raizaccv1.crt0
+http://ocsp.accv.es0
+$http://www.accv.es/legislacion_c.htm0U
+Dhttp://www.accv.es/fileadmin/Archivos/certificados/raizaccv1_der.crl0
+accv@accv.es0
+actalisauthenticationrootca
+Milan1#0!
+Actalis S.p.A./033585209671'0%
+Actalis Authentication Root CA0
+110922112202Z
+300922112202Z0k1
+Milan1#0!
+Actalis S.p.A./033585209671'0%
+Actalis Authentication Root CA0
+'%7xLQj
+YTG>4{xmV
+affirmtrustcommercial
+AffirmTrust1
+AffirmTrust Commercial0
+100129140606Z
+301231140606Z0D1
+AffirmTrust1
+AffirmTrust Commercial0
+affirmtrustnetworking
+AffirmTrust1
+AffirmTrust Networking0
+100129140824Z
+301231140824Z0D1
+AffirmTrust1
+AffirmTrust Networking0
+$fU$K@D
+5NvCq 
+affirmtrustpremium
+AffirmTrust1
+AffirmTrust Premium0
+100129141036Z
+401231141036Z0A1
+AffirmTrust1
+AffirmTrust Premium0
+W)fwa!1
+\~.e&\SO
+affirmtrustpremiumecc
+AffirmTrust1 0
+AffirmTrust Premium ECC0
+100129142024Z
+401231142024Z0E1
+AffirmTrust1 0
+AffirmTrust Premium ECC0v0
+amazonrootca1
+Amazon1
+Amazon Root CA 10
+150526000000Z
+380117000000Z091
+Amazon1
+Amazon Root CA 10
+0-}-tp5
+vQ( 6#
+rC4unWY
+amazonrootca2
+Amazon1
+Amazon Root CA 20
+150526000000Z
+400526000000Z091
+Amazon1
+Amazon Root CA 20
+j6QF'a[
+!dz _ld
+amazonrootca3
+Amazon1
+Amazon Root CA 30
+150526000000Z
+400526000000Z091
+Amazon1
+Amazon Root CA 30Y0
+hbEW}DX
+amazonrootca4
+Amazon1
+Amazon Root CA 40
+150526000000Z
+400526000000Z091
+Amazon1
+Amazon Root CA 40v0
+(N*O5M3Z
+anfsecureserverrootca
+G632875101
+ES1'0%
+ANF Autoridad de Certificacion1
+ANF CA Raiz1"0 
+ANF Secure Server Root CA0
+190904100038Z
+390830100038Z0
+G632875101
+ES1'0%
+ANF Autoridad de Certificacion1
+ANF CA Raiz1"0 
+ANF Secure Server Root CA0
+y/N ";
+TJRYK`
+atostrustedroot2011
+Atos TrustedRoot 20111
+110707145830Z
+301231235959Z0<1
+Atos TrustedRoot 20111
++atqlC
+atostrustedrootrootcaecctls2021
+0L1.0,
+%Atos TrustedRoot Root CA ECC TLS 20211
+210422092623Z
+410417092622Z0L1.0,
+%Atos TrustedRoot Root CA ECC TLS 20211
+atostrustedrootrootcarsatls2021
+0L1.0,
+%Atos TrustedRoot Root CA RSA TLS 20211
+210422092110Z
+410417092109Z0L1.0,
+%Atos TrustedRoot Root CA RSA TLS 20211
+{??|G8
+#CS$b\m
+Gp@3Xw
+4autoridaddecertificacionfirmaprofesionalcifa62634068
+ES1B0@
+9Autoridad de Certificacion Firmaprofesional CIF A626340680
+140923152207Z
+360505152207Z0Q1
+ES1B0@
+9Autoridad de Certificacion Firmaprofesional CIF A626340680
+#http://www.firmaprofesional.com/cps0\
+YE%`"3
+baltimorecybertrustroot
+Baltimore1
+CyberTrust1"0 
+Baltimore CyberTrust Root0
+000512184600Z
+250512235900Z0Z1
+Baltimore1
+CyberTrust1"0 
+Baltimore CyberTrust Root0
+bjcaglobalrootca1
+CN1&0$
+BEIJING CERTIFICATE AUTHORITY1
+BJCA Global Root CA10
+191219031617Z
+441212031617Z0T1
+CN1&0$
+BEIJING CERTIFICATE AUTHORITY1
+BJCA Global Root CA10
+^_!E`H\
+bjcaglobalrootca2
+CN1&0$
+BEIJING CERTIFICATE AUTHORITY1
+BJCA Global Root CA20
+191219031821Z
+441212031821Z0T1
+CN1&0$
+BEIJING CERTIFICATE AUTHORITY1
+BJCA Global Root CA20v0
+buypassclass2rootca
+Buypass AS-9831633271 0
+Buypass Class 2 Root CA0
+101026083803Z
+401026083803Z0N1
+Buypass AS-9831633271 0
+Buypass Class 2 Root CA0
+ZMl2#C
+buypassclass3rootca
+Buypass AS-9831633271 0
+Buypass Class 3 Root CA0
+101026082858Z
+401026082858Z0N1
+Buypass AS-9831633271 0
+Buypass Class 3 Root CA0
+vcJz@e
+cadisigrootr2
+Bratislava1
+Disig a.s.1
+CA Disig Root R20
+120719091530Z
+420719091530Z0R1
+Bratislava1
+Disig a.s.1
+CA Disig Root R20
+Oe@x\GP
+certainlyroote1
+Certainly1
+Certainly Root E10
+210401000000Z
+460401000000Z0=1
+Certainly1
+Certainly Root E10v0
+certainlyrootr1
+Certainly1
+Certainly Root R10
+210401000000Z
+460401000000Z0=1
+Certainly1
+Certainly Root R10
+Rv;-0@
+6Tm\%(
+certigna
+Dhimyotis1
+Certigna0
+070629151305Z
+270629151305Z041
+Dhimyotis1
+Certigna0
+o*(%n*>
+Dhimyotis1
+Certigna
+certignarootca
+Dhimyotis1
+0002 481463081000361
+Certigna Root CA0
+131001083227Z
+331001083227Z0Z1
+Dhimyotis1
+0002 481463081000361
+Certigna Root CA0
+UvP|%z
+60A{v3"
+#https://wwww.certigna.fr/autorites/0m
+)http://crl.certigna.fr/certignarootca.crl01
++http://crl.dhimyotis.com/certignarootca.crl0
+]h8/Q"
++LWyzW"
+fRi~Kh
+certsignrootca
+certSIGN1
+certSIGN ROOT CA0
+060704172004Z
+310704172004Z0;1
+certSIGN1
+certSIGN ROOT CA0
+a@j`WhT
+ZNIDTX_B
+certsignrootcag2
+CERTSIGN SA1
+certSIGN ROOT CA G20
+170206092735Z
+420206092735Z0A1
+CERTSIGN SA1
+certSIGN ROOT CA G20
+m76+xf
+C9v[lP
+certumec-384ca
+Asseco Data Systems S.A.1'0%
+Certum Certification Authority1
+Certum EC-384 CA0
+180326072454Z
+430326072454Z0t1
+Asseco Data Systems S.A.1'0%
+Certum Certification Authority1
+Certum EC-384 CA0v0
+certumtrustednetworkca
+PL1"0 
+Unizeto Technologies S.A.1'0%
+Certum Certification Authority1"0 
+Certum Trusted Network CA0
+081022120737Z
+291231120737Z0~1
+PL1"0 
+Unizeto Technologies S.A.1'0%
+Certum Certification Authority1"0 
+Certum Trusted Network CA0
+certumtrustednetworkca2
+PL1"0 
+Unizeto Technologies S.A.1'0%
+Certum Certification Authority1$0"
+Certum Trusted Network CA 20"
+20111006083956Z
+20461006083956Z0
+PL1"0 
+Unizeto Technologies S.A.1'0%
+Certum Certification Authority1$0"
+Certum Trusted Network CA 20
+cyD~Kc$
+.4?)LR
+certumtrustedrootca
+Asseco Data Systems S.A.1'0%
+Certum Certification Authority1
+Certum Trusted Root CA0
+180316121013Z
+430316121013Z0z1
+Asseco Data Systems S.A.1'0%
+Certum Certification Authority1
+Certum Trusted Root CA0
+cfcaevroot
+CN100.
+'China Financial Certification Authority1
+CFCA EV ROOT0
+120808030701Z
+291231030701Z0V1
+CN100.
+'China Financial Certification Authority1
+CFCA EV ROOT0
+"`jc`Nv
+TS.x2g=
+s#_!dc
+commscopepublictrusteccroot-01
+CommScope1+0)
+"CommScope Public Trust ECC Root-010
+210428173543Z
+460428173542Z0N1
+CommScope1+0)
+"CommScope Public Trust ECC Root-010v0
+h/HNS+
+commscopepublictrusteccroot-02
+CommScope1+0)
+"CommScope Public Trust ECC Root-020
+210428174454Z
+460428174453Z0N1
+CommScope1+0)
+"CommScope Public Trust ECC Root-020v0
+commscopepublictrustrsaroot-01
+CommScope1+0)
+"CommScope Public Trust RSA Root-010
+210428164554Z
+460428164553Z0N1
+CommScope1+0)
+"CommScope Public Trust RSA Root-010
+f*|RQu
+commscopepublictrustrsaroot-02
+CommScope1+0)
+"CommScope Public Trust RSA Root-020
+210428171643Z
+460428171642Z0N1
+CommScope1+0)
+"CommScope Public Trust RSA Root-020
+WLCym:e
+comodoaaaservicesroot
+Greater Manchester1
+Salford1
+Comodo CA Limited1!0
+AAA Certificate Services0
+040101000000Z
+281231235959Z0{1
+Greater Manchester1
+Salford1
+Comodo CA Limited1!0
+AAA Certificate Services0
+2http://crl.comodoca.com/AAACertificateServices.crl06
+0http://crl.comodo.net/AAACertificateServices.crl0
+comodocertificationauthority
+Greater Manchester1
+Salford1
+COMODO CA Limited1'0%
+COMODO Certification Authority0
+061201000000Z
+291231235959Z0
+Greater Manchester1
+Salford1
+COMODO CA Limited1'0%
+COMODO Certification Authority0
+8http://crl.comodoca.com/COMODOCertificationAuthority.crl0
+comodoecccertificationauthority
+Greater Manchester1
+Salford1
+COMODO CA Limited1+0)
+"COMODO ECC Certification Authority0
+080306000000Z
+380118235959Z0
+Greater Manchester1
+Salford1
+COMODO CA Limited1+0)
+"COMODO ECC Certification Authority0v0
+comodorsacertificationauthority
+Greater Manchester1
+Salford1
+COMODO CA Limited1+0)
+"COMODO RSA Certification Authority0
+100119000000Z
+380118235959Z0
+Greater Manchester1
+Salford1
+COMODO CA Limited1+0)
+"COMODO RSA Certification Authority0
+HCgNr*
+digicertassuredidrootca
+DigiCert Inc1
+www.digicert.com1$0"
+DigiCert Assured ID Root CA0
+061110000000Z
+311110000000Z0e1
+DigiCert Inc1
+www.digicert.com1$0"
+DigiCert Assured ID Root CA0
+digicertassuredidrootg2
+DigiCert Inc1
+www.digicert.com1$0"
+DigiCert Assured ID Root G20
+130801120000Z
+380115120000Z0e1
+DigiCert Inc1
+www.digicert.com1$0"
+DigiCert Assured ID Root G20
+(/R?6rI
+rZVq;?
+swoJ9S
+digicertassuredidrootg3
+DigiCert Inc1
+www.digicert.com1$0"
+DigiCert Assured ID Root G30
+130801120000Z
+380115120000Z0e1
+DigiCert Inc1
+www.digicert.com1$0"
+DigiCert Assured ID Root G30v0
+digicertglobalrootca
+DigiCert Inc1
+www.digicert.com1 0
+DigiCert Global Root CA0
+061110000000Z
+311110000000Z0a1
+DigiCert Inc1
+www.digicert.com1 0
+DigiCert Global Root CA0
+hn\#2K
+digicertglobalrootg2
+DigiCert Inc1
+www.digicert.com1 0
+DigiCert Global Root G20
+130801120000Z
+380115120000Z0a1
+DigiCert Inc1
+www.digicert.com1 0
+DigiCert Global Root G20
+digicertglobalrootg3
+DigiCert Inc1
+www.digicert.com1 0
+DigiCert Global Root G30
+130801120000Z
+380115120000Z0a1
+DigiCert Inc1
+www.digicert.com1 0
+DigiCert Global Root G30v0
+digicerthighassuranceevrootca
+DigiCert Inc1
+www.digicert.com1+0)
+"DigiCert High Assurance EV Root CA0
+061110000000Z
+311110000000Z0l1
+DigiCert Inc1
+www.digicert.com1+0)
+"DigiCert High Assurance EV Root CA0
+:8P[w1
+AA"Nea
+digicerttlseccp384rootg5
+DigiCert, Inc.1&0$
+DigiCert TLS ECC P384 Root G50
+210115000000Z
+460114235959Z0N1
+DigiCert, Inc.1&0$
+DigiCert TLS ECC P384 Root G50v0
+digicerttlsrsa4096rootg5
+DigiCert, Inc.1%0#
+DigiCert TLS RSA4096 Root G50
+210115000000Z
+460114235959Z0M1
+DigiCert, Inc.1%0#
+DigiCert TLS RSA4096 Root G50
+)p1G?t
+digicerttrustedrootg4
+DigiCert Inc1
+www.digicert.com1!0
+DigiCert Trusted Root G40
+130801120000Z
+380115120000Z0b1
+DigiCert Inc1
+www.digicert.com1!0
+DigiCert Trusted Root G40
+]J<0"0i3
+v=Y]Bv
+PAq=?Mp#
+L?n(Zy&
+d-trustbrrootca12020
+D-Trust GmbH1"0 
+D-TRUST BR Root CA 1 20200
+200211094500Z
+350211094459Z0H1
+D-Trust GmbH1"0 
+D-TRUST BR Root CA 1 20200v0
+8http://crl.d-trust.net/crl/d-trust_br_root_ca_1_2020.crl0y
+sldap://directory.d-trust.net/CN=D-TRUST%20BR%20Root%20CA%201%202020,O=D-Trust%20GmbH,C=DE?certificaterevocationlist0
+d-trustbrrootca22023
+D-Trust GmbH1"0 
+D-TRUST BR Root CA 2 20230
+230509085631Z
+380509085630Z0H1
+D-Trust GmbH1"0 
+D-TRUST BR Root CA 2 20230
+TkcQoI3
+)RkNwl
+C$^KkMg
+8ZO#tt
+8http://crl.d-trust.net/crl/d-trust_br_root_ca_2_2023.crl0
+{e'W9C
+"FupkyH
+d-trustevrootca12020
+D-Trust GmbH1"0 
+D-TRUST EV Root CA 1 20200
+200211100000Z
+350211095959Z0H1
+D-Trust GmbH1"0 
+D-TRUST EV Root CA 1 20200v0
+ueI*0g
+8http://crl.d-trust.net/crl/d-trust_ev_root_ca_1_2020.crl0y
+sldap://directory.d-trust.net/CN=D-TRUST%20EV%20Root%20CA%201%202020,O=D-Trust%20GmbH,C=DE?certificaterevocationlist0
+d-trustevrootca22023
+xbS_Zo0
+D-Trust GmbH1"0 
+D-TRUST EV Root CA 2 20230
+230509091033Z
+380509091032Z0H1
+D-Trust GmbH1"0 
+D-TRUST EV Root CA 2 20230
+7dux)h
+8http://crl.d-trust.net/crl/d-trust_ev_root_ca_2_2023.crl0
+d-trustrootclass3ca22009
+D-Trust GmbH1'0%
+D-TRUST Root Class 3 CA 2 20090
+091105083558Z
+291105083558Z0M1
+D-Trust GmbH1'0%
+D-TRUST Root Class 3 CA 2 20090
+zldap://directory.d-trust.net/CN=D-TRUST%20Root%20Class%203%20CA%202%202009,O=D-Trust%20GmbH,C=DE?certificaterevocationlist0C
+=http://www.d-trust.net/crl/d-trust_root_class_3_ca_2_2009.crl0
+okk,%$r
+d-trustrootclass3ca2ev2009
+D-Trust GmbH1*0(
+!D-TRUST Root Class 3 CA 2 EV 20090
+091105085046Z
+291105085046Z0P1
+D-Trust GmbH1*0(
+!D-TRUST Root Class 3 CA 2 EV 20090
+ldap://directory.d-trust.net/CN=D-TRUST%20Root%20Class%203%20CA%202%20EV%202009,O=D-Trust%20GmbH,C=DE?certificaterevocationlist0F
+@http://www.d-trust.net/crl/d-trust_root_class_3_ca_2_ev_2009.crl0
+emsigneccrootca-c3
+emSign PKI1
+eMudhra Inc1 0
+emSign ECC Root CA - C30
+180218183000Z
+430218183000Z0Z1
+emSign PKI1
+eMudhra Inc1 0
+emSign ECC Root CA - C30v0
+emsigneccrootca-g3
+emSign PKI1%0#
+eMudhra Technologies Limited1 0
+emSign ECC Root CA - G30
+180218183000Z
+430218183000Z0k1
+emSign PKI1%0#
+eMudhra Technologies Limited1 0
+emSign ECC Root CA - G30v0
+emsignrootca-c1
+emSign PKI1
+eMudhra Inc1
+emSign Root CA - C10
+180218183000Z
+430218183000Z0V1
+emSign PKI1
+eMudhra Inc1
+emSign Root CA - C10
+VB*9%p
+#c;dg"D
+emsignrootca-g1
+emSign PKI1%0#
+eMudhra Technologies Limited1
+emSign Root CA - G10
+180218183000Z
+430218183000Z0g1
+emSign PKI1%0#
+eMudhra Technologies Limited1
+emSign Root CA - G10
+$entrust.netpremium2048secureserverca
+Entrust.net1@0>
+7www.entrust.net/CPS_2048 incorp. by ref. (limits liab.)1%0#
+(c) 1999 Entrust.net Limited1301
+*Entrust.net Certification Authority (2048)0
+991224175051Z
+290724141512Z0
+Entrust.net1@0>
+7www.entrust.net/CPS_2048 incorp. by ref. (limits liab.)1%0#
+(c) 1999 Entrust.net Limited1301
+*Entrust.net Certification Authority (2048)0
+!entrustrootcertificationauthority
+Entrust, Inc.1907
+0www.entrust.net/CPS is incorporated by reference1
+(c) 2006 Entrust, Inc.1-0+
+$Entrust Root Certification Authority0
+061127202342Z
+261127205342Z0
+Entrust, Inc.1907
+0www.entrust.net/CPS is incorporated by reference1
+(c) 2006 Entrust, Inc.1-0+
+$Entrust Root Certification Authority0
+20061127202342Z
+20261127205342Z0
+V7.1:4.0
+%entrustrootcertificationauthority-ec1
+Entrust, Inc.1(0&
+See www.entrust.net/legal-terms1907
+0(c) 2012 Entrust, Inc. - for authorized use only1301
+*Entrust Root Certification Authority - EC10
+121218152536Z
+371218155536Z0
+Entrust, Inc.1(0&
+See www.entrust.net/legal-terms1907
+0(c) 2012 Entrust, Inc. - for authorized use only1301
+*Entrust Root Certification Authority - EC10v0
+$entrustrootcertificationauthority-g2
+Entrust, Inc.1(0&
+See www.entrust.net/legal-terms1907
+0(c) 2009 Entrust, Inc. - for authorized use only1200
+)Entrust Root Certification Authority - G20
+090707172554Z
+301207175554Z0
+Entrust, Inc.1(0&
+See www.entrust.net/legal-terms1907
+0(c) 2009 Entrust, Inc. - for authorized use only1200
+)Entrust Root Certification Authority - G20
+epkirootcertificationauthority
+TW1#0!
+Chunghwa Telecom Co., Ltd.1*0(
+!ePKI Root Certification Authority0
+041220023127Z
+341220023127Z0^1
+TW1#0!
+Chunghwa Telecom Co., Ltd.1*0(
+!ePKI Root Certification Authority0
+U9.w?BJ
+%{hPtU
+6Ht"A\
+e-szignorootca2017
+Budapest1
+Microsec Ltd.1
+VATHU-235844971
+e-Szigno Root CA 20170
+170822120706Z
+420822120706Z0q1
+Budapest1
+Microsec Ltd.1
+VATHU-235844971
+e-Szigno Root CA 20170Y0
+firmaprofesionalcaroot-aweb
+Firmaprofesional SA1
+VATES-A626340681'0%
+FIRMAPROFESIONAL CA ROOT-A WEB0
+220406090136Z
+470331090136Z0n1
+Firmaprofesional SA1
+VATES-A626340681'0%
+FIRMAPROFESIONAL CA ROOT-A WEB0v0
+gdcatrustauthr5root
+CN1200
+)GUANG DONG CERTIFICATE AUTHORITY CO.,LTD.1
+GDCA TrustAUTH R5 ROOT0
+141126051315Z
+401231155959Z0b1
+CN1200
+)GUANG DONG CERTIFICATE AUTHORITY CO.,LTD.1
+GDCA TrustAUTH R5 ROOT0
+S0F^KT
+\e}<mYW
+ FT~jO1
+~Bt8es'
+globalsigneccrootca-r4
+0P1$0"
+GlobalSign ECC Root CA - R41
+GlobalSign1
+GlobalSign0
+121113000000Z
+380119031407Z0P1$0"
+GlobalSign ECC Root CA - R41
+GlobalSign1
+GlobalSign0Y0
+globalsigneccrootca-r5
+0P1$0"
+GlobalSign ECC Root CA - R51
+GlobalSign1
+GlobalSign0
+121113000000Z
+380119031407Z0P1$0"
+GlobalSign ECC Root CA - R51
+GlobalSign1
+GlobalSign0v0
+globalsignrootca
+GlobalSign nv-sa1
+Root CA1
+GlobalSign Root CA0
+980901120000Z
+280128120000Z0W1
+GlobalSign nv-sa1
+Root CA1
+GlobalSign Root CA0
+globalsignrootca-r3
+GlobalSign Root CA - R31
+GlobalSign1
+GlobalSign0
+090318100000Z
+290318100000Z0L1 0
+GlobalSign Root CA - R31
+GlobalSign1
+GlobalSign0
+globalsignrootca-r6
+GlobalSign Root CA - R61
+GlobalSign1
+GlobalSign0
+141210000000Z
+341210000000Z0L1 0
+GlobalSign Root CA - R61
+GlobalSign1
+GlobalSign0
+PmBf/M
+'YLv9[
+globalsignroote46
+GlobalSign nv-sa1
+GlobalSign Root E460
+190320000000Z
+460320000000Z0F1
+GlobalSign nv-sa1
+GlobalSign Root E460v0
+globalsignrootr46
+GlobalSign nv-sa1
+GlobalSign Root R460
+190320000000Z
+460320000000Z0F1
+GlobalSign nv-sa1
+GlobalSign Root R460
+_)c1Yq
+f9Gd,nM
+6Jy!x"
+@E1x*z
+globaltrust2020
+AT1#0!
+e-commerce monitoring GmbH1
+GLOBALTRUST 20200
+200210000000Z
+400610000000Z0M1
+AT1#0!
+e-commerce monitoring GmbH1
+GLOBALTRUST 20200
+7AyURc
+xJ=B{k~
+godaddyclass2ca
+The Go Daddy Group, Inc.110/
+(Go Daddy Class 2 Certification Authority0
+040629170620Z
+340629170620Z0c1
+The Go Daddy Group, Inc.110/
+(Go Daddy Class 2 Certification Authority0
+The Go Daddy Group, Inc.110/
+(Go Daddy Class 2 Certification Authority
+"godaddyrootcertificateauthority-g2
+Arizona1
+Scottsdale1
+GoDaddy.com, Inc.110/
+(Go Daddy Root Certificate Authority - G20
+090901000000Z
+371231235959Z0
+Arizona1
+Scottsdale1
+GoDaddy.com, Inc.110/
+(Go Daddy Root Certificate Authority - G20
+gtsrootr1
+US1"0 
+Google Trust Services LLC1
+GTS Root R10
+160622000000Z
+360622000000Z0G1
+US1"0 
+Google Trust Services LLC1
+GTS Root R10
+\ _N@]b"v
+gtsrootr2
+US1"0 
+Google Trust Services LLC1
+GTS Root R20
+160622000000Z
+360622000000Z0G1
+US1"0 
+Google Trust Services LLC1
+GTS Root R20
+%iSU'\
+1:%QUg
+gtsrootr3
+%'m=f0
+US1"0 
+Google Trust Services LLC1
+GTS Root R30
+160622000000Z
+360622000000Z0G1
+US1"0 
+Google Trust Services LLC1
+GTS Root R30v0
+gtsrootr4
+US1"0 
+Google Trust Services LLC1
+GTS Root R40
+160622000000Z
+360622000000Z0G1
+US1"0 
+Google Trust Services LLC1
+GTS Root R40v0
+haricatlseccrootca2021
+GR1705
+.Hellenic Academic and Research Institutions CA1$0"
+HARICA TLS ECC Root CA 20210
+210219110110Z
+450213110109Z0l1
+GR1705
+.Hellenic Academic and Research Institutions CA1$0"
+HARICA TLS ECC Root CA 20210v0
+haricatlsrsarootca2021
+GR1705
+.Hellenic Academic and Research Institutions CA1$0"
+HARICA TLS RSA Root CA 20210
+210219105538Z
+450213105537Z0l1
+GR1705
+.Hellenic Academic and Research Institutions CA1$0"
+HARICA TLS RSA Root CA 20210
+4hellenicacademicandresearchinstitutionseccrootca2015
+Athens1D0B
+;Hellenic Academic and Research Institutions Cert. Authority1D0B
+;Hellenic Academic and Research Institutions ECC RootCA 20150
+150707103712Z
+400630103712Z0
+Athens1D0B
+;Hellenic Academic and Research Institutions Cert. Authority1D0B
+;Hellenic Academic and Research Institutions ECC RootCA 20150v0
+,HoL%)
+1hellenicacademicandresearchinstitutionsrootca2015
+Athens1D0B
+;Hellenic Academic and Research Institutions Cert. Authority1@0>
+7Hellenic Academic and Research Institutions RootCA 20150
+150707101121Z
+400630101121Z0
+Athens1D0B
+;Hellenic Academic and Research Institutions Cert. Authority1@0>
+7Hellenic Academic and Research Institutions RootCA 20150
+:Ye9Xz
+hipkirootca-g1
+TW1#0!
+Chunghwa Telecom Co., Ltd.1
+HiPKI Root CA - G10
+190222094604Z
+371231155959Z0O1
+TW1#0!
+Chunghwa Telecom Co., Ltd.1
+HiPKI Root CA - G10
+_}Bd9z&6
+N1gjt[
+vxsy"^
+hongkongpostrootca3
+Hong Kong1
+Hong Kong1
+Hongkong Post1 0
+Hongkong Post Root CA 30
+170603022946Z
+420603022946Z0o1
+Hong Kong1
+Hong Kong1
+Hongkong Post1 0
+Hongkong Post Root CA 30
+identrustcommercialrootca1
+IdenTrust1'0%
+IdenTrust Commercial Root CA 10
+140116181223Z
+340116181223Z0J1
+IdenTrust1'0%
+IdenTrust Commercial Root CA 10
+uYf1G)
+identrustpublicsectorrootca1
+IdenTrust1*0(
+!IdenTrust Public Sector Root CA 10
+140116175332Z
+340116175332Z0M1
+IdenTrust1*0(
+!IdenTrust Public Sector Root CA 10
+;zJ,1*
+isrgrootx1
+US1)0'
+ Internet Security Research Group1
+ISRG Root X10
+150604110438Z
+350604110438Z0O1
+US1)0'
+ Internet Security Research Group1
+ISRG Root X10
+qiJffl
+AB_g$H
+isrgrootx2
+US1)0'
+ Internet Security Research Group1
+ISRG Root X20
+200904000000Z
+400917160000Z0O1
+US1)0'
+ Internet Security Research Group1
+ISRG Root X20v0
+0{yNFP
+izenpe.com
+IZENPE S.A.1
+Izenpe.com0
+071213130828Z
+371213082725Z081
+IZENPE S.A.1
+Izenpe.com0
+info@izenpe.com
+>IZENPE S.A. - CIF A01337260-RMerc.Vitoria-Gasteiz T1055 F62 S81C0A
+:Avda del Mediterraneo Etorbidea 14 - 01010 Vitoria-Gasteiz0
+'!GBJ|H:
+microsece-szignorootca2009
+Budapest1
+Microsec Ltd.1'0%
+Microsec e-Szigno Root CA 20091
+info@e-szigno.hu0
+090616113018Z
+291230113018Z0
+Budapest1
+Microsec Ltd.1'0%
+Microsec e-Szigno Root CA 20091
+info@e-szigno.hu0
+info@e-szigno.hu0
+(microsofteccrootcertificateauthority2017
+Microsoft Corporation1604
+-Microsoft ECC Root Certificate Authority 20170
+191218230645Z
+420718231604Z0e1
+Microsoft Corporation1604
+-Microsoft ECC Root Certificate Authority 20170v0
+(microsoftrsarootcertificateauthority2017
+Microsoft Corporation1604
+-Microsoft RSA Root Certificate Authority 20170
+191218225122Z
+420718230023Z0e1
+Microsoft Corporation1604
+-Microsoft RSA Root Certificate Authority 20170
+RaQp(?
+qbE'K:B
+%naverglobalrootcertificationauthority
+KR1&0$
+NAVER BUSINESS PLATFORM Corp.1200
+)NAVER Global Root Certification Authority0
+170818085842Z
+370818235959Z0i1
+KR1&0$
+NAVER BUSINESS PLATFORM Corp.1200
+)NAVER Global Root Certification Authority0
+ netlockarany(classgold)ftanstvny
+Budapest1
+NetLock Kft.1705
+nykiad
+k (Certification Services)1503
+,NetLock Arany (Class Gold) F
+081211150821Z
+281206150821Z0
+Budapest1
+NetLock Kft.1705
+nykiad
+k (Certification Services)1503
+,NetLock Arany (Class Gold) F
+u|/(Kb$
+oistewisekeyglobalrootgbca
+WISeKey1"0 
+OISTE Foundation Endorsed1(0&
+OISTE WISeKey Global Root GB CA0
+141201150032Z
+391201151031Z0m1
+WISeKey1"0 
+OISTE Foundation Endorsed1(0&
+OISTE WISeKey Global Root GB CA0
+fC7~#Cy
++W{cFj
+oistewisekeyglobalrootgcca
+WISeKey1"0 
+OISTE Foundation Endorsed1(0&
+OISTE WISeKey Global Root GC CA0
+170509094834Z
+420509095833Z0m1
+WISeKey1"0 
+OISTE Foundation Endorsed1(0&
+OISTE WISeKey Global Root GC CA0v0
+LZmI)`x
+quovadisrootca1g3
+QuoVadis Limited1
+QuoVadis Root CA 1 G30
+120112172744Z
+420112172744Z0H1
+QuoVadis Limited1
+QuoVadis Root CA 1 G30
+.-F/if
+MgTl/oe
+quovadisrootca2
+QuoVadis Limited1
+QuoVadis Root CA 20
+061124182700Z
+311124182333Z0E1
+QuoVadis Limited1
+QuoVadis Root CA 20
+QuoVadis Limited1
+QuoVadis Root CA 2
+quovadisrootca2g3
+QuoVadis Limited1
+QuoVadis Root CA 2 G30
+120112185932Z
+420112185932Z0H1
+QuoVadis Limited1
+QuoVadis Root CA 2 G30
+f4;ars
+quovadisrootca3
+QuoVadis Limited1
+QuoVadis Root CA 30
+061124191123Z
+311124190644Z0E1
+QuoVadis Limited1
+QuoVadis Root CA 30
+Any use of this Certificate constitutes acceptance of the QuoVadis Root CA 3 Certificate Policy / Certification Practice Statement.0-
+!http://www.quovadisglobal.com/cps0
+QuoVadis Limited1
+QuoVadis Root CA 3
+m$/Kzl
+quovadisrootca3g3
+QuoVadis Limited1
+QuoVadis Root CA 3 G30
+120112202632Z
+420112202632Z0H1
+QuoVadis Limited1
+QuoVadis Root CA 3 G30
+raE)HYhow
+@b-;Hi
+w#4Iu|
+(sectigopublicserverauthenticationroote46
+Sectigo Limited1604
+-Sectigo Public Server Authentication Root E460
+210322000000Z
+460321235959Z0_1
+Sectigo Limited1604
+-Sectigo Public Server Authentication Root E460v0
+(sectigopublicserverauthenticationrootr46
+Sectigo Limited1604
+-Sectigo Public Server Authentication Root R460
+210322000000Z
+460321235959Z0_1
+Sectigo Limited1604
+-Sectigo Public Server Authentication Root R460
+II-U7h
+secureglobalca
+SecureTrust Corporation1
+Secure Global CA0
+061107194228Z
+291231195206Z0J1
+SecureTrust Corporation1
+Secure Global CA0
+#http://crl.securetrust.com/SGCA.crl0
+5ZJD^NW
+)OCitvgK
+securesignrootca12
+JP1#0!
+Cybertrust Japan Co., Ltd.1
+SecureSign Root CA120
+200408053646Z
+400408053646Z0Q1
+JP1#0!
+Cybertrust Japan Co., Ltd.1
+SecureSign Root CA120
+W;*v%3
+]%N*);
+securesignrootca14
+JP1#0!
+Cybertrust Japan Co., Ltd.1
+SecureSign Root CA140
+200408070619Z
+450408070619Z0Q1
+JP1#0!
+Cybertrust Japan Co., Ltd.1
+SecureSign Root CA140
+securesignrootca15
+JP1#0!
+Cybertrust Japan Co., Ltd.1
+SecureSign Root CA150
+200408083256Z
+450408083256Z0Q1
+JP1#0!
+Cybertrust Japan Co., Ltd.1
+SecureSign Root CA150v0
+28S*FD
+securetrustca
+SecureTrust Corporation1
+SecureTrust CA0
+061107193118Z
+291231194055Z0H1
+SecureTrust Corporation1
+SecureTrust CA0
+o1BlR>h
+#http://crl.securetrust.com/STCA.crl0
+dR6_`g
+securitycommunicationeccrootca1
+JP1%0#
+SECOM Trust Systems CO.,LTD.1+0)
+"Security Communication ECC RootCA10
+160616051528Z
+380118051528Z0a1
+JP1%0#
+SECOM Trust Systems CO.,LTD.1+0)
+"Security Communication ECC RootCA10v0
+securitycommunicationrootca2
+JP1%0#
+SECOM Trust Systems CO.,LTD.1'0%
+Security Communication RootCA20
+090529050039Z
+290529050039Z0]1
+JP1%0#
+SECOM Trust Systems CO.,LTD.1'0%
+Security Communication RootCA20
+&ssl.comevrootcertificationauthorityecc
+Texas1
+Houston1
+SSL Corporation1402
++SSL.com EV Root Certification Authority ECC0
+160212181523Z
+410212181523Z0
+Texas1
+Houston1
+SSL Corporation1402
++SSL.com EV Root Certification Authority ECC0v0
+(ssl.comevrootcertificationauthorityrsar2
+Texas1
+Houston1
+SSL Corporation1705
+.SSL.com EV Root Certification Authority RSA R20
+170531181437Z
+420530181437Z0
+Texas1
+Houston1
+SSL Corporation1705
+.SSL.com EV Root Certification Authority RSA R20
+$ssl.comrootcertificationauthorityecc
+Texas1
+Houston1
+SSL Corporation110/
+(SSL.com Root Certification Authority ECC0
+160212181403Z
+410212181403Z0|1
+Texas1
+Houston1
+SSL Corporation110/
+(SSL.com Root Certification Authority ECC0v0
+k1RcA;
+$ssl.comrootcertificationauthorityrsa
+Texas1
+Houston1
+SSL Corporation110/
+(SSL.com Root Certification Authority RSA0
+160212173939Z
+410212173939Z0|1
+Texas1
+Houston1
+SSL Corporation110/
+(SSL.com Root Certification Authority RSA0
+ssl.comtlseccrootca2022
+SSL Corporation1%0#
+SSL.com TLS ECC Root CA 20220
+220825163348Z
+460819163347Z0N1
+SSL Corporation1%0#
+SSL.com TLS ECC Root CA 20220v0
+uj5vRE
+ssl.comtlsrsarootca2022
+SSL Corporation1%0#
+SSL.com TLS RSA Root CA 20220
+220825163422Z
+460819163421Z0N1
+SSL Corporation1%0#
+SSL.com TLS RSA Root CA 20220
+starfieldclass2ca
+US1%0#
+Starfield Technologies, Inc.1200
+)Starfield Class 2 Certification Authority0
+040629173916Z
+340629173916Z0h1
+US1%0#
+Starfield Technologies, Inc.1200
+)Starfield Class 2 Certification Authority0
+qQ<0._
+US1%0#
+Starfield Technologies, Inc.1200
+)Starfield Class 2 Certification Authority
+$starfieldrootcertificateauthority-g2
+Arizona1
+Scottsdale1%0#
+Starfield Technologies, Inc.1200
+)Starfield Root Certificate Authority - G20
+090901000000Z
+371231235959Z0
+Arizona1
+Scottsdale1%0#
+Starfield Technologies, Inc.1200
+)Starfield Root Certificate Authority - G20
+,starfieldservicesrootcertificateauthority-g2
+Arizona1
+Scottsdale1%0#
+Starfield Technologies, Inc.1;09
+2Starfield Services Root Certificate Authority - G20
+090901000000Z
+371231235959Z0
+Arizona1
+Scottsdale1%0#
+Starfield Technologies, Inc.1;09
+2Starfield Services Root Certificate Authority - G20
+swisssigngoldca-g2
+SwissSign AG1
+SwissSign Gold CA - G20
+061025083035Z
+361025083035Z0E1
+SwissSign AG1
+SwissSign Gold CA - G20
+ http://repository.swisssign.com/0
+szafirrootca2
+PL1(0&
+Krajowa Izba Rozliczeniowa S.A.1
+SZAFIR ROOT CA20
+151019074330Z
+351019074330Z0Q1
+PL1(0&
+Krajowa Izba Rozliczeniowa S.A.1
+SZAFIR ROOT CA20
+telekomsecuritytlseccroot2020
+DE1'0%
+Deutsche Telekom Security GmbH1+0)
+"Telekom Security TLS ECC Root 20200
+200825074820Z
+450825235959Z0c1
+DE1'0%
+Deutsche Telekom Security GmbH1+0)
+"Telekom Security TLS ECC Root 20200v0
+telekomsecuritytlsrsaroot2023
+DE1'0%
+Deutsche Telekom Security GmbH1+0)
+"Telekom Security TLS RSA Root 20230
+230328121645Z
+480327235959Z0c1
+DE1'0%
+Deutsche Telekom Security GmbH1+0)
+"Telekom Security TLS RSA Root 20230
+teliarootcav2
+Telia Finland Oyj1
+Telia Root CA v20
+181129115554Z
+431129115554Z0D1
+Telia Finland Oyj1
+Telia Root CA v20
+K/Xs-O-
+jP}56f
+teliasonerarootcav1
+TeliaSonera1
+TeliaSonera Root CA v10
+071018120050Z
+321018120050Z071
+TeliaSonera1
+TeliaSonera Root CA v10
+W8Ui46=
+I"?D'o
+zO@,"5
+trustasiaglobalrootcag3
+CN1%0#
+TrustAsia Technologies, Inc.1$0"
+TrustAsia Global Root CA G30
+210520021019Z
+460519021019Z0Z1
+CN1%0#
+TrustAsia Technologies, Inc.1$0"
+TrustAsia Global Root CA G30
+\SEWZE
+trustasiaglobalrootcag4
+CN1%0#
+TrustAsia Technologies, Inc.1$0"
+TrustAsia Global Root CA G40
+210520021022Z
+460519021022Z0Z1
+CN1%0#
+TrustAsia Technologies, Inc.1$0"
+TrustAsia Global Root CA G40v0
+%trustwaveglobalcertificationauthority
+Illinois1
+Chicago1!0
+Trustwave Holdings, Inc.110/
+(Trustwave Global Certification Authority0
+170823193412Z
+420823193412Z0
+Illinois1
+Chicago1!0
+Trustwave Holdings, Inc.110/
+(Trustwave Global Certification Authority0
+]Q(K<7
+OHA}5J
+T(;d-!
+,trustwaveglobaleccp256certificationauthority
+Illinois1
+Chicago1!0
+Trustwave Holdings, Inc.1:08
+1Trustwave Global ECC P256 Certification Authority0
+170823193510Z
+420823193510Z0
+Illinois1
+Chicago1!0
+Trustwave Holdings, Inc.1:08
+1Trustwave Global ECC P256 Certification Authority0Y0
+,trustwaveglobaleccp384certificationauthority
+Illinois1
+Chicago1!0
+Trustwave Holdings, Inc.1:08
+1Trustwave Global ECC P384 Certification Authority0
+170823193643Z
+420823193643Z0
+Illinois1
+Chicago1!0
+Trustwave Holdings, Inc.1:08
+1Trustwave Global ECC P384 Certification Authority0v0
+t-telesecglobalrootclass2
+DE1+0)
+"T-Systems Enterprise Services GmbH1
+T-Systems Trust Center1%0#
+T-TeleSec GlobalRoot Class 20
+081001104014Z
+331001235959Z0
+DE1+0)
+"T-Systems Enterprise Services GmbH1
+T-Systems Trust Center1%0#
+T-TeleSec GlobalRoot Class 20
+On7H(8
+0zk6b{
+%S7bS_
+t-telesecglobalrootclass3
+DE1+0)
+"T-Systems Enterprise Services GmbH1
+T-Systems Trust Center1%0#
+T-TeleSec GlobalRoot Class 30
+081001102956Z
+331001235959Z0
+DE1+0)
+"T-Systems Enterprise Services GmbH1
+T-Systems Trust Center1%0#
+T-TeleSec GlobalRoot Class 30
+tyZ~@>
+%tubitakkamusmsslkoksertifikasi-surum1
+Gebze - Kocaeli1B0@
+9Turkiye Bilimsel ve Teknolojik Arastirma Kurumu - TUBITAK1-0+
+$Kamu Sertifikasyon Merkezi - Kamu SM1604
+-TUBITAK Kamu SM SSL Kok Sertifikasi - Surum 10
+131125082555Z
+431025082555Z0
+Gebze - Kocaeli1B0@
+9Turkiye Bilimsel ve Teknolojik Arastirma Kurumu - TUBITAK1-0+
+$Kamu Sertifikasyon Merkezi - Kamu SM1604
+-TUBITAK Kamu SM SSL Kok Sertifikasi - Surum 10
+^W}sVd
+tuntrustrootca
+TN1705
+.Agence Nationale de Certification Electronique1
+TunTrust Root CA0
+190426085756Z
+440426085756Z0a1
+TN1705
+.Agence Nationale de Certification Electronique1
+TunTrust Root CA0
+gzfh$N
+twcacyberrootca
+TAIWAN-CA1
+Root CA1
+TWCA CYBER Root CA0
+221122065429Z
+471122155959Z0P1
+TAIWAN-CA1
+Root CA1
+TWCA CYBER Root CA0
+vkBZXv4
+twcaglobalrootca
+TAIWAN-CA1
+Root CA1
+TWCA Global Root CA0
+120627062833Z
+301231155959Z0Q1
+TAIWAN-CA1
+Root CA1
+TWCA Global Root CA0
+G`/+295R:(
+tS*=S'i
+twcarootcertificationauthority
+TAIWAN-CA1
+Root CA1*0(
+!TWCA Root Certification Authority0
+080828072433Z
+301231155959Z0_1
+TAIWAN-CA1
+Root CA1*0(
+!TWCA Root Certification Authority0
+ucaextendedvalidationroot
+O4Xf#p`0
+UniTrust1%0#
+UCA Extended Validation Root0
+150313000000Z
+381231000000Z0G1
+UniTrust1%0#
+UCA Extended Validation Root0
+[aXo6P
+e8+85Q!
+ucaglobalg2root
+UniTrust1
+UCA Global G2 Root0
+160311000000Z
+401231000000Z0=1
+UniTrust1
+UCA Global G2 Root0
+6F_"h=
+"usertrustecccertificationauthority
+New Jersey1
+Jersey City1
+The USERTRUST Network1.0,
+%USERTrust ECC Certification Authority0
+100201000000Z
+380118235959Z0
+New Jersey1
+Jersey City1
+The USERTRUST Network1.0,
+%USERTrust ECC Certification Authority0v0
+"usertrustrsacertificationauthority
+New Jersey1
+Jersey City1
+The USERTRUST Network1.0,
+%USERTrust RSA Certification Authority0
+100201000000Z
+380118235959Z0
+New Jersey1
+Jersey City1
+The USERTRUST Network1.0,
+%USERTrust RSA Certification Authority0
+vtruseccrootca
+iTrusChina Co.,Ltd.1
+vTrus ECC Root CA0
+180731072644Z
+430731072644Z0G1
+iTrusChina Co.,Ltd.1
+vTrus ECC Root CA0v0
+vtrusrootca
+iTrusChina Co.,Ltd.1
+vTrus Root CA0
+180731072405Z
+430731072405Z0C1
+iTrusChina Co.,Ltd.1
+vTrus Root CA0
+gjY+%b
+f;=9v!F
+MON-;4C
+xrampglobalcaroot
+www.xrampsecurity.com1$0"
+XRamp Security Services Inc1-0+
+$XRamp Global Certification Authority0
+041101171404Z
+350101053719Z0
+www.xrampsecurity.com1$0"
+XRamp Security Services Inc1-0+
+$XRamp Global Certification Authority0
+%http://crl.xrampsecurity.com/XGCA.crl0
+Autoridad de Certificaci
+z de la ACCV (Agencia de Tecnolog
+a y Certificaci
+n Electr
+nica, CIF Q4601156E). CPS en http://www.accv.e
+NPaseo de la Bonanova 47 Barcelona 0801

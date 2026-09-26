@@ -1,0 +1,60 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\__pycache__\fallback_config.cpython-311.pyc
+
+zFHelpers for reading the effective fallback provider chain from config.
+annotations)
+valuer
+return
+isinstancer
+rstrip)
+NC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\fallback_config.py
+_normalized_base_urlr
+dict[str, Any] | None
+str | Nonec
+API key for one fallback entry: inline ``api_key``, else ``key_env``.
+    Mirrors the custom-provider convention (``key_env`` names the env var
+    holding the key; ``api_key_env`` accepted as an alias). Returns None when
+    neither yields a non-empty value, letting ``resolve_runtime_provider``
+    fall through to the provider's standard credential resolution.
+    ``key_env`` is resolved through ``agent.secret_scope.get_secret`` rather
+    than a raw ``os.getenv`` 
+ in a multiplexed gateway a bare env read would
+    ignore the active profile's scope and can return another profile's
+    credential. ``get_secret`` already implements the right fallback: it
+    reads ``os.environ`` when there's no active multiplexed scope (matching
+    prior single-profile behavior), and fails closed only when multiplexing
+    is active with no scope installed.
+api_keyr
+key_env
+api_key_envr
+get_secret)
+agent.secret_scoper
+inliner
+resolve_entry_api_keyr
+list[dict[str, Any]]c
+providerr
+base_url)
+append)
+candidates
+entriesr
+normalizedr$
+        r
+_iter_fallback_entriesr*
+dict[str, Any]
+tuple[str, str, str]c
+lowerr
+_entry_identityr/
+configc
+Return the effective fallback chain merged across old and new config keys.
+    ``fallback_providers`` remains the primary source of truth and keeps its
+    order. Legacy ``fallback_model`` entries are appended afterwards unless
+    they target the same provider/model/base_url route as an earlier entry.
+    The returned list always contains fresh dict copies.
+fallback_providers
+fallback_model)
+identitys
+      r
+get_fallback_chainr:
+__doc__
+__future__r
+typingr
+<module>r?

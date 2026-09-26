@@ -1,0 +1,36 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\utils\composite-context-provider.js
+
+import { mergeModelContexts } from "../model-context/types.js";
+//#region src/utils/composite-context-provider.ts
+var CompositeContextProvider = class {
+	_providers = /* @__PURE__ */ new Set();
+	getModelContext() {
+		return mergeModelContexts(this._providers);
+	}
+	registerModelContextProvider(provider) {
+		this._providers.add(provider);
+		const unsubscribe = provider.subscribe?.(() => {
+			this.notifySubscribers();
+		});
+		this.notifySubscribers();
+		return () => {
+			this._providers.delete(provider);
+			unsubscribe?.();
+			this.notifySubscribers();
+		};
+	}
+	_subscribers = /* @__PURE__ */ new Set();
+	notifySubscribers() {
+		for (const callback of this._subscribers) callback();
+	}
+	subscribe(callback) {
+		this._subscribers.add(callback);
+		return () => {
+			this._subscribers.delete(callback);
+		};
+	}
+};
+//#endregion
+export { CompositeContextProvider };
+
+//# sourceMappingURL=composite-context-provider.js.map

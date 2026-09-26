@@ -1,0 +1,11 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\lang\menu_sk_sk.vim
+
+" Menu Translations:
+Slovak
+" Translated By:
+Martin Lacko <lacko@host.sk>
+" Last Change:
+2002 May 27
+if has("win32")
+source <sfile>:p:h/menu_sk_sk.1250.vim
+source <sfile>:p:h/menu_sk_sk.iso_8859-2.vim

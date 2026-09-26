@@ -1,0 +1,21 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@tabler\icons\docs\solidjs.mdx
+
+title: Tabler Icons for SolidJS
+![](https://raw.githubusercontent.com/tabler/tabler-icons/master/.github/packages/og-package-solidjs.png)
+## Installation
+<TabsPackage name="@tabler/icons-solidjs" />
+or just [download from Github](https://github.com/tabler/tabler-icons/releases).
+## How to use
+It's build with ESmodules so it's completely tree-shakable. Each icon can be imported as a component.
+import { IconArrowRight } from '@tabler/icons-solidjs';
+const App = () => {
+  return <IconArrowRight />;
+export default App;
+You can pass additional props to adjust the icon.
+<IconArrowRight color="red" size={48} />
+### Props
+| name          | type     | default      |
+| ------------- | -------- | ------------ |
+| `size`        | _Number_ | 24           |
+| `color`       | _String_ | currentColor |
+| `stroke`      | _Number_ | 2            |

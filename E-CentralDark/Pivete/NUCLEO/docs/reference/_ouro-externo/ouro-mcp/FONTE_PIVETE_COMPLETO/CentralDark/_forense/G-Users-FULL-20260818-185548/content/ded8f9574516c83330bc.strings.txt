@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\share\doc\git-doc\RelNotes\2.33.4.adoc
+
+Git v2.33.4 Release Notes
+=========================
+This release merges up the fixes that appear in v2.30.5, v2.31.4
+and v2.32.3 to address the security issue CVE-2022-29187; see
+the release notes for these versions for details.

@@ -1,0 +1,18 @@
+flowchart TB
+  ZT[Zero Trust Protocol]
+  G1[Guard-GitHub]
+  G2[Guard-VPS]
+  G3[Guard-Cloudflare]
+  G4[Guard-Contabo]
+  AUD[Auditor]
+  REV[Reviewer]
+  ZT --> G1
+  ZT --> G2
+  ZT --> G3
+  ZT --> G4
+  G1 --> AUD
+  G2 --> AUD
+  G3 --> REV
+  G4 --> REV
+  AUD --> SOL[SOL]
+  REV --> SOL

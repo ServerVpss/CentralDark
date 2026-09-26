@@ -1,0 +1,15 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\compiler\csslint.vim
+
+" Vim compiler file
+" Compiler:
+csslint for CSS
+" Maintainer:
+Daniel Moch <daniel@danielmoch.com>
+" Last Change:
+2016 May 21
+2024 Apr 03 by The Vim Project (removed :CompilerSet definition)
+if exists("current_compiler")
+  finish
+let current_compiler = "csslint"
+CompilerSet makeprg=csslint\ --format=compact
+CompilerSet errorformat=%-G,%-G%f:\ lint\ free!,%f:\ line\ %l\\,\ col\ %c\\,\ %trror\ -\ %m,%f:\ line\ %l\\,\ col\ %c\\,\ %tarning\ -\ %m,%f:\ line\ %l\\,\ col\ %c\\,\ %m

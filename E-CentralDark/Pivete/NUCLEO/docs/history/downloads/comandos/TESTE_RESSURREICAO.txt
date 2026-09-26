@@ -1,0 +1,7 @@
+# TESTE RESSURREICAO
+
+COMANDO: teste_ressurreicao
+PROMPT: verifica se auto-destilador ressuscitou
+GATE: FILE_SECURITY_GATE v2
+RISCO: nenhum
+GAP: nenhum

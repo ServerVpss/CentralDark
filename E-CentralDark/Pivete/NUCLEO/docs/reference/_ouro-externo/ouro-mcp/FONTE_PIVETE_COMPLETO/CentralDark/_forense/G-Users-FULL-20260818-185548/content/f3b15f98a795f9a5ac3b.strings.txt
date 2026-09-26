@@ -1,0 +1,14 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\keymap\hebrewp.vim
+
+let encoding = &enc
+if encoding == 'latin1'
+    if has("unix")
+let encoding = 'iso-8859-8'
+    else
+let encoding = 'cp1255'
+    endif
+if encoding == 'utf-8'
+source <sfile>:p:h/hebrewp_utf-8.vim
+elseif encoding == 'cp1255'
+source <sfile>:p:h/hebrewp_cp1255.vim
+source <sfile>:p:h/hebrewp_iso-8859-8.vim

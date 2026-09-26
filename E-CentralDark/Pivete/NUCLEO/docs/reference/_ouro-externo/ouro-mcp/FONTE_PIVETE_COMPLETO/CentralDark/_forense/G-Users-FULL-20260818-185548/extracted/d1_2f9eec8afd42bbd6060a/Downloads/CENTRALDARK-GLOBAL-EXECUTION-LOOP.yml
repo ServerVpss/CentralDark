@@ -1,0 +1,311 @@
+CENTRALDARK_GLOBAL_EXECUTION_LOOP:
+  schema: "centraldark.global-execution-loop.v1"
+  status: "PROPOSED_GLOBAL_CANONICAL"
+  scope: "GLOBAL"
+
+  principles:
+    reality_is_judge: true
+    reuse_before_create: true
+    one_owner_per_capability: true
+    one_writer_per_scope: true
+    parallelize_perception: true
+    serialize_mutation: true
+    model_specific_governance: false
+    models_are_replaceable_engines: true
+
+  authority:
+    final_human_authority: "SEGREDO/CHEFE"
+    model_is_authority: false
+    writer_is_judge: false
+    received_material_auto_authorizes: false
+    explicit_chefe_instruction_preserved: true
+
+  boot:
+    acordar:
+      icon: "📍"
+      question: "onde a Casa está agora?"
+      actions:
+        - measure_live_state
+        - measure_main_head
+        - measure_open_prs
+        - measure_writer
+        - measure_owner
+        - measure_gates
+        - measure_runtime
+        - measure_temporal_delta
+
+    calibrar:
+      icon: "🎯"
+      question: "estou entendendo tua intenção, escopo, autoridade e alvo do jeito certo?"
+      actions:
+        - recover_current_intent
+        - separate_intent_from_state
+        - preserve_existing_authorization
+        - locate_owner
+        - locate_writer
+        - classify_allowed_action
+
+    multibussola:
+      icon: "🧭"
+      question: "olhei por todos os lados materiais e tentei quebrar minha própria conclusão?"
+      actions:
+        - inspect_material_directions
+        - inspect_dependencies
+        - inspect_temporal_state
+        - inspect_causal_chain
+        - inspect_counterexamples
+        - attempt_self_falsification
+
+  react_loop:
+    - step: THINK
+      icon: "🧠"
+      action: formulate_smallest_information_gaining_next_step
+
+    - step: ACT
+      icon: "🛠️"
+      action: execute_authorized_action
+
+    - step: OBSERVE
+      icon: "👀"
+      action: observe_real_effect
+
+    - step: UPDATE_STATE
+      icon: "🔄"
+      action: update_belief_and_operational_state
+
+    - step: COUNTERPROVE
+      icon: "🧪"
+      action: attempt_to_falsify_current_conclusion
+
+    - step: REMEDY
+      icon: "🩹"
+      action: apply_minimal_correction_if_cause_and_authority_are_proven
+
+    - step: REMEASURE
+      icon: "📏"
+      action: remeasure_same_target_after_correction
+
+    - step: FIXED_POINT
+      icon: "✅"
+      action: close_only_if_remeasurement_and_counterproof_survive
+
+    - step: RECEIPT
+      icon: "🧾"
+      action: record_exact_resume_state
+
+  counterproof_transitions:
+    conclusion_survived:
+      - continue_with_smallest_material_delta
+
+    conclusion_falsified:
+      - update_belief_immediately
+      - identify_causal_wound
+      - derive_minimal_correction
+      - execute_correction_in_current_run
+      - counterprove_again
+      - remeasure_again
+
+    no_information_gain:
+      - NO_CHANGE
+
+    unknown:
+      - preserve_unknown
+      - do_not_promote_to_pass
+
+  error_discovered:
+    rule: >
+      ERRO DESCOBERTO NAO VIRA APENAS RELATORIO.
+      SE CAUSA, CORRECAO, AUTORIDADE E CAMINHO MATERIAL ESTAO PROVADOS,
+      A CORRECAO CONTINUA NESTA MESMA EXECUCAO.
+    flow:
+      - prove_root_cause
+      - derive_correction
+      - reuse_existing_owner_before_create
+      - apply_minimal_correction_now_if_authorized
+      - test
+      - counterprove
+      - remeasure_live_state
+      - continue_if_material_delta_remains
+      - fixed_point_local_when_closed
+      - record_exact_continuity_receipt
+
+  learning_to_capability:
+    rule: >
+      ERRO + CAUSA + SOLUCAO REUTILIZAVEL
+      DEVE REDUZIR A CHANCE DE REPETICAO
+      NA PROPRIA EXECUCAO E NAS EXECUCOES SEGUINTES.
+
+    decision:
+      existing_owner_fits:
+        then:
+          - absorb_unique_delta_into_existing_owner
+          - do_not_create_new_skill
+          - do_not_create_parallel_system
+
+      no_existing_owner:
+        reusable_signals:
+          - repeated_across_sessions
+          - preventable_recurrent_error
+          - complex_multi_step
+          - standardization_needed
+        if_any_signal:
+          - validate_single_canonical_skill_or_command
+        if_no_signal:
+          - keep_minimal_local_procedure
+
+  invariants:
+    word_is_not_proof: true
+    reasoning_is_not_evidence: true
+    action_is_not_proof: true
+    history_is_not_live_state: true
+    merged_is_not_main_confirmed: true
+    main_confirmed_is_not_fixed_point: true
+    fixed_point_local_is_not_mission_end: true
+
+    non_pass_states:
+      - UNKNOWN
+      - PENDING
+      - QUEUED
+      - SKIPPED
+      - CANCELLED
+
+  mutation_gate:
+    before_any_mutation:
+      - classify_target
+      - verify_authority
+      - locate_existing_owner
+      - locate_current_writer
+      - verify_one_writer_per_scope
+      - locate_applicable_pre_mutation_gate
+      - attempt_counterproof
+      - block_on_divergence
+      - preserve_history
+
+    deterministic_exception:
+      allowed_only_if_all:
+        - explicit
+        - scope_bounded
+        - no_new_authority
+        - no_competing_owner
+        - counterproof_available
+        - observable_receipt_available
+
+  continuity:
+    after_fixed_point_local:
+      - record_live_state
+      - record_main_sha
+      - record_pr
+      - record_head_sha
+      - record_target
+      - record_owner
+      - record_writer
+      - record_gates
+      - record_tests
+      - record_counterproof
+      - record_remaining_unknowns
+      - record_exact_resume_point
+      - return_to_active_intent
+
+    next_execution:
+      - resume_from_recorded_state
+      - remeasure_before_trusting_receipt
+      - do_not_rediscover_solved_problem
+
+  adapter_policy:
+    adapter_is_owner: false
+    adapter_is_brain: false
+    adapter_thin: true
+    global_owner_only: true
+    examples:
+      - CHATGPT.md
+      - CLAUDE.md
+      - GEMINI.md
+      - CODEX.md
+      - GROK.md
+    adapter_required_behavior:
+      - load_global_entrypoint
+      - load_global_owner
+      - run_acordar
+      - run_calibrar
+      - run_multibussola
+      - enter_global_execution_loop
+
+  evidence_flow:
+    - CLAIM
+    - SOURCE
+    - LINK_OR_REF
+    - SHA
+    - TARGET
+    - OBSERVED_STATE
+    - OBSERVED_AT
+    - COUNTERPROOF
+    - VERDICT
+
+  final_receipt:
+    required_fields:
+      - FEITO
+      - EVIDENCIA
+      - MAIN_SHA
+      - PR
+      - HEAD_SHA
+      - TARGET
+      - OWNER
+      - WRITER
+      - GATES
+      - TESTES
+      - CONTRAPROVA
+      - ESTADO_ATUAL
+      - PENDENCIA_REAL
+      - PROXIMO_PONTO_EXATO
+      - FIXED_POINT_LOCAL
+      - MISSAO_GLOBAL_FECHADA
+      - OURO
+      - DIAMANTES
+      - CRISTAIS
+      - FORJAS
+      - RESIDUO_DESCARTADO
+
+  status_icons:
+    state: "📍"
+    intent: "🎯"
+    multibussola: "🧭"
+    recover: "📦"
+    reconcile: "🧩"
+    inspect: "🔎"
+    think: "🧠"
+    act: "🛠️"
+    observe: "👀"
+    update_state: "🔄"
+    counterproof: "🧪"
+    remedy: "🩹"
+    remeasure: "📏"
+    fixed_point: "✅"
+    receipt: "🧾"
+    continuity: "⏭️"
+    authority: "👑"
+    owner: "👤"
+    writer: "✍️"
+    gate: "🚪"
+    blocked: "🔒"
+    attention: "🟡"
+    alert: "🔴"
+    stable: "🟢"
+    crystal: "💎"
+    gold: "🪙"
+    residue: "🗑️"
+    house: "🏠"
+    global: "🌐"
+
+  mantra:
+    - "🌐 UMA CASA."
+    - "🧠 UM LOOP."
+    - "🤖 MUITOS MOTORES."
+    - "💥 DESCOBRIU O ERRO -> CORRIGE NESTA EXECUCAO."
+    - "🪙 APRENDEU -> INCORPORA."
+    - "🩹 CORRIGIU -> REMEDE."
+    - "🧪 SOBROU DUVIDA -> CONTRAPROVA."
+    - "🔁 SOBROU DELTA -> CONTINUA."
+    - "✅ FECHOU -> FIXED_POINT_LOCAL."
+    - "🧾 DEIXA RECIBO."
+    - "⏭️ O PROXIMO RETOMA. NAO REDESCOBRE."
+    - "⚖️ REALITY=JUDGE."

@@ -1,0 +1,130 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\agent\__pycache__\credential_persistence.cpython-311.pyc
+
+Credential-pool disk-boundary sanitization helpers.
+These helpers define which credential-pool entries are references to borrowed
+runtime secrets and strip raw values before those entries are written to
+``auth.json``.  They intentionally have no dependency on ``hermes_cli.auth`` so
+both the pool model and the final auth-store write boundary can share the same
+policy without import cycles.
+annotationsN)
+Mapping>
+xai-oauth
+device_code
+openai-codexr
+minimax-oauth
+anthropic
+hermes_pkce>
+client_id
+expires_at
+expires_in
+token_type
+last_status
+agent_key_id
+last_refresh
+expires_at_ms
+secret_source
+last_status_at
+last_error_code
+agent_key_reused
+last_error_reason
+last_error_message
+secret_fingerprint
+last_error_reset_at
+agent_key_expires_at
+agent_key_expires_in
+agent_key_obtained_at>
+apikey
+secret
+tokens
+api_key
+id_token
+password
+agent_key
+api_token
+auth_token
+credential
+secret_key
+credentials
+oauth_token
+private_key
+access_token
+bearer_token
+authorization
+client_secret
+refresh_token
+session_token)
+_api_key
+_api_token
+_access_token
+_auth_token
+_refresh_token
+_bearer_token
+_client_secret
+_id_token
+_oauth_token
+_private_key
+_session_token
+_secret_key
+_password
+_secret
+_token
+(?<=[a-z0-9])(?=[A-Z])
+return
+_CAMEL_CASE_BOUNDARY
+replace)
+PC:\Users\danda\AppData\Local\hermes\hermes-agent\agent\credential_persistence.py
+_normalize_keyrY
+source
+provider_id
+zGReturn True when ``source`` points at a borrowed/reference-only secret.rN
+manualz
+manual:)
+startswith
+_PERSISTABLE_PROVIDER_SOURCES)
+normalized_source
+normalized_providers
+    rX
+is_borrowed_credential_sourcerd
+_SAFE_SECRETISH_METADATA_KEYS
+_SECRET_VALUE_KEYS
+endswith
+_SECRET_VALUE_SUFFIXES)
+normalizeds
+_is_secret_payload_keyrk
+str | Nonec
+surrogatepass)
+errors
+sha256:
+hashlib
+sha256
+encode
+hexdigest)
+digests
+_fingerprint_valuery
+payload
+Mapping[str, Any]c
+itemsrk
+isinstancerL
+fingerprintrl
+existings
+     rX
+_credential_secret_fingerprintr
+Dict[str, Any]c
+Return a disk-safe credential-pool payload.
+    Owned sources (manual entries and Hermes-owned OAuth/device-code state)
+    pass through unchanged.  Borrowed/reference-only sources keep labels,
+    source refs, status/cooldown metadata, counters, and a non-reversible
+    fingerprint, but raw secret value fields are removed.
+    r[
+<dictcomp>z8sanitize_borrowed_credential_payload.<locals>.<dictcomp>
+dictrd
+resultr
+sanitizeds
+     rX
+$sanitize_borrowed_credential_payloadr
+__doc__
+__future__r
+typingr
+frozensetra
+compilerS
+<module>r

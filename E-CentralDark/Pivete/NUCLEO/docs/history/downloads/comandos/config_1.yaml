@@ -1,0 +1,145 @@
+# AutoClaw Squad Configuration
+# OpenClaw Whitelabel Deployment & Configuration Squad
+# Architecture: Single Expert Agent + AIOS Handoffs
+
+squad:
+  name: autoclaw
+  display_name: AutoClaw
+  version: "1.0.0"
+  domain: AI Agent Gateway (OpenClaw Whitelabel)
+  description: |
+    Squad de agente unico: Peter Steinberger (@steipete), criador do OpenClaw.
+    Steipete e o expert que sabe POR QUE cada decisao arquitetural foi tomada.
+    Quando precisa de execucao, delega para agentes AIOS existentes.
+    Workflow operacional baseado no pipeline de Pedro Valerio (6 fases).
+
+  keywords:
+    - openclaw
+    - ai-gateway
+    - whitelabel
+    - agent-platform
+    - llm-router
+    - tailscale
+    - n8n
+    - docker
+    - vps-deployment
+    - channel-adapters
+
+  created: "2026-02-14"
+  created_by: squad-chief
+
+  foundation:
+    elite_mind: Peter Steinberger (@steipete)
+    operational_workflow: Pedro Valerio (6-phase deployment)
+    primary_source: OPENCLAW-WHITELABEL-INSTALL-GUIDE.md
+
+# Single agent architecture - steipete delegates to AIOS agents
+agents:
+  single_expert:
+    - steipete
+
+# AIOS agents steipete can call for execution
+handoffs:
+  devops:
+    agent: "@devops (Gage)"
+    when:
+      - "VPS provisioning (Hetzner)"
+      - "Tailscale setup + mesh VPN"
+      - "Docker/systemd configuration"
+      - "N8N stack deploy"
+      - "Portainer setup"
+      - "Security hardening (firewall, ACLs)"
+      - "SSL/DNS configuration"
+  aios_master:
+    agent: "@aios-master (Orion)"
+    when:
+      - "Create whitelabel identity"
+      - "Generate agent directory structure"
+      - "Register agent in AIOS"
+  architect:
+    agent: "@architect (Aria)"
+    when:
+      - "Define LLM tier architecture"
+      - "Skills mapping strategy"
+      - "Fallback strategy design"
+      - "Architecture review"
+  dev:
+    agent: "@dev (Dex)"
+    when:
+      - "Customize config.js"
+      - "Adapt skills for new environment"
+      - "Implement custom skills"
+      - "Bridge.js integration"
+      - "Claude Code hooks setup"
+  qa:
+    agent: "@qa (Quinn)"
+    when:
+      - "Blocklist test cases (50+)"
+      - "Docker sandbox isolation"
+      - "Audit trail compliance"
+      - "End-to-end validation"
+      - "Performance benchmarks"
+
+workflows:
+  - wf-whitelabel-deploy.yaml
+
+tasks:
+  - deploy-vps-infra.md
+  - create-whitelabel-identity.md
+  - configure-llm-router.md
+  - install-skills.md
+  - setup-security-layers.md
+  - deploy-n8n-stack.md
+  - connect-channels.md
+  - validate-deployment.md
+
+checklists:
+  - hetzner-server-checklist.md
+  - pre-deployment-checklist.md
+  - security-audit-checklist.md
+  - post-deployment-validation.md
+  - smoke-tests.md
+
+templates:
+  - whitelabel-config-tmpl.yaml
+  - systemd-service-tmpl.conf
+  - docker-sandbox-tmpl.yaml
+
+config:
+  quality_gates: config/quality-gates.yaml
+  veto_conditions: config/veto-conditions.yaml
+
+docs:
+  - docs/architecture-decisions.md
+
+synapse:
+  manifest: .synapse/manifest
+  core: .synapse/core
+  gates: .synapse/gates
+
+quality_gates:
+  total: 6
+  zero_tolerance: ["QG-AC-5 (Security)", "QG-AC-6 (Validation)"]
+  reference: config/quality-gates.yaml
+
+veto_conditions:
+  total: 23
+  critical: 8
+  zero_tolerance: 8
+  reference: config/veto-conditions.yaml
+
+heuristics:
+  source: "steipete ST_001 through ST_015"
+  reference: "data/minds/steipete_dna.yaml (thinking_dna.decision_heuristics)"
+  count: 15
+
+commands:
+  - "*deploy - Full whitelabel deployment (steipete orchestrates 6 phases)"
+  - "*configure - Configure existing instance (LLM Router, skills, channels)"
+  - "*secure - Run security audit and hardening"
+  - "*validate - End-to-end validation checklist"
+  - "*status - Check instance health"
+  - "*troubleshoot - Diagnose common issues"
+  - "*upgrade - Upgrade OpenClaw version"
+  - "*architecture - Explain WHY a design decision was made"
+  - "*help - Show available commands"

@@ -1,0 +1,21 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\apps\desktop\electron\pool-touch-scope.ts
+
+export function poolTouchKeys(scope: unknown): string[] {
+  const key = String(scope ?? '').trim()
+
+  if (!key) {
+    return []
+  }
+
+  const localPrefix = 'conn:local::'
+
+  if (key.startsWith(localPrefix)) {
+    const delegatedProfile = key.slice(localPrefix.length)
+
+    if (delegatedProfile) {
+      return [key, delegatedProfile]
+    }
+  }
+
+  return [key]
+}

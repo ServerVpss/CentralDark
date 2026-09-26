@@ -1,0 +1,180 @@
+{
+  "name": "combo-potencia",
+  "easy_name": "combo-potencia",
+  "aliases": [
+    "combo",
+    "power-combo",
+    "boom-combo"
+  ],
+  "installed_entry_skills": [
+    "cp-cc-switch",
+    "cp-ecc",
+    "cp-graphify",
+    "cp-hermes-agent",
+    "cp-skillspector",
+    "sp-brainstorming",
+    "sp-dispatching-parallel-agents",
+    "sp-executing-plans",
+    "sp-finishing-a-development-branch",
+    "sp-receiving-code-review",
+    "sp-requesting-code-review",
+    "sp-subagent-driven-development",
+    "sp-systematic-debugging",
+    "sp-test-driven-development",
+    "sp-using-git-worktrees",
+    "sp-using-superpowers",
+    "sp-verification-before-completion",
+    "sp-writing-plans",
+    "sp-writing-skills"
+  ],
+  "superpowers": [
+    {
+      "orig": "brainstorming",
+      "name": "sp-brainstorming",
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\combo-potencia\\packs\\superpowers\\sp-brainstorming",
+      "collided_with_casa": true
+    },
+    {
+      "orig": "dispatching-parallel-agents",
+      "name": "sp-dispatching-parallel-agents",
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\combo-potencia\\packs\\superpowers\\sp-dispatching-parallel-agents",
+      "collided_with_casa": false
+    },
+    {
+      "orig": "executing-plans",
+      "name": "sp-executing-plans",
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\combo-potencia\\packs\\superpowers\\sp-executing-plans",
+      "collided_with_casa": false
+    },
+    {
+      "orig": "finishing-a-development-branch",
+      "name": "sp-finishing-a-development-branch",
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\combo-potencia\\packs\\superpowers\\sp-finishing-a-development-branch",
+      "collided_with_casa": false
+    },
+    {
+      "orig": "receiving-code-review",
+      "name": "sp-receiving-code-review",
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\combo-potencia\\packs\\superpowers\\sp-receiving-code-review",
+      "collided_with_casa": false
+    },
+    {
+      "orig": "requesting-code-review",
+      "name": "sp-requesting-code-review",
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\combo-potencia\\packs\\superpowers\\sp-requesting-code-review",
+      "collided_with_casa": true
+    },
+    {
+      "orig": "subagent-driven-development",
+      "name": "sp-subagent-driven-development",
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\combo-potencia\\packs\\superpowers\\sp-subagent-driven-development",
+      "collided_with_casa": true
+    },
+    {
+      "orig": "systematic-debugging",
+      "name": "sp-systematic-debugging",
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\combo-potencia\\packs\\superpowers\\sp-systematic-debugging",
+      "collided_with_casa": true
+    },
+    {
+      "orig": "test-driven-development",
+      "name": "sp-test-driven-development",
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\combo-potencia\\packs\\superpowers\\sp-test-driven-development",
+      "collided_with_casa": true
+    },
+    {
+      "orig": "using-git-worktrees",
+      "name": "sp-using-git-worktrees",
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\combo-potencia\\packs\\superpowers\\sp-using-git-worktrees",
+      "collided_with_casa": false
+    },
+    {
+      "orig": "using-superpowers",
+      "name": "sp-using-superpowers",
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\combo-potencia\\packs\\superpowers\\sp-using-superpowers",
+      "collided_with_casa": false
+    },
+    {
+      "orig": "verification-before-completion",
+      "name": "sp-verification-before-completion",
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\combo-potencia\\packs\\superpowers\\sp-verification-before-completion",
+      "collided_with_casa": true
+    },
+    {
+      "orig": "writing-plans",
+      "name": "sp-writing-plans",
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\combo-potencia\\packs\\superpowers\\sp-writing-plans",
+      "collided_with_casa": true
+    },
+    {
+      "orig": "writing-skills",
+      "name": "sp-writing-skills",
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\combo-potencia\\packs\\superpowers\\sp-writing-skills",
+      "collided_with_casa": false
+    }
+  ],
+  "conflicts_resolved": [
+    {
+      "pack": "superpowers",
+      "orig": "brainstorming",
+      "resolved_as": "sp-brainstorming"
+    },
+    {
+      "pack": "superpowers",
+      "orig": "requesting-code-review",
+      "resolved_as": "sp-requesting-code-review"
+    },
+    {
+      "pack": "superpowers",
+      "orig": "subagent-driven-development",
+      "resolved_as": "sp-subagent-driven-development"
+    },
+    {
+      "pack": "superpowers",
+      "orig": "systematic-debugging",
+      "resolved_as": "sp-systematic-debugging"
+    },
+    {
+      "pack": "superpowers",
+      "orig": "test-driven-development",
+      "resolved_as": "sp-test-driven-development"
+    },
+    {
+      "pack": "superpowers",
+      "orig": "verification-before-completion",
+      "resolved_as": "sp-verification-before-completion"
+    },
+    {
+      "pack": "superpowers",
+      "orig": "writing-plans",
+      "resolved_as": "sp-writing-plans"
+    }
+  ],
+  "claude_friends_preserved": [
+    "claude-code",
+    "codex",
+    "opencode",
+    "hermes-agent",
+    "claude-code-security-gate"
+  ],
+  "vendors": {
+    "ECC": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\combo-potencia-vendor\\ECC",
+    "superpowers": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\combo-potencia-vendor\\superpowers",
+    "graphify": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\combo-potencia-vendor\\graphify",
+    "SkillSpector": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\combo-potencia-vendor\\SkillSpector",
+    "cc-switch": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\combo-potencia-vendor\\cc-switch"
+  },
+  "ecc_skills_offline_count": 281,
+  "policy": {
+    "casa_wins_on_collision": true,
+    "no_global_ecc_flood": true,
+    "prefixes": [
+      "cp-",
+      "sp-"
+    ],
+    "auto_activate": false,
+    "boom_requires_order": true
+  },
+  "vendor_root": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\combo-potencia-vendor",
+  "index_policy": "vendor FORA de skills/ para nao poluir hermes skills list"
+}

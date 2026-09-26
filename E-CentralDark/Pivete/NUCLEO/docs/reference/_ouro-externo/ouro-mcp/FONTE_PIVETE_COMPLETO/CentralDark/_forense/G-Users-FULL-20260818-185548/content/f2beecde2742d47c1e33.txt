@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@icons-pack\react-simple-icons\icons\SiPingdom.d.ts
+
+import { IconType } from '../types';
+declare const defaultColor = "#FFF000";
+declare const SiPingdom: IconType;
+export { SiPingdom as default, defaultColor };

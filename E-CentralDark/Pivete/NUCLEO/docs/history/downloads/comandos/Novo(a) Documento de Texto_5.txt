@@ -1,0 +1,455 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+PS C:\Users\danda> hermes tui
+usage: hermes [-h] [--version] [-z PROMPT] [--usage-file PATH] [-m MODEL] [--provider PROVIDER] [--reasoning LEVEL]
+              [-t TOOLSETS] [--resume SESSION] [--no-restore-cwd] [--in DIR] [--continue [SESSION_NAME]] [--worktree]
+              [--accept-hooks] [--skills SKILLS] [--yolo] [--pass-session-id] [--ignore-user-config] [--ignore-rules]
+              [--safe-mode] [--tui] [--cli] [--dev]
+              {chat,model,moa,fallback,secrets,egress,migrate,gateway,proxy,lsp,setup,whatsapp,whatsapp-cloud,slack,send,login,logout,auth,status,pause,resume,cron,sync,webhook,peer,portal,kanban,project,hooks,doctor,verify,security,approvals,dump,debug,backup,checkpoints,import,import-agent,config,skin,console,pairing,skills,bundles,plugins,curator,pets,journey,learning,memory-graph,memory,tools,computer-use,mcp,sessions,insights,monitoring,claw,version,update,uninstall,acp,profile,completion,dashboard,serve,desktop,gui,logs,prompt-size}
+              ...
+hermes: error: argument command: invalid choice: 'tui' (choose from 'chat', 'model', 'moa', 'fallback', 'secrets', 'egress', 'migrate', 'gateway', 'proxy', 'lsp', 'setup', 'whatsapp', 'whatsapp-cloud', 'slack', 'send', 'login', 'logout', 'auth', 'status', 'pause', 'resume', 'cron', 'sync', 'webhook', 'peer', 'portal', 'kanban', 'project', 'hooks', 'doctor', 'verify', 'security', 'approvals', 'dump', 'debug', 'backup', 'checkpoints', 'import', 'import-agent', 'config', 'skin', 'console', 'pairing', 'skills', 'bundles', 'plugins', 'curator', 'pets', 'journey', 'learning', 'memory-graph', 'memory', 'tools', 'computer-use', 'mcp', 'sessions', 'insights', 'monitoring', 'claw', 'version', 'update', 'uninstall', 'acp', 'profile', 'completion', 'dashboard', 'serve', 'desktop', 'gui', 'logs', 'prompt-size')
+PS C:\Users\danda> hermes tui -c
+usage: hermes [-h] [--version] [-z PROMPT] [--usage-file PATH] [-m MODEL] [--provider PROVIDER] [--reasoning LEVEL]
+              [-t TOOLSETS] [--resume SESSION] [--no-restore-cwd] [--in DIR] [--continue [SESSION_NAME]] [--worktree]
+              [--accept-hooks] [--skills SKILLS] [--yolo] [--pass-session-id] [--ignore-user-config] [--ignore-rules]
+              [--safe-mode] [--tui] [--cli] [--dev]
+              {chat,model,moa,fallback,secrets,egress,migrate,gateway,proxy,lsp,setup,whatsapp,whatsapp-cloud,slack,send,login,logout,auth,status,pause,resume,cron,sync,webhook,peer,portal,kanban,project,hooks,doctor,verify,security,approvals,dump,debug,backup,checkpoints,import,import-agent,config,skin,console,pairing,skills,bundles,plugins,curator,pets,journey,learning,memory-graph,memory,tools,computer-use,mcp,sessions,insights,monitoring,claw,version,update,uninstall,acp,profile,completion,dashboard,serve,desktop,gui,logs,prompt-size}
+              ...
+hermes: error: argument command: invalid choice: 'tui' (choose from 'chat', 'model', 'moa', 'fallback', 'secrets', 'egress', 'migrate', 'gateway', 'proxy', 'lsp', 'setup', 'whatsapp', 'whatsapp-cloud', 'slack', 'send', 'login', 'logout', 'auth', 'status', 'pause', 'resume', 'cron', 'sync', 'webhook', 'peer', 'portal', 'kanban', 'project', 'hooks', 'doctor', 'verify', 'security', 'approvals', 'dump', 'debug', 'backup', 'checkpoints', 'import', 'import-agent', 'config', 'skin', 'console', 'pairing', 'skills', 'bundles', 'plugins', 'curator', 'pets', 'journey', 'learning', 'memory-graph', 'memory', 'tools', 'computer-use', 'mcp', 'sessions', 'insights', 'monitoring', 'claw', 'version', 'update', 'uninstall', 'acp', 'profile', 'completion', 'dashboard', 'serve', 'desktop', 'gui', 'logs', 'prompt-size')
+PS C:\Users\danda>
+PS C:\Users\danda> $Md = @"                                                                ====="
+>> # CENTRALDARK — RECEIPT DE RECONCILIAÇÃO DA SOL LOCAL
+>>
+>> ## RESULTADO
+>>
+>> SOL_LOCAL_RECONCILIADA=$($Receipt.sol_local_reconciliada)
+>>
+>> FIXED_POINT=$FixedPoint
+>>
+>> ## 🔗 LINK
+>>
+>> CANONICAL_COMMIT:
+>> $($Receipt.canonical.commit_link)
+>>
+>> SOUL_SOL:
+>> $($Receipt.soul_sol.link)
+>>
+>> HERMES_CHAIN:
+>> $($Receipt.hermes_chain.link)
+>>
+>> ## 🧾 EVIDÊNCIA
+>>
+>> LOCAL_REPO=$Repo
+>> LOCAL_BRANCH=$LocalBranch
+>> LOCAL_HEAD_SHA=$LocalHead
+>>
+>> CANONICAL_REF=$CanonicalRef
+>> CANONICAL_HEAD_SHA=$CanonicalHead
+>>
+>> HERMES_HOME=$HermesHome
+>>
+>> CLAIMS_TOTAL=$($Claims.Count)
+>> CLAIMS_PASS=$ClaimsPass
+>> CLAIMS_FAIL=$ClaimsFail
+>> CLAIMS_UNKNOWN=$ClaimsUnknown
+>> CLAIMS_BLOCKED=$ClaimsBlocked
+>>
+>> ## 🔐 SHA/HASH
+>>
+>> SOUL_SOL_BLOB_SHA=$($Receipt.soul_sol.blob_sha)
+>> SOUL_SOL_SHA256=$($Receipt.soul_sol.sha256)
+>>
+>> HERMES_CHAIN_BLOB_SHA=$($Receipt.hermes_chain.blob_sha)
+>> HERMES_CHAIN_SHA256=$($Receipt.hermes_chain.sha256)
+>>
+>> LOCAL_STATUS_SHA256=$LocalStatusSha
+>> HERMES_RUNTIME_RECEIPT_SHA256=$HermesProcessSha
+>> PROFILE_INVENTORY_SHA256=$ProfileInventorySha
+>>
+>> LEDGER_JSON_SHA256=$LedgerJsonSha
+>> LEDGER_CSV_SHA256=$LedgerCsvSha
+>>
+>> ## ✅ VEREDITO
+>>
+>> SOL_IS_COORDINATOR=$(
+>>     ($Claims | Where-Object claim_id -eq "SOL_IS_COORDINATOR" | Select-Object -First 1).veredito
+>> )
+>>
+>> HERMES_IS_EXECUTOR=$(
+>>     ($Claims | Where-Object claim_id -eq "HERMES_IS_EXECUTOR" | Select-Object -First 1).veredito
+>> )
+>>
+>> SOL_HERMES_CHAIN=$(
+>>     ($Claims | Where-Object claim_id -eq "SOL_HERMES_CHAIN" | Select-Object -First 1).veredito
+>> )
+>>
+>> PROOF_POLICY=$(
+>>     ($Claims | Where-Object claim_id -eq "PROOF_POLICY" | Select-Object -First 1).veredito
+>> )
+>>
+>> FIXED_POINT=$FixedPoint
+>>
+>> ## REGRA
+>>
+>> 🔗 LINK
+>> +
+>> 🧾 EVIDÊNCIA
+>> +
+>> 🔐 SHA/HASH
+>> +
+>> ✅ VEREDITO
+>>
+>> SEM_PROVA_SEM_PASS=true
+>> SEM_EVIDENCIA_UNKNOWN=true
+>> NO_FAKE_SHA=true
+>> NO_FAKE_LINK=true
+>> NO_FAKE_PASS=true
+>> UNKNOWN_IS_NOT_PASS=true
+>> "@
+PS C:\Users\danda> if ($CanonicalHead -ne "UNKNOWN") {
+>>
+>>     if ($LocalHead -eq $CanonicalHead) {
+>>
+>>         Add-Claim `
+>>             -Id "LOCAL_CANONICAL_HEAD_RELATION" `
+>>             -Claim "HEAD local coincide com HEAD canônico medido" `
+>>             -Classificacao "FATO" `
+>>             -Fonte "git" `
+>>             -Evidencia "$LocalHead == $CanonicalHead" `
+>>             -Link "https://github.com/$CanonicalRepo/commit/$CanonicalHead" `
+>>             -CommitSha $CanonicalHead `
+>>             -Alvo $Repo `
+>>             -Veredito "PASS"
+>>     }
+>>     else {
+>>
+>>         $mergeBase = Invoke-Git -Args @(
+>>             "merge-base",
+>>             $LocalHead,
+>>             $CanonicalHead
+>>         ) -AllowFailure
+>>
+>>         Add-Claim `
+>>             -Id "LOCAL_CANONICAL_HEAD_RELATION" `
+>>             -Claim "HEAD local coincide com HEAD canônico medido" `
+>>             -Classificacao "FATO" `
+>>             -Fonte "git" `
+>>             -Evidencia "LOCAL=$LocalHead | CANONICAL=$CanonicalHead | MERGE_BASE=$($mergeBase.Output)" `
+>>             -Link "https://github.com/$CanonicalRepo/commit/$CanonicalHead" `
+>>             -CommitSha $CanonicalHead `
+>>             -Alvo $Repo `
+>>             -Contraprova "Comparação direta dos SHAs." `
+>>             -Veredito "FAIL"
+>>     }
+>> }
+PS C:\Users\danda> try {
+>>
+>>     $mcpResp = Invoke-WebRequest `
+>>         -Uri $McpUrl `
+>>         -Method GET `
+>>         -TimeoutSec 10 `
+>>         -UseBasicParsing
+>>
+>>     $McpRecord = @"
+>> URL=$McpUrl
+>> STATUS=$($mcpResp.StatusCode)
+>> TIMESTAMP=$((Get-Date).ToUniversalTime().ToString("o"))
+>> "@
+>>
+>>     Set-Content `
+>>         -LiteralPath $McpResultPath `
+>>         -Value $McpRecord `
+>>         -Encoding UTF8
+>>
+>>     $McpSha = Get-Sha256 $McpResultPath
+>>
+>>     Add-Claim `
+>>         -Id "MCP_CENTRALDARK_REACHABLE" `
+>>         -Claim "Endpoint MCP CentralDark é alcançável deste corpo" `
+>>         -Classificacao "FATO" `
+>>         -Fonte "HTTP runtime probe" `
+>>         -Evidencia "HTTP $($mcpResp.StatusCode)" `
+>>         -Link $McpUrl `
+>>         -Sha256 $McpSha `
+>>         -Alvo $McpUrl `
+>>         -Contraprova "Probe externo ao vivo." `
+>>         -Veredito $(if ($mcpResp.StatusCode -ge 200 -and $mcpResp.StatusCode -lt 500) {"PASS"} else {"FAIL"})
+>> }
+>> catch {
+>>
+>>     $msg = Sanitize-Text $_.Exception.Message
+>>
+>>     Set-Content `
+>>         -LiteralPath $McpResultPath `
+>>         -Value $msg `
+>>         -Encoding UTF8
+>>
+>>     $McpSha = Get-Sha256 $McpResultPath
+>>
+>>     Add-Claim `
+>>         -Id "MCP_CENTRALDARK_REACHABLE" `
+>>         -Claim "Endpoint MCP CentralDark é alcançável deste corpo" `
+>>         -Classificacao "UNKNOWN" `
+>>         -Fonte "HTTP runtime probe" `
+>>         -Evidencia $msg `
+>>         -Link $McpUrl `
+>>         -Sha256 $McpSha `
+>>         -Alvo $McpUrl `
+>>         -Veredito "UNKNOWN"
+>> }
+PS C:\Users\danda> try {
+>>
+>>     $resp = Invoke-WebRequest `
+>>         -Uri $GatewayUrl `
+>>         -Method GET `
+>>         -TimeoutSec 5 `
+>>         -UseBasicParsing
+>>
+>>     $GatewayRecord = @"
+>> URL=$GatewayUrl
+>> STATUS=$($resp.StatusCode)
+>> TIMESTAMP=$((Get-Date).ToUniversalTime().ToString("o"))
+>> "@
+>>
+>>     Set-Content -LiteralPath $GatewayResultPath -Value $GatewayRecord -Encoding UTF8
+>>
+>>     $GatewaySha = Get-Sha256 $GatewayResultPath
+>>
+>>     Add-Claim `
+>>         -Id "LOCAL_GATEWAY_9119" `
+>>         -Claim "Gateway Hermes local responde em 127.0.0.1:9119" `
+>>         -Classificacao "FATO" `
+>>         -Fonte "HTTP runtime probe" `
+>>         -Evidencia "HTTP $($resp.StatusCode)" `
+>>         -Link $GatewayUrl `
+>>         -Sha256 $GatewaySha `
+>>         -Alvo $GatewayUrl `
+>>         -Contraprova "Probe HTTP ao vivo; presença de arquivo não foi usada como substituto." `
+>>         -Veredito $(if ($resp.StatusCode -ge 200 -and $resp.StatusCode -lt 500) {"PASS"} else {"FAIL"})
+>> }
+>> catch {
+>>
+>>     $msg = Sanitize-Text $_.Exception.Message
+>>
+>>     Set-Content `
+>>         -LiteralPath $GatewayResultPath `
+>>         -Value $msg `
+>>         -Encoding UTF8
+>>
+>>     $GatewaySha = Get-Sha256 $GatewayResultPath
+>>
+>>     Add-Claim `
+>>         -Id "LOCAL_GATEWAY_9119" `
+>>         -Claim "Gateway Hermes local responde em 127.0.0.1:9119" `
+>>         -Classificacao "UNKNOWN" `
+>>         -Fonte "HTTP runtime probe" `
+>>         -Evidencia $msg `
+>>         -Link $GatewayUrl `
+>>         -Sha256 $GatewaySha `
+>>         -Alvo $GatewayUrl `
+>>         -Veredito "UNKNOWN"
+>> }
+PS C:\Users\danda> if ($HermesEvidence) {
+>>
+>>     $HermesText = Get-Content -LiteralPath $HermesEvidence.copy -Raw
+>>
+>>     $Needles = @(
+>>         "SOL = coordenadora",
+>>         "PIVETE/HERMES = executor, preservação e continuidade",
+>>         "SOL RECONCILIA CONTEXTO/ESCOPO",
+>>         "PIVETE/HERMES EXECUTA O MENOR DELTA",
+>>         "TESTE",
+>>         "PROVA",
+>>         "REGISTRO",
+>>         "APRENDIZADO",
+>>         "CONTINUIDADE"
+>>     )
+>>
+>>     $Missing = @()
+>>
+>>     foreach ($Needle in $Needles) {
+>>         if (!$HermesText.Contains($Needle)) {
+>>             $Missing += $Needle
+>>         }
+>>     }
+>>
+>>     if ($Missing.Count -eq 0) {
+>>
+>>         Add-Claim `
+>>             -Id "SOL_HERMES_CHAIN" `
+>>             -Claim "A cadeia canônica define SOL reconciliando e Hermes executando antes de teste/prova/registro" `
+>>             -Classificacao "FATO" `
+>>             -Fonte $HermesChainPath `
+>>             -Evidencia ($Needles -join " | ") `
+>>             -Link $HermesEvidence.link `
+>>             -CommitSha $HermesEvidence.commit_sha `
+>>             -BlobSha $HermesEvidence.blob_sha `
+>>             -Sha256 $HermesEvidence.sha256 `
+>>             -Alvo "CASA" `
+>>             -Contraprova "Busca literal de todos os elos obrigatórios da cadeia." `
+>>             -Veredito "PASS"
+>>     }
+>>     else {
+>>
+>>         Add-Claim `
+>>             -Id "SOL_HERMES_CHAIN" `
+>>             -Claim "A cadeia canônica define SOL reconciliando e Hermes executando antes de teste/prova/registro" `
+>>             -Classificacao "UNKNOWN" `
+>>             -Fonte $HermesChainPath `
+>>             -Evidencia "Ausentes: $($Missing -join ', ')" `
+>>             -Link $HermesEvidence.link `
+>>             -CommitSha $HermesEvidence.commit_sha `
+>>             -BlobSha $HermesEvidence.blob_sha `
+>>             -Sha256 $HermesEvidence.sha256 `
+>>             -Alvo "CASA" `
+>>             -Veredito "UNKNOWN"
+>>     }
+>> }
+PS C:\Users\danda> if ($SoulEvidence) {                                                     "
+>>
+>>     $SoulText = Get-Content -LiteralPath $SoulEvidence.copy -Raw
+>>
+>>     $Checks = @(
+>>         @{
+>>             Id="SOL_IS_COORDINATOR"
+>>             Search="SOL=IDENTIDADE_OPERACIONAL_COORDENADORA"
+>>             Claim="SOL é a identidade operacional coordenadora"
+>>         },
+>>         @{
+>>             Id="HERMES_IS_EXECUTOR"
+>>             Search="PIVETE/HERMES=EXECUTOR_PRESERVACAO_CONTINUIDADE"
+>>             Claim="PIVETE/HERMES é executor, preservação e continuidade"
+>>         },
+>>         @{
+>>             Id="MODEL_IS_SUBSTITUTABLE"
+>>             Search="MODELO=MOTOR_SUBSTITUIVEL"
+>>             Claim="Modelo é motor substituível e não identidade"
+>>         },
+>>         @{
+>>             Id="ONE_SYSTEM_ONLY"
+>>             Search="ONE_SYSTEM_ONLY=true"
+>>             Claim="A Casa preserva um único sistema"
+>>         },
+>>         @{
+>>             Id="ONE_WRITER_PER_SCOPE"
+>>             Search="ONE_WRITER_PER_SCOPE=true"
+>>             Claim="Existe regra de um Writer por escopo"
+>>         },
+>>         @{
+>>             Id="UNKNOWN_IS_NOT_PASS"
+>>             Search="UNKNOWN_IS_NOT_PASS=true"
+>>             Claim="UNKNOWN não pode ser promovido a PASS"
+>>         }
+>>     )
+>>
+>>     foreach ($Check in $Checks) {
+>>
+>>         if ($SoulText.Contains($Check.Search)) {
+>>
+>>             Add-Claim `
+>>                 -Id $Check.Id `
+>>                 -Claim $Check.Claim `
+>>                 -Classificacao "FATO" `
+>>                 -Fonte $SoulPath `
+>>                 -Evidencia $Check.Search `
+>>                 -Link $SoulEvidence.link `
+>>                 -CommitSha $SoulEvidence.commit_sha `
+>>                 -BlobSha $SoulEvidence.blob_sha `
+>>                 -Sha256 $SoulEvidence.sha256 `
+>>                 -Alvo "SOL_LOCAL" `
+>>                 -Contraprova "Busca literal no conteúdo recuperado do objeto Git pinado." `
+>>                 -Veredito "PASS"
+>>         }
+>>         else {
+>>
+>>             Add-Claim `
+>>                 -Id $Check.Id `
+>>                 -Claim $Check.Claim `
+>>                 -Classificacao "UNKNOWN" `
+>>                 -Fonte $SoulPath `
+>>                 -Evidencia "Literal esperado não encontrado: $($Check.Search)" `
+>>                 -Link $SoulEvidence.link `
+>>                 -CommitSha $SoulEvidence.commit_sha `
+>>                 -BlobSha $SoulEvidence.blob_sha `
+>>                 -Sha256 $SoulEvidence.sha256 `
+>>                 -Alvo "SOL_LOCAL" `
+>>                 -Veredito "UNKNOWN"
+>>         }
+>>     }
+>> }
+PS C:\Users\danda> foreach ($Path in $CanonicalFiles) {
+>>
+>>     $SafeName = ($Path -replace '[\\/:*?"<>|]', '_')
+>>     $Dest = Join-Path $CanonicalDir $SafeName
+>>
+>>     if ($CanonicalHead -eq "UNKNOWN") {
+>>         Add-Claim `
+>>             -Id "CANONICAL_$SafeName" `
+>>             -Claim "Fonte canônica disponível: $Path" `
+>>             -Classificacao "UNKNOWN" `
+>>             -Fonte "git" `
+>>             -Evidencia "Canonical HEAD não resolvido" `
+>>             -Veredito "UNKNOWN"
+>>
+>>         continue
+>>     }
+>>
+>>     $exists = Get-GitFileAtRef `
+>>         -Ref $CanonicalHead `
+>>         -Path $Path `
+>>         -Destination $Dest
+>>
+>>     if (!$exists) {
+>>         Add-Claim `
+>>             -Id "CANONICAL_$SafeName" `
+>>             -Claim "Fonte canônica disponível: $Path" `
+>>             -Classificacao "FATO" `
+>>             -Fonte "git show" `
+>>             -Evidencia "Arquivo não encontrado em $CanonicalHead" `
+>>             -CommitSha $CanonicalHead `
+>>             -Alvo $Path `
+>>             -Veredito "FAIL"
+>>
+>>         continue
+>>     }
+>>
+>>     $BlobSha = Get-GitBlobSha `
+>>         -Ref $CanonicalHead `
+>>         -Path $Path
+>>
+>>     $Sha256 = Get-Sha256 $Dest
+>>
+>>     $Link = "https://github.com/$CanonicalRepo/blob/$CanonicalHead/$Path"
+>>
+>>     $CanonicalEvidence += [pscustomobject]@{
+>>         path       = $Path
+>>         commit_sha = $CanonicalHead
+>>         blob_sha   = $BlobSha
+>>         sha256     = $Sha256
+>>         link       = $Link
+>>         copy       = $Dest
+>>     }
+>>
+>>     Add-Claim `
+>>         -Id "CANONICAL_$SafeName" `
+>>         -Claim "Fonte canônica materialmente recuperada: $Path" `
+>>         -Classificacao "FATO" `
+>>         -Fonte "Git object database" `
+>>         -Evidencia "Arquivo extraído diretamente de $CanonicalHead" `
+>>         -Link $Link `
+>>         -CommitSha $CanonicalHead `
+>>         -BlobSha $BlobSha `
+>>         -Sha256 $Sha256 `
+>>         -Alvo $Path `
+>>         -Contraprova "Blob resolvido pelo Git e conteúdo materializado com SHA256 independente." `
+>>         -Veredito "PASS"
+>> }
+PS C:\Users\danda> $CanonicalFiles = @(
+>>     "LEIA-ME-IA.md",
+>>     "AGENTS.md",
+>>     "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+>>     "docs/CONSCIENCIA/PIVETE-IA/PIVETE-07-HERMES-CADEIA.md",
+>>     "docs/CONSCIENCIA/02-PERMISSOES.md"
+>> )^C
+PS C:\Users\danda>

@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\primitives\thread\topAnchor\useTopAnchorReserve.d.ts.map
+
+{"version":3,"file":"useTopAnchorReserve.d.ts","names":[],"sources":["../../../../src/primitives/thread/topAnchor/useTopAnchorReserve.ts"],"mappings":";;AAWA;;;;cAAa,mBAAA,GAAuB,OAAgB"}

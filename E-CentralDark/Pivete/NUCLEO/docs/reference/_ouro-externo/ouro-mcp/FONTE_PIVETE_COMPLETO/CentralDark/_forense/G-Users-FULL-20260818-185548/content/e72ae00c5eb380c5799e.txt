@@ -1,0 +1,25 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@electron\universal\node_modules\fs-extra\lib\ensure\index.js
+
+'use strict'
+
+const { createFile, createFileSync } = require('./file')
+const { createLink, createLinkSync } = require('./link')
+const { createSymlink, createSymlinkSync } = require('./symlink')
+
+module.exports = {
+  // file
+  createFile,
+  createFileSync,
+  ensureFile: createFile,
+  ensureFileSync: createFileSync,
+  // link
+  createLink,
+  createLinkSync,
+  ensureLink: createLink,
+  ensureLinkSync: createLinkSync,
+  // symlink
+  createSymlink,
+  createSymlinkSync,
+  ensureSymlink: createSymlink,
+  ensureSymlinkSync: createSymlinkSync
+}

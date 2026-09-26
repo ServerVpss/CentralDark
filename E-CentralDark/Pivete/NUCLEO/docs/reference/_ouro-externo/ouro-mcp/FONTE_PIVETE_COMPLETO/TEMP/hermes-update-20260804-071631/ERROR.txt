@@ -1,0 +1,9 @@
+﻿hermes.exe : Using Python 3.11.15 environment at: venv
+No C:\Users\danda\Downloads\ATUALIZAR-HERMES-WINDOWS-SEGURO.ps1:193 caractere:21
++     $updateOutput = & $HermesExe update --yes 2>&1
++                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Using Python 3....onment at: venv:Strin 
+   g) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+

@@ -1,0 +1,82 @@
+# MISSAO - tauri-sign.yml
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\.grok\worktrees\pivete-centraldark\test\.github\workflows\tauri-sign.yml
+**SHA:** 62cfc554a79867dc
+**Timestamp:** 2026-08-28T02:56:04.067857
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Comandos
+- run: |
+- run: npm ci
+- run: npm run build
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+# .github/workflows/tauri-sign.yml
+name: Tauri Windows Sign
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  sign-windows:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    env:
+      TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Import Code Signing Certificate
+        uses: actions/import-code-signing-cert@v3
+        with:
+          certificate: ${{ secrets.WINDOWS_CERT_PFX_BASE64 }}
+          password: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+
+      - name: Verify Certificate Imported
+        run: |
+          Get-ChildItem Cert:\CurrentUser\My -CodeSigningCert | Where-Object {$_.Thumbprint -eq "${{ secrets.WINDOWS_CERT_THUMBPRINT }}".Replace(" ", "")}
+
+      - name: Install Dependencies
+        run: npm ci
+        working-directory: ./apps/sol-desktop
+
+      - name: Build Frontend
+        run: npm run build
+        working-directory: ./apps/sol-desktop
+
+      - name: Build Tauri (Signed)
+        uses: tauri-apps/tauri-action@v0
+        env:
+          TAURI_SIGNING_WINDOWS_CERT_THUMBPRINT: ${{ secrets.WINDOWS_CERT_THUMBPRINT }}
+          TAURI_SIGNING_WINDOWS_CERT_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "SOL CentralDark ${{ github.ref_name }}"
+          releaseBody: "Build assinado com certificado EV"
+          args: --target x86_64-pc-windows-msvc
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sol-desktop-signed
+          path: apps/sol-desktop/src-tauri/target/release/bundle/msi/*.msi
+```

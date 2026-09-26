@@ -1,0 +1,98 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\agent\__pycache__\plugin_stream_hooks.cpython-311.pyc
+
+Z d(d-d$
+).zDAsynchronous per-consumer plugin observers for streaming LLM output.
+annotationsN)
+dataclass)
+Callable)
+OBSERVER_SCHEMA_VERSIONi
+_ConsumerDispatcher
+hook_name
+Callable[..., Any]
+callbackz&'queue.Queue[dict[str, Any] | object]'
+eventsNz
+threading.Thread | None
+thread)
+__name__
+__module__
+__qualname__
+__annotations__r
+MC:\Users\danda\AppData\Local\hermes\hermes-agent\agent\plugin_stream_hooks.pyr
+z*dict[tuple[str, int], _ConsumerDispatcher]
+_dispatchersr
+returnr
+getattr
+_callback_namer
+dispatcher
+telemetry_schema_versionz Hook '%s' callback %s raised: %sr
+task_done
+setdefaultr
+Exception
+logger
+warningr
+payload
+_workerr,
+tuple[Callable[..., Any], ...]c
+pluginsz-plugin stream hook callback lookup failed: %sT
+exc_infor
+hermes_clir/
+iter_hook_callbacksr&
+debug)
+_registered_callbacksr5
+timeout
+floatc
+put_nowaitr"
+get_nowaitr#
+Emptyr
+_stop_dispatcherrA
+list[_ConsumerDispatcher]c
+<setcomp>z#_dispatchers_for.<locals>.<setcomp>X
+maxsize)
+plugin-stream-hook:)
+target
+daemon
+_dispatcher_lock
+append
+is_aliver<
+_QUEUE_SIZEr
+threading
+Threadr,
+startrA
+callbacks
+callback_ids
+key_hook_name
+callback_idr
+           r
+_dispatchers_forr_
+zLQueue an observer hook for each consumer without running plugin code inline.FTz?plugin stream hook queue full after drop-oldest: %s callback=%s)
+queuedr)
+     r
+enqueue_plugin_stream_hookrc
+<genexpr>z,has_stream_observer_hooks.<locals>.<genexpr>
+on_stream_start
+on_stream_delta
+on_stream_end)
+has_stream_observer_hooksrk
+stream_reasoning_deltas_enabledr`
+#has_reasoning_stream_observer_hooksrn
+zCReturn True only when the user opted plugins into reasoning deltas.r
+configr/
+stream_reasoning_deltasF)
+defaultz.failed to read plugins.stream_reasoning_deltasTr0
+load_configr`
+cfg_getr&
+config_modrp
+zPStop background stream hook dispatchers; used by tests and clean shutdown paths.Nr:
+valuesrA
+dispatchersr
+&shutdown_plugin_stream_hook_dispatcherry
+__doc__
+__future__r
+loggingr<
+dataclassesr
+typingr
+hermes_cli.middlewarer
+getLoggerr
+objectr"
+LockrM
+<module>r

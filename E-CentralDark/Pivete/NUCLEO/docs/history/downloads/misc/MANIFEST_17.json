@@ -1,0 +1,15 @@
+{
+  "package": "CentralDark_Fluxo_Bidirecional_Auditoria_RECUPERADO_2026-08-24",
+  "historical_package": "CentralDark_Fluxo_Bidirecional_Auditoria_2026-07-28.zip",
+  "historical_sha256": "1583fad27aadc477827bb0d57746b0a962439add16a17ad221a512aa187c2bfc",
+  "historical_file_count": 71,
+  "recovery_note": "Não é reconstrução byte-a-byte do ZIP histórico; é recuperação de continuidade com owners/gaps conhecidos + auditoria atual.",
+  "known_historical_gaps_closed_here": [
+    "adapters/LOVABLE.md",
+    "sources/LOVABLE_INVENTARIO.md",
+    "PRESERVE_LIST.txt"
+  ],
+  "mutation_authorized": false,
+  "deploy_authorized": false,
+  "publication_authorized": false
+}

@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\react\runtimes\cloud\useCloudThreadListAdapter.d.ts.map
+
+{"version":3,"file":"useCloudThreadListAdapter.d.ts","names":[],"sources":["../../../../src/react/runtimes/cloud/useCloudThreadListAdapter.tsx"],"mappings":";;;KAkBK;EACH;;KAGG;EACH,QAAQ;EAER,gBAAgB,QAAQ;EACxB,WAAW,qBAAqB;;cAarB,4BACX,SAAS,kCACR"}

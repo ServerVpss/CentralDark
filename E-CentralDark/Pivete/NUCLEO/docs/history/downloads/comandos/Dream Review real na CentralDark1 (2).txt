@@ -1,0 +1,2083 @@
+
+
+Inspecionando arquitetura Dreamer Sleep CentralDark
+{
+  "url": "https://api.github.com/repos/ServerVpss/CentralDark/branches/main"
+}
+
+App usado
+{
+  "query": "dreamer dream sleep dormir acordar memory dream Hermes",
+  "repository_name": "ServerVpss/CentralDark",
+  "topn": 100
+}
+
+App usado
+{
+  "query": "Memory Dream",
+  "repository_name": "ServerVpss/CentralDark",
+  "topn": 100
+}
+
+App usado
+{
+  "repository_full_name": "ServerVpss/CentralDark",
+  "path": "scripts/memory-linker/dream-review.mjs",
+  "ref": "dcf70053f2af1d95bd86867e6f043fb634e919d0"
+}
+
+App usado
+{
+  "repository_full_name": "ServerVpss/CentralDark",
+  "path": "scripts/memory-linker/dream-review-run.mjs",
+  "ref": "dcf70053f2af1d95bd86867e6f043fb634e919d0"
+}
+
+App usado
+{
+  "repository_full_name": "ServerVpss/CentralDark",
+  "path": "scripts/memory-linker/README.md",
+  "ref": "dcf70053f2af1d95bd86867e6f043fb634e919d0"
+}
+
+App usado
+{
+  "repository_full_name": "ServerVpss/CentralDark",
+  "path": "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md",
+  "ref": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+  "start_line": 1,
+  "end_line": 260
+}
+
+App usado
+{
+  "query": "dream-review-run.mjs",
+  "repository_name": "ServerVpss/CentralDark",
+  "topn": 100
+}
+
+App usado
+{
+  "query": "memory-linker cron scheduler",
+  "repository_name": "ServerVpss/CentralDark",
+  "topn": 100
+}
+
+Arquitetando Pack Completo com Autorrevisão e Rotinas
+{
+  "query": "Hermes cron scheduler Windows Casa",
+  "repository_name": "ServerVpss/CentralDark",
+  "topn": 100
+}
+
+App usado
+{
+  "repository_full_name": "ServerVpss/CentralDark",
+  "path": "docs/BRAIN/03-DOCUMENTACAO/INVENTARIO-METODOS-HERMES.md",
+  "ref": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+  "start_line": 1,
+  "end_line": 260
+}
+
+App usado
+{
+  "query": "wake acordar idle sleep schedule night nightly quiet hours Hermes",
+  "repository_name": "ServerVpss/CentralDark",
+  "topn": 100
+}
+
+App usado
+{
+  "query": "cron Hermes",
+  "repository_name": "ServerVpss/CentralDark",
+  "topn": 100
+}
+
+App usado
+{
+  "repository_full_name": "ServerVpss/CentralDark",
+  "path": "docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-6-hermes-autonomo.md",
+  "ref": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+  "start_line": 1,
+  "end_line": 260
+}
+
+App usado
+{
+  "repository_full_name": "ServerVpss/CentralDark",
+  "path": "docs/CONSCIENCIA/ARSENAL/scripts/hermes.sh",
+  "ref": "dcf70053f2af1d95bd86867e6f043fb634e919d0"
+}
+
+App usado
+{
+  "query": "schtasks Task Scheduler casa Hermes",
+  "repository_name": "ServerVpss/CentralDark",
+  "topn": 100
+}
+
+App usado
+{
+  "query": "cron.scheduler",
+  "repository_name": "ServerVpss/CentralDark",
+  "topn": 100
+}
+
+Estruturando o pacote doméstico
+Estou organizando uma arquitetura local completa, separando revisão de sonhos, memória, descoberta de padrões, roteamento e agendamento. Também vou manter o Hermes legado isolado, com horários configuráveis, validações e execução segura para reduzir riscos de falha.
+
+
+Arquitetando pacote Hermes Casa com ciclo noturno seguro
+{
+  "repository_full_name": "ServerVpss/CentralDark",
+  "path": "docs/BRAIN/00-MAPA-SISTEMA/DIRECAO-ATUAL-HERMES.md",
+  "ref": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+  "start_line": 1,
+  "end_line": 320
+}
+
+App usado
+{
+  "repository_full_name": "ServerVpss/CentralDark",
+  "path": "docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md",
+  "ref": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+  "start_line": 1,
+  "end_line": 320
+}
+
+App usado
+{
+  "repository_full_name": "ServerVpss/CentralDark",
+  "path": "scripts/casa/sync-hermes-obsidian.ps1",
+  "ref": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+  "start_line": 1,
+  "end_line": 360
+}
+
+App usado
+{
+  "query": "cron job CentralDark Dependabot Hermes Agent profile pivete",
+  "repository_name": "ServerVpss/CentralDark",
+  "topn": 100
+}
+
+App usado
+{
+  "repository_full_name": "ServerVpss/CentralDark",
+  "path": "docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/SUGESTOES/004-hermes-24h-loop-autonomo.md",
+  "ref": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+  "start_line": 1,
+  "end_line": 260
+}
+
+App usado
+{
+  "repository_full_name": "ServerVpss/CentralDark",
+  "path": "scripts/memory-linker/pattern-discovery.mjs",
+  "ref": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+  "start_line": 1,
+  "end_line": 220
+}
+
+App usado
+{
+  "repository_full_name": "ServerVpss/CentralDark",
+  "path": "scripts/memory-linker/memory-reserve-events.mjs",
+  "ref": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+  "start_line": 1,
+  "end_line": 260
+}
+
+App usado
+{
+  "repository_full_name": "ServerVpss/CentralDark",
+  "path": "scripts/memory-linker/pattern-library.mjs",
+  "ref": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+  "start_line": 1,
+  "end_line": 280
+}
+
+App usado
+{
+  "repository_full_name": "ServerVpss/CentralDark",
+  "path": ".github/workflows/lupa-conformance.yml",
+  "ref": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+  "start_line": 1,
+  "end_line": 420
+}
+
+App usado
+{
+  "query": "\"Dream Review\"",
+  "repository_full_name": "ServerVpss/CentralDark",
+  "state": "all",
+  "topn": 30,
+  "sort": "updated",
+  "order": "desc"
+}
+
+App usado
+{
+  "repository_full_name": "ServerVpss/CentralDark",
+  "path": "scripts/memory-linker/dream-review.test.mjs",
+  "ref": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+  "start_line": 1,
+  "end_line": 360
+}
+
+Fechando a coleta diária
+Estou identificando uma lacuna: o revisor não captura automaticamente tudo que acontece durante o dia. Para fechar isso, preciso de um registro JSONL normalizado, gerado pelo Hermes, com caminhos opcionais para artefatos e logs explicitamente autorizados.
+
+Pensou por 3m 2s
+Pronto
+
+Analisado
+from pathlib import Path
+import hashlib, zipfile, textwrap, json, shutil, os, re
+
+root = Path("/mnt/data/CENTRALDARK-HERMES-DREAM-SLEEP-WAKE-CASA-PACK-20260823")
+if root.exists():
+    shutil.rmtree(root)
+root.mkdir(parents=True)
+
+def put(rel, txt):
+    p = root / rel
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(textwrap.dedent(txt).lstrip(), encoding="utf-8")
+    return p
+
+put("README-FIRST.md", r"""
+# CENTRALDARK — HERMES DREAM / SLEEP / WAKE — CASA PACK
+
+**Data do baseline:** 2026-08-23  
+**Repositório:** `ServerVpss/CentralDark`  
+**HEAD observado ao desenhar este pack:** `dcf70053f2af1d95bd86867e6f043fb634e919d0`
+
+## Resultado da investigação
+
+SIM: a CentralDark já possui um sistema real de **consolidação ociosa / Dream Review**.
+
+NÃO: o repositório não prova que o Dream Review esteja hoje ligado a um scheduler noturno da Casa.
+
+NÃO: o Dream Review não deve criar `Dream Engine`, `Night Brain` ou segundo sistema.
+
+A fonte canônica declara que ele pertence ao **mesmo `scripts/memory-linker/`**.
+
+## Núcleo real encontrado
+
+```text
+EXPERIÊNCIA / EVENTO / MEMÓRIA RESERVA / ARTEFATO
+→ dream-review.mjs
+→ sanitização + tempo + provenance + HEAD
+→ dedupe exato por fingerprint
+→ CANDIDATE | QUARANTINE
+→ pattern-discovery.mjs
+→ complete-link + Jaccard
+→ pattern-library.mjs
+→ memória longitudinal derivada
+→ routePatternAutonomy()
+→ CENTRALDARK_AGENT_CALL_V1
+→ Writer/HEAD/scope gate
+→ apply_directly=false
+→ MetaLupa + same-head + proof ownership
+→ somente depois: Writer autorizado
+O runner de composição já existe:
+
+scripts/memory-linker/dream-review-run.mjs
+
+O que este pack acrescenta
+Este pack NÃO substitui o Dream Review.
+
+Ele prepara a costura física da Casa:
+
+DIA
+→ Hermes trabalha junto com o CHEFE
+→ eventos/receipts ficam preservados
+
+NOITE
+→ entra em DREAM_WINDOW
+→ revisa memória/eventos em cópia isolada
+→ descobre padrões
+→ revisa a própria revisão por replay determinístico
+→ roda Judge local do artefato
+→ NÃO altera canônico
+→ NÃO promove sozinho
+
+HORA DE PARAR
+→ deadline hard
+→ STOP
+→ receipt
+
+MANHÃ
+→ WAKE
+→ verifica recibo da noite
+→ mantém candidatos prontos para a próxima missão
+→ volta a modo interativo
+Princípio principal
+DORMIR != PARAR DE PENSAR
+DREAM != ESCREVER CANÔNICO
+REVIEW != APPROVAL
+REVIEW_OF_REVIEW != SELF_APPROVAL
+PATTERN != PROOF
+CANDIDATE != CANONICAL
+NIGHT != WRITE_AUTHORITY
+Antes de instalar
+Este pack foi desenhado para ser fail-closed.
+
+Não execute o instalador de scheduler até medir:
+
+caminho real atual do clone da Casa;
+
+caminho real do state/runtime local;
+
+scheduler real disponível;
+
+se o Hermes local já possui scheduler/cron próprio;
+
+hora de início da janela noturna;
+
+hora de parada;
+
+timezone/sistema local;
+
+formato real dos logs diurnos que devem entrar no Dream Review.
+
+O pack não inventa esses valores.
+
+Comece por
+01-VERIFICACAO-CENTRALDARK.md
+
+02-ARQUITETURA-END-TO-END.md
+
+03-GAPS-REAIS.md
+
+04-INSTALACAO-CASA.md
+
+config/DREAM-HOUSE-CONTRACT.yml
+
+scripts/casa/discover-dream-runtime.ps1
+
+APPLY-PLAN.yml
+""")
+
+put("01-VERIFICACAO-CENTRALDARK.md", r"""
+
+Verificação — o sistema existe?
+Veredito
+DREAM_REVIEW_CORE=FOUND
+DREAM_REVIEW_RUNNER=FOUND
+PATTERN_DISCOVERY=FOUND
+PATTERN_LIBRARY=FOUND
+MEMORY_RESERVE_BRIDGE=FOUND
+ARTIFACT_MINING_BRIDGE=FOUND
+SEMANTIC_PREFILTER=FOUND
+JARVIS_AGENT_CALL_ROUTING=FOUND
+META_LUPA_GATE=FOUND
+SAME_HEAD_REQUIREMENT=FOUND
+DIRECT_APPLY=FORBIDDEN
+CANONICAL_SCHEDULER_FOR_DREAM_IN_CASA=UNPROVEN
+DAY_LOG_TO_DREAM_ADAPTER=UNPROVEN
+PHYSICAL_SLEEP_WAKE_RUNTIME=UNPROVEN
+Links reais
+Dream Review
+https://github.com/ServerVpss/CentralDark/blob/main/scripts/memory-linker/dream-review.mjs
+
+Runner composto
+https://github.com/ServerVpss/CentralDark/blob/main/scripts/memory-linker/dream-review-run.mjs
+
+README do Memory Linker
+https://github.com/ServerVpss/CentralDark/blob/main/scripts/memory-linker/README.md
+
+Metacognição / contrato conceitual
+https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+
+Pattern Discovery
+https://github.com/ServerVpss/CentralDark/blob/main/scripts/memory-linker/pattern-discovery.mjs
+
+Pattern Library
+https://github.com/ServerVpss/CentralDark/blob/main/scripts/memory-linker/pattern-library.mjs
+
+Memory Reserve → Dream
+https://github.com/ServerVpss/CentralDark/blob/main/scripts/memory-linker/memory-reserve-events.mjs
+
+Teste do Dream
+https://github.com/ServerVpss/CentralDark/blob/main/scripts/memory-linker/dream-review.test.mjs
+
+Teste do runner
+https://github.com/ServerVpss/CentralDark/blob/main/scripts/memory-linker/dream-review-run.test.mjs
+
+Gate real
+https://github.com/ServerVpss/CentralDark/blob/main/.github/workflows/lupa-conformance.yml
+
+Inventário de métodos Hermes
+https://github.com/ServerVpss/CentralDark/blob/main/docs/BRAIN/03-DOCUMENTACAO/INVENTARIO-METODOS-HERMES.md
+
+PRs que explicam a evolução
+PR #834 — Dream Review no memory-linker
+https://github.com/ServerVpss/CentralDark/pull/834
+
+PR #869 — Pattern Discovery + autonomy routing
+https://github.com/ServerVpss/CentralDark/pull/869
+
+PR #935 — Pattern Library longitudinal + Lembranças
+https://github.com/ServerVpss/CentralDark/pull/935
+
+Sistema antigo encontrado — NÃO confundir
+Também existe um Hermes histórico/Arsenal que rodava às 06:00 na VPS:
+
+https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-6-hermes-autonomo.md
+
+Script:
+
+https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/ARSENAL/scripts/hermes.sh
+
+Esse fluxo:
+
+06:00 cron
+→ PENDENCIAS
+→ arsenal-council
+→ proposta
+→ Telegram
+não é o owner atual do Dream Review.
+
+Ele é material histórico/operacional separado e é VPS-specific (/root/CentralDark).
+
+Não usar esse script como atalho para a Casa.
+""")
+
+put("02-ARQUITETURA-END-TO-END.md", r"""
+
+Arquitetura end-to-end — DIA → SONO → SONHO → REVISÃO → ACORDAR
+Plano de autoridade
+SEGREDO/CHEFE
+    │ intenção e autoridade humana
+    ▼
+SOL
+    │ coordenação
+    ▼
+PIVETE/HERMES
+    │ execução / continuidade
+    ▼
+DREAM REVIEW
+    │ percepção/consolidação isolada
+    ▼
+CANDIDATOS
+Dream Review não recebe autoridade de Writer.
+
+Pipeline canônico existente
+RAW EXPERIENCE
+   │
+   ├── JSONL event
+   ├── Memory Reserve
+   └── Artifact Capability
+        ↓
+dream-review-run.mjs
+        │
+        ├── loadMemoryReserveEvents()
+        ├── compileArtifactToDreamEvent()
+        ├── buildDreamProposal()
+        ├── attachSemanticIntentPrefilter()
+        ├── enrichDreamProposal()
+        ├── updatePatternLibrary()
+        └── routePatternAutonomy() quando JARVIS_STATE é fornecido
+        ↓
+DREAM_PROPOSAL
+        ↓
+CANDIDATE | QUARANTINE
+        ↓
+PATTERN DISCOVERY
+        ↓
+AUTONOMY_QUEUE
+        ↓
+CENTRALDARK_AGENT_CALL_V1
+        ↓
+WRITER/SCOPE/HEAD VALIDATION
+        ↓
+TRANSPORT_EXECUTION=false
+DIRECT_APPLY=false
+Arquitetura física proposta da Casa
+┌──────────────── DAY INTERACTIVE ────────────────┐
+│                                                 │
+│ CHEFE + HERMES trabalham                       │
+│      ↓                                          │
+│ eventos/receipts/material do dia                │
+│      ↓                                          │
+│ memory reserve + day-events JSONL + artifacts   │
+│                                                 │
+└───────────────────┬─────────────────────────────┘
+                    │
+                    │ NIGHT_START
+                    ▼
+┌──────────────── DREAM WINDOW ───────────────────┐
+│                                                 │
+│ PRECHECK                                        │
+│  - repo real                                    │
+│  - HEAD                                         │
+│  - clean/known state                            │
+│  - no concurrent dream lock                     │
+│  - scheduler deadline                           │
+│                                                 │
+│ PASS 1 — DREAM REVIEW                           │
+│  - CANDIDATE only                               │
+│  - sanitize                                     │
+│  - dedupe                                       │
+│  - patterns                                     │
+│  - pattern library                              │
+│                                                 │
+│ PASS 2 — REVIEW OF REVIEW                       │
+│  - replay same HEAD/input                       │
+│  - proposal hash must remain stable             │
+│  - no artificial new observation               │
+│                                                 │
+│ PASS 3 — JUDGE LOCAL                            │
+│  - validateDreamProposal                        │
+│  - validatePatternDiscovery                     │
+│  - direct apply must be false                   │
+│  - transport must be false unless proven        │
+│  - head must match                              │
+│                                                 │
+│ PASS 4 — TARGETED REGRESSION                    │
+│  - dream-review.test                            │
+│  - pattern-discovery.test                       │
+│  - pattern-library.test                         │
+│  - memory-reserve-events.test                   │
+│  - dream-review-run.test                        │
+│                                                 │
+│ RESULT                                          │
+│  - NIGHT_PASS                                   │
+│  - NIGHT_BLOCKED                                │
+│  - NIGHT_NO_NEW_INFORMATION                     │
+│                                                 │
+└───────────────────┬─────────────────────────────┘
+                    │
+                    │ NIGHT_STOP
+                    ▼
+┌──────────────── HARD STOP ──────────────────────┐
+│ stop flag                                       │
+│ process deadline                                │
+│ receipt                                         │
+│ zero canonical mutation                         │
+└───────────────────┬─────────────────────────────┘
+                    │
+                    │ WAKE
+                    ▼
+┌──────────────── DAY WAKE ───────────────────────┐
+│ read previous receipt                           │
+│ show candidates/patterns                        │
+│ no auto-promotion                               │
+│ return control to interactive Hermes            │
+└─────────────────────────────────────────────────┘
+Revisão da revisão
+O “revisar a própria revisão” é implementado como contraprova de determinismo, não autoaprovação.
+
+PASS_1
+→ proposal A
+→ SHA256 A
+
+MESMO HEAD + MESMA ENTRADA
+→ PASS_2
+→ proposal B
+→ SHA256 B
+
+A == B
+→ REPLAY_STABLE
+
+A != B sem entrada nova
+→ NON_DETERMINISM_OR_STATE_DRIFT
+→ BLOCK
+Depois um Judge estrutural valida o artefato.
+
+REVIEW_OF_REVIEW != APPROVAL
+SELF_REPLAY != INDEPENDENT_JUDGE
+Segurança do sono
+Durante a janela noturna:
+
+GIT_CANONICAL_WRITE=false
+COMMIT=false
+PUSH=false
+MERGE=false
+DEPLOY=false
+VPS=false
+SECRET_ROTATION=false
+DIRECT_AGENT_TRANSPORT=false
+Saída fica no STATE_ROOT, fora do Git, até uma missão autorizada promover ouro.
+""")
+
+put("03-GAPS-REAIS.md", r"""
+
+Gaps reais — o que falta para funcionar na Casa
+GAP 1 — Scheduler físico
+O próprio Memory Linker declara:
+
+SCHEDULE=UNPROVEN
+O Dream Review não agenda a si mesmo.
+
+É necessário medir qual scheduler é realmente o owner local:
+
+A) scheduler nativo do Hermes local
+B) Windows Task Scheduler
+C) outro scheduler canônico já instalado
+A regra é:
+
+DISCOVER_EXISTING
+→ REUSE
+→ somente se nenhum owner aplicável existir:
+   HUMAN_SELECTION_REQUIRED
+GAP 2 — Janela noite/dia
+Não existe no núcleo do Dream Review um contrato físico de:
+
+NIGHT_START
+NIGHT_STOP
+WAKE_TIME
+Este pack cria o contrato, mas deixa os horários REQUIRED até o CHEFE definir.
+
+GAP 3 — Logs diurnos
+O Dream Review já aceita eventos JSONL e artefatos, porém não há prova de que o log completo do Hermes local esteja convertido para o schema Dream.
+
+Logo:
+
+DAY_LOG_EXISTS? = UNPROVEN
+DAY_LOG_SCHEMA = UNPROVEN
+DAY_LOG_ADAPTER = UNPROVEN
+Não parsear log arbitrário no escuro.
+
+Primeiro medir o log real; então adaptar o menor formato necessário.
+
+GAP 4 — Hard stop
+Cron de início não garante parada.
+
+É preciso deadline dentro do executor.
+
+O wrapper deste pack:
+
+calcula deadline;
+
+monitora processo;
+
+respeita STOP.REQUESTED;
+
+mata somente o processo filho do ciclo se ultrapassar a janela;
+
+grava receipt.
+
+GAP 5 — Wake receipt
+É preciso separar:
+
+NIGHT_JOB_FINISHED
+de:
+
+DAY_HERMES_READY
+wake lê o receipt e volta ao modo interativo sem promover candidatos.
+
+GAP 6 — Conflito com trabalho diurno
+Se a Casa ainda estiver em trabalho ativo quando a janela começar:
+
+ACTIVE_INTERACTIVE_LOCK
+→ DREAM=DEFER
+Não roubar Writer nem executar sobre estado parcialmente mutado.
+
+GAP 7 — Estado do clone local
+O script atual de Casa/Obsidian explicitamente bloqueia defaults históricos de C:\/E:\ até os roots serem medidos.
+
+Portanto este pack também não hardcoda root.
+
+GAP 8 — Review-of-review
+O core já tem MetaLupa e testes, mas o ciclo físico noturno precisa produzir um receipt explícito de replay.
+
+Este pack acrescenta:
+
+PASS1_HASH
+PASS2_HASH
+REPLAY_STABLE=true|false
+Sem transformar replay em Judge independente.
+""")
+
+put("04-INSTALACAO-CASA.md", r"""
+
+Instalação da Casa — ordem exata
+Não execute enquanto o Hermes atual ainda estiver trabalhando.
+
+A instalação física começa depois que o trabalho atual terminar e o estado for novamente medido.
+
+Fase 0 — somente leitura
+Rodar:
+
+powershell -ExecutionPolicy Bypass -File .\scripts\casa\discover-dream-runtime.ps1
+O resultado deve informar:
+
+REPO_ROOT
+NODE
+GIT
+HERMES_LOCAL
+HERMES_SCHEDULER_CANDIDATES
+WINDOWS_TASKS_CANDIDATES
+DREAM_FILES
+CURRENT_HEAD
+Nenhuma mutação.
+
+Fase 1 — definir roots reais
+Depois da descoberta:
+
+REPO_ROOT=<clone real>
+STATE_ROOT=<diretório local fora do repo>
+STATE_ROOT deve ser local, privado e não versionado.
+
+Estrutura:
+
+STATE_ROOT/
+├── runs/
+├── proposals/
+├── logs/
+├── receipts/
+├── locks/
+├── pattern-library.json
+├── STOP.REQUESTED
+└── ACTIVE-INTERACTIVE.lock
+Fase 2 — horários
+Definir explicitamente:
+
+NIGHT_START=HH:mm
+NIGHT_STOP=HH:mm
+WAKE_TIME=HH:mm
+Não há default.
+
+Se a janela atravessar meia-noite, o wrapper calcula o deadline do dia seguinte.
+
+Fase 3 — log do dia
+Antes de ativar:
+
+localizar o log real do Hermes;
+
+provar schema;
+
+escolher uma destas rotas:
+
+ROUTE_A = eventos JSONL já no schema Dream
+ROUTE_B = artifact-capability para artefato diário
+ROUTE_C = Memory Reserve apenas
+Se nenhum adapter estiver provado:
+
+DAY_LOG_ROUTE=MEMORY_RESERVE_ONLY
+Não bloquear o Dream Review inteiro; rodar somente o que é comprovado.
+
+Fase 4 — teste manual
+Rodar sem scheduler:
+
+powershell -ExecutionPolicy Bypass -File .\scripts\casa\dream-house-cycle.ps1 `
+  -RepoRoot "<REPO_ROOT>" `
+  -StateRoot "<STATE_ROOT>" `
+  -NightStop "<HH:mm>" `
+  -DryRun
+O DryRun deste pack significa:
+
+não instalar scheduler;
+
+não alterar Git;
+
+executar somente o pipeline derivado em STATE_ROOT;
+
+validar/replay;
+
+zero promoção.
+
+Fase 5 — regressões
+Executar no clone:
+
+node --test scripts/memory-linker/dream-review.test.mjs
+node --test scripts/memory-linker/pattern-discovery.test.mjs
+node --test scripts/memory-linker/pattern-library.test.mjs
+node --test scripts/memory-linker/memory-reserve-events.test.mjs
+node --test scripts/memory-linker/dream-review-run.test.mjs
+Tudo deve passar.
+
+Fase 6 — escolher scheduler
+Primeiro ler:
+
+receipts/scheduler-discovery.json
+
+Se scheduler Hermes nativo aplicável for provado:
+
+REUSE_HERMES_SCHEDULER
+Se não houver owner aplicável e o CHEFE escolher Windows Task Scheduler:
+
+WINDOWS_TASK_SCHEDULER
+Só então executar o instalador com -Apply.
+
+Fase 7 — canário de uma noite
+Primeira noite:
+
+CANONICAL_WRITE=false
+NIGHT_CYCLES_MAX=1
+DAY_LOG_ROUTE=MEMORY_RESERVE_ONLY ou adapter provado
+Na manhã seguinte verificar receipt.
+
+Fase 8 — ampliar
+Somente após canário:
+
+adicionar day log;
+
+adicionar artifacts;
+
+aumentar material revisado;
+
+nunca aumentar autoridade do Dream Review.
+""")
+
+put("05-STATE-MACHINE.md", r"""
+
+Máquina de estados
+DAY_ACTIVE
+  │
+  ├─ night start + active lock → DREAM_DEFERRED
+  │
+  └─ night start + no lock
+           ↓
+      NIGHT_PRECHECK
+           │
+           ├─ fail → NIGHT_BLOCKED
+           └─ pass
+                ↓
+           DREAM_PASS_1
+                ↓
+           REPLAY_PASS_2
+                │
+                ├─ hash mismatch → NIGHT_BLOCKED_NONDETERMINISTIC
+                └─ stable
+                     ↓
+                LOCAL_JUDGE
+                     │
+                     ├─ fail → NIGHT_BLOCKED_VALIDATION
+                     └─ pass
+                          ↓
+                  TARGETED_TESTS
+                          │
+                          ├─ fail → NIGHT_BLOCKED_REGRESSION
+                          └─ pass
+                               ↓
+                         NIGHT_COMPLETE
+                               │
+                               ├─ deadline → STOPPED_BY_DEADLINE
+                               └─ normal → SLEEP_RECEIPT_WRITTEN
+                                           ↓
+                                          WAKE
+                                           ↓
+                                      DAY_READY
+Estados que nunca significam PASS
+SKIPPED
+UNKNOWN
+DEFERRED
+TIMEOUT
+KILLED
+PARTIAL
+CANDIDATE
+QUARANTINE
+Stop
+STOP.REQUESTED tem prioridade sobre nova etapa.
+
+Um processo já em execução recebe deadline; se ultrapassar, o wrapper encerra o processo filho e marca:
+
+STATUS=STOPPED_BY_DEADLINE
+PASS=false
+""")
+
+put("06-REVIEW-OF-REVIEW.md", r"""
+
+Review of Review — sem autoengano
+Objetivo
+Fazer o Hermes revisar o próprio resultado sem confundir isso com aprovação independente.
+
+Camadas
+R0 — matéria bruta
+Imutável.
+
+R1 — Dream Review
+Gera proposal-A.json.
+
+R2 — replay
+Mesmos:
+
+HEAD;
+
+input;
+
+memory reserve snapshot;
+
+config.
+
+Gera proposal-B.json.
+
+Comparar representação canônica do conteúdo, ignorando somente campos explicitamente temporais se houver.
+
+Preferência deste pack: mesma entrada + mesmo runner deve produzir o mesmo proposal material.
+
+R3 — validador estrutural
+dream-house-judge.mjs usa os validadores canônicos do repo.
+
+R4 — regressão real
+Executa testes oficiais.
+
+R5 — Judge independente futuro
+Quando houver promoção, MetaLupa/Judge no mesmo HEAD.
+
+Invariantes
+R2_STABLE != PROVEN_TRUE
+R3_VALID != PROVEN_USEFUL
+R4_PASS != CANONICAL_PROMOTION
+SELF_REVIEW != INDEPENDENT_JUDGE
+O que R2 prova:
+
+MESMA_ENTRADA
+→ MESMO_RESULTADO_DERIVADO
+O que não prova:
+
+RESULTADO_DERIVADO = VERDADE
+""")
+
+put("07-LOG-ADAPTER-GATE.md", r"""
+
+Gate do log diurno
+O usuário deseja que, à noite, Hermes revise “tudo que fez durante o dia”.
+
+Isso só pode ser fechado quando o log real for medido.
+
+Não fazer
+Não escrever parser baseado em amostra imaginada.
+
+Não presumir que stdout completo é memória segura.
+
+Não persistir cadeia privada de raciocínio.
+
+O adapter deve extrair somente
+event_time: ""
+observed_at: ""
+source: ""
+source_class: INTERNAL
+session_id: ""
+head_sha: ""
+kind: MEMORY|SKILL|RULE|TEST|GUARDRAIL|CONTRACT
+target: ""
+claim: ""
+learning_delta: ""
+evidence: []
+owner_evidence: []
+consumer_evidence: []
+Entrada não suportada
+Se o log não permitir derivar esses campos deterministicamente:
+
+LOG_EVENT=SKIP
+REASON=INSUFFICIENT_STRUCTURED_EVIDENCE
+Sanitização
+Antes do JSONL:
+
+tokens;
+
+Bearer;
+
+provider keys;
+
+bot tokens;
+
+passwords;
+
+secrets;
+
+conteúdo privado não necessário.
+
+O Dream Review sanitiza novamente; isso é defesa em profundidade.
+
+Regra
+RAW_LOG != DREAM_EVENT
+RAW_LOG != MEMORY
+RAW_LOG != PROOF
+""")
+
+put("08-LINKS-E-PROVENIENCIA.md", r"""
+
+Links e proveniência
+Código canônico atual
+Dream Review
+https://github.com/ServerVpss/CentralDark/blob/main/scripts/memory-linker/dream-review.mjs
+
+Dream Review Runner
+https://github.com/ServerVpss/CentralDark/blob/main/scripts/memory-linker/dream-review-run.mjs
+
+Pattern Discovery
+https://github.com/ServerVpss/CentralDark/blob/main/scripts/memory-linker/pattern-discovery.mjs
+
+Pattern Library
+https://github.com/ServerVpss/CentralDark/blob/main/scripts/memory-linker/pattern-library.mjs
+
+Memory Reserve Events
+https://github.com/ServerVpss/CentralDark/blob/main/scripts/memory-linker/memory-reserve-events.mjs
+
+Memory Linker README
+https://github.com/ServerVpss/CentralDark/blob/main/scripts/memory-linker/README.md
+
+Metacognição
+https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+
+Gate
+https://github.com/ServerVpss/CentralDark/blob/main/.github/workflows/lupa-conformance.yml
+
+Casa / Obsidian
+https://github.com/ServerVpss/CentralDark/blob/main/docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md
+
+Sync Casa atualmente fail-closed
+https://github.com/ServerVpss/CentralDark/blob/main/scripts/casa/sync-hermes-obsidian.ps1
+
+Histórico útil
+PR #834
+https://github.com/ServerVpss/CentralDark/pull/834
+
+PR #869
+https://github.com/ServerVpss/CentralDark/pull/869
+
+PR #935
+https://github.com/ServerVpss/CentralDark/pull/935
+
+Hermes autônomo histórico 06:00
+https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-6-hermes-autonomo.md
+
+Sugestão histórica Hermes 24h
+https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/SUGESTOES/004-hermes-24h-loop-autonomo.md
+
+Baseline de blobs
+main=d​cf70053f2af1d95bd86867e6f043fb634e919d0
+
+dream-review.mjs
+sha=observed in GitHub at baseline
+
+dream-review-run.mjs
+sha=55cf1782756dba9641db9f768439ea0c5b26d551
+
+pattern-discovery.mjs
+sha=4b8ca23eaba00cd89a86c64e8cd34eb42440ac58
+
+pattern-library.mjs
+sha=dbcd72dafeb21c9bb6ead51d057e0b897b825bb8
+
+memory-reserve-events.mjs
+sha=fccf26e90e5d421d7c9437a665cc27fc5f6da4b4
+
+lupa-conformance.yml
+sha=c4bb7ebb9cf721127fa9cafda12cb1395526fa7e
+
+METACOGNICAO-OPERACIONAL.md
+sha=7ba0a71aa13197b35653a89edc17d3df90168ebc
+Antes de instalar, remedir todos.
+""".replace("dcf", "dcf"))
+
+put("config/DREAM-HOUSE-CONTRACT.yml", r"""
+schema_version: 1
+system: CENTRALDARK_HERMES_DREAM_HOUSE
+mode: PREPARED_NOT_ACTIVATED
+
+authority:
+human: SEGREDO/CHEFE
+coordinator: SOL
+executor: PIVETE/HERMES
+reality: JUDGE
+
+canonical_core:
+root: scripts/memory-linker
+runner: scripts/memory-linker/dream-review-run.mjs
+proposal: scripts/memory-linker/dream-review.mjs
+patterns: scripts/memory-linker/pattern-discovery.mjs
+library: scripts/memory-linker/pattern-library.mjs
+memory_reserve: scripts/memory-linker/memory-reserve-events.mjs
+gate: .github/workflows/lupa-conformance.yml
+
+local:
+repo_root: REQUIRED_MEASURED_VALUE
+state_root: REQUIRED_MEASURED_VALUE
+timezone: LOCAL_SYSTEM
+
+window:
+night_start: REQUIRED_HH_MM
+night_stop: REQUIRED_HH_MM
+wake_time: REQUIRED_HH_MM
+cross_midnight_supported: true
+hard_stop: true
+
+input_routes:
+memory_reserve:
+enabled: true
+proven_by_repo: true
+day_events_jsonl:
+enabled: false
+reason: DAY_LOG_ADAPTER_UNPROVEN
+artifact:
+enabled: false
+reason: ARTIFACT_PATH_NOT_MEASURED
+
+night_policy:
+canonical_write: false
+commit: false
+push: false
+merge: false
+deploy: false
+vps_mutation: false
+direct_transport: false
+candidate_only: true
+max_parallel_writers: 0
+
+review_of_review:
+enabled: true
+method: EXACT_REPLAY
+same_head: true
+same_input: true
+proposal_hash_must_match: true
+replay_is_independent_judge: false
+
+stop:
+flag_file: STOP.REQUESTED
+poll_seconds: 2
+kill_child_after_deadline: true
+deadline_result: STOPPED_BY_DEADLINE
+deadline_is_pass: false
+
+interactive_lock:
+file: ACTIVE-INTERACTIVE.lock
+if_present: DREAM_DEFERRED
+steal_writer: false
+
+scheduler:
+mode: DISCOVER_FIRST
+choices:
+- HERMES_NATIVE_SCHEDULER
+- WINDOWS_TASK_SCHEDULER
+create_second_scheduler: false
+activation_requires_explicit_choice: true
+""")
+
+put("config/NIGHT-CYCLE.yml", r"""
+schema_version: 1
+cycle: HERMES_DREAM_NIGHT
+
+stages:
+
+id: PRECHECK
+blocking: true
+checks:
+
+repo_exists
+
+git_available
+
+node_available
+
+dream_runner_exists
+
+current_head_is_40_hex
+
+no_concurrent_dream_lock
+
+no_active_interactive_lock
+
+deadline_valid
+
+id: SNAPSHOT
+outputs:
+
+head_sha
+
+git_status
+
+input_identity
+
+start_time
+
+deadline
+
+id: DREAM_PASS_1
+command_owner: scripts/memory-linker/dream-review-run.mjs
+direct_apply: false
+
+id: REPLAY_PASS_2
+same_input_required: true
+same_head_required: true
+output_hash_match_required: true
+
+id: LOCAL_JUDGE
+validator: scripts/casa/dream-house-judge.mjs
+independent_judge: false
+
+id: REGRESSION
+tests:
+
+scripts/memory-linker/dream-review.test.mjs
+
+scripts/memory-linker/pattern-discovery.test.mjs
+
+scripts/memory-linker/pattern-library.test.mjs
+
+scripts/memory-linker/memory-reserve-events.test.mjs
+
+scripts/memory-linker/dream-review-run.test.mjs
+
+id: RECEIPT
+output: STATE_ROOT/receipts/latest.json
+
+id: STOP
+at_deadline: true
+canonical_mutation: false
+
+terminal:
+success:
+- NIGHT_PASS
+- NIGHT_NO_NEW_INFORMATION
+non_success:
+- NIGHT_BLOCKED
+- DREAM_DEFERRED
+- STOPPED_BY_DEADLINE
+- NIGHT_BLOCKED_NONDETERMINISTIC
+- NIGHT_BLOCKED_VALIDATION
+- NIGHT_BLOCKED_REGRESSION
+""")
+
+put("config/SCHEDULER-BINDING.yml", r"""
+schema_version: 1
+binding: DREAM_HOUSE_SCHEDULER
+status: UNBOUND
+
+rule:
+discover_existing_before_create: true
+second_scheduler_for_same_scope: forbidden
+
+candidate_1:
+id: HERMES_NATIVE_SCHEDULER
+preference: first_if_proven
+proof_required:
+- physical_scheduler_path_or_api
+- existing_job_inventory
+- timezone
+- start_stop_semantics
+- logs
+- disable_remove_path
+
+candidate_2:
+id: WINDOWS_TASK_SCHEDULER
+preference: fallback_after_human_selection
+proof_required:
+- Get-ScheduledTask_available
+- user_context
+- repo_root
+- state_root
+- exact_start_time
+- exact_wake_time
+
+tasks_if_windows_selected:
+
+CentralDark-Hermes-Dream-Start
+
+CentralDark-Hermes-Dream-Wake
+
+hard_stop_is_inside_cycle: true
+night_stop_is_not_second_task_required: true
+""")
+
+put("APPLY-PLAN.yml", r"""
+schema_version: 1
+mission_id: CENTRALDARK-HERMES-DREAM-SLEEP-WAKE-CASA-01
+mode: PREPARE_THEN_INSTALL_AFTER_CURRENT_WORK_FINISHES
+
+precondition:
+wait_for_current_hermes_work_to_finish: true
+remeasure_git_after_finish: true
+no_install_while_interactive_work_active: true
+
+phase_0_reanchor:
+actions:
+- measure_main
+- measure_local_clone
+- measure_local_git_status
+- measure_hermes_runtime
+- discover_scheduler
+- locate_day_logs
+- locate_state_root
+mutation: false
+
+phase_1_verify_canonical_core:
+commands:
+- node --check scripts/memory-linker/dream-review.mjs
+- node --check scripts/memory-linker/pattern-discovery.mjs
+- node --check scripts/memory-linker/pattern-library.mjs
+- node --check scripts/memory-linker/memory-reserve-events.mjs
+- node --check scripts/memory-linker/dream-review-run.mjs
+mutation: false
+
+phase_2_tests:
+commands:
+- node --test scripts/memory-linker/dream-review.test.mjs
+- node --test scripts/memory-linker/pattern-discovery.test.mjs
+- node --test scripts/memory-linker/pattern-library.test.mjs
+- node --test scripts/memory-linker/memory-reserve-events.test.mjs
+- node --test scripts/memory-linker/dream-review-run.test.mjs
+all_pass_required: true
+
+phase_3_manual_canary:
+scheduler: none
+canonical_write: false
+cycles: 1
+input:
+- memory_reserve
+review_of_review: true
+receipt_required: true
+
+phase_4_log_adapter:
+condition: actual_day_log_schema_measured
+if_unproven: KEEP_MEMORY_RESERVE_ONLY
+
+phase_5_scheduler_choice:
+priority:
+- reuse_proven_hermes_native_scheduler
+- human_select_windows_task_scheduler
+second_scheduler_forbidden: true
+
+phase_6_install:
+requires:
+- night_start_set
+- night_stop_set
+- wake_time_set
+- repo_root_proven
+- state_root_proven
+- scheduler_selected
+- manual_canary_pass
+command: scripts/casa/install-dream-scheduler.ps1 -Apply
+note: "Run only after filling exact arguments."
+
+phase_7_first_night:
+canonical_write: false
+one_cycle: true
+verify_next_morning: true
+
+rollback:
+windows_scheduler:
+command: scripts/casa/remove-dream-scheduler.ps1
+state:
+preserve_receipts: true
+delete_automatically: false
+
+forbidden:
+
+direct_main_write_at_night
+
+auto_merge_at_night
+
+deploy_at_night
+
+private_reasoning_persistence
+
+second_dream_engine
+
+second_memory
+
+second_scheduler_same_scope
+
+claim_pass_on_timeout
+""")
+
+put("TEST-MATRIX.yml", r"""
+schema_version: 1
+suite: DREAM_HOUSE_INSTALL_CONFORMANCE
+
+tests:
+
+id: DH-001
+claim: dream_core_exists
+expect: FILES_PRESENT
+
+id: DH-002
+claim: night_does_not_write_canonical
+expect:
+direct_apply: false
+
+id: DH-003
+claim: active_interactive_work_defers_dream
+given: ACTIVE-INTERACTIVE.lock
+expect: DREAM_DEFERRED
+
+id: DH-004
+claim: deadline_stops_cycle
+given: deadline_elapsed
+expect: STOPPED_BY_DEADLINE
+
+id: DH-005
+claim: replay_is_stable
+given: same_head_same_input
+expect: same_proposal_sha256
+
+id: DH-006
+claim: replay_does_not_self_approve
+expect:
+independent_judge: false
+
+id: DH-007
+claim: stale_head_is_blocked
+expect: BLOCKED
+
+id: DH-008
+claim: external_only_stays_quarantine
+expect: QUARANTINE
+
+id: DH-009
+claim: no_evidence_no_learning
+expect: NO_NEW_INFORMATION_OR_REJECTION
+
+id: DH-010
+claim: no_learning_delta_no_candidate
+expect: REJECT
+
+id: DH-011
+claim: secret_is_sanitized
+expect: REDACTED
+
+id: DH-012
+claim: old_memory_same_fingerprint_does_not_churn
+expect: UNCHANGED
+
+id: DH-013
+claim: pattern_is_not_proof
+expect: true
+
+id: DH-014
+claim: source_echo_does_not_grant_authority
+expect: true
+
+id: DH-015
+claim: scheduler_must_be_discovered
+given: scheduler_unknown
+expect: INSTALL_BLOCKED
+
+id: DH-016
+claim: local_roots_are_not_guessed
+given: repo_root_missing
+expect: BLOCKED
+
+id: DH-017
+claim: raw_log_not_auto_parsed
+given: unmeasured_log_schema
+expect: DAY_LOG_ADAPTER_UNPROVEN
+
+id: DH-018
+claim: wake_does_not_promote
+expect:
+canonical_write: false
+
+id: DH-019
+claim: official_memory_tests_pass
+expect: ALL_PASS
+
+id: DH-020
+claim: second_scheduler_for_same_scope_is_forbidden
+expect: BLOCK
+""")
+
+put("scripts/casa/discover-dream-runtime.ps1", r"""
+[CmdletBinding()]
+param(
+[string]$RepoRoot = ""
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+$result = [ordered]@{
+timestamp = (Get-Date).ToString("o")
+mutation = $false
+repo_root = $null
+repo_exists = $false
+git = $null
+node = $null
+head = $null
+dream_files = @()
+local_hermes_root = $null
+hermes_scheduler_candidates = @()
+windows_task_candidates = @()
+verdict = "UNKNOWN"
+}
+
+try { $result.git = (& git --version 2>$null) } catch {}
+try { $result.node = (& node --version 2>$null) } catch {}
+
+$candidateRoots = New-Object System.Collections.Generic.List[string]
+if (-not [string]::IsNullOrWhiteSpace($RepoRoot)) { $candidateRoots.Add($RepoRoot) }
+
+$cwd = (Get-Location).Path
+if (Test-Path (Join-Path $cwd ".git")) { $candidateRoots.Add($cwd) }
+
+foreach ($drive in @("C:\CentralDark\Pivete\CentralDark","E:\CentralDark\Pivete\CentralDark")) {
+if (Test-Path $drive -PathType Container) { $candidateRoots.Add($drive) }
+}
+
+$uniqueRoots = $candidateRoots | Select-Object -Unique
+foreach ($candidate in $uniqueRoots) {
+try {
+$full = [System.IO.Path]::GetFullPath($candidate)
+if (-not (Test-Path (Join-Path $full ".git"))) { continue }
+Push-Location $full
+try {
+$head = (& git rev-parse HEAD 2>$null).Trim()
+if ($head -match '^[a-f0-9]{40}$') {
+$result.repo_root = $full
+$result.repo_exists = $true
+$result.head = $head
+break
+}
+} finally { Pop-Location }
+} catch {}
+}
+
+if ($result.repo_root) {
+foreach ($rel in @(
+"scripts/memory-linker/dream-review.mjs",
+"scripts/memory-linker/dream-review-run.mjs",
+"scripts/memory-linker/pattern-discovery.mjs",
+"scripts/memory-linker/pattern-library.mjs",
+"scripts/memory-linker/memory-reserve-events.mjs"
+)) {
+$path = Join-Path $result.repo_root $rel
+$result.dream_files += [ordered]@{
+path = $rel
+exists = (Test-Path $path -PathType Leaf)
+}
+}
+}
+
+$hermesRoot = Join-Path $env:LOCALAPPDATA "hermes"
+if (Test-Path $hermesRoot -PathType Container) {
+$result.local_hermes_root = $hermesRoot
+$patterns = @("scheduler.py","cron.py","scheduler.json","cron.json","jobs.json")
+foreach ($pattern in $patterns) {
+Get-ChildItem -Path $hermesRoot -Recurse -File -Filter $pattern -ErrorAction SilentlyContinue |
+Select-Object -First 50 |
+ForEach-Object { $result.hermes_scheduler_candidates += $_.FullName }
+}
+}
+
+try {
+$tasks = Get-ScheduledTask -ErrorAction Stop |
+Where-Object { $_.TaskName -match 'CentralDark|Hermes|Dream' } |
+Select-Object TaskName,TaskPath,State
+$result.windows_task_candidates = @($tasks)
+} catch {}
+
+$dreamOk = $result.dream_files.Count -gt 0 -and (($result.dream_files | Where-Object { -not $_.exists }).Count -eq 0)
+if ($result.repo_exists -and $result.git -and $result.node -and $dreamOk) {
+$result.verdict = "DREAM_CORE_LOCAL_FOUND"
+} else {
+$result.verdict = "BLOCKED_LOCAL_RUNTIME_INCOMPLETE"
+}
+
+$result | ConvertTo-Json -Depth 8
+""")
+
+put("scripts/casa/dream-house-judge.mjs", r"""
+#!/usr/bin/env node
+import fs from 'node:fs';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+
+const [repoRootArg, proposalArg, expectedHeadArg] = process.argv.slice(2);
+if (!repoRootArg || !proposalArg || !expectedHeadArg) {
+throw new Error('USAGE: dream-house-judge.mjs <repoRoot> <proposal.json> <expectedHead>');
+}
+
+const repoRoot = path.resolve(repoRootArg);
+const proposalPath = path.resolve(proposalArg);
+const expectedHead = String(expectedHeadArg).trim().toLowerCase();
+
+if (!/^[a-f0-9]{40}$/.test(expectedHead)) throw new Error('EXPECTED_HEAD_INVALID');
+
+const dreamModule = await import(pathToFileURL(
+path.join(repoRoot, 'scripts/memory-linker/dream-review.mjs')
+).href);
+const patternModule = await import(pathToFileURL(
+path.join(repoRoot, 'scripts/memory-linker/pattern-discovery.mjs')
+).href);
+
+const proposal = JSON.parse(fs.readFileSync(proposalPath, 'utf8'));
+const dreamValidation = dreamModule.validateDreamProposal(proposal);
+const patternValidation = patternModule.validatePatternDiscovery(proposal);
+
+const errors = [];
+if (!dreamValidation.ok) errors.push(...dreamValidation.errors.map((x) => DREAM:${x}));
+if (!patternValidation.ok) errors.push(...patternValidation.errors.map((x) => PATTERN:${x}));
+if (String(proposal.head_sha || '').toLowerCase() !== expectedHead) errors.push('HEAD_MISMATCH');
+if (proposal.apply_allowed !== false) errors.push('APPLY_NOT_FALSE');
+if (proposal.direct_canonical_mutation !== false) errors.push('DIRECT_CANONICAL_MUTATION_NOT_FALSE');
+if (proposal.raw_session_mutation !== false) errors.push('RAW_SESSION_MUTATION_NOT_FALSE');
+if (proposal.autonomy_routing?.transport_execution === true) errors.push('TRANSPORT_EXECUTION_TRUE');
+
+const receipt = {
+schema_version: 1,
+mode: 'DREAM_HOUSE_LOCAL_JUDGE',
+expected_head: expectedHead,
+proposal_head: proposal.head_sha ?? null,
+proposal_status: proposal.status ?? null,
+candidate_count: proposal.candidate_count ?? null,
+pattern_count: proposal.pattern_discovery?.pattern_count ?? null,
+dream_validation: dreamValidation,
+pattern_validation: patternValidation,
+independent_judge: false,
+self_review_is_approval: false,
+ok: errors.length === 0,
+errors,
+};
+
+process.stdout.write(${JSON.stringify(receipt, null, 2)}\n);
+process.exitCode = receipt.ok ? 0 : 2;
+""")
+
+put("scripts/casa/dream-house-cycle.ps1", r"""
+[CmdletBinding()]
+param(
+[Parameter(Mandatory=$true)][string]$RepoRoot,
+[Parameter(Mandatory=$true)][string]$StateRoot,
+[Parameter(Mandatory=$true)][ValidatePattern('^\d{2}:\d{2}$')][string]$NightStop,
+[string]$InputJsonl = "",
+[switch]$DryRun
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+function Fail([string]$Code, [string]$Message) {
+$obj = [ordered]@{
+timestamp = (Get-Date).ToString("o")
+status = $Code
+pass = $false
+message = $Message
+}
+$obj | ConvertTo-Json -Depth 8
+exit 3
+}
+
+$repo = [System.IO.Path]::GetFullPath($RepoRoot)
+$state = [System.IO.Path]::GetFullPath($StateRoot)
+
+if (-not (Test-Path $repo -PathType Container)) { Fail "BLOCKED_REPO_MISSING" $repo }
+if (-not (Test-Path (Join-Path $repo ".git"))) { Fail "BLOCKED_NOT_GIT_REPO" $repo }
+
+$required = @(
+"scripts/memory-linker/dream-review.mjs",
+"scripts/memory-linker/dream-review-run.mjs",
+"scripts/memory-linker/pattern-discovery.mjs",
+"scripts/memory-linker/pattern-library.mjs",
+"scripts/memory-linker/memory-reserve-events.mjs"
+)
+foreach ($rel in $required) {
+if (-not (Test-Path (Join-Path $repo $rel) -PathType Leaf)) {
+Fail "BLOCKED_DREAM_FILE_MISSING" $rel
+}
+}
+
+New-Item -ItemType Directory -Force -Path $state | Out-Null
+foreach ($dir in @("runs","proposals","logs","receipts","locks")) {
+New-Item -ItemType Directory -Force -Path (Join-Path $state $dir) | Out-Null
+}
+
+$interactiveLock = Join-Path $state "ACTIVE-INTERACTIVE.lock"
+if (Test-Path $interactiveLock) { Fail "DREAM_DEFERRED" "ACTIVE-INTERACTIVE.lock present" }
+
+$cycleLock = Join-Path $state "locks\dream-cycle.lock"
+if (Test-Path $cycleLock) { Fail "BLOCKED_CONCURRENT_DREAM" $cycleLock }
+Set-Content -LiteralPath $cycleLock -Value "$PID $(Get-Date -Format o)" -Encoding UTF8
+
+try {
+Push-Location $repo
+try {
+$head = (& git rev-parse HEAD).Trim()
+if ($head -notmatch '^[a-f0-9]{40}$') { Fail "BLOCKED_HEAD_INVALID" $head }
+
+    $now = Get-Date
+    $parts = $NightStop.Split(':')
+    $deadline = Get-Date -Hour ([int]$parts[0]) -Minute ([int]$parts[1]) -Second 0
+    if ($deadline -le $now) { $deadline = $deadline.AddDays(1) }
+
+    $runId = $now.ToString("yyyyMMdd-HHmmss")
+    $proposal = Join-Path $state "proposals\dream-$runId.json"
+    $library = Join-Path $state "pattern-library.json"
+    $pass1Log = Join-Path $state "logs\dream-$runId-pass1.log"
+    $pass2Log = Join-Path $state "logs\dream-$runId-pass2.log"
+    $judgeLog = Join-Path $state "logs\dream-$runId-judge.json"
+    $receiptPath = Join-Path $state "receipts\dream-$runId.json"
+    $stopFlag = Join-Path $state "STOP.REQUESTED"
+
+    if (Test-Path $stopFlag) { Remove-Item $stopFlag -Force }
+
+    function Assert-Window() {
+        if (Test-Path $stopFlag) { Fail "STOPPED_BY_REQUEST" "STOP.REQUESTED" }
+        if ((Get-Date) -ge $deadline) { Fail "STOPPED_BY_DEADLINE" $deadline.ToString("o") }
+    }
+
+    Assert-Window
+
+    $args = @(
+        "scripts/memory-linker/dream-review-run.mjs",
+        "--output", $proposal,
+        "--head", $head,
+        "--library", $library
+    )
+    if (-not [string]::IsNullOrWhiteSpace($InputJsonl)) {
+        $inputFull = [System.IO.Path]::GetFullPath($InputJsonl)
+        if (-not (Test-Path $inputFull -PathType Leaf)) { Fail "BLOCKED_INPUT_MISSING" $inputFull }
+        $args += @("--input", $inputFull)
+    }
+
+    & node @args *> $pass1Log
+    if ($LASTEXITCODE -ne 0) { Fail "NIGHT_BLOCKED_PASS1" "dream-review-run exit=$LASTEXITCODE" }
+    Assert-Window
+
+    $hash1 = (Get-FileHash -Algorithm SHA256 -LiteralPath $proposal).Hash.ToLowerInvariant()
+
+    & node @args *> $pass2Log
+    if ($LASTEXITCODE -ne 0) { Fail "NIGHT_BLOCKED_PASS2" "dream-review-run exit=$LASTEXITCODE" }
+    Assert-Window
+
+    $hash2 = (Get-FileHash -Algorithm SHA256 -LiteralPath $proposal).Hash.ToLowerInvariant()
+    if ($hash1 -ne $hash2) {
+        Fail "NIGHT_BLOCKED_NONDETERMINISTIC" "proposal sha mismatch $hash1 != $hash2"
+    }
+
+    $judge = Join-Path $PSScriptRoot "dream-house-judge.mjs"
+    & node $judge $repo $proposal $head *> $judgeLog
+    if ($LASTEXITCODE -ne 0) { Fail "NIGHT_BLOCKED_VALIDATION" "local judge exit=$LASTEXITCODE" }
+    Assert-Window
+
+    $tests = @(
+        "scripts/memory-linker/dream-review.test.mjs",
+        "scripts/memory-linker/pattern-discovery.test.mjs",
+        "scripts/memory-linker/pattern-library.test.mjs",
+        "scripts/memory-linker/memory-reserve-events.test.mjs",
+        "scripts/memory-linker/dream-review-run.test.mjs"
+    )
+    $testResults = @()
+    foreach ($test in $tests) {
+        Assert-Window
+        $testLog = Join-Path $state ("logs\test-" + [IO.Path]::GetFileNameWithoutExtension($test) + "-$runId.log")
+        & node --test $test *> $testLog
+        $ok = $LASTEXITCODE -eq 0
+        $testResults += [ordered]@{ test=$test; pass=$ok; log=$testLog }
+        if (-not $ok) { Fail "NIGHT_BLOCKED_REGRESSION" $test }
+    }
+
+    $proposalObj = Get-Content -Raw -LiteralPath $proposal | ConvertFrom-Json
+    $receipt = [ordered]@{
+        schema_version = 1
+        mode = "HERMES_DREAM_HOUSE"
+        run_id = $runId
+        status = "NIGHT_PASS"
+        pass = $true
+        dry_run = [bool]$DryRun
+        head_sha = $head
+        started_at = $now.ToString("o")
+        deadline = $deadline.ToString("o")
+        proposal = $proposal
+        proposal_sha256 = $hash2
+        replay_stable = $true
+        candidate_count = $proposalObj.candidate_count
+        pattern_count = $proposalObj.pattern_discovery.pattern_count
+        direct_apply = $false
+        canonical_write = $false
+        commit = $false
+        push = $false
+        merge = $false
+        deploy = $false
+        tests = $testResults
+        judge_receipt = $judgeLog
+    }
+    $receipt | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $receiptPath -Encoding UTF8
+    Copy-Item -LiteralPath $receiptPath -Destination (Join-Path $state "receipts\latest.json") -Force
+    $receipt | ConvertTo-Json -Depth 10
+} finally {
+    Pop-Location
+}
+} finally {
+Remove-Item -LiteralPath $cycleLock -Force -ErrorAction SilentlyContinue
+}
+""")
+
+put("scripts/casa/dream-house-stop.ps1", r"""
+[CmdletBinding()]
+param(
+[Parameter(Mandatory=$true)][string]$StateRoot
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+$state = [System.IO.Path]::GetFullPath($StateRoot)
+New-Item -ItemType Directory -Force -Path $state | Out-Null
+$flag = Join-Path $state "STOP.REQUESTED"
+Set-Content -LiteralPath $flag -Value (Get-Date).ToString("o") -Encoding UTF8
+Write-Output "DREAM_STOP_REQUESTED=$flag"
+""")
+
+put("scripts/casa/dream-house-wake.ps1", r"""
+[CmdletBinding()]
+param(
+[Parameter(Mandatory=$true)][string]$StateRoot
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+$state = [System.IO.Path]::GetFullPath($StateRoot)
+$latest = Join-Path $state "receipts\latest.json"
+$stop = Join-Path $state "STOP.REQUESTED"
+
+$result = [ordered]@{
+timestamp = (Get-Date).ToString("o")
+mode = "HERMES_DREAM_WAKE"
+canonical_write = $false
+promotion = $false
+previous_night = $null
+state = "DAY_READY"
+}
+
+if (Test-Path $latest -PathType Leaf) {
+try { $result.previous_night = Get-Content -Raw -LiteralPath $latest | ConvertFrom-Json }
+catch { $result.state = "DAY_READY_WITH_INVALID_PREVIOUS_RECEIPT" }
+} else {
+$result.state = "DAY_READY_NO_PREVIOUS_RECEIPT"
+}
+
+Remove-Item -LiteralPath $stop -Force -ErrorAction SilentlyContinue
+$result | ConvertTo-Json -Depth 10
+""")
+
+put("scripts/casa/install-dream-scheduler.ps1", r"""
+[CmdletBinding()]
+param(
+[Parameter(Mandatory=$true)][string]$RepoRoot,
+[Parameter(Mandatory=$true)][string]$StateRoot,
+[Parameter(Mandatory=$true)][ValidatePattern('^\d{2}:\d{2}$')][string]$NightStart,
+[Parameter(Mandatory=$true)][ValidatePattern('^\d{2}:\d{2}$')][string]$NightStop,
+[Parameter(Mandatory=$true)][ValidatePattern('^\d{2}:\d{2}$')][string]$WakeTime,
+[ValidateSet("WindowsTaskScheduler")][string]$SchedulerMode = "WindowsTaskScheduler",
+[switch]$Apply
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+$repo = [System.IO.Path]::GetFullPath($RepoRoot)
+$state = [System.IO.Path]::GetFullPath($StateRoot)
+$cycle = Join-Path $repo "scripts\casa\dream-house-cycle.ps1"
+$wake = Join-Path $repo "scripts\casa\dream-house-wake.ps1"
+
+$plan = [ordered]@{
+scheduler = $SchedulerMode
+apply = [bool]$Apply
+repo_root = $repo
+state_root = $state
+night_start = $NightStart
+night_stop = $NightStop
+wake_time = $WakeTime
+tasks = @(
+"CentralDark-Hermes-Dream-Start",
+"CentralDark-Hermes-Dream-Wake"
+)
+warning = "ONLY USE AFTER scheduler discovery proves no conflicting canonical owner."
+}
+
+if (-not $Apply) {
+$plan | ConvertTo-Json -Depth 8
+exit 0
+}
+
+if (-not (Test-Path $cycle -PathType Leaf)) { throw "CYCLE_SCRIPT_MISSING=$cycle" }
+if (-not (Test-Path $wake -PathType Leaf)) { throw "WAKE_SCRIPT_MISSING=$wake" }
+
+$existing = Get-ScheduledTask -ErrorAction SilentlyContinue |
+Where-Object { $_.TaskName -in $plan.tasks }
+if ($existing) {
+throw "DREAM_TASK_ALREADY_EXISTS. REMOVE/RECONCILE BEFORE CREATE."
+}
+
+$startAt = [datetime]::ParseExact($NightStart, "HH:mm", $null)
+$wakeAt = [datetime]::ParseExact($WakeTime, "HH:mm", $null)
+
+$ps = (Get-Command powershell.exe).Source
+
+$startArgs = "-NoProfile -ExecutionPolicy Bypass -File "$cycle" -RepoRoot "$repo" -StateRoot "$state" -NightStop "$NightStop""
+$wakeArgs = "-NoProfile -ExecutionPolicy Bypass -File "$wake" -StateRoot "$state""
+
+$startAction = New-ScheduledTaskAction -Execute $ps -Argument $startArgs
+$startTrigger = New-ScheduledTaskTrigger -Daily -At $startAt
+$startSettings = New-ScheduledTaskSettingsSet -StartWhenAvailable -MultipleInstances IgnoreNew
+
+$wakeAction = New-ScheduledTaskAction -Execute $ps -Argument $wakeArgs
+$wakeTrigger = New-ScheduledTaskTrigger -Daily -At $wakeAt
+$wakeSettings = New-ScheduledTaskSettingsSet -StartWhenAvailable -MultipleInstances IgnoreNew
+
+Register-ScheduledTask -TaskName "CentralDark-Hermes-Dream-Start" -Action $startAction -Trigger $startTrigger -Settings $startSettings | Out-Null
+Register-ScheduledTask -TaskName "CentralDark-Hermes-Dream-Wake" -Action $wakeAction -Trigger $wakeTrigger -Settings $wakeSettings | Out-Null
+
+$plan.status = "INSTALLED"
+$plan | ConvertTo-Json -Depth 8
+""")
+
+put("scripts/casa/remove-dream-scheduler.ps1", r"""
+[CmdletBinding()]
+param(
+[switch]$Apply
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+$names = @(
+"CentralDark-Hermes-Dream-Start",
+"CentralDark-Hermes-Dream-Wake"
+)
+
+if (-not $Apply) {
+[ordered]@{
+apply = $false
+would_remove = $names
+} | ConvertTo-Json -Depth 4
+exit 0
+}
+
+foreach ($name in $names) {
+$task = Get-ScheduledTask -TaskName $name -ErrorAction SilentlyContinue
+if ($task) {
+Unregister-ScheduledTask -TaskName $name -Confirm:$false
+}
+}
+
+[ordered]@{
+apply = $true
+removed = $names
+} | ConvertTo-Json -Depth 4
+""")
+
+put("PROMPT-INSTALAR-DEPOIS.md", r"""
+
+Prompt para usar quando o Hermes atual acabar
+#ACORDAR
+!CALIBRAR
+!MULTIBUSSOLA
+
+MISSÃO=CENTRALDARK-HERMES-DREAM-SLEEP-WAKE-CASA-01
+
+O trabalho interativo anterior terminou.
+NÃO reutilize o snapshot antigo como presente.
+
+1. Meça main remoto.
+2. Meça clone local.
+3. Meça git status.
+4. Meça runtime Hermes local.
+5. Execute scripts/casa/discover-dream-runtime.ps1 em modo read-only.
+6. Identifique scheduler canônico real.
+7. Identifique formato/path real do log diurno.
+8. Confirme os arquivos Dream Review atuais e seus SHAs.
+9. Rode testes canônicos atuais.
+10. Compare com este pack.
+
+REGRAS:
+- scripts/memory-linker é o único Dream/Memory pipeline.
+- não criar Dream Engine/Night Brain.
+- não usar hermes.sh histórico da VPS como scheduler da Casa.
+- não inventar C:/E:.
+- não instalar scheduler se houver owner local concorrente.
+- não ativar day-log adapter sem schema medido.
+- noite = candidate-only.
+- direct canonical write = false.
+- review-of-review = replay + validation, não self-approval.
+- hard stop na hora definida.
+- wake não promove candidato.
+- qualquer STATE_DRIFT deve ser reconciliado antes da escrita.
+
+Somente depois da medição:
+A) preencha REPO_ROOT/STATE_ROOT/horários;
+B) rode canário manual;
+C) valide receipts;
+D) selecione scheduler;
+E) instale;
+F) prove primeira noite e wake;
+G) reporte evidência final.
+""")
+
+put("PROMPT-JUDGE.md", r"""
+
+Judge adversarial do sistema de sono
+Audite o sistema DREAM/SLEEP/WAKE no HEAD e runtime exatos.
+
+Tente provar:
+
+1. existe segundo Dream Engine;
+2. existe segundo scheduler para o mesmo escopo;
+3. noite escreve canônico;
+4. noite consegue commit/push/merge/deploy;
+5. Dream Review se autopromove;
+6. replay é chamado de Judge independente;
+7. pattern é chamado de prova;
+8. source externa se eleva a autoridade;
+9. HEAD muda entre pass1/pass2;
+10. mesma entrada gera proposta diferente;
+11. deadline passa e processo continua;
+12. ACTIVE-INTERACTIVE.lock é ignorado;
+13. raw log vira memória sem adapter comprovado;
+14. segredo chega ao proposal;
+15. StateRoot fica dentro de área versionada;
+16. wake promove candidato;
+17. timeout é chamado PASS;
+18. tests oficiais foram pulados;
+19. scheduler foi instalado sem discovery;
+20. caminhos históricos C:/E: foram presumidos.
+
+PASS somente se todos os invariantes aplicáveis forem observados no mesmo runtime/HEAD.
+""")
+
+Validate rough YAML syntax if PyYAML available.
+yaml_status = []
+try:
+import yaml
+for p in root.rglob("*.yml"):
+with p.open(encoding="utf-8") as f:
+yaml.safe_load(f)
+yaml_status.append((p.relative_to(root).as_posix(), "PASS"))
+except Exception as e:
+yaml_status.append(("YAML_VALIDATION", f"FAIL: {e}"))
+
+Manifest
+files = sorted([p for p in root.rglob("*") if p.is_file()])
+manifest = [
+"# PACKAGE MANIFEST",
+"",
+f"files_before_manifest: {len(files)}",
+"",
+"## YAML validation",
+]
+for f, s in yaml_status:
+manifest.append(f"- {f}: {s}")
+put("PACKAGE-MANIFEST.md", "\n".join(manifest) + "\n")
+
+checksums
+checksum_lines = []
+for p in sorted([p for p in root.rglob("*") if p.is_file() and p.name != "CHECKSUMS.sha256"]):
+checksum_lines.append(f"{hashlib.sha256(p.read_bytes()).hexdigest()} {p.relative_to(root).as_posix()}")
+put("CHECKSUMS.sha256", "\n".join(checksum_lines) + "\n")
+
+Zip
+zip_path = Path("/mnt/data/CENTRALDARK-HERMES-DREAM-SLEEP-WAKE-CASA-PACK-20260823.zip")
+if zip_path.exists():
+zip_path.unlink()
+with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
+for p in sorted(root.rglob("*")):
+if p.is_file():
+z.write(p, arcname=f"{root.name}/{p.relative_to(root).as_posix()}")
+
+sha = hashlib.sha256(zip_path.read_bytes()).hexdigest()
+print("ZIP:", zip_path)
+print("SHA256:", sha)
+print("FILES:", len([p for p in root.rglob("*") if p.is_file()]))
+print("YAML:", yaml_status)
+
+ZIP: /mnt/data/CENTRALDARK-HERMES-DREAM-SLEEP-WAKE-CASA-PACK-20260823.zip
+SHA256: 9edb88cfbd20cd7ccfb158f68eac0de9b3b754978fa60353d0524e6daa67cbff
+FILES: 25
+YAML: [('TEST-MATRIX.yml', 'PASS'), ('A

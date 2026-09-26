@@ -1,0 +1,52 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\__pycache__\secret_prompt.cpython-311.pyc
+
+z1Secret input prompts with masked typing feedback.
+annotationsN)
+Callable
+read_char
+Callable[[], str]
+Callable[[str], object]
+prompt
+returnc
+zCRead one secret line while writing a mask character per typed char.T
+EOFError
+_ENTER_CHARS
+KeyboardInterrupt
+_EOF_CHARS
+_BACKSPACE_CHARS
+append)
+      
+LC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\secret_prompt.py
+_collect_masked_inputr$
+Prompt for a secret while showing masked typing feedback.
+    Falls back to ``getpass.getpass`` when stdin/stdout are not interactive or
+    when raw terminal handling is unavailable.
+stdout
+_stream_is_tty
+getpass
+_masked_secret_prompt_windowsr
+Exception
+_masked_secret_prompt_posix)
+    r#
+masked_secret_promptr2
+isattyr0
+streams
+getwch)
+msvcrts
+z0_masked_secret_prompt_windows.<locals>.read_char^
+z,_masked_secret_prompt_windows.<locals>.writee
+    @r#
+z._masked_secret_prompt_posix.<locals>.read_chars
+z*_masked_secret_prompt_posix.<locals>.writev
+termios
+fileno
+tcgetattr
+setrawr$
+tcsetattr
+TCSADRAIN)
+old_attrsr
+        r#
+__doc__
+__future__r
+collections.abcr
+<module>rY

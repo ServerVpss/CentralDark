@@ -1,0 +1,68 @@
+PACKAGE_VALIDATOR
+PASS files=28
+
+NODE_TESTS
+TAP version 13
+# Subtest: default deny
+ok 1 - default deny
+  ---
+  duration_ms: 0.915376
+  type: 'test'
+  ...
+# Subtest: revoked not allowed
+ok 2 - revoked not allowed
+  ---
+  duration_ms: 0.217236
+  type: 'test'
+  ...
+# Subtest: critical drops
+ok 3 - critical drops
+  ---
+  duration_ms: 0.125494
+  type: 'test'
+  ...
+# Subtest: rate limit
+ok 4 - rate limit
+  ---
+  duration_ms: 0.255744
+  type: 'test'
+  ...
+# Subtest: authz explicit
+ok 5 - authz explicit
+  ---
+  duration_ms: 0.291905
+  type: 'test'
+  ...
+# Subtest: redact
+ok 6 - redact
+  ---
+  duration_ms: 1.677845
+  type: 'test'
+  ...
+# Subtest: public error hides internals
+ok 7 - public error hides internals
+  ---
+  duration_ms: 0.235131
+  type: 'test'
+  ...
+# Subtest: circuit
+ok 8 - circuit
+  ---
+  duration_ms: 0.178859
+  type: 'test'
+  ...
+# Subtest: audit tamper
+ok 9 - audit tamper
+  ---
+  duration_ms: 0.869077
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 84.607071

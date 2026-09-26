@@ -1,0 +1,1364 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\msys-pcre2-8-0.dll
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.edata
+@.idata
+@.reloc
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AVAUATUWVSH
+[^_]A\A]A^
+[^_]A\A]A^
+AWAVUWVSH
+h[^_]A^A_
+D$P9D$T
+h[^_]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+\$(I+K8A
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+vw8HcD
+H[^_]A\A]A^A_
+AUATUWVSH
+8[^_]A\A]
+AVAUATUWVSH
+[^_]A\A]A^
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+H+D$xH)
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+D$0bidiL
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AVAUATUWVS
+[^_]A\A]A^A_
+D$XERCP
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+AVUWVSH
+ [^_]A^
+AWAVAUATUWVSH
+D+D$$1
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+ [^_]A\A]A^
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVATUWVSH
+ [^_]A\A^A_
+ [^_]A\A^A_
+AWAVAUATUWVSA
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AUATUWVSH
+x[^_]A\A]
+H9D$XL
+D$`H9D$X
+H9D$XL
+x[^_]A\A]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AUATUWVSH
+[^_]A\A]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+(?s)ff.
+@8t$Pu
+1H9D$ 
+1H9D$ 
+"D$(E1
+L9t$Ht
+D$TA8G
+D$TA:G
+t$TA:7
+7@8t$T
+t3H9T$H
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+|$`H9~8s
+D$`H;D$xsh
+tWD9(u
+|$THcD$pM
+H+\$hA
+H+D$hA
+t)D;|$P
+H+D$hA
+t#D;|$P
+t#D;|$P
+t#D;|$P
+D$(HcT$p
+t#D;|$P
+D$(HcT$p
+~#D;|$P
+~#D;|$P
+~#D;|$P
+~#D;|$P
+~#D;|$P
+H+D$hA
+\$`H;X8
+u'D;|$P
+H+D$hA
+\$xH9\$`
+\$xH9\$`
+D$(HcT$p
+D$T;l$P
+L$`H;H8
+H+T$hA
+HcT$pH
+{L+L$h
+"D;|$P
+H+\$hD
+D$X=_ 
+D$X=_ 
+D$X-( 
+t$xH9t$`
+D$X-( 
+H;D$xrQ;l$P
+D$`H;D$xr
+D$X=_ 
+D$xH9D$`
+L$`H;H8
+L$`L;H8
+L$`L;H8r#H
+ tp;l$P
+AVAUATUWVS
+{XERCP
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+<qw9<o
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+yu.ff.
+H[^_]A\A]A^A_
+ATUWVSH
+ [^_]A\
+ [^_]A\
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AVAUATUWVSH
+[^_]A\A]A^
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+uxA8t$
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+ATUWVSH
+0[^_]A\
+0[^_]A\
+L$(LcL$xD
+L$(LcL$xA
+AUATUWVSH
+8[^_]A\A]
+8[^_]A\A]
+8[^_]A\A]
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+ATUWVSH
+@HcAtH
+@[^_]A\
+@[^_]A\
+ATUWVSH
+@[^_]A\
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+HcGLE1
+HcGhE1
+HcGLE1
+L;D$pt;A9
+HcT$pL
+AVATUWVSH
+8[^_]A\A^
+8[^_]A\A^
+AWAVAUATUWVSH
+l$ McD$XA
+[^_]A\A]A^A_
+IcJhHc
+IcJtHc
+IcJtHc
+AWAVUWVSH
+8[^_]A^A_
+8[^_]A^A_
+AVWVSH
+H[^_A^
+H[^_A^
+\$Xu}L
+AVUWVSH
+p[^_]A^
+p[^_]A^
+p[^_]A^
+p[^_]A^
+AVWVSH
+8[^_A^
+8[^_A^
+L$xuxH
+AVUWVSH
+0[^_]A^
+0[^_]A^
+AVUWVSH
+0[^_]A^
+0[^_]A^
+AVAUATUWVSH
+0[^_]A\A]A^
+AVUWVSH
+0[^_]A^
+0[^_]A^
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+ATUWVSH
+P[^_]A\
+AVATUWVSH
+X[^_]A\A^
+X[^_]A\A^
+AVUWVSH
+P[^_]A^
+P[^_]A^
+ATUWVSH
+@[^_]A\
+@[^_]A\
+HcFPE1
+HcGPE1
+AVAUATUWVSH
+P[^_]A\A]A^
+AVWVSH
+X[^_A^
+X[^_A^
+X[^_A^
+X[^_A^
+X[^_A^
+AWAVATUWVSH
+`[^_]A\A^A_
+LcT$PHc|$XL
+!HcD$P
+`[^_]A\A^A_
+AWAVAUATUWVSH
+HcETE1
+[^_]A\A]A^A_
+AUATUWVSH
+[^_]A\A]
+LcL$HA
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+ATUWVSH
+PHcAdH
+P[^_]A\
+P[^_]A\
+P[^_]A\
+AVATUWVSH
+HcC4E1
+X[^_]A\A^
+X[^_]A\A^
+X[^_]A\A^
+X[^_]A\A^
+AUATUWVSH
+[^_]A\A]
+AVAUATUWVSH
+`[^_]A\A]A^
+AWAVAUATUWVSH
+D$HHcAdE
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+t$Pff.
+D8!t+H
+H+\$XH
+HcT$PH
+t$XHcL$HH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AUATUWVSH
+h[^_]A\A]
+HcFdE1
+h[^_]A\A]
+AUATUWVSH
+\D@tjA
+X[^_]A\A]
+AVAUATUWVSH
+@[^_]A\A]A^
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+D$`HcD$PA
+HcD$XE1
+HcD$PA
+ATUWVSH
+0[^_]A\
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+LcT$xL
+Hc|$xD
+LcT$xL
+D$H;|$\
+D$HHcD$PH
+LcL$HE
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+LcT$`E1
+HcD$`E
+IcFtE1
+IcFLE1
+D$(McNl
+HcD$`E1
+D$(McNl
+HcD$`E1
+HcD$`E1
+IcFlE1
+IcFlE1
+IcFlE1
+LcL$`A
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+D$PHcD$dH
+D$hHcD$dH
+IcElE1
+[^_]A\A]A^A_
++D$DE1
++D$DE1
+HcD$dE1
+D$(McMl
+IcElE1
+Hc|$dA
+D$(McMlA
+LcL$dA
+LcL$dA
+Lct$dH
+LcL$dH
+LcL$dA
+Hcl$dE1
+IcElE1
+LcL$dA
+AWAVAUATUWVSH
+Lcl$`E1
+[^_]A\A]A^A_
+Lcl$`E1
+Lcl$`E1
+E(Lcl$`
+Lcl$`E1
+HcD$xLcL$h
+Lcl$`E1
+Lcl$`E1
+HcD$lH
+HcD$`E1
+HcD$hE1
+Lcl$`E1
+HcD$hE1
+Lcl$`E1
+Lcl$`A
+Lcl$`E1
+LcL$`A
+Lcl$`E1
+Lcl$`E1
+HcD$xLcL$h
+HcD$xLcL$h
+Lcl$`E1
+LcL$`A
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+HcC(E1
+C,LcK(A
+IcGlE1
+IcGpE1
+IcGlE1
+HcD$PE1
+AWAVAUATUWVSH
+D$`9D$L
+IcD$4E1
+Lcl$dE1
+Lc\$dE1
+HcD$xE1
+[^_]A\A]A^A_
+HcD$dE1
+LcL$dA
+HcD$dE1
+Hc\$xE1
+LcL$dH
+Lc|$xM
+LcL$xA
+LcL$dH
+IcC4E1
+HcD$dE1
+Lcl$dE1
+AWAVAUATUWVSH
+H9T$Ht/H
+HcCXE1
+HcCXE1
+HcCXE1
+[^_]A\A]A^A_
+HcCXE1
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+Bh t^L
+ED$XE1
+ATUWVSH
+[^_]A\
+ATUWVSH
+ [^_]A\H
+ATUWVSH
+ [^_]A\
+AVAUATUWVSH
+ [^_]A\A]A^
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+I+D$0I
+F A9G0
+[^_]A\A]A^A_
+W8A;G<sFI
+W8A;G<s
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W8A;G<
+W<A9G8
+H+\$pL
+gP;|$xs5L9
+OP;|$xr
+BPI9GPH
+CPI9GPA
+M+|$0L
+A9G@t@I
+A9G@tED9
+A9W@uBI
+A;o<syM
+AWAVAUATUWVSH
+~XERCP
+[^_]A\A]A^A_
+L$0M9l$8s,I
+xhH=?KL
+l$LH9\$h
+L9\$Ps
+xXERCP
+AUATUWVSH
+yXERCP
+<qw9<o
+h[^_]A\A]
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+xXERCP
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+~XERCPu]fA
+8[^_]A\A]A^A_
+9S2RPu#
+AVWVSH
+8[^_A^
+8[^_A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVWVSH
+[^_A^A_
+AWAVATUWVS1
+[^_]A\A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+L<)w+I
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+f;sjr"
+L9H@r_M
+AUATUWVSH
+H[^_]A\A]
+H[^_]A\A]
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AVAUATUWVSH
+[^_]A\A]A^
+[^_]A\A]A^
+[^_]A\A]A^
+[^_]A\A]A^
+[^_]A\A]A^
+AVUWVS
+[^_]A^
+[^_]A^
+[^_]A^
+[^_]A^
+ATUWVSH
+ [^_]A\
+ [^_]A\
+bidiclass
+script
+scriptextensions
+[:<:]]
+[:>:]]
+VERSION
+DEFINE
+NOTEMPTY)
+NOTEMPTY_ATSTART)
+NO_AUTO_POSSESS)
+NO_DOTSTAR_ANCHOR)
+NO_JIT)
+NO_START_OPT)
+CASELESS_RESTRICT)
+TURKISH_CASING)
+LIMIT_HEAP=
+LIMIT_MATCH=
+LIMIT_DEPTH=
+LIMIT_RECURSION=
+ANYCRLF)
+BSR_ANYCRLF)
+BSR_UNICODE)
+xdigit
+positive_lookahead
+positive_lookbehind
+non_atomic_positive_lookahead
+non_atomic_positive_lookbehind
+negative_lookahead
+negative_lookbehind
+scan_substring
+atomic
+script_run
+atomic_script_run
+ACCEPT
+COMMIT
+10.47 2025-10-21
+!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+alpha:lower:upper:alnum:ascii:blank:cntrl:digit:graph:print:punct:space:word:xdigit:
+(*NUL)
+\?*+|.^${}[]()
+(){}123456789
+(*COMMIT
+no error
+no match
+partial match
+UTF-8 error: 1 byte missing at end
+UTF-8 error: 2 bytes missing at end
+UTF-8 error: 3 bytes missing at end
+UTF-8 error: 4 bytes missing at end
+UTF-8 error: 5 bytes missing at end
+UTF-8 error: byte 2 top bits not 0x80
+UTF-8 error: byte 3 top bits not 0x80
+UTF-8 error: byte 4 top bits not 0x80
+UTF-8 error: byte 5 top bits not 0x80
+UTF-8 error: byte 6 top bits not 0x80
+UTF-8 error: 5-byte character is not allowed (RFC 3629)
+UTF-8 error: 6-byte character is not allowed (RFC 3629)
+UTF-8 error: code points greater than 0x10ffff are not defined
+UTF-8 error: code points 0xd800-0xdfff are not defined
+UTF-8 error: overlong 2-byte sequence
+UTF-8 error: overlong 3-byte sequence
+UTF-8 error: overlong 4-byte sequence
+UTF-8 error: overlong 5-byte sequence
+UTF-8 error: overlong 6-byte sequence
+UTF-8 error: isolated byte with 0x80 bit set
+UTF-8 error: illegal byte (0xfe or 0xff)
+UTF-16 error: missing low surrogate at end
+UTF-16 error: invalid low surrogate
+UTF-16 error: isolated low surrogate
+UTF-32 error: code points 0xd800-0xdfff are not defined
+UTF-32 error: code points greater than 0x10ffff are not defined
+bad data value
+patterns do not all use the same character tables
+magic number missing
+pattern compiled in wrong mode: 8/16/32-bit error
+bad offset value
+bad option value
+invalid replacement string
+bad offset into UTF string
+callout error code
+invalid data in workspace for DFA restart
+too much recursion for DFA matching
+backreference condition or recursion test is not supported for DFA matching
+function is not supported for DFA matching
+pattern contains an item that is not supported for DFA matching
+workspace size exceeded in DFA matching
+internal error - pattern overwritten?
+bad JIT option
+JIT stack limit reached
+match limit exceeded
+no more memory
+unknown substring
+non-unique substring name
+NULL argument passed with non-zero length
+nested recursion at the same subject position
+matching depth limit exceeded
+requested value is not available
+requested value is not set
+offset limit set without PCRE2_USE_OFFSET_LIMIT
+bad escape sequence in replacement string
+expected closing curly bracket in replacement string
+bad substitution in replacement string
+match with end before start or start moved backwards is not supported
+too many replacements (more than INT_MAX)
+bad serialized data
+heap limit exceeded
+invalid syntax
+internal error: duplicate substitution match
+PCRE2_MATCH_INVALID_UTF is not supported for DFA matching
+internal error: invalid substring offset
+feature is not supported by the JIT compiler
+error performing replacement case transformation
+replacement too large (longer than PCRE2_SIZE)
+substitute pattern differs from prior match call
+substitute subject differs from prior match call
+substitute start offset differs from prior match call
+substitute options differ from prior match call
+disallowed use of \K in lookaround
+no error
+\ at end of pattern
+\c at end of pattern
+unrecognized character follows \
+numbers out of order in {} quantifier
+number too big in {} quantifier
+missing terminating ] for character class
+escape sequence is invalid in character class
+range out of order in character class
+quantifier does not follow a repeatable item
+internal error: unexpected repeat
+unrecognized character after (? or (?-
+POSIX named classes are supported only within a class
+POSIX collating elements are not supported
+missing closing parenthesis
+reference to non-existent subpattern
+pattern passed as NULL with non-zero length
+unrecognised compile-time option bit(s)
+missing ) after (?# comment
+parentheses are too deeply nested
+regular expression is too large
+failed to allocate heap memory
+unmatched closing parenthesis
+internal error: code overflow
+missing closing parenthesis for condition
+length of lookbehind assertion is not limited
+a relative value of zero is not allowed
+conditional subpattern contains more than two branches
+atomic assertion expected after (?( or (?(?C)
+digit expected after (?+
+unknown POSIX class name
+internal error in pcre2_study(): should not occur
+this version of PCRE2 does not have Unicode support
+parentheses are too deeply nested (stack check)
+character code point value in \x{} or \o{} is too large
+lookbehind is too complicated
+\C is not allowed in a lookbehind assertion in UTF-8 mode
+PCRE2 does not support \F, \L, \l, \N{name}, \U, or \u
+number after (?C is greater than 255
+closing parenthesis for (?C expected
+invalid escape sequence in (*VERB) name
+unrecognized character after (?P
+syntax error in subpattern name (missing terminator?)
+two named subpatterns have the same name (PCRE2_DUPNAMES not set)
+subpattern name must start with a non-digit
+this version of PCRE2 does not have support for \P, \p, or \X
+malformed \P or \p sequence
+unknown property after \P or \p
+subpattern name is too long (maximum 128 code units)
+too many named subpatterns (maximum 10000)
+invalid range in character class
+octal value is greater than \377 in 8-bit non-UTF-8 mode
+internal error: overran compiling workspace
+internal error: previously-checked referenced subpattern not found
+DEFINE subpattern contains more than one branch
+missing opening brace after \o
+internal error: unknown newline setting
+\g is not followed by a braced, angle-bracketed, or quoted name/number or by a plain number
+(?R (recursive pattern call) must be followed by a closing parenthesis
+obsolete error (should not occur)
+(*VERB) not recognized or malformed
+subpattern number is too big
+subpattern name expected
+internal error: parsed pattern overflow
+non-octal character in \o{} (closing brace missing?)
+different names for subpatterns of the same number are not allowed
+(*MARK) must have an argument
+non-hex character in \x{} (closing brace missing?)
+\c must be followed by a printable ASCII character
+\k is not followed by a braced, angle-bracketed, or quoted name
+internal error: unknown meta code in check_lookbehinds()
+\N is not supported in a class
+callout string is too long
+disallowed Unicode code point (>= 0xd800 && <= 0xdfff)
+using UTF is disabled by the application
+using UCP is disabled by the application
+name is too long in (*MARK), (*PRUNE), (*SKIP), or (*THEN)
+character code point value in \u.... sequence is too large
+digits missing after \x or in \x{} or \o{} or \N{U+}
+syntax error or number too big in (?(VERSION condition
+internal error: unknown opcode in auto_possessify()
+missing terminating delimiter for callout with string argument
+unrecognized string delimiter follows (?C
+using \C is disabled by the application
+(?| and/or (?J: or (?x: parentheses are too deeply nested
+using \C is disabled in this PCRE2 library
+regular expression is too complicated
+lookbehind assertion is too long
+pattern string is longer than the limit set by the application
+internal error: unknown code in parsed pattern
+internal error: bad code value in parsed_skip()
+PCRE2_EXTRA_ALLOW_SURROGATE_ESCAPES is not allowed in UTF-16 mode
+invalid option bits with PCRE2_LITERAL
+\N{U+dddd} is supported only in Unicode (UTF) mode
+invalid hyphen in option setting
+(*alpha_assertion) not recognized
+script runs require Unicode support, which this version of PCRE2 does not have
+too many capturing groups (maximum 65535)
+octal digit missing after \0 (PCRE2_EXTRA_NO_BS0 is set)
+\K is not allowed in lookarounds (but see PCRE2_EXTRA_ALLOW_LOOKAROUND_BSK)
+branch too long in variable-length lookbehind assertion
+compiled pattern would be longer than the limit set by the application
+octal value given by \ddd is greater than \377 (forbidden by PCRE2_EXTRA_PYTHON_OCTAL)
+using callouts is disabled by the application
+PCRE2_EXTRA_TURKISH_CASING require Unicode (UTF or UCP) mode
+PCRE2_EXTRA_TURKISH_CASING requires UTF in 8-bit mode
+PCRE2_EXTRA_TURKISH_CASING and PCRE2_EXTRA_CASELESS_RESTRICT are not compatible
+extended character class nesting is too deep
+invalid operator in extended character class
+unexpected operator in extended character class (no preceding operand)
+expected operand after operator in extended character class
+square brackets needed to clarify operator precedence in extended character class
+missing terminating ] for extended character class (note '[' must be escaped under PCRE2_ALT_EXTENDED_CLASS)
+unexpected expression in extended character class (no preceding operator)
+empty expression in extended character class
+terminating ] with no following closing parenthesis in (?[...]
+unexpected character in (?[...]) extended character class
+expected capture group number or name
+missing opening parenthesis
+syntax error in subpattern number (missing terminator?)
+erroroffset passed as NULL
+x86 64bit (little endian + unaligned)
+alphabetic
+anatolianhieroglyphs
+arabic
+armenian
+asciihexdigit
+avestan
+balinese
+bassavah
+bengali
+bhaiksuki
+bidial
+bidian
+bidibn
+bidicontrol
+bidics
+bidien
+bidies
+bidiet
+bidifsi
+bidilre
+bidilri
+bidilro
+bidimirrored
+bidinsm
+bidion
+bidipdf
+bidipdi
+bidirle
+bidirli
+bidirlo
+bidiws
+bopomofo
+brahmi
+braille
+buginese
+canadianaboriginal
+carian
+caseignorable
+caucasianalbanian
+chakma
+changeswhencasefolded
+changeswhencasemapped
+changeswhenlowercased
+changeswhentitlecased
+changeswhenuppercased
+cherokee
+chorasmian
+common
+coptic
+cuneiform
+cypriot
+cyprominoan
+cyrillic
+defaultignorablecodepoint
+deprecated
+deseret
+devanagari
+diacritic
+divesakuru
+duployan
+egyptianhieroglyphs
+elbasan
+elymaic
+emojicomponent
+emojimodifier
+emojimodifierbase
+emojipresentation
+ethiopic
+extendedpictographic
+extender
+extpict
+georgian
+glagolitic
+gothic
+grantha
+graphemebase
+graphemeextend
+graphemelink
+grbase
+grlink
+gujarati
+gunjalagondi
+gurmukhi
+gurungkhema
+hangul
+hanifirohingya
+hanunoo
+hatran
+hebrew
+hexdigit
+hiragana
+idcompatmathcontinue
+idcompatmathstart
+idcontinue
+ideographic
+idsbinaryoperator
+idstart
+idstrinaryoperator
+idsunaryoperator
+imperialaramaic
+inherited
+inscriptionalpahlavi
+inscriptionalparthian
+javanese
+joincontrol
+kaithi
+kannada
+katakana
+kayahli
+kharoshthi
+khitansmallscript
+khojki
+khudawadi
+kiratrai
+lepcha
+lineara
+linearb
+logicalorderexception
+lowercase
+lycian
+lydian
+mahajani
+makasar
+malayalam
+mandaic
+manichaean
+marchen
+masaramgondi
+medefaidrin
+meeteimayek
+mendekikakui
+meroiticcursive
+meroitichieroglyphs
+modifiercombiningmark
+mongolian
+multani
+myanmar
+nabataean
+nagmundari
+nandinagari
+newtailue
+noncharactercodepoint
+nyiakengpuachuehmong
+olchiki
+oldhungarian
+olditalic
+oldnortharabian
+oldpermic
+oldpersian
+oldsogdian
+oldsoutharabian
+oldturkic
+olduyghur
+olonal
+osmanya
+pahawhhmong
+palmyrene
+patsyn
+patternsyntax
+patternwhitespace
+paucinhau
+phagspa
+phoenician
+prependedconcatenationmark
+psalterpahlavi
+quotationmark
+radical
+regionalindicator
+rejang
+samaritan
+saurashtra
+sentenceterminal
+sharada
+shavian
+siddham
+signwriting
+sinhala
+softdotted
+sogdian
+sorasompeng
+soyombo
+sundanese
+sunuwar
+sylotinagri
+syriac
+tagalog
+tagbanwa
+taitham
+taiviet
+tangsa
+tangut
+telugu
+terminalpunctuation
+thaana
+tibetan
+tifinagh
+tirhuta
+todhri
+tulutigalari
+ugaritic
+unifiedideograph
+unknown
+uppercase
+variationselector
+vithkuqi
+wancho
+warangciti
+whitespace
+wspace
+xidcontinue
+xidstart
+yezidi
+zanabazarsquare
+16.0.0
+ !"#$%&'()*+,-./0123456789:;<=>?@abcdefghijklmnopqrstuvwxyz[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+ !"#$%&'()*+,-./0123456789:;<=>?@abcdefghijklmnopqrstuvwxyz[\]^_`ABCDEFGHIJKLMNOPQRSTUVWXYZ{|}~
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+RSDStu{
+msys-pcre2-8-0.dll
+__gcc_deregister_frame
+__gcc_register_frame
+_pcre2_OP_lengths_8
+_pcre2_auto_possessify_8
+_pcre2_callout_end_delims_8
+_pcre2_callout_start_delims_8
+_pcre2_check_escape_8
+_pcre2_ckd_smul_8
+_pcre2_compile_add_name_to_table8
+_pcre2_compile_class_nested_8
+_pcre2_compile_class_not_nested_8
+_pcre2_compile_find_dupname_details8
+_pcre2_compile_find_named_group8
+_pcre2_compile_get_hash_from_name8
+_pcre2_compile_parse_recurse_args8
+_pcre2_compile_parse_scan_substr_args8
+_pcre2_default_compile_context_8
+_pcre2_default_convert_context_8
+_pcre2_default_match_context_8
+_pcre2_default_tables_8
+_pcre2_eclass_8
+_pcre2_extuni_8
+_pcre2_find_bracket_8
+_pcre2_hspace_list_8
+_pcre2_is_newline_8
+_pcre2_jit_free_8
+_pcre2_jit_free_rodata_8
+_pcre2_jit_get_size_8
+_pcre2_jit_get_target_8
+_pcre2_memctl_malloc_8
+_pcre2_ord2utf_8
+_pcre2_posix_class_maps8
+_pcre2_script_run_8
+_pcre2_strcmp_8
+_pcre2_strcmp_c8_8
+_pcre2_strcpy_c8_8
+_pcre2_strlen_8
+_pcre2_strncmp_8
+_pcre2_strncmp_c8_8
+_pcre2_study_8
+_pcre2_ucd_boolprop_sets_8
+_pcre2_ucd_caseless_sets_8
+_pcre2_ucd_digit_sets_8
+_pcre2_ucd_nocase_ranges_8
+_pcre2_ucd_nocase_ranges_size_8
+_pcre2_ucd_records_8
+_pcre2_ucd_script_sets_8
+_pcre2_ucd_stage1_8
+_pcre2_ucd_stage2_8
+_pcre2_ucd_turkish_dotted_i_caseset_8
+_pcre2_ucp_gbtable_8
+_pcre2_ucp_gentype_8
+_pcre2_ucp_typerange_8
+_pcre2_unicode_version_8
+_pcre2_update_classbits_8
+_pcre2_utf8_table1
+_pcre2_utf8_table1_size
+_pcre2_utf8_table2
+_pcre2_utf8_table3
+_pcre2_utf8_table4
+_pcre2_utt_8
+_pcre2_utt_names_8
+_pcre2_utt_size_8
+_pcre2_valid_utf_8
+_pcre2_vspace_list_8
+_pcre2_was_newline_8
+_pcre2_xclass_8
+pcre2_callout_enumerate_8
+pcre2_code_copy_8
+pcre2_code_copy_with_tables_8
+pcre2_code_free_8
+pcre2_compile_8
+pcre2_compile_context_copy_8
+pcre2_compile_context_create_8
+pcre2_compile_context_free_8
+pcre2_config_8
+pcre2_convert_context_copy_8
+pcre2_convert_context_create_8
+pcre2_convert_context_free_8
+pcre2_converted_pattern_free_8
+pcre2_dfa_match_8
+pcre2_general_context_copy_8
+pcre2_general_context_create_8
+pcre2_general_context_free_8
+pcre2_get_error_message_8
+pcre2_get_mark_8
+pcre2_get_match_data_heapframes_size_8
+pcre2_get_match_data_size_8
+pcre2_get_ovector_count_8
+pcre2_get_ovector_pointer_8
+pcre2_get_startchar_8
+pcre2_jit_compile_8
+pcre2_jit_free_unused_memory_8
+pcre2_jit_match_8
+pcre2_jit_stack_assign_8
+pcre2_jit_stack_create_8
+pcre2_jit_stack_free_8
+pcre2_maketables_8
+pcre2_maketables_free_8
+pcre2_match_8
+pcre2_match_context_copy_8
+pcre2_match_context_create_8
+pcre2_match_context_free_8
+pcre2_match_data_create_8
+pcre2_match_data_create_from_pattern_8
+pcre2_match_data_free_8
+pcre2_next_match_8
+pcre2_pattern_convert_8
+pcre2_pattern_info_8
+pcre2_serialize_decode_8
+pcre2_serialize_encode_8
+pcre2_serialize_free_8
+pcre2_serialize_get_number_of_codes_8
+pcre2_set_bsr_8
+pcre2_set_callout_8
+pcre2_set_character_tables_8
+pcre2_set_compile_extra_options_8
+pcre2_set_compile_recursion_guard_8
+pcre2_set_depth_limit_8
+pcre2_set_glob_escape_8
+pcre2_set_glob_separator_8
+pcre2_set_heap_limit_8
+pcre2_set_match_limit_8
+pcre2_set_max_pattern_compiled_length_8
+pcre2_set_max_pattern_length_8
+pcre2_set_max_varlookbehind_8
+pcre2_set_newline_8
+pcre2_set_offset_limit_8
+pcre2_set_optimize_8
+pcre2_set_parens_nest_limit_8
+pcre2_set_recursion_limit_8
+pcre2_set_recursion_memory_management_8
+pcre2_set_substitute_callout_8
+pcre2_set_substitute_case_callout_8
+pcre2_substitute_8
+pcre2_substring_copy_byname_8
+pcre2_substring_copy_bynumber_8
+pcre2_substring_free_8
+pcre2_substring_get_byname_8
+pcre2_substring_get_bynumber_8
+pcre2_substring_length_byname_8
+pcre2_substring_length_bynumber_8
+pcre2_substring_list_free_8
+pcre2_substring_list_get_8
+pcre2_substring_nametable_scan_8
+pcre2_substring_number_from_name_8
+__locale_ctype_ptr
+_impure_ptr
+calloc
+cygwin_internal
+dll_dllcrt0
+malloc
+memchr
+memcmp
+memcpy
+memmove
+memset
+msys_detach_dll
+munmap
+posix_madvise
+posix_memalign
+pthread_mutex_lock
+pthread_mutex_unlock
+realloc
+strchr
+strlen
+sysconf
+tolower
+toupper
+GetModuleHandleA
+msys-2.0.dll
+KERNEL32.dll
+__lib64_libkernel32_a_iname
+__imp_posix_madvise
+__imp_tolower
+__imp_calloc
+_head_msys_2_0_dll
+__imp_sysconf
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_free
+__nm__impure_ptr
+__imp_pthread_mutex_unlock
+__imp_memchr
+__imp_memset
+__IAT_end__
+__imp_memcpy
+__imp_memmove
+__imp_dll_dllcrt0
+__imp___locale_ctype_ptr
+_head_lib64_libkernel32_a
+__imp_msys_detach_dll
+__imp_toupper
+__imp_GetModuleHandleA
+__imp_strlen
+__imp_malloc
+__imp__impure_ptr
+__imp_realloc
+__IAT_start__
+__imp_munmap
+__imp_strchr
+__imp_mmap
+__imp_pthread_mutex_lock
+__imp_memcmp
+msys_2_0_dll_iname
+:;<=>?@
+[\]^_`
+ !"######$$%%&$$$$$$$'$$$$$$$
+((((()((((((((((((((((((((((((((*+,,,,-+./0123/.4566.7+8.609:::+;;;;;<;;;;;;;;;;;;;;;;;2;;;;;;;=>>>>>?>>>>>>>>>>>>>>>>>2>>>>>>>@ABABABABABABABABABABABABABABABABABABABABABABABACDEABABABFABABABABABABABABGABABABABABABABABABABABABABABABABABABABABABABABHABABABIJKABABLABMMABFNOPABMQRSTABUVSWXYABABABZABZFFABZAB[[ABAB\ABF]ABF^]]]]_`abcdefgABABABABABABABABhABABABABABABABABABEijkABlmABABABABABABABABABABABABABABABABABABABABnFABABABABABABABABABFFFFFFoABpqrrABstuABACABABABvwxyzF{{F|F}~FFF{
+FFFFFFF
+F]FFFFFFFF
+FFFFFFFFFFFFFFFFF
+......
+.................
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+FFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFF
+ABABABABABABABABABABABABABABABABABABABABABABACABABABABABABABABABABABABABABABABABABABABABABABABAB
+ABABABABABABABABABABABABABABABABABABABABABABABABABABEEEE
+FABABABABABABABABABABABABABABABABABABABABABACABABABABABABABABABABABABABABABABABABABABABABABABABAB
+++++19+
+666666
+6666666666
+::::::::::::::::
+------
+--------------22222222222222
+22222222
+22222222222222222222222
+222222
+22222222222222
+222222222
+2222222222222222
+2--------
+--------------
+----22------/
+-----------
+-2-----------
+------------
+-----2222222222222222222222222
+-----------------------/
+-----------222222
+------
+----///-----------------------------------------------
+-----------
+::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::----------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------//--
+--------------
+-----------222
+2/////
+----------
+/-/-/------/---/------
+----------//---------------/--/----
+-----------//
+::::::::::::::::::::::::::::::-
+---------/--------------
+--------------
+2222222
+2222222222222222
+2222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222
+2222222
+222222222
+222222222222
+22222222222
+222222222222222222222222222222222222222222222
+222222
+22222222222222222222222222222222222222
+2222222222222222222
+2222222
+222222
+22222222
+22222-----///-------------------
+-------------------222222222222222222222--222222---
+------------------------------
+--------------------------------
+-------------------------------------------------------------------------------------------------------
+ABABAB
+FABFABFFFFF
++++++++++
+++++++++
+++++++++
+:::::::::::::::
+:::::::::::::::
+...............
+..ABABABABABABABFFABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABAB
+FFFFFFFFABAB
+ABABABABAB
+F]ABAB
+FABABABABABABABABABAB
+ABABABABABABABAB
+FABABAB
+F]]]]]
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+FFFFFFF
+;;;;;;;;;;;;;;;;;;;;
+>>>>>>>>>>>>>>>>>>>>
+33333333
+FFFFFFFFFF]FFFFFFFFFFFFFFF
+FFFFFF
+ !"#$%&'()))*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNNOPQRSTUVWXYZ[\]^_`abcdeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeefeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeghhhhhhhhijjklmnopqrstuvwxyz{|}wxyz{|}wxyz{|}wxyz{|}wxyz{|}wxyz{|}wxyz{|}wxyz{|}wxyz{|}wxyz{|}wxyz{|}wxyz{|}wxy~
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~

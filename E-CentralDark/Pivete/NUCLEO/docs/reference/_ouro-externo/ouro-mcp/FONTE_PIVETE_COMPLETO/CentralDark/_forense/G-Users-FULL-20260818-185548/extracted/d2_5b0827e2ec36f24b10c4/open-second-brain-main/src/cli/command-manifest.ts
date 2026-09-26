@@ -1,0 +1,703 @@
+export interface CliFlagManifest {
+  readonly name: string;
+  readonly type: "boolean" | "string" | "string-array";
+  readonly inherited?: boolean;
+}
+
+export interface CliCommandManifest {
+  readonly name: string;
+  readonly summary: string;
+  readonly flags?: ReadonlyArray<CliFlagManifest>;
+  readonly commands?: ReadonlyArray<CliCommandManifest>;
+}
+
+export interface CliRootManifest {
+  readonly command: "o2b";
+  readonly flags: ReadonlyArray<CliFlagManifest>;
+  readonly commands: ReadonlyArray<CliCommandManifest>;
+}
+
+export const INHERITED_JSON_FLAG: CliFlagManifest = Object.freeze({
+  name: "json",
+  type: "boolean",
+  inherited: true,
+});
+
+export const CLI_COMMAND_MANIFEST: CliRootManifest = Object.freeze({
+  command: "o2b",
+  flags: [INHERITED_JSON_FLAG],
+  commands: [
+    command("status", "Show Open Second Brain configuration status", [
+      flag("config", "string"),
+      flag("vault", "string"),
+    ]),
+    command("init", "Initialize a vault profile", [
+      flag("vault", "string"),
+      flag("name", "string"),
+      flag("agent-name", "string"),
+      flag("timezone", "string"),
+      flag("force", "boolean"),
+      flag("interactive", "boolean"),
+    ]),
+    command("doctor", "Run health checks on vault, config, and plugins", [
+      flag("vault", "string"),
+      flag("config", "string"),
+      flag("repo", "string"),
+    ]),
+    command("onboarding", "Show the guided first-run setup checklist", [
+      flag("vault", "string"),
+      flag("config", "string"),
+    ]),
+    command("export-config", "Write a redacted config snapshot", [
+      flag("config", "string"),
+      flag("output", "string"),
+    ]),
+    command("index", "Regenerate the vault index from discovered pages", [flag("vault", "string")]),
+    command("mcp", "Run the optional MCP tool server", [
+      flag("vault", "string"),
+      flag("config", "string"),
+      flag("repo", "string"),
+      flag("scope", "string"),
+      flag("writer-only", "boolean"),
+      flag("tool-profile", "string"),
+      flag("probe", "boolean"),
+      flag("allow-tool", "string-array"),
+      flag("disable-tool", "string-array"),
+      flag("max-tools", "string"),
+    ]),
+    command("help", "Print command help or the command manifest"),
+    command("completions", "Print shell completion script for o2b", [flag("shell", "string")]),
+    command("install-cli", "Create symlinks for o2b and vault-log"),
+    command("install", "Multi-runtime install orchestrator"),
+    command("update", "Update Open Second Brain across detected runtimes", [
+      flag("target", "string"),
+      flag("dry-run", "boolean"),
+      flag("force", "boolean"),
+    ]),
+    command("uninstall", "Print or apply an uninstall plan", [
+      flag("config", "string"),
+      flag("apply-local", "boolean"),
+      flag("remove-cli", "boolean"),
+      flag("target", "string"),
+    ]),
+    command("tool-call", "Invoke an MCP tool handler from the CLI", [
+      flag("vault", "string"),
+      flag("tool-arg", "string-array"),
+    ]),
+    command(
+      "secrets",
+      "Inspect $secret:NAME references without printing values",
+      [],
+      [
+        command("list", "List $secret:NAME references found in the config", [
+          flag("config", "string"),
+        ]),
+        command("status", "Report whether each referenced secret resolves", [
+          flag("config", "string"),
+        ]),
+      ],
+    ),
+    command(
+      "aider",
+      "Session-bracketing memory wrapper for Aider",
+      [],
+      [
+        command("wrap", "Run Aider bracketed with live memory load + write-back", [
+          flag("session-id", "string"),
+          flag("aider-bin", "string"),
+          flag("chat-history", "string"),
+          flag("vault", "string"),
+          flag("config", "string"),
+        ]),
+      ],
+    ),
+    command(
+      "brain",
+      "Brain memory verbs",
+      [],
+      [
+        command("init", "Bootstrap Brain skeleton"),
+        command("feedback", "Record a taste signal"),
+        command(
+          "dream",
+          "Run deterministic consolidation; staged lifecycle via stage/validate/apply; " +
+            "--step runs one independently-runnable step, --gate overrides a phase gate for one run",
+          [flag("step", "string"), flag("gate", "string-array")],
+        ),
+        command("apply-evidence", "Record preference evidence"),
+        command("note", "Append a narrative milestone"),
+        command("digest", "Render recent Brain transitions"),
+        command("intent-review", "Review signal clusters before dream"),
+        command("retention", "Review retired preference retention"),
+        command("monthly", "Render month-level Brain synthesis"),
+        command("query", "Read preferences, topics, and logs", [
+          flag("vault", "string"),
+          flag("preference", "string"),
+          flag("topic", "string"),
+          flag("since", "string"),
+          flag("at", "string"),
+          flag("show-expired", "boolean"),
+        ]),
+        command("agent-query", "Read source-agent provenance"),
+        command("agent-diff", "Compare source-agent coverage"),
+        command("reject", "Retire a preference"),
+        command("merge", "Merge duplicate preferences"),
+        command("pin", "Pin a preference"),
+        command("unpin", "Unpin a preference"),
+        command("set-primary", "Set primary Brain agent"),
+        command("protect", "Emit runtime deny rules for Brain"),
+        command("unprotect", "Remove managed runtime deny rules"),
+        command(
+          "snapshot",
+          "Inspect Brain snapshots",
+          [],
+          [
+            command("log", "Newest-first listing of every recovery point with its reason", [
+              flag("vault", "string"),
+              flag("reason", "string"),
+              flag("limit", "string"),
+            ]),
+            command("diff", "Read-only diff between two snapshots, or snapshot vs live", [
+              flag("vault", "string"),
+            ]),
+          ],
+        ),
+        command("rollback", "Restore Brain from a snapshot"),
+        command("upgrade", "Migrate release-owned Brain files"),
+        command("export", "Export active preferences"),
+        command("explorer", "Open or export Brain graph explorer"),
+        command("doctor", "Check Brain invariants"),
+        command("status", "Unified operator status snapshot with next-command hints", [
+          flag("vault", "string"),
+          flag("json", "boolean"),
+        ]),
+        command("hygiene", "Hygiene pipeline: scan findings, apply remediation plan"),
+        command("refresh", "Targeted recompile of stale derived pages"),
+        command("anticipate", "Inspect or refresh the anticipatory context cache"),
+        command("watchdog", "Probe Brain recovery status"),
+        command("health", "Render semantic Brain health"),
+        command("history", "Render preference edit history"),
+        command("activation", "Activation event store: status and sweep"),
+        command("truth", "Claim ledger: slots, conflicts, aggregate, collisions"),
+        command("facts", "Decompose text into atomic assertions"),
+        command("dead-end", "Record or list failed approaches"),
+        command("foresight", "Render forward-looking projection"),
+        command("label", "Assign, remove, or show controlled-vocabulary labels"),
+        command("attr", "Assign, remove, or show typed-page attribute fields"),
+        command("tiers", "Check, restore, or accept identity-field drift"),
+        command("secret", "Capability-gated secret custody: set, list, rm, run"),
+        command("maintenance", "Quiet-window, lease-guarded heavy maintenance lane"),
+        command("audit", "Render mutation audit trail"),
+        command(
+          "generation-reports",
+          "Record/list/summarize opt-in inbound LLM generation traces",
+          [],
+          [
+            command("record", "Record one gated inbound generation report"),
+            command("list", "List generation report records"),
+            command("summary", "Summarize generation usage with memory linkage"),
+            command("show", "Show one generation report record"),
+          ],
+        ),
+        command("morning-brief", "Render session-start summary"),
+        command("codec", "Compress or expand session prose"),
+        command("sources", "Show signal source dashboard"),
+        command(
+          "schema",
+          "Inspect Brain schema vocabulary",
+          [flag("vault", "string")],
+          [
+            command("report", "Inspect Brain schema vocabulary", [flag("vault", "string")]),
+            command("stats", "Summarise Brain schema vocabulary", [flag("vault", "string")]),
+            command("lint", "Lint Brain schema vocabulary", [flag("vault", "string")]),
+            command("graph", "Render Brain schema graph", [flag("vault", "string")]),
+            command("explain", "Explain a Brain schema token", [flag("vault", "string")]),
+            command("orphans", "Review unused Brain schema declarations", [
+              flag("vault", "string"),
+            ]),
+            command("apply", "Apply audited Brain schema mutations", [
+              flag("vault", "string"),
+              flag("mutation", "string-array"),
+              flag("actor", "string"),
+              flag("reason", "string"),
+            ]),
+            command("sync", "Brain schema sync (not implemented; refuses)", [
+              flag("vault", "string"),
+              flag("dry-run", "boolean"),
+              flag("batch-size", "string"),
+            ]),
+          ],
+        ),
+        command("graph-export", "Export vault graph"),
+        command("graph-import", "Import vault graph stubs"),
+        command("backlinks", "List inbound Brain references"),
+        command("semantics-backfill", "Preview Brain semantics backfill"),
+        command("mcp-landscape", "List MCP servers configured across the vault"),
+        command("scan-inline", "Capture inline @osb markers"),
+        command("scan-citations", "Promote inline [Source: ...] citations to dated events", [
+          flag("vault", "string"),
+          flag("dry-run", "boolean"),
+          flag("strict", "boolean"),
+          flag("path", "string-array"),
+          flag("exclude", "string-array"),
+          flag("agent", "string"),
+          flag("json", "boolean"),
+        ]),
+        command("import-session", "Replay registered agent sessions"),
+        command("handoff", "Write an operator-readable session handoff note"),
+        command("intention", "Manage scoped current-intention chains"),
+        command("project", "Link project directories to their owning vault"),
+        command("source", "Manage read-only recall sources of the active vault"),
+        command(
+          "forget-source",
+          "Find and delete entries derived from an exact source file (dry-run by default)",
+          [
+            flag("vault", "string"),
+            flag("confirm", "boolean"),
+            flag("include-originals", "boolean"),
+            flag("json", "boolean"),
+          ],
+        ),
+        command(
+          "batch-plan",
+          "Plan a large-folder ingest into bounded parallel batches (skips unchanged sources)",
+          [
+            flag("vault", "string"),
+            flag("max-bytes", "string"),
+            flag("max-files", "string"),
+            flag("reconcile", "boolean"),
+            flag("json", "boolean"),
+          ],
+        ),
+        command(
+          "pre-extract",
+          "Extract deterministic code structure (classes/functions/imports/inheritance) from a source file as JSON seeds",
+          [flag("json", "boolean")],
+        ),
+        command("links", "Normalize wikilink path format across Brain notes"),
+        command("bridges", "Propose, accept, or dismiss embedding-near bridge links"),
+        command("clusters", "Detect link-graph communities and materialize cluster notes"),
+        command(
+          "co-occurrence",
+          "Suggest edges between entities co-referenced from the same notes",
+        ),
+        command("file-context", "Surface prior vault work that mentions a file path"),
+        command("benchmark", "Score recall quality against a fixed query dataset"),
+        command("tune", "Grid-evaluate and persist self-tuning recall parameters"),
+        command("profile", "Materialize the compact Brain/profile.md digest"),
+        command("sgrep", "Grep-shaped semantic Brain search (path:line: output)"),
+        command("continuity", "Export continuity records as ATOF/ATIF trajectories"),
+        command("bench", "Memory quality benchmark over a disposable fixture vault"),
+        command("git", "Git history as project memory: ingest, status, find, mine"),
+        command("architect", "Deterministic architecture notes for a code project"),
+        command(
+          "session",
+          "Agent write sessions: open, submit, approve, abandon, status, list, sweep",
+        ),
+        command("panel", "Multi-persona decision panel riding the write-session kernel"),
+        command(
+          "trigger",
+          "Grounded proactive trigger queue (scan/list/ack/dismiss/act/suppress/unsuppress/history)",
+        ),
+        command("deep-synthesis", "Topic dossier: agreements, contradictions, stale claims, gaps"),
+        command("ideas", "Ranked next-direction candidates from open loops"),
+        command("entity", "Canonical entity registry: set, get, list, relate, archive"),
+        command("session-hook", "Capture runtime lifecycle hook payloads"),
+        command("import-claude-memory", "Import Claude memory feedback"),
+        // no-dead-ends, task 6: the fifty-five brain cases the manifest
+        // never modelled, so neither shell completions nor `o2b help
+        // --json` could name them. Listed in dispatcher order; the
+        // ratchet in `tests/cli/manifest-completeness.test.ts` reads the
+        // dispatcher, so a fifty-sixth cannot land unlisted.
+        command(
+          "lifecycle",
+          "Tombstone or supersede a memory, resolve chain tips, list curator slices",
+        ),
+        command(
+          "claims",
+          "Claim-graph query: current truth, truth at an instant, replaced-by, contested-by",
+        ),
+        command(
+          "decision",
+          "Decision records: record, outcome, rate, show, list, compare, similar, history, recall",
+        ),
+        command(
+          "tension",
+          "Detect and triage persisted contradictions: detect, list, show, confirm, dismiss, resolve",
+        ),
+        command("state", "Overwrite-only exact-state lane keyed by aspect: set, get, list, clear"),
+        command(
+          "health-baseline",
+          "Acknowledge-before watermark for health advisories: set, get, clear",
+        ),
+        command(
+          "vitals",
+          "Governance scorecard: domain diversity, connectivity, orphans, gap pressure",
+        ),
+        command(
+          "bank-export",
+          "Serialise a whole-vault bank bundle: preferences, graph, pages, sources",
+        ),
+        command("bank-import", "Reconstruct the page graph from a bank bundle"),
+        command(
+          "authored-at-backfill",
+          "Backfill authored_at on session-imported signals (dry-run by default)",
+        ),
+        command(
+          "distill",
+          "Condense a source into agent-supplied atomic claims with block provenance",
+        ),
+        command("session-summary", "Session-scoped structured digest: write, get, list"),
+        command(
+          "idea-lineage",
+          "Trace how a derived artifact was reached: observation, synthesis, conclusion",
+        ),
+        command("note-history", "Decompose a note's git history into episodic phases"),
+        command(
+          "diarize",
+          "Subject profile: document set, stated-versus-evidenced gap, needs-LLM skeleton",
+        ),
+        command("okf-export", "Write a portable Open Knowledge Format bundle"),
+        command(
+          "okf-import",
+          "Import an Open Knowledge Format bundle (staged for review by default)",
+        ),
+        command("page-dedup", "Detect, and optionally merge, near-duplicate vault pages"),
+        command("token-footprint", "Report per-category vault token size against a warn threshold"),
+        command("context-pack", "Return a tier-then-recency vault slice under a token budget"),
+        command("context-receipts", "List or show prompt context receipt records"),
+        command(
+          "event-trace",
+          "Join logged events to the continuity records sharing their correlation ids",
+        ),
+        command("context-presets", "Show, suggest, or diff read-only context budget presets"),
+        command(
+          "pre-compact-extract",
+          "Extract typed continuity records from bounded session text",
+        ),
+        command(
+          "post-compact-audit",
+          "Audit pinned-anchor survival after a compaction and re-assert drifted anchors",
+        ),
+        command("recall-telemetry", "List, summarize, or cost opt-in recall telemetry records"),
+        command("knowledge-gaps", "Rank recurring queries the vault answers poorly"),
+        command(
+          "skill-proposals",
+          "Learn, list, review, and recover deterministic skill proposals",
+        ),
+        command("procedural-memory", "Reconcile or list the procedural memory index and its usage"),
+        command("procedural-graph", "Rebuild or show the procedural graph and hint projections"),
+        command("recurrence", "Inspect and update recurrence and support diagnostics"),
+        command("attention-flows", "Declarative attention recipes over open loops and learnings"),
+        command("obligation", "Recurring obligations with cadence-driven next-due dates"),
+        command("agenda", "Synthesize agenda conflicts and focus blocks from provided events"),
+        command("today", "Today dashboard: due obligations, open loops, recent activity, totals"),
+        command("apply-markers", "Apply @osb set frontmatter write-backs (report by default)"),
+        command(
+          "pending",
+          "Review the write-approval queue: list, apply, reject",
+          [],
+          [
+            command("list", "List the staged signals awaiting approval", [flag("vault", "string")]),
+            command("apply", "Move one staged signal into the inbox unchanged", [
+              flag("vault", "string"),
+              flag("dry-run", "boolean"),
+            ]),
+            command("reject", "Retire one staged signal with a recorded reason", [
+              flag("vault", "string"),
+              flag("reason", "string"),
+            ]),
+          ],
+        ),
+        command("signal", "Fact signal lifecycle: retire a signal with a reason"),
+        command("telegram-capture", "Inbound Telegram capture bot: long-poll run or catchup"),
+        command("inbox-drain", "Classify and route staged captures (dry-run by default)"),
+        command(
+          "repair-lane",
+          "Propose memory-graph edges (dry-run by default); --apply is holdout-gated",
+          [
+            flag("vault", "string"),
+            flag("apply", "boolean"),
+            flag("confirm", "string"),
+            flag("include-inferred", "boolean"),
+          ],
+        ),
+        command("session-grep", "Search imported session recall turns and summaries"),
+        command("session-describe", "Describe an imported session recall DAG"),
+        command("session-expand", "Expand a session recall node to its source turns"),
+        command("lint", "Self-healing structural checks; --consolidate --apply writes the fixes", [
+          flag("vault", "string"),
+          flag("consolidate", "boolean"),
+          flag("apply", "boolean"),
+          flag("yes", "boolean"),
+        ]),
+        command(
+          "actions",
+          "Ranked maintenance action list over dedup, lint, and footprint findings",
+        ),
+        command("summary", "Operator dashboard: trust verdict, doctor and dream counts, actions"),
+        command(
+          "unlinked",
+          "Raw-text mentions of an artifact's title or aliases outside wikilinks",
+        ),
+        command(
+          "synthesise",
+          "Concept cluster: a target plus its depth-1 linkers, optionally mentions",
+        ),
+        command("moc-audit", "Per-MOC coverage audit: well-covered, fragile, candidate-missing"),
+        command(
+          "timeline",
+          "Chronological event list filtered by preference, topic, kind, or date",
+        ),
+        command(
+          "evolution",
+          "Per-preference or per-topic story: status transitions, evidence, retire",
+        ),
+        command("stale", "Stale preferences, signals, and log files against configured thresholds"),
+        command("daily", "Daily brief: events by kind, status transitions, vault delta"),
+        command("weekly", "Seven-day synthesis: transitions, retired, contradictions, vault delta"),
+      ],
+    ),
+    command(
+      "search",
+      "Search the vault index",
+      [],
+      [
+        // Declared in the order `cmdSearchQuery` parses them. There is no
+        // per-verb `--help` for the search verbs, so `o2b help` is the only
+        // place these are discoverable; a partial list here reads as
+        // complete, so the whole `parseFlags` schema is modelled and
+        // `tests/cli/search-query-flag-manifest.test.ts` holds it to that.
+        command("query", "Search the vault index", [
+          flag("vault", "string"),
+          flag("config", "string"),
+          flag("db", "string"),
+          flag("limit", "string"),
+          flag("semantic", "boolean"),
+          flag("keyword-only", "boolean"),
+          flag("path", "string"),
+          flag("keyword-weight", "string"),
+          flag("semantic-weight", "string"),
+          flag("auto-refresh", "boolean"),
+          flag("property", "string-array"),
+          flag("degree", "string-array"),
+          flag("visibility", "string-array"),
+          flag("agent-scope", "string"),
+          flag("query-doc", "string"),
+          flag("expand", "boolean"),
+          flag("disclosure", "string"),
+          flag("profile", "string"),
+          flag("evidence-pack", "boolean"),
+          flag("include-superseded", "boolean"),
+          flag("since", "string"),
+          flag("until", "string"),
+          flag("global", "boolean"),
+          flag("no-record-access", "boolean"),
+          flag("verbose", "boolean"),
+          flag("explain", "boolean"),
+        ]),
+        // Both builders declare their whole `parseFlags` schema for the
+        // same reason `query` does, and `tests/cli/search-query-flag-manifest.test.ts`
+        // holds all three to it: `--cron-template` and `--interval` were
+        // parsed by `reindex` and advertised nowhere, so neither help nor
+        // completions could offer the recipe this CLI knows how to print.
+        command("index", "Incrementally update the search index", [
+          flag("vault", "string"),
+          flag("config", "string"),
+          flag("db", "string"),
+          flag("embeddings", "boolean"),
+          flag("force", "boolean"),
+          flag("force-cost", "boolean"),
+          flag("concurrency", "string"),
+          flag("verbose", "boolean"),
+        ]),
+        command("reindex", "Rebuild the search index", [
+          flag("vault", "string"),
+          flag("config", "string"),
+          flag("db", "string"),
+          flag("embeddings", "boolean"),
+          flag("force-cost", "boolean"),
+          flag("concurrency", "string"),
+          flag("verbose", "boolean"),
+          flag("cron-template", "boolean"),
+          flag("interval", "string"),
+        ]),
+        command("watch", "Watch the vault and incrementally sync the index on .md edits"),
+        command("status", "Print search index status"),
+        command(
+          "check",
+          "Run search pre-flight diagnostics; --integrity adds a full structural scan of the index file",
+          [flag("integrity", "boolean")],
+        ),
+        command("provider", "Manage embedding provider profiles"),
+        command("expand", "Drill a search card into the fuller note and its raw chunk transcript"),
+        command("focus", "Set, show, or clear the session recall focus bias"),
+        command("feedback", "Record a relevance verdict for one recall result"),
+        command("weights", "Show or reset the learned hybrid ranking weights"),
+        command("rerank-provider", "Manage reranker provider profiles"),
+        command("rerank-fit", "Diagnose whether the configured reranker fits this vault's queries"),
+        command("plan", "Preview the should-read shortlist for a query without reading the notes"),
+        command(
+          "vector-backfill",
+          "Compute vectors for indexed chunks that have none (dry-run unless --apply)",
+        ),
+        command(
+          "event-anchor-backfill",
+          "Resolve event anchors for indexed documents that have none (dry-run unless --apply)",
+        ),
+      ],
+    ),
+    command(
+      "vault",
+      "Vault scope and profile verbs",
+      [],
+      [
+        command("status", "Show vault policy walk summary"),
+        command("inspect", "Inspect one vault-relative path"),
+        command("profile", "Manage named vault profiles"),
+        command("map", "Print vault-map role tokens"),
+      ],
+    ),
+    command(
+      "discipline",
+      "Daily logging discipline verbs",
+      [],
+      [
+        command("report", "Render discipline report"),
+        command("install", "Install discipline cron"),
+        command("uninstall", "Remove discipline cron"),
+      ],
+    ),
+    command(
+      "partner",
+      "Read-only reports on external code-project partners",
+      [],
+      [
+        command(
+          "codegraph",
+          "Codegraph partner reports",
+          [],
+          [
+            command("report", "Report codegraph index status and workspace members", [
+              flag("vault", "string"),
+              flag("fail-on-health", "boolean"),
+            ]),
+            command(
+              "resync",
+              "Print a cron recipe that re-indexes the code project when its commit moves (requires --cron-template; writes nothing)",
+              [
+                flag("cron-template", "boolean"),
+                flag("interval", "string"),
+                flag("project", "string"),
+                flag("vault", "string"),
+              ],
+            ),
+          ],
+        ),
+      ],
+    ),
+  ],
+});
+
+export function manifestForJson(): CliRootManifest {
+  return addInheritedFlags(CLI_COMMAND_MANIFEST);
+}
+
+export function commandNames(manifest: CliRootManifest = CLI_COMMAND_MANIFEST): string[] {
+  return manifest.commands.map((item) => item.name);
+}
+
+export function nestedCommandNames(parent: string): string[] {
+  const node = CLI_COMMAND_MANIFEST.commands.find((item) => item.name === parent);
+  return node?.commands?.map((item) => item.name) ?? [];
+}
+
+/**
+ * Every root command that models nested subcommands, paired with them.
+ *
+ * The completion renderer used to hand-list the three roots it knew about,
+ * so a fourth that grew subcommands was offered by no shell and nothing
+ * anywhere said so. Deriving the groups from the manifest is what makes
+ * the completion surface follow the manifest rather than trail it.
+ */
+export function nestedCommandGroups(
+  manifest: CliRootManifest = CLI_COMMAND_MANIFEST,
+): Array<{ parent: string; children: string[] }> {
+  // Every depth, not only the first. Shell completion keys off the word
+  // immediately before the cursor, so a verb two levels down is reachable
+  // by its own parent's name and needs no path context - which is what
+  // makes a flat, recursively-collected map the right shape here.
+  const byParent = new Map<string, string[]>();
+  const visit = (items: ReadonlyArray<CliCommandManifest>): void => {
+    for (const item of items) {
+      const children = item.commands ?? [];
+      if (children.length === 0) continue;
+      const merged = byParent.get(item.name) ?? [];
+      for (const child of children) {
+        if (!merged.includes(child.name)) merged.push(child.name);
+      }
+      byParent.set(item.name, merged);
+      visit(children);
+    }
+  };
+  visit(manifest.commands);
+  return [...byParent].map(([parent, children]) => ({ parent, children }));
+}
+
+/** One modelled subcommand, e.g. `nestedCommand("search", "query")`. */
+export function nestedCommand(parent: string, child: string): CliCommandManifest | undefined {
+  const node = CLI_COMMAND_MANIFEST.commands.find((item) => item.name === parent);
+  return node?.commands?.find((item) => item.name === child);
+}
+
+export function allFlagNames(manifest: CliRootManifest = manifestForJson()): string[] {
+  const names = new Set<string>();
+  for (const flagSpec of manifest.flags) names.add(flagSpec.name);
+  const visit = (items: ReadonlyArray<CliCommandManifest>): void => {
+    for (const item of items) {
+      for (const flagSpec of item.flags ?? []) names.add(flagSpec.name);
+      if (item.commands) visit(item.commands);
+    }
+  };
+  visit(manifest.commands);
+  return [...names].toSorted();
+}
+
+function command(
+  name: string,
+  summary: string,
+  flags: ReadonlyArray<CliFlagManifest> = [],
+  commands: ReadonlyArray<CliCommandManifest> = [],
+): CliCommandManifest {
+  return Object.freeze({
+    name,
+    summary,
+    ...(flags.length > 0 ? { flags } : {}),
+    ...(commands.length > 0 ? { commands } : {}),
+  });
+}
+
+function flag(name: string, type: CliFlagManifest["type"]): CliFlagManifest {
+  return Object.freeze({ name, type });
+}
+
+function addInheritedFlags(root: CliRootManifest): CliRootManifest {
+  return {
+    ...root,
+    commands: root.commands.map((item) => addInheritedFlagsToCommand(item)),
+  };
+}
+
+function addInheritedFlagsToCommand(commandSpec: CliCommandManifest): CliCommandManifest {
+  const ownFlags = commandSpec.flags ?? [];
+  const hasJson = ownFlags.some((item) => item.name === INHERITED_JSON_FLAG.name);
+  return {
+    ...commandSpec,
+    flags: hasJson ? ownFlags : [...ownFlags, INHERITED_JSON_FLAG],
+    ...(commandSpec.commands
+      ? {
+          commands: commandSpec.commands.map((item) => addInheritedFlagsToCommand(item)),
+        }
+      : {}),
+  };
+}

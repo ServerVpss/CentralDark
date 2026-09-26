@@ -1,0 +1,12 @@
+{
+  "id": "uuid",
+  "correlation_id": "uuid da entrada",
+  "timestamp": "ISO-8601 UTC",
+  "texto": "string",
+  "agentes": [
+    "id"
+  ],
+  "bloqueado": false,
+  "evidencias": [],
+  "pendencias": []
+}

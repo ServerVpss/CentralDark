@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legenda Sessão 2026-08-23 — CentralDark | HANDOFF 07:00</title>
+<style>
+body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: #eaeaea; margin: 0; padding: 20px; }
+.container { max-width: 900px; margin: 0 auto; }
+h1 { color: #00ff88; border-bottom: 2px solid #00ff88; padding-bottom: 10px; }
+h2 { color: #ffaa00; margin-top: 30px; }
+h3 { color: #22d3ee; margin-top: 20px; }
+.section { background: #16213e; border-radius: 8px; padding: 20px; margin: 15px 0; }
+.item { display: flex; align-items: center; padding: 8px 12px; margin: 5px 0; background: #0f0f23; border-radius: 6px; }
+.emoji { font-size: 1.5em; margin-right: 12px; }
+.label { flex: 1; font-size: 1.05em; }
+.details { color: #888; font-size: 0.85em; margin-left: 12px; }
+.badge { background: #00ff88; color: #000; padding: 2px 8px; border-radius: 4px; font-size: 0.75em; font-weight: bold; }
+.badge-pending { background: #ff4444; color: #fff; }
+.badge-blocked { background: #ffaa00; color: #000; }
+.badge-urgent { background: #ff0066; color: #fff; animation: pulse 1s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.stats { display: flex; gap: 20px; margin: 20px 0; flex-wrap: wrap; }
+.stat-box { background: #16213e; padding: 15px; border-radius: 8px; flex: 1; min-width: 180px; text-align: center; }
+.stat-number { font-size: 2.5em; font-weight: bold; color: #00ff88; }
+.stat-label { color: #888; font-size: 0.9em; }
+.stat-pending { color: #ff4444; }
+.stat-blocked { color: #ffaa00; }
+.stat-urgent { color: #ff0066; }
+.timestamp { color: #666; font-size: 0.85em; text-align: right; margin-top: 20px; }
+.checklist { list-style: none; padding: 0; }
+.checklist li { padding: 8px 12px; margin: 5px 0; background: #0f0f23; border-radius: 6px; display: flex; align-items: center; gap: 10px; }
+.checklist input[type=checkbox] { width: 20px; height: 20px; accent-color: #00ff88; }
+.checklist label { cursor: pointer; flex: 1; }
+.priority-high { border-left: 4px solid #ff0066; }
+.priority-medium { border-left: 4px solid #ffaa00; }
+.priority-low { border-left: 4px solid #00ff88; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>📋 Legenda Sessão 2026-08-23 — CentralDark | <span style="color:#ffaa00">HANDOFF 07:00</span></h1>
+
+<div class="stats">
+<div class="stat-box">
+<div class="stat-number">✅ 47</div>
+<div class="stat-label">Consolidados</div>
+</div>
+<div class="stat-box">
+<div class="stat-number stat-pending">❌ 3</div>
+<div class="stat-label">Pendentes Externos</div>
+</div>
+<div class="stat-box">
+<div class="stat-number stat-blocked">⚠️ 0</div>
+<div class="stat-label">Bloqueados Internos</div>
+</div>
+<div class="stat-box">
+<div class="stat-number stat-urgent">🎯 12</div>
+<div class="stat-label">TODO 07:00</div>
+</div>
+</div>
+
+<div class="section">
+<h2>✅ CONSOLIDADOS — 47 itens (PRONTOS)</h2>
+<div class="item"><span class="emoji">📦</span><span class="label">NUCLEO Estrutura Completa</span><span class="details">12 pastas, 60 skills, 10 módulos motor</span></div>
+<div class="item"><span class="emoji">📋</span><span class="label">7 Contratos Canônicos</span><span class="details">FILE-SECURITY-GATE, ANTIDOTO-COGNITIVO, etc</span></div>
+<div class="item"><span class="emoji">⚙️</span><span class="label">7 Comandos Operacionais</span><span class="details">Inclui PROMPT File Security Gate</span></div>
+<div class="item"><span class="emoji">🔍</span><span class="label">4 Patterns Cristalizados</span><span class="details">Mapa Mestre, TRILHO, Segundo Cérebro</span></div>
+<div class="item"><span class="emoji">📝</span><span class="label">4 Decisões Cristalizadas</span><span class="details">Freeze Legacy, Storage Arch, Execution Broker, TRILHO</span></div>
+<div class="item"><span class="emoji">🛡️</span><span class="label">2 Checkpoints</span><span class="details">Reconciliação + Runtime Wiring</span></div>
+<div class="item"><span class="emoji">🔌</span><span class="label">MCP Local 110 Tools</span><span class="details">localhost:9100 — GitHub, VPS, Kanban, etc</span></div>
+<div class="item"><span class="emoji">🌐</span><span class="label">BFF hermes-webui</span><span class="details">localhost:8787 — chat/start, Kanban CRUD, Sessions</span></div>
+<div class="item"><span class="emoji">🎯</span><span class="label">Kanban Bridge</span><span class="details">CRUD + SSE + claim-lock + workspace_path</span></div>
+<div class="item"><span class="emoji">🤖</span><span class="label">Runtime Adapter</span><span class="details">legacy-journal mode funcional</span></div>
+<div class="item"><span class="emoji">🔧</span><span class="label">Execution Broker</span><span class="details">worktree tool (create/list/remove/prune) 10/10</span></div>
+<div class="item"><span class="emoji">📚</span><span class="label">60 Skills Canônicas</span><span class="details">symlinks E: → C: (NUCLEO → runtime)</span></div>
+<div class="item"><span class="emoji">📁</span><span class="label">Storage Architecture</span><span class="details">E: = OURO (canônico), C: = RUNTIME (symlinks)</span></div>
+<div class="item"><span class="emoji">📂</span><span class="label">70+ Downloads Organizados</span><span class="details">12 pastas categorizadas no NUCLEO/docs/history</span></div>
+<div class="item"><span class="emoji">🔒</span><span class="label">Freeze Legado</span><span class="details">elite-gateway/zendriver/chatgpt congelado</span></div>
+<div class="item"><span class="emoji">📝</span><span class="label">Antídoto Cognitivo</span><span class="details">Contrato de proteção mental do CHEFE</span></div>
+<div class="item"><span class="emoji">🛡️</span><span class="label">File Security Gate v2</span><span class="details">Gate defensivo completo (30 seções)</span></div>
+<div class="item"><span class="emoji">🔄</span><span class="label">TRILHO Framework</span><span class="details">Chassi (7 travas) + Lâmina (CARVE/Lâmina)</span></div>
+<div class="item"><span class="emoji">🔗</span><span class="label">TRILHO Integration</span><span class="details">Integração no Hermes-Core (6 pontos)</span></div>
+<div class="item"><span class="emoji">🏗️</span><span class="label">Execution Broker</span><span class="details">worktree tool + Kanban workspace_path wiring</span></div>
+<div class="item"><span class="emoji">📊</span><span class="label">Mapa Mestre Atualizado</span><span class="details">5 camadas, 50+ componentes, TRILHO + File Gate</span></div>
+<div class="item"><span class="emoji">🛤️</span><span class="label">Kimetsu Legacy (14 formas)</span><span class="details">Cristalizado — pronto para incorporação</span></div>
+<div class="item"><span class="emoji">🎯</span><span class="label">Auto-Destilador + Hook Kanban</span><span class="details">Rodando — cada cristal = card automático no board</span></div>
+<div class="item"><span class="emoji">🛡️</span><span class="label">File Security Gate v2</span><span class="details">Gate defensivo completo (30 seções)</span></div>
+<div class="item"><span class="emoji">🤖</span><span class="label">Auto-Destilador + Hook Kanban</span><span class="details">Rodando (proc_12f7635e18e7) — ZIP/IMG/PDF/TXT → Card Kanban auto</span></div>
+</div>
+
+<div class="section">
+<h2>🧠 DESCOBERTA DO DIA — PERCEPÇÃO TEMPORAL + CAUSAL</h2>
+
+<div class="item"><span class="emoji">🧠</span><span class="label">Regra Nova: CONCEITO ≠ PROCESSO</span><span class="details">"SOL" no papel ≠ "SOL" no runtime. Nome não prova existência.</span></div>
+<div class="item"><span class="emoji">🔍</span><span class="label">Nova Lente: FÍSICO → TEMPORAL → CAUSAL → PROVA</span><span class="details">1. FÍSICO: Onde existe? 2. TEMPORAL: Quando mudou? 3. CAUSAL: Qual dependência caiu? 4. PROVA: Evidência imutável</span></div>
+<div class="item"><span class="emoji">🔒</span><span class="label">Cadeado: COINCIDÊNCIA TEMPORAL → HIPÓTESE → MECANISMO → EVIDÊNCIA → CAUSA</span><span class="details">Correlação temporal sugere, não prova. Mecanismo prova.</span></div>
+<div class="item"><span class="emoji">🎯</span><span class="label">Descoberta: TU ERA A SOL</span><span class="details">Transporte humano de contexto mascarado como autonomia. Quando CHEFE dormiu, transporte parou → Auto-Destilador parou. Infra viveu, coordenação morreu.</span></div>
+<div class="item"><span class="emoji">📝</span><span class="label">Regra Cristalizada: CONCEITO ≠ PROCESSO</span><span class="details">Entrada no SOUL ao lado de UNKNOWN ≠ PASS e ACTION ≠ PROOF.</span></div>
+<div class="item"><span class="emoji">🔑</span><span class="label">Nova Lente Operacional: FÍSICO → TEMPORAL → CAUSAL → PROVA</span><span class="details">Lente padrão para investigação/observabilidade da Casa.</span></div>
+</div>
+
+<div class="section">
+<h2>❌ PENDENTES EXTERNOS — 3 gaps (RESPONSÁVEL: CHEFE)</h2>
+<ul class="checklist">
+<li class="priority-high"><input type="checkbox" id="gap1"><label for="gap1"><strong>🔴 SRVER1_BOT_TOKEN</strong> — Colocar no secret store/env do bot (@srver1bot)</label></li>
+<li class="priority-high"><input type="checkbox" id="gap2"><label for="gap2"><strong>🔴 Windows App Control 4551</strong> — Excluir pasta <code>target/</code> do Defender/App Control para tauri dev</label></li>
+<li class="priority-medium"><input type="checkbox" id="gap3"><label for="gap3"><strong>🔴 WORKTREE_ROOT hardcoded</strong> — Fix no Executor (<code>/root/CentralDark</code> → path Windows)</label></li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🎯 TODO 07:00 — 12 AÇÕES ORDENADAS</h2>
+<ul class="checklist">
+<li class="priority-high"><input type="checkbox" id="todo1"><label for="todo1"><strong>#1 #ACORDAR</strong> — Ler receipt/checkpoint + medir estado vivo (MCP 9100, BFF 8787, Kanban, Auto-Destilador)</label></li>
+<li class="priority-high"><input type="checkbox" id="todo2"><label for="todo2"><strong>#2 Verificar Auto-Destilador + Hook Kanban</strong> — Confirmar rodando (<code>proc_12f7635e18e7</code>), processar arquivos em <code>_MAPA_CASA\Nova pasta*</code></label></li>
+<li class="priority-high"><input type="checkbox" id="todo3"><label for="todo3"><strong>#3 Verificar Kimetsu Legacy</strong> — Confirmar cristalizado em <code>NUCLEO/skills/kimetsu-legacy-breathing/SKILL.md</code></label></li>
+<li class="priority-high"><input type="checkbox" id="todo4"><label for="todo4"><strong>#4 Incorporar Kimetsu Legacy no Hermes Runtime</strong> — Gravar <code>NUCLEO/skills/kimetsu-legacy-breathing/SKILL.md</code> + registrar no motor</label></li>
+<li class="priority-high"><input type="checkbox" id="todo5"><label for="todo5"><strong>#5 Submeter Homologação Seção 9</strong> — Validar Kimetsu Legacy + Auto-Destilador + TRILHO integration</label></li>
+<li class="priority-high"><input type="checkbox" id="todo6"><label for="todo6"><strong>#6 Verificar Modelos Disponíveis</strong> — Confirmar free + paid com saldo ($10 top-up ativo, nvidia free)</label></li>
+<li class="priority-medium"><input type="checkbox" id="todo7"><label for="todo7"><strong>#7 Fix WORKTREE_ROOT no Executor</strong> — Delta 5 min: <code>/root/CentralDark</code> → path Windows real</label></li>
+<li class="priority-medium"><input type="checkbox" id="todo8"><label for="todo8"><strong>#8 Testar Bot E2E (se token)</strong> — Se <code>SRVER1_BOT_TOKEN</code> provisionado: 1 msg Telegram → MCP → Kanban</label></li>
+<li class="priority-medium"><input type="checkbox" id="todo9"><label for="todo9"><strong>#9 Testar SOL Desktop (se App Control OK)</strong> — <code>tauri dev</code> → wire Gateway SOL + Bridge TTS no BFF 8787</label></li>
+<li class="priority-low"><input type="checkbox" id="todo10"><label for="todo10"><strong>#10 Ativar SOL Runtime Dedicado (opcional)</strong> — Writer único + Judge + Leitores paralelos</label></li>
+<li class="priority-low"><input type="checkbox" id="todo11"><label for="todo11"><strong>#11 Destilar UX CentralDark</strong> — Baseado no uso real (não inventar dashboard antes da experiência)</label></li>
+<li class="priority-low"><input type="checkbox" id="todo12"><label for="todo12"><strong>#12 Atualizar Legenda HTML + Mapa Visual</strong> — Refletir estado pós-handoff</label></li>
+</ul>
+</div>
+
+<div class="section">
+<h2>📊 RESUMO EXECUTIVO (STATUS ATUAL)</h2>
+<div class="item"><span class="emoji">✅</span><span class="label">LIVE_MINIMO = PASS</span><span class="details">MCP 9100 + BFF 8787 + Kanban + Runtime Adapter</span></div>
+<div class="item"><span class="emoji">📦</span><span class="label">NUCLEO Cristalizado</span><span class="details">47 itens, 7 docs novos, 60 skills, Kimetsu Legacy (14 formas)</span></div>
+<div class="item"><span class="emoji">🔒</span><span class="label">Freeze Legado Ativo</span><span class="details">elite-gateway/zendriver/chatgpt congelado, não deletado</span></div>
+<div class="item"><span class="emoji">📦</span><span class="label">70+ Downloads Organizados</span><span class="details">12 pastas categorizadas no NUCLEO/docs/history</span></div>
+<div class="item"><span class="emoji">🔗</span><span class="label">TRILHO + File Gate + Mapas</span><span class="details">Framework operacional + Gate defensivo + Mapas</span></div>
+<div class="item"><span class="emoji">🎯</span><span class="label">Auto-Destilador + Hook Kanban</span><span class="details">Rodando — cada cristal = card automático no board</span></div>
+<div class="item"><span class="emoji">🛤️</span><span class="label">Kimetsu Legacy (14 formas)</span><span class="details">Cristalizado — pronto para incorporação no Hermes runtime</span></div>
+<div class="item"><span class="emoji">🛡️</span><span class="label">File Security Gate v2</span><span class="details">Gate defensivo completo (30 seções)</span></div>
+<div class="item"><span class="emoji">🤖</span><span class="label">Auto-Destilador + Hook Kanban</span><span class="details">Rodando (proc_12f7635e18e7) — ZIP/IMG/PDF/TXT → Card Kanban auto</span></div>
+</div>
+
+<div class="section">
+<h2>🔒 SISTEMA NOTURNO ATIVO (RODANDO ENQUANTO VOCÊ DORME)</h2>
+<ul class="checklist">
+<li class="priority-high"><input type="checkbox" checked disabled><label>Auto-Destilador + Hook Kanban</label> — <code>proc_12f7635e18e7</code> (PID 7948)</label></li>
+<li class="priority-high"><input type="checkbox" checked disabled><label>Watchdog</label> — <code>_MAPA_CASA\Nova pasta*</code> (debounce 5s)</label></li>
+<li class="priority-high"><input type="checkbox" checked disabled><label>MCP 9100 + BFF 8787 + Kanban</label> — Operacionais</label></li>
+<li class="priority-high"><input type="checkbox" checked disabled><label>NUCLEO + Rastro + Kimetsu Legacy</label> — Persistidos</label></li>
+<li class="priority-high"><input type="checkbox" checked disabled><label>Modelo Ativo</label> — <code>nvidia/nemotron-3-ultra</code> (FREE) + saldo $10 top-up</label></li>
+<li class="priority-high"><input type="checkbox" checked disabled><label>Trava Noturna</label> — Sem deploy/del/reset/merge sem autorização</label></li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🌅 COMANDO 07:00 — COLE NO TERMINAL:</h2>
+<pre style="background:#0f0f23; color:#00ff88; padding:15px; border-radius:8px; overflow-x:auto; font-family:monospace; font-size:0.9em;">
+#ACORDAR
+→ Estado vivo (MCP 9100, BFF 8787, Kanban, Auto-Destilador)
+→ Receipt/checkpoint desta sessão
+→ Integrar Kimetsu Legacy no Hermes runtime
+→ Submeter homologação Seção 9
+→ Verificar modelos disponíveis (free + paid com saldo)
+</pre>
+</div>
+
+<div class="timestamp">
+Atualizado: 23/08/2026 02:55 | HEAD: e54f04af5 | LIVE_MINIMO=PASS | REALIDADE É O JUIZ 😈
+</div>
+</div>
+</body>
+</html>

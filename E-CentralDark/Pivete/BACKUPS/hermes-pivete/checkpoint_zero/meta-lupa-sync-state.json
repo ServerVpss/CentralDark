@@ -1,0 +1,15 @@
+{
+  "last_synced_remote_tree_sha": "137e16d87e0aa1b91639eeb5d563e6add0c5f4bc",
+  "last_synced_local_tree_sha": "137e16d87e0aa1b91639eeb5d563e6add0c5f4bc",
+  "current_remote_tree_sha": "137e16d87e0aa1b91639eeb5d563e6add0c5f4bc",
+  "current_local_tree_sha": "137e16d87e0aa1b91639eeb5d563e6add0c5f4bc",
+  "last_validated_at": "2026-07-28",
+  "last_rollback_path": "E:\\CentralDark\\Pivete\\BACKUPS\\hermes-pivete\\checkpoint_zero\\meta-lupa-pre-sync-25f85787",
+  "loaded_profile": "pivete",
+  "loaded_meta_lupa_path": "E:\\CentralDark\\Pivete\\worktrees\\meta-lupa-runtime-final-20260728\\.agents\\skills\\meta-lupa",
+  "profile_tree_sha": "137e16d87e0aa1b91639eeb5d563e6add0c5f4bc",
+  "loader_head_sha": "c1459f5668b684d527dfd330aeb2ab11e31bc7ea",
+  "loader_rollback_path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\skills\\meta-lupa.junction-pre-final-20260728",
+  "source": "ServerVpss/CentralDark origin/main",
+  "remote_main_sha": "17f690af78967ccd6b4335a5995624ba61771100"
+}

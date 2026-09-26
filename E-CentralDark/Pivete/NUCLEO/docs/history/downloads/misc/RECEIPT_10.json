@@ -1,0 +1,29 @@
+{
+  "schema": "centraldark.visual-package.receipt/v1",
+  "package": "CENTRALDARK_PACOTAO_DUAS_ARTES_VISUAIS",
+  "created_at": "2026-08-26T11:10:00-03:00",
+  "required_assets": 2,
+  "materialized_assets": 2,
+  "asset_checks": [
+    {
+      "path": "assets/01_CENTRALDARK_AMADURECIMENTO_TATICO_DA_CASA.png",
+      "sha256": "9c5fd4bc7486f79b1014f323e1e65e53a380e9b54177d68d0ecf2cd9761ebe4b",
+      "bytes": 2555602,
+      "result": "PASS"
+    },
+    {
+      "path": "assets/02_CENTRALDARK_OURO_SENDO_COLETADO.png",
+      "sha256": "252709f127cde40ba571ec54a6f2fda44b8989b6715f73db8f5817414f87217f",
+      "bytes": 2500810,
+      "result": "PASS"
+    }
+  ],
+  "package_scope_result": "PASS",
+  "payload_fixed_point": "2/2_REQUIRED_ASSETS_PRESENT_AND_HASHED",
+  "runtime_state": "NOT_PROVEN",
+  "notes": [
+    "Checksums prove byte identity only.",
+    "Generated visual text is not technical runtime evidence.",
+    "No claim of current GitHub/VPS/Hermes/CI state is made by this package."
+  ]
+}

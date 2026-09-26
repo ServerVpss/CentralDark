@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\primitives\selectionToolbar\SelectionToolbarQuote.d.ts.map
+
+{"version":3,"file":"SelectionToolbarQuote.d.ts","names":[],"sources":["../../../src/primitives/selectionToolbar/SelectionToolbarQuote.tsx"],"mappings":";;;;kBAaiB,8BAAA;EAAA,KACH,OAAA,GAAU,YAAA,QAAoB,SAAA,CAAU,MAAA;EAAA,KACxC,KAAA,GAAQ,wBAAA,QAAgC,SAAA,CAAU,MAAA;AAAA;;;;;;;;;;;;;;;cAiBnD,8BAAA,kBAA8B,yBAAA,CAAA,IAAA,CAAA,IAAA,iBAAA,eAAA,CAAA,iBAAA,oBAAA,oBAAA,CAAA,iBAAA"}

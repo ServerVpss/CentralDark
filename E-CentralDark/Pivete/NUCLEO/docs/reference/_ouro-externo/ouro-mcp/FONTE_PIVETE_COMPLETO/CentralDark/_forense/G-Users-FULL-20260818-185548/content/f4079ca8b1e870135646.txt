@@ -1,0 +1,10 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\types\quote.d.ts
+
+//#region src/types/quote.d.ts
+type QuoteInfo = {
+  readonly text: string;
+  readonly messageId: string;
+};
+//#endregion
+export { QuoteInfo };
+//# sourceMappingURL=quote.d.ts.map

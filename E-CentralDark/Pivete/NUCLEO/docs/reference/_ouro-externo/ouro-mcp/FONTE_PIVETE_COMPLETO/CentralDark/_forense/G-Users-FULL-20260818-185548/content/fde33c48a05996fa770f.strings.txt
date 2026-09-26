@@ -1,0 +1,93 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\lib\awk\grcat.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+@.rsrc
+@.reloc
+%s:%s:%ld:
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+RSDSX]
+?)T7`f3P
+__main
+_dll_crt0
+_impure_ptr
+calloc
+cygwin_internal
+dll_dllcrt0
+endgrent
+getgrent
+malloc
+msys_detach_dll
+posix_memalign
+printf
+putchar
+realloc
+GetModuleHandleA
+msys-2.0.dll
+KERNEL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__lib64_libkernel32_a_iname
+__imp__dll_crt0
+__imp_calloc
+_head_msys_2_0_dll
+__imp_putchar
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_free
+__nm__impure_ptr
+__imp_getgrent
+__IAT_end__
+__imp_dll_dllcrt0
+_head_lib64_libkernel32_a
+__imp_msys_detach_dll
+__imp_GetModuleHandleA
+__imp___main
+__imp_malloc
+__imp__impure_ptr
+__imp_realloc
+__IAT_start__
+__imp_endgrent
+__imp_printf
+msys_2_0_dll_iname

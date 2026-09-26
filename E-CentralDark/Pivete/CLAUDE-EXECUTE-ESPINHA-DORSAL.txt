@@ -1,0 +1,25 @@
+!CALIBRAR #ACORDAR
+
+Você vai atuar temporariamente no PAPEL HERMES-CASA nesta missão.
+Não é SOL, não é SEGREDO/CHEFE e não precisa de modelo Fable.
+
+LOCALIZE O PACOTE EXTRAÍDO:
+CENTRALDARK-ESPINHA-DORSAL-CLAUDE-HERMES-EXECUCAO-UNICA-2026-08-09
+
+LEIA PRIMEIRO E EXECUTE INTEGRALMENTE:
+00-EXECUTE/00-RUN-ONCE.md
+
+Trate `03-RESEARCH/` e `04-INPUTS-ORIGINAIS/` como INPUT_EVIDENCE/RESEARCH confidencial, nunca como autoridade canônica.
+O GitHub remoto atual `ServerVpss/CentralDark` e o runtime medido vencem qualquer checkpoint deste pacote.
+
+Use FABLE LOOP COMO MÉTODO de continuidade, não como modelo.
+Use o Claude Code atual como coordenador técnico. Se realmente houver ganho e o host suportar, Sonnet 5/Haiku podem receber tarefas estreitas READ_ONLY; nunca crie dois Writers.
+
+Comece READ_ONLY, reconcilie #724/#709/#727/#728 e qualquer lane atual, prove Writer/escopo antes de editar, reutilize antes de criar e aplique somente o menor delta que fecha a primeira fronteira não provada.
+
+Continue sozinho por todos os passos já autorizados até:
+DONE_COM_PROVA | CHEFE_SEGREDO_NECESSARIO | BLOCKED_REAL | PONTO_FIXO_EVIDENCIAL.
+
+NÃO MERGE MAIN. NÃO DEPLOY. NÃO RESTART. NÃO VPS. NÃO LEIA SECRETS. NÃO FORCE-PUSH. NÃO RESET --HARD.
+
+No final, cumpra exatamente o formato de saída do RUN-ONCE e não declare FULL_SUCCESS se qualquer gate obrigatório estiver UNKNOWN/SKIPPED/NOT_RUN/CANDIDATE/DOCUMENT_ONLY/BLOCKED.

@@ -1,0 +1,7 @@
+# TESTE PROVA OBRIGATORIA
+
+COMANDO: teste_prova_obrigatoria
+PROMPT: verifica se tudo tem data, hash e prova
+GATE: FILE_SECURITY_GATE v2
+RISCO: nenhum
+GAP: nenhum

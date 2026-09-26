@@ -1,0 +1,66 @@
+schema_version: 1
+target: docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/catalog.json
+mode: MERGE_NOT_REPLACE
+precondition:
+  current_schema_version: 1
+  remeasure_target_before_apply: true
+
+supported_formats_add: [web, rss, github, podcast, public-social]
+
+source_policy:
+  default_status: INDEXED_REFERENCE
+  default_classification: STUDY_CANDIDATE
+  raw_copy_default: false
+  sensitive_raw_ingest: false
+
+bootstrap_source_collections:
+  - source_id: human-router-geoff-huntley-public
+    title: "Geoff Huntley — public professional sources"
+    formats: [web, github]
+    status: INDEXED_REFERENCE
+    classification: STUDY_CANDIDATE
+    provenance:
+      provider: multi-public
+      external_id: human-router:GEOFF-HUNTLEY-LENS
+      canonical_path: docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/HUMAN-MIND-ROUTERS/ROUTERS.yml
+  - source_id: human-router-ian-livingstone-public
+    title: "Ian Livingstone — public professional sources"
+    formats: [web, podcast, public-social]
+    status: INDEXED_REFERENCE
+    classification: STUDY_CANDIDATE
+    provenance:
+      provider: multi-public
+      external_id: human-router:IAN-LIVINGSTONE-LENS
+      canonical_path: docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/HUMAN-MIND-ROUTERS/ROUTERS.yml
+  - source_id: human-router-dex-horthy-public
+    title: "Dex Horthy — public professional sources"
+    formats: [web, github, podcast]
+    status: INDEXED_REFERENCE
+    classification: STUDY_CANDIDATE
+    provenance:
+      provider: multi-public
+      external_id: human-router:DEX-HORTHY-LENS
+      canonical_path: docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/HUMAN-MIND-ROUTERS/ROUTERS.yml
+  - source_id: human-router-greg-pstrucha-public
+    title: "Greg Pstrucha — public professional sources"
+    formats: [web, podcast]
+    status: INDEXED_REFERENCE
+    classification: STUDY_CANDIDATE
+    provenance:
+      provider: multi-public
+      external_id: human-router:GREG-PSTRUCHA-LENS
+      canonical_path: docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/HUMAN-MIND-ROUTERS/ROUTERS.yml
+  - source_id: human-router-allie-howe-public
+    title: "Allie Howe — public professional sources"
+    formats: [web, podcast, public-social]
+    status: INDEXED_REFERENCE
+    classification: STUDY_CANDIDATE
+    provenance:
+      provider: multi-public
+      external_id: human-router:ALLIE-HOWE-LENS
+      canonical_path: docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/HUMAN-MIND-ROUTERS/ROUTERS.yml
+
+notes:
+  - "Executor deve adaptar esta delta ao schema real; não substituir catalog.json."
+  - "Se multi-public ou novos formats exigirem validação, implementar no library-router com testes fail-closed."
+  - "Nenhuma fonte pública nova vira INGESTED sem bytes observados + SHA-256."

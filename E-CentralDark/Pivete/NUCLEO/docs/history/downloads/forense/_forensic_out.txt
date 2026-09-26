@@ -1,0 +1,709 @@
+﻿=== FORENSIC COLLECT 2026-08-22T05:10:58.7582596-03:00 ===
+User: danda  Computer: SEGREDO  Integrity: S-1-5-21-200212632-3624053253-2615606181-1001
+
+=== SECURITY CENTER AV ===
+Name=Windows Defender  instanceGuid={D68DDC3A-831F-4fae-9E44-DA132C1ACF46}  pathToSignedProductExe=windowsdefender://  pathToSignedReportingExe=%ProgramFiles%\Windows Defender\MsMpeng.exe  productState=393472
+
+=== SECURITY CENTER FW / SPYWARE ===
+
+=== DEFENDER REGISTRY ===
+-- HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender --
+
+
+DisableAntiSpyware       : 1
+DisableAntiVirus         : 1
+PUAProtection            : 2
+DisablePackedExeScanning : 1
+PSPath                   : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows 
+                           Defender
+PSParentPath             : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft
+PSChildName              : Windows Defender
+PSDrive                  : HKLM
+PSProvider               : Microsoft.PowerShell.Core\Registry
+-- HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection --
+
+
+DisableBehaviorMonitoring   : 1
+DisableIOAVProtection       : 1
+DisableOnAccessProtection   : 1
+DisableRealtimeMonitoring   : 1
+DisableScanOnRealtimeEnable : 1
+PSPath                      : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Window
+                              s Defender\Real-Time Protection
+PSParentPath                : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Window
+                              s Defender
+PSChildName                 : Real-Time Protection
+PSDrive                     : HKLM
+PSProvider                  : Microsoft.PowerShell.Core\Registry
+-- HKLM:\SOFTWARE\Microsoft\Windows Defender --
+
+
+ProductAppDataPath                   : C:\ProgramData\Microsoft\Windows Defender
+ProductIcon                          : @C:\Program Files\Windows Defender\EppManifest.dll,-100
+ProductLocalizedName                 : @C:\Program Files\Windows Defender\EppManifest.dll,-1000
+RemediationExe                       : windowsdefender://
+ProductType                          : 2
+HybridModeEnabled                    : 0
+VerifiedAndReputableTrustModeEnabled : 0
+InstallTime                          : {187, 219, 215, 125...}
+InstallLocation                      : C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.24080.9-0\
+ManagedDefenderProductType           : 0
+SmartLockerMode                      : 0
+OOBEInstallTime                      : {60, 234, 72, 226...}
+PUAProtection                        : 2
+ProductStatus                        : 0
+PassiveMode                          : 0
+DisableAntiSpyware                   : 1
+DisableAntiVirus                     : 1
+UUPFlags                             : 0
+SacLearningModeSwitch                : 1
+PSPath                               : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Window
+                                       s Defender
+PSParentPath                         : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft
+PSChildName                          : Windows Defender
+PSDrive                              : HKLM
+PSProvider                           : Microsoft.PowerShell.Core\Registry
+-- HKLM:\SOFTWARE\Microsoft\Windows Defender\Features --
+
+
+TamperProtection               : 1
+TPExclusions                   : 0
+MpPlatformKillbitsFromEngine   : {0, 0, 0, 4...}
+TamperProtectionSource         : 5
+DlpAppEnlightenmentSettings    : 0
+MpCapability                   : {255, 1, 0, 0...}
+ChangedDefaults                : {0, 0, 0, 0...}
+MpPlatformKillbitsExFromEngine : {32, 0, 0, 0...}
+EnableCACS                     : 0
+PSPath                         : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows 
+                                 Defender\Features
+PSParentPath                   : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows 
+                                 Defender
+PSChildName                    : Features
+PSDrive                        : HKLM
+PSProvider                     : Microsoft.PowerShell.Core\Registry
+-- HKLM:\SOFTWARE\Microsoft\Windows Defender\Real-Time Protection --
+
+
+DpaDisabled  : 0
+PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Real-Time 
+               Protection
+PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender
+PSChildName  : Real-Time Protection
+PSDrive      : HKLM
+PSProvider   : Microsoft.PowerShell.Core\Registry
+-- HKLM:\SYSTEM\CurrentControlSet\Services\WinDefend --
+
+
+DependOnService    : {RpcSs}
+Description        : @%ProgramFiles%\Windows Defender\MpAsDesc.dll,-240
+DisplayName        : @%ProgramFiles%\Windows Defender\MpAsDesc.dll,-310
+ErrorControl       : 1
+FailureActions     : {128, 81, 1, 0...}
+ImagePath          : "C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.24080.9-0\MsMpEng.exe"
+LaunchProtected    : 3
+ObjectName         : LocalSystem
+RequiredPrivileges : {SeImpersonatePrivilege, SeBackupPrivilege, SeRestorePrivilege, SeDebugPrivilege...}
+ServiceSidType     : 1
+Start              : 4
+Type               : 16
+PSPath             : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WinDefend
+PSParentPath       : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services
+PSChildName        : WinDefend
+PSDrive            : HKLM
+PSProvider         : Microsoft.PowerShell.Core\Registry
+-- HKLM:\SYSTEM\CurrentControlSet\Services\WdNisSvc --
+
+
+DependOnService : {WdNisDrv}
+Description     : @%ProgramFiles%\Windows Defender\MpAsDesc.dll,-242
+DisplayName     : @%ProgramFiles%\Windows Defender\MpAsDesc.dll,-320
+ErrorControl    : 1
+FailureActions  : {128, 81, 1, 0...}
+ImagePath       : "C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.24080.9-0\NisSrv.exe"
+LaunchProtected : 3
+ObjectName      : NT AUTHORITY\LocalService
+ServiceSidType  : 1
+Start           : 4
+Type            : 16
+PSPath          : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WdNisSvc
+PSParentPath    : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services
+PSChildName     : WdNisSvc
+PSDrive         : HKLM
+PSProvider      : Microsoft.PowerShell.Core\Registry
+-- HKLM:\SYSTEM\CurrentControlSet\Services\WdFilter --
+
+
+DependOnService   : {FltMgr}
+Description       : @%ProgramFiles%\Windows Defender\MpAsDesc.dll,-340
+DisplayName       : @%ProgramFiles%\Windows Defender\MpAsDesc.dll,-330
+ErrorControl      : 1
+Group             : FSFilter Anti-Virus
+ImagePath         : \SystemRoot\system32\drivers\wd\WdFilter.sys
+Start             : 4
+SupportedFeatures : 15
+Type              : 2
+PSPath            : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WdFilter
+PSParentPath      : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services
+PSChildName       : WdFilter
+PSDrive           : HKLM
+PSProvider        : Microsoft.PowerShell.Core\Registry
+-- HKLM:\SYSTEM\CurrentControlSet\Services\WdBoot --
+
+
+Description     : @%ProgramFiles%\Windows Defender\MpAsDesc.dll,-400
+DisplayName     : @%ProgramFiles%\Windows Defender\MpAsDesc.dll,-390
+ErrorControl    : 1
+Group           : _Early-Launch
+ImagePath       : \SystemRoot\system32\drivers\wd\WdBoot.sys
+Start           : 4
+SupportElamHive : 0
+Type            : 1
+PSPath          : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WdBoot
+PSParentPath    : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services
+PSChildName     : WdBoot
+PSDrive         : HKLM
+PSProvider      : Microsoft.PowerShell.Core\Registry
+-- HKLM:\SYSTEM\CurrentControlSet\Services\WdNisDrv --
+
+
+DependOnService : {BFE}
+Description     : @%ProgramFiles%\Windows Defender\MpAsDesc.dll,-242
+DisplayName     : @%ProgramFiles%\Windows Defender\MpAsDesc.dll,-370
+ErrorControl    : 1
+ImagePath       : system32\drivers\wd\WdNisDrv.sys
+Start           : 4
+Type            : 1
+PSPath          : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WdNisDrv
+PSParentPath    : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services
+PSChildName     : WdNisDrv
+PSDrive         : HKLM
+PSProvider      : Microsoft.PowerShell.Core\Registry
+-- HKLM:\SYSTEM\CurrentControlSet\Services\Sense --
+
+
+Description        : @%ProgramFiles%\Windows Defender Advanced Threat Protection\MsSense.exe,-1002
+DisplayName        : @%ProgramFiles%\Windows Defender Advanced Threat Protection\MsSense.exe,-1001
+ErrorControl       : 1
+FailureActions     : {128, 81, 1, 0...}
+ImagePath          : "C:\Program Files\Windows Defender Advanced Threat Protection\MsSense.exe"
+LaunchProtected    : 2
+ObjectName         : LocalSystem
+RequiredPrivileges : {SeAuditPrivilege, SeChangeNotifyPrivilege, SeCreateGlobalPrivilege, SeCreatePagefilePrivilege...}
+ServiceSidType     : 1
+Start              : 3
+Type               : 16
+PSPath             : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Sense
+PSParentPath       : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services
+PSChildName        : Sense
+PSDrive            : HKLM
+PSProvider         : Microsoft.PowerShell.Core\Registry
+
+=== UNINSTALL BITDEFENDER / AV ===
+
+
+DisplayName     : Bitdefender Agent
+DisplayVersion  : 27.1.1.45
+Publisher       : Bitdefender
+InstallLocation : C:\Program Files\Bitdefender Agent\
+UninstallString : "C:\Program Files\Bitdefender Agent\27.1.1.45\installer\installer.exe" /uninstall
+InstallDate     : 
+
+DisplayName     : Bitdefender VPN
+DisplayVersion  : 27.3.4.19
+Publisher       : Bitdefender
+InstallLocation : C:\Program Files\Bitdefender\Bitdefender VPN\
+UninstallString : "C:\Program Files\Bitdefender\Bitdefender VPN\installer\installer.exe" /uninstall
+InstallDate     : 
+
+DisplayName     : Malwarebytes version 5.6.5.306
+DisplayVersion  : 5.6.5.306
+Publisher       : Malwarebytes
+InstallLocation : C:\Program Files\Malwarebytes\Anti-Malware
+UninstallString : "C:\Program Files\Malwarebytes\Anti-Malware\mbuns.exe" /uninstall /arp
+InstallDate     : 20260821
+
+DisplayName     : Avast Secure Browser
+DisplayVersion  : 136.0.30453.115
+Publisher       : Autores do Avast Secure Browser
+InstallLocation : C:\Program Files\AVAST Software\Browser\Application
+UninstallString : "C:\Program Files\AVAST Software\Browser\AvastBrowserUninstall.exe" /run_source=cp 
+InstallDate     : 20250603
+
+DisplayName     : Avast Update Helper
+DisplayVersion  : 1.8.1993.6
+Publisher       : AVAST Software
+InstallLocation : 
+UninstallString : MsiExec.exe /I{19C3AB22-3718-4E4D-B203-242F5001565B}
+InstallDate     : 20250603
+
+=== SERVICES MATCHING AV / SUSPICIOUS ===
+
+
+Name      : BDESVC
+State     : Stopped
+StartMode : Manual
+PathName  : C:\WINDOWS\System32\svchost.exe -k netsvcs -p
+StartName : localSystem
+ProcessId : 0
+
+Name      : bdredline_agent
+State     : Running
+StartMode : Auto
+PathName  : "C:\Program Files\Bitdefender Agent\redline\bdredline.exe"
+StartName : LocalSystem
+ProcessId : 7796
+
+Name      : bdvpnservice
+State     : Stopped
+StartMode : Auto
+PathName  : "C:\Program Files\Bitdefender\Bitdefender VPN\bdvpnservice.exe" "service"
+StartName : LocalSystem
+ProcessId : 0
+
+Name      : mpssvc
+State     : Running
+StartMode : Auto
+PathName  : C:\WINDOWS\system32\svchost.exe -k LocalServiceNoNetworkFirewall -p
+StartName : NT Authority\LocalService
+ProcessId : 4708
+
+Name      : ProductAgentService
+State     : Running
+StartMode : Auto
+PathName  : "C:\Program Files\Bitdefender Agent\ProductAgentService.exe"
+StartName : LocalSystem
+ProcessId : 8540
+
+Name      : SecurityHealthService
+State     : Running
+StartMode : Manual
+PathName  : C:\WINDOWS\system32\SecurityHealthService.exe
+StartName : LocalSystem
+ProcessId : 24464
+
+Name      : Sense
+State     : Stopped
+StartMode : Manual
+PathName  : "C:\Program Files\Windows Defender Advanced Threat Protection\MsSense.exe"
+StartName : LocalSystem
+ProcessId : 0
+
+Name      : WdNisSvc
+State     : Stopped
+StartMode : Disabled
+PathName  : "C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.24080.9-0\NisSrv.exe"
+StartName : NT AUTHORITY\LocalService
+ProcessId : 0
+
+Name      : WinDefend
+State     : Stopped
+StartMode : Disabled
+PathName  : "C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.24080.9-0\MsMpEng.exe"
+StartName : LocalSystem
+ProcessId : 0
+
+Name      : cbdhsvc_8a80596
+State     : Running
+StartMode : Auto
+PathName  : C:\WINDOWS\system32\svchost.exe -k ClipboardSvcGroup -p
+StartName : 
+ProcessId : 22556
+
+=== PROCESS SNAPSHOT (name,id,ppid,path,cmd) ===
+PID=20512 PPID=1932 NAME=AccountsControlHost.exe PATH=C:\Windows\SystemApps\Microsoft.AccountsControl_cw5n1h2txyewy\AccountsControlHost.exe CMD="C:\Windows\SystemApps\Microsoft.AccountsControl_cw5n1h2txyewy\AccountsControlHost.exe" -ServerName:App.AppX20qnn98vxw5bhxrjtb1f6rggecb2k15a.mca
+PID=10012 PPID=7700 NAME=AggregatorHost.exe PATH= CMD=
+PID=3752 PPID=1724 NAME=amdfendrsr.exe PATH= CMD=
+PID=7784 PPID=1724 NAME=AppleMobileDeviceService.exe PATH= CMD=
+PID=2364 PPID=1932 NAME=ApplicationFrameHost.exe PATH=C:\WINDOWS\system32\ApplicationFrameHost.exe CMD=C:\WINDOWS\system32\ApplicationFrameHost.exe -Embedding
+PID=3820 PPID=1724 NAME=AsusCertService.exe PATH= CMD=
+PID=17456 PPID=3812 NAME=atieclxx.exe PATH= CMD=
+PID=3812 PPID=1724 NAME=atiesrxx.exe PATH= CMD=
+PID=4892 PPID=4700 NAME=audiodg.exe PATH= CMD=
+PID=24136 PPID=1932 NAME=backgroundTaskHost.exe PATH=C:\WINDOWS\system32\backgroundTaskHost.exe CMD="C:\WINDOWS\system32\backgroundTaskHost.exe" -ServerName:App.AppXe9cvj1thv1hmcw0cs98xm3r97tyzy2xs.mca
+PID=7796 PPID=1724 NAME=bdredline.exe PATH= CMD=
+PID=6064 PPID=5108 NAME=bdvpnapp.exe PATH=C:\Program Files\Bitdefender\Bitdefender VPN\bdvpnapp.exe CMD="C:\Program Files\Bitdefender\Bitdefender VPN\bdvpnapp.exe" startup
+PID=4888 PPID=2376 NAME=CCleaner.exe PATH= CMD=
+PID=9512 PPID=1724 NAME=CCleaner_service.exe PATH= CMD=
+PID=28936 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=469 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=45418242950 --metrics-shmem-handle=9708,i,1806080582663061311,4144567302479071103,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709425784498675 --mojo-platform-channel-handle=16200 /prefetch:1
+PID=19824 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=475 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=45524370103 --metrics-shmem-handle=17204,i,9569824155858498313,1256466098853654116,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709431406749769 --mojo-platform-channel-handle=15692 /prefetch:1
+PID=29244 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=491 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=46137873028 --metrics-shmem-handle=6760,i,11173207921410892930,10340691320436671848,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709446399419353 --mojo-platform-channel-handle=15964 /prefetch:1
+PID=23348 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=31 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=12207223660 --metrics-shmem-handle=8340,i,1522286892128916443,16093958937682700844,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709015360168813 --mojo-platform-channel-handle=8360 /prefetch:1
+PID=14664 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=30 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=12206932944 --metrics-shmem-handle=8552,i,14527920794140896614,6385070433571289761,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709014423126964 --mojo-platform-channel-handle=8564 /prefetch:1
+PID=29384 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=490 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=46136524092 --metrics-shmem-handle=16388,i,1599660720170060744,6247631737132594237,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709445462377504 --mojo-platform-channel-handle=12108 /prefetch:1
+PID=2564 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=476 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=45546216649 --metrics-shmem-handle=15932,i,9047773943567873172,3313326870113755916,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709432343791618 --mojo-platform-channel-handle=16712 /prefetch:1
+PID=860 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=38 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=12226590289 --metrics-shmem-handle=9436,i,5215007385378733419,6031341245329207609,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709021919461756 --mojo-platform-channel-handle=9432 /prefetch:1
+PID=26152 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=34 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=12223962681 --metrics-shmem-handle=5656,i,9099870750755485309,6577037693555350434,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709018171294360 --mojo-platform-channel-handle=8916 /prefetch:1
+PID=24912 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=utility --utility-sub-type=video_capture.mojom.VideoCaptureService --lang=pt-BR --service-sandbox-type=none --video-capture-use-gpu-memory-buffer --no-pre-read-main-dll --metrics-shmem-handle=11020,i,5535692297845990322,4235011046703376404,524288 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709061275219414 --mojo-platform-channel-handle=12912 /prefetch:14
+PID=17044 PPID=4552 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --restart
+PID=20664 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=254 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=17253873185 --metrics-shmem-handle=6652,i,10189711976413676382,8317223163628179762,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709224320501140 --mojo-platform-channel-handle=14160 /prefetch:1
+PID=24412 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=251 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=17232347184 --metrics-shmem-handle=5540,i,5793131488707769457,17660071304099778808,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709221509375593 --mojo-platform-channel-handle=14128 /prefetch:1
+PID=20580 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=crashpad-handler "--user-data-dir=C:\Users\danda\AppData\Local\Google\Chrome\User Data" /prefetch:4 --monitor-self-annotation=ptype=crashpad-handler "--database=C:\Users\danda\AppData\Local\Google\Chrome\User Data\Crashpad" "--metrics-dir=C:\Users\danda\AppData\Local\Google\Chrome\User Data" --url=https://clients2.google.com/cr/report --annotation=channel= --annotation=plat=Win64 --annotation=prod=Chrome --annotation=ver=151.0.7922.174 --initial-client-data=0x148,0x14c,0x150,0x124,0x154,0x7ffc295be9c0,0x7ffc295be9d0,0x7ffc295be9e0
+PID=4640 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=122 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=13184806680 --metrics-shmem-handle=11684,i,10552454283186074255,8693908088299693455,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709100630977072 --mojo-platform-channel-handle=11204 /prefetch:1
+PID=21960 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=utility --utility-sub-type=audio.mojom.AudioService --lang=pt-BR --service-sandbox-type=audio --video-capture-use-gpu-memory-buffer --no-pre-read-main-dll --metrics-shmem-handle=11916,i,6768246985219695496,13206515167745386151,524288 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709060338177565 --mojo-platform-channel-handle=7896 /prefetch:12
+PID=23892 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=142 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=13377407275 --metrics-shmem-handle=10608,i,15723499233932388142,16607146843999919958,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709119371814052 --mojo-platform-channel-handle=13880 /prefetch:1
+PID=2588 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=138 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=13374189237 --metrics-shmem-handle=12252,i,4737011866536767062,16690890058040907240,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709115623646656 --mojo-platform-channel-handle=14112 /prefetch:1
+PID=7828 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=71 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=12608053475 --metrics-shmem-handle=10596,i,2245808290118095884,6935937636304520794,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709052841842773 --mojo-platform-channel-handle=11820 /prefetch:1
+PID=28944 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=664 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=48296839481 --metrics-shmem-handle=6448,i,15215134731966734977,8355271820914764073,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709608507659230 --mojo-platform-channel-handle=15860 /prefetch:1
+PID=29296 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=417 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=43775868119 --metrics-shmem-handle=15968,i,3729406834825204396,2280757516714372937,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709377058322527 --mojo-platform-channel-handle=16024 /prefetch:1
+PID=32352 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=441 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=44749196529 --metrics-shmem-handle=11784,i,3874352961438819912,1536025979225769368,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709399547326903 --mojo-platform-channel-handle=17048 /prefetch:1
+PID=20328 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=429 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=43971537055 --metrics-shmem-handle=16784,i,13190776970340723609,17694490097122680378,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709388302824715 --mojo-platform-channel-handle=17136 /prefetch:1
+PID=30888 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=404 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=43440205158 --metrics-shmem-handle=11188,i,9842869735499498723,8793806379531350592,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709364876778490 --mojo-platform-channel-handle=12004 /prefetch:1
+PID=32748 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=333 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=42287371728 --metrics-shmem-handle=7600,i,1622907610965925523,17726546982022219231,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709298346807211 --mojo-platform-channel-handle=14008 /prefetch:1
+PID=12144 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --top-chrome-webui --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=312 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=42034528822 --metrics-shmem-handle=8088,i,10642920657200540894,5261705099234948030,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709278668928382 --mojo-platform-channel-handle=9584 /prefetch:1
+PID=22268 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=utility --utility-sub-type=network.mojom.NetworkService --lang=pt-BR --service-sandbox-type=none --no-pre-read-main-dll --metrics-shmem-handle=2056,i,17879170008178841601,15533371149582684519,524288 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190708989122997041 --mojo-platform-channel-handle=2224 /prefetch:11
+PID=10472 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=45 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=12283565428 --metrics-shmem-handle=7008,i,1782291941188918065,11644995494550005241,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709028478754699 --mojo-platform-channel-handle=8960 /prefetch:1
+PID=31440 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=utility --utility-sub-type=media.mojom.SpeechRecognitionService --lang=pt-BR --service-sandbox-type=speech_recognition --video-capture-use-gpu-memory-buffer --no-pre-read-main-dll --metrics-shmem-handle=10208,i,18194473169959115243,3938857277120520736,524288 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709447336461202 --mojo-platform-channel-handle=15540 /prefetch:14
+PID=25692 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=602 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=47372501639 --metrics-shmem-handle=14876,i,16666007709308611007,6360971997461746633,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709550411064592 --mojo-platform-channel-handle=10112 /prefetch:1
+PID=12224 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=601 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=47371572191 --metrics-shmem-handle=7648,i,1045786377236496273,18246660970467244313,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709549474022743 --mojo-platform-channel-handle=11752 /prefetch:1
+PID=19204 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=620 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=47395382693 --metrics-shmem-handle=22324,i,10217004047271696218,14967267381979619290,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709567277817874 --mojo-platform-channel-handle=22164 /prefetch:1
+PID=23536 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --top-chrome-webui --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=5 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=12145453666 --metrics-shmem-handle=3876,i,16155737013375231306,13106518598445538941,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190708990997080739 --mojo-platform-channel-handle=3872 /prefetch:1
+PID=4512 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=567 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=46988753063 --metrics-shmem-handle=17264,i,8527735971680565669,8754975378053948337,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709517614599877 --mojo-platform-channel-handle=19288 /prefetch:1
+PID=14060 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=657 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=48069770720 --metrics-shmem-handle=18952,i,1557674139789067988,1723346265572828601,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709601948366287 --mojo-platform-channel-handle=18040 /prefetch:1
+PID=5108 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=590 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=47248209761 --metrics-shmem-handle=7244,i,11267424073757908621,7319931326758012391,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709539166562404 --mojo-platform-channel-handle=17952 /prefetch:1
+PID=8656 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=579 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=47204984631 --metrics-shmem-handle=18604,i,2292407661669585368,14007437504976871343,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709528859102065 --mojo-platform-channel-handle=6348 /prefetch:1
+PID=21472 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=641 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=47778028767 --metrics-shmem-handle=20056,i,855909924645833187,1883844208540852167,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709586955696703 --mojo-platform-channel-handle=19708 /prefetch:1
+PID=8608 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=635 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=47772226462 --metrics-shmem-handle=13612,i,10950006552278967360,7172572561977504156,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709581333445609 --mojo-platform-channel-handle=11648 /prefetch:1
+PID=17964 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=gpu-process --no-pre-read-main-dll --gpu-preferences=WAAAAAAAAADgAAAEAAAAAAAAAAAAAGAAQAAAAAAAAAADAAAAAAAAADgAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAoAAAAAAAAAAgAAAAAAAAAEAAAAAIAAAABAAAAAAAAAAgAAAAAAAAACAAAAAAAAAA= --metrics-shmem-handle=1840,i,8184527933584373454,13969463899545570620,262144 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190708988185955192 --mojo-platform-channel-handle=1944 /prefetch:2
+PID=24204 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=642 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=47778174307 --metrics-shmem-handle=19700,i,365887418553008034,11514068514749913822,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709587892738552 --mojo-platform-channel-handle=15384 /prefetch:1
+PID=28904 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=621 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=47408157387 --metrics-shmem-handle=20992,i,15206616397270764739,3042000829391534274,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709568214859723 --mojo-platform-channel-handle=21040 /prefetch:1
+PID=13336 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=utility --utility-sub-type=storage.mojom.StorageService --lang=pt-BR --service-sandbox-type=service --no-pre-read-main-dll --metrics-shmem-handle=2712,i,2097881623103600408,15225543461253026614,524288 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190708990060038890 --mojo-platform-channel-handle=2732 /prefetch:13
+PID=25400 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=utility --utility-sub-type=data_decoder.mojom.DataDecoderService --lang=pt-BR --service-sandbox-type=service --video-capture-use-gpu-memory-buffer --no-pre-read-main-dll --metrics-shmem-handle=22068,i,6383869475582642389,173320356218462076,524288 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709579459361911 --mojo-platform-channel-handle=19436 /prefetch:14
+PID=18356 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=622 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=47410547394 --metrics-shmem-handle=22128,i,7077739764754711799,15509146412604380348,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709569151901572 --mojo-platform-channel-handle=21532 /prefetch:1
+PID=28072 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=653 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=47857608073 --metrics-shmem-handle=16368,i,4769705578628187773,17013019262467719050,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709598200198891 --mojo-platform-channel-handle=18896 /prefetch:1
+PID=15596 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=521 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=46145975860 --metrics-shmem-handle=9656,i,5463880718796226073,664408471899860814,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709474510674823 --mojo-platform-channel-handle=13820 /prefetch:1
+PID=6292 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=517 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=46143285583 --metrics-shmem-handle=17876,i,11519814353389526712,7604383705286863,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709470762507427 --mojo-platform-channel-handle=13532 /prefetch:1
+PID=30128 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=528 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=46243016819 --metrics-shmem-handle=11404,i,15133460877183107384,13204754561049566592,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709481069967766 --mojo-platform-channel-handle=10292 /prefetch:1
+PID=19952 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=utility --utility-sub-type=on_device_translation.mojom.OnDeviceTranslationService --lang=pt-BR --service-sandbox-type=service --translate-kit-binary-path="c:\users\danda\appdata\local\google\chrome\user data\translatekit/lib\2025.11.24.0\translatekitfiles/libtranslatekit.dll" --video-capture-use-gpu-memory-buffer --no-pre-read-main-dll --metrics-shmem-handle=18704,i,754893867995771021,6555901291214431904,524288 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709478258842219 --mojo-platform-channel-handle=17908 /prefetch:14
+PID=19372 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=495 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=46140423013 --metrics-shmem-handle=13372,i,1154432388886820292,8336168511670928465,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709450147586749 --mojo-platform-channel-handle=16836 /prefetch:1
+PID=11028 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=494 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=46139797173 --metrics-shmem-handle=9816,i,11003496755406251600,10413232219080272306,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709449210544900 --mojo-platform-channel-handle=17092 /prefetch:1
+PID=16652 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=500 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=46140937200 --metrics-shmem-handle=15536,i,17029218844648527932,14176318685672081219,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709454832795994 --mojo-platform-channel-handle=16556 /prefetch:1
+PID=11500 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=497 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=46140915434 --metrics-shmem-handle=6316,i,11303664243201947405,18211610915378818248,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709452021670447 --mojo-platform-channel-handle=14204 /prefetch:1
+PID=10568 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=658 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=48069887334 --metrics-shmem-handle=19392,i,18204058904544528685,605390648333076914,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709602885408136 --mojo-platform-channel-handle=19564 /prefetch:1
+PID=22520 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=10 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=12145552398 --metrics-shmem-handle=4516,i,2940311170317470136,4868940621307011272,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190708995682289984 --mojo-platform-channel-handle=4524 /prefetch:1
+PID=6912 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=557 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=46605799110 --metrics-shmem-handle=19060,i,80222602835015768,4117221792961321144,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709508244181387 --mojo-platform-channel-handle=18092 /prefetch:1
+PID=16916 PPID=17044 NAME=chrome.exe PATH=C:\Program Files\Google\Chrome\Application\chrome.exe CMD="C:\Program Files\Google\Chrome\Application\chrome.exe" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=pt-BR --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=27 --time-ticks-at-unix-epoch=-1787337853179633 --launch-time-ticks=12204805342 --metrics-shmem-handle=8080,i,15977523327056405516,17978800581076156651,2097152 --field-trial-handle=1948,i,6039481948962738521,15393097837528643209,262144 --variations-seed-version=20260821-090053.671000-production --pseudonymization-salt-handle=1952,i,10233884035111740117,12731397638506171743,4 --trace-process-track-uuid=3190709011612001417 --mojo-platform-channel-handle=8044 /prefetch:1
+PID=18172 PPID=20424 NAME=conhost.exe PATH=C:\WINDOWS\system32\conhost.exe CMD=\??\C:\WINDOWS\system32\conhost.exe 0x4
+PID=9704 PPID=1724 NAME=cowork-svc.exe PATH= CMD=
+PID=1892 PPID=1724 NAME=CredentialEnrollmentManager.exe PATH=C:\WINDOWS\system32\CredentialEnrollmentManager.exe CMD=C:\WINDOWS\system32\CredentialEnrollmentManager.exe
+PID=23156 PPID=24284 NAME=csrss.exe PATH= CMD=
+PID=1504 PPID=1492 NAME=csrss.exe PATH= CMD=
+PID=24784 PPID=4340 NAME=ctfmon.exe PATH= CMD=
+PID=8024 PPID=7680 NAME=dasHost.exe PATH= CMD=
+PID=19112 PPID=1932 NAME=DataExchangeHost.exe PATH=C:\Windows\System32\DataExchangeHost.exe CMD=C:\Windows\System32\DataExchangeHost.exe -Embedding
+PID=4200 PPID=8540 NAME=DiscoverySrv.exe PATH= CMD=
+PID=14376 PPID=1932 NAME=dllhost.exe PATH=C:\WINDOWS\system32\DllHost.exe CMD="C:\WINDOWS\system32\DllHost.exe" /Processid:{559F1A79-1264-4219-9F15-F919BBBB2CA4}
+PID=5476 PPID=1932 NAME=dllhost.exe PATH=C:\WINDOWS\system32\DllHost.exe CMD="C:\WINDOWS\system32\DllHost.exe" /Processid:{6351E20C-35FA-4BE3-98FB-4CABF1363E12}
+PID=21444 PPID=1932 NAME=dllhost.exe PATH=C:\WINDOWS\system32\DllHost.exe CMD="C:\WINDOWS\system32\DllHost.exe" /Processid:{B41DB860-64E4-11D2-9906-E49FADC173CA}
+PID=16408 PPID=1932 NAME=dllhost.exe PATH=C:\WINDOWS\system32\DllHost.exe CMD=C:\WINDOWS\system32\DllHost.exe /Processid:{AB8902B4-09CA-4BB6-B78D-A8F59079A8D5}
+PID=30372 PPID=1932 NAME=dllhost.exe PATH=C:\WINDOWS\system32\DllHost.exe CMD=C:\WINDOWS\system32\DllHost.exe /Processid:{973D20D7-562D-44B9-B70B-5A0F49CCDF3F}
+PID=13476 PPID=25520 NAME=dwm.exe PATH= CMD=
+PID=25468 PPID=2376 NAME=explorer.exe PATH=C:\WINDOWS\explorer.exe CMD="C:\WINDOWS\explorer.exe" /NoUACCheck
+PID=28688 PPID=1932 NAME=FileCoAuth.exe PATH=C:\Users\danda\AppData\Local\Microsoft\OneDrive\26.145.0728.0010\FileCoAuth.exe CMD="C:\Users\danda\AppData\Local\Microsoft\OneDrive\26.145.0728.0010\FileCoAuth.exe" -Embedding
+PID=20992 PPID=25520 NAME=fontdrvhost.exe PATH= CMD=
+PID=1940 PPID=1628 NAME=fontdrvhost.exe PATH= CMD=
+PID=21440 PPID=7860 NAME=GameInputRedistService.exe PATH=C:\Program Files\Microsoft GameInput\x64\GameInputRedistService.exe CMD="C:\Program Files\Microsoft GameInput\x64\GameInputRedistService.exe" /session=\\.\pipe\GameInputServiceSession-002fb82aaa4970b6-00000002
+PID=7860 PPID=1724 NAME=GameInputRedistService.exe PATH= CMD=
+PID=29856 PPID=1724 NAME=GameInputSvc.exe PATH= CMD=
+PID=29896 PPID=29856 NAME=GameInputSvc.exe PATH= CMD=
+PID=24968 PPID=1724 NAME=gamingservices.exe PATH= CMD=
+PID=29048 PPID=1724 NAME=gamingservicesnet.exe PATH= CMD=
+PID=23556 PPID=3040 NAME=grok.exe PATH=C:\Users\danda\.grok\bin\grok.exe CMD="C:\Users\danda\.grok\bin\grok.exe"
+PID=8312 PPID=1724 NAME=jhi_service.exe PATH= CMD=
+PID=7636 PPID=6504 NAME=Lightshot.exe PATH=C:\Program Files (x86)\Skillbrains\lightshot\5.5.0.7\Lightshot.exe CMD="C:\Program Files (x86)\Skillbrains\lightshot\5.5.0.7\Lightshot.exe" 
+PID=1732 PPID=1628 NAME=lsass.exe PATH= CMD=
+PID=21188 PPID=23008 NAME=Malwarebytes.exe PATH=C:\Program Files\Malwarebytes\Anti-Malware\Malwarebytes.exe CMD="C:\Program Files\Malwarebytes\Anti-Malware\Malwarebytes.exe" nowindow
+PID=23008 PPID=1724 NAME=MBAMService.exe PATH= CMD=
+PID=4156 PPID=4 NAME=Memory Compression PATH= CMD=
+PID=9600 PPID=1932 NAME=Microsoft.Notes.exe PATH=C:\Program Files\WindowsApps\Microsoft.MicrosoftStickyNotes_6.1.4.0_x64__8wekyb3d8bbwe\Microsoft.Notes.exe CMD="C:\Program Files\WindowsApps\Microsoft.MicrosoftStickyNotes_6.1.4.0_x64__8wekyb3d8bbwe\Microsoft.Notes.exe" -ServerName:App.AppX495fygk72hjw82j58ny5h3nr8hpsd8vs.mca
+PID=26328 PPID=25468 NAME=MicrosoftSecurityApp.exe PATH=C:\Program Files\WindowsApps\Microsoft.6365217CE6EB4_102.2602.23002.0_x64__8wekyb3d8bbwe\MicrosoftSecurityApp\MicrosoftSecurityApp.exe CMD="C:\Program Files\WindowsApps\Microsoft.6365217CE6EB4_102.2602.23002.0_x64__8wekyb3d8bbwe\MicrosoftSecurityApp\MicrosoftSecurityApp.exe" 
+PID=5656 PPID=15740 NAME=MoUsoCoreWorker.exe PATH= CMD=
+PID=8128 PPID=1724 NAME=MpDefenderCoreService.exe PATH= CMD=
+PID=31564 PPID=4888 NAME=msedgewebview2.exe PATH=C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe CMD="C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe" --embedded-browser-webview=1 --webview-exe-name=CCleaner.exe --webview-exe-version=7.10.1464.0 --user-data-dir="C:\Users\danda\AppData\Roaming\CCleaner\EBWebView" --noerrdialogs --embedded-browser-webview-dpi-awareness=2 --enable-features=msWebView2EnableDraggableRegions --mojo-named-platform-channel-pipe=4888.19308.12632244043585280096 /pfhostedapp:77d2d06690a132132a81b51458f9aa365bd120f1
+PID=21156 PPID=26868 NAME=msedgewebview2.exe PATH=C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe CMD="C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe" --type=utility --utility-sub-type=network.mojom.NetworkService --lang=pt-BR --service-sandbox-type=none --noerrdialogs --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; Cortana 1.18.9.23723; 10.0.0.0.26200.9168) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.26200 IsWebView2/True (WebView2Version 151.0.4129.101)" --user-data-dir="C:\Users\danda\AppData\Local\Packages\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\LocalState\EBWebView" --webview-exe-name=SearchHost.exe --webview-exe-version=2606.30004.100.0 --embedded-browser-webview=1 --always-read-main-dll --metrics-shmem-handle=2184,i,5704701885252415063,6893710283264132971,524288 --field-trial-handle=2188,i,7551795285637188819,13275294322837430915,262144 --enable-features=msEdgeFluentOverlayScrollbar --disable-features=msSmartScreenProtection --variations-seed-version --pseudonymization-salt-handle=2192,i,14400284755455464372,15224921268074932556,4 --trace-process-track-uuid=3190708989122997041 --mojo-platform-channel-handle=2340 /prefetch:11 /pfhostedapp:40734bf0e53f0b71e60190eee7a60e24258672cb
+PID=31996 PPID=26868 NAME=msedgewebview2.exe PATH=C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe CMD="C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe" --type=gpu-process --noerrdialogs --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; Cortana 1.18.9.23723; 10.0.0.0.26200.9168) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.26200 IsWebView2/True (WebView2Version 151.0.4129.101)" --user-data-dir="C:\Users\danda\AppData\Local\Packages\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\LocalState\EBWebView" --webview-exe-name=SearchHost.exe --webview-exe-version=2606.30004.100.0 --embedded-browser-webview=1 --gpu-preferences=WAAAAAAAAADgAAAEAAAAAAAAAAAAAGAAQAAAAAAAAAADAAAAAAAAADgAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAoAAAAAAAAAAgAAAAAAAAAEAAAAAIAAAABAAAAAAAAAAgAAAAAAAAACAAAAAAAAAA= --always-read-main-dll --metrics-shmem-handle=2008,i,2609235285352488647,13135953771455132210,262144 --field-trial-handle=2188,i,7551795285637188819,13275294322837430915,262144 --enable-features=msEdgeFluentOverlayScrollbar --disable-features=msSmartScreenProtection --variations-seed-version --pseudonymization-salt-handle=2192,i,14400284755455464372,15224921268074932556,4 --trace-process-track-uuid=3190708988185955192 --mojo-platform-channel-handle=2168 /prefetch:2 /pfhostedapp:40734bf0e53f0b71e60190eee7a60e24258672cb
+PID=25268 PPID=26868 NAME=msedgewebview2.exe PATH=C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe CMD="C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe" --type=renderer --noerrdialogs --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; Cortana 1.18.9.23723; 10.0.0.0.26200.9168) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.26200 IsWebView2/True (WebView2Version 151.0.4129.101)" --user-data-dir="C:\Users\danda\AppData\Local\Packages\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\LocalState\EBWebView" --webview-exe-name=SearchHost.exe --webview-exe-version=2606.30004.100.0 --embedded-browser-webview=1 --video-capture-use-gpu-memory-buffer --lang=pt-BR --js-flags=--expose-gc --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=5 --time-ticks-at-unix-epoch=-1787337853154276 --launch-time-ticks=46424394248 --always-read-main-dll --metrics-shmem-handle=4124,i,17764165316312182763,8356636549407395542,2097152 --field-trial-handle=2188,i,7551795285637188819,13275294322837430915,262144 --enable-features=msEdgeFluentOverlayScrollbar --disable-features=msSmartScreenProtection --variations-seed-version --pseudonymization-salt-handle=2192,i,14400284755455464372,15224921268074932556,4 --trace-process-track-uuid=3190708990997080739 --mojo-platform-channel-handle=4132 /pfhostedapp:40734bf0e53f0b71e60190eee7a60e24258672cb /prefetch:1
+PID=20336 PPID=31564 NAME=msedgewebview2.exe PATH=C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe CMD="C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe" --type=renderer --noerrdialogs --user-data-dir="C:\Users\danda\AppData\Roaming\CCleaner\EBWebView" --webview-exe-name=CCleaner.exe --webview-exe-version=7.10.1464.0 --embedded-browser-webview=1 --embedded-browser-webview-dpi-awareness=2 --video-capture-use-gpu-memory-buffer --lang=pt-BR --js-flags=--expose-gc --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=6 --time-ticks-at-unix-epoch=-1787337853154276 --launch-time-ticks=47921514568 --skip-read-main-dll --metrics-shmem-handle=5312,i,16030976986623811851,1426776032211314914,2097152 --field-trial-handle=1960,i,15407022008839534000,12951066517238113830,262144 --enable-features=msWebView2EnableDraggableRegions --variations-seed-version --pseudonymization-salt-handle=1972,i,15964052427425439655,2091436573833572632,4 --trace-process-track-uuid=3190708991934122588 --mojo-platform-channel-handle=5316 /pfhostedapp:77d2d06690a132132a81b51458f9aa365bd120f1 /prefetch:1
+PID=27312 PPID=26868 NAME=msedgewebview2.exe PATH=C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe CMD="C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe" --type=utility --utility-sub-type=storage.mojom.StorageService --lang=pt-BR --service-sandbox-type=service --noerrdialogs --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; Cortana 1.18.9.23723; 10.0.0.0.26200.9168) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.26200 IsWebView2/True (WebView2Version 151.0.4129.101)" --user-data-dir="C:\Users\danda\AppData\Local\Packages\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\LocalState\EBWebView" --webview-exe-name=SearchHost.exe --webview-exe-version=2606.30004.100.0 --embedded-browser-webview=1 --always-read-main-dll --metrics-shmem-handle=2608,i,9022792979872193104,9407295437390459650,524288 --field-trial-handle=2188,i,7551795285637188819,13275294322837430915,262144 --enable-features=msEdgeFluentOverlayScrollbar --disable-features=msSmartScreenProtection --variations-seed-version --pseudonymization-salt-handle=2192,i,14400284755455464372,15224921268074932556,4 --trace-process-track-uuid=3190708990060038890 --mojo-platform-channel-handle=2636 /prefetch:13 /pfhostedapp:40734bf0e53f0b71e60190eee7a60e24258672cb
+PID=14796 PPID=31564 NAME=msedgewebview2.exe PATH=C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe CMD="C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe" --type=gpu-process --noerrdialogs --user-data-dir="C:\Users\danda\AppData\Roaming\CCleaner\EBWebView" --webview-exe-name=CCleaner.exe --webview-exe-version=7.10.1464.0 --embedded-browser-webview=1 --embedded-browser-webview-dpi-awareness=2 --gpu-preferences=WAAAAAAAAADgAAAEAAAAAAAAAAAAAGAAQAAAAAAAAAADAAAAAAAAADgAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAoAAAAAAAAAAgAAAAAAAAAEAAAAAIAAAABAAAAAAAAAAgAAAAAAAAACAAAAAAAAAA= --startup-read-main-dll --metrics-shmem-handle=1872,i,13921471276756122069,6820615594743589579,262144 --field-trial-handle=1960,i,15407022008839534000,12951066517238113830,262144 --enable-features=msWebView2EnableDraggableRegions --variations-seed-version --pseudonymization-salt-handle=1972,i,15964052427425439655,2091436573833572632,4 --trace-process-track-uuid=3190708988185955192 --mojo-platform-channel-handle=1840 /prefetch:2 /pfhostedapp:77d2d06690a132132a81b51458f9aa365bd120f1
+PID=24596 PPID=26868 NAME=msedgewebview2.exe PATH=C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe CMD="C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe" --type=crashpad-handler --user-data-dir=C:\Users\danda\AppData\Local\Packages\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\LocalState\EBWebView /prefetch:4 /pfhostedapp:40734bf0e53f0b71e60190eee7a60e24258672cb --monitor-self-annotation=ptype=crashpad-handler --database=C:\Users\danda\AppData\Local\Packages\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\LocalState\EBWebView\Crashpad --metrics-dir=C:\Users\danda\AppData\Local\Packages\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\LocalState\EBWebView --annotation=IsOfficialBuild=1 --annotation=channel= --annotation=chromium-version=151.0.7922.170 "--annotation=exe=C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe" --annotation=plat=Win64 "--annotation=prod=Edge WebView2" --annotation=ver=151.0.4129.101 --initial-client-data=0x16c,0x170,0x174,0x148,0x17c,0x7ffc894565f0,0x7ffc89456600,0x7ffc89456610
+PID=25912 PPID=31564 NAME=msedgewebview2.exe PATH=C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe CMD="C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe" --type=renderer --noerrdialogs --user-data-dir="C:\Users\danda\AppData\Roaming\CCleaner\EBWebView" --webview-exe-name=CCleaner.exe --webview-exe-version=7.10.1464.0 --embedded-browser-webview=1 --embedded-browser-webview-dpi-awareness=2 --video-capture-use-gpu-memory-buffer --lang=pt-BR --js-flags=--expose-gc --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=5 --time-ticks-at-unix-epoch=-1787337853154276 --launch-time-ticks=47912662901 --ssd-no-pressure-read-main-dll --metrics-shmem-handle=3740,i,14283272079388557118,3544916360467189984,2097152 --field-trial-handle=1960,i,15407022008839534000,12951066517238113830,262144 --enable-features=msWebView2EnableDraggableRegions --variations-seed-version --pseudonymization-salt-handle=1972,i,15964052427425439655,2091436573833572632,4 --trace-process-track-uuid=3190708990997080739 --mojo-platform-channel-handle=3328 /pfhostedapp:77d2d06690a132132a81b51458f9aa365bd120f1 /prefetch:1
+PID=26868 PPID=24320 NAME=msedgewebview2.exe PATH=C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe CMD="C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe" --embedded-browser-webview=1 --webview-exe-name=SearchHost.exe --webview-exe-version=2606.30004.100.0 --user-data-dir="C:\Users\danda\AppData\Local\Packages\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\LocalState\EBWebView" --noerrdialogs --disable-features=msSmartScreenProtection --edge-webview-enable-mojo-ipcz --enable-features=msEdgeFluentOverlayScrollbar --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; Cortana 1.18.9.23723; 10.0.0.0.26200.9168) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.26200 IsWebView2/True (WebView2Version 151.0.4129.101)" --lang=pt-BR --mojo-named-platform-channel-pipe=24320.23236.15823243036473745405 /pfhostedapp:40734bf0e53f0b71e60190eee7a60e24258672cb
+PID=16296 PPID=31564 NAME=msedgewebview2.exe PATH=C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe CMD="C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe" --type=utility --utility-sub-type=storage.mojom.StorageService --lang=pt-BR --service-sandbox-type=service --noerrdialogs --user-data-dir="C:\Users\danda\AppData\Roaming\CCleaner\EBWebView" --webview-exe-name=CCleaner.exe --webview-exe-version=7.10.1464.0 --embedded-browser-webview=1 --embedded-browser-webview-dpi-awareness=2 --startup-read-main-dll --metrics-shmem-handle=2492,i,18264934901431370107,16112022772539701075,524288 --field-trial-handle=1960,i,15407022008839534000,12951066517238113830,262144 --enable-features=msWebView2EnableDraggableRegions --variations-seed-version --pseudonymization-salt-handle=1972,i,15964052427425439655,2091436573833572632,4 --trace-process-track-uuid=3190708990060038890 --mojo-platform-channel-handle=2532 /prefetch:13 /pfhostedapp:77d2d06690a132132a81b51458f9aa365bd120f1
+PID=30960 PPID=31564 NAME=msedgewebview2.exe PATH=C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe CMD="C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe" --type=utility --utility-sub-type=network.mojom.NetworkService --lang=pt-BR --service-sandbox-type=none --noerrdialogs --user-data-dir="C:\Users\danda\AppData\Roaming\CCleaner\EBWebView" --webview-exe-name=CCleaner.exe --webview-exe-version=7.10.1464.0 --embedded-browser-webview=1 --embedded-browser-webview-dpi-awareness=2 --startup-read-main-dll --metrics-shmem-handle=2176,i,10915870471567433832,6688397189381767880,524288 --field-trial-handle=1960,i,15407022008839534000,12951066517238113830,262144 --enable-features=msWebView2EnableDraggableRegions --variations-seed-version --pseudonymization-salt-handle=1972,i,15964052427425439655,2091436573833572632,4 --trace-process-track-uuid=3190708989122997041 --mojo-platform-channel-handle=2164 /prefetch:11 /pfhostedapp:77d2d06690a132132a81b51458f9aa365bd120f1
+PID=20872 PPID=31564 NAME=msedgewebview2.exe PATH=C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe CMD="C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe" --type=crashpad-handler --user-data-dir=C:\Users\danda\AppData\Roaming\CCleaner\EBWebView /prefetch:4 /pfhostedapp:77d2d06690a132132a81b51458f9aa365bd120f1 --monitor-self-annotation=ptype=crashpad-handler --database=C:\Users\danda\AppData\Roaming\CCleaner\EBWebView\Crashpad --metrics-dir=C:\Users\danda\AppData\Roaming\CCleaner\EBWebView --annotation=IsOfficialBuild=1 --annotation=channel= --annotation=chromium-version=151.0.7922.170 "--annotation=exe=C:\Program Files (x86)\Microsoft\EdgeWebView\Application\151.0.4129.101\msedgewebview2.exe" --annotation=plat=Win64 "--annotation=prod=Edge WebView2" --annotation=ver=151.0.4129.101 --initial-client-data=0x174,0x178,0x17c,0x150,0x184,0x7ffc894565f0,0x7ffc89456600,0x7ffc89456610
+PID=17884 PPID=5108 NAME=Notepad.exe PATH=C:\Program Files\WindowsApps\Microsoft.WindowsNotepad_11.2605.34.0_x64__8wekyb3d8bbwe\Notepad\Notepad.exe CMD="C:\Program Files\WindowsApps\Microsoft.WindowsNotepad_11.2605.34.0_x64__8wekyb3d8bbwe\Notepad\Notepad.exe" 
+PID=6688 PPID=5108 NAME=OneDrive.exe PATH=C:\Users\danda\AppData\Local\Microsoft\OneDrive\OneDrive.exe CMD="C:\Users\danda\AppData\Local\Microsoft\OneDrive\OneDrive.exe" /background
+PID=26476 PPID=14868 NAME=OneDrive.Sync.Service.exe PATH=C:\Users\danda\AppData\Local\Microsoft\OneDrive\26.145.0728.0010\OneDrive.Sync.Service.exe CMD="C:\Users\danda\AppData\Local\Microsoft\OneDrive\26.145.0728.0010\OneDrive.Sync.Service.exe" /silentConfig
+PID=30392 PPID=18316 NAME=OpenConsole.exe PATH=C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\OpenConsole.exe CMD="C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\OpenConsole.exe" --headless --textMeasurement graphemes --width 116 --height 96 --signal 0x6a4 --server 0xbf4
+PID=31752 PPID=18316 NAME=OpenConsole.exe PATH=C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\OpenConsole.exe CMD="C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\OpenConsole.exe" --headless --textMeasurement graphemes --width 120 --height 30 --signal 0x8f4 --server 0x8e8
+PID=3932 PPID=20424 NAME=powershell.exe PATH=C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe CMD="C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File C:\Users\danda\Downloads\_forensic_collect.ps1
+PID=3040 PPID=18316 NAME=powershell.exe PATH=C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe CMD=C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe
+PID=20424 PPID=23556 NAME=powershell.exe PATH=C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe CMD="powershell.exe" -NoProfile -NonInteractive -Command "powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\Users\danda\Downloads\_forensic_collect.ps1\""
+PID=7808 PPID=18316 NAME=powershell.exe PATH=C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe CMD=C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe
+PID=8540 PPID=1724 NAME=ProductAgentService.exe PATH= CMD=
+PID=232 PPID=4 NAME=Registry PATH= CMD=
+PID=13256 PPID=5108 NAME=RtkAudUService64.exe PATH=C:\Windows\System32\RtkAudUService64.exe CMD="C:\Windows\System32\RtkAudUService64.exe" -background
+PID=8404 PPID=1724 NAME=RtkAudUService64.exe PATH= CMD=
+PID=19048 PPID=1932 NAME=RuntimeBroker.exe PATH=C:\Windows\System32\RuntimeBroker.exe CMD=C:\Windows\System32\RuntimeBroker.exe -Embedding
+PID=30044 PPID=1932 NAME=RuntimeBroker.exe PATH=C:\Windows\System32\RuntimeBroker.exe CMD=C:\Windows\System32\RuntimeBroker.exe -Embedding
+PID=424 PPID=1932 NAME=RuntimeBroker.exe PATH=C:\Windows\System32\RuntimeBroker.exe CMD=C:\Windows\System32\RuntimeBroker.exe -Embedding
+PID=30788 PPID=1932 NAME=RuntimeBroker.exe PATH=C:\Windows\System32\RuntimeBroker.exe CMD=C:\Windows\System32\RuntimeBroker.exe -Embedding
+PID=14716 PPID=1932 NAME=RuntimeBroker.exe PATH=C:\Windows\System32\RuntimeBroker.exe CMD=C:\Windows\System32\RuntimeBroker.exe -Embedding
+PID=13060 PPID=8112 NAME=SearchFilterHost.exe PATH= CMD=
+PID=31836 PPID=8112 NAME=SearchFilterHost.exe PATH= CMD=
+PID=11016 PPID=8112 NAME=SearchFilterHost.exe PATH= CMD=
+PID=28316 PPID=8112 NAME=SearchFilterHost.exe PATH= CMD=
+PID=3544 PPID=8112 NAME=SearchFilterHost.exe PATH= CMD=
+PID=14792 PPID=8112 NAME=SearchFilterHost.exe PATH= CMD=
+PID=7736 PPID=8112 NAME=SearchFilterHost.exe PATH= CMD=
+PID=24320 PPID=1932 NAME=SearchHost.exe PATH=C:\WINDOWS\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\SearchHost.exe CMD="C:\WINDOWS\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\SearchHost.exe" -ServerName:CortanaUI.AppXstmwaab17q5s3y22tp6apqz7a45vwv65.mca
+PID=8112 PPID=1724 NAME=SearchIndexer.exe PATH= CMD=
+PID=27432 PPID=8112 NAME=SearchProtocolHost.exe PATH= CMD=
+PID=188 PPID=4 NAME=Secure System PATH= CMD=
+PID=24464 PPID=1724 NAME=SecurityHealthService.exe PATH= CMD=
+PID=1724 PPID=1628 NAME=services.exe PATH= CMD=
+PID=10120 PPID=1932 NAME=ShellExperienceHost.exe PATH=C:\WINDOWS\SystemApps\ShellExperienceHost_cw5n1h2txyewy\ShellExperienceHost.exe CMD="C:\WINDOWS\SystemApps\ShellExperienceHost_cw5n1h2txyewy\ShellExperienceHost.exe" -ServerName:App.AppXtk181tbxbce2qsex02s8tw7hfxa9xb3t.mca
+PID=4576 PPID=18244 NAME=ShellHost.exe PATH=C:\Windows\System32\ShellHost.exe CMD="C:\Windows\System32\ShellHost.exe"
+PID=18244 PPID=2628 NAME=sihost.exe PATH=C:\WINDOWS\system32\sihost.exe CMD=sihost.exe
+PID=448 PPID=4 NAME=smss.exe PATH= CMD=
+PID=5984 PPID=1724 NAME=spoolsv.exe PATH= CMD=
+PID=8232 PPID=1724 NAME=sqlwriter.exe PATH= CMD=
+PID=30048 PPID=1932 NAME=StartMenuExperienceHost.exe PATH=C:\WINDOWS\SystemApps\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\StartMenuExperienceHost.exe CMD="C:\WINDOWS\SystemApps\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\StartMenuExperienceHost.exe" -ServerName:FullTrustApp.AppXykjsye98af63ez2annt9djke8trg8stn.mca
+PID=2828 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2728 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=3060 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2836 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=15956 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=17268 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2456 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2448 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2652 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2628 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2524 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=3128 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4312 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4208 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4088 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4340 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4700 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4320 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=3656 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=3244 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=3184 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4072 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4064 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=3712 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2376 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=1336 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=1932 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=8932 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=26752 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2068 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=1452 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=16084 PPID=1724 NAME=svchost.exe PATH=C:\WINDOWS\system32\svchost.exe CMD=C:\WINDOWS\system32\svchost.exe -k LocalSystemNetworkRestricted -p -s webthreatdefusersvc
+PID=5312 PPID=1724 NAME=svchost.exe PATH=C:\WINDOWS\system32\svchost.exe CMD=C:\WINDOWS\system32\svchost.exe -k UnistackSvcGroup -s CDPUserSvc
+PID=24500 PPID=1724 NAME=svchost.exe PATH=C:\WINDOWS\system32\svchost.exe CMD=C:\WINDOWS\system32\svchost.exe -k LocalService -p -s NPSMSvc
+PID=14308 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=8644 PPID=1724 NAME=svchost.exe PATH=C:\WINDOWS\system32\svchost.exe CMD=C:\WINDOWS\system32\svchost.exe -k UnistackSvcGroup -s WpnUserService
+PID=11568 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=22556 PPID=1724 NAME=svchost.exe PATH=C:\WINDOWS\system32\svchost.exe CMD=C:\WINDOWS\system32\svchost.exe -k ClipboardSvcGroup -p -s cbdhsvc
+PID=2340 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2328 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=8188 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=5632 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=3004 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=1260 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=18400 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2148 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2088 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=6484 PPID=1724 NAME=svchost.exe PATH=C:\WINDOWS\system32\svchost.exe CMD=C:\WINDOWS\system32\svchost.exe -k UdkSvcGroup -s UdkUserSvc
+PID=2312 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=25300 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=7716 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=7700 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4204 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=13804 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=8092 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=7892 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=7656 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=6632 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=6624 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=31164 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=7680 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=27216 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=22588 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=10080 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=12704 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=8436 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=12512 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=26092 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=10712 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=7104 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=15964 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=27108 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=12840 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=8356 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=8196 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=5200 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=5192 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=28480 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=8568 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=5716 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=5324 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=17020 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4716 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=10500 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=5184 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4708 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=15740 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=6020 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=6496 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=7676 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=6456 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=6296 PPID=1724 NAME=svchost.exe PATH=C:\WINDOWS\System32\svchost.exe CMD=C:\WINDOWS\System32\svchost.exe -k UnistackSvcGroup
+PID=13648 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2952 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=5948 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=924 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=5896 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=6336 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=15284 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=16224 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4 PPID=0 NAME=System PATH= CMD=
+PID=0 PPID=0 NAME=System Idle Process PATH= CMD=
+PID=7960 PPID=1932 NAME=SystemSettings.exe PATH=C:\Windows\ImmersiveControlPanel\SystemSettings.exe CMD="C:\Windows\ImmersiveControlPanel\SystemSettings.exe" -ServerName:microsoft.windows.immersivecontrolpanel
+PID=3100 PPID=2376 NAME=taskhostw.exe PATH=C:\WINDOWS\system32\taskhostw.exe CMD=taskhostw.exe {222A245B-E637-4AE9-A93F-A59CA119A75E}
+PID=4052 PPID=28112 NAME=Taskmgr.exe PATH= CMD=
+PID=2296 PPID=1932 NAME=TextInputHost.exe PATH=C:\WINDOWS\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\TextInputHost.exe CMD="C:\WINDOWS\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\TextInputHost.exe" -ServerName:InputApp.AppXk0k6mrh4r2q0ct33a9wgbez0x7v9cz5y.mca
+PID=14416 PPID=1932 NAME=unsecapp.exe PATH= CMD=
+PID=24316 PPID=1724 NAME=updater.exe PATH= CMD=
+PID=4420 PPID=1724 NAME=usboesrv.exe PATH= CMD=
+PID=3032 PPID=1724 NAME=usboesrvcl.exe PATH= CMD=
+PID=12464 PPID=1932 NAME=UserOOBEBroker.exe PATH=C:\Windows\System32\oobe\UserOOBEBroker.exe CMD=C:\Windows\System32\oobe\UserOOBEBroker.exe -Embedding
+PID=13816 PPID=1724 NAME=vmcompute.exe PATH= CMD=
+PID=7328 PPID=1932 NAME=Widgets.exe PATH=C:\Program Files\WindowsApps\MicrosoftWindows.Client.WebExperience_526.17301.40.0_x64__cw5n1h2txyewy\Dashboard\Widgets.exe CMD="C:\Program Files\WindowsApps\MicrosoftWindows.Client.WebExperience_526.17301.40.0_x64__cw5n1h2txyewy\Dashboard\Widgets.exe" -ServerName:Microsoft.Windows.DashboardServer
+PID=10608 PPID=1932 NAME=WidgetService.exe PATH=C:\Program Files\WindowsApps\Microsoft.WidgetsPlatformRuntime_1.6.19.0_x64__8wekyb3d8bbwe\WidgetService\WidgetService.exe CMD="C:\Program Files\WindowsApps\Microsoft.WidgetsPlatformRuntime_1.6.19.0_x64__8wekyb3d8bbwe\WidgetService\WidgetService.exe" -RegisterProcessAsComServer -Embedding
+PID=18316 PPID=18124 NAME=WindowsTerminal.exe PATH=C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\WindowsTerminal.exe CMD="C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\WindowsTerminal.exe" -d "C:\Users\danda\Downloads"
+PID=1628 PPID=1492 NAME=wininit.exe PATH= CMD=
+PID=25520 PPID=24284 NAME=winlogon.exe PATH= CMD=
+PID=25176 PPID=17044 NAME=WinRAR.exe PATH= CMD=
+PID=9340 PPID=1932 NAME=WmiPrvSE.exe PATH= CMD=
+PID=2696 PPID=1932 NAME=WmiPrvSE.exe PATH= CMD=
+PID=8964 PPID=1724 NAME=WMIRegistrationService.exe PATH= CMD=
+PID=8868 PPID=1724 NAME=wslservice.exe PATH= CMD=
+
+=== INTERESTING PROCESSES ===
+PID=1932 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=1336 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=1452 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2068 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2088 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2148 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2312 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2328 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2340 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2376 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2448 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2456 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2524 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2628 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2652 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2728 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2828 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=2836 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=3060 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=3128 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=3184 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=3244 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=3656 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=3712 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4064 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4072 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4088 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4208 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4312 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4320 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4700 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4340 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4716 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4708 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=5184 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=5192 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=5200 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=5324 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=5716 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=6020 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=5896 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=924 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=5948 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=6336 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=6456 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=6496 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=6624 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=6632 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=7656 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=7680 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=7700 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=7716 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=7892 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=8092 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=7104 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=8196 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=8356 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=8436 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=10080 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=10712 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=12512 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=12704 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=12840 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=13648 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=7676 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=15284 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=16224 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=15740 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=17020 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=10500 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=15956 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=17268 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=7796 PPID=1724 NAME=bdredline.exe PATH= CMD=
+PID=5632 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=3004 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=24464 PPID=1724 NAME=SecurityHealthService.exe PATH= CMD=
+PID=1260 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=8188 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=25300 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=18400 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=8932 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=14308 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=11568 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=5312 PPID=1724 NAME=svchost.exe PATH=C:\WINDOWS\system32\svchost.exe CMD=C:\WINDOWS\system32\svchost.exe -k UnistackSvcGroup -s CDPUserSvc
+PID=16084 PPID=1724 NAME=svchost.exe PATH=C:\WINDOWS\system32\svchost.exe CMD=C:\WINDOWS\system32\svchost.exe -k LocalSystemNetworkRestricted -p -s webthreatdefusersvc
+PID=8644 PPID=1724 NAME=svchost.exe PATH=C:\WINDOWS\system32\svchost.exe CMD=C:\WINDOWS\system32\svchost.exe -k UnistackSvcGroup -s WpnUserService
+PID=22556 PPID=1724 NAME=svchost.exe PATH=C:\WINDOWS\system32\svchost.exe CMD=C:\WINDOWS\system32\svchost.exe -k ClipboardSvcGroup -p -s cbdhsvc
+PID=6484 PPID=1724 NAME=svchost.exe PATH=C:\WINDOWS\system32\svchost.exe CMD=C:\WINDOWS\system32\svchost.exe -k UdkSvcGroup -s UdkUserSvc
+PID=24500 PPID=1724 NAME=svchost.exe PATH=C:\WINDOWS\system32\svchost.exe CMD=C:\WINDOWS\system32\svchost.exe -k LocalService -p -s NPSMSvc
+PID=26092 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=15964 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=27108 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=22588 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=13804 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=4204 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=31164 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=30372 PPID=1932 NAME=dllhost.exe PATH=C:\WINDOWS\system32\DllHost.exe CMD=C:\WINDOWS\system32\DllHost.exe /Processid:{973D20D7-562D-44B9-B70B-5A0F49CCDF3F}
+PID=27216 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=6296 PPID=1724 NAME=svchost.exe PATH=C:\WINDOWS\System32\svchost.exe CMD=C:\WINDOWS\System32\svchost.exe -k UnistackSvcGroup
+PID=2952 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=8568 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=14376 PPID=1932 NAME=dllhost.exe PATH=C:\WINDOWS\system32\DllHost.exe CMD="C:\WINDOWS\system32\DllHost.exe" /Processid:{559F1A79-1264-4219-9F15-F919BBBB2CA4}
+PID=5476 PPID=1932 NAME=dllhost.exe PATH=C:\WINDOWS\system32\DllHost.exe CMD="C:\WINDOWS\system32\DllHost.exe" /Processid:{6351E20C-35FA-4BE3-98FB-4CABF1363E12}
+PID=28480 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=21444 PPID=1932 NAME=dllhost.exe PATH=C:\WINDOWS\system32\DllHost.exe CMD="C:\WINDOWS\system32\DllHost.exe" /Processid:{B41DB860-64E4-11D2-9906-E49FADC173CA}
+PID=7808 PPID=18316 NAME=powershell.exe PATH=C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe CMD=C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe
+PID=26752 PPID=1724 NAME=svchost.exe PATH= CMD=
+PID=3040 PPID=18316 NAME=powershell.exe PATH=C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe CMD=C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe
+PID=16408 PPID=1932 NAME=dllhost.exe PATH=C:\WINDOWS\system32\DllHost.exe CMD=C:\WINDOWS\system32\DllHost.exe /Processid:{AB8902B4-09CA-4BB6-B78D-A8F59079A8D5}
+PID=20424 PPID=23556 NAME=powershell.exe PATH=C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe CMD="powershell.exe" -NoProfile -NonInteractive -Command "powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\Users\danda\Downloads\_forensic_collect.ps1\""
+PID=18172 PPID=20424 NAME=conhost.exe PATH=C:\WINDOWS\system32\conhost.exe CMD=\??\C:\WINDOWS\system32\conhost.exe 0x4
+PID=3932 PPID=20424 NAME=powershell.exe PATH=C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe CMD="C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File C:\Users\danda\Downloads\_forensic_collect.ps1
+DONE_PHASE1

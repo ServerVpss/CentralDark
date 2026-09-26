@@ -1,0 +1,12 @@
+{
+  "id": "uuid",
+  "timestamp": "ISO-8601 UTC",
+  "origem": "terminal|voz|telefone|sensor",
+  "texto": "string",
+  "intencao": "string",
+  "tags": [
+    "string"
+  ],
+  "risco": "R0|R1|R2|R3|R4",
+  "contexto_memoria": []
+}

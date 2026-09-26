@@ -1,0 +1,57 @@
+{
+  "ecosystem_principal": "/root/CentralDark/ecosystem.config.js (1441 linhas, 18 apps declarados)",
+  "dump_pm2": "/root/.pm2/dump.pm2 (mtime 2026-07-21, 21 entradas — bate com o vivo)",
+  "processos_vivos": 21,
+  "declarados_MAS_NAO_RODANDO": [
+    "CentralDark-BotServer",
+    "CentralDark-CloneDeck",
+    "CentralDark-ContasAdmin",
+    "CentralDark-EliteAnthropic",
+    "CentralDark-EliteWS",
+    "CentralDark-EvolucaoIAs",
+    "CentralDark-GuardiaoAnalista",
+    "CentralDark-MultiZap",
+    "CentralDark-Respiracao",
+    "CentralDark-SyncDrive",
+    "CentralDark-TelePainelDeploy",
+    "CentralDark-Zentinel"
+  ],
+  "RODANDO_MAS_NAO_DECLARADOS": [
+    "CentralDark-ArtifactsCrafter",
+    "CentralDark-ArtifactsBuilder",
+    "CentralDark-Hermes",
+    "CentralDark-GrafoVivo",
+    "CentralDark-Memoria",
+    "CentralDark-ArsenalProxy",
+    "CentralDark-OAuthBroker",
+    "CentralDark-PiveteSync",
+    "CentralDark-AiDiag",
+    "CentralDark-AiPromptAPI",
+    "CentralDark-LovableBridge",
+    "CentralDark-HermesVerificador",
+    "CentralDark-ArsenalAdapter",
+    "CentralDark-GuardiaoBot",
+    "CentralDark-GuardiaoBridge"
+  ],
+  "coincidem": [
+    "CentralDark-EliteHTTP",
+    "CentralDark-GraphPanel",
+    "CentralDark-GuardiaoConsciencia",
+    "CentralDark-HubBot",
+    "CentralDark-MCP",
+    "CentralDark-WebhookDeploy"
+  ],
+  "STATE_DRIFT_SEVERIDADE": "ALTA — ecosystem.config.js NAO representa o estado vivo. 12 declarados nao rodam, 15 rodam sem declaracao.",
+  "fonte_de_verdade_real": "/root/.pm2/dump.pm2 — unico artefato que bate 1:1 com o vivo",
+  "inventarios_documentados": {
+    "docs/CONSCIENCIA/INVENTARIO-PM2-VPS.md": "existe, mtime 2026-07-05, desatualizado ~27 dias",
+    "mem/architecture/inventario-pm2-vps.md": "existe, mtime 2026-07-14, desatualizado ~18 dias"
+  },
+  "mcp_version_drift": "package.json 0.3.0 vs dist 0.4.0 vs runtime 0.4.0; dist/ modificado e NAO commitado",
+  "mcp_arquivos_nao_rastreados": [
+    "manifesto-destrutivas.json",
+    "scripts/",
+    "src/lib/admin-guard.js",
+    "tests/"
+  ]
+}

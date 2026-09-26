@@ -1,0 +1,11 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@hapi\hoek\lib\utils.js
+
+'use strict';
+
+const internals = {};
+
+
+exports.keys = function (obj, options = {}) {
+
+    return options.symbols !== false ? Reflect.ownKeys(obj) : Object.getOwnPropertyNames(obj);  // Defaults to true
+};

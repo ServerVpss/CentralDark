@@ -1,0 +1,30 @@
+{
+  "current_conversation_sources": [
+    "Texto colado(20260824-094838).txt",
+    "Untitled-2.txt",
+    "previous generated handoff zips"
+  ],
+  "recovered_library_raw": [
+    "Screenpipe Activity reshapes CentralDark integratio1n.html",
+    "Markdown(20260808-063647).md colado",
+    "Markdown(20260816-133256).md colado"
+  ],
+  "retrieval_refs": [
+    "turn49file0 README master handoff",
+    "turn49file1 PROOF",
+    "turn49file2 SESSION_RASTRO",
+    "turn49file3 Aug08 handoff",
+    "turn49file5 Screenpipe session export",
+    "turn49file7 Hermes/skills transcript snippets",
+    "turn49file8 historical spec-vs-execution conflict",
+    "turn49file9 Aug16 repo review",
+    "turn49file13 governance/partitura",
+    "turn55file0 PR1115 live",
+    "turn56file0 PR1119 live"
+  ],
+  "web_official_sources": [
+    "https://docs.npmjs.com/commands/npm-ls/",
+    "https://docs.npmjs.com/using-npm/config/"
+  ],
+  "note": "Refs are provenance pointers from this ChatGPT execution; full raw bytes are included only where materialization was available."
+}

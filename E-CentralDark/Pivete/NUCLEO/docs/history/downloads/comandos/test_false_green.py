@@ -1,0 +1,19 @@
+import tempfile, unittest
+from pathlib import Path
+from runtime.types import Critique, TransferResult
+from runtime.ledger import Ledger
+from runtime.gates import evaluate_gates
+from runtime.evidence import hash_tree
+class T(unittest.TestCase):
+ def test_correct_without_mechanism_blocks(self):
+  with tempfile.TemporaryDirectory() as td:
+   b=Path(td); i=b/'i'; i.mkdir(); l=Ledger(b/'l','m'); l.append('BEGIN',{})
+   c=Critique('','','','',''); tr=[TransferResult('x','p','SIM','r','SIM',False,False)]
+   g=evaluate_gates(input_hash_before=hash_tree(i),input_dir=i,positive=[],negative=[],ledger=l,critique=c,transfer_results=tr,thread_preserved=True,artifact_exists=True)
+   self.assertFalse(next(x for x in g if x.gate=='G_ERROR_MECHANISM').passed)
+ def test_repetition_blocks(self):
+  with tempfile.TemporaryDirectory() as td:
+   b=Path(td); i=b/'i'; i.mkdir(); l=Ledger(b/'l','m'); l.append('BEGIN',{})
+   c=Critique('erro','mecanismo descrito com clareza suficiente','parecia','prova','corrigir'); tr=[TransferResult('x','p','NÃO_VERIFICADO','r','NÃO_VERIFICADO',True,True)]
+   g=evaluate_gates(input_hash_before=hash_tree(i),input_dir=i,positive=[],negative=[],ledger=l,critique=c,transfer_results=tr,thread_preserved=True,artifact_exists=True)
+   self.assertFalse(next(x for x in g if x.gate=='G_NON_REPETITION').passed)

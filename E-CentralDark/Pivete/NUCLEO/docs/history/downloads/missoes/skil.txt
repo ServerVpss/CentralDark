@@ -1,0 +1,92 @@
+/goal
+
+MODO=
+ATIVAR_QA_AUTOCONSULTATIVO_COMO_DELTA_DA_MISSAO_ATUAL
+
+ALVO=
+C:\Users\danda\AppData\Local\hermes\profiles\pivete\skills\qa.teste-de-software.MARKDOWN
+
+TRAVA_DE_CONTINUIDADE=
+
+Este goal NÃO cria missão nova.
+Preserve a missão, objetivo, escopo, Writer, worktree, branch, HEAD, checkpoint,
+progresso e próximo estado já ativos.
+
+Não executar outro /goal.
+Não reiniciar do zero.
+Não criar V1/V2/V3/NOVO/FINAL.
+Não abandonar alteração em andamento.
+Não adaptar teste para esconder defeito.
+Não ler secrets, .env, tokens, sessions ou SSH.
+Não executar Enxame/API sem pedido explícito.
+Não fazer merge, deploy, VPS, produção, force, rebase ou reset --hard.
+
+RESPOSTA_INICIAL=
+
+DELTA_RECEBIDO=SIM
+MISSAO_ATUAL_PRESERVADA=SIM
+VERSAO_PARALELA=NAO
+PROXIMO_ESTADO=<ESTADO_JA_PRESERVADO>
+
+DEPOIS_CONTINUE_AUTOMATICAMENTE=
+
+1. Entrar exatamente no ALVO.
+2. Ler SKILL.md integralmente.
+3. Executar:
+   node runtime/orchestrator.mjs --self-map
+4. Se retornar DRIFT:
+   node runtime/orchestrator.mjs --self-map --apply
+   node runtime/orchestrator.mjs --self-map
+5. Executar:
+   node runtime/orchestrator.mjs --verify
+6. Não aceitar PASS se existir FAIL, SKIPPED, UNKNOWN, leitura de secret,
+   erro de consulta, ausência de match tratada como verde ou Judge ausente
+   apresentado como veredito.
+7. Executar demo local sem API:
+   node runtime/orchestrator.mjs
+8. Conectar a skill à MISSÃO_ATUAL somente como DELTA.
+9. Para eventos futuros, usar runtime/update-bot.mjs por stdin ou JSONL.
+10. Só declarar DELTA_INCORPORADO=SIM após verify PASS.
+
+ENXAME=
+
+Somente se a missão atual pedir explicitamente:
+node runtime/orchestrator.mjs --enxame
+
+Fallback permitido:
+CENTRALDARK_API_KEY → OPENAI_API_KEY → ANTHROPIC_API_KEY → ENXAME_UNAVAILABLE
+
+Nunca procurar chave em arquivo.
+Nunca imprimir chave.
+
+RECIBO_FINAL=
+
+STATUS=
+MISSAO_ATUAL_PRESERVADA=
+PROXIMO_ESTADO_PRESERVADO=
+MANIFEST_STATUS=
+MANIFEST_HASH=
+GATILHOS_INDEXADOS=
+NODE_CHECK_TOTAL=
+TESTS_TOTAL=
+PASS=
+FAIL=
+SKIPPED=
+UNKNOWN=
+DEMO=
+CONSULTA_SELETIVA=
+PRIORIDADE_SEM_GATILHO_BLOQUEADA=
+PATH_TRAVERSAL_BLOQUEADO=
+PROVA_INCOMPLETA_BLOQUEADA=
+DEDUPLICACAO_ENTRE_SESSOES=
+FABLE_ADVERSARIAL_PRESENTE=
+API_FALLBACK=
+LEITURA_DE_ENV_FILE=NAO
+AUTO_APPLY=
+VERSAO_PARALELA=NAO
+MERGE=NAO
+DEPLOY=NAO
+VPS=INTOCADA
+PRODUCAO=INTOCADA
+DELTA_INCORPORADO=
+PROXIMO_ESTADO=

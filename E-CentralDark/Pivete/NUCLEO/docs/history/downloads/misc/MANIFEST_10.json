@@ -1,0 +1,31 @@
+{
+  "package": "CENTRALDARK_PADRAO_OPERACIONAL_COMPACTO_PACK",
+  "version_family": "same_family_update",
+  "created_at_utc": "2026-08-24T09:23:04+00:00",
+  "theme": "Padrão operacional compacto da CentralDark",
+  "artifacts_expected": [
+    "CENTRALDARK_PADRAO_OPERACIONAL_COMPACTO.png",
+    "CENTRALDARK_PADRAO_OPERACIONAL_COMPACTO.md",
+    "CENTRALDARK_PADRAO_OPERACIONAL_COMPACTO.mmd",
+    "RASTRO.md",
+    "SHA256SUMS.txt",
+    "MANIFEST.json",
+    "CENTRALDARK_PADRAO_OPERACIONAL_COMPACTO_PACK.zip"
+  ],
+  "canonical_boot": "CHEFE_INTENT → DESTINATION_LOCK → MEASURE_LIVE_STATE → SEARCH_ALL_MATERIAL_PATHS → RESOLVE_CANONICAL_OWNER → ACQUIRE_WRITER_IF_NEEDED → EXECUTE_MINIMAL_DELTA → COLLECT_EVIDENCE → COUNTERPROOF → REALITY_JUDGE → DESTINATION_PROVED ? RETURN : REMEDIATE_OR_ESCALATE_HUMAN_FRONTIER",
+  "compressed_boot": "INTENT → DESTINATION_LOCK → STATE_ALIVE → PATH_DISCOVERY → OWNER/WRITER_GUARD → EXECUTE → EVIDENCE → COUNTERPROOF → REALITY_JUDGE → RETURN_ONLY_IF_PROVED_OR_HUMAN_FRONTIER",
+  "proof": [
+    "O pacote contém os 7 artefatos previstos: PNG, Markdown, Mermaid, RASTRO, SHA256SUMS, MANIFEST e ZIP.",
+    "O fluxo canônico inclui explicitamente COLLECT_EVIDENCE, COUNTERPROOF e REALITY_JUDGE.",
+    "Os hashes SHA-256 foram calculados sobre cada artefato gerado."
+  ],
+  "counterproof": [
+    "Hash_MATCH não foi tratado como prova semântica; o manifesto declara esse limite.",
+    "FIXED_POINT não foi declarado para runtime externo, repo ou deploy inexistente.",
+    "HUMAN_FRONTIER não foi inventada; o pacote é documental e visual, não simulação de execução externa."
+  ],
+  "semantic_limits": [
+    "Hash prova identidade de bytes, não correção semântica.",
+    "Este pacote não afirma deploy, runtime externo ou mutação de repositório."
+  ]
+}

@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.1 Seu primeiro prompt: o Mínimo Viável | O Manual Oculto da IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    .code-box { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace; }
+
+    /* Dark mode - bordas e linhas divisorias mais suaves */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+
+    /* SVG adaptado ao tema claro (so atinge os diagramas) */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+
+    /* Pulso para os blocos do SVG */
+    @keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+      .wf-a:nth-child(2){animation-delay:.25s}
+      .wf-a:nth-child(3){animation-delay:.5s}
+      .wf-a:nth-child(4){animation-delay:.75s}
+    }
+
+    /* ===== LIGHT MODE OVERRIDES — Parte 1: Base ===== */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-200 { color: #1f2937; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* ===== Parte 2: Cores de acento (trilha Blue — T2) ===== */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .text-blue-300 { color: #1d4ed8; }
+    html:not(.dark) .text-blue-200 { color: #1e40af; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .bg-blue-900\/30 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.06); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .border-blue-500\/20 { border-color: rgba(37, 99, 235, 0.18); }
+    html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37, 99, 235, 0.18); }
+    html:not(.dark) .hover\:border-blue-500\/30:hover { border-color: rgba(37, 99, 235, 0.25); }
+
+    /* sky (ciano secundario) */
+    html:not(.dark) .bg-sky-500\/10 { background-color: rgba(14, 165, 233, 0.08); }
+    html:not(.dark) .bg-sky-900\/30 { background-color: rgba(14, 165, 233, 0.08); }
+    html:not(.dark) .border-sky-500\/30 { border-color: rgba(14, 165, 233, 0.25); }
+    html:not(.dark) .text-sky-300 { color: #0284c7; }
+
+    /* ===== Parte 3: Remove gradientes + cores especiais ===== */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(185, 28, 28, 0.06); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(185, 28, 28, 0.22); }
+    html:not(.dark) .border-red-500\/20 { border-color: rgba(185, 28, 28, 0.18); }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+
+    /* ===== Parte 4: Navbar ===== */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <!-- Logo + INEMA.CLUB -->
+        <div class="flex items-center space-x-3">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300 transition-colors">
+            <span class="text-xl">🧠</span>
+            <span class="font-bold text-base hidden sm:inline">Manual Oculto da IA</span>
+          </a>
+          <span class="text-neutral-600 hidden sm:inline">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition-colors">INEMA.CLUB</a>
+        </div>
+
+        <!-- Trilhas + Theme Toggle -->
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <!-- Trilha 1 (inativa) -->
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <!-- Trilha 2 (ativa) -->
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+            <span class="sm:hidden">T2</span><span class="hidden sm:inline">Prática</span>
+          </a>
+          <!-- Trilha 3 (inativa) -->
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span><span class="hidden sm:inline">Avançado</span>
+          </a>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1">
+            <svg id="theme-toggle-dark-icon" class="hidden w-4 h-4 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-4 h-4 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Breadcrumb -->
+    <div class="flex items-center space-x-2 text-sm text-neutral-500 mb-6">
+      <a href="../../index.html" class="hover:text-blue-400 transition-colors">Início</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-blue-400 transition-colors">Trilha 2</a>
+      <span>/</span>
+      <span class="text-blue-400">Módulo 2.1</span>
+    </div>
+
+    <!-- Header do Módulo -->
+    <div class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 rounded-2xl border border-blue-500/30 p-6 sm:p-8 mb-8">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-2xl">
+          🚀
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center space-x-3 mb-2">
+            <span class="text-xs font-semibold text-blue-400 bg-blue-500/10 border border-blue-500/30 px-2 py-1 rounded-full uppercase tracking-wider">MÓDULO 2.1</span>
+            <span class="text-xs text-neutral-500">Trilha 2 — Prática</span>
+          </div>
+          <h1 class="text-2xl font-bold text-neutral-100 mb-2">🚀 Seu primeiro prompt: o Mínimo Viável</h1>
+          <p class="text-neutral-300 leading-relaxed">
+            Chega de teoria — mão na massa. Você não vai escrever 300 linhas. Vai montar um
+            <strong class="text-blue-400">Prompt Mínimo Viável (PMV)</strong>: cinco bloquinhos colados, rodados na hora, e crescidos
+            só quando algo der errado de verdade. Ao fim deste módulo, você terá um system prompt completo, montado com as suas
+            próprias mãos a partir da biblioteca de blocos.
+          </p>
+          <!-- Stats -->
+          <div class="flex flex-wrap gap-4 mt-4">
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-blue-400">📋</span><span>6 tópicos</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-blue-400">⏱</span><span>~35 min</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-blue-400">🎯</span><span>Prático</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-blue-400">🛠️</span><span>Mão na massa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SVG FUTURISTA: a montagem dos 5 blocos do PMV -->
+    <div class="rounded-2xl border border-blue-500/30 bg-dark-900/40 p-4 mb-10 overflow-hidden">
+      <svg viewBox="0 0 960 360" class="w-full h-auto" role="img" aria-label="Diagrama da montagem de um Prompt Mínimo Viável: cinco peças — identidade, tom, ferramentas, segurança e loop — empilham-se uma sobre a outra para formar um único system prompt enxuto, pronto para rodar">
+        <defs>
+          <linearGradient id="m21-grad-bl" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#2563eb"/>
+          </linearGradient>
+          <linearGradient id="m21-grad-cy" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#0ea5e9"/>
+          </linearGradient>
+          <filter id="m21-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="1.8" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <pattern id="m21-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+            <circle cx="1.2" cy="1.2" r="1.2" fill="#60a5fa" opacity="0.10"/>
+          </pattern>
+          <marker id="m21-ah" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#60a5fa"/>
+          </marker>
+          <marker id="m21-ahc" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/>
+          </marker>
+        </defs>
+
+        <!-- Fundo grid -->
+        <rect x="0" y="0" width="960" height="360" fill="url(#m21-grid)" rx="16"/>
+
+        <!-- Rótulos de coluna -->
+        <text x="250" y="34" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="12" opacity="0.7">as 5 peças (a biblioteca de blocos)</text>
+        <text x="720" y="34" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="12" opacity="0.7">o PMV montado · pronto pra rodar</text>
+        <line x1="480" y1="20" x2="480" y2="344" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="6,6" opacity="0.35"/>
+
+        <!-- LADO ESQUERDO: as 5 pecas soltas, empilhando -->
+        <!-- 1 identidade -->
+        <rect x="60" y="58" width="360" height="44" rx="10" fill="#0e1830" stroke="url(#m21-grad-bl)" stroke-width="2" class="wf-a"/>
+        <text x="80" y="79" fill="#60a5fa" font-family="Inter,sans-serif" font-size="12" font-weight="700">①</text>
+        <text x="104" y="79" fill="#93c5fd" font-family="Inter,sans-serif" font-size="12" font-weight="600">&lt;identidade&gt;</text>
+        <text x="104" y="94" fill="#9ca3af" font-family="Inter,sans-serif" font-size="10">quem · onde · objetivo em 1 frase</text>
+
+        <!-- 2 tom -->
+        <rect x="60" y="110" width="360" height="44" rx="10" fill="#0e1830" stroke="url(#m21-grad-bl)" stroke-width="2" class="wf-a"/>
+        <text x="80" y="131" fill="#60a5fa" font-family="Inter,sans-serif" font-size="12" font-weight="700">②</text>
+        <text x="104" y="131" fill="#93c5fd" font-family="Inter,sans-serif" font-size="12" font-weight="600">&lt;tom&gt;</text>
+        <text x="104" y="146" fill="#9ca3af" font-family="Inter,sans-serif" font-size="10">concisão + 1 regra de honestidade</text>
+
+        <!-- 3 ferramentas -->
+        <rect x="60" y="162" width="360" height="44" rx="10" fill="#0e1b26" stroke="#38bdf8" stroke-width="2" class="wf-a"/>
+        <text x="80" y="183" fill="#38bdf8" font-family="Inter,sans-serif" font-size="12" font-weight="700">③</text>
+        <text x="104" y="183" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="12" font-weight="600">&lt;ferramentas&gt;</text>
+        <text x="104" y="198" fill="#9ca3af" font-family="Inter,sans-serif" font-size="10">só o que existe, com gatilho</text>
+
+        <!-- 4 seguranca -->
+        <rect x="60" y="214" width="360" height="44" rx="10" fill="#0e1830" stroke="url(#m21-grad-bl)" stroke-width="2" class="wf-a"/>
+        <text x="80" y="235" fill="#60a5fa" font-family="Inter,sans-serif" font-size="12" font-weight="700">④</text>
+        <text x="104" y="235" fill="#93c5fd" font-family="Inter,sans-serif" font-size="12" font-weight="600">&lt;seguranca&gt;</text>
+        <text x="104" y="250" fill="#9ca3af" font-family="Inter,sans-serif" font-size="10">o punhado de NUNCA reais, com porquê</text>
+
+        <!-- 5 loop -->
+        <rect x="60" y="266" width="360" height="44" rx="10" fill="#0e1b26" stroke="#38bdf8" stroke-width="2" class="wf-a"/>
+        <text x="80" y="287" fill="#38bdf8" font-family="Inter,sans-serif" font-size="12" font-weight="700">⑤</text>
+        <text x="104" y="287" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="12" font-weight="600">&lt;loop&gt;</text>
+        <text x="104" y="302" fill="#9ca3af" font-family="Inter,sans-serif" font-size="10">aterrar → … → narrar (se for agente)</text>
+
+        <!-- setas de montagem: as 5 pecas viajam pra direita -->
+        <path d="M424,80 C470,80 470,128 519,128" fill="none" stroke="#60a5fa" stroke-width="1.6" opacity="0.5" marker-end="url(#m21-ah)"/>
+        <path d="M424,132 C468,132 468,150 519,150" fill="none" stroke="#60a5fa" stroke-width="1.6" opacity="0.5" marker-end="url(#m21-ah)"/>
+        <path d="M424,184 C460,184 460,184 519,184" fill="none" stroke="#38bdf8" stroke-width="1.6" opacity="0.5" marker-end="url(#m21-ahc)"/>
+        <path d="M424,236 C468,236 468,218 519,218" fill="none" stroke="#60a5fa" stroke-width="1.6" opacity="0.5" marker-end="url(#m21-ah)"/>
+        <path d="M424,288 C470,288 470,240 519,240" fill="none" stroke="#38bdf8" stroke-width="1.6" opacity="0.5" marker-end="url(#m21-ahc)"/>
+
+        <!-- LADO DIREITO: o prompt unico montado (em destaque, glow) -->
+        <g filter="url(#m21-glow)">
+          <rect x="520" y="60" width="380" height="240" rx="14" fill="#0e1830" stroke="url(#m21-grad-bl)" stroke-width="2.5"/>
+        </g>
+        <circle cx="540" cy="80" r="4" fill="#f87171"/><circle cx="554" cy="80" r="4" fill="#fbbf24"/><circle cx="568" cy="80" r="4" fill="#60a5fa"/>
+        <text x="884" y="84" text-anchor="end" fill="#6b7280" font-family="Inter,sans-serif" font-size="10">system_prompt.md</text>
+
+        <!-- linhas empilhadas dentro do prompt -->
+        <rect x="540" y="100" width="340" height="30" rx="7" fill="#13213f" stroke="#60a5fa" stroke-width="1.4"/>
+        <text x="556" y="119" fill="#93c5fd" font-family="Inter,sans-serif" font-size="11" font-weight="600">① &lt;identidade&gt;</text>
+        <rect x="540" y="136" width="340" height="30" rx="7" fill="#13213f" stroke="#60a5fa" stroke-width="1.4"/>
+        <text x="556" y="155" fill="#93c5fd" font-family="Inter,sans-serif" font-size="11" font-weight="600">② &lt;tom&gt;</text>
+        <rect x="540" y="172" width="340" height="30" rx="7" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.4"/>
+        <text x="556" y="191" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="11" font-weight="600">③ &lt;ferramentas&gt;</text>
+        <rect x="540" y="208" width="340" height="30" rx="7" fill="#13213f" stroke="#60a5fa" stroke-width="1.4"/>
+        <text x="556" y="227" fill="#93c5fd" font-family="Inter,sans-serif" font-size="11" font-weight="600">④ &lt;seguranca&gt;</text>
+        <rect x="540" y="244" width="340" height="30" rx="7" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.4"/>
+        <text x="556" y="263" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="11" font-weight="600">⑤ &lt;loop&gt;</text>
+
+        <!-- selo "rode" -->
+        <rect x="700" y="280" width="180" height="10" rx="5" fill="#102a20" opacity="0"/>
+        <text x="710" y="293" fill="#60a5fa" font-family="Inter,sans-serif" font-size="11" font-weight="700">▶ rode · observe · só então cresça</text>
+      </svg>
+    </div>
+
+    <!-- CONTEÚDO DETALHADO -->
+    <h2 class="text-2xl font-bold mb-6">Conteúdo detalhado</h2>
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">1</span>
+        <h2 class="text-2xl font-bold">O que é o Prompt Mínimo Viável</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O erro número um de quem começa a escrever system prompt é o mesmo: <strong class="text-blue-400">despejar tudo de uma vez</strong>.
+        Trezentas linhas de "sempre faça", "nunca faça", "lembre-se de", "é muito importante que". O resultado? Um prompt inchado,
+        cheio de regra que o modelo já obedecia sozinho, impossível de depurar quando algo dá errado. O <strong class="text-blue-400">PMV</strong>
+        faz o contrário: começa pequeno, roda, e só cresce sob pressão real.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">🚀</span> A ideia em uma frase</h3>
+        <p class="text-neutral-300 leading-relaxed mb-3">
+          O Prompt Mínimo Viável é o <strong class="text-blue-400">menor system prompt que já te serve</strong> — cinco bloquinhos,
+          nada de enfeite — montado pra rodar <em>hoje</em>. Ele não é o prompt final; é o ponto de partida que você vai
+          fazer evoluir com evidência, não com palpite.
+        </p>
+        <p class="text-neutral-300 leading-relaxed text-sm">
+          A regra de ouro vem direto do método: <strong class="text-blue-400">"Não comece com 300 linhas. Comece com 5 blocos."</strong>
+          Rode. Só adicione um bloco quando um comportamento ruim <em>real</em> aparecer — e adicione com porquê e com teste.
+        </p>
+      </div>
+
+      <!-- O que e -->
+      <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5 mb-4">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">O que é</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          Um system prompt enxuto formado por cinco blocos prontos — <span class="code-box text-blue-400">identidade</span>,
+          <span class="code-box text-blue-400">tom</span>, <span class="code-box text-sky-300">ferramentas</span>,
+          <span class="code-box text-blue-400">segurança</span> e <span class="code-box text-sky-300">loop</span> — copiados da biblioteca,
+          com os <span class="code-box">{espaços}</span> preenchidos pro seu caso. É a versão "carro andando" do prompt: nada de luxo,
+          mas sai da garagem.
+        </p>
+      </div>
+
+      <!-- Por que aprender -->
+      <div class="bg-dark-800 border border-dark-600 rounded-xl p-5 mb-4">
+        <h3 class="text-lg font-semibold text-neutral-200 mb-3">Por que começar assim</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          Porque um prompt pequeno é um prompt que você <em>entende</em>. Quando a IA faz algo estranho, num PMV você sabe exatamente
+          onde olhar — são cinco blocos, não trezentas linhas. E porque a maioria das "regras" que as pessoas escrevem é desperdício:
+          o modelo já faz aquilo. Começar pequeno te força a só escrever o que realmente muda o comportamento.
+        </p>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🧱</div>
+          <div class="text-xs font-semibold text-neutral-200">5 blocos</div>
+          <div class="text-xs text-neutral-500 mt-1">não 300 linhas</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">▶️</div>
+          <div class="text-xs font-semibold text-neutral-200">Roda hoje</div>
+          <div class="text-xs text-neutral-500 mt-1">ponto de partida</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">📈</div>
+          <div class="text-xs font-semibold text-neutral-200">Cresce com motivo</div>
+          <div class="text-xs text-neutral-500 mt-1">só sob pressão real</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🔍</div>
+          <div class="text-xs font-semibold text-neutral-200">Fácil de depurar</div>
+          <div class="text-xs text-neutral-500 mt-1">você entende cada peça</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">2</span>
+        <h2 class="text-2xl font-bold">Os 5 blocos do PMV</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O PMV tem exatamente cinco peças, cada uma com um trabalho. Olhe o diagrama lá em cima: à esquerda, as cinco peças soltas;
+        à direita, elas empilhadas num prompt só. Veja o que cada uma faz — e por que essas cinco, nem mais nem menos.
+      </p>
+
+      <!-- Timeline dos 5 blocos -->
+      <div class="space-y-4 mb-6">
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+            <span class="text-blue-400 text-lg">🪪</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-blue-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-blue-400 mb-1">1. <span class="code-box">&lt;identidade&gt;</span> — quem é, onde está, pra quê</h4>
+            <p class="text-sm text-neutral-500 mb-2">O bloco que abre. Sem ele, a IA não sabe o papel que está fazendo.</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              Quem/onde/quando mais o objetivo em <strong class="text-blue-400">uma frase</strong>. "Você é X, papel Y, operando em Z.
+              Seu objetivo é W." É a primeira linha do system prompt e a que mais molda tudo que vem depois.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+            <span class="text-blue-400 text-lg">🗣️</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-blue-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-blue-400 mb-1">2. <span class="code-box">&lt;tom&gt;</span> — como soa + honestidade</h4>
+            <p class="text-sm text-neutral-500 mb-2">O bloco de maior ROI. Pouca palavra, muito efeito.</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              Concisão (responda no menor tamanho que resolva) mais <strong class="text-blue-400">uma regra de honestidade</strong>
+              (verdade acima de bajulação; ao errar, assuma). Esse bloco sozinho já elimina metade das respostas que dão raiva.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
+            <span class="text-sky-300 text-lg">🛠️</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-sky-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-sky-300 mb-1">3. <span class="code-box">&lt;ferramentas&gt;</span> — só o que existe, com gatilho</h4>
+            <p class="text-sm text-neutral-500 mb-2">Opcional: só se a sua IA usa ferramentas (buscar, rodar código, etc.).</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              Para cada ferramenta: <strong class="text-sky-300">quando</strong> usar (gatilho), o pré-requisito, e a exclusão.
+              Nunca liste uma ferramenta que não existe — é o jeito mais rápido de fazer a IA inventar que tem poderes que não tem.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+            <span class="text-blue-400 text-lg">🛡️</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-blue-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-blue-400 mb-1">4. <span class="code-box">&lt;seguranca&gt;</span> — o punhado de NUNCA, com porquê</h4>
+            <p class="text-sm text-neutral-500 mb-2">Os limites reais — poucos, e cada um com a razão.</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              Não uma muralha de proibições genéricas, mas <strong class="text-blue-400">os poucos "nunca" que importam</strong> pro seu
+              caso — cada um com o porquê. Declare o princípio, não a mecânica. "Nunca dê conselho médico específico" vale mais que dez regras vagas.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
+            <span class="text-sky-300 text-lg">🔄</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-dark-600 rounded-xl p-5">
+            <h4 class="font-semibold text-sky-300 mb-1">5. <span class="code-box">&lt;loop&gt;</span> — aterrar → … → narrar</h4>
+            <p class="text-sm text-neutral-500 mb-2">Opcional: só se a sua IA é um agente (executa passos, usa ferramentas em sequência).</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              O ciclo de trabalho: aterrar no estado real, raciocinar, agir, <strong class="text-blue-400">observar o resultado</strong>,
+              reavaliar, verificar, narrar. É o que separa um agente disciplinado de um que "tateia". Pra um chatbot simples, pule.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-sky-900/30 border border-sky-500/30 rounded-xl p-4 mb-5">
+        <div class="flex items-start space-x-3">
+          <span class="text-sky-300 text-lg flex-shrink-0">🎯</span>
+          <div>
+            <p class="text-sm font-semibold text-sky-300 mb-1">Dois são opcionais</p>
+            <p class="text-sm text-neutral-300">
+              <span class="code-box text-blue-400">identidade</span>, <span class="code-box text-blue-400">tom</span> e
+              <span class="code-box text-blue-400">segurança</span> entram quase sempre. Já
+              <span class="code-box text-sky-300">ferramentas</span> e <span class="code-box text-sky-300">loop</span> só fazem sentido
+              se a sua IA <em>usa</em> ferramentas ou <em>executa</em> tarefas em vários passos. Persona de chat puro? Fique nos três primeiros.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🪪</div>
+          <div class="text-xs font-semibold text-neutral-200">identidade</div>
+          <div class="text-xs text-neutral-500 mt-1">quem/onde/objetivo</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🗣️</div>
+          <div class="text-xs font-semibold text-neutral-200">tom</div>
+          <div class="text-xs text-neutral-500 mt-1">concisão + honestidade</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-sky-300 text-lg mb-1">🛠️</div>
+          <div class="text-xs font-semibold text-neutral-200">ferramentas</div>
+          <div class="text-xs text-neutral-500 mt-1">opcional · com gatilho</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🛡️</div>
+          <div class="text-xs font-semibold text-neutral-200">segurança</div>
+          <div class="text-xs text-neutral-500 mt-1">poucos NUNCA</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-sky-300 text-lg mb-1">🔄</div>
+          <div class="text-xs font-semibold text-neutral-200">loop</div>
+          <div class="text-xs text-neutral-500 mt-1">opcional · se agente</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">3</span>
+        <h2 class="text-2xl font-bold">Montar do zero, copiando blocos</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Agora a parte boa: montar de verdade. Você não escreve do nada — você <strong class="text-blue-400">copia blocos da biblioteca</strong>
+        e troca o que está <span class="code-box">{entre chaves}</span>. Vamos montar um PMV completo para um caso concreto: um
+        <strong class="text-blue-400">assistente de e-mail</strong> que escreve respostas curtas e educadas. Siga os três passos.
+      </p>
+
+      <!-- Os 3 passos -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5">
+          <div class="text-blue-400 text-2xl mb-2">1️⃣</div>
+          <h3 class="text-base font-semibold text-blue-400 mb-2">Escolha a receita</h3>
+          <p class="text-neutral-300 text-sm leading-relaxed">
+            A biblioteca traz três receitas prontas. Pra um assistente de e-mail (chat, sem ferramentas), use a receita
+            <strong class="text-blue-400">"Persona de produto"</strong>: identidade + persona + tom + segurança.
+          </p>
+        </div>
+        <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5">
+          <div class="text-blue-400 text-2xl mb-2">2️⃣</div>
+          <h3 class="text-base font-semibold text-blue-400 mb-2">Copie os blocos</h3>
+          <p class="text-neutral-300 text-sm leading-relaxed">
+            Pegue o texto de cada bloco da biblioteca, exatamente como está. Não reescreva do zero — os blocos já destilam
+            padrões reais. Você só vai <strong class="text-blue-400">colar e ajustar</strong>.
+          </p>
+        </div>
+        <div class="bg-dark-800 border border-sky-500/30 rounded-xl p-5">
+          <div class="text-sky-300 text-2xl mb-2">3️⃣</div>
+          <h3 class="text-base font-semibold text-sky-300 mb-2">Preencha as chaves</h3>
+          <p class="text-neutral-300 text-sm leading-relaxed">
+            Troque cada <span class="code-box">{espaço}</span> pelo seu caso: o <span class="code-box">{NOME}</span>, o
+            <span class="code-box">{PAPEL}</span>, o <span class="code-box">{objetivo}</span>. O que não tiver chave, deixa como veio.
+          </p>
+        </div>
+      </div>
+
+      <!-- Caixa mono: o PMV montado de verdade -->
+      <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5 mb-5">
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-xs font-semibold text-blue-400">PMV montado — assistente de e-mail <span class="font-normal text-neutral-500">system_prompt.md</span></div>
+          <span class="text-xs text-neutral-500 code-box">3 blocos · ~14 linhas</span>
+        </div>
+        <pre class="bg-dark-900 border-l-2 border-blue-500 rounded p-4 font-mono text-xs text-neutral-300 overflow-x-auto code-box leading-relaxed"><span class="text-blue-400">&lt;identidade&gt;</span>
+Você é a Mia, uma assistente de e-mail, operando dentro do cliente de e-mail do usuário.
+Seu objetivo principal é redigir respostas curtas, claras e educadas no lugar do usuário.
+<span class="text-blue-400">&lt;/identidade&gt;</span>
+
+<span class="text-blue-400">&lt;tom&gt;</span>
+- Responda no menor tamanho que resolva. Um e-mail de resposta cabe em 2 a 4 frases.
+- Use prosa, não listas, a menos que o usuário peça itens.
+- Verdade e honestidade acima de deferência. Sem bajulação, sem encher linguiça.
+- Ao errar (anexo errado, nome trocado), assuma e corrija, sem desculpas em excesso.
+<span class="text-blue-400">&lt;/tom&gt;</span>
+
+<span class="text-blue-400">&lt;seguranca&gt;</span>
+- Nunca prometa prazos, valores ou compromissos em nome do usuário sem ele confirmar — porque
+  isso vira obrigação real para outra pessoa.
+- Antes de enviar qualquer e-mail, mostre o rascunho e espere o "pode enviar".
+<span class="text-blue-400">&lt;/seguranca&gt;</span></pre>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-4 mb-5">
+        <div class="flex items-start space-x-3">
+          <span class="text-primary text-lg flex-shrink-0">💡</span>
+          <div>
+            <p class="text-sm font-semibold text-primary mb-1">Repare no que NÃO entrou</p>
+            <p class="text-sm text-neutral-300">
+              A Mia não tem bloco <span class="code-box">&lt;ferramentas&gt;</span> (ela não busca na web nem roda código) nem
+              <span class="code-box">&lt;loop&gt;</span> (não executa tarefas em vários passos). Três blocos bastaram.
+              Esse é o espírito do PMV: <strong>só o que o caso pede</strong>. Quando faltar algo, você adiciona — não antes.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">📋</div>
+          <div class="text-xs font-semibold text-neutral-200">Copie, não invente</div>
+          <div class="text-xs text-neutral-500 mt-1">blocos prontos</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🔑</div>
+          <div class="text-xs font-semibold text-neutral-200">Troque as chaves</div>
+          <div class="text-xs text-neutral-500 mt-1">{NOME} {PAPEL} {objetivo}</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🍳</div>
+          <div class="text-xs font-semibold text-neutral-200">Use a receita</div>
+          <div class="text-xs text-neutral-500 mt-1">3 prontas na biblioteca</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">✂️</div>
+          <div class="text-xs font-semibold text-neutral-200">Só o que pede</div>
+          <div class="text-xs text-neutral-500 mt-1">3 blocos bastaram</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">4</span>
+        <h2 class="text-2xl font-bold">Rodar e observar</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Prompt montado não é prompt pronto — é prompt <strong class="text-blue-400">hipótese</strong>. O próximo passo não é polir mais:
+        é <strong class="text-blue-400">rodar e observar</strong>. Cole o PMV, dê algumas tarefas de verdade, e leia as respostas com
+        atenção. Você está caçando comportamento ruim <em>real</em>, não imaginando problemas que talvez nunca apareçam.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">👀</span> O que observar em cada resposta</h3>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">①</span>
+            <span><strong class="text-blue-400">O tom bateu?</strong> A resposta saiu no tamanho e no jeito que você pediu — ou ela foi longa, bajuladora, cheia de listas que ninguém pediu?</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">②</span>
+            <span><strong class="text-blue-400">Respeitou os limites?</strong> Ela parou onde devia parar, ou atravessou um dos seus "nunca"?</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">③</span>
+            <span><strong class="text-blue-400">Fez a tarefa certa?</strong> A identidade segurou — ou no meio do papo a IA "esqueceu" quem era?</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Grid: observar bem vs observar mal -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+        <div class="bg-blue-900/20 border border-blue-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-blue-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-blue-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>Observar do jeito certo</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Dá tarefas reais, do dia a dia, não casos artificiais</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Lê a resposta inteira antes de julgar</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Anota o problema concreto que viu ("ela usou lista num e-mail")</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Roda várias vezes — um erro pode ser sorte/azar</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">✗</span>
+            <span>Observar do jeito errado</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Já sai adicionando regra "por via das dúvidas", sem ter visto o erro</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Julga pela primeira frase e fecha a tela</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Reescreve o prompt inteiro a cada resposta meia-boca</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Conclui de um único teste que "está quebrado"</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-primary text-lg flex-shrink-0">💡</span>
+          <div>
+            <p class="text-sm font-semibold text-primary mb-1">Pra guardar</p>
+            <p class="text-sm text-neutral-300">
+              Observar é o passo que quase todo mundo pula — e é onde mora o ganho. Um prompt que você
+              <strong>rodou e observou</strong> vale dez prompts que você "achou que iam funcionar". O resultado é a verdade;
+              o seu palpite é só rascunho.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">5</span>
+        <h2 class="text-2xl font-bold">Só crescer com motivo</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Aqui está a disciplina que separa um prompt enxuto de um monstro inchado: você <strong class="text-blue-400">só adiciona um bloco
+        ou uma regra quando um comportamento ruim real apareceu</strong> — e, ao adicionar, traz junto o porquê. Nada de "deixa eu
+        botar essa regra só pra garantir". Se você não viu o problema, a regra não entra.
+      </p>
+
+      <!-- O fluxo de crescimento -->
+      <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">🔁</span> O gatilho para crescer</h3>
+        <div class="flex flex-col sm:flex-row items-stretch gap-3 text-sm">
+          <div class="flex-1 bg-dark-900 rounded-lg p-3 border border-dark-600 text-center">
+            <div class="text-blue-400 text-lg mb-1">👁️</div>
+            <div class="font-semibold text-neutral-200 mb-1">Viu um erro real</div>
+            <div class="text-neutral-500 text-xs">"a Mia mandou um e-mail de 3 parágrafos"</div>
+          </div>
+          <div class="flex items-center justify-center text-blue-400 font-bold">→</div>
+          <div class="flex-1 bg-dark-900 rounded-lg p-3 border border-dark-600 text-center">
+            <div class="text-blue-400 text-lg mb-1">✍️</div>
+            <div class="font-semibold text-neutral-200 mb-1">Adiciona com porquê</div>
+            <div class="text-neutral-500 text-xs">+1 linha no &lt;tom&gt;, explicando a razão</div>
+          </div>
+          <div class="flex items-center justify-center text-blue-400 font-bold">→</div>
+          <div class="flex-1 bg-dark-900 rounded-lg p-3 border border-dark-600 text-center">
+            <div class="text-blue-400 text-lg mb-1">✅</div>
+            <div class="font-semibold text-neutral-200 mb-1">Re-roda e confere</div>
+            <div class="text-neutral-500 text-xs">o erro sumiu? então a regra fica</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid: três perguntas antes de adicionar -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+        <div class="bg-blue-900/20 border border-blue-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-blue-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-blue-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>Quando a regra MERECE entrar</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Você viu o comportamento ruim acontecer, com seus olhos</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>O modelo não corrige sozinho — repete o erro</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Dá pra escrever um teste que falharia sem a regra</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Você consegue dizer o porquê em uma frase</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">✗</span>
+            <span>Quando NÃO adicionar</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>"Por via das dúvidas" — você nem viu o problema</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>O modelo já faz isso sozinho (regra desperdiçada)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>É um caso raríssimo que talvez nunca aconteça</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Você está empilhando "IMPORTANTE" pra parecer firme</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-sky-900/30 border border-sky-500/30 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-sky-300 text-lg flex-shrink-0">🌱</span>
+          <div>
+            <p class="text-sm font-semibold text-sky-300 mb-1">O prompt cresce como um jardim, não como um depósito</p>
+            <p class="text-sm text-neutral-300">
+              Cada regra ocupa espaço e disputa atenção com as outras. Um prompt cheio de regra desnecessária não é mais seguro —
+              é mais <strong>confuso</strong>, e o modelo passa a obedecer pior até as regras que importam. Crescer com motivo mantém
+              o prompt afiado.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">6</span>
+        <h2 class="text-2xl font-bold">Um teste por regra</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A última peça da disciplina, e a mais poderosa: <strong class="text-blue-400">toda regra que você mantém precisa de um teste que
+        falharia sem ela</strong>. Se você não consegue imaginar uma tarefa onde a IA erraria caso a regra não existisse, então a regra
+        não está fazendo nada — corte. Esse é o jeito de impedir que o PMV vire um monstro com o tempo.
+      </p>
+
+      <!-- Caixa mono: regra + teste pareados -->
+      <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5 mb-6">
+        <div class="text-xs font-semibold text-blue-400 mb-3">Cada regra com o seu teste <span class="font-normal text-neutral-500">— exemplo: a Mia</span></div>
+        <div class="space-y-3">
+          <div class="bg-dark-900 rounded-lg p-3 border border-blue-500/20">
+            <p class="text-sm text-neutral-200 mb-1"><span class="code-box text-blue-400">Regra:</span> "Um e-mail de resposta cabe em 2 a 4 frases."</p>
+            <p class="text-xs text-neutral-400"><span class="code-box text-sky-300">Teste:</span> peça uma resposta a um e-mail comum. Falha se vier um textão de 3 parágrafos.</p>
+          </div>
+          <div class="bg-dark-900 rounded-lg p-3 border border-blue-500/20">
+            <p class="text-sm text-neutral-200 mb-1"><span class="code-box text-blue-400">Regra:</span> "Nunca prometa prazos sem o usuário confirmar."</p>
+            <p class="text-xs text-neutral-400"><span class="code-box text-sky-300">Teste:</span> mande um e-mail perguntando "quando fica pronto?". Falha se a Mia chutar uma data sozinha.</p>
+          </div>
+          <div class="bg-dark-900 rounded-lg p-3 border border-blue-500/20">
+            <p class="text-sm text-neutral-200 mb-1"><span class="code-box text-blue-400">Regra:</span> "Antes de enviar, mostre o rascunho e espere o ok."</p>
+            <p class="text-xs text-neutral-400"><span class="code-box text-sky-300">Teste:</span> diga "responde pra ele". Falha se ela enviar direto sem te mostrar antes.</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed text-sm">
+        Repare no padrão: cada regra vira uma <strong class="text-blue-400">pergunta concreta</strong> que você pode rodar. Não é teste
+        de software com código — é uma tarefa que você dá à IA e um critério claro de "passou" ou "falhou". Se a regra não gera um teste
+        assim, ela é decoração.
+      </p>
+
+      <!-- Box Alerta / nuance -->
+      <div class="bg-red-900/20 border border-red-500/30 rounded-xl p-5 mb-5">
+        <h3 class="text-lg font-semibold text-red-400 mb-2 flex items-center"><span class="mr-2">⚠️</span> O teste das três perguntas</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed mb-3">
+          Antes de manter qualquer regra, faça as três perguntas da consolidação:
+        </p>
+        <ul class="space-y-2 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">1.</span><span><strong>O modelo já faz isso sozinho?</strong> → corte.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">2.</span><span><strong>Dá pra fundir com outra num princípio?</strong> → funda.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">3.</span><span><strong>Que teste falharia sem ela?</strong> → se nenhum, corte; se algum, <strong>escreva o teste</strong>.</span></li>
+        </ul>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🧪</div>
+          <div class="text-xs font-semibold text-neutral-200">1 regra = 1 teste</div>
+          <div class="text-xs text-neutral-500 mt-1">sem teste, sem regra</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">❓</div>
+          <div class="text-xs font-semibold text-neutral-200">Vira pergunta</div>
+          <div class="text-xs text-neutral-500 mt-1">tarefa + critério claro</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">✂️</div>
+          <div class="text-xs font-semibold text-neutral-200">Sem teste? Corte</div>
+          <div class="text-xs text-neutral-500 mt-1">é só decoração</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">💬</div>
+          <div class="text-xs font-semibold text-neutral-200">Tem porquê</div>
+          <div class="text-xs text-neutral-500 mt-1">documentado em 1 frase</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ENTREGÁVEL PRÁTICO -->
+    <div class="bg-dark-800 border border-blue-500/30 rounded-2xl p-6 sm:p-8 mb-8">
+      <h2 class="text-2xl font-bold mb-3 flex items-center"><span class="mr-3">🛠️</span> Mão na massa: seu entregável</h2>
+      <p class="text-neutral-300 leading-relaxed mb-5 text-sm">
+        Antes de seguir, faça você mesmo. Em 15 minutos você sai com um PMV de verdade no bolso.
+      </p>
+      <ol class="space-y-3 text-sm text-neutral-300 mb-2">
+        <li class="flex items-start space-x-3">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex-shrink-0">1</span>
+          <span>Escolha um caso seu (um assistente de estudos, de e-mail, de receitas — o que for). Decida: ele usa ferramentas? Executa tarefas em passos? Isso diz quais dos 5 blocos você precisa.</span>
+        </li>
+        <li class="flex items-start space-x-3">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex-shrink-0">2</span>
+          <span>Copie os blocos da biblioteca e preencha as <span class="code-box">{chaves}</span>. Mire em 3 blocos; só passe disso se o caso pedir.</span>
+        </li>
+        <li class="flex items-start space-x-3">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex-shrink-0">3</span>
+          <span>Cole numa IA, dê 3 tarefas reais e observe. Anote o primeiro comportamento ruim que aparecer — só ele.</span>
+        </li>
+        <li class="flex items-start space-x-3">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex-shrink-0">4</span>
+          <span>Adicione UMA linha que resolve aquele erro, com o porquê — e escreva o teste que ela passa a fazer falhar. Re-rode e confira.</span>
+        </li>
+      </ol>
+    </div>
+
+    <!-- RESUMO FINAL -->
+    <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-2xl border border-blue-500/30 p-6 sm:p-8 mb-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📝</span> Resumo do Módulo</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <ul class="space-y-3 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span>O <strong class="text-blue-400">PMV</strong> é o menor prompt que já serve: comece com 5 blocos, não com 300 linhas</span></li>
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span>Os 5 blocos: <span class="code-box text-blue-400">identidade</span>, <span class="code-box text-blue-400">tom</span>, <span class="code-box text-sky-300">ferramentas</span>, <span class="code-box text-blue-400">segurança</span>, <span class="code-box text-sky-300">loop</span> (os 2 últimos são opcionais)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span>Monte <strong>copiando blocos</strong> da biblioteca e trocando as <span class="code-box">{chaves}</span> — não escreva do zero</span></li>
+        </ul>
+        <ul class="space-y-3 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-blue-400">Rode e observe</strong> com tarefas reais antes de polir mais</span></li>
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span>Só cresça <strong class="text-blue-400">com motivo</strong>: regra nova só depois de ver o erro de verdade</span></li>
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-blue-400">Um teste por regra</strong>: sem um teste que falharia sem ela, a regra é decoração — corte</span></li>
+        </ul>
+      </div>
+
+      <div class="bg-dark-800/50 rounded-lg p-4 mb-6 border border-blue-500/20">
+        <h3 class="font-semibold text-blue-400 mb-1 flex items-center"><span class="mr-2">➡️</span> Próximo Módulo</h3>
+        <p class="text-neutral-300 text-sm">
+          <strong>2.2 — 📦 A biblioteca de blocos.</strong> Você montou um PMV com três blocos. Agora vamos abrir a caixa de ferramentas
+          inteira: todos os blocos copiáveis, em PT e EN, e quando puxar cada um.
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="inline-flex items-center justify-start space-x-2 text-neutral-400 hover:text-blue-400 text-sm font-medium px-4 py-2.5 rounded-xl bg-dark-700 hover:bg-dark-600 transition-colors">
+          <span>←</span><span>Voltar para Trilha</span>
+        </a>
+        <a href="modulo-2-2.html" class="inline-flex items-center justify-start space-x-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition-colors">
+          <span>Próximo: 2.2 A biblioteca de blocos</span><span>→</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
+        <div class="text-sm text-neutral-500">
+          <span class="text-blue-400 font-medium">O Manual Oculto da IA</span> · Módulo 2.1 · Trilha 2 · 2026
+        </div>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm transition-colors">INEMA.CLUB</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

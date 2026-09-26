@@ -1,0 +1,1002 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\pinentry-w32.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+@.rsrc
+@.reloc
+AUATUWVSH
+H[^_]A\A]
+H[^_]A\A]
+ATUWVSH
+0[^_]A\
+0[^_]A\
+AWAVATUWVSH
+D+L$`D+T$dH
+D$x+D$pH
+D$|+D$tA
+[^_]A\A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AVWVSH
+pinentryH9
+AVWVSH
+NametKI
+AVUWVSH
+INQUIRE H
+QUALITY H
+<Et`<C
+`[^_]A^
+<NtX<R
+ATUWVSH
+INQUIRE H
+CHECKPINH
+<Et,<CtX<Du
+<Ntx<Ru
+`[^_]A\
+`[^_]A\
+ATUWVSH
+INQUIRE H
+ GENPIN
+<Et4<CtX<Du
+<Nt@<Ru
+P[^_]A\
+P[^_]A\
+AVWVSH
+H[^_A^
+H[^_A^
+H[^_A^
+AUATUWVSH
+H[^_]A\A]
+)D$0fH
+)D$`fH
+ATUWVSH
+0[^_]A\
+AWAVAUATUWVSH
+!<|tKE1
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+ignore-iH3D$`H
+nvalid-oH3L$hH
+|$`alia
+ignore-iH3T$`H
+nvalid-oH3L$hH
+-option
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+-option
+AVAUATUWVSH
+ [^_]A\A]A^
+ [^_]A\A]A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AVUWVSH
+[^_]A^
+%%%%fD
+H;D$pt
+MapDialogRect failed: %s
+LoadImage failed: %s
+pinentry-w32
+Quality:
+version
+1.3.2-unknown
+flavor
+pinentry-
+%s%s%s
+ttyinfo
+%lo/%lu/%lu
+%s %s %s %s %lu/%lu %s
+--clear
+pin->pin_len == 0
+pinentry.c
+pin->pin_len > 0
+pinentry
+Copyright (C) 2016 g10 Code GmbH
+Please report bugs to <https://bugs.gnupg.org>.
+Ask securely for a secret and print it to stdout.
+Usage: %s [options] (-h for help)
+%s.%s %d %s
+--one-button
+BUTTON_INFO
+no-grab
+debug-wait
+%s: waiting for debugger - my pid is %u ...
+%s: ... okay
+display
+ttyname
+ttytype
+ttyalert
+lc-ctype
+lc-messages
+parent-wid
+touch-file
+default-ok
+default-cancel
+default-prompt
+default-pwmngr
+default-cf-visi
+default-tt-visi
+default-tt-hide
+default-capshint
+allow-external-password-cache
+XDG_SESSION_DESKTOP
+PINENTRY_KDE_USE_WALLET
+allow-emacs-prompt
+invisible-char
+formatted-passphrase
+formatted-passphrase-hint
+constraints-enforce
+constraints-hint-short
+constraints-hint-long
+constraints-error-title
+%%%02X
+/proc/%lu/status
+/proc/%lu/cmdline
+[%lu]@%s (%s)
+[%lu]@%s
+[%lu] <unknown host>
+ASSUAN WRITE LINE failed: rc=%d
+ASSUAN READ LINE failed: rc=%d
+pin->pin
+!pin->pin
+PASSWORD_FROM_CACHE
+PIN_REPEATED
+len == 0
+--display
+%s: %s
+--display=
+DISPLAY
+bright-
+bright
+SETDESC
+server context creation failed: %s
+%s: failed to initialize the server: %s
+%s: failed to the register commands with Assuan: %s
+%s: Assuan accept problem: %s
+%s: Assuan processing failed: %s
+SETPROMPT
+SETKEYINFO
+SETREPEAT
+SETREPEATERROR
+SETREPEATOK
+SETERROR
+SETNOTOK
+SETCANCEL
+GETPIN
+CONFIRM
+MESSAGE
+SETQUALITYBAR
+SETQUALITYBAR_TT
+SETGENPIN
+SETGENPIN_TT
+GETINFO
+SETTITLE
+SETTIMEOUT
+CLEARPASSPHRASE
+Turn on debugging output
+|DISPLAY|Set the X display
+|FILE|Set the tty terminal node name
+|NAME|Set the tty terminal type
+|STRING|Set the tty LC_CTYPE value
+|STRING|Set the tty LC_MESSAGES value
+timeout
+|SECS|Timeout waiting for input after this many seconds
+no-global-grab
+Grab keyboard only while window is focused
+Parent window ID (for positioning)
+colors
+|STRING|Set custom colors for ncurses
+|STRING|Set the alert mode (none, beep or flash)
+default
+yellow
+magenta
+pinentry_setbuffer_clear
+pinentry_setbuffer_use
+pinentry_setbufferlen
+License GPLv2+: GNU GPL version 2 or later <https://www.gnu.org/licenses/>
+This is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+It is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this software.  If not, see <https://www.gnu.org/licenses/>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Copyright (C) YEAR NAME
+Options:
+(A single dash may be used instead of the double ones)
+%s: Ohhhh jeeee: 
+invalid argument for arg_parse
+argument not expected
+read error
+keyword too long
+missing argument
+invalid argument
+invalid command
+invalid alias definition
+out of core
+invalid option
+%s:%u: %s
+missing argument for option "%.50s"
+invalid argument for option "%.50s"
+option "%.50s" does not expect an argument
+invalid command "%.50s"
+option "%.50s" is ambiguous
+command "%.50s" is ambiguous
+out of core
+invalid option "%.50s"
+version
+warranty
+dump-options
+--dump-options
+--help
+--version
+--warranty
+ignore-invalid-option
+failed to send %d bytes to socket: %s
+select
+invalid response: %s
+%%%02X
+SETTITLE
+SETDESC
+SETERROR
+SETPROMPT
+SETREPEAT
+SETREPEATERROR
+SETCANCEL
+SETNOTOK
+GETPIN
+CONFIRM
+INSIDE_EMACS
+emacs_socket < 0
+pinentry-emacs.c
+TMPDIR
+out of core
+%s/emacs%u/%s
+pinentry
+socket name is too long
+socket is not owned by the same user
+socket
+connect
+pinentry_emacs_init
+Warning: using insecure memory!
+failed to drop setuid
+secure memory is disabled
+can't mmap pool of %u bytes: %s - using malloc
+can't allocate memory pool of %u bytes
+failed to reset uid: %s
+can't lock memory: %s
+Oops, secure memory pool already initialized
+operation is not possible without initialized secure memory
+(you may have used the wrong program for this task)
+secmem usage: %u/%u bytes in %u/%u blocks of pool %lu/%lu
+dropping privileges failed
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+GCC: (GNU) 15.1.0
+assuan_accept
+assuan_begin_confidential
+assuan_end_confidential
+assuan_fdopen
+assuan_init_pipe_server
+assuan_new
+assuan_process
+assuan_read_line
+assuan_register_command
+assuan_register_option_handler
+assuan_register_reset_notify
+assuan_release
+assuan_send_data
+assuan_set_flag
+assuan_set_malloc_hooks
+assuan_write_line
+assuan_write_status
+gpg_err_code_from_syserror
+gpg_strerror
+gpgrt_check_version
+__assert_func
+__cxa_atexit
+__errno
+__getreent
+__locale_ctype_ptr
+__main
+_dll_crt0
+_impure_ptr
+calloc
+connect
+cygwin_internal
+dll_dllcrt0
+fclose
+fflush
+fprintf
+fwrite
+getegid
+getenv
+geteuid
+getpagesize
+getpid
+getuid
+malloc
+memcpy
+memmove
+memset
+msys_detach_dll
+munmap
+perror
+posix_memalign
+realloc
+select
+setuid
+sigaction
+snprintf
+socket
+sprintf
+strchr
+strcmp
+strcpy
+strcspn
+strdup
+strerror
+strlen
+strncasecmp
+strncmp
+strpbrk
+strstr
+strtol
+strtoul
+uname_x
+vfprintf
+GetDeviceCaps
+GetStockObject
+SetBkMode
+SetTextColor
+FormatMessageA
+GetLastError
+GetModuleHandleA
+GetModuleHandleW
+MultiByteToWideChar
+WideCharToMultiByte
+DialogBoxParamA
+EnableWindow
+EndDialog
+GetDesktopWindow
+GetDlgItem
+GetDlgItemTextW
+GetWindowRect
+LoadImageA
+MapDialogRect
+ReleaseDC
+SendMessageA
+SetDlgItemTextW
+SetWindowPos
+ShowWindow
+msys-assuan-9.dll
+msys-gpg-error-0.dll
+msys-2.0.dll
+GDI32.dll
+KERNEL32.dll
+USER32.dll
+333332!
+#3333333332
+#33333332
+#333333
+333330
+333332
+33333332
+332333331
+3333333
+#333332
+#3333 
+3333332
+#33333332
+3333333333!
+333333(
+3333333332!
+#33333333333333332!
+#33333333333332
+#333333333332
+#3333333333 
+3333333331
+33333332
+#333333!
+333333
+333331
+#3333!
+#333332"!
+3333333332"
+333333333333"
+#333333333332!
+"""333!
+3 #332
+#33331
+#33333333331
+3333333333
+3333330
+333333332
+3333333
+#333333 
+#33333331
+333333333 
+33333333333
+#333333!
+#333333333332
+#33333333333333
+333333333333333332!
+#333333333(
+!-AYnw_N7"
+C2?O\n{
+!%/7AITZfnv
+":Ufi`T<#
+#-33,#
+ypfO?7//7?Mdnx
+333333333333333333332""
+"#33333333333333333333333333333333333333"
+"33333333333333333333333333333333332
+#3333333333333333333333333333333!
+33333333333333333333333333333!
+333333333333333333333333333!
+3333333333333333333333333!
+33333333333333333333333!
+3333333333333333333332
+33333333333333333333
+#333333333333333333 
+333333333333333332
+3333333333333333
+3333333333333331
+33333333333333
+33333333333331
+#33333"
+333333333333
+3333333"
+333333333332
+33333332
+3333333333 
+3333332
+3333333333
+333333
+#333333331
+33333333 
+33333333
+#3333331
+333333 
+#33!3330
+333333
+#333331
+333332
+#33332
+333331
+3333331
+33333332
+333333333!
+33333333332
+3333333333333"
+#3333333333333333!
+#3333333333333333332!
+3333333333333333333333!
+333333333333333333333333!
+33333333333333333333333332
+""3333333333333333333333333!
+33333333333333333333333332
+33333332
+"#33333333333333
+33333332
+""#33333333
+33333332
+33333332
+#33332
+33333332
+#33333
+33333331
+33333 
+33333331
+33333 
+33333331
+333330
+33333331
+333331
+#33333331
+333331
+#33333331
+333332
+#33333331
+333332
+333333331
+333333
+333333331
+333333
+333333331
+333333
+333333331
+333333 
+333333331
+333333 
+333333332
+3333330
+333#33332
+3333330
+333#33333
+3333330
+333"33333 
+3333331
+#33!333330
+3333331
+33 333332
+3333330
+#3333330
+333331
+33333330
+333333
+3333333 
+333331
+#3333333 
+333333 
+333333
+33333333
+3333331
+#333332
+#33333333
+3333333
+3333332
+#333333332
+#3333333 
+33333332!
+#3333333331
+333333331
+333333332"""333333333330
+333333333
+#3333333333333333333333
+#333333333 
+3333333333333333333333
+33333333332
+333333333333333333331
+33333333333 
+#3333333333333333333 
+3333333333331
+#333333333333333333
+3333333333333
+33333333333333330
+333333333333331
+333333333333333
+333333333333333 
+"33333333!#331
+33333333333333332
+#3333!
+#33333333333333333 
+333332
+3333333333333333333
+333333!
+333333333333333333332
+33333332"""333333
+#3333333333333333333331
+333333333333333
+33333333333333333333333!
+3333333333333
+3333333333333333333333333 
+#3333333332
+333333333333333333333333333!
+"33333"
+333333333333333333333333333331
+33333333333333333333333333333332
+#33333333333333333333333333333333332
+#3333333333333333333333333333333333333332"!
+""333333333333333333333(
+333333333333333333333333333333""""33333333333333333333333333333333333333333333333333333333!
+33333333333333333333333333333333333333333333333332!
+#333333333333333333333333333333333333333333333!
+3333333333333333333333333333333333333333332
+#3333333333333333333333333333333333333332
+33333333333333333333333333333333333331
+333333333333333333333333333333333331
+3333333333333333333333333333333331
+33333333333333333333333333333332
+#333333333333333333333333333333
+#3333333333333333333333333333 
+3333333333333333333333333331
+33333333333333333333333332
+#333333333333333333333333
+333333333333333333333331
+#33333"
+3333333333333333333333
+#33333"
+3333333333333333333330
+#33333!
+33333333333333333333
+#33332"
+33333333333333333330
+3333333!
+333333333333333333
+33333332!
+333333333333333330
+#333333332
+3333333333333333
+33333333333
+3333333333333331
+3333333333 
+33333333333333
+3333333330
+33333333333332
+333333330
+#3333333333330
+33333331
+333333333333
+3333332
+333333333332
+33333 
+333333
+33333333330
+333333
+3333333333
+3333333332
+333333330
+33333333
+333333330
+33333333
+33333330
+33333331
+3333331
+3333330
+333332
+333333
+333333
+333332
+333332
+3333330
+3333333 
+33333333 
+333333333!
+33333333331
+333333333332
+3333333333333!
+333333333333333!
+333333333333333332
+333333333333333333333!
+#33333333333333333333333"
+#33333333333333333333333333!
+33333333333333333333333333333!
+33333333333333333333333333333332
+333333333333333333333333333333333!
+33333333333333333333333333333333333 
+"#33333333333333333333333333333333332
+3333333333333333333333333333333333
+33333333332333333333333333333333333 
+33333333330
+"3333333333333333333 
+33333333330
+"#333333333333!
+3333333333 
+"33333333 
+3333333333 
+3333333 
+3333333333 
+#3333333
+3333333333 
+3333333
+3333333333 
+3333333 
+#3333333333 
+33333330
+#3333333333 
+33333330
+33333333333 
+33333331
+33333333333 
+33333331
+33333333333 
+33333332
+33333333333 
+33333333
+33333333333
+33333333
+33333333333
+33333333
+33333333333
+33333333
+33333333333
+33333333 
+33333333333
+333333330
+33333333333
+#33333330
+33333333333
+#33333331
+33333333333
+33333331
+33333333333
+33333332
+33333333333 
+33333332
+333233333330
+33333333
+333233333330
+33333333
+333133333331
+#33333333
+3333333
+#33333333
+3333333
+333333333
+3333333 
+333333333
+33333331
+333333333
+3333 #3333333
+333333333
+333333 
+3333333 
+#333333333
+3333330
+33333332
+3333333333
+3333331
+#3333333 
+3333333332
+3333333
+33333332
+33333333331
+33333333 
+33333333 
+33333333331
+333333330
+33333333
+333333333330
+333333332
+333333331
+33333333333 
+#333333333
+3333333331
+333333333333
+33333333330
+3333333331
+3333333333333
+33333333332
+33333333333
+33333333333332
+33333333333
+333333333332""""3333333333333330
+3333333333330
+#333333333333333333333333333333 
+3333333333333
+333333333333333333333333333333
+#3333333333333 
+33333333333333333333333333333
+333333333333331
+#3333333333333333333333333330
+333333333333333
+#33330
+333333333333333333333333333
+33333333333333330
+33333333333333333333333333
+33333333333333333
+333331
+3333333333333333333333330
+3333333333333333330
+33333 
+33333333333333333333333
+3333333333333333333
+333332
+#333333333333333333331
+333333333333333333330
+333332
+3333333333333323333 
+333333333333333333333
+#333331
+#33333333333!
+33333333333333333333331
+3333332
+3333333!
+33333333333333333333333
+3333332
+3333333333333333333333332
+#3333333 
+#33333333333333333333333331
+#33333332
+#33333 
+333333333333333333333333333 
+33333333332
+#33333331
+33333333333333333333333333333
+3333333333333333333332
+#333333333333333333333333333332
+33333333333333333332
+#33333333333333333333333333333331
+#33333333333333331
+3333333333333333333333333333333331
+33333333333333!
+333333333333333333333333333333333331
+"3333333333!
+33333333333333333333333333333333333332
+#33332!
+3333333333333333333333333333333333333332
+#333333333333333333333333333333333333333333!
+3333333333333333333333333333333333333333333333!
+#3333333333333333333333333333333333333333333333333!
+33333333333333333333333333333333333333333333333333333333""""333333333333333333333333333333
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__imp_setuid
+__imp_getuid
+__imp_GetDesktopWindow
+__imp_abort
+__lib64_libkernel32_a_iname
+__imp_assuan_init_pipe_server
+__imp_assuan_write_line
+__imp_assuan_register_command
+__imp_GetStockObject
+__imp__dll_crt0
+__imp_mlock
+__imp_GetModuleHandleW
+__imp_assuan_read_line
+__imp_calloc
+__imp_FormatMessageA
+__imp_getpid
+__imp_send
+__imp_getpagesize
+__imp_assuan_write_status
+__imp_recv
+__imp_assuan_process
+__imp_uname_x
+__imp_getegid
+__imp_sleep
+__imp_assuan_register_reset_notify
+__imp_uname
+__imp_strpbrk
+__imp_getenv
+__imp_alarm
+_head_msys_2_0_dll
+__imp_gpgrt_check_version
+__imp_sigaction
+__imp_strtol
+__imp_SetDlgItemTextW
+__imp_EnableWindow
+__imp_strcmp
+__imp_assuan_release
+__lib64_libgdi32_a_iname
+__imp_MultiByteToWideChar
+__imp_gpg_strerror
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_GetLastError
+__imp_free
+__imp_assuan_begin_confidential
+__imp___errno
+__imp_GetDeviceCaps
+__imp_GetDlgItem
+__nm__impure_ptr
+__imp_SetTextColor
+__imp_assuan_register_option_handler
+__imp_strdup
+__imp_atoi
+__imp_write
+__imp_fputs
+__lib64_libuser32_a_iname
+__imp_strcpy
+__imp_memset
+__IAT_end__
+__imp_memcpy
+__imp_memmove
+__imp_dll_dllcrt0
+msys_gpg_error_0_dll_iname
+__imp_select
+__imp_MapDialogRect
+__imp_GetDlgItemTextW
+__imp_strerror
+__imp___locale_ctype_ptr
+__imp_fwrite
+__imp_strtoul
+__imp_utime
+_head_lib64_libkernel32_a
+__imp_msys_detach_dll
+__imp_strstr
+__imp_LoadImageA
+__imp_ShowWindow
+_head_msys_assuan_9_dll
+__imp_snprintf
+__imp___getreent
+_head_lib64_libgdi32_a
+__imp_GetModuleHandleA
+__imp___main
+__imp_WideCharToMultiByte
+__imp_strlen
+__imp_assuan_accept
+__imp_malloc
+__imp_assuan_set_malloc_hooks
+__imp__impure_ptr
+__imp___assert_func
+__imp_stat
+__imp_realloc
+__imp_exit
+__imp_GetDC
+__imp_vfprintf
+__imp_time
+__IAT_start__
+_head_msys_gpg_error_0_dll
+msys_assuan_9_dll_iname
+__imp_assuan_fdopen
+__imp_perror
+__imp_SendMessageA
+__imp___cxa_atexit
+__imp_strcspn
+__imp_fprintf
+__imp_gpg_err_code_from_syserror
+__imp_strncasecmp
+__imp_assuan_end_confidential
+__imp_fclose
+__imp_munmap
+__imp_GetWindowRect
+_head_lib64_libuser32_a
+__imp_ReleaseDC
+__imp_geteuid
+__imp_strncmp
+__imp_strchr
+__imp_close
+__imp_assuan_set_flag
+__imp_socket
+__imp_EndDialog
+__imp_mmap
+__imp_fflush
+__imp_SetWindowPos
+__imp_DialogBoxParamA
+__imp_sprintf
+__imp_fread
+__imp_SetBkMode
+__imp_assuan_new
+__imp_fopen
+__imp_connect
+__imp_assuan_send_data
+__imp_getc
+msys_2_0_dll_iname
+[out of core]
+Pinentry
+MS Sans Serif
+STATIC
+&Cancel

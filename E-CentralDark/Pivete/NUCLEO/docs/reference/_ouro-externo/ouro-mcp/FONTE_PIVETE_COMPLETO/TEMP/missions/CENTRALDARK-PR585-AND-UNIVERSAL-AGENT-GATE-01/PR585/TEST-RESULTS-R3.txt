@@ -1,0 +1,23 @@
+=== RED/GREEN R3 (3 ataques reais contra codigo pre-rodada-3, commit 0bf226ae5) ===
+=== ACHADO 1: placeholder de judge ('NONE') ===
+OLD (0bf226ae5): ok=True head_sha_verified=True approved_for_promotion=True  <- judge='NONE' contava como judge real
+NEW (atual):     ok=True head_sha_verified=True approved_for_promotion=False  <- judge='NONE' normalizado para ausente
+
+=== ACHADO 2: HEAD ancestral aceito como HEAD atual (sem binding exato) ===
+ancestor=7dceac8ddb50aba22de5875faa43455b74c9cc40 current=0bf226ae5c18c2bf3ba815bd203616b480143e50
+OLD (0bf226ae5): ok=True head_sha_verified=True approved_for_promotion=True  <- aceitava ancestral como se fosse HEAD atual
+NEW (atual):     ok=False reason=OPERATION_RECEIPT_HEAD_MISMATCH  <- rejeita por nao bater com expected_head
+
+=== ACHADO 3: evidence_sha256 nunca verificado contra bytes reais (so formato) ===
+OLD (0bf226ae5): ok=True  <- nao tinha nocao de evidence_root, so checava o FORMATO do hash (aceita hash que nao bate com o arquivo real)
+NEW (atual):     ok=False reason=OPERATION_RECEIPT_EVIDENCE_HASH_MISMATCH  <- calcula o sha256 real do arquivo e rejeita por nao bater
+
+=== suite completa FRESCA (rodada 3) ===
+.............ssss....................................................... [ 38%]
+........................................................................ [ 77%]
+.........................................                                [100%]
+181 passed, 4 skipped in 13.44s
+
+=== teste isolado do validador (52 casos) ===
+....................................................                     [100%]
+52 passed in 1.56s

@@ -1,0 +1,55 @@
+Pivete, vou procurar o app Chromium da CentralDark nos dois drives. Buscas independentes em paralelo.
+
+Zero direto. Vou alargar a rede — buscar por cockpit, workspace, e executáveis relacionados nos dois roots.
+
+Busca por nome de arquivo seca. Vou listar as raízes e varrer pastas por nome (incluindo variações de digitação).
+
+E:\ é gigante (timeout). Mas vi E:\CentralDark listado. Vou restringir a varredura ao que importa: E:\CentralDark e C:\CentralDark (apps/hermes-webui), procurando o app em si, não node_modules.`
+
+Achei referências. Vou inspecionar o que é esse "Chromium da CentralDark" — lendo os docs de Chrome e listando as pastas workspace/hermes-webui nos dois roots.
+
+Achei vários rastros. O "app Chromium da CentralDark" com cockpit/github/workspace cheira a Electron (Chromium embutido) ou ao hermes-webui. Vou isolar os executáveis e as pastas Pivete/apps.
+
+Vários candidatos. Vou mirar no que descreve o app: procurar conteúdo cockpit/chromium nos textos e inspecionar o APPCENTRALDARK EVOLUIR (app empacotado com node.exe).
+
+E:\CentralDark\Pivete\MARKDOWN\APPCENTRALDARK EVOLUIR é um app empacotado (node.exe + resources + sidecar) — forte candidato. Vou olhar dentro dele e dar um jeito de localizar o "Chromium" sem timeout. Como as varreduras grep full-timeram, foco no app.
+
+Não é esse. O .overclock-app tem panes.json/session.json — cheira a um app multi-painel (cockpit). Vou ler esses e procurar "chromium" dentro do app de forma local, sem travar o disco.
+
+Esse é Overclock (multi-agent IDE), não o Chromium. O "app Chromium da CentralDark" com cockpit/github/workspace provavelmente é um Electron app. Vou varrer só os paths que têm executável Electron/pacote, controlando tempo, e procurar a string "centraldark" no conteúdo dos .bat/.txt que citei.
+
+
+QUAL SEU BOT E PADRAO E PRA QUEM VOCE TRABALA
+
+
+?
+
+search_files com E:\/C:\ falhou (path casing). Vou usar terminal find com -path node_modules -prune pra não travar, procurando pastas/arquivos que lembrem o app (electron, dist win-unpacked, cockpit, chromium).
+
+Achei o núcleo. MOTOR-TESTE é o app (tem cockpit, github, electron) e apps/modulos/Bolt tem Electron. Vou mapear a raiz do MOTOR-TESTE e o src pra localizar o app Chromium/cockpit exato.
+
+Encontrei, Pivete. Mapeamento concluído com prova de filesystem.
+
+📍 Local exato do app
+O "app Chromium da CentralDark" com cockpit / conexão GitHub / workspace é o MOTOR-TESTE — um router de IA (package omniroute) com frontend Electron/Chromium, cockpit de compressão e integração GitHub. Está em dois mirrors:
+
+E:\CentralDark\MOTOR-TESTE          ← (E:) principal que você citou
+C:\CentralDark\MOTOR-TESTE          ← (C:) clone espelho
+Evidência de que é esse:
+
+E:\CentralDark\MOTOR-TESTE\src\app\(dashboard)\dashboard\compression\studio\CompressionCockpit.tsx → o cockpit
+E:\CentralDark\MOTOR-TESTE\src\app\api\github-skills → conexão GitHub
+E:\CentralDark\MOTOR-TESTE\package.json → name: "omniroute", Electron/Chromium/PWA, desktop
+E:\CentralDark\MOTOR-TESTE\docker\vnc-browser\chromium → instância Chromium do app
+E:\CentralDark\MOTOR-TESTE\apps\modulos\Bolt\source\ → módulo Electron (Bolt)
+Outros rastros que NÃO são o app (descartei):
+
+C:\CentralDark\obsidian-app\ → Obsidian (não é)
+E:\CentralDark\Pivete\MARKDOWN\APPCENTRALDARK EVOLUIR\ → app Overclock (multi-agent IDE, não chromium)
+E:\CentralDark\hermes-webui\ → webui do Hermes
+node_modules/chrome-launcher, playwright → libs, não o app
+Próximo passo
+Não mexi em nada (só leitura). Me diz o que quer fazer com ele:
+
+abrir no VSCode/no editor?
+rodar npm run dev / build?

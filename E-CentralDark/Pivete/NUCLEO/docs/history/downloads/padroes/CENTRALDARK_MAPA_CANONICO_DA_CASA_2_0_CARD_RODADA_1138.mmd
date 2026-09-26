@@ -1,0 +1,33 @@
+flowchart TD
+    C["👑 SEGREDO / CHEFE<br/>intenção + autoridade"] --> A["☼ #ACORDAR<br/>medir estado"]
+    A --> K["⚙ !CALIBRAR<br/>alinhar intenção"]
+    K --> M["🧭 !MULTIBÚSSOLA<br/>percepção material"]
+    M --> S["☀ SOL<br/>coordena / reconcilia"]
+
+    S --> G["✶ GRAFO<br/>estado"]
+    S --> V["♄ VIGIA<br/>observação"]
+    S --> J["♃ J.R.V.S.<br/>agentes"]
+    G --> L["⊛ META LUPA<br/>falsificação"]
+    V --> L
+    J --> L
+
+    L --> W["✎ WRITER ÚNICO<br/>1 writer por escopo"]
+    W --> H["☿ HERMES / PIVETE<br/>executa / preserva"]
+    H --> F["∞ FABLE LOOP<br/>executar → medir → repetir"]
+    F --> R["⚖ REALITY / JUDGE<br/>prova externa"]
+
+    R -->|PROVOU| T["TRANSFERÊNCIA CANÔNICA<br/>aprendizado útil vira capacidade"]
+    R -->|FALHOU / UNKNOWN| X["REMEDIAÇÃO<br/>menor delta suficiente"]
+    X --> H
+    T --> B["RECEIPT / CRYSTAL / LAST_GOOD_STATE"]
+    B --> G
+    G --> A
+
+    subgraph Pipeline["FLUXO ÚNICO DA CASA"]
+      P1["1 ENTRADAS"] --> P2["2 PERCEPÇÃO"] --> P3["3 ENTENDIMENTO"] --> P4["4 MEMÓRIA"]
+      P4 --> P5["5 DECISÃO"] --> P55["5.5 ORQUESTRAÇÃO"] --> P6["6 MODELO"]
+      P6 --> P7["7 EXECUÇÃO"] --> P8["8 PROVA"] --> P10["10 TRANSFERÊNCIA"]
+    end
+
+    C -. governa .-> Pipeline
+    R -. julga .-> Pipeline

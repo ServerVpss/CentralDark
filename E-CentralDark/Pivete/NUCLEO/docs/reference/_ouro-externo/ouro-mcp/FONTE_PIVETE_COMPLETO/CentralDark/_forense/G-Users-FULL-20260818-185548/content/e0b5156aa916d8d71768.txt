@@ -1,0 +1,14 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@electron\universal\dist\esm\sha.js
+
+import * as fs from 'fs-extra';
+import * as crypto from 'crypto';
+import { pipeline } from 'stream/promises';
+import { d } from './debug';
+export const sha = async (filePath) => {
+    d('hashing', filePath);
+    const hash = crypto.createHash('sha256');
+    hash.setEncoding('hex');
+    await pipeline(fs.createReadStream(filePath), hash);
+    return hash.read();
+};
+//# sourceMappingURL=sha.js.map

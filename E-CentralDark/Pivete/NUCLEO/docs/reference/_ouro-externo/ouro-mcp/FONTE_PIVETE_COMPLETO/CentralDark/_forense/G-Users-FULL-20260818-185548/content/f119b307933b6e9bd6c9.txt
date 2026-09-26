@@ -1,0 +1,11 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@mermaid-js\parser\dist\chunks\mermaid-parser.esm\packet-FGNDS4OH.mjs
+
+import {
+  PacketModule,
+  createPacketServices
+} from "./chunk-4W2XWMKJ.mjs";
+import "./chunk-36B4POZ4.mjs";
+export {
+  PacketModule,
+  createPacketServices
+};

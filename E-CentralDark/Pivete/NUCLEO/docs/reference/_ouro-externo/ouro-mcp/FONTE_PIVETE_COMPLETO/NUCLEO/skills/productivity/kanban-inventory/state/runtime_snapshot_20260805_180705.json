@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-08-05T18:07:05.503531",
+  "cards": {
+    "t_6c3d5e16": {
+      "status": "blocked",
+      "primary_class": "WORKER_CRASH",
+      "secondary_class": "PROVIDER_RATE_LIMIT",
+      "evidence_primary": "consecutive_failures=3, most_recent_outcome=crashed, last_error='pid 46036 not alive', 5 crashed runs with different PIDs",
+      "evidence_secondary": "Log shows HTTP 429 RateLimitError from openai-codex provider, usage limit reached",
+      "block_kind_current": null,
+      "block_kind_suggested": "transient",
+      "circuit_breaker": true,
+      "retryable": true,
+      "impact": "Gate determinístico não pode ser registrado; worker morre repetidamente"
+    },
+    "t_35432f15": {
+      "status": "blocked",
+      "primary_class": "WORKER_CRASH",
+      "secondary_class": "CAPABILITY_MISSING",
+      "evidence_primary": "consecutive_failures=2, most_recent_outcome=crashed, last_error='pid 19364 not alive', 6 crashed runs",
+      "evidence_secondary": "Log shows 'Unknown provider custom:routellm-(abacus-ai)' + HTTP 429 RateLimitError",
+      "block_kind_current": null,
+      "block_kind_suggested": "transient",
+      "circuit_breaker": true,
+      "retryable": true,
+      "impact": "Atualização AUTOLUPA_CANO não pode prosseguir; provider desconhecido + worker crash"
+    },
+    "t_ae83ea45": {
+      "status": "done",
+      "primary_class": null,
+      "secondary_class": null,
+      "evidence_primary": "SHA-256 fixture test passed, receipt recorded",
+      "evidence_secondary": null,
+      "block_kind_current": null,
+      "block_kind_suggested": null,
+      "circuit_breaker": false,
+      "retryable": false,
+      "impact": "Teste R0 autonomia concluído com prova"
+    }
+  },
+  "database_schema_hash": "94fbdc9a83c835eea6156204e9a17ffc504f25030c411d111b60bfa98e8fd6c0",
+  "adapter_code_hash": "2ea7a19baf731121b3e88e2e554b2681e53eacfb5cbde0f3a4d824cfb2bd2221",
+  "kanban_url": "http://127.0.0.1:9119/kanban?profile=pivete",
+  "cli_version": "Hermes Agent v0.20.0 (2026.8.3)",
+  "board": "default",
+  "total_cards": 3,
+  "blocked": 2,
+  "done": 1,
+  "triage": 0,
+  "running": 0
+}

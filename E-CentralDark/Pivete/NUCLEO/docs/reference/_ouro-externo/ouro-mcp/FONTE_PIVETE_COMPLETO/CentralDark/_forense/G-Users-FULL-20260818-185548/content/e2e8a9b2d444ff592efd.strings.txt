@@ -1,0 +1,35 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\Service Worker\CacheStorage\579544fd7d0441717f082c9eb123588966aa57ac\e4e79384-0e73-44ff-9d95-dc42ae10afe6\434b43f63be1082a_0
+
+https://ssl.gstatic.com/ui/v1/icons/mail/gm3/1x/lock_clock_baseline_nv700_20dp.png
+accept-ranges
+bytes"6
+access-control-allow-origin
+https://mail.google.com"
+456906"9
+alt-svc
+.h3=":443"; ma=2592000,h3-29=":443"; ma=2592000")
+cache-control
+public, max-age=31536000"
+content-length
+#content-security-policy-report-only
+_require-trusted-types-for 'script'; report-uri https://csp.withgoogle.com/csp/gstatic-ui-assets"
+content-type
+image/png"T
+&cross-origin-opener-policy-report-only
+*same-origin; report-to="gstatic-ui-assets"",
+cross-origin-resource-policy
+cross-origin"%
+Thu, 13 Aug 2026 00:23:13 GMT"(
+expires
+Fri, 13 Aug 2027 00:23:13 GMT".
+last-modified
+Sun, 25 Jun 2023 02:58:00 GMT"
+report-to
+{"group":"gstatic-ui-assets","max_age":2592000,"endpoints":[{"url":"https://csp.withgoogle.com/csp/report-to/gstatic-ui-assets"}]}"
+server
+Origin"!
+x-content-type-options
+nosniff"
+x-xss-protection
+BRhttps://ssl.gstatic.com/ui/v1/icons/mail/gm3/1x/lock_clock_baseline_nv700_20dp.pngP(Z
+image/pngr

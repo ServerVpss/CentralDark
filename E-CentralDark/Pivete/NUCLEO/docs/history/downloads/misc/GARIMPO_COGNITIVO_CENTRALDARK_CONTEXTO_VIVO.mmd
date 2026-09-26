@@ -1,0 +1,13 @@
+flowchart LR
+    VIS[Visual / screenshot / interface] --> SENSOR[Sensor]
+    SENSOR --> CONTEXTO[Contexto vivo]
+    CONTEXTO --> GARIMPO[Garimpo Cognitivo]
+    GARIMPO --> EXTR[Extrair sinais]
+    EXTR --> DED[Deduplicar]
+    DED --> CP[Contraprovar]
+    CP --> DELTA[Delta útil]
+    DELTA --> OWNER[Owner existente]
+    OWNER --> TESTE[Teste real]
+    TESTE --> JUDGE[Reality Judge]
+    JUDGE --> RECEIPT[Receipt]
+    RECEIPT --> CRYSTAL[Crystal]

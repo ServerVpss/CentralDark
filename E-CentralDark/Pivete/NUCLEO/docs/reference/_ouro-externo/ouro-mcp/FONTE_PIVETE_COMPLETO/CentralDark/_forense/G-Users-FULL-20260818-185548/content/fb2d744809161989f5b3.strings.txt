@@ -1,0 +1,3457 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\lang\ko.UTF-8\LC_MESSAGES\vim.mo
+
+Last set from 
+Arguments:
+Usage:
+          modified: 
+         [not usable on this computer]
+         [not usable with this version of Vim]
+         host name: 
+         user name: 
+        process ID: 
+       a: Find assignments to this symbol
+       c: Find functions calling this function
+       d: Find functions called by this function
+       e: Find this egrep pattern
+       f: Find this file
+       g: Find this definition
+       i: Find files #including this file
+       s: Find this C symbol
+       t: Find this text string
+    Name        Args       Address   Complete  Definition
+   #   line
+   or:
+  # TO tag         FROM line  in file/text
+ jump line  col file/text
+# %s History (newest to oldest):
+# Buffer list:
+# File marks:
+# History of marks within files (newest to oldest):
+# Jumplist (newest first):
+# Last %sSearch Pattern:
+# Last Substitute String:
+# Registers:
+# global variables:
+(1) Another program may be editing the same file.  If this is the case,
+    be careful not to end up with two different instances of the same
+    file when making changes.  Quit, or continue with caution.
+(You might want to write out this file under another name
+--- Autocommands ---
+--- Global option values ---
+--- Local option values ---
+--- Menus ---
+--- Options ---
+--- Registers ---
+--- Signs ---
+--- Syntax items ---
+--- Syntax sync items ---
+--- Terminal codes ---
+--- Terminal keys ---
+Arguments recognised by gvim (Athena version):
+Arguments recognised by gvim (GTK+ version):
+Arguments recognised by gvim (Motif version):
+Arguments recognised by gvim (neXtaw version):
+Big version 
+Cannot create pipes
+Cannot execute shell 
+Cannot execute shell sh
+Cannot fork
+Command terminated
+Compiled 
+Could not get security context for 
+Could not set security context for 
+Extra patches: 
+Found a swap file by the name "
+Huge version 
+If you entered a new crypt key but did not write the text file,
+If you wrote the text file after changing the crypt key press enter
+Included patches: 
+MS-Windows 32-bit GUI version
+MS-Windows 32-bit console version
+MS-Windows 64-bit GUI version
+MS-Windows 64-bit console version
+Maybe no changes were made or Vim did not update the swap file.
+More info with: "vim -h"
+Normal version 
+OpenVMS version
+Small version 
+Tiny version 
+Vim: Got X error
+WARNING: Original file may be lost or damaged
+You may want to delete the .swp file now.
+enter the new crypt key.
+macOS version
+mark line  col file/text
+shell returned 
+syncing on items
+to use the same key for text file and swap file
+                              for Vim defaults   
+                              for two modes      
+             dated: 
+          owned by: 
+         [cannot be opened]
+         [cannot be read]
+         [does not look like a Vim swap file]
+         [from Vim version 3.0]
+         file name: 
+       defaults file: "
+      -- none --
+      NEWER than swap file!
+      user exrc file: "
+     user vimrc file: "
+    If this is the case, use ":recover" or "vim -r 
+    If you did this already, delete the swap file "
+    line=%ld  id=%d  name=%s
+    system menu file: "
+    user gvimrc file: "
+   In current directory:
+   In directory 
+   Using specified name:
+   dated: 
+   host name: 
+   system vimrc file: "
+  # pri kind tag
+  (Already listed)
+  2nd user exrc file: "
+  DEBUG BUILD
+  Features included (+) or not (-):
+  NOT FOUND
+  Using tag with different case!
+  fall-back for $VIM: "
+  system gvimrc file: "
+ # pid    database name                       prepend path
+ (Interrupted)
+ (NOT FOUND)
+ (includes previously listed match)
+ (insert)
+ (insert) Scroll (^E/^Y)
+ (line deleted)
+ (not supported)
+ (paste)
+ (replace)
+ (replace) Scroll (^E/^Y)
+ (still running)
+ (vreplace)
+ 2nd user vimrc file: "
+ 3rd user vimrc file: "
+ < "%.*s"
+ Adding
+ Arabic
+ CONVERSION ERROR
+ Command-line completion (^V^N^P)
+ Copy %d of %d
+ Definition completion (^D^N^P)
+ Dictionary completion (^K^N^P)
+ FAILED
+ File name completion (^F^N^P)
+ Hebrew
+ INSERT
+ Keyword Local completion (^N^P)
+ Keyword completion (^N^P)
+ Omni completion (^O^N^P)
+ Path pattern completion (^N^P)
+ REPLACE
+ REVERSE
+ SELECT
+ SELECT BLOCK
+ SELECT LINE
+ SPACE/d/j: screen/page/line down, b/u/k: up, q: quit 
+ Spelling suggestion (^S^N^P)
+ Tag completion (^]^N^P)
+ Thesaurus completion (^T^N^P)
+ User defined completion (^U^N^P)
+ VISUAL
+ VISUAL BLOCK
+ VISUAL LINE
+ VREPLACE
+ Whole line completion (^L^N^P)
+ [Modified]
+ ^X mode (^]^D^E^F^I^K^L^N^O^Ps^U^V^Y)
+ appended
+ cannot be used on this computer.
+ cannot be used with this version of Vim.
+ f-b for $VIMRUNTIME: "
+ has been damaged (page size is smaller than minimum value).
+ in line %ld;
+ into "%c
+ kind file
+ line breaks
+ lines before top line
+ marks
+ oldfiles
+ on %ld lines
+ on 1 line
+ or more
+ returned
+ vim [arguments] 
+ with OLE support
+ written
+    to avoid this message.
+    to recover the changes (see ":help recovery").
+" already exists!
+# This viminfo file was generated by Vim %s.
+# Value of 'encoding' when this file was written
+# You may edit it if you're careful!
+%-5s: %s%*s (Usage: %s)
+%3d  %s %s  line %ld
+%3d  expr %s
+%d buffers deleted
+%d buffers unloaded
+%d buffers wiped out
+%d duplicate word(s) in %s
+%d files to edit
+%d more files to edit.  Quit anyway?
+%ld %s; %s #%ld  %s
+%ld Cols; 
+%ld fewer lines
+%ld lines %sed %d times
+%ld lines %sed 1 time
+%ld lines --%d%%--
+%ld lines changed
+%ld lines filtered
+%ld lines indented 
+%ld lines moved
+%ld lines to indent... 
+%ld lines yanked%s
+%ld lines, 
+%ld matches
+%ld more lines
+%ld seconds ago
+%ld substitutions
+%lld characters
+%s (%s, compiled %s)
+%s aborted
+%s discarded
+%s line %ld
+%s made pending
+%s resumed
+%s returning #%ld
+%s returning %s
+%s value differs from what is used in another .aff file
+%s, line %ld
+%serror list %d of %d; %d errors 
+%sviminfo: %s in line: 
+&Cancel
+&Dismiss
+&Filter
+&Cancel
+&Load File
+&Open Read-Only
+&Edit anyway
+&Recover
+&Delete it
+&Abort
+&Open Read-Only
+&Edit anyway
+&Recover
+&Abort
+&Replace
+&Cancel
+Save &All
+&Discard All
+&Cancel
+' not known. Available builtin terminals are:
+'-nb' cannot be used: not enabled at compile time
+'dictionary' option is empty
+'history' option is zero
+'readonly' option is set for "%s".
+Do you wish to write anyway?
+'thesaurus' option is empty
+(%d of %d)%s%s: 
+(2) An edit session for this file crashed.
+(Interrupted) 
+(Invalid)
+Start at end of file
++--%3ld line folded 
++--%3ld lines folded 
++<lnum>
+Start at line <lnum>
++reverse
+Don't use reverse video (also: +rv)
+or the file has been damaged.
+-               read text from stdin
+Only file names after this
+-- More --
+-- Searching...
+--- Included files 
+--Deleted--
+--No lines in buffer--
+--cmd <command>
+Execute <command> before loading any vimrc file
+--cmd argument
+--echo-wid
+Make gvim echo the Window ID on stdout
+--literal
+Don't expand wildcards
+--noplugin
+Don't load plugin scripts
+--not-a-term
+Skip warning for input/output not being a terminal
+--remote <files>
+Edit <files> in a Vim server if possible
+--remote-expr <expr>
+Evaluate <expr> in a Vim server and print result
+--remote-send <keys>
+Send <keys> to a Vim server and exit
+--remote-silent <files>  Same, don't complain if there is no server
+--remote-tab[-wait][-silent] <files>  As --remote but use tab page per file
+--remote-wait <files>  As --remote but wait for files to have been edited
+--remote-wait-silent <files>  Same, don't complain if there is no server
+--role <role>
+Set a unique role to identify the main window
+--serverlist
+List available Vim server names and exit
+--servername <name>
+Send to/become the Vim server <name>
+--socketid <xid>
+Open Vim inside another GTK widget
+--startuptime <file>
+Write startup timing messages to <file>
+--ttyfail
+Exit if input or output is not a terminal
+--version
+Print version information and exit
+--windowid <HWND>
+Open Vim inside another win32 widget
+Start in Arabic mode
+Compatible with Vi: 'compatible'
+Debugging mode
+Improved Ex mode
+Start in Farsi mode
+Start in Hebrew mode
+Same as -r
+Modifications in text not allowed
+Not fully Vi compatible: 'nocompatible'
+Like -o but split vertically
+-P <parent title>
+Open Vim inside parent application
+Readonly mode (like "view")
+-S <session>
+Source file <session> after loading the first file
+-T <terminal>
+Set terminal type to <terminal>
+-U <gvimrc>
+Use <gvimrc> instead of any .gvimrc
+-V[N][fname]
+Be verbose [level N] [log messages to fname]
+-W <scriptout>
+Write all typed commands to file <scriptout>
+Do not connect to X server
+Restricted mode (like "rvim")
+Binary mode
+-background <color>
+Use <color> for the background (also: -bg)
+-boldfont <font>
+Use <font> for bold text
+-borderwidth <width>
+Use a border width of <width> (also: -bw)
+-c <command>
+Execute <command> after loading the first file
+-c argument
+Diff mode (like "vimdiff")
+-dev <device>
+Use <device> for I/O
+-display <display>
+Connect Vim to this particular X-server
+-display <display>
+Run Vim on <display>
+-display <display>
+Run Vim on <display> (also: --display)
+Ex mode (like "ex")
+Don't use newcli to open window
+-f  or  --nofork
+Foreground: Don't fork when starting GUI
+-font <font>
+Use <font> for normal text (also: -fn)
+-foreground <color>
+Use <color> for normal text (also: -fg)
+Run using GUI (like "gvim")
+-geometry <geom>
+Use <geom> for initial geometry (also: -geom)
+-h  or  --help
+Print Help (this message) and exit
+-i <viminfo>
+Use <viminfo> instead of .viminfo
+-iconic
+Start Vim iconified
+-italicfont <font>
+Use <font> for italic text
+Lisp mode
+Modifications (writing files) not allowed
+-menuheight <height>
+Use a menu bar height of <height> (also: -mh)
+No swap file, use memory only
+Open N windows (default: one for each file)
+Open N tab pages (default: one for each file)
+-q [errorfile]  edit file with first error
+List swap files and exit
+-r (with file name)
+Recover crashed session
+-register
+Register this gvim for OLE
+-reverse
+Use reverse video (also: -rv)
+Silent (batch) mode (only for "ex")
+-s <scriptin>
+Read Normal mode commands from file <scriptin>
+-scrollbarwidth <width>  Use a scrollbar width of <width> (also: -sw)
+-t tag          edit file where tag is defined
+-u <vimrc>
+Use <vimrc> instead of any .vimrc
+-unregister
+Unregister gvim for OLE
+Vi mode (like "vi")
+-w <scriptout>
+Append all typed commands to file <scriptout>
+Edit encrypted files
+-xrm <resource>
+Set the specified resource
+Easy mode (like "evim", modeless)
+/ line ignored in %s line %d: %s
+/encoding= line after word ignored in %s line %d: %s
+1 buffer deleted
+1 buffer unloaded
+1 buffer wiped out
+1 character
+1 line %sed %d times
+1 line %sed 1 time
+1 line --%d%%--
+1 line changed
+1 line indented 
+1 line less
+1 line moved
+1 line yanked%s
+1 line, 
+1 match
+1 more file to edit.  Quit anyway?
+1 more line
+1 substitution
+2nd user gvimrc file: "
+3rd user gvimrc file: "
+: Send expression failed.
+: Send failed.
+: Send failed. Trying to execute locally
+; match 
+<%s>%s%s  %d,  Hex %02x,  Oct %03o, Digr %s
+<%s>%s%s  %d,  Hex %02x,  Octal %03o
+<cannot open> 
+<empty>
+> %d, Hex %04x, Oct %o, Digr %s
+> %d, Hex %04x, Octal %o
+> %d, Hex %08x, Oct %o, Digr %s
+> %d, Hex %08x, Octal %o
+??? from here until ???END lines may be messed up
+??? from here until ???END lines may have been inserted/deleted
+???BLOCK MISSING
+???EMPTY BLOCK
+???END
+???LINE COUNT WRONG
+???LINES MISSING
+???MANY LINES MISSING
+ANCHOR_BUF_SIZE too small.
+Add a new database
+Added cscope database %s
+Affix also used for BAD/RARE/KEEPCASE/NEEDAFFIX/NEEDCOMPOUND/NOSUGGEST in %s line %d: %s
+Affix name too long in %s line %d: %s
+All Files (*)
+All Files (*)
+C source (*.c, *.h)
+*.c;*.h
+C++ source (*.cpp, *.hpp)
+*.cpp;*.hpp
+Vim files (*.vim, _vimrc, _gvimrc)
+*.vim;_vimrc;_gvimrc
+All Files (*.*)
+All Files (*.*)
+C source (*.c, *.h)
+*.c;*.h
+C++ source (*.cpp, *.hpp)
+*.cpp;*.hpp
+VB code (*.bas, *.frm)
+*.bas;*.frm
+Vim files (*.vim, _vimrc, _gvimrc)
+*.vim;_vimrc;_gvimrc
+All cscope databases reset
+All included files were found
+Already at newest change
+Already at oldest change
+Already only one tab page
+Already only one window
+Append File
+Argument missing after
+At line
+Attempt to open script file again: "
+Back at original
+Backwards range given, OK to swap
+Become a registered Vim user!
+Before byte %ld
+Both SAL and SOFO lines in %s
+Breakpoint in "%s%s" line %ld
+Broken condition in %s line %d: %s
+COMPOUNDSYLMAX used without SYLLABLE
+Calling shell to execute: "%s"
+Can't find temp file for conversion
+Cancel
+Cannot create 
+Cannot execute 
+Cannot open NIL:
+Cannot open file "%s"
+Cannot open for reading: "
+Cannot open for script output: "
+Cannot source a directory: "%s"
+Cannot write undo file in any directory in 'undodir'
+Change "%.*s" to:
+Close tab
+Col %s of %s; Line %ld of %ld; Word %lld of %lld; Byte %lld of %lld
+Col %s of %s; Line %ld of %ld; Word %lld of %lld; Char %lld of %lld; Byte %lld of %lld
+Command Line
+Compilation: 
+Compiler: 
+Compressed %d of %d nodes; %d (%d%%) remaining
+Compressing word tree...
+Conversion failure for word in %s line %d: %s
+Conversion in %s not supported
+Conversion in %s not supported: from %s to %s
+Conversion with 'charconvert' failed
+Could not fix up function pointers to the DLL!
+Could not load vim32.dll!
+Could not open temporary log file for writing, displaying on stderr... 
+Cscope tag: %s
+Current %slanguage: "%s"
+Debug Line
+Defining COMPOUNDFORBIDFLAG after PFX item may give wrong results in %s line %d
+Defining COMPOUNDPERMITFLAG after PFX item may give wrong results in %s line %d
+Diff with Vim
+Different combining flag in continued affix block in %s line %d: %s
+Direction
+Directories
+Directory
+*.nothing
+Do you really want to write to it
+Double ; in list of variables
+Duplicate /encoding= line ignored in %s line %d: %s
+Duplicate /regions= line ignored in %s line %d: %s
+Duplicate affix in %s line %d: %s
+Duplicate character in MAP in %s line %d
+Duplicate field name: %s
+Duplicate word in %s line %d: %s
+E100: No other buffer in diff mode
+E101: More than two buffers in diff mode, don't know which one to use
+E102: Can't find buffer "%s"
+E103: Buffer "%s" is not in diff mode
+E104: Escape not allowed in digraph
+E105: Using :loadkeymap not in a sourced file
+E107: Missing parentheses: %s
+E108: No such variable: "%s"
+E109: Missing ':' after '?'
+E10: \ should be followed by /, ? or &
+E110: Missing ')'
+E111: Missing ']'
+E112: Option name missing: %s
+E113: Unknown option: %s
+E114: Missing quote: %s
+E115: Missing quote: %s
+E116: Invalid arguments for function %s
+E117: Unknown function: %s
+E118: Too many arguments for function: %s
+E119: Not enough arguments for function: %s
+E11: Invalid in command-line window; <CR> executes, CTRL-C quits
+E120: Using <SID> not in a script context: %s
+E121: Undefined variable: %s
+E122: Function %s already exists, add ! to replace it
+E123: Undefined function: %s
+E124: Missing '(': %s
+E125: Illegal argument: %s
+E126: Missing :endfunction
+E127: Cannot redefine function %s: It is in use
+E128: Function name must start with a capital or "s:": %s
+E129: Function name required
+E12: Command not allowed from exrc/vimrc in current dir or tag search
+E130: Unknown function: %s
+E131: Cannot delete function %s: It is in use
+E132: Function call depth is higher than 'maxfuncdepth'
+E133: :return not inside a function
+E134: Move lines into themselves
+E135: *Filter* Autocommands must not change current buffer
+E136: viminfo: Too many errors, skipping rest of file
+E137: Viminfo file is not writable: %s
+E138: Can't write viminfo file %s!
+E139: File is loaded in another buffer
+E13: File exists (add ! to override)
+E140: Use ! to write partial buffer
+E141: No file name for buffer %ld
+E142: File not written: Writing is disabled by 'write' option
+E143: Autocommands unexpectedly deleted new buffer %s
+E144: Non-numeric argument to :z
+E145: Shell commands not allowed in rvim
+E146: Regular expressions can't be delimited by letters
+E147: Cannot do :global recursive with a range
+E148: Regular expression missing from global
+E149: Sorry, no help for %s
+E14: Invalid address
+E150: Not a directory: %s
+E151: No match: %s
+E152: Cannot open %s for writing
+E153: Unable to open %s for reading
+E154: Duplicate tag "%s" in file %s/%s
+E155: Unknown sign: %s
+E156: Missing sign name
+E157: Invalid sign ID: %ld
+E158: Invalid buffer name: %s
+E159: Missing sign number
+E15: Invalid expression: %s
+E160: Unknown sign command: %s
+E161: Breakpoint not found: %s
+E162: No write since last change for buffer "%s"
+E163: There is only one file to edit
+E164: Cannot go before first file
+E165: Cannot go beyond last file
+E166: Can't open linked file for writing
+E167: :scriptencoding used outside of a sourced file
+E168: :finish used outside of a sourced file
+E169: Command too recursive
+E16: Invalid range
+E170: Missing :endfor
+E170: Missing :endwhile
+E171: Missing :endif
+E173: %ld more files to edit
+E173: 1 more file to edit
+E174: Command already exists: add ! to replace it
+E175: No attribute specified
+E176: Invalid number of arguments
+E177: Count cannot be specified twice
+E178: Invalid default value for count
+E179: Argument required for -addr
+E179: Argument required for -complete
+E17: "%s" is a directory
+E180: Invalid address type value: %s
+E180: Invalid complete value: %s
+E181: Invalid attribute: %s
+E182: Invalid command name
+E183: User defined commands must start with an uppercase letter
+E184: No such user-defined command: %s
+E185: Cannot find color scheme '%s'
+E186: No previous directory
+E187: Unknown
+E188: Obtaining window position not implemented for this platform
+E189: "%s" exists (add ! to override)
+E18: Unexpected characters in :let
+E190: Cannot open "%s" for writing
+E191: Argument must be a letter or forward/backward quote
+E192: Recursive use of :normal too deep
+E193: :endfunction not inside a function
+E194: No alternate file name to substitute for '#'
+E195: Cannot open viminfo file for reading
+E196: No digraphs in this version
+E197: Cannot set language to "%s"
+E198: cmd_pchar beyond the command length
+E199: Active window or buffer deleted
+E19: Mark has invalid line number
+E200: *ReadPre autocommands made the file unreadable
+E201: *ReadPre autocommands must not change current buffer
+E202: Conversion made file unreadable!
+E203: Autocommands deleted or unloaded buffer to be written
+E204: Autocommand changed number of lines in unexpected way
+E205: Patchmode: can't save original file
+E206: Patchmode: can't touch empty original file
+E207: Can't delete backup file
+E208: Error writing to "%s"
+E209: Error closing "%s"
+E20: Mark not set
+E210: Error reading "%s"
+E211: File "%s" no longer available
+E212: Can't open file for writing
+E213: Cannot convert (add ! to write without conversion)
+E214: Can't find temp file for writing
+E215: Illegal character after *: %s
+E216: No such event: %s
+E216: No such group or event: %s
+E217: Can't execute autocommands for ALL events
+E218: Autocommand nesting too deep
+E219: Missing {.
+E21: Cannot make changes, 'modifiable' is off
+E220: Missing }.
+E222: Add to read buffer
+E223: Recursive mapping
+E224: Global abbreviation already exists for %s
+E225: Global mapping already exists for %s
+E226: Abbreviation already exists for %s
+E227: Mapping already exists for %s
+E228: makemap: Illegal mode
+E229: Cannot start the GUI
+E22: Scripts nested too deep
+E230: Cannot read from "%s"
+E231: 'guifontwide' invalid
+E232: Cannot create BalloonEval with both message and callback
+E233: Cannot open display
+E234: Unknown fontset: %s
+E235: Unknown font: %s
+E236: Font "%s" is not fixed-width
+E237: Printer selection failed
+E238: Print error: %s
+E239: Invalid sign text: %s
+E23: No alternate file
+E240: No connection to the X server
+E241: Unable to send to %s
+E243: Argument not supported: "-%s"; Use the OLE version.
+E244: Illegal charset name "%s" in font name "%s"
+E244: Illegal quality name "%s" in font name "%s"
+E245: Illegal char '%c' in font name "%s"
+E246: FileChangedShell autocommand deleted buffer
+E247: No registered server named "%s"
+E248: Failed to send command to the destination program
+E24: No such abbreviation
+E250: Fonts for the following charsets are missing in fontset %s:
+E251: VIM instance registry property is badly formed.  Deleted!
+E252: Fontset name: %s
+E253: Fontset name: %s
+E254: Cannot allocate color %s
+E255: Couldn't read in sign data!
+E256: Hangul automata ERROR
+E257: cstag: tag not found
+E258: Unable to send to client
+E25: GUI cannot be used: Not enabled at compile time
+E261: Cscope connection %s not found
+E262: Error reading cscope connection %ld
+E263: Sorry, this command is disabled, the Python library could not be loaded.
+E264: Python: Error initialising I/O objects
+E265: $_ must be an instance of String
+E266: Sorry, this command is disabled, the Ruby library could not be loaded.
+E267: Unexpected return
+E268: Unexpected next
+E269: Unexpected break
+E26: Hebrew cannot be used: Not enabled at compile time
+E270: Unexpected redo
+E272: Unhandled exception
+E273: Unknown longjmp status %d
+E277: Unable to read a server reply
+E27: Farsi cannot be used: Not enabled at compile time
+E280: TCL FATAL ERROR: reflist corrupt!? Please report this to vim-dev@vim.org
+E282: Cannot read from "%s"
+E283: No marks matching "%s"
+E284: Cannot set IC values
+E285: Failed to create input context
+E286: Failed to open input method
+E287: Warning: Could not set destroy callback to IM
+E288: Input method doesn't support any style
+E289: Input method doesn't support my preedit type
+E28: No such highlight group name: %s
+E290: List or number required
+E293: Block was not locked
+E294: Seek error in swap file read
+E295: Read error in swap file
+E296: Seek error in swap file write
+E297: Write error in swap file
+E298: Didn't get block nr 0?
+E298: Didn't get block nr 1?
+E298: Didn't get block nr 2?
+E299: Perl evaluation forbidden in sandbox without the Safe module
+E29: No inserted text yet
+E300: Swap file already exists (symlink attack?)
+E301: Oops, lost the swap file!!!
+E302: Could not rename swap file
+E303: Unable to open swap file for "%s", recovery impossible
+E304: ml_upd_block0(): Didn't get block 0??
+E305: No swap file found for %s
+E306: Cannot open %s
+E307: %s does not look like a Vim swap file
+E308: Warning: Original file may have been changed
+E309: Unable to read block 1 from %s
+E30: No previous command line
+E310: Block 1 ID wrong (%s not a .swp file?)
+E311: Recovery Interrupted
+E312: Errors detected while recovering; look for lines starting with ???
+E313: Cannot preserve, there is no swap file
+E314: Preserve failed
+E315: Ml_get: invalid lnum: %ld
+E316: Ml_get: cannot find line %ld
+E317: Pointer block id wrong
+E317: Pointer block id wrong 2
+E317: Pointer block id wrong 3
+E317: Pointer block id wrong 4
+E318: Updated too many blocks?
+E319: Sorry, the command is not available in this version
+E31: No such mapping
+E320: Cannot find line %ld
+E321: Could not reload "%s"
+E322: Line number out of range: %ld past the end
+E323: Line count wrong in block %ld
+E324: Can't open PostScript output file
+E325: ATTENTION
+E326: Too many swap files found
+E327: Part of menu-item path is not sub-menu
+E328: Menu only exists in another mode
+E329: No menu "%s"
+E32: No file name
+E330: Menu path must not lead to a sub-menu
+E331: Must not add menu items directly to menu bar
+E332: Separator cannot be part of a menu path
+E333: Menu path must lead to a menu item
+E334: Menu not found: %s
+E335: Menu not defined for %s mode
+E336: Menu path must lead to a sub-menu
+E337: Menu not found - check menu names
+E338: Sorry, no file browser in console mode
+E339: Pattern too long
+E33: No previous substitute regular expression
+E340: Line is becoming too long
+E341: Internal error: lalloc(%ld, )
+E342: Out of memory!  (allocating %lu bytes)
+E343: Invalid path: '**[number]' must be at the end of the path or be followed by '%s'.
+E344: Can't find directory "%s" in cdpath
+E345: Can't find file "%s" in path
+E346: No more directory "%s" found in cdpath
+E347: No more file "%s" found in path
+E348: No string under cursor
+E349: No identifier under cursor
+E34: No previous command
+E350: Cannot create fold with current 'foldmethod'
+E351: Cannot delete fold with current 'foldmethod'
+E352: Cannot erase folds with current 'foldmethod'
+E353: Nothing in register %s
+E354: Invalid register name: '%s'
+E355: Unknown option: %s
+E356: get_varp ERROR
+E357: 'langmap': Matching character missing for %s
+E358: 'langmap': Extra characters after semicolon: %s
+E359: Screen mode setting not supported
+E35: No previous regular expression
+E360: Cannot execute shell with -f option
+E363: Pattern uses more memory than 'maxmempattern'
+E364: Library call failed for "%s()"
+E365: Failed to print PostScript file
+E367: No such group: "%s"
+E369: Invalid item in %s%%[]
+E36: Not enough room
+E370: Could not load library %s
+E371: Command not found
+E372: Too many %%%c in format string
+E373: Unexpected %%%c in format string
+E374: Missing ] in format string
+E375: Unsupported %%%c in format string
+E376: Invalid %%%c in format string prefix
+E377: Invalid %%%c in format string
+E378: 'errorformat' contains no pattern
+E379: Missing or empty directory name
+E37: No write since last change
+E37: No write since last change (add ! to override)
+E380: At bottom of quickfix stack
+E381: At top of quickfix stack
+E382: Cannot write, 'buftype' option is set
+E383: Invalid search string: %s
+E384: Search hit TOP without match for: %s
+E385: Search hit BOTTOM without match for: %s
+E386: Expected '?' or '/'  after ';'
+E387: Match is on current line
+E388: Couldn't find definition
+E389: Couldn't find pattern
+E38: Null argument
+E390: Illegal argument: %s
+E391: No such syntax cluster: %s
+E392: No such syntax cluster: %s
+E393: group[t]here not accepted here
+E394: Didn't find region item for %s
+E395: Contains argument not accepted here
+E397: Filename required
+E398: Missing '=': %s
+E399: Not enough arguments: syntax region %s
+E39: Number expected
+E400: No cluster specified
+E401: Pattern delimiter not found: %s
+E402: Garbage after pattern: %s
+E403: syntax sync: line continuations pattern specified twice
+E404: Illegal arguments: %s
+E405: Missing equal sign: %s
+E406: Empty argument: %s
+E407: %s not allowed here
+E408: %s must be first in contains list
+E409: Unknown group name: %s
+E40: Can't open errorfile %s
+E410: Invalid :syntax subcommand: %s
+E411: Highlight group not found: %s
+E412: Not enough arguments: ":highlight link %s"
+E413: Too many arguments: ":highlight link %s"
+E414: Group has settings, highlight link ignored
+E415: Unexpected equal sign: %s
+E416: Missing equal sign: %s
+E417: Missing argument: %s
+E418: Illegal value: %s
+E419: FG color unknown
+E41: Out of memory!
+E420: BG color unknown
+E421: Color name or number not recognized: %s
+E422: Terminal code too long: %s
+E423: Illegal argument: %s
+E424: Too many different highlighting attributes in use
+E425: Cannot go before first matching tag
+E426: Tag not found: %s
+E427: There is only one matching tag
+E428: Cannot go beyond last matching tag
+E429: File "%s" does not exist
+E42: No Errors
+E430: Tag file path truncated for %s
+E431: Format error in tags file "%s"
+E432: Tags file not sorted: %s
+E433: No tags file
+E434: Can't find tag pattern
+E435: Couldn't find tag, just guessing!
+E436: No "%s" entry in termcap
+E437: Terminal capability "cm" required
+E438: u_undo: line numbers wrong
+E439: Undo list corrupt
+E43: Damaged match string
+E440: Undo line missing
+E441: There is no preview window
+E442: Can't split topleft and botright at the same time
+E443: Cannot rotate when another window is split
+E444: Cannot close last window
+E445: Other window contains changes
+E446: No file name under cursor
+E447: Can't find file "%s" in path
+E448: Could not load library function %s
+E449: Invalid expression received
+E44: Corrupted regexp program
+E455: Error writing to PostScript output file
+E456: Can't find PostScript resource file "%s.ps"
+E456: Can't find PostScript resource file "cidfont.ps"
+E456: Can't find PostScript resource file "prolog.ps"
+E456: Can't open file "%s"
+E457: Can't read PostScript resource file "%s"
+E459: Cannot go back to previous directory
+E45: 'readonly' option is set (add ! to override)
+E461: Illegal variable name: %s
+E462: Could not prepare for reloading "%s"
+E463: Region is guarded, cannot modify
+E464: Ambiguous use of user-defined command
+E465: :winsize requires two number arguments
+E466: :winpos requires two number arguments
+E467: Custom completion requires a function argument
+E468: Completion argument only allowed for custom completion
+E46: Cannot change read-only variable "%s"
+E470: Command aborted
+E471: Argument required
+E472: Command failed
+E473: Internal error
+E474: Invalid argument
+E475: Invalid argument: %s
+E475: Invalid value for argument %s
+E475: Invalid value for argument %s: %s
+E476: Invalid command
+E477: No ! allowed
+E478: Don't panic!
+E479: No match
+E47: Error while reading errorfile
+E480: No match: %s
+E481: No range allowed
+E482: Can't create file %s
+E483: Can't get temp file name
+E484: Can't open file %s
+E485: Can't read file %s
+E486: Pattern not found: %s
+E487: Argument must be positive
+E488: Trailing characters
+E48: Not allowed in sandbox
+E490: No fold found
+E492: Not an editor command
+E493: Backwards range given
+E494: Use w or w>>
+E495: No autocommand file name to substitute for "<afile>"
+E496: No autocommand buffer number to substitute for "<abuf>"
+E497: No autocommand match name to substitute for "<amatch>"
+E498: No :source file name to substitute for "<sfile>"
+E499: Empty file name for '%' or '#', only works with ":p:h"
+E49: Invalid scroll size
+E500: Evaluates to an empty string
+E501: At end-of-file
+E505: "%s" is read-only (add ! to override)
+E505: %s is read-only (add ! to override)
+E506: Can't write to backup file (add ! to override)
+E507: Close error for backup file (add ! to override)
+E508: Can't read file for backup (add ! to override)
+E509: Cannot create backup file (add ! to override)
+E50: Too many \z(
+E510: Can't make backup file (add ! to override)
+E511: NetBeans already connected
+E512: Close failed
+E513: Write error, conversion failed (make 'fenc' empty to override)
+E513: write error, conversion failed in line %ld (make 'fenc' empty to override)
+E514: Write error (file system full?)
+E515: No buffers were unloaded
+E516: No buffers were deleted
+E517: No buffers were wiped out
+E518: Unknown option
+E519: Option not supported
+E51: Too many %s(
+E520: Not allowed in a modeline
+E521: Number required after =
+E521: Number required: &%s = '%s'
+E522: Not found in termcap
+E523: Not allowed here
+E524: Missing colon
+E525: Zero length string
+E526: Missing number after <%s>
+E527: Missing comma
+E528: Must specify a ' value
+E529: Cannot set 'term' to empty string
+E52: Unmatched \z(
+E530: Cannot change term in GUI
+E531: Use ":gui" to start the GUI
+E533: Can't select wide font
+E534: Invalid wide font
+E535: Illegal character after <%c>
+E536: Comma required
+E537: 'commentstring' must be empty or contain %s
+E538: No mouse support
+E539: Illegal character <%s>
+E53: Unmatched %s%%(
+E540: Unclosed expression sequence
+E542: Unbalanced groups
+E543: Not a valid codepage
+E544: Keymap file not found
+E545: Missing colon
+E546: Illegal mode
+E547: Illegal mouseshape
+E548: Digit expected
+E549: Illegal percentage
+E54: Unmatched %s(
+E550: Missing colon
+E551: Illegal component
+E552: Digit expected
+E553: No more items
+E554: Syntax error in %s{...}
+E555: At bottom of tag stack
+E556: At top of tag stack
+E557: Cannot open termcap file
+E558: Terminal entry not found in terminfo
+E559: Terminal entry not found in termcap
+E55: Unmatched %s)
+E560: Usage: cs[cope] %s
+E561: Unknown cscope search type
+E562: Usage: cstag <ident>
+E563: stat error
+E563: stat(%s) error: %d
+E564: %s is not a directory or a valid cscope database
+E566: Could not create cscope pipes
+E567: No cscope connections
+E568: Duplicate cscope database not added
+E570: Fatal error in cs_manage_matches
+E571: Sorry, this command is disabled: the Tcl library could not be loaded.
+E572: Exit code %d
+E573: Invalid server id used: %s
+E574: Unknown register type %d
+E579: :if nesting too deep
+E580: :endif without :if
+E581: :else without :if
+E582: :elseif without :if
+E583: Multiple :else
+E584: :elseif after :else
+E585: :while/:for nesting too deep
+E586: :continue without :while or :for
+E587: :break without :while or :for
+E588: :endfor without :for
+E588: :endwhile without :while
+E589: 'backupext' and 'patchmode' are equal
+E590: A preview window already exists
+E591: 'winheight' cannot be smaller than 'winminheight'
+E592: 'winwidth' cannot be smaller than 'winminwidth'
+E593: Need at least %d lines
+E594: Need at least %d columns
+E595: contains unprintable or wide character
+E596: Invalid font(s)
+E597: Can't select fontset
+E598: Invalid fontset
+E599: Value of 'imactivatekey' is invalid
+E59: Invalid character after %s@
+E600: Missing :endtry
+E601: :try nesting too deep
+E602: :endtry without :try
+E603: :catch without :try
+E604: :catch after :finally
+E605: Exception not caught: %s
+E606: :finally without :try
+E607: Multiple :finally
+E608: Cannot :throw exceptions with 'Vim' prefix
+E609: Cscope error: %s
+E60: Too many complex %s{...}s
+E612: Too many signs defined
+E613: Unknown printer font: %s
+E614: vim_SelFile: can't return to current directory
+E615: vim_SelFile: can't get current directory
+E616: vim_SelFile: can't get font %s
+E617: Cannot be changed in the GTK+ 2 GUI
+E618: File "%s" is not a PostScript resource file
+E619: File "%s" is not a supported PostScript resource file
+E61: Nested %s*
+E620: Unable to convert to print encoding "%s"
+E621: "%s" resource file has wrong version
+E622: Could not fork for cscope
+E623: Could not spawn cscope process
+E624: Can't open file "%s"
+E625: Cannot open cscope database: %s
+E626: Cannot get cscope database information
+E62: Nested %s%c
+E630: %s(): write while not connected
+E631: %s(): write failed
+E63: Invalid use of \_
+E64: %s%c follows nothing
+E655: Too many symbolic links (cycle?)
+E658: NetBeans connection lost for buffer %ld
+E659: Cannot invoke Python recursively
+E65: Illegal back reference
+E661: Sorry, no '%s' help for %s
+E664: Changelist is empty
+E665: Cannot start GUI, no valid font found
+E666: Compiler not supported: %s
+E667: Fsync failed
+E668: Wrong access mode for NetBeans connection info file: "%s"
+E669: Unprintable character in group name
+E66: \z( not allowed here
+E670: Mix of help file encodings within a language: %s
+E671: Cannot find window title "%s"
+E672: Unable to open window inside MDI application
+E673: Incompatible multi-byte encoding and character set.
+E674: printmbcharset cannot be empty with multi-byte encoding.
+E675: No default font specified for multi-byte printing.
+E676: No matching autocommands for acwrite buffer
+E677: Error writing temp file
+E678: Invalid character after %s%%[dxouU]
+E679: Recursive loop loading syncolor.vim
+E67: \z1 - \z9 not allowed here
+E680: <buffer=%d>: invalid buffer number 
+E681: Buffer is not loaded
+E682: Invalid search pattern or delimiter
+E683: File name missing or invalid pattern
+E684: List index out of range: %ld
+E685: Internal error: %s
+E686: Argument of %s must be a List
+E687: Less targets than List items
+E688: More targets than List items
+E689: Can only index a List or Dictionary
+E68: Invalid character after \z
+E690: Missing "in" after :for
+E691: Can only compare List with List
+E692: Invalid operation for List
+E694: Invalid operation for Funcrefs
+E695: Cannot index a Funcref
+E696: Missing comma in List: %s
+E697: Missing end of List ']': %s
+E698: Variable nested too deep for making a copy
+E699: Too many arguments
+E69: Missing ] after %s%%[
+E700: Unknown function: %s
+E701: Invalid type for len()
+E702: Sort compare function failed
+E703: Using a Funcref as a Number
+E704: Funcref variable name must start with a capital: %s
+E705: Variable name conflicts with existing function: %s
+E707: Function name conflicts with variable: %s
+E708: [:] must come last
+E709: [:] requires a List value
+E70: Empty %s%%[]
+E710: List value has more items than target
+E711: List value has not enough items
+E712: Argument of %s must be a List or Dictionary
+E713: Cannot use empty key for Dictionary
+E714: List required
+E715: Dictionary required
+E716: Key not present in Dictionary: %s
+E717: Dictionary entry already exists
+E718: Funcref required
+E719: Cannot use [:] with a Dictionary
+E71: Invalid character after %s%%
+E720: Missing colon in Dictionary: %s
+E721: Duplicate key in Dictionary: "%s"
+E722: Missing comma in Dictionary: %s
+E723: Missing end of Dictionary '}': %s
+E724: Variable nested too deep for displaying
+E725: Calling dict function without Dictionary: %s
+E726: Stride is zero
+E727: Start past end
+E728: Using a Dictionary as a Number
+E729: using Funcref as a String
+E72: Close error on swap file
+E730: using List as a String
+E731: using Dictionary as a String
+E732: Using :endfor with :while
+E733: Using :endwhile with :for
+E734: Wrong variable type for %s=
+E735: Can only compare Dictionary with Dictionary
+E736: Invalid operation for Dictionary
+E737: Key already exists: %s
+E738: Can't list variables for %s
+E739: Cannot create directory: %s
+E73: Tag stack empty
+E740: Too many arguments for function %s
+E741: Value is locked: %s
+E742: Cannot change value of %s
+E743: Variable nested too deep for (un)lock
+E744: NetBeans does not allow changes in read-only files
+E745: Using a List as a Number
+E746: Function name does not match script file name: %s
+E747: Cannot change directory, buffer is modified (add ! to override)
+E749: Empty buffer
+E74: Command too complex
+E750: First use ":profile start {fname}"
+E751: Output file name must not have region name
+E752: No previous spell replacement
+E753: Not found: %s
+E754: Only up to %ld regions supported
+E755: Invalid region in %s
+E756: Spell checking is not enabled
+E757: This does not look like a spell file
+E758: Truncated spell file
+E75: Name too long
+E760: No word count in %s
+E761: Format error in affix file FOL, LOW or UPP
+E762: Character in FOL, LOW or UPP is out of range
+E763: Word characters differ between spell files
+E764: Option '%s' is not set
+E765: 'spellfile' does not have %ld entries
+E766: Insufficient arguments for printf()
+E767: Too many arguments to printf()
+E768: Swap file exists: %s (:silent! overrides)
+E769: Missing ] after %s[
+E76: Too many [
+E770: Unsupported section in spell file
+E771: Old spell file, needs to be updated
+E772: Spell file is for newer version of Vim
+E774: 'operatorfunc' is empty
+E775: Eval feature not available
+E776: No location list
+E777: String or List expected
+E778: This does not look like a .sug file: %s
+E779: Old .sug file, needs to be updated: %s
+E77: Too many file names
+E780: .sug file is for newer version of Vim: %s
+E781: .sug file doesn't match .spl file: %s
+E782: Error while reading .sug file: %s
+E783: Duplicate char in MAP entry
+E784: Cannot close last tab page
+E785: complete() can only be used in Insert mode
+E786: Range not allowed
+E787: Buffer changed unexpectedly
+E788: Not allowed to edit another buffer now
+E789: Missing ']': %s
+E78: Unknown mark
+E790: undojoin is not allowed after undo
+E791: Empty keymap entry
+E792: Empty menu name
+E793: No other buffer in diff mode is modifiable
+E794: Cannot set variable in the sandbox: "%s"
+E795: Cannot delete variable %s
+E797: SpellFileMissing autocommand deleted buffer
+E798: ID is reserved for ":match": %ld
+E799: Invalid ID: %ld (must be greater than or equal to 1)
+E79: Cannot expand wildcards
+E800: Arabic cannot be used: Not enabled at compile time
+E802: Invalid ID: %ld (must be greater than or equal to 1)
+E803: ID not found: %ld
+E804: Cannot use '%' with Float
+E805: Using a Float as a Number
+E806: Using a Float as a String
+E807: Expected Float argument for printf()
+E808: Number or Float required
+E809: #< is not available without the +eval feature
+E80: Error while writing
+E810: Cannot read or write temp files
+E811: Not allowed to change buffer information now
+E812: Autocommands changed buffer or buffer name
+E813: Cannot close autocmd window
+E814: Cannot close window, only autocmd window would remain
+E815: Sorry, this command is disabled, the MzScheme libraries could not be loaded.
+E816: Cannot read patch output
+E817: Blowfish big/little endian use wrong
+E818: sha256 test failed
+E819: Blowfish test failed
+E81: Using <SID> not in a script context
+E820: sizeof(uint32_t) != 4
+E821: File is encrypted with unknown method
+E822: Cannot open undo file for reading: %s
+E823: Not an undo file: %s
+E824: Incompatible undo file: %s
+E825: Corrupted undo file (%s): %s
+E826: Undo file decryption failed: %s
+E827: Undo file is encrypted: %s
+E828: Cannot open undo file for writing: %s
+E829: Write error in undo file: %s
+E82: Cannot allocate any buffer, exiting...
+E830: Undo number %ld not found
+E831: bf_key_init() called with empty password
+E832: Non-encrypted file has encrypted undo file: %s
+E833: %s is encrypted and this version of Vim does not support encryption
+E834: Conflicts with value of 'listchars'
+E835: Conflicts with value of 'fillchars'
+E836: This Vim cannot execute :python after using :py3
+E837: This Vim cannot execute :py3 after using :python
+E838: Netbeans is not supported with this GUI
+E839: Completion function changed window
+E83: Cannot allocate buffer, using other one...
+E840: Completion function deleted text
+E841: Reserved name, cannot be used for user defined command
+E842: No line number to use for "<slnum>"
+E843: Error while updating swap file crypt
+E844: Invalid cchar value
+E845: Insufficient memory, word list will be incomplete
+E846: Key code not set
+E847: Too many syntax includes
+E848: Too many syntax clusters
+E849: Too many highlight and syntax groups
+E84: No modified buffer found
+E850: Invalid register name
+E851: Failed to create a new process for the GUI
+E852: The child process failed to start the GUI
+E853: Duplicate argument name: %s
+E855: Autocommands caused command to abort
+E85: There is no listed buffer
+E862: Cannot use g: here
+E867: (NFA) Unknown operator '\%%%c'
+E867: (NFA) Unknown operator '\z%c'
+E868: Error building NFA with equivalence class!
+E869: (NFA) Unknown operator '\@%c'
+E86: Buffer %ld does not exist
+E872: (NFA regexp) Too many '('
+E874: (NFA) Could not pop the stack!
+E877: (NFA regexp) Invalid character class: %ld
+E879: (NFA regexp) Too many \z(
+E87: Cannot go beyond last buffer
+E881: Line count changed unexpectedly
+E882: Uniq compare function failed
+E884: Function name cannot contain a colon: %s
+E885: Not possible to change sign %s
+E886: Can't rename viminfo file to %s!
+E887: Sorry, this command is disabled, the Python's site module could not be loaded.
+E888: (NFA regexp) cannot repeat %s
+E88: Cannot go before first buffer
+E890: Trailing char after ']': %s]%s
+E891: Using a Funcref as a Float
+E892: Using a String as a Float
+E893: Using a List as a Float
+E894: Using a Dictionary as a Float
+E895: Sorry, this command is disabled, the MzScheme's racket/base module could not be loaded.
+E898: socket() in channel_open()
+E89: No write since last change for buffer %ld (add ! to override)
+E901: gethostbyname() in channel_open()
+E902: Cannot connect to port
+E903: Received command with non-string argument
+E904: Last argument for expr/call must be a number
+E904: Third argument for call must be a list
+E905: Received unknown command: %s
+E906: Not an open channel
+E907: Using a special value as a Float
+E908: Using an invalid value as a String
+E909: Cannot index a special variable
+E90: Cannot unload last buffer
+E910: Using a Job as a Number
+E911: Using a Job as a Float
+E912: Cannot use ch_evalexpr()/ch_sendexpr() with a raw or nl channel
+E913: Using a Channel as a Number
+E914: Using a Channel as a Float
+E915: in_io buffer requires in_buf or in_name to be set
+E916: Not a valid job
+E917: Cannot use a callback with %s()
+E918: Buffer must be loaded: %s
+E919: Directory not found in '%s': "%s"
+E91: 'shell' option is empty
+E920: _io file requires _name to be set
+E921: Invalid callback argument
+E922: Expected a dict
+E923: Second argument of function() must be a list or a dict
+E924: Current window was closed
+E925: Current quickfix was changed
+E926: Current location list was changed
+E927: Invalid action: '%s'
+E928: String required
+E929: Too many viminfo temp files, like %s!
+E92: Buffer %ld not found
+E930: Cannot use :redir inside execute()
+E931: Buffer cannot be registered
+E932: Closure function should not be at top level: %s
+E933: Function was deleted: %s
+E934: Cannot jump to a buffer that does not have a name
+E935: Invalid submatch number: %d
+E936: Cannot delete the current group
+E937: Attempt to delete a buffer that is in use
+E938: Duplicate key in JSON: "%s"
+E93: More than one match for %s
+E940: Cannot lock or unlock variable %s
+E941: Already started a server
+E942: +clientserver feature not available
+E943: Command table needs to be updated, run 'make cmdidxs'
+E947: Job still running in buffer "%s"
+E948: Job still running
+E948: Job still running (add ! to end the job)
+E949: File changed while writing
+E94: No matching buffer for %s
+E951: \% value too large
+E952: Autocommand caused recursive behavior
+E953: File exists: %s
+E954: 24-bit colors are not supported on this environment
+E955: Not a terminal buffer
+E95: Buffer with this name already exists
+E96: Cannot diff more than %ld buffers
+E97: Cannot create diffs
+E98: Cannot read diff output
+E99: Current buffer is not in diff mode
+ERROR: 
+Edit File
+Edit File in new tab page
+Edit File in new window
+Edit with &Vim
+Edit with &multiple Vims
+Edit with existing Vim - 
+Edit with single &Vim
+Edits the selected file(s) with Vim
+Encoding:
+End of function
+End of sourced file
+Enter encryption key: 
+Enter number of swap file to use (0 to quit): 
+Enter same key again: 
+Entering Debug mode.  Type "cont" to continue.
+Entering Ex mode.  Type "visual" to go to Normal mode.
+Error and interrupt
+Error creating process: Check if gvim is in your path!
+Error detected while processing %s:
+Error file
+Estimated runtime memory use: %d bytes
+Exception
+Exception caught: %s
+Exception discarded: %s
+Exception finished: %s
+Exception thrown: %s
+Executing %s
+Expected MAP count in %s line %d
+Expected REP(SAL) count in %s line %d
+Expected Y or N in %s line %d: %s
+Expression
+External submatches:
+FLAG after using flags in %s line %d: %s
+File "%s" does not exist
+File contents changed, cannot use undo info
+File permissions of "%s" are read-only.
+It may still be possible to write it.
+Do you wish to try?
+File preserved
+Filter
+Find & Replace (use '\\' to find a '\')
+Find &Next
+Find Next
+Find string (use '\\' to find a '\')
+Find what:
+Finished reading undo file %s
+First duplicate word in %s line %d: %s
+Flag is not a number in %s line %d: %s
+Font '%s' is not fixed-width
+Font%ld width is not twice that of font0
+Font0 width: %ld
+Font0: %s
+Font1 width: %ld
+Font1: %s
+Garbage after option argument
+Greetings, Vim user!
+Help poor children in Uganda!
+Hit end of paragraph
+I/O ERROR
+Ignored %d word(s) with non-ASCII characters in %s
+Ignored %d words with non-ASCII characters
+Ignoring long line in tags file
+Illegal file name
+Illegal flag in %s line %d: %s
+Illegal register name
+Illegal starting char
+Input Line
+Input _Methods
+Interrupt
+Interrupt: 
+Interrupted
+Invalid argument for
+Invalid font specification
+Invalid region nr in %s line %d: %s
+Invalid value for FLAG in %s line %d: %s
+Keys don't match!
+Kill a connection
+Kill job in "%s"?
+Linking: 
+Lua library cannot be loaded.
+Match whole word only
+Message
+Messages maintainer: The Vim Project
+Missing '>'
+Missing FOL/LOW/UPP line in %s
+Missing SOFO%s line in %s
+Modified by 
+Need %s version %ld
+Need Amigados version 2.04 or later
+Need encryption key for "%s"
+NetBeans disallows writes of unmodified buffers
+New tab
+Newval = "%s"
+No Syntax items defined for this buffer
+No abbreviation found
+No breakpoints defined
+No display
+No display: Send expression failed.
+No included files
+No mapping found
+No marks set
+No matching autocommands
+No old files
+No swap file
+No text to be printed
+No undo possible; continue anyway
+No user-defined commands found
+Not Used
+Not enough memory to set references, garbage collection aborted!
+Not reading undo file, owner differs: %s
+Nothing to undo
+Number of words after soundfolding: %ld
+Oldval = "%s"
+Open File dialog
+Open Tab...
+Open tab...
+Opening the X display failed
+Opening the X display timed out
+Opening the X display took %ld msec
+Original file "%s"
+Overwrite existing file "%s"?
+Page %d
+Partial writes disallowed for NetBeans buffers
+Patch file
+Path length too long!
+Pathname:
+Pattern found in every line: %s
+Pattern not found
+Pattern not found: %s
+Performing soundfolding...
+Press ENTER or type command to continue
+Print job sent.
+Printed: %s
+Printing '%s'
+Printing aborted
+Printing page %d (%d%%)
+Question
+Reading affix file %s...
+Reading back spell file...
+Reading dictionary file %s...
+Reading from stdin...
+Reading spell file "%s"
+Reading undo file: %s
+Reading viminfo file "%s"%s%s%s
+Reading word file %s...
+Recovery completed. Buffer contents equals file contents.
+Recovery completed. You should check if everything is OK.
+Reinit all connections
+Replace
+Replace &All
+Replace All
+Replace with:
+Running in Vi compatible mode
+Running modeless, typed text is inserted
+Save As
+Save File dialog
+Save Redirection
+Save Session
+Save Setup
+Save View
+Save changes to "%s"?
+Scanning dictionary: %s
+Scanning included file: %s
+Scanning tags.
+Scanning: %s
+Scrollbar Widget: Could not get geometry of thumb pixmap.
+Search String
+Searching for "%s"
+Searching for "%s" in "%s"
+Searching included file %s
+Searching tags file %s
+See ":help E312" for more information.
+See ":help W11" for more info.
+See ":help W12" for more info.
+See ":help W16" for more info.
+Select Directory dialog
+Selected %s%ld of %ld Lines; %lld of %lld Words; %lld of %lld Bytes
+Selected %s%ld of %ld Lines; %lld of %lld Words; %lld of %lld Chars; %lld of %lld Bytes
+Selection
+Sending to printer...
+Show connections
+Show this message
+Signs for %s:
+Skipping undo file write, nothing to undo
+Sorry, help file "%s" not found
+Sorry, no suggestions
+Sorry, only %ld suggestions
+Sorry, this command is disabled: the Perl library could not be loaded.
+Source Vim script
+Sponsor Vim development!
+Stack size increases
+Style:
+Substitute 
+Swap file "
+Swap file "%s" exists, overwrite anyway?
+Swap file already exists!
+Swap file is encrypted: "%s"
+Swap files found:
+Tab page %d
+Tear off this menu
+Terminal
+Terminal-finished
+Testing the X display failed
+Thanks for flying Vim
+The file was created on 
+The only match
+This Vim was not compiled with the diff feature.
+This cscope command does not support splitting the window.
+Too many "+command", "-c command" or "--cmd command" arguments
+Too many compound flags
+Too many edit arguments
+Too many postponed prefixes
+Too many postponed prefixes and/or compound flags
+Too many regions in %s line %d: %s
+Total number of words: %d
+Trailing text in %s line %d: %s
+Type  :qa!  and press <Enter> to abandon all changes and exit Vim
+Type number and <Enter> (empty cancels): 
+Type number and <Enter> or click with mouse (empty cancels): 
+Unable to read block 0 from 
+Unable to register a command server name
+Unknown
+Unknown option argument
+Unrecognized flags in %s line %d: %s
+Unrecognized or duplicate item in %s line %d: %s
+Untitled
+Use Vim version 3.0.
+Used CUT_BUFFER0 instead of empty selection
+Using crypt key from swap file for the text file.
+Using swap file "%s"
+VIM - ATTENTION
+VIM - Search and Replace...
+VIM - Search...
+VIM - Vi IMproved
+VIM Error
+VIM: Can't open window!
+VIMRUN.EXE not found in your $PATH.
+External commands will not pause after completion.
+See  :help win32-vimrun  for more information.
+Vim - Font Selector
+Vim E458: Cannot allocate colormap entry, some colors may be incorrect
+Vim Warning
+Vim dialog
+Vim error
+Vim error: ~a
+Vim exiting with %d
+Vim is open source and freely distributable
+Vim macro files (*.vim)
+All Files (*)
+Vim macro files (*.vim)
+All Files (*.*)
+Vim: Caught %s event
+Vim: Error reading input, exiting...
+Vim: Error: Failure to start gvim from NetBeans
+Vim: Error: This version of Vim does not run in a Cygwin terminal
+Vim: Main window unexpectedly destroyed
+Vim: Reading from stdin...
+Vim: Received "die" request from session manager
+Vim: Warning: Input is not from a terminal
+Vim: Warning: Output is not to a terminal
+W10: Warning: Changing a readonly file
+W11: Warning: File "%s" has changed since editing started
+W12: Warning: File "%s" has changed and the buffer was changed in Vim as well
+W13: Warning: File "%s" has been created after editing started
+W14: Warning: List of file names overflow
+W15: Warning: Wrong line separator, ^M may be missing
+W16: Warning: Mode of file "%s" has changed since editing started
+W17: Arabic requires UTF-8, do ':set encoding=utf-8'
+W18: Invalid character in group name
+W19: Deleting augroup that is still in use
+W20: Required python version 2.x not supported, ignoring file: %s
+W21: Required python version 3.x not supported, ignoring file: %s
+W22: Text found after :endfunction: %s
+WARNING: The file has been changed since reading it!!!
+Warning
+Warning: Cannot find word list "%s.%s.spl" or "%s.ascii.spl"
+Warning: Cannot find word list "%s_%s.spl" or "%s_ascii.spl"
+Warning: Entered other buffer unexpectedly (check autocommands)
+Warning: Using a weak encryption method; see :help 'cm'
+Warning: both compounding and NOBREAK specified
+Warning: region %s not supported
+Warning: terminal cannot highlight
+While opening file "
+Will not overwrite with undo file, cannot read: %s
+Will not overwrite, this is not an undo file: %s
+Window position: X %d, Y %d
+Word '%.*s' added to %s
+Word '%.*s' removed from %s
+Word from other line
+Write partial file?
+Writing spell file %s...
+Writing suggestion file %s...
+Writing undo file: %s
+Writing viminfo file "%s"
+Wrong CHECKCOMPOUNDPATTERN value in %s line %d: %s
+Wrong COMPOUNDMIN value in %s line %d: %s
+Wrong COMPOUNDRULES value in %s line %d: %s
+Wrong COMPOUNDSYLMAX value in %s line %d: %s
+Wrong COMPOUNDWORDMAX value in %s line %d: %s
+XSMP ICE connection watch failed
+XSMP SmcOpenConnection failed: %s
+XSMP handling save-yourself request
+XSMP lost ICE connection
+XSMP opening connection
+[CONVERSION ERROR in line %ld]
+[CR missing]
+[Deleted]
+[Device]
+[File too big]
+[Help]
+[ILLEGAL BYTE in line %ld]
+[Incomplete last line]
+[Location List]
+[NOT converted]
+[New DIRECTORY]
+[New File]
+[New file]
+[No Name]
+[No write since last change]
+[Not edited]
+[Permission Denied]
+[Preview]
+[Prompt]
+[Quickfix List]
+[READ ERRORS]
+[Read errors]
+[Scratch]
+[converted]
+[crypted]
+[dos format]
+[fifo/socket]
+[fifo]
+[file ..]       edit specified file(s)
+[long lines split]
+[mac format]
+[noeol]
+[readonly]
+[socket]
+[unix format]
+[unix]
+_Cancel
+_Close
+active
+add() argument
+and run diff with the original file to check for changes)
+attempt to refer to deleted buffer
+attempt to refer to deleted tab page
+attempt to refer to deleted window
+auto-removing autocommand: %s <buffer=%d>
+autocommand %s
+before
+block of %ld lines yanked%s
+block of 1 line yanked%s
+buffer is invalid
+by Bram Moolenaar et al.
+called inputrestore() more often than inputsave()
+calling %s
+can't delete OutputObject attributes
+can't read output of 'charconvert'
+cannot change console mode ?!
+cannot create buffer/window command: object is being deleted
+cannot delete line
+cannot delete vim.Dictionary attributes
+cannot delete vim.List attributes
+cannot get line
+cannot insert line
+cannot insert/append line
+cannot modify fixed dictionary
+cannot open 
+cannot register callback command: buffer/window is already being deleted
+cannot register callback command: buffer/window reference not found
+cannot replace line
+cannot save undo information
+cannot set attribute %s
+cannot set line(s)
+cannot yank; delete anyway
+change
+changes
+cmd: %s
+continuing in %s
+could not source "%s"
+couldn't open buffer
+cs_create_connection exec failed
+cs_create_connection setpgid failed
+cs_create_connection: fdopen for fr_fp failed
+cs_create_connection: fdopen for to_fp failed
+cscope commands:
+cscope connection %s closed
+cursor position outside buffer
+defaulting to '
+deleted block 1?
+dictionary is locked
+dlerror = "%s"
+don't quit the editor until the file is successfully written!
+empty keys are not allowed
+environment variable
+error handler
+expressions disabled at compile time
+extend() argument
+failed to add key '%s' to dictionary
+failed to change directory
+failed to rename buffer
+failed to run function %s
+fewer lines
+filename / context / line
+filter() argument
+finished
+finished sourcing %s
+frame at highest level: %d
+frame is zero
+freeing %ld lines
+function %s does not exist
+gvimext.dll error
+hidden option
+in path ---
+insert() argument
+invalid attribute: %s
+invalid buffer number
+invalid expression
+invalid mark name
+is a device (disabled with 'opendevice' option)
+is a directory
+is not a file
+is not a file or writable device
+is read-only (add ! to override)
+keyboard interrupt
+line %4ld:
+line %6d, word %6ld - %s
+line %ld
+line %ld of %ld --%d%%-- col 
+line %ld: %s
+line %ld: could not source "%s"
+line %ld: sourcing "%s"
+line less
+line number out of range
+linenr out of range
+list index out of range
+list is locked
+logoff
+map() argument
+mark not set
+match %d
+match %d of %d
+match in file
+maximal 
+mch_get_shellsize: not a console??
+menu  Edit->Global Settings->Toggle Insert Mode  
+menu  Edit->Global Settings->Toggle Vi Compatible
+menu  Help->Orphans           for information    
+menu  Help->Sponsor/Register  for information    
+minimal 
+modeline
+more line
+more lines
+netbeans is not supported with this GUI
+new shell started
+no cscope connections
+no such tab page
+no such window
+no syncing
+not allowed in the Vim sandbox
+not found 
+not found in '%s': "%s"
+not implemented yet
+number must be greater or equal to zero
+number must be greater than zero
+pe_line_count is zero
+pre-vimrc command line
+readonly attribute: buffer
+recording
+remove() argument
+replace with %s (y/n/a/q/l/^E/^Y)?
+reverse() argument
+row %d column %d
+running
+search hit BOTTOM, continuing at TOP
+search hit TOP, continuing at BOTTOM
+shell 
+shell returned %d
+shutdown
+sort() argument
+sourcing "%s"
+stack_idx should be 0
+string cannot contain newlines
+syncing on C-style comments
+syncing starts 
+syntax case ignore
+syntax case match
+syntax conceal off
+syntax conceal on
+syntax iskeyword 
+tag %d of %d%s
+tagname
+to %s on %s
+type  :help cp-default<Enter> for info on this
+type  :help iccf<Enter>       for information 
+type  :help register<Enter>   for information 
+type  :help sponsor<Enter>    for information 
+type  :help version9<Enter>   for version info
+type  :help<Enter>  or  <F1>  for on-line help
+type  :q<Enter>               to exit         
+type  :set nocp<Enter>        for Vim defaults
+unable to convert %s to a Vim list
+unable to get option value
+uniq() argument
+unknown
+unknown flag: 
+unknown option
+unknown vimOption
+unnamed function %s does not exist
+value is too large to fit into C int type
+value is too small to fit into C int type
+version 
+window index is out of range
+window is invalid
+with Carbon GUI.
+with Cocoa GUI.
+with GTK2 GUI.
+with GTK2-GNOME GUI.
+with GTK3 GUI.
+with GUI.
+with Photon GUI.
+with X11-Athena GUI.
+with X11-Motif GUI.
+with X11-neXtaw GUI.
+without GUI.
+writing to device disabled with 'opendevice' option
+Project-Id-Version: vim 8.1
+Report-Msgid-Bugs-To: 
+PO-Revision-Date: 2018-06-29 09:32+0900
+Last-Translator: SungHyun Nam <goweol@gmail.com>
+Language-Team: Korean
+Language: ko
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Plural-Forms: nplurals=1; plural=0;
+Last set from 
+          
+         [
+         [
+         
+         
+        
+       a: 
+       c: 
+       d: 
+       e: 
+ egrep 
+       f: 
+       g: 
+       i: 
+ #include
+       s: 
+       t: 
+        
+       
+      
+      
+   #   
+  # TO tag         FROM line  in file/text
+  col 
+# Last %sSearch Pattern:
+--- Syntax 
+--- Syntax sync 
+ (GTK+ 
+ (neXtaw 
+Cannot execute shell 
+Compiled 
+Could not get security context for 
+Could not set security context for 
+Found a swap file by the name "
+MS-Windows 32
+MS-Windows 32
+MS-Windows 64
+MS-Windows 64
+: "vim -h"
+Normal 
+OpenVMS 
+Small 
+ .swp 
+macOS 
+  col 
+shell returned 
+syncing on items
+                          Vim
+                         
+             
+          
+         [
+         [
+         [
+         [
+         
+       defaults 
+      -- 
+      NEWER than swap file!
+         
+ exrc 
+        
+ vimrc 
+ ":recover" 
+ "vim -r 
+=%ld  id=%d  
+       
+ gvimrc 
+   In directory 
+        
+ vimrc 
+  # pri kind tag
+  (Already listed)
+ exrc 
+  Using tag with different case!
+  fall-back for $VIM: "
+       
+ gvimrc 
+ # pid    
+                   prepend path
+ (^E/^Y)
+ (^E/^Y)
+ vimrc 
+ vimrc 
+ < "%.*s"
+ (^V^N^P)
+ %d / %d
+ (^D^N^P)
+ Dictionary 
+ (^K^N^P)
+ (^F^N^P)
+ (^N^P)
+ (^N^P)
+ Omni 
+ (^O^N^P)
+ (^N^P)
+ SPACE/d/j: 
+, b/u/k: 
+ (^S^N^P)
+ (^]^N^P)
+ (^T^N^P)
+ (^U^N^P)
+ (^L^N^P)
+ (^]^D^E^F^I^K^L^N^O^Ps^U^V^Y)
+ cannot be used with this version of Vim.
+ f-b for $VIMRUNTIME: "
+ has been damaged (page size is smaller than minimum value).
+ into "%c
+ kind file
+ line breaks
+ lines before top line
+ oldfiles
+ or more
+ returned
+ vim [
+ (":help recovery" 
+ viminfo 
+ Vim %s.
+ 'encoding'
+%-5s: %s%*s (
+%3d  %s %s  %ld 
+%3d  expr %s
+%ld %s; %s #%ld  %s
+%ld lines %sed %d times
+%ld lines %sed 1 time
+ --%d%%--
+%ld lines changed
+%ld lines indented 
+%ld lines to indent... 
+%ld lines yanked%s
+%ld seconds ago
+%s (%s, 
+) pending 
+) #%ld
+ .aff 
+%s, %ld 
+%serror list %d of %d; %d errors 
+%sviminfo: 
+' not known. Available builtin terminals are:
+'dictionary' 
+'history' 
+'readonly' 
+'thesaurus' 
+(%d of %d)%s%s: 
++-%3ld 
++-%3ld 
++<lnum>
+<lnum> 
++reverse
+ (also: +rv)
+or the file has been damaged.
+-               
+--- Included files 
+--cmd <
+vimrc 
+--cmd 
+--echo-wid
+ Window ID
+--literal
+--noplugin
+--not-a-term
+--remote <files>
+ <files> 
+--remote-expr <expr>
+ <expr> 
+--remote-send <keys>
+ <keys>
+--remote-silent <files>  
+--remote-tab[-wait][-silent] <files>  --remote
+--remote-wait <files>  --remote
+--remote-wait-silent <files>  
+--role <role>
+--serverlist
+--servername <name>
+ <name>
+--socketid <xid>
+--startuptime <file>
+startup timing 
+ <file>
+--ttyfail
+--version
+--windowid <HWND>
+ win32 
+Arabic 
+: 'compatible'
+Farsi 
+Hebrew 
+: 'nocompatible'
+-P <parent title>
+ ("view"
+-T <terminal>
+ <terminal>
+-U <gvimrc>
+.gvimrc 
+ <gvimrc>
+-V[N][fname]
+Be verbose [level N] [fname
+-W <scriptout>
+ <scriptout> 
+ ("rvim"
+-background <color>
+ <color> 
+ (also: -bg)
+-boldfont <font>
+ <font> 
+-borderwidth <width>
+ <width> 
+ (also: -bw)
+ ("vimdiff"
+-dev <
+-display <display>
+-display <display>
+ <display>
+-display <display>
+ <display>
+ (also: --display)
+ ("ex"
+ newcli 
+ --nofork
+-font <font>
+ <font> 
+ (also: -fn)
+-foreground <color>
+ <color> 
+ (also: -fg)
+ ("gvim"
+-geometry <geom>
+ <geom> 
+ (also: -geom)
+ --help
+-i <viminfo>
+.viminfo 
+ <viminfo>
+-iconic
+-italicfont <font>
+ <font> 
+-menuheight <height>
+ <height> 
+ (also: -mh)
+-register
+ gvim OLE
+-reverse
+ (also: -rv)
+ ("ex"
+-s <scriptin>
+<scriptin> 
+ Normal 
+-scrollbarwidth <width>  
+ <width> 
+ (also: -sw)
+-t tag          
+-u <vimrc>
+.vimrc 
+ <vimrc>
+-unregister
+ ("vi"
+-w <scriptout>
+ <scriptout> 
+-xrm <resource>
+ ("evim"
+, modeless)
+ /encoding= 
+1 line %sed %d times
+1 line %sed 1 time
+ --%d%%--
+1 line changed
+1 line indented 
+1 line yanked%s
+ gvimrc 
+ gvimrc 
+; match 
+<%s>%s%s  %d,  
+ %02x,  
+ %03o, 
+<%s>%s%s  %d,  
+ %02x,  
+> %d, 
+ %04x, 
+> %d, 
+ %04x, 
+> %d, 
+ %08x, 
+> %d, 
+ %08x, 
+ANCHOR_BUF_SIZE
+cscope 
+ BAD/RARE/KEEPCASE/NEEDAFFIX/NEEDCOMPOUND/NOSUGGEST
+ affix
+Affix name too long in %s line %d: %s
+ (*.c, *.h)
+*.c;*.h
+ (*.cpp, *.hpp)
+*.cpp;*.hpp
+ (*.vim, _vimrc, _gvimrc)
+*.vim;_vimrc;_gvimrc
+ (*.*)
+ (*.*)
+ (*.c, *.h)
+*.c;*.h
+ (*.cpp, *.hpp)
+*.cpp;*.hpp
+ (*.bas, *.frm)
+*.bas;*.frm
+ (*.vim, _vimrc, _gvimrc)
+*.vim;_vimrc;_gvimrc
+ cscope 
+At line
+Before byte %ld
+ SOFO 
+: "%s%s" %ld 
+COMPOUNDSYLMAX
+ SYLLABLE
+: "%s"
+Cannot create 
+Cannot execute 
+ source
+: "%s"
+'undodir'
+ undo 
+Change "%.*s" to:
+Col %s of %s; Line %ld of %ld; Word %lld of %lld; Byte %lld of %lld
+Col %s of %s; Line %ld of %ld; Word %lld of %lld; Char %lld of %lld; Byte %lld of %lld
+%d/%d 
+; %d (%d%%)
+'charconvert'
+vim32.dll
+(stderr)
+Cscope 
+: "%s"
+ COMPOUNDFORBIDFLAG
+ COMPOUNDPERMITFLAG
+ affix 
+*.nothing
+ /encoding= 
+ /regions= 
+ affix: %s
+E100: 
+ diff 
+E101: 
+ diff 
+E102: "%s" 
+E103: "%s" 
+ diff 
+E104: digraph
+ Escape
+E105: 
+ :loadkeymap
+E107: 
+E108: 
+: "%s"
+E109: '?' 
+E10: /, ? 
+E110: ')'
+E111: ']'
+E112: 
+E113: 
+E114: 
+E115: 
+E116: 
+E117: 
+E118: 
+E119: 
+; <CR> 
+, CTRL-C 
+E120: 
+ <SID> 
+E121: 
+E122: 
+E123: 
+E124: '('
+E125: 
+E126: :endfunction
+E127: 
+E128: 
+E129: 
+ exrc/vimrc
+E130: 
+E131: 
+E132: 
+ 'maxfuncdepth'
+E133: :return
+E134: 
+E135: *Filter* 
+E136: viminfo: 
+E137: Viminfo 
+E138: Viminfo 
+E139: 
+E140: 
+E141: 
+E142: 
+: 'write' 
+E143: Autocommand
+E144: 
+E145: rvim
+E146: 
+E147: :global
+E148: global
+E149: 
+E150: 
+E151: 
+E152: 
+E153: 
+E154: "%s" 
+ %s/%s 
+E155: 
+ sign: %s
+E156: sign 
+E157: 
+ sign ID: %ld
+E158: 
+E159: sign 
+E160: 
+ sign 
+E161: 
+E162: 
+E163: 
+E164: 
+E165: 
+E166: 
+E167: :scriptencoding
+E168: :finish
+E169: 
+E170: :endfor 
+E170: :endwhile
+E171: :endif
+E173: 
+E173: 
+E174: 
+E175: 
+E176: 
+E177: 
+E178: 
+E179: -addr
+E179: -complete
+E17: "%s"
+E180: 
+E180: 
+E181: 
+E182: 
+E183: 
+E184: 
+E185: 
+E186: 
+E187: 
+E188: 
+E189: "%s"
+E18: ':let'
+E190: 
+E191: 
+E192: :normal
+E193: :endfunction
+ function 
+E194: '#'
+E195: 
+ viminfo 
+E196: 
+ digraph
+E197: 
+ "%s"(
+E198: cmd_pchar
+E199: 
+E200: *ReadPre 
+E201: *ReadPre 
+E202: 
+E203: 
+E204: Autocommand
+E205: 
+E206: 
+E207: 
+E208: "%s"
+E209: "%s" 
+E210: "%s" 
+E211: 
+E212: 
+E213: 
+E214: 
+E215: * 
+E216: 
+E216: 
+E217: ALL 
+E218: 
+E219: {
+, 'modifiable'
+E220: }
+E222: 
+E223: 
+E224: %s 
+E225: %s 
+E226: %s 
+E227: %s 
+E228: makemap: 
+E229: GUI
+E230: "%s"
+E231: 'guifontwide'
+E232: 
+ BalloonEval
+E233: 
+E234: 
+E235: 
+E236: 
+E237: 
+E238: 
+E239: 
+ sign 
+E240: X 
+E241: %s(
+E243: 
+: "-%s": OLE 
+E244: 
+E244: 
+E245: 
+E246: FileChangedShell 
+E247: "%s"
+E248: 
+E250: 
+E251: 
+E252: 
+E253: 
+E254: 
+E255: sign 
+E256: 
+E257: cstag: 
+E258: 
+E25: GUI
+E261: cscope 
+E262: cscope 
+E263: 
+E264: 
+: I/O 
+E265: $_
+ String 
+E266: 
+E267: 
+ return
+E268: 
+E269: 
+ break
+E26: Hebrew
+E270: 
+E272: 
+E273: 
+ longjmp 
+E277: 
+E27: Farsi
+E280: TCL 
+: reflist
+ vim-dev@vim.org
+E282: "%s"
+E283: "%s"
+E284: IC 
+E285: 
+E286: 
+E287: 
+E288: 
+E289: 
+ preedit 
+E290: List
+ number
+E293: 
+E294: 
+E295: 
+E296: 
+E297: 
+E298: 
+E298: 
+E298: 
+E299: Safe 
+ sandbox
+ Perl evaluation
+E300: 
+ (symlink 
+E301: 
+E302: 
+E303: "%s"
+E304: ml_upd_block0(): 
+E305: %s
+E306: %s
+E307: %s
+E308: 
+E309: %s
+E310: 
+) .swp 
+E311: 
+E312: 
+E313: 
+E314: 
+E315: ml_get: 
+ lnum: %ld
+E316: ml_get: %ld 
+E317: 
+E317: 
+E317: 
+E317: 
+E318: 
+E319: 
+E320: %ld 
+E321: "%s"
+E322: 
+E323: 
+E324: 
+E325: 
+E326: 
+E327: 
+E328: 
+E329: "%s" 
+E330: 
+E331: 
+E332: 
+E333: 
+E334: 
+E335: %s 
+E336: 
+E337: 
+E338: 
+E339: 
+E340: 
+E341: 
+: lalloc(%ld, )
+E342: 
+!  (%lu 
+E343: 
+: '**[
+ '%s' 
+E344: cdpath
+ "%s" 
+E345: path
+ "%s" 
+E346: cdpath
+ "%s" 
+E347: path
+ "%s" 
+E348: 
+E349: 
+E350: 
+ 'foldmethod'
+E351: 
+ 'foldmethod'
+E352: 
+ 'foldmethod'
+E353: %s 
+E354: 
+: '%s'
+E355: 
+E356: get_varp 
+E357: 'langmap': %s
+E358: 'langmap': 
+E359: 
+E360: -f 
+E363: 
+ 'maxmempattern'
+E364: 
+ "%s()" 
+E365: 
+E367: 
+: "%s"
+E369: %s%%[]
+E370: %s 
+E371: 
+E372: 
+E373: 
+E374: 
+E375: 
+E376: 
+E377: 
+E378: 'errorformat'
+E379: 
+E380: 
+E381: 
+E382: 
+, 'buftype' 
+E383: 
+E384: 
+E385: 
+E386: ';' 
+E387: 
+E388: 
+E389: 
+E390: 
+E391: 
+E392: 
+E393: group[t]here
+E394: %s
+ region 
+E395: contains 
+E397: 
+E398: '=' 
+E399: 
+E400: 
+E401: 
+E402: 
+E403: syntax sync: 
+E404: 
+E405: 
+E406: 
+E407: %s
+E408: %s
+) contains 
+E409: 
+E410: 
+ :syntax 
+E411: 
+E412: 
+: ":highlight link %s"
+E413: 
+: ":highlight link %s"
+E414: group
+, highlight link 
+E415: 
+E416: 
+E417: 
+E418: 
+E419: 
+E420: 
+E421: 
+E422: 
+E423: 
+E424: 
+E425: 
+E426: 
+E427: 
+E428: 
+E429: 
+E430: %s
+E431: 
+E432: 
+E433: 
+E434: 
+E435: 
+E436: termcap
+ "%s" 
+E437: 
+ "cm" 
+E438: u_undo: 
+E439: undo 
+E440: undo 
+E441: 
+E442: 
+E443: 
+E444: 
+E445: 
+E446: 
+E447: path
+ "%s" 
+E448: %s 
+E449: 
+E455: 
+E456: 
+ "%s.ps"
+E456: 
+ "cidfont.ps"
+E456: 
+ "prolog.ps"
+E456: "%s" 
+E457: 
+E459: 
+E45: 'readonly' 
+E461: 
+E462: "%s"
+E463: 
+E464: 
+E465: :winsize
+E466: :winpos
+E467: 
+E468: 
+E470: 
+E471: 
+E472: 
+E473: 
+E474: 
+E475: 
+E475: 
+E475: 
+E476: 
+E477: !
+E478: 
+E479: 
+E480: 
+E481: 
+E482: %s 
+E483: 
+E484: %s 
+E485: %s 
+E486: 
+E487: 
+E488: 
+E48: sandbox
+E490: fold
+E492: 
+E493: 
+E494: w
+E495: "<afile>"
+E496: "<abuf>"
+E497: "<amatch>"
+E498: "<sfile>"
+ :source 
+E499: '%'
+ ":p:h"
+E500: 
+E501: 
+E505: "%s"
+E505: %s
+E506: 
+E507: 
+E508: 
+E509: 
+E50: \z(
+E510: 
+E511: netbeans
+E512: 
+E513: 
+ 'fenc'
+E513: 
+, %ld 
+ 'fenc'
+E514: 
+E515: 
+E516: 
+E517: 
+E518: 
+E519: 
+E51: %s(
+E520: 
+E521: = 
+E521: 
+: &%s = '%s'
+E522: termcap
+E523: 
+E524: 
+E525: 
+E526: <%s> 
+E527: 
+E528: ' 
+E529: 'term'
+E530: GUI
+E531: GUI
+ ":gui"
+E533: 
+E534: 
+E535: <%c> 
+E536: 
+E537: 'commentstring'
+E538: 
+E539: 
+ %s%%(
+E540: 
+E542: 
+E543: 
+E544: 
+E545: 
+E546: 
+E547: 
+E548: 
+E549: 
+E550: 
+E551: 
+E552: 
+E553: 
+E554: %s{...}
+E555: 
+E556: 
+E557: termcap 
+E558: 
+ terminfo
+E559: 
+ termcap
+E560: 
+: cs[cope] %s
+E561: 
+ cscope 
+E562: 
+: cstag <ident>
+E563: stat 
+E563: stat(%s) 
+E564: %s
+ cscope 
+E566: cscope 
+E567: cscope 
+E568: 
+ cscope 
+E570: cs_manage_matches
+E571: 
+, Tcl 
+E572: 
+E573: 
+E574: 
+E579: :if
+E580: :if
+ :endif
+E581: :if
+ :else
+E582: :if
+ :elseif
+E583: 
+ :else
+E584: :else 
+ :elseif
+E585: :while/:for
+E586: :while 
+ :continue
+E587: :while 
+ :break
+E588: :for 
+ :endfor
+E588: :while
+ :endwhile
+E589: 'backupext'
+ 'patchmode'
+E590: 
+E591: 'winheight'
+ 'winminheight'
+E592: 'winwidth'
+ 'winminwidth'
+E593: 
+E594: 
+E595: 
+E596: 
+E597: 
+E598: 
+E599: 'imactivatekey' 
+E59: %s@ 
+E600: :endtry
+E601: :try
+E602: :try
+ :endtry
+E603: :try
+ :catch
+E604: :finally 
+ :catch
+E605: 
+E606: :try
+ :finally
+E607: 
+ :finally
+E608: 'Vim' 
+ :throw
+E609: Cscope 
+E60: %s{...}s
+E612: 
+E613: 
+E614: vim_SelFile: 
+E615: vim_SelFile: 
+E616: vim_SelFile: 
+E617: GTK+ 2 GUI
+E618: 
+E619: 
+E61: Nested %s*
+E620: "%s" 
+E621: "%s" 
+E622: cscope
+E623: cscope 
+ spawn
+E624: "%s" 
+E625: cscope 
+E626: cscope 
+E62: Nested %s%c
+E630: %s(): 
+E631: %s(): 
+E63: \_
+E64: %s%c 
+E655: 
+E658: 
+ NetBeans 
+E659: Python
+E661: 
+E664: changelist
+E665: 
+E666: 
+E667: Fsync
+E668: NetBeans 
+: "%s"
+E669: 
+E66: \z(
+E670: 
+E671: 
+E672: MDI 
+E673: 
+E674: printmbcharset
+E675: 
+E676: acwrite 
+ autocommand
+E677: 
+E678: %s%%[dxouU] 
+E679: syncolor.vim 
+E67: \z1 
+E680: <buffer=%d>: 
+E681: 
+E682: 
+E683: 
+E684: 
+E685: 
+E686: %s 
+E687: List 
+E688: List 
+E689: List
+ Dictionary
+E68: \z 
+E690: :for 
+E691: List
+E692: List
+E694: Funcrefs
+E695: Funcref
+E696: List
+E697: List 
+E698: 
+E699: 
+E69: %s%%[ 
+E700: 
+E701: len()
+E702: 
+E703: Funcref
+ Number
+E704: Funcref 
+E705: 
+E707: 
+E708: [:]
+E709: [:]
+ List 
+ %s%%[]
+E710: List 
+E711: List 
+E712: %s 
+ List 
+ Dictionary
+E713: Dictionary
+E714: List
+E715: Dictionary
+E716: Dictionary
+E717: 
+ Dictionary 
+E718: Funcref
+E719: Dictionary
+E71: %s%% 
+E720: Dictionary
+E721: Dictionary
+: "%s"
+E722: Dictionary
+E723: Dictionary 
+E724: 
+E725: Dictionary
+E726: Stride
+E727: 
+E728: Dictionary
+ Number
+E729: Funcref
+ String
+E730: List
+ String
+E731: Dictionary
+ String
+E732: :while
+ :endfor
+E733: :for
+ :endwhile
+E734: %s=
+E735: Dictionary
+ Dictionary
+E736: Dictionary
+E737: 
+E738: %s 
+E739: 
+E740: 
+E741: 
+E742: %s 
+E743: 
+E744: NetBeans
+E745: List
+ Number
+E746: 
+E747: 
+E749: 
+E750: 
+ ":profile start {fname}"
+E751: 
+E752: 
+E753: 
+E754: 
+E755: %s
+E756: 
+E757: spell 
+E758: 
+ spell 
+E760: %s
+E761: affix 
+ FOL, LOW 
+E762: FOL, LOW 
+E763: 
+ spell 
+E764: 
+E765: 'spellfile'
+E766: printf()
+E767: printf()
+E768: 
+: %s (
+ :silent! 
+E769: %s[ 
+E76: [
+E770: spell 
+E771: 
+ spell 
+E772: Spell 
+E774: 'operatorfunc'
+E775: Eval 
+E776: 
+E777: String
+E778: .sug 
+E779: 
+ .sug 
+E780: .sug 
+E781: .sug 
+ .spl 
+E782: .sug 
+E783: MAP 
+E784: 
+E785: complete()
+E786: 
+E787: 
+E788: 
+E789: ']' 
+E790: undo 
+ undojoin
+E791: 
+E792: 
+E793: 
+ diff 
+E794: sandbox 
+: "%s"
+E795: 
+E797: SpellFileMissing autocommand
+E798: ID
+ ":match"
+E799: 
+ ID: %ld (1
+E800: Arabic
+E802: 
+ ID: %ld (1
+E803: ID
+E804: Float
+E805: Float
+ Number
+E806: Float
+ String
+E807: printf()
+ Float 
+E808: Number 
+ Float
+E809: #<
+ +eval 
+E810: 
+E811: 
+E812: Autocommand
+E813: autocmd 
+E814: 
+, autocmd 
+E815: 
+, MzScheme 
+E816: patch 
+E817: Blowfish big/little endian use wrong
+E818: sha256 
+E819: Blowfish 
+ <SID> 
+E820: sizeof(uint32_t) != 4
+E821: 
+E822: 
+ undo 
+E823: undo 
+E824: 
+ undo 
+E825: 
+ undo 
+ (%s): %s
+E826: Undo 
+E827: Undo 
+E828: 
+E829: undo 
+E830: Undo 
+E831: 
+ bf_key_init() 
+E832: 
+ undo 
+E833: %s
+E834: 'listchars' 
+E835: 'fillchars' 
+E836: 
+ :python
+E837: 
+ :python
+E838: 
+ netbeans
+E839: Completion 
+E840: Completion 
+E841: 
+E842: "<slnum>"
+E843: 
+E844: 
+ cchar 
+E845: 
+E846: 
+E847: 
+(include)
+E848: 
+E849: highlight
+ syntax group
+E850: 
+E851: 
+E852: 
+E853: 
+E855: Autocommand
+E862: 
+E867: (NFA) 
+ '\%%%c'
+E867: (NFA) 
+ '\z%c'
+E868: Error building NFA with equivalence class!
+E869: (NFA) 
+ '\@%c'
+E872: (NFA 
+E874: (NFA) 
+E877: (NFA 
+E879: (NFA 
+E881: 
+E882: Uniq 
+E884: 
+E885: sign %s
+E886: viminfo 
+E887: 
+E888: (NFA 
+E890: ']' 
+: %s]%s
+E891: Funcref
+ Float
+E892: String
+ Float
+E893: List
+ Float
+E894: Dictionary
+ Float
+E895: 
+, MzScheme
+ racket/base 
+E898: channel_open()
+ socket()
+E901: channel_open()
+ gethostbyname()
+E902: 
+E903: 
+E904: expr/call
+E904: 3
+E905: 
+E906: 
+E907: 
+ Float
+E908: 
+ String
+E909: 
+E910: Job
+ Number
+E911: Job
+ Float
+E912: raw 
+ ch_evalexpr()/ch_sendexpr()
+E913: Channel
+ Number
+E914: Channel
+ Float
+E915: in_io 
+ in_buf
+ in_name
+E916: 
+E917: %s()
+ callback
+E918: 
+E919: '%s'
+: "%s"
+E91: 'shell' 
+E920: _io 
+ _name
+E921: 
+E922: dict
+E923: function()
+E924: 
+E925: 
+ quickfix
+E926: 
+ location list
+E927: 
+: '%s'
+E928: String
+E929: 
+ viminfo 
+E930: execute() 
+ :redir
+E931: 
+E932: Closure 
+E933: 
+E934: 
+E935: 
+ submatch number: %d
+E936: 
+E937: 
+E938: JSON
+: "%s"
+E93: %s
+E940: 
+E941: 
+E942: +clientserver 
+E943: 
+, 'make cmdidxs'
+E947: Job
+ "%s" 
+E948: Job
+E948: Job
+E949: 
+E94: %s
+E951: \% 
+E952: Autocommand
+E953: 
+E954: 
+E955: 
+E97: diff
+E98: diff 
+ diff 
+ "cont"
+.  Normal 
+ "visual"
+: gvim
+ thrown: %s
+ REP(SAL) 
+ submatches:
+ FLAG: %s
+, undo 
+ '\\' 
+ '\\' 
+Invalid argument for
+: SungHyun Nam <goweol@gmail.com>
+ FOL/LOW/UPP
+SOFO%s
+Modified by 
+Need %s version %ld
+NetBeans
+ = "%s"
+ undo 
+soundfold 
+ = "%s"
+ %ld msec
+ "%s" 
+NetBeans 
+soundfold 
+ (%d%%)
+affix 
+spell 
+viminfo 
+ "%s"%s%s%s
+) "%s"
+ ":help E312"
+ ":help W11"
+ ":help W12"
+ ":help W16"
+Selected %s%ld of %ld Lines; %lld of %lld Words; %lld of %lld Bytes
+Selected %s%ld of %ld Lines; %lld of %lld Words; %lld of %lld Chars; %lld of %lld Bytes
+ undo 
+, Perl 
+Substitute 
+: "%s"
+Terminal
+Terminal-finished
+The file was created on 
+The only match
+ diff 
+ cscope 
+ "+command" "-c command" 
+ "--cmd command" 
+compound 
+postponed 
+postponed 
+) compound 
+Trailing text in %s line %d: %s
+Unable to read block 0 from 
+ CUT_BUFFER0
+VIMRUN.EXE
+ $PATH
+ :help win32-vimrun
+Vim - 
+ E458: 
+ (*.vim)
+ (*.vim)
+ (*.*)
+: NetBeans
+ gvim 
+ Cygwin 
+ "die" 
+W17: Arabic
+ UTF-8 
+, ':set encoding=utf-8' 
+ augroup
+W22: :endfunction 
+ "%s.%s.spl" 
+ "%s.ascii.spl"
+ "%s_%s.spl" 
+ "%s_ascii.spl"
+ (autocommand
+; :help 'cm'
+: compound
+ NOBREAK 
+While opening file "
+ undo 
+: X %d, Y %d
+ '%.*s'
+ '%.*s'
+spell 
+Viminfo 
+ CHECKCOMPOUNDPATTERN 
+ COMPOUNDMIN 
+ COMPOUNDRULES 
+ COMPOUNDSYLMAX 
+ COMPOUNDWORDMAX 
+XSMP SmcOpenConnection 
+ save-yourself 
+[Prompt]
+[Quickfix 
+[Scratch]
+ ..]       
+[noeol]
+active
+add() 
+autocommand 
+: %s <buffer=%d>
+before
+block of %ld lines yanked%s
+block of 1 line yanked%s
+by Bram Moolenaar et al.
+inputrestore()
+ inputsave()
+OutputObject 
+'charconvert'
+vim.Dictionary 
+vim.List 
+fixed dictionary
+cannot open 
+cannot yank; delete anyway
+change
+changes
+cs_create_connection 
+cs_create_connection setpgid
+cs_create_connection: fr_fp
+ fdopen 
+cs_create_connection: to_fp
+ fdopen 
+cscope 
+cscope 
+defaulting to '
+dictionary
+dlerror = "%s"
+extend() 
+dictionary
+ '%s' 
+fewer lines
+filter() 
+finished
+freeing %ld lines
+gvimext.dll 
+in path ---
+insert() 
+ ('opendevice' 
+ %6d, 
+ %6ld - %s
+%ld / %ld 
+ --%d%%-- 
+: "%s"
+: "%s" 
+line less
+map() 
+match %d
+match %d of %d
+match in file
+maximal 
+mch_get_shellsize: 
+->Sponsor/Register
+minimal 
+modeline
+more line
+more lines
+ netbeans
+cscope 
+Vim sandbox
+not found 
+: "%s"
+pe_line_count
+pre-vimrc 
+remove() 
+ (y/n/a/q/l/^E/^Y)?
+reverse() 
+running
+shell 
+sort() 
+stack_idx
+ newline
+syncing starts 
+syntax iskeyword 
+tag %d of %d%s
+to %s on %s
+    :help cp-default<
+    :help iccf<
+>       
+    :help register<
+    :help sponsor<
+           :help version9<
+     :help<
+ <F1>  
+                   :q<
+>               
+     :set nocp<
+>        
+) vim list
+uniq() 
+Carbon GUI.
+Cocoa GUI.
+GTK2 GUI.
+GTK2-GNOME GUI.
+GTK3 GUI.
+Photon GUI.
+X11-Athena GUI.
+X11-Motif GUI.
+X11-neXtaw GUI.
+ 'opendevice' 

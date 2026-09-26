@@ -1,0 +1,21 @@
+mission_id: CENTRALDARK-ONE-SITE-DEPLOY
+goal: "https://centralldark.com online como 1 site, 1 painel, 1 backend/gateway de entrada"
+reference:
+  centraldark_repo: ServerVpss/CentralDark
+  centraldark_main_sha_at_pack_creation: 0af4e2f9f4ef0c33ad6fde00f51fcce8a641b81f
+  buzz_repo: block/buzz
+  buzz_main_sha_observed: f88cda9eb886500ec7d205e1d265ac6f654aa433
+invariants:
+  - REUSE_BEFORE_CREATE_REQUIRED
+  - ONE_SYSTEM_ONLY
+  - ONE_WRITER_PER_SCOPE
+  - NO_V1_V2_V3
+  - UNKNOWN_IS_NOT_PASS
+  - REALITY_IS_JUDGE
+  - MENOS_E_MAIS
+completion:
+  status: DEPLOYED
+  url: https://centralldark.com
+  fixed_point: true
+  material_unknowns: 0
+  critical_regressions: 0

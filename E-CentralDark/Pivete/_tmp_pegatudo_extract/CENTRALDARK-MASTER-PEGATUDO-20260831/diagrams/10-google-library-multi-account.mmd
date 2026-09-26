@@ -1,0 +1,12 @@
+flowchart TB
+  A1[Google Account A] --> S1[CentralDark authorized scope]
+  A2[Google Account B] --> S2[CentralDark authorized scope]
+  AN[Google Account N] --> SN[CentralDark authorized scope]
+  S1 --> I[Sanitize + classify + index]
+  S2 --> I
+  SN --> I
+  I --> H[Existing CentralDark HUB]
+  H --> L[DOCUMENTACAO / BIBLIOTECA]
+  L --> G[Gemini read-only sweep]
+  G --> R[Evidence candidates + provenance]
+  R --> X[Reality Scope Gate / Reconcile]

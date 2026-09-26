@@ -1,0 +1,1538 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\bin\printf_gettext.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.pdata
+@.xdata
+.idata
+@.reloc
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+8MZuDHcP<H
+xwLc%Om
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AVAUATUWVSH
+[^_]A\A]A^
+ATUWVSH
+ [^_]A\
+AVAUATUWVSH
+0[^_]A\A]A^
+0[^_]A\A]A^
+ATUWVSH
+[^_]A\
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+D$<H9t$@
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+//TRANSLK
+AWAVAUATUWVSH
+|$8@ |$qM
+\$u"L$qI
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+H;D$XrrH
+x[^_]A\A]A^A_
+AVAUATUWVSH
+P[^_]A\A]A^
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+ATUWVSH
+:.binu^L
+@[^_]A\
+@[^_]A\
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+AUATUWVSH
+([^_]A\A]
+AUATUWVSH
+H[^_]A\A]
+ATUWVSH
+P[^_]A\
+</tV<\tRA
+</tA<\t=H
+AVAUATUWVSH
+ [^_]A\A]A^
+AWAVAUATUWVSH
+H9T$0@
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+}hH9}x
+~8H9~0
+L9mps[H
+UhH9Ux
+UhH9UxL
+}xH9}hL
+UhH9Ux
+]hH9]x
+]hH9]x
+UhH9Ux
+H9]psKH
+uhH9ux
+u0L9]P
+E\ t8D
+FH<dt#<it
+E0H+E@H
+AUATUWVSH
+|$-6500
+|$-utf8
+|$-UTF-
+H[^_]A\A]
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+AWAVAUATUWVSH
+D:&t2H
+[^_]A\A]A^A_
+ATUWVSH
+P[^_]A\
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AVAUATUWVS
+[^_]A\A]A^A_
+D$8L9(t
+AWAVAUATUWVSH
+H=3333H
+x[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+9D$(rED
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+r;HiT$ 
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+([^_]H
+AUATUWVS
+[^_]A\A]
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+ATUWVSH
+ [^_]A\
+ATUWVSH
+ [^_]A\
+UWVSIc
+AUATUWVSH
+H[^_]A\A]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+\$`+l$H
+D$P+D$X
+AVAUATUWVSH
+0[^_]A\A]A^
+@$A9@(~
+AWAVAUATUWVSH
+C$9C(~
+H[^_]A\A]A^A_
+S$9S(~
+S$9S(~
+UAWAVAUATWVSH
+C$9C(~
+C$9C(~
+[^_A\A]A^A_]
+UAWAVAUATWVSH
+C$9C(~
+C$9C(~
+[^_A\A]A^A_]
+UAVWVSH
+C$9C(~
+[^_A^]
+[^_A^]
+=UUUUw
+S$9S(~
+AUATUWVSH
+X[^_]A\A]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+D$L)D$`
+T$8HcD$L;B
+D$`+D$H
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+ATUWVSLcY
+[^_]A\
+[^_]A\
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+WVSHcA
+AVAUATUWVSH
+ [^_]A\A]A^
+D$(+D$,
+T$(rJH
+([^_]H
+HcT$xH
+UAWAVAUATWVSH
+@localedir@
+Try '%s --help' for more information.
+Usage: %s [OPTION] FORMAT [ARGUMENT]...
+Produces formatted output, applying the native language translation of FORMAT
+to the ARGUMENTs.
+Options and arguments:
+  -c, --context=CONTEXT     specify context for FORMAT
+  FORMAT                    format string
+  ARGUMENT                  string or numeric argument
+Informative output:
+  -h, --help                display this help and exit
+  -V, --version             display version information and exit
+The format string consists of
+  - plain text,
+  - directives, that start with '%c',
+  - escape sequences, that start with a backslash.
+A directive that consumes an argument
+  - starts with '%s' or '%s' where %s is a positive integer,
+  - is optionally followed by any of the characters '%c', '%c', '%c', '%c', '%c',
+    each of which acts as a flag,
+  - is optionally followed by a width specification (a nonnegative integer),
+  - is optionally followed by '%c' and a precision specification (an optional
+    nonnegative integer),
+  - is finished by a specifier
+      - '%c', that prints a character,
+      - '%c', that prints a string,
+      - '%c', '%c', that print an integer,
+      - '%c', '%c', '%c', '%c', that print an unsigned (nonnegative) integer,
+      - '%c', '%c', that print a floating-point number in scientific notation,
+      - '%c', '%c', that print a floating-point number without an exponent,
+      - '%c', '%c', that print a floating-point number in general notation,
+      - '%c', '%c', that print a floating-point number in hexadecimal notation.
+Additionally there is the directive '%s', that prints a single '%c'.
+If a directive specifies the argument by its number ('%s' notation),
+all directives that consume an argument must do so.
+The escape sequences are:
+  %s      backslash
+  %s      alert (BEL)
+  %s      backspace (BS)
+  %s      form feed (FF)
+  %s      new line (LF)
+  %s      carriage return (CR)
+  %s      horizontal tab (HT)
+  %s      vertical tab (VT)
+  %s    octal number with 1 to 3 octal digits
+Environment variables:
+The translation of the format string is looked up in the translation domain
+given by the environment variable %s.
+TEXTDOMAIN
+IN_HELP2MAN
+/mingw64/share/locale
+It is looked up in the catalogs directory given by the environment variable
+%s or, if not present, in the default catalogs directory.
+This binary is configured to use the default catalogs directory:
+TEXTDOMAINDIR
+Report bugs in the bug tracker at <%s>
+or by email to <%s>.
+bug-gettext@gnu.org
+https://savannah.gnu.org/projects/gettext
+D:/M/msys64/mingw64/bin
+/mingw64
+gettext-runtime
+gnulib
+%s (GNU %s) %s
+Copyright (C) %s Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <%s>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+https://gnu.org/licenses/gpl.html
+2025-2026
+Bruno Haible
+Written by %s.
+missing format string
+context
+version
+In the directive number %zu, the argument number 0 is not a positive integer.
+The string ends in the middle of a directive.
+The character that terminates the directive number %zu is not a valid conversion specifier.
+In the directive number %zu, the character '%c' is not a valid conversion specifier.
+In the directive number %zu, the flag '%c' is invalid for the conversion '%c'.
+The string refers to arguments both through absolute argument numbers and through unnumbered argument specifications.
+The string ends in the middle of an escape sequence.
+This escape sequence is invalid.
+The escape sequence '%c%c' is unsupported (not in POSIX).
+The escape sequence '%c%c' is invalid.
+The translated format string consumes %zu arguments, whereas the original format string consumes only %zu arguments.
+warning: ignoring excess arguments, starting with %s
+write error
+%s: expected a numeric value
+%s: value not completely converted
+?write error
+Unknown system error
+gnulib
+%s:%u: 
+start_options: warning: Option '--%s' has no action. Use the 'key' or the 'variable' field to specify an action.
+fatal: start_options has not been invoked
+/.libs/
+../../../gettext-1.0/gettext-runtime/gnulib-lib/mbuiter.h
+mbsinit (&iter->state)
+*iter->cur.ptr == '\0'
+iter->cur.wc == 0
+%s (%s)
+gnulib
+literal
+shell-always
+shell-escape
+shell-escape-always
+c-maybe
+escape
+locale
+clocale
+English_United States.65001
+C.UTF-8
+.65001
+LC_COLLATE
+LC_XXX
+LC_MONETARY
+LC_NUMERIC
+LC_TIME
+LC_MESSAGES
+LC_CTYPE
+LC_COLLATE=
+LC_MESSAGES=
+%s;LC_MESSAGES=%s
+LC_COLLATE=%s;LC_CTYPE=%s;LC_MONETARY=%s;LC_NUMERIC=%s;LC_TIME=%s;LC_MESSAGES=%s
+U.A.E.
+Afghanistan
+Albania
+Armenia
+Netherlands Antilles
+Argentina
+Austria
+Australia
+Azerbaijan
+Bosnia and Herzegovina
+Bangladesh
+Belgium
+Bulgaria
+Bahrain
+Brunei Darussalam
+Bolivia
+Brazil
+Bhutan
+Belarus
+Belize
+Canada
+Switzerland
+Cote d'Ivoire
+Cameroon
+People's Republic of China
+Colombia
+Costa Rica
+Serbia and Montenegro
+Czech Republic
+Germany
+Denmark
+Dominican Republic
+Algeria
+Ecuador
+Estonia
+Eritrea
+Ethiopia
+Finland
+Faroe Islands
+France
+United Kingdom
+Caribbean
+Georgia
+Greenland
+Greece
+Guatemala
+Hong Kong
+Hong Kong S.A.R.
+Honduras
+Croatia
+Hungary
+Indonesia
+Ireland
+Israel
+Iceland
+Jamaica
+Jordan
+Kyrgyzstan
+Cambodia
+South Korea
+Kuwait
+Kazakhstan
+Lebanon
+Liechtenstein
+Sri Lanka
+Lithuania
+Luxembourg
+Latvia
+Morocco
+Principality of Monaco
+Moldava
+Moldova
+Montenegro
+Former Yugoslav Republic of Macedonia
+Myanmar
+Mongolia
+Macau S.A.R.
+Maldives
+Mexico
+Malaysia
+Nigeria
+Nicaragua
+Netherlands
+Norway
+New Zealand
+Panama
+Philippines
+Islamic Republic of Pakistan
+Poland
+Puerto Rico
+Portugal
+Paraguay
+Reunion
+Romania
+Serbia
+Russia
+Rwanda
+Saudi Arabia
+Sweden
+Singapore
+Slovenia
+Slovak
+Senegal
+Somalia
+Suriname
+El Salvador
+Thailand
+Tajikistan
+Turkmenistan
+Tunisia
+Turkey
+Trinidad and Tobago
+Taiwan
+Tanzania
+Ukraine
+United States
+Uruguay
+Vatican
+Venezuela
+Viet Nam
+South Africa
+Zimbabwe
+Afrikaans
+Amharic
+Arabic
+Mapudungun
+Assamese
+az@cyrillic
+Azeri (Cyrillic)
+az@latin
+Azeri (Latin)
+Bashkir
+Belarusian
+Tamazight
+ber@arabic
+Tamazight (Arabic)
+ber@latin
+Tamazight (Latin)
+Bulgarian
+Bengali
+Bengali (Bangladesh)
+Bengali (India)
+Tibetan
+Breton
+bs@cyrillic
+Catalan
+Cherokee
+Corsican
+Hawaiian
+Danish
+German
+Lower Sorbian
+Divehi
+English
+Spanish
+Estonian
+Basque
+Fulfulde
+Finnish
+Faroese
+French
+Frisian
+Gaelic (Scotland)
+Scottish Gaelic
+Galician
+Guarani
+Alsatian
+Gujarati
+Hebrew
+Croatian
+Upper Sorbian
+Hungarian
+Armenian
+Indonesian
+Icelandic
+Italian
+Japanese
+Georgian
+Kazakh
+Greenlandic
+Cambodian
+Kannada
+Korean
+Konkani
+Kanuri
+Kashmiri
+Kashmiri_India
+Kashmiri (Arabic)_Pakistan
+Kyrgyz
+Luxembourgish
+Lithuanian
+Latvian
+FYRO Macedonian
+Macedonian
+Malayalam
+Mongolian
+Manipuri
+Mohawk
+Marathi
+Maltese
+Burmese
+Nepali
+Ibibio
+Norwegian
+Northern Sotho
+Sepedi
+Occitan
+Punjabi
+Papiamentu
+Polish
+Pashto
+Portuguese
+Quechua
+K'iche'
+Romansh
+Romanian
+Russian
+Kinyarwanda
+Sanskrit
+Sindhi
+Sami (Northern)
+Northern Sami
+Sinhalese
+Slovenian
+Sami (Southern)
+Southern Sami
+Sami (Lule)
+Lule Sami
+Sami (Inari)
+Inari Sami
+Sami (Skolt)
+Skolt Sami
+Somali
+Albanian
+Serbian (Latin)
+sr@cyrillic
+Swedish
+Swahili
+Syriac
+Telugu
+Tigrinya
+Turkmen
+Filipino
+Tswana
+Turkish
+Tsonga
+Uighur
+Ukrainian
+Uzbek (Latin)
+uz@cyrillic
+Uzbek (Cyrillic)
+Vietnamese
+Sorbian
+Yiddish
+Yoruba
+Chinese
+Unknown error %d
+Socket type not supported
+Cannot send after transport endpoint shutdown
+Too many references: cannot splice
+Host is down
+Too many processes
+Too many users
+Disk quota exceeded
+Stale NFS file handle
+Object is remote
+Overlapped operation aborted
+Overlapped I/O event object not in signaled state
+Overlapped operations will complete later
+Network subsystem is unavailable
+Winsock.dll version out of range
+Successful WSAStartup not yet performed
+Graceful shutdown in progress
+No more results
+Call was canceled
+Procedure call table is invalid
+Service provider is invalid
+Service provider failed to initialize
+System call failure
+Service not found
+Class type not found
+Database query was refused
+Host not found
+Nonauthoritative host not found
+Nonrecoverable error
+Valid name, no data record of requested type
+Multihop attempted
+Protocol family not supported
+../../../gettext-1.0/gettext-runtime/gnulib-lib/mbuiterf.h
+mbsinit (&ps->state)
+*iter == '\0'
+wc == 0
+memory exhausted
+gnulib
+H%+.3d
+?UUUUUU
+@@naNAinIN
+CP1361
+CP20127
+CP20866
+KOI8-R
+CP20936
+GB2312
+CP21866
+KOI8-RU
+CP28591
+ISO-8859-1
+CP28592
+ISO-8859-2
+CP28593
+ISO-8859-3
+CP28594
+ISO-8859-4
+CP28595
+ISO-8859-5
+CP28596
+ISO-8859-6
+CP28597
+ISO-8859-7
+CP28598
+ISO-8859-8
+CP28599
+ISO-8859-9
+CP28605
+ISO-8859-15
+CP38598
+ISO-8859-8
+CP51932
+EUC-JP
+CP51936
+GB2312
+CP51949
+EUC-KR
+CP51950
+EUC-TW
+CP54936
+GB18030
+CP65001
+LC_ALL
+gsw_FR
+uz.UTF-8
+az@cyrillic
+az_AZ@cyrillic
+C.UTF-8
+chr_US
+bo.UTF-8
+zu_ZA.UTF-8
+sr@cyrillic
+sr_CS@cyrillic
+sr_RS@cyrillic
+sr_ME@cyrillic
+sr_BA@cyrillic
+tg.UTF-8
+yo.UTF-8
+bs@cyrillic
+bs_BA@cyrillic
+zu.UTF-8
+prs_AF
+bin_NG
+se.UTF-8
+yo_NG.UTF-8
+iu.UTF-8
+yi_IL.UTF-8
+cpe_US
+nic_NG
+ha.UTF-8
+iu@latin
+iu_CA@latin
+ii.UTF-8
+qut_GT
+kok_IN
+mni_IN
+arn_CL
+moh_CA
+pap_AN
+smj_NO
+smj_SE
+sma_NO
+sma_SE
+sms_FI
+smn_FI
+ii_CN.UTF-8
+yi.UTF-8
+hsb_DE
+dsb_DE
+nso_ZA
+es_ES@modern
+bnt_TZ
+syr_SY
+gd_GB.UTF-8
+sah.UTF-8
+ber_MA
+ber@latin
+ber_DZ
+fr.UTF-8
+sah_RU.UTF-8
+bs.UTF-8
+uz@cyrillic
+uz_UZ@cyrillic
+xh.UTF-8
+sah_RU
+af_ZA.UTF-8
+af.UTF-8
+sq_AL.UTF-8
+sq.UTF-8
+gsw_FR.UTF-8
+gsw.UTF-8
+am_ET.UTF-8
+am.UTF-8
+ar_SA.UTF-8
+ar_IQ.UTF-8
+ar_EG.UTF-8
+ar_LY.UTF-8
+ar_DZ.UTF-8
+ar_MA.UTF-8
+ar_TN.UTF-8
+ar_OM.UTF-8
+ar_YE.UTF-8
+ar_SY.UTF-8
+ar_JO.UTF-8
+ar_LB.UTF-8
+ar_KW.UTF-8
+ar_AE.UTF-8
+ar_BH.UTF-8
+ar_QA.UTF-8
+ar.UTF-8
+hy_AM.UTF-8
+hy.UTF-8
+as_IN.UTF-8
+as.UTF-8
+sr.UTF-8
+az_AZ.UTF-8
+az.UTF-8@cyrillic
+az_AZ.UTF-8@cyrillic
+xh_ZA.UTF-8
+ba_RU.UTF-8
+ba.UTF-8
+eu_ES.UTF-8
+eu.UTF-8
+be_BY.UTF-8
+be.UTF-8
+bn_IN.UTF-8
+bn_BD.UTF-8
+bn.UTF-8
+br_FR.UTF-8
+br.UTF-8
+bg_BG.UTF-8
+bg.UTF-8
+my_MM.UTF-8
+my.UTF-8
+km_KH.UTF-8
+km.UTF-8
+ca_ES.UTF-8
+ca.UTF-8
+chr_US.UTF-8
+chr.UTF-8
+zh_TW.UTF-8
+zh_CN.UTF-8
+zh_HK.UTF-8
+zh_SG.UTF-8
+zh_MO.UTF-8
+zh.UTF-8
+co_FR.UTF-8
+co.UTF-8
+hr.UTF-8
+hr_HR.UTF-8
+hr_BA.UTF-8
+wo_SN.UTF-8
+sr_CS.UTF-8
+sr_RS.UTF-8
+sr_ME.UTF-8
+sr_BA.UTF-8
+sr.UTF-8@cyrillic
+sr_CS.UTF-8@cyrillic
+sr_RS.UTF-8@cyrillic
+sr_ME.UTF-8@cyrillic
+sr_BA.UTF-8@cyrillic
+az.UTF-8
+cy.UTF-8
+bs_BA.UTF-8
+bs.UTF-8@cyrillic
+bs_BA.UTF-8@cyrillic
+wo.UTF-8
+cs_CZ.UTF-8
+cs.UTF-8
+da_DK.UTF-8
+da.UTF-8
+prs_AF.UTF-8
+prs.UTF-8
+dv_MV.UTF-8
+dv.UTF-8
+nl_NL.UTF-8
+nl_BE.UTF-8
+nl_SR.UTF-8
+nl.UTF-8
+bin_NG.UTF-8
+bin.UTF-8
+en_US.UTF-8
+en_GB.UTF-8
+en_AU.UTF-8
+en_CA.UTF-8
+en_NZ.UTF-8
+en_IE.UTF-8
+en_ZA.UTF-8
+en_JM.UTF-8
+en_GD.UTF-8
+en_BZ.UTF-8
+en_TT.UTF-8
+en_ZW.UTF-8
+en_PH.UTF-8
+en_ID.UTF-8
+en_HK.UTF-8
+en_IN.UTF-8
+en_MY.UTF-8
+en_SG.UTF-8
+en.UTF-8
+et_EE.UTF-8
+et.UTF-8
+fo_FO.UTF-8
+fo.UTF-8
+fa_IR.UTF-8
+fa.UTF-8
+fi_FI.UTF-8
+fi.UTF-8
+fr_FR.UTF-8
+fr_BE.UTF-8
+fr_CA.UTF-8
+fr_CH.UTF-8
+fr_LU.UTF-8
+fr_MC.UTF-8
+fr_RE.UTF-8
+fr_CG.UTF-8
+fr_SN.UTF-8
+fr_CM.UTF-8
+fr_CI.UTF-8
+fr_ML.UTF-8
+fr_MA.UTF-8
+fr_HT.UTF-8
+cy_GB.UTF-8
+fy_NL.UTF-8
+fy.UTF-8
+ff_NG.UTF-8
+ff.UTF-8
+ga_IE.UTF-8
+ga.UTF-8
+gl_ES.UTF-8
+gl.UTF-8
+ka_GE.UTF-8
+ka.UTF-8
+de_DE.UTF-8
+de_CH.UTF-8
+de_AT.UTF-8
+de_LU.UTF-8
+de_LI.UTF-8
+de.UTF-8
+el_GR.UTF-8
+el.UTF-8
+kl_GL.UTF-8
+kl.UTF-8
+gn_PY.UTF-8
+gn.UTF-8
+gu_IN.UTF-8
+gu.UTF-8
+ha_NG.UTF-8
+vi_VN.UTF-8
+cpe_US.UTF-8
+cpe.UTF-8
+he_IL.UTF-8
+he.UTF-8
+hi_IN.UTF-8
+hi.UTF-8
+hu_HU.UTF-8
+hu.UTF-8
+nic_NG.UTF-8
+nic.UTF-8
+is_IS.UTF-8
+is.UTF-8
+ig_NG.UTF-8
+ig.UTF-8
+id_ID.UTF-8
+id.UTF-8
+iu_CA.UTF-8
+iu.UTF-8@latin
+iu_CA.UTF-8@latin
+ve.UTF-8
+it_IT.UTF-8
+it_CH.UTF-8
+it.UTF-8
+ja_JP.UTF-8
+ja.UTF-8
+kn_IN.UTF-8
+kn.UTF-8
+kr_NG.UTF-8
+kr.UTF-8
+ks_PK.UTF-8
+ks_IN.UTF-8
+ks.UTF-8
+kk_KZ.UTF-8
+kk.UTF-8
+qut_GT.UTF-8
+qut.UTF-8
+rw_RW.UTF-8
+rw.UTF-8
+kok_IN.UTF-8
+kok.UTF-8
+ko_KR.UTF-8
+ko.UTF-8
+ky_KG.UTF-8
+ky.UTF-8
+lo_LA.UTF-8
+lo.UTF-8
+la_VA.UTF-8
+la.UTF-8
+lv_LV.UTF-8
+lv.UTF-8
+lt_LT.UTF-8
+lt.UTF-8
+lb_LU.UTF-8
+lb.UTF-8
+mk_MK.UTF-8
+mk.UTF-8
+ms_MY.UTF-8
+ms_BN.UTF-8
+ms.UTF-8
+ml_IN.UTF-8
+ml.UTF-8
+mt_MT.UTF-8
+mt.UTF-8
+mni_IN.UTF-8
+mni.UTF-8
+mi_NZ.UTF-8
+mi.UTF-8
+arn_CL.UTF-8
+arn.UTF-8
+mr_IN.UTF-8
+mr.UTF-8
+moh_CA.UTF-8
+moh.UTF-8
+mn_MN.UTF-8
+mn_CN.UTF-8
+mn.UTF-8
+ne_NP.UTF-8
+ne_IN.UTF-8
+ne.UTF-8
+nb.UTF-8
+nb_NO.UTF-8
+nn.UTF-8
+nn_NO.UTF-8
+no.UTF-8
+oc_FR.UTF-8
+oc.UTF-8
+or_IN.UTF-8
+or.UTF-8
+om_ET.UTF-8
+om.UTF-8
+pap_AN.UTF-8
+pap.UTF-8
+ps_AF.UTF-8
+ps.UTF-8
+pl_PL.UTF-8
+pl.UTF-8
+pt_BR.UTF-8
+pt_PT.UTF-8
+pt.UTF-8
+pa_IN.UTF-8
+pa_PK.UTF-8
+pa.UTF-8
+qu_BO.UTF-8
+qu_EC.UTF-8
+qu_PE.UTF-8
+qu.UTF-8
+ro_RO.UTF-8
+ro_MD.UTF-8
+ro.UTF-8
+rm_CH.UTF-8
+rm.UTF-8
+ru_RU.UTF-8
+ru_MD.UTF-8
+ru.UTF-8
+se_NO.UTF-8
+se_SE.UTF-8
+se_FI.UTF-8
+smj.UTF-8
+smj_NO.UTF-8
+smj_SE.UTF-8
+sma.UTF-8
+sma_NO.UTF-8
+sma_SE.UTF-8
+sms.UTF-8
+sms_FI.UTF-8
+smn.UTF-8
+smn_FI.UTF-8
+ve_ZA.UTF-8
+sa_IN.UTF-8
+sa.UTF-8
+vi.UTF-8
+gd.UTF-8
+sd_IN.UTF-8
+sd_PK.UTF-8
+sd.UTF-8
+si_LK.UTF-8
+si.UTF-8
+sk_SK.UTF-8
+sk.UTF-8
+sl_SI.UTF-8
+sl.UTF-8
+so_SO.UTF-8
+so.UTF-8
+hsb.UTF-8
+hsb_DE.UTF-8
+dsb.UTF-8
+dsb_DE.UTF-8
+wen.UTF-8
+nso_ZA.UTF-8
+nso.UTF-8
+es_ES.UTF-8
+es_MX.UTF-8
+es_ES.UTF-8@modern
+es_GT.UTF-8
+es_CR.UTF-8
+es_PA.UTF-8
+es_DO.UTF-8
+es_VE.UTF-8
+es_CO.UTF-8
+es_PE.UTF-8
+es_AR.UTF-8
+es_EC.UTF-8
+es_CL.UTF-8
+es_UY.UTF-8
+es_PY.UTF-8
+es_BO.UTF-8
+es_SV.UTF-8
+es_HN.UTF-8
+es_NI.UTF-8
+es_PR.UTF-8
+es_US.UTF-8
+es.UTF-8
+bnt_TZ.UTF-8
+bnt.UTF-8
+sw_KE.UTF-8
+sw.UTF-8
+sv_SE.UTF-8
+sv_FI.UTF-8
+sv.UTF-8
+syr_SY.UTF-8
+syr.UTF-8
+tl_PH.UTF-8
+tl.UTF-8
+tg_TJ.UTF-8
+uz.UTF-8@cyrillic
+ber_MA.UTF-8
+ber.UTF-8@latin
+ber_DZ.UTF-8
+ber.UTF-8
+ta_IN.UTF-8
+ta.UTF-8
+tt_RU.UTF-8
+tt.UTF-8
+te_IN.UTF-8
+te.UTF-8
+th_TH.UTF-8
+th.UTF-8
+bo_BT.UTF-8
+uz_UZ.UTF-8@cyrillic
+ti_ET.UTF-8
+ti_ER.UTF-8
+ti.UTF-8
+ts_ZA.UTF-8
+ts.UTF-8
+tn_ZA.UTF-8
+tn.UTF-8
+tr_TR.UTF-8
+tr.UTF-8
+tk_TM.UTF-8
+tk.UTF-8
+ug_CN.UTF-8
+ug.UTF-8
+uk_UA.UTF-8
+uk.UTF-8
+ur_PK.UTF-8
+ur_IN.UTF-8
+ur.UTF-8
+uz_UZ.UTF-8
+GETTEXT_MUI
+.UTF-8
+../../../gettext-1.0/gettext-runtime/gnulib-lib/mbuiter.h
+mbsinit (&iter->state)
+*iter->cur.ptr == '\0'
+iter->cur.wc == 0
+(NULL)
+../../../gettext-1.0/gettext-runtime/gnulib-lib/mbuiterf.h
+mbsinit (&ps->state)
+*iter == '\0'
+wc == 0
+Argument domain error (DOMAIN)
+Argument singularity (SIGN)
+Overflow range error (OVERFLOW)
+Partial loss of significance (PLOSS)
+Total loss of significance (TLOSS)
+The result is too small to be represented (UNDERFLOW)
+Unknown error
+_matherr(): %s in %s(%g, %g)  (retval=%g)
+Mingw-w64 runtime failure:
+Address %p has no image-section
+  VirtualQuery failed for %d bytes at address %p
+  VirtualProtect failed with code 0x%x
+  Unknown pseudo relocation protocol version %d.
+  Unknown pseudo relocation bit size %d.
+%d bit pseudo relocation at %p out of range, targeting %p, yielding the value %p.
+POSIXLY_CORRECT
+unknown option -- %s
+unknown option -- %c
+option doesn't take an argument -- %.*s
+ambiguous option -- %.*s
+option requires an argument -- %s
+option requires an argument -- %c
+*** buffer overflow detected ***: terminated
+*** stack smashing detected ***: terminated
+0123456789abcdef
+Infinity
+infinity
+INFINITY
+(null)
+Infinity
+msvcrt.dll
+rand_s
+SystemFunction036
+msvcrt.dll
+getenv_s
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+libintl_bindtextdomain
+libintl_dcgettext
+libintl_dgettext
+libintl_gettext
+libintl_set_relocation_prefix
+libintl_sprintf
+libintl_textdomain
+libiconv
+libiconv_close
+libiconv_open
+libiconv_set_relocation_prefix
+DeleteCriticalSection
+EnterCriticalSection
+EnumSystemLocalesA
+GetACP
+GetCurrentProcess
+GetCurrentThreadId
+GetFileType
+GetLastError
+GetLocaleInfoA
+GetModuleFileNameA
+GetModuleHandleA
+GetProcAddress
+GetThreadLocale
+InitializeCriticalSection
+IsProcessorFeaturePresent
+LeaveCriticalSection
+LoadLibraryW
+MultiByteToWideChar
+SetLastError
+SetUnhandledExceptionFilter
+TerminateProcess
+TlsGetValue
+TryEnterCriticalSection
+VirtualProtect
+VirtualQuery
+WideCharToMultiByte
+__C_specific_handler
+___lc_codepage_func
+___mb_cur_max_func
+__argv
+__getmainargs
+__initenv
+__iob_func
+__set_app_type
+__setusermatherr
+_amsg_exit
+_assert
+_cexit
+_commode
+_errno
+_fileno
+_fileno
+_fmode
+_get_osfhandle
+_initterm
+_setmode
+_strdup
+_strtoi64
+_strtoui64
+_write
+atexit
+calloc
+fclose
+ferror
+fflush
+fprintf
+getenv
+isalnum
+isalpha
+isleadbyte
+isprint
+isspace
+iswctype
+localeconv
+malloc
+memchr
+memcmp
+memcpy
+memset
+realloc
+setlocale
+setvbuf
+signal
+strchr
+strcmp
+strcpy
+strerror
+strlen
+strncmp
+strncpy
+strrchr
+toupper
+vfprintf
+wcslen
+libintl-8.dll
+libiconv-2.dll
+KERNEL32.dll
+msvcrt.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__imp_isleadbyte
+__imp_abort
+__lib64_libkernel32_a_iname
+__imp__fmode
+__imp____mb_cur_max_func
+_head_lib64_libmsvcrt_def_a
+__imp_ferror
+__imp_calloc
+__imp_LoadLibraryW
+__imp_fileno
+__imp_setlocale
+__imp___msvcrt_assert
+__imp_GetFileType
+__imp_DeleteCriticalSection
+libintl_8_dll_iname
+__imp_fputc
+__imp__amsg_exit
+__imp_IsProcessorFeaturePresent
+__imp__errno
+__imp_getenv
+__imp_strncpy
+__imp_libiconv_close
+__imp_GetCurrentThreadId
+__imp__strdup
+__imp_strcmp
+__imp__get_osfhandle
+__imp_MultiByteToWideChar
+__imp___C_specific_handler
+__imp_strrchr
+__imp_GetLastError
+__imp_free
+__imp_libintl_sprintf
+__imp_LeaveCriticalSection
+__imp_GetThreadLocale
+__imp_isalnum
+__imp_memchr
+__imp_puts
+__imp_write
+__imp_fputs
+__imp_libiconv_set_relocation_prefix
+__imp_strcpy
+__imp_libintl_dgettext
+__imp_memset
+__imp__setmode
+__IAT_end__
+__imp_memcpy
+__imp_isalpha
+__lib64_libmsvcrt_def_a_iname
+__imp_strerror
+__imp_iswctype
+__imp_setvbuf
+__imp___getmainargs
+_head_lib64_libkernel32_a
+__imp_EnterCriticalSection
+__imp_toupper
+__imp_TerminateProcess
+__imp_GetProcAddress
+__imp_signal
+__imp_SetLastError
+__imp_strtoumax
+__imp_strtoimax
+__imp_GetModuleHandleA
+__imp_WideCharToMultiByte
+__imp_strlen
+__imp_malloc
+__imp_TryEnterCriticalSection
+__imp_libintl_textdomain
+__imp_InitializeCriticalSection
+__imp_realloc
+__imp_exit
+__imp_vfprintf
+__imp___initenv
+__IAT_start__
+__imp__cexit
+__imp_SetUnhandledExceptionFilter
+__imp_libintl_bindtextdomain
+__imp_libintl_gettext
+__imp_GetLocaleInfoA
+__imp___argv
+__imp_Sleep
+__imp___setusermatherr
+__imp_TlsGetValue
+__imp_fprintf
+__imp__crt_atexit
+__imp_VirtualProtect
+_head_libintl_8_dll
+__imp_VirtualQuery
+__imp__initterm
+__imp_fclose
+__imp___iob_func
+__imp_localeconv
+__imp_raise
+__imp_strncmp
+__imp_strchr
+__imp_wcslen
+__imp____lc_codepage_func
+__imp_GetModuleFileNameA
+__imp_fflush
+libiconv_2_dll_iname
+_head_libiconv_2_dll
+__imp___set_app_type
+__imp_libiconv_open
+__imp__fileno
+__imp_EnumSystemLocalesA
+__imp_isspace
+__imp__commode
+__imp_GetACP
+__imp_libiconv
+__imp_isprint
+__imp_libintl_set_relocation_prefix
+__imp_GetCurrentProcess
+__imp_memcmp
+__imp_libintl_dcgettext
+(NULL)
+(null)
+sadvapi32.dll
+VS_VERSION_INFO
+StringFileInfo
+04090000
+Comments
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License. You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+CompanyName
+Free Software Foundation
+FileDescription
+GPLed program for Windows
+FileVersion
+InternalName
+LegalCopyright
+Copyright (C) 1995-2024
+LegalTrademarks
+OriginalFilename
+ProductName
+GNU gettext utilities
+ProductVersion
+VarFileInfo
+Translation

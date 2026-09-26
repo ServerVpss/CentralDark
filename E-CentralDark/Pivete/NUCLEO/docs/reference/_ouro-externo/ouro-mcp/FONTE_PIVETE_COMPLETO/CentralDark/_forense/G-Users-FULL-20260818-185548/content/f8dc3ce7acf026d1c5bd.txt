@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@peculiar\json-schema\build\types\helper.d.ts
+
+import { JsonPropTypes } from "./prop_types";
+import { IJsonConvertible } from "./types";
+export declare function checkType(value: any, type: JsonPropTypes): boolean;
+export declare function throwIfTypeIsWrong(value: any, type: JsonPropTypes): void;
+export declare function isConvertible(target: any): target is IJsonConvertible;

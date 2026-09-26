@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa MULTIBÚSSOLA_META — Visão CentralDark</title>
+<style>
+  :root{
+    --bg:#0d0d0d; --card:#161616; --line:#2a2a2a; --txt:#e6e6e6;
+    --gold:#ffd24a; --green:#3ddc84; --red:#ff5d5d; --blue:#4aa8ff; --purple:#c084fc;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:'Courier New',monospace;line-height:1.5;padding:20px}
+  .wrap{max-width:1000px;margin:0 auto}
+  h1{color:var(--gold);text-align:center;font-size:23px;margin-bottom:4px}
+  .sub{text-align:center;color:#888;margin-bottom:20px;font-size:12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:12px 0}
+  h2{color:var(--blue);font-size:17px;margin:0 0 12px;border-bottom:1px solid var(--line);padding-bottom:6px}
+  /* flow */
+  .flow{display:flex;flex-direction:column;gap:0;align-items:center}
+  .node{background:#1d1d1d;border:1px solid var(--line);border-radius:8px;padding:10px 16px;min-width:280px;text-align:center;font-size:13px}
+  .node.gold{border-color:var(--gold);color:var(--gold)}
+  .node.green{border-color:var(--green);color:var(--green)}
+  .node.red{border-color:var(--red);color:var(--red)}
+  .node.blue{border-color:var(--blue);color:var(--blue)}
+  .node.purple{border-color:var(--purple);color:var(--purple)}
+  .arrow{color:#555;font-size:18px;margin:2px 0}
+  .branch{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:6px 0}
+  .branch .node{min-width:200px}
+  /* bearings table */
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#1d1d1d;color:var(--gold)}
+  .ok{color:var(--green);font-weight:bold}
+  .bad{color:var(--red);font-weight:bold}
+  .warn{color:var(--gold);font-weight:bold}
+  .stale{color:#aaa;text-decoration:line-through}
+  .pill{display:inline-block;background:#1d1d1d;border:1px solid var(--line);border-radius:20px;padding:3px 10px;font-size:11px;margin:2px}
+  .foot{text-align:center;color:#666;margin-top:24px;font-size:11px}
+  pre{background:#000;color:var(--green);padding:12px;border-radius:6px;font-size:12px;overflow-x:auto;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>🧭 MULTIBÚSSOLA_META — MAPA DE VISÃO</h1>
+  <div class="sub">CentralDark · Leitura executada por HERMES-CASA · 2026-08-27 · Estado REAL medido</div>
+
+  <div class="card">
+    <h2>🔄 FLUXO DO PROTOCOLO (o que o código descreve)</h2>
+    <div class="flow">
+      <div class="node gold">!CENTRALDARK</div>
+      <div class="arrow">↓</div>
+      <div class="node gold">#ACORDAR (recupera estado real)</div>
+      <div class="arrow">↓</div>
+      <div class="node gold">!CALIBRAR (alinha intenção/escopo/tools/prova)</div>
+      <div class="arrow">↓</div>
+      <div class="node purple">!MULTIBÚSSOLA_META → MODE=META</div>
+      <div class="arrow">↓</div>
+      <div class="node blue">RESOLVE_REQUIRED_BEARINGS</div>
+      <div class="arrow">↓</div>
+      <div class="node blue">FORWARD → REVERSE → INVERSE ROUTE</div>
+      <div class="arrow">↓</div>
+      <div class="node blue">CROSS_BEARING_RENDEZVOUS</div>
+      <div class="arrow">↓</div>
+      <div class="node">DIVERGÊNCIA?</div>
+      <div class="arrow">↓</div>
+      <div class="branch">
+        <div class="node green">NÃO → LOCAL_FIXED_POINT<br>UNKNOWN_MATERIAL=0 + convergem</div>
+        <div class="node red">SIM → !META_LUPA<br>TESTE_DISCRIMINANTE<br>!RECONCILIAR → RE-FIX</div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="node purple">REALITY_JUDGE</div>
+      <div class="arrow">↓</div>
+      <div class="branch">
+        <div class="node green">PASS → FIXED_POINT_PASS</div>
+        <div class="node red">FAIL → FIXED_POINT_FAIL</div>
+        <div class="node warn">FRONTEIRA → FIXED_POINT_BLOCKED</div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="node gold">!REGISTRA → !BOOT</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📍 BEARINGS RESOLVIDOS — ESTADO REAL (o que ACONTECEU na leitura)</h2>
+    <table>
+      <tr><th>Bearing (eixo)</th><th>Estado medido</th><th>Veredito</th></tr>
+      <tr><td>SOUL perfil pivete (disco)</td><td>38KB travado, hash 4f62fa7c…541c, locked:true</td><td class="ok">FIXADO ✅</td></tr>
+      <tr><td>GUARDIAO_MODO</td><td>propor forçado em ecosystem.config.cjs VPS; auto NUNCA implementado</td><td class="bad">INERTE ❌</td></tr>
+      <tr><td>BOT VPS (unified-bot.cjs)</td><td>não lê LEIA-ME-IA/SOUL no boot</td><td class="bad">DIVERGENTE ❌</td></tr>
+      <tr><td>TRAVA 08/07/2026</td><td>venceu (hoje 27/08); doc aposentado 14/08 por SegredoiDev</td><td class="stale">STALE (invalidar)</td></tr>
+      <tr><td>Doc REGRA-OFICIAL (14/08)</td><td>HISTORICAL_DECISION: não se apresente como vigente</td><td class="warn">ALINHAR ⚠️</td></tr>
+      <tr><td>VPS acesso desta sessão</td><td>sem SSH/tunnel — só repo local</td><td class="warn">FORA_ESCOPO ⚠️</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>🎯 RENDEZVOUS — ONDE OS BEARINGS CONVERGEM</h2>
+    <pre>
+INTENT:   bot/VPS no jeito do Chefe + sem trava fantasma
+PROOF:    código medido (guardiao.py, ecosystem.cjs, unified-bot.cjs)
+DIVERG:   bot não lê SOUL + trava vencida still no PM2
+→ !META_LUPA: confirma que 'auto' NÃO existe no código (só propor)
+→ !RECONCILIAR: doc 14/08 aposentou trava, mas PM2 não seguiu
+→ RE-FIX: ecosystem.cjs deve tirar GUARDIAO_MODO:"propor"
+          unified-bot.cjs deve carregar SOUL no boot
+LOCAL_ANALYSIS_STABLE? → NÃO (precisa edit VPS)
+RESIDUAL_MAP: deploy VPS é teu (R4), não meu
+NEXT_CURSOR: aguarda ordem de deploy do Chefe
+    </pre>
+  </div>
+
+  <div class="card">
+    <h2>🚨 FIXED_POINT? — Veredito honesto</h2>
+    <p><span class="bad">FIXED_POINT_BLOCKED</span> — não dá pra fechar porque o alvo real (VPS) está fora do alcance desta sessão. Os bearings locais (repo) estão mapeados, mas o efeito no runtime VPS exige teu deploy.</p>
+    <p style="margin-top:8px">Não vou inventar PASS. O mapa mostra exatamente onde trava.</p>
+  </div>
+
+  <div class="foot">Gerado por HERMES-CASA · Perfil pivete · Visão MULTIBÚSSOLA_META · 2026-08-27</div>
+
+</div>
+</body>
+</html>

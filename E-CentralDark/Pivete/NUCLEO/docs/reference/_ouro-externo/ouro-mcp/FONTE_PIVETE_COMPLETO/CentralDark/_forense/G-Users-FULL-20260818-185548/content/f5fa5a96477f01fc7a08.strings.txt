@@ -1,0 +1,15 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\ftplugin\htmldjango.vim
+
+" Vim filetype plugin file
+" Language:
+Django HTML template
+" Maintainer:
+Dave Hodder <dmh@dmh.org.uk>
+" Last Change:
+2007 Jan 25
+" Only use this filetype plugin when no other was loaded.
+if exists("b:did_ftplugin")
+  finish
+" Use HTML and Django template ftplugins.
+runtime! ftplugin/html.vim
+runtime! ftplugin/django.vim

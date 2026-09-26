@@ -1,0 +1,756 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@streamdown\code\node_modules\shiki\dist\onig.wasm
+
+emscripten_memcpy_big
+emscripten_get_now
+wasi_snapshot_preview1
+fd_write
+emscripten_resize_heap
+memory
+__wasm_call_ctors
+__indirect_function_table
+__errno_location
+omalloc
+getLastOnigError
+createOnigScanner
+freeOnigScanner
+findNextOnigScannerMatch
+findNextOnigScannerMatchDbg
+stackSave
+stackRestore
+stackAlloc
+dynCall_jiji
+/optqrsu
+....'&&&&&&&&&..
+..*... -..
+A~qA8F
+555555555555-5
+555555555
+5555555
+                
+>>>>>>>>>>>>
+>>>>>>>>
+>>>>>>>>>
+>>>>>>>
+777777777777777
+A0k" A
+tjA<A; 
+jApqk"
+A q!( 
+ !"#$%&'()*+,-./0123456789:;^]\ZYXWVUTSRQPONMLKJIHGFEDA@bd
+tjA@j"
+tjA@j"
+tjA@j"
+tjA@j"
+MNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNLNNKJ36NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNIHGFEDCBA@?>=<;:98754N210/.-,+*)(NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN'&%$#"! 
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNN
+lkA0r:
+kA-A+ 
+kA-A+ 
+jApqk"
+A qrr6
+You didn't call onig_initialize() explicitly
+-+   0X0x
+mismatch
+%d.%d.%d
+EUC-TW
+Shift_JIS
+EUC-KR
+KOI8-R
+EUC-JP
+US-ASCII
+UTF-16LE
+UTF-32LE
+UTF-16BE
+UTF-32BE
+ISO-8859-9
+ISO-8859-8
+ISO-8859-7
+ISO-8859-16
+ISO-8859-6
+ISO-8859-15
+ISO-8859-5
+ISO-8859-14
+ISO-8859-4
+ISO-8859-13
+ISO-8859-3
+ISO-8859-2
+CP1251
+ISO-8859-11
+ISO-8859-1
+GB18030
+ISO-8859-10
+Oniguruma %d.%d.%d : Copyright (C) 2002-2018 K.Kosako
+no support in this configuration
+regular expression has '%s' without escape
+EUC-CN
+(null)
+MISMATCH
+-0X+0X 0X-0x+0x 0x
+fail to memory allocation
+Hiragana
+ONIG-MONITOR: %-4s %s at: %d [%d - %d] len: %d
+match-stack limit over
+character class has '%s' without escape
+parse depth limit over
+Katakana
+retry-limit-in-match over
+TOTAL_COUNT
+XDigit
+retry-limit-in-search over
+subexp-call-limit-in-search over
+undefined type (bug)
+internal parser error (bug)
+XDigit
+stack error (bug)
+undefined bytecode (bug)
+unexpected bytecode (bug)
+default multibyte-encoding is not set
+can't convert to wide-char on specified multibyte-encoding
+xdigit
+fail to initialize
+invalid argument
+end pattern at left brace
+end pattern at left bracket
+empty char-class
+redundant nested repeat operator
+premature end of char-class
+nested repeat operator %s and %s was replaced with '%s'
+end pattern at escape
+end pattern at meta
+end pattern at control
+invalid meta-code syntax
+invalid control-code syntax
+char-class value at end of range
+char-class value at start of range
+unmatched range specifier in char-class
++ and ??
+target of repeat operator is not specified
++? and ?
+ !"#$%&'()*+,-./0123456789:;<=>?@abcdefghijklmnopqrstuvwxyz[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+target of repeat operator is invalid
+nested repeat operator
+unmatched close parenthesis
+end pattern with unmatched parenthesis
+end pattern in group
+undefined group option
+invalid group option
+invalid POSIX bracket type
+invalid pattern in look-behind
+invalid repeat range {lower,upper}
+too big number
+too big number for repeat range
+upper is smaller than lower in repeat range
+empty range in char class
+mismatch multibyte code length in char-class range
+too many multibyte code ranges are specified
+too short multibyte code string
+too big backref number
+invalid backref number/name
+numbered backref/call is not allowed. (use name)
+too many captures
+too big wide-char value
+too long wide-char value
+undefined operator
+invalid code point value
+group name is empty
+invalid group name <%n>
+invalid char in group name <%n>
+undefined name <%n> reference
+undefined group <%n> reference
+multiplex defined name <%n>
+multiplex definition name <%n> call
+never ending recursion
+group number is too big for capture history
+invalid character property name {%n}
+invalid if-else syntax
+invalid absent group pattern
+invalid absent group generator pattern
+invalid callout pattern
+invalid callout name
+undefined callout name
+invalid callout body
+invalid callout tag name
+invalid callout arg
+not supported encoding combination
+invalid combination of options
+very inefficient pattern
+library is not initialized
+undefined error code
+\x%02x
+inkannada
+lineara
+carian
+mendekikakui
+meeteimayek
+inkharoshthi
+inosmanya
+inmanichaean
+inarmenian
+inmiao
+inchakma
+common
+mandaic
+inmyanmar
+inmakasar
+inideographicsymbolsandpunctuation
+inkhmer
+prependedconcatenationmark
+connectorpunctuation
+inrunic
+incarian
+inavestan
+combiningmark
+incuneiformnumbersandpunctuation
+inchorasmian
+inahom
+inipaextensions
+incherokee
+insharada
+makasar
+inarrows
+masaramgondi
+incuneiform
+inzanabazarsquare
+lineseparator
+insamaritan
+armenian
+inmarchen
+inmasaramgondi
+inscriptionalparthian
+inthaana
+inkhmersymbols
+inkatakana
+incyrillic
+inthai
+incham
+inkaithi
+initialpunctuation
+insyriac
+intakri
+inkanaextendeda
+katakana
+yezidi
+inideographicdescriptioncharacters
+xidcontinue
+privateuse
+arabic
+inmyanmarextendeda
+inruminumeralsymbols
+letter
+innandinagari
+inmeeteimayek
+inoldnortharabian
+incjkcompatibilityforms
+kannada
+incjkcompatibilityideographs
+inmodi
+inspecials
+intransportandmapsymbols
+inmendekikakui
+letternumber
+inmedefaidrin
+inchesssymbols
+inemoticons
+inlineara
+brahmi
+inolditalic
+inmiscellaneousmathematicalsymbolsa
+mongolian
+psalterpahlavi
+grlink
+insundanese
+inoldsogdian
+gothic
+inancientsymbols
+meroiticcursive
+control
+patternwhitespace
+inadlam
+inmandaic
+incommonindicnumberforms
+incjkcompatibilityideographssupplement
+inoldsoutharabian
+inlycian
+intoto
+idsbinaryoperator
+inkanasupplement
+incjkstrokes
+inopticalcharacterrecognition
+indominotiles
+inmalayalam
+inmodifiertoneletters
+insmallkanaextension
+inlinearbideograms
+intaitham
+inmusicalsymbols
+inznamennymusicalnotation
+insylotinagri
+innewa
+samaritan
+incontrolpictures
+inmiscellaneoussymbols
+inancientgreekmusicalnotation
+inmiscellaneoussymbolsandarrows
+inmiscellaneoussymbolsandpictographs
+inugaritic
+inwarangciti
+inlatinextendeda
+insaurashtra
+intaile
+inoldturkic
+idcontinue
+inhanifirohingya
+inlatinextendede
+inhiragana
+incaucasianalbanian
+indeseret
+inspacingmodifierletters
+cherokee
+inlydian
+phoenician
+bengali
+marchen
+inwancho
+graphemelink
+balinese
+idstart
+intamil
+inmultani
+chakma
+kaithi
+inmahajani
+graphemebase
+inogham
+inmeeteimayekextensions
+khojki
+inancientgreeknumbers
+manichaean
+lowercase
+canadianaboriginal
+inolchiki
+inethiopic
+inearlydynasticcuneiform
+insinhala
+inkhudawadi
+xidstart
+xdigit
+chorasmian
+insiddham
+incountingrodnumerals
+inolduyghur
+ingrantha
+inscriptionalpahlavi
+inlatinextendedc
+innewtailue
+inosage
+ingeneralpunctuation
+georgian
+kharoshthi
+sinhala
+casedletter
+multani
+gunjalagondi
+incyrillicsupplement
+ingeorgian
+incherokeesupplement
+glagolitic
+quotationmark
+incjkunifiedideographsextensiona
+joincontrol
+inmongolian
+incjkunifiedideographsextensione
+grantha
+intirhuta
+inhatran
+inkhitansmallscript
+ingurmukhi
+sundanese
+inoldhungarian
+intamilsupplement
+inmiscellaneoustechnical
+inherited
+paucinhau
+gurmukhi
+innabataean
+inkanbun
+logicalorderexception
+inbhaiksuki
+incjkunifiedideographsextensionc
+graphemeextend
+inelbasan
+insorasompeng
+unassigned
+radical
+lowercaseletter
+incjkunifiedideographs
+linearb
+inanatolianhieroglyphs
+hanunoo
+inkhojki
+inlatinextendedadditional
+inenclosedalphanumerics
+anatolianhieroglyphs
+emojimodifier
+nandinagari
+saurashtra
+intangsa
+bhaiksuki
+ingreekandcoptic
+tangsa
+inkayahli
+inoriya
+inyezidi
+inarabic
+inphoenician
+inshavian
+bidicontrol
+inenclosedideographicsupplement
+inmeroitichieroglyphs
+shavian
+inkangxiradicals
+enclosingmark
+insinhalaarchaicnumbers
+braille
+inhanunoo
+inbasiclatin
+inarabicpresentationformsa
+regionalindicator
+inenclosedalphanumericsupplement
+emojimodifierbase
+ingreekextended
+indogra
+format
+lycian
+inphaistosdisc
+unknown
+grbase
+myanmar
+incjkunifiedideographsextensiond
+ingeometricshapes
+incyprominoan
+insundanesesupplement
+taiviet
+asciihexdigit
+punctuation
+insoyombo
+inimperialaramaic
+inbatak
+inlatinextendedd
+innushu
+intibetan
+inlowsurrogates
+hatran
+inblockelements
+insogdian
+indingbats
+inelymaic
+indevanagari
+emojicomponent
+inkatakanaphoneticextensions
+ideographic
+coptic
+innumberforms
+incjkcompatibility
+inkanaextendedb
+patternsyntax
+avestan
+inarabicextendeda
+sogdian
+intangut
+inbyzantinemusicalsymbols
+ininscriptionalparthian
+diacritic
+ininscriptionalpahlavi
+inmayannumerals
+inmyanmarextendedb
+intags
+patsyn
+sentenceterminal
+imperialaramaic
+terminalpunctuation
+lydian
+javanese
+ingeometricshapesextended
+inoldpersian
+inornamentaldingbats
+inbraillepatterns
+invariationselectors
+caseignorable
+inyiradicals
+innoblock
+inverticalforms
+inethiopicsupplement
+sharada
+inbalinese
+invedicextensions
+inmiscellaneousmathematicalsymbolsb
+olower
+decimalnumber
+incyrillicextendeda
+olchiki
+intaixuanjingsymbols
+intaiviet
+incjksymbolsandpunctuation
+bopomofo
+inlisu
+inoldpermic
+siddham
+zanabazarsquare
+assigned
+closepunctuation
+sorasompeng
+invariationselectorssupplement
+inhanguljamo
+medefaidrin
+inlisusupplement
+incoptic
+insyriacsupplement
+inhanguljamoextendeda
+inshorthandformatcontrols
+incyrillicextendedc
+gujarati
+spacingmark
+inpalmyrene
+malayalam
+inlepcha
+palmyrene
+meroitichieroglyphs
+intelugu
+indevanagariextended
+inmeroiticcursive
+thaana
+titlecaseletter
+inmathematicalalphanumericsymbols
+caucasianalbanian
+inbamum
+deseret
+ingeorgiansupplement
+buginese
+separator
+insmallformvariants
+inbrahmi
+incombiningdiacriticalmarks
+incombiningdiacriticalmarksforsymbols
+oldpersian
+mahajani
+taitham
+newtailue
+newline
+inmongoliansupplement
+inunifiedcanadianaboriginalsyllabicsextendeda
+vithkuqi
+number
+insuttonsignwriting
+variationselector
+lepcha
+tirhuta
+incopticepactnumbers
+wancho
+incjkunifiedideographsextensiong
+cuneiform
+induployan
+ugaritic
+insymbolsandpictographsextendeda
+oldpermic
+incombiningdiacriticalmarkssupplement
+khudawadi
+syriac
+tagbanwa
+modifierletter
+incurrencysymbols
+innyiakengpuachuehmong
+ingothic
+inunifiedcanadianaboriginalsyllabics
+incombiningdiacriticalmarksextended
+idstrinaryoperator
+inbengali
+surrogate
+inbuginese
+mathsymbol
+invithkuqi
+incjkradicalssupplement
+ingujarati
+inglagolitic
+ingunjalagondi
+phagspa
+otheridcontinue
+whitespace
+inlinearbsyllabary
+hiragana
+inphagspa
+othernumber
+inrejang
+incjkunifiedideographsextensionb
+intagalog
+inbassavah
+tangut
+inenclosedcjklettersandmonths
+currencysymbol
+inlimbu
+inbuhid
+inethiopicextendeda
+warangciti
+oalpha
+olditalic
+inottomansiyaqnumbers
+spaceseparator
+inlatin1supplement
+otheralphabetic
+changeswhencasemapped
+inaegeannumbers
+inunifiedcanadianaboriginalsyllabicsextended
+injavanese
+cyrillic
+noncharactercodepoint
+inhangulsyllables
+bassavah
+inletterlikesymbols
+incombininghalfmarks
+inarabicmathematicalalphabeticsymbols
+inprivateusearea
+changeswhentitlecased
+intagbanwa
+intifinagh
+inbopomofo
+inalphabeticpresentationforms
+incjkunifiedideographsextensionf
+insymbolsforlegacycomputing
+oldhungarian
+finalpunctuation
+inpaucinhau
+inpsalterpahlavi
+inarabicpresentationformsb
+nonspacingmark
+devanagari
+khitansmallscript
+kayahli
+inbamumsupplement
+sylotinagri
+tibetan
+osmanya
+indivesakuru
+oldturkic
+changeswhenlowercased
+cyprominoan
+inethiopicextended
+emojipresentation
+otherlowercase
+inhebrew
+softdotted
+inmathematicaloperators
+inalchemicalsymbols
+inmahjongtiles
+hangul
+intangutcomponents
+otherletter
+nabataean
+paragraphseparator
+inarabicextendedb
+inlatinextendedg
+changeswhenuppercased
+inplayingcards
+inarabicsupplement
+inyijinghexagramsymbols
+inphoneticextensions
+otheruppercase
+otheridstart
+elbasan
+inindicsiyaqnumbers
+othersymbol
+extender
+extpict
+wspace
+elymaic
+intangutsupplement
+cypriot
+symbol
+incyrillicextendedb
+insuperscriptsandsubscripts
+inyisyllables
+inphoneticextensionssupplement
+oldsogdian
+ingeorgianextended
+inhanguljamoextendedb
+inhighprivateusesurrogates
+inpahawhhmong
+insupplementalarrowsa
+oupper
+othermath
+soyombo
+inlatinextendedb
+alphabetic
+insupplementalarrowsc
+insupplementalmathematicaloperators
+otherdefaultignorablecodepoint
+deprecated
+oldnortharabian
+incypriotsyllabary
+extendedpictographic
+unifiedideograph
+pahawhhmong
+divesakuru
+signwriting
+tifinagh
+inhalfwidthandfullwidthforms
+uppercase
+ethiopic
+modifiersymbol
+otherpunctuation
+rejang
+inethiopicextendedb
+insupplementalpunctuation
+inlatinextendedf
+tagalog
+hanifirohingya
+inglagoliticsupplement
+hexdigit
+changeswhencasefolded
+dashpunctuation
+oldsoutharabian
+inegyptianhieroglyphs
+telugu
+uppercaseletter
+inegyptianhieroglyphformatcontrols
+hyphen
+hebrew
+inhighsurrogates
+ogrext
+othergraphemeextend
+insupplementalarrowsb
+defaultignorablecodepoint
+inhangulcompatibilityjamo
+olduyghur
+insupplementaryprivateuseareaa
+inbopomofoextended
+insupplementalsymbolsandpictographs
+nyiakengpuachuehmong
+openpunctuation
+duployan
+inboxdrawing
+egyptianhieroglyphs
+insupplementaryprivateuseareab
+:987654
+;;;;;;
+;;;;;;;;;;;;10/.-,+*;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;(
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+88888888888888888888888888888888888888888888888888888888888888888
+88888888
+888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+88888888
+8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+ !"#$%&'()*+,-./0123456789:;<=>?@abcdefghijklmnopqrstuvwxyz[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+0123456789ABCDEF|- did not match after %.3f ms
+~~~~~~~~~~~~~~~~~~~~
+Entering findNextOnigScannerMatch:%.*s
+- searchOnigRegExp: %.*s
+Leaving findNextOnigScannerMatch
+|- matched after %.3f ms at byte offset %d
+MISMATCH
+MISMATCH
+TOTAL_COUNT
+TOTAL_COUNT
+}od[SMGC?;8520-+*(&%$"! 

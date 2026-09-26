@@ -1,0 +1,18 @@
+{
+  "generated_at_utc": "2026-08-24T10:09:57+00:00",
+  "scope": "RELEVANT_CENTRALDARK_CONTEXT_RECOVERABLE_IN_THIS_EXECUTION",
+  "all_account_chat_messages_exported": false,
+  "personal_context_queries": 3,
+  "files_search_used": true,
+  "files_library_list_used": true,
+  "github_live_state_used": true,
+  "current_big_paste_loaded": true,
+  "previous_session_master_zip_embedded": true,
+  "previous_ouro_zip_embedded": true,
+  "materialized_library_sources": [
+    "Markdown(20260808-063647).md colado",
+    "Screenpipe Activity reshapes CentralDark integratio1n.html",
+    "Markdown(20260816-133256).md colado"
+  ],
+  "limitation": "No direct exhaustive transcript export API for every ChatGPT conversation in this session; unretrieved material is UNKNOWN, not silently treated as absent."
+}

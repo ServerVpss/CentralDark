@@ -1,0 +1,33 @@
+flowchart TD
+    A[CHEFE_INTENT] --> B[DESTINATION_LOCK]
+    B --> C[MEASURE_LIVE_STATE]
+    C --> D[SEARCH_ALL_MATERIAL_PATHS]
+    D --> E[RESOLVE_CANONICAL_OWNER]
+    E --> F[ACQUIRE_WRITER_IF_NEEDED]
+    F --> G[EXECUTE_MINIMAL_DELTA]
+    G --> H[COLLECT_EVIDENCE]
+    H --> I[COUNTERPROOF]
+    I --> J[REALITY_JUDGE]
+    J --> K{DESTINATION_PROVED?}
+    K -- Sim --> L[RETURN]
+    K -- Não --> M{HUMAN_FRONTIER?}
+    M -- Sim --> N[ESCALATE_HUMAN_FRONTIER]
+    M -- Não --> O[REMEDIATE]
+    O --> G
+
+    subgraph LACUNA_MATERIAL
+        P["DESTINATION_LOCK sem juiz final material
+=> retorno cedo demais"]
+        Q["SEARCH_ALL_MATERIAL_PATHS sem ESTADO_VIVO
+=> rota em cima de suposição velha"]
+        R["RETURN somente quando resolvido
+=> incompleto sem fronteira humana real"]
+    end
+
+    subgraph CADEADOS
+        S[CHEFE DEFINE O DESTINO]
+        T[AÇÃO != PROVA]
+        U[REALITY = JUDGE]
+        V[REUSE_BEFORE_CREATE]
+        W[ONE_WRITER_PER_SCOPE]
+    end

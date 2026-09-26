@@ -1,0 +1,46 @@
+{
+  "retrieved_on": "2026-08-26",
+  "sources": [
+    {
+      "name": "NIST SP 800-218 SSDF 1.1",
+      "url": "https://csrc.nist.gov/pubs/sp/800/218/final",
+      "supports": "secure SDLC and addressing root causes to prevent future recurrences"
+    },
+    {
+      "name": "NIST AI RMF Core",
+      "url": "https://airc.nist.gov/airmf-resources/airmf/5-sec-core/",
+      "supports": "Govern/Map/Measure/Manage, uncertainty documentation, independent review, continual improvement"
+    },
+    {
+      "name": "OWASP Top 10 for Agentic Applications 2026",
+      "url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/",
+      "supports": "agentic threat framework"
+    },
+    {
+      "name": "OWASP Agentic Top 10 release",
+      "url": "https://genai.owasp.org/2025/12/09/owasp-top-10-for-agentic-applications-the-benchmark-for-agentic-security-in-the-age-of-autonomous-ai/",
+      "supports": "goal hijack, tool misuse, identity/privilege abuse, agentic supply chain, unexpected execution"
+    },
+    {
+      "name": "SLSA v1.2 Build Requirements",
+      "url": "https://slsa.dev/spec/v1.2/build-requirements",
+      "supports": "provenance generation, authenticity, unforgeability, hosted and isolated builds"
+    },
+    {
+      "name": "SLSA v1.2 Source Requirements",
+      "url": "https://slsa.dev/spec/v1.2/source-requirements",
+      "supports": "source history/provenance and increasing technical controls"
+    },
+    {
+      "name": "Intent Provenance Protocol draft-haberkamp-ipp-01",
+      "url": "https://datatracker.ietf.org/doc/draft-haberkamp-ipp/01/",
+      "supports": "signed bounded human-intent lineage through agent actions; Internet-Draft/work in progress"
+    }
+  ],
+  "source_version_correction": {
+    "old_reference": "draft-haberkamp-ipp-00",
+    "current_revalidated_reference": "draft-haberkamp-ipp-01",
+    "published": "2026-07-02",
+    "status": "Internet-Draft / work in progress, not IETF standard"
+  }
+}

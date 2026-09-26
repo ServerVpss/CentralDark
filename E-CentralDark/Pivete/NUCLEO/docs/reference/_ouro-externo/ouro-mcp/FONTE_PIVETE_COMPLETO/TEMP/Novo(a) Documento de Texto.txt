@@ -1,0 +1,54 @@
+version: "1.0"
+metadata:
+  name: "acorda-loop-engine"
+  philosophy: "Zero Trust"
+  security_policy: "Até na sombra"
+  green_status_override: true # Ignora status verde padrão sem evidência
+
+pipeline_flow:
+  - step: 1
+    name: "ACORDA"
+    action: "trigger_scanner"
+    targets:
+      - "missao"
+      - "commits"
+      - "branches"
+      - "bots"
+      - "workflows"
+      - "autonomia"
+      - "writer"
+      - "judge"
+      - "casa"
+      - "vps"
+
+  - step: 2
+    name: "MEDE TUDO"
+    action: "collect_metrics"
+    mode: "evidencia_primeiro" # Separa prova de conversa antiga
+
+  - step: 3
+    name: "DESCONFIA DE TUDO"
+    action: "validate_integrity"
+    trust_score_required: 1.00 # Zero tolerância
+
+  - step: 4
+    name: "APONTA DRIFT"
+    action: "detect_divergence"
+    log_level: "fio_do_lobo" # Rastreamento estrito por pegadas
+
+  - step: 5
+    name: "TRAVA COLISÃO"
+    action: "lock_concurrent_processes"
+    fail_fast: true
+
+  - step: 6
+    name: "ENTREGA O PRÓXIMO GATE"
+    action: "promote_release"
+    condition: "all_steps_passed"
+
+fio_da_meada_glossary:
+  fio_condutor: "Linha mestra que guia a missao"
+  linha_raciocinio: "Caminho logico para julgar o cenario"
+  espinha_dorsal: "Estrutura central de dados da VPS"
+  nexo_causal: "Conexao provada entre drift e trava"
+  norte: "Guia que impede falsos positivos"

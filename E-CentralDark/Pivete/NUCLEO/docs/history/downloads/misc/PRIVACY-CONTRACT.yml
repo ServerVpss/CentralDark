@@ -1,0 +1,31 @@
+schema_version: 1
+policy: CENTRALDARK_LOCAL_LEARNING_PRIVACY
+local_first: true
+private_life_tracking: false
+hidden_capture: false
+explicit_session_required_for:
+  - microphone
+  - ambient_transcription
+  - personal_learning_stream
+forbidden_default_collection:
+  - webcam_continuous
+  - passwords
+  - tokens
+  - private_keys
+  - private_messages_not_selected
+  - location_tracking
+  - family_tracking
+raw_retention:
+  default: ephemeral
+  persist_only_if_required: true
+  crystallized_delta_preferred: true
+private_mode:
+  capture: off
+  ingestion: off
+  environment_learning: off
+kill_switch:
+  stop_new_capture: true
+  stop_new_writes: true
+  pause_queues: true
+  preserve_checkpoint: true
+  auto_delete_evidence: false

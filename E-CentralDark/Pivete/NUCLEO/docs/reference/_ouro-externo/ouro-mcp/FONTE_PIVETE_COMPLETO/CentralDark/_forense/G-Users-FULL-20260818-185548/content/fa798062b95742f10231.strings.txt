@@ -1,0 +1,488 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\bzcat.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+.reloc
+AUATUWVSH
+8[^_]A\A]
+AUATSH
+ [A\A]
+AVAUATUWVS
+D$xH+D$pH
+[^_]A\A]A^A_
+ATUWVSH
+ [^_]A\
+AVAUATUWVS
+HcL$DL
+[^_]A\A]A^A_
+AVAUATUWVS
+D$hH+D$`H
+HcL$TL
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AUATUWVSH
+([^_]A\A]
+AUATUWVSH
+([^_]A\A]
+A9Ex|kA
+EtA9Ex|
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+C@DiK(
+8[^_]A\A]A^A_
+|$$i{(
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+([^_]A\A]
+([^_]A\A]
+ATUWVSH
+ [^_]A\
+ [^_]A\
+ [^_]A\
+ [^_]A\
+AVAUATUWVSH
+ [^_]A\A]A^
+AVAUATUWVS
+[^_]A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+AUATUWVSH
+x[^_]A\A]
+x[^_]A\A]
+x[^_]A\A]
+AUATUWVSH
+x[^_]A\A]
+x[^_]A\A]
+x[^_]A\A]
+AVAUATUWVSH
+[^_]A\A]A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+Y2D;L$H|
+AWAVAUATUWVSH
+HcD$p9D$P
+HcD$p;D$P
+[^_]A\A]A^A_
+|$T9|$|
+|$T9|$|
+L$T9L$|
+HcC8iK(
+9s8tkL
+C<u(LcC
+AWAVAUATUWVSH
+HcT$0H
+t$89t$0
+t$,9t$0
+HcD$$A
+t$89t$0
+D$X9D$0|
+[^_]A\A]A^A_
+HcD$ H
+7+D$ D
+~3HcL$4
+HcL$(D
+|$`HcL$8
+[^_]A\A]A^A_
+D9T$0w
+D+T$09L$0w
+AVAUATUWVS
+HcT$X1
+l$PHc\$0H
+Lcd$0H
+D+l$0H
+D+l$0H
+D+l$0H
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+AVAUATUWVSH
+P[^_]A\A]A^
+P[^_]A\A]A^
+AVAUATUWVS
+Lct$dD
+Lcl$dD
+[^_]A\A]A^A_
+AUATUWVS
+[^_]A\A]
+AVAUATUWVSH
+<IwJf.
+0[^_]A\A]A^
+%s: %s is redundant in versions 0.9.5 and above
+bzip2: I'm not configured correctly for this platform!
+I require Int32, Int16 and Char to have sizes
+of 4, 2 and 1 bytes to run properly, and they don't.
+Probably you can fix this by defining them correctly,
+and recompiling.  Bye!
+%s: Deleting output file %s, if it exists.
+%s: WARNING: deletion of output file (apparently) failed.
+%s: WARNING: deletion of output file suppressed
+%s:    since input file no longer exists.  Output file
+%s:    `%s' may be incomplete.
+%s:    I suggest doing an integrity test (bzip2 -tv) of it.
+%s: WARNING: some files have not been processed:
+%s:    %d specified on command line, %d not processed yet.
+%s: Control-C or similar caught, quitting.
+bzip2, a block-sorting file compressor.  Version %s.
+   Copyright (C) 1996-2019 by Julian Seward.
+   This program is free software; you can redistribute it and/or modify
+   it under the terms set out in the LICENSE file, which is included
+   in the bzip2 source distribution.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   LICENSE file for more details.
+bzip2, a block-sorting file compressor.  Version %s.
+   usage: %s [flags and input files in any order]
+   -h --help           print this message
+   -d --decompress     force decompression
+   -z --compress       force compression
+   -k --keep           keep (don't delete) input files
+   -f --force          overwrite existing output files
+   -t --test           test compressed file integrity
+   -c --stdout         output to standard out
+   -q --quiet          suppress noncritical error messages
+   -v --verbose        be verbose (a 2nd -v gives more)
+   -L --license        display software version & license
+   -V --version        display software version & license
+   -s --small          use less memory (at most 2500k)
+   -1 .. -9            set block size to 100k .. 900k
+   --fast              alias for -1
+   --best              alias for -9
+   If invoked as `bzip2', default action is to compress.
+              as `bunzip2',  default action is to decompress.
+              as `bzcat', default action is to decompress to stdout.
+   If no file names are given, bzip2 compresses or decompresses
+   from standard input to standard output.  You can combine
+   short flags, so `-v -4' means the same as -v4 or -4v, &c.
+Input file = %s, output file = %s
+%s: couldn't allocate enough memory
+%s: PANIC -- internal consistency error:
+This is a BUG.  Please report it to:
+bzip2-devel@sourceware.org
+%s: I/O or other error, bailing out.  Possible reason follows.
+It is possible that the compressed file(s) have become corrupted.
+You can use the -tvv option to test integrity of such files.
+You can use the `bzip2recover' program to attempt to recover
+data from undamaged sections of corrupted files.
+%s: Caught a SIGSEGV or SIGBUS whilst compressing.
+   Possible causes are (most likely first):
+   (1) This computer has unreliable memory or cache hardware
+       (a surprisingly common problem; try a different machine.)
+   (2) A bug in the compiler used to create this executable
+       (unlikely, if you didn't compile bzip2 yourself.)
+   (3) A real bug in bzip2 -- I hope this should never be the case.
+   The user's manual, Section 4.3, has more info on (1) and (2).
+   If you suspect this is a bug in bzip2, or are unsure about (1)
+   or (2), feel free to report it to: bzip2-devel@sourceware.org.
+   Section 4.3 of the user's manual describes the info a useful
+   bug report should have.  If the manual is available on your
+   system, please try and read it before mailing me.  If you don't
+   have the manual or can't be bothered to read it, mail me anyway.
+%s: Caught a SIGSEGV or SIGBUS whilst decompressing.
+   Possible causes are (most likely first):
+   (1) The compressed data is corrupted, and bzip2's usual checks
+       failed to detect this.  Try bzip2 -tvv my_file.bz2.
+   (2) This computer has unreliable memory or cache hardware
+       (a surprisingly common problem; try a different machine.)
+   (3) A bug in the compiler used to create this executable
+       (unlikely, if you didn't compile bzip2 yourself.)
+   (4) A real bug in bzip2 -- I hope this should never be the case.
+   The user's manual, Section 4.3, has more info on (2) and (3).
+   If you suspect this is a bug in bzip2, or are unsure about (2)
+   or (3), feel free to report it to: bzip2-devel@sourceware.org.
+   Section 4.3 of the user's manual describes the info a useful
+   bug report should have.  If the manual is available on your
+   system, please try and read it before mailing me.  If you don't
+   have the manual or can't be bothered to read it, mail me anyway.
+bzip2: file name
+is suspiciously (more than %d chars) long.
+Try using a reasonable file name instead.  Sorry! :-)
+Input-file size: %ld
+%.2f%% done
+, new size: %.2f%%
+ no data compressed.
+%6.3f:1, %6.3f bits/byte, %5.2f%% saved, %s in, %s out.
+compress:unexpected error
+test:bzReadGetUnused
+%s: %s: 
+data integrity (CRC) error in data
+file ends unexpectedly
+bad magic number (file not created by bzip2)
+trailing garbage after EOF ignored
+test:unexpected error
+testf: bad modes
+(none)
+(stdin)
+%s: Input file %s is a directory.
+%s: I won't read compressed data from a terminal.
+%s: For help, type: `%s --help'.
+%s: Can't open input file %s:%s.
+testf: bad srcMode
+  %s: 
+%s: Can't open input %s: %s.
+%.2f%% done
+decompress:bzReadGetUnused
+%s: Data integrity error when decompressing.
+%s: Compressed file ends unexpectedly;
+perhaps it is corrupted?  *Possible* reason follows.
+%s: %s: trailing garbage after EOF ignored
+decompress:unexpected error
+compress: bad modes
+(stdout)
+%s: Input file %s already has %s suffix.
+%s: Input file %s is not a normal file.
+%s: Output file %s already exists.
+%s: Input file %s has %d other link%s.
+%s: I won't write compressed data to a terminal.
+%s: Can't open input file %s: %s.
+%s: Can't create output file %s: %s.
+compress: bad srcMode
+uncompress: bad modes
+%s: Can't guess original name for %s -- using %s
+uncompress: bad srcMode
+not a bzip2 file.
+%s: %s is not a bzip2 file.
+%s: Bad flag `%s'
+--stdout
+--decompress
+--compress
+--force
+--test
+--keep
+--small
+--quiet
+--show-progress
+--version
+--license
+--exponential
+--repetitive-best
+--repetitive-fast
+--fast
+--best
+--verbose
+--help
+%s: -c and -t cannot be used together.
+You can use the `bzip2recover' program to attempt to recover
+data from undamaged sections of corrupted files.
+1.0.8, 13-Jul-2019
+bzip2/libbzip2: internal error number %d.
+This is a bug in bzip2/libbzip2, %s.
+Please report it to: bzip2-devel@sourceware.org.  If this happened
+when you were using some program which uses libbzip2 as a
+component, you should also report this bug to the author(s)
+of that program.  Please make an effort to report this bug;
+timely and accurate bug reports eventually lead to higher
+quality software.  Thanks.
+*** A special note about internal error number 1007 ***
+Experience suggests that a common cause of i.e. 1007
+is unreliable memory or other hardware.  The 1007 assertion
+just happens to cross-check the results of huge numbers of
+memory reads/writes, and so acts (unintendedly) as a stress
+test of your memory system.
+I suggest the following: try compressing the file again,
+possibly monitoring progress in detail with the -vv flag.
+* If the error cannot be reproduced, and/or happens at different
+  points in compression, you may have a flaky memory system.
+  Try a memory-test program.  I have used Memtest86
+  (www.memtest86.com).  At the time of writing it is free (GPLd).
+  Memtest86 tests memory much more thorougly than your BIOSs
+  power-on test, and may find failures that the BIOS doesn't.
+* If the error can be repeatably reproduced, this is a bug in
+  bzip2, and I would very much like to hear about it.  Please
+  let me know, and, ideally, save a copy of the file causing the
+  problem -- without which I will be unable to investigate it.
+ {0x%08x, 0x%08x}
+    combined CRCs: stored = 0x%08x, computed = 0x%08x
+SEQUENCE_ERROR
+PARAM_ERROR
+MEM_ERROR
+DATA_ERROR
+DATA_ERROR_MAGIC
+IO_ERROR
+UNEXPECTED_EOF
+OUTBUFF_FULL
+CONFIG_ERROR
+    block %d: crc = 0x%08x, combined CRC = 0x%08x, size = %d
+      %d in block, %d after MTF & 1-2 coding, %d+2 syms in use
+      initial group %d, [%d .. %d], has %d syms (%4.1f%%)
+      pass %d: size is %d, grp uses are 
+      bytes: mapping %d, 
+selectors %d, 
+code lengths %d, 
+codes %d
+    final combined CRC = 0x%08x
+    [%d: huff+mtf 
+rt+rld
+        bucket sorting ...
+        depth %6d has 
+%6d unresolved strings
+        reconstructing block ...
+        main sort initialise ...
+        qsort [0x%x, 0x%x]   done %d   this %d
+        %d pointers, %d sorted, %d scanned
+      %d work, %d block, ratio %5.2f
+    too repetitive; using fallback sorting algorithm
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+__cxa_atexit
+__errno
+__getreent
+__locale_ctype_ptr
+__main
+_dll_crt0
+_impure_ptr
+_setmode
+calloc
+cygwin_internal
+dll_dllcrt0
+fchmod
+fchown
+fclose
+fdopen
+fflush
+fileno
+fprintf
+fseeko
+ftello
+fwrite
+getenv
+isatty
+malloc
+memcpy
+memmove
+memset
+msys_detach_dll
+perror
+posix_memalign
+realloc
+remove
+rewind
+signal
+strcat
+strcmp
+strerror
+strlen
+strncmp
+strncpy
+strstr
+ungetc
+GetModuleHandleA
+msys-2.0.dll
+KERNEL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__lib64_libkernel32_a_iname
+__imp__dll_crt0
+__imp_calloc
+__imp_fileno
+__imp_fputc
+__imp_getenv
+__imp_strncpy
+_head_msys_2_0_dll
+__imp_strcmp
+__imp_fchown
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_free
+__imp_fdopen
+__imp___errno
+__imp_ftello
+__nm__impure_ptr
+__imp_memset
+__imp__setmode
+__IAT_end__
+__imp_memcpy
+__imp_fchmod
+__imp_memmove
+__imp_dll_dllcrt0
+__imp_rewind
+__imp_strerror
+__imp___locale_ctype_ptr
+__imp_fwrite
+__imp_utime
+_head_lib64_libkernel32_a
+__imp_fseeko
+__imp_msys_detach_dll
+__imp_strstr
+__imp_open
+__imp_signal
+__imp___getreent
+__imp_GetModuleHandleA
+__imp___main
+__imp_strlen
+__imp_malloc
+__imp__impure_ptr
+__imp_stat
+__imp_realloc
+__imp_exit
+__imp_time
+__IAT_start__
+__imp_strcat
+__imp_ungetc
+__imp_perror
+__imp_isatty
+__imp___cxa_atexit
+__imp_fprintf
+__imp_remove
+__imp_fclose
+__imp_strncmp
+__imp_close
+__imp_fflush
+__imp_fgetc
+__imp_lstat
+__imp_fread
+__imp_fopen
+__imp_fseek
+msys_2_0_dll_iname

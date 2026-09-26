@@ -1,0 +1,438 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\mktemp.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+.reloc
+AVAUATVSH
+AWAVAUATUWVSH
+</t <\t
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+T$'"T$TH
+x[^_]A\A]A^A_
+D$@u?L
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AUATUWVSH
+X[^_]A\A]
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+TUUUUUUU1
+SUUUUUUUL9
+ATWVSH
+8[^_A\
+8[^_A\
+|$ POSIt
+AUATUWVSH
+H[^_]A\A]
+H[^_]A\A]
+AVAUATUWVSH
+0[^_]A\A]A^
+AUATSH
+ [A\A]
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+ [^_]A\A]A^
+AVAUATUWVSI
+[^_]A\A]A^
+AWAVAUATSH
+ [A\A]A^A_
+AVAUATH
+ A\A]A^
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+mktemp
+ invocation
+Try '%s --help' for more information.
+Usage: %s [OPTION]... [TEMPLATE]
+Create a temporary file or directory, safely, and print its name.
+TEMPLATE must contain at least 3 consecutive 'X's in last component.
+If TEMPLATE is not specified, use tmp.XXXXXXXXXX, and --tmpdir is implied.
+Files are created u+rw, and directories u+rwx, minus umask restrictions.
+  -d, --directory     create a directory, not a file
+  -u, --dry-run       do not create anything; merely print a name (unsafe)
+  -q, --quiet         suppress diagnostics about file/dir-creation failure
+      --suffix=SUFF   append SUFF to TEMPLATE; SUFF must not contain a slash.
+                        This option is implied if TEMPLATE does not end in X
+  -p DIR, --tmpdir[=DIR]  interpret TEMPLATE relative to DIR; if DIR is not
+                        specified, use $TMPDIR if set, else /tmp.  With
+                        this option, TEMPLATE must not be an absolute name;
+                        unlike with -t, TEMPLATE may contain slashes, but
+                        mktemp creates only the final component
+  -t                  interpret TEMPLATE as a single file name component,
+                        relative to a directory: $TMPDIR, if set; else the
+                        directory specified via -p; else /tmp [deprecated]
+      --help     display this help and exit
+      --version  output version information and exit
+test invocation
+coreutils
+Multi-call invocation
+sha224sum
+sha2 utilities
+sha256sum
+sha384sum
+sha512sum
+%s online help: <%s>
+https://www.gnu.org/software/coreutils/
+GNU coreutils
+Report any translation bugs to <https://translationproject.org/team/>
+Full documentation <%s%s>
+or available locally via: info '(coreutils) %s%s'
+tmp.XXXXXXXXXX
+/usr/share/locale
+Eric Blake
+Jim Meyering
+dp:qtuV
+too many templates
+with --suffix, template %s must end in X
+invalid suffix %s, contains directory separator
+too few X's in template %s
+TMPDIR
+invalid template, %s, contains directory separator
+invalid template, %s; with --tmpdir, it may not be absolute
+failed to create directory via template %s
+failed to create file via template %s
+write error
+directory
+dry-run
+suffix
+tmpdir
+version
+write error
+%s: %s
+A NULL argv[0] was passed through an exec system call.
+/.libs/
+literal
+shell-always
+shell-escape
+shell-escape-always
+c-maybe
+escape
+locale
+clocale
+! "invalid KIND in __gen_tempname"
+../coreutils-8.32/lib/tempname.c
+gen_tempname_len
+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+%s (%s) %s
+License GPLv3+: GNU GPL version 3 or later <%s>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+https://gnu.org/licenses/gpl.html
+Written by %s.
+Written by %s and %s.
+Written by %s, %s, and %s.
+Written by %s, %s, %s,
+and %s.
+Written by %s, %s, %s,
+%s, and %s.
+Written by %s, %s, %s,
+%s, %s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+%s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+%s, %s, and others.
+Report bugs to: %s
+bug-coreutils@gnu.org
+%s home page: <%s>
+https://www.gnu.org/software/coreutils/
+GNU coreutils
+General help using GNU software: <%s>
+https://www.gnu.org/gethelp/
+Copyright %s %d Free Software Foundation, Inc.
+memory exhausted
+US-ASCII
+LC_ALL
+LC_CTYPE
+CP1361
+CP20127
+CP20866
+KOI8-R
+CP20936
+GB2312
+CP21866
+KOI8-RU
+CP28591
+ISO-8859-1
+CP28592
+ISO-8859-2
+CP28593
+ISO-8859-3
+CP28594
+ISO-8859-4
+CP28595
+ISO-8859-5
+CP28596
+ISO-8859-6
+CP28597
+ISO-8859-7
+CP28598
+ISO-8859-8
+CP28599
+ISO-8859-9
+CP28605
+ISO-8859-15
+CP38598
+ISO-8859-8
+CP51932
+EUC-JP
+CP51936
+GB2312
+CP51949
+EUC-KR
+CP51950
+EUC-TW
+CP54936
+GB18030
+CP65001
+%s: end of file
+%s: read error
+/dev/urandom
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+libintl_bindtextdomain
+libintl_gettext
+libintl_setlocale
+libintl_textdomain
+__assert_func
+__cxa_atexit
+__errno
+__getreent
+__locale_ctype_ptr
+__locale_mb_cur_max
+__main
+__memcpy_chk
+__sprintf_chk
+__strcpy_chk
+_dll_crt0
+_impure_ptr
+calloc
+cygwin_internal
+dll_dllcrt0
+explicit_bzero
+fclose
+fdopen
+fileno
+fprintf
+fputc_unlocked
+fputs_unlocked
+fread_unlocked
+fwrite
+getenv
+getgid
+getopt_long
+getpid
+getppid
+gettimeofday
+getuid
+iswprint
+malloc
+mbrtowc
+mbsinit
+memcmp
+memcpy
+memset
+msys_detach_dll
+nl_langinfo
+optarg
+optind
+posix_memalign
+printf
+program_invocation_name
+program_invocation_short_name
+pthread_mutex_lock
+pthread_mutex_unlock
+realloc
+remove
+setlocale
+setvbuf
+strchr
+strcmp
+strcpy
+strlen
+strncmp
+strrchr
+strspn
+GetACP
+GetModuleHandleA
+GetModuleHandleW
+msys-intl-8.dll
+msys-2.0.dll
+KERNEL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__imp_explicit_bzero
+__imp_getuid
+__imp_optarg
+__nm_optarg
+__imp_abort
+__lib64_libkernel32_a_iname
+_head_msys_intl_8_dll
+__imp__dll_crt0
+__imp_fputs_unlocked
+__imp_GetModuleHandleW
+__imp_calloc
+__imp_getpid
+__imp_fileno
+__nm_optind
+__imp_setlocale
+__imp_strspn
+__imp_getenv
+_head_msys_2_0_dll
+__imp_strcmp
+__imp___strcpy_chk
+__imp_read
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_strrchr
+__imp_free
+__imp_fdopen
+__nm_program_invocation_name
+__imp___errno
+__nm__impure_ptr
+__imp_pthread_mutex_unlock
+__imp_puts
+__imp_fputc_unlocked
+__imp__exit
+__imp_getgid
+__imp_strcpy
+__imp_memset
+__IAT_end__
+__imp_memcpy
+__imp___memcpy_chk
+__imp_dll_dllcrt0
+__imp___locale_ctype_ptr
+__imp_fwrite
+__imp_setvbuf
+_head_lib64_libkernel32_a
+__imp_libintl_setlocale
+__imp_msys_detach_dll
+__imp_gettimeofday
+__imp_open
+__imp_iswprint
+__imp_nl_langinfo
+__imp_program_invocation_short_name
+__imp___locale_mb_cur_max
+__nm_program_invocation_short_name
+__imp___getreent
+__imp_mbsinit
+__imp_GetModuleHandleA
+__imp___main
+__imp_fread_unlocked
+__imp_strlen
+__imp_malloc
+__imp_libintl_textdomain
+__imp__impure_ptr
+__imp___assert_func
+__imp_realloc
+__imp_exit
+__imp_mbrtowc
+__imp_mkdir
+__IAT_start__
+__imp_libintl_bindtextdomain
+__imp_program_invocation_name
+__imp_libintl_gettext
+__imp___cxa_atexit
+__imp_fcntl
+__imp_fprintf
+__imp_remove
+msys_intl_8_dll_iname
+__imp_optind
+__imp_fclose
+__imp_error
+__imp_strncmp
+__imp_getppid
+__imp_strchr
+__imp_close
+__imp_getopt_long
+__imp_lstat
+__imp_printf
+__imp_pthread_mutex_lock
+__imp_GetACP
+__imp___sprintf_chk
+__imp_fopen
+__imp_memcmp
+msys_2_0_dll_iname

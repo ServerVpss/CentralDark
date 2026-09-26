@@ -1,0 +1,406 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\agent\__pycache__\copilot_acp_client.cpython-311.pyc
+
+Z+dLd 
+Z,dOd"
+Z-dPd)
+Z.dQd*
+dRdSd2
+Z0dTd4
+Z1dUd9
+Z2dVd=
+Z3dWd@
+Z4dXdD
+OpenAI-compatible shim that forwards Hermes requests to `copilot --acp`.
+This adapter lets Hermes treat the GitHub Copilot ACP server as a chat-style
+backend. Each request starts a short-lived ACP session, sends the formatted
+conversation as a single prompt, collects text chunks, and converts the result
+back into the minimal shape Hermes expects from an OpenAI client.
+annotationsN)
+deque)
+SimpleNamespace)
+ChatCompletionMessageToolCall
+Function)
+get_read_block_error
+get_write_denied_error
+is_write_approval_required)
+redact_sensitive_text)
+hermes_subprocess_envz
+acp://copilotg
+@z&<tool_call>\s*(\{.*?\})\s*</tool_call>zd\{\s*\"id\"\s*:\s*\"[^\"]+\"\s*,\s*\"type\"\s*:\s*\"function\"\s*,\s*\"function\"\s*:\s*\{.*?\}\s*\})
+gh-copilot)
+has been deprecatedz
+no commands will be executed
+stderr_text
+return
+zHTrue iff stderr looks like the deprecated gh-copilot extension's banner.c
+lowers
+LC:\Users\danda\AppData\Local\hermes\hermes-agent\agent\copilot_acp_client.py
+<genexpr>z5_is_gh_copilot_deprecation_message.<locals>.<genexpr>9
+markerr
+z5_is_gh_copilot_deprecation_message.<locals>.<genexpr>;
+_DEPRECATION_REQUIRED
+_DEPRECATION_MARKERS)
+"_is_gh_copilot_deprecation_messager#
+HERMES_COPILOT_ACP_COMMAND
+COPILOT_CLI_PATH
+copilot)
+getenv
+stripr
+_resolve_commandr,
+list[str]c
+HERMES_COPILOT_ACP_ARGSr&
+--acpz
+--stdio)
+split)
+_resolve_argsr4
+dict[str, bool]
+_ACP_PROBE_CACHE
+command
+bool | Nonec
+Tri-state probe: does ``command`` accept the ACP args we'd pass?
+    Different CLI versions support different transports. The GitHub
+    Copilot CLI (`@github/copilot`, late 2025+) ships with ``--acp``;
+    older releases (and Claude Code v2.x as of Aug 2026) do not.
+    Spawning a CLI that doesn't recognize the flag silently exits
+    with code 1 and ``error: unknown option '--acp'`` on stderr,
+    after which every delegate_task call hangs the parent for
+    ``child_timeout_seconds`` (default 600s) waiting for stdout
+    that never arrives.
+    Returns:
+      - ``True``  
+ help text advertises ``--acp``; safe to spawn.
+      - ``False`` 
+ help ran cleanly but ``--acp`` is absent; spawning
+        would hang, so the caller should fast-fail with a clear error.
+      - ``None``  
+ inconclusive (binary missing, --help failed or
+        timed out). The caller must fall through to the normal spawn
+        path, which surfaces the existing "Could not start Copilot ACP
+        command" error with full context.
+    Only probes when ``--acp`` is actually among ``args``: a custom
+    HERMES_COPILOT_ACP_ARGS transport is the operator's business.
+    r0
+--help
+capture_output
+timeoutr
+(?:^|[\s\[])--acp(?:[\s=\],]|$))
+subprocess
+FileNotFoundError
+TimeoutExpired
+OSError
+returncoder
+search
+stdout
+MULTILINE)
+cached
+verdicts
+     r
+_acp_supportedrL
+z-Return a stable HOME for child ACP processes.
+HOMEr&
+environr>
+expanduser
+getpwuid
+getuid
+pw_dir
+Exception)
+expandedrS
+resolveds
+_resolve_home_dirr[
+dict[str, str]c
+inherit_credentialsrN
+apply_subprocess_home_env)
+hermes_constantsr_
+_build_subprocess_envrb
+message_idr
+message
+dict[str, Any]c
+jsonrpc
+errorr
+_jsonrpc_errorrm
+outcome
+cancelled
+resultr
+_permission_deniedrs
+messages
+list[dict[str, Any]]
+str | None
+list[dict[str, Any]] | None
+tool_choicec
+z>You are being used as the active ACP agent backend for Hermes.z'Use ACP capabilities to complete tasks.z
+IMPORTANT: If you take an action with a tool, you MUST output tool calls using <tool_call>{...}</tool_call> blocks with JSON exactly in OpenAI function-call shape.z&If no tool is needed, answer normally.z
+Hermes requested model hint: 
+function
+descriptionr&
+parameters)
+Available tools (OpenAI function schema). When using a tool, emit ONLY <tool_call>{...}</tool_call> with one JSON object containing id/type/function{name,arguments}. arguments must be a JSON string.
+ensure_asciiz
+Tool choice hint: 
+unknown
+system
+assistant
+context
+content
+System
+Assistant
+Context)
+Conversation transcript:
+z7Continue the conversation from the latest user request.c
+sections
+z-_format_messages_as_prompt.<locals>.<genexpr>
+append
+isinstance
+dictr>
+dumpsr
+_render_message_content
+sections
+tool_specs
+transcriptrf
+rendered
+labels
+               r
+_format_messages_as_promptr
+itemr<
+call_idr}
+argumentsr
+zDBuild an OpenAI-compatible tool-call object for downstream handling.Nr|
+response_item_id
+typer|
+_build_openai_tool_callr
+completionr
+list[SimpleNamespace]c
+z@Convert a one-shot ACP response into OpenAI-style stream chunks.r
+indexrk
+tool_calls
+reasoning_content
+reasoning)
+finish_reason)
+choicesrv
+usage)
+enumerater
+getattrr|
+choicerf
+tool_call_deltasr
+tool_callr
+data_chunk
+usage_chunks
+         r
+_completion_to_stream_chunksr
+/tuple[list[ChatCompletionMessageToolCall], str]c
+raw_jsonr
+acp_call_
+loadsrW
+fn_name
+fn_argsr
+extracteds
+      
+_try_add_tool_callz9_extract_tool_calls_from_text.<locals>._try_add_tool_callg
+z0_extract_tool_calls_from_text.<locals>.<genexpr>
+_TOOL_CALL_BLOCK_RE
+finditer
+groupr
+_TOOL_CALL_JSON_RE
+consumed_spansr
+mergedr
+cursor
+cleanedr
+           @r
+_extract_tool_calls_from_textr
+path_text
+Nz'ACP file-system paths must be absolute.z
+Path 'z
+' is outside the session cwd 'z
+is_absolute
+PermissionError
+resolve
+relative_to
+ValueError)
+candidaterZ
+      r
+_ensure_path_within_cwdr
+_ACPChatCompletions
+client
+'CopilotACPClient'c
+_client
+__init__z
+_ACPChatCompletions.__init__
+kwargsr
+_create_chat_completion)
+createz
+_ACPChatCompletions.create
+__name__
+__module__
+__qualname__r
+_ACPChatNamespacer
+completionsr
+_ACPChatNamespace.__init__
+CopilotACPClientz8Minimal OpenAI-client-compatible facade for Copilot ACP.N)
+api_key
+base_url
+default_headers
+acp_command
+acp_args
+acp_cwdr6
+dict[str, str] | Noner
+list[str] | Noner
+copilot-acpF)
+ACP_MARKER_BASE_URLr
+_default_headersr,
+_acp_commandr
+_acp_argsr
+getcwdr
+_acp_cwdr
+is_closed
+_active_process
+threading
+_active_process_lock)
+          r
+CopilotACPClient.__init__
+terminate
+waitrW
+closez
+CopilotACPClient.close
+streamrv
+float | Nonerx
+attrr=
+<listcomp>z<CopilotACPClient._create_chat_completion.<locals>.<listcomp>
+connect
+poolr=
+float)
+z<CopilotACPClient._create_chat_completion.<locals>.<listcomp>
+timeout_secondsr
+cached_tokens)
+prompt_tokens
+completion_tokens
+total_tokens
+prompt_tokens_details)
+reasoning_detailsr
+_DEFAULT_TIMEOUT_SECONDSr
+_run_promptr
+prompt_text
+_effective_timeout
+_candidates
+_numeric
+response_text
+reasoning_textr
+cleaned_textr
+assistant_messager
+   `                 r
+z(CopilotACPClient._create_chat_completion
+tuple[str, str]c
+d&d'd(d)
+(none)z ACP transport not supported by 'z
+': `a4
+` is rejected as an unknown option. This usually means the CLI is an older release (e.g. Claude Code v2.x) or a different tool than expected. Either install a CLI that ships with --acp support (e.g. `@github/copilot` late 2025+), or set HERMES_COPILOT_ACP_COMMAND / HERMES_COPILOT_ACP_ARGS to a working pair.r
+windows_hide_flagsT
+replacer
+stdinrG
+stderrr<
+encoding
+errors
+bufsizer
+creationflagsz%Could not start Copilot ACP command 'zQ'. Install GitHub Copilot CLI or set HERMES_COPILOT_ACP_COMMAND/COPILOT_CLI_PATH.z6Copilot ACP process did not expose stdin/stdout pipes.
+maxlenr
+rstrip)
+inboxr!
+_stdout_readerz4CopilotACPClient._run_prompt.<locals>._stdout_readerf
+stderr_tails
+_stderr_readerz4CopilotACPClient._run_prompt.<locals>._stderr_readero
+target
+daemon)
+text_parts
+reasoning_parts
+methodr
+paramsrg
+processr
+Copilot ACP z
+ failed: rf
+Hermes ACP mode requires the NEW GitHub Copilot CLI (github.com/github/copilot-cli), but the binary it just spawned is the deprecated `gh copilot` extension.
+Install the new CLI:
+  npm install -g @github/copilot
+  # then verify with: copilot --help
+If `copilot` already resolves to the new CLI but you still see this,
+point Hermes at it explicitly:
+  export HERMES_COPILOT_ACP_COMMAND=/path/to/new/copilot
+Alternative: use the `copilot` provider (no ACP, hits the Copilot API
+directly with a Copilot subscription token) via `hermes setup`.
+Original error:
+z"Copilot ACP process exited early: z.Timed out waiting for Copilot ACP response to 
+monotonic
+pollr>
+_handle_server_messager
+RuntimeErrorr
+TimeoutError)
+request_id
+payload
+deadline
+next_idr!
+          
+_requestz.CopilotACPClient._run_prompt.<locals>._request|
+initialize
+readTextFile
+writeTextFilez
+hermes-agentz
+Hermes Agentz
+0.0.0)
+version)
+protocolVersion
+clientCapabilities
+clientInfoz
+session/new)
+mcpServers
+sessionIdr&
+z'Copilot ACP did not return a sessionId.z
+session/promptr<
+prompt
+hermes_cli._subprocess_compatrF
+Queuer
+Threadr
+previewrF
+out_thread
+err_threadrr
+session
+session_idr\
+` `            @@@@r
+CopilotACPClient._run_prompt.
+subprocess.Popen[str]r
+session/updater_
+update
+sessionUpdater&
+agent_message_chunk
+agent_thought_chunkTrk
+session/request_permissionz
+fs/read_text_filerQ
+limitr
+keependsr
+forceri
+fs/write_text_filez
+Write denied: 'zR' requires interactive approval and cannot be written through the ACP file bridge.)
+parents
+exist_oki
+ACP client method 'z!' is not supported by Hermes yet.r
+read_textrA
+splitlinesr
+parent
+write_textr*
+chunk_textrc
+responserQ
+block_errorrT
+linesr
+denieds
+                       r
+z'CopilotACPClient._handle_server_message
+__doc__r
+__future__r
+collectionsr
+pathlibr
+typesr
+typingr
+3openai.types.chat.chat_completion_message_tool_callr
+agent.file_safetyr
+agent.redactr
+tools.environments.localr
+compile
+DOTALLr
+__annotations__rL
+<module>r

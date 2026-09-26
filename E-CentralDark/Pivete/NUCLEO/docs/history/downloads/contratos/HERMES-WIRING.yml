@@ -1,0 +1,41 @@
+schema_version: 1
+mission: HERMES_BROWSER_WIRING
+
+strategy: REUSE_EXISTING_HANDLER
+
+no_initial_change_required:
+  - apps/modulos/HERMES-CORE/agents/Executor/agent.mjs
+  - apps/modulos/HERMES-CORE/agents/Universal-Handler/agent.mjs
+
+runtime_binding:
+  tool: handler
+  action: http
+  bridge_url_env: CENTRALDARK_BROWSER_BRIDGE_URL
+  health_path: /health
+
+capability_contract:
+  inject_only_when_health_passes: true
+  name: BROWSER_SENSOR
+  role: TOOL
+  authority: NONE
+
+decisor_extension:
+  required_for_automatic_discovery: true
+  owner: apps/modulos/HERMES-CORE/core/decisor.mjs
+  desired_delta:
+    - mention BROWSER_SENSOR as a capability reachable through existing handler
+    - never add a duplicated browser execution implementation
+    - use only when health/capability receipt exists
+  note: "Apply to live file after remeasurement; do not replace whole file from this pack."
+
+mission_context_example:
+  browser:
+    status: AVAILABLE
+    endpoint_ref: env:CENTRALDARK_BROWSER_BRIDGE_URL
+    invocation:
+      ferramenta: handler
+      acao: http
+
+write_policy:
+  observation: READ_ONLY
+  action: EXPLICIT_MISSION_SCOPE_REQUIRED

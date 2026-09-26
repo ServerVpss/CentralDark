@@ -1,0 +1,11 @@
+interface:
+  display_name: "Generate Status Report"
+  short_description: "Create project status reports from Jira"
+
+Jira tasks"
+erFrames compositions."
+s"
+policy:
+  allow_implicit_invocation: false
+ng"
+  icon_large: "./assets/shadcn.png"

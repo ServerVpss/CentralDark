@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-08-05T18:12:16.459095",
+  "result": "SAFE_ADAPTER_DRIFT",
+  "details": {
+    "captured_keys": [
+      "timestamp",
+      "kanban_url",
+      "cli_version",
+      "cli_commands",
+      "board",
+      "cards",
+      "adapter_hash",
+      "schema_hash"
+    ],
+    "differences": {
+      "adapter_hash": {
+        "expected": "2ea7a19baf731121b3e88e2e554b2681e53eacfb5cbde0f3a4d824cfb2bd2221",
+        "actual": "791cc06aace5014128996834ce734980b2b285ac5a29ea63bf81e534b029947e",
+        "type": "adapter_code_changed"
+      }
+    },
+    "normalized_sample": {
+      "timestamp": "2026-08-05T18:12:12.524402",
+      "kanban_url": "http://127.0.0.1:9119/kanban?profile=pivete",
+      "cli_version": "Hermes Agent v0.20.0 (2026.8.3)",
+      "cli_commands": "['archive', 'assign', 'assignees', 'attach', 'attach-rm', 'attachments', 'block', 'boards', 'claim', 'comment', 'complete', 'context', 'create', 'daemon', 'decompose', 'diag', 'diagnostics', 'dispatch",
+      "board": "{'name': 'default', 'display': 'Default', 'db_path': 'C:\\\\Users\\\\danda\\\\AppData\\\\Local\\\\hermes\\\\kanban.db', 'tasks': '3 total (blocked=2, done=1)'}",
+      "adapter_hash": "791cc06aace5014128996834ce734980b2b285ac5a29ea63bf81e534b029947e",
+      "schema_hash": "94fbdc9a83c835eea6156204e9a17ffc504f25030c411d111b60bfa98e8fd6c0"
+    },
+    "card_count": 3
+  },
+  "actions_required": [
+    "Atualizar hash do adapter no contrato (LAST_KNOWN_GOOD)",
+    "Executar testes de regressão da skill",
+    "Promover se testes passarem"
+  ],
+  "unknown_factors": [],
+  "contract_hash": "2a888b5b7da53d58420bfbcbcd932756795d95159b620dc0345863eb8b990123",
+  "adapter_hash": "791cc06aace5014128996834ce734980b2b285ac5a29ea63bf81e534b029947e",
+  "schema_hash": "94fbdc9a83c835eea6156204e9a17ffc504f25030c411d111b60bfa98e8fd6c0"
+}

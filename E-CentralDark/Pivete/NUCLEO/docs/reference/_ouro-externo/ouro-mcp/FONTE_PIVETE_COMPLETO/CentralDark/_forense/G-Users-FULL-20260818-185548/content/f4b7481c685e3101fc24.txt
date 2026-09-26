@@ -1,0 +1,13 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@iconify\utils\lib\css\icon.d.ts
+
+import { IconCSSIconOptions, IconContentIconOptions } from "./types.js";
+import { IconifyIcon } from "@iconify/types";
+/**
+ * Get CSS for icon, rendered as background or mask
+ */
+declare function getIconCSS(icon: IconifyIcon, options?: IconCSSIconOptions): string;
+/**
+ * Get CSS for icon, rendered as content
+ */
+declare function getIconContentCSS(icon: IconifyIcon, options: IconContentIconOptions): string;
+export { getIconCSS, getIconContentCSS };

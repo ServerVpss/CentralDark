@@ -1,0 +1,12 @@
+flowchart TD
+  CAND["Writer candidate result"] --> ATTACK["Falsifier attacks"]
+  ATTACK --> Q{"Counterexample found?"}
+  Q -- Yes --> EVID["Evidence only - no mutation"]
+  EVID --> OWNER["Existing owner"]
+  OWNER --> WR["ONE_WRITER"]
+  WR --> PATCH["Minimum patch"]
+  PATCH --> TEST["Retest"]
+  TEST --> ATTACK
+  Q -- No --> SURV["COUNTERPROOF_SURVIVES"]
+  SURV --> JUDGE["Reality Judge"]
+  JUDGE --> PROM["Promotion if all gates pass"]

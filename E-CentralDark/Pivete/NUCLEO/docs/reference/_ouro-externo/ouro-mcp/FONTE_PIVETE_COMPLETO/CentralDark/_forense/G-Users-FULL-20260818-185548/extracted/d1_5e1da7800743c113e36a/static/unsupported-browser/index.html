@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BitTorrent Wallet - Speed</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" type="image/png" href="../favicon.png">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+    body {
+      background-color: #f0f3f6;
+    }
+
+    .logo {
+      margin: 60px auto;
+      display: block;
+    }
+
+    .card {
+      width: 900px;
+      margin: 60px auto 20px auto;
+      padding: 80px 20px 180px;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.14);
+      background-color: #ffffff;
+    }
+
+    .title {
+      margin: 0 39px 32px 38px;
+      font-family: 'Lato', sans-serif;
+      font-size: 48px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.33;
+      text-align: center;
+      letter-spacing: normal;
+      color: #303233;
+    }
+
+    .subtitle {
+      margin: 32px 67px 72px 66px;
+      font-family: 'Lato', sans-serif;
+      font-size: 18px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.33;
+      letter-spacing: normal;
+      text-align: center;
+      color: #303233;
+    }
+
+    .browsers {
+      height: 128px;
+      margin: 0 auto;
+      display: inline;
+      padding-left: 97px;
+      font-family: 'Lato', sans-serif;
+    }
+
+    a.browser {
+      vertical-align: top;
+      display: inline-block;
+      text-align: center;
+      width: 128px;
+      padding-left: 37px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    a.browser:hover {
+      text-decoration: underline;
+    }
+    img {
+      width: 128px;
+      height: 128px;
+    }
+    .caption {
+      margin-top: 10px;
+      display: block;
+      color: #518BFF;
+    }
+  </style>
+</head>
+
+<body data-gr-c-s-loaded="true">
+  <script>
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(window.location);
+        return results === null ? '' : decodeURIComponent(results[1]);
+    }
+
+    var isIE = /*@cc_on!@*/ false || !!document.documentMode;
+    var isOpera = (!!window.opr && !!window.opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+    var isFirefox = typeof InstallTrigger !== 'undefined';
+    var isEdge = !isIE && !!window.StyleMedia;
+    var isChromeEngine = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+    var isChromeUserAgent = /Chrome|CriOS/.test(navigator.userAgent);
+    var isChrome = isChromeEngine || isChromeUserAgent;
+    var isEdgeChromium = isChrome && navigator.userAgent.indexOf('Edg') != -1;
+
+    var port = getUrlParameter('port');
+
+    function getFeatureBranchName() {
+        var subStr = window.location.href.match(/.btt.network\/(.*)\/gui\/static\/unsupported-browser\/index.html/);
+        return subStr ? subStr[1] : '';
+    }
+
+    if (isChrome || isOpera || isFirefox || isEdge || isEdgeChromium) {
+      var featureBranchName = getFeatureBranchName();
+      var browserPageUrl = '/gui/index.html?port=' + port;
+      var fullBrowserPageUrl = featureBranchName ? '/' + featureBranchName + browserPageUrl : browserPageUrl;
+
+      window.location.href = fullBrowserPageUrl;
+    }
+  </script>
+  <svg class="logo" xmlns="http://www.w3.org/2000/svg" width="356" height="80" fill="none" viewBox="0 0 356 80">
+    <path fill="#0402FD" d="M69.96 54.606s-.03.54-.602 1.439c-.574.901-1.808 1.678-2.771 1.678H41.344s4.09-6.075 5.181-7.671c1.34-1.963 1.988-2.697 3.494-2.697h15.664c.964 0 2.197-.777 2.771-1.678.573-.9.63-1.452.63-1.452s.85 3.412.944 6.381c.095 3.035-.068 4-.068 4z"/>
+    <path fill="url(#paint0_linear)" d="M65.467 47.354h.215c.964 0 2.197-.776 2.771-1.678.567-.89.63-1.44.63-1.45C65.508 29.09 52.226 17.969 36.136 18 18.323 18.035 3.72 31.674 2.35 49.04c.002.005.51.863 1.411 1.311.904.45 1.913.658 3.434.81 1.054.104 3.961.09 3.961.09h4.452c2.028-12.144 12.634-21.403 25.416-21.403 11.375 0 21.027 7.333 24.443 17.506z"/>
+    <path fill="#6D40FF" d="M17.91 56.673c.507-.267 3.94-2.484 8.44-5.423H11.159s-2.907.015-3.961-.09c-1.521-.151-2.53-.36-3.434-.809-.904-.45-1.411-1.311-1.411-1.311s-.154 1.644-.24 2.615c-.036.404-.094.613-.111 1.752-.03 2.068.689 3.052 1.735 3.583l.027.013c.904.45 2.208.633 3.434.69.314.014 3.977.029 3.977.029h3.45c.04-.002 1.46-.089 3.286-1.049z"/>
+    <path fill="url(#paint1_linear)" d="M14.622 57.721s1.436-.075 3.288-1.049c1.644-.864 33.978-22.204 33.978-22.204S38.323 54.387 37.911 54.934c-1.16 1.544-2.022 1.937-3.227 2.372-1.057.381-3.344.415-3.344.415H14.622z"/>
+    <path fill="#303233" d="M85.914 57.244h12.708c2.7 0 4.824-.648 6.336-1.836 1.692-1.296 2.628-3.168 2.628-5.76 0-3.06-1.8-5.436-4.608-6.3v-.108c2.268-.864 3.6-2.484 3.6-5.04 0-2.052-.756-3.708-2.232-4.932-1.368-1.116-3.348-1.764-6.012-1.764h-12.42v25.74zm6.3-5.112v-6.12h5.616c1.944 0 3.456 1.044 3.456 3.096 0 1.836-1.296 3.024-3.384 3.024h-5.688zm0-10.44v-5.148h5.22c1.872 0 3.06.936 3.06 2.556 0 1.692-1.26 2.592-3.096 2.592h-5.184zM109.706 57.244h5.868V38.812h-5.868v18.432zm0-20.988h5.868v-4.752h-5.868v4.752zM125.698 57.46c1.584 0 2.7-.144 3.204-.288v-4.284c-.216 0-.792.036-1.296.036-1.26 0-2.052-.36-2.052-1.8v-8.64h3.348v-3.672h-3.348V32.98h-5.724v5.832h-2.448v3.672h2.448v9.9c0 3.96 2.448 5.076 5.868 5.076zM137.707 57.244h6.372v-20.34h7.56v-5.4h-21.42v5.4h7.488v20.34z"/>
+    <path fill="#303233" d="M158.327 53.644c-2.556 0-3.888-2.232-3.888-5.58s1.332-5.616 3.888-5.616 3.925 2.268 3.925 5.616-1.369 5.58-3.925 5.58zm.037 4.176c5.94 0 9.827-4.212 9.827-9.756 0-5.544-3.887-9.756-9.827-9.756-5.904 0-9.865 4.212-9.865 9.756 0 5.544 3.961 9.756 9.865 9.756zM170.175 57.244h5.868v-8.28c0-3.996 2.304-5.76 5.904-5.256h.144v-5.04c-.252-.108-.612-.144-1.152-.144-2.232 0-3.744.972-5.04 3.168h-.108v-2.88h-5.616v18.432zM183.956 57.244h5.868v-8.28c0-3.996 2.304-5.76 5.904-5.256h.144v-5.04c-.252-.108-.612-.144-1.152-.144-2.232 0-3.744.972-5.04 3.168h-.108v-2.88h-5.616v18.432zM206.386 57.784c2.34 0 4.212-.612 5.76-1.692 1.62-1.116 2.7-2.7 3.096-4.356h-5.724c-.504 1.152-1.512 1.836-3.06 1.836-2.412 0-3.78-1.548-4.14-4.032h13.248c.036-3.744-1.044-6.948-3.24-8.964-1.584-1.44-3.672-2.304-6.3-2.304-5.616 0-9.468 4.212-9.468 9.72 0 5.58 3.744 9.792 9.828 9.792zm-4.032-11.736c.396-2.196 1.548-3.6 3.78-3.6 1.908 0 3.276 1.404 3.492 3.6h-7.272zM217.531 57.244h5.868V47.056c0-2.268 1.296-3.888 3.24-3.888 1.908 0 2.88 1.332 2.88 3.276v10.8h5.868V45.256c0-4.104-2.376-6.984-6.408-6.984-2.556 0-4.32 1.08-5.688 3.06h-.108v-2.52h-5.652v18.432zM245.018 57.46c1.584 0 2.7-.144 3.204-.288v-4.284c-.216 0-.792.036-1.296.036-1.26 0-2.052-.36-2.052-1.8v-8.64h3.348v-3.672h-3.348V32.98h-5.724v5.832h-2.448v3.672h2.448v9.9c0 3.96 2.448 5.076 5.868 5.076zM266.43 57.748c5.544 0 9.468-2.7 9.468-7.524 0-5.796-4.572-7.02-9.576-8.028-3.852-.756-6.732-1.62-6.732-4.536 0-2.664 2.304-4.14 5.796-4.14 3.78 0 6.156 1.836 6.624 5.508h3.06c-.648-4.752-3.312-8.028-9.756-8.028-5.22 0-8.748 2.556-8.748 6.804 0 4.86 3.888 6.156 8.424 7.164 4.608 1.008 7.704 1.836 7.704 5.364 0 3.204-2.556 4.824-6.12 4.824-4.86 0-7.524-2.268-7.956-6.624h-3.168c.288 5.184 3.744 9.216 10.98 9.216zM279.173 63.22h2.916v-8.172h.072c1.548 1.98 3.348 2.736 5.868 2.736 5.04 0 8.1-3.816 8.1-9.792 0-6.192-3.276-9.792-7.992-9.792-2.7 0-4.572 1.152-5.976 3.06h-.072v-2.628h-2.916V63.22zm8.64-7.884c-4.284 0-5.904-3.276-5.904-7.308s1.872-7.344 5.94-7.344c3.528 0 5.292 3.168 5.292 7.344 0 4.212-1.764 7.308-5.328 7.308zM306.992 57.748c4.212 0 7.128-2.268 7.992-6.264h-2.844c-.648 2.52-2.448 3.816-5.148 3.816-3.744 0-5.796-2.88-6.012-6.66h14.4c0-6.156-2.988-10.476-8.568-10.476-5.292 0-8.82 4.392-8.82 9.792 0 5.4 3.312 9.792 9 9.792zm-.18-17.28c3.348 0 5.256 2.268 5.436 5.976h-11.196c.432-3.384 2.304-5.976 5.76-5.976zM326.188 57.748c4.212 0 7.128-2.268 7.992-6.264h-2.844c-.648 2.52-2.448 3.816-5.148 3.816-3.744 0-5.796-2.88-6.012-6.66h14.4c0-6.156-2.988-10.476-8.568-10.476-5.292 0-8.82 4.392-8.82 9.792 0 5.4 3.312 9.792 9 9.792zm-.18-17.28c3.348 0 5.256 2.268 5.436 5.976h-11.196c.432-3.384 2.304-5.976 5.76-5.976zM344.627 57.784c2.628 0 4.356-1.008 5.76-2.808h.072v2.268h2.916v-25.74h-2.916v9.756h-.072c-1.188-1.764-3.204-3.06-5.832-3.06-4.608 0-8.172 3.6-8.172 9.792 0 5.976 3.168 9.792 8.244 9.792zm.108-2.448c-3.564 0-5.364-3.096-5.364-7.308 0-4.176 1.8-7.344 5.328-7.344 3.852 0 5.94 3.024 5.94 7.344 0 4.212-1.764 7.308-5.904 7.308z"/>
+    <defs>
+        <linearGradient id="paint0_linear" x1="69.084" x2="2.35" y1="34.625" y2="34.625" gradientUnits="userSpaceOnUse">
+            <stop offset=".305" stop-color="#6D40FF"/>
+            <stop offset=".55" stop-color="#0402FD"/>
+            <stop offset="1" stop-color="#041A9B"/>
+        </linearGradient>
+        
+        <linearGradient id="paint1_linear" x1="32.036" x2="28.036" y1="48.763" y2="57.609" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0402FD"/>
+            <stop offset="1" stop-color="#041A9B"/>
+        </linearGradient>
+    </defs>
+  </svg>
+
+  <div class="card">
+    <div class="title">Unsupported Browser</div>
+    <div class="subtitle">We recommend using one of the following browsers:</div>
+
+    <div class="browsers">
+      <a class="browser" href="https://www.microsoft.com/edge" target="_blank">
+        <img src="./edge.png" alt="Edge">
+        <span class="caption">Edge</span>
+      </a>
+  
+      <a class="browser" href="https://www.opera.com/download" target="_blank">
+        <img src="./opera.png" alt="Opera">
+        <span class="caption">Opera</span>
+      </a>
+  
+      <a class="browser" href="https://www.mozilla.org/firefox/new" target="_blank">
+        <img src="./firefox.png" alt="Firefox">
+        <span class="caption">Firefox</span>
+      </a>
+  
+      <a class="browser" href="https://www.google.com/chrome" target="_blank">
+        <img src="./chrome.png" alt="Chrome">
+        <span class="caption">Chrome</span>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

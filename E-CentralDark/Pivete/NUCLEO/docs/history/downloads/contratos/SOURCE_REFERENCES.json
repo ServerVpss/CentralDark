@@ -1,0 +1,31 @@
+{
+  "repository": "ServerVpss/CentralDark",
+  "main_sha": "53ba5d5f4704a57305702ed3ccb681f64d714848",
+  "observed_at": "2026-08-24T20:45:00-03:00",
+  "canonical_paths": [
+    "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.md",
+    "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml",
+    "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md",
+    "docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md",
+    ".agents/skills/knowledge-compiler/SKILL.md",
+    "scripts/trigger-fabric/verify_repo_contract.py"
+  ],
+  "merged_prs": [
+    1122,
+    1123,
+    1124,
+    1128,
+    1131,
+    1132,
+    1133,
+    1134,
+    1135,
+    1136,
+    1139,
+    1141,
+    1144,
+    1145,
+    1146
+  ],
+  "note": "Pacote derivado; os owners do repo continuam a fonte canônica."
+}

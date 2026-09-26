@@ -1,0 +1,489 @@
+[
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VpLH0",
+    "isResolved": true,
+    "isOutdated": false,
+    "path": "AGENTS.md",
+    "line": 52,
+    "comment_count": 1,
+    "authors": [
+      "coderabbitai"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T15:48:55Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T15:48:55Z",
+    "original_commit": "64518e8372d1a67ba7c758e3d517dda4e44ba5f4",
+    "last_body_excerpt": "_🔒 Security & Privacy_ | _🟠 Major_ | _🏗️ Heavy lift_\n\n<details>\n<summary>🧩 Analysis chain</summary>\n\n🏁 Script executed:\n\n```shell\n#!/bin/bash\nset -euo pipefail\n\ntest \"$(git rev-parse HEAD)\" = \"ebf9bb4b1e0e749b860453cc89c051a2795f2bb3\"\n\nrg -n -C 3 -i \\\n  'autoridade final|SEGREDO/CHEFE|PIVETE|judge|writer' \\\n  AGENTS.md \\\n  LEIA-ME-IA.md \\\n  docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITO"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VpLH2",
+    "isResolved": true,
+    "isOutdated": true,
+    "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+    "line": null,
+    "comment_count": 1,
+    "authors": [
+      "coderabbitai"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T15:48:55Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T15:48:55Z",
+    "original_commit": "64518e8372d1a67ba7c758e3d517dda4e44ba5f4",
+    "last_body_excerpt": "_🗄️ Data Integrity & Integration_ | _🟠 Major_ | _⚡ Quick win_\n\n**Separe a fonte canônica da evidência observada.**\n\n`ServerVpss/CentralDark` é a fonte oficial. A evidência atual do alvo é uma observação operacional. Ela não deve ter a mesma autoridade que o repositório.\n\nSepare os campos para impedir que um estado divergente ou não aprovado do alvo se torne fonte canônica.\n\n<details>\n<summary>Co"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VpLH5",
+    "isResolved": true,
+    "isOutdated": false,
+    "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+    "line": 24,
+    "comment_count": 1,
+    "authors": [
+      "coderabbitai"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T15:48:55Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T15:48:55Z",
+    "original_commit": "64518e8372d1a67ba7c758e3d517dda4e44ba5f4",
+    "last_body_excerpt": "_🔒 Security & Privacy_ | _🟠 Major_ | _🏗️ Heavy lift_\n\n**Elimine a contradição de autoridade no boot.**\n\nEste documento define `SEGREDO/CHEFE` como autoridade humana final. Porém, `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` ainda define `PIVETE` como autoridade final nas linhas 43–49 e 304.\n\nComo os dois documentos são carregados pelo boot, o executor pode escolher a regra m"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VpLH6",
+    "isResolved": true,
+    "isOutdated": false,
+    "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+    "line": 97,
+    "comment_count": 1,
+    "authors": [
+      "coderabbitai"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T15:48:55Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T15:48:55Z",
+    "original_commit": "64518e8372d1a67ba7c758e3d517dda4e44ba5f4",
+    "last_body_excerpt": "_🔒 Security & Privacy_ | _🟠 Major_ | _⚡ Quick win_\n\n**Torne a sanitização obrigatória antes da persistência.**\n\nA expressão “redação antes da gravação quando possível” permite gravar evidência bruta quando a redação falhar. Isso contradiz a regra de que tokens, headers, cookies, chaves e certificados nunca são registrados.\n\nSe a redação prévia não puder ser garantida, interrompa a captura, não p"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VpLH-",
+    "isResolved": true,
+    "isOutdated": true,
+    "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+    "line": null,
+    "comment_count": 1,
+    "authors": [
+      "coderabbitai"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T15:48:55Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T15:48:55Z",
+    "original_commit": "64518e8372d1a67ba7c758e3d517dda4e44ba5f4",
+    "last_body_excerpt": "_🗄️ Data Integrity & Integration_ | _🟠 Major_ | _⚡ Quick win_\n\n**Unifique os estados usados no circuito e no receipt.**\n\n`BLOCKED_SECRET_EXPOSURE` é usado como estado, mas não está na lista de estados permitidos nem no campo `status` do receipt. `SKIPPED` também é mencionado, mas não possui representação definida no receipt.\n\nEsse contrato permite que um produtor emita um valor que consumidores "
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VpL3d",
+    "isResolved": true,
+    "isOutdated": false,
+    "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+    "line": 3,
+    "comment_count": 2,
+    "authors": [
+      "chatgpt-codex-connector",
+      "segredounlock"
+    ],
+    "first_author": "chatgpt-codex-connector",
+    "first_created_at": "2026-08-01T15:51:05Z",
+    "last_author": "segredounlock",
+    "last_created_at": "2026-08-01T21:25:29Z",
+    "original_commit": "64518e8372d1a67ba7c758e3d517dda4e44ba5f4",
+    "last_body_excerpt": "Corrigido antes deste HEAD: AGENTS.md:30 e :77 (commit 0bf226ae5c18c2bf3ba815bd203616b480143e50) ja nao impoem mais o documento candidato como contrato obrigatorio -- so carrega quando referenciado explicitamente, e a autoridade canonica permanece em LEIA-ME-IA.md/JARVIS ate promocao explicita. Confirmado por leitura direta do arquivo atual, nao pela alegacao do comentario anterior."
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VpMZc",
+    "isResolved": true,
+    "isOutdated": false,
+    "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+    "line": 70,
+    "comment_count": 1,
+    "authors": [
+      "coderabbitai"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T15:52:41Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T15:52:41Z",
+    "original_commit": "64518e8372d1a67ba7c758e3d517dda4e44ba5f4",
+    "last_body_excerpt": "_🗄️ Data Integrity & Integration_ | _🟠 Major_ | _⚡ Quick win_\n\n**Delimite a escrita permitida durante `CAPTURE`.**\n\n`NINGUÉM ESCREVE` contradiz a permissão posterior para gravar a própria evidência. A regra literal pode bloquear a captura ou permitir interpretação inconsistente sobre mutações no alvo.\n\nEspecifique que nenhuma escrita ocorre no alvo. Permita somente a gravação da evidência no dir"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VpMZh",
+    "isResolved": true,
+    "isOutdated": false,
+    "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+    "line": 147,
+    "comment_count": 1,
+    "authors": [
+      "coderabbitai"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T15:52:41Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T15:52:41Z",
+    "original_commit": "64518e8372d1a67ba7c758e3d517dda4e44ba5f4",
+    "last_body_excerpt": "_🔒 Security & Privacy_ | _🟠 Major_ | _⚡ Quick win_\n\n**Exija handoff explícito na troca de Writer.**\n\nO documento exige um único Writer, mas não define como transferir a autoridade. Antes de outro Writer atuar, registre Writer anterior, novo Writer, escopo, HEAD, estado, autorização e receipt.\n\nAs per coding guidelines: manter um único escritor por escopo e exigir handoff explícito na troca.\n\n   "
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VpUPa",
+    "isResolved": true,
+    "isOutdated": false,
+    "path": ".coderabbit.yaml",
+    "line": 121,
+    "comment_count": 2,
+    "authors": [
+      "chatgpt-codex-connector",
+      "segredounlock"
+    ],
+    "first_author": "chatgpt-codex-connector",
+    "first_created_at": "2026-08-01T16:16:25Z",
+    "last_author": "segredounlock",
+    "last_created_at": "2026-08-01T21:25:32Z",
+    "original_commit": "5d84b562120a5021421bd4bc287abc53b833586c",
+    "last_body_excerpt": "Corrigido antes deste HEAD: .coderabbit.yaml (commit 0bf226ae5c18c2bf3ba815bd203616b480143e50) ja tem mcp.usage: \"disabled\" com disabled_servers: [] e comentario explicito de deny-by-default. Confirmado por leitura direta e parse YAML."
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VqC5G",
+    "isResolved": true,
+    "isOutdated": false,
+    "path": ".coderabbit.yaml",
+    "line": 33,
+    "comment_count": 1,
+    "authors": [
+      "coderabbitai"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T18:19:26Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T18:19:26Z",
+    "original_commit": "a242a89f00d61702c9d839299a964d0b26f3f347",
+    "last_body_excerpt": "_🔒 Security & Privacy_ | _🟠 Major_ | _⚡ Quick win_\n\n<details>\n<summary>🧩 Analysis chain</summary>\n\n🏁 Script executed:\n\n```shell\n#!/bin/bash\nset -e\nprintf '%s\\n' '--- .coderabbit.yaml ---'\ncat -n .coderabbit.yaml\nprintf '%s\\n' '--- repository references to finishing_touches and related settings ---'\nrg -n -i --hidden --glob '!node_modules' --glob '!dist' --glob '!build' \\\n  'finishing_touches|d"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VqC5I",
+    "isResolved": true,
+    "isOutdated": false,
+    "path": ".coderabbit.yaml",
+    "line": 96,
+    "comment_count": 1,
+    "authors": [
+      "coderabbitai"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T18:19:26Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T18:19:26Z",
+    "original_commit": "a242a89f00d61702c9d839299a964d0b26f3f347",
+    "last_body_excerpt": "_🔒 Security & Privacy_ | _🟠 Major_ | _⚡ Quick win_\n\n<details>\n<summary>🧩 Analysis chain</summary>\n\n🏁 Script executed:\n\n```shell\nsed -n '55,85p' .coderabbit.yaml\nprintf '\\n--- related configuration ---\\n'\nrg -n -i \"allow_non_org_members|auto_reply|inheritance|chat:\" . --glob '*.yaml' --glob '*.yml' --glob '*.md' --glob '*.json' --glob '*.jsonc' | head -200\n```\n\nRepository: ServerVpss/CentralDar"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VqDnj",
+    "isResolved": true,
+    "isOutdated": true,
+    "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+    "line": null,
+    "comment_count": 2,
+    "authors": [
+      "chatgpt-codex-connector",
+      "segredounlock"
+    ],
+    "first_author": "chatgpt-codex-connector",
+    "first_created_at": "2026-08-01T18:21:29Z",
+    "last_author": "segredounlock",
+    "last_created_at": "2026-08-01T21:25:34Z",
+    "original_commit": "a242a89f00d61702c9d839299a964d0b26f3f347",
+    "last_body_excerpt": "Corrigido antes deste HEAD: CAPTURE_DEGRADED (commit 0bf226ae5c18c2bf3ba815bd203616b480143e50) ja esta na tabela de estados permitidos (linha ~122) e no enum do OPERATION_RECEIPT (linha ~208) do documento LOOP. isOutdated=true confirma que a visualizacao do diff estava defasada."
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VqLTk",
+    "isResolved": true,
+    "isOutdated": false,
+    "path": ".coderabbit.yaml",
+    "line": 48,
+    "comment_count": 3,
+    "authors": [
+      "coderabbitai",
+      "segredounlock"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T18:44:16Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T21:25:51Z",
+    "original_commit": "8f5925f0abef0467f8204d327c97cebe152351d4",
+    "last_body_excerpt": "`@segredounlock`, confirmado. A configuração agora define `reviews.fail_commit_status: true` com `reviews.review_progress: true`. Isso elimina o falso verde causado pelo valor padrão `false` quando ocorre erro de revisão.\n\n<!-- <review_comment_addressed> -->\n\n<sub>You are interacting with an AI system.</sub>\n\n<!-- This is an auto-generated reply by CodeRabbit -->"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VqUgG",
+    "isResolved": true,
+    "isOutdated": false,
+    "path": "AGENTS.md",
+    "line": 44,
+    "comment_count": 2,
+    "authors": [
+      "segredounlock"
+    ],
+    "first_author": "segredounlock",
+    "first_created_at": "2026-08-01T19:06:00Z",
+    "last_author": "segredounlock",
+    "last_created_at": "2026-08-01T21:25:41Z",
+    "original_commit": "8f5925f0abef0467f8204d327c97cebe152351d4",
+    "last_body_excerpt": "Corrigido no commit 0bf226ae5c18c2bf3ba815bd203616b480143e50: nota de precedencia adicionada ao JARVIS reconciliando as ocorrencias de \"Pivete = autoridade final\" (Secao 3 e criterio 10 da Secao 11) com SEGREDO/CHEFE, mantendo a pilha canonica SEGREDO/CHEFE > SOL/COORDENADOR > PIVETE/HERMES > Writer/Judge/Promotor. A mesma ambiguidade em 4 outros arquivos fora do escopo deste PR (.claude/rules/00-"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VqUgI",
+    "isResolved": true,
+    "isOutdated": false,
+    "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+    "line": 5,
+    "comment_count": 2,
+    "authors": [
+      "segredounlock"
+    ],
+    "first_author": "segredounlock",
+    "first_created_at": "2026-08-01T19:06:00Z",
+    "last_author": "segredounlock",
+    "last_created_at": "2026-08-01T21:25:43Z",
+    "original_commit": "8f5925f0abef0467f8204d327c97cebe152351d4",
+    "last_body_excerpt": "Corrigido no commit 0bf226ae5c18c2bf3ba815bd203616b480143e50: LEIA-ME-IA.md agora separa source_of_truth: \"ServerVpss/CentralDark\" de um campo observed_evidence proprio, sem autoridade canonica."
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VqUgK",
+    "isResolved": true,
+    "isOutdated": false,
+    "path": ".coderabbit.yaml",
+    "line": 15,
+    "comment_count": 2,
+    "authors": [
+      "segredounlock"
+    ],
+    "first_author": "segredounlock",
+    "first_created_at": "2026-08-01T19:06:00Z",
+    "last_author": "segredounlock",
+    "last_created_at": "2026-08-01T21:25:38Z",
+    "original_commit": "8f5925f0abef0467f8204d327c97cebe152351d4",
+    "last_body_excerpt": "Mesma correcao do achado acima (fail_commit_status): corrigido no commit 0bf226ae5c18c2bf3ba815bd203616b480143e50. YAML validado com yaml.safe_load."
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VqUgM",
+    "isResolved": true,
+    "isOutdated": false,
+    "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+    "line": 208,
+    "comment_count": 2,
+    "authors": [
+      "segredounlock"
+    ],
+    "first_author": "segredounlock",
+    "first_created_at": "2026-08-01T19:06:00Z",
+    "last_author": "segredounlock",
+    "last_created_at": "2026-08-01T21:25:45Z",
+    "original_commit": "8f5925f0abef0467f8204d327c97cebe152351d4",
+    "last_body_excerpt": "Corrigido no commit 0bf226ae5c18c2bf3ba815bd203616b480143e50: novo validador reutilizavel de OPERATION_RECEIPT em .agents/skills/meta-lupa/scripts/meta_lupa.py (subcomando validate-operation-receipt), com 23 testes em test_operation_receipt_validator.py. Rejeita enum invalido, BLOCKED sem reason, autoaprovacao (writer==judge), evidence_sha256 ausente para status definitivo, e verifica head_sha con"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VqW2I",
+    "isResolved": true,
+    "isOutdated": true,
+    "path": ".coderabbit.yaml",
+    "line": null,
+    "comment_count": 3,
+    "authors": [
+      "coderabbitai",
+      "segredounlock"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T19:13:07Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T21:26:00Z",
+    "original_commit": "8f5925f0abef0467f8204d327c97cebe152351d4",
+    "last_body_excerpt": "`@segredounlock`, confirmado. A alteração descrita resolve o finding: `auto_enrich.enabled` e `auto_planning.enabled` estão desativados, enquanto `planning.enabled` permanece ativo.\n\n<!-- <review_comment_addressed> -->\n\n<sub>You are interacting with an AI system.</sub>\n\n<!-- This is an auto-generated reply by CodeRabbit -->"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VqW2P",
+    "isResolved": true,
+    "isOutdated": true,
+    "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+    "line": null,
+    "comment_count": 3,
+    "authors": [
+      "coderabbitai",
+      "segredounlock"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T19:13:07Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T21:26:04Z",
+    "original_commit": "8f5925f0abef0467f8204d327c97cebe152351d4",
+    "last_body_excerpt": "`@segredounlock`, confirmado. A alteração remove a alegação de aprovação sem evidência auditável.\n\nO documento agora permanece `CANDIDATO_CANONICO` até existir um `OPERATION_RECEIPT` terminal com `chief_decision: APPROVED` vinculado ao mesmo HEAD. Isso atende ao finding.\n\n<!-- <review_comment_addressed> -->\n\n<sub>You are interacting with an AI system.</sub>\n\n<!-- This is an auto-generated reply by"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VqW2R",
+    "isResolved": true,
+    "isOutdated": true,
+    "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+    "line": null,
+    "comment_count": 3,
+    "authors": [
+      "coderabbitai",
+      "segredounlock"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T19:13:07Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T21:26:03Z",
+    "original_commit": "8f5925f0abef0467f8204d327c97cebe152351d4",
+    "last_body_excerpt": "`@segredounlock`, confirmado. A normalização de `origin` agora exclui `userinfo`, query, fragmento e credenciais antes do registro. Isso atende ao finding de segurança.\n\n<!-- <review_comment_addressed> -->\n\n<sub>You are interacting with an AI system.</sub>\n\n<!-- This is an auto-generated reply by CodeRabbit -->"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VqW2T",
+    "isResolved": true,
+    "isOutdated": true,
+    "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+    "line": null,
+    "comment_count": 3,
+    "authors": [
+      "coderabbitai",
+      "segredounlock"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T19:13:07Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T21:26:06Z",
+    "original_commit": "8f5925f0abef0467f8204d327c97cebe152351d4",
+    "last_body_excerpt": "`@segredounlock`, confirmado. A regra de `SECRET_EXPOSURE` agora aplica fail-closed explícito: interrompe a captura, não persiste nem envia a evidência e retorna `status: BLOCKED`.\n\n<!-- <review_comment_addressed> -->\n\n<sub>You are interacting with an AI system.</sub>\n\n<!-- This is an auto-generated reply by CodeRabbit -->"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VqW2U",
+    "isResolved": true,
+    "isOutdated": true,
+    "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+    "line": null,
+    "comment_count": 3,
+    "authors": [
+      "coderabbitai",
+      "segredounlock"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T19:13:07Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T21:26:15Z",
+    "original_commit": "8f5925f0abef0467f8204d327c97cebe152351d4",
+    "last_body_excerpt": "`@segredounlock`, confirmado. A correção separa o resultado técnico da autorização de promoção.\n\n`status: PASS` não autoriza promoção isoladamente. A promoção requer `chief_decision: APPROVED` no mesmo `OPERATION_RECEIPT`. O validador também aplica as duas condições em `approved_for_promotion`.\n\n<!-- <review_comment_addressed> -->\n\n<sub>You are interacting with an AI system.</sub>\n\n<!-- This is an"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VqW2V",
+    "isResolved": true,
+    "isOutdated": false,
+    "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+    "line": 223,
+    "comment_count": 3,
+    "authors": [
+      "coderabbitai",
+      "segredounlock"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T19:13:07Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T21:26:34Z",
+    "original_commit": "8f5925f0abef0467f8204d327c97cebe152351d4",
+    "last_body_excerpt": "<details>\n<summary>🧩 Analysis chain</summary>\n\n🏁 Script executed:\n\n```shell\n#!/bin/bash\nset -euo pipefail\n\ncommit='0bf226ae5c18c2bf3ba815bd203616b480143e50'\n\nprintf '%s\\n' '== Commit identity and changed paths =='\ngit show --no-ext-diff --format='commit %H%n%P%n%s' --name-only \"$commit\"\n\nprintf '%s\\n' '== Documentation changes in the reported commit =='\ngit show --no-ext-diff --format='' \"$commi"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VqXNT",
+    "isResolved": true,
+    "isOutdated": true,
+    "path": ".coderabbit.yaml",
+    "line": null,
+    "comment_count": 2,
+    "authors": [
+      "chatgpt-codex-connector",
+      "segredounlock"
+    ],
+    "first_author": "chatgpt-codex-connector",
+    "first_created_at": "2026-08-01T19:14:06Z",
+    "last_author": "segredounlock",
+    "last_created_at": "2026-08-01T21:26:02Z",
+    "original_commit": "8f5925f0abef0467f8204d327c97cebe152351d4",
+    "last_body_excerpt": "Corrigido no commit 0bf226ae5c18c2bf3ba815bd203616b480143e50: as duas ocorrencias do caminho inexistente docs/PLANO-MESTRE-HERMES-CASA-MENTE-ESTENDIDA/** em .coderabbit.yaml (path_instructions e knowledge_base.code_guidelines.filePatterns) foram trocadas por docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md, o arquivo real citado tambem pelo proprio JARVIS."
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VrHdc",
+    "isResolved": false,
+    "isOutdated": false,
+    "path": ".agents/skills/meta-lupa/references/OPERATION-RECEIPT-VALIDATOR.md",
+    "line": 43,
+    "comment_count": 1,
+    "authors": [
+      "coderabbitai"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T21:30:56Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T21:30:56Z",
+    "original_commit": "0bf226ae5c18c2bf3ba815bd203616b480143e50",
+    "last_body_excerpt": "_🧹 Nitpick_ | _🔵 Trivial_\n\n**Considere automatizar o gate antes da promoção.**\n\nO documento registra que a validação do `OPERATION_RECEIPT` ainda depende de execução manual antes de `!REGISTRA` ou de promoção do documento LOOP a canônico. Sem hook automático, um Writer pode esquecer de rodar o validador antes de fechar o ciclo, mesmo com `STATUS=BLOCKED` disponível como gate.\n\nAdicione um hook d"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VrHdd",
+    "isResolved": false,
+    "isOutdated": false,
+    "path": ".agents/skills/meta-lupa/scripts/meta_lupa.py",
+    "line": 1675,
+    "comment_count": 1,
+    "authors": [
+      "coderabbitai"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T21:30:56Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T21:30:56Z",
+    "original_commit": "0bf226ae5c18c2bf3ba815bd203616b480143e50",
+    "last_body_excerpt": "_🔒 Security & Privacy_ | _🟠 Major_ | _⚡ Quick win_\n\n**Placeholder de `judge` contorna a independência Writer/Judge.**\n\nA checagem de autoaprovação só compara `judge.casefold() == writer.casefold()`. Ela não rejeita valores-placeholder como `\"NONE\"`, que aparece como valor default no fixture de teste (`_valid_receipt()`, linha 23 de `test_operation_receipt_validator.py`).\n\nCausa: um receipt com `"
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VrHdh",
+    "isResolved": false,
+    "isOutdated": false,
+    "path": ".agents/skills/meta-lupa/testes/test_operation_receipt_validator.py",
+    "line": 42,
+    "comment_count": 1,
+    "authors": [
+      "coderabbitai"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T21:30:57Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T21:30:57Z",
+    "original_commit": "0bf226ae5c18c2bf3ba815bd203616b480143e50",
+    "last_body_excerpt": "_📐 Maintainability & Code Quality_ | _🔵 Trivial_ | _💤 Low value_\n\n**Variável `details` não utilizada.**\n\n`details` é capturado em `ok, reason, details = validate_operation_receipt(_valid_receipt())` mas nunca é lido no corpo do teste. Renomeie para `_` ou remova o nome, conforme apontado pelo Ruff (RUF059).\n\n\n\n\n<details>\n<summary>♻️ Correção proposta</summary>\n\n```diff\n-    ok, reason, details "
+  },
+  {
+    "thread_id": "PRRT_kwDOTDnUP86VrHdi",
+    "isResolved": true,
+    "isOutdated": false,
+    "path": ".agents/skills/meta-lupa/testes/test_operation_receipt_validator.py",
+    "line": 70,
+    "comment_count": 1,
+    "authors": [
+      "coderabbitai"
+    ],
+    "first_author": "coderabbitai",
+    "first_created_at": "2026-08-01T21:30:57Z",
+    "last_author": "coderabbitai",
+    "last_created_at": "2026-08-01T21:30:57Z",
+    "original_commit": "0bf226ae5c18c2bf3ba815bd203616b480143e50",
+    "last_body_excerpt": "_🩺 Stability & Availability_ | _🔵 Trivial_ | _⚡ Quick win_\n\n<details>\n<summary>🧩 Analysis chain</summary>\n\n🏁 Script executed:\n\n```shell\n#!/bin/bash\n# Descrição: localizar workflows de CI e verificar profundidade de checkout usada nos jobs de teste Python.\nfd -e yml -e yaml . .github/workflows 2>/dev/null | xargs -I{} sh -c 'echo \"--- {} ---\"; cat {}'\n```\n\nRepository: ServerVpss/CentralDark\n\nLe"
+  }
+]

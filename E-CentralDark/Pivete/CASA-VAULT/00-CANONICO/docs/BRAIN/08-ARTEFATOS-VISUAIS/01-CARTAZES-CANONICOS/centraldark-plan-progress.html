@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CentralDark — Plano de Avanço e Barra de Progresso</title>
+<style>
+  :root {
+    --bg: #0d0d12;
+    --fg: #eaeaea;
+    --accent: #22c55e;
+    --warn: #f59e0b;
+    --danger: #ef4444;
+    --info: #3b82f6;
+    --muted: #6b7280;
+    --card: #1a1a24;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .header { margin-bottom: 2rem; border-bottom: 1px solid #2a2a3a; padding-bottom: 1rem; }
+  h1 { font-size: 1.8rem; color: var(--accent); margin-bottom: 0.5rem; }
+  .subtitle { color: var(--muted); margin-bottom: 0.5rem; }
+  .date { color: var(--muted); font-size: 0.9rem; }
+  .progress-bar {
+    background: var(--card);
+    border: 1px solid #2a2a3a;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .progress-title { font-weight: 600; margin-bottom: 1rem; color: var(--info); }
+  .progress-track {
+    background: #2a2a3a;
+    height: 24px;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, var(--info), var(--accent));
+    height: 100%;
+    width: 45%; /* Ajustar conforme progresso real */
+    transition: width 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: 0.8rem;
+    color: #fff;
+    font-weight: 600;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .items { margin: 1.5rem 0; }
+  .item {
+    background: var(--card);
+    border: 1px solid #2a2a3a;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  .item-title { font-weight: 600; font-size: 1.1rem; }
+  .status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .status-green { background: rgba(34,197,94,0.2); color: var(--accent); }
+  .status-yellow { background: rgba(245,158,11,0.2); color: var(--warn); }
+  .status-red { background: rgba(239,68,68,0.2); color: var(--danger); }
+  .status-black { background: rgba(107,114,128,0.2); color: var(--muted); }
+  .item-description { color: var(--muted); margin-bottom: 0.5rem; }
+  .item-actions { font-size: 0.9rem; color: var(--info); }
+  .section { margin: 2rem 0; }
+  .section h2 { font-size: 1.3rem; margin-bottom: 1rem; color: var(--accent); }
+  .note {
+    background: rgba(245,158,11,0.1);
+    border-left: 3px solid var(--warn);
+    padding: 1rem;
+    margin: 1rem 0;
+    color: var(--warn);
+    font-size: 0.9rem;
+  }
+  .success {
+    background: rgba(34,197,94,0.1);
+    border-left: 3px solid var(--accent);
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+  .code {
+    background: #1a1a24;
+    border: 1px solid #2a2a3a;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    font-family: monospace;
+    color: var(--accent);
+    margin: 0.5rem 0;
+  }
+  footer {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid #2a2a3a;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🚀 CentralDark — Plano de Avanço</h1>
+  <div class="subtitle">Dependabot Autônomo · 20 Frentes · Ponto Fixo Cristalizado</div>
+  <div class="date">Última atualização: 04/09/2026 · Autorização: SEGREDO/CHEFE</div>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-title">📊 Barra de Progresso Geral</div>
+  <div class="progress-track">
+    <div class="progress-fill" style="width: 45%;">45%</div>
+  </div>
+  <div class="progress-label">
+    <span>✅ 9 frentes concluídas · 🔄 3 em progresso · ⏳ 8 pendentes</span>
+    <span>Objetivo: 100% — Ponto Fixo</span>
+  </div>
+</div>
+
+<div class="section">
+  <h2>📋 Resumo Executivo</h2>
+  <div class="success">
+    <strong>✅ Gates corrigidos hoje:</strong> Cartazes canônicos (manifest.json + symlink) agora PASS no CI.
+    Validado localmente com node validate-canonical-posters.mjs → CANONICAL_POSTERS=PASS.
+  </div>
+  <div class="note">
+    <strong>⏳ Pendente:</strong> PR #1397 ainda tem outros gates vermelhos (Juiz determinístico, Porta/governança, Validate canonical map, validate-title).
+    PR #1407 está CONFLICTING — precisa de resolução.
+  </div>
+</div>
+
+<div class="items">
+  <div class="item">
+    <div class="item-header">
+      <span class="item-title">🔧 Fase A: Corrigir CI Vermelho</span>
+      <span class="status status-green">✅ Em andamento</span>
+    </div>
+    <div class="item-description">Corrigir todos os gates vermelhos dos PRs abertos até CI ficar 100% verde.</div>
+    <div class="item-actions">
+      <strong>Gate resolvido:</strong> Cartazes canônicos (manifest + symlink)<br>
+      <strong>Gate pendente:</strong> Juiz determinístico, Porta/governança, Validate canonical map, validate-title (PR #1397)<br>
+      <strong>PR #1381:</strong> Porta-de-entrada FAIL, Artefato sensível FAIL, PROMOTION_SEAL_RECEIPT_INVALID FAIL<br>
+      <strong>Ação:</strong> Criar symlink CARTAZES-CANONICOS já resolvido; próximos: investigar logs dos outros gates
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header">
+      <span class="item-title">📄 Fase B: Atualizar Documentos</span>
+      <span class="status status-yellow">🔄 Em progresso</span>
+    </div>
+    <div class="item-description">Melhorar documentação existente baseada nos HTMLs de referência (cristalize.html, CentralDark Status.html)</div>
+    <div class="item-actions">
+      <strong>Criado:</strong> centraldark-plan-progress.html (este arquivo)<br>
+      <strong>Baseado em:</strong> E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE\cristalize.html<br>
+      <strong>Ação:</strong> Revisar e atualizar documentação das 20 frentes com barra de progresso real
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header">
+      <span class="item-title">💳 Fase C: Sistema de Pagamento via API</span>
+      <span class="status status-black">⏳ Pendente</span>
+    </div>
+    <div class="item-description">Integrar API de pagamento no painel admin sem burlar regras — apenas API implementada</div>
+    <div class="item-actions">
+      <strong>Escopo:</strong> API de pagamento embutida no painel admin do sistema<br>
+      <strong>Restrição:</strong> Não burlar regras — apenas API, sem trabalhoarounds<br>
+      <strong>Ação:</strong> Documentar arquitetura de API, integrar com gateway existente, testar fluxo completo
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-header">
+      <span class="item-title">🚀 Fase D: Deploys + Ponto Fixo</span>
+      <span class="status status-yellow">🔄 Em progresso</span>
+    </div>
+    <div class="item-description">Autonomia 24/7 no GitHub com deploys automáticos e CI sempre verde</div>
+    <div class="item-actions">
+      <strong>Status:</strong> dependabot-auto-merge.yml corrigido (removeu APPROVE)<br>
+      <strong>Monitoramento:</strong> dependabot-supreme-monitor.sh criado<br>
+      <strong>Validação:</strong> dependabot-integration-test.sh (8/8 testes passam)<br>
+      <strong>Ação:</strong> Validar com PR real do dependabot, configurar webhook deploy, cristalizar fixed-point
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>🎯 Metas por Fase</h2>
+  <table style="width:100%; border-collapse: collapse; margin: 1rem 0;">
+    <thead>
+      <tr style="background: var(--card); border-bottom: 2px solid #2a2a3a;">
+        <th style="padding: 0.75rem; text-align: left;">Fase</th>
+        <th style="padding: 0.75rem; text-align: left;">Objetivo</th>
+        <th style="padding: 0.75rem; text-align: center;">Status</th>
+        <th style="padding: 0.75rem; text-align: center;">Progresso</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding: 0.75rem;">A</td>
+        <td style="padding: 0.75rem;">CI sempre verde para todos os PRs</td>
+        <td style="padding: 0.75rem; text-align: center;"><span class="status status-green">✅ Iniciado</span></td>
+        <td style="padding: 0.75rem; text-align: center;">30%</td>
+      </tr>
+      <tr>
+        <td style="padding: 0.75rem;">B</td>
+        <td style="padding: 0.75rem;">Documentação cristalizada + HTML plano</td>
+        <td style="padding: 0.75rem; text-align: center;"><span class="status status-yellow">🔄 Em progresso</span></td>
+        <td style="padding: 0.75rem; text-align: center;">40%</td>
+      </tr>
+      <tr>
+        <td style="padding: 0.75rem;">C</td>
+        <td style="padding: 0.75rem;">API de pagamento no painel admin</td>
+        <td style="padding: 0.75rem; text-align: center;"><span class="status status-black">⏳ Pendente</span></td>
+        <td style="padding: 0.75rem; text-align: center;">0%</td>
+      </tr>
+      <tr>
+        <td style="padding: 0.75rem;">D</td>
+        <td style="padding: 0.75rem;">Deploys automáticos + Ponto Fixo</td>
+        <td style="padding: 0.75rem; text-align: center;"><span class="status status-yellow">🔄 Em progresso</span></td>
+        <td style="padding: 0.75rem; text-align: center;">50%</td>
+      </tr>
+      <tr style="background: var(--card); font-weight: 600;">
+        <td style="padding: 0.75rem;">TOTAL</td>
+        <td style="padding: 0.75rem;">Ponto Fixo Cristalizado · CI Verde · Deploys 24/7</td>
+        <td style="padding: 0.75rem; text-align: center; color: var(--accent);">45%</td>
+        <td style="padding: 0.75rem; text-align: center; color: var(--accent);">➡️ 100%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section">
+  <h2>📝 Próximos Passos Imediatos</h2>
+  <ol>
+    <li><strong>Correção gates PR #1397:</strong> Investigar logs dos outros gates (Juiz determinístico, Porta/governança)</li>
+    <li><strong>Resolução PR #1381:</strong> Porta-de-entrada FAIL, Artefato sensível FAIL, PROMOTION_SEAL_RECEIPT_INVALID</li>
+    <li><strong>Resolução PR #1407:</strong> CONFLICTING — resolver conflito com main</li>
+    <li><strong>Atualizar barra de progresso:</strong> Ajustar para refletir progresso real após cada correção</li>
+    <li><strong>Criar documento HTML plano:</strong> Baseado em cristalize.html, com estrutura de plano + barra de progresso</li>
+    <li><strong>Implementar API pagamento:</strong> Documentar arquitetura, integrar com gateway</li>
+    <li><strong>Configurar webhook deploy:</strong> Automatizar deploy quando PR mergeado</li>
+    <li><strong>Cristalizar fixed-point:</strong> Documentar ponto fixo alcançado com todos os gates verdes</li>
+  </ol>
+</div>
+
+<footer>
+  <p>CentralDark — Sistema autônomo com Dependabot 24/7 · GitHub + VPS + Casa</p>
+  <p>Owner: SEGREDO/CHEFE · Executor: HERMES/PIVETE · Coordinator: SOL</p>
+  <p>ONE_SYSTEM_ONLY · REUSE_BEFORE_CREATE · REALITY=JUDGE</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,38 @@
+schema: centraldark.model-routing.v1
+
+roles:
+  scout_fast:
+    primary: grok
+    fallback: luna
+    permissions: [read, search, correlate]
+    forbidden: [write, restart, deploy, merge, secret_read]
+
+  local_triage:
+    selection: hardware_probe
+    candidates:
+      high_capacity:
+        model: Qwen/Qwen3.6-35B-A3B
+        purpose: high-throughput local triage and repository correlation
+        condition: "validated runtime support and sufficient aggregate RAM/VRAM"
+      balanced:
+        model: Qwen/Qwen3.5-9B
+        purpose: continuous triage, classification, summarization
+        condition: "moderate GPU or CPU/RAM capacity"
+      light:
+        model: Qwen/Qwen3.5-4B
+        purpose: cheap classifier and log summarizer
+        condition: "limited hardware"
+    permissions: [read_snapshot, classify, summarize, correlate]
+    forbidden: [arbitrary_shell, production_write, merge, secret_read]
+
+  frontier:
+    order:
+      - fast_model_pass
+      - sonnet_refinement
+      - opus_adversarial_review
+    note: "Papel e evidência importam; nomes de modelos são substituíveis."
+
+gates:
+  no_hardware_measurement: BLOCKED_MODEL_SELECTION
+  no_runtime_support_proof: BLOCKED_MODEL_INSTALL
+  no_sanitized_snapshot: BLOCKED_LLM_INPUT

@@ -1,0 +1,25 @@
+flowchart LR
+    A["EXECUÇÃO REAL<br/>terminal / comando"]
+    B["SUPERFÍCIE ORIGINAL<br/>~62 linhas"]
+    C["COMPRESSÃO<br/>~60 linhas"]
+    D["CRISTAL<br/>51 linhas"]
+    E["REUSO SEMPRE<br/>interface pequena"]
+    F["USINA POR TRÁS<br/>owners + memória + skills + tools + runtime + testes"]
+
+    A --> B --> C --> D --> E --> F
+
+    G["GATE<br/>CAPACIDADE_DEPOIS >= CAPACIDADE_ANTES"]
+    H["META<br/>COMPLEXIDADE_EXPOSTA_DEPOIS << ANTES"]
+
+    C -. precisa satisfazer .-> G
+    D -. precisa satisfazer .-> G
+    D -. busca .-> H
+
+    I["LOC != POWER"]
+    J["SKILL = COMPRESSED_CONTROL_SURFACE"]
+    K["SKILL != WHOLE_SYSTEM"]
+
+    I --> J --> K
+    K -. explica .-> D
+
+    L["IMAGE"] --> M["MARKDOWN"] --> N["MERMAID"] --> O["ZIP"]

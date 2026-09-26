@@ -1,0 +1,21 @@
+﻿=== IOBIT INVENTORY 2026-08-22T06:41:22.1491461-03:00 ===
+--- TASKS ---
+--- SERVICES ---
+--- PROCESSES ---
+--- FOLDERS ---
+DIR C:\Program Files (x86)\IObit
+  IObit Unlocker
+DIR C:\Users\danda\AppData\Roaming\IObit
+  Advanced SystemCare
+  PPMain.ini
+DIR C:\ProgramData\IObit
+  Advanced SystemCare
+  IObitRtt
+  ASCCache.dat
+  EventPromote.ini
+  Install.ini
+  iobitpromotion.ini
+  Precare.ini
+  PreMalScn.ini
+  RCDate.ini
+DONE

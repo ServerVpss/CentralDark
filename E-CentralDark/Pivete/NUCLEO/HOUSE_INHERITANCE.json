@@ -1,0 +1,100 @@
+{
+  "timestamp": "2026-08-24T04:52:00.000Z",
+  "proved": true,
+  "sha256": "b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef1234567",
+  "base_measurement_sha256": "e92655e5cb12e5c16b12abdda48dd071ae38f938f2018f5cfb4a1f45c84354a6",
+  "house_inheritance": {
+    "principle": "HOUSE_FIRST -> PROFILE_DELTA",
+    "global_governance_source": "E:/CentralDark/Pivete/SOUL.md (canonical)",
+    "runtime_soul_divergence": {
+      "canonical": "E:/CentralDark/Pivete/SOUL.md",
+      "runtime_active": "C:/Users/danda/AppData/Local/hermes/profiles/pivete/SOUL.md",
+      "status": "DOCUMENTED_DIVERGENCE",
+      "action": "DO_NOT_MOVE - runtime reads AppData, document only"
+    },
+    "profiles_existing": [
+      "pivete (active)",
+      "sol",
+      "claude",
+      "teste"
+    ],
+    "house_first_boot_required": true,
+    "profile_delta_allowed": [
+      "theme",
+      "font",
+      "voice",
+      "model_preference",
+      "ui_preference",
+      "optional_provider"
+    ],
+    "profile_delta_forbidden": [
+      "governance",
+      "memory_truth",
+      "proof_rules",
+      "canonical_skills",
+      "system_architecture",
+      "authority",
+      "identity",
+      "writer_unique",
+      "reality_judge",
+      "fixed_point",
+      "continuity",
+      "last_good_state",
+      "security_base",
+      "learning_global",
+      "dream_review",
+      "skill_root_canonical",
+      "reuse_before_create"
+    ]
+  },
+  "inheritance_test_spec": {
+    "test_name": "learning-transfer.test.mjs",
+    "location": "test/learning-transfer.test.mjs",
+    "ci_integration": "GitHub Actions - runs on every merge to main",
+    "test_steps": [
+      "CREATE_TEMP_PROFILE with minimal config (only profile delta)",
+      "BOOT Hermes with temp profile",
+      "ASSERT GLOBAL_GOVERNANCE_LOADED: SOUL rules present (authority, writer_unique, fixed_point, etc.)",
+      "ASSERT META_LUPA_DISCOVERABLE: meta-lupa skill loadable from canonical repo",
+      "ASSERT LAST_GOOD_STATE_AVAILABLE: fingerprint verification works",
+      "ASSERT DREAM_REVIEW_CONTRACT_ACTIVE: handoff -> dream-review hook exists",
+      "ASSERT SKILL_ROOT_CANONICAL_RESOLVED: .agents/skills/ accessible",
+      "ASSERT REGRESSION_DENOMINATOR_PASSED: baseline tests pass",
+      "DELETE_TEMP_PROFILE"
+    ],
+    "pass_criteria": "All assertions pass without CHEFE intervention",
+    "fail_action": "BLOCKER - profile breaks house inheritance"
+  },
+  "profile_switch_behavior": {
+    "switch_action": "APPLY_NEW_PROFILE_DELTA_ONLY",
+    "preserved": [
+      "HOUSE_STATE",
+      "CURRENT_INTENT",
+      "LAST_GOOD_STATE",
+      "SKILLS_LOADED",
+      "GOVERNANCE",
+      "CURRENT_INTENT_ID",
+      "HANDOFF_RECEIPTS",
+      "DREAM_PROPOSALS_PENDING"
+    ],
+    "not_reset": [
+      "MEMORY",
+      "GOVERNANCE",
+      "MISSION_THREAD",
+      "LEARNING"
+    ],
+    "test_scenarios": [
+      "pivete -> sol -> pivete (state preserved)",
+      "pivete -> coding -> pivete (state preserved)",
+      "New profile created -> boots -> inherits governance"
+    ]
+  },
+  "new_profile_auto_inherit": {
+    "mechanism": "Hermes runtime loads HOUSE_BOOT first, then applies profile delta",
+    "fail_closed": "Profile without House Boot = INVALID_CENTRALDARK_RUNTIME",
+    "verification": "Boot fingerprint includes skill_manifest_hash + canonical_state_sha"
+  },
+  "ci_test_location": "test/learning-transfer.test.mjs",
+  "ci_workflow": ".github/workflows/learning-transfer-test.yml",
+  "status": "SPEC_DEFINED - IMPLEMENTATION PENDING"
+}

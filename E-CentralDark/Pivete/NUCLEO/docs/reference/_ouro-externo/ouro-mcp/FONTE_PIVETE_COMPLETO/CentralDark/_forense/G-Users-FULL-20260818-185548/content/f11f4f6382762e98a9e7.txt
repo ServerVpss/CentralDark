@@ -1,0 +1,21 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@babel\helper-module-transforms\README.md
+
+# @babel/helper-module-transforms
+
+> Babel helper functions for implementing ES6 module transformations
+
+See our website [@babel/helper-module-transforms](https://babeljs.io/docs/babel-helper-module-transforms) for more information.
+
+## Install
+
+Using npm:
+
+```sh
+npm install --save @babel/helper-module-transforms
+```
+
+or using yarn:
+
+```sh
+yarn add @babel/helper-module-transforms
+```

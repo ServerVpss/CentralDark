@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1618.687 197.9" width="1618.687" height="197.9" style="--bg:#1a1b26;--fg:#a9b1d6;--line:#3d59a1;--accent:#7aa2f7;--muted:#565f89;background:var(--bg)">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
+  }
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="8" markerHeight="5" refX="7" refY="2.5" orient="auto">
+    <polygon points="0 0, 8 2.5, 0 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+  <marker id="arrowhead-start" markerWidth="8" markerHeight="5" refX="1" refY="2.5" orient="auto-start-reverse">
+    <polygon points="8 0, 0 2.5, 8 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+</defs>
+<g class="subgraph" data-id="CASA" data-label=" Casa Local ">
+  <rect x="40" y="40" width="445.33" height="110.9" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="40" y="40" width="445.33" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="52" y="54" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999"> Casa Local </text>
+</g>
+<g class="subgraph" data-id="GITHUB" data-label=" ServerVpss/CentralDark ">
+  <rect x="537.3299999999999" y="40" width="436.43800000000005" height="110.9" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="537.3299999999999" y="40" width="436.43800000000005" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="549.3299999999999" y="54" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999"> ServerVpss/CentralDark </text>
+</g>
+<g class="subgraph" data-id="VPS" data-label=" VPS Produção ">
+  <rect x="1101.4940000000001" y="61" width="477.193" height="96.9" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="1101.4940000000001" y="61" width="477.193" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1113.4940000000001" y="75" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999"> VPS Produção </text>
+</g>
+<polyline class="edge" data-from="WORKTREES" data-to="PR" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="469.33,109.45 553.33,109.45" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ACTIONS" data-to="VPS" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="deploy" points="957.768,109.45 1101.4940000000001,109.45" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="NUCLEO" data-to="WORKTREES" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="324.395,109.45 364.395,109.45" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="AUTO" data-to="NUCLEO" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="189.09300000000002,109.45 229.09300000000002,109.45" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="PR" data-to="MAIN" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="676.049,109.45 716.049,109.45" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="MAIN" data-to="ACTIONS" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="784.675,109.45 824.675,109.45" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="PM2" data-to="MCP" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1255.7740000000001,123.45 1295.7740000000001,123.45" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="MCP" data-to="WEBUI" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1442.9460000000001,123.45 1482.9460000000001,123.45" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<g class="edge-label" data-from="ACTIONS" data-to="VPS" data-label="deploy">
+  <rect x="1015.768" y="93.45" width="49.726000000000006" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1040.631" y="108.60000000000001" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">deploy</text>
+</g>
+<g class="node" data-id="NUCLEO" data-label="NUCLEO" data-shape="cylinder">
+  <rect x="229.09300000000002" y="91" width="95.30199999999999" height="36.900000000000006" fill="var(--_node-fill)" stroke="none" />
+  <line x1="229.09300000000002" y1="91" x2="229.09300000000002" y2="127.9" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <line x1="324.395" y1="91" x2="324.395" y2="127.9" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="276.744" cy="127.9" rx="47.650999999999996" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="276.744" cy="91" rx="47.650999999999996" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="276.744" y="109.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">NUCLEO</text>
+</g>
+<g class="node" data-id="WORKTREES" data-label="Worktrees" data-shape="rectangle">
+  <rect x="364.395" y="91" width="104.93499999999999" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="416.86249999999995" y="109.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Worktrees</text>
+</g>
+<g class="node" data-id="AUTO" data-label="Auto-Destilador" data-shape="rectangle">
+  <rect x="56" y="91" width="133.09300000000002" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="122.54650000000001" y="109.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Auto-Destilador</text>
+</g>
+<g class="node" data-id="MAIN" data-label="main" data-shape="cylinder">
+  <rect x="716.049" y="91" width="68.626" height="36.900000000000006" fill="var(--_node-fill)" stroke="none" />
+  <line x1="716.049" y1="91" x2="716.049" y2="127.9" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <line x1="784.675" y1="91" x2="784.675" y2="127.9" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="750.362" cy="127.9" rx="34.313" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="750.362" cy="91" rx="34.313" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="750.362" y="109.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">main</text>
+</g>
+<g class="node" data-id="PR" data-label="Pull Requests" data-shape="rectangle">
+  <rect x="553.3299999999999" y="91" width="122.71900000000001" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="614.6895" y="109.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Pull Requests</text>
+</g>
+<g class="node" data-id="ACTIONS" data-label="Actions Runner" data-shape="rectangle">
+  <rect x="824.675" y="91" width="133.09300000000002" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="891.2215" y="109.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Actions Runner</text>
+</g>
+<g class="node" data-id="PM2" data-label="PM2 Processes" data-shape="rectangle">
+  <rect x="1117.4940000000001" y="105" width="138.28" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1186.6340000000002" y="123.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">PM2 Processes</text>
+</g>
+<g class="node" data-id="MCP" data-label="CentralDark-MCP" data-shape="rectangle">
+  <rect x="1295.7740000000001" y="105" width="147.172" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1369.3600000000001" y="123.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">CentralDark-MCP</text>
+</g>
+<g class="node" data-id="WEBUI" data-label="WebUI" data-shape="rectangle">
+  <rect x="1482.9460000000001" y="105" width="79.74100000000001" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1522.8165000000001" y="123.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">WebUI</text>
+</g>
+</svg>

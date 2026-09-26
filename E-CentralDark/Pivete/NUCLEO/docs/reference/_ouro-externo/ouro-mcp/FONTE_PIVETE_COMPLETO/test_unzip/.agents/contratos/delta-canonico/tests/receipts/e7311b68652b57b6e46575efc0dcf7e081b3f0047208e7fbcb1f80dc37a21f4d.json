@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "event": "CLOSE",
+  "mission_id": "test-mission",
+  "instance_id": "e7311b68652b57b6e46575efc0dcf7e081b3f0047208e7fbcb1f80dc37a21f4d",
+  "verdict": "APPROVED",
+  "head_sha": null,
+  "closed_at": "2026-07-31T19:43:25.294709+00:00",
+  "receipt_sha256": "1a1472c1e2f44c366f441025e3eada29887965dade3a33b30c8dab6d6c2f7de0"
+}

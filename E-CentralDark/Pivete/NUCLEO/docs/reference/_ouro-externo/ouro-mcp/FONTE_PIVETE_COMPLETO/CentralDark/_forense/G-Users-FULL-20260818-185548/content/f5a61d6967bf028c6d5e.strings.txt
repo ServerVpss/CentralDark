@@ -1,0 +1,410 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\agent\__pycache__\relay_llm.cpython-311.pyc
+
+Z!d{d2
+Z&d~dL
+z?Core NeMo Relay adapters for physical Hermes provider attempts.
+annotationsN)
+Callable
+Iterator)
+dataclass)
+SimpleNamespace)
+relay_runtime
+reasoning_content
+reasoning_detailsz
+x-dynamo-parent-session-idz
+x-dynamo-session-idT)
+frozen
+slotsc
+_RelayProtocol
+operation
+codec_classN)
+__name__
+__module__
+__qualname__
+__annotations__
+CC:\Users\danda\AppData\Local\hermes\hermes-agent\agent\relay_llm.pyr
+openai.chat_completions
+OpenAIChatCodec)
+openai.responses
+OpenAIResponsesCodecz
+anthropic.messages
+AnthropicMessagesCodec)
+chat_completions
+codex_responses
+anthropic_messages
+metadata
+dict[str, Any] | None
+return
+_RelayProtocol | Nonec
+z>Return Relay's operation and codec descriptor for an API mode.
+api_modeN)
+isinstancer
+_RELAY_PROTOCOL_BY_API_MODE)
+_relay_protocolr)
+provider_namer
+zGReturn Relay's canonical operation name when Hermes knows the API mode.)
+protocols
+_relay_operation_namer-
+dict[str, Any]c
+zHPreserve the physical provider when the operation name is canonicalized.z
+hermes.provider)
+_jsonabler'
+setdefault)
+relay_metadatas
+_relay_metadatar4
+defer_logical_completion
+request
+callback
+Callable[[dict[str, Any]], Any]
+session_id
+model_namer5
+z>Run one non-streaming physical provider attempt through Relay.N
+relay_request_bodyr 
+next_requestr
+finalr.
+managed_callback_guard)
+guardedz(execute.<locals>.invoke.<locals>.guardedi
+codec_baseline_bodyr 
+_provider_request
+BaseExceptionr0
+final_request
+callback_context
+callback_errorrJ
+raw_responser@
+invokez
+execute.<locals>.invokef
+handler 
+response_codec
+relay_errorrU
+logicalr5
+success
+outcomerL
+resolve_execution_context
+managed_execution_enabled
+_logical_parent
+_relay_request_body
+LLMRequest
+_codec_round_trip_request_body
+contextvars
+copy_context
+_run_awaitable
+run_in_session_async
+executer-
+_codecrP
+ _is_relay_wrapped_callback_error
+_recover_successful_callback
+_complete_logical
+_json_equal
+_namespace
+runtime
+session
+parentr^
+relay_requestrW
+managedrS
+``   `         @@@@@r
+z=Run one asynchronous physical provider attempt through Relay.Nr>
+call_providerz4execute_async.<locals>.invoke.<locals>.call_provider
+asyncio
+create_taskrP
+taskrR
+     @
+execute_async.<locals>.invoke
+``   `         @@@@@r
+execute_asyncr
+zDRun a provider attempt under the inherited Hermes turn when present.N
+active_turnro
+leaser9
+       r
+execute_currentr
+zDRun an async provider attempt under the inherited turn when present.Nr
+       r
+execute_current_asyncr
+get_running_loop
+RuntimeErrorr
+_has_running_event_loopr
+completed_response_predicate
+stream_factory
+finalizer
+Callable[[], Any]r
+Callable[[Any], bool] | Nonec
+Run a provider stream under the inherited Hermes turn when present.
+    When ``completed_response_predicate`` is set and the stream_factory returns
+    a complete response instead of an iterator (e.g. AnthropicAuxiliaryClient
+    and other shims that ignore ``stream=True``), unwrap and return the
+    completed response directly. This mirrors the pre-Relay behavior where
+    ``call_llm(stream=True)`` returned the raw response and the consumer's
+    own ``hasattr(stream, "choices")`` check handled it (#11732, #55933) 
+    without the unwrap the response stays trapped as ``final_response`` on the
+    inner ManagedLlmStream and the outer consumer sees an empty stream.
+    Determining that return shape requires starting the lazy managed pipeline,
+    and Relay may read ahead internally while satisfying that first pull. A
+    genuine first returned chunk remains buffered, while provider work,
+    latency, and pre-first-yield errors may surface before this function
+    returns.
+    N)
+final_response)
+streamr
+_prime_completed_response
+getattr)
+completeds
+           r
+stream_currentr
+on_stream_created
+on_chunk
+chunk_adapter
+accept_chunkr
+Callable[[Any], None] | Noner
+Callable[[Any], Any] | Noner
+'ManagedLlmStream'c
+z?Return a synchronous view of one Relay-managed provider stream.)
+ManagedLlmStream)
+             r
+z@Drive Relay's async stream from Hermes's provider worker thread.r6
+call_role
+auxiliary:r7
+Callable[..., Any]
+z@ManagedLlmStream.__init__.<locals>.run_callback.<locals>.guarded
+run_callbackz/ManagedLlmStream.__init__.<locals>.run_callback
+close)
+_provider_completedr
+callablerP
+_close_error
+StopIteration
+_accept_chunkr0
+_raw_chunks
+append
+_callback_error)
+raw_streamr
+raw_iterator
+encoded_chunkrJ
+       
+provider_streamz2ManagedLlmStream.__init__.<locals>.provider_stream
+_on_chunkr0
+observe_chunkz0ManagedLlmStream.__init__.<locals>.observe_chunk*
+_logical_model_name
+_response_model_name
+_logical_response_model_namer0
+responserS
+relay_finalizerz2ManagedLlmStream.__init__.<locals>.relay_finalizer.
+_NeMo Relay stream post-processing failed after provider success; preserving the provider result
+exc_info
+cancelled
+failed
+response_model_name)
+_stream
+_raw_stream_resource
+_closedr
+_logical
+_defer_logical_completionr
+startswithr
+_logical_provider_namer
+_chunk_adapterr
+_relay_observes_chunksr
+_prefetched_chunks
+output_modifiedrj
+new_event_loop
+run_until_completerm
+stream_executer-
+Exception
+logger
+warning
+!_preserve_pending_provider_chunksrs
+_is_cancellationr
+looprS
+```   ``   ``           @@@@r
+__init__z
+ManagedLlmStream.__init__
+__iter__z
+ManagedLlmStream.__iter__n
+z4Advance once while preserving a genuine first chunk.N)
+z*ManagedLlmStream._prime_completed_responseq
+logical_outcomer"
+anextr
+next_chunkz-ManagedLlmStream.__next__.<locals>.next_chunk
+_closer
+StopAsyncIterationr
+enumeratert
+encodedrR
+`       r
+__next__z
+ManagedLlmStream.__next__z
+zAClose an explicitly abandoned stream and cancel its logical call.r
+close_errors
+ManagedLlmStream.close
+z@Switch a failed Relay stream to its undelivered provider chunks.c
+_encodedrR
+<listcomp>zFManagedLlmStream._preserve_pending_provider_chunks.<locals>.<listcomp>
+acloser"
+close_streamzHManagedLlmStream._preserve_pending_provider_chunks.<locals>.close_stream
+z4Relay stream cleanup failed during provider fallbackTr
+clearr
+debugr
+pendingr
+relay_streamr
+     @r
+z2ManagedLlmStream._preserve_pending_provider_chunks
+Provider stream cleanup failedr
+z-ManagedLlmStream._close.<locals>.close_stream
+resources
+closed_ids
+resourcerS
+        @r
+ManagedLlmStream._close
+__del__z
+ManagedLlmStream.__del__&
+__doc__r
+AnthropicStreamAccumulatorz<Rebuild an Anthropic Message from post-intercept SSE events.r"
+_message
+_blocksr
+z#AnthropicStreamAccumulator.__init__-
+eventr
+message_start
+message)
+content_block_startr
+content_block
+content_block_delta
+text_delta
+thinking_delta
+thinking
+signature_delta
+signature
+input_json_delta
+_partial_json
+partial_json
+citations_delta
+citation
+citations
+message_delta)
+stop_reason
+stop_sequencer!
+payload
+event_typer
+blockr%
+delta_type
+partialr!
+current_usages
+             r
+observez"AnthropicStreamAccumulator.observe1
+content)
+sortedr
+TypeError
+ValueErrorr
+blocksr
+     r
+finalizez#AnthropicStreamAccumulator.finalizel
+z8Return the attribute-shaped response consumed by Hermes.r@
+assembled
+base_payloadr@
+mergeds
+      r
+z#AnthropicStreamAccumulator.responsey
+relay_runtime.RelayRuntimerx
+6tuple[relay_runtime.RelayTurnContext, Any, str] | Nonec
+api_request_idr
+hermes.call_roler
+primary)
+finalize_lock
+closed
+logical_llm_lock
+logical_llm_calls
+run_in_sessionrg
+LOGICAL_LLM_SCOPE
+ScopeType
+Function
+RUNTIME_SCHEMA_KEY
+RUNTIME_SCHEMA_VERSION
+RUNTIME_INSTANCE_KEY
+runtime_id)
+request_idrY
+       r
+str | Noner
+provider
+response_model)
+outputr 
+z,Hermes Relay logical LLM finalization failedTr
+RelayRuntimerR
+updaterV
+pop_relay_scoperg
+          r
+BaseException | Nonec
+Fz]NeMo Relay LLM post-processing failed after provider success; returning the provider responseTr
+     r
+errorc
+CancelledError
+InterruptedError
+KeyboardInterrupt)
+zDComplete the active turn's logical LLM call after caller validation.Nr
+       r
+complete_logical_callrq
+z<Return a provider-reported model name when one is available.r 
+strip)
+originalr@
+baseline
+intercepted
+headersc
+ _RELAY_INTERNAL_PROVIDER_HEADERS
+<dictcomp>z%_provider_request.<locals>.<dictcomp>?
+extra_headers)
+_provider_request_body
+$_restore_provider_message_extensions
+itemsr&
+           r
+toolsc
+functionc
+z2_relay_request_body.<locals>.<listcomp>.<dictcomp>^
+z'_relay_request_body.<locals>.<listcomp>[
+z'_relay_request_body.<locals>.<listcomp>n
+zGRestore provider wire fields that Relay's typed codec cannot represent.
+messagesc
+<genexpr>z7_restore_provider_message_extensions.<locals>.<genexpr>
+strictc
+z7_restore_provider_message_extensions.<locals>.<genexpr>
+ _PROVIDER_MESSAGE_EXTENSION_KEYS)
+original_messages
+final_messages
+baseline_messages
+intercepted_messages
+original_message
+final_message
+baseline_message
+intercepted_messager8
+             r
+zCReturn the codec-only request shape used to identify real rewrites.Nr@
+zCNeMo Relay request codec baseline failed; ignoring request rewritesTr
+zTNeMo Relay request codec returned an unsupported baseline; ignoring request rewrites)
+decode
+encoder
+annotatedr
+        r
+z*_provider_request_body.<locals>.<listcomp>
+codecs)
+     r
+_jsonable.<locals>.<dictcomp>
+_jsonable.<locals>.<listcomp>
+model_dumprL
+warningsc
+_jsonable.<locals>.<dictcomp>
+floatr<
+tupler
+AttributeError)
+attributess
+_namespace.<locals>.<dictcomp>
+_namespace.<locals>.<listcomp>
+rightc
+sort_keys
+separatorsF)
+dumpsr0
+NzBSynchronous Relay LLM execution cannot run on an event-loop thread)
+inspect
+isawaitabler
+__future__r
+logging
+collections.abcr
+dataclassesr
+typesr
+typingr
+agentr
+getLoggerr
+frozensetr
+<module>r
+dSdSdS

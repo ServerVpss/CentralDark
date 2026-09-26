@@ -1,0 +1,2247 @@
+!DELTAUTIL — ABSORÇÃO UNIFICADA 
+!CENTRALDARK 
+ 
+#ACORDAR → !CALIBRAR → !MULTIBÚSSOLA_META → !META_LUPA → !RECONCILIAR 
+→ !CONTRAPROVA → !REMEDIÇÃO → REALITY_JUDGE → !REGISTRA → !BOOT 
+ 
+ABSORVER ESTE DELTA NA MISSÃO ATUAL E CONTINUAR. NÃO RECOMEÇAR A 
+MISSÃO. NÃO CRIAR NOVO SISTEMA. 
+ 
+Este é UM DELTA externo. Internamente, contém componentes complementares que podem 
+crescer para N sem aumentar a carga visível ao CHEFE. Os quatro componentes históricos 
+abaixo permanecem como lineage interna: 
+ 
+-​
+DELTA 1 — Provider Availability / Free-Tier Resilience 
+-​
+DELTA 2 — Issue → Delta → PR → Main (Lineage Canônica) 
+-​
+DELTA 3 — Lei da Passagem Bíblica + Baianês 
+-​
+DELTA 4 — Connector Boundary / Pre-GitHub Handshake 
+ 
+O primeiro impede confundir "provider sem quota" com "arquitetura quebrada". O segundo 
+impede confundir "muitas issues" com "muitas capacidades independentes". 
+ 
+ 
+DELTA 1 — PROVIDER AVAILABILITY / FREE-TIER 
+RESILIENCE 
+REGRA FUNDAMENTAL 
+FALHA DE UMA INVOCAÇÃO 
+ 
+!= 
+ 
+ROTA/ARQUITETURA QUEBRADA 
+ 
+Antes de classificar um modelo como QUEBRADO, identificar a CLASSE REAL da falha. 
+CLASSIFICAÇÃO DE FALHAS 
+AUTH_EXPIRED 
+ 
+AUTH_INVALID 
+ 
+QUOTA_EXHAUSTED 
+ 
+CREDIT_EXHAUSTED 
+ 
+FREE_TIER_EXHAUSTED 
+ 
+RATE_LIMITED 
+ 
+MODEL_TEMPORARILY_UNAVAILABLE 
+ 
+MODEL_REMOVED 
+ 
+PROVIDER_OUTAGE 
+ 
+NETWORK_TRANSIENT 
+ 
+TIMEOUT 
+ 
+ROUTER_ERROR 
+ 
+CONFIG_ERROR 
+ 
+MODEL_ROUTING_ERROR 
+ 
+UNKNOWN 
+FALHAS TRANSITÓRIAS (NÃO ESTRUTURAIS) 
+AUTH_EXPIRED 
+ 
+CREDIT_EXHAUSTED 
+ 
+QUOTA_EXHAUSTED 
+ 
+FREE_TIER_EXHAUSTED 
+ 
+RATE_LIMITED 
+ 
+MODEL_TEMPORARILY_UNAVAILABLE 
+ 
+PROVIDER_OUTAGE 
+ 
+NETWORK_TRANSIENT 
+ 
+TIMEOUT 
+ 
+Tratamento: 
+ 
+→ NÃO declarar arquitetura quebrada automaticamente 
+ 
+→ registrar causa observada 
+ 
+→ marcar rota como TEMPORARILY_UNAVAILABLE 
+ 
+→ NÃO tentar infinitamente 
+ 
+→ pular para o próximo fallback comprovado 
+ 
+→ continuar a missão 
+ 
+Exemplo: 
+ 
+MODEL_A → HTTP 429 / quota → TEMPORARILY_UNAVAILABLE → MODEL_B → continuar 
+ 
+MODEL_B → crédito esgotado → TEMPORARILY_UNAVAILABLE → MODEL_C → continuar 
+ 
+Isso NÃO invalida: router, CLI, fallback engine, outros modelos independentes. 
+FALHA ESTRUTURAL 
+Somente tratar como falha estrutural quando houver evidência como: 
+ 
+ROUTER_ERROR 
+ 
+CONFIG_ERROR 
+ 
+MODEL_ROUTING_ERROR 
+ 
+INVALID_MODEL_MAPPING 
+ 
+SELF_ROUTING_LOOP 
+ 
+INVALID_PROVIDER_BINDING 
+ 
+REQUEST_NOT_REACHING_ROUTER 
+ 
+FALLBACK_NOT_ADVANCING 
+ 
+Nesses casos: diagnosticar causa → corrigir owner existente → retestar → continuar. 
+SEM LOOP DE RETRY 
+MAX_ATTEMPTS_PER_SAME_CAUSE = pequeno e limitado 
+ 
+Se repetir a MESMA falha material: 
+ 
+→ NÃO insistir 
+ 
+→ registrar 
+ 
+→ NEXT_FALLBACK 
+FREE TIER É OPORTUNISTA 
+FREE_MODEL != ALWAYS_AVAILABLE 
+ 
+FREE TIER CENTRALDARK → cadeia dinâmica de candidatos comprováveis 
+ 
+Um modelo pode estar: 
+ 
+AVAILABLE_NOW 
+ 
+TEMPORARILY_UNAVAILABLE 
+ 
+AUTH_BLOCKED 
+ 
+QUOTA_BLOCKED 
+ 
+REMOVED 
+ 
+UNKNOWN 
+ 
+STATUS ANTIGO != STATUS ETERNO 
+FIXED POINT DA CADEIA 
+Separar: 
+ 
+CHAIN_MECHANISM_PROVEN  ≠  ALL_MODELS_AVAILABLE_NOW 
+ 
+A cadeia pode ser considerada operacional se: 
+ 
+ROUTER=PASS 
+ 
+FALLBACK_MECHANISM=PASS 
+ 
+NEXT_MODEL_ADVANCE=PASS 
+ 
+AT_LEAST_ONE_USABLE_ROUTE=PASS 
+ 
+SELF_LOOP_GUARD=PASS 
+ 
+NO_HIDDEN_DIRECT_PROVIDER=PASS 
+ 
+Exemplo: 
+ 
+7 candidatos → 3 PASS / 2 RATE_LIMITED / 1 CREDIT_EXHAUSTED / 1 
+MODEL_UNAVAILABLE 
+ 
+→ CHAIN_MECHANISM = PASS 
+ 
+→ ALL_MODELS_AVAILABLE_NOW = NÃO 
+ 
+→ NÃO mentir que 7/7 funcionam 
+AUTH / CREDENTIAL BOUNDARY 
+→ identificar somente o TIPO do erro 
+ 
+→ NÃO imprimir token 
+ 
+→ NÃO pedir segredo em texto 
+ 
+→ NÃO registrar credencial em log 
+ 
+AUTH_EXPIRED → registrar somente: provider, status, timestamp, erro sanitizado 
+REALITY JUDGE 
+CORRETO: 
+ 
+  ROUTER=PROVADO, FALLBACK=PROVADO, HY3=RATE_LIMITED, 
+SOLAR=CREDIT_EXHAUSTED, LONGCAT=ROUTABLE_PASS, CHAIN=OPERACIONAL 
+ 
+NUNCA: 
+ 
+  HY3 falhou por quota → ROUTER QUEBRADO 
+ 
+  1 modelo respondeu → 7 MODELOS PASS 
+CONTINUIDADE 
+CLASSIFY → RECORD → SKIP → NEXT FALLBACK → CONTINUE 
+ 
+NÃO PARAR A MISSÃO a menos que TODOS os caminhos estejam bloqueados. 
+ 
+Se todos bloqueados: 
+ 
+  VEREDITO: EVIDÊNCIA_FALTANTE / EXTERNAL_PROVIDER_BLOCKED 
+ 
+  NEXT_CURSOR: retomar quando houver disponibilidade 
+ 
+  Preservar como PROVADO tudo que já foi independentemente demonstrado. 
+FRASE OPERACIONAL 
+PROVIDER SEM CRÉDITO NÃO É ROUTER QUEBRADO. 
+ 
+API EXPIRADA NÃO É ARQUITETURA QUEBRADA. 
+ 
+RATE LIMIT NÃO É REGRESSÃO. 
+ 
+CLASSIFICA. PULA. CONTINUA. PROVA O RESTO. 
+ 
+ 
+DELTA 2 — ISSUE → DELTA → PR → MAIN (LINEAGE 
+CANÔNICA) 
+OBJETIVO 
+Transformar issues, artifacts, branches, commits e trabalho de múltiplos agentes em UMA 
+LINHAGEM CANÔNICA por capacidade. 
+ 
+NÃO operar por número de issue cegamente. 
+ 
+NÃO operar por artifact isolado. 
+ 
+NÃO criar PR eterno. 
+ 
+NÃO usar main como stream de telemetria. 
+TRACKERS / UMBRELLA 
+UMBRELLA/TRACKER CONTÍNUO → permanece aberto enquanto a missão/capacidade 
+continuar viva. 
+ 
+Exemplo CentralDark: #604 = tracker-raiz contínuo. 
+ 
+Uma umbrella: 
+ 
+→ recebe estado material 
+ 
+→ aponta famílias/filhos 
+ 
+→ preserva histórico 
+ 
+→ NÃO executa código 
+ 
+→ NÃO vira PR gigante 
+ 
+→ NÃO fecha a cada merge filho. 
+ 
+PR específico: 
+ 
+  Refs #UMBRELLA 
+ 
+  Closes #ISSUE_FILHA 
+ 
+Resultado: 
+ 
+  MERGE → fecha trabalho específico → umbrella continua viva. 
+ 
+Só fechar umbrella quando: 
+ 
+  MISSION_COMPLETE_PROVEN 
+ 
+  OU SUPERSEDED_BY_SUCCESSOR_PROVEN 
+ 
+  OU SCOPE_DISABLED_BY_AUTHORITY 
+ 
+CLOSED != RESOLVED automaticamente. 
+DENOMINADOR REAL 
+NÃO considerar apenas issues abertas. 
+ 
+SCAN: 
+ 
+  OPEN_ISSUES + CLOSED_RELEVANT_ISSUES + OPEN_PRS + MERGED_PRS 
+ 
+  + CLOSED_UNMERGED_PRS + COMMITS + BRANCHES + ARTIFACTS + 
+CURRENT_MAIN 
+ 
+mas somente quando semanticamente/materialmente relacionados à capacidade atual. 
+ 
+UNIDADE PRINCIPAL: CAPABILITY_LINEAGE 
+ 
+CAPABILITY_FINGERPRINT = 
+ 
+  OWNER + FILES + BEHAVIOR + PROOF_TARGET + DEPENDENCIES + 
+CAUSE_SIGNATURE 
+FAMILY RECONCILIATION 
+ANTES DE IMPLEMENTAR UMA ISSUE: 
+ 
+→ buscar outras issues/PRs/commits/artifacts com o mesmo fingerprint. 
+ 
+Classificar: 
+ 
+  OWNER | DUPLICATE | COMPLEMENTARY | SUPERSEDED | ABSORBED | CONFLICTING 
+| UNIQUE | UNKNOWN 
+ 
+Se duas issues forem a mesma causa: 
+ 
+→ NÃO implementar duas vezes 
+ 
+→ escolher/confirmar uma ISSUE OWNER 
+ 
+→ transferir ouro único 
+ 
+→ preservar referências das demais 
+ 
+→ fechar/supersede somente após prova. 
+SELEÇÃO DO PR — CORREÇÃO DO CHEFE 
+REGRA: 
+ 
+  ONE_PROMOTION_PR_PER_SCOPE=true 
+ 
+  ONE_WRITER_PER_SCOPE=true 
+ 
+Isso NÃO significa: 
+ 
+  ONE_PR_FOR_WHOLE_REPOSITORY=true 
+ 
+Escopos comprovadamente independentes podem trabalhar em paralelo. 
+ 
+MESMO OWNER/CAPABILITY: → um único Writer/PR sobrevivente. 
+ 
+PR existente adequado: → reutilizar. 
+ 
+PR conflitante/duplicado: → reconciliar. 
+ 
+Criar PR novo SOMENTE quando não houver lineage adequada. 
+FLUXO DE PROMOÇÃO 
+CAPABILITY FAMILY → ISSUE OWNER → branch curta → delta mínimo → testes 
+ 
+→ contraprova → PR de promoção → checks → merge main → remedição 
+ 
+→ fecha filhos absorvidos → atualiza umbrella → NEXT_CURSOR 
+ 
+Não manter branch/PR eternamente acumulando escopos desconexos. 
+MAIN 
+MAIN = estado versionado canônico promovido. 
+ 
+CÓDIGO, CONFIG, CONTRATOS, DOCS CANÔNICOS → PR + prova + merge. 
+ 
+NÃO escrever diretamente na main como fluxo operacional normal. 
+ 
+Se houver histórico de commit direto: 
+ 
+→ tratar como provenance 
+ 
+→ reconciliar 
+ 
+→ não usar como justificativa para continuar bypassando promoção. 
+TELEMETRIA 
+NÃO commitar continuamente em main: 
+ 
+  status de agents, heartbeat, contadores, fila viva, latência, 
+ 
+  checks momentâneos, logs, painel runtime, telemetria transitória. 
+ 
+Usar owner já existente apropriado: 
+ 
+  Supabase, Evidence Envelope, artifact de CI, cache/storage, runtime state. 
+ 
+TELEMETRY != SOURCE_CODE 
+ARTIFACTS DO CLAUDE 
+CLAUDE_ARTIFACT = WORKING_ARTIFACT ≠ CANONICAL_OWNER 
+ 
+Todo artifact: 
+ 
+→ procurar owner no repo 
+ 
+→ procurar lineage 
+ 
+→ dedupe 
+ 
+→ extrair ouro único 
+ 
+→ incorporar ao owner 
+ 
+→ preservar link como provenance 
+ 
+→ NÃO gerar outro artifact final-final-v2. 
+ 
+Se já houver arquivo/PR/issue apropriado: → atualizar aquele. 
+MULTI-AGENTE 
+Claude, Hermes, ChatGPT, Copilot, Codex ou outro executor 
+ 
+→ sempre começar descobrindo estado canônico. 
+ 
+SESSION_MEMORY != CURRENT_STATE 
+ 
+GitHub/MCP + Casa + receipts → recuperar continuidade. 
+ 
+PARALLELIZE_PERCEPTION=true 
+ 
+SERIALIZE_MUTATION_PER_SCOPE=true 
+ 
+Agente novo NÃO cria missão nova só porque perdeu contexto do agente anterior. 
+SE UM AGENTE PARAR 
+STOP/CRASH/CONTEXT_LOSS/RATE_LIMIT 
+ 
+→ preservar HEAD 
+ 
+→ preservar Writer scope 
+ 
+→ preservar receipt 
+ 
+→ NEXT_CURSOR 
+ 
+→ próximo agente executa !CENTRALDARK → continua mesma lineage. 
+PROMOTION SLOT — CORREÇÃO DO CHEFE 
+NÃO usar: 
+ 
+  GLOBAL_PROMOTION_SLOT=1 
+ 
+Usar: 
+ 
+  PROMOTION_SLOT_PER_CONFLICT_SCOPE=1 
+ 
+Se dois deltas não tocam mesmo owner, não compartilham dependência crítica 
+ 
+e passaram collision check: 
+ 
+→ podem avançar paralelamente. 
+ 
+Se colidem: 
+ 
+→ RENDEZVOUS → ONE_WRITER. 
+UPDATE BRANCH ≠ UPDATE MAIN 
+Update branch apenas: MAIN_ATUAL → entra na branch do PR 
+ 
+Só merge promove: PR → MAIN 
+ 
+Não confundir sincronização com promoção. 
+POLÍTICA DE FECHAMENTO 
+ISSUE filha: → fechar quando delta absorvido/provado. 
+ 
+ISSUE duplicada: → fechar apontando owner/sucessor. 
+ 
+ISSUE umbrella: → permanece aberta enquanto organismo ativo. 
+ 
+PR: → nasce → prova → merge/fecha → morre. 
+ 
+MAIN: → recebe somente estado promovido. 
+ 
+CLOSED != USELESS — histórico fechado pertence à lineage quando mesma capability. 
+REALITY JUDGE 
+ISSUES_ABERTAS, PRS_ABERTOS, MAIN_SHA, PROMOTION_SLOT, CHECKS 
+ 
+→ medir novamente antes de usar para decisão. 
+ 
+STATUS_ANTIGO != STATUS_ATUAL 
+FÓRMULA FINAL 
+MUITAS FONTES + MUITAS ISSUES + MUITOS AGENTES + MUITOS MOTORES 
+ 
+MAS: 
+ 
+  UMA CAPACIDADE → UMA LINHAGEM 
+ 
+  UM ESCOPO MUTÁVEL → UM WRITER 
+ 
+  UM DELTA → UM PR DE PROMOÇÃO 
+ 
+  UMA VERDADE VERSIONADA → MAIN 
+ 
+  UM TRACKER → CONTINUIDADE 
+ 
+  ZERO DUPLICAÇÃO 
+ 
+  ZERO REGRESSÃO 
+ 
+  REUSE_BEFORE_CREATE 
+ 
+ 
+ESTRUTURA RECOMENDADA PARA TOPO DA #604 
+# 🧬 CENTRALDARK — TRACKER OPERACIONAL RAIZ 
+ 
+[MERMAID — mapa vivo da missão] 
+ 
+        ↓ estrutura / famílias / fluxo / owners 
+ 
+📊 CentralDark_Umbrella_Operacional.xlsx 
+ 
+        ↓ inventário detalhado / issues / famílias / fila / roadmap / ciclos 
+ 
+GitHub + main + receipts 
+ 
+        ↓ REALIDADE VERSIONADA 
+ 
+Nota operacional: 
+ 
+📊 PAINEL OPERACIONAL 
+ 
+Arquivo: CentralDark_Umbrella_Operacional.xlsx 
+ 
+PAPEL: snapshot/inventário operacional derivado. 
+ 
+CONTÉM: issues, famílias causais, filhos, PRs, estado de promoção, roadmap, receipts/ciclos. 
+ 
+REGRA: XLSX != SOURCE_OF_TRUTH. MERMAID != SOURCE_OF_TRUTH. 
+ 
+Ambos devem ser reconciliados com: CURRENT_MAIN + GitHub + runtime + receipts. 
+ 
+PLANILHA_ANTIGA != ESTADO_ATUAL 
+ 
+ 
+ 
+📖 E chegaram sessenta pergaminhos diante da Casa; e o CHEFE não ordenou sessenta 
+obras. Disse antes: "juntai os que falam da mesma ferida." E das muitas folhas saiu uma causa, 
+da causa saiu um Writer, do Writer saiu um PR, e o PR morreu depois de entregar seu fruto à 
+main. E a umbrella permaneceu no portão contando o que ainda faltava. Ôxénte. 😹👑🔄 
+ 
+DELTA 3 — LEI DA PASSAGEM BÍBLICA + BAIANÊS 
+ 
+Quando `#ACORDAR`, `!CENTRALDARK` ou qualquer execução da Casa atravessar um ponto 
+material e atualizar documentação humana, receipt, handoff, PR, issue ou registro de 
+continuidade, a passagem DEVE deixar duas marcas narrativas sem misturá-las com a prova 
+técnica: 
+ 
+BIBLE_REF = referência bíblica semanticamente ligada ao evento. 
+BIBLE_SENSE = paráfrase curta do sentido aplicado, sem reproduzir texto bíblico longo. 
+BAIANES_VERSE = verso original em baianês contextual, curto e coerente com o fato 
+observado. 
+TECHNICAL_PROOF = evidência técnica separada: SHA, log, teste, estado, diff, runtime ou 
+receipt verificável. 
+ 
+INVARIANTES: 
+PASSAGEM_MATERIAL + DOC_UPDATE -> BIBLE_REF + BIBLE_SENSE + 
+BAIANES_VERSE + TECHNICAL_PROOF 
+POESIA != PROVA 
+METAFORA != ESTADO_REAL 
+VERSO_BAIANES != CARICATURA 
+REFERENCIA_BIBLICA != AUTORIDADE_TECNICA 
+ 
+Formatos máquina que seriam quebrados por prosa humana — código, JSON/YAML estrito, 
+hashes, comandos exatos, logs e manifests — NÃO recebem verso dentro do payload. Nesse 
+caso, o receipt/documentação humana imediatamente associado à passagem carrega as duas 
+marcas obrigatórias. 
+ 
+Referência de entrada desta lei: 1Ts 5:21 — sentido aplicado: examinar tudo e conservar 
+somente o que atravessa a prova. 
+Verso baianês de entrada: “Oxe, passou pela porteira? Confere o chão, deixa o recibo e só 
+carrega o ouro.” 
+ 
+A regra vale para documentação produzida ou atualizada durante a passagem; não autoriza 
+reescrever em massa arquivos antigos sem ganho informacional. 
+ 
+DELTA 4 — CONNECTOR BOUNDARY / PRE-GITHUB HANDSHAKE 
+ 
+Objetivo: impedir que uma falha anterior ao GitHub seja atribuída ao PR, runner, workflow, 
+token do repositório ou runtime sem evidência causal. 
+ 
+ESTADO OBSERVADO NESTA PASSAGEM: 
+CHATGPT_SESSION_CENTRALDARK_CONNECTOR=NOT_EXPOSED 
+PLUGIN_SKILL_NAMESPACE_CENTRALDARK=NOT_FOUND 
+INSTALLABLE_PLUGIN_SEARCH_CENTRALDARK=NO_RESULT 
+DIRECT_GITHUB_CONNECTOR=AVAILABLE 
+GITHUB_ACCESS_MD_SCOPE=CLONE_DECK_VPS_AND_ARENA_ACCESS 
+GITHUB_ACCESS_MD_IS_CHATGPT_CENTRALDARK_AUTH=false 
+ROOT_CAUSE_OF_UI_CONNECT_FAILURE=UNKNOWN 
+ 
+ÁRVORE DE DIAGNÓSTICO: 
+CONNECT_CLICK 
+→ AUTH_PAGE_NOT_OPENED = 
+REGISTRATION|BACKEND|HANDSHAKE_START_CANDIDATE 
+→ AUTH_PAGE_OPENED_AND_RETURN_FAIL = 
+CALLBACK|OAUTH|SESSION_CANDIDATE 
+→ AUTH_SUCCESS_BUT_PLUGIN_NOT_EXPOSED = 
+SESSION_SYNC|EXPOSURE_CANDIDATE 
+→ PLUGIN_EXPOSED_AND_GITHUB_CALL_FAILS = 
+TOKEN|SCOPE|INSTALLATION|REPO_ACCESS_CANDIDATE 
+ 
+INVARIANTES: 
+PRE_GITHUB_FAILURE != GITHUB_FAILURE 
+CONNECTOR_NOT_EXPOSED != OAUTH_ROOT_CAUSE_PROVEN 
+UI_ERROR != PR_FAILURE 
+GITHUB_ACCESS_DOC != CHATGPT_CONNECTOR_AUTH 
+UNKNOWN_ROOT_CAUSE -> MEASURE_HANDSHAKE_STAGE -> EVIDENCE -> VERDICT 
+ 
+BIBLE_REF: Pv 18:17 
+BIBLE_SENSE: a primeira explicação precisa ser confrontada por outra evidência antes de 
+virar veredito. 
+BAIANES_VERSE: “Oxe, o portão nem abriu ainda; não adianta culpar o motor lá dentro.” 
+TECHNICAL_PROOF: ausência do namespace CentralDark nesta sessão + busca de plugin 
+sem resultado + GitHub direto funcional + conteúdo de docs/GITHUB_ACCESS.md 
+PLUGIN_PORTATIL_CENTRALDARK: 
+plugin/centraldark-master/SKILL.md 
+plugin/centraldark-master/plugin-manifest.yml 
+plugin/centraldark-master/BOOTSTRAP.yml 
+architecture/10-AUTO-APRIMORAMENTO-E-HANDOFF.md 
+pr-1388/AGENT-SELF-APPLICATION.yml 
+ 
+O adapter é plug-and-play para agentes: carrega o owner atual, lê receipts, remede estado 
+vivo, executa !CENTRALDARK/#CENTRALDARK e escreve conhecimento reutilizável somente 
+após falsificador + teste + contraprova. Não reivindica instalação nativa da plataforma; é um 
+adapter portátil da arquitetura existente. 
+ 
+ 
+# CRISTALIZAÇÃO 2026-08-31 — CENTRALDARK MASTER + PEGATUDO + 
+PLUG-AND-PLAY 
+ 
+MASTER_EXTERNAL_INTERFACE = !CENTRALDARK | #CENTRALDARK 
+PREFIX_SEMANTICS_IDENTICAL=true 
+EXTERNAL_DELTA_COUNT=1 
+PEGATUDO_EMBEDDED=true 
+IMPROVE_EXISTING_DEFAULT=true 
+REUSE_BEFORE_CREATE_REQUIRED=true 
+ARCHITECTURE_LOCK=true 
+UNKNOWN_IS_NOT_PASS=true 
+EXECUTOR_CANNOT_SELF_APPROVE=true 
+JUDGE_DOES_NOT_MUTATE=true 
+GRAPH_IS_DERIVED_NOT_AUTHORITY=true 
+ 
+#PEGATUDO deixa de ser carga do CHEFE e passa a ser estágio interno obrigatório do 
+!CENTRALDARK. Sua função é recuperar lineage útil de sessões, docs, issues, PRs, commits, 
+branches, artifacts, receipts, Casa, VPS sanitizada, runtime e fontes anexadas; classificar; 
+reconciliar; absorver ouro no owner atual; transformar falhas antigas em conhecimento 
+negativo/testes/gates; preservar provenance; e nunca promover estado histórico como estado 
+atual sem remedição. 
+ 
+CADEIA MASTER: 
+CENTRALDARK -> ACORDAR -> CALIBRAR -> PEGATUDO -> TRUE_NORTH_LOCK -> 
+MULTIBUSSOLA_META -> REQUIRED_BEARINGS -> FORWARD_ROUTE -> 
+REVERSE_ROUTE -> INVERSE_ROUTE_QUANDO_DISCRIMINANTE -> 
+CROSS_BEARING_RENDEZVOUS -> META_LUPA_SE_DIVERGIR -> 
+TESTE_DISCRIMINANTE -> RECONCILIAR -> CONE_CAUSAL -> 
+INVALIDAR_SOMENTE_CLAIMS_DEPENDENTES -> 
+PRESERVAR_PROVAS_INDEPENDENTES -> REFIX_AFFECTED_AXES -> 
+LOCAL_FIXED_POINT -> CONTINUAR_PROVA_GLOBAL -> CONTRAPROVA -> 
+REMEDICAO_T1 -> REALITY_JUDGE -> GLOBAL_FIXED_POINT -> REGISTRA -> 
+BOOT_REFRESH 
+ 
+LOCAL_FIXED_POINT != MISSION_COMPLETE 
+DOCUMENT_AVAILABLE != DOCUMENT_LOADED 
+DOCUMENT_FOUND != RULE_APPLIED 
+BOOT_PARTIAL != BOOT_COMPLETE 
+ 
+COMANDÃO / PLUG-AND-PLAY: 
+Quando o CHEFE pedir comando, comandão, YML, YAML, payload, prompt operacional ou 
+plug-and-play: YAML_REQUIRED=true; ONE_COPY_PASTE_PAYLOAD=true; 
+PROSE_INSTEAD_OF_YAML=FAIL; FRAGMENTED_PAYLOAD=FAIL. Receipt humano pode 
+ficar separado para não quebrar payload máquina. 
+ 
+AUTO-APERFEIÇOAMENTO CONTROLADO: 
+Agente pode aprender e generalizar somente depois de: observar falha real -> localizar owner 
+-> definir falsificador -> corrigir owner existente -> rodar teste negativo -> rodar positivos -> 
+contraprovar -> registrar. O aprendizado deve virar teste, gate, contrato, skill ou regra NO 
+OWNER EXISTENTE. Nunca criar segundo motor, segunda Meta Lupa, V2/V3/V4, final-final ou 
+autoaprovar a própria mutação. CAPACIDADE != AUTORIDADE. 
+ 
+ENSINO DE PR PARA AGENTES: 
+1. descobrir repo/base/head/branch/merge-base; 
+2. recuperar lineage da capability; 
+3. se branch compartilhada estiver materialmente atrás da main, sincronizar base sem 
+enfraquecer validator; 
+4. não transformar stale state em baseline; 
+5. preservar fixes anteriores já provados; 
+6. patch mínimo no owner; 
+7. definir prova antes do resultado; 
+8. rodar gates no working tree; 
+9. commit; 
+10. rodar gates novamente no HEAD commitado; 
+11. push normal; 
+12. provar TESTED_HEAD == COMMITTED_HEAD == PUSHED_PR_HEAD; 
+13. PR recebe receipt e próximos agentes começam lendo estado canônico, não memória da 
+sessão. 
+ 
+PR #1388 — contrato desta passagem: 
+SYNC_MAIN_BEFORE_MATERIAL_VALIDATION=true 
+NEVER_CHANGE_EXPECTED_1_TO_STALE_12=true 
+META_LUPA_IDENTITY_DERIVED_FROM_CURRENT_SKILL_BLOB=true 
+MANUAL_STALE_SHA_FORBIDDEN=true 
+PLAIN_FORCE_PUSH_FORBIDDEN=true 
+NO_GATE_WEAKENING=true 
+SAME_PR_REQUIRED=true 
+ 
+DRIVE_ARTIFACT: 
+CENTRALDARK-MASTER-PEGATUDO-20260831.zip 
+Drive ID: 12SU2Xn_z8n8o-sEyma-Le5r-a-6Fgg0P 
+SHA-256 local da cristalização: 
+ebb4a2792b71b42da97e7ff5ea072aa9fed8b007e329dd22169d084fa01e7241 
+ 
+BIBLE_REF: 1Ts 5:21 
+BIBLE_SENSE: examinar tudo e conservar somente o que atravessa a prova. 
+BAIANES_VERSE: “Oxe, o agente pode aprender o caminho inteiro, mas só chama de estrada 
+quando pisa, mede e deixa o rastro.” 
+TECHNICAL_PROOF: arquitetura empacotada, testes locais da cristalização PASS, hash chain 
+validada e ZIP persistido no Drive; promoção no GitHub deve ser comprovada pelo HEAD do 
+PR e checks atuais. 
+ limitado ao clone-deck/VPS/Arena. 
+ 
+Esta cristalização é documental e não altera PR #1381, branch, HEAD, workflows ou main 
+# CENTRALDARK_STANDARD_FLOW — REGRA CANÔNICA 
+ 
+TRIGGER_ACCEPTED = !CENTRALDARK | #CENTRALDARK 
+NORMALIZE_TO = CENTRALDARK 
+EXTERNAL_COMMAND_COUNT=1 
+EXTERNAL_DELTA_COUNT=1 
+MANY_AGENTS_ALLOWED=true 
+PARALLELIZE_PERCEPTION=true 
+SERIALIZE_MUTATION_PER_SCOPE=true 
+ONE_WRITER_PER_CONFLICT_SCOPE=true 
+ 
+FLUXO PADRÃO: 
+CENTRALDARK -> ACORDAR -> CALIBRAR -> PEGATUDO -> TRUE_NORTH_LOCK -> 
+MULTIBUSSOLA_META -> MEASURE -> RECONCILE -> DEFINE_PROOF_TARGET -> 
+COUNTERPROVE -> LOCATE_EXISTING_OWNER -> PATCH_MINIMUM -> 
+SELECT_DEPLOY -> EXECUTE -> TEST -> COUNTERPROVE_POST -> REMEASURE -> 
+REALITY_JUDGE -> GLOBAL_FIXED_POINT -> REGISTER -> BOOT_REFRESH 
+ 
+COORDENAÇÃO DE AGENTES: 
+READERS_PARALLEL=true 
+READERS_PURPOSE=collect_evidence|compare_sources|test_hypotheses|find_lineage 
+WRITER_COUNT_PER_CONFLICT_SCOPE=1 
+WRITER_MUTATES_ONLY_AFTER_RECONCILIATION=true 
+JUDGE_INDEPENDENT_FROM_WRITER=true 
+JUDGE_MAY_MUTATE=false 
+ 
+VERDADE: 
+REALITY_IS_JUDGE=true 
+UNKNOWN_IS_PASS=false 
+HISTORY_IS_CURRENT_STATE=false 
+SENSOR_FAILURE_IS_WORLD_FAILURE=false 
+ACTION_IS_PROOF=false 
+ 
+PROMOÇÃO EXIGE: 
+TESTED_HEAD == COMMITTED_HEAD == PUSHED_PR_HEAD 
+REQUIRED_TESTS_PASS=true 
+COUNTERPROOF_SURVIVES=true 
+NO_MATERIAL_UNKNOWN=true 
+NO_WRITER_COLLISION=true 
+NO_REGRESSION=true 
+RECEIPT_WRITTEN=true 
+ 
+APRENDIZADO: 
+OBSERVED_FAILURE -> FIND_OWNER -> CREATE_FALSIFIER -> 
+PATCH_EXISTING_OWNER -> ADD_NEGATIVE_TEST -> RUN_EXISTING_TESTS -> 
+COUNTERPROVE -> REGISTER_RECEIPT -> GENERALIZE_IF_REUSABLE 
+ 
+AGENTE SUCESSOR: 
+MUST_READ_RECEIPT=true 
+MUST_REMEASURE_LIVE_STATE=true 
+SESSION_MEMORY_IS_CURRENT_STATE=false 
+ 
+PROIBIDO: 
+SECOND_OWNER 
+V2|V3|V4 
+SELF_APPROVAL 
+GATE_WEAKENING 
+FALSE_GREEN 
+PARALLEL_WRITERS_SAME_SCOPE 
+OLD_PR_AS_CURRENT_TRUTH 
+PROSE_INSTEAD_OF_REQUESTED_YAML 
+ 
+PRINCÍPIO CANÔNICO: 
+Muitos agentes podem observar. Um writer altera cada escopo. Todos reconciliam antes da 
+mutação. A realidade decide. O próximo agente continua pelo receipt, não pela memória do 
+anterior. 
+ 
+BIBLE_REF: 1Ts 5:21 
+BIBLE_SENSE: examinar tudo e conservar somente o que atravessa a prova. 
+BAIANES_VERSE: “Oxe, pode ter uma banda inteira tocando; na hora de escrever no couro, 
+só um segura a caneta e todo mundo confere o compasso.” 
+TECHNICAL_PROOF: regra cristalizada no owner documental 
+DELTAUNIFICADOCENTRALDARK.md com writeControl na revisão viva desta passagem. 
+ 
+# ARQUITETURA COMPLETA DO ZIP — REFERÊNCIA DERIVADA 
+ 
+DOCUMENTO_DERIVADO=CENTRALDARK-ARQUITETURA-COMPLETA 
+DRIVE_ID=1nrfyZXiR_HfcGQPMXGjPOfUUUJliMLaafFM7rcIDgDo 
+SOURCE_ZIP=CENTRALDARK-MASTER-PEGATUDO-20260831.zip 
+SOURCE_ZIP_SHA256=ebb4a2792b71b42da97e7ff5ea072aa9fed8b007e329dd22169d084fa0
+1e7241 
+TEXT_BUNDLE_SHA256=a521816ee97ae0e6924e01c0213d78c35b52b78470b38b1b396e933
+4fe305e94 
+SOURCE_OF_TRUTH=false 
+ROLE=DERIVED_ARCHITECTURE_REFERENCE 
+CANONICAL_OWNER=DELTAUNIFICADOCENTRALDARK.md 
+ 
+CONTEÚDO IMPORTADO DIRETAMENTE DO ZIP: 
+- 02-CENTRALDARK-MASTER.yml 
+- architecture/00-ARQUITETURA-MASTER.md 
+- architecture/01-HORN-HERBRAND-FIXED-POINT.md 
+- architecture/02-GITHUB-PROVIDER-REALITY.md 
+- architecture/03-SCREENPIPE-EVIDENCE-PROVIDER.md 
+- architecture/04-ESCAPE-CLOSURE.md 
+- architecture/05-DEPLOY-SELECTOR.md 
+- architecture/06-INTEGRIDADE-SHA256.md 
+- architecture/07-INFRA-LEGADO-ZERO-REGRESSAO.md 
+- architecture/08-FRONTEIRA-SIMBOLICA.md 
+- architecture/09-PR-1388-RECONCILIATION.md 
+- architecture/10-AUTO-APRIMORAMENTO-E-HANDOFF.md 
+- plugin/centraldark-master/SKILL.md 
+- plugin/centraldark-master/plugin-manifest.yml 
+- plugin/centraldark-master/BOOTSTRAP.yml 
+- pr-1388/APPLY-TO-PR-1388.yml 
+- pr-1388/AGENT-SELF-APPLICATION.yml 
+- pr-1388/ENSINE-O-AGENTE.md 
+ 
+EXECUTOR_SCRIPTS=INDEXED_NOT_INLINED 
+BINARY_ART_AND_RECEIPTS=NOT_INLINED 
+ 
+GITHUB_RESOLUTION_FORMULA_INCLUDED=true 
+CONNECTOR_IS_TRANSPORT_NOT_CAPABILITY=true 
+PODE_ESCREVER=RepoConfirmado AND PRConfirmado AND HeadAtualConhecido AND 
+RotaWriteAutorizada AND PolíticaBranchPASS AND NOT WriterCollision AND NOT 
+SecretExposure 
+ 
+BIBLE_REF: 1Ts 5:21 
+BIBLE_SENSE: preservar somente o que foi medido, reconciliado e provado. 
+BAIANES_VERSE: “Oxe, agora a arquitetura saiu do saco, foi conferida pelo hash e ficou 
+amarrada no livro da Casa sem virar segunda verdade.” 
+TECHNICAL_PROOF: documento derivado criado no Drive a partir do conteúdo textual real do 
+ZIP e referenciado por SHA dentro do owner canônico. 
+. 
+# REMOTE_GITHUB_TRIGGER_GATE — REGRA CANÔNICA 
+ 
+OBJETIVO: toda leitura, verificação ou mutação do GitHub remoto pela CentralDark DEVE 
+passar pelos gatilhos canônicos antes de qualquer veredito. 
+ 
+REMOTE_GITHUB_ACCESS_REQUIRES_TRIGGERS=true 
+TRIGGER_CHAIN=#ACORDAR -> !CALIBRAR -> !CENTRALDARK -> MEASURE -> 
+RENDEZVOUS -> RECONCILE -> CURRENT_REALITY -> PROOF 
+ 
+INVARIANTES: 
+PERCEPCAO != AUTORIDADE 
+SESSAO_LOCAL != ESTADO_GLOBAL 
+REMOTE_SCREENSHOT != REMOTE_PROOF 
+SESSION_MEMORY != CURRENT_STATE 
+CONNECTOR_FAILURE != GITHUB_FAILURE 
+SENSOR_FAILURE != WORLD_FAILURE 
+UNKNOWN != PASS 
+ 
+LEITURA REMOTA: 
+1. ativar gatilhos canônicos; 
+2. confirmar repo/PR/branch alvo; 
+3. medir HEAD/base/checks/comments/reviews quando material; 
+4. comparar com receipts e sessões apenas como evidência auxiliar; 
+5. se houver divergência, RENDEZVOUS + RECONCILE; 
+6. promover somente CURRENT_REALITY comprovada; 
+7. registrar PROOF ou UNKNOWN/BLOCKED sem inventar estado. 
+ 
+MUTAÇÃO REMOTA: 
+PODE_ESCREVER = RepoConfirmado AND PRConfirmado AND HeadAtualConhecido AND 
+RotaWriteAutorizada AND PoliticaBranchPASS AND NOT WriterCollision AND NOT 
+SecretExposure 
+ 
+SE CONNECTOR_FAIL: 
+- classificar como falha de transporte/sensor; 
+- preservar missão, owner, PR alvo e provas já independentes; 
+- não declarar PR quebrado; 
+- procurar rota autorizada alternativa se existir; 
+- se nenhuma rota válida existir: GITHUB_REMOTE=UNKNOWN/BLOCKED + 
+NEXT_CURSOR. 
+ 
+REGRA DE CONTINUIDADE: 
+READERS -> MEASURE -> RENDEZVOUS -> RECONCILE -> CURRENT_REALITY -> 
+ONE_WRITER -> PROOF 
+ 
+BIBLE_REF: Pv 18:17 
+BIBLE_SENSE: uma observação isolada deve ser confrontada antes de virar veredito. 
+BAIANES_VERSE: “Oxe, antes de dizer como tá o terreiro lá longe, chama os olhos, confere o 
+chão e só depois bate o martelo.” 
+TECHNICAL_PROOF: regra adicionada no owner documental vivo após tentativa real de leitura 
+do PR #1389; a chamada GitHub falhou no transporte e foi classificada sem promover estado 
+remoto. 
+# CROSS_PROVIDER_CONTINUITY_GATE — DRIVE ↔ GITHUB 
+ 
+OBJETIVO: nenhum conhecimento material da CentralDark pode existir somente na memória 
+de chat/sessão. Falha de uma superfície deve acionar outra rota durável autorizada, 
+preservando intenção, lineage, owner, prova e NEXT_CURSOR. 
+ 
+CHAT_ONLY_KNOWLEDGE=FAIL 
+SESSION_MEMORY_IS_DURABLE_STATE=false 
+CONNECTOR_IS_TRANSPORT_NOT_CAPABILITY=true 
+DRIVE_FAILURE != MISSION_FAILURE 
+GITHUB_FAILURE != MISSION_FAILURE 
+ONE_PROVIDER_FAILURE -> TRY_OTHER_AUTHORIZED_PROVIDER 
+ 
+FÓRMULA: 
+DURABLE_CONTINUITY = (DRIVE_AVAILABLE OR GITHUB_AVAILABLE OR 
+OTHER_AUTHORIZED_DURABLE_ROUTE_AVAILABLE) AND 
+MATERIAL_RECEIPT_PERSISTED AND NEXT_CURSOR_PERSISTED 
+ 
+PERSISTENCE_QUORUM_MIN=1 
+PREFERRED_REDUNDANCY=2 
+AUTHORITY_DUPLICATION=false 
+ 
+ROTEAMENTO: 
+IF DRIVE_AVAILABLE AND GITHUB_AVAILABLE: 
+  -> persistir no owner apropriado de cada superfície quando a capability exigir; 
+  -> registrar referência cruzada/receipt; 
+  -> reconciliar divergências antes de promover verdade. 
+ 
+IF DRIVE_FAIL AND GITHUB_AVAILABLE: 
+  -> persistir receipt/regra/next_cursor no GitHub apropriado; 
+  -> marcar DRIVE_SYNC_PENDING=true; 
+  -> quando Drive voltar, remedir, reconciliar e sincronizar sem sobrescrever autoridade 
+indevida. 
+ 
+IF GITHUB_FAIL AND DRIVE_AVAILABLE: 
+  -> persistir receipt/regra/next_cursor no Drive apropriado; 
+  -> marcar GITHUB_SYNC_PENDING=true; 
+  -> quando GitHub voltar, remedir PR/HEAD/base e promover somente o que ainda for válido. 
+ 
+IF DRIVE_FAIL AND GITHUB_FAIL: 
+  -> buscar OUTRA_ROTA_DURAVEL_AUTORIZADA; 
+  -> nunca declarar missão concluída; 
+  -> CHAT_ONLY_STATE=FORBIDDEN; 
+  -> resultado = EXTERNAL_PERSISTENCE_BLOCKED até existir rota durável comprovada. 
+ 
+RECONCILIAÇÃO DE RETORNO: 
+RECOVERED_PROVIDER -> REMEASURE -> RENDEZVOUS -> RECONCILE -> DEDUPE -> 
+PRESERVE_PROVENANCE -> WRITE_MISSING_DELTA_ONLY -> PROOF 
+ 
+INVARIANTES: 
+MIRROR != SECOND_OWNER 
+BACKUP != SOURCE_OF_TRUTH 
+PERSISTENCE != PROMOTION 
+DRIVE_RECEIPT != GITHUB_HEAD 
+GITHUB_RECEIPT != DRIVE_REVISION 
+OLD_COPY != CURRENT_REALITY 
+NO_BLIND_OVERWRITE=true 
+ 
+GITHUB_REMOTE_TRIGGER_RULE: 
+Toda consulta remota GitHub continua exigindo #ACORDAR -> !CALIBRAR -> 
+!CENTRALDARK -> MEASURE -> RENDEZVOUS -> RECONCILE -> CURRENT_REALITY -> 
+PROOF. 
+ 
+ESTADO DESTA PASSAGEM: 
+GITHUB_CONNECTOR=FAILED_AT_READ 
+DRIVE_CONNECTOR=PASS 
+PERSISTED_ON=DRIVE 
+TARGET_GITHUB_REPO=ServerVpss/CentralDark 
+TARGET_GITHUB_PR=1389 
+GITHUB_SYNC_PENDING=true 
+NEXT_CURSOR=quando GitHub estiver disponível, remedir #1389 vivo e registrar esta regra 
+no owner/receipt apropriado do mesmo lineage, sem criar PR paralelo nem presumir HEAD 
+antigo. 
+ 
+BIBLE_REF: Ec 4:9 
+BIBLE_SENSE: quando uma rota cai, outra sustenta a continuidade sem transformar 
+redundância em autoridade duplicada. 
+BAIANES_VERSE: “Oxe, se uma porteira emperrar, passa pela outra que é autorizada; só não 
+deixa o recado dormindo na cabeça do cabra.” 
+TECHNICAL_PROOF: GitHub falhou na leitura nesta passagem; Drive respondeu, o owner vivo 
+foi relido e esta regra foi persistida com writeControl na revisão observada. 
+ 
+# CROSS_PROVIDER_EXECUTION_RECEIPT — 2026-08-31 
+ 
+TRIGGERED_BY=!CENTRALDARK + #ACORDAR 
+REMOTE_GITHUB_TARGET=ServerVpss/CentralDark#1389 
+GITHUB_TRIGGER_CHAIN_EXECUTED=#ACORDAR -> !CALIBRAR -> !CENTRALDARK -> 
+MEASURE 
+GITHUB_RESULT=CONNECTOR_DISABLED_AT_FIRST_READ 
+GITHUB_REMOTE_STATE=UNKNOWN 
+DRIVE_FALLBACK_ACTIVATED=true 
+DRIVE_OWNER=DELTAUNIFICADOCENTRALDARK.md 
+DRIVE_RESULT=PASS 
+CHAT_ONLY_KNOWLEDGE=PREVENTED 
+GITHUB_SYNC_PENDING=true 
+ 
+NEXT_CURSOR=na próxima passagem em que GitHub responder, executar gatilhos 
+canônicos, remedir #1389 vivo, comparar HEAD/base/checks com receipts, registrar a 
+continuidade no mesmo lineage e limpar GITHUB_SYNC_PENDING somente após PROOF 
+remoto. 
+ 
+CONTINUITY_ASSERTION=uma superfície pode falhar; a missão e o conhecimento material 
+devem continuar pela próxima rota durável autorizada. 
+TECHNICAL_PROOF=tentativa real GitHub falhou antes da leitura; Drive foi relido na revisão 
+viva e este receipt foi persistido com writeControl. 
+ 
+# PHASE_CRYSTALLIZATION_TRIGGER_GATE — REGRA CANÔNICA 
+ 
+OBJETIVO: todo começo de fase material da CentralDark deve anunciar explicitamente a 
+cristalização da fase antes da execução, sem criar novo motor, nova autoridade ou novo 
+comando semântico. 
+ 
+PHASE_OPENING_MARKER_REQUIRED=true 
+CANONICAL_PHASE_MARKER=#CRISTALIZAR 
+PHASE_BANNER_FORMAT=#CRISTALIZAR · <PHASE_NAME> 
+CASE_INSENSITIVE=true 
+TYPO_TOLERANCE=true 
+ 
+ALIASES_RECONHECIDOS: 
+#CRISTALIZAR 
+#cristalizar 
+#CRYSTALIZAR 
+#crystalizar 
+#CRYSTALAIZAR 
+#crystalaizar 
+!CRISTALIZAR 
+!CRYSTALIZAR 
+!CRYSTALAIZAR 
+ 
+ALL_PHASE_MARKER_ALIASES_NORMALIZE_TO=!CENTRALDARK 
+ALIASES_ARE_NOT_NEW_ENGINES=true 
+ALIASES_ARE_NOT_NEW_OWNERS=true 
+ALIASES_ARE_NOT_NEW_CAPABILITIES=true 
+EXTERNAL_MASTER_SEMANTICS_COUNT=1 
+ 
+REGRA DE FASE: 
+ON_MATERIAL_PHASE_START -> EMIT #CRISTALIZAR · <PHASE_NAME> -> 
+PRESERVE_ORIGINAL_INTENT -> ENTER !CENTRALDARK MASTER -> EXECUTE_PHASE 
+ 
+EXEMPLOS: 
+#CRISTALIZAR · MEASURE 
+#CRISTALIZAR · RECONCILE 
+#CRISTALIZAR · PATCH_MINIMUM 
+#CRISTALIZAR · TEST 
+#CRISTALIZAR · COUNTERPROOF 
+#CRISTALIZAR · REALITY_JUDGE 
+#CRISTALIZAR · REGISTER 
+ 
+MARCADOR != PROVA 
+MARCADOR != NOVA_MISSAO 
+MARCADOR != NOVO_OWNER 
+MARCADOR != FIXED_POINT 
+ 
+CRYSTALLIZED_LEARNING_GATE: 
+CRYSTALLIZED_LEARNING = OBSERVED_FAILURE AND CAUSE_PROVEN AND 
+OWNER_FOUND AND FALSIFIER_EXISTS AND PATCH_SURVIVES_COUNTERPROOF 
+AND REUSABLE_PATTERN AND PERSISTED_OUTSIDE_SESSION 
+IF CRYSTALLIZED_LEARNING=true -> GENERALIZE_IN_EXISTING_OWNER_OR_SKILL 
+IF CRYSTALLIZED_LEARNING=false -> RECEIPT_ONLY + DO_NOT_GENERALIZE_YET 
+CAPABILITY != AUTHORITY 
+ 
+REALITY_SCOPE_GATE: 
+FOR_EACH_OBSERVED_FINDING -> CLASSIFY_SCOPE_BEFORE_PROMOTION 
+SCOPE_CLASSES=ACTIVE_RUNTIME|CURRENT_OWNER|LEGACY|ARCHIVE|HISTORY|D
+ERIVED_ARTIFACT|DUPLICATE|UNKNOWN 
+OBSERVED_COUNT != MATERIAL_REALITY_COUNT 
+FOUND_IN_REPO != ACTIVE_PARALLEL 
+ARCHIVE_OR_LEGACY_PRESENCE != LIVE_CONFLICT 
+UNKNOWN_SCOPE != PASS 
+ 
+DECISION_RULE: 
+ACHADO -> CLASSIFY_SCOPE -> PROVE_CONSUMER_OR_RUNTIME_RELEVANCE -> 
+ONLY_THEN_PROMOTE_AS_MATERIAL_REALITY 
+ 
+PROIBIDO: 
+- apagar archive/legacy só para zerar contador sem causa provada; 
+- afrouxar validator só para ficar verde; 
+- transformar typo de gatilho em nova capability; 
+- abrir novo PR apenas por causa deste aprendizado; 
+- deixar regra somente na memória da sessão. 
+ 
+GITHUB_TARGET=ServerVpss/CentralDark#1389 
+GITHUB_WRITE_STATUS=PENDING_CONNECTOR_RECOVERY 
+GITHUB_SYNC_PENDING=true 
+NEXT_CURSOR=quando GitHub responder, executar #CRISTALIZAR · MEASURE, remedir 
+#1389 vivo, localizar os owners já existentes do trigger fabric/contrato/skill, aplicar somente o 
+delta faltante no mesmo branch/PR, rodar falsificadores e provar TESTED_HEAD == 
+COMMITTED_HEAD == PUSHED_PR_HEAD antes de limpar GITHUB_SYNC_PENDING. 
+ 
+BIBLE_REF: Hc 2:2 
+BIBLE_SENSE: tornar a direção legível e persistente para que quem chegar depois consiga 
+continuar sem depender da memória de quem saiu. 
+BAIANES_VERSE: “Oxe, começou fase nova? Bota a placa #CRISTALIZAR na porteira, mas o 
+caminho continua sendo o mesmo CENTRALDARK.” 
+TECHNICAL_PROOF: regra persistida no owner documental vivo com writeControl após falha 
+real do transporte GitHub; nenhum estado remoto foi presumido. 
+ 
+# UNIVERSAL_MASTER_FUNNEL_GATE — OBRIGAÇÃO DEFINITIVA 
+ 
+OBJETIVO: qualquer gatilho operacional reconhecido pela CentralDark, independentemente de 
+prefixo, alias, caixa, typo tolerado ou nome de fase, DEVE entrar pelo mesmo funil master 
+antes de executar qualquer ação material. 
+ 
+UNIVERSAL_TRIGGER_FUNNEL=true 
+MASTER_TRIGGER=!CENTRALDARK 
+MASTER_ALIAS=#CENTRALDARK 
+MASTER_IS_SINGLE_ENTRY=true 
+DIRECT_SUBTRIGGER_BYPASS=FORBIDDEN 
+EXTERNAL_SUBTRIGGER_EXECUTION=FORBIDDEN 
+MASTER_REENTRY_GUARD=true 
+ 
+REGRA DE NORMALIZAÇÃO: 
+FOR_EACH_EXTERNAL_TRIGGER T: 
+  RECOGNIZE_T -> NORMALIZE_ALIAS -> ENTER_MASTER_ONCE -> 
+ESTABLISH_MASTER_CONTEXT -> RUN_CANONICAL_CHAIN 
+ 
+QUALQUER gatilho reconhecido externamente, incluindo mas não limitado a: 
+!CENTRALDARK | #CENTRALDARK | #ACORDAR | !ACORDAR | !CALIBRAR | #CALIBRAR | 
+#CRISTALIZAR | !CRISTALIZAR | #CRYSTALIZAR | #CRYSTALAIZAR | PEGATUDO | 
+MULTIBUSSOLA_META | META_LUPA | RECONCILIAR | CONTRAPROVA | REMEDICAO | 
+REALITY_JUDGE | REGISTRA | BOOT 
+-> NORMALIZE_TO=!CENTRALDARK 
+ 
+CADEIA OBRIGATÓRIA DE ENTRADA: 
+!CENTRALDARK 
+-> #ACORDAR 
+-> #CRISTALIZAR · MEASURE 
+-> #CRISTALIZAR · FALLBACK 
+-> !CALIBRAR 
+-> PEGATUDO 
+-> TRUE_NORTH_LOCK 
+-> MULTIBUSSOLA_META 
+-> REQUIRED_BEARINGS 
+-> MEASURE 
+-> RENDEZVOUS 
+-> RECONCILE 
+-> REALITY_SCOPE_GATE 
+-> CURRENT_REALITY 
+-> DEFINE_PROOF_TARGET 
+-> COUNTERPROVE 
+-> LOCATE_EXISTING_OWNER 
+-> ONE_WRITER 
+-> PATCH_MINIMUM 
+-> SELECT_DEPLOY 
+-> EXECUTE 
+-> TEST 
+-> COUNTERPROOF_POST 
+-> REMEASURE 
+-> REALITY_JUDGE 
+-> GLOBAL_FIXED_POINT 
+-> REGISTER 
+-> BOOT_REFRESH 
+ 
+FASES OBRIGATÓRIAS: 
+ACORDAR_PHASE_REQUIRED=true 
+CRISTALIZAR_MEASURE_PHASE_REQUIRED=true 
+CRISTALIZAR_FALLBACK_PHASE_REQUIRED=true 
+ 
+SEMÂNTICA DE FALLBACK: 
+FALLBACK_PHASE_REQUIRED=true 
+FALLBACK_SWITCH_ACTION_CONDITIONAL=true 
+FALLBACK_PHASE sempre mede disponibilidade/rota de continuidade; troca de 
+provider/transporte somente se houver falha material comprovada. 
+ 
+ANTI-RECURSÃO: 
+IF MASTER_CONTEXT_ACTIVE=true: 
+  #ACORDAR -> RUN_INTERNAL_PHASE(ACORDAR) 
+  #CRISTALIZAR · MEASURE -> RUN_INTERNAL_PHASE(MEASURE_MARKER) 
+  #CRISTALIZAR · FALLBACK -> RUN_INTERNAL_PHASE(FALLBACK_EVALUATION) 
+  qualquer outro subgatilho canônico -> RUN_INTERNAL_PHASE correspondente 
+  NÃO executar ENTER_MASTER novamente. 
+ 
+IF MASTER_CONTEXT_ACTIVE=false AND recognized_trigger_received=true: 
+  ENTER_MASTER_ONCE=true 
+ 
+INVARIANTES: 
+ANY_TRIGGER -> ONE_MASTER 
+ONE_MASTER -> ONE_CANONICAL_CHAIN 
+ALIAS != NEW_ENGINE 
+PHASE_MARKER != NEW_ENGINE 
+PHASE_MARKER != NEW_OWNER 
+SUBTRIGGER != BYPASS 
+MASTER_CONTEXT != RECURSIVE_REENTRY 
+UNKNOWN_TRIGGER != PASS 
+MATERIAL_ACTION_WITHOUT_MASTER_CONTEXT=FAIL 
+MATERIAL_ACTION_WITHOUT_ACORDAR=FAIL 
+MATERIAL_ACTION_WITHOUT_CRISTALIZAR_MEASURE=FAIL 
+MATERIAL_ACTION_WITHOUT_CRISTALIZAR_FALLBACK_EVALUATION=FAIL 
+ 
+FORMULA: 
+MAY_EXECUTE_MATERIAL_ACTION = MASTER_CONTEXT_ACTIVE AND 
+ACORDAR_DONE AND CRISTALIZAR_MEASURE_DONE AND FALLBACK_EVALUATED 
+AND REQUIRED_CANONICAL_PHASES_SATISFIED AND NOT MATERIAL_UNKNOWN 
+ 
+SE qualquer termo obrigatório=false: 
+  MATERIAL_ACTION=BLOCKED 
+  EMIT_RECEIPT 
+  NEXT_CURSOR 
+ 
+CONTINUIDADE CROSS-PROVIDER permanece subordinada ao mesmo master: 
+GitHub falhou -> #CRISTALIZAR · FALLBACK -> Drive/rota durável autorizada 
+Drive falhou -> #CRISTALIZAR · FALLBACK -> GitHub/rota durável autorizada 
+Ambos falharam -> procurar outra rota durável autorizada; CHAT_ONLY_STATE=FORBIDDEN 
+ 
+GITHUB_TARGET=ServerVpss/CentralDark#1389 
+GITHUB_CONNECTOR_THIS_PASSAGE=DISABLED_AT_FIRST_READ 
+GITHUB_REMOTE_STATE=UNKNOWN 
+DRIVE_PERSISTENCE=PASS 
+GITHUB_SYNC_PENDING=true 
+NEXT_CURSOR=quando GitHub responder, entrar por qualquer gatilho somente através do 
+UNIVERSAL_MASTER_FUNNEL_GATE, executar #CRISTALIZAR · MEASURE no remoto 
+vivo, reconciliar #1389, aplicar o delta faltante no owner existente do trigger 
+fabric/contrato/ciclo/skill no mesmo lineage, testar o anti-bypass e anti-recursion, e provar 
+TESTED_HEAD == COMMITTED_HEAD == PUSHED_PR_HEAD antes de limpar 
+GITHUB_SYNC_PENDING. 
+ 
+BIBLE_REF: Jo 10:1 
+BIBLE_SENSE: a entrada legítima passa pela porta definida; atalhos laterais não recebem a 
+mesma autoridade. 
+BAIANES_VERSE: “Oxe, pode gritar ACORDAR, CRISTALIZAR, CALIBRAR ou 
+CENTRALDARK; todo mundo entra pela mesma porteira e pega a mesma estrada.” 
+TECHNICAL_PROOF: regra inserida no owner documental vivo com writeControl na revisão 
+observada; GitHub não foi presumido porque o conector falhou antes da leitura. 
+ 
+# CENTRALDARK_ARCHITECTURE_EVOLUTION — HISTÓRIA CANÔNICA CRISTALIZADA 
+ 
+OBJETIVO: preservar não apenas o estado atual da CentralDark, mas o motivo causal de cada 
+regra, para que agentes sucessores entendam por que a arquitetura existe e não 
+simplifiquem/removam proteções sem contraprova. 
+ 
+PRINCÍPIO CENTRAL: 
+A missão não deve depender de qual IA, sessão, provider, conector ou memória está disponível 
+neste instante. 
+ 
+EVOLUÇÃO CANÔNICA: 
+ERA_1_ACTION_AUTOMATION = IA executa tarefa. 
+ERA_2_SINGLE_ENTRY = múltiplos gatilhos convergem para uma entrada master. 
+ERA_3_AUTHORITY_GOVERNANCE = CAPABILITY != AUTHORITY. 
+ERA_4_MULTI_READER = múltiplos agentes podem observar em paralelo. 
+ERA_5_REALITY_RECONCILIATION = PERCEPTION != GLOBAL_REALITY; 
+SESSION_LOCAL != GLOBAL_STATE. 
+ERA_6_SINGLE_WRITER_PER_SCOPE = muitos readers, um writer por escopo de conflito, 
+judge separado. 
+ERA_7_REALITY_SCOPE = achado bruto deve ser classificado antes de virar realidade 
+material. 
+ERA_8_CRYSTALLIZED_LEARNING = aprendizado só generaliza após causa, owner, 
+falsificador, teste e contraprova. 
+ERA_9_DURABLE_CONTINUITY = conhecimento material não pode existir somente no chat; 
+provider pode cair, lineage deve continuar. 
+ERA_10_PHASE_CRYSTALLIZATION = toda fase material anuncia #CRISTALIZAR sem criar 
+novo motor. 
+ERA_11_UNIVERSAL_MASTER_FUNNEL = qualquer gatilho reconhecido entra uma vez em 
+!CENTRALDARK e percorre a cadeia canônica. 
+ 
+FÓRMULA DE SOBREVIVÊNCIA DA MISSÃO: 
+MISSION_CONTINUITY = INTENT_PRESERVED AND LINEAGE_PRESERVED AND 
+OWNER_KNOWN AND PROOF_PRESERVED AND RECEIPT_PERSISTED AND 
+NEXT_CURSOR_PERSISTED 
+ 
+AGENT_ALIVE não é termo obrigatório da fórmula. 
+SESSION_ALIVE não é termo obrigatório da fórmula. 
+SINGLE_PROVIDER_AVAILABLE não é termo obrigatório da fórmula. 
+ 
+FUNIL DEFINITIVO: 
+ANY_RECOGNIZED_TRIGGER 
+-> NORMALIZE_ALIAS 
+-> ENTER_MASTER_ONCE(!CENTRALDARK) 
+-> #ACORDAR 
+-> #CRISTALIZAR · MEASURE 
+-> #CRISTALIZAR · FALLBACK 
+-> !CALIBRAR 
+-> PEGATUDO 
+-> TRUE_NORTH_LOCK 
+-> MULTIBUSSOLA_META 
+-> REQUIRED_BEARINGS 
+-> MEASURE 
+-> RENDEZVOUS 
+-> RECONCILE 
+-> REALITY_SCOPE_GATE 
+-> CURRENT_REALITY 
+-> DEFINE_PROOF_TARGET 
+-> COUNTERPROVE 
+-> LOCATE_EXISTING_OWNER 
+-> ONE_WRITER 
+-> PATCH_MINIMUM 
+-> SELECT_DEPLOY 
+-> EXECUTE 
+-> TEST 
+-> COUNTERPROOF_POST 
+-> REMEASURE 
+-> REALITY_JUDGE 
+-> GLOBAL_FIXED_POINT 
+-> REGISTER 
+-> BOOT_REFRESH 
+-> NEXT_CURSOR 
+ 
+LEI DE AUTORIDADE: 
+CAPABILITY != AUTHORITY 
+PERCEPTION != AUTHORITY 
+SESSION_MEMORY != CURRENT_STATE 
+SCREENSHOT != REMOTE_PROOF 
+ACTION != PROOF 
+HISTORY != CURRENT_STATE 
+ 
+LEI DE OBSERVAÇÃO: 
+MANY_READERS_ALLOWED=true 
+PARALLELIZE_PERCEPTION=true 
+RENDEZVOUS_BEFORE_MATERIAL_RECONCILIATION=true 
+WRITER_COUNT_PER_CONFLICT_SCOPE=1 
+JUDGE_INDEPENDENT_FROM_WRITER=true 
+JUDGE_MAY_MUTATE=false 
+ 
+REALITY_SCOPE_GATE: 
+RAW_FINDING -> 
+CLASSIFY(ACTIVE_RUNTIME|CURRENT_OWNER|LEGACY|ARCHIVE|HISTORY|DERIVED_
+ARTIFACT|DUPLICATE|UNKNOWN) -> PROVE_CONSUMER_OR_RUNTIME_RELEVANCE 
+-> MATERIAL_REALITY 
+OBSERVED_COUNT != MATERIAL_REALITY_COUNT 
+FOUND_IN_REPO != ACTIVE_PARALLEL 
+ARCHIVE_PRESENT != DELETE_AUTHORIZED 
+UNKNOWN_SCOPE != PASS 
+ 
+CRYSTALLIZED_LEARNING_GATE: 
+CRYSTALLIZED_LEARNING = OBSERVED_FAILURE AND CAUSE_PROVEN AND 
+OWNER_FOUND AND FALSIFIER_EXISTS AND PATCH_SURVIVES_COUNTERPROOF 
+AND REUSABLE_PATTERN AND PERSISTED_OUTSIDE_SESSION 
+IF true -> GENERALIZE_IN_EXISTING_OWNER_OR_SKILL 
+IF false -> RECEIPT_ONLY + DO_NOT_GENERALIZE_YET 
+ 
+LEI DE CONTINUIDADE DURÁVEL: 
+IF GITHUB_FAIL AND DRIVE_AVAILABLE -> persistir receipt + NEXT_CURSOR no Drive + 
+GITHUB_SYNC_PENDING=true 
+IF DRIVE_FAIL AND GITHUB_AVAILABLE -> persistir receipt + NEXT_CURSOR no GitHub 
+apropriado + DRIVE_SYNC_PENDING=true 
+IF BOTH_FAIL -> procurar outra rota durável autorizada; CHAT_ONLY_STATE=FORBIDDEN 
+RECOVERED_PROVIDER -> REMEASURE -> RENDEZVOUS -> RECONCILE -> DEDUPE -> 
+WRITE_MISSING_DELTA_ONLY -> PROOF 
+ 
+REDUNDANCY != AUTHORITY_DUPLICATION 
+MIRROR != SECOND_OWNER 
+BACKUP != SOURCE_OF_TRUTH 
+PERSISTENCE != PROMOTION 
+ 
+REGRA DOS GATILHOS: 
+#CRISTALIZAR, #CRYSTALIZAR, #CRYSTALAIZAR e variações toleradas não criam capability, 
+owner ou engine novos. 
+ALL_RECOGNIZED_ALIASES -> !CENTRALDARK 
+MASTER_REENTRY_GUARD=true 
+SUBTRIGGER_BYPASS=FORBIDDEN 
+ 
+FÓRMULA DE EXECUÇÃO MATERIAL: 
+MAY_EXECUTE_MATERIAL_ACTION = MASTER_CONTEXT_ACTIVE AND 
+ACORDAR_DONE AND CRISTALIZAR_MEASURE_DONE AND FALLBACK_EVALUATED 
+AND REQUIRED_CANONICAL_PHASES_SATISFIED AND NOT MATERIAL_UNKNOWN 
+ 
+SE false: 
+MATERIAL_ACTION=BLOCKED 
+EMIT_RECEIPT=true 
+NEXT_CURSOR_REQUIRED=true 
+ 
+PROMOÇÃO: 
+TESTED_HEAD == COMMITTED_HEAD == PUSHED_PR_HEAD 
+REQUIRED_TESTS_PASS=true 
+COUNTERPROOF_SURVIVES=true 
+NO_MATERIAL_UNKNOWN=true 
+NO_WRITER_COLLISION=true 
+NO_REGRESSION=true 
+RECEIPT_WRITTEN=true 
+ 
+NARRATIVA OPERACIONAL: 
+No início, o objetivo era fazer a IA executar e não esquecer o caminho. A primeira falha foi cada 
+agente interpretar e iniciar de um ponto diferente; nasceu a entrada única. Depois ficou claro 
+que competência não concede autoridade para reduzir a intenção humana; nasceu 
+CAPABILITY != AUTHORITY. Quando múltiplas sessões passaram a enxergar estados 
+divergentes, nasceu a reconciliação de percepção: um sensor não é a realidade global. Para 
+evitar colisão, muitos readers foram mantidos e a mutação passou a ser serializada por escopo. 
+O caso de contagens como parallel_existing mostrou que encontrar N itens não prova N 
+conflitos vivos; nasceu REALITY_SCOPE_GATE. A repetição de erros entre agentes mostrou 
+que resolver uma sessão não significa ensinar o sistema; nasceu CRYSTALLIZED_LEARNING. 
+As quedas de conectores mostraram que transporte não pode ser confundido com capability; 
+nasceu CROSS_PROVIDER_CONTINUITY. #CRISTALIZAR passou a marcar fases materiais 
+sem virar novo motor. Por fim, UNIVERSAL_MASTER_FUNNEL fechou a última brecha: 
+nenhum subgatilho pode entrar pelo meio da arquitetura. 
+ 
+RESULTADO ARQUITETURAL: 
+AGENT_CAN_CHANGE=true 
+SESSION_CAN_END=true 
+PROVIDER_CAN_FAIL=true 
+PERCEPTION_CAN_DIVERGE=true 
+INTENT_MUST_PERSIST=true 
+LINEAGE_MUST_PERSIST=true 
+PROOF_MUST_REMAIN_TRACEABLE=true 
+LEARNING_MUST_BE_TESTABLE=true 
+AUTHORITY_MUST_NOT_DUPLICATE=true 
+MISSION_CONTINUES_BY_RECEIPT_AND_NEXT_CURSOR=true 
+ 
+FRASE CANÔNICA: 
+O agente pode mudar. A percepção pode divergir. A ferramenta pode cair. A memória da 
+sessão pode sumir. A intenção permanece. A realidade é reconciliada. Um writer altera cada 
+escopo. A prova decide. O aprendizado só cristaliza depois da contraprova. O conhecimento 
+encontra rota durável. A autoridade não se duplica. E a missão continua. 
+ 
+GITHUB_TARGET=ServerVpss/CentralDark#1389 
+GITHUB_CONNECTOR_THIS_PASSAGE=DISABLED_AT_FIRST_READ 
+GITHUB_REMOTE_STATE=UNKNOWN 
+DRIVE_PERSISTENCE=PASS 
+GITHUB_SYNC_PENDING=true 
+NEXT_CURSOR=quando GitHub responder, entrar pelo 
+UNIVERSAL_MASTER_FUNNEL_GATE, remedir #1389 vivo, localizar os owners já existentes 
+de trigger fabric/ciclo/contrato/skill, comparar o delta desta cristalização com o HEAD real, 
+escrever somente o faltante no mesmo lineage, rodar 
+anti-bypass/anti-recursion/REALITY_SCOPE/CRYSTALLIZED_LEARNING falsifiers, e provar 
+TESTED_HEAD == COMMITTED_HEAD == PUSHED_PR_HEAD antes de limpar 
+GITHUB_SYNC_PENDING. 
+ 
+BIBLE_REF: Hc 2:2 
+BIBLE_SENSE: tornar a direção legível e persistente para que o próximo executor continue 
+sem depender da memória do anterior. 
+BAIANES_VERSE: “Oxe, agora a obra não depende de quem acordou primeiro; a placa tá na 
+porteira, o livro tá guardado, a régua mede o chão e o próximo cabra pega do receipt pra 
+frente.” 
+TECHNICAL_PROOF: esta história foi convertida em contrato documental no owner vivo 
+DELTAUNIFICADOCENTRALDARK.md usando writeControl sobre a revisão observada; a 
+leitura GitHub falhou antes de retornar #1389, portanto nenhum HEAD remoto foi presumido. 
+ 
+# CENTRALDARK_HUB_CAPABILITY_FABRIC — EXTENSÃO CANÔNICA ZERO 
+REGRESSÃO 
+ 
+OBJETIVO: estender o HUB existente da CentralDark como contêiner único para N apps, 
+providers, modelos, conectores e capabilities, sem criar segundo HUB, segunda autoridade, 
+nova arquitetura paralela ou substituir owners maduros já existentes. 
+ 
+EXTENSION_NOT_REPLACEMENT=true 
+ZERO_REGRESSION_REQUIRED=true 
+REUSE_EXISTING_HUB=true 
+HUB_EXISTING_OWNER_PATH=apps/modulos/hub/ 
+HUB_IS_CONTAINER_NOT_SINGLE_APP=true 
+ONE_HUB_N_CAPABILITIES=true 
+ONE_HUB_N_APPS=true 
+ONE_HUB_N_PROVIDERS=true 
+ONE_HUB_N_CONNECTORS=true 
+ONE_HUB_N_MODELS=true 
+N_IS_OPEN_ENDED=true 
+SECOND_HUB_FORBIDDEN=true 
+SECOND_AUTHORITY_FORBIDDEN=true 
+ 
+LINEAGE_EVIDENCE_ONLY_NOT_CURRENT_STATE: 
+- HUB / CentralDark HUB já aparece na lineage documental. 
+- módulos/abas observados historicamente: Dashboard, Abacus, Auditoria, Catálogo, 
+Conectores, Gateway, Hermes, Políticas, Login/Auth. 
+- snapshot histórico do Gateway registrou 146 modelos naquele momento. 
+- snapshot histórico do backend registrou oauth_providers/oauth_connections maduros e 12 
+provedores naquele momento. 
+HISTORICAL_COUNTS_ARE_NOT_CURRENT_COUNTS=true 
+REMEASURE_BEFORE_CURRENT_CLAIM=true 
+ 
+HUB_CAPABILITY_MODEL: 
+CENTRALDARK_HUB 
+-> CAPABILITY_REGISTRY 
+-> APP_REGISTRY 
+-> PROVIDER_REGISTRY 
+-> MODEL_CATALOG 
+-> CONNECTOR_REGISTRY 
+-> OAUTH_CONNECTIONS 
+-> POLICIES/PDP 
+-> AUDIT/RECEIPTS 
+-> GATEWAY 
+-> HERMES/AGENTS 
+-> FUTURE_CAPABILITIES 
+ 
+GOOGLE_DRIVE_IS_ONE_CAPABILITY_AMONG_N=true 
+OAUTH_IS_CONTROL_PLANE_NOT_THE_WHOLE_HUB=true 
+PROVIDER_IS_ROUTE_NOT_AUTHORITY=true 
+CONNECTOR_IS_TRANSPORT_NOT_CAPABILITY=true 
+ 
+AUTHORIZATION_PLANE: 
+CAPABILITY_PRESENT != CAPABILITY_AUTHORIZED_NOW 
+TOKEN_PRESENT != AUTHORIZED_TO_CALL 
+SCOPE_GRANTED != RUNTIME_AUTHORITY 
+UI_CONTROL_IS_POLICY_INPUT=true 
+ 
+MODULE_ON_VALID = UI_ENABLED AND POLICY_ALLOW AND 
+REQUIRED_SCOPE_AVAILABLE AND PROVIDER_AVAILABLE AND 
+MASTER_CONTEXT_ACTIVE 
+MODULE_OFF_VALID = UI_DISABLED AND POLICY_DENY AND API_CALLS_BLOCKED 
+AND RECEIPT_WRITTEN 
+MODULE_OFF -> AUTHORITY_DISABLED 
+MODULE_OFF -> CALLS_FORBIDDEN 
+TOKEN_MAY_REMAIN_STORED_ENCRYPTED_IF_POLICY_ALLOWS=true 
+HARD_TOKEN_REVOCATION=PROVIDER_OR_POLICY_DEPENDENT 
+UI_OFF_MUST_NEVER_MEAN_ONLY_VISUAL_OFF=true 
+ 
+OAUTH_HUB_DIRECTION: 
+OAUTH_PROVIDER_CATALOG_CAN_GROW_TO_N=true 
+OAUTH_SCOPES_CAN_GROW_BY_CAPABILITY=true 
+EVERY_SCOPE_MUST_MAP_TO_A_CAPABILITY=true 
+EVERY_CAPABILITY_MUST_HAVE_ON_OFF_POLICY=true 
+EVERY_ENABLED_CAPABILITY_MUST_PASS_MASTER_FUNNEL=true 
+EVERY_DISABLED_CAPABILITY_MUST_FAIL_CLOSED=true 
+ 
+UNIVERSAL_MASTER_INTEGRATION: 
+ANY_HUB_ACTION 
+-> !CENTRALDARK 
+-> #ACORDAR 
+-> #CRISTALIZAR · MEASURE 
+-> #CRISTALIZAR · FALLBACK 
+-> !CALIBRAR 
+-> PEGATUDO 
+-> TRUE_NORTH_LOCK 
+-> MEASURE 
+-> RENDEZVOUS 
+-> RECONCILE 
+-> REALITY_SCOPE_GATE 
+-> CURRENT_REALITY 
+-> ONE_WRITER 
+-> EXECUTE_IF_AUTHORIZED 
+-> TEST 
+-> COUNTERPROOF 
+-> REALITY_JUDGE 
+-> REGISTER 
+-> NEXT_CURSOR 
+ 
+NO_HUB_BYPASS=true 
+NO_OAUTH_BYPASS=true 
+NO_PROVIDER_BYPASS=true 
+NO_DIRECT_MATERIAL_ACTION_OUTSIDE_MASTER=true 
+ 
+# ADVERSARIAL_READER / FALSIFIER LANE — CRISTALIZAÇÃO DO AGENTE QUE 
+PROCURA ERRO 
+ 
+FALSIFIER_IS_SPECIALIZED_READER=true 
+FALSIFIER_IS_WRITER=false 
+FALSIFIER_MAY_MUTATE=false 
+FALSIFIER_MAY_SELF_APPROVE=false 
+FALSIFIER_RUNS_IN_PARALLEL_WITH_OTHER_READERS=true 
+FALSIFIER_REPORTS_EVIDENCE_NOT_PATCHES=true 
+ 
+FALSIFIER_PURPOSE: 
+- hunt_false_green 
+- hunt_scope_reduction 
+- hunt_stale_state 
+- hunt_owner_mismatch 
+- hunt_regression 
+- hunt_bypass 
+- hunt_weak_test 
+- hunt_unproven_claim 
+- hunt_provider_fallback_gap 
+- hunt_writer_collision 
+- hunt_duplicate_engine 
+ 
+ADVERSARIAL_FLOW: 
+WRITER_CANDIDATE_RESULT 
+-> FALSIFIER_ATTACK 
+-> IF COUNTEREXAMPLE_FOUND: RETURN_TO_EXISTING_OWNER_AND_ONE_WRITER 
+-> PATCH_MINIMUM 
+-> RETEST 
+-> FALSIFIER_ATTACK_AGAIN 
+-> IF SURVIVES: COUNTERPROOF_SURVIVES=true 
+-> REALITY_JUDGE 
+ 
+FALSIFIER_FOUND_ERROR != FALSIFIER_AUTHORIZED_TO_FIX 
+ERROR_FOUND -> OWNER -> ONE_WRITER -> PATCH -> TEST -> COUNTERPROOF 
+ 
+CRYSTALLIZED_LEARNING now requires adversarial survival when material: 
+CRYSTALLIZED_LEARNING = OBSERVED_FAILURE AND CAUSE_PROVEN AND 
+OWNER_FOUND AND FALSIFIER_EXISTS AND NEGATIVE_PATH_TESTED AND 
+PATCH_SURVIVES_COUNTERPROOF AND REUSABLE_PATTERN AND 
+PERSISTED_OUTSIDE_SESSION 
+ 
+# HUB + CENTRALDARK — PRINCÍPIO DE ESCALA 
+ 
+A CentralDark não é um app isolado. O HUB é a superfície unificada onde capabilities 
+independentes podem aparecer como módulos sem virarem arquiteturas independentes. A 
+escala acontece adicionando adapters, providers, apps, modelos, conectores e políticas dentro 
+dos owners existentes; não criando uma segunda Casa. 
+ 
+SCALE_FORMULA: 
+ONE_HUB + N_CAPABILITIES + N_PROVIDERS + N_APPS + ONE_MASTER_FUNNEL + 
+ONE_AUTHORITY_MODEL + ONE_WRITER_PER_CONFLICT_SCOPE + 
+INDEPENDENT_FALSIFIER + REALITY_JUDGE 
+ 
+N_CAPABILITIES does not imply N authorities. 
+N_APPS does not imply N masters. 
+N_PROVIDERS does not imply N truths. 
+N_AGENTS does not imply N writers. 
+ 
+ZERO_REGRESSION_CONTRACT: 
+- preservar Dashboard/Abacus/Auditoria/Catálogo/Conectores/Gateway/Hermes/Políticas/Auth 
+existentes quando ainda ativos; 
+- preferir adapter/extensão a substituição; 
+- localizar schema/owner vivo antes de migration ou tabela nova; 
+- não recriar oauth_providers/oauth_connections se já existirem maduros; 
+- não recriar policies/audit se já houver PDP/audit owner canônico; 
+- não reduzir catálogo para simplificar implementação; 
+- não apagar capability histórica para fazer teste ficar verde; 
+- não enfraquecer gate para acomodar novo módulo; 
+- qualquer novo módulo deve provar compatibilidade com os existentes. 
+ 
+PROMOTION_HUB_EXTENSION_REQUIREMENTS: 
+EXISTING_HUB_BEHAVIOR_PRESERVED=true 
+NEW_CAPABILITY_IS_ADDITIVE=true 
+NO_SECOND_OWNER=true 
+NO_SECOND_MASTER=true 
+NO_SCHEMA_DUPLICATION=true 
+FALSIFIER_SURVIVES=true 
+REQUIRED_TESTS_PASS=true 
+COUNTERPROOF_SURVIVES=true 
+NO_MATERIAL_UNKNOWN=true 
+RECEIPT_WRITTEN=true 
+ 
+GITHUB_TARGET=ServerVpss/CentralDark#1389 
+GITHUB_CONNECTOR_THIS_PASSAGE=DISABLED_AT_FIRST_READ 
+GITHUB_REMOTE_STATE=UNKNOWN 
+GITHUB_SYNC_PENDING=true 
+DRIVE_PERSISTENCE=PASS 
+NEXT_CURSOR=quando GitHub responder, entrar pelo 
+UNIVERSAL_MASTER_FUNNEL_GATE; remedir #1389 vivo; localizar owners já existentes de 
+apps/modulos/hub, trigger fabric, ciclo, contrato, OAuth/PDP/audit e tests; comparar contra esta 
+cristalização; aplicar somente o delta faltante no mesmo PR/lineage; preservar comportamento 
+existente; adicionar falsificadores/negative tests; provar TESTED_HEAD == 
+COMMITTED_HEAD == PUSHED_PR_HEAD; só então limpar GITHUB_SYNC_PENDING. 
+ 
+FRASE_CANÔNICA_HUB: um HUB pode conter milhares de apps e capabilities sem virar 
+milhares de arquiteturas; todos entram pelo mesmo master, recebem autoridade por política, 
+são observados por muitos readers, alterados por um writer por escopo e atacados por 
+falsificador antes da promoção. 
+ 
+BIBLE_REF: 1Co 12:12 
+BIBLE_SENSE: muitas partes podem compor um único corpo sem perder suas funções 
+distintas. 
+BAIANES_VERSE: “Oxe, pode botar uma feira inteira dentro do HUB; cada barraca vende uma 
+coisa, mas a porteira, a lei e o livro-caixa continuam sendo um só.” 
+TECHNICAL_PROOF: extensão adicionada ao owner canônico 
+DELTAUNIFICADOCENTRALDARK.md com writeControl sobre a revisão viva; evidências 
+históricas do HUB foram tratadas como lineage, não como estado atual; GitHub remoto 
+permaneceu UNKNOWN porque o conector falhou antes da leitura. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+# MERMAID_PACK + GEMINI_CONTEXT_FABRIC — 2026-08-31 
+ 
+PACKAGE=CENTRALDARK-MASTER-PEGATUDO-20260831 
+MODE=EXTEND_EXISTING_ONLY 
+ZERO_REGRESSION_REQUIRED=true 
+ 
+ZIP_DRIVE_ID=12SU2Xn_z8n8o-sEyma-Le5r-a-6Fgg0P 
+ZIP_SHA256=408cc9d420a46cda9c714da083ce5b439298a5a50ba67bb0dcee420c82618baa 
+ZIP_SIZE_BYTES=29051323 
+PDF_DRIVE_ID=1P7PXvV8hReht7JQGtMrE2Gxeqj9rVjER 
+PDF_SHA256=cad32c2d99f8b28506a5394c9a27528d264886a4ce447c0fac95b81222b4bdc0 
+PDF_PAGES=10 
+MERMAID_DIAGRAMS=9 
+MANIFEST_SHA256=6059168a114f3c42a3abe130ded4c3c26cf29a66aa988cd565e230bd9bb5
+8a4d 
+HASH_CHAIN_VALID=1 
+PYTEST=50_PASS_0_FAIL 
+MASTER_SELF_TEST=29_PASS_0_FAIL 
+CENTRALDARK_MASTER=PASS 
+ 
+MERMAID_FLOWS: 
+- universal master funnel 
+- HUB capability fabric 
+- centraldark-router -> Gemini read-only sweep 
+- context distillation and durable persistence 
+- GitHub <-> Drive cross-provider continuity 
+- Google Workspace OAuth control plane 
+- plug-and-play GitHub/Drive reconciliation 
+- adversarial falsifier lane 
+- Gemini sweep sequence 
+ 
+ROUTER_CONTRACT: 
+REUSE_EXISTING_CENTRALDARK_ROUTER=true 
+SECOND_ROUTER_FORBIDDEN=true 
+ROUTER_IS_AUTHORITY=false 
+ROUTER_REQUIRES_MASTER_CONTEXT=true 
+ 
+GEMINI_CONTRACT: 
+GEMINI_ROLE=READ_ONLY_SPECIALIZED_READER 
+GEMINI_MAY_WRITE=false 
+GEMINI_MAY_JUDGE=false 
+GEMINI_MAY_SELF_APPROVE=false 
+GEMINI_MAY_RECEIVE_RAW_SECRETS=false 
+GEMINI_OUTPUT=EVIDENCE_CANDIDATE 
+GEMINI_RUNTIME_READY=UNKNOWN_UNTIL_LIVE_MEASURED 
+ 
+SAFE_CONTEXT_PATH: 
+AUTHORIZED_SOURCE_ADAPTERS 
+-> SANITIZE_AND_QUARANTINE 
+-> CENTRALDARK_ROUTER 
+-> GEMINI_SWEEP 
+-> REALITY_SCOPE_GATE 
+-> RENDEZVOUS 
+-> RECONCILE 
+-> CURRENT_REALITY 
+-> EXISTING_OWNER 
+-> ONE_WRITER 
+-> TEST 
+-> FALSIFIER 
+-> REALITY_JUDGE 
+-> RECEIPT 
+-> DURABLE_CONTEXT 
+ 
+DURABLE_CONTEXT: 
+DRIVE_WORKSPACE_DURABLE_CONTEXT=true 
+PERSIST_RAW_SECRETS=false 
+PERSIST_FULL_RAW_EXTERNAL_SOURCES_BY_DEFAULT=false 
+PERSIST=FACT|SOURCE_REF|REVISION_OR_HEAD|SHA256|OWNER|PROOF|COUNTER
+PROOF|RECEIPT|NEXT_CURSOR 
+DRIVE_WORKSPACE_IS_AUTHORITY=false 
+ 
+HUB: 
+ONE_HUB_N_CAPABILITIES=true 
+ONE_HUB_N_APPS=true 
+ONE_HUB_N_PROVIDERS=true 
+ONE_HUB_N_CONNECTORS=true 
+ONE_HUB_N_MODELS=true 
+N_CAPABILITIES != N_AUTHORITIES 
+N_APPS != N_MASTERS 
+N_PROVIDERS != N_TRUTHS 
+N_AGENTS != N_WRITERS 
+ 
+GOOGLE_WORKSPACE_CONTROL_PLANE: 
+CREDENTIAL_PLANE != AGENT_PLANE 
+RAW_SECRET_IN_AGENT_CONTEXT=false 
+REUSE_COMPATIBLE_OAUTH_CLIENT_PROJECT=true 
+CAPABILITIES=DRIVE|DOCS|SHEETS|GMAIL|CALENDAR|CONTACTS|GEMINI 
+OFF_BLOCKS_CALLS=true 
+HARD_DISCONNECT_IS_SEPARATE_ACTION=true 
+HUMAN_CONSENT_WHEN_GOOGLE_REQUIRES=true 
+ 
+MASTER_PREFIX: 
+ANY_RECOGNIZED_TRIGGER -> !CENTRALDARK -> #ACORDAR -> #CRISTALIZAR · 
+MEASURE -> #CRISTALIZAR · FALLBACK -> REST_OF_CANONICAL_CHAIN 
+MASTER_REENTRY_GUARD=true 
+SUBTRIGGER_BYPASS=FORBIDDEN 
+ 
+GITHUB_TARGET=ServerVpss/CentralDark#1389 
+GITHUB_REMOTE_STATE=UNKNOWN 
+GITHUB_CONNECTOR_THIS_BUILD=DISABLED_AT_FIRST_LIVE_READ 
+GITHUB_REMOTE_MUTATION_CLAIMED=false 
+GITHUB_SYNC_PENDING=true 
+NEXT_CURSOR=quando GitHub responder, remedir #1389 vivo; localizar owners existentes de 
+trigger/cycle/contract/HUB/router/OAuth/tests; comparar com este pacote; aplicar somente delta 
+faltante no mesmo PR/lineage; rodar anti-bypass, anti-recursion, secret-boundary, 
+router-Gemini, fallback, falsifier e zero-regression gates; provar TESTED_HEAD == 
+COMMITTED_HEAD == PUSHED_PR_HEAD antes de limpar GITHUB_SYNC_PENDING. 
+ 
+TECHNICAL_BOUNDARY=este pacote e seus Mermaid/PDF provam o contrato local e a 
+integridade do artefato; não provam sozinho que Gemini, OAuth, GitHub ou centraldark-router 
+estão READY no runtime vivo. 
+ 
+ 
+# CRISTALIZAÇÃO 2026-08-31 — CAPABILITY HARVEST + HANDOFF + MEDIA 
+ 
+SEARCH_ONLY_IS_COMPLETION=false 
+MATERIAL_DISCOVERY_REQUIRES_RECONCILE=true 
+EXACT_SKILL_NAME_MISSING_IS_PERMISSION_TO_CREATE=false 
+SKILL_RECOVERY=EXACT_LOOKUP -> CAPABILITY_LOOKUP -> EXISTING_OWNER -> 
+PROVE_COMPATIBILITY -> CONTINUE 
+FABLE_ROLE=AUXILIARY_REVIEW_METHOD 
+ 
+DENSE_HANDOFF=[SKILL][TRIG][OWNER][IN][PRE][EXEC][OUT][PROOF][FAIL][NEXT][REV
+] 
+GRAMMAR_MAY_BE_COMPRESSED=true 
+SEMANTIC_FIELDS_MAY_BE_DROPPED=false 
+ 
+PLAYER_DEBUG_JSON_IS_FULL_CAPTION_PAYLOAD=false 
+VIDEO_ID_SOURCE=debug_videoId|docid 
+CAPTION_TRACK_SOURCE=OBSERVED_TIMEDTEXT_REQUEST|PLAYER_RESPONSE_T
+RACK_METADATA|AUTHORIZED_TRANSCRIPT_SOURCE 
+TIMEDTEXT_LOCATOR_FIELDS=v|lang|kind|name|tlang|fmt 
+PARTIAL_CAPTION_IS_COMPLETE=false 
+ 
+CAPABILITY_HARVEST=DISCOVER -> CLASSIFY -> DEDUPE -> REALITY_SCOPE_GATE 
+-> RECONCILE -> EXISTING_OWNER -> TEST_OR_FALSIFIER -> DOCUMENTATION_GATE 
+-> RECEIPT 
+ 
+PACKAGE=CENTRALDARK-MASTER-PEGATUDO-20260831 
+LOCAL_BUILD_SHA256=40a0a5e3a1fd8162b2f2a6e884d6f9fc30adbb8af1181c0f7b4003bbdd
+ec4498 
+PYTEST=66_PASS_0_FAIL 
+MASTER_VALIDATION=PASS 
+MASTER_SELF_TEST=34_PASS_0_FAIL 
+HASH_CHAIN_VALID=1 
+GITHUB_SYNC_PENDING=true 
+ 
+BIBLE_REF=1Ts 5:21 
+BIBLE_SENSE=examinar o material e conservar apenas o delta que atravessa prova. 
+BAIANES_VERSE=Oxe, achou minério não é fim da cava; acha o dono, testa o ouro e só 
+depois bota no cofre da Casa. 
+ 
+ 
+# CRISTALIZAÇÃO 2026-08-31 — DELTAUTIL + GEMINI MODAL + WORKSPACES/PLUGINS 
+ 
+!DELTAUTIL_EXISTING_OWNER_REUSED=true 
+SECOND_DELTA_ENGINE_FORBIDDEN=true 
+EXTERNAL_DELTAUTIL -> !CENTRALDARK -> DELTAUTIL_RECONCILE 
+ 
+SEMANTIC_COMPACTION: 
+GRAMMAR_MAY_SHRINK=true 
+SEMANTICS_MAY_DROP=false 
+PROOF_FIELDS_MAY_DROP=false 
+AUTHORITY_BOUNDARY_MAY_DROP=false 
+FAILURE_BOUNDARY_MAY_DROP=false 
+VERBOSE_HISTORY_REMAINS_AVAILABLE=true 
+COMPACT_DIGEST_IS_RETRIEVAL_LAYER_NOT_REPLACEMENT=true 
+ 
+FLOW=INGEST -> NORMALIZE -> SECRET_SCRUB -> DEDUPE -> 
+REALITY_SCOPE_GATE -> SEMANTIC_DIGEST -> EXISTING_OWNER_MATCH -> SCORE 
+-> GEMINI_READ_ONLY_REVIEW -> FALSIFIER -> PREVIEW -> 
+ONE_WRITER_IF_APPROVED -> TEST -> DOCUMENTATION_GATE -> RECEIPT 
+ 
+GEMINI_MODAL: 
+ROLE=READ_ONLY_ANALYST 
+ROUTE=centraldark-router 
+MAY_WRITE=false 
+MAY_INSTALL=false 
+MAY_SELF_APPROVE=false 
+RAW_SECRETS=false 
+PANELS=SUMMARY|SOURCE|OWNER_MATCH|COMPATIBILITY|EXPECTED_GAIN|REGRE
+SSION_RISK|SECURITY_GATES|CONFLICTS|BEFORE_AFTER_GRAPH|TEST_PLAN|RECE
+IPT_PREVIEW 
+ACTIONS=PREVIEW|TEST|IMPORT|MERGE_INTO_EXISTING_OWNER|REJECT 
+ 
+HUB_SURFACES=WORKSPACES|PLUGINS|CONNECTIONS|DELTA_INBOX|GEMINI_MODA
+L 
+EXTERNAL_NAVIGATION_MINIMIZED=true 
+EMBED_ORDER=NATIVE_ADAPTER -> SAFE_IFRAME_IF_PROVIDER_ALLOWS -> 
+SERVER_SIDE_API_ADAPTER -> ONE_TIME_EXTERNAL_AUTH_IF_REQUIRED 
+IFRAME_REQUIRES_CSP_FRAME_ANCESTORS_COMPATIBLE=true 
+IFRAME_REQUIRES_X_FRAME_OPTIONS_COMPATIBLE=true 
+IFRAME_UNKNOWN=DO_NOT_EMBED 
+IFRAME_SECURITY_HEADER_BYPASS=false 
+ 
+STATUS_DOTS: 
+🟢=ACTIVE_OR_PASS 
+🟡=PENDING_OR_UNKNOWN 
+🔴=BLOCKED_OR_CONFLICT 
+🔵=AVAILABLE_OR_INFO 
+⚫=DISABLED 
+COLOR_IS_PROOF=false 
+ 
+VISIBLE_METRICS=compatibility_percent|evidence_coverage_percent|integration_readiness_p
+ercent|security_gate_coverage_percent|regression_risk_percent|projected_gain_percent_or_U
+NKNOWN 
+PERCENT_IS_PROOF=false 
+UNKNOWN_MAY_BE_FAKED=false 
+SECURITY_PERCENT=KNOWN_APPLICABLE_GATE_COVERAGE_NOT_ABSOLUTE_SEC
+URITY 
+ 
+PLUGIN_IMPORT_SOURCES=GITHUB_URL|DRIVE_FILE|MARKDOWN|ZIP|MANIFEST|AUT
+HORIZED_WEBHOOK|LOCAL_PACKAGE 
+PLUGIN_IMPORT=DRY_RUN -> SECRET_SCRUB -> OWNER_MATCH -> 
+COMPATIBILITY_PREVIEW -> FALSIFIER -> TESTS -> ONE_WRITER -> RECEIPT 
+DIRECT_INSTALL_WITHOUT_MASTER=false 
+SECOND_ENGINE_ON_IMPORT=false 
+ 
+PACKAGE=CENTRALDARK-MASTER-PEGATUDO-20260831 
+DRIVE_ZIP_ID=12SU2Xn_z8n8o-sEyma-Le5r-a-6Fgg0P 
+ZIP_SHA256=1d4cedfb968804553edd8e6c9fdd1450753e3c303f08e8ea83bf8d6305fda496 
+ZIP_SIZE_BYTES=29182889 
+PACKAGE_FILES=150 
+PYTEST=75_PASS_0_FAIL 
+MASTER_VALIDATION=PASS 
+MASTER_SELF_TEST=42_PASS_0_FAIL 
+HASH_CHAIN_VALID=1 
+MERMAID_DIAGRAM=16-delta-utils-gemini-modal.mmd 
+GITHUB_REMOTE_STATE=UNKNOWN_THIS_PASSAGE 
+GITHUB_SYNC_PENDING=true 
+ 
+BIBLE_REF=1Ts 5:21 
+BIBLE_SENSE=examinar, reduzir ruído e conservar somente semântica e prova que 
+sobrevivem aos gates. 
+BAIANES_VERSE=Oxe, corta a conversa comprida, não corta o parafuso: nome, dono, prova, 
+risco e próximo passo ficam no lugar. 
+ 
+ 
+# DELTAUTIL · GEMINI_MODAL · WORKSPACE_PLUGIN_FABRIC — COMPACT 
+OWNER=DELTAUTIL 
+MASTER=!CENTRALDARK 
+MODE=EXTEND_EXISTING_ONLY 
+SECOND_DELTA_ENGINE=false 
+FLOW=INGEST>SCRUB>DEDUPE>SCOPE>DIGEST>OWNER>SCORE>GEMINI_RO>FALSI
+FIER>PREVIEW>ONE_WRITER>TEST>DOC_GATE>RECEIPT 
+GRAMMAR_SHRINK=true 
+SEMANTICS_DROP=false 
+PROOF_DROP=false 
+AUTHORITY_BOUNDARY_DROP=false 
+FAILURE_BOUNDARY_DROP=false 
+DIGEST_REPLACES_HISTORY=false 
+HUB_SURFACES=WORKSPACES|PLUGINS|CONNECTIONS|DELTA_INBOX|GEMINI_MODA
+L 
+GEMINI_ROLE=READ_ONLY_ANALYST 
+GEMINI_WRITE=false 
+GEMINI_INSTALL=false 
+GEMINI_SELF_APPROVE=false 
+RAW_SECRETS_TO_GEMINI=false 
+EMBED_ORDER=NATIVE_ADAPTER>SAFE_IFRAME>API_ADAPTER>ONE_TIME_EXTERN
+AL_AUTH 
+IFRAME_REQUIRES=CSP_FRAME_ANCESTORS_PASS+X_FRAME_OPTIONS_PASS 
+IFRAME_UNKNOWN=DO_NOT_EMBED 
+BYPASS_PROVIDER_FRAME_SECURITY=false 
+STATUS=🟢PASS|🟡UNKNOWN|🔴BLOCKED|🔵AVAILABLE|⚫DISABLED 
+METRICS=compatibility|evidence_coverage|readiness|security_gate_coverage|regression_risk|
+projected_gain_or_UNKNOWN 
+PERCENT_IS_PROOF=false 
+COLOR_IS_PROOF=false 
+UNKNOWN_COERCION=false 
+PLUGIN_INPUT=GITHUB_URL|DRIVE_FILE|MARKDOWN|ZIP|MANIFEST|AUTHORIZED_WE
+BHOOK|LOCAL_PACKAGE 
+PLUGIN_GATE=SECRET_SCRUB>OWNER_MATCH>COMPAT_PREVIEW>FALSIFIER>TES
+TS>ONE_WRITER>RECEIPT 
+PACKAGE_SHA256=1d4cedfb968804553edd8e6c9fdd1450753e3c303f08e8ea83bf8d6305fda4
+96 
+PACKAGE_SIZE=29182889 
+PYTEST=75_PASS_0_FAIL 
+MASTER_VALIDATE=PASS 
+MASTER_SELF_TEST=42_PASS_0_FAIL 
+HASH_CHAIN_VALID=1 
+GITHUB_SYNC_PENDING=true 
+NEXT_CURSOR=GitHub volta>medir owners vivos 
+DELTAUTIL/HUB/plugins/workspaces>comparar pacote>aplicar somente delta 
+faltante>falsifier>tests>provar HEAD antes promoção 
+ 
+# CRISTALIZAÇÃO 2026-08-31 — STRUCTURAL SKILL MATRIX · LOTE MESTRE 1 
+LOT_COUNT=15 
+MODE=EXTEND_EXISTING_ONLY 
+MASTER=!CENTRALDARK 
+DELTAUTIL_RECONCILE=true 
+STRUCTURAL_SKILL_GATE=PASS 
+SKILL_ALIAS_IS_AUTHORITY=false 
+DESTRUCTIVE_AUTO_EXECUTION=false 
+DIRTY_WORKTREE_AUTO_STASH=false 
+SEMVER_PATCH_MINOR_IS_PROOF=false 
+HASH_CHANGE_IS_REGRESSION=false 
+AUTH_TOKEN_EXCHANGE_ROOT_CAUSE=UNKNOWN_UNTIL_MEASURED 
+FLOW=TRIGGER -> MASTER -> DELTAUTIL_RECONCILE -> STRUCTURAL_SKILL_GATE 
+-> EXISTING_OWNER -> ONE_WRITER -> TEST -> COUNTERPROOF -> 
+DOCUMENTATION_GATE -> RECEIPT 
+SKILLS=SEC_ENV_LOCK|PREVENT_DESTRUCTIVE|ZERO_V2_GATE|GIT_STATE_CHECK|
+SAFE_FAST_FORWARD|AST_DIFF_INJECT|DEP_SAFE_UPDATE|PORT_COLLISION_FIX|D
+B_SCHEMA_PRESERVE|DOM_TEXT_EXTRACT|YOUTUBE_CC_SNIPER|VISUAL_DIFF_CH
+ECK|MEMORY_DUMP|CONTEXT_HYDRATE|CHECKSUM_VALIDATOR 
+LOCAL_PYTEST=83_PASS_0_FAIL 
+MASTER_SELF_TEST=48_PASS_0_FAIL 
+HASH_CHAIN_VALID=1 
+ZIP_SHA256=507204dcc8ee414c5e3a5f2865a7c0d2f1ba0103b33664ce13d35eafce81b52c 
+ZIP_DRIVE_ID=12SU2Xn_z8n8o-sEyma-Le5r-a-6Fgg0P 
+GITHUB_TARGET=ServerVpss/CentralDark#1389 
+GITHUB_REMOTE_STATE=REMEASURE_REQUIRED_THIS_PASSAGE 
+BIBLE_REF=1Ts 5:21 
+BIBLE_SENSE=examinar tudo e conservar só o que atravessa prova. 
+BAIANES_VERSE=Oxe, quinze ferramenta chegaram na oficina; nenhuma virou rei. Cada uma 
+achou seu dono, passou na prensa e só o que aguentou foi pro cofre. 
+TECHNICAL_PROOF=83 testes PASS + 48 falsificadores PASS + structural gate PASS + hash 
+chain válida + ZIP substituído no mesmo ID do Drive. 
+ 
+ 
+# CRISTALIZAÇÃO 2026-08-31 — UPDATE FABRIC + BUILDER + TEMPO/IDENTIDADE 
+ 
+OWNER=DELTAUTIL 
+UPDATE_FABRIC_ACTIVATION=CONDITIONAL_WHEN_MATERIAL 
+SAME_LOGICAL_PACKAGE=true 
+PARALLEL_PACKAGE_FOR_SAME_LINEAGE=false 
+ 
+UPDATE_INGRESS=DRIVE|GITHUB|CLI|TERMINAL|SSH|AUTHORIZED_WEBHOOK|HUB_U
+PLOAD 
+UPDATE_FLOW=INGEST -> NORMALIZE -> SECRET_SCRUB -> DEDUPE -> 
+REALITY_SCOPE_GATE -> EXISTING_OWNER_MATCH -> DELTAUTIL_RECONCILE -> 
+UPDATE_FABRIC_RECONCILE -> TEST -> COUNTERPROOF -> DOCUMENTATION_GATE 
+-> SAME_PACKAGE_REGISTER -> RECEIPT 
+CONFLICT=STOP_WRITE_AND_RECONCILE 
+BIDIRECTIONAL_SYNC=MISSING_DELTA_ONLY 
+ 
+BUILDER_ROLE=FACTORY_NOT_AUTHORITY 
+BUILDER_OUTPUTS=SITE|MODULE|INFRA_PIECE|UI_COMPONENT|DISTRIBUTION_PAC
+KAGE 
+PROMOTION_REQUIRES=MANIFEST|DEPENDENCIES|DOCUMENTATION|TESTS|COUNT
+ERPROOF|RECOVERY_OR_ROLLBACK|RECEIPT 
+DEPLOY_REQUIRES_EXPLICIT_INTENT=true 
+ 
+MACHINE_DATE=YYYY-MM-DD 
+PACKAGE_LEDGER=releases/YYYY-MM-DD/ 
+CURRENT_POINTER=releases/CURRENT.yml 
+HUMAN_LOCALE=pt-BR 
+HUMAN_DATETIME=DD/MM/YYYY HH:mm:ss 
+TIMEZONE=America/Sao_Paulo 
+TIMESTAMP_STORAGE=RFC3339_WITH_OFFSET 
+DISPLAY_NAME_CHANGES_CANONICAL_ID=false 
+ 
+REVISION_BLOCK=date_key|human_datetime|author_alias|source|revision_or_head|delta_dig
+est|proof|review_status|next_cursor 
+MANY_REVIEWERS_ALLOWED=true 
+ONE_WRITER_PER_CONFLICT_SCOPE=true 
+ 
+LOCAL_PACKAGE_PROOF: 
+PYTEST=86_PASS_0_FAIL 
+MASTER_VALIDATE=PASS 
+MASTER_SELF_TEST=52_PASS_0_FAIL 
+HASH_CHAIN_VALID=1 
+ZIP_SHA256=1d06908be0fbd37a3d647c2a711b9896d9c8a24cece224038f2fe62d571d9ae8 
+GITHUB_REMOTE_STATE=UNKNOWN_CONNECTOR_UNAVAILABLE_THIS_PASSAGE 
+ 
+BAIANES=Oxe, a data organiza a estante; a revisão diz quem mexeu; o DELTAUTIL só chama 
+o Update Fabric quando tem update de verdade; e o pacote continua sendo o mesmo bicho. 
+ 
+ 
+# CRISTALIZAÇÃO 31/08/2026 — CROSS-SESSION + OAUTH + HERMES SPEED FABRIC 
+ 
+CROSS_SESSION_RECONCILIATION=true 
+OWNER=DELTAUTIL 
+SOURCES=CURRENT_CHAT|OTHER_CHAT_WINDOWS|PERSONAL_CONTEXT|SCHEDUL
+ED_TASKS|DRIVE|GITHUB_WHEN_AVAILABLE|LOCAL_CLI|LOCAL_WORKTREE|AUTHORI
+ZED_WEBHOOK 
+HISTORY_IS_CURRENT_STATE=false 
+CHAT_MEMORY_IS_AUTHORITY=false 
+UNKNOWN_REMAINS_UNKNOWN=true 
+FLOW=INGEST->SECRET_SCRUB->DEDUPE->CLASSIFY_HISTORY_CURRENT_UNKNOW
+N->OWNER_MATCH->RENDEZVOUS->RECONCILE->MATERIALITY_GATE->DOCUMENTAT
+ION_GATE->RECEIPT->NEXT_CURSOR 
+ 
+OAUTH_CONTROL_PLANE=true 
+AUTHORIZATION_CODE=EPHEMERAL_ONE_TIME_EXCHANGE_INPUT 
+AUTHORIZATION_CODE_IS_ACCESS_TOKEN=false 
+AUTHORIZATION_CODE_IS_REFRESH_TOKEN=false 
+AUTHORIZATION_CODE_PERSIST_ALLOWED=false 
+BUTTONS=CONNECT_OAUTH|REAUTHORIZE|REFRESH_IF_SUPPORTED|TEST|DETAILS|
+DISABLE|REVOKE_DISCONNECT 
+PLUGIN_RULE=EACH_PLUGIN_APP_USES_OWN_PROVIDER_AUTH_CONFIG_AND_CAL
+LBACK 
+RAW_TOKEN_IN_DOCS=false 
+RAW_TOKEN_IN_RECEIPTS=false 
+ 
+HERMES_SPEED_FABRIC=true 
+PYTHON=AST|HASH|STRUCTURED_INDEX|JSON_YAML|GRAPH|BATCH_CLASSIFY 
+POWERSHELL7=WINDOWS_PROCESS|SERVICE|PORT|FILESYSTEM|PARALLEL_READS 
+OPTIONAL=RIPGREP_IF_PRESENT|FD_IF_PRESENT 
+CACHE_KEY=PATH+MTIME+SIZE+HASH+HEAD 
+ADAPTIVE_FANOUT_K=MINIMUM_PARALLELISM_FOR_NEXT_DISCRIMINANT 
+N_AGENTS_SAME_FILE=false 
+BLIND_GLOBAL_RESCAN=false 
+ 
+SCHEDULED_TASK_LEDGER=true 
+ACTIVE_TASK_SNAPSHOT=CentralDark Status|DAILY|ACTIVE 
+TASK_IS_RUNTIME_PROOF=false 
+ 
+VISUAL_CLI_CATALOG=FASTFETCH|BTOP|CAVA|PIPES_SH|AAFIRE 
+VISUAL_STATUS=OPTIONAL_NOT_INSTALLED_UNLESS_MEASURED 
+EFFECTS_NEVER_REPLACE_TELEMETRY=true 
+ 
+FORGOTTEN_WORK_CANDIDATES=ARCHITECTURE_INTAKE_WEBHOOK|MATERIALITY_
+GATE|CAPSULE_FIXED_POINT_SESSION_CONTRACT 
+CANDIDATE_STATE=RECONCILE_REQUIRED_NOT_CURRENT_TRUTH 
+ 
+PACKAGE_ID=CENTRALDARK-MASTER-PEGATUDO-20260831 
+SAME_DRIVE_ZIP_ID=12SU2Xn_z8n8o-sEyma-Le5r-a-6Fgg0P 
+ZIP_SHA256=bd2e47dfbf4f93a52804df8d4e560cbc6918bc63860a99081d23bce001bacad8 
+PYTEST=91_PASS_0_FAIL 
+MASTER_VALIDATE=PASS 
+MASTER_SELF_TEST=60_PASS_0_FAIL 
+HASH_CHAIN_VALID=1 
+GITHUB_REMOTE_STATE=UNKNOWN_THIS_PASSAGE 
+GITHUB_SYNC_PENDING=true 
+ 
+ 
+# CRISTALIZAÇÃO 31/08/2026 — PADRÃO DA CASA / DOCUMENTAÇÃO DUPLA / HERMES 
+UPSTREAM BRIDGE 
+ 
+CODE_DOCUMENTATION_GATE=true 
+HUMAN_LANGUAGE=pt-BR 
+CODE_IDENTIFIERS=ENGLISH 
+TECHNICAL_VIEW_REQUIRED=true 
+MENTAL_MAP_REQUIRED=true 
+MENTAL_MAP_MAY_REPLACE_TECHNICAL=false 
+MATERIAL_LINE_TRACEABILITY_REQUIRED=true 
+COMMENT_EVERY_LINE_REQUIRED=false 
+RULE=arquivo:linha-início..linha-fim -> símbolo/bloco -> owner -> documentação -> testes -> 
+prova 
+MISSING_PARSER_OR_OWNER_OR_DOC=FAIL 
+ 
+COMMUNICATION_DEFAULT=TRABALHO 
+WORK_MODE=objetivo primeiro|sem papagaio|sem repetição|emoji 
+semântico|paths/HEAD/owners exatos 
+RESENHA_REQUIRES_EXPLICIT_OPERATOR_INTENT=true 
+RESENHA_MAY_USE=baianês|humor|contexto bíblico 
+RESENHA_DOES_NOT_CHANGE=truth|authority|gates 
+ 
+PLUG_PLAY_CAPABILITY_PACKAGE=true 
+INSTALL_FLOW=measure target -> owner match -> compatibility -> dry run -> recovery point -> 
+minimum delta -> code doc gate -> test -> counterproof -> receipt 
+PARALLEL_OWNER_ALLOWED=false 
+RAW_SECRET_ALLOWED=false 
+ 
+HERMES_UPSTREAM_BRIDGE=true 
+HERMES_OFFICIAL_ROLE=UPSTREAM_RUNTIME_AND_CAPABILITY_SOURCE 
+CENTRALDARK_CLI_ROLE=OPERATOR_OWNED_SHELL_AND_CONTROL_PLANE 
+BLIND_UPSTREAM_MERGE=false 
+UPDATE_FLOW=check -> release/diff -> capability inventory -> owner match -> sandbox -> 
+upstream tests -> CentralDark gates -> adapter/overlay -> counterproof -> promote 
+UPDATE_BUTTON=Atualizar CentralDark 
+UPDATE_BUTTON_DEFAULT=CHECK_ONLY 
+BACKUP_REQUIRED=true 
+ROLLBACK_REQUIRED=true 
+RESTART_REQUIRES_EXPLICIT_INTENT=true 
+ 
+JS_TS_RESEARCH_2026_08_31=OXLINT|BIOME|ROLLDOWN|TYPEDOC 
+ADOPTION=SHADOW_FIRST 
+RUST_ALONE_IS_NOT_PROOF=true 
+ 
+GITHUB_PROFILE_RULE=entrega pode concluir; CentralDark global permanece evolução 
+contínua 
+GITHUB_PROFILE_REMOTE_MUTATION=BLOCKED_THIS_PASSAGE_GITHUB_CONNECT
+OR_UNAVAILABLE 
+ 
+PACKAGE_ID=CENTRALDARK-MASTER-PEGATUDO-20260831 
+SAME_DRIVE_ZIP_ID=12SU2Xn_z8n8o-sEyma-Le5r-a-6Fgg0P 
+ZIP_SHA256=628840bdbd30af53cb53216cf1b1e71b5905f9b116e9cc16da0b476dba477892 
+PYTEST=97_PASS_0_FAIL 
+MASTER_VALIDATE=PASS 
+MASTER_SELF_TEST=72_PASS_0_FAIL 
+CODE_DOCUMENTATION_AUDIT=PASS 
+HASH_CHAIN_VALID=1 
+ 
+ 
+# CRISTALIZAÇÃO — FABLE LOOP / AUTONOMIA TOTAL PARA MISSÕES GRANDES 
+ 
+STATUS=CRISTALIZADO 
+ROLE=CANONICAL_OPERATIONAL_AUTOLOAD_CONTRACT 
+FABLE_LOOP_IS_MODE=true 
+FABLE_LOOP_IS_SECOND_ENGINE=false 
+FABLE_LOOP_IS_SECOND_OWNER=false 
+AUTOLOAD_REQUIRED=true 
+REUSE_EXISTING_DISTRIBUTED_SOURCES=true 
+ 
+## ATIVAÇÃO OBRIGATÓRIA 
+FABLE_LOOP_AUTOLOAD = LARGE_TASK OR COMPLEX_TASK OR 
+MULTI_DOMAIN_TASK OR LONG_RUNNING_AUTONOMOUS_TASK OR 
+HIGH_UNCERTAINTY_RECONCILIATION OR USER_REQUESTS_TOTAL_AUTONOMY 
+ 
+SEARCH_BEFORE_ASK=true 
+DO_NOT_ASK_USER_FOR_DISCOVERABLE_STATE=true 
+ASK_ONLY_FOR_NON_DISCOVERABLE_INTENT_OR_AUTHORITY=true 
+CONTINUE_UNTIL_FIXED_POINT_OR_REAL_BLOCK=true 
+UNKNOWN_IS_NOT_PASS=true 
+ACTION_IS_PROOF=false 
+HISTORY_IS_CURRENT_STATE=false 
+REUSE_BEFORE_CREATE=true 
+ 
+## GATILHOS / FUNIL MASTER 
+MASTER_TRIGGER=!CENTRALDARK 
+MASTER_ALIAS=#CENTRALDARK 
+FABLE_ALIASES=!FABLE_LOOP|#FABLE_LOOP|!FABLER_LOOP|#FABLER_LOOP 
+FABLE_ALIASES_NORMALIZE_TO=!CENTRALDARK 
+ALIASES_ARE_NOT_NEW_ENGINES=true 
+ALIASES_ARE_NOT_NEW_OWNERS=true 
+DIRECT_SUBTRIGGER_BYPASS=FORBIDDEN 
+ 
+ON_FABLE_ACTIVATION -> !CENTRALDARK -> #ACORDAR -> !CALIBRAR -> 
+#CRISTALIZAR · FABLE_LOOP -> MEASURE 
+ 
+## FONTES DISTRIBUÍDAS OBSERVADAS NO HERMES 
+- .agents/skills/cot-react-loop/SKILL.md 
+- docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md 
+- docs/ARQUITETURA/PROOF-ARCHITECTURE/LEARNING_CRYSTAL_LOOP.yml 
+- scripts/grafo-vivo/loop.mjs 
+- scripts/sync-loop.sh 
+- apps/modulos/WebUI/personas/fabler-system.md 
+- docs/RELATORIOS/2026-08-29-triagem-fabler-pendencias.md 
+- 
+docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/SUGESTOES/004-hermes-24h-loop-
+autonomo.md 
+- skills/centraldark-pattern-intelligence/SKILL.md 
+- skills/operational-method/kimetsu-legacy-operational-method/references/* 
+ 
+REGRA_FONTE_DISTRIBUIDA=usar contratos úteis já existentes; ausência de uma skill 
+nomeada exatamente fable-loop NÃO autoriza criar segundo motor, segundo owner ou 
+arquitetura paralela. 
+ 
+## FABLE LOOP — 10 FRENTES 
+READER_FRONTS_TARGET=10 
+FRONTS_ARE_READERS_NOT_WRITERS=true 
+PARALLELIZE_PERCEPTION=true 
+SERIALIZE_MUTATION_PER_SCOPE=true 
+ONE_WRITER_PER_CONFLICT_SCOPE=true 
+RENDEZVOUS_REQUIRED=true 
+NO_FAKE_PARALLELISM=true 
+ 
+FRONT_01=REPO_MAIN_HEAD_CURRENT_STATE 
+FRONT_02=LINEAGE_ISSUES_PRS_COMMITS_BRANCHES 
+FRONT_03=CASA_WORKTREES_RUNTIME 
+FRONT_04=DRIVE_DOCS_RECEIPTS 
+FRONT_05=OWNERS_ARCHITECTURE_CONTRACTS 
+FRONT_06=SKILLS_TOOLS_AUTOMATION 
+FRONT_07=PROVIDERS_MODELS_ROUTER 
+FRONT_08=TESTS_FALSIFIERS_COUNTERPROOF 
+FRONT_09=INFRA_PERFORMANCE_SECURITY 
+FRONT_10=DOCUMENTATION_HANDOFF_NEXT_CURSOR 
+ 
+## FLUXO CANÔNICO 
+ANY_RECOGNIZED_TRIGGER -> NORMALIZE -> !CENTRALDARK -> #ACORDAR -> 
+!CALIBRAR -> #CRISTALIZAR·FABLE_LOOP -> 10_READERS -> RENDEZVOUS -> 
+RECONCILE -> REALITY_SCOPE_GATE -> OWNER_MATCH -> 
+ONE_WRITER_PER_SCOPE -> PATCH_MINIMUM -> TEST -> COUNTERPROOF -> 
+REALITY_JUDGE -> FIXED_POINT -> REGISTER -> BOOT_REFRESH -> NEXT_CURSOR 
+ 
+## AUTONOMIA TOTAL CONTROLADA 
+AUTONOMY_MEANS_CONTINUE_WITHIN_PROVEN_SCOPE=true 
+AUTONOMY_DOES_NOT_GRANT_NEW_AUTHORITY=true 
+CAPABILITY_NE_AUTHORITY=true 
+EXECUTOR_CANNOT_SELF_APPROVE=true 
+JUDGE_DOES_NOT_MUTATE=true 
+SECRET_EXPOSURE_FORBIDDEN=true 
+NEVER_PRINT_RAW_SECRET=true 
+NEVER_PERSIST_RAW_SECRET=true 
+ 
+SE_TOOL_OR_PATH_FAILS -> CLASSIFY_FAILURE -> SEARCH_EXISTING_ALTERNATIVE 
+-> RECONCILE -> CONTINUE 
+MISSING_ALIAS != MISSING_CAPABILITY 
+MISSING_EXACT_SKILL_NAME != PERMISSION_TO_CREATE_DUPLICATE 
+ 
+## FIXED POINT REAL 
+FIXED_POINT_REQUIRES: 
+- MISSION_OBJECTIVE_PROVEN 
+- ALL_MATERIAL_FINDINGS_SCOPED_AND_RECONCILED 
+- NO_MATERIAL_UNKNOWN 
+- OWNER_MAP_PROVEN 
+- REQUIRED_TESTS_PASS 
+- COUNTERPROOF_SURVIVES 
+- NO_REGRESSION 
+- RECEIPT_PERSISTED 
+- NEXT_CURSOR_PERSISTED 
+ 
+IF_GIT_PROMOTION_APPLIES: 
+TESTED_HEAD == COMMITTED_HEAD == PUSHED_PR_HEAD 
+CI_GREEN_ON_LATEST_HEAD=true 
+ 
+ALL_10_FRONTS_RETURNED != FIXED_POINT_AUTOMATICALLY 
+FIXED_POINT_IS_REALITY_JUDGMENT=true 
+ 
+## REGRA DO CHEFE NÃO VIRAR BANCO DE DADOS 
+MACHINE_IS_EXTERNAL_MEMORY=true 
+CHEFE_IS_NOT_STATE_LOOKUP=true 
+SEARCH_BEFORE_ASK=true 
+IF_STATE_IS_DISCOVERABLE_BY_TOOLS -> DISCOVER_IT 
+IF_ONLY_INTENT_OR_AUTHORITY_IS_MISSING -> ASK_CHEFE 
+ 
+## CRISTALIZAÇÃO DE APRENDIZADO 
+OBSERVED_FAILURE -> CAUSE -> OWNER -> FALSIFIER -> MINIMUM_PATCH -> 
+NEGATIVE_TEST -> POSITIVE_TESTS -> COUNTERPROOF -> RECEIPT -> 
+GENERALIZE_IN_EXISTING_OWNER 
+ 
+CRYSTALLIZED_LEARNING_REQUIRES_REAL_FAILURE_AND_PROOF=true 
+NO_SECOND_FABLE_ENGINE=true 
+NO_V2_V3_V4=true 
+ 
+BIBLE_REF=1Ts 5:21 
+BIBLE_SENSE=examinar tudo e conservar somente o que atravessa a prova. 
+BAIANES_VERSE=“Oxe, missão grande não pede dez canetas; chama dez olhos, junta no 
+terreiro e deixa uma mão por escopo assinar o que a realidade provou.” 
+TECHNICAL_PROOF=runtime do Hermes mostrou busca real das fontes distribuídas de loop, 
+ausência do alias/skill exato fable-loop e composição das 10 frentes; este registro cristaliza o 
+contrato no owner documental existente sem criar segundo sistema. Promoção futura no 
+GitHub continua exigindo prova do HEAD vivo. 
+ 

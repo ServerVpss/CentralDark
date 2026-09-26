@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <item name="androidx.core.text.util.LinkifyCompat boolean addLinks(android.text.Spannable, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{android.text.util.Linkify.WEB_URLS, android.text.util.Linkify.EMAIL_ADDRESSES, android.text.util.Linkify.PHONE_NUMBERS, android.text.util.Linkify.MAP_ADDRESSES, android.text.util.Linkify.ALL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LinkifyCompat boolean addLinks(android.widget.TextView, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{android.text.util.Linkify.WEB_URLS, android.text.util.Linkify.EMAIL_ADDRESSES, android.text.util.Linkify.PHONE_NUMBERS, android.text.util.Linkify.MAP_ADDRESSES, android.text.util.Linkify.ALL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LinkifyCompat.LinkifyMask">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{android.text.util.Linkify.WEB_URLS, android.text.util.Linkify.EMAIL_ADDRESSES, android.text.util.Linkify.PHONE_NUMBERS, android.text.util.Linkify.MAP_ADDRESSES, android.text.util.Linkify.ALL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getBaseFirstDayOfWeek(java.util.Locale)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.FirstDayOfWeek.SUNDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.MONDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.TUESDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.WEDNESDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.THURSDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.FRIDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.SATURDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getBaseHourCycle(java.util.Locale)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.HourCycle.H11, androidx.core.text.util.LocalePreferences.HourCycle.H12, androidx.core.text.util.LocalePreferences.HourCycle.H23, androidx.core.text.util.LocalePreferences.HourCycle.H24, androidx.core.text.util.LocalePreferences.HourCycle.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getCalendarType()">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.CalendarType.CHINESE, androidx.core.text.util.LocalePreferences.CalendarType.DANGI, androidx.core.text.util.LocalePreferences.CalendarType.GREGORIAN, androidx.core.text.util.LocalePreferences.CalendarType.HEBREW, androidx.core.text.util.LocalePreferences.CalendarType.INDIAN, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_CIVIL, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_RGSA, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_TBLA, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_UMALQURA, androidx.core.text.util.LocalePreferences.CalendarType.PERSIAN, androidx.core.text.util.LocalePreferences.CalendarType.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getCalendarType(boolean)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.CalendarType.CHINESE, androidx.core.text.util.LocalePreferences.CalendarType.DANGI, androidx.core.text.util.LocalePreferences.CalendarType.GREGORIAN, androidx.core.text.util.LocalePreferences.CalendarType.HEBREW, androidx.core.text.util.LocalePreferences.CalendarType.INDIAN, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_CIVIL, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_RGSA, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_TBLA, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_UMALQURA, androidx.core.text.util.LocalePreferences.CalendarType.PERSIAN, androidx.core.text.util.LocalePreferences.CalendarType.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getCalendarType(java.util.Locale)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.CalendarType.CHINESE, androidx.core.text.util.LocalePreferences.CalendarType.DANGI, androidx.core.text.util.LocalePreferences.CalendarType.GREGORIAN, androidx.core.text.util.LocalePreferences.CalendarType.HEBREW, androidx.core.text.util.LocalePreferences.CalendarType.INDIAN, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_CIVIL, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_RGSA, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_TBLA, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_UMALQURA, androidx.core.text.util.LocalePreferences.CalendarType.PERSIAN, androidx.core.text.util.LocalePreferences.CalendarType.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getCalendarType(java.util.Locale, boolean)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.CalendarType.CHINESE, androidx.core.text.util.LocalePreferences.CalendarType.DANGI, androidx.core.text.util.LocalePreferences.CalendarType.GREGORIAN, androidx.core.text.util.LocalePreferences.CalendarType.HEBREW, androidx.core.text.util.LocalePreferences.CalendarType.INDIAN, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_CIVIL, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_RGSA, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_TBLA, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_UMALQURA, androidx.core.text.util.LocalePreferences.CalendarType.PERSIAN, androidx.core.text.util.LocalePreferences.CalendarType.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getFirstDayOfWeek()">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.FirstDayOfWeek.SUNDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.MONDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.TUESDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.WEDNESDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.THURSDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.FRIDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.SATURDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getFirstDayOfWeek(boolean)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.FirstDayOfWeek.SUNDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.MONDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.TUESDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.WEDNESDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.THURSDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.FRIDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.SATURDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getFirstDayOfWeek(java.util.Locale)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.FirstDayOfWeek.SUNDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.MONDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.TUESDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.WEDNESDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.THURSDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.FRIDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.SATURDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getFirstDayOfWeek(java.util.Locale, boolean)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.FirstDayOfWeek.SUNDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.MONDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.TUESDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.WEDNESDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.THURSDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.FRIDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.SATURDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getHourCycle()">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.HourCycle.H11, androidx.core.text.util.LocalePreferences.HourCycle.H12, androidx.core.text.util.LocalePreferences.HourCycle.H23, androidx.core.text.util.LocalePreferences.HourCycle.H24, androidx.core.text.util.LocalePreferences.HourCycle.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getHourCycle(boolean)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.HourCycle.H11, androidx.core.text.util.LocalePreferences.HourCycle.H12, androidx.core.text.util.LocalePreferences.HourCycle.H23, androidx.core.text.util.LocalePreferences.HourCycle.H24, androidx.core.text.util.LocalePreferences.HourCycle.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getHourCycle(java.util.Locale)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.HourCycle.H11, androidx.core.text.util.LocalePreferences.HourCycle.H12, androidx.core.text.util.LocalePreferences.HourCycle.H23, androidx.core.text.util.LocalePreferences.HourCycle.H24, androidx.core.text.util.LocalePreferences.HourCycle.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getHourCycle(java.util.Locale, boolean)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.HourCycle.H11, androidx.core.text.util.LocalePreferences.HourCycle.H12, androidx.core.text.util.LocalePreferences.HourCycle.H23, androidx.core.text.util.LocalePreferences.HourCycle.H24, androidx.core.text.util.LocalePreferences.HourCycle.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getTemperatureHardCoded(java.util.Locale)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.TemperatureUnit.CELSIUS, androidx.core.text.util.LocalePreferences.TemperatureUnit.FAHRENHEIT, androidx.core.text.util.LocalePreferences.TemperatureUnit.KELVIN, androidx.core.text.util.LocalePreferences.TemperatureUnit.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getTemperatureUnit()">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.TemperatureUnit.CELSIUS, androidx.core.text.util.LocalePreferences.TemperatureUnit.FAHRENHEIT, androidx.core.text.util.LocalePreferences.TemperatureUnit.KELVIN, androidx.core.text.util.LocalePreferences.TemperatureUnit.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getTemperatureUnit(boolean)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.TemperatureUnit.CELSIUS, androidx.core.text.util.LocalePreferences.TemperatureUnit.FAHRENHEIT, androidx.core.text.util.LocalePreferences.TemperatureUnit.KELVIN, androidx.core.text.util.LocalePreferences.TemperatureUnit.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getTemperatureUnit(java.util.Locale)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.TemperatureUnit.CELSIUS, androidx.core.text.util.LocalePreferences.TemperatureUnit.FAHRENHEIT, androidx.core.text.util.LocalePreferences.TemperatureUnit.KELVIN, androidx.core.text.util.LocalePreferences.TemperatureUnit.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences java.lang.String getTemperatureUnit(java.util.Locale, boolean)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.TemperatureUnit.CELSIUS, androidx.core.text.util.LocalePreferences.TemperatureUnit.FAHRENHEIT, androidx.core.text.util.LocalePreferences.TemperatureUnit.KELVIN, androidx.core.text.util.LocalePreferences.TemperatureUnit.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences.Api24Impl java.lang.String getCalendarType(java.util.Locale)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.CalendarType.CHINESE, androidx.core.text.util.LocalePreferences.CalendarType.DANGI, androidx.core.text.util.LocalePreferences.CalendarType.GREGORIAN, androidx.core.text.util.LocalePreferences.CalendarType.HEBREW, androidx.core.text.util.LocalePreferences.CalendarType.INDIAN, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_CIVIL, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_RGSA, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_TBLA, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_UMALQURA, androidx.core.text.util.LocalePreferences.CalendarType.PERSIAN, androidx.core.text.util.LocalePreferences.CalendarType.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences.Api33Impl java.lang.String getHourCycle(java.util.Locale)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.HourCycle.H11, androidx.core.text.util.LocalePreferences.HourCycle.H12, androidx.core.text.util.LocalePreferences.HourCycle.H23, androidx.core.text.util.LocalePreferences.HourCycle.H24, androidx.core.text.util.LocalePreferences.HourCycle.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences.Api33Impl java.lang.String getHourCycleType(android.icu.text.DateFormat.HourCycle)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.HourCycle.H11, androidx.core.text.util.LocalePreferences.HourCycle.H12, androidx.core.text.util.LocalePreferences.HourCycle.H23, androidx.core.text.util.LocalePreferences.HourCycle.H24, androidx.core.text.util.LocalePreferences.HourCycle.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences.Api33Impl java.lang.String getResolvedTemperatureUnit(java.util.Locale)">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.TemperatureUnit.CELSIUS, androidx.core.text.util.LocalePreferences.TemperatureUnit.FAHRENHEIT, androidx.core.text.util.LocalePreferences.TemperatureUnit.KELVIN, androidx.core.text.util.LocalePreferences.TemperatureUnit.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences.CalendarType.CalendarTypes">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.CalendarType.CHINESE, androidx.core.text.util.LocalePreferences.CalendarType.DANGI, androidx.core.text.util.LocalePreferences.CalendarType.GREGORIAN, androidx.core.text.util.LocalePreferences.CalendarType.HEBREW, androidx.core.text.util.LocalePreferences.CalendarType.INDIAN, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_CIVIL, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_RGSA, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_TBLA, androidx.core.text.util.LocalePreferences.CalendarType.ISLAMIC_UMALQURA, androidx.core.text.util.LocalePreferences.CalendarType.PERSIAN, androidx.core.text.util.LocalePreferences.CalendarType.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences.FirstDayOfWeek.Days">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.FirstDayOfWeek.SUNDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.MONDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.TUESDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.WEDNESDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.THURSDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.FRIDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.SATURDAY, androidx.core.text.util.LocalePreferences.FirstDayOfWeek.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences.HourCycle.HourCycleTypes">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.HourCycle.H11, androidx.core.text.util.LocalePreferences.HourCycle.H12, androidx.core.text.util.LocalePreferences.HourCycle.H23, androidx.core.text.util.LocalePreferences.HourCycle.H24, androidx.core.text.util.LocalePreferences.HourCycle.DEFAULT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.text.util.LocalePreferences.TemperatureUnit.TemperatureUnits">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{androidx.core.text.util.LocalePreferences.TemperatureUnit.CELSIUS, androidx.core.text.util.LocalePreferences.TemperatureUnit.FAHRENHEIT, androidx.core.text.util.LocalePreferences.TemperatureUnit.KELVIN, androidx.core.text.util.LocalePreferences.TemperatureUnit.DEFAULT}" />
+    </annotation>
+  </item>
+</root>
+

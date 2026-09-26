@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.5 O Loop operacional: o cérebro disciplinado | O Manual Oculto da IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    .code-box { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace; }
+
+    /* Dark mode - bordas e linhas divisorias mais suaves */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+
+    /* SVG adaptado ao tema claro (so atinge os diagramas) */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+
+    /* Pulso para os blocos do SVG */
+    @keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+    @keyframes wf-dash { to { stroke-dashoffset: -120; } }
+    @media (prefers-reduced-motion: no-preference) {
+      .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+      .wf-a:nth-child(2){animation-delay:.25s}
+      .wf-a:nth-child(3){animation-delay:.5s}
+      .wf-a:nth-child(4){animation-delay:.75s}
+      .wf-flow { stroke-dasharray: 8 10; animation: wf-dash 2.4s linear infinite; }
+    }
+
+    /* ===== LIGHT MODE OVERRIDES — Parte 1: Base ===== */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-200 { color: #1f2937; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* ===== Parte 2: Cores de acento (trilha Blue — T2) ===== */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .text-blue-300 { color: #1d4ed8; }
+    html:not(.dark) .text-blue-200 { color: #1e40af; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .bg-blue-900\/30 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.06); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .border-blue-500\/20 { border-color: rgba(37, 99, 235, 0.18); }
+    html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37, 99, 235, 0.18); }
+    html:not(.dark) .hover\:border-blue-500\/30:hover { border-color: rgba(37, 99, 235, 0.25); }
+
+    /* sky (ciano secundario) */
+    html:not(.dark) .bg-sky-500\/10 { background-color: rgba(14, 165, 233, 0.08); }
+    html:not(.dark) .bg-sky-900\/30 { background-color: rgba(14, 165, 233, 0.08); }
+    html:not(.dark) .border-sky-500\/30 { border-color: rgba(14, 165, 233, 0.25); }
+    html:not(.dark) .text-sky-300 { color: #0284c7; }
+
+    /* ===== Parte 3: Remove gradientes + cores especiais ===== */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(185, 28, 28, 0.06); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(185, 28, 28, 0.22); }
+    html:not(.dark) .border-red-500\/20 { border-color: rgba(185, 28, 28, 0.18); }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+
+    /* ===== Parte 4: Navbar ===== */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <!-- Logo + INEMA.CLUB -->
+        <div class="flex items-center space-x-3">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300 transition-colors">
+            <span class="text-xl">🧠</span>
+            <span class="font-bold text-base hidden sm:inline">Manual Oculto da IA</span>
+          </a>
+          <span class="text-neutral-600 hidden sm:inline">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition-colors">INEMA.CLUB</a>
+        </div>
+
+        <!-- Trilhas + Theme Toggle -->
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <!-- Trilha 1 (inativa) -->
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <!-- Trilha 2 (ativa) -->
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+            <span class="sm:hidden">T2</span><span class="hidden sm:inline">Prática</span>
+          </a>
+          <!-- Trilha 3 (inativa) -->
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span><span class="hidden sm:inline">Avançado</span>
+          </a>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1">
+            <svg id="theme-toggle-dark-icon" class="hidden w-4 h-4 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-4 h-4 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Breadcrumb -->
+    <div class="flex items-center space-x-2 text-sm text-neutral-500 mb-6">
+      <a href="../../index.html" class="hover:text-blue-400 transition-colors">Início</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-blue-400 transition-colors">Trilha 2</a>
+      <span>/</span>
+      <span class="text-blue-400">Módulo 2.5</span>
+    </div>
+
+    <!-- Header do Módulo -->
+    <div class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 rounded-2xl border border-blue-500/30 p-6 sm:p-8 mb-8">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-2xl">
+          🔁
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center space-x-3 mb-2">
+            <span class="text-xs font-semibold text-blue-400 bg-blue-500/10 border border-blue-500/30 px-2 py-1 rounded-full uppercase tracking-wider">MÓDULO 2.5</span>
+            <span class="text-xs text-neutral-500">Trilha 2 — Prática</span>
+          </div>
+          <h1 class="text-2xl font-bold text-neutral-100 mb-2">🔁 O Loop operacional: o cérebro disciplinado</h1>
+          <p class="text-neutral-300 leading-relaxed">
+            Este é o módulo-chave do curso. Um agente disciplinado não corre para o teclado — ele
+            <strong class="text-blue-400">aterra no real, raciocina, age em lotes, para pra ler o que voltou</strong> e só então decide o
+            próximo passo. Esse ciclo tem nome: <strong class="text-blue-400">GROUND → REASON → ACT → OBSERVE → RE-EVALUATE → VERIFY → NARRATE</strong>.
+            Aqui você vai entender, passo a passo, o cérebro que separa um agente que pensa de um que só "tateia rápido".
+          </p>
+          <!-- Stats -->
+          <div class="flex flex-wrap gap-4 mt-4">
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-blue-400">📋</span><span>6 tópicos</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-blue-400">⏱</span><span>~40 min</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-blue-400">🎯</span><span>Módulo-chave</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-blue-400">🧠</span><span>O cérebro do agente</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SVG FUTURISTA: O LOOP DE DECISÃO EM CICLO -->
+    <div class="rounded-2xl border border-blue-500/30 bg-dark-900/40 p-4 mb-10 overflow-hidden">
+      <svg viewBox="0 0 960 420" class="w-full h-auto" role="img" aria-label="Diagrama do loop de decisão em ciclo: sete fases — GROUND (aterrar), REASON (raciocinar), ACT (agir), OBSERVE (observar), RE-EVALUATE (reavaliar), VERIFY (verificar) e NARRATE (narrar) — dispostas em círculo e ligadas em sequência. A alça entre ACT, OBSERVE e RE-EVALUATE é destacada em ciano e repetida em laço até a meta ser atingida; é o passo que todo mundo pula. Depois o ciclo segue para VERIFY e NARRATE">
+        <defs>
+          <linearGradient id="m25-grad-bl" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#2563eb"/>
+          </linearGradient>
+          <linearGradient id="m25-grad-cy" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#0ea5e9"/>
+          </linearGradient>
+          <filter id="m25-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="2" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <pattern id="m25-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+            <circle cx="1.2" cy="1.2" r="1.2" fill="#60a5fa" opacity="0.10"/>
+          </pattern>
+          <marker id="m25-ah" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#60a5fa"/>
+          </marker>
+          <marker id="m25-ahc" markerWidth="10" markerHeight="10" refX="6.8" refY="5" orient="auto">
+            <path d="M0,0 L9,5 L0,10 L2.6,5 Z" fill="#38bdf8"/>
+          </marker>
+        </defs>
+
+        <!-- Fundo grid -->
+        <rect x="0" y="0" width="960" height="420" fill="url(#m25-grid)" rx="16"/>
+
+        <!-- Título do diagrama -->
+        <text x="480" y="30" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="13" font-weight="600" opacity="0.8">O LOOP DE DECISÃO EM CICLO — rode-o a cada turno não-trivial</text>
+
+        <!-- Anel de fundo (a órbita do ciclo) -->
+        <circle cx="480" cy="225" r="150" fill="none" stroke="#60a5fa" stroke-width="1" stroke-dasharray="4,7" opacity="0.30"/>
+
+        <!-- Núcleo central -->
+        <g filter="url(#m25-glow)">
+          <circle cx="480" cy="225" r="58" fill="#0e1830" stroke="url(#m25-grad-bl)" stroke-width="2"/>
+        </g>
+        <text x="480" y="216" text-anchor="middle" fill="#93c5fd" font-family="Inter,sans-serif" font-size="13" font-weight="700">o cérebro</text>
+        <text x="480" y="234" text-anchor="middle" fill="#93c5fd" font-family="Inter,sans-serif" font-size="13" font-weight="700">disciplinado</text>
+        <text x="480" y="252" text-anchor="middle" fill="#6b7280" font-family="Inter,sans-serif" font-size="9.5">pense antes · e entre · cada passo</text>
+
+        <!-- Arcos de ligação entre as 7 fases (sentido horário) -->
+        <!-- GROUND(480,75) -> REASON(693,128) -->
+        <path d="M533,95 A150 150 0 0 1 660,118" fill="none" stroke="#60a5fa" stroke-width="2" opacity="0.65" marker-end="url(#m25-ah)"/>
+        <!-- REASON(693,128) -> ACT(630,330)  (entra na alça ciano) -->
+        <path d="M717,158 A150 150 0 0 1 678,300" fill="none" stroke="#60a5fa" stroke-width="2" opacity="0.65" marker-end="url(#m25-ahc)"/>
+
+        <!-- ===== ALÇA CIANO destacada: ACT -> OBSERVE -> RE-EVALUATE (laço) ===== -->
+        <!-- ACT(630,330) -> OBSERVE(330,330) -->
+        <path d="M615,357 A150 150 0 0 1 345,357" fill="none" stroke="url(#m25-grad-cy)" stroke-width="3.4" class="wf-flow" marker-end="url(#m25-ahc)"/>
+        <!-- OBSERVE(330,330) -> RE-EVALUATE(267,128) -->
+        <path d="M300,317 A150 150 0 0 1 256,170" fill="none" stroke="url(#m25-grad-cy)" stroke-width="3.4" class="wf-flow" marker-end="url(#m25-ahc)"/>
+        <!-- laço de repetição RE-EVALUATE -> ACT (curva interna ciano, "repita até a meta") -->
+        <path d="M300,150 C400,235 470,300 600,330" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="5,6" opacity="0.85" marker-end="url(#m25-ahc)"/>
+        <text x="392" y="300" text-anchor="middle" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="10.5" font-weight="700">↻ repita até a meta</text>
+
+        <!-- RE-EVALUATE(267,128) -> VERIFY... segue o ciclo pra cima/direita de volta a VERIFY/NARRATE -->
+        <path d="M282,118 A150 150 0 0 1 427,76" fill="none" stroke="#60a5fa" stroke-width="2" opacity="0.5" marker-end="url(#m25-ah)"/>
+
+        <!-- ===== Os 7 nós ===== -->
+        <!-- 1 GROUND (topo) -->
+        <g class="wf-a">
+          <circle cx="480" cy="75" r="30" fill="#0e1830" stroke="url(#m25-grad-bl)" stroke-width="2.4"/>
+        </g>
+        <text x="480" y="71" text-anchor="middle" fill="#60a5fa" font-family="Inter,sans-serif" font-size="13" font-weight="800">①</text>
+        <text x="480" y="86" text-anchor="middle" fill="#93c5fd" font-family="Inter,sans-serif" font-size="10.5" font-weight="700">GROUND</text>
+        <text x="480" y="124" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="9.5">aterrar no real</text>
+
+        <!-- 2 REASON (sup. direita) -->
+        <g class="wf-a">
+          <circle cx="693" cy="128" r="30" fill="#0e1830" stroke="url(#m25-grad-bl)" stroke-width="2.4"/>
+        </g>
+        <text x="693" y="124" text-anchor="middle" fill="#60a5fa" font-family="Inter,sans-serif" font-size="13" font-weight="800">②</text>
+        <text x="693" y="139" text-anchor="middle" fill="#93c5fd" font-family="Inter,sans-serif" font-size="10" font-weight="700">REASON</text>
+        <text x="772" y="120" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="9.5">raciocinar antes</text>
+
+        <!-- 3 ACT (inf. direita) — entra na alça ciano -->
+        <g class="wf-a">
+          <circle cx="630" cy="330" r="31" fill="#0e1b26" stroke="url(#m25-grad-cy)" stroke-width="2.8"/>
+        </g>
+        <text x="630" y="326" text-anchor="middle" fill="#38bdf8" font-family="Inter,sans-serif" font-size="13" font-weight="800">③</text>
+        <text x="630" y="341" text-anchor="middle" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="11" font-weight="700">ACT</text>
+        <text x="630" y="378" text-anchor="middle" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="9.5">agir em lotes</text>
+
+        <!-- 4 OBSERVE (inf. esquerda) — alça ciano -->
+        <g class="wf-a">
+          <circle cx="330" cy="330" r="31" fill="#0e1b26" stroke="url(#m25-grad-cy)" stroke-width="2.8"/>
+        </g>
+        <text x="330" y="326" text-anchor="middle" fill="#38bdf8" font-family="Inter,sans-serif" font-size="13" font-weight="800">④</text>
+        <text x="330" y="341" text-anchor="middle" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="9.5" font-weight="700">OBSERVE</text>
+        <text x="330" y="378" text-anchor="middle" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="9.5">ler o que voltou</text>
+
+        <!-- 5 RE-EVALUATE (sup. esquerda) — alça ciano -->
+        <g class="wf-a">
+          <circle cx="267" cy="128" r="32" fill="#0e1b26" stroke="url(#m25-grad-cy)" stroke-width="2.8"/>
+        </g>
+        <text x="267" y="120" text-anchor="middle" fill="#38bdf8" font-family="Inter,sans-serif" font-size="12" font-weight="800">⑤</text>
+        <text x="267" y="134" text-anchor="middle" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="8.5" font-weight="700">RE-EVALUATE</text>
+        <text x="190" y="118" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="9.5">atualizar o plano</text>
+
+        <!-- selo da alça ciano -->
+        <rect x="372" y="200" width="216" height="22" rx="11" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.2" opacity="0.95"/>
+        <text x="480" y="215" text-anchor="middle" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="10.5" font-weight="700">o passo que todo mundo pula</text>
+
+        <!-- 6 VERIFY (faixa inferior, fora da órbita — fecha o ciclo) -->
+        <g filter="url(#m25-glow)">
+          <rect x="305" y="392" width="160" height="22" rx="11" fill="#0e1830" stroke="url(#m25-grad-bl)" stroke-width="1.8"/>
+        </g>
+        <text x="320" y="407" fill="#60a5fa" font-family="Inter,sans-serif" font-size="10.5" font-weight="800">⑥</text>
+        <text x="385" y="407" text-anchor="middle" fill="#93c5fd" font-family="Inter,sans-serif" font-size="10" font-weight="700">VERIFY · check real</text>
+
+        <!-- 7 NARRATE -->
+        <g filter="url(#m25-glow)">
+          <rect x="495" y="392" width="160" height="22" rx="11" fill="#0e1830" stroke="url(#m25-grad-bl)" stroke-width="1.8"/>
+        </g>
+        <text x="510" y="407" fill="#60a5fa" font-family="Inter,sans-serif" font-size="10.5" font-weight="800">⑦</text>
+        <text x="575" y="407" text-anchor="middle" fill="#93c5fd" font-family="Inter,sans-serif" font-size="10" font-weight="700">NARRATE · relato fiel</text>
+
+        <!-- conectores VERIFY/NARRATE -->
+        <path d="M630,361 C560,378 500,386 466,394" fill="none" stroke="#60a5fa" stroke-width="1.6" opacity="0.45" marker-end="url(#m25-ah)"/>
+        <path d="M465,403 L495,403" fill="none" stroke="#60a5fa" stroke-width="1.6" opacity="0.45" marker-end="url(#m25-ah)"/>
+      </svg>
+    </div>
+
+    <!-- CONTEÚDO DETALHADO -->
+    <h2 class="text-2xl font-bold mb-6">Conteúdo detalhado</h2>
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">1</span>
+        <h2 class="text-2xl font-bold">Por que um loop, e não um truque</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A internet está cheia de "truques de prompt": a frase mágica, o jailbreak da moda, o template que "faz a IA virar gênio".
+        Eles funcionam por uma tarde e quebram na seguinte. O que realmente muda o jogo não é um truque — é um
+        <strong class="text-blue-400">hábito de trabalho</strong>. Um ciclo que o agente roda em todo turno difícil, sempre o mesmo,
+        sempre na ordem. É isso que separa um agente que <em>pensa</em> de um que apenas <em>age rápido</em>.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">🧠</span> A ideia em uma frase</h3>
+        <p class="text-neutral-300 leading-relaxed mb-3">
+          O <strong class="text-blue-400">Loop operacional</strong> é o cérebro disciplinado do agente: um ciclo de sete passos —
+          <strong class="text-blue-400">aterrar, raciocinar, agir, observar, reavaliar, verificar, narrar</strong> — rodado a cada turno
+          não-trivial. Ele não é uma frase que você cola; é um jeito de trabalhar que você institui.
+        </p>
+        <p class="text-neutral-300 leading-relaxed text-sm">
+          A frase que resume tudo: <strong class="text-blue-400">"a velocidade vem de fazer a coisa certa uma vez, não de pular o
+          raciocínio."</strong> Um truque te dá um atalho que às vezes funciona; o loop te dá um método que sempre confere.
+        </p>
+      </div>
+
+      <!-- Grid: truque vs loop -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">✗</span>
+            <span>O truque (frágil)</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Depende de uma frase específica que "destrava" o modelo</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Funciona num caso e quebra no caso vizinho</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Corre pro teclado: age sem aterrar nem conferir</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Quando dá errado, você não sabe por quê — era mágica</span></li>
+          </ul>
+        </div>
+        <div class="bg-blue-900/20 border border-blue-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-blue-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-blue-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>O loop (robusto)</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>É um ciclo de hábitos, igual em toda tarefa</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Generaliza: serve pro caso que você não previu</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Aterra primeiro, age depois, confere sempre</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Quando algo falha, você sabe em qual passo olhar</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-sky-900/30 border border-sky-500/30 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-sky-300 text-lg flex-shrink-0">🎯</span>
+          <div>
+            <p class="text-sm font-semibold text-sky-300 mb-1">Por que isto é o módulo-chave</p>
+            <p class="text-sm text-neutral-300">
+              Todos os blocos da Trilha 2 montam <em>como o agente fala</em>. Este monta <em>como o agente trabalha</em>. O bloco
+              <span class="code-box text-sky-300">&lt;loop_operacional&gt;</span> é o que mais aproxima um agente comum da disciplina de
+              ponta — é, sozinho, o pulo do gato. Domine este, e o resto vira ajuste fino.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">2</span>
+        <h2 class="text-2xl font-bold">GROUND — aterrar no estado real</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O ciclo abre com a regra mais simples e mais ignorada: <strong class="text-blue-400">nunca mude o que você não entendeu</strong>.
+        Antes de propor solução, antes de editar uma linha, o agente estabelece o estado real do mundo. Roda o
+        <span class="code-box text-blue-400">git status</span>, faz o <span class="code-box text-blue-400">grep</span>, lista o diretório,
+        lê o arquivo que importa. Aterrar é trocar o "provavelmente está assim" pelo "eu acabei de ver".
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">🌍</span> Reconhecimento antes da mutação</h3>
+        <p class="text-neutral-300 leading-relaxed mb-3">
+          Toda tarefa começa por <strong class="text-blue-400">estabelecer o que de fato existe</strong>, não por imaginar o que talvez
+          exista. O agente disciplinado abre com um <span class="code-box">git status</span>, um grep certeiro e a leitura do único arquivo
+          que importa — <em>antes</em> de escrever um único caractere.
+        </p>
+        <p class="text-neutral-300 leading-relaxed text-sm">
+          Há um segundo grão de areia aqui: <strong class="text-blue-400">leia a região exata logo antes de mudá-la</strong>. Contexto de
+          cinco passos atrás é contexto velho. Uma releitura fresca evita a edição que não casa, o bloco duplicado e a mudança que já
+          tinha sido feita.
+        </p>
+      </div>
+
+      <!-- Grid: aterrar bem vs editar de memória -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+        <div class="bg-blue-900/20 border border-blue-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-blue-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-blue-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>Aterrar de verdade</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Checa o estado (git status, listar dir) antes de propor</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Faz um grep certeiro pra achar a coisa</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Lê o arquivo que importa nesta sessão</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Relê as linhas exatas pouco antes de editá-las</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">✗</span>
+            <span>Tatear no escuro</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Propõe a correção a partir de suposição</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Edita um arquivo cujo conteúdo atual não viu</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Edita "de memória" do que o arquivo provavelmente tem</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Usa contexto velho e bate numa edição que não casa</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-primary text-lg flex-shrink-0">💡</span>
+          <div>
+            <p class="text-sm font-semibold text-primary mb-1">Como soa no system prompt</p>
+            <p class="text-sm text-neutral-300">
+              "Estabeleça o estado real antes de mudar nada: git status, grep, listar dir, ler o arquivo que importa. Nunca mude o que
+              você não entendeu." Uma linha — e ela muda a postura inteira do agente, do "chuta e corre" para o "olha e age".
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">3</span>
+        <h2 class="text-2xl font-bold">REASON + ACT — pensar antes, agir em lotes</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Aterrado o terreno, vêm dois passos colados. <strong class="text-blue-400">REASON</strong>: antes da primeira ferramenta, diga o
+        objetivo, a hipótese e o plano — mesmo que em uma ou duas linhas. Nomear o que você espera encontrar muda o que você faz em
+        seguida. <strong class="text-blue-400">ACT</strong>: dê o próximo passo deliberado e <em>agrupe o que é independente</em> — mas
+        nunca finja paralelo o que tem dependência.
+      </p>
+
+      <!-- Timeline: reason -> act -->
+      <div class="space-y-4 mb-6">
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+            <span class="text-blue-400 text-lg">🧭</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-blue-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-blue-400 mb-1">REASON — objetivo + hipótese + plano, antes da 1ª ferramenta</h4>
+            <p class="text-sm text-neutral-500 mb-2">Raciocínio não é custo extra. É o trabalho.</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              "O rodapé aparece duas vezes. Provavelmente é montagem duplicada no layout. Vou dar grep no import do rodapé e depois ler o
+              layout." Duas frases, e o agente já parou de disparar ferramenta antes de saber o que está testando.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
+            <span class="text-sky-300 text-lg">⚡</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-sky-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-sky-300 mb-1">ACT — passo deliberado, lotes do que é independente</h4>
+            <p class="text-sm text-neutral-500 mb-2">Mova com alavanca: agrupe o homogêneo, paralelize o independente.</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              Leia os três arquivos de uma vez. Rode os checks independentes em paralelo. Execução serial de trabalho independente é
+              tempo de parede desperdiçado. <strong class="text-sky-300">A ressalva</strong>: se o passo B precisa da saída do passo A,
+              eles não são paralelos — fingir que são produz trabalho cancelado e confusão.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid: o casal reason+act -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🎯</div>
+          <div class="text-xs font-semibold text-neutral-200">Diga o objetivo</div>
+          <div class="text-xs text-neutral-500 mt-1">antes de agir</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🔬</div>
+          <div class="text-xs font-semibold text-neutral-200">Forme a hipótese</div>
+          <div class="text-xs text-neutral-500 mt-1">o que espera achar</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-sky-300 text-lg mb-1">📦</div>
+          <div class="text-xs font-semibold text-neutral-200">Agrupe o independente</div>
+          <div class="text-xs text-neutral-500 mt-1">leia os 3 de uma vez</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-sky-300 text-lg mb-1">⛓️</div>
+          <div class="text-xs font-semibold text-neutral-200">Não finja paralelo</div>
+          <div class="text-xs text-neutral-500 mt-1">se B depende de A</div>
+        </div>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-primary text-lg flex-shrink-0">💡</span>
+          <div>
+            <p class="text-sm font-semibold text-primary mb-1">O anti-padrão a evitar</p>
+            <p class="text-sm text-neutral-300">
+              Disparar uma chamada de ferramenta antes de ter dito, nem que seja para si mesmo, o que você está testando. O agente que
+              age sem raciocinar não está sendo rápido — está acumulando passos que vai ter que desfazer.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">4</span>
+        <h2 class="text-2xl font-bold">OBSERVE + RE-EVALUATE — o passo que todo mundo pula</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Este é o coração do módulo, e o hábito que <strong class="text-blue-400">mais se ignora</strong>. Depois que uma ferramenta
+        retorna, pare e <strong class="text-blue-400">leia o que voltou — de verdade</strong>. Aí decida o próximo passo a partir do que o
+        resultado de fato mostrou, não do plano que você tinha antes de ter os dados. Na imagem lá em cima, é a
+        <strong class="text-sky-300">alça em ciano</strong>: ACT → OBSERVE → RE-EVALUATE, repetida em laço até a meta.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">👁️</span> O plano é rascunho; o resultado é a verdade</h3>
+        <p class="text-neutral-300 leading-relaxed mb-3">
+          O laço observar-então-decidir é a diferença entre um agente que pensa e um que apenas age rápido. Rode-o
+          <strong class="text-blue-400">a cada ciclo</strong>. A regra que comanda esse passo é uma só:
+          <strong class="text-blue-400">atualize o plano a partir do resultado — não o resultado a partir do plano</strong>.
+        </p>
+        <p class="text-neutral-300 leading-relaxed text-sm">
+          <strong class="text-blue-400">Parece assim:</strong> uma busca devolve três resultados que você não esperava. Você pausa, revisa
+          a teoria e ajusta a próxima ação — em vez de seguir empurrando o plano antigo morro abaixo.
+        </p>
+      </div>
+
+      <!-- Grid: observar bem vs pular -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+        <div class="bg-blue-900/20 border border-blue-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-blue-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-blue-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>Observar e reavaliar</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Para e lê o retorno inteiro antes do próximo passo</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Decide a partir do que o resultado mostrou, não do plano</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Quando o dado surpreende, revisa a teoria na hora</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Repete ACT..RE-EVALUATE até a meta ser atingida</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">✗</span>
+            <span>Pular o passo</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Executa uma sequência pré-planejada como se os resultados não pudessem mudá-la</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Olha o retorno de relance e já dispara a próxima ação</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Encaixa o resultado no plano em vez do contrário</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Segue empurrando mesmo com o dado contradizendo a teoria</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-sky-900/30 border border-sky-500/30 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-sky-300 text-lg flex-shrink-0">🔁</span>
+          <div>
+            <p class="text-sm font-semibold text-sky-300 mb-1">Por que esta alça é a peça canônica</p>
+            <p class="text-sm text-neutral-300">
+              É o único hábito que, quando falta, faz "bons planos virarem resultados errados". A maioria dos agentes ruins não erra por
+              raciocinar mal — erra por <strong>não ler o que voltou</strong> e seguir o roteiro antigo. Reobservar e reavaliar é o que
+              fecha esse buraco.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">5</span>
+        <h2 class="text-2xl font-bold">VERIFY + NARRATE — check real e relato fiel</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Os dois últimos passos fecham o ciclo com honestidade. <strong class="text-blue-400">VERIFY</strong>: toda edição é uma hipótese;
+        um check que passa é a evidência. Rode o teste, o build ou o lint <strong class="text-blue-400">real</strong> do projeto — não um
+        <span class="code-box">ls</span> nem um <span class="code-box">echo</span>. <strong class="text-blue-400">NARRATE</strong>: diga o
+        que vai fazer e por quê, confirme as transições de fase. Não suma por vinte chamadas e apareça só no fim.
+      </p>
+
+      <!-- O fluxo verify -> narrate -->
+      <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">✅</span> Do "parece certo" ao "testes passam, eis a saída"</h3>
+        <div class="flex flex-col sm:flex-row items-stretch gap-3 text-sm">
+          <div class="flex-1 bg-dark-900 rounded-lg p-3 border border-dark-600 text-center">
+            <div class="text-blue-400 text-lg mb-1">🧪</div>
+            <div class="font-semibold text-neutral-200 mb-1">Rode o check real</div>
+            <div class="text-neutral-500 text-xs">o teste/build/lint do projeto, não um ls</div>
+          </div>
+          <div class="flex items-center justify-center text-blue-400 font-bold">→</div>
+          <div class="flex-1 bg-dark-900 rounded-lg p-3 border border-dark-600 text-center">
+            <div class="text-blue-400 text-lg mb-1">📤</div>
+            <div class="font-semibold text-neutral-200 mb-1">Leia a saída</div>
+            <div class="text-neutral-500 text-xs">a evidência de que a hipótese se confirmou</div>
+          </div>
+          <div class="flex items-center justify-center text-blue-400 font-bold">→</div>
+          <div class="flex-1 bg-dark-900 rounded-lg p-3 border border-dark-600 text-center">
+            <div class="text-blue-400 text-lg mb-1">🗣️</div>
+            <div class="font-semibold text-neutral-200 mb-1">Relate sem rodeios</div>
+            <div class="text-neutral-500 text-xs">"feito e verificado" — ou "falhou, eis o erro"</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Caixa mono: RELATO FIEL (EN canônico Claude Code) -->
+      <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5 mb-5">
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-xs font-semibold text-blue-400">Relato fiel — a regra de ouro <span class="font-normal text-neutral-500">EN canônico (Claude Code)</span></div>
+          <span class="text-xs text-neutral-500 code-box">NARRATE</span>
+        </div>
+        <pre class="bg-dark-900 border-l-2 border-blue-500 rounded p-4 font-mono text-xs text-neutral-300 overflow-x-auto code-box leading-relaxed">Report outcomes faithfully: if tests fail, say so with the output;
+if a step was skipped, say that; when something is done and verified,
+state it plainly without hedging.</pre>
+        <p class="text-xs text-neutral-500 mt-3 leading-relaxed">
+          Em PT: reporte resultados fielmente — se testes falharam, diga e mostre a saída; se pulou uma etapa, diga que pulou; se algo está
+          feito e verificado, afirme sem rodeios. <strong class="text-blue-400">"Provavelmente funciona" não é pronto; "testes passam, eis
+          a saída" é pronto.</strong>
+        </p>
+      </div>
+
+      <!-- Box Alerta / nuance: verificar melhor que a fonte -->
+      <div class="bg-red-900/20 border border-red-500/30 rounded-xl p-5 mb-5">
+        <h3 class="text-lg font-semibold text-red-400 mb-2 flex items-center"><span class="mr-2">⚠️</span> Aqui, seja melhor que a fonte</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed mb-3">
+          O modelo do qual esta mentalidade foi destilada verifica de forma <strong>inconsistente</strong>. Você deve verificar
+          <strong class="text-red-400">sempre</strong>. Dois anti-padrões a cortar:
+        </p>
+        <ul class="space-y-2 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Declarar uma mudança pronta porque "parece certa", ou porque um comando sem relação saiu com código zero</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Sumir por vinte chamadas de ferramenta e reaparecer só no fim, sem narrar as transições</span></li>
+        </ul>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-primary text-lg flex-shrink-0">💡</span>
+          <div>
+            <p class="text-sm font-semibold text-primary mb-1">Confiança se constrói com relato exato</p>
+            <p class="text-sm text-neutral-300">
+              Não com relato otimista. Narrar o que você está fazendo — incluindo a higiene, tipo "vou criar um branch" ou "estou
+              aterrando" — é o que mantém uma execução longa auditável e deixa o humano corrigir o rumo cedo.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">6</span>
+        <h2 class="text-2xl font-bold">Calibrar o esforço à tarefa</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Uma última disciplina, e ela impede o loop de virar burocracia: <strong class="text-blue-400">escale o esforço à tarefa</strong>.
+        Um fix de uma linha não precisa de sala de guerra. Uma migração de cinquenta passos, sem plano e sem rastreio, é como o trabalho
+        descarrila sem ninguém perceber. O ciclo é sempre o mesmo; o <em>peso</em> de cada passo é que muda com o tamanho do trabalho.
+      </p>
+
+      <!-- Grid: tarefa leve vs tarefa pesada -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5">
+          <h4 class="text-base font-semibold text-blue-400 mb-2 flex items-center"><span class="mr-2">🪶</span> Tarefa leve — loop enxuto</h4>
+          <p class="text-sm text-neutral-500 mb-3">um fix de uma linha, uma resposta direta</p>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">•</span><span>Aterre rápido: um grep, uma leitura</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">•</span><span>Raciocínio de uma linha basta</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">•</span><span>Aja, verifique o check real, relate</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">•</span><span>Sem plano formal nem lista de tarefas</span></li>
+          </ul>
+        </div>
+        <div class="bg-dark-800 border border-sky-500/30 rounded-xl p-5">
+          <h4 class="text-base font-semibold text-sky-300 mb-2 flex items-center"><span class="mr-2">🏗️</span> Tarefa pesada — loop com plano</h4>
+          <p class="text-sm text-neutral-500 mb-3">uma migração, um build de muitos passos</p>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-sky-300 mt-0.5">•</span><span>Plano curto em fases, com aprovação</span></li>
+            <li class="flex items-start space-x-2"><span class="text-sky-300 mt-0.5">•</span><span>Lista de tarefas viva, atualizada no caminho</span></li>
+            <li class="flex items-start space-x-2"><span class="text-sky-300 mt-0.5">•</span><span>Volte ao plano em cada fronteira de fase</span></li>
+            <li class="flex items-start space-x-2"><span class="text-sky-300 mt-0.5">•</span><span>Narre as transições — mantenha auditável</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Caixa mono VERBATIM: o bloco LOOP-OPERACIONAL (PT) -->
+      <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5 mb-5">
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-xs font-semibold text-blue-400">O bloco copiável — o cérebro do agente <span class="font-normal text-neutral-500">loop_operacional.md</span></div>
+          <span class="text-xs text-neutral-500 code-box">⭐ alinhado 1:1 ao Fable</span>
+        </div>
+        <pre class="bg-dark-900 border-l-2 border-blue-500 rounded p-4 font-mono text-xs text-neutral-300 overflow-x-auto code-box leading-relaxed"><span class="text-blue-400">&lt;loop_operacional&gt;</span>
+Rode este ciclo a cada turno não-trivial. Escale o esforço à tarefa — um fix de uma linha não precisa de sala de guerra.
+
+<span class="text-sky-300">GROUND</span> (aterrar)    Estabeleça o estado real antes de mudar nada: git status, grep, listar dir, ler o arquivo que importa. Nunca mude o que você não entendeu.
+<span class="text-sky-300">REASON</span> (raciocinar) Antes da 1ª ferramenta, diga objetivo + hipótese + plano (mesmo 1-2 linhas). Nomear o que você espera muda o que você faz.
+<span class="text-sky-300">ACT</span> (agir)          Dê o próximo passo deliberado. Agrupe o que é independente; não finja paralelo o que tem dependência.
+<span class="text-sky-300">OBSERVE</span> (observar)  Pare e LEIA o que voltou. De verdade. Pular este passo é como bons planos viram resultados errados.
+<span class="text-sky-300">RE-EVALUATE</span>         Atualize o plano a partir do resultado, não o contrário. O plano é rascunho; o resultado é a verdade. (Repita ACT..RE-EVALUATE até a meta.)
+<span class="text-sky-300">VERIFY</span> (verificar)  Toda edição é hipótese; um check que passa é a evidência. Rode o teste/build/lint REAL do projeto, não um `ls`/`echo`. Verifique SEMPRE — aqui seja melhor que a fonte.
+<span class="text-sky-300">NARRATE</span> (narrar)    Diga o que vai fazer e por quê; confirme transições de fase. Não suma por 20 chamadas e apareça só no fim.
+<span class="text-blue-400">&lt;/loop_operacional&gt;</span></pre>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">⚖️</div>
+          <div class="text-xs font-semibold text-neutral-200">Escale o esforço</div>
+          <div class="text-xs text-neutral-500 mt-1">à tarefa</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🪶</div>
+          <div class="text-xs font-semibold text-neutral-200">Fix de 1 linha</div>
+          <div class="text-xs text-neutral-500 mt-1">sem sala de guerra</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🏗️</div>
+          <div class="text-xs font-semibold text-neutral-200">Migração de 50 passos</div>
+          <div class="text-xs text-neutral-500 mt-1">plano + rastreio</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🔁</div>
+          <div class="text-xs font-semibold text-neutral-200">Mesmo ciclo</div>
+          <div class="text-xs text-neutral-500 mt-1">peso diferente</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ENTREGÁVEL PRÁTICO -->
+    <div class="bg-dark-800 border border-blue-500/30 rounded-2xl p-6 sm:p-8 mb-8">
+      <h2 class="text-2xl font-bold mb-3 flex items-center"><span class="mr-3">🛠️</span> Mão na massa: seu entregável</h2>
+      <p class="text-neutral-300 leading-relaxed mb-5 text-sm">
+        Antes de seguir, instale o loop num agente seu. Em 15 minutos você sai com um agente que pensa, não que tateia.
+      </p>
+      <ol class="space-y-3 text-sm text-neutral-300 mb-2">
+        <li class="flex items-start space-x-3">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex-shrink-0">1</span>
+          <span>Pegue um agente seu que executa tarefas em passos (usa ferramentas, edita arquivos). Cole o bloco <span class="code-box">&lt;loop_operacional&gt;</span> no system prompt, exatamente como está acima.</span>
+        </li>
+        <li class="flex items-start space-x-3">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex-shrink-0">2</span>
+          <span>Dê uma tarefa não-trivial e observe se ele <strong>aterra antes de agir</strong>: ele checa o estado (lista, lê) antes de editar — ou já sai mexendo?</span>
+        </li>
+        <li class="flex items-start space-x-3">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex-shrink-0">3</span>
+          <span>Caísse o foco na <strong>alça ciano</strong>: depois de cada ferramenta, ele para e lê o retorno, ou empurra o plano antigo? Esse é o passo que mais revela disciplina.</span>
+        </li>
+        <li class="flex items-start space-x-3">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex-shrink-0">4</span>
+          <span>No fim, confira o <strong>VERIFY + NARRATE</strong>: ele rodou um check real (não um <span class="code-box">ls</span>) e relatou sem rodeios? Anote o passo mais fraco — é ali que você reforça a linha.</span>
+        </li>
+      </ol>
+    </div>
+
+    <!-- RESUMO FINAL -->
+    <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-2xl border border-blue-500/30 p-6 sm:p-8 mb-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📝</span> Resumo do Módulo</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <ul class="space-y-3 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span>O <strong class="text-blue-400">Loop operacional</strong> é um hábito de trabalho, não um truque: o cérebro disciplinado do agente</span></li>
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-blue-400">GROUND</strong>: aterre no estado real e releia a região exata antes de mudar nada</span></li>
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-blue-400">REASON + ACT</strong>: diga objetivo/hipótese/plano antes da 1ª ferramenta; agrupe o independente, não finja paralelo</span></li>
+        </ul>
+        <ul class="space-y-3 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-sky-300">OBSERVE + RE-EVALUATE</strong>: a alça ciano — leia o que voltou e atualize o plano a partir dele. O passo que todo mundo pula</span></li>
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-blue-400">VERIFY + NARRATE</strong>: check real (não um <span class="code-box">ls</span>) e relato fiel — "testes passam, eis a saída" é pronto</span></li>
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-blue-400">Calibre o esforço</strong> à tarefa: mesmo ciclo, peso diferente — fix de 1 linha não precisa de sala de guerra</span></li>
+        </ul>
+      </div>
+
+      <div class="bg-dark-800/50 rounded-lg p-4 mb-6 border border-blue-500/20">
+        <h3 class="font-semibold text-blue-400 mb-1 flex items-center"><span class="mr-2">➡️</span> Próximo Módulo</h3>
+        <p class="text-neutral-300 text-sm">
+          <strong>2.6 — 🛠️ Construindo uma Skill e um Agente.</strong> Você tem o cérebro disciplinado no bolso. Agora vamos dar mãos e
+          memória a ele: montar uma skill reutilizável e um agente completo, com o loop operacional rodando por dentro.
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="inline-flex items-center justify-start space-x-2 text-neutral-400 hover:text-blue-400 text-sm font-medium px-4 py-2.5 rounded-xl bg-dark-700 hover:bg-dark-600 transition-colors">
+          <span>←</span><span>Voltar para Trilha</span>
+        </a>
+        <a href="modulo-2-6.html" class="inline-flex items-center justify-start space-x-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition-colors">
+          <span>Próximo: 2.6 Construindo uma Skill e um Agente</span><span>→</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
+        <div class="text-sm text-neutral-500">
+          <span class="text-blue-400 font-medium">O Manual Oculto da IA</span> · Módulo 2.5 · Trilha 2 · 2026
+        </div>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm transition-colors">INEMA.CLUB</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@radix-ui\react-direction\dist\index.d.ts
+
+import * as React from 'react';
+
+type Direction = 'ltr' | 'rtl';
+interface DirectionProviderProps {
+    children?: React.ReactNode;
+    dir: Direction;
+}
+declare const DirectionProvider: React.FC<DirectionProviderProps>;
+declare function useDirection(localDir?: Direction): Direction;
+declare const Provider: React.FC<DirectionProviderProps>;
+
+export { DirectionProvider, Provider, useDirection };

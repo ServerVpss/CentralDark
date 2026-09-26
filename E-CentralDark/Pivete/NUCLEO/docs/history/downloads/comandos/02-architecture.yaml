@@ -1,0 +1,37 @@
+external:
+  canonical_url: https://centralldark.com
+  entrypoints: 1
+  panel: 1
+  backend_gateway: 1
+
+frontend_sections:
+  - home
+  - agents
+  - missions
+  - chat
+  - projects
+  - git_ci
+  - memory
+  - graph
+  - tools
+  - voice
+  - workflows
+  - system
+  - receipts
+  - config
+
+owners_target:
+  coordination: SOL
+  execution_continuity: HERMES-CORE
+  collaboration: Buzz
+  multi_model: Arsenal/Council owner existente
+  tools: MCP owner existente
+  memory: owner canônico BRAIN/memória existente
+  graph: Grafo Vivo/graph owner existente
+  voice: centraldark-voice se provado aplicável
+  provider_routing: gateway/arsenal adapter canônico existente
+  git_ci: integração GitHub/Git existente
+  telemetry: owner de runtime existente
+  receipts: proof/audit existente
+
+rule: "serviços podem continuar separados internamente; externamente o usuário vê uma única CentralDark"

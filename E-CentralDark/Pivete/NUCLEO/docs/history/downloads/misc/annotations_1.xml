@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <item name="androidx.core.graphics.drawable.IconCompat int getType()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.graphics.drawable.IconCompat.TYPE_UNKNOWN, androidx.core.graphics.drawable.IconCompat.TYPE_BITMAP, androidx.core.graphics.drawable.IconCompat.TYPE_RESOURCE, androidx.core.graphics.drawable.IconCompat.TYPE_DATA, androidx.core.graphics.drawable.IconCompat.TYPE_URI, androidx.core.graphics.drawable.IconCompat.TYPE_ADAPTIVE_BITMAP, androidx.core.graphics.drawable.IconCompat.TYPE_URI_ADAPTIVE_BITMAP}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.graphics.drawable.IconCompat.Api23Impl int getType(java.lang.Object)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.graphics.drawable.IconCompat.TYPE_UNKNOWN, androidx.core.graphics.drawable.IconCompat.TYPE_BITMAP, androidx.core.graphics.drawable.IconCompat.TYPE_RESOURCE, androidx.core.graphics.drawable.IconCompat.TYPE_DATA, androidx.core.graphics.drawable.IconCompat.TYPE_URI, androidx.core.graphics.drawable.IconCompat.TYPE_ADAPTIVE_BITMAP, androidx.core.graphics.drawable.IconCompat.TYPE_URI_ADAPTIVE_BITMAP}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.graphics.drawable.IconCompat.IconType">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.graphics.drawable.IconCompat.TYPE_UNKNOWN, androidx.core.graphics.drawable.IconCompat.TYPE_BITMAP, androidx.core.graphics.drawable.IconCompat.TYPE_RESOURCE, androidx.core.graphics.drawable.IconCompat.TYPE_DATA, androidx.core.graphics.drawable.IconCompat.TYPE_URI, androidx.core.graphics.drawable.IconCompat.TYPE_ADAPTIVE_BITMAP, androidx.core.graphics.drawable.IconCompat.TYPE_URI_ADAPTIVE_BITMAP}" />
+    </annotation>
+  </item>
+</root>
+

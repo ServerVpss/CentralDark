@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\lib\tcl8.6\tzdata\Atlantic\Reykjavik
+
+# created by tools/tclZIC.tcl - do not edit
+if {![info exists TZData(Africa/Abidjan)]} {
+    LoadTimeZoneFile Africa/Abidjan
+set TZData(:Atlantic/Reykjavik) $TZData(:Africa/Abidjan)

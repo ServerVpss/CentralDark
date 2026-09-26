@@ -1,0 +1,4 @@
+# IMAGEM DO ZIP
+
+COMANDO: teste_imagem_zip
+PROMPT: imagem dentro do zip

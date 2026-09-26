@@ -1,0 +1,369 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\web_routers\__pycache__\tools.cpython-311.pyc
+
+Toolset / terminal-backend dashboard routes (extracted verbatim from
+web_server.py).
+Handler bodies are byte-identical.  The toolset/terminal catalogs
+(``_MODEL_CATALOG_TOOLSETS``, ``_TERMINAL_BACKENDS``,
+``_TERMINAL_BACKEND_NAMES`` - some defined *after* this router's mount point
+in web_server's body) and all helpers stay in web_server - reached via the
+late-binding seam in :mod:`hermes_cli.web_deps` (``late`` for callables,
+``LateState`` for the catalog constants) so monkeypatching on web_server
+stays authoritative.
+Optional)
+APIRouter
+HTTPException)
+LateState)
+TerminalBackendSelect
+ToolsetEnvUpdate
+ToolsetModelSelect
+ToolsetPostSetup
+ToolsetProviderSelect
+ToolsetTogglez
+hermes_cli.web_server
+_find_toolset_provider_row
+_probe_terminal_backend
+_profile_cli_args
+_profile_scope
+_resolve_toolset_model_plugin
+_spawn_hermes_action
+_toolset_model_catalog
+load_config
+save_config
+_MODEL_CATALOG_TOOLSETS
+_TERMINAL_BACKENDS
+_TERMINAL_BACKEND_NAMES
+_CONFIG_MUTATION_LOCKz
+/api/tools/toolsets
+profilec
+_CONFIG_ONLY_TOOLSETS
+$_get_effective_configurable_toolsets
+_get_platform_tools
+_toolset_configuration_platform
+_toolset_has_keys
+get_nous_subscription_features
+gui_toolset_label)
+platform_label)
+resolve_toolsetc
+PC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\web_routers\tools.py
+<setcomp>z.get_toolsets.<locals>._read.<locals>.<setcomp>K
+include_default_mcp_serversr+
+platformr"
+configs
+<dictcomp>z/get_toolsets.<locals>._read.<locals>.<dictcomp>N
+toolset_rows
+target_platforms
+enabled_by_platform
+featuresr6
+_readz
+get_toolsets.<locals>._readG
+is_truthy_value
+enabledT)
+default)
+descriptionr5
+available
+configured
+tools)
+hermes_cli.tools_configr 
+hermes_cli.platformsr'
+toolsetsr(
+asyncio
+to_thread
+sorted
+Exception
+utilsr=
+isinstance
+append)
+resultr-
+descrD
+target_platformr=
+section
+is_enabledr!
+`                   @@@@r/
+get_toolsetsrW
+/api/tools/toolsets/{name}r-
+Enable/disable a configurable toolset for its configuration platform.
+    Most toolsets persist to ``platform_toolsets.cli``. Platform-restricted
+    toolsets instead target their supported platform (for example, Discord's
+    native toolsets persist to ``platform_toolsets.discord``). The shared
+    ``_save_platform_tools`` helper keeps the GUI and CLI in lockstep. Scoped
+    to ``body.profile`` when provided. Returns 400 for unknown toolset keys.
+_save_platform_toolsr#
+ts_keyr.
+z!toggle_toolset.<locals>.<setcomp>
+Unknown toolset: 
+status_code
+detailc
+setdefaultrO
+boolr>
+discard)
+toggle_toolset.<locals>._run
+returnc
+TOOL_CATEGORIES
+_post_setup_already_installed
+_visible_providers
+post_setup)
+       
+_pending_install_keyz,toggle_toolset.<locals>._pending_install_key
+post-setup
+tools-post-setupz0install-on-enable post-setup spawn failed for %sT)
+post_setup_started)
+exception)
+validri
+pending_keyr 
+```       @@@@r/
+toggle_toolsetr}
+z!/api/tools/toolsets/{name}/configc
+Return the provider matrix + key status for a toolset's config panel.
+    Surfaces the same provider rows the CLI ``hermes tools`` picker shows
+    (via ``_visible_providers``), each with its ``env_vars`` annotated with
+    current ``is_set`` state so the GUI can render provider selection + key
+    entry. Toolsets without a ``TOOL_CATEGORIES`` entry return an empty
+    provider list and ``has_category: false``. Returns 400 for unknown keys.
+_is_provider_activern
+provider_readiness_status
+web_provider_capabilities)
+get_env_value)
+z%get_toolset_config.<locals>.<setcomp>
+force_freshc
+prompt
+is_set)
+<listcomp>z5get_toolset_config.<locals>._read.<locals>.<listcomp>
+env_varsr-
+requires_nous_auth)
+is_active)
+status
+web_backend
+capabilities
+tts_providerr
+_get_extract_backend
+_get_search_backend)
+tools.web_toolsr
+providers
+active_provider
+active_search_backend
+active_extract_backendr;
+             
+z!get_toolset_config.<locals>._read
+has_categoryr
+hermes_cli.configr
+hermes_cli.nous_subscriptionr%
+payloadrl
+``         @@@@@@@r/
+get_toolset_configr
+z!/api/tools/toolsets/{name}/models
+providerc
+Return the model catalog for a toolset backend (image/video gen).
+    The GUI counterpart of the model picker `hermes tools` runs after a
+    backend is selected 
+ e.g. FAL's multi-model catalog (speed / strengths /
+    price per model). ``provider`` names a picker row; omitted, the currently
+    active provider is used. Toolsets without model catalogs return
+    ``has_models: false``.
+    NF)
+has_models
+models
+currentr?
+model)
+strip)
+plugin
+catalog
+default_model
+section_cfgr
+        
+z!get_toolset_models.<locals>._readg
+display
+speedr
+strengths
+price)
+model_id
+z&get_toolset_models.<locals>.<listcomp>
+itemsrf
+resolvedr
+```        @r/
+get_toolset_modelsr
+z /api/tools/toolsets/{name}/modelc
+Persist a backend model selection (``image_gen.model`` / ``video_gen.model``).
+    Validates the model against the resolved backend's catalog 
+ the same
+    write the CLI's post-selection model picker performs. Returns 400 for
+    toolsets without model catalogs or unknown model ids.
+    Nr_
+Toolset has no model catalog: ra
+model is requiredc
+z'No model-capable backend is active for ra
+Unknown model z
+ for backend r
+_defaultr
+      
+z"select_toolset_model.<locals>._run
+```  @@r/
+select_toolset_modelr
+z#/api/tools/toolsets/{name}/providerc
+Persist a provider selection for a toolset (no key prompting).
+    Delegates to ``apply_provider_selection`` 
+ the shared, non-interactive
+    core extracted from the CLI configurator 
+ so the GUI and ``hermes tools``
+    write identical config keys (``web.backend``, ``tts.provider``, etc.).
+    API keys and post-setup flows are handled by separate endpoints. Returns
+    400 for unknown toolset or provider names.
+    For the ``web`` toolset only, an optional ``capability`` ('search' |
+    'extract') scopes the selection to ``web.search_backend`` /
+    ``web.extract_backend`` 
+ the same per-capability overrides the runtime
+    dispatchers (``tools.web_tools._get_search_backend`` /
+    ``_get_extract_backend``) resolve first. The provider must actually
+    support the requested capability (a search-only backend can't be the
+    extract backend). Omitting ``capability`` keeps the legacy whole-provider
+    behavior (writes ``web.backend``).
+    Managed Nous rows (``managed_nous_feature``) additionally report the
+    Portal entitlement state: the CLI flow gates these selections on
+    ``ensure_nous_portal_access`` (inline login), but the GUI has no inline
+    prompt, so selecting one while logged out / unentitled used to write the
+    config keys and then never activate (``_is_provider_active`` requires
+    ``managed_by_nous``). The response now carries an additive
+    ``needs_nous_auth: true`` + ``feature`` so the client can drive the
+    existing Nous Portal OAuth flow (``POST /api/providers/oauth/nous/start``)
+    and refetch.
+apply_provider_selectionr
+!MANAGED_FEATURE_COVERAGE_CATEGORYr%
+z*select_toolset_provider.<locals>.<setcomp>
+z:capability selection is only supported for the web toolset)
+search
+extractz
+Unknown capability: z! (expected 'search' or 'extract')c
+<genexpr>z8select_toolset_provider.<locals>._run.<locals>.<genexpr>
+Unknown provider z
+ for toolset ra
+Provider z
+ has no web backend keyz
+ does not support r
+_backend
+capabilityc
+z8select_toolset_provider.<locals>._run.<locals>.<genexpr>=
+managed_nous_feature
+needs_nous_auth
+feature)
+KeyErrorrx
+account_inforf
+logged_in
+tool_gateway_entitled_for
+tool_gateway_entitled)
+backend
+web_cfg
+responser
+managed_featurer;
+category
+entitledr
+              
+z%select_toolset_provider.<locals>._run
+```    @@@@@@r/
+select_toolset_providerr
+/api/tools/toolsets/{name}/envc
+Persist API keys for a toolset's provider env vars.
+    Writes each ``key: value`` to ``~/.hermes/.env`` via ``save_env_value`` 
+    the same store ``hermes tools`` writes when it prompts for keys. Keys are
+    validated against the env-var allowlist for the toolset's category (the
+    union of every visible provider's ``env_vars``), so the GUI can't write an
+    arbitrary env var through this endpoint. A blank value is treated as
+    "leave unchanged" and skipped. Returns the saved/skipped key lists and the
+    refreshed ``is_set`` status. Returns 400 for unknown toolset or env keys.
+save_env_valuec
+z#save_toolset_env.<locals>.<setcomp>n
+alloweds
+z2save_toolset_env.<locals>._run.<locals>.<listcomp>|
+Unknown env var(s) for toolset z
+z2save_toolset_env.<locals>._run.<locals>.<dictcomp>
+joinrJ
+ValueErrorrx
+unknown
+skippedrr
+valuer
+           @
+save_toolset_env.<locals>._runr
+valid_tsri
+```      @@@@r/
+save_toolset_envr
+z%/api/tools/toolsets/{name}/post-setupc
+Spawn a provider's post-setup install hook as a background action.
+    Post-setup hooks (npm install for browser/Camofox, pip install for
+    KittenTTS/Piper/ddgs, cua-driver fetch, etc.) are long-running and
+    text-output, so this follows the spawn-action pattern: it launches
+    ``hermes tools post-setup <key>`` and the frontend tails the log via
+    ``GET /api/actions/tools-post-setup/status``. The ``key`` is validated
+    against the declared post-setup allowlist before spawning. Returns 400
+    for unknown toolset or post-setup key.
+    ``profile`` spawns the hook as ``hermes -p <profile> tools post-setup``.
+    Most hooks install machine-level artifacts (repo node_modules, shared
+    pip packages) where the scope is inert, but hooks that read config or
+    write per-profile state must see the same HERMES_HOME the rest of the
+    drawer's writes targeted 
+ so the scope is threaded for consistency.
+valid_post_setup_keysc
+z)run_toolset_post_setup.<locals>.<setcomp>
+Unknown post-setup key: rD
+z Failed to spawn tools post-setup
+Failed to run post-setup: NT)
+        r/
+run_toolset_post_setupr
+/api/tools/terminal/backendsc
+Terminal execution backend rows with health probes for the picker panel.
+    Returns ``{active, backends: [{name, label, description, active, status,
+    detail}]}`` where ``status`` is ``ready`` / ``needs_setup`` /
+    ``unavailable`` and ``detail`` carries setup guidance for non-ready rows.
+    Probes are fast (<~2s each) and defensive 
+ a probe failure surfaces as a
+    status, never an error response.
+terminalr
+localr-
+activer
+backends)
+lowerr
+terminal_cfgr
+       
+z$get_terminal_backends.<locals>._read
+get_terminal_backendsr
+/api/tools/terminal/backendc
+Persist ``terminal.backend`` in config.yaml.
+    Validates against the known backend set (the same enum the raw-config
+    settings row exposes). Selecting a backend that still needs setup is
+    allowed 
+ the picker shows guidance instead of blocking, matching the CLI.
+Unknown terminal backend: z
+. Use one of: r
+z%select_terminal_backend.<locals>._run
+`` @r/
+select_terminal_backendr
+/api/tools/computer-use/statusc
+Cross-platform Computer Use readiness for the desktop card.
+    See ``tools.computer_use.permissions.computer_use_status`` for the payload
+    shape. Read-only and fast (shells ``cua-driver doctor`` + macOS
+    ``permissions status``).
+computer_use_statusc
+z&get_computer_use_status.<locals>._read
+tools.computer_use.permissionsr
+get_computer_use_statusr
+z)/api/tools/computer-use/permissions/grantc
+Spawn ``hermes computer-use permissions grant`` as a background action.
+    macOS-only: ``cua-driver permissions grant`` launches CuaDriver via
+    LaunchServices so the TCC dialog is attributed to com.trycua.driver, then
+    waits for approval. The frontend polls ``GET /api/actions/computer-use-
+    grant/status`` and re-reads ``/status`` once it exits. Windows/Linux have
+    no TCC toggles to grant, so this returns 400 there.
+darwinr_
+z3Computer Use permission grants are a macOS concept.ra
+computer-use
+permissions
+grantz
+computer-use-grantz.Failed to spawn computer-use permissions grantr
+Failed to request permissions: NT)
+grant_computer_use_permissionsr
+__doc__rH
+loggingr
+typingr
+fastapir
+hermes_cli.web_depsr
+hermes_cli.web_modelsr
+getLoggerry
+routerr
+<module>r!

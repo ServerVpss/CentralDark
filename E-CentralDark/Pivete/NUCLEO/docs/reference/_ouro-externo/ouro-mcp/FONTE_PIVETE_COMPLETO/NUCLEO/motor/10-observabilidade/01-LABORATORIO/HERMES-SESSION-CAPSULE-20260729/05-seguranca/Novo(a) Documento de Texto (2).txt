@@ -1,0 +1,148 @@
+A arquitetura do Guardião está no rumo certo, mas **eu não criaria uma nova “agência” nem uma MetaLupa paralela**. A Casa já tem quase todos os órgãos; o delta real é transformar isso num **perfil de investigação em lote** que compõe os owners existentes.
+
+O estado vivo também mudou: a `main` está em `21ccc236…`, e o contrato atual já contém `LEARNING_TRANSFER` em vários owners/gates.  A MetaLupa canônica já é explicitamente para investigações, auditorias, incidentes e alegações conflitantes; começa read-only quando isso reduz risco, separa fato/inferência/UNKNOWN, exige contraprova e executa AutoLupa sobre o próprio veredito.  O método operacional também já define `WRITER=NONE`/`READ_ONLY` como default de investigação, Writer único e um mecanismo de self-learning com prova antes da promoção.
+
+E o `MATERIAL-INGEST` já tem a máquina que o Guardião estava tentando reinventar: material → assay → candidate → counterproof → gold → owner → test/gate → crystal; `UNKNOWN → QUARANTINE_PRESERVE_UNKNOWN`; falha → causa → delta mínimo → reteste. Ele ainda já contém `LEARNING_TRANSFER_FAIL_ON_RETEACH=true`.
+
+Então eu mostraria a arquitetura assim, antes de qualquer skill:
+
+```text
+👑 SEGREDO/CHEFE
+│ intenção + autoridade
+▼
+☼ #ACORDAR
+│ estado vivo / alvo / HEAD / fontes
+▼
+⚙ !CALIBRAR
+│ destino + permissão + risco + prova necessária
+▼
+🧭 !MULTIBÚSSOLA
+│ fan-out de investigação READ_ONLY
+│ N itens / N fontes / N hipóteses
+▼
+┌────────────────────────────────────────────┐
+│  CAMADA DE ASSAY / TRIAGEM                 │
+│                                            │
+│  INPUT = texto | link | arquivo | claim   │
+│          imagem | anúncio | log | evento   │
+│                                            │
+│  DEFAULT = UNTRUSTED_UNTIL_CLASSIFIED      │
+│  DEFAULT_MUTATION = NONE                   │
+│                                            │
+│  pessoa/claim público                      │
+│      → PUBLIC_OR_AUTHORIZED_SOURCES_ONLY   │
+│      → sem invasão de privacidade          │
+│                                            │
+│  arquivo/artefato                          │
+│      → NÃO EXECUTAR                        │
+│      → hash + tipo real + metadata         │
+│      → UNKNOWN preservado                  │
+│                                            │
+│  lote N                                    │
+│      → fan-out paralelo READ_ONLY          │
+└────────────────────┬───────────────────────┘
+                     ▼
+⊛ META LUPA
+│
+│ FACT | INFERENCE | HYPOTHESIS | UNKNOWN
+│
+│ normaliza evidência por:
+│ TARGET
+│ SOURCE
+│ TIME
+│ HEAD/SHA quando aplicável
+│ PROVENANCE
+│ CLAIM
+│ EVIDENCE_REF
+│ CLUSTER/DEPENDÊNCIA
+│
+│ NÃO multiplica cópias da mesma fonte
+▼
+✣ RENDEZVOUS
+│
+│ dedupe
+│ conflito → teste discriminante
+│ ausência em ferramenta ≠ inexistência
+│ suspeita ≠ fato
+│ correlação ≠ causa
+▼
+⚖ JUDGE EPISTEMOLÓGICO
+│
+├──── PROVADO
+├──── NOT_PROVEN
+├──── UNKNOWN
+└──── FALHOU / REFUTADO
+│
+│ nunca:
+│ "parece fraude" → "fraude"
+│ "arquivo estranho" → "malware"
+│ "modelo detectou" → "fato"
+▼
+🛡️ BOUNDARY
+│
+│ ação material somente se:
+│ ALVO correto
+│ AUTORIZAÇÃO correta
+│ EVIDÊNCIA suficiente
+│ OWNER existente
+│ WRITER único
+│ rollback aplicável
+▼
+☿ HERMES / WRITER ÚNICO
+│ executa somente o delta autorizado
+▼
+REALIDADE / EFEITO OBSERVÁVEL
+│
+▼
+⊛ AUTOLUPA
+│
+│ "o que eu afirmei?"
+│ "que prova realmente sustenta isso?"
+│ "eu confundi instrumento com realidade?"
+│ "minha própria ação produziu a evidência?"
+▼
+♻ LEARNING_TRANSFER
+│
+│ ERRO COMPROVADO
+│ → assinatura
+│ → mecanismo
+│ → correção
+│ → teste de regressão
+│ → owner existente
+│ → gate quando material
+│ → receipt
+│
+│ ocorrência equivalente seguinte
+│ deve reutilizar sem o CHEFE ensinar de novo
+▼
+💎 CRYSTAL | NO_CHANGE
+│
+▼
+🕊 NEXT_CURSOR
+```
+
+Eu faria três correções importantes no texto original.
+
+Primeiro, **`TUDO = SUSPEITO` não deve significar acusação**. Internamente, a regra correta é `UNTRUSTED_UNTIL_CLASSIFIED`: material ainda não validado não ganha confiança nem execução. Isso evita transformar postura defensiva em falso positivo.
+
+Segundo, “silêncio total” em cyber deve significar **observação quieta e não-mutante**, não cegueira nem obrigação de esconder evidência. O perfil pode ficar `READ_ONLY` e não tocar no alvo; se surgir algo material, registra evidência e escala pelo Boundary. Quarentena física só existe se houver mecanismo real e autorização — `QUARANTINE_DECLARED != FILE_QUARANTINED`.
+
+Terceiro, a “agência de N coisas” não deve virar outro conjunto de agentes permanentes. O correto é:
+
+`N_ITEMS → N_READ_ONLY_FRONTS → ONE_EVIDENCE_SCHEMA → RENDEZVOUS → ONE_VERDICT_PER_CLAIM`.
+
+Isso já conversa diretamente com a MetaLupa e com o mecanismo atual de percepção paralela sem multiplicar Writer.
+
+Portanto, a futura skill — se você mandar criar depois de ver isto — deveria ser fina, algo como `investigacao-n-coisas`, mas **não conter outro motor de MetaLupa**. Ela seria um entrypoint que chama os owners existentes:
+
+`centraldark-operational-method + MATERIAL_INGEST + META_LUPA + PROOF_OWNERSHIP + HANDOFF`.
+
+O diferencial dela seria apenas batch orchestration, schema de evidência, privacy boundary e learning-transfer. Todo o resto seria referência canônica, não cópia.
+
+E tem um detalhe que eu mudaria no nome conceitual: “sistema se pega mentindo” eu traduziria tecnicamente para **`SELF_CLAIM_FALSIFICATION`**. Às vezes o agente não “mente”; ele pode inferir errado, usar estado velho ou promover evidência fraca. O mecanismo deve pegar todos esses casos sem precisar atribuir intenção.
+
+**VEREDITO:** arquitetura = `EXTENSÃO_CANÔNICA`, não novo cérebro. Skill ainda **não criada**, conforme o pedido de mostrar antes.
+
+**Próximo delta correto:** uma skill fina de investigação em lote que reutiliza os quatro owners e adiciona somente `BATCH_READ_ONLY + EVIDENCE_NORMALIZATION + PRIVACY_BOUNDARY + SELF_CLAIM_FALSIFICATION + LEARNING_TRANSFER`.
+
+Posso também criar uma imagem desse “Sistema Nervoso Epistemológico” já nessa versão corrigida.

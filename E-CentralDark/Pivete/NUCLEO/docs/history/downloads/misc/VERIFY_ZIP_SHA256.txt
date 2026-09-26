@@ -1,0 +1,5 @@
+Execute no diretório que contém os dois arquivos:
+
+sha256sum -c CENTRALDARK_SESSION_MASTER_HANDOFF.zip.sha256
+
+Ou compare o SHA-256 do ZIP com o valor do sidecar.

@@ -1,0 +1,49 @@
+{
+  "timestamp": "2026-08-05T18:15:45.071215",
+  "result": "AMBIGUOUS_DRIFT",
+  "details": {
+    "captured_keys": [
+      "timestamp",
+      "kanban_url",
+      "cli_version",
+      "cli_commands",
+      "board",
+      "cards",
+      "adapter_hash",
+      "schema_hash"
+    ],
+    "differences": {
+      "cli_version": {
+        "expected": "Hermes Agent v99.99.9 (2099.1.1)",
+        "actual": "Hermes Agent v0.20.0 (2026.8.3)",
+        "type": "version_changed"
+      },
+      "board_name": {
+        "expected": "different_board",
+        "actual": "default",
+        "type": "board_changed"
+      }
+    },
+    "normalized_sample": {
+      "timestamp": "2026-08-05T18:15:40.573149",
+      "kanban_url": "http://127.0.0.1:9119/kanban?profile=pivete",
+      "cli_version": "Hermes Agent v0.20.0 (2026.8.3)",
+      "cli_commands": "['archive', 'assign', 'assignees', 'attach', 'attach-rm', 'attachments', 'block', 'boards', 'claim', 'comment', 'complete', 'context', 'create', 'daemon', 'decompose', 'diag', 'diagnostics', 'dispatch",
+      "board": "{'name': 'default', 'display': 'Default', 'db_path': 'C:\\\\Users\\\\danda\\\\AppData\\\\Local\\\\hermes\\\\kanban.db', 'tasks': '3 total (blocked=2, done=1)'}",
+      "adapter_hash": "2ea7a19baf731121b3e88e2e554b2681e53eacfb5cbde0f3a4d824cfb2bd2221",
+      "schema_hash": "94fbdc9a83c835eea6156204e9a17ffc504f25030c411d111b60bfa98e8fd6c0"
+    },
+    "card_count": 3
+  },
+  "actions_required": [
+    "NÃO corrigir automaticamente",
+    "Criar/atualizar cartão no Kanban com detalhes exatos do que mudou",
+    "Aguardar decisão humana"
+  ],
+  "unknown_factors": [
+    "Múltiplas mudanças simultâneas - causa raiz não identificada"
+  ],
+  "contract_hash": "2a888b5b7da53d58420bfbcbcd932756795d95159b620dc0345863eb8b990123",
+  "adapter_hash": "2ea7a19baf731121b3e88e2e554b2681e53eacfb5cbde0f3a4d824cfb2bd2221",
+  "schema_hash": "94fbdc9a83c835eea6156204e9a17ffc504f25030c411d111b60bfa98e8fd6c0"
+}

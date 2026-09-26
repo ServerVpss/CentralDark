@@ -1,0 +1,20 @@
+flowchart TD
+  A[INTENT] --> B[SELF_APPLY]
+  B --> C[LIVE_STATE]
+  C --> D[DISCOVER]
+  D --> E[MODEL_PROBLEM]
+  E --> F[EXPAND while INFORMATION_GAIN > 0]
+  F --> G[COMPRESS]
+  G --> H[RECONCILE_EXISTING]
+  H --> I[PLAN_MINIMAL_DELTA]
+  I --> J[PARALLEL READ_ONLY PERCEPTION]
+  J --> K[ONE_WRITER_EXECUTE]
+  K --> L[EVIDENCE]
+  L --> M[COUNTERPROOF]
+  M --> N{MATERIAL_RESIDUAL?}
+  N -- YES --> O[REMEDIATE_MINIMAL]
+  O --> K
+  N -- NO --> P[LEARN if future behavior changes]
+  P --> Q{FIXED_POINT?}
+  Q -- NO --> C
+  Q -- YES --> R[RETURN]

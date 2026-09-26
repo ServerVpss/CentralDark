@@ -1,0 +1,14 @@
+flowchart TD
+  S[Chats / Tasks / Drive / GitHub / CLI] --> D[DELTAUTIL]
+  D --> X[SECRET SCRUB + DEDUPE]
+  X --> R[RENDEZVOUS / RECONCILE]
+  R --> M[MATERIALITY GATE]
+  M --> O[EXISTING OWNER]
+  O --> T[TEST + COUNTERPROOF]
+  T --> DOC[DOCUMENTATION + RECEIPT]
+  A[OAuth CONNECT] --> C[Ephemeral authorization code]
+  C --> CP[Credential Plane Exchange]
+  CP --> SR[SecretRef]
+  SR --> H[HUB App Registry]
+  P[Python / PowerShell / rg / fd] --> K[Adaptive K readers]
+  K --> R

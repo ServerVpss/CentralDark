@@ -1,0 +1,24 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react-streamdown\dist\defaults.d.ts
+
+import { PluginConfig, ResolvedPluginConfig } from "./types.js";
+import { BundledTheme } from "streamdown";
+
+//#region src/defaults.d.ts
+/**
+ * Default Shiki theme for code highlighting.
+ * First value is light theme, second is dark theme.
+ */
+declare const DEFAULT_SHIKI_THEME: [BundledTheme, BundledTheme];
+/**
+ * Merges user plugin configuration with detected defaults.
+ *
+ * Rules:
+ * - `false` = explicitly disable a plugin
+ * - `undefined` = use default (auto-detect)
+ * - plugin instance = use provided plugin
+ * - mermaid requires explicit enabling (not auto-detected)
+ */
+declare function mergePlugins(userPlugins: PluginConfig | undefined, defaultPlugins: ResolvedPluginConfig): ResolvedPluginConfig;
+//#endregion
+export { DEFAULT_SHIKI_THEME, mergePlugins };
+//# sourceMappingURL=defaults.d.ts.map

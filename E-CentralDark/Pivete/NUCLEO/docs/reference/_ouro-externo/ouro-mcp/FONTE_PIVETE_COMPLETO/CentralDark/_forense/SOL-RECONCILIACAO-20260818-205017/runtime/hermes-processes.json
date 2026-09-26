@@ -1,0 +1,122 @@
+﻿[
+    {
+        "Name":  "hermes.exe",
+        "PID":  28660,
+        "Executable":  "C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\hermes.exe",
+        "CommandLine":  "C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\hermes.exe dashboard --port 9119 --no-open --skip-build"
+    },
+    {
+        "Name":  "python.exe",
+        "PID":  26124,
+        "Executable":  "C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe",
+        "CommandLine":  "\"C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe\" \"C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\hermes.exe\" dashboard --port 9119 --no-open --skip-build"
+    },
+    {
+        "Name":  "python.exe",
+        "PID":  10136,
+        "Executable":  "C:\\Users\\danda\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe",
+        "CommandLine":  "\"C:\\Users\\danda\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe\"  \"C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\hermes.exe\" dashboard --port 9119 --no-open --skip-build"
+    },
+    {
+        "Name":  "node.exe",
+        "PID":  20864,
+        "Executable":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe",
+        "CommandLine":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe C:\\Users\\danda\\AppData\\Local\\npm-cache\\_npx\\5f7878ce38f1eb13\\node_modules\\pm2\\lib\\Daemon.js"
+    },
+    {
+        "Name":  "python.exe",
+        "PID":  22752,
+        "Executable":  "C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe",
+        "CommandLine":  "C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe -m hermes_cli.main gateway run"
+    },
+    {
+        "Name":  "python.exe",
+        "PID":  14028,
+        "Executable":  "C:\\Users\\danda\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe",
+        "CommandLine":  "\"C:\\Users\\danda\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe\"  -m hermes_cli.main gateway run"
+    },
+    {
+        "Name":  "node.exe",
+        "PID":  24172,
+        "Executable":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe",
+        "CommandLine":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe  --expose-gc C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\ui-tui\\dist\\entry.js"
+    },
+    {
+        "Name":  "hermes.exe",
+        "PID":  23404,
+        "Executable":  "C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\bin\\hermes.exe",
+        "CommandLine":  "\"C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\bin\\hermes.exe\" --tui -c"
+    },
+    {
+        "Name":  "python.exe",
+        "PID":  29976,
+        "Executable":  "C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe",
+        "CommandLine":  "\"C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe\" \"C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\bin\\hermes.exe\" --tui -c"
+    },
+    {
+        "Name":  "python.exe",
+        "PID":  21252,
+        "Executable":  "C:\\Users\\danda\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe",
+        "CommandLine":  "\"C:\\Users\\danda\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe\"  \"C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\bin\\hermes.exe\" --tui -c"
+    },
+    {
+        "Name":  "node.exe",
+        "PID":  18776,
+        "Executable":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe",
+        "CommandLine":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe --expose-gc C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\ui-tui\\dist\\entry.js"
+    },
+    {
+        "Name":  "python.exe",
+        "PID":  29132,
+        "Executable":  "C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe",
+        "CommandLine":  "C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe -m tui_gateway.entry"
+    },
+    {
+        "Name":  "node.exe",
+        "PID":  28144,
+        "Executable":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe",
+        "CommandLine":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe  --expose-gc C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\ui-tui\\dist\\entry.js"
+    },
+    {
+        "Name":  "node.exe",
+        "PID":  22556,
+        "Executable":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe",
+        "CommandLine":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe  --expose-gc C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\ui-tui\\dist\\entry.js"
+    },
+    {
+        "Name":  "node.exe",
+        "PID":  25648,
+        "Executable":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe",
+        "CommandLine":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe  --expose-gc C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\ui-tui\\dist\\entry.js"
+    },
+    {
+        "Name":  "node.exe",
+        "PID":  18672,
+        "Executable":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe",
+        "CommandLine":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe  --expose-gc C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\ui-tui\\dist\\entry.js"
+    },
+    {
+        "Name":  "node.exe",
+        "PID":  10812,
+        "Executable":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe",
+        "CommandLine":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe  --expose-gc C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\ui-tui\\dist\\entry.js"
+    },
+    {
+        "Name":  "node.exe",
+        "PID":  12896,
+        "Executable":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe",
+        "CommandLine":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe  --expose-gc C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\ui-tui\\dist\\entry.js"
+    },
+    {
+        "Name":  "node.exe",
+        "PID":  29388,
+        "Executable":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe",
+        "CommandLine":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe  --expose-gc C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\ui-tui\\dist\\entry.js"
+    },
+    {
+        "Name":  "node.exe",
+        "PID":  11176,
+        "Executable":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe",
+        "CommandLine":  "C:\\Users\\danda\\AppData\\Local\\hermes\\node\\node.exe  --expose-gc C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\ui-tui\\dist\\entry.js"
+    }
+]

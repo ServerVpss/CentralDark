@@ -1,0 +1,11 @@
+{
+  "algorithm": "SHA-256",
+  "root_semantics": "SHA256(CORE_MANIFEST.sha256 bytes)",
+  "core_file_count": 37,
+  "proof_root_sha256": "d869c8d00b0fd94e156934965c67fd22d7dde0c07c977dc43be5b104ebcfa4d1",
+  "main_head_measured": "94b6780bbbdf26a64acbadd1d7be03c22d32322d",
+  "session_material_corrections_counted": 12,
+  "cross_chat_events_inventory": 9,
+  "electron_byte_identity": "BYTE_IDENTICAL_TO_OFFICIAL_ASSET",
+  "safety_rule": "Human life/injury is never accepted as technical proof."
+}

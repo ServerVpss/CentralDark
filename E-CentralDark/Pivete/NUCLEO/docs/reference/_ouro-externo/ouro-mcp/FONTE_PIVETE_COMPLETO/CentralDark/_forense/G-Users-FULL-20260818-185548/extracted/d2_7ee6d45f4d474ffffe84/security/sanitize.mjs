@@ -1,0 +1,3 @@
+const RX=/(authorization|cookie|password|passwd|secret|token|api[_-]?key|service[_-]?role|private[_-]?key)/i;
+export function sanitizeObject(v,d=0){if(d>5)return'[TRUNCATED]';if(Array.isArray(v))return v.slice(0,50).map(x=>sanitizeObject(x,d+1));if(v&&typeof v==='object'){const o={};for(const[k,x]of Object.entries(v))o[k]=RX.test(k)?'[REDACTED]':sanitizeObject(x,d+1);return o}if(typeof v==='string'&&v.length>2048)return v.slice(0,2048)+'…';return v}
+export function publicError(err,requestId){const status=Number.isInteger(err?.status)&&err.status>=400&&err.status<600?err.status:500;return{status,body:{ok:false,code:'REQUEST_FAILED',request_id:requestId||null,message:status>=500?'Internal request failure':'Request rejected'}}}

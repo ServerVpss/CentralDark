@@ -1,0 +1,20 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\src\react\primitive-hooks\useActionBarReload.ts
+
+import { useCallback } from "react";
+import { useAui, useAuiState } from "@assistant-ui/store";
+
+export const useActionBarReload = () => {
+  const aui = useAui();
+  const disabled = useAuiState(
+    (s) =>
+      s.thread.isRunning ||
+      s.thread.isDisabled ||
+      s.message.role !== "assistant",
+  );
+
+  const reload = useCallback(() => {
+    aui.message().reload();
+  }, [aui]);
+
+  return { reload, disabled };
+};

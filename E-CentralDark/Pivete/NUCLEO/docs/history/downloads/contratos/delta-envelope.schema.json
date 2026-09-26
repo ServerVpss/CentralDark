@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "centraldark://contracts/delta-envelope",
+  "title": "CentralDark Delta Envelope",
+  "type": "object",
+  "required": [
+    "delta_id",
+    "source_id",
+    "status",
+    "changed",
+    "content_hash"
+  ],
+  "properties": {
+    "delta_id": {
+      "type": "string"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "NEW",
+        "CHANGED",
+        "NO_CHANGE",
+        "UNKNOWN"
+      ]
+    },
+    "changed": {
+      "type": "boolean"
+    },
+    "content_hash": {
+      "type": "string"
+    },
+    "previous_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reason": {
+      "type": "string"
+    }
+  }
+}

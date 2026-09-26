@@ -1,0 +1,685 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\lib\thread2.8.12\thread2812.dll
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.pdata
+@.xdata
+.edata
+@.idata
+.reloc
+ATUWVSH
+0[^_]A\
+([^_]H
+ATUWVSH
+ [^_]A\
+ATUWVSH
+0[^_]A\
+no targeH
+t interpH
+0[^_]A\
+([^_]H
+AVWVSH
+H[^_A^
+H9s0tJH
+hread diH
+target tH
+H9s tBH
+hread diH
+target tH
+([^_]H
+ATUWVSH
+ [^_]A\
+ [^_]A\
+AVAUATUWVSH
+[^_]A\A]A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+ATUWVSH
+`[^_]A\
+AVAUATUWVSH
+`[^_]A\A]A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AVATUWVSH
+[^_]A\A^
+ATUWVSH
+p[^_]A\
+AVUWVSH
+[^_]A^
+AVAUATUWVSH
+p[^_]A\A]A^
+AWAVAUATUWVSH
+T$8I9T$
+H[^_]A\A]A^A_
+D$8I;D$
+D$8I9D$
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+H;D$PH
+ATUWVSH
+ [^_]A\
+AVWVSH
+X[^_A^
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+X[^_]A\A]A^A_
+AWAVUWVSH
+h[^_]A^A_
+D$(u9M
+AVATUWVSH
+8[^_]A\A^H
+8[^_]A\A^
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AVUWVSH
+`[^_]A^
+AUATUWVSH
+H[^_]A\A]
+AVAUATUWVSH
+C8tsv:
+ [^_]A\A]A^H
+([^_]H
+AWAVATUWVSH
+@[^_]A\A^A_
+@[^_]A\A^A_
+AVATUWVSH
+HcD$LL
+h[^_]A\A^
+AVWVSH
+HcD$HH
+h[^_A^
+AUATUWVSH
+usHcD$<L
+h[^_]A\A]
+HcD$<L
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+Ict$TH
+AUATUWVSH
+X[^_]A\A]
+HcD$LL
+9\$LtrH
+AUATUWVSH
+l$@HcD$<H
+X[^_]A\A]
+9\$<t:L
+AVAUATUWVSH
+[^_]A\A]A^
+HcD$DE1
+([^_]H
+AVUWVSH
+p[^_]A^
+AUATUWVSH
+8[^_]A\A]
+ATUWVSH
+ [^_]A\
+AVAUATUWVSH
+[^_]A\A]A^
+L$8~PH
+ATUWVSH
+ [^_]A\
+K <rt{<wtg<mtSH
+AVWVSH
+h[^_A^
+AVWVSH
+h[^_A^
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+9V~"HcL$8
+AUATUWVSH
+h[^_]A\A]
+AVUWVSH
+[^_]A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVWVSH
+0[^_A^A_
+0[^_A^A_
+AWAVWVSH
+:V~eIc
+P[^_A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+C,9C0|9H
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+w(A9w0
+HcL$HH
+LcT$<E
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+9T$\~aH
+H;|$Ht
+HcT$dH
+HcT$dH
+HcT$dI
+H;|$Ht
+AWAVUWVSH
+h[^_]A^A_
+L$DHcT$@H
+P(Hc\$8H
+\$<HcT$DH
+;D$<|8H
+AWAVAUATUWVSH
+HcT$4D
+X[^_]A\A]A^A_
+ATUWVSH
+P[^_]A\
+T$DHcD$<H
+AVAUATUWVSH
+[^_]A\A]A^
+AWAVAUATUWVSH
+uLHcl$HH
+x[^_]A\A]A^A_
+LcD$LD;D$T
+AWAVATUWVSH
+L$`HcT$\H
+L$`HcT$\H
+HcD$\H
+\$HtoL
+[^_]A\A^A_
+ubHcD$4)
+ATUWVSH
+P[^_]A\
+AVUWVSH
+`[^_]A^
+ATUWVSH
+P[^_]A\
+([^_]H
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+l$0ff.
+H;|$(t
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AUATUWVSH
+8[^_]A\A]
+AVATUWVSH
+X[^_]A\A^
+ATUWVSH
+@[^_]A\
+AVAUATUWVSH
+0[^_]A\A]A^
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+([^_]H
+ATUWVSH
+ [^_]A\
+ [^_]A\
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+<'t4<IuhA
+D$peE1
+D$pB8D3
+H9T$Pt
+H9l$0L
+L+L$`H
+H9T$Pt
+@$A9@(~
+AWAVAUATUWVSH
+C$9C(~
+H[^_]A\A]A^A_
+S$9S(~
+S$9S(~
+UAWAVAUATWVSH
+C$9C(~
+C$9C(~
+[^_A\A]A^A_]
+UAWAVAUATWVSH
+C$9C(~
+C$9C(~
+[^_A\A]A^A_]
+UAVWVSH
+C$9C(~
+[^_A^]
+[^_A^]
+=UUUUw
+S$9S(~
+AUATUWVSH
+X[^_]A\A]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+D$L)D$`
+T$8HcD$L;B
+D$`+D$H
+ATUWVSH
+ [^_]A\
+UWVSIc
+ATUWVSLcY
+[^_]A\
+[^_]A\
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+WVSHcA
+AUATUWVSH
+H[^_]A\A]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+\$`+l$H
+D$P+D$X
+AVAUATUWVSH
+0[^_]A\A]A^
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+D$(+D$,
+HcT$xH
+errorCode
+errorInfo
+invalid thread handle "
+channel already exists in target
+target interp missing
+THREAD
+channel
+channel is not registered here
+channel is shared
+cannot join thread 
+?status?
+channel not detached
+channel already exists
+?proc?
+thread::wait
+-joinable
+-preserved
+thread:nsd
+can't create a new thread
+" does not exist
+thread "
+?-joinable? ?script?
+Error from thread 
+-eventmark
+-unwindonerror
+-errorstate
+", should be one of -eventmark, -unwindonerror or -errorstate
+bad option "
+threadlId ?optionName? ?value? ?optionName value?...
+expected integer but got "
+id channel
+transfer failed: 
+for reasons unknown
+?-wait? ?threadId?
+?threadId?
+?-unwind? id ?result?
+-unwind
+not supported with this Tcl version
+thread is in error
+script
+-async
+can't notify self
+?-async? ?-head? id script ?varName?
+Tcl core wasn't compiled for threading
+thread::create
+thread::send
+thread::broadcast
+thread::exit
+thread::unwind
+thread::id
+thread::names
+thread::exists
+thread::configure
+thread::errorproc
+thread::preserve
+thread::release
+thread::join
+thread::transfer
+thread::detach
+thread::attach
+thread::cancel
+::tcl::build-info
+2.8.12+1191a4e80d2b1e7ccbe5ac2672b53d2fed3589d1a0740047ddb946e153d9d0ed.gcc-1502
+::thread::build-info
+2.8.12
+Thread
+" is not a thread shared array
+array ?key ...?
+no key 
+invalid command name "
+?pattern?
+array arg ?arg...?
+    ("eval" body line %d)
+array key ?args?
+key has been deleted
+" exists
+option array
+option
+list must have an even number of elements
+array handle
+array is already bound
+can't open persistent storage on "
+shared variable is not bound
+value ?value ...?
+object
+exists
+append
+handlers
+isbound
+unbind
+%cid%d
+option ?args?
+option
+create
+condHandle ?args?
+condition variable is in use
+no such condition variable "
+condHandle mutexHandle ?timeout?
+no such mutex "
+mutex not locked or wrong type
+thread::::mutex
+thread::::rwmutex
+thread::::cond
+thread::::eval
+?-lock <mutexHandle>? arg ?arg...?
+wrong mutex type, must be exclusive or recursive
+locking the same exclusive mutex twice from the same thread
+    ("eval" body line %d)
+mutexHandle
+mutex is in use
+wrong mutex type, must be readwrite
+from the same thread
+read-locking already write-locked mutex 
+write-locking the same read-write mutex twice from the same thread
+mutex is not locked
+?-recursive?
+-recursive
+wrong mutex type, must be either exclusive or recursive
+destroy
+unlock
+notify
+tpoolId
+tpool%p
+can not find threadpool "
+can't create a new thread
+-minworkers
+-idletime
+-exitcmd
+?-minworkers count? ?-maxworkers count? ?-initcmd script? ?-exitcmd script? ?-idletime seconds?
+-initcmd
+-maxworkers
+errorCode
+errorInfo
+tpoolId jobId ?result?
+no such job
+job not completed
+tpoolId jobIdList ?listVar
+-detached
+-nowait
+?-detached? ?-nowait? tpoolId script
+tpool::create
+tpool::names
+tpool::post
+tpool::wait
+tpool::cancel
+tpool::get
+tpool::preserve
+tpool::release
+tpool::suspend
+tpool::resume
+?index?
+index ?index...? value
+list index out of range
+first last
+index element ?element ...?
+value ?value ...?
+element ?index?
+?mode? pattern
+search mode
+first last ?element ...?
+list doesn't have element 
+lappend
+lreplace
+linsert
+llength
+lindex
+lrange
+lsearch
+-exact
+-regexp
+?lkey?
+" not found
+key ?key ...?
+?key? ?var?
+key value ?key value ...?
+keylset
+keylget
+keyldel
+keylkeys
+found "
+keyed list entry not a valid list, 
+element list, found "
+keyed list entry must be a two 
+binary string
+keyed list key may not be a 
+empty string
+keyed list key may not be an 
+it is used as a separator in key paths
+keyed list key may not contain a "."; 
+keyedList
+this extension is compiled for Tcl %d.%d
+interpreter uses an incompatible stubs mechanism
+Mingw-w64 runtime failure:
+Address %p has no image-section
+  VirtualQuery failed for %d bytes at address %p
+  VirtualProtect failed with code 0x%x
+  Unknown pseudo relocation protocol version %d.
+  Unknown pseudo relocation bit size %d.
+%d bit pseudo relocation at %p out of range, targeting %p, yielding the value %p.
+*** stack smashing detected ***: terminated
+(null)
+Infinity
+0123456789abcdefNaN
+Infinity
+infinity
+INFINITY
+msvcrt.dll
+rand_s
+SystemFunction036
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+GCC: (Rev8, Built by MSYS2 project) 15.2.0
+thread2812.dll
+Thread_Init
+DeleteCriticalSection
+EnterCriticalSection
+GetCurrentProcess
+GetLastError
+GetModuleHandleA
+GetProcAddress
+InitializeCriticalSection
+IsProcessorFeaturePresent
+LeaveCriticalSection
+LoadLibraryW
+MultiByteToWideChar
+TerminateProcess
+TlsGetValue
+VirtualProtect
+VirtualQuery
+WideCharToMultiByte
+___lc_codepage_func
+___mb_cur_max_func
+__iob_func
+_amsg_exit
+_errno
+_initterm
+_strtoi64
+_strtoui64
+_unlock
+_write
+calloc
+fprintf
+isdigit
+isleadbyte
+isspace
+isxdigit
+localeconv
+malloc
+memcmp
+memcpy
+memmove
+memset
+realloc
+strcat
+strchr
+strcmp
+strcpy
+strerror
+strlen
+strncmp
+strncpy
+strtol
+strtoul
+tolower
+ungetc
+vfprintf
+wcslen
+KERNEL32.dll
+msvcrt.dll
+__imp_isleadbyte
+__imp_abort
+__lib64_libkernel32_a_iname
+__imp____mb_cur_max_func
+__imp__lock
+__imp_tolower
+_head_lib64_libmsvcrt_def_a
+__imp_calloc
+__imp_LoadLibraryW
+__imp_DeleteCriticalSection
+__imp_fputc
+__imp__amsg_exit
+__imp_IsProcessorFeaturePresent
+__imp__errno
+__imp_strncpy
+__imp_strtol
+__imp_strcmp
+__imp_MultiByteToWideChar
+__imp_GetLastError
+__imp_free
+__imp_LeaveCriticalSection
+__imp_atoi
+__imp_write
+__imp_strcpy
+__imp_memset
+__IAT_end__
+__imp_memcpy
+__imp_memmove
+__lib64_libmsvcrt_def_a_iname
+__imp_strerror
+__imp_strtoul
+_head_lib64_libkernel32_a
+__imp_EnterCriticalSection
+__imp_TerminateProcess
+__imp_GetProcAddress
+__imp_GetModuleHandleA
+__imp_WideCharToMultiByte
+__imp_strlen
+__imp_malloc
+__imp_InitializeCriticalSection
+__imp_realloc
+__imp_vfprintf
+__IAT_start__
+__imp_strcat
+__imp_ungetc
+__imp_Sleep
+__imp_TlsGetValue
+__imp_fprintf
+__imp_VirtualProtect
+__imp_VirtualQuery
+__imp__initterm
+__imp___iob_func
+__imp_localeconv
+__imp_strncmp
+__imp_strchr
+__imp_wcslen
+__imp____lc_codepage_func
+__imp_isxdigit
+__imp__unlock
+__imp_isspace
+__imp_strtoull
+__imp_strtoll
+__imp_isdigit
+__imp_GetCurrentProcess
+__imp_memcmp
+__imp_getc
+(null)
+sadvapi32.dll

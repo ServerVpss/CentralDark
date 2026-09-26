@@ -1,0 +1,323 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\tutor\tutor1.zh_tw
+
+===============================================================================
+=      
+ V I M  
+ 1.5      =
+===============================================================================
+     vim 
+"vimtutor"
+Shift-Lock(
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     ^
+     k
+       < h
+     j
+     v
+(Normal)
+      
+      
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:wq  <
+vimtutor <
+vim tutor <
+ 'vim' 
+ 'tutor'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   ** 
+(Normal)
+ ---> 
+---> The ccow jumpedd ovverr thhe mooon.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ---> 
+ <ESC> 
+---> There is text misng this .
+---> There is some text missing from this line.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       
+ hjkl 
+)       k (
+    l (
+<ESC>   :q!
+<ESC>   :wq
+ i     
+ <ESC> 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ** 
+ <ESC> 
+ ---> 
+ <ESC> 
+---> There are a some words fun that don't belong paper in this sentence.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      
+   ** 
+ <ESC> 
+ ---> 
+---> Somebody typed the end of this line twice. end of this line twice.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ [number]   d
+object
+     d
+ [number]   object
+    number - 
+    d - 
+    object - 
+    w - 
+    e - 
+    $ - 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       ** 
+ 2dd (
+ number-command-object 
+      1)  Roses are red,
+      2)  Mud is fun,
+      3)  Violets are blue,
+      4)  I have a car,
+      5)  Clocks tell time,
+      6)  Sugar is sweet
+      7)  And so are you.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ---> 
+ CTRL-R (
+ CTRL 
+---> Fiix the errors oon thhis line and reeplace them witth undo.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       
+       [number]   command   object     
+     command
+[number]   object
+       number - 
+       command - 
+       object - 
+$ (to the end of line), etc.
+CTRL-R
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       ** 
+(<ESC>
+     d) Can you learn too?
+     b) Violets are blue,
+     c) Intelligence is learned,
+     a) Roses are red,
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       
+ ---> 
+--->  Whan this lime was tuoed in, someone presswd some wrojg keys!
+--->  When this line was typed in, someone pressed some wrong keys!
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   ** 
+ cw **
+ ---> 
+ lubw 
+ <ESC> 
+---> This lubw has a few wptfd that mrrf changing usf the change command.
+---> This line has a few words that need changing using the change command.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       
+     ** 
+       [number]   c   object
+[number]   object
+ ---> 
+ <ESC> 
+---> The end of this line needs some help to make it like the second.
+---> The end of this line needs to be corrected using the  c$  command.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       
+ [number]   c
+object
+      
+c   [number]   object
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ CTRL-g 
+ SHIFT-G 
+ CTRL 
+ SHIFT-G 
+ SHIFT-G
+     CTRL-g 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     ** 
+ errroor <
+errroor
+ Shift-N 
+---> When the search reaches the end of the file it will continue at the start.
+  "errroor" is not the way to spell error;  errroor is an error.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ** 
+---> This ( is a test line with ('s, ['s ] and {'s } in it. ))
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      
+ :s/old/new/g 
+ ---> 
+ :s/thee/the <
+ :s/thee/the/g
+---> the best time to see thee flowers is in thee spring.
+ :#,#s/old/new/g (#,#
+ :%s/old/new/g 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       
+  1. Ctrl-g 
+Shift-G 
+ Shift-G 
+ Shift-N 
+  :s/old/new
+  :s/old/new/g
+  :#,#s/old/new/g
+  :%s/old/new/g
+ :%s/old/new/gc
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   ** 
+ shell 
+ !ls <
+ :!dir 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      
+     ** 
+ :w FILENAME **
+ :!dir 
+ :!ls 
+     <
+ TEST 
+ :w TEST  (
+ TEST 
+ TEST 
+ (VIM 
+ :!dir 
+ TEST 
+ :!rm TEST 
+ TEST 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ :#,# w FILENAME **
+ :!dir 
+ :!ls 
+ TEST 
+ CTRL-g 
+ CTRL-g 
+ :#,# w TEST 
+ TEST 
+ :!dir 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       ** 
+ :r FILENAME **
+ :!dir 
+ TEST 
+ :r TEST 
+ TEST 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       
+  1. :!command 
+ command
+ :!dir
+ :!rm FILENAME
+ FILENAME 
+  2. :w FILENAME  
+ FILENAME
+  3. :#,#w FILENAME 
+     FILENAME 
+  4. :r FILENAME 
+ FILENAME 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ---> 
+ ---> 
+ <ESC> 
+---> After typing  o  the cursor is placed on the open line in Insert mode.
+ Shift-O
+Open up a line above this by typing Shift-O while the cursor is on this line.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     ** 
+ ---> 
+      
+<ESC> 
+      x 
+---> This line will allow you to practice
+---> This line will allow you to practice appending text to the end of a line.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ** 
+ ---> 
+ ---> 
+ last 
+---> To make the first line the same as the last on this page use the keys.
+---> To make the first line the same as the second, type R and the new text.
+ <ESC> 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ignore 
+ /ignore 
+Ignore Case
+:set ic
+ ignore
+ hlsearch 
+ incsearch 
+     :set hls is
+     /ignore
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       
+ <ESC> 
+ :set xxx 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       
+      ** 
+  Vim 
+ <HELP> 
+ <F1> 
+:help <
+":help"
+  :help w <
+  :help c_<T <
+  :help insert-index <
+  :help user-manual <
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      
+     :edit ~/.vimrc
+     :edit ~/_vimrc
+Windows
+     :read $VIMRUNTIME/vimrc_example.vim
+     :write
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  vim 
+:help user-manual
+Vim - Vi Improved - 
+Steve Oualline
+New Riders
+ https://iccf-holland.org/click5.html
+Learning the Vi Editor - 
+Linda Lamb
+O'Reilly & Associates Inc.
+Calorado School of Minese
+Michael C. Pierce
+Robert K.
+  Ware 
+Colorado State University
+Charles Smith
+bware@mines.colorado.edu
+Bram Moolenaar
+  ===========
+      
+ <beos@turbolinux.com.cn>
+      
+linuxrat@gnuchina.org
+      
+ Debian GNU/Linux 
+      
+  autoconvert 
+      
+  =========
+      2002
+ <beos@turbolinux.com.cn>
+      
+ RMS@SMTH 
+      2002
+ <linuxrat@gnuchina.org>
+      
+ xuandong@sh163.net 
+      2002
+ <linuxrat@gnuchina.org>
+      
+Bram Moolenaar
+vimtutor1.4
+      
+vimtutor1.5
+      2001
+ <linuxrat@gnuchina.org>
+      
+vimtutor1.4
+Bram Moolenaar
+Sven Guckes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

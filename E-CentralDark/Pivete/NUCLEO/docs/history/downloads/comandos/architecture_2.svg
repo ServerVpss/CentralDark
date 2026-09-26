@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="920">
+<rect width="1600" height="920" fill="#10131a"/>
+<text x="80" y="70" fill="white" font-size="34" font-family="sans-serif">CENTRALDARK — arquitetura de prova</text>
+<g fill="#dfe7ef" font-size="25" font-family="monospace">
+<text x="100" y="150">SEGREDO/CHEFE: intenção + destino + realidade vivida</text>
+<text x="100" y="220">↓</text><text x="100" y="280">!PAPAGAIO_OFF</text>
+<text x="100" y="350">↓</text><text x="100" y="410">#ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA</text>
+<text x="100" y="480">↓</text><text x="100" y="540">HUMAN_LIVED_REALITY + SYSTEM_MEASURED_REALITY</text>
+<text x="100" y="610">↓</text><text x="100" y="670">!RECONCILIAR → !REMEDIÇÃO → !FIXED_POINT</text>
+<text x="100" y="740">↓</text><text x="100" y="800">FALHA → EVIDÊNCIA → TESTE → GATE → CRISTAL → !REGISTRA → !BOOT</text>
+</g>
+<text x="100" y="875" fill="#aebdca" font-size="20" font-family="monospace">PROOF_ROOT=d869c8d00b0fd94e156934965c67fd22d7dde0c07c977dc43be5b104ebcfa4d1</text></svg>

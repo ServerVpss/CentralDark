@@ -1,0 +1,92 @@
+name: dispatcher-bots
+
+# Issues e PRs usam a mesma fila de labels assign:<bot>.
+# Anti-loop: cada bot só age se a label dele estiver presente.
+# PRs recebem briefing de suporte sem transferir o Writer do código.
+
+on:
+  issues:
+    types: [labeled, opened]
+  pull_request_target:
+    types: [labeled, opened, reopened]
+
+permissions:
+  issues: write
+  pull-requests: read
+  contents: read
+
+concurrency:
+  group: dispatcher-bots-${{ github.event_name }}-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  rotear:
+    if: >-
+      (github.event_name == 'issues' && (
+        contains(github.event.issue.labels.*.name, 'assign:codex') ||
+        contains(github.event.issue.labels.*.name, 'assign:supabase-bot') ||
+        contains(github.event.issue.labels.*.name, 'assign:lovable') ||
+        contains(github.event.issue.labels.*.name, 'assign:grok') ||
+        contains(github.event.issue.labels.*.name, 'assign:chatgpt')
+      )) ||
+      (github.event_name == 'pull_request_target' && (
+        contains(github.event.pull_request.labels.*.name, 'assign:codex') ||
+        contains(github.event.pull_request.labels.*.name, 'assign:supabase-bot') ||
+        contains(github.event.pull_request.labels.*.name, 'assign:lovable') ||
+        contains(github.event.pull_request.labels.*.name, 'assign:grok') ||
+        contains(github.event.pull_request.labels.*.name, 'assign:chatgpt')
+      ))
+    runs-on: [self-hosted, Linux]
+    steps:
+      - name: Postar briefing idempotente
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const subject = context.payload.issue || context.payload.pull_request;
+            const labels = subject.labels.map((label) => label.name);
+            const issue_number = subject.number;
+            const kind = context.payload.pull_request ? 'PR' : 'Issue';
+            const briefings = [
+              ['assign:codex', 'Codex: ler AGENTS.md + CODEX.md, revisar código/YAML estruturado, fazer patch mínimo quando for o Writer autorizado, rodar build/test e explicar o diff. Bloqueado: arquivos sensíveis.'],
+              ['assign:supabase-bot', 'Supabase Bot: rodar checks read-only (schema/RLS/migrations) e anexar relatório. Escrita só com label adicional `confirm:write`.'],
+              ['assign:lovable', 'Lovable: tarefa de frontend/UI/painel. Sem mexer em backend, secrets, Docker ou VPS.'],
+              ['assign:grok', 'Grok: auditoria VPS/PM2 read-only. Sem rm -rf, sem reset --hard e sem ação sensível sem OK explícito do usuário.'],
+              ['assign:chatgpt', 'ChatGPT: apoiar artefatos Mermaid/Canvas/YAML, orquestrar, validar cadeia de prova e fechar somente quando o critério for cumprido. Suporte visual não transfere o Writer do código.'],
+            ];
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number,
+              per_page: 100,
+            });
+
+            for (const [label, text] of briefings) {
+              if (!labels.includes(label)) continue;
+              const marker = `<!-- dispatcher-bots:${label} -->`;
+              const alreadyPosted = comments.some((comment) => {
+                const owned =
+                  comment.user?.login === 'github-actions[bot]' ||
+                  comment.performed_via_github_app?.slug === 'github-actions';
+                return owned && comment.body?.includes(marker);
+              });
+              if (alreadyPosted) continue;
+              const body = [
+                marker,
+                `🤖 **Dispatcher CentralDark** — este ${kind} pediu suporte via \`${label}\`.`,
+                '',
+                '**TTL:** 7 dias para PR/comentário de progresso, senão a pendência permanece visível.',
+                `**Regra anti-loop:** somente o bot da label \`${label}\` deve agir; os demais ignoram.`,
+                '**Regra de Writer:** apoio visual, revisão ou tradução não concede posse de escrita.',
+                '',
+                '---',
+                text,
+              ].join('\n');
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number,
+                body,
+              });
+            }

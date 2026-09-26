@@ -1,0 +1,55 @@
+{
+  "instrument_encoding_test": "PASS",
+  "mutacoes": [
+    {
+      "thread_id": "3695966151",
+      "file": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+      "negative_proof_finding_reproduzido": true,
+      "positive_proof_candidato_livre": true,
+      "mutant_sha256_16": "3017167dffd83636",
+      "veredicto": "PASS"
+    },
+    {
+      "thread_id": "3695966156",
+      "file": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+      "negative_proof_finding_reproduzido": true,
+      "positive_proof_candidato_livre": true,
+      "mutant_sha256_16": "a4b421e82925adcb",
+      "veredicto": "PASS"
+    },
+    {
+      "thread_id": "3695966160",
+      "file": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+      "negative_proof_finding_reproduzido": true,
+      "positive_proof_candidato_livre": true,
+      "mutant_sha256_16": "9e948fbd790dd4ab",
+      "veredicto": "PASS"
+    },
+    {
+      "thread_id": "3695970314",
+      "file": "AGENTS.md",
+      "negative_proof_finding_reproduzido": true,
+      "positive_proof_candidato_livre": true,
+      "mutant_sha256_16": "7ffde9e8e7654660",
+      "veredicto": "PASS"
+    },
+    {
+      "thread_id": "3695973317",
+      "file": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+      "negative_proof_finding_reproduzido": true,
+      "positive_proof_candidato_livre": true,
+      "mutant_sha256_16": "0ac9acf2ee565cbc",
+      "veredicto": "PASS"
+    },
+    {
+      "thread_id": "3696018772",
+      "file": ".coderabbit.yaml",
+      "negative_proof_finding_reproduzido": true,
+      "positive_proof_candidato_livre": true,
+      "mutant_sha256_16": "ce3c61df3bb847d7",
+      "veredicto": "PASS"
+    }
+  ],
+  "worktree_intocado": true,
+  "falhas": []
+}

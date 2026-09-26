@@ -1,0 +1,58 @@
+name: Lupa Drift Guard
+
+on:
+  pull_request:
+    branches: [main, pivete/dev, pivete/auditoria]
+    types: [opened, reopened, synchronize, ready_for_review, labeled, unlabeled]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lupa-drift-guard-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  drift-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Confirmar canônica única no disco
+        run: |
+          set -e
+          test -f .agents/skills/meta-lupa/SKILL.md || { echo "❌ canônica ausente"; exit 1; }
+          for proibido in tecnica-da-lupa metalupa-bayesiana-canonica lupa-premium; do
+            for base in .agents/skills .claude/skills .workspace/skills; do
+              if [ -d "$base/$proibido" ]; then
+                echo "❌ skill removida reapareceu: $base/$proibido"
+                exit 1
+              fi
+            done
+          done
+          echo "✅ apenas .agents/skills/meta-lupa/ está ativo"
+
+      - name: Gerar inventário de skills
+        run: |
+          python scripts/lupa/inventario_skills.py > /tmp/inv.json
+          echo "---"
+          jq '.total, [.skills[].nome]' /tmp/inv.json
+
+      - name: Detectar drift (skills duplicadas + menções ativas em doc)
+        run: python scripts/lupa/detectar_drift.py
+
+      - name: Upload inventário
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: inventario-skills
+          path: |
+            /tmp/inv.json
+            docs/RELATORIOS/inventario-skills.json

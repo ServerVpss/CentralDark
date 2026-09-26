@@ -1,0 +1,128 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\agent\lsp\__pycache__\protocol.cpython-311.pyc
+
+d-d.d#
+Minimal LSP JSON-RPC 2.0 framer over async streams.
+LSP wire format:
+    Content-Length: <bytes>\r\n
+    \r\n
+    <utf-8 JSON body>
+The body is a JSON-RPC 2.0 envelope: request, response, or notification.
+This module replaces what ``vscode-jsonrpc/node`` would do in a
+TypeScript implementation.  We keep it deliberately small 
+ just the
+framer + envelope helpers 
+ so :class:`agent.lsp.client.LSPClient` can
+focus on protocol semantics.
+annotationsN)
+Optional
+Tuplez
+agent.lsp.protocoli
+LSPProtocolErroru
+Raised when the wire protocol is violated.
+    Distinct from :class:`LSPRequestError` which represents a server
+    returning a JSON-RPC error response 
+ that's protocol-conformant.
+    This exception means the framing or envelope itself is broken.
+    N)
+__name__
+__module__
+__qualname__
+__doc__
+FC:\Users\danda\AppData\Local\hermes\hermes-agent\agent\lsp\protocol.pyr
+LSPRequestErrorz
+Raised when an LSP request returns an error response.
+    Carries the JSON-RPC ``code``, ``message``, and optional ``data``.
+message
+return
+LSP error z
+__init__r
+__class__s
+LSPRequestError.__init__/
+__classcell__)
+bytesc
+Encode a JSON-RPC envelope as a Content-Length framed byte string.
+    The body is encoded as compact UTF-8 JSON (no spaces between
+    separators) 
+ matches what ``vscode-jsonrpc`` emits and keeps the
+    Content-Length count exact.
+separators
+ensure_ascii
+utf-8z
+Content-Length: z
+ascii)
+encode
+headers
+encode_messager0
+reader
+asyncio.StreamReader
+Optional[dict]c
+Read one Content-Length framed JSON-RPC message from the stream.
+    Returns ``None`` on clean EOF (server closed stdout cleanly between
+    messages 
+ typical shutdown).  Raises :class:`LSPProtocolError` on
+    malformed framing.
+    The reader is advanced to just past the JSON body on success.
+Nz2unexpected EOF while reading LSP headers (partial=
+z2LSP header block exceeded 8 KiB without terminator
+non-ASCII LSP header: z
+malformed LSP header line: z
+content-lengthz$LSP message missing Content-Length: z
+non-integer Content-Length: i
+unreasonable Content-Length: z
+truncated LSP body: expected z
+ bytes, got r(
+invalid JSON in LSP body: z
+non-UTF-8 LSP body: )
+readuntil
+asyncio
+IncompleteReadError
+partialr
+decode
+partition
+UnicodeDecodeError
+ValueError
+readexactlyr*
+JSONDecodeError)
+headers
+header_bytes
+           r
+read_messagerN
+req_idr
+methodr
+paramsr
+z&Build a JSON-RPC 2.0 request envelope.
+jsonrpc
+make_requestrW
+z7Build a JSON-RPC 2.0 notification envelope (no ``id``).rS
+make_notificationrY
+resultc
+z/Build a JSON-RPC 2.0 success response envelope.rS
+make_responser\
+z-Build a JSON-RPC 2.0 error response envelope.)
+errorr
+     r
+make_error_responser`
+Tuple[str, Any]c
+Return ``(kind, key)`` where kind is one of ``request``,
+    ``response``, ``notification``, ``invalid``.
+    The key is the request id for request/response, the method name
+    for notifications, and ``None`` for invalid messages.
+invalidNrT
+requestrZ
+response
+notification)
+isinstancer!
+has_id
+has_methods
+classify_messagerj
+ERROR_CONTENT_MODIFIED
+ERROR_REQUEST_CANCELLED
+ERROR_METHOD_NOT_FOUNDr
+__future__r
+logging
+typingr
+getLogger
+loggerrk
+Exceptionr
+__all__r
+<module>ru

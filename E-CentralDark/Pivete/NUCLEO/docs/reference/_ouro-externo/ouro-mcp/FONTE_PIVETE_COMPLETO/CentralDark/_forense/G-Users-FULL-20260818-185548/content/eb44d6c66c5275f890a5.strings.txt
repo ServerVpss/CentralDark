@@ -1,0 +1,23 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\terminfo\78\xterm-pcolor
+
+xterm-pcolor|xterm with color used for highlights and status line
+[%i%p1%d;%p2%dr
+[%i%p1%d;%p2%dH
+[1;43m
+[7;34m
+[7;31m
+[4;42m
+[?1;3;4;6l
+[%p1%dP
+[%p1%dM
+[%p1%dB
+[%p1%dL
+[%p1%dD
+[%p1%dC
+[%p1%dA
+[?1;3;4;6l
+%?%p9%t
+[0%?%p6%t;1;43%;%?%p2%t;4;42%;%?%p1%t;7;31%;%?%p3%t;7;34%;m
+``aaffggiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz{{||}}~~
+[%i%d;%dR
+[?1;2c

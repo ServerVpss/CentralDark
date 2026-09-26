@@ -1,0 +1,4 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\contributors\emails\hinablue@gmail.com
+
+hinablue
+# v0.20.0 audit: direct email match; co-author on #77022

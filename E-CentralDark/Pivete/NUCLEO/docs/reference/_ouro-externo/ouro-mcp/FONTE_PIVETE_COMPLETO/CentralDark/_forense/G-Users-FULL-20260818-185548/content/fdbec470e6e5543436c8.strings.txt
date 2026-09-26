@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\lib\terminfo\78\xterm+sm+1002
+
+xterm+sm+1002|xterm any-button mouse
+[?1006;1004;1002%?%p1%{1}%=%th%el%;
+[?1004l
+[?1004h
+[<%i%p3%d;%p1%d;%p2%d;%?%p4%tM%em%;

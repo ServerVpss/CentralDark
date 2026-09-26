@@ -1,0 +1,26 @@
+{
+  "schema": "CENTRALDARK_CRYSTALLIZATION_RECEIPT",
+  "date": "2026-08-31",
+  "scope": "capability-harvest-media-handoff-recovery",
+  "mode": "EXTEND_EXISTING_ONLY",
+  "github_remote": "UNAVAILABLE_AT_FIRST_READ_THIS_TURN",
+  "drive_zip_id": "12SU2Xn_z8n8o-sEyma-Le5r-a-6Fgg0P",
+  "drive_owner_id": "1ZFhlcoPclDuNPXtD4FSfq4_Zfyb4L0vwBAcselkyC_E",
+  "changes": [
+    "named skill miss resolves by capability/owner; no fabricated skill",
+    "Fable remains auxiliary review method",
+    "dense handoff grammar compression without semantic-field loss",
+    "YouTube debug locator and timedtext track-locator contract",
+    "search-only no longer counts as completed capability harvest"
+  ],
+  "secret_values_persisted": false,
+  "runtime_claims": {
+    "youtube_full_transcript": "UNKNOWN_UNTIL_ACQUIRED",
+    "github_sync": "PENDING"
+  },
+  "tests": "66_PASS_0_FAIL",
+  "master_validation": "PASS",
+  "master_self_test": "34_PASS_0_FAIL",
+  "hash_chain_valid": true,
+  "manifest_sha256": "1ef7f267d1db17b5611998399d6481d58deb5cc46ae60cb57d78fd32640e3e63"
+}

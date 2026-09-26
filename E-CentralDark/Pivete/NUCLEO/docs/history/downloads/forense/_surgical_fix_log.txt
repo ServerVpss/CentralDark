@@ -1,0 +1,50 @@
+﻿2026-08-22T05:28:53.6152034-03:00 === SURGICAL START ===
+2026-08-22T05:28:53.6346841-03:00 User=SEGREDO\danda
+2026-08-22T05:28:53.6406994-03:00 IsAdmin=True
+2026-08-22T05:28:53.6427043-03:00 --- policy before ---
+2026-08-22T05:28:53.6487200-03:00 DisableAntiSpyware       : 1
+DisableAntiVirus         : 1
+DisablePackedExeScanning : 1
+2026-08-22T05:28:53.6626345-03:00 REMOVED HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender DisableAntiSpyware
+2026-08-22T05:28:53.6693200-03:00 REMOVED HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender DisableAntiVirus
+2026-08-22T05:28:53.6733295-03:00 REMOVED HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender DisablePackedExeScanning
+2026-08-22T05:28:53.6818659-03:00 REMOVED HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection DisableBehaviorMonitoring
+2026-08-22T05:28:53.6899717-03:00 REMOVED HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection DisableIOAVProtection
+2026-08-22T05:28:53.6979909-03:00 REMOVED HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection DisableOnAccessProtection
+2026-08-22T05:28:53.7040077-03:00 REMOVED HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection DisableRealtimeMonitoring
+2026-08-22T05:28:53.7107698-03:00 REMOVED HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection DisableScanOnRealtimeEnable
+2026-08-22T05:28:53.7629992-03:00 REMOVED HKLM:\SOFTWARE\Microsoft\Windows Defender DisableAntiSpyware
+2026-08-22T05:28:53.7913748-03:00 REMOVED HKLM:\SOFTWARE\Microsoft\Windows Defender DisableAntiVirus
+2026-08-22T05:28:53.7913748-03:00 --- services ---
+2026-08-22T05:28:53.8136645-03:00 Set-Service WinDefend Automatic OK
+2026-08-22T05:28:53.8208865-03:00 Set-Service WdNisSvc Automatic OK
+2026-08-22T05:28:53.8608772-03:00 sc config WdFilter start= system :: [SC] OpenService FALHA 5:
+
+Acesso negado.
+2026-08-22T05:28:53.8877667-03:00 sc config WdBoot start= boot :: [SC] OpenService FALHA 5:
+
+Acesso negado.
+2026-08-22T05:28:53.9319918-03:00 sc config WdNisDrv start= demand :: [SC] OpenService FALHA 5:
+
+Acesso negado.
+2026-08-22T05:28:53.9478962-03:00 Start-Service WinDefend OK
+2026-08-22T05:28:57.9779138-03:00 SVC MDCoreSvc Status=Running StartType=Automatic
+2026-08-22T05:28:57.9779138-03:00 SVC SecurityHealthService Status=Running StartType=Manual
+2026-08-22T05:28:57.9899710-03:00 SVC WdFilter Status=Stopped StartType=Disabled
+2026-08-22T05:28:57.9899710-03:00 SVC WdNisSvc Status=Stopped StartType=Disabled
+2026-08-22T05:28:57.9899710-03:00 SVC WinDefend Status=Stopped StartType=Disabled
+2026-08-22T05:28:57.9899710-03:00 --- MpComputerStatus ---
+2026-08-22T05:28:58.4642826-03:00 AMRunningMode=Not running
+2026-08-22T05:28:58.4662881-03:00 AMServiceEnabled=False
+2026-08-22T05:28:58.4682939-03:00 AntivirusEnabled=False
+2026-08-22T05:28:58.4702993-03:00 RealTimeProtectionEnabled=False
+2026-08-22T05:28:58.4723043-03:00 BehaviorMonitorEnabled=False
+2026-08-22T05:28:58.4743099-03:00 IoavProtectionEnabled=False
+2026-08-22T05:28:58.4763155-03:00 OnAccessProtectionEnabled=False
+2026-08-22T05:28:58.4800668-03:00 AMEngineVersion=0.0.0.0
+2026-08-22T05:28:58.4820720-03:00 AMServiceVersion=0.0.0.0
+2026-08-22T05:28:58.4840772-03:00 IsTamperProtected=False
+2026-08-22T05:28:58.4840772-03:00 --- policy after ---
+2026-08-22T05:28:58.4880874-03:00 DisableAntiSpyware : 
+DisableAntiVirus   :
+2026-08-22T05:28:58.4880874-03:00 === SURGICAL END ===

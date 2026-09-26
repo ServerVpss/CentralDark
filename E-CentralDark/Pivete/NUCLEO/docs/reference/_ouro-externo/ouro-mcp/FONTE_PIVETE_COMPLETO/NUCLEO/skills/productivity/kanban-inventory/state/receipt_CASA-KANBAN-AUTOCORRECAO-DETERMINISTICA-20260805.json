@@ -1,0 +1,70 @@
+{
+  "mission_id": "CASA-KANBAN-AUTOCORRECAO-DETERMINISTICA-20260805",
+  "authority": "SEGREDO/CHEFE",
+  "authorization_marker": "PERMITO SEGREDO",
+  "coordinator": "SOL",
+  "executor": "PIVETE/HERMES",
+  "writer": "HERMES",
+  "before_hash": {
+    "contract_file": "926cd347915e1a3880d284f65c17af0f976c1feb07bb84173155587c2df7722e",
+    "adapter": "2ea7a19baf731121b3e88e2e554b2681e53eacfb5cbde0f3a4d824cfb2bd2221",
+    "schema": "94fbdc9a83c835eea6156204e9a17ffc504f25030c411d111b60bfa98e8fd6c0",
+    "backup": "00c0749386bdaa7c8da9aae280e0f447e46667a4b85fc103dcf40ddee8009f0a"
+  },
+  "after_hash": {
+    "contract_file": "6a8aa09ca6eceb2aaa3c01f514627624efb4008287e3d20bb88a59fc47e814d4",
+    "contract_canonical": "60a3488d7e621710478042525e357b16533afb54999c2faba79ae795cb23d0b7",
+    "contract_hash_file": "60a3488d7e621710478042525e357b16533afb54999c2faba79ae795cb23d0b7",
+    "adapter": "2ea7a19baf731121b3e88e2e554b2681e53eacfb5cbde0f3a4d824cfb2bd2221",
+    "detector": "8883304caca213de3e9743ad4dc22dbc13c937ff66abe3d2445ecd655965b677",
+    "schema": "94fbdc9a83c835eea6156204e9a17ffc504f25030c411d111b60bfa98e8fd6c0"
+  },
+  "files_changed": [
+    "contracts/kanban-contract.json",
+    "scripts/drift_detector.py",
+    "state/contract_hash.txt",
+    "state/baseline_CASA-KANBAN-AUTOCORRECAO-DETERMINISTICA-20260805.json",
+    "state/test_suite_*.json",
+    "state/drift_report_*.json",
+    "state/canary_cleanup_*.json"
+  ],
+  "action": "FASE5_detector_rewrite+authority_contract+canary+20tests",
+  "test_result": {
+    "total_tests": 20,
+    "applicable": 20,
+    "pass": 20,
+    "fail": 0,
+    "skipped": 0,
+    "not_applicable": 0,
+    "pass_percent": 100.0
+  },
+  "rollback": {
+    "available": true,
+    "backup_dir": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\backups\\CASA-KANBAN-AUTOCORRECAO-DETERMINISTICA-20260805",
+    "backup_hash": "00c0749386bdaa7c8da9aae280e0f447e46667a4b85fc103dcf40ddee8009f0a",
+    "method": "restore files from backup dir"
+  },
+  "canary": {
+    "created": true,
+    "write": true,
+    "rollback": true,
+    "cleanup": true,
+    "channels": [
+      "CLI create/show/block/unblock",
+      "CLI show status field + archive/--rm"
+    ],
+    "human_cards_untouched": true,
+    "final_board": "only original 3 cards remain"
+  },
+  "authority_checks": {
+    "PERMITO_SEGREDO": "PASS",
+    "PERMITO_PIVETE": "BLOCKED",
+    "AUTHORITY_MISSING": "BLOCKED",
+    "AUTHORITY_CONFLICT": "BLOCKED"
+  },
+  "upstream_files_modified": 0,
+  "upstream_porcelain_non_nul": [],
+  "sol_integration": "BLOCKED_NOT_IMPLEMENTED",
+  "sol_extension_point": "skill local kanban-inventory + receipt JSON in state/; SOL consumes receipt, does not co-write",
+  "timestamp": "2026-08-05T23:07:31.851813"
+}

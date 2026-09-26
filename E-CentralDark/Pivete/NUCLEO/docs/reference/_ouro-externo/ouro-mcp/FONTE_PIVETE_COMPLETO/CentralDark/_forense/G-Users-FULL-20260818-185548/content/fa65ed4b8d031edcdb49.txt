@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@icons-pack\react-simple-icons\icons\SiCheckmk.d.ts
+
+import { IconType } from '../types';
+declare const defaultColor = "#15D1A0";
+declare const SiCheckmk: IconType;
+export { SiCheckmk as default, defaultColor };

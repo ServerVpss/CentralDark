@@ -1,0 +1,8 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@dnd-kit\utilities\dist\hooks\useIsomorphicLayoutEffect.d.ts
+
+import { useLayoutEffect } from 'react';
+/**
+ * A hook that resolves to useEffect on the server and useLayoutEffect on the client
+ * @param callback {function} Callback function that is invoked when the dependencies of the hook change
+ */
+export declare const useIsomorphicLayoutEffect: typeof useLayoutEffect;

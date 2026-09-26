@@ -1,0 +1,172 @@
+/**
+ * Helpers for building short-lived vault directories for search tests.
+ */
+
+import { mkdtempSync, mkdirSync, writeFileSync, symlinkSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
+
+import {
+  classifyVaultIgnoreRule,
+  DEFAULT_VAULT_IGNORE_PATHS,
+  type VaultIgnoreRule,
+} from "../../src/core/vault-scope/defaults.ts";
+import type {
+  ResolvedSearchConfig,
+  ResolvedEmbeddingConfig,
+  ResolvedRerankConfig,
+} from "../../src/core/search/types.ts";
+import { DEFAULT_FTS_TOKENIZE } from "../../src/core/search/schema.ts";
+
+export function createTempVault(prefix: string): {
+  vault: string;
+  dbPath: string;
+  cleanup: () => void;
+} {
+  const vault = mkdtempSync(join(tmpdir(), `osb-${prefix}-`));
+  const dbPath = join(vault, ".open-second-brain", "brain.sqlite");
+  return {
+    vault,
+    dbPath,
+    cleanup: () => rmSync(vault, { recursive: true, force: true }),
+  };
+}
+
+export function writeMd(vault: string, relPath: string, content: string): string {
+  const abs = join(vault, relPath);
+  mkdirSync(dirname(abs), { recursive: true });
+  writeFileSync(abs, content);
+  return abs;
+}
+
+export function writeSymlink(vault: string, relLink: string, absTarget: string): string {
+  const abs = join(vault, relLink);
+  mkdirSync(dirname(abs), { recursive: true });
+  symlinkSync(absTarget, abs);
+  return abs;
+}
+
+export function makeConfig(opts: {
+  vault: string;
+  dbPath: string;
+  /**
+   * Optional terse shortcut: when provided, each string is classified
+   * into a `VaultIgnoreRule` (kind `path` if it contains `/`, else
+   * `name`). When omitted, the shared default rule set is used.
+   */
+  ignorePaths?: ReadonlyArray<string>;
+  semantic?: Partial<ResolvedEmbeddingConfig>;
+  /** MMR tradeoff; defaults to 0.7. Pass 1 to disable diversification. */
+  mmrLambda?: number;
+  /** Link-graph traversal depth; defaults to 1. Pass 0 to disable. */
+  maxHops?: number;
+  /** Query-intent reweighting; defaults to true. */
+  intentEnabled?: boolean;
+  /** Synonym / query expansion; defaults to false (opt-in). */
+  synonymEnabled?: boolean;
+  /** Persistent query cache; defaults to false (opt-in). */
+  cacheEnabled?: boolean;
+  /** Relation-aware recall polarity; defaults to true. */
+  relationPolarityEnabled?: boolean;
+  /** Typed-edge relational RRF arm; defaults to false (opt-in). */
+  relationalArmEnabled?: boolean;
+  /** Retrieval trust gate (kernel 1); defaults to false (opt-in). */
+  retrievalTrustGateEnabled?: boolean;
+  /** Relation-only supersede fade (kernel 1); defaults to false (opt-in). */
+  supersedeFadeEnabled?: boolean;
+  /** Learned recall weights from feedback; defaults to false (opt-in). */
+  learnedWeightsEnabled?: boolean;
+  /** Access-reinforced activation; defaults to true (neutral without events). */
+  activationEnabled?: boolean;
+  /** Two-pass broadened retry in evidence-pack mode; defaults to true. */
+  twoPassEnabled?: boolean;
+  /** Rank-fusion mode; defaults to "linear". */
+  fusionMode?: "linear" | "rrf";
+  /** Opt-in self-tuning recall; defaults to false. */
+  selfTuningEnabled?: boolean;
+  /** RRF damping constant; defaults to 60. */
+  rrfK?: number;
+  /** Optional cross-encoder rerank overrides; defaults to disabled. */
+  rerank?: Partial<ResolvedRerankConfig>;
+  /** Trigram candidate prefilter; defaults to false (opt-in). */
+  trigramPrefilterEnabled?: boolean;
+  /** Minimum corpus chunks before the trigram prefilter engages; defaults to 5000. */
+  trigramPrefilterMinChunks?: number;
+}): ResolvedSearchConfig {
+  const baseSemantic: ResolvedEmbeddingConfig = Object.freeze({
+    enabled: false,
+    provider: "openai-compat",
+    baseUrl: null,
+    model: null,
+    apiKey: null,
+    dimension: null,
+    timeoutMs: 10_000,
+    concurrency: 4,
+    batchSize: 32,
+    costGateUsd: 0,
+    maxRetries: 3,
+  });
+  const semantic: ResolvedEmbeddingConfig = Object.freeze({
+    ...baseSemantic,
+    ...opts.semantic,
+  });
+  const paths = opts.ignorePaths ?? DEFAULT_VAULT_IGNORE_PATHS;
+  const ignoreRules: ReadonlyArray<VaultIgnoreRule> = Object.freeze(
+    paths.map(classifyVaultIgnoreRule),
+  );
+  return Object.freeze({
+    vault: opts.vault,
+    dbPath: opts.dbPath,
+    ignoreRules,
+    chunkSize: 800,
+    chunkOverlap: 100,
+    chunkMinSize: 100,
+    keywordWeight: 0.6,
+    semanticWeight: 0.4,
+    fusionMode: opts.fusionMode ?? "linear",
+    rrfK: opts.rrfK ?? 60,
+    semantic,
+    recall: Object.freeze({
+      mmrLambda: opts.mmrLambda ?? 0.7,
+      maxHops: opts.maxHops ?? 1,
+      hopDecay: 0.5,
+      maxExpansionPerHit: 3,
+      recencyShape: 0.8,
+      recencyScale: 30,
+      recencyAmplitude: 0.05,
+      intentEnabled: opts.intentEnabled ?? true,
+      synonymEnabled: opts.synonymEnabled ?? false,
+      synonymMaxTerms: 3,
+      cacheEnabled: opts.cacheEnabled ?? false,
+      cacheTtlSeconds: 300,
+      relationPolarityEnabled: opts.relationPolarityEnabled ?? true,
+      relationalArmEnabled: opts.relationalArmEnabled ?? false,
+      retrievalTrustGateEnabled: opts.retrievalTrustGateEnabled ?? false,
+      supersedeFadeEnabled: opts.supersedeFadeEnabled ?? false,
+      learnedWeightsEnabled: opts.learnedWeightsEnabled ?? false,
+      activationEnabled: opts.activationEnabled ?? true,
+      twoPassEnabled: opts.twoPassEnabled ?? true,
+      poolMultiplier: 3,
+      selfTuningEnabled: opts.selfTuningEnabled ?? false,
+      chainStopEnabled: false,
+      chainStopScore: 0.8,
+      trigramPrefilterEnabled: opts.trigramPrefilterEnabled ?? false,
+      trigramPrefilterMinChunks: opts.trigramPrefilterMinChunks ?? 5000,
+      trigramPrefilterMaxSelectivity: 0.5,
+    }),
+    rerank: Object.freeze({
+      enabled: false,
+      kind: "openai-compat",
+      baseUrl: null,
+      model: null,
+      envKey: null,
+      apiKey: null,
+      topK: 20,
+      minScore: 0,
+      ...opts.rerank,
+    }),
+    shutdownGraceMs: 5_000,
+    resumeReindex: false,
+    ftsTokenize: DEFAULT_FTS_TOKENIZE,
+  });
+}

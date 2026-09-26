@@ -1,0 +1,19 @@
+{
+  "total_rows": 14252,
+  "categories": {
+    "DESCONHECIDO": 14252
+  },
+  "unique_shas": 8790,
+  "duplicate_sha_groups": 2875,
+  "duplicate_lines": 8337,
+  "sensitive_rows_count": 62,
+  "classified_counts": {
+    "SENSITIVE_QUARANTINE": 62,
+    "DUPLICATE": 8313,
+    "HISTORICAL_REFERENCE": 5877,
+    "CURRENT_CANDIDATE": 0
+  },
+  "note_current_candidate": "CURRENT_CANDIDATE não aplicado porque critério não foi declarado; todos os itens são CRISTAL e arquivados.",
+  "path_output_summary": "E:\\CentralDark\\Pivete\\_RECONCILIADO\\rastro_classificacao_summary.json",
+  "path_output_sensitive": "E:\\CentralDark\\Pivete\\_RECONCILIADO\\quarantine_sensitive_candidates.json"
+}

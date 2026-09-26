@@ -1,0 +1,11 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@shikijs\engine-javascript\README.md
+
+# @shikijs/engine-javascript
+
+Engine for Shiki using JavaScript's native RegExp. Uses [Oniguruma-To-ES](https://github.com/slevithan/oniguruma-to-es) to transpile regex syntax and behavior.
+
+[Documentation](https://shiki.style/guide/regex-engines)
+
+## License
+
+MIT

@@ -1,0 +1,505 @@
+# 🧠 DETERMINAÇÕES PARA O SISTEMA PARAR DE “DIZER” E COMEÇAR A **PROVAR**
+
+Isso aqui **não é mágica nem confiança na memória da IA**. Funciona quando cada regra vira:
+
+```text
+REGRA EXECUTÁVEL
++ TESTE AUTOMÁTICO
++ GATE BLOQUEANTE
++ RECIBO VERIFICÁVEL
+```
+
+Sem esses quatro itens, continua sendo apenas orientação escrita.
+
+---
+
+## 1. Vocabulário obrigatório de estado
+
+1. **“Planejado”** significa que ainda não houve alteração.
+2. **“Em execução”** significa que há processo identificado trabalhando.
+3. **“Alterado localmente”** significa que o arquivo mudou, mas ainda não existe commit.
+4. **“Commitado”** significa que existe commit contendo a alteração.
+5. **“Enviado”** significa que o commit existe no remoto.
+6. **“Em PR”** significa que o commit está ligado a um Pull Request.
+7. **“Integrado”** significa que a alteração entrou na branch canônica.
+8. **“Publicado”** significa que chegou ao ambiente de execução.
+9. **“Validado”** significa que foi testado no alvo declarado.
+10. **“Registrado permanentemente”** significa arquivo canônico + commit + remoto + leitura posterior comprovada.
+11. **“Comentado” nunca pode ser usado como sinônimo de registrado.**
+12. **“Documentado” nunca pode ser usado quando só existe comentário de PR.**
+13. **“Resolvido” exige correção aplicada e teste contra repetição.**
+14. **“Verde” exige prova atual, não ausência de erro.**
+15. **“Online” exige medição real do alvo atual.**
+16. **“Protegido” exige controles ativos e teste de eficácia.**
+17. **“Concluído” exige todos os critérios de aceite satisfeitos.**
+18. **“Bloqueado” deve informar exatamente o requisito ausente.**
+19. **“Parcial” deve listar o que foi e o que não foi feito.**
+20. **“Desconhecido” é um estado válido e preferível à invenção.**
+
+---
+
+## 2. Proibição de palavras sem prova
+
+21. O agente não pode escrever **“feito”** sem apresentar identificador verificável.
+22. O agente não pode escrever **“registrado”** sem informar o arquivo canônico.
+23. O agente não pode escrever **“commitado”** sem informar o SHA.
+24. O agente não pode escrever **“na main”** sem consultar a `origin/main`.
+25. O agente não pode escrever **“testado”** sem informar comando e resultado.
+26. O agente não pode escrever **“funcionando”** baseado somente em compilação.
+27. O agente não pode escrever **“notificado”** apenas porque chamou uma função.
+28. O agente não pode escrever **“Telegram recebeu”** sem receipt ou confirmação observável.
+29. O agente não pode escrever **“painel atualizado”** sem consultar a fonte exibida.
+30. O agente não pode escrever **“fallback funcionou”** sem provocar a falha principal.
+31. O agente não pode escrever **“rollback disponível”** sem demonstrar o procedimento.
+32. O agente não pode escrever **“sem regressão”** sem rodar testes anteriores relevantes.
+33. O agente não pode escrever **“seguro”** sem declarar escopo e riscos residuais.
+34. O agente não pode escrever **“não existe”** sem mostrar onde procurou.
+35. O agente não pode escrever **“não mudou”** sem comparar referências fixadas.
+36. O agente não pode escrever **“limpo”** sem verificar arquivos rastreados e não rastreados.
+37. O agente não pode escrever **“consolidado”** se ainda existem fontes paralelas.
+38. O agente não pode escrever **“canônico”** sem apontar a fonte da verdade.
+39. O agente não pode escrever **“permanente”** se depender da memória da conversa.
+40. O agente não pode fechar missão com base somente na própria narrativa.
+
+---
+
+## 3. Registro permanente de verdade
+
+41. Toda regra permanente deve morar em um artefato versionado.
+42. Comentário de PR é histórico auxiliar, não fonte canônica.
+43. Mensagem de chat é contexto temporário, não registro permanente.
+44. Memória do agente é apoio, não fonte de verdade operacional.
+45. O registro deve entrar no arquivo canônico já existente.
+46. Não criar um novo documento se já existe local correto.
+47. Não criar `V2`, `V3`, `FINAL`, `FINAL-REAL` ou cópia paralela.
+48. A alteração deve preservar o histórico Git.
+49. O commit deve conter somente mudanças relacionadas à missão.
+50. O registro deve estar presente no remoto.
+51. O registro deve ser reencontrado por uma nova leitura.
+52. O sistema deve provar que consegue carregar a regra posteriormente.
+53. A regra deve ter identificador estável.
+54. A regra deve informar sua origem e finalidade.
+55. A regra deve informar o comportamento esperado.
+56. A regra deve informar o comportamento proibido.
+57. A regra deve possuir ao menos um teste de aceitação.
+58. A regra deve possuir teste negativo.
+59. A regra deve informar quando precisa de decisão humana.
+60. A regra só pode ser chamada de permanente após o gate completo.
+
+---
+
+## 4. Matriz mínima para “REGISTRADO”
+
+```text
+ARQUIVO_CANÔNICO_ENCONTRADO   = SIM
+ALTERAÇÃO_PRESENTE            = SIM
+COMMIT_CONTÉM_ALTERAÇÃO       = SIM
+COMMIT_EXISTE_NO_REMOTO       = SIM
+BRANCH_CANÔNICA_CONTÉM_COMMIT = SIM
+TESTE_DA_REGRA_PASSOU         = SIM
+RELEITURA_RECUPEROU_REGRA     = SIM
+FONTE_PARALELA_CRIADA         = NÃO
+```
+
+61. Se qualquer campo obrigatório for `NÃO`, o estado não é `REGISTRADO`.
+62. Se algum campo não puder ser verificado, o estado é `REGISTRO_NÃO_COMPROVADO`.
+63. Um comentário de PR pode gerar somente o estado `COMENTÁRIO_EXISTENTE`.
+64. Um commit fora da main pode gerar somente `COMMIT_PENDENTE_DE_INTEGRAÇÃO`.
+65. Um arquivo alterado sem commit gera `ALTERAÇÃO_LOCAL`.
+66. Um commit local sem push gera `COMMIT_LOCAL`.
+67. Um push em branch gera `REMOTO_NÃO_CANÔNICO`.
+68. Um merge sem teste gera `INTEGRADO_NÃO_VALIDADO`.
+69. Um teste sem teste negativo gera `VALIDAÇÃO_INCOMPLETA`.
+70. Um registro sem releitura gera `PERSISTÊNCIA_NÃO_PROVADA`.
+
+---
+
+## 5. Fonte da verdade
+
+71. Cada domínio deve possuir uma única fonte canônica.
+72. O sistema deve saber qual arquivo responde por cada regra.
+73. Antes de criar arquivo, executar o **Gate de Mapa Único**.
+74. Procurar primeiro por artefato equivalente.
+75. Comparar conteúdo, função e responsabilidade.
+76. Se já existe equivalente, melhorar o existente.
+77. Se existem duas fontes concorrentes, bloquear novas mudanças.
+78. Escolher uma fonte canônica e migrar referências.
+79. Não deletar a fonte antiga antes de mapear consumidores.
+80. Não confiar somente em nomes de arquivos.
+81. Verificar quem lê, importa ou executa cada artefato.
+82. Documentação deve apontar para caminhos realmente existentes.
+83. Código deve apontar para a fonte canônica atual.
+84. Testes devem verificar que caminhos antigos não retornaram.
+85. O painel deve consumir dados da mesma fonte que o Telegram.
+86. O histórico deve consumir o mesmo evento emitido pelo executor.
+87. Nenhum canal pode criar sua própria versão da verdade.
+88. Divergência entre canais deve gerar incidente.
+89. A fonte canônica deve possuir proprietário ou responsável técnico.
+90. A ausência de fonte definida deve gerar estado `CANONICAL_SOURCE_UNKNOWN`.
+
+---
+
+## 6. Prova Git
+
+91. Fixar `BASE_SHA` antes de começar.
+92. Registrar `HEAD_SHA` após a alteração.
+93. Comparar `BASE_SHA..HEAD_SHA`.
+94. Verificar que o commit contém apenas o escopo autorizado.
+95. Não trabalhar diretamente em main suja.
+96. Não usar `force-push`.
+97. Não usar reset destrutivo para esconder erro.
+98. Não declarar main atual sem executar fetch.
+99. Não confiar no clone local desatualizado.
+100. Verificar `origin/main`, não apenas `main`.
+101. Verificar arquivos não rastreados.
+102. Verificar arquivos ignorados quando relevantes.
+103. Verificar submódulos, se existirem.
+104. Verificar que nenhum secret entrou no diff.
+105. Verificar que arquivos temporários não entraram no commit.
+106. Verificar que o patch aplicado corresponde ao patch aprovado.
+107. Salvar hashes de entradas importantes.
+108. O receipt deve informar branch, base, head e commit.
+109. Alteração sem SHA deve ser tratada como não comprovada.
+110. A descrição do PR não substitui a inspeção do diff.
+
+---
+
+## 7. Testes obrigatórios
+
+111. Toda correção de erro deve criar teste que reproduza o erro antigo.
+112. O teste deve falhar antes da correção.
+113. O teste deve passar depois da correção.
+114. O teste deve verificar o comportamento, não apenas a existência do arquivo.
+115. Teste de importação deve provar que importar não encerra o processo.
+116. Teste de notificação deve verificar envio, falha e retry.
+117. Teste de fallback deve desligar o provedor principal.
+118. Teste de painel deve remover dados antigos e observar o comportamento.
+119. Teste de HTTP deve verificar conteúdo, não somente status 200.
+120. Teste de persistência deve reiniciar o leitor e reler o registro.
+121. Teste de concorrência deve provocar duas mutações simultâneas.
+122. Teste de serialização deve confirmar ordem única de escrita.
+123. Teste de rollback deve restaurar estado anterior.
+124. Teste de canal deve provar Telegram e painel separadamente.
+125. Teste ponta a ponta deve provar origem → processamento → armazenamento → exibição.
+126. Testes devem registrar duração e resultado.
+127. Testes não executados devem aparecer como `NOT_RUN`.
+128. Testes ignorados devem aparecer como `SKIPPED`, com motivo.
+129. Falta de erro não equivale a teste aprovado.
+130. Resultado vazio não equivale a sucesso.
+131. Mock não prova runtime real.
+132. Teste local não prova VPS.
+133. Teste da VPS não prova Telegram recebido.
+134. Teste do Telegram não prova painel atualizado.
+135. Cada camada deve possuir sua própria evidência.
+136. Uma segunda evidência independente deve confirmar o resultado crítico.
+
+---
+
+## 8. Falso verde
+
+137. Painel inicia em `UNKNOWN`, nunca em verde.
+138. Falha de consulta não pode carregar verde antigo silenciosamente.
+139. Cache deve exibir idade do dado.
+140. Dado vencido deve aparecer como `STALE`.
+141. HTTP 200 com payload inválido deve ser falha.
+142. HTTP 200 com erro interno deve ser falha.
+143. Processo existente não significa processo saudável.
+144. Porta aberta não significa serviço funcional.
+145. Serviço respondendo não significa integração funcionando.
+146. Mensagem enviada não significa mensagem entregue.
+147. Job agendado não significa job executado.
+148. Workflow iniciado não significa workflow aprovado.
+149. PR aberto não significa correção existente.
+150. PR mergeado não significa produção atualizada.
+151. Ausência de alerta não significa ausência de problema.
+152. Resultado vazio deve ser tratado conforme contrato explícito.
+153. Fallback estático deve ser identificado visualmente.
+154. Dados simulados nunca podem parecer dados reais.
+155. Todo verde deve informar a evidência usada.
+156. Todo verde deve informar horário da medição.
+157. Todo verde deve informar o alvo medido.
+158. Todo verde deve informar a versão ou SHA observada.
+159. Se não há medição atual, mostrar `DESCONHECIDO`.
+160. Se os canais divergem, mostrar vermelho até reconciliação.
+
+---
+
+## 9. Notificação que realmente funciona
+
+161. O evento deve ser gravado antes da tentativa de notificação.
+162. A falha do Telegram não pode apagar o evento.
+163. A falha do painel não pode apagar o evento.
+164. Cada notificação deve possuir `EVENT_ID`.
+165. Cada tentativa deve possuir `ATTEMPT_ID`.
+166. Cada canal deve retornar receipt próprio.
+167. Receipt de API não deve ser confundido com visualização humana.
+168. Falha temporária deve gerar retry limitado.
+169. Falha permanente deve abrir incidente.
+170. Retry não pode gerar duplicação descontrolada.
+171. Mensagens duplicadas devem usar chave de idempotência.
+172. Alertas críticos devem possuir botão de ação funcional.
+173. O botão deve apontar para ação permitida e identificável.
+174. Botão quebrado deve falhar no teste.
+175. Notificação deve informar impacto.
+176. Notificação deve informar evidência.
+177. Notificação deve informar ação necessária.
+178. Notificação deve informar o que o sistema já tentou.
+179. Notificação deve informar risco de não agir.
+180. Notificação deve informar se é decisão humana obrigatória.
+181. Alertas informativos não devem parecer bloqueios.
+182. Bloqueios devem aparecer grandes e inequívocos.
+183. O painel e o Telegram devem usar o mesmo `EVENT_ID`.
+184. O histórico deve permitir reconstruir todo o ciclo.
+185. Canal indisponível deve ser visível em outro canal.
+186. Nenhum alerta crítico deve depender de um único canal.
+
+---
+
+## 10. Quando chamar o CHEFE
+
+187. Não chamar o usuário para erro corrigível automaticamente.
+188. Não chamar o usuário para repetir comando seguro.
+189. Não chamar o usuário apenas porque a IA ficou insegura.
+190. Chamar o usuário quando houver escolha de negócio real.
+191. Chamar o usuário quando houver risco destrutivo.
+192. Chamar o usuário antes de produção, deploy ou restart não autorizado.
+193. Chamar o usuário antes de alterar secrets.
+194. Chamar o usuário quando duas fontes canônicas entram em conflito.
+195. Chamar o usuário quando o rollback não é confiável.
+196. Chamar o usuário quando a correção ultrapassa o escopo aprovado.
+197. Chamar o usuário quando o resultado muda comportamento público.
+198. Chamar o usuário quando há risco de perda de dados.
+199. Chamar o usuário quando existe decisão sem resposta técnica única.
+200. Toda solicitação humana deve conter opções claras.
+201. Toda opção deve conter impacto e risco.
+202. Não mandar “o que faço?” sem investigação anterior.
+203. O sistema deve chegar com diagnóstico, evidência e recomendação.
+204. O usuário mantém autoridade final.
+205. Confiança da IA nunca equivale a autorização.
+206. Ausência de resposta humana não autoriza ação perigosa.
+
+---
+
+## 11. IA como residual, não como fundamento
+
+207. Código determinístico resolve casos conhecidos.
+208. IA entra somente em casos desconhecidos ou ambíguos.
+209. A IA deve receber contexto mínimo necessário.
+210. A IA não deve receber secrets desnecessários.
+211. A IA deve produzir hipótese, não verdade automática.
+212. A hipótese deve ser testada antes de aplicada.
+213. A solução proposta deve passar pelos mesmos gates do código humano.
+214. IA não pode pular testes.
+215. IA não pode se autoaprovar em mudança crítica.
+216. Mudança produzida por IA deve ter judge independente.
+217. Erro conhecido resolvido pela IA deve virar regra determinística.
+218. A solução deve virar teste de regressão.
+219. O próximo caso igual não deve precisar de IA.
+220. A IA deve declarar quando não sabe.
+221. A IA deve procurar prova contrária.
+222. A IA não deve inventar porcentagem de confiança.
+223. A IA não deve inventar status de execução.
+224. A IA não deve expor raciocínio privado como requisito.
+225. A IA deve mostrar fatos, testes e decisões observáveis.
+226. O fallback de IA deve registrar modelo solicitado e modelo realmente usado.
+227. Falha de créditos deve ser classificada separadamente.
+228. Rate limit não deve ser confundido com erro de código.
+229. Falha de provedor deve acionar fallback permitido.
+230. Nenhum fallback pode alterar escopo silenciosamente.
+
+---
+
+## 12. Writer único e concorrência
+
+231. Só um componente pode escrever em cada recurso por vez.
+232. Ações de leitura podem ocorrer em paralelo quando seguras.
+233. Ações de mutação devem ser serializadas.
+234. `Promise.all` não deve executar mutações concorrentes no mesmo alvo.
+235. Toda escrita deve possuir lock ou fila.
+236. O lock deve possuir timeout.
+237. Lock abandonado deve ser detectado.
+238. Toda mutação deve possuir idempotency key.
+239. Repetir a mesma ação não pode duplicar efeitos.
+240. O sistema deve registrar quem iniciou a escrita.
+241. O sistema deve registrar entrada e resultado.
+242. Falha no meio da escrita deve gerar estado recuperável.
+243. Escrita parcial não pode ser exibida como concluída.
+244. Operações compostas devem ter transação ou compensação.
+245. O rollback deve saber exatamente o que desfazer.
+246. Dois agentes não podem corrigir o mesmo arquivo sem coordenação.
+247. Um judge não deve editar o trabalho que está julgando.
+248. O executor não pode declarar aprovação final sozinho.
+249. Estado divergente entre agentes deve bloquear consolidação.
+250. O sistema deve escolher uma única síntese final.
+
+---
+
+## 13. Correção mínima sem regressão
+
+251. Confirmar o erro no HEAD atual.
+252. Não corrigir achado antigo sem reconfirmação.
+253. Identificar causa, não apenas sintoma.
+254. Mapear consumidores antes de alterar interface.
+255. Preservar contratos ainda usados.
+256. Alterar o menor número possível de arquivos.
+257. Não reescrever componente inteiro por conveniência.
+258. Não criar serviço paralelo para evitar entender o existente.
+259. Não renomear caminhos sem atualizar consumidores.
+260. Não deletar código aparentemente morto sem call graph.
+261. Não alterar comportamento não relacionado.
+262. Comparar antes e depois.
+263. Rodar regressão do componente.
+264. Rodar regressão dos consumidores.
+265. Validar compatibilidade de importação.
+266. Validar compatibilidade de configuração.
+267. Validar compatibilidade do evento.
+268. Validar comportamento de falha.
+269. Validar comportamento de recuperação.
+270. Registrar risco residual.
+271. Se o risco ultrapassar o autorizado, parar.
+272. A correção deve melhorar o existente, não competir com ele.
+273. Refatoração só entra quando necessária para corrigir com segurança.
+274. Refatoração visual deve mostrar antes e depois.
+275. Toda mudança estrutural deve possuir rollback claro.
+
+---
+
+## 14. Fechamento calculado
+
+276. O fechamento não pode ser escrito antes da execução.
+277. O fechamento deve ser gerado a partir dos receipts.
+278. `FEITO` lista somente ações comprovadas.
+279. `EVIDÊNCIA` lista referências verificáveis.
+280. `NÃO TOCADO` protege o escopo.
+281. `PENDÊNCIA` lista bloqueios reais.
+282. `RISCO RESIDUAL` informa o que não foi eliminado.
+283. `PRÓXIMO PASSO` deve ser único e objetivo.
+284. `BOOT` deve carregar somente contexto necessário.
+285. `FIO DA MISSÃO` deve permitir continuação sem recomeço.
+286. Falha parcial não pode virar sucesso total.
+287. Sucesso local não pode virar sucesso de produção.
+288. Teste não executado deve aparecer no fechamento.
+289. Canal não validado deve aparecer no fechamento.
+290. Runtime não observado deve aparecer no fechamento.
+291. A falta de prova deve reduzir o estado, não ser escondida.
+292. O fechamento deve apontar o SHA observado.
+293. O fechamento deve apontar o alvo validado.
+294. O fechamento deve informar data e hora.
+295. O fechamento deve ser reproduzível por outro agente.
+
+---
+
+# 🔒 Regra-mãe
+
+```text
+NENHUMA DECLARAÇÃO MUDA O ESTADO DO SISTEMA.
+
+SOMENTE UMA TRANSIÇÃO COMPROVADA MUDA O ESTADO:
+
+ESTADO_ANTERIOR
++ AÇÃO IDENTIFICADA
++ RESULTADO OBSERVADO
++ TESTE
++ RECEIPT
+= NOVO_ESTADO
+```
+
+## Exemplo do caso da foto
+
+```text
+COMENTÁRIO_DO_PR = SIM
+ARQUIVO_CANÔNICO = NÃO
+COMMIT            = NÃO
+REMOTO            = NÃO
+MAIN              = NÃO
+TESTE             = NÃO
+RELEITURA         = NÃO
+
+STATUS_CORRETO = COMENTÁRIO_EXISTENTE
+STATUS_PROIBIDO = REGISTRADO
+```
+
+O agente pode errar na frase. **O validador não permite que a frase errada altere o status.**
+
+---
+
+# 🧱 Estrutura técnica mínima que faz isso funcionar
+
+```text
+1. EVENTO
+   Recebe a alegação: “foi registrado”.
+
+2. VERIFICADOR
+   Procura arquivo, commit, remoto, main, teste e releitura.
+
+3. MÁQUINA DE ESTADOS
+   Calcula o estado permitido.
+
+4. GATE
+   Bloqueia “REGISTRADO” quando faltam provas.
+
+5. RECEIPT
+   Salva todas as evidências usadas.
+
+6. TESTE DE REGRESSÃO
+   Repete o erro da foto e confirma que agora é bloqueado.
+
+7. PAINEL + TELEGRAM
+   Exibem o estado calculado, não a opinião do agente.
+```
+
+## Resultado esperado
+
+```text
+AGENTE: “REGISTRADO”
+
+VALIDADOR:
+- arquivo canônico: não
+- commit: não
+- main: não
+- teste: não
+
+RESPOSTA AUTOMÁTICA:
+DECLARAÇÃO REJEITADA
+ESTADO REAL: COMENTÁRIO_DE_PR
+AÇÃO NECESSÁRIA: CONSOLIDAR NO ARQUIVO CANÔNICO
+```
+
+---
+
+## Feito
+
+Entreguei **295 determinações operacionais** voltadas a impedir falso feito, falso verde, falsa permanência, regressão, duplicação e dependência da memória dos agentes.
+
+## Evidência usada
+
+O caso real mostrado na imagem: algo foi chamado de “registrado” apesar de existir somente em comentário de PR.
+
+## Pendência
+
+Essas regras ainda são uma **especificação de estudo**. Elas só passam a funcionar automaticamente quando forem transformadas em máquina de estados, verificadores, gates e testes no código canônico.
+
+## Próximo passo
+
+Separar desta lista um **núcleo inicial de 15 regras bloqueantes**, implementar e provar antes de ampliar.
+
+## BOOT
+
+```text
+FONTE = lista de determinações contra falso feito
+PRIORIDADE = estado + prova + gate + receipt
+PROIBIDO = confiar na frase do agente
+OBJETIVO = nunca corrigir o mesmo erro duas vezes
+```
+
+## Fio da missão
+
+```text
+ERRO REAL
+→ REGRA DETERMINÍSTICA
+→ TESTE QUE REPRODUZ
+→ GATE BLOQUEANTE
+→ RECEIPT
+→ REGISTRO CANÔNICO
+→ NÃO REPETIR
+```

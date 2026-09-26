@@ -1,0 +1,8 @@
+YAML_VALID=true
+reviews.review_progress= True
+reviews.fail_commit_status= True
+issue_enrichment.auto_enrich.enabled= False
+issue_enrichment.planning.enabled= True
+issue_enrichment.planning.auto_planning.enabled= False
+knowledge_base.mcp.usage= disabled
+knowledge_base.mcp.disabled_servers= []

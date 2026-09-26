@@ -1,0 +1,37 @@
+{
+  "schema": "centraldark.visual-package.manifest/v1",
+  "package": "CENTRALDARK_PACOTAO_DUAS_ARTES_VISUAIS",
+  "created_at": "2026-08-26T11:10:00-03:00",
+  "authority_label": "SEGREDO/CHEFE",
+  "payload_type": "visual_artifacts",
+  "payload_required": 2,
+  "payload_present": 2,
+  "status": "PROVADO_NO_ESCOPO_DO_PACOTE",
+  "scope": "byte identity + package completeness only",
+  "assets": [
+    {
+      "path": "assets/01_CENTRALDARK_AMADURECIMENTO_TATICO_DA_CASA.png",
+      "bytes": 2555602,
+      "sha256": "9c5fd4bc7486f79b1014f323e1e65e53a380e9b54177d68d0ecf2cd9761ebe4b"
+    },
+    {
+      "path": "assets/02_CENTRALDARK_OURO_SENDO_COLETADO.png",
+      "bytes": 2500810,
+      "sha256": "252709f127cde40ba571ec54a6f2fda44b8989b6715f73db8f5817414f87217f"
+    }
+  ],
+  "invariants": {
+    "PAPAGAIO_MODE": "OFF",
+    "POMBO_MODE": "CHECKSUM_ON",
+    "ACTION_IS_PROOF": false,
+    "UNKNOWN_IS_PASS": false,
+    "REALITY_IS_JUDGE": true,
+    "ONE_SYSTEM_ONLY": true,
+    "ONE_WRITER_PER_SCOPE": true
+  },
+  "evidence_boundary": {
+    "visual_claim_is_runtime_proof": false,
+    "image_generated_is_verified_state": false,
+    "checksum_means": "BYTE_IDENTITY_ONLY"
+  }
+}

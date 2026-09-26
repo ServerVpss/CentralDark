@@ -1,0 +1,28 @@
+
+LOSS_TO_GOLD:
+  LOSS:
+    meaning: "falha/derrota/contraprova que quebrou hipótese ou execução"
+  MINERAL:
+    requires: [PRESERVED_EVIDENCE]
+  CANDIDATE:
+    requires: [PROVENANCE, HYPOTHESIS_OR_ROOT_CAUSE, COUNTERPROOF]
+  GOLD:
+    requires:
+      - DISCRIMINATING_EVIDENCE
+      - MINIMAL_CORRECTION
+      - RETEST
+      - REGRESSION_WHERE_APPLICABLE
+  CRYSTAL:
+    requires:
+      - GOLD
+      - CANONICAL_OWNER
+      - TEST_OR_VALIDATOR
+      - GATE_OR_ENFORCEMENT
+      - PROVENANCE
+      - NEXT_CURSOR
+      - NEXT_EVENT_REUSE
+  FAILURE:
+    error_hidden: NO_GAIN
+    wrong_cause_crystallized: POISON_CRYSTAL
+    prose_only_learning: NOT_LEARNED
+    same_rule_reteached_after_promotion: LEARNING_TRANSFER_FAIL

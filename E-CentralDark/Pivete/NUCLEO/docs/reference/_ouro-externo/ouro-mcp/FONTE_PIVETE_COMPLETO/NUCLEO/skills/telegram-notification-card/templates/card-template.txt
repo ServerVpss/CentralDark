@@ -1,0 +1,42 @@
+<pre>
+╔════════════════════════════════════╗
+║{SISTEMA} / {MÓDULO}                ║
+║{NOME DA ENGINE} v{X.Y.Z}           ║
+╚════════════════════════════════════╝
+
+STATUS:    {✅ OK|⚠️ AVISO|❌ FALHA}
+PRIORID:   {🟢 Baixa|🟡 Média|🔴 Alta}
+RESPONS:   @segredounlocker
+
+🎯 MISSÃO: {frase curta}
+📌 FASE:   {atual → próxima}
+⏱  TEMPO:  {ex: 4m 12s}
+
+📘 LEIGO
+  {2 linhas em português simples}
+
+⚙️  AÇÃO
+  {o que foi feito, 2-4 linhas}
+
+📊 PROGRESSO
+  NÍVEL: [████████░░] Lv.{N}
+  XP:    [██████████] {ganho}/{total}
+  PROG:  {0-100}%
+
+🧠 SKILLS UP
+  • {Skill}  +{XP} XP (Lv.{N})
+
+🚨 BLOQUEIOS
+  {nenhum | descrição curta}
+
+🎯 PRÓXIMO PASSO
+  {1 linha objetiva}
+
+────────────────────────────────────
+🔧 DETALHE TÉCNICO (PROVA)
+  Arquivo:  {caminho}
+  Commits:  {hash} ({versão})
+  Validad:  {quem validou}
+  Log ID:   {uuid curto}
+  Tags:     #dev #consciencia
+</pre>

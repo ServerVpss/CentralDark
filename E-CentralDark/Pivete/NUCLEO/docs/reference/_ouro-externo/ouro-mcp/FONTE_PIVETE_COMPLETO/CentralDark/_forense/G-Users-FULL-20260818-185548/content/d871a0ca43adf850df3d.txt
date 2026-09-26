@@ -1,0 +1,10 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\primitives\thread\topAnchor\createReserveObservers.d.ts
+
+//#region src/primitives/thread/topAnchor/createReserveObservers.d.ts
+declare const createReserveObservers: (onChange: () => void) => {
+  target: (viewport: HTMLElement, anchor: HTMLElement, target: HTMLElement) => void;
+  disconnect: () => void;
+};
+//#endregion
+export { createReserveObservers };
+//# sourceMappingURL=createReserveObservers.d.ts.map

@@ -1,0 +1,234 @@
+{
+  "schema": "centraldark.executor.unico.v1",
+  "mission_id": "CENTRALDARK_EXECUTOR_UNICO",
+  "mode": "AUTO_EXECUTE",
+  "language": "pt-BR",
+  "repo": {
+    "preferred": "ServerVpss/CentralDark",
+    "discover_live": true,
+    "source_of_truth": "LIVE_STATE",
+    "read_first": [
+      "AGENTS.md",
+      "LEIA-ME-IA.md"
+    ],
+    "do_not_assume_head": true
+  },
+  "authority": {
+    "human": "SEGREDO/CHEFE",
+    "final_authority": "SEGREDO/CHEFE",
+    "sol": "COORDINATOR",
+    "pivete": "OPERATIONAL_PROFILE",
+    "hermes": "EXECUTOR",
+    "models": "REPLACEABLE_ENGINES"
+  },
+  "execution": {
+    "auto_execute": true,
+    "human_reask_same_scope": false,
+    "reuse_before_create": true,
+    "one_scope_one_writer": true,
+    "writer_is_not_judge": true,
+    "parallelize_perception": true,
+    "serialize_mutation": true,
+    "same_agent_self_confrontation": true,
+    "independent_judges": true,
+    "pr_mother": {
+      "discover_existing_first": true,
+      "reuse_equivalent": true,
+      "create_if_absent_and_scope_free": true,
+      "merge": false
+    }
+  },
+  "allowed": {
+    "repo_read": true,
+    "repo_write_if_writer_lock": true,
+    "tests": true,
+    "git_branch": true,
+    "commit": true,
+    "push_branch_if_scope_proved": true,
+    "create_or_update_pr": true,
+    "read_web_primary_sources": true,
+    "read_connected_tools": true
+  },
+  "forbidden": {
+    "force_push": true,
+    "reset_hard": true,
+    "merge_without_gate": true,
+    "deploy": true,
+    "vps_write": true,
+    "dns_write": true,
+    "secret_value_to_model": true,
+    "secret_in_logs": true,
+    "secret_in_git": true,
+    "parallel_writer_same_scope": true,
+    "v2_v3_parallel_architecture_without_gap": true
+  },
+  "capability_map": [
+    "multi-model",
+    "multi-window",
+    "multi-channel",
+    "multi-device",
+    "multi-session",
+    "state-reconciliation",
+    "mission-continuity",
+    "self-confrontation",
+    "independent-judge",
+    "MetaLupa",
+    "archaeology",
+    "causal-compression",
+    "held-out-reconstruction",
+    "Git/GitHub-proof",
+    "CI/CD-gates",
+    "Casa",
+    "Hermes",
+    "VPS-boundary",
+    "observability",
+    "memory-provenance",
+    "security-status-without-secret-values",
+    "setup-admin-control-plane",
+    "external-knowledge-mining",
+    "scientist-of-scientists"
+  ],
+  "epistemic_classes": [
+    "FATO_HISTORICO",
+    "EVIDENCIA_TECNICA",
+    "HIPOTESE",
+    "TEORIA",
+    "CRENCA_RELIGIOSA",
+    "METAFORA",
+    "FANTASIA",
+    "SIMBOLO",
+    "DESCONHECIDO"
+  ],
+  "compression": {
+    "goal": "MINIMUM_IRREDUCIBLE_RESIDUE",
+    "line_target_is_not_gate": true,
+    "gate": {
+      "capability_after_gte_before": true,
+      "complexity_after_lt_before": true,
+      "held_out_required": true,
+      "reconstruction_required": true
+    }
+  },
+  "states": {
+    "pass_states": [
+      "PASS"
+    ],
+    "non_pass": [
+      "FAIL",
+      "SKIPPED",
+      "UNKNOWN",
+      "PENDING",
+      "QUEUED",
+      "TELEMETRY",
+      "NO_OP"
+    ],
+    "terminal": [
+      "PASS_COMPROVADO",
+      "BLOCKED_REAL",
+      "CHEFE_NECESSARIO"
+    ]
+  },
+  "arena_24h": {
+    "enabled_only_if_explicitly_selected": true,
+    "isolation": {
+      "prefer_microvm_plus_container": true,
+      "host_mounts": "NONE",
+      "docker_socket": "NONE",
+      "privileged": false,
+      "capabilities": "DROP_ALL",
+      "secrets": "ZERO",
+      "host_network": false,
+      "resource_limits": true,
+      "time_limit_hours": 24
+    },
+    "objective": "REDUCE_STRUCTURE_WITHOUT_CAPABILITY_LOSS"
+  },
+  "receipt_required": [
+    "STATUS",
+    "MISSION",
+    "SCOPE",
+    "REPOSITORY",
+    "BRANCH",
+    "BASE_SHA",
+    "HEAD_SHA",
+    "PR_MAE",
+    "WRITER",
+    "WRITER_SCOPE",
+    "JUDGES",
+    "FACTS",
+    "INFERENCES",
+    "HYPOTHESES",
+    "UNKNOWN",
+    "ROOT_CAUSE",
+    "DELTA_MATERIAL",
+    "FILES_CHANGED",
+    "APPLICABLE_GATES",
+    "PASS",
+    "FAIL",
+    "NOT_APPLICABLE",
+    "SKIPPED",
+    "UNKNOWN_GATES",
+    "DENOMINATOR",
+    "NUMERATOR",
+    "PERCENT",
+    "SELF_CONFRONTATION",
+    "JUDGE",
+    "META_LUPA",
+    "COMPRESSION_BEFORE",
+    "COMPRESSION_AFTER",
+    "COMPRESSION_RATIO",
+    "CAPABILITY_LOSS",
+    "HELD_OUT_RESULTS",
+    "PROVENANCE",
+    "PENDENCY",
+    "BLOCKED_REAL",
+    "NEXT_MINIMAL_ACTION"
+  ],
+  "human_gate_only_for": [
+    "NEW_INTENT",
+    "TASTE_OR_VISUAL",
+    "BUSINESS_CHOICE",
+    "SPEND",
+    "PUBLICATION_OR_DEPLOY",
+    "IRREVERSIBLE_RISK",
+    "SECRET_ENTRY",
+    "REAL_PHYSICAL_BLOCKER",
+    "UNRESOLVABLE_INTENT_CONFLICT"
+  ],
+  "gold_consumption": {
+    "principle": "PROVE_ONCE_REUSE_UNTIL_AFFECTED_FRONTIER_CHANGES",
+    "hermes_default": "CONSUME_SEALED_GOLD",
+    "do_not_repeat_archaeology": true,
+    "reopen_only_affected_frontier": true,
+    "historical_snapshot_is_not_live_state": true
+  },
+  "proof_graph": {
+    "type": "FINITE_DAG",
+    "required_fields": [
+      "CLAIM",
+      "OWNER",
+      "CONSUMER",
+      "FAILURE_MODE",
+      "EVIDENCE_REF",
+      "STATE_REF",
+      "NEGATIVE_TEST_REF",
+      "EXTERNAL_ANCHOR_REF"
+    ],
+    "circular_proof": "UNPROVEN",
+    "self_validation_without_independent_counterproof": "UNPROVEN",
+    "external_anchor_required": true,
+    "duplicate_detection_basis": "SAME_CLAIM+SAME_FAILURE_MODE+SAME_EVIDENCE",
+    "defense_in_depth_allowed": "SAME_CLAIM+INDEPENDENT_FAILURE_MODES"
+  },
+  "physical_archaeology": {
+    "default": "DO_NOT_SCAN_C_E",
+    "only_if_gap_proved": true,
+    "suspected_artifact": "METADATA_HASH_SCAN_NO_EXEC",
+    "execute_suspect": false
+  },
+  "static_security_review": {
+    "static_review_pass_does_not_equal_malware_free": true,
+    "allowed_claim": "NO_OBVIOUS_MALICIOUS_INDICATORS_STATIC",
+    "sandbox_before_execution_when_artifact_untrusted": true
+  }
+}

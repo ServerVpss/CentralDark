@@ -1,0 +1,5 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\lib\terminfo\78\xterm+x11mouse
+
+xterm+x11mouse|X11 xterm mouse protocol
+[?1000%?%p1%{1}%=%th%el%;
+[M%?%p4%t%p3%e%{3}%;%' '%+%c%p2%'!'%+%c%p1%'!'%+%c

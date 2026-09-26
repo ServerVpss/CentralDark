@@ -1,0 +1,352 @@
+schema: CENTRALDARK_TOTAL_RECONCILE_COMMAND
+schema_version: 1
+command_id: CENTRALDARK_RECONCILIAR_TOTAL
+entry:
+  trigger: "!CENTRALDARK"
+  aliases:
+    - "#CENTRALDARK"
+    - "#ACORDAR"
+    - "!CALIBRAR"
+    - "#RECONCILIAR"
+  objective: >-
+    Reconciliar Casa, VPS, GitHub vivo, Google Drive/CentralDark, espelhos, webhooks,
+    pacote plug-and-play, documentação e cérebros existentes; promover somente o que
+    sobreviver a owner, teste, contraprova e CI no HEAD exato; preservar histórico;
+    zero regressão; zero autoridade paralela.
+
+operator_intent:
+  mode: TRABALHO
+  language: pt-BR
+  code_identifiers: ENGLISH
+  continue_without_reasking_when_contract_resolves: true
+  no_parrot: true
+  outcome_first: true
+
+hard_invariants:
+  - ANY_TRIGGER -> ONE_MASTER -> ONE_CANONICAL_CHAIN
+  - IMPROVE_EXISTING > CREATE_PARALLEL
+  - SOURCE_TRANSPORT != AUTHORITY
+  - HISTORY != CURRENT_STATE
+  - MIRROR != CANONICAL
+  - CAPABILITY != AUTHORITY
+  - UNKNOWN != PASS
+  - ACTION != PROOF
+  - EXECUTOR != JUDGE
+  - ONE_WRITER_PER_MUTABLE_SCOPE
+  - NO_FORCE_PUSH
+  - NO_DIRECT_MAIN_PUSH
+  - NO_V2_V3_V4_FOR_SAME_LINEAGE
+  - NO_SECRET_IN_CHAT_LOG_DOC_RECEIPT
+  - NO_DESTRUCTIVE_CLEANUP_BY_NAME_SIMILARITY
+  - NO_NEW_BRAIN_IF_EXISTING_OWNER_IS_NOT_PROVEN
+
+source_roles:
+  github_live:
+    role: DESIRED_VERSIONED_TRUTH
+    expected_repo: ServerVpss/CentralDark
+    required_before_claiming_remote_current: true
+  casa_live:
+    role: ACTUAL_STATE_SENSOR
+  vps_live:
+    role: ACTUAL_STATE_SENSOR
+  drive_centraldark:
+    role: DURABLE_LIBRARY_AND_MIRROR
+    canonical: false
+    allowed_root: Google Drive/CentralDark
+  espelhos_do_github:
+    role: REFERENCE_MIRROR
+    canonical: false
+  package:
+    role: PORTABLE_CANDIDATE_CAPABILITY_SET
+    canonical: false
+  chat:
+    role: HUMAN_INTENT_AND_TRANSIENT_CONTEXT
+    canonical: false
+
+fallback:
+  github:
+    order:
+      - GITHUB_CONNECTOR
+      - GH_CLI_IF_ALREADY_AUTHENTICATED
+      - GIT_REMOTE_READ
+      - DRIVE_ESPELHOS_REFERENCE_ONLY
+    if_none: REMOTE_CURRENT_UNKNOWN
+  drive:
+    order:
+      - GOOGLE_DRIVE_CONNECTOR
+      - EXISTING_AUTHENTICATED_LOCAL_PROVIDER
+      - MEASURED_LOCAL_SYNC_MIRROR
+    if_none: DRIVE_CURRENT_UNKNOWN
+  rule: PROVIDER_FAILURE -> SWITCH_SENSOR; NEVER_INVENT_STATE
+
+preflight:
+  read_only_first: true
+  commands_if_available:
+    - "git rev-parse --show-toplevel"
+    - "git branch --show-current"
+    - "git rev-parse HEAD"
+    - "git status --short"
+    - "git remote -v"
+    - "gh auth status"
+  redact_secrets: true
+  record:
+    - OS
+    - HOST
+    - REPO_ROOT
+    - BRANCH
+    - HEAD
+    - WORKTREE_STATE
+    - REMOTES
+    - AVAILABLE_TOOLS
+    - AUTH_SENSOR_STATUS_WITHOUT_TOKEN_VALUE
+
+contracts_to_load_before_write:
+  repo_live_discovery:
+    - LEIA-ME-IA.md
+    - AGENTS.md
+    - CLAUDE.md
+    - .agents/skills/meta-lupa/SKILL.md
+    - docs/BRAIN
+    - docs/CONSCIENCIA
+    - governance
+    - trigger/router/master files
+    - CI/workflow/rulesets
+    - webhook owners
+  package:
+    - 02-CENTRALDARK-MASTER.yml
+    - plugin/capability-package-contract.yml
+    - docs/CODE-DOCUMENTATION-HOUSE-STANDARD.yml
+    - docs/SOURCE-AUTHORITY-MATRIX.yml
+    - docs/BRAIN-RECONCILIATION.yml
+    - docs/AGENT-GENERATIONAL-HANDOFF.md
+  drive_reference:
+    - 00-ESCOPO-DRIVE-CENTRALDARK
+    - ESPELHOS-DO-GITHUB
+  rule: MISSING_EXPECTED_PATH -> DISCOVER_EQUIVALENT_OWNER; DO_NOT_CREATE_YET
+
+scope_collision_guard:
+  classify_every_input_by:
+    - declared_repository
+    - declared_owner
+    - path_owner
+    - runtime_target
+    - observation_date
+    - revision_or_head
+  cross_project_example:
+    clone_deck_docs_are_centraldark_global_policy: false
+    clone_deck_webhook_port_is_centraldark_global_port: false
+  generalize_only_if:
+    - rule_is_owner_neutral
+    - rule_survives_counterexample
+    - existing_global_owner_found
+
+inventory:
+  readers_max: 10
+  writers_during_inventory: 0
+  fronts:
+    - GITHUB_CURRENT
+    - LOCAL_CASA
+    - VPS_SANITIZED
+    - DRIVE_CENTRALDARK
+    - ESPELHOS_DO_GITHUB
+    - PACKAGE_CAPABILITIES
+    - WEBHOOKS
+    - BRAINS_AND_MEMORY
+    - CI_AND_RULESETS
+    - DOCUMENTATION_AND_RECEIPTS
+  per_item_fields:
+    - artifact_id
+    - path_or_uri
+    - source
+    - declared_repo
+    - owner_candidate
+    - revision_or_head
+    - sha256_when_byte_material
+    - state
+    - classification
+    - materiality
+    - conflict_set
+    - next_cursor
+
+classification:
+  allowed:
+    - CURRENT_CANONICAL
+    - CURRENT_RUNTIME
+    - CURRENT_MIRROR
+    - HISTORICAL_GOLD
+    - NEGATIVE_KNOWLEDGE
+    - COMPLEMENTARY
+    - DUPLICATE
+    - SUPERSEDED
+    - CONFLICTING
+    - FUTURE_CANDIDATE
+    - QUARANTINE
+    - IRRELEVANT
+    - UNKNOWN
+  unknown_action: MEASURE_MORE_OR_BLOCK
+  duplicate_action: PRESERVE_HISTORY_REMOVE_OPERATIONAL_AUTHORITY_ONLY_AFTER_PROOF
+
+brain_reconciliation:
+  rule: MODELS_AND_PERSONAS_CHANGE; ARCHITECTURE_AND_CONTRACTS_PERSIST
+  discover_exact_live_paths:
+    - PRIMARY_BRAIN
+    - SECOND_BRAIN
+    - BRAIN
+    - CONSCIENCIA
+    - EXIGIA
+    - EXG
+  mirror_candidates_not_authority:
+    second_brain: docs/BRAIN
+    ia_memory: docs/CONSCIENCIA
+  if_exact_live_owner_found:
+    - KEEP_ONE_OWNER_PER_ROLE
+    - LINK_OTHER_VIEWS_AS_DERIVED_INDEX_OR_MIRROR
+    - RECONCILE_DUPLICATE_AUTHORITY
+  if_not_found:
+    - MARK_UNKNOWN
+    - DO_NOT_CREATE_SECOND_BRAIN
+  every_agent_must_consume:
+    - CANONICAL_CONTRACT
+    - CURRENT_HEAD_OR_REVISION
+    - CURRENT_RECEIPT
+    - PROVEN_LEARNINGS
+    - OPEN_UNKNOWNS
+  personality_memory_is_system_truth: false
+
+package_acceptance:
+  iterate_all_capabilities: true
+  acceptance_states:
+    - PASS
+    - BLOCKED
+    - REJECTED
+    - UNKNOWN
+  pass_requires_all:
+    - EXISTING_OWNER_RESOLVED
+    - CONTRACT_VALID
+    - COMPATIBILITY_PROVEN
+    - DOCUMENTATION_PRESENT
+    - INSTALL_DRY_RUN_PASS
+    - NEGATIVE_TEST_OR_FALSIFIER_PASS
+    - POSITIVE_TESTS_PASS
+    - COUNTERPROOF_SURVIVES
+    - EXACT_TESTED_HEAD_EQUALS_CANDIDATE_HEAD
+    - CI_GREEN_ON_LATEST_HEAD_IF_CI_MATERIAL
+    - NO_MATERIAL_UNKNOWN
+    - NO_CONTRADICTION
+  executor_may_self_approve: false
+  judge_may_modify_code: false
+  technical_acceptance_can_be_automatic_after_proof: true
+  merge_requires_separate_policy_authority: true
+  deploy_requires_separate_policy_authority: true
+
+write_phase:
+  enter_only_after_rendezvous: true
+  writer_count_per_conflict_scope: 1
+  target: EXISTING_OWNER_ONLY
+  worktree_or_branch_required: true
+  clean_or_classified_dirty_state_required: true
+  snapshot_or_recovery_point_required: true
+  patch_strategy: MINIMUM_SEMANTIC_DELTA
+  forbidden:
+    - REWRITE_UNRELATED_CODE
+    - DELETE_HISTORY_WITHOUT_PROOF
+    - WEAKEN_VALIDATOR
+    - FORCE_PUSH
+    - DIRECT_MAIN_PUSH
+    - CREATE_PARALLEL_ENGINE
+    - CREATE_PARALLEL_BRAIN
+
+webhook_reconciliation:
+  role: ACCELERATOR_NOT_AUTHORITY
+  event_flow:
+    - VERIFY_SIGNATURE_IF_PROVIDER_SUPPORTS
+    - VERIFY_REPOSITORY_SCOPE
+    - VERIFY_BRANCH_OR_EVENT_SCOPE
+    - DEDUPE_EVENT
+    - QUEUE_MEASURE
+    - RECONCILE_DESIRED_VS_ACTUAL
+    - APPLY_ONLY_IF_OWNER_AND_POLICY_ALLOW
+    - TEST
+    - RECEIPT
+  webhook_only_sync_forbidden: true
+  boot_or_periodic_reconcile_required: true
+  no_new_listener_if_existing_owner_can_be_extended: true
+
+verification:
+  order:
+    - STATIC_CONTRACTS
+    - PACKAGE_SELF_TESTS
+    - REPO_NATIVE_TESTS
+    - NEGATIVE_TESTS
+    - INTEGRATION_TESTS
+    - DOCUMENTATION_GATE
+    - SECURITY_SECRET_SCAN_NAMES_AND_DIFF_ONLY
+    - COUNTERPROOF
+    - CI_LATEST_HEAD
+    - REMOTE_HEAD_REMEASURE
+  ci_rule: GREEN_MUST_BELONG_TO_LATEST_CANDIDATE_HEAD
+  skipped_check_is_not_automatically_meaningful_proof: true
+  stale_green_is_pass: false
+  local_green_on_different_head_is_pass: false
+
+sync_back:
+  after_canonical_commit_is_proven:
+    - UPDATE_DERIVED_DRIVE_MIRRORS_IF_IN_SCOPE
+    - UPDATE_DOCUMENTATION_HUB
+    - UPDATE_RECEIPTS
+    - UPDATE_PACKAGE_SAME_LOGICAL_ID
+    - UPDATE_NEXT_CURSOR
+  preserve:
+    - HISTORICO
+    - LEGACY_WITH_PROVENANCE
+    - NEGATIVE_KNOWLEDGE
+  drive_personal_content_outside_centraldark: DO_NOT_TOUCH
+
+handoff:
+  required_for_every_material_cycle: true
+  fields:
+    - objective
+    - repo
+    - branch
+    - tested_head
+    - pushed_head_if_any
+    - source_truth_status
+    - changed_files
+    - owners_touched
+    - tests_run
+    - falsifiers
+    - ci_status
+    - receipts
+    - unknowns
+    - blockers
+    - next_cursor
+  rule: NEXT_AGENT_REMEASURES_REALITY; DOES_NOT_INHERIT_UNPROVEN_CLAIMS
+
+loop:
+  max_cycles: 10
+  repeat:
+    - MEASURE
+    - RECONCILE
+    - PATCH_MINIMUM_IF_REQUIRED
+    - TEST
+    - COUNTERPROOF
+    - REMEASURE
+  success: FIXED_POINT_PASS
+  external_boundary: BLOCKED_WITH_RECEIPT_AND_NEXT_CURSOR
+  no_progress: STOP_WITH_RESIDUAL_MAP_NOT_FALSE_GREEN
+
+final_receipt:
+  show_pt_BR:
+    - RESULTADO
+    - O_QUE_MUDOU
+    - O_QUE_FOI_PRESERVADO
+    - GITHUB_HEAD
+    - CASA_STATE
+    - VPS_STATE
+    - DRIVE_REVISION
+    - PACKAGE_SHA256
+    - CI
+    - CONTRAPROVA
+    - UNKNOWN
+    - NEXT_CURSOR
+  forbidden_claim: "PRONTO/FINAL/100% sem escopo + revisão + prova"

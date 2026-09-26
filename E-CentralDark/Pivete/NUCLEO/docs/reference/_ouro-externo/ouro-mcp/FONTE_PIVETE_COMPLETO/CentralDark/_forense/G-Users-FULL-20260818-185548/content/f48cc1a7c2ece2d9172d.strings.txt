@@ -1,0 +1,578 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\lang\menu_tr_tr.utf-8.vim
+
+" Menu Translations:
+Turkish
+" Maintainer:
+Emir SARI <bitigchi@me.com>
+" Original translations
+if exists("did_menu_trans")
+   finish
+let did_menu_trans = 1
+let s:keepcpo= &cpo
+set cpo&vim
+scriptencoding utf-8
+menutrans &File
+&Dosya
+menutrans &Edit
+menutrans &Tools
+menutrans &Syntax
+zdizim
+menutrans &Buffers
+A&rabellekler
+menutrans &Window
+&Pencere
+menutrans &Help
+" Help menu
+menutrans &Overview<Tab><F1>
+&Genel\ Bak
+<Tab><F1>
+menutrans &User\ Manual
+&Kullan
+lavuzu
+menutrans &How-To\ Links
+l\ Yap
+menutrans &Find\.\.\.
+        &Bul\.\.\.
+"--------------------
+menutrans &Credits
+menutrans Co&pying
+menutrans &Sponsor/Register
+&Sponsorluk/Kay
+menutrans O&rphans
+&Yetimler
+"--------------------
+menutrans &Version
+m\ &Bilgisi
+menutrans &About
+" File menu
+menutrans &Open\.\.\.<Tab>:e
+\.\.\.<Tab>:e
+menutrans Sp&lit-Open\.\.\.<Tab>:sp
+&Yeni\ B
+mde\ A
+\.\.\.<Tab>:sp
+menutrans Open\ &Tab\.\.\.<Tab>:tabnew
+S&ekme\ A
+\.\.\.<Tab>:tabnew
+menutrans &New<Tab>:enew
+        Yeni\ &Sekme<Tab>:enew
+menutrans &Close<Tab>:close
+Ka&pat<Tab>:close
+"--------------------
+menutrans &Save<Tab>:w
+Kayde&t<Tab>:w
+menutrans Save\ &As\.\.\.<Tab>:sav
+&Farkl
+\ Kaydet\.\.\.<Tab>:sav
+"--------------------
+menutrans Split\ &Diff\ With\.\.\.
+r\.\.\.
+menutrans Split\ Patched\ &By\.\.\.
+Ya&ma\ 
+le\ Kar
+r\.\.\.
+"--------------------
+menutrans &Print
+menutrans Sa&ve-Exit<Tab>:wqa
+        Kaydet\ &ve\ 
+k<Tab>:wqa
+menutrans E&xit<Tab>:qa
+&k<Tab>:qa
+" Edit menu
+menutrans &Undo<Tab>u
+        &Geri\ Al<Tab>u
+menutrans &Redo<Tab>^R
+        &Yinele<Tab>^R
+menutrans Rep&eat<Tab>\.        
+Son\ Komutu\ Y&inele<Tab>\.
+"--------------------
+menutrans Cu&t<Tab>"+x                 &Kes<Tab>"+x
+menutrans &Copy<Tab>"+y 
+        K&opyala<Tab>"+y
+menutrans &Paste<Tab>"+gP              Ya&p
+r<Tab>"+gP
+menutrans Put\ &Before<Tab>[p
+        
+ne\ Koy<Tab>[p
+menutrans Put\ &After<Tab>]p
+        A&rkas
+na\ Koy<Tab>]p
+menutrans &Delete<Tab>x 
+        Si&l<Tab>x
+menutrans &Select\ All<Tab>ggVG
+<Tab>ggVG
+"--------------------
+" Athena GUI only
+menutrans &Find<Tab>/
+                &Bul<Tab>/
+menutrans Find\ and\ Rep&lace<Tab>:%s
+        Bul\ &ve\ De
+tir<Tab>:%s
+" End Athena GUI only
+menutrans &Find\.\.\.<Tab>/
+        &Bul\.\.\.<Tab>/
+menutrans Find\ and\ Rep&lace\.\.\.
+        Bul\ ve\ &De
+tir\.\.\.
+menutrans Find\ and\ Rep&lace\.\.\.<Tab>:%s
+Bul\ ve\ &De
+tir\.\.\.<Tab>:%s
+menutrans Find\ and\ Rep&lace\.\.\.<Tab>:s
+Bul\ ve\ &De
+tir\.\.\.<Tab>:s
+"--------------------
+menutrans Settings\ &Window
+&Ayarlar\ Penceresi
+menutrans Startup\ &Settings
+\ Ayarlar
+menutrans &Global\ Settings
+Ge&nel\ Ayarlar
+menutrans F&ile\ Settings
+&Dosya\ Ayarlar
+menutrans C&olor\ Scheme
+&Renk\ D
+menutrans &Keymap
+me\ &E
+menutrans Select\ Fo&nt\.\.\.
+tipi\ Se
+\.\.\.
+">>>----------------- Edit/Global settings
+menutrans Toggle\ Pattern\ &Highlight<Tab>:set\ hls!    
+Dizgi\ &Vurgulamas
+/Kapat<Tab>:set\ hls!
+menutrans Toggle\ &Ignoring\ Case<Tab>:set\ ic!
+k\ Harf\ &Duyarl
+/Kapat<Tab>:set\ ic!
+menutrans Toggle\ &Showing\ Matched\ Pairs<Tab>:set\ sm!
+kilileri\ A
+/Kapat<Tab>:set\ sm!
+menutrans &Context\ Lines
+le\ Oynayan\ Sat
+menutrans &Virtual\ Edit
+&Sanal\ D
+zenleme
+menutrans Toggle\ Insert\ &Mode<Tab>:set\ im!
+Ekleme\ &Kipini\ A
+/Kapat<Tab>:set\ im!
+menutrans Toggle\ Vi\ C&ompatibility<Tab>:set\ cp!
+&Vi\ Uyumlu\ Kipi\ A
+/Kapat<Tab>:set\ cp!
+menutrans Search\ &Path\.\.\.
+&Arama\ Yolu\.\.\.
+menutrans Ta&g\ Files\.\.\.
+&Etiket\ Dosyalar
+\.\.\.
+menutrans Toggle\ &Toolbar
+unu\ A
+/Kapat
+menutrans Toggle\ &Bottom\ Scrollbar
+A&lt\ Kayd
+unu\ A
+/Kapat
+menutrans Toggle\ &Left\ Scrollbar
+&Sol\ Kayd
+unu\ A
+/Kapat
+menutrans Toggle\ &Right\ Scrollbar
+\ Kayd
+unu\ A
+/Kapat
+">>>->>>------------- Edit/Global settings/Virtual edit
+menutrans Never
+menutrans Block\ Selection
+Blok\ Se
+menutrans Insert\ Mode
+Ekleme\ Kipi
+menutrans Block\ and\ Insert
+Blok\ Se
+iminde\ ve\ Ekleme\ Kipinde
+menutrans Always
+Her\ Zaman\ A
+">>>----------------- Edit/File settings
+menutrans Toggle\ Line\ &Numbering<Tab>:set\ nu!
+r\ Numaraland
+/Kapat<Tab>:set\ nu!
+menutrans Toggle\ Relati&ve\ Line\ Numbering<Tab>:set\ rnu!
+receli\ Sat
+r\ Numaraland
+/Kapat<Tab>:set\ nru!
+menutrans Toggle\ &List\ Mode<Tab>:set\ list!
+nmeyen\ Karakterleri\ A
+/Kapat<Tab>:set\ list!
+menutrans Toggle\ Line\ &Wrapping<Tab>:set\ wrap!
+r\ Kayd
+/Kapat<Tab>:set\ wrap!
+menutrans Toggle\ W&rapping\ at\ Word<Tab>:set\ lbr!
+k\ Kayd
+/Kapat<Tab>:set\ lbr!
+menutrans Toggle\ Tab\ &Expanding-tab<Tab>:set\ et!
+S&ekmeleri\ Bo
+luklara\ D
+rmeyi\ A
+/Kapat<Tab>:set\ et!
+menutrans Toggle\ &Auto\ Indenting<Tab>:set\ ai!
+&Otomatik\ Girintilemeyi\ A
+/Kapat<Tab>:set\ ai!
+menutrans Toggle\ &C-Style\ Indenting<Tab>:set\ cin!
+&C\ Tarz
+\ Girintilemeyi\ A
+/Kapat<Tab>:set\ cin!
+">>>---
+menutrans &Shiftwidth
+&Girinti\ D
+menutrans Soft\ &Tabstop
+&Sekme\ Geni
+menutrans Te&xt\ Width\.\.\.
+&Metin\ Geni
+i\.\.\.
+menutrans &File\ Format\.\.\.
+&Dosya\ Bi
+imi\.\.\.
+" Tools menu
+menutrans &Jump\ to\ This\ Tag<Tab>g^]
+&u\ Etikete\ Atla<Tab>g^]
+menutrans Jump\ &Back<Tab>^T
+&Geri\ D
+n<Tab>^T
+menutrans Build\ &Tags\ File
+&Etiket\ Dosyas
+"-------------------
+menutrans &Folding
+rmalar
+menutrans &Spelling
+m\ Denetimi
+menutrans &Diff
+rma\ (diff)
+"-------------------
+menutrans &Make<Tab>:make
+&Derle<Tab>:make
+menutrans &List\ Errors<Tab>:cl
+&Hatalar
+\ Listele<Tab>:cl
+menutrans L&ist\ Messages<Tab>:cl!
+&letileri\ Listele<Tab>:cl!
+menutrans &Next\ Error<Tab>:cn
+Bir\ &Sonraki\ Hata<Tab>:cn
+menutrans &Previous\ Error<Tab>:cp
+&nceki\ Hata<Tab>:cp
+menutrans &Older\ List<Tab>:cold
+Daha\ &Eski\ Hatalar<Tab>:cold
+menutrans N&ewer\ List<Tab>:cnew
+Daha\ &Yeni\ Hatalar<Tab>:cnew
+menutrans Error\ &Window
+Hatalar\ &Penceresi
+menutrans Se&t\ Compiler
+De&rleyici\ Se
+menutrans Show\ Compiler\ Se&ttings\ in\ Menu
+Derleyici\ Ayarlar
+de\ &G
+"-------------------
+menutrans &Convert\ to\ HEX<Tab>:%!xxd
+HEX'e\ D
+r<Tab>:%!xxd
+menutrans Conve&rt\ Back<Tab>:%!xxd\ -r
+HEX'&ten\ D
+r<Tab>:%!xxd\ -r
+">>>---------------- Tools/Spelling
+menutrans &Spell\ Check\ On
+m\ Denetimini\ &A
+menutrans Spell\ Check\ &Off
+m\ Denetimini\ &Kapat
+menutrans To\ &Next\ Error<Tab>]s
+Bir\ &Sonraki\ Hata<Tab>]s
+menutrans To\ &Previous\ Error<Tab>[s
+&nceki\ Hata<Tab>[s
+menutrans Suggest\ &Corrections<Tab>z=
+&zeltme\ 
+ner<Tab>z=
+menutrans &Repeat\ Correction<Tab>:spellrepall
+zeltmeyi\ &Yinele<Tab>spellrepall
+"-------------------
+menutrans Set\ Language\ to\ "en"
+Dili\ "en"\ yap
+menutrans Set\ Language\ to\ "en_au"
+Dili\ "en_au"\ yap
+menutrans Set\ Language\ to\ "en_ca"
+Dili\ "en_ca"\ yap
+menutrans Set\ Language\ to\ "en_gb"
+Dili\ "en_gb"\ yap
+menutrans Set\ Language\ to\ "en_nz"
+Dili\ "en_nz"\ yap
+menutrans Set\ Language\ to\ "en_us"
+Dili\ "en_us"\ yap
+menutrans &Find\ More\ Languages
+ka\ Diller\ Bul
+let g:menutrans_set_lang_to =
+'Dil Y
+" The Spelling popup menu
+let g:menutrans_spell_change_ARG_to =
+zeltilecek:\ "%s"\ ->'
+let g:menutrans_spell_add_ARG_to_word_list =
+'"%s"\ s
+e\ ekle'
+let g:menutrans_spell_ignore_ARG =
+'"%s"\ s
+\ yoksay'
+">>>---------------- Folds
+menutrans &Enable/Disable\ Folds<Tab>zi
+rmalar
+/Kapat<Tab>zi
+menutrans &View\ Cursor\ Line<Tab>zv
+&mlecin\ Oldu
+u\ Sat
+le<Tab>zv
+menutrans Vie&w\ Cursor\ Line\ Only<Tab>zMzx
+mlecin\ Oldu
+u\ Sat
+le<Tab>zMzx
+menutrans C&lose\ More\ Folds<Tab>zm
+&Daha\ Fazla\ K
+rma\ Kapat<Tab>zm
+menutrans &Close\ All\ Folds<Tab>zM
+rmalar
+\ Kapat<Tab>zM
+menutrans &Open\ All\ Folds<Tab>zR
+rmalar
+<Tab>zR
+menutrans O&pen\ More\ Folds<Tab>zr
+D&aha\ Fazla\ K
+rma\ A
+<Tab>zr
+menutrans Fold\ Met&hod
+&rma\ Y
+menutrans Create\ &Fold<Tab>zf
+rma\ &Olu
+tur<Tab>zf
+menutrans &Delete\ Fold<Tab>zd
+rma\ &Sil<Tab>zd
+menutrans Delete\ &All\ Folds<Tab>zD
+rmalar
+\ Sil<Tab>zD
+menutrans Fold\ col&umn\ Width
+rma\ S
+tunu\ &Geni
+">>>->>>----------- Tools/Folds/Fold Method
+menutrans M&anual
+menutrans I&ndent
+&Girinti
+menutrans E&xpression
+menutrans S&yntax
+zdizim
+menutrans Ma&rker
+&mleyici
+">>>--------------- Tools/Diff
+menutrans &Update
+ncelle
+menutrans &Get\ Block
+u\ &Al
+menutrans &Put\ Block
+u\ &Koy
+">>>--------------- Tools/Diff/Error window
+menutrans &Update<Tab>:cwin
+ncelle<Tab>:cwin
+menutrans &Close<Tab>:cclose
+&Kapat<Tab>:cclose
+menutrans &Open<Tab>:copen
+<Tab>:copen
+" Syntax menu
+menutrans &Show\ File\ Types\ in\ Menu
+Dosya\ T
+rlerini\ Men
+de\ &G
+menutrans Set\ '&syntax'\ only
+zca\ 'syntax'\ &Ayarla
+menutrans Set\ '&filetype'\ too
+'filetype'\ 
+in\ &de\ Ayarla
+menutrans &Off
+&Kapat
+menutrans &Manual
+menutrans A&utomatic
+&Otomatik
+menutrans On/Off\ for\ &This\ File
+&Bu\ Dosya\ i
+/Kapat
+menutrans Co&lor\ Test
+&Renk\ S
+menutrans &Highlight\ Test
+&Vurgu\ S
+menutrans &Convert\ to\ HTML
+&HTML'ye\ D
+" Buffers menu
+menutrans &Refresh\ menu
+ncelle
+menutrans Delete
+menutrans &Alternate
+menutrans &Next
+So&nraki
+menutrans &Previous
+n&ceki
+menutrans [No\ File]
+[Dosya\ Yok]
+" Window menu
+menutrans &New<Tab>^Wn
+Yeni\ &Pencere<Tab>^Wn
+menutrans S&plit<Tab>^Ws
+Pencereyi\ &B
+l<Tab>^Ws
+menutrans Sp&lit\ To\ #<Tab>^W^^
+Pencereyi\ Ba
+&l<Tab>^W^^
+menutrans Split\ &Vertically<Tab>^Wv
+Pencereyi\ &Dikey\ Olarak\ B
+l<Tab>^Wv
+menutrans Split\ File\ E&xplorer
+Yeni\ B
+&mde\ Dosya\ Gezginini\ A
+menutrans &Close<Tab>^Wc
+Pen&cereyi\ Kapat<Tab>^Wc
+menutrans Close\ &Other(s)<Tab>^Wo
+er\ Pencerele&ri\ Kapat<Tab>^Wo
+menutrans Move\ &To
+menutrans Rotate\ &Up<Tab>^WR
+&Yukar
+<Tab>^WR
+menutrans Rotate\ &Down<Tab>^Wr
+<Tab>^Wr
+menutrans &Equal\ Size<Tab>^W=
+it\ Boyut<Tab>^W=
+menutrans &Max\ Height<Tab>^W_
+E&n\ B
+kseklik<Tab>^W_
+menutrans M&in\ Height<Tab>^W1_
+ksekl&ik<Tab>^W1_
+menutrans Max\ &Width<Tab>^W\|
+k\ Gen&i
+lik<Tab>^W\|
+menutrans Min\ Widt&h<Tab>^W1\|
+k\ Geni
+li&k<Tab>^W1\|
+">>>----------------- Window/Move To
+menutrans &Top<Tab>^WK
+&Yukar
+<Tab>^WK
+menutrans &Bottom<Tab>^WJ
+<Tab>^WJ
+menutrans &Left\ Side<Tab>^WH
+So&la<Tab>^WH
+menutrans &Right\ Side<Tab>^WL
+a<Tab>^WL
+" The popup menu
+menutrans &Undo
+&Geri\ Al
+menutrans Cu&t
+menutrans &Copy
+K&opyala
+menutrans &Paste
+menutrans &Delete
+menutrans Select\ Blockwise
+&Blok\ Bi
+iminde\ Se
+menutrans Select\ &Word
+menutrans Select\ &Sentence
+mce\ Se
+menutrans Select\ Pa&ragraph
+&Paragraf\ Se
+menutrans Select\ &Line
+menutrans Select\ &Block
+Bl&ok\ Se
+menutrans Select\ &All
+" The GUI toolbar
+if has("toolbar")
+if exists("*Do_toolbar_tmenu")
+delfun Do_toolbar_tmenu
+fun Do_toolbar_tmenu()
+tmenu ToolBar.Open
+Dosya A
+tmenu ToolBar.Save
+Dosya Kaydet
+tmenu ToolBar.SaveAll
+m Dosyalar
+ Kaydet
+tmenu ToolBar.Print
+tmenu ToolBar.Undo
+Geri Al
+tmenu ToolBar.Redo
+Yinele
+tmenu ToolBar.Cut
+tmenu ToolBar.Copy
+Kopyala
+tmenu ToolBar.Paste
+tmenu ToolBar.Find
+Bul...
+tmenu ToolBar.FindNext
+Sonrakini Bul
+tmenu ToolBar.FindPrev
+ncekini Bul
+tmenu ToolBar.Replace
+Bul ve De
+tir...
+" disabled; These are in the Windows menu
+tmenu ToolBar.New
+Yeni Pencere
+tmenu ToolBar.WinSplit
+Pencereyi B
+tmenu ToolBar.WinMax
+k Pencere Y
+ksekli
+tmenu ToolBar.WinMin
+k Pencere Y
+ksekli
+tmenu ToolBar.WinClose
+Pencereyi Kapat
+tmenu ToolBar.LoadSesn
+Oturum Y
+tmenu ToolBar.SaveSesn
+Oturum Kaydet
+tmenu ToolBar.RunScript
+Betik 
+tmenu ToolBar.Make
+tmenu ToolBar.Shell
+tmenu ToolBar.RunCtags
+Etiket Dosyas
+tmenu ToolBar.TagJump
+Etikete Atla
+tmenu ToolBar.Help
+tmenu ToolBar.FindHelp
+endfun
+" Dialog texts
+" Find in help dialog
+let g:menutrans_help_dialog = "Yard
+in komut veya s
+k girin:\n\nEkleme Kipi komutlar
+ aramak i
+in i_ ekleyin (
+in i_CTRL-X)\nNormal Kip komutlar
+ aramak i
+in _c ekleyin (
+in c_<Del>)\nSe
+enekler hakk
+nda yard
+m almak i
+in ' ekleyin (
+in 'shiftwidth')"
+" Searh path dialog
+let g:menutrans_path_dialog = "Dosya aramas
+in yol belirtin.\nDizin adlar
+llerle ayr
+" Tag files dialog
+let g:menutrans_tags_dialog = "Etiket dosyas
+ adlar
+ belirtin (virg
+lle ay
+rarak).\n"
+" Text width dialog
+let g:menutrans_textwidth_dialog = "Bi
+imlendirme i
+in metin geni
+ini belirtin.\nBi
+imlendirme iptali i
+in 0 girin."
+" File format dialog
+let g:menutrans_fileformat_dialog = "Dosya bi
+imi se
+let g:menutrans_fileformat_choices = "&Unix\n&Dos\n&Mac\n
+&ptal"
+let menutrans_no_file = "[Dosya Yok]"
+let &cpo = s:keepcpo
+unlet s:keepcpo

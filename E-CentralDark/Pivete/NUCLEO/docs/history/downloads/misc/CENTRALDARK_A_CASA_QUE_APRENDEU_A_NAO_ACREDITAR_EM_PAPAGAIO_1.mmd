@@ -1,0 +1,40 @@
+flowchart TD
+    CHEFE["👑 CHEFE\nIntenção"] --> SOL["☀️ SOL\nVisão + Coordenação"]
+    SOL --> STATE["#ACORDAR\nMedir estado vivo"]
+    STATE --> HYP["Hipótese"]
+    HYP --> COUNTER["!META_LUPA\nContraprova"]
+    COUNTER --> ACTION["🔧 HERMES\nAção mínima"]
+    ACTION --> TEST["Teste"]
+    TEST --> JUDGE["⚖️ REALITY JUDGE"]
+    JUDGE -->|PASS| RECEIPT["Receipt + Evidência"]
+    JUDGE -->|FAIL / UNKNOWN| REMED["Remediação"]
+    REMED --> STATE
+    RECEIPT --> CRYSTAL["💎 Crystal"]
+    CRYSTAL --> LGS["LAST_GOOD_STATE"]
+    LGS --> NEXT["NEXT_EXECUTION_BASELINE"]
+    NEXT --> SOL
+
+    subgraph CASA["CENTRALDARK — UMA CASA"]
+      SOL
+      STATE
+      HYP
+      COUNTER
+      ACTION
+      TEST
+      JUDGE
+      RECEIPT
+      CRYSTAL
+      LGS
+      NEXT
+    end
+
+    RULES["PAPAGAIO?\nDESCONFIE → CONFIRME → DEPOIS ENTERRE\nUNKNOWN != PASS\nACTION != PROOF\nDOCUMENTED != EXECUTED\nREALITY = JUDGE"] -. governa .-> CASA
+
+    EVID["Fontes verificadas\nLogs\nMetadados\nContradições\nPadrões\nContexto"] --> STATE
+
+    style CHEFE stroke-width:2px
+    style SOL stroke-width:2px
+    style HYP stroke-width:2px
+    style ACTION stroke-width:2px
+    style JUDGE stroke-width:2px
+    style CRYSTAL stroke-width:2px

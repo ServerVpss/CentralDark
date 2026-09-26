@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@icons-pack\react-simple-icons\icons\SiCoinmarketcap.d.ts
+
+import { IconType } from '../types';
+declare const defaultColor = "#17181B";
+declare const SiCoinmarketcap: IconType;
+export { SiCoinmarketcap as default, defaultColor };

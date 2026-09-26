@@ -1,0 +1,28 @@
+[
+  {
+    "pid": 37424,
+    "create_time": 1789407208.104123,
+    "purpose": "serve",
+    "install": "83b674ef9dc1",
+    "spawner_pid": 43772,
+    "spawner_create": 1789407203.484,
+    "registered_at": 1789407223.1079285,
+    "argv": "C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\hermes_cli\\main.py serve --host 127.0.0.1 --port 0",
+    "host": "127.0.0.1",
+    "port": 54444,
+    "profile": ""
+  },
+  {
+    "pid": 53936,
+    "create_time": 1789407225.0869403,
+    "purpose": "mcp-helper",
+    "install": "83b674ef9dc1",
+    "spawner_pid": 37424,
+    "spawner_create": 1789407208.104123,
+    "registered_at": 1789407225.136068,
+    "argv": "C:\\WINDOWS\\system32\\cmd.exe /c C:\\Program Files\\nodejs\\npx.CMD @modelcontextprotocol/server-github",
+    "host": "",
+    "port": null,
+    "profile": ""
+  }
+]

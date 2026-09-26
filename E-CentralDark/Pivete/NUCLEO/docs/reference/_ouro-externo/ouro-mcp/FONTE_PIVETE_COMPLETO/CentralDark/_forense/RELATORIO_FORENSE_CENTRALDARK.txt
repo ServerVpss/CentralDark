@@ -1,0 +1,167 @@
+================================================================================
+RELATÓRIO FORENSE — CENTRALDARK / CASA / HERMES / VPS / GIT / HISTÓRIA
+ATUALIZAÇÃO COMPLETA (2ª PASSADA — até acabar)
+================================================================================
+Gerado por: SOL (operacional, read-only)
+Data: 2026-08-18
+Escopo: vírus / invasão / vínculo forte anômalo entre
+  VPS, GIT, CASA, HISTÓRIA, MINHA, SUA(HERMES), TRISMÉGISTO,
+  COISAS ANTIGAS, SOL, REF, TEAMS, ROTEADOR.
+
+================================================================================
+0. VEREDITO FINAL
+================================================================================
+🦠 VÍRUS / MALWARE ATIVO .................... NÃO ENCONTRADO
+🔗 VÍNCULO FORTE ANÔMALO / C2 / PHONE-HOME . NÃO ENCONTRADO
+🕳️ BACKDOOR em git / código ................ NÃO ENCONTRADO
+🔑 SECRET hardcoded em repo/Casa ............ NÃO ENCONTRADO
+✅ Todos os componentes encontrados são LEGÍTIMOS ao ecossistema da Casa
+   ou ferramentas conhecidas do usuário.
+
+================================================================================
+1. ARQUIVOS DA CASA EM DOWNLOADS (CONFERIDOS POR DENTRO)
+================================================================================
+C:\Users\danda\Downloads\ — 19 zips CentralDark (todos legítimos, teus):
+  • CENTRALDARK-EXECUTOR-UNICO(.zip e variações 1-4, PYTHON-AUTO)
+      Conteúdo: CENTRALDARK-EXECUTOR.md, MANIFEST.sha256, PROMPT-UNICO.txt,
+      RUN.ps1, bootstrap.py, mission.json, assets/*.png, run.sh
+      → RUN.ps1 apenas chama bootstrap.py
+      → bootstrap.py: sanitiza credenciais de remote, procura repo CentralDark,
+        faz hash. NENHUM comportamento de dropper/exfiltração.
+  • CENTRALDARK-PRIVATE-SECURITY-BANK-FOUNDATION.zip
+      Conteúdo: .md, MANIFEST.json, db/*.sql (RLS/audit), admin/*.tsx,
+      docs/* (THREAT-MODEL, SECURITY-ARCHITECTURE, INCIDENT-PLAYBOOK)
+      → Pacote de segurança da Casa. SQL cria tabelas de privilégio/audit.
+        NENHUM binário, NENHUM script de execução automática.
+  • CENTRALDARK-RECONCILIACAO-CANONICA-FINAL-2026-08-13(.zip e (1))
+  • CENTRALDARK-REGISTRO-MAE-2026-08-14.zip
+  • centraldark-grok-adapter.zip
+  • PACOTE-CENTRALDARK-ZT.zip
+  • skills_collection-main.zip, open-second-brain-main.zip,
+    manual-oculto-ia-curso-main.zip, agi-self-improvement-main.zip,
+    wo-mic-5-2.zip
+  → Todos contêm documentação/código-fonte da Casa ou cursos. Nenhum
+    executável malicioso detectado na listagem.
+
+G:\Users\danda\
+  • danda.zip (341 MB / 51 arquivos)
+      Conteúdo amostra: RELATORIO-NUCLEO-CENTRALDARK.md, runs.json,
+      skills-lock.json, store.js, TUTORIAL-TERMINAL-SEM-CONTA.md,
+      agent (161 MB), APRENDIZADOS_PROXY.md, _probe_models.json
+      → Backup pessoal da Casa. Sem exe/ps1 suspeito na amostra.
+  • .codex.zip (2.47 GB / 12253 arquivos)
+      Estado do Codex CLI (history, goals sqlite, auth.json, config.toml).
+      → Dados de ferramenta, não ameaça.
+  • .codex/.codex.zip (89 MB / 42 arquivos)
+      Backup de estado do Codex. Legítimo.
+
+================================================================================
+2. SCRIPTS PESSOAIS / FERRAMENTAS (CONFERIDOS)
+================================================================================
+G:\Users\danda\Downloads\ATUALIZAR-HERMES-WINDOWS-SEGURO.ps1
+  → TEU script de update do Hermes. Faz: coleta evidência, backup HERMES_HOME,
+    bundle git, para gateway, atualiza sem --force/--force-venv, valida CLI,
+    reinicia gateway se ativo. NÃO lê/imprime secrets, NÃO usa reset --hard,
+    NÃO force-push, NÃO altera VPS. LEGÍTIMO.
+
+C:\Users\danda\AppData\Local\hermes\bootstrap-cache\install-main.ps1
+  → Instalador oficial do Hermes Agent (usa uv). LEGÍTIMO.
+C:\Users\danda\AppData\Local\hermes\gateway-service\Hermes_Gateway.vbs
+  → Service oficial do gateway Hermes (seta env, roda python -m hermes_cli).
+    LEGÍTIMO.
+
+Outros .ps1/.bat/.exe:
+  • .grok/*, .codex/*, .cargo/*, .docker/* → ferramentas conhecidas.
+  • WOMicClientSetup6.3.exe → Nullsoft installer de app de microfone WiFi.
+    Legítimo (mas é um serviço de áudio na rede — revisar se quer).
+  • hermes-setup.exe → instalador Hermes. Legítimo.
+
+================================================================================
+3. CONEXÕES DE REDE (snapshot)
+================================================================================
+LISTENERS (0.0.0.0): apenas Windows padrão (135/445/2869/5040/7680/RPC).
+LISTENERS (127.0.0.1): Hermes (9119, 59642, PID 10136) — legítimo.
+
+CONEXÕES ESTABELECIDAS EXTERNAS (não localhost):
+  192.168.100.5 -> 34.117.13.33:443        (Google Cloud — Hermes/Nous)
+  192.168.100.5 -> 34.49.40.81:443         (Google Cloud)
+  192.168.100.5 -> 172.64.149.246:443      (Cloudflare)
+  192.168.100.5 -> 104.17.107/108.108:443  (Cloudflare)
+  192.168.100.5 -> 140.82.112.25:443       (GitHub)
+  192.168.100.5 -> 192.168.100.2:8125      (ROTEADOR local — Luci/OpenWrt)
+
+  → Todos os IPs externos são ranges corporativos conhecidos
+    (Google / Cloudflare / GitHub). NENHUM IP suspeito/desconhecido.
+  → PTR não resolveu via nslookup (sem servidor de reversa configurado),
+    mas os ranges são públicos e consistentes com os serviços usados.
+
+VÍNCULO EXTERNO EXPLÍCITO ENCONTRADO NOS SCRIPTS DA CASA:
+  https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/ai-proxy
+  https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/ai-proxy/v1/chat/completions
+  → É o SUPABASE DA CASA (projeto CentralDark) fazendo proxy de IA.
+    VÍNCULO LEGÍTIMO da infraestrutura tua, não invasão.
+
+================================================================================
+4. GIT / CENTRALDARK
+================================================================================
+Branch: fix/ci-self-hosted-fallback-deterministico (ahead 579)
+Commits recentes: todos autoria SEGREDO/CHEFE (SegredoiDev).
+  e621d5093 feat(security): centralize causal telemetry + externalize secrets
+  → commit que REMOVE secrets do código (benigno, confirmado).
+Nenhum commit de terceiro, nenhum backdoor, nenhum push não autorizado
+detectado na varredura.
+
+================================================================================
+5. TRISMÉGISTO / HERITAGE / SOL / TEAMS / HISTÓRIA
+================================================================================
+Todas as menções em docs/CONSCIENCIA e docs/BRAIN são:
+  - Proveniência ACADÊMICA (Ebeling, van Bladel, Botelho) usada como
+    antídoto contra atribuição falsa e para separar fonte/efeito/receptor.
+  - Metáfora OPERACIONAL (SOL = identidade da Casa; TEAMS = STT opcional).
+NENHUMA é canal de rede, webhook, token ou execução externa.
+docs/AGENTS.md confirma: MultiZap é HISTÓRICO e não dirige identidade atual.
+
+================================================================================
+6. ROTEADOR
+================================================================================
+Gateway: 192.168.100.1
+IP local: 192.168.100.5
+Conexão para 192.168.100.2:8125 = painel do roteador (provável OpenWrt/Luci).
+→ Sem anomalia no snapshot local. Recomenda-se login no roteador
+  (192.168.100.1) para conferir regras de NAT/port-forward e dispositivos
+  na rede (fora do escopo desta varredura local).
+
+================================================================================
+7. VPS
+================================================================================
+Não houve acesso à VPS nesta varredura (credencial não fornecida).
+Recomendação: rodar varredura equivalente lá (netstat, ps, authorized_keys,
+cron, /etc/passwd, docker ps) com autorização do SEGREDO/CHEFE.
+
+================================================================================
+8. RECOMENDAÇÕES FINAIS
+================================================================================
+1. Os zips da Casa em Downloads são legítimos mas DESORGANIZADOS.
+   => Mover para pasta única (ex: E:\CentralDark\Pivete\BACKUPS\zips-casa)
+      para reduzir superfície de confusão.
+2. WOMic (microfone WiFi) escuta rede — revisar se ainda usa.
+3. Conferir roteador (192.168.100.1) por regras não autorizadas.
+4. VPS: varredura pendente (autorizar).
+5. .env do Hermes protegido — manter assim, nunca hand-editar secrets.
+
+================================================================================
+9. ASSINATURA DA EXECUÇÃO (PROVA)
+================================================================================
+  [x] netstat LISTENING + ESTABLISHED (local + externo)
+  [x] G:\ e C:\ perfis listados (exe/ps1/bat/zip)
+  [x] Conteúdo de zips da Casa lido por dentro (RUN.ps1, bootstrap.py, sql)
+  [x] .ps1 de update Hermes lido (legítimo)
+  [x] bootstrap.ps1 / gateway.vbs do Hermes lidos (oficiais)
+  [x] URLs externas em scripts da Casa greppadas (achado Supabase legítimo)
+  [x] git log + grep secrets executados
+  [x] docs Trismegisto/Hermes/SOL/Teams greppados
+  [x] NENHUM arquivo modificado, NENHUM secret exposto, NENHUM commit
+  [x] Relatório em: C:\CentralDark\Pivete\CentralDark\_forense\
+================================================================================
+FIM — SOL OPERACIONAL (forense read-only concluída)
+================================================================================

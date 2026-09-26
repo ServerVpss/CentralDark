@@ -1,0 +1,101 @@
+# COMANDO - inventario-root-vps.yml
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\Codex\2026-06-10\prior-conversation-with-codex-conversation-role\work\CentralDark-live\CentralDark\apps\clone-deck\.github\workflows\inventario-root-vps.yml
+**SHA:** 80df2041a3b96b89
+**Timestamp:** 2026-08-26T19:31:26.605701
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Comandos
+- run: |
+- echo "Workflow run: ${{ github.run_id }}"
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+name: Inventario root VPS
+
+on:
+  push:
+    paths:
+      - '.github/workflows/inventario-root-vps.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  inventario:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Rodar inventario seguro na VPS
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.VPS_HOST_LOVABLE }}
+          username: ${{ secrets.VPS_USER_LOVABLE }}
+          key: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
+          command_timeout: 8m
+          script_stop: false
+          script: |
+            set +e
+            BASE="/root/Multizap"
+            REPO="$BASE/apps/clone-deck"
+            echo "[INFO] repo=$REPO"
+            cd "$REPO" || { echo "[ERRO] repo nao encontrado"; exit 0; }
+            git fetch origin main 2>&1 | tail -5 || true
+            git checkout main 2>&1 | tail -3 || true
+            git pull --ff-only origin main 2>&1 | tail -5 || true
+            SCRIPT="$REPO/CentralDark/scripts/run-once/inventory-root-vps.sh"
+            if [ ! -f "$SCRIPT" ]; then
+              SCRIPT="$REPO/scripts/run-once/inventory-root-vps.sh"
+            fi
+            if [ ! -f "$SCRIPT" ]; then
+              echo "[ERRO] script de inventario nao encontrado"
+              find "$REPO" -path '*inventory-root-vps.sh' -maxdepth 6 2>/dev/null
+              exit 0
+            fi
+            chmod +x "$SCRIPT" || true
+            OUT_DIR="$(bash "$SCRIPT" 2>&1 | tail -1)"
+            echo "[INFO] out_dir=$OUT_DIR"
+            REPORT="$OUT_DIR/resumo.md"
+            echo "===RESUMO_INICIO==="
+            if [ -f "$REPORT" ]; then
+              echo "[arquivo] $REPORT"
+              echo "---"
+              cat "$REPORT"
+            else
+              echo "[ERRO] resumo nao encontrado"
+              echo "$OUT_DIR"
+            fi
+            echo "===RESUMO_FIM==="
+
+      - name: Registrar resumo no repo
+        if: always()
+        run: |
+          mkdir -p security/reports
+          {
+            echo "# Inventário root VPS"
+            echo ""
+            echo "Workflow run: ${{ github.run_id }}"
+            echo "Data UTC: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            echo ""
+            echo "Resumo completo disponível no log do step 'Rodar inventario seguro na VPS' entre os marcadores:"
+            echo ""
+            echo "- ===RESUMO_INICIO==="
+            echo "- ===RESUMO_FIM==="
+          } > security/reports/inventario-root-vps.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add security/reports/inventario-root-vps.md
+          git commit -m "chore(vps): registrar inventario root (${{ github.run_id }})" || echo "sem mudancas"
+          git push || true
+
+```

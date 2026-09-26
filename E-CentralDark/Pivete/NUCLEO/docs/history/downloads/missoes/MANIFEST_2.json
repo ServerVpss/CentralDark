@@ -1,0 +1,38 @@
+{
+  "package": "CENTRALDARK_LACUNA_FECHADA_PACK",
+  "created_at_utc": "2026-08-24T09:02:06Z",
+  "operation_mode": "READ_ONLY_SYNTHESIS_FROM_SCREENSHOTS",
+  "summary": {
+    "theme": "Lacuna fechada: critério de saída, estado vivo e retorno somente com prova",
+    "core_gap": "faltava estado vivo antes da descoberta de caminhos e faltava juiz material no critério de saída"
+  },
+  "sources": [
+    {
+      "role": "Screenshot A",
+      "path": "/mnt/data/ghostwriter_images/context/81196067-a3d7-55d8-a9f5-9ad6f9b84d7e.png",
+      "sha256": "c91abd2c52cfe70bbfd198d34a3695ad5ec23f5f927dbb99b51b1fe27890f3e2"
+    },
+    {
+      "role": "Screenshot B",
+      "path": "/mnt/data/ghostwriter_images/context/ed0c51d8-7c90-5be0-a1da-9fc4b5fe1fb8.png",
+      "sha256": "8a3c8948adea3bea265d06d68c220440f60876539886d721218275806788cc8b"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "file": "CENTRALDARK_LACUNA_FECHADA.md",
+      "sha256": "74b69a6b0f4450a896dfb5e9e7d7e3155e80490e5768ed5cda738550f9153a4c"
+    },
+    {
+      "file": "CENTRALDARK_LACUNA_FECHADA.mmd",
+      "sha256": "47f4fcfc333e18711d5271c00bebe5c7d87f2601408a674fe70aad6f65fabfaa"
+    },
+    {
+      "file": "CENTRALDARK_LACUNA_FECHADA.png",
+      "sha256": "4844460c1cfad7914d6f73e7b93c452d9ec330e3f540c8abf02ba43e6dd63de5"
+    }
+  ],
+  "canonical_boot": "CHEFE_INTENT → DESTINATION_LOCK → MEASURE_LIVE_STATE → SEARCH_ALL_MATERIAL_PATHS → RESOLVE_CANONICAL_OWNER → ACQUIRE_WRITER_IF_NEEDED → EXECUTE_MINIMAL_DELTA → COLLECT_EVIDENCE → COUNTERPROOF → REALITY_JUDGE → DESTINATION_PROVED ? RETURN : REMEDIATE_OR_ESCALATE_HUMAN_FRONTIER",
+  "compressed_boot": "INTENT → DESTINATION_LOCK → STATE_ALIVE → PATH_DISCOVERY → OWNER/WRITER_GUARD → EXECUTE → EVIDENCE → COUNTERPROOF → REALITY_JUDGE → RETURN_ONLY_IF_PROVED_OR_HUMAN_FRONTIER",
+  "mission_thread": "intenção → destino travado → estado vivo → descoberta automática dos caminhos → owner/writer correto → execução mínima necessária → prova → contraprova → realidade confirma → retorno somente quando provado ou quando houver fronteira humana real"
+}

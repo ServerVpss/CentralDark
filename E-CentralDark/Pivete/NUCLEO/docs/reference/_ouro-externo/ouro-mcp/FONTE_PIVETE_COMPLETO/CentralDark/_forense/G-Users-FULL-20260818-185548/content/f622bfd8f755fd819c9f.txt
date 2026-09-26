@@ -1,0 +1,23 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\store\dist\utils\tap-assistant-context.d.ts
+
+import { AssistantEventName, AssistantEventPayload } from "../types/events.js";
+import { AssistantClient } from "../types/client.js";
+import { ClientStack } from "./tap-client-stack-context.js";
+//#region src/utils/tap-assistant-context.d.ts
+type EmitFn = <TEvent extends Exclude<AssistantEventName, "*">>(event: TEvent, payload: AssistantEventPayload[TEvent], clientStack: ClientStack) => void;
+type AssistantTapContextValue = {
+  clientRef: {
+    parent: AssistantClient;
+    current: AssistantClient | null;
+  };
+  emit: EmitFn;
+};
+declare const useAssistantTapContextProvider: <TResult>(value: AssistantTapContextValue, fn: () => TResult) => TResult;
+declare const useAssistantClientRef: () => {
+  parent: AssistantClient;
+  current: AssistantClient | null;
+};
+declare const useAssistantEmit: () => <TEvent extends Exclude<AssistantEventName, "*">>(event: TEvent, payload: AssistantEventPayload[TEvent]) => void;
+//#endregion
+export { AssistantTapContextValue, useAssistantClientRef, useAssistantEmit, useAssistantTapContextProvider };
+//# sourceMappingURL=tap-assistant-context.d.ts.map

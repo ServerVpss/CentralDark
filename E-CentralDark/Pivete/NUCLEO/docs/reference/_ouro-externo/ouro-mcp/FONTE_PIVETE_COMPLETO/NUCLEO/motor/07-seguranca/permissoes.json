@@ -1,0 +1,26 @@
+{
+  "modo_atual": "SEM_EXECUTOR",
+  "acoes_permitidas": [
+    "conversar",
+    "salvar_memoria_explicita",
+    "consultar_memoria",
+    "planejar",
+    "registrar_feedback",
+    "falar_resposta"
+  ],
+  "acoes_bloqueadas": [
+    "apagar_arquivo",
+    "formatar",
+    "reiniciar_sistema",
+    "instalar_programa",
+    "executar_shell",
+    "abrir_portao",
+    "acessar_camera",
+    "alterar_codigo"
+  ],
+  "palavras_parada": [
+    "PARA",
+    "TRAVA",
+    "CANCELA"
+  ]
+}

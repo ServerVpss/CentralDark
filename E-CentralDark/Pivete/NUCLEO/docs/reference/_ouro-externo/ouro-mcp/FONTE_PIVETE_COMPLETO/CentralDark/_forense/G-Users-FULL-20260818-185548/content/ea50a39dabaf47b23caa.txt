@@ -1,0 +1,15 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\src\runtimes\assistant-transport\utils.ts
+
+export async function createRequestHeaders(
+  headersValue:
+    | Record<string, string>
+    | Headers
+    | (() => Promise<Record<string, string> | Headers>),
+): Promise<Headers> {
+  const resolvedHeaders =
+    typeof headersValue === "function" ? await headersValue() : headersValue;
+
+  const headers = new Headers(resolvedHeaders);
+  headers.set("Content-Type", "application/json");
+  return headers;
+}

@@ -1,0 +1,8 @@
+flowchart LR
+  A[Material change] --> B[Tests]
+  B --> C[Counterproof / falsifier]
+  C --> D[Reality Judge]
+  D --> E{Documentation complete?}
+  E -- no --> F[DOCUMENTATION_GATE FAIL + NEXT_CURSOR]
+  E -- yes --> G[Receipt]
+  G --> H[Promotable]

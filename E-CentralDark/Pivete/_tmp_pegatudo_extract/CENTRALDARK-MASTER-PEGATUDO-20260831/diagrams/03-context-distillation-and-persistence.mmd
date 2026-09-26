@@ -1,0 +1,13 @@
+flowchart TD
+  SRC["External sources"] --> CLASS["Classify source + scope"]
+  CLASS --> RECENCY["Verify recency / revision / HEAD"]
+  RECENCY --> OWNER["Verify owner / consumer relevance"]
+  OWNER --> DISTILL["Distill unique material delta"]
+  DISTILL --> SAFE["Safe context: facts, refs, hashes, receipts"]
+  DISTILL --> SECRET["Credential-like / sensitive"]
+  SECRET --> QUAR["QUARANTINE - never prompt / receipt"]
+  SAFE --> PERSIST["Durable context store"]
+  PERSIST --> D["Drive / Workspace"]
+  PERSIST --> G["GitHub when available"]
+  PERSIST --> IDX["Manifest / index / NEXT_CURSOR"]
+  IDX --> NEXT["Successor agent remeasures live state"]

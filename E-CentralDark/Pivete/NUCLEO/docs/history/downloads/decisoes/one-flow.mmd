@@ -1,0 +1,30 @@
+flowchart TD
+  H[SEGREDO/CHEFE<br/>intenção + autoridade] --> I[Ingressos]
+  I --> D[Surface/Capability Discovery]
+  D --> P1[Browser/DOM/Network/Storage]
+  D --> P2[Files/HTML/Notepad]
+  D --> P3[Screenpipe/Recorder/Telemetry]
+  D --> P4[GitHub/Runtime/VPS/Web]
+  P1 --> E[Envelope de Evidência]
+  P2 --> E
+  P3 --> E
+  P4 --> E
+  E --> HARV[Session Intelligence Harvester]
+  HARV --> R[Rendezvous + Dedupe]
+  R --> M[Multibússola + MetaLupa]
+  M --> SOL[SOL]
+  SOL --> DEC{Decisão}
+  DEC -->|REUSE| W[ONE WRITER PER SCOPE]
+  DEC -->|EXTEND| W
+  DEC -->|CREATE IF GAP PROVEN| W
+  DEC -->|NO_CHANGE| K[Knowledge/No Change]
+  W --> HER[HERMES/PIVETE]
+  HER --> FX[Efeito]
+  FX --> O[Observabilidade]
+  O --> J[Reality Judge]
+  J -->|FAIL| REM[Remediação mínima]
+  REM --> O
+  J -->|PASS| KC[Knowledge Compiler]
+  KC --> K
+  K --> C[Cockpit]
+  C --> H

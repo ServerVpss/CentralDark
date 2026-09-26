@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "mission_id",
+    "status",
+    "created_at",
+    "artifacts",
+    "ledger_sha256",
+    "critique",
+    "transfer_results",
+    "gates"
+  ],
+  "properties": {
+    "mission_id": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "SEALED_LEARNING",
+        "SEALED_TRANSFER",
+        "SEALED_PASS",
+        "SEALED_BLOCKED",
+        "SEALED_ABORTED"
+      ]
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "artifacts": {
+      "type": "array"
+    },
+    "ledger_sha256": {
+      "type": "string"
+    },
+    "critique": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "transfer_results": {
+      "type": "array"
+    },
+    "gates": {
+      "type": "array"
+    }
+  },
+  "additionalProperties": false
+}

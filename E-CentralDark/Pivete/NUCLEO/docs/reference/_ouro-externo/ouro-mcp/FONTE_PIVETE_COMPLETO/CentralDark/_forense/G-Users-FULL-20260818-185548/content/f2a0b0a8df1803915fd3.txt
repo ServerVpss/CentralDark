@@ -1,0 +1,22 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\src\react\primitive-hooks\useActionBarSpeak.ts
+
+import { useCallback } from "react";
+import { useAui, useAuiState } from "@assistant-ui/store";
+
+export const useActionBarSpeak = () => {
+  const aui = useAui();
+
+  const disabled = useAuiState((s) => {
+    return !(
+      (s.message.role !== "assistant" ||
+        s.message.status?.type !== "running") &&
+      s.message.parts.some((c) => c.type === "text" && c.text.length > 0)
+    );
+  });
+
+  const speak = useCallback(async () => {
+    aui.message().speak();
+  }, [aui]);
+
+  return { speak, disabled };
+};

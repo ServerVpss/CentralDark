@@ -1,0 +1,10 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@nous-research\ui\dist\ui\components\toast.d.ts
+
+export declare function Toast({ toast }: ToastProps): import("react").ReactPortal | null;
+interface ToastProps {
+    toast: {
+        message: string;
+        type: 'error' | 'success';
+    } | null;
+}
+export {};

@@ -1,0 +1,353 @@
+
+
+
+Você está certo em trocar de chat. Esta janela começou a perder precisão, e você já estava tendo que me corrigir demais. O checkpoint correto é preservar o fio antes de continuar.
+
+Também confirmo: o SHA estava certo desde o começo — 5f7573492cb13ef5923d388af51ebd3c3abe60f4. Meu alerta anterior foi erro de leitura. O GitHub ainda mostra esse commit como o topo atual da main.
+
+O que será preservado
+
+Não se perde:
+ 
+- arquivos salvos em `E:\CentralDark`;
+- arquivos salvos em `E:\CentralDark\Pivete\CentralDark`;
+- arquivos salvos em `E:\CentralDark\Pivete`;
+- arquivos salvos em `E:\CentralDark\Sol`;
+- arquivos salvos em `E:\CentralDark\.claude`;
+documentos e código do repositório;
+commits, PRs, issues e comentários;
+LEIA-ME-IA.md, AGENTS.md, contrato JARVIS e docs/ESTADO-DA-RETOMADA.md;
+recibos publicados na issue #564;
+programa registrado no PR-mãe #554.
+
+O repositório já determina boot universal, carregamento da governança, Delta, Meta Lupa, fonte da verdade atual e escritor único.
+
+Não atravessa automaticamente para outro chat ou outra conta:
+
+imagens colocadas somente nesta conversa;
+texto que nunca foi salvo em arquivo, issue ou PR;
+anexos exclusivos desta conta;
+detalhes exatos de uma conversa enorme.
+
+Na mesma conta, o ChatGPT pode consultar partes úteis do histórico quando essa função está ativada, mas não conserva necessariamente todos os detalhes. Em um Projeto, chats e arquivos do mesmo projeto têm continuidade mais forte. Entre contas diferentes, não existe fusão automática de histórico, arquivos ou memórias.
+
+Portanto, sua solução correta é:
+
+CHAT = interface temporária
+GITHUB = memória operacional remota
+ISSUE/PR = checkpoint vivo
+CASA = memória privada/local
+!CALIBRAR = ponte para reconstruir o contexto
+Comando exato para o novo chat
+
+Cole inteiro, como primeira mensagem:
+
+!CALIBRAR_CENTRALDARK_RETOMADA:
+
+  checkpoint_id: "VPS_CHECKMATE_DELTA-FASE0-OPUS-PARTIAL-20260730"
+  mode: "RETOMADA_READ_ONLY_COM_DELTA"
+  authority: "PERMITO PIVETE"
+  do_not_rewind: true
+  do_not_restart_completed_investigation: true
+  do_not_infer_unknown_fields: true
+
+  usuario:
+    nome_operacional: "PIVETE"
+    papel: "AUTORIDADE_FINAL_E_DECISOR"
+    linguagem:
+      - "PT-BR"
+      - "explicação leiga primeiro"
+      - "detalhe técnico logo depois"
+      - "resultado direto"
+      - "sem jargão robótico"
+      - "sem repetir pergunta já respondida"
+
+  objetivo_maior:
+    programa: "HERMES-CASA-MENTE-ESTENDIDA-01"
+    destino:
+      - "uma conversa visível"
+      - "uma voz SOL"
+      - "Hermes Agent como motor"
+      - "Hermes One como interface"
+      - "memória compartilhada segura"
+      - "especialistas trabalhando em delta"
+      - "um escritor por escopo"
+      - "GitHub registrando código, decisões e provas"
+      - "Casa preservando estado local e privado"
+      - "VPS executando somente o aprovado"
+
+  repositorio:
+    remoto: "ServerVpss/CentralDark"
+    clone_oficial_local: "E:/CentralDark/Pivete/CentralDark"
+    casa_workspace: "E:/CentralDark"
+    ultimo_head_conhecido: "5f7573492cb13ef5923d388af51ebd3c3abe60f4"
+    regra_head: >
+      Este SHA é checkpoint, não verdade eterna.
+      Antes de qualquer conclusão, medir novamente a main remota,
+      a main local e o estado atual da VPS.
+      Estado novo comprovado vence este snapshot.
+
+  boot_obrigatorio_em_ordem:
+    - "LEIA-ME-IA.md"
+    - "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md"
+    - "docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md"
+    - "AGENTS.md"
+    - "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md"
+    - "docs/ESTADO-DA-RETOMADA.md"
+    - "apps/modulos/mapeamento/config/mapa-canonico.json"
+    - ".agents/skills/meta-lupa/SKILL.md"
+    - ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA"
+
+  estado_operacional_obrigatorio:
+    ler_github:
+      - "issue #564 inteira, incluindo todos os comentários, do mais novo para o mais antigo"
+      - "PR #554, corpo, arquivos, comentários e último PROGRAM_DELTA"
+      - "PR #455, estado, arquivos e colisões de governança"
+      - "PR #574 e merge commit 749077ad694babc494f9b0f2e9d713d92bdd0360"
+      - "últimos commits da main"
+      - "checks e recibos relacionados"
+
+    ler_casa_se_acessivel:
+      - "localizar RASTRO-SESSAO.md sem criar outro"
+      - "localizar CALIBRAR-CONTRATO-DELTA.md sem criar duplicata"
+      - "E:/CentralDark/Pivete/NUCLEO/motor/03-memoria"
+      - "E:/CentralDark/Pivete/NUCLEO/MANUAL-SESSAO-19-07-2026/MANUAL.html"
+      - "REVISAO-TECNICA-DA-LUPA.md"
+      - "artefatos visuais e diagramas do Agentic Engineering Loop"
+
+    proibido_ler:
+      - ".env"
+      - "tokens"
+      - "secrets"
+      - "sessions"
+      - "cookies"
+      - "chaves"
+      - "certificados"
+      - "conteúdo privado de memória"
+      - "bancos vivos"
+
+  checkpoint_recebido:
+
+    pr_554:
+      tipo: "PR_MAE_DO_PROGRAMA"
+      estado: "OPEN"
+      escritora_unica: "SOL"
+      regra:
+        - "não alterar"
+        - "não fazer merge enquanto funcionar como programa vivo"
+        - "mudanças técnicas entram por PR-filho"
+        - "retornar evidência por PROGRAM_DELTA"
+
+    issue_564:
+      missao: "VPS_CHECKMATE_DELTA"
+      estado: "OPEN"
+      fase: "FASE_0"
+      resultado_atual: "ANALISE_CONCLUIDA_GATE_PENDENTE"
+      mutacao_vps_executada: false
+      fase_1_iniciada: false
+      gate_revisor: "OPUS_GATE_PARTIAL"
+
+      ultima_prova_conhecida:
+        github_head: "5f7573492cb13ef5923d388af51ebd3c3abe60f4"
+        github_tree: "72c728107baf39359cffcc2ac921dcf4a6322a1a"
+        vps_snapshot: "e1c4430096"
+        vps_branch: "chore/gateway-providers-routes"
+        regra: >
+          O HEAD da VPS muda por commits automáticos.
+          Capturar HEAD e status imediatamente antes de cada medição.
+          Nunca reutilizar SHA antigo como prova atual.
+
+      achados_confirmados:
+        - "mapa-canonico.json da VPS é estado antigo, não ouro"
+        - "validar-mapa.mjs da VPS é subconjunto antigo da main"
+        - "origem dos dois arquivos foi o PR #296, não o PR #551"
+        - "grupo-evolucao/missions contém 200+ arquivos de telemetria runtime"
+        - "nenhuma limpeza foi executada"
+        - "nenhum descarte foi autorizado pela revisão final"
+        - ".grok/rules/05-pr-secret-scan-nunca-merge.md permanece em quarentena"
+        - "regra Grok contém risco relevante relacionado ao scanner de segredo"
+        - "falso 200 do Cloudflare não prova deploy aplicado na VPS"
+
+      divida_de_evidencia:
+        regra: >
+          Ler o comentário mais recente do parecer Opus e identificar
+          exatamente as três comparações de conteúdo ainda pendentes.
+          Não adivinhar os nomes.
+        provável_classe:
+          - "validar-mapa.test.mjs"
+          - "provider-health.mjs"
+          - "provider-health.test.mjs"
+        observacao: >
+          A lista provável não é prova.
+          A lista oficial deve vir do parecer mais recente da issue #564.
+
+    pr_455:
+      estado_conhecido: "OPEN"
+      escopo:
+        - "Meta Lupa"
+        - "entrypoints"
+        - "gates canônicos"
+        - "hooks"
+        - "workflows"
+      regra: >
+        Não modificar arquivo ou mecanismo que esteja sendo escrito
+        pelo PR #455 sem comparação e handoff explícito.
+
+  papeis:
+    decisor: "PIVETE"
+    coordenadora_programa: "SOL"
+    escritora_pr_554: "SOL"
+    papel_deste_novo_chat: "CALIBRADOR_E_REVISOR_READ_ONLY"
+    escritor_vps: "NONE_ATÉ_CONFIRMAR_ESTADO_VIVO"
+    leitores_paralelos: "PERMITIDOS"
+    escritores_paralelos: "PROIBIDOS"
+    judge: "INDEPENDENTE_DO_EXECUTOR"
+
+  contexto_futuro_preservado_sem_executar:
+
+    builder:
+      destino: "criar, editar, visualizar e publicar sites"
+      proibido: "virar CRM ou segundo chat principal"
+
+    crm:
+      candidato: "DeskcommCRM"
+      estado: "LABORATORIO_FUTURO"
+      objetivo:
+        - "clientes"
+        - "pedidos"
+        - "compromissos"
+        - "atendimento"
+        - "processos comerciais"
+      executar_agora: false
+
+    lovable:
+      estado: "TRANSICAO_CONTROLADA"
+      permanece_ate: "fim dos créditos da gateway"
+      fonte_da_verdade: false
+
+    manual_html:
+      tipo: "BASE_VISUAL_HISTORICA"
+      fonte_da_verdade: false
+      futuro: "ser projetado dentro do Hub único"
+
+    projetor_estado_unico:
+      objetivo:
+        - "ler fontes canônicas uma vez"
+        - "gerar estado-atual.json"
+        - "alimentar WebUI, Manual e Status"
+      executar_agora: false
+
+  regras_invariantes:
+    - "Pivete comanda"
+    - "IA organiza"
+    - "GitHub registra"
+    - "VPS executa"
+    - "ações provam"
+    - "código determinístico primeiro"
+    - "agente interpreta somente o que exigir raciocínio"
+    - "modelo é recurso, não identidade"
+    - "mensagem atrasada não reinicia missão"
+    - "snapshot novo substitui estado antigo"
+    - "leitores podem trabalhar em enxame"
+    - "somente um escritor por escopo"
+    - "executor não aprova a si mesmo"
+    - "tamanho igual não prova conteúdo igual"
+    - "200 HTTP não prova efeito operacional"
+    - "nenhum segredo em logs ou snapshots"
+    - "nenhum reset, clean, force-push ou remoção destrutiva"
+
+  acao_imediata_autorizada:
+
+    etapa_1:
+      tipo: "READ_ONLY"
+      executar:
+        - "confirmar acesso ao repositório oficial"
+        - "medir HEAD e tree atuais da main"
+        - "ler último recibo da issue #564"
+        - "confirmar o escritor atual de cada escopo"
+        - "identificar delta desde o checkpoint recebido"
+
+    etapa_2:
+      condicao: >
+        Somente se a issue #564 continuar em OPUS_GATE_PARTIAL,
+        nenhuma mutação nova tiver ocorrido e nenhum outro escritor
+        estiver operando no mesmo escopo.
+      executar:
+        - "realizar exatamente as três leituras de conteúdo pendentes"
+        - "comparar conteúdo/hash, nunca somente tamanho"
+        - "sanitizar toda saída"
+        - "não alterar VPS, repo, PR ou serviço"
+        - "produzir parecer APPROVED ou continuar PARTIAL com causa objetiva"
+
+  hard_stop:
+    - "fonte canônica indisponível"
+    - "GitHub connector ou acesso ao repo ausente"
+    - "outro escritor ativo no mesmo escopo"
+    - "HEAD mudou durante a medição"
+    - "necessidade de ler segredo"
+    - "evidência contraditória"
+    - "ação exigindo mutação"
+    - "PR #554 seria tocado"
+    - "PR #455 seria sobrescrito"
+
+  retorno_inicial_obrigatorio:
+    formato:
+      CENTRALDARK_AI_BOOT:
+        governance: "LOADED|BLOCKED"
+        delta_method: "LOADED|BLOCKED"
+        meta_lupa: "VALIDATED|BLOCKED"
+        role: "READ_ONLY_REVIEWER"
+        writer: "nome ou NONE"
+
+      CHECKPOINT:
+        repository_head: ""
+        repository_tree: ""
+        issue_564_gate: ""
+        pr_554_writer: ""
+        pr_455_collision: ""
+        vps_latest_snapshot: ""
+        delta_from_previous_state: []
+
+      VEREDITO:
+        estado_atual: ""
+        fato_novo: []
+        conflito: []
+        duplicidade: []
+        regressao: []
+        bloqueio: []
+        proxima_acao_segura: ""
+
+  regra_final: >
+    Não reinicie a missão e não conte toda a história novamente.
+    Leia as fontes canônicas, prove o estado vivo, incorpore somente
+    o delta e continue exatamente do gate mais avançado.
+O novo chat deve responder primeiro assim
+CENTRALDARK_AI_BOOT:
+  governance: LOADED
+  delta_method: LOADED
+  meta_lupa: VALIDATED
+  role: READ_ONLY_REVIEWER
+  writer: NONE
+
+CHECKPOINT:
+  repository_head: "<medido agora>"
+  issue_564_gate: "<medido agora>"
+  delta_from_previous_state: []
+
+VEREDITO:
+  estado_atual: "..."
+  proxima_acao_segura: "..."
+
+Se ele começar criando sistema novo, lendo E:\CentralDark como se fosse o Git, tocando no PR #554 ou reiniciando a investigação, ele falhou no !CALIBRAR.
+
+Minha decisão precisa
+
+Troque de chat agora, mas não dependa da memória do ChatGPT para reconstruir a missão. A espinha dorsal já está persistida:
+
+PR #554 mantém o programa, a arquitetura-alvo, as fases e os deltas.
+Issue #564 mantém a execução e os recibos da VPS; ela está aberta e possui oito comentários operacionais.
+O parecer independente está registrado como OPUS_GATE: PARTIAL, preso ao HEAD e tree medidos.
+docs/ESTADO-DA-RETOMADA.md já é gerado automaticamente e não deve ser editado manualmente.
+O PR #455 continua aberto e precisa ser respeitado para evitar dois escritores na Meta Lupa e nos gates.
+
+As fotos desta conversa são sua visão auxiliar. O GitHub, a Casa e os recibos são a memória que qualquer chat, conta, CLI ou agente poderá recuperar. 😎🔎🧠

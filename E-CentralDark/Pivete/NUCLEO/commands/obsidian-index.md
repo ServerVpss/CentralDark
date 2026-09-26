@@ -1,0 +1,112 @@
+# COMANDO - obsidian-index.yml
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\.grok\worktrees\pivete-centraldark\test\.github\workflows\obsidian-index.yml
+**SHA:** 7b94f697eae53d51
+**Timestamp:** 2026-08-28T02:56:03.424739
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Comandos
+- run: |
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+name: Obsidian — Regenerar INDEX
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/BRAIN/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: obsidian-index
+  cancel-in-progress: false
+
+jobs:
+  regenerar-index:
+    name: 📚 Regenerar INDEX.md do Segundo Cérebro
+    runs-on: self-hosted
+    timeout-minutes: 5
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+          submodules: false
+
+      - name: 🔄 Regerar + commit + push (retry loop)
+        run: |
+          set -e
+          git config user.name  "CentralDark Bot"
+          git config user.email "bot@centralldark.com"
+
+          MAX_TRIES=3
+          for TRY in $(seq 1 $MAX_TRIES); do
+            echo "🔄 Tentativa $TRY/$MAX_TRIES"
+            git fetch origin main
+            git reset --hard origin/main
+
+            node - <<'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          const BRAIN = path.join(process.cwd(), 'docs', 'BRAIN');
+          const INDEX = path.join(BRAIN, 'INDEX.md');
+          function listNotes() {
+            const result = [];
+            for (const entry of fs.readdirSync(BRAIN, { withFileTypes: true })) {
+              if (entry.isDirectory()) {
+                const dir = path.join(BRAIN, entry.name);
+                for (const f of fs.readdirSync(dir)) {
+                  if (f.endsWith('.md')) result.push({ folder: entry.name, file: f });
+                }
+              } else if (entry.name.endsWith('.md') && entry.name !== 'INDEX.md') {
+                result.push({ folder: '', file: entry.name });
+              }
+            }
+            return result;
+          }
+          const notes = listNotes();
+          const byFolder = {};
+          for (const n of notes) {
+            const key = n.folder || '(raiz)';
+            (byFolder[key] = byFolder[key] || []).push(n);
+          }
+          const ts = new Date().toISOString().replace('T', ' ').slice(0, 16);
+          let md = `# 📚 INDEX — Segundo Cérebro CentralDark\n\n> Gerado automaticamente em ${ts} UTC. Não editar manualmente.\n\n`;
+          for (const [folder, items] of Object.entries(byFolder).sort()) {
+            md += `## ${folder}\n\n`;
+            for (const item of items.sort((a, b) => a.file.localeCompare(b.file))) {
+              md += `- [[${item.file.replace('.md', '')}]]\n`;
+            }
+            md += '\n';
+          }
+          fs.writeFileSync(INDEX, md);
+          console.log(`✅ INDEX.md gerado: ${notes.length} notas em ${Object.keys(byFolder).length} pastas`);
+          EOF
+
+            if git diff --quiet -- docs/BRAIN/INDEX.md; then
+              echo "✅ INDEX sem mudanças."
+              exit 0
+            fi
+            git add docs/BRAIN/INDEX.md
+            git commit -m "chore(brain): regenerar INDEX.md automaticamente"
+            echo "🚪 Gate global pré-main"
+            node scripts/lupa/validar-continuidade-global.mjs
+            node scripts/lupa/validar-porta-de-entrada.mjs
+            if git push origin HEAD:main; then
+              echo "✅ INDEX publicado (tentativa $TRY)."
+              exit 0
+            fi
+            echo "⚠️ Push rejeitado, retry..."
+            sleep 2
+          done
+          echo "❌ Falhou após $MAX_TRIES tentativas."
+          exit 1
+
+```

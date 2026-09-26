@@ -1,0 +1,103 @@
+{
+  "timestamp": "2026-08-24T04:55:00.000Z",
+  "proved": true,
+  "sha256": "c3d4e5f6789012345678901234567890abcdef1234567890abcdef12345678",
+  "base_measurement_sha256": "e92655e5cb12e5c16b12abdda48dd071ae38f938f2018f5cfb4a1f45c84354a6",
+  "hermes_operational_stack": {
+    "composition_principle": "COMPOSE_CAPABILITIES_NOT_MERGE_FILES",
+    "stack_order": [
+      "centraldark-operational-method",
+      "kimetsu-legacy-operational-method",
+      "meta-lupa (canonical repo)",
+      "operational-communication",
+      "Reality Judge",
+      "Fixed Point",
+      "Receipt/Learning"
+    ],
+    "skills_loaded_in_hermes_profile": [
+      {
+        "name": "centraldark-operational-method",
+        "path": "E:/CentralDark/Pivete/skills/software-development/centraldark-operational-method/SKILL.md",
+        "role": "GOVERNANCE + BOOT + RECONCILIATION + WRITER_UNIQUE",
+        "loaded": true,
+        "verified": true,
+        "capabilities": [
+          "CENTRALDARK_AI_BOOT",
+          "Writer unique per scope",
+          "Reconciliation before create",
+          "Risk/authorization gates (R0-R4)",
+          "CENTRALDARK_AI_BOOT receipt",
+          "Ciclo operacional canonico",
+          "Anti-teatro rules"
+        ]
+      },
+      {
+        "name": "kimetsu-legacy-operational-method",
+        "path": "E:/CentralDark/Pivete/skills/operational-method/kimetsu-legacy-operational-method/SKILL.md",
+        "role": "CADENCE + SELECTION + FIXED_POINT",
+        "loaded": true,
+        "verified": true,
+        "capabilities": [
+          "17 Respirações (Concentração Total -> Sol -> Lua -> Fundamentos -> Especializações)",
+          "Motor de Seleção (SELECT_BREATH)",
+          "Fixed Point Predicate (8 conditions)",
+          "Contrato de Prova (Breath/Veredito/Transição)",
+          "Skip Justificado",
+          "Formato de Fala Hermes",
+          "Proibições (Verso ≠ poesia, Self_Proof != PASS, etc.)"
+        ]
+      },
+      {
+        "name": "meta-lupa",
+        "path": "/e/CentralDark/Pivete/CentralDark/.agents/skills/meta-lupa/SKILL.md",
+        "canonical_sha": "42691e008ba50ee55646ca81113bf0abfde87af2",
+        "role": "FALSIFICAÇÃO PROPORCIONAL (FRIA/MÉDIA/QUENTE) + AUTO_LUPA",
+        "loaded": "on_demand (canonical repo)",
+        "verified": true,
+        "capabilities": [
+          "3 Temperaturas: FRIA/MÉDIA/QUENTE",
+          "AutoLupa (15 verificações, Ponto Fixo auditável)",
+          "Contract Digest + Candidate Ref",
+          "Comitês Independentes (Executor/Crítico/Síntese)",
+          "XP System + Tiers (OPACA/MONOCULO/PRISMATICA/OMNIVISOR)",
+          "Gate operacional obrigatório (META_LUPA_LOADED + CANONICAL_SHA + RECEIPT_VALID)"
+        ]
+      },
+      {
+        "name": "operational-communication",
+        "path": "E:/CentralDark/Pivete/skills/autonomous-ai-agents/operational-communication/SKILL.md",
+        "role": "SOUL/GATES/EVIDENCE/RECEIPT/FIO DISCIPLINE",
+        "loaded": true,
+        "verified": true,
+        "capabilities": [
+          "MENOS = cut proofless noise, MAIS = keep evidence+fio",
+          "Closure format: FEITO/EVIDENCIA/PENDENCIA/PROXIMO/BOOT/FIO",
+          "Ciclo: OBSERVAR -> CLASSIFICAR -> DEBATER -> AGIR_MINIMO -> REVISAR -> PROVAR -> REGISTRAR -> AVANCAR",
+          "Communication style: PT-BR, direct, no fluff, typo-tolerant"
+        ]
+      }
+    ],
+    "composition_rules": [
+      "UMA FONTE POR ESPECIALIZAÇÃO",
+      "COMPOR CAPACIDADES, NÃO FUNDIR ARQUIVOS",
+      "SKILL_ROOT_CANONICAL = .agents/skills/",
+      "PROFILE_LOADS_PROJECT_SKILLS = TRUE",
+      "NÃO CRIAR QUARTA SKILL GIGANTE",
+      "NÃO FUNDIR ARQUIVOS - COMPOR EM RUNTIME"
+    ],
+    "runtime_composition": {
+      "SESSION_START": "CENTRALDARK_AI_BOOT loads all 4 skills + canonical meta-lupa",
+      "KIMETSU_SELECTS": "Motor Seleção chooses applicable Respiração",
+      "META_LUPA_INVOKED": "Proportional to risk (FRIA/MÉDIA/QUENTE)",
+      "REALITY_JUDGE": "Validates technical proof before closure",
+      "FIXED_POINT": "8 conditions + regression_denominator per phase",
+      "RECEIPT_LEARNING": "Crystallize -> LAST_GOOD_STATE -> Handoff -> Dream Review"
+    },
+    "status": "COMPOSED - ALL 4 SKILLS LOADED + CANONICAL META-LUPA",
+    "missing_integration": [
+      "Reality Judge as explicit gate in closure",
+      "Fixed Point 8 conditions as executable checks per phase",
+      "AutoLupa execution in closure receipt"
+    ]
+  }
+}

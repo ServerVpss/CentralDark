@@ -1,0 +1,37 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\compiler\perl.vim
+
+" Vim compiler file
+" Compiler:      Perl syntax checks (perl -Wc)
+" Maintainer:    vim-perl <vim-perl@googlegroups.com> (need to be subscribed to post)
+" Author:        Christian J. Robinson <heptite@gmail.com>
+" Homepage:      https://github.com/vim-perl/vim-perl
+" Bugs/requests: https://github.com/vim-perl/vim-perl/issues
+" License:       Vim License (see :help license)
+" Last Change:   2021 Nov 2
+2024 Apr 03 by The Vim Project (removed :CompilerSet definition)
+if exists("current_compiler")
+  finish
+let current_compiler = "perl"
+let s:savecpo = &cpo
+set cpo&vim
+if get(g:, 'perl_compiler_force_warnings', 1)
+let s:warnopt = 'W'
+let s:warnopt = 'w'
+if getline(1) =~# '-[^ ]*T'
+let s:taintopt = 'T'
+let s:taintopt = ''
+exe 'CompilerSet makeprg=perl\ -' . s:warnopt . s:taintopt . 'c\ %:S'
+CompilerSet errorformat=
+\%-G%.%#had\ compilation\ errors.,
+\%-G%.%#syntax\ OK,
+\%m\ at\ %f\ line\ %l.,
+\%+A%.%#\ at\ %f\ line\ %l\\,%.%#,
+\%+C%.%#
+" Explanation:
+" %-G%.%#had\ compilation\ errors.,  - Ignore the obvious.
+" %-G%.%#syntax\ OK,                 - Don't include the 'a-okay' message.
+" %m\ at\ %f\ line\ %l.,             - Most errors...
+" %+A%.%#\ at\ %f\ line\ %l\\,%.%#,  - As above, including ', near ...'
+" %+C%.%#                            -   ... Which can be multi-line.
+let &cpo = s:savecpo
+unlet s:savecpo

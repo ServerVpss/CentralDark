@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@icons-pack\react-simple-icons\icons\SiCockroachlabs.d.ts
+
+import { IconType } from '../types';
+declare const defaultColor = "#6933FF";
+declare const SiCockroachlabs: IconType;
+export { SiCockroachlabs as default, defaultColor };

@@ -1,0 +1,81 @@
+{
+  "schema": "centraldark.pombo.owner.failclosed.package.v1",
+  "generated_at": "2026-08-24T18:40:00-03:00",
+  "source_repo": "ServerVpss/CentralDark",
+  "source_main_sha": "6bff74d4beec72ac0cc08828715f7f5d7f393dfe",
+  "source_pr": 1136,
+  "status": "PACKAGE_READY_NOT_APPLIED",
+  "allowed_verdicts": [
+    "PROVADO",
+    "QUEBRADO",
+    "EVIDÊNCIA FALTANTE"
+  ],
+  "runtime_universal": "EVIDÊNCIA FALTANTE",
+  "files": [
+    {
+      "path": "DOCS/PATCH-MAP.md",
+      "bytes": 754,
+      "sha256": "789d1c56f13adab37afccbba2f1d5f2e5b5c4231c7bf0c819b408817cfee429b"
+    },
+    {
+      "path": "DOCS/PR-BODY.md",
+      "bytes": 1107,
+      "sha256": "51f572f22f1575c98cedc54c525a5ac141b7e2e2bc2e8845ce8fb884df554e1d"
+    },
+    {
+      "path": "DOCS/VEREDITO.md",
+      "bytes": 722,
+      "sha256": "d0b669a4d5e55853fd6db4391434b43fd472fc92f3038e7c8eba329971628e58"
+    },
+    {
+      "path": "LEIA-ME.md",
+      "bytes": 2463,
+      "sha256": "0ca02ebf217b1511e319e9e6a7abcf633d507baed929a3357b1444abda49fe31"
+    },
+    {
+      "path": "PATCH_TREE/.github/workflows/trigger-fabric-package.yml",
+      "bytes": 5732,
+      "sha256": "990caec16f62e1ceda0dd04d065c7a82e05bf8a8c63f4298f3778c5c5d2fb905"
+    },
+    {
+      "path": "PATCH_TREE/docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md",
+      "bytes": 2116,
+      "sha256": "72c78e4210d689d693c17f8f068abd5f479e0864ca6f63a576d9af7df90ecef7"
+    },
+    {
+      "path": "PATCH_TREE/scripts/trigger-fabric/build_package.py",
+      "bytes": 3014,
+      "sha256": "d9dcc9533b3f7524b2bd0b8acc24ab249fe5504adf79e7f816ee09d62f28b019"
+    },
+    {
+      "path": "PATCH_TREE/scripts/trigger-fabric/test_pombo_handoff_counterproof.py",
+      "bytes": 2295,
+      "sha256": "a9c1ed766f468b130b32a3ca8912e29644d8a9b93adcd3010c63ff7ce016cdef"
+    },
+    {
+      "path": "PATCH_TREE/scripts/trigger-fabric/verify_package.py",
+      "bytes": 4244,
+      "sha256": "39dce1ab36268acf9ba4223b05dff68ea223cbf84d97aeda5eb38bd2956ced91"
+    },
+    {
+      "path": "PATCH_TREE/scripts/trigger-fabric/verify_repo_contract.py",
+      "bytes": 6650,
+      "sha256": "422e47c6d4f23125a5fdc72bd195935ccbbd9572d4c1119d33ba7c8e37f6144c"
+    },
+    {
+      "path": "TOOLS/APPLY-LOCAL.ps1",
+      "bytes": 1986,
+      "sha256": "e7d97c4d262e2b87a8a5a2afb325b7f68907e2d88d7b90e2d4ad2665f5ee9291"
+    },
+    {
+      "path": "TOOLS/PROVE-LOCAL.ps1",
+      "bytes": 805,
+      "sha256": "8c03e08eb7f9b9dc9421580cbfa2c726daeb86559a7ddf49a447528d0de67e26"
+    },
+    {
+      "path": "verify-this-package.py",
+      "bytes": 1509,
+      "sha256": "06c5832e18b17c676587059a0fdb3daebd88ca42051c9b652081ab2cb35d642d"
+    }
+  ]
+}

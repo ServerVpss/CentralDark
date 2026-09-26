@@ -1,0 +1,52 @@
+gatilhos:
+  "ver passado":
+    skill: screenpipe-hermes-integration
+    desc: "Ver histórico e logs do sistema"
+  "ver futuro":
+    skill: screenpipe-hermes-integration
+    desc: "Ver monitoramento e projeções"
+  "screenpipe":
+    skill: screenpipe-hermes-integration
+    desc: "Acessar Screenpipe"
+  "monitor":
+    skill: screenpipe-hermes-integration
+    desc: "Ver monitor do sistema"
+  "o que aconteceu":
+    skill: screenpipe-hermes-integration
+    desc: "Ver eventos passados"
+  "logs":
+    skill: screenpipe-hermes-integration
+    desc: "Ver logs do sistema"
+  "status":
+    skill: screenpipe-hermes-integration
+    desc: "Ver status dos serviços"
+  "tá rodando":
+    skill: screenpipe-hermes-integration
+    desc: "Verificar se serviços estão ativos"
+  "anel de monitoramento":
+    skill: screenpipe-hermes-integration
+    desc: "Ver monitoramento em tempo real"
+  "tem alguma coisa rodando":
+    skill: screenpipe-hermes-integration
+    desc: "Verificar processos e serviços"
+  "o que tá vivo":
+    skill: screenpipe-hermes-integration
+    desc: "Ver serviços ativos"
+  "antes eu vi isso":
+    skill: screenpipe-hermes-integration
+    desc: "Buscar evidências passadas"
+  "questão operacional":
+    skill: screenpipe-hermes-integration
+    desc: "Investigar questão operacional"
+  "status operational":
+    skill: screenpipe-hermes-integration
+    desc: "Ver status operacional"
+  "health check":
+    skill: screenpipe-hermes-integration
+    desc: "Verificar health check"
+  "ver o monitor":
+    skill: screenpipe-hermes-integration
+    desc: "Ver monitor em tempo real"
+  "monitor do sistema":
+    skill: screenpipe-hermes-integration
+    desc: "Acessar monitor do sistema"

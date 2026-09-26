@@ -1,0 +1,20 @@
+{
+  "schema": "centraldark.registro-mae.local.v1",
+  "date": "2026-08-14",
+  "github_live": "BLOCKED_GITHUB_UNAVAILABLE",
+  "branch_created": false,
+  "commit_created": false,
+  "pr_created": false,
+  "main_modified": false,
+  "deploy": false,
+  "vps_write": false,
+  "secret_exposure": 0,
+  "files": [
+    "ARTIFACTS.sha256",
+    "PR-MAE-BODY.md",
+    "docs/CONSCIENCIA/2026-08-14-REGISTRO-MAE-CENTRALDARK.md",
+    "docs/CONSCIENCIA/assets/2026-08-14-registro-mae/CENTRALDARK-ARQUITETURA-VIVA-4K.png",
+    "docs/CONSCIENCIA/assets/2026-08-14-registro-mae/centraldark-podcast.mp3",
+    "docs/CONSCIENCIA/assets/2026-08-14-registro-mae/centraldark-teaser.mp4"
+  ]
+}

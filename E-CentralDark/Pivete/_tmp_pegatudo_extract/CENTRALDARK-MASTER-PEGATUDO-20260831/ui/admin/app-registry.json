@@ -1,0 +1,46 @@
+{
+  "schema": "CENTRALDARK_APP_REGISTRY_UI",
+  "version": 1,
+  "columns": [
+    "status",
+    "app",
+    "workspace_account",
+    "auth",
+    "health",
+    "capabilities",
+    "permissions",
+    "last_measured",
+    "actions"
+  ],
+  "actions": [
+    "CONNECT",
+    "REAUTHORIZE",
+    "TEST",
+    "DETAILS",
+    "ENABLE",
+    "DISABLE",
+    "DISCONNECT"
+  ],
+  "states": {
+    "CONNECTED": {
+      "glyph": "🟢"
+    },
+    "UNKNOWN": {
+      "glyph": "🟡"
+    },
+    "BLOCKED": {
+      "glyph": "🔴"
+    },
+    "AVAILABLE": {
+      "glyph": "🔵"
+    },
+    "DISABLED": {
+      "glyph": "⚫"
+    }
+  },
+  "rules": {
+    "color_alone_is_proof": false,
+    "connected_implies_write_authority": false,
+    "raw_secret_visible": false
+  }
+}

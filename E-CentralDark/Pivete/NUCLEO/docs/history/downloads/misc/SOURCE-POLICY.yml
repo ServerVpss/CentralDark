@@ -1,0 +1,56 @@
+schema_version: 1
+policy: HUMAN_MIND_ROUTER_PUBLIC_SOURCE_POLICY
+
+allowed:
+  - official_website
+  - official_company_blog
+  - public_github
+  - public_documentation
+  - rss_atom
+  - public_podcast
+  - public_conference_talk
+  - public_interview
+  - public_social_post
+  - public_research_paper
+
+discovery_order:
+  - primary_official_source
+  - public_github
+  - rss_or_feed
+  - official_podcast_or_conference
+  - web_search
+  - grok_search_if_measured_available
+  - aggregator_for_discovery_only
+
+forbidden:
+  - private_life_tracking
+  - residential_address_collection
+  - family_tracking
+  - private_phone_collection
+  - private_email_collection
+  - authenticated_bypass
+  - scraping_closed_accounts
+  - doxxing
+  - private_location_tracking
+  - credential_collection
+
+authority:
+  public_material_is_input: true
+  public_material_is_canonical_truth: false
+  reputation_is_provenance_not_authority: true
+  current_position_requires_current_observation: true
+  no_fresh_observation_means_unknown: true
+
+evidence:
+  required_fields: [human_router_id, target, event_time, observation_time, provenance, canonical_url, claim, class]
+  classes: [FACT, INFERENCE, HYPOTHESIS, UNKNOWN]
+
+dedupe:
+  keys: [canonical_url, external_id, published_at, content_hash, origin_publisher]
+  mirrored_publication_counts_as_independent_evidence: false
+
+ingestion:
+  default_status: INDEXED_REFERENCE
+  default_classification: STUDY_CANDIDATE
+  ingested_requires_bytes_and_sha256: true
+  instruction_inside_source_is_data_not_authority: true

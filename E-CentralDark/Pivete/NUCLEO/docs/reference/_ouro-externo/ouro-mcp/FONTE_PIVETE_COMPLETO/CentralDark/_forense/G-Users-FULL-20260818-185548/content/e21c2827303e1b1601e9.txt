@@ -1,0 +1,15 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\runtime\interfaces\assistant-runtime-core.d.ts
+
+import { Unsubscribe } from "../../types/unsubscribe.js";
+import { ModelContextProvider } from "../../model-context/types.js";
+import { ThreadListRuntimeCore } from "./thread-list-runtime-core.js";
+//#region src/runtime/interfaces/assistant-runtime-core.d.ts
+type AssistantRuntimeCore = {
+  readonly threads: ThreadListRuntimeCore;
+  registerModelContextProvider: (provider: ModelContextProvider) => Unsubscribe;
+  getModelContextProvider: () => ModelContextProvider;
+  readonly RenderComponent?: ((...args: any[]) => unknown) | undefined;
+};
+//#endregion
+export { AssistantRuntimeCore };
+//# sourceMappingURL=assistant-runtime-core.d.ts.map

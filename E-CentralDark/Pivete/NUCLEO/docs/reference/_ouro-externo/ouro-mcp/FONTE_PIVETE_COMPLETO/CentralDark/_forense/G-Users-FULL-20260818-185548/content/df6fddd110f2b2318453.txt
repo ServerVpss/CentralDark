@@ -1,0 +1,21 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\src\react\primitive-hooks\useBranchPickerPrevious.ts
+
+import { useCallback } from "react";
+import { useAui, useAuiState } from "@assistant-ui/store";
+
+export const useBranchPickerPrevious = () => {
+  const aui = useAui();
+  const disabled = useAuiState((s) => {
+    if (s.message.branchNumber <= 1) return true;
+    if (s.thread.isRunning && !s.thread.capabilities.switchBranchDuringRun) {
+      return true;
+    }
+    return false;
+  });
+
+  const previous = useCallback(() => {
+    aui.message().switchToBranch({ position: "previous" });
+  }, [aui]);
+
+  return { previous, disabled };
+};

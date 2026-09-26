@@ -1,0 +1,11 @@
+{
+  "schema": "centraldark.final_single_delivery.receipt.v1",
+  "payload_count": 13,
+  "required_previous_files_count": 12,
+  "required_previous_files_present": true,
+  "payload_manifest_sha256": "7e1b85cf852d56d33ddc67aab142657f09d2a5883ac18de4d205b480615caf3f",
+  "payload_sums_sha256": "d2d83b98878cfb7bc1749d786bec902243edda5525928f406b058cf4c331059f",
+  "payload_hashes_verified_prepack": true,
+  "scope_fixed_point": "DELIVERY_PAYLOAD_ONLY",
+  "project_global_fixed_point": "NOT_PROVEN"
+}

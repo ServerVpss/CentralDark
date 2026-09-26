@@ -1,0 +1,26 @@
+flowchart TB
+  CHEFE[CHEFE/SEGREDO]
+  SOL[SOL]
+  HERMES[Hermes/Pivete]
+  GUARDS[Guards]
+  REV[Reviewers/Auditors]
+  CD[CentralDark Canônico]
+  ZT[Zero Trust]
+  MEM[Memória/Ledger]
+  BUZZ[Buzz Relay Comunicação]
+  PANEL[Painel Admin Blueprint]
+  INFRA[GitHub Contabo CF VPS Casa]
+
+  CHEFE --> SOL
+  SOL --> HERMES
+  SOL --> GUARDS
+  SOL --> REV
+  SOL --> CD
+  CD --> ZT
+  CD --> MEM
+  GUARDS -->|READ_ONLY events| BUZZ
+  HERMES -->|reports| BUZZ
+  REV --> BUZZ
+  BUZZ --> PANEL
+  INFRA --> GUARDS
+  CD -.->|autoridade| HERMES

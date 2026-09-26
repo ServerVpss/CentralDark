@@ -1,0 +1,39 @@
+{
+  "audit_date": "2026-07-19",
+  "status": "evidence_only_not_canonical",
+  "source": {
+    "Segredinho.zip": {
+      "sha256": "94e5ec4648a4e773ec0bd5ab86177005d587c283591b84a9e166a87769b3da8b",
+      "size_bytes": 728405
+    },
+    "TECNICA-DA-LUPA-PREMIUM-original-anexada.md": {
+      "sha256": "7eebe3adb0b34ca8a27570d6b394974e3455c3085db7b6e1ef4df896e2c5688e",
+      "lines": 1426,
+      "size_bytes": 37405
+    },
+    "nested_lupa-react.zip": {
+      "sha256": "f5347f86a16374f48b4864f0940a734e57cfb3b972f02d7da91d944e11266bda"
+    },
+    "nested_lupa-react_refatoradaORIGINAL.zip": {
+      "sha256": "2d518eabd515318abfa1e950e8482662b882853a84c1fb3a5f4bf39901e2d0fc"
+    },
+    "packaged_TECNICA-DA-LUPA-PREMIUM.md": {
+      "sha256": "ab214504da89dbf1eb4b3606bc69b3d421c64ac06793d206c00bb0b187f12eaf",
+      "lines": 1506,
+      "size_bytes": 46827
+    }
+  },
+  "execution": {
+    "python": "3.12.13",
+    "original_tests": "11/11 passed",
+    "refactored_tests": "22/22 passed",
+    "compileall": "passed",
+    "adversarial_findings_reproduced": 7
+  },
+  "git": {
+    "learning_commit": "569e2a888e9348fe9d9a70677eee5efac4c484e2",
+    "code_head_sha": null,
+    "manifest_same_head": false,
+    "verdict": "blocked_until_code_and_manifest_share_the_same_HEAD_SHA"
+  }
+}

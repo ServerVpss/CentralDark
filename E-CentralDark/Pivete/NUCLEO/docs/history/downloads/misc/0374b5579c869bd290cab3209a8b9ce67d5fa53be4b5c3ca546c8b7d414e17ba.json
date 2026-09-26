@@ -1,0 +1,11 @@
+{
+  "serverUrl": "https://mcp.centralldark.com/admin/mcp",
+  "authorizationServerUrl": "https://mcp.centralldark.com",
+  "clientId": "mcp_79fc30bcaa1cd966af45498b401fa57a",
+  "clientSecret": null,
+  "redirectUri": "http://127.0.0.1:58981/",
+  "resourceUrl": "https://mcp.centralldark.com/admin/mcp",
+  "issuedAt": 1787709925,
+  "isStatic": false,
+  "httpsRedirect": null
+}

@@ -1,0 +1,35 @@
+{
+  "ts": "2026-07-18T19:51:14",
+  "config": {
+    "model": {
+      "default": "claude-opus-4-6",
+      "provider": "anthropic",
+      "base_url": ""
+    },
+    "fallback_model": {
+      "provider": "xai-oauth",
+      "model": "grok-4.5"
+    },
+    "delegation": {
+      "provider": "xai-oauth",
+      "model": "grok-build-0.1",
+      "max_concurrent_children": 3,
+      "max_spawn_depth": 1
+    }
+  },
+  "runtime": {
+    "provider": "anthropic",
+    "api_mode": "anthropic_messages",
+    "base_url": "https://api.anthropic.com"
+  },
+  "client_base": "https://api.anthropic.com",
+  "orch_synth": {
+    "model": "claude-haiku-4-5-20251001",
+    "http": 200,
+    "text": "# MISSÃO 20260718_040020_c23e466e\n\n**VEREDITO:** Fases 1-9 validadas com sucesso. Sistema operacional em conformidade.\n\n**ORQUESTRADOR:** Protocolo de orquestração ativo. Todas as camadas (processamento de áudio, STT, persistência, deduplicação, curadoria, memória distribuída e roteamento) confirmadas funcionais.\n\n**PENDENCIA:** Confirmação de integridade dos contratos inteligentes. Auditoria de permissões em CentralDark (ac"
+  },
+  "critic": "**CRITICA:** Validação Fases 1-9 reportada sem evidência auditável anexada; pendência de integridade de contratos inteligentes em aberto exije gate formal antes de produção.\n**RISCO:** Médio — falha ou inconsistência nos contratos inteligentes pode comprometer persistência, roteamento e confiabilidade do orquestrador; fallback grok-4.5 mitiga mas não elimina.\n**VEREDITO_CRITICO:** CONDICIONADO",
+  "executor": "EXEC OK 2+2=4",
+  "prova_oi": "PROVA-OI-MODELOS-ORQUESTRACAO.json all six oi=200",
+  "session_note": "Desktop session may remain grok mid-flight; profile default now Claude Opus orchestrator"
+}

@@ -1,0 +1,37 @@
+schema: CENTRALDARK_MEDIA_CAPTION_HANDOFF
+schema_version: 1
+mode: EXTEND_EXISTING_ONLY
+owners:
+  master: CENTRALDARK
+  harvest: PEGATUDO
+  library: DOCUMENTATION_HUB
+  router: CENTRALDARK_ROUTER_WHEN_PROVIDER_NEEDED
+no_new_engine: true
+no_new_media_authority: true
+capability_harvest:
+  search_only_complete: false
+  material_finding_requires_disposition: true
+  dispositions: [ABSORB_EXISTING_OWNER, TEST_OR_FALSIFIER, PROVENANCE, QUARANTINE, NEXT_CURSOR, IRRELEVANT_WITH_REASON]
+named_skill_recovery:
+  exact_missing_creates_skill: false
+  flow: [EXACT_LOOKUP, CAPABILITY_LOOKUP, MATCH_EXISTING_OWNER, PROVE_COMPATIBILITY, CONTINUE]
+  ambiguity: UNKNOWN
+  fable_role: AUXILIARY_REVIEW_METHOD
+dense_handoff:
+  grammar_may_be_sacrificed: true
+  semantics_may_be_sacrificed: false
+  fields: [SKILL, TRIG, OWNER, IN, PRE, EXEC, OUT, PROOF, FAIL, NEXT, REV]
+  secrets_allowed: false
+media:
+  youtube_debug_json_role: LOCATOR_RECEIPT
+  youtube_debug_json_is_full_caption_payload: false
+  video_id_preference: [debug_videoId, docid]
+  hints: [cc, au_d, len, origin, timestamp, reqBlocked]
+  caption_track_sources: [OBSERVED_TIMEDTEXT_REQUEST, PLAYER_RESPONSE_CAPTION_TRACKS, AUTHORIZED_TRANSCRIPT_SOURCE]
+  timedtext_fields: [v, lang, kind, name, tlang, fmt]
+  captions_js_stable_api: false
+complete_text_gate:
+  requires: [MEDIA_ID, CAPTION_TRACK_ID, AUTHORIZED_TEXT_SOURCE, COVERAGE_CHECK, PROVENANCE]
+  partial_is_complete: false
+promotion:
+  path: [NORMALIZE, DEDUPE, REALITY_SCOPE_GATE, RECONCILE, CAPABILITY_HARVEST, EXISTING_OWNER, TEST_OR_FALSIFIER_IF_MATERIAL, DOCUMENTATION_GATE, RECEIPT]

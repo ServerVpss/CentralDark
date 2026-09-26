@@ -1,0 +1,17 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\primitives\threadListItemMore\ThreadListItemMoreItem.d.ts
+
+import { WithRenderPropProps } from "../../utils/Primitive.js";
+import { ComponentRef } from "react";
+import { DropdownMenu } from "radix-ui";
+
+//#region src/primitives/threadListItemMore/ThreadListItemMoreItem.d.ts
+declare namespace ThreadListItemMorePrimitiveItem {
+  type Element = ComponentRef<typeof DropdownMenu.Item>;
+  type Props = WithRenderPropProps<typeof DropdownMenu.Item>;
+}
+declare const ThreadListItemMorePrimitiveItem: import("react").ForwardRefExoticComponent<Omit<DropdownMenu.DropdownMenuItemProps & import("react").RefAttributes<HTMLDivElement>, "ref"> & {
+  render?: import("react").ReactElement | undefined;
+} & import("react").RefAttributes<HTMLDivElement>>;
+//#endregion
+export { ThreadListItemMorePrimitiveItem };
+//# sourceMappingURL=ThreadListItemMoreItem.d.ts.map

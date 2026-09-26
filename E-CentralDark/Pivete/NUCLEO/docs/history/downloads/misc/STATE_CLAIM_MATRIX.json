@@ -1,0 +1,30 @@
+[
+  {
+    "id": "STATE-001",
+    "claim": "PR1115 mergeable=true",
+    "old": "historical observation",
+    "current": "false",
+    "class": "SUPERSEDED_BY_LIVE_STATE"
+  },
+  {
+    "id": "STATE-002",
+    "claim": "PR1119 head=8e8b84.../6 commits",
+    "old": "attached historical text",
+    "current": "cc67c83.../7 commits",
+    "class": "SUPERSEDED_BY_LIVE_STATE"
+  },
+  {
+    "id": "STATE-003",
+    "claim": "Hermes runtime current",
+    "old": "various historical receipts",
+    "current": "UNKNOWN",
+    "class": "CURRENT_UNKNOWN"
+  },
+  {
+    "id": "STATE-004",
+    "claim": "Project global fixed point",
+    "old": "premature cycle closed claims",
+    "current": "NOT_PROVEN",
+    "class": "SUPERSEDED_SCOPE_ERROR"
+  }
+]

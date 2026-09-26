@@ -1,0 +1,30 @@
+{
+  "mission": {
+    "MISSION_ID": "CENTRALDARK_MULTIWINDOW_OMEGA_RECONCILIATION",
+    "INTENT": "Configurar VS Code + Hermes para transformar múltiplas janelas de IA em braços identificáveis de uma única missão CentralDark",
+    "DESTINATION": "E:/CentralDark/Pivete",
+    "PROOF_TARGET": "extensão Hermes funcionando + registry compartilhado + workers identificados",
+    "MATERIAL_SCOPE": "E:/CentralDark/Pivete",
+    "SNAPSHOT_ID": "snap_001",
+    "CREATED_AT": "2026-08-27T19:32:00Z"
+  },
+  "arms": [
+    {
+      "T_ID": "T0",
+      "ROLE": "SOL_ORCHESTRATOR",
+      "ENGINE": "hermes",
+      "PID": 19040,
+      "WORKSPACE": "E:/CentralDark/Pivete/CentralDark",
+      "STATE": "ACTIVE",
+      "MISSION_ID": "CENTRALDARK_MULTIWINDOW_OMEGA_RECONCILIATION",
+      "SNAPSHOT_ID": "snap_001",
+      "LAST_RECEIPT": "2026-08-27T19:32:00Z",
+      "PORT": 8787,
+      "PROFILE": "pivete",
+      "CLI_ARGS": "--profile pivete"
+    }
+  ],
+  "workers": [],
+  "version": "1.0.0",
+  "updated_at": "2026-08-27T19:32:00Z"
+}

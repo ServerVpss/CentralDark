@@ -1,0 +1,227 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\lib\sasl2\msys-otp-3.dll
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.edata
+@.idata
+.reloc
+ATUWVSH
+p[^_]A\
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+D8T$Ou_H
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+ATUWVSH
+`[^_]A\
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+init-hexH
+AUATUWVSH
+([^_]A\A]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AVAUATUWVSH
+[^_]A\A]A^
+ATUWVSH
+ [^_]A\
+ATUWVSH
+ [^_]A\
+ATUWVSH
+ [^_]A\
+ATUWVSH
+P[^_]A\
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+ [^_]A\A]A^
+ATUWVSH
+ [^_]A\
+not an OTP challenge
+OTP algorithm '%s' not supported
+no whitespace between OTP algorithm and sequence
+sequence > %u
+no whitespace between OTP sequence and seed
+OTP seed length < %u
+no whitespace between OTP seed and extensions
+not an OTP extended challenge
+incorrect word length '%s'
+word '%s' not found in dictionary
+incorrect parity
+not enough words (%d)
+Out of Memory in otp.c near line %d
+OTP: auxprop backend can't store properties
+OTP algorithm %s is not available
+_plug_EVP_MD_CTX_new()
+cannot allocate MD CTX
+cannot allocate OTP key
+%s%.*s
+_plug_EVP_MD_CTX_free()
+%020ld
+cmusaslsecretOTP
+error making OTP secret
+Error putting OTP secret
+OTP: Error parsing user
+otp_mda
+unknown OTP algorithm '%s'
+Setpass for OTP successful
+%.2s%04u
+Please enter your secret pass-phrase
+Please enter your authentication name
+Please enter your authorization name
+SSF requested of OTP plugin
+OTP challenge too long
+Please enter your one-time password
+Parameter Error in otp.c near line %d
+OTP has expired (sequence < 1)
+:%s %u %s:
+Invalid OTP client step %d
+*cmusaslsecretOTP
+Can only find OTP authzid (no authid)
+Got more data than we were expecting in the OTP plugin
+no OTP secret in database
+OTP secret too short
+simultaneous OTP authentications not permitted
+OTP has expired (sequence <= 1)
+otp-%s %u %s ext
+OTP response too long
+OTP: server timed out
+init-hex:
+init-word:
+unknown OTP extended response type
+Invalid OTP server step %d
+OTP version mismatch
+Parameter Error in plugin_common.c near line %d
+Out of Memory in plugin_common.c near line %d
+Unexpectedly missing a prompt result in _plug_get_simple
+Unexpectedly missing a prompt result in _plug_get_password
+Unexpectedly missing a prompt result in _plug_challenge_prompt
+Unexpectedly missing a prompt result in _plug_get_realm
+make_prompts() called with no actual prompts
+Authorization Name
+Authentication Name
+Password
+encoded packet size too big (%d > %d)
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+msys-otp-3.dll
+sasl_client_plug_init
+sasl_server_plug_init
+EVP_DigestFinal
+EVP_DigestInit
+EVP_DigestUpdate
+EVP_MD_CTX_free
+EVP_MD_CTX_new
+EVP_get_digestbyname
+OPENSSL_init_crypto
+__cxa_atexit
+__locale_ctype_ptr
+_impure_ptr
+bsearch
+calloc
+cygwin_internal
+dll_dllcrt0
+freeaddrinfo
+getaddrinfo
+malloc
+memcpy
+memset
+msys_detach_dll
+posix_memalign
+realloc
+snprintf
+sprintf
+sscanf
+stpcpy
+strcasecmp
+strcat
+strchr
+strcpy
+strerror
+strlen
+strncasecmp
+strncmp
+strncpy
+strtoul
+tolower
+uname_x
+GetModuleHandleA
+msys-crypto-3.dll
+msys-2.0.dll
+KERNEL32.dll
+__lib64_libkernel32_a_iname
+__imp_tolower
+__imp_freeaddrinfo
+__imp_calloc
+_head_msys_crypto_3_dll
+__imp_EVP_DigestFinal
+__imp_uname_x
+__imp_EVP_DigestUpdate
+__imp_sleep
+__imp_uname
+__imp_strncpy
+_head_msys_2_0_dll
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_free
+__nm__impure_ptr
+__imp_strcpy
+__imp_memset
+__imp_bsearch
+__IAT_end__
+__imp_memcpy
+__imp_EVP_MD_CTX_new
+__imp_dll_dllcrt0
+msys_crypto_3_dll_iname
+__imp_strerror
+__imp___locale_ctype_ptr
+__imp_strtoul
+_head_lib64_libkernel32_a
+__imp_msys_detach_dll
+__imp_sscanf
+__imp_snprintf
+__imp_GetModuleHandleA
+__imp_strlen
+__imp_malloc
+__imp__impure_ptr
+__imp_realloc
+__imp_time
+__IAT_start__
+__imp_strcat
+__imp_OPENSSL_init_crypto
+__imp_EVP_DigestInit
+__imp_stpcpy
+__imp___cxa_atexit
+__imp_EVP_get_digestbyname
+__imp_EVP_MD_CTX_free
+__imp_strncasecmp
+__imp_strcasecmp
+__imp_strncmp
+__imp_strchr
+__imp_sprintf
+__imp_getaddrinfo
+msys_2_0_dll_iname

@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\context\providers\ThreadViewportProvider.d.ts.map
+
+{"version":3,"file":"ThreadViewportProvider.d.ts","names":[],"sources":["../../../src/context/providers/ThreadViewportProvider.tsx"],"mappings":";;;;KAeY,2BAAA,GAA8B,iBAAiB;EACzD,OAAA,GAAU,0BAAA;AAAA;AAAA,cA4BC,+BAAA,EAAiC,EAAE,CAC9C,2BAAA"}

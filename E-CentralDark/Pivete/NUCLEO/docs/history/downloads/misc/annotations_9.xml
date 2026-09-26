@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <item name="androidx.core.view.accessibility.AccessibilityEventCompat int getContentChangeTypes(android.view.accessibility.AccessibilityEvent)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_CONTENT_DESCRIPTION, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_STATE_DESCRIPTION, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_SUBTREE, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_TEXT, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_UNDEFINED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_STARTED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_DROPPED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_CANCELLED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_CONTENT_INVALID, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_ERROR, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_ENABLED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.accessibility.AccessibilityEventCompat void setContentChangeTypes(android.view.accessibility.AccessibilityEvent, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_CONTENT_DESCRIPTION, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_STATE_DESCRIPTION, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_SUBTREE, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_TEXT, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_UNDEFINED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_STARTED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_DROPPED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_CANCELLED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_CONTENT_INVALID, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_ERROR, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_ENABLED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.accessibility.AccessibilityEventCompat.ContentChangeType">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_CONTENT_DESCRIPTION, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_STATE_DESCRIPTION, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_SUBTREE, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_TEXT, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_UNDEFINED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_STARTED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_DROPPED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_DRAG_CANCELLED, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_CONTENT_INVALID, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_ERROR, androidx.core.view.accessibility.AccessibilityEventCompat.CONTENT_CHANGE_TYPE_ENABLED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.accessibility.AccessibilityNodeInfoCompat int getChecked()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="false" />
+      <val name="value" val="{android.view.accessibility.AccessibilityNodeInfo.CHECKED_STATE_FALSE, android.view.accessibility.AccessibilityNodeInfo.CHECKED_STATE_TRUE, android.view.accessibility.AccessibilityNodeInfo.CHECKED_STATE_PARTIAL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.accessibility.AccessibilityNodeInfoCompat int getExpandedState()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="false" />
+      <val name="value" val="{android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_UNDEFINED, android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_COLLAPSED, android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_PARTIAL, android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_FULL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.accessibility.AccessibilityNodeInfoCompat java.lang.String getExpandedStateSymbolicName(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="false" />
+      <val name="value" val="{android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_UNDEFINED, android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_COLLAPSED, android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_PARTIAL, android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_FULL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.accessibility.AccessibilityNodeInfoCompat void setChecked(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="false" />
+      <val name="value" val="{android.view.accessibility.AccessibilityNodeInfo.CHECKED_STATE_FALSE, android.view.accessibility.AccessibilityNodeInfo.CHECKED_STATE_TRUE, android.view.accessibility.AccessibilityNodeInfo.CHECKED_STATE_PARTIAL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.accessibility.AccessibilityNodeInfoCompat void setExpandedState(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="false" />
+      <val name="value" val="{android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_UNDEFINED, android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_COLLAPSED, android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_PARTIAL, android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_FULL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.accessibility.AccessibilityNodeInfoCompat.Api36Impl int getChecked(android.view.accessibility.AccessibilityNodeInfo)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="false" />
+      <val name="value" val="{android.view.accessibility.AccessibilityNodeInfo.CHECKED_STATE_FALSE, android.view.accessibility.AccessibilityNodeInfo.CHECKED_STATE_TRUE, android.view.accessibility.AccessibilityNodeInfo.CHECKED_STATE_PARTIAL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.accessibility.AccessibilityNodeInfoCompat.Api36Impl int getExpandedState(android.view.accessibility.AccessibilityNodeInfo)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="false" />
+      <val name="value" val="{android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_UNDEFINED, android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_COLLAPSED, android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_PARTIAL, android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_FULL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.accessibility.AccessibilityNodeInfoCompat.Api36Impl void setChecked(android.view.accessibility.AccessibilityNodeInfo, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="false" />
+      <val name="value" val="{android.view.accessibility.AccessibilityNodeInfo.CHECKED_STATE_FALSE, android.view.accessibility.AccessibilityNodeInfo.CHECKED_STATE_TRUE, android.view.accessibility.AccessibilityNodeInfo.CHECKED_STATE_PARTIAL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.accessibility.AccessibilityNodeInfoCompat.Api36Impl void setExpandedState(android.view.accessibility.AccessibilityNodeInfo, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="false" />
+      <val name="value" val="{android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_UNDEFINED, android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_COLLAPSED, android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_PARTIAL, android.view.accessibility.AccessibilityNodeInfo.EXPANDED_STATE_FULL}" />
+    </annotation>
+  </item>
+</root>
+

@@ -1,0 +1,9 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@react-three\fiber\native\dist\react-three-fiber-native.cjs.js
+
+'use strict';
+
+if (process.env.NODE_ENV === "production") {
+  module.exports = require("./react-three-fiber-native.cjs.prod.js");
+} else {
+  module.exports = require("./react-three-fiber-native.cjs.dev.js");
+}

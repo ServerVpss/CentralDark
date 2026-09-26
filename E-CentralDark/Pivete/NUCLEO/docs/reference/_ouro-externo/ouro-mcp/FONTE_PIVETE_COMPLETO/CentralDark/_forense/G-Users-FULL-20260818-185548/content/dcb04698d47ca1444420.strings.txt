@@ -1,0 +1,19 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\terminfo\73\screen.xterm-r6
+
+screen.xterm-r6|screen customized for X11R6 xterm
+[%i%p1%d;%p2%dr
+[%i%p1%d;%p2%dH
+[?1;3;4;6l
+[%p1%dP
+[%p1%dM
+[%p1%dB
+[%p1%dL
+[%p1%dD
+[%p1%dC
+[%p1%dA
+[?1;3;4;6l
+``aaffggiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz{{||}}~~
+[%i%d;%dR
+[?1;2c
+[?1000%?%p1%{1}%=%th%el%;
+[M%?%p4%t%p3%e%{3}%;%' '%+%c%p2%'!'%+%c%p1%'!'%+%c

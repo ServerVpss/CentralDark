@@ -1,0 +1,5 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\terminfo\78\xterm+pcc1
+
+xterm+pcc1|fragment with modifyCursorKeys:1
+#(-27<AFKPUZ_di
+#)/5;AGMSY]bglq

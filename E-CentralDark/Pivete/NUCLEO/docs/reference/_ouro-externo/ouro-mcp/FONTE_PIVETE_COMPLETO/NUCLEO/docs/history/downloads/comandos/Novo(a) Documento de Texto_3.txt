@@ -1,0 +1,448 @@
+Sim. E eu mudaria bastante esse texto antes de entregar ao Hermes, porque ele ainda está criando coisa onde a Casa **já tem estrutura pronta**.
+
+O principal achado é esse: você já tem uma biblioteca local canônica. Ela é `.agents/skills/`. O `skill-authoring.mjs` atual inclusive bloqueia skill fora desse caminho e aplica `REUSE_BEFORE_CREATE`; então criar agora `apps/modulos/mcp/src/skills/viteDominator.ts` como outro universo seria começar duplicação.
+
+Além disso, já existem duas peças muito mais fortes que o texto que te deram. O `skill-workshop` é literalmente uma “prateleira única” de capacidades: cataloga, procura, compara com o que a Casa já possui, absorve só o delta útil e carrega conhecimento sob demanda.  O `knowledge-compiler` já implementa a parte que você está querendo: muitas fontes entram, dedupe/contraprova acontecem uma vez, sai um “cristal” reutilizável e o runtime depois usa o modo FLASH sem pesquisar tudo novamente.
+
+Então tua ideia de “Hermes dominar a arte do projeto sem ficar toda hora procurando dependência besta” já tem o chassis. O que falta é **alimentar e ligar direito o que existe**, não inventar outro framework.
+
+E achei um drift real: o MCP atual ainda tem um `skill.js` que procura skills em `skills/<nome>/`, enquanto o canônico atual exige `.agents/skills/<nome>/`. Ou seja, antes de sair criando tool nova, Hermes deve reconciliar essa fronteira.
+
+Outra correção: o texto colado fala em criar JSON Schema + executor Vite novo e depois ligar no MCP. Isso é uma arquitetura genérica válida, mas **não está reconciliada com a CentralDark existente**.  E as afirmações “patch fuzzy com 9 estratégias” e semelhantes não devem virar fundamento até o repo provar o mecanismo; minha busca atual não encontrou essa implementação com essa descrição.
+
+Sobre Casa ou VPS: eu não escolheria um dos dois. A arquitetura certa é **uma biblioteca, dois corpos de execução**. Isso já é compatível com o próprio desenho histórico da Casa: HERMES-CASA para interação/contexto local e WORKER/HERMES-VPS para trabalho remoto, sem criar dois Hermes.
+
+A skill local praticamente não “pesa” no teu PC: Markdown, JSON e scripts pequenos custam quase nada parados. O que pesa é build, teste pesado, containers, browser, indexação grande etc. Portanto:
+
+```text
+GITHUB / .agents/skills
+        = FONTE CANÔNICA
+
+        ↓ mesmo conhecimento / mesmo SHA
+
+HERMES-CASA
+        = cache/leitura/uso local
+        = arquivos locais
+        = navegador/tela
+        = trabalho leve
+             │
+             │ mesma capacidade
+             ▼
+MCP CENTRALDARK EXISTENTE
+             │
+             ▼
+WORKER/HERMES-VPS
+        = build pesado
+        = serviços
+        = testes remotos
+        = deploy/observabilidade
+
+NÃO EXISTEM DUAS BIBLIOTECAS.
+NÃO EXISTEM DUAS LÓGICAS.
+MCP É PORTA, NÃO DONO.
+```
+
+Isso evita até outro erro comum: colocar toda lógica dentro do MCP. **Não.** A regra/recurso reutilizável pertence ao owner canônico. O MCP só expõe a chamada. Se amanhã você desligar a VPS, a capacidade continua existindo na CentralDark.
+
+E eu daria este texto ao Hermes:
+
+```text
+#ACORDAR
+!CALIBRAR
+!MULTIBUSSOLA
+!META_LUPA
+
+MISSÃO:
+TRANSFORMAR CONHECIMENTO TÉCNICO RECORRENTE DA CENTRALDARK
+EM CAPACIDADE LOCAL REUTILIZÁVEL, SEM CRIAR SISTEMA PARALELO.
+
+MODO:
+RECONCILE_THEN_IMPLEMENT
+
+AUTORIDADE:
+SEGREDO/CHEFE
+
+PRINCÍPIOS:
+CENTRALDARK = UM SISTEMA
+REUSE_BEFORE_CREATE = TRUE
+ONE_SYSTEM_ONLY = TRUE
+ONE_OWNER_PER_CAPABILITY = TRUE
+ONE_WRITER_PER_SCOPE = TRUE
+MCP_IS_ADAPTER_NOT_OWNER = TRUE
+LOCAL_AND_VPS_ARE_TWO_BODIES_OF_SAME_SYSTEM = TRUE
+UNKNOWN_IS_NOT_PASS = TRUE
+REALITY_IS_JUDGE = TRUE
+
+OBJETIVO:
+
+Quero que a CentralDark deixe de reaprender continuamente
+conhecimento técnico recorrente.
+
+Quando uma tecnologia, biblioteca, framework, configuração,
+erro recorrente ou procedimento for estudado profundamente:
+
+FONTE
+→ medir versão/proveniência
+→ extrair conhecimento útil
+→ separar conceito de procedimento
+→ reconciliar com conhecimento existente
+→ deduplicar
+→ contraprovar
+→ cristalizar localmente
+→ tornar chamável pelo Hermes
+→ reutilizar sem nova pesquisa enquanto continuar válido.
+
+NÃO criar outra biblioteca de agentes.
+NÃO criar novo framework.
+NÃO usar LangChain/CrewAI/AutoGen.
+NÃO criar outro MCP.
+NÃO criar segundo catálogo.
+NÃO criar pasta skills/ paralela.
+NÃO criar viteDominator ou equivalente antes de provar GAP_REAL.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ARQUITETURA OBRIGATÓRIA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Usar como infraestrutura existente:
+
+.agents/skills/
+→ biblioteca canônica local
+
+.agents/skills/skill-workshop/
+→ descoberta/catálogo/mineração de capacidades
+
+.agents/skills/knowledge-compiler/
+→ ingestão, dedupe, contraprova, cristalização e FLASH
+
+skill-authoring.mjs
+→ gate para decidir REUSE_EXISTING_OWNER
+  ou criação real de nova skill
+
+MCP CentralDark existente
+→ apenas superfície remota/chamável da capacidade
+
+HERMES-CASA
+→ corpo local
+
+WORKER/HERMES-VPS
+→ corpo remoto/pesado
+
+GitHub CentralDark
+→ fonte de verdade e versionamento.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORRIGIR DRIFT PRIMEIRO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Medir o runtime e o código atuais.
+
+Existe evidência de que:
+
+CANONICAL_SKILL_ROOT=.agents/skills
+
+mas parte do MCP ainda referencia:
+
+skills/<nome>/
+
+Não presumir correção.
+
+Localizar consumidores reais.
+Localizar implementação atual.
+Classificar CURRENT | LEGACY | DEAD | UNKNOWN.
+Corrigir somente se o drift estiver realmente vivo.
+
+Não criar um segundo loader para contornar o primeiro.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BIBLIOTECA DE CONHECIMENTO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Para cada domínio relevante, exemplo:
+
+Vite
+TypeScript
+React
+npm
+Node
+Supabase
+GitHub
+MCP
+Docker
+PM2
+Caddy
+CI
+build
+testes
+segurança
+browser
+routing
+etc.
+
+não copiar documentação inteira sem necessidade.
+
+Executar:
+
+DOCUMENTAÇÃO/FONTE
+→ VERSIONAR PROVENIÊNCIA
+→ EXTRAIR CAPACIDADES
+→ EXTRAIR ERROS CONHECIDOS
+→ EXTRAIR TESTES DISCRIMINANTES
+→ EXTRAIR PROCEDIMENTOS REUTILIZÁVEIS
+→ EXTRAIR LIMITES/VERSÕES
+→ DEDUPE
+→ CONTRAPROVA
+→ OWNER EXISTENTE
+→ CRISTAL OPERACIONAL
+
+Conhecimento genérico não vira skill automaticamente.
+
+Skill só existe quando houver procedimento chamável,
+reutilização real ou erro recorrente que justifique.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RUNTIME FLASH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+O Hermes NÃO deve pesquisar a internet toda vez que aparecer:
+
+"Vite não builda"
+"npm deu ERESOLVE"
+"configuração TS"
+"plugin incompatível"
+
+Primeiro:
+
+INTENÇÃO
+→ catálogo local
+→ cristal aplicável
+→ versão atual do projeto
+→ estado vivo
+→ diagnóstico/teste.
+
+Só voltar à mineração externa quando:
+
+VERSÃO MUDOU
+| CRISTAL AUSENTE
+| TESTE FALHOU
+| EVIDÊNCIA FICOU STALE
+| NOVO ERRO NÃO COBERTO
+| CONTRADIÇÃO MATERIAL APARECEU.
+
+MINERAR UMA VEZ.
+CRISTALIZAR UMA VEZ.
+REUTILIZAR N VEZES.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DEPENDÊNCIAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Não instalar pacote para resolver problema de conhecimento.
+
+Antes de qualquer nova dependência:
+
+1. verificar Node standard library;
+2. verificar dependências já instaladas;
+3. verificar helper já existente na CentralDark;
+4. verificar capacidade em .agents/skills;
+5. verificar scripts existentes;
+6. provar GAP_REAL.
+
+Somente depois considerar pacote novo.
+
+IMPORTANTE:
+
+biblioteca local de conhecimento
+NÃO substitui dependências reais exigidas pelo software.
+
+Exemplo:
+saber tudo sobre Vite localmente não elimina
+a necessidade do pacote Vite para executar um build Vite.
+
+Não confundir:
+DEPENDÊNCIA DE EXECUÇÃO
+com
+DEPENDÊNCIA DE CONHECIMENTO.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LOCAL × VPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Não duplicar capacidades por ambiente.
+
+A mesma capacidade canônica pode ser chamada
+pelos dois corpos.
+
+CASA:
+→ leitura
+→ memória
+→ catálogo
+→ descoberta
+→ arquivos locais
+→ tarefas leves/interativas
+
+VPS:
+→ build pesado
+→ CI
+→ serviços
+→ containers
+→ testes de servidor
+→ observabilidade
+→ deploy quando autorizado
+
+A escolha do corpo é feita pelo TARGET_REAL da tarefa.
+
+TARGET_LOCAL → Casa
+TARGET_VPS → Worker VPS
+
+Nunca executar trabalho pesado nos dois
+só para "garantir".
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MCP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Não colocar inteligência duplicada dentro da tool MCP.
+
+Formato obrigatório:
+
+MCP TOOL
+→ valida input/autorização
+→ chama capacidade canônica
+→ recebe resultado estruturado
+→ retorna receipt
+
+BUSINESS_LOGIC_INSIDE_MCP_DUPLICATED = FALSE
+
+Assim Casa, CLI, WebUI, MCP ou futura interface
+usam o mesmo núcleo.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDIÇÃO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Não assumir existência de "patch tool fuzzy 9 estratégias".
+
+Provar ferramenta real disponível.
+
+Preferência:
+
+menor alteração determinística
+→ diff
+→ sintaxe/typecheck
+→ teste pertinente
+→ contraprova
+→ receipt
+→ rollback conhecido.
+
+AST não é proibido por dogma.
+
+AST só entra se problema estrutural provar que
+edição textual existente não é suficientemente segura.
+
+Escolher mecanismo por evidência.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+VITE — PRIMEIRO DOGFOOD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Usar Vite como primeiro domínio de prova.
+
+Não criar sistema Vite paralelo.
+
+Primeiro mapear:
+
+versão real
+package.json
+lockfile
+plugins
+peerDependencies
+Node
+config
+scripts
+CI
+erros observados
+
+Depois compilar o conhecimento útil:
+
+configuração
+compatibilidade
+diagnóstico
+dev server
+build
+plugins
+resolução
+assets
+env
+SSR quando aplicável
+performance
+testes
+falhas conhecidas
+
+Separar sempre:
+
+VITE = build/dev tooling
+V8 = engine JavaScript Chrome/Node
+
+SAME_NAME_PATTERN != SAME_TECHNOLOGY.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ENTREGA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Entregar:
+
+CURRENT_STATE=
+EXISTING_OWNERS=
+REUSED=
+DRIFT_FOUND=
+KNOWLEDGE_COMPILED=
+SKILLS_EXTENDED=
+NEW_SKILL_REQUIRED=
+MCP_ADAPTER_STATUS=
+CASA_EXECUTION=
+VPS_EXECUTION=
+DEPENDENCIES_AVOIDED=
+DEPENDENCIES_ACTUALLY_REQUIRED=
+TESTS=
+COUNTERPROOF=
+UNKNOWN=
+RESIDUAL=
+FIXED_POINT=
+
+Não declarar PASS sem execução/prova correspondente.
+
+OBJETIVO FINAL:
+
+SEGREDO/CHEFE fala a intenção.
+
+Hermes já conhece o conhecimento cristalizado,
+mede apenas o que mudou,
+escolhe a capacidade existente,
+executa no corpo adequado,
+prova,
+e volta com resultado.
+
+ZERO caça repetitiva de documentação.
+ZERO framework paralelo.
+ZERO biblioteca duplicada.
+ZERO segunda CentralDark.
+```
+
+Esse é bem mais forte do que o “ViteDominator”. Ele transforma **Vite em primeiro dogfood**, mas o mecanismo serve para a arte inteira do projeto.
+
+E tem outro detalhe importante: eu tiraria do prompt antigo a ordem de “limpeza nuclear npm”. Isso é diagnóstico preguiçoso. `node_modules`/cache/lockfile só se mexe depois de medir a causa. O sintoma “Vite não apareceu em node_modules” não prova que cache do Windows seja a causa.
+
+O `main` que medi continua em `dcf70053f2af1d95bd86867e6f043fb634e919d0`.
+
+Feito. Arquitetura fechada como **biblioteca canônica `.agents/skills` + conhecimento compilado + MCP como adaptador + Casa/VPS como dois corpos da mesma capacidade**.
+
+Evidência usada. Teu material propõe manifest/tool executor para Vite; comparei isso com `skill-workshop`, `knowledge-compiler`, `skill-authoring`, MCP `skill.js`, governança Casa/VPS e o HEAD vivo. 
+
+Pendência. Confirmar em execução se o drift `skills/` → `.agents/skills/` do MCP está vivo e qual consumidor ainda depende dele. `FOUND_IN_CODE != RUNTIME_ACTIVE`.
+
+Próximo passo. Dar esse contrato ao Hermes; ele começa pelo Vite como dogfood, **reconciliando antes de criar qualquer arquivo**.
+
+BOOT. `CENTRALDARK_AI_BOOT · main@dcf70053 · RECONCILE_FIRST · ONE_SYSTEM_ONLY`.
+
+Fio da missão. `conhecimento bruto → garimpo → cristal local → owner existente → mesma capacidade Casa/VPS → MCP como porta → prova → reutilização`.

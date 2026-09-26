@@ -1,0 +1,32 @@
+AUDITORIA REPRODUZIDA EM 19/07/2026
+Python 3.12.13
+
+COMPILAÇÃO
+- pacote original: PASS
+- pacote refatorado: PASS
+
+TESTES DECLARADOS
+- pacote original: Ran 11 tests — OK
+- pacote refatorado: Ran 22 tests — OK
+
+HASH DOCUMENTAL
+- EVIDENCIAS.md refatorado, declarado: f2a85091fd8d5a9df317cf3fff47a2fb2fa0f8a22cb48881cefd325b5691c99c
+- EVIDENCIAS.md refatorado, real:      edc815c900636fea12872c35c073094e30a92d056d58b28f0577ffffdfe21ef9
+- resultado: DIVERGENTE
+
+PROBES ADVERSARIAIS
+1. contradição ancorada: True
+2. segunda missão reutilizou observação antiga: APROVADO
+3. exceção expôs Bearer fictício: REPRODUZIDO
+4. texto teatral + evidência nominal: 96/100 PROFISSIONAL
+5. Bearer genérico não foi redigido: REPRODUZIDO
+6. injeção reformulada recebeu score 0: REPRODUZIDO
+7. cadeia inteiramente alterada e recalculada: verificar() == True
+
+INTERPRETAÇÃO
+Os testes originais comprovam os casos que executam. Os probes comprovam que as
+garantias amplas ainda possuem falsos verdes. Veredito de produção: BLOQUEADO.
+
+PROVENIÊNCIA GIT
+O pacote de código não possui repositório/branch/PR/HEAD_SHA comprovado contendo
+código e manifesto juntos. Ver GIT-HEAD-SHA.md.

@@ -1,0 +1,21 @@
+flowchart LR
+  UI["CentralDark HUB Google card"] --> CTRL["OAuth / credential control plane"]
+  CTRL --> CLIENT["Existing compatible OAuth client/project"]
+  CLIENT --> CONSENT["User consent when Google requires it"]
+  CONSENT --> STORE["Encrypted token storage"]
+  STORE --> REG["Capability registry"]
+  REG --> D["Drive ON/OFF"]
+  REG --> DOC["Docs ON/OFF"]
+  REG --> SH["Sheets ON/OFF"]
+  REG --> GM["Gmail ON/OFF"]
+  REG --> CA["Calendar ON/OFF"]
+  REG --> CO["Contacts ON/OFF"]
+  REG --> GE["Gemini ON/OFF"]
+  D --> MASTER["!CENTRALDARK master funnel"]
+  DOC --> MASTER
+  SH --> MASTER
+  GM --> MASTER
+  CA --> MASTER
+  CO --> MASTER
+  GE --> MASTER
+  STORE -. "raw secrets never enter agent context" .-> AG["Agents see state/scopes/health only"]

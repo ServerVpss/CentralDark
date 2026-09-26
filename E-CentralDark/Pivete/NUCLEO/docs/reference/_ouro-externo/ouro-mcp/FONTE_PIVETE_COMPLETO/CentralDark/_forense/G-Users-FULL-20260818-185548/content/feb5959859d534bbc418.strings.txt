@@ -1,0 +1,738 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\mkpasswd.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+@.rsrc
+@.reloc
+ATUWVSH
+@[^_]A\
+AWAVAUATWVS
+[^_A\A]A^A_]
+bcCd::D::ghl::L::mo:sS:p:u:U:V
+mkpasswd (%d): [%u] %s
+mkpasswd (%d): error %u
+domain
+machine
+en_US.UTF-8
+%s:%s:%u:%u:%s:%s:%s
+POSIXLY_CORRECT
+%s: Can not enumerate from more than 32 domains and machines.
+%s: Duplicate %s '%s'.  Skipping...
+%s: Malformed domain string '%s'.  Skipping...
+%s: Only one ASCII character allowed as domain\user separator character.
+%s: Colon not allowed as domain\user separator character.
+%s: '%s' is not a fully qualified path.
+Usage: %s [OPTIONS]...
+Write /etc/passwd-like output to stdout
+Don't use this command to generate a local /etc/passwd file, unless you
+really need one.  See the Cygwin User's Guide for more information.
+Options:
+   -l,--local [machine]    Print local user accounts of "machine",
+                           from local machine if no machine specified.
+                           Automatically adding machine prefix for local
+                           machine depends on settings in /etc/nsswitch.conf.
+   -L,--Local machine      Ditto, but generate username with machine prefix.
+   -d,--domain [domain]    Print domain accounts,
+                           from current domain if no domain specified.
+   -c,--current            Print current user.
+   -S,--separator char     For -L use character char as domain\user
+                           separator in username instead of the default '%s'.
+   -o,--id-offset offset   Change the default offset (0x10000) added to uids
+                           of foreign local machine accounts.  Use with -l/-L.
+   -u,--username username  Only return information for the specified user.
+                           One of -l, -d must be specified, too
+   -b,--no-builtin         Don't print BUILTIN users.
+   -p,--path-to-home path  Use specified path instead of user account home dir
+                           or /home prefix.
+   -U,--unix userlist      Print UNIX users when using -l on a UNIX Samba
+                           server.  Userlist is a comma-separated list of
+                           usernames or uid ranges (root,-25,50-100).
+                           Enumerating large ranges can take a long time!
+   -h,--help               Displays this message.
+   -V,--version            Version information and exit.
+Default is to print local accounts on stand-alone machines, domain accounts
+on domain controllers and domain member machines.
+mkpasswd (cygwin) %d.%d.%d
+Passwd File Generator
+Copyright (C) 1997 - %s Cygwin Authors
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+Mar 29 2026
+Try `%s --help' for more information.
+mkpasswd: non-option command line argument `%s' is not allowed.
+Try `mkpasswd --help' for more information.
+%s:%s:%u:%u:%s:%s%s:%s
+%s: Invalid machine name '%s'.  Skipping...
+ (%ls)
+%ls%s%ls:*:%u:%u:%ls%sU-%ls\%ls,%s:%s:/bin/bash
+%s: Invalid user name '%s'.  Skipping...
+Unix_User
+%s%s%ls:*:%u:99999:,%s::
+%s: Malformed unix user list entry '%s'.  Skipping...
+no-builtin
+current
+Current
+Domain
+local-groups
+no-mount
+id-offset
+path-to-home
+no-sids
+separator
+username
+version
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+AllocateAndInitializeSid
+EqualSid
+FreeSid
+GetSidIdentifierAuthority
+GetSidSubAuthority
+GetSidSubAuthorityCount
+GetTokenInformation
+LookupAccountNameW
+LookupAccountSidW
+OpenProcessToken
+CloseHandle
+FormatMessageA
+GetComputerNameExA
+GetCurrentProcess
+GetLastError
+GetModuleHandleA
+NetApiBufferFree
+NetUserEnum
+NetUserGetInfo
+__getreent
+__locale_ctype_ptr
+__main
+_dll_crt0
+_impure_ptr
+_setmode
+calloc
+cygwin_conv_path
+cygwin_internal
+dll_dllcrt0
+fprintf
+getopt_long
+isatty
+iswdigit
+malloc
+mbstowcs
+msys_detach_dll
+optarg
+optind
+posix_memalign
+printf
+program_invocation_short_name
+realloc
+setlocale
+sprintf
+stpcpy
+strcasecmp
+strcat
+strchr
+strcmp
+strdup
+strlen
+strncmp
+strrchr
+strtok
+strtol
+strtoul
+unsetenv
+wcpcpy
+wcpncpy
+wcstombs
+ADVAPI32.dll
+KERNEL32.dll
+NETAPI32.dll
+msys-2.0.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+crt0.c
+.xdata
+.pdata
+cygming-crtbeg
+.xdata
+.pdata
+mkpasswd.c
+put_sid
+longopts@
+.rdata
+.xdata
+.pdata
+.idata$7
+.idata$5
+.idata$4
+.idata$6
+.idata$7
+.idata$5
+.idata$4
+.idata$6
+.idata$7
+.idata$5
+.idata$4
+.idata$6
+fthunk
+.idata$2(
+.idata$4
+.idata$5
+.idata$4
+.idata$5 
+.idata$7
+.idata$7
+.idata$5
+.idata$4
+.idata$6
+.idata$7
+.idata$5
+.idata$4
+.idata$6
+.idata$7$
+.idata$5
+.idata$4
+.idata$6D
+cygwin_crt0.c
+.xdata
+.pdata
+premain0.c
+.xdata
+.pdata
+premain1.c
+.xdata
+.pdata
+premain2.c
+.xdata
+.pdata
+premain3.c
+.xdata
+.pdata
+.xdata
+.pdata
+.rdata
+dll_entry.c
+.xdata
+.pdata
+dll_main.cc
+DllMain
+.xdata
+.pdata
+.xdata
+.pdata
+.idata$7
+.idata$5H
+.idata$48
+.idata$6<
+.xdata
+.pdata
+.idata$7p
+.idata$5
+.idata$4
+.idata$6F
+.idata$7l
+.idata$5
+.idata$4
+.idata$62
+.idata$7h
+.idata$5
+.idata$4
+.idata$6
+.idata$7d
+.idata$5
+.idata$4
+.idata$6
+.idata$7`
+.idata$5
+.idata$4
+.idata$6
+.idata$7\
+.idata$5
+.idata$4
+.idata$6
+.idata$7X
+.idata$5
+.idata$4
+.idata$6
+.idata$7T
+.idata$5
+.idata$4x
+.idata$6
+.idata$7P
+.idata$5
+.idata$4p
+.idata$6
+.idata$7L
+.idata$5x
+.idata$4h
+.idata$6
+fthunk
+.idata$2
+.idata$4h
+.idata$5x
+.idata$4
+.idata$5
+.idata$7t
+.idata$7
+.idata$5
+.idata$4
+.idata$6
+.idata$7
+.idata$5
+.idata$4
+.idata$6
+.idata$7
+.idata$5
+.idata$4
+.idata$6
+.idata$7
+.idata$5
+.idata$4
+.idata$6z
+.idata$7
+.idata$5
+.idata$4
+.idata$6h
+.idata$7
+.idata$5
+.idata$4
+.idata$6Z
+fthunk
+.idata$2
+.idata$4
+.idata$5
+.idata$4
+.idata$5
+.idata$7
+cygming-crtend
+.idata$2<
+.idata$5(
+.idata$4
+.idata$7
+.idata$5(
+.idata$4
+.idata$6
+.idata$7
+.idata$50
+.idata$4 
+.idata$6
+.idata$7
+.idata$58
+.idata$4(
+.idata$6$
+.idata$7
+.idata$5@
+.idata$40
+.idata$60
+.idata$7
+.idata$5P
+.idata$4@
+.idata$6L
+.idata$7
+.idata$5X
+.idata$4H
+.idata$6X
+.idata$7
+.idata$5`
+.idata$4P
+.idata$6d
+.idata$7
+.idata$5h
+.idata$4X
+.idata$6x
+.idata$7
+.idata$5p
+.idata$4`
+.idata$6
+.idata$7
+.idata$5x
+.idata$4h
+.idata$6
+.idata$7
+.idata$5
+.idata$4p
+.idata$6
+.idata$7
+.idata$5
+.idata$4x
+.idata$6
+.idata$7
+.idata$5
+.idata$4
+.idata$6
+.idata$7
+.idata$5
+.idata$4
+.idata$6
+.idata$7
+.idata$5
+.idata$4
+.idata$6
+.idata$7
+.idata$5
+.idata$4
+.idata$6
+.idata$7
+.idata$5
+.idata$4
+.idata$6
+.idata$7
+.idata$5
+.idata$4
+.idata$6
+.idata$7
+.idata$5
+.idata$4
+.idata$6$
+.idata$7 
+.idata$5
+.idata$4
+.idata$68
+.idata$7(
+.idata$5
+.idata$4
+.idata$6d
+.idata$7,
+.idata$5
+.idata$4
+.idata$6p
+.idata$70
+.idata$5
+.idata$4
+.idata$6|
+.idata$74
+.idata$5
+.idata$4
+.idata$6
+.idata$78
+.idata$5
+.idata$4
+.idata$6
+.idata$7<
+.idata$5
+.idata$4
+.idata$6
+.idata$7@
+.idata$5
+.idata$4
+.idata$6
+.idata$7D
+.idata$5 
+.idata$4
+.idata$6
+.idata$7H
+.idata$5(
+.idata$4
+.idata$6
+.idata$7L
+.idata$50
+.idata$4 
+.idata$6
+.idata$7P
+.idata$58
+.idata$4(
+.idata$6
+.idata$7T
+.idata$5@
+.idata$40
+.idata$6
+.idata$7X
+.idata$5H
+.idata$48
+.idata$6
+.idata$7\
+.idata$5P
+.idata$4@
+.idata$6
+.idata$7`
+.idata$5X
+.idata$4H
+.idata$6
+.idata$7d
+.idata$5`
+.idata$4P
+.idata$6
+.idata$7h
+.idata$5h
+.idata$4X
+.idata$6(
+.idata$7l
+.idata$5p
+.idata$4`
+.idata$64
+.idata$7p
+.idata$5x
+.idata$4h
+.idata$6@
+.idata$4p
+.idata$5
+.idata$7t
+stpcpy
+__main
+unsetenv
+printf
+malloc
+isatty
+EqualSid
+strtoul
+wcstombs
+wcpncpy
+mbstowcs
+_ZdlPv
+__dll__
+strtol
+strrchr
+calloc
+fprintf
+strcat
+strncmp
+FreeSid
+realloc
+_setmodeP
+strtok
+strdup
+_ZdaPv
+__end__
+strcmp
+sprintf
+_fmode
+iswdigit
+wcpcpy
+strlen
+strchr
+mainCRTStartup
+WinMainCRTStartup
+.rdata$zzz
+__gcc_register_frame
+__gcc_deregister_frame
+_print_win_error
+curr_user
+curr_pgrp
+got_curr_user
+.text.startup
+.xdata.startup
+.pdata.startup
+msys_crt0
+cygwin_premain0
+cygwin_premain1
+cygwin_premain2
+cygwin_premain3
+_msys_crt0_common
+_cygwin_crt0_common.cc
+__dllMain
+storedPtr
+storedReason
+storedHandle
+_msys_dll_entry
+dll_index
+_pei386_runtime_relocator
+pseudo-reloc-dummy.c
+msys_attach_dll
+cygwin_attach_dll.c
+register_frame_ctor
+.ctors.65535
+__imp_optarg
+___RUNTIME_PSEUDO_RELOC_LIST__
+__imp_GetComputerNameExA
+__nm_optarg
+FormatMessageA
+__lib64_libkernel32_a_iname
+__data_start__
+___DTOR_LIST__
+__imp__dll_crt0
+__imp_GetSidIdentifierAuthority
+__imp_calloc
+__imp_FormatMessageA
+___tls_start__
+getopt_long
+__locale_ctype_ptr
+dll_dllcrt0
+NetUserGetInfo
+GetLastError
+__rt_psrelocs_start
+__nm_optind
+__imp_setlocale
+__imp_GetTokenInformation
+__dll_characteristics__
+__size_of_stack_commit__
+__size_of_stack_reserve__
+__major_subsystem_version__
+___crt_xl_start__
+___crt_xi_start__
+___crt_xi_end__
+cygwin_internal
+__lib64_libadvapi32_a_iname
+__dynamically_loaded
+_head_msys_2_0_dll
+__getreent
+__imp_strtol
+__imp_strcmp
+__bss_start__
+__dso_handle
+___RUNTIME_PSEUDO_RELOC_LIST_END__
+__imp_cygwin_internal
+__imp_posix_memalign
+__size_of_heap_commit__
+__imp_strrchr
+__imp_GetLastError
+__imp_free
+GetSidSubAuthority
+NetApiBufferFree
+___crt_xd_end__
+___crt_xp_start__
+AllocateAndInitializeSid
+__nm__impure_ptr
+_head_lib64_libadvapi32_a
+___crt_xp_end__
+__imp_CloseHandle
+.weak.__real__Znam._msys_crt0_common
+__minor_os_version__
+__lib64_libnetapi32_a_iname
+__imp_strdup
+__imp_cygwin_conv_path
+__section_alignment__
+___crt_xd_start__
+__imp__setmode
+__IAT_end__
+_head_lib64_libnetapi32_a
+__RUNTIME_PSEUDO_RELOC_LIST__
+__imp_wcpcpy
+__imp_dll_dllcrt0
+GetTokenInformation
+__data_end__
+__imp___locale_ctype_ptr
+__imp_strtoul
+.weak.__real__ZnwmRKSt9nothrow_t._msys_crt0_common
+__CTOR_LIST__
+_head_lib64_libkernel32_a
+GetModuleHandleA
+__bss_end__
+__imp_msys_detach_dll
+___crt_xc_end__
+___crt_xc_start__
+__imp_mbstowcs
+___CTOR_LIST__
+__imp_program_invocation_short_name
+strcasecmp
+__nm_program_invocation_short_name
+__imp___getreent
+GetSidIdentifierAuthority
+LookupAccountSidW
+__imp_GetModuleHandleA
+__imp___main
+__imp_EqualSid
+__imp_strlen
+__imp_malloc
+sid_nt_auth
+__file_alignment__
+__imp__impure_ptr
+CloseHandle
+__imp_strtok
+__imp_OpenProcessToken
+__imp_realloc
+__imp_exit
+__major_os_version__
+__IAT_start__
+__imp_NetUserGetInfo
+__imp_strcat
+.weak.__real__ZdaPvRKSt9nothrow_t._msys_crt0_common
+_ZdaPvRKSt9nothrow_t
+__imp_isatty
+__imp_LookupAccountSidW
+__DTOR_LIST__
+__imp_stpcpy
+__imp_NetUserEnum
+_ZnwmRKSt9nothrow_t
+.weak.__real__Znwm._msys_crt0_common
+__DELAY_IMPORT_DIRECTORY_start__
+__size_of_heap_reserve__
+___crt_xt_start__
+.weak.__real__ZnamRKSt9nothrow_t._msys_crt0_common
+__imp_FreeSid
+__subsystem__
+setlocale
+GetCurrentProcess
+__imp_NetApiBufferFree
+__imp_fprintf
+__imp_wcstombs
+__DELAY_IMPORT_DIRECTORY_end__
+msys_detach_dll
+__imp_optind
+___tls_end__
+sid_world_auth
+__imp_strcasecmp
+__imp_iswdigit
+__imp_strncmp
+__major_image_version__
+__imp_GetSidSubAuthorityCount
+__loader_flags__
+__imp_strchr
+cygwin_conv_path
+___chkstk_ms
+_ZnamRKSt9nothrow_t
+__rt_psrelocs_end
+__cygwin_cxx_malloc
+__imp_AllocateAndInitializeSid
+__minor_subsystem_version__
+__minor_image_version__
+NetUserEnum
+__imp_wcpncpy
+__imp_getopt_long
+_ZdlPvRKSt9nothrow_t
+__imp_unsetenv
+__imp_sprintf
+__imp_printf
+__imp_LookupAccountNameW
+.weak.__real__ZdlPv._msys_crt0_common
+LookupAccountNameW
+.weak.__real__ZdaPv._msys_crt0_common
+GetComputerNameExA
+__RUNTIME_PSEUDO_RELOC_LIST_END__
+__imp_GetSidSubAuthority
+__imp_GetCurrentProcess
+posix_memalign
+___crt_xt_end__
+OpenProcessToken
+GetSidSubAuthorityCount
+.weak.__real__ZdlPvRKSt9nothrow_t._msys_crt0_common
+msys_2_0_dll_iname
+Unix User\

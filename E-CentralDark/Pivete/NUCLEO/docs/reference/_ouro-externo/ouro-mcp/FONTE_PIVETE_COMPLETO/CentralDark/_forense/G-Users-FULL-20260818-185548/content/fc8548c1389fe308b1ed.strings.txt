@@ -1,0 +1,810 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\libexec\git-core\Microsoft.Identity.Client.Broker.dll
+
+!This program cannot be run in DOS mode.
+`.rsrc
+@.reloc
+v4.0.30319
+#Strings
+<GetAccountsAsync>d__20
+<>c__DisplayClass20_0
+<>c__DisplayClass21_0
+<>9__12_0
+<AcquireTokenInteractiveAsync>b__12_0
+<SetMSALIdentityProvider>b__12_0
+<>9__13_0
+<HandleResponse>b__13_0
+<>c__DisplayClass13_0
+<>9__23_0
+<IsBrokerInstalledAndInvokable>b__23_0
+<>9__3_0
+<AddRuntimeSupport>b__3_0
+<>9__14_0
+<AcquireTokenInteractiveDefaultUserAsync>b__14_0
+<.cctor>b__25_0
+<>9__16_0
+<AcquireTokenSilentAsync>b__16_0
+<>9__17_0
+<AcquireTokenSilentDefaultUserAsync>b__17_0
+<>9__18_0
+<AcquireTokenByUsernamePasswordAsync>b__18_0
+<>c__DisplayClass8_0
+<>9__19_0
+<RemoveAccountAsync>b__19_0
+<>c__DisplayClass19_0
+<>9__9_0
+<GetCommonAuthParameters>b__9_0
+<GetAccountsAsync>b__0
+<SignInInteractivelyAsync>b__0
+<CreateExceptionFromWamError>b__0
+<GetSsoPolicyHeaders>b__0
+<>c__DisplayClass20_1
+<>9__12_1
+<SetMSALIdentityProvider>b__12_1
+<>9__23_1
+<IsBrokerInstalledAndInvokable>b__23_1
+<>9__3_1
+<AddRuntimeSupport>b__3_1
+<>9__19_1
+<RemoveAccountAsync>b__19_1
+<>9__9_1
+<GetCommonAuthParameters>b__9_1
+<>8__1
+<GetAccountsAsync>b__1
+<CreateExceptionFromWamError>b__1
+<>u__1
+Func`1
+Nullable`1
+IEnumerable`1
+ConfiguredTaskAwaitable`1
+Predicate`1
+Task`1
+AsyncTaskMethodBuilder`1
+BaseAbstractApplicationBuilder`1
+IEnumerator`1
+HashSet`1
+IReadOnlyList`1
+Lazy`1
+<AcquireTokenInteractiveAsync>d__12
+<>9__20_2
+<GetAccountsAsync>b__20_2
+<>9__9_2
+<GetCommonAuthParameters>b__9_2
+<logEventWrapper>5__2
+<authParams>5__2
+<>8__2
+<RemoveAccountAsync>b__2
+<>u__2
+Func`2
+KeyValuePair`2
+IDictionary`2
+IReadOnlyDictionary`2
+Microsoft.Identity.Client.OAuth2
+<SignInInteractivelyAsync>d__13
+<>9__20_3
+<GetAccountsAsync>b__20_3
+<>9__19_3
+<RemoveAccountAsync>b__19_3
+<>9__9_3
+<GetCommonAuthParameters>b__9_3
+<cancellationToken>5__3
+<authParams>5__3
+<readAccountResult>5__3
+<requestContext>5__3
+<>u__3
+<AcquireTokenInteractiveDefaultUserAsync>d__14
+<>9__19_4
+<RemoveAccountAsync>b__19_4
+<authParams>5__4
+<discoverAccountsResult>5__4
+<GetAccountsAsync>b__4
+Func`4
+<readAccountResult>5__5
+<GetAccountsAsync>b__5
+<AcquireTokenSilentAsync>d__16
+<AcquireTokenSilentDefaultUserAsync>d__17
+<AcquireTokenByUsernamePasswordAsync>d__18
+<RemoveAccountAsync>d__19
+<Module>
+IdentityProviderTypeMSA
+IdentityProviderTypeAAD
+clientID
+Microsoft.Identity.Client.UI
+value__
+set_AdditionalExceptionData
+get_TelemetryData
+instanceMetadata
+mscorlib
+System.Collections.Generic
+set_BrokerCreatorFunc
+ReadAccountByIdAsync
+AcquireTokenByUsernamePasswordAsync
+AcquireTokenInteractiveAsync
+GetMetadataEntryTryAvoidNetworkAsync
+SignInAsync
+AcquireTokenInteractiveDefaultUserAsync
+AcquireTokenSilentDefaultUserAsync
+DiscoverAccountsAsync
+GetAccountsAsync
+AcquireTokenSilentAsync
+RemoveAccountAsync
+SignInInteractivelyAsync
+AcquireTokenInteractivelyAsync
+SignInSilentlyAsync
+AcquireTokenSilentlyAsync
+SignOutSilentlyAsync
+get_ApiId
+get_CorrelationId
+set_CorrelationId
+correlationId
+get_ObjectId
+get_TenantId
+get_ClientId
+clientId
+get_AccountId
+get_HomeAccountId
+set_WamAccountId
+get_KeyId
+get_PiiLoggingEnabled
+IsLoggingEnabled
+set_IsBrokerEnabled
+get_MultiCloudSupportEnabled
+set_IsWebviewSsoPolicyEnabled
+ApplicationCanceled
+UserCanceled
+Microsoft.Identity.Client.PlatformsCommon.Shared
+UserDataRemovalRequired
+InteractionRequired
+LogEventRaised
+get_IsValueCreated
+Unexpected
+AwaitUnsafeOnCompleted
+get_IsCompleted
+get_IsPopSupported
+AuthorityUntrusted
+Reserved
+get_HomeAccountid
+NewGuid
+DateTimeKind
+SpecifyKind
+get_Method
+get_HttpMethod
+set_HttpMethod
+get_Password
+IsNullOrWhiteSpace
+Microsoft.Identity.Client.Instance
+get_Nonce
+set_Nonce
+set_TokenSource
+get_ErrorCode
+Encode
+get_Message
+ToLogMessage
+errorMessage
+Microsoft.Identity.Client.Cache
+IsBrokerInstalledAndInvokable
+NetworkTemporarilyUnavailable
+ServerTemporarilyUnavailable
+Enumerable
+IDisposable
+AccountUnusable
+set_IsRetryable
+_parentHandle
+IServiceBundle
+get_ServiceBundle
+TenantProfile
+get_Title
+WamHeaderTitle
+get_UserName
+get_Username
+Microsoft.Identity.Client.AuthScheme
+IAuthenticationScheme
+get_AuthenticationScheme
+DateTime
+AppendLine
+get_NewLine
+IAsyncStateMachine
+SetStateMachine
+stateMachine
+get_Scope
+set_Scope
+ValueType
+get_TokenType
+set_TokenType
+get_AccessTokenType
+NativeInteropMsalRequestType
+get_SsoPolicyType
+AuthorityType
+authorityType
+System.Core
+Microsoft.Identity.Client.Core
+s_lazyCore
+get_InvariantCulture
+OAuth2ResponseBase
+ContainsOrdinalIgnoreCase
+HandleResponse
+ParseRuntimeResponse
+MsalTokenResponse
+Verbose
+Dispose
+Create
+LogDelegate
+EditorBrowsableState
+<>1__state
+AssemblyMetadataAttribute
+EmbeddedAttribute
+CompilerGeneratedAttribute
+AttributeUsageAttribute
+DebuggableAttribute
+EditorBrowsableAttribute
+ComVisibleAttribute
+AssemblyTitleAttribute
+AsyncStateMachineAttribute
+ObsoleteAttribute
+TargetFrameworkAttribute
+DebuggerHiddenAttribute
+ExtensionAttribute
+AssemblyFileVersionAttribute
+AssemblyInformationalVersionAttribute
+AssemblyConfigurationAttribute
+AssemblyDescriptionAttribute
+InternalsVisibleToAttribute
+RefSafetyRulesAttribute
+CompilationRelaxationsAttribute
+AssemblyProductAttribute
+AssemblyCopyrightAttribute
+CLSCompliantAttribute
+AssemblyCompanyAttribute
+RuntimeCompatibilityAttribute
+get_Value
+_disposedValue
+SuppressFinalize
+get_Tag
+get_Config
+Microsoft.Identity.Client.AppConfig
+get_AppConfig
+appConfig
+System.Threading
+System.Runtime.Versioning
+Warning
+ToString
+Substring
+disposing
+UserSwitch
+get_MsaPassthrough
+get_ForceRefresh
+set_UriPath
+get_HttpPath
+get_Length
+EndsWith
+EnablePii
+WarningPii
+InfoPii
+ErrorPii
+get_RedirectUri
+set_RedirectUri
+GetExpectedRedirectUri
+redirectUri
+appLink
+NoNetwork
+get_Task
+Microsoft.Identity.Client.Internal
+get_ClaimsPrincipal
+System.ComponentModel
+get_LogLevel
+RemoveAll
+Microsoft.Identity.Client.Broker.dll
+HandleInstallUrl
+set_AuthorityUrl
+TokenReceivedFromWam
+get_Item
+set_Item
+System
+set_ExpiresIn
+get_ExpiresOn
+Boolean
+TimeSpan
+set_IdToken
+get_RawIdToken
+get_UserCancellationToken
+get_AccessToken
+set_AccessToken
+AppDomain
+get_CurrentDomain
+BrokerExtension
+Version
+PublicClientApplication
+ApiContractViolation
+ApplicationConfiguration
+PoPAuthenticationConfiguration
+get_PopAuthenticationConfiguration
+IncorrectConfiguration
+System.Globalization
+get_IsPopAuthorization
+op_Subtraction
+System.Reflection
+PropertyCollection
+MsalUiRequiredException
+NotImplementedException
+MsalServiceException
+MsalRuntimeException
+MsalException
+ArgumentNullException
+SetException
+s_initException
+MsalClientException
+exception
+StringComparison
+CultureInfo
+get_ClientInfo
+set_ClientInfo
+get_AuthorityInfo
+authorityInfo
+LogLevelMap
+Microsoft.Identity.Client.NativeInterop
+System.Net.Http
+System.Linq
+get_AuthorizationHeader
+IFormatProvider
+SetMSALIdentityProvider
+MsalIdentityProvider
+AsyncTaskMethodBuilder
+StringBuilder
+PublicClientApplicationBuilder
+<>t__builder
+sender
+InsufficientBuffer
+ICacheSessionManager
+cacheSessionManager
+IInstanceDiscoveryManager
+instanceDiscoveryManager
+get_Logger
+_logger
+Microsoft.Identity.Client.Internal.Broker
+Microsoft.Identity.Client.Broker
+IBroker
+enableBroker
+Microsoft.Identity.Client.Platforms.Features.RuntimeBroker
+WithBroker
+NullBroker
+_broker
+EventHandler
+ScopeHelper
+DesktopOsHelper
+LogEventWrapper
+ConfiguredTaskAwaiter
+GetAwaiter
+ILoggerAdapter
+get_Error
+CreateExceptionFromWamError
+IEnumerator
+GetEnumerator
+.cctor
+IntPtr
+IsBrokerEnabledOnCurrentOs
+System.Diagnostics
+ApiIds
+get_TotalSeconds
+System.Runtime.InteropServices
+System.Runtime.CompilerServices
+DebuggingModes
+get_ClaimsAndClientCapabilities
+get_Properties
+DecorateExceptionWithRuntimeErrorProperties
+get_GrantedScopes
+set_RequestedScopes
+GetMsalRuntimeScopes
+HasNonMsalScopes
+get_Aliases
+LogEventArgs
+<>4__this
+Microsoft.CodeAnalysis
+System.Threading.Tasks
+Equals
+Microsoft.Identity.Client.Utils
+authParams
+get_PopParams
+AddPopParams
+GetTokenRequestParams
+OperatingSystems
+System.Security.Claims
+set_DecodedClaims
+EnumerableExtensions
+MsalLoggerExtensions
+System.Collections
+_wamOptions
+get_BrokerOptions
+set_BrokerOptions
+brokerOptions
+GetSsoPolicyHeaders
+Base64UrlHelpers
+Microsoft.Identity.Client.ApiConfig.Parameters
+AcquireTokenByUsernamePasswordParameters
+acquireTokenByUsernamePasswordParameters
+AbstractAcquireTokenByUsernameParameters
+AcquireTokenInteractiveParameters
+acquireTokenInteractiveParameters
+GetCommonAuthParameters
+AcquireTokenSilentParameters
+acquireTokenSilentParameters
+AuthenticationRequestParameters
+authenticationRequestParameters
+get_ExtraQueryParameters
+WamAdapters
+get_IsSuccess
+AttributeTargets
+Microsoft.Identity.Client.TelemetryCore.Internal.Events
+get_Accounts
+msalAccounts
+wamAccounts
+get_ListOperatingSystemAccounts
+Microsoft.Identity.Client.Internal.Requests
+get_Status
+ResponseStatus
+Concat
+Format
+Object
+Select
+Distinct
+DateTimeOffset
+ConfigureAwait
+op_Implicit
+add_ProcessExit
+OnProcessExit
+runtimeAuthResult
+authResult
+DiscoverAccountsResult
+GetResult
+SetResult
+ReadAccountResult
+SignOutResult
+Microsoft.Identity.Client
+IsWin10OrServerEquivalent
+get_Environment
+CoreUIParent
+uiParent
+get_Current
+add_LogEvent
+remove_LogEvent
+get_ApiEvent
+get_LoginHint
+loginHint
+get_Count
+IAccount
+get_Account
+nativeAccount
+TryConvertToMsalAccount
+msalAccount
+wamAccount
+IsOperatingSystemAccount
+account
+AddRuntimeSupport
+ConsumersPassthroughRequest
+ToList
+set_UriHost
+get_HttpHost
+FindFirst
+MoveNext
+System.Text
+get_Context
+get_RequestContext
+WithBrokerPreview
+set_AccessTokenToRenew
+get_UtcNow
+get_OwnerWindow
+GetParentWindow
+WamErrorPrefix
+ErrorMessageSuffix
+WithSsoPolicy
+ssoPolicy
+get_Key
+Microsoft.Identity.Client.Instance.Discovery
+set_MsalRuntimeTelemetry
+InstanceDiscoveryMetadataEntry
+op_Equality
+get_Authority
+get_CanonicalAuthority
+IsNullOrEmpty
+x@on]0
+WrapNonExceptionThrows
+Serviceable
+mMicrosoft.Identity.Client.Desktop, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+lMicrosoft.Identity.Client.Broker, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+hMicrosoft.Identity.Test.Unit, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+jMicrosoft.Identity.Test.Common, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+nMicrosoft.Identity.Test.SideBySide, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+wMicrosoft.Identity.Test.Integration.NetCore, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+uMicrosoft.Identity.Test.Integration.NetFx, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+oMicrosoft.Identity.Test.Performance, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+cCommonCache.Test.Common, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+aCommonCache.Test.Unit, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+dDynamicProxyGenAssembly2, PublicKey=0024000004800000940000000602000000240000525341310004000001000100c547cac37abd99c8db225ef2f6c8a3602f3b3606cc9891605d02baa56104f4cfc0734aa39b93bf7852f7d9266654753cc297e7d2edfe0bac1cdcf9f717241550e0a7b191195b7667bb4f64bcb8e2121380fd1d9d46ad2d92d2d15605093924cceaf74c4861eff62abf69b9291ed0a340e113be11e6a7d3113e92484cf7045cc7
+uMicrosoft.Identity.Client.Extensions.Msal, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+tMicrosoft.Identity.Client.Extensions.Web, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+~Microsoft.Identity.Client.Extensions.Web.UnitTests, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+RXForms, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+RWebApi, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+[NetFxConsoleApp, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+^NetCoreWinFormsWAM, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+ZDesktopTestApp, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d96616729b54f6d013d71559a017f50aa4861487226c523959d1579b93f3fdf71c08b980fd3130062b03d3de115c4b84e7ac46aef5e192a40e7457d5f3a08f66ceab71143807f2c3cb0da5e23b38f0559769978406f6e5d30ceadd7985fc73a5a609a8b74a1df0a29399074a003a226c943d480fec96dbec7106a87896539ad
+.NETFramework,Version=v4.6.2
+FrameworkDisplayName
+.NET Framework 4.6.2
+Microsoft Corporation
+Release
+ Microsoft Corporation. All rights reserved.
+      This package contains binaries needed to use brokers in public client desktop applications and supersedes Microsoft.Identity.Client.Desktop.
+4.65.0.0
+/4.65.0+e8baa99af1726fe40b9a0ba302dfb9f3bde12803
+'Microsoft Authentication Library Broker
+ Microsoft.Identity.Client.Broker
+RepositoryUrlFhttps://github.com/AzureAD/microsoft-authentication-library-for-dotnet
+lMicrosoft.Identity.Client.Platforms.Features.RuntimeBroker.RuntimeBroker+<AcquireTokenInteractiveAsync>d__12
+hMicrosoft.Identity.Client.Platforms.Features.RuntimeBroker.RuntimeBroker+<SignInInteractivelyAsync>d__13
+wMicrosoft.Identity.Client.Platforms.Features.RuntimeBroker.RuntimeBroker+<AcquireTokenInteractiveDefaultUserAsync>d__14
+gMicrosoft.Identity.Client.Platforms.Features.RuntimeBroker.RuntimeBroker+<AcquireTokenSilentAsync>d__16
+rMicrosoft.Identity.Client.Platforms.Features.RuntimeBroker.RuntimeBroker+<AcquireTokenSilentDefaultUserAsync>d__17
+sMicrosoft.Identity.Client.Platforms.Features.RuntimeBroker.RuntimeBroker+<AcquireTokenByUsernamePasswordAsync>d__18
+bMicrosoft.Identity.Client.Platforms.Features.RuntimeBroker.RuntimeBroker+<RemoveAccountAsync>d__19
+`Microsoft.Identity.Client.Platforms.Features.RuntimeBroker.RuntimeBroker+<GetAccountsAsync>d__20
+This broker implementation is generally available. Use WithBroker(BrokerOptions) in Microsoft.Identity.Client.Broker package instead. See https://aka.ms/msal-net-wam for details.
+AllowMultiple
+Inherited
+/_/src/client/Microsoft.Identity.Client.Broker/obj/Release/net462/Microsoft.Identity.Client.Broker.pdb
+SHA256
+_CorDllMain
+mscoree.dll
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 20110
+250619182135Z
+260617182135Z0t1
+Washington1
+Redmond1
+Microsoft Corporation1
+Microsoft Corporation0
+4(_si0
+I0G1-0+
+$Microsoft Ireland Operations Limited1
+230012+5053620
+Chttp://www.microsoft.com/pkiops/crl/MicCodSigPCA2011_2011-07-08.crl0a
+Ehttp://www.microsoft.com/pkiops/certs/MicCodSigPCA2011_2011-07-08.crt0
+eV!g*!
+Washington1
+Redmond1
+Microsoft Corporation1200
+)Microsoft Root Certificate Authority 20110
+110708205909Z
+260708210909Z0~1
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 20110
+Ihttp://crl.microsoft.com/pki/crl/products/MicRooCerAut2011_2011_03_22.crl0^
+Bhttp://www.microsoft.com/pki/certs/MicRooCerAut2011_2011_03_22.crt0
+3http://www.microsoft.com/pkiops/docs/primarycps.htm0@
+*?*kXIc
+QEX82q'
+WqVNHE
+Washington1
+Redmond1
+Microsoft Corporation1(0&
+Microsoft Code Signing PCA 2011
+https://www.microsoft.com 0
+20260211154356.675Z0
+Washington1
+Redmond1
+Microsoft Corporation1-0+
+$Microsoft Ireland Operations Limited1'0%
+nShield TSS ESN:321A-05E0-D9471%0#
+Microsoft Time-Stamp Service
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+250814184828Z
+261113184828Z0
+Washington1
+Redmond1
+Microsoft Corporation1-0+
+$Microsoft Ireland Operations Limited1'0%
+nShield TSS ESN:321A-05E0-D9471%0#
+Microsoft Time-Stamp Service0
+Nhttp://www.microsoft.com/pkiops/crl/Microsoft%20Time-Stamp%20PCA%202010(1).crl0l
+Phttp://www.microsoft.com/pkiops/certs/Microsoft%20Time-Stamp%20PCA%202010(1).crt0
+OuN'mg
+cqvm|B
+!vUPNi
+Washington1
+Redmond1
+Microsoft Corporation1200
+)Microsoft Root Certificate Authority 20100
+210930182225Z
+300930183225Z0|1
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+3http://www.microsoft.com/pkiops/Docs/Repository.htm0
+Ehttp://crl.microsoft.com/pki/crl/products/MicRooCerAut_2010-06-23.crl0Z
+>http://www.microsoft.com/pki/certs/MicRooCerAut_2010-06-23.crt0
+as.,k{n?,
+Washington1
+Redmond1
+Microsoft Corporation1-0+
+$Microsoft Ireland Operations Limited1'0%
+nShield TSS ESN:321A-05E0-D9471%0#
+Microsoft Time-Stamp Service
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 20100
+20260211133955Z
+20260212133955Z0t0:
+'K9L8#
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 2010
+GhUO=Xr
+Washington1
+Redmond1
+Microsoft Corporation1&0$
+Microsoft Time-Stamp PCA 2010
+Y[9#<k
+logger
+x-ms-SsoFlags
+SsoRestr
+SsoPolicyError
+SsoRestrError:
+x-ms-SsoFlagsSubstatus
+SsoRestrUndefined
+[RuntimeBroker] Not a supported operating system. WAM broker is not available. 
+[RuntimeBroker] Authority is {0}. WAM is not available
+[RuntimeBroker] Processing WAM exception
+[RuntimeBroker] authentication_canceled User canceled authentication. 
+authentication_canceled
+User canceled authentication. 
+WAM Error  
+ Error Code: {0} 
+ Error Message: 
+ Internal Error Code: 
+[RuntimeBroker] failed_to_acquire_token_silently_from_broker 
+failed_to_acquire_token_silently_from_broker
+ Error Message: {0} 
+ WAM Error Message: 
+ Possible causes: 
+- Invalid redirect uri - ensure you have configured the following url in the application registration in Azure Portal: 
+[RuntimeBroker] WAM_provider_error_{0} {1}
+WAM_provider_error_{0}
+ Possible cause: no Internet connection 
+[RuntimeBroker] WAM_network_error_{0} {1}
+Unknown {0} (error code {1}) (internal error code {2})
+unknown_broker_error
+msal_request_type
+consumer_passthrough
+msal_accounts_control_title
+instance_aware
+ssh-cert
+key_id
+BrokerErrorContext
+BrokerErrorTag
+0x{0:X}
+BrokerErrorStatus
+BrokerErrorCode
+BrokerTelemetry
+[RuntimeBroker] Proof-of-Possession is configured. Using Proof-of-Possession with broker request. 
+9188040d-6c67-4c5b-b112-36a304b66dad
+msal_identity_provider
+[RuntimeBroker] {0} {1}
+[RuntimeBroker] WAM response status account switch. Treating as success
+[RuntimeBroker] No correlation ID in response
+[RuntimeBroker] WAM response status success
+[RuntimeBroker] Could not acquire token using WAM. 
+wam_failed
+Could not acquire token using WAM. 
+ms-appx-web://microsoft.aad.brokerplugin/
+=== [RuntimeBroker] Converting WAM Account to MSAL Account ===
+wamAccount.AccountId: 
+wamAccount.HomeAccountid: 
+wamAccount.UserName: 
+wamAccount.AccountId: {0}.
+wamAccount.HomeAccountid: {0}
+wamAccount.Environment: 
+wamAccount.UserName: {0}.
+[RuntimeBroker] WAM Account properties are missing. Cannot convert to MSAL Accounts.
+[RuntimeBroker] Using Windows account picker.
+[RuntimeBroker] Signing in with the default user account.
+[RuntimeBroker] Acquiring token silently.
+[RuntimeBroker] Acquiring token silently for default account.
+[RuntimeBroker] Acquiring token with Username Password flow.
+[RuntimeBroker] No valid account was passed to RemoveAccountAsync. 
+[RuntimeBroker] Default Operating System Account cannot be removed. 
+[RuntimeBroker] WAM Account exists and can be removed.
+[RuntimeBroker] Account signed out successfully. 
+[RuntimeBroker] Filtering WAM accounts based on Environment.
+[RuntimeBroker] MsalRuntime initialization failed. See https://aka.ms/msal-net-wam#wam-limitations
+[RuntimeBroker] MsalRuntime initialization successful.
+wam_runtime_init_failed
+ See https://aka.ms/msal-net-wam#troubleshooting
+[RuntimeBroker] AcquireTokenInteractive - login hint provided? 
+Removing WAM Account. Correlation ID : 
+[RuntimeBroker] Broker returned {0} account(s).
+[RuntimeBroker] {0} account(s) returned after filtering.
+[RuntimeBroker] Converted {0} WAM account(s) to MSAL Account(s).
+[RuntimeBroker] Broker returned SsoPolicyType {0} and errorCode {1}.
+MSALRuntime_Username
+MSALRuntime_Password
+Could not acquire token with username and password.
+window_handle_required
+A window handle must be configured. See https://aka.ms/msal-net-wam#parent-window-handles
+Could not acquire token interactively.
+[RuntimeBroker] Could not find a WAM account for the selected user {0}, error: {1}
+[RuntimeBroker] Could not find a WAM account for the selected user. Error: {0}
+Could not sign in interactively with the default OS account.
+[RuntimeBroker] Could not find a WAM account for the selected user {0}. Error: {1}
+wam_no_account_for_id
+Could not find a WAM account for the selected user. Error: {0}
+Could not acquire token silently.
+Could not acquire token silently with AccessTokenToRenew option.
+Could not acquire token silently for the default user.
+[RuntimeBroker] ListWindowsWorkAndSchoolAccounts option was not enabled.
+ [RuntimeBroker] 
+ Telemetry Data: 
+[RuntimeBroker] 
+[RuntimeBroker] DiscoverAccounts Error. 
+Error Code : {0}. 
+Internal Error Code: 
+wam_remove_account_failed
+No valid account was passed.
+Default Operating System account cannot be removed.
+[RuntimeBroker] Could not find a WAM account for the selected user {0} - error: {1}
+[RuntimeBroker] Could not find a WAM account for the selected user, error: {0}
+[RuntimeBroker] Could not sign out user {0} - error: {1}
+[RuntimeBroker] Could not sign out user, error: {0}
+[RuntimeBroker] Calling SignInInteractivelyAsync this will show the account picker.
+Could not sign in interactively.
+[RuntimeBroker] Validating Common Auth Parameters.
+[RuntimeBroker] No scopes were passed in the request. Adding default scopes.
+[RuntimeBroker] Scopes were passed in the request.
+[RuntimeBroker] Acquired Common Auth Parameters.
+[RuntimeBroker] MSALRuntime Identity provider set to MSA.
+[RuntimeBroker] MSALRuntime Identity provider set to AAD
+[RuntimeBroker] Successfully retrieved token.
+[RuntimeBroker] TelemetryData: 
+[RuntimeBroker] unknown_broker_error 
+[Runtime] WAM supported OS.
+[RuntimeBroker] Not a Windows 10 or Server equivalent machine. Runtime broker or SsoPolicy support is not available.
+ For more details see https://aka.ms/msal-net-wam
+WAM Error 
+msal_request_type
+consumer_passthrough
+msal_identity_provider
+msal_accounts_control_title
+VS_VERSION_INFO
+VarFileInfo
+Translation
+StringFileInfo
+000004b0
+Comments
+      This package contains binaries needed to use brokers in public client desktop applications and supersedes Microsoft.Identity.Client.Desktop.
+CompanyName
+Microsoft Corporation
+FileDescription
+Microsoft.Identity.Client.Broker
+FileVersion
+4.65.0.0
+InternalName
+Microsoft.Identity.Client.Broker.dll
+LegalCopyright
+ Microsoft Corporation. All rights reserved.
+OriginalFilename
+Microsoft.Identity.Client.Broker.dll
+ProductName
+Microsoft Authentication Library Broker
+ProductVersion
+4.65.0+e8baa99af1726fe40b9a0ba302dfb9f3bde12803
+Assembly Version
+4.65.0.0
+Legal_policy_statement
+Microsof

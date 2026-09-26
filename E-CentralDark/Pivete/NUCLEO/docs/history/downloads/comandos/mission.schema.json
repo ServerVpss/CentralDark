@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "mission_id",
+    "objective",
+    "input_dir",
+    "work_dir",
+    "output_dir",
+    "adapter",
+    "transfer_cases"
+  ],
+  "properties": {
+    "mission_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "objective": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input_dir": {
+      "type": "string"
+    },
+    "work_dir": {
+      "type": "string"
+    },
+    "output_dir": {
+      "type": "string"
+    },
+    "control_dir": {
+      "type": "string"
+    },
+    "adapter": {
+      "enum": [
+        "mock",
+        "local_process",
+        "file_broker"
+      ]
+    },
+    "max_rounds": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "stagnation_limit": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "timeout_seconds": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "test_commands": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "negative_test_commands": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "transfer_cases": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "case_id",
+          "prompt",
+          "expected_classification"
+        ],
+        "properties": {
+          "case_id": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "expected_classification": {
+            "enum": [
+              "SIM",
+              "NÃO",
+              "NÃO_VERIFICADO"
+            ]
+          },
+          "expected_response": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "adapter_config": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false
+}

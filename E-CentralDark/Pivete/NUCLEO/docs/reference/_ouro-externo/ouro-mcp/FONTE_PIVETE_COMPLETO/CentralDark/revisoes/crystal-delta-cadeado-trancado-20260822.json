@@ -1,0 +1,50 @@
+{
+  "schema": "centraldark.runtime.receipt.v1",
+  "run_id": "crystal-delta-cadeado-trancado-20260822",
+  "timestamp": "2026-08-22T22:18:00Z",
+  "repository": "ServerVpss/CentralDark",
+  "main_head": "98893dde3",
+  "runtime_head": "67950e916",
+  "host_id_sanitized": "local-crystal",
+  "baseline_sha256": "delta-cadeado-trancado",
+  "processes": [],
+  "routes": [],
+  "detectors": ["meta-lupa", "porta-de-entrada", "pr-auto-review", "vps-exec-selfhosted", "deploy-guards", "package"],
+  "findings": [
+    "CADEADO TRANCADO minerado e reconciliado contra owners canônicos",
+    "FABLE_LOOP DEFENSE integrado na MetaLupa (AutoLupa)",
+    "20 mutant tests adversariais no PR auto-review",
+    "Discovery read-only + runtime receipt v1 na porta-de-entrada",
+    "Hardening VPS: evidence + UFW canonical + verify bind + PM2 stability",
+    "Secrets rotation check no deploy-operational-guards",
+    "Duplicatas @radix-ui removidas do package.json"
+  ],
+  "repairs_attempted": [
+    "Delta cirúrgico aplicado em 6 owners canônicos",
+    "3 scripts extraídos de inline YAML",
+    "Skill delta-cadeado-trancado criada"
+  ],
+  "repairs_succeeded": [
+    "YAML lint: 3/3 workflows passing",
+    "npm test: 4/4 passing",
+    "Git commit: 67950e916",
+    "Git push: origin/feat/gatilhos-execucao-reversivel-remediacao"
+  ],
+  "repairs_failed": [],
+  "rollback": null,
+  "judge_verdict": "APPROVED",
+  "remaining_unknowns": [
+    "Execução real no runner self-hosted (aguarda PR)",
+    "Fases B-G Runtime Closed Loop (futuro)",
+    "Self-Learning skill formal (futuro)"
+  ],
+  "coverage_scope": [
+    "meta-lupa",
+    "porta-de-entrada",
+    "pr-auto-review",
+    "vps-exec-selfhosted",
+    "deploy-operational-guards",
+    "package"
+  ],
+  "final_status": "PASS"
+}

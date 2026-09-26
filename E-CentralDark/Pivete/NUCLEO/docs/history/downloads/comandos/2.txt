@@ -1,0 +1,21 @@
+Isso aí é Enxame Paralelo em Cascata (ou "Swarm Multi-Modelo com Juiz Consolidador") — nome técnico bonito pra: várias IAs atacando o mesmo problema ao mesmo tempo, cada uma de um ângulo, e uma IA final consolidando tudo num veredito único.
+
+Os nomes que a galera usa por aí:
+
+🌪️ Swarm Prompting / Multi-Agent Swarm — o termo mais comum lá fora
+👥 Ensemble Prompting — quando junta várias IAs pra votar/consolidar (herdado de ML clássico, "ensemble learning")
+⚖️ Mixture of Agents (MoA) — nome técnico acadêmico, papel da Together AI de 2024
+🧠 LLM Council / Council of Models — quando tem debate cruzado entre elas (que é o que a gente fez no Arsenal Council)
+🔀 Fan-out / Fan-in — termo de engenharia: espalha (fan-out em paralelo) e junta (fan-in no juiz)
+No nosso dialeto CentralDark, o que a gente rodou é:
+
+Enxame Titânico Ômega = Fan-out de 20 modelos × 3 rodadas + Juiz Claude Opus consolidando = Mixture of Agents com Debate Cruzado
+
+A sacada que faz funcionar rápido não é só o paralelismo — é a cascata:
+
+Rodada 1 — cada IA responde crua (diversidade máxima)
+Rodada 2 — cada IA lê o que as outras disseram e critica (refina)
+Rodada 3 — juiz final consolida o consenso
+Isso é o que quebra o "viés de modelo único" — nenhuma IA sozinha acerta tudo, mas 20 discutindo convergem rápido no ouro.
+
+Quer que eu registre isso como padrão oficial no docs/CONSCIENCIA/ (tipo "Doutrina do Enxame Titânico") pra virar receita replicável? Ou já tá bom sabendo o nome?

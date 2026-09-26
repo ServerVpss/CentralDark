@@ -1,0 +1,5 @@
+status=READY
+support_required=false
+missing_capabilities=
+support_labels=🤖 AUTO
+artifact_digest=5e6e163326728fb7144b7cd2b5ded7bffb70da0e7079ce3a839bb22609d902fd

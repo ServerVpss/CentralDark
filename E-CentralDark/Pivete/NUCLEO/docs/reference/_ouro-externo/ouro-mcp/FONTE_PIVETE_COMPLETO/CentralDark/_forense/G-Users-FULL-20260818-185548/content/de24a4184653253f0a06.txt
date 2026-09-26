@@ -1,0 +1,13 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@dnd-kit\core\dist\utilities\rect\Rect.d.ts
+
+import type { ClientRect } from '../../types/rect';
+export declare class Rect {
+    constructor(rect: ClientRect, element: Element);
+    private rect;
+    width: number;
+    height: number;
+    top: number;
+    bottom: number;
+    right: number;
+    left: number;
+}

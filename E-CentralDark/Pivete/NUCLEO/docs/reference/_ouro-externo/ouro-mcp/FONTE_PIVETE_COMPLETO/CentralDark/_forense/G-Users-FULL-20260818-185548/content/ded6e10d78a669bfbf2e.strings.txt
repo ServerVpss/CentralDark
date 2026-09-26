@@ -1,0 +1,16 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\ftplugin\openvpn.vim
+
+" Vim filetype plugin
+" Language:
+OpenVPN
+" Maintainer:
+ObserverOfTime <chronobserver@disroot.org>
+" Last Change:
+2022 Oct 16
+2024 May 23 by Riley Bruins <ribru17@gmail.com> ('commentstring')
+if exists('b:did_ftplugin')
+  finish
+let b:did_ftplugin = 1
+setlocal iskeyword+=-,.,/
+setlocal comments=:#,:; commentstring=#\ %s
+let b:undo_ftplugin = 'setl isk< com< cms<'

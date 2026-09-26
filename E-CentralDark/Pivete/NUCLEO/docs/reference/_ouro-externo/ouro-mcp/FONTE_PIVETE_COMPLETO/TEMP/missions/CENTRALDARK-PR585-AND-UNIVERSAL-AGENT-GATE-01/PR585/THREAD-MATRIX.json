@@ -1,0 +1,55 @@
+{
+  "captured_at_utc": "2026-08-01T19:20:00Z",
+  "pr": 585,
+  "repo": "ServerVpss/CentralDark",
+  "head_sha_reviewed": "8f5925f0abef0467f8204d327c97cebe152351d4",
+  "total_threads": 24,
+  "resolved_by_github": 9,
+  "unresolved_by_github": 15,
+  "note": "O corpo do PR afirma '9 threads, todas fechadas', mas essa afirmacao ficou desatualizada: apos o ultimo FINAL do ledger (2026-08-01T18:15Z), CodeRabbit, Codex e o proprio SEGREDO/CHEFE (login segredounlock) postaram 15 comentarios adicionais entre 18:19Z e 19:14Z, a maioria no HEAD atual. PR_BODY_MATCHES_REMOTE=false ate o corpo ser atualizado.",
+  "threads": [
+    { "thread_id": "PRRT_kwDOTDnUP86VpLH0", "classification": "RESOLVED", "path": "AGENTS.md", "note": "Ja fechado pelo GitHub." },
+    { "thread_id": "PRRT_kwDOTDnUP86VpLH2", "classification": "RESOLVED", "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md", "note": "Ja fechado; outdated." },
+    { "thread_id": "PRRT_kwDOTDnUP86VpLH5", "classification": "RESOLVED", "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md", "note": "Ja fechado pelo GitHub." },
+    { "thread_id": "PRRT_kwDOTDnUP86VpLH6", "classification": "RESOLVED", "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md", "note": "Ja fechado pelo GitHub." },
+    { "thread_id": "PRRT_kwDOTDnUP86VpLH-", "classification": "RESOLVED", "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md", "note": "Ja fechado; outdated." },
+    { "thread_id": "PRRT_kwDOTDnUP86VpMZc", "classification": "RESOLVED", "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md", "note": "Ja fechado pelo GitHub." },
+    { "thread_id": "PRRT_kwDOTDnUP86VpMZh", "classification": "RESOLVED", "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md", "note": "Ja fechado pelo GitHub." },
+    { "thread_id": "PRRT_kwDOTDnUP86VqC5G", "classification": "RESOLVED", "path": ".coderabbit.yaml", "note": "Ja fechado pelo GitHub." },
+    { "thread_id": "PRRT_kwDOTDnUP86VqC5I", "classification": "RESOLVED", "path": ".coderabbit.yaml", "note": "Ja fechado pelo GitHub." },
+
+    { "thread_id": "PRRT_kwDOTDnUP86VpL3d", "classification": "ALREADY_FIXED_UNRESOLVED", "path": "AGENTS.md", "author": "chatgpt-codex-connector", "finding": "AGENTS.md:30/77 impunha o documento candidato como contrato obrigatorio.", "evidence": "AGENTS.md linha 30 atual: 'quando a missao referencia-lo explicitamente ou quando ele estiver em validacao... nao substitui os contratos ja promovidos'; linha 77: 'autoridade canonica permanece em LEIA-ME-IA.md e JARVIS... ate promocao explicita'. Ja corrigido em commit posterior a 64518e83; thread nunca foi marcada resolvida no GitHub.", "action": "Responder ao thread citando o HEAD atual e pedir resolucao; nenhuma edicao de codigo necessaria." },
+    { "thread_id": "PRRT_kwDOTDnUP86VpUPa", "classification": "ALREADY_FIXED_UNRESOLVED", "path": ".coderabbit.yaml", "author": "chatgpt-codex-connector", "finding": "MCP habilitado com disabled_servers vazio herdaria todos os servidores.", "evidence": ".coderabbit.yaml linhas 116-118 atuais: 'mcp: usage: \"disabled\", disabled_servers: []' com comentario explicito de deny-by-default. Ja corrigido em commit posterior a 5d84b562; thread nunca foi marcada resolvida.", "action": "Responder ao thread citando o HEAD atual." },
+    { "thread_id": "PRRT_kwDOTDnUP86VqDnj", "classification": "ALREADY_FIXED_UNRESOLVED", "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md", "author": "chatgpt-codex-connector", "finding": "CAPTURE_DEGRADED nao aparecia nos estados permitidos nem no enum do receipt.", "evidence": "Linha 122 (tabela reason) e linha 208 (enum do OPERATION_RECEIPT) atuais ja incluem CAPTURE_DEGRADED. isOutdated=true confirma que a visualizacao do diff ficou defasada. Ja corrigido; thread nunca foi marcada resolvida.", "action": "Responder ao thread citando o HEAD atual." },
+
+    { "thread_id": "PRRT_kwDOTDnUP86VqLTk", "classification": "VALID_CURRENT", "priority": "P1", "path": ".coderabbit.yaml", "author": "coderabbitai", "finding": "Falta 'fail_commit_status: true' junto de 'review_progress: true'.", "evidence": ".coderabbit.yaml linha 15 tem 'review_progress: true' mas NAO existe chave 'fail_commit_status' em todo o arquivo (grep vazio confirmado).", "mission_item": 3, "action": "Adicionar fail_commit_status: true em reviews." },
+    { "thread_id": "PRRT_kwDOTDnUP86VqUgK", "classification": "VALID_CURRENT", "priority": "P1", "path": ".coderabbit.yaml", "author": "segredounlock (CHEFE)", "finding": "Mesmo achado de VqLTk, postado pelo Chefe.", "evidence": "Identico a VqLTk.", "mission_item": 3, "action": "Mesma correcao de VqLTk fecha os dois threads." },
+
+    { "thread_id": "PRRT_kwDOTDnUP86VqUgG", "classification": "VALID_CURRENT", "priority": "P1", "path": "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md", "author": "segredounlock (CHEFE)", "finding": "JARVIS ainda declara Pivete como autoridade final (linhas 44-49 e 304), contradizendo SEGREDO/CHEFE como autoridade final em LEIA-ME-IA.md/AGENTS.md/doc LOOP.", "evidence": "Linha 44 'Pivete... continua sendo a autoridade final'; linha 304 'Pivete continua com autoridade final e uma unica interface visivel' -- confirmado por leitura direta do arquivo atual.", "mission_item": 1, "action": "Adicionar nota de precedencia explicita no JARVIS reconhecendo SEGREDO/CHEFE como autoridade humana final, com Pivete/Hermes como executor, sem reescrever a doutrina inteira (menor edicao)." },
+
+    { "thread_id": "PRRT_kwDOTDnUP86VqUgI", "classification": "VALID_CURRENT", "priority": "P1", "path": "LEIA-ME-IA.md", "author": "segredounlock (CHEFE)", "finding": "CENTRALDARK_AI_BOOT usa source_of_truth: 'ServerVpss/CentralDark + evidencia atual', misturando fonte canonica com evidencia observada.", "evidence": "Linha 59 atual confirmada por leitura direta.", "mission_item": 2, "action": "Separar em dois campos: source_of_truth (so o repo) e observed_evidence (estado medido, sem autoridade canonica)." },
+
+    { "thread_id": "PRRT_kwDOTDnUP86VqUgM", "classification": "VALID_CURRENT", "priority": "P1", "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md + validador novo", "author": "segredounlock (CHEFE)", "finding": "Nao existe validador reutilizavel do OPERATION_RECEIPT no repositorio.", "evidence": "Busca por '*receipt*valid*' e '*operation_receipt*' no worktree nao encontrou nenhum arquivo.", "mission_item": 4, "action": "Criar script de validacao do schema OPERATION_RECEIPT (enum de status/reason, target obrigatorio, chief_decision != PASS implicito) com testes RED/GREEN." },
+
+    { "thread_id": "PRRT_kwDOTDnUP86VqW2I", "classification": "VALID_CURRENT", "priority": "P1", "path": ".coderabbit.yaml", "author": "coderabbitai", "finding": "issue_enrichment.auto_enrich.enabled e planning.auto_planning.enabled continuam true.", "evidence": "Linhas 121-126 atuais: auto_enrich.enabled: true; auto_planning.enabled: true (confirmado por leitura direta).", "mission_item": 5, "action": "auto_enrich.enabled=false; planning.enabled=true; auto_planning.enabled=false, preservando labels." },
+
+    { "thread_id": "PRRT_kwDOTDnUP86VqW2P", "classification": "VALID_CURRENT", "priority": "P1", "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md", "author": "coderabbitai", "finding": "Linha 12 afirma 'aprovado por SEGREDO/CHEFE' sem OPERATION_RECEIPT auditavel que prove essa aprovacao.", "evidence": "Linha 12 atual: 'Este documento registra o modo de operacao aprovado por SEGREDO/CHEFE durante a captura defensiva da VPS em 2026-07-31.' Nenhum receipt anexado comprova essa aprovacao.", "mission_item": 6, "action": "Trocar 'aprovado por' por 'proposto para avaliacao por SEGREDO/CHEFE' ate existir receipt terminal com chief_decision=APPROVED." },
+
+    { "thread_id": "PRRT_kwDOTDnUP86VqW2R", "classification": "VALID_CURRENT", "priority": "P1", "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md", "author": "coderabbitai", "finding": "CAPTURE registra 'origem' sem regra de normalizacao (userinfo/query/fragmento).", "evidence": "Linha 51 lista 'origem' entre os itens medidos, sem qualquer instrucao de normalizacao em todo o documento.", "mission_item": 7, "action": "Adicionar regra explicita: registrar somente scheme+host+path, nunca userinfo/query/fragment/credenciais." },
+
+    { "thread_id": "PRRT_kwDOTDnUP86VqW2T", "classification": "VALID_CURRENT", "priority": "P1", "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md", "author": "coderabbitai", "finding": "SECRET_EXPOSURE nao tem a mesma instrucao fail-closed explicita ('nao persistir, nao enviar, interromper') que SANITIZE_FAILED tem na linha 91.", "evidence": "Linha 95 apenas declara o status resultante, sem a acao fail-closed explicita presente na linha 91 para SANITIZE_FAILED.", "mission_item": 8, "action": "Repetir a instrucao fail-closed explicita para SECRET_EXPOSURE." },
+
+    { "thread_id": "PRRT_kwDOTDnUP86VqW2U", "classification": "VALID_CURRENT", "priority": "P1", "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md", "author": "coderabbitai", "finding": "Schema permite status=PASS simultaneo a chief_decision=PENDING, misturando PASS tecnico com decisao do Chefe.", "evidence": "Linhas 207 e 214 sao campos independentes sem regra que impeca a combinacao.", "mission_item": 9, "action": "Adicionar regra textual: PASS tecnico nao implica aprovacao; promocao exige chief_decision=APPROVED explicito." },
+
+    { "thread_id": "PRRT_kwDOTDnUP86VqW2V", "classification": "VALID_CURRENT", "priority": "P1", "path": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md", "author": "coderabbitai", "finding": "OPERATION_RECEIPT nao tem campo 'target'.", "evidence": "Schema (linhas 196-216) nao lista 'target' entre os campos.", "mission_item": 10, "action": "Adicionar campo target obrigatorio, coerente com head_sha e evidence_path." },
+
+    { "thread_id": "PRRT_kwDOTDnUP86VqXNT", "classification": "VALID_CURRENT", "priority": "P2", "path": ".coderabbit.yaml", "author": "chatgpt-codex-connector", "finding": "path_instructions aponta para docs/PLANO-MESTRE-HERMES-CASA-MENTE-ESTENDIDA/** que nao existe no repositorio.", "evidence": "'ls docs/PLANO-MESTRE-HERMES-CASA-MENTE-ESTENDIDA' -> No such file or directory. O plano mestre real e docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md, referenciado pelo proprio JARVIS linha 15.", "mission_item": 11, "action": "Corrigir o path_instructions para o arquivo real." }
+  ],
+  "summary": {
+    "P0_OPEN": 0,
+    "P1_OPEN": 11,
+    "P2_OPEN": 1,
+    "ALREADY_FIXED_NEEDS_REPLY_ONLY": 3,
+    "RESOLVED": 9
+  }
+}

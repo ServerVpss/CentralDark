@@ -1,0 +1,15 @@
+flowchart TD
+  A[Drive / GitHub / CLI / Terminal / SSH / Webhook / HUB] --> B[!CENTRALDARK]
+  B --> C[DELTAUTIL]
+  C --> D{Update material?}
+  D -- No --> X[Continue mission without Update Fabric]
+  D -- Yes --> E[UPDATE_FABRIC_RECONCILE]
+  E --> F[Existing Owner]
+  F --> G[Test + Counterproof]
+  G --> H[Documentation Gate]
+  H --> I[Same Logical Package]
+  I --> J[releases/YYYY-MM-DD ledger]
+  J --> K[CURRENT pointer]
+  K --> L{Explicit deploy/distribution intent?}
+  L -- No --> M[READY / NEXT_CURSOR]
+  L -- Yes --> N[Builder / Distribution / Deploy Selector]

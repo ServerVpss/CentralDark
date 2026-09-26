@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Atualização do CentralDark — Painel</title>
+<link rel="stylesheet" href="painel.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand"><span class="dot" id="dotStatus"></span> CentralDark · Atualização</div>
+    <div class="spacer"></div>
+    <button class="btn" id="btnTema">🌗 Tema</button>
+    <button class="btn" onclick="location.reload()">↻ Recarregar</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <h1>Como está a sua cópia do CentralDark</h1>
+    <p id="subGerado">Sem leitura ainda — rode o script de atualização.</p>
+  </div>
+
+  <!-- resposta dominante -->
+  <section class="verdict" id="verdict">
+    <div>
+      <div class="big" id="verdictTitulo">Aguardando leitura</div>
+      <div class="why" id="verdictTexto">
+        Rode <code>atualizar.ps1</code> (Windows) ou <code>./atualizar.sh</code> (Linux)
+        na pasta do projeto. Ele gera o arquivo <code>paineis/dados.js</code> e esta tela se preenche sozinha.
+      </div>
+    </div>
+  </section>
+
+  <!-- números -->
+  <section class="grid">
+    <div class="card"><h3>Sua versão</h3><div class="kpi" id="kHead">—<small id="kBranch">branch —</small></div></div>
+    <div class="card"><h3>Versão no GitHub</h3><div class="kpi" id="kRemoto">—<small id="kAtras">—</small></div></div>
+    <div class="card"><h3>Trabalho não salvo</h3><div class="kpi" id="kSujo">—<small>arquivos alterados que ainda não foram pro GitHub</small></div></div>
+    <div class="card"><h3>Áreas protegidas</h3><div class="kpi" id="kProt">—<small>caminhos que exigem PERMITO PIVETE</small></div></div>
+  </section>
+
+  <!-- avisos -->
+  <div id="boxAvisos"></div>
+
+  <!-- passos executados -->
+  <details open>
+    <summary>🔍 O que o script conferiu <span class="cnt" id="cntPassos">0</span></summary>
+    <div id="listaPassos"><div class="vazio">Nenhuma leitura ainda.</div></div>
+  </details>
+
+  <!-- caminho seguro -->
+  <details open>
+    <summary>🛡️ O caminho seguro (nunca pule etapa)</summary>
+    <div style="padding:16px 18px">
+      <ol class="steps" id="steps">
+        <li class="done"><b>1 · Conferir</b><span>Rodar sem <code>-Aplicar</code>. Nada muda, só mostra o diagnóstico.</span></li>
+        <li><b>2 · Salvar o que é seu</b><span>Se houver trabalho não salvo, commitar ou <code>git stash</code> antes.</span></li>
+        <li><b>3 · Backup automático</b><span>O script cria um <code>.bundle</code> com todo o histórico antes de mexer.</span></li>
+        <li><b>4 · Atualizar</b><span>Só <code>merge --ff-only</code>. Nunca <code>reset --hard</code>, nunca force-push.</span></li>
+        <li><b>5 · Guarda de áreas protegidas</b><span>Se tocou em zona travada, exige <code>PERMITO PIVETE</code>.</span></li>
+      </ol>
+    </div>
+  </details>
+
+  <!-- comandos -->
+  <details>
+    <summary>⌨️ Comandos prontos pra copiar</summary>
+    <div style="padding:14px 18px">
+      <p style="margin:0 0 4px;color:var(--ink-soft);font-size:13.5px"><b>Windows (PowerShell), só conferir:</b></p>
+      <div class="cmd">.\atualizar.ps1<button onclick="copiar(this)">copiar</button></div>
+      <p style="margin:12px 0 4px;color:var(--ink-soft);font-size:13.5px"><b>Windows, aplicar de verdade:</b></p>
+      <div class="cmd">.\atualizar.ps1 -Aplicar<button onclick="copiar(this)">copiar</button></div>
+      <p style="margin:12px 0 4px;color:var(--ink-soft);font-size:13.5px"><b>Pasta veio de ZIP? clona ao lado sem apagar nada:</b></p>
+      <div class="cmd">.\atualizar.ps1 -Aplicar -Clonar<button onclick="copiar(this)">copiar</button></div>
+      <p style="margin:12px 0 4px;color:var(--ink-soft);font-size:13.5px"><b>Linux / VPS:</b></p>
+      <div class="cmd">chmod +x atualizar.sh &amp;&amp; ./atualizar.sh --aplicar<button onclick="copiar(this)">copiar</button></div>
+      <p style="margin:12px 0 4px;color:var(--ink-soft);font-size:13.5px"><b>Ligar os hooks locais (trava antes do commit):</b></p>
+      <div class="cmd">git config core.hooksPath .githooks<button onclick="copiar(this)">copiar</button></div>
+    </div>
+  </details>
+
+  <!-- lista de protegidos -->
+  <details>
+    <summary>🔒 Áreas protegidas <span class="cnt" id="cntProt">0</span></summary>
+    <div class="scroll"><table id="tabProt"><thead><tr><th>Caminho</th><th>Regra</th></tr></thead><tbody></tbody></table></div>
+  </details>
+
+  <p class="foot">CentralDark · painel local, funciona offline · abra com dois cliques</p>
+</main>
+
+<script src="dados.js" onerror="console.info('sem dados.js ainda')"></script>
+<script>
+function copiar(b){
+  const t = b.parentElement.textContent.replace(/copiar$/,'').trim();
+  navigator.clipboard.writeText(t).then(()=>{ b.textContent='copiado!'; setTimeout(()=>b.textContent='copiar',1400); });
+}
+document.getElementById('btnTema').onclick = () => {
+  const r = document.documentElement;
+  const novo = r.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  r.setAttribute('data-theme', novo);
+  localStorage.setItem('cd-tema', novo);
+};
+const salvo = localStorage.getItem('cd-tema');
+if (salvo) document.documentElement.setAttribute('data-theme', salvo);
+
+const VEREDITOS = {
+  JA_ATUALIZADO:  ['ok',  'Tudo em dia ✅',        'Sua cópia está igualzinha ao GitHub. Pode trabalhar tranquilo.'],
+  ATUALIZADO:     ['ok',  'Atualizado agora ✅',    'Baixamos as novidades sem apagar nada. Backup guardado antes de mexer.'],
+  PENDENTE:       ['warn','Tem novidade esperando','Existem commits novos no GitHub. Rode de novo com -Aplicar quando quiser baixar.'],
+  BLOQUEADO_SUJO: ['bad', 'Parei pra não te atrapalhar','Você tem trabalho não salvo. Commite ou guarde (git stash) e rode de novo.'],
+  CONFLITO:       ['bad', 'Históricos divergiram', 'Não deu pra atualizar direto. Precisa revisão manual — nada foi forçado.'],
+  PRECISA_CLONE:  ['warn','Essa pasta veio de ZIP','Não dá pra atualizar por git. Rode com -Aplicar -Clonar: eu crio um clone AO LADO, sem apagar sua pasta.'],
+  CLONADO:        ['ok',  'Clone novo criado ✅',   'Agora copie seu trabalho antigo pra dentro do clone e continue por lá.'],
+  CLONE_JA_EXISTE:['warn','Já existe um clone',    'Encontrei a pasta de destino. Não toquei em nada.'],
+  NADA_A_FAZER:   ['warn','Nada a fazer',          'O script não encontrou ação necessária.']
+};
+
+const D = window.DADOS_ATUALIZACAO;
+if (D) {
+  document.getElementById('subGerado').innerHTML =
+    `Leitura de <b>${D.gerado}</b> · pasta <code>${D.pasta}</code> · caso <b>${D.caso}</b>`;
+
+  const [cls, tit, txt] = VEREDITOS[D.resultado] || ['warn', D.resultado, ''];
+  const v = document.getElementById('verdict');
+  v.className = 'verdict ' + (cls === 'ok' ? '' : cls);
+  document.getElementById('verdictTitulo').textContent = tit;
+  document.getElementById('verdictTexto').textContent = txt;
+  document.getElementById('dotStatus').className = 'dot' + (cls === 'ok' ? ' live' : '');
+  if (cls !== 'ok') document.getElementById('dotStatus').style.background = `var(--${cls === 'bad' ? 'bad' : 'warn'})`;
+
+  document.getElementById('kHead').firstChild.textContent = D.headLocal || '—';
+  document.getElementById('kBranch').textContent = 'branch ' + (D.branch || '—');
+  document.getElementById('kRemoto').firstChild.textContent = D.headRemoto || '—';
+  document.getElementById('kAtras').textContent =
+    D.commitsAtras > 0 ? `${D.commitsAtras} commit(s) atrás` : 'em dia';
+  document.getElementById('kSujo').firstChild.textContent = D.sujo ? 'SIM' : 'não';
+  document.getElementById('kProt').firstChild.textContent = (D.protegidos || []).length;
+
+  const av = document.getElementById('boxAvisos');
+  (D.avisos || []).forEach(a => {
+    const d = document.createElement('div');
+    d.className = 'card'; d.style.borderLeft = '4px solid var(--warn)'; d.style.marginBottom = '10px';
+    d.innerHTML = `<span class="pill warn">atenção</span> <span style="margin-left:8px">${a}</span>`;
+    av.appendChild(d);
+  });
+
+  const lp = document.getElementById('listaPassos'); lp.innerHTML = '';
+  (D.passos || []).forEach(p => {
+    const el = document.createElement('div');
+    el.className = 'ev ' + (p.estado === 'bad' ? 'is-bad' : p.estado === 'warn' ? 'is-warn' : '');
+    el.innerHTML = `<span class="h"><span class="pill ${p.estado}">${p.estado}</span></span><span class="t"><b>${p.nome}</b><br>${p.detalhe || ''}</span>`;
+    lp.appendChild(el);
+  });
+  document.getElementById('cntPassos').textContent = (D.passos || []).length;
+
+  const tb = document.querySelector('#tabProt tbody');
+  (D.protegidos || []).forEach(p => {
+    tb.insertAdjacentHTML('beforeend',
+      `<tr><td class="mono">${p}</td><td><span class="pill mute">PERMITO PIVETE</span></td></tr>`);
+  });
+  document.getElementById('cntProt').textContent = (D.protegidos || []).length;
+}
+</script>
+</body>
+</html>

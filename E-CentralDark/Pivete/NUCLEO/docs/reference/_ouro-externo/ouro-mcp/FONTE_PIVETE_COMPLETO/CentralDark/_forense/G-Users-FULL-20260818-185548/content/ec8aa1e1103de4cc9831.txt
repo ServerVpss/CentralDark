@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@icons-pack\react-simple-icons\icons\SiDolibarr.d.ts
+
+import { IconType } from '../types';
+declare const defaultColor = "#263C5C";
+declare const SiDolibarr: IconType;
+export { SiDolibarr as default, defaultColor };

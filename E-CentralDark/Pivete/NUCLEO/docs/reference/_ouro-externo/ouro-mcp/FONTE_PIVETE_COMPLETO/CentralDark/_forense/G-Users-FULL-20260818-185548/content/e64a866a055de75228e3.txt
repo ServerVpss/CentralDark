@@ -1,0 +1,35 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react-streamdown\dist\adapters\code-adapter.d.ts
+
+import { Element } from "../node_modules/.pnpm/@types_hast@3.0.4/node_modules/@types/hast/index.js";
+import { CodeHeaderProps, ComponentsByLanguage, SyntaxHighlighterProps } from "../types.js";
+import { ComponentPropsWithoutRef, ComponentType } from "react";
+
+//#region src/adapters/code-adapter.d.ts
+type CodeProps = ComponentPropsWithoutRef<"code"> & {
+  node?: Element | undefined;
+};
+interface CodeAdapterOptions {
+  SyntaxHighlighter?: ComponentType<SyntaxHighlighterProps> | undefined;
+  CodeHeader?: ComponentType<CodeHeaderProps> | undefined;
+  componentsByLanguage?: ComponentsByLanguage | undefined;
+}
+/**
+ * Creates a code component adapter that bridges the assistant-ui
+ * SyntaxHighlighter/CodeHeader API to streamdown's code component.
+ */
+declare function createCodeAdapter(options: CodeAdapterOptions): import("react").MemoExoticComponent<({
+  node,
+  className,
+  children,
+  "data-block": dataBlock,
+  ...props
+}: CodeProps & {
+  "data-block"?: string;
+}) => import("react").JSX.Element>;
+/**
+ * Checks if the code adapter should be used (i.e., user provided custom components).
+ */
+declare function shouldUseCodeAdapter(options: CodeAdapterOptions): boolean;
+//#endregion
+export { createCodeAdapter, shouldUseCodeAdapter };
+//# sourceMappingURL=code-adapter.d.ts.map

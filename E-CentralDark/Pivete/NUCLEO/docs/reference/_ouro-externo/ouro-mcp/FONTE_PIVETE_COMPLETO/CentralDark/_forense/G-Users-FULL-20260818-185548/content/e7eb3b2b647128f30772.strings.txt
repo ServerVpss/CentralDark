@@ -1,0 +1,929 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\bin\xzcat.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.pdata
+@.xdata
+.idata
+@.reloc
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+8MZuDHcP<H
+xoLc5/
+AVATUWVSH
+8[^_]A\A^
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+([^_]A\A]A^A_
+AUATUWVSH
+([^_]A\A]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+8[^_]A\A]A^A_
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+H9Q@r\
+T$8t)I
+ATUWVSH
+AWAVATUWVSH
+[^_]A\A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVUWVSH
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+/<-w!H
+AVATUWVSH
+H[^_]A\A^
+ATUWVSH
+P[^_]A\
+ATUWVSH
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AVUWVS
+[^_]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AVAUATUWVSH
+[^_]A\A]A^
+AVAUATUWVSH
+[^_]A\A]A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+DD$ H9
+T$ LcE
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+PHc5&q
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+H=CCG t}
+([^_]H
+AUATUWVS
+[^_]A\A]
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+@$A9@(~
+AWAVAUATUWVSH
+C$9C(~
+H[^_]A\A]A^A_
+S$9S(~
+S$9S(~
+UAWAVAUATWVSH
+C$9C(~
+C$9C(~
+[^_A\A]A^A_]
+UAWAVAUATWVSH
+C$9C(~
+C$9C(~
+[^_A\A]A^A_]
+UAVWVSH
+C$9C(~
+[^_A^]
+[^_A^]
+=UUUUw
+S$9S(~
+AUATUWVSH
+X[^_]A\A]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+ATUWVSH
+ [^_]A\
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+D$L)D$`
+T$8HcD$L;B
+D$`+D$H
+ATUWVSLcY
+[^_]A\
+[^_]A\
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+WVSHcA
+T$(rVH
+([^_]H
+HcT$xH
+AVAUATUWVSH
+H9D$0t
+memlimit-compress%
+memlimit-compress
+memlimit-decompress%
+memlimit-decompress
+memlimit-mt-decompress%
+memlimit-mt-decompress
+memlimit%
+memlimit
+threads
+%s: Unknown file format type
+%s: Unsupported integrity check type
+block-size
+%s: Invalid argument to --block-list
+%s: Too many arguments to --block-list
+In --block-list, block size is missing after filter chain number '%c:'
+block-list
+0 can only be used as the last element in --block-list
+Only one file can be specified with '--files' or '--files0'.
+%s: %s
+flush-timeout
+The environment variable %s contains too many arguments
+unlzma
+XZ_DEFAULTS
+XZ_OPT
+Compression of lzip files (.lz) is not supported
+--block-list is ignored unless compressing to the .xz format
+With --format=raw, --suffix=.SUF is required unless writing to stdout
+compress
+decompress
+uncompress
+stdout
+to-stdout
+no-sync
+single-stream
+no-sparse
+suffix
+files0
+format
+ignore-check
+memory
+no-adjust
+extreme
+filters
+filters1
+filters2
+filters3
+filters4
+filters5
+filters6
+filters7
+filters8
+filters9
+filters-help
+powerpc
+armthumb
+verbose
+no-warn
+info-memory
+long-help
+version
+cC:defF:hHlkM:qQrS:tT:vVz0123456789
+sha256
+(stdin)
+Memory usage limit is too low for the given filter setup.
+Maximum number of filters is four
+Error in --filters%s=FILTERS option:
+filter chain %u used by --block-list but not specified with --filters%u=
+Using a preset in raw mode is discouraged.
+The exact options of the presets may vary between software versions.
+The .lzma format supports only the LZMA1 filter
+LZMA1 cannot be used with the .xz format
+Filter chain %u is incompatible with --flush-timeout
+Switching to single-threaded mode due to --flush-timeout
+Unsupported options in filter chain %u
+Unsupported filter chain or filter options
+Using up to %u threads.
+Decompression will need %s MiB of memory.
+Reduced the number of threads from %s to %s to not exceed the memory usage limit of %s MiB
+Reduced the number of threads from %s to one. The automatic memory usage limit of %s MiB is still being exceeded. %s MiB of memory is required. Continuing anyway.
+Switching to single-threaded mode to not exceed the memory usage limit of %s MiB
+Adjusted LZMA%c dictionary size from %s MiB to %s MiB to not exceed the memory usage limit of %s MiB
+Adjusted LZMA%c dictionary size for --filters%u from %s MiB to %s MiB to not exceed the memory usage limit of %s MiB
+%s: %s
+Error changing to filter chain %u: %s
+%s: Write error: %s
+%s: Cannot remove: %s
+Empty filename, skipping
+%s: %s
+%s: Is a directory, skipping
+%s: Not a regular file, skipping
+(stdout)
+%s: Destination is not a regular file
+%s: Seeking failed when trying to create a sparse file: %s
+%s: Synchronizing the file failed: %s
+%s: Closing the file failed: %s
+%s: Read error: %s
+%s: Error seeking the file: %s
+%s: Unexpected end of file
+Disabled
+  %-*s  %s
+  %-*s  %s MiB (%s B)
+Amount of physical memory (RAM):
+Number of processor threads:
+Compression:
+Decompression:
+Multi-threaded decompression:
+Default for -T0:
+Hardware information:
+  %-*s  %u
+Memory usage limits:
+Compression and decompression with --robot are not supported yet.
+Cannot read data from standard input when reading filenames from standard input
+%s: Error reading filenames: %s
+%s: Unexpected end of input when reading filenames
+%s: Null character found when reading filenames; maybe you meant to use '--files0' instead of '--files'?
+%u:%02u:%02u
+%u:%02u
+%u min %u s
+%u min
+%u h %u min
+%u d %u h
+%s / %s
+ > %.3f
+ = %.3f
+%s (%u)
+%s (%u/%u)
+%.*f %ciB/s
+%.1f %%
+ %*s %*s   %*s %10s   %10s
+ %*s %*s   %*s %10s   %10s
+Internal error (bug)
+Cannot establish signal handlers
+No integrity check; not verifying file integrity
+Unsupported type of integrity check; not verifying file integrity
+Memory usage limit reached
+File format not recognized
+Unsupported options
+Compressed data is corrupt
+Unexpected end of input
+%s MiB of memory is required. The limiter is disabled.
+%s MiB
+%s MiB of memory is required. The limit is %s.
+%s: Filter chain: %s
+Try '%s --help' for more information.
+XZ_VERSION=%u
+LIBLZMA_VERSION=%u
+xz (XZ Utils) 5.8.3
+liblzma %s
+Usage: %s [OPTION]... [FILE]...
+Compress or decompress FILEs in the .xz format.
+Mandatory arguments to long options are mandatory for short options too.
+Operation mode:
+force compression
+-z, --compress
+-d, --decompress
+-t, --test
+-l, --list
+list information about .xz files
+test compressed file integrity
+force decompression
+Operation modifiers:
+keep (don't delete) input files
+-k, --keep
+-f, --force
+-c, --stdout
+write to standard output and don't delete input files
+force overwrite of output file and (de)compress links
+don't synchronize the output file to the storage device before removing the input file
+    --no-sync
+    --single-stream
+    --no-sparse
+-S, --suffix=%s
+    --files[=%s]
+    --files0[=%s]
+like --files but use the null character as terminator
+read filenames to process from FILE; if FILE is omitted, filenames are read from the standard input; filenames must be terminated with the newline character
+use the suffix '.SUF' on compressed files
+do not create sparse files when decompressing
+decompress only the first stream, and silently ignore possible remaining input data
+Basic file format and compression options:
+FORMAT
+-F, --format=%s
+-C, --check=%s
+    --ignore-check
+don't verify the integrity check when decompressing
+integrity check type: 'none' (use with caution), 'crc32', 'crc64' (default), or 'sha256'
+file format to encode or decode; possible values are 'auto' (default), 'xz', 'lzma', 'lzip', and 'raw'
+compression preset; default is 6; take compressor *and* decompressor memory usage into account before using 7-9!
+-0 ... -9
+-e, --extreme
+-T, --threads=%s
+use at most NUM threads; the default is 0 which uses as many threads as there are processor cores
+try to improve compression ratio by using more CPU time; does not affect decompressor memory requirements
+    --block-size=%s
+    --block-list=%s
+    --flush-timeout=%s
+when compressing, if more than NUM milliseconds has passed since the previous flush and reading more input would block, all pending data is flushed out
+start a new .xz block after the given comma-separated intervals of uncompressed data; optionally, specify a filter chain number (0-9) followed by a ':' before the uncompressed data size
+BLOCKS
+start a new .xz block after every SIZE bytes of input; use this to set the block size for threaded compression
+    --memlimit-compress=%s
+    --memlimit-decompress=%s
+    --memlimit-mt-decompress=%s
+-M, --memlimit=%s
+    --no-adjust
+if compression settings exceed the memory usage limit, give an error instead of adjusting the settings downwards
+set memory usage limit for compression, decompression, threaded decompression, or all of these; LIMIT is in bytes, % of RAM, or 0 for defaults
+Custom filter chain for compression (an alternative to using presets):
+FILTERS
+--filters=%s
+--filters1=%s ... --filters9=%s
+--filters-help
+display more information about the liblzma filter string syntax and exit
+set additional filter chains using the liblzma filter string syntax to use with --block-list
+set the filter chain using the liblzma filter string syntax; use --filters-help for more information
+--lzma1[=%s]
+--lzma2[=%s]
+LZMA1 or LZMA2; OPTS is a comma-separated list of zero or more of the following options (valid values; default):
+preset=%s
+%s (0-9[e])
+dict=%s
+(4KiB - 1536MiB; 8MiB)
+(0-4; 3)
+(0-4; 0)
+(0-4; 2)
+mode=%s
+%s (fast, normal; normal)
+nice=%s
+(2-273; 64)
+%s (hc3, hc4, bt2, bt3, bt4; bt4)
+depth=%s
+maximum search depth; 0=automatic (default)
+match finder
+nice length of a match
+compression mode
+number of position bits
+number of literal position bits
+number of literal context bits
+dictionary size
+reset options to a preset
+--x86[=%s]
+--arm[=%s]
+--armthumb[=%s]
+--arm64[=%s]
+--powerpc[=%s]
+--ia64[=%s]
+--sparc[=%s]
+--riscv[=%s]
+Valid OPTS for all BCJ filters:
+RISC-V BCJ filter
+SPARC BCJ filter
+IA-64 (Itanium) BCJ filter
+PowerPC BCJ filter (big endian only)
+ARM64 BCJ filter
+ARM-Thumb BCJ filter
+ARM BCJ filter
+x86 BCJ filter (32-bit and 64-bit)
+start=%s
+start offset for conversions (default=0)
+--delta[=%s]
+Delta filter; valid OPTS (valid values; default):
+dist=%s
+(1-256; 1)
+distance between bytes being subtracted from each other
+Other options:
+suppress warnings; specify twice to suppress errors too
+-q, --quiet
+-v, --verbose
+be verbose; specify twice for even more verbose
+make warnings not affect the exit status
+-Q, --no-warn
+    --robot
+    --info-memory
+-h, --help
+-H, --long-help
+display this long help and exit
+display the short help (lists only the basic options)
+display the total amount of RAM and the currently active memory usage limits, and exit
+use machine-parsable messages (useful for scripts)
+display the version number and exit
+-V, --version
+With no FILE, or when FILE is -, read standard input.
+xz@tukaani.org
+Report bugs to <%s> (in English or Finnish).
+XZ Utils
+%s home page: <%s>
+https://tukaani.org/xz/
+Error printing the help text (error code %d)
+display this short help and exit
+-h, --help
+-H, --long-help
+display the long help (lists also the advanced options)
+<0-9>[e]
+Filter chains are set using the --filters=FILTERS or --filters1=FILTERS ... --filters9=FILTERS options. Each filter in the chain can be separated by spaces or '--'. Alternatively a preset %s can be specified instead of a filter chain.
+The supported filters and their options are:
+X@Unsupported LZMA1/LZMA2 preset: %s
+Options must be 'name=value' pairs separated with commas
+%s: %s
+%s: Invalid option name
+Invalid option value
+The sum of lc and lp must not exceed 4
+normal
+preset
+%s: File already has '%s' suffix, skipping
+%s: Filename has an unknown suffix, skipping
+%s: Invalid filename suffix
+Value is not a non-negative decimal integer
+%s: %s
+%s: Invalid multiplier suffix
+Valid suffixes are 'KiB' (2^10), 'MiB' (2^20), and 'GiB' (2^30).
+Value of the option '%s' must be in the range [%llu, %llu]
+ (%'llu B)
+ (%llu B)
+Compressed data cannot be read from a terminal
+Compressed data cannot be written to a terminal
+P?3333
+Unknown error
+Writing to standard output failed
+%s: %s: %s
+%u.%u.%u%s
+%016llx
+%s: %s
+%s: File is empty
+%s: Too small to be a valid .xz file
+stream
+summary
+totals
+%s file
+%s files
+%5s %7s  %11s  %11s  %5s  %-7s 
+Streams:
+  %-*s %s
+Blocks:
+Compressed size:
+Uncompressed size:
+Ratio:
+Check:
+Stream Padding:
+    %*s %*s %*s %*s %*s %*s  %*s  %-*s %*s
+    %*s %*s %*s %*s 
+%*s %*s  %*s  %-*s %*s
+    %*s %*s %*s %*s %*s %*s  %*s  %-*s
+ %-*s  %*s  %-*s %*s %*s  %s
+%*s %*s  %*s  %-*s
+ %-*s  %*s  %-*s %*s %*s MiB  %s
+Memory needed:
+  %-*s %s MiB
+Sizes in headers:
+Minimum XZ Utils version:
+  %s %s
+Strms  Blocks   Compressed Uncompressed  Ratio  Check   Filename
+%*s %*s  %*s  %*s  %*s  %-*s %s
+Totals:
+Number of files:
+--list works only on .xz files (--format=xz or --format=auto)
+Try 'lzmainfo' with .lzma files.
+--list does not support reading from standard input
+Unknown-2
+Unknown-3
+Unknown-5
+Unknown-6
+Unknown-7
+Unknown-8
+Unknown-9
+SHA-256
+Unknown-11
+Unknown-12
+Unknown-13
+Unknown-14
+Unknown-15
+Stream
+Blocks
+CompOffset
+UncompOffset
+CompSize
+UncompSize
+TotalSize
+CheckVal
+Padding
+Header
+MemUsage
+Filters
+Argument domain error (DOMAIN)
+Argument singularity (SIGN)
+Overflow range error (OVERFLOW)
+Partial loss of significance (PLOSS)
+Total loss of significance (TLOSS)
+The result is too small to be represented (UNDERFLOW)
+Unknown error
+_matherr(): %s in %s(%g, %g)  (retval=%g)
+Mingw-w64 runtime failure:
+Address %p has no image-section
+  VirtualQuery failed for %d bytes at address %p
+  VirtualProtect failed with code 0x%x
+  Unknown pseudo relocation protocol version %d.
+  Unknown pseudo relocation bit size %d.
+%d bit pseudo relocation at %p out of range, targeting %p, yielding the value %p.
+POSIXLY_CORRECT
+unknown option -- %s
+unknown option -- %c
+option doesn't take an argument -- %.*s
+ambiguous option -- %.*s
+option requires an argument -- %s
+option requires an argument -- %c
+*** stack smashing detected ***: terminated
+(null)
+Infinity
+msvcrt.dll
+rand_s
+SystemFunction036
+msvcrt.dll
+getenv_s
+kernel32.dll
+IsDBCSLeadByteEx
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+lzma_alone_decoder
+lzma_alone_encoder
+lzma_block_compressed_size
+lzma_block_header_decode
+lzma_check_is_supported
+lzma_check_size
+lzma_code
+lzma_cputhreads
+lzma_end
+lzma_file_info_decoder
+lzma_filters_free
+lzma_filters_update
+lzma_get_progress
+lzma_index_block_count
+lzma_index_checks
+lzma_index_end
+lzma_index_file_size
+lzma_index_iter_init
+lzma_index_iter_next
+lzma_index_iter_rewind
+lzma_index_stream_count
+lzma_index_uncompressed_size
+lzma_lzip_decoder
+lzma_lzma_preset
+lzma_memusage
+lzma_mt_block_size
+lzma_physmem
+lzma_properties_decode
+lzma_raw_decoder
+lzma_raw_decoder_memusage
+lzma_raw_encoder
+lzma_raw_encoder_memusage
+lzma_str_from_filters
+lzma_str_list_filters
+lzma_str_to_filters
+lzma_stream_decoder_mt
+lzma_stream_encoder
+lzma_stream_encoder_mt
+lzma_stream_encoder_mt_memusage
+lzma_version_number
+lzma_version_string
+DeleteCriticalSection
+EnterCriticalSection
+GetCPInfo
+GetConsoleMode
+GetCurrentProcess
+GetFileInformationByHandle
+GetLastError
+GetModuleHandleA
+GetProcAddress
+GetTickCount64
+InitializeCriticalSection
+IsProcessorFeaturePresent
+LeaveCriticalSection
+LoadLibraryW
+MultiByteToWideChar
+SetConsoleCtrlHandler
+SetUnhandledExceptionFilter
+TerminateProcess
+TlsGetValue
+VirtualProtect
+VirtualQuery
+WideCharToMultiByte
+__C_specific_handler
+___lc_codepage_func
+___mb_cur_max_func
+__getmainargs
+__initenv
+__iob_func
+__set_app_type
+__setusermatherr
+_amsg_exit
+_cexit
+_close
+_commit
+_commode
+_errno
+_fmode
+_fstat64
+_futime64
+_get_osfhandle
+_initterm
+_lseeki64
+_setmode
+_stricmp
+_unlock
+_unlink
+_write
+atexit
+calloc
+fclose
+ferror
+fflush
+fprintf
+getenv
+isspace
+iswctype
+localeconv
+malloc
+memcpy
+putchar
+realloc
+setlocale
+setvbuf
+signal
+strchr
+strcmp
+strcspn
+strerror
+strlen
+strncmp
+strpbrk
+strrchr
+strstr
+vfprintf
+wcslen
+liblzma-5.dll
+KERNEL32.dll
+msvcrt.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+    <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+        <application>
+            <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/> <!-- Vista -->
+            <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/> <!-- 7 -->
+            <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/> <!-- 8 -->
+            <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> <!-- 8.1 -->
+            <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> <!-- 10/11 -->
+        </application>
+    </compatibility>
+    <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+        <security>
+            <requestedPrivileges>
+                <requestedExecutionLevel level="asInvoker"/>
+            </requestedPrivileges>
+        </security>
+    </trustInfo>
+    <application xmlns="urn:schemas-microsoft-com:asm.v3">
+        <windowsSettings>
+            <longPathAware xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">true</longPathAware>
+            <activeCodePage xmlns="http://schemas.microsoft.com/SMI/2019/WindowsSettings">UTF-8</activeCodePage>
+        </windowsSettings>
+    </application>
+</assembly>
+__imp_lzma_stream_encoder_mt
+__imp_lzma_raw_decoder
+__imp__read
+_head_liblzma_5_dll
+__imp_lzma_lzma_preset
+__imp_abort
+__lib64_libkernel32_a_iname
+__imp_SetConsoleCtrlHandler
+__imp__fmode
+__imp____mb_cur_max_func
+__imp__lock
+_head_lib64_libmsvcrt_def_a
+__imp_ferror
+__imp__futime64
+__imp_calloc
+__imp_lzma_index_block_count
+__imp_LoadLibraryW
+__imp_lzma_index_file_size
+__imp_GetCPInfo
+__imp_setlocale
+__imp_DeleteCriticalSection
+__imp__commit
+__imp_lzma_version_string
+__imp_fputc
+__imp__amsg_exit
+__imp_IsProcessorFeaturePresent
+__imp_GetTickCount64
+__imp__errno
+__imp___msvcrt_iswctype
+__imp_strpbrk
+__imp_getenv
+__imp__open
+__imp_lzma_file_info_decoder
+__imp_lzma_stream_encoder
+__imp__fstat64
+__imp_lzma_cputhreads
+__imp_lzma_get_progress
+__imp_strcmp
+__imp__get_osfhandle
+__imp_MultiByteToWideChar
+__imp___C_specific_handler
+__imp_putchar
+__imp_strrchr
+__imp_GetLastError
+__imp_free
+__imp_lzma_alone_decoder
+__imp_lzma_check_is_supported
+__imp_LeaveCriticalSection
+__imp_lzma_block_header_decode
+__imp_feof
+__imp_puts
+__imp_write
+__imp_fputs
+__imp_lzma_str_from_filters
+__IAT_end__
+__imp_memcpy
+liblzma_5_dll_iname
+__lib64_libmsvcrt_def_a_iname
+__imp_strerror
+__imp_setmode
+__imp_lzma_memusage
+__imp_lzma_mt_block_size
+__imp_lzma_block_compressed_size
+__imp_setvbuf
+__imp_lzma_filters_update
+__imp_putc
+__imp___getmainargs
+_head_lib64_libkernel32_a
+__imp_lzma_raw_decoder_memusage
+__imp_strstr
+__imp_EnterCriticalSection
+__imp_TerminateProcess
+__imp_GetProcAddress
+__imp_signal
+__imp_lzma_str_list_filters
+__imp_GetModuleHandleA
+__imp_WideCharToMultiByte
+__imp_lzma_physmem
+__imp_strlen
+__imp_malloc
+__imp_InitializeCriticalSection
+__imp_realloc
+__imp_exit
+__imp_vfprintf
+__imp___initenv
+__imp_lzma_code
+__IAT_start__
+__imp_lzma_index_iter_next
+__imp__cexit
+__imp_SetUnhandledExceptionFilter
+__imp_unlink
+__imp_lzma_stream_encoder_mt_memusage
+__imp_Sleep
+__imp___setusermatherr
+__imp_strcspn
+__imp_TlsGetValue
+__imp_fprintf
+__imp_lzma_index_stream_count
+__imp_lzma_end
+__imp__crt_atexit
+__imp_lzma_lzip_decoder
+__imp_VirtualProtect
+__imp_lzma_raw_encoder
+__imp_lseek64
+__imp_VirtualQuery
+__imp__initterm
+__imp_fclose
+__imp___iob_func
+__imp_localeconv
+__imp_lzma_index_iter_rewind
+__imp_strcasecmp
+__imp_strncmp
+__imp_lzma_index_checks
+__imp_strchr
+__imp_lzma_index_uncompressed_size
+__imp_close
+__imp_lzma_index_iter_init
+__imp_lzma_raw_encoder_memusage
+__imp_wcslen
+__imp____lc_codepage_func
+__imp_fflush
+__imp__unlock
+__imp___set_app_type
+__imp_fgetc
+__imp_lzma_check_size
+__imp_lzma_alone_encoder
+__imp_isspace
+__imp_lzma_filters_free
+__imp_lzma_properties_decode
+__imp__commode
+__imp_lzma_str_to_filters
+__imp_fopen
+__imp_lzma_version_number
+__imp_GetCurrentProcess
+__imp_lzma_index_end
+__imp_GetConsoleMode
+__imp_GetFileInformationByHandle
+__imp_lzma_stream_decoder_mt
+(null)
+sadvapi32.dll
+VS_VERSION_INFO
+StringFileInfo
+040904b0
+CompanyName
+The Tukaani Project <https://tukaani.org/>
+FileDescription
+xz data compression tool for .xz and .lzma files
+FileVersion
+InternalName
+OriginalFilename
+xz.exe
+ProductName
+XZ Utils <https://tukaani.org/xz/>
+ProductVersion
+VarFileInfo
+Translation

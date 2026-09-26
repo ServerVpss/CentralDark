@@ -1,0 +1,115 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\__pycache__\profile.cpython-311.pyc
+
+``hermes profile`` subcommand parser.
+Extracted verbatim from ``hermes_cli/main.py:main()`` (god-file Phase 2).
+Handler injected to avoid importing ``main``.
+annotations)
+Callable
+cmd_profiler
+return
+d>d?d@dA
+d>dSd@dT
+dUdVdW
+d>d[d@d\
+dbdcdd
+)mz4Attach the ``profile`` subcommand to ``subparsers``.
+profileu6
+Manage profiles 
+ multiple isolated Hermes instances)
+profile_action)
+List all profiles
+Set sticky default profile
+profile_namez
+Profile name (or 'default')
+createz
+Create a new profilez&Profile name (lowercase, alphanumeric)z
+--clone
+store_truez?Copy config.yaml, .env, SOUL.md, and skills from active profile)
+actionr
+--clone-allzFFull copy of active profile (all state, excluding per-profile history)z
+--clone-from
+SOURCEzGSource profile to clone from; implies --clone unless --clone-all is set)
+metavarr
+--no-aliasz
+Skip wrapper script creationz
+--no-skillszWCreate an empty profile with no bundled skills (opts out of `hermes update` skill sync)z
+--descriptionNz
+One- or two-sentence description of what this profile is good at. Used by the kanban decomposer to route tasks based on role instead of profile name alone. Skip and add later via `hermes profile describe`.)
+defaultr
+deletez
+Delete a profilez
+Profile to deletez
+--yesz
+Skip confirmation prompt
+describezERead or set a profile's description (used by the kanban orchestrator)
+?z6Profile to describe (omit + use --all --auto to sweep))
+nargsr
+--textzHSet description to this exact text (overwrites any existing description)z
+--autozRAuto-generate description via the auxiliary LLM (uses auxiliary.profile_describer)z
+--overwritezsWith --auto, replace user-authored descriptions too (default: only fill in missing or previously-auto descriptions)z
+all_missingz7With --auto, run on every profile missing a description)
+Show profile detailsz
+Profile to show
+aliasz
+Manage wrapper scriptsz
+Profile namez
+--removez
+Remove the wrapper scriptz
+--name
+alias_name
+NAMEz)Custom alias name (default: profile name))
+renamez
+Rename a profile
+old_namez
+Current profile name
+new_namez
+New profile name
+exportz
+Export a profile to archivez
+Profile to exportz
+--outputz$Output file (default: <name>.tar.gz)
+importz
+Import a profile from archive
+archivez
+Path to .tar.gz archive
+import_namez-Profile name (default: inferred from archive)
+installz@Install a profile distribution from a git URL or local directoryz
+Install a Hermes profile distribution. SOURCE can be a git URL (github.com/user/repo, https://..., git@...) or a local directory containing distribution.yaml at its root.)
+description
+sourcez0Distribution source (git URL or local directory)
+install_namez3Override profile name (default: read from manifest)z
+--aliasz6Create a shell wrapper alias for the installed profilez
+--forcezDOverwrite an existing profile of the same name (user data preserved)z"Skip manifest preview confirmation
+updatez>Re-pull a distribution and apply updates (user data preserved)z
+Fetch the distribution from its recorded source and overwrite distribution-owned files (SOUL.md, skills/, cron/, mcp.json). User data (memories, sessions, auth, .env) is never touched. config.yaml is preserved unless --force-config is passed.z
+Profile to updatez
+--force-configzFAlso overwrite config.yaml (normally preserved to keep user overrides)z
+Skip confirmation
+infozFShow a profile's distribution manifest (version, requirements, source)z
+Profile to inspect)
+add_parser
+add_subparsers
+add_argument
+set_defaults)
+subparsersr
+profile_parser
+profile_subparsers
+profile_use
+profile_create
+profile_delete
+profile_describe
+profile_show
+profile_alias
+profile_rename
+profile_export
+profile_import
+profile_install
+profile_update
+profile_infos
+                
+RC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\profile.py
+build_profile_parserrA
+__doc__
+__future__r
+typingr
+<module>rG

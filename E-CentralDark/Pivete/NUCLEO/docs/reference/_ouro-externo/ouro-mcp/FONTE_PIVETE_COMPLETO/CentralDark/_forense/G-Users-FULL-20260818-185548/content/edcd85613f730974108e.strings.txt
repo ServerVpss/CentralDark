@@ -1,0 +1,39 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\__pycache__\update.cpython-311.pyc
+
+``hermes update`` subcommand parser.
+Extracted verbatim from ``hermes_cli/main.py:main()`` (god-file Phase 2).
+Handler injected to avoid importing ``main``.
+annotations)
+Callable
+cmd_updater
+return
+z3Attach the ``update`` subcommand to ``subparsers``.
+updatez)Update Hermes Agent to the latest versionz;Pull the latest changes from git and reinstall dependencies)
+descriptionz
+--gateway
+store_trueFzZGateway mode: use file-based IPC for prompts instead of stdin (used internally by /update))
+action
+defaultr
+--checkz@Check whether an update is available without installing anythingz
+--no-backupz~Skip ALL pre-update backups for this run (both the quick state snapshot and the full zip; overrides updates.pre_update_backup)z
+--backupz}Force a FULL pre-update backup (quick state snapshot + HERMES_HOME zip) for this run, regardless of updates.pre_update_backupz
+--yesz
+Assume yes for interactive prompts (config migration, stash restore). API-key entry is skipped; run 'hermes config migrate' separately for those.z
+--branchN
+Update against this branch instead of the default (main). If the local checkout is on a different branch, hermes will switch to the requested branch first (auto-stashing any uncommitted changes).)
+metavarr
+--forcez
+Windows: proceed with the update even when another hermes.exe is detected. The concurrent process will likely cause WinError 32 warnings and may leave a reboot-deferred .exe replacement. Does NOT bypass the venv-process guard (see --force-venv).z
+--force-venva>
+Windows: mutate the venv even while other processes are running from its interpreter (desktop backend, gateway, terminals). Those processes keep native .pyd files locked, so the dependency sync will likely fail partway and strand the install half-updated. Use only if you know the detected holders are false positives.)
+add_parser
+add_argument
+set_defaults)
+subparsersr
+update_parsers
+QC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\update.py
+build_update_parserr
+__doc__
+__future__r
+typingr
+<module>r

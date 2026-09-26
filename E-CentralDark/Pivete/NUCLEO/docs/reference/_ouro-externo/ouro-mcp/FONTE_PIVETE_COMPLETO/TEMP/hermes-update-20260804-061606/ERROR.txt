@@ -1,0 +1,9 @@
+﻿taskkill.exe : ERRO: o processo "31832" n├úo foi encontrado.
+No C:\Users\danda\Downloads\ATUALIZAR-HERMES-WINDOWS-SEGURO.ps1:88 caractere:9
++         & taskkill.exe /PID $proc.ProcessId /T /F 2>&1 |
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERRO: o process...foi encontrado.:Strin 
+   g) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+

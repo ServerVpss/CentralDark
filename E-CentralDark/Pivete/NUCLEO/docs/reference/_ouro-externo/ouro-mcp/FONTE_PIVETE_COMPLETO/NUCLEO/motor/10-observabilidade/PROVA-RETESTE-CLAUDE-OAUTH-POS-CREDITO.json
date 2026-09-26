@@ -1,0 +1,32 @@
+[
+  {
+    "ts": "2026-07-18T21:50:51-03:00",
+    "model": "claude-opus-4-6",
+    "client_base": "https://api.anthropic.com",
+    "oauth": true,
+    "token_resolved": true,
+    "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': 'Error'}, 'request_id': 'req_011CdAVuS6HZPmYbuJwkpsfZ'}",
+    "context_ok": false,
+    "http": 429
+  },
+  {
+    "ts": "2026-07-18T21:50:53-03:00",
+    "model": "claude-sonnet-5",
+    "client_base": "https://api.anthropic.com",
+    "oauth": true,
+    "token_resolved": true,
+    "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': 'Error'}, 'request_id': 'req_011CdAVuTze3ev1AEYeiXcLM'}",
+    "context_ok": false,
+    "http": 429
+  },
+  {
+    "ts": "2026-07-18T21:50:53-03:00",
+    "model": "claude-haiku-4-5-20251001",
+    "client_base": "https://api.anthropic.com",
+    "oauth": true,
+    "token_resolved": true,
+    "http": 200,
+    "text": "Oi! Tudo bem? 👋 Como posso",
+    "context_ok": true
+  }
+]

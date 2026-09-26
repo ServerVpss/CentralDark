@@ -1,0 +1,42 @@
+{
+  "schema": "CENTRALDARK_UPDATE_FABRIC_UI",
+  "version": 1,
+  "date_key": "YYYY-MM-DD",
+  "human_locale": "pt-BR",
+  "human_datetime": "DD/MM/YYYY HH:mm:ss",
+  "timezone_required": true,
+  "cards": [
+    "UPDATES",
+    "DISTRIBUTION_PACKAGES",
+    "BUILDER_OUTPUTS",
+    "REVISIONS",
+    "AUTHORS",
+    "SOURCES",
+    "TESTS",
+    "RECOVERY"
+  ],
+  "update_channels": [
+    "Drive",
+    "GitHub",
+    "CLI",
+    "Terminal",
+    "SSH",
+    "Webhook",
+    "HUB Upload"
+  ],
+  "actions": [
+    "CHECK_UPDATE",
+    "PREVIEW_DELTA",
+    "TEST",
+    "GENERATE_DISTRIBUTION",
+    "OPEN_BUILDER",
+    "APPLY_TO_EXISTING_OWNER",
+    "ROLLBACK_OR_RECOVER"
+  ],
+  "rules": {
+    "parallel_package_for_same_lineage": false,
+    "display_name_changes_canonical_id": false,
+    "deploy_without_explicit_intent": false,
+    "unknown_is_pass": false
+  }
+}

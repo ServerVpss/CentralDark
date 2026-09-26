@@ -1,0 +1,10 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\apps\desktop\release\win-unpacked.bak\resources\install-stamp.json
+
+{
+  "schemaVersion": 1,
+  "commit": "c9ce66e25e55332b557b6af4471fbcdee3779022",
+  "branch": "main",
+  "builtAt": "2026-08-18T03:30:03.400Z",
+  "dirty": false,
+  "source": "ci"
+}

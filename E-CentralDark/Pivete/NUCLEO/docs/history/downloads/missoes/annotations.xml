@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <item name="androidx.core.content.ContextCompat android.content.Intent registerReceiver(android.content.Context, android.content.BroadcastReceiver, android.content.IntentFilter, int) 3">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.content.ContextCompat.RECEIVER_VISIBLE_TO_INSTANT_APPS, androidx.core.content.ContextCompat.RECEIVER_EXPORTED, androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.content.ContextCompat android.content.Intent registerReceiver(android.content.Context, android.content.BroadcastReceiver, android.content.IntentFilter, java.lang.String, android.os.Handler, int) 5">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.content.ContextCompat.RECEIVER_VISIBLE_TO_INSTANT_APPS, androidx.core.content.ContextCompat.RECEIVER_EXPORTED, androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.content.ContextCompat android.view.Display getDisplayOrDefault(android.content.Context) 0">
+    <annotation name="androidx.annotation.DisplayContext" />
+  </item>
+  <item name="androidx.core.content.ContextCompat.RegisterReceiverFlags">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.content.ContextCompat.RECEIVER_VISIBLE_TO_INSTANT_APPS, androidx.core.content.ContextCompat.RECEIVER_EXPORTED, androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.content.PackageManagerCompat.UnusedAppRestrictionsStatus">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.content.UnusedAppRestrictionsConstants.ERROR, androidx.core.content.UnusedAppRestrictionsConstants.FEATURE_NOT_AVAILABLE, androidx.core.content.UnusedAppRestrictionsConstants.DISABLED, androidx.core.content.UnusedAppRestrictionsConstants.API_30_BACKPORT, androidx.core.content.UnusedAppRestrictionsConstants.API_30, androidx.core.content.UnusedAppRestrictionsConstants.API_31}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.content.PermissionChecker int checkCallingOrSelfPermission(android.content.Context, java.lang.String)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.content.PermissionChecker.PERMISSION_GRANTED, androidx.core.content.PermissionChecker.PERMISSION_DENIED, androidx.core.content.PermissionChecker.PERMISSION_DENIED_APP_OP}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.content.PermissionChecker int checkCallingPermission(android.content.Context, java.lang.String, java.lang.String)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.content.PermissionChecker.PERMISSION_GRANTED, androidx.core.content.PermissionChecker.PERMISSION_DENIED, androidx.core.content.PermissionChecker.PERMISSION_DENIED_APP_OP}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.content.PermissionChecker int checkPermission(android.content.Context, java.lang.String, int, int, java.lang.String)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.content.PermissionChecker.PERMISSION_GRANTED, androidx.core.content.PermissionChecker.PERMISSION_DENIED, androidx.core.content.PermissionChecker.PERMISSION_DENIED_APP_OP}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.content.PermissionChecker int checkSelfPermission(android.content.Context, java.lang.String)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.content.PermissionChecker.PERMISSION_GRANTED, androidx.core.content.PermissionChecker.PERMISSION_DENIED, androidx.core.content.PermissionChecker.PERMISSION_DENIED_APP_OP}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.content.PermissionChecker.PermissionResult">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.content.PermissionChecker.PERMISSION_GRANTED, androidx.core.content.PermissionChecker.PERMISSION_DENIED, androidx.core.content.PermissionChecker.PERMISSION_DENIED_APP_OP}" />
+    </annotation>
+  </item>
+</root>
+

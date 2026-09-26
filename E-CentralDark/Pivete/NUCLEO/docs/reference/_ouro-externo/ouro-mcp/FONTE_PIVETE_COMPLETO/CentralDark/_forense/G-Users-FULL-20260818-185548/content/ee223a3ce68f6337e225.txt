@@ -1,0 +1,33 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\react\providers\PartByIndexProvider.js
+
+import { AuiProvider, Derived, useAui } from "@assistant-ui/store";
+import { useMemo } from "@assistant-ui/tap/react-shim";
+import { jsx } from "react/jsx-runtime";
+//#region src/react/providers/PartByIndexProvider.tsx
+const PartByIndexProvider = ({ index, children }) => {
+	const lastPartRef = useMemo(() => ({
+		index,
+		current: null
+	}), [index]);
+	return /* @__PURE__ */ jsx(AuiProvider, {
+		value: useAui({ part: Derived({
+			source: "message",
+			query: {
+				type: "index",
+				index
+			},
+			get: (aui) => {
+				const message = aui.message();
+				if (index >= message.getState().parts.length && lastPartRef.current) return lastPartRef.current;
+				const part = message.part({ index });
+				lastPartRef.current = part;
+				return part;
+			}
+		}) }),
+		children
+	});
+};
+//#endregion
+export { PartByIndexProvider };
+
+//# sourceMappingURL=PartByIndexProvider.js.map

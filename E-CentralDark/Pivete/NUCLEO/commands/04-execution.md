@@ -1,0 +1,118 @@
+# COMANDO - 04-execution.yaml
+**Origem:** E:\\CentralDark\\_MAPA_CASA\\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\.extracted_CentralDark_Deploy_Package_2026-08-20\CentralDark_Deploy_Package_2026-08-20\config\04-execution.yaml
+**SHA:** e49a731dfbac6fc4
+**Timestamp:** 2026-08-26T19:43:49.459494
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Contratos
+- gate: snapshot_T0_written
+- gate: inventory_has_no_unclassified_material_item
+- gate: no_parallel_external_product
+- gate: buzz_vertical_flow_pass
+- gate: all_material_panel_routes_live
+- gate: all_material_backend_routes_verified
+- gate: critical_tests_pass
+- gate: capacity_fit_or_internal_split_only
+- gate: external_vertical_flow_pass
+- gate: fixed_point
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+phases:
+  - id: P0
+    name: boot_and_remeasure
+    actions:
+      - measure branch/head/pr/writer
+      - measure VPS CPU RAM disk IO network
+      - measure DNS Caddy TLS
+      - measure Docker PM2 systemd processes ports
+      - measure available secrets without printing values
+    gate: snapshot_T0_written
+
+  - id: P1
+    name: reconcile
+    actions:
+      - read PR998 completely
+      - cross-reference every material item with main implementation
+      - dedupe overlapping gateway panel memory agent owners
+      - classify real gaps
+    gate: inventory_has_no_unclassified_material_item
+
+  - id: P2
+    name: integration_contracts
+    actions:
+      - freeze one external URL
+      - freeze one panel shell
+      - freeze one external gateway
+      - define internal service contracts and health checks
+    gate: no_parallel_external_product
+
+  - id: P3
+    name: buzz_integration
+    actions:
+      - choose pinned Buzz revision
+      - deploy or connect self-hosted relay
+      - wire identity/auth boundary without duplicate identity authority
+      - wire channels agents projects workflows required by panel
+      - prove A-to-B agent handoff
+    gate: buzz_vertical_flow_pass
+
+  - id: P4
+    name: panel_integration
+    actions:
+      - reuse current portal shell
+      - connect real routes to real owners
+      - remove production mocks
+      - keep one navigation surface
+    gate: all_material_panel_routes_live
+
+  - id: P5
+    name: backend_integration
+    actions:
+      - reuse canonical CentralDark gateway/API owner
+      - route internal services behind same external origin
+      - keep secrets server-side
+      - add health/readiness only where missing
+    gate: all_material_backend_routes_verified
+
+  - id: P6
+    name: tests
+    actions:
+      - unit
+      - integration
+      - vertical UI-to-effect
+      - restart/reconnect
+      - security/auth
+      - negative/counterproof
+    gate: critical_tests_pass
+
+  - id: P7
+    name: capacity_and_build
+    actions:
+      - measure build/runtime footprint
+      - reproducible builds
+      - if VPS insufficient move only heavy internal workload
+    gate: capacity_fit_or_internal_split_only
+
+  - id: P8
+    name: canary_and_deploy
+    actions:
+      - backup current config/state
+      - deploy reversibly
+      - configure routing TLS DNS
+      - external smoke
+      - rollback automatically on critical failure
+    gate: external_vertical_flow_pass
+
+  - id: P9
+    name: fixed_point
+    actions:
+      - remeasure T1
+      - Multibussola affected axes
+      - MetaLupa false-green check
+      - close material UNKNOWNs
+    gate: fixed_point
+
+```

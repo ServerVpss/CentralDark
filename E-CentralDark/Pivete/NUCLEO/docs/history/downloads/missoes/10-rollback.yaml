@@ -1,0 +1,19 @@
+minimum:
+  - record predeploy main/deploy SHA
+  - backup current Caddyfile and imported snippets
+  - record service versions and container images
+  - DB changes only with reversible migration plan
+  - preserve previous frontend dist/release artifact
+  - never destroy working runtime during diagnosis
+
+automatic_trigger:
+  - primary URL unavailable after switch
+  - auth path broken
+  - critical API owner unavailable
+  - data migration integrity failure
+
+post_rollback:
+  - restore routing
+  - verify previous external vertical flow
+  - record failure receipt
+  - fix forward in same mission

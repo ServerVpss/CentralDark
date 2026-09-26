@@ -1,0 +1,10 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\share\doc\git-doc\RelNotes\1.7.7.7.adoc
+
+Git v1.7.7.7 Release Notes
+==========================
+Fixes since v1.7.7.6
+--------------------
+ * An error message from 'git bundle' had an unmatched single quote pair in it.
+ * 'git diff --histogram' option was not described.
+ * 'git imap-send' carried an unused dead code.
+Also contains minor fixes and documentation updates.

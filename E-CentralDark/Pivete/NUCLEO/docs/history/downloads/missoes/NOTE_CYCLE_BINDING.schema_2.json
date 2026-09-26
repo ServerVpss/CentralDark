@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CENTRALDARK_NOTE",
+  "type": "object",
+  "required": [
+    "mission_id",
+    "intent_id",
+    "intent",
+    "destination",
+    "originator",
+    "owner",
+    "status",
+    "cycle",
+    "result"
+  ],
+  "properties": {
+    "mission_id": {
+      "type": "string"
+    },
+    "intent_id": {
+      "type": "string"
+    },
+    "intent": {
+      "type": "string"
+    },
+    "destination": {
+      "type": "string"
+    },
+    "originator": {
+      "type": "string"
+    },
+    "writer": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "owner": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "cycle_ref": {
+      "const": "CENTRALDARK_MASTER_CYCLE"
+    },
+    "cycle": {
+      "type": "object",
+      "additionalProperties": {
+        "enum": [
+          "DONE",
+          "ACTIVE",
+          "JUSTIFIED_SKIP",
+          "UNKNOWN",
+          "PASS",
+          "FAIL",
+          "NOT_YET",
+          "READY"
+        ]
+      }
+    },
+    "evidence": {
+      "type": "array"
+    },
+    "counterproof": {
+      "type": "array"
+    },
+    "result": {
+      "type": "object",
+      "required": [
+        "contribution_to_intent",
+        "residual",
+        "next_cursor",
+        "intent_reached_requested_destination"
+      ]
+    }
+  }
+}

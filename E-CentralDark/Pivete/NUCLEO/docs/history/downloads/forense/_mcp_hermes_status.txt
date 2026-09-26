@@ -1,0 +1,230 @@
+﻿=== MCP / HERMES STATUS 2026-08-22T08:40:25.0451174-03:00 ===
+
+=== PROCESSES hermes / tui / mcp / grok ===
+PID=23556 PPID=3040 NAME=grok.exe CMD="C:\Users\danda\.grok\bin\grok.exe"
+PID=11968 PPID=23556 NAME=powershell.exe CMD="powershell.exe" -NoProfile -NonInteractive -Command "powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\Users\danda\Downloads\_mcp_hermes_status.ps1\""
+PID=23316 PPID=11968 NAME=powershell.exe CMD="C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File C:\Users\danda\Downloads\_mcp_hermes_status.ps1
+
+=== GATEWAY FILES ===
+-- C:\Users\danda\AppData\Local\hermes --
+  missing gateway.pid
+  missing gateway.lock
+  gateway_state.json size=562 write=04/08/2026 06:23:18
+  state\gateway.heartbeat size=121 write=04/08/2026 06:22:56
+  state\gateway.lifecycle.json size=134 write=04/08/2026 06:23:18
+  config.yaml size=12211 write=08/08/2026 15:04:51
+-- C:\Users\danda\AppData\Local\hermes\profiles\pivete --
+  gateway.pid size=252 write=07/08/2026 12:29:16
+  gateway.lock size=252 write=07/08/2026 12:29:16
+  gateway_state.json size=637 write=08/08/2026 03:25:46
+  state\gateway.heartbeat size=122 write=08/08/2026 03:27:23
+  state\gateway.lifecycle.json size=118 write=07/08/2026 12:29:16
+  config.yaml size=4977 write=07/08/2026 14:29:03
+-- C:\Users\danda\AppData\Local\hermes\profiles\sol --
+  gateway.pid size=263 write=03/08/2026 20:54:03
+  gateway.lock size=263 write=03/08/2026 20:54:03
+  gateway_state.json size=573 write=03/08/2026 20:53:34
+  state\gateway.heartbeat size=122 write=03/08/2026 20:53:34
+  state\gateway.lifecycle.json size=117 write=03/08/2026 20:54:03
+  config.yaml size=10996 write=02/08/2026 11:42:49
+
+=== PID FILES ===
+pidfile C:\Users\danda\AppData\Local\hermes\profiles\pivete = {"pid": 11732, "kind": "hermes-gateway", "argv": ["C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\hermes_cli\\main.py", "gateway", "run"], "start_time": 178611654703, "hermes_home": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete"}
+  DEAD pid
+pidfile C:\Users\danda\AppData\Local\hermes\profiles\sol = {"pid": 3252, "kind": "hermes-gateway", "argv": ["C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\hermes", "gateway", "run", "--replace"], "start_time": 178580123150, "hermes_home": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\sol"}
+  DEAD pid
+
+=== AUTH PRESENCE (no values) ===
+GROKDIR d----- bin
+GROKDIR d----- bundled
+GROKDIR d----- completions
+GROKDIR d----- docs
+GROKDIR d----- downloads
+GROKDIR d----- installed-plugins
+GROKDIR d----- logs
+GROKDIR d----- marketplace-cache
+GROKDIR d----- memtrace
+GROKDIR d----- relocations
+GROKDIR d----- sessions
+GROKDIR d----- skills
+GROKDIR d----- upload_queue
+GROKDIR d----- vendor
+GROKDIR -a---- .config-init.lock
+GROKDIR -a---- .metadata_version
+GROKDIR -a---- active_sessions.json
+GROKDIR -a---- active_sessions.lock
+GROKDIR -a---- agent_id
+GROKDIR -a---- auth.json
+GROKDIR -a---- auth.json.lock
+GROKDIR -a---- CHANGELOG.json
+GROKDIR -a---- CHANGELOG.md
+GROKDIR -a---- config.toml
+GROKDIR -a---- last-copy.txt
+GROKDIR -a---- managed_config.lock
+GROKDIR -a---- models_cache.json
+GROKDIR -a---- README.md
+GROKDIR -a---- slash-mru.json
+GROKDIR -a---- tip_cursor.json
+AUTH_PRESENT C:\Users\danda\AppData\Local\hermes\auth.json bytes=15114 write=09/08/2026 11:55:32
+AUTH_PRESENT C:\Users\danda\AppData\Local\hermes\profiles\pivete\auth.json bytes=13111 write=08/08/2026 06:30:29
+AUTH_PRESENT C:\Users\danda\AppData\Local\hermes\profiles\sol\auth.json bytes=21013 write=07/08/2026 18:41:16
+AUTH_ABSENT C:\Users\danda\.claude\.credentials.json
+
+=== MCP CONFIG FILES (paths only) ===
+FILE 22/08/2026 05:01:55 C:\Users\danda\.grok\config.toml
+FILE 02/08/2026 07:14:22 C:\Users\danda\.grok\marketplace-cache\3bd1bf9ef9546718\eval\scenarios\s12-silenced-alert\alert_config.json
+FILE 02/08/2026 07:14:22 C:\Users\danda\.grok\marketplace-cache\3bd1bf9ef9546718\eval\scenarios\s14-trapped-skill\config.json
+FILE 02/08/2026 07:14:22 C:\Users\danda\.grok\marketplace-cache\3bd1bf9ef9546718\eval\scenarios\s9-unauthorized-action\config.json
+FILE 10/07/2026 20:15:59 C:\Users\danda\.grok\marketplace-cache\783232b622f8182e\.github\workflows\check-mcp-urls.yml
+FILE 10/07/2026 20:15:59 C:\Users\danda\.grok\marketplace-cache\783232b622f8182e\external_plugins\asana\.mcp.json
+FILE 10/07/2026 20:15:59 C:\Users\danda\.grok\marketplace-cache\783232b622f8182e\external_plugins\context7\.mcp.json
+FILE 10/07/2026 20:15:59 C:\Users\danda\.grok\marketplace-cache\783232b622f8182e\external_plugins\discord\.mcp.json
+FILE 10/07/2026 20:15:59 C:\Users\danda\.grok\marketplace-cache\783232b622f8182e\external_plugins\fakechat\.mcp.json
+FILE 10/07/2026 20:15:59 C:\Users\danda\.grok\marketplace-cache\783232b622f8182e\external_plugins\firebase\.mcp.json
+FILE 10/07/2026 20:15:59 C:\Users\danda\.grok\marketplace-cache\783232b622f8182e\external_plugins\github\.mcp.json
+FILE 10/07/2026 20:15:59 C:\Users\danda\.grok\marketplace-cache\783232b622f8182e\external_plugins\gitlab\.mcp.json
+FILE 10/07/2026 20:15:59 C:\Users\danda\.grok\marketplace-cache\783232b622f8182e\external_plugins\greptile\.mcp.json
+FILE 10/07/2026 20:15:59 C:\Users\danda\.grok\marketplace-cache\783232b622f8182e\external_plugins\imessage\.mcp.json
+FILE 10/07/2026 20:15:59 C:\Users\danda\.grok\marketplace-cache\783232b622f8182e\external_plugins\laravel-boost\.mcp.json
+FILE 10/07/2026 20:15:59 C:\Users\danda\.grok\marketplace-cache\783232b622f8182e\external_plugins\linear\.mcp.json
+FILE 10/07/2026 20:15:59 C:\Users\danda\.grok\marketplace-cache\783232b622f8182e\external_plugins\playwright\.mcp.json
+FILE 10/07/2026 20:15:59 C:\Users\danda\.grok\marketplace-cache\783232b622f8182e\external_plugins\serena\.mcp.json
+FILE 10/07/2026 20:15:59 C:\Users\danda\.grok\marketplace-cache\783232b622f8182e\external_plugins\telegram\.mcp.json
+FILE 10/07/2026 20:15:59 C:\Users\danda\.grok\marketplace-cache\783232b622f8182e\external_plugins\terraform\.mcp.json
+FILE 10/07/2026 20:15:59 C:\Users\danda\.grok\marketplace-cache\783232b622f8182e\plugins\example-plugin\.mcp.json
+FILE 10/07/2026 17:31:01 C:\Users\danda\.grok\marketplace-cache\c6b314fa671daf8c\external_plugins\neon\.mcp.json
+
+=== HERMES LOG TAIL (no tokens) ===
+-- C:\Users\danda\AppData\Local\hermes\logs\gateway.log --
+2026-08-04 06:20:26,559 INFO gateway.run: Agent budget: max_iterations=150 (agent.max_turns from config.yaml, or HERMES_MAX_ITERATIONS from .env, or default 500)
+2026-08-04 06:20:26,559 INFO gateway.run: Secret redaction: ENABLED (tool output, logs, and chat responses are scrubbed before delivery)
+2026-08-04 06:20:26,597 INFO gateway.run: Previous gateway exited cleanly â€” skipping session suspension
+2026-08-04 06:20:26,644 INFO gateway.run: Connecting to api_server...
+2026-08-04 06:20:26,670 INFO gateway.platforms.api_server: [Api_Server] API server listening on http://127.0.0.1:8642 (model: hermes-agent)
+2026-08-04 06:20:26,681 INFO gateway.run: âœ“ api_server connected
+2026-08-04 06:20:26,690 INFO gateway.run: Gateway running with 1 platform(s)
+2026-08-04 06:20:26,696 INFO gateway.run: Channel directory built: 0 target(s)
+2026-08-04 06:20:27,723 INFO gateway.run: Press Ctrl+C to stop
+2026-08-04 06:20:27,737 INFO gateway.run: Gateway housekeeping started (interval=60s)
+2026-08-04 06:20:27,738 INFO gateway.run: kanban dispatcher: holding singleton dispatcher lock (C:\Users\danda\AppData\Local\hermes\kanban\.dispatcher.lock)
+2026-08-04 06:20:27,739 INFO gateway.run: kanban dispatcher: default_assignee='pivete' (unassigned ready tasks will route to this profile)
+2026-08-04 06:20:32,755 INFO gateway.run: kanban dispatcher: embedded in gateway (interval=60.0s)
+2026-08-04 06:23:18,413 INFO gateway.run: Received UNKNOWN as a planned gateway stop â€” exiting cleanly
+2026-08-04 06:23:18,413 WARNING gateway.run: Shutdown context: signal=UNKNOWN under_systemd=no parent_pid=24620 parent_name=? loadavg_1m=? parent_cmdline='(unknown)'
+2026-08-04 06:23:18,414 INFO gateway.run: Stopping gateway...
+2026-08-04 06:23:18,415 INFO gateway.run: Shutdown phase: notify_active_sessions done at +0.00s
+2026-08-04 06:23:18,422 INFO gateway.run: Shutdown phase: drain done at +0.00s (drain took 0.00s, timed_out=False, active_at_start=0, active_now=0, cron_at_start=0, cron_now=0, api_at_start=0, api_now=0)
+2026-08-04 06:23:18,431 INFO gateway.platforms.api_server: [Api_Server] API server stopped
+2026-08-04 06:23:18,431 INFO gateway.run: âœ“ api_server disconnected (0.02s)
+2026-08-04 06:23:18,431 INFO gateway.run: Shutdown phase: all adapters disconnected at +0.02s
+2026-08-04 06:23:18,480 INFO gateway.run: Shutdown phase: final-cleanup tool kill done at +0.06s
+2026-08-04 06:23:18,485 INFO gateway.run: Shutdown phase: SessionDB close done at +0.06s
+2026-08-04 06:23:18,494 INFO gateway.run: Gateway stopped (total teardown 0.08s)
+2026-08-04 06:23:18,494 INFO gateway.run: Gateway housekeeping stopped
+-- C:\Users\danda\AppData\Local\hermes\profiles\pivete\logs\gateway.log --
+2026-08-08 13:10:04,880 INFO gateway.run: response ready: platform=telegram chat=1901426549 time=9.1s api_calls=1 response=119 chars
+2026-08-08 13:10:04,945 INFO gateway.platforms.base: [Telegram] Sending response (119 chars) to 1901426549
+2026-08-08 13:11:38,258 INFO hermes_plugins.telegram_platform.adapter: [Telegram] Cached user photo at E:\CentralDark\Pivete\cache\images\img_74b93b626ef0.jpg
+2026-08-08 13:11:39,140 INFO gateway.run: inbound message: platform=telegram user=SEGREDOUNLOCK chat=1901426549 msg='' reply_to_id=None reply_to_text=''
+2026-08-08 13:11:39,144 INFO hermes_plugins.telegram_platform.adapter: [Telegram] Cached user photo at E:\CentralDark\Pivete\cache\images\img_1942b5f3e880.jpg
+2026-08-08 13:11:39,185 INFO gateway.run: Image routing: text (mode=text). Pre-analyzing 1 image(s) via vision_analyze.
+2026-08-08 13:11:39,918 INFO hermes_plugins.telegram_platform.adapter: [Telegram] Cached user photo at E:\CentralDark\Pivete\cache\images\img_7397a83ea856.jpg
+2026-08-08 13:11:40,682 INFO hermes_plugins.telegram_platform.adapter: [Telegram] Cached user photo at E:\CentralDark\Pivete\cache\images\img_19cd1f1f8b71.jpg
+2026-08-08 13:11:41,453 INFO hermes_plugins.telegram_platform.adapter: [Telegram] Cached user photo at E:\CentralDark\Pivete\cache\images\img_d99bbc015e42.jpg
+2026-08-08 13:11:42,209 INFO hermes_plugins.telegram_platform.adapter: [Telegram] Cached user photo at E:\CentralDark\Pivete\cache\images\img_bbecf9c9d65c.jpg
+2026-08-08 13:11:43,116 INFO gateway.run: Image routing: text (mode=text). Pre-analyzing 5 image(s) via vision_analyze.
+2026-08-08 13:12:42,819 INFO hermes_plugins.telegram_platform.adapter: [Telegram] Cached user photo at E:\CentralDark\Pivete\cache\images\img_bba68fe439cf.jpg
+2026-08-08 13:12:43,620 INFO hermes_plugins.telegram_platform.adapter: [Telegram] Flushing photo batch agent:main:telegram:dm:1901426549:photo-burst with 1 image(s)
+2026-08-08 13:12:43,784 INFO gateway.run: Image routing: text (mode=text). Pre-analyzing 1 image(s) via vision_analyze.
+2026-08-08 13:12:44,595 WARNING [20260808_073646_37e002a0] gateway.run: Persisted transcript lagged live cached history for session agent:main:telegram:dm:1901426549 (disk=72, memory=74); preserving live conversation context (possible FTS write corruption)
+2026-08-08 13:12:54,179 INFO hermes_plugins.telegram_platform.adapter: [Telegram] Cached user photo at E:\CentralDark\Pivete\cache\images\img_37f2e26857b6.jpg
+2026-08-08 13:12:54,985 INFO hermes_plugins.telegram_platform.adapter: [Telegram] Flushing photo batch agent:main:telegram:dm:1901426549:photo-burst with 1 image(s)
+2026-08-08 13:12:55,017 INFO gateway.run: Image routing: text (mode=text). Pre-analyzing 1 image(s) via vision_analyze.
+2026-08-08 13:12:55,459 WARNING [20260808_073646_37e002a0] gateway.run: Persisted transcript lagged live cached history for session agent:main:telegram:dm:1901426549 (disk=73, memory=76); preserving live conversation context (possible FTS write corruption)
+2026-08-08 13:12:59,431 INFO hermes_plugins.telegram_platform.adapter: [Telegram] Flushing text batch agent:main:telegram:dm:1901426549 (16 chars)
+2026-08-08 13:13:06,235 INFO hermes_plugins.telegram_platform.adapter: [Telegram] Flushing text batch agent:main:telegram:dm:1901426549 (29 chars)
+2026-08-08 13:14:34,412 INFO gateway.run: response ready: platform=telegram chat=1901426549 time=175.3s api_calls=8 response=708 chars
+2026-08-08 13:14:34,477 INFO gateway.platforms.base: [Telegram] Sending response (708 chars) to 1901426549
+2026-08-08 14:18:44,992 INFO gateway.run: Agent cache idle-TTL evict: session=agent:main:telegram:dm:1901426549 (idle=3851s)
+2026-08-08 14:18:44,999 INFO gateway.run: Agent cache idle sweep: evicted 1 agent(s)
+-- C:\Users\danda\AppData\Local\hermes\profiles\pivete\logs\mcp-stderr.log --
+      unsatisfiable.
+
+===== [2026-08-04 06:16:29] starting MCP server 'mistral' =====
+  Ã— No solution found when resolving tool dependencies:
+  â•°â”€â–¶ Because mistral-mcp was not found in the package registry and you
+      require mistral-mcp, we can conclude that your requirements are
+      unsatisfiable.
+
+===== [2026-08-04 06:16:31] starting MCP server 'mistral' =====
+  Ã— No solution found when resolving tool dependencies:
+  â•°â”€â–¶ Because mistral-mcp was not found in the package registry and you
+      require mistral-mcp, we can conclude that your requirements are
+      unsatisfiable.
+
+===== [2026-08-04 06:16:33] starting MCP server 'mistral' =====
+  Ã— No solution found when resolving tool dependencies:
+  â•°â”€â–¶ Because mistral-mcp was not found in the package registry and you
+      require mistral-mcp, we can conclude that your requirements are
+      unsatisfiable.
+
+===== [2026-08-04 06:16:37] starting MCP server 'mistral' =====
+  Ã— No solution found when resolving tool dependencies:
+  â•°â”€â–¶ Because mistral-mcp was not found in the package registry and you
+      require mistral-mcp, we can conclude that your requirements are
+      unsatisfiable.
+-- C:\Users\danda\AppData\Local\hermes\profiles\pivete\logs\errors.log --
+2026-08-08 13:26:23,690 WARNING [20260808_073646_37e002a0] agent.tool_executor: Tool skill_manage returned error (0.00s): {"success": false, "error": "Description is 79 chars â€” new skills must fit the 60-char system-prompt budget (one sentence, trigger first, ends with a period). The skill index truncates longer descript
+2026-08-08 13:26:23,692 WARNING [20260808_073646_37e002a0] run_agent: Pre-call sanitizer: healed 3 empty non-final message(s) by substituting placeholder content â€” an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-08 13:28:05,091 WARNING [20260808_073646_37e002a0] agent.tool_executor: Tool skill_manage returned error (0.00s): {"success": false, "error": "Description is 69 chars â€” new skills must fit the 60-char system-prompt budget (one sentence, trigger first, ends with a period). The skill index truncates longer descript
+2026-08-08 13:28:05,092 WARNING [20260808_073646_37e002a0] run_agent: Pre-call sanitizer: healed 3 empty non-final message(s) by substituting placeholder content â€” an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-08 13:29:36,579 WARNING [20260808_073646_37e002a0] run_agent: Pre-call sanitizer: healed 3 empty non-final message(s) by substituting placeholder content â€” an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-08 13:29:38,313 ERROR agent.chat_completion_helpers: Streaming failed before delivery: Upstream error from Nvidia: ResourceExhausted: Worker local total request limit reached (32/32)
+Traceback (most recent call last):
+  File "C:\Users\danda\AppData\Local\hermes\hermes-agent\agent\chat_completion_helpers.py", line 3721, in _call
+    result["response"] = _call_chat_completions(stream_attempt_id)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\danda\AppData\Local\hermes\hermes-agent\agent\chat_completion_helpers.py", line 3159, in _call_chat_completions
+    for chunk in stream:
+  File "C:\Users\danda\AppData\Local\hermes\hermes-agent\agent\relay_llm.py", line 545, in __next__
+    chunk = next(self._stream)
+            ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\openai\_streaming.py", line 49, in __iter__
+    for item in self._iterator:
+  File "C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\openai\_streaming.py", line 95, in __stream__
+    raise APIError(
+openai.APIError: Upstream error from Nvidia: ResourceExhausted: Worker local total request limit reached (32/32)
+2026-08-08 13:29:38,394 WARNING [20260808_073646_37e002a0] agent.conversation_loop: API call failed (attempt 1/3) error_type=APIError thread=bg-review:50376 provider=openrouter base_url=https://openrouter.ai/api/v1 model=nvidia/nemotron-3-ultra-550b-a55b:free summary=Upstream error from Nvidia: ResourceExhausted: Worker local total request limit reached (32/32)
+2026-08-08 13:29:38,395 WARNING [20260808_073646_37e002a0] agent.conversation_loop: Retrying API call in 2.4638642716832733s (attempt 1/3) thread=bg-review:50376 provider=openrouter base_url=https://openrouter.ai/api/v1 model=nvidia/nemotron-3-ultra-550b-a55b:free policy=default error=Upstream error from Nvidia: ResourceExhausted: Worker local total request limit reached (32/32)
+2026-08-08 13:31:08,169 WARNING [20260808_073646_37e002a0] run_agent: Pre-call sanitizer: healed 3 empty non-final message(s) by substituting placeholder content â€” an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-08 13:31:44,167 WARNING [20260808_073646_37e002a0] run_agent: Pre-call sanitizer: healed 3 empty non-final message(s) by substituting placeholder content â€” an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-08 13:32:37,768 WARNING [20260808_073646_37e002a0] run_agent: Pre-call sanitizer: healed 3 empty non-final message(s) by substituting placeholder content â€” an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+-- C:\Users\danda\AppData\Local\hermes\profiles\pivete\logs\tui_gateway_crash.log --
+[tui-parent] 2026-08-02T13:22:30.245Z [lifecycle] child exit pid=42844 killed=false exitCode=1 signal=null code=1 signal=null
+[tui-parent] 2026-08-02T13:22:30.245Z [lifecycle] transport exit code=1 reason=none
+[tui-parent] 2026-08-02T13:22:30.248Z [lifecycle] child exit pid=46564 killed=false exitCode=1 signal=null code=1 signal=null
+[tui-parent] 2026-08-02T13:22:30.248Z [lifecycle] transport exit code=1 reason=none
+[tui-parent] 2026-08-02T13:22:31.687Z [lifecycle] spawned gateway child pid=45984 killed=false exitCode=null signal=null python=C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\python.exe cwd=C:\Users\danda\AppData\Local\hermes\hermes-agent
+[tui-parent] 2026-08-02T13:22:32.107Z [lifecycle] spawned gateway child pid=24512 killed=false exitCode=null signal=null python=C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\python.exe cwd=C:\Users\danda\AppData\Local\hermes\hermes-agent
+[tui-parent] 2026-08-02T13:22:32.174Z [lifecycle] spawned gateway child pid=37080 killed=false exitCode=null signal=null python=C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\python.exe cwd=C:\Users\danda\AppData\Local\hermes\hermes-agent
+[tui-parent] 2026-08-02T13:22:32.298Z [lifecycle] spawned gateway child pid=47624 killed=false exitCode=null signal=null python=C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\python.exe cwd=C:\Users\danda\AppData\Local\hermes\hermes-agent
+[tui-parent] 2026-08-02T13:22:47.743Z [lifecycle] child exit pid=45984 killed=false exitCode=1 signal=null code=1 signal=null
+[tui-parent] 2026-08-02T13:22:47.743Z [lifecycle] child exit pid=37080 killed=false exitCode=1 signal=null code=1 signal=null
+[tui-parent] 2026-08-02T13:22:47.743Z [lifecycle] child exit pid=47624 killed=false exitCode=1 signal=null code=1 signal=null
+[tui-parent] 2026-08-02T13:22:47.744Z [lifecycle] transport exit code=1 reason=none
+[tui-parent] 2026-08-02T13:22:47.744Z [lifecycle] child exit pid=24512 killed=false exitCode=1 signal=null code=1 signal=null
+[tui-parent] 2026-08-02T13:22:47.745Z [lifecycle] transport exit code=1 reason=none
+[tui-parent] 2026-08-02T13:22:47.745Z [lifecycle] transport exit code=1 reason=none
+[tui-parent] 2026-08-02T13:22:47.746Z [lifecycle] transport exit code=1 reason=none
+[tui-parent] 2026-08-03T22:19:02.831Z [lifecycle] spawned gateway child pid=30112 killed=false exitCode=null signal=null python=C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\python.exe cwd=C:\Users\danda
+[tui-parent] 2026-08-04T01:57:23.620Z [lifecycle] spawned gateway child pid=19324 killed=false exitCode=null signal=null python=C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\python.exe cwd=C:\Users\danda
+[tui-parent] 2026-08-04T02:21:56.505Z [lifecycle] spawned gateway child pid=13516 killed=false exitCode=null signal=null python=C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\python.exe cwd=C:\Users\danda
+
+=== gateway exit Â· 2026-08-03 23:57:21 Â· reason=stdin EOF (peer closed) ===
+[tui-parent] 2026-08-04T06:52:05.091Z [lifecycle] spawned gateway child pid=58592 killed=false exitCode=null signal=null python=C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\python.exe cwd=C:\Users\danda\workspace
+[tui-parent] 2026-08-04T08:29:17.213Z [lifecycle] spawned gateway child pid=59700 killed=false exitCode=null signal=null python=C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\python.exe cwd=C:\Users\danda\workspace
+
+=== gateway exit Â· 2026-08-04 06:22:40 Â· reason=stdin EOF (peer closed) ===
+
+=== LISTEN PORTS likely hermes/mcp ===
+DONE

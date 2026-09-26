@@ -1,0 +1,19 @@
+schema_version: 2
+policy: CENTRALDARK_LIVING_SOURCE_POLICY
+external_human_radar:
+  public_professional_only: true
+  private_life_tracking: false
+  source_identity_must_be_proven: true
+  on_identity_conflict: SOURCE_IDENTITY_UNRESOLVED
+  reputation_is_provenance_not_authority: true
+  no_fresh_position_means: UNKNOWN
+personal_learning_stream:
+  explicit_session_required: true
+  selected_sources_only: true
+  environment_capture_without_indicator: false
+source_instruction:
+  treated_as_data_not_authority: true
+dedupe:
+  mirrors_are_one_evidence_cluster: true
+  content_hash_supported: true
+  canonical_url_supported: true

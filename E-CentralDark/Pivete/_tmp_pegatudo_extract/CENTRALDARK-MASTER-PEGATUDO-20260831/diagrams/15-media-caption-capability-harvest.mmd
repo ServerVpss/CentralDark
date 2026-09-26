@@ -1,0 +1,15 @@
+flowchart TD
+  A[Debug/player metadata] --> B[Identify media ID]
+  B --> C{Caption track observed?}
+  C -- No --> U[UNKNOWN + NEXT_CURSOR]
+  C -- Yes --> D[Acquire authorized complete text]
+  D --> E[Completeness + provenance gate]
+  E --> F[Normalize + dedupe]
+  F --> G[Reality Scope Gate]
+  G --> H[Reconcile]
+  H --> I[PEGATUDO capability harvest]
+  I --> J{Existing owner compatible?}
+  J -- No/unclear --> U
+  J -- Yes --> K[Test / falsifier when material]
+  K --> L[Crystallize in existing owner]
+  L --> M[Documentation Gate + receipt]

@@ -1,0 +1,108 @@
+================================================================================
+⏸️  QUICK REFERENCE: PAUSAR E CONTINUAR
+================================================================================
+
+🛑 PAUSAR AGORA (Forma mais rápida)
+────────────────────────────────────────────────────────────────────────────
+Digite:
+  "Vou pausar aqui"
+
+Eu vou:
+  ✅ Salvar tudo
+  ✅ Fazer git commit
+  ✅ Criar checkpoint
+  ✅ Confirmar
+
+Resultado:
+  Tudo está salvo. Você pode sair tranquilo.
+
+================================================================================
+
+🔄 CONTINUAR DEPOIS (Forma mais simples)
+────────────────────────────────────────────────────────────────────────────
+Abra novo chat e digite:
+  "Continua de onde parou"
+  ou
+  "Continua squad dual-pilar"
+
+Eu vou:
+  ✅ Carregar contexto anterior
+  ✅ Mostrar resumo do que foi feito
+  ✅ Apontar próximos passos
+
+Resultado:
+  Tudo carregado. Você continua normalmente.
+
+================================================================================
+
+📸 PAUSA COM SNAPSHOT (Se quer detalhe)
+────────────────────────────────────────────────────────────────────────────
+Digite:
+  "Quero fazer snapshot de: [o que você quer documentar]"
+
+Exemplo:
+  "Snapshot do status: pilar 1, pilar 2, squad status"
+
+Eu vou:
+  ✅ Gerar relatório completo
+  ✅ Listar tudo feito
+  ✅ Apontar próximos passos
+  ✅ Salvar em arquivo .md
+
+Resultado:
+  Você tem documento completo para retomar depois.
+
+================================================================================
+
+🔍 CONTINUA COM TIMESTAMP (Se quer exato)
+────────────────────────────────────────────────────────────────────────────
+Digite:
+  "Continua do checkpoint 24/fev 14:35"
+  ou
+  "Retoma de session-20260224-1435.md"
+
+Eu vou:
+  ✅ Carregar checkpoint EXATO
+  ✅ Restaurar estado precisamente
+  ✅ Você continua de lá
+
+Resultado:
+  Estado exato restaurado. Zero surpresas.
+
+================================================================================
+
+🆘 RECOVERY (Se houve erro ou quer voltar)
+────────────────────────────────────────────────────────────────────────────
+Digite:
+  "Recovery: retoma do checkpoint de [data]"
+
+Exemplo:
+  "Recovery: retoma do checkpoint de 23/fev 18:00"
+
+Eu vou:
+  ✅ Listar checkpoints disponíveis
+  ✅ Carregar o que você pediu
+  ✅ Restaurar estado anterior
+
+Resultado:
+  Estado anterior carregado. Você continua de lá.
+
+================================================================================
+
+📋 CHECKPOINTS AUTOMÁTICOS CRIADOS EM:
+  .claude/checkpoints/
+
+📊 VER CHECKPOINTS:
+  ls -la .claude/checkpoints/
+
+🔗 ARQUIVO ATUAL CHECKPOINT:
+  Geralmente em: .claude/checkpoints/session-{YYYYMMDD-HHMMSS}.md
+
+================================================================================
+
+RESUMO ULTRA-RÁPIDO:
+  PAUSAR:     "Vou pausar aqui"
+  CONTINUAR:  "Continua squad"
+  RESULTADO:  Sem perda, continuidade perfeita ✅
+
+================================================================================

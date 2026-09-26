@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <item name="androidx.core.view.insets.ColorProtection ColorProtection(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Side.LEFT, androidx.core.view.WindowInsetsCompat.Side.TOP, androidx.core.view.WindowInsetsCompat.Side.RIGHT, androidx.core.view.WindowInsetsCompat.Side.BOTTOM}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.insets.ColorProtection ColorProtection(int, int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Side.LEFT, androidx.core.view.WindowInsetsCompat.Side.TOP, androidx.core.view.WindowInsetsCompat.Side.RIGHT, androidx.core.view.WindowInsetsCompat.Side.BOTTOM}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.insets.GradientProtection GradientProtection(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Side.LEFT, androidx.core.view.WindowInsetsCompat.Side.TOP, androidx.core.view.WindowInsetsCompat.Side.RIGHT, androidx.core.view.WindowInsetsCompat.Side.BOTTOM}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.insets.GradientProtection GradientProtection(int, int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Side.LEFT, androidx.core.view.WindowInsetsCompat.Side.TOP, androidx.core.view.WindowInsetsCompat.Side.RIGHT, androidx.core.view.WindowInsetsCompat.Side.BOTTOM}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.insets.Protection Protection(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Side.LEFT, androidx.core.view.WindowInsetsCompat.Side.TOP, androidx.core.view.WindowInsetsCompat.Side.RIGHT, androidx.core.view.WindowInsetsCompat.Side.BOTTOM}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.insets.Protection int getSide()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Side.LEFT, androidx.core.view.WindowInsetsCompat.Side.TOP, androidx.core.view.WindowInsetsCompat.Side.RIGHT, androidx.core.view.WindowInsetsCompat.Side.BOTTOM}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.insets.Protection mSide">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Side.LEFT, androidx.core.view.WindowInsetsCompat.Side.TOP, androidx.core.view.WindowInsetsCompat.Side.RIGHT, androidx.core.view.WindowInsetsCompat.Side.BOTTOM}" />
+    </annotation>
+  </item>
+</root>
+

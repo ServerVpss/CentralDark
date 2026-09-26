@@ -1,0 +1,10 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\share\doc\git-doc\RelNotes\1.5.5.6.adoc
+
+GIT v1.5.5.6 Release Notes
+==========================
+Fixes since 1.5.5.5
+-------------------
+ * Removed support for an obsolete gitweb request URI, whose
+   implementation ran "git diff" Porcelain, instead of using plumbing,
+   which would have run an external diff command specified in the
+   repository configuration as the gitweb user.

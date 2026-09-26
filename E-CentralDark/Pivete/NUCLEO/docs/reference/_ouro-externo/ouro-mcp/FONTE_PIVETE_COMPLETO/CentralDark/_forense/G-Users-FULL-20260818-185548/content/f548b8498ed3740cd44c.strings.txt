@@ -1,0 +1,21 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\Storage\ext\nmmhkkegccagdldgiimedpiccmgmieda\def\Network\Trust Tokens
+
+SQLite format 3
+Ktabletrust_tokens_issuer_toplevel_pair_configtrust_tokens_issuer_toplevel_pair_config
+CREATE TABLE trust_tokens_issuer_toplevel_pair_config ( key TEXT, proto BLOB, PRIMARY KEY(key))p
+indexsqlite_autoindex_trust_tokens_issuer_toplevel_pair_config_1trust_tokens_issuer_toplevel_pair_config
+3tabletrust_tokens_toplevel_configtrust_tokens_toplevel_config
+CREATE TABLE trust_tokens_toplevel_config ( key TEXT, proto BLOB, PRIMARY KEY(key))W
+indexsqlite_autoindex_trust_tokens_toplevel_config_1trust_tokens_toplevel_config
+/tabletrust_tokens_issuer_configtrust_tokens_issuer_config
+CREATE TABLE trust_tokens_issuer_config ( key TEXT, proto BLOB, PRIMARY KEY(key))S
+indexsqlite_autoindex_trust_tokens_issuer_config_1trust_tokens_issuer_config
+/tablemetameta
+CREATE TABLE meta(key LONGVARCHAR NOT NULL UNIQUE PRIMARY KEY, value LONGVARCHAR)'
+indexsqlite_autoindex_meta_1meta
+last_compatible_version2
+version2
+mmap_status-1
+last_compatible_version
+version
+mmap_status

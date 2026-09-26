@@ -1,0 +1,15 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\share\doc\git-doc\RelNotes\2.5.3.adoc
+
+Git v2.5.3 Release Notes
+========================
+Fixes since v2.5.2
+------------------
+ * The experimental untracked-cache feature were buggy when paths with
+   a few levels of subdirectories are involved.
+ * Recent versions of scripted "git am" has a performance regression
+   in "git am --skip" codepath, which no longer exists in the
+   built-in version on the 'master' front.  Fix the regression in
+   the last scripted version that appear in 2.5.x maintenance track
+   and older.
+Also contains typofixes, documentation updates and trivial code
+clean-ups.

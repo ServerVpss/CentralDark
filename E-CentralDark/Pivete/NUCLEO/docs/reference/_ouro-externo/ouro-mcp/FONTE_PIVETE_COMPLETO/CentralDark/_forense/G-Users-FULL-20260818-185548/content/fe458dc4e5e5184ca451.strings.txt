@@ -1,0 +1,270 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\cmd\git-receive-pack.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.pdata
+@.xdata
+.edata
+@.idata
+@.reloc
+B.debug
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+8MZuDHcP<H
+xpLc5/
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AUATUWVSH
+([^_]A\A]
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+H=CCG t}
+([^_]H
+AVAUATUWVS
+8MSYSu
+SetCurrentProcessExplicitAppUserModelID
+Argument domain error (DOMAIN)
+Argument singularity (SIGN)
+Overflow range error (OVERFLOW)
+Partial loss of significance (PLOSS)
+Total loss of significance (TLOSS)
+The result is too small to be represented (UNDERFLOW)
+Unknown error
+_matherr(): %s in %s(%g, %g)  (retval=%g)
+Mingw-w64 runtime failure:
+Address %p has no image-section
+  VirtualQuery failed for %d bytes at address %p
+  VirtualProtect failed with code 0x%x
+  Unknown pseudo relocation protocol version %d.
+  Unknown pseudo relocation bit size %d.
+%d bit pseudo relocation at %p out of range, targeting %p, yielding the value %p.
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev14, Built by MSYS2 project) 15.2.0
+GCC: (Rev14, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev14, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev13, Built by MSYS2 project) 15.2.0
+GCC: (Rev14, Built by MSYS2 project) 15.2.0
+git-receive-pack.exe
+CloseHandle
+CreateFileW
+CreateProcessW
+DeleteCriticalSection
+EnterCriticalSection
+ExitProcess
+FormatMessageW
+GetCommandLineW
+GetEnvironmentVariableA
+GetEnvironmentVariableW
+GetExitCodeProcess
+GetFileAttributesW
+GetFinalPathNameByHandleW
+GetLastError
+GetModuleFileNameW
+GetProcAddress
+GetStdHandle
+GetSystemDirectoryW
+InitializeCriticalSection
+LeaveCriticalSection
+LoadLibraryW
+LocalFree
+SetConsoleCtrlHandler
+SetEnvironmentVariableA
+SetEnvironmentVariableW
+SetUnhandledExceptionFilter
+TlsGetValue
+VirtualProtect
+VirtualQuery
+WaitForSingleObject
+__C_specific_handler
+__iob_func
+__set_app_type
+__setusermatherr
+__wgetmainargs
+__winitenv
+_amsg_exit
+_cexit
+_commode
+_fmode
+_initterm
+_vsnwprintf
+_waccess
+_wcsdup
+_wcsicmp
+_wcsicmp
+_wcsnicmp
+_wfopen
+atexit
+calloc
+fclose
+fflush
+fprintf
+fwprintf
+isalpha
+isspace
+malloc
+memcpy
+memmove
+realloc
+setvbuf
+signal
+strcpy
+strlen
+strncmp
+swprintf
+towlower
+vfprintf
+wcscat
+wcschr
+wcscmp
+wcscpy
+wcslen
+wcsncat
+wcsncmp
+wcsncpy
+wcsspn
+wcsstr
+CommandLineToArgvW
+PathRemoveFileSpecW
+LoadStringW
+KERNEL32.dll
+msvcrt.dll
+SHELL32.dll
+SHLWAPI.dll
+USER32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+<assemblyIdentity type="win32" name="Git" version="0.0.0.1" />
+<trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">
+<security>
+<requestedPrivileges>
+<requestedExecutionLevel level="asInvoker" uiAccess="false" />
+</requestedPrivileges>
+</security>
+</trustInfo>
+<compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+<application>
+<!-- Windows Vista -->
+<supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+<!-- Windows 7 -->
+<supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+<!-- Windows 8 -->
+<supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+<!-- Windows 8.1 -->
+<supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/>
+<!-- Windows 10 -->
+<supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/>
+</application>
+</compatibility>
+</assembly>
+D:\git-sdk-64-build-installers\usr\src\MINGW-packages\mingw-w64-git\src\git\cmd\git-receive-pack.pdb
+Substituting '%s' results in too large a command-line
+Invalid command-line: '%s'
+Code 0x%1!08x!
+%s: %s
+mingw\bin
+Top-level not found: %s
+Invalid executable path: %s
+libexec\git-core
+MINGW64\bin
+git-lfs.exe
+Need a valid command-line; Edit the string resources accordingly
+Could not read resource (too large)
+MINIMAL_PATH=1 
+ALLOC_CONSOLE=1 
+SHOW_CONSOLE=1 
+APPEND_QUOTE=1 
+APP_ID=
+EXEPATH
+Skipping command-line '%s'
+('%s' not found)
+--no-cd
+--cd-to-home
+--minimal-search-path
+--no-minimal-search-path
+--needs-console
+--no-needs-console
+--hide
+--no-hide
+--append-quote
+--no-append-quote
+--command=
+--app-id=
+shell32.dll
+Dwarning: could not set app ID
+scalar.exe
+git-gui.exe
+wish.exe
+gitk.exe
+"%s" "%s\%.*s\%s"
+mingw\bin\wish.exe
+"%s" "%s\mingw\%s"
+git-remote-http.exe
+git-remote-https.exe
+git.exe
+bin\git.exe
+sh.exe
+busybox.exe
+ash.exe
+Could not find '%ls'
+MINGW64
+MSYSTEM
+PLINK_PROTOCOL
+HOMEPATH
+HOMEDRIVE
+USERPROFILE
+usr\bin;
+mingw\bin;
+\etc\git-bash.config
+"%s\%s" %.*s
+\cmd.exe /K "
+BUG (fork bomb): %s
+CONOUT$
+error reading exit code
+error launching git
+VS_VERSION_INFO
+StringFileInfo
+040904b0
+CompanyName
+The Git Development Community
+FileDescription
+Git for Windows
+InternalName
+OriginalFilename
+git.exe
+ProductName
+ProductVersion
+2.54.0.windows.1
+FileVersion
+2.54.0.windows.1
+VarFileInfo
+Translation

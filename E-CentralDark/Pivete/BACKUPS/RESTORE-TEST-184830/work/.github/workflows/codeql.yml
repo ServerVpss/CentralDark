@@ -1,0 +1,51 @@
+name: CodeQL — análise de segurança
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Toda segunda 09:17 UTC = 06:17 BRT
+    - cron: "17 9 * * 1"
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: [self-hosted, Linux]
+    # CodeQL/Advanced Security é grátis só em repo público.
+    # Em privado sem GHAS pago, a action falha com "Advanced Security must be enabled".
+    # Por isso só roda quando o repo for público (event.repository.private == false).
+    if: github.repository == 'ServerVpss/CentralDark' && github.event.repository.private == false
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ["javascript-typescript"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Init CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-and-quality
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"

@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@iconify\utils\lib\svg\html.d.ts
+
+/**
+ * Generate <svg>
+ */
+declare function iconToHTML(body: string, attributes: Record<string, string>): string;
+export { iconToHTML };

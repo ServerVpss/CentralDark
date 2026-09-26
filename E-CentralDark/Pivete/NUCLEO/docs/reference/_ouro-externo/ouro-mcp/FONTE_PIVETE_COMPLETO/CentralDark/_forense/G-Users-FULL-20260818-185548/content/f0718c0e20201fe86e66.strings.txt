@@ -1,0 +1,163 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\msys-wind-0.dll
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.edata
+@.idata
+@.reloc
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+D9d$,u
+ATUWVSH
+@[^_]A\
+@[^_]A\
+ATUWVSH
+0[^_]A\
+0[^_]A\
+0[^_]A\
+T$(t H
+ATUWVSH
+0[^_]A\
+0[^_]A\
+0[^_]A\
+0[^_]A\
+abcdefghijklmnopqrstuvwxyz0123456789
+nameprep
+saslprep
+ldapprep
+No error
+No such profile
+Buffer overrun
+Buffer underrun
+Length not mod2
+Length not mod4
+Invalid UTF-8 combination in string
+Invalid UTF-16 combination in string
+Invalid UTF-32 combination in string
+No byte order mark (BOM) in string
+Code can't be represented as UTF-16
+Heimdal 7.8.0
+%s (%s)
+Copyright 1995-2014 Kungliga Tekniska H
+gskolan
+https://github.com/heimdal/heimdal/issues
+Send bug-reports to %s
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+GCC: (GNU) 13.3.0
+msys-wind-0.dll
+_wind_combining_class
+_wind_ldap_case_exact_attribute
+_wind_stringprep_error
+_wind_stringprep_map
+_wind_stringprep_normalize
+_wind_stringprep_prohibited
+_wind_stringprep_testbidi
+wind_profile
+wind_punycode_label_toascii
+wind_stringprep
+wind_ucs2read
+wind_ucs2utf8
+wind_ucs2utf8_length
+wind_ucs2write
+wind_ucs4utf8
+wind_ucs4utf8_length
+wind_utf8ucs2
+wind_utf8ucs2_length
+wind_utf8ucs4
+wind_utf8ucs4_length
+init_error_table
+initialize_error_table_r
+__cxa_atexit
+__getreent
+_impure_ptr
+bsearch
+calloc
+cygwin_internal
+dll_dllcrt0
+fprintf
+fwrite
+getprogname
+malloc
+memcpy
+memmove
+msys_detach_dll
+posix_memalign
+realloc
+strcasecmp
+GetModuleHandleA
+msys-com_err-1.dll
+msys-2.0.dll
+KERNEL32.dll
+__lib64_libkernel32_a_iname
+__imp_calloc
+__imp_getprogname
+_head_msys_2_0_dll
+__imp_cygwin_internal
+__imp_posix_memalign
+msys_com_err_1_dll_iname
+__imp_free
+__nm__impure_ptr
+__imp_bsearch
+__IAT_end__
+__imp_memcpy
+__imp_memmove
+__imp_dll_dllcrt0
+__imp_fwrite
+_head_lib64_libkernel32_a
+__imp_msys_detach_dll
+__imp___getreent
+__imp_GetModuleHandleA
+__imp_malloc
+__imp__impure_ptr
+__imp_realloc
+__IAT_start__
+__imp___cxa_atexit
+__imp_fprintf
+__imp_init_error_table
+__imp_initialize_error_table_r
+__imp_strcasecmp
+_head_msys_com_err_1_dll
+msys_2_0_dll_iname
+lrJKLM
+XY[\]^

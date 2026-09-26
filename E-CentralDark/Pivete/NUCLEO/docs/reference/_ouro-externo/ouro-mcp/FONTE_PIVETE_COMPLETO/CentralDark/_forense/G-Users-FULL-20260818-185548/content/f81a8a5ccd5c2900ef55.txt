@@ -1,0 +1,5 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@radix-ui\react-visually-hidden\README.md
+
+# `react-visually-hidden`
+
+View docs [here](https://radix-ui.com/primitives/docs/utilities/visually-hidden).

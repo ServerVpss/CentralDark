@@ -1,0 +1,183 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\bin\git-askyesno.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.pdata
+@.xdata
+.idata
+@.reloc
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+8MZuDHcP<H
+xpLc5/]
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+PHc5VW
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+H=CCG t}
+([^_]H
+Argument domain error (DOMAIN)
+Argument singularity (SIGN)
+Overflow range error (OVERFLOW)
+Partial loss of significance (PLOSS)
+Total loss of significance (TLOSS)
+The result is too small to be represented (UNDERFLOW)
+Unknown error
+_matherr(): %s in %s(%g, %g)  (retval=%g)
+Mingw-w64 runtime failure:
+Address %p has no image-section
+  VirtualQuery failed for %d bytes at address %p
+  VirtualProtect failed with code 0x%x
+  Unknown pseudo relocation protocol version %d.
+  Unknown pseudo relocation bit size %d.
+%d bit pseudo relocation at %p out of range, targeting %p, yielding the value %p.
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+DeleteCriticalSection
+EnterCriticalSection
+GetLastError
+InitializeCriticalSection
+LeaveCriticalSection
+SetUnhandledExceptionFilter
+TlsGetValue
+VirtualProtect
+VirtualQuery
+__C_specific_handler
+__iob_func
+__set_app_type
+__setusermatherr
+__wgetmainargs
+__winitenv
+_amsg_exit
+_cexit
+_commode
+_fmode
+_initterm
+atexit
+calloc
+fflush
+fprintf
+malloc
+memcpy
+setvbuf
+signal
+strlen
+strncmp
+vfprintf
+wcscmp
+wcscpy
+wcslen
+MessageBoxW
+KERNEL32.dll
+msvcrt.dll
+USER32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__imp_abort
+__lib64_libkernel32_a_iname
+__imp__fmode
+_head_lib64_libmsvcrt_def_a
+__imp_calloc
+__imp_DeleteCriticalSection
+__imp__amsg_exit
+__imp___C_specific_handler
+__imp_GetLastError
+__imp_free
+__imp_LeaveCriticalSection
+__imp_wcscpy
+__lib64_libuser32_a_iname
+__IAT_end__
+__imp_memcpy
+__lib64_libmsvcrt_def_a_iname
+__imp_setvbuf
+_head_lib64_libkernel32_a
+__imp_EnterCriticalSection
+__imp_signal
+__imp_strlen
+__imp_malloc
+__imp___wgetmainargs
+__imp_InitializeCriticalSection
+__imp_exit
+__imp_vfprintf
+__imp_wcscmp
+__IAT_start__
+__imp__cexit
+__imp_SetUnhandledExceptionFilter
+__imp_Sleep
+__imp___setusermatherr
+__imp_TlsGetValue
+__imp_fprintf
+__imp__crt_atexit
+__imp_VirtualProtect
+__imp_VirtualQuery
+__imp__initterm
+__imp___iob_func
+_head_lib64_libuser32_a
+__imp_strncmp
+__imp_MessageBoxW
+__imp_wcslen
+__imp_fflush
+__imp___set_app_type
+__imp__commode
+__imp___winitenv
+Question?
+Error!
+Usage: git askyesno <question>
+--title
+Out of memory asking a question

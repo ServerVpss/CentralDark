@@ -1,0 +1,4160 @@
+{
+  "version": 2,
+  "manifest": {
+    "ai-assistant-integration\\SKILL.md": [
+      1788100469469838600,
+      3083
+    ],
+    "ai-model-communication-preference\\SKILL.md": [
+      1787755625310384600,
+      1557
+    ],
+    "analysis\\canonical-doc-analysis\\SKILL.md": [
+      1787904542360317600,
+      4947
+    ],
+    "apple\\DESCRIPTION.md": [
+      1784347005925927700,
+      139
+    ],
+    "apple\\apple-notes\\SKILL.md": [
+      1785641291966353700,
+      2394
+    ],
+    "apple\\apple-reminders\\SKILL.md": [
+      1788751453059389200,
+      3606
+    ],
+    "apple\\findmy\\SKILL.md": [
+      1788751453061388700,
+      3709
+    ],
+    "apple\\imessage\\SKILL.md": [
+      1788751453062389600,
+      2442
+    ],
+    "auto-destilador\\SKILL.md": [
+      1788254128146016000,
+      28780
+    ],
+    "autonomous-ai-agents\\DESCRIPTION.md": [
+      1784347005934928000,
+      214
+    ],
+    "autonomous-ai-agents\\autonomous-task-routing\\SKILL.md": [
+      1787930559030155100,
+      11335
+    ],
+    "autonomous-ai-agents\\claude-code\\SKILL.md": [
+      1788751453066388800,
+      34281
+    ],
+    "autonomous-ai-agents\\codex\\SKILL.md": [
+      1785641291970360100,
+      5738
+    ],
+    "autonomous-ai-agents\\computer-use\\SKILL.md": [
+      1788751453069903200,
+      15819
+    ],
+    "autonomous-ai-agents\\hermes-agent\\SKILL.md": [
+      1788751453071902200,
+      13183
+    ],
+    "autonomous-ai-agents\\opencode\\SKILL.md": [
+      1788751453096419600,
+      7259
+    ],
+    "autonomous-ai-agents\\operational-communication\\SKILL.md": [
+      1788654164621471400,
+      31964
+    ],
+    "autonomous-operation\\autonomous-dependa-boot\\SKILL.md": [
+      1788450800574101400,
+      8417
+    ],
+    "autonomous-operation\\autonomous-session-continuity\\SKILL.md": [
+      1788907289246610400,
+      2332
+    ],
+    "brain-vault-watcher\\SKILL.md": [
+      1788714928191747500,
+      1495
+    ],
+    "centraldark\\centraldark-bin-launcher\\SKILL.md": [
+      1788651527426570400,
+      621
+    ],
+    "centraldark\\centraldark-ci-gate-forensics\\SKILL.md": [
+      1788405622570206000,
+      11719
+    ],
+    "centraldark\\centraldark-drive-auth\\SKILL.md": [
+      1788643426713934900,
+      1539
+    ],
+    "centraldark\\centraldark-fixed-point-shared\\SKILL.md": [
+      1788636971264286500,
+      4328
+    ],
+    "centraldark\\centraldark-front-integration\\SKILL.md": [
+      1788289856900541600,
+      14797
+    ],
+    "centraldark\\centraldark-function-duplication\\SKILL.md": [
+      1788637933509779100,
+      890
+    ],
+    "centraldark\\centraldark-harvest\\SKILL.md": [
+      1788253531415111600,
+      2899
+    ],
+    "centraldark\\centraldark-install\\SKILL.md": [
+      1788724875490041600,
+      715
+    ],
+    "centraldark\\centraldark-issue-guardian\\SKILL.md": [
+      1787797241090626100,
+      306
+    ],
+    "centraldark\\centraldark-lupa-drift-guard\\SKILL.md": [
+      1787798577406081000,
+      559
+    ],
+    "centraldark\\centraldark-master-funnel-autonomo\\SKILL.md": [
+      1788771558245039600,
+      19508
+    ],
+    "centraldark\\centraldark-megazord-binding\\SKILL.md": [
+      1788650067438905300,
+      3270
+    ],
+    "centraldark\\centraldark-multi-source-readonly\\SKILL.md": [
+      1788331686918982900,
+      10762
+    ],
+    "centraldark\\centraldark-multiplexed-duplication\\SKILL.md": [
+      1788643920166262900,
+      1900
+    ],
+    "centraldark\\centraldark-operational-discipline\\SKILL.md": [
+      1788875192841712900,
+      83418
+    ],
+    "centraldark\\centraldark-pendencias\\SKILL.md": [
+      1788637118237203900,
+      1411
+    ],
+    "centraldark\\centraldark-status-reconciliation\\SKILL.md": [
+      1788650282787034300,
+      2282
+    ],
+    "centraldark\\centraldark-vps-git-operations\\SKILL.md": [
+      1788753195538085500,
+      7133
+    ],
+    "centraldark-casa-operations\\SKILL.md": [
+      1788771434351855300,
+      80004
+    ],
+    "centraldark-ci-gate-debugging\\SKILL.md": [
+      1788917722053265600,
+      9450
+    ],
+    "centraldark-config-management\\SKILL.md": [
+      1788653725973400500,
+      660
+    ],
+    "centraldark-drive-reconciliation\\SKILL.md": [
+      1788288042328648100,
+      9175
+    ],
+    "centraldark-handoff-pattern\\SKILL.md": [
+      1788236329606206100,
+      4900
+    ],
+    "centraldark-hermes-config-edit\\SKILL.md": [
+      1788268948436304700,
+      3313
+    ],
+    "centraldark-hermes-config-edit-v2\\SKILL.md": [
+      1788500310539047300,
+      4192
+    ],
+    "centraldark-pattern-intelligence\\SKILL.md": [
+      1788192143153579400,
+      19607
+    ],
+    "centraldark-shared\\SKILL.md": [
+      1788643151507716200,
+      875
+    ],
+    "centraldark-workflow-authoring\\SKILL.md": [
+      1788924547325229000,
+      5181
+    ],
+    "core\\lupa-drift-guard\\SKILL.md": [
+      1787797914162709100,
+      737
+    ],
+    "creative\\DESCRIPTION.md": [
+      1784347005949037000,
+      119
+    ],
+    "creative\\architecture-diagram\\SKILL.md": [
+      1788751453100458100,
+      5830
+    ],
+    "creative\\ascii-art\\SKILL.md": [
+      1784347005953044700,
+      10878
+    ],
+    "creative\\ascii-video\\SKILL.md": [
+      1788751453104051500,
+      15011
+    ],
+    "creative\\baoyu-infographic\\SKILL.md": [
+      1788751453116618200,
+      10434
+    ],
+    "creative\\claude-design\\SKILL.md": [
+      1788751453170737100,
+      25117
+    ],
+    "creative\\comfyui\\SKILL.md": [
+      1785641291999904100,
+      24117
+    ],
+    "creative\\design-md\\SKILL.md": [
+      1788751453172249000,
+      8477
+    ],
+    "creative\\excalidraw\\SKILL.md": [
+      1785641292015438500,
+      7297
+    ],
+    "creative\\humanizer\\SKILL.md": [
+      1788751453176760400,
+      34463
+    ],
+    "creative\\manim-video\\SKILL.md": [
+      1788751453179759600,
+      12150
+    ],
+    "creative\\p5js\\SKILL.md": [
+      1788751453198894600,
+      27534
+    ],
+    "creative\\popular-web-designs\\SKILL.md": [
+      1788751453218917400,
+      9722
+    ],
+    "creative\\pretext\\SKILL.md": [
+      1785641292017464400,
+      13962
+    ],
+    "creative\\sketch\\SKILL.md": [
+      1785641292019484600,
+      9788
+    ],
+    "creative\\songwriting-and-ai-music\\SKILL.md": [
+      1788751453277955500,
+      10963
+    ],
+    "creative\\touchdesigner-mcp\\SKILL.md": [
+      1785641292023540600,
+      15269
+    ],
+    "cybersecurity\\claude-code-security\\SKILL.md": [
+      1787639885078967800,
+      3086
+    ],
+    "cybersecurity\\edr-zero-trust-hunter\\SKILL.md": [
+      1788081640894873300,
+      17528
+    ],
+    "desktop\\cua-driver-windows-elevado\\SKILL.md": [
+      1788105763433939600,
+      3825
+    ],
+    "desktop\\env-file-handling\\SKILL.md": [
+      1788106658418346600,
+      1755
+    ],
+    "desktop\\tauri-code-signing\\SKILL.md": [
+      1787439407713148300,
+      8132
+    ],
+    "devops\\branch-reconciliation\\SKILL.md": [
+      1787995760186091700,
+      6794
+    ],
+    "devops\\centraldark-ci-reconciliation\\SKILL.md": [
+      1788621829661115900,
+      27460
+    ],
+    "devops\\centraldark-vps-operations\\SKILL.md": [
+      1788756792085399600,
+      61988
+    ],
+    "devops\\centraldark-vps-runner\\SKILL.md": [
+      1787770275551402900,
+      3705
+    ],
+    "devops\\cron-maintenance-tasks\\SKILL.md": [
+      1788712609052901100,
+      35898
+    ],
+    "devops\\dependabot-workflow\\SKILL.md": [
+      1788502727158252400,
+      7871
+    ],
+    "devops\\git-worktree-collision-avoidance\\SKILL.md": [
+      1788621945820323700,
+      2304
+    ],
+    "devops\\hermes-vscode-deploy\\SKILL.md": [
+      1787771208099634300,
+      3490
+    ],
+    "devops\\hermes-webui-deploy\\SKILL.md": [
+      1788106167350928100,
+      4825
+    ],
+    "devops\\hermes-webui-remote-access\\SKILL.md": [
+      1788105892788179200,
+      4076
+    ],
+    "devops\\sdlc-review\\SKILL.md": [
+      1788751453280460900,
+      9073
+    ],
+    "devops\\tailscale-remote-access\\SKILL.md": [
+      1788106658716726300,
+      2881
+    ],
+    "devops\\vps-reboot-forensic\\SKILL.md": [
+      1787771600342985000,
+      2578
+    ],
+    "directory-watch\\SKILL.md": [
+      1788232776727476800,
+      2541
+    ],
+    "email\\DESCRIPTION.md": [
+      1784347006192789700,
+      104
+    ],
+    "email\\email-inbox-triage\\SKILL.md": [
+      1788751453283470500,
+      4057
+    ],
+    "email\\himalaya\\SKILL.md": [
+      1788751453284470400,
+      7272
+    ],
+    "external-service-document-review\\SKILL.md": [
+      1788270336235600900,
+      5454
+    ],
+    "fable-loop\\SKILL.md": [
+      1788716467149488100,
+      13792
+    ],
+    "forensics\\centraldark-forensic-attribution\\SKILL.md": [
+      1788234060814620200,
+      7548
+    ],
+    "frente-01-skills-reforco\\SKILL.md": [
+      1788490584125602500,
+      372
+    ],
+    "gatilhos-hermesscreenpipe-observabilidade\\SKILL.md": [
+      1788268027399550700,
+      2706
+    ],
+    "github\\DESCRIPTION.md": [
+      1784347006198797000,
+      170
+    ],
+    "github\\centraldark-label-conventions\\SKILL.md": [
+      1787761911661207400,
+      2564
+    ],
+    "github\\codebase-inspection\\SKILL.md": [
+      1787851356251978200,
+      5188
+    ],
+    "github\\github-auth\\SKILL.md": [
+      1785641292026224000,
+      7618
+    ],
+    "github\\github-code-review\\SKILL.md": [
+      1785641292031464900,
+      13620
+    ],
+    "github\\github-issues\\SKILL.md": [
+      1785641292033993300,
+      9320
+    ],
+    "github\\github-pr-workflow\\SKILL.md": [
+      1785641292035506300,
+      10040
+    ],
+    "github\\github-repo-management\\SKILL.md": [
+      1785641292036516300,
+      13738
+    ],
+    "google-drive-document-handling\\SKILL.md": [
+      1788218930296845900,
+      1706
+    ],
+    "gpt-5.5-principles-extractor\\SKILL.md": [
+      1788253619486605900,
+      16593
+    ],
+    "hermes\\centraldark-hermes-vault-enforce\\SKILL.md": [
+      1788719278173410900,
+      1153
+    ],
+    "hermes\\hermes-cli-extension\\SKILL.md": [
+      1788230965535971700,
+      7923
+    ],
+    "hermes\\hermes-desktop-concert\\SKILL.md": [
+      1788748460816906600,
+      8130
+    ],
+    "hermes-casa-health-monitoring\\SKILL.md": [
+      1788891610713732500,
+      6016
+    ],
+    "hermes-profile-canonical-reconciliation\\SKILL.md": [
+      1787850343698728800,
+      24146
+    ],
+    "investigation\\centraldark-screenpipe-e2e-forensics\\SKILL.md": [
+      1788096125067327000,
+      4215
+    ],
+    "investigation\\domain-api-consolidation\\SKILL.md": [
+      1787912693299871800,
+      4408
+    ],
+    "investigation\\forensic-recon\\SKILL.md": [
+      1787637890043291700,
+      5447
+    ],
+    "investigation\\integration-consumption-forensics\\SKILL.md": [
+      1788094112179077000,
+      4922
+    ],
+    "investigation\\notepad-forensic-extraction\\SKILL.md": [
+      1788492857401786600,
+      2691
+    ],
+    "local-clone-vs-remote-file-exists\\SKILL.md": [
+      1787851235250579800,
+      4861
+    ],
+    "lupa-compatibility-guard\\SKILL.md": [
+      1787798398499738600,
+      827
+    ],
+    "media\\DESCRIPTION.md": [
+      1784347006230523300,
+      142
+    ],
+    "media\\gif-search\\SKILL.md": [
+      1788751453305772900,
+      2720
+    ],
+    "media\\songsee\\SKILL.md": [
+      1788751453307771000,
+      2336
+    ],
+    "media\\voice-tts-config\\SKILL.md": [
+      1788716970563897300,
+      8337
+    ],
+    "media\\youtube-content\\SKILL.md": [
+      1788751453308771200,
+      3538
+    ],
+    "mermaid-skill\\SKILL.md": [
+      1787800159985686800,
+      12347
+    ],
+    "mlops\\DESCRIPTION.md": [
+      1784347006240519500,
+      165
+    ],
+    "mlops\\evaluation\\DESCRIPTION.md": [
+      1784347006242519500,
+      129
+    ],
+    "mlops\\evaluation\\evaluating-llms-harness\\SKILL.md": [
+      1785641292039526200,
+      12204
+    ],
+    "mlops\\evaluation\\weights-and-biases\\SKILL.md": [
+      1785641292046522300,
+      12676
+    ],
+    "mlops\\huggingface-hub\\SKILL.md": [
+      1785641292048528400,
+      3715
+    ],
+    "mlops\\inference\\DESCRIPTION.md": [
+      1784347006256727000,
+      164
+    ],
+    "mlops\\inference\\llama-cpp\\SKILL.md": [
+      1784347006258728900,
+      9129
+    ],
+    "mlops\\inference\\serving-llms-vllm\\SKILL.md": [
+      1785641292051532000,
+      9335
+    ],
+    "mlops\\models\\DESCRIPTION.md": [
+      1784347006272240000,
+      256
+    ],
+    "note-taking\\DESCRIPTION.md": [
+      1784347006281635500,
+      149
+    ],
+    "note-taking\\centraldark-brain-vault-notes\\SKILL.md": [
+      1788476655663379800,
+      7783
+    ],
+    "note-taking\\obsidian\\SKILL.md": [
+      1788751453316281700,
+      3092
+    ],
+    "operational\\absolute-lock-protocol\\SKILL.md": [
+      1787842341432139500,
+      2986
+    ],
+    "operational\\autonomous-execution-mode\\SKILL.md": [
+      1788508478494492700,
+      5103
+    ],
+    "operational\\hermes-platform-access-control\\SKILL.md": [
+      1787632594063910800,
+      3508
+    ],
+    "operational\\intention-driven-workflow\\SKILL.md": [
+      1787911288280944700,
+      2646
+    ],
+    "operational\\multi-agent-rendezvous\\SKILL.md": [
+      1788243516412729000,
+      2759
+    ],
+    "operational\\operational-incident-response\\SKILL.md": [
+      1787842743195277100,
+      4856
+    ],
+    "operational-communication\\card-castelo-pivete\\SKILL.md": [
+      1787632720228933500,
+      2048
+    ],
+    "operational-communication\\operational-comms-pivete\\SKILL.md": [
+      1788080843841716800,
+      18228
+    ],
+    "operational-communication\\operational-communication-contract\\SKILL.md": [
+      1788257178228488500,
+      4138
+    ],
+    "operational-communication\\pivete-dialect-compact\\SKILL.md": [
+      1788702834121189100,
+      40168
+    ],
+    "operational-communication\\resposta-cortada\\SKILL.md": [
+      1788277375027969200,
+      1604
+    ],
+    "operational-framework\\centraldark-casa-operational\\SKILL.md": [
+      1788632742573805200,
+      1619
+    ],
+    "operational-framework\\multibussoa-meta\\SKILL.md": [
+      1787769969198799500,
+      1065
+    ],
+    "operational-intelligence\\session-intelligence-harvester\\SKILL.md": [
+      1787936798447069400,
+      13986
+    ],
+    "operational-method\\agencia-forense-desinformacao\\SKILL.md": [
+      1787640376711147200,
+      3666
+    ],
+    "operational-method\\agent-media-recovery\\SKILL.md": [
+      1787831349177146600,
+      2832
+    ],
+    "operational-method\\cristalizacao-documento\\SKILL.md": [
+      1788642690553525300,
+      1706
+    ],
+    "operational-method\\investigacao-guardiao\\SKILL.md": [
+      1787640559168696600,
+      7442
+    ],
+    "operational-method\\kimetsu-legacy-operational-method\\SKILL.md": [
+      1788815121245625400,
+      31407
+    ],
+    "operational-method\\meta-lupa-checkout-pattern\\SKILL.md": [
+      1788375392104285100,
+      798
+    ],
+    "pivete-dialeto-compact\\SKILL.md": [
+      1788702373447078000,
+      4866
+    ],
+    "pivete-session-guide\\SKILL.md": [
+      1788619787605221700,
+      9227
+    ],
+    "pretty-mermaid\\SKILL.md": [
+      1787800161571001900,
+      8006
+    ],
+    "productivity\\DESCRIPTION.md": [
+      1784347006284634700,
+      117
+    ],
+    "productivity\\airtable\\SKILL.md": [
+      1788751453319282700,
+      11314
+    ],
+    "productivity\\box\\SKILL.md": [
+      1788751453321282700,
+      11697
+    ],
+    "productivity\\document-to-action-items\\SKILL.md": [
+      1788751453334287700,
+      3910
+    ],
+    "productivity\\docx\\SKILL.md": [
+      1788751453338288400,
+      10395
+    ],
+    "productivity\\google-workspace\\SKILL.md": [
+      1788751453352797900,
+      13670
+    ],
+    "productivity\\maps\\SKILL.md": [
+      1788751453361804700,
+      6705
+    ],
+    "productivity\\meeting-action-items\\SKILL.md": [
+      1788751453364804300,
+      3808
+    ],
+    "productivity\\nano-pdf\\SKILL.md": [
+      1785641292140210700,
+      1605
+    ],
+    "productivity\\notion\\SKILL.md": [
+      1788751453366806000,
+      14629
+    ],
+    "productivity\\ocr-and-documents\\SKILL.md": [
+      1785641292142211100,
+      5383
+    ],
+    "productivity\\ocr-and-documents\\DESCRIPTION.md": [
+      1784347006302667800,
+      150
+    ],
+    "productivity\\pdf\\SKILL.md": [
+      1788751453371308300,
+      12489
+    ],
+    "productivity\\powerpoint\\SKILL.md": [
+      1785641292157727200,
+      20539
+    ],
+    "productivity\\product-price-monitor\\SKILL.md": [
+      1788751453406642900,
+      4400
+    ],
+    "productivity\\teams-meeting-pipeline\\SKILL.md": [
+      1788751453407642600,
+      7206
+    ],
+    "productivity\\weekly-review-planning\\SKILL.md": [
+      1788751453409641900,
+      3975
+    ],
+    "productivity\\xlsx\\SKILL.md": [
+      1785641292179645600,
+      9126
+    ],
+    "provider-reputation-framework\\SKILL.md": [
+      1787843993818358300,
+      4330
+    ],
+    "research\\DESCRIPTION.md": [
+      1784347006366578600,
+      182
+    ],
+    "research\\arxiv\\SKILL.md": [
+      1788751453427647900,
+      10061
+    ],
+    "research\\blogwatcher\\SKILL.md": [
+      1784347006372089500,
+      5248
+    ],
+    "research\\competitor-news-monitor\\SKILL.md": [
+      1788751453430647400,
+      4618
+    ],
+    "research\\grounded-citations\\SKILL.md": [
+      1788751453478052500,
+      12434
+    ],
+    "research\\llm-wiki\\SKILL.md": [
+      1788751453485051200,
+      20121
+    ],
+    "research\\polymarket\\SKILL.md": [
+      1784347006375089300,
+      3062
+    ],
+    "research\\research-paper-writing\\SKILL.md": [
+      1785641292186643500,
+      103656
+    ],
+    "research\\rss-feeds\\SKILL.md": [
+      1788751453487051300,
+      4557
+    ],
+    "screenpipe-hermes-integration\\SKILL.md": [
+      1788392146840450500,
+      11229
+    ],
+    "smart-home\\DESCRIPTION.md": [
+      1784347006440638800,
+      126
+    ],
+    "smart-home\\openhue\\SKILL.md": [
+      1785641292188149100,
+      2843
+    ],
+    "social-media\\DESCRIPTION.md": [
+      1784347006442635700,
+      154
+    ],
+    "social-media\\reddit-reading\\SKILL.md": [
+      1788751453492051600,
+      6279
+    ],
+    "social-media\\xurl\\SKILL.md": [
+      1785641292190155900,
+      16345
+    ],
+    "software-development\\centraldark-handoff-pattern\\SKILL.md": [
+      1788279210887327100,
+      5881
+    ],
+    "software-development\\centraldark-omni-router\\SKILL.md": [
+      1787655946422932100,
+      7624
+    ],
+    "software-development\\centraldark-operational-method\\SKILL.md": [
+      1788497917555892500,
+      11245
+    ],
+    "software-development\\centraldark-pr-label\\SKILL.md": [
+      1787758484721376700,
+      2671
+    ],
+    "software-development\\dependabot-conflict-resolver\\SKILL.md": [
+      1787913595988185500,
+      3390
+    ],
+    "software-development\\dependency-intelligence-runtime\\SKILL.md": [
+      1787562964926358800,
+      7774
+    ],
+    "software-development\\dogfood\\SKILL.md": [
+      1788751453499789000,
+      6324
+    ],
+    "software-development\\fable-adversarial-audit\\SKILL.md": [
+      1787772532464609700,
+      3335
+    ],
+    "software-development\\github\\SKILL.md": [
+      1788751453532331400,
+      2446
+    ],
+    "software-development\\heal-esbuild-optional-deps\\SKILL.md": [
+      1787563686661883500,
+      1737
+    ],
+    "software-development\\heal-rollup-optional-deps\\SKILL.md": [
+      1787563715218382200,
+      1779
+    ],
+    "software-development\\heal-vite-npm-dependency\\SKILL.md": [
+      1787562494470550700,
+      2632
+    ],
+    "software-development\\hermes-agent-skill-authoring\\SKILL.md": [
+      1788751453551338900,
+      14432
+    ],
+    "software-development\\hermes-multi-profile-orchestration\\SKILL.md": [
+      1786206576394106100,
+      9203
+    ],
+    "software-development\\inspecting-hermes-desktop-dom\\SKILL.md": [
+      1785641292199155600,
+      6204
+    ],
+    "software-development\\node-inspect-debugger\\SKILL.md": [
+      1788751453555848100,
+      10894
+    ],
+    "software-development\\plan\\SKILL.md": [
+      1785641292202665600,
+      8903
+    ],
+    "software-development\\python-debugpy\\SKILL.md": [
+      1788751453557852900,
+      13347
+    ],
+    "software-development\\requesting-code-review\\SKILL.md": [
+      1788751453559853900,
+      8423
+    ],
+    "software-development\\simplify-code\\SKILL.md": [
+      1788751453561853900,
+      14696
+    ],
+    "software-development\\skill-crystallization-engine\\SKILL.md": [
+      1788466854107774000,
+      9725
+    ],
+    "software-development\\spike\\SKILL.md": [
+      1788751453563854200,
+      8723
+    ],
+    "software-development\\systematic-debugging\\SKILL.md": [
+      1788751453565854000,
+      14059
+    ],
+    "software-development\\t0-integral-mapeamento\\SKILL.md": [
+      1788630321862840300,
+      5960
+    ],
+    "software-development\\test-driven-development\\SKILL.md": [
+      1788751453567853400,
+      10300
+    ],
+    "software-development\\trigger-fabric-packager\\SKILL.md": [
+      1787633097727495700,
+      12455
+    ],
+    "test-skill\\SKILL.md": [
+      1788714873576097900,
+      87
+    ],
+    "text-file-reading-workaround\\SKILL.md": [
+      1787891295332311800,
+      4067
+    ],
+    "trigger-chain-verification\\SKILL.md": [
+      1787976589622995800,
+      7217
+    ],
+    "web\\DESCRIPTION.md": [
+      1788751453569858200,
+      137
+    ],
+    "web\\blocked-page-recovery\\SKILL.md": [
+      1788751453570853900,
+      5156
+    ]
+  },
+  "skills": [
+    {
+      "skill_name": "ai-assistant-integration",
+      "category": "ai-assistant-integration",
+      "frontmatter_name": "ai-assistant-integration",
+      "description": "AI assistant integration patterns with external tools",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "ai-model-communication-preference",
+      "category": "ai-model-communication-preference",
+      "frontmatter_name": "ai-model-communication-preference",
+      "description": "Preferir modelo Nous gratuito, sem chaves ou pagos.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "canonical-doc-analysis",
+      "category": "analysis",
+      "frontmatter_name": "canonical-doc-analysis",
+      "description": "Analyze doctrine text for semantic gaps, contradictions",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "apple-notes",
+      "category": "apple",
+      "frontmatter_name": "apple-notes",
+      "description": "",
+      "platforms": [
+        "macos"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "apple-reminders",
+      "category": "apple",
+      "frontmatter_name": "apple-reminders",
+      "description": "",
+      "platforms": [
+        "macos"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "findmy",
+      "category": "apple",
+      "frontmatter_name": "findmy",
+      "description": "",
+      "platforms": [
+        "macos"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "imessage",
+      "category": "apple",
+      "frontmatter_name": "imessage",
+      "description": "",
+      "platforms": [
+        "macos"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "auto-destilador",
+      "category": "auto-destilador",
+      "frontmatter_name": "auto-destilador",
+      "description": "Watchdog destila e cristaliza arquivos no NUCLEO — suport...",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "autonomous-task-routing",
+      "category": "autonomous-ai-agents",
+      "frontmatter_name": "autonomous-task-routing",
+      "description": "Route autonomous-agent intents to real Hermes capabilities.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "claude-code",
+      "category": "autonomous-ai-agents",
+      "frontmatter_name": "claude-code",
+      "description": "Delegate coding to Claude Code CLI (features, PRs).",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "codex",
+      "category": "autonomous-ai-agents",
+      "frontmatter_name": "codex",
+      "description": "Delegate coding to OpenAI Codex CLI (features, PRs).",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "computer-use",
+      "category": "autonomous-ai-agents",
+      "frontmatter_name": "computer-use",
+      "description": "Drive the desktop background-first; escalate on signal.",
+      "platforms": [
+        "macos",
+        "windows",
+        "linux"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "hermes-agent",
+      "category": "autonomous-ai-agents",
+      "frontmatter_name": "hermes-agent",
+      "description": "Use, configure, theme, extend, and orchestrate Hermes Agent.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "opencode",
+      "category": "autonomous-ai-agents",
+      "frontmatter_name": "opencode",
+      "description": "Delegate coding to OpenCode CLI (features, PR review).",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "operational-communication",
+      "category": "autonomous-ai-agents",
+      "frontmatter_name": "operational-communication",
+      "description": "Use when operating under SOUL/gate evidence frameworks.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "autonomous-dependa-boot",
+      "category": "autonomous-operation",
+      "frontmatter_name": "autonomous-dependa-boot",
+      "description": "Multi-arm autonomous operation. Reach fixed point silently.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "autonomous-session-continuity",
+      "category": "autonomous-operation",
+      "frontmatter_name": "autonomous-session-continuity",
+      "description": "Resume mission after truncation without human re-prompt.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "brain-vault-watcher",
+      "category": "brain-vault-watcher",
+      "frontmatter_name": "brain-vault-watcher",
+      "description": "Watch BRAIN vault for markdown changes to auto-update MOCs.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-casa-operations",
+      "category": "centraldark-casa-operations",
+      "frontmatter_name": "centraldark-casa-operations",
+      "description": "Usar quando operar Casa CentralDark.",
+      "platforms": [
+        "windows",
+        "linux"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-ci-gate-debugging",
+      "category": "centraldark-ci-gate-debugging",
+      "frontmatter_name": "centraldark-ci-gate-debugging",
+      "description": "Debug CentralDark CI gate failures via gh and git.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-config-management",
+      "category": "centraldark-config-management",
+      "frontmatter_name": "centraldark-config-management",
+      "description": "CentralDark config changes, FABLE_LOOP settings.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-drive-reconciliation",
+      "category": "centraldark-drive-reconciliation",
+      "frontmatter_name": "centraldark-drive-reconciliation",
+      "description": "Reconcilia Google Drive ↔ workspace local para CentralDar...",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-handoff-pattern",
+      "category": "centraldark-handoff-pattern",
+      "frontmatter_name": "centraldark-handoff-pattern",
+      "description": "",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-hermes-config-edit-v2",
+      "category": "centraldark-hermes-config-edit-v2",
+      "frontmatter_name": "centraldark-hermes-config-edit",
+      "description": "Edit Hermes config.yaml with PyYAML from its venv.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-hermes-config-edit",
+      "category": "centraldark-hermes-config-edit",
+      "frontmatter_name": "centraldark-hermes-config-edit",
+      "description": "Edit Hermes config.yaml with PyYAML from its venv.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-pattern-intelligence",
+      "category": "centraldark-pattern-intelligence",
+      "frontmatter_name": "centraldark-pattern-intelligence",
+      "description": "Adaptive pattern intelligence motor for CentralDark",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-shared",
+      "category": "centraldark-shared",
+      "frontmatter_name": "centraldark-shared",
+      "description": "Emp&alias for RECONCILIAR_SHARED",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-workflow-authoring",
+      "category": "centraldark-workflow-authoring",
+      "frontmatter_name": "centraldark-workflow-authoring",
+      "description": "Extend CentralDark workflows safely without new infra.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-bin-launcher",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-bin-launcher",
+      "description": "Launcher for !CENTRALDARK command.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-ci-gate-forensics",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-ci-gate-forensics",
+      "description": "CentralDark CI gate red? Find base cause, prove local.",
+      "platforms": [
+        "windows",
+        "linux"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-drive-auth",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-drive-auth",
+      "description": "Setup Google OAuth for CentralDark Drive integration.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-fixed-point-shared",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-fixed-point-shared",
+      "description": "Shared reconciliation FIRST_WRITER_WINS fixed point.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-front-integration",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-front-integration",
+      "description": "Integrate a new FABLE LOOP reconciliation front.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-function-duplication",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-function-duplication",
+      "description": "Duplica funções entre Zendrive, Rabbit e Hermes.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-harvest",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-harvest",
+      "description": "Minerar Notepad/CentralDark para handoff ChatGPT.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-install",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-install",
+      "description": "Instala o CLI centraldark para o ambiente.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-issue-guardian",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-issue-guardian",
+      "description": "Checa e registra status de issues e PRs em CentralDark.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-lupa-drift-guard",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-lupa-drift-guard",
+      "description": "Blocks false Lupa drift; permits compatibility alias.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-master-funnel-autonomo",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-master-funnel-autonomo",
+      "description": "Use when !CENTRALDARK::<intenção> com autonomia total.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-megazord-binding",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-megazord-binding",
+      "description": "MEGAZORD binding and engine gap checker.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-multi-source-readonly",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-multi-source-readonly",
+      "description": "Multi-source read-only with Google Drive skill, cognitive",
+      "platforms": [
+        "windows",
+        "linux"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-multiplexed-duplication",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-multiplexed-duplication",
+      "description": "Duplicate concurrency for Zendrive, Rabbit, Hermes.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-operational-discipline",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-operational-discipline",
+      "description": "CentralDark Casa: anti-papagaio, measure-copy, no ABC ask.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-pendencias",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-pendencias",
+      "description": "Manage the CentralDark pendências file",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-status-reconciliation",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-status-reconciliation",
+      "description": "Status semáforo: cor não é prova; tem genealogia e HEAD.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-vps-git-operations",
+      "category": "centraldark",
+      "frontmatter_name": "centraldark-vps-git-operations",
+      "description": "VPS git ops — chattr, lsattr, deploy, dependabot conflito.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "lupa-drift-guard",
+      "category": "core",
+      "frontmatter_name": "lupa-drift-guard",
+      "description": "Lupa Drift Guard helper",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "architecture-diagram",
+      "category": "creative",
+      "frontmatter_name": "architecture-diagram",
+      "description": "Dark-themed SVG architecture/cloud/infra diagrams as HTML.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "ascii-art",
+      "category": "creative",
+      "frontmatter_name": "ascii-art",
+      "description": "ASCII art: pyfiglet, cowsay, boxes, image-to-ascii.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "ascii-video",
+      "category": "creative",
+      "frontmatter_name": "ascii-video",
+      "description": "ASCII video: convert video/audio to colored ASCII MP4/GIF.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "baoyu-infographic",
+      "category": "creative",
+      "frontmatter_name": "baoyu-infographic",
+      "description": "Infographics: 21 layouts x 21 styles (信息图, 可视化).",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "claude-design",
+      "category": "creative",
+      "frontmatter_name": "claude-design",
+      "description": "Design one-off HTML artifacts (landing, deck, prototype).",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "comfyui",
+      "category": "creative",
+      "frontmatter_name": "comfyui",
+      "description": "Generate images, video, and audio via diffusion workflows.",
+      "platforms": [
+        "macos",
+        "linux",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "design-md",
+      "category": "creative",
+      "frontmatter_name": "design-md",
+      "description": "Author/validate/export Google's DESIGN.md token spec files.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "excalidraw",
+      "category": "creative",
+      "frontmatter_name": "excalidraw",
+      "description": "Hand-drawn Excalidraw JSON diagrams (arch, flow, seq).",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "humanizer",
+      "category": "creative",
+      "frontmatter_name": "humanizer",
+      "description": "Humanize text: strip AI-isms and add real voice.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "manim-video",
+      "category": "creative",
+      "frontmatter_name": "manim-video",
+      "description": "Manim CE animations: 3Blue1Brown math/algo videos.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "p5js",
+      "category": "creative",
+      "frontmatter_name": "p5js",
+      "description": "p5.js sketches: gen art, shaders, interactive, 3D.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "popular-web-designs",
+      "category": "creative",
+      "frontmatter_name": "popular-web-designs",
+      "description": "54 real design systems (Stripe, Linear, Vercel) as HTML/CSS.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "pretext",
+      "category": "creative",
+      "frontmatter_name": "pretext",
+      "description": "Build creative browser demos with DOM-free text layout.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "sketch",
+      "category": "creative",
+      "frontmatter_name": "sketch",
+      "description": "Throwaway HTML mockups: 2-3 design variants to compare.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "songwriting-and-ai-music",
+      "category": "creative",
+      "frontmatter_name": "songwriting-and-ai-music",
+      "description": "Songwriting craft and Suno AI music prompts.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "touchdesigner-mcp",
+      "category": "creative",
+      "frontmatter_name": "touchdesigner-mcp",
+      "description": "Control TouchDesigner via twozero MCP.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "claude-code-security",
+      "category": "cybersecurity",
+      "frontmatter_name": "claude-code-security",
+      "description": "Lock Claude Code permission bypasses anywhere they live.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "edr-zero-trust-hunter",
+      "category": "cybersecurity",
+      "frontmatter_name": "edr-zero-trust-hunter",
+      "description": "Hunt EDR/Zero Trust/MITRE ATT&CK on Windows native tools.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "cua-driver-windows-elevado",
+      "category": "desktop",
+      "frontmatter_name": "cua-driver-windows-elevado",
+      "description": "Run cua-driver ELEVATED on Windows to fix WinError 740.",
+      "platforms": [
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "env-file-handling",
+      "category": "desktop",
+      "frontmatter_name": "env-file-handling",
+      "description": "Open .env in Notepad; never echo secrets to terminal.",
+      "platforms": [
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "tauri-code-signing",
+      "category": "desktop",
+      "frontmatter_name": "tauri-code-signing",
+      "description": "Configure Tauri v2 Windows code signing with EV certificate.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "branch-reconciliation",
+      "category": "devops",
+      "frontmatter_name": "branch-reconciliation",
+      "description": "Resolve merge conflicts using shared remote as truth.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-ci-reconciliation",
+      "category": "devops",
+      "frontmatter_name": "centraldark-ci-reconciliation",
+      "description": "PR/CI vermelho: diagnosticar runner e rebase divergido",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-vps-operations",
+      "category": "devops",
+      "frontmatter_name": "centraldark-vps-operations",
+      "description": "CentralDark VPS runtime and housekeeping.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-vps-runner",
+      "category": "devops",
+      "frontmatter_name": "centraldark-vps-runner",
+      "description": "Setup, manutenção e fixed-point de runner self-hosted Git...",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "cron-maintenance-tasks",
+      "category": "devops",
+      "frontmatter_name": "cron-maintenance-tasks",
+      "description": "Hermes cron: agendar tarefa recorrente à validação.",
+      "platforms": [
+        "windows",
+        "linux"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "dependabot-workflow",
+      "category": "devops",
+      "frontmatter_name": "dependabot-workflow",
+      "description": "Dependabot rebase loop: recreate and manual fallback.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "git-worktree-collision-avoidance",
+      "category": "devops",
+      "frontmatter_name": "git-worktree-collision-avoidance",
+      "description": "Avoid git branch/worktree collisions on PR branches.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "hermes-vscode-deploy",
+      "category": "devops",
+      "frontmatter_name": "hermes-vscode-deploy",
+      "description": "Deploy da CentralDark via Hermes Agent + VSCode/A CP + ru...",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "hermes-webui-deploy",
+      "category": "devops",
+      "frontmatter_name": "hermes-webui-deploy",
+      "description": "Set up Hermes WebUI on Windows for iPhone via Tailscale.",
+      "platforms": [
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "hermes-webui-remote-access",
+      "category": "devops",
+      "frontmatter_name": "hermes-webui-remote-access",
+      "description": "Setup Hermes WebUI remote via Tailscale + iPhone Hermex.",
+      "platforms": [
+        "windows",
+        "linux",
+        "macos"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "sdlc-review",
+      "category": "devops",
+      "frontmatter_name": "sdlc-review",
+      "description": "Review Kanban handoffs and route verified outcomes.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [
+          "kanban"
+        ],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "tailscale-remote-access",
+      "category": "devops",
+      "frontmatter_name": "tailscale-remote-access",
+      "description": "Expose local server over Tailscale Serve with auth.",
+      "platforms": [
+        "windows",
+        "linux",
+        "macos"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "vps-reboot-forensic",
+      "category": "devops",
+      "frontmatter_name": "vps-reboot-forensic",
+      "description": "Reboot VPS Contabo + forense Cloudflare via API, read-onl...",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "directory-watch",
+      "category": "directory-watch",
+      "frontmatter_name": "directory-watch",
+      "description": "Monitor directory file changes in real-time with SHA256.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "email-inbox-triage",
+      "category": "email",
+      "frontmatter_name": "email-inbox-triage",
+      "description": "Triage an inbox: prioritize threads, draft replies safely.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "himalaya",
+      "category": "email",
+      "frontmatter_name": "himalaya",
+      "description": "Himalaya CLI: IMAP/SMTP email from terminal.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "external-service-document-review",
+      "category": "external-service-document-review",
+      "frontmatter_name": "external-service-document-review",
+      "description": "Review external docs and produce structured summaries.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "fable-loop",
+      "category": "fable-loop",
+      "frontmatter_name": "fable-loop",
+      "description": "FABLE LOOP: distributed sources, not parallel systems.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-forensic-attribution",
+      "category": "forensics",
+      "frontmatter_name": "centraldark-forensic-attribution",
+      "description": "Forensic attribution for VPS deploy and runtime issues.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "frente-01-skills-reforco",
+      "category": "frente-01-skills-reforco",
+      "frontmatter_name": "frente-01-skills-reforco",
+      "description": "Listar e testar skills críticas da Casa.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "gatilhos-hermesscreenpipe-observabilidade",
+      "category": "gatilhos-hermesscreenpipe-observabilidade",
+      "frontmatter_name": "gatilhos-hermesscreenpipe-observabilidade",
+      "description": "screenpipe-hermes gatilhos: monitor/passado/futuro/logs",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-label-conventions",
+      "category": "github",
+      "frontmatter_name": "centraldark-label-conventions",
+      "description": "",
+      "platforms": [
+        "any"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "codebase-inspection",
+      "category": "github",
+      "frontmatter_name": "codebase-inspection",
+      "description": "Inspect codebases w/ pygount: LOC, languages, ratios.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "github-auth",
+      "category": "github",
+      "frontmatter_name": "github-auth",
+      "description": "GitHub auth setup: HTTPS tokens, SSH keys, gh CLI login.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "github-code-review",
+      "category": "github",
+      "frontmatter_name": "github-code-review",
+      "description": "Review PRs: diffs, inline comments via gh or REST.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "github-issues",
+      "category": "github",
+      "frontmatter_name": "github-issues",
+      "description": "Create, triage, label, assign GitHub issues via gh or REST.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "github-pr-workflow",
+      "category": "github",
+      "frontmatter_name": "github-pr-workflow",
+      "description": "GitHub PR lifecycle: branch, commit, open, CI, merge.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "github-repo-management",
+      "category": "github",
+      "frontmatter_name": "github-repo-management",
+      "description": "Clone/create/fork repos; manage remotes, releases.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "google-drive-document-handling",
+      "category": "google-drive-document-handling",
+      "frontmatter_name": "google-drive-document-handling",
+      "description": "Detect and convert file formats from Google Drive exports.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "gpt-5.5-principles-extractor",
+      "category": "gpt-5.5-principles-extractor",
+      "frontmatter_name": "gpt-5.5-principles-extractor",
+      "description": "Mega-skill cristalizada: princípios reutilizáveis extraíd...",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "hermes-casa-health-monitoring",
+      "category": "hermes-casa-health-monitoring",
+      "frontmatter_name": "hermes-casa-health-monitoring",
+      "description": "Monitor Hermes-Casa health and safely remediate issues.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "hermes-profile-canonical-reconciliation",
+      "category": "hermes-profile-canonical-reconciliation",
+      "frontmatter_name": "hermes-profile-canonical-reconciliation",
+      "description": "Trigger: bootstrap, drift, pre-commit, mission. Adapts SOUL.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-hermes-vault-enforce",
+      "category": "hermes",
+      "frontmatter_name": "CentralDark Hermes Vault Enforce",
+      "description": "Garantir que Hermes carregue Vault no boot.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "hermes-cli-extension",
+      "category": "hermes",
+      "frontmatter_name": "hermes-cli-extension",
+      "description": "Extend Hermes CLI with slash commands and handlers.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "hermes-desktop-concert",
+      "category": "hermes",
+      "frontmatter_name": "hermes-desktop-concert",
+      "description": "Diagnose Hermes desktop app failures by reading logs first.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-screenpipe-e2e-forensics",
+      "category": "investigation",
+      "frontmatter_name": "centraldark-screenpipe-e2e-forensics",
+      "description": "Read-only proof Hermes consumes Screenpipe via causal chain.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "domain-api-consolidation",
+      "category": "investigation",
+      "frontmatter_name": "domain-api-consolidation",
+      "description": "Use when checking 1-domain-1-API setup.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "forensic-recon",
+      "category": "investigation",
+      "frontmatter_name": "forensic-recon",
+      "description": "Trace file/asset origin & attribution (read-only recon).",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "integration-consumption-forensics",
+      "category": "investigation",
+      "frontmatter_name": "integration-consumption-forensics",
+      "description": "Prove an agent consumes an external system.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "notepad-forensic-extraction",
+      "category": "investigation",
+      "frontmatter_name": "notepad-forensic-extraction",
+      "description": "Extrair texto de Notepad .bin via python strings/utf16le.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "local-clone-vs-remote-file-exists",
+      "category": "local-clone-vs-remote-file-exists",
+      "frontmatter_name": "local-clone-vs-remote-file-exists",
+      "description": "CI gate fails on file absent locally. Check origin/main.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "lupa-compatibility-guard",
+      "category": "lupa-compatibility-guard",
+      "frontmatter_name": "lupa-compatibility-guard",
+      "description": "Manages alias dirs in Lupa Drift Guard",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "gif-search",
+      "category": "media",
+      "frontmatter_name": "gif-search",
+      "description": "Search/download GIFs from Tenor via curl + jq.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "songsee",
+      "category": "media",
+      "frontmatter_name": "songsee",
+      "description": "Audio spectrograms/features (mel, chroma, MFCC) via CLI.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "voice-tts-config",
+      "category": "media",
+      "frontmatter_name": "voice-tts-config",
+      "description": "Sempre passe voice no TTS ou sai inglês.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "youtube-content",
+      "category": "media",
+      "frontmatter_name": "youtube-content",
+      "description": "YouTube transcripts to summaries, threads, blogs.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "mermaid-skill",
+      "category": "mermaid-skill",
+      "frontmatter_name": "mermaid-skill",
+      "description": "Generate Mermaid diagrams (.mmd) and export to PNG/SVG/PD...",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "evaluating-llms-harness",
+      "category": "mlops/evaluation",
+      "frontmatter_name": "evaluating-llms-harness",
+      "description": "",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "weights-and-biases",
+      "category": "mlops/evaluation",
+      "frontmatter_name": "weights-and-biases",
+      "description": "W&B: log ML experiments, sweeps, model registry, dashboards.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "huggingface-hub",
+      "category": "mlops",
+      "frontmatter_name": "huggingface-hub",
+      "description": "HuggingFace hf CLI: search/download/upload models, datasets.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "llama-cpp",
+      "category": "mlops/inference",
+      "frontmatter_name": "llama-cpp",
+      "description": "llama.cpp local GGUF inference + HF Hub model discovery.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "serving-llms-vllm",
+      "category": "mlops/inference",
+      "frontmatter_name": "serving-llms-vllm",
+      "description": "",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-brain-vault-notes",
+      "category": "note-taking",
+      "frontmatter_name": "centraldark-brain-vault-notes",
+      "description": "Trigger docs/BRAIN nota. Callouts prioridade grafo hash.",
+      "platforms": [
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "obsidian",
+      "category": "note-taking",
+      "frontmatter_name": "obsidian",
+      "description": "Read, search, create, and edit notes in the Obsidian vault.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "card-castelo-pivete",
+      "category": "operational-communication",
+      "frontmatter_name": "card-castelo-pivete",
+      "description": "Use when replying to Pivete: format as Castle Card v1.2.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "operational-comms-pivete",
+      "category": "operational-communication",
+      "frontmatter_name": "operational-comms-pivete",
+      "description": "Use when talking to Pivete: card style and intent-over-form.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "operational-communication-contract",
+      "category": "operational-communication",
+      "frontmatter_name": "operational-communication-contract",
+      "description": "Ultra-concise execute-first style no re-asks provenance.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "pivete-dialect-compact",
+      "category": "operational-communication",
+      "frontmatter_name": "pivete-dialect-compact",
+      "description": "Reply to Pivete with extreme conciseness in baianês. Zero...",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "resposta-cortada",
+      "category": "operational-communication",
+      "frontmatter_name": "resposta-cortada",
+      "description": "Resposta cortada: aguardar confirmação, não inventar.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-casa-operational",
+      "category": "operational-framework",
+      "frontmatter_name": "centraldark-casa-operational",
+      "description": "!CENTRALDARK SHARED. FIRST_WRITER_WINS.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "multibussoa-meta",
+      "category": "operational-framework",
+      "frontmatter_name": "multibussoa-meta",
+      "description": "Resolve bearings and converge routes in CentralDark.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "session-intelligence-harvester",
+      "category": "operational-intelligence",
+      "frontmatter_name": "session-intelligence-harvester",
+      "description": "Minera sessões e Notepad para handoff.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "agencia-forense-desinformacao",
+      "category": "operational-method",
+      "frontmatter_name": "agencia-forense-desinformacao",
+      "description": "Agência de fact-checking META LUPA: investigar N claims/a...",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "agent-media-recovery",
+      "category": "operational-method",
+      "frontmatter_name": "agent-media-recovery",
+      "description": "Image fails in chat? Read from disk by path not chat API",
+      "platforms": [
+        "windows",
+        "linux",
+        "macos"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "cristalizacao-documento",
+      "category": "operational-method",
+      "frontmatter_name": "cristalizacao-documento",
+      "description": "Arquivo físico consolidado para prova de estado.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "investigacao-guardiao",
+      "category": "operational-method",
+      "frontmatter_name": "investigacao-guardiao",
+      "description": "Investigate for Pivete: FORENSE vs SILENCIOSA.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "kimetsu-legacy-operational-method",
+      "category": "operational-method",
+      "frontmatter_name": "kimetsu-legacy-operational-method",
+      "description": "Use when CHEFE says 17 respiracoes / 17 respirações / kim...",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "meta-lupa-checkout-pattern",
+      "category": "operational-method",
+      "frontmatter_name": "meta-lupa-checkout-pattern",
+      "description": "Meta-lupa missing? Check sol checkout.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "absolute-lock-protocol",
+      "category": "operational",
+      "frontmatter_name": "absolute-lock-protocol",
+      "description": "",
+      "platforms": [
+        "universal"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "autonomous-execution-mode",
+      "category": "operational",
+      "frontmatter_name": "autonomous-execution-mode",
+      "description": "User demands autonomous operation without chat interruption.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "hermes-platform-access-control",
+      "category": "operational",
+      "frontmatter_name": "hermes-platform-access-control",
+      "description": "Verify or lock who can message the Hermes bot.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "intention-driven-workflow",
+      "category": "operational",
+      "frontmatter_name": "intention-driven-workflow",
+      "description": "Wait for intention, reject fragments, one-sentence rule.",
+      "platforms": [
+        "windows",
+        "linux"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "multi-agent-rendezvous",
+      "category": "operational",
+      "frontmatter_name": "multi-agent-rendezvous",
+      "description": "Parallel agent rendezvous with TIK_TAK proof freshness.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "operational-incident-response",
+      "category": "operational",
+      "frontmatter_name": "operational-incident-response",
+      "description": "VPS offline, MCP crash, secret leak → parallel fix.",
+      "platforms": [
+        "windows",
+        "linux"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "pivete-dialeto-compact",
+      "category": "pivete-dialeto-compact",
+      "frontmatter_name": "pivete-dialeto-compact",
+      "description": "Resposta curta em baianês. Execute antes de explicar.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "pivete-session-guide",
+      "category": "pivete-session-guide",
+      "frontmatter_name": "pivete-session-guide",
+      "description": "Hermes-Casa session guide: measure, reuse, single writer.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "pretty-mermaid",
+      "category": "pretty-mermaid",
+      "frontmatter_name": "pretty-mermaid",
+      "description": "Generate and render Mermaid diagrams for architecture doc...",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "airtable",
+      "category": "productivity",
+      "frontmatter_name": "airtable",
+      "description": "Airtable REST API via curl. Records CRUD, filters, upserts.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "box",
+      "category": "productivity",
+      "frontmatter_name": "box",
+      "description": "Box manages cloud files, sharing, search, and metadata.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "document-to-action-items",
+      "category": "productivity",
+      "frontmatter_name": "document-to-action-items",
+      "description": "Extract cited obligations, deadlines, tasks from documents.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "docx",
+      "category": "productivity",
+      "frontmatter_name": "docx",
+      "description": "Create, read, edit, template, and review Word .docx files.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "google-workspace",
+      "category": "productivity",
+      "frontmatter_name": "google-workspace",
+      "description": "Gmail, Calendar, Drive, Docs, Sheets via gws CLI or Python.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "maps",
+      "category": "productivity",
+      "frontmatter_name": "maps",
+      "description": "Geocode, POIs, routes, timezones via OpenStreetMap/OSRM.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [
+          "terminal"
+        ],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "meeting-action-items",
+      "category": "productivity",
+      "frontmatter_name": "meeting-action-items",
+      "description": "Turn meeting notes into cited decisions, owners, tickets.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "nano-pdf",
+      "category": "productivity",
+      "frontmatter_name": "nano-pdf",
+      "description": "Edit text in existing PDFs via natural-language prompts.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "notion",
+      "category": "productivity",
+      "frontmatter_name": "notion",
+      "description": "Notion API + ntn CLI: pages, databases, markdown, Workers.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "ocr-and-documents",
+      "category": "productivity",
+      "frontmatter_name": "ocr-and-documents",
+      "description": "Extract text from PDFs/scans (pymupdf, marker-pdf).",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "pdf",
+      "category": "productivity",
+      "frontmatter_name": "pdf",
+      "description": "PDF files: create, read, merge, fill, OCR, edit text.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "powerpoint",
+      "category": "productivity",
+      "frontmatter_name": "powerpoint",
+      "description": "Create, read, edit .pptx decks, slides, notes, templates.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "product-price-monitor",
+      "category": "productivity",
+      "frontmatter_name": "product-price-monitor",
+      "description": "Watch product, flight, or listing prices; alert on target.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "teams-meeting-pipeline",
+      "category": "productivity",
+      "frontmatter_name": "teams-meeting-pipeline",
+      "description": "Teams meeting summaries, job replay, Graph subscriptions.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": [
+          "teams",
+          "cron"
+        ]
+      }
+    },
+    {
+      "skill_name": "weekly-review-planning",
+      "category": "productivity",
+      "frontmatter_name": "weekly-review-planning",
+      "description": "Weekly reset: commitments, stalled work, next-week plan.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "xlsx",
+      "category": "productivity",
+      "frontmatter_name": "xlsx",
+      "description": "Create, read, edit Excel .xlsx spreadsheets and CSVs.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "provider-reputation-framework",
+      "category": "provider-reputation-framework",
+      "frontmatter_name": "provider-reputation-framework",
+      "description": "Assess AI provider trust. Classify providers.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "arxiv",
+      "category": "research",
+      "frontmatter_name": "arxiv",
+      "description": "Search arXiv papers by keyword, author, category, or ID.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "blogwatcher",
+      "category": "research",
+      "frontmatter_name": "blogwatcher",
+      "description": "Monitor blogs and RSS/Atom feeds via blogwatcher-cli tool.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "competitor-news-monitor",
+      "category": "research",
+      "frontmatter_name": "competitor-news-monitor",
+      "description": "Watch named companies for material news; cited digests.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "grounded-citations",
+      "category": "research",
+      "frontmatter_name": "grounded-citations",
+      "description": "Ground answers and documents in cited, verifiable sources.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "llm-wiki",
+      "category": "research",
+      "frontmatter_name": "llm-wiki",
+      "description": "Karpathy's LLM Wiki: build/query interlinked markdown KB.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "polymarket",
+      "category": "research",
+      "frontmatter_name": "polymarket",
+      "description": "Query Polymarket: markets, prices, orderbooks, history.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "research-paper-writing",
+      "category": "research",
+      "frontmatter_name": "research-paper-writing",
+      "description": "",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [
+          "terminal",
+          "files"
+        ],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "rss-feeds",
+      "category": "research",
+      "frontmatter_name": "rss-feeds",
+      "description": "Read RSS, Atom, JSON feeds; discover feeds behind a page.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "screenpipe-hermes-integration",
+      "category": "screenpipe-hermes-integration",
+      "frontmatter_name": "screenpipe-hermes-integration",
+      "description": "Integrate Screenpipe with Hermes via Omni Router.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "openhue",
+      "category": "smart-home",
+      "frontmatter_name": "openhue",
+      "description": "Control Philips Hue lights, scenes, rooms via OpenHue CLI.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "reddit-reading",
+      "category": "social-media",
+      "frontmatter_name": "reddit-reading",
+      "description": "Read Reddit: subreddits, search, threads, users. No browser.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "xurl",
+      "category": "social-media",
+      "frontmatter_name": "xurl",
+      "description": "",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-handoff-pattern",
+      "category": "software-development",
+      "frontmatter_name": "centraldark-handoff-pattern",
+      "description": "Reusable handoff pattern for CentralDark sessions. Produc...",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-omni-router",
+      "category": "software-development",
+      "frontmatter_name": "centraldark-omni-router",
+      "description": "ONE_SYSTEM_ONLY entrypoint routing 4 AI engines.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-operational-method",
+      "category": "software-development",
+      "frontmatter_name": "centraldark-operational-method",
+      "description": "Operar no CentralDark com metodo Pivete/Hermes.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "centraldark-pr-label",
+      "category": "software-development",
+      "frontmatter_name": "centraldark-pr-label",
+      "description": "Aplicar labels canônicas obrigatórias em todo PR da Centr...",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "dependabot-conflict-resolver",
+      "category": "software-development",
+      "frontmatter_name": "dependabot-conflict-resolver",
+      "description": "Padrão ÚNICO da Casa para conflito de PR (dependabot ou h...",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "dependency-intelligence-runtime",
+      "category": "software-development",
+      "frontmatter_name": "dependency-intelligence-runtime",
+      "description": "Diagnose/fix missing deps with local-first crystals.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "dogfood",
+      "category": "software-development",
+      "frontmatter_name": "dogfood",
+      "description": "Exploratory QA of web apps: find bugs, evidence, reports.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "fable-adversarial-audit",
+      "category": "software-development",
+      "frontmatter_name": "fable-adversarial-audit",
+      "description": "Auditoria adversária read-only de pacote ZIP/skill anexad...",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "github",
+      "category": "software-development",
+      "frontmatter_name": "github",
+      "description": "GitHub via gh CLI: PRs, issues, reviews, repos, auth.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "heal-esbuild-optional-deps",
+      "category": "software-development",
+      "frontmatter_name": "heal-esbuild-optional-deps",
+      "description": "Fix esbuild missing platform binary from omit=optional.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "heal-rollup-optional-deps",
+      "category": "software-development",
+      "frontmatter_name": "heal-rollup-optional-deps",
+      "description": "Fix rollup missing native binary from omit=optional config.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "heal-vite-npm-dependency",
+      "category": "software-development",
+      "frontmatter_name": "heal-vite-npm-dependency",
+      "description": "Fix npm missing devDependencies from omit=dev config.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "hermes-agent-skill-authoring",
+      "category": "software-development",
+      "frontmatter_name": "hermes-agent-skill-authoring",
+      "description": "Author in-repo SKILL.md files: frontmatter and structure.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "hermes-multi-profile-orchestration",
+      "category": "software-development",
+      "frontmatter_name": "hermes-multi-profile-orchestration",
+      "description": "Run multiple Hermes profiles as isolated processes with PM2.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "inspecting-hermes-desktop-dom",
+      "category": "software-development",
+      "frontmatter_name": "inspecting-hermes-desktop-dom",
+      "description": "Read the live Hermes desktop DOM/CSS over CDP.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "node-inspect-debugger",
+      "category": "software-development",
+      "frontmatter_name": "node-inspect-debugger",
+      "description": "Debug Node.js via --inspect + Chrome DevTools Protocol CLI.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "plan",
+      "category": "software-development",
+      "frontmatter_name": "plan",
+      "description": "Write a markdown plan to .hermes/plans/; no execution.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "python-debugpy",
+      "category": "software-development",
+      "frontmatter_name": "python-debugpy",
+      "description": "",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "requesting-code-review",
+      "category": "software-development",
+      "frontmatter_name": "requesting-code-review",
+      "description": "Pre-commit review: security scan, quality gates, auto-fix.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "simplify-code",
+      "category": "software-development",
+      "frontmatter_name": "simplify-code",
+      "description": "Parallel 4-agent cleanup of recent code changes.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "skill-crystallization-engine",
+      "category": "software-development",
+      "frontmatter_name": "skill-crystallization-engine",
+      "description": "Enforces gold-standard skills with auto-improvement to Fi...",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "spike",
+      "category": "software-development",
+      "frontmatter_name": "spike",
+      "description": "Throwaway experiments to validate an idea before build.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "systematic-debugging",
+      "category": "software-development",
+      "frontmatter_name": "systematic-debugging",
+      "description": "4-phase root cause debugging: understand bugs before fixing.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "t0-integral-mapeamento",
+      "category": "software-development",
+      "frontmatter_name": "t0-integral-mapeamento",
+      "description": "Mede toda infraestrutura antes de consolidar na CentralDark.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "test-driven-development",
+      "category": "software-development",
+      "frontmatter_name": "test-driven-development",
+      "description": "TDD: enforce RED-GREEN-REFACTOR, tests before code.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "trigger-fabric-packager",
+      "category": "software-development",
+      "frontmatter_name": "trigger-fabric-packager",
+      "description": "Package and verify CentralDark trigger-fabric artifacts w...",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "test-skill",
+      "category": "test-skill",
+      "frontmatter_name": "test-skill",
+      "description": "A test skill.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "text-file-reading-workaround",
+      "category": "text-file-reading-workaround",
+      "frontmatter_name": "text-file-reading-workaround",
+      "description": "read_file Binary file em texto UTF-8 — ler via Python.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "trigger-chain-verification",
+      "category": "trigger-chain-verification",
+      "frontmatter_name": "trigger-chain-verification",
+      "description": "Execute trigger chain to verify state and emit boot record.",
+      "platforms": [],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "blocked-page-recovery",
+      "category": "web",
+      "frontmatter_name": "blocked-page-recovery",
+      "description": "Use when a fetch fails: 403/429, paywall, WAF, bot wall.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    }
+  ],
+  "category_descriptions": {
+    "autonomous-ai-agents": "Skills for spawning and orchestrating autonomous AI coding agents and multi-agent workflows — running independent agent processes, delegating tasks, and coordinating parallel workstreams.",
+    "creative": "Creative content generation — ASCII art, hand-drawn style diagrams, and visual design tools.",
+    "email": "Skills for sending, receiving, searching, and managing email from the terminal.",
+    "github": "GitHub workflow skills for managing repositories, pull requests, code reviews, issues, and CI/CD pipelines using the gh CLI and git via terminal.",
+    "media": "Skills for working with media content — YouTube transcripts, GIF search, music generation, and audio visualization.",
+    "mlops": "Knowledge and Tools for Machine Learning Operations - tools and frameworks for training, fine-tuning, deploying, and optimizing ML/AI models",
+    "mlops/evaluation": "Model evaluation benchmarks, experiment tracking, data curation, tokenizers, and interpretability tools.",
+    "mlops/inference": "Model serving, quantization (GGUF/GPTQ), structured output, inference optimization, and model surgery tools for deploying and running LLMs.",
+    "mlops/models": "Specific model architectures and tools — image segmentation (Segment Anything / SAM) and audio generation (AudioCraft / MusicGen). Additional model skills (CLIP, Stable Diffusion, Whisper, LLaVA) are available as optional skills.",
+    "note-taking": "Note taking skills, to save information, assist with research, and collab on multi-session planning and information sharing.",
+    "productivity": "Skills for document creation, presentations, spreadsheets, and other productivity workflows.",
+    "productivity/ocr-and-documents": "Skills for extracting text from PDFs, scanned documents, images, and other file formats using OCR and document parsing tools.",
+    "research": "Skills for academic research, paper discovery, literature review, domain reconnaissance, market data, content monitoring, and scientific knowledge retrieval.",
+    "smart-home": "Skills for controlling smart home devices — lights, switches, sensors, and home automation systems.",
+    "social-media": "Skills for interacting with social platforms and social-media workflows — posting, reading, monitoring, and account operations.",
+    "web": "Skills for reaching web content when direct access fails — blocked, paywalled, rate-limited, or bot-walled pages."
+  }
+}

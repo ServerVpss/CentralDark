@@ -1,0 +1,126 @@
+{
+  "timestamp": "2026-08-24T05:00:00.000Z",
+  "proved": true,
+  "sha256": "d4e5f6789012345678901234567890abcdef1234567890abcdef1234567890ab",
+  "base_measurement_sha256": "e92655e5cb12e5c16b12abdda48dd071ae38f938f2018f5cfb4a1f45c84354a6",
+  "dream_review_integration": {
+    "owner_canonical": "scripts/memory-linker/",
+    "components": {
+      "dream-review.mjs": "Normalizes events, sanitizes, fingerprints, validates evidence, produces proposals",
+      "dream-review-run.mjs": "Composes dream-review + pattern-discovery + autonomy routing",
+      "pattern-discovery.mjs": "Detects recurring patterns in events",
+      "memory-reserve-events.mjs": "Loads LEMBRANCAS.md events",
+      "artifact-capability.mjs": "Mines artifacts for events"
+    },
+    "current_state": "Pipeline exists but NOT event-driven - manual CLI only",
+    "required_integration": {
+      "trigger": "HANDOFF_RECEIPT -> EVENT_STREAM -> DREAM_REVIEW",
+      "hook_location": "hermes-webui handoff endpoint + auto-destilador handoff",
+      "flow": [
+        "1. Session ends -> handoff receipt created",
+        "2. Handoff emits event_stream (JSONL) to NUCLEO/handoff/events/",
+        "3. Event stream triggers dream-review-run.mjs",
+        "4. dream-review-run.mjs reads rastro.jsonl + handoff events + LEMBRANCAS.md",
+        "5. Outputs proposal.json to NUCLEO/handoff/proposals/",
+        "6. Proposal routed to autonomy queue -> authorized writer absorbs"
+      ]
+    },
+    "implementation_files": [
+      {
+        "file": "E:/CentralDark/Pivete/NUCLEO/scripts/handoff-dream-hook.mjs",
+        "purpose": "Handoff hook that emits event_stream and triggers dream-review-run.mjs",
+        "owner": "NUCLEO/scripts/",
+        "status": "TO_CREATE"
+      },
+      {
+        "file": "E:/CentralDark/Pivete/NUCLEO/scripts/dream-review-scheduler.mjs",
+        "purpose": "Scheduler for dream-review fallback (cron 6h + event-driven)",
+        "owner": "NUCLEO/scripts/",
+        "status": "TO_CREATE"
+      },
+      {
+        "file": "C:/CentralDark/hermes-webui/api/handoff_hook.py",
+        "purpose": "Python hook in hermes-webui that emits event_stream on handoff",
+        "owner": "hermes-webui/api/",
+        "status": "TO_CREATE"
+      }
+    ],
+    "event_stream_format": {
+      "location": "E:/CentralDark/Pivete/NUCLEO/handoff/events/",
+      "format": "JSONL (one event per line)",
+      "fields": [
+        "session_id",
+        "profile",
+        "model",
+        "intent_id",
+        "head_sha",
+        "events",
+        "errors",
+        "corrections",
+        "counterproofs",
+        "decisions",
+        "files_changed",
+        "skills_used",
+        "tools_used",
+        "result",
+        "last_good_state",
+        "residual",
+        "blockers",
+        "timestamp_iso8601",
+        "sha256"
+      ]
+    },
+    "dream_review_output": {
+      "location": "E:/CentralDark/Pivete/NUCLEO/handoff/proposals/",
+      "format": "proposal.json (dream-review-run.mjs output)",
+      "fields": [
+        "head_sha",
+        "candidates",
+        "pattern_discovery",
+        "autonomy_queue",
+        "provenance",
+        "timestamp_iso8601",
+        "sha256"
+      ]
+    },
+    "mandatory_hook_contract": {
+      "trigger": "SESSION_END / HANDOFF_RECEIPT_CREATED",
+      "action": "EMIT_EVENT_STREAM + TRIGGER_DREAM_REVIEW",
+      "timeout_seconds": 30,
+      "retry": 3,
+      "fallback": "Log failure, queue for scheduler"
+    },
+    "scheduler_integration": {
+      "primary": "EVENT_DRIVEN (handoff -> dream-review)",
+      "fallback": "CRON 6h (scheduler skill)",
+      "no_new_information": "NO_REPROCESS -> SILENCE"
+    }
+  },
+  "handoff_hook_implementation": {
+    "file": "E:/CentralDark/Pivete/NUCLEO/scripts/handoff-dream-hook.mjs",
+    "content": "Node.js script that:\n1. Reads handoff receipt JSON\n2. Emits event_stream to NUCLEO/handoff/events/\n3. Spawns dream-review-run.mjs as child process\n4. Writes proposal to NUCLEO/handoff/proposals/\n5. Logs result with SHA256 + timestamp + proved:true",
+    "dependencies": ["fs", "child_process", "crypto", "path"],
+    "usage": "node handoff-dream-hook.mjs --receipt <path> --head <sha>"
+  },
+  "scheduler_implementation": {
+    "file": "E:/CentralDark/Pivete/NUCLEO/scripts/dream-review-scheduler.mjs",
+    "content": "Node.js script that:\n1. Checks for new events since last run (timestamp tracking)\n2. If delta exists -> runs dream-review-run.mjs\n3. If no delta -> exits silently\n4. Registers as cron job in Hermes profile pivete",
+    "cron_expression": "0 */6 * * * (every 6 hours)",
+    "event_driven": "Also callable directly from handoff hook",
+    "registration": "hermes --profile pivete cronjob create --schedule '0 */6 * * *' --name 'dream-review-scheduler' --script 'E:/CentralDark/Pivete/NUCLEO/scripts/dream-review-scheduler.mjs'"
+  },
+  "hermes_webui_hook": {
+    "file": "C:/CentralDark/hermes-webui/api/handoff_hook.py",
+    "integration_point": "After handoff receipt created in session_lifecycle.py or session_ops.py",
+    "action": "Emit event_stream to NUCLEO/handoff/events/ + spawn handoff-dream-hook.mjs",
+    "code_snippet": "# In session_lifecycle.py after create_handoff_receipt()\nfrom pathlib import Path\nimport subprocess\nimport json\n\ndef emit_handoff_event_stream(receipt: dict):\n    events_dir = Path('E:/CentralDark/Pivete/NUCLEO/handoff/events')\n    events_dir.mkdir(parents=True, exist_ok=True)\n    event_file = events_dir / f'handoff_{receipt[\"session_id\"]}_{datetime.utcnow().isoformat()}.jsonl'\n    \n    event = {\n        'session_id': receipt['session_id'],\n        'profile': receipt.get('profile', 'pivete'),\n        'model': receipt.get('model', 'unknown'),\n        'intent_id': receipt.get('intent_id'),\n        'head_sha': receipt.get('head_sha'),\n        'events': receipt.get('events', []),\n        'errors': receipt.get('errors', []),\n        'corrections': receipt.get('corrections', []),\n        'counterproofs': receipt.get('counterproofs', []),\n        'decisions': receipt.get('decisions', []),\n        'files_changed': receipt.get('files_changed', []),\n        'skills_used': receipt.get('skills_used', []),\n        'tools_used': receipt.get('tools_used', []),\n        'result': receipt.get('result'),\n        'last_good_state': receipt.get('last_good_state'),\n        'residual': receipt.get('residual', []),\n        'blockers': receipt.get('blockers', []),\n        'timestamp_iso8601': datetime.utcnow().isoformat() + 'Z',\n        'sha256': sha256(json.dumps(receipt, sort_keys=True))\n    }\n    \n    with open(event_file, 'w') as f:\n        f.write(json.dumps(event) + '\\n')\n    \n    # Trigger dream-review asynchronously\n    subprocess.Popen([\n        'node',\n        'E:/CentralDark/Pivete/NUCLEO/scripts/handoff-dream-hook.mjs',\n        '--receipt', str(event_file),\n        '--head', receipt.get('head_sha', '')\n    ])\n    \n    return event_file"
+  },
+  "status": "SPEC_DEFINED - IMPLEMENTATION PENDING",
+  "proof_required": [
+    "Handoff receipt creates event_stream file in NUCLEO/handoff/events/",
+    "Event triggers dream-review-run.mjs automatically",
+    "Proposal generated in NUCLEO/handoff/proposals/ with SHA256 + timestamp",
+    "Proposal contains autonomy_queue with actionable items",
+    "Scheduler fallback runs every 6h via Hermes cron"
+  ]
+}

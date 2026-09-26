@@ -1,0 +1,12 @@
+CENTRALDARK_AI_BOOT:
+  soul: LOADED
+  governance: LOADED
+  context_reconciliation: LOADED
+  history_preservation: ACTIVE
+  source_of_truth: "<REPO> + runtime medido"
+  observed_evidence: "<BRANCH>, <HEAD>, <PR>, <RUNTIME>, <TOOLS>"
+  alignment: "SEGREDO/CHEFE > SOL > PIVETE/HERMES + ESPECIALISTAS"
+  role: "<ROLE>"
+  writer: "<WRITER>"
+  frequency: "<FREQUENCY>"
+  fronts: "<FRONTS>"

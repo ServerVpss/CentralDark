@@ -1,0 +1,15 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@hermes\ink\src\ink\wrapAnsi.ts
+
+import wrapAnsiNpm from 'wrap-ansi'
+
+type WrapAnsiOptions = {
+  hard?: boolean
+  wordWrap?: boolean
+  trim?: boolean
+}
+
+const wrapAnsiBun = typeof Bun !== 'undefined' && typeof Bun.wrapAnsi === 'function' ? Bun.wrapAnsi : null
+
+const wrapAnsi: (input: string, columns: number, options?: WrapAnsiOptions) => string = wrapAnsiBun ?? wrapAnsiNpm
+
+export { wrapAnsi }

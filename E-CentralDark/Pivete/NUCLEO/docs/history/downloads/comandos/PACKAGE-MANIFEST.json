@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "package": "CENTRALDARK-CASA-LOCAL-RECONCILIADA",
+  "member_count": 10,
+  "members": [
+    {
+      "path": "ARQUITETURA-CANONICA.md",
+      "bytes": 2426,
+      "sha256": "8b6e3a59101e1b1f1841fa21c867675fc01d104c19554499ba8b63cb38027586"
+    },
+    {
+      "path": "CASA-MAE.ps1",
+      "bytes": 18329,
+      "sha256": "06043f3205a25228b7e0690bd2ff77f5002a5dd9e5a4048641fbd3075ef0bb71"
+    },
+    {
+      "path": "ERROS-E-APRENDIZADOS-SOL.md",
+      "bytes": 1868,
+      "sha256": "ce1be04312a713147d21348decc4aa2a46de03e2c079dcabfa26b809df5fa472"
+    },
+    {
+      "path": "GITHUB-SNAPSHOT.json",
+      "bytes": 3266,
+      "sha256": "acebfa0228489eadb6e211f18a594db8f90656fd62cd3afb596352b7187c8419"
+    },
+    {
+      "path": "HERMES-HANDOFF.md",
+      "bytes": 1162,
+      "sha256": "ed38fa3099154ba72c155545ffd8fb73d25914f31e24865e17583db82efe18aa"
+    },
+    {
+      "path": "MISSION-CANONICA.json",
+      "bytes": 3949,
+      "sha256": "cf8b91be403597d70378957bac5e63080ccd1b86e3277005a89c1aebad2d49ca"
+    },
+    {
+      "path": "README-PRIMEIRO.md",
+      "bytes": 2346,
+      "sha256": "00cd7d8d28a06f200bc995f98869a0fd6183f4cbb57f25634ba3172badc95599"
+    },
+    {
+      "path": "RECONCILIACAO-SESSAO.md",
+      "bytes": 2029,
+      "sha256": "67993782425fc601daf9821d62d22fd62adc457a9cdc4b782fdfdbf2025e803c"
+    },
+    {
+      "path": "SECURITY-POLICY.json",
+      "bytes": 616,
+      "sha256": "bf247f6297fc3a16e64af700184edc06536badc56c4ee8df94e5e5ecd34169bc"
+    },
+    {
+      "path": "START-CASA.cmd",
+      "bytes": 253,
+      "sha256": "a81a6b50230632f4d6b9da79d0a616f55f3a75e6865386b486aa717d5e364087"
+    }
+  ]
+}

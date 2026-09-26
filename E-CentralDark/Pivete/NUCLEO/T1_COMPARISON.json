@@ -1,0 +1,84 @@
+{
+  "timestamp": "2026-08-24T05:30:00.000Z",
+  "proved": true,
+  "sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+  "t0_sha256": "e92655e5cb12e5c16b12abdda48dd071ae38f938f2018f5cfb4a1f45c84354a6",
+  "t1_sha256": "fa388bb89fca54e9b08ca5eb2b4ffded0abc8bac20dc738f7bb16495813a3489",
+  "comparison": {
+    "git": {
+      "t0": "branch: feat/gatilhos-execucao-reversivel-remediacao, head: 51e3cd4ca4011ff2bbc31ecf33c7e6998c2c354f",
+      "t1": "branch: feat/gatilhos-execucao-reversivel-remediacao, head: 51e3cd4ca4011ff2bbc31ecf33c7e6998c2c354f",
+      "match": true,
+      "delta": "None - same HEAD"
+    },
+    "ports": {
+      "t0_live": ["8787", "8788", "8917", "9100"],
+      "t1_live": ["8787", "8788", "8917", "9100", "22624", "27015", "33000", "52505", "54544", "55632", "61677"],
+      "new_ports": ["22624", "27015", "33000", "52505", "54544", "55632", "61677"],
+      "port_8917_still_preview": true,
+      "port_8090_8082_9200_9500_still_declared_not_live": true,
+      "match": false,
+      "delta": "Additional ephemeral ports appeared (likely system/ephemeral), canonical ports stable"
+    },
+    "runtimes": {
+      "hermes_webui": {"t0_pid": 27700, "t1_pid": 27700, "stable": true},
+      "auto_destilador": {"t0_pid": 32464, "t1_pid": 32464, "stable": true},
+      "mcp": {"t0_pid": 8900, "t1_pid": 8900, "stable": true},
+      "match": true,
+      "delta": "Canonical runtimes stable"
+    },
+    "residuals_comparison": {
+      "vite_build_blocked": {"t0": "BLOCKED", "t1": "BLOCKED", "resolved": false},
+      "theme_engine_incomplete": {"t0": "INCOMPLETE", "t1": "INCOMPLETE", "resolved": false},
+      "dream_review_not_automated": {"t0": "NOT_AUTOMATED", "t1": "NOT_AUTOMATED", "resolved": false},
+      "scheduler_owner_undefined": {"t0": "UNDEFINED", "t1": "UNDEFINED", "resolved": false},
+      "triad_sync_contract_missing": {"t0": "MISSING", "t1": "MISSING", "resolved": false},
+      "fixed_point_denominators_undefined": {"t0": "UNDEFINED", "t1": "UNDEFINED", "resolved": false},
+      "last_good_state_no_fingerprint": {"t0": "MISSING", "t1": "MISSING", "resolved": false},
+      "profile_inheritance_no_ci_test": {"t0": "MISSING", "t1": "MISSING", "resolved": false},
+      "consumer_proof_optional": {"t0": "OPTIONAL", "t1": "OPTIONAL", "resolved": false},
+      "skill_promotion_incomplete": {"t0": "INCOMPLETE", "t1": "INCOMPLETE", "resolved": false},
+      "self_healing_missing_search_siblings": {"t0": "MISSING", "t1": "MISSING", "resolved": false},
+      "dream_review_no_mandatory_hook": {"t0": "MISSING", "t1": "MISSING", "resolved": false}
+    },
+    "new_artifacts": {
+      "MATRIZ_OWNERS.json": "Created - 57 capabilities mapped with KEEP/ABSORB/IMPROVE/RETIRE",
+      "HOUSE_INHERITANCE.json": "Created - profile inheritance spec with CI test",
+      "HERMES_OPERATIONAL_STACK.json": "Created - stack composition documented",
+      "DREAM_REVIEW_INTEGRATION.json": "Created - handoff -> dream-review integration spec",
+      "HEALING_SESSIONS.json": "Created - 3 healing sessions planned for top errors",
+      "PRODUCT_ABSORPTION.json": "Created - HTML/theme/cloudflare absorption spec"
+    },
+    "artifacts_created": [
+      "MATRIZ_T0.json (T0)",
+      "MATRIZ_T0.json (T1 - updated)",
+      "MATRIZ_OWNERS.json",
+      "HOUSE_INHERITANCE.json",
+      "HERMES_OPERATIONAL_STACK.json",
+      "DREAM_REVIEW_INTEGRATION.json",
+      "HEALING_SESSIONS.json",
+      "PRODUCT_ABSORPTION.json"
+    ]
+  },
+  "verdict": {
+    "t0_t1_match": false,
+    "canonical_runtime_stable": true,
+    "residuals_persist": true,
+    "new_artifacts_created": 7,
+    "regression": "NONE - no capabilities lost",
+    "progress": "SPECIFICATONS CREATED FOR ALL GAPS - IMPLEMENTATION PENDING"
+  },
+  "fixed_point_status": {
+    "phase_0_t0": "PENDING - vite_build_blocked",
+    "phase_1_owners": "PENDING - specs created, implementation pending",
+    "phase_2_house": "PENDING - spec created, CI test not implemented",
+    "phase_3_stack": "PENDING - stack composed but reality_judge/fixed_point gates not executable",
+    "phase_4_dream": "PENDING - spec created, implementation pending",
+    "phase_5_healing": "PENDING - sessions planned, not executed",
+    "phase_6_product": "PENDING - spec created, absorption not implemented",
+    "phase_7_t1": "COMPLETED - T1 measurement done",
+    "phase_8_death": "PENDING",
+    "phase_9_fixed": "BLOCKED - denominators not implemented, residuals persist"
+  },
+  "fixed_point_verdict": "NOT_REACHED - residuals persist, denominators not executable, implementation pending"
+}

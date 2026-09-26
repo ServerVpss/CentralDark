@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-08-24T06:02:30.477Z",
+  "results": [
+    {
+      "test": "vite_in_node_modules",
+      "pass": false
+    },
+    {
+      "test": "vite_bin_linked",
+      "pass": false
+    },
+    {
+      "test": "vite_version_runs",
+      "pass": true,
+      "output": "vite/5.4.21 win32-x64 node-v26.5.1"
+    },
+    {
+      "test": "vite_build_compiles",
+      "pass": false,
+      "output": "npm notice run vite_react_shadcn_ts@0.0.0 npx\nnpm notice run vite build\n\u001b[31mfailed to load config from E:\\CentralDark\\Pivete\\CentralDark\\vite.config.ts\u001b[39m\n\u001b[31merror during build:\nError [ERR_MODULE | ERR: Command failed: npx vite build 2>&1"
+    },
+    {
+      "test": "dist_updated",
+      "pass": false
+    }
+  ]
+}

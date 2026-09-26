@@ -1,0 +1,64 @@
+name: estado-retomada
+
+# Regenera docs/ESTADO-DA-RETOMADA.md a partir de evidencia real do checkout.
+# Ninguem edita o arquivo a mao; quem quiser mudar o que e medido muda o script.
+
+on:
+  schedule:
+    - cron: "23 6 * * *"
+  push:
+    branches: [main]
+    paths:
+      - 'apps/modulos/mapeamento/config/mapa-canonico.json'
+      - 'scripts/estado/gerar-estado-retomada.mjs'
+      - '.github/workflows/estado-retomada.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: estado-retomada
+  cancel-in-progress: false
+
+jobs:
+  gerar:
+    name: Gerar ESTADO DA RETOMADA
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Gerar estado
+        run: node scripts/estado/gerar-estado-retomada.mjs
+
+      - name: Commitar apenas se houver diferenca real
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- docs/ESTADO-DA-RETOMADA.md; then
+            echo "ESTADO_INALTERADO=1 - nada a commitar"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/ESTADO-DA-RETOMADA.md
+          git commit -m "chore(estado): regenerar ESTADO DA RETOMADA [skip ci]"
+
+          BASE_SHA=$(git rev-parse HEAD^)
+          git fetch --no-tags origin main
+          REMOTE_SHA=$(git rev-parse FETCH_HEAD)
+          if [ "$REMOTE_SHA" != "$BASE_SHA" ]; then
+            echo "ESTADO_RETOMADA_BLOCKED_DIVERGENCE base=$BASE_SHA remote=$REMOTE_SHA"
+            exit 1
+          fi
+          echo "🚪 Gate global pré-main"
+          node scripts/lupa/validar-continuidade-global.mjs
+          node scripts/lupa/validar-porta-de-entrada.mjs
+          git push origin HEAD:main

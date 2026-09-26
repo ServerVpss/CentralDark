@@ -1,0 +1,137 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\dashboard_auth\__pycache__\prefix.cpython-311.pyc
+
+Helpers for X-Forwarded-Prefix support.
+Mission-control style deploys reverse-proxy the dashboard at a path
+prefix (e.g. ``mission-control.tilos.com/hermes/*`` -> dashboard on
+:9119), injecting ``X-Forwarded-Prefix: /hermes`` so the backend can
+reconstruct prefixed URLs (Location: headers, OAuth redirect_uri,
+cookie Path attributes, SPA asset URLs).
+This module is also the home of the ``HERMES_DASHBOARD_PUBLIC_URL`` /
+``dashboard.public_url`` resolution 
+ when the operator declares a
+complete public URL (scheme + host + optional path prefix), we use
+that directly for the OAuth ``redirect_uri`` and skip the
+X-Forwarded-Prefix reconstruction. Relief valve for deploys where the
+proxy header chain isn't reliable.
+The single source of truth for both helpers lives here so the gate
+middleware, the OAuth routes, the cookie helpers, and the SPA mount
+all agree on validation rules.
+annotationsN)
+Optional
+_warned_malformed_public_urls
+_warned_malformed_prefixes
+source
+return
+Warn (once per distinct value) when a non-empty public-url value
+    was rejected by :func:`_normalise_public_url`.
+    A non-empty value that normalises to ``""`` is almost always a
+    missing scheme (``hermes.example.com`` instead of
+    ``https://hermes.example.com``) 
+ the single most common cause of
+    "I set HERMES_DASHBOARD_PUBLIC_URL but the OAuth callback is still
+    http://". Without this warning the value is silently discarded and
+    the dashboard falls back to reconstructing the redirect URI from
+    request headers, which behind a reverse proxy can yield the wrong
+    scheme. Surfacing it turns a silent footgun into a self-diagnosing
+    one.
+%s is set to %r but was ignored because it is not a valid absolute URL 
+ it must include an http:// or https:// scheme (e.g. https://%s). Falling back to reconstructing the OAuth redirect URI from request headers, which may produce the wrong scheme behind a reverse proxy.z
+hermes.example.com)
+stripr
+warning
+split)
+cleaned
+TC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\dashboard_auth\prefix.py
+_warn_if_malformedr!
+Optional[str]
+reasonc
+z@Warn once when a non-empty X-Forwarded-Prefix value is rejected.r
+NzzX-Forwarded-Prefix header %r was ignored because %s. Dashboard URLs will be generated without a reverse-proxy path prefix.)
+    r 
+_warn_if_malformed_prefixr&
+Normalise an X-Forwarded-Prefix header value.
+    Returns a string like ``"/hermes"`` (no trailing slash) or ``""``
+    when no prefix is set / the header is malformed. We deliberately
+    reject anything containing ``..`` or non-printable bytes so a
+    hostile proxy can't inject HTML or path-traversal sequences via the
+    prefix.
+<genexpr>z#normalise_prefix.<locals>.<genexpr>v
+z3it contains a disallowed character or path sequencez
+it is longer than z
+ characters)
+startswith
+rstrip
+_REJECT_CHARSr&
+_MAX_PREFIX_LENGTH)
+normalise_prefixr6
+Convenience wrapper that reads the header off a Starlette/FastAPI
+    Request and normalises it. Returns ``""`` when no prefix.
+x-forwarded-prefix)
+headers
+requests
+prefix_from_requestr;
+Normalise a ``dashboard.public_url`` value.
+    Returns the cleaned URL (scheme://netloc[/path], trailing slash
+    removed) on success, or ``""`` when the value is empty, malformed,
+    or contains characters that suggest header injection. The caller
+    must treat ``""`` as "fall back to request reconstruction" 
+ never
+    as "the user explicitly chose no public URL", because the two are
+    indistinguishable from an empty env var.
+z(_normalise_public_url.<locals>.<genexpr>
+httpsr(
+urllib
+urlparse
+ValueError
+scheme
+netlocr1
+parsedr>
+_normalise_public_urlrH
+Return the ``dashboard`` block from ``config.yaml`` if it exists
+    and is a dict; otherwise an empty dict.
+    Robust to (a) load_config() raising (malformed YAML, IO error,
+    config.yaml absent), and (b) ``dashboard`` being absent or non-dict.
+    Both shapes fall through to ``{}`` so the caller can rely on
+    ``.get(...)`` access.
+load_configzVdashboard-auth.prefix: load_config() raised %s; falling back to env-only configurationN
+dashboard)
+hermes_cli.configrK
+Exceptionr
+isinstancerI
+sections
+    r 
+_load_dashboard_sectionrT
+Resolve the operator-declared dashboard public URL.
+    Precedence (mirrors ``dashboard.oauth.client_id``):
+      1. ``HERMES_DASHBOARD_PUBLIC_URL`` env var (when non-empty after
+         strip 
+ empty values are treated as unset so a provisioned-but-
+         not-populated Fly secret can't shadow a valid config.yaml entry).
+      2. ``dashboard.public_url`` in ``config.yaml``.
+      3. Empty string 
+ signals "no override, reconstruct from request"
+         to the caller.
+    Each candidate value is run through :func:`_normalise_public_url`.
+    A malformed env var falls through to the config.yaml entry; a
+    malformed config entry falls through to ``""``. This means a typo
+    in one surface doesn't prevent the other from working.
+HERMES_DASHBOARD_PUBLIC_URLr
+z#HERMES_DASHBOARD_PUBLIC_URL env var
+public_urlz#dashboard.public_url in config.yaml)
+environr9
+env_raw
+env_clean
+cfg_raw
+cfg_cleans
+    r 
+resolve_public_urlr^
+__doc__
+__future__r
+loggingrX
+urllib.parserA
+typingr
+getLogger
+__name__r
+frozensetr3
+__annotations__r
+<module>rh

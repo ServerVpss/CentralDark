@@ -1,0 +1,1202 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\__pycache__\plugins_cmd.cpython-311.pyc
+
+Z9d9Z:d
+eNd_d`h
+ZYdvdw
+``hermes plugins`` CLI subcommand 
+ install, update, remove, and list plugins.
+Plugins are installed from Git repositories into ``~/.hermes/plugins/``.
+Supports full URLs and ``owner/repo`` shorthand (resolves to GitHub).
+After install, if the plugin ships an ``after-install.md`` file it is
+rendered with Rich Markdown.  Otherwise a default confirmation is shown.
+annotationsN)
+Optional)
+get_hermes_home)
+noninteractive_git_env)
+cfg_get)
+masked_secret_prompt)
+atomic_write_text
+maxsize
+return
+Optional[str]c
+Resolve a git binary for subprocess use when ``PATH`` may be minimal.
+    Matches other Hermes subprocess resolution: :func:`shutil.which` first,
+    then common Git for Windows install paths and POSIX defaults.
+ProgramFilesz
+C:\Program Filesz
+ProgramFiles(x86)z
+C:\Program Files (x86)
+LOCALAPPDATA
+git.exe
+Programs)
+/usr/bin/gitz
+/usr/local/bin/gitz
+/bin/gitN)
+shutil
+environ
+extend
+isfile)
+prog_x86
+candidates
+      
+JC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\plugins_cmd.py
+_resolve_git_executabler+
+PluginOperationErrorzHRecoverable plugin install/update failure (CLI exits; HTTP maps to 4xx).N)
+__name__
+__module__
+__qualname__
+__doc__
+PluginScanBlockedz
+Plugin failed the security scan and was not installed.
+    Carries the ScanResult so callers (CLI, dashboard) can render the
+    findings report alongside the error message.
+message
+__init__
+scan_result)
+selfr6
+__class__s
+PluginScanBlocked.__init__Q
+__classcell__)
+Whether install/update-time plugin security scanning is enabled.
+    On by default (inspired by Claude Cowork's skill & plugin security
+    scanning). Disable via ``plugins.scan_on_install: false`` in config.yaml.
+load_config
+plugins
+scan_on_installT
+default)
+hermes_cli.configrC
+Exception
+configs
+_scan_on_install_enabledrL
+scan_decision_cb
+plugin_dirr
+identifierr7
+forcec
+Scan *plugin_dir* and enforce the install policy.
+    Verdicts: safe 
+ proceed; caution 
+ needs confirmation (``force=True``
+    or a truthy ``scan_decision_cb(result)``); dangerous 
+ always blocked.
+    Raises :class:`PluginScanBlocked` when the plugin may not be installed.
+    Returns the ScanResult (or None when scanning is disabled).
+    Nr
+format_scan_report
+scan_plugin
+should_allow_plugin_install
+source
+Tz Caution verdict accepted by userz$plugin scan decision callback failedz&Security scan blocked plugin install: z
+Review the findings above. Install only plugins from sources you trust. (Scanning can be configured via plugins.scan_on_install in config.yaml.))
+plugin scan passed for %s: %s)
+tools.plugin_guardrS
+logger
+exceptionr5
+result
+allowed
+reasons
+          r*
+_scan_plugin_treer`
+z9Return the user plugins directory, creating it if needed.rD
+parents
+exist_ok)
+mkdir)
+_plugins_dirre
+allow_subdirr
+plugins_dirrg
+Validate a plugin name and return the safe target path inside *plugins_dir*.
+    Raises ``ValueError`` if the name contains path-traversal sequences or would
+    resolve outside the plugins directory.
+    ``allow_subdir=True`` permits a single forward slash inside *name* so
+    category-namespaced plugin keys like ``observability/langfuse`` or
+    ``image_gen/openai`` (the registry keys emitted by ``_discover_all_plugins``)
+    can be looked up. ``..`` and backslash are still rejected, leading and
+    trailing slashes are stripped, and the resolved target must still live
+    inside *plugins_dir*. Install paths leave this at the default ``False``
+    because a freshly-cloned plugin always lands top-level under
+    ``~/.hermes/plugins/<name>/``.
+Plugin name must not be empty.
+Invalid plugin name 'z3': must not reference the plugins directory itself.)
+': must not contain '
+'.z,': resolves to the plugins directory itself.z*': resolves outside the plugins directory.)
+ValueError
+resolve
+relative_to)
+bad_chars
+target
+plugins_resolveds
+       r*
+_sanitize_plugin_namerw
+commit
+issues
+actions
+commits
+releases
+tuple[str, Optional[str]]c
+Turn an identifier into a cloneable Git URL and optional subdirectory.
+    Returns ``(git_url, subdir)`` where ``subdir`` is the path within the
+    cloned repository that contains the plugin (``None`` when the plugin lives
+    at the repo root).
+    Accepted formats:
+    - Full URL: https://github.com/owner/repo.git
+    - Full URL: git@github.com:owner/repo.git
+    - Full URL: ssh://git@github.com/owner/repo.git
+    - Browser URL: https://github.com/owner/repo/tree/main/path
+      
+  (https://github.com/owner/repo.git, "path")
+    - Shorthand: owner/repo  
+  https://github.com/owner/repo.git
+    - Shorthand w/ subdir: owner/repo/path/to/plugin
+      
+  (https://github.com/owner/repo.git, "path/to/plugin")
+    - Full URL w/ subdir (``.git`` boundary):
+      https://github.com/owner/repo.git/path/to/plugin
+      
+  (https://github.com/owner/repo.git, "path/to/plugin")
+    - Any URL w/ explicit subdir fragment (works for every scheme, incl.
+      ``file://`` and ssh): <url>#path/to/plugin
+      
+  (<url>, "path/to/plugin")
+    NOTE: ``http://`` and ``file://`` schemes are accepted but will trigger a
+    security warning at install time.
+https://
+http://z
+ssh://
+file://z
+https://github.com/N
+.gitrz
+<genexpr>z#_resolve_git_url.<locals>.<genexpr>
+<listcomp>z$_resolve_git_url.<locals>.<listcomp>
+Invalid plugin identifier: 'zi'. Use a Git URL or 'owner/repo' shorthand (optionally with a subdirectory: 'owner/repo/path/to/plugin').)
+startswith
+splitrp
+_GITHUB_BROWSER_SEGMENTS
+removesuffixr!
+partition
+findro
+subdir
+git_url
+marker
+owners
+           r*
+_resolve_git_urlr
+clone_rootr
+Resolve ``subdir`` inside ``clone_root``, rejecting path traversal.
+    Guards against ``..`` segments, absolute paths, and symlinks that would
+    escape the cloned repository. Returns the resolved directory path.
+    Raises ``PluginOperationError`` if the path escapes the clone, doesn't
+    exist, or is not a directory.
+Plugin subdirectory 'z
+' escapes the repository.z#' does not exist in the repository.z
+' is not a directory.)
+exists
+is_dir)
+candidates
+_resolve_subdir_withinr
+zCExtract the repo name from a Git URL for the plugin directory name.rj
+rstrip
+endswith
+rsplit)
+_repo_name_from_urlr
+z;Read a native or portable manifest, preferring native YAML.
+plugin.yaml
+plugin.yml
+plugin.jsonr
+read_agent_plugin_manifestz$Failed to read plugin.json in %s: %sN
+encodingz$Failed to read plugin.yaml in %s: %s)
+is_symlink
+hermes_cli.agent_pluginsr
+warning
+safe_load)
+manifest_file
+portable_filer
+manifestr
+         r*
+_read_manifestr
+Copy any .example files to their real names if they don't already exist.
+    For example, ``config.yaml.example`` becomes ``config.yaml``.
+    Skips files that already exist to avoid overwriting user config on reinstall.
+*.examplez
+[dim]  Created z
+ from 
+[/dim]z)[yellow]Warning:[/yellow] Failed to copy 
+printr
+OSError)
+console
+example_file
+real_name
+real_pathr
+      r*
+_copy_example_filesr
+list[str]c
+zLReturn declared ``requires_env`` names that are unset in ``~/.hermes/.env``.
+requires_envr
+get_env_valuer
+z/_missing_requires_env_names.<locals>.<listcomp>
+isinstancer7
+appendr
+env_specs
+entryr
+    @r*
+_missing_requires_env_namesr
+Surface declared python_dependencies at install time (#64165).
+    Declaration seam ONLY 
+ Hermes never auto-installs plugin pip
+    dependencies (isolation design deferred; see #64165 / #15220). We print
+    the declared requirements with a copy-pasteable install hint.
+python_dependenciesNc
+z._print_python_dependencies.<locals>.<listcomp>
+this plugin
+[bold]zC[/bold] declares Python dependencies (not installed automatically):z
+  - z2[dim]Install them yourself if needed: pip install 
+z-_print_python_dependencies.<locals>.<genexpr>
+[/dim]
+plugin_name
+     r*
+_print_python_dependenciesr
+Prompt for required environment variables declared in plugin.yaml.
+    ``requires_env`` accepts two formats:
+    Simple list (backwards-compatible)::
+        requires_env:
+          - MY_API_KEY
+    Rich list with metadata::
+        requires_env:
+          - name: MY_API_KEY
+            description: "API key for Acme service"
+            url: "https://acme.com/keys"
+            secret: true
+    Already-set variables are skipped.  Values are saved to the user's ``.env``.
+save_env_value)
+display_hermes_homer
+z+_prompt_plugin_env_vars.<locals>.<listcomp>
+z6[/bold] requires the following environment variables:
+descriptionr
+secretF
+  [dim]Get yours at: r
+[dim]  Skipped (you can set these later in z
+/.env)[/dim]u
+  [green]
+[/green] Saved to z
+/.envz
+  [dim]  Skipped (set z
+/.env later)[/dim])
+hermes_constantsr
+EOFError
+KeyboardInterruptr
+missingr
+valuer
+                @r*
+_prompt_plugin_env_varsr
+z@Show after-install.md if it exists, otherwise a default message.r
+Console)
+Markdown)
+after-install.mdr
+greenF)
+border_style
+expandz![green bold]Plugin installed:[/] z
+[dim]Location:[/] u
+ Installed)
+titler
+rich.consoler
+rich.markdownr
+rich.panelr
+read_textr
+after_install
+content
+         r*
+_display_after_installr
+z*Show confirmation after removing a plugin.r
+[/red] Plugin [bold]z
+[/bold] removed from N)
+    r*
+_display_removedr
+zUReturn the plugin path if it exists, or exit with an error listing installed plugins.Trf
+z,_require_installed_plugin.<locals>.<genexpr>!
+(none)
+[red]Error:[/red] Plugin 'z
+' not found in z
+Installed plugins: r
+iterdirr
+installeds
+     r*
+_require_installed_pluginr%
+^[0-9a-fA-F]{40}$z
+.install-metadata.jsonc
+_INSTALL_METADATA_FILEr3
+_install_metadata_pathr(
+dict[str, dict[str, object]]c
+z@Read profile-local, non-secret plugin source metadata from disk.r
+z(Could not read plugin install metadata: Nz.Plugin install metadata must be a JSON object.)
+loadsr
+JSONDecodeErrorr.
+_read_install_metadatar/
+metadatac
+zEAtomically replace the profile-local plugin install metadata sidecar.r
+indent
+sort_keys
+.tmp-)
+tmp_prefixN)
+dumpsr
+_write_install_metadatar7
+Nz---ref must be a full 40-character commit SHA.)
+_EXACT_COMMIT_RE
+fullmatchr.
+lower)
+_normalize_exact_revisionr=
+subprocess.CompletedProcess
+source_urlc
+zCReturn diagnosable Git output without echoing embedded credentials.r
+redact_sensitive_textr
+agent.redactrA
+stderr
+stdoutrp
+replace
+_scrub_git_url)
+errors
+    r*
+_safe_git_errorrH
+git_exec
+rev-parse
+HEADTr
+capture_output
+errors
+timeout
+z,Could not determine installed Git revision:
+subprocess
+DEVNULLr
+returncoderH
+    r*
+_git_head_revisionr[
+revisionc
+zIFetch and detach at one immutable commit, then verify the resulting HEAD.
+--depth
+originTr
+Git fetch of commit 'z
+' timed out after 60 seconds.Nr
+Git commit 'z
+' could not be fetched:
+checkoutz
+--detachz
+Git checkout of commit 'z
+' failed:
+Checked-out revision 'z#' does not match requested commit 'rn
+TimeoutExpiredr.
+fetchedr.
+checked_out
+actuals
+        r*
+_checkout_exact_revisionrh
+z?Strip credentials and query/fragment data from an HTTP Git URL.>
+httpsr
+urllib
+urlsplit
+scheme
+hostname
+urlunsplitr 
+parsed
+scrubbeds
+_canonical_sourcery
+zFEnsure credentials used for cloning do not survive in ``.git/config``.N
+remotez
+set-urlra
+z)Could not sanitize installed Git remote:
+      r*
+_scrub_cloned_originr|
+tuple[Path, dict, str]c
+d"l.m/}
+|#r)|"
+}%|$s4|%s2|
+d1l9m:}&
+)2zGClone a Git plugin and atomically record its source and exact revision.Nc
+pinnedTr
+z(_install_plugin_core.<locals>.<listcomp>
+.install-
+prefix
+plugin
+$git is not installed or not in PATH.
+cloner_
+--no-checkoutTr
+z%Git clone timed out after 60 seconds.z
+Git clone failed:
+Agent Plugin install: %sz,Portable plugin manifest validation failed: r
+manifest_version
+Plugin 'z ' has invalid manifest_version 'z
+' (expected an integer).)
+recommended_update_commandz
+' requires manifest_version z), but this installer only supports up to z
+. Run z
+ to update Hermes.)
+zD' already exists. Use force reinstall or run `hermes plugins update z
+zl' is pinned. Reinstall it with an explicit --ref <40-character commit SHA> to change its source or revision.)
+previous-plugin)
+missing_ok
+__init__.pyz>%s has no plugin.yaml / __init__.py; may not be a valid pluginr
+valuesr
+tempfile
+TemporaryDirectoryr
+FileNotFoundErrorrd
+TypeError
+_SUPPORTED_MANIFEST_VERSIONrH
+rmtreer(
+unlinkr
+requested_revisionr
+old_metadata
+matching_pinsr\
+tmp_clonerI
+clone_argsr]
+installed_revision
+tmp_target
+has_native_manifest
+has_portable_manifestr
+diagnostics
+diagnosticr.
+mv_intr
+new_metadata
+backup
+replaced_existing
+has_yaml
+has_portabler
+installed_manifest
+installed_namerW
+                                         @r*
+_install_plugin_corer
+True when *identifier* is a bare plugin name (no slash, not a URL).
+    Bare names are resolved through the community plugin index; anything with
+    a slash or URL scheme keeps the existing owner/repo / Git URL semantics.
+    rj
+_looks_like_bare_index_namer
+Resolve a bare plugin name to ``(install_identifier, pinned_ref)``.
+    Exits with an error when the name is unknown, or lists candidates and
+    exits when the name is ambiguous. The returned ref is only used when it
+    is an exact 40-character commit SHA (the pin format the installer
+    accepts); tag refs are surfaced as advisory output instead.
+SECURITY_FOOTER
+load_index
+resolve_nameNr
+[red]Error:[/red] Plugin name 'z'' is ambiguous in the community index (z
+). Candidates:r
+  z8Re-run with the exact name or the owner/repo identifier.r 
+z(' was not found in the community index (zc). Use `hermes plugins search <term>` to browse, or install directly with an owner/repo identifier.z
+[dim]Index pins ref 'zN' (not an exact commit SHA); installing the default branch head instead.[/dim]z
+[dim]Resolved 'z
+' via community index (u
+[dim])
+hermes_cli.plugin_indexr
+install_identifierr"
+entriesrW
+pinned_refs
+           r*
+_resolve_index_namer
+enable
+Optional[bool]c
+Install a plugin from a Git URL, owner/repo shorthand, or index name.
+    Bare names (no slash, no URL scheme) are resolved through the community
+    plugin index to ``owner/repo`` plus the index-pinned ref. An explicit
+    ``--ref`` always wins over the index pin.
+    After install, prompt "Enable now? [y/N]" unless *enable* is provided
+    (True = auto-enable without prompting, False = install disabled).
+[red]Error:[/red] r
+zs[yellow]Warning:[/yellow] Using insecure/local URL scheme. Consider using https:// or git@ for production installs.z
+[dim]Cloning z
+ (subdir: z
+)...[/dim]
+...[/dim]r
+zCPrompt the user to accept a caution-verdict plugin (Cowork 'warn').r
+[yellow]
+ Security scan flagged this plugin:[/yellow]Fz@  Install anyway? Only continue if you trust the source. [y/N]: >
+isattyrD
+answerr
+_interactive_scan_decisionz/cmd_install.<locals>._interactive_scan_decision
+[red]Blocked:[/red] r
+[yellow]Warning:[/yellow] z_ doesn't contain plugin.yaml, plugin.json, or __init__.py. It may not be a valid Hermes plugin.z
+  Enable 'z
+' now? [y/N]: >
+[green]
+[/green] Plugin [bold]z
+[/bold] enabled.zB[dim]Plugin installed but not enabled. Run `hermes plugins enable z
+` to activate.[/dim]
+install
+contextz=[dim]Restart the gateway for the plugin to take effect:[/dim]z#[dim]  hermes gateway restart[/dim]
+_get_enabled_set
+_get_disabled_set
+discard
+_save_enabled_set
+_save_disabled_set
+$_declared_capabilities_from_manifest
+_run_capability_consent)
+index_refr
+_subdirr
+should_enabler
+enabled
+disabled
+declared_capsr
+                  @r*
+cmd_installr
+)%zAUpdate an installed plugin by pulling latest from its git remote.r
+escaper
+<source>r 
+' is pinned to r\
+z*. To move it, run `hermes plugins install z* --force --ref <40-character commit SHA>`.r
+z@' was not installed from git (no .git directory). Cannot update.z
+[dim]Updating r
+[yellow]
+ Security scan flagged the updated plugin:[/yellow] 
+dangerous
+[red]Plugin 'z[' has been disabled.[/red] Review the findings, then re-enable with `hermes plugins enable z
+` if you trust them.r
+declared_set_changed
+pending_capabilities
+updater
+Already up to dater
+[/bold] is already up to date.z
+[/bold] updated.r
+rich.markupr
+_git_pull_plugin_dirr+
+verdictr
+_clear_plugin_bytecoder
+hermes_cli.plugin_capabilitiesr
+install_record
+recorded_source
+outputrI
+updated_manifest
+plugin_idr
+                            r*
+cmd_updater
+zARemove one plugin and its metadata without splitting their state.Nrk
+.remove-r
+z#Plugin metadata update failed and 'z@' could not be restored automatically; recovery copy remains at T)
+ignore_errors)
+mkdtemp
+parentr
+updated
+stagingr
+restore_excs
+      r*
+_remove_plugin_corer
+z#Remove an installed plugin by name.r
+Nz+[red]Error:[/red] Could not remove plugin '
+       r*
+cmd_remover
+Read the disabled plugins set from config.yaml.
+    An explicit deny-list. A plugin name here never loads, even if also
+    listed in ``plugins.enabled``.
+z/Write the disabled plugins list to config.yaml.r
+save_configrD
+sorted)
+    r*
+basicz
+dashboard_auth/basic
+Re-enable the bundled basic dashboard-auth plugin in *cfg*.
+    ``hermes setup`` / ``hermes plugins disable basic`` can park the plugin
+    in ``plugins.disabled`` while ``dashboard.basic_auth`` is configured.
+    The basic provider is a bundled backend that still respects the
+    deny-list, so password auth silently fails until the block is removed.
+    Returns True when ``plugins.disabled`` was modified.
+    rD
+_BASIC_AUTH_PLUGIN_KEYSr
+plugins_cfgr
+*ensure_basic_auth_plugin_enabled_in_configr
+Read the enabled plugins allow-list from config.yaml.
+    Plugins are opt-in: only names here are loaded. Returns ``set()`` if
+    the key is missing (same behaviour as "nothing enabled yet").
+    r*
+z.Write the enabled plugins list to config.yaml.r
+    r*
+Resolve a user-supplied plugin identifier to its canonical registry key.
+    Accepts either the bare manifest name (``nemo_relay``), the directory
+    name, or the full path-derived key (``observability/nemo_relay``) and
+    returns the canonical key the loader gates on (``manifest.key`` or, for a
+    flat plugin, the bare name). Returns ``None`` when no plugin matches.
+    This is the single normalization point so ``hermes plugins enable`` /
+    ``disable`` write the same key that ``PluginManager`` matches against 
+    nested category plugins (e.g. ``observability/nemo_relay``) included.
+z'_resolve_plugin_key.<locals>.<listcomp>M
+_discover_all_pluginsr
+leaf_matchess
+`   r*
+_resolve_plugin_keyr
+Optional[tuple]c
+Resolve *name* to ``(canonical_key, source)`` or ``None`` if no match.
+    Mirrors :func:`_resolve_plugin_key`'s normalization but also returns the
+    plugin's source (``"bundled"``, ``"user"``, ``"project"``, ...) so the
+    enable path can tell whether a built-in-override consent prompt is needed.
+z2_resolve_plugin_key_and_source.<locals>.<listcomp>_
+`   r*
+_resolve_plugin_key_and_sourcer
+zEWrite ``plugins.entries.<plugin_id>.<key> = value`` into config.yaml.r
+setdefaultr
+         r*
+_set_plugin_entry_flagr
+allow_tool_overridec
+Add a plugin to the enabled allow-list (and remove it from disabled).
+    For non-bundled plugins, prompt the operator about granting the
+    privileged ``allow_tool_override`` capability (replacing built-in tools
+    like ``shell_exec`` / ``write_file``). ``allow_tool_override`` is a
+    tri-state: ``True`` grants without prompting, ``False`` declines without
+    prompting, ``None`` (default) asks interactively. Bundled plugins are
+    trusted and never prompted.
+$' is not installed or bundled.[/red]r
+z.[/bold] enabled. Takes effect on next session.
+[dim]Plugin 'z
+' is already enabled.[/dim]
+bundledr
+_declared_capabilities_for_keyr
+_resolve_tool_override_grant)
+resolvedr
+already_enabled
+             r*
+cmd_enabler&
+zFExtract + normalize the ``capabilities:`` declaration from a manifest.r
+parse_declared_capabilities
+capabilities)
+zFRead the declared capabilities for an installed/bundled plugin by key.r
+entrypoint)
+discover_entrypoint_manifestsr
+hermes_cli.pluginsr,
+dir_paths
+     r*
+z8Render the consent screen body: one line per capability.r
+CAPABILITY_REGISTRYr
+    [bold]u
+[/bold] 
+      r*
+_print_capability_listr2
+declaredr
+Show the capability consent screen and record the decision.
+    Prints the declared capability list with one-line risk descriptions and
+    asks a single Y/n. On consent, the *pending* capabilities are granted
+    (recorded under ``plugins.entries.<plugin_id>.granted_capabilities`` with
+    a consent hash of the declared set). On decline 
+ or in ANY
+    non-interactive context 
+ capabilities stay ungranted (fail closed) and
+    the plugin must degrade gracefully via ``ctx.has_capability()``.
+    The consent wording deliberately does not imply a code audit: granting a
+    capability trusts the plugin author. This is consent + audit, NOT a
+    sandbox 
+ an in-process plugin can run arbitrary Python regardless.
+    Returns True when consent was granted.
+record_consentTr
+requestsz
+now requestsz
+  [yellow]Plugin [bold]z
+[/bold] z% the following capabilities:[/yellow]u
+  [dim]Granting trusts the plugin author with these host surfaces. This is consent, not a sandbox 
+ plugins run as regular Python in-process.[/dim]zu  [yellow]Non-interactive session: capabilities NOT granted (fail closed).[/yellow] Run `hermes plugins capabilities z'` to review and `hermes plugins enable z
+` to grant interactively.Fz"  Grant these capabilities? [y/N] r
+  [green]
+[/green] Granted: r
+ ([dim]plugins.entries.z
+.granted_capabilities[/dim])z
+  [dim]Declined. z
+ stays enabled with these capabilities off; it should degrade gracefully (ctx.has_capability()). Re-run `hermes plugins enable z
+` to grant later.[/dim])
+pending
+         r*
+``hermes plugins capabilities [<id>]`` 
+ declared vs granted.r
+granted_capabilitiesr
+plugin_capability_grantedc
+<setcomp>z#cmd_capabilities.<locals>.<setcomp>P
+z3[dim]No plugins declare or hold capabilities.[/dim]
+[bold]z
+[/bold] [dim](
+)[/dim]z
+  declared: [dim](none)[/dim]z
+[green]granted[/green]u3
+ [dim](via legacy allow_* key 
+ deprecated)[/dim]z
+[yellow]not granted[/yellow]r
+z>: [green]granted[/green] [dim](not declared in manifest)[/dim])
+grantedr0
+effectiverW
+             @@r*
+cmd_capabilitiesrD
+Resolve and persist the ``allow_tool_override`` grant for a plugin.
+    ``allow_tool_override`` tri-state: True grants, False declines, None
+    prompts interactively (defaulting to deny on a non-interactive stdin).
+    Nz
+[yellow]Allow this plugin to replace built-in tools (e.g. shell_exec, write_file)?[/yellow]
+  This is a privileged capability: an override can intercept everything the agent routes through that tool.
+  Grant it? [y/N] r
+[green]
+[/green] Granted [bold]zD[/bold] permission to override built-in tools ([dim]plugins.entries.z".allow_tool_override: true[/dim]).r
+z@ may not override built-in tools. Re-run `hermes plugins enable z2 --allow-tool-override` to grant this later.[/dim])
+promptr
+      r*
+zBRemove a plugin from the enabled allow-list (and add to disabled).r
+' is already disabled.[/dim]rj
+[yellow]
+[/yellow] Plugin [bold]z/[/bold] disabled. Takes effect on next session.)
+       r*
+cmd_disablerH
+z>Return True if a plugin with *name* (bare name or key) exists.N)
+_plugin_existsrJ
+zrRead a native or portable manifest and return display metadata.
+    Returns None if no manifest file exists.
+versionr
+ImportErrorr
+             r*
+_read_manifest_inforN
+True when *dir_path* is an Agent Plugins v1 package (``plugin.json``
+    only 
+ a native ``plugin.yaml`` takes precedence, matching the loader).Fr
+_is_portable_plugin_dirrP
+model-provider
+backend
+platformc
+True when a bundled plugin at *dir_path* is active without an explicit
+    ``plugins.enabled`` entry. Standalone/exclusive kinds stay opt-in, and
+    portable packages (``plugin.json``) have no kind at all.r
+standalone)
+_BUNDLED_DEFAULT_ON_KINDSrI
+      r*
+_bundled_default_onrX
+baserW
+skip_names
+depthr
+Recursive directory scan matching PluginManager._scan_directory_level.
+    Populates *seen* with key -> (name, version, description, source, dir, key).
+    Nr
+_scan_levelr
+src_label
+sub_prefixs
+              r*
+Return a list of (name, version, description, source, dir_path, key) for
+    every plugin the loader can see 
+ user + bundled + project + entry point.
+    Matches the ordering/dedup of ``PluginManager.discover_and_load``:
+    bundled first, then user, then project, then entry points. Later sources
+    override earlier ones on key collision.
+get_bundled_plugins_dirr 
+model-providers
+memory
+context_enginer^
+_discover_entrypoint_pluginsr
+repo_pluginsrY
+          r*
+list[tuple[str, str, str, str]]c
+Return plugin entries advertised through ``hermes_agent.plugins``.
+    Entry-point plugins are installed as Python packages, so they do not have a
+    plugin directory under ``~/.hermes/plugins``. Include package metadata here
+    so ``hermes plugins list`` can show and enable them.
+ENTRY_POINTS_GROUP
+select
+groupc
+z0_discover_entrypoint_plugins.<locals>.<listcomp>f
+z'Entry-point plugin discovery failed: %sNr
+distr0
+Summary)
+importlibr0
+entry_points
+hasattrrn
+getattrr7
+group_epsr.
+         @r*
+zAReturn the user-facing activation state for a plugin name or key.r
+not enabledr3
+    r*
+_plugin_statusr}
+z*Apply ``hermes plugins list`` CLI filters.
+no_bundledFr^
+z*_filter_plugin_entries.<locals>.<listcomp>
+z*_filter_plugin_entries.<locals>.<listcomp>
+filtereds
+  `` r*
+_filter_plugin_entriesr
+Any | Nonec
+)%z>List all plugins (bundled + user) with enabled/disabled state.r
+Tablez [dim]No plugins installed.[/dim]
+:[dim]Install with:[/dim] hermes plugins install owner/repoNr+
+statusrL
+       
+cmd_list.<locals>.<listcomp>
+plainr
+8z3[dim]No plugins matched the selected filters.[/dim]
+Plugins)
+show_lines
+Status
+Version
+Description
+Sourcer
+[red]disabled[/red]r
+[green]enabled[/green]z
+[yellow]not enabled[/yellow]zA[dim]Compact view:[/dim] hermes plugins list --plain --no-bundledz-[dim]Interactive toggle:[/dim] hermes pluginsz?[dim]Enable/disable:[/dim] hermes plugins enable/disable <name>uI
+[dim]Plugins are opt-in by default 
+ only 'enabled' plugins load.[/dim])
+rich.tabler
+add_column
+add_row)
+payloadr
+_descriptionrW
+tabler
+status_namer
+                @@r*
+cmd_listr
+list[tuple[str, str]]c
+zAReturn [(name, description), ...] for available memory providers.r
+discover_memory_providersc
+_avails
+    r*
+z._discover_memory_providers.<locals>.<listcomp>
+plugins.memoryr
+_discover_memory_providersr
+Return [(name, description), ...] for available context engines.
+    Includes repo-shipped engines from ``plugins/context_engine/`` AND
+    plugin-registered engines (third-party engines installed as Hermes
+    plugins via ``ctx.register_context_engine``). Repo-shipped descriptions
+    win when a plugin-registered engine collides on name.
+discover_context_engines)
+discover_plugins
+get_plugin_context_enginer
+installed plugin)
+plugins.context_enginer
+enginesr\
+plugin_engines
+         r*
+_discover_context_enginesr
+zBReturn the current memory.provider from config (empty = built-in).r
+providerr
+_get_current_memory_providerr
+z.Return the current context.engine from config.r
+engine
+compressorrF
+_get_current_context_enginer
+z'Persist memory.provider to config.yaml.r
+    r*
+_save_memory_providerr
+z&Persist context.engine to config.yaml.r
+    r*
+_save_context_enginer
+zDLaunch a radio picker for memory providers. Returns True if changed.r
+curses_radiolistz
+built-in (default)r
+ (not found)z
+Memory Provider (select one)
+selectedTF)
+hermes_cli.curses_uir
+current
+providersr
+namesr
+choice
+new_providers
+           r*
+_configure_memory_providerr
+zCLaunch a radio picker for context engines. Returns True if changed.r
+compressor (default)r
+Context Engine (select one)r
+new_engines
+           r*
+_configure_context_enginer
+Show details for a single plugin, including declared emits/listens.
+    Resolves *name* against every discoverable plugin (bundled + user +
+    entrypoint) by either its display name or its registry key, then reads
+    its ``plugin.yaml`` to surface the advisory event-bus declarations
+    (``emits`` / ``listens``) alongside the basic metadata.
+' not found.[/red]z6[dim]List installed plugins:[/dim] hermes plugins listr
+listensr
+[/bold]z
+ [dim]vr
+[dim]Status:[/dim] z
+[dim]Source:[/dim] z
+[dim]Key:[/dim] z
+[dim]Emits:[/dim] r
+[dim](none)[/dim]z
+[dim]Listens:[/dim] )
+matchr
+pnamerL
+                  r*
+cmd_showr
+Interactive composite UI 
+ general plugins + provider plugin categories.r
+ [bundled]
+built-inz
+Memory Providerz
+Context EnginezE[dim]No plugins installed and no provider categories available.[/dim]r
+Nz0[dim]Interactive mode requires a terminal.[/dim])
+enumerater
+curses
+_run_composite_uirM
+_run_composite_fallback)
+enabled_set
+disabled_set
+plugin_keys
+plugin_labels
+plugin_selected
+_versionr
+current_memory
+current_context
+categories
+has_plugins
+has_categoriesr
+                       r*
+cmd_toggler
+z<Custom curses screen with checkboxes + category action rows.r
+flush_stdinF)
+plugins_changed
+providers_changedc
+/j/k navigate  PgUp/PgDn page  SPACE toggle  ENTER configure/confirm  ESC donez
+  General Pluginsu
+  Provider Pluginsz
+curs_set
+has_colors
+start_color
+use_default_colors
+init_pair
+COLOR_GREEN
+COLOR_YELLOW
+COLOR_CYAN
+COLORS
+COLOR_WHITE
+getmaxyx
+A_BOLD
+color_pair
+addnstr
+A_DIMrG
+A_NORMALr
+refresh
+KEY_UP
+KEY_DOWN
+KEY_NPAGE
+KEY_PPAGE
+KEY_HOME
+KEY_END
+symmetric_difference_update
+endwinr
+initscr
+noecho
+cbreak
+keypad
+KEY_ENTER)"
+stdscr
+cursor
+scroll_offset
+visible_rowsr
+plugin_start
+plugin_stopr
+cat_name
+cat_current
+_cat_fn
+cat_idxr
+_cat_name
+_cat_cur
+cat_fn
+changedr
+chosenr
+n_categories
+n_pluginsr
+result_holder
+total_itemss"
+                          
+_drawz _run_composite_ui.<locals>._draw
+[green]
+[/green] General plugins: z
+ enabled, z
+ disabled.z&
+[dim]General plugins unchanged.[/dim]r
+[green]
+[/green] Memory provider: [bold]z
+[/bold]  Context engine: [bold]r
+z/[dim]Changes take effect on next session.[/dim]N)
+wrapperr
+new_enabled
+new_disabledr
+prev_enabled
+enabled_changed
+disabled_changed
+new_memory
+new_contextr:
+` `  `             @@@@@r*
+z1Text-based fallback for the composite plugins UI.r
+Colors
+colorz
+  Pluginsz
+  General Pluginsz&  Toggle by number, Enter to confirm.
+. z"  Toggle # (or Enter to confirm): Nrj
+  Provider Pluginsr
+z"  Configure # (or Enter to skip): r
+hermes_cli.colorsrI
+YELLOWr
+GREENr
+                       r*
+dict[str, Any]c
+zPNon-interactive install for the web dashboard. Returns a JSON-serializable dict.r
+zEInsecure URL scheme; prefer https:// or git@ for production installs.rX
+pattern_id
+severity
+category
+filer/
+z,dashboard_install_plugin.<locals>.<listcomp>U
+scan_blocked
+scan_verdict
+scan_findings
+warnings
+missing_env
+after_install_pathr
+findingsr7
+                r*
+dashboard_install_pluginrd
+Return the toolset key a plugin registers its tools under, or None.
+    Queries the live tool registry 
+ the plugin must already be loaded.
+    Falls back to reading ``provides_tools`` from plugin.yaml and looking
+    up the toolset from the registry for the first tool name found.
+registryN)
+get_plugin_managerrc
+provides_tools)
+tools.registryrf
+_pluginsr
+tools_registered
+get_entry
+toolsetrd
+manager
+loaded
+tool_namer
+             r*
+_get_plugin_toolset_keyrr
+Add or remove a plugin's toolset from platform_toolsets for all platforms.
+    Only acts if the plugin actually provides tools (has a toolset key).
+    Nr
+platform_toolsetsFT
+remove)
+toolset_keyrC
+ts_lists
+          r*
+_toggle_plugin_toolsetry
+Enable or disable a plugin in ``config.yaml`` (runtime allow/deny lists).
+    For plugins that provide tools (toolsets), also toggles the toolset in
+    ``platform_toolsets`` so the agent actually sees the tools in sessions.
+    Fr
+' is not installed or bundled.r[
+unchanged)
+    r*
+"dashboard_set_agent_plugin_enabledr|
+Optional[Path]c
+z>Resolved path under ``~/.hermes/plugins/<name>`` if it exists.Trf
+_user_installed_plugin_dirr
+z1``git pull`` inside ``~/.hermes/plugins/<name>``.NFr
+' was not found under rk
+; run `hermes plugins install z5 --force --ref <40-character commit SHA>` to move it.r
+z-' is not a git checkout; cannot pull updates.r
+           r*
+dashboard_update_user_pluginr
+Remove ``__pycache__`` dirs under a just-updated plugin checkout.
+    Plugin dirs live outside the main repo, so the launch-time checkout
+    fingerprint sweep in ``hermes_cli.main`` never covers them. After a
+    ``git pull`` changes a plugin's ``.py`` files, stale bytecode here can
+    produce the same ImportError class as #6207/#60242 in whichever
+    process imports the plugin next. Never raises.
+__pycache__r
+rglobr
+removed
+cache_dirs
+z?Run one git command inside a plugin checkout (non-interactive).Tr
+    r*
+_run_plugin_gitr
+zDCurrent ``refs/stash`` commit, or empty string when no stash exists.rK
+--verifyz
+refs/stashr
+probes
+_stash_refr
+tuple[bool, str]c
+``git pull --ff-only`` a plugin checkout, autostashing local edits.
+    Users tweak installed plugins in place (config constants, small patches),
+    and a plain ``pull --ff-only`` then aborts with "Your local changes ...
+    would be overwritten by merge" 
+ making the plugin permanently
+    un-updatable until they hand-run git. Same UX class Factory Droid fixed
+    in v0.188 ("Updating a plugin marketplace now succeeds when its checkout
+    has local changes"), and the same autostash approach ``hermes update``
+    already uses for the main checkout (PR #70161).
+    Flow: clean tree 
+ plain pull (unchanged). Dirty tree 
+ stash push
+    (ref-compared, so "nothing saved" is distinguished from "saved but exit
+    1"), pull, stash apply. A clean re-apply drops the entry; a conflicted
+    re-apply resets the tree to the updated revision and KEEPS the stash so
+    the plugin still imports and no local work is lost.
+--porcelainr
+--include-untrackedz
+hermes-plugin-update-autostashzgLocal changes in the plugin checkout could not be stashed; update aborted before touching the checkout.r4
+resetz
+--hardrL
+--ff-only
+applyz
+stash@{0}
+Local changes were restored.zGLocal changes are preserved in git stash (restore with: git stash pop).z
+git pull failed.T
+--name-onlyz
+--diff-filter=Uz4
+Local changes were re-applied on top of the update.u
+ Local changes in this plugin conflicted with the update and were NOT re-applied. They are preserved in git stash 
+ inspect with `git stash show -p stash@{0}` and re-apply with `git stash pop` inside rk
+Fz)Git operation timed out after 60 seconds.)
+stash_created
+pre_stashr
+post_stashrZ
+restore
+pulled
+unmerged
+has_conflictss
+               r*
+z7Delete a plugin tree under ``~/.hermes/plugins/`` only.r 
+Fz5Bundled plugins cannot be removed from the dashboard.r[
+Could not remove plugin 'r
+_pathro
+          r*
+dashboard_remove_user_pluginr
+z?Validate one plugin through runtime discovery and registration.r
+doctor_pluginr
+hermes_cli.plugin_devr
+format_textr
+SystemExit)
+reports
+     r*
+cmd_plugin_doctorr
+json_output
+capabilityr
+)%zCSearch the community plugin index (fuzzy on name/description/tags).r
+search_index)
+to_dict)
+cmd_search.<locals>.<listcomp>
+resultsr
+[yellow]No plugins matched 'z
+'[/yellow] [dim](index source: r?
+Community plugins (z
+ matchr
+Author
+[dim]Index source: z.. Install: hermes plugins install <name>[/dim]r
+authorr!
+                r*
+cmd_searchr
+)&z$Dispatch hermes plugins subcommands.
+plugins_actionNr
+no_enablerP
+searchr
+uninstallr
+no_allow_tool_override)
+disabler)
+doctorr1
+pack_command>
+[red]Unknown plugins action: z
+[/red]r
+hermes_cli.plugin_packsr
+action
+enable_arg
+allow_overrider
+      r*
+plugins_commandr
+__future__r
+functools
+importlib.metadataru
+loggingr
+urllib.parsern
+pathlibr
+typingr
+hermes_cli._subprocess_compatr
+hermes_cli.secret_promptr
+utilsr
+getLoggerr/
+lru_cacher+
+compiler:
+frozensetr
+<module>r

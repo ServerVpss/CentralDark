@@ -1,0 +1,47 @@
+# Configuração exemplo para drive_reconcile.py
+
+## Onde colocar
+
+Copie este arquivo para um destes caminhos (o script procura por eles):
+
+```
+config/drive_config.yaml              # um nível acima do script
+~/.config/centraldark/drive/config.yaml   # configuração global do usuário
+```
+
+Ou passe explicitamente com `--config <caminho>`.
+
+## O que editar
+
+- `root_folder_name`: nome da pasta raiz no Google Drive (opcional)
+- `mappings`: cada entrada liga uma pasta local a uma pasta remota
+- `ignore`: padrões que não devem ser sincronizados (ver NO LIXO na skill)
+
+## O que NÃO colocar
+
+- Credenciais, tokens, chaves, senhas
+- Qualquer coisa que identifique você ou sua conta
+
+## Como o script usa
+
+O script só lê este arquivo se estiver configurado. Se não encontrar, vira UNKNOWN
+e não executa. Use `--check` para verificar se está configurado.
+
+Exemplo de uso:
+
+```bash
+python CentralDark/scripts/drive_reconcile.py --check
+python CentralDark/scripts/drive_reconcile.py --dry-run
+python CentralDark/scripts/drive_reconcile.py --local "_MAPA_CASA" --dry-run
+```
+
+Veja a skill `centraldark-drive-reconciliation` para mais detalhes sobre o fluxo.
+
+## Notas de segurança
+
+- O script não cria conta nova
+- O script não inventa oauth fora do canônico
+- O script não loga valor de credenciais
+- Se o serviço vigente exigir arquivo de credencial, coloque-o fora do repo
+  (ex: `~/.config/centraldark/drive/credentials.json`) e use o que o svc vigente
+  der como padrão, não copie arquivos de credencial do repo.

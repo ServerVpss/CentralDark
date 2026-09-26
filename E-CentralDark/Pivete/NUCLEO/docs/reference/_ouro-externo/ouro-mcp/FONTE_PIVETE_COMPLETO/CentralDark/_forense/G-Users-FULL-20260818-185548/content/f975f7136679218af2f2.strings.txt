@@ -1,0 +1,74 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\__pycache__\model_data_policy_guard.cpython-311.pyc
+
+Data-policy confirmation helpers for model selection surfaces.
+Some inference tiers are cheap *because* the vendor trains future models on your
+prompts and completions. Selecting one for the low price without realising the
+data trade-off is a real footgun. This guard mirrors
+``hermes_cli.model_cost_guard`` 
+ it returns a warning payload that the CLI and
+web model-selection flows surface as an explicit confirm step.
+Why a static table (not a ProviderProfile hook): the guard runs inside core
+selection code (``auth.py`` / ``web_server.py``), which never calls into the
+active provider profile for a selection-time warning. Keeping the rule set here
+also means it renders regardless of which provider plugin happens to be loaded,
+and it stays testable without importing arbitrary third-party plugin code into
+the selection path.
+The status is NOT machine-readable anywhere today: neither models.dev nor the
+Meta ``/v1/models`` payload exposes a training/retention flag (verified
+2026-08-07). The only reliable signals are the vendor-documented model id and
+its anomalously low pricing, so the rule keys on the id.
+annotations)
+dataclass)
+Callable
+OptionalT)
+frozenc
+DataTrainingWarningz?Confirmation payload for models whose tier trains on user data.
+provider
+messageN)
+__name__
+__module__
+__qualname__
+__doc__
+__annotations__
+VC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\model_data_policy_guard.pyr
+model_lowerr
+provider_lower
+return
+-contributor
+contributor
+endswith
+split)
+_is_meta_contributorr
+!!! CONTRIBUTOR TIER 
+ TRAINS ON YOUR DATA !!!
+muse-spark-1.2-contributor is Meta's contributor tier: heavily discounted
+token pricing in exchange for permission to use your prompts and completions
+to train future Meta models.
+  Price per 1M tokens:  input $0.10  |  output $0.20  |  cached input $0.002
+  (vs. standard muse-spark-1.2:  input $1.25  |  output $4.25  |  cached $0.15)
+It lowers the barrier to entry for prototyping, testing integrations, and
+scaling experiments where training on your data is acceptable. Do NOT use it
+for confidential, proprietary, personal, or otherwise sensitive data. For the
+same model at standard pricing with no training on your data, select the
+standard variant, muse-spark-1.2.
+Source: https://dev.meta.ai/docs/pricing-rate-limits/
+Confirm only if training on your prompts and completions is acceptable.z2tuple[tuple[Callable[[str, str], bool], str], ...]
+_RULESN)
+base_url
+model_namer
+Optional[str]r!
+Optional[DataTrainingWarning]c
+Return a warning payload when *model_name* selects a data-training tier.
+    Returns ``None`` when no rule matches (the common case). Callers should run
+    this after model resolution so aliases / provider-specific ids have settled,
+    and surface ``.message`` as a confirm prompt.
+lowerr 
+Exception)
+predicater
+        r
+data_training_warningr+
+__future__r
+dataclassesr
+typingr
+_META_CONTRIBUTOR_MESSAGEr 
+<module>r0

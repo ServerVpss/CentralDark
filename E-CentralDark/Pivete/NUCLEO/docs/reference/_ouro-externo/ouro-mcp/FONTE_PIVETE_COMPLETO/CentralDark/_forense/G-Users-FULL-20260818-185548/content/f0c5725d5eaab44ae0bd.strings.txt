@@ -1,0 +1,35 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\Service Worker\CacheStorage\379f1cbab5b08b6fc9e08681e42d8be311441c88\2ce6458a-4e5a-498a-9a81-53c72338dabb\58c540c5cd3665f9_0
+
+https://fonts.gstatic.com/s/i/youtube_outline_experimental/info_circle/v11/24px.svg<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="24" viewBox="0 0 24 24" width="24"><path d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1Zm0 2a9 9 0 110 18.001A9 9 0 0112 3Zm0 3.75a1.25 1.25 0 100 2.5 1.25 1.25 0 000-2.5ZM13 15v-5h-2.5a1 1 0 000 2h.5v3h-1a1 1 0 000 2h4a1 1 0 000-2h-1Z"/></svg>
+accept-ranges
+bytes" 
+access-control-allow-origin
+390321"9
+alt-svc
+.h3=":443"; ma=2592000,h3-29=":443"; ma=2592000")
+cache-control
+public, max-age=31536000"
+content-encoding
+content-length
+#content-security-policy-report-only
+Yrequire-trusted-types-for 'script'; report-uri https://csp.withgoogle.com/csp/apps-themes"
+content-type
+image/svg+xml"B
+cross-origin-opener-policy
+$same-origin; report-to="apps-themes"",
+cross-origin-resource-policy
+cross-origin"%
+Tue, 11 Aug 2026 12:48:10 GMT"(
+expires
+Wed, 11 Aug 2027 12:48:10 GMT".
+last-modified
+Thu, 04 Jun 2026 18:55:06 GMT"
+report-to
+v{"group":"apps-themes","max_age":2592000,"endpoints":[{"url":"https://csp.withgoogle.com/csp/report-to/apps-themes"}]}"
+server
+Accept-Encoding"!
+x-content-type-options
+nosniff"
+x-xss-protection
+BShttps://fonts.gstatic.com/s/i/youtube_outline_experimental/info_circle/v11/24px.svgP(Z
+image/svg+xmlr

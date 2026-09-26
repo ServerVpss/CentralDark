@@ -1,0 +1,104 @@
+{
+  "observed_at": "2026-08-23",
+  "repository": "ServerVpss/CentralDark",
+  "visibility": "private",
+  "default_branch": "main",
+  "latest_observed_recent_commit": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+  "coverage_note": "Snapshot curado dos owners/PRs/commits materiais lidos. Não afirma todos os PRs históricos. O launcher enumera todos os commits/refs/arquivos do clone local.",
+  "open_material_prs": [
+    {
+      "number": 1119,
+      "state": "OPEN_DRAFT_MERGEABLE",
+      "head": "1296396db53a0dd89add7aefa4fe72c3b8d9ba81",
+      "purpose": "harvester + causal navigation; corrige confidence inventada e tail EOF/echo"
+    },
+    {
+      "number": 1117,
+      "state": "OPEN_DRAFT",
+      "purpose": "IPNames handoff; adapter runtime não implementado"
+    },
+    {
+      "number": 1116,
+      "state": "OPEN_DRAFT",
+      "purpose": "agentes por dias; conceitual"
+    },
+    {
+      "number": 1115,
+      "state": "OPEN_DRAFT",
+      "purpose": "cognitive council no ONE_CORE_MANY_ARMS; CI/Judge pendentes"
+    }
+  ],
+  "merged_material_commits": [
+    {
+      "sha": "f4e2bde0b4586a3427a397258f575f6526e2658a",
+      "pr": 1114,
+      "delta": "SOL core único + adapters finos + Portable Kernel cache"
+    },
+    {
+      "sha": "3185f591002201c8a6586e3625d91be4cc1b60b5",
+      "pr": 1113,
+      "delta": "corrigir sistema, não fala do CHEFE"
+    },
+    {
+      "sha": "d8ff02628f8965fd44ebd131a0b9205f90be5878",
+      "pr": 1111,
+      "delta": "prova de cobertura/tools"
+    },
+    {
+      "sha": "b64024f5b1d33886fdf44da32e6051a599e5985a",
+      "pr": 1110,
+      "delta": "trace causal MCP"
+    },
+    {
+      "sha": "31b07c49a7c74a76784811d8eed2fd7322725701",
+      "pr": 1108,
+      "delta": "gate determinístico"
+    },
+    {
+      "sha": "7e64247d48ff51758127c9ef04702c9f0e613c71",
+      "pr": 1104,
+      "delta": "PORTA+HUB+RUBY+CÉREBRO"
+    },
+    {
+      "sha": "55ba95ce0acc01b8ce47ca1caf86521a511c1dc9",
+      "pr": 1100,
+      "delta": "memória cross-session/surface"
+    },
+    {
+      "sha": "12ee1e9d1ff32c2f2e0a8ecc27649f32e3b08070",
+      "pr": 1090,
+      "delta": "execução reversível + remedição oficiais"
+    },
+    {
+      "sha": "98893dde37d1255415bce9bb3d33ca64b8a06f1c",
+      "pr": null,
+      "delta": "BRAIN/vault + cadeia histórica; claim histórico não é estado atual"
+    },
+    {
+      "sha": "07942a25af3ca2c0ea9cc3f33dfd3687678910b2",
+      "pr": null,
+      "delta": "Notepad LocalState fonte histórica"
+    },
+    {
+      "sha": "be71db7867882ba7ab6288a2867603cc3c60684a",
+      "pr": 1065,
+      "delta": "tríade no adapter ChatGPT"
+    }
+  ],
+  "canonical_owners_read": [
+    "LEIA-ME-IA.md",
+    "AGENTS.md",
+    "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+    "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md",
+    "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md",
+    "docs/CONSCIENCIA/MULTIBUSSOLA.md",
+    "docs/CONSCIENCIA/ADMINISTRAVEIS.json",
+    "docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md",
+    "docs/CONSCIENCIA/REMEDICAO.md",
+    ".agents/skills/meta-lupa/SKILL.md",
+    "scripts/lupa/portable-kernel.mjs",
+    ".agents/skills/session-intelligence-harvester/SKILL.md",
+    "package.json"
+  ]
+}

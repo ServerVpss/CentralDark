@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-08-24T06:02:32.654Z",
+  "checks": [
+    {
+      "check": "dist_is_fresh",
+      "pass": false,
+      "mtime": "2026-08-22T23:02:03.084Z"
+    },
+    {
+      "check": "dist_has_assets",
+      "pass": true,
+      "js_count": 8,
+      "css_count": 1
+    }
+  ],
+  "passed": false,
+  "all_checks": 2,
+  "passed_checks": 1
+}

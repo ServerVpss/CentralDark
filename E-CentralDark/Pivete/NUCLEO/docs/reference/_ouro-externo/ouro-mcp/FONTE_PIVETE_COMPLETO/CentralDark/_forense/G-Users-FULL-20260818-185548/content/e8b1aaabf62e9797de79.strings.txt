@@ -1,0 +1,14 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\share\doc\git-doc\git-fsck-objects.adoc
+
+git-fsck-objects(1)
+===================
+git-fsck-objects - Verifies the connectivity and validity of the objects in the database
+SYNOPSIS
+--------
+[verse]
+'git fsck-objects' ...
+DESCRIPTION
+-----------
+This is a synonym for linkgit:git-fsck[1].  Please refer to the
+documentation of that command.
+Part of the linkgit:git[1] suite

@@ -1,0 +1,22 @@
+{
+  "kind": "RECORDER_EXPORT",
+  "surface_id": "chrome-recorder-example",
+  "target": "chat-surface",
+  "operational_scope": "BROWSER_OBSERVATION",
+  "event_time": "2026-08-23T16:38:27Z",
+  "observed_at": "2026-08-23T16:40:00Z",
+  "provenance": "CHROME_DEVTOOLS_RECORDER_EXPORT",
+  "payload": {
+    "title": "Sanitized user-flow example",
+    "steps": [
+      {
+        "type": "navigate",
+        "url": "https://example.invalid/"
+      },
+      {
+        "type": "waitForElement",
+        "selector": "[data-testid='example']"
+      }
+    ]
+  }
+}

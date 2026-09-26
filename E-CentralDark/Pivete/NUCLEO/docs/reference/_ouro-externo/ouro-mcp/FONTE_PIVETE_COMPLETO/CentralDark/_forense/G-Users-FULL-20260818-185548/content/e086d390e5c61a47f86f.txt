@@ -1,0 +1,10 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@shikijs\langs\dist\jinja-html.mjs
+
+import html from './html.mjs'
+
+const lang = Object.freeze(JSON.parse("{\"displayName\":\"jinja-html\",\"firstLineMatch\":\"^\\\\{% extends [\\\"'][^\\\"']+[\\\"'] %}\",\"foldingStartMarker\":\"(<(?i:(head|table|tr|div|style|script|ul|ol|form|dl))\\\\b.*?>|\\\\{%\\\\s*(block|filter|for|if|macro|raw))\",\"foldingStopMarker\":\"(</(?i:(head|table|tr|div|style|script|ul|ol|form|dl))\\\\b.*?>|\\\\{%\\\\s*(end(?:block|filter|for|if|macro|raw))\\\\s*%})\",\"name\":\"jinja-html\",\"patterns\":[{\"include\":\"source.jinja\"},{\"include\":\"text.html.basic\"}],\"scopeName\":\"text.html.jinja\",\"embeddedLangs\":[\"html\"]}"))
+
+export default [
+...html,
+lang
+]

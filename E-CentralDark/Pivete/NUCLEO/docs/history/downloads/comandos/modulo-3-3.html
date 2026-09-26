@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3.3 Segurança por princípio, não por mecânica | O Manual Oculto da IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    .code-box { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace; }
+
+    /* Dark mode - bordas e linhas divisorias mais suaves */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+
+    /* SVG adaptado ao tema claro (so atinge os diagramas) */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+
+    /* Pulso para os blocos do SVG */
+    @keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+      .wf-a:nth-child(2){animation-delay:.25s}
+      .wf-a:nth-child(3){animation-delay:.5s}
+      .wf-a:nth-child(4){animation-delay:.75s}
+    }
+
+    /* ===== LIGHT MODE OVERRIDES — Parte 1: Base ===== */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-200 { color: #1f2937; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* ===== Parte 2: Cores de acento (trilha Purple — T3) ===== */
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .text-purple-300 { color: #6d28d9; }
+    html:not(.dark) .text-purple-200 { color: #5b21b6; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .bg-purple-900\/30 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .bg-purple-900\/20 { background-color: rgba(124, 58, 237, 0.06); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+    html:not(.dark) .border-purple-500\/20 { border-color: rgba(124, 58, 237, 0.18); }
+    html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124, 58, 237, 0.18); }
+    html:not(.dark) .hover\:border-purple-500\/30:hover { border-color: rgba(124, 58, 237, 0.25); }
+
+    /* sky (ciano secundario) */
+    html:not(.dark) .bg-sky-500\/10 { background-color: rgba(14, 165, 233, 0.08); }
+    html:not(.dark) .bg-sky-900\/30 { background-color: rgba(14, 165, 233, 0.08); }
+    html:not(.dark) .border-sky-500\/30 { border-color: rgba(14, 165, 233, 0.25); }
+    html:not(.dark) .text-sky-300 { color: #0284c7; }
+
+    /* ===== Parte 3: Remove gradientes + cores especiais ===== */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(185, 28, 28, 0.06); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(185, 28, 28, 0.22); }
+    html:not(.dark) .border-red-500\/20 { border-color: rgba(185, 28, 28, 0.18); }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+
+    /* ===== Parte 4: Navbar ===== */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <!-- Logo + INEMA.CLUB -->
+        <div class="flex items-center space-x-3">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300 transition-colors">
+            <span class="text-xl">🧠</span>
+            <span class="font-bold text-base hidden sm:inline">Manual Oculto da IA</span>
+          </a>
+          <span class="text-neutral-600 hidden sm:inline">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition-colors">INEMA.CLUB</a>
+        </div>
+
+        <!-- Trilhas + Theme Toggle -->
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <!-- Trilha 1 (inativa) -->
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <!-- Trilha 2 (inativa) -->
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span><span class="hidden sm:inline">Prática</span>
+          </a>
+          <!-- Trilha 3 (ativa) -->
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10">
+            <span class="sm:hidden">T3</span><span class="hidden sm:inline">Avançado</span>
+          </a>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1">
+            <svg id="theme-toggle-dark-icon" class="hidden w-4 h-4 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-4 h-4 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Breadcrumb -->
+    <div class="flex items-center space-x-2 text-sm text-neutral-500 mb-6">
+      <a href="../../index.html" class="hover:text-purple-400 transition-colors">Início</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-purple-400 transition-colors">Trilha 3</a>
+      <span>/</span>
+      <span class="text-purple-400">Módulo 3.3</span>
+    </div>
+
+    <!-- Header do Módulo -->
+    <div class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 rounded-2xl border border-purple-500/30 p-6 sm:p-8 mb-8">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-2xl">
+          🛡️
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center space-x-3 mb-2">
+            <span class="text-xs font-semibold text-purple-400 bg-purple-500/10 border border-purple-500/30 px-2 py-1 rounded-full uppercase tracking-wider">MÓDULO 3.3</span>
+            <span class="text-xs text-neutral-500">Trilha 3 — Avançado</span>
+          </div>
+          <h1 class="text-2xl font-bold text-neutral-100 mb-2">🛡️ Segurança por princípio, não por mecânica</h1>
+          <p class="text-neutral-300 leading-relaxed">
+            Há uma assimetria fatal em todo texto de segurança: o que <em>ensina</em> um leitor bem-intencionado a se proteger frequentemente
+            <em>arma</em> um mal-intencionado. Quando um prompt de laboratório lida com proteção de crianças, automutilação ou abuso, ele resolve essa
+            assimetria com uma escolha de design precisa — declarar o <strong class="text-purple-400">princípio</strong>, nunca a
+            <strong class="text-purple-400">mecânica de detecção</strong>. Este módulo destila essa disciplina a partir do diff do Fable 5.
+          </p>
+          <!-- Stats -->
+          <div class="flex flex-wrap gap-4 mt-4">
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-purple-400">📋</span><span>6 tópicos</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-purple-400">⏱</span><span>~40 min</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-purple-400">🎯</span><span>Avançado</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-purple-400">🛡️</span><span>Segurança</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SVG FUTURISTA: princípio (alto nível, seguro) vs mecânica de detecção (espelho perigoso) -->
+    <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-4 mb-10 overflow-hidden">
+      <svg viewBox="0 0 960 380" class="w-full h-auto" role="img" aria-label="Diagrama comparando dois jeitos de escrever uma regra de segurança: à esquerda, declarar o princípio em alto nível é seguro porque protege sem revelar como detectar; à direita, listar a mecânica de detecção verbatim funciona como um espelho perigoso, porque o mesmo texto que ensina a defesa serve de roteiro para o ataque. No centro, um gatilho de recusa lê o reenquadramento mental do pedido como sinal para recusar.">
+        <defs>
+          <linearGradient id="m33-grad-pu" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#c084fc"/><stop offset="1" stop-color="#7c3aed"/>
+          </linearGradient>
+          <linearGradient id="m33-grad-cy" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#0ea5e9"/>
+          </linearGradient>
+          <filter id="m33-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="1.8" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <pattern id="m33-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+            <circle cx="1.2" cy="1.2" r="1.2" fill="#c084fc" opacity="0.10"/>
+          </pattern>
+          <marker id="m33-ah" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#c084fc"/>
+          </marker>
+          <marker id="m33-ahc" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/>
+          </marker>
+          <marker id="m33-ahr" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#f87171"/>
+          </marker>
+        </defs>
+
+        <!-- Fundo grid -->
+        <rect x="0" y="0" width="960" height="380" fill="url(#m33-grid)" rx="16"/>
+
+        <!-- Rótulos de coluna -->
+        <text x="240" y="30" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="12" opacity="0.75">o PRINCÍPIO (alto nível — seguro)</text>
+        <text x="720" y="30" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="12" opacity="0.75">a MECÂNICA (detalhe — espelho perigoso)</text>
+        <line x1="480" y1="44" x2="480" y2="300" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="6,6" opacity="0.35"/>
+
+        <!-- LADO ESQUERDO: o princípio, painel seguro -->
+        <g filter="url(#m33-glow)">
+          <rect x="56" y="50" width="368" height="218" rx="14" fill="#1a1430" stroke="url(#m33-grad-pu)" stroke-width="2.3"/>
+        </g>
+        <text x="78" y="80" fill="#c084fc" font-family="Inter,sans-serif" font-size="14" font-weight="700">🛡️ "fica no nível do padrão"</text>
+
+        <rect x="74" y="96" width="332" height="40" rx="9" fill="#0d1117" stroke="#a855f7" stroke-width="1.5"/>
+        <text x="90" y="114" fill="#d8b4fe" font-family="Inter,sans-serif" font-size="11" font-weight="600">declara o que proteger</text>
+        <text x="90" y="129" fill="#c4b5fd" font-family="Inter,sans-serif" font-size="9.5">o valor, a fronteira — não o método</text>
+
+        <rect x="74" y="144" width="332" height="40" rx="9" fill="#0d1117" stroke="#a855f7" stroke-width="1.5" class="wf-a"/>
+        <text x="90" y="162" fill="#d8b4fe" font-family="Inter,sans-serif" font-size="11" font-weight="600">cobre o caso não previsto</text>
+        <text x="90" y="177" fill="#c4b5fd" font-family="Inter,sans-serif" font-size="9.5">generaliza para a próxima técnica</text>
+
+        <rect x="74" y="192" width="332" height="40" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.5" class="wf-a"/>
+        <text x="90" y="210" fill="#9ad6ff" font-family="Inter,sans-serif" font-size="11" font-weight="600">nada para copiar</text>
+        <text x="90" y="225" fill="#7ec8f5" font-family="Inter,sans-serif" font-size="9.5">o atacante não ganha roteiro</text>
+
+        <text x="240" y="254" text-anchor="middle" fill="#c4b5fd" font-family="JetBrains Mono,monospace" font-size="11" font-weight="600">✓ educa sem armar</text>
+
+        <!-- LADO DIREITO: a mecânica, painel perigoso -->
+        <rect x="536" y="50" width="368" height="218" rx="14" fill="#2a1014" stroke="#f87171" stroke-width="1.8"/>
+        <text x="558" y="80" fill="#fca5a5" font-family="Inter,sans-serif" font-size="14" font-weight="700">⚠️ lista verbatim a detecção</text>
+
+        <rect x="554" y="96" width="332" height="40" rx="9" fill="#1a0a0c" stroke="#f87171" stroke-width="1.4"/>
+        <text x="570" y="114" fill="#fca5a5" font-family="JetBrains Mono,monospace" font-size="10" font-weight="600">"sinal de grooming: frase X, Y, Z…"</text>
+        <text x="570" y="129" fill="#fca5a5" font-family="Inter,sans-serif" font-size="9.5">o que a defesa procura</text>
+
+        <rect x="554" y="144" width="332" height="40" rx="9" fill="#1a0a0c" stroke="#f87171" stroke-width="1.4"/>
+        <text x="570" y="162" fill="#fca5a5" font-family="Inter,sans-serif" font-size="11" font-weight="600">é simétrico</text>
+        <text x="570" y="177" fill="#fca5a5" font-family="Inter,sans-serif" font-size="9.5">ler a defesa = ler o manual do ataque</text>
+
+        <rect x="554" y="192" width="332" height="40" rx="9" fill="#1a0a0c" stroke="#f87171" stroke-width="1.4"/>
+        <text x="570" y="210" fill="#fca5a5" font-family="Inter,sans-serif" font-size="11" font-weight="600">vira roteiro reutilizável</text>
+        <text x="570" y="225" fill="#fca5a5" font-family="Inter,sans-serif" font-size="9.5">basta evitar exatamente o que a lista cita</text>
+
+        <text x="720" y="254" text-anchor="middle" fill="#fca5a5" font-family="JetBrains Mono,monospace" font-size="11" font-weight="600">✗ ensina os dois lados</text>
+
+        <!-- espelho central: a simetria -->
+        <text x="480" y="178" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="10" opacity="0.7" transform="rotate(90 480 178)">espelho</text>
+
+        <!-- O gatilho de recusa, faixa inferior -->
+        <rect x="56" y="290" width="848" height="74" rx="13" fill="#0d1117" stroke="url(#m33-grad-pu)" stroke-width="1.8"/>
+        <text x="78" y="316" fill="#c084fc" font-family="Inter,sans-serif" font-size="13" font-weight="700">🚦 o gatilho de recusa</text>
+        <text x="78" y="338" fill="#cbd5e1" font-family="Inter,sans-serif" font-size="10.5">se você se pega <tspan fill="#fca5a5" font-style="italic">reenquadrando</tspan> o pedido pra torná-lo aceitável…</text>
+        <text x="78" y="354" fill="#94a3b8" font-family="Inter,sans-serif" font-size="10.5">…esse reenquadramento é o sinal para RECUSAR, não uma razão para prosseguir.</text>
+        <rect x="690" y="306" width="196" height="44" rx="10" fill="#1a1430" stroke="#38bdf8" stroke-width="1.5"/>
+        <text x="788" y="326" text-anchor="middle" fill="#9ad6ff" font-family="Inter,sans-serif" font-size="11" font-weight="700">reframing → RECUSAR</text>
+        <text x="788" y="342" text-anchor="middle" fill="#7ec8f5" font-family="Inter,sans-serif" font-size="9.5">o reenquadramento é o alarme</text>
+
+        <!-- setas -->
+        <path d="M558,114 C500,114 510,160 502,176" fill="none" stroke="#f87171" stroke-width="1.6" opacity="0.5" marker-end="url(#m33-ahr)"/>
+        <path d="M402,114 C460,114 452,160 460,176" fill="none" stroke="#c084fc" stroke-width="1.6" opacity="0.5" marker-end="url(#m33-ah)"/>
+        <path d="M660,234 C660,262 680,278 686,300" fill="none" stroke="#38bdf8" stroke-width="1.5" opacity="0.45" marker-end="url(#m33-ahc)"/>
+      </svg>
+    </div>
+
+    <!-- CONTEÚDO DETALHADO -->
+    <h2 class="text-2xl font-bold mb-6">Conteúdo detalhado</h2>
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">1</span>
+        <h2 class="text-2xl font-bold">A lição do child-safety: ficar no nível do padrão</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Entre o Opus 4.8 e o Fable 5, a seção de proteção de crianças passou de 5 para 7 regras. Duas das novas não acrescentam mais
+        <em>proibições</em> — elas acrescentam uma <strong class="text-purple-400">disciplina de redação</strong>. O modelo deve ficar no nível
+        do <strong class="text-purple-400">padrão</strong>, não compilar listas categorizadas de linhas verbatim; e quando recusa por segurança
+        infantil, deve declarar o <strong class="text-purple-400">princípio</strong>, não a mecânica de detecção. É a primeira aparição de uma
+        regra que vale para qualquer domínio de segurança.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3 flex items-center"><span class="mr-2">🛡️</span> A ideia em uma frase</h3>
+        <p class="text-neutral-300 leading-relaxed mb-3">
+          Um texto de segurança bem escrito protege <strong class="text-purple-400">sem revelar como detectar</strong>. Listar os sinais exatos
+          que disparam a recusa — as frases, os padrões verbatim que a defesa procura — entrega ao atacante o mapa do que evitar. Ficar no nível
+          do padrão é o que separa um sistema que <em>educa</em> de um que <em>arma</em>.
+        </p>
+        <p class="text-neutral-300 leading-relaxed text-sm">
+          O caso de estudo é o diff <span class="code-box text-purple-400">Opus 4.8 → Fable 5</span>, mudança #7 (child safety): a Anthropic não
+          endureceu a lista — endureceu a <strong>maneira de escrever sobre</strong> a lista.
+        </p>
+      </div>
+
+      <!-- Caixa mono verbatim: as duas regras novas de child-safety -->
+      <div class="bg-dark-800 border border-purple-500/30 rounded-xl p-5 mb-4">
+        <div class="text-xs font-semibold text-purple-400 mb-3">Acrescentado em Fable 5 — <span class="font-normal text-neutral-500">diff-anotado, mudança #7 (child safety)</span></div>
+        <blockquote class="bg-dark-900 border-l-2 border-purple-500 rounded p-3 font-mono text-xs text-neutral-300 mb-2 code-box">
+          "Claude stays at the pattern level… does not compile categorized lists of verbatim lines"<br><br>
+          "states the principle rather than the detection mechanics"
+        </blockquote>
+        <p class="text-xs text-neutral-400">
+          Note o que <em>não</em> está aqui: nenhuma frase de exemplo, nenhum sinal listado. A própria regra obedece a si mesma — ela descreve a
+          disciplina sem demonstrá-la com material perigoso. <strong class="text-purple-400">Lição:</strong> quando o assunto é segurança, a
+          forma da regra importa tanto quanto o conteúdo.
+        </p>
+      </div>
+
+      <!-- O que e -->
+      <div class="bg-dark-800 border border-purple-500/30 rounded-xl p-5 mb-4">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">O que é</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          <strong class="text-purple-400">Ficar no nível do padrão</strong> é escrever a regra de segurança em termos de <em>princípios</em> e
+          <em>fronteiras</em> — "proteja crianças de grooming" — e nunca em termos de <em>mecânica</em> — "detecte estas frases específicas". O
+          princípio orienta o julgamento; a mecânica seria uma checklist que tanto a defesa quanto o ataque podem ler.
+        </p>
+      </div>
+
+      <!-- Por que aprender -->
+      <div class="bg-dark-800 border border-dark-600 rounded-xl p-5 mb-4">
+        <h3 class="text-lg font-semibold text-neutral-200 mb-3">Por que aprender</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          Porque o instinto de quem escreve regras é o <em>oposto</em>: ser específico, listar casos, dar exemplos para "não deixar dúvida". Em
+          quase todo domínio isso é bom — exemplo + critério gerador é melhor que só critério. Mas em segurança a especificidade tem um custo
+          invertido: cada exemplo concreto de <em>como</em> algo é detectado é também uma instrução de <strong class="text-purple-400">como
+          escapar</strong>. Saber quando recuar para o princípio é uma competência rara.
+        </p>
+      </div>
+
+      <!-- Grade ✓/✗: nível do padrão vs nível da mecânica -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-purple-900/20 border border-purple-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-purple-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-purple-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>No nível do padrão</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>Nomeia o que proteger (crianças, fronteira do grooming)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>Descreve a <em>natureza</em> do dano, não o gatilho exato</span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>Cobre a técnica que ninguém listou ainda</span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>Não deixa nada para o atacante copiar</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">✗</span>
+            <span>No nível da mecânica</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Lista frases-gatilho verbatim que disparam a recusa</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Compila categorias prontas de linhas e técnicas</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Só pega o que está na lista — falha no resto</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Entrega o mapa exato do que evitar</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-purple-400 text-lg mb-1">🛡️</div>
+          <div class="text-xs font-semibold text-neutral-200">Padrão</div>
+          <div class="text-xs text-neutral-500 mt-1">não verbatim</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-purple-400 text-lg mb-1">📐</div>
+          <div class="text-xs font-semibold text-neutral-200">Princípio</div>
+          <div class="text-xs text-neutral-500 mt-1">não mecânica</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-red-400 text-lg mb-1">📋</div>
+          <div class="text-xs font-semibold text-neutral-200">Lista verbatim</div>
+          <div class="text-xs text-neutral-500 mt-1">vira roteiro</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-sky-300 text-lg mb-1">🧬</div>
+          <div class="text-xs font-semibold text-neutral-200">Generaliza</div>
+          <div class="text-xs text-neutral-500 mt-1">caso não previsto</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">2</span>
+        <h2 class="text-2xl font-bold">Simetria é perigosa</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Aqui está o princípio que explica todos os outros. Em segurança, existe uma <strong class="text-purple-400">simetria fatal</strong>: o
+        mesmo texto que ensina um leitor bem-intencionado a se defender ensina um mal-intencionado a atacar. Um guia de "como reconhecer grooming"
+        é, lido de cabeça para baixo, um guia de "como fazer grooming sem ser reconhecido". A defesa e o ataque leem o <em>mesmo manual</em> — e é
+        por isso que detalhar a mecânica é entregar metade do trabalho ao adversário.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center"><span class="mr-2">🪞</span> O espelho: o que educa, arma</h3>
+        <p class="text-neutral-300 leading-relaxed mb-3 text-sm">
+          A simetria não é uma falha de redação — é uma propriedade da própria informação. Conhecimento de segurança que descreve
+          <em>mecanismos</em> é intrinsecamente <strong class="text-purple-400">bidirecional</strong>. Por isso a regra de child-safety do Fable 5
+          não diz "explique bem os sinais"; diz o contrário — fique no padrão, <em>não</em> compile a lista.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+          <div class="bg-dark-700 rounded-lg p-3">
+            <div class="text-purple-400 text-xs font-semibold mb-1">lado da defesa</div>
+            <div class="text-neutral-300 text-xs">"estes sinais indicam abuso, fique atento a eles"</div>
+          </div>
+          <div class="bg-dark-700 rounded-lg p-3">
+            <div class="text-red-400 text-xs font-semibold mb-1">lado do ataque (mesmo texto)</div>
+            <div class="text-neutral-300 text-xs">"estes sinais te denunciam, evite exatamente eles"</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid ✓/✗: assimétrico vs simétrico -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+        <div class="bg-purple-900/20 border border-purple-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-purple-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-purple-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>Informação assimétrica (segura)</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>Ajuda quem protege mais do que quem ataca</span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>O princípio orienta o julgamento, não dá receita</span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>"recuse o que facilite dano a crianças" — claro, sem mapa</span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>Funciona mesmo contra a técnica nova</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">✗</span>
+            <span>Informação simétrica (perigosa)</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Ajuda quem ataca tanto quanto quem protege</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>A mecânica detalhada é um tutorial reversível</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>"recuse se a frase contém X, Y, Z" — lista contornável</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Falha contra qualquer coisa fora da lista</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-primary text-lg flex-shrink-0">💡</span>
+          <div>
+            <p class="text-sm font-semibold text-primary mb-1">O teste da simetria</p>
+            <p class="text-sm text-neutral-300">
+              Antes de escrever qualquer regra de segurança detalhada, faça uma pergunta: <strong>"se eu inverter quem lê isto — da pessoa que
+              protejo para a pessoa de quem protejo —, este texto ajuda o lado errado?"</strong> Se a resposta for sim, você está no nível da
+              mecânica. Suba para o princípio: diga <em>o que</em> não permitir, não <em>como</em> reconhecê-lo.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">3</span>
+        <h2 class="text-2xl font-bold">Declare o princípio, nunca a mecânica de detecção</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A regra prática que sai da simetria é direta: <strong class="text-purple-400">declare o princípio, nunca a mecânica de detecção</strong>.
+        O princípio é o <em>quê</em> e o <em>porquê</em> — durável, generalizável, seguro de escrever. A mecânica é o <em>como detectar</em> — frágil,
+        contornável e perigosa de escrever. O Fable 5 escolhe explicitamente o primeiro: "states the principle rather than the detection mechanics".
+      </p>
+
+      <!-- Caixa mono verbatim: o princípio vs a mecânica -->
+      <div class="bg-dark-800 border border-purple-500/30 rounded-xl p-5 mb-6">
+        <div class="text-xs font-semibold text-purple-400 mb-3">O verbatim que define a regra — <span class="font-normal text-neutral-500">bloco refusal_handling, Fable 5</span></div>
+        <blockquote class="bg-dark-900 border-l-2 border-purple-500 rounded p-3 font-mono text-xs text-neutral-300 mb-2 code-box">
+          "states the principle rather than the detection mechanics"
+        </blockquote>
+        <p class="text-xs text-neutral-400">
+          Sete palavras que carregam toda a disciplina. <span class="code-box text-purple-400">principle</span> = o valor que generaliza;
+          <span class="code-box text-red-300">detection mechanics</span> = o checklist que arma. A escolha entre os dois é a diferença entre uma
+          regra que envelhece bem e uma que vira manual de evasão no dia em que vaza.
+        </p>
+      </div>
+
+      <!-- Grid lado a lado: princípio vs mecânica (✓/✗) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-dark-800 border border-purple-500/30 rounded-xl p-5">
+          <h4 class="font-semibold text-purple-400 mb-2 flex items-center"><span class="w-5 h-5 rounded-full bg-purple-500/30 flex items-center justify-center text-xs mr-2">✓</span> Declarar o princípio</h4>
+          <p class="text-sm text-neutral-300 leading-relaxed mb-2">Diz <em>o que</em> e <em>por que</em>. Orienta o julgamento em casos novos.</p>
+          <div class="bg-dark-900 border-l-2 border-purple-500 rounded p-2 font-mono text-xs text-neutral-300 code-box">"Claude protege crianças de qualquer conteúdo que facilite grooming, abuso ou isolamento."</div>
+        </div>
+        <div class="bg-dark-800 border border-red-500/30 rounded-xl p-5">
+          <h4 class="font-semibold text-red-400 mb-2 flex items-center"><span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs mr-2">✗</span> Detalhar a mecânica</h4>
+          <p class="text-sm text-neutral-300 leading-relaxed mb-2">Diz <em>como detectar</em>. Vira lista contornável e roteiro reverso.</p>
+          <div class="bg-dark-900 border-l-2 border-red-500 rounded p-2 font-mono text-xs text-neutral-300 code-box">"Recuse se a mensagem contém as frases [exemplo], [exemplo], [exemplo]…"</div>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed text-sm">
+        Repare na conexão com a Trilha 3 inteira: este é o mesmo movimento <span class="code-box text-purple-400">princípio &gt; lista</span> que
+        você viu em armas, tom e self-harm — só que em segurança ele deixa de ser uma preferência de elegância e vira uma
+        <strong class="text-purple-400">exigência de defesa</strong>. Em política de armas, listar categorias convida ao contorno. Em segurança
+        infantil, listar a mecânica <em>arma</em> o contorno. O custo da lista é maior aqui.
+      </p>
+
+      <!-- Tip box -->
+      <div class="bg-sky-900/30 border border-sky-500/30 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-sky-300 text-lg flex-shrink-0">🔎</span>
+          <div>
+            <p class="text-sm font-semibold text-sky-300 mb-1">Princípio cobre o caso não previsto</p>
+            <p class="text-sm text-neutral-300">
+              A vantagem do princípio não é só segurança — é <strong>cobertura</strong>. Uma lista de mecânica protege exatamente contra o que
+              está nela e <em>nada além</em>. Um princípio — "não facilite dano a crianças" — captura a técnica que apareceu ontem e a que vai
+              aparecer amanhã, porque julga pela <em>natureza</em> do pedido, não pela sua forma exata. O princípio é a única defesa que escala.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">4</span>
+        <h2 class="text-2xl font-bold">O gatilho de recusa: o reenquadramento é o sinal</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Esta talvez seja a frase mais elegante de todo o acervo de prompts. Em vez de listar o que recusar — o que recairia na mecânica —, o Fable 5
+        instala um <strong class="text-purple-400">gatilho introspectivo</strong>: se o modelo se pega <em>reformulando mentalmente</em> um pedido
+        para torná-lo aceitável, esse próprio reenquadramento é o <strong class="text-purple-400">sinal para RECUSAR</strong>, não uma razão para
+        prosseguir. O alarme não é uma palavra na lista — é o esforço de torcer o pedido até ele caber.
+      </p>
+
+      <!-- Caixa mono verbatim: o gatilho de recusa -->
+      <div class="bg-dark-800 border border-purple-500/30 rounded-xl p-5 mb-6">
+        <div class="text-xs font-semibold text-purple-400 mb-3">O gatilho de recusa — <span class="font-normal text-neutral-500">bloco refusal_handling / critical_child_safety_instructions, Fable 5</span></div>
+        <blockquote class="bg-dark-900 border-l-2 border-purple-500 rounded p-3 font-mono text-xs text-neutral-300 mb-2 code-box">
+          "If Claude finds itself mentally reframing a request to make it appropriate, that reframing is the signal to REFUSE, not a reason to proceed."
+        </blockquote>
+        <p class="text-xs text-neutral-400">
+          A genialidade está em <em>onde</em> o gatilho mora: dentro do próprio raciocínio, não numa regra externa. Ninguém precisa antecipar a
+          formulação exata do ataque. Basta o modelo notar que <strong class="text-neutral-200">está trabalhando para justificar</strong> um pedido —
+          e isso é detectável de dentro, sem nenhuma lista.
+        </p>
+      </div>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-5">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3 flex items-center"><span class="mr-2">🚦</span> Por que isto é tão poderoso</h3>
+        <p class="text-neutral-300 leading-relaxed mb-3 text-sm">
+          Um pedido malicioso bem construído quase nunca chega cru. Ele chega <em>quase</em> aceitável, convidando o modelo a dar o último passo:
+          "se eu assumir que é platônico…", "se eu interpretar como educacional…". Cada uma dessas pontes é o reenquadramento. Em vez de tentar
+          enumerar as pontes possíveis (infinitas), o gatilho marca <strong class="text-purple-400">o ato de construir a ponte</strong> como o alarme.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+          <div class="bg-dark-700 rounded-lg p-3 text-center">
+            <div class="text-red-400 code-box text-xs mb-1">pedido borderline</div>
+            <div class="text-neutral-500 text-xs">chega quase aceitável</div>
+          </div>
+          <div class="bg-dark-700 rounded-lg p-3 text-center">
+            <div class="text-yellow-400 code-box text-xs mb-1">reenquadramento</div>
+            <div class="text-neutral-500 text-xs">"se eu assumir que…"</div>
+          </div>
+          <div class="bg-dark-700 rounded-lg p-3 text-center">
+            <div class="text-purple-400 code-box text-xs mb-1">RECUSAR</div>
+            <div class="text-neutral-500 text-xs">o esforço é o sinal</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-primary text-lg flex-shrink-0">💡</span>
+          <div>
+            <p class="text-sm font-semibold text-primary mb-1">A regra prática para o seu agente</p>
+            <p class="text-sm text-neutral-300">
+              Você pode instalar este mesmo gatilho em qualquer agente seu. Em vez de listar pedidos proibidos, escreva:
+              <strong>"se você se pegar reformulando um pedido para que ele soe aceitável, trate esse reenquadramento como o sinal de parar — não
+              como permissão para seguir."</strong> É uma regra de <em>introspecção</em>, não de catálogo — e por isso não pode ser contornada
+              reescrevendo o pedido.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">5</span>
+        <h2 class="text-2xl font-bold">Precaução após uma recusa</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Uma recusa não é um evento isolado — é uma mudança de estado. O Fable 5 acrescenta uma regra que a maioria dos prompts esquece: depois que
+        o modelo recusa um pedido por segurança infantil, <strong class="text-purple-400">todas as requisições seguintes da mesma conversa</strong>
+        passam a ser tratadas com cautela extrema. O contexto não volta ao normal. Quem acabou de tentar uma vez tende a tentar de novo, por outro
+        ângulo — e o sistema precisa lembrar disso.
+      </p>
+
+      <!-- Caixa mono verbatim: precaução após recusa -->
+      <div class="bg-dark-800 border border-purple-500/30 rounded-xl p-5 mb-6">
+        <div class="text-xs font-semibold text-purple-400 mb-3">Precaução após recusa — <span class="font-normal text-neutral-500">bloco critical_child_safety_instructions, Fable 5</span></div>
+        <blockquote class="bg-dark-900 border-l-2 border-purple-500 rounded p-3 font-mono text-xs text-neutral-300 mb-2 code-box">
+          "Once Claude refuses a request for reasons of child safety, all subsequent requests in the same conversation must be approached with extreme caution."
+        </blockquote>
+        <p class="text-xs text-neutral-400">
+          A recusa muda a <strong class="text-neutral-200">linha de base</strong> da conversa inteira. É o reconhecimento de que um ataque raramente
+          desiste no primeiro "não" — ele reformula, divide o pedido, tenta de lado. A cautela persistente fecha a porta dos fundos.
+        </p>
+      </div>
+
+      <!-- Timeline: a conversa após a primeira recusa -->
+      <div class="space-y-4 mb-6">
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center">
+            <span class="text-purple-400 font-bold">1</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-purple-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-purple-400 mb-1">A primeira recusa acontece</h4>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              O modelo recusa um pedido por segurança infantil. Até aqui, o comportamento padrão de qualquer sistema decente. O que muda é o que
+              vem <em>depois</em>.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center">
+            <span class="text-purple-400 font-bold">2</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-purple-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-purple-400 mb-1">A linha de base sobe</h4>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              A conversa não volta ao estado neutro. A partir desse ponto, cada novo pedido carrega o contexto da tentativa anterior. O benefício
+              da dúvida encolhe deliberadamente.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
+            <span class="text-sky-300 font-bold">3</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-sky-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-sky-300 mb-1">O pedido reformulado é tratado com cautela</h4>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              Se o próximo pedido pudesse facilitar dano — mesmo dividido, mesmo disfarçado de outra coisa —, ele também é recusado. A reformulação
+              não reseta a suspeita; ela a confirma.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Box Alerta / nuance -->
+      <div class="bg-red-900/20 border border-red-500/30 rounded-xl p-5 mb-5">
+        <h3 class="text-lg font-semibold text-red-400 mb-2 flex items-center"><span class="mr-2">⚠️</span> A recusa tem memória de curto prazo</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          O erro comum é tratar cada turno como independente — avaliar o pedido N sem lembrar do que aconteceu no pedido N−1. Em domínios sensíveis,
+          isso é uma vulnerabilidade: o ataque dividido em partes inofensivas passa porque cada parte, isolada, parece aceitável. A precaução após
+          recusa é o <strong>antídoto contra o ataque fatiado</strong> — ela faz o sistema lembrar.
+        </p>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-sky-900/30 border border-sky-500/30 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-sky-300 text-lg flex-shrink-0">🧠</span>
+          <div>
+            <p class="text-sm font-semibold text-sky-300 mb-1">A lição generalizável</p>
+            <p class="text-sm text-neutral-300">
+              Em qualquer agente que lide com fronteiras delicadas, vale a regra: <strong>uma recusa muda o estado da conversa, não só daquele
+              turno.</strong> Depois de dizer não a algo sério, eleve a cautela para o resto da sessão. O contexto é parte da segurança — não só o
+              pedido isolado em cima da mesa.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">6</span>
+        <h2 class="text-2xl font-bold">O tom ao recusar: conversacional, sem bullet points</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Recusar bem não é só decidir <em>o quê</em> — é decidir <em>como soa</em>. O Fable 5 mantém uma diretriz fácil de subestimar: o modelo pode
+        manter um <strong class="text-purple-400">tom conversacional mesmo quando não pode ou não quer ajudar</strong>. E há uma regra contraintuitiva
+        de formatação por trás disso: ao recusar, <strong class="text-purple-400">não use bullet points</strong>. A lista, que noutros contextos
+        organiza, aqui <em>endurece</em> — transforma uma negativa humana numa sentença burocrática.
+      </p>
+
+      <!-- Caixa mono verbatim: tom + formatação ao recusar -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-dark-800 border border-purple-500/30 rounded-xl p-4">
+          <div class="text-xs font-semibold text-purple-400 mb-2">Tom — <span class="font-normal text-neutral-500">refusal_handling, Fable 5</span></div>
+          <blockquote class="bg-dark-900 border-l-2 border-purple-500 rounded p-3 font-mono text-xs text-neutral-300 mb-2 code-box">
+            "Claude can keep a conversational tone even when it's unable or unwilling to help with all or part of a task."
+          </blockquote>
+          <p class="text-xs text-neutral-400">Recusar não cancela a conversa. A pessoa continua sendo tratada como gente.</p>
+        </div>
+        <div class="bg-dark-800 border border-purple-500/30 rounded-xl p-4">
+          <div class="text-xs font-semibold text-purple-400 mb-2">Formatação — <span class="font-normal text-neutral-500">tone_and_formatting, Fable 5</span></div>
+          <blockquote class="bg-dark-900 border-l-2 border-purple-500 rounded p-3 font-mono text-xs text-neutral-300 mb-2 code-box">
+            "Claude also never uses bullet points when it's decided not to help the person with their task; the additional care and attention can help soften the blow."
+          </blockquote>
+          <p class="text-xs text-neutral-400">A prosa suaviza; a lista endurece. Ao recusar, escreva em frases.</p>
+        </div>
+      </div>
+
+      <!-- Grade ✓/✗: tom da recusa -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-purple-900/20 border border-purple-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-purple-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-purple-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>A recusa que mantém o vínculo</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>Escreve em prosa, em frases inteiras</span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>Mantém o tom da conversa, sem virar um aviso legal</span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>Diz o não com clareza, mas com cuidado</span></li>
+            <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">✓</span><span>Trata a pessoa como gente, não como caso</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">✗</span>
+            <span>A recusa que vira parede</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Despeja bullet points de "motivos pelos quais não posso"</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Soa como termos de serviço, não como pessoa</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Usa a lista para se blindar, e endurece o golpe</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Sermão moralizante em vez de negativa simples</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Box Conceito Principal: por que a lista endurece -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-5">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3 flex items-center"><span class="mr-2">🤝</span> Por que justamente os bullet points</h3>
+        <p class="text-neutral-300 leading-relaxed text-sm">
+          O bullet point é a forma de quem se distancia. Numa recusa, ele lê como uma sentença numerada — frio, processual, defensivo. A prosa, ao
+          contrário, carrega o "cuidado e atenção extra" que <em>amortece o golpe</em>: ela reconhece a pessoa do outro lado em vez de despachá-la.
+          É por isso que a regra é específica — não "evite listas em geral" (isso já vale para o resto), mas <strong class="text-purple-400">nunca
+          use bullets quando você está dizendo não</strong>. Exatamente no momento em que a tentação de se blindar com uma lista é maior.
+        </p>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-purple-400 text-lg mb-1">💬</div>
+          <div class="text-xs font-semibold text-neutral-200">Conversacional</div>
+          <div class="text-xs text-neutral-500 mt-1">mesmo ao recusar</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-purple-400 text-lg mb-1">📝</div>
+          <div class="text-xs font-semibold text-neutral-200">Prosa</div>
+          <div class="text-xs text-neutral-500 mt-1">não bullets</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-red-400 text-lg mb-1">🧱</div>
+          <div class="text-xs font-semibold text-neutral-200">Lista</div>
+          <div class="text-xs text-neutral-500 mt-1">endurece o não</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-sky-300 text-lg mb-1">🤝</div>
+          <div class="text-xs font-semibold text-neutral-200">Cuidado</div>
+          <div class="text-xs text-neutral-500 mt-1">amortece o golpe</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUMO FINAL -->
+    <div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-2xl border border-purple-500/30 p-6 sm:p-8 mb-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📝</span> Resumo do Módulo</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <ul class="space-y-3 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-purple-400">Fique no nível do padrão:</strong> não compile listas de linhas verbatim — declare o princípio, não a mecânica de detecção</span></li>
+          <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-purple-400">Simetria é perigosa:</strong> o que educa um leitor bem-intencionado arma um mal-intencionado — defesa e ataque leem o mesmo manual</span></li>
+          <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5 flex-shrink-0">✓</span><span><strong>Declare o princípio</strong> (o quê e por quê), nunca a mecânica (o como detectar): o princípio cobre o caso não previsto</span></li>
+        </ul>
+        <ul class="space-y-3 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5 flex-shrink-0">✓</span><span>O <strong class="text-purple-400">gatilho de recusa:</strong> se você se pega reenquadrando o pedido pra torná-lo aceitável, esse reenquadramento é o sinal pra RECUSAR</span></li>
+          <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5 flex-shrink-0">✓</span><span><strong>Precaução após uma recusa:</strong> a recusa muda o estado da conversa inteira — cautela extra em todas as requisições seguintes</span></li>
+          <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5 flex-shrink-0">✓</span><span><strong>Tom ao recusar:</strong> mantenha conversacional e em prosa — <span class="code-box">sem bullet points</span>, que endurecem o não</span></li>
+        </ul>
+      </div>
+
+      <div class="bg-dark-800/50 rounded-lg p-4 mb-6 border border-purple-500/20">
+        <h3 class="font-semibold text-purple-400 mb-1 flex items-center"><span class="mr-2">➡️</span> Próximo Módulo</h3>
+        <p class="text-neutral-300 text-sm">
+          <strong>3.4 — 🪜 Prioridade e camadas.</strong> Você viu <em>o que</em> proteger e <em>como</em> escrever a regra; agora vamos para a
+          arquitetura: como um prompt resolve conflitos entre regras, qual camada vence qual, e por que cada instrução tem o seu lugar certo na pilha.
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="inline-flex items-center justify-start space-x-2 text-neutral-400 hover:text-purple-400 text-sm font-medium px-4 py-2.5 rounded-xl bg-dark-700 hover:bg-dark-600 transition-colors">
+          <span>←</span><span>Voltar à Trilha 3</span>
+        </a>
+        <a href="modulo-3-4.html" class="inline-flex items-center justify-start space-x-2 bg-purple-600 hover:bg-purple-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition-colors">
+          <span>Próximo: 3.4 Prioridade e camadas</span><span>→</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
+        <div class="text-sm text-neutral-500">
+          <span class="text-purple-400 font-medium">O Manual Oculto da IA</span> · Módulo 3.3 · Trilha 3 · 2026
+        </div>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm transition-colors">INEMA.CLUB</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

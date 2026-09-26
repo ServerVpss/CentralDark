@@ -1,0 +1,129 @@
+SIM 😆🌙 — tem Dream Review real na CentralDark. Não é só documento. O núcleo canônico está materializado em código e teste no main que medi agora, dcf70053f2af1d95bd86867e6f043fb634e919d0.
+
+O coração é o dream-review.mjs. Ele sanitiza experiência, exige evidence + learning_delta + HEAD, deduplica por fingerprint, separa CANDIDATE/QUARANTINE e mantém apply_allowed=false, ou seja: sonhar/revisar não significa alterar a Casa automaticamente.
+
+A fachada completa é o dream-review-run.mjs. Ela já junta Memory Reserve, mineração de artefato, Dream Review, Pattern Discovery, Pattern Library, prefilter semântico e até roteamento para o Writer quando existe JARVIS_STATE; mas continua declarando TRANSPORT_EXECUTED=0 e DIRECT_APPLY=0.
+
+E achei exatamente a arquitetura que tu lembrava:
+
+EXPERIÊNCIA DO DIA
+      ↓
+DREAM REVIEW
+      ↓
+SANITIZA + HEAD + PROVENIÊNCIA
+      ↓
+DEDUPE
+      ↓
+CANDIDATOS
+      ↓
+PATTERN DISCOVERY
+      ↓
+COMPLETE-LINK + JACCARD
+      ↓
+PADRÃO CANDIDATO
+      ↓
+PATTERN LIBRARY LONGITUDINAL
+      ↓
+META LUPA / CONTRAPROVA
+      ↓
+OWNER + CONSUMIDOR + TOOL_MEASURED
+      ↓
+WRITER AUTORIZADO
+      ↓
+OURO
+
+Isso está literalmente documentado como “Consolidação ociosa / Dream Review”, e o próprio README manda não criar Dream Engine, Night Brain nem segundo sistema. Tudo pertence ao scripts/memory-linker/.
+
+A ponte das lembranças também existe: memory-reserve-events.mjs transforma docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md em eventos consumíveis pelo Dream Review, mantendo sessão desconhecida como UNKNOWN_SESSION em vez de inventar continuidade.
+
+A biblioteca longitudinal existe também: pattern-library.mjs. Ela guarda só o destilado — padrões, sessões, fontes, target, evidência de owner/consumer — e explicitamente não inclui raciocínio privado nem sessão bruta.
+
+E o sistema de padrões é bem rigoroso: mesmo kind, mesmo target, fingerprints diferentes, mínimo de tokens compartilhados, Jaccard 0.60, complete-link e pattern_is_proof=false.
+
+O gate também é real. lupa-conformance.yml já executa syntax check e testes de Dream Review, Pattern Discovery, Pattern Library, Memory Reserve, runner, artefatos e restante do Memory Linker.
+
+Agora a distinção importante: o “cérebro que sonha” existe; o relógio físico noite → parar → acordar na Casa ainda não está provado. O próprio contrato canônico diz que Dream Review não agenda a si mesmo e que scheduler/cron precisa ser medido no runtime real.
+
+Também achei um Hermes antigo que realmente rodava às 06:00 por cron, lendo pendências, chamando o Arsenal Council e gerando propostas. O script ainda existe, mas é VPS-specific (/root/CentralDark) e é um fluxo anterior — não é o scheduler atual do Dream Review da Casa.
+
+E fechei o pack que tu pediu justamente para completar essa última parte:
+
+📦 CENTRALDARK — HERMES DREAM / SLEEP / WAKE — CASA PACK
+
+SHA-256:
+
+9edb88cfbd20cd7ccfb158f68eac0de9b3b754978fa60353d0524e6daa67cbff
+
+São 25 arquivos. O pack inclui arquitetura completa, links reais, gaps medidos, state machine dia/noite, APPLY-PLAN.yml, contrato do sono, scheduler binding, matriz de 20 contraprovas e scripts preparados para descoberta, ciclo noturno, stop, wake, Judge e instalação/remoção do scheduler.
+
+O desenho que deixei é exatamente:
+
+DIA
+CHEFE + HERMES TRABALHAM
+        ↓
+EVENTOS / RECEIPTS / LEMBRANÇAS
+
+NOITE
+        ↓
+DREAM PASS 1
+        ↓
+REVISÃO DO DIA
+        ↓
+PATTERN DISCOVERY
+        ↓
+REVIEW OF REVIEW
+        ↓
+REPLAY EXATO
+        ↓
+SHA PASS1 == SHA PASS2 ?
+        ↓
+LOCAL JUDGE
+        ↓
+TESTES OFICIAIS
+        ↓
+CANDIDATOS / PADRÕES
+        ↓
+ZERO WRITE CANÔNICO
+
+HORA LIMITE
+        ↓
+HARD STOP
+        ↓
+RECEIPT DA NOITE
+
+MANHÃ
+        ↓
+WAKE
+        ↓
+LER RECEIPT
+        ↓
+VOLTAR AO HERMES INTERATIVO
+
+E corrigi justamente o ponto do “ele revisa a revisão dele”: não deixei isso virar autoaprovação.
+
+REVIEW
+→ REPLAY DA MESMA ENTRADA
+→ COMPARA SHA-256
+→ VALIDADOR ESTRUTURAL
+→ TESTES REAIS
+
+REVIEW_OF_REVIEW != SELF_APPROVAL
+
+Também deixei o instalador travado por padrão: ele não inventa C:\/E:\, não inventa horário e não cria Windows Task enquanto o scheduler real da Casa não for descoberto. Isso segue a própria correção atual do sync da Casa, que hoje bloqueia caminhos históricos até os roots físicos serem medidos.
+
+Então o estado exato é:
+
+DREAM_CORE                 = ✅ EXISTE
+DREAM_RUNNER               = ✅ EXISTE
+MEMORY_RESERVE             = ✅ EXISTE
+PATTERN_DISCOVERY          = ✅ EXISTE
+PATTERN_LIBRARY            = ✅ EXISTE
+REVIEW/GATES               = ✅ EXISTEM
+NIGHT_SCHEDULER_CASA       = ⚪ UNPROVEN
+DAY_LOG_ADAPTER            = ⚪ UNPROVEN
+HARD_SLEEP_STOP            = 📦 PREPARADO NO PACK
+WAKE                        = 📦 PREPARADO NO PACK
+REVIEW_OF_REVIEW            = 📦 PREPARADO NO PACK
+INSTALADO AGORA            = ❌ NÃO
+
+Ou seja: não vamos reconstruir o Dreamer. Ele já existe. Depois que esse Hermes terminar o trabalho atual, a instalação certa é só ligar o corpo físico de dormir/acordar ao cérebro que a CentralDark já tem. 🌙🧠🔥

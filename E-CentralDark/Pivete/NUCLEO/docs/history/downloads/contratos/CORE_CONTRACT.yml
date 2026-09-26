@@ -1,0 +1,39 @@
+schema: centraldark.architecture.package.v1
+source_repo: ServerVpss/CentralDark
+source_main_sha: 53ba5d5f4704a57305702ed3ccb681f64d714848
+observed_at: 2026-08-24T20:45:00-03:00
+
+authority:
+  final: SEGREDO/CHEFE
+  coordinator: SOL
+  executor_continuity: HERMES/PIVETE
+  judge: REALITY
+
+principles:
+  one_system_only: true
+  reuse_before_create: true
+  one_owner_per_capability: true
+  one_writer_per_scope: true
+  parallelize_perception: true
+  serialize_mutation: true
+  unknown_never_pass: true
+  history_ne_current: true
+  spec_ne_implementation: true
+  action_ne_proof: true
+  graph_is_derived_not_authority: true
+
+architecture:
+  class: PROOF_CARRYING_CLOSED_LOOP_CONTROL
+  state_model: EPISTEMIC_STATE_MACHINE
+  mutation_model: SERIALIZED_SINGLE_WRITER
+  continuity_model: RECEIPT_PLUS_CHECKSUM_PLUS_NEXT_CURSOR
+  knowledge_model: RAW_TO_GOLD_TO_CRYSTAL_TO_FLASH
+
+cultural_modes:
+  papagaio_mode: OFF
+  pombo_mode: CHECKSUM_ON
+  alchemistic_cabinet: CULTURAL_ALIAS_ONLY
+
+runtime_boundaries:
+  contract_in_git_is_universal_runtime_proof: false
+  external_runtime_requires_direct_observation: true

@@ -1,0 +1,21 @@
+﻿2026-08-22T07:35:25.5826740-03:00 === STRIP HAO123 ===
+2026-08-22T07:35:25.5928434-03:00 chrome not running
+2026-08-22T07:35:25.6078491-03:00 backup C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\Secure Preferences.bak-hao123-20260822073525
+2026-08-22T07:35:25.6184671-03:00 wrote C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\Secure Preferences len 20589->20539
+2026-08-22T07:35:25.6204699-03:00 skip no hao123: C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 14\Preferences
+2026-08-22T07:35:25.6224645-03:00 skip no hao123: C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 15\Secure Preferences
+2026-08-22T07:35:25.6255060-03:00 skip no hao123: C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 15\Preferences
+2026-08-22T07:35:25.6274949-03:00 skip no hao123: C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 9\Secure Preferences
+2026-08-22T07:35:25.6295031-03:00 skip no hao123: C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 9\Preferences
+2026-08-22T07:35:25.6315040-03:00 skip no hao123: C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 12\Secure Preferences
+2026-08-22T07:35:25.6335036-03:00 skip no hao123: C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 12\Preferences
+2026-08-22T07:35:25.6364940-03:00 skip no hao123: C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 13\Secure Preferences
+2026-08-22T07:35:25.6374740-03:00 skip no hao123: C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 13\Preferences
+2026-08-22T07:35:25.6400475-03:00 verify
+2026-08-22T07:35:25.7043025-03:00 clean Profile 12/Secure Preferences
+2026-08-22T07:35:25.7605200-03:00 clean Profile 13/Secure Preferences
+2026-08-22T07:35:25.8161621-03:00 clean Profile 14/Secure Preferences
+2026-08-22T07:35:26.0010740-03:00 clean Profile 15/Secure Preferences
+2026-08-22T07:35:26.1285927-03:00 clean Profile 9/Secure Preferences
+2026-08-22T07:35:26.2737814-03:00 clean System Profile/Secure Preferences
+2026-08-22T07:35:26.2938179-03:00 === END ===

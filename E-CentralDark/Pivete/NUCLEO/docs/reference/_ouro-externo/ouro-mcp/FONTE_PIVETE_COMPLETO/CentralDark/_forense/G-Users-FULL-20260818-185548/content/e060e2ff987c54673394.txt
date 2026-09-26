@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@icons-pack\react-simple-icons\icons\SiAndela.d.ts
+
+import { IconType } from '../types';
+declare const defaultColor = "#173B3F";
+declare const SiAndela: IconType;
+export { SiAndela as default, defaultColor };

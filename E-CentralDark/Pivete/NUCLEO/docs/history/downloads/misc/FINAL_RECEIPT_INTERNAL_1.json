@@ -1,0 +1,64 @@
+{
+  "package": "CENTRALDARK_CANONICAL_PROJECT_FINAL",
+  "created_at_utc": "2026-08-24T10:09:57+00:00",
+  "scope": "PACKAGE_ONLY",
+  "project_global_fixed_point": "NOT_PROVEN",
+  "package_fixed_point": "TRUE",
+  "live_state": {
+    "measured_at_utc": "2026-08-24T10:09:57+00:00",
+    "repository": "ServerVpss/CentralDark",
+    "main_head_observed": "dcf70053f2af1d95bd86867e6f043fb634e919d0",
+    "pr_1115": {
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "mergeable": false,
+      "head": "b917ca3a19ed59d26c04ab2234280a93ee19513b",
+      "commits": 18,
+      "changed_files": 14
+    },
+    "pr_1119": {
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "mergeable": false,
+      "head": "cc67c83c2f207d8cf20a3fd81cd76658c33a8abf",
+      "commits": 7,
+      "changed_files": 9
+    },
+    "hermes_physical_runtime_now": "UNKNOWN_NOT_MEASURED_BY_THIS_SESSION",
+    "github_mutation_this_round": false
+  },
+  "coverage": {
+    "generated_at_utc": "2026-08-24T10:09:57+00:00",
+    "scope": "RELEVANT_CENTRALDARK_CONTEXT_RECOVERABLE_IN_THIS_EXECUTION",
+    "all_account_chat_messages_exported": false,
+    "personal_context_queries": 3,
+    "files_search_used": true,
+    "files_library_list_used": true,
+    "github_live_state_used": true,
+    "current_big_paste_loaded": true,
+    "previous_session_master_zip_embedded": true,
+    "previous_ouro_zip_embedded": true,
+    "materialized_library_sources": [
+      "Markdown(20260808-063647).md colado",
+      "Screenpipe Activity reshapes CentralDark integratio1n.html",
+      "Markdown(20260816-133256).md colado"
+    ],
+    "limitation": "No direct exhaustive transcript export API for every ChatGPT conversation in this session; unretrieved material is UNKNOWN, not silently treated as absent."
+  },
+  "counterproof_required": true,
+  "receipt_is_inside_package": true,
+  "manifest_sha256": "9ebcdea99e5b610559d42bfaa046c3d0175a53fdce26653b10f9dc177a554838",
+  "expected_validation": [
+    "required_files",
+    "internal_hashes",
+    "nested_zips",
+    "zip_crc",
+    "current_vs_historical_separation",
+    "project_fixed_point_not_overclaimed"
+  ],
+  "note": "This receipt does not hash itself; SHA256SUMS.txt hashes it. The external receipt hashes the final ZIP.",
+  "validation_result": "PASS",
+  "validator_output": "10_INTEGRITY/VALIDATOR_OUTPUT.txt"
+}

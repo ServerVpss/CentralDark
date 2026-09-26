@@ -1,0 +1,42 @@
+﻿{
+    "schema":  "centraldark.casa.brain.safe-pull.v1",
+    "observed_at":  "2026-09-18T08:57:28.9216543-03:00",
+    "source_repo_head":  "7bdfd52ad2d8be2dabe957fbd3b51ada7c261d97",
+    "remote_main_head":  "466d8c058f0f173111b3d783cb6ed74900240a71",
+    "note":  "remote main differs in docs/BRAIN by two known additions; applied separately",
+    "copied_count":  121,
+    "conflicts_preserved":  [
+                                "00 - Mapa do Sistema\\GRAFO-VIVO.md",
+                                "01-CONCEITOS\\02-BANDA\\BANDA_COMPASSO_GLOBAL.md"
+                            ],
+    "skipped_local_ui":  [
+                             ".hermes-sync-manifest.json",
+                             ".obsidian\\community-plugins.json",
+                             ".obsidian\\graph.json",
+                             ".obsidian\\plugins\\dataview\\main.js",
+                             ".obsidian\\plugins\\dataview\\manifest.json",
+                             ".obsidian\\plugins\\dataview\\styles.css",
+                             ".obsidian\\plugins\\obsidian-excalidraw-plugin\\data.json",
+                             ".obsidian\\plugins\\obsidian-excalidraw-plugin\\main.js",
+                             ".obsidian\\plugins\\obsidian-excalidraw-plugin\\manifest.json",
+                             ".obsidian\\plugins\\obsidian-excalidraw-plugin\\styles.css",
+                             ".obsidian\\plugins\\templater-obsidian\\main.js",
+                             ".obsidian\\plugins\\templater-obsidian\\manifest.json",
+                             ".obsidian\\plugins\\templater-obsidian\\styles.css",
+                             ".obsidian\\workspace.json"
+                         ],
+    "vault_changed_only_not_overwritten":  [
+                                               "02-ENTRADA\\01-RAW\\CONVERGENCIA_DUPLICACAO_20260819.md",
+                                               "07-APRENDIZADOS-MEMORIAS\\01-OURO\\dependabot-supreme-adaptacao-evolucao.md",
+                                               "07-APRENDIZADOS-MEMORIAS\\01-OURO\\dependabot-supreme-finalizacao.md",
+                                               "07-APRENDIZADOS-MEMORIAS\\01-OURO\\dependabot-supreme-flexibilidade.md",
+                                               "07-APRENDIZADOS-MEMORIAS\\01-OURO\\dependabot-supreme-hooks.md",
+                                               "07-APRENDIZADOS-MEMORIAS\\2026-09-03-CRISTAL-SESSAO-CENTRALDARK.md",
+                                               "07-APRENDIZADOS-MEMORIAS\\2026-09-03-REGISTER-BEFORE-REPORT-RECEIPT.md"
+                                           ],
+    "vault_new_not_overwritten":  [
+                                      ".hermes-sync-manifest.json",
+                                      "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\03-trajetoria-vivida.zip"
+                                  ],
+    "unknown_is_not_pass":  true
+}

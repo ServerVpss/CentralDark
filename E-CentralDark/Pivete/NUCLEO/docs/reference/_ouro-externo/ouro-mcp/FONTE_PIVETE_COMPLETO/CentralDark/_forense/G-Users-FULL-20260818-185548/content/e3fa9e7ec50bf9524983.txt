@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@mermaid-js\parser\dist\chunks\mermaid-parser.esm.min\chunk-V32KM35I.mjs
+
+import{Va as u,a as r,b as i,c as l,d,e as s,f as c,ib as n,jb as m}from"./chunk-RKHDN2Z7.mjs";var t=class extends m{static{r(this,"WardleyValueConverter")}runCustomConverter(e,a,p){switch(e.name.toUpperCase()){case"LINK_LABEL":return a.substring(1).trim();default:return}}};var S={parser:{ValueConverter:r(()=>new t,"ValueConverter")}};function M(o=s){let e=d(l(o),u),a=d(i({shared:e}),n,S);return e.ServiceRegistry.register(a),{shared:e,Wardley:a}}r(M,"createWardleyServices");export{S as a,M as b};

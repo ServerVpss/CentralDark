@@ -1,0 +1,366 @@
+Pensando
+Pesquisando em 9 sites
+Busca na web finalizada
+Comparando opções
+Estou comparando assistentes com voz, compartilhamento de tela e suporte a matemática. O Copilot Vision parece o mais próximo, embora aulas em vídeo possam exigir legendas visíveis para melhorar a compreensão.
+
+Busca na web finalizada
+Pensou por 19s
+Pronto
+
+Fontes
+·
+92
+Suporte Microsoft
+Usando o Visão do Copilot com o Microsoft Copilot | Microsoft Support
+Suporte Microsoft
+Using Copilot Vision with Microsoft Copilot | Microsoft Support
+Suporte Microsoft
+How vision in Microsoft Copilot works | Microsoft Support
+
+OpenAI
+New ways to learn math and science in ChatGPT | OpenAI
+9 de março de 2026
+
+blog.google
+Study notebooks in the Gemini app
+24 de junho de 2026
+
+Ajuda do Google
+Conversar naturalmente com o Gemini Live - Android - Ajuda do Apps do Gemini
+
+Google DeepMind
+Gemini’s guided learning: results from a randomized controlled trial in Sierra Leone — Google DeepMind
+8 de junho de 2026
+
+Nature
+ChatGPT’s impact on student learning outcomes: a meta-analysis of 35 experimental studies | Humanities and Social Sciences Communications
+
+Microsoft Learn
+Accessibility Best Practices - Win32 apps | Microsoft Learn
+13 de julho de 2025
+
+Microsoft Learn
+Accessible Windows apps - Win32 apps | Microsoft Learn
+
+blog.google
+Google’s Gemini app hits 1 billion monthly active users
+10 de agosto de 2026 — MORE THAN 1 BILLION PEOPLE ARE USING THE GEMINI APP EVERY MONTH. Aug 11, 2026 * * * The Gemini app has officially surpassed 1 billion monthly users, making it the fastest-growing product in Google...
+
+blog.google
+Mais de 1 bilhão de pessoas usam o Gemini mensalmente
+10 de agosto de 2026 — MAIS DE 1 BILHÃO DE PESSOAS USAM O GEMINI MENSALMENTE 11 Ago, 2026 * * * O app Gemini ultrapassou oficialmente a marca de 1 bilhão de usuários mensais, tornando-se o produto com o crescimento mais...
+
+research.google
+Advancing AMIE towards expert-level audio-visual clinical consultations
+10 de agosto de 2026 — Image: Advancing AMIE towards expert-level audio-visual clinical consultations ADVANCING AMIE TOWARDS EXPERT-LEVEL AUDIO-VISUAL CLINICAL CONSULTATIONS August 11, 2026 Anil Palepu, Senior Research...
+
+openai.com
+ChatGPT — Release Notes | OpenAI Help Center
+6 de agosto de 2026 — JULY 8, 2026 INTRODUCING GPT-LIVE-1 IN CHATGPT VOICE We’re rolling out a new ChatGPT Voice experience. ChatGPT Voice is now powered by GPT-Live-1 for paid users and GPT-Live-1 mini for Free users. B...
+
+microsoft.com
+Develop accessible Windows apps - Windows apps | Microsoft Learn
+3 de agosto de 2026 — नोट इस पेज तक पहुँच के लिए प्रमाणन की आवश्यकता होती है. आप साइन इन करने या निर्देशिकाओं को बदलने का प्रयास कर सकते हैं. इस पेज तक पहुँच के लिए प्रमाणन की आवश्यकता होती है. आप निर्देशिकाओं को बदलने...
+github.com
+Chronicle research preview breaks all third-party screen sharing system-wide (macOS) until reboot · Issue #34792 · openai/codex · GitHub
+21 de julho de 2026 — CHRONICLE RESEARCH PREVIEW BREAKS ALL THIRD-PARTY SCREEN SHARING SYSTEM-WIDE (MACOS) UNTIL REBOOT #34792 New issue Copy link New issue Copy link Open Open Chronicle research preview breaks all...
+
+blog.google
+How to use your Gemini Live camera for real-time help
+21 de julho de 2026 — HERE’S HOW TO ASK GEMINI LIVE FOR HELP WITH ANYTHING YOU SEE. Lindsey Lanquist Contributor Jul 22, 2026 * * * Have you ever struggled to describe something you’re looking at? Whether it’s a comp...
+
+microsoft.com
+Enhance Meeting Experience with APIs - Teams | Microsoft Learn
+19 de julho de 2026 — SEND REAL-TIME CAPTIONS API The send real-time captions API exposes a POST endpoint for Teams communication access real-time translation (CART) captions, human-typed closed captions. Text content sen...
+
+openai.com
+ChatGPT — Release Notes | OpenAI Help Center
+15 de julho de 2026 — JULY 8, 2026 INTRODUCING GPT-LIVE-1 IN CHATGPT VOICE We’re rolling out a new ChatGPT Voice experience. ChatGPT Voice is now powered by GPT-Live-1 for paid users and GPT-Live-1 mini for Free users. B...
+
+openai.com
+ChatGPT — Notas de versão | OpenAI Help Center
+14 de julho de 2026 — 8 DE JULHO DE 2026 APRESENTAMOS O GPT-LIVE-1 NO CHATGPT MODO VOZ Estamos lançando uma nova experiência do ChatGPT Modo Voz. O ChatGPT Modo Voz agora é alimentado pelo GPT-Live-1 para usuários pagos...
+
+openai.com
+Introducing GPT-Live | OpenAI
+7 de julho de 2026 — July 8, 2026 INTRODUCING GPT‑LIVE A new generation of voice models for natural human-AI interaction, now powering ChatGPT Voice. Loading… Share Update July 31, 2026: Supported audio generated wi...
+
+microsoft.com
+Get callTranscript - Microsoft Graph v1.0 | Microsoft Learn
+29 de junho de 2026 — GET CALLTRANSCRIPT Feedback Summarize this article for me IN THIS ARTICLE 1. Permissions 2. HTTP request 3. Optional query parameters 4. Request headers 5. Request body 6. Response 7. Examples Sh...
+
+microsoft.com
+Obter callTranscript - Microsoft Graph v1.0 | Microsoft Learn
+29 de junho de 2026 — SOLICITAÇÃO HTTP `/content` Nos pontos finais, selecione o formato de conteúdo de transcrição com o cabeçalho do `Accept` pedido, conforme descrito em Formatos de conteúdo de transcrição. Obter uma...
+
+microsoft.com
+Monitor an agent overview (preview) - Microsoft Copilot Studio (new experience) | Microsoft Learn
+28 de junho de 2026 — MONITOR AN AGENT OVERVIEW (PREVIEW) Feedback Summarize this article for me IN THIS ARTICLE 1. What can you monitor? 2. Analytics dashboard 3. Session tracking 4. Error monitoring 5. Related infor...
+
+microsoft.com
+Get callTranscript - Microsoft Graph beta | Microsoft Learn
+28 de junho de 2026 — Note Access to this page requires authorization. You can try signing in or changing directories. Access to this page requires authorization. You can try changing directories. GET CALLTRANSCRIPT F...
+
+doi.org
+AI-powered learning: exploring secondary school students’ use of ChatGPT for solving mathematical modelling problems | ZDM – Mathematics Education | Springer Nature Link
+25 de maio de 2026 — AI-POWERED LEARNING: EXPLORING SECONDARY SCHOOL STUDENTS’ USE OF CHATGPT FOR SOLVING MATHEMATICAL MODELLING PROBLEMS * Original Paper * Open access * Published: 26 May 2026 * (2026) * Cite this art...
+
+microsoft.com
+my live caption issue - Microsoft Q&A
+19 de maio de 2026 — MY LIVE CAPTION ISSUE Sunil, Sona 0 Reputation points May 20, 2026, 12:28 PM my live caption is not working, it says ready to show but its not working Windows for home | Windows 11 | Accessibilit...
+
+blog.google
+100 things we announced at Google I/O 2026
+19 de maio de 2026 — 100 things we announced at I/O 2026 100 THINGS WE ANNOUNCED AT I/O 2026 May 20, 2026 | We've been busy! Here’s a rundown of the top announcements, launches and demos at I/O 2026. * * * News fro...
+
+blog.google
+Measuring the impact of AI on teaching and learning
+18 de maio de 2026 — MEASURING THE IMPACT OF AI ON TEACHING AND LEARNING May 19, 2026 | Two new studies in Sierra Leone and Italy demonstrate how Gemini is improving learning outcomes by helping students improve math...
+
+blog.google
+Google I/O 2026: News and announcements
+18 de maio de 2026 — I/O 2026 May 19, 2026 · 31 articles 19 May, 2026 articles 31 May 19, 2026 31 articles 19 May, 2026 articles 31 At Google I/O 2026, we shared how we’re making AI more helpful for everyone. We’re...
+
+publicnow.com
+Google LLC (via Public) / Measuring the impact of AI on teaching and learning
+18 de maio de 2026 — Google LLC 05/19/2026 | Press release | Distributed by Public on 05/19/2026 01:38 MEASURING THE IMPACT OF AI ON TEACHING AND LEARNING We believe AI has the potential to transform education by crea...
+
+doi.org
+ChatGPT As a Resource to Strengthen Mathematics Teaching and Learning: A Systematic Review - Su - 2026 - Journal of Computer Assisted Learning - Wiley Online Library
+13 de abril de 2026 — CHATGPT AS A RESOURCE TO STRENGTHEN MATHEMATICS TEACHING AND LEARNING: A SYSTEMATIC REVIEW Chia Shih Su, Corresponding Author Chia Shih Su * ciaushih@gmail.com * orcid.org/0000-0002-1446-0513 F...
+
+wiley.com
+ChatGPT As a Resource to Strengthen Mathematics Teaching and Learning: A Systematic Review - Su - 2026 - Journal of Computer Assisted Learning - Wiley Online Library
+13 de abril de 2026 — CHATGPT AS A RESOURCE TO STRENGTHEN MATHEMATICS TEACHING AND LEARNING: A SYSTEMATIC REVIEW Chia Shih Su, Corresponding Author Chia Shih Su * ciaushih@gmail.com * orcid.org/0000-0002-1446-0513 F...
+
+microsoft.com
+Desenvolver aplicativos de Windows acessíveis - Windows apps | Microsoft Learn
+7 de abril de 2026 — DESENVOLVER APLICATIVOS DE WINDOWS ACESSÍVEIS Comentários NESTE ARTIGO 1. Guias de implementação 2. Samples 3. Videos 4. Outros recursos Image: Imagem de herói de acessibilidade Crie aplicativos...
+
+microsoft.com
+Develop accessible Windows apps - Windows apps | Microsoft Learn
+7 de abril de 2026 — DEVELOP ACCESSIBLE WINDOWS APPS Feedback Summarize this article for me IN THIS ARTICLE 1. Implementation guides 2. Samples 3. Videos 4. Other resources Image: Accessibility hero image Build acc...
+
+microsoft.com
+Develop accessible Windows apps - Windows apps | Microsoft Learn
+7 de abril de 2026 — DEVELOP ACCESSIBLE WINDOWS APPS คำติชม ในบทความนี้ 1. Implementation guides 2. Samples 3. Videos 4. Other resources Image: Accessibility hero image Build accessible and inclusive Windows applica...
+
+microsoft.com
+Develop accessible Windows apps - Windows apps | Microsoft Learn
+7 de abril de 2026 — DEVELOP ACCESSIBLE WINDOWS APPS Aiseolas SAN ALT SEO 1. Implementation guides 2. Samples 3. Videos 4. Other resources Image: Accessibility hero image Build accessible and inclusive Windows appli...
+
+microsoft.com
+Develop accessible Windows apps - Windows apps | Microsoft Learn
+7 de abril de 2026 — DEVELOP ACCESSIBLE WINDOWS APPS Feedback F'DAN L-ARTIKLU Image: Accessibility hero image Build accessible and inclusive Windows applications with improved functionality and usability for people o...
+
+microsoft.com
+Develop accessible Windows apps - Windows apps | Microsoft Learn
+7 de abril de 2026 — DEVELOP ACCESSIBLE WINDOWS APPS Feedback I DENNE ARTIKEL 1. Implementation guides 2. Samples 3. Videos 4. Other resources Image: Accessibility hero image Build accessible and inclusive Windows a...
+
+microsoft.com
+Develop accessible Windows apps - Windows apps | Microsoft Learn
+6 de abril de 2026 — DEVELOP ACCESSIBLE WINDOWS APPS Povratne informacije U OVOM ČLANKU 1. Implementation guides 2. Samples 3. Videos 4. Other resources Image: Accessibility hero image Build accessible and inclusive...
+
+nature.com
+ChatGPT’s impact on student learning outcomes: a meta-analysis of 35 experimental studies | Humanities and Social Sciences Communications
+25 de março de 2026 — ChatGPT’s impact on student learning outcomes: a meta-analysis of 35 experimental studies Download PDF Download PDF * Review * Open access * Published: 26 March 2026 CHATGPT’S IMPACT ON STUDENT L...
+
+blog.google
+O Search Live está sendo expandido globalmente
+25 de março de 2026 — O SEARCH LIVE ESTÁ SENDO EXPANDIDO GLOBALMENTE 26 Mar, 2026 | * * * Liza Ma Director, Product Management, Search * * * Image: Search Live Hoje, estamos expandindo o Search Live globalmente pa...
+
+microsoft.com
+Create captions with speech to text quickstart - Speech service - Foundry Tools | Microsoft Learn
+24 de fevereiro de 2026 — CREATE CAPTIONS FROM SPEECH Follow these steps to build and run the captioning quickstart code example. 1. Copy the scenarios/csharp/dotnetcore/captioning/ sample files from GitHub. If you have Git...
+
+microsoft.com
+Guia de início rápido para criar legendas com conversão de fala em texto – Serviço de Fala - Foundry Tools | Microsoft Learn
+24 de fevereiro de 2026 — CRIAR LEGENDAS DA FALA Siga essas etapas para criar e executar o exemplo de código de início rápido de legendagem com o Visual Studio Community 2022 no Windows. 1. Baixe ou copie os arquivos de exem...
+
+microsoft.com
+Captioning with speech to text - Speech service - Foundry Tools | Microsoft Learn
+24 de fevereiro de 2026 — Note Access to this page requires authorization. You can try signing in or changing directories. Access to this page requires authorization. You can try changing directories. CAPTIONING WITH SPEEC...
+
+deepmind.google
+Gemini Deep Think: Redefining the Future of Scientific Research — Google DeepMind
+10 de fevereiro de 2026 — February 11, 2026 Research ACCELERATING MATHEMATICAL AND SCIENTIFIC DISCOVERY WITH GEMINI DEEP THINK Thang Luong and Vahab Mirrokni Image: An abstract digital illustration representing Gemini Deep...
+
+microsoft.com
+Voice Live API Reference 2026-01-01-preview - Foundry Tools | Microsoft Learn
+3 de fevereiro de 2026 — PROPERTIES Expand table Field | Type | Description --- | --- | --- type | string | Must be `"response.audio.delta"` response_id | string | ID of the response item_id | string | ID of the ite...
+
+blog.google
+New ChromeOS tools to support classroom collaboration
+20 de janeiro de 2026 — NEW CHROMEOS TOOLS TO SUPPORT CLASSROOM COLLABORATION Jan 21, 2026 | Modernize your classroom with AI-powered Chromebooks, Gemini in Chrome, and new ways to engage and collaborate with students wi...
+
+blog.google
+Gemini agora inclui chats temporários e novos recursos de personalização
+12 de agosto de 2025 — GEMINI AGORA INCLUI CHATS TEMPORÁRIOS E NOVOS RECURSOS DE PERSONALIZAÇÃO 13 Ago, 2025 | As novas funcionalidades do aplicativo Gemini oferecem uma experiência personalizada ainda melhor. * * * M...
+
+microsoft.com
+Accessible Windows apps - Win32 apps | Microsoft Learn
+13 de julho de 2025 — Note Access to this page requires authorization. You can try signing in or changing directories. Access to this page requires authorization. You can try changing directories. ACCESSIBILITY AND AUT...
+
+microsoft.com
+Getting Started (Microsoft Active Accessibility) - Win32 apps | Microsoft Learn
+13 de julho de 2025 — 1. Learn 2. Windows 3. Apps 4. Win32 5. Desktop Technologies 6. Accessibility 7. Accessibility and automation for Windows developers Note Access to this page requires authorization. You can try si...
+
+blog.google
+O Gemini ficou mais pessoal, proativo e poderoso
+19 de maio de 2025 — O GEMINI FICOU MAIS PESSOAL, PROATIVO E PODEROSO 20 Mai, 2025 | * * * Josh Woodward VP, Google Labs & Google Gemini * * * Image: Hero É a sua vez de criar, aprender e explorar com um assisten...
+
+blog.google
+Gemini App: 7 updates from Google I/O 2025
+19 de maio de 2025 — GEMINI GETS MORE PERSONAL, PROACTIVE AND POWERFUL May 20, 2025 | It’s your turn to create, learn and explore with an AI assistant that’s starting to understand your world and anticipate your needs...
+
+blog.google
+How to use Gemini Live with camera and screen sharing
+6 de abril de 2025 — 5 WAYS TO USE GEMINI LIVE WITH CAMERA AND SCREEN SHARING Apr 07, 2025 | Gemini Live with camera and screen sharing capabilities is now available on Android. Here’s how to get started. * * * Isha...
+
+blog.google
+5 formas de usar o Gemini Live com a câmera e compartilhamento de tela
+6 de abril de 2025 — 5 FORMAS DE USAR O GEMINI LIVE COM A CÂMERA E COMPARTILHAMENTO DE TELA 07 Abr, 2025 | Os recursos de câmera e compartilhamento de tela do Gemini Live já estão disponíveis para dispositivos Android...
+
+openai.com
+Agente para uso do computador (CUA) | OpenAI
+22 de janeiro de 2025 — COMO FUNCIONA O CUA processa dados brutos de pixels para compreender o que está acontecendo na tela, e além disso também usa um mouse e um teclado virtuais para realizar ações. Ele consegue navegar p...
+
+google.com
+Talk naturally with Gemini Live - Android - Gemini Apps Help
+TALK NATURALLY WITH GEMINI LIVE With Gemini Live, you can have a natural, free-flowing conversation with Gemini. You can even interrupt it like when you want to add more details or change the topic...
+
+google.com
+Talk naturally with Gemini Live - iPhone and iPad - Gemini Apps Help
+YOUR GEMINI LIVE DATA Learn more about how Google works with Gemini Live data. MANAGE YOUR LIVE CHAT WITH GEMINI Put Live on hold and resume the Live chat * To put the Live chat on hold, tap Hold...
+
+google.com
+Talk naturally with Gemini Live - Android - Gemini Apps Help
+YOUR GEMINI LIVE DATA Learn more about how Google works with Gemini Live data. MANAGE YOUR LIVE CHAT WITH GEMINI Put Live on hold and resume the Live chat * To put the Live chat on hold, tap Hold...
+
+google.com
+Conversar naturalmente com o Gemini Live - Android - Ajuda do Apps do Gemini
+CONVERSAR NATURALMENTE COM O GEMINI LIVE Com o Gemini Live, você pode ter uma conversa de verdade com o Gemini. Dá para interromper o Gemini se quiser adicionar mais detalhes ou mudar de assunto. Ve...
+
+google.com
+Fale naturalmente com o Gemini Live - Android - Apps Gemini Ajuda
+FALE NATURALMENTE COM O GEMINI LIVE Com o Gemini Live, pode ter uma conversa natural e fluida com o Gemini. Pode mesmo interrompê-lo, por exemplo, quando quiser acrescentar mais detalhes ou mudar o...
+
+google.com
+Conversar naturalmente com o Gemini Live - Android - Ajuda do Apps do Gemini
+CONVERSAR NATURALMENTE COM O GEMINI LIVE Com o Gemini Live, você pode ter uma conversa de verdade com o Gemini. Dá para interromper o Gemini se quiser adicionar mais detalhes ou mudar de assunto. Ve...
+
+google.com
+Usar o Gemini - Ajuda do Android
+APROVEITE AO MÁXIMO SEU DISPOSITIVO ANDROID USAR O GEMINI Image: barra de progresso 5 Você pode usar o Gemini para: * Aprenda de novas maneiras com texto, voz, imagens e sua câmera. * Escreva men...
+
+google.com
+Usar o Gemini Live no Android XR - Ajuda do Apps do Gemini
+USAR O GEMINI LIVE NO ANDROID XR Os dispositivos Android XR oferecem um assistente pessoal de IA que conversa naturalmente com você: o Gemini Live. Você pode, por exemplo: * Fazer perguntas para en...
+
+google.com
+Conversar naturalmente com o Gemini Live - iPhone e iPad - Ajuda do Apps do Gemini
+* É preciso ter mais de 13 anos (ou a idade mínima no seu país). * Para usar esse recurso, faça login nos apps do Gemini. Saiba como fazer login nos apps do Gemini. Importante: * O app Gemini para...
+
+google.com
+Use Gemini Live on Android XR - Apps Gemini Ajuda
+USE GEMINI LIVE ON ANDROID XR Nos dispositivos Android XR, pode conversar naturalmente com o Gemini Live como o seu companheiro pessoal de IA. Pode também: * Fazer perguntas para compreender melhor...
+
+google.com
+Talk naturally with Gemini Live - Android - Gemini Apps Help
+* To resume a previous Live chat, open the chat and tap Live Image or swipe left. SHARE YOUR CAMERA OR SCREEN WITH LIVE Share your camera in Live In your Live chat, you can turn on your camera to s...
+
+google.com
+Começar a usar o app do Gemini para dispositivos móveis - Android - Ajuda do Apps do Gemini
+COMEÇAR A USAR O APP DO GEMINI PARA DISPOSITIVOS MÓVEIS Potencialize suas ideias com o app do Gemini para dispositivos móveis. Converse com ele para aprender, escrever mensagens, planejar eventos e...
+
+google.com
+Adicionar e personalizar o widget do Gemini - Android - Ajuda do Apps do Gemini
+ADICIONAR E PERSONALIZAR O WIDGET DO GEMINI Agilize suas conversas no Gemini com atalhos na sua tela inicial ou de bloqueio. Com o widget do Gemini, você pode: * Abrir o Gemini com o botão Image *...
+microsoft.com
+Using Copilot Vision with Microsoft Copilot | Microsoft Support
+USING COPILOT VISION WITH MICROSOFT COPILOT Image Get help with Copilot Microsoft Copilot Vision is a new way to have AI work with you as you use your Windows PC or Mac, browse the web in Microsof...
+microsoft.com
+Use vision in Microsoft Copilot | Microsoft Support
+USE VISION IN MICROSOFT COPILOT Share your desktop screen or mobile camera with Copilot and ask about what you’re seeing. Copilot answers through voice chat, using both what’s on your screen and you...
+microsoft.com
+Frequently asked questions about voice features in Microsoft Copilot | Microsoft Support
+FREQUENTLY ASKED QUESTIONS ABOUT VOICE FEATURES IN MICROSOFT COPILOT Note The voice features referenced in this article are being released gradually and may not yet be available to all users. Gener...
+
+microsoft.com
+Use Live Captions In Windows To Better Understand Audio - Training | Microsoft Learn
+1100 XP USE LIVE CAPTIONS IN WINDOWS TO BETTER UNDERSTAND AUDIO * 25 min * Module * 10 Units Feedback Beginner Administrator Business Leader Business Owner Business User Technology Manager...
+
+microsoft.com
+Windows.Media.ClosedCaptioning Namespace - Windows apps | Microsoft Learn
+WINDOWS.MEDIA.CLOSEDCAPTIONING NAMESPACE Important Some information relates to prerelease product that may be substantially modified before it’s released. Microsoft makes no warranties, express o...
+
+openai.com
+ChatGPT — Notas de versão | OpenAI Help Center
+8 DE JULHO DE 2026 APRESENTAMOS O GPT-LIVE-1 NO CHATGPT MODO VOZ Estamos lançando uma nova experiência do ChatGPT Modo Voz. O ChatGPT Modo Voz agora é alimentado pelo GPT-Live-1 para usuários pagos...
+
+openai.com
+ChatGPT — Release Notes | OpenAI Help Center
+JULY 8, 2026 INTRODUCING GPT-LIVE-1 IN CHATGPT VOICE We’re rolling out a new ChatGPT Voice experience. ChatGPT Voice is now powered by GPT-Live-1 for paid users and GPT-Live-1 mini for Free users. B...
+
+openai.com
+ChatGPT Modo Voz | OpenAI Help Center
+4. ChatGPT Modo Voz Esta página foi traduzida automaticamente. Veja o artigo original em inglês. Dê o seu feedback sobre esta tradução CHATGPT MODO VOZ Converse com o ChatGPT em uma conversa por v...
+
+openai.com
+ChatGPT Voice | OpenAI Help Center
+CHATGPT VOICE Talk with ChatGPT in a natural, free-form voice conversation. Updated: 3 days ago OVERVIEW WHAT IS CHATGPT VOICE? ChatGPT Voice lets you speak with ChatGPT and hear a spoken respon...
+
+openai.com
+ChatGPT Voice | OpenAI Help Center
+CHATGPT VOICE Talk with ChatGPT in a natural, free-form voice conversation. Updated: 3 days ago OVERVIEW WHAT IS CHATGPT VOICE? ChatGPT Voice lets you speak with ChatGPT and hear a spoken respon...
+
+openai.com
+FAQ do modo voz | OpenAI Help Center
+Esta página foi traduzida automaticamente. Veja o artigo original em inglês. Dê o seu feedback sobre esta tradução FAQ DO MODO VOZ Seu guia para chats por voz com o ChatGPT, desde a configuração e...
+
+openai.com
+ChatGPT Modo Voz | OpenAI Help Center
+CHATGPT MODO VOZ Converse com o ChatGPT em uma conversa por voz natural e livre. Atualizado: 8 hours ago VISÃO GERAL O QUE É O CHATGPT MODO VOZ? O ChatGPT Modo Voz permite que você fale com o Ch...
+
+openai.com
+ChatGPT Voice | OpenAI Help Center
+CHATGPT VOICE Talk with ChatGPT in a natural, free-form voice conversation. Updated: 23 minutes ago OVERVIEW WHAT IS CHATGPT VOICE? ChatGPT Voice lets you speak with ChatGPT and hear a spoken re...
+
+openai.com
+ChatGPT Trabalho e Codex | OpenAI Help Center
+USE O MODO VOZ COM O WORK OU O CODEX * Abra o aplicativo do ChatGPT para desktop e escolha Work ou Codex. * Selecione o controle de Voz ou use um atalho configurado em Configurações. Não há um atalh...
+
+sciencedirect.com
+From functionality to performance: How AI-enabled engagement and collaboration shape mathematics learning outcomes - ScienceDirect
+SOCIAL SCIENCES & HUMANITIES OPEN Volume 13, June 2026, 102978 Regular Article From functionality to performance: How AI-enabled engagement and collaboration shape mathematics learning outcomes...
+
+sciencedirect.com
+ChatGPT in school mathematics education: A systematic review of opportunities, challenges, and pedagogical implications - ScienceDirect
+TEACHING AND TEACHER EDUCATION Date: February 2026 Article: 105286 Volume: Volume 170 PUBLISHED BY: ELSEVIER Review article ChatGPT in school mathematics education: A systematic review of opp...
+github.com
+GitHub - 19PINE-AI/aoi: AOI: a model-agnostic perception layer giving computer-use agents adaptive video + audio perception with zero retraining, plus DynaCU-Bench (100 dynamic browser tasks). Paper + benchmark + code. · GitHub
+AGENT-COMPUTER OBSERVATION INTERFACE (AOI) & DYNACU-BENCH A model-agnostic perception layer that gives existing computer-use (CU) agents adaptive visual and audio perception of dynamic screen content...
+github.com
+GitHub - kellylford/LiveCaptionsWithAccessibility: Accessible live captioning for Windows: full scrollable transcript, screen-reader announcements, on-device Whisper, and system-audio capture. A demo that the built-in Live Captions can be made accessible. · GitHub
+ACCESSIBLE LIVE CAPTIONS (DEMONSTRATION) A small native Windows app that shows the right way to present live captions for screen-reader and low-vision users — the thing Windows' built-in Live Captio...
+
+google.com.br
+Potencialize o aprendizado com o Gemini for Education - Google for Education
+O GEMINI AGORA TEM PROTEÇÃO DE DADOS EXTRA. CONVERSE COM O GEMINI PARA ECONOMIZAR TEMPO, PERSONALIZAR O APRENDIZADO E BUSCAR INSPIRAÇÃO. O GEMINI AGORA TEM PROTEÇÃO DE DADOS EXTRA. COMECE A CONVERSA...
+
+google.com.br
+Empower learning with Gemini for Education - Google for Education
+EXPLORE WHAT YOU CAN DO WITH GEMINI * Save hours on your research * Create custom AI experts * Write, code and create * Take learning on the go * Talk it out Live * Play Pause DEEP RESEARCH Get d...
+
+gemini.google
+Gemini Live: faça perguntas à IA no modo que você quiser
+O GEMINI LIVE ENTROU NA CONVERSA. O Gemini Live agora está integrado à conversa, para você falar e digitar de uma forma totalmente fluida. * Teste o Gemini Live FALE PARA IR ALÉM DO TEXTO. O Gemi...
+
+a11ybob.com
+A11y-CUA Dataset: Characterizing the Accessibility Gap in Computer Use Agents - a11ybob.com
+A11Y-CUA DATASET: CHARACTERIZING THE ACCESSIBILITY GAP IN COMPUTER USE AGENTS Ananya Gubbi Mohanbabu, Rosiana Natalie, Brandon Kim, Anhong Guo, Amy Pavel · 2026 · Proceedings of the 2026 CHI Confere...
+
+ithub.global.ssl.fastly.net
+GitHub - 19PINE-AI/aoi: AOI: a model-agnostic perception layer giving computer-use agents adaptive video + audio perception with zero retraining, plus DynaCU-Bench (100 dynamic browser tasks). Paper + benchmark + code. · GitHub
+[Button: View all files] REPOSITORY FILES NAVIGATION * * README * License * License More items AGENT-

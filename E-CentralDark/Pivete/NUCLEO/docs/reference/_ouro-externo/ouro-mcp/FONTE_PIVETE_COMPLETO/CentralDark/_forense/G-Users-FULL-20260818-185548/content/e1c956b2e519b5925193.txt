@@ -1,0 +1,9 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\primitives\message\MessageError.d.ts
+
+import { FC, PropsWithChildren } from "react";
+
+//#region src/primitives/message/MessageError.d.ts
+declare const MessagePrimitiveError: FC<PropsWithChildren>;
+//#endregion
+export { MessagePrimitiveError };
+//# sourceMappingURL=MessageError.d.ts.map

@@ -1,0 +1,334 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\agent\__pycache__\outbound_webhooks.cpython-311.pyc
+
+Z5dCd 
+Z6dDdEd%
+Z7dFd'
+Z8dGd*
+Z9dHd.
+Z:dId1
+Z;dJd5
+Z<dKd9
+Z=dLd;
+Z>dMd=
+Z?dFd>
+Z@dFd?
+dAe jB
+ZEdMdB
+Outbound webhook notifications.
+Reads the ``hooks.outbound:`` list from ``config.yaml`` and registers
+notify-only callbacks on the existing plugin hook manager, so every
+``invoke_hook()`` site can push lifecycle events to external HTTP
+endpoints 
+ CI systems, dashboards, other agents 
+ with zero changes to
+call sites and zero polling on the receiving end.
+This is the outbound mirror of the inbound webhook platform
+(``gateway/platforms/webhook.py``): inbound wakes Hermes when the world
+changes; outbound tells the world when Hermes does something.
+Design notes
+------------
+* Delivery is fire-and-forget through a bounded in-process queue and a
+  single daemon worker thread.  ``invoke_hook()`` runs inside the agent
+  loop, so callbacks must never block on network I/O 
+ they serialize,
+  enqueue, and return ``None`` immediately.  Outbound targets can never
+  block a tool call, inject context, or otherwise influence agent flow.
+* Payloads are signed with HMAC-SHA256 (GitHub-style
+  ``X-Hermes-Signature-256: sha256=<hexdigest>`` over the raw body) when
+  a secret is configured.  Receivers verify exactly like they verify
+  GitHub webhooks.
+* No consent prompt: unlike shell hooks, an outbound target executes no
+  code on this machine 
+ it POSTs JSON to a URL the user themselves put
+  in config.  ``HERMES_SAFE_MODE=1`` still skips registration, matching
+  plugins / MCP / shell hooks.
+* Registration is idempotent 
+ safe to invoke from both the CLI entry
+  point and the gateway entry point.
+Config schema (``~/.hermes/config.yaml``)::
+    hooks:
+      outbound:
+        - url: https://ci.example.com/hermes-events
+          events: [on_session_end, subagent_stop]
+          # secret literal (discouraged) or env var name (preferred):
+          secret_env: HERMES_OUTBOUND_WEBHOOK_SECRET
+          # optional regex, honored for pre/post_tool_call only:
+          matcher: "terminal|delegate_task"
+          timeout: 10       # per-attempt seconds, clamped to [1, 60]
+          name: ci-notify   # optional label for logs / `hermes hooks list`
+Wire format (POST body)::
+        "hook_event_name": "on_session_end",
+        "tool_name":       null,
+        "tool_input":      null,
+        "session_id":      "sess_abc123",
+        "cwd":             "/home/user/project",
+        "extra":           {...},          # event-specific kwargs
+        "delivery_id":     "3f2c...",      # uuid4, unique per POST
+        "timestamp":       "2026-07-22T14:00:00Z"
+Headers::
+    Content-Type:            application/json
+    User-Agent:              Hermes-Agent-Outbound-Webhook
+    X-Hermes-Event:          <hook event name>
+    X-Hermes-Delivery:       <delivery_id>
+    X-Hermes-Signature-256:  sha256=<hmac hexdigest>   # only when secret set
+annotationsN)
+dataclass
+field)
+datetime
+timezone)
+Optional
+Tuple)
+error)
+request
+pre_tool_call
+post_tool_call>
+tool_name
+session_id
+parent_session_idz
+Set[Tuple[str, str]]
+_registered)
+maxsizez''queue.Queue[Optional[Dict[str, Any]]]'
+_delivery_queuez
+Optional[threading.Thread]
+_workerc
+WebhookTargetzDParsed and validated representation of one ``hooks.outbound`` entry.
+List[str]
+events
+Optional[str]
+secret
+matcher
+timeoutF)
+default
+Optional[re.Pattern]
+compiled_matcher
+return
+outbound webhook matcher %r is invalid (%s) 
+ treating as literal equality)
+isinstancer(
+compiler-
+logger
+warning)
+stripped
+KC:\Users\danda\AppData\Local\hermes\hermes-agent\agent\outbound_webhooks.py
+__post_init__z
+WebhookTarget.__post_init__|
+labelz
+WebhookTarget.label
+fullmatch)
+matches_toolz
+WebhookTarget.matches_tool
+__name__
+__module__
+__qualname__
+__doc__
+__annotations__r%
+DEFAULT_TIMEOUT_SECONDSr*
+propertyr>
+Optional[Dict[str, Any]]r.
+List[WebhookTarget]c
+Register every configured outbound webhook on the plugin manager.
+    ``cfg`` is the full parsed config dict.  Missing, empty, or malformed
+    ``hooks.outbound`` is treated as zero targets 
+ config parsing never
+    raises, because a broken webhook entry must not crash the agent.
+    Returns the targets that ended up wired (deduplicated across repeat
+    calls, so the CLI and gateway can both invoke this safely).
+env_var_enabled
+HERMES_SAFE_MODEu<
+HERMES_SAFE_MODE=1 
+ outbound webhook registration skipped
+outboundN)
+get_plugin_managerFTz?outbound webhook registered: %s -> %s (matcher=%s, timeout=%ds))
+utilsrQ
+_parse_outbound_block
+hermes_cli.pluginsrU
+_registered_lockr#
+_hooks
+setdefault
+append
+_make_callback
+hooks_cfg
+targetsrU
+manager
+registered
+target
+wired_any
+           r:
+register_from_configrj
+zYParse ``hooks.outbound`` without registering anything.
+    Used by ``hermes hooks list``.rS
+iter_configured_targetsrl
+floatr@
+Block until all queued deliveries are done (or *timeout* elapses).
+    Returns ``True`` when the queue fully drained.  Test/shutdown helper.r
+monotonicr
+all_tasks_done
+unfinished_tasks
+sleep)
+deadlines
+flushrv
+zAClear the idempotence set and drain the queue.  Test-only helper.N)
+clearr
+get_nowait
+task_done
+EmptyrL
+reset_for_testsr}
+Nz8hooks.outbound must be a list of webhook targets; got %s)
+listr5
+typerE
+enumerate
+_parse_single_targetr_
+entryrf
+     r:
+indexr)
+Optional[WebhookTarget]c
+VALID_HOOKSzIhooks.outbound[%d] must be a mapping with 'url' and 'events' keys; got %sr"
+z/hooks.outbound[%d] is missing a non-empty 'url')
+http://z
+https://u:
+hooks.outbound[%d].url must be http(s); got %r 
+ skippedr
+hooks.outbound[%d].url uses plain http:// 
+ payloads (including tool inputs) travel unencrypted. Prefer https.r#
+z>hooks.outbound[%d] needs a non-empty 'events' list (valid: %s)z
+, z8hooks.outbound[%d]: unknown event %r ignored (valid: %s)u2
+hooks.outbound[%d] has no valid events 
+ skippedr(
+z;hooks.outbound[%d].matcher must be a string regex; ignoringc
+_TOOL_SCOPED_EVENTS)
+<genexpr>z'_parse_single_target.<locals>.<genexpr>D
+hooks.outbound[%d].matcher=%r will be ignored 
+ matcher is only honored for pre_tool_call / post_tool_call.r*
+zEhooks.outbound[%d].timeout must be an int (got %r); using default %ds
+startswithr
+sortedr_
+TypeError
+ValueError
+MAX_TIMEOUT_SECONDS
+_resolve_secretr 
+events_rawr#
+timeout_rawr*
+            r:
+Dict[str, Any]r&
+zE``secret_env`` (env var name, preferred) wins over inline ``secret``.
+secret_envr$
+hooks.outbound[%d].secret_env=%r is not set in the environment 
+ deliveries will be UNSIGNEDNr'
+environr5
+valuer'
+     r:
+zABuild the notify-only closure ``invoke_hook()`` calls per firing.
+kwargsr
+zBoutbound webhook payload serialization failed (event=%s target=%s)T
+exc_info)
+_serialize_payload
+Exceptionr5
+_enqueue
+_build_delivery)
+delivery_id
+bodyrh
+_callbackz!_make_callback.<locals>._callback
+outbound_webhook[
+bytesc
+Render the POST body.  Same top-level shape as shell hooks' stdin
+    (documented in :mod:`agent.shell_hooks`), plus delivery metadata.
+    ``delivery_id`` is shared with the ``X-Hermes-Delivery`` header so
+    receivers can dedupe on either 
+ and since it (plus ``timestamp``)
+    lives inside the HMAC-signed body, it doubles as replay protection.
+_TOP_LEVEL_PAYLOAD_KEYS)
+<dictcomp>z&_serialize_payload.<locals>.<dictcomp>
++00:00
+hook_event_namer
+tool_inputr
+extrar
+timestampF)
+ensure_asciir+
+utf-8)
+itemsr!
+OSErrorrY
+isoformat
+replace
+encode)
+extrasr
+payloads
+      r:
+application/jsonz
+Hermes-Agent-Outbound-Webhook)
+Content-Typez
+User-Agentz
+X-Hermes-Eventz
+X-Hermes-Deliveryr
+sha256=z
+X-Hermes-Signature-256)
+headersr*
+hashlib
+sha256
+hexdigestr"
+digests
+      r:
+deliveryc
+outbound webhook queue full (%d pending) 
+ dropping %s event for %srh
+_ensure_workerr
+put_nowaitr{
+Fullr5
+QUEUE_MAX_SIZE
+outbound-webhooksT)
+daemonrm
+is_alive
+_worker_lock
+threading
+Thread
+_worker_loop
+atexit
+registerrv
+NTz-outbound webhook delivery crashed (target=%s)r>
+_deliverr
+_NoRedirectHandleruD
+Refuse to follow redirects.
+    urllib's default handler converts a redirected POST into a body-less
+    GET 
+ the signed payload would be silently dropped and the headers
+    re-sent to a location the user never configured.  Treat any 3xx as a
+    delivery failure instead (surfaced as HTTPError by returning None).
+newurls
+       r:
+redirect_requestz#_NoRedirectHandler.redirect_request
+POST with bounded retries.  Retries on connection errors and 5xx;
+    4xx is the receiver telling us the request itself is wrong 
+ no retry.
+    3xx redirects are never followed (misconfiguration 
+ fix the URL).r$
+methodr*
+status
+z.outbound webhook delivered: %s -> %s (HTTP %d)rh
+HTTP i
+outbound webhook target redirected (event=%s target=%s): %s -> %s 
+ redirects are not followed; update the configured url
+Locationr
+outbound webhook rejected (event=%s target=%s): %s 
+ not retryingzMoutbound webhook delivery failed after %d attempt(s) (event=%s target=%s): %s)
+MAX_DELIVERY_ATTEMPTS
+urlrequest
+Request
+_opener
+getattrr5
+urlerror
+HTTPErrorr
+RETRY_BACKOFF_SECONDS)
+last_error
+attemptr
+       r:
+__future__r
+loggingr
+dataclassesr
+pathlibr
+typingr
+urllibr
+getLoggerrE
+Lockr\
+Queuer
+HTTPRedirectHandlerr
+build_openerr
+<module>r

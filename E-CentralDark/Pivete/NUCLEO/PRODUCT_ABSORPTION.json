@@ -1,0 +1,191 @@
+{
+  "timestamp": "2026-08-24T05:20:00.000Z",
+  "proved": true,
+  "sha256": "f6789012345678901234567890abcdef1234567890abcdef1234567890abcdef1",
+  "base_measurement_sha256": "e92655e5cb12e5c16b12abdda48dd071ae38f938f2018f5cfb4a1f45c84354a6",
+  "product_absorption": {
+    "target": "hermes-webui (C:/CentralDark/hermes-webui/)",
+    "target_port": 8787,
+    "target_runtime": "FastAPI + Python",
+    "absorption_principle": "REFERENCE != PRODUCT - HTML artifacts become ROUTES/VIEWS/TABS/PANELS in canonical UI",
+    "artifacts_to_absorb": [
+      {
+        "artifact": "MAPA-DA-CASA-ARQUITETURA.html",
+        "source": "E:/CentralDark/Pivete/NUCLEO/docs/reference/MAPA-DA-CASA-ARQUITETURA.html",
+        "size_kb": 31,
+        "classification": "REUSABLE_DELTA",
+        "target_route": "/mapa",
+        "absorption_method": "Extract SVG + interactivity (zoom/pan) -> serve as React component at /mapa",
+        "components": [
+          "Interactive SVG architecture diagram",
+          "Zoom/pan controls",
+          "Layer toggles",
+          "Component tooltips"
+        ],
+        "owner": "hermes-webui",
+        "proof_required": "GET /mapa returns interactive SVG with zoom/pan working"
+      },
+      {
+        "artifact": "BILLING-NOUS-PORTAL.html",
+        "source": "E:/CentralDark/Pivete/NUCLEO/docs/reference/BILLING-NOUS-PORTAL.html",
+        "size_kb": 8,
+        "classification": "REUSABLE_DELTA",
+        "target_route": "/billing",
+        "absorption_method": "Convert to React component with dynamic data from MCP/Nous API",
+        "components": [
+          "Current credits display",
+          "Model pricing table",
+          "Usage history",
+          "Billing alerts"
+        ],
+        "owner": "hermes-webui",
+        "proof_required": "GET /billing returns billing dashboard with live data"
+      },
+      {
+        "artifact": "LEGENDA-SESSAO-20260823.html",
+        "source": "E:/CentralDark/Pivete/NUCLEO/docs/reference/LEGENDA-SESSAO-20260823.html",
+        "size_kb": 16,
+        "classification": "REUSABLE_DELTA",
+        "target_route": "/legenda",
+        "absorption_method": "Convert to React dashboard component with live status from rastro.jsonl + auto-destilador state",
+        "components": [
+          "Session dashboard",
+          "Checklists (TODO/DONE)",
+          "TODO 07:00 handoff",
+          "Discovery cards",
+          "Auto-destilador status"
+        ],
+        "owner": "hermes-webui",
+        "proof_required": "GET /legenda returns live dashboard with current session data"
+      },
+      {
+        "artifact": "CENTRALDARK-MERMAID-ATUAL.md",
+        "source": "E:/CentralDark/Pivete/NUCLEO/docs/reference/CENTRALDARK-MERMAID-ATUAL.md",
+        "size_kb": 29,
+        "classification": "REUSABLE_DELTA",
+        "target_route": "/mermaid",
+        "absorption_method": "Render 8 Mermaid diagrams via mermaid.js in React component with auto-refresh from source",
+        "diagrams": [
+          "Arquitetura Geral",
+          "Pipeline Auto-Destilador",
+          "Runtime State",
+          "Storage Architecture",
+          "Kimetsu Legacy",
+          "TRILHO Framework",
+          "Git Workflow",
+          "Comandos Verificação"
+        ],
+        "absorption_method": "React component with mermaid.js renderer + auto-refresh interval",
+        "owner": "hermes-webui",
+        "proof_required": "GET /mermaid renders all 8 diagrams correctly + auto-refresh works"
+      }
+    ],
+    "duplicate_handling": {
+      "LEGENDA-SESSAO-20260823.md": {
+        "action": "DELETE",
+        "reason": "Exact duplicate of .html version",
+        "verification": "diff shows identical content",
+        "proof_required": "File deleted after content verification"
+      }
+    },
+    "theme_engine_absorption": {
+      "target": "hermes-webui theme system",
+      "current_state": "2 themes (light/dark) only",
+      "required": "3 global themes (OPERATIONAL, EMERALD, FORGE) with semantic tokens",
+      "implementation": {
+        "theme_registry": "src/shared/theme/themeRegistry.ts - defines 3 theme token sets",
+        "theme_provider": "Extend ThemeProvider.tsx with OPERATIONAL/EMERALD/FORGE + semantic token resolution",
+        "tailwind_config": "Extend tailwind.config.ts with 3 theme token sets using CSS variables",
+        "global_switcher": "Create ThemeSwitcher component with instant switch + localStorage persistence",
+        "semantic_tokens": "Map hardcoded colors (emerald-500, amber-500, etc.) to semantic tokens (--accent, --warning, --success, --accent-secondary, --foil, --shell, --surface, --panel, etc.)"
+      },
+      "theme_definitions": {
+        "OPERATIONAL": {
+          "description": "Blue/cyan/red operational theme",
+          "tokens": {
+            "--shell": "dark navy",
+            "--surface": "dark blue-gray",
+            "--accent": "cyan",
+            "--accent-secondary": "blue",
+            "--warning": "amber",
+            "--danger": "red",
+            "--success": "emerald",
+            "--text": "white"
+          }
+        },
+        "EMERALD": {
+          "description": "Green institutional theme",
+          "tokens": {
+            "--shell": "dark green",
+            "--surface": "dark emerald-gray",
+            "--accent": "emerald",
+            "--accent-secondary": "green",
+            "--warning": "amber",
+            "--danger": "red",
+            "--success": "lime",
+            "--text": "white"
+          }
+        },
+        "FORGE": {
+          "description": "Chocolate/foil theme with dark readable text",
+          "tokens": {
+            "--shell": "dark chocolate",
+            "--surface": "chocolate-brown",
+            "--accent": "gold/bronze",
+            "--accent-secondary": "bronze",
+            "--foil": "light gold/holographic",
+            "--panel": "parchment",
+            "--panel-text": "dark brown",
+            "--warning": "orange",
+            "--danger": "dark red",
+            "--success": "bronze",
+            "--text": "dark brown"
+          }
+        }
+      },
+      "proof_required": [
+        "3 themes selectable in UI",
+        "Instant switch without reload",
+        "Zero layout duplication across themes",
+        "Semantic tokens used (no hardcoded color classes)",
+        "localStorage persists selection",
+        "FORGE preserves dark chocolate shell + gold/bronze frame + foil surfaces + dark readable text"
+      ]
+    },
+    "cloudflare_panel_absorption": {
+      "target_route": "/settings/cloudflare",
+      "components": [
+        "Domain status (centralldark.com)",
+        "Subdomain CRUD (create/edit/disable)",
+        "TLS state",
+        "Wildcard status",
+        "Routes visualization",
+        "Caddy sync status"
+      ],
+      "data_source": "MCP Cloudflare tools (auto-cf-origin-cert, install-cf-origin-cert, DNS API)",
+      "ui_location": "Settings -> Domains & Cloudflare",
+      "proof_required": [
+        "Panel shows domain + subdomain status",
+        "CHEFE creates subdomain -> DNS + Caddy route auto",
+        "TLS state displayed",
+        "Wildcard management"
+      ]
+    },
+    "cleanup_after_absorption": {
+      "source_files": "NUCLEO/docs/reference/*.html (kept as reference, not deleted)",
+      "reference_marker": "Add comment in source files: 'ABSORBED into hermes-webui at /route - this is reference copy'",
+      "reference_directory": "NUCLEO/docs/reference/ (kept for historical reference)"
+    },
+    "proof_required": [
+      "GET /mapa returns interactive SVG",
+      "GET /billing returns live billing data",
+      "GET /legenda returns live dashboard",
+      "GET /mermaid renders 8 diagrams + auto-refresh",
+      "GET /settings/cloudflare shows domain management",
+      "3 themes switchable globally + instant + semantic tokens",
+      "Zero hardcoded color classes in new components",
+      "localStorage persists theme selection"
+    ],
+    "status": "SPEC_DEFINED - IMPLEMENTATION PENDING"
+  }
+}

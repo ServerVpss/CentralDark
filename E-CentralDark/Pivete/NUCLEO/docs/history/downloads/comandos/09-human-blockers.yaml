@@ -1,0 +1,29 @@
+continue_autonomously_for:
+  - code errors
+  - installable dependencies
+  - build failures
+  - occupied ports
+  - stopped processes
+  - Docker PM2 systemd configuration
+  - Caddy configuration
+  - Git branch PR CI failures
+  - reversible migrations
+  - refactors
+  - failing tests
+
+human_required_only:
+  - secret does not exist and cannot be accessed
+  - external credential cannot be obtained
+  - paid API has no balance and payment is required
+  - VPS purchase or resource upgrade is required
+  - financial decision
+  - human-only 2FA or login
+  - external authorization unavailable to system
+
+output:
+  status: BLOCKED_HUMAN_REQUIRED
+  need: exact_missing_item
+  why: exact_blocking_dependency
+  where: target_service
+  minimum_action: smallest_human_action
+  resume_from: exact_phase_and_gate

@@ -1,0 +1,22 @@
+schema: CENTRALDARK_DOCUMENTATION_REGISTRY
+schema_version: 1
+observed_at: 2026-08-31
+source_class: USER_SCREENSHOT
+ports:
+  "8099": {expected: UNKNOWN, observed: OPEN, owner: UNKNOWN, proof: SCREENSHOT_STATUS_ONLY}
+  "8787": {expected: UNKNOWN, observed: OPEN, owner: UNKNOWN, proof: SCREENSHOT_STATUS_ONLY}
+  "8880": {expected: UNKNOWN, observed: NONE, owner: UNKNOWN, proof: SCREENSHOT_STATUS_ONLY}
+  "8645": {expected: UNKNOWN, observed: OPEN, owner: UNKNOWN, proof: SCREENSHOT_STATUS_ONLY}
+  "1420": {expected: UNKNOWN, observed: NONE, owner: UNKNOWN, proof: SCREENSHOT_STATUS_ONLY, next_cursor: FIND_CANONICAL_OWNER_AND_EXPECTATION}
+triggers:
+  CENTRALDARK: {purpose: MASTER_ENTRYPOINT, external: true}
+  ACORDAR: {purpose: LOAD_AND_REMEASURE_CONTEXT, external_alias_allowed: true}
+  CALIBRAR: {purpose: ALIGN_INTENT_SCOPE_AND_PROOF, external_alias_allowed: true}
+  PEGATUDO: {purpose: RECONCILE_RELEVANT_LINEAGE, embedded_in_master: true}
+  MULTIBUSSOLA: {purpose: COVER_REQUIRED_BEARINGS, embedded_in_master: true}
+  META_LUPA: {purpose: RESOLVE_DIVERGENCE_WITH_DISCRIMINATING_TEST, embedded_in_master: true}
+  RECONCILIAR: {purpose: UNIFY_CONFLICTING_EVIDENCE, embedded_in_master: true}
+  CONTRAPROVA: {purpose: ATTACK_CURRENT_CLAIM, embedded_in_master: true}
+  REALITY_JUDGE: {purpose: INDEPENDENT_PROMOTION_JUDGE, embedded_in_master: true}
+  CRISTALIZAR: {purpose: TURN_PROVEN_LEARNING_INTO_DURABLE_CONTRACT, external_alias_allowed: true}
+  BOOT_REFRESH: {purpose: REFRESH_SUCCESSOR_ENTRY_STATE, embedded_in_master: true}

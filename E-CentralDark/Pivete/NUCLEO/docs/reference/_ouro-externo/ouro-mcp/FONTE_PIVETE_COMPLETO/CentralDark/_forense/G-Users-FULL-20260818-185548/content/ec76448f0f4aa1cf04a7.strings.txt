@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\react\model-context\makeAssistantToolUI.d.ts.map
+
+{"version":3,"file":"makeAssistantToolUI.d.ts","names":[],"sources":["../../../src/react/model-context/makeAssistantToolUI.ts"],"mappings":";;;;;;;;;;;;;KAgBY,kBAAkB;;EAE5B,eAAe;;;;;;;;;;;;;;cAeJ,sBAAuB,OAAO,SACzC,MAAM,qBAAqB,OAAO,aAAQ"}

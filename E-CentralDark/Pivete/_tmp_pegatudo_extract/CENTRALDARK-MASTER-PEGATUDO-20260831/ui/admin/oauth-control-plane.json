@@ -1,0 +1,44 @@
+{
+  "schema": "CENTRALDARK_OAUTH_CONTROL_PLANE_UI",
+  "version": 1,
+  "status_dots": {
+    "CONNECTED": "🟢",
+    "AUTH_REQUIRED": "🟡",
+    "ERROR": "🔴",
+    "AVAILABLE": "🔵",
+    "DISABLED": "⚫"
+  },
+  "buttons": [
+    "CONNECT_OAUTH",
+    "REAUTHORIZE",
+    "REFRESH",
+    "TEST",
+    "DETAILS",
+    "DISABLE",
+    "REVOKE_DISCONNECT"
+  ],
+  "fields": [
+    "provider",
+    "app_plugin",
+    "workspace_account",
+    "auth_state",
+    "granted_capabilities",
+    "expires_at_if_known",
+    "last_test",
+    "secret_ref",
+    "callback_ref"
+  ],
+  "credential_semantics": {
+    "authorization_code": "EPHEMERAL_ONE_TIME_EXCHANGE_INPUT",
+    "access_token": "SHORT_LIVED_RUNTIME_CREDENTIAL",
+    "refresh_token": "LONGER_LIVED_RENEWAL_CREDENTIAL_IF_PROVIDER_ISSUES",
+    "secret_ref": "ONLY_REFERENCE_VISIBLE_TO_HUB"
+  },
+  "rules": {
+    "raw_authorization_code_visible_after_exchange": false,
+    "raw_access_token_visible": false,
+    "raw_refresh_token_visible": false,
+    "button_click_implies_success": false,
+    "connected_implies_write_authority": false
+  }
+}

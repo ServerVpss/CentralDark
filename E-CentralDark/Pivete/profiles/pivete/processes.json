@@ -1,0 +1,22 @@
+[
+  {
+    "session_id": "proc_84741ad9d6e8",
+    "command": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --remote-debugging-port=9222 --user-data-dir=\"C:\\Users\\danda\\AppData\\Local\\Google\\Chrome\\User Data\\ZendriveTest\" --no-first-run --disable-default-apps \"https://chatgpt.com\"",
+    "pid": 19556,
+    "pid_scope": "host",
+    "host_start_time": 178861761784,
+    "cwd": "E:\\CentralDark\\Pivete\\CentralDark",
+    "started_at": 1788617617.7853177,
+    "task_id": "default",
+    "session_key": "20260905_010608_8c07f9",
+    "watcher_platform": "",
+    "watcher_chat_id": "",
+    "watcher_user_id": "",
+    "watcher_user_name": "",
+    "watcher_thread_id": "",
+    "watcher_message_id": "",
+    "watcher_interval": 0,
+    "notify_on_complete": false,
+    "watch_patterns": []
+  }
+]

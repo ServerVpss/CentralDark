@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\libexec\git-core\git-update
+
+#!/bin/sh
+# Placeholder for the deprecated `git update` command
+echo 'Warning! `git update` has been deprecated;' >&2
+echo 'Please use `git update-git-for-windows` instead.' >&2
+exec git update-git-for-windows "$@"

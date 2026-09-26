@@ -1,0 +1,552 @@
+import { afterEach, beforeEach, describe, expect, test } from "bun:test";
+import { chmodSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const HOOK = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "..",
+  "hooks",
+  "active-inject.ts",
+);
+
+let vault: string;
+let configHome: string;
+
+beforeEach(() => {
+  vault = mkdtempSync(join(tmpdir(), "o2b-hook-active-vault-"));
+  configHome = mkdtempSync(join(tmpdir(), "o2b-hook-active-cfg-"));
+  mkdirSync(join(vault, "Brain"), { recursive: true });
+});
+
+afterEach(() => {
+  rmSync(vault, { recursive: true, force: true });
+  rmSync(configHome, { recursive: true, force: true });
+});
+
+interface RunResult {
+  readonly stdout: string;
+  readonly stderr: string;
+  readonly exit: number;
+}
+
+async function runHook(payload: unknown, env: Record<string, string> = {}): Promise<RunResult> {
+  // Bun.spawn env replaces (does not merge with) process.env when
+  // provided. We explicitly forward PATH so `bun run` can resolve its
+  // own toolchain on $PATH-only systems.
+  const inherited: Record<string, string> = {
+    PATH: process.env["PATH"] ?? "",
+    HOME: configHome,
+    // Isolate the active.md injection behaviour from the runtime-notice
+    // channel by default; the dedicated notice test re-enables it.
+    OPEN_SECOND_BRAIN_RUNTIME_NOTICES: "false",
+  };
+  const proc = Bun.spawn(["bun", "run", HOOK], {
+    stdin: "pipe",
+    stdout: "pipe",
+    stderr: "pipe",
+    env: { ...inherited, ...env },
+  });
+  proc.stdin.write(JSON.stringify(payload));
+  await proc.stdin.end();
+  const [stdout, stderr] = await Promise.all([
+    new Response(proc.stdout).text(),
+    new Response(proc.stderr).text(),
+  ]);
+  const exit = await proc.exited;
+  return { stdout, stderr, exit };
+}
+
+function writeActive(body: string): void {
+  writeFileSync(join(vault, "Brain", "active.md"), body, "utf8");
+}
+
+function writeLessons(body: string): void {
+  writeFileSync(join(vault, "Brain", "lessons.md"), body, "utf8");
+}
+
+function writeStandingRules(body: string): string {
+  const path = join(vault, "Brain", "standing-rules.md");
+  writeFileSync(path, body, "utf8");
+  return path;
+}
+
+describe("active-inject hook", () => {
+  test("injects active.md content as SessionStart additionalContext", async () => {
+    writeActive(
+      "---\nkind: brain-active\ngenerated_at: 2026-05-15T10:00:00Z\n---\n\n# Active Brain Preferences\n\n## Confirmed (1)\n\n- `pref-foo` — Rule body\n",
+    );
+
+    const r = await runHook(
+      {
+        hook_event_name: "SessionStart",
+        session_id: "abc",
+      },
+      { VAULT_DIR: vault },
+    );
+    expect(r.exit).toBe(0);
+    expect(r.stdout.endsWith("\n")).toBe(true);
+    const out = JSON.parse(r.stdout);
+    expect(out.hookSpecificOutput.hookEventName).toBe("SessionStart");
+    expect(out.hookSpecificOutput.additionalContext).toContain("# Active Brain Preferences");
+    expect(out.hookSpecificOutput.additionalContext).toContain("pref-foo");
+  });
+
+  test("stays silent under PostCompact - the event cannot carry additionalContext", async () => {
+    // Current Claude Code has no PostCompact hook event; runtimes that
+    // still fire one reject `hookSpecificOutput.additionalContext` for
+    // it, echoing the whole payload back as a validation error. The
+    // post-compact re-injection path is the SessionStart `compact`
+    // matcher instead.
+    writeActive(
+      "---\nkind: brain-active\ngenerated_at: 2026-05-15T10:00:00Z\n---\n\n# Active Brain Preferences\n\n## Confirmed (0)\n\n_No confirmed preferences yet._\n",
+    );
+
+    const r = await runHook(
+      {
+        hook_event_name: "PostCompact",
+      },
+      { VAULT_DIR: vault },
+    );
+    expect(r.exit).toBe(0);
+    expect(r.stdout).toBe("");
+  });
+
+  test("injects under UserPromptSubmit - an allowlisted context-bearing event", async () => {
+    writeActive(
+      "---\nkind: brain-active\ngenerated_at: 2026-05-15T10:00:00Z\n---\n\n# Active Brain Preferences\n\n## Confirmed (1)\n\n- `pref-foo` — Rule body\n",
+    );
+
+    const r = await runHook(
+      {
+        hook_event_name: "UserPromptSubmit",
+      },
+      { VAULT_DIR: vault },
+    );
+    expect(r.exit).toBe(0);
+    const out = JSON.parse(r.stdout);
+    expect(out.hookSpecificOutput.hookEventName).toBe("UserPromptSubmit");
+    expect(out.hookSpecificOutput.additionalContext).toContain("pref-foo");
+  });
+
+  test("stays silent under an unknown future event name (default-closed)", async () => {
+    writeActive("---\nkind: brain-active\ngenerated_at: 2026-05-15T10:00:00Z\n---\n\nbody\n");
+
+    const r = await runHook({ hook_event_name: "SomeFutureEvent" }, { VAULT_DIR: vault });
+    expect(r.exit).toBe(0);
+    expect(r.stdout).toBe("");
+  });
+
+  test("stays silent when Brain/active.md does not exist", async () => {
+    const r = await runHook({ hook_event_name: "SessionStart" }, { VAULT_DIR: vault });
+    expect(r.exit).toBe(0);
+    expect(r.stdout).toBe("");
+  });
+
+  test("stays silent when vault cannot be resolved (no config, no env)", async () => {
+    const r = await runHook({ hook_event_name: "SessionStart" });
+    // No VAULT_DIR, no config in $HOME → resolveVault returns null.
+    expect(r.exit).toBe(0);
+    expect(r.stdout).toBe("");
+  });
+
+  test("stays silent on empty payload", async () => {
+    writeActive("---\nkind: brain-active\ngenerated_at: 2026-05-15T10:00:00Z\n---\n\nbody\n");
+    const proc = Bun.spawn(["bun", "run", HOOK], {
+      stdin: "pipe",
+      stdout: "pipe",
+      stderr: "pipe",
+      env: {
+        PATH: process.env["PATH"] ?? "",
+        HOME: configHome,
+        VAULT_DIR: vault,
+      },
+    });
+    await proc.stdin.end();
+    const stdout = await new Response(proc.stdout).text();
+    const exit = await proc.exited;
+    expect(exit).toBe(0);
+    // Empty stdin → readHookInput returns null → asHookPayload returns
+    // {} → we use the default "SessionStart" event name and still
+    // inject. The contract is to be useful when called by a runtime
+    // that doesn't pre-populate `hook_event_name`.
+    expect(stdout).not.toBe("");
+    const out = JSON.parse(stdout);
+    expect(out.hookSpecificOutput.hookEventName).toBe("SessionStart");
+  });
+
+  test("budgets an oversized active.md body and points at brain_context", async () => {
+    const hugeRules = Array.from(
+      { length: 400 },
+      (_, i) => `- \`pref-rule-${i}\` (confidence: low (0.10)) — Rule number ${i} body text`,
+    ).join("\n");
+    writeActive(
+      `---\nkind: brain-active\ngenerated_at: 2026-05-15T10:00:00Z\n---\n\n# Active Brain Preferences\n\n## Confirmed (400)\n\n${hugeRules}\n\n## Recently retired (last 1)\n\n- \`pref-r\` — low_confidence on 2026-05-01\n`,
+    );
+
+    const r = await runHook({ hook_event_name: "SessionStart" }, { VAULT_DIR: vault });
+    expect(r.exit).toBe(0);
+    const out = JSON.parse(r.stdout);
+    const injected: string = out.hookSpecificOutput.additionalContext;
+    // Default budget is 8,000 chars (+ the one-line truncation notice).
+    expect(injected.length).toBeLessThanOrEqual(8300);
+    expect(injected).toContain("# Active Brain Preferences");
+    expect(injected).toContain("brain_context");
+    expect(injected).not.toContain("## Recently retired");
+  });
+
+  test("honors active.inject_budget_chars from _brain.yaml", async () => {
+    writeFileSync(
+      join(vault, "Brain", "_brain.yaml"),
+      "schema_version: 1\nactive:\n  inject_budget_chars: 500\n",
+      "utf8",
+    );
+    const rules = Array.from(
+      { length: 40 },
+      (_, i) => `- \`pref-rule-${i}\` — Rule number ${i} body text`,
+    ).join("\n");
+    writeActive(
+      `---\nkind: brain-active\ngenerated_at: 2026-05-15T10:00:00Z\n---\n\n# Active Brain Preferences\n\n## Confirmed (40)\n\n${rules}\n`,
+    );
+
+    const r = await runHook({ hook_event_name: "SessionStart" }, { VAULT_DIR: vault });
+    expect(r.exit).toBe(0);
+    const out = JSON.parse(r.stdout);
+    const injected: string = out.hookSpecificOutput.additionalContext;
+    expect(injected.length).toBeLessThanOrEqual(800);
+    expect(injected).toContain("brain_context");
+  });
+
+  test("appends lessons.md body alongside active.md when present", async () => {
+    writeActive(
+      "---\nkind: brain-active\ngenerated_at: 2026-05-15T10:00:00Z\n---\n\n# Active Brain Preferences\n\n## Confirmed (1)\n\n- `pref-foo` — Rule body\n",
+    );
+    writeLessons(
+      "---\nkind: brain-lessons\ngenerated_at: 2026-05-15T10:00:00Z\n---\n\n# Lessons\n\n## Avoid (1)\n\n- `de-2026-05-18-x` (score: -0.95) — the flaky retry loop\n",
+    );
+
+    const r = await runHook({ hook_event_name: "SessionStart" }, { VAULT_DIR: vault });
+    expect(r.exit).toBe(0);
+    const out = JSON.parse(r.stdout);
+    const injected: string = out.hookSpecificOutput.additionalContext;
+    expect(injected).toContain("# Active Brain Preferences");
+    expect(injected).toContain("pref-foo");
+    expect(injected).toContain("# Lessons");
+    expect(injected).toContain("the flaky retry loop");
+  });
+
+  test("injects active.md alone when lessons.md is absent", async () => {
+    writeActive(
+      "---\nkind: brain-active\ngenerated_at: 2026-05-15T10:00:00Z\n---\n\n# Active Brain Preferences\n\n## Confirmed (1)\n\n- `pref-foo` — Rule body\n",
+    );
+    const r = await runHook({ hook_event_name: "SessionStart" }, { VAULT_DIR: vault });
+    expect(r.exit).toBe(0);
+    const out = JSON.parse(r.stdout);
+    const injected: string = out.hookSpecificOutput.additionalContext;
+    expect(injected).toContain("pref-foo");
+    expect(injected).not.toContain("# Lessons");
+  });
+
+  test("stays silent when active.md is empty whitespace only", async () => {
+    writeActive("   \n  \n");
+    const r = await runHook({ hook_event_name: "SessionStart" }, { VAULT_DIR: vault });
+    expect(r.exit).toBe(0);
+    expect(r.stdout).toBe("");
+  });
+
+  test("prepends a runtime-notice block when a transient condition holds", async () => {
+    writeActive(
+      "---\nkind: brain-active\ngenerated_at: 2026-05-15T10:00:00Z\n---\n\n# Active Brain Preferences\n\n## Confirmed (1)\n\n- `pref-foo` — Rule body\n",
+    );
+    // Notices on (override the harness default); no search index exists in
+    // this bare vault, so the index-missing notice fires and rides the surface.
+    const r = await runHook(
+      { hook_event_name: "SessionStart" },
+      { VAULT_DIR: vault, OPEN_SECOND_BRAIN_RUNTIME_NOTICES: "true" },
+    );
+    expect(r.exit).toBe(0);
+    const injected: string = JSON.parse(r.stdout).hookSpecificOutput.additionalContext;
+    expect(injected).toContain("Runtime notices:");
+    expect(injected).toContain("Search index is not built");
+    // The command the notice used to spell out in prose still reaches the
+    // agent's context, now rendered from the structured field
+    // (no-dead-ends, task 3).
+    expect(injected).toContain("Run: o2b search index");
+    // The active body still follows the notice block.
+    expect(injected).toContain("pref-foo");
+    expect(injected.indexOf("Runtime notices:")).toBeLessThan(injected.indexOf("pref-foo"));
+  });
+
+  test("injects notices alone when there is no active.md body", async () => {
+    // No active.md at all; the notice channel still surfaces the condition.
+    const r = await runHook(
+      { hook_event_name: "SessionStart" },
+      { VAULT_DIR: vault, OPEN_SECOND_BRAIN_RUNTIME_NOTICES: "true" },
+    );
+    expect(r.exit).toBe(0);
+    const injected: string = JSON.parse(r.stdout).hookSpecificOutput.additionalContext;
+    expect(injected).toContain("Runtime notices:");
+    expect(injected).toContain("Search index is not built");
+  });
+});
+
+/**
+ * A `_brain.yaml` the operator wrote and then broke.
+ *
+ * The injection-budget read inside the hook resolves to the default budget
+ * on a config failure and MUST keep doing so. This is a SessionStart hook,
+ * and the assembly the read sits in is the fail-open loader's `assemble`
+ * callback: a raise there does not surface anything, it swaps the whole
+ * injection for the last-good cache - a body captured while the config
+ * still read, which therefore carries no word of the breakage. So the
+ * property under test is not "it throws" but "it does not throw AND the
+ * condition is named on the same surface": the runtime-notice block the
+ * same assembly emits before it ever reads the budget.
+ *
+ * Three cases, the same split `load*ConfigSafe` makes - absent (the common
+ * case for every vault in the wild, and silent by design), malformed, and
+ * present-but-unopenable.
+ */
+describe("active-inject hook: _brain.yaml absent vs. unreadable", () => {
+  const ACTIVE_DOC =
+    "---\nkind: brain-active\ngenerated_at: 2026-05-15T10:00:00Z\n---\n\n" +
+    "# Active Brain Preferences\n\n## Confirmed (1)\n\n- `pref-foo` — Rule body\n";
+
+  /** Does not parse at all: an indented first line has no parent key. */
+  const MALFORMED_CONFIG = "  schema_version: 1\n";
+
+  /** The prose the `brain_config_unreadable` notice renders. */
+  const CONFIG_NOTICE = "Brain/_brain.yaml could not be read";
+
+  function configPath(): string {
+    return join(vault, "Brain", "_brain.yaml");
+  }
+
+  /** Notices are opt-out in the shared harness; this channel is the point. */
+  const NOTICES_ON = { OPEN_SECOND_BRAIN_RUNTIME_NOTICES: "true" };
+
+  async function inject(env: Record<string, string> = {}): Promise<string> {
+    const r = await runHook({ hook_event_name: "SessionStart" }, { VAULT_DIR: vault, ...env });
+    expect(r.exit).toBe(0);
+    expect(r.stderr).toBe("");
+    return JSON.parse(r.stdout).hookSpecificOutput.additionalContext as string;
+  }
+
+  test("absent: no config notice, and the documented default budget applies", async () => {
+    writeActive(ACTIVE_DOC);
+    const injected = await inject(NOTICES_ON);
+    // A vault that never ran `brain init` is healthy. It has settings to
+    // report only about the index, never about a file it does not have.
+    expect(injected).not.toContain(CONFIG_NOTICE);
+    expect(injected).toContain("pref-foo");
+  });
+
+  test("malformed: the hook still injects, and the breakage rides the same payload", async () => {
+    writeActive(ACTIVE_DOC);
+    writeFileSync(configPath(), MALFORMED_CONFIG, "utf8");
+
+    const injected = await inject(NOTICES_ON);
+    // Not fatal: the session gets its preferences either way.
+    expect(injected).toContain("pref-foo");
+    // And not silent: the operator's settings are named as not in force.
+    expect(injected).toContain(CONFIG_NOTICE);
+    // The notice carries THIS vault's parse failure, path and all, so the
+    // assertion cannot be satisfied by a constant sentence.
+    expect(injected).toContain(configPath());
+    expect(injected.indexOf(CONFIG_NOTICE)).toBeLessThan(injected.indexOf("pref-foo"));
+  });
+
+  test("unopenable: a config the process cannot read is reported, not read as absent", async () => {
+    writeActive(ACTIVE_DOC);
+    writeFileSync(configPath(), "schema_version: 1\n", "utf8");
+    chmodSync(configPath(), 0o000);
+    try {
+      const injected = await inject(NOTICES_ON);
+      expect(injected).toContain("pref-foo");
+      expect(injected).toContain(CONFIG_NOTICE);
+      expect(injected).toContain(configPath());
+    } finally {
+      chmodSync(configPath(), 0o600);
+    }
+  });
+
+  test("malformed: the budget falls back to the default rather than going unbounded", async () => {
+    // The operator's `inject_budget_chars` is unreachable, so the read
+    // lands on INJECT_BUDGET_CHARS_DEFAULT (8,000). Pinned because an
+    // unbounded body is the failure this read exists to prevent, and it
+    // would be invisible in a small fixture.
+    const hugeRules = Array.from(
+      { length: 400 },
+      (_, i) => `- \`pref-rule-${i}\` (confidence: low (0.10)) — Rule number ${i} body text`,
+    ).join("\n");
+    writeActive(
+      `---\nkind: brain-active\ngenerated_at: 2026-05-15T10:00:00Z\n---\n\n# Active Brain Preferences\n\n## Confirmed (400)\n\n${hugeRules}\n`,
+    );
+    writeFileSync(configPath(), MALFORMED_CONFIG, "utf8");
+
+    const injected = await inject(NOTICES_ON);
+    const noticeBlock = injected.slice(0, injected.indexOf("# Active Brain Preferences"));
+    expect(injected.length - noticeBlock.length).toBeLessThanOrEqual(8300);
+  });
+
+  test("opting out of the notice channel is the one path that hides the breakage", async () => {
+    // `OPEN_SECOND_BRAIN_RUNTIME_NOTICES=false` suppresses the whole
+    // channel by the operator's own instruction. Pinned so the budget
+    // read's silence is understood as delegated to that channel rather
+    // than as its own decision - if this ever stops being the only quiet
+    // path, the delegation has broken.
+    writeActive(ACTIVE_DOC);
+    writeFileSync(configPath(), MALFORMED_CONFIG, "utf8");
+
+    const injected = await inject({ OPEN_SECOND_BRAIN_RUNTIME_NOTICES: "false" });
+    expect(injected).toContain("pref-foo");
+    expect(injected).not.toContain(CONFIG_NOTICE);
+  });
+});
+
+/**
+ * Operator standing rules at the head of the preamble
+ * (silence-is-not-an-answer, U8).
+ *
+ * The block is read OUTSIDE the fail-open memory load and before it, and
+ * that one placement is what gives it every property asserted here: it
+ * leads the payload, it is never charged against the injection budget, a
+ * memory-layer failure cannot take it down, and - because it never
+ * enters the inject cache - a stale constitution can never be served
+ * from disk in place of the live one.
+ */
+describe("active-inject hook: operator standing rules", () => {
+  const ACTIVE_DOC =
+    "---\nkind: brain-active\ngenerated_at: 2026-05-15T10:00:00Z\n---\n\n" +
+    "# Active Brain Preferences\n\n## Confirmed (1)\n\n- `pref-foo` — Rule body\n";
+  const RULES = "Never force-push to main.\nAsk before deleting anything under Archive/.";
+  const HEADER = "## Operator standing rules";
+  const CAP_NOTICE = "Standing rules truncated";
+
+  async function inject(env: Record<string, string> = {}): Promise<string> {
+    const r = await runHook({ hook_event_name: "SessionStart" }, { VAULT_DIR: vault, ...env });
+    expect(r.exit).toBe(0);
+    expect(r.stderr).toBe("");
+    return JSON.parse(r.stdout).hookSpecificOutput.additionalContext as string;
+  }
+
+  test("the preamble starts with the standing-rules header and the operator text", async () => {
+    writeActive(ACTIVE_DOC);
+    writeStandingRules(RULES);
+    const injected = await inject();
+    expect(injected.startsWith(HEADER)).toBe(true);
+    expect(injected).toContain(RULES);
+    expect(injected.indexOf(RULES)).toBeLessThan(injected.indexOf("pref-foo"));
+  });
+
+  test("absent rules file leaves the payload exactly as it was", async () => {
+    writeActive(ACTIVE_DOC);
+    const injected = await inject();
+    expect(injected).not.toContain(HEADER);
+    expect(injected).toContain("pref-foo");
+  });
+
+  test("with no active memory file the block is still emitted", async () => {
+    writeStandingRules(RULES);
+    const injected = await inject();
+    expect(injected.startsWith(HEADER)).toBe(true);
+    expect(injected.endsWith(RULES)).toBe(true);
+  });
+
+  test("memory assembly throwing with no cache still emits the block, exit zero", async () => {
+    // A directory where active.md belongs makes the assembly throw, and
+    // this vault has never injected successfully, so the fail-open loader
+    // has nothing to degrade to. The constitution must survive that.
+    mkdirSync(join(vault, "Brain", "active.md"));
+    writeStandingRules(RULES);
+    const r = await runHook({ hook_event_name: "SessionStart" }, { VAULT_DIR: vault });
+    expect(r.exit).toBe(0);
+    const injected: string = JSON.parse(r.stdout).hookSpecificOutput.additionalContext;
+    expect(injected.startsWith(HEADER)).toBe(true);
+    expect(injected.endsWith(RULES)).toBe(true);
+    expect(injected).not.toContain("pref-foo");
+  });
+
+  test("neither standing rules nor memory keeps the hook silent", async () => {
+    const r = await runHook({ hook_event_name: "SessionStart" }, { VAULT_DIR: vault });
+    expect(r.exit).toBe(0);
+    expect(r.stdout).toBe("");
+  });
+
+  test("the block is exempt from the injection budget at its minimum", async () => {
+    // Budget pinned at its floor and a rules file far larger than it: the
+    // operator's block is emitted whole and only the memory body carries
+    // a truncation notice.
+    writeFileSync(
+      join(vault, "Brain", "_brain.yaml"),
+      "schema_version: 1\nactive:\n  inject_budget_chars: 500\n  standing_rules_max_chars: 100000\n",
+      "utf8",
+    );
+    const bigRules = Array.from({ length: 200 }, (_, i) => `Standing rule number ${i}.`).join("\n");
+    writeStandingRules(bigRules);
+    const rules = Array.from(
+      { length: 60 },
+      (_, i) => `- \`pref-rule-${i}\` — Rule ${i} body`,
+    ).join("\n");
+    writeActive(
+      `---\nkind: brain-active\ngenerated_at: 2026-05-15T10:00:00Z\n---\n\n# Active Brain Preferences\n\n## Confirmed (60)\n\n${rules}\n`,
+    );
+
+    const injected = await inject();
+    // Whole, byte for byte, despite being far over the 500-char budget.
+    expect(injected).toContain(bigRules);
+    expect(injected).not.toContain(CAP_NOTICE);
+    // The memory body is the only thing that was cut.
+    expect(injected).toContain("Injection truncated to budget");
+    const memory = injected.slice(injected.indexOf("# Active Brain Preferences"));
+    expect(memory.length).toBeLessThanOrEqual(800);
+  });
+
+  test("an over-cap rules file is capped loudly and still leads the payload", async () => {
+    writeFileSync(
+      join(vault, "Brain", "_brain.yaml"),
+      "schema_version: 1\nactive:\n  standing_rules_max_chars: 200\n",
+      "utf8",
+    );
+    const path = writeStandingRules(
+      Array.from({ length: 100 }, (_, i) => `Standing rule number ${i}.`).join("\n"),
+    );
+    writeActive(ACTIVE_DOC);
+    const injected = await inject();
+    expect(injected.startsWith(HEADER)).toBe(true);
+    expect(injected).toContain(CAP_NOTICE);
+    expect(injected).toContain(path);
+    expect(injected).toContain("pref-foo");
+  });
+
+  test("standing rules precede the runtime notices", async () => {
+    writeActive(ACTIVE_DOC);
+    writeStandingRules(RULES);
+    const injected = await inject({ OPEN_SECOND_BRAIN_RUNTIME_NOTICES: "true" });
+    expect(injected.startsWith(HEADER)).toBe(true);
+    expect(injected).toContain("Runtime notices:");
+    expect(injected.indexOf(HEADER)).toBeLessThan(injected.indexOf("Runtime notices:"));
+    expect(injected.indexOf("Runtime notices:")).toBeLessThan(injected.indexOf("pref-foo"));
+  });
+
+  test.skipIf(typeof process.getuid === "function" && process.getuid() === 0)(
+    "an unreadable rules file is announced, never silently dropped",
+    async () => {
+      writeActive(ACTIVE_DOC);
+      const path = writeStandingRules(RULES);
+      chmodSync(path, 0o000);
+      try {
+        const injected = await inject();
+        expect(injected.startsWith(HEADER)).toBe(true);
+        expect(injected).toContain(path);
+        expect(injected).toContain("No standing rules are in force this session");
+        // Not fatal: the memory layer still reaches the session.
+        expect(injected).toContain("pref-foo");
+      } finally {
+        chmodSync(path, 0o600);
+      }
+    },
+  );
+});

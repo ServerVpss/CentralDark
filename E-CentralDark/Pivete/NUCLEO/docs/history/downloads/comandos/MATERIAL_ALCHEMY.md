@@ -1,0 +1,39 @@
+# Material Ingest + Alquimia Operacional
+
+```text
+MATÉRIA
+→ TRIGGER_FABRIC
+→ SESSION HARVESTER
+→ MEMORY LINKER
+→ KNOWLEDGE COMPILER / FORJA
+→ OWNER + SKILL + CONSUMER + TEST + GATE
+→ ARTIFACT PROPERTIES
+→ DERIVED INDEX / GRAPH
+→ HERMES FLASH
+→ AÇÃO MÍNIMA + PROVA + CONTRAPROVA
+```
+
+```text
+RAW_MATERIAL
+→ ASSAY
+→ CANDIDATE
+→ COUNTERPROOF
+→ GOLD
+→ OWNER_BINDING
+→ TEST + GATE
+→ CRYSTAL
+→ FLASH
+```
+
+`GOLD` = capacidade generalizável que sobreviveu à contraprova.
+`CRYSTAL` = GOLD + OWNER + SKILL + CONSUMER + TEST + GATE + PROVENANCE + ROUTE.
+`FLASH` = rota mínima reutilizável sem carregar o corpus inteiro.
+
+Saídas laterais:
+`DUPLICATE → DROP_DUPLICATE_KEEP_PROVENANCE`
+`CONFLICT → DISCRIMINATING_TEST`
+`UNKNOWN → QUARANTINE_PRESERVE_UNKNOWN`
+`FAIL → ROOT_CAUSE → MINIMAL_DELTA → RETEST`
+`STALE → INVALIDATE_AFFECTED_ROUTE_ONLY`
+
+`Alchemistic Cabinet` = alias cultural de compartimentação; não engine/owner/autoridade.

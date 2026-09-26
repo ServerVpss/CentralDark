@@ -1,0 +1,323 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\agent\__pycache__\message_sanitization.cpython-311.pyc
+
+dRdSd%
+d6e d7<
+Z!dWd=
+Z"dXd?
+Z#dYd@
+Z$dZdF
+Z%d[dH
+Message and tool-payload sanitization helpers.
+Pure functions extracted from ``run_agent.py`` so the AIAgent module can
+stay focused on the conversation loop.  These walk OpenAI-format message
+lists and structured payloads, repairing or stripping problematic
+characters that would otherwise crash ``json.dumps`` inside the OpenAI
+SDK or be rejected by upstream APIs.
+All helpers are stateless and side-effect-free except for in-place
+mutation of their input (where documented).  Backward-compatible
+re-exports from ``run_agent`` remain in place so existing imports
+``from run_agent import _sanitize_surrogates`` keep working.
+annotationsN)
+[\ud800-\udfff]
+returnc
+Replace lone surrogate code points with U+FFFD (replacement character).
+    Surrogates are invalid in UTF-8 and will crash ``json.dumps()`` inside the
+    OpenAI SDK.  This is a fast no-op when the text contains no surrogates.
+_SURROGATE_RE
+search
+NC:\Users\danda\AppData\Local\hermes\hermes-agent\agent\message_sanitization.py
+_sanitize_surrogatesr
+payloadr
+Replace surrogate code points in nested dict/list payloads in-place.
+    Mirror of ``_sanitize_structure_non_ascii`` but for surrogate recovery.
+    Used to scrub nested structured fields (e.g. ``reasoning_details`` 
+    array of dicts with ``summary``/``text`` strings) that flat per-field
+    checks don't reach.  Returns True if any surrogates were replaced.
+    Fc
+isinstance
+itemsr
+enumerate)
+founds
+z-_sanitize_structure_surrogates.<locals>._walk5
+_sanitize_structure_surrogatesr"
+messagesr
+Sanitize surrogate characters from all string content in a messages list.
+    Walks message dicts in-place. Returns True if any surrogates were found
+    and replaced, False otherwise. Covers content/text, name, tool call
+    metadata/arguments, AND any additional string or nested structured fields
+    (``reasoning``, ``reasoning_content``, ``reasoning_details``, etc.) so
+    retries don't fail on a non-content field.  Byte-level reasoning models
+    (xiaomi/mimo, kimi, glm) can emit lone surrogates in reasoning output
+    that flow through to ``api_messages["reasoning_content"]`` on the next
+    turn and crash json.dumps inside the OpenAI SDK.
+contentr
+tool_calls
+function
+arguments>
+roler%
+fn_name
+fn_argsr
+               r
+_sanitize_messages_surrogatesr4
+Escape unescaped control chars inside JSON string values.
+    Walks the raw JSON character-by-character, tracking whether we are
+    inside a double-quoted string. Inside strings, replaces literal
+    control characters (0x00-0x1F) that aren't already part of an escape
+    sequence with their ``\uXXXX`` equivalents. Pass-through for everything
+    else.
+    Ported from #12093 
+ complements the other repair passes in
+    ``_repair_tool_call_arguments`` when ``json.loads(strict=False)`` is
+    not enough (e.g. llama.cpp backends that emit literal apostrophes or
+    tabs alongside other malformations).
+    Fr
+append
+in_string
+      r
+%_escape_invalid_chars_in_json_stringsrG
+raw_args
+tool_namec
+Attempt to repair malformed tool_call argument JSON.
+    Models like GLM-5.1 via Ollama can produce truncated JSON, trailing
+    commas, Python ``None``, etc.  The API proxy rejects these with HTTP 400
+    "invalid tool call arguments".  This function applies common repairs;
+    if all fail it returns ``"{}"`` so the request succeeds (better than
+    crashing the session).  All repairs are logged at WARNING level.
+    r=
+z*Sanitized empty tool_call arguments for %sz
+Nonez0Sanitized Python-None tool_call arguments for %sF)
+strict)
+separatorsz>Repaired unescaped control chars in tool_call arguments for %sz
+,\s*([}\]])z
+Repaired malformed tool_call arguments for %s: %s 
+Repaired control-char-laced tool_call arguments for %s: %s 
+Unrepairable tool_call arguments for %s 
+ replaced with empty object (was: %s))
+logger
+warning
+JSONDecodeError
+TypeError
+ValueError
+endswithrG
+_FULL_ARGS_LOG_BOUND)
+raw_stripped
+parsed
+reserialised
+open_curly
+open_bracket
+escapeds
+          r
+_repair_tool_call_argumentsrn
+final_responsec
+Append a synthetic assistant turn when an interrupted tail is a tool result.
+    A turn cut short by ``/stop`` can leave the transcript ending on a raw
+    ``tool`` message (a tool finished, or its execution was cancelled, but the
+    model never streamed a closing assistant turn). Persisting that tail means
+    the next user message lands as ``
+ tool 
+ user`` 
+ a role-alternation
+    violation that strict providers (Gemini, Claude) react to by hallucinating
+    a continuation of the user's message and ignoring prior context, which
+    reads to the user as "lost context" (#48879).
+    ``finalize_turn`` closes this on the happy interrupt path, but the
+    retry/backoff/error interrupt aborts in ``conversation_loop`` ``return``
+    early and never reach it 
+ this shared helper closes the sequence on all of
+    them. ``final_response`` is usually empty on an interrupt, so an explicit
+    placeholder is used rather than an empty-content assistant turn.
+    Mutates ``messages`` in place. Returns True if a closing turn was appended.
+    FrV
+toolr=
+append_message
+assistantz
+Operation interrupted.)
+agent.message_metadatarr
+     r
+close_interrupted_tool_sequencerv
+Remove non-ASCII characters, replacing with closest ASCII equivalent or removing.
+    Used as a last resort when the system encoding is ASCII and can't handle
+    any non-ASCII characters (e.g. LANG=C on Chromebooks).
+ignore
+errors)
+encode
+decoder
+_strip_non_asciir~
+Strip non-ASCII characters from all string content in a messages list.
+    This is a last-resort recovery for systems with ASCII-only encoding
+    (LANG=C, Chromebooks, minimal containers).  Returns True if any
+    non-ASCII content was found and sanitized.
+    Fr%
+sanitizedr.
+              r
+_sanitize_messages_non_asciir
+toolsc
+z7Strip non-ASCII characters from tool payloads in-place.)
+_sanitize_structure_non_ascii)
+_sanitize_tools_non_asciir
+Remove image_url content parts from all messages in-place.
+    Called when a server signals it does not support images (e.g.
+    "Only 'text' content type is supported.").  Mutates messages so the
+    next API call sends text only.
+    Preserves message alternation invariants:
+      * ``tool``-role messages whose content was entirely images are replaced
+        with a plaintext placeholder, NOT deleted 
+ deleting them would leave
+        the paired ``tool_call_id`` on the prior assistant message unmatched,
+        which providers reject with HTTP 400.
+      * Non-tool messages whose content becomes empty are dropped.  In
+        practice this only hits synthetic image-only user messages appended
+        for attachment delivery; real user turns always include text.
+    Returns True if any image parts were removed.
+    Fr%
+image_url
+input_imageTr+
+[image content removed 
+ server does not support images])
+reversed)
+to_deleterD
+new_partsr.
+        r
+_strip_images_from_messagesr
+zCStrip non-ASCII characters from nested dict/list payloads in-place.Fc
+z,_sanitize_structure_non_ascii.<locals>._walk
+deterministic_call_id
+coalesce_tool_call_id
+uniquify_tool_call_ids
+reasoning_echo_family
+matches_reasoning_echo_family
+needs_reasoning_echo
+apply_reasoning_content_policy
+reapply_reasoning_echor2
+Generate a deterministic call_id from tool call content.
+    Used as a fallback when the API doesn't provide a call_id.
+    Deterministic IDs prevent cache invalidation 
+ random UUIDs would
+    make every API call's prefix unique, breaking OpenAI's prompt cache.
+    rO
+replacerz
+call_)
+hashlib
+sha256r|
+hexdigest)
+digests
+     r
+Extract the effective call ID from a tool_call entry (dict or object).
+    Single owner for the ``call_id or id`` coalescing rule: Codex Responses
+    tool calls carry ``call_id`` (authoritative pairing key), Chat
+    Completions ones carry ``id`` only. Returns ``""`` when neither is set.
+call_idr=
+getattr)
+Ensure every tool call in a single assistant turn has a distinct id.
+    Some models/providers reuse one call id across different calls in a
+    single batch (observed with native Kimi Responses replays, Ollama-
+    compatible endpoints, and degraded models at long context; same bug
+    class as openclaw/openclaw#110518 / #110956). Duplicate ids are lossy
+    downstream: the pre-API sanitizer keeps only the first call/result
+    pair per id (#58327), so the later call's result silently vanishes
+    from every replayed payload, and strict providers (Anthropic
+    tool_use, DeepSeek) reject duplicate ids outright.
+    The first occurrence keeps its id; later collisions get a
+    deterministic ``<id>_d<n>`` suffix 
+ never a random UUID, which would
+    break prompt-cache prefix stability across replays. Mutates the
+    entries in place (SDK models / SimpleNamespace / dicts) and returns
+    the same list. Blank/missing ids are left for the deterministic
+    fallback in ``build_assistant_message``.
+split)
+new_ids
+_renamedz(uniquify_tool_call_ids.<locals>._renamedT
+z,Could not uniquify duplicate tool call id %sr)
+zyModel reused tool call id %s within one turn; renamed the duplicate to %s (tool=%s) to keep call/result pairing lossless.)
+ExceptionrY
+seenr/
+_fn_namer
+         @r
+kimi-codingz
+kimi-coding-cnr 
+api.kimi.comz
+moonshot.aiz
+moonshot.cn
+deepseek)
+api.deepseek.com
+xiaomi)
+api.xiaomimimo.comz
+xiaomimimo.com
+_REASONING_ECHO_RULES
+familyc
+KeyError)
+_family_ruler
+provider
+base_urlc
+True when (provider, model, base_url) matches one echo-back family.
+    Families can overlap (e.g. a deepseek-named model pointed at a kimi
+    host); this membership test is independent per family so per-family
+    predicates keep their original semantics.
+base_url_host_matchesr=
+model_lowers
+<genexpr>z0matches_reasoning_echo_family.<locals>.<genexpr>
+z0matches_reasoning_echo_family.<locals>.<genexpr>
+utilsr
+raw_providers
+lowered_providers
+model_subs
+provider_lowerr
+   `      @@r
+'str | None'c
+Classify the provider direction for the reasoning_content echo policy.
+    Returns ``"kimi"``, ``"deepseek"``, or ``"mimo"`` (first match in table
+    order) when the target endpoint enforces reasoning_content echo-back on
+    assistant turns, else ``None`` (strict/indifferent side 
+ the field must
+    be stripped).
+z<True when the endpoint requires reasoning_content echo-back.N)
+source_msgr
+api_msg
+needs_thinking_padrL
+Copy provider-facing reasoning fields onto an API replay message.
+    ``needs_thinking_pad`` is the require-side flag (see
+    ``needs_reasoning_echo`` / the agent's cached
+    ``_needs_thinking_reasoning_pad``). Mutates ``api_msg`` in place.
+    r+
+reasoning_contentr=
+reasoningr'
+existing
+normalized_reasonings
+     r
+api_messagesc
+Re-pad (or strip) assistant turns' reasoning_content for the active provider.
+    ``api_messages`` is built once, before the retry loop, while the *primary*
+    provider is active.  A mid-conversation fallback can then switch providers,
+    so the reasoning fields baked into ``api_messages`` are shaped for the
+    *prior* provider and must be reconciled against the *current* one:
+    * Switching TO a require-side provider (DeepSeek / Kimi / MiMo thinking
+      mode): assistant turns built when the prior provider did NOT need the
+      echo-back go out without ``reasoning_content`` and the new provider
+      rejects them with HTTP 400 ("The reasoning_content in the thinking mode
+      must be passed back").  Re-apply the pad.
+    * Switching TO a strict provider that rejects the field (Mistral,
+      Cerebras, Groq, SambaNova, 
+): assistant turns built under a reasoning
+      primary carry a ``reasoning_content`` pad (often a single space ``" "``),
+      and the strict provider rejects it with HTTP 400/422 ("Extra inputs are
+      not permitted").  Strip the field.  This is the exact cross-provider
+      fallback bug from #45655 
+ a DeepSeek primary pads history with ``" "``,
+      the request falls back to Mistral, and Mistral 422s on the stale pad.
+    Calling this immediately before building the request kwargs reconciles the
+    fields against the *current* provider.  It is idempotent and safe to call
+    every iteration; it covers every fallback path.
+    Returns the number of assistant turns whose reasoning_content was added or
+    removed.
+changedr
+__doc__
+__future__r
+loggingra
+typingr
+getLogger
+__name__rY
+compiler
+__all__r
+frozensetr
+__annotations__r
+<module>r

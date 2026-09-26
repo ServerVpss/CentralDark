@@ -1,0 +1,15 @@
+﻿├èXITO: o processo com PID 13208 (processo filho de PID 59700) foi finalizado.
+├èXITO: o processo com PID 57216 (processo filho de PID 56048) foi finalizado.
+├èXITO: o processo com PID 55760 (processo filho de PID 50616) foi finalizado.
+├èXITO: o processo com PID 49536 (processo filho de PID 56068) foi finalizado.
+├èXITO: o processo com PID 56012 (processo filho de PID 57856) foi finalizado.
+├èXITO: o processo com PID 59700 (processo filho de PID 60196) foi finalizado.
+├èXITO: o processo com PID 56068 (processo filho de PID 56084) foi finalizado.
+├èXITO: o processo com PID 56048 (processo filho de PID 56084) foi finalizado.
+├èXITO: o processo com PID 50616 (processo filho de PID 56084) foi finalizado.
+├èXITO: o processo com PID 57856 (processo filho de PID 56084) foi finalizado.
+├èXITO: o processo com PID 55860 (processo filho de PID 56084) foi finalizado.
+├èXITO: o processo com PID 59824 (processo filho de PID 56084) foi finalizado.
+├èXITO: o processo com PID 60196 (processo filho de PID 56084) foi finalizado.
+├èXITO: o processo com PID 56084 (processo filho de PID 56684) foi finalizado.
+├èXITO: o processo com PID 56684 (processo filho de PID 57324) foi finalizado.

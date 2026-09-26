@@ -1,0 +1,282 @@
+{
+  "schema": "centraldark.package.manifest.v1",
+  "mission": "CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE",
+  "global_runtime_100_percent": false,
+  "files": [
+    {
+      "path": "ADVERSARIAL_HANDOFF.yml",
+      "bytes": 2475,
+      "sha256": "0887f0bc6070744fc7f1f0dbf750402b33cd81a48464956a37f042e5c67bf8a0"
+    },
+    {
+      "path": "AIOX-CAPABILITY-ADAPTER.yml",
+      "bytes": 13747,
+      "sha256": "733f91e3acf5ab34b0b2df319ed3949b1faebe8a8e1c5b10f562fafb889250ac"
+    },
+    {
+      "path": "ARCHITECTURE.md",
+      "bytes": 15748,
+      "sha256": "2e6d70f0add368f8050c75b751bb33b1d54f690741be290007b415b53a092c09"
+    },
+    {
+      "path": "ARCHITECTURE.mmd",
+      "bytes": 4447,
+      "sha256": "2765358e53f520ff37e90ae6096bf7e2f010b169b133c79f8ead35f7f15d511e"
+    },
+    {
+      "path": "ARCHITECTURE.png",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "ARTIFACT-PROPERTIES.yml",
+      "bytes": 3848,
+      "sha256": "cade477727971418dca85ebad4990e6fc405dd534ccd7fda2752002508b7e0ec"
+    },
+    {
+      "path": "AUREOLA-BAHIA-BIBLICA.yml",
+      "bytes": 6633,
+      "sha256": "6db99761146b05e264d7d50da4744bc917da21a9b5003584473e2df0a6735f9d"
+    },
+    {
+      "path": "AUREOLA-ROUND1-RECEIPT.md",
+      "bytes": 1301,
+      "sha256": "723b3949bb39c786462cbc937376b469cdd75d294d48a052d0dcc4153a5fe98c"
+    },
+    {
+      "path": "build_package.py",
+      "bytes": 3173,
+      "sha256": "63a2a6168e4655bed07fa5549c96bdca1566cad894459383b744f98121b782fa"
+    },
+    {
+      "path": "CAPABILITY-READINESS-POLICY.yml",
+      "bytes": 13458,
+      "sha256": "a297e787bb1c866cc310dd26f44b9782894020063fdd5b64a7c812c55f96e579"
+    },
+    {
+      "path": "CHEFE-CASA-REALIDADE.md",
+      "bytes": 4618,
+      "sha256": "69fb9407f336ca835c289d6114b7c0ef0ea26fde857f926af4a7607d5fcde462"
+    },
+    {
+      "path": "CONTRACT.yml",
+      "bytes": 15514,
+      "sha256": "7775efc81d04f844ddfad4cfcc19e30d5edee52497a1fe85233baea7bb1dc1a1"
+    },
+    {
+      "path": "COUNTERPROOF.md",
+      "bytes": 3883,
+      "sha256": "25acbda1cd206bf8be01586d956b9ac5b2790ca68f813b2fd5afac5329611f28"
+    },
+    {
+      "path": "DELTA-CONTINUO.md",
+      "bytes": 10828,
+      "sha256": "c734570c11ba4b0ee8da41bc30c1604962b4daf73c59979f6877bf601d338376"
+    },
+    {
+      "path": "DEPLOY-READINESS.yml",
+      "bytes": 3618,
+      "sha256": "276e84c2e55ef23903bfed5214e62296484401e8e2e9ee11b4f8f0f122934f6f"
+    },
+    {
+      "path": "docs/ARQUITETURA/PADRAO-PARCEIRO-DELTA-JUDGE.md",
+      "bytes": 14146,
+      "sha256": "2554a6f68753c6f50317617f3760164ba504efb2383f9f806a25a42817f4accd"
+    },
+    {
+      "path": "ENGINE_BINDING.yml",
+      "bytes": 13843,
+      "sha256": "caab52da3db49d6636de49e24e56c697cb704a1483fb283751bebfbd17917786"
+    },
+    {
+      "path": "GARIMPO-CHEFE.md",
+      "bytes": 1202,
+      "sha256": "0cdbf762cec0231021604c58cf49498636dbb39f3bb541e2dec42d38a4c53288"
+    },
+    {
+      "path": "GROK-BUILD-ADAPTER.yml",
+      "bytes": 5969,
+      "sha256": "c3b6275819ae9452e984b07d95b4bafe96887c89fff637a37c5788b0d5be2e80"
+    },
+    {
+      "path": "HISTORY.md",
+      "bytes": 1208,
+      "sha256": "9ab37c20cd685a4acd3094de96a44bb451390978c443c03f8654edc3e66da1dd"
+    },
+    {
+      "path": "KNOWLEDGE-HUB.yml",
+      "bytes": 10081,
+      "sha256": "d655fb89489cc972e8dd120f6b04fa4ca6e256c7a9d6bf93f0bc8e29a4398bb5"
+    },
+    {
+      "path": "LIVE_STATE.md",
+      "bytes": 2591,
+      "sha256": "38605f3cfbf56c03a43a45a793fed0033d43566a7a01c4406c35f5fad3373b2a"
+    },
+    {
+      "path": "MASTER-CYCLE.yml",
+      "bytes": 15413,
+      "sha256": "4b5fd05ba9d18a2e89a929fe28ce7b6317bdf016ca43c5eac9b2f3daabcec5e9"
+    },
+    {
+      "path": "MATERIAL-INGEST.md",
+      "bytes": 13083,
+      "sha256": "7b5ef2a7ccff64cac3342f6729602db5d4f1733c7b1fac30939f525c526bd735"
+    },
+    {
+      "path": "MEGAZORD-CENTRALDARK.yml",
+      "bytes": 9855,
+      "sha256": "18f50d46024feb43dd46743600694930cf997fe3b99deedf535f82f81856d218"
+    },
+    {
+      "path": "NOTE-STITCHING-CONTRACT.yml",
+      "bytes": 3100,
+      "sha256": "9b2b9503bbc88d996e741a877f7eb459e126b82b1408a5c4c4c84f6d4c0f5752"
+    },
+    {
+      "path": "OLHO-BIONICO-ANTI-FLASH.md",
+      "bytes": 9176,
+      "sha256": "c19ddc7a407b26282e96440df516dd165302e1e9038ec1e3ea01ea7cfce828e1"
+    },
+    {
+      "path": "PEGATUDO-HISTORY.yml",
+      "bytes": 2839,
+      "sha256": "f6d8026e9051aa508eb86b90762ba4855b0da1238a3d1bffd23453e03b84464f"
+    },
+    {
+      "path": "PERSISTENT-AUTONOMOUS-ZORDS.yml",
+      "bytes": 7364,
+      "sha256": "72c8b611eef5fef17577a54047792bff8de1d48be6bf0fbb875e3b92f011d5f3"
+    },
+    {
+      "path": "PERSISTENT-SWEEP-CONTRACT.yml",
+      "bytes": 3082,
+      "sha256": "3618ad0ea61aa4be64dc8aec2c0ecf812d70fb4894a1c63a5abd9dcbe59c264f"
+    },
+    {
+      "path": "POST-GREEN-LOCK.yml",
+      "bytes": 3112,
+      "sha256": "f44434aa6f58a2071ce53240d4a60bf4c4a3362628a7c92967e03e8a0e3ae962"
+    },
+    {
+      "path": "PR-MOTHER-PULSE.yml",
+      "bytes": 1794,
+      "sha256": "2805d1589b7e4f11e42e14d780e7da74cfb6d8004be46d3cdd7b0275bf403bbb"
+    },
+    {
+      "path": "PROVEN-CLAIMS.lock.json",
+      "bytes": 161,
+      "sha256": "77ffb8fdaed2eba1853aeeee93e84ccc4086de50ba9dc9811478b46e9c3f95a2"
+    },
+    {
+      "path": "PROVEN-DETERMINISTIC-LOCK.yml",
+      "bytes": 3473,
+      "sha256": "a82c6ebaf507afe85187ce208028fc1ae2a70dd5edc18af7e563a07ee98dc684"
+    },
+    {
+      "path": "RASTRO.md",
+      "bytes": 1347,
+      "sha256": "6bf9852a908b24dbd2190e9cf1de07f45ea73b227669d58a0710cf97c15c7526"
+    },
+    {
+      "path": "README.md",
+      "bytes": 7511,
+      "sha256": "e05126c1cb3818cfa3c39a5376ff3794256354bdb2ae715069c6626380c2d2a1"
+    },
+    {
+      "path": "RECEIPT-2026-09-05-RECONCILIACAO-MAIN.md",
+      "bytes": 2519,
+      "sha256": "6ab60e93740706e0fee2ec129a1dde65bb7103fad259f60c6b05384f34506ba1"
+    },
+    {
+      "path": "RECEIPT-2026-09-05-SENTINELA-SISTEMA-INTEIRO.md",
+      "bytes": 4471,
+      "sha256": "79269929fecbe341f80152e9aa76b1538545d9412839ded0f31f228ce1102deb"
+    },
+    {
+      "path": "RECEIPT.md",
+      "bytes": 1709,
+      "sha256": "7300c17a2d79676674162c4c5452123267ee9540cf91921b97335e7f2e7bbc33"
+    },
+    {
+      "path": "RECONCILIACAO-PR-MAE-1189.md",
+      "bytes": 10588,
+      "sha256": "19c64adf6a4f9ceccc031700de68799abf7df776a7c9bcb501a228ad28b68eec"
+    },
+    {
+      "path": "RUNTIME-PLUG-CONTRACT.yml",
+      "bytes": 11197,
+      "sha256": "5dbeee35042b3f96af3c0016ff14361b29085ee67e38ea5d58d2bfb0225fb239"
+    },
+    {
+      "path": "RUNTIME-PLUG-RECONCILIATION.yml",
+      "bytes": 9552,
+      "sha256": "03ba3ec6855d5041db8cb46776e03d0bd682f229533f485a1f179bf387f7951e"
+    },
+    {
+      "path": "SCREENPIPE-BINDING.yml",
+      "bytes": 10928,
+      "sha256": "8c416889fc16f762e0f0462a2f359ff1f13b0fea68433936060e46ffc6082923"
+    },
+    {
+      "path": "scripts/trigger-fabric/centraldark_master_cycle.py",
+      "bytes": 34461,
+      "sha256": "d23d7608608152585af982e18ed5aeb7b5f1b4f2d5fedf8873c6828cc311fc6c"
+    },
+    {
+      "path": "SECOND-BRAIN.yml",
+      "bytes": 5686,
+      "sha256": "8d8c9a0e9e416160bfb0c37f3de7ad5cd407b09de7a3a989e07597d514360ea0"
+    },
+    {
+      "path": "SEMANTIC-GREEN-GATE.yml",
+      "bytes": 4542,
+      "sha256": "5fa2c8c8077b3258e052e8e677c912d044b87946071288ca82efd0c25a93cda7"
+    },
+    {
+      "path": "SIGNAL-TERRITORY-CAPABILITY-CRYSTAL.md",
+      "bytes": 3652,
+      "sha256": "0e3ba361189e4998c9aaab233329f43e4d82c7a5fa1bcb38fd2f63ec4f69d702"
+    },
+    {
+      "path": "SOL-CONTRAPROVA-PAPAGAIO-CASCO-VIVO.md",
+      "bytes": 3506,
+      "sha256": "c824cc1a39b9f34281089041dcf2a26e4aa5b11ff071bc975ce63b58ecd53e28"
+    },
+    {
+      "path": "SOURCES.json",
+      "bytes": 3985,
+      "sha256": "3a2519a44d5124178e9bb7749781f8f77014d628c17240242c9cea238b0e3efb"
+    },
+    {
+      "path": "SPIRAL-TRAVERSAL.yml",
+      "bytes": 6081,
+      "sha256": "669ea04ac075d390d05c6a77597b8bb16ec19a7b5e5d5fc8c6dd39cce15a1658"
+    },
+    {
+      "path": "SYSTEM-SENTINEL.yml",
+      "bytes": 8734,
+      "sha256": "2b38fab908d070abc2d5498732dbd8385fe8aa5e59306fbb3c821e947cc91f70"
+    },
+    {
+      "path": "TRIGGERS.yml",
+      "bytes": 16714,
+      "sha256": "dd9ed6a62497fed7185486f2c1e2854259d24dd9a0c55e4c18ae1f7da154f377"
+    },
+    {
+      "path": "UNIVERSAL-ENGINE-METHOD.yml",
+      "bytes": 7883,
+      "sha256": "e1aa77cd0067fa0d5912714d285f1a333661f7075073bb1b161b8ff3fea25f61"
+    },
+    {
+      "path": "verify_package.py",
+      "bytes": 5893,
+      "sha256": "13820a09c97e6347f060138b73faee8cf82fe980fc83b7b8fda9801edf369927"
+    },
+    {
+      "path": "ZORD_WORKFLOW_DEDUPE.yml",
+      "bytes": 231,
+      "sha256": "d71df41c9fa83c4de53f4884f05eee695caf47534870f85a4697b3196006e81e"
+    }
+  ]
+}

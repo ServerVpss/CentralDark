@@ -1,0 +1,52 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\Service Worker\ScriptCache\7b4fd8111178d5b1_0
+
+HTTP/1.1 200
+content-type:text/javascript
+last-modified:Mon, 17 Aug 2026 08:34:06 GMT
+accept-ranges:bytes
+server-timing:cfExtPri
+date:Mon, 17 Aug 2026 21:41:58 GMT
+server:cloudflare
+x-turbo-charged-by:LiteSpeed
+cache-control:max-age=14400
+cf-cache-status:MISS
+report-to:{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=drynBqbypmA2qUOAW6LkDf9vWEDCX%2BWhgheXHmIZGBknsuNOanLrZxVdq3Z4HCCh414%2F2Rm%2FUngd518hLt%2ByxrzeoKWsgseguOGlsHCTI%2F50D1eO9rACHQG06aAA"}]}
+nel:{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+priority:u=4,i
+cf-ray:a2cbd88edc8ea513-GRU
+alt-svc:h3=":443"; ma=86400
+content-length:0
+Let's Encrypt1
+260626173659Z
+260924173658Z0
+wo-mic.net0Y0
+http://ye1.i.lencr.org/0#
+*.wo-mic.net
+wo-mic.net0
+http://ye1.c.lencr.org/4.crl0
+Root YE0
+250903000000Z
+280902235959Z031
+Let's Encrypt1
+YE10v0
+http://ye.i.lencr.org/0
+http://ye.c.lencr.org/0
+)woBu6}
+US1)0'
+ Internet Security Research Group1
+ISRG Root X20
+260513000000Z
+320902235959Z0.1
+Root YE0v0
+http://x2.i.lencr.org/0
+http://x2.c.lencr.org/0
+US1)0'
+ Internet Security Research Group1
+ISRG Root X20
+200904000000Z
+400917160000Z0O1
+US1)0'
+ Internet Security Research Group1
+ISRG Root X20v0
+0{yNFP
+104.21.34.173

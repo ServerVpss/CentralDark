@@ -1,0 +1,20 @@
+# ============================================================
+# CentralDark — ÁREAS PROTEGIDAS (lista legível por máquina)
+# Fonte doutrinária: CLAUDE.md + .github/CODEOWNERS
+# Alterar qualquer caminho daqui exige "PERMITO PIVETE <escopo>".
+# ============================================================
+CLAUDE.md
+AGENTS.md
+docs/GOVERNANCA/**
+docs/CONSCIENCIA/**
+.github/**
+.claude/**
+.agents/**
+infra/caddy/**
+scripts/vps/**
+apps/bot-telegram/**
+apps/modulos/graph-panel/**
+apps/modulos/status/**
+apps/modulos/HERMES-CORE/**
+apps/modulos/obsidian-plugin-grafo-vivo/**
+secrets/**

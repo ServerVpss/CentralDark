@@ -1,0 +1,24 @@
+﻿
+
+ProcessId       : 16916
+ParentProcessId : 34368
+Name            : hermes.exe
+ExecutablePath  : C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\hermes.exe
+CommandLine     : "C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\hermes.exe"
+
+ProcessId       : 63676
+ParentProcessId : 16916
+Name            : python.exe
+ExecutablePath  : C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\python.exe
+CommandLine     : "C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\python.exe" 
+                  "C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\hermes.exe"
+
+ProcessId       : 63760
+ParentProcessId : 63676
+Name            : python.exe
+ExecutablePath  : C:\Users\danda\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\python.exe
+CommandLine     : "C:\Users\danda\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\python.exe"  
+                  "C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\hermes.exe"
+
+
+

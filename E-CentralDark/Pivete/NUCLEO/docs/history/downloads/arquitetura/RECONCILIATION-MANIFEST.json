@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "generated_at": "2026-08-24T06:37:34.978517+00:00",
+  "rule": "IMAGE -> MARKDOWN -> MERMAID -> ZIP",
+  "visual_claim_rule": "VISUAL_CLAIM != RUNTIME_PROOF",
+  "families": [
+    {
+      "name": "CENTRALDARK_INSTINTO_SUPERIOR_EMERGENTE",
+      "title": "CENTRALDARK — Instinto Superior Emergente",
+      "source_file": "a_highly_detailed_infographic_dashboard_poster_u.png",
+      "source_sha256": "f59d00d1a0e9192157e09b241daee3c90ace407b0af4bb446da7e5612c31f654",
+      "canonical_png_sha256": "f59d00d1a0e9192157e09b241daee3c90ace407b0af4bb446da7e5612c31f654",
+      "package": "CENTRALDARK_INSTINTO_SUPERIOR_EMERGENTE_PACK.zip"
+    },
+    {
+      "name": "CENTRALDARK_RECONCILIACAO_CRESCIMENTO_TOTAL",
+      "title": "CENTRALDARK — Reconciliação e Crescimento Total",
+      "source_file": "a_dark_high_detail_infographic_dashboard_style_po.png",
+      "source_sha256": "657ef1529b706eee467bb93b246cd551db9fad32d1d0bbc413862dc950ae1b8e",
+      "canonical_png_sha256": "657ef1529b706eee467bb93b246cd551db9fad32d1d0bbc413862dc950ae1b8e",
+      "package": "CENTRALDARK_RECONCILIACAO_CRESCIMENTO_TOTAL_PACK.zip"
+    },
+    {
+      "name": "GARIMPO_COGNITIVO_CENTRALDARK",
+      "title": "Garimpo Cognitivo CentralDark",
+      "source_file": "a_detailed_infographic_concept_art_scene_cinema.png",
+      "source_sha256": "c4f1a739428099dbcb3d9e5dfefc23d1863372c24a2533cc5715013e013338f1",
+      "canonical_png_sha256": "c4f1a739428099dbcb3d9e5dfefc23d1863372c24a2533cc5715013e013338f1",
+      "package": "GARIMPO_COGNITIVO_CENTRALDARK_PACK.zip"
+    },
+    {
+      "name": "CENTRALDARK_MAPA_CANONICO_DA_CASA",
+      "title": "CENTRALDARK — Mapa Canônico da Casa",
+      "source_file": "mapa_canônico_da_casa_centraldark.png",
+      "source_sha256": "ff8015bffc7cce820f42f7229615bea5da39930e708fd7e4ba21afb17e93d522",
+      "canonical_png_sha256": "ff8015bffc7cce820f42f7229615bea5da39930e708fd7e4ba21afb17e93d522",
+      "package": "CENTRALDARK_MAPA_CANONICO_DA_CASA_PACK.zip"
+    },
+    {
+      "name": "CENTRALDARK_BAHIA_CORE",
+      "title": "CENTRALDARK — Bahia Core",
+      "source_file": "d469b5c8-85db-40a8-992d-d11753ea2716.png",
+      "source_sha256": "250ab377d4421e5c7e49d48f7daf7fefacc911e6a338a316a910515bb06fb2fc",
+      "canonical_png_sha256": "250ab377d4421e5c7e49d48f7daf7fefacc911e6a338a316a910515bb06fb2fc",
+      "package": "CENTRALDARK_BAHIA_CORE_PACK.zip"
+    },
+    {
+      "name": "CARTAO_OPERACIONAL_CENTRALDARK_5_LENTES",
+      "title": "Cartão Operacional CentralDark — 5 Lentes",
+      "source_file": "Cristalização oficial e geração do cartão operacional da CentralDark incorporando a lente definitiva de cinco etapas no fluxo do Hermes.jpg",
+      "source_sha256": "276ff6aa5a704ad2f83ec77f6dd21891f65e6653acd0d140d08ca87fd5b8b910",
+      "canonical_png_sha256": "c8d8fb8b790dd071ea7fb0cbd72b1df17830db6f44bd1886abf782de2b18fc63",
+      "package": "CARTAO_OPERACIONAL_CENTRALDARK_5_LENTES_PACK.zip"
+    },
+    {
+      "name": "CENTRALDARK_RECONCILIACAO_TOTAL_BUILD_LOCAL_COMPLETO",
+      "title": "CENTRALDARK — Reconciliação Total e Build Local Completo",
+      "source_file": "a_detailed_infographic_poster_style_image_dark_cy.png",
+      "source_sha256": "66bf3beabca1d6fa8c85fa5dfa9a4d8153ebd3a23b5bd41eca16bab891c384e7",
+      "canonical_png_sha256": "66bf3beabca1d6fa8c85fa5dfa9a4d8153ebd3a23b5bd41eca16bab891c384e7",
+      "package": "CENTRALDARK_RECONCILIACAO_TOTAL_BUILD_LOCAL_COMPLETO_PACK.zip"
+    },
+    {
+      "name": "GARIMPO_COGNITIVO_CENTRALDARK_CONTEXTO_VIVO",
+      "title": "Garimpo Cognitivo CentralDark — Contexto Vivo",
+      "source_file": "a_wide_high_resolution_polished_infographic_de.png",
+      "source_sha256": "02e17bc1da19722ff5fe20a21f64d6119e498f682d980f44f14fe76757290e43",
+      "canonical_png_sha256": "02e17bc1da19722ff5fe20a21f64d6119e498f682d980f44f14fe76757290e43",
+      "package": "GARIMPO_COGNITIVO_CENTRALDARK_CONTEXTO_VIVO_PACK.zip"
+    }
+  ],
+  "historical_sources": [
+    {
+      "family": "CENTRALDARK_MAPA_CANONICO_DA_CASA",
+      "source_file": "a_highly_detailed_infographic_dashboard_map_imag.png",
+      "sha256": "fa1e3f19f2d388f26290315f1e70263cf95a0d9083c149a6f2949b8ce188e407",
+      "preserved_as": "CENTRALDARK_MAPA_CANONICO_DA_CASA__SOURCE_fa1e3f19f2d3.png",
+      "note": "Variação histórica do mesmo mapa lógico; preservada como proveniência, não como arquitetura concorrente."
+    }
+  ]
+}

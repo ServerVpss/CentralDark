@@ -1,0 +1,34 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\Service Worker\CacheStorage\579544fd7d0441717f082c9eb123588966aa57ac\e4e79384-0e73-44ff-9d95-dc42ae10afe6\a9d4becd3632d6ee_0
+
+https://www.gstatic.com/images/icons/material/system_gm/2x/arrow_drop_down_black_20dp.png
+FIDATx
+accept-ranges
+bytes"6
+access-control-allow-origin
+https://mail.google.com"
+15271"9
+alt-svc
+.h3=":443"; ma=2592000,h3-29=":443"; ma=2592000")
+cache-control
+public, max-age=31536000"
+content-length
+content-type
+image/png"U
+&cross-origin-opener-policy-report-only
++same-origin; report-to="static-on-bigtable"",
+cross-origin-resource-policy
+cross-origin"%
+Tue, 18 Aug 2026 03:03:50 GMT"(
+expires
+Wed, 18 Aug 2027 03:03:50 GMT".
+last-modified
+Tue, 22 Oct 2019 18:15:00 GMT"
+report-to
+{"group":"static-on-bigtable","max_age":2592000,"endpoints":[{"url":"https://csp.withgoogle.com/csp/report-to/static-on-bigtable"}]}"
+server
+Origin"!
+x-content-type-options
+nosniff"
+x-xss-protection
+BYhttps://www.gstatic.com/images/icons/material/system_gm/2x/arrow_drop_down_black_20dp.pngP(Z
+image/pngr

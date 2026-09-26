@@ -1,0 +1,159 @@
+{
+  "1_NO_CHANGE": {
+    "pass": true,
+    "reason": "NO_CHANGE"
+  },
+  "2_SAFE_ADAPTER_DRIFT": {
+    "pass": true,
+    "reason": "SAFE_ADAPTER_DRIFT"
+  },
+  "3_UPSTREAM_DRIFT": {
+    "pass": true,
+    "reason": "UPSTREAM_DRIFT"
+  },
+  "4_BROKEN_CONTRACT": {
+    "pass": true,
+    "reason": "BROKEN_CONTRACT"
+  },
+  "5_AMBIGUOUS_DRIFT": {
+    "pass": true,
+    "reason": "AMBIGUOUS_DRIFT"
+  },
+  "6_AMBIGUOUS_DRIFT_ADAPTER_UPSTREAM": {
+    "pass": true,
+    "reason": "AMBIGUOUS_DRIFT"
+  },
+  "7_IDEMPOTENCE": {
+    "pass": true,
+    "reason": "NO_CHANGE->NO_CHANGE"
+  },
+  "8_NO_KANBAN_WRITE_READONLY": {
+    "pass": true,
+    "reason": "schema hash uses sqlite mode=ro"
+  },
+  "9_PERMITO_SEGREDO_VALID": {
+    "pass": true,
+    "reason": "{'1_AUTHORITY_VALID': True, '2_SCOPE_VALID': True, '3_BASELINE_VALID': True, '4_CAUSE_REPRODUCED': True, '5_TRANSFORMATION_DETERMINISTIC': True, '6_MINIMAL_DIFF': True, '7_TESTS_VALID': True, '8_ROLLBACK_AVAILABLE': True, '9_RECEIPT_BOUND': True}"
+  },
+  "10_PERMITO_PIVETE_LEGACY_BLOCKED": {
+    "pass": true,
+    "reason": "{'1_AUTHORITY_VALID': False, '2_SCOPE_VALID': True, '3_BASELINE_VALID': True, '4_CAUSE_REPRODUCED': True, '5_TRANSFORMATION_DETERMINISTIC': True, '6_MINIMAL_DIFF': True, '7_TESTS_VALID': True, '8_ROLLBACK_AVAILABLE': True, '9_RECEIPT_BOUND': True}"
+  },
+  "11_AUTHORITY_MISSING_BLOCKED": {
+    "pass": true,
+    "reason": "{'1_AUTHORITY_VALID': False, '2_SCOPE_VALID': True, '3_BASELINE_VALID': True, '4_CAUSE_REPRODUCED': True, '5_TRANSFORMATION_DETERMINISTIC': True, '6_MINIMAL_DIFF': True, '7_TESTS_VALID': True, '8_ROLLBACK_AVAILABLE': True, '9_RECEIPT_BOUND': True}"
+  },
+  "12_AUTHORITY_CONFLICT_BLOCKED": {
+    "pass": true,
+    "reason": "authority conflict blocks gate"
+  },
+  "13_SCOPE_MISMATCH_BLOCKED": {
+    "pass": true,
+    "reason": "{'1_AUTHORITY_VALID': True, '2_SCOPE_VALID': False, '3_BASELINE_VALID': True, '4_CAUSE_REPRODUCED': True, '5_TRANSFORMATION_DETERMINISTIC': True, '6_MINIMAL_DIFF': True, '7_TESTS_VALID': True, '8_ROLLBACK_AVAILABLE': True, '9_RECEIPT_BOUND': True}"
+  },
+  "14_BASELINE_HASH_CHANGED": {
+    "pass": true,
+    "reason": "baseline present"
+  },
+  "15_CANARY_WRITE": {
+    "pass": false,
+    "reason": "rollback unblock failed",
+    "details": {
+      "success": false,
+      "authorization_marker": "PERMITO SEGREDO",
+      "authority": "SEGREDO/CHEFE",
+      "write_success": true,
+      "transition_success": true,
+      "rollback_success": false,
+      "cleanup_success": false,
+      "idempotent": false,
+      "channel_1": {
+        "action": "create",
+        "code": 0,
+        "stdout": "{\n  \"id\": \"t_50e3c33b\",\n  \"title\": \"[CANARY] AUTONOMIA-CANARY-CASA-KANBAN-AUTOCORRECAO-DETERMINISTICA-20260805-20260805230301\",\n  \"body\": \"Temporary canary card for local autocorrection proof. Created by mission CASA-KANBAN-AUTOCORRECAO-DETERMINISTICA-20260805. Safe to archive/purge.\",\n  \"assignee\": \"pivete\",\n  \"status\": \"ready\",\n  \"priority\": 0,\n  \"tenant\": null,\n  \"workspace_kind\": \"scratch\",\n  \"workspace_path\": null,\n  \"branch_name\": null,\n  \"project_id\": null,\n  \"created_by\": \"user\",\n  \"created_at\": 1785981783,\n  \"started_at\": null,\n  \"completed_at\": null,\n  \"result\": null,\n  \"skills\": [],\n  \"max_retries\": null,\n  \"model_override\": null,\n  \"provider_override\": null,\n  \"session_id\": null,\n  \"workflow_template_id\": null,\n  \"current_step_key\": null\n}\n",
+        "stderr": ""
+      },
+      "channel_2": {
+        "action": "show_after_create",
+        "code": 0,
+        "stdout": "Task t_50e3c33b: [CANARY] AUTONOMIA-CANARY-CASA-KANBAN-AUTOCORRECAO-DETERMINISTICA-20260805-20260805230301\n  status:    ready\n  assignee:  pivete\n  workspace: scratch\n  max-retries: 2 (default)\n  created:   2026-08-05 23:03 by user\n\nBody:\nTemporary canary card for local autocorrection proof. Created by mission CASA-KANBAN-AUTOCORRECAO-DETERMINISTICA-20260805. Safe to archive/purge.\n\nEvents (1):\n  [2026-08-05 23:03] created {'assignee': 'pivete', 'status': 'ready', 'parents': [], 'tenant': None, 'workspace_kind': 'scratch', 'workspace_path': None, 'branch_name': None, 'project_id': None, 'skills': None, 'goal_mode': None, 'model_override': None, 'provider_override': None}\n",
+        "stderr": ""
+      },
+      "reason": "rollback unblock failed",
+      "task_id": "t_50e3c33b",
+      "transition_block": {
+        "code": 0,
+        "stdout": "Blocked t_50e3c33b: canary test\n",
+        "stderr": ""
+      },
+      "rollback_unblock": {
+        "code": 0,
+        "stdout": "Unblocked t_50e3c33b\n",
+        "stderr": ""
+      }
+    }
+  },
+  "16_CANARY_ROLLBACK": {
+    "pass": false,
+    "reason": "rollback unblock failed",
+    "details": {
+      "success": false,
+      "authorization_marker": "PERMITO SEGREDO",
+      "authority": "SEGREDO/CHEFE",
+      "write_success": true,
+      "transition_success": true,
+      "rollback_success": false,
+      "cleanup_success": false,
+      "idempotent": false,
+      "channel_1": {
+        "action": "create",
+        "code": 0,
+        "stdout": "{\n  \"id\": \"t_1dd123b5\",\n  \"title\": \"[CANARY] AUTONOMIA-CANARY-CASA-KANBAN-AUTOCORRECAO-DETERMINISTICA-20260805-20260805230319\",\n  \"body\": \"Temporary canary card for local autocorrection proof. Created by mission CASA-KANBAN-AUTOCORRECAO-DETERMINISTICA-20260805. Safe to archive/purge.\",\n  \"assignee\": \"pivete\",\n  \"status\": \"ready\",\n  \"priority\": 0,\n  \"tenant\": null,\n  \"workspace_kind\": \"scratch\",\n  \"workspace_path\": null,\n  \"branch_name\": null,\n  \"project_id\": null,\n  \"created_by\": \"user\",\n  \"created_at\": 1785981800,\n  \"started_at\": null,\n  \"completed_at\": null,\n  \"result\": null,\n  \"skills\": [],\n  \"max_retries\": null,\n  \"model_override\": null,\n  \"provider_override\": null,\n  \"session_id\": null,\n  \"workflow_template_id\": null,\n  \"current_step_key\": null\n}\n",
+        "stderr": ""
+      },
+      "channel_2": {
+        "action": "show_after_create",
+        "code": 0,
+        "stdout": "Task t_1dd123b5: [CANARY] AUTONOMIA-CANARY-CASA-KANBAN-AUTOCORRECAO-DETERMINISTICA-20260805-20260805230319\n  status:    running\n  assignee:  pivete\n  workspace: scratch @ C:\\Users\\danda\\AppData\\Local\\hermes\\kanban\\workspaces\\t_1dd123b5\n  max-retries: 2 (default)\n  created:   2026-08-05 23:03 by user\n  started:   2026-08-05 23:03\n\nBody:\nTemporary canary card for local autocorrection proof. Created by mission CASA-KANBAN-AUTOCORRECAO-DETERMINISTICA-20260805. Safe to archive/purge.\n\nEvents (3):\n  [2026-08-05 23:03] created {'assignee': 'pivete', 'status': 'ready', 'parents': [], 'tenant': None, 'workspace_kind': 'scratch', 'workspace_path': None, 'branch_name': None, 'project_id': None, 'skills': None, 'goal_mode': None, 'model_override': None, 'provider_override': None}\n  [2026-08-05 23:03] [run 14] claimed {'lock': 'SEGREDO:21108', 'expires': 1785982701, 'run_id': 14}\n  [2026-08-05 23:03] [run 14] spawned {'pid': 48172}\n\nRuns (1):\n  #14  running      @pivete  active  2026-08-05 23:03\n",
+        "stderr": ""
+      },
+      "reason": "rollback unblock failed",
+      "task_id": "t_1dd123b5",
+      "transition_block": {
+        "code": 0,
+        "stdout": "Blocked t_1dd123b5: canary test\n",
+        "stderr": ""
+      },
+      "rollback_unblock": {
+        "code": 0,
+        "stdout": "Unblocked t_1dd123b5\n",
+        "stderr": ""
+      }
+    }
+  },
+  "17_IDEMPOTENT_AUTOCORRECTION": {
+    "pass": true,
+    "reason": "NO_CHANGE->NO_CHANGE"
+  },
+  "18_UPSTREAM_ZERO_WRITE": {
+    "pass": true,
+    "reason": "upstream_files_modified=0"
+  },
+  "19_RECEIPT_HEAD_BOUND": {
+    "pass": true,
+    "reason": "ok"
+  },
+  "20_UNKNOWN_INVESTIGATION": {
+    "pass": true,
+    "reason": "history=[('AMBIGUOUS_DRIFT', '2026-08-05T23:03:48.300099-03:00'), ('UNKNOWN', '2026-08-05T23:03:48.300113-03:00'), ('AUTOCORRECTION_READY', '2026-08-05T23:03:48.300122-03:00')]"
+  },
+  "_summary": {
+    "total_tests": 20,
+    "applicable": 20,
+    "pass": 18,
+    "fail": 2,
+    "skipped": 0,
+    "not_applicable": 0,
+    "pass_percent": 90.0
+  }
+}

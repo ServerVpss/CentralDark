@@ -1,0 +1,48 @@
+RECEIPT=NODE20_DEPRECATION_REMOVIDA
+TIMESTAMP=2026-08-01T17:21:10Z
+REPO=ServerVpss/CentralDark
+BRANCH=feature/delta-canonico-core-20260731
+HEAD_AT_FIX=43e04c933808657cc901718784712e7ddbcd2e1a
+PUSHED=false
+PR=false
+
+== VERSOES ALVO (confirmadas na fonte, runs.using: node24) ==
+  actions/checkout@v4      -> v5   (action.yml v5 = node24, verificado)
+  actions/setup-node@v4    -> v5   (release v5.0.0: Upgrade action to use node24)
+  actions/upload-artifact@v4 -> v6 (v5 ainda default node20; SO v6 e node24)
+  actions/github-script@v7 -> v8   (release v8.0.0: Node.js 24.x)
+  actions/setup-python@v5  -> v6   (action.yml v6 = node24, verificado)
+
+== ARQUIVOS ALTERADOS ==
+.github/workflows/arsenal-adapter-tests.yml
+.github/workflows/bots-labels-seed.yml
+.github/workflows/codex-validate.yml
+.github/workflows/cors-validator.yml
+.github/workflows/dependabot-auto-merge.yml
+.github/workflows/dispatcher-bots.yml
+.github/workflows/estado-retomada.yml
+.github/workflows/github-bot-controller.yml
+.github/workflows/linear-pendencias-sync.yml
+.github/workflows/lupa-conformance.yml
+.github/workflows/lupa-drift-guard.yml
+.github/workflows/nivel-7-tests.yml
+.github/workflows/notion-sync.yml
+.github/workflows/porta-de-entrada.yml
+.github/workflows/pr-auto-review.yml
+.github/workflows/sentinela-divergencias.yml
+.github/workflows/vps-exec-selfhosted.yml
+
+== CONTAGEM FINAL ==
+     25 actions/checkout@v5
+     12 actions/checkout@v6
+     10 actions/github-script@v8
+      8 actions/setup-node@v5
+      6 actions/upload-artifact@v6
+      5 actions/setup-node@v6
+      3 actions/setup-python@v6
+
+== RESIDUO NODE20 ==
+  NENHUM — repositorio limpo
+
+== VALIDACAO YAML ==
+  17/17 arquivos alterados validados com yaml.safe_load = OK

@@ -1,0 +1,30 @@
+schema_version: 1
+component: SOL_OPERATOR_PLANE
+required_widgets:
+  - runtime_status
+  - radar_toggle
+  - capture_toggle
+  - mode_selector
+  - session_status
+  - current_source
+  - queue_progress
+  - learned_today
+  - pending_review
+  - blockers
+  - memory_destination
+  - kill_switch
+required_actions:
+  - start_session
+  - pause
+  - resume
+  - stop_session
+  - enter_teach_mode
+  - enter_private_mode
+  - review
+  - open_nucleo
+  - open_obsidian
+  - stop_all
+truth_rules:
+  intelligence_percent: forbidden
+  learned_without_receipt: forbidden
+  hidden_capture_indicator: forbidden

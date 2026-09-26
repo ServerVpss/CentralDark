@@ -1,0 +1,7 @@
+{
+  "status_rc": 0,
+  "probe_rc": 0,
+  "fanout_1_rc": 0,
+  "fanout_2_without_probe_rc": 1,
+  "expected_multi_locked": true
+}

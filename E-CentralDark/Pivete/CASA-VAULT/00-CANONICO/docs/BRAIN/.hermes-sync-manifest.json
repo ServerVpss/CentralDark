@@ -1,0 +1,677 @@
+﻿{
+    "09-RASCUNHO/doc-Sem título 1.canvas":  {
+                                                "Size":  2,
+                                                "MTime":  "2026-09-05T11:29:36.3896737Z",
+                                                "Hash":  "44136FA355B3678A1146AD16F7E8649E94FB4FC21FE77E8310C060F61CAAFF8A"
+                                            },
+    "01-CONCEITOS/04-IDENTIDADE/IDENTIDADE_VOZ_SOL.md":  {
+                                                             "Size":  8423,
+                                                             "MTime":  "2026-09-05T11:29:33.7151762Z",
+                                                             "Hash":  "A98D6AA4B54BC1D26EE7AC43C6686F3FECEE4B16D7AE33DD8528DBC473D2CEB5"
+                                                         },
+    "01-CONCEITOS/05-MINERACAO/MINERACAO_API_FIRST_DELTA_ONLY.md":  {
+                                                                        "Size":  10221,
+                                                                        "MTime":  "2026-09-05T11:29:33.7168831Z",
+                                                                        "Hash":  "8ECA17B189AEA6CEE57399250021219631E607736809709DA6DFEAF2514EB8BE"
+                                                                    },
+    "03-DOCUMENTACAO/02-BIBLIOTECA/BIBLIOTECA.md":  {
+                                                        "Size":  231,
+                                                        "MTime":  "2026-09-05T11:29:33.8227383Z",
+                                                        "Hash":  "8A72DDEF74563B2BA8D6E7DD2BD4B868A4BCADC0D3AC81D7E981A80EDB92EBBC"
+                                                    },
+    "01-CONCEITOS/09-IDEIAS-VISUAIS.md":  {
+                                              "Size":  655,
+                                              "MTime":  "2026-08-29T16:37:37.6016401Z",
+                                              "Hash":  "2771BD39E0268A122D2F05EE8E0CF84B519B67A4A7D1A9600AC41A41ECE99B5E"
+                                          },
+    "00-MAPA-SISTEMA/02-GRAFOS/02-ARQUITETURA.md":  {
+                                                        "Size":  3800,
+                                                        "MTime":  "2026-09-05T11:29:33.5814091Z",
+                                                        "Hash":  "95EE5E85264C4CE59B0157E296C7133171AE5145EA7CA0A72D4F9202731C2F6A"
+                                                    },
+    "01-CONCEITOS/01-ARTEFATOS/AUTO_MERMAID_ARTIFACT_ENGINE.md":  {
+                                                                      "Size":  4948,
+                                                                      "MTime":  "2026-09-05T11:29:33.6772709Z",
+                                                                      "Hash":  "052ADFCDE37975D4AA4125F0ED80F06F1AF737E60BD98C818B64FD0AC320F203"
+                                                                  },
+    "07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-hooks.md":  {
+                                                                         "Size":  1375,
+                                                                         "MTime":  "2026-09-05T11:29:35.2125053Z",
+                                                                         "Hash":  "80E7BC55F05D237494DF64BE6F913CF15FC9C0E0C45D4EBC38F1F26644B289D8"
+                                                                     },
+    "03-DOCUMENTACAO/03-GUIAS/TUTORIAL-OBSIDIAN.md":  {
+                                                          "Size":  7095,
+                                                          "MTime":  "2026-09-05T11:29:33.9738942Z",
+                                                          "Hash":  "4B21E69389AC383D08F060BFBF2655F7BC7E623FD8968E48646C4860868096FD"
+                                                      },
+    ".obsidian/appearance.json":  {
+                                      "Size":  2,
+                                      "MTime":  "2026-09-05T07:59:59.8739262Z",
+                                      "Hash":  "44136FA355B3678A1146AD16F7E8649E94FB4FC21FE77E8310C060F61CAAFF8A"
+                                  },
+    "03-DOCUMENTACAO/03-GUIAS/OBSIDIAN-CASA-SINCRONIZACAO.md":  {
+                                                                    "Size":  1371,
+                                                                    "MTime":  "2026-09-05T11:29:33.8757173Z",
+                                                                    "Hash":  "B6DC1BE76F140A6F34B14CA1B5BF16D9B55C643405E08464CB50FFEA7F8C69C2"
+                                                                },
+    "00-MAPA-SISTEMA/03-MOCS/MOC-GitHub.md":  {
+                                                  "Size":  1242,
+                                                  "MTime":  "2026-09-05T11:29:33.6726354Z",
+                                                  "Hash":  "AD2E0E5B9EED80AA7D9B9F891102546D3BA948AC6A987B774F9C2CABDE87623E"
+                                              },
+    "08-ARTEFATOS-VISUAIS/01-CARTAZES-CANONICOS/manifest.json":  {
+                                                                     "Size":  6387,
+                                                                     "MTime":  "2026-09-05T11:29:36.3016632Z",
+                                                                     "Hash":  "A41BE25888300D774E350AB477033A012EB991215B77052C9019506AFCC04B40"
+                                                                 },
+    "04-DECISOES/06-DECISOES.md":  {
+                                       "Size":  1873,
+                                       "MTime":  "2026-08-20T09:59:28.8458092Z",
+                                       "Hash":  "85C7DC0ED8C9B74E1604AB598EF76A47BAB147650D3C649CD40A45608EAF495B"
+                                   },
+    "09-RASCUNHO/Sem título 3.canvas":  {
+                                            "Size":  2,
+                                            "MTime":  "2026-09-05T11:29:36.3693518Z",
+                                            "Hash":  "44136FA355B3678A1146AD16F7E8649E94FB4FC21FE77E8310C060F61CAAFF8A"
+                                        },
+    "03-DOCUMENTACAO/01-AGENTS-LIBRARY/02-AGENTES/GRAPH-INVESTIGATOR.md":  {
+                                                                               "Size":  3017,
+                                                                               "MTime":  "2026-09-05T11:29:33.7350017Z",
+                                                                               "Hash":  "F28103AC07A455235814722970DC7164962FD4B26E38D29BCA42A2B2005C05BC"
+                                                                           },
+    "08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md":  {
+                                                              "Size":  4563,
+                                                              "MTime":  "2026-09-04T03:18:41.7602616Z",
+                                                              "Hash":  "917CFDB2B4944C5E5E6C876C8A496B4BE537B24F2A5815D3F1F89AE99955823C"
+                                                          },
+    "04-DECISOES/README.md":  {
+                                  "Size":  612,
+                                  "MTime":  "2026-08-20T09:59:28.8468144Z",
+                                  "Hash":  "161A367E59CF3F8D248F9EE531AF40A20432A8A2E000FE0F02284306B6F467EB"
+                              },
+    "03-DOCUMENTACAO/01-AGENTS-LIBRARY/01-INDICES/00-AGENTS-INDEX.md":  {
+                                                                            "Size":  2393,
+                                                                            "MTime":  "2026-09-05T11:29:33.7272606Z",
+                                                                            "Hash":  "2758A1BBAAD1672F3C08F111DFF0E83B540E5FCC239673D1272DB5721148C902"
+                                                                        },
+    "03-DOCUMENTACAO/01-AGENTS-LIBRARY/02-AGENTES/MEMORY-REGISTRAR.md":  {
+                                                                             "Size":  6839,
+                                                                             "MTime":  "2026-09-05T11:29:33.7467277Z",
+                                                                             "Hash":  "3F5887F76CECF2625CE9207AEB22211403A96FEA7CC9E6BF2D3199BDB30EF784"
+                                                                         },
+    "03-DOCUMENTACAO/01-AGENTS-LIBRARY/02-AGENTES/PROMPT-ENGINEER.md":  {
+                                                                            "Size":  2092,
+                                                                            "MTime":  "2026-09-05T11:29:33.7478573Z",
+                                                                            "Hash":  "A79EE7550DEF982B6FEE5E32E332E35485552008483DEF500ACB430C063F87E8"
+                                                                        },
+    "09-RASCUNHO/Sem título 5.canvas":  {
+                                            "Size":  2,
+                                            "MTime":  "2026-09-05T11:29:36.3713465Z",
+                                            "Hash":  "44136FA355B3678A1146AD16F7E8649E94FB4FC21FE77E8310C060F61CAAFF8A"
+                                        },
+    "08-ARTEFATOS-VISUAIS/01-CARTAZES-CANONICOS/README.md":  {
+                                                                 "Size":  4563,
+                                                                 "MTime":  "2026-09-05T11:29:36.2421180Z",
+                                                                 "Hash":  "917CFDB2B4944C5E5E6C876C8A496B4BE537B24F2A5815D3F1F89AE99955823C"
+                                                             },
+    "08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/01-casa-nao-acredita-em-papagaio.webp":  {
+                                                                                          "Size":  255590,
+                                                                                          "MTime":  "2026-09-04T03:18:41.7436183Z",
+                                                                                          "Hash":  "760E52FA9B6E32E3C9941C78999C0BA9435B0AB5DD3969F31BB76F14603C8671"
+                                                                                      },
+    "03-DOCUMENTACAO/01-AGENTS-LIBRARY/02-AGENTES/ISSUE-ANALYZER.md":  {
+                                                                           "Size":  2601,
+                                                                           "MTime":  "2026-09-05T11:29:33.7455882Z",
+                                                                           "Hash":  "9F9F322D63F055465CFEA2BDD20C746775C4F99D6F4A0FDFA191FC5B10F7E540"
+                                                                       },
+    "02-ENTRADA/MAPA-CPUID-MONITORAMENTO.md":  {
+                                                   "Size":  3488,
+                                                   "MTime":  "2026-08-25T04:26:06.2499121Z",
+                                                   "Hash":  "8B094B424E60E397196951B226D140A3115FDFB0F5AAC9B4E7A9A6C8890C8EAF"
+                                               },
+    "07-APRENDIZADOS-MEMORIAS/README.md":  {
+                                               "Size":  1118,
+                                               "MTime":  "2026-08-20T09:59:28.8553303Z",
+                                               "Hash":  "6B4362385F347CB0F0E17BBC0442941C327250978439D47C5453E25BCB892CE3"
+                                           },
+    "03-DOCUMENTACAO/RELATORIO-SWARM-GRAFO.json":  {
+                                                       "Size":  3597,
+                                                       "MTime":  "2026-08-20T09:59:28.8413597Z",
+                                                       "Hash":  "A2EE03C87B04DF914E09FB4778F15B77D07B774C25EB512C7A6FB2DEE5737D5E"
+                                                   },
+    "07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-finalizacao.md":  {
+                                                                               "Size":  2036,
+                                                                               "MTime":  "2026-09-05T11:29:35.0878083Z",
+                                                                               "Hash":  "1E584DD0B8A161DF125EDD9129CE16D253155560809A2610D3DB0BE1BEE13118"
+                                                                           },
+    "03-DOCUMENTACAO/03-GUIAS/DIAGRAMAS-CENTRALDARK.md":  {
+                                                              "Size":  9134,
+                                                              "MTime":  "2026-09-05T11:29:33.8734975Z",
+                                                              "Hash":  "FB138026DAC7C217674D4A8481E68C8FCDA1DF869E67A9256E884D02AF4B1116"
+                                                          },
+    "08-ARTEFATOS-VISUAIS/01-CARTAZES-CANONICOS/04-arquitetura-operacional.webp":  {
+                                                                                       "Size":  242640,
+                                                                                       "MTime":  "2026-09-05T11:29:36.2347510Z",
+                                                                                       "Hash":  "C6BC946FDA8604F095678929439D589C0BBAB800C5FDBCA25FC89D8676BE24FE"
+                                                                                   },
+    "03-DOCUMENTACAO/02-BIBLIOTECA/IPNAMES-EXTERNAL-NETWORK-REFERENCE.md":  {
+                                                                                "Size":  5044,
+                                                                                "MTime":  "2026-09-05T11:29:33.8238871Z",
+                                                                                "Hash":  "4A214FF533E1E99555DB0EE4F59B401BC4AB0AFC061926CA74A8EA7E5A3B290B"
+                                                                            },
+    "01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json":  {
+                                                             "Size":  4365,
+                                                             "MTime":  "2026-09-05T11:29:33.6789254Z",
+                                                             "Hash":  "D65BE2977A6963A6A76AD088CE74D6F9ED480FDEA5EB009A9F0AF4A58B8B4589"
+                                                         },
+    "07-APRENDIZADOS-MEMORIAS/2026-09-03-REGISTER-BEFORE-REPORT-RECEIPT.md":  {
+                                                                                  "Size":  5322,
+                                                                                  "MTime":  "2026-09-05T11:29:36.0390318Z",
+                                                                                  "Hash":  "F82D692BA2BA076A489869DB81ACF86B991ACF70A4D28777DC9F77053CD3B547"
+                                                                              },
+    "00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md":  {
+                                                    "Size":  5006,
+                                                    "MTime":  "2026-09-05T11:29:33.5836729Z",
+                                                    "Hash":  "DB272848898D61C43857E0F48FEF1B096FA20D122432C9D0DEC33D006E31F7CA"
+                                                },
+    "07-APRENDIZADOS-MEMORIAS/01-OURO/OURO-CHEFE.md":  {
+                                                           "Size":  13154,
+                                                           "MTime":  "2026-09-05T11:29:34.5962172Z",
+                                                           "Hash":  "32115E2D813C7D0B4D0D2B55EF59FBED97146058CEA2A9DC81C5D5041FCA1E27"
+                                                       },
+    "03-DOCUMENTACAO/01-AGENTS-LIBRARY/03-LINKER/SEMANTIC-LINKER.md":  {
+                                                                           "Size":  3563,
+                                                                           "MTime":  "2026-09-05T11:29:33.7516560Z",
+                                                                           "Hash":  "A15D8A75823659061ECEC87D4FCA72132601E34EC8837F957B046DE5666D9AE9"
+                                                                       },
+    "07-APRENDIZADOS-MEMORIAS/02-SESSOES/2026-08-28-garimpo-perfil-overclock-taxonomia-enxame.md":  {
+                                                                                                        "Size":  4315,
+                                                                                                        "MTime":  "2026-09-05T11:29:35.9315282Z",
+                                                                                                        "Hash":  "751846A41978A2DBBEE93A1D273B99D18D08ADF7C2D4015A79BD690036C3DDCB"
+                                                                                                    },
+    "07-APRENDIZADOS-MEMORIAS/01-OURO/kimetsu-17-tecnicas-dependabot.md":  {
+                                                                               "Size":  3014,
+                                                                               "MTime":  "2026-09-05T11:29:35.8819778Z",
+                                                                               "Hash":  "014555155D5AB3DD37AA1F4247BAFB31BE780204F4C507C6AB552FD168B412C0"
+                                                                           },
+    "03-DOCUMENTACAO/01-AGENTS-LIBRARY/02-AGENTES/DAILY-REVIEWER.md":  {
+                                                                           "Size":  2056,
+                                                                           "MTime":  "2026-09-05T11:29:33.7332865Z",
+                                                                           "Hash":  "0D98003A49B369D70AE918EB1AD969A509AB84672CD04219850E9B2395B9FAA7"
+                                                                       },
+    "03-DOCUMENTACAO/03-GUIAS/GUIA-PROMPTS.md":  {
+                                                     "Size":  3741,
+                                                     "MTime":  "2026-09-05T11:29:33.8740581Z",
+                                                     "Hash":  "6654EC6868A18C5BDA7DBA62FF5E5CAA60626FE95AA7842FED0FB46A825316EC"
+                                                 },
+    "07-APRENDIZADOS-MEMORIAS/01-OURO/2026-09-03-ouro-chatgpt-warp-orquestrador.md":  {
+                                                                                          "Size":  2847,
+                                                                                          "MTime":  "2026-09-05T11:29:34.4870232Z",
+                                                                                          "Hash":  "A82218C37C32B71146047A5C6D7465BA2992681AAE528F25EB7E36E71C62CD12"
+                                                                                      },
+    "01-CONCEITOS/03-DISSONANCIA/DISSONANCIA_OPERACIONAL_CONTROLADA.md":  {
+                                                                              "Size":  3499,
+                                                                              "MTime":  "2026-09-05T11:29:33.6953129Z",
+                                                                              "Hash":  "7503C17A157FFF629BAFA364E44D0E7F7777EA4B87CAE4950B394A130F99B794"
+                                                                          },
+    "00-MAPA-SISTEMA/02-GRAFOS/MAPA-OBSIDIAN-BRAIN.md":  {
+                                                             "Size":  5181,
+                                                             "MTime":  "2026-09-05T11:29:33.6690794Z",
+                                                             "Hash":  "789798A5ECF32E7C62FF59590F9B625E5325246C0963CB677FBE4AFB38511C49"
+                                                         },
+    "02-ENTRADA/PADRAO-GARGALO-CHROME-WINDOWS.md":  {
+                                                        "Size":  2599,
+                                                        "MTime":  "2026-08-25T04:26:06.2512128Z",
+                                                        "Hash":  "F9F8FCF01BD820694753D2CD29C88BF0CB83127CFF6EF28F7C45FC214A4FB0E2"
+                                                    },
+    "07-APRENDIZADOS-MEMORIAS/01-OURO/2026-09-03-mandato-preservar-ouro-chefe.md":  {
+                                                                                        "Size":  1845,
+                                                                                        "MTime":  "2026-09-05T11:29:34.4842105Z",
+                                                                                        "Hash":  "5F5BF012EC96EC506743F7D67054F098E201175DDE953BF01D144B5ED85097E8"
+                                                                                    },
+    "02-ENTRADA/PADRAO-GARGALO-WINDOWS.md":  {
+                                                 "Size":  2580,
+                                                 "MTime":  "2026-08-20T09:59:28.8046770Z",
+                                                 "Hash":  "AB6464854F56D2BB3DADBDFC591CF9E15A5BF9985E04C26C37B4A528D3073AFC"
+                                             },
+    "07-APRENDIZADOS-MEMORIAS/02-SESSOES/2026-08-28-garimpo-desktop-papel-do-grok.md":  {
+                                                                                            "Size":  3864,
+                                                                                            "MTime":  "2026-09-05T11:29:35.9193369Z",
+                                                                                            "Hash":  "0585AE3A8C530BA7DC5604C7DB98F67A2EEA7D69DD2469E98AD165D1F1492B64"
+                                                                                        },
+    "07-APRENDIZADOS-MEMORIAS/02-SESSOES/2026-08-26-sessao-hermes-rei-deploy-ouro.md":  {
+                                                                                            "Size":  2660,
+                                                                                            "MTime":  "2026-09-05T11:29:35.8886597Z",
+                                                                                            "Hash":  "E881F1397DB5E942F11F2FDF9EE31B7E6192A3E63C5CA94C38C29503F7B80D2C"
+                                                                                        },
+    "00-MAPA-SISTEMA/02-GRAFOS/DIRECAO-ATUAL-HERMES.md":  {
+                                                              "Size":  1016,
+                                                              "MTime":  "2026-09-05T11:29:33.5825366Z",
+                                                              "Hash":  "F9D31B4D46B2434CBFE3B202E3476038B169B1E4781C1B0B6A103E38039F1C6E"
+                                                          },
+    "03-DOCUMENTACAO/03-GUIAS/INVENTARIO-METODOS-HERMES.md":  {
+                                                                  "Size":  5448,
+                                                                  "MTime":  "2026-09-05T11:29:33.8751581Z",
+                                                                  "Hash":  "C667C407055B2D8CF1B5828A333295ECD06A99AA24FE9C6824B379055E1E3EC1"
+                                                              },
+    ".obsidian/app.json":  {
+                               "Size":  2,
+                               "MTime":  "2026-09-05T07:59:58.8102638Z",
+                               "Hash":  "44136FA355B3678A1146AD16F7E8649E94FB4FC21FE77E8310C060F61CAAFF8A"
+                           },
+    ".obsidian/graph.json":  {
+                                 "Size":  1163,
+                                 "MTime":  "2026-09-05T12:39:58.2760000Z",
+                                 "Hash":  "CE0282331ECB1D3DA3C4273030D45244B748F2BF93E6F9AA99FA34809C0C9DA2"
+                             },
+    "01-CONCEITOS/02-BANDA/LACUNA_BANDA_INTENCAO_UNICA.md":  {
+                                                                 "Size":  5279,
+                                                                 "MTime":  "2026-09-05T11:29:33.6936382Z",
+                                                                 "Hash":  "A43F1D44A053062A1E73C11486472490E26BE3C29181D5311E180BD4E22A68BE"
+                                                             },
+    "07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-intuicao-refinada.md":  {
+                                                                                     "Size":  2555,
+                                                                                     "MTime":  "2026-09-05T11:29:35.3747087Z",
+                                                                                     "Hash":  "8CD1EBDB727C42BCB51EC6C7881629D1B593CB13A8DC79695C98A4948AC166D2"
+                                                                                 },
+    "03-DOCUMENTACAO/01-AGENTS-LIBRARY/01-INDICES/00-TEMPLATE-SKILL.md":  {
+                                                                              "Size":  1915,
+                                                                              "MTime":  "2026-09-05T11:29:33.7287750Z",
+                                                                              "Hash":  "1837240CA2A69893B733113342D180ADE5E4A7CBC09CA3FA313A34FA10B3E8A2"
+                                                                          },
+    "04-DECISOES/2026-09-03-casa-github-brain-conexao.md":  {
+                                                                "Size":  1135,
+                                                                "MTime":  "2026-09-05T11:29:34.3637272Z",
+                                                                "Hash":  "D40779B97A312938D2CE99DBF3C18281561C73B0D7D0E37423A26A2405B1C52E"
+                                                            },
+    "03-DOCUMENTACAO/01-AGENTS-LIBRARY/02-AGENTES/SWARM-INVESTIGADOR-GRAFO.md":  {
+                                                                                     "Size":  3135,
+                                                                                     "MTime":  "2026-09-05T11:29:33.7489558Z",
+                                                                                     "Hash":  "59C66AF3C18811A97839E2742E9E1FF63FF6F5BE3B3C7B206C1A73A575EDBA0C"
+                                                                                 },
+    "00-MAPA-SISTEMA/03-MOCS/MOC-CentralDark-HubBot.md":  {
+                                                              "Size":  1294,
+                                                              "MTime":  "2026-09-05T11:29:33.6720744Z",
+                                                              "Hash":  "A77DAFB7FC612658CFEA91729BCBBDB620D7CD80CAE2BFE880518D0C0524E911"
+                                                          },
+    "08-ARTEFATOS-VISUAIS/01-CARTAZES-CANONICOS/01-casa-nao-acredita-em-papagaio.webp":  {
+                                                                                             "Size":  255590,
+                                                                                             "MTime":  "2026-09-05T11:29:36.1239467Z",
+                                                                                             "Hash":  "760E52FA9B6E32E3C9941C78999C0BA9435B0AB5DD3969F31BB76F14603C8671"
+                                                                                         },
+    "08-ARTEFATOS-VISUAIS/mapa-cerebro-caracol.svg":  {
+                                                          "Size":  14138,
+                                                          "MTime":  "2026-09-05T11:29:36.3655168Z",
+                                                          "Hash":  "67887F2F53A891E4F8D9299AA36396C287D91488582A5640FD2AFAB49123C2F1"
+                                                      },
+    "06-REUNIOES-NOTAS/README.md":  {
+                                        "Size":  1038,
+                                        "MTime":  "2026-09-04T03:17:45.9627669Z",
+                                        "Hash":  "4B918A32A7CF93EF1F18969CC9CE226CBDD5097A0D7006F5C79DB7A6B16D703E"
+                                    },
+    "08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/semantic-graph-observed-20260824.png":  {
+                                                                                         "Size":  182494,
+                                                                                         "MTime":  "2026-09-04T03:18:41.7622633Z",
+                                                                                         "Hash":  "12EA66A2259CA4BC3B04C76DE317FBDF4BBE694444CB97975FE5A2C067F28D20"
+                                                                                     },
+    "08-ARTEFATOS-VISUAIS/CentralDark_Reconciliation_Watch.html":  {
+                                                                       "Size":  5887,
+                                                                       "MTime":  "2026-09-05T11:40:10.0634060Z",
+                                                                       "Hash":  "B4595AF1A5CD3D34B055021D86CEADBAEAED547447B2A5CF0B117B772894DC18"
+                                                                   },
+    "00-MAPA-SISTEMA/01-HUB/PROTOCOLO-INICIALIZACAO.md":  {
+                                                              "Size":  4647,
+                                                              "MTime":  "2026-09-05T11:29:33.5790857Z",
+                                                              "Hash":  "C420D450070A237828E07394D0DE4A11715EB064DA0D95BCB0BA2CE4A537F3CB"
+                                                          },
+    "02-ENTRADA/01-RAW/INVENTARIO_DEPLOY_20260819.md":  {
+                                                            "Size":  2424,
+                                                            "MTime":  "2026-09-05T11:29:33.7251096Z",
+                                                            "Hash":  "518907B87F62A8A24A6B79BDDA45DA1D78EA82BEBA5A7B93BC9D91095367239F"
+                                                        },
+    "01-CONCEITOS/05-MINERACAO/REPOS_PUBLICOS_COMO_MINAS.md":  {
+                                                                   "Size":  2791,
+                                                                   "MTime":  "2026-09-05T11:29:33.7186162Z",
+                                                                   "Hash":  "925F2FD213A1FDA52B943FB90CD994457E3F625366B6371A534F9C98FC72D4B4"
+                                                               },
+    "07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-vision-integral.md":  {
+                                                                                   "Size":  2983,
+                                                                                   "MTime":  "2026-09-05T11:29:35.8219975Z",
+                                                                                   "Hash":  "4B18156E3E6624F58489677BB324EE961BF5571639B273269FDA9EC4DF622C9E"
+                                                                               },
+    "01-CONCEITOS/02-BANDA/BANDA_INTENCAO_UNICA_COMPASSO.md":  {
+                                                                   "Size":  4845,
+                                                                   "MTime":  "2026-09-05T11:29:33.6811598Z",
+                                                                   "Hash":  "445AF340EA520DE94BDC81BC418C76B976E4495A4C6DC020A48726602DD0CCB2"
+                                                               },
+    "07-APRENDIZADOS-MEMORIAS/02-SESSOES/2026-08-28-o-filtro-nao-testado-mente.md":  {
+                                                                                         "Size":  3413,
+                                                                                         "MTime":  "2026-09-05T11:29:35.9326795Z",
+                                                                                         "Hash":  "B76ECDE30D96B8C5C9CE8DF9B78E13165CC3B4F9172D412BF9817DAA1EF96946"
+                                                                                     },
+    "07-APRENDIZADOS-MEMORIAS/02-SESSOES/2026-08-16-verde-delta-fechado-promove.md":  {
+                                                                                          "Size":  2054,
+                                                                                          "MTime":  "2026-09-05T11:29:35.8876468Z",
+                                                                                          "Hash":  "C9E742F38B641CC5FBA71870B5D3857519ADA1116962C65F640986D677FEFD7D"
+                                                                                      },
+    "09-RASCUNHO/Sem título 2.canvas":  {
+                                            "Size":  2,
+                                            "MTime":  "2026-09-05T11:29:36.3682636Z",
+                                            "Hash":  "44136FA355B3678A1146AD16F7E8649E94FB4FC21FE77E8310C060F61CAAFF8A"
+                                        },
+    "07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-ponto-fixo-alcancado.md":  {
+                                                                                        "Size":  2415,
+                                                                                        "MTime":  "2026-09-05T11:29:35.7005647Z",
+                                                                                        "Hash":  "EB30E2E869DD53307B428AF065F0BBD121A1582C12D22D7A1D13E63DDCAE5D81"
+                                                                                    },
+    "00-MAPA-SISTEMA/02-GRAFOS/ARVORE-SEMANTICA-DA-CASA.md":  {
+                                                                  "Size":  3500,
+                                                                  "MTime":  "2026-09-05T11:29:33.5819802Z",
+                                                                  "Hash":  "FA16C2FFCA3FC743C5C32C01E83A12356A5203E45F8D952B1C0BF9BF2B4DA4E6"
+                                                              },
+    "01-CONCEITOS/07-OURO/CALIBRACAO_CAMADAS_EVIDENCIA.md":  {
+                                                                 "Size":  2858,
+                                                                 "MTime":  "2026-09-05T11:29:33.7210343Z",
+                                                                 "Hash":  "B61C460C986754BAC6B5BDF4AE03A403CF897C0D5A9DEF60E91C2EBC1F7BCAC0"
+                                                             },
+    "04-DECISOES/01-PENDENCIAS.md":  {
+                                         "Size":  5525,
+                                         "MTime":  "2026-08-28T13:09:02.5840509Z",
+                                         "Hash":  "A9B4FF9E2BB8B8EFC9397BBFCEDE233AC9F8526AE3A0561B6FD3898B54A434FE"
+                                     },
+    "07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-adaptacao-evolucao.md":  {
+                                                                                      "Size":  2184,
+                                                                                      "MTime":  "2026-09-05T11:29:34.7120873Z",
+                                                                                      "Hash":  "19EF5B17DC0942D09D0637173D1236AC48FF9F3205F7BDA5EF6E017485942B1F"
+                                                                                  },
+    "08-ARTEFATOS-VISUAIS/01-CARTAZES-CANONICOS/semantic-graph-observed-20260824.png":  {
+                                                                                            "Size":  182494,
+                                                                                            "MTime":  "2026-09-05T11:29:36.3448780Z",
+                                                                                            "Hash":  "12EA66A2259CA4BC3B04C76DE317FBDF4BBE694444CB97975FE5A2C067F28D20"
+                                                                                        },
+    "07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-diagrama.md":  {
+                                                                            "Size":  6599,
+                                                                            "MTime":  "2026-09-05T11:29:35.0669145Z",
+                                                                            "Hash":  "FB1E4C1E06CC581A7CC2ACDBA90D4891D86D490A483D1F15F953931707FE6472"
+                                                                        },
+    "00-MAPA-SISTEMA/02-GRAFOS/MAPA-DO-CEREBRO.md":  {
+                                                         "Size":  344,
+                                                         "MTime":  "2026-09-05T11:29:33.5849418Z",
+                                                         "Hash":  "6999F0DCFD98E81EB2E34AE0BCCC09F5A7F9E61E9C45F16E06F6A309A148311A"
+                                                     },
+    "00-MAPA-SISTEMA/03-MOCS/MOC-MCP.md":  {
+                                               "Size":  1176,
+                                               "MTime":  "2026-09-05T11:29:33.6731871Z",
+                                               "Hash":  "5D7CDD1E43F48FABB71C14FBC065327E1A5814FFB65903F952551B83DD6600CE"
+                                           },
+    "02-ENTRADA/01-RAW/CONVERGENCIA_DUPLICACAO_20260819.md":  {
+                                                                  "Size":  943,
+                                                                  "MTime":  "2026-09-05T11:29:33.7233709Z",
+                                                                  "Hash":  "DBAE049273A9E5AC87193D8DD7D69563A1BB81804F15EF1E5C2A1977ECA271A4"
+                                                              },
+    "03-DOCUMENTACAO/02-BIBLIOTECA/README.md":  {
+                                                    "Size":  13174,
+                                                    "MTime":  "2026-09-05T11:29:33.8700191Z",
+                                                    "Hash":  "A658945359E069DF4EFAEDB1204D062E2CCB820ABC3E23C97F67A2EB1F151B00"
+                                                },
+    ".obsidian/workspace.json":  {
+                                     "Size":  7566,
+                                     "MTime":  "2026-09-05T12:40:19.2116346Z",
+                                     "Hash":  "B54B3250273627E02DD47D68987F2126D505692E611E99F9DA1EAFD00C852E6E"
+                                 },
+    "01-CONCEITOS/02-BANDA/INTENT_SYNC_STATE.md":  {
+                                                       "Size":  5264,
+                                                       "MTime":  "2026-09-05T11:29:33.6823038Z",
+                                                       "Hash":  "1D76985CD3D14FFDCA37C45EDFBFD0FD634C4176E7D4559CD46A54449CEFACAE"
+                                                   },
+    ".obsidian/core-plugins.json":  {
+                                        "Size":  696,
+                                        "MTime":  "2026-09-05T08:00:03.3002951Z",
+                                        "Hash":  "763CF20A921FD9955735B278006820B90B207B2FC04D9E79CA648279C7C14276"
+                                    },
+    "09-RASCUNHO/doc-Sem título.canvas":  {
+                                              "Size":  2,
+                                              "MTime":  "2026-09-05T11:29:36.3907936Z",
+                                              "Hash":  "44136FA355B3678A1146AD16F7E8649E94FB4FC21FE77E8310C060F61CAAFF8A"
+                                          },
+    "00-MAPA-SISTEMA/01-HUB/INDEX-MAPA.md":  {
+                                                 "Size":  194,
+                                                 "MTime":  "2026-09-05T11:29:33.4313052Z",
+                                                 "Hash":  "5DDDBE506191EDF02DC962981F4EFBE948AE882AEA451DA4FE7A4C931790ACC7"
+                                             },
+    "03-DOCUMENTACAO/01-AGENTS-LIBRARY/02-AGENTES/DECISION-RECORDER.md":  {
+                                                                              "Size":  2034,
+                                                                              "MTime":  "2026-09-05T11:29:33.7338496Z",
+                                                                              "Hash":  "38FDEBD65164E2C82CF703228939FA86011C0AD6589E0B7F77E908FC2B49D3A7"
+                                                                          },
+    "03-DOCUMENTACAO/01-AGENTS-LIBRARY/02-AGENTES/PROMPT-MASTER-CENTRALDARK.md":  {
+                                                                                      "Size":  5107,
+                                                                                      "MTime":  "2026-09-05T11:29:33.7484097Z",
+                                                                                      "Hash":  "1631F214696E78F674E719BAAFD274A377F258B6D49F32DDC78156BB2F6442F6"
+                                                                                  },
+    "08-ARTEFATOS-VISUAIS/01-CARTAZES-CANONICOS/03-trajetoria-vivida.webp":  {
+                                                                                 "Size":  212254,
+                                                                                 "MTime":  "2026-09-05T11:29:36.2039798Z",
+                                                                                 "Hash":  "7AF633220155CC3A0849FD8CFE9184260EB4154FB2E4BCD2F445C4436B19F69B"
+                                                                             },
+    "03-DOCUMENTACAO/01-AGENTS-LIBRARY/01-INDICES/00-PROMPT-MASTER-SKILLS.md":  {
+                                                                                    "Size":  2523,
+                                                                                    "MTime":  "2026-09-05T11:29:33.7277670Z",
+                                                                                    "Hash":  "A5E2803D735D2F90C8196B973A6B4CA8E975302CD9B098E6B85F583A9751E5B3"
+                                                                                },
+    "05-DEVEDORES-CONTATOS/DEVEDORES.md":  {
+                                               "Size":  599,
+                                               "MTime":  "2026-08-20T09:59:28.8482013Z",
+                                               "Hash":  "C86D133C48F45DA32F10CC11C178BCB116FBD8D0F0224A4A7641CC21DB6C0E20"
+                                           },
+    "08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/04-arquitetura-operacional.webp":  {
+                                                                                    "Size":  242640,
+                                                                                    "MTime":  "2026-09-04T03:18:41.7507091Z",
+                                                                                    "Hash":  "C6BC946FDA8604F095678929439D589C0BBAB800C5FDBCA25FC89D8676BE24FE"
+                                                                                },
+    "00-MAPA-SISTEMA/01-HUB/00-LEIA-PRIMEIRO.md":  {
+                                                       "Size":  204,
+                                                       "MTime":  "2026-09-05T11:29:33.3450540Z",
+                                                       "Hash":  "AB4579A1892310418AB7D01B253863FEF4E7132937F6D53847DE014E33D938A9"
+                                                   },
+    "00-MAPA-SISTEMA/01-HUB/00-MAPA.md":  {
+                                              "Size":  5902,
+                                              "MTime":  "2026-09-05T11:29:33.3461137Z",
+                                              "Hash":  "E472822CE009CDA106CBF60A06C4130CDD2389313263B625FA2FAC88768138B5"
+                                          },
+    "07-APRENDIZADOS-MEMORIAS/02-SESSOES/2026-08-16-gaveta-duravel-cristalizacao.md":  {
+                                                                                           "Size":  3414,
+                                                                                           "MTime":  "2026-09-05T11:29:35.8856039Z",
+                                                                                           "Hash":  "19BFFAD993344F565237CF6063B94640060100ECB08E64E790C21728DAD58616"
+                                                                                       },
+    "03-DOCUMENTACAO/01-AGENTS-LIBRARY/02-AGENTES/ARCHITECTURE-REVIEWER.md":  {
+                                                                                  "Size":  3076,
+                                                                                  "MTime":  "2026-09-05T11:29:33.7304917Z",
+                                                                                  "Hash":  "6E702D81CB677ECF7EF069DB44B46D95DF76506507D89418F0C29DCD3893532C"
+                                                                              },
+    "07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-precisao.md":  {
+                                                                            "Size":  3244,
+                                                                            "MTime":  "2026-09-05T11:29:35.7244955Z",
+                                                                            "Hash":  "71DAB8CA002B185BB9C068D0208D1D86B198356DB75DA8D9AB91433AB609602B"
+                                                                        },
+    "07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-resumo-executivo.md":  {
+                                                                                    "Size":  1955,
+                                                                                    "MTime":  "2026-09-05T11:29:35.8085249Z",
+                                                                                    "Hash":  "3C135C529158D12DD8E0D162F200D9E8F73CCC2E674545FF840E24F4BAC65C4A"
+                                                                                },
+    "00-MAPA-SISTEMA/02-GRAFOS/PLANO.md":  {
+                                               "Size":  1047,
+                                               "MTime":  "2026-09-05T11:29:33.6702441Z",
+                                               "Hash":  "97537A41F451513B2CB3E90AAB3E0C25680ECE15D722689EA3E409C14E674FEC"
+                                           },
+    "04-DECISOES/2026-09-03-numeracao-01-10-vault.md":  {
+                                                            "Size":  1635,
+                                                            "MTime":  "2026-09-05T11:29:34.4214650Z",
+                                                            "Hash":  "1AFFC1B8B6A0A16224ED7D22A3A84386472E8C360C9DC5F148C80FE6B303DFA0"
+                                                        },
+    "07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-flexibilidade.md":  {
+                                                                                 "Size":  2985,
+                                                                                 "MTime":  "2026-09-05T11:29:35.1597513Z",
+                                                                                 "Hash":  "F6D06012E85F067BF74453639F80D8ED0F726D6CC60F32D85E87DD697DAD53FC"
+                                                                             },
+    "03-DOCUMENTACAO/03-GUIAS/PLUGINS-OBSIDIAN-RECOMENDADOS.md":  {
+                                                                      "Size":  2904,
+                                                                      "MTime":  "2026-09-05T11:29:33.9727571Z",
+                                                                      "Hash":  "1D89218CBDB03C4D0A1FA70347CF600CD0F3BB72BBDD143FA66BAE692666B8C9"
+                                                                  },
+    "04-DECISOES/08-HISTORICO-DECISOES.md":  {
+                                                 "Size":  228,
+                                                 "MTime":  "2026-09-05T11:29:33.9750283Z",
+                                                 "Hash":  "032A7CB9BFB6E3143F7B8FE51EC534D4B2B45665F27110C9AB0445D541BF8DA7"
+                                             },
+    "03-DOCUMENTACAO/02-BIBLIOTECA/generalizations.json":  {
+                                                               "Size":  13244,
+                                                               "MTime":  "2026-09-05T11:29:33.8723580Z",
+                                                               "Hash":  "A4DD7FFB5EAFC215D24A794173E1E8FF20C0E76D6B00D51EA197F6A4CBC93E19"
+                                                           },
+    "07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-cristalization.md":  {
+                                                                                  "Size":  1422,
+                                                                                  "MTime":  "2026-09-05T11:29:35.0275149Z",
+                                                                                  "Hash":  "62895A95B8DB40320534A8E70B9BD85584CB7A712D804B958512AB59556F1B8C"
+                                                                              },
+    "00-MAPA-SISTEMA/03-MOCS/MOC-PM2.md":  {
+                                               "Size":  1394,
+                                               "MTime":  "2026-09-05T11:29:33.6743122Z",
+                                               "Hash":  "813FB4470BB37696961A3A3C02EAD4830574C7E22AA6DFFBE0733CC9830D17EB"
+                                           },
+    "00 - Mapa do Sistema/GRAFO-VIVO.md":  {
+                                               "Size":  6041,
+                                               "MTime":  "2026-09-05T11:29:33.3433392Z",
+                                               "Hash":  "BDA14F5AC814BEE66CF4D6AFBE5861979B970E2BFC2F7F7F2DE3FDA2128CDA2E"
+                                           },
+    "01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.md":  {
+                                                           "Size":  6322,
+                                                           "MTime":  "2026-09-05T11:29:33.6800374Z",
+                                                           "Hash":  "B794DF11BC17B08340A9F828286ECF9198FAD7617D10E661E7A41784B321E33E"
+                                                       },
+    "05-DEVEDORES-CONTATOS/README.md":  {
+                                            "Size":  1199,
+                                            "MTime":  "2026-08-20T09:59:28.8492092Z",
+                                            "Hash":  "183E33C36AE6DE58A36C896193FF693AE379C1ACB9C636A68AEC8D017E60808C"
+                                        },
+    "00-MAPA-SISTEMA/02-GRAFOS/MAPA-DOS-BOTS.md":  {
+                                                       "Size":  7549,
+                                                       "MTime":  "2026-09-05T11:29:33.5883612Z",
+                                                       "Hash":  "818557C511C8FD261E7A2D213A4E5060834B33F4B62C67AD35245BC29917DFB1"
+                                                   },
+    "03-DOCUMENTACAO/02-BIBLIOTECA/catalog.json":  {
+                                                       "Size":  39378,
+                                                       "MTime":  "2026-09-05T11:29:33.8711786Z",
+                                                       "Hash":  "6081E9EE58775AFACDC5295A9A71E276C79F7355CA3E16C7D9774FC7081D643C"
+                                                   },
+    "00-MAPA-SISTEMA/01-HUB/README.md":  {
+                                             "Size":  1896,
+                                             "MTime":  "2026-09-05T11:29:33.5802287Z",
+                                             "Hash":  "4C830BEC972636C3AEDD9F953F004D837C3CBFBCE6F67CAC31C59C881DD117D4"
+                                         },
+    "00-MAPA-SISTEMA/01-HUB/BRAIN.md":  {
+                                            "Size":  3648,
+                                            "MTime":  "2026-09-05T11:29:33.4301961Z",
+                                            "Hash":  "E7A4951E3DC6E0124CB4A78D3A582376515FF5F7690A569CBE4A5A3EBB0597EE"
+                                        },
+    "07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-controle-total.md":  {
+                                                                                  "Size":  1963,
+                                                                                  "MTime":  "2026-09-05T11:29:34.8021323Z",
+                                                                                  "Hash":  "4BF54DDF03A432AC5B4527041513534DAC3FBB5C18F2E900CD48CB7D1D6E89AC"
+                                                                              },
+    "07-APRENDIZADOS-MEMORIAS/01-OURO/2026-09-03-garimpo-chefe-inventario.md":  {
+                                                                                    "Size":  2526,
+                                                                                    "MTime":  "2026-09-05T11:29:34.4371141Z",
+                                                                                    "Hash":  "453E9E42C3D55BC7DB0A5E84ED927FEDA2CD24C722A1735EE312AD8BA0484E0D"
+                                                                                },
+    "08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/02-cajado-da-correcao.webp":  {
+                                                                               "Size":  184640,
+                                                                               "MTime":  "2026-09-04T03:18:41.7466767Z",
+                                                                               "Hash":  "054FCDB06B08AA6DF5A7A971239B3B572459D1F3AF33E64E7CA4E9EC973B94CF"
+                                                                           },
+    "09-RASCUNHO/Sem título 1.canvas":  {
+                                            "Size":  2,
+                                            "MTime":  "2026-09-05T11:29:36.3672552Z",
+                                            "Hash":  "44136FA355B3678A1146AD16F7E8649E94FB4FC21FE77E8310C060F61CAAFF8A"
+                                        },
+    "00-MAPA-SISTEMA/01-HUB/INDEX.md":  {
+                                            "Size":  2458,
+                                            "MTime":  "2026-09-05T11:29:33.5710463Z",
+                                            "Hash":  "CCCFAF07B74AF211886E03C58BC018053A8CF315A14A951D8F141EA4D29E3A87"
+                                        },
+    "03-DOCUMENTACAO/01-AGENTS-LIBRARY/02-AGENTES/CODE-INVESTIGATOR.md":  {
+                                                                              "Size":  2725,
+                                                                              "MTime":  "2026-09-05T11:29:33.7321529Z",
+                                                                              "Hash":  "25F35E336EB7AAFDB0C53DD299E8CB2C9C68D4C8556996C3AC51DB52DDBF6388"
+                                                                          },
+    "00-MAPA-SISTEMA/03-MOCS/MOC-Skills.md":  {
+                                                  "Size":  1558,
+                                                  "MTime":  "2026-09-05T11:29:33.6755552Z",
+                                                  "Hash":  "11D6A7C29069C7E6DD88A6DAF673113AF69DB188F6A970AF24C611A04B6E9F40"
+                                              },
+    "08-ARTEFATOS-VISUAIS/01-CARTAZES-CANONICOS/centraldark-plan-progress.html":  {
+                                                                                      "Size":  11232,
+                                                                                      "MTime":  "2026-09-04T06:58:32.7650803Z",
+                                                                                      "Hash":  "178223426F3EF139ABBFD3AE760AB07BECF60D6B4A655FCB029198D60B72AB16"
+                                                                                  },
+    "03-DOCUMENTACAO/01-AGENTS-LIBRARY/2026-07-13-overclock-swarm-tier-catalog.json":  {
+                                                                                           "Size":  2943,
+                                                                                           "MTime":  "2026-09-05T11:29:33.8214881Z",
+                                                                                           "Hash":  "D20E2A53D70A84EEF6791B7597A9763447B4FA03E47D2FF4684A375EEE470A27"
+                                                                                       },
+    "09-RASCUNHO/Sem título.base":  {
+                                        "Size":  0,
+                                        "MTime":  "2026-09-05T11:29:36.3719689Z",
+                                        "Hash":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                                    },
+    "08-ARTEFATOS-VISUAIS/01-CARTAZES-CANONICOS/02-cajado-da-correcao.webp":  {
+                                                                                  "Size":  184640,
+                                                                                  "MTime":  "2026-09-05T11:29:36.1359201Z",
+                                                                                  "Hash":  "054FCDB06B08AA6DF5A7A971239B3B572459D1F3AF33E64E7CA4E9EC973B94CF"
+                                                                              },
+    "02-ENTRADA/01-RAW/HERMES_LEARNING_PENDING.md":  {
+                                                         "Size":  408,
+                                                         "MTime":  "2026-09-05T11:29:33.7239628Z",
+                                                         "Hash":  "DEE6DA96239074F6C2E247DAAE3A07540B13C56C81B26EC1A1ED96811B4E002D"
+                                                     },
+    "08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/03-trajetoria-vivida.webp":  {
+                                                                              "Size":  212254,
+                                                                              "MTime":  "2026-09-04T03:18:41.7491850Z",
+                                                                              "Hash":  "7AF633220155CC3A0849FD8CFE9184260EB4154FB2E4BCD2F445C4436B19F69B"
+                                                                          },
+    "09-RASCUNHO/Sem título.canvas":  {
+                                          "Size":  2,
+                                          "MTime":  "2026-09-05T11:29:36.3883119Z",
+                                          "Hash":  "44136FA355B3678A1146AD16F7E8649E94FB4FC21FE77E8310C060F61CAAFF8A"
+                                      },
+    "01-CONCEITOS/06-ORQUESTRACAO/ORQUESTRACAO_4_ANGULOS.md":  {
+                                                                   "Size":  2035,
+                                                                   "MTime":  "2026-09-05T11:29:33.7197559Z",
+                                                                   "Hash":  "87B706F7E7E942EAA0FA021815D6DC890D49DE5651DA4C797DD8A893F399D50A"
+                                                               },
+    ".obsidian/bookmarks.json":  {
+                                     "Size":  1080,
+                                     "MTime":  "2026-09-03T13:50:56.2510000Z",
+                                     "Hash":  "0FC3DA22BC4A18E7FE2676BA8E8B53D6DCD8B5625E6B31E1E6DF997917FC40DF"
+                                 },
+    "00-MAPA-SISTEMA/01-HUB/00-POSTURA-PIVETE.md":  {
+                                                        "Size":  2575,
+                                                        "MTime":  "2026-09-05T11:29:33.3467216Z",
+                                                        "Hash":  "9B72C831632D0FE933835C8A3368DE6F1C24E54DC1E42B038CF9B9840DFEC8B8"
+                                                    },
+    "09-RASCUNHO/Sem título 4.canvas":  {
+                                            "Size":  2,
+                                            "MTime":  "2026-09-05T11:29:36.3707523Z",
+                                            "Hash":  "44136FA355B3678A1146AD16F7E8649E94FB4FC21FE77E8310C060F61CAAFF8A"
+                                        },
+    "08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/manifest.json":  {
+                                                                  "Size":  6384,
+                                                                  "MTime":  "2026-09-04T03:18:41.7612655Z",
+                                                                  "Hash":  "4135F0DEDDB4B7D14DC6ECA9D25B3631574CBBE0D4C80ECE0F45864FA766053E"
+                                                              },
+    "07-APRENDIZADOS-MEMORIAS/2026-09-03-CRISTAL-SESSAO-CENTRALDARK.md":  {
+                                                                              "Size":  16821,
+                                                                              "MTime":  "2026-09-05T11:29:36.0102135Z",
+                                                                              "Hash":  "B73D4988DD7D00F162071EE8045E1DEAA1C4A6F8254812ED3DE4D545DF51BC87"
+                                                                          }
+}

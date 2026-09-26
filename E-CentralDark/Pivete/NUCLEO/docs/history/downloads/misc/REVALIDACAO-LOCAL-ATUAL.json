@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "nodeCheck": {
+    "total": 24,
+    "failed": []
+  },
+  "tests": {
+    "total": 31,
+    "pass": 31,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "status": "PASS"
+  },
+  "configOk": true,
+  "secretFileReadScan": {
+    "status": "PASS",
+    "findings": []
+  },
+  "codeSeal": {
+    "status": "PASS",
+    "tracked": 37,
+    "missing": [],
+    "changed": [],
+    "untracked": []
+  }
+}

@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\store\dist\useClientLookup.d.ts.map
+
+{"version":3,"file":"useClientLookup.d.ts","names":[],"sources":["../src/useClientLookup.ts"],"mappings":";;;KAKK,iBAAiB,YAAY;EAChC,sBAAsB;IAEpB;iBAUY,gBAAgB,iBAAiB,eAC/C,mBAAmB,gBAAgB;EAEnC,OAAO,iBAAiB;EACxB,MAAM;IAAU;;IAAoB;QAAkB"}

@@ -1,0 +1,71 @@
+schema_version: 1
+mission_id: CENTRALDARK-HERMES-BROWSER-ADAPTER-01
+baseline_main: dcf70053f2af1d95bd86867e6f043fb634e919d0
+baseline_is_future_authority: false
+
+preflight:
+  - remeasure_main
+  - remeasure_open_pr_writers
+  - inspect_local_chrome
+  - inspect_existing_zendriver_runtime
+  - inspect_existing_mcp_runtime
+  - prove_localhost_binding
+  - prove_no_conflicting_browser_bridge
+
+reuse:
+  hermes_transport:
+    owner: apps/modulos/HERMES-CORE/agents/Universal-Handler/agent.mjs
+  evidence:
+    owner: supabase/functions/_shared/evidence-envelope.mjs
+  ingestion:
+    owner: supabase/functions/agent-log/index.ts
+  browser_mining:
+    owner: scripts/memory-linker/artifact-capability.mjs
+  dream:
+    owner: scripts/memory-linker/dream-review-run.mjs
+  zendriver:
+    owner_root: apps/modulos/elite-gateway
+  foreground_contract:
+    owner: docs/INTEGRACOES/CHROME-DEVTOOLS-MCP.md
+
+create:
+  - local Browser Bridge V1 implementation
+  - provider foreground adapter
+  - provider zendriver adapter
+  - tests
+  - runtime receipt
+
+do_not_create:
+  - second_hermes
+  - second_mcp_core
+  - second_evidence_store
+  - second_dream_engine
+  - browser_brain
+  - chatgpt_private_api_client
+
+execution_order:
+  - converge_zendriver_legacy_behind_provider
+  - bind_foreground_provider_to_measured_chrome_mcp
+  - start_browser_bridge_local_only
+  - health_check
+  - expose_capability_to_hermes_via_handler
+  - run_foreground_e2e
+  - run_background_e2e
+  - wire_agent_log
+  - wire_artifact_capability_when_learning_is_requested
+  - prove_dream_candidate_path
+  - emit_receipt
+
+activation:
+  localhost_only_default: true
+  deploy: false
+  vps_change: false
+  public_exposure: false
+
+final_claim:
+  wired_requires:
+    - foreground_e2e_pass_if_enabled
+    - background_e2e_pass_if_enabled
+    - hermes_receive_pass
+    - browser_return_pass
+    - evidence_envelope_pass

@@ -1,0 +1,16 @@
+flowchart TD
+    C[SEGREDO/CHEFE<br/>correção material] --> R[REGRA COMPARTILHADA]
+    R --> S1[SOL / janela A]
+    R --> S2[SOL / janela B]
+    R --> S3[SOL / janela C]
+    R --> S4[SOL / janela D]
+    S1 --> O[COMPORTAMENTO OBSERVÁVEL]
+    S2 --> O
+    S3 --> O
+    S4 --> O
+    O --> P[PRINT / RECEIPT]
+    P --> J{REALITY JUDGE}
+    J -->|divergiu| C
+    J -->|reproduziu| K[CRISTAL / LAST_GOOD_STATE]
+    K --> N[NEXT BOOT MAIS ALTO]
+    N --> R

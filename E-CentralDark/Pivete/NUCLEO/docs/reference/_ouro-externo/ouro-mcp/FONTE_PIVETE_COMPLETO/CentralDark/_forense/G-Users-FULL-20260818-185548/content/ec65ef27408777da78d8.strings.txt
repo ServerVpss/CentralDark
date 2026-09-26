@@ -1,0 +1,22 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\share\doc\git-doc\git-verify-commit.adoc
+
+git-verify-commit(1)
+====================
+git-verify-commit - Check the GPG signature of commits
+SYNOPSIS
+--------
+[synopsis]
+git verify-commit [-v | --verbose] [--raw] <commit>...
+DESCRIPTION
+-----------
+Validates the GPG signature created by `git commit -S`
+on the commit objects given on the command line.
+OPTIONS
+-------
+`--raw`::
+Print the raw gpg status output to standard error instead of the normal
+human-readable output.
+`-v`::
+`--verbose`::
+Print the contents of the commit object before validating it.
+Part of the linkgit:git[1] suite

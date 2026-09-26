@@ -1,0 +1,12 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\share\doc\git-doc\RelNotes\2.33.2.adoc
+
+Git v2.33.2 Release Notes
+=========================
+This release merges up the fixes that appear in v2.30.3, v2.31.2
+and v2.32.1 to address the security issue CVE-2022-24765; see
+the release notes for these versions for details.
+In addition, it contains the following fixes:
+ * Squelch over-eager warning message added during this cycle.
+ * A bug in "git rebase -r" has been fixed.
+ * One CI task based on Fedora image noticed a not-quite-kosher
+   construct recently, which has been corrected.

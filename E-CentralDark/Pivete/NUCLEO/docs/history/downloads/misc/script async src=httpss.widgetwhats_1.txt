@@ -1,0 +1,842 @@
+<script async src="https://s.widgetwhats.com/wwwa.js" data-wwwa="26034"></script>
+
+<!-- SOM DE AVISO LEGAL -->
+<audio id="popup-som" preload="auto">
+  <source src="https://segredounlock.com/Alert.mp3" type="audio/mpeg">
+  Seu navegador não suporta áudio HTML5.
+</audio>
+
+<script>
+  document.addEventListener('click', function playSom() {
+    document.getElementById('popup-som').play();
+    document.removeEventListener('click', playSom); // Toca só uma vez
+  });
+</script>
+
+
+<div id="popup-termos" class="popup-overlay" style="display: none;">
+  <div class="popup-box animated">
+    <button class="close-popup" onclick="fecharPopup()">×</button>
+    <h2>🛠️ Termos de Uso e Responsabilidade</h2>
+    <p><strong>IMPORTANTE — USO RESPONSÁVEL DAS FERRAMENTAS</strong></p>
+    <p>As ferramentas vendidas neste site são destinadas exclusivamente para uso técnico autorizado, por profissionais de manutenção e assistência técnica.</p>
+    <p>Ao adquirir qualquer produto, o comprador declara:</p>
+    <ul>
+      <li>Ser maior de 18 anos;</li>
+      <li>Utilizar as ferramentas apenas em equipamentos próprios ou com autorização expressa e documentada do proprietário;</li>
+      <li>Estar ciente de que o uso indevido pode configurar crime (art. 154-A do Código Penal e Lei 12.737/2012).</li>
+    </ul>
+    <p><strong>⚠️ Não nos responsabilizamos pelo uso incorreto ou ilegal das ferramentas após a compra.</strong></p>
+    <hr>
+    <h3>📝 Aviso Legal</h3>
+    <p>Este site <strong>não apoia serviços ilegais</strong>, como desbloqueio de iCloud, remoção de FRP ou alteração de IMEI.</p>
+    <p>O uso das ferramentas sem comprovação de propriedade é proibido e de responsabilidade do comprador.</p>
+  </div>
+</div>
+
+<style>
+
+
+
+
+
+
+
+  .popup-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to bottom right, rgba(0, 128, 0, 0.4), rgba(144, 238, 144, 0.5));
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  .popup-box {
+    background: #e6f5e6;
+    color: #225522;
+    border: 2px solid #8fbc8f;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 550px;
+    width: 90%;
+    font-family: Arial, sans-serif;
+    position: relative;
+    box-shadow: 0 8px 20px rgba(0, 128, 0, 0.3);
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.4s ease;
+  }
+
+  .popup-box.show {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .popup-box h2, .popup-box h3 {
+    margin-top: 0;
+    color: #1d431d;
+  }
+
+  .popup-box ul {
+    margin: 10px 0;
+    padding-left: 20px;
+  }
+
+  .popup-box hr {
+    border: none;
+    border-top: 1px solid #cceacc;
+    margin: 15px 0;
+  }
+
+  .close-popup {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background-color: #d0f0d0;
+    border: 1px solid #a0d0a0;
+    border-radius: 50%;
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    color: #2e6e2e;
+    cursor: pointer;
+    line-height: 28px;
+    text-align: center;
+  }
+
+  .close-popup:hover {
+    background-color: #b2eab2;
+  }
+</style>
+
+<script>
+  function fecharPopup() {
+    document.getElementById('popup-termos').style.display = 'none';
+    localStorage.setItem('ultimaExibicaoPopup', new Date().getTime());
+  }
+
+  function tocarSomPopup() {
+    const audio = document.getElementById('popup-som');
+    if (audio) {
+      audio.play().catch(err => {
+        // navegador pode bloquear autoplay — só exibe aviso no console
+        console.warn("Som bloqueado pelo navegador até haver interação do usuário.", err);
+      });
+    }
+  }
+
+  window.addEventListener('load', () => {
+    const agora = new Date().getTime();
+    const ultimaExibicao = localStorage.getItem('ultimaExibicaoPopup');
+    const intervalo = 10 * 60 * 1000; // 10 minutos
+
+    if (!ultimaExibicao || agora - parseInt(ultimaExibicao) > intervalo) {
+      const popup = document.getElementById('popup-termos');
+      const box = popup.querySelector('.popup-box');
+      popup.style.display = 'flex';
+
+      void box.offsetWidth;
+      box.classList.add('show');
+
+      tocarSomPopup(); // Toca o som ao exibir
+      setTimeout(() => fecharPopup(), 20000); // Fecha após 20 segundos
+    }
+  });
+</script>
+<!-- PARTE DE CIMA SLIDE ROLOVER INICIO------------------------------------------------------------------------------------->
+<!-- SLIDER HEADER COM ALTERNÂNCIA E RESPONSIVO -->
+<div class="slider1-container">
+    <div class="slider1-track">
+        <div class="slide1">
+            <img src="https://i.postimg.cc/bwsWmr0C/Slider-Web1.png" alt="Slide 1">
+        </div>
+        <div class="slide1">
+            <img src="https://i.postimg.cc/y8t5tKvV/Slider-Web2.png" alt="Slide 2">
+        </div>
+        <div class="slide1">
+            <img src="https://i.postimg.cc/hGmwqY5V/Slider-Web3.png" alt="Slide 3">
+        </div>
+    </div>
+</div>
+
+<style>
+    .slider1-container {
+        width: 100%;
+        height: auto;
+        max-height: 50px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .slider1-track {
+        display: flex;
+        width: fit-content;
+        animation: slide1Alternate 6s infinite alternate ease-in-out;
+    }
+
+    .slide1 {
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+
+    .slide1 img {
+        height: 50px;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+        display: block;
+    }
+
+    /* Corrigindo o nome da animação */
+    @keyframes slide1Alternate {
+        0% {
+            transform: translateX(0%);
+        }
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+
+    /* Ajuste em telas menores */
+    @media (max-width: 600px) {
+        .slide1 img {
+            height: 40px;
+        }
+    }
+</style>
+<!-- PARTE DE CIMA SLIDE ROLOVER FIM------------------------------------------------------------------------------------->
+<!-- TEXTO ROLANTE RESPONSIVO COM PAUSA AO PASSAR O MOUSE -->
+<!-- TEXTO ROLANTE RESPONSIVO COM PAUSA AO PASSAR O MOUSE -->
+<div class="scroll-banner">
+    <div class="scroll-text">
+        <span>
+            ✨SEGREDOUNLOCKER!!! 🔥Utilizar o mesmo email, para Depósito PIX
+            <span style="color: #000000; font-weight: bold;">"APÓS PAGAMENTO AGUARDE"</span> Para Que o Saldo Seja Adicionado Automaticamente à Sua Conta.
+            Caso Não Realize esse procedimento, o saldo não será atualizado.
+            <a href="https://wa.me/5554991046842" target="_blank" class="marquee-link">🔥Então, entre em contato pelo WhatsApp🔥</a>
+        </span>
+    </div>
+</div>
+
+<style>
+    .scroll-banner {
+        overflow: hidden;
+        background: radial-gradient(circle, rgb(255 255 255) 0%, rgb(255 255 255) 100%);
+        box-shadow: -4px 5px 10px #ffffff;
+        white-space: nowrap;
+        position: relative;
+        height: auto;
+    }
+
+    .scroll-text {
+        display: inline-block;
+        white-space: nowrap;
+        animation: scrollText 25s linear infinite; /* Sem atraso, começa imediatamente */
+        animation-play-state: running;
+    }
+
+    .scroll-banner:hover .scroll-text {
+        animation-play-state: paused; /* Pausar animação ao passar mouse */
+    }
+
+    .scroll-text span {
+        display: inline-block;
+        color: #ff0000;
+        font-size: 15px;
+        font-family: verdana;
+        font-weight: bold;
+        text-shadow: 0px -1px 3px #f4f4f4, 1px -2px 9px #000000, 1px 2px 3px #ffffff, 1px 2px 11px #ffffff;
+        background: url(https://hostingunlock.com/styles/blink2-1.gif) center left repeat;
+    }
+
+    .marquee-link {
+        color: #ff0000;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .marquee-link:hover {
+        text-decoration: underline;
+    }
+
+    @keyframes scrollText {
+        0% {
+            transform: translateX(80%); /* Inicia o texto fora da tela à direita */
+        }
+        100% {
+            transform: translateX(-99%); /* Finaliza o texto fora da tela à esquerda */
+        }
+    }
+
+    @media (max-width: 600px) {
+        .scroll-text span {
+            font-size: 13px;
+        }
+    }
+</style>
+
+
+
+<!-- PARTE DE CIMA LETRA ROLOVER FIM------------------------------------------------------------------------------------->
+
+<!-- WHATSAPP BOLHA------------------------------------------------------------------------------------->
+<script>
+     $(document).ready(function() {
+        var link = "https://wa.me/5554991046842";
+        var button = `
+<div class="wa-container">
+    <div class="wa-button">
+        <a class="wa-button-link" href="${link}" target="_blank">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="50" height="50" version="1.1">
+                <path d=" M19.11 17.205c-.372 0-1.088 1.39-1.518 1.39a.63.63 0 0 1-.315-.1c-.802-.402-1.504-.817-2.163-1.447-.545-.516-1.146-1.29-1.46-1.963a.426.426 0 0 1-.073-.215c0-.33.99-.945.99-1.49 0-.143-.73-2.09-.832-2.335-.143-.372-.214-.487-.6-.487-.187 0-.36-.043-.53-.043-.302 0-.53.115-.746.315-.688.645-1.032 1.318-1.06 2.264v.114c-.015.99.472 1.977 1.017 2.78 1.23 1.82 2.506 3.41 4.554 4.34.616.287 2.035.888 2.722.888.817 0 2.15-.515 2.478-1.318.13-.33.244-.73.244-1.088 0-.058 0-.144-.03-.215-.1-.172-2.434-1.39-2.678-1.39zm-2.908 7.593c-1.747 0-3.48-.53-4.942-1.49L7.793 24.41l1.132-3.337a8.955 8.955 0 0 1-1.72-5.272c0-4.955 4.04-8.995 8.997-8.995S25.2 10.845 25.2 15.8c0 4.958-4.04 8.998-8.998 8.998zm0-19.798c-5.96 0-10.8 4.842-10.8 10.8 0 1.964.53 3.898 1.546 5.574L5 27.176l5.974-1.92a10.807 10.807 0 0 0 16.03-9.455c0-5.958-4.842-10.8-10.802-10.8z"></path>
+            </svg>
+        </a>
+    </div>
+</div>
+        `;
+        var style = `
+        <style>
+.card-product {
+    border: #88DFBA solid 5px;
+}
+.card {
+    background: #ffffff;
+}
+        .wa-container {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            z-index: 1000;
+            margin: 0 10px 10px 0;
+        }
+        .wa-button {
+            border-radius: 30px;
+            background-color: #25d366;
+            color: #fff;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            padding: 5px;
+        }
+        .wa-button:hover {
+            background-color: #075e54;
+        }
+        .wa-button svg {
+            fill: white;
+        }
+.searchme {
+    background: url(https://enxf.cc/Ak4d9pH.gif) repeat scroll 0 0%;
+    color: #88dfb0;
+    font-weight: bold;
+    text-shadow: 5px 5px 5px #000000, 0 0 10px #000000, 1px 4px 0px #000000;
+}
+}
+@keyframes fa-blink{
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    color: blue;
+  }
+}
+.fa-blink {
+   animation: blink 1s steps(1, end) infinite;
+
+}
+        </style>`
+
+        $("body").append(style);
+        $("body").append(button);
+     });
+ </script>
+<!-- WHATSAPP BOLHA------------------------------------------------------------------------------------->
+
+<!-- COR DA BARRA MEIO------------------------------------------------------------------------------------->
+<style>
+.bg-white, .bg-primary, .footer-top {
+    background-color: #000000 !important;
+}
+</style>
+<!-- COR DA BARRA MEIO------------------------------------------------------------------------------------->
+
+<!-- navbar------------------------------------------------------------------------------------->
+
+<style>
+
+.dropdown-menu, .modal-content, .navbar-products .nav-item:hover, .card, .card-product .product-info {
+    background: #000000  !important;
+}
+
+.btn, .menu.selected, .page-size.selected, .btn.btn-light, .bg-hover:hover, .bg-hover:focus, .dropdown-item:focus, .dropdown-item:hover {
+    background: #ffc107 !important;
+    border-color: transparent;
+    color: white;
+}
+
+body, h3.h3 span:before, .carousel.slide-products, .serchcontent, .list-group-item, .chosen-container .chosen-results li.highlighted {
+    background: #88dfb0 !important;
+    color: #707070;
+}
+.header-bottom {
+    background: #88dfb0 !important;
+}
+.nav.navbar-dark .nav-link, .header-bottom.header-middle .navbar-expand-lg .navbar-nav .nav-link, .header-bottom.header-middle .navbar-expand-lg .navbar-nav .nav-item:hover .nav-link, .header-bottom.header-middle .navbar-brand, .header-bottom.header-middle .navbar-toggler {
+    color: rgb(0 0 0);
+
+    text-shadow: 0px 0px 1px #000000, 0 0 0px #000000, 1px 0px 1px #000000;
+}
+.cursor-pointer {
+  color: #ff0018 !important;
+  text-shadow: 0 0 5px #ff0018, 0 0 10px #ff0018, 0 0 15px #ff0018;
+  animation: pulse-glow 1.5s infinite alternate;
+}
+
+@keyframes pulse-glow {
+  0% {
+    text-shadow: 0 0 5px #ff0018, 0 0 10px #ff0018, 0 0 15px #ff0018;
+  }
+  100% {
+    text-shadow: 0 0 2px #ff0018, 0 0 4px #ff0018, 0 0 6px #ff0018;
+  }
+}
+</style>
+<!-- navbar------------------------------------------------------------------------------------->
+
+<!-- VALOR RED------------------------------------------------------------------------------------->
+
+<style>
+
+.small, small {
+    font-size: large;
+    background: url(https://hostingunlock.com/styles/blink2-1.gif) center left repeat, repeat scroll 56% 83% hsl(0deg 0% 1% / 01%);
+    background-position: 0px 0%;
+    background-size: initial;
+    background-repeat: repeat;
+    background-attachment: scroll;
+    background-origin: initial;
+    background-clip: initial;
+    font-weight: bold;
+    color: #ffffff !important;
+}
+*, ::after, ::before {
+    box-sizing: border-box;
+     
+}
+
+.big-font {
+    margin-bottom: 0;
+    font-size: xx-large;
+    font-family: verdana;
+    font-weight: bold;
+    text-shadow: 0px -1px 3px #f4f4f4, 1px -2px 9px #000, 1px 2px 3px #ffffff, 1px 2px 11px #000;
+    background: url(https://hostingunlock.com/styles/blink2-1.gif) repeat scroll 0% 0% hsl(134.23deg 65.99% 28.82% / 0%);
+}
+</style>
+<!-- VALOR RED------------------------------------------------------------------------------------->
+<style>
+dropdown-item {
+    color: #000;
+    display: block;
+    padding: 0.25rem 1rem;
+    transition: all 0.1s ease 0s;
+    cursor: pointer;
+}
+
+
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: .25rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: #88dfb0;
+    border: 0;
+}
+</style>
+
+<style>
+  .custom-button {
+    
+      background-color: #30e62d;
+      color: #000000; 
+      font-family: Arial, system-ui, sans-serif;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 19px;
+      cursor: pointer;
+      font-weight: bold;
+      border: 1px solid #adadad;
+    
+  }
+
+  .custom-button:hover {
+    
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        filter: brightness(110%);
+       
+        transition: all 0.3s ease;
+      
+  }
+/*Quadrado de baixo*/
+
+.content-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .custom-services-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      width: 100%;
+      padding: 10px;
+    }
+    .custom-service-card {
+      background-color: #f4f4f4;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .custom-service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+    .custom-service-card i {
+      font-size: 2em;
+      color: green; /* Alterado para verde */
+      margin-bottom: 10px;
+    }
+    .custom-service-card h3 {
+      font-size: 1.2em;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .custom-service-card p {
+      font-size: 1em;
+      color: #666;
+    }
+
+</style>
+<style>
+  /* Estilo para o texto piscante */
+  .piscando {
+    animation: piscar 1s step-start infinite;
+  }
+
+  @keyframes piscar {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  /* Container principal */
+  .content-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 30px;
+  }
+
+  /* Container dos serviços */
+  .custom-services-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    width: 100%;
+    padding: 10px;
+  }
+
+  /* Cartões de serviço */
+  .custom-service-card {
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    padding: 5px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+  /* Efeito ao passar o mouse */
+  .custom-service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5); /* Sombra preta */
+  }
+
+  /* Ícones */
+  .custom-service-card i {
+    font-size: 2em;
+    color: green; /* Cor verde */
+    margin-bottom: 10px;
+  }
+
+  /* Títulos dos serviços */
+  .custom-service-card h3 {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  /* Descrições dos serviços */
+  .custom-service-card p {
+    font-size: 1em;
+    color: #666;
+  }
+
+  /* Estilo para os títulos principais */
+  .titulo-principal {
+    text-align: center;
+    font-size: 15pt;
+    font-weight: bold;
+    background-image: url('https://enxf.cc/Ak4d9pH.gif');
+    background-repeat: repeat;
+    background-position: 0 0;
+    background-size: initial;
+    color: #000;
+    padding: 20px 0;
+  }
+
+  /* Estilo para os subtítulos */
+  .subtitulo {
+    text-align: center;
+    font-size: 24pt;
+    background-color: #f5f5f5;
+    color: #000;
+    padding: 10px 0;
+  }
+
+  /* Estilo para os parágrafos informativos */
+  .paragrafo-info {
+    text-align: center;
+    font-size: 18pt;
+    background-color: #f5f5f5;
+    color: #000;
+    padding: 10px 0;
+  }
+
+  /* Estilo para os links de contato */
+  .contato-links {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .contato-links a {
+    margin: 0 10px;
+    display: inline-block;
+  }
+
+  .contato-links img {
+    width: 76px;
+    height: 76px;
+  }
+
+  /* Estilo para o rodapé */
+  .rodape {
+    text-align: center;
+    font-weight: bold;
+    color: #ff0000;
+    text-shadow: 0 0 5px #fff, 0 0 5px #f00, 1px 1px 0 #f00;
+    background-image: url('https://enxf.cc/Ak4d9pH.gif');
+    background-repeat: repeat;
+    background-position: 0 0;
+    padding: 20px 0;
+  }
+</style>
+<style>
+    .pix-table {
+      width: 100%;
+      max-width: 800px;
+      border-collapse: collapse;
+      margin: 0 auto;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 16px;
+      color: #212529;
+      background-color: #fff;
+    }
+
+    .pix-table th,
+    .pix-table td {
+      border: 1px solid #dee2e6;
+      padding: 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .pix-title {
+      text-align: center;
+      font-size: 28px;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+      padding: 16px;
+      border-bottom: 2px solid #dee2e6;
+      background-color: #f8f9fa;
+    }
+
+    .pix-key {
+      font-weight: bold;
+      color: #202124;
+    }
+
+@keyframes tiltPulse {
+  0% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.03) rotate(2deg); }
+  50% { transform: scale(1.05) rotate(-2deg); }
+  75% { transform: scale(1.03) rotate(1deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.navbar-brand img {
+  animation: tiltPulse 1s ease-in-out infinite;
+}
+  </style>
+<style>
+  
+
+   .pix-banner {
+  font-size: 36pt;
+  font-weight: bold;
+  padding: 15px;
+  color: #fff;
+  background-color: red; /* Apenas uma cor sólida */
+  animation: flash 1s infinite;
+  display: inline-block;
+}
+
+@keyframes flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+    .pix-info {
+      background-color: #ffff00;
+      color: #000;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 8px;
+      font-size: 18px;
+    }
+
+    .contact-icons {
+      margin: 20px 0;
+    }
+
+    .contact-icons a {
+      margin: 0 10px;
+      display: inline-block;
+    }
+
+    .contact-icons img {
+      width: 75px;
+      height: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .contact-icons img:hover {
+      transform: scale(1.1);
+    }
+
+    iframe {
+      margin-top: 30px;
+      max-width: 100%;
+    }
+  </style>
+<style>
+ .x-pix-banner {
+    font-size: 0px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #ff0000;
+    padding: 6px;
+    text-align: center;
+    font-family: Verdana, Arial, sans-serif;
+    animation: x-flash 1s infinite;
+}
+
+  @keyframes x-flash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .x-pix-info {
+    font-size: 18px;
+    background-color: #ffff00;
+    color: #000;
+    padding: 10px;
+    font-family: Verdana, Arial, sans-serif;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .x-contact-icons {
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .x-contact-icons img {
+    width: 48px;
+    height: 48px;
+    margin: 0 10px;
+  }
+
+  .x-pix-note {
+    font-size: 16px;
+    text-align: center;
+    color: #000;
+    font-family: Verdana, Arial, sans-serif;
+    margin-top: 10px;
+  }
+
+  iframe {
+    display: block;
+    margin: 20px auto;
+    border: none;
+  }
+
+.bis_skin_checked={
+    color: #000000 !important;       /* Texto preto */
+    background-color: ;       /* Fundo branco (ou personalize como quiser) */
+    border: 1px solid #000000;       /* Borda preta */
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.spinner-loader, a, .text-muted, .h1, .h2, .h3, .h4, .h5, .h6, h3.title, .btn-addtocart, .card-product:hover .service-name, .page-link, ul.nav-pills.flex-nowrap .nav-link.active, .double-border h5 {
+    color: #ffffff;
+}
+
+.botao-comprar {
+  display: inline-block;
+  background-color: #ffcc00; /* Amarelo */
+  color: #000;               /* Preto */
+  font-weight: bold;
+  padding: 15px 30px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 18px;
+  box-shadow: 0 0 12px rgba(255, 204, 0, 0.5);
+  transition: 0.3s ease;
+}
+
+.botao-comprar:hover {
+  background-color: #ffdb4d;
+  box-shadow: 0 0 20px rgba(255, 204, 0, 0.8);
+  transform: scale(1.05);
+}
+</style>

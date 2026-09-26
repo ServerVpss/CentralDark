@@ -1,0 +1,32 @@
+{
+  "processo": "CentralDark-LovableBridge (pm_id 15)",
+  "pid": 3583381,
+  "pm2_status_reportado": "online",
+  "processo_realmente_vivo": true,
+  "estado_os": "Ssl sleeping multi-thread session-leader, 11 threads, ~15d08h de execucao",
+  "script_declarado": "/root/CentralDark/apps/modulos/lovable-openai-bridge/server.mjs",
+  "script_existe_no_disco": false,
+  "diretorio_do_modulo": "existe mas contem APENAS logs/ — nenhum codigo-fonte",
+  "ACHADO_CRITICO": "processo ORFAO: roda em memoria a partir de arquivo inexistente no disco. Qualquer restart/reload/resurrect MATA o servico permanentemente, pois nao ha codigo para recarregar.",
+  "prova": [
+    "test -f server.mjs => AUSENTE",
+    "kill -0 3583381 => VIVO",
+    "err.log registra ERR_MODULE_NOT_FOUND para server.mjs em 2026-07-17T06:00:45"
+  ],
+  "porta_escutando": "NENHUMA (nao aparece em ss -ltnp)",
+  "dominio": "Caddy tem handle_path /lovable/v1/* para 127.0.0.1:3102, mas NADA escuta em 3102",
+  "consumidores_encontrados": "NENHUM comprovado",
+  "depende_de_LOVABLE_API_KEY": "NAO_COMPROVADO (codigo-fonte inexistente)",
+  "substituto_funcional": "NAO_COMPROVADO",
+  "classificacao": "LEGACY_RUNNING",
+  "pode_ser_parado_com_seguranca": "unknown — nao escuta porta e nao tem consumidor comprovado, mas confirmar antes",
+  "AVISO": "NAO EXECUTAR pm2 restart — irreversivel sem restaurar o arquivo do Git primeiro",
+  "processo_irmao_mesmo_sintoma": {
+    "nome": "CentralDark-AiPromptAPI",
+    "pid": 3583363,
+    "script": "/root/CentralDark/apps/modulos/status/ai-prompt-server.mjs",
+    "script_existe": false,
+    "vivo": true,
+    "nota": "diretorio status/ existe com outros arquivos, mas ai-prompt-server.mjs NAO esta la"
+  }
+}

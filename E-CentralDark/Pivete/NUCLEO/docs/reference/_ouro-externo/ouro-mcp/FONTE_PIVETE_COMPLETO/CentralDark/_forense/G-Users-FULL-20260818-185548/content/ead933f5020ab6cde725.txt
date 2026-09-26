@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\tap\react-shim\compiler-runtime\package.json
+
+{
+  "type": "module",
+  "main": "../../dist/react-shim/compiler-runtime.js"
+}

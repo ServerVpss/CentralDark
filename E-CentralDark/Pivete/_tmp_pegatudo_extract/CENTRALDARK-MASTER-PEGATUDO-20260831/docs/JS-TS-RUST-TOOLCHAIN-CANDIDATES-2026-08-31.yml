@@ -1,0 +1,45 @@
+schema: CENTRALDARK_JS_TS_TOOLCHAIN_CANDIDATES
+observed_at: '2026-08-31'
+status: RESEARCHED_NOT_INSTALLED
+candidates:
+  OXLINT:
+    role: LINTER_FAST
+    implementation: Rust_plus_type_aware_bridge
+    strengths:
+      - JS_TS_JSX_TSX
+      - multi_file_analysis
+      - type_aware_rules_available
+      - migration_support_from_eslint
+    adoption: SHADOW_FIRST
+    caveats:
+      - JS_plugins_alpha
+      - type_aware_requires_extra_component
+  BIOME:
+    role: FORMATTER_AND_LINTER
+    implementation: Rust
+    strengths:
+      - fast_formatter
+      - JS_TS_JSX_TSX_JSON_CSS_GRAPHQL
+      - integrated_toolchain
+    adoption: SHADOW_FIRST
+  ROLLDOWN:
+    role: BUNDLER_CANDIDATE
+    implementation: Rust
+    strengths:
+      - Rollup_Vite_compatible_direction
+      - JS_TS_transforms
+      - fast_bundling
+    adoption: ONLY_IF_CURRENT_BUILD_OWNER_COMPATIBLE
+  TYPEDOC:
+    role: GENERATED_API_DOCUMENTATION
+    implementation: TypeScript_ecosystem
+    strengths:
+      - TSDoc_JSDoc_comments
+      - Markdown
+      - HTML_generation
+    adoption: COMPLEMENT_HOUSE_DOC_GATE_NOT_REPLACE
+rules:
+  benchmark_before_replace: true
+  no_tool_replacement_without_regression_suite: true
+  current_eslint_or_formatter_remains_until_shadow_equivalence_proven: true
+  rust_is_not_automatic_reason_to_adopt: true

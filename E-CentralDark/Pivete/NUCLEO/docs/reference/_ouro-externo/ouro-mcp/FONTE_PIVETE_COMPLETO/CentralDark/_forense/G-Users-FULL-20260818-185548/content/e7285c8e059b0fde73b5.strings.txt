@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\lib\tcl8.6\tzdata\Etc\GMT-0
+
+# created by tools/tclZIC.tcl - do not edit
+if {![info exists TZData(Etc/GMT)]} {
+    LoadTimeZoneFile Etc/GMT
+set TZData(:Etc/GMT-0) $TZData(:Etc/GMT)

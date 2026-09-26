@@ -1,0 +1,56 @@
+{
+  "product": "CentralDark.MissionCockpit",
+  "pattern": "multi_agent_orchestration_saas",
+  "not_goals": ["clone_third_party_ide", "resell_only_tokens", "depend_on_third_party_grants"],
+  "pages": {
+    "dashboard": {"route": "/app/dashboard", "job": "member_home_entitlement_ctas"},
+    "plans": {"route": "/app/plans|/checkout|/billing", "job": "capture_subscription_revenue"},
+    "download": {"route": "/download", "job": "deliver_runtime_optional_mvp_web"},
+    "direction": {"route": "/app/roadmap", "job": "alpha_transparency_retention"},
+    "help": {"route": "/app/help", "job": "activation_and_deflect_support"}
+  },
+  "roles": ["conductor", "scout", "builder", "reviewer", "executor", "judge"],
+  "revenue": {
+    "primary": "hub_subscription",
+    "secondary": "arsenal_usage_margin",
+    "addons": ["voice", "memory", "seats", "sla"],
+    "byok": "optional"
+  },
+  "stack": {
+    "gateway": "arsenal-openai-adapter:8090",
+    "public_api": "api.centralldark.com",
+    "upstream": "abacus_routellm",
+    "hub": "supabase",
+    "tools": "mcp:9100",
+    "orchestrator": "hermes-core",
+    "vps_root": "/root/CentralDark/apps/modulos"
+  },
+  "tables": [
+    "plans",
+    "entitlements",
+    "missions",
+    "mission_agents",
+    "mission_events",
+    "cost_ledger",
+    "price_table",
+    "squad_templates",
+    "help_articles",
+    "roadmap_items"
+  ],
+  "mvp_slices": [
+    "P0_spec_schema",
+    "P1_mission_gateway_cost_budget",
+    "P2_squad_orchestration",
+    "P3_hub_ui",
+    "P4_entitlements_help_roadmap"
+  ],
+  "dod": [
+    "login_hub",
+    "create_mission",
+    "ge_2_roles_via_arsenal",
+    "live_cost",
+    "budget_hard_stop",
+    "first_mission_help",
+    "no_clone"
+  ]
+}

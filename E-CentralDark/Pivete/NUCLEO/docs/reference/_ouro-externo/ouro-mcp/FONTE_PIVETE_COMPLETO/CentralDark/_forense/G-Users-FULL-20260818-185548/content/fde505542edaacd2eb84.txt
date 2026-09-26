@@ -1,0 +1,14 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@asamuzakjp\generational-cache\types\index.d.ts
+
+export class GenerationalCache<K, V> {
+    constructor(max: number);
+    set max(value: number);
+    get max(): number;
+    get size(): number;
+    get(key: K): V | undefined;
+    set(key: K, value: V): GenerationalCache<any, any>;
+    has(key: K): boolean;
+    delete(key: K): boolean;
+    clear(): void;
+    #private;
+}

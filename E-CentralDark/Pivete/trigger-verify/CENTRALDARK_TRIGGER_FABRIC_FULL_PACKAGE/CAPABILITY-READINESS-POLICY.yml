@@ -1,0 +1,368 @@
+schema: centraldark.capability-readiness.v1
+name: CAPABILITY-READINESS-POLICY
+status: CANONICAL_CONTRACT_CANDIDATE
+owner: CENTRALDARK_TRIGGER_FABRIC
+consumer: MEGAZORD-CENTRALDARK
+
+intent:
+  statement: "Estar capacitado para usar uma capacidade não significa manter essa capacidade instalada, carregada ou ativa o tempo todo."
+  goal: "Preservar o conteúdo, programação, contratos, adapters, manifests e procedimentos completos para ativação futura sob demanda, sem sobrecarregar Casa ou VPS."
+
+invariants:
+  CAPABILITY_CATALOGUED_IS_NOT_INSTALLED: true
+  INSTALLED_IS_NOT_LOADED: true
+  LOADED_IS_NOT_ACTIVE: true
+  ACTIVE_IS_NOT_SELECTED: true
+  SELECTED_IS_NOT_EXECUTED: true
+  EXECUTED_IS_NOT_PROVEN: true
+  DISCOVERED_IS_NOT_REQUIRED: true
+  AVAILABLE_IS_NOT_ALWAYS_ON: true
+  DISABLED_IS_NOT_FAILURE: true
+  OFF_IS_NOT_FAILURE_WHEN_NOT_SELECTED: true
+  INACTIVE_UNSELECTED_IS_NEUTRAL: true
+  AVAILABLE_OFF_IS_VALID_STATE: true
+  FAILURE_REQUIRES_EXPECTED_ACTIVE_CAPABILITY: true
+  BUTTON_OFF_IS_STATE_NOT_INCIDENT: true
+  LOCAL_MODEL_SUPPORTED_IS_NOT_LOCAL_MODEL_RESIDENT: true
+  READINESS_DOES_NOT_REQUIRE_RESOURCE_RESIDENCY: true
+
+readiness_model:
+  states:
+    CATALOGUED:
+      meaning: "Capacidade conhecida, classificada e com owner/destino definido."
+    READY_TO_MATERIALIZE:
+      meaning: "Código, configuração, adapters, comandos, manifests e testes necessários existem ou têm origem determinística para instalação/ativação."
+    INSTALLED:
+      meaning: "Dependência/binário/modelo está fisicamente presente no runtime alvo."
+    LOADED:
+      meaning: "Está consumindo memória/CPU/GPU/disco/processos do runtime."
+    ACTIVE:
+      meaning: "Serviço/modelo/tool está operacional neste instante."
+    SELECTED:
+      meaning: "Capability Contract Router escolheu a capacidade para a intenção vigente."
+    AVAILABLE_OFF:
+      meaning: "Capacidade disponível/instalada porém deliberadamente desligada ou não selecionada; estado neutro, sem incidente."
+    REQUIRED_UNAVAILABLE:
+      meaning: "A intenção vigente exige a capacidade, mas ela não pôde ser ativada nem substituída por fallback aplicável."
+  normal_policy: CATALOGUED_OR_READY_TO_MATERIALIZE
+  runtime_residency_policy: ON_DEMAND
+
+inactive_state_semantics:
+  principle: OFF_BY_ITSELF_MEANS_ONLY_OFF
+  disabled_or_off_without_selection:
+    classification: AVAILABLE_OFF
+    severity: NONE
+    alert: false
+    blocker: false
+    regression: false
+    error: false
+    action: CONTINUE_WITH_SELECTED_CAPABILITIES
+  selected_or_required_but_off:
+    first_action: TRY_CANONICAL_ACTIVATION_OR_EXISTING_FALLBACK
+    failure_only_if:
+      - CURRENT_INTENT_REQUIRES_CAPABILITY
+      - CAPABILITY_SELECTED_OR_REQUIRED
+      - ACTIVATION_OR_HEALTH_PROBE_FAILS
+      - NO_APPLICABLE_EXISTING_FALLBACK
+    classification_when_failure_proven: REQUIRED_UNAVAILABLE
+  fallback_semantics:
+    disabled_arm_with_equivalent_active_arm: CONTINUE
+    one_optional_arm_off_does_not_fail_organism: true
+    provider_or_tool_off_is_router_input_not_global_incident: true
+  hud_semantics:
+    AVAILABLE_OFF: "⚪ disponível/desligado — neutro"
+    ACTIVE: "🟢 ativo"
+    REQUIRED_UNAVAILABLE: "🔴 exigido e indisponível após ativação/fallback falhar"
+    UNKNOWN: "⚫ ainda não medido"
+  forbidden_interpretations:
+    - DISABLED_IMPLIES_BROKEN
+    - BUTTON_OFF_IMPLIES_REGRESSION
+    - OPTIONAL_TOOL_OFF_IMPLIES_SYSTEM_FAILURE
+    - UNSELECTED_PROVIDER_OFF_IMPLIES_BLOCKER
+
+artifacts_to_preserve_ready:
+  - SOURCE_CODE
+  - PROGRAMMING_LOGIC
+  - SKILLS
+  - ADAPTERS
+  - CONTRACTS
+  - MANIFESTS
+  - CONFIG_TEMPLATES
+  - INSTALL_RECIPES
+  - START_STOP_RECIPES
+  - HEALTH_CHECKS
+  - TEST_FIXTURES
+  - COUNTERPROOF_PROCEDURES
+  - VERSION_AND_PROVENANCE
+  - RESOURCE_REQUIREMENTS
+  - ROLLBACK_PROCEDURES
+  - OWNER_AND_HANDOFF_MAPPING
+
+heavy_runtime_policy:
+  examples:
+    - LOCAL_LLM
+    - EMBEDDING_MODEL
+    - RERANKER
+    - GPU_RUNTIME
+    - LARGE_INDEX
+    - HEAVY_BROWSER_WORKER
+    - OPTIONAL_DATABASE_SERVICE
+  default: DO_NOT_INSTALL_OR_LOAD_UNLESS_SELECTED
+  selection_requires:
+    - CURRENT_INTENT_REQUIRES_CAPABILITY
+    - CAPABILITY_ROUTER_SELECTS_IT
+    - TARGET_RUNTIME_HAS_RESOURCES
+    - RESOURCE_BUDGET_ACCEPTABLE
+    - NO_LIGHTER_EQUIVALENT_ALREADY_AVAILABLE
+    - INSTALL_OR_START_PATH_KNOWN
+    - HEALTH_PROBE_DEFINED
+    - STOP_OR_UNLOAD_PATH_KNOWN
+  after_use:
+    - REMEASURE_NEED
+    - STOP_OR_UNLOAD_IF_NO_LONGER_REQUIRED
+    - PRESERVE_READY_ARTIFACTS
+    - PRESERVE_RECEIPT
+
+local_llm_policy:
+  install_all_local_llms: false
+  keep_all_local_llms_loaded: false
+  keep_all_local_llms_running: false
+  catalogue_supported_models: true
+  preserve_integration_code: true
+  preserve_model_adapter_contracts: true
+  preserve_install_and_activation_recipes: true
+  preserve_resource_profiles: true
+  materialize_only_when_needed: true
+  allow_remote_or_existing_engine_when_sufficient: true
+  vps_weight_is_selection_factor: true
+  house_weight_is_selection_factor: true
+  model_is_replaceable_engine: true
+  model_is_not_identity: true
+
+resource_budget:
+  dimensions:
+    - DISK
+    - RAM
+    - VRAM
+    - CPU
+    - GPU
+    - NETWORK
+    - STARTUP_TIME
+    - STEADY_STATE_COST
+    - PROCESS_COUNT
+    - PORTS
+  rules:
+    CAPABILITY_WITHOUT_BUDGET_FIT: NOT_SELECTED
+    HEAVIER_WHEN_LIGHTER_SUFFICIENT: FORBIDDEN
+    IDLE_HEAVY_RUNTIME_WITHOUT_CURRENT_NEED: STOP_OR_UNLOAD
+    INSTALLATION_MAY_BE_DEFERRED: true
+    KNOWLEDGE_AND_CODE_MUST_REMAIN_READY: true
+
+megazord_semantics:
+  discover_relevant_resources: true
+  catalogue_broad_capabilities: true
+  activate_all_discovered: false
+  install_all_catalogued: false
+  preload_all_models: false
+  selection_policy: MINIMUM_SUFFICIENT_SET
+  lazy_materialization: true
+  lazy_activation: true
+  reusable_capability_blueprints: true
+  one_system_only: true
+  one_writer_per_scope: true
+
+agent_operational_quality:
+  intent: "Absorver práticas de arquitetura de agentes como comportamento do ciclo existente, sem criar ferramenta, cérebro, cargo soberano ou pipeline paralelo."
+  owner: CENTRALDARK_TRIGGER_FABRIC
+  runtime_owner: apps/modulos/fixed-point-fabric/
+  metacognition_owner: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+  new_tool: false
+  new_engine: false
+  new_authority: false
+  ai_architect_semantics:
+    classification: GOVERNANCE_VIEW
+    creates_new_human_authority: false
+    creates_new_agent_identity: false
+    purpose:
+      - ALIGN_AGENT_BEHAVIOR_WITH_CHEFE_INTENT
+      - ALIGN_OUTPUT_WITH_PRODUCT_AND_BUSINESS_CONSTRAINTS
+      - KEEP_OWNER_AND_SYSTEM_THEORY_RECONSTRUCTIBLE
+  pre_promotion_simulation:
+    reuse_existing_test_and_counterproof_harness: true
+    implementation_surface: apps/modulos/fixed-point-fabric/tests/test_counterproof.py
+    scenario_matrix_required_when_material: true
+    persona_is_test_fixture_not_identity: true
+    scenario_is_test_input_not_live_state: true
+    simulated_pass_is_not_runtime_pass: true
+    minimum_scenario_classes:
+      - HAPPY_PATH
+      - REGRESSION_AFTER_PRIOR_PASS
+      - UNKNOWN_DEPENDENCY
+      - BLOCKED_EXTERNAL_GATE
+      - STALE_EVIDENCE
+      - MODEL_OR_PROVIDER_CHANGE_WHEN_APPLICABLE
+      - PERMISSION_OR_AUTH_FAILURE_WHEN_APPLICABLE
+      - HANDOFF_TO_NEXT_AGENT_WITHOUT_GUESSING
+    promotion_requires_real_evidence_after_simulation: true
+  closed_loop_improvement:
+    enabled_as_existing_method: true
+    flow:
+      - OBSERVE_REAL_RESULT
+      - CAPTURE_EVIDENCE
+      - CLASSIFY_DEVIATION
+      - MAP_TO_EXISTING_OWNER
+      - APPLY_MINIMAL_DELTA
+      - RUN_REGRESSION_SCENARIOS
+      - COUNTERPROVE
+      - REMEASURE_T1
+      - REGISTER_LEARNING_DELTA
+      - CONTINUE_UNTIL_FIXED_POINT
+    conversation_or_runtime_sample_is_evidence_input_not_authority: true
+    feedback_without_discriminating_evidence_is_not_learning: true
+    past_error_must_improve_future: true
+  agent_iceberg:
+    visible_surface_is_not_total_cost: true
+    below_surface_checks:
+      - REGRESSION_TESTS
+      - MODEL_MIGRATION_COMPATIBILITY
+      - PROVIDER_FALLBACK
+      - EXCEPTION_AND_TIMEOUT_HANDLING
+      - AUTHORIZATION_BOUNDARIES
+      - RESOURCE_BUDGET
+      - OBSERVABILITY
+      - ROLLBACK
+      - DECISION_LINEAGE
+      - COGNITIVE_DEBT
+      - OWNER_HANDOFF
+    simple_ui_does_not_imply_simple_runtime: true
+    hidden_complexity_does_not_authorize_new_architecture: true
+    response: REUSE_OWNER_AND_TEST_THE_ICEBERG
+  proof_boundaries:
+    SIMULATION_IS_NOT_PRODUCTION_PROOF: true
+    MANY_PERSONAS_IS_NOT_COVERAGE_PROOF: true
+    FEEDBACK_LOOP_EXISTS_IS_NOT_FEEDBACK_QUALITY_PROVEN: true
+    CONVERSATION_AUDIT_IS_NOT_RUNTIME_HEALTH: true
+    MODEL_MIGRATION_IS_NOT_SAFE_UNTIL_REGRESSION_PASS: true
+    CI_GREEN_IS_NOT_COGNITIVE_DEBT_CLOSED: true
+    FIXED_POINT_REQUIRES_RECONSTRUCTIBLE_THEORY: true
+
+web_retrieval_capability:
+  capability_contract:
+    name: WEB_SEARCH_EXTRACTION
+    owner: CENTRALDARK_TRIGGER_FABRIC
+    router: .agents/skills/capability-contract-router/SKILL.md
+    provider_is_replaceable: true
+    provider_is_not_new_brain: true
+    provider_is_not_new_router: true
+    provider_is_not_authority: true
+    select_minimum_sufficient_provider: true
+
+  firecrawl:
+    classification: OPTIONAL_WEB_PROVIDER
+    capabilities:
+      - WEB_SEARCH
+      - WEB_SCRAPE
+      - WEB_CRAWL
+      - WEB_MAP
+      - WEB_INTERACT_WHEN_SUPPORTED
+    materialization: ON_DEMAND
+    install_globally_by_default: false
+    local_house_skill_observed: centraldark-casa-operations
+    local_house_observation_status: OBSERVED_NOT_GLOBAL_PROOF
+    canonical_repo_copy_of_house_skill_found: false
+    do_not_duplicate_house_skill_into_repo_without_owner_reconciliation: true
+
+    authentication_modes:
+      keyless:
+        status: OFFICIAL_CAPABILITY_AVAILABLE
+        role: FIRST_LIGHTWEIGHT_ATTEMPT_WHEN_SUPPORTED_BY_SELECTED_CLIENT
+        monthly_free_credit_claim_requires_live_provider_policy: true
+      authenticated_api:
+        status: SUPPORTED
+        secret_name: FIRECRAWL_API_KEY
+        secret_must_not_be_persisted_in_repo: true
+        api_key_absent_means_provider_auth_unavailable_not_web_capability_unavailable: true
+      agent_skill_or_mcp:
+        status: SUPPORTED_WHEN_RUNTIME_DISCOVERS_IT
+        availability_requires_runtime_measurement: true
+
+    fallback_semantics:
+      sequence:
+        - EXISTING_WEB_CAPABILITY_ALREADY_AVAILABLE
+        - FIRECRAWL_KEYLESS_WHEN_SUPPORTED
+        - FIRECRAWL_AUTHENTICATED_WHEN_SECRET_PRESENT
+        - OTHER_EXISTING_WEB_PROVIDER
+      FIRECRAWL_API_KEY_ABSENT_IS_NOT_GLOBAL_WEB_BLOCKER: true
+      FIRECRAWL_FAILURE_IS_NOT_CENTRALDARK_FAILURE: true
+      FIRECRAWL_UNAVAILABLE_IS_CAPABILITY_ROUTER_INPUT: true
+      NO_SECOND_WEB_PIPELINE: true
+
+    proof_boundaries:
+      PACKAGE_INSTALLED_IS_NOT_SEARCH_PROVEN: true
+      IMPORT_OK_IS_NOT_REMOTE_API_PROVEN: true
+      SEARCH_RESULT_IS_NOT_CRAWL_PROVEN: true
+      SCREENSHOT_IS_HOUSE_OBSERVATION_NOT_GLOBAL_RUNTIME_PROOF: true
+      PROVIDER_DOCS_IS_NOT_RUNTIME_STATE: true
+      LIVE_PROVIDER_PROBE_REQUIRED_FOR_ACTIVE_PASS: true
+
+    ci_boundary:
+      FIRECRAWL_IS_NOT_GITHUB_CI: true
+      FIRECRAWL_API_KEY_ABSENT_CANNOT_SET_CI_UNKNOWN: true
+      GITHUB_CI_MUST_BE_MEASURED_VIA_GITHUB_SURFACE_OR_CANONICAL_CI_OWNER: true
+
+    security:
+      never_log_api_key: true
+      never_commit_api_key: true
+      never_copy_browser_session_secret_to_repo: true
+      auth_failure_is_fail_closed_for_that_provider_only: true
+
+  house_observation_2026_09_02:
+    source: HERMES_CASA_SCREEN_EVIDENCE
+    observed:
+      - PYTHON_PACKAGE_INSTALL_REPORTED_SUCCESS
+      - PYTHON_IMPORT_REPORTED_OK
+      - WEB_SEARCH_RESULT_RENDERED_IN_HERMES_SESSION
+      - AUTHENTICATED_API_KEY_NOT_PROVEN_IN_REPO
+    interpretation:
+      FIRECRAWL_HOUSE_CAPABILITY_CANDIDATE: READY_OR_ACTIVE_LOCALLY_PENDING_LIVE_REMEASURE
+      GLOBAL_FIXED_POINT: NOT_PROVEN
+      CI_IMPACT: NONE_DIRECT
+
+example:
+  local_llm_supported_but_not_needed:
+    catalogue: PASS
+    adapter_source: PASS
+    install_recipe: PASS
+    tests_or_health_contract: PASS
+    model_binary_present: OPTIONAL
+    model_loaded_in_ram_or_vram: false
+    service_running: false
+    status: READY_NOT_RESIDENT
+  local_llm_needed_now:
+    first: MEASURE_EXISTING_ENGINES_AND_RESOURCES
+    then: SELECT_MINIMUM_SUFFICIENT_ENGINE
+    if_local_selected: MATERIALIZE_OR_START_LOCAL_MODEL
+    after: HEALTH_CHECK_AND_REALITY_JUDGE
+
+proof:
+  readiness_requires:
+    - OWNER_KNOWN
+    - SOURCE_OR_REPRODUCIBLE_ORIGIN_KNOWN
+    - ACTIVATION_PATH_KNOWN
+    - RESOURCE_REQUIREMENTS_KNOWN
+    - HEALTH_OR_TEST_CONTRACT_KNOWN
+    - ROLLBACK_OR_STOP_PATH_KNOWN
+  runtime_active_requires:
+    - PROCESS_OR_SERVICE_OBSERVED
+    - HEALTH_PASS
+    - EXPECTED_VERSION_OR_SHA_WHEN_APPLICABLE
+  failure_requires:
+    - CURRENT_INTENT_REQUIRES_CAPABILITY
+    - CAPABILITY_SELECTED_OR_REQUIRED
+    - ACTIVATION_OR_HEALTH_PROBE_FAILS
+    - NO_APPLICABLE_EXISTING_FALLBACK
+  unknown_is_not_pass: true
+
+slogan:
+  technical: "CAPABILITY_READY != CAPABILITY_RESIDENT; OFF != FAIL"
+  operational: "ARSENAL COMPLETO, PESO SOB DEMANDA; BOTÃO DESLIGADO É SÓ BOTÃO DESLIGADO"

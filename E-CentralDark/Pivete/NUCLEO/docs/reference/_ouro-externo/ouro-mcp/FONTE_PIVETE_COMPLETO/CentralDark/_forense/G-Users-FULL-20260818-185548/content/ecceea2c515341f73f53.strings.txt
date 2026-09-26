@@ -1,0 +1,218 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\__pycache__\peer.cpython-311.pyc
+
+``hermes peer`` 
+ bot-to-bot DMs across machines/gateways.
+A *peer* is another Hermes gateway (any machine: homelab, Spark, Hermes
+Cloud) running the ``api_server`` platform. Registering it here gives every
+bot on THIS machine a transport to message bots on THAT machine:
+    hermes peer add spark --url http://spark.lan:8377 --key <API_SERVER_KEY>
+    hermes peer dm spark "Message from 
+ dixie (@dixie): disk status?"
+    hermes peer dm spark/researcher "..."      # named profile (multiplexed peer)
+``dm`` resolves the remote agent's canonical "Bot Chat" session (by title,
+creating it when missing), runs ONE synchronous agent turn over the peer's
+existing ``POST /api/sessions/{id}/chat`` endpoint, and prints the reply on
+stdout 
+ the exact cross-machine twin of the local
+``hermes -p <bot> chat --in ~ -c "Bot Chat" ...`` bot-messaging command, so
+the Bot Mode protocol composes over it unchanged.
+Design notes:
+- No new server surface: the peer's stock api_server is the transport.
+- Peer labels/URLs live in config.yaml (``bot_peers``); the peer's
+  API_SERVER_KEY is a credential and lives in ``~/.hermes/.env`` as
+  ``HERMES_PEER_<NAME>_KEY``.
+- Named-profile targets use the peer's ``/p/<profile>/`` multiplex mirror;
+  the bare target is the peer gateway's own (launch) profile.
+annotationsNz
+Bot Chatz
+^[a-z0-9][a-z0-9_-]{0,63}$z ^[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}$iX
+returnc
+HERMES_PEER_
+replace)
+OC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\peer.py
+_peer_key_envr
+load_config
+bot_peers)
+hermes_cli.configr
+isinstancer
+peerss
+_load_peersr
+save_configr
+_save_peersr
+zHThe peer's API key: profile-scoped secret store first, raw env fallback.r
+get_secret
+agent.secret_scoper!
+Exception
+environr
+env_namer!
+_peer_secretr)
+method
+timeout
+dict | Noner.
+utf-8z
+Bearer z
+application/jsonz
+hermes-peer-dm)
+Authorizationz
+Content-Typez
+User-Agent)
+datar,
+headers)
+z!Peer returned non-JSON response: 
+z(Peer returned a non-object JSON response)
+encode
+urllib
+request
+Request
+urlopen
+decode
+ValueError
+RuntimeErrorr
+payload
+parsed
+           r
+_requestrJ
+profile
+str | Nonec
+rstripr<
+quote)
+_base_urlrU
+z4The remote canonical Bot Chat's session id, or None.z
+/api/sessions?limit=200r6
+titler"
+BOT_CHAT_TITLEr
+listing
+sessions
+_find_bot_chatr]
+/api/sessions
+bot_peer_dm)
+source)
+session_idr"
+z5Peer did not return a session id for the new Bot Chat)
+existing
+createdr\
+      r
+_ensure_bot_chatre
+target
+tuple[str, str | None]c
+``<peer>`` or ``<peer>/<profile>`` 
+ (peer, profile|None).r"
+Nz8Peer name required (hermes peer dm <peer>[/<agent>] ...)z
+Invalid agent/profile name: )
+partitionrC
+_PROFILE_RE
+match)
+     r
+_parse_targetrm
+urllib.error.HTTPErrorc
+messager8
+_http_error_detailrr
+peer_action)
+Invalid peer name: z" (lowercase, digits, -, _; max 64))
+http://z
+https://zJPeer --url must be an http(s) gateway base URL, e.g. http://spark.lan:8377r/
+noter0
+save_env_valuez
+Peer 'z
+' saved (u
+ key stored as z
+ in ~/.hermes/.envuJ
+). No key given 
+ set the peer's API_SERVER_KEY with:
+  hermes peer add z
+ --url z
+ --key <key>
+  (or add z
+=<key> to ~/.hermes/.env))
+remove
+No peer named 'z
+' removed (its z6 entry in .env is kept; delete it manually if unused).)
+lsNzbNo peers registered. Add one: hermes peer add <name> --url http://host:port --key <API_SERVER_KEY>z
+key setz
+NO KEY (z
+ unset)u
+'. Run: hermes peer listz
+No API key for peer 'z
+'. Set it: hermes peer add z! --url <url> --key <key> (or add z%Message required (argument or stdin).z
+/api/sessions/rP
+/chatr_
+' rejected the request (HTTP z
+Could not reach peer 'z
+contentr9
+replyz
+(no reply)z,Unknown peer action. See: hermes peer --help)1
+getattrr
+_PEER_NAME_RErk
+stderrr/
+startswithr
+sortedr
+isattyr@
+DM_TIMEOUT_Srp
+HTTPError
+coderr
+URLError
+TimeoutError
+OSErrorrD
+actionr
+has_keyry
+peer_namerL
+resultr
+                    r
+cmd_peerr
+d$d%d&d'
+d)d*d+d,
+)/z1Attach the ``peer`` subcommand to ``subparsers``.rK
+z5Bot-to-bot DMs across machines (peer Hermes gateways)uv
+Register other Hermes gateways as peers and message their agents. 'hermes peer dm <peer>[/<agent>] "..."' delivers into the remote agent's canonical Bot Chat over the peer's API server and prints the reply 
+ the cross-machine twin of 'hermes -p <bot> chat'. The peer must run the api_server platform; its API_SERVER_KEY is stored locally as a credential in ~/.hermes/.env.uS
+Examples:
+  hermes peer add spark --url http://spark.lan:8377 --key <API_SERVER_KEY>
+  hermes peer list
+  hermes peer dm spark "Message from 
+ dixie (@dixie): disk status?"
+  hermes peer dm spark/researcher "..."   # named profile on a multiplexed peer
+  hermes peer remove spark
+Exit codes: 0 ok, 1 delivery/peer error, 2 usage error.)
+description
+epilog
+formatter_classrt
+destru
+z#Register (or update) a peer gateway)
+aliasesr
+z/Peer name (lowercase slug, e.g. spark, homelab))
+--urlTz1Peer gateway base URL, e.g. http://spark.lan:8377)
+requiredr
+--keyr"
+z4The peer's API_SERVER_KEY (stored in ~/.hermes/.env))
+defaultr
+--notez
+Optional descriptionr~
+List registered peersr{
+Remove a peerz
+Peer namer
+z6Message an agent on a peer gateway and print its replyrf
+z><peer> or <peer>/<agent> (named profile on a multiplexed peer)rq
+Message text (or stdin))
+nargsr
+--json
+store_trueFz
+Emit a JSON result)
+add_parser
+argparse
+RawDescriptionHelpFormatter
+add_subparsers
+add_argument
+set_defaultsr
+subparsers
+parser
+peer_sub
+      r
+build_peer_parserr
+__doc__
+__future__r
+urllib.errorr<
+urllib.parse
+urllib.requestrZ
+compiler
+LIST_TIMEOUT_Sr
+<module>r

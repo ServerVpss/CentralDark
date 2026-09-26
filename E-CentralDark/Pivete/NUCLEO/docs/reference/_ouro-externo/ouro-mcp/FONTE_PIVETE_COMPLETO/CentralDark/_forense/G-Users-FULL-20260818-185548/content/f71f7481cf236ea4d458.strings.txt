@@ -1,0 +1,59 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\__pycache__\webhook.cpython-311.pyc
+
+``hermes webhook`` subcommand parser.
+Extracted verbatim from ``hermes_cli/main.py:main()`` (god-file Phase 2).
+Handler injected to avoid importing ``main``.
+annotations)
+Callable
+cmd_webhookr
+return
+)3z4Attach the ``webhook`` subcommand to ``subparsers``.
+webhookz$Manage dynamic webhook subscriptionszPCreate, list, and remove webhook subscriptions for event-driven agent activation)
+description
+webhook_action)
+subscribe
+Create a webhook subscription)
+aliasesr
+namez*Route name (used in URL: /webhooks/<name>))
+--prompt
+z0Prompt template with {dot.notation} payload refs)
+defaultr
+--eventsz%Comma-separated event types to acceptz
+--descriptionz
+What this subscription doesz
+--skillsz#Comma-separated skill names to loadz
+--deliver
+logz4Delivery target: log, telegram, discord, slack, etc.z
+--deliver-chat-idz*Target chat ID for cross-platform deliveryz
+--secretz'HMAC secret (auto-generated if omitted)z
+--deliver-only
+store_trueu
+Skip the agent 
+ deliver the rendered prompt directly as the message. Zero LLM cost. Requires --deliver to be a real target (not 'log').)
+actionr
+--scriptz
+Filter/transform script under ~/.hermes/scripts/. The route payload is passed as JSON on stdin; empty stdout, [SILENT], or a nonzero exit code ignores the webhook.
+List all dynamic subscriptions
+remove
+Remove a subscriptionz
+Subscription name to remove
+testz#Send a test POST to a webhook routez
+Subscription name to testz
+--payloadz,JSON payload to send (default: test payload))
+funcN)
+add_parser
+add_subparsers
+add_argument
+set_defaults)
+subparsersr
+webhook_parser
+webhook_subparsers
+wh_sub
+wh_tests
+       
+RC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\webhook.py
+build_webhook_parserr(
+__doc__
+__future__r
+typingr
+<module>r.

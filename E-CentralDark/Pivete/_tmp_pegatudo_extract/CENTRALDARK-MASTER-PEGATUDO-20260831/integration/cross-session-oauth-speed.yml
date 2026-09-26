@@ -1,0 +1,148 @@
+schema: CENTRALDARK_CROSS_SESSION_OAUTH_SPEED_FABRIC
+schema_version: 1
+mode: EXTEND_EXISTING_ONLY
+master: CENTRALDARK
+owner: DELTAUTIL
+cross_session:
+  enabled: true
+  owner: DELTAUTIL
+  sources:
+  - CURRENT_CHAT
+  - OTHER_CHAT_WINDOWS
+  - PERSONAL_CONTEXT
+  - SCHEDULED_TASKS
+  - DRIVE
+  - GITHUB_WHEN_AVAILABLE
+  - LOCAL_CLI
+  - LOCAL_WORKTREE
+  - AUTHORIZED_WEBHOOK
+  rules:
+    history_is_current_state: false
+    chat_memory_is_authority: false
+    scheduled_task_is_runtime_proof: false
+    source_failure_is_world_failure: false
+    secret_values_may_persist: false
+    same_fact_dedup_by_source_revision_hash: true
+    unknown_remains_unknown: true
+  flow:
+  - INGEST
+  - SECRET_SCRUB
+  - DEDUPE
+  - CLASSIFY_HISTORY_CURRENT_UNKNOWN
+  - OWNER_MATCH
+  - RENDEZVOUS
+  - RECONCILE
+  - MATERIALITY_GATE
+  - DOCUMENTATION_GATE
+  - RECEIPT
+  - NEXT_CURSOR
+  forgotten_work_disposition:
+  - CURRENT_ACTIONABLE
+  - HISTORICAL_ONLY
+  - SUPERSEDED
+  - DUPLICATE
+  - BLOCKED
+  - UNKNOWN
+  - ARCHIVE_CANDIDATE
+oauth_control:
+  enabled: true
+  owner: HUB_CONNECTIONS
+  authorization_code_is_access_token: false
+  authorization_code_is_refresh_token: false
+  authorization_code_persist_allowed: false
+  raw_token_in_docs: false
+  raw_token_in_receipts: false
+  secretref_only_after_exchange: true
+  buttons:
+  - CONNECT_OAUTH
+  - REAUTHORIZE
+  - REFRESH_IF_SUPPORTED
+  - TEST
+  - DETAILS
+  - DISABLE
+  - REVOKE_DISCONNECT
+  flow:
+  - DISCOVER_PROVIDER
+  - BUILD_AUTH_URL
+  - HUMAN_CONSENT_IF_REQUIRED
+  - RECEIVE_EPHEMERAL_AUTH_CODE
+  - EXCHANGE_IN_CREDENTIAL_PLANE
+  - STORE_SECRETREF
+  - MEASURE_GRANTED_CAPABILITIES
+  - TEST
+  - REGISTER
+  - REFRESH_IF_SUPPORTED
+  - REMEASURE
+  - RECEIPT
+  plugin_rule: EACH_PLUGIN_APP_USES_ITS_OWN_PROVIDER_AUTH_CONFIG_AND_CALLBACK; NEVER_REUSE_RANDOM_CALLBACK_CODE_AS_GENERIC_PLUGIN_TOKEN
+speed:
+  enabled: true
+  owner: CENTRALDARK_RUNTIME_TOOLING
+  goal: MINIMUM_DISCRIMINANT_LATENCY_WITHOUT_DUPLICATE_WORK
+  engines:
+    PYTHON:
+    - AST
+    - HASH
+    - STRUCTURED_INDEX
+    - JSON_YAML
+    - GRAPH
+    - BATCH_CLASSIFY
+    POWERSHELL7:
+    - WINDOWS_PROCESS
+    - SERVICE
+    - PORT
+    - FILESYSTEM
+    - REGISTRY_WHEN_AUTHORIZED
+    - PARALLEL_READS
+    RIPGREP_IF_PRESENT:
+    - TEXT_SEARCH
+    FD_IF_PRESENT:
+    - PATH_DISCOVERY
+  routing:
+  - FEATURE_DETECT
+  - CHOOSE_CHEAPEST_PROVEN_ENGINE
+  - CACHE_BY_PATH_MTIME_SIZE_HASH_HEAD
+  - DELTA_SCAN_FIRST
+  - FULL_SCAN_ONLY_WHEN_DISCRIMINANT
+  - ADAPTIVE_FANOUT_K
+  - RENDEZVOUS
+  - RECONCILE
+  rules:
+    n_agents_same_file: false
+    busy_loop: false
+    ocr_continuous_without_demand: false
+    blind_global_rescan: false
+    cache_is_truth: false
+    k_is_minimum_parallelism_for_next_discriminant: true
+tasks:
+  enabled: true
+  owner: DOCUMENTATION_HUB
+  active_task_snapshot:
+  - title: CentralDark Status
+    cadence: DAILY
+    state: ACTIVE
+    source: AUTOMATIONS_LIVE_MEASURED_2026-08-31
+  disabled_tasks_promoted_as_active: false
+  panel: TASKS_AND_NEXT_CURSOR
+visual_cli:
+  owner: TUI_VISUAL_FABRIC
+  status: OPTIONAL_NOT_INSTALLED_UNLESS_MEASURED
+  candidates:
+  - FASTFETCH
+  - BTOP
+  - CAVA
+  - PIPES_SH
+  - AAFIRE
+  professional_default: true
+  effects_never_replace_telemetry: true
+  install_state_unknown_is_installed: false
+known_lineage_candidates:
+- id: ARCHITECTURE_INTAKE_WEBHOOK
+  state: RECONCILE_REQUIRED
+  reason: historically proposed; current implementation not proven
+- id: MATERIALITY_GATE
+  state: RECONCILE_REQUIRED
+  reason: historically proposed; current implementation not proven
+- id: CAPSULE_FIXED_POINT_SESSION_CONTRACT
+  state: RECONCILE_REQUIRED
+  reason: historical architecture useful; do not create second owner

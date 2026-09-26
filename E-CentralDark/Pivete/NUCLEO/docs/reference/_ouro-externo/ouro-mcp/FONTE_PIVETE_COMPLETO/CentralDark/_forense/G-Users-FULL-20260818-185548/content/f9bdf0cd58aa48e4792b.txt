@@ -1,0 +1,9 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@electron\osx-sign\node_modules\fs-extra\lib\move\index.js
+
+'use strict'
+
+const u = require('universalify').fromCallback
+module.exports = {
+  move: u(require('./move')),
+  moveSync: require('./move-sync')
+}

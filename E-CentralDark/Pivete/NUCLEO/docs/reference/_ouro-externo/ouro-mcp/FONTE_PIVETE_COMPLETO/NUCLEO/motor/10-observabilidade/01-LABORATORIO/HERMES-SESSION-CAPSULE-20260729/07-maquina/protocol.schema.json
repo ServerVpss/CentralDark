@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HERMES Session Capsule Protocol",
+  "type": "object",
+  "properties": {
+    "capsule_id": {
+      "type": "string",
+      "description": "Unique identifier for this capsule"
+    },
+    "capsule_kind": {
+      "type": "string",
+      "enum": ["OPERATIONAL_MEMORY"]
+    },
+    "owner": {
+      "type": "string"
+    },
+    "executor_identity": {
+      "type": "string"
+    },
+    "supervisor_identity": {
+      "type": "string"
+    },
+    "nonce": {
+      "type": "string"
+    },
+    "current_mission": {
+      "type": "string"
+    },
+    "phase": {
+      "type": "string"
+    },
+    "profile_runtime": {
+      "type": "string"
+    },
+    "hermes_version": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "capsule_id",
+    "capsule_kind",
+    "owner",
+    "nonce",
+    "current_mission"
+  ]
+}

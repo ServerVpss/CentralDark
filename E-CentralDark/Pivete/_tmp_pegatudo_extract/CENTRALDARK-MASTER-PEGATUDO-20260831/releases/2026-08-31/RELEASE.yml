@@ -1,0 +1,45 @@
+schema: CENTRALDARK_RELEASE_LEDGER
+logical_package: CENTRALDARK-MASTER-PEGATUDO
+date_key: '2026-08-31'
+display_date_pt_BR: 31/08/2026
+created_at: '2026-08-31T11:41:33-03:00'
+display_datetime_pt_BR: 31/08/2026 11:41:33 -03:00
+timezone: America/Sao_Paulo
+delta:
+- UPDATE_FABRIC_CONDITIONAL
+- BUILDER_FACTORY_CONTRACT
+- TEMPORAL_IDENTITY_DISPLAY
+- REVISION_BLOCKS
+- CROSS_SESSION_RECONCILIATION
+- OAUTH_CONTROL_PLANE_UI
+- HERMES_SPEED_FABRIC
+- SCHEDULED_TASK_LEDGER
+- OPTIONAL_VISUAL_CLI_CATALOG
+- CODE_DOCUMENTATION_HOUSE_STANDARD
+- COMMUNICATION_MODES
+- PLUG_PLAY_CAPABILITY_PACKAGE
+- HERMES_UPSTREAM_BRIDGE
+- JS_TS_RUST_TOOLCHAIN_RESEARCH
+- GITHUB_PROFILE_CONTINUOUS_README
+- TOTAL_RECONCILIATION_COMMAND
+- SOURCE_AUTHORITY_MATRIX
+- SCOPE_COLLISION_GUARD
+- BRAIN_RECONCILIATION
+- AGENT_GENERATIONAL_HANDOFF
+- PACKAGE_TECHNICAL_ACCEPTANCE
+- WEBHOOK_RECONCILIATION_GUARD
+authority: LEDGER_ONLY_NOT_SECOND_PACKAGE
+next_cursor: REMEASURE_LIVE_OWNERS_BEFORE_REMOTE_MUTATION
+tests:
+  pytest_pass: 102
+  pytest_fail: 0
+  master_validate: PASS
+  master_self_test_pass: 72
+  master_self_test_fail: 0
+  code_documentation_audit: PASS
+human_summary: Mesmo pacote lógico; reconciliação total separa GitHub desejado de
+  Casa/VPS reais e Drive espelho; cada item ganha owner/escopo; pacote inteiro recebe
+  aceitação técnica fail-closed; cérebros existentes são descobertos/reconciliados
+  sem criar autoridade paralela; handoff geracional obrigatório.
+updated_at: '2026-08-31T13:25:00-03:00'
+display_updated_at_pt_BR: 31/08/2026 13:25:00 -03:00

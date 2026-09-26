@@ -1,0 +1,70 @@
+# MISSAO - supabase-bot.yml
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\Codex\2026-06-10\prior-conversation-with-codex-conversation-role\work\CentralDark-live\.github\workflows\supabase-bot.yml
+**SHA:** 23647fc2dd2f1a6d
+**Timestamp:** 2026-08-26T19:30:49.926390
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Comandos
+- run: npm install --omit=dev --no-audit --no-fund
+- run: node CentralDark/apps/supabase-bot/src/index.mjs
+- run: |
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+name: supabase-bot
+
+# Bot Supabase — read-only por padrão. Roda checks de schema/RLS/migrations
+# e posta relatório. Escrita exige label adicional `confirm:write` na Issue.
+
+on:
+  schedule:
+    - cron: '0 9 * * *'  # 06:00 BRT (UTC-3)
+  workflow_dispatch:
+  push:
+    paths:
+      - 'infra/supabase/migrations/**'
+      - 'CentralDark/apps/supabase-bot/**'
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  rodar:
+    if: github.event_name != 'issues' || contains(github.event.issue.labels.*.name, 'assign:supabase-bot')
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+
+      - name: Instalar deps do bot
+        working-directory: CentralDark/apps/supabase-bot
+        run: npm install --omit=dev --no-audit --no-fund
+
+      - name: Rodar checks read-only
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_ALVO: ${{ github.repository }}
+          ISSUE_NUM: ${{ github.event.issue.number || '' }}
+        run: node CentralDark/apps/supabase-bot/src/index.mjs
+
+      - name: Commit relatório
+        run: |
+          git config user.name 'CentralDark Supabase Bot'
+          git config user.email 'actions@github.com'
+          git add -- docs/RELATORIOS/supabase-bot 2>/dev/null || true
+          git commit -m "chore(supabase-bot): relatório ${{ github.run_id }}
+
+          Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>" || exit 0
+          git push || true
+
+```

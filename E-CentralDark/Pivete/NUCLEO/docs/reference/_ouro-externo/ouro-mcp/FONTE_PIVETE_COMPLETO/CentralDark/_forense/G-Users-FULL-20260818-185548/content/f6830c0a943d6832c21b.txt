@@ -1,0 +1,24 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@streamdown\code\node_modules\@shikijs\engine-javascript\dist\engine-raw.mjs
+
+import { J as JavaScriptScanner } from './shared/engine-javascript.hzpS1_41.mjs';
+
+function createJavaScriptRawEngine() {
+  const options = {
+    cache: /* @__PURE__ */ new Map(),
+    regexConstructor: () => {
+      throw new Error("JavaScriptRawEngine: only support precompiled grammar");
+    }
+  };
+  return {
+    createScanner(patterns) {
+      return new JavaScriptScanner(patterns, options);
+    },
+    createString(s) {
+      return {
+        content: s
+      };
+    }
+  };
+}
+
+export { createJavaScriptRawEngine };

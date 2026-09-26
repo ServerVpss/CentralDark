@@ -1,0 +1,954 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\apps\desktop\release\win-unpacked\resources\app.asar.unpacked\dist\node_modules\node-pty\prebuilds\win32-x64\winpty.dll
+
+!This program cannot be run in DOS mode.
+`.rdata
+@.data
+.pdata
+@.fptable
+@.reloc
+SVWAVAWH
+ A_A^_^[
+@VWAVAWH
+A_A^_^
+VWATAVAWH
+A_A^A\_^
+fB9<@u
+@SVAUAVAWH
+0A_A^A]^[
+t$ AVH
+@SWAUAWH
+8A_A]_[
+fB9<@u
+VWATAVAWH
+@A_A^A\_^
+@USVWATAVAWH
+A_A^A\_^[]
+UVWATAUAVAWH
+A_A^A]A\_^]
+WATAUAVAWH
+A_A^A]A\_
+D$XH+D$PH9D$h
+f9*t+H
+@SVWATAUAVAWH
+`A_A^A]A\_^[
+WATAUAVAWH
+D$pH+D$hH9
+A_A^A]A\_
+L$ VWAVH
+D$hH+D$`H9D$x
+@SUVAUAVH
+fD9,Zu
+@A^A]^][
+\$ UWAWH
+WAVAWH
+0A_A^_
+SUVAUAVAWH
+HA_A^A]^][
+@SUVAUH
+8A]^][
+\$ WATAWH
+0A_A\_
+\$ UVWH
+|$ AVH
+VWAUAVAWH
+ A_A^A]_^
+SVATAUAVAWH
+8A_A^A]A\^[
+l$ VWAWH
+|$ UATAUAVAWH
+A_A^A]A\]
+L$ SUVWH
+|$ AVH
+@SWATAUAVH
+0A^A]A\_[
+l$ VWAVH
+t$ UWAVH
+|$ ATAVAWH
+A_A^A\
+SUVWAVH
+@A^_^][
+@SVWAVH
+hA^_^[
+|$ UATAUAVAWH
+fF9<@u
+A_A^A]A\]
+|$ UATAUAVAWH
+A_A^A]A\]
+d$ UAVAWH
+L$-fff
+\$ VAVAWH
+0A_A^^
+0A_A^^
+WAVAWH
+ A_A^_
+|$ AVH
+@USVWAVAWH
+A_A^_^[]
+@SUVWATAUAVAWH
+ot$ I;
+hA_A^A]A\_^][
+@SWAVH
+)t$@H;
+8T$(ua
+t$ WATAUAVAWH
+~QD;t;
+ A_A^A]A\_
+WATAUAVAWH
+A_A^A]A\_
+x ATAVAWH
+A_A^A\
+H;xXu5
+WATAUAVAWH
+A_A^A]A\_
+AUAVAWH
+u4I9}(
+9I9}(tgH
+0A_A^A]
+AUAVAWH
+u4I9}(
+9I9}(tgH
+0A_A^A]
+UVWATAUAVAWH
+`A_A^A]A\_^]
+UVWATAUAVAWH
+`A_A^A]A\_^]
+@USVWATAUAVAWH
+L$pHcX
+A_A^A]A\_^[]
+@USVWATAUAVAWH
+D$h;D$x
+A_A^A]A\_^[]
+UVWATAUAVAWH
+A_A^A]A\_^]
+@USVWATAUAVAWH
+A_A^A]A\_^[]
+WAVAWH
+ A_A^_
+x ATAVAWH
+ A_A^A\
+WAVAWH
+x ATAVAWH
+9h@u(D93t#D9
+A_A^A\
+@SVWATAUAVAWH
+D$0HcH
+pA_A^A]A\_^[
+@SVWATAUAVAWH
+A_A^A]A\_^[
+B(I9A(u
+SVWATAUAVAWH
+|$ Hc^
+0A_A^A]A\_^[
+SVWATAUAVAWH
+A_A^A]A\_^[
+UVWATAUAVAWH
+|$hHcX
+ A_A^A]A\_^]
+UVWATAUAVAWH
+ A_A^A]A\_^]
+D$ I;R
+D$ I9P
+WATAUAVAWH
+ A_A^A]A\_
+D$0@8{
+@SUVWATAUAVAWH
+fD94Pu
+fE94Du
+fE94tu
+fD94Cu
+fD94Ku
+fD94Cu
+A_A^A]A\_^][
+\$ UVWH
+fB9<@u
+H SVWH
+H SUVWH
+WATAUAVAWH
+0A_A^A]A\_
+UVWATAUAVAWH
+rsf;\$d
+r_f;\$l
+rKf;\$t
+r7f;\$|
+f;\$4r
+f;\$<r
+f;\$Dr
+rvf;\$d
+rbf;\$l
+rNf;\$t
+r:f;\$|
+A_A^A]A\_^]
+S(HcS0
+S(HcS0
+S(HcS0
+S(HcS0
+S(HcS0
+S(HcS0
+UWATAVAWH
+A_A^A\_]
+D$@H;F
+D$@H;F
+sL@8w(u
+<htl<jt\<lt4<tt$<wt
+UWATAVAWH
+A_A^A\_]
+UATAUAVAWH
+c,D+cHD+
+D9k |o
+A_A^A]A\]
+UATAUAVAWH
+A_A^A]A\]
+|$ AWH
+D$18F(u
+WAVAWH
+ A_A^_
+WAVAWH
+~,*uII
+ A_A^_
+@USVWATAVAWH
+A_A^A\_^[]
+@USVWATAVAWH
+A_A^A\_^[]
+u3HcH<H
+x ATAVAWH
+ A_A^A\
+UVWAVAWH
+0A_A^_^]
+WAVAWH
+ A_A^_
+t$ WATAUAVAWH
+D!|$xA
+A_A^A]A\_
+WAVAWH
+D8|$`t
+ A_A^_
+f9)u4H9j
+u%@8j(t
+L$ VWAVH
+t$ WATAUAVAWH
+gfffffffH
+A_A^A]A\_
+{ AUAVAWH
+0A_A^A]
+t$xt*3
+WAVAWH
+ A_A^_
+x ATAVAWH
+ A_A^A\
+L$ VWAVH
+fD94H}aD
+@SUVWATAVAWH
+@A_A^A\_^][
+t$ WATAUAVAWH
+0A_A^A]A\_
+UVWAVAWH
+A8^8}WD
+u,9\$0~NL
+PA_A^_^]
+fD9t$b
+t$ WATAUAVAWH
+ A_A^A]A\_
+D$0H!L$ H
+u$D8r(t
+D81u`L9r
+uPD8r(t
+vWD8s(t
+u$D8r(t
+fD91u_L9r
+uPD8r(t
+vVD8s(t
+UVWATAUAVAWH
+PA_A^A]A\_^]
+WATAUAVAWH
+0A_A^A]A\_
+H9>u+A
+@USVWATAUAVH
+D8t$ht
+D8t$ht
+A^A]A\_^[]
+l$ VWATAVAWH
+L$&8\$&t,8Y
+A_A^A\_^
+@UATAUAVAWH
+e0A_A^A]A\]
+UVWATAUAVAWH
+fB9<I}1L
+A_A^A]A\_^]
+VWATAVAW
+A_A^A\_^
+VATAUAVAWH
+0A_A^A]A\^
+@USVWATAUAVAWH
+H!D$ E
+hA_A^A]A\_^[]
+SUVWATAVAWH
+A_A^A\_^][
+USVWATAVAWH
+A_A^A\_^[]
+D$0H9D$8
+WAVAWH
+ A_A^_
+ATAUAVAWH
+L$ |+L;
+A_A^A]A\
+@UATAUAVAWH
+A_A^A]A\]
+VATAUAVAWH
+0A_A^A]A\^
+ffffff
+fffffff
+|$ AVH
+@USVAVH
+LcA<E3
+ffffff
+vKfffff
+ffffff
+fffffff
+Unknown exception
+bad allocation
+bad exception
+__based(
+__cdecl
+__stdcall
+__thiscall
+__fastcall
+__vectorcall
+__preserve_none
+__clrcall
+__eabi
+__swift_1
+__swift_2
+__swift_3
+__ptr64
+__restrict
+__unaligned
+restrict(
+ delete
+operator
+`vftable'
+`vbtable'
+`vcall'
+`typeof'
+`local static guard'
+`string'
+`vbase destructor'
+`vector deleting destructor'
+`default constructor closure'
+`scalar deleting destructor'
+`vector constructor iterator'
+`vector destructor iterator'
+`vector vbase constructor iterator'
+`virtual displacement map'
+`eh vector constructor iterator'
+`eh vector destructor iterator'
+`eh vector vbase constructor iterator'
+`copy constructor closure'
+`udt returning'
+`local vftable'
+`local vftable constructor closure'
+ new[]
+ delete[]
+`omni callsig'
+`placement delete closure'
+`placement delete[] closure'
+`managed vector constructor iterator'
+`managed vector destructor iterator'
+`eh vector copy constructor iterator'
+`eh vector vbase copy constructor iterator'
+`dynamic initializer for '
+`dynamic atexit destructor for '
+`vector copy constructor iterator'
+`vector vbase copy constructor iterator'
+`managed vector copy constructor iterator'
+`local static thread guard'
+operator "" 
+operator co_await
+operator<=>
+ Type Descriptor'
+ Base Class Descriptor at (
+ Base Class Array'
+ Class Hierarchy Descriptor'
+ Complete Object Locator'
+`anonymous namespace'
+FlsAlloc
+FlsFree
+FlsGetValue
+FlsSetValue
+InitializeCriticalSectionEx
+(null)
+CorExitProcess
+Sunday
+Monday
+Tuesday
+Wednesday
+Thursday
+Friday
+Saturday
+January
+February
+August
+September
+October
+November
+December
+MM/dd/yy
+dddd, MMMM dd, yyyy
+HH:mm:ss
+NAN(SNAN)
+nan(snan)
+NAN(IND)
+nan(ind)
+AreFileApisANSI
+FlsGetValue2
+GetActiveWindow
+GetLastActivePopup
+GetProcessWindowStation
+GetUserObjectInformationW
+LCMapStringEx
+LocaleNameToLCID
+MessageBoxA
+MessageBoxW
+AppPolicyGetProcessTerminationMethod
+AppPolicyGetShowDeveloperDiagnostic
+AppPolicyGetWindowingModel
+ !"#$%&'()*+,-./0123456789:;<=>?@abcdefghijklmnopqrstuvwxyz[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`ABCDEFGHIJKLMNOPQRSTUVWXYZ{|}~
+[aOni*{
+~ $s%r
+@b;zO]
+v2!L.2
+1#QNAN
+1#SNAN
+UUUUUU
+UUUUUU
+=imb;D
+/>58d%
+>jtm}S
+)>6{1n
++f)>0'
+;H9>&X
+*StO9>T
+n03>Pu
+K~Je#>!
+bp(=>?g
+BC?>6t9^
+K&>.yC
+.xJ>Hf
+y\PD>!
+|b=})>
+c [1>H'
+uzKs@>
+3>N;kU
+kE>fvw
+V6E>`"(5
+?UUUUUU
+?7zQ6$
+unknown exception
+bad array new length
+string too long
+false && "GetModuleHandleEx failed"
+D:\a\_work\1\s\deps\winpty\src\libwinpty\AgentLocation.cc
+size != 0 && size != bufsize
+err->msgDynamic != nullptr
+D:\a\_work\1\s\deps\winpty\src\libwinpty\winpty.cc
+msgPtr != nullptr
+libwinpty error: code=%u msg='%s'
+(flags & WINPTY_FLAG_MASK) == flags
+cfg != nullptr && cols > 0 && rows > 0
+cfg != nullptr && mouseMode >= WINPTY_MOUSE_MODE_NONE && mouseMode <= WINPTY_MOUSE_MODE_FORCE
+cfg != nullptr && timeoutMs > 0
+false && "unexpected WaitForMultipleObjects return value"
+actual == amount && "WriteFile wrote fewer bytes than requested"
+chunk <= amount && "readData result is larger than amount"
+WINPTY_SHOW_CONSOLE
+force_desktop
+force_desktop_spawn
+force_desktop_curproc
+no_desktop
+error: Only one of force_desktop, force_desktop_spawn, force_desktop_curproc, and no_desktop may be set
+force_sw_hide
+no_sw_hide
+error: Both the force_sw_hide and no_sw_hide flags are set
+Created agent successfully, pid=%u, cmdline=%s
+Pipe client PID security check skipped: GetNamedPipeClientProcessId unsupported on this OS version
+Error: failed to create background desktop, using original desktop instead: %s
+cfg != nullptr
+wp != nullptr
+~RpcOperation: Closing control pipe
+envStr[0] == L'\0'
+envStrSz >= 3
+envStr[envStrSz - 3] != L'\0'
+envStr[envStrSz - 2] == L'\0'
+envStr[envStrSz - 1] == L'\0'
+(winptyFlags & WINPTY_SPAWN_FLAG_MASK) == winptyFlags
+wp != nullptr && cfg != nullptr
+wp != nullptr && cols > 0 && rows > 0
+processList != nullptr
+vector too long
+0.4.4-dev
+1def5774632305246fe21f0f69e23a664d6c5910
+lengthNeeded % sizeof(wchar_t) == 0
+D:\a\_work\1\s\deps\winpty\src\shared\BackgroundDesktop.cc
+Created background desktop: %s
+pos <= m_buf.size() && len <= m_buf.size() - pos
+D:\a\_work\1\s\deps\winpty\src\shared\Buffer.cc
+m_off <= m_buf.size()
+len <= m_buf.size() - m_off
+decode error: %s
+getRawValue<Piece>() == Piece::Int32
+getRawValue<Piece>() == Piece::Int64
+getRawValue<Piece>() == Piece::WString
+charLen <= SIZE_MAX / sizeof(wchar_t)
+m_off == m_buf.size()
+WINPTY_DEBUG
+INTERNAL ERROR: hasDebugFlag flag has comma: '%s'
+[%05d.%03d %s,p%04d,t%04d]: %s
+m_module != NULL
+D:\a\_work\1\s\deps\winpty\src\shared\OsModule.h
+GetProcAddress: %s is missing
+SystemFunction036
+GenRandom: CryptAcquireContext failed: %u
+GenRandom: RtlGenRandom/SystemFunction036 failed: %u
+GenRandom: CryptGenRandom failed, size=%d, lasterror=%u
+CloseHandle(%p) failed
+D:\a\_work\1\s\deps\winpty\src\shared\StringUtil.cc
+mblen2 == mblen
+token != nullptr && "OpenThreadToken/OpenProcessToken token is NULL"
+D:\a\_work\1\s\deps\winpty\src\shared\WindowsSecurity.cc
+actual >= sizeof(tmp)
+Omitting PIPE_REJECT_REMOTE_CLIENTS on pre-Vista OS
+GetNamedPipeClientProcessId
+success && "GetVersionEx failed"
+D:\a\_work\1\s\deps\winpty\src\shared\WindowsVersion.cc
+GetFileVersionInfoSizeW
+GetFileVersionInfoW
+VerQueryValueW
+Error getting %s version: %s
+:error
+Client
+DomainController
+Server
+product=
+Windows version: %s
+Assertion failed: %s, file %s, line %d
+winpty version %s (commit %s)
+RSDSrQ
+D:\a\_work\1\s\build\Release\winpty.pdb
+.text$mn
+.text$mn$00
+.text$mn$21
+.text$x
+.idata$5
+.00cfg
+.CRT$XCA
+.CRT$XCZ
+.CRT$XIA
+.CRT$XIC
+.CRT$XIZ
+.CRT$XPA
+.CRT$XPX
+.CRT$XPXA
+.CRT$XPZ
+.CRT$XTA
+.CRT$XTZ
+.gfids
+.rdata
+.rdata$00
+.rdata$r
+.rdata$voltmd
+.rdata$zzzdbg
+.rtc$IAA
+.rtc$IZZ
+.rtc$TAA
+.rtc$TZZ
+.xdata
+.xdata$x
+.edata
+.idata$2
+.idata$3
+.idata$4
+.idata$6
+.data$r
+.data$rs
+.pdata
+.fptable
+.rsrc$01
+.rsrc$02
+winpty.dll
+winpty_agent_process
+winpty_conerr_name
+winpty_config_free
+winpty_config_new
+winpty_config_set_agent_timeout
+winpty_config_set_initial_size
+winpty_config_set_mouse_mode
+winpty_conin_name
+winpty_conout_name
+winpty_error_code
+winpty_error_free
+winpty_error_msg
+winpty_free
+winpty_get_console_process_list
+winpty_open
+winpty_set_size
+winpty_spawn
+winpty_spawn_config_free
+winpty_spawn_config_new
+GetModuleHandleW
+GetModuleHandleExW
+GetModuleFileNameW
+GetFileAttributesW
+ReadFile
+CancelIo
+EnterCriticalSection
+GetCurrentProcess
+WriteFile
+CreateNamedPipeW
+WaitForMultipleObjects
+LeaveCriticalSection
+InitializeCriticalSection
+GetEnvironmentVariableA
+DuplicateHandle
+CreateEventW
+GetLastError
+CloseHandle
+GetOverlappedResult
+DeleteCriticalSection
+CreateProcessW
+ConnectNamedPipe
+GetCurrentThreadId
+GetModuleFileNameA
+SetNamedPipeHandleState
+SetLastError
+CreateFileW
+GetCurrentProcessId
+TransactNamedPipe
+GetSystemTimeAsFileTime
+WaitNamedPipeW
+LoadLibraryW
+GetProcAddress
+FreeLibrary
+WideCharToMultiByte
+LocalAlloc
+GetCurrentThread
+LocalFree
+GetVersionExW
+GetSystemDirectoryW
+KERNEL32.dll
+CryptReleaseContext
+CryptGenRandom
+CryptAcquireContextW
+GetTokenInformation
+OpenThreadToken
+InitializeSecurityDescriptor
+FreeSid
+OpenProcessToken
+SetEntriesInAclW
+AllocateAndInitializeSid
+SetSecurityDescriptorDacl
+ADVAPI32.dll
+CreateWindowStationW
+GetProcessWindowStation
+GetUserObjectInformationW
+SetProcessWindowStation
+CreateDesktopW
+CloseDesktop
+GetThreadDesktop
+CloseWindowStation
+USER32.dll
+RtlCaptureContext
+RtlLookupFunctionEntry
+RtlVirtualUnwind
+UnhandledExceptionFilter
+SetUnhandledExceptionFilter
+TerminateProcess
+IsProcessorFeaturePresent
+QueryPerformanceCounter
+InitializeSListHead
+IsDebuggerPresent
+GetStartupInfoW
+RtlUnwindEx
+RtlPcToFileHeader
+RaiseException
+InterlockedFlushSList
+EncodePointer
+InitializeCriticalSectionAndSpinCount
+TlsAlloc
+TlsGetValue
+TlsSetValue
+TlsFree
+LoadLibraryExW
+GetStdHandle
+GetFileType
+WriteConsoleW
+ExitProcess
+OutputDebugStringW
+HeapFree
+HeapAlloc
+FlsAlloc
+FlsGetValue
+FlsSetValue
+FlsFree
+InitializeCriticalSectionEx
+VirtualProtect
+LCMapStringW
+FindClose
+FindFirstFileExW
+FindNextFileW
+IsValidCodePage
+GetACP
+GetOEMCP
+GetCPInfo
+GetCommandLineA
+GetCommandLineW
+MultiByteToWideChar
+GetEnvironmentStringsW
+FreeEnvironmentStringsW
+GetProcessHeap
+GetStringTypeW
+FlushFileBuffers
+GetConsoleOutputCP
+GetConsoleMode
+GetFileSizeEx
+SetFilePointerEx
+SetStdHandle
+HeapSize
+HeapReAlloc
+                          
+abcdefghijklmnopqrstuvwxyz
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+                          
+abcdefghijklmnopqrstuvwxyz
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+.?AVbad_alloc@std@@
+.?AVexception@std@@
+.?AVbad_array_new_length@std@@
+.?AVlogic_error@std@@
+.?AVlength_error@std@@
+.?AVbad_exception@std@@
+.?AVWinptyException@@
+.?AVLibWinptyException@@
+.?AVbad_alloc@stdext@@
+.?AVDecodeError@ReadBuffer@@
+.?AUModuleNotFound@?A0x022946a7@@
+.?AVExceptionImpl@?A0xf25de583@@
+.?AVtype_info@@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<assembly xmlns='urn:schemas-microsoft-com:asm.v1' manifestVersion='1.0'>
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level='asInvoker' uiAccess='false' />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+</assembly>
+api-ms-win-core-fibers-l1-1-1
+api-ms-win-core-synch-l1-2-0
+kernel32
+api-ms-
+Assertion failed: %Ts, file %Ts, line %d
+Microsoft Visual C++ Runtime Library
+Assertion failed!
+Program: 
+File: 
+Line: 
+Expression: 
+For information on how your program can cause an assertion
+failure, see the Visual C++ documentation on asserts
+(Press Retry to debug the application - JIT must be enabled)
+<program name unknown>
+(null)
+mscoree.dll
+Sunday
+Monday
+Tuesday
+Wednesday
+Thursday
+Friday
+Saturday
+January
+February
+August
+September
+October
+November
+December
+MM/dd/yy
+dddd, MMMM dd, yyyy
+HH:mm:ss
+api-ms-win-core-datetime-l1-1-1
+api-ms-win-core-fibers-l1-1-2
+api-ms-win-core-file-l1-2-4
+api-ms-win-core-file-l1-2-2
+api-ms-win-core-file-l2-1-4
+api-ms-win-core-localization-l1-2-1
+api-ms-win-core-localization-obsolete-l1-2-0
+api-ms-win-core-processthreads-l1-1-2
+api-ms-win-core-string-l1-1-0
+api-ms-win-core-sysinfo-l1-2-1
+api-ms-win-core-winrt-l1-1-0
+api-ms-win-core-xstate-l2-1-0
+api-ms-win-rtcore-ntuser-window-l1-1-0
+api-ms-win-security-systemfunctions-l1-1-0
+ext-ms-win-ntuser-dialogbox-l1-1-0
+ext-ms-win-ntuser-windowstation-l1-1-0
+advapi32
+kernelbase
+api-ms-win-appmodel-runtime-l1-1-2
+user32
+ext-ms-
+         (((((                  H
+zh-CHS
+az-AZ-Latn
+uz-UZ-Latn
+kok-IN
+syr-SY
+div-MV
+quz-BO
+sr-SP-Latn
+az-AZ-Cyrl
+uz-UZ-Cyrl
+quz-EC
+sr-SP-Cyrl
+quz-PE
+smj-NO
+bs-BA-Latn
+smj-SE
+sr-BA-Latn
+sma-NO
+sr-BA-Cyrl
+sma-SE
+sms-FI
+smn-FI
+zh-CHT
+az-az-cyrl
+az-az-latn
+bs-ba-latn
+div-mv
+kok-in
+quz-bo
+quz-ec
+quz-pe
+sma-no
+sma-se
+smj-no
+smj-se
+smn-fi
+sms-fi
+sr-ba-cyrl
+sr-ba-latn
+sr-sp-cyrl
+sr-sp-latn
+syr-sy
+uz-uz-cyrl
+uz-uz-latn
+zh-chs
+zh-cht
+CONOUT$
+D:\a\_work\1\s\deps\winpty\src\libwinpty\AgentLocation.cc
+ASSERT_CONDITION("false && \"GetModuleHandleEx failed\"")
+ASSERT_CONDITION("size != 0 && size != bufsize")
+\winpty-agent.exe
+agent executable does not exist: '
+Out of memory
+Bad RPC packet
+Uncaught C++ exception
+D:\a\_work\1\s\deps\winpty\src\libwinpty\winpty.cc
+ASSERT_CONDITION("err->msgDynamic != nullptr")
+ASSERT_CONDITION("msgPtr != nullptr")
+Success
+ASSERT_CONDITION("(flags & WINPTY_FLAG_MASK) == flags")
+ASSERT_CONDITION("cfg != nullptr && cols > 0 && rows > 0")
+ASSERT_CONDITION("cfg != nullptr && mouseMode >= WINPTY_MOUSE_MODE_NONE && mouseMode <= WINPTY_MOUSE_MODE_FORCE")
+ASSERT_CONDITION("cfg != nullptr && timeoutMs > 0")
+agent died
+agent timed out
+WaitForMultipleObjects failed
+ASSERT_CONDITION("false && \"unexpected WaitForMultipleObjects return value\"")
+lost connection to agent
+ConnectNamedPipe failed
+WriteFile failed
+ASSERT_CONDITION("actual == amount && \"WriteFile wrote fewer bytes than requested\"")
+ReadFile failed
+ASSERT_CONDITION("chunk <= amount && \"readData result is larger than amount\"")
+Agent RPC error: invalid packet size
+could not create the control pipe's SECURITY_DESCRIPTOR
+CreateNamedPipeW failed
+CreateEventW failed
+winpty-agent CreateProcess failed: cmdline='
+' err=0x
+Security check failed: pipe client pid (
+) does not match agent pid (
+GetNamedPipeClientProcessId failed
+\\.\pipe\winpty-control-
+--create-desktop
+ASSERT_CONDITION("cfg != nullptr")
+ASSERT_CONDITION("wp != nullptr")
+Agent shutdown due to RPC failure
+ASSERT_CONDITION("envStr[0] == L'\\0'")
+ASSERT_CONDITION("envStrSz >= 3")
+ASSERT_CONDITION("envStr[envStrSz - 3] != L'\\0'")
+ASSERT_CONDITION("envStr[envStrSz - 2] == L'\\0'")
+ASSERT_CONDITION("envStr[envStrSz - 1] == L'\\0'")
+ASSERT_CONDITION("(winptyFlags & WINPTY_SPAWN_FLAG_MASK) == winptyFlags")
+DuplicateHandle of process handle
+ASSERT_CONDITION("wp != nullptr && cfg != nullptr")
+CreateProcess failed
+Agent RPC error: invalid StartProcessResult
+ASSERT_CONDITION("wp != nullptr && cols > 0 && rows > 0")
+ASSERT_CONDITION("processList != nullptr")
+0123456789abcdef
+D:\a\_work\1\s\deps\winpty\src\shared\BackgroundDesktop.cc
+ASSERT_CONDITION("lengthNeeded % sizeof(wchar_t) == 0")
+GetUserObjectInformationW failed
+BackgroundDesktop ctor: GetProcessWindowStation returned NULL
+BackgroundDesktop ctor: CreateWindowStationW returned NULL
+BackgroundDesktop ctor: SetProcessWindowStation failed
+Default
+BackgroundDesktop ctor: CreateDesktopW failed
+getCurrentDesktopName: GetProcessWindowStation returned NULL
+getCurrentDesktopName: GetThreadDesktop returned NULL
+DecodeError: RPC message decoding error
+D:\a\_work\1\s\deps\winpty\src\shared\Buffer.cc
+ASSERT_CONDITION("pos <= m_buf.size() && len <= m_buf.size() - pos")
+ASSERT_CONDITION("m_off <= m_buf.size()")
+\\.\pipe\DebugServer
+D:\a\_work\1\s\deps\winpty\src\shared\OsModule.h
+ASSERT_CONDITION("m_module != NULL")
+LoadLibraryW error: 
+advapi32.dll
+u0123456789abcdef
+CloseHandle failed
+D:\a\_work\1\s\deps\winpty\src\shared\StringUtil.cc
+ASSERT_CONDITION("mblen2 == mblen")
+OpenThreadToken failed
+OpenProcessToken failed
+D:\a\_work\1\s\deps\winpty\src\shared\WindowsSecurity.cc
+ASSERT_CONDITION("token != nullptr && \"OpenThreadToken/OpenProcessToken token is NULL\"")
+getOwnerSid: GetTokenInformation: expected ERROR_INSUFFICIENT_BUFFER
+getOwnerSid: GetTokenInformation
+ASSERT_CONDITION("actual >= sizeof(tmp)")
+wellKnownSid: error getting 
+BUILTIN\Administrators group
+LocalSystem account
+finishSecurityDescriptor: 
+SetEntriesInAcl failed: 
+finishSecurityDescriptor: LocalAlloc failed
+finishSecurityDescriptor: InitializeSecurityDescriptor
+finishSecurityDescriptor: SetSecurityDescriptorDacl
+kernel32.dll
+D:\a\_work\1\s\deps\winpty\src\shared\WindowsVersion.cc
+ASSERT_CONDITION("success && \"GetVersionEx failed\"")
+ModuleNotFound
+GetSystemDirectory failed
+GetSystemDirectory: path is longer than MAX_PATH
+\version.dll
+WGetFileVersionInfoSizeW is missing
+GetFileVersionInfoW is missing
+VerQueryValueW is missing
+GetFileVersionInfoSizeW failed on 
+GetFileVersionInfoW failed on 
+VerQueryValueW failed on 
+4ConEmuHk64.dll
+Windows error 

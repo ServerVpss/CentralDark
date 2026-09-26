@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.4 Ferramentas e o Contrato de Ferramenta | O Manual Oculto da IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    .code-box { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace; }
+
+    /* Dark mode - bordas e linhas divisorias mais suaves */
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+
+    /* SVG adaptado ao tema claro (so atinge os diagramas) */
+    html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+
+    /* Pulso para os blocos do SVG */
+    @keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: no-preference) {
+      .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+      .wf-a:nth-child(2){animation-delay:.25s}
+      .wf-a:nth-child(3){animation-delay:.5s}
+      .wf-a:nth-child(4){animation-delay:.75s}
+    }
+
+    /* ===== LIGHT MODE OVERRIDES — Parte 1: Base ===== */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-200 { color: #1f2937; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* ===== Parte 2: Cores de acento (trilha Blue — T2) ===== */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .text-blue-300 { color: #1d4ed8; }
+    html:not(.dark) .text-blue-200 { color: #1e40af; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .bg-blue-900\/30 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.06); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .border-blue-500\/20 { border-color: rgba(37, 99, 235, 0.18); }
+    html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37, 99, 235, 0.18); }
+    html:not(.dark) .hover\:border-blue-500\/30:hover { border-color: rgba(37, 99, 235, 0.25); }
+
+    /* sky (ciano secundario) */
+    html:not(.dark) .bg-sky-500\/10 { background-color: rgba(14, 165, 233, 0.08); }
+    html:not(.dark) .bg-sky-900\/30 { background-color: rgba(14, 165, 233, 0.08); }
+    html:not(.dark) .border-sky-500\/30 { border-color: rgba(14, 165, 233, 0.25); }
+    html:not(.dark) .text-sky-300 { color: #0284c7; }
+
+    /* ===== Parte 3: Remove gradientes + cores especiais ===== */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(185, 28, 28, 0.06); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(185, 28, 28, 0.22); }
+    html:not(.dark) .border-red-500\/20 { border-color: rgba(185, 28, 28, 0.18); }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+
+    /* ===== Parte 4: Navbar ===== */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <!-- Logo + INEMA.CLUB -->
+        <div class="flex items-center space-x-3">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300 transition-colors">
+            <span class="text-xl">🧠</span>
+            <span class="font-bold text-base hidden sm:inline">Manual Oculto da IA</span>
+          </a>
+          <span class="text-neutral-600 hidden sm:inline">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition-colors">INEMA.CLUB</a>
+        </div>
+
+        <!-- Trilhas + Theme Toggle -->
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <!-- Trilha 1 (inativa) -->
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <!-- Trilha 2 (ativa) -->
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+            <span class="sm:hidden">T2</span><span class="hidden sm:inline">Prática</span>
+          </a>
+          <!-- Trilha 3 (inativa) -->
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span><span class="hidden sm:inline">Avançado</span>
+          </a>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-1">
+            <svg id="theme-toggle-dark-icon" class="hidden w-4 h-4 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-4 h-4 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Breadcrumb -->
+    <div class="flex items-center space-x-2 text-sm text-neutral-500 mb-6">
+      <a href="../../index.html" class="hover:text-blue-400 transition-colors">Início</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-blue-400 transition-colors">Trilha 2</a>
+      <span>/</span>
+      <span class="text-blue-400">Módulo 2.4</span>
+    </div>
+
+    <!-- Header do Módulo -->
+    <div class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 rounded-2xl border border-blue-500/30 p-6 sm:p-8 mb-8">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-2xl">
+          🔧
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center space-x-3 mb-2">
+            <span class="text-xs font-semibold text-blue-400 bg-blue-500/10 border border-blue-500/30 px-2 py-1 rounded-full uppercase tracking-wider">MÓDULO 2.4</span>
+            <span class="text-xs text-neutral-500">Trilha 2 — Prática</span>
+          </div>
+          <h1 class="text-2xl font-bold text-neutral-100 mb-2">🔧 Ferramentas e o Contrato de Ferramenta</h1>
+          <p class="text-neutral-300 leading-relaxed">
+            Listar as ferramentas não basta. Sua IA vai chamar a ferramenta errada, ignorar dependências, ou fazer dez chamadas em fila onde
+            uma em lote resolvia. A cura é o <strong class="text-blue-400">Contrato de Ferramenta</strong>: para cada ferramenta, dizer
+            <em>quando</em> chamar, o que vem antes, o que nunca usar, e como agrupar. Você sai daqui com seis cláusulas prontas pra colar.
+          </p>
+          <!-- Stats -->
+          <div class="flex flex-wrap gap-4 mt-4">
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-blue-400">📋</span><span>6 tópicos</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-blue-400">⏱</span><span>~35 min</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-blue-400">🎯</span><span>Prático</span>
+            </div>
+            <div class="flex items-center space-x-1.5 text-sm text-neutral-400">
+              <span class="text-blue-400">🛠️</span><span>Mão na massa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SVG FUTURISTA: o fluxo de decisao "qual ferramenta / em paralelo ou em serie?" -->
+    <div class="rounded-2xl border border-blue-500/30 bg-dark-900/40 p-4 mb-10 overflow-hidden">
+      <svg viewBox="0 0 960 380" class="w-full h-auto" role="img" aria-label="Fluxograma de decisão de uso de ferramenta: a partir de uma necessidade, primeiro pergunta-se qual ferramenta usar (existe uma dedicada? então use-a, nunca o terminal), depois se há um pré-requisito a cumprir antes (ler antes de editar), e por fim se as chamadas são independentes — em caso afirmativo elas são disparadas em paralelo no mesmo bloco, caso contrário são encadeadas em série, uma consumindo o resultado da anterior">
+        <defs>
+          <linearGradient id="m24-grad-bl" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#2563eb"/>
+          </linearGradient>
+          <linearGradient id="m24-grad-cy" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#0ea5e9"/>
+          </linearGradient>
+          <filter id="m24-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="1.8" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <pattern id="m24-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+            <circle cx="1.2" cy="1.2" r="1.2" fill="#60a5fa" opacity="0.10"/>
+          </pattern>
+          <marker id="m24-ah" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#60a5fa"/>
+          </marker>
+          <marker id="m24-ahc" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/>
+          </marker>
+        </defs>
+
+        <!-- Fundo grid -->
+        <rect x="0" y="0" width="960" height="380" fill="url(#m24-grid)" rx="16"/>
+
+        <!-- Titulo do fluxo -->
+        <text x="480" y="32" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="12" opacity="0.7">o contrato em ação · qual ferramenta usar, e em paralelo ou em série?</text>
+
+        <!-- START: necessidade -->
+        <rect x="40" y="70" width="150" height="50" rx="12" fill="#0e1830" stroke="url(#m24-grad-bl)" stroke-width="2" class="wf-a"/>
+        <text x="115" y="92" text-anchor="middle" fill="#93c5fd" font-family="Inter,sans-serif" font-size="12" font-weight="700">preciso agir</text>
+        <text x="115" y="108" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="10">ler · editar · buscar…</text>
+
+        <!-- DECISAO 1: existe ferramenta dedicada? (losango) -->
+        <path d="M340,95 L420,55 L500,95 L420,135 Z" fill="#0e1b26" stroke="#38bdf8" stroke-width="2" class="wf-a"/>
+        <text x="420" y="92" text-anchor="middle" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="11" font-weight="700">há ferramenta</text>
+        <text x="420" y="106" text-anchor="middle" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="11" font-weight="700">dedicada?</text>
+
+        <!-- seta start -> decisao 1 -->
+        <path d="M190,95 L334,95" fill="none" stroke="#60a5fa" stroke-width="1.8" marker-end="url(#m24-ah)"/>
+
+        <!-- NAO -> terminal (exclusao) -->
+        <text x="445" y="46" fill="#f87171" font-family="Inter,sans-serif" font-size="10" font-weight="700">não</text>
+        <rect x="540" y="44" width="180" height="42" rx="10" fill="#0e1830" stroke="#f87171" stroke-width="1.6"/>
+        <text x="630" y="62" text-anchor="middle" fill="#fca5a5" font-family="Inter,sans-serif" font-size="11" font-weight="600">só então: terminal</text>
+        <text x="630" y="77" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="9">comando de sistema real</text>
+        <path d="M500,80 C516,72 524,66 534,65" fill="none" stroke="#f87171" stroke-width="1.6" opacity="0.7" marker-end="url(#m24-ah)"/>
+
+        <!-- SIM -> use a dedicada (exclusao: nunca o terminal) -->
+        <text x="426" y="158" fill="#60a5fa" font-family="Inter,sans-serif" font-size="10" font-weight="700">sim</text>
+        <g filter="url(#m24-glow)">
+          <rect x="340" y="166" width="160" height="48" rx="11" fill="#0e1830" stroke="url(#m24-grad-bl)" stroke-width="2.4"/>
+        </g>
+        <text x="420" y="186" text-anchor="middle" fill="#93c5fd" font-family="Inter,sans-serif" font-size="11" font-weight="700">use a dedicada</text>
+        <text x="420" y="201" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="9">nunca o terminal pra isso</text>
+        <path d="M420,135 L420,160" fill="none" stroke="#60a5fa" stroke-width="1.8" marker-end="url(#m24-ah)"/>
+
+        <!-- DECISAO 2: pre-requisito? -->
+        <path d="M340,278 L420,238 L500,278 L420,318 Z" fill="#0e1b26" stroke="#38bdf8" stroke-width="2" class="wf-a"/>
+        <text x="420" y="275" text-anchor="middle" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="11" font-weight="700">tem pré-</text>
+        <text x="420" y="289" text-anchor="middle" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="11" font-weight="700">requisito?</text>
+        <path d="M420,214 L420,236" fill="none" stroke="#60a5fa" stroke-width="1.8" marker-end="url(#m24-ah)"/>
+
+        <!-- pre-requisito: ler antes de editar (a esquerda) -->
+        <rect x="70" y="252" width="200" height="52" rx="10" fill="#0e1830" stroke="#60a5fa" stroke-width="1.6"/>
+        <text x="170" y="272" text-anchor="middle" fill="#93c5fd" font-family="Inter,sans-serif" font-size="11" font-weight="600">cumpra o passo antes</text>
+        <text x="170" y="288" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="9">ex.: ler o arquivo antes de editar</text>
+        <text x="296" y="270" fill="#60a5fa" font-family="Inter,sans-serif" font-size="10" font-weight="700">sim</text>
+        <path d="M340,278 L274,278" fill="none" stroke="#60a5fa" stroke-width="1.6" marker-end="url(#m24-ah)"/>
+
+        <!-- DECISAO 3: chamadas independentes? -->
+        <path d="M620,278 L710,236 L800,278 L710,320 Z" fill="#0e1b26" stroke="#38bdf8" stroke-width="2" class="wf-a"/>
+        <text x="710" y="274" text-anchor="middle" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="11" font-weight="700">chamadas</text>
+        <text x="710" y="288" text-anchor="middle" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="11" font-weight="700">independentes?</text>
+        <text x="540" y="270" fill="#60a5fa" font-family="Inter,sans-serif" font-size="10" font-weight="700">não/ok</text>
+        <path d="M500,278 L614,278" fill="none" stroke="#60a5fa" stroke-width="1.8" marker-end="url(#m24-ah)"/>
+
+        <!-- SIM -> paralelo (mesmo bloco) -->
+        <g filter="url(#m24-glow)">
+          <rect x="800" y="150" width="140" height="60" rx="11" fill="#0e1b26" stroke="#38bdf8" stroke-width="2.4"/>
+        </g>
+        <text x="870" y="174" text-anchor="middle" fill="#7dd3fc" font-family="Inter,sans-serif" font-size="11" font-weight="700">▶▶ em paralelo</text>
+        <text x="870" y="190" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="9">todas no mesmo bloco</text>
+        <text x="870" y="203" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="9">independentes → juntas</text>
+        <text x="788" y="238" text-anchor="end" fill="#38bdf8" font-family="Inter,sans-serif" font-size="10" font-weight="700">sim</text>
+        <path d="M765,250 C800,232 820,220 845,212" fill="none" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#m24-ahc)"/>
+
+        <!-- NAO -> serie (encadeamento) -->
+        <rect x="800" y="296" width="140" height="60" rx="11" fill="#0e1830" stroke="url(#m24-grad-bl)" stroke-width="2"/>
+        <text x="870" y="320" text-anchor="middle" fill="#93c5fd" font-family="Inter,sans-serif" font-size="11" font-weight="700">→→ em série</text>
+        <text x="870" y="336" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="9">B usa o resultado de A</text>
+        <text x="870" y="349" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="9">uma de cada vez</text>
+        <text x="788" y="326" text-anchor="end" fill="#60a5fa" font-family="Inter,sans-serif" font-size="10" font-weight="700">não</text>
+        <path d="M765,300 C800,314 820,320 845,322" fill="none" stroke="#60a5fa" stroke-width="1.8" marker-end="url(#m24-ah)"/>
+
+        <!-- rodape: nunca cite o nome ao usuario -->
+        <text x="40" y="362" fill="#6b7280" font-family="Inter,sans-serif" font-size="10">e em todo caminho: ao falar com o usuário, descreva a ação — não cite o nome da ferramenta.</text>
+      </svg>
+    </div>
+
+    <!-- CONTEÚDO DETALHADO -->
+    <h2 class="text-2xl font-bold mb-6">Conteúdo detalhado</h2>
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">1</span>
+        <h2 class="text-2xl font-bold">Gatilho de uso: quando chamar</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        No módulo da biblioteca você viu o bloco <span class="code-box text-sky-300">ferramentas</span> dizer <em>o que existe</em>. Isso é só metade.
+        A outra metade — a que faz a IA parar de tatear — é o <strong class="text-blue-400">gatilho de uso</strong>: a condição clara que diz
+        <em>quando</em> aquela ferramenta entra. "Você tem uma busca na web" é uma capacidade. "Use a busca quando precisar de um fato posterior
+        ao seu corte de conhecimento" é um <strong class="text-blue-400">contrato</strong>. A diferença é noite e dia.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">🎯</span> A ideia em uma frase</h3>
+        <p class="text-neutral-300 leading-relaxed mb-3">
+          O Contrato de Ferramenta diz <strong class="text-blue-400">quando e em que ordem</strong> chamar cada ferramenta — não só
+          <em>o que</em> existe. Listar é a Declaração de Capacidades; contratar é o passo seguinte, e é o que separa um agente que executa com
+          disciplina de um que chama a coisa errada na hora errada.
+        </p>
+        <p class="text-neutral-300 leading-relaxed text-sm">
+          O coração de cada cláusula é o gatilho: <strong class="text-blue-400">"use quando {condição}"</strong>. Sem ele, o modelo adivinha — e
+          adivinha mal: chama a busca pra coisas que já sabe, ou deixa de chamar quando precisava de verdade.
+        </p>
+      </div>
+
+      <!-- O que e -->
+      <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5 mb-4">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">O que é o gatilho</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          Uma frase que amarra a ferramenta a uma <strong class="text-blue-400">situação observável</strong>: "use a calculadora quando a conta tiver
+          mais de um passo", "use a busca quando o usuário pedir algo atual", "use o leitor de arquivo quando precisar do conteúdo, não do nome".
+          O gatilho responde à única pergunta que importa no momento de agir: <span class="code-box text-blue-400">isto se aplica agora?</span>
+        </p>
+      </div>
+
+      <!-- Por que aprender -->
+      <div class="bg-dark-800 border border-dark-600 rounded-xl p-5 mb-4">
+        <h3 class="text-lg font-semibold text-neutral-200 mb-3">Por que o gatilho muda tudo</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed">
+          Porque sem condição de disparo, a ferramenta vira tentação. O modelo ou abusa (chama pra tudo, gasta tempo e tokens) ou ignora (responde de
+          cabeça quando devia ter buscado). O gatilho transforma "você pode" em "você deve, exatamente aqui" — e é a parte do contrato que mais reduz
+          chamada errada.
+        </p>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🎯</div>
+          <div class="text-xs font-semibold text-neutral-200">Use quando…</div>
+          <div class="text-xs text-neutral-500 mt-1">condição clara</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">👀</div>
+          <div class="text-xs font-semibold text-neutral-200">Observável</div>
+          <div class="text-xs text-neutral-500 mt-1">dá pra reconhecer</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🚫</div>
+          <div class="text-xs font-semibold text-neutral-200">Não é só listar</div>
+          <div class="text-xs text-neutral-500 mt-1">diz o quando</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">⚖️</div>
+          <div class="text-xs font-semibold text-neutral-200">Nem abusa, nem ignora</div>
+          <div class="text-xs text-neutral-500 mt-1">na hora certa</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">2</span>
+        <h2 class="text-2xl font-bold">Pré-requisito: o passo obrigatório antes</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Algumas ferramentas têm uma ordem sagrada: <strong class="text-blue-400">antes de fazer X, faça Y</strong>. O exemplo clássico, que aparece
+        literalmente nas regras de ferramentas reais, é <em>ler antes de editar</em>: você não pode editar um arquivo que nunca leu — porque se não viu
+        o conteúdo atual, a edição é um chute. O pré-requisito é a cláusula que torna essa dependência explícita.
+      </p>
+
+      <!-- Caixa mono: o pre-requisito verbatim (Cursor) -->
+      <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5 mb-5">
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-xs font-semibold text-blue-400">Pré-requisito de ordem, num agente real <span class="font-normal text-neutral-500">— Cursor, verbatim</span></div>
+          <span class="text-xs text-neutral-500 code-box">EN canônico</span>
+        </div>
+        <pre class="bg-dark-900 border-l-2 border-blue-500 rounded p-4 font-mono text-xs text-neutral-300 overflow-x-auto code-box leading-relaxed">You MUST use the Read tool at least once before editing.</pre>
+        <p class="text-xs text-neutral-400 mt-3 leading-relaxed">
+          Uma frase. Maiúsculas no <span class="code-box text-blue-400">MUST</span>, a ordem explícita ("at least once before editing"). Não é sugestão —
+          é a porta que precisa ser aberta antes da próxima.
+        </p>
+      </div>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">🔗</span> Por que declarar a ordem importa</h3>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">①</span>
+            <span><strong class="text-blue-400">A IA não infere a dependência sozinha.</strong> Pra ela, editar e ler são duas ferramentas separadas. Você precisa amarrar uma à outra.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">②</span>
+            <span><strong class="text-blue-400">Pular o passo gera dano silencioso.</strong> Editar sem ler sobrescreve o que você não viu — e o erro só aparece depois, quando já é tarde.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">③</span>
+            <span><strong class="text-blue-400">A regra é curta e custa pouco.</strong> Uma linha no contrato evita uma classe inteira de falhas. ROI altíssimo.</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-sky-900/30 border border-sky-500/30 rounded-xl p-4 mb-5">
+        <div class="flex items-start space-x-3">
+          <span class="text-sky-300 text-lg flex-shrink-0">🎯</span>
+          <div>
+            <p class="text-sm font-semibold text-sky-300 mb-1">O molde do pré-requisito</p>
+            <p class="text-sm text-neutral-300">
+              <span class="code-box text-blue-400">Pré-requisito: antes de {ação}, {passo obrigatório}.</span> Exemplos: "antes de editar, leia o arquivo";
+              "antes de enviar o e-mail, mostre o rascunho"; "antes de rodar o deploy, rode os testes". Sempre <strong>antes de</strong> + a porta que
+              precisa estar aberta.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🔗</div>
+          <div class="text-xs font-semibold text-neutral-200">Antes de X, Y</div>
+          <div class="text-xs text-neutral-500 mt-1">ordem sagrada</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">📖</div>
+          <div class="text-xs font-semibold text-neutral-200">Ler antes de editar</div>
+          <div class="text-xs text-neutral-500 mt-1">o caso clássico</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🤐</div>
+          <div class="text-xs font-semibold text-neutral-200">Dano silencioso</div>
+          <div class="text-xs text-neutral-500 mt-1">pular custa caro</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">💵</div>
+          <div class="text-xs font-semibold text-neutral-200">1 linha, muito ganho</div>
+          <div class="text-xs text-neutral-500 mt-1">ROI alto</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">3</span>
+        <h2 class="text-2xl font-bold">Exclusão: use X, nunca Y</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Quando duas ferramentas <em>parecem</em> servir pro mesmo caso, a IA escolhe — e às vezes escolhe a pior. A cláusula de
+        <strong class="text-blue-400">exclusão</strong> tira a escolha das mãos dela: "para este caso, use X, <strong class="text-blue-400">nunca</strong> Y".
+        O exemplo que define o padrão vem do Cursor: <em>use a ferramenta dedicada de arquivo, nunca o terminal</em>.
+      </p>
+
+      <!-- Caixa mono: a exclusao verbatim (Cursor) -->
+      <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5 mb-5">
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-xs font-semibold text-blue-400">Exclusão explícita, num agente real <span class="font-normal text-neutral-500">— Cursor, verbatim</span></div>
+          <span class="text-xs text-neutral-500 code-box">EN canônico</span>
+        </div>
+        <pre class="bg-dark-900 border-l-2 border-blue-500 rounded p-4 font-mono text-xs text-neutral-300 overflow-x-auto code-box leading-relaxed">Use specialized tools instead of terminal commands when possible…
+don't use cat/head/tail to read files, don't use sed/awk to edit files…
+Reserve terminal commands exclusively for actual system commands.</pre>
+        <p class="text-xs text-neutral-400 mt-3 leading-relaxed">
+          Repare na forma: diz o que <strong class="text-blue-400">usar</strong> (a ferramenta dedicada), o que <strong class="text-red-400">não usar</strong>
+          (cat, head, tail, sed, awk) e <strong class="text-blue-400">reserva</strong> o terminal pro que de fato é comando de sistema. Escolha eliminada.
+        </p>
+      </div>
+
+      <!-- Grid: exclusao bem feita vs mal feita -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+        <div class="bg-blue-900/20 border border-blue-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-blue-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-blue-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>Exclusão que funciona</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>"Para ler arquivo, use o leitor — nunca o terminal"</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Nomeia a vencedora E a proibida, sem ambiguidade</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Vale só pro caso ("para isto"), não pra tudo</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Resolve uma confusão real que você já viu acontecer</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">✗</span>
+            <span>Exclusão que atrapalha</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>"Não use o terminal" — sem dizer o que usar no lugar</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Proíbe sem caso ("nunca, jamais"), travando usos legítimos</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Cria exclusão entre ferramentas que não se sobrepõem</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Inventa uma regra pra um conflito que nunca ocorreu</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Caixa mono: o molde de exclusao em PT -->
+      <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5 mb-5">
+        <div class="text-xs font-semibold text-blue-400 mb-3">O molde, em PT <span class="font-normal text-neutral-500">— cole e ajuste</span></div>
+        <pre class="bg-dark-900 border-l-2 border-blue-500 rounded p-4 font-mono text-xs text-neutral-300 overflow-x-auto code-box leading-relaxed"><span class="text-sky-300">&lt;ferramentas&gt;</span>
+Para <span class="text-blue-400">ler/editar arquivos</span>, use a ferramenta dedicada — nunca o terminal.
+Reserve o terminal só para comandos de sistema de verdade (git, mkdir, mover).
+<span class="text-sky-300">&lt;/ferramentas&gt;</span></pre>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">✅</div>
+          <div class="text-xs font-semibold text-neutral-200">Use X</div>
+          <div class="text-xs text-neutral-500 mt-1">a vencedora</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-red-400 text-lg mb-1">⛔</div>
+          <div class="text-xs font-semibold text-neutral-200">Nunca Y</div>
+          <div class="text-xs text-neutral-500 mt-1">a proibida</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🎯</div>
+          <div class="text-xs font-semibold text-neutral-200">Para este caso</div>
+          <div class="text-xs text-neutral-500 mt-1">não pra tudo</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🧹</div>
+          <div class="text-xs font-semibold text-neutral-200">Escolha eliminada</div>
+          <div class="text-xs text-neutral-500 mt-1">sem ambiguidade</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">4</span>
+        <h2 class="text-2xl font-bold">Batching e paralelismo</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Aqui mora um ganho enorme de velocidade que quase ninguém escreve no prompt: quando você precisa de várias coisas que <strong class="text-blue-400">não
+        dependem uma da outra</strong>, peça todas <em>de uma vez</em>, no mesmo bloco — em paralelo. Ler três arquivos diferentes? Buscar duas coisas distintas?
+        Não há motivo pra fazer em fila. A regra de paralelismo do Claude Code diz isso de forma direta.
+      </p>
+
+      <!-- Caixa mono: o paralelismo verbatim (Claude Code) -->
+      <div class="bg-dark-800 border border-sky-500/30 rounded-xl p-5 mb-5">
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-xs font-semibold text-sky-300">Paralelismo como política, num agente real <span class="font-normal text-neutral-500">— Claude Code, verbatim</span></div>
+          <span class="text-xs text-neutral-500 code-box">EN canônico</span>
+        </div>
+        <pre class="bg-dark-900 border-l-2 border-sky-500 rounded p-4 font-mono text-xs text-neutral-300 overflow-x-auto code-box leading-relaxed">If you intend to call multiple tools and there are no dependencies
+between the calls, make all of the independent calls in the same block.</pre>
+        <p class="text-xs text-neutral-400 mt-3 leading-relaxed">
+          A condição é "<strong class="text-sky-300">no dependencies between the calls</strong>"; a ação é "<strong class="text-sky-300">make all of the
+          independent calls in the same block</strong>". Independente → junto. Dependente → não (isso é o próximo tópico).
+        </p>
+      </div>
+
+      <!-- Timeline: serie vs paralelo -->
+      <div class="space-y-4 mb-6">
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center">
+            <span class="text-red-400 text-lg">🐌</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-red-500/20 rounded-xl p-5">
+            <h4 class="font-semibold text-red-400 mb-1">Sem contrato: em fila, sem motivo</h4>
+            <p class="text-sm text-neutral-500 mb-2">A IA lê o arquivo A, espera, lê o B, espera, lê o C. Três idas e voltas.</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              Nada ali dependia de nada — A, B e C são independentes. Mas sem a regra, o modelo serializa por hábito. O usuário espera o triplo do
+              necessário, e a tarefa fica lenta à toa.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
+            <span class="text-sky-300 text-lg">⚡</span>
+          </div>
+          <div class="flex-1 bg-dark-800 border border-sky-500/30 rounded-xl p-5">
+            <h4 class="font-semibold text-sky-300 mb-1">Com contrato: todas no mesmo bloco</h4>
+            <p class="text-sm text-neutral-500 mb-2">A IA dispara as três leituras juntas e lê as três respostas que voltam.</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              Uma ida só. O contrato de batching diz: <strong class="text-sky-300">chamadas independentes → no mesmo bloco, em paralelo</strong>. O resultado
+              é o mesmo, mas chega numa fração do tempo. Velocidade de graça.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-4 mb-5">
+        <div class="flex items-start space-x-3">
+          <span class="text-primary text-lg flex-shrink-0">💡</span>
+          <div>
+            <p class="text-sm font-semibold text-primary mb-1">O teste da independência</p>
+            <p class="text-sm text-neutral-300">
+              Antes de agrupar, pergunte: <strong>"a chamada B precisa do resultado da A?"</strong> Se a resposta é não pra todas, vão todas juntas. Se
+              alguma precisa, essa fica de fora do bloco e espera. Batching só vale pro que é genuinamente independente — não force paralelo onde há dependência.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-sky-300 text-lg mb-1">⚡</div>
+          <div class="text-xs font-semibold text-neutral-200">Independentes → juntas</div>
+          <div class="text-xs text-neutral-500 mt-1">mesmo bloco</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">⏱️</div>
+          <div class="text-xs font-semibold text-neutral-200">Uma ida só</div>
+          <div class="text-xs text-neutral-500 mt-1">não três</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">❓</div>
+          <div class="text-xs font-semibold text-neutral-200">B precisa de A?</div>
+          <div class="text-xs text-neutral-500 mt-1">o teste</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🎁</div>
+          <div class="text-xs font-semibold text-neutral-200">Velocidade de graça</div>
+          <div class="text-xs text-neutral-500 mt-1">mesmo resultado</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">5</span>
+        <h2 class="text-2xl font-bold">Não citar o nome da ferramenta ao usuário</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Uma cláusula pequena de etiqueta, com efeito grande na experiência: <strong class="text-blue-400">ao falar com o usuário, descreva a ação em
+        linguagem natural — não recite o nome interno da ferramenta</strong>. O usuário quer saber "estou procurando isso pra você", não
+        "vou invocar a função <span class="code-box">web_search</span> com o parâmetro <span class="code-box">query</span>". O nome da ferramenta é assunto
+        de bastidor.
+      </p>
+
+      <!-- Grid: o que dizer vs o que esconder -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+        <div class="bg-blue-900/20 border border-blue-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-blue-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-blue-500/30 flex items-center justify-center text-xs">✓</span>
+            <span>Diga assim (linguagem natural)</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>"Deixa eu procurar isso pra você…"</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>"Vou ler o arquivo pra ver o que tem lá"</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>"Calculei e o total é R$ 1.240"</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">✓</span><span>Descreve a intenção, não o mecanismo</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+          <h4 class="text-sm font-semibold text-red-400 mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-red-500/30 flex items-center justify-center text-xs">✗</span>
+            <span>Não diga assim (vaza o bastidor)</span>
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>"Chamando a tool <span class="code-box">search_web</span>…"</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>"Executando <span class="code-box">read_file(path=…)</span>"</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>"Vou usar a função <span class="code-box">calculator</span> agora"</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">✗</span><span>Expõe nomes internos que não dizem nada ao usuário</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Caixa mono: a regra em PT -->
+      <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5 mb-5">
+        <div class="text-xs font-semibold text-blue-400 mb-3">A cláusula, em PT <span class="font-normal text-neutral-500">— uma linha no bloco de ferramentas</span></div>
+        <pre class="bg-dark-900 border-l-2 border-blue-500 rounded p-4 font-mono text-xs text-neutral-300 overflow-x-auto code-box leading-relaxed">Não cite o nome da ferramenta ao falar com o usuário;
+diga em linguagem natural o que está fazendo.</pre>
+      </div>
+
+      <!-- Tip box -->
+      <div class="bg-sky-900/30 border border-sky-500/30 rounded-xl p-4">
+        <div class="flex items-start space-x-3">
+          <span class="text-sky-300 text-lg flex-shrink-0">🌱</span>
+          <div>
+            <p class="text-sm font-semibold text-sky-300 mb-1">Por que isso importa de verdade</p>
+            <p class="text-sm text-neutral-300">
+              O nome da ferramenta é detalhe de implementação. Citá-lo polui a conversa, confunde quem não é técnico e amarra o seu prompt a nomes que
+              podem mudar. A regra mantém a IA <strong>falando de resultados</strong>, não de encanamento — e a experiência fica limpa.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-14">
+      <div class="flex items-center space-x-4 mb-5">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl flex-shrink-0">6</span>
+        <h2 class="text-2xl font-bold">Encadeamento: usar o resultado anterior</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O oposto do batching: às vezes a chamada B <strong class="text-blue-400">só faz sentido com o que a A devolveu</strong>. Aí não dá pra paralelizar —
+        tem que ser em série, e a B precisa consumir o output exato da A. Esse é o <strong class="text-blue-400">encadeamento</strong>: o contrato que diz
+        "pegue tal campo do resultado anterior e passe pra próxima". Sem ele, a IA inventa o elo — e quebra o pipeline.
+      </p>
+
+      <!-- Caixa mono: encadeamento de verdade -->
+      <div class="bg-dark-800 border border-blue-500/30 rounded-xl p-5 mb-6">
+        <div class="text-xs font-semibold text-blue-400 mb-3">Encadeamento em série <span class="font-normal text-neutral-500">— B consome o resultado de A</span></div>
+        <div class="space-y-3">
+          <div class="bg-dark-900 rounded-lg p-3 border border-blue-500/20">
+            <p class="text-sm text-neutral-200 mb-1"><span class="code-box text-blue-400">A — buscar:</span> "encontre o ID do pedido pelo e-mail do cliente"</p>
+            <p class="text-xs text-neutral-400"><span class="code-box text-sky-300">devolve:</span> <span class="code-box">pedido_id = 8842</span></p>
+          </div>
+          <div class="flex items-center justify-center text-blue-400 font-bold text-sm">↓ passa o resultado ↓</div>
+          <div class="bg-dark-900 rounded-lg p-3 border border-blue-500/20">
+            <p class="text-sm text-neutral-200 mb-1"><span class="code-box text-blue-400">B — detalhar:</span> "abra os detalhes do pedido <span class="code-box">{pedido_id}</span>"</p>
+            <p class="text-xs text-neutral-400"><span class="code-box text-sky-300">contrato:</span> use exatamente o <span class="code-box">pedido_id</span> que A devolveu — não chute um número.</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed text-sm">
+        Repare no padrão: a cláusula de encadeamento nomeia <strong class="text-blue-400">qual campo</strong> sai de A e <strong class="text-blue-400">para
+        onde</strong> entra em B. Quanto mais exato o formato declarado ("o <span class="code-box">pedido_id</span> no formato numérico"), menos a IA improvisa.
+        É o irmão da exclusão: um diz <em>qual ferramenta</em>, o outro diz <em>com qual dado</em>.
+      </p>
+
+      <!-- Box Alerta / nuance -->
+      <div class="bg-red-900/20 border border-red-500/30 rounded-xl p-5 mb-5">
+        <h3 class="text-lg font-semibold text-red-400 mb-2 flex items-center"><span class="mr-2">⚠️</span> Os três erros de encadeamento</h3>
+        <p class="text-neutral-300 text-sm leading-relaxed mb-3">
+          Quando o pipeline quebra, quase sempre é um destes:
+        </p>
+        <ul class="space-y-2 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">1.</span><span><strong>Paralelizar o que é dependente.</strong> B sai junto de A e usa um valor que ainda não existe → erro ou lixo.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">2.</span><span><strong>Inventar o elo.</strong> A IA não pega o campo real de A; chuta um valor plausível e segue → resultado errado, sem aviso.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">3.</span><span><strong>Formato impreciso.</strong> O contrato não diz qual campo nem em que formato → a IA pega o pedaço errado do output.</span></li>
+        </ul>
+      </div>
+
+      <!-- Conceitos-chave -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🔗</div>
+          <div class="text-xs font-semibold text-neutral-200">B usa o de A</div>
+          <div class="text-xs text-neutral-500 mt-1">em série</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🏷️</div>
+          <div class="text-xs font-semibold text-neutral-200">Nomeie o campo</div>
+          <div class="text-xs text-neutral-500 mt-1">e o formato</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🚫</div>
+          <div class="text-xs font-semibold text-neutral-200">Não chute o elo</div>
+          <div class="text-xs text-neutral-500 mt-1">use o valor real</div>
+        </div>
+        <div class="bg-dark-700 rounded-lg p-3 text-center">
+          <div class="text-blue-400 text-lg mb-1">🧩</div>
+          <div class="text-xs font-semibold text-neutral-200">Pipeline inteiro</div>
+          <div class="text-xs text-neutral-500 mt-1">elo por elo</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ENTREGÁVEL PRÁTICO -->
+    <div class="bg-dark-800 border border-blue-500/30 rounded-2xl p-6 sm:p-8 mb-8">
+      <h2 class="text-2xl font-bold mb-3 flex items-center"><span class="mr-3">🛠️</span> Mão na massa: seu entregável</h2>
+      <p class="text-neutral-300 leading-relaxed mb-5 text-sm">
+        Pegue uma IA sua que use ferramentas e escreva o contrato delas. Em 15 minutos você fecha as seis cláusulas.
+      </p>
+      <ol class="space-y-3 text-sm text-neutral-300 mb-2">
+        <li class="flex items-start space-x-3">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex-shrink-0">1</span>
+          <span>Liste as ferramentas que a sua IA realmente tem. Para cada uma, escreva o <strong class="text-blue-400">gatilho</strong>: "use quando {condição}".</span>
+        </li>
+        <li class="flex items-start space-x-3">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex-shrink-0">2</span>
+          <span>Marque os <strong class="text-blue-400">pré-requisitos</strong> (alguma precisa de um passo antes? ex.: ler antes de editar) e as <strong class="text-blue-400">exclusões</strong> (duas se confundem? "use X, nunca Y").</span>
+        </li>
+        <li class="flex items-start space-x-3">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex-shrink-0">3</span>
+          <span>Escreva a regra de <strong class="text-blue-400">batching</strong> ("independentes → no mesmo bloco") e marque os <strong class="text-blue-400">encadeamentos</strong> (B precisa de qual campo de A?).</span>
+        </li>
+        <li class="flex items-start space-x-3">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex-shrink-0">4</span>
+          <span>Adicione a linha de etiqueta ("não cite o nome da ferramenta ao usuário"). Cole tudo no bloco <span class="code-box">&lt;ferramentas&gt;</span>, rode uma tarefa real e veja se a IA escolhe e agrupa certo.</span>
+        </li>
+      </ol>
+    </div>
+
+    <!-- RESUMO FINAL -->
+    <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-2xl border border-blue-500/30 p-6 sm:p-8 mb-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📝</span> Resumo do Módulo</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <ul class="space-y-3 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span>O <strong class="text-blue-400">Contrato de Ferramenta</strong> diz <em>quando e em que ordem</em> chamar — não só o que existe</span></li>
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-blue-400">Gatilho:</strong> amarre a ferramenta a uma condição observável — "use quando {condição}"</span></li>
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-blue-400">Pré-requisito:</strong> o passo obrigatório antes — ex.: ler antes de editar</span></li>
+        </ul>
+        <ul class="space-y-3 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-blue-400">Exclusão:</strong> "use X, nunca Y" para o caso — escolha errada eliminada</span></li>
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-blue-400">Batching:</strong> chamadas independentes → no mesmo bloco, em paralelo; dependentes → <strong class="text-blue-400">encadeadas</strong> em série</span></li>
+          <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5 flex-shrink-0">✓</span><span><strong class="text-blue-400">Etiqueta:</strong> ao usuário, diga a ação em linguagem natural — não cite o nome da ferramenta</span></li>
+        </ul>
+      </div>
+
+      <div class="bg-dark-800/50 rounded-lg p-4 mb-6 border border-blue-500/20">
+        <h3 class="font-semibold text-blue-400 mb-1 flex items-center"><span class="mr-2">➡️</span> Próximo Módulo</h3>
+        <p class="text-neutral-300 text-sm">
+          <strong>2.5 — 🔁 O Loop operacional.</strong> Você contratou as ferramentas; agora vamos dar à IA o ciclo de trabalho que usa esses contratos com
+          disciplina: aterrar, raciocinar, agir, observar, verificar, narrar — o cérebro do agente.
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="inline-flex items-center justify-start space-x-2 text-neutral-400 hover:text-blue-400 text-sm font-medium px-4 py-2.5 rounded-xl bg-dark-700 hover:bg-dark-600 transition-colors">
+          <span>←</span><span>Voltar para Trilha</span>
+        </a>
+        <a href="modulo-2-5.html" class="inline-flex items-center justify-start space-x-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition-colors">
+          <span>Próximo: 2.5 O Loop operacional</span><span>→</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
+        <div class="text-sm text-neutral-500">
+          <span class="text-blue-400 font-medium">O Manual Oculto da IA</span> · Módulo 2.4 · Trilha 2 · 2026
+        </div>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm transition-colors">INEMA.CLUB</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

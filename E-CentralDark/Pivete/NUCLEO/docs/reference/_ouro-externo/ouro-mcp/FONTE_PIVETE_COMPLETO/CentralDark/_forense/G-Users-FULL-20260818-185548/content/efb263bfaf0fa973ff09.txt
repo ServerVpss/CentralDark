@@ -1,0 +1,9 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@babel\runtime\helpers\classPrivateFieldDestructureSet.js
+
+var classApplyDescriptorDestructureSet = require("./classApplyDescriptorDestructureSet.js");
+var classPrivateFieldGet2 = require("./classPrivateFieldGet2.js");
+function _classPrivateFieldDestructureSet(e, t) {
+  var r = classPrivateFieldGet2(t, e);
+  return classApplyDescriptorDestructureSet(e, r);
+}
+module.exports = _classPrivateFieldDestructureSet, module.exports.__esModule = true, module.exports["default"] = module.exports;

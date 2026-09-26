@@ -1,0 +1,17 @@
+﻿├èXITO: o processo com PID 27936 (processo filho de PID 22272) foi finalizado.
+├èXITO: o processo com PID 22272 (processo filho de PID 12436) foi finalizado.
+├èXITO: o processo com PID 31692 (processo filho de PID 32276) foi finalizado.
+├èXITO: o processo com PID 12436 (processo filho de PID 32276) foi finalizado.
+├èXITO: o processo com PID 33064 (processo filho de PID 10920) foi finalizado.
+├èXITO: o processo com PID 14976 (processo filho de PID 20512) foi finalizado.
+├èXITO: o processo com PID 19788 (processo filho de PID 21820) foi finalizado.
+├èXITO: o processo com PID 23460 (processo filho de PID 33392) foi finalizado.
+├èXITO: o processo com PID 61084 (processo filho de PID 61044) foi finalizado.
+├èXITO: o processo com PID 32276 (processo filho de PID 31832) foi finalizado.
+├èXITO: o processo com PID 10920 (processo filho de PID 31832) foi finalizado.
+├èXITO: o processo com PID 20512 (processo filho de PID 31832) foi finalizado.
+├èXITO: o processo com PID 21820 (processo filho de PID 31832) foi finalizado.
+├èXITO: o processo com PID 33392 (processo filho de PID 31832) foi finalizado.
+├èXITO: o processo com PID 61044 (processo filho de PID 31832) foi finalizado.
+├èXITO: o processo com PID 31832 (processo filho de PID 29448) foi finalizado.
+├èXITO: o processo com PID 29448 (processo filho de PID 27340) foi finalizado.

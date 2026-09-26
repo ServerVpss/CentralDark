@@ -1,0 +1,18 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@nous-research\ui\dist\ui\components\stats.d.ts
+
+import React, { ReactNode } from 'react';
+export declare function Stats({ className, items, flip, ...props }: StatsProps): React.JSX.Element;
+interface StatsProps extends React.ComponentProps<'div'> {
+    items: {
+        label: string | {
+            key: string;
+            node: ReactNode;
+        };
+        value: string | {
+            key: string;
+            node: ReactNode;
+        };
+    }[];
+    flip?: boolean;
+}
+export {};

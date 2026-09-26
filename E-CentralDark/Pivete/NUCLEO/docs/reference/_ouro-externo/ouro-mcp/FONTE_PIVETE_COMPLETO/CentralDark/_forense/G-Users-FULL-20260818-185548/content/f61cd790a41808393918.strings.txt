@@ -1,0 +1,99 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\gateway\__pycache__\readiness.cpython-311.pyc
+
+)'zLBounded, non-destructive readiness probes for authenticated health surfaces.
+annotationsN)
+closing)
+get_hermes_homeg
+status
+detail
+str | None
+extrar
+return
+dict[str, Any]c
+update)
+results
+EC:\Users\danda\AppData\Local\hermes\hermes-agent\gateway\readiness.py
+_checkr
+state.db
+not initializedz
+file:z
+?mode=roTg
+timeoutz
+PRAGMA query_only = ONz&SELECT name FROM sqlite_master LIMIT 1
+degraded)
+existsr
+as_posixr
+sqlite3
+connect
+execute
+fetchone
+Exception
+__name__)
+     r
+_probe_state_dbr'
+config.yamlr
+using defaultsz
+utf-8)
+encodingr
+top level is not a mappingz
+invalid config (
+safe_load
+read_text
+isinstance
+dictr!
+_probe_configr1
+used_percent
+free_bytes)
+shutil
+disk_usage
+_DISK_DEGRADED_PERCENTr
+freer!
+used_pctr
+     r
+_probe_diskr@
+runtime_statusc
+gateway_state
+unknown
+platformsr
+stater
+running
+connectedr4
+lower)
+values
+<genexpr>z!_probe_gateway.<locals>.<genexpr>N
+drainingr
+connected_platformsrE
+valuesr
+configuredr
+      r
+_probe_gatewayrV
+active_api_runs
+process_completion_queue_depth
+active_delegations
+configured_model
+dict[str, Any] | NonerW
+Return bounded readiness diagnostics without mutating runtime state.
+    The detailed health endpoint is authenticated. Even there, probes expose
+    status and counts only: never config values, credentials, paths, commands,
+    queue payloads, or exception messages.
+    rH
+process_completionsrY
+state_db
+config
+gateway
+background_queuesc
+z,collect_runtime_readiness.<locals>.<genexpr>v
+checks)
+stripr@
+runtimerg
+overalls
+         r
+collect_runtime_readinessrm
+__doc__
+__future__r
+contextlibr
+pathlibr
+typingr
+hermes_constantsr
+__all__
+<module>rv

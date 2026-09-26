@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\tap\dist\core\react-dispatcher.d.ts.map
+
+{"version":3,"file":"react-dispatcher.d.ts","names":[],"sources":["../../src/core/react-dispatcher.ts"],"mappings":";;;;;;;;iBAwEgB,oBAAoB,GAAG,cAAc,IAAI"}

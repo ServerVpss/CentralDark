@@ -1,0 +1,201 @@
+Pivete, pra puxar a lista de modelos online no gateway, usa o endpoint /v1/models:
+
+
+
+curl -s https://api.centralldark.com/v1/models \
+  -H "Authorization: Bearer $CENTRALLDARK_API_KEY" \
+  -H "Accept: application/json" | jq '.data[].id'
+
+
+
+
+Se a tua chave for do tipo x-api-key:
+
+
+
+curl -s https://api.centralldark.com/v1/models \
+  -H "x-api-key: $CENTRALLDARK_API_KEY" \
+  -H "Accept: application/json" | jq '.data[].id'
+
+
+
+
+Se tiver o darkai instalado, é mais fácil ainda:
+
+
+
+darkai --list-models
+
+
+
+
+Também dá pra ver pelo HUB, na aba Gateway → lista os IDs reais, alias e se tá ativo.
+
+olha como jaa ta
+
+10 de jul., 18:48
+Thought for 8s
+
+🔥 Tá lindo, Pivete! HUB saudável, Abacus RouteLLM ON, 140 modelos disponíveis, /status 200 OK e gateway online. A máquina tá cantando.
+
+
+
+
+Qual é a próxima missão? Quer que eu verifique alguma coisa específica agora, tipo os aliases duplicados, algum modelo dando erro, ou alguma aba do HUB que ainda tá torta?
+
+TU AXA QUE AQUELE OVERLOCK O APP DELE FOI FEITO EM VSCODE ?
+
+10 de jul., 18:59
+An internal error occurred
+Something went wrong while processing your request. Please try again.
+Retry
+
+ELETRONM CROMIUN ?:
+
+10 de jul., 18:59
+Thought for 5s
+
+Provavelmente é "Electron + Chromium?", né Pivete?
+
+
+
+
+Sem olhar o código do overclock.sh não dá pra afirmar, mas site com essa cara de app desktop rodando no browser geralmente é uma dessas:
+
+
+
+
+
+Electron + Chromium — app desktop de verdade, empacotado.
+
+
+Tauri — mais leve, usa Chromium do sistema.
+
+
+PWA com Chrome — só parece app, mas é web normal.
+
+
+Next.js/Vite com SSR — web, não app.
+
+
+
+
+
+Se quiser, posso:
+
+
+
+
+
+Fazer uma varredura rápida no overclock.sh pra descobrir o stack real dele.
+
+
+Ou verificar se no repo CentralDark você tem algum app Electron/Chromium já montado.
+
+
+
+
+
+Qual das duas você quer?
+
+Analise o arquivo overclock.sh para identificar se o app é Electron, Tauri ou PWA.
+
+10 de jul., 19:05
+Used 7 tools
+
+Nenhuma tarefa registrada ainda.
+
+Achado, Pivete. O overclock.sh NÃO é Electron nem Tauri — é uma web app Next.js pura (React + Turbopack) servida via Cloudflare.
+
+
+
+
+Evidências:
+
+
+
+
+
+🟢 Scripts em /_next/static/chunks/... → assinatura clara do Next.js (App Router + Turbopack bundler).
+
+
+🟢 Header server: cloudflare + cf-ray → hospedado atrás do Cloudflare (provavelmente Vercel ou Cloudflare Pages/Workers).
+
+
+🔴 Zero traço de electron, tauri, manifest.webmanifest, service-worker ou _app.asar.
+
+
+🔴 Sem PWA instalável (não tem manifest declarado no HTML).
+
+
+
+
+
+Stack real:
+
+
+
+Camada	Tecnologia
+Framework	Next.js (App Router)
+Bundler	Turbopack
+Estilo	Tailwind + fonte Geist Mono
+Hosting	Cloudflare (edge)
+Render	SSR/RSC → HTML entregue pronto + hidratação client
+
+
+
+Ou seja: aquela "cara de app desktop" com janelas mac (Gmail/Discord/Xiaomi) é puro HTML+CSS estilizado dentro de um site web normal. Não tem binário, não tem Electron empacotado — é só uma landing muito bem feita.
+
+
+
+
+Se você quiser reproduzir esse visual "3 janelas mac flutuando", dá pra fazer no TelePainel/HUB com Tailwind puro — sem precisar de Electron.
+
+VE O VIDEO DEDLE POW!
+
+10 de jul., 19:07
+Used 8 tools
+
+Nenhuma tarefa registrada ainda.
+
+Pivete, não tem vídeo nenhum no overclock.sh. 🟡
+
+
+
+
+O que parece "vídeo" na landing é fake: é um mock HTML/CSS/JS que simula um cockpit com 6 agentes rodando (canvas de "matrix rain" no fundo + divs com logs animados via JavaScript). Nada de <video>, YouTube embed, Vimeo, Loom, mp4 ou webm.
+
+
+
+
+As únicas menções a "YouTube" na página são:
+
+
+
+
+
+Um mock visual estilizado como interface do YouTube (linha 3046, "YouTube-style mock UI") — puro HTML decorativo.
+
+
+Texto dizendo que o founder faz stream ao vivo no YouTube todo dia (linha 3039/3350) — mas o link/embed do canal não tá plantado na home.
+
+
+
+
+
+Ou seja: o cara vendeu o "demo rodando" só com animação de front-end. Se quiser, eu:
+
+
+
+
+
+🔎 Cavo o Discord/YouTube dele pra achar o canal e o vídeo real da demo, ou
+
+
+🛠️ Replico esse mesmo truque de "cockpit fake animado" no HUB pra gente ter um hero parecido.
+
+
+
+
+
+Qual manda?

@@ -1,0 +1,5 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\lang\menu_eo_eo.utf-8.vim
+
+" Menu Translations:
+Esperanto for UTF-8 encoding
+source <sfile>:p:h/menu_eo.utf-8.vim

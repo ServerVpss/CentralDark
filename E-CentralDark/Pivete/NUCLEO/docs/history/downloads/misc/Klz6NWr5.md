@@ -1,0 +1,28 @@
+# OUTRO - Klz6NWr5.html
+**Origem:** E:\\CentralDark\\_MAPA_CASA\\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\Emojis para Copiar e Colar _ invertexto.com_files\Klz6NWr5.html
+**SHA:** d5f7394acf0644b1
+**Timestamp:** 2026-08-26T19:43:12.466195
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Comandos
+- Y.prototype.run=function(){var a=this,b=wc(this).then(function(d){a.h=d},function(d){return H(d||13)}).then(function(){return a.h._upb_==="y"?G():xc(a)},function(d){return H(d)}),c=this.za();this.ra=m
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+<!DOCTYPE html>
+<!-- saved from url=(0055)https://ep2.adtrafficquality.google/sodar/Klz6NWr5.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script>
+(function(){var n,aa=function(a){var b=0;return function(){return b<a.length?{done:!1,value:a[b++]}:{done:!0}}},p=typeof Object.defineProperties=="function"?Object.defineProperty:function(a,b,c){if(a==Array.prototype||a==Object.prototype)return a;a[b]=c.value;return a},ba=function(a){a=["object"==typeof globalThis&&globalThis,a,"object"==typeof window&&window,"object"==typeof self&&self,"object"==typeof global&&global];for(var b=0;b<a.length;++b){var c=a[b];if(c&&c.Math==Math)return c}throw Error("Cannot find global object");
+},q=ba(this),r=function(a,b){if(b)a:{var c=q;a=a.split(".");for(var d=0;d<a.length-1;d++){var e=a[d];if(!(e in c))break a;c=c[e]}a=a[a.length-1];d=c[a];b=b(d);b!=d&&b!=null&&p(c,a,{configurable:!0,writable:!0,value:b})}};
+r("Symbol",function(a){if(a)return a;var b=function(h,g){this.Ea=h;p(this,"description",{configurable:!0,writable:!0,value:g})};b.prototype.toString=function(){return this.Ea};var c="jscomp_symbol_"+(Math.random()*1E9>>>0)+"_",d=0,e=function(h){if(this instanceof e)throw new TypeError("Symbol is not a constructor");return new b(c+(h||"")+"_"+d++,h)};return e});
+r("Symbol.iterator",function(a){if(a)return a;a=Symbol("Symbol.iterator");for(var b="Array Int8Array Uint8Array Uint8ClampedArray Int16Array Uint16Array Int32Array Uint32Array Float32Array Float64Array".split(" "),c=0;c<b.length;c++){var d=q[b[c]];typeof d==="function"&&typeof d.prototype[a]!="function"&&p(d.prototype,a,{configurable:!0,writable:!0,value:function(){return ca(aa(this))}})}return a});
+var ca=function(a){a={next:a};a[Symbol.iterator]=function(){return this};return a},da=typeof Object.create=="function"?Object.create:function(a){var b=function(){};b.prototype=a;return new b},ea;if(typeof Object.setPrototypeOf=="function")ea=Object.setPrototypeOf;else{var fa;a:{var ha={a:!0},ia={};try{ia.__proto__=ha;fa=ia.a;break a}catch(a){}fa=!1}ea=fa?function(a,b){a.__proto__=b;if(a.__proto__!==b)throw new TypeError(a+" is not extensible");return a}:null}
+var ja=ea,ka=function(a,b){a.prototype=da(b.prototype);a.prototype.constructor=a;if(ja)ja(a,b);else for(var c in b)if(c!="prototype")if(Object.defineProperties){var d=Object.getOwnPropertyDescriptor(b,c);d&&Object.defineProperty(a,c,d)}else a[c]=b[c];a.Za=b.prototype},u=function(a){var b=typeof Symbol!="undefined"&&Symbol.iterator&&a[Symbol.iterator];if(b)return b.call(a);if(typeof a.length=="number")return{next:aa(a)};throw Error(String(a)+" is not an iterable or ArrayLike");},ma=function(a){return la(a,
+a)},la=function(a,b){a.raw=b;Object.freeze&&(Object.freeze(a),Object.freeze(b));return a},v=function(a,b){return Object.prototype.hasOwnProperty.call(a,b)},na=function(){for(var a=Number(this),b=[],c=a;c<arguments.length;c++)b[c-a]=arguments[c];return b};r("globalThis",function(a){return a||q});
+r("Promise",function(a){function b(){this.G=null}function c(g){return g instanceof e?g:new e(function(f){f(g)})}if(a)return a;b.prototype.ua=function(g){if(this.G==null){this.G=[];var f=this;this.va(function(){f.Ha()})}this.G.push(g)};var d=q.setTimeout;b.prototype.va=function(g){d(g,0)};b.prototype.Ha=function(){for(;this.G&&this.G.length;){var g=this.G;this.G=[];for(var f=0;f<g.length;++f){var k=g[f];g[f]=null;try{k()}catch(l){this.Fa(l)}}}this.G=null};b.prototype.Fa=function(g){this.va(function(){throw g;
+})};var e=function(g){this.i=0;this.I=void 0;this.V=[];this.ya=!1;var f=this.ma();try{g(f.resolve,f.reject)}catch(k){f.reject(k)}};e.prototype.ma=function(){function g(l){return function(m){k||(k=!0,l.call(f,m))}}var f=this,k=!1;return{resolve:g(this.Va),reject:g(this.sa)}};e.prototype.Va=function(g){if(g===this)this.sa(new TypeError("A Promise cannot resolve to itself"));else if(g instanceof e)this.Xa(g);else{a:switch(typeof g){case "object":var f=g!=null;break a;case "function":f=!0;break a;default:f=
+!1}f?this.Ua(g):this.wa(g)}};e.prototype.Ua=function(g){var f=void 0;try{f=g.then}catch(k){this.sa(k);return}typeof f=="function"?this.Ya(f,g):this.wa(g)};e.prototype.sa=function(g){this.Ca(2,g)};e.prototype.wa=function(g){this.Ca(1,g)};e.prototype.Ca=function(g,f){if(this.i!=0)throw Error("Cannot settle("+g+", "+f+"): Promise already settled in state"+this.i);this.i=g;this.I=f;this.i===2&&this.Wa();this.Ja()};e.prototype.Wa=function(){var g=this;d(function(){if(g.Ra()){var f=q.console;typeof f!==
+"undefined"&&f.error(g.I)}},1)};e.prototype.Ra=function(){if(this.ya)return!1;var g=q.CustomEvent,f=q.Event,k=q.dispatchEvent;if(typeof k==="undefined")return!0;typeof g==="function"?g=new g("unhandledrejection",{cancelable:!0}):typeof f==="function"?g=new f("unhandledrejection",{cancelable:!0}):(g=q.document.createEvent("CustomEvent"),g.initCustomEvent("unhandledrejection",!1,!0,g));g.promise=this;g.reason=this.I;return k(g)};e.prototype.Ja=function(){if(this.V!=null){for(var g=0;g<thi
+```

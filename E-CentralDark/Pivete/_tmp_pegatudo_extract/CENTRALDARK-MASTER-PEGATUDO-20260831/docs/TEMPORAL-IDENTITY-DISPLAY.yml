@@ -1,0 +1,33 @@
+schema: CENTRALDARK_TEMPORAL_IDENTITY_DISPLAY
+schema_version: 1
+principle: SORT_CANONICALLY_DISPLAY_HUMANLY
+machine:
+  date_key: YYYY-MM-DD
+  timestamp: RFC3339_WITH_OFFSET
+  timezone_required: true
+  preferred_timezone: America/Sao_Paulo
+human_pt_BR:
+  date: DD/MM/YYYY
+  time: HH:mm:ss
+  datetime: DD/MM/YYYY HH:mm:ss
+  timezone_label: BRT_OR_EXPLICIT_OFFSET
+  example_date: 31/08/2026
+  example_datetime: 31/08/2026 11:41:33 -03:00
+package_visibility:
+  logical_package: CENTRALDARK-MASTER-PEGATUDO
+  date_partition_inside_same_package: releases/YYYY-MM-DD/
+  current_pointer: releases/CURRENT.yml
+  parallel_zip_per_update: false
+identity_display:
+  fields:
+  - display_name
+  - handle_or_alias
+  - role
+  - source
+  - revision_or_head
+  canonical_id_stable_under_display_name_change: true
+  sensitive_identity_fields_in_receipt: false
+invariants:
+  display_format_is_proof: false
+  local_time_without_timezone_allowed: false
+  date_partition_creates_new_authority: false

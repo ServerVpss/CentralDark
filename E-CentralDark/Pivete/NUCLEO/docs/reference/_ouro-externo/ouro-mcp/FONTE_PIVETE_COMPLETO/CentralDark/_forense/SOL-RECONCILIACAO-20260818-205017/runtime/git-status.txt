@@ -1,0 +1,15 @@
+## fix/ci-self-hosted-fallback-deterministico...origin/fix/ci-self-hosted-fallback-deterministico [ahead 579]
+ M .agents/skills/knowledge-compiler/SKILL.md
+ M .agents/skills/knowledge-compiler/contract.json
+ M .agents/skills/knowledge-compiler/scripts/skill-authoring.mjs
+ M .agents/skills/knowledge-compiler/tests/skill-authoring.test.mjs
+ M "docs/BRAIN/00 - Mapa do Sistema/00-POSTURA-PIVETE.md"
+ M package-lock.json
+ M package.json
+ M src/shared/test/splash.test.tsx
+ M vite.config.ts
+ M vitest.config.ts
+?? .agents/contratos/
+?? .agents/skills/knowledge-compiler/scripts/authority-normalize.mjs
+?? _forense/
+?? docs/BRAIN/.obsidian/

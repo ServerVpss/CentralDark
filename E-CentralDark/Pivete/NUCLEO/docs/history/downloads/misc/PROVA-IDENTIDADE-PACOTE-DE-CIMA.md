@@ -1,0 +1,31 @@
+# OUTRO - PROVA-IDENTIDADE-PACOTE-DE-CIMA.txt
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\01-ARQUIVOS-DA-CONVERSA\PROVA-IDENTIDADE-PACOTE-DE-CIMA.txt
+**SHA:** 82dc4c1e4e89bfeb
+**Timestamp:** 2026-08-26T19:10:22.739496
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Decisoes
+- CONCLUSAO=O arquivo entregue e uma copia byte a byte do pacote final atual referido na parte superior da captura.
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+PROVA_DE_IDENTIDADE_DO_PACOTE
+
+PACOTE_REFERIDO=PACOTAO-CENTRALDARK-RIGOR-MAXIMO.zip
+ORIGEM_MONTADA=PACOTAO-CENTRALDARK-RIGOR-MAXIMO(1).zip
+ENTREGUE_COMO=PACOTAO-CENTRALDARK-RIGOR-MAXIMO.zip
+
+SOURCE_SIZE_BYTES=1442278
+DELIVERED_SIZE_BYTES=1442278
+
+SOURCE_SHA256=0295a20f3b955678ef9505e3a9f8a0d48272ff22d98db9f6fd56e0af7f4cb03a
+DELIVERED_SHA256=0295a20f3b955678ef9505e3a9f8a0d48272ff22d98db9f6fd56e0af7f4cb03a
+
+BYTE_IDENTITY=PASS
+HASH_IDENTITY=PASS
+
+CONCLUSAO=O arquivo entregue e uma copia byte a byte do pacote final atual referido na parte superior da captura.
+
+```

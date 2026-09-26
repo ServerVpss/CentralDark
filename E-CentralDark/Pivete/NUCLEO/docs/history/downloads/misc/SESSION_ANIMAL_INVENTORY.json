@@ -1,0 +1,169 @@
+{
+  "count": 15,
+  "items": [
+    {
+      "id": 1,
+      "entity": "Formigas",
+      "kind": "macrogrupo",
+      "parent": "Insetos sociais",
+      "cap": [
+        "DISTRIBUTED_CONTROL",
+        "COOPERATION",
+        "EXPLORATION"
+      ],
+      "evidence": "coordenação distribuída, trilhas, estigmergia"
+    },
+    {
+      "id": 2,
+      "entity": "Abelhas",
+      "kind": "macrogrupo",
+      "parent": "Insetos sociais",
+      "cap": [
+        "COMMUNICATION",
+        "EXPLORATION",
+        "NAVIGATION"
+      ],
+      "evidence": "comunicação, exploração/explotação, navegação"
+    },
+    {
+      "id": 3,
+      "entity": "Polvos",
+      "kind": "macrogrupo",
+      "parent": "Cefalópodes",
+      "cap": [
+        "DISTRIBUTED_CONTROL"
+      ],
+      "evidence": "controle distribuído pelos braços"
+    },
+    {
+      "id": 4,
+      "entity": "Corvídeos",
+      "kind": "macrogrupo",
+      "parent": "Aves",
+      "cap": [
+        "MEMORY",
+        "PLANNING",
+        "TOOL_USE"
+      ],
+      "evidence": "memória, planejamento, ferramenta"
+    },
+    {
+      "id": 5,
+      "entity": "Corvo",
+      "kind": "representante_explicito",
+      "parent": "Corvídeos",
+      "cap": [
+        "PLANNING"
+      ],
+      "evidence": "CORVO → planejamento"
+    },
+    {
+      "id": 6,
+      "entity": "Papagaios",
+      "kind": "macrogrupo+metafora",
+      "parent": "Aves",
+      "cap": [
+        "COMMUNICATION"
+      ],
+      "evidence": "categorias, abstração, comunicação; metáfora: linguagem reproduzível"
+    },
+    {
+      "id": 7,
+      "entity": "Elefantes",
+      "kind": "macrogrupo+metafora",
+      "parent": "Mamíferos",
+      "cap": [
+        "MEMORY"
+      ],
+      "evidence": "memória social e espacial duradoura; metáfora: continuidade"
+    },
+    {
+      "id": 8,
+      "entity": "Cetáceos",
+      "kind": "macrogrupo",
+      "parent": "Mamíferos marinhos",
+      "cap": [
+        "COOPERATION",
+        "COMMUNICATION"
+      ],
+      "evidence": "cooperação, comunicação social"
+    },
+    {
+      "id": 9,
+      "entity": "Primatas",
+      "kind": "macrogrupo",
+      "parent": "Mamíferos",
+      "cap": [
+        "SOCIAL_LEARNING",
+        "CAUSAL_REASONING"
+      ],
+      "evidence": "imitação, estratégia social, causalidade"
+    },
+    {
+      "id": 10,
+      "entity": "Macaco",
+      "kind": "representante_explicito+metafora",
+      "parent": "Primatas",
+      "cap": [
+        "PATTERN_RECOGNITION",
+        "SOCIAL_LEARNING"
+      ],
+      "evidence": "reconhecimento de padrões; aprende sequência e repete"
+    },
+    {
+      "id": 11,
+      "entity": "Roedores",
+      "kind": "macrogrupo",
+      "parent": "Mamíferos",
+      "cap": [
+        "NAVIGATION",
+        "EXPLORATION"
+      ],
+      "evidence": "navegação espacial, reforço, exploração"
+    },
+    {
+      "id": 12,
+      "entity": "Peixes",
+      "kind": "macrogrupo",
+      "parent": "Vertebrados",
+      "cap": [
+        "NAVIGATION",
+        "SOCIAL_LEARNING",
+        "ENERGY_EFFICIENCY"
+      ],
+      "evidence": "navegação, quantidade, aprendizagem social; cognição eficiente"
+    },
+    {
+      "id": 13,
+      "entity": "Invertebrados",
+      "kind": "macrogrupo",
+      "parent": "Diversos",
+      "cap": [
+        "ENERGY_EFFICIENCY"
+      ],
+      "evidence": "comportamentos complexos com sistemas compactos"
+    },
+    {
+      "id": 14,
+      "entity": "Predador",
+      "kind": "papel_ecologico_explicito",
+      "parent": "Dinâmica predador–presa",
+      "cap": [
+        "ADVERSARIAL_ADAPTATION",
+        "PLANNING"
+      ],
+      "evidence": "PREDADOR → antecipação"
+    },
+    {
+      "id": 15,
+      "entity": "Presa",
+      "kind": "papel_ecologico_explicito",
+      "parent": "Dinâmica predador–presa",
+      "cap": [
+        "ADVERSARIAL_ADAPTATION",
+        "PERCEPTION"
+      ],
+      "evidence": "PRESA → detecção de ameaça"
+    }
+  ]
+}

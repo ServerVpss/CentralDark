@@ -1,0 +1,5 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\share\zoneinfo\right\Europe\Oslo
+
+%62x%6
+5+qQ<+rf
+CET-1CEST,M3.5.0,M10.5.0/3

@@ -1,0 +1,12 @@
+{
+  "running": true,
+  "uptime_seconds": 203824.72978806496,
+  "processed_count": 188442,
+  "error_count": 990,
+  "pending_files": [],
+  "watcher_active": true,
+  "pid": 14660,
+  "last_save": "2026-08-29T05:34:24.988800",
+  "sha256": "65d51043155f7369e522587a7e44934b9e9c6ac5ffc76e507cc4c7d7235941df",
+  "proved": true
+}

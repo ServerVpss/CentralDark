@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@shikijs\core\README.md
+
+# @shikijs/core
+
+The core functionality of [Shiki](https://github.com/shikijs/shiki), without any grammar of themes bundled.
+
+It's the same as importing `shiki/core`.

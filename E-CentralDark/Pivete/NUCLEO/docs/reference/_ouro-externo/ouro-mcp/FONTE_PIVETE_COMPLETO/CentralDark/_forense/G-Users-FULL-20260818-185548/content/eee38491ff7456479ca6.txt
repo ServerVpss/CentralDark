@@ -1,0 +1,35 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@nous-research\ui\src\ui\components\fit-text\index.stories.tsx
+
+import type { Meta, StoryObj } from '@storybook/react-vite'
+
+import { FitText } from '../fit-text'
+
+const meta: Meta<typeof FitText> = {
+  args: { children: 'Fit Text', max: 'infinity * 1px', min: '1em' },
+  component: FitText,
+  title: 'Components/Effects/FitText'
+}
+
+export default meta
+
+type Story = StoryObj<typeof FitText>
+
+export const Playground: Story = {}
+
+export const Fills: Story = {
+  render: () => (
+    <div className="w-full">
+      <FitText className="font-sans font-bold">Design System</FitText>
+    </div>
+  )
+}
+
+export const CappedMax: Story = {
+  render: () => (
+    <div className="w-full">
+      <FitText className="font-mondwest" max="4rem">
+        Capped max at 4rem
+      </FitText>
+    </div>
+  )
+}

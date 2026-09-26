@@ -1,0 +1,9 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\share\doc\git-doc\RelNotes\2.3.9.adoc
+
+Git v2.3.9 Release Notes
+========================
+Fixes since v2.3.8
+------------------
+ * A handful of codepaths that used to use fixed-sized arrays to hold
+   pathnames have been corrected to use strbuf and other mechanisms to
+   allow longer pathnames without fearing overflows.

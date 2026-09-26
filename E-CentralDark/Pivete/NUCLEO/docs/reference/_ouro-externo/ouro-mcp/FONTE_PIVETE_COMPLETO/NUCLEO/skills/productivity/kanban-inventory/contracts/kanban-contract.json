@@ -1,0 +1,556 @@
+{
+  "metadata": {
+    "name": "kanban-contract",
+    "version": "1.0.0",
+    "created_at": "2026-08-05T18:07:05.503531",
+    "created_by": "pivete",
+    "profile": "pivete",
+    "description": "Contrato determinístico do Kanban do Hermes para perfil pivete - FASES 2+3+4",
+    "authority": "SEGREDO/CHEFE",
+    "authorization_marker": "PERMITO SEGREDO",
+    "coordinator": "SOL",
+    "executor": "PIVETE/HERMES",
+    "writer_policy": "SINGLE_WRITER",
+    "unknown_policy": "INVESTIGATE_THEN_DECIDE",
+    "upstream_policy": "READ_ONLY",
+    "kanban_write_policy": "CONDITIONAL_AND_REVERSIBLE",
+    "mission_id": "CASA-KANBAN-AUTOCORRECAO-DETERMINISTICA-20260805",
+    "updated_at": "2026-08-05T22:39:54.891129"
+  },
+  "canonical": {
+    "KANBAN_URL": {
+      "value": "http://127.0.0.1:9119/kanban?profile=pivete",
+      "how_to_measure": "Check active gateway/dashboard port via socket + hermes status",
+      "source": "runtime_discovery",
+      "risk_if_changed": "Loss of visibility, broken automation",
+      "action_allowed": "Read, discover dynamically",
+      "action_prohibited": "Hardcode port 8648 or any fixed port"
+    },
+    "CLI_VERSION": {
+      "value": "Hermes Agent v0.20.0 (2026.8.3)",
+      "how_to_measure": "Run `hermes --version`",
+      "source": "cli_output",
+      "risk_if_changed": "Compatibility break with automation",
+      "action_allowed": "Verify at runtime",
+      "action_prohibited": "Assume fixed version"
+    },
+    "CLI_COMMANDS": {
+      "value": [
+        "init",
+        "boards",
+        "create",
+        "swarm",
+        "list",
+        "ls",
+        "show",
+        "assign",
+        "set-model",
+        "reclaim",
+        "reassign",
+        "diagnostics",
+        "diag",
+        "link",
+        "unlink",
+        "claim",
+        "comment",
+        "attach",
+        "attachments",
+        "attach-rm",
+        "complete",
+        "edit",
+        "block",
+        "schedule",
+        "unblock",
+        "promote",
+        "archive",
+        "tail",
+        "dispatch",
+        "daemon",
+        "watch",
+        "stats",
+        "notify-subscribe",
+        "notify-list",
+        "notify-unsubscribe",
+        "log",
+        "runs",
+        "heartbeat",
+        "assignees",
+        "context",
+        "specify",
+        "decompose",
+        "gc",
+        "repair"
+      ],
+      "how_to_measure": "Run `hermes kanban --help` and parse subcommands",
+      "source": "cli_help",
+      "risk_if_changed": "Command removed/changed breaks automation",
+      "action_allowed": "Use listed commands",
+      "action_prohibited": "Invent flags like --apply, PERMITO_PIVETE=true"
+    },
+    "BOARD_NAME": {
+      "value": "default",
+      "how_to_measure": "Run `hermes kanban boards show`",
+      "source": "cli_output",
+      "risk_if_changed": "Board switched without notice",
+      "action_allowed": "Read current board",
+      "action_prohibited": "Create parallel board"
+    },
+    "COLUMN_NAMES": {
+      "value": [
+        "triage",
+        "todo",
+        "scheduled",
+        "ready",
+        "running",
+        "blocked",
+        "review",
+        "done",
+        "archived"
+      ],
+      "how_to_measure": "Dashboard UI + `hermes kanban list` status values",
+      "source": "upstream_constants",
+      "risk_if_changed": "Flow broken, automation misroutes cards",
+      "action_allowed": "Follow official flow",
+      "action_prohibited": "Hardcode columns"
+    },
+    "VALID_STATUSES": {
+      "value": [
+        "triage",
+        "todo",
+        "scheduled",
+        "ready",
+        "running",
+        "blocked",
+        "review",
+        "done",
+        "archived"
+      ],
+      "how_to_measure": "Upstream VALID_STATUSES constant",
+      "source": "kanban_db.py:102",
+      "risk_if_changed": "Invalid status breaks dispatcher",
+      "action_allowed": "Use only valid statuses",
+      "action_prohibited": "Invent custom statuses"
+    },
+    "VALID_BLOCK_KINDS": {
+      "value": [
+        "dependency",
+        "needs_input",
+        "capability",
+        "transient"
+      ],
+      "how_to_measure": "Upstream VALID_BLOCK_KINDS constant",
+      "source": "kanban_db.py:125",
+      "risk_if_changed": "Block kind rejected by upstream",
+      "action_allowed": "Use only valid block kinds",
+      "action_prohibited": "Invent custom block kinds"
+    },
+    "CARD_FIELDS": {
+      "value": [
+        "id",
+        "title",
+        "body",
+        "assignee",
+        "status",
+        "priority",
+        "created_by",
+        "created_at",
+        "started_at",
+        "completed_at",
+        "workspace_kind",
+        "workspace_path",
+        "branch_name",
+        "project_id",
+        "claim_lock",
+        "claim_expires",
+        "tenant",
+        "result",
+        "idempotency_key",
+        "consecutive_failures",
+        "worker_pid",
+        "last_failure_error",
+        "max_runtime_seconds",
+        "last_heartbeat_at",
+        "current_run_id",
+        "workflow_template_id",
+        "current_step_key",
+        "skills",
+        "model_override",
+        "max_retries",
+        "goal_mode",
+        "goal_max_turns",
+        "session_id",
+        "block_kind",
+        "block_recurrences",
+        "provider_override",
+        "reasoning_effort"
+      ],
+      "how_to_measure": "PRAGMA table_info(tasks) on kanban.db",
+      "source": "database_schema",
+      "risk_if_changed": "Schema migration breaks readers",
+      "action_allowed": "Read fields dynamically",
+      "action_prohibited": "Assume fixed schema"
+    },
+    "CARD_ACTIONS": {
+      "value": [
+        "create",
+        "assign",
+        "set-model",
+        "reclaim",
+        "reassign",
+        "link",
+        "unlink",
+        "claim",
+        "comment",
+        "attach",
+        "attach-rm",
+        "complete",
+        "edit",
+        "block",
+        "schedule",
+        "unblock",
+        "promote",
+        "archive",
+        "specify",
+        "decompose"
+      ],
+      "how_to_measure": "CLI help subcommands that modify tasks",
+      "source": "cli_help",
+      "risk_if_changed": "Action removed breaks automation",
+      "action_allowed": "Execute via CLI with authorization",
+      "action_prohibited": "Direct SQLite writes"
+    },
+    "ERROR_CLASSES": {
+      "value": {
+        "PROVIDER_RATE_LIMIT": {
+          "detection": "HTTP 429, rate limit, usage limit reached",
+          "source": "provider_response",
+          "retryable": true,
+          "block_kind": "transient"
+        },
+        "PROVIDER_CREDIT_OR_QUOTA": {
+          "detection": "out of quota, insufficient credits, plan limit",
+          "source": "provider_response",
+          "retryable": false,
+          "block_kind": "capability"
+        },
+        "PROVIDER_ENDPOINT_UNREACHABLE": {
+          "detection": "connection refused, timeout, host unreachable, network error",
+          "source": "network",
+          "retryable": true,
+          "block_kind": "transient"
+        },
+        "PROVIDER_AUTH_MISSING": {
+          "detection": "401, unauthorized, authentication failed, invalid token",
+          "source": "auth",
+          "retryable": false,
+          "block_kind": "capability"
+        },
+        "SKILL_MISSING": {
+          "detection": "Unknown skill(s), skill not found, skill not loaded",
+          "source": "config",
+          "retryable": true,
+          "block_kind": "capability"
+        },
+        "WORKER_CRASH": {
+          "detection": "pid not alive, worker died, process exited, crash, consecutive_failures",
+          "source": "runtime",
+          "retryable": true,
+          "block_kind": "transient"
+        },
+        "STALE_CLAIM": {
+          "detection": "stale claim, claim expired, claim_lock timeout",
+          "source": "dispatcher",
+          "retryable": true,
+          "block_kind": "transient"
+        },
+        "DEPENDENCY_OPEN": {
+          "detection": "waiting for dependency, blocked by parent, dependency not met",
+          "source": "workflow",
+          "retryable": true,
+          "block_kind": "dependency"
+        },
+        "HUMAN_INPUT_REQUIRED": {
+          "detection": "awaiting human input, manual approval needed, please review, needs_input",
+          "source": "human",
+          "retryable": false,
+          "block_kind": "needs_input"
+        },
+        "CAPABILITY_MISSING": {
+          "detection": "feature not implemented, unsupported operation, unknown provider, unknown model",
+          "source": "config",
+          "retryable": false,
+          "block_kind": "capability"
+        },
+        "CIRCUIT_BREAKER_TRIPPED": {
+          "detection": "failure_limit exceeded, consecutive_failures >= limit, gave_up",
+          "source": "dispatcher",
+          "retryable": true,
+          "block_kind": "transient"
+        },
+        "UNKNOWN": {
+          "detection": "any other blockage reason not matching above",
+          "source": "unknown",
+          "retryable": false,
+          "block_kind": null
+        }
+      },
+      "how_to_measure": "Map observed errors to canonical classes via detector",
+      "source": "upstream_constants + runtime_observation",
+      "risk_if_changed": "Misclassification blocks correct recovery",
+      "action_allowed": "Classify deterministically",
+      "action_prohibited": "Guess class from title alone"
+    },
+    "STATE_TRANSITIONS_PROVEN": {
+      "value": {
+        "triage": [
+          "todo",
+          "scheduled",
+          "archived"
+        ],
+        "todo": [
+          "ready",
+          "blocked",
+          "triage",
+          "archived"
+        ],
+        "scheduled": [
+          "ready",
+          "triage",
+          "archived"
+        ],
+        "ready": [
+          "running",
+          "blocked",
+          "todo",
+          "triage",
+          "archived"
+        ],
+        "running": [
+          "done",
+          "blocked",
+          "crashed",
+          "timed_out",
+          "failed",
+          "released",
+          "review"
+        ],
+        "blocked": [
+          "ready",
+          "todo",
+          "triage",
+          "running",
+          "archived"
+        ],
+        "review": [
+          "done",
+          "running",
+          "blocked",
+          "archived"
+        ],
+        "done": [
+          "archived"
+        ],
+        "archived": []
+      },
+      "how_to_measure": "Observe valid transitions in upstream + runtime",
+      "source": "upstream_constants + observation",
+      "risk_if_changed": "Invalid transition breaks dispatcher",
+      "action_allowed": "Follow proven transitions",
+      "action_prohibited": "Force invalid transitions"
+    },
+    "DISPATCHER_SIGNALS": {
+      "value": {
+        "dispatch_command": "hermes kanban dispatch",
+        "daemon": "runs in gateway (hermes gateway start)",
+        "failure_limit": 2,
+        "block_recurrence_limit": 2,
+        "reclaim_stale": true,
+        "promote_ready": true,
+        "spawn_workers": true
+      },
+      "how_to_measure": "CLI help + gateway code + config",
+      "source": "dispatcher_implementation",
+      "risk_if_changed": "Dispatcher behavior changes silently",
+      "action_allowed": "Monitor dispatch, respect limits",
+      "action_prohibited": "Disable circuit breaker"
+    },
+    "WORKER_SIGNALS": {
+      "value": [
+        "kanban_claim",
+        "kanban_complete",
+        "kanban_block",
+        "kanban_heartbeat",
+        "kanban_comment",
+        "kanban_attach",
+        "kanban_attach_url",
+        "kanban_attachments"
+      ],
+      "how_to_measure": "Toolset definition + worker logs",
+      "source": "worker_toolset",
+      "risk_if_changed": "Worker cannot signal state",
+      "action_allowed": "Monitor events table",
+      "action_prohibited": "Assume worker healthy without heartbeat"
+    },
+    "CIRCUIT_BREAKER_SIGNALS": {
+      "value": {
+        "failure_limit": 2,
+        "consecutive_failures_counter": true,
+        "reset_on_success": true,
+        "block_recurrence_limit": 2,
+        "escalate_to_triage": true
+      },
+      "how_to_measure": "Upstream constants + task_runs outcomes",
+      "source": "kanban_db.py:122,134",
+      "risk_if_changed": "Infinite retry loops",
+      "action_allowed": "Respect failure_limit and recurrence_limit",
+      "action_prohibited": "Override limits without evidence"
+    },
+    "WRITER_IDENTITY": {
+      "value": "pivete",
+      "how_to_measure": "SOUL profile + single writer rule",
+      "source": "SOUL + config",
+      "risk_if_changed": "Concurrent writes corrupt board",
+      "action_allowed": "Single writer per scope",
+      "action_prohibited": "Concurrent modifications"
+    },
+    "NINE_CONDITIONS": {
+      "value": {
+        "1_AUTHORITY_VALID": {
+          "description": "Missao contem PERMITO SEGREDO e autoridade = SEGREDO/CHEFE",
+          "how_to_measure": "Verificar baseline.mission_id e authorization_marker",
+          "source": "baseline + contrato",
+          "risk_if_false": "Autocorrecao bloqueada sem autoridade valida",
+          "action_allowed": "Prosseguir com autocorrecao",
+          "action_prohibited": "Escrever sem PERMITO SEGREDO"
+        },
+        "2_SCOPE_VALID": {
+          "description": "Arquivo, cartao, regra e acao pertencem ao escopo desta missao",
+          "how_to_measure": "Verificar se path esta em FILES_IN_SCOPE do baseline",
+          "source": "baseline",
+          "risk_if_false": "Escrita fora do escopo autorizado",
+          "action_allowed": "Acao dentro do escopo",
+          "action_prohibited": "Acao fora do escopo"
+        },
+        "3_BASELINE_VALID": {
+          "description": "Contrato, codigo, schema e runtime possuem hashes anteriores registrados",
+          "how_to_measure": "Comparar hashes atuais com baseline",
+          "source": "baseline + estado atual",
+          "risk_if_false": "Sem ponto de retorno conhecido",
+          "action_allowed": "Prosseguir quando hashes conferem",
+          "action_prohibited": "Prosseguir sem baseline valido"
+        },
+        "4_CAUSE_REPRODUCED": {
+          "description": "Falha reproduzida por codigo, nao inferida por titulo ou fala de IA",
+          "how_to_measure": "Detector de drift classificou com evidencia concreta",
+          "source": "drift_detector report",
+          "risk_if_false": "Corrigindo sintoma, nao causa raiz",
+          "action_allowed": "Corrigir causa reproduzida",
+          "action_prohibited": "Corrigir baseado em hipotese"
+        },
+        "5_TRANSFORMATION_DETERMINISTIC": {
+          "description": "Regra explicita de entrada -> transformacao -> resultado esperado",
+          "how_to_measure": "Selector/rule em selectors/ ou rules/ define transformacao",
+          "source": "selectors/ + rules/",
+          "risk_if_false": "Transformacao nao reproduzivel",
+          "action_allowed": "Aplicar regra deterministica",
+          "action_prohibited": "Adivinhar transformacao"
+        },
+        "6_MINIMAL_DIFF": {
+          "description": "Somente campos ou arquivos necessarios alterados",
+          "how_to_measure": "Diff entre before/after limitado ao necessario",
+          "source": "git diff / file compare",
+          "risk_if_false": "Efeitos colaterais nao intencionais",
+          "action_allowed": "Alteracao minima",
+          "action_prohibited": "Alteracao ampla sem justificativa"
+        },
+        "7_TESTS_VALID": {
+          "description": "Teste positivo, negativo, regressao, idempotencia - todos passam",
+          "how_to_measure": "Executar suite de testes e verificar 20/20 PASS",
+          "source": "test runner",
+          "risk_if_false": "Regressao nao detectada",
+          "action_allowed": "Promover quando todos passam",
+          "action_prohibited": "Promover com testes falhando"
+        },
+        "8_ROLLBACK_AVAILABLE": {
+          "description": "Estado anterior integro existe e reversao validada antes da escrita",
+          "how_to_measure": "Backup hash confere + restore testado",
+          "source": "baseline + backup",
+          "risk_if_false": "Impossibilidade de desfazer",
+          "action_allowed": "Escrever com rollback testado",
+          "action_prohibited": "Escrever sem rollback valido"
+        },
+        "9_RECEIPT_BOUND": {
+          "description": "Receipt contem mission_id, authority, writer, before_hash, after_hash, files_changed, action, test_result, rollback, timestamp",
+          "how_to_measure": "Validar schema do receipt apos escrita",
+          "source": "receipt gerado",
+          "risk_if_false": "Rastreabilidade perdida",
+          "action_allowed": "Gerar receipt completo",
+          "action_prohibited": "Escrever sem receipt"
+        }
+      },
+      "how_to_measure": "Verificar cada condicao individualmente antes de escrever",
+      "source": "Fase 5C - Nove Condicoes da Autocorrecao",
+      "risk_if_changed": "Autocorrecao invalida ou perigosa",
+      "action_allowed": "Aplicar autocorrecao somente quando todas 9 forem TRUE",
+      "action_prohibited": "Aplicar autocorrecao com qualquer condicao FALSE"
+    }
+  },
+  "runtime_snapshot": {
+    "timestamp": "2026-08-05T18:07:05.503531",
+    "cards": {
+      "t_6c3d5e16": {
+        "status": "blocked",
+        "primary_class": "WORKER_CRASH",
+        "secondary_class": "PROVIDER_RATE_LIMIT",
+        "evidence_primary": "consecutive_failures=3, most_recent_outcome=crashed, last_error='pid 46036 not alive', 5 crashed runs with different PIDs",
+        "evidence_secondary": "Log shows HTTP 429 RateLimitError from openai-codex provider, usage limit reached",
+        "block_kind_current": null,
+        "block_kind_suggested": "transient",
+        "circuit_breaker": true,
+        "retryable": true,
+        "impact": "Gate determinístico não pode ser registrado; worker morre repetidamente"
+      },
+      "t_35432f15": {
+        "status": "blocked",
+        "primary_class": "WORKER_CRASH",
+        "secondary_class": "CAPABILITY_MISSING",
+        "evidence_primary": "consecutive_failures=2, most_recent_outcome=crashed, last_error='pid 19364 not alive', 6 crashed runs",
+        "evidence_secondary": "Log shows 'Unknown provider custom:routellm-(abacus-ai)' + HTTP 429 RateLimitError",
+        "block_kind_current": null,
+        "block_kind_suggested": "transient",
+        "circuit_breaker": true,
+        "retryable": true,
+        "impact": "Atualização AUTOLUPA_CANO não pode prosseguir; provider desconhecido + worker crash"
+      },
+      "t_ae83ea45": {
+        "status": "done",
+        "primary_class": null,
+        "secondary_class": null,
+        "evidence_primary": "SHA-256 fixture test passed, receipt recorded",
+        "evidence_secondary": null,
+        "block_kind_current": null,
+        "block_kind_suggested": null,
+        "circuit_breaker": false,
+        "retryable": false,
+        "impact": "Teste R0 autonomia concluído com prova"
+      }
+    },
+    "database_schema_hash": "94fbdc9a83c835eea6156204e9a17ffc504f25030c411d111b60bfa98e8fd6c0",
+    "adapter_code_hash": "2ea7a19baf731121b3e88e2e554b2681e53eacfb5cbde0f3a4d824cfb2bd2221",
+    "kanban_url": "http://127.0.0.1:9119/kanban?profile=pivete",
+    "cli_version": "Hermes Agent v0.20.0 (2026.8.3)",
+    "board": "default",
+    "total_cards": 3,
+    "blocked": 2,
+    "done": 1,
+    "triage": 0,
+    "running": 0,
+    "authority_metadata": {
+      "authority": "SEGREDO/CHEFE",
+      "authorization_marker": "PERMITO SEGREDO",
+      "coordinator": "SOL",
+      "executor": "PIVETE/HERMES",
+      "writer_policy": "SINGLE_WRITER"
+    }
+  }
+}

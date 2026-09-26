@@ -1,0 +1,1093 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\apps\desktop\release\win-unpacked\snapshot_blob.bin
+
+14.4.258.32-electron.0
+[@@[]@[[
+WebAssembly.Module
+WebAssembly.Instance
+WebAssembly.Table
+WebAssembly.Memory
+WebAssembly.Global
+WebAssembly.Tag
+WebAssembly.Exception
+WebAssembly
+prototype
+length
+enumerable
+configurableU
+writableM
+adoptText
+approximatelySign
+baseNameU
+accounting
+breakType
+calendars
+cardinalU
+caseFirst
+compare
+collation
+collations
+compact
+compactDisplay
+currencyU
+currencyDisplay
+currencySignU
+dateStyle
+dateTimeField
+dayPeriod
+daysDisplay
+decimal
+dialect
+digital
+endRangeU
+engineering
+exceptZero
+expand
+exponentInteger
+exponentMinusSign
+exponentSeparator
+fallbackU
+firstDayU
+firstDayOfWeek
+format
+formatMatcher
+fractionU
+fractionalDigitsU
+fractionalSecondU
+granularity
+graphemeU
+halfCeilU
+halfEvenU
+halfExpand
+halfFloor
+halfTrunc
+hour12
+hourCycle
+hourCycles
+hoursDisplayU
+ignorePunctuation
+Invalid DateU
+integer
+isWordLike
+languageU
+languageDisplay
+lessPrecision
+letter
+literal
+locale
+localeMatcher
+maximumFractionDigits
+maximumSignificantDigitsU
+microsecondsDisplay
+millisecondsDisplay
+minimalDays
+minimumFractionDigits
+minimumIntegerDigitsU
+minimumSignificantDigitsU
+minusSign
+minutesDisplay
+monthsDisplay
+morePrecision
+nanosecondsDisplay
+narrowSymbolU
+negativeU
+notationU
+normal
+numberingSystem
+numberingSystemsU
+numeric
+ordinal
+percentSign
+plusSignU
+quarter
+region
+relatedYear
+roundingPriorityU
+scientific
+secondsDisplay
+segment
+Segment IteratorU
+SegmentsU
+sensitivity
+shared
+signDisplay
+standardU
+startRange
+strict
+stripIfInteger
+textInfoU
+timeStyle
+timeZones
+trailingZeroDisplay
+2-digit
+unknown
+useGrouping
+unitDisplay
+variantsU
+weekday
+weekend
+weeksDisplayU
+weekInfoU
+yearNameU
+yearsDisplayU
+AggregateError
+alphabetU
+always
+anonymous
+Arguments
+arguments
+[object Arguments]
+[object Array]
+ArrayBuffer
+Array Iterator
+assert
+Atomics.Condition
+Atomics.Mutex
+BigInt64Array
+BigInt
+bigint
+BigUint64Array
+Boolean
+boolean
+[object Boolean]U
+bound 
+buffer
+byteLength
+byteOffset
+calendarU
+calendarId
+calendarNameU
+callee
+caller
+character
+column
+CompileErrorU
+<computed>
+conjunction
+console
+constrain
+construct
+current
+[object Date]
+dateAdd
+dateFromFields
+dateUntil
+dayOfWeek
+dayOfYear
+daysInMonth
+daysInWeek
+daysInYear
+default
+defineProperty
+deleteProperty
+detachedU
+direction
+disambiguation
+disjunction
+disposedU
+.brand
+.catch
+.defaultU
+.generator_object
+.home_objectU
+.new.target
+.repl_resultU
+.result
+.static_home_object
+.switch_tag
+.this_function
+dotAll
+element
+epochMilliseconds
+epochNanosecondsU
+eraYear
+[object Error]
+errors
+EvalError
+exception
+fields
+FinalizationRegistryU
+Float16ArrayU
+Float32ArrayU
+Float64ArrayU
+fractionalSecondDigits
+function () { [native code] }
+Function.prototype.applyU
+Function.prototype.call
+FunctionU
+functionU
+[object Function]
+Generator
+getOffsetNanosecondsFor
+getOwnPropertyDescriptorU
+getPossibleInstantsFor
+getPrototypeOf
+getTimeZoneTransition
+global
+globalThis
+groups
+growableU
+hasIndices
+hoursInDay
+ignoreCase
+illegal access
+illegal argumentU
+indices
+InfinityU
+infinityU
+inLeapYear
+<instance_members_initializer>
+Int16Array
+Int32Array
+Int8Array
+isExtensibleU
+iso8601
+isoDay
+isoHour
+isoMicrosecond
+isoMillisecond
+isoMinute
+isoMonthU
+isoNanosecond
+isoSecond
+isoYear
+IteratorU
+jsMemoryEstimateU
+jsMemoryRange
+largestUnit
+lastChunkHandling
+lastIndex
+linear
+LinkError
+Map IteratorU
+maxByteLength
+medium
+mergeFields
+message
+microsecond
+microsecondsU
+millisecond
+millisecondsU
+-Infinity
+minute
+minutes
+Module
+monthCode
+monthDayFromFields
+months
+monthsInYearU
+multiline
+nanosecond
+nanoseconds
+narrow
+native
+not-equal
+[object Null]
+Number
+number
+[object Number]
+Object.prototypeU
+Object
+object
+[object Object]
+offset
+offsetNanoseconds
+overflowU
+ownKeys
+percent
+plainDate
+plainTime
+positionU
+preventExtensions
+#constructorU
+Promise
+promise
+__proto__
+RangeError
+rawJSON
+ReferenceError
+Reflect.get
+Reflect.has
+RegExp
+[object RegExp]
+reject
+relativeTo
+resizable
+ResizableArrayBufferU
+return
+revoke
+roundingIncrement
+roundingModeU
+RuntimeErrorU
+Script
+script
+second
+seconds
+sentenceU
+Set IteratorU
+setPrototypeOf
+ShadowRealm
+SharedArray
+SharedArrayBuffer
+SharedStructU
+smallestUnitU
+source
+sourceText
+stackTraceLimit
+<static_initializer>U
+sticky
+String
+string
+[object String]
+suppressed
+SuppressedError
+SuspendErrorU
+Symbol.iterator
+Symbol.matchAll
+Symbol.replace
+[Symbol.species]U
+Symbol.species
+Symbol.splitU
+Symbol
+symbol
+SyntaxError
+target
+timed-out
+timeZoneU
+timeZoneId
+timeZoneNameU
+toJSON
+toStringU
+get TypedArray.prototype.length
+TypeError
+Uint16Array
+Uint32Array
+Uint8Array
+Uint8ClampedArray
+undefined
+[object Undefined]
+unicode
+unicodeSets
+URIErrorU
+WeakMap
+WeakRef
+WeakSet
+WebAssembly.Exception
+WebAssembly.Module
+weekOfYear
+written
+yearMonthFromFields
+yearOfWeek
+Symbol.asyncIteratorM
+IntlLegacyConstructedSymbol
+Symbol.matchM
+Symbol.search
+Symbol.unscopables
+Symbol.dispose
+Symbol.asyncDispose
+Symbol.hasInstance
+Symbol.toStringTag
+Symbol.toPrimitive
+Symbol.isConcatSpreadable
+constructor
+resolve
+valueOf
+Not supported Wasm field type
+Array Iterator.prototype.next
+Torque assert 'valueSmi >= 0' failed [src/builtins/base.tq:1726]U
+Torque assert '!Float64IsNaN(valueDouble)' failed [src/builtins/base.tq:1737]
+Torque assert 'valueDouble >= 0' failed [src/builtins/base.tq:1741]
+Torque assert 'valueDouble <= kMaxSafeInteger' failed [src/builtins/base.tq:1750]
+Date.prototype [ @@toPrimitive ]U
+[Generator].prototype.next
+[Generator].prototype.returnU
+[Generator].prototype.throw
+Map.prototype.set
+Map.prototype.deleteU
+Map.prototype.get
+Map.prototype.has
+Map.prototype.getOrInsert
+Map.prototype.getOrInsertComputed
+Map.prototype.entries
+get Map.prototype.size
+Map.prototype.forEach
+Map.prototype.keys
+Map.prototype.valuesU
+Map Iterator.prototype.next
+[object U
+Object.prototype.toString
+RegExp.prototype.compileU
+Set.prototype.has
+Set.prototype.add
+Set.prototype.deleteU
+TaggedNotEqual(key, HashTableHoleConstant()) [..\..\v8\src\builtins\builtins-collections-gen.cc:2111]
+Set.prototype.entries
+get Set.prototype.size
+Set.prototype.forEach
+Set.prototype.valuesU
+Set Iterator.prototype.next
+ShadowRealm.prototype.importValue
+Atomics.loadU
+Atomics.store
+Atomics.exchangeU
+Atomics.add
+Atomics.sub
+Atomics.and
+Atomics.or
+Atomics.xor
+String.prototype.matchAll
+RegExp.prototype.@@matchAll
+String.prototype.replaceU
+String.prototype.split
+TypedArray
+get TypedArray.prototype.byteLength
+get TypedArray.prototype.byteOffset
+%TypedArray%.prototype.map
+Torque assert '(paramType & kValueTypeIsRefBit) != 0' failed [src/builtins/wasm-to-js.tq:158]
+Torque assert '(retType & kValueTypeIsRefBit) != 0' failed [src/builtins/wasm-to-js.tq:261]
+WeakMap.prototype.get
+WeakMap.prototype.has
+WeakMap.prototype.set
+WeakMap.prototype.getOrInsert
+WeakMap.prototype.getOrInsertComputed
+WeakMap.prototype.deleteU
+TaggedNotEqual(key, TheHoleConstant()) [..\..\v8\src\builtins\builtins-collections-gen.cc:3148]
+WeakSet.prototype.has
+WeakSet.prototype.add
+WeakSet.prototype.deleteU
+TaggedNotEqual(value, TheHoleConstant()) [..\..\v8\src\builtins\builtins-collections-gen.cc:3262]
+[AsyncGenerator].prototype.next
+[AsyncGenerator].prototype.return
+[AsyncGenerator].prototype.throwU
+[AsyncModule].evaluate
+Array.prototype.every
+Array.prototype.filter
+Torque assert 'Convert<uintptr>(endIndex) <= Convert<uintptr>(this.length) && Convert<uintptr>(startIndex) <= Convert<uintptr>(endIndex)' failed [src/builtins/torque-internal.tq:150]
+Array.prototype.findU
+Array.prototype.findIndex
+Array.prototype.findLastU
+Array.prototype.findLastIndex
+Array.prototype.forEach
+Array.fromAsync
+%Array%.fromU
+toLocaleString
+%TypedArray%.prototype.join
+%TypedArray%.prototype.toLocaleString
+Array.prototype.map
+Array.prototype.reduceRight
+Array.prototype.reduce
+Array.prototype.someU
+get ArrayBuffer.prototype.byteLengthU
+get ArrayBuffer.prototype.maxByteLength
+get ArrayBuffer.prototype.resizable
+get ArrayBuffer.prototype.detached
+get SharedArrayBuffer.prototype.maxByteLength
+get SharedArrayBuffer.prototype.growableU
+Boolean.prototype.toString
+Boolean.prototype.valueOf
+String.prototype.toString
+String.prototype.valueOfU
+String.prototype.charAt
+String.prototype.charCodeAt
+String.prototype.codePointAtU
+String.prototype.concat
+ToObjectU
+get DataView.prototype.buffer
+get DataView.prototype.byteLength
+get DataView.prototype.byteOffset
+DataView.prototype.getUint8
+DataView.prototype.getInt8
+DataView.prototype.getUint16U
+DataView.prototype.getInt16
+DataView.prototype.getUint32U
+DataView.prototype.getInt32
+DataView.prototype.getFloat16
+DataView.prototype.getFloat32
+DataView.prototype.getFloat64
+DataView.prototype.getBigUint64
+DataView.prototype.getBigInt64
+DataView.prototype.setUint8
+DataView.prototype.setInt8
+DataView.prototype.setUint16U
+DataView.prototype.setInt16
+DataView.prototype.setUint32U
+DataView.prototype.setInt32
+DataView.prototype.setFloat16
+DataView.prototype.setFloat32
+DataView.prototype.setFloat64
+DataView.prototype.setBigUint64
+DataView.prototype.setBigInt64
+FinalizationRegistry.prototype.register
+set Iterator.prototype[Symbol.toStringTag]
+set Iterator.prototype.constructor
+Iterator.from
+%WrapForValidIteratorPrototype%.nextU
+%WrapForValidIteratorPrototype%.return
+Iterator Helper.prototype.next
+Iterator Helper.prototype.returnU
+Iterator.prototype.map
+Iterator.prototype.filter
+Iterator.prototype.take
+Iterator.prototype.drop
+Iterator.prototype.flatMap
+Iterator.prototype.reduce
+Iterator.prototype.toArray
+Iterator.prototype.forEach
+Iterator.prototype.some
+Iterator.prototype.everyU
+Iterator.prototype.find
+Map.groupBy
+Number.prototype.toString
+Number.prototype.valueOfU
+Object.groupBy
+Object.setPrototypeOf
+Object.prototype.toLocaleString
+PromiseReject
+Promise.all
+Torque assert 'remainingElementsCount >= 0' failed [src/builtins/promise-all.tq:289]U
+Promise.allSettled
+Torque assert 'value != PromiseHole' failed [src/builtins/promise-all-element-closure.tq:15]U
+Torque assert 'remainingElementsCount >= 0' failed [src/builtins/promise-all-element-closure.tq:140]U
+status
+fulfilled
+rejectedU
+reason
+Promise.any
+Torque assert 'errors.length == index - 1' failed [src/builtins/promise-any.tq:329]
+Torque assert 'Is<NativeContext>(context)' failed [src/builtins/promise-constructor.tq:95]
+Promise.prototype.finally
+Torque assert 'Is<NativeContext>(context)' failed [src/builtins/promise-finally.tq:175]
+Promise.raceU
+Torque assert 'Is<NativeContext>(context)' failed [src/builtins/promise-race.tq:17]
+PromiseResolve
+Promise.prototype.then
+Promise.try
+Promise.withResolvers
+Proxy.revocable
+Reflect.isExtensibleU
+Reflect.preventExtensions
+Reflect.getPrototypeOf
+Reflect.setPrototypeOf
+Reflect.deleteProperty
+Reflect.getOwnPropertyDescriptorU
+RegExp.prototype.exec
+%RegExpStringIterator%.prototype.next
+RegExp.prototype.@@matchU
+RegExp.prototype.@@replace
+RegExp.prototype.@@search
+RegExp.prototype.source
+RegExp.prototype.@@splitU
+RegExp.prototype.test
+RegExp.prototype.global
+RegExp.prototype.ignoreCase
+RegExp.prototype.multiline
+RegExp.prototype.hasIndices
+RegExp.prototype.linear
+RegExp.prototype.dotAll
+RegExp.prototype.sticky
+RegExp.prototype.unicodeU
+RegExp.prototype.unicodeSetsU
+RegExp.prototype.flags
+Set.prototype.differenceU
+Set.prototype.intersection
+Set.prototype.isDisjointFromU
+Set.prototype.isSubsetOfU
+Set.prototype.isSupersetOf
+Set.prototype.symmetricDifference
+Set.prototype.union
+String.prototype.at
+String.prototype.endsWith
+String.prototype.anchor
+String.prototype.bigU
+String.prototype.blink
+String.prototype.bold
+String.prototype.fontcolor
+String.prototype.fontsize
+String.prototype.fixed
+String.prototype.italicsU
+String.prototype.link
+String.prototype.small
+String.prototype.strike
+strike
+String.prototype.subU
+String.prototype.supU
+String.prototype.includes
+String.prototype.indexOfU
+String.prototype.isWellFormed
+String.prototype[Symbol.iterator]
+String Iterator.prototype.next
+String.prototype.match
+String.prototype.search
+String.prototype.padStart
+String.prototype.padEnd
+String.prototype.repeat
+String.prototype.replaceAll
+String.prototype.slice
+String.prototype.startsWith
+String.prototype.substr
+String.prototype.substring
+String.prototype.toWellFormed
+String.prototype.trim
+String.prototype.trimLeft
+String.prototype.trimRight
+Symbol.prototype.descriptionU
+Symbol.prototype [ @@toPrimitive ]
+Symbol.prototype.toString
+Symbol.prototype.valueOfU
+%TypedArray%.prototype.at
+start offsetU
+Construct
+byte length
+TypedArray's constructorU
+%TypedArray%.prototype.everyU
+%TypedArray%.prototype.entries
+%TypedArray%.prototype.filter
+%TypedArray%.prototype.find
+%TypedArray%.prototype.findIndexU
+%TypedArray%.prototype.findLast
+%TypedArray%.prototype.findIndexLastU
+%TypedArray%.prototype.forEach
+%TypedArray%.from
+%TypedArray%.prototype.keys
+%TypedArray%.of
+%TypedArray%.prototype.reduce
+%TypedArray%.prototype.reduceRight
+%TypedArray%.prototype.set
+%TypedArray%.prototype.sliceU
+%TypedArray%.prototype.some
+%TypedArray%.prototype.sort
+%TypedArray%.prototype.subarray
+%TypedArray%.prototype.toReversed
+%TypedArray%.prototype.toSorted
+%TypedArray%.prototype.values
+%TypedArray%.prototype.with
+Torque assert 'result == kStoreSucceded' failed [src/builtins/typed-array.tq:119]
+WeakRef.prototype.deref
+Type assertion failed! (value/expectedType/nodeId)
+Type assertion failed!
+Node id: 
+Actual value: 
+Expected type: 
+Actual value (high): 
+Actual vlaue (low): U
+a == 1
+a == -1
+Torque assert '(retType & kValueTypeIsRefBit) != 0' failed [src/builtins/js-to-wasm.tq:575]
+Torque assert '(paramType & kValueTypeIsRefBit) != 0' failed [src/builtins/js-to-wasm.tq:752]
+Torque assert 'this.paramBufferEnd == 0 || this.nextStack <= this.paramBufferEnd' failed [src/builtins/js-to-wasm.tq:383]
+Torque assert '(retType & kValueTypeIsRefBit) != 0' failed [src/builtins/js-to-wasm.tq:963]
+Torque assert '(retType & kValueTypeIsRefBit) != 0' failed [src/builtins/js-to-wasm.tq:1079]U
+String.prototype.toLowerCaseU
+Intl.ListFormat.prototype.formatU
+Intl.ListFormat.prototype.formatToParts
+String.prototype.toLocaleLowerCase
+[Symbol.iterator]
+GeneratorFunction
+[Symbol.asyncIterator]
+Async-from-Sync IteratorU
+AsyncGeneratorFunction
+AsyncGenerator
+AsyncFunction
+assign
+getOwnPropertyDescriptors
+getOwnPropertyNames
+getOwnPropertySymbols
+hasOwn
+create
+definePropertiesU
+freeze
+isFrozenU
+isSealedU
+entries
+fromEntries
+values
+groupBy
+__defineGetter__U
+__defineSetter__U
+hasOwnProperty
+__lookupGetter__U
+__lookupSetter__U
+isPrototypeOf
+propertyIsEnumerableU
+get __proto__
+set __proto__
+[Symbol.hasInstance]U
+get arguments
+set arguments
+get caller
+set caller
+get [Symbol.species]U
+isArray
+fromAsync
+concat
+copyWithin
+findIndex
+findLastU
+findLastIndex
+lastIndexOf
+reverse
+unshift
+splice
+includesU
+indexOf
+forEach
+filter
+flatMap
+reduce
+reduceRight
+toReversed
+toSortedU
+toSpliced
+toExponential
+toFixed
+toPrecision
+isFiniteU
+isInteger
+isSafeInteger
+parseFloat
+parseIntU
+MAX_VALUE
+MIN_VALUE
+NEGATIVE_INFINITY
+POSITIVE_INFINITY
+MAX_SAFE_INTEGERU
+MIN_SAFE_INTEGERU
+EPSILON
+fromCharCodeU
+fromCodePoint
+anchor
+charAt
+charCodeAt
+codePointAt
+endsWithU
+fontcolor
+fontsizeU
+isWellFormedU
+italics
+localeCompare
+matchAllU
+normalize
+padEnd
+padStartU
+repeat
+replace
+replaceAll
+search
+substr
+substring
+startsWith
+toWellFormedU
+trimStart
+trimLeftU
+trimEnd
+trimRight
+toLocaleLowerCase
+toLocaleUpperCase
+toLowerCase
+toUpperCase
+String Iterator
+StringIterator
+keyFor
+asyncIterator
+hasInstance
+isConcatSpreadable
+iteratorU
+species
+toPrimitive
+toStringTag
+unscopables
+dispose
+asyncDisposeU
+description
+get description
+[Symbol.toPrimitive]U
+toDateStringU
+toTimeStringU
+toISOString
+toUTCString
+toGMTString
+getDate
+setDate
+getDay
+getFullYear
+setFullYear
+getHoursU
+setHoursU
+getMilliseconds
+setMilliseconds
+getMinutes
+setMinutes
+getMonthU
+setMonthU
+getSeconds
+setSeconds
+getTime
+setTime
+getTimezoneOffset
+getUTCDate
+setUTCDate
+getUTCDay
+getUTCFullYear
+setUTCFullYear
+getUTCHours
+setUTCHours
+getUTCMilliseconds
+setUTCMilliseconds
+getUTCMinutes
+setUTCMinutes
+getUTCMonth
+setUTCMonth
+getUTCSeconds
+setUTCSeconds
+getYear
+setYear
+toLocaleDateString
+toLocaleTimeString
+allSettled
+withResolvers
+finally
+get dotAll
+get flags
+get global
+get hasIndices
+get ignoreCase
+get multiline
+get source
+get sticky
+get unicode
+get unicodeSets
+compile
+[Symbol.match]
+[Symbol.matchAll]
+[Symbol.replace]U
+[Symbol.search]
+[Symbol.split]
+get input
+set input
+get $_
+set $_
+lastMatch
+get lastMatch
+set lastMatch
+get $&
+set $&
+lastParen
+get lastParen
+set lastParen
+get $+
+set $+
+leftContext
+get leftContext
+set leftContext
+get $`
+set $`
+rightContextU
+get rightContextU
+set rightContextU
+get $'
+set $'
+get $1
+set $1
+get $2
+set $2
+get $3
+set $3
+get $4
+set $4
+get $5
+set $5
+get $6
+set $6
+get $7
+set $7
+get $8
+set $8
+get $9
+set $9
+RegExp String Iterator
+RegExpStringIteratorU
+captureStackTrace
+stringify
+isRawJSON
+fround
+random
+LOG10E
+SQRT1_2
+getCanonicalLocales
+supportedValuesOf
+DateTimeFormat
+supportedLocalesOf
+Intl.DateTimeFormat
+resolvedOptions
+formatToParts
+get format
+formatRange
+formatRangeToParts
+NumberFormatU
+Intl.NumberFormat
+CollatorU
+Intl.Collator
+get compare
+v8BreakIterator
+get adoptText
+get first
+get nextU
+get current
+get breakType
+PluralRules
+Intl.PluralRulesU
+select
+selectRange
+RelativeTimeFormat
+Intl.RelativeTimeFormat
+ListFormat
+Intl.ListFormat
+Locale
+Intl.Locale
+maximizeU
+minimizeU
+get languageU
+get script
+get region
+get baseNameU
+get calendarU
+get caseFirst
+get collation
+get firstDayOfWeek
+get hourCycle
+get numeric
+get numberingSystem
+getCalendarsU
+getCollations
+getHourCycles
+getNumberingSystems
+getTimeZonesU
+getTextInfo
+getWeekInfo
+DisplayNamesU
+Intl.DisplayNames
+Segmenter
+Intl.Segmenter
+containing
+Segmenter String Iterator
+DurationFormat
+Intl.DurationFormat
+isView
+get byteLength
+arrayBufferConstructor_DoNotInitialize
+get maxByteLength
+get resizable
+resize
+transferU
+transferToFixedLength
+get detachedU
+get growableU
+Atomics
+exchangeU
+compareExchange
+isLockFree
+waitAsync
+notify
+get buffer
+get byteOffset
+get length
+[Symbol.toStringTag]U
+get [Symbol.toStringTag]U
+subarrayU
+BYTES_PER_ELEMENT
+DataViewU
+getInt8
+setInt8
+getUint8U
+setUint8U
+getInt16U
+setInt16U
+getUint16
+setUint16
+getInt32U
+setInt32U
+getUint32
+setUint32
+getFloat32
+setFloat32
+getFloat64
+setFloat64
+getBigInt64
+setBigInt64
+getBigUint64U
+setBigUint64U
+delete
+get sizeU
+asUintN
+asIntN
+difference
+intersectionU
+isSubsetOf
+isSupersetOfU
+isDisjointFrom
+symmetricDifference
+Iterator Helper
+toArray
+set [Symbol.toStringTag]U
+get constructor
+set constructor
+revocable
+Reflect
+registerU
+unregister
+SetIterator
+MapIterator
+CallSiteU
+getColumnNumber
+getEnclosingColumnNumberU
+getEnclosingLineNumber
+getEvalOrigin
+getFileName
+getFunction
+getFunctionName
+getLineNumber
+getMethodName
+getPosition
+getPromiseIndex
+getScriptNameOrSourceURLU
+getScriptHash
+getThis
+getTypeName
+isAsync
+isConstructor
+isEval
+isNativeU
+isPromiseAllU
+isToplevel
+decodeURI
+decodeURIComponent
+encodeURI
+encodeURIComponent
+escape
+unescapeU
+isTraceCategoryEnabled
+getContinuationPreservedEmbedderDataU
+setContinuationPreservedEmbedderDataU
+dirxml
+groupCollapsed
+groupEndU
+countReset
+profile
+profileEnd
+timeLog
+timeEnd
+timeStamp
+context
+validateU
+instantiate
+imports
+exports
+customSections
+InstanceU
+get exports
+Memory
+Global
+get value
+set value
+Exception
+getArg
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

@@ -1,0 +1,77 @@
+[
+  {
+    "id": "F-01",
+    "sev": "CRITICO",
+    "titulo": "Dois processos orfaos rodando sem codigo no disco",
+    "processos": [
+      "CentralDark-LovableBridge (pid 3583381)",
+      "CentralDark-AiPromptAPI (pid 3583363)"
+    ],
+    "detalhe": "Ambos estao VIVOS (11 threads, ~15d), mas seus scripts .mjs NAO existem mais no disco. Rodam de memoria. Qualquer pm2 restart/reload/resurrect os mata permanentemente.",
+    "prova": "test -f script => AUSENTE; kill -0 pid => VIVO; ERR_MODULE_NOT_FOUND no log",
+    "acao": "NAO reiniciar. Restaurar o arquivo do Git ANTES de qualquer operacao PM2 nesses dois."
+  },
+  {
+    "id": "F-02",
+    "sev": "ALTO",
+    "titulo": "State drift severo entre ecosystem.config.js e o estado vivo",
+    "detalhe": "12 servicos declarados nao rodam; 15 servicos rodam sem estar declarados; so 6 coincidem. Um pm2 start ecosystem.config.js hoje subiria a configuracao errada.",
+    "acao": "Regenerar o ecosystem a partir do dump.pm2 (unica fonte que bate com o vivo) antes de qualquer resurrect."
+  },
+  {
+    "id": "F-03",
+    "sev": "ALTO",
+    "titulo": "MCP: 100% do catalogo fora da allowlist desejada",
+    "detalhe": "102 ferramentas vivas; nenhuma das 7 desejadas (get_mission_state, get_github_state, get_vps_state, get_service_inventory, get_open_findings, get_receipts, get_hardware_capacity) existe. Catalogo atual inclui execute_command, vps_run_once_script, vps_write_file_safe e ~23 github_* mutaveis.",
+    "acao": "BLOCKED_PENDING_ALLOWLIST. Implementar as 7 read-only e um gate de allowlist explicito antes de expor a terceiros."
+  },
+  {
+    "id": "F-04",
+    "sev": "MEDIO",
+    "titulo": "MCP com erro de codigo recorrente",
+    "detalhe": "ReferenceError: Cannot access mcpAdminTools before initialization em src/tools/core/mcp-diagnostics.js:33 — dependencia circular de import.",
+    "acao": "Corrigir a ordem de inicializacao/import."
+  },
+  {
+    "id": "F-05",
+    "sev": "MEDIO",
+    "titulo": "Historico de crash-loop por porta ocupada em 5 servicos",
+    "detalhe": "EADDRINUSE: MCP 2475x (9100), WebhookDeploy 558x (9300), GraphPanel 522x (3030), ArsenalProxy (8083), EliteHTTP (8082). Restarts acumulados: ArsenalProxy 5576, EliteHTTP 5308, MCP 843, WebhookDeploy 278, GraphPanel 260.",
+    "acao": "Investigar dupla instanciacao (provavel pm2 start duplicado ou resurrect sobre processo vivo). Hoje estao estaveis."
+  },
+  {
+    "id": "F-06",
+    "sev": "MEDIO",
+    "titulo": "MCP com drift de versao e dist nao commitado",
+    "detalhe": "package.json 0.3.0, dist/index.js 0.4.0, runtime 0.4.0. dist/ tem 5 arquivos modificados e nao commitados; src/lib/admin-guard.js, tests/, scripts/ e manifesto-destrutivas.json nao rastreados.",
+    "acao": "Reconciliar versao e commitar ou reverter o dist."
+  },
+  {
+    "id": "F-07",
+    "sev": "MEDIO",
+    "titulo": "Superpropagacao de segredos no ambiente PM2",
+    "detalhe": "OPENAI_API_KEY presente nos 21 processos; ANTHROPIC_AUTH_TOKEN em 16; SUPABASE_SERVICE_ROLE_KEY, GITHUB_CLIENT_SECRET, MCP_SESSION_SECRET e CENTRALDARK_ADMIN_KEY em 10 cada. Servicos sem relacao com IA carregam chave de IA.",
+    "acao": "Reduzir escopo por processo (principio do menor privilegio)."
+  },
+  {
+    "id": "F-08",
+    "sev": "BAIXO",
+    "titulo": "5 servicos PM2 expostos em 0.0.0.0",
+    "detalhe": "Hermes:8899, ArsenalProxy:8083, EliteHTTP:8082, ArsenalAdapter:8090, ArtifactsBuilder:3090 escutam em todas as interfaces. MCP corretamente so em 127.0.0.1:9100.",
+    "acao": "Confirmar se firewall externo cobre essas portas; caso contrario, restringir bind a 127.0.0.1."
+  },
+  {
+    "id": "F-09",
+    "sev": "INFO",
+    "titulo": "Certificado TLS do MCP valido, expira em 2026-09-01",
+    "detalhe": "CN=centralldark.com, emissor Google Trust Services WE1, valido ate 2026-09-01T17:15:24Z (~31 dias).",
+    "acao": "Renovacao automatica do Caddy deve cobrir; monitorar."
+  },
+  {
+    "id": "F-10",
+    "sev": "INFO",
+    "titulo": "MCP falha fechado corretamente sem credencial",
+    "detalhe": "POST /mcp sem Bearer retorna 401. /health publico por design retorna 200. Redacao de token/secret/session/key presente nos logs. Limites de payload 2mb/1mb.",
+    "acao": "Nenhuma — comportamento correto."
+  }
+]

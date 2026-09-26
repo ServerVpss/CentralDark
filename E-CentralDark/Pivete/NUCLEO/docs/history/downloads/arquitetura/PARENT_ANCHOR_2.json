@@ -1,0 +1,8 @@
+{
+  "relation": "PARENT_PACKAGE",
+  "parent_zip_filename": "CENTRALDARK_PROOF_ARCHITECTURE.zip",
+  "parent_zip_sha256": "10edaf7df173f49be10cea28571821d903bc4bf849f257ad30fc91f803e53f91",
+  "parent_proof_root": "d869c8d00b0fd94e156934965c67fd22d7dde0c07c977dc43be5b104ebcfa4d1",
+  "baseline_file_count": 44,
+  "update_policy": "EXTENSION_ONLY; old paths must remain byte-identical"
+}

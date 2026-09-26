@@ -1,0 +1,33 @@
+#ACORDAR !CALIBRAR
+
+Você recebeu um ZIP chamado `centraldark-grok-adapter.zip`.
+
+MISSÃO: instalar ou reconciliar o adaptador Grok da CentralDark SEM criar segunda governança.
+
+NÃO PRESUMA CAMINHO, NÃO COPIE CEGAMENTE.
+
+1. Localize a raiz real de `ServerVpss/CentralDark`.
+2. Leia primeiro `AGENTS.md` e `LEIA-ME-IA.md`.
+3. Verifique se já existe mecanismo Grok/skills/adapters no repositório.
+4. Verifique se `.grok/skills/centraldark/SKILL.md` é um destino suportado pelo ambiente Grok que você realmente está executando.
+5. Se já existir adaptador equivalente, NÃO crie outro: compare semanticamente e incorpore somente o delta útil no dono existente.
+6. Se o destino for suportado e estiver livre, extraia somente `.grok/skills/centraldark/SKILL.md`.
+7. Não altere AGENTS/LEIA-ME-IA/MetaLupa só para acomodar o adaptador.
+8. Não instale pacote Matt, marketplace ou segundo router. Ouro externo é comportamento a ser absorvido pelos donos existentes.
+9. Rode a inspeção/descoberta de skills que o runtime Grok realmente oferecer e prove que o adaptador foi encontrado.
+10. Teste que o adaptador aponta para os donos canônicos e não redefine autoridade.
+11. Se houver Writer em colisão, fique READ_ONLY e entregue o patch/delta ao Writer.
+12. Zero deploy, zero VPS, zero DNS, zero secret, zero force-push.
+13. Se qualquer suposição acima for falsa, corrija a rota; não force o desenho.
+14. Só declare sucesso com prova do consumidor real.
+
+Critério final:
+ADAPTER_DISCOVERED=true
+SECOND_GOVERNANCE=0
+DUPLICATE_SKILL=0
+WRITER_COLLISION=0
+CANONICAL_OWNERS_PRESERVED=true
+DEPLOY=NAO
+VPS=NAO
+
+Depois volte ao fio anterior. Não transforme esta instalação em nova missão permanente.

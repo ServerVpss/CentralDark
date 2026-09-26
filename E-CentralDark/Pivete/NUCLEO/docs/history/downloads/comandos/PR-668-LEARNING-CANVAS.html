@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CentralDark PR #668 — aprendizado</title>
+<style>
+body{margin:0;background:#0b0d10;color:#f3f4f6;font-family:Arial,Helvetica,sans-serif}
+main{max-width:1180px;margin:24px auto;padding:0 16px}
+h1{font-size:24px;margin:0 0 8px}
+p{color:#b8c0cc}
+canvas{width:100%;height:auto;background:#11151a;border:1px solid #2a313b;border-radius:16px}
+code{display:inline-block;background:#171b21;padding:8px 10px;border-radius:8px;overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<main>
+<h1>PR #668 — aprendizado verificável</h1>
+<p>HEAD <code>4566636ec93fcdebb2d956ff3dd692a6e205a275</code> · estado <code>READY</code></p>
+<canvas id="board" width="1120" height="430" aria-label="Fluxo de aprendizado do PR"></canvas>
+<p><code>ARTIFACT_DIGEST=5e6e163326728fb7144b7cd2b5ded7bffb70da0e7079ce3a839bb22609d902fd</code></p>
+</main>
+<script>
+const states=[["PR_ABERTO","PR e HEAD identificados"],["ARTEFATO_GERADO","Mermaid, YAML, texto e Canvas"],["CAPACIDADES_OK","todas SIM"],["GATES_PENDENTES","testes e revisão ainda decidem"],["RECEIPT_EMITIDO","5e6e163326728fb7"]];
+const canvas=document.getElementById('board');
+const ctx=canvas.getContext('2d');
+function box(x,y,w,h,title,sub,active){
+  ctx.fillStyle=active?'#f4f4f5':'#1b222b';
+  ctx.strokeStyle=active?'#f4f4f5':'#3a4654';
+  ctx.lineWidth=3;ctx.beginPath();ctx.roundRect(x,y,w,h,16);ctx.fill();ctx.stroke();
+  ctx.fillStyle=active?'#101317':'#f3f4f6';ctx.textAlign='center';
+  ctx.font='700 17px Arial';ctx.fillText(title,x+w/2,y+46);
+  ctx.font='14px Arial';ctx.fillText(sub.slice(0,28),x+w/2,y+82);
+}
+function arrow(x1,y1,x2,y2){
+  ctx.strokeStyle='#6b7280';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(x2-10,y2-6);ctx.lineTo(x2,y2);ctx.lineTo(x2-10,y2+6);ctx.stroke();
+}
+ctx.fillStyle='#11151a';ctx.fillRect(0,0,canvas.width,canvas.height);
+const margin=28,gap=16,w=(canvas.width-margin*2-gap*4)/5,y=120,h=150;
+states.forEach((s,i)=>{const x=margin+i*(w+gap);box(x,y,w,h,s[0],s[1],i===states.length-1);if(i<4)arrow(x+w+3,y+h/2,x+w+gap-3,y+h/2);});
+ctx.textAlign='left';ctx.fillStyle='#d1d5db';ctx.font='16px monospace';
+ctx.fillText('ARTEFATO ORGANIZA; TESTE E JUDGE PROVAM.',28,350);
+ctx.fillText('SUPORTE NÃO TRANSFERE O WRITER DO CÓDIGO.',28,382);
+</script>
+</body>
+</html>

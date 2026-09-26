@@ -1,0 +1,1473 @@
+import { createHash } from "node:crypto";
+import {
+  appendFileSync,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  unlinkSync,
+} from "node:fs";
+import { basename, dirname, join, relative } from "node:path";
+
+import { parseFrontmatter, slugify, writeFrontmatterAtomic } from "../vault.ts";
+import { atomicWriteFileSync } from "../fs-atomic.ts";
+import { ensureInsideVault } from "../path-safety.ts";
+import { verifySkillProposalCandidate } from "./skill-proposal-verifier.ts";
+import { rebuildProceduralHints } from "./procedural-hints.ts";
+import { rebuildProceduralGraph } from "./procedural-graph.ts";
+import {
+  listProceduralMemory,
+  proceduralEntryId,
+  proceduralSuccessRate,
+  reconcileProceduralMemory,
+} from "./procedural-memory.ts";
+import { requireNextStep } from "./next-step.ts";
+import {
+  clearSkillAcceptJournal,
+  listSkillAcceptJournals,
+  readSkillAcceptJournals,
+  removeSkillAcceptJournalFile,
+  writeSkillAcceptJournal,
+  type SkillAcceptJournalEntry,
+} from "./skill-accept-journal.ts";
+import { acquireLockSync, type LockHandle } from "./sync-lockfile.ts";
+import {
+  BRAIN_SKILL_PROPOSALS_REL,
+  procedurePath,
+  proposalWatermarkPath,
+  skillAcceptJournalPath,
+  skillProposalAcceptedPath,
+  skillProposalPendingPath,
+  skillProposalRejectedPath,
+} from "./paths.ts";
+import { assertVaultIdentityForWrite } from "./vault-identity.ts";
+import { listContinuityRecords, type ContinuityRecord } from "./continuity/store.ts";
+
+/**
+ * Pattern kind stamped on a proposal an author DECLARED through an
+ * `@osb skill` marker rather than one the miner inferred from
+ * continuity records.
+ *
+ * It is deliberately outside the verifier gate. That gate
+ * (`skill-proposal-verifier.ts`) scores a MINED candidate against its own
+ * supporting records - at least `VERIFIER_MIN_EVIDENCE` (3) distinct
+ * records structurally supporting the pattern, plus a confidence floor -
+ * so a thin or padded inference never reaches a human. A declaration has
+ * exactly one piece of evidence, the declaration itself, and claims no
+ * statistical confidence, so running the same gate over it would reject
+ * every marker and make the feature a silent no-op. The review gate that
+ * does apply is the human one: a declared proposal lands in `pending` and
+ * is promoted only by `acceptSkillProposal`.
+ */
+export const DECLARED_MARKER_PATTERN_KIND = "declared_marker";
+
+export type SkillProposalPatternKind =
+  | "repeated_action"
+  | "structural_similarity"
+  | "co_occurrence"
+  | "temporal_routine"
+  | typeof DECLARED_MARKER_PATTERN_KIND;
+
+/** The three phases a proposal file can live in, most terminal first. */
+const PROPOSAL_PHASES = ["accepted", "rejected", "pending"] as const;
+
+export type SkillProposalPhase = (typeof PROPOSAL_PHASES)[number];
+
+export interface SkillProposalLearnOptions {
+  readonly now?: Date;
+  readonly minSupport?: number;
+}
+
+export interface SkillProposalLearnResult {
+  readonly watermarkFrom: string | null;
+  readonly watermarkTo: string | null;
+  readonly scanned: number;
+  readonly created: ReadonlyArray<string>;
+  readonly suppressed: ReadonlyArray<string>;
+  /** Candidates whose support merged into an existing same-name proposal. */
+  readonly merged: ReadonlyArray<string>;
+  /** Candidates the verifier gate rejected before the pending queue. */
+  readonly verifierRejected: ReadonlyArray<string>;
+}
+
+export interface SkillProposalReviewResult {
+  readonly id: string;
+  readonly slug: string;
+  readonly status: "accepted" | "rejected";
+  readonly proposalPath: string;
+  readonly procedurePath?: string;
+}
+
+/**
+ * Execution contract supplied at acceptance (no-dead-ends, Unit I). Each
+ * field is a list of structural steps; an absent field writes no key, so a
+ * contract-free acceptance is byte-identical to the pre-contract output.
+ */
+export interface SkillContractInput {
+  readonly prerequisites?: ReadonlyArray<string>;
+  readonly rollback?: ReadonlyArray<string>;
+  readonly sideEffects?: ReadonlyArray<string>;
+  readonly verification?: ReadonlyArray<string>;
+}
+
+export interface SkillProposalAcceptOptions {
+  readonly now?: Date;
+  readonly note?: string;
+  readonly contract?: SkillContractInput;
+}
+
+/** Contract field name -> frontmatter key, in the order they are written. */
+const SKILL_CONTRACT_FIELDS = Object.freeze([
+  ["prerequisites", "prerequisites"],
+  ["rollback", "rollback"],
+  ["sideEffects", "side_effects"],
+  ["verification", "verification"],
+] as const);
+
+/** What a resolved journal did to the sequence it was guarding. */
+export type SkillAcceptRecoveryAction = "rolled_back" | "completed";
+
+export interface SkillAcceptRecovery {
+  readonly slug: string;
+  readonly action: SkillAcceptRecoveryAction;
+}
+
+/**
+ * How a proposal's self-reported support compares with the independently
+ * recorded procedural outcome ledger.
+ *
+ * `unrecorded` is NOT "no failures": it is the absence of evidence either
+ * way, which is why {@link SkillProposalEvidence.recordedSuccessRate} is
+ * null rather than zero in that state. Failures, successes and silence stay
+ * three distinct answers; `mixed` is the honest fourth.
+ */
+export type SkillEvidenceOutcomeState = "unrecorded" | "successful" | "failing" | "mixed";
+
+export interface SkillProposalEvidence {
+  readonly slug: string;
+  readonly id: string;
+  readonly phase: SkillProposalPhase;
+  /** Support the proposal claims from its own pattern match - self-reported. */
+  readonly claimedEvidenceCount: number;
+  readonly claimedConfidence: number;
+  /** Ledger join key, derived from the slug with no lookup. */
+  readonly proceduralEntryId: string;
+  /** False when the procedure has no procedural-memory entry at all. */
+  readonly proceduralEntryPresent: boolean;
+  /** Host-recorded outcomes; null when there is no entry to read them from. */
+  readonly recordedSuccesses: number | null;
+  readonly recordedFailures: number | null;
+  /** null whenever nothing was recorded - never 0, which reads as total failure. */
+  readonly recordedSuccessRate: number | null;
+  readonly outcomeState: SkillEvidenceOutcomeState;
+}
+
+interface ProposalCandidate {
+  readonly patternKind: SkillProposalPatternKind;
+  readonly key: string;
+  readonly confidence: number;
+  /** Bounded evidence sample kept for the proposal note, slug, and hash. */
+  readonly records: ReadonlyArray<ContinuityRecord>;
+  /**
+   * Full supporting record set the candidate cleared detection with. Carried
+   * apart from the capped `records` so the verifier gate sees the true support
+   * count (a minSupport above the sample cap must not reject a passing draft).
+   */
+  readonly supportingRecords: ReadonlyArray<ContinuityRecord>;
+  readonly suggestedTitle: string;
+}
+
+interface WatermarkState {
+  readonly lastCreatedAt: string | null;
+  readonly lastId: string | null;
+}
+
+const DEFAULT_MIN_SUPPORT = 3;
+const DEFAULT_PROCEDURAL_ROOTS = ["Brain/procedures", "skills"] as const;
+
+/** Version stamped on a freshly-drafted skill; increments on evolution. */
+const SKILL_PROPOSAL_INITIAL_VERSION = 1;
+
+/** Slug budget: how much of the pattern key survives, and the hash suffix length. */
+const PROPOSAL_SLUG_KEY_MAX_LEN = 40;
+const PROPOSAL_SLUG_HASH_LEN = 8;
+
+/**
+ * Heading that separates the reviewable skill body from the pattern and
+ * evidence sections. `renderAcceptedProcedureBody` splits on it, so both
+ * the writer and the reader must name it from here.
+ */
+const SUGGESTED_BODY_HEADING = "## Suggested skill body";
+
+/** Lock basename guarding the accept sequence, inside the proposals root. */
+const ACCEPT_LOCK_NAME = "accept";
+
+/** JSONL ledger of verifier rejections, relative to the vault. */
+const VERIFIER_REJECTION_LEDGER_REL = join(BRAIN_SKILL_PROPOSALS_REL, "verifier-rejections.jsonl");
+
+export function learnSkillProposals(
+  vault: string,
+  opts: SkillProposalLearnOptions = {},
+): SkillProposalLearnResult {
+  // Vault-identity write guard (context-integrity-gates, Unit J).
+  assertVaultIdentityForWrite(vault);
+  const now = opts.now ?? new Date();
+  const minSupport = Math.max(2, opts.minSupport ?? DEFAULT_MIN_SUPPORT);
+
+  const watermark = readWatermark(vault);
+  const records = listContinuityRecords(vault)
+    .filter((record) => {
+      if (watermark.lastCreatedAt === null) return true;
+      if (record.createdAt > watermark.lastCreatedAt) return true;
+      if (record.createdAt < watermark.lastCreatedAt) return false;
+      if (watermark.lastId === null) return true;
+      return record.id > watermark.lastId;
+    })
+    .toSorted(
+      (left, right) =>
+        left.createdAt.localeCompare(right.createdAt) || left.id.localeCompare(right.id),
+    );
+
+  if (records.length === 0) {
+    return {
+      watermarkFrom: watermark.lastCreatedAt,
+      watermarkTo: watermark.lastCreatedAt,
+      scanned: 0,
+      created: Object.freeze([]),
+      suppressed: Object.freeze([]),
+      merged: Object.freeze([]),
+      verifierRejected: Object.freeze([]),
+    };
+  }
+
+  const candidates = detectCandidates(records, minSupport);
+  const created: string[] = [];
+  const suppressed: string[] = [];
+  const merged: string[] = [];
+  const verifierRejected: string[] = [];
+  const watermarkTo = records[records.length - 1]!.createdAt;
+
+  for (const candidate of candidates) {
+    const payloadHash = candidateHash(candidate);
+    const slug = proposalSlug(candidate, payloadHash);
+    const proposalId = `prop-${slug}`;
+    const nameKey = candidateNameKey(candidate);
+    const newRefs = candidateSourceRefs(candidate);
+
+    // Verifier gate: a draft reaches pending only after passing structural and
+    // evidence-count checks against its OWN supporting records.
+    const verdict = verifySkillProposalCandidate(
+      {
+        patternKind: candidate.patternKind,
+        key: candidate.key,
+        confidence: candidate.confidence,
+        evidence: candidate.supportingRecords.map((record) => ({
+          id: record.id,
+          supportsPattern: recordSupportsCandidate(candidate, record),
+        })),
+      },
+      { minEvidence: minSupport },
+    );
+    if (!verdict.accepted) {
+      appendVerifierRejection(vault, {
+        id: proposalId,
+        name_key: nameKey,
+        reason: verdict.reason,
+        at: now.toISOString(),
+      });
+      verifierRejected.push(proposalId);
+      continue;
+    }
+
+    // Same-name merge: an accepted collision evolves the skill (version bump);
+    // a pending collision accumulates support. Neither forks a new draft.
+    const acceptedMatch = findProposalByNameKey(vault, "accepted", nameKey);
+    if (acceptedMatch !== null) {
+      evolveAcceptedProposal(vault, acceptedMatch, candidate, newRefs, now, watermarkTo);
+      merged.push(acceptedMatch.id);
+      continue;
+    }
+    const pendingMatch = findProposalByNameKey(vault, "pending", nameKey);
+    if (pendingMatch !== null) {
+      mergePendingProposal(vault, pendingMatch, candidate, newRefs, now, watermarkTo);
+      merged.push(pendingMatch.id);
+      continue;
+    }
+    if (findProposalByNameKey(vault, "rejected", nameKey) !== null) {
+      // A human rejected this name; do not resurface it as a fresh draft.
+      suppressed.push(proposalId);
+      continue;
+    }
+
+    const pendingPath = skillProposalPendingPath(vault, slug);
+    const acceptedPath = skillProposalAcceptedPath(vault, slug);
+    const rejectedPath = skillProposalRejectedPath(vault, slug);
+    if (existsSync(pendingPath) || existsSync(acceptedPath) || existsSync(rejectedPath)) {
+      suppressed.push(proposalId);
+      continue;
+    }
+
+    writeFrontmatterAtomic(
+      pendingPath,
+      {
+        schema_version: 1,
+        kind: "brain-skill-proposal",
+        id: proposalId,
+        slug,
+        status: "pending",
+        pattern_kind: candidate.patternKind,
+        name_key: nameKey,
+        version: SKILL_PROPOSAL_INITIAL_VERSION,
+        confidence: candidate.confidence.toFixed(3),
+        payload_hash: payloadHash,
+        created_at: now.toISOString(),
+        updated_at: now.toISOString(),
+        watermark_from: watermark.lastCreatedAt ?? "",
+        watermark_to: watermarkTo,
+        evidence_count: String(candidate.records.length),
+        source_refs: newRefs,
+      },
+      renderProposalBody(candidate),
+      {
+        overwrite: false,
+        existsErrorKind: "skill proposal",
+        vaultForRelativePath: vault,
+      },
+    );
+    created.push(proposalId);
+  }
+
+  const watermarkRecord = records[records.length - 1]!;
+  writeWatermark(vault, {
+    lastCreatedAt: watermarkTo,
+    lastId: watermarkRecord.id,
+  });
+  const graph = rebuildProceduralGraph(vault);
+  rebuildProceduralHints(vault, { graph });
+
+  return {
+    watermarkFrom: watermark.lastCreatedAt,
+    watermarkTo,
+    scanned: records.length,
+    created: Object.freeze(created),
+    suppressed: Object.freeze(suppressed),
+    merged: Object.freeze(merged),
+    verifierRejected: Object.freeze(verifierRejected),
+  };
+}
+
+export function listPendingSkillProposals(vault: string): ReadonlyArray<{
+  id: string;
+  slug: string;
+  status: string;
+  patternKind: string;
+}> {
+  const dir = ensureInsideVault(join(vault, BRAIN_SKILL_PROPOSALS_REL, "pending"), vault);
+  if (!existsSync(dir)) return Object.freeze([]);
+
+  const out: Array<{
+    id: string;
+    slug: string;
+    status: string;
+    patternKind: string;
+  }> = [];
+  for (const name of readdirSync(dir).toSorted()) {
+    if (!name.endsWith(".md")) continue;
+    const path = ensureInsideVault(join(dir, name), vault);
+    const [fm] = parseFrontmatter(path);
+    if (fm["kind"] !== "brain-skill-proposal") continue;
+    if (typeof fm["id"] !== "string") continue;
+    out.push({
+      id: fm["id"],
+      slug: typeof fm["slug"] === "string" ? fm["slug"] : fm["id"].replace(/^prop-/, ""),
+      status: typeof fm["status"] === "string" ? fm["status"] : "pending",
+      patternKind: typeof fm["pattern_kind"] === "string" ? fm["pattern_kind"] : "unknown",
+    });
+  }
+  return Object.freeze(out);
+}
+
+/** A declared skill proposal was rejected before anything was written. */
+export class DeclaredSkillProposalError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "DeclaredSkillProposalError";
+  }
+}
+
+export interface DeclaredSkillProposalInput {
+  /** Human-facing skill name; its slug is the proposal's identity key. */
+  readonly name: string;
+  /** What the skill does, carried verbatim into the reviewable body. */
+  readonly body: string;
+  /** Where the declaration was found, as wikilinks. */
+  readonly sourceRefs: ReadonlyArray<string>;
+  readonly now?: Date;
+}
+
+/**
+ * What a declaration did, by name.
+ *
+ *   - `created`   - a new pending draft was written.
+ *   - `deduped`   - an equivalent draft is already PENDING review, so the
+ *                   declaration resolved to it and nothing was written.
+ *   - `suppressed`- the queue declined: the name is already reviewed
+ *                   (accepted or rejected), or a file already occupies the
+ *                   slug. Nothing was written and the declared body was
+ *                   NOT stored anywhere.
+ *
+ * The three are distinct because the caller's next move differs: a
+ * `deduped` declaration is safely consumed - the same skill is already
+ * queued for a human - while a `suppressed` one has nowhere its content
+ * survives, so consuming its marker would destroy the only copy.
+ */
+export type DeclaredSkillProposalOutcome = "created" | "deduped" | "suppressed";
+
+interface DeclaredSkillProposalResultBase {
+  readonly id: string;
+  readonly slug: string;
+  /** The proposal file this declaration created or resolved to. */
+  readonly path: string;
+}
+
+export type DeclaredSkillProposalResult = DeclaredSkillProposalResultBase &
+  (
+    | { readonly outcome: "created" | "deduped" }
+    /** `reason` is required here: a decline the caller cannot explain is a silent drop. */
+    | { readonly outcome: "suppressed"; readonly reason: string }
+  );
+
+/**
+ * Draft a PENDING proposal from an author's `@osb skill` declaration.
+ *
+ * The write lands in `pending` and nowhere else: acceptance stays the
+ * human step, exactly as it is for a mined proposal. See
+ * {@link DECLARED_MARKER_PATTERN_KIND} for why the mining verifier is not
+ * in this path. No `confidence` key is written either - a declaration
+ * makes no statistical claim, and `resolveSkillProposalEvidence` already
+ * reads an absent claim as zero self-reported support.
+ *
+ * One name, one proposal: see {@link DeclaredSkillProposalOutcome} for
+ * what happens when the name is taken.
+ */
+export function draftDeclaredSkillProposal(
+  vault: string,
+  input: DeclaredSkillProposalInput,
+): DeclaredSkillProposalResult {
+  // Vault-identity write guard (context-integrity-gates, Unit J).
+  assertVaultIdentityForWrite(vault);
+  const planned = planDeclaredSkillProposal(vault, input);
+  if ("declined" in planned) return planned.declined;
+  const plan = planned.plan;
+
+  const now = (input.now ?? new Date()).toISOString();
+  const sourceRefs = [...input.sourceRefs];
+
+  writeFrontmatterAtomic(
+    plan.path,
+    {
+      schema_version: 1,
+      kind: "brain-skill-proposal",
+      id: plan.id,
+      slug: plan.slug,
+      status: "pending",
+      pattern_kind: DECLARED_MARKER_PATTERN_KIND,
+      name_key: plan.nameKey,
+      version: SKILL_PROPOSAL_INITIAL_VERSION,
+      payload_hash: plan.payloadHash,
+      created_at: now,
+      updated_at: now,
+      evidence_count: String(sourceRefs.length),
+      source_refs: sourceRefs,
+    },
+    renderProposalDocument({
+      title: plan.name,
+      patternKind: DECLARED_MARKER_PATTERN_KIND,
+      key: plan.key,
+      suggestedBody: plan.body.split("\n"),
+      evidence: sourceRefs.map((ref) => `- declared in ${ref}`),
+    }),
+    {
+      overwrite: false,
+      existsErrorKind: "skill proposal",
+      vaultForRelativePath: vault,
+    },
+  );
+
+  return { id: plan.id, slug: plan.slug, path: plan.path, outcome: "created" };
+}
+
+/**
+ * What {@link draftDeclaredSkillProposal} would do, without writing.
+ *
+ * Same validation, same identity derivation, same decline reasons - the
+ * two share {@link planDeclaredSkillProposal}, so a preview cannot report
+ * an outcome the writer would not reach. Used by `scan-inline --dry-run`,
+ * which must count and report what a real run would do while touching
+ * nothing.
+ */
+export function previewDeclaredSkillProposal(
+  vault: string,
+  input: DeclaredSkillProposalInput,
+): DeclaredSkillProposalResult {
+  const planned = planDeclaredSkillProposal(vault, input);
+  if ("declined" in planned) return planned.declined;
+  const plan = planned.plan;
+  return { id: plan.id, slug: plan.slug, path: plan.path, outcome: "created" };
+}
+
+/** Everything a declared draft needs, once the queue has agreed to take it. */
+interface DeclaredSkillProposalPlan {
+  readonly id: string;
+  readonly slug: string;
+  readonly path: string;
+  readonly name: string;
+  readonly body: string;
+  readonly key: string;
+  readonly nameKey: string;
+  readonly payloadHash: string;
+}
+
+/**
+ * Decide what a declaration does before anything is written: a plan to
+ * draft, or the outcome the queue declined with.
+ *
+ * Both guards below refuse by name rather than letting the exclusive
+ * write throw an untyped `EEXIST` later - the same two guards the mined
+ * path carries in `learnSkillProposals`, in the same order.
+ */
+function planDeclaredSkillProposal(
+  vault: string,
+  input: DeclaredSkillProposalInput,
+):
+  | { readonly plan: DeclaredSkillProposalPlan }
+  | { readonly declined: DeclaredSkillProposalResult } {
+  const name = input.name.trim();
+  if (!name) throw new DeclaredSkillProposalError("declared skill proposal requires a name");
+  const body = input.body.trim();
+  if (!body) throw new DeclaredSkillProposalError(`declared skill proposal '${name}' has no body`);
+
+  const key = slugify(name);
+  const nameKey = nameKeyFor(DECLARED_MARKER_PATTERN_KIND, key);
+  for (const phase of PROPOSAL_PHASES) {
+    const existing = findProposalByNameKey(vault, phase, nameKey);
+    if (existing === null) continue;
+    const found = { id: existing.id, slug: existing.slug, path: existing.path };
+    if (phase === "pending") return { declined: { ...found, outcome: "deduped" } };
+    return {
+      declined: {
+        ...found,
+        outcome: "suppressed",
+        reason:
+          `a skill proposal named '${name}' is already ${phase} (${existing.id}); ` +
+          "this declaration was not drafted and its body was not stored",
+      },
+    };
+  }
+
+  const payloadHash = createHash("sha256")
+    .update(JSON.stringify({ patternKind: DECLARED_MARKER_PATTERN_KIND, key, body }), "utf8")
+    .digest("hex");
+  const slug = composeProposalSlug(DECLARED_MARKER_PATTERN_KIND, key, payloadHash);
+  const id = `prop-${slug}`;
+
+  for (const phase of PROPOSAL_PHASES) {
+    const occupied = proposalPhasePath(vault, phase, slug);
+    if (!existsSync(occupied)) continue;
+    return {
+      declined: {
+        id,
+        slug,
+        path: occupied,
+        outcome: "suppressed",
+        reason:
+          `a skill proposal file already occupies slug '${slug}' under ${phase}/; ` +
+          "this declaration was not drafted and its body was not stored",
+      },
+    };
+  }
+
+  return {
+    plan: {
+      id,
+      slug,
+      path: skillProposalPendingPath(vault, slug),
+      name,
+      body,
+      key,
+      nameKey,
+      payloadHash,
+    },
+  };
+}
+
+/**
+ * Accept a pending proposal: archive it, materialize its procedure, drop
+ * the pending copy, reproject.
+ *
+ * The four steps are one compensating transaction. Every step is preceded
+ * by a write-ahead journal stamp (see `skill-accept-journal.ts`), so a
+ * CRASH - which no `catch` can compensate - is resolved by the next accept
+ * or by {@link recoverSkillProposalAccepts}; a thrown error is compensated
+ * inline through the same resolver. Removing the pending copy is the
+ * commit point: before it the sequence rolls back to the pending draft,
+ * after it the sequence rolls forward to rebuilt projections.
+ *
+ * The whole sequence runs under one vault-wide accept lock. That lock is
+ * what makes the sweep of OTHER slugs' journals safe: no second accept can
+ * be mid-sequence while this one resolves what it finds.
+ */
+export function acceptSkillProposal(
+  vault: string,
+  slug: string,
+  opts: SkillProposalAcceptOptions = {},
+): SkillProposalReviewResult {
+  // Vault-identity write guard (context-integrity-gates, Unit J).
+  assertVaultIdentityForWrite(vault);
+  // Validated before anything touches disk: a malformed contract must not
+  // half-accept a proposal.
+  const contract = contractFrontmatter(opts.contract);
+  const now = (opts.now ?? new Date()).toISOString();
+
+  const lock = acquireAcceptLock(vault);
+  try {
+    resolveOutstandingAccepts(vault);
+
+    const pendingPath = skillProposalPendingPath(vault, slug);
+    if (!existsSync(pendingPath)) {
+      throw new Error(`pending skill proposal not found: ${slug}`);
+    }
+
+    const [fm, body] = parseFrontmatter(pendingPath);
+    if (fm["kind"] !== "brain-skill-proposal") {
+      throw new Error(`invalid skill proposal file: ${pendingPath}`);
+    }
+    const id = typeof fm["id"] === "string" ? fm["id"] : `prop-${slug}`;
+    const version = parseVersion(fm["version"]);
+    const acceptedPath = skillProposalAcceptedPath(vault, slug);
+    const procPath = procedurePath(vault, slug);
+
+    let journal: SkillAcceptJournalEntry = {
+      slug,
+      id,
+      phase: "archive",
+      startedAt: now,
+      // Captured up front so a rollback never deletes a file this
+      // sequence did not create.
+      acceptedExisted: existsSync(acceptedPath),
+      procedureExisted: existsSync(procPath),
+    };
+    writeSkillAcceptJournal(vault, journal);
+
+    try {
+      writeFrontmatterAtomic(
+        acceptedPath,
+        {
+          ...fm,
+          status: "accepted",
+          version,
+          reviewed_at: now,
+          updated_at: now,
+          ...(opts.note ? { review_note: opts.note } : {}),
+          ...contract,
+        },
+        body,
+        {
+          overwrite: false,
+          existsErrorKind: "accepted skill proposal",
+          vaultForRelativePath: vault,
+        },
+      );
+
+      journal = { ...journal, phase: "materialize" };
+      writeSkillAcceptJournal(vault, journal);
+      writeFrontmatterAtomic(
+        procPath,
+        {
+          schema_version: 1,
+          kind: "brain-procedure",
+          id: `proc-${slug}`,
+          slug,
+          source_proposal: id,
+          version,
+          created_at: now,
+          updated_at: now,
+          status: "active",
+          ...contract,
+        },
+        renderAcceptedProcedureBody(id, body),
+        {
+          overwrite: false,
+          existsErrorKind: "procedure",
+          vaultForRelativePath: vault,
+        },
+      );
+
+      journal = { ...journal, phase: "commit" };
+      writeSkillAcceptJournal(vault, journal);
+      unlinkSync(pendingPath);
+      rebuildProceduralProjections(vault);
+    } catch (error) {
+      compensateSkillAccept(vault, journal, error);
+    }
+
+    clearSkillAcceptJournal(vault, slug);
+    return {
+      id,
+      slug,
+      status: "accepted",
+      proposalPath: acceptedPath,
+      procedurePath: procPath,
+    };
+  } finally {
+    lock.release();
+  }
+}
+
+/**
+ * Resolve every accept sequence a previous run abandoned. Returns what was
+ * done per slug; an empty array means there was nothing outstanding.
+ *
+ * This is the operator surface for a journal a crash left behind, reached
+ * through `o2b brain skill-proposals recover`. It refuses, by name, on the
+ * two states it must not paper over: a held lock
+ * ({@link SkillAcceptLockedError}) and an unreadable marker
+ * (`SkillAcceptJournalUnreadableError`).
+ */
+export function recoverSkillProposalAccepts(vault: string): ReadonlyArray<SkillAcceptRecovery> {
+  // Vault-identity write guard (context-integrity-gates, Unit J).
+  assertVaultIdentityForWrite(vault);
+  const lock = acquireAcceptLock(vault);
+  try {
+    return Object.freeze(resolveOutstandingAccepts(vault));
+  } finally {
+    lock.release();
+  }
+}
+
+/**
+ * Delete every accept-journal marker that cannot be parsed, returning the
+ * paths removed in the order they were found.
+ *
+ * This is the ONE mechanical exit in this pair, and it is deliberately not
+ * automatic: it runs when an operator asks for it, never inside an accept.
+ * What it gives up is stated rather than hidden - an unreadable marker
+ * names no phase, so the sequence it marked cannot be rolled back or
+ * forward, and removing it unblocks accepting without claiming that
+ * sequence was resolved. The marker's own contents are the only thing lost;
+ * every artifact the sequence may have written is still on disk, where
+ * `o2b brain doctor` reports duplicates and orphans.
+ */
+export function discardUnreadableSkillAcceptJournals(vault: string): ReadonlyArray<string> {
+  // Vault-identity write guard (context-integrity-gates, Unit J).
+  assertVaultIdentityForWrite(vault);
+  const lock = acquireAcceptLock(vault);
+  try {
+    const discarded = readSkillAcceptJournals(vault).unreadable.map((entry) => entry.path);
+    for (const path of discarded) removeSkillAcceptJournalFile(vault, path);
+    return Object.freeze(discarded);
+  } finally {
+    lock.release();
+  }
+}
+
+/** Registry code for the refusal a held accept lock produces. */
+export const SKILL_ACCEPT_LOCKED_CODE = "skill-accept-locked";
+
+/**
+ * Resolved at module scope so a registry that lost the entry fails at
+ * import rather than inside the refusal it is meant to explain.
+ */
+const LOCKED_EXIT = requireNextStep(SKILL_ACCEPT_LOCKED_CODE).nextCommand;
+
+/**
+ * The accept lock was already held.
+ *
+ * Deliberately NOT a breaker. The lock primitive is a single-attempt
+ * exclusive create, so no timeout distinguishes a crashed writer from a
+ * live one, and removing a live writer's lock corrupts what it protects -
+ * the same reason `applier-capability.ts` refuses `stale-lock`. What
+ * changes here is that the refusal names the exact file to judge and the
+ * command that lists every lock under the Brain tree, instead of leaving
+ * an `ELOCKED` errno for the operator to trace back to a path.
+ */
+export class SkillAcceptLockedError extends Error {
+  readonly path: string;
+  constructor(path: string, options?: { readonly cause?: unknown }) {
+    super(
+      `skill-proposal accept is locked by ${path}; every accept is refused while it is held. ` +
+        "Nothing breaks it automatically - a live writer cannot be told from a crashed one - " +
+        `so confirm no process owns it, then remove that file by hand: ${LOCKED_EXIT}`,
+      options,
+    );
+    this.name = "SkillAcceptLockedError";
+    this.path = path;
+  }
+}
+
+/** Path of the lock guarding the accept sequence and the journal sweep. */
+export function skillAcceptLockPath(vault: string): string {
+  return `${acceptLockTarget(vault)}.lock`;
+}
+
+/**
+ * Take the accept lock, mapping the primitive's `ELOCKED` errno onto the
+ * named refusal. One wrapper for all three entry points, so an operator
+ * meets the same message whichever one they reached.
+ */
+function acquireAcceptLock(vault: string): LockHandle {
+  try {
+    return acquireLockSync(acceptLockTarget(vault));
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ELOCKED") {
+      throw new SkillAcceptLockedError(skillAcceptLockPath(vault), { cause: error });
+    }
+    throw error;
+  }
+}
+
+/** Lock target guarding the accept sequence and the journal sweep. */
+function acceptLockTarget(vault: string): string {
+  return ensureInsideVault(join(vault, BRAIN_SKILL_PROPOSALS_REL, ACCEPT_LOCK_NAME), vault);
+}
+
+/** Caller must already hold {@link acceptLockTarget}. */
+function resolveOutstandingAccepts(vault: string): SkillAcceptRecovery[] {
+  return listSkillAcceptJournals(vault).map((journal) => ({
+    slug: journal.slug,
+    action: resolveSkillAccept(vault, journal),
+  }));
+}
+
+/**
+ * Roll one journaled sequence back or forward.
+ *
+ * The pending copy is the commit witness: the sequence removes it only
+ * once both writes have landed, so its presence means nothing was
+ * committed and the draft must survive untouched.
+ */
+function resolveSkillAccept(
+  vault: string,
+  journal: SkillAcceptJournalEntry,
+): SkillAcceptRecoveryAction {
+  const committed =
+    journal.phase === "commit" && !existsSync(skillProposalPendingPath(vault, journal.slug));
+
+  if (!committed) {
+    if (!journal.acceptedExisted) {
+      rmSync(skillProposalAcceptedPath(vault, journal.slug), { force: true });
+    }
+    if (!journal.procedureExisted) {
+      rmSync(procedurePath(vault, journal.slug), { force: true });
+    }
+    clearSkillAcceptJournal(vault, journal.slug);
+    return "rolled_back";
+  }
+
+  rebuildProceduralProjections(vault);
+  clearSkillAcceptJournal(vault, journal.slug);
+  return "completed";
+}
+
+/**
+ * Inline compensation for a THROWN step. Always rethrows: either the
+ * original error once the sequence has been resolved, or - when the
+ * resolution itself fails - a named error saying the journal was retained
+ * so a later recovery pass can finish the job.
+ */
+function compensateSkillAccept(
+  vault: string,
+  journal: SkillAcceptJournalEntry,
+  error: unknown,
+): never {
+  let repairFailure: unknown = null;
+  try {
+    resolveSkillAccept(vault, journal);
+  } catch (repairError) {
+    repairFailure = repairError;
+  }
+  if (repairFailure !== null) {
+    // The step failure stays the `cause`; the repair failure is named in
+    // the message, and the journal on disk keeps the sequence recoverable.
+    throw new Error(
+      `skill proposal accept failed and could not be resolved (${errorMessage(repairFailure)}); ` +
+        `journal retained for recovery: ${skillAcceptJournalPath(vault, journal.slug)}`,
+      { cause: error },
+    );
+  }
+  throw error;
+}
+
+function errorMessage(value: unknown): string {
+  return value instanceof Error ? value.message : String(value);
+}
+
+/** Rebuild the three projections derived from the procedure tree. */
+function rebuildProceduralProjections(vault: string): void {
+  reconcileProceduralMemory(vault, {
+    roots: DEFAULT_PROCEDURAL_ROOTS.map((root) => join(vault, root)),
+  });
+  const graph = rebuildProceduralGraph(vault);
+  rebuildProceduralHints(vault, { graph });
+}
+
+/**
+ * Frontmatter fragment for the execution contract. An absent or empty
+ * field writes no key; a field holding a blank or non-string entry is a
+ * caller error and is refused by name rather than quietly dropped.
+ */
+function contractFrontmatter(
+  contract: SkillContractInput | undefined,
+): Record<string, ReadonlyArray<string>> {
+  if (!contract) return {};
+  const out: Record<string, ReadonlyArray<string>> = {};
+  for (const [field, key] of SKILL_CONTRACT_FIELDS) {
+    const values = contract[field];
+    if (values === undefined || values.length === 0) continue;
+    out[key] = values.map((value) => {
+      if (typeof value !== "string" || value.trim().length === 0) {
+        throw new Error(`skill contract field '${field}' must not contain an empty entry`);
+      }
+      return value.trim();
+    });
+  }
+  return out;
+}
+
+/**
+ * Resolve a proposal's SELF-REPORTED support against the independently
+ * recorded procedural outcome ledger.
+ *
+ * `evidence_count` and `confidence` come from the proposal's own pattern
+ * match, so on their own they corroborate nothing. The ledger written by
+ * `recordProceduralOutcome` is host-supplied and never inferred, and it is
+ * joined here by the entry id derived from the procedure path the accept
+ * path already causes to exist - no lookup table, no second registry.
+ */
+export function resolveSkillProposalEvidence(vault: string, slug: string): SkillProposalEvidence {
+  const found = findReviewedProposal(vault, slug);
+  const fm = found.fm;
+  const entryId = proceduralEntryId(vaultRelative(vault, procedurePath(vault, slug)));
+  const entry = listProceduralMemory(vault).find((candidate) => candidate.id === entryId) ?? null;
+
+  return Object.freeze({
+    slug,
+    id: typeof fm["id"] === "string" ? fm["id"] : `prop-${slug}`,
+    phase: found.phase,
+    claimedEvidenceCount: Number.parseInt(String(fm["evidence_count"] ?? "0"), 10) || 0,
+    claimedConfidence: Number.parseFloat(String(fm["confidence"] ?? "0")) || 0,
+    proceduralEntryId: entryId,
+    proceduralEntryPresent: entry !== null,
+    recordedSuccesses: entry?.successCount ?? null,
+    recordedFailures: entry?.failureCount ?? null,
+    recordedSuccessRate: entry === null ? null : proceduralSuccessRate(entry),
+    outcomeState: outcomeState(entry?.successCount ?? 0, entry?.failureCount ?? 0),
+  });
+}
+
+function outcomeState(successes: number, failures: number): SkillEvidenceOutcomeState {
+  if (successes === 0 && failures === 0) return "unrecorded";
+  if (successes > 0 && failures > 0) return "mixed";
+  return failures > 0 ? "failing" : "successful";
+}
+
+/** Where a proposal with `slug` lives while it is in `phase`. */
+function proposalPhasePath(vault: string, phase: SkillProposalPhase, slug: string): string {
+  switch (phase) {
+    case "accepted":
+      return skillProposalAcceptedPath(vault, slug);
+    case "rejected":
+      return skillProposalRejectedPath(vault, slug);
+    case "pending":
+      return skillProposalPendingPath(vault, slug);
+  }
+}
+
+/** Locate a proposal in whichever phase holds it, terminal phases first. */
+function findReviewedProposal(
+  vault: string,
+  slug: string,
+): { phase: SkillProposalPhase; fm: Record<string, unknown> } {
+  for (const phase of PROPOSAL_PHASES) {
+    const path = proposalPhasePath(vault, phase, slug);
+    if (!existsSync(path)) continue;
+    const [fm] = parseFrontmatter(path);
+    return { phase, fm: fm as Record<string, unknown> };
+  }
+  throw new Error(`skill proposal not found in any phase: ${slug}`);
+}
+
+function vaultRelative(vault: string, absolute: string): string {
+  return relative(vault, absolute).replaceAll("\\", "/");
+}
+
+export function rejectSkillProposal(
+  vault: string,
+  slug: string,
+  opts: { now?: Date; note: string },
+): SkillProposalReviewResult {
+  // Vault-identity write guard (context-integrity-gates, Unit J).
+  assertVaultIdentityForWrite(vault);
+  if (!opts.note.trim()) {
+    throw new Error("rejecting skill proposal requires a non-empty note");
+  }
+
+  const now = (opts.now ?? new Date()).toISOString();
+  const pendingPath = skillProposalPendingPath(vault, slug);
+  if (!existsSync(pendingPath)) {
+    throw new Error(`pending skill proposal not found: ${slug}`);
+  }
+
+  const [fm, body] = parseFrontmatter(pendingPath);
+  if (fm["kind"] !== "brain-skill-proposal") {
+    throw new Error(`invalid skill proposal file: ${pendingPath}`);
+  }
+  const id = typeof fm["id"] === "string" ? fm["id"] : `prop-${slug}`;
+  const rejectedPath = skillProposalRejectedPath(vault, slug);
+
+  writeFrontmatterAtomic(
+    rejectedPath,
+    {
+      ...fm,
+      status: "rejected",
+      reviewed_at: now,
+      updated_at: now,
+      review_note: opts.note,
+    },
+    body,
+    {
+      overwrite: false,
+      existsErrorKind: "rejected skill proposal",
+      vaultForRelativePath: vault,
+    },
+  );
+
+  unlinkSync(pendingPath);
+  rebuildProceduralProjections(vault);
+  return { id, slug, status: "rejected", proposalPath: rejectedPath };
+}
+
+function readWatermark(vault: string): WatermarkState {
+  const path = watermarkPath(vault);
+  if (!existsSync(path)) return { lastCreatedAt: null, lastId: null };
+  try {
+    const parsed = JSON.parse(readFileSync(path, "utf8")) as Record<string, unknown>;
+    return {
+      lastCreatedAt: typeof parsed["lastCreatedAt"] === "string" ? parsed["lastCreatedAt"] : null,
+      lastId: typeof parsed["lastId"] === "string" ? parsed["lastId"] : null,
+    };
+  } catch {
+    return { lastCreatedAt: null, lastId: null };
+  }
+}
+
+function writeWatermark(vault: string, state: WatermarkState): void {
+  const path = proposalWatermarkPath(vault);
+  const root = ensureInsideVault(dirname(path), vault);
+  mkdirSync(root, { recursive: true });
+  const payload = JSON.stringify(state, null, 2);
+  atomicWriteFileSync(path, `${payload}\n`);
+}
+
+function watermarkPath(vault: string): string {
+  return proposalWatermarkPath(vault);
+}
+
+/** Stable name identity of a candidate, independent of the specific records. */
+function candidateNameKey(candidate: ProposalCandidate): string {
+  return nameKeyFor(candidate.patternKind, candidate.key);
+}
+
+/** The stored `name_key`, shared by the mined and the declared paths. */
+function nameKeyFor(patternKind: SkillProposalPatternKind, key: string): string {
+  return `${patternKind}:${key}`;
+}
+
+/** Source references a candidate contributes (record ids plus their source ids). */
+function candidateSourceRefs(candidate: ProposalCandidate): string[] {
+  return candidate.records.flatMap((record) => [
+    record.id,
+    ...record.sourceRefs.map((src) => src.id),
+  ]);
+}
+
+/** True when `record` structurally supports the candidate's pattern. */
+function recordSupportsCandidate(candidate: ProposalCandidate, record: ContinuityRecord): boolean {
+  switch (candidate.patternKind) {
+    case "repeated_action":
+      return actionToken(record) === candidate.key;
+    case "structural_similarity":
+      return shapeSignature(record) === candidate.key;
+    case "co_occurrence": {
+      const [left, right] = candidate.key.split(" -> ");
+      const token = actionToken(record);
+      return token !== null && (token === left || token === right);
+    }
+    case "temporal_routine": {
+      const [action, hour] = candidate.key.split("@");
+      return actionToken(record) === action && isoHour(record.createdAt) === hour;
+    }
+    default:
+      return false;
+  }
+}
+
+/** Parse a stored version scalar, defaulting to the initial version. */
+function parseVersion(value: unknown): number {
+  const parsed = typeof value === "number" ? value : Number.parseInt(String(value ?? ""), 10);
+  return Number.isFinite(parsed) && parsed >= 1
+    ? Math.floor(parsed)
+    : SKILL_PROPOSAL_INITIAL_VERSION;
+}
+
+/** Merge two source-ref lists, preserving order and dropping duplicates. */
+function mergeSourceRefs(previous: unknown, next: ReadonlyArray<string>): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  const push = (value: unknown): void => {
+    if (typeof value !== "string" || value.length === 0 || seen.has(value)) return;
+    seen.add(value);
+    out.push(value);
+  };
+  if (Array.isArray(previous)) for (const ref of previous) push(ref);
+  for (const ref of next) push(ref);
+  return out;
+}
+
+interface FoundProposal {
+  readonly path: string;
+  readonly slug: string;
+  readonly id: string;
+  readonly fm: Record<string, unknown>;
+  readonly body: string;
+}
+
+/** Find the first proposal in `phase` whose stored name key matches. */
+function findProposalByNameKey(
+  vault: string,
+  phase: SkillProposalPhase,
+  nameKey: string,
+): FoundProposal | null {
+  const dir = ensureInsideVault(join(vault, BRAIN_SKILL_PROPOSALS_REL, phase), vault);
+  if (!existsSync(dir)) return null;
+  for (const name of readdirSync(dir).toSorted()) {
+    if (!name.endsWith(".md")) continue;
+    const path = ensureInsideVault(join(dir, name), vault);
+    const [fm, body] = parseFrontmatter(path);
+    if (fm["kind"] !== "brain-skill-proposal") continue;
+    if (fm["name_key"] !== nameKey) continue;
+    const slug =
+      typeof fm["slug"] === "string" ? fm["slug"] : name.replace(/^prop-/, "").replace(/\.md$/, "");
+    const id = typeof fm["id"] === "string" ? fm["id"] : `prop-${slug}`;
+    return { path, slug, id, fm: fm as Record<string, unknown>, body };
+  }
+  return null;
+}
+
+/** Count of distinct records that structurally support the candidate. */
+function supportingCount(candidate: ProposalCandidate): number {
+  return new Set(
+    candidate.records
+      .filter((record) => recordSupportsCandidate(candidate, record))
+      .map((r) => r.id),
+  ).size;
+}
+
+/** Merge a candidate's support into an existing pending draft (no fork). */
+function mergePendingProposal(
+  vault: string,
+  match: FoundProposal,
+  candidate: ProposalCandidate,
+  newRefs: ReadonlyArray<string>,
+  now: Date,
+  watermarkTo: string,
+): void {
+  const priorEvidence = Number.parseInt(String(match.fm["evidence_count"] ?? "0"), 10) || 0;
+  const priorConfidence = Number.parseFloat(String(match.fm["confidence"] ?? "0")) || 0;
+  writeFrontmatterAtomic(
+    match.path,
+    {
+      ...match.fm,
+      confidence: Math.max(priorConfidence, candidate.confidence).toFixed(3),
+      evidence_count: String(priorEvidence + supportingCount(candidate)),
+      source_refs: mergeSourceRefs(match.fm["source_refs"], newRefs),
+      updated_at: now.toISOString(),
+      watermark_to: watermarkTo,
+    },
+    match.body,
+    { overwrite: true, vaultForRelativePath: vault },
+  );
+}
+
+/** Evolve an accepted skill: merge support and increment its version. */
+function evolveAcceptedProposal(
+  vault: string,
+  match: FoundProposal,
+  candidate: ProposalCandidate,
+  newRefs: ReadonlyArray<string>,
+  now: Date,
+  watermarkTo: string,
+): void {
+  const priorEvidence = Number.parseInt(String(match.fm["evidence_count"] ?? "0"), 10) || 0;
+  const nextVersion = parseVersion(match.fm["version"]) + 1;
+  writeFrontmatterAtomic(
+    match.path,
+    {
+      ...match.fm,
+      version: nextVersion,
+      evidence_count: String(priorEvidence + supportingCount(candidate)),
+      source_refs: mergeSourceRefs(match.fm["source_refs"], newRefs),
+      updated_at: now.toISOString(),
+      watermark_to: watermarkTo,
+    },
+    match.body,
+    { overwrite: true, vaultForRelativePath: vault },
+  );
+
+  const procPath = procedurePath(vault, match.slug);
+  if (existsSync(procPath)) {
+    const [procFm, procBody] = parseFrontmatter(procPath);
+    writeFrontmatterAtomic(
+      procPath,
+      { ...procFm, version: nextVersion, updated_at: now.toISOString() },
+      procBody,
+      { overwrite: true, vaultForRelativePath: vault },
+    );
+  }
+}
+
+/** Append one verifier-rejection record to the JSONL ledger. */
+function appendVerifierRejection(
+  vault: string,
+  entry: { id: string; name_key: string; reason: string; at: string },
+): void {
+  const path = ensureInsideVault(join(vault, VERIFIER_REJECTION_LEDGER_REL), vault);
+  mkdirSync(dirname(path), { recursive: true });
+  appendFileSync(path, `${JSON.stringify(entry)}\n`, { encoding: "utf8" });
+}
+
+function detectCandidates(
+  records: ReadonlyArray<ContinuityRecord>,
+  minSupport: number,
+): ProposalCandidate[] {
+  const out: ProposalCandidate[] = [];
+
+  const actionMap = new Map<string, ContinuityRecord[]>();
+  for (const record of records) {
+    const action = actionToken(record);
+    if (!action) continue;
+    const bucket = actionMap.get(action) ?? [];
+    bucket.push(record);
+    actionMap.set(action, bucket);
+  }
+  for (const [action, bucket] of actionMap) {
+    if (bucket.length < minSupport) continue;
+    out.push({
+      patternKind: "repeated_action",
+      key: action,
+      confidence: confidence(bucket.length, minSupport),
+      records: Object.freeze(bucket.slice(0, 6)),
+      supportingRecords: Object.freeze([...bucket]),
+      suggestedTitle: `Repeated action: ${action}`,
+    });
+  }
+
+  const shapeMap = new Map<string, ContinuityRecord[]>();
+  for (const record of records) {
+    const shape = shapeSignature(record);
+    if (!shape) continue;
+    const bucket = shapeMap.get(shape) ?? [];
+    bucket.push(record);
+    shapeMap.set(shape, bucket);
+  }
+  for (const [shape, bucket] of shapeMap) {
+    if (bucket.length < minSupport) continue;
+    out.push({
+      patternKind: "structural_similarity",
+      key: shape,
+      confidence: confidence(bucket.length, minSupport),
+      records: Object.freeze(bucket.slice(0, 6)),
+      supportingRecords: Object.freeze([...bucket]),
+      suggestedTitle: `Structural routine: ${shape}`,
+    });
+  }
+
+  const pairMap = new Map<string, ContinuityRecord[]>();
+  for (let i = 1; i < records.length; i++) {
+    const left = actionToken(records[i - 1]!);
+    const right = actionToken(records[i]!);
+    if (!left || !right || left === right) continue;
+    const pair = `${left} -> ${right}`;
+    const bucket = pairMap.get(pair) ?? [];
+    bucket.push(records[i - 1]!, records[i]!);
+    pairMap.set(pair, bucket);
+  }
+  for (const [pair, bucket] of pairMap) {
+    const support = Math.floor(bucket.length / 2);
+    if (support < minSupport) continue;
+    out.push({
+      patternKind: "co_occurrence",
+      key: pair,
+      confidence: confidence(support, minSupport),
+      records: Object.freeze(bucket.slice(0, 6)),
+      supportingRecords: Object.freeze([...bucket]),
+      suggestedTitle: `Co-occurrence flow: ${pair}`,
+    });
+  }
+
+  const temporalMap = new Map<string, ContinuityRecord[]>();
+  for (const record of records) {
+    const action = actionToken(record);
+    if (!action) continue;
+    const hour = isoHour(record.createdAt);
+    if (hour === null) continue;
+    const key = `${action}@${hour}`;
+    const bucket = temporalMap.get(key) ?? [];
+    bucket.push(record);
+    temporalMap.set(key, bucket);
+  }
+  for (const [key, bucket] of temporalMap) {
+    const daySet = new Set(bucket.map((record) => record.createdAt.slice(0, 10)));
+    if (daySet.size < minSupport) continue;
+    out.push({
+      patternKind: "temporal_routine",
+      key,
+      confidence: confidence(daySet.size, minSupport),
+      records: Object.freeze(bucket.slice(0, 6)),
+      supportingRecords: Object.freeze([...bucket]),
+      suggestedTitle: `Temporal routine: ${key}`,
+    });
+  }
+
+  return out.toSorted(
+    (left, right) =>
+      left.patternKind.localeCompare(right.patternKind) || left.key.localeCompare(right.key),
+  );
+}
+
+function actionToken(record: ContinuityRecord): string | null {
+  const payload = record.payload as Record<string, unknown>;
+  for (const field of ["action", "command", "tool", "verb", "event"]) {
+    const value = payload[field];
+    if (typeof value === "string" && value.trim()) {
+      return value.trim().toLowerCase();
+    }
+  }
+  return null;
+}
+
+function shapeSignature(record: ContinuityRecord): string | null {
+  const keys = Object.keys(record.payload).toSorted();
+  if (keys.length === 0) return null;
+  return `${record.kind}:${keys.join(",")}`;
+}
+
+function isoHour(iso: string): string | null {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return null;
+  return String(date.getUTCHours()).padStart(2, "0");
+}
+
+function confidence(support: number, minSupport: number): number {
+  const raw = Math.min(0.99, 0.55 + (support - minSupport) * 0.1);
+  return Math.max(0.55, Math.round(raw * 1000) / 1000);
+}
+
+/**
+ * The one proposal document shape, whether the pattern was mined or
+ * declared. Section order and headings are a contract with
+ * `renderAcceptedProcedureBody`, so both producers go through here.
+ */
+function renderProposalDocument(input: {
+  readonly title: string;
+  readonly patternKind: SkillProposalPatternKind;
+  readonly key: string;
+  readonly suggestedBody: ReadonlyArray<string>;
+  readonly evidence: ReadonlyArray<string>;
+}): string {
+  return [
+    `# ${input.title}`,
+    "",
+    "## Pattern",
+    `- kind: ${input.patternKind}`,
+    `- key: ${input.key}`,
+    "",
+    SUGGESTED_BODY_HEADING,
+    ...input.suggestedBody,
+    "",
+    "## Evidence",
+    ...input.evidence,
+  ].join("\n");
+}
+
+function renderProposalBody(candidate: ProposalCandidate): string {
+  return renderProposalDocument({
+    title: candidate.suggestedTitle,
+    patternKind: candidate.patternKind,
+    key: candidate.key,
+    suggestedBody: [
+      `When pattern \`${candidate.key}\` appears, follow the observed repeatable workflow.`,
+      "Capture inputs first, execute steps in stable order, and emit audit-friendly outputs.",
+    ],
+    evidence: candidate.records.map((record) => {
+      const snippet = evidenceSnippet(record);
+      return `- ${record.createdAt} :: ${record.kind} :: ${record.id}${snippet ? ` :: ${snippet}` : ""}`;
+    }),
+  });
+}
+
+function evidenceSnippet(record: ContinuityRecord): string {
+  const payload = record.payload as Record<string, unknown>;
+  for (const field of ["query", "summary", "note", "text"]) {
+    const value = payload[field];
+    if (typeof value === "string" && value.trim()) {
+      return value.trim().slice(0, 120);
+    }
+  }
+  return "";
+}
+
+function proposalSlug(candidate: ProposalCandidate, payloadHash: string): string {
+  return composeProposalSlug(candidate.patternKind, slugify(candidate.key), payloadHash);
+}
+
+function composeProposalSlug(
+  patternKind: SkillProposalPatternKind,
+  keySlug: string,
+  payloadHash: string,
+): string {
+  return `${patternKind}-${keySlug.slice(0, PROPOSAL_SLUG_KEY_MAX_LEN)}-${payloadHash.slice(0, PROPOSAL_SLUG_HASH_LEN)}`;
+}
+
+function candidateHash(candidate: ProposalCandidate): string {
+  return createHash("sha256")
+    .update(
+      JSON.stringify({
+        patternKind: candidate.patternKind,
+        key: candidate.key,
+        records: candidate.records.map((record) => record.id),
+      }),
+      "utf8",
+    )
+    .digest("hex");
+}
+
+function renderAcceptedProcedureBody(proposalId: string, proposalBody: string): string {
+  const idx = proposalBody.indexOf(SUGGESTED_BODY_HEADING);
+  const suggested =
+    idx >= 0 ? proposalBody.slice(idx + SUGGESTED_BODY_HEADING.length).trim() : proposalBody.trim();
+  return [
+    "# Procedure",
+    "",
+    `Accepted from proposal: [[${proposalId}]]`,
+    "",
+    suggested || "No suggested body was captured.",
+  ].join("\n");
+}
+
+export function skillProposalSlugFromPath(path: string): string | null {
+  const name = basename(path);
+  if (!name.startsWith("prop-") || !name.endsWith(".md")) return null;
+  return name.slice("prop-".length, -".md".length);
+}

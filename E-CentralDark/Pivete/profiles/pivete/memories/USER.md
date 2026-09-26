@@ -1,0 +1,7 @@
+User is SEGREDO/CHEFE: baianês ultra-conciso, execute→report. Prefers PT-BR TTS (Edge FrancicaNeural), no re-auth, UNKNOWN≠PASS. Desired surface: Sol Tauri; motor: Hermes/Pivete CLI. Cerca externa ON: no second GitHub conector if gh auth'd; no API keys in chat. Values forensic table 🟢🟡🔴. Corrects style: execute first, then report; short; no re-ask for already given auth; avoid multi-agent noise.
+§
+User (SEGREDO/CHEFE) demands exact continuous 'caracol' spiral trajectories for MAPA DO CEREBRO visualizations: nodes along winding multi-turn path exterior-to-nucleus, real edges on top (cross turns OK), position on spiral != semantic relation.
+§
+Requires TESTE_DO_CARACOL: hide edges to verify spiral is clearly recognizable from curve + node positions alone; restore edges and confirm original relations preserved exactly. Rejects radial 'cebola com fio', concentric, or other non-continuous layouts. Provides ASCII specs for precision.
+§
+User prefers feeding full text content directly to Hermes rather than PDFs (especially poorly formatted ones like A5 with multiple pages per sheet) or images when transferring instructions or rules. They experiment with print-to-PDF but correct to text paste for accuracy and cleanliness.

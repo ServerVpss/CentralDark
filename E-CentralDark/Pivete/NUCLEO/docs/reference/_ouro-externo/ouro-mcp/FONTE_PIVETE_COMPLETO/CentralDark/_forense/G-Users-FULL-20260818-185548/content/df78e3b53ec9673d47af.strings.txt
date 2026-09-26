@@ -1,0 +1,269 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\agent\__pycache__\image_gen_provider.cpython-311.pyc
+
+d!d"d#
+d5d6d6d6e
+Image Generation Provider ABC
+=============================
+Defines the pluggable-backend interface for image generation. Providers register
+instances via ``PluginContext.register_image_gen_provider()``; the active one
+(selected via ``image_gen.provider`` in ``config.yaml``) services every
+``image_generate`` tool call.
+Providers live in ``<repo>/plugins/image_gen/<name>/`` (built-in, auto-loaded
+as ``kind: backend``) or ``~/.hermes/plugins/image_gen/<name>/`` (user, opt-in
+via ``plugins.enabled``).
+Unified surface
+---------------
+One tool 
+ ``image_generate`` 
+ covers **text-to-image** and
+**image-to-image / image editing**. The router is the presence of
+``image_url`` (and/or ``reference_image_urls``): if any source image is
+provided, the provider routes to its image-to-image / edit endpoint; if
+omitted, the provider routes to text-to-image. Users pick one **model**
+(e.g. nano-banana-pro, gpt-image-2, grok-imagine-image); the provider
+handles which underlying endpoint to hit. This mirrors the ``video_gen``
+provider design (``agent/video_gen_provider.py``) so the two surfaces
+stay learnable together.
+Response shape
+--------------
+All providers return a dict that :func:`success_response` / :func:`error_response`
+produce. The tool wrapper JSON-serializes it. Keys:
+    success        bool
+    image          str | None       URL or absolute file path
+    model          str              provider-specific model identifier
+    prompt         str              echoed prompt
+    aspect_ratio   str              "landscape" | "square" | "portrait"
+    modality       str              "text" | "image" (which mode was used)
+    provider       str              provider name (for diagnostics)
+    error          str              only when success=False
+    error_type     str              only when success=False
+annotationsN)
+Optional
+Tuple)
+landscape
+square
+portraitz
+Tuple[str, ...]
+VALID_ASPECT_RATIOSr
+ImageGenProvideru
+Abstract base class for an image generation backend.
+    Subclasses must implement :meth:`generate`. Everything else has sane
+    defaults 
+ override only what your provider needs.
+return
+Stable short identifier used in ``image_gen.provider`` config.
+        Lowercase, no spaces. Examples: ``fal``, ``openai``, ``replicate``.
+        N
+LC:\Users\danda\AppData\Local\hermes\hermes-agent\agent\image_gen_provider.py
+ImageGenProvider.nameG
+zMHuman-readable label shown in ``hermes tools``. Defaults to ``name.title()``.)
+titler
+display_namez
+ImageGenProvider.display_nameO
+Return True when this provider can service calls.
+        Typically checks for a required API key. Default: True
+        (providers with no external dependencies are always available).
+        Tr
+is_availablez
+ImageGenProvider.is_availableT
+List[Dict[str, Any]]c
+Return catalog entries for ``hermes tools`` model picker.
+        Each entry::
+            {
+                "id": "gpt-image-1.5",               # required
+                "display": "GPT Image 1.5",          # optional; defaults to id
+                "speed": "~10s",                     # optional
+                "strengths": "...",                  # optional
+                "price": "$...",                     # optional
+            }
+        Default: empty list (provider has no user-selectable models).
+        r
+list_modelsz
+ImageGenProvider.list_models\
+Dict[str, Any]c
+Return provider metadata for the ``hermes tools`` picker.
+        Used by ``tools_config.py`` to inject this provider as a row in
+        the Image Generation provider list. Shape::
+            {
+                "name": "OpenAI",                     # picker label
+                "badge": "paid",                      # optional short tag
+                "tag": "One-line description...",     # optional subtitle
+                "env_vars": [                         # keys to prompt for
+                    {"key": "OPENAI_API_KEY",
+                     "prompt": "OpenAI API key",
+                     "url": "https://platform.openai.com/api-keys"},
+                ],
+            }
+        Default: minimal entry derived from ``display_name``. Override to
+        expose API key prompts and custom badges.
+        
+env_vars)
+get_setup_schemaz!ImageGenProvider.get_setup_schemam
+Optional[str]c
+z7Return the default model id, or None if not applicable.r
+modelss
+default_modelz
+ImageGenProvider.default_model
+Return what this provider supports.
+        Returned dict (all keys optional)::
+            {
+                "modalities": ["text", "image"],   # which inputs the backend accepts
+                "max_reference_images": 9,          # cap for reference_image_urls
+            }
+        ``modalities`` declares whether the active backend/model supports
+        text-to-image (``"text"``), image-to-image / editing (``"image"``),
+        or both. The tool layer surfaces this in the dynamic schema so the
+        model knows when ``image_url`` is honored. Used by ``hermes tools``
+        for the picker too. Default: text-only (backward compatible 
+        provider that doesn't override this advertises text-to-image only).
+        
+modalities
+max_reference_imagesr
+capabilitiesz
+ImageGenProvider.capabilities
+image_url
+reference_image_urls
+prompt
+aspect_ratior5
+Optional[List[str]]
+kwargsr
+Generate an image from a text prompt, or edit/transform a source image.
+        Routing: if ``image_url`` (or any ``reference_image_urls``) is
+        provided, the provider should route to its image-to-image / edit
+        endpoint; otherwise text-to-image. ``image_url`` is the primary
+        source image to edit; ``reference_image_urls`` are additional
+        style/composition references (provider clamps to its declared
+        ``max_reference_images``).
+        Implementations should return the dict from :func:`success_response`
+        or :func:`error_response`. ``kwargs`` may contain forward-compat
+        parameters future versions of the schema will expose 
+        implementations MUST ignore unknown keys (no TypeError).
+        Known optional kwarg: ``upscale`` (bool) 
+ when true, the caller
+        requests a post-generation high-resolution pass through the
+        backend's upscaler/enhancer. Providers without an upscaler simply
+        ignore it; providers that honor it should report ``upscaled: True``
+        in the response ``extra``.
+        Nr
+      r
+generatez
+ImageGenProvider.generate
+__name__
+__module__
+__qualname__
+__doc__
+property
+abstractmethodr
+DEFAULT_ASPECT_RATIOr<
+valuer*
+Clamp an aspect_ratio value to the valid set, defaulting to landscape.
+    Invalid values are coerced rather than rejected so the tool surface is
+    forgiving of agent mistakes.
+isinstancer
+lowerr
+resolve_aspect_ratiorK
+Coerce a reference-image argument into a clean list of URL/path strings.
+    Accepts a single string or a list; strips blanks and whitespace. Returns
+    ``None`` when nothing usable remains so providers can treat "no refs" as a
+    single sentinel.
+    N)
+tuplerH
+append)
+normalize_reference_imagesrR
+zBReturn ``$HERMES_HOME/cache/images/``, creating parents as needed.r
+get_hermes_home
+imagesT)
+parents
+exist_ok)
+hermes_constantsrT
+mkdir)
+_images_cache_dirr\
+prefix
+extension
+b64_datar_
+Decode base64 image data and write it under ``$HERMES_HOME/cache/images/``.
+    Returns the absolute :class:`Path` to the saved file.
+    Filename format: ``<prefix>_<YYYYMMDD_HHMMSS>_<short-uuid>.<ext>``.
+%Y%m%d_%H%M%SN
+base64
+b64decode
+datetime
+strftime
+write_bytes)
+shortr[
+       r
+save_b64_imagers
+image/pngz
+image/jpegz
+image/jpgz
+image/webpz
+image/gifg
+timeout
+max_bytes
+floatrx
+Download an image URL and write it under ``$HERMES_HOME/cache/images/``.
+    Used by providers (xAI, fallback OpenAI) whose API returns an *ephemeral*
+    URL instead of inline base64 
+ those URLs frequently expire before a
+    downstream consumer (Telegram ``send_photo``, browser fetch) can resolve
+    them, so we materialise the bytes locally at tool-completion time.
+    Mirrors :func:`save_b64_image`'s shape so providers can swap in one line.
+    Returns the absolute :class:`Path` to the saved file.  Raises on any
+    network / HTTP / oversize / non-image-content-type error so callers can
+    fall back to returning the bare URL with a clear error message.
+streamz
+Content-Typer%
+jpegru
+chunk_sizez
+Image at z
+ exceeds i
+MB cap; refusing to cache.z% returned 0 bytes; refusing to cache.)
+requestsr-
+raise_for_status
+headers
+splitrH
+_URL_IMAGE_CONTENT_TYPES
+endswithri
+iter_content
+unlink
+OSError
+ValueError
+write)
+response
+content_typer`
+url_path
+bytes_written
+chunks
+                r
+save_url_imager
+modality
+modelr7
+providerr
+Optional[Dict[str, Any]]r#
+Build a uniform success response dict.
+    ``image`` may be an HTTP URL or an absolute filesystem path (for b64
+    providers like OpenAI). ``modality`` is ``"text"`` (text-to-image) or
+    ``"image"`` (image-to-image / editing) 
+ indicates which endpoint was
+    actually hit, useful for diagnostics. Callers that need to pass through
+    additional backend-specific fields can supply ``extra``.
+    T)
+successr]
+setdefault)
+payload
+          r
+success_responser
+provider_errorr%
+error_typer
+errorr
+z$Build a uniform error response dict.FN)
+      r
+error_responser
+__future__r
+loggingrl
+pathlibr
+typingr
+getLoggerr=
+loggerr
+__annotations__rD
+<module>r

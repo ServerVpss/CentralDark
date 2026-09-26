@@ -1,0 +1,50 @@
+flowchart TD
+    A[CHEFE_INTENT] --> B[DESTINATION_LOCK]
+    B --> C[MEASURE_LIVE_STATE]
+    C --> D[SEARCH_ALL_MATERIAL_PATHS]
+    D --> E[RESOLVE_CANONICAL_OWNER]
+    E --> F[ACQUIRE_WRITER_IF_NEEDED]
+    F --> G[EXECUTE_MINIMAL_DELTA]
+    G --> H[COLLECT_EVIDENCE]
+    H --> I[COUNTERPROOF]
+    I --> J[REALITY_JUDGE]
+    J --> K{DESTINATION_PROVED?}
+    K -- SIM --> L[RECEIPT + RETURN]
+    K -- NÃO --> M{HUMAN_FRONTIER_PROVED?}
+    M -- SIM --> N[RETURN_BLOCKED_WITH_EVIDENCE]
+    M -- NÃO --> O[MINIMAL_REMEDIATION]
+    O --> G
+
+    subgraph SELF[SELF-APPLICATION UNTIL FIXED POINT]
+      S1[APPLY CONTRACT TO CURRENT WORK] --> S2[OBSERVE OWN OUTPUT]
+      S2 --> S3[SELF_COUNTERPROOF]
+      S3 --> S4{MATERIAL_RESIDUAL?}
+      S4 -- YES --> S5[MINIMAL_SELF_REMEDIATION]
+      S5 --> S2
+      S4 -- NO --> S6{NEXT_PASS_INFORMATION_GAIN?}
+      S6 -- YES --> S2
+      S6 -- NO --> S7[FIXED_POINT_CHECK]
+    end
+
+    subgraph TRANSFORM[CAPABILITY TRANSFORMATIONS]
+      T1[Curiosidade → descoberta automática]
+      T2[Memória → continuidade temporal]
+      T3[Dúvida → contraprova]
+      T4[Intuição → padrão testável]
+      T5[Experiência → compressão]
+      T6[Equipe → paralelismo coordenado]
+      T7[Disciplina → gates]
+      T8[Aprendizado → mudança de scaffold]
+      T9[Criatividade → recombinação]
+      T10[Julgamento humano onde necessário]
+    end
+
+    subgraph HANDOFF[SECTION 7 — HANDOFF PADRÃO]
+      P1[PNG]
+      P2[Markdown]
+      P3[Mermaid]
+      P4[RASTRO]
+      P5[SHA256SUMS]
+      P6[MANIFEST]
+      P7[ZIP]
+    end

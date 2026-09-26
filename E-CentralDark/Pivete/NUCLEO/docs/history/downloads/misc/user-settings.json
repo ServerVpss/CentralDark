@@ -1,0 +1,21 @@
+{
+  "mcp": {
+    "servers": [
+      {
+        "id": "screenpipe",
+        "label": "screenpipe",
+        "enabled": true,
+        "transport": "stdio",
+        "command": "C:\\Users\\danda\\AppData\\Local\\screenpipe\\bun.exe",
+        "args": [
+          "x",
+          "screenpipe-mcp@latest"
+        ],
+        "env": {
+          "SCREENPIPE_MCP_CLIENT": "grok",
+          "SCREENPIPE_LOCAL_API_KEY": "sp-cf03bb5a"
+        }
+      }
+    ]
+  }
+}

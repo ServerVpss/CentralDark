@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "objective",
+    "current_response",
+    "thread_preserved",
+    "risk_residual"
+  ],
+  "properties": {
+    "objective": {
+      "type": "string"
+    },
+    "current_response": {
+      "type": "string"
+    },
+    "thread_preserved": {
+      "type": "boolean"
+    },
+    "risk_residual": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

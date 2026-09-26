@@ -1,0 +1,96 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\__pycache__\nous_auth_keepalive.cpython-311.pyc
+
+Z d,d-d%
+).z9Background keepalive for long-lived Nous Portal sessions.
+annotationsN)
+Optional)
+!ACCESS_TOKEN_REFRESH_SKEW_SECONDS
+NOUS_INVOKE_JWT_MIN_TTL_SECONDS
+AuthError
+_agent_key_is_usable
+_is_expiring
+get_provider_auth_state
+ resolve_nous_runtime_credentialsi`T
+Optional[threading.Thread]
+_keepalive_thread
+Optional[float]
+return
+floatc
+HERMES_NOUS_TIMEOUT_SECONDS
+getenv
+TypeError
+ValueError)
+RC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\nous_auth_keepalive.py
+_timeout_secondsr
+object
+agent_key
+agent_key_expires_at
+scope)
+getattr)
+_entry_stater$
+min_key_ttl_seconds
+Optional[bool]c
+Refresh the current Nous credential pool entry when it is stale.
+    Returns True when a pool entry exists and is usable/refreshed, False when a
+    pool exists but no entry can be used, and None when no Nous pool exists.
+load_pool
+nousz4Nous auth keepalive: credential pool unavailable: %sNz9Nous auth keepalive: credential pool selection failed: %sF
+expires_atz4Nous auth keepalive: refreshed credential pool entryT)
+agent.credential_poolr*
+Exception
+logger
+has_credentials
+selectr
+try_refresh_current)
+access_expiring
+key_usable
+refresheds
+        r
+_refresh_selected_pool_entryr9
+timeout_secondsr;
+z5Refresh Nous auth once if credentials are configured.r
+z3Nous auth keepalive: refreshed singleton auth stateTz)Nous auth keepalive requires re-login: %sz
+Nous auth keepalive failed: %s)
+relogin_required
+infor.
+pool_result
+stater5
+     r
+ refresh_nous_auth_keepalive_oncerC
+stop_event
+threading.Event
+interval_seconds
+initial_delay_seconds
+is_setrC
+     r
+_keepalive_looprL
+z2Start the process-wide Nous auth keepalive thread.r
+nous-auth-keepalive)
+target
+kwargs
+daemon
+Nous auth keepalive started)
+_keepalive_lockr
+is_alive
+_keepalive_stop
+threading
+ThreadrL
+startr/
+start_nous_auth_keepaliver[
+timeoutc
+z@Stop the keepalive thread. Intended for graceful shutdown/tests.N)
+threads
+stop_nous_auth_keepaliverb
+__doc__
+__future__r
+loggingr
+typingr
+hermes_cli.authr
+getLogger
+__name__r/
+$NOUS_AUTH_KEEPALIVE_INTERVAL_SECONDS
+)NOUS_AUTH_KEEPALIVE_INITIAL_DELAY_SECONDS
+LockrT
+EventrV
+__annotations__r
+<module>rp

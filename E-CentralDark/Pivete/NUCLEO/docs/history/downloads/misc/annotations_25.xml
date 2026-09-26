@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <item name="org.chromium.support_lib_boundary.PrefetchOperationResultBoundaryInterface int getStatusCode()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{org.chromium.support_lib_boundary.PrefetchStatusCodeBoundaryInterface.SUCCESS, org.chromium.support_lib_boundary.PrefetchStatusCodeBoundaryInterface.FAILURE}" />
+    </annotation>
+  </item>
+  <item name="org.chromium.support_lib_boundary.PrefetchStatusCodeBoundaryInterface">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{org.chromium.support_lib_boundary.PrefetchStatusCodeBoundaryInterface.SUCCESS, org.chromium.support_lib_boundary.PrefetchStatusCodeBoundaryInterface.FAILURE}" />
+    </annotation>
+  </item>
+  <item name="org.chromium.support_lib_boundary.ProcessGlobalConfigConstants.ProcessGlobalConfigMapKey">
+    <annotation name="androidx.annotation.StringDef">
+      <val name="value" val="{org.chromium.support_lib_boundary.ProcessGlobalConfigConstants.DATA_DIRECTORY_SUFFIX, org.chromium.support_lib_boundary.ProcessGlobalConfigConstants.DATA_DIRECTORY_BASE_PATH, org.chromium.support_lib_boundary.ProcessGlobalConfigConstants.CACHE_DIRECTORY_BASE_PATH, org.chromium.support_lib_boundary.ProcessGlobalConfigConstants.CONFIGURE_PARTITIONED_COOKIES}" />
+    </annotation>
+  </item>
+  <item name="org.chromium.support_lib_boundary.WebMessagePayloadBoundaryInterface int getType()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{org.chromium.support_lib_boundary.WebMessagePayloadBoundaryInterface.WebMessagePayloadType.TYPE_STRING, org.chromium.support_lib_boundary.WebMessagePayloadBoundaryInterface.WebMessagePayloadType.TYPE_ARRAY_BUFFER}" />
+    </annotation>
+  </item>
+  <item name="org.chromium.support_lib_boundary.WebMessagePayloadBoundaryInterface.WebMessagePayloadType">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{org.chromium.support_lib_boundary.WebMessagePayloadBoundaryInterface.WebMessagePayloadType.TYPE_STRING, org.chromium.support_lib_boundary.WebMessagePayloadBoundaryInterface.WebMessagePayloadType.TYPE_ARRAY_BUFFER}" />
+    </annotation>
+  </item>
+</root>
+

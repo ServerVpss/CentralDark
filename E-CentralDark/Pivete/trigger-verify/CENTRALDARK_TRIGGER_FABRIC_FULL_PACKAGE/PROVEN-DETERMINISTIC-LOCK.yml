@@ -1,0 +1,126 @@
+schema: centraldark.proven-deterministic-lock.v1
+status: CANDIDATE_UNTIL_SAME_HEAD_GATES
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC
+authority: SEGREDO/CHEFE
+
+purpose: >-
+  Tornar aprendizado comprovado reutilizavel e deterministico sem reabrir
+  raciocinio ja selado. O lock protege claim+owner; melhoria mensuravel pode
+  reabrir o mesmo claim somente com a mesma chave e causa explicita.
+
+invariants:
+  one_system_only: true
+  reuse_before_create: true
+  unknown_is_not_pass: true
+  action_is_not_proof: true
+  learning_never_discarded: true
+  proven_becomes_deterministic_candidate: true
+  deterministic_requires_real_consumer: true
+  deterministic_requires_positive_negative_test: true
+  deterministic_requires_verifiable_receipt: true
+  same_head_required_when_ci_is_claimed: true
+  sealed_claim_default: LOCKED_READ_ONLY
+  no_new_information: REUSE_PROOF
+  failed_candidate: REFUTED_MINERAL
+  unresolved_candidate: UNRESOLVED_MINERAL
+
+lock_identity:
+  key_material: [CLAIM_KEY, OWNER]
+  algorithm: SHA256
+  stable_across_sessions: true
+  model_switch_changes_key: false
+  provider_switch_changes_key: false
+  chat_switch_changes_key: false
+  syntax_switch_changes_key: false
+
+seal_requires:
+  - CLAIM_KEY
+  - OWNER
+  - PROOF_TARGET
+  - EVIDENCE_REF
+  - OBSERVED_AT
+  - STATE_PROVED
+  - COUNTERPROOF_PASS
+  - RECEIPT_REF
+
+reopen_requires_all:
+  - SAME_LOCK_KEY
+  - REOPEN_CAUSE_REF
+  - MATERIAL_IMPROVEMENT
+  - COUNTERPROOF_PLAN
+  - CURRENT_TARGET_REMEASURED
+
+reopen_denied_when:
+  - DIFFERENT_LOCK_KEY
+  - NO_NEW_INFORMATION
+  - STYLE_ONLY_CHANGE_WITHOUT_CAPABILITY_GAIN
+  - REPEATED_CLAIM_WITHOUT_NEW_EVIDENCE
+  - MODEL_ONLY_DISAGREEMENT
+
+trigger_loader:
+  owner: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+  sources:
+    - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+    - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+    - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+  command_entry_normalization:
+    ignore_case: true
+    leading_bang_or_hash_equivalent: true
+    unicode_accents_normalized: true
+    prose_mentions_do_not_activate: true
+    line_start_or_explicit_command_context_required: true
+  load_full_registry: true
+  execute_all_phases_blindly: false
+  execute_materially_applicable_only: true
+  verses_are_presentation_and_orientation: true
+  verse_change_must_not_change_chefe_intent: true
+
+canonical_flow:
+  - DESTINATION_LOCK
+  - ACORDAR
+  - CALIBRAR
+  - MULTIBUSSOLA
+  - META_LUPA
+  - RECONCILIAR
+  - DELTA_UTIL
+  - CONTRAPROVA
+  - REMEDICAO
+  - SEMANTIC_GREEN
+  - FIXED_POINT
+  - POST_GREEN_LOCK
+  - REGISTRA
+  - BOOT
+
+promotion:
+  proven_learning_flow:
+    - MATERIAL
+    - CLASSIFY
+    - FIND_EXISTING_OWNER
+    - TEST
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - PROVED
+    - DETERMINISTIC_IMPLEMENTATION
+    - POSITIVE_NEGATIVE_TEST
+    - RECEIPT
+    - CLAIM_SEAL
+    - REUSE_PROOF
+  improvement_flow:
+    - SEALED_CLAIM
+    - SAME_LOCK_KEY
+    - REOPEN_CAUSE_REF
+    - MATERIAL_IMPROVEMENT
+    - TARGETED_REVALIDATION
+    - COUNTERPROOF
+    - NEW_RECEIPT
+    - RESEAL_SAME_CLAIM
+
+fixed_point:
+  stop_when:
+    - NO_NEW_INFORMATION
+    - FIXED_POINT
+    - HUMAN_FRONTIER
+    - BLOCKED_WITH_EXPLICIT_CAUSE
+  infinite_retry_without_information_gain: FORBIDDEN
+  reopen_entire_system_for_local_delta: FORBIDDEN
+  invalidate_only_dependent_claims: true

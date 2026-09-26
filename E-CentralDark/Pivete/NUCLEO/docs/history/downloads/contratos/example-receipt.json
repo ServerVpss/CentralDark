@@ -1,0 +1,122 @@
+{
+  "contract": "CENTRALDARK_ONE_FLOW",
+  "generated_at": "2026-08-23T20:43:00.073Z",
+  "counts": {
+    "sources": 1,
+    "unique_evidence": 1,
+    "duplicates": 0,
+    "sensitive_quarantined": 0
+  },
+  "normalized_sources": [
+    {
+      "source_id": "src_d0d03844aa5f3ed6",
+      "surface_id": "chatgpt-session-example",
+      "kind": "SAVED_HTML",
+      "target": "conversation-surface",
+      "operational_scope": "SESSION_INTELLIGENCE",
+      "event_time": "2026-08-23T16:38:27Z",
+      "observed_at": "2026-08-23T17:01:00Z",
+      "provenance": "USER_SAVED_HTML",
+      "previous_hash": null,
+      "sensitivity": "NORMAL",
+      "payload": {
+        "title": "Screenpipe Activity reshapes CentralDark integration",
+        "summary": "Exemplo sanitizado de snapshot temporal; sem credenciais."
+      },
+      "redactions": [],
+      "content_hash": "ddd5f0912f35b1576abfb356284d3b7e2962f8f6f90524e5d4304af4b3ded97e"
+    }
+  ],
+  "deltas": [
+    {
+      "delta_id": "delta_b2d4f197c90b1cea",
+      "source_id": "src_d0d03844aa5f3ed6",
+      "status": "NEW",
+      "changed": true,
+      "content_hash": "ddd5f0912f35b1576abfb356284d3b7e2962f8f6f90524e5d4304af4b3ded97e",
+      "previous_hash": null,
+      "reason": "NO_PREVIOUS_HASH"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_b2d4f197c90b1cea",
+      "source_id": "src_d0d03844aa5f3ed6",
+      "target": "conversation-surface",
+      "operational_scope": "SESSION_INTELLIGENCE",
+      "event_time": "2026-08-23T16:38:27Z",
+      "observed_at": "2026-08-23T17:01:00Z",
+      "provenance": "USER_SAVED_HTML",
+      "claim": "Source src_d0d03844aa5f3ed6 produced new material",
+      "class": "FACT",
+      "content_hash": "ddd5f0912f35b1576abfb356284d3b7e2962f8f6f90524e5d4304af4b3ded97e",
+      "previous_hash": null,
+      "current_state": "HISTORICAL_REFERENCE",
+      "counterexample": "A newer live measurement changes the claim",
+      "sensitivity": "NORMAL",
+      "redactions": []
+    }
+  ],
+  "duplicates": [],
+  "capabilities": [
+    {
+      "policy": "MINIMUM_SUFFICIENT_CAPABILITY",
+      "candidates": [
+        "snapshot_harvest"
+      ],
+      "selected": "snapshot_harvest",
+      "mutation": false
+    }
+  ],
+  "causal_frame": {
+    "physical": [
+      {
+        "target": "conversation-surface",
+        "evidence_ref": "evidence_b2d4f197c90b1cea"
+      }
+    ],
+    "temporal": [
+      {
+        "at": "2026-08-23T16:38:27Z",
+        "evidence_ref": "evidence_b2d4f197c90b1cea"
+      }
+    ],
+    "causal": {
+      "status": "INSUFFICIENT_EVIDENCE",
+      "rule": "CORRELATION_IS_NOT_CAUSE"
+    },
+    "counterproof": {
+      "required": true,
+      "question": "What competing explanation would produce the same observation?"
+    },
+    "proof": {
+      "status": "UNKNOWN",
+      "rule": "A discriminating observation must eliminate material competitors"
+    }
+  },
+  "knowledge_result": "CRYSTAL_CANDIDATE",
+  "invariants": {
+    "one_system_only": true,
+    "reuse_before_create": true,
+    "one_writer_per_scope": true,
+    "parallel_perception": true,
+    "serial_mutation": true,
+    "unknown_is_pass": false,
+    "action_is_proof": false,
+    "writer_is_judge": false,
+    "reality_is_judge": true
+  },
+  "reality_judge": {
+    "target": "ONE_FLOW_PIPELINE",
+    "claim": "The input sources were normalized, deduplicated and classified by this local reference pipeline",
+    "verdict": "PASS",
+    "proof_refs": [
+      "sources:1",
+      "unique:1"
+    ],
+    "writer_ref": null,
+    "judge_ref": "independent-readonly-judge",
+    "remeasured_at": null,
+    "notes": "PASS_ONLY_FOR_DECLARED_CLAIM_AND_PROOFS"
+  }
+}

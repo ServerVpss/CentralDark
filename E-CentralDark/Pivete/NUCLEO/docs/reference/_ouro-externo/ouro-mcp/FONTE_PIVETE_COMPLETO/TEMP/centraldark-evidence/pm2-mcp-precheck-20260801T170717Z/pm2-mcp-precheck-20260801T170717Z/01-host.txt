@@ -1,0 +1,28 @@
+MISSION_ID=CENTRALDARK-PM2-MCP-FORENSIC-PRECHECK-01
+MODE=READ_ONLY
+HOSTNAME=vmi3256920
+TIMESTAMP_UTC=2026-08-01T17:07:17Z
+TIMESTAMP_LOCAL=2026-08-01T14:07:17-0300
+UPTIME=up 5 weeks, 5 days, 16 hours, 8 minutes since 2026-06-21 21:58:49
+LOADAVG=5.16 5.45 5.66 11/1235 3863335
+NODE=v22.22.2
+NPM=10.9.7
+PM2=7.0.1
+--- MEM ---
+               total        used        free      shared  buff/cache   available
+Mem:            23Gi       3.8Gi        15Gi       126Mi       3.7Gi        19Gi
+Swap:          2.0Gi       316Mi       1.7Gi
+--- DISK ---
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       194G   95G   99G  49% /
+--- IPv4 ---
+lo 127.0.0.1/8
+eth0 89.117.78.124/21
+br-5ecff7855d6f 172.20.0.1/16
+docker0 172.17.0.1/16
+br-7ebe01022684 172.18.0.1/16
+br-2fb3692de01b 172.19.0.1/16
+br-25c2d33a24af 172.21.0.1/16
+br-6a72e3c9dd61 172.24.0.1/16
+br-ec492156ac91 172.23.0.1/16
+br-422027dd832d 172.22.0.1/16

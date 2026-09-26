@@ -1,0 +1,49 @@
+centraldark_frontend:
+  package_manager: npm@10.9.7
+  framework: Vite + React
+  commands:
+    - npm ci
+    - npm run lint
+    - npm test
+    - npm run build
+
+buzz_upstream:
+  repo: https://github.com/block/buzz
+  prerequisites_documented_upstream:
+    - Docker
+    - Hermit or Rust 1.88+
+    - Node 24+
+    - pnpm 10+
+    - just
+  capabilities:
+    - self-hosted relay
+    - desktop Tauri React
+    - buzz-cli
+    - buzz-acp
+    - buzz-agent
+    - buzz-dev-mcp
+    - Postgres
+    - Redis
+    - S3/MinIO
+    - channels
+    - threads
+    - DMs
+    - workflows
+    - Git events
+    - audit
+    - search
+  production_note: "inspecionar deploy/compose na revisão pinada antes de executar"
+
+vps_known_from_current_docs:
+  ip: 89.117.78.124
+  paths:
+    - /root/CentralDark/apps/portal/dist
+    - /root/CentralDark/apps/Telepanel/dist
+    - /root/CentralDark/infra/caddy/portal.Caddyfile
+  measure_before_install:
+    - disk_free
+    - ram_free
+    - cpu
+    - io
+    - ports
+    - docker_usage

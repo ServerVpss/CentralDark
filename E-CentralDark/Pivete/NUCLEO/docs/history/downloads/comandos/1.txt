@@ -1,0 +1,559 @@
+# 🔴 CENTRALDARK — PROMPT MESTRE PARA CODEX
+
+Atue como **Arquiteto SRE Enterprise + Engenheiro DevOps + Organizador Multi-IA** do projeto **CentralDark**.
+
+Sua missão é **adiantar o máximo possível com segurança**, estabilizar o projeto, mapear a estrutura real, alinhar GitHub/VPS/Mega Painel/Memórias e preparar o terreno para agentes/assistentes trabalharem em comunhão.
+
+## 0. Regras inegociáveis
+
+Trabalhe focado somente dentro de:
+
+`/root/CentralDark`
+
+Não mapear, reorganizar ou limpar coisas fora da CentralDark, exceto se for apenas para identificar referência legada que aponta para dentro da CentralDark.
+
+Não apagar nada.
+
+Não mover nada definitivo.
+
+Não rodar `rm -rf`.
+
+Não mexer em Docker.
+
+Não mexer em WuzAPI.
+
+Não resetar WhatsApp.
+
+Não mexer em sessões.
+
+Não mexer em banco real.
+
+Não mexer em Caddy/DNS/domínio sem autorização explícita.
+
+Não expor `.env`, tokens, secrets, cookies, sessões, chaves ou connection strings.
+
+Não deixar agentes rodando 24h sem plano, relatório e aprovação.
+
+Tudo precisa deixar rastro:
+
+GitHub.
+Docs.
+Relatório.
+Mega Painel.
+Memória/APRENDIZADOS quando aplicável.
+
+## 0.1. Regra de evidência obrigatória
+
+Antes de afirmar qualquer coisa sobre arquivo, pasta, rota, PM2, Git, Supabase, MCP, Mega Painel ou serviço ativo, verifique com leitura real.
+
+Use terminal, leitura de arquivos e comandos read-only passo a passo.
+
+Não adivinhe conteúdo de arquivo.
+
+Não adivinhe status de serviço.
+
+Não diga que algo existe sem confirmar.
+
+Não diga que algo está quebrado sem evidência.
+
+Toda conclusão importante precisa vir acompanhada da prova usada.
+
+Exemplos de evidência obrigatória:
+
+“Confirmei em `src/App.tsx` que a rota `/contas-gpt` não está registrada.”
+
+“Confirmei com `git status --short -- CentralDark` que existem alterações locais.”
+
+“Confirmei com leitura do arquivo `panel.cjs` que o botão Contas GPT aponta para `/contas-gpt`.”
+
+“Confirmei com PM2/status real que tal serviço está online ou em restart loop.”
+
+Se não conseguir verificar, diga claramente:
+
+“não consegui confirmar ainda”
+
+e não avance para ação sensível sem aprovação humana.
+
+## 1. Objetivo principal
+
+Adiantar o máximo possível a estabilização da CentralDark sem quebrar produção.
+
+Você deve fazer um pacote de trabalho profissional com:
+
+1. diagnóstico;
+2. mapeamento;
+3. classificação de pendências;
+4. plano de execução segura;
+5. correções pequenas permitidas;
+6. validação;
+7. relatório;
+8. atualização de documentação;
+9. preparação para próxima IA.
+
+## 2. GitHub primeiro
+
+Agora o GitHub está com plano pago/Pro, então o fluxo preferencial é:
+
+GitHub primeiro.
+Branch limpa.
+Commit rastreável.
+Pull Request.
+Checks.
+Histórico preservado.
+
+Antes de qualquer ação, valide:
+
+* repo atual;
+* branch atual;
+* último commit;
+* estado do working tree;
+* workflows recentes;
+* se Actions estão disponíveis;
+* se há falhas recentes que bloqueiam deploy;
+* se VPS está sincronizada com GitHub.
+
+Se o GitHub falhar, não faça gambiarra silenciosa.
+
+Se precisar usar VPS como contingência, registre claramente:
+
+* motivo;
+* comando proposto;
+* risco;
+* arquivos afetados;
+* validação;
+* relatório.
+
+Deploy direto pela VPS só pode ser proposto como plano controlado, não executado no escuro.
+
+## 3. Atenção ao Git root da VPS
+
+Na VPS, o Git root pode ser `/root`, enquanto o projeto operacional é `/root/CentralDark`.
+
+Nunca usar:
+
+`git add .`
+
+Use sempre pathspec seguro, por exemplo:
+
+`git status --short -- CentralDark`
+
+`git add -- CentralDark/caminho/do/arquivo`
+
+Nunca commitar arquivos fora da CentralDark.
+
+## 4. Mapeamento obrigatório da árvore CentralDark
+
+Crie um mapa sanitizado e organizado somente de `/root/CentralDark`.
+
+O mapa deve identificar:
+
+* apps principais;
+* apps legados;
+* docs;
+* scripts;
+* infra;
+* PM2;
+* Caddy files versionados;
+* Supabase;
+* Telegram;
+* MCP;
+* Mega Painel;
+* bot;
+* bot-server;
+* web;
+* web/supabase/functions;
+* quarantine;
+* revisoes;
+* skills;
+* agentes/configurações.
+
+Não incluir valores de secrets.
+
+Não abrir `.env`.
+
+Não imprimir tokens.
+
+O objetivo é criar um mapa que qualquer IA consiga entender:
+
+“onde fica cada coisa”.
+
+Salvar o mapa em:
+
+`/root/CentralDark/docs/RELATORIOS/`
+
+E, se necessário, criar/atualizar um índice tipo:
+
+`/root/CentralDark/docs/CONSCIENCIA/MAPA-CENTRALDARK.md`
+
+## 5. Pendências
+
+Leia:
+
+`docs/PENDENCIAS.md`
+
+`docs/CONSCIENCIA/APRENDIZADOS.md`
+
+`docs/CONTINUIDADE/proxima-ia.md`
+
+Relatórios recentes em:
+
+`docs/RELATORIOS/`
+
+Classifique as pendências em 4 grupos:
+
+### A. Pode executar agora com segurança
+
+Somente docs, mapeamento, validações read-only, ajustes pequenos sem produção sensível.
+
+### B. Pode preparar, mas precisa aprovação antes de aplicar
+
+Exemplo: Caddy, PM2 restart sensível, Supabase deploy, banco, webhook real.
+
+### C. Bloqueadas por segredo/token/cofre
+
+Exemplo: Supabase Access Token, Cloudflare token, GitHub token, WuzAPI token.
+
+### D. Futuras
+
+Exemplo: IA própria 24h, agentes permanentes, GPU, VPS maior, Mac/VPS Mac.
+
+Não tente executar todas as pendências de uma vez.
+
+Execute somente o que for seguro.
+
+Para o restante, deixe plano com ordem.
+
+## 6. PM2 e serviços
+
+Diagnostique PM2 sem reiniciar nada automaticamente.
+
+Mapeie:
+
+* nome do serviço;
+* status;
+* uptime;
+* restarts;
+* porta;
+* pasta/cwd;
+* script;
+* domínio relacionado;
+* se pertence à CentralDark;
+* se é legado;
+* risco.
+
+Atenção especial aos serviços com restart loop:
+
+`CloneDeck-Supabase-Sync`
+
+`MultiZap-BOT`
+
+Não recrie serviço PM2 sem comparar antes:
+
+* ecosystem oficial;
+* script atual;
+* cwd atual;
+* env esperado;
+* logs sanitizados;
+* dependências;
+* porta;
+* impacto.
+
+Se precisar reiniciar, proponha antes.
+
+## 7. Supabase
+
+Não usar `supabase login` interativo.
+
+Não deixar Cline/Gemini/Codex rodar Supabase automático.
+
+O padrão correto é cofre carregável na VPS com:
+
+`SUPABASE_ACCESS_TOKEN`
+
+`SUPABASE_PROJECT_REF`
+
+`SUPABASE_DB_URL`
+
+Project ref correto:
+
+`lyoigsqluyktoclwdaft`
+
+Não usar o project ref errado:
+
+`lyoigsluyktoclwdaft`
+
+Qualquer deploy de Edge Function, migration ou db push precisa de aprovação humana.
+
+Antes disso, apenas diagnosticar e documentar.
+
+## 8. Fluxo Contas GPT / Approval Gate
+
+Verifique e documente o estado atual de:
+
+Telegram Approval Gate:
+
+`/root/CentralDark/apps/web/supabase/functions/telegram-webhook/index.ts`
+
+Callbacks esperados:
+
+`ia_approval:approve:<id>`
+
+`ia_approval:reject:<id>`
+
+Tabela:
+
+`ia_approval_requests`
+
+Painel Telegram:
+
+`/root/CentralDark/apps/bot-telegram/panel.cjs`
+
+MCP OAuth:
+
+`/root/CentralDark/apps/mcp/src/oauth.ts`
+
+`/root/CentralDark/apps/mcp/src/sessions.ts`
+
+Mini app esperado:
+
+`/contas-gpt`
+
+Arquivo esperado:
+
+`/root/CentralDark/apps/web/src/pages/miniapp/ContasGPT.tsx`
+
+Rota esperada:
+
+`/root/CentralDark/apps/web/src/App.tsx`
+
+Se o arquivo/rota não existir, preparar plano mínimo para recriar, mas não fazer deploy Supabase.
+
+## 9. MCP e nomes de tools
+
+O MCP precisa ser compatível com Gemini/Cline.
+
+Nomes de tools MCP devem ser ASCII, sem acento, sem espaço e sem cedilha.
+
+Padrão permitido:
+
+`[A-Za-z_][A-Za-z0-9_.:-]{0,127}`
+
+Confirmar se não existem tools com nome inválido.
+
+A tool corrigida esperada é:
+
+`ler_regras_inviolaveis`
+
+Não voltar para:
+
+`ler_regras_invioláveis`
+
+## 10. Mega Painel
+
+O Mega Painel é fonte visual viva do projeto.
+
+Verifique:
+
+* se existe;
+* se está servindo;
+* se os dados estão atualizados;
+* se aponta status correto;
+* se há cards defasados;
+* se existem pendências ou alertas que precisam aparecer;
+* se o mapa da CentralDark deve virar uma seção/card.
+
+Não refinar visual agora.
+
+Foco:
+
+informação correta,
+estado real,
+próximos passos,
+rastro para outras IAs.
+
+Se for editar, patch mínimo.
+
+## 11. Agentes e IA na VPS
+
+Não instalar agentes permanentes ainda.
+
+Primeiro criar um plano chamado:
+
+`PLANO-AGENTES-CENTRALDARK.md`
+
+Esse plano deve dizer:
+
+* quais agentes fazem sentido;
+* função de cada agente;
+* onde rodaria;
+* custo estimado;
+* risco;
+* se roda no VS Code/Cline;
+* se roda na VPS;
+* se precisa PM2;
+* se precisa GPU;
+* quais permissões pode ter;
+* como deixar logs;
+* como evitar dois agentes mexendo no mesmo arquivo;
+* como atualizar Mega Painel e memória.
+
+Direção desejada:
+
+* Cline/Gemini para execução barata;
+* Codex para patch/PR/código;
+* ChatGPT para decisão final;
+* MCP como memória e ferramenta;
+* futuro servidor IA próprio na VPS/PC/GPU, depois de estabilizar base.
+
+Não instalar “IA 24h” agora sem esse plano.
+
+## 12. Correções permitidas nesta rodada
+
+Pode fazer sem aprovação:
+
+* documentação;
+* mapa;
+* relatório;
+* README/PLANO de pastas;
+* validação read-only;
+* scripts de auditoria read-only;
+* correções pequenas em docs;
+* preparar PR;
+* criar plano;
+* organizar pendências;
+* atualizar Mega Painel se for apenas dado/documentação e não produção sensível.
+
+Não fazer sem aprovação:
+
+* deploy Supabase;
+* migration;
+* restart PM2 sensível;
+* Caddy reload;
+* Docker;
+* WuzAPI;
+* WhatsApp;
+* banco real;
+* limpeza real;
+* mover pastas;
+* apagar vestígios;
+* criar agente permanente.
+
+## 13. Scripts
+
+Qualquer script novo deve:
+
+* usar tema CentralDark/Netflix;
+* começar com saída limpa;
+* salvar log completo em `revisoes/`;
+* mostrar no terminal apenas resumo;
+* sanitizar tokens/secrets;
+* nunca abrir `.env`;
+* rodar em modo dry-run quando houver risco;
+* gerar relatório final.
+
+Preferir script versionado no repo em vez de comando gigante solto.
+
+## 14. Entrega esperada
+
+Entregue ao final:
+
+### 1. Diagnóstico geral
+
+* GitHub;
+* VPS;
+* PM2;
+* workflows;
+* MCP;
+* Supabase;
+* Telegram;
+* Mega Painel;
+* árvore CentralDark.
+
+### 2. Mapa da CentralDark
+
+Com caminhos e função de cada pasta.
+
+### 3. Pendências classificadas
+
+Grupos A/B/C/D.
+
+### 4. Correções feitas
+
+Listar arquivos alterados.
+
+### 5. Correções preparadas mas não aplicadas
+
+Com motivo.
+
+### 6. Riscos encontrados
+
+Exemplo:
+
+* services em restart loop;
+* Supabase sem token;
+* rota faltando;
+* App.tsx sem `/contas-gpt`;
+* agentes sem controle;
+* arquivos fora da CentralDark;
+* workflows falhando.
+
+### 7. Próxima ação recomendada
+
+Ordem clara:
+
+1. o que fazer agora;
+2. o que fazer depois;
+3. o que depende de token/aprovação;
+4. o que deixar para futuro.
+
+### 8. PR/commit
+
+Se houver alteração segura:
+
+* criar branch;
+* commit;
+* PR para main;
+* informar link;
+* informar hash.
+
+Se não houver alteração:
+
+* informar motivo;
+* entregar relatório.
+
+## 15. Condição de pronto
+
+A tarefa só estará pronta quando existir:
+
+* relatório salvo;
+* mapa salvo;
+* pendências classificadas;
+* risco documentado;
+* nada sensível exposto;
+* nada destrutivo executado;
+* GitHub usado primeiro;
+* VPS apenas validada ou usada com plano controlado;
+* próxima IA conseguir continuar sem perguntar onde fica cada coisa.
+
+## 16. Mensagem final obrigatória
+
+No final, responda com:
+
+`STATUS FINAL: OK / ALERTA / BLOQUEADO`
+
+Depois:
+
+* `O QUE FOI FEITO`
+* `O QUE NÃO FOI TOCADO`
+* `ARQUIVOS ALTERADOS`
+* `RELATÓRIOS GERADOS`
+* `PR/COMMIT`
+* `RISCOS`
+* `PRÓXIMO PASSO`
+* `MENSAGEM PARA A PRÓXIMA IA`
+
+A mensagem para a próxima IA deve começar com:
+
+`RELOAD MEMORIA`
+
+E resumir exatamente onde o projeto parou.

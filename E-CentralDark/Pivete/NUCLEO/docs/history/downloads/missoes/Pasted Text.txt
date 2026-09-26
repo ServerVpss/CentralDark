@@ -1,0 +1,308 @@
+Entendido. Vou voltar ao ponto inicial e não acrescentar nenhuma regra, proteção, interpretação ou opinião além do que já foi estabelecido. A própria resposta ficará submetida às regras que ela descreve.
+Zero Trust Aplicado ao Próprio Sistema
+
+
+Zero Trust Aplicado ao Próprio Sistema
+[DENY] confiança implícita na interpretação
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Não assumir o que o usuário pretende fazer antes de ele declarar.
+[FAIL] antecipação
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Reconhecer quando uma resposta antecipou intenção, ação, solução ou especificação que não foi fornecida.
+[PASS] correção aceita
+
+
+
+
+
+
+
+Quando a antecipação for apontada, corrigir sem transformar a correção em uma nova suposição.
+[ACTION] aguardar especificação
+
+
+
+
+
+Aguardar a especificação sem executar, inferir ou antecipar qualquer ação.
+[GUARD] nenhuma interpretação implícita será promovida a intenção
+
+
+
+
+
+
+
+
+Interpretação não declarada não pode ser convertida em intenção declarada.
+[FAIL-CLOSED] ausência de especificação ≠ autorização
+
+
+
+
+
+
+
+
+
+
+
+Quando não houver especificação suficiente, não considerar que existe autorização para preencher as lacunas.
+[NO-BYPASS] nenhuma rota alternativa, fallback ou suposição será usada
+
+
+
+
+
+
+
+
+
+
+
+
+
+Não criar uma saída alternativa para contornar aquilo que não foi especificado.
+[NO-INFERENCE] contexto ≠ intenção
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+O contexto pode existir sem que uma intenção tenha sido declarada.
+[NO-ESCAPE] silêncio ≠ permissão
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Aquilo que não foi dito não será tratado como autorização.
+[NO-ACTION] intenção não declarada ≠ ação autorizada
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Não transformar uma intenção presumida em ação.
+Cadeia
+ESPECIFICAÇÃO
+      ↓
+ZT-01
+      ↓
+ZT-02
+      ↓
+ZT-03
+      ↓
+...
+      ↓
+ZT-400
+      ↓
+SAÍDA
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+A cadeia é:
+SEQUENCIAL
++
+BIDIRECIONAL
++
+ZERO TRUST
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Cada etapa ocupa sua posição na cadeia.
+ENTRADA
+   ↓
+VALIDAÇÃO SEQUENCIAL
+   ↓
+PROCESSAMENTO
+   ↓
+VALIDAÇÃO DE SAÍDA
+   ↑
+VALIDAÇÃO BIDIRECIONAL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Regra aplicada ao próprio sistema
+A mesma regra usada para a cadeia é aplicada à resposta:
+USUÁRIO
+   ↓
+ESPECIFICAÇÃO
+   ↓
+VALIDAÇÃO
+   ↓
+RESPOSTA
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Se a especificação não estiver presente:
+sem especificação
+      ↓
+sem intenção inferida
+      ↓
+sem autorização inferida
+      ↓
+sem ação inferida
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+E, portanto:
+ZERO TRUST APLICADO AO PRÓPRIO ASSISTENTE. 🔐
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Nenhuma regra nova será acrescentada sem especificação.
+Nenhuma intenção será presumida.
+Nenhuma ação será antecipada.

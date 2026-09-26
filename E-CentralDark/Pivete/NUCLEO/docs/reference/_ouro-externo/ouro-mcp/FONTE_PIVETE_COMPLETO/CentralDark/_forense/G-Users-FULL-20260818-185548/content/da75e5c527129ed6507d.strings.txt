@@ -1,0 +1,587 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\gateway\__pycache__\kanban_watchers.cpython-311.pyc
+
+Kanban board watcher methods for GatewayRunner.
+Extracted verbatim from ``gateway/run.py`` (god-file decomposition Phase 3).
+These are the background-loop methods that subscribe to kanban boards, deliver
+notifications/artifacts, and drive the multi-agent dispatcher. They use only
+``self`` state, so they live on a mixin that ``GatewayRunner`` inherits 
+``self._kanban_*`` call sites resolve identically via the MRO, making this a
+behavior-neutral move that lifts ~1,000 LOC out of run.py.
+annotationsN
+Callable
+Optional)
+gateway.run
+load_config
+Callable[[], Any]
+return
+'tuple[bool, int]'c
+Resolve the live (enabled, per_tick) auto-decompose settings.
+    Read fresh from config on every dispatcher tick (#49638) so that flipping
+    ``kanban.auto_decompose: false`` to STOP runaway fan-out takes effect on the
+    next tick instead of requiring a gateway restart. Auto-decompose is a
+    safety toggle 
+ a user who sees it create and launch tasks they didn't
+    intend reaches for this flag to halt it, and a stale boot-captured value
+    silently ignoring that change is the bug reported in #49638.
+    Fails **safe**: if the config read raises, return ``(False, 3)`` 
+    transient read error must never re-enable a feature the user turned off,
+    nor fall back to the burst-prone default-on behaviour. ``per_tick`` is
+    clamped to ``>= 1``.
+kanban
+auto_decomposeT
+auto_decompose_per_tickr
+Exception
+isinstance
+TypeError
+ValueError)
+enabled
+per_ticks
+KC:\Users\danda\AppData\Local\hermes\hermes-agent\gateway\kanban_watchers.py
+ _resolve_auto_decompose_settingsr!
+Return False while the global emergency stop (`hermes pause`) is engaged.
+    Checked every dispatcher tick BEFORE spawning new workers so a pause takes
+    effect on the next tick without a gateway restart. In-flight workers are
+    never touched 
+ this only stops NEW spawns. Fails open: if the estop
+    module is unimportable, dispatch proceeds (the sentinel gate must not
+    become a new crash surface for the dispatcher).
+check_pausedTr
+agent.estopr$
+ImportError
+loggerr#
+_kanban_dispatch_allowedr(
+'tuple[Optional[object], str]'c
+Take an exclusive, non-blocking advisory lock for the sole dispatcher.
+    Only one gateway process machine-wide may run the embedded kanban
+    dispatcher: concurrent dispatchers double the reclaim frequency (each
+    runs its own ``release_stale_claims`` 
+ promote 
+ dispatch loop), double
+    claim-attempt events in the event log, and 
+ with ``wal_autocheckpoint=0`` 
+    concurrent manual WAL checkpoints can corrupt index pages. The
+    ``dispatch_in_gateway`` config flag is the primary control; this lock is the
+    backstop that survives config drift and same-profile restart races.
+    Delegates to :func:`gateway.status._try_acquire_file_lock` (``fcntl`` on
+    POSIX, ``msvcrt`` on Windows) so the guard is cross-platform.
+    Returns ``(handle, "held")`` on success 
+ the caller keeps the file handle
+    for the process lifetime and **must** release it via
+    :func:`_release_singleton_lock` when done. ``(None, "contended")`` when
+    another process holds the lock (caller must NOT dispatch). ``(None,
+    "unavailable")`` when locking cannot be performed (non-POSIX filesystem
+    without flock, or the status.py helpers are unimportable) 
+ caller falls
+    back to config-only control.
+_try_acquire_file_lock)
+unavailableT)
+parents
+exist_okz
+utf-8)
+encoding)
+contended
+gateway.statusr+
+parent
+OSError
+close)
+lock_pathr+
+handles
+_acquire_singleton_lockr;
+zQRelease a dispatcher singleton lock acquired via :func:`_acquire_singleton_lock`.Nr
+_release_file_lock)
+_release_singleton_lockr?
+adapterr
+Optional[str]c
+Return the tenant scope (Slack workspace) a subscription's wake keys to.
+    ``build_session_key()`` includes ``SessionSource.scope_id`` on platforms
+    where one bot serves several isolated tenants, so a wake source must carry
+    the same scope as inbound messages from that chat to resolve to the same
+    session.
+    The subscription's persisted ``delivery_metadata`` wins over the adapter's
+    live chat 
+ scope mapping, because it records the scope the subscription was
+    created from; the mapping only covers rows that stored no metadata. ``None``
+    means the chat has no scope, which is what an unscoped platform's key
+    contains.
+delivery_metadata)
+scope_id
+slack_team_id
+team_id
+scope_id_for_chatN
+chat_id
+z4kanban notifier: scope lookup failed for chat %s: %sT
+exc_info)
+getattr
+callabler
+debug)
+delivery_meta
+resolver
+resolved
+        r 
+_wake_scope_idrV
+GatewayKanbanWatchersMixinz?Kanban watcher / notifier / dispatcher loops for GatewayRunner.r
+z>Return whether this gateway currently owns the singleton lock.
+_kanban_dispatcher_lock_handleN)
+_owns_kanban_dispatcher_lockz7GatewayKanbanWatchersMixin._owns_kanban_dispatcher_lock
+z>Clear notifier-visible ownership before releasing the OS lock.rZ
+_release_kanban_dispatcher_lockz:GatewayKanbanWatchersMixin._release_kanban_dispatcher_lock
+interval
+floatc
+r%d2t?
+r%d+t?
+r%d+t?
+r%d2t?
+dMl%m&}'
+|(dPdQ
+dMl%m&}-
+>r1|.r
+|2|/|0|
+dml%m1}3
+Poll ``kanban_notify_subs`` and deliver terminal events to users.
+        For each subscription row, fetches ``task_events`` newer than the
+        stored cursor with kind in the terminal set (``completed``,
+        ``blocked``, ``gave_up``, ``crashed``, ``timed_out``,
+        ``review_requested``, ``block_loop_detected``). Sends one
+        message per new event to ``(platform, chat_id, thread_id)``,
+        then advances the cursor. The subscription is removed only when the
+        task is ``archived``. A ``done`` task can be reopened for review or
+        continuation, so its subscription and origin-session ownership must
+        survive completion. Cursor advancement prevents old events replaying
+        when that happens.
+        Runs in the gateway event loop; all SQLite work is pushed to a
+        thread via ``asyncio.to_thread`` so the loop never blocks on the
+        WAL lock. Failures in one tick don't stop subsequent ticks.
+        **Multi-board:** iterates every board discovered on disk per
+        tick. Each gateway polls only subscriptions owned by profiles whose
+        adapters it hosts. The dispatch-owning gateway also handles legacy
+        subscriptions without a profile stamp.
+        r
+Platform
+kanban_dbz<kanban notifier: kanban_db not importable; notifier disabledN)
+completed
+blocked
+gave_up
+crashed
+timed_out
+status
+archived
+unblocked
+block_loop_detected
+review_requested
+_kanban_sub_fail_counts
+_kanban_notifier_profile
+done_sub_retention_daysc
+strip)
+profiles
+<genexpr>zXGatewayKanbanWatchersMixin._kanban_notifier_watcher.<locals>._collect.<locals>.<genexpr>#
+_profile_adaptersc
+platforms
+<setcomp>zXGatewayKanbanWatchersMixin._kanban_notifier_watcher.<locals>._collect.<locals>.<setcomp>(
+zXGatewayKanbanWatchersMixin._kanban_notifier_watcher.<locals>._collect.<locals>.<genexpr>:
+z5kanban notifier: no connected adapters; skipping tickF
+include_archived
+db_pathz
+slug:z;kanban notifier: skipping duplicate board slug %s for DB %s)
+notifier_profiles
+include_unownedr
+zIkanban notifier: board %s has no subscriptions owned by %s; skipping openzekanban notifier: read-only subscription probe failed for board %s (%s); falling back to writable open
+z)kanban notifier: cannot open board %s: %s)
+max_age_dayszVkanban notifier: purged %d stale done-task subscription(s) on board %s (retention %dd)z5kanban notifier: stale-sub GC failed for board %s: %s)
+z.kanban notifier: board %s has no subscriptions
+notifier_profilezlkanban notifier: subscription for %s owned by profile %s; current profile %s has no adapter for it, skipping
+task_idr
+zIkanban notifier: subscription for %s on %s skipped; adapter not connectedz
+<missing>rI
+thread_id)
+kindsuF
+kanban notifier: claimed %d event(s) for %s on board %s cursor %s
+old_cursor
+cursor
+events
+z;kanban notifier: subscription for %s on board %s failed: %s)!r\
+updaterM
+adapters
+valuesr'
+list_boardsr
+read_board_metadata
+DEFAULT_BOARD
+expanduser
+resolve
+kanban_db_path
+count_notify_subs
+sorted
+connect
+purge_stale_done_notify_subs
+list_notify_subsr
+claim_unseen_events_for_sub
+get_task
+append
+warningr8
+deliveriesr
+active_platforms
+_profile_adapter_map
+boards
+seen_db_paths
+board_metar
+resolved_db_pathrU
+_purged
+_gc_exc
+subsrA
+owner_profile
+_owner_adaptersr
+sub_exc
+TERMINAL_KINDS
+_gc_due
+_gc_retention_days
+                         
+_collectzEGatewayKanbanWatchersMixin._kanban_notifier_watcher.<locals>._collect
+zPkanban notifier: adapter %s disconnected before delivery for %s; rewinding claimr
+delivery_mode
+notify)
+notify+wake
+summary
+Kanban u
+ done 
+reasonz
+ blockedri
+erroru
+ z& gave up after repeated spawn failuresrj
+z1 worker crashed (pid gone); dispatcher will retryrk
+limit_secondsu
+ timed out (max_runtime=z
+s); will retryrl
+ ready for review 
+recurrencesz
+ (blocked z
+x for the same cause)u
+ routed to TRIAGE 
+ needs a human decisionrD
+adapter_supports_pushzmkanban notifier: adapter %s has no push channel; skipping text ping for %s, relying on wake self-post instead)
+metadata
+successTFz!adapter send() reported failure: z
+unknown errorz?kanban notifier: delivered %s event for %s to %s/%s on board %s
+payload)
+event_payloadr
+z4kanban notifier: artifact delivery for %s failed: %sr
+z=kanban notifier: send failed for %s on %s (attempt %d/%d): %szRkanban notifier: dropping subscription %s on %s after %d consecutive send failuresrm
+_WAKE_KINDSs
+zFGatewayKanbanWatchersMixin._kanban_notifier_watcher.<locals>.<setcomp>
+session_idz
+gateway.kanban.wake.completedz
+gateway.kanban.wake.gave_upz
+gateway.kanban.wake.crashedz
+gateway.kanban.wake.timed_outz
+gateway.kanban.wake.blockedz!gateway.kanban.wake.status_joinerz"gateway.kanban.wake.status_defaultz
+gateway.kanban.wake.message)
+assigneer
+gateway.kanban.wake.handoff)
+gateway.kanban.wake.guidance
+deliver_wake)
+@kanban notifier: woke agent for %s on %s/%s profile=%s events=%s
+defaultzAkanban notifier: wake self-post failed for %s (attempt %d/%d): %srK
+zRkanban notifier: dropping subscription %s on %s after %d consecutive wake failuresr
+Wake the creator session behind a push adapter.
+                            Shared by the wake-only (pre-advance, delivery)
+                            and notify+wake (post-advance, best-effort)
+                            branches below; raises on failure so the caller
+                            decides whether to rewind or merely log.
+                            r
+SessionSourcer
+chat_typerJ
+grouprI
+user_id
+user_id_alt)
+sourcer
+gateway.sessionr
+gateway.waker
+_chat_type
+_delivery_meta
+_source
+_session_key
+_synth
+_wake_kindsr@
+platform_strrA
+sub_profiles
+_push_wakezGGatewayKanbanWatchersMixin._kanban_notifier_watcher.<locals>._push_waked
+zEkanban notifier: wake-only delivery failed for %s (attempt %d/%d): %sz3kanban notifier: wakeup injection failed for %s: %sz
+kanban notifier tick failed: %s
+gateway.configrd
+hermes_clirf
+_active_profile_namers
+asyncio
+_running
+monotonic
+hermes_cli.configr
+to_threadr
+_kanban_advance
+_authorization_adapterrO
+_kanban_rewindr
+splitlines
+resultr
+RuntimeError
+_deliver_kanban_artifacts
+_kanban_unsubrl
+max)Er[
+_Platform
+MAX_SEND_FAILURES
+sub_fail_counts
+_GC_INTERVAL_SECONDS
+_gc_next_at
+_load_cfg
+_kanban_cfgr
+board_slugr
+board_tag
+sub_key
+wake_agent
+send_passive
+wake_handoffr
+handoff
+payload_summary
+new_statusr
+_send_res
+art_excrU
+task_terminal
+_adapter_push_ok
+_is_push_adapter
+_title
+_assignee
+_parts
+_statusr
+_wk_errr
+`                                                      @@@@@@@@@@@@@@r 
+_kanban_notifier_watcherz3GatewayKanbanWatchersMixin._kanban_notifier_watcher
+Sync helper: advance a subscription's cursor. Runs in to_thread.
+        ``board`` scopes the DB connection to the board that owns this
+        subscription. Unsub cursors in one board can't touch another's.
+        r
+new_cursorN)
+advance_notify_cursorr
+      r 
+z*GatewayKanbanWatchersMixin._kanban_advance
+remove_notify_subr
+     r 
+z(GatewayKanbanWatchersMixin._kanban_unsub
+claimed_cursorr
+zCSync helper: undo a claimed notification cursor after send failure.r
+rewind_notify_cursorr
+       r 
+z)GatewayKanbanWatchersMixin._kanban_rewind
+Optional[dict]c
+Upload artifact files referenced by a completed kanban task.
+        Workers passing ``kanban_complete(artifacts=[...])`` ship absolute
+        file paths through the completion event so downstream humans get
+        the deliverable as a native upload instead of a path printed in
+        chat.
+        Sources scanned, in priority order:
+          1. ``event_payload['artifacts']`` (explicit list 
+ preferred)
+          2. ``event_payload['summary']`` (truncated first line)
+          3. ``task.result`` (legacy fallback)
+        Files are deduplicated, missing files are silently skipped (the
+        path may have been mentioned for reference only), and delivery
+        errors are logged but do not break the notifier loop.
+        r
+pathr6
+isfiler
+expanded
+candidates
+_addzBGatewayKanbanWatchersMixin._deliver_kanban_artifacts.<locals>._addO
+artifactsr
+BasePlatformAdapter>
+.webp>
+.webm)
+quotec
+suffixr
+_IMAGE_EXTS
+_Paths
+<listcomp>zHGatewayKanbanWatchersMixin._deliver_kanban_artifacts.<locals>.<listcomp>
+zHGatewayKanbanWatchersMixin._deliver_kanban_artifacts.<locals>.<listcomp>
+file://rJ
+_quotes
+zHGatewayKanbanWatchersMixin._deliver_kanban_artifacts.<locals>.<listcomp>
+imagesr
+z.kanban notifier: image batch upload failed: %s)
+video_pathr
+file_pathr
+z0kanban notifier: artifact upload (%s) failed: %s)
+pathlibr
+tupler6
+extract_local_filesrM
+gateway.platforms.baserJ
+filter_local_delivery_paths
+urllib.parserV
+send_multiple_imagesr
+send_video
+send_document)
+pathsr5
+result_textrJ
+_VIDEO_EXTS
+image_paths
+other_paths
+batchrU
+                      @@@@@r 
+z4GatewayKanbanWatchersMixin._deliver_kanban_artifacts1
+Embedded kanban dispatcher 
+ one tick every `dispatch_interval_seconds`.
+        Gated by `kanban.dispatch_in_gateway` in config.yaml (default True).
+        When true, the gateway hosts the single dispatcher for this profile:
+        no separate `hermes kanban daemon` process needed. When false, the
+        loop exits immediately and an external daemon is expected.
+        Each tick calls :func:`kanban_db.dispatch_once` inside
+        ``asyncio.to_thread`` so the SQLite WAL lock never blocks the
+        event loop. Failures in one tick don't stop subsequent ticks 
+        same pattern as `_kanban_notifier_watcher`.
+        Shutdown: the loop checks ``self._running`` between ticks; gateway
+        stop() flips it to False and cancels pending tasks, and the
+        in-flight ``to_thread`` returns on its own after the current
+        ``dispatch_once`` call finishes (typically <1ms on an idle board).
+        r
+z6kanban dispatcher: config loader unavailable; disabledN
+!HERMES_KANBAN_DISPATCH_IN_GATEWAYrJ
+falsezEkanban dispatcher: disabled via HERMES_KANBAN_DISPATCH_IN_GATEWAY envz4kanban dispatcher: cannot load config (%s); disabledr
+dispatch_in_gatewayTzGkanban dispatcher: disabled via config kanban.dispatch_in_gateway=falsere
+z@kanban dispatcher: kanban_db not importable; dispatcher disabledz
+.dispatcher.lockr0
+zjkanban dispatcher: another gateway already holds the dispatcher lock (%s); this gateway will NOT dispatch.r1
+z9kanban dispatcher: holding singleton dispatcher lock (%s)zWkanban dispatcher: advisory lock unavailable at %s; proceeding on config control alone.
+dispatch_interval_seconds
+zIkanban dispatcher: invalid dispatch_interval_seconds=%r, using default 60g
+max_spawnz
+kanban dispatcher: max_spawn=%s
+max_in_progressr
+zAkanban dispatcher: kanban.max_in_progress=%r is below 1; ignoringz%kanban dispatcher: max_in_progress=%sz>kanban dispatcher: invalid kanban.max_in_progress=%r; ignoringz
+kanban dispatcher: kanban.max_in_progress unset; using memory-derived default max_in_progress=%d (set kanban.max_in_progress in config.yaml to override)
+failure_limitzDkanban dispatcher: invalid kanban.failure_limit=%r; using default %dzGkanban dispatcher: kanban.failure_limit=%r is below 1; using default %d
+dispatch_stale_timeout_secondsz^kanban dispatcher: invalid kanban.dispatch_stale_timeout_seconds=%r; disabling stale detection
+reconcile_orphans
+default_assigneezZkanban dispatcher: default_assignee=%r (unassigned ready tasks will route to this profile)
+max_in_progress_per_profilezMkanban dispatcher: kanban.max_in_progress_per_profile=%r is below 1; ignoringz1kanban dispatcher: max_in_progress_per_profile=%dzJkanban dispatcher: invalid kanban.max_in_progress_per_profile=%r; ignoringrt
+"tuple[str, int | None, int | None]c
+statr7
+st_mtime_ns
+st_size)
+_board_db_fingerprintzTGatewayKanbanWatchersMixin._kanban_dispatcher_watcher.<locals>._board_db_fingerprint
+KanbanDbCorruptErrorTFz
+file is not a databasez database disk image is malformed)
+sqlite3
+DatabaseErrorr6
+corrupt_guard_errorr%
+_is_corrupt_board_db_errorzYGatewayKanbanWatchersMixin._kanban_dispatcher_watcher.<locals>._is_corrupt_board_db_error
+'Optional[object]'c
+Run one dispatch_once for a specific board.
+            Runs in a worker thread via `asyncio.to_thread`. `board=slug`
+            is passed through `dispatch_once` so `resolve_workspace` and
+            `_default_spawn` see the right paths. The per-board DB is
+            opened explicitly so concurrent boards never share a
+            connection handle or accidentally claim across each other.
+            Nzdkanban dispatcher: board %s database fingerprint unchanged after %.0fs quarantine; retrying dispatchz?kanban dispatcher: board %s database changed; retrying dispatchr
+stale_timeout_secondsr
+kanban dispatcher: board %s database %s is not a valid SQLite database; pausing dispatch for this board until the file changes, the gateway restarts, or the quarantine timer expires. Move or restore the file, then run `hermes kanban init` if you need a fresh board.r
+z*kanban dispatcher: tick failed on board %s)
+dispatch_oncer8
+exception)
+fingerprint
+disabled_entry
+disabled_fingerprint
+disabled_at
+!CORRUPT_BOARD_RETRY_AFTER_SECONDSr
+disabled_corrupt_boardsr
+        
+_tick_once_for_boardzSGatewayKanbanWatchersMixin._kanban_dispatcher_watcher.<locals>._tick_once_for_board
+$'list[tuple[str, Optional[object]]]'c
+Run one dispatch_once per board. Returns (slug, result) pairs.
+            Enumerating boards on every tick keeps the dispatcher honest
+            when users create a new board mid-run: no restart required,
+            the next tick picks it up automatically.
+            Fr
+_tick_oncezIGatewayKanbanWatchersMixin._kanban_dispatcher_watcher.<locals>._tick_once
+Cheap probe: is there at least one ready+assigned+unclaimed
+            task on ANY board whose assignee maps to a real Hermes profile
+            (i.e. one the dispatcher would actually spawn for)?
+            Tasks assigned to control-plane lanes (e.g. ``orion-cc``,
+            ``orion-research``) are pulled by terminals via
+            ``claim_task`` directly and never spawnable, so a queue full
+            of those is "correctly idle", not "stuck". Filtering them out
+            here keeps the stuck-warn fire only on real failures (broken
+            PATH, missing venv, credential loss for a real Hermes profile).
+            Fr
+review_dispatch_enabledr
+has_spawnable_readyr8
+has_spawnable_review)
+_review_prober
+_ready_nonemptyzNGatewayKanbanWatchersMixin._kanban_dispatcher_watcher.<locals>._ready_nonempty
+tuple[bool, int]c
+z=Re-resolve (enabled, per_tick) from current config each tick.)
+_load_configs
+_read_auto_decompose_settingsz\GatewayKanbanWatchersMixin._kanban_dispatcher_watcher.<locals>._read_auto_decompose_settings<
+Run the auto-decomposer for up to N triage tasks across all
+            boards. Returns the number of triage tasks that were
+            successfully decomposed or specified this tick.
+            r
+kanban_decomposez3kanban auto-decompose: import failed (%s); skippingNFr
+HERMES_KANBAN_BOARDz>kanban auto-decompose: list_triage_ids failed on board %s (%s)r
+auto-decomposer)
+authorz3kanban auto-decompose: decompose_task crashed on %su.
+kanban auto-decompose [%s]: %s 
+ %d childrenu:
+kanban auto-decompose [%s]: %s 
+ single task (no fanout)z*kanban auto-decompose [%s]: %s skipped: %s)
+environ
+list_triage_idsrO
+decompose_taskr
+fanout
+child_idsr
+_decomprU
+attempted
+successesr
+prev_env
+triage_ids
+outcomer
+            
+_auto_decompose_tickzSGatewayKanbanWatchersMixin._kanban_dispatcher_watcher.<locals>._auto_decompose_tick@
+z7kanban dispatcher: embedded in gateway (interval=%.1fs)z6kanban dispatcher: reaped %d zombie worker(s), pids=%sz'kanban dispatcher: zombie reaper failedF
+spawnedzckanban dispatcher [%s]: spawned=%d reclaimed=%d crashed=%d timed_out=%d promoted=%d auto_blocked=%d
+__len__z
+kanban dispatcher stuck: ready queue non-empty for %d consecutive ticks but 0 workers spawned. Check profile health (venv, PATH, credentials) and `hermes kanban list --status ready`.z
+kanban dispatcher: cancelledz+kanban dispatcher: unexpected watcher errorru
+kanban_homer;
+resolve_max_in_progress
+DEFAULT_FAILURE_LIMITr
+reap_worker_zombiesr
+reclaimed
+hasattrrj
+promoted
+auto_blockedr
+CancelledErrorrO
+min)-r[
+env_overrider
+kanban_cfg
+_lock_path
+_lock_handle
+_lock_statera
+raw_max_in_progress
+effective_max_in_progress
+raw_failure_limit
+raw_stale
+raw_per_profile
+HEALTH_WINDOW
+bad_ticks
+last_warn_atr
+ready_pending
+_ad_enabled
+_ad_per_tick
+results
+any_spawnedr
+sleptr
+                               @@@@@@@@@@@@@@r 
+_kanban_dispatcher_watcherz5GatewayKanbanWatchersMixin._kanban_dispatcher_watcher
+__name__
+__module__
+__qualname__
+__doc__r\
+__future__r
+loggingrC
+typingr
+agent.i18nr
+getLoggerr'
+<module>r

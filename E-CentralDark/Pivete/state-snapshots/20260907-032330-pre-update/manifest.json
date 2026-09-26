@@ -1,0 +1,28 @@
+{
+  "id": "20260907-032330-pre-update",
+  "timestamp": "20260907-032330",
+  "label": "pre-update",
+  "file_count": 17,
+  "total_size": 619176074,
+  "files": {
+    "state.db": 612831232,
+    "config.yaml": 4964,
+    ".env": 364,
+    "auth.json": 21695,
+    "cron/jobs.json": 21425,
+    "cron/executions.db": 1044480,
+    "gateway_state.json": 477,
+    "channel_directory.json": 363,
+    "processes.json": 2,
+    "projects.db": 45056,
+    "verification_evidence.db": 286720,
+    "kanban.db": 4767744,
+    "kanban/boards/sol/kanban.db": 118784,
+    "kanban/boards/sol/kanban.db-shm": 32768,
+    "kanban/boards/sol/kanban.db-wal": 0,
+    "kanban/boards/sol/kanban.db.dispatch.lock": 0,
+    "kanban/boards/sol/kanban.db.init.lock": 0
+  },
+  "failed_dbs": [],
+  "oversized_skipped": []
+}

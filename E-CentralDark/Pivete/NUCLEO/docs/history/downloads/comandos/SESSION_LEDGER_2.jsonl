@@ -1,0 +1,12 @@
+{"id": "CS-01", "class": "FALSE_PRECISION_BLOCKED", "event": "Percentuais foram apresentados como 'medidos' sem benchmark; usuário forçou reclassificação para estimativa/UNKNOWN."}
+{"id": "CS-02", "class": "SELF_VALIDATION_BLOCKED", "event": "SOL tentou usar a própria correção como prova causal; usuário forçou separar evento observado de causalidade."}
+{"id": "CS-03", "class": "SCOPE_GENERALIZATION", "event": "Usuário corrigiu PAPAGAIO_OFF para qualquer escopo; juiz material varia por escopo."}
+{"id": "CS-04", "class": "DETERMINISTIC_STATE_RESTORED", "event": "Usuário corrigiu READY_FOR_MERGE de 'claim da SOL' para estado determinístico de GitHub/gates/Dependabot/conflitos."}
+{"id": "CS-05", "class": "HUMAN_REALITY_PRESERVED", "event": "Usuário corrigiu PAPAGAIO_OFF para não gerar dúvida artificial sobre comando e experiência vivida."}
+{"id": "CS-06", "class": "PR_SCOPE_BOUNDARY", "event": "Usuário corrigiu mistura de deploy/VPS com readiness de PR; deploy virou porteira separada."}
+{"id": "CS-07", "class": "AUTHORSHIP_GUARD", "event": "Usuário corrigiu achatamento entre originator/writer/owner/authority."}
+{"id": "CS-08", "class": "HISTORY_RENDEZVOUS", "event": "Usuário insistiu em reconciliação histórica; conclusão forte demais sobre ausência Chrome/Electron↔CentralDark caiu."}
+{"id": "CS-09", "class": "SEMANTIC_ESCAPE_BLOCKED", "event": "Usuário apontou que literalismo 'não são todas as técnicas' desviava do objeto pragmático e tornou teste recursivo."}
+{"id": "CS-10", "class": "ADVERSARY_STRENGTHENED", "event": "Usuário rejeitou bateria excessivamente favorável e pediu Fable como adversário forte."}
+{"id": "CS-11", "class": "SOURCE_SEPARATION", "event": "Usuário exigiu busca externa; Fable público foi separado de fabler/fable-tutor internos do repo."}
+{"id": "CS-12", "class": "OBSERVABLE_BEHAVIOR_AUDIT", "event": "Usuário rejeitou foco em resumo de raciocínio e exigiu histórico de erros/admissões/registros reais."}

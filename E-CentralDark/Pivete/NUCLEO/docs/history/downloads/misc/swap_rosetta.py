@@ -1,0 +1,600 @@
+#!/usr/bin/env python3
+# meteor-decomp — clean-room decompilation of FINAL FANTASY XIV 1.x client binaries
+# Copyright (C) 2026  Samuel Stegall
+# SPDX-License-Identifier: AGPL-3.0-or-later
+"""
+Splice a hand-written `_rosetta/<sym>.cpp` source into the relink in
+place of the byte-blob's coverage at the function's RVA.
+
+Pipeline:
+  1. Wrap the rosetta source in `#pragma code_seg(".text$X<rva>")` so
+     link.exe places it at the right offset within `.text`. Output:
+     `src/<binary>/_passthrough/_swap_<sym>.cpp`.
+  2. Compile the wrapped source via cl-wine.sh.
+  3. Verify the compiled .obj's `.text` matches orig bytes at the
+     function's RVA — if not, abort (don't ship a regression).
+  4. Pass the (rva, size) to `emit_text_blob.py --skip` so the next
+     blob emit leaves a hole at that RVA.
+  5. Re-emit text-blob, recompile, relink, verify byte-identical to orig.
+
+Usage:
+  tools/swap_rosetta.py <binary> <FUN_<va>>   # one swap
+  tools/swap_rosetta.py <binary> --list       # show known swaps
+
+Reads:
+  src/<binary>/_rosetta/<sym>.cpp
+  config/<binary>.yaml (rva → size lookup)
+  build/pe-layout/<binary>.json
+  orig/<binary>.exe
+
+Writes:
+  src/<binary>/_passthrough/_swap_<sym>.cpp
+  src/<binary>/_passthrough/_swap_manifest.json  (RVAs to hole-out)
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import struct
+import subprocess
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+SRC = REPO_ROOT / "src"
+ORIG = REPO_ROOT / "orig"
+PE_LAYOUT = REPO_ROOT / "build" / "pe-layout"
+CONFIG = REPO_ROOT / "config"
+OBJ = REPO_ROOT / "build" / "obj" / "_passthrough"
+
+LICENSE_HEADER = """\
+// meteor-decomp — clean-room decompilation of FINAL FANTASY XIV 1.x client binaries
+// Copyright (C) 2026  Samuel Stegall
+// SPDX-License-Identifier: AGPL-3.0-or-later
+"""
+
+
+# Streaming YAML reader (matches emit_passthrough_cpp.py).
+RE_YAML_HEADER = re.compile(r"^- rva: (0x[0-9a-fA-F]+)")
+
+
+def stream_yaml_rows(yaml_path: Path):
+    rva = end = size = None
+    symbol = None
+    status = None
+    with yaml_path.open() as f:
+        for line in f:
+            m = RE_YAML_HEADER.match(line)
+            if m:
+                if rva is not None:
+                    yield (rva, end, size, symbol, status)
+                rva = int(m.group(1), 16)
+                end = size = None
+                symbol = None
+                status = None
+                continue
+            stripped = line.strip()
+            if stripped.startswith("end:"):
+                end = int(stripped.split(":", 1)[1].split("#", 1)[0].strip(), 0)
+            elif stripped.startswith("size:"):
+                size = int(stripped.split(":", 1)[1].split("#", 1)[0].strip(), 0)
+            elif stripped.startswith("symbol:"):
+                symbol = stripped.split(":", 1)[1].split("#", 1)[0].strip()
+            elif stripped.startswith("status:"):
+                status = stripped.split(":", 1)[1].split("#", 1)[0].strip()
+    if rva is not None:
+        yield (rva, end, size, symbol, status)
+
+
+def find_function_size(binary: str, fun_name: str) -> tuple[int, int]:
+    """Return (rva, size) for FUN_<va> by lookup in YAML."""
+    m = re.match(r"FUN_([0-9a-fA-F]+)$", fun_name)
+    if not m:
+        raise ValueError(f"expected FUN_<va>, got {fun_name!r}")
+    va = int(m.group(1), 16)
+    rva = va - 0x400000
+    yaml_path = CONFIG / f"{binary}.yaml"
+    for r, _e, sz, sym, _st in stream_yaml_rows(yaml_path):
+        if r == rva:
+            return rva, sz
+    raise ValueError(f"no YAML row at rva 0x{rva:08x}")
+
+
+_EXTERN_C_RE = re.compile(r'\bextern\s+"C"\s+')
+
+
+def wrap_rosetta_source(rosetta_src: str, fun_name: str, rva: int) -> str:
+    """Wrap a `_rosetta/<sym>.cpp` body in code_seg + namespace so
+    cl.exe places its `.text` contribution in `.text$X<rva>` AND
+    every defined symbol is mangled with a per-RVA namespace.
+
+    Two collision-avoidance layers:
+      1. **Namespace wrap** — handles C++-name-mangled symbols
+         (class methods like `C::empty1`).
+      2. **`extern "C"` neutralisation** — cluster-derived rosettas
+         frequently use `extern "C" __declspec(naked) void
+         no_reloc_member() {...}`. The `extern "C"` linkage prevents
+         the namespace from mangling the symbol, so multiple swaps
+         that share that template all define the unmangled
+         `_no_reloc_member` (LNK2005). We comment out `extern "C"`
+         so the symbol gets normal C++ mangling under our per-RVA
+         namespace.
+
+    Functionally safe: `extern "C"` for a naked function only affects
+    the linker-side symbol name; the function body (raw asm) doesn't
+    care. We're keeping the naked body verbatim — just renaming the
+    symbol that wraps it.
+    """
+    ns = f"swap_{rva:08x}"
+    # Comment out every `extern "C"` (and `extern "C++"`) in the
+    # rosetta source. We do NOT touch `extern int the_global;` etc.
+    # — those reference SYMBOLS not function-definition linkage.
+    neutralised = _EXTERN_C_RE.sub("/* extern \"C\" */ ", rosetta_src)
+
+    out = [LICENSE_HEADER, ""]
+    out.append(f"// AUTO-GENERATED by tools/swap_rosetta.py — do not edit.")
+    out.append(f"// Wraps src/<binary>/_rosetta/{fun_name}.cpp in a")
+    out.append(f"// code_seg pragma + per-RVA namespace so the compiled .text")
+    out.append(f"// bytes land at orig RVA 0x{rva:08x} in the relinked PE")
+    out.append(f"// AND every symbol defined here is mangled with `{ns}::*`")
+    out.append(f"// (avoids LNK2005 when multiple cluster-derived rosettas")
+    out.append(f"// share generic class names like `C::empty1`).")
+    out.append("//")
+    out.append("// Any top-level `extern \"C\"` linkage decls in the rosetta")
+    out.append("// source are commented out so namespace mangling applies")
+    out.append("// (cluster-derived sources reuse names like `no_reloc_member`).")
+    out.append("")
+    out.append(f'#pragma code_seg(".text$X{rva:08x}")')
+    out.append("")
+    out.append(f"namespace {ns} {{")
+    out.append("")
+    out.append(neutralised)
+    out.append("")
+    out.append(f"}}  // namespace {ns}")
+    out.append("")
+    out.append("#pragma code_seg()")
+    out.append("")
+    return "\n".join(out)
+
+
+def coff_text_bytes(obj_path: Path) -> bytes:
+    """Concatenate every `.text` / `.text$<key>` section in COFF order."""
+    data = obj_path.read_bytes()
+    sig1, sig2 = struct.unpack_from("<HH", data, 0)
+    if sig1 == 0x0000 and sig2 == 0xFFFF:
+        n_sections = struct.unpack_from("<I", data, 0x2c)[0]
+        sym_off = struct.unpack_from("<I", data, 0x30)[0]
+        n_syms = struct.unpack_from("<I", data, 0x34)[0]
+        sec_off = 0x38
+        sym_size = 20
+    else:
+        n_sections = struct.unpack_from("<H", data, 2)[0]
+        sym_off = struct.unpack_from("<I", data, 8)[0]
+        n_syms = struct.unpack_from("<I", data, 12)[0]
+        opt_size = struct.unpack_from("<H", data, 16)[0]
+        sec_off = 20 + opt_size
+        sym_size = 18
+    str_table_off = sym_off + n_syms * sym_size
+    chunks = []
+    for i in range(n_sections):
+        b = sec_off + i * 40
+        raw_name = data[b:b + 8]
+        name = raw_name.rstrip(b"\0").decode("ascii", errors="replace")
+        if name.startswith("/"):
+            try:
+                offset = int(name[1:])
+                end = data.find(b"\0", str_table_off + offset)
+                if end >= 0:
+                    name = data[str_table_off + offset:end].decode("ascii", errors="replace")
+            except ValueError:
+                pass
+        if name == ".text" or name.startswith(".text$"):
+            raw_size = struct.unpack_from("<I", data, b + 16)[0]
+            raw_ptr = struct.unpack_from("<I", data, b + 20)[0]
+            chunks.append(data[raw_ptr:raw_ptr + raw_size])
+    return b"".join(chunks)
+
+
+def verify_obj_against_orig(obj_path: Path, binary: str, rva: int, size: int) -> tuple[bool, str]:
+    """Read the .obj's `.text` and compare against orig bytes at the RVA.
+
+    Also reject .objs that emit `.rdata` / `.data` content (e.g.
+    floating-point literals): those bytes would pollute the merged
+    `.rdata` / `.data` section in the relink, since link.exe places
+    plain-named sections BEFORE `.<sec>$<key>` subsections (`\\0` <
+    `$` lexicographically). Our data sections are emitted as a single
+    blob keyed on `.rdata$X<rva>`, so any swap-introduced bytes shift
+    the blob and break byte-identity. Better to reject the swap and
+    let the byte-passthrough cover those bytes.
+    """
+    pe = json.loads((PE_LAYOUT / f"{binary}.json").read_text())
+    text_sec = next(s for s in pe["sections"] if s["name"] == ".text")
+    orig = (ORIG / f"{binary}.exe").read_bytes()
+    file_off = text_sec["raw_pointer"] + (rva - text_sec["virtual_address"])
+    orig_slice = orig[file_off:file_off + size]
+    ours = coff_text_bytes(obj_path)
+    if not ours:
+        return False, "no .text section in .obj"
+    if len(ours) != size:
+        return False, f"size mismatch: obj_text={len(ours)} expected={size}"
+    if ours != orig_slice:
+        first_diff = next(i for i, (a, b) in enumerate(zip(orig_slice, ours)) if a != b)
+        return False, (f"byte mismatch at +{first_diff}: "
+                       f"orig={orig_slice[first_diff:first_diff+8].hex()} "
+                       f"ours={ours[first_diff:first_diff+8].hex()}")
+    # Reject if the .obj has other content-bearing sections that would
+    # pollute the merged .rdata/.data.
+    extras = _coff_unwanted_sections(obj_path)
+    if extras:
+        return False, f"polluting sections: {extras[:3]}"
+    return True, f"GREEN: {size} bytes match orig at rva 0x{rva:08x}"
+
+
+def _coff_unwanted_sections(obj_path: Path) -> list[str]:
+    """Return list of section names in `obj` that would land in the
+    merged `.rdata` / `.data` if linked. Excludes our intentional
+    `.text` / `.text$X<rva>` and link-time-discarded `.drectve` /
+    `.debug$*` sections."""
+    data = obj_path.read_bytes()
+    sig1, sig2 = struct.unpack_from("<HH", data, 0)
+    if sig1 == 0x0000 and sig2 == 0xFFFF:
+        n_sections = struct.unpack_from("<I", data, 0x2c)[0]
+        sym_off = struct.unpack_from("<I", data, 0x30)[0]
+        n_syms = struct.unpack_from("<I", data, 0x34)[0]
+        sec_off = 0x38
+        sym_size = 20
+    else:
+        n_sections = struct.unpack_from("<H", data, 2)[0]
+        sym_off = struct.unpack_from("<I", data, 8)[0]
+        n_syms = struct.unpack_from("<I", data, 12)[0]
+        opt_size = struct.unpack_from("<H", data, 16)[0]
+        sec_off = 20 + opt_size
+        sym_size = 18
+    str_table_off = sym_off + n_syms * sym_size
+    bad: list[str] = []
+    for i in range(n_sections):
+        b = sec_off + i * 40
+        raw_name = data[b:b + 8]
+        name = raw_name.rstrip(b"\0").decode("ascii", errors="replace")
+        if name.startswith("/"):
+            try:
+                offset = int(name[1:])
+                end = data.find(b"\0", str_table_off + offset)
+                if end >= 0:
+                    name = data[str_table_off + offset:end].decode("ascii", errors="replace")
+            except ValueError:
+                continue
+        # `.text` / `.text$X<rva>` — our intentional code-blob output.
+        if name == ".text" or name.startswith(".text$"):
+            continue
+        # `.drectve` / `.debug$*` — link.exe drops these.
+        if name == ".drectve" or name.startswith(".debug$"):
+            continue
+        # Anything else (`.rdata`, `.data`, `.bss`, `.tls`, etc.) would
+        # land in the merged section and shift our byte-blob.
+        bad.append(name)
+    return bad
+
+
+def compile_swap_obj(binary: str, swap_cpp: Path) -> Path:
+    """Compile the wrapped swap source via cl-wine.sh.
+
+    Paths are passed RELATIVE to REPO_ROOT and we cwd into REPO_ROOT
+    before the call — cl-wine.sh + Wine handle the Z: drive
+    translation internally."""
+    obj_path = OBJ / binary / swap_cpp.with_suffix(".obj").name
+    obj_path.parent.mkdir(parents=True, exist_ok=True)
+    cl_wine = REPO_ROOT / "tools" / "cl-wine.sh"
+    rel_cpp = swap_cpp.relative_to(REPO_ROOT)
+    rel_obj = obj_path.relative_to(REPO_ROOT)
+    cmd = [
+        str(cl_wine),
+        "/c", "/O2", "/Oy", "/GR-", "/EHs-", "/Gy", "/MT",
+        "/Zc:wchar_t", "/Zc:forScope", "/TP",
+        f"/Fo{rel_obj}",
+        str(rel_cpp),
+    ]
+    res = subprocess.run(cmd, capture_output=True, text=True, cwd=REPO_ROOT)
+    if res.returncode != 0:
+        print(f"  cl.exe stdout:\n{res.stdout[:500]}")
+        print(f"  cl.exe stderr:\n{res.stderr[:500]}")
+        raise RuntimeError(f"cl.exe failed for {swap_cpp.name}")
+    return obj_path
+
+
+def patch_alignment(obj_path: Path) -> int:
+    """Rewrite COFF `.text$X*` section alignment bits to 1.
+    Returns number of subsections patched."""
+    raw = bytearray(obj_path.read_bytes())
+    sig1, sig2 = struct.unpack_from("<HH", raw, 0)
+    if sig1 == 0x0000 and sig2 == 0xFFFF:
+        n_sections = struct.unpack_from("<I", raw, 0x2c)[0]
+        sym_off = struct.unpack_from("<I", raw, 0x30)[0]
+        n_syms = struct.unpack_from("<I", raw, 0x34)[0]
+        sec_off = 0x38
+        sym_size = 20
+    else:
+        n_sections = struct.unpack_from("<H", raw, 2)[0]
+        sym_off = struct.unpack_from("<I", raw, 8)[0]
+        n_syms = struct.unpack_from("<I", raw, 12)[0]
+        opt_size = struct.unpack_from("<H", raw, 16)[0]
+        sec_off = 20 + opt_size
+        sym_size = 18
+    str_table_off = sym_off + n_syms * sym_size
+    n_patched = 0
+    for i in range(n_sections):
+        b = sec_off + i * 40
+        raw_name = raw[b:b + 8]
+        name = raw_name.rstrip(b"\0").decode("ascii", errors="replace")
+        if name.startswith("/"):
+            try:
+                offset = int(name[1:])
+                end = raw.find(b"\0", str_table_off + offset)
+                if end >= 0:
+                    name = raw[str_table_off + offset:end].decode("ascii", errors="replace")
+            except ValueError:
+                continue
+        if not re.match(r"^\.text\$X[0-9a-fA-F]{8}$", name):
+            continue
+        chars_off = b + 36
+        chars = struct.unpack_from("<I", raw, chars_off)[0]
+        new_chars = (chars & ~0x00f00000) | 0x00100000
+        if new_chars != chars:
+            struct.pack_into("<I", raw, chars_off, new_chars)
+            n_patched += 1
+    if n_patched:
+        obj_path.write_bytes(bytes(raw))
+    return n_patched
+
+
+_MANIFEST_LOCK = __import__("threading").Lock()
+
+
+def update_swap_manifest(binary: str, fun_name: str, rva: int, size: int) -> None:
+    manifest_path = SRC / binary / "_passthrough" / "_swap_manifest.json"
+    with _MANIFEST_LOCK:
+        if manifest_path.exists():
+            manifest = json.loads(manifest_path.read_text())
+        else:
+            manifest = {"swaps": []}
+        # Replace existing entry for this rva, or append.
+        manifest["swaps"] = [s for s in manifest["swaps"] if s["rva"] != rva]
+        manifest["swaps"].append({"fun_name": fun_name, "rva": rva, "size": size})
+        manifest["swaps"].sort(key=lambda s: s["rva"])
+        manifest_path.parent.mkdir(parents=True, exist_ok=True)
+        manifest_path.write_text(json.dumps(manifest, indent=2))
+
+
+def attempt_swap(binary: str, fun_name: str, verbose: bool = True) -> dict:
+    """Try to wrap + compile + verify ONE rosetta source. Returns a
+    result dict with `verdict` ∈ {accepted, no_yaml, compile_fail,
+    byte_mismatch, no_rosetta}, plus diagnostic fields."""
+    rosetta_src_path = SRC / binary / "_rosetta" / f"{fun_name}.cpp"
+    if not rosetta_src_path.exists():
+        return {"fun_name": fun_name, "verdict": "no_rosetta"}
+    try:
+        rva, size = find_function_size(binary, fun_name)
+    except ValueError as e:
+        return {"fun_name": fun_name, "verdict": "no_yaml", "error": str(e)}
+
+    wrapped = wrap_rosetta_source(rosetta_src_path.read_text(), fun_name, rva)
+    swap_path = SRC / binary / "_passthrough" / f"_swap_{fun_name}.cpp"
+    swap_path.parent.mkdir(parents=True, exist_ok=True)
+    swap_path.write_text(wrapped)
+
+    try:
+        obj_path = compile_swap_obj(binary, swap_path)
+    except RuntimeError as e:
+        swap_path.unlink(missing_ok=True)
+        return {"fun_name": fun_name, "rva": rva, "size": size,
+                "verdict": "compile_fail", "error": str(e)}
+
+    patch_alignment(obj_path)
+    ok, msg = verify_obj_against_orig(obj_path, binary, rva, size)
+    if not ok:
+        swap_path.unlink(missing_ok=True)
+        obj_path.unlink(missing_ok=True)
+        return {"fun_name": fun_name, "rva": rva, "size": size,
+                "verdict": "byte_mismatch", "error": msg}
+    update_swap_manifest(binary, fun_name, rva, size)
+    return {"fun_name": fun_name, "rva": rva, "size": size,
+            "verdict": "accepted"}
+
+
+def cmd_swap(binary: str, fun_name: str) -> None:
+    print(f"=== swap_rosetta {fun_name} ===")
+    res = attempt_swap(binary, fun_name)
+    if res["verdict"] == "accepted":
+        print(f"  ✓ accepted: rva 0x{res['rva']:08x}, size {res['size']}")
+        print(f"\nNext: `make relink BINARY={binary}.exe` to bake the swap.")
+    else:
+        print(f"  ✗ rejected ({res['verdict']}): {res.get('error','?')[:120]}")
+        raise SystemExit(1)
+
+
+# Source patterns we know will compile-fail because they reference
+# placeholder externs that no real symbol resolves. Pre-filter these
+# to save cl.exe round-trips at scale.
+PRE_FILTER_PATTERNS = [
+    re.compile(r"^\s*extern\s+\"C\"\s+int\s+the_global\s*;", re.MULTILINE),
+    re.compile(r"^\s*extern\s+\"C\"\s+(int|void)\s+target\s*\(", re.MULTILINE),
+    re.compile(r"^\s*extern\s+int\s+target\s*\(\s*\)\s*;", re.MULTILINE),
+    re.compile(r"^\s*extern\s+\"C\"\s+\w+\s+operator_delete\s*\(", re.MULTILINE),
+    re.compile(r"^\s*extern\s+\"C\"\s+void\s+inner\s*\(", re.MULTILINE),
+]
+
+
+def _has_unresolvable_extern(src: str) -> bool:
+    return any(p.search(src) for p in PRE_FILTER_PATTERNS)
+
+
+def attempt_swap_with_prefilter(binary: str, fun_name: str) -> dict:
+    """Like attempt_swap, but pre-skip rosettas with unresolvable
+    extern placeholders (cluster-derived sources that reference
+    fictional symbols like `the_global` / `target`). Saves a doomed
+    cl.exe round-trip for the bulk path."""
+    rosetta_src_path = SRC / binary / "_rosetta" / f"{fun_name}.cpp"
+    if not rosetta_src_path.exists():
+        return {"fun_name": fun_name, "verdict": "no_rosetta"}
+    src = rosetta_src_path.read_text()
+    if _has_unresolvable_extern(src):
+        return {"fun_name": fun_name, "verdict": "prefilter_extern"}
+    return attempt_swap(binary, fun_name)
+
+
+def cmd_bulk(binary: str, jobs: int = 4) -> None:
+    """Iterate every src/<binary>/_rosetta/*.cpp, attempt swap, accumulate
+    a per-fn report. Re-emit the text-blob ONCE at the end so the
+    accepted swaps land in the next relink."""
+    import concurrent.futures
+    import sys as _sys
+
+    rosetta_dir = SRC / binary / "_rosetta"
+    if not rosetta_dir.is_dir():
+        raise SystemExit(f"no rosetta dir: {rosetta_dir}")
+    candidates = sorted(rosetta_dir.glob("FUN_*.cpp"))
+    print(f"=== bulk swap_rosetta ({binary}): {len(candidates)} candidates, jobs={jobs} ===", flush=True)
+
+    results: list[dict] = []
+    counts: dict[str, int] = {}
+
+    def emit_progress(i: int, res: dict, total: int) -> None:
+        verdict = res["verdict"]
+        if i % 25 == 0 or verdict == "accepted":
+            line = f"  [{i:>4}/{total}] {res['fun_name']:30s} {verdict:18s}"
+            if verdict == "accepted":
+                line += f" ({res['size']} B at rva 0x{res['rva']:08x})"
+            print(line, flush=True)
+
+    # For accept-path we need to serialize manifest writes (to avoid
+    # JSON corruption). Run pre-filter inline; only the cl.exe
+    # invocations parallelize.
+    pre_filtered: list[tuple[int, str]] = []  # (i, fun_name)
+    for i, cpp in enumerate(candidates, 1):
+        fun_name = cpp.stem
+        src = (SRC / binary / "_rosetta" / f"{fun_name}.cpp").read_text()
+        if _has_unresolvable_extern(src):
+            res = {"fun_name": fun_name, "verdict": "prefilter_extern"}
+            results.append(res)
+            counts["prefilter_extern"] = counts.get("prefilter_extern", 0) + 1
+            emit_progress(i, res, len(candidates))
+        else:
+            pre_filtered.append((i, fun_name))
+
+    print(f"  pre-filter dropped {counts.get('prefilter_extern', 0)} candidates "
+          f"(unresolvable externs); compiling {len(pre_filtered)}", flush=True)
+
+    # Compile path — parallel via threads (each cl-wine.sh is its own
+    # subprocess so threads + subprocess.run sidesteps GIL).
+    with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as ex:
+        futures = {ex.submit(attempt_swap, binary, fun_name): (i, fun_name)
+                   for i, fun_name in pre_filtered}
+        for fut in concurrent.futures.as_completed(futures):
+            i, fun_name = futures[fut]
+            try:
+                res = fut.result()
+            except Exception as e:
+                res = {"fun_name": fun_name, "verdict": "exception", "error": str(e)}
+            results.append(res)
+            counts[res["verdict"]] = counts.get(res["verdict"], 0) + 1
+            emit_progress(i, res, len(candidates))
+    print()
+    print("Verdicts:", flush=True)
+    for v, n in sorted(counts.items(), key=lambda kv: -kv[1]):
+        print(f"  {v:18s} {n:>4}", flush=True)
+    print()
+
+    # Group byte_mismatch errors by first-diff offset for diagnosis.
+    mismatch_results = [r for r in results if r["verdict"] == "byte_mismatch"]
+    if mismatch_results:
+        offset_buckets: dict[int, int] = {}
+        for r in mismatch_results:
+            err = r.get("error", "")
+            m = re.search(r"\+(\d+):", err)
+            if m:
+                first_diff = int(m.group(1))
+                offset_buckets[first_diff] = offset_buckets.get(first_diff, 0) + 1
+        if offset_buckets:
+            print("Byte-mismatch first-diff distribution (top 5):")
+            for off, n in sorted(offset_buckets.items(), key=lambda kv: -kv[1])[:5]:
+                print(f"  +{off:>4} bytes  {n:>3} fn(s)")
+            print()
+
+    # Persist the report.
+    report_path = REPO_ROOT / "build" / "wire" / f"{binary}.bulk_swap.json"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps({
+        "binary": binary,
+        "candidates": len(candidates),
+        "counts": counts,
+        "results": results,
+    }, indent=2))
+    print(f"Per-fn report → {report_path.relative_to(REPO_ROOT)}")
+    if counts.get("accepted", 0) > 0:
+        print(f"\nNext: `make relink BINARY={binary}.exe` to bake the {counts['accepted']} accepted swaps.")
+
+
+def cmd_list(binary: str) -> None:
+    manifest_path = SRC / binary / "_passthrough" / "_swap_manifest.json"
+    if not manifest_path.exists():
+        print(f"  no swaps recorded for {binary}")
+        return
+    manifest = json.loads(manifest_path.read_text())
+    print(f"  {len(manifest['swaps'])} swap(s) for {binary}:")
+    for s in manifest["swaps"]:
+        print(f"    rva 0x{s['rva']:08x}  size {s['size']:>5}  {s['fun_name']}")
+
+
+def cmd_clear(binary: str) -> None:
+    """Wipe all recorded swaps + their _swap_*.cpp / _swap_*.obj files.
+    Use to reset between bulk runs or before re-trying with new
+    rosetta sources."""
+    out_dir = SRC / binary / "_passthrough"
+    obj_dir = OBJ / binary
+    n_cpp = n_obj = 0
+    if out_dir.exists():
+        for p in out_dir.glob("_swap_*.cpp"):
+            p.unlink()
+            n_cpp += 1
+    if obj_dir.exists():
+        for p in obj_dir.glob("_swap_*.obj"):
+            p.unlink()
+            n_obj += 1
+    manifest_path = out_dir / "_swap_manifest.json"
+    if manifest_path.exists():
+        manifest_path.unlink()
+        manifest_cleared = True
+    else:
+        manifest_cleared = False
+    print(f"cleared {n_cpp} _swap_*.cpp, {n_obj} _swap_*.obj"
+          + (", manifest" if manifest_cleared else ""))
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("binary", help="binary stem")
+    ap.add_argument("fun_name", nargs="?", help="FUN_<va> to swap (one-shot)")
+    ap.add_argument("--list", action="store_true", help="list recorded swaps for binary")
+    ap.add_argument("--clear", action="store_true", help="remove all recorded swaps + their .cpp/.obj")
+    ap.add_argument("--bulk", action="store_true", help="attempt swap for every _rosetta/FUN_*.cpp")
+    ap.add_argument("--jobs", type=int, default=4, help="parallel cl.exe jobs for --bulk (default 4)")
+    args = ap.parse_args()
+    if args.list:
+        cmd_list(args.binary)
+        return 0
+    if args.clear:
+        cmd_clear(args.binary)
+        return 0
+    if args.bulk:
+        cmd_bulk(args.binary, jobs=args.jobs)
+        return 0
+    if not args.fun_name:
+        ap.error("either pass FUN_<va>, --bulk, --list, or --clear")
+    cmd_swap(args.binary, args.fun_name)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

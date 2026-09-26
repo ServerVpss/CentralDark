@@ -1,0 +1,54 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\__pycache__\config.cpython-311.pyc
+
+``hermes config`` subcommand parser.
+Extracted verbatim from ``hermes_cli/main.py:main()`` (god-file Phase 2).
+Handler injected to avoid importing ``main``.
+annotations)
+Callable
+cmd_configr
+return
+)*z3Attach the ``config`` subcommand to ``subparsers``.
+configz
+View and edit configurationz!Manage Hermes Agent configuration)
+description
+config_command)
+Show current configuration)
+Open config file in editor
+getz$Print a resolved configuration value
+Configuration key (e.g., model))
+nargsr
+--json
+store_truez
+Print value as JSON)
+actionr
+Set a configuration valuez1Configuration key (e.g., model, terminal.backend)
+valuez
+Value to setz
+--forcez~Skip the unknown-key notice printed after writing a key the running version doesn't recognize (the value is saved either way).
+unsetz
+Remove a configuration valuez
+Configuration key to remove
+Print config file pathz
+env-pathz
+Print .env file path
+checkz!Check for missing/outdated config
+migratez
+Update config with new options)
+funcN)
+add_parser
+add_subparsers
+add_argument
+set_defaults)
+subparsersr
+config_parser
+config_subparsers
+config_get
+config_set
+config_unsets
+       
+QC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\config.py
+build_config_parserr(
+__doc__
+__future__r
+typingr
+<module>r.

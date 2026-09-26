@@ -1,0 +1,6 @@
+Antitracker da Bitdefender
+1.6.0.43
+Protege sua privacidade bloqueando rastreadores que coletam diferentes tipos de dados enquanto você navega online.
+ID: khndhdhbebhaddchcgnalcjlaekbbeof
+Inspecionar visualizações:
+service worker

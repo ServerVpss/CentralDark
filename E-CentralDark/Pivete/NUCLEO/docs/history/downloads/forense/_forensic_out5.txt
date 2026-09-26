@@ -1,0 +1,71 @@
+﻿=== Y_CYBERSEC LIVE TRIAGE 2026-08-22T05:21:10.3257507-03:00 ===
+
+=== LOG CLEAR / ANTI-FORENSICS (1102 Security, 104 System) ===
+
+=== PREFETCH (execution evidence) incident window ===
+
+=== PREFETCH ALL RECENT 48h (non-windows noise trimmed) ===
+
+=== DLL NEXT TO BITDEFENDER AGENT (T1574) ===
+-- C:\Program Files\Bitdefender Agent --
+  Valid        ProductAgentDP.dll                       CN=Bitdefender SRL, OU=DEVSUP CLINSTALLER, O=Bitdefender SRL, L=Bucuresti, C=RO
+  Valid        ProductAgentService.exe                  CN=Bitdefender SRL, OU=DEVSUP CLINSTALLER, O=Bitdefender SRL, L=Bucuresti, C=RO
+  Valid        ProductAgentUI.exe                       CN=Bitdefender SRL, OU=DEVSUP CLINSTALLER, O=Bitdefender SRL, L=Bucuresti, C=RO
+  Valid        WebView2Loader.dll                       CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+-- C:\Program Files\Bitdefender Agent\redline --
+  Valid        bdch.dll                                 CN=Bitdefender SRL, OU=DEVSUP CLINSTALLER, O=Bitdefender SRL, L=Bucuresti, C=RO
+  Valid        bdec.dll                                 CN=Bitdefender SRL, OU=DEVSUP CLINSTALLER, O=Bitdefender SRL, L=Bucuresti, C=RO
+  Valid        bdnc.dll                                 CN=Bitdefender SRL, OU=DEVSUP CLINSTALLER, O=Bitdefender SRL, L=Bucuresti, C=RO
+  Valid        bdredline.exe                            CN=Bitdefender SRL, OU=DEVSUP CLINSTALLER, O=Bitdefender SRL, L=Bucuresti, C=RO
+  Valid        bdreinit.exe                             CN=Bitdefender SRL, OU=DEVSUP CLINSTALLER, O=Bitdefender SRL, L=Bucuresti, C=RO
+-- C:\Program Files\Bitdefender\Bitdefender Security --
+-- C:\Program Files\Piriform\CCleaner 7 --
+  Valid        avDump.exe                               CN=Gen Digital Inc., O=Gen Digital Inc., S=Arizona, C=US
+  Valid        CCleaner.exe                             CN=Gen Digital Inc., O=Gen Digital Inc., S=Arizona, C=US
+  Valid        CCleanerBugReport.exe                    CN=Gen Digital Inc., O=Gen Digital Inc., S=Arizona, C=US
+  Valid        CCleanerDU.dll                           CN=Gen Digital Inc., O=Gen Digital Inc., S=Arizona, C=US
+  Valid        CCleanerReactivator.exe                  CN=Gen Digital Inc., O=Gen Digital Inc., S=Arizona, C=US
+  Valid        CCleaner_service.exe                     CN=Gen Digital Inc., O=Gen Digital Inc., S=Arizona, C=US
+  Valid        concrt140.dll                            CN=Microsoft Windows Software Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+  Valid        libwaapi.dll                             CN=Gen Digital Inc., O=Gen Digital Inc., S=Arizona, C=US
+  Valid        libwaheap.dll                            CN=Gen Digital Inc., O=Gen Digital Inc., S=Arizona, C=US
+  Valid        libwalocal.dll                           CN=Gen Digital Inc., O=Gen Digital Inc., S=Arizona, C=US
+  Valid        libwaresource.dll                        CN=Gen Digital Inc., O=Gen Digital Inc., S=Arizona, C=US
+  Valid        libwautils.dll                           CN=Gen Digital Inc., O=Gen Digital Inc., S=Arizona, C=US
+  Valid        libwavmodapi.dll                         CN=Gen Digital Inc., O=Gen Digital Inc., S=Arizona, C=US
+  Valid        msvcp140.dll                             CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+  Valid        msvcp140_1.dll                           CN=Microsoft Windows Software Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+  Valid        msvcp140_2.dll                           CN=Microsoft Windows Software Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+  Valid        msvcp140_atomic_wait.dll                 CN=Microsoft Windows Software Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+  Valid        msvcp140_codecvt_ids.dll                 CN=Microsoft Windows Software Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+  Valid        ucrtbase.dll                             CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+  Valid        vccorlib140.dll                          CN=Microsoft Windows Software Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+  Valid        vcruntime140.dll                         CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+  Valid        vcruntime140_1.dll                       CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+  Valid        vcruntime140_threads.dll                 CN=Microsoft Windows Software Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+  Valid        wa_3rd_party_host_32.exe                 CN=Gen Digital Inc., O=Gen Digital Inc., S=Arizona, C=US
+  Valid        wa_3rd_party_host_64.exe                 CN=Gen Digital Inc., O=Gen Digital Inc., S=Arizona, C=US
+  Valid        WebView2Loader.dll                       CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+
+=== AVAST DRIVER FILES + SIGNATURE ===
+DRV asw0d08ea64726e6e5c.tmp size=1299040 written=11/08/2026 16:04:20 status=Valid signer=CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+DRV asw1acde8ddacf6dff8.tmp size=299616 written=11/08/2026 16:04:20 status=Valid signer=CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+DRV asw45056e4196f27c92.tmp size=393824 written=11/08/2026 16:04:12 status=Valid signer=CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+DRV asw5300f0faabe2a954.tmp size=857184 written=11/08/2026 16:04:13 status=Valid signer=CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+DRV asw7206bd7739884c5c.tmp size=34912 written=11/08/2026 16:04:18 status=Valid signer=CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+DRV asw7f9e046cfdf9f756.tmp size=80992 written=11/08/2026 16:04:20 status=Valid signer=CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+DRV asw959a94e4afb646ea.tmp size=100960 written=11/08/2026 16:04:20 status=Valid signer=CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+DRV asw97b66f866876deee.tmp size=317024 written=11/08/2026 16:04:20 status=Valid signer=CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+DRV asw9dd4678ab872d4eb.tmp size=245856 written=11/08/2026 16:04:13 status=Valid signer=CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+DRV aswaeabe29996861c79.tmp size=473184 written=11/08/2026 16:04:21 status=Valid signer=CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+DRV aswb77346b2482d2a88.tmp size=71776 written=11/08/2026 16:04:22 status=Valid signer=CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+DRV aswd96d230a28d1764e.tmp size=29144 written=11/08/2026 16:04:20 status=Valid signer=CN=Microsoft Windows Early Launch Anti-malware Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+DRV aswe40f5e67cf647e1f.tmp size=21088 written=11/08/2026 16:04:13 status=Valid signer=CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+
+=== TASK SCHEDULER OPERATIONAL (recent 4698/106/140/141) ===
+
+=== SECURITY 4697/4698 last 10 if audit on ===
+
+=== AMCACHE EXISTS? ===
+Amcache missing
+DONE

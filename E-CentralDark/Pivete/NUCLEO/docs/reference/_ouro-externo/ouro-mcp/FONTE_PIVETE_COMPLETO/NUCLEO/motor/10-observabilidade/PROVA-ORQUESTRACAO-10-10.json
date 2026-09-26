@@ -1,0 +1,39 @@
+{
+  "ts": "2026-07-18T22:23:09.687129+00:00",
+  "claude": {
+    "resolve_anthropic_token": true,
+    "token_len": 108,
+    "token_prefix": "sk-ant-oat...",
+    "is_oauth": true,
+    "last_error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': 'Error'}, 'request_id': 'req_011CdAJdj7zizgtCPdgGrBty'}",
+    "last_model_tried": "claude-sonnet-4-5"
+  },
+  "grok": {
+    "grok-4.5": {
+      "http": 200,
+      "text": "ORCH OK",
+      "ok": true
+    },
+    "grok-build-0.1": {
+      "http": 200,
+      "text": "BUILD OK",
+      "ok": true
+    },
+    "grok-composer-2.5-fast": {
+      "http": 200,
+      "text": "FAST OK",
+      "ok": true
+    }
+  },
+  "claude_final": {
+    "resolve": true,
+    "oauth": true,
+    "http": 429,
+    "note": "token sk-ant-oat via resolve_anthropic_token+build_anthropic_client; rate_limit not auth failure",
+    "prior_minima_200": true
+  },
+  "dedupe": {
+    "tests": "12 passed",
+    "marker_update_id": 318054617
+  }
+}

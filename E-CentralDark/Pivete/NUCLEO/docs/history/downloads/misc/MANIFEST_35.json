@@ -1,0 +1,59 @@
+{
+  "schema": "centraldark.visual-family.v2",
+  "family": "CENTRALDARK_MAPA_CANONICO_DA_CASA",
+  "generated_at_utc": "2026-08-24T20:35:24.657838+00:00",
+  "rule": "REUSE_CANONICAL_FIRST -> ABSORB_DELTA -> ZERO_REGRESSION -> IMAGE+MD+MMD+RASTRO+MANIFEST+SHA256+ZIP",
+  "git": {
+    "repository": "ServerVpss/CentralDark",
+    "main_sha_observed": "9187cb2d4263ca8a5c116acf3f2da7dac902766f",
+    "pr": 1131,
+    "pr_state_observed": "merged"
+  },
+  "files": [
+    {
+      "path": "CENTRALDARK_MAPA_CANONICO_DA_CASA.md",
+      "bytes": 4028,
+      "sha256": "adf38467521358edb932e413eb4c4b0a0d0e4a4893aaef966f59086d3beaa833"
+    },
+    {
+      "path": "CENTRALDARK_MAPA_CANONICO_DA_CASA.mmd",
+      "bytes": 952,
+      "sha256": "911dd85f2ad0a65244640b05e85e1dcbb9f12eda65aeaa6f6b87339fbe9c6ad3"
+    },
+    {
+      "path": "CENTRALDARK_MAPA_CANONICO_DA_CASA.png",
+      "bytes": 1982427,
+      "sha256": "9b6f4c0ab508c9c30cfbf9cdde8a36af9956458eec19a6240c17cca594a5c502"
+    },
+    {
+      "path": "EVIDENCE.md",
+      "bytes": 531,
+      "sha256": "d74868c0cca83ac1f3bc9f6f6e851a9cd69e5ce9b3c7152acebc0c9b4d0d2b56"
+    },
+    {
+      "path": "LIVE_STATE.md",
+      "bytes": 768,
+      "sha256": "1aa57761aa20d4a2fea5fa6d0867e8f294233e44de7adf5ae90094fcb5516c26"
+    },
+    {
+      "path": "RASTRO.md",
+      "bytes": 949,
+      "sha256": "13a59d36acdd8009b37f4321b42164140f7c5dab71d02bb1270fdc0958f6ce16"
+    },
+    {
+      "path": "REGRA-OPERACIONAL-GLOBAL.md",
+      "bytes": 556,
+      "sha256": "be2909a1cb114dceee0958f5d715713714d122b39960e2b1d6018b08c583dbdc"
+    },
+    {
+      "path": "SHA256SUMS.txt",
+      "bytes": 800,
+      "sha256": "10a30864221275c77374ff11fa23284da82079dda177ae7b9c442a491c9cf4ad"
+    },
+    {
+      "path": "verify_pack.py",
+      "bytes": 561,
+      "sha256": "067174c09e63595c438ae05c413ee7bb882117d6e1b4acc90291862a44fdadc4"
+    }
+  ]
+}

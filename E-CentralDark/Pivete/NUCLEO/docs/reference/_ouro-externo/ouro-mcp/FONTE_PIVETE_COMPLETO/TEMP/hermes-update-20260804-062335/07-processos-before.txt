@@ -1,0 +1,54 @@
+﻿
+
+ProcessId       : 56684
+ParentProcessId : 57324
+Name            : python.exe
+ExecutablePath  : C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\pytho
+                  n.exe
+CommandLine     : C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\pytho
+                  n.exe -m hermes_cli.main -p default dashboard --port 9119 --host 
+                  127.0.0.1 --open-profile pivete
+
+ProcessId       : 60196
+ParentProcessId : 56084
+Name            : node.exe
+ExecutablePath  : C:\Program Files\nodejs\node.exe
+CommandLine     : "C:\Program Files\nodejs\node.exe"  --expose-gc C:\Users\danda\AppD
+                  ata\Local\hermes\hermes-agent\ui-tui\dist\entry.js
+
+ProcessId       : 59700
+ParentProcessId : 60196
+Name            : python.exe
+ExecutablePath  : C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\pytho
+                  n.exe
+CommandLine     : C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\pytho
+                  n.exe -m tui_gateway.entry
+
+ProcessId       : 16916
+ParentProcessId : 34368
+Name            : hermes.exe
+ExecutablePath  : C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\herme
+                  s.exe
+CommandLine     : "C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\herm
+                  es.exe"
+
+ProcessId       : 63676
+ParentProcessId : 16916
+Name            : python.exe
+ExecutablePath  : C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\pytho
+                  n.exe
+CommandLine     : "C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scripts\pyth
+                  on.exe" "C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Scri
+                  pts\hermes.exe"
+
+ProcessId       : 63760
+ParentProcessId : 63676
+Name            : python.exe
+ExecutablePath  : C:\Users\danda\AppData\Roaming\uv\python\cpython-3.11-windows-x86_6
+                  4-none\python.exe
+CommandLine     : "C:\Users\danda\AppData\Roaming\uv\python\cpython-3.11-windows-x86_
+                  64-none\python.exe"  "C:\Users\danda\AppData\Local\hermes\hermes-ag
+                  ent\venv\Scripts\hermes.exe"
+
+
+

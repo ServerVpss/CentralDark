@@ -1,0 +1,19 @@
+{
+  "updated_at": "2026-08-24T21:46:46.578798",
+  "platforms": {
+    "telegram": [
+      {
+        "id": "5911381125",
+        "name": "Ramdisk Robô",
+        "type": "dm",
+        "thread_id": null
+      },
+      {
+        "id": "1901426549",
+        "name": "SEGREDOUNLOCK",
+        "type": "dm",
+        "thread_id": null
+      }
+    ]
+  }
+}

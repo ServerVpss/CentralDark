@@ -1,0 +1,24 @@
+.agents/skills/meta-lupa/testes/test_autolupa_conformance.py.bak-26072026
+.artifacts/meta-lupa-mission/40-transicao-casa-bolt.md
+.hermes/desktop-attachments/OPUS-5.md
+.hermes/desktop-attachments/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md
+.hermes/desktop-attachments/Screenshot_14.png
+.hermes/desktop-attachments/Screenshot_17.png
+.hermes/desktop-attachments/icon-512-x-512-px.png
+NUL
+"apps/modulos/hub/LEMBRAN\303\207AS DE NOVO E UTIL.txt"
+docs/BRAIN/.obsidian/app.json
+docs/BRAIN/.obsidian/appearance.json
+docs/BRAIN/.obsidian/core-plugins.json
+docs/BRAIN/.obsidian/graph.json
+docs/BRAIN/.obsidian/workspace.json
+"docs/BRAIN/Sem t\303\255tulo 1.base"
+"docs/BRAIN/Sem t\303\255tulo 2.base"
+"docs/BRAIN/Sem t\303\255tulo.base"
+supabase/.temp/gotrue-version
+supabase/.temp/pooler-url
+supabase/.temp/postgres-version
+supabase/.temp/project-ref
+supabase/.temp/rest-version
+supabase/.temp/storage-migration
+supabase/.temp/storage-version

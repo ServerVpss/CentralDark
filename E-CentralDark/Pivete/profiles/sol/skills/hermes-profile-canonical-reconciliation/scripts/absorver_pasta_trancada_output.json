@@ -1,0 +1,31 @@
+{"pasta_trancada": "C:\Users\danda\OneDrive\u00c1rea de Trabalho\U0001f512PASTA TRANCADA APELO CHEFE\U0001f512",
+  "pasta_existe": true,
+  "modo": "READ_ONLY_INVENTARIO",
+  "repo_clone": "E:\CentralDark\Pivete\CentralDark",
+  "repo_existe": true,
+  "itens": [
+    {
+      "nome": "05358456-7c81-469b-a978-c51a85cd265c.png",
+      "tamanho_bytes": 2289784,
+      "mtime": "2026-08-24T18:07:34",
+      "sha256": "10ebb31911f192c0c6c111ed69a1a2e49963300382d7c5b941b429f18b92b063",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    }
+  ],
+  "estatisticas": {
+    "total_itens": 63,
+    "zips": 22,
+    "ja_existentes_no_repo": 0,
+    "novos_para_verificar": 63
+  },
+  "boot_evidence": [
+    "PASTA_TRANCADA_LIDA",
+    "REPO_INDEXADO_PARA_REUSE_CHECK",
+    "INVENTARIO_GERADO_SEM_EXTRACAO",
+    "INVENTARIO_JSON_GRAVADO_LOCAL"
+  ],
+  "inventario_salvo_em": "C:\Users\danda\OneDrive\u00c1rea de Trabalho\U0001f512PASTA TRANCADA APELO CHEFE\U0001f512\INVENTARIO.json"
+}

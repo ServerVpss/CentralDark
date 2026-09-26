@@ -1,0 +1,63 @@
+{
+  "contract": "CENTRALDARK_ONE_FLOW",
+  "status": "PLUG_KIT_NOT_SECOND_SYSTEM",
+  "house_wide": true,
+  "model_neutral": true,
+  "one_system_only": true,
+  "reuse_before_create": true,
+  "one_writer_per_scope": true,
+  "parallel_perception": true,
+  "serial_mutation": true,
+  "reality_is_judge": true,
+  "unknown_is_pass": false,
+  "raw_is_canonical": false,
+  "surface_is_intelligence": false,
+  "sources": {
+    "allowed": [
+      "TEXT",
+      "VOICE",
+      "IMAGE",
+      "SCREEN_REGION",
+      "FILE",
+      "URL",
+      "TAB_CONTEXT",
+      "SAVED_HTML",
+      "RECORDER_EXPORT",
+      "SCREENPIPE_EXPORT",
+      "GITHUB",
+      "RUNTIME",
+      "LOG",
+      "VPS",
+      "WEB"
+    ],
+    "sensitive_quarantine": [
+      "PASSWORD",
+      "TOKEN",
+      "COOKIE",
+      "AUTH",
+      "SESSION_SECRET",
+      "API_KEY",
+      "PRIVATE_KEY",
+      "SSH_KEY",
+      "CREDENTIAL_DB"
+    ]
+  },
+  "decision": [
+    "REUSE",
+    "EXTEND_MINIMALLY",
+    "CREATE_IF_GAP_PROVEN",
+    "NO_CHANGE"
+  ],
+  "epistemic": [
+    "FACT",
+    "INFERENCE",
+    "HYPOTHESIS",
+    "UNKNOWN"
+  ],
+  "knowledge_result": [
+    "CRYSTAL",
+    "NO_CHANGE",
+    "UNKNOWN",
+    "BLOCKED"
+  ]
+}

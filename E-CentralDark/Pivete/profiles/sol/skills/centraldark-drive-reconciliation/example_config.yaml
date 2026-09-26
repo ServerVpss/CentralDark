@@ -1,0 +1,54 @@
+# Exemplo de configuração para drive_reconcile.py
+# Copie este arquivo para config/drive_config.yaml ou
+# ~/.config/centraldark/drive/config.yaml
+#
+# Antes de usar: configure a conta/drive no serviço vigente,
+# gere o token/credencial, e preencha os mappings.
+#
+# REGRAS:
+# - drive_reconcile.py não cria conta nova
+# - Não coloque credenciais aqui; use o serviço vigente
+# - Sem configuração/credencial → UNKNOWN, não executa
+
+drive:
+  # Nome da pasta raiz no Google Drive (opcional, se usar pasta raiz)
+  root_folder_name: "CentralDark"
+
+  # Mapeamentos: cada entrada liga uma pasta local a uma pasta remota
+  mappings:
+    - local: "_MAPA_CASA"        # caminho relativo ao diretório base do script
+      remote: "CentralDark/_MAPA_CASA"
+
+    - local: "_MEM"
+      remote: "CentralDark/_BACKUPS"
+
+    - local: ".hermes/receipts"
+      remote: "CentralDark/_RECEIPTS"
+
+    - local: "_LOGS/notepad"
+      remote: "CentralDark/_LOGS/notepad"
+
+  # Padrões que não devem ser sincronizados (lixo, segredos, temporários)
+  ignore:
+    - ".env*"
+    - "auth.json"
+    - "node_modules/**"
+    - "__pycache__/**"
+    - "*.log"
+    - "*.tmp"
+    - "*.bak"
+
+  # Direção da sincronização por mapeamento (opcional)
+  # Por padrão: bidirecional, com hard stops em conflito
+  # direction pode ser: "upload_only", "download_only", "bidirectional"
+  #
+  # Exemplo:
+  #   - local: "_MAPA_CASA"
+  #     remote: "CentralDark/_MAPA_CASA"
+  #     direction: "bidirectional"
+
+# Credenciais/caminhos de auth (se o serviço vigente usar arquivos)
+# NÃO coloque tokens/chaves aqui — use o serviço vigente
+# auth:
+#   credentials_path: "~/.config/centraldark/drive/credentials.json"
+#   token_path: "~/.config/centraldark/drive/token.json"

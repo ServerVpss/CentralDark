@@ -1,0 +1,196 @@
+# QUALITY GATES - AutoClaw
+# OpenClaw Whitelabel Deployment Pipeline
+# Version: 1.0
+# Last Updated: 2026-02-14
+
+quality_gates:
+  version: "1.0"
+  philosophy: |
+    "Fail-closed security. Start locked, explicitly open. Never the reverse."
+    Gates are walls, not suggestions. Security gates have ZERO tolerance.
+
+  gates:
+    # PHASE 1-2: INFRASTRUCTURE
+    QG_AC_1:
+      id: "QG-AC-1"
+      name: "Infrastructure Ready Gate"
+      phase: "infrastructure"
+      type: "auto"
+      description: "VPS + Tailscale + OpenClaw verified"
+      after_phase: "phase_1_2"
+
+      criteria:
+        - metric: "tailscale_ping"
+          threshold: "success"
+          operator: "=="
+        - metric: "gateway_health"
+          threshold: "OK"
+          operator: "=="
+        - metric: "systemd_status"
+          threshold: "active"
+          operator: "=="
+
+      checks:
+        - "tailscale ping {hostname} succeeds"
+        - "curl http://localhost:18789/health returns OK"
+        - "systemctl status openclaw shows active (running)"
+        - "Port 18789 NOT reachable from public internet"
+
+      veto: "Infrastructure must be verified before creating identity"
+      pass_action: "Proceed to Phase 3 (Identity)"
+      fail_action: "VETO - Fix infrastructure before proceeding"
+
+    # PHASE 3: IDENTITY
+    QG_AC_2:
+      id: "QG-AC-2"
+      name: "Identity Created Gate"
+      phase: "identity"
+      type: "auto"
+      description: "Whitelabel agent directory and definitions exist"
+      after_phase: "phase_3"
+
+      criteria:
+        - metric: "directory_complete"
+          threshold: true
+        - metric: "agents_md_valid"
+          threshold: true
+        - metric: "soul_md_exists"
+          threshold: true
+
+      checks:
+        - "apps/{agent-name}/ exists with all subdirs"
+        - "AGENTS.md contains valid agent definition"
+        - "SOUL.md contains personality definition"
+        - "openclaw agent --list shows new agent"
+
+      veto: "Identity must exist before architecture review"
+      pass_action: "Proceed to Phase 4 (Architecture)"
+      fail_action: "VETO - Complete identity before proceeding"
+
+    # PHASE 4: ARCHITECTURE
+    QG_AC_3:
+      id: "QG-AC-3"
+      name: "Architecture Valid Gate"
+      phase: "architecture"
+      type: "hybrid"
+      description: "LLM Router configured, skills mapped, .env populated"
+      after_phase: "phase_4"
+
+      criteria:
+        - metric: "yaml_valid"
+          threshold: true
+        - metric: "all_tiers_respond"
+          threshold: true
+        - metric: "env_populated"
+          threshold: true
+
+      checks:
+        - "llm-router-config.yaml is valid YAML"
+        - "All 3 tiers respond to test messages"
+        - ".env has all required API keys"
+        - "Skills correctly mapped to tiers"
+        - "Fallback chain works (disable premium, verify standard handles)"
+
+      veto: "Architecture must be validated before implementation"
+      pass_action: "Proceed to Phase 5a (Implementation)"
+      fail_action: "VETO - Fix architecture before proceeding"
+
+    # PHASE 5a: IMPLEMENTATION
+    QG_AC_4:
+      id: "QG-AC-4"
+      name: "Implementation Complete Gate"
+      phase: "implementation"
+      type: "auto"
+      description: "Skills installed, config.js customized, bridge.js working"
+      after_phase: "phase_5a"
+
+      criteria:
+        - metric: "npm_install"
+          threshold: "success"
+        - metric: "no_clawdbot_refs"
+          threshold: true
+        - metric: "bridge_detects"
+          threshold: true
+
+      checks:
+        - "npm install succeeds without errors"
+        - "config.js has no clawdbot references"
+        - "bridge.js detects service"
+        - "Each skill passes individual test"
+
+      veto: "Implementation must work before security hardening"
+      pass_action: "Proceed to Phase 5b (Security)"
+      fail_action: "VETO - Fix implementation before proceeding"
+
+    # PHASE 5b: SECURITY (ZERO TOLERANCE)
+    QG_AC_5:
+      id: "QG-AC-5"
+      name: "Security Hardened Gate"
+      phase: "security"
+      type: "auto"
+      description: "3-layer security active and verified"
+      after_phase: "phase_5b"
+      severity: "CRITICAL"
+
+      criteria:
+        - metric: "blocklist_active"
+          threshold: true
+        - metric: "sandbox_isolated"
+          threshold: true
+        - metric: "audit_logging"
+          threshold: true
+        - metric: "secrets_redacted"
+          threshold: true
+
+      checks:
+        - "Blocked commands rejected (test rm -rf /)"
+        - "Docker sandbox isolated (no network, non-root)"
+        - "Logging active with journald"
+        - "Sensitive data redacted in logs"
+        - "DM pairing enforced"
+
+      veto: "Security MUST pass before validation - non-negotiable"
+      pass_action: "Proceed to Phase 6 (Validation)"
+      fail_action: "VETO - ZERO TOLERANCE. Fix ALL security issues."
+
+    # PHASE 6: VALIDATION
+    QG_AC_6:
+      id: "QG-AC-6"
+      name: "Deployment Validated Gate"
+      phase: "validation"
+      type: "hybrid"
+      description: "Full end-to-end validation passed"
+      after_phase: "phase_6"
+
+      criteria:
+        - metric: "all_items_pass"
+          threshold: true
+        - metric: "e2e_flow_works"
+          threshold: true
+        - metric: "security_baseline_met"
+          threshold: true
+        - metric: "performance_baseline_met"
+          threshold: true
+
+      checks:
+        - "All infrastructure checks PASS"
+        - "All 3 LLM tiers respond correctly"
+        - "All security tests PASS"
+        - "At least 1 channel fully operational"
+        - "Response latency < 5s (standard tier)"
+        - "Memory usage < 2GB steady state"
+
+      veto: "All tests must pass before declaring deployment complete"
+      pass_action: "DEPLOYMENT READY"
+      fail_action: "BLOCKED - Fix issues and re-validate"
+
+  # GATE SUMMARY
+  phase_gates:
+    infrastructure: ["QG-AC-1"]
+    identity: ["QG-AC-2"]
+    architecture: ["QG-AC-3"]
+    implementation: ["QG-AC-4"]
+    security: ["QG-AC-5"]
+    validation: ["QG-AC-6"]
+  total_gates: 6
+  zero_tolerance_gates: ["QG-AC-5", "QG-AC-6"]

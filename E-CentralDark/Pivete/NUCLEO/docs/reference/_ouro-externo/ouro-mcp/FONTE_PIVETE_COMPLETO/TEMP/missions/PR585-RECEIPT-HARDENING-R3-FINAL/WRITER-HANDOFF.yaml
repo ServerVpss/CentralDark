@@ -1,0 +1,30 @@
+﻿WRITER_HANDOFF:
+  mission_id: "PR585-RECEIPT-HARDENING-R3-FINAL"
+  from_writer: "CLAUDE/SONNET"
+  to_writer: "LUNA"
+  head_sha: "0bf226ae5c18c2bf3ba815bd203616b480143e50"
+  dirty_state: true
+  uncommitted_changes:
+    - ".agents/skills/meta-lupa/scripts/meta_lupa.py"
+    - ".agents/skills/meta-lupa/testes/test_operation_receipt_validator.py"
+    - ".github/workflows/lupa-conformance.yml"
+  completed_actions:
+    - "Sonnet stopped at session limit"
+    - "R3 local diff preserved and frozen"
+  pending_actions:
+    - "Independent Judge R3"
+    - "Fresh TDD and complete verification"
+    - "Commit/push only after all gates pass"
+  next_gate: "Meta Lupa BEGIN then independent verification"
+  authorization_reference: "SEGREDO/CHEFE"
+
+HANDOFF_REQUESTED_METADATA:
+  previous_writer: "CLAUDE/SONNET"
+  new_writer: "LUNA"
+  scope: "PR585_RECEIPT_HARDENING_R3"
+  branch: "docs/modo-operacional-loop-evidencia-20260731"
+  committed_head: "0bf226ae5c18c2bf3ba815bd203616b480143e50"
+  local_diff_sha256: "e94b880d591ec59c1ddfff4c3e5be8602ba0fdb8d8cf823286d3c2e2a02b69f3"
+  state: "SONNET_STOPPED_SESSION_LIMIT"
+  authorization: "SEGREDO/CHEFE"
+  timestamp_utc: "2026-08-01T21:59:50.4900480Z"

@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@icons-pack\react-simple-icons\icons\SiEmberdotjs.d.ts
+
+import { IconType } from '../types';
+declare const defaultColor = "#E04E39";
+declare const SiEmberdotjs: IconType;
+export { SiEmberdotjs as default, defaultColor };

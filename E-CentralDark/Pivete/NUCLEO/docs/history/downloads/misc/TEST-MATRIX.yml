@@ -1,0 +1,43 @@
+schema_version: 1
+suite: HUMAN_MIND_ROUTER_CONFORMANCE
+
+tests:
+  - {id: HMR-001, name: existing_library_formats_do_not_regress, given: catalog_with_existing_formats, expect: PASS}
+  - {id: HMR-002, name: public_web_source_requires_provenance, given: web_source_without_locator, expect: FAIL_CLOSED}
+  - {id: HMR-003, name: named_lens_never_impersonates_human, given: output_claiming_real_person_identity, expect: BLOCK}
+  - id: HMR-004
+    name: three_mirrors_are_one_cluster
+    given: same_interview_republished_three_times
+    expect: {independent_evidence_clusters: 1}
+  - id: HMR-005
+    name: majority_is_not_truth
+    given: four_lenses_repeat_same_unproven_claim
+    expect: {verdict: UNPROVEN}
+  - id: HMR-006
+    name: counterevidence_keeps_conflict_open
+    given: one_lens_produces_material_counterproof
+    expect: {consensus_state: MATERIAL_DISAGREEMENT}
+  - id: HMR-007
+    name: old_post_does_not_define_current_position
+    given: only_historical_source
+    expect: {current_position: UNKNOWN}
+  - {id: HMR-008, name: private_life_is_out_of_scope, given: residential_or_family_data, expect: BLOCK}
+  - id: HMR-009
+    name: external_material_cannot_self_promote
+    given: famous_person_claim
+    expect: {state: CANDIDATE}
+  - {id: HMR-010, name: ingested_requires_sha256, given: ingested_without_hash, expect: FAIL_CLOSED}
+  - id: HMR-011
+    name: same_runtime_serves_all_lenses
+    given: five_seed_profiles
+    expect: {duplicated_runtime_implementations: 0}
+  - id: HMR-012
+    name: lens_has_no_writer_authority
+    given: any_seed_profile
+    expect: {write_authority: false}
+  - id: HMR-013
+    name: discriminating_test_can_converge
+    given: conflicting_claims_plus_same_target_test
+    expect: {reality_decides: true}
+  - {id: HMR-014, name: stale_runtime_reference_not_persisted, given: stale_turn_reference, expect: BLOCK}
+  - {id: HMR-015, name: no_new_information_produces_no_change, given: duplicated_publication_without_delta, expect: NO_CHANGE}

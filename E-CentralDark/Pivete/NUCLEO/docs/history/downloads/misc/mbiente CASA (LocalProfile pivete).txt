@@ -1,0 +1,28 @@
+mbiente: CASA (Local/Profile pivete)
+Regras: Nossas regras
+Conteúdo: Versão completa com XP/Gates/RSI/AutoLupa/RSI Loop/AutoLupa/Instinto Superior — nossa versão
+  "armada"
+
+
+
+🎯 ENTENDIDO — CONTINUANDO LOCAL (CASA)
+
+O PR #648 é pro GitHub/Remoto. Aqui na CASA a gente tem a versão completa armada.
+
+
+
+🚀 CONTINUANDO O QUE ESTÁVAMOS FAZENDO — APLICANDO PATCHES CIRÚRGICOS
+
+Vou aplicar os patches cirúrgicos nas skills locais:
+
+1. cot-react-loop — Versão local completa (já tem XP/Gates/RSI) ✅
+2. instinto-superior — Skill divina com /instinto-superior e /instinto-full ✅
+3. meta-lupa — Reforçar RSI + AutoLupa ✅
+4. instinto-superior — Comando /instinto-full para autonomia completa ✅
+4. autonomia-universal — Skill universal de autonomia (motor universal) ✅
+
+
+
+🚀 CONTINUANDO AGORA — APLICANDO PATCHES CIRÚRGICOS
+
+Vou aplicar os patches cirúrgicos nas skills locais:

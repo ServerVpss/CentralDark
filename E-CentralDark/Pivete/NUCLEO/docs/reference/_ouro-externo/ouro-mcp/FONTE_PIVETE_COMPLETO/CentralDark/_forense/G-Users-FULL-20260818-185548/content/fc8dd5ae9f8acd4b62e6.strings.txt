@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\perl5\vendor_perl\URI\sftp.pm
+
+package URI::sftp;
+use strict;
+use warnings;
+our $VERSION = '5.34';
+use parent 'URI::ssh';

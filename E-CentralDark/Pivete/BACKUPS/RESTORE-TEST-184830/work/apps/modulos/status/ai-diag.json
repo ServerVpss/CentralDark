@@ -1,0 +1,60 @@
+{
+  "gerado_em": "2026-07-05T22:43:00.781Z",
+  "gerado_em_br": "05/07/2026, 19:43:00",
+  "versao_tick": "2.0",
+  "ambiente": {
+    "tem_chave_lovable": false,
+    "proxy_ativo": {
+      "nome": "CentralDark-ArsenalProxy",
+      "url": "http://127.0.0.1:3101"
+    },
+    "proxies_conhecidos": [
+      {
+        "nome": "CentralDark-LovableProxy",
+        "status": "ausente"
+      },
+      {
+        "nome": "CentralDark-ArsenalProxy",
+        "status": "online"
+      }
+    ]
+  },
+  "testes": {
+    "proxy": {
+      "label": "proxy /health (local)",
+      "ok": true,
+      "ms": 61,
+      "proxy": "CentralDark-ArsenalProxy",
+      "url": "http://127.0.0.1:3101",
+      "status": 200,
+      "corpo": {
+        "ok": true,
+        "raiz": "/root/CentralDark/docs"
+      }
+    },
+    "gateway": {
+      "label": "gateway publico (ping)",
+      "ok": true,
+      "ms": 436,
+      "status": 404,
+      "alcancavel": true
+    },
+    "chat": {
+      "label": "chat completion end-to-end",
+      "ok": false,
+      "ms": 0,
+      "erro": "aguardando_chave: LOVABLE_API_KEY nao configurada no PM2"
+    },
+    "erros_recentes": {
+      "label": "logs de erro (CentralDark-ArsenalProxy)",
+      "existe": false,
+      "arquivo": "/root/.pm2/logs/CentralDark-ArsenalProxy-error.log",
+      "linhas": []
+    }
+  },
+  "placar": {
+    "ok": 2,
+    "total": 3,
+    "saude": "degradado"
+  }
+}

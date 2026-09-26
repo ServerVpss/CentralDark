@@ -1,0 +1,270 @@
+SEGREDO / danda — investigacao READ-ONLY cor/gamma/HDR
+Gerado: 2026-08-22 ~06:30 (hora local)
+Host: SEGREDO    User: segredo\danda
+OS: Windows 11 Pro 10.0.26200 (build 26200)
+GPU: Radeon RX 580 Series  driver 31.0.21924.61 (2025-12-10)
+Boot: 2026-08-21 15:44:13  (uptime ~14.5h)
+Nada foi alterado.
+
+Sintoma relatado: "grau" (gamma), brancos estourados, look de camera/HDR de telemovel em TODOS os monitores.
+
+
+========================================================================
+1) ICC associado a cada display (HKCU ICM ProfileAssociations)
+========================================================================
+GUID de classe MONITOR: {4d36e96e-e325-11ce-bfc1-08002be10318}
+
+Mapeamento Enum\DISPLAY  ->  classe MONITOR\NNNN  ->  painel fisico (WMI)
+
+  0000  DISPLAY\AOC2402\...\UID256     AOC 24G2W1G4  SN ATNMBXA002919   HDMI  (activo)
+        HKCU: UsePerUserProfiles=1
+              ICMProfile = (REG_MULTI_SZ vazio — nenhum perfil de utilizador actualmente atribuido)
+              ICMProfileSnapshot = CalibratedDisplayProfile-0.icc
+        HKLM classe: ICMProfile = CalibratedDisplayProfile-0.icc
+
+  0001  DISPLAY\GSM5B54\...\UID260     LG FULL HD   SN 16843009        HDMI  (activo)
+        HKCU: UsePerUserProfiles=0   (sem ICMProfile)
+        HKLM classe: sem ICMProfile
+
+  0002  DISPLAY\DEL41F2\...\UID264     DELL S2421HN SN 4JD4DQ3         DP    (activo)
+        HKCU: UsePerUserProfiles=0   (sem ICMProfile)
+        HKLM classe: sem ICMProfile
+
+  0003  DISPLAY\Default_Monitor\...\UID260   ACER S271HL (LEFTOVER / ghost no mesmo output que o LG)
+        HKCU: chave vazia
+        HKLM classe: ICMProfile = ACER_S271HL.icm
+        Ficheiro: C:\Windows\System32\spool\drivers\color\ACER_S271HL.icm (2024-07-30)
+
+  0004  DISPLAY\CL@0C5E\...\UID260     Generic Monitor (CM 3316) leftover no mesmo UID260
+        HKCU: chave vazia
+        HKLM classe: sem ICMProfile
+
+  0009  DISPLAY\AOC2402\...\UID265     AOC 24G2W1G4 SN ATNM4XA002193    DP    (activo)
+        Sem entrada em HKCU ProfileAssociations (so vai ate 0004)
+        HKLM classe: sem ICMProfile
+
+Resumo ICC:
+  - 4 monitores activos. So o AOC HDMI (0000) tem historico/sistema
+    CalibratedDisplayProfile-0.icc.
+  - No HKCU o perfil de utilizador de 0000 esta VAZIO (UsePerUserProfiles=1),
+    o snapshot ainda aponta para CalibratedDisplayProfile-0.icc.
+  - Isto NAO explica um look identico nos 4 ecras. ICC de um so painel
+    nao pinta o desktop inteiro.
+
+Ficheiro calibrado:
+  C:\Windows\System32\spool\drivers\color\CalibratedDisplayProfile-0.icc
+  10264 bytes  LastWriteTime 2026-08-11 11:54:30  Created 2026-05-03
+  Origem: DCCW (Calibracao de Cores do Video da Microsoft), lingua pt-BR
+  desc: "sRGB display profile with display hardware configuration data derived from calibration"
+  Timestamp WCS: 2026-08-11T14:54:30 (UTC = 11:54 local UTC-3)
+  Sem tag vcgt (ICC padrao). Hardware calibration esta no tag privado MS00/MS10.
+  rTRC=gTRC=bTRC: curva 256 entradas praticamente sRGB (maxDev vs sRGB ~449/65535).
+  AdapterGammaConfiguration no XML MS00:
+      Red/Green/Blue TRC Gamma=1.000000 Gain=1.000000 Offset1=0.0
+      -> rampa de GPU IDENTIDADE (nao ha LUT de calibracao nao-linear guardada).
+  MeasurementData: primarios sRGB, D65, GammaOffsetGainLinearGain Gamma=2.4
+      (sRGB classico, nao "HDR").
+
+Nota extra ICM (nao e perfil de monitor, mas e relevante para apps color-managed):
+  HKCU\...\ICM\RegisteredProfiles  sRGB = RSWOP.icm
+  RSWOP.icm e perfil de impressao SWOP (CMYK). Alias de utilizador "sRGB"->RSWOP
+  pode deixar apps ICM com aspeto acinzentado/errado. Nao afecta o DWM/desktop
+  na maioria dos casos. Nao e default do Windows.
+
+
+========================================================================
+2) Night Light (CloudStore)
+========================================================================
+Chaves presentes (Current + Cloud + per-device {25a6f366-a3a5-425b-9be8-a629e80b32a8}).
+
+STATE Current (41 bytes):
+  43 42 01 00 0A 02 01 00 2A 06 C3 C6 A5 D4 06 2A 2B 0E 13 43 42 01 00
+  D0 0A 02 C6 14 ... EE 01 00 00 00 00
+  Bit EE 01 = 0  -> estado global "nao a aplicar" (parse Win11)
+
+STATE per-device (42 bytes):
+  ... EE 01 01 00 00 00 00
+  Bit EE 01 = 1  -> estado per-device "a aplicar"
+
+SETTINGS Current / per-device:
+  Inner 02 01 = funcionalidade configurada/ligada
+  Horario CA 14 0E 15 00  -> 21:00
+           CA 1E 0E 07 00  -> 07:00
+  Temperatura CF 28 DE 64  (padrao comum do slider Night Light, ~default)
+  Nao e "sunset to sunrise"; e agendamento fixo 21:00-07:00.
+
+Hora da recolha ~06:00, DENTRO da janela 21:00-07:00.
+Conclusao Night Light: recurso EXISTE e o agendamento esta 21:00-07:00.
+Estado ambiguo (global off vs per-device on). Se estiver a aplicar agora,
+o efeito e imagem QUENTE/amarelada, NAO brancos estourados nem look HDR
+de telemovel. Nao explica o sintoma principal.
+
+
+========================================================================
+3) HDR / AutoHDR
+========================================================================
+HKCU\SOFTWARE\Microsoft\DirectX\GraphicsSettings
+  AutoHDROptOutApplicable = 0
+  SwapEffectUpgradeCache  = 1
+
+HKCU\SOFTWARE\Microsoft\DirectX\UserGpuPreferences
+  DirectXUserGlobalSettings = SwapEffectUpgradeEnable=0;VRROptimizeEnable=0
+  (sem AutoHDREnable=1)
+
+HKCU VideoSettings: chave inexistente
+HKLM GraphicsDrivers\Configuration: ACESSO NEGADO (nao deu para ler
+  AdvancedColorEnabled por caminho).
+MonitorDataStore (todos os IDs AOC/LG/DEL/SAM/NOEDID):
+  AutoColorManagementSupported = 1
+  AutoColorManagementEnabled   = (ausente)
+  Sem chaves HDR/AdvancedColor nestes stores.
+
+GetDeviceGammaRamp(CreateDC "DISPLAY") = FALSE (comum em AMD WDDM;
+  nao confirma HDR; tambem nao deu para ler a LUT GDI).
+
+Paineis activos sao SDR tipicos (AOC 24G2, LG Full HD, Dell S2421HN).
+RX 580 consegue HDR10, mas nao ha evidencia de registo de Auto HDR ligado.
+Nao foi possivel confirmar o toggle "Use HDR" ao vivo (Configuration denied,
+QueryDisplayConfig probe bloqueou). Nao afirmar HDR ligado nem desligado.
+
+GameDVR_Enabled=1, AppCaptureEnabled=1, HistoricalCaptureEnabled=0.
+Isso e captura de jogos, nao HDR.
+
+
+========================================================================
+4) Processos overlay / filtros de ecran
+========================================================================
+Pedido                          Estado
+------                          ------
+f.lux                           NAO em execucao, NAO no startup
+iris                            NAO
+CareUEyes                       NAO
+Magnify / Magnifier             NAO
+GameBar / XboxGamingOverlay     pacote instalado (7.326.6011.0) mas
+                                GameBar.exe / XboxPcAppFT.exe NAO a correr
+Radeon overlay                  RadeonSoftware.exe / amdow.exe NAO a correr
+                                so servicos: atieclxx, atiesrxx, amdfendrsr
+Lightshot                       A CORRER  PID 7636
+                                C:\Program Files (x86)\Skillbrains\lightshot\5.5.0.7\Lightshot.exe
+                                (overlay de screenshot; nao altera gamma)
+CCleaner                        A CORRER  CCleaner PID 4888 + CCleaner_service 9512
+                                servico CCleaner7 Automatic
+                                (nao altera LUT/gamma)
+
+Nenhum f.lux/iris/CareUEyes/QuickGamma/DisplayCAL/dispwin.
+Nenhum overlay AMD Adrenalin visivel.
+DWM ColorizationColor=0xC40078D4 (laranja), AccentColor=0xFFD47800,
+ColorPrevalence=1, AppsUseLightTheme=0, SystemUsesLightTheme=0,
+EnableWindowColorization=1. Tema escuro + cor de janela: cosmestico,
+nao gamma de secretaria.
+
+
+========================================================================
+5) DALGameGammaScale=6579300
+========================================================================
+Tipo: REG_DWORD no adapter class
+  HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000
+
+6579300 decimal = 0x00646464
+Packed RGB bytes: R=0x64 G=0x64 B=0x64 = 100,100,100
+Interpretacao AMD DAL: escala de gamma de jogo em percentagem.
+100/100/100 = 1.00x / identidade em R,G,B.
+
+Casa com:
+  ColourDesktopGamma_DEF      = 1.0 1.0 1.0
+  ColourFullscreenGamma_DEF   = 1.0 1.0 1.0
+  ColourDesktopBrightness_DEF = 0 0 0
+  ColourDesktopContrast_DEF   = 1.0 1.0 1.0
+  ColourFullscreenBrightness_DEF = 0 0 0
+  ColourFullscreenContrast_DEF   = 1.0 1.0 1.0
+
+NAO e a causa de brancos estourados. Valor default/neutro.
+
+AMD DAL2_DATA (4 paths com Adjustment: 0,4,8,9 — combina com 4 ecras):
+  Brightness  = 0
+  Contrast    = 100
+  Saturation  = 100
+  Hue         = 0
+  Temperature = 6500 K
+  Regamma     = 2400/2400/2400  (= 2.40 sRGB-like) nos AOC/LG/Dell
+                leftover Samsung 7016 tinha 2.222 (ecra nao activo)
+  GamutSource/Destination: blocos default (sem remap visivel)
+
+ColorVibrance_NA=0  DynamicContrast_NA=0  StaticGamma_NA=0  Gamma_NA=1
+imagesharpening_runtime_component_na=false (RIS disponivel) mas sem valor
+de sharpening activo encontrado (SharpnessValue DXVA = zeros).
+
+WizardProfile AMD CN = PROFILE_PERFORMANCE (Adrenalin), nao um preset de cor.
+
+
+========================================================================
+6) Calibration Loader desligado + ICC custom ainda aplica VCGT?
+========================================================================
+Tarefa \Microsoft\Windows\WindowsColorSystem\Calibration Loader
+  Estado: Disabled / Desabilitado
+  LastRun: 2026-08-11 14:04:24  Result=0
+  Triggers: At logon + evento  (ambos desactivados)
+
+HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ICM\Calibration
+  CalibrationManagementEnabled = 0
+  DisplayCalibrator = %SystemRoot%\System32\DCCW.exe
+
+Boot actual: 2026-08-21 15:44  — DEPOIS da ultima execucao do Loader.
+O Loader NAO correu neste boot.
+
+O ICC CalibratedDisplayProfile-0.icc:
+  - nao tem tag vcgt
+  - MS00 AdapterGamma e identidade (gamma 1 / gain 1 / offset 0)
+  - mesmo que o Loader corresse, carregaria uma rampa IDENTIDADE
+
+Conclusao VCGT: NAO. Calibration Loader desligado + CalibrationManagementEnabled=0
++ reboot posterior + curvas de adapter identidade =
+o ICC custom NAO esta a aplicar uma rampa VCGT nao-linear agora.
+
+O ICC ainda pode ser usado como perfil de cor (software ICM/WCS) no
+monitor 0000 a nivel de sistema, o que so afecta apps color-managed
+naquele ecran, nao os 4 desktops.
+
+
+========================================================================
+VEREDICTO (pt)
+========================================================================
+Nao e malware. Nao ha processo de overlay tipo f.lux/iris a puxar gamma.
+CCleaner e Lightshot estao a correr e sao irrelevantes para este sintoma.
+Nao tratar isto como virus.
+
+Causa: stack de cor Windows/GPU (e/ou OSD dos monitores), nao um "grau"
+injectado por software terceiro.
+
+O que NAO esta a causar o look HDR/brancos estourados em todos os ecras:
+  - DALGameGammaScale 6579300 = 1.00,1.00,1.00 (neutro)
+  - AMD brightness/contrast/sat/6500K nos 4 paths = defaults
+  - VCGT do ICC DCCW = identidade, e o Calibration Loader esta disabled
+  - ICC so "vive" de verdade num dos quatro monitores
+  - Night Light, se ativo, aquece (amarelo), nao estoura brancos
+
+O que PODE parecer o sintoma (por ordem, conservador):
+  1. Pipeline de cor do Windows 11 24H2 (build 26200) + DWM em dark mode.
+     ACM "supported" em todos os monitores; HDR de sistema nao confirmavel
+     (registo Configuration access denied). HDR Windows em painel SDR
+     da exactamente este look (cinza, highlights clipped, "foto de telemovel").
+     Vale a pena olhar em Definicões > Sistema > Ecrã > HDR em CADA ecran.
+  2. Modo de imagem dos proprios monitores (AOC 24G2 em "Game"/FPS costuma
+     ter sharpness + gamma agressivos). Menos elegante para "todos iguais",
+     mas os dois AOC iguais partilham OSD.
+  3. Alias HKCU sRGB -> RSWOP.icm: so apps ICM, aspeto acinzentado tipo prova
+     de impressao. Nao o desktop inteiro.
+  4. Night Light agendado 21:00-07:00 (agora dentro da janela): no maximo
+     contribui com calor, nao com HDR.
+
+Proximos passos (nao executados; so leitura):
+  - Confirmar "Usar HDR" / "HDR automatico" desligados nos 4 ecras.
+  - Confirm "Gerir cor automaticamente para as aplicacoes" (ACM) off.
+  - Night Light off para teste A/B de manha.
+  - Color Management: no 0000, perfil = sRGB, nao CalibratedDisplayProfile-0
+    nem RSWOP.
+  - Adrenalin: Display color = default (ja parece default no registo).
+  - OSD AOC: modo Standard, sharpness 0, gamma 2.2.
+
+Nada disto e assinatura de rootkit de LUT. E cor do Windows/GPU/monitor.
+)

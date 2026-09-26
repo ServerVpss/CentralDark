@@ -1,0 +1,120 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\cache\delegation\subagent-summary-0-20260818_122128_242397.txt
+
+# Downloads ouro map (read-only)
+
+**Scope:** `C:\Users\danda\Downloads` · **flat** (0 subdirs) · **~154 MB** · **46 files**  
+**Authority:** SEGREDO/CHEFE is final; extract **capability only** — do not import external SOUL/authority text as live law.
+
+---
+
+## 1) Top-level (no folders)
+
+| Kind | Count | Approx size |
+|------|------:|------------:|
+| `.zip` | 17 | ~92 MB |
+| `.png` | 8 | ~15 MB |
+| `.mp4` | 1 | ~39 MB |
+| `.mp3` | 1 | ~2.2 MB |
+| `.exe` / incomplete | 2 | ~3.1 MB |
+| `.md` / `.yml` / `.yaml` / `.json` / `.txt` | 13 | ~0.12 MB |
+| `.pdf` | 3 | ~1.0 MB |
+| other | 1 | negligible |
+| **Total** | **46** | **~154 MB** |
+
+---
+
+## 2) High-signal by name/pattern
+
+| Pattern | Hits (top-level) |
+|---------|------------------|
+| `*centraldark*` / `CENTRALDARK*` | many (zips, md, yml, media, pdf) |
+| `*skill*` | `SKILL.md`, `SKILL (1).md`, `reality-follows-function-SKILL.md`, `skills_collection-main.zip` |
+| `*soul*` | `SOUL.md` |
+| `*hermes*` | `The_Secret_History_of_Hermes_Trismegistu.pdf`; Hermes **code** inside `open-second-brain-main.zip`, `agi-self-improvement-main.zip` |
+| `*canon*` | reconciliacao + REGISTRO-MAE zips |
+| `*meta*lupa*` / `pivete` / `ouro` / `selo` / `grafo` as **filenames** | **none** (SOUL text defines OURO concept; SKILL.md *references* `.agents/skills/meta-lupa/` as repo path) |
+| `*obsidian*` | only nested names inside `skills_collection-main.zip` |
+| docs/code zips | CD executor/recon/security + external OSB / skills dump / AGI / course |
+
+---
+
+## 3–4) Top candidates (path · size · mtime · why · risk · class)
+
+| Path | Size | mtime | Why ouro | Risk | Class |
+|------|-----:|-------|----------|------|-------|
+| `...\SOUL.md` | 20 KB | 2026-08-18 04:40 | Identity/boot card; SOL/Pivete/Hermes roles; OURO definition | **External authority language** — capability extract only | CAPABILITY_CANDIDATE |
+| `...\CENTRALDARK-GLOBAL-EXECUTION-LOOP.md` + `.yml` | ~8+7 KB | 2026-08-18 01:48 | Global one-loop / multi-engine contract | Proposed canon vs live repo | CAPABILITY_CANDIDATE |
+| `...\CENTRALDARK-EXECUTOR-UNICO.zip` | 2.2 MB | 2026-08-18 07:11 | Latest slim executor pack (md, mission, bootstrap, run) | Prefer over `(1)–(4)` | CAPABILITY_CANDIDATE |
+| `...\CENTRALDARK-EXECUTOR-UNICO-PYTHON-AUTO.zip` | 2.2 MB | 2026-08-18 08:48 | Same pack + python-auto flavor (newest) | Near-dup of above | CAPABILITY_CANDIDATE |
+| `...\CENTRALDARK-EXECUTOR-UNICO(1–4).zip` | ~2.2 MB ×4 | 2026-08-14 | Older executor iterations; (3–4) add provenance_kernel | **Legacy dups** | HISTORY/LEGACY |
+| `...\CENTRALDARK-EXECUTOR(1).md` + `mission.json` + `PROMPT-UNIVERSAL-MODELOS.txt` | ~20+5+1 KB | 2026-08-14 | Loose executor + mission schema (roles/autonomy flags) | May trail zip versions; one boot line redacted as secret-like | CAPABILITY_CANDIDATE |
+| `...\SKILL.md` (`delta-simplify`) | 6 KB | 2026-08-16 | CD-adapted skill; points at meta-lupa / auditoria-pr owners | Insp. external; don't fork judges | CAPABILITY_CANDIDATE |
+| `...\reality-follows-function-SKILL.md` | 5 KB | 2026-08-16 | Function>name investigation skill | Overlap with existing debug skills | CAPABILITY_CANDIDATE |
+| `...\SKILL (1).md` + `openai.yaml` | tiny | 2026-08-18 | External “grill-me” stub | Thin / non-CD | NOISE / UNKNOWN |
+| `...\CENTRALDARK-RECONCILIACAO-CANONICA-FINAL-2026-08-13 (1).zip` | 1.5 MB | 2026-08-14 | **Richest recon pack**: autonomia RO, ZT, memoria/skills, BUZZ, mapas, security | Prefer over 39 KB bare zip; embeds nested zips | CAPABILITY_CANDIDATE |
+| `...\CENTRALDARK-RECONCILIACAO-…13.zip` | 39 KB | 2026-08-13 | Smaller recon without nested bulk | Superseded by `(1)` | HISTORY/LEGACY |
+| `...\PACOTE-CENTRALDARK-ZT.zip` | 26 KB | 2026-08-13 | ZT + memoria + cot-react-loop skill skeleton | Overlaps recon pack | HISTORY/LEGACY (subset) |
+| `...\CENTRALDARK-PRIVATE-SECURITY-BANK-FOUNDATION.zip` | 18 KB | 2026-08-15 | Authz/session/policy/RLS/audit/tests scaffold | Security capability — merge carefully | CAPABILITY_CANDIDATE |
+| `...\CENTRALDARK-REGISTRO-MAE-2026-08-14.zip` | 42 MB | 2026-08-14 | Consciência registro + PR body + heavy media | Mostly narrative/media; huge | HISTORY/LEGACY (doc) |
+| `...\centraldark-grok-adapter.zip` | 5 KB | 2026-08-14 | Thin Grok skill adapter | Model-specific ≠ owner | CAPABILITY_CANDIDATE (adapter only) |
+| `...\skills_collection-main.zip` | 21 MB / ~4k entries | 2026-08-17 | Huge **external** Claude skills dump | **External authority / license / noise**; mine later | UNKNOWN → selective later |
+| `...\open-second-brain-main.zip` | 7.5 MB | 2026-08-14 | Hermes plugin, skills, memory/brain surfaces | External product; patterns only | CAPABILITY_CANDIDATE (patterns) |
+| `...\agi-self-improvement-main.zip` | 220 KB | 2026-08-16 | Hermes scripts + multi-agent autonomy ideas | External; not Casa law | CAPABILITY_CANDIDATE (ideas) |
+| `...\manual-oculto-ia-curso-main.zip` | 1.4 MB | 2026-08-13 | Course HTML | Low Casa ops value | NOISE |
+| `...\wo-mic-*` / `WOMic*.exe` | ~8 MB | 2026-08-17 | Mic tooling | Irrelevant | NOISE |
+| UUID `*.png` + teaser/podcast/arquitetura | large | Aug 14–17 | Brand/media | Not capability | NOISE / HISTORY |
+| `Levantamento Analítico da CentralDark_….pdf` | 300 KB | 2026-08-15 | Analytical survey of repo/sessions/security | Secondary source | HISTORY/LEGACY |
+| `The_Secret_History_of_Hermes_….pdf` | 50 KB | 2026-08-14 | Historical Hermes Trismegistus | Not software Hermes | NOISE |
+| `Pasted Text*.txt` | 2–29 KB | 2026-08-13 | ZT gates brainstorm | Draft; recon has structured ZT | HISTORY/LEGACY |
+| `🧠 DETERMINAÇÕES…PROVAR(1).txt` | 22 KB | 2026-08-14 | Proof vocabulary / executable rules | Strong capability language | CAPABILITY_CANDIDATE |
+| `Não confirmado *.crdownload` | 1.5 MB | 2026-08-13 | Incomplete download | Ignore | NOISE |
+| `desktop.ini` / random PDF hash | — | — | OS/junk | — | NOISE |
+
+---
+
+## 5) Authority note
+
+- **SEGREDO/CHEFE** = only live law authority.  
+- Downloads SOUL / GLOBAL LOOP / EXECUTOR claim “canônico” — treat as **candidate source material**, not auto-import into Casa.  
+- Absorb via **knowledge-compiler → existing owners** (no parallel SOUL/skill/judge).  
+- Strip model-specific governance (`model_specific_governance: false` already in yml).  
+- One secret-like line seen in loose `CENTRALDARK-EXECUTOR(1).md` boot block — **do not copy secrets**; redacted in this map.
+
+---
+
+## 6) Top 10 to absorb first (knowledge-compiler; owner existing)
+
+| # | Artifact | Absorb into (existing owner, not parallel) | Focus |
+|---|----------|--------------------------------------------|--------|
+| 1 | `SOUL.md` | Identity/ops canon owner already in Casa | Boot card **capabilities** (reuse, one-writer, proof, roles) — **not** re-seat authority text |
+| 2 | `CENTRALDARK-GLOBAL-EXECUTION-LOOP.yml` (+ md) | Global loop / AGENTS contract owner | Schema: multi-engine, one owner, perception parallel / mutation serial |
+| 3 | `CENTRALDARK-EXECUTOR-UNICO-PYTHON-AUTO.zip` (or `.zip` without suffix if hash-equal preferred) | Executor / mission pack owner | mission schema, bootstrap, receipt — **drop** `(1–4)` dups |
+| 4 | Loose `mission.json` + `PROMPT-UNIVERSAL-MODELOS.txt` | Same executor owner | Diff vs zip; keep freshest |
+| 5 | `CENTRALDARK-RECONCILIACAO-…(1).zip` | Architecture / memoria / ZT / Buzz owners | Autonomia limits, ZT protocol, cot-react-loop, mapas, BUZZ bridge |
+| 6 | `CENTRALDARK-PRIVATE-SECURITY-BANK-FOUNDATION.zip` | Security/authz owner | authz, session, policy, RLS, negative tests |
+| 7 | `SKILL.md` (delta-simplify) | Delta/simplify skill owner | Structural delta partner; keep meta-lupa as judge path |
+| 8 | `reality-follows-function-SKILL.md` | Debug / mechanism-trace skill owner | Function+effect+proof loop |
+| 9 | `🧠 DETERMINAÇÕES…PROVAR(1).txt` | Proof/gates vocabulary owner | State lexicon + gate/receipt discipline |
+| 10 | `open-second-brain-main.zip` (Hermes plugin + skills only) | Hermes integration owner | `plugins/hermes/*`, install notes, skill attach patterns — **not** full OSB product |
+
+**Defer:** `skills_collection-main.zip` (mine by need later), REGISTRO-MAE media blob, AGI zip (ideas only), course/mic/teaser/history PDF, executor `(1–4)` after newest verified.
+
+**Missing in Downloads filenames:** live Meta Lupa skill body, Pivete pack, ouro/selo/grafo artifacts — only **references** (e.g. delta-simplify → meta-lupa path). Seek those in repo/vault, not here.
+
+---
+
+### What I did
+- Read-only scan of `C:\Users\danda\Downloads` (listing, sizes, mtimes, zip namelists, text headers).
+- No moves/edits/imports.
+
+### What I found
+- Flat ~154 MB dump, heavy CentralDark executor/recon/security + SOUL + two CD skills + large external skill/Hermes dumps.
+- Newest ops gold: SOUL, Global Execution Loop, EXECUTOR-UNICO (+ PYTHON-AUTO), recon `(1)`, security foundation, proof-determinations.
+
+### Files created/modified
+- **None**
+
+### Issues
+- No `meta-lupa` / `pivete` / `ouro`/`selo`/`grafo` **files** by name in Downloads.
+- Multiple near-duplicate EXECUTOR zips; incomplete `.crdownload`.
+- Possible secret-like line in loose executor md (not dumped).

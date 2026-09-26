@@ -1,0 +1,216 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\psl.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+@.reloc
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+--notimeH
+- information not available -
+Usage: psl [options] <domains...>
+Options:
+  --version                    show library version information
+  --use-latest-data            use the latest PSL data available [default]
+  --use-builtin-data           use the builtin PSL data
+  --no-star-rule               do not apply the prevailing star rule
+                                 (only applies to --is-public-suffix)
+  --load-psl-file <filename>   load PSL data from file
+  --is-public-suffix           check if domains are public suffixes [default]
+  --is-cookie-domain-acceptable <cookie-domain>
+                               check if cookie-domain is acceptable for domains
+  --print-unreg-domain         print the longest public suffix part
+  --print-reg-domain           print the shortest private suffix part
+  --print-info                 print info about library builtin data
+  -b,  --batch                 don't print leading domain
+(null)
+--is-public-suffix
+--print-unreg-domain
+--print-reg-domain
+--print-info
+--is-cookie-domain-acceptable
+--use-latest-data
+Dropped data from %s
+No PSL data available
+--use-builtin-data
+No builtin PSL data available
+--no-star-rule
+--load-psl-file
+Failed to load PSL data from %s
+--batch
+--help
+`psl' explores the Public Suffix List
+--version
+0.21.5
+psl %s (0x%06x)
+libpsl %s
+Copyright (C) 2014-2024 Tim Ruehsen
+License: MIT
+Unknown option '%s'
+--no-star-rule only combines with --is-public-suffix
+No PSL data available - aborting
+%s: Failed to convert to lowercase UTF-8 (%d)
+%s: Failed to convert cookie domain '%s' to lowercase UTF-8 (%d)
+dist filename: %s
+suffixes: %d
+suffixes: %s
+exceptions: %d
+exceptions: %s
+wildcards: %d
+wildcards: %s
+builtin suffixes: %d
+builtin exceptions: %d
+builtin wildcards: %d
+builtin filename: %s
+%a, %d %b %Y %H:%M:%S %Z
+builtin file time: %ld (%s)
+builtin SHA1 file hash: %s
+builtin outdated: %d
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+GCC: (GNU) 13.2.0
+psl_builtin
+psl_builtin_file_time
+psl_builtin_filename
+psl_builtin_outdated
+psl_builtin_sha1sum
+psl_check_version_number
+psl_dist_filename
+psl_free
+psl_free_string
+psl_get_version
+psl_is_cookie_domain_acceptable
+psl_is_public_suffix
+psl_is_public_suffix2
+psl_latest
+psl_load_file
+psl_registrable_domain
+psl_str_to_utf8lower
+psl_suffix_count
+psl_suffix_exception_count
+psl_suffix_wildcard_count
+psl_unregistrable_domain
+__cxa_atexit
+__getreent
+__locale_ctype_ptr
+__main
+_dll_crt0
+_impure_ptr
+calloc
+cygwin_internal
+dll_dllcrt0
+fprintf
+fwrite
+localtime_r
+malloc
+msys_detach_dll
+posix_memalign
+printf
+putchar
+realloc
+setlocale
+strcmp
+strftime
+strlen
+GetModuleHandleA
+msys-psl-5.dll
+msys-2.0.dll
+KERNEL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__lib64_libkernel32_a_iname
+__imp__dll_crt0
+__imp_calloc
+__imp_psl_is_public_suffix2
+__imp_setlocale
+__imp_psl_is_public_suffix
+__imp_fputc
+__imp_psl_str_to_utf8lower
+_head_msys_2_0_dll
+__imp_psl_get_version
+__imp_psl_builtin_file_time
+__imp_psl_latest
+__imp_strcmp
+__imp_putchar
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_free
+__imp_psl_unregistrable_domain
+__nm__impure_ptr
+__imp_psl_suffix_exception_count
+__imp_puts
+__imp_psl_builtin_filename
+__IAT_end__
+__imp_localtime_r
+__imp_psl_registrable_domain
+__imp_psl_builtin
+__imp_dll_dllcrt0
+__imp___locale_ctype_ptr
+__imp_fwrite
+_head_lib64_libkernel32_a
+__imp_msys_detach_dll
+__imp_strftime
+__imp_psl_is_cookie_domain_acceptable
+__imp___getreent
+msys_psl_5_dll_iname
+__imp_psl_check_version_number
+__imp_GetModuleHandleA
+__imp_psl_free_string
+__imp___main
+__imp_strlen
+__imp_malloc
+__imp__impure_ptr
+__imp_psl_free
+__imp_realloc
+__imp_exit
+__imp_psl_dist_filename
+__IAT_start__
+__imp___cxa_atexit
+__imp_fprintf
+__imp_psl_load_file
+_head_msys_psl_5_dll
+__imp_psl_suffix_wildcard_count
+__imp_psl_builtin_outdated
+__imp_psl_suffix_count
+__imp_fgets
+__imp_printf
+__imp_psl_builtin_sha1sum
+msys_2_0_dll_iname

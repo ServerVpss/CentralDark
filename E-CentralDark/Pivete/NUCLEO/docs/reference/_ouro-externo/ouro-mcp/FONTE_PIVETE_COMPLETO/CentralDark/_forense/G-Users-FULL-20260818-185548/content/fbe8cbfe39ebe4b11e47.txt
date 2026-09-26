@@ -1,0 +1,23 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@babel\helpers\lib\helpers\setFunctionName.js
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = setFunctionName;
+function setFunctionName(fn, name, prefix) {
+  if (typeof name === "symbol") {
+    name = name.description;
+    name = name ? "[" + name + "]" : "";
+  }
+  try {
+    Object.defineProperty(fn, "name", {
+      configurable: true,
+      value: prefix ? prefix + " " + name : name
+    });
+  } catch (_) {}
+  return fn;
+}
+
+//# sourceMappingURL=setFunctionName.js.map

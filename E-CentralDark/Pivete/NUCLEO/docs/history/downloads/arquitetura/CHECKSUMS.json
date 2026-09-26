@@ -1,0 +1,67 @@
+[
+  {
+    "path": "ARQUITETURA-INTEGRADA.md",
+    "sha256": "a9ed181b83842cc07469f9b65dec6ce2484b8f8e9452b410f4f8c92a8a495a5a",
+    "bytes": 788
+  },
+  {
+    "path": "HANDOFF.md",
+    "sha256": "c434d3bb7071439ec57b5421db9fe34b11ddf9234bf62b51cc2d5fbafdb9fb8d",
+    "bytes": 683
+  },
+  {
+    "path": "LEIA-ME.md",
+    "sha256": "322274ca2375ce118263b669a449e94825e42b4832207204693327609117839e",
+    "bytes": 1903
+  },
+  {
+    "path": "MANIFEST.json",
+    "sha256": "050fe12695ae5a6abdfd7a913cd13c442b24f47482205aee08a608dc11876858",
+    "bytes": 672
+  },
+  {
+    "path": "PRESERVE_LIST.txt",
+    "sha256": "83cbf3ecf58dcd2ab26a98773b3e2e934f190e24ea1b7bdcc10aa13a4a142ba9",
+    "bytes": 529
+  },
+  {
+    "path": "_MAPA_CASA/00-INDICE-MESTRE.md",
+    "sha256": "ef625330a930520f0bcd9124a3d00f85660df78262405202566b3b2d22f03a64",
+    "bytes": 1074
+  },
+  {
+    "path": "adapters/LOVABLE.md",
+    "sha256": "ba2274218764d6369d60375fb00eb0f32c4f68dcb4c0186a33a38dc3d26f84f8",
+    "bytes": 543
+  },
+  {
+    "path": "docs/CONSCIENCIA/ADMINISTRAVEIS.json",
+    "sha256": "66672f18c3e0d3358b5037d08b0bc4ee637e4c6cc75f3d42b2ead3e2672a8c54",
+    "bytes": 713
+  },
+  {
+    "path": "docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md",
+    "sha256": "2628ead7156d8b513de8545a3bd08f65697def6b30c80e1d166fb4bab2de635d",
+    "bytes": 441
+  },
+  {
+    "path": "docs/CONSCIENCIA/REMEDIACAO.md",
+    "sha256": "d86c0a1de1b164e076fff6d1020ed8c3d0577036b08a8c87f8da59cfe968ddaa",
+    "bytes": 484
+  },
+  {
+    "path": "infra/host-audit/windows-readonly-audit.ps1",
+    "sha256": "6f0358d18863257b3a6a0c60edb48fc3ae51ccf1afa033d5d1f4d85e71187d15",
+    "bytes": 33464
+  },
+  {
+    "path": "sources/LOVABLE_INVENTARIO.md",
+    "sha256": "f4a07342c1779e833a4ae60b0fa33dfe10c9585971e8edf0d719ba495d95b0bc",
+    "bytes": 520
+  },
+  {
+    "path": "visual/AUTONOMIA-ORIGINAL-vs-DRIFT-ATUAL.png",
+    "sha256": "add761ff32acd23a1b71f850d2c6e4fe331213dc9795fbeb607d8216608c1dc1",
+    "bytes": 1889809
+  }
+]

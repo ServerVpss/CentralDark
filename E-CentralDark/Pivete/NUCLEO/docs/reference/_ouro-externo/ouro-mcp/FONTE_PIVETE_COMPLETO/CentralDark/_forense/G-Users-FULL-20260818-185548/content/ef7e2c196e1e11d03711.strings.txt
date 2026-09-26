@@ -1,0 +1,30 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\__pycache__\import_cmd.cpython-311.pyc
+
+``hermes import`` subcommand parser.
+Extracted verbatim from ``hermes_cli/main.py:main()`` (god-file Phase 2).
+Handler injected to avoid importing ``main``.
+annotations)
+Callable
+cmd_importr
+return
+z3Attach the ``import`` subcommand to ``subparsers``.
+importz'Restore a Hermes backup from a zip filez
+Extract a previously created Hermes backup into your Hermes home directory, restoring configuration, skills, sessions, and data)
+description
+zipfilez
+Path to the backup zip file)
+--forcez
+store_truez-Overwrite existing files without confirmation)
+actionr
+funcN)
+add_parser
+add_argument
+set_defaults)
+subparsersr
+import_parsers
+UC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\subcommands\import_cmd.py
+build_import_cmd_parserr
+__doc__
+__future__r
+typingr
+<module>r

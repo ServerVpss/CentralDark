@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\share\doc\git-doc\RelNotes\2.33.5.adoc
+
+Git v2.33.5 Release Notes
+=========================
+This release merges the security fix that appears in v2.30.6; see
+the release notes for that version for details.

@@ -1,0 +1,1417 @@
+[
+S_{ij}=\frac{Q_iK_j^\top}{\sqrt d}+M_{ij},
+\qquad
+P_{ij}=\frac{\exp(S_{ij})}{\sum_k\exp(S_{ik})},
+\qquad
+O_i=\sum_jP_{ij}V_j
+]
+
+# PILAR 1: PARADIGMAS DE PROGRAMAÇÃO E ARQUITETURA AVANÇADA
+
+## 1. FlashAttention-3+: blocagem SRAM/HBM, FP8 e pipeline assíncrono
+
+Para cada bloco (Q_i\in\mathbb{R}^{B_r\times d}), percorrem-se blocos (K_j,V_j\in\mathbb{R}^{B_c\times d}) sem materializar (S,P\in\mathbb{R}^{N\times N}) na HBM.
+
+### 1.1 Restrição de SRAM
+
+[
+M_{\mathrm{SRAM}}
+\ge
+B_rd
++2B_cd
++B_rB_c
++B_rd
++2B_r
+]
+
+Componentes:
+
+[
+\underbrace{B_rd}*{Q}
++
+\underbrace{B_cd+B_cd}*{K,V}
++
+\underbrace{B_rB_c}*{S/P}
++
+\underbrace{B_rd}*{O_{\mathrm{acc}}}
++
+\underbrace{2B_r}_{m,\ell}
+]
+
+Escolha operacional:
+
+[
+(B_r,B_c)
+=========
+
+\arg\max_{b_r,b_c}
+\operatorname{AI}(b_r,b_c)
+\quad
+\text{sujeito a }
+M_{\mathrm{tile}}\le M_{\mathrm{SRAM}},
+\quad
+R_{\mathrm{thread}}\le R_{\max}
+]
+
+A atenção convencional materializa (S) e (P):
+
+[
+Q_{\mathrm{HBM,naive}}=\Theta(N^2+Nd)
+]
+
+A blocagem IO-aware reduz o tráfego assintótico, para (d\le M\le Nd), a aproximadamente:
+
+[
+Q_{\mathrm{HBM,flash}}
+======================
+
+\Theta\left(\frac{N^2d^2}{M}+Nd\right)
+]
+
+### 1.2 Softmax online por bloco
+
+Estado persistente de cada linha:
+
+[
+m_i^{(0)}=-\infty,\qquad
+\ell_i^{(0)}=0,\qquad
+A_i^{(0)}=0
+]
+
+Para o bloco (j):
+
+[
+S_{ij}=Q_iK_j^\top s
+]
+
+[
+\widetilde m_i
+==============
+
+\max\left(
+m_i,
+\max_k S_{ijk}
+\right)
+]
+
+[
+\alpha_i
+========
+
+\exp(m_i-\widetilde m_i)
+]
+
+[
+\widetilde P_{ij}
+=================
+
+\exp(S_{ij}-\widetilde m_i)
+]
+
+[
+\widetilde\ell_i
+================
+
+\alpha_i\ell_i
++
+\sum_k\widetilde P_{ijk}
+]
+
+[
+\widetilde A_i
+==============
+
+\alpha_iA_i
++
+\widetilde P_{ij}V_j
+]
+
+[
+m_i\leftarrow\widetilde m_i,\qquad
+\ell_i\leftarrow\widetilde\ell_i,\qquad
+A_i\leftarrow\widetilde A_i
+]
+
+Resultado:
+
+[
+O_i=\frac{A_i}{\ell_i},
+\qquad
+\operatorname{LSE}_i=m_i+\log\ell_i
+]
+
+### 1.3 Quantização FP8 por bloco
+
+Para (X\in{Q,K,V}):
+
+[
+s_X^{(b)}
+=========
+
+\frac{\max_{x\in X_b}|x|}
+{\operatorname{FP8MAX}}
+]
+
+[
+\widehat X_b
+============
+
+Q_{\mathrm{FP8}}
+\left(
+\frac{X_b}{s_X^{(b)}}
+\right)
+]
+
+[
+X_b
+\approx
+s_X^{(b)}\widehat X_b
+]
+
+O produto (QK^\top) usa operandos FP8, escalas por bloco e acumulação FP32:
+
+[
+S_{ij}
+\approx
+\left(s_Q^{(i)}s_K^{(j)}\right)
+\operatorname{MMA}_{\mathrm{FP8}\rightarrow\mathrm{FP32}}
+\left(
+\widehat Q_i,\widehat K_j^\top
+\right)\frac1{\sqrt d}
+]
+
+Para reduzir a concentração de outliers pode-se aplicar uma transformação ortogonal (H):
+
+[
+Q' = QH^\top,\qquad K'=KH^\top
+]
+
+Como (HH^\top=I):
+
+[
+Q'K'^\top
+=========
+
+# QH^\top HK^\top
+
+QK^\top
+]
+
+### 1.4 Pipeline Hopper/Blackwell
+
+[
+T_{\mathrm{tile}}
+=================
+
+\max
+\left(
+T_{\mathrm{TMA}},
+T_{\mathrm{WGMMA}}+T_{\mathrm{softmax}}
+\right)
+]
+
+A transferência fica ocultada quando:
+
+[
+T_{\mathrm{TMA}}(K_{j+1},V_{j+1})
+\le
+T_{\mathrm{WGMMA}}(Q_i,K_j)
++
+T_{\mathrm{softmax}}
++
+T_{\mathrm{PV}}
+]
+
+Pipeline de três estágios:
+
+```text
+warp-group producer:
+    TMA_LOAD K[j+1], V[j+1] -> SRAM[next]
+    MBARRIER_ARRIVE(next)
+
+warp-group QK consumer:
+    MBARRIER_WAIT(current)
+    WGMMA_ASYNC Q, K[current] -> S
+    WGMMA_COMMIT_GROUP
+
+warp-group softmax/PV consumer:
+    WGMMA_WAIT_GROUP
+    ONLINE_SOFTMAX(S, m, l)
+    WGMMA_ASYNC P, V[current] -> ACC
+    rotate(current, next)
+```
+
+### 1.5 Pseudo-kernel Triton FP8
+
+```python
+import triton
+import triton.language as tl
+
+
+@triton.jit
+def flash_attn3_fp8_fwd(
+    Q, K, V, O, LSE,
+    Q_SCALE, K_SCALE, V_SCALE,
+    stride_qh, stride_qm, stride_qd,
+    stride_kh, stride_kn, stride_kd,
+    stride_vh, stride_vn, stride_vd,
+    stride_oh, stride_om, stride_od,
+    N_CTX: tl.constexpr,
+    HEAD_DIM: tl.constexpr,
+    SM_SCALE: tl.constexpr,
+    CAUSAL: tl.constexpr,
+    BLOCK_M: tl.constexpr,
+    BLOCK_N: tl.constexpr,
+):
+    pid_m = tl.program_id(0)
+    pid_h = tl.program_id(1)
+
+    offs_m = pid_m * BLOCK_M + tl.arange(0, BLOCK_M)
+    offs_n_base = tl.arange(0, BLOCK_N)
+    offs_d = tl.arange(0, HEAD_DIM)
+
+    q_ptrs = (
+        Q
+        + pid_h * stride_qh
+        + offs_m[:, None] * stride_qm
+        + offs_d[None, :] * stride_qd
+    )
+
+    q_mask = offs_m[:, None] < N_CTX
+    q8 = tl.load(q_ptrs, mask=q_mask, other=0.0)
+
+    # Escala FP8 do bloco Q atual.
+    sq = tl.load(Q_SCALE + pid_h * tl.cdiv(N_CTX, BLOCK_M) + pid_m)
+
+    m_i = tl.full((BLOCK_M,), -float("inf"), tl.float32)
+    l_i = tl.zeros((BLOCK_M,), tl.float32)
+    acc = tl.zeros((BLOCK_M, HEAD_DIM), tl.float32)
+
+    # tl.range com múltiplos stages permite ao compilador sobrepor
+    # carregamentos de K/V com MMA e softmax do bloco anterior.
+    for start_n in tl.range(
+        0,
+        N_CTX,
+        BLOCK_N,
+        num_stages=4,
+        warp_specialize=True,
+    ):
+        offs_n = start_n + offs_n_base
+
+        k_ptrs = (
+            K
+            + pid_h * stride_kh
+            + offs_n[:, None] * stride_kn
+            + offs_d[None, :] * stride_kd
+        )
+
+        v_ptrs = (
+            V
+            + pid_h * stride_vh
+            + offs_n[:, None] * stride_vn
+            + offs_d[None, :] * stride_vd
+        )
+
+        kv_mask = offs_n[:, None] < N_CTX
+
+        # Em Hopper/Blackwell estes loads devem baixar para TMA assíncrono
+        # com buffers SRAM alternados.
+        k8 = tl.load(k_ptrs, mask=kv_mask, other=0.0)
+        v8 = tl.load(v_ptrs, mask=kv_mask, other=0.0)
+
+        block_n = start_n // BLOCK_N
+        sk = tl.load(
+            K_SCALE
+            + pid_h * tl.cdiv(N_CTX, BLOCK_N)
+            + block_n
+        )
+        sv = tl.load(
+            V_SCALE
+            + pid_h * tl.cdiv(N_CTX, BLOCK_N)
+            + block_n
+        )
+
+        # FP8 WGMMA -> acumulação FP32.
+        qk = tl.dot(q8, tl.trans(k8), out_dtype=tl.float32)
+        qk *= (sq * sk * SM_SCALE)
+
+        valid = (offs_m[:, None] < N_CTX) & (
+            offs_n[None, :] < N_CTX
+        )
+
+        if CAUSAL:
+            valid &= offs_m[:, None] >= offs_n[None, :]
+
+        qk = tl.where(valid, qk, -float("inf"))
+
+        block_max = tl.max(qk, axis=1)
+        m_new = tl.maximum(m_i, block_max)
+
+        alpha = tl.exp2((m_i - m_new) * 1.4426950408889634)
+        p = tl.exp2(
+            (qk - m_new[:, None]) * 1.4426950408889634
+        )
+
+        l_new = alpha * l_i + tl.sum(p, axis=1)
+
+        # Reescala o acumulador antigo quando o máximo online muda.
+        acc *= alpha[:, None]
+
+        # P é convertido para FP16/BF16; V permanece FP8 e acumula em FP32.
+        pv = tl.dot(
+            p.to(tl.float16),
+            v8.to(tl.float16),
+            out_dtype=tl.float32,
+        )
+        acc += pv * sv
+
+        m_i = m_new
+        l_i = l_new
+
+    out = acc / l_i[:, None]
+    lse = m_i + tl.log(l_i)
+
+    o_ptrs = (
+        O
+        + pid_h * stride_oh
+        + offs_m[:, None] * stride_om
+        + offs_d[None, :] * stride_od
+    )
+
+    tl.store(o_ptrs, out, mask=q_mask)
+    tl.store(
+        LSE + pid_h * N_CTX + offs_m,
+        lse,
+        mask=offs_m < N_CTX,
+    )
+```
+
+---
+
+## 2. Mixture of Experts dinâmico: Top-K, penalização e balanceamento distribuído
+
+Para token (x_t):
+
+[
+z_t=W_rx_t+b_r\in\mathbb{R}^{E}
+]
+
+Carga exponencial do expert (e):
+
+[
+\widehat f_e^{(n)}
+==================
+
+\rho\widehat f_e^{(n-1)}
++
+(1-\rho)
+\frac{n_e}{TK}
+]
+
+Logit corrigido:
+
+[
+\widetilde z_{t,e}
+==================
+
+z_{t,e}
++
+b_e^{\mathrm{dual}}
+-------------------
+
+\lambda
+\left(
+\widehat f_e-\frac1E
+\right)
+]
+
+Seleção:
+
+[
+\mathcal E_t
+============
+
+\operatorname{TopK}*e
+\left(
+\widetilde z*{t,e}
+\right)
+]
+
+O bias de balanceamento altera a seleção, mas o peso semântico pode continuar derivado do logit original:
+
+[
+g_{t,e}
+=======
+
+\frac{
+\exp(z_{t,e}/\tau)
+}{
+\sum_{j\in\mathcal E_t}\exp(z_{t,j}/\tau)
+},
+\quad e\in\mathcal E_t
+]
+
+Saída:
+
+[
+y_t
+===
+
+\sum_{e\in\mathcal E_t}
+g_{t,e}E_e(x_t)
+]
+
+Capacidade por expert:
+
+[
+C
+=
+
+\left\lceil
+c_{\mathrm{cap}}
+\frac{TK}{E}
+\right\rceil
+]
+
+Atualização dual sem gradiente:
+
+[
+b_e^{\mathrm{dual}}
+\leftarrow
+\operatorname{clip}
+\left[
+b_e^{\mathrm{dual}}
++
+\eta
+\left(
+\frac1E-\widehat f_e
+\right),
+-b_{\max},b_{\max}
+\right]
+]
+
+Perda auxiliar de balanceamento:
+
+[
+p_e
+===
+
+\frac1T\sum_t
+\operatorname{softmax}(z_t)_e
+]
+
+[
+f_e
+===
+
+\frac1{TK}
+\sum_t
+\mathbf 1[e\in\mathcal E_t]
+]
+
+[
+\mathcal L_{\mathrm{balance}}
+=============================
+
+\alpha E\sum_e f_ep_e
+]
+
+Penalização de magnitude do roteador:
+
+[
+\mathcal L_z
+============
+
+\beta\frac1T
+\sum_t
+\left(
+\log\sum_e\exp z_{t,e}
+\right)^2
+]
+
+Objetivo:
+
+[
+\mathcal L
+==========
+
+\mathcal L_{\mathrm{LM}}
++
+\mathcal L_{\mathrm{balance}}
++
+\mathcal L_z
+]
+
+### 2.1 Roteamento distribuído
+
+```python
+from dataclasses import dataclass
+
+import torch
+import torch.distributed as dist
+import torch.nn.functional as F
+
+
+@dataclass
+class RouteState:
+    load_ema: torch.Tensor
+    dual_bias: torch.Tensor
+
+
+def dynamic_topk_route(
+    x: torch.Tensor,                  # [tokens, hidden]
+    router_weight: torch.Tensor,      # [experts, hidden]
+    state: RouteState,
+    *,
+    top_k: int,
+    temperature: float = 1.0,
+    load_decay: float = 0.99,
+    load_penalty: float = 2.0,
+    dual_lr: float = 1e-3,
+    capacity_factor: float = 1.10,
+):
+    tokens = x.shape[0]
+    experts = router_weight.shape[0]
+
+    logits = F.linear(x.float(), router_weight.float())
+
+    target = torch.full_like(state.load_ema, 1.0 / experts)
+    overload = state.load_ema - target
+
+    selection_logits = (
+        logits
+        + state.dual_bias[None, :]
+        - load_penalty * overload[None, :]
+    )
+
+    _, expert_ids = torch.topk(
+        selection_logits,
+        k=top_k,
+        dim=-1,
+        sorted=False,
+    )
+
+    # O balanceamento decide quais experts entram.
+    # Os pesos da combinação vêm dos logits sem penalização.
+    selected_logits = logits.gather(1, expert_ids)
+    gates = F.softmax(
+        selected_logits / temperature,
+        dim=-1,
+        dtype=torch.float32,
+    ).to(x.dtype)
+
+    capacity = int(
+        torch.ceil(
+            torch.tensor(
+                capacity_factor * tokens * top_k / experts
+            )
+        ).item()
+    )
+
+    flat_experts = expert_ids.reshape(-1)
+    flat_tokens = (
+        torch.arange(tokens, device=x.device)
+        .repeat_interleave(top_k)
+    )
+    flat_gates = gates.reshape(-1)
+
+    raw_count = torch.bincount(
+        flat_experts,
+        minlength=experts,
+    )
+
+    # Rank estável dentro de cada expert para impor capacidade.
+    order = torch.argsort(flat_experts, stable=True)
+    sorted_experts = flat_experts[order]
+
+    starts = torch.zeros(
+        experts + 1,
+        device=x.device,
+        dtype=torch.long,
+    )
+    starts[1:] = torch.cumsum(raw_count, dim=0)
+
+    position = torch.arange(
+        flat_experts.numel(),
+        device=x.device,
+    ) - torch.repeat_interleave(
+        starts[:-1],
+        raw_count,
+    )
+
+    keep_sorted = position < capacity
+    keep = torch.zeros_like(keep_sorted)
+    keep[order] = keep_sorted
+
+    flat_experts = flat_experts[keep]
+    flat_tokens = flat_tokens[keep]
+    flat_gates = flat_gates[keep]
+
+    accepted_count = torch.bincount(
+        flat_experts,
+        minlength=experts,
+    ).float()
+
+    # Consenso global de carga entre os nós do expert-parallel group.
+    if dist.is_initialized():
+        dist.all_reduce(
+            accepted_count,
+            op=dist.ReduceOp.SUM,
+        )
+
+    normalized_load = accepted_count / accepted_count.sum().clamp_min(1)
+
+    state.load_ema.mul_(load_decay).add_(
+        normalized_load,
+        alpha=1.0 - load_decay,
+    )
+
+    state.dual_bias.add_(
+        dual_lr * (target - state.load_ema)
+    ).clamp_(-2.0, 2.0)
+
+    router_prob = logits.softmax(dim=-1).mean(dim=0)
+    token_fraction = normalized_load
+
+    balance_loss = experts * torch.sum(
+        router_prob * token_fraction.detach()
+    )
+
+    z_loss = torch.mean(
+        torch.logsumexp(logits, dim=-1).square()
+    )
+
+    return {
+        "token_ids": flat_tokens,
+        "expert_ids": flat_experts,
+        "gates": flat_gates,
+        "capacity": capacity,
+        "balance_loss": balance_loss,
+        "z_loss": z_loss,
+        "state": state,
+    }
+```
+
+### 2.2 Dispatch/compute/combine com Expert Parallelism
+
+```python
+def expert_parallel_forward(
+    x,
+    route,
+    local_experts,
+    expert_owner,
+    ep_group,
+):
+    token_ids = route["token_ids"]
+    expert_ids = route["expert_ids"]
+    gates = route["gates"]
+
+    routed_x = x[token_ids]
+    destination = expert_owner[expert_ids]
+
+    permutation = torch.argsort(destination, stable=True)
+
+    send_x = routed_x[permutation]
+    send_expert = expert_ids[permutation]
+    send_gate = gates[permutation]
+    send_token = token_ids[permutation]
+
+    world = dist.get_world_size(ep_group)
+
+    send_splits = torch.bincount(
+        destination,
+        minlength=world,
+    ).tolist()
+
+    split_tensor = torch.tensor(
+        send_splits,
+        device=x.device,
+        dtype=torch.int64,
+    )
+    recv_split_tensor = torch.empty_like(split_tensor)
+
+    dist.all_to_all_single(
+        recv_split_tensor,
+        split_tensor,
+        group=ep_group,
+    )
+    recv_splits = recv_split_tensor.tolist()
+
+    recv_total = sum(recv_splits)
+
+    recv_x = torch.empty(
+        recv_total,
+        x.shape[-1],
+        device=x.device,
+        dtype=x.dtype,
+    )
+    recv_expert = torch.empty(
+        recv_total,
+        device=x.device,
+        dtype=torch.long,
+    )
+
+    # Dispatch: tokens -> nós que possuem os experts.
+    dist.all_to_all_single(
+        recv_x,
+        send_x,
+        recv_splits,
+        send_splits,
+        group=ep_group,
+    )
+    dist.all_to_all_single(
+        recv_expert,
+        send_expert,
+        recv_splits,
+        send_splits,
+        group=ep_group,
+    )
+
+    recv_y = torch.empty_like(recv_x)
+
+    for expert_id, expert in local_experts.items():
+        mask = recv_expert == expert_id
+        if mask.any():
+            recv_y[mask] = expert(recv_x[mask])
+
+    send_back = torch.empty_like(send_x)
+
+    # Combine: resultados -> nós de origem.
+    dist.all_to_all_single(
+        send_back,
+        recv_y,
+        send_splits,
+        recv_splits,
+        group=ep_group,
+    )
+
+    weighted = send_back * send_gate[:, None]
+
+    y = torch.zeros_like(x)
+    y.index_add_(0, send_token, weighted)
+
+    gate_sum = torch.zeros(
+        x.shape[0],
+        device=x.device,
+        dtype=x.dtype,
+    )
+    gate_sum.index_add_(0, send_token, send_gate)
+
+    return y / gate_sum.clamp_min(1e-6)[:, None]
+```
+
+---
+
+## 3. Test-Time Compute: PRM token-level acoplado a MCTS
+
+Para estado parcial:
+
+[
+s_t=(x,y_{1:t})
+]
+
+O modelo gerador fornece prior por token:
+
+[
+P_\theta(a\mid s_t)
+===================
+
+\operatorname{softmax}
+\left(
+W_{\mathrm{LM}}h_t
+\right)_a
+]
+
+O PRM compartilha ou replica o backbone e adiciona uma cabeça escalar:
+
+[
+u_t=W_2,\operatorname{SiLU}(W_1\operatorname{LN}(h_t))
+]
+
+[
+p_t^{\mathrm{PRM}}
+==================
+
+\sigma(u_t)
+]
+
+Valor instantâneo por token em log-probabilidade:
+
+[
+r_t
+===
+
+\log\left(
+p_t^{\mathrm{PRM}}+\varepsilon
+\right)
+]
+
+Valor acumulado normalizado:
+
+[
+V_{\mathrm{PRM}}(s_t)
+=====================
+
+\frac{
+\sum_{j=1}^{t}
+\gamma^{t-j}r_j
+}{
+\sum_{j=1}^{t}
+\gamma^{t-j}
+}
+]
+
+Alternativa em log-odds, útil quando o PRM está calibrado:
+
+[
+r_t^{\mathrm{odds}}
+===================
+
+\log
+\frac{
+p_t^{\mathrm{PRM}}+\varepsilon
+}{
+1-p_t^{\mathrm{PRM}}+\varepsilon
+}
+]
+
+Em fronteiras de passos de raciocínio:
+
+[
+V_{\mathrm{step}}(s_t)
+======================
+
+\operatorname{Agg}
+\left(
+r_{b_{k-1}+1},\ldots,r_{b_k}
+\right)
+]
+
+Com agregação conservadora:
+
+[
+\operatorname{Agg}_{\min}
+=========================
+
+\min_{j\in\mathrm{step}_k}p_j^{\mathrm{PRM}}
+]
+
+ou geométrica:
+
+[
+\operatorname{Agg}_{\mathrm{geo}}
+=================================
+
+\exp
+\left[
+\frac1{|\mathrm{step}_k|}
+\sum_j\log(p_j^{\mathrm{PRM}}+\varepsilon)
+\right]
+]
+
+### 3.1 Seleção PUCT
+
+[
+a^*
+===
+
+\arg\max_a
+\left[
+Q(s,a)
++
+c_{\mathrm{puct}}
+P_\theta(a\mid s)
+\frac{\sqrt{N(s)}}{1+N(s,a)}
+----------------------------
+
+\lambda_vL_{\mathrm{virtual}}(s,a)
+\right]
+]
+
+O virtual loss impede múltiplos workers de explorarem a mesma aresta simultaneamente.
+
+### 3.2 Expansão
+
+[
+\mathcal A_B(s)
+===============
+
+\operatorname{TopB}
+\left(
+P_\theta(\cdot\mid s)
+\right)
+]
+
+Para cada token candidato (a):
+
+[
+s'=s\oplus a
+]
+
+[
+V(s')
+=====
+
+\lambda_pV_{\mathrm{PRM}}(s')
++
+\lambda_oV_{\mathrm{ORM}}(s')
++
+\lambda_eV_{\mathrm{exec}}(s')
+------------------------------
+
+\lambda_cC(s')
+]
+
+Onde:
+
+[
+\lambda_p+\lambda_o+\lambda_e=1
+]
+
+(V_{\mathrm{exec}}) pode ser produzido por compilador, testes, solver, verificador formal ou ambiente.
+
+### 3.3 Backup
+
+Para trajetória ((s_0,a_0,\ldots,s_L)):
+
+[
+G_L=V(s_L)
+]
+
+[
+G_t=r_t+\gamma G_{t+1}
+]
+
+[
+N(s_t,a_t)\leftarrow N(s_t,a_t)+1
+]
+
+[
+Q(s_t,a_t)
+\leftarrow
+Q(s_t,a_t)
++
+\frac{
+G_t-Q(s_t,a_t)
+}{
+N(s_t,a_t)
+}
+]
+
+### 3.4 Cabeça PRM por token
+
+```python
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+
+class TokenProcessRewardModel(nn.Module):
+    def __init__(self, backbone, hidden_size, bottleneck=1024):
+        super().__init__()
+        self.backbone = backbone
+        self.norm = nn.LayerNorm(hidden_size)
+
+        self.reward_head = nn.Sequential(
+            nn.Linear(hidden_size, bottleneck, bias=False),
+            nn.SiLU(),
+            nn.Linear(bottleneck, 1, bias=False),
+        )
+
+    def forward(
+        self,
+        input_ids,
+        attention_mask,
+        step_boundary_mask=None,
+        labels=None,
+    ):
+        outputs = self.backbone(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            output_hidden_states=True,
+            use_cache=False,
+        )
+
+        h = self.norm(outputs.hidden_states[-1])
+        token_logits = self.reward_head(h).squeeze(-1)
+        token_prob = torch.sigmoid(token_logits)
+
+        result = {
+            "token_logits": token_logits,
+            "token_prob": token_prob,
+        }
+
+        if step_boundary_mask is not None:
+            result["step_logits"] = token_logits.masked_select(
+                step_boundary_mask
+            )
+            result["step_prob"] = token_prob.masked_select(
+                step_boundary_mask
+            )
+
+        if labels is not None:
+            valid = labels != -100
+            result["loss"] = F.binary_cross_entropy_with_logits(
+                token_logits[valid],
+                labels[valid].float(),
+            )
+
+        return result
+```
+
+### 3.5 Nó MCTS com valor incremental por token
+
+```python
+from dataclasses import dataclass, field
+import math
+import threading
+
+
+@dataclass
+class Edge:
+    prior: float
+    visits: int = 0
+    value_sum: float = 0.0
+    virtual_loss: int = 0
+    child: "Node | None" = None
+
+    @property
+    def q(self):
+        if self.visits == 0:
+            return 0.0
+        return self.value_sum / self.visits
+
+
+@dataclass
+class Node:
+    token_ids: tuple[int, ...]
+    kv_cache_handle: object
+    prm_log_sum: float
+    prm_weight_sum: float
+    depth: int
+    terminal: bool = False
+    edges: dict[int, Edge] = field(default_factory=dict)
+    lock: threading.Lock = field(
+        default_factory=threading.Lock,
+        repr=False,
+    )
+
+    @property
+    def visits(self):
+        return sum(edge.visits for edge in self.edges.values())
+
+    @property
+    def prm_value(self):
+        if self.prm_weight_sum == 0:
+            return 0.0
+        return self.prm_log_sum / self.prm_weight_sum
+```
+
+### 3.6 Atualização token-level do PRM
+
+```python
+def extend_prm_value(
+    parent: Node,
+    token_probability: float,
+    gamma: float,
+):
+    eps = 1e-8
+
+    # Peso maior para tokens mais recentes.
+    decayed_log_sum = gamma * parent.prm_log_sum
+    decayed_weight_sum = gamma * parent.prm_weight_sum
+
+    token_reward = math.log(
+        max(token_probability, eps)
+    )
+
+    return (
+        decayed_log_sum + token_reward,
+        decayed_weight_sum + 1.0,
+    )
+```
+
+### 3.7 Seleção PUCT concorrente
+
+```python
+def select_edge(
+    node: Node,
+    c_puct: float,
+    virtual_loss_weight: float,
+):
+    with node.lock:
+        parent_visits = max(1, node.visits)
+        sqrt_parent = math.sqrt(parent_visits)
+
+        best_token = None
+        best_score = -float("inf")
+
+        for token, edge in node.edges.items():
+            exploration = (
+                c_puct
+                * edge.prior
+                * sqrt_parent
+                / (1 + edge.visits)
+            )
+
+            score = (
+                edge.q
+                + exploration
+                - virtual_loss_weight * edge.virtual_loss
+            )
+
+            if score > best_score:
+                best_score = score
+                best_token = token
+
+        edge = node.edges[best_token]
+        edge.virtual_loss += 1
+
+        return best_token, edge
+```
+
+### 3.8 Expansão batched com KV cache
+
+```python
+@torch.no_grad()
+def expand_node(
+    node,
+    policy_model,
+    prm_model,
+    tokenizer,
+    *,
+    branch_factor=16,
+    gamma=0.995,
+):
+    last_token = torch.tensor(
+        [[node.token_ids[-1]]],
+        device=policy_model.device,
+    )
+
+    policy_out = policy_model(
+        input_ids=last_token,
+        past_key_values=node.kv_cache_handle,
+        use_cache=True,
+    )
+
+    logits = policy_out.logits[0, -1]
+    probs = logits.softmax(dim=-1)
+
+    priors, candidate_tokens = torch.topk(
+        probs,
+        k=branch_factor,
+    )
+
+    batch_tokens = candidate_tokens[:, None]
+
+    prm_out = prm_model(
+        input_ids=batch_tokens,
+        attention_mask=torch.ones_like(batch_tokens),
+    )
+
+    token_values = prm_out["token_prob"][:, -1]
+
+    children = []
+
+    for token, prior, token_probability in zip(
+        candidate_tokens.tolist(),
+        priors.tolist(),
+        token_values.tolist(),
+    ):
+        log_sum, weight_sum = extend_prm_value(
+            node,
+            token_probability,
+            gamma,
+        )
+
+        child = Node(
+            token_ids=node.token_ids + (token,),
+            kv_cache_handle=policy_out.past_key_values,
+            prm_log_sum=log_sum,
+            prm_weight_sum=weight_sum,
+            depth=node.depth + 1,
+            terminal=token == tokenizer.eos_token_id,
+        )
+
+        node.edges[token] = Edge(
+            prior=prior,
+            child=child,
+        )
+        children.append(child)
+
+    return children
+```
+
+### 3.9 Backup da trajetória
+
+```python
+def backup(
+    trajectory,
+    leaf_value,
+    gamma=0.995,
+):
+    value = leaf_value
+
+    for node, token, token_reward in reversed(trajectory):
+        value = token_reward + gamma * value
+
+        with node.lock:
+            edge = node.edges[token]
+            edge.virtual_loss = max(
+                0,
+                edge.virtual_loss - 1,
+            )
+            edge.visits += 1
+            edge.value_sum += value
+```
+
+### 3.10 Loop MCTS completo
+
+```python
+def mcts_runtime_inference(
+    root,
+    policy_model,
+    prm_model,
+    tokenizer,
+    *,
+    simulations=1024,
+    branch_factor=16,
+    max_depth=2048,
+    c_puct=1.5,
+    virtual_loss_weight=0.25,
+    gamma=0.995,
+):
+    for _ in range(simulations):
+        node = root
+        trajectory = []
+
+        while node.edges and not node.terminal:
+            token, edge = select_edge(
+                node,
+                c_puct=c_puct,
+                virtual_loss_weight=virtual_loss_weight,
+            )
+
+            child = edge.child
+
+            token_reward = (
+                child.prm_value - node.prm_value
+            )
+
+            trajectory.append(
+                (node, token, token_reward)
+            )
+            node = child
+
+            if node.depth >= max_depth:
+                break
+
+        if not node.terminal and node.depth < max_depth:
+            children = expand_node(
+                node,
+                policy_model,
+                prm_model,
+                tokenizer,
+                branch_factor=branch_factor,
+                gamma=gamma,
+            )
+
+            # Inicialização conservadora: melhor filho segundo o PRM,
+            # sem transformar prior do gerador em recompensa.
+            leaf = max(
+                children,
+                key=lambda child: child.prm_value,
+            )
+            leaf_value = leaf.prm_value
+        else:
+            leaf_value = node.prm_value
+
+        backup(
+            trajectory,
+            leaf_value,
+            gamma=gamma,
+        )
+
+    # Política final derivada das visitas, não do maior Q isolado.
+    best_token, best_edge = max(
+        root.edges.items(),
+        key=lambda item: item[1].visits,
+    )
+
+    return best_token, best_edge.child
+```
+
+### 3.11 Alocação adaptativa do orçamento
+
+Para dificuldade estimada (d_x) e orçamento máximo (B):
+
+[
+\max_{{n_x,b_x,h_x}}
+\mathbb E[
+U_x(n_x,b_x,h_x)
+]
+]
+
+sujeito a:
+
+[
+\sum_x
+n_xb_xh_x
+\le B
+]
+
+Onde:
+
+* (n_x): simulações MCTS;
+* (b_x): branching factor;
+* (h_x): profundidade;
+* (U_x): utilidade estimada por PRM/ORM/verificador.
+
+Regra adaptativa:
+
+[
+B_x
+===
+
+B_{\min}
++
+(B_{\max}-B_{\min})
+\cdot
+4d_x(1-d_x)
+]
+
+A função concentra compute em problemas de dificuldade intermediária, nos quais busca adicional possui maior ganho marginal.
+
+```python
+def allocate_search_budget(
+    predicted_success,
+    *,
+    min_simulations=64,
+    max_simulations=4096,
+    min_branch=4,
+    max_branch=32,
+):
+    p = float(
+        max(0.0, min(1.0, predicted_success))
+    )
+
+    uncertainty = 4.0 * p * (1.0 - p)
+
+    simulations = round(
+        min_simulations
+        + uncertainty
+        * (max_simulations - min_simulations)
+    )
+
+    branch_factor = round(
+        min_branch
+        + uncertainty
+        * (max_branch - min_branch)
+    )
+
+    return {
+        "simulations": simulations,
+        "branch_factor": branch_factor,
+        "uncertainty": uncertainty,
+    }
+```

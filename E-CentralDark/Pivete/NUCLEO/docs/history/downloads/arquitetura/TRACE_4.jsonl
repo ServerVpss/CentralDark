@@ -1,0 +1,10 @@
+{"ts": "2026-08-24T09:33:00-03:00", "event": "REQUEST_RECEIVED", "intent": "single ZIP: animals + OpenAI neural/system architecture + reproducible evidence"}
+{"ts": "2026-08-24T09:33:00-03:00", "event": "CANONICAL_IMAGE_REUSED", "path": "CENTRALDARK_BIOCOGNITIVE_OPENAI_NEURAL_ATLAS.png", "rule": "REUSE_BEFORE_CREATE"}
+{"ts": "2026-08-24T09:33:00-03:00", "event": "OPENAI_PUBLIC_STATE_MEASURED", "status": "DONE", "unknown": ["GPT-5.6 exact neural topology"]}
+{"ts": "2026-08-24T09:33:00-03:00", "event": "ANIMAL_COGNITION_SOURCES_MEASURED", "status": "DONE"}
+{"ts": "2026-08-24T09:33:00-03:00", "event": "COUNTERPROOF_WRITTEN", "status": "DONE"}
+{"ts": "2026-08-24T09:33:00-03:00", "event": "CROSS_AGENT_DENOMINATOR_EMBEDDED", "status": "DONE"}
+{"ts": "2026-08-24T13:00:00-03:00", "event": "SESSION_ANIMAL_INVENTORY", "count": 15, "result": "PASS"}
+{"ts": "2026-08-24T13:00:01-03:00", "event": "TAXONOMY_DEDUPE", "rule": "DEDUPE != DELETE_INFORMATION", "result": "PASS"}
+{"ts": "2026-08-24T13:00:02-03:00", "event": "RECOVERED_DELTAS", "deltas": ["Macaco", "Corvo", "Predador", "Presa split"], "result": "PASS"}
+{"ts": "2026-08-24T13:00:03-03:00", "event": "ZERO_REGRESSION", "scope": "recovered session inventory", "coverage": "15/15", "result": "PASS"}

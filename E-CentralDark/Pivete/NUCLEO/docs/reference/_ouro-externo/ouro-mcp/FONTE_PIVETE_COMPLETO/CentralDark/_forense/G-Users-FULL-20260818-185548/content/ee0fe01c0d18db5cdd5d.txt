@@ -1,0 +1,11 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@babel\runtime\helpers\esm\initializerDefineProperty.js
+
+function _initializerDefineProperty(e, i, r, l) {
+  r && Object.defineProperty(e, i, {
+    enumerable: r.enumerable,
+    configurable: r.configurable,
+    writable: r.writable,
+    value: r.initializer ? r.initializer.call(l) : void 0
+  });
+}
+export { _initializerDefineProperty as default };

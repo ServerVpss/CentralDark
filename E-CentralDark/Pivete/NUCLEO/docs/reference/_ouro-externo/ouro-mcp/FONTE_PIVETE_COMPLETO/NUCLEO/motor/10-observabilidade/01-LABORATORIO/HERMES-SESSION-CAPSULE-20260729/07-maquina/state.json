@@ -1,0 +1,17 @@
+{
+  "mission": "INVENTARIO-TOTAL-HERMES-01",
+  "nonce": "BBC03689F2C4",
+  "phase": "MAPEAMENTO_READ_ONLY",
+  "folder_current": null,
+  "mutation_authorized": false,
+  "profile_runtime_proven": true,
+  "last_valid_profile_report_sha256": "bb03aa8abe3799437c69128eb0cb47fc9524960bdac4d1817cde1158de1aac6e",
+  "last_instrument_status": "INVALID",
+  "last_script_prepared": "stage-05d-reserved-entry-nul-diagnostic.ps1",
+  "last_script_sha256": "00ba8aad5f0058cab9f1cbba07619aaf7da09a12a29a053b21fdb9065b22f6e5",
+  "last_script_executed": false,
+  "next_gate": "PIVETE_OR_SOL_REVIEW",
+  "new_collector_started": false,
+  "capsule_created": true,
+  "capsule_timestamp": "2026-07-29T06:02:00-03:00"
+}

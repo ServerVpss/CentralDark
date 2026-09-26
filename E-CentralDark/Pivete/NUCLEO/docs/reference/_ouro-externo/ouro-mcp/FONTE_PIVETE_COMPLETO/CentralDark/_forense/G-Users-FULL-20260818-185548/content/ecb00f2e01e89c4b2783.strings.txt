@@ -1,0 +1,8 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\keymap\dvorak.vim
+
+" Maintainer:   Ashish SHUKLA <wahjava@members.fsf.org>
+" Last Changed: 2009 Jul 04
+" All characters are ASCII, conversion to another encoding (e.g., UTF-8)
+" should work.
+let b:keymap_name = "en-dv"
+loadkeymap

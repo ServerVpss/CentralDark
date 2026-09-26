@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <item name="androidx.core.view.inputmethod.EditorInfoCompat boolean isCutOnSurrogate(java.lang.CharSequence, int, int) 2">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.inputmethod.EditorInfoCompat.TrimPolicy.HEAD, androidx.core.view.inputmethod.EditorInfoCompat.TrimPolicy.TAIL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.inputmethod.EditorInfoCompat int getProtocol(android.view.inputmethod.EditorInfo)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.inputmethod.EditorInfoCompat.Protocol.Unknown, androidx.core.view.inputmethod.EditorInfoCompat.Protocol.PlatformApi, androidx.core.view.inputmethod.EditorInfoCompat.Protocol.SupportLib, androidx.core.view.inputmethod.EditorInfoCompat.Protocol.AndroidX_1_0_0, androidx.core.view.inputmethod.EditorInfoCompat.Protocol.AndroidX_1_1_0}" />
+    </annotation>
+  </item>
+</root>
+

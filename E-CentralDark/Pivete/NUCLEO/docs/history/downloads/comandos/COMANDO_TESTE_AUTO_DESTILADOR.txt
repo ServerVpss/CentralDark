@@ -1,0 +1,11 @@
+# COMANDO TESTE AUTO
+
+Este é um comando de teste para o auto-destilador.
+
+COMANDO: testar_auto_destilador
+PROMPT: processa automaticamente arquivos na Nova pasta
+GATE: FILE_SECURITY_GATE obrigatório
+DECISÃO: cristalizar tudo que chegar
+
+RISCO: baixo - apenas teste
+GAP: nenhum - teste isolado

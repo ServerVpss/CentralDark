@@ -1,0 +1,564 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\agent\__pycache__\error_classifier.cpython-311.pyc
+
+Z!d[d'
+Z"d(Z#d)d*d+d,d-d.e#g
+Z0d;d;d
+Z2d^dL
+Z4d`dN
+Z5dadP
+Z6dbdR
+Z7dcdS
+Z8dddT
+Z9dedU
+Z:dfdW
+Z;dgdY
+API error classification for smart failover and recovery.
+Provides a structured taxonomy of API errors and a priority-ordered
+classification pipeline that determines the correct recovery action
+(retry, rotate credential, fallback to another provider, compress
+context, or abort).
+Replaces scattered inline string-matching with a centralized classifier
+that the main retry loop in run_agent.py consults for every API failure.
+annotationsN)
+dataclass
+field)
+Optional
+provider_stream_non_json_datac
+FailoverReasonu8
+Why an API call failed 
+ determines recovery strategy.
+auth_permanent
+billing
+rate_limit
+upstream_rate_limit
+overloaded
+server_error
+timeout
+ssl_cert_verification
+context_overflow
+payload_too_large
+image_too_large
+model_not_found
+provider_policy_blocked
+content_policy_blocked
+format_error
+invalid_encrypted_content
+#multimodal_tool_content_unsupported
+thinking_signature
+long_context_tier
+!oauth_long_context_beta_forbidden
+llama_cpp_grammar_pattern
+unknownN)
+__name__
+__module__
+__qualname__
+__doc__r
+JC:\Users\danda\AppData\Local\hermes\hermes-agent\agent\error_classifier.pyr
+ClassifiedErrorz>Structured classification of an API error with recovery hints.r
+reasonN
+Optional[int]
+status_code
+Optional[str]
+provider
+message)
+default_factory
+Dict[str, Any]
+error_contextT
+retryableF
+should_compress
+should_rotate_credential
+should_fallback
+returnc
+is_authz
+ClassifiedError.is_authe
+True when a ``billing`` verdict rests on an ambiguous body.
+        Anthropic's "out of extra usage" 400 can also be a content-filter
+        rejection (#82154); surfaces must hedge rather than assert exhaustion.
+        
+billing_unverified)
+z"ClassifiedError.billing_unverifiedi
+__annotations__r.
+dictr7
+propertyrB
+insufficient credits
+insufficient_quotaz
+insufficient balancez
+credit balancez
+credits exhaustedz
+credits have been exhaustedz
+requires available creditsz
+account balance is too lowz
+no usable creditsz
+top up your creditsz
+payment requiredz
+billing hard limitz
+exceeded your current quotaz
+account is deactivatedz
+plan does not include
+out of extra usagez
+out of fundsz
+run out of funds
+balance_depleted
+ model_not_supported_on_free_tierz
+not available on the free tier)
+error_msgr3
+zBerror_context marking a billing verdict as unverified (see above).c
+<genexpr>z-_billing_ambiguity_context.<locals>.<genexpr>
+possible_content_filter)
+_UNVERIFIED_BILLING_PATTERNS)
+_billing_ambiguity_contextrX
+z$personal-team-blocked:spending-limitrI
+billing_not_active
+payment_required
+insufficient_credits
+no_usable_creditsrK
+member_spend_cap_exceeded)
+rate limitr
+too many requests
+throttledz
+requests per minutez
+tokens per minutez
+requests per dayz
+try again inz
+please retry after
+resource_exhaustedz
+rate increased too quickly
+throttlingexceptionz
+too many concurrent requests
+servicequotaexceededexception
+throttling)
+temporarily overloadedz!service is temporarily overloadedz%service may be temporarily overloadedz
+server is overloadedz
+server overloadedz
+service overloadedz
+service is overloadedz
+upstream overloadedz
+currently overloadedz
+at capacityz
+over capacity)
+usage limit
+quotaz
+limit exceeded
+key limit exceeded)
+try again
+retryz
+resets atz
+reset in
+requests remaining
+periodic
+window)
+request entity too largez
+payload too largez
+error code: 413
+request_too_largez request exceeds the maximum size)
+image exceedsz
+image too larger
+image size exceedsz
+image dimensions exceedz"dimensions exceed max allowed sizez
+max allowed size: 8000)
+text is not setz%tool message content must be a stringz
+tool content must be a stringz
+tool message must be a stringz
+expected string, got listz
+expected string, got arrayz tool_call.content must be string)
+context lengthz
+context sizez
+maximum contextz
+token limitz
+too many tokensz
+reduce the lengthz
+exceeds the limitz
+context windowz
+prompt is too longz
+prompt exceeds max length
+max_tokensz
+maximum number of tokensz
+exceeds the max_model_len
+max_model_lenz
+prompt length
+input is too longz
+maximum model lengthz
+context length exceededz
+truncating inputz
+slot context
+n_ctx_slotu
+z.tokens in request more than max tokens allowedrl
+max input tokenz
+input tokenz*exceeds the maximum number of input tokensz
+maximum allowed input length)
+is not a valid modelz
+invalid modelz
+model not foundr
+does not existz
+no such modelz
+unknown modelz
+unsupported modelz(no endpoints found that support tool user1
+True when a bare model id is only known to the provider as ``vendor/id``.
+    Some providers answer a malformed model id with a naked 404 that names
+    nothing 
+ NVIDIA NIM returns ``404 page not found`` for a bare
+    ``nemotron-3-ultra-550b-a55b``, indistinguishable from a bad endpoint
+    path. Consulting the curated catalogue tells the two apart: if the id
+    carries no ``/`` but the catalogue has exactly one entry ending in
+    ``/<id>``, the prefix was dropped and the failure is deterministic.
+    Never guesses 
+ an id absent from the catalogue (a local NIM container,
+    a proxied model) returns False so genuine endpoint problems keep their
+    retryable ``unknown`` classification.
+    r2
+suggest_prefixed_model_id)
+hermes_cli.model_normalizerp
+Exception)
+namerp
+    r)
+_model_id_missing_known_prefixru
+no user query foundz
+must have non-empty contentz
+messages must have non-empty
+invalid_request_bodyz%text content blocks must be non-emptyz
+content field is requiredz*messages: at least one message is required)
+unknown parameterz
+unsupported parameterz
+unrecognized request argument
+invalid_request_error
+unknown_parameter
+unsupported_parameter)
+z.no endpoints available matching your guardrailz0no endpoints available matching your data policyz,no endpoints found matching your data policy)
+z'flagged for possible cybersecurity riskz
+trusted access for cyberz
+violates our usage policiesz violates openai's usage policiesz
+your request was flagged byz prompt was flagged by our safetyz+responses cannot be generated due to safety
+content_filter
+responsibleaipolicyviolation
+new_sensitive)
+invalid api key
+invalid_api_key
+gateway_auth_failed
+authentication
+unauthorized
+forbiddenz
+invalid tokenz
+token expiredz
+token revokedz
+access denied
+signature)
+returned an empty responsez
+empty response despite retriesz#provider returned an empty responsez
+model returning empty responsesz
+empty response stream)
+timed outz
+turn timed outz
+request timed outz
+deadline exceededz
+operation timed outz
+upstream timed out)
+connection refused
+econnrefusedz
+no route to hostz
+network is unreachablez
+network unreachablez
+name or service not knownz$temporary failure in name resolutionz
+nodename nor servname providedz
+getaddrinfo failedz
+getaddrinfo enotfound
+eai_againz
+fetch failedz
+failed to fetchz
+upstream connect error>
+SSLError
+ReadError
+PoolTimeout
+ReadTimeout
+SSLEOFError
+ConnectError
+TimeoutError
+ConnectTimeout
+APITimeoutError
+BrokenPipeError
+ConnectionError
+SSLSyscallError
+SSLWantReadError
+SSLWantWriteError
+APIConnectionError
+SSLZeroReturnError
+RemoteProtocolError
+ConnectionResetError
+ConnectionAbortedError
+ServerDisconnectedError)
+server disconnectedz
+peer closed connectionz
+connection reset by peerz
+connection was closedz
+network connection lostz
+unexpected eofz
+incomplete chunked read)
+certificate verify failed
+certificate_verify_failedz&unable to get local issuer certificatez
+self-signed certificatez
+self signed certificatez
+certificate has expiredz+hostname mismatch, certificate is not validz&unable to verify the first certificate)
+bad record macz
+ssl alertz
+tls alertz
+ssl handshake failurez
+tlsv1 alertz
+sslv3 alert
+bad_record_mac
+ssl_alert
+tls_alert
+tls_alert_internal_errorz
+[ssl:r2
+approx_tokens
+context_length
+num_messages
+errorrs
+d-l%m&}
+d3l/m0}
+Classify an API error into a structured recovery recommendation.
+    Priority-ordered pipeline:
+      0. Plugin ``transform_api_error_classification`` hooks (first valid result wins)
+      1. Special-case provider-specific patterns (thinking sigs, tier gates)
+      2. HTTP status code + message-aware refinement
+      3. Error code classification (from body)
+      4. Message pattern matching (billing vs rate_limit vs context vs auth)
+      5. SSL/TLS transient alert patterns 
+ retry as timeout
+      6. Server disconnect + large session 
+ context overflow
+      7. Transport error heuristics
+      8. Fallback: unknown (retryable with backoff)
+    Args:
+        error: The exception from the API call.
+        provider: Current provider name (e.g. "openrouter", "anthropic").
+        model: Current model slug.
+        approx_tokens: Approximate token count of the current context.
+        context_length: Maximum context length for the current model.
+    Returns:
+        ClassifiedError with reason and recovery action hints.
+RateLimitError
+metadata
+_extract_message
+updater+
+overrides
+defaults
+_resultz#classify_api_error.<locals>._result
+get_plugin_error_classification)
+error_type
+error_code
+error_message
+error_bodyr
+z+Plugin error classification unavailable: %sz@API error classified by plugin hook: %s (provider=%s, status=%s)c
+z%classify_api_error.<locals>.<genexpr>T
+thinkingr
+cannot be modifiedz
+must remain as they were
+extra usagez
+long contextz
+long context betaz
+not yet availablez
+error parsing grammarz
+json-schema-to-grammarz
+unable to generate parser
+templatez'do not have an active grok subscriptionz
+out of available resources
+result_fn
+moaz.'types.SimpleNamespace' object is not iterablez7'types.SimpleNamespace' object has no attribute 'index')
+MoAPresetNotFoundError
+z%classify_api_error.<locals>.<genexpr>
+z%classify_api_error.<locals>.<genexpr>(
+z%classify_api_error.<locals>.<genexpr>1
+!get_reasoning_stale_timeout_floorg333333
+RuntimeErrorz
+consecutive stale attemptsz
+aborting this call)
+_extract_status_code
+typer#
+_extract_error_body
+_extract_error_coder3
+isinstancerG
+JSONDecodeError
+TypeError
+append
+hermes_cli.pluginsr
+logger
+valuerV
+ _CONTENT_POLICY_BLOCKED_PATTERNSr
+_NO_USER_QUERY_SIGNALr!
+_classify_by_statusr
+agent.errorsr
+_classify_by_error_code
+_classify_by_message
+_SSL_CERT_VERIFY_PATTERNSr
+_SSL_TRANSIENT_PATTERNSr
+_SERVER_DISCONNECT_PATTERNS
+agent.reasoning_timeoutsr
+_TRANSPORT_ERROR_TYPESr
+OSErrorr"
+_raw_msg
+_body_msg
+_metadata_msg
+_err_obj
+_metadata
+_raw_jsonr
+_inner
+_inner_err
+provider_lower
+model_lowerr
+plugin_classification
+_llama_cpp_grammar_hit
+classifiedr
+is_disconnectr
+is_larger
+```                            @@@r)
+classify_api_errorr
+Optional[ClassifiedError]c
+)%zAClassify based on HTTP status code with message-aware refinement.i
+xai-oauthrd
+spending limitc
+z&_classify_by_status.<locals>.<genexpr>
+z&_classify_by_status.<locals>.<genexpr>
+z&_classify_by_status.<locals>.<genexpr>
+z&_classify_by_status.<locals>.<genexpr>
+z&_classify_by_status.<locals>.<genexpr>
+upstream_provider
+z&_classify_by_status.<locals>.<genexpr>"
+z&_classify_by_status.<locals>.<genexpr>3
+z&_classify_by_status.<locals>.<genexpr>9
+z&_classify_by_status.<locals>.<genexpr>F
+z&_classify_by_status.<locals>.<genexpr>L
+_XAI_SPENDING_LIMIT_ERROR_CODErV
+_BILLING_PATTERNSr
+_classify_402
+!_PROVIDER_POLICY_BLOCKED_PATTERNSr
+_MODEL_NOT_FOUND_PATTERNSr
+_OVERLOADED_PATTERNSr
+_is_openrouter_upstream_error
+_extract_upstream_provider_namer
+_classify_400
+_REQUEST_VALIDATION_PATTERNSr
+!_EMPTY_PROVIDER_RESPONSE_PATTERNSr
+_CONTEXT_OVERFLOW_PATTERNSr
+ `          r)
+Disambiguate 402: billing exhaustion vs transient usage limit.
+    The key insight from OpenClaw: some 402s are transient rate limits
+    disguised as payment errors.  "Usage limit, try again in 5 minutes"
+    is NOT a billing problem 
+ it's a periodic quota that resets.
+z _classify_402.<locals>.<genexpr>v
+z _classify_402.<locals>.<genexpr>w
+_USAGE_LIMIT_PATTERNS
+_USAGE_LIMIT_TRANSIENT_SIGNALSr
+has_usage_limit
+has_transient_signals
+`   r)
+Classify 400 Bad Request 
+ context overflow, format error, or generic.c
+z _classify_400.<locals>.<genexpr>
+z _classify_400.<locals>.<genexpr>
+encrypted content for itemz
+could not be verifiedz0could not decrypt the provided encrypted_contentFr
+z _classify_400.<locals>.<genexpr>
+z _classify_400.<locals>.<genexpr>
+Malformed message array 400 (invalid request body) classified as format_error, NOT context overflow 
+ failing fast + falling back instead of entering the compression loop. This usually means an empty-content assistant stub is in the transcript; num_messages=%s approx_tokens=%s. error=%.200sc
+z _classify_400.<locals>.<genexpr>
+z _classify_400.<locals>.<genexpr>
+z _classify_400.<locals>.<genexpr>
+z _classify_400.<locals>.<genexpr>
+z _classify_400.<locals>.<genexpr>
+z _classify_400.<locals>.<genexpr>%
+errorMessage
+errorArgsr,
+!_MULTIMODAL_TOOL_CONTENT_PATTERNSr
+_IMAGE_TOO_LARGE_PATTERNSr
+_INVALID_MESSAGE_BODY_PATTERNSr
+warningr
+_RATE_LIMIT_PATTERNSr
+error_code_lower
+err_body_msg
+err_obj
+is_genericr
+`              r)
+z:Classify by structured error codes from the response body.z
+request validation failed:FTr
+rate_limit_exceeded)
+invalid_modelr
+model_not_available>
+max_tokens_exceeded
+context_length_exceededr
+#PROVIDER_STREAM_NON_JSON_ERROR_CODEr
+_BILLING_ERROR_CODESr
+code_lowers
+    r)
+zJClassify based on error message patterns when no status code is available.c
+z'_classify_by_message.<locals>.<genexpr>
+z'_classify_by_message.<locals>.<genexpr>
+z'_classify_by_message.<locals>.<genexpr>
+z'_classify_by_message.<locals>.<genexpr>
+z'_classify_by_message.<locals>.<genexpr>
+z'_classify_by_message.<locals>.<genexpr>
+z'_classify_by_message.<locals>.<genexpr>
+z'_classify_by_message.<locals>.<genexpr>
+z'_classify_by_message.<locals>.<genexpr>
+z'_classify_by_message.<locals>.<genexpr>
+z'_classify_by_message.<locals>.<genexpr>
+z'_classify_by_message.<locals>.<genexpr>
+z'_classify_by_message.<locals>.<genexpr>
+z'_classify_by_message.<locals>.<genexpr>'
+z'_classify_by_message.<locals>.<genexpr>1
+_PAYLOAD_TOO_LARGE_PATTERNSr
+_AUTH_PATTERNSr
+_TIMEOUT_MESSAGE_PATTERNSr
+_CONNECTION_MESSAGE_PATTERNS)
+`      r)
+z?Walk the error and its cause chain to find an HTTP status code.
+status
+__cause__
+__context__)
+getattrr
+current
+causes
+     r)
+zKExtract the structured error body from an SDK exception or its cause chain.r`
+responserc
+json_bodyrj
+       r)
+z4Extract an error code string from the response body.r2
+zAExtract a code/type from a nested error payload dict (defensive).r2
+payload
+payload_error
+nestedri
+     r)
+_code_from_payloadz/_extract_error_code.<locals>._code_from_payloadh
+errorCode)
+startswithr
+error_objri
+nested_codert
+         r)
+z+Extract the most informative error message.r
+argsr,
+      r)
+Detect OpenRouter's aggregator-wrapped upstream provider errors.
+    OpenRouter returns errors from upstream model providers (DeepSeek,
+    Anthropic, etc.) wrapped with the outer message "Provider returned error"
+    and the real error nested in ``metadata.raw``. This signal means the
+    user's OpenRouter key is healthy 
+ the upstream provider is the one that
+    failed 
+ so credential rotation is the wrong recovery.
+    Fr2
+provider returned error
+openrouterTr
+provider_name)
+outer_msgr
+      r)
+zCPull the upstream provider name out of OpenRouter's error metadata.Nr
+    r)
+__future__r
+logging
+dataclassesr
+typingr
+getLoggerr#
+frozensetrI
+_THINKING_SIG_PATTERNSr
+<module>r

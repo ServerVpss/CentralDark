@@ -1,0 +1,15 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@nous-research\ui\src\ui\components\overlays\blend-modes.ts
+
+export const BLEND_MODES = [
+  'overlay',
+  'multiply',
+  'screen',
+  'difference',
+  'exclusion',
+  'color-dodge',
+  'color-burn',
+  'hard-light',
+  'soft-light',
+  'darken',
+  'lighten'
+] as unknown as React.CSSProperties['mixBlendMode'][]

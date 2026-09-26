@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <item name="androidx.core.app.FrameMetricsAggregator FrameMetricsAggregator(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.app.FrameMetricsAggregator.TOTAL_DURATION, androidx.core.app.FrameMetricsAggregator.INPUT_DURATION, androidx.core.app.FrameMetricsAggregator.LAYOUT_MEASURE_DURATION, androidx.core.app.FrameMetricsAggregator.DRAW_DURATION, androidx.core.app.FrameMetricsAggregator.SYNC_DURATION, androidx.core.app.FrameMetricsAggregator.COMMAND_DURATION, androidx.core.app.FrameMetricsAggregator.SWAP_DURATION, androidx.core.app.FrameMetricsAggregator.DELAY_DURATION, androidx.core.app.FrameMetricsAggregator.ANIMATION_DURATION, androidx.core.app.FrameMetricsAggregator.EVERY_DURATION}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.FrameMetricsAggregator.MetricType">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.app.FrameMetricsAggregator.TOTAL_DURATION, androidx.core.app.FrameMetricsAggregator.INPUT_DURATION, androidx.core.app.FrameMetricsAggregator.LAYOUT_MEASURE_DURATION, androidx.core.app.FrameMetricsAggregator.DRAW_DURATION, androidx.core.app.FrameMetricsAggregator.SYNC_DURATION, androidx.core.app.FrameMetricsAggregator.COMMAND_DURATION, androidx.core.app.FrameMetricsAggregator.SWAP_DURATION, androidx.core.app.FrameMetricsAggregator.DELAY_DURATION, androidx.core.app.FrameMetricsAggregator.ANIMATION_DURATION, androidx.core.app.FrameMetricsAggregator.EVERY_DURATION}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.GrammaticalInflectionManagerCompat void setRequestedApplicationGrammaticalGender(android.content.Context, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.GrammaticalInflectionManagerCompat.GRAMMATICAL_GENDER_NOT_SPECIFIED, androidx.core.app.GrammaticalInflectionManagerCompat.GRAMMATICAL_GENDER_NEUTRAL, androidx.core.app.GrammaticalInflectionManagerCompat.GRAMMATICAL_GENDER_FEMININE, androidx.core.app.GrammaticalInflectionManagerCompat.GRAMMATICAL_GENDER_MASCULINE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.GrammaticalInflectionManagerCompat.GrammaticalGender">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.GrammaticalInflectionManagerCompat.GRAMMATICAL_GENDER_NOT_SPECIFIED, androidx.core.app.GrammaticalInflectionManagerCompat.GRAMMATICAL_GENDER_NEUTRAL, androidx.core.app.GrammaticalInflectionManagerCompat.GRAMMATICAL_GENDER_FEMININE, androidx.core.app.GrammaticalInflectionManagerCompat.GRAMMATICAL_GENDER_MASCULINE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationChannelCompat int getLockscreenVisibility()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC, androidx.core.app.NotificationCompat.VISIBILITY_PRIVATE, androidx.core.app.NotificationCompat.VISIBILITY_SECRET}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat int getGroupAlertBehavior(android.app.Notification)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.GROUP_ALERT_ALL, androidx.core.app.NotificationCompat.GROUP_ALERT_SUMMARY, androidx.core.app.NotificationCompat.GROUP_ALERT_CHILDREN}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat int getVisibility(android.app.Notification)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC, androidx.core.app.NotificationCompat.VISIBILITY_PRIVATE, androidx.core.app.NotificationCompat.VISIBILITY_SECRET}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.Action Action(androidx.core.graphics.drawable.IconCompat, java.lang.CharSequence, android.app.PendingIntent, android.os.Bundle, androidx.core.app.RemoteInput[], androidx.core.app.RemoteInput[], boolean, int, boolean, boolean, boolean) 7">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_NONE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_REPLY, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_UNREAD, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_DELETE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_ARCHIVE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MUTE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_UNMUTE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_THUMBS_UP, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_THUMBS_DOWN, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_CALL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.Action Action(int, java.lang.CharSequence, android.app.PendingIntent, android.os.Bundle, androidx.core.app.RemoteInput[], androidx.core.app.RemoteInput[], boolean, int, boolean, boolean, boolean) 7">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_NONE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_REPLY, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_UNREAD, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_DELETE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_ARCHIVE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MUTE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_UNMUTE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_THUMBS_UP, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_THUMBS_DOWN, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_CALL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.Action int getSemanticAction()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_NONE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_REPLY, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_UNREAD, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_DELETE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_ARCHIVE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MUTE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_UNMUTE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_THUMBS_UP, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_THUMBS_DOWN, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_CALL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.Action mSemanticAction">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_NONE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_REPLY, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_UNREAD, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_DELETE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_ARCHIVE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MUTE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_UNMUTE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_THUMBS_UP, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_THUMBS_DOWN, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_CALL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.Action.Builder Builder(androidx.core.graphics.drawable.IconCompat, java.lang.CharSequence, android.app.PendingIntent, android.os.Bundle, androidx.core.app.RemoteInput[], boolean, int, boolean, boolean, boolean) 6">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_NONE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_REPLY, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_UNREAD, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_DELETE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_ARCHIVE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MUTE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_UNMUTE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_THUMBS_UP, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_THUMBS_DOWN, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_CALL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.Action.Builder androidx.core.app.NotificationCompat.Action.Builder setSemanticAction(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_NONE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_REPLY, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_UNREAD, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_DELETE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_ARCHIVE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MUTE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_UNMUTE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_THUMBS_UP, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_THUMBS_DOWN, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_CALL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.Action.Builder mSemanticAction">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_NONE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_REPLY, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_UNREAD, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_DELETE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_ARCHIVE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MUTE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_UNMUTE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_THUMBS_UP, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_THUMBS_DOWN, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_CALL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.Action.SemanticAction">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_NONE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_REPLY, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_UNREAD, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_DELETE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_ARCHIVE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_MUTE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_UNMUTE, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_THUMBS_UP, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_THUMBS_DOWN, androidx.core.app.NotificationCompat.Action.SEMANTIC_ACTION_CALL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.BadgeIconType">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.BADGE_ICON_NONE, androidx.core.app.NotificationCompat.BADGE_ICON_SMALL, androidx.core.app.NotificationCompat.BADGE_ICON_LARGE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.Builder androidx.core.app.NotificationCompat.Builder setBadgeIconType(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.BADGE_ICON_NONE, androidx.core.app.NotificationCompat.BADGE_ICON_SMALL, androidx.core.app.NotificationCompat.BADGE_ICON_LARGE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.Builder androidx.core.app.NotificationCompat.Builder setForegroundServiceBehavior(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.FOREGROUND_SERVICE_DEFAULT, androidx.core.app.NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE, androidx.core.app.NotificationCompat.FOREGROUND_SERVICE_DEFERRED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.Builder androidx.core.app.NotificationCompat.Builder setGroupAlertBehavior(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.GROUP_ALERT_ALL, androidx.core.app.NotificationCompat.GROUP_ALERT_SUMMARY, androidx.core.app.NotificationCompat.GROUP_ALERT_CHILDREN}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.Builder androidx.core.app.NotificationCompat.Builder setSound(android.net.Uri, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.media.AudioManager.STREAM_VOICE_CALL, android.media.AudioManager.STREAM_SYSTEM, android.media.AudioManager.STREAM_RING, android.media.AudioManager.STREAM_MUSIC, android.media.AudioManager.STREAM_ALARM, android.media.AudioManager.STREAM_NOTIFICATION, android.media.AudioManager.STREAM_DTMF, android.media.AudioManager.STREAM_ACCESSIBILITY}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.Builder androidx.core.app.NotificationCompat.Builder setVisibility(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC, androidx.core.app.NotificationCompat.VISIBILITY_PRIVATE, androidx.core.app.NotificationCompat.VISIBILITY_SECRET}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.Builder mFgsDeferBehavior">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.FOREGROUND_SERVICE_DEFAULT, androidx.core.app.NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE, androidx.core.app.NotificationCompat.FOREGROUND_SERVICE_DEFERRED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.Builder mGroupAlertBehavior">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.GROUP_ALERT_ALL, androidx.core.app.NotificationCompat.GROUP_ALERT_SUMMARY, androidx.core.app.NotificationCompat.GROUP_ALERT_CHILDREN}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.Builder mVisibility">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC, androidx.core.app.NotificationCompat.VISIBILITY_PRIVATE, androidx.core.app.NotificationCompat.VISIBILITY_SECRET}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.CallStyle CallStyle(int, androidx.core.app.Person, android.app.PendingIntent, android.app.PendingIntent, android.app.PendingIntent) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.CallStyle.CALL_TYPE_UNKNOWN, androidx.core.app.NotificationCompat.CallStyle.CALL_TYPE_INCOMING, androidx.core.app.NotificationCompat.CallStyle.CALL_TYPE_ONGOING, androidx.core.app.NotificationCompat.CallStyle.CALL_TYPE_SCREENING}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.CallStyle.CallType">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.CallStyle.CALL_TYPE_UNKNOWN, androidx.core.app.NotificationCompat.CallStyle.CALL_TYPE_INCOMING, androidx.core.app.NotificationCompat.CallStyle.CALL_TYPE_ONGOING, androidx.core.app.NotificationCompat.CallStyle.CALL_TYPE_SCREENING}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.GroupAlertBehavior">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.GROUP_ALERT_ALL, androidx.core.app.NotificationCompat.GROUP_ALERT_SUMMARY, androidx.core.app.NotificationCompat.GROUP_ALERT_CHILDREN}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.NotificationVisibility">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC, androidx.core.app.NotificationCompat.VISIBILITY_PRIVATE, androidx.core.app.NotificationCompat.VISIBILITY_SECRET}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.ServiceNotificationBehavior">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationCompat.FOREGROUND_SERVICE_DEFAULT, androidx.core.app.NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE, androidx.core.app.NotificationCompat.FOREGROUND_SERVICE_DEFERRED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationCompat.StreamType">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.media.AudioManager.STREAM_VOICE_CALL, android.media.AudioManager.STREAM_SYSTEM, android.media.AudioManager.STREAM_RING, android.media.AudioManager.STREAM_MUSIC, android.media.AudioManager.STREAM_ALARM, android.media.AudioManager.STREAM_NOTIFICATION, android.media.AudioManager.STREAM_DTMF, android.media.AudioManager.STREAM_ACCESSIBILITY}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationManagerCompat int getCurrentInterruptionFilter()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationManagerCompat.INTERRUPTION_FILTER_UNKNOWN, androidx.core.app.NotificationManagerCompat.INTERRUPTION_FILTER_ALL, androidx.core.app.NotificationManagerCompat.INTERRUPTION_FILTER_PRIORITY, androidx.core.app.NotificationManagerCompat.INTERRUPTION_FILTER_NONE, androidx.core.app.NotificationManagerCompat.INTERRUPTION_FILTER_ALARMS}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.NotificationManagerCompat.InterruptionFilter">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.NotificationManagerCompat.INTERRUPTION_FILTER_UNKNOWN, androidx.core.app.NotificationManagerCompat.INTERRUPTION_FILTER_ALL, androidx.core.app.NotificationManagerCompat.INTERRUPTION_FILTER_PRIORITY, androidx.core.app.NotificationManagerCompat.INTERRUPTION_FILTER_NONE, androidx.core.app.NotificationManagerCompat.INTERRUPTION_FILTER_ALARMS}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.PendingIntentCompat android.app.PendingIntent getActivities(android.content.Context, int, android.content.Intent[], int, android.os.Bundle, boolean) 3">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{android.app.PendingIntent.FLAG_ONE_SHOT, android.app.PendingIntent.FLAG_NO_CREATE, android.app.PendingIntent.FLAG_CANCEL_CURRENT, android.app.PendingIntent.FLAG_UPDATE_CURRENT, android.content.Intent.FILL_IN_ACTION, android.content.Intent.FILL_IN_DATA, android.content.Intent.FILL_IN_CATEGORIES, android.content.Intent.FILL_IN_COMPONENT, android.content.Intent.FILL_IN_PACKAGE, android.content.Intent.FILL_IN_SOURCE_BOUNDS, android.content.Intent.FILL_IN_SELECTOR, android.content.Intent.FILL_IN_CLIP_DATA}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.PendingIntentCompat android.app.PendingIntent getActivities(android.content.Context, int, android.content.Intent[], int, boolean) 3">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{android.app.PendingIntent.FLAG_ONE_SHOT, android.app.PendingIntent.FLAG_NO_CREATE, android.app.PendingIntent.FLAG_CANCEL_CURRENT, android.app.PendingIntent.FLAG_UPDATE_CURRENT, android.content.Intent.FILL_IN_ACTION, android.content.Intent.FILL_IN_DATA, android.content.Intent.FILL_IN_CATEGORIES, android.content.Intent.FILL_IN_COMPONENT, android.content.Intent.FILL_IN_PACKAGE, android.content.Intent.FILL_IN_SOURCE_BOUNDS, android.content.Intent.FILL_IN_SELECTOR, android.content.Intent.FILL_IN_CLIP_DATA}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.PendingIntentCompat android.app.PendingIntent getActivity(android.content.Context, int, android.content.Intent, int, android.os.Bundle, boolean) 3">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{android.app.PendingIntent.FLAG_ONE_SHOT, android.app.PendingIntent.FLAG_NO_CREATE, android.app.PendingIntent.FLAG_CANCEL_CURRENT, android.app.PendingIntent.FLAG_UPDATE_CURRENT, android.content.Intent.FILL_IN_ACTION, android.content.Intent.FILL_IN_DATA, android.content.Intent.FILL_IN_CATEGORIES, android.content.Intent.FILL_IN_COMPONENT, android.content.Intent.FILL_IN_PACKAGE, android.content.Intent.FILL_IN_SOURCE_BOUNDS, android.content.Intent.FILL_IN_SELECTOR, android.content.Intent.FILL_IN_CLIP_DATA}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.PendingIntentCompat android.app.PendingIntent getActivity(android.content.Context, int, android.content.Intent, int, boolean) 3">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{android.app.PendingIntent.FLAG_ONE_SHOT, android.app.PendingIntent.FLAG_NO_CREATE, android.app.PendingIntent.FLAG_CANCEL_CURRENT, android.app.PendingIntent.FLAG_UPDATE_CURRENT, android.content.Intent.FILL_IN_ACTION, android.content.Intent.FILL_IN_DATA, android.content.Intent.FILL_IN_CATEGORIES, android.content.Intent.FILL_IN_COMPONENT, android.content.Intent.FILL_IN_PACKAGE, android.content.Intent.FILL_IN_SOURCE_BOUNDS, android.content.Intent.FILL_IN_SELECTOR, android.content.Intent.FILL_IN_CLIP_DATA}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.PendingIntentCompat android.app.PendingIntent getBroadcast(android.content.Context, int, android.content.Intent, int, boolean) 3">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{android.app.PendingIntent.FLAG_ONE_SHOT, android.app.PendingIntent.FLAG_NO_CREATE, android.app.PendingIntent.FLAG_CANCEL_CURRENT, android.app.PendingIntent.FLAG_UPDATE_CURRENT, android.content.Intent.FILL_IN_ACTION, android.content.Intent.FILL_IN_DATA, android.content.Intent.FILL_IN_CATEGORIES, android.content.Intent.FILL_IN_COMPONENT, android.content.Intent.FILL_IN_PACKAGE, android.content.Intent.FILL_IN_SOURCE_BOUNDS, android.content.Intent.FILL_IN_SELECTOR, android.content.Intent.FILL_IN_CLIP_DATA}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.PendingIntentCompat android.app.PendingIntent getForegroundService(android.content.Context, int, android.content.Intent, int, boolean) 3">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{android.app.PendingIntent.FLAG_ONE_SHOT, android.app.PendingIntent.FLAG_NO_CREATE, android.app.PendingIntent.FLAG_CANCEL_CURRENT, android.app.PendingIntent.FLAG_UPDATE_CURRENT, android.content.Intent.FILL_IN_ACTION, android.content.Intent.FILL_IN_DATA, android.content.Intent.FILL_IN_CATEGORIES, android.content.Intent.FILL_IN_COMPONENT, android.content.Intent.FILL_IN_PACKAGE, android.content.Intent.FILL_IN_SOURCE_BOUNDS, android.content.Intent.FILL_IN_SELECTOR, android.content.Intent.FILL_IN_CLIP_DATA}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.PendingIntentCompat android.app.PendingIntent getService(android.content.Context, int, android.content.Intent, int, boolean) 3">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{android.app.PendingIntent.FLAG_ONE_SHOT, android.app.PendingIntent.FLAG_NO_CREATE, android.app.PendingIntent.FLAG_CANCEL_CURRENT, android.app.PendingIntent.FLAG_UPDATE_CURRENT, android.content.Intent.FILL_IN_ACTION, android.content.Intent.FILL_IN_DATA, android.content.Intent.FILL_IN_CATEGORIES, android.content.Intent.FILL_IN_COMPONENT, android.content.Intent.FILL_IN_PACKAGE, android.content.Intent.FILL_IN_SOURCE_BOUNDS, android.content.Intent.FILL_IN_SELECTOR, android.content.Intent.FILL_IN_CLIP_DATA}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.PendingIntentCompat.Flags">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{android.app.PendingIntent.FLAG_ONE_SHOT, android.app.PendingIntent.FLAG_NO_CREATE, android.app.PendingIntent.FLAG_CANCEL_CURRENT, android.app.PendingIntent.FLAG_UPDATE_CURRENT, android.content.Intent.FILL_IN_ACTION, android.content.Intent.FILL_IN_DATA, android.content.Intent.FILL_IN_CATEGORIES, android.content.Intent.FILL_IN_COMPONENT, android.content.Intent.FILL_IN_PACKAGE, android.content.Intent.FILL_IN_SOURCE_BOUNDS, android.content.Intent.FILL_IN_SELECTOR, android.content.Intent.FILL_IN_CLIP_DATA}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.RemoteInput RemoteInput(java.lang.String, java.lang.CharSequence, java.lang.CharSequence[], boolean, int, android.os.Bundle, java.util.Set&lt;java.lang.String&gt;) 4">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_AUTO, androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_DISABLED, androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_ENABLED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.RemoteInput int getEditChoicesBeforeSending()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_AUTO, androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_DISABLED, androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_ENABLED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.RemoteInput int getResultsSource(android.content.Intent)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.RemoteInput.SOURCE_FREE_FORM_INPUT, androidx.core.app.RemoteInput.SOURCE_CHOICE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.RemoteInput mEditChoicesBeforeSending">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_AUTO, androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_DISABLED, androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_ENABLED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.RemoteInput void setResultsSource(android.content.Intent, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.RemoteInput.SOURCE_FREE_FORM_INPUT, androidx.core.app.RemoteInput.SOURCE_CHOICE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.RemoteInput.Builder androidx.core.app.RemoteInput.Builder setEditChoicesBeforeSending(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_AUTO, androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_DISABLED, androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_ENABLED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.RemoteInput.Builder mEditChoicesBeforeSending">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_AUTO, androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_DISABLED, androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_ENABLED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.RemoteInput.EditChoicesBeforeSending">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_AUTO, androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_DISABLED, androidx.core.app.RemoteInput.EDIT_CHOICES_BEFORE_SENDING_ENABLED}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.RemoteInput.Source">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.app.RemoteInput.SOURCE_FREE_FORM_INPUT, androidx.core.app.RemoteInput.SOURCE_CHOICE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.ServiceCompat void stopForeground(android.app.Service, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.app.ServiceCompat.STOP_FOREGROUND_REMOVE, androidx.core.app.ServiceCompat.STOP_FOREGROUND_DETACH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.app.ServiceCompat.StopForegroundFlags">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.app.ServiceCompat.STOP_FOREGROUND_REMOVE, androidx.core.app.ServiceCompat.STOP_FOREGROUND_DETACH}" />
+    </annotation>
+  </item>
+</root>
+

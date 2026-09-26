@@ -1,0 +1,19 @@
+{
+  "scope": "PROJECT_GLOBAL",
+  "objective_closed": false,
+  "material_evidence_pass": "PARTIAL",
+  "counterproof_survived": false,
+  "material_contradictions_open": [
+    "PR1115 open/draft/not-merged",
+    "PR1119 open/draft/not-merged",
+    "Hermes current physical runtime UNKNOWN"
+  ],
+  "eligible_work_remaining": "YES",
+  "material_unknown": [
+    "Hermes current local/VPS runtime",
+    "current local status of historical skill files",
+    "end-to-end intent-to-fixed-point transfer"
+  ],
+  "next_pass_information_gain": "YES",
+  "verdict": "NOT_PROVEN"
+}

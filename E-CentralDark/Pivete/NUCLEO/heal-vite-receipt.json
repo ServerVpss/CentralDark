@@ -1,0 +1,25 @@
+{
+  "operation": "heal-vite-npm-reset",
+  "timestamp": "2026-08-24T06:02:32.655Z",
+  "sha256": "0346d05ec46a683f2e5af67ca4802f035ef8113096dac4d77657c2e808ce83a5",
+  "mission": "CENTRALDARK_ONE_HOUSE_TOTAL_RECONCILIATION",
+  "phase": "HEAL-001",
+  "measure_sha256": "0f35efeac922baf736f81689dad0d7af798d03f2413a86ac440b0ffe0a340739",
+  "diagnosis_sha256": "f701887d6d3c2f01232cb55417d4b5f508e756c02ba61ed4695a520a49f053d6",
+  "cause_sha256": "7bead01130f355e00452b27784fe6efcb2eb888eb8d87d70f2bbb87392cf172d",
+  "remediation_sha256": "854d724706dbb2b3bb86a5ca2945bd22b5cf5bc4fdaa62bb3e2245a4c838b010",
+  "retest_sha256": "e3fb07487872a348c1205010681bd62b0ff4d6cbc22496c427671074295a1718",
+  "counterproof_sha256": "3e6fe81ad094e9fa68972b2986c54391ba693af350ed4e36e9e3473c6940697a",
+  "overall_success": false,
+  "fixed_point_contribution": {
+    "phase_0_denominator": "vite_build_blocked resolved",
+    "phase_1_denominator": "pending",
+    "phase_2_denominator": "pending",
+    "phase_3_denominator": "pending",
+    "phase_4_denominator": "pending",
+    "phase_5_denominator": "pending",
+    "phase_6_denominator": "pending",
+    "phase_7_denominator": "pending",
+    "phase_8_denominator": "pending"
+  }
+}

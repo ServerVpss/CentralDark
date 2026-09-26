@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@icons-pack\react-simple-icons\icons\SiPadlet.d.ts
+
+import { IconType } from '../types';
+declare const defaultColor = "#FF4081";
+declare const SiPadlet: IconType;
+export { SiPadlet as default, defaultColor };

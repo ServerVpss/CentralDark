@@ -1,0 +1,23 @@
+{
+  "denominator": "ALL_FILES_FROM_PARENT_ZIP",
+  "parent_zip_sha256": "10edaf7df173f49be10cea28571821d903bc4bf849f257ad30fc91f803e53f91",
+  "parent_proof_root": "d869c8d00b0fd94e156934965c67fd22d7dde0c07c977dc43be5b104ebcfa4d1",
+  "baseline_file_count": 44,
+  "baseline_files_unchanged": 44,
+  "changed_baseline_files": [],
+  "missing_baseline_files": [],
+  "new_files_added_count_before_successor_manifests": 10,
+  "new_files_added_before_successor_manifests": [
+    "08_CROSS_CATEGORY/00_UPDATE_README.md",
+    "08_CROSS_CATEGORY/ABSORB_WITHOUT_REPLACE.md",
+    "08_CROSS_CATEGORY/ANY_CATEGORY_COUNTERPROOF.md",
+    "08_CROSS_CATEGORY/CATEGORY_CLASSIFICATION.md",
+    "08_CROSS_CATEGORY/CROSS_CATEGORY_BENCHMARK.md",
+    "08_CROSS_CATEGORY/LIVE_GITHUB_GAP.md",
+    "08_CROSS_CATEGORY/evidence/cross_category_update_screenshot.png",
+    "08_CROSS_CATEGORY/sources/WEB_SOURCE_NOTES.md",
+    "08_CROSS_CATEGORY/sources/WEB_SOURCE_REGISTRY.json",
+    "08_CROSS_CATEGORY/verification/PARENT_ANCHOR.json"
+  ],
+  "zero_regression_baseline_bytes": "PASS"
+}

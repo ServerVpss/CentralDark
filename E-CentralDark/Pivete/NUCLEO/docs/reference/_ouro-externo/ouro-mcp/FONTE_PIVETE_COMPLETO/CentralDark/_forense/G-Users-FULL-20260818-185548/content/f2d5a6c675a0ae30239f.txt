@@ -1,0 +1,12 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@iconify\utils\lib\icon-set\get-icons.d.ts
+
+import { IconifyJSON } from "@iconify/types";
+/**
+ * Optional properties that must be copied when copying icon set
+ */
+declare const propsToCopy: (keyof IconifyJSON)[];
+/**
+ * Extract icons from icon set
+ */
+declare function getIcons(data: IconifyJSON, names: string[], not_found?: boolean): IconifyJSON | null;
+export { getIcons, propsToCopy };

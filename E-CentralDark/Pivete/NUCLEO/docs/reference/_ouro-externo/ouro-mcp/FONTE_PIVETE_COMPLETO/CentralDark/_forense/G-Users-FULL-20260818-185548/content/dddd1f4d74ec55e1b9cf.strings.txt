@@ -1,0 +1,389 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\__pycache__\nous_billing.cpython-311.pyc
+
+dZd^d*
+Z d`d4
+dZdad9
+Nous Portal Remote Spending HTTP client (Phase 2b).
+Thin, fail-loud client for the four ``/api/billing/*`` endpoints the terminal
+billing screens drive. Companion to ``hermes_cli/nous_account.py`` (which owns
+read-only entitlement/balance) 
+ this module owns the *write* side: buy credits,
+poll a charge, configure auto-reload.
+Design rules:
+- **Money is decimal, never float.** The server emits decimal STRINGS
+  (``"142.5"`` 
+ not fixed 2dp). We parse with :class:`decimal.Decimal` and never
+  round-trip through float.
+- **This client raises typed exceptions; it does NOT fail open.** Fail-open is the
+  *caller's* job (the ``agent/billing_view.py`` builders) so each surface can
+  decide how to degrade. A raw network/HTTP error here surfaces as
+  :class:`BillingError` (or a subclass) carrying the parsed server ``error`` code,
+  HTTP status, ``portalUrl`` deep-link, and ``retry_after``.
+- **Auth** = the OAuth bearer JWT Hermes already holds for inference
+  (``get_provider_auth_state("nous")["access_token"]``). No API-key auth on these.
+- **Portal base URL** resolves with the same precedence as the device-flow login
+  (``auth.py``): ``HERMES_PORTAL_BASE_URL`` 
+ ``NOUS_PORTAL_BASE_URL`` 
+  stored auth-state ``portal_base_url`` 
+ the registry default. This is how the
+  E2E run points the client at a preview deployment with zero code change.
+annotationsN)
+Optionalz
+https://portal.nousresearch.comg
+billing:managec
+BillingErrorae
+A billing HTTP call failed.
+    Carries everything a surface needs to render the right message + affordance:
+    the server ``error`` code, HTTP ``status``, an optional human ``message``, the
+    ``portalUrl`` deep-link (present on every gate denial), and ``retry_after``
+    seconds (429/503). ``payload`` is the full parsed JSON body when available.
+status
+portal_url
+retry_after
+payload
+recovery
+message
+Optional[int]r
+Optional[str]r
+Optional[dict[str, Any]]r
+return
+__init__r
+__class__s
+          
+KC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\nous_billing.pyr
+BillingError.__init__=
+__name__
+__module__
+__qualname__
+__doc__r
+__classcell__)
+BillingScopeRequiredua
+``403 insufficient_scope`` 
+ the held token lacks ``billing:manage``.
+    The lazy step-up trigger: catching this kicks off a fresh device-connect that
+    requests ``billing:manage`` (and tells the user an ADMIN must select "Allow
+    Remote Spending"). Also fires mid-session if the scope is stripped on refresh
+    after the user loses ADMIN.
+BillingAuthErroruC
+``401`` 
+ missing/invalid bearer token (not logged in / expired).Nr'
+BillingRemoteSpendingRevokedu"
+``403 remote_spending_revoked`` 
+ THIS terminal's spending was revoked.
+    Distinct from ``insufficient_scope`` (never had the grant) and from
+    ``session_revoked`` (full logout). The terminal stays logged in; only the
+    money path is cut. ``actor`` is ``"admin"`` or ``"self"`` (absent 
+ treat as
+    ``"self"``); recovery is **reconnect** (re-consent device-auth). The terminal
+    MUST disable charge/auto-reload immediately, without waiting for the next
+    token refresh (the current token still claims the scope for ~15 min).
+    Nr'
+BillingSessionRevokedu^
+``401 session_revoked`` 
+ the whole session was logged out.
+    Stronger than a spend-revoke: recovery is **re-login** (full device-auth),
+    not just reconnect. Subclass of :class:`BillingAuthError` so existing 401
+    handling still treats it as not-logged-in, but the typed code lets the
+    surface route to re-login with the right copy.
+    Nr'
+BillingTransientu"
+A deterministic non-charge outcome: the request definitely did NOT
+    reach/complete at Stripe, so it's always safe to retry after backoff 
+    never the "maybe charged" ambiguity of a real 5xx/timeout. Covers
+    429 rate limiting, 503 gate-unavailable, Stripe being down, and the
+    daily upgrade cap 
+ distinct failure modes that share this one
+    contract property. Catch this (not the old ad-hoc subclass hierarchy)
+    wherever the intent is "any transient, definitely-not-charged billing
+    failure, back off and retry/poll".
+    Nr'
+BillingRateLimiteduf
+``429 rate_limited`` or ``503 temporarily_unavailable``.
+    NOT a payment failure. Carries ``retry_after`` (seconds) 
+ back off and tell
+    the user "try again in N min"; never auto-retry-spam (the limiter is
+    5/org/hr + 5/token/hr and easy to dig deeper into). A 503 is the gate backend
+    failing closed 
+ back off, do NOT treat as revoked.
+    Nr'
+BillingStripeUnavailableu
+``503 stripe_unavailable`` 
+ Stripe itself is down.
+    TRANSIENT: back off and retry using Retry-After; this is NOT the same as
+    being throttled by our own rate limiter, so surfaces must not render "rate
+    limited" copy for it 
+ they should read ``.error`` to tell the two apart.
+    A BillingTransient sibling of BillingRateLimited (not a subclass) 
+ surfaces
+    must not render "rate limited" copy for it; read ``.error`` to distinguish it.
+    Nr'
+BillingUpgradeCapExceededua
+``429 upgrade_cap_exceeded`` 
+ the org hit its 5-upgrades/day cap.
+    Distinct from the hourly ``rate_limited`` charge cap (same HTTP status,
+    different meaning + no useful short-Retry-After backoff). A BillingTransient
+    sibling of BillingRateLimited (not a subclass) 
+ surfaces must read ``.error``
+    to distinguish the failure mode.
+    Nr'
+stater
+Resolve the portal base URL with login-time precedence.
+    ``HERMES_PORTAL_BASE_URL`` 
+ ``NOUS_PORTAL_BASE_URL`` 
+ stored auth-state
+    ``portal_base_url`` 
+ registry default. Trailing slash stripped.
+HERMES_PORTAL_BASE_URL
+NOUS_PORTAL_BASE_URL
+portal_base_url)
+getenv
+rstrip
+isinstancer
+DEFAULT_PORTAL_BASE_URL)
+storeds
+resolve_portal_base_urlrH
+Resolve a (possibly relative) server portalUrl to an absolute URL.
+    The server emits ``portalUrl`` relative by design (e.g. ``/billing?topup=open``)
+ it doesn't know which deployment the client points at. Resolve it against the
+    client's portal base (preview / staging / prod) so deep-links are clickable.
+    Idempotent: an already-absolute URL is returned unchanged (urljoin keeps it).
+    r=
+urllib
+urljoinrB
+_absolutize_portal_urlrN
+tuple[float, str, str] | None
+_token_cacher
+Bust the 30s token cache so post-step-up replays use the freshly-scoped token.
+    ``_request`` only self-busts the cache on a 401 (an expired/invalid
+    token), not on a 403 scope denial 
+ so after a step-up grant, the
+    cache would otherwise still hold the pre-grant unscoped token and
+    the immediate replay would 403 again. Callers outside this module
+    (e.g. the CLI's scope step-up flow) call this instead of poking
+    the private ``_token_cache`` global directly.
+    N)
+invalidate_cached_tokenrQ
+Optional[BaseException]
+'BillingAuthError'c
+zEBuild the canonical 'not logged in' BillingAuthError (single source).u>
+Not logged into Nous Portal 
+ run `hermes portal` to log in.
+invalid_token)
+__cause__)
+_billing_not_logged_inrZ
+use_cacher\
+tuple[str, str]c
+Return ``(access_token, portal_base_url)`` for billing calls.
+    Uses the same refresh-aware resolver the inference path uses
+    (``resolve_nous_access_token``), so a short-lived (~15 min) access token that
+    has expired is transparently refreshed via the stored ``refresh_token``
+    instead of failing as "not logged in". Raises :class:`BillingAuthError` only
+    when there is no usable Nous session at all.
+    The result is cached for ``_TOKEN_CACHE_TTL_SECONDS`` to keep the charge poll
+    loop from re-locking + re-reading the auth store on every 2s tick. Pass
+    ``use_cache=False`` to force a fresh resolution (e.g. after a 401).
+get_provider_auth_state
+AuthError
+resolve_nous_access_token
+access_token)
+timerO
+_TOKEN_CACHE_TTL_SECONDS
+hermes_cli.authr`
+ExceptionrH
+ImportErrorrC
+cached_at
+tokenrM
+resolvedrR
+           r
+_resolve_token_and_basern
+headersr
+Parse a ``Retry-After`` header (integer seconds) 
+ None if absent/bad.
+    Thin wrapper around :func:`agent.retry_utils.parse_retry_after_seconds`
+    (the shared parser also handles HTTP-date forms and clamps negatives).
+parse_retry_after_secondsN)
+agent.retry_utilsrq
+secondss
+_retry_after_secondsru
+dict[str, Any]c
+Map an HTTP error response to the right typed :class:`BillingError`.
+    Recognizes the Remote-Spending gate contract (NAS PR #481):
+    403 ``remote_spending_revoked`` (this terminal's spend revoked 
+ reconnect),
+    401 ``session_revoked`` (full logout 
+ re-login), 503 ``temporarily_unavailable``
+    (gate fail-closed 
+ back off, NOT revoked). The business-denial codes
+    (``cli_billing_disabled`` + dual ``code:remote_spending_disabled``,
+    ``role_required``, ``idempotency_conflict``, 
+) flow through as a generic
+    BillingError carrying ``error``/``code``/``recovery`` for the surface to map.
+portalUrlr
+stripe_unavailableu8
+Stripe is temporarily unavailable 
+ try again shortly.
+upgrade_cap_exceededu7
+Daily plan-change limit reached 
+ try again tomorrow.rV
+session_revokedu-
+Your session was logged out 
+ log in again.z
+Authentication required.i
+remote_spending_revokedz.Remote spending was stopped for this terminal.
+insufficient_scopez+This action needs the billing:manage scope.z
+Billing request denied.)
+Rate limited 
+ try again shortly.z
+Billing request failed (z
+dictrC
+commons
+           r
+_raise_for_errorr
+extra_headers
+timeout
+_retried_auth
+method
+Optional[dict[str, str]]r
+floatr
+Make an authenticated billing request; return the parsed JSON dict.
+    Raises a typed :class:`BillingError` on any non-2xx response (or transport
+    failure). 2xx with an empty body returns ``{}``. A 401 triggers exactly one
+    retry with a freshly-resolved token (bypassing the short token cache) so a
+    cached-but-just-expired token self-heals instead of failing the call.
+    r[
+Bearer z
+application/json)
+Authorization
+AcceptNz
+Content-Typez
+utf-8)
+dataro
+z[Billing endpoint returned a non-JSON response (it may not be available on this deployment).
+endpoint_unavailabler
+Could not reach Nous Portal: 
+network_error
+z&Could not reach Nous Portal: timed out)
+update
+encoderJ
+request
+Request
+urlopen
+decoderA
+JSONDecodeErrorr
+getattrr
+HTTPErrorr
+_requestrh
+URLError
+reason
+TimeoutError)
+                r
+``GET /api/billing/state`` 
+ role-tiered overview (no scope required).
+/api/billing/stater
+get_billing_stater
+enabled
+threshold
+float | str
+top_up_amountc
+``PATCH /api/billing/auto-top-up`` 
+ configure auto-reload (scope required).
+    Body is strict server-side: extra keys (``maxMonthlySpend``, a payment method)
+    are rejected with 400. Numbers are sent as JSON numbers per the contract.
+PATCHz
+/api/billing/auto-top-up)
+topUpAmount
+patch_auto_top_upr
+amount_usd
+idempotency_keyc
+``POST /api/billing/charge`` 
+ buy credits (scope required).
+    ``Idempotency-Key`` header is MANDATORY (a missing header is a server 400, not
+    a default): generate a UUID per user-confirmed purchase and reuse it on retry.
+    Returns ``202 {chargeId}`` 
+ money is NOT confirmed yet; poll with
+    :func:`get_charge_status`.
+    z)Idempotency-Key is required for a charge.
+idempotency_key_requiredr
+/api/billing/charge
+amountUsd
+Idempotency-Key
+post_charger
+charge_idc
+``GET /api/billing/charge/{id}`` 
+ poll a charge (scope required).
+    Returns ``{status: "pending"|"settled"|"failed", ...}``. An unknown or foreign
+    id returns ``{status:"pending"}`` (never 404, never another org's data) 
+    ``pending`` that never resolves past the 5-min cap is a *timeout*, not an error.
+A charge id is required.
+invalid_charge_idr
+/api/billing/charge/r
+quoter
+safe_ids
+get_charge_statusr
+``GET /api/billing/subscription`` 
+ current plan, tiers, usage (no scope).
+    Returns the raw JSON dict from NAS (WS1 Phase A). Read-only 
+    ``billing:manage`` scope required. Raises :class:`BillingAuthError`
+    on 401 and :class:`BillingError` on other non-2xx.
+/api/billing/subscriptionr
+get_subscription_stater
+subscription_type_idc
+``POST /api/billing/subscription/preview`` 
+ a chargeless effect quote.
+    Quotes a change to ``subscription_type_id`` without mutating anything:
+    ``effect`` is ``charge_now`` (an upgrade 
+ ``amountDueNowCents`` is the prorated
+    upfront charge), ``scheduled`` (a downgrade 
+ ``effectiveAt`` is period end),
+    ``no_op`` (already on the tier), or ``blocked`` (``reason`` says why the commit
+    would be refused). Also returns the current + target tier and the monthly-credit
+    delta. ``amountDueNowCents`` is ``None`` when not a charge or when the proration
+    quote is unavailable. Requires ``billing:manage`` (live Stripe calls + amounts).
+z!/api/billing/subscription/preview
+subscriptionTypeIdr
+post_subscription_previewr
+cancelr
+str | Noner
+``PUT /api/billing/subscription/pending-change`` 
+ set the end-of-period intent.
+    A subscription has at most one pending disposition. Pass ``cancel=True`` to
+    schedule a cancellation, or a ``subscription_type_id`` to schedule a downgrade /
+    same-price change. UPGRADES are rejected here (they charge immediately 
+    :func:`post_subscription_upgrade`). Chargeless; requires ``billing:manage``.
+    Returns ``{rail, changeType, targetTierName, message}`` for a tier change, or
+    ``{rail, cancelAtPeriodEnd, message}`` for a cancellation.
+cancellationz:A subscription tier is required to schedule a plan change.
+invalid_subscription_typer
+tier_change)
+(/api/billing/subscription/pending-changer
+put_subscription_pending_changer
+``DELETE /api/billing/subscription/pending-change`` 
+ clear it (resume / undo).
+    Removes a scheduled downgrade OR cancellation in one call, restoring the live
+    active tier and recurring renewal. Chargeless, but it re-enables recurring
+    spend, so it requires ``billing:manage`` and is honored by the org kill-switch.
+    Returns ``{rail, cancelAtPeriodEnd: false, message}``.
+DELETEr
+"delete_subscription_pending_changer
+``POST /api/billing/subscription/upgrade`` 
+ immediate paid upgrade.
+    The SINGLE money route: one Stripe op prorates, charges the card already on the
+    subscription, and flips the plan. ``Idempotency-Key`` is MANDATORY (a missing
+    header is a server 400, not a default) 
+ reuse the same key on retry so a replay
+    cannot double-charge. Returns ``{status:"upgraded"|"already_on_tier", ...}`` on
+    success, or ``{status:"requires_action"|"payment_failed", reason, recoveryUrl}``
+    when the charge needs 3DS / was declined and must be finished in the portal at
+    ``recoveryUrl``. Requires ``billing:manage``.
+    z+Idempotency-Key is required for an upgrade.r
+z!/api/billing/subscription/upgrader
+post_subscription_upgrader
+__future__r
+urllib.errorrJ
+urllib.parse
+urllib.request
+typingr
+DEFAULT_TIMEOUT
+BILLING_MANAGE_SCOPErh
+__annotations__rQ
+<module>r

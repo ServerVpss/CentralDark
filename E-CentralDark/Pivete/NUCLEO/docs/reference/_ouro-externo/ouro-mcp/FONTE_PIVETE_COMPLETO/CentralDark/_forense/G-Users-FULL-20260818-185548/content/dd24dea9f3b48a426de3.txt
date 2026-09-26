@@ -1,0 +1,9 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\react\model-context\useInlineRender.d.ts
+
+import { ToolCallMessagePartProps } from "../types/MessagePartComponentTypes.js";
+import { FC } from "react";
+//#region src/react/model-context/useInlineRender.d.ts
+declare const useInlineRender: <TArgs, TResult>(toolUI: FC<ToolCallMessagePartProps<TArgs, TResult>>) => FC<ToolCallMessagePartProps<TArgs, TResult>>;
+//#endregion
+export { useInlineRender };
+//# sourceMappingURL=useInlineRender.d.ts.map

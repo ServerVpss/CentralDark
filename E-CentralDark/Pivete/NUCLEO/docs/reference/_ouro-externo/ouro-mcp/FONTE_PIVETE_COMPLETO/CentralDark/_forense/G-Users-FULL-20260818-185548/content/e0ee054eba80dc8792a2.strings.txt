@@ -1,0 +1,230 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\__pycache__\send_cmd.cpython-311.pyc
+
+CLI subcommand: ``hermes send`` 
+ pipe text from shell scripts to any
+configured messaging platform (Telegram, Discord, Slack, Signal, SMS, etc.).
+This is a thin wrapper around ``tools.send_message_tool.send_message_tool``
+that exposes its functionality as a standalone CLI entry point so ops
+scripts, cron jobs, CI hooks, and monitoring daemons can reuse the gateway's
+already-configured credentials without having to reimplement each platform's
+REST API client.
+Design notes:
+* No LLM, no agent loop 
+ the subcommand just resolves arguments, reads the
+  message body, calls the shared tool function, and prints/returns the
+  result. It is intentionally fast, cheap, and side-effect-only.
+* For platforms that send via bot token (Telegram, Discord, Slack, Signal,
+  SMS, WhatsApp-CloudAPI, 
+) no running gateway is required. The tool
+  talks directly to each platform's REST endpoint. For platforms that rely
+  on a persistent adapter connection (plugin platforms, Matrix in some
+  modes, 
+) a live gateway is needed; the underlying tool surfaces that
+  error to the caller.
+* Exit codes follow the classic Unix convention:
+    0 
+ delivery (or list) succeeded
+    1 
+ delivery failed at the platform level
+    2 
+ usage / argument / config error (argparse already uses 2)
+annotationsN)
+Optional
+positional
+Optional[str]
+file_path
+returnc
+Resolve the message body from (in order):
+    1. An explicit positional message argument.
+    2. ``--file PATH`` or ``--file -`` (where ``-`` means stdin).
+    3. Piped stdin when it is not attached to a TTY.
+    Returns ``None`` when nothing is available 
+ callers must treat that as
+    a usage error.
+utf-8)
+encoding
+hermes send: z
+ is not a text file. --file reads the message *body* (logs, reports, markdown).
+To send an image/document/audio file as a native attachment, reference it with MEDIA: in the message text instead:
+  hermes send --to telegram "MEDIA:z6"
+  hermes send --to telegram "optional caption MEDIA:zv"
+Add [[as_document]] to deliver an image as an uncompressed file:
+  hermes send --to telegram "[[as_document]] MEDIA:
+hermes send: cannot read z
+read_text
+UnicodeDecodeError
+stderr
+_USAGE_EXIT
+OSError
+isatty)
+GC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\send_cmd.py
+_read_message_bodyr!
+arg_toc
+zAReturn a cleaned ``--to`` value, or ``None`` when nothing is set.N)
+strip)
+_resolve_targetr%
+result_json
+json_mode
+Print the tool result in the requested format and return the exit code.
+    The underlying ``send_message_tool`` always returns a JSON string. We
+    parse it, decide success/failure, and format accordingly.
+    z#invalid JSON from send_message_tool)
+indentr.
+success
+skipped)
+JSONDecodeErrorr
+_FAILURE_EXIT
+_SUCCESS_EXIT)
+payloadr2
+     r 
+_emit_resultr=
+platform_filterc
+Print the channel directory (all configured targets across platforms).
+    Uses ``load_directory()`` for structured JSON output and
+    ``format_directory_for_display()`` for the human-readable rendering that
+    the send_message tool itself shows to the model 
+ keeps the two surfaces
+    identical.
+format_directory_for_display
+load_directoryz/hermes send: failed to load channel directory: r
+Nz/hermes send: failed to read channel directory: 
+platforms)
+load_gateway_config
+value)
+api_server
+webhookc
+lower)
+<dictcomp>z!_list_targets.<locals>.<dictcomp>
+z,hermes send: no targets found for platform 'z
+'. Configured: z
+(none)r
+defaultz@No messaging platforms configured or no channels discovered yet.zBSet one up with `hermes gateway setup`, or run the gateway once soz@channel discovery can populate ~/.hermes/channel_directory.json.
+  (no channels discovered yet)
+chat_id
+gateway.channel_directoryr@
+Exceptionr
+dictr9
+gateway.configrC
+get_connected_platforms
+getattrr(
+setdefaultr$
+sortedr5
+gw_config
+plat_name
+filtered
+channels
+suffixrN
+                 @r 
+_list_targetsri
+Populate ``os.environ`` from ``~/.hermes/.env`` AND bridge top-level
+    ``config.yaml`` keys into the environment so the underlying gateway
+    config loader sees platform credentials and home channel IDs.
+    ``send_message_tool`` reads tokens and home-channel IDs via
+    ``os.getenv(...)`` on each call. The gateway process does two things at
+    startup that ``hermes send`` must replicate when invoked standalone:
+    1. ``load_dotenv(~/.hermes/.env)`` 
+ brings bot tokens into the env.
+    2. Bridge top-level simple values from ``~/.hermes/config.yaml`` into
+       ``os.environ`` (without overriding existing env vars). This is where
+       ``TELEGRAM_HOME_CHANNEL`` and friends live when the user saved them
+       via ``hermes config set``.
+    See ``gateway/run.py`` for the canonical version of this bridge 
+    intentionally reimplement the minimum needed here so ``hermes send``
+    doesn't pull in the full gateway module just to resolve a home channel.
+load_dotenvN)
+get_hermes_homez
+.envTz
+utf-8-sig)
+overrider
+latin-1)
+streamrn
+config.yaml)
+read_user_config_raw)
+_expand_env_vars)
+managed_scope)
+dotenvrl
+hermes_cli.configrm
+existsr(
+codecs
+read_bytes
+startswith
+BOM_UTF8
+StringIO
+decode
+hermes_clirr
+apply_managed_overlay
+isinstancerZ
+floatr*
+environ)
+env_pathrv
+config_pathrp
+              r 
+_load_hermes_envr
+argparse.Namespacec
+z9Entry point wired into the top-level argparse dispatcher.
+list_targetsF
+messageNr5
+hermes send: --to PLATFORM[:channel[:thread]] is required
+Examples:
+  hermes send --to telegram "hello"
+  hermes send --to discord:#ops --file report.md
+  hermes send --list      # list available targetsr
+znhermes send: no message provided. Pass text as a positional argument, use --file PATH, or pipe data via stdin.
+subjectz
+send_message_tool
+action
+targetr
+lstrip
+tools.send_message_toolr
+exit_coder
+tool_args
+results
+         r 
+cmd_sendr
+argparse.ArgumentParserc
+Create the ``send`` subparser and return it.
+    Kept as a standalone function so the top-level parser builder can wire
+    it in next to the other messaging subcommands without cluttering
+    ``_parser.py`` or ``main.py``.
+zASend a message to a configured platform (scripts, cron jobs, CI).u!
+Pipe text from any shell script to any messaging platform Hermes is already configured for. Reuses the gateway's platform credentials (~/.hermes/.env + ~/.hermes/config.yaml) 
+ no LLM, no agent loop, no running gateway required for bot-token platforms like Telegram/Discord/Slack/Signal.a
+Examples:
+  hermes send --to telegram "deploy finished"
+  echo "RAM 92%" | hermes send --to telegram:-1001234567890
+  hermes send --to discord:#ops --file /tmp/report.md
+  hermes send --to slack:#eng --subject "[CI]" --file build.log
+  hermes send --to telegram "MEDIA:/tmp/chart.png"   # send a media attachment
+  hermes send --list                  # all platforms
+  hermes send --list telegram         # filter by platform
+Exit codes: 0 ok, 1 delivery/backend error, 2 usage error.)
+description
+epilog
+formatter_classz
+TARGETNz
+Delivery target. Format: 'platform' (home channel), 'platform:chat_id', 'platform:chat_id:thread_id', or 'platform:#channel-name'. Examples: telegram, telegram:-1001234567890:17585, discord:#ops, slack:C0123ABCD, signal:+15551234567.)
+metavarrP
+z4Message text. If omitted, read from --file or stdin.)
+nargsrP
+--file
+Read message body from PATH (text only). Use '-' to force stdin. To send an image/document as an attachment, use MEDIA:<path> in the message text instead.z
+--subject
+LINEz6Prepend a subject/header line before the message body.z
+--listr
+store_trueFzRList available targets. Optional positional filter: `hermes send --list telegram`.)
+--quietz,Suppress stdout on success (exit code only).)
+--jsonz6Emit raw JSON result instead of human-readable output.)
+add_parser
+argparse
+RawDescriptionHelpFormatter
+add_argument
+set_defaultsr
+subparsers
+parsers
+register_send_subparserr
+__doc__
+__future__r
+pathlibr
+typingr
+__all__rI
+<module>r

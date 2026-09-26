@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@icons-pack\react-simple-icons\icons\SiZigbee2mqtt.d.ts
+
+import { IconType } from '../types';
+declare const defaultColor = "#FFC135";
+declare const SiZigbee2mqtt: IconType;
+export { SiZigbee2mqtt as default, defaultColor };

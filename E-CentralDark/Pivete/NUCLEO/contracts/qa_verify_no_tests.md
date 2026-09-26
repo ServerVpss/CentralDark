@@ -1,0 +1,58 @@
+# CONTRATO - qa_verify_no_tests.json
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\PACOTE-SESSAO-INTEIRA-CENTRALDARK-20260806\02-SNAPSHOT-TRABALHO\qa_verify_no_tests.json
+**SHA:** 3959bac35cbf874a
+**Timestamp:** 2026-08-26T19:10:23.484599
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Riscos
+- "delta": "QA_CONTEXT_DELTA=\n\nEVENTO=TEST_FAILED\nMANIFEST_HASH=57c6274bb168a416f7744a8796d60ccd704a7fcfec79f50c26fd8beb391a9518\n\nSTATUS=OK\nHEURISTICAS_ATIVADAS=\n- FAILURE\n\nDOCUMENTOS_CONSULTAD
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+{
+  "status": "PASS",
+  "manifest": {
+    "count": 17,
+    "hash": "57c6274bb168a416f7744a8796d60ccd704a7fcfec79f50c26fd8beb391a9518",
+    "selfMap": {
+      "totalMarkdownDetected": 23,
+      "indexedUniquePaths": 15,
+      "missing": [],
+      "status": "SYNCED",
+      "applied": 0
+    }
+  },
+  "nodeCheck": {
+    "total": 10,
+    "fail": []
+  },
+  "shellSyntax": {
+    "applicable": true,
+    "total": 4,
+    "fail": []
+  },
+  "tests": {
+    "exitCode": 0,
+    "summary": {
+      "total": 0,
+      "pass": 0,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0
+    },
+    "output": "TAP version 13\n1..0\n# tests 0\n# suites 0\n# pass 0\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 66.947651"
+  },
+  "demo": {
+    "statusOk": true,
+    "delta": "QA_CONTEXT_DELTA=\n\nEVENTO=TEST_FAILED\nMANIFEST_HASH=57c6274bb168a416f7744a8796d60ccd704a7fcfec79f50c26fd8beb391a9518\n\nSTATUS=OK\nHEURISTICAS_ATIVADAS=\n- FAILURE\n\nDOCUMENTOS_CONSULTADOS=\n- SKILL.md\n\nCAUSA_A_INVESTIGAR=trailer no rodapé não foi reconhecido\nTESTE_DISCRIMINATIVO=Preservar o teste que encontrou a falha; corrigir a fonte, nunca a assertion para fabricar verde.\nREGRESSAO_PRESERVADA=SIM\nMISSAO_ATUAL_PRESERVADA=SIM\nPROXIMO_ESTADO=TESTE_DISCRIMINATIVO_VERDE\n\nAUTO_APPLY=NAO\nPOLICY_STATE=AUTO_APPLY_BLOCKED\nAUTO_APPLY_BLOQUEIO=MATCH_PROVADO=NAO | ALTERACAO_LOCAL=NAO | REVERSIVEL=NAO | WRITER_UNICO=NAO | ESCOPO_AUTORIZADO=NAO | MUDANCA_MINIMA=NAO | TESTE_DISCRIMINATIVO_EXISTE=NAO | TESTE_ANTES_FALHOU=NAO | TESTE_DEPOIS_PASSOU=NAO | REGRESSAO_PASSOU=NAO | CASO_NEGATIVO_PASSOU=NAO | IDEMPOTENCIA_PASSOU=NAO | ROLLBACK_EXISTE=NAO | HEAD_FIXADO=NAO | SEM_CONFLITO_CANONICO=NAO | ARQUIVOS_FORA_ESCOPO_ZERO=NAO | FAIL_ZERO=NAO | SKIPPED_ZERO=NAO | UNKNOWN_ZERO=NAO | SECRETS=DESCONHECIDO | MERGE=DESCONHECIDO | DEPLOY=DESCONHECIDO | VPS=DESCONHECIDO | PRODUCAO=DESCONHECIDO | HISTORY_REWRITE=DESCONHECIDO\n\nAPRENDIZADO_PROMOVIDO=NAO\nAPRENDIZADO_STATUS=NAO_SOLICITADO\nAPRENDIZADO_REUTILIZADO=NAO\n\nCONTEXTO_INTEIRO_CARREGADO=NAO\nAPENAS_DELTA_RELEVANTE=SIM\nMATCH_COUNT=1\nDOCUMENTOS_CARREGADOS=1\n\n--- TRECHOS SELETIVOS ---\n### failure (SKILL.md) score=20.1 mode=KEYWORD_WINDOWS\n## Contrato curto\n→ próxima sessão reutiliza\n```\n\nEsta skill é **módulo subordinado**. Ela não abre missão nova, não troca objetivo,\nnão abandona worktree, não muda Writer e não fecha a missão raiz.\n\n## Eventos\n\n- `TEST_FAILED`\n- `NODE_CHECK_FAILED`\n- `SEMANTIC_FAILURE_WITH_SYNTAX_PASS`\n- `REGRESSION_FAILED`\n- `TIMEOUT`\n- `STATE_TRANSITION_ERROR`\n\n## Regras inegociáveis\n\n- Não carregar o acervo inteiro.\n- Não adaptar teste para aceitar código quebrado.\n- Não promover `proven=true` sem contrato de prova.\n- Não tratar erro de leitura, API, Judge ausente ou resultado vazio como PASS.\n- Não ler `.env`, `secrets/`, `tokens/`, `sessions/` ou `.ssh/`.\n- Não criar V1/V2/V3/NOVO/FINAL paralelo.\n- Não executar Enxame sem pedido explícito.\n- Não fazer merge, deploy, VPS, produção ou reescrita histórica.\n\n## Runtime\n\n\n## Aprendizado promovível\n\n`proven=true` sozinho não vale. Exigir:\n\n```text\nSOURCE\n...[truncado]\n"
+  },
+  "secretReadScan": {
+    "pass": true,
+    "files": []
+  }
+}
+
+```

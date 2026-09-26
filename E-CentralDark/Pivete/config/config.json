@@ -1,0 +1,6 @@
+﻿{  
+    "api_key": "[REDIGIDO-PRESERVACAO]",  
+    "modelo": "grok-3-mini",  
+    "voz_velocidade": 180,  
+    "captura_automatica_segundos": 0  
+}  

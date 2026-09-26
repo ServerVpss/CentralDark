@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\share\doc\git-doc\RelNotes\2.19.6.adoc
+
+Git v2.19.6 Release Notes
+=========================
+This release merges up the fixes that appear in v2.17.6 and
+v2.18.5 to address the security issue CVE-2021-21300; see the
+release notes for these versions for details.

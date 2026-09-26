@@ -1,0 +1,29 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\terminfo\73\screen.linux-m1b
+
+screen.linux-m1b|Linux m1b specific for screen
+[%i%p1%d;%p2%dr
+[%i%p1%dG
+[%i%p1%d;%p2%dH
+[?1049h
+[?1049l
+[%p1%dP
+[%p1%dM
+[%p1%dB
+[%p1%d@
+[%p1%dS
+[%p1%dL
+[%p1%dD
+[%p1%dC
+[%p1%dT
+[%p1%dA
+[?1000l
+[%i%p1%dd
+[0%?%p6%t;1%;%?%p1%t;3%;%?%p2%t;4%;%?%p3%t;7%;%?%p4%t;5%;%?%p5%t;2%;m%?%p9%t
+++,,--..00``aaffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz{{||}}~~
+[%i%d;%dR
+[?1;2c
+[?2004l
+[?2004h
+(%p1%c
+[?1000%?%p1%{1}%=%th%el%;
+[M%?%p4%t%p3%e%{3}%;%' '%+%c%p2%'!'%+%c%p1%'!'%+%c

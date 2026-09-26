@@ -1,0 +1,1273 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\ls.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+.reloc
+AVAUATUWVSA
+[^_]A\A]A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AUATVSH
+([^A\A]
+AVAUATUWVSH
+@[^_]A\A]A^
+@[^_]A\A]A^
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+A@H9B@|
+AVAUATSH
+([A\A]A^
+([A\A]A^
+([A\A]A^
+ATWVSH
+AUATWVSH
+0[^_A\A]
+AUATUWVSH
+</t><\t:
+([^_]A\A]
+A@H9B@|&u
+R@H9Q@|#u
+ATUWVSH
+ [^_]A\
+@HH9AH|
+APA+@Pu
+AhH9Bh|
+Bp+Apu
+@XH9AX|
+A`A+@`u
+P@H9Q@|
+BHH9AH
+BP+APu
+A`+B`u
+BhH9Ah
+Bp+Apu
+BXH9AX
+B`+A`u
+Ap+Bpu
+AP+BPu
+AVAUATH
+ A\A]A^
+AVAUATH
+ A\A]A^
+A;P(|=A
+A;@(|"I
+ATWVSH
+([^_A\
+([^_A\
+@hH9Ah|
+ApA+@pu
+AXH9BX|
+B`+A`u
+AHH9BH|
+BP+APu
+A;P(|hI
+A;P(|:I
+AVAUATSH
+([A\A]A^
+([A\A]A^
+AVAUATSH
+([A\A]A^
+([A\A]A^
+AVAUATH
+A@H9B@|Tt
+ A\A]A^
+AVAUATH
+B@H9A@|Tt
+ A\A]A^
+AVAUATH
+BXL9AX
+ A\A]A^
+ A\A]A^
+AVAUATH
+AhL9Bh
+ A\A]A^
+ A\A]A^
+AVAUATH
+AHL9BH
+ A\A]A^
+ A\A]A^
+AVAUATH
+BhL9Ah
+ A\A]A^
+ A\A]A^
+AVAUATH
+BHL9AH
+ A\A]A^
+ A\A]A^
+AVAUATH
+AXL9BX
+ A\A]A^
+ A\A]A^
+ATUWVSH
+ [^_]A\
+AVAUATVSH
+ [^A\A]A^
+AVAUATVSH
+ [^A\A]A^
+AVAUATH
+ A\A]A^
+ A\A]A^
+AVAUATH
+ A\A]A^
+ A\A]A^
+AVAUATSH
+([A\A]A^
+([A\A]A^
+AVAUATSH
+([A\A]A^
+([A\A]A^
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+AVAUATSH
+([A\A]A^
+([A\A]A^
+([A\A]A^
+AVAUATH
+ A\A]A^
+ A\A]A^
+A@H9B@|
+AVAUATH
+ A\A]A^
+ A\A]A^
+B@H9A@|
+AVAUATH
+ A\A]A^
+ A\A]A^
+RHL9QH|
+AVAUATH
+ A\A]A^
+ A\A]A^
+RhL9Qh|
+AVAUATH
+ A\A]A^
+ A\A]A^
+QhL9Rh|
+AVAUATH
+ A\A]A^
+ A\A]A^
+QXL9RX|
+AVAUATH
+ A\A]A^
+ A\A]A^
+QHL9RH|
+AVAUATH
+ A\A]A^
+ A\A]A^
+RXL9QX|
+AVAUATVSH
+ [^A\A]A^
+ [^A\A]A^
+AVAUATVSH
+ [^A\A]A^
+ [^A\A]A^
+AVAUATH
+ A\A]A^
+ A\A]A^
+AVAUATH
+ A\A]A^
+ A\A]A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+A;@(|;I
+AVAUATUWVSH
+@[^_]A\A]A^
+A;@(|9I
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+H[^_]A\A]A^A_
+AVAUATUWVSH
+????????H
+[^_]A\A]A^
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+H[^_]A\A]A^A_
+A;@(|}I
+A;@(|cI
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+AVAUATVSH
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+ATWVSH
+8[^_A\
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATH
+(A\A]A^A_
+ATUWVSH
+ [^_]A\
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+</t4<\t0H
+AVAUATVSH
+ [^A\A]A^
+ [^A\A]A^
+AVAUATSH
+([A\A]A^
+([A\A]A^
+AWAVAUATUWVSH
+</t <\t
+([^_]A\A]A^A_
+<.tT<Z
+AVAUATUWVSH
+0[^_]A\A]A^
+|$ POSIt
+ATUWVSH
+ [^_]A\
+ [^_]A\
+ [^_]A\
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+ATWVSH
+([^_A\
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+AVAUATWVSH
+([^_A\A]A^
+ATWVSH
+([^_A\
+AVAUATSH
+x[A\A]A^
+x[A\A]A^
+x[A\A]A^
+x[A\A]A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AUATSH
+ [A\A]
+ [A\A]
+ [A\A]
+AUATSH
+ [A\A]
+ [A\A]
+ [A\A]
+gfffffffA
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+H9|$ t/L
+H[^_]A\A]A^A_
+H9\$0t
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+gfffffffH
+AWAVAUATUWVSH
+T$'"T$TH
+x[^_]A\A]A^A_
+D$@u?L
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AUATUWVSH
+X[^_]A\A]
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+AWAVAUATSH
+ [A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+TUUUUUUU1
+SUUUUUUUL9
+AUATVSH
+H[^A\A]
+ATWVSH
+H9T$(wZL
+8[^_A\
+8[^_A\
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+UAVAUATVSH
+[^A\A]A^]
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+ATWVSH
+8[^_A\
+8[^_A\
+ATUWVSH
+ [^_]A\
+AUATSH
+ [A\A]
+ [A\A]
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+AVAUATSH
+([A\A]A^
+([A\A]A^
+([A\A]A^
+([A\A]A^
+AWAVAUATH
+(A\A]A^A_
+(A\A]A^A_
+(A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+T$(3T$,D
+T$ 3T$$
+[^_]A\A]A^A_
+AUATUWVSH
+H[^_]A\A]
+H[^_]A\A]
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+%.*s%s%s
+cannot compare file names %s and %s
+%%%02x
+sort_type != sort_version
+../coreutils-8.32/src/ls.c
+error canonicalizing %s
+cannot access %s
+cannot read symbolic link %s
+]8;;file://%s%s%s
+%s %*s 
+%*s, %*s 
+cannot open directory %s
+cannot determine device and inode of %s
+%s: not listing already-listed directory
+reading directory %s
+closing directory %s
+ invocation
+Try '%s --help' for more information.
+Usage: %s [OPTION]... [FILE]...
+List information about the FILEs (the current directory by default).
+Sort entries alphabetically if none of -cftuvSUX nor --sort is specified.
+Mandatory arguments to long options are mandatory for short options too.
+  -a, --all                  do not ignore entries starting with .
+  -A, --almost-all           do not list implied . and ..
+      --author               with -l, print the author of each file
+  -b, --escape               print C-style escapes for nongraphic characters
+      --block-size=SIZE      with -l, scale sizes by SIZE when printing them;
+                               e.g., '--block-size=M'; see SIZE format below
+  -B, --ignore-backups       do not list implied entries ending with ~
+  -c                         with -lt: sort by, and show, ctime (time of last
+                               modification of file status information);
+                               with -l: show ctime and sort by name;
+                               otherwise: sort by ctime, newest first
+  -C                         list entries by columns
+      --color[=WHEN]         colorize the output; WHEN can be 'always' (default
+                               if omitted), 'auto', or 'never'; more info below
+  -d, --directory            list directories themselves, not their contents
+  -D, --dired                generate output designed for Emacs' dired mode
+  -f                         do not sort, enable -aU, disable -ls --color
+  -F, --classify             append indicator (one of */=>@|) to entries
+      --file-type            likewise, except do not append '*'
+      --format=WORD          across -x, commas -m, horizontal -x, long -l,
+                               single-column -1, verbose -l, vertical -C
+      --full-time            like -l --time-style=full-iso
+  -g                         like -l, but do not list owner
+      --group-directories-first
+                             group directories before files;
+                               can be augmented with a --sort option, but any
+                               use of --sort=none (-U) disables grouping
+  -G, --no-group             in a long listing, don't print group names
+  -h, --human-readable       with -l and -s, print sizes like 1K 234M 2G etc.
+      --si                   likewise, but use powers of 1000 not 1024
+  -H, --dereference-command-line
+                             follow symbolic links listed on the command line
+      --dereference-command-line-symlink-to-dir
+                             follow each command line symbolic link
+                               that points to a directory
+      --hide=PATTERN         do not list implied entries matching shell PATTERN
+                               (overridden by -a or -A)
+      --hyperlink[=WHEN]     hyperlink file names; WHEN can be 'always'
+                               (default if omitted), 'auto', or 'never'
+      --indicator-style=WORD  append indicator with style WORD to entry names:
+                               none (default), slash (-p),
+                               file-type (--file-type), classify (-F)
+  -i, --inode                print the index number of each file
+  -I, --ignore=PATTERN       do not list implied entries matching shell PATTERN
+  -k, --kibibytes            default to 1024-byte blocks for disk usage;
+                               used only with -s and per directory totals
+  -l                         use a long listing format
+  -L, --dereference          when showing file information for a symbolic
+                               link, show information for the file the link
+                               references rather than for the link itself
+  -m                         fill width with a comma separated list of entries
+  -n, --numeric-uid-gid      like -l, but list numeric user and group IDs
+  -N, --literal              print entry names without quoting
+  -o                         like -l, but do not list group information
+  -p, --indicator-style=slash
+                             append / indicator to directories
+  -q, --hide-control-chars   print ? instead of nongraphic characters
+      --show-control-chars   show nongraphic characters as-is (the default,
+                               unless program is 'ls' and output is a terminal)
+  -Q, --quote-name           enclose entry names in double quotes
+      --quoting-style=WORD   use quoting style WORD for entry names:
+                               literal, locale, shell, shell-always,
+                               shell-escape, shell-escape-always, c, escape
+                               (overrides QUOTING_STYLE environment variable)
+  -r, --reverse              reverse order while sorting
+  -R, --recursive            list subdirectories recursively
+  -s, --size                 print the allocated size of each file, in blocks
+  -S                         sort by file size, largest first
+      --sort=WORD            sort by WORD instead of name: none (-U), size (-S),
+                               time (-t), version (-v), extension (-X)
+      --time=WORD            change the default of using modification times;
+                               access time (-u): atime, access, use;
+                               change time (-c): ctime, status;
+                               birth time: birth, creation;
+                             with -l, WORD determines which time to show;
+                             with --sort=time, sort by WORD (newest first)
+      --time-style=TIME_STYLE  time/date format with -l; see TIME_STYLE below
+  -t                         sort by time, newest first; see --time
+  -T, --tabsize=COLS         assume tab stops at each COLS instead of 8
+  -u                         with -lt: sort by, and show, access time;
+                               with -l: show access time and sort by name;
+                               otherwise: sort by access time, newest first
+  -U                         do not sort; list entries in directory order
+  -v                         natural sort of (version) numbers within text
+  -w, --width=COLS           set output width to COLS.  0 means no limit
+  -x                         list entries by lines instead of by columns
+  -X                         sort alphabetically by entry extension
+  -Z, --context              print any security context of each file
+  -1                         list one file per line.  Avoid '\n' with -q or -b
+      --append-exe           append .exe if cygwin magic was needed
+      --help     display this help and exit
+      --version  output version information and exit
+The SIZE argument is an integer and optional unit (example: 10K is 10*1024).
+Units are K,M,G,T,P,E,Z,Y (powers of 1024) or KB,MB,... (powers of 1000).
+Binary prefixes can be used, too: KiB=K, MiB=M, and so on.
+The TIME_STYLE argument can be full-iso, long-iso, iso, locale, or +FORMAT.
+FORMAT is interpreted like in date(1).  If FORMAT is FORMAT1<newline>FORMAT2,
+then FORMAT1 applies to non-recent files and FORMAT2 to recent files.
+TIME_STYLE prefixed with 'posix-' takes effect only outside the POSIX locale.
+Also the TIME_STYLE environment variable sets the default style to use.
+Using color to distinguish file types is disabled both by default and
+with --color=never.  With --color=auto, ls emits color codes only when
+standard output is connected to a terminal.  The LS_COLORS environment
+variable can change the settings.  Use the dircolors command to set it.
+Exit status:
+ 0  if OK,
+ 1  if minor problems (e.g., cannot access subdirectory),
+ 2  if serious trouble (e.g., cannot access command-line argument).
+test invocation
+coreutils
+Multi-call invocation
+sha224sum
+sha2 utilities
+sha256sum
+sha384sum
+sha512sum
+%s online help: <%s>
+https://www.gnu.org/software/coreutils/
+GNU coreutils
+Report any translation bugs to <https://translationproject.org/team/>
+Full documentation <%s%s>
+or available locally via: info '(coreutils) %s%s'
+full-iso
+locale
+/usr/share/locale
+QUOTING_STYLE
+ignoring invalid value of environment variable QUOTING_STYLE: %s
+COLUMNS
+ignoring invalid width in environment variable COLUMNS: %s
+TABSIZE
+ignoring invalid tab size in environment variable TABSIZE: %s
+abcdfghiklmnopqrstuvw:xABCDFGHI:LNQRST:UXZ1
+invalid line width
+%s: %s
+invalid tab size
+--sort
+--time
+--format
+--color
+--hyperlink
+--indicator-style
+--quoting-style
+David MacKenzie
+Richard M. Stallman
+LS_BLOCK_SIZE
+BLOCK_SIZE
+TIME_STYLE
+invalid time style format %s
+time style
+Valid arguments are:
+  - [posix-]%s
+  - +FORMAT (e.g., +%H:%M) for a 'date'-style format
+%Y-%m-%d %H:%M:%S.%N %z
+%Y-%m-%d %H:%M
+%Y-%m-%d 
+%m-%d %H:%M
+LS_COLORS
+COLORTERM
+unrecognized prefix: %s
+unparsable value for LS_COLORS environment variable
+target
+dev_ino_size <= obstack_object_size (&dev_ino_obstack)
+//DIRED//
+//SUBDIRED//
+//DIRED-OPTIONS// --quoting-style=%s
+hash_get_n_entries (active_dir_set) == 0
+dev_ino_pop
+sort_files
+posix-
+always
+if-tty
+access
+status
+creation
+extension
+version
+verbose
+commas
+horizontal
+across
+vertical
+single-column
+escape
+directory
+full-time
+group-directories-first
+human-readable
+kibibytes
+numeric-uid-gid
+no-group
+hide-control-chars
+reverse
+almost-all
+ignore-backups
+classify
+file-type
+dereference-command-line
+dereference-command-line-symlink-to-dir
+ignore
+indicator-style
+dereference
+literal
+quote-name
+quoting-style
+recursive
+format
+show-control-chars
+tabsize
+time-style
+hyperlink
+block-size
+context
+author
+append-exe
+%b %e  %Y
+%b %e %H:%M
+long-iso
+?pcdb-lswd
+# Configuration file for dircolors, a utility to help you set the
+# LS_COLORS environment variable used by GNU ls with the --color option.
+# Copyright (C) 1996-2020 Free Software Foundation, Inc.
+# Copying and distribution of this file, with or without modification,
+# are permitted provided the copyright notice and this notice are preserved.
+# The keywords COLOR, OPTIONS, and EIGHTBIT (honored by the
+# slackware version of dircolors) are recognized but ignored.
+# Below are TERM entries, which can be a glob patterns, to match
+# against the TERM environment variable to determine if it is colorizable.
+TERM Eterm
+TERM ansi
+TERM *color*
+TERM con[0-9]*x[0-9]*
+TERM cons25
+TERM console
+TERM cygwin
+TERM dtterm
+TERM gnome
+TERM hurd
+TERM jfbterm
+TERM konsole
+TERM kterm
+TERM linux
+TERM linux-c
+TERM mlterm
+TERM putty
+TERM rxvt*
+TERM screen*
+TERM st
+TERM terminator
+TERM tmux*
+TERM vt100
+TERM xterm*
+# Below are the color init strings for the basic file types.
+# One can use codes for 256 or more colors supported by modern terminals.
+# The default color codes use the capabilities of an 8 color terminal
+# with some additional attributes as per the following codes:
+# Attribute codes:
+# 00=none 01=bold 04=underscore 05=blink 07=reverse 08=concealed
+# Text color codes:
+# 30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
+# Background color codes:
+# 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
+#NORMAL 00 # no color code at all
+#FILE 00 # regular file: use no color at all
+RESET 0 # reset to "normal" color
+DIR 01;34 # directory
+LINK 01;36 # symbolic link. (If you set this to 'target' instead of a
+ # numerical value, the color is as for the file pointed to.)
+MULTIHARDLINK 00 # regular file with more than one link
+FIFO 40;33 # pipe
+SOCK 01;35 # socket
+DOOR 01;35 # door
+BLK 40;33;01 # block device driver
+CHR 40;33;01 # character device driver
+ORPHAN 40;31;01 # symlink to nonexistent file, or non-stat'able file ...
+MISSING 00 # ... and the files they point to
+SETUID 37;41 # file that is setuid (u+s)
+SETGID 30;43 # file that is setgid (g+s)
+CAPABILITY 30;41 # file with capability
+STICKY_OTHER_WRITABLE 30;42 # dir that is sticky and other-writable (+t,o+w)
+OTHER_WRITABLE 34;42 # dir that is other-writable (o+w) and not sticky
+STICKY 37;44 # dir with the sticky bit set (+t) and not other-writable
+# This is for files with execute permission:
+EXEC 01;32
+# List any file extensions like '.gz' or '.tar' that you would like ls
+# to colorize below. Put the extension, a space, and the color init string.
+# (and any comments you want to add after a '#')
+# If you use DOS-style suffixes, you may want to uncomment the following:
+#.cmd 01;32 # executables (bright green)
+#.exe 01;32
+#.com 01;32
+#.btm 01;32
+#.bat 01;32
+# Or if you want to colorize scripts even if they do not have the
+# executable bit actually set.
+#.sh 01;32
+#.csh 01;32
+ # archives or compressed (bright red)
+.tar 01;31
+.tgz 01;31
+.arc 01;31
+.arj 01;31
+.taz 01;31
+.lha 01;31
+.lz4 01;31
+.lzh 01;31
+.lzma 01;31
+.tlz 01;31
+.txz 01;31
+.tzo 01;31
+.t7z 01;31
+.zip 01;31
+.z 01;31
+.dz 01;31
+.gz 01;31
+.lrz 01;31
+.lz 01;31
+.lzo 01;31
+.xz 01;31
+.zst 01;31
+.tzst 01;31
+.bz2 01;31
+.bz 01;31
+.tbz 01;31
+.tbz2 01;31
+.tz 01;31
+.deb 01;31
+.rpm 01;31
+.jar 01;31
+.war 01;31
+.ear 01;31
+.sar 01;31
+.rar 01;31
+.alz 01;31
+.ace 01;31
+.zoo 01;31
+.cpio 01;31
+.7z 01;31
+.rz 01;31
+.cab 01;31
+.wim 01;31
+.swm 01;31
+.dwm 01;31
+.esd 01;31
+# image formats
+.jpg 01;35
+.jpeg 01;35
+.mjpg 01;35
+.mjpeg 01;35
+.gif 01;35
+.bmp 01;35
+.pbm 01;35
+.pgm 01;35
+.ppm 01;35
+.tga 01;35
+.xbm 01;35
+.xpm 01;35
+.tif 01;35
+.tiff 01;35
+.png 01;35
+.svg 01;35
+.svgz 01;35
+.mng 01;35
+.pcx 01;35
+.mov 01;35
+.mpg 01;35
+.mpeg 01;35
+.m2v 01;35
+.mkv 01;35
+.webm 01;35
+.webp 01;35
+.ogm 01;35
+.mp4 01;35
+.m4v 01;35
+.mp4v 01;35
+.vob 01;35
+.qt 01;35
+.nuv 01;35
+.wmv 01;35
+.asf 01;35
+.rm 01;35
+.rmvb 01;35
+.flc 01;35
+.avi 01;35
+.fli 01;35
+.flv 01;35
+.gl 01;35
+.dl 01;35
+.xcf 01;35
+.xwd 01;35
+.yuv 01;35
+.cgm 01;35
+.emf 01;35
+# https://wiki.xiph.org/MIME_Types_and_File_Extensions
+.ogv 01;35
+.ogx 01;35
+# audio formats
+.aac 00;36
+.au 00;36
+.flac 00;36
+.m4a 00;36
+.mid 00;36
+.midi 00;36
+.mka 00;36
+.mp3 00;36
+.mpc 00;36
+.ogg 00;36
+.ra 00;36
+.wav 00;36
+# https://wiki.xiph.org/MIME_Types_and_File_Extensions
+.oga 00;36
+.opus 00;36
+.spx 00;36
+.xspf 00;36
+invalid argument %s for %s
+ambiguous argument %s for %s
+Valid arguments are:
+  - %s
+write error
+%s: %s
+# entries:         %lu
+# buckets:         %lu
+# buckets used:    %lu (%.2f%%)
+max bucket length: %lu
+BLOCK_SIZE
+BLOCKSIZE
+POSIXLY_CORRECT
+eEgGkKmMpPtTyYzZ0
+human-readable
+KMGTPEZY
+%m/%d/%y
+%Y-%m-%d
+%H:%M:%S
+A NULL argv[0] was passed through an exec system call.
+/.libs/
+literal
+shell-always
+shell-escape
+shell-escape-always
+c-maybe
+escape
+locale
+clocale
+unable to convert path name %s
+%s (%s) %s
+License GPLv3+: GNU GPL version 3 or later <%s>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+https://gnu.org/licenses/gpl.html
+Written by %s.
+Written by %s and %s.
+Written by %s, %s, and %s.
+Written by %s, %s, %s,
+and %s.
+Written by %s, %s, %s,
+%s, and %s.
+Written by %s, %s, %s,
+%s, %s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+%s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+%s, %s, and others.
+Report bugs to: %s
+bug-coreutils@gnu.org
+%s home page: <%s>
+https://www.gnu.org/software/coreutils/
+GNU coreutils
+General help using GNU software: <%s>
+https://www.gnu.org/gethelp/
+Copyright %s %d Free Software Foundation, Inc.
+memory exhausted
+%s: %s
+invalid %s%s argument '%s'
+invalid suffix in %s%s argument '%s'
+%s%s argument '%s' too large
+0 <= strtol_base && strtol_base <= 36
+../coreutils-8.32/lib/xstrtol.c
+xstrtoumax
+POSIXLY_CORRECT
+list != NULL
+../coreutils-8.32/lib/fnmatch_loop.c
+p[-1] == L_(')')
+! "Invalid extended matching operator"
+mbsinit (&ps)
+../coreutils-8.32/lib/fnmatch.c
+ext_match
+ext_wmatch
+rpl_fnmatch
+memory exhausted
+US-ASCII
+LC_ALL
+LC_CTYPE
+CP1361
+CP20127
+CP20866
+KOI8-R
+CP20936
+GB2312
+CP21866
+KOI8-RU
+CP28591
+ISO-8859-1
+CP28592
+ISO-8859-2
+CP28593
+ISO-8859-3
+CP28594
+ISO-8859-4
+CP28595
+ISO-8859-5
+CP28596
+ISO-8859-6
+CP28597
+ISO-8859-7
+CP28598
+ISO-8859-8
+CP28599
+ISO-8859-9
+CP28605
+ISO-8859-15
+CP38598
+ISO-8859-8
+CP51932
+EUC-JP
+CP51936
+GB2312
+CP51949
+EUC-KR
+CP51950
+EUC-TW
+CP54936
+GB18030
+CP65001
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+libintl_bindtextdomain
+libintl_dcgettext
+libintl_gettext
+libintl_setlocale
+libintl_textdomain
+__assert_func
+__cxa_atexit
+__errno
+__getreent
+__locale_ctype_ptr
+__locale_mb_cur_max
+__main
+__memcpy_chk
+__sprintf_chk
+__strcpy_chk
+__swbuf_r
+_dll_crt0
+_impure_ptr
+acl_entries
+acl_free
+acl_get_entry
+acl_get_file
+acl_get_tag_type
+calloc
+clock_gettime
+closedir
+cygwin_conv_path
+cygwin_internal
+dll_dllcrt0
+fclose
+fflush_unlocked
+fprintf
+fputc_unlocked
+fputs_unlocked
+fstatat
+fwrite
+fwrite_unlocked
+getcwd
+getenv
+getgrgid
+getgrnam
+gethostname
+getopt_long
+getpwnam
+getpwuid
+gmtime_r
+isatty
+iswcntrl
+iswctype
+iswprint
+localeconv
+localtime_r
+longjmp
+malloc
+mbrtowc
+mbsinit
+mbsrtowcs
+mbstowcs
+memchr
+memcmp
+memcpy
+memmove
+memset
+mktime
+msys_detach_dll
+nl_langinfo
+opendir
+optarg
+optind
+posix_memalign
+printf
+program_invocation_name
+program_invocation_short_name
+pthread_mutex_lock
+pthread_mutex_unlock
+putc_unlocked
+readdir
+readlink
+realloc
+setenv
+setjmp
+setlocale
+sigaction
+sigaddset
+sigemptyset
+sigismember
+signal
+sigprocmask
+snprintf
+sprintf
+stpcpy
+stpncpy
+strcasecmp
+strcat
+strchr
+strcmp
+strcoll
+strcpy
+strftime
+strlen
+strncmp
+strrchr
+strspn
+strtoumax
+tcgetpgrp
+timegm
+tolower
+toupper
+towlower
+unsetenv
+wcscat
+wcslen
+wcstombs
+wcswidth
+wctype
+wcwidth
+wmemchr
+wmempcpy
+GetACP
+GetModuleHandleA
+GetModuleHandleW
+msys-intl-8.dll
+msys-2.0.dll
+KERNEL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__imp_wcscat
+__imp_optarg
+__nm_optarg
+__imp_abort
+__lib64_libkernel32_a_iname
+__imp_btowc
+__imp_fwrite_unlocked
+_head_msys_intl_8_dll
+__imp__dll_crt0
+__imp_tolower
+__imp_fputs_unlocked
+__imp_getgrnam
+__imp_longjmp
+__imp_GetModuleHandleW
+__imp_calloc
+__imp_tzset
+__imp_towlower
+__nm_optind
+__imp_setlocale
+__imp_fflush_unlocked
+__imp_strspn
+__imp_sigemptyset
+__imp_acl_get_file
+__imp_getenv
+__imp_timegm
+_head_msys_2_0_dll
+__imp_mktime
+__imp_stpncpy
+__imp_acl_free
+__imp_tcgetpgrp
+__imp_sigaction
+__imp_strcmp
+__imp___strcpy_chk
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_strrchr
+__imp_free
+__imp_wctype
+__nm_program_invocation_name
+__imp___errno
+__imp_readdir
+__imp_fstatat
+__imp_sigprocmask
+__nm__impure_ptr
+__imp_pthread_mutex_unlock
+__imp_memchr
+__imp_acl_entries
+__imp_wmempcpy
+__imp_getcwd
+__imp_fputc_unlocked
+__imp_cygwin_conv_path
+__imp__exit
+__imp_strcpy
+__imp_memset
+__imp_wcswidth
+__IAT_end__
+__imp_getgrgid
+__imp_memcpy
+__imp___memcpy_chk
+__imp_localtime_r
+__imp_wmemchr
+__imp_memmove
+__imp_dll_dllcrt0
+__imp_fstat
+__imp_iswctype
+__imp___locale_ctype_ptr
+__imp_fwrite
+_head_lib64_libkernel32_a
+__imp_libintl_setlocale
+__imp_msys_detach_dll
+__imp_strftime
+__imp_gmtime_r
+__imp_iswprint
+__imp_gethostname
+__imp_mbstowcs
+__imp_nl_langinfo
+__imp_toupper
+__imp_snprintf
+__imp_getpwnam
+__imp_acl_get_entry
+__imp_program_invocation_short_name
+__imp_putc_unlocked
+__imp_signal
+__imp___locale_mb_cur_max
+__nm_program_invocation_short_name
+__imp___getreent
+__imp_strtoumax
+__imp_ioctl
+__imp_mbsinit
+__imp_GetModuleHandleA
+__imp___main
+__imp_setjmp
+__imp_strlen
+__imp_malloc
+__imp_libintl_textdomain
+__imp__impure_ptr
+__imp_sigismember
+__imp___assert_func
+__imp_stat
+__imp_realloc
+__imp_exit
+__imp_mbrtowc
+__imp_mbsrtowcs
+__IAT_start__
+__imp_wcwidth
+__imp_strcoll
+__imp_strcat
+__imp_libintl_bindtextdomain
+__imp_program_invocation_name
+__imp_isatty
+__imp_libintl_gettext
+__imp_stpcpy
+__imp___cxa_atexit
+__imp_closedir
+__imp_fprintf
+__imp_sigaddset
+__imp_setenv
+__imp_acl_get_tag_type
+__imp_wcstombs
+__imp_iswcntrl
+msys_intl_8_dll_iname
+__imp_dirfd
+__imp_optind
+__imp_fclose
+__imp_getpwuid
+__imp_localeconv
+__imp_error
+__imp___swbuf_r
+__imp_strcasecmp
+__imp_raise
+__imp_strncmp
+__imp_strchr
+__imp_wcslen
+__imp_getopt_long
+__imp_unsetenv
+__imp_sprintf
+__imp_lstat
+__imp_printf
+__imp_readlink
+__imp_pthread_mutex_lock
+__imp_opendir
+__imp_clock_gettime
+__imp_GetACP
+__imp___sprintf_chk
+__imp_memcmp
+__imp_libintl_dcgettext
+msys_2_0_dll_iname

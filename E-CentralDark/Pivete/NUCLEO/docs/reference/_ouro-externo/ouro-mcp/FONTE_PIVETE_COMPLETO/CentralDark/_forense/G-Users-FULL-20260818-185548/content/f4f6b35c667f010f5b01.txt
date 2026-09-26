@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\gateway-starts.log
+
+1787066949.140856
+1787074346.027268
+1787083918.754585
+1787084478.59674
+1787085399.033344

@@ -1,0 +1,8 @@
+# TESTE FINAL
+
+COMANDO: teste_final
+PROMPT: verifica se auto-destilador funciona com provas obrigatorias
+GATE: FILE_SECURITY_GATE v2
+RISCO: nenhum
+GAP: nenhum
+DATA: 2026-08-23T16:02:00

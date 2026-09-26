@@ -1,0 +1,152 @@
+{
+  "package": "CENTRALDARK-PRIVATE-SECURITY-BANK-FOUNDATION",
+  "purpose": "transport-only reuse-before-create zero-deploy",
+  "file_count": 29,
+  "files": [
+    {
+      "path": "00-AGENTE-INTEGRADOR.md",
+      "bytes": 1252,
+      "sha256": "0c4f4de84e9eeb910ada8afe0e3340cffb48dd7d7e6d2cf3a2380614fdc82a2c"
+    },
+    {
+      "path": "01-MAPA-DE-INTEGRACAO.md",
+      "bytes": 797,
+      "sha256": "1a5bf65180d1a691e180582dd84589872604807b63ddc43edced3a183260b5f3"
+    },
+    {
+      "path": "README.md",
+      "bytes": 945,
+      "sha256": "12dc24c6e254b14d165690d93492d478bf5e421797eaef6f121f411965267f82"
+    },
+    {
+      "path": "VALIDATION-RECEIPT.txt",
+      "bytes": 1045,
+      "sha256": "fdd22dfa8dfb5360e3bcc3c9a6f5ce45df6ab6e45f6bdd21d1f79677e48f5c78"
+    },
+    {
+      "path": "admin/SecurityCenter.tsx",
+      "bytes": 1741,
+      "sha256": "f7866f1ad4092e0f0187244094e5ce1211e0032fc3c20661eaf7d6cc17de9eaa"
+    },
+    {
+      "path": "admin/security-types.ts",
+      "bytes": 365,
+      "sha256": "a999128baee16c5f8106276533270b8c1029f4a7cfcbdce979125af2d4827b1c"
+    },
+    {
+      "path": "db/000_private_security.sql",
+      "bytes": 3753,
+      "sha256": "ed0df17615af3cf4ca56e412a2ac210d26d3f9023c6c6ed0876cdff55b633a9e"
+    },
+    {
+      "path": "db/001_privileges_indexes.sql",
+      "bytes": 1080,
+      "sha256": "451ff404ae915a04b34ca2127156474fbf0e77229e8f3d4cfabd0670f53a4fbd"
+    },
+    {
+      "path": "db/002_admin_summary.sql",
+      "bytes": 842,
+      "sha256": "d241831b5ea776e11bde0a11bf8daa7419ca13c982122b6f089fa6c768728ea2"
+    },
+    {
+      "path": "db/003_rls_audit_readonly.sql",
+      "bytes": 298,
+      "sha256": "490d620eb5799f6d27654cdfbc8122f6ab3ab4167e4df470f909d4b9b2a27334"
+    },
+    {
+      "path": "docs/ADMIN-SECURITY-CENTER.md",
+      "bytes": 660,
+      "sha256": "fcbb1e35d8dbdc31336574e1d105f7d7da4e81e54f756daa327bb56e9bec88e6"
+    },
+    {
+      "path": "docs/DEFINITION-OF-DONE.md",
+      "bytes": 420,
+      "sha256": "08bebfc16454312d4fb190d79a627b265f2d0b606e4db750c769784b0080b3bd"
+    },
+    {
+      "path": "docs/INCIDENT-PLAYBOOK.md",
+      "bytes": 394,
+      "sha256": "c9a5a822a96a70be052f1e68e3f4df56fab4872a3b8a20cd99757cc274e1cac5"
+    },
+    {
+      "path": "docs/REFERENCIAS-PRIMARIAS.md",
+      "bytes": 612,
+      "sha256": "e365a70d1f816b94718dfdc7c232f16f9939acee83573d2a53b20ae790a6debf"
+    },
+    {
+      "path": "docs/SECURITY-ARCHITECTURE.md",
+      "bytes": 730,
+      "sha256": "109a6401cedff0b237893bfda1fce08eda80aeedf123bd570b87a98d6d369b78"
+    },
+    {
+      "path": "docs/THREAT-MODEL.md",
+      "bytes": 612,
+      "sha256": "fd334cf38a1744746dd24ee7f47e27349d2b46ecd31510991421cb22614fda39"
+    },
+    {
+      "path": "host/linux-readonly-audit.sh",
+      "bytes": 620,
+      "sha256": "d40ab380a2a0099746e782def4b037a13b33ddf6e7a1730af03cc622f146df61"
+    },
+    {
+      "path": "host/windows-readonly-audit.ps1",
+      "bytes": 785,
+      "sha256": "27681fe90a7deeaaa48e8386ecf5f7d2f251e21f143c7d2e4602037b9cd7f3bf"
+    },
+    {
+      "path": "security/audit.mjs",
+      "bytes": 762,
+      "sha256": "27fc42d240b2a279e3c715c219e72a977cce102fa6396f1327ad1c1603cd7d3f"
+    },
+    {
+      "path": "security/authz.mjs",
+      "bytes": 411,
+      "sha256": "3bca471d1d512b8bcd71c38088d245a0085707a2d59bbb2fe17d8510968d0e9e"
+    },
+    {
+      "path": "security/circuit-breaker.mjs",
+      "bytes": 567,
+      "sha256": "edee1e8d507e75218fa23132928ebc00ce29d7f78bbc0b5a23bc4753273b4708"
+    },
+    {
+      "path": "security/policy.mjs",
+      "bytes": 815,
+      "sha256": "09f01efed6baf5ab9db7bffc07cacc1157fa1a2d1da92419929ef116667d5d73"
+    },
+    {
+      "path": "security/rate-limit.mjs",
+      "bytes": 827,
+      "sha256": "d137cf5fd75bc76e9869229f6ddc8e946da47bb3c75530fee880229ebbd93941"
+    },
+    {
+      "path": "security/sanitize.mjs",
+      "bytes": 737,
+      "sha256": "531a9e5c437d2afd394f6f5961685aa16d2748205bf219519d96dffb102bf372"
+    },
+    {
+      "path": "security/security-headers.mjs",
+      "bytes": 479,
+      "sha256": "9c054ba471da10d9070e90ea93942a4f679a94b882a5021bb1836664bc91b023"
+    },
+    {
+      "path": "security/session.mjs",
+      "bytes": 578,
+      "sha256": "d6c2cca6a451a1d1cd40f68e35db83763f4879762ade8bf65c540ef81ff19368"
+    },
+    {
+      "path": "tests/NEGATIVE-CASES.md",
+      "bytes": 540,
+      "sha256": "e9ccf868a0bd6a774bcc7527207d4703f7bc1c47b7feb017745d5ea18aede89d"
+    },
+    {
+      "path": "tests/security.test.mjs",
+      "bytes": 1974,
+      "sha256": "01f75df8e7f51a2c6e510379ba1e00e48e8f6df338d638dac0c098b69d0fb7ea"
+    },
+    {
+      "path": "tests/validate_package.py",
+      "bytes": 847,
+      "sha256": "f499a6e6a4f265afddfe68a1c1801dcbe0b382043bf791c8e3bd83094ba0552f"
+    }
+  ]
+}

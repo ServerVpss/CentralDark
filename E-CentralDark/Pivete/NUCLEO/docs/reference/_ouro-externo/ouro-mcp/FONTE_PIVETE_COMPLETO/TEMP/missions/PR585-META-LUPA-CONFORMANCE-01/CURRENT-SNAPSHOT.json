@@ -1,0 +1,76 @@
+{
+  "mission_id": "PR585-META-LUPA-CONFORMANCE-01",
+  "volta": 5,
+  "timestamp_utc": "2026-08-01T18:14:18Z",
+  "status": "PUBLICADO_VOLTA2_AGUARDANDO_REVISORES",
+  "base_head": "a242a89f00d61702c9d839299a964d0b26f3f347",
+  "heads_match": "3/3 (worktree=remote=pr)",
+  "lupa_usage_id": "720eaff4504f9ebc6f6b6b141d276876ccba6ad5b5b6b202f478bf162f21ec4d",
+  "begin_preceded_first_write": false,
+  "method_violations": [
+    "WRITE_BEFORE_BEGIN",
+    "CONTAGEM_8_9",
+    "EDICAO_RESOLVED_T7_REVERTIDA"
+  ],
+  "gates": {
+    "MUTATION_GATE": "PASS 6/6 (2a volta; 1a: detector T156 emaranhado com T160, desemaranhado)",
+    "INSTRUMENT_ENCODING_TEST": "PASS (cp1252 provado cego, UTF-8 estrito passa)",
+    "SCOPE_GATE": "PASS 15/15",
+    "JUDGE_R1": "CORRIGIR (D1: enum reason vs obrigatoriedade; 6/6 fechados, 3/3 intocados)",
+    "D1_FIX": "aplicado — reason obrigatorio somente em BLOCKED",
+    "JUDGE_R2": "APROVAR (D1 morto; tentou derrubar por 3 angulos e falhou)",
+    "LEDGER_FINAL": "record_hash valido, verify-ledger BAD_HASH=0, XP 895->920, penalty alteracao_sem_autorizacao registrada",
+    "COMMIT": "a242a89f0 (3 arquivos exatos)",
+    "PUSH": "origin OK sem force",
+    "REVIEWS_SOLICITADAS": "@coderabbitai + @codex no HEAD a242a89f0"
+  },
+  "evidencias": [
+    "BEFORE-status.txt",
+    "BEFORE-diff.patch",
+    "BEFORE-threads.json",
+    "BEFORE-heads.json",
+    "BEFORE-sha256.txt",
+    "MUTATION-PROOFS.json"
+  ],
+  "meta_lupa_evolution_defects_registrados": [
+    "ledger_check fail-open (pula registro sem record_hash; forja aceita com OK=1)",
+    "BEGIN retroativo nao rejeitado tecnicamente",
+    "escrita antes de BEGIN sem trava tecnica (provado nesta propria sessao)",
+    "FINAL manual fora da cadeia aceito",
+    "instrumentos cegos a encoding (cp1252) geram falso-FAIL/falso-PASS"
+  ],
+  "publicado": true,
+  "merge": false,
+  "novo_head": "a242a89f00d61702c9d839299a964d0b26f3f347",
+  "remote_igual_local": true,
+  "heads_match_3_ways": true,
+  "drift_registrado": "protocolo previa 4 threads OPEN; GraphQL mediu 5 (12 totais). O 5o (E, PRRT_kwDOTDnUP86VqDnj, P2) e filho da propria correcao anterior: CAPTURE_DEGRADED ficou orfao apos a unificacao de estados do T160.",
+  "threads_volta4": {
+    "A_PRRT_kwDOTDnUP86VpL3d": "ja corrigido no HEAD — NAO editado (proibido movimentar linha)",
+    "B_PRRT_kwDOTDnUP86VpUPa": "ja corrigido no HEAD — NAO editado",
+    "C_PRRT_kwDOTDnUP86VqC5G": "finishing_touches: 4 recursos de escrita enabled:false",
+    "D_PRRT_kwDOTDnUP86VqC5I": "chat.allow_non_org_members:false, auto_reply preservado",
+    "E_PRRT_kwDOTDnUP86VqDnj": "CAPTURE_DEGRADED vira status:BLOCKED + reason, adicionado a tabela E ao enum"
+  },
+  "gates_volta4": {
+    "MUTATION_GATE_V2": "PASS 3/3 novos + 6/6 sem regressao",
+    "INSTRUMENT_ENCODING_TEST": "PASS",
+    "SCOPE_GATE_V2": "PASS 11/11, escopo minimo 2 arquivos (AGENTS.md intocado)",
+    "JUDGE_V2": "APROVAR 5/5, zero regressao, escopo limpo",
+    "PREVENTIVOS_DO_JUDGE": "2 aplicados (unit_tests desligado; ACHADO_PENDENTE no enum) — fecha rodada 4 antes de existir",
+    "PREVENTIVE_GATE": "PASS (zero orfaos em status e reason, 5/5 write features off)",
+    "COMMIT": "8f5925f0a",
+    "PUSH": "OK sem force",
+    "PR_BODY": "atualizado com base/head reais e verificacao executada",
+    "REVIEWS": "@coderabbitai + @codex solicitados no HEAD 8f5925f0a"
+  },
+  "files_changed_volta4": [
+    ".coderabbit.yaml",
+    "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md"
+  ],
+  "publicado_volta4": true,
+  "head_atual": "8f5925f0abef0467f8204d327c97cebe152351d4",
+  "instrumentos_corrigidos_nesta_volta": [
+    "regex de enum casava com status do front matter (CANDIDATO_CANONICO) em vez do enum do receipt -> falso FAIL; corrigido ancorando no bloco OPERATION_RECEIPT"
+  ]
+}

@@ -1,0 +1,170 @@
+# OpenClaw Whitelabel Deployment Workflow
+# Based on Pedro Valerio's 6-Phase Pipeline
+# Orchestrator: steipete (delegates to AIOS agents)
+
+workflow:
+  name: wf-whitelabel-deploy
+  version: "1.0.0"
+  description: |
+    Full whitelabel deployment of OpenClaw instance.
+    steipete orchestrates, AIOS agents execute.
+  trigger: "*deploy"
+  orchestrator: steipete
+
+# PEDRO VALIDATION REQUIRED FIELDS
+unidirectional: true
+rollback: false
+
+phases:
+  - id: phase_1_2
+    name: "Infrastructure Setup"
+    executor: "@devops (Gage)"
+    delegated_by: steipete
+    steps:
+      - "Create Hetzner VPS (CX22+, Ubuntu 22.04)"
+      - "Install Node.js 22, pnpm, Docker"
+      - "Install Tailscale on VPS + desktop"
+      - "Clone, build, deploy OpenClaw"
+      - "Configure systemd service"
+    veto_conditions:
+      - "Tailscale ping fails -> STOP"
+      - "Gateway /health not OK -> STOP"
+
+  - id: phase_3
+    name: "Whitelabel Identity"
+    executor: "@aios-master (Orion)"
+    delegated_by: steipete
+    steps:
+      - "Define agent name, icon, persona"
+      - "Create apps/{agent-name}/ directory"
+      - "Generate agent definition"
+      - "Register in AIOS"
+    veto_conditions:
+      - "Directory incomplete -> STOP"
+      - "Name conflicts with existing -> STOP"
+
+  - id: phase_4
+    name: "Architecture Review"
+    executor: "@architect (Aria)"
+    delegated_by: steipete
+    steps:
+      - "Copy llm-router-config.yaml"
+      - "Define tier structure (budget/standard/premium)"
+      - "Map skills to tiers"
+      - "Configure fallback + .env"
+    veto_conditions:
+      - "No API keys configured -> STOP"
+      - "Invalid YAML -> STOP"
+
+  - id: phase_5a
+    name: "Implementation"
+    executor: "@dev (Dex)"
+    delegated_by: steipete
+    steps:
+      - "Copy skills from apps/clawdbot/"
+      - "Customize config.js"
+      - "Create bridge.js service"
+      - "Configure Claude Code hooks"
+      - "npm install"
+    veto_conditions:
+      - "npm install fails -> STOP"
+      - "bridge.js not detecting service -> STOP"
+
+  - id: phase_5b
+    name: "Security + N8N"
+    executor: "@devops (Gage)"
+    delegated_by: steipete
+    steps:
+      - "Layer 1: Customize blocklist.yaml"
+      - "Layer 2: Docker sandbox (alpine, non-root, network none)"
+      - "Layer 3: journald + logrotate"
+      - "Deploy N8N stack"
+      - "Configure Traefik"
+      - "Setup channels (WhatsApp, Slack)"
+    veto_conditions:
+      - "Blocklist not blocking dangerous commands -> STOP IMMEDIATELY"
+      - "Docker sandbox not isolated -> STOP"
+
+  - id: phase_6
+    name: "End-to-End Validation"
+    executor: "@qa (Quinn)"
+    delegated_by: steipete
+    steps:
+      - "Gateway /health"
+      - "Tailscale connectivity"
+      - "LLM Router all tiers"
+      - "Skills functional"
+      - "Security tests"
+      - "Channel tests"
+      - "Performance baseline"
+    veto_conditions:
+      - "Any security test fails -> STOP"
+      - "Gateway not responding -> STOP"
+
+gates:
+  - gate: INFRA_READY
+    after_phase: phase_1_2
+    blocking: true
+    checks:
+      - "tailscale ping succeeds"
+      - "gateway /health returns OK"
+      - "systemd service active"
+    veto: "Infrastructure must be verified before creating identity"
+
+  - gate: IDENTITY_CREATED
+    after_phase: phase_3
+    blocking: true
+    checks:
+      - "apps/{agent-name}/ exists with all subdirs"
+      - "Agent definition .md valid"
+    veto: "Identity must exist before architecture review"
+
+  - gate: ARCHITECTURE_VALID
+    after_phase: phase_4
+    blocking: true
+    checks:
+      - "llm-router-config.yaml valid YAML"
+      - "All skills mapped to tiers"
+      - ".env populated with API keys"
+    veto: "Architecture must be validated before implementation"
+
+  - gate: IMPLEMENTATION_COMPLETE
+    after_phase: phase_5a
+    blocking: true
+    checks:
+      - "npm install succeeds"
+      - "config.js has no clawdbot references"
+      - "bridge.js detects service"
+    veto: "Implementation must work before security hardening"
+
+  - gate: SECURITY_HARDENED
+    after_phase: phase_5b
+    blocking: true
+    checks:
+      - "Blocked commands rejected (test rm -rf /)"
+      - "Docker sandbox isolated"
+      - "Logging active"
+    veto: "Security MUST pass before validation - non-negotiable"
+
+  - gate: DEPLOYMENT_VALIDATED
+    after_phase: phase_6
+    blocking: true
+    checks:
+      - "All 10 validation items pass"
+      - "End-to-end flow works"
+      - "Security baseline met"
+    veto: "All tests must pass before declaring deployment complete"
+
+completion:
+  success_criteria:
+    - "All 6 phases completed"
+    - "All 6 gates passed"
+    - "No veto conditions triggered"
+  deliverables:
+    - "Running OpenClaw instance on VPS"
+    - "Tailscale mesh connectivity"
+    - "Whitelabel identity active"
+    - "LLM Router with tiers"
+    - "Skills customized"
+    - "3-layer security hardened"
+    - "Claude Code hooks integrated"

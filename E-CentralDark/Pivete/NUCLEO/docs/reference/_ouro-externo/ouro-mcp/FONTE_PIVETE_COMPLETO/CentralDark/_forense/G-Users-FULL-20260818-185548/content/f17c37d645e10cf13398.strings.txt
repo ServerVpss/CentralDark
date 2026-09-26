@@ -1,0 +1,35 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\Google\Chrome\User Data\Default\Service Worker\CacheStorage\b500f1faf61f180de1748705af17dc1a8e8ccb3b\921934df-27cd-4876-abf8-f2e96abb6a9d\bf67801a9365f04c_0
+
+https://www.gstatic.com/devrel-devsite/prod/v0f3a5b8b76e4a120372a69044e02756e703b6140f9f1812c6e4a0407b19864b7/js/devsite_devsite_footer_promos_module__pt_br.js(function(_ds){var window=this;var N2=class extends _ds.nn{ec(a){var b=this.querySelector("nav");a&&_ds.mn(this,b,a.querySelector("nav"));b&&(a?(b.hidden=!1,b.removeAttribute("aria-hidden")):(b.hidden=!0,b.setAttribute("aria-hidden","true")))}};N2.prototype.updateContent=N2.prototype.ec;try{customElements.define("devsite-footer-promos",N2)}catch(a){console.warn("Unrecognized DevSite custom element - DevsiteFooterPromos",a)};})(_ds_www);
+accept-ranges
+bytes" 
+access-control-allow-origin
+45758"9
+alt-svc
+.h3=":443"; ma=2592000,h3-29=":443"; ma=2592000")
+cache-control
+public, max-age=31536000"
+content-encoding
+content-length
+#content-security-policy-report-only
+\require-trusted-types-for 'script'; report-uri https://csp.withgoogle.com/csp/devrel-devsite"
+content-type
+text/javascript"E
+cross-origin-opener-policy
+'same-origin; report-to="devrel-devsite"",
+cross-origin-resource-policy
+cross-origin"%
+Tue, 18 Aug 2026 06:08:47 GMT"(
+expires
+Wed, 18 Aug 2027 06:08:47 GMT".
+last-modified
+Tue, 18 Aug 2026 03:46:13 GMT"
+report-to
+|{"group":"devrel-devsite","max_age":2592000,"endpoints":[{"url":"https://csp.withgoogle.com/csp/report-to/devrel-devsite"}]}"
+server
+Accept-Encoding"!
+x-content-type-options
+nosniff"
+x-xss-protection
+https://www.gstatic.com/devrel-devsite/prod/v0f3a5b8b76e4a120372a69044e02756e703b6140f9f1812c6e4a0407b19864b7/js/devsite_devsite_footer_promos_module__pt_br.jsP(Z
+text/javascriptr

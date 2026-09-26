@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\share\doc\git-doc\RelNotes\2.15.3.adoc
+
+Git v2.15.3 Release Notes
+=========================
+This release merges up the fixes that appear in v2.14.5 to address
+the recently reported CVE-2018-17456; see the release notes for that
+version for details.

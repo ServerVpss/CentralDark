@@ -1,0 +1,20 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\legacy-runtime\runtime-cores\assistant-transport\commandQueue.d.ts
+
+import { AssistantTransportCommand, CommandQueueState, QueuedCommand } from "./types.js";
+
+//#region src/legacy-runtime/runtime-cores/assistant-transport/commandQueue.d.ts
+declare const createInitialQueueState: () => CommandQueueState;
+declare const useCommandQueue: (opts: {
+  onQueue: () => void;
+}) => {
+  state: CommandQueueState;
+  enqueue: (command: AssistantTransportCommand, options?: {
+    schedule?: boolean;
+  }) => void;
+  flush: () => QueuedCommand[];
+  markDelivered: () => void;
+  reset: () => void;
+};
+//#endregion
+export { createInitialQueueState, useCommandQueue };
+//# sourceMappingURL=commandQueue.d.ts.map

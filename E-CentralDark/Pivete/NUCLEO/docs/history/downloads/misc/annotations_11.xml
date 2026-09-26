@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <item name="androidx.core.widget.AutoSizeableTextView int getAutoSizeTextType()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.widget.TextViewCompat.AUTO_SIZE_TEXT_TYPE_NONE, androidx.core.widget.TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.widget.AutoSizeableTextView void setAutoSizeTextTypeWithDefaults(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.widget.TextViewCompat.AUTO_SIZE_TEXT_TYPE_NONE, androidx.core.widget.TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.widget.NestedScrollView int scrollBy(int, int, android.view.MotionEvent, int, int, boolean) 4">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.widget.TextViewCompat.AutoSizeTextType">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.widget.TextViewCompat.AUTO_SIZE_TEXT_TYPE_NONE, androidx.core.widget.TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.widget.TextViewOnReceiveContentListener java.lang.CharSequence coerceToText(android.content.Context, android.content.ClipData.Item, int) 2">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.FLAG_CONVERT_TO_PLAIN_TEXT}" />
+    </annotation>
+  </item>
+</root>
+

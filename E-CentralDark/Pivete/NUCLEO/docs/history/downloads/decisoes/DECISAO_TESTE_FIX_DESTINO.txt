@@ -1,0 +1,6 @@
+# DECISAO TESTE 3
+
+DECISÃO: Validar escrita no destino correto após fix
+CONTRATO: FILE_SECURITY_GATE v2
+RISCO: nenhum
+GAP: nenhum

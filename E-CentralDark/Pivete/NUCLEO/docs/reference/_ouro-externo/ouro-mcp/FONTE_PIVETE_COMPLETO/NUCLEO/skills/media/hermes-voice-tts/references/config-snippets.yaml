@@ -1,0 +1,32 @@
+# Known-good TTS fragments for profile pivete (2026-07-18)
+# Merge into config.yaml under top-level keys; do not paste secrets here.
+
+# --- LOCKED default: Edge Francisca (BR) ---
+tts:
+  provider: edge
+  speed: 1.0
+  edge:
+    voice: pt-BR-FranciscaNeural   # locked; sample edge_francisca_mulher_BR.mp3
+    speed: 1.0
+  xai:
+    voice_id: castor
+    language: pt-BR
+    speed: 0.9
+    sample_rate: 24000
+    bit_rate: 128000
+
+voice:
+  auto_tts: true
+
+# Alternates only after user asks:
+# edge.voice: pt-BR-ThalitaMultilingualNeural
+# edge.voice: pt-BR-AntonioNeural
+#
+# --- xAI experiment (only if user asks again; quality was rejected) ---
+# tts:
+#   provider: xai
+#   speed: 0.9
+#   xai:
+#     voice_id: castor   # or sal, lux, leo, rex, ...
+#     language: pt-BR
+#     speed: 0.9

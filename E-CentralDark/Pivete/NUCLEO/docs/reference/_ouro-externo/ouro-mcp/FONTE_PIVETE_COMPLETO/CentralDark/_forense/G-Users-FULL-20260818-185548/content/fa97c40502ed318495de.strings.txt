@@ -1,0 +1,449 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\stdbuf.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+.reloc
+AVAUATVSH
+AWAVAUATUWVSH
+</t <\t
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+T$'"T$TH
+x[^_]A\A]A^A_
+D$@u?L
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AUATUWVSH
+X[^_]A\A]
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+TUUUUUUU1
+SUUUUUUUL9
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+ATWVSH
+8[^_A\
+8[^_A\
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+|$ POSIt
+AUATUWVSH
+H[^_]A\A]
+H[^_]A\A]
+AWAVAUATSH
+ [A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+H;D$8A
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+ATUWVSH
+[^_]A\
+ATUWVSH
+P[^_]A\
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+AVWVSH
+AVUWVSH
+[^_]A^
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+H9L$@t
+H9L$@t
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+stdbuf
+ invocation
+Try '%s --help' for more information.
+Usage: %s OPTION... COMMAND
+Run COMMAND, with modified buffering operations for its standard streams.
+Mandatory arguments to long options are mandatory for short options too.
+  -i, --input=MODE   adjust standard input stream buffering
+  -o, --output=MODE  adjust standard output stream buffering
+  -e, --error=MODE   adjust standard error stream buffering
+      --help     display this help and exit
+      --version  output version information and exit
+If MODE is 'L' the corresponding stream will be line buffered.
+This option is invalid with standard input.
+If MODE is '0' the corresponding stream will be unbuffered.
+Otherwise MODE is a number which may be followed by one of the following:
+KB 1000, K 1024, MB 1000*1000, M 1024*1024, and so on for G, T, P, E, Z, Y.
+Binary prefixes can be used, too: KiB=K, MiB=M, and so on.
+In this case the corresponding stream will be fully buffered with the buffer
+size set to MODE bytes.
+NOTE: If COMMAND adjusts the buffering of its standard streams ('tee' does
+for example) then that will override corresponding changes by 'stdbuf'.
+Also some filters (like 'dd' and 'cat' etc.) don't use streams for I/O,
+and are thus unaffected by 'stdbuf' settings.
+test invocation
+coreutils
+Multi-call invocation
+sha224sum
+sha2 utilities
+sha256sum
+sha384sum
+sha512sum
+%s online help: <%s>
+https://www.gnu.org/software/coreutils/
+GNU coreutils
+Report any translation bugs to <https://translationproject.org/team/>
+Full documentation <%s%s>
+or available locally via: info '(coreutils) %s%s'
+/usr/share/locale
+0 <= opt_fileno && opt_fileno < ARRAY_CARDINALITY (stdbuf)
+../coreutils-8.32/src/stdbuf.c
+line buffering stdin is meaningless
+EGkKMPTYZ0
+invalid mode %s
+Padraig Brady
++i:o:e:
+missing operand
+_STDBUF_
+%s%c=L
+%s%c=%lu
+failed to update the environment with %s
+you must specify a buffering mode option
+/proc/self/exe
+/usr/lib/coreutils
+LD_PRELOAD
+libstdbuf.dll
+failed to find %s
+%s=%s:%s
+failed to run command %s
+output
+version
+write error
+%s: %s
+A NULL argv[0] was passed through an exec system call.
+/.libs/
+literal
+shell-always
+shell-escape
+shell-escape-always
+c-maybe
+escape
+locale
+clocale
+%s (%s) %s
+License GPLv3+: GNU GPL version 3 or later <%s>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+https://gnu.org/licenses/gpl.html
+Written by %s.
+Written by %s and %s.
+Written by %s, %s, and %s.
+Written by %s, %s, %s,
+and %s.
+Written by %s, %s, %s,
+%s, and %s.
+Written by %s, %s, %s,
+%s, %s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+%s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+%s, %s, and others.
+Report bugs to: %s
+bug-coreutils@gnu.org
+%s home page: <%s>
+https://www.gnu.org/software/coreutils/
+GNU coreutils
+General help using GNU software: <%s>
+https://www.gnu.org/gethelp/
+Copyright %s %d Free Software Foundation, Inc.
+memory exhausted
+0 <= strtol_base && strtol_base <= 36
+../coreutils-8.32/lib/xstrtol.c
+xstrtoumax
+US-ASCII
+LC_ALL
+LC_CTYPE
+CP1361
+CP20127
+CP20866
+KOI8-R
+CP20936
+GB2312
+CP21866
+KOI8-RU
+CP28591
+ISO-8859-1
+CP28592
+ISO-8859-2
+CP28593
+ISO-8859-3
+CP28594
+ISO-8859-4
+CP28595
+ISO-8859-5
+CP28596
+ISO-8859-6
+CP28597
+ISO-8859-7
+CP28598
+ISO-8859-8
+CP28599
+ISO-8859-9
+CP28605
+ISO-8859-15
+CP38598
+ISO-8859-8
+CP51932
+EUC-JP
+CP51936
+GB2312
+CP51949
+EUC-KR
+CP51950
+EUC-TW
+CP54936
+GB18030
+CP65001
+H%+.2d
+?UUUUUU
+(NULL)
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+RSDS4[
+libintl_bindtextdomain
+libintl_gettext
+libintl_setlocale
+libintl_textdomain
+__assert_func
+__cxa_atexit
+__errno
+__getreent
+__locale_ctype_ptr
+__locale_mb_cur_max
+__main
+__memcpy_chk
+__sprintf_chk
+__strcpy_chk
+_dll_crt0
+_impure_ptr
+access
+calloc
+cygwin_internal
+dll_dllcrt0
+execvp
+fclose
+fprintf
+fputc_unlocked
+fputs_unlocked
+fwrite
+getenv
+getopt_long
+iswprint
+malloc
+mbrtowc
+mbsinit
+memcmp
+memcpy
+memset
+msys_detach_dll
+nl_langinfo
+optarg
+optind
+posix_memalign
+printf
+program_invocation_name
+program_invocation_short_name
+pthread_mutex_lock
+pthread_mutex_unlock
+putenv
+readlink
+realloc
+setlocale
+snprintf
+sprintf
+strchr
+strcmp
+strcpy
+strlen
+strncmp
+strrchr
+strtok
+strtoumax
+toupper
+GetACP
+GetModuleHandleA
+GetModuleHandleW
+msys-intl-8.dll
+msys-2.0.dll
+KERNEL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__imp_optarg
+__nm_optarg
+__imp_abort
+__lib64_libkernel32_a_iname
+_head_msys_intl_8_dll
+__imp__dll_crt0
+__imp_fputs_unlocked
+__imp_GetModuleHandleW
+__imp_calloc
+__nm_optind
+__imp_setlocale
+__imp_getenv
+_head_msys_2_0_dll
+__imp_strcmp
+__imp___strcpy_chk
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_strrchr
+__imp_free
+__nm_program_invocation_name
+__imp___errno
+__nm__impure_ptr
+__imp_pthread_mutex_unlock
+__imp_fputc_unlocked
+__imp__exit
+__imp_frexp
+__imp_strcpy
+__imp_memset
+__imp_putenv
+__IAT_end__
+__imp_memcpy
+__imp___memcpy_chk
+__imp_dll_dllcrt0
+__imp_execvp
+__imp_access
+__imp___locale_ctype_ptr
+__imp_fwrite
+_head_lib64_libkernel32_a
+__imp_libintl_setlocale
+__imp_msys_detach_dll
+__imp_iswprint
+__imp_nl_langinfo
+__imp_toupper
+__imp_snprintf
+__imp_program_invocation_short_name
+__imp___locale_mb_cur_max
+__nm_program_invocation_short_name
+__imp___getreent
+__imp_strtoumax
+__imp_mbsinit
+__imp_GetModuleHandleA
+__imp___main
+__imp_strlen
+__imp_malloc
+__imp_libintl_textdomain
+__imp__impure_ptr
+__imp___assert_func
+__imp_stat
+__imp_strtok
+__imp_realloc
+__imp_exit
+__imp_mbrtowc
+__IAT_start__
+__imp_libintl_bindtextdomain
+__imp_program_invocation_name
+__imp_libintl_gettext
+__imp___cxa_atexit
+__imp_fprintf
+msys_intl_8_dll_iname
+__imp_optind
+__imp_fclose
+__imp_error
+__imp_strncmp
+__imp_strchr
+__imp_ldexp
+__imp_getopt_long
+__imp_sprintf
+__imp_printf
+__imp_readlink
+__imp_pthread_mutex_lock
+__imp_GetACP
+__imp___sprintf_chk
+__imp_memcmp
+msys_2_0_dll_iname
+(NULL)

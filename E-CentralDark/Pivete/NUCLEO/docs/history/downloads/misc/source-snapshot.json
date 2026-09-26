@@ -1,0 +1,14 @@
+{
+  "kind": "SAVED_HTML",
+  "surface_id": "chatgpt-session-example",
+  "target": "conversation-surface",
+  "operational_scope": "SESSION_INTELLIGENCE",
+  "event_time": "2026-08-23T16:38:27Z",
+  "observed_at": "2026-08-23T17:01:00Z",
+  "provenance": "USER_SAVED_HTML",
+  "previous_hash": null,
+  "payload": {
+    "title": "Screenpipe Activity reshapes CentralDark integration",
+    "summary": "Exemplo sanitizado de snapshot temporal; sem credenciais."
+  }
+}

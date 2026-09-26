@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "event": "CLOSE",
+  "mission_id": "mission-full-cycle",
+  "instance_id": "1e60ce8fe7bf781df89f25906959e397f4e7fa47b79034935d39e4b893986237",
+  "verdict": "APPROVED",
+  "head_sha": "5f7573492cb13ef5923d388af51ebd3c3abe60f4",
+  "closed_at": "2026-08-01T17:34:31.359542+00:00",
+  "receipt_sha256": "c86a985af5019c6dd2bb801a031890b0de68eb56c63dd1906a171b08270ad7df"
+}

@@ -1,0 +1,38 @@
+{
+  "heal-vite-npm-dependency": {
+    "historical_report": "CREATED in pasted Hermes transcript",
+    "current_main_exact_search": "NOT_FOUND",
+    "current_local_runtime": "UNKNOWN",
+    "verdict": "HISTORICAL_CANDIDATE_NOT_CURRENTLY_PROVEN"
+  },
+  "heal-esbuild-optional-deps": {
+    "historical_report": "CREATED in pasted Hermes transcript",
+    "current_main_exact_search": "NOT_FOUND",
+    "current_local_runtime": "UNKNOWN",
+    "verdict": "HISTORICAL_CANDIDATE_NOT_CURRENTLY_PROVEN"
+  },
+  "heal-rollup-optional-deps": {
+    "historical_report": "CREATED in pasted Hermes transcript",
+    "current_main_exact_search": "NOT_FOUND",
+    "current_local_runtime": "UNKNOWN",
+    "verdict": "HISTORICAL_CANDIDATE_NOT_CURRENTLY_PROVEN"
+  },
+  "dependency-intelligence-runtime": {
+    "historical_report": "CREATED in pasted Hermes transcript",
+    "current_main_exact_search": "NOT_FOUND",
+    "current_local_runtime": "UNKNOWN",
+    "verdict": "HISTORICAL_CANDIDATE_RECONCILE_WITH_EXISTING_OWNERS"
+  },
+  "skill-crystallization-engine": {
+    "historical_report": "CREATED in pasted Hermes transcript",
+    "current_main_exact_search": "NOT_FOUND",
+    "current_local_runtime": "UNKNOWN",
+    "verdict": "DO_NOT_CREATE_PARALLEL_ENGINE_WITHOUT_GAP"
+  },
+  "existing_current_owner_examples": [
+    ".agents/skills/knowledge-compiler",
+    "session-intelligence-harvester",
+    "memory-linker/meta owners",
+    "Hermes perception/continuity owners"
+  ]
+}

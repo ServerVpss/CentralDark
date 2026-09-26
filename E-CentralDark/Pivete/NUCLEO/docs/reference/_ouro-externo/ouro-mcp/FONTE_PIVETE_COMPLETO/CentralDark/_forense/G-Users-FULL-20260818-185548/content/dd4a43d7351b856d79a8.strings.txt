@@ -1,0 +1,571 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\rm.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+.reloc
+AVAUATSH
+ATUWVSH
+[^_]A\
+[^_]A\
+[^_]A\
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+|$0uFI
+D$0A9E
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+ATWVSH
+8[^_A\
+AWAVAUATUWVSH
+([^_]A\A]A^A_
+AWAVAUATH
+(A\A]A^A_
+ATUWVSH
+ [^_]A\
+AWAVAUATUWVSH
+</t <\t
+([^_]A\A]A^A_
+AWAVAUATUWVSH
+T$'"T$TH
+x[^_]A\A]A^A_
+D$@u?L
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AUATUWVSH
+X[^_]A\A]
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+x[^_]A\A]A^A_
+TUUUUUUU1
+SUUUUUUUL9
+@xH9Bx
+H9w8s*H
+AUATVSH
+([^A\A]
+AWAVAUATWVSH
+D$ 9Fpu
+D$(H9Fx
+[^_A\A]A^A_
+AWAVAUATUWVSH
+x[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AUATSH
+ [A\A]
+AWAVAUATSH
+ [A\A]A^A_
+A9D$puOM
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+([^_]A\A]
+([^_]A\A]
+ATWVSH
+8[^_A\
+8[^_A\
+|$ POSIt
+ATUWVSH
+ [^_]A\
+ [^_]A\
+ [^_]A\
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+ATWVSH
+([^_A\
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+AVAUATWVSH
+([^_A\A]A^
+ATWVSH
+([^_A\
+AVAUATSH
+x[A\A]A^
+x[A\A]A^
+x[A\A]A^
+x[A\A]A^
+AUATUWVSH
+H[^_]A\A]
+H[^_]A\A]
+AUATSH
+ [A\A]
+ [A\A]
+AWAVAUATSH
+ [A\A]A^A_
+AUATUWVSH
+[^_]A\A]
+ invocation
+Try '%s --help' for more information.
+Usage: %s [OPTION]... [FILE]...
+Remove (unlink) the FILE(s).
+  -f, --force           ignore nonexistent files and arguments, never prompt
+  -i                    prompt before every removal
+  -I                    prompt once before removing more than three files, or
+                          when removing recursively; less intrusive than -i,
+                          while still giving protection against most mistakes
+      --interactive[=WHEN]  prompt according to WHEN: never, once (-I), or
+                          always (-i); without WHEN, prompt always
+      --one-file-system  when removing a hierarchy recursively, skip any
+                          directory that is on a file system different from
+                          that of the corresponding command line argument
+      --no-preserve-root  do not treat '/' specially
+      --preserve-root[=all]  do not remove '/' (default);
+                              with 'all', reject any command line argument
+                              on a separate device from its parent
+  -r, -R, --recursive   remove directories and their contents recursively
+  -d, --dir             remove empty directories
+  -v, --verbose         explain what is being done
+      --help     display this help and exit
+      --version  output version information and exit
+By default, rm does not remove directories.  Use the --recursive (-r or -R)
+option to remove each listed directory, too, along with all of its contents.
+To remove a file whose name starts with a '-', for example '-foo',
+use one of these commands:
+  %s -- -foo
+  %s ./-foo
+Note that if you use rm to remove a file, it might be possible to recover
+some of its contents, given sufficient expertise and/or time.  For greater
+assurance that the contents are truly unrecoverable, consider using shred.
+test invocation
+coreutils
+Multi-call invocation
+sha224sum
+sha2 utilities
+sha256sum
+sha384sum
+sha512sum
+%s online help: <%s>
+https://www.gnu.org/software/coreutils/
+GNU coreutils
+Report any translation bugs to <https://translationproject.org/team/>
+Full documentation <%s%s>
+or available locally via: info '(coreutils) %s%s'
+/usr/share/locale
+--interactive
+--no-preserve-root
+you may not abbreviate the --no-preserve-root option
+unrecognized --preserve-root argument: %s
+Jim Meyering
+Richard M. Stallman
+David MacKenzie
+Paul Rubin
+Try '%s ./%s' to remove the file %s.
+dfirvIR
+missing operand
+failed to get attributes of %s
+VALID_STATUS (status)
+../coreutils-8.32/src/rm.c
+%s: remove %lu arguments recursively? 
+%s: remove %lu argument recursively? 
+%s: remove %lu arguments? 
+%s: remove %lu argument? 
+always
+interactive
+one-file-system
+no-preserve-root
+preserve-root
+-presume-input-tty
+recursive
+verbose
+version
+removed directory %s
+removed %s
+cannot remove %s
+%s: descend into write-protected directory %s? 
+%s: descend into directory %s? 
+%s: remove write-protected %s %s? 
+%s: remove %s %s? 
+fts_read failed
+it is dangerous to operate recursively on %s
+it is dangerous to operate recursively on %s (same as %s)
+failed to stat %s: skipping %s
+WARNING: Circular directory structure.
+This almost certainly means that you have a corrupted file system.
+NOTIFY YOUR SYSTEM MANAGER.
+The following directory is part of the cycle:
+traversal failed: %s
+unexpected failure: fts_info=%d: %s
+please report to %s
+bug-coreutils@gnu.org
+VALID_STATUS (s)
+../coreutils-8.32/src/remove.c
+fts_close failed
+use --no-preserve-root to override this failsafe
+skipping %s, since it's on a different device
+and --preserve-root=all is in effect
+refusing to remove %s or %s directory: skipping %s
+invalid argument %s for %s
+ambiguous argument %s for %s
+Valid arguments are:
+  - %s
+error closing file
+%s: %s
+write error
+%s: %s
+regular empty file
+regular file
+directory
+symbolic link
+block special file
+character special file
+socket
+weird file
+A NULL argv[0] was passed through an exec system call.
+/.libs/
+literal
+shell-always
+shell-escape
+shell-escape-always
+c-maybe
+escape
+locale
+clocale
+%s (%s) %s
+License GPLv3+: GNU GPL version 3 or later <%s>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+https://gnu.org/licenses/gpl.html
+Written by %s.
+Written by %s and %s.
+Written by %s, %s, and %s.
+Written by %s, %s, %s,
+and %s.
+Written by %s, %s, %s,
+%s, and %s.
+Written by %s, %s, %s,
+%s, %s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+%s, and %s.
+Written by %s, %s, %s,
+%s, %s, %s, %s,
+%s, %s, and others.
+Report bugs to: %s
+bug-coreutils@gnu.org
+%s home page: <%s>
+https://www.gnu.org/software/coreutils/
+GNU coreutils
+General help using GNU software: <%s>
+https://www.gnu.org/gethelp/
+Copyright %s %d Free Software Foundation, Inc.
+memory exhausted
+errno != EINVAL
+../coreutils-8.32/lib/xfts.c
+xfts_open
+state->magic == 9827862
+../coreutils-8.32/lib/cycle-check.c
+cycle_check
+# entries:         %lu
+# buckets:         %lu
+# buckets used:    %lu (%.2f%%)
+max bucket length: %lu
+US-ASCII
+LC_ALL
+LC_CTYPE
+CP1361
+CP20127
+CP20866
+KOI8-R
+CP20936
+GB2312
+CP21866
+KOI8-RU
+CP28591
+ISO-8859-1
+CP28592
+ISO-8859-2
+CP28593
+ISO-8859-3
+CP28594
+ISO-8859-4
+CP28595
+ISO-8859-5
+CP28596
+ISO-8859-6
+CP28597
+ISO-8859-7
+CP28598
+ISO-8859-8
+CP28599
+ISO-8859-9
+CP28605
+ISO-8859-15
+CP38598
+ISO-8859-8
+CP51932
+EUC-JP
+CP51936
+GB2312
+CP51949
+EUC-KR
+CP51950
+EUC-TW
+CP54936
+GB18030
+CP65001
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+GCC: (GNU) 11.3.0
+libintl_bindtextdomain
+libintl_gettext
+libintl_ngettext
+libintl_setlocale
+libintl_textdomain
+__assert_func
+__cxa_atexit
+__errno
+__getreent
+__locale_ctype_ptr
+__locale_mb_cur_max
+__main
+__memcpy_chk
+__sprintf_chk
+__strcpy_chk
+_dll_crt0
+_impure_ptr
+calloc
+closedir
+cygwin_internal
+dll_dllcrt0
+faccessat
+fchdir
+fclose
+fdopendir
+fflush
+fprintf
+fputc_unlocked
+fputs_unlocked
+fseeko
+fstatat
+fwrite
+getenv
+geteuid
+getline
+getopt_long
+isatty
+iswprint
+malloc
+mbrtowc
+mbsinit
+memcmp
+memcpy
+memmove
+memset
+msys_detach_dll
+nl_langinfo
+openat
+optarg
+optind
+posix_memalign
+printf
+program_invocation_name
+program_invocation_short_name
+pthread_mutex_lock
+pthread_mutex_unlock
+putc_unlocked
+readdir
+realloc
+rpmatch
+setlocale
+strchr
+strcmp
+strcpy
+strlen
+strncmp
+strrchr
+unlinkat
+GetACP
+GetModuleHandleA
+GetModuleHandleW
+msys-intl-8.dll
+msys-2.0.dll
+KERNEL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__imp_libintl_ngettext
+__imp_optarg
+__nm_optarg
+__imp_abort
+__lib64_libkernel32_a_iname
+_head_msys_intl_8_dll
+__imp__dll_crt0
+__imp_fputs_unlocked
+__imp_GetModuleHandleW
+__imp_calloc
+__nm_optind
+__imp_setlocale
+__imp_getenv
+_head_msys_2_0_dll
+__imp_strcmp
+__imp___strcpy_chk
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_strrchr
+__imp_free
+__nm_program_invocation_name
+__imp___errno
+__imp_readdir
+__imp_fstatat
+__nm__impure_ptr
+__imp_pthread_mutex_unlock
+__imp_fputc_unlocked
+__imp_openat
+__imp__exit
+__imp_strcpy
+__imp_memset
+__IAT_end__
+__imp_memcpy
+__imp___memcpy_chk
+__imp_memmove
+__imp_dll_dllcrt0
+__imp_fstat
+__imp___locale_ctype_ptr
+__imp_fwrite
+_head_lib64_libkernel32_a
+__imp_fseeko
+__imp_libintl_setlocale
+__imp_msys_detach_dll
+__imp_unlinkat
+__imp_open
+__imp_iswprint
+__imp_nl_langinfo
+__imp_program_invocation_short_name
+__imp_putc_unlocked
+__imp___locale_mb_cur_max
+__nm_program_invocation_short_name
+__imp___getreent
+__imp_mbsinit
+__imp_GetModuleHandleA
+__imp_faccessat
+__imp___main
+__imp_strlen
+__imp_malloc
+__imp_libintl_textdomain
+__imp__impure_ptr
+__imp___assert_func
+__imp_stat
+__imp_realloc
+__imp_exit
+__imp_fchdir
+__imp_mbrtowc
+__IAT_start__
+__imp_fdopendir
+__imp_libintl_bindtextdomain
+__imp_program_invocation_name
+__imp_isatty
+__imp_libintl_gettext
+__imp___cxa_atexit
+__imp_fcntl
+__imp_closedir
+__imp_fprintf
+msys_intl_8_dll_iname
+__imp_dirfd
+__imp_optind
+__imp_qsort
+__imp_fclose
+__imp_error
+__imp_rpmatch
+__imp_geteuid
+__imp_strncmp
+__imp_strchr
+__imp_close
+__imp_fflush
+__imp_getline
+__imp_getopt_long
+__imp_lstat
+__imp_printf
+__imp_pthread_mutex_lock
+__imp_GetACP
+__imp___sprintf_chk
+__imp_memcmp
+msys_2_0_dll_iname

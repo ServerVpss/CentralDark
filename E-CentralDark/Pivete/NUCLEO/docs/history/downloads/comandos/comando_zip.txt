@@ -1,0 +1,5 @@
+# COMANDO DO ZIP
+
+COMANDO: teste_zip
+PROMPT: processa zip automaticamente
+GATE: FILE_SECURITY_GATE

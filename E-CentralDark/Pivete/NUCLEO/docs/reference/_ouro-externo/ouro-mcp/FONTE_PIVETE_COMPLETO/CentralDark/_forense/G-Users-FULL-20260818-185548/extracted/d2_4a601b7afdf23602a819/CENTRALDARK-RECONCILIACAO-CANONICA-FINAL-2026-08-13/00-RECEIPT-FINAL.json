@@ -1,0 +1,63 @@
+{
+  "mission_id": "INCORPORAR_BUZZ_AO_PACOTE_CENTRALDARK_EXISTENTE",
+  "created_at": "2026-08-13T21:21:46.643349+00:00",
+  "baseline_zip_sha256": "87d1ee07351b3f1de74c14879c7a84e305c26282cced497b28817b82dffdb320",
+  "new_zip_sha256": "72b3d1e8586593c0d5bb58abf7e3049a3b9159a8ab9f6e482a1031b5b3835d6f",
+  "canonical_repo": "ServerVpss/CentralDark",
+  "canonical_repo_head": "filesystem-declared",
+  "buzz_repo": "https://github.com/block/buzz",
+  "buzz_ref": "main (ARCHITECTURE.md + AGENTS.md + README crates)",
+  "baseline_files_total": 28,
+  "final_files_total": 45,
+  "preserved_files": 12,
+  "refined_files": 4,
+  "generated_files": 16,
+  "blueprint_files": 13,
+  "buzz_capabilities_proven": [
+    "relay websocket nostr events",
+    "channels membership",
+    "presence pubsub",
+    "agent ACP harness",
+    "audit hash-chain",
+    "workflow yaml",
+    "cli agent-first"
+  ],
+  "buzz_capabilities_rejected": [
+    "relay as source of truth",
+    "membership as infra authorization",
+    "workflow as authority engine",
+    "replace mae/deny-delete",
+    "replace zero-trust protocol",
+    "media stack initially"
+  ],
+  "bridges_required": [
+    "event envelope bridge",
+    "identity map",
+    "panel feed"
+  ],
+  "duplicates_avoided": [
+    "parallel ZT",
+    "second ledger writer",
+    "second panel runtime",
+    "Buzz as canonical"
+  ],
+  "blueprint_items": [
+    "BUZZ-INTEGRATION/*",
+    "PAINEL-UNICO",
+    "SEGURANCA",
+    "incident rooms",
+    "mapa vivo runtime"
+  ],
+  "unproven_items": [
+    "Buzz runtime deploy",
+    "VPS tree dump",
+    "live panel"
+  ],
+  "secret_scan": "PASS",
+  "manifest_validation": "PASS",
+  "crc_validation": "PASS",
+  "clone_deck_in_scope": false,
+  "security_plan": "STAGED_NOT_ACTIVE",
+  "parallel_architecture_created": false,
+  "duplication_scan": "PASS"
+}

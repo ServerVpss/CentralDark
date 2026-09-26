@@ -1,0 +1,35 @@
+﻿2026-08-22T05:30:05.1944366-03:00 === PHASE2 START ===
+2026-08-22T05:30:05.2010980-03:00 IsAdmin=True
+2026-08-22T05:30:05.2010980-03:00 --- current disable flags ---
+2026-08-22T05:30:05.2170380-03:00 HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender DisableAntiSpyware= DisableAntiVirus=
+2026-08-22T05:30:05.2195670-03:00 HKLM:\SOFTWARE\Microsoft\Windows Defender DisableAntiSpyware=1 DisableAntiVirus=1
+2026-08-22T05:30:05.2195670-03:00 --- service Start dword ---
+2026-08-22T05:30:05.2195670-03:00 REG WinDefend Start=4  (2=auto 3=manual 4=disabled 0=boot 1=system)
+2026-08-22T05:30:05.2330064-03:00 REG WdNisSvc Start=4  (2=auto 3=manual 4=disabled 0=boot 1=system)
+2026-08-22T05:30:05.2330064-03:00 REG WdFilter Start=4  (2=auto 3=manual 4=disabled 0=boot 1=system)
+2026-08-22T05:30:05.2403092-03:00 REG WdBoot Start=4  (2=auto 3=manual 4=disabled 0=boot 1=system)
+2026-08-22T05:30:05.2448246-03:00 REG WdNisDrv Start=4  (2=auto 3=manual 4=disabled 0=boot 1=system)
+2026-08-22T05:30:05.2448246-03:00 --- WSC AV ---
+2026-08-22T05:30:05.3480560-03:00 AV Name=Windows Defender state=393472 exe=windowsdefender://
+2026-08-22T05:30:05.3500622-03:00 --- SCM 7040 around surgery ---
+2026-08-22T05:30:05.4720510-03:00 --- force Start via registry ---
+2026-08-22T05:30:05.4720510-03:00 WinDefend Start=2 written
+2026-08-22T05:30:05.4886080-03:00 WdNisSvc Start=2 written
+2026-08-22T05:30:05.4926179-03:00 WdFilter Start=1 written
+2026-08-22T05:30:05.4966272-03:00 WdNisDrv Start=3 written
+2026-08-22T05:30:05.4991365-03:00 WdBoot Start=0 written
+2026-08-22T05:30:05.5011417-03:00 --- start WinDefend again ---
+2026-08-22T05:30:05.5393610-03:00 sc start WinDefend :: [SC] StartService FALHA 1058:
+
+O serviço não pode ser iniciado porque está desativado ou não tem dispositivos ativados associados.
+2026-08-22T05:30:10.5794456-03:00 AFTER WinDefend REG-Start=2 Status=Stopped StartType=Automatic
+2026-08-22T05:30:10.5794456-03:00 AFTER WdNisSvc REG-Start=2 Status=Stopped StartType=Automatic
+2026-08-22T05:30:10.5794456-03:00 AFTER WdFilter REG-Start=1 Status=Stopped StartType=System
+2026-08-22T05:30:10.5980927-03:00 AFTER WdBoot REG-Start=0 Status=Stopped StartType=Boot
+2026-08-22T05:30:10.6022926-03:00 AFTER WdNisDrv REG-Start=3 Status=Stopped StartType=Manual
+2026-08-22T05:30:11.0437201-03:00 AMRunningMode=Not running
+2026-08-22T05:30:11.0437201-03:00 AntivirusEnabled=False
+2026-08-22T05:30:11.0437201-03:00 RealTimeProtectionEnabled=False
+2026-08-22T05:30:11.0437201-03:00 AMEngineVersion=0.0.0.0
+2026-08-22T05:30:11.0437201-03:00 AMServiceEnabled=False
+2026-08-22T05:30:11.0437201-03:00 === PHASE2 END ===

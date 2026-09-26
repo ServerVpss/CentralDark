@@ -1,0 +1,391 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\u2d.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+@.rsrc
+@.reloc
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AWAVAUATUWVSH
+H[^_]A\A]A^A_
+AVWVSH
+([^_A^
+([^_A^
+D$(t{H
+AUATUWVSH
+[^_]A\A]
+[^_]A\A]
+D$:dos fD
+D$:noeof
+D$:mac fD
+D$:unixfD
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+h[^_]A\A]A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+X[^_]A\A]A^A_
+AVWVSH
+([^_A^
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AVATUWVSH
+[^_]A\A^
+[^_]A\A^
+AWAVWVSH
+0[^_A^A_H
+0[^_A^A_H
+0[^_A^A_
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+ATUWVSH
+unix2dosH
+unix2mac
+[^_]A\
+Copyright (C) 2009-%d Erwin Waterlander
+Copyright (C) 1994-1995 Benjamin Lin
+All rights reserved.
+Added line break to last line.
+using code page %d.
+DOS2UNIX_LOCALEDIR
+/usr/share/locale
+error: Value of environment variable DOS2UNIX_LOCALEDIR is too long.
+dos2unix
+unix2dos:
+unix2mac
+unix2mac.exe
+Failed to write to temporary output file %s:
+Failed to close input file %s:
+Text %s has been truncated from %d to %d characters in %s to prevent a buffer overflow.
+d2u_strncpy()
+%s: %s:
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice in the documentation and/or other materials provided with
+   the distribution.
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+dos2unix
+mac2unix
+Usage: %s [options] [file ...] [-n infile outfile ...]
+ --allow-chown         allow file ownership change
+ -ascii                default conversion mode
+ -iso                  conversion between DOS and ISO-8859-1 character set
+   -1252               use Windows code page 1252 (Western European)
+   -437                use DOS code page 437 (US) (default)
+   -850                use DOS code page 850 (Western European)
+   -860                use DOS code page 860 (Portuguese)
+   -863                use DOS code page 863 (French Canadian)
+   -865                use DOS code page 865 (Nordic)
+ -7                    convert 8 bit characters to 7 bit space
+ -b, --keep-bom        keep Byte Order Mark (default)
+ -b, --keep-bom        keep Byte Order Mark
+ -c, --convmode        conversion mode
+   convmode            ascii, 7bit, iso, mac, default to ascii
+ -e, --add-eol         add a line break to the last line if there isn't one
+ --error-binary        return an error when a binary file is skipped
+ -f, --force           force conversion of binary files
+ -h, --help            display this help text
+ -i, --info[=FLAGS]    display file information
+   file ...            files to analyze
+ -k, --keepdate        keep output file date
+ -L, --license         display software license
+ -l, --newline         add additional newline
+ -m, --add-bom         add Byte Order Mark (default UTF-8)
+ -n, --newfile         write to new file
+   infile              original file in new-file mode
+   outfile             output file in new-file mode
+ --no-allow-chown      don't allow file ownership change (default)
+ --no-add-eol          don't add a line break to the last line if there isn't one (default)
+ --no-error-binary     don't return an error when a binary file is skipped (default)
+ -O, --to-stdout       write to standard output
+ -o, --oldfile         write to old file (default)
+   file ...            files to convert in old-file mode
+ -q, --quiet           quiet mode, suppress all warnings
+ -r, --remove-bom      remove Byte Order Mark
+ -r, --remove-bom      remove Byte Order Mark (default)
+ -s, --safe            skip binary files (default)
+ -u,  --keep-utf16     keep UTF-16 encoding
+ -ul, --assume-utf16le assume that the input format is UTF-16LE
+ -ub, --assume-utf16be assume that the input format is UTF-16BE
+ -v,  --verbose        verbose operation
+ -F, --follow-symlink  follow symbolic links and convert the targets
+ -R, --replace-symlink replace symbolic links with converted files
+                         (original target files remain unchanged)
+ -S, --skip-symlink    keep symbolic links and targets unchanged (default)
+ -V, --version         display version number
+%s %s (%s)
+2026-04-06
+MSYS version.
+With Unicode UTF-16 support.
+With native language support.
+With support to preserve the user and group ownership of files.
+LOCALEDIR: %s
+https://waterlan.home.xs4all.nl/dos2unix.html
+https://dos2unix.sourceforge.io/
+/d2utmpXXXXXX
+UTF-16LE
+Writing %s BOM.
+UTF-16BE
+GB18030
+Input file %s has %s BOM.
+  UTF-16LE
+  UTF-16BE
+  UTF-8   
+  GB18030 
+  no_bom  
+Skipping binary file %s
+code page %d is not supported.
+Skipping UTF-16 file %s, the size of wchar_t is %d bytes.
+Skipping UTF-16 file %s, an UTF-16 conversion error occurred on line %u.
+Skipping %s, not a regular file.
+Skipping %s, output file %s is a symbolic link.
+Skipping symbolic link %s.
+Skipping symbolic link %s, target is not a regular file.
+Skipping %s, target of symbolic link %s is not a regular file.
+converting file %s to file %s in Unix format...
+converting file %s to Unix format...
+converting file %s to file %s in Mac format...
+converting file %s to Mac format...
+converting file %s to file %s in DOS format...
+converting file %s to DOS format...
+converting %s file %s to %s file %s in Unix format...
+converting %s file %s to %s Unix format...
+converting %s file %s to %s file %s in Mac format...
+converting %s file %s to %s Mac format...
+converting %s file %s to %s file %s in DOS format...
+converting %s file %s to %s DOS format...
+problems converting file %s to file %s
+problems converting file %s
+     DOS
+    UNIX
+     MAC
+  BOM     
+  TXTBIN
+ LASTLN
+  binary
+  text  
+can not read from input file %s:
+wrong flag '%c' for option -i or --info
+can not read from input file: %s
+Assuming UTF-16LE encoding.
+Assuming UTF-16BE encoding.
+%s: %s: 
+problems resolving symbolic link '%s'
+Failed to open temporary output file: %s
+Failed to change the permissions of temporary output file %s:
+The user and/or group ownership of file %s is not preserved.
+Failed to change the owner and group of temporary output file %s:
+problems renaming '%s' to '%s':
+          which is the target of symbolic link '%s'
+          output file remains in '%s'
+--help
+--keep-bom
+--keepdate
+--add-eol
+--no-add-eol
+--force
+--allow-chown
+--no-allow-chown
+--safe
+--error-binary
+--no-error-binary
+--quiet
+--verbose
+--newline
+--add-bom
+--remove-bom
+--skip-symlink
+--follow-symlink
+--replace-symlink
+--version
+--license
+-ascii
+active code page: %d
+--keep-utf16
+--assume-utf16le
+--assume-utf16be
+--info
+--info=
+--convmode
+invalid %s conversion mode specified
+option '%s' requires an argument
+--oldfile
+target of file %s not specified in new-file mode
+--newfile
+--to-stdout
+can not write to output file: %s
+error: Invalid surrogate pair. Missing low surrogate.
+error: Invalid surrogate pair. Missing high surrogate.
+Converted %u out of %u line breaks.
+Binary symbol 0x00%02X found at line %u
+Binary symbol 0x%02X found at line %u
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+libintl_bindtextdomain
+libintl_gettext
+libintl_setlocale
+libintl_textdomain
+__errno
+__getreent
+__main
+_dll_crt0
+_impure_ptr
+_setmode
+calloc
+canonicalize_file_name
+cygwin_internal
+dll_dllcrt0
+fclose
+fdopen
+fileno
+fprintf
+fwrite
+getenv
+malloc
+mkstemp
+msys_detach_dll
+nl_langinfo
+posix_memalign
+realloc
+rename
+sprintf
+strcasecmp
+strchr
+strcmp
+strdup
+strerror
+strlen
+strncmp
+strncpy
+strrchr
+ungetc
+unlink
+wcstombs
+GetModuleHandleA
+msys-intl-8.dll
+msys-2.0.dll
+KERNEL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__lib64_libkernel32_a_iname
+_head_msys_intl_8_dll
+__imp__dll_crt0
+__imp_calloc
+__imp_fileno
+__imp_umask
+__imp_fputc
+__imp_getenv
+__imp_strncpy
+_head_msys_2_0_dll
+__imp_strcmp
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_strrchr
+__imp_free
+__imp_fdopen
+__imp___errno
+__nm__impure_ptr
+__imp_strdup
+__imp_fputs
+__imp__setmode
+__IAT_end__
+__imp_chown
+__imp_dll_dllcrt0
+__imp_strerror
+__imp_fwrite
+__imp_utime
+_head_lib64_libkernel32_a
+__imp_libintl_setlocale
+__imp_msys_detach_dll
+__imp_chmod
+__imp_nl_langinfo
+__imp___getreent
+__imp_GetModuleHandleA
+__imp___main
+__imp_strlen
+__imp_malloc
+__imp_libintl_textdomain
+__imp__impure_ptr
+__imp_stat
+__imp_realloc
+__imp_exit
+__IAT_start__
+__imp_mkstemp
+__imp_libintl_bindtextdomain
+__imp_ungetc
+__imp_libintl_gettext
+__imp_unlink
+__imp_fprintf
+__imp_wcstombs
+__imp_rename
+msys_intl_8_dll_iname
+__imp_canonicalize_file_name
+__imp_fclose
+__imp_strcasecmp
+__imp_strncmp
+__imp_strchr
+__imp_fgetc
+__imp_sprintf
+__imp_lstat
+__imp_fopen
+msys_2_0_dll_iname

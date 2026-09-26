@@ -1,0 +1,815 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <item name="androidx.core.view.ContentInfoCompat int getFlags()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.FLAG_CONVERT_TO_PLAIN_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat int getSource()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.SOURCE_APP, androidx.core.view.ContentInfoCompat.SOURCE_CLIPBOARD, androidx.core.view.ContentInfoCompat.SOURCE_INPUT_METHOD, androidx.core.view.ContentInfoCompat.SOURCE_DRAG_AND_DROP, androidx.core.view.ContentInfoCompat.SOURCE_AUTOFILL, androidx.core.view.ContentInfoCompat.SOURCE_PROCESS_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat java.lang.String flagsToString(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.FLAG_CONVERT_TO_PLAIN_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat java.lang.String sourceToString(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.SOURCE_APP, androidx.core.view.ContentInfoCompat.SOURCE_CLIPBOARD, androidx.core.view.ContentInfoCompat.SOURCE_INPUT_METHOD, androidx.core.view.ContentInfoCompat.SOURCE_DRAG_AND_DROP, androidx.core.view.ContentInfoCompat.SOURCE_AUTOFILL, androidx.core.view.ContentInfoCompat.SOURCE_PROCESS_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.Builder Builder(android.content.ClipData, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.SOURCE_APP, androidx.core.view.ContentInfoCompat.SOURCE_CLIPBOARD, androidx.core.view.ContentInfoCompat.SOURCE_INPUT_METHOD, androidx.core.view.ContentInfoCompat.SOURCE_DRAG_AND_DROP, androidx.core.view.ContentInfoCompat.SOURCE_AUTOFILL, androidx.core.view.ContentInfoCompat.SOURCE_PROCESS_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.Builder androidx.core.view.ContentInfoCompat.Builder setFlags(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.FLAG_CONVERT_TO_PLAIN_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.Builder androidx.core.view.ContentInfoCompat.Builder setSource(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.SOURCE_APP, androidx.core.view.ContentInfoCompat.SOURCE_CLIPBOARD, androidx.core.view.ContentInfoCompat.SOURCE_INPUT_METHOD, androidx.core.view.ContentInfoCompat.SOURCE_DRAG_AND_DROP, androidx.core.view.ContentInfoCompat.SOURCE_AUTOFILL, androidx.core.view.ContentInfoCompat.SOURCE_PROCESS_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.BuilderCompat void setFlags(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.FLAG_CONVERT_TO_PLAIN_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.BuilderCompat void setSource(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.SOURCE_APP, androidx.core.view.ContentInfoCompat.SOURCE_CLIPBOARD, androidx.core.view.ContentInfoCompat.SOURCE_INPUT_METHOD, androidx.core.view.ContentInfoCompat.SOURCE_DRAG_AND_DROP, androidx.core.view.ContentInfoCompat.SOURCE_AUTOFILL, androidx.core.view.ContentInfoCompat.SOURCE_PROCESS_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.BuilderCompat31Impl void setFlags(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.FLAG_CONVERT_TO_PLAIN_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.BuilderCompat31Impl void setSource(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.SOURCE_APP, androidx.core.view.ContentInfoCompat.SOURCE_CLIPBOARD, androidx.core.view.ContentInfoCompat.SOURCE_INPUT_METHOD, androidx.core.view.ContentInfoCompat.SOURCE_DRAG_AND_DROP, androidx.core.view.ContentInfoCompat.SOURCE_AUTOFILL, androidx.core.view.ContentInfoCompat.SOURCE_PROCESS_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.BuilderCompatImpl mFlags">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.FLAG_CONVERT_TO_PLAIN_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.BuilderCompatImpl mSource">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.SOURCE_APP, androidx.core.view.ContentInfoCompat.SOURCE_CLIPBOARD, androidx.core.view.ContentInfoCompat.SOURCE_INPUT_METHOD, androidx.core.view.ContentInfoCompat.SOURCE_DRAG_AND_DROP, androidx.core.view.ContentInfoCompat.SOURCE_AUTOFILL, androidx.core.view.ContentInfoCompat.SOURCE_PROCESS_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.BuilderCompatImpl void setFlags(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.FLAG_CONVERT_TO_PLAIN_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.BuilderCompatImpl void setSource(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.SOURCE_APP, androidx.core.view.ContentInfoCompat.SOURCE_CLIPBOARD, androidx.core.view.ContentInfoCompat.SOURCE_INPUT_METHOD, androidx.core.view.ContentInfoCompat.SOURCE_DRAG_AND_DROP, androidx.core.view.ContentInfoCompat.SOURCE_AUTOFILL, androidx.core.view.ContentInfoCompat.SOURCE_PROCESS_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.Compat int getFlags()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.FLAG_CONVERT_TO_PLAIN_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.Compat int getSource()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.SOURCE_APP, androidx.core.view.ContentInfoCompat.SOURCE_CLIPBOARD, androidx.core.view.ContentInfoCompat.SOURCE_INPUT_METHOD, androidx.core.view.ContentInfoCompat.SOURCE_DRAG_AND_DROP, androidx.core.view.ContentInfoCompat.SOURCE_AUTOFILL, androidx.core.view.ContentInfoCompat.SOURCE_PROCESS_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.Compat31Impl int getFlags()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.FLAG_CONVERT_TO_PLAIN_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.Compat31Impl int getSource()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.SOURCE_APP, androidx.core.view.ContentInfoCompat.SOURCE_CLIPBOARD, androidx.core.view.ContentInfoCompat.SOURCE_INPUT_METHOD, androidx.core.view.ContentInfoCompat.SOURCE_DRAG_AND_DROP, androidx.core.view.ContentInfoCompat.SOURCE_AUTOFILL, androidx.core.view.ContentInfoCompat.SOURCE_PROCESS_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.CompatImpl int getFlags()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.FLAG_CONVERT_TO_PLAIN_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.CompatImpl int getSource()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.SOURCE_APP, androidx.core.view.ContentInfoCompat.SOURCE_CLIPBOARD, androidx.core.view.ContentInfoCompat.SOURCE_INPUT_METHOD, androidx.core.view.ContentInfoCompat.SOURCE_DRAG_AND_DROP, androidx.core.view.ContentInfoCompat.SOURCE_AUTOFILL, androidx.core.view.ContentInfoCompat.SOURCE_PROCESS_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.CompatImpl mFlags">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.FLAG_CONVERT_TO_PLAIN_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.CompatImpl mSource">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.SOURCE_APP, androidx.core.view.ContentInfoCompat.SOURCE_CLIPBOARD, androidx.core.view.ContentInfoCompat.SOURCE_INPUT_METHOD, androidx.core.view.ContentInfoCompat.SOURCE_DRAG_AND_DROP, androidx.core.view.ContentInfoCompat.SOURCE_AUTOFILL, androidx.core.view.ContentInfoCompat.SOURCE_PROCESS_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.Flags">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.FLAG_CONVERT_TO_PLAIN_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ContentInfoCompat.Source">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ContentInfoCompat.SOURCE_APP, androidx.core.view.ContentInfoCompat.SOURCE_CLIPBOARD, androidx.core.view.ContentInfoCompat.SOURCE_INPUT_METHOD, androidx.core.view.ContentInfoCompat.SOURCE_DRAG_AND_DROP, androidx.core.view.ContentInfoCompat.SOURCE_AUTOFILL, androidx.core.view.ContentInfoCompat.SOURCE_PROCESS_TEXT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.HapticFeedbackConstantsCompat int getFeedbackConstantOrFallback(int)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.HapticFeedbackConstantsCompat.NO_HAPTICS, androidx.core.view.HapticFeedbackConstantsCompat.LONG_PRESS, androidx.core.view.HapticFeedbackConstantsCompat.VIRTUAL_KEY, androidx.core.view.HapticFeedbackConstantsCompat.KEYBOARD_TAP, androidx.core.view.HapticFeedbackConstantsCompat.CLOCK_TICK, androidx.core.view.HapticFeedbackConstantsCompat.CONTEXT_CLICK, androidx.core.view.HapticFeedbackConstantsCompat.KEYBOARD_PRESS, androidx.core.view.HapticFeedbackConstantsCompat.KEYBOARD_RELEASE, androidx.core.view.HapticFeedbackConstantsCompat.VIRTUAL_KEY_RELEASE, androidx.core.view.HapticFeedbackConstantsCompat.TEXT_HANDLE_MOVE, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_START, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_END, androidx.core.view.HapticFeedbackConstantsCompat.CONFIRM, androidx.core.view.HapticFeedbackConstantsCompat.REJECT, androidx.core.view.HapticFeedbackConstantsCompat.TOGGLE_ON, androidx.core.view.HapticFeedbackConstantsCompat.TOGGLE_OFF, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_THRESHOLD_ACTIVATE, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_THRESHOLD_DEACTIVATE, androidx.core.view.HapticFeedbackConstantsCompat.DRAG_START, androidx.core.view.HapticFeedbackConstantsCompat.SEGMENT_TICK, androidx.core.view.HapticFeedbackConstantsCompat.SEGMENT_FREQUENT_TICK}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.HapticFeedbackConstantsCompat int getFeedbackConstantOrFallback(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.HapticFeedbackConstantsCompat.NO_HAPTICS, androidx.core.view.HapticFeedbackConstantsCompat.LONG_PRESS, androidx.core.view.HapticFeedbackConstantsCompat.VIRTUAL_KEY, androidx.core.view.HapticFeedbackConstantsCompat.KEYBOARD_TAP, androidx.core.view.HapticFeedbackConstantsCompat.CLOCK_TICK, androidx.core.view.HapticFeedbackConstantsCompat.CONTEXT_CLICK, androidx.core.view.HapticFeedbackConstantsCompat.KEYBOARD_PRESS, androidx.core.view.HapticFeedbackConstantsCompat.KEYBOARD_RELEASE, androidx.core.view.HapticFeedbackConstantsCompat.VIRTUAL_KEY_RELEASE, androidx.core.view.HapticFeedbackConstantsCompat.TEXT_HANDLE_MOVE, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_START, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_END, androidx.core.view.HapticFeedbackConstantsCompat.CONFIRM, androidx.core.view.HapticFeedbackConstantsCompat.REJECT, androidx.core.view.HapticFeedbackConstantsCompat.TOGGLE_ON, androidx.core.view.HapticFeedbackConstantsCompat.TOGGLE_OFF, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_THRESHOLD_ACTIVATE, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_THRESHOLD_DEACTIVATE, androidx.core.view.HapticFeedbackConstantsCompat.DRAG_START, androidx.core.view.HapticFeedbackConstantsCompat.SEGMENT_TICK, androidx.core.view.HapticFeedbackConstantsCompat.SEGMENT_FREQUENT_TICK}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.HapticFeedbackConstantsCompat.HapticFeedbackFlags">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.HapticFeedbackConstantsCompat.FLAG_IGNORE_VIEW_SETTING}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.HapticFeedbackConstantsCompat.HapticFeedbackType">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.HapticFeedbackConstantsCompat.NO_HAPTICS, androidx.core.view.HapticFeedbackConstantsCompat.LONG_PRESS, androidx.core.view.HapticFeedbackConstantsCompat.VIRTUAL_KEY, androidx.core.view.HapticFeedbackConstantsCompat.KEYBOARD_TAP, androidx.core.view.HapticFeedbackConstantsCompat.CLOCK_TICK, androidx.core.view.HapticFeedbackConstantsCompat.CONTEXT_CLICK, androidx.core.view.HapticFeedbackConstantsCompat.KEYBOARD_PRESS, androidx.core.view.HapticFeedbackConstantsCompat.KEYBOARD_RELEASE, androidx.core.view.HapticFeedbackConstantsCompat.VIRTUAL_KEY_RELEASE, androidx.core.view.HapticFeedbackConstantsCompat.TEXT_HANDLE_MOVE, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_START, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_END, androidx.core.view.HapticFeedbackConstantsCompat.CONFIRM, androidx.core.view.HapticFeedbackConstantsCompat.REJECT, androidx.core.view.HapticFeedbackConstantsCompat.TOGGLE_ON, androidx.core.view.HapticFeedbackConstantsCompat.TOGGLE_OFF, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_THRESHOLD_ACTIVATE, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_THRESHOLD_DEACTIVATE, androidx.core.view.HapticFeedbackConstantsCompat.DRAG_START, androidx.core.view.HapticFeedbackConstantsCompat.SEGMENT_TICK, androidx.core.view.HapticFeedbackConstantsCompat.SEGMENT_FREQUENT_TICK}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChild boolean startNestedScroll(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_AXIS_NONE, androidx.core.view.ViewCompat.SCROLL_AXIS_HORIZONTAL, androidx.core.view.ViewCompat.SCROLL_AXIS_VERTICAL}" />
+      <val name="flag" val="true" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChild2 boolean dispatchNestedPreScroll(int, int, int[], int[], int) 4">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChild2 boolean dispatchNestedScroll(int, int, int, int, int[], int) 5">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChild2 boolean hasNestedScrollingParent(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChild2 boolean startNestedScroll(int, int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_AXIS_NONE, androidx.core.view.ViewCompat.SCROLL_AXIS_HORIZONTAL, androidx.core.view.ViewCompat.SCROLL_AXIS_VERTICAL}" />
+      <val name="flag" val="true" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChild2 boolean startNestedScroll(int, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChild2 void stopNestedScroll(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChild3 void dispatchNestedScroll(int, int, int, int, int[], int, int[]) 5">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChildHelper android.view.ViewParent getNestedScrollingParentForType(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChildHelper boolean dispatchNestedPreScroll(int, int, int[], int[], int) 4">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChildHelper boolean dispatchNestedScroll(int, int, int, int, int[], int) 5">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChildHelper boolean dispatchNestedScrollInternal(int, int, int, int, int[], int, int[]) 5">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChildHelper boolean hasNestedScrollingParent(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChildHelper boolean startNestedScroll(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_AXIS_NONE, androidx.core.view.ViewCompat.SCROLL_AXIS_HORIZONTAL, androidx.core.view.ViewCompat.SCROLL_AXIS_VERTICAL}" />
+      <val name="flag" val="true" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChildHelper boolean startNestedScroll(int, int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_AXIS_NONE, androidx.core.view.ViewCompat.SCROLL_AXIS_HORIZONTAL, androidx.core.view.ViewCompat.SCROLL_AXIS_VERTICAL}" />
+      <val name="flag" val="true" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChildHelper boolean startNestedScroll(int, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChildHelper void dispatchNestedScroll(int, int, int, int, int[], int, int[]) 5">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChildHelper void setNestedScrollingParentForType(int, android.view.ViewParent) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingChildHelper void stopNestedScroll(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingParent boolean onStartNestedScroll(android.view.View, android.view.View, int) 2">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_AXIS_NONE, androidx.core.view.ViewCompat.SCROLL_AXIS_HORIZONTAL, androidx.core.view.ViewCompat.SCROLL_AXIS_VERTICAL}" />
+      <val name="flag" val="true" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingParent int getNestedScrollAxes()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_AXIS_NONE, androidx.core.view.ViewCompat.SCROLL_AXIS_HORIZONTAL, androidx.core.view.ViewCompat.SCROLL_AXIS_VERTICAL}" />
+      <val name="flag" val="true" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingParent void onNestedScrollAccepted(android.view.View, android.view.View, int) 2">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_AXIS_NONE, androidx.core.view.ViewCompat.SCROLL_AXIS_HORIZONTAL, androidx.core.view.ViewCompat.SCROLL_AXIS_VERTICAL}" />
+      <val name="flag" val="true" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingParent2 boolean onStartNestedScroll(android.view.View, android.view.View, int, int) 2">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_AXIS_NONE, androidx.core.view.ViewCompat.SCROLL_AXIS_HORIZONTAL, androidx.core.view.ViewCompat.SCROLL_AXIS_VERTICAL}" />
+      <val name="flag" val="true" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingParent2 boolean onStartNestedScroll(android.view.View, android.view.View, int, int) 3">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingParent2 void onNestedPreScroll(android.view.View, int, int, int[], int) 4">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingParent2 void onNestedScroll(android.view.View, int, int, int, int, int) 5">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingParent2 void onNestedScrollAccepted(android.view.View, android.view.View, int, int) 2">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_AXIS_NONE, androidx.core.view.ViewCompat.SCROLL_AXIS_HORIZONTAL, androidx.core.view.ViewCompat.SCROLL_AXIS_VERTICAL}" />
+      <val name="flag" val="true" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingParent2 void onNestedScrollAccepted(android.view.View, android.view.View, int, int) 3">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingParent2 void onStopNestedScroll(android.view.View, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingParent3 void onNestedScroll(android.view.View, int, int, int, int, int, int[]) 5">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingParentHelper int getNestedScrollAxes()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_AXIS_NONE, androidx.core.view.ViewCompat.SCROLL_AXIS_HORIZONTAL, androidx.core.view.ViewCompat.SCROLL_AXIS_VERTICAL}" />
+      <val name="flag" val="true" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingParentHelper void onNestedScrollAccepted(android.view.View, android.view.View, int) 2">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_AXIS_NONE, androidx.core.view.ViewCompat.SCROLL_AXIS_HORIZONTAL, androidx.core.view.ViewCompat.SCROLL_AXIS_VERTICAL}" />
+      <val name="flag" val="true" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingParentHelper void onNestedScrollAccepted(android.view.View, android.view.View, int, int) 2">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_AXIS_NONE, androidx.core.view.ViewCompat.SCROLL_AXIS_HORIZONTAL, androidx.core.view.ViewCompat.SCROLL_AXIS_VERTICAL}" />
+      <val name="flag" val="true" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingParentHelper void onNestedScrollAccepted(android.view.View, android.view.View, int, int) 3">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.NestedScrollingParentHelper void onStopNestedScroll(android.view.View, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.VelocityTrackerCompat boolean isAxisSupported(android.view.VelocityTracker, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.view.MotionEvent.AXIS_X, android.view.MotionEvent.AXIS_Y, android.view.MotionEvent.AXIS_SCROLL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.VelocityTrackerCompat float getAxisVelocity(android.view.VelocityTracker, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.view.MotionEvent.AXIS_X, android.view.MotionEvent.AXIS_Y, android.view.MotionEvent.AXIS_SCROLL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.VelocityTrackerCompat float getAxisVelocity(android.view.VelocityTracker, int, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.view.MotionEvent.AXIS_X, android.view.MotionEvent.AXIS_Y, android.view.MotionEvent.AXIS_SCROLL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.VelocityTrackerCompat.VelocityTrackableMotionEventAxis">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.view.MotionEvent.AXIS_X, android.view.MotionEvent.AXIS_Y, android.view.MotionEvent.AXIS_SCROLL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat android.view.View keyboardNavigationClusterSearch(android.view.View, android.view.View, int) 2">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.view.View.FOCUS_LEFT, android.view.View.FOCUS_UP, android.view.View.FOCUS_RIGHT, android.view.View.FOCUS_DOWN, android.view.View.FOCUS_FORWARD, android.view.View.FOCUS_BACKWARD}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat boolean dispatchNestedPreScroll(android.view.View, int, int, int[], int[], int) 5">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat boolean dispatchNestedScroll(android.view.View, int, int, int, int, int[], int) 6">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat boolean hasNestedScrollingParent(android.view.View, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat boolean performHapticFeedback(android.view.View, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.HapticFeedbackConstantsCompat.NO_HAPTICS, androidx.core.view.HapticFeedbackConstantsCompat.LONG_PRESS, androidx.core.view.HapticFeedbackConstantsCompat.VIRTUAL_KEY, androidx.core.view.HapticFeedbackConstantsCompat.KEYBOARD_TAP, androidx.core.view.HapticFeedbackConstantsCompat.CLOCK_TICK, androidx.core.view.HapticFeedbackConstantsCompat.CONTEXT_CLICK, androidx.core.view.HapticFeedbackConstantsCompat.KEYBOARD_PRESS, androidx.core.view.HapticFeedbackConstantsCompat.KEYBOARD_RELEASE, androidx.core.view.HapticFeedbackConstantsCompat.VIRTUAL_KEY_RELEASE, androidx.core.view.HapticFeedbackConstantsCompat.TEXT_HANDLE_MOVE, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_START, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_END, androidx.core.view.HapticFeedbackConstantsCompat.CONFIRM, androidx.core.view.HapticFeedbackConstantsCompat.REJECT, androidx.core.view.HapticFeedbackConstantsCompat.TOGGLE_ON, androidx.core.view.HapticFeedbackConstantsCompat.TOGGLE_OFF, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_THRESHOLD_ACTIVATE, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_THRESHOLD_DEACTIVATE, androidx.core.view.HapticFeedbackConstantsCompat.DRAG_START, androidx.core.view.HapticFeedbackConstantsCompat.SEGMENT_TICK, androidx.core.view.HapticFeedbackConstantsCompat.SEGMENT_FREQUENT_TICK}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat boolean performHapticFeedback(android.view.View, int, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.HapticFeedbackConstantsCompat.NO_HAPTICS, androidx.core.view.HapticFeedbackConstantsCompat.LONG_PRESS, androidx.core.view.HapticFeedbackConstantsCompat.VIRTUAL_KEY, androidx.core.view.HapticFeedbackConstantsCompat.KEYBOARD_TAP, androidx.core.view.HapticFeedbackConstantsCompat.CLOCK_TICK, androidx.core.view.HapticFeedbackConstantsCompat.CONTEXT_CLICK, androidx.core.view.HapticFeedbackConstantsCompat.KEYBOARD_PRESS, androidx.core.view.HapticFeedbackConstantsCompat.KEYBOARD_RELEASE, androidx.core.view.HapticFeedbackConstantsCompat.VIRTUAL_KEY_RELEASE, androidx.core.view.HapticFeedbackConstantsCompat.TEXT_HANDLE_MOVE, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_START, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_END, androidx.core.view.HapticFeedbackConstantsCompat.CONFIRM, androidx.core.view.HapticFeedbackConstantsCompat.REJECT, androidx.core.view.HapticFeedbackConstantsCompat.TOGGLE_ON, androidx.core.view.HapticFeedbackConstantsCompat.TOGGLE_OFF, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_THRESHOLD_ACTIVATE, androidx.core.view.HapticFeedbackConstantsCompat.GESTURE_THRESHOLD_DEACTIVATE, androidx.core.view.HapticFeedbackConstantsCompat.DRAG_START, androidx.core.view.HapticFeedbackConstantsCompat.SEGMENT_TICK, androidx.core.view.HapticFeedbackConstantsCompat.SEGMENT_FREQUENT_TICK}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat boolean performHapticFeedback(android.view.View, int, int) 2">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.HapticFeedbackConstantsCompat.FLAG_IGNORE_VIEW_SETTING}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat boolean startNestedScroll(android.view.View, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_AXIS_NONE, androidx.core.view.ViewCompat.SCROLL_AXIS_HORIZONTAL, androidx.core.view.ViewCompat.SCROLL_AXIS_VERTICAL}" />
+      <val name="flag" val="true" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat boolean startNestedScroll(android.view.View, int, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_AXIS_NONE, androidx.core.view.ViewCompat.SCROLL_AXIS_HORIZONTAL, androidx.core.view.ViewCompat.SCROLL_AXIS_VERTICAL}" />
+      <val name="flag" val="true" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat boolean startNestedScroll(android.view.View, int, int) 2">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat int getAccessibilityLiveRegion(android.view.View)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.ACCESSIBILITY_LIVE_REGION_NONE, androidx.core.view.ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE, androidx.core.view.ViewCompat.ACCESSIBILITY_LIVE_REGION_ASSERTIVE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat int getImportantForAccessibility(android.view.View)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_AUTO, androidx.core.view.ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_YES, androidx.core.view.ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO, androidx.core.view.ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat int getImportantForAutofill(android.view.View)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.view.View.IMPORTANT_FOR_AUTOFILL_AUTO, android.view.View.IMPORTANT_FOR_AUTOFILL_YES, android.view.View.IMPORTANT_FOR_AUTOFILL_NO, android.view.View.IMPORTANT_FOR_AUTOFILL_YES_EXCLUDE_DESCENDANTS, android.view.View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat int getLayerType(android.view.View)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.view.View.LAYER_TYPE_NONE, android.view.View.LAYER_TYPE_SOFTWARE, android.view.View.LAYER_TYPE_HARDWARE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat int getLayoutDirection(android.view.View)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.LAYOUT_DIRECTION_LTR, androidx.core.view.ViewCompat.LAYOUT_DIRECTION_RTL}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat int getOverScrollMode(android.view.View)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.OVER_SCROLL_ALWAYS, androidx.core.view.ViewCompat.OVER_SCROLL_IF_CONTENT_SCROLLS, androidx.core.view.ViewCompat.OVER_SCROLL_NEVER}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat void dispatchNestedScroll(android.view.View, int, int, int, int, int[], int, int[]) 6">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat void setAccessibilityLiveRegion(android.view.View, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.ACCESSIBILITY_LIVE_REGION_NONE, androidx.core.view.ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE, androidx.core.view.ViewCompat.ACCESSIBILITY_LIVE_REGION_ASSERTIVE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat void setImportantForAccessibility(android.view.View, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_AUTO, androidx.core.view.ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_YES, androidx.core.view.ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO, androidx.core.view.ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat void setImportantForAutofill(android.view.View, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.view.View.IMPORTANT_FOR_AUTOFILL_AUTO, android.view.View.IMPORTANT_FOR_AUTOFILL_YES, android.view.View.IMPORTANT_FOR_AUTOFILL_NO, android.view.View.IMPORTANT_FOR_AUTOFILL_YES_EXCLUDE_DESCENDANTS, android.view.View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat void setImportantForContentCapture(android.view.View, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.IMPORTANT_FOR_CONTENT_CAPTURE_AUTO, androidx.core.view.ViewCompat.IMPORTANT_FOR_CONTENT_CAPTURE_YES, androidx.core.view.ViewCompat.IMPORTANT_FOR_CONTENT_CAPTURE_NO, androidx.core.view.ViewCompat.IMPORTANT_FOR_CONTENT_CAPTURE_YES_EXCLUDE_DESCENDANTS, androidx.core.view.ViewCompat.IMPORTANT_FOR_CONTENT_CAPTURE_NO_EXCLUDE_DESCENDANTS}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat void setLayerType(android.view.View, int, android.graphics.Paint) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.view.View.LAYER_TYPE_NONE, android.view.View.LAYER_TYPE_SOFTWARE, android.view.View.LAYER_TYPE_HARDWARE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat void setLayoutDirection(android.view.View, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.LAYOUT_DIRECTION_LTR, androidx.core.view.ViewCompat.LAYOUT_DIRECTION_RTL, androidx.core.view.ViewCompat.LAYOUT_DIRECTION_INHERIT, androidx.core.view.ViewCompat.LAYOUT_DIRECTION_LOCALE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat void setOverScrollMode(android.view.View, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.OVER_SCROLL_ALWAYS, androidx.core.view.ViewCompat.OVER_SCROLL_IF_CONTENT_SCROLLS, androidx.core.view.ViewCompat.OVER_SCROLL_NEVER}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat void setScrollIndicators(android.view.View, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_INDICATOR_TOP, androidx.core.view.ViewCompat.SCROLL_INDICATOR_BOTTOM, androidx.core.view.ViewCompat.SCROLL_INDICATOR_LEFT, androidx.core.view.ViewCompat.SCROLL_INDICATOR_RIGHT, androidx.core.view.ViewCompat.SCROLL_INDICATOR_START, androidx.core.view.ViewCompat.SCROLL_INDICATOR_END}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat void setScrollIndicators(android.view.View, int, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_INDICATOR_TOP, androidx.core.view.ViewCompat.SCROLL_INDICATOR_BOTTOM, androidx.core.view.ViewCompat.SCROLL_INDICATOR_LEFT, androidx.core.view.ViewCompat.SCROLL_INDICATOR_RIGHT, androidx.core.view.ViewCompat.SCROLL_INDICATOR_START, androidx.core.view.ViewCompat.SCROLL_INDICATOR_END}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat void setScrollIndicators(android.view.View, int, int) 2">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_INDICATOR_TOP, androidx.core.view.ViewCompat.SCROLL_INDICATOR_BOTTOM, androidx.core.view.ViewCompat.SCROLL_INDICATOR_LEFT, androidx.core.view.ViewCompat.SCROLL_INDICATOR_RIGHT, androidx.core.view.ViewCompat.SCROLL_INDICATOR_START, androidx.core.view.ViewCompat.SCROLL_INDICATOR_END}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat void stopNestedScroll(android.view.View, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat.FocusDirection">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.view.View.FOCUS_LEFT, android.view.View.FOCUS_UP, android.view.View.FOCUS_RIGHT, android.view.View.FOCUS_DOWN, android.view.View.FOCUS_FORWARD, android.view.View.FOCUS_BACKWARD}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat.FocusRealDirection">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.view.View.FOCUS_LEFT, android.view.View.FOCUS_UP, android.view.View.FOCUS_RIGHT, android.view.View.FOCUS_DOWN}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat.FocusRelativeDirection">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{android.view.View.FOCUS_FORWARD, android.view.View.FOCUS_BACKWARD}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat.NestedScrollType">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.TYPE_TOUCH, androidx.core.view.ViewCompat.TYPE_NON_TOUCH}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat.ScrollAxis">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_AXIS_NONE, androidx.core.view.ViewCompat.SCROLL_AXIS_HORIZONTAL, androidx.core.view.ViewCompat.SCROLL_AXIS_VERTICAL}" />
+      <val name="flag" val="true" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewCompat.ScrollIndicators">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_INDICATOR_TOP, androidx.core.view.ViewCompat.SCROLL_INDICATOR_BOTTOM, androidx.core.view.ViewCompat.SCROLL_INDICATOR_LEFT, androidx.core.view.ViewCompat.SCROLL_INDICATOR_RIGHT, androidx.core.view.ViewCompat.SCROLL_INDICATOR_START, androidx.core.view.ViewCompat.SCROLL_INDICATOR_END}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.ViewGroupCompat int getNestedScrollAxes(android.view.ViewGroup)">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.ViewCompat.SCROLL_AXIS_NONE, androidx.core.view.ViewCompat.SCROLL_AXIS_HORIZONTAL, androidx.core.view.ViewCompat.SCROLL_AXIS_VERTICAL}" />
+      <val name="flag" val="true" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsAnimationCompat WindowInsetsAnimationCompat(int, android.view.animation.Interpolator, long) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsAnimationCompat int getTypeMask()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsAnimationCompat.Callback Callback(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_STOP, androidx.core.view.WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_CONTINUE_ON_SUBTREE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsAnimationCompat.Callback int getDispatchMode()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_STOP, androidx.core.view.WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_CONTINUE_ON_SUBTREE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsAnimationCompat.Callback mDispatchMode">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_STOP, androidx.core.view.WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_CONTINUE_ON_SUBTREE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsAnimationCompat.Callback.DispatchMode">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_STOP, androidx.core.view.WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_CONTINUE_ON_SUBTREE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsAnimationCompat.Impl mTypeMask">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsAnimationControlListenerCompat void onReady(androidx.core.view.WindowInsetsAnimationControllerCompat, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsAnimationControllerCompat int getTypes()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsAnimationControllerCompat.Impl int getTypes()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat androidx.core.graphics.Insets getInsets(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat androidx.core.graphics.Insets getInsetsIgnoringVisibility(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat boolean isVisible(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Builder androidx.core.view.WindowInsetsCompat.Builder setInsets(int, androidx.core.graphics.Insets) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Builder androidx.core.view.WindowInsetsCompat.Builder setInsetsIgnoringVisibility(int, androidx.core.graphics.Insets) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Builder androidx.core.view.WindowInsetsCompat.Builder setVisible(int, boolean) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Impl androidx.core.graphics.Insets getInsets(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Impl androidx.core.graphics.Insets getInsetsIgnoringVisibility(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Impl boolean isVisible(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Impl20 androidx.core.graphics.Insets getInsetsForType(int, boolean) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Impl20 boolean isTypeVisible(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Type int all()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Type int captionBar()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Type int displayCutout()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Type int ime()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Type int indexOf(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Type int mandatorySystemGestures()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Type int navigationBars()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Type int statusBars()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Type int systemBars()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Type int systemGestures()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Type int tappableElement()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.Type.InsetsType">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsCompat.TypeImpl30 int toPlatformType(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsControllerCompat int getSystemBarsBehavior()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_DEFAULT, androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsControllerCompat void controlWindowInsetsAnimation(int, long, android.view.animation.Interpolator, android.os.CancellationSignal, androidx.core.view.WindowInsetsAnimationControlListenerCompat) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsControllerCompat void hide(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsControllerCompat void setSystemBarsBehavior(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_DEFAULT, androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsControllerCompat void show(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsControllerCompat.Impl30 int getSystemBarsBehavior()">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_DEFAULT, androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsControllerCompat.Impl30 void controlWindowInsetsAnimation(int, long, android.view.animation.Interpolator, android.os.CancellationSignal, androidx.core.view.WindowInsetsAnimationControlListenerCompat) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsControllerCompat.Impl30 void hide(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsControllerCompat.Impl30 void setSystemBarsBehavior(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="value" val="{androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_DEFAULT, androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsControllerCompat.Impl30 void show(int) 0">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+  <item name="androidx.core.view.WindowInsetsControllerCompat.OnControllableInsetsChangedListener void onControllableInsetsChanged(androidx.core.view.WindowInsetsControllerCompat, int) 1">
+    <annotation name="androidx.annotation.IntDef">
+      <val name="flag" val="true" />
+      <val name="value" val="{androidx.core.view.WindowInsetsCompat.Type.STATUS_BARS, androidx.core.view.WindowInsetsCompat.Type.NAVIGATION_BARS, androidx.core.view.WindowInsetsCompat.Type.CAPTION_BAR, androidx.core.view.WindowInsetsCompat.Type.IME, androidx.core.view.WindowInsetsCompat.Type.WINDOW_DECOR, androidx.core.view.WindowInsetsCompat.Type.SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.MANDATORY_SYSTEM_GESTURES, androidx.core.view.WindowInsetsCompat.Type.TAPPABLE_ELEMENT, androidx.core.view.WindowInsetsCompat.Type.DISPLAY_CUTOUT}" />
+    </annotation>
+  </item>
+</root>
+

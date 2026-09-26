@@ -1,0 +1,112 @@
+{
+  "canonical_server": "CentralDark-MCP (pm_id 9)",
+  "script_running": "/root/CentralDark/apps/modulos/mcp/dist/index.js",
+  "bind": "127.0.0.1:9100",
+  "public_exposure": "somente via Caddy reverse proxy",
+  "domain": "mcp.centralldark.com",
+  "https": {
+    "status": "OK",
+    "health_http_code": 200
+  },
+  "certificate": {
+    "subject_cn": "centralldark.com",
+    "issuer": "Google Trust Services / WE1",
+    "not_before": "2026-06-03T16:20:11Z",
+    "not_after": "2026-09-01T17:15:24Z",
+    "valido": true
+  },
+  "auth": {
+    "mecanismo": "OAuth 2.0 + Bearer (endpoints authorize/token)",
+    "fail_closed_sem_credencial": true,
+    "prova": "POST /mcp sem Bearer retornou HTTP 401, jsonrpc error -32000, Authorization Bearer ausente",
+    "health_publico_por_design": true
+  },
+  "sanitizacao_logs": {
+    "presente": true,
+    "evidencia": "regex token|secret|session|key aplicada em src/index.js linhas ~222 e ~229",
+    "audit_logger": "src/audit-logger.js presente; MCP_LOG_DIR ausente, usa LOG_DIR como fallback"
+  },
+  "limites": {
+    "payload_json": "2mb",
+    "payload_urlencoded": "1mb",
+    "timeout_global_servidor": "NAO_COMPROVADO",
+    "timeout_observado": "oauth.js 5000ms; admin.js 10000ms",
+    "rate_limit": "NAO_COMPROVADO no MCP"
+  },
+  "health_check": {
+    "endpoints": [
+      "/health",
+      "/health/deep"
+    ],
+    "protegido": false
+  },
+  "versao": {
+    "package_json": "0.3.0",
+    "dist_index_js": "0.4.0",
+    "vivo_health": "0.4.0",
+    "tool_count_vivo": 102,
+    "DRIFT": "package.json 0.3.0 diverge do dist e do runtime 0.4.0"
+  },
+  "erro_de_codigo_ativo": {
+    "tipo": "ReferenceError",
+    "mensagem": "Cannot access mcpAdminTools before initialization",
+    "arquivo": "src/tools/core/mcp-diagnostics.js:33",
+    "ocorrencias": "recorrente no error log ate 2026-07-28"
+  },
+  "instabilidade": {
+    "restarts": 843,
+    "EADDRINUSE_no_log": 2475,
+    "porta_em_conflito": "127.0.0.1:9100",
+    "classificacao": "CRASH_LOOP_HISTORICO — estavel desde 2026-07-28"
+  },
+  "allowlist_desejada": {
+    "get_mission_state": "NAO_EXISTE",
+    "get_github_state": "NAO_EXISTE",
+    "get_vps_state": "NAO_EXISTE",
+    "get_service_inventory": "NAO_EXISTE",
+    "get_open_findings": "NAO_EXISTE",
+    "get_receipts": "NAO_EXISTE",
+    "get_hardware_capacity": "NAO_EXISTE"
+  },
+  "allowlist_conclusao": "NENHUMA das 7 ferramentas desejadas existe. 100% do catalogo atual (102 vivas) fica BLOCKED_PENDING_ALLOWLIST",
+  "ferramentas_mutaveis_identificadas": [
+    "execute_command",
+    "vps_run_once_script",
+    "vps_write_file_safe",
+    "github_commit",
+    "github_create_or_update_file",
+    "github_create_branch",
+    "github_delete_branch_safe",
+    "github_delete_file_safe",
+    "github_delete_workflow_run",
+    "github_merge_pull_request",
+    "github_create_pull_request",
+    "github_create_issue",
+    "github_close_issue",
+    "github_comment_issue",
+    "github_dispatch",
+    "github_dispatch_workflow",
+    "github_rerun_workflow_run",
+    "github_rerun_failed_jobs",
+    "github_cancel_workflow_run",
+    "github_set_repo_variable",
+    "github_upload_base64_file",
+    "github_upload_binary_file",
+    "github_create_release_safe",
+    "mcp_admin_call",
+    "deploy_status",
+    "deploy_validate_mcp_catalog",
+    "supabase_run_sql_readonly",
+    "pendencias_close",
+    "atualizar_consciencia",
+    "atualizar_painel"
+  ],
+  "risco_shell_e_escrita": "ALTO — execute_command e vps_run_once_script executam comando na VPS; vps_write_file_safe escreve arquivo; github_* faz commit/merge/delete no repositorio",
+  "policy_engine": {
+    "arquivo": "src/tools/core/mcp-policy.js",
+    "existe": true,
+    "expoe": "mcp_policy_summary com readOnlyHint/destructiveHint/idempotentHint",
+    "allowlist_explicita_por_ferramenta": "NAO_COMPROVADO"
+  },
+  "pronto_para_integracao_externa": false
+}

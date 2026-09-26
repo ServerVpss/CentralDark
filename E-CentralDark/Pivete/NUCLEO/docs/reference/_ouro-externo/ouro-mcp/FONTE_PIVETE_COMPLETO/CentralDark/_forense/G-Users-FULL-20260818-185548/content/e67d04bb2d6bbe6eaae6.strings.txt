@@ -1,0 +1,152 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\agent\__pycache__\reasoning_timeouts.cpython-311.pyc
+
+Per-reasoning-model stale-timeout floor for known reasoning models.
+Reasoning models (those that emit extended thinking blocks before their
+first content token) routinely exceed Hermes's default chat-model
+stale detectors:
+* Stream stale detector:   ``HERMES_STREAM_STALE_TIMEOUT``     default 180s
+                           ``agent/chat_completion_helpers.py:2544``
+* Non-stream stale detector: ``HERMES_API_CALL_STALE_TIMEOUT``  default 90s
+                           ``run_agent.py:1140``
+For NVIDIA Nemotron 3 Ultra on the hosted NIM gateway the empirical
+upstream idle kill is ~120s (first-party reproduction at
+NVIDIA/NemoClaw#4846 
+ TTFB ~31s, stream dies at 120s). The same
+failure mode exists on OpenAI o1/o3, Anthropic Opus 4.x thinking,
+DeepSeek R1, Qwen QwQ, xAI Grok reasoning 
+ every cloud reasoning
+model hits upstream-proxies / load-balancers with idle timeouts
+shorter than the model's thinking phase. Result: the stale detector
+kills the connection mid-think, surfacing as
+``BrokenPipeError``/``RemoteProtocolError`` on the next read.
+This module provides a floor that the existing stale-detector scaling
+blocks consult via :func:`get_reasoning_stale_timeout_floor` and
+apply as ``max(default, floor)``. It is a FLOOR:
+* Never overrides explicit user config (``providers.<id>.models.<model>.stale_timeout_seconds``
+  or ``request_timeout_seconds`` already wins 
+ this code never runs
+  in that branch).
+* Never lowers an existing threshold.
+* Has zero effect on non-reasoning models 
+ they are not in the
+  allowlist and the resolver returns ``None``.
+Matching uses start-anchored regex on the slug-only component of
+the model name (after stripping any aggregator prefix like
+``openai/``, ``x-ai/``, ``anthropic/``).  The right-anchor matches
+end-of-string or a ``-``/``.``/``_`` slug separator, so ``qwen3-235b``
+matches the ``qwen3`` family entry (a future model slug would be
+``qwen3-235b-instruct`` and would also match) but ``some-other-qwen3``
+does NOT match ``qwen3`` (the ``-qwen3`` is not at start of slug).
+The ``o1`` case is the most delicate: a model named
+``llama-4-70b-o1-preview`` is a hypothetical community derivative that
+should NOT trigger the reasoning-model floor for the user (the user
+chose a non-OpenAI model, not a reasoning model).  The start-of-slug
+anchor naturally excludes this 
+ the matched ``o1-preview`` is at
+position 11 of the slug, not at position 0.  The previous substring-
+with-trailing-hyphen design would have over-matched here, which is
+why start-of-slug anchoring is the right shape.
+Fixes #52217.
+annotationsN)
+Optional)
+nemotron-3-ultra
+nemotron-3-superr
+nemotron-3-nano
+nemotron-3.5-lightningr
+deepseek-r1r
+deepseek-reasonerr
+deepseek-v4-flashr
+deepseek-v4-pror
+qwq-32br
+o1-minir
+o1-pror
+o1-previewr
+o3-pror
+o3-minir
+o4-minir
+claude-opus-4
+claude-opus-5r
+claude-sonnet-5r
+claude-sonnet-4.5r
+claude-sonnet-4.6r
+claude-fabler
+grok-4-fast-reasoningr
+grok-4.20-reasoningr
+grok-4.5r
+grok-4.6r
+grok-4-fast-non-reasoningr
+tuple[tuple[str, int], ...]
+_REASONING_STALE_TIMEOUT_FLOORSc
+(?:$|[\-._]))
+compile
+escape)
+floors
+LC:\Users\danda\AppData\Local\hermes\hermes-agent\agent\reasoning_timeouts.py
+<listcomp>r
+<lambda>r
+keyz(list[tuple[str, float, re.Pattern[str]]]
+_SORTED_REASONING_FLOORS
+model_lower
+return
+Optional[float]c
+Return the floor for the first matching slug, else None.
+    Each table entry is matched as a start-of-slug prefix with the
+    slug-separator-or-end-of-string right-anchor.  Table iteration
+    order is irrelevant: longest slug wins (so ``o3-mini`` beats
+    ``o3`` on a model like ``openai/o3-mini``).
+    N)
+search
+float)
+_slugr
+patterns
+_match_anyr'
+objectc
+Return the stale-timeout floor (seconds) for a known reasoning model.
+    Returns ``None`` when the model is not in the allowlist or the
+    argument is empty / not a string.  Matching uses
+    word-boundary-anchored regex on the lowercased model name, so
+    ``openai/o3-mini`` matches the ``o3-mini`` slug but
+    ``olmo-1`` does NOT match ``o1`` (the ``o1`` substring is not
+    at a word boundary inside ``olmo-1``).
+    Aggregator prefixes (``openai/``, ``x-ai/``, ``anthropic/`` etc.)
+    are preserved through matching 
+ the ``/`` is itself a word
+    boundary, so ``openai/o3-mini`` matches ``o3-mini`` because the
+    ``/`` before ``o3-mini`` satisfies the left-anchor alternation.
+    This is a FLOOR 
+ callers must apply it as ``max(default, floor)``
+    and only when no explicit user-configured per-model
+    ``stale_timeout_seconds`` exists.
+    >>> get_reasoning_stale_timeout_floor("nvidia/nemotron-3-ultra-550b-a55b")
+    600.0
+    >>> get_reasoning_stale_timeout_floor("openai/o3-mini")
+    300.0
+    >>> get_reasoning_stale_timeout_floor("deepseek/deepseek-r1")
+    600.0
+    >>> get_reasoning_stale_timeout_floor("deepseek/deepseek-v4-flash")
+    600.0
+    >>> get_reasoning_stale_timeout_floor("deepseek/deepseek-v4-pro")
+    600.0
+    >>> get_reasoning_stale_timeout_floor("qwen/qwen3-235b-a22b-thinking")
+    180.0
+    >>> get_reasoning_stale_timeout_floor("x-ai/grok-4-fast-reasoning")
+    300.0
+    >>> get_reasoning_stale_timeout_floor("anthropic/claude-opus-4-6")
+    240.0
+    >>> get_reasoning_stale_timeout_floor("anthropic/claude-fable-5")
+    600.0
+    >>> get_reasoning_stale_timeout_floor("gpt-4o") is None
+    True
+    >>> get_reasoning_stale_timeout_floor("olmo-1") is None
+    True
+    >>> get_reasoning_stale_timeout_floor(None) is None
+    True
+isinstancer
+rsplitr'
+!get_reasoning_stale_timeout_floorr2
+__doc__
+__future__r
+typingr
+__annotations__
+sortedr
+<module>r9

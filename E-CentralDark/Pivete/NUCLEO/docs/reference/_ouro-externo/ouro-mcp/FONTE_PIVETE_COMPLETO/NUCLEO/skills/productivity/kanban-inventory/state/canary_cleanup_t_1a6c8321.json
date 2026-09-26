@@ -1,0 +1,19 @@
+{
+  "task_id": "t_1a6c8321",
+  "archive": {
+    "code": 0,
+    "out": "Archived t_1a6c8321\n",
+    "err": ""
+  },
+  "purge": {
+    "code": 0,
+    "out": "Deleted t_1a6c8321\n",
+    "err": ""
+  },
+  "show_after": {
+    "code": 1,
+    "out": "",
+    "err": "no such task: t_1a6c8321\n"
+  },
+  "gone": true
+}

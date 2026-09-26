@@ -1,0 +1,97 @@
+name: dispatcher-bots
+
+# Issues e PRs usam somente labels canônicas em MAIÚSCULAS.
+# Label roteia capacidade; não concede autoridade nem posse permanente de Writer.
+
+on:
+  issues:
+    types: [labeled, opened]
+  pull_request_target:
+    types: [labeled, opened, reopened]
+
+permissions:
+  issues: write
+  pull-requests: write
+  contents: read
+
+concurrency:
+  group: dispatcher-bots-${{ github.event_name }}-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  rotear:
+    if: >-
+      (github.event_name == 'issues' && (
+        contains(github.event.issue.labels.*.name, '🧠 AGENTE-CODEX') ||
+        contains(github.event.issue.labels.*.name, '🧠 AGENTE-SUPABASE') ||
+        contains(github.event.issue.labels.*.name, '🧠 AGENTE-GROK') ||
+        contains(github.event.issue.labels.*.name, '🧠 AGENTE-CHATGPT') ||
+        contains(github.event.issue.labels.*.name, '🧠 AGENTE-CLAUDE') ||
+        contains(github.event.issue.labels.*.name, '🧠 AGENTE-HERMES') ||
+        contains(github.event.issue.labels.*.name, '🧠 AGENTE-JARVIS') ||
+        contains(github.event.issue.labels.*.name, '🧠 AGENTE-SENTINELA')
+      )) ||
+      (github.event_name == 'pull_request_target' && (
+        contains(github.event.pull_request.labels.*.name, '🧠 AGENTE-CODEX') ||
+        contains(github.event.pull_request.labels.*.name, '🧠 AGENTE-SUPABASE') ||
+        contains(github.event.pull_request.labels.*.name, '🧠 AGENTE-GROK') ||
+        contains(github.event.pull_request.labels.*.name, '🧠 AGENTE-CHATGPT') ||
+        contains(github.event.pull_request.labels.*.name, '🧠 AGENTE-CLAUDE') ||
+        contains(github.event.pull_request.labels.*.name, '🧠 AGENTE-HERMES') ||
+        contains(github.event.pull_request.labels.*.name, '🧠 AGENTE-JARVIS') ||
+        contains(github.event.pull_request.labels.*.name, '🧠 AGENTE-SENTINELA')
+      ))
+    runs-on: [self-hosted, Linux]
+    steps:
+      - name: Postar briefing idempotente
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const subject = context.payload.issue || context.payload.pull_request;
+            const labels = subject.labels.map((label) => label.name);
+            const issue_number = subject.number;
+            const kind = context.payload.pull_request ? 'PR' : 'Issue';
+            const briefings = [
+              ['🧠 AGENTE-CODEX', 'Codex: código/YAML estruturado; patch mínimo quando for o Writer autorizado; build/test; sem arquivos sensíveis.'],
+              ['🧠 AGENTE-SUPABASE', 'Supabase: checks de schema/RLS/migrations; escrita somente dentro do escopo já autorizado e sem expor secrets.'],
+              ['🧠 AGENTE-GROK', 'Grok: capacidade de infra/VPS; medir primeiro e não executar restart/deploy/reset sem autorização aplicável.'],
+              ['🧠 AGENTE-CHATGPT', 'ChatGPT/SOL: coordenação, prova, código/artefatos quando Writer; suporte não transfere ownership.'],
+              ['🧠 AGENTE-CLAUDE', 'Claude: análise/revisão/execução conforme Writer-Scope vigente; sem model lock.'],
+              ['🧠 AGENTE-HERMES', 'PIVETE/Hermes: executor e continuidade operacional; nunca autoridade humana.'],
+              ['🧠 AGENTE-JARVIS', 'Jarvis: orquestração e síntese; realidade e SEGREDO/CHEFE permanecem acima do modelo.'],
+              ['🧠 AGENTE-SENTINELA', 'Sentinela: detector determinístico; atualizar ferida existente antes de criar nova.'],
+            ];
+
+            let comments;
+            try {
+              comments = await github.paginate(github.rest.issues.listComments, {owner:context.repo.owner,repo:context.repo.repo,issue_number,per_page:100});
+            } catch (error) {
+              if (kind !== 'PR' || error.status !== 403) throw error;
+              comments = await github.paginate(github.rest.pulls.listReviews, {owner:context.repo.owner,repo:context.repo.repo,pull_number:issue_number,per_page:100});
+            }
+
+            for (const [label, text] of briefings) {
+              if (!labels.includes(label)) continue;
+              const marker = `<!-- dispatcher-bots:${label} -->`;
+              const alreadyPosted = comments.some((comment) => {
+                const owned = comment.user?.login === 'github-actions[bot]' || comment.performed_via_github_app?.slug === 'github-actions';
+                return owned && comment.body?.includes(marker);
+              });
+              if (alreadyPosted) continue;
+              const body = [
+                marker,
+                `🤖 **Dispatcher CentralDark** — ${kind} roteado por \`${label}\`.`,
+                '',
+                '**Regra:** label escolhe capacidade; não concede autoridade nem Writer permanente.',
+                '**Anti-loop:** atualizar a ferida material existente; não criar eco/issue paralela.',
+                '',
+                text,
+              ].join('\n');
+              try {
+                await github.rest.issues.createComment({owner:context.repo.owner,repo:context.repo.repo,issue_number,body});
+              } catch (error) {
+                if (kind !== 'PR' || error.status !== 403) throw error;
+                await github.rest.pulls.createReview({owner:context.repo.owner,repo:context.repo.repo,pull_number:issue_number,body,event:'COMMENT'});
+              }
+            }

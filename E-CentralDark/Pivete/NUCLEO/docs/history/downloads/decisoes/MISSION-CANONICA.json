@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "package_id": "CENTRALDARK_CASA_LOCAL_RECONCILIADA",
+  "package_role": "LOCAL_LAUNCHER_AND_RECONCILIATION_RECEIPT_NOT_NEW_SYSTEM",
+  "authority": "SEGREDO/CHEFE",
+  "coordination": "SOL",
+  "execution": "PIVETE/HERMES",
+  "model": "REPLACEABLE_ENGINE",
+  "source_of_truth": [
+    "ServerVpss/CentralDark",
+    "LIVE_LOCAL_RUNTIME",
+    "APPLICABLE_EVIDENCE"
+  ],
+  "mother_router": {
+    "new_semantic_trigger_created": false,
+    "physical_entrypoint": "START-CASA.cmd",
+    "canonical_owner": "LEIA-ME-IA.md + docs/CONSCIENCIA/ADMINISTRAVEIS.json",
+    "accepted_recovery_aliases": [
+      "RELOAD MEMORIA",
+      "RECARREGAR MEMORIA",
+      "LEMBRAR MEMORIA",
+      "SYNC IA",
+      "SINCRONIZAR IA",
+      "ATIVA MODO SEGREDO",
+      "ATIVA DELTA",
+      "RETOMAR MISSAO",
+      "#ACORDA",
+      "#ACORDAR",
+      "!CALIBRAR",
+      "!MULTIBUSSOLA",
+      "!MULTI-BUSSOLA",
+      "!MULTIBÚSSOLA"
+    ],
+    "canonical_administrable_triggers": [
+      "#ACORDAR",
+      "!CALIBRAR",
+      "!MULTIBUSSOLA",
+      "!EXECUÇÃO_REVERSÍVEL",
+      "!REMEDIÇÃO"
+    ],
+    "flow": [
+      "RECOVER_LIVE_STATE(#ACORDAR)",
+      "ALIGN_INTENT_SCOPE_TOOLS_PROOF(!CALIBRAR)",
+      "MULTIDIRECTIONAL_COUNTERPROOF(!MULTIBUSSOLA)",
+      "IF_MATERIAL_MUTATION: PROVE_ROLLBACK(!EXECUÇÃO_REVERSÍVEL)",
+      "ONE_WRITER_MINIMAL_EXECUTION",
+      "IF_MUTATED: REMEASURE_T0_T1(!REMEDIÇÃO)",
+      "REALITY_JUDGE_SAME_TARGET",
+      "ABSORB_REUSABLE_DELTA_OR_NO_CHANGE",
+      "FIXED_POINT"
+    ]
+  },
+  "canonical_intent": "UMA CASA; UMA INTENÇÃO; MUITAS SUPERFÍCIES; UM FLUXO CANÔNICO. O humano define O QUE; a Casa descobre COMO e prova se passou.",
+  "architecture": [
+    "SEGREDO/CHEFE_INTENT_AUTHORITY",
+    "INGRESS_ADAPTERS_AND_SURFACES",
+    "SOL_REANCHOR_AND_RECONCILIATION",
+    "PARALLEL_READ_ONLY_PERCEPTION",
+    "EVIDENCE_ENVELOPE_AND_PROVENANCE",
+    "DEDUPE_CAUSAL_CLASSIFICATION_COUNTERPROOF",
+    "MEMORY_AND_KNOWLEDGE_COMPILER",
+    "DECISION_LOWEST_SUFFICIENT_CAPABILITY",
+    "ORCHESTRATION_ONE_CORE_MANY_ARMS",
+    "ONE_WRITER_PER_SCOPE",
+    "PIVETE_HERMES_EXECUTION",
+    "MODEL_TOOL_RUNTIME_BODY",
+    "OBSERVABLE_EFFECT",
+    "REALITY_JUDGE",
+    "REMEASUREMENT_T0_T1",
+    "CRYSTALLIZATION_OR_NO_CHANGE",
+    "COCKPIT_RECEIPT_AND_RECOVERY"
+  ],
+  "session_delta": {
+    "same_intent_not_new_mission": true,
+    "surfaces": [
+      "Chat/LLM surfaces",
+      "Chromium/Chrome/Edge tabs",
+      "DevTools Recorder",
+      "DevTools Application/Storage",
+      "Network/Performance/Memory/Sources/Console/Elements",
+      "WebMCP/MCP",
+      "Screenpipe when locally present",
+      "Notepad LocalState when locally present",
+      "Filesystem",
+      "Git/GitHub",
+      "Hermes local",
+      "Builder/Bolt/HUB when present"
+    ],
+    "sensor_candidates_without_pipeline_change": [
+      "latitude",
+      "longitude",
+      "magnitude",
+      "radio",
+      "Morse"
+    ],
+    "canonical_phrase": "Não copie a conversa. Capture a superfície. Não preserve o cascalho. Preserve o delta.",
+    "cockpit_rule": "ONE_VISIBLE_COCKPIT_CAN_HOST_MANY_SURFACES_BUT_SURFACE_IS_NOT_INTELLIGENCE"
+  },
+  "local_only_policy": {
+    "deploy": false,
+    "vps_mutation": false,
+    "github_mutation": false,
+    "network_fetch_pull_install": false,
+    "ccleaner_action": false,
+    "browser_storage_delete": false,
+    "cookie_clear": false,
+    "credential_extraction": false,
+    "raw_chat_copy_to_repo": false,
+    "build_existing_local_dependencies_only": true
+  },
+  "fixed_point": {
+    "absolute_certainty_claim": false,
+    "definition": "100% somente sobre denominador medido. Fixed point = nova passagem sem delta material; UNKNOWN continua UNKNOWN.",
+    "close_when": [
+      "owners medidos contabilizados",
+      "prova no mesmo alvo para checks executados",
+      "nenhum delta material inexplicado no escopo medido",
+      "nova passagem produz NO_NEW_INFORMATION -> NO_CHANGE"
+    ]
+  }
+}

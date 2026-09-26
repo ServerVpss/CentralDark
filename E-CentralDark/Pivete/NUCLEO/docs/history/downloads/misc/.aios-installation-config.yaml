@@ -1,0 +1,13 @@
+installation:
+  mode: project-development
+  detected_at: '2026-02-03T00:58:21.719Z'
+repository:
+  url: https://github.com/SynkraAI/aios-core.git
+  auto_detect: true
+framework:
+  source: npm
+  version: 3.10.0
+  location: /home/projonx/aios-core/node_modules/@aios/fullstack
+git_ignore_rules:
+  mode: project-development
+  ignore_framework_files: true

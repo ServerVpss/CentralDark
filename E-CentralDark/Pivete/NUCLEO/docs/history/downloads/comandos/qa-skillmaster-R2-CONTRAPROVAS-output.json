@@ -1,0 +1,267 @@
+{
+  "status": "BLOCKED_NEW_COUNTERPROOFS",
+  "targetRoot": "/mnt/data/rigor-audit/qa.teste-de-software.MARKDOWN",
+  "pacotaoRoot": "/mnt/data/pacotao-audit/PACOTAO-CENTRALDARK",
+  "findings": [
+    {
+      "id": "R2-000",
+      "title": "Pacote RIGOR não é extensão byte-preservada do PACOTAO",
+      "reproduced": true,
+      "evidence": {
+        "pacotaoFiles": 51,
+        "rigorFiles": 52,
+        "missingCount": 19,
+        "changedCount": 7,
+        "addedCount": 20,
+        "missing": [
+          "03-KIT-RELATORIOS-OVERCLOCK/raw-arsenal/abacus-router-status.json",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw-arsenal/models-public.json",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw-arsenal/proxy-health.json",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw/README.md",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw/ab_result.json",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw/ab_runs.csv",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw/ab_summary.csv",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw/ab_test.py",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw/chunk_map.json",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw/chunk_urls.json",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw/chunks.json",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw/chunks_analysis.json",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw/longtasks.json",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw/prof_0.json",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw/prof_1.json",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw/prof_2.json",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw/profile.cpuprofile",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw/scripts.json",
+          "03-KIT-RELATORIOS-OVERCLOCK/raw/summary_v2.json"
+        ],
+        "changed": [
+          "02-KIT-ENXAME-OMEGA/README.md",
+          "02-KIT-ENXAME-OMEGA/enxame-econo-5.sh",
+          "02-KIT-ENXAME-OMEGA/enxame-padrao-10.sh",
+          "02-KIT-ENXAME-OMEGA/enxame-titanico-20.sh",
+          "02-KIT-ENXAME-OMEGA/hypernova-50.sh",
+          "05-BOOTS-PROMPTS/PROMPT-MISSAO-ENXAME.md",
+          "README.md"
+        ]
+      }
+    },
+    {
+      "id": "R2-001",
+      "title": "Prova de missão contraditória e regressão declarada sem teste",
+      "reproduced": true,
+      "evidence": {
+        "routeMissionPreserved": true,
+        "routeMission": {
+          "id": null,
+          "objective": null,
+          "state": null,
+          "nextState": null
+        },
+        "deltaLines": [
+          "REGRESSAO_PRESERVADA=SIM",
+          "MISSAO_PRESENTE=NAO",
+          "MISSAO_ATUAL_PRESERVADA=NAO",
+          "PROXIMO_ESTADO=INALTERADO",
+          "MISSAO_AVISO=Missao ausente no evento; nenhum estado foi inventado."
+        ]
+      }
+    },
+    {
+      "id": "R2-002",
+      "title": "Aprendizado sem proveniência real e com tipagem inválida é promovido",
+      "reproduced": true,
+      "evidence": {
+        "validation": {
+          "valid": true,
+          "missing": []
+        },
+        "registration": {
+          "promoted": true,
+          "reason": "PROVA_COMPLETA",
+          "id": "c424ea443395f4a8"
+        }
+      }
+    },
+    {
+      "id": "R2-003",
+      "title": "Learning Store quebra sob promoção concorrente",
+      "reproduced": true,
+      "evidence": {
+        "fulfilled": 1,
+        "rejected": [
+          "ENOENT:ENOENT: no such file or directory, rename '/tmp/qa-r2-learning-race-uJvTaE/fbe7be30b900a8d0.json.7070.tmp' -> '/tmp/qa-r2-learning-race-uJvTaE/fbe7be30b900a8d0.json'",
+          "ENOENT:ENOENT: no such file or directory, rename '/tmp/qa-r2-learning-race-uJvTaE/fbe7be30b900a8d0.json.7070.tmp' -> '/tmp/qa-r2-learning-race-uJvTaE/fbe7be30b900a8d0.json'",
+          "ENOENT:ENOENT: no such file or directory, rename '/tmp/qa-r2-learning-race-uJvTaE/fbe7be30b900a8d0.json.7070.tmp' -> '/tmp/qa-r2-learning-race-uJvTaE/fbe7be30b900a8d0.json'",
+          "ENOENT:ENOENT: no such file or directory, rename '/tmp/qa-r2-learning-race-uJvTaE/fbe7be30b900a8d0.json.7070.tmp' -> '/tmp/qa-r2-learning-race-uJvTaE/fbe7be30b900a8d0.json'",
+          "ENOENT:ENOENT: no such file or directory, rename '/tmp/qa-r2-learning-race-uJvTaE/fbe7be30b900a8d0.json.7070.tmp' -> '/tmp/qa-r2-learning-race-uJvTaE/fbe7be30b900a8d0.json'",
+          "ENOENT:ENOENT: no such file or directory, rename '/tmp/qa-r2-learning-race-uJvTaE/fbe7be30b900a8d0.json.7070.tmp' -> '/tmp/qa-r2-learning-race-uJvTaE/fbe7be30b900a8d0.json'",
+          "ENOENT:ENOENT: no such file or directory, rename '/tmp/qa-r2-learning-race-uJvTaE/fbe7be30b900a8d0.json.7070.tmp' -> '/tmp/qa-r2-learning-race-uJvTaE/fbe7be30b900a8d0.json'"
+        ]
+      }
+    },
+    {
+      "id": "R2-004",
+      "title": "Checkpoint global perde eventos e writeAtomic colide entre eventos diferentes",
+      "reproduced": true,
+      "evidence": {
+        "requested": 30,
+        "fulfilled": 6,
+        "processedReturns": 6,
+        "rejectedCount": 24,
+        "rejected": [
+          "ENOENT: no such file or directory, rename '/tmp/qa-r2-update-race-ry40Ve/.checkpoint.json.7070.1786010760770.tmp' -> '/tmp/qa-r2-update-race-ry40Ve/checkpoint.json'",
+          "ENOENT: no such file or directory, rename '/tmp/qa-r2-update-race-ry40Ve/.checkpoint.json.7070.1786010760773.tmp' -> '/tmp/qa-r2-update-race-ry40Ve/checkpoint.json'",
+          "ENOENT: no such file or directory, rename '/tmp/qa-r2-update-race-ry40Ve/.checkpoint.json.7070.1786010760770.tmp' -> '/tmp/qa-r2-update-race-ry40Ve/checkpoint.json'",
+          "ENOENT: no such file or directory, rename '/tmp/qa-r2-update-race-ry40Ve/.checkpoint.json.7070.1786010760772.tmp' -> '/tmp/qa-r2-update-race-ry40Ve/checkpoint.json'",
+          "ENOENT: no such file or directory, rename '/tmp/qa-r2-update-race-ry40Ve/.checkpoint.json.7070.1786010760771.tmp' -> '/tmp/qa-r2-update-race-ry40Ve/checkpoint.json'",
+          "ENOENT: no such file or directory, rename '/tmp/qa-r2-update-race-ry40Ve/.checkpoint.json.7070.1786010760770.tmp' -> '/tmp/qa-r2-update-race-ry40Ve/checkpoint.json'",
+          "ENOENT: no such file or directory, rename '/tmp/qa-r2-update-race-ry40Ve/.checkpoint.json.7070.1786010760771.tmp' -> '/tmp/qa-r2-update-race-ry40Ve/checkpoint.json'",
+          "ENOENT: no such file or directory, rename '/tmp/qa-r2-update-race-ry40Ve/.checkpoint.json.7070.1786010760771.tmp' -> '/tmp/qa-r2-update-race-ry40Ve/checkpoint.json'"
+        ],
+        "checkpointCount": 1
+      }
+    },
+    {
+      "id": "R2-005",
+      "title": "Lock órfão bloqueia o evento indefinidamente",
+      "reproduced": true,
+      "evidence": {
+        "eventId": "9d24440f7c6fc591226480b7455efb08c88e74c86b9278aea54994fb0fbe09c2",
+        "error": "LOCK_TIMEOUT:9d24440f7c6fc591226480b7455efb08c88e74c86b9278aea54994fb0fbe09c2"
+      }
+    },
+    {
+      "id": "R2-006",
+      "title": "Enxame retorna OK com cinco respostas vazias",
+      "reproduced": true,
+      "evidence": {
+        "callProviderTextLength": 0,
+        "status": "OK",
+        "agentsUsed": [
+          "diagnostico-causal",
+          "qa-regressao",
+          "fable-adversarial",
+          "seguranca-escopo",
+          "implementacao-minima"
+        ],
+        "failCount": 0
+      }
+    },
+    {
+      "id": "R2-007",
+      "title": "Verificador PASS ignora runtime aninhado inválido que abre .env",
+      "reproduced": true,
+      "evidence": {
+        "verifierExitCode": 0,
+        "verifierStatus": "PASS",
+        "nodeCheckTotal": 16,
+        "secretReadScan": {
+          "pass": true,
+          "files": []
+        }
+      }
+    },
+    {
+      "id": "R2-008",
+      "title": "Teste pulado é escondido por resumo TAP forjado e verify retorna PASS",
+      "reproduced": true,
+      "evidence": {
+        "verifierExitCode": 0,
+        "verifierStatus": "PASS",
+        "parsedSummary": {
+          "total": 55,
+          "pass": 55,
+          "fail": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0
+        },
+        "testExitCode": 0
+      }
+    }
+  ],
+  "comparison": {
+    "pacotaoFiles": 51,
+    "rigorFiles": 52,
+    "missing": [
+      "03-KIT-RELATORIOS-OVERCLOCK/raw-arsenal/abacus-router-status.json",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw-arsenal/models-public.json",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw-arsenal/proxy-health.json",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw/README.md",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw/ab_result.json",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw/ab_runs.csv",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw/ab_summary.csv",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw/ab_test.py",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw/chunk_map.json",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw/chunk_urls.json",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw/chunks.json",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw/chunks_analysis.json",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw/longtasks.json",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw/prof_0.json",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw/prof_1.json",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw/prof_2.json",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw/profile.cpuprofile",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw/scripts.json",
+      "03-KIT-RELATORIOS-OVERCLOCK/raw/summary_v2.json"
+    ],
+    "changed": [
+      {
+        "path": "02-KIT-ENXAME-OMEGA/README.md",
+        "pacotaoSha256": "e6102f8ce40028b1ca6347a064b6ae32e645068eeac08b3fa2bd657cf17d5b0a",
+        "rigorSha256": "e571d73fd8029f799ca28c9cc1a6320cc7798794d4a81b97abd5a4ddca719a6a"
+      },
+      {
+        "path": "02-KIT-ENXAME-OMEGA/enxame-econo-5.sh",
+        "pacotaoSha256": "616199a1c677695c3a7dd4cda18f562859b667940cbbbbe11495950cc36e5a1b",
+        "rigorSha256": "2f2e09ee872c9bc2f5dfb303c9c60eb792d45ab0c9b58f4bd8e1e4f0eba25f29"
+      },
+      {
+        "path": "02-KIT-ENXAME-OMEGA/enxame-padrao-10.sh",
+        "pacotaoSha256": "49ec68a4f1e4f703f1c91d9ae85f7efcb549a086297d96a0e9a88736c488a1be",
+        "rigorSha256": "e432c694e5e89d1dd208610def230b983f7707852b1175ea5623e7e5ae099d9d"
+      },
+      {
+        "path": "02-KIT-ENXAME-OMEGA/enxame-titanico-20.sh",
+        "pacotaoSha256": "ded20d7357414b51ffab0d65c222a6548efd7e2f2d4a480df9602ee09252db32",
+        "rigorSha256": "ef1a2523d8bebbbd9af020a0c621c4250f431fa14afd42c0afaa484e2308f4c2"
+      },
+      {
+        "path": "02-KIT-ENXAME-OMEGA/hypernova-50.sh",
+        "pacotaoSha256": "21f006e1968963824c204a67813c1c9df0a1e8f29b1740af6102188809435bc6",
+        "rigorSha256": "373ed456d0d5a349c3d3d01bd5895a12afafcd837f6b5a385b4da0cfe31d8797"
+      },
+      {
+        "path": "05-BOOTS-PROMPTS/PROMPT-MISSAO-ENXAME.md",
+        "pacotaoSha256": "77d0b979101739c4e5fb62273a7d5a4bdbe1449951e486e67f49f48e37ec0954",
+        "rigorSha256": "714509adf518b6dec4503d8c415fb8abdc1314a4ffd5e5416d99f2061f22f5dc"
+      },
+      {
+        "path": "README.md",
+        "pacotaoSha256": "26b0e8aae31beb5107ba1abe3da076b73aa7a09ae52044897adf39ea4c19bb86",
+        "rigorSha256": "60061d0ca6cfff4a913ff1cf957978e3cf5a188c7aca0d652b9089e920e82183"
+      }
+    ],
+    "added": [
+      "SKILL.md",
+      "manifest.json",
+      "package.json",
+      "runtime/classificar-evento.mjs",
+      "runtime/consolidar-delta.mjs",
+      "runtime/consultar.mjs",
+      "runtime/enxame-runner.mjs",
+      "runtime/learning-store.mjs",
+      "runtime/orchestrator.mjs",
+      "runtime/policy-gate.mjs",
+      "runtime/router.mjs",
+      "runtime/sanitize.mjs",
+      "runtime/update-bot.mjs",
+      "skil.txt",
+      "tests/consulta-seletiva.test.mjs",
+      "tests/contraprovas-p0.test.mjs",
+      "tests/enxame.test.mjs",
+      "tests/orchestrator-update.test.mjs",
+      "tests/policy-learning.test.mjs",
+      "tests/router.test.mjs"
+    ]
+  }
+}

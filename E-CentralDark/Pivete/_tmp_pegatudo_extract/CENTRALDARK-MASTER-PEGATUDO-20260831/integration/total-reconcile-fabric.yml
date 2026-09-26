@@ -1,0 +1,32 @@
+schema: CENTRALDARK_TOTAL_RECONCILE_FABRIC
+schema_version: 1
+owner: DELTAUTIL
+master: CENTRALDARK
+mode: EXTENSION_NOT_REPLACEMENT
+reconcile_axes:
+  - DESIRED_GITHUB
+  - ACTUAL_CASA
+  - ACTUAL_VPS
+  - DURABLE_DRIVE
+  - PACKAGE_CAPABILITIES
+  - WEBHOOK_EVENTS
+  - BRAINS_MEMORY
+  - CI_PROOF
+consistency_model:
+  desired_state_source: GITHUB_LIVE_WHEN_MEASURED
+  actual_state_sources: [CASA_LIVE, VPS_LIVE]
+  mirror_source: DRIVE_CENTRALDARK
+  event_transport: WEBHOOK
+  convergence: CONTINUOUS_RECONCILIATION
+  webhook_is_only_trigger: false
+  conflict: STOP_WRITE_REMEASURE_RENDEZVOUS
+acceptance:
+  review_every_package_capability: true
+  no_proof_no_pass: true
+  latest_head_ci_required_when_material: true
+  stale_green_rejected: true
+  executor_is_final_judge: false
+package:
+  same_logical_id: CENTRALDARK-MASTER-PEGATUDO
+  update_in_place: true
+  parallel_package_for_same_lineage: false

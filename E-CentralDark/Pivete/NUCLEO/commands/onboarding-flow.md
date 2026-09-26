@@ -1,0 +1,289 @@
+# COMANDO - onboarding-flow.js
+**Origem:** E:\CentralDark\_MAPA_CASA\Nova pasta\.extracted_screenpipe-main.zip\screenpipe-main\apps\screenpipe-app-tauri\e2e\tests\onboarding-flow.js
+**SHA:** d9164dcd44730374
+**Timestamp:** 2026-08-23T14:15:53.710439
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Comandos
+- const hasOnboardingPrompt = bodyText.includes('get started') &&
+- const stuckOnStart = bodyText.includes('starting engine') ||
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+/**
+ * Onboarding Flow Test
+ *
+ * Covers TESTING.md section 11:
+ * - Fresh install flow
+ * - Skip onboarding
+ * - Onboarding window size (no overflow)
+ * - Auto-advance after engine starts
+ */
+
+describe('Onboarding Flow', () => {
+    before(async () => {
+        await browser.waitUntil(
+            async () => (await browser.execute(() => document.readyState)) === 'complete',
+            { timeout: 30000, timeoutMsg: 'app did not load' }
+        );
+    });
+
+    it('should show onboarding on fresh launch', async () => {
+        // On fresh app launch, onboarding should appear
+        // Look for skip button or onboarding-related content
+        await browser.pause(2000);
+
+        const bodyText = await browser.execute(() => document.body.innerText.toLowerCase());
+        const hasOnboarding = bodyText.includes('skip') ||
+            bodyText.includes('get started') ||
+            bodyText.includes('welcome') ||
+            bodyText.includes('setup') ||
+            bodyText.includes('next');
+        expect(hasOnboarding).toBe(true);
+    });
+
+    it('should have no overflow (window renders correctly)', async () => {
+        // Check that the body doesn't have horizontal overflow
+        const hasOverflow = await browser.execute(() => {
+            return document.body.scrollWidth > document.body.clientWidth + 10;
+        });
+        expect(hasOverflow).toBe(false);
+    });
+
+    it('should be able to skip onboarding', async () => {
+        // Find and click skip
+        try {
+            const skipBtn = await $('button*=skip');
+            await skipBtn.waitForDisplayed({ timeout: 5000 });
+            await skipBtn.click();
+            await browser.pause(1000);
+        } catch {
+            // Try JS click fallback
+            await browser.execute(() => {
+                const btns = document.querySelectorAll('button');
+                for (const btn of btns) {
+                    if (btn.textContent.toLowerCase().includes('skip')) {
+                        btn.click();
+                        break;
+                    }
+                }
+            });
+            await browser.pause(1000);
+        }
+
+        // After skipping, should reach main app view
+        const ready = await browser.execute(() => document.readyState);
+        expect(ready).toBe('complete');
+    });
+
+    it('should not crash after skipping', async () => {
+        // Wait a moment and verify app is stable
+        await browser.pause(3000);
+
+        const ready = await browser.execute(() => document.readyState);
+        expect(ready).toBe('complete');
+
+        const bodyText = await browser.execute(() => document.body.innerText);
+        expect(bodyText).not.toContain('Unhandled Runtime Error');
+        expect(bodyText).not.toContain('Application error');
+    });
+
+    it('should reach main app view after skip (S11.3)', async () => {
+        // After skipping, we should be on the main page (not onboarding)
+        const bodyText = await browser.execute(() => document.body.innerText.toLowerCase());
+
+        // Main app should have timeline or search elements
+        // Onboarding keywords should be gone
+        const hasMainApp = bodyText.includes('search') ||
+            bodyText.includes('timeline') ||
+            bodyText.includes('recording') ||
+            bodyText.includes('settings') ||
+            bodyText.length > 100; // Main app has substantial content
+        expect(hasMainApp).toBe(true);
+    });
+
+    it('should have no vertical overflow after skip (S11.5)', async () => {
+        const hasVertOverflow = await browser.execute(() => {
+            return document.body.scrollHeight > window.innerHeight * 3;
+        });
+        // Some scrolling is expected, but extreme overflow suggests layout bug
+        expect(hasVertOverflow).toBe(false);
+    });
+
+    it('should not re-show onboarding on page reload (S11.6)', async () => {
+        // Reload the page
+        await browser.execute(() => { window.location.reload(); });
+        await browser.pause(3000);
+
+        const bodyText = await browser.execute(() => document.body.innerText.toLowerCase());
+
+        // If onboarding re-shows, it will have "get started" or prominent "skip"
+        // After completing onboarding, these should not appear prominently
+        const hasOnboardingPrompt = bodyText.includes('get started') &&
+            bodyText.includes('welcome');
+        if (hasOnboardingPrompt) {
+            console.log('Warning: onboarding may have re-shown after reload');
+        }
+
+        const ready = await browser.execute(() => document.readyState);
+        expect(ready).toBe('complete');
+    });
+
+    it('should handle navigation to / after onboarding (S11.6)', async () => {
+        await browser.execute(() => { window.location.href = '/'; });
+        await browser.pause(2000);
+
+        const ready = await browser.execute(() => document.readyState);
+        expect(ready).toBe('complete');
+
+        const bodyText = await browser.execute(() => document.body.innerText);
+    
+```
+
+---
+
+# COMANDO - onboarding-flow.js
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\.extracted_screenpipe-main.zip\screenpipe-main\apps\screenpipe-app-tauri\e2e\tests\onboarding-flow.js
+**SHA:** d9164dcd4473037409dcdd6616f97d7932a55a933728cedb7e07a33c0d219f44
+**Timestamp:** 2026-08-23T23:43:22.462114
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Comandos
+- const hasOnboardingPrompt = bodyText.includes('get started') &&
+- const stuckOnStart = bodyText.includes('starting engine') ||
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+/**
+ * Onboarding Flow Test
+ *
+ * Covers TESTING.md section 11:
+ * - Fresh install flow
+ * - Skip onboarding
+ * - Onboarding window size (no overflow)
+ * - Auto-advance after engine starts
+ */
+
+describe('Onboarding Flow', () => {
+    before(async () => {
+        await browser.waitUntil(
+            async () => (await browser.execute(() => document.readyState)) === 'complete',
+            { timeout: 30000, timeoutMsg: 'app did not load' }
+        );
+    });
+
+    it('should show onboarding on fresh launch', async () => {
+        // On fresh app launch, onboarding should appear
+        // Look for skip button or onboarding-related content
+        await browser.pause(2000);
+
+        const bodyText = await browser.execute(() => document.body.innerText.toLowerCase());
+        const hasOnboarding = bodyText.includes('skip') ||
+            bodyText.includes('get started') ||
+            bodyText.includes('welcome') ||
+            bodyText.includes('setup') ||
+            bodyText.includes('next');
+        expect(hasOnboarding).toBe(true);
+    });
+
+    it('should have no overflow (window renders correctly)', async () => {
+        // Check that the body doesn't have horizontal overflow
+        const hasOverflow = await browser.execute(() => {
+            return document.body.scrollWidth > document.body.clientWidth + 10;
+        });
+        expect(hasOverflow).toBe(false);
+    });
+
+    it('should be able to skip onboarding', async () => {
+        // Find and click skip
+        try {
+            const skipBtn = await $('button*=skip');
+            await skipBtn.waitForDisplayed({ timeout: 5000 });
+            await skipBtn.click();
+            await browser.pause(1000);
+        } catch {
+            // Try JS click fallback
+            await browser.execute(() => {
+                const btns = document.querySelectorAll('button');
+                for (const btn of btns) {
+                    if (btn.textContent.toLowerCase().includes('skip')) {
+                        btn.click();
+                        break;
+                    }
+                }
+            });
+            await browser.pause(1000);
+        }
+
+        // After skipping, should reach main app view
+        const ready = await browser.execute(() => document.readyState);
+        expect(ready).toBe('complete');
+    });
+
+    it('should not crash after skipping', async () => {
+        // Wait a moment and verify app is stable
+        await browser.pause(3000);
+
+        const ready = await browser.execute(() => document.readyState);
+        expect(ready).toBe('complete');
+
+        const bodyText = await browser.execute(() => document.body.innerText);
+        expect(bodyText).not.toContain('Unhandled Runtime Error');
+        expect(bodyText).not.toContain('Application error');
+    });
+
+    it('should reach main app view after skip (S11.3)', async () => {
+        // After skipping, we should be on the main page (not onboarding)
+        const bodyText = await browser.execute(() => document.body.innerText.toLowerCase());
+
+        // Main app should have timeline or search elements
+        // Onboarding keywords should be gone
+        const hasMainApp = bodyText.includes('search') ||
+            bodyText.includes('timeline') ||
+            bodyText.includes('recording') ||
+            bodyText.includes('settings') ||
+            bodyText.length > 100; // Main app has substantial content
+        expect(hasMainApp).toBe(true);
+    });
+
+    it('should have no vertical overflow after skip (S11.5)', async () => {
+        const hasVertOverflow = await browser.execute(() => {
+            return document.body.scrollHeight > window.innerHeight * 3;
+        });
+        // Some scrolling is expected, but extreme overflow suggests layout bug
+        expect(hasVertOverflow).toBe(false);
+    });
+
+    it('should not re-show onboarding on page reload (S11.6)', async () => {
+        // Reload the page
+        await browser.execute(() => { window.location.reload(); });
+        await browser.pause(3000);
+
+        const bodyText = await browser.execute(() => document.body.innerText.toLowerCase());
+
+        // If onboarding re-shows, it will have "get started" or prominent "skip"
+        // After completing onboarding, these should not appear prominently
+        const hasOnboardingPrompt = bodyText.includes('get started') &&
+            bodyText.includes('welcome');
+        if (hasOnboardingPrompt) {
+            console.log('Warning: onboarding may have re-shown after reload');
+        }
+
+        const ready = await browser.execute(() => document.readyState);
+        expect(ready).toBe('complete');
+    });
+
+    it('should handle navigation to / after onboarding (S11.6)', async () => {
+        await browser.execute(() => { window.location.href = '/'; });
+        await browser.pause(2000);
+
+        const ready = await browser.execute(() => document.readyState);
+        expect(ready).toBe('complete');
+
+        const bodyText = await browser.execute(() => document.body.innerText);
+    
+```

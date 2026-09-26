@@ -1,0 +1,62 @@
+schema_version: 1
+component: CENTRALDARK_BROWSER_BRIDGE_V1
+role: SENSOR_AND_BODY_ADAPTER
+authority: NONE
+writer: NONE_BY_DEFAULT
+
+bind:
+  hermes:
+    mechanism: EXISTING_UNIVERSAL_HANDLER_HTTP
+    owner: apps/modulos/HERMES-CORE/agents/Universal-Handler/agent.mjs
+
+providers:
+  foreground:
+    technology: chrome-devtools-mcp
+    status: CANDIDATE_UNTIL_LOCAL_MEASURED
+  background:
+    technology: zendriver
+    existing_root: apps/modulos/elite-gateway
+    status: EXISTING_CODE_NEEDS_PROTOCOL_CONVERGENCE
+
+http_api:
+  - path: /health
+    method: GET
+  - path: /v1/browser/status
+    method: POST
+  - path: /v1/browser/observe
+    method: POST
+  - path: /v1/browser/context
+    method: POST
+  - path: /v1/browser/selection
+    method: POST
+  - path: /v1/browser/console
+    method: POST
+  - path: /v1/browser/network
+    method: POST
+  - path: /v1/browser/performance
+    method: POST
+  - path: /v1/browser/lighthouse
+    method: POST
+  - path: /v1/browser/transcript
+    method: POST
+  - path: /v1/browser/action
+    method: POST
+
+output_protocol: CENTRALDARK_BROWSER_EVENT_V1
+input_protocol: CENTRALDARK_BROWSER_COMMAND_V1
+
+telemetry:
+  owner: supabase/functions/agent-log/index.ts
+  normalizer: supabase/functions/_shared/evidence-envelope.mjs
+
+learning:
+  adapter: scripts/memory-linker/artifact-capability.mjs
+  dream: scripts/memory-linker/dream-review-run.mjs
+
+invariants:
+  no_second_brain: true
+  no_second_memory: true
+  no_second_evidence_bus: true
+  no_browser_authority: true
+  no_direct_canonical_write: true
+  read_only_default: true

@@ -1,0 +1,16 @@
+flowchart TD
+  PKG["Canonical CENTRALDARK package"] --> DISC["Discover existing owners"]
+  DISC --> GH{"GitHub reachable?"}
+  DISC --> DR{"Drive reachable?"}
+  GH -- Yes --> GHR["Read current PR/main/HEAD"]
+  GH -- No --> GHP["GITHUB_SYNC_PENDING"]
+  DR -- Yes --> DRR["Read current owner/revision"]
+  DR -- No --> DRP["DRIVE_SYNC_PENDING"]
+  GHR --> REC["RECONCILE"]
+  DRR --> REC
+  GHP --> REC
+  DRP --> REC
+  REC --> PATCH["Apply missing delta only"]
+  PATCH --> TEST["Tests + falsifier + counterproof"]
+  TEST --> RECEIPT["Receipt"]
+  RECEIPT --> SAME["Update same ZIP / same lineage"]

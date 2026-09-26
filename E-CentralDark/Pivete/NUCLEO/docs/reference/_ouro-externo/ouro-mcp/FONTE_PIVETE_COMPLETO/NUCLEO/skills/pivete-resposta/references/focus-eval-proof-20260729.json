@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-07-29T05:11:14Z",
+  "source": "https://github.com/ayghri/i-have-adhd",
+  "source_main_commit_observed": "07684c4ab625dd7d1ea6e99e065f60bc0ac6a1ba",
+  "classification": {
+    "incorporated": [
+      "estado_bloqueio_proxima_acao",
+      "espiral_de_debug_apos_tres_tentativas",
+      "checklist_pre_envio",
+      "baseline_candidato_isolados",
+      "modelo_fixado",
+      "julgamento_cego",
+      "rubrica_correcao_autonomia_acao_seguranca_concisao"
+    ],
+    "already_existed": [
+      "resultado_primeiro",
+      "blocos_curtos",
+      "erro_sem_drama",
+      "seguranca_acima_da_brevidade"
+    ],
+    "rejected": [
+      "limite_rigido_de_cinco_itens",
+      "acao_obrigatoria_na_primeira_linha",
+      "estimativa_sem_premissas",
+      "hook_fail_open_como_enforcement"
+    ]
+  },
+  "SKILL_SHA256_ANTES": "ae5ea9931028cdd7442a1385994d4f628a70abe02f96c6f187c9538050b0f5e0",
+  "SKILL_SHA256_DEPOIS": "9f586a849d12156ff84da12be6eaa1004b53b6c4e23fbb05a0bcc3b6dad8fc40",
+  "GATE_SHA256": "225308e6bae2c17eed21c669b311c706d57ccc702cd7ff05a2f3c1a6abac6442",
+  "SELF_TEST": "PASS",
+  "POSITIVE": "APROVAR",
+  "HOOK_LEAK": "CONDICIONAR",
+  "SHORT_BUT_WRONG": "REJEITAR",
+  "MATERIAL_BLOCKER": "REJEITAR",
+  "ROLLBACK_SIMULATION": "PASS",
+  "VEREDITO": "APROVAR_LOCAL_PROFILE"
+}

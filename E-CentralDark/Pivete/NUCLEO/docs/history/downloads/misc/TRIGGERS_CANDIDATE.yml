@@ -1,0 +1,39 @@
+schema_version: 1
+owner: TRIGGER_FABRIC
+master: "!CENTRALDARK"
+canonical_chain:
+  - "#ACORDAR"
+  - "!CALIBRAR"
+  - "!MULTIBÚSSOLA"
+  - "!META_LUPA"
+  - "!RECONCILIAR"
+  - "!CONTRAPROVA"
+  - "!REMEDIÇÃO"
+  - "!FIXED_POINT"
+  - "!REGISTRA"
+  - "!BOOT"
+initial:
+  - TEST_FAILED
+  - NODE_CHECK_FAILED
+  - SEMANTIC_FAILURE_WITH_SYNTAX_PASS
+  - REGRESSION_FAILED
+  - TIMEOUT
+  - STATE_TRANSITION_ERROR
+  - NON_IDEMPOTENT_RESULT
+  - REPEATED_ERROR
+  - SESSION_CHECKPOINT
+  - SESSION_RESUME
+custom_known:
+  - FANOUT_JUDGE_REQUEST
+  - MULTI_INSTANCE_PROBE
+  - ANALYZE_WORKFLOWS_READ
+  - REPO_TARGET_CHECK
+  - ONE_WRITER_PER_SCOPE
+  - RENDEZVOUS_REQUIRED
+  - EXECUTOR_FANOUT
+discovery:
+  enabled: true
+  promote_requires: [owner_resolved, semantic_delta_proven, duplicate_check, positive_test, negative_test, receipt]
+  on_duplicate: IGNORE_KEEP_PROVENANCE
+  on_unknown: NOT_PROVEN
+  on_conflict: META_LUPA_AND_RENDEZVOUS

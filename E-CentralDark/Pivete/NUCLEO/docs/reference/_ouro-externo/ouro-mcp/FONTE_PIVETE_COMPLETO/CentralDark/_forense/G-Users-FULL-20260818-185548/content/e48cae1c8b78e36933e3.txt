@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@nous-research\ui\dist\ui\components\overlays\blend-modes.d.ts
+
+export declare const BLEND_MODES: React.CSSProperties["mixBlendMode"][];

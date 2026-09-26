@@ -1,0 +1,6 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@react-three\fiber\dist\declarations\src\native\events.d.ts
+
+import { RootStore } from "../core/store.js";
+import { EventManager } from "../core/events.js";
+/** Default R3F event manager for react-native */
+export declare function createTouchEvents(store: RootStore): EventManager<HTMLElement>;

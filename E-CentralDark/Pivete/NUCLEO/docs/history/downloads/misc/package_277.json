@@ -1,0 +1,13 @@
+{
+  "name": "gatilho-universal-ia",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Adaptador universal auditável para acionar modelos por #nome ou !nome, via CLI ou API HTTP.",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "verify": "node scripts/verify.mjs",
+    "start": "node bin/server.mjs"
+  }
+}

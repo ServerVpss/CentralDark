@@ -1,0 +1,62 @@
+schema: CENTRALDARK_CODE_DOCUMENTATION_HOUSE_STANDARD
+schema_version: 1
+owner: DOCUMENTATION_HUB
+language:
+  human: pt-BR
+  code_identifiers: english
+  comments_for_public_contracts: pt-BR_when_helpful
+  raw_code_must_remain_clean: true
+coverage:
+  unit: SOURCE_RANGE_TO_SYMBOL_OR_BLOCK
+  every_material_line_must_map_to_documented_range: true
+  comment_every_line_required: false
+  reason: preserva código liso; auditoria usa faixa de linhas, símbolo, owner e prova
+required_for_material_symbol:
+  - canonical_name
+  - kind
+  - source_path
+  - line_start
+  - line_end
+  - owner
+  - what_it_does_ptbr
+  - what_it_does_not_do_ptbr
+  - why_it_exists_ptbr
+  - inputs
+  - outputs
+  - side_effects
+  - invariants
+  - errors
+  - security_boundary
+  - dependencies
+  - callers_or_consumers
+  - tests
+  - examples
+  - related_patterns
+  - last_verified_revision
+  - proof_refs
+dual_view:
+  technical_professional:
+    required: true
+    format: concise_structured
+  mental_map:
+    required: true
+    format: emoji_plus_flow_plus_one_line_summary
+    may_not_replace_technical_view: true
+status:
+  GREEN: documented_and_verified
+  YELLOW: documented_but_proof_or_consumer_pending
+  RED: material_gap_or_conflict
+  BLUE: informational_or_available
+  BLACK: disabled_or_not_applicable
+  WHITE: unknown_not_measured
+gate:
+  touched_material_code_requires_doc_delta: true
+  exported_or_public_symbol_requires_contract: true
+  changed_behavior_requires_before_after: true
+  changed_error_path_requires_negative_test: true
+  missing_parser_is_pass: false
+  missing_owner_is_pass: false
+  missing_doc_is_pass: false
+  stale_doc_is_pass: false
+  raw_secret_allowed: false
+  bypass_requires_house_exception_receipt: true

@@ -1,0 +1,231 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\lib\perl5\core_perl\auto\IO\IO.dll
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.edata
+@.idata
+@.reloc
+LcD$,H
+LcD$,H
+ATUWVSH
+ [^_]A\
+AVAUATUWVSH
+ [^_]A\A]A^
+AUATUWVSH
+([^_]A\A]
+ATUWVSH
+ [^_]A\
+ATUWVSH
+ [^_]A\
+AUATUWVSH
+h[^_]A\A]
+AUATUWVSH
+X[^_]A\A]
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AUATUWVSH
+8[^_]A\A]
+8[^_]A\A]
+0 but true
+getline
+getlines
+usage: $io->%s()
+Can't call $io->getlines in a scalar context, use $io->getline
+handle
+handle, pos
+handle, c
+Negative character number in ungetc()
+Wide character number in ungetc()
+handle, ...
+IO::Handle::setbuf
+%s not implemented on this architecture
+Usage: IO::Handle::setvbuf(handle, buf, type, size)
+IO::Handle::setvbuf
+IO::File
+packname = "IO::File"
+timeout, ...
+handle, blk=-1
+v5.42.0
+IO::Seekable::getpos
+IO::Seekable::setpos
+IO::File::new_tmpfile
+IO::Poll::_poll
+IO::Handle::blocking
+IO::Handle::ungetc
+IO::Handle::error
+IO::Handle::clearerr
+IO::Handle::untaint
+IO::Handle::flush
+IO::Handle::sync
+IO::Handle::getline
+IO::Handle::getlines
+IO::Handle::gets
+IO::Socket::sockatmark
+IO::Poll
+POLLIN
+POLLPRI
+POLLOUT
+POLLRDNORM
+POLLWRNORM
+POLLRDBAND
+POLLWRBAND
+POLLERR
+POLLHUP
+POLLNVAL
+IO::Handle
+_IOFBF
+_IOLBF
+_IONBF
+SEEK_SET
+SEEK_CUR
+SEEK_END
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+IO.dll
+__gcc_deregister_frame
+__gcc_register_frame
+boot_IO
+__errno
+__stack_chk_fail
+__stack_chk_guard
+_impure_ptr
+calloc
+cygwin_internal
+dll_dllcrt0
+malloc
+msys_detach_dll
+posix_memalign
+realloc
+sockatmark
+GetModuleHandleA
+PL_ppaddr
+PerlIO_getpos
+PerlIO_isutf8
+PerlIO_setpos
+PerlIO_tmpfile
+PerlIO_ungetc
+Perl_PerlIO_clearerr
+Perl_PerlIO_error
+Perl_PerlIO_fileno
+Perl_PerlIO_flush
+Perl_PerlIO_unread
+Perl_croak
+Perl_croak_nocontext
+Perl_croak_xs_usage
+Perl_do_openn
+Perl_gv_stashpv
+Perl_gv_stashpvn
+Perl_hv_common_key_len
+Perl_newCONSTSUB
+Perl_newGVgen_flags
+Perl_newRV
+Perl_newSV
+Perl_newSViv
+Perl_newSVuv
+Perl_newXS_deffile
+Perl_newXS_flags
+Perl_stack_grow
+Perl_sv_2io
+Perl_sv_2iv_flags
+Perl_sv_2mortal
+Perl_sv_2nv_flags
+Perl_sv_2pv_flags
+Perl_sv_2uv_flags
+Perl_sv_bless
+Perl_sv_free2
+Perl_sv_newmortal
+Perl_sv_setiv
+Perl_sv_setiv_mg
+Perl_sv_setpvn
+Perl_uvoffuni_to_utf8_flags_msgs
+Perl_xs_boot_epilog
+Perl_xs_handshake
+msys-2.0.dll
+KERNEL32.dll
+msys-perl5_42.dll
+__imp_Perl_sv_setiv_mg
+__lib64_libkernel32_a_iname
+__imp_Perl_newXS_flags
+__imp_Perl_newSV
+__imp_calloc
+__imp___stack_chk_guard
+__imp___stack_chk_fail
+__imp_Perl_hv_common_key_len
+__nm_PL_ppaddr
+__imp_Perl_gv_stashpv
+__imp_Perl_sv_setpvn
+__imp_Perl_sv_2nv_flags
+__imp_Perl_newSVuv
+__nm___stack_chk_guard
+_head_msys_2_0_dll
+__imp_Perl_PerlIO_error
+__imp_Perl_PerlIO_unread
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_free
+__imp___errno
+msys_perl5_42_dll_iname
+__imp_Perl_newGVgen_flags
+__nm__impure_ptr
+__imp_Perl_PerlIO_fileno
+__imp_Perl_sv_2io
+__IAT_end__
+__imp_dll_dllcrt0
+__imp_Perl_newRV
+__imp_Perl_sv_newmortal
+__imp_Perl_newSViv
+_head_lib64_libkernel32_a
+__imp_Perl_uvoffuni_to_utf8_flags_msgs
+__imp_PerlIO_setpos
+__imp_msys_detach_dll
+__imp_sockatmark
+__imp_PL_ppaddr
+__imp_GetModuleHandleA
+__imp_Perl_sv_2uv_flags
+__imp_malloc
+__imp__impure_ptr
+__imp_Perl_sv_2mortal
+__imp_Perl_stack_grow
+__imp_realloc
+__imp_Perl_PerlIO_flush
+__imp_Perl_gv_stashpvn
+__imp_Perl_croak_xs_usage
+__imp_Perl_newCONSTSUB
+__IAT_start__
+__imp_PerlIO_isutf8
+__imp_Perl_sv_bless
+__imp_Perl_xs_handshake
+_head_msys_perl5_42_dll
+__imp_Perl_PerlIO_clearerr
+__imp_poll
+__imp_fcntl
+__imp_Perl_newXS_deffile
+__imp_Perl_croak_nocontext
+__imp_Perl_do_openn
+__imp_Perl_sv_2pv_flags
+__imp_Perl_croak
+__imp_Perl_xs_boot_epilog
+__imp_Perl_sv_2iv_flags
+__imp_PerlIO_ungetc
+__imp_Perl_sv_setiv
+__imp_PerlIO_getpos
+__imp_fsync
+__imp_PerlIO_tmpfile
+__imp_Perl_sv_free2
+msys_2_0_dll_iname

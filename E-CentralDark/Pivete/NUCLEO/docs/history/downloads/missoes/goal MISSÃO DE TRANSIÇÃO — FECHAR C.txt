@@ -1,0 +1,151 @@
+/goal MISSÃO DE TRANSIÇÃO — FECHAR CASA E ABRIR A FASE BOLT/BUILDER. USE AS SKILS DO HERMS MAIS PODEROS CONTITDAS NO  INVENTARIO NAO NEGUE FORÇA TOTAL VAMOS MOSTRA DO QUE SOOMOS CAPAZ EM PARALELO DELEGANDO TAAREFAS EM MULTE AGNTES  10 AGETNES ESPECIALZIADO EM CADA SETOR! 
+
+OBJETIVO:
+Encerrar tecnicamente a preparação da Casa e iniciar imediatamente o inventário real do Bolt/Builder, sem recomeçar do zero e sem criar arquitetura paralela.
+
+ESTADO JÁ PROVADO:
+- META LUPA incorporada à main.
+- PR #377 mesclada.
+- 4 Scheduled Jobs reparados.
+- 72/72 testes aprovados.
+- Main local sincronizada.
+- Branch de trabalho removida.
+- Profile Hermes: pivete.
+
+PARTE A — REGISTRO FINAL DA CASA
+
+1. Fixar:
+REPO=
+HEAD_MAIN=
+PROFILE=pivete
+META_LUPA_PATH=
+META_LUPA_LOADED=
+JOBS=4/4
+TESTS=72/72
+
+2. Atualizar o mesmo plano existente, sem criar V2/V3, registrando somente fatos comprovados desta missão.
+
+3. Provar no Hermes:
+VOICE_OK=
+NATIVE_IMAGE_OK=
+BROWSER_OR_COMPUTER_USE_OK=
+CONTEXT_RECOVERY_OK=
+META_LUPA_AUTOLOAD_OK=
+ROLLBACK_PATH=
+
+4. Não repetir testes já comprovados, salvo quando necessários para validar o runtime atual.
+
+PARTE B — INVENTÁRIO DO BOLT
+
+Inspecionar em modo leitura primeiro:
+
+REPOSITÓRIO:
+E:\CentralDark\Pivete\CentralDark
+
+VPS:
+ /root/CentralDark
+ /root/CentralDark/apps/modulos/hub
+
+Localizar pelo conteúdo, sem assumir maiúsculas/minúsculas:
+
+- Bolt
+- Builder
+- hermes-webui
+- docker-compose
+- executor.mjs
+- preview
+- workspace
+- terminal
+- gateway
+- websocket
+- HMR
+- deploy
+- rollback
+
+Para cada componente registrar:
+
+PATH=
+TIPO=
+FUNÇÃO=
+STATUS=
+PROCESSO=
+PORTA=
+CONTAINER=
+DEPENDÊNCIAS=
+ROTA=
+LOG=
+GIT_TRACKED=
+EM_USO=
+QUEBRADO=
+DUPLICADO=
+RISCO=
+PRÓXIMA_CORREÇÃO=
+
+Classificar:
+
+EXISTE_E_FUNCIONA
+EXISTE_E_QUEBRADO
+EXISTE_E_DESLIGADO
+EXISTE_E_NAO_LIGADO
+FALTA
+DUPLICADO
+LIXO_COM_PROVA
+
+REGRAS:
+- Não instalar outro Builder.
+- Não criar novo Bolt.
+- Não remover componentes existentes.
+- Não alterar produção nesta fase.
+- Não expor secrets.
+- Não modificar VPS antes do inventário.
+- Preservar hermes-webui como base quando aplicável.
+- Usar META LUPA para caçar falso verde.
+- Trabalhar em paralelo: Casa, repositório e VPS.
+- Um único escritor por arquivo.
+- Continuar até mapa completo ou bloqueio real.
+
+ENTREGA FINAL:
+
+CASA_FECHADA=
+PLANO_ATUALIZADO=
+HEAD_MAIN=
+META_LUPA_RUNTIME=
+VOICE=
+VISION=
+BROWSER=
+CONTEXT_RECOVERY=
+ROLLBACK=
+
+BOLT_FOUND=
+BOLT_PATH_REPO=
+BOLT_PATH_VPS=
+COMPOSE_FOUND=
+CONTAINERS=
+SERVICES=
+PORTS=
+PREVIEW_CURRENT_STATUS=
+HMR_CURRENT_STATUS=
+WORKSPACE_ISOLATION=
+GATEWAY=
+AUTH=
+LOGS=
+BROKEN_COMPONENTS=
+MISSING_COMPONENTS=
+DUPLICATES=
+SAFE_TO_REPAIR=
+
+READY_FOR_BOLT_PREVIEW=SIM|NAO
+BLOCKERS=
+REPORT_PATH=
+NEXT_GOAL=
+
+Quando READY_FOR_BOLT_PREVIEW=SIM, preparar automaticamente a próxima missão:
+LIGAR PREVIEW REAL DO BOLT EXISTENTE.
+
+Não instalar nem ligar nesta missão; entregar o plano técnico exato para ligar o preview usando o que já existe.
+
+BOOT:
+fechar Casa → registrar → inventariar Bolt → localizar motor → preparar preview.
+
+FIO:
+etapa atual → próxima etapa → validação → registro.

@@ -1,0 +1,429 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\mingw64\bin\create-shortcut.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.pdata
+@.xdata
+.idata
+@.reloc
+AWAVAUATUWVSH
+X[^_]A\A]A^A_
+8MZuDHcP<H
+xoLc5/M
+UAWAVAUATWVSH
+[^_A\A]A^A_]
+H=CCG t}
+([^_]H
+@$A9@(~
+AWAVAUATUWVSH
+C$9C(~
+H[^_]A\A]A^A_
+S$9S(~
+S$9S(~
+UAWAVAUATWVSH
+C$9C(~
+C$9C(~
+[^_A\A]A^A_]
+UAWAVAUATWVSH
+C$9C(~
+C$9C(~
+[^_A\A]A^A_]
+UAVWVSH
+C$9C(~
+[^_A^]
+[^_A^]
+=UUUUw
+S$9S(~
+AUATUWVSH
+X[^_]A\A]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+@$A9@(~
+IcP$fA
+ATUWVSH
+`[^_]A\
+`[^_]A\
+HcC$fA
+S$9S(~
+S$9S(~
+=UUUUw
+C$9C(~
+UAWAVAUATWVSH
+LcC$fB
+C$9C(~
+C$9C(~
+[^_A\A]A^A_]
+AUATUWVSH
+X[^_]A\A]
+UAWAVAUATWVSH
+HcS$fA
+C$9C(~
+C$9C(~
+[^_A\A]A^A_]
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+[^_]A\A]A^A_
+D$L)D$`
+T$8HcD$L;B
+D$`+D$H
+ATUWVSLcY
+[^_]A\
+[^_]A\
+AWAVAUATUWVSH
+8[^_]A\A]A^A_
+AVAUATUWVSH
+ [^_]A\A]A^
+AUATUWVSH
+([^_]A\A]
+([^_]A\A]
+WVSHcA
+HcT$xH
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+N/A (0x%08lX)
+Error: %s
+--work-dir
+--arguments
+--show-cmd
+--icon-file
+--description
+--desktop-shortcut
+--dry-run
+Unknown option: %s
+Usage: %s [options] <source> <destination>
+Can only create .lnk files ('%s' was specified)
+source: %s
+work_dir: %s
+show_cmd: %d
+icon_file: %s
+arguments: %s
+description: %s
+could not get desktop path
+destination: %ls\%s
+destination: %s
+Could not initialize OLE
+Could not get ShellLink interface
+Could not get PersistFile interface
+Could not set path
+Could not get desktop path
+Could not save link
+Dw=`:s
+Dw=^:s
+Dw=_:s
+Dw=u:s
+Dw=t:s
+Dw=f:s
+Dw=g:s
+Dw={:s
+Dw=i:s
+Dw=h:s
+Dw=z:s
+Dw=]:s
+Dw=d:s
+Dw=':s
+Dw=y:s
+Dw=&:s
+Dw=c:s
+Dw=m:s
+Dw=~:s
+Dw=}:s
+Dw=U:s
+Dw=|:s
++ LOOP 
+Argument domain error (DOMAIN)
+Argument singularity (SIGN)
+Overflow range error (OVERFLOW)
+Partial loss of significance (PLOSS)
+Total loss of significance (TLOSS)
+The result is too small to be represented (UNDERFLOW)
+Unknown error
+_matherr(): %s in %s(%g, %g)  (retval=%g)
+Mingw-w64 runtime failure:
+Address %p has no image-section
+  VirtualQuery failed for %d bytes at address %p
+  VirtualProtect failed with code 0x%x
+  Unknown pseudo relocation protocol version %d.
+  Unknown pseudo relocation bit size %d.
+%d bit pseudo relocation at %p out of range, targeting %p, yielding the value %p.
+*** buffer overflow detected ***: terminated
+*** stack smashing detected ***: terminated
+(null)
+(null)
+Infinity
+msvcrt.dll
+rand_s
+SystemFunction036
+T&<rskO
+&|=Huw
+g_#AlB
+hj(5W<
+kjO}$M
+N_3haO
+1"EYg-
+]$C9"D
+3]X+'/
+3!XI-X
+305.1i
+EW>o9DjZ
+jo9nP(
+I6OYGv
+#$lfP/
+.y[p'\a`\
+%=*K<C
+W'tVas
+X7iii9P
+*G]d(t
+sP=*`J
+5]ko%U
+O?!YFs
+!kA(/A
+)fQiTH
+<dUG>A
+VN]$D{
+VN]$D{
+VGrqt>2D
+VGrqt>2D
+VGrqt>2D
+"ryxiw
+%$BVdH
+I]mm]&
+l4j.EL
+!mj?%H
+i3OPBK
+-VeDmc*
+EK0qjd
+YYh*<H
+rtXT9bq^F
+;gk**l
+X;T>Ri
+qAZf4[
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+GCC: (Rev11, Built by MSYS2 project) 15.2.0
+DeleteCriticalSection
+EnterCriticalSection
+FormatMessageA
+GetCurrentProcess
+GetLastError
+GetModuleHandleA
+GetProcAddress
+InitializeCriticalSection
+IsProcessorFeaturePresent
+LeaveCriticalSection
+LoadLibraryW
+MultiByteToWideChar
+SetUnhandledExceptionFilter
+TerminateProcess
+TlsGetValue
+VirtualProtect
+VirtualQuery
+WideCharToMultiByte
+__C_specific_handler
+___lc_codepage_func
+___mb_cur_max_func
+__getmainargs
+__initenv
+__iob_func
+__set_app_type
+__setusermatherr
+_amsg_exit
+_cexit
+_commode
+_errno
+_fmode
+_initterm
+_stricmp
+_unlock
+_write
+atexit
+calloc
+fflush
+fprintf
+fputwc
+fwprintf
+isleadbyte
+localeconv
+malloc
+memcpy
+setvbuf
+signal
+strcmp
+strerror
+strlen
+strncmp
+vfprintf
+wcslen
+CoCreateInstance
+CoInitialize
+CoTaskMemFree
+CoUninitialize
+SHGetKnownFolderPath
+KERNEL32.dll
+msvcrt.dll
+ole32.dll
+SHELL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__imp_Sleep
+__imp_EnterCriticalSection
+__imp__unlock
+__imp_strlen
+__imp_malloc
+__imp___getmainargs
+__imp_VirtualQuery
+__imp__fmode
+__IAT_end__
+__imp_fprintf
+__imp___setusermatherr
+__imp_fputwc
+__imp_DeleteCriticalSection
+__imp___ms_fwprintf
+__imp_calloc
+__imp__amsg_exit
+__imp_memcpy
+__imp_TlsGetValue
+__imp__crt_atexit
+__imp_SetUnhandledExceptionFilter
+__lib64_libmsvcrt_def_a_iname
+__imp_atoi
+_head_lib64_libshell32_a
+__imp__lock
+__imp_wcslen
+__imp_write
+__imp_abort
+__imp__cexit
+__imp_WideCharToMultiByte
+__imp_free
+__imp_LeaveCriticalSection
+__imp___set_app_type
+__imp_CoUninitialize
+_head_lib64_libkernel32_a
+__imp_setvbuf
+__imp_CoInitialize
+__imp__commode
+__imp__errno
+__imp____lc_codepage_func
+__imp_exit
+__imp__initterm
+__imp____mb_cur_max_func
+__imp_fflush
+__imp_CoTaskMemFree
+__imp___C_specific_handler
+__imp_GetCurrentProcess
+__imp_MultiByteToWideChar
+__imp_InitializeCriticalSection
+_head_lib64_libole32_a
+__imp_strcasecmp
+__lib64_libshell32_a_iname
+__imp_GetLastError
+__imp_localeconv
+__imp_VirtualProtect
+__imp_strncmp
+__imp_isleadbyte
+__imp_LoadLibraryW
+__imp_GetModuleHandleA
+__IAT_start__
+__imp_fputc
+__imp___iob_func
+__imp_FormatMessageA
+__imp_vfprintf
+__lib64_libole32_a_iname
+__imp_TerminateProcess
+__imp___initenv
+__imp_SHGetKnownFolderPath
+__imp_CoCreateInstance
+__imp_GetProcAddress
+__imp_strcmp
+__imp_IsProcessorFeaturePresent
+__lib64_libkernel32_a_iname
+_head_lib64_libmsvcrt_def_a
+__imp_signal
+__imp_strerror
+Error: Too long Desktop path: %s
+(null)
+%-*.*S
+%-*.*s
+(null)
+sadvapi32.dll

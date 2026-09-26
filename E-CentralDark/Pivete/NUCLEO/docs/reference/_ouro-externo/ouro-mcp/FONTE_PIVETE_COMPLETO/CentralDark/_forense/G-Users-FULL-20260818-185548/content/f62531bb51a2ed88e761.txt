@@ -1,0 +1,3 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@mermaid-js\parser\dist\chunks\mermaid-parser.esm.min\chunk-EMC6Q6NL.mjs
+
+import{Va as p,Za as G,a as e,b as d,c as n,d as a,e as u,f as c,kb as s,lb as m}from"./chunk-RKHDN2Z7.mjs";var r=class extends m{static{e(this,"GitGraphTokenBuilder")}constructor(){super(["gitGraph"])}};var l={parser:{TokenBuilder:e(()=>new r,"TokenBuilder"),ValueConverter:e(()=>new s,"ValueConverter")}};function x(i=u){let t=a(n(i),p),o=a(d({shared:t}),G,l);return t.ServiceRegistry.register(o),{shared:t,GitGraph:o}}e(x,"createGitGraphServices");export{l as a,x as b};

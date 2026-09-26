@@ -1,0 +1,75 @@
+name: VPS HealthCheck
+# Bot de monitoramento — roda direto na VPS via self-hosted runner.
+# Sem SSH (runner já é local). Envia relatório pelo canal oficial notify-telegram.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vps-healthcheck
+  cancel-in-progress: false
+
+jobs:
+  healthcheck:
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    env:
+      NOTIFY_API_KEY: ${{ secrets.NOTIFY_API_KEY }}
+    steps:
+      - name: Coletar e notificar
+        shell: bash
+        run: |
+          set +e
+          HOST=$(hostname)
+          UPTIME=$(uptime | sed 's/^ *//')
+          LOAD=$(cut -d' ' -f1-3 /proc/loadavg)
+          DISK=$(df -h / | awk 'NR==2{print $3"/"$2" ("$5")"}')
+          DISK_PCT=$(df / | awk 'NR==2{gsub("%","",$5);print $5+0}')
+          MEM=$(free -h | awk '/Mem:/{print $3"/"$2}')
+          PM2_JSON=$(pm2 jlist 2>/dev/null || echo "[]")
+          PM2_ON=$(echo "$PM2_JSON"  | jq '[.[]|select(.pm2_env.status=="online")]  | length' 2>/dev/null || echo 0)
+          PM2_OFF=$(echo "$PM2_JSON" | jq '[.[]|select(.pm2_env.status=="stopped")] | length' 2>/dev/null || echo 0)
+          PM2_ERR=$(echo "$PM2_JSON" | jq '[.[]|select(.pm2_env.status=="errored")] | length' 2>/dev/null || echo 0)
+
+          TIPO="sucesso"; EMOJI="✅"; ALERTAS=""
+          if [ "${PM2_ERR:-0}" -gt 0 ]; then
+            TIPO="erro"; EMOJI="❌"
+            ALERTAS="${ALERTAS}\n• PM2 com ${PM2_ERR} processo(s) em erro"
+          fi
+          if [ "${DISK_PCT:-0}" -ge 90 ]; then
+            TIPO="critico"; EMOJI="🚨"
+            ALERTAS="${ALERTAS}\n• Disco / em ${DISK_PCT}%"
+          elif [ "${DISK_PCT:-0}" -ge 80 ] && [ "$TIPO" = "sucesso" ]; then
+            TIPO="aviso"; EMOJI="⚠️"
+            ALERTAS="${ALERTAS}\n• Disco / em ${DISK_PCT}%"
+          fi
+
+          TITULO="${EMOJI} HealthCheck VPS"
+          MSG="<b>Host:</b> ${HOST}\n<b>Uptime:</b> ${UPTIME}\n<b>Load:</b> ${LOAD}\n<b>Disco /:</b> ${DISK}\n<b>Memória:</b> ${MEM}\n<b>PM2:</b> ${PM2_ON} online · ${PM2_OFF} parados · ${PM2_ERR} erro${ALERTAS}"
+
+          echo "==== Relatório ===="
+          echo -e "$MSG"
+          echo "==================="
+
+          if [ -z "${NOTIFY_API_KEY:-}" ]; then
+            echo "::warning::NOTIFY_API_KEY ausente no repo — relatório apenas no log."
+            exit 0
+          fi
+
+          PAYLOAD=$(jq -nc \
+            --arg origem "vps-healthcheck" \
+            --arg tipo "$TIPO" \
+            --arg titulo "$TITULO" \
+            --arg mensagem "$(echo -e "$MSG")" \
+            '{origem:$origem, tipo:$tipo, titulo:$titulo, mensagem:$mensagem}')
+
+          curl -sS -X POST "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/notify-telegram" \
+            -H "x-notify-key: ${NOTIFY_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD"
+          echo

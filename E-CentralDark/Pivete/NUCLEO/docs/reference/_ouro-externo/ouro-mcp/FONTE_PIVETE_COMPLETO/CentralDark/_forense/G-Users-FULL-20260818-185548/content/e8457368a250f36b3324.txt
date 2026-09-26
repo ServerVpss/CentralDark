@@ -1,0 +1,9 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@babel\runtime\helpers\callSuper.js
+
+var getPrototypeOf = require("./getPrototypeOf.js");
+var isNativeReflectConstruct = require("./isNativeReflectConstruct.js");
+var possibleConstructorReturn = require("./possibleConstructorReturn.js");
+function _callSuper(t, o, e) {
+  return o = getPrototypeOf(o), possibleConstructorReturn(t, isNativeReflectConstruct() ? Reflect.construct(o, e || [], getPrototypeOf(t).constructor) : o.apply(t, e));
+}
+module.exports = _callSuper, module.exports.__esModule = true, module.exports["default"] = module.exports;

@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CentralDark Runtime Receipt",
+  "type": "object",
+  "required": [
+    "schema",
+    "run_id",
+    "timestamp",
+    "repository",
+    "main_head",
+    "host_id_sanitized",
+    "baseline_sha256",
+    "processes",
+    "routes",
+    "findings",
+    "final_status"
+  ],
+  "properties": {
+    "schema": {
+      "const": "centraldark.runtime.receipt.v1"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "repository": {
+      "type": "string"
+    },
+    "main_head": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "runtime_head": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "host_id_sanitized": {
+      "type": "string"
+    },
+    "baseline_sha256": {
+      "type": "string"
+    },
+    "processes": {
+      "type": "array"
+    },
+    "routes": {
+      "type": "array"
+    },
+    "detectors": {
+      "type": "array"
+    },
+    "findings": {
+      "type": "array"
+    },
+    "repairs_attempted": {
+      "type": "array"
+    },
+    "repairs_succeeded": {
+      "type": "array"
+    },
+    "repairs_failed": {
+      "type": "array"
+    },
+    "rollback": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "judge_verdict": {
+      "enum": [
+        "NOT_RUN",
+        "APPROVED",
+        "CORRECT",
+        "BLOCKED"
+      ]
+    },
+    "remaining_unknowns": {
+      "type": "array"
+    },
+    "coverage_scope": {
+      "type": "array"
+    },
+    "final_status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "UNKNOWN",
+        "ERROR",
+        "BLOCKED"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

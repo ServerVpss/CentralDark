@@ -1,0 +1,88 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\cache\delegation\subagent-summary-1-20260818_123829_626921.txt
+
+## Resultado (READ ONLY — `origin/main` em `C:/CentralDark/Pivete/CentralDark`)
+
+Não há skill dedicada `instinto-superior/`. **Instinto Superior** é doutrina/capacidade META (“AGIR MELHOR”), embutida em docs + skill `meta-lupa` + adapter Grok + painel status.
+
+### O que é
+- Nome operacional do **SEGREDO/CHEFE** para **reflexo construído por experiência**: detectar desvio, contradição, risco e padrão **antes** de concluir.
+- **Não** é paranormal; **não** substitui prova. O “instinto” escolhe o **próximo teste/ação**; a **prova** decide.
+- Forma META: `META_INSTINTO_SUPERIOR → AGIR MELHOR` (mata atrito operacional; vira comportamento mais rápido/seguro sem perder missão).
+- Obrigatório evoluir: `INSTINTO_SUPERIOR=EVOLUTION_REQUIRED` (reflexo congelado = inválido).
+
+### Onde vive (`origin/main`)
+| Papel | Path |
+|--------|------|
+| Contrato conceitual canônico | `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` |
+| Aprendizado operacional + cubo transversal | `apps/modulos/status/README.md` (2026-08-06) |
+| Ref skill MetaLupa | `.agents/skills/meta-lupa/references/metacognicao-operacional.md` |
+| Gate executável | `.agents/skills/meta-lupa/scripts/evolution_gate.py` (+ testes) |
+| Adapter Grok (regras de uso) | `.grok/skills/centraldark/SKILL.md` § INSTINTO SUPERIOR |
+| Alma SOL / labels META | `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` |
+| Kernel portátil (meta_flow) | `scripts/lupa/portable-kernel.mjs` |
+| Inventário hub | `apps/modulos/hub/scripts/house-inventory-core.mjs` (`META_INSTINTO_SUPERIOR`) |
+| Knowledge-compiler / MetaForja | `.agents/skills/knowledge-compiler/SKILL.md` |
+| Cápsula observável (fixture) | `apps/modulos/status/capsula-observavel.test.mjs` (`CAPSULA-INSTINTO-SUPERIOR-01`) |
+| Mapa visual (aprendizado) | `docs/CONSCIENCIA/APRENDIZADOS/2026-08-17-mapa-mental-intencao-comprimida.md` |
+| Workspace local (fora do blob citado) | `C:\CentralDark\GOAL.txt` → `/goal RELEASE_TRAIN_INSTINTO_SUPERIOR_CASA_VPS` |
+
+### Regras-chave (citação)
+**Drift / corrida de merge** (`.grok/skills/centraldark/SKILL.md`):
+```text
+NÃO REINICIAR A MISSÃO.
+NÃO ENTRAR EM PÂNICO.
+REMEDIR SOMENTE A FRONTEIRA AFETADA.
+ABSORVER O DELTA CAUSAL.
+COSTURAR O RESÍDUO.
+REPROVAR.
+CONTINUAR.
+```
+
+**Movimento por reflexo** (`apps/modulos/status/README.md`):
+```text
+SINAL CONHECIDO → detector/fingerprint → contraprova já comprovada
+→ ação local/reversível → Judge tenta derrubar → evidência externa promove
+```
+
+**Evolução do reflexo**:
+```text
+INSTINTO_SUPERIOR=EVOLUTION_REQUIRED
+REFLEXO_ANTIGO + FALHA_NOVA → REFLEXO_CANDIDATO
+→ BEFORE/AFTER → TESTE + CONTRAPROVA + REGRESSÃO → REFLEXO_PROMOVIDO
+```
+Sem before/after / ganho / com regressão → `EVOLUTION_UNPROVEN`.
+
+**Ciclo META** (donos obrigatórios):
+```text
+META_EXPANSAO (VER) → META_MENOS_E_MAIS (CARREGAR MENOS)
+→ META_LUPA (PROVAR) → META_INSTINTO_SUPERIOR (AGIR)
+→ META_METACOGNICAO (APRENDER) → ↺
+```
+Cross-meta: falta de lente `INSTINTO_SUPERIOR` no review → `CROSS_META_INSTINTO_SUPERIOR_MISSING`.
+
+### Capacidades / “skills de potência” relacionadas (mesmo cluster)
+Não há pasta “potency”; o cluster de potência cognitiva é:
+1. **MetaLupa** — `.agents/skills/meta-lupa/` (falsificar/provar)
+2. **Expansão de Domínio** — `docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md` (ver campo; sem bypass/deploy)
+3. **Menos É Mais** — compressão / menos atrito
+4. **Metacognição operacional** — doc + ref acima
+5. **Self-healing** — mesmo SKILL Grok (`SELF_HEALING != SELF_JUSTIFYING`)
+6. **Knowledge-compiler / MetaForja** — aplica as lentes META (incl. Instinto) na forja
+7. **cot-react-loop** — menciona `SELF_HEALING=true`
+8. **UI**: não apagar tema “Instinto Superior” / Esmeralda (Grok skill, design)
+
+### Como usar
+1. **Operacional (missão em curso):** em drift/HEAD/tool down → **não reiniciar**; remediar fronteira; absorver delta; reprovar; continuar (Grok adapter + status README).
+2. **Método Chefe:** `METODO=INSTINTO_SUPERIOR + META_LUPA_TRANSVERSAL` + faces do `CUBO_TRANSVERSAL_OCULTO` (claim/artefato/verificador/adversário/território/persistência).
+3. **Alegar evolução de reflexo:** montar manifest JSON →  
+   `python .agents/skills/meta-lupa/scripts/evolution_gate.py --input <manifest.json> [--repo-root .]`  
+   Exit 0 só se `evolution_verified`; senão 13 / `EVOLUTION_UNPROVEN`. Self-test: `--self-test`.
+4. **Não criar** skill/motor paralelo “Instinto v2”; dono canônico = `METACOGNICAO-OPERACIONAL.md` + gate da meta-lupa.
+5. **UI:** tema pode existir no Admin; mudança visual ≠ apagar comportamento.
+
+### Arquivos criados/modificados
+- Nenhum (somente leitura).
+
+### Observações
+- Busca “potency” em inglês no repo quase só pega “potencialmente” / idempotency — cluster real = **META + evolução verificável**.
+- `GOAL.txt` no workspace aponta release train `INSTINTO_SUPERIOR_CASA_VPS`; não é a skill em si.

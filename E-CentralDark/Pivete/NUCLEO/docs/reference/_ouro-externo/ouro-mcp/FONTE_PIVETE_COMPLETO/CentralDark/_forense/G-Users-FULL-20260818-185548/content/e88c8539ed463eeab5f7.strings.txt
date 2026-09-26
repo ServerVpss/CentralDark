@@ -1,0 +1,101 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\lib\gawk\fork.dll
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.edata
+@.idata
+@.reloc
+AWAVAUATUWVSH
+h[^_]A\A]A^A_
+result != NULL
+fork.c
+r_make_string
+%s: malloc of %d bytes failed
+PROCINFO
+fork: PROCINFO is not an array!
+fork: version mismatch with gawk!
+my version (API %d.%d), gawk version (API %d.%d)
+fork: could not add %s
+fork extension: version 1.0
+do_fork
+do_waitpid
+do_wait
+waitpid
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+fork.dll
+__gcc_deregister_frame
+__gcc_register_frame
+dl_load
+plugin_is_GPL_compatible
+libintl_gettext
+__assert_func
+__errno
+__getreent
+_impure_ptr
+calloc
+cygwin_internal
+dll_dllcrt0
+fprintf
+fwrite
+getpid
+getppid
+malloc
+memcpy
+msys_detach_dll
+posix_memalign
+realloc
+strlen
+waitpid
+GetModuleHandleA
+msys-intl-8.dll
+msys-2.0.dll
+KERNEL32.dll
+__lib64_libkernel32_a_iname
+_head_msys_intl_8_dll
+__imp_calloc
+__imp_getpid
+_head_msys_2_0_dll
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_free
+__imp___errno
+__imp_wait
+__nm__impure_ptr
+__IAT_end__
+__imp_memcpy
+__imp_fork
+__imp_dll_dllcrt0
+__imp_fwrite
+_head_lib64_libkernel32_a
+__imp_msys_detach_dll
+__imp___getreent
+__imp_GetModuleHandleA
+__imp_strlen
+__imp_malloc
+__imp__impure_ptr
+__imp___assert_func
+__imp_realloc
+__imp_exit
+__IAT_start__
+__imp_libintl_gettext
+__imp_fprintf
+msys_intl_8_dll_iname
+__imp_waitpid
+__imp_getppid
+msys_2_0_dll_iname

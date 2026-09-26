@@ -1,0 +1,20 @@
+SNAPSHOT_SUPERSEDING:
+  mission_id: "PR585-RECEIPT-HARDENING-R3-FINAL"
+  prior_snapshot: "BEFORE-diff.patch"
+  prior_snapshot_sha256: "e94b880d591ec59c1ddfff4c3e5be8602ba0fdb8d8cf823286d3c2e2a02b69f3"
+  current_snapshot: "SNAPSHOT-SUPERSEDING-diff.patch"
+  current_snapshot_sha256: "8acdd547080f862cfdf29685976377a43e5c277363fcef931d60ababf28050f5"
+  confirmation_sha256: "8acdd547080f862cfdf29685976377a43e5c277363fcef931d60ababf28050f5"
+  current_snapshot_bytes: 93650
+  branch: "docs/modo-operacional-loop-evidencia-20260731"
+  head: "0bf226ae5c18c2bf3ba815bd203616b480143e50"
+  writer: "LUNA"
+  sonnet_state: "STOPPED_PROVADO"
+  mutation_source: "MUTACAO_AUTOMATICA_CANONICA"
+  ledger_event: "BEGIN"
+  ledger_mission_id: "PR585-RECEIPT-HARDENING-R3-FINAL"
+  ledger_usage_id: "8ba63e268c922925ad7861e74ef000ba81339a4c878259fe3b119c6a6d19d7bd"
+  ledger_record_hash: "e1d4262cbebed911a51d393985f0e1359d92cc65a4597cb27634dd30010895c5"
+  ledger_started_at_utc: "2026-08-01T21:59:56Z"
+  handoff_original: "WRITER-HANDOFF.yaml"
+  handoff_original_rewritten: false

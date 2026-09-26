@@ -1,0 +1,20 @@
+1- PRIMEIRO PASSO
+ execulta isso na primeira vez que abrir ngrok
+
+ngrok config add-authtoken 2X3OtD8jH1CtihGLCY9N9w8BxFe_Lfobab2K1MkgA3kByYM3
+
+------------------------------------------------------------------------------------
+2- SEGUNDO PASSO
+ comando para iniciar o ngrok copia tudo ! nao e mais: (ngrok tcp 2215)
+
+agora e esse de baixo! copia todo cola e da enter pra iniciar!
+
+ngrok tcp --region=sa --remote-addr=1.tcp.sa.ngrok.io:21614 2215
+
+----------------------------------------------------------------------
+PULO DO GATO 
+
+191.234.200.117
+2215
+--------------------------------------------------------------------------------------
+

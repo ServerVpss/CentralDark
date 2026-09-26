@@ -1,0 +1,368 @@
+Pensando
+Definindo o arquivo
+docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md
+
+
+docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md
+{
+  "repository_full_name": "ServerVpss/CentralDark",
+  "path": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md",
+  "ref": "main",
+  "encoding": "utf-8",
+  "start_line": 1,
+  "end_line": 120
+}
+Pensou por 30s
+Pronto  Sim. **Ajusto a ressalva:** dá para projetar a CentralDark para perseguir **ZERO BUG CONHECIDO como condição operacional**, sem devolver bug técnico pro CHEFE só porque o primeiro agente não soube resolver.
+
+O erro seria interpretar “zero bug” como “escrever uma promessa de que nenhum defeito desconhecido existirá no universo”. O que interessa é mais forte na prática:
+
+> **apareceu defeito → a Casa não aceita o defeito como estado final → investiga, procura, reproduz, pesquisa fora quando necessário, corrige, contraprovoca, aprende e procura o próximo.**
+
+E isso fecha justamente uma lacuna viva: o kernel atual ainda declara `AUTO_WORK_DISCOVERY_PRODUCER=UNPROVEN`. Ou seja, a Casa já sabe **como** um trabalho deve ser governado, mas ainda não está provado que ela descubra sozinha todo trabalho novo que o estado revela.
+
+Eu colocaria esta lei no núcleo executável:
+
+```text
+#ACORDAR
+!CALIBRAR
+!MULTIBUSSOLA
+!META_LUPA
+
+BUG_IS_WORK=true
+BUG_IS_NOT_HUMAN_ROUTING_WORK=true
+UNKNOWN_IS_INVESTIGATION_INPUT=true
+SAME_ERROR_NO_NEW_INFO_IS_WASTE=true
+
+QUALQUER SINAL DE DEFEITO:
+
+ERRO
+CRASH
+TEST_FAIL
+CI_FAIL
+BUILD_FAIL
+RUNTIME_FAIL
+UI_FAIL
+REGRESSION
+WARNING_MATERIAL
+INCONSISTÊNCIA
+TIMEOUT
+PERFORMANCE_REGRESSION
+SECURITY_FINDING
+USER_OBSERVED_FAILURE
+
+        ↓
+
+CAPTURAR ESTADO EXATO
+→ tempo
+→ target
+→ versão/HEAD
+→ ambiente
+→ logs
+→ entrada
+→ saída observada
+
+        ↓
+
+FINGERPRINT DO DEFEITO
+
+        ↓
+
+JÁ CONHECIDO?
+├─ SIM → recuperar causa/fix/teste anterior e verificar se ainda se aplica
+└─ NÃO → investigar
+
+        ↓
+
+REPRODUZIR
+
+Se não reproduzir:
+→ não inventar causa
+→ aumentar observabilidade
+→ buscar condição discriminante
+→ continuar investigação
+
+        ↓
+
+LOCALIZAR PRIMEIRO PONTO CAUSAL
+
+sintoma
+→ produtor
+→ fronteira
+→ dependência
+→ mecanismo
+→ causa candidata
+
+        ↓
+
+PESQUISA AUTÔNOMA
+
+1. Código e histórico da própria CentralDark
+2. Testes e erros anteriores
+3. Git/PR/issues/logs/receipts
+4. documentação oficial da tecnologia
+5. changelog/release notes
+6. issue tracker upstream
+7. conhecimento técnico público/web
+8. implementação upstream quando necessário
+
+CHEFE NÃO PRECISA TRAZER LINK.
+
+EXTERNAL_SOURCE=EVIDENCE_INPUT
+EXTERNAL_SOURCE!=AUTHORITY
+
+        ↓
+
+GERAR HIPÓTESES CONCORRENTES
+
+H1
+H2
+H3 somente quando material
+
+        ↓
+
+TESTE DISCRIMINANTE
+
+realidade elimina hipóteses
+
+        ↓
+
+MENOR CORREÇÃO CAUSAL
+
+não mascarar sintoma
+não usar bypass permanente
+não downgrade aleatório
+não retry ornamental
+
+        ↓
+
+CONTRAPROVA
+
+o erro original sumiu?
+caso inverso funciona?
+casos vizinhos funcionam?
+houve regressão?
+
+        ↓
+
+AMPLIAR TESTES CONFORME A FERIDA
+
+unit
+integration
+E2E
+property-based
+metamorphic
+fuzz
+differential
+performance
+security
+
+        ↓
+
+MESMO SHA
+
+TYPECHECK
+LINT
+TEST
+BUILD
+SECURITY
+CI
+RUNTIME quando aplicável
+
+        ↓
+
+APRENDER
+
+BUG
+→ CAUSA
+→ FIX
+→ TESTE DE REGRESSÃO
+→ owner existente
+
+O mesmo defeito não pode voltar silenciosamente.
+
+        ↓
+
+REMEDIR
+
+procurar resíduo
+procurar próximo defeito
+continuar
+
+        ↓
+
+ZERO_KNOWN_RESIDUAL
+```
+
+E aqui entra ciência de verdade, não só “manda outra IA tentar”.
+
+**Property-based testing** gera automaticamente casos e bordas que o programador nem pensou; quando encontra falha, ferramentas dessa família podem reduzir o caso até uma entrada mínima reproduzível. ([Hypothesis][1])
+
+**Metamorphic testing** ajuda justamente quando nem é fácil saber previamente qual deveria ser a saída exata: em vez disso, verifica relações que obrigatoriamente deveriam continuar verdadeiras entre execuções relacionadas. É uma técnica estudada para atacar o chamado *oracle problem*. ([White Rose Research Online][2])
+
+E **fuzzing contínuo** já demonstra esse modelo industrialmente: o OSS-Fuzz usa geração automática de entradas para achar falhas de estabilidade/segurança; no CI, o CIFuzz inclusive exige que o crash seja reproduzível e diferencia falha preexistente de falha introduzida pelo novo commit. ([Google][3])
+
+Então eu adicionaria uma regra ainda mais ambiciosa:
+
+```text
+TEST_SUITE != CONJUNTO FIXO DE TESTES
+
+TEST_SUITE =
+testes conhecidos
++ testes gerados pela mudança
++ teste da falha descoberta
++ propriedades invariantes
++ fuzz proporcional ao risco
++ contraprovas derivadas da causa
+```
+
+Ou seja: **cada bug aumenta permanentemente a resistência da Casa contra aquela classe de erro.**
+
+Isso também muda `UNKNOWN`.
+
+Hoje muita arquitetura trata:
+
+```text
+UNKNOWN
+→ parar
+```
+
+Eu quero:
+
+```text
+UNKNOWN
+→ qual informação falta?
+→ qual instrumento consegue obtê-la?
+→ interno não resolve?
+   → pesquisar externamente
+→ formar teste
+→ executar
+→ atualizar estado
+```
+
+Só termina em bloqueio humano quando chegar numa coisa que **pesquisa, código, teste e ferramenta realmente não podem decidir**, por exemplo uma nova autorização material.
+
+E a internet entra exatamente como tu falou:
+
+```text
+APARECEU BUG
+
+não sei
+↓
+PROCURA
+
+não achei dentro
+↓
+PROCURA FORA
+
+achei dez respostas
+↓
+NÃO COPIA CEGAMENTE
+
+normaliza
+→ checa versão
+→ checa ambiente
+→ testa contra nossa realidade
+→ contraprovoca
+→ usa só o que sobrevive
+```
+
+**Google, docs, GitHub upstream, papers, changelogs e fóruns são sensores da Casa, não novos cérebros.**
+
+A CentralDark já possui o lado de coordenação para isso: `hub_missions` tem claim atômico, seleção de missão aprovada disponível e trava para impedir dois Writers simultâneos na mesma fronteira.  Então não precisa inventar fila nova.
+
+A evolução que eu faria é:
+
+```text
+HOJE
+
+CHEFE vê bug
+→ avisa
+→ agente tenta
+→ emperra
+→ pergunta
+→ outro agente tenta
+→ CHEFE vira roteador
+
+DEPOIS
+
+SENSOR vê bug
+→ BUG EVENT
+→ work discovery
+→ reproducer
+→ researcher
+→ debugger
+→ discriminating test
+→ Writer
+→ Judge
+→ regression test
+→ CI
+→ runtime proof
+→ learning
+→ residual scan
+
+CHEFE só vê:
+
+BUG=RESOLVIDO
+CAUSA=
+PROVA=
+REGRESSÃO_PREVENIDA=
+
+ou
+
+REAL_BLOCK=
+DECISÃO_HUMANA_NECESSÁRIA=
+```
+
+E isso mata também a frase que eu usei antes, “ninguém consegue eliminar todos os bugs”.
+
+A formulação útil é outra:
+
+```text
+ZERO_BUG
+= OBJETIVO OPERACIONAL CONTÍNUO
+
+FIXED_POINT LOCAL SÓ ACEITA:
+KNOWN_BUGS_OPEN=0
+KNOWN_REGRESSIONS_OPEN=0
+REPRODUCIBLE_FAILURES_OPEN=0
+CRITICAL_UNKNOWN=0
+
+BUG NOVO FUTURO
+→ REABRE AUTOMATICAMENTE O LOOP
+→ INVESTIGA
+→ CORRIGE
+→ ENDURECE
+```
+
+Aí o sistema não promete onisciência. **Ele promete comportamento:** defeito conhecido não vira mobília da Casa. 😆
+
+E tem um último salto: eu não limitaria isso a “bug de código”.
+
+```text
+BUG DA CENTRALDARK =
+qualquer diferença material entre
+INTENÇÃO / CONTRATO / RESULTADO REAL
+```
+
+Então também entram:
+
+* agente repetindo erro já aprendido;
+* Claude e Hermes divergindo da mesma lei;
+* snapshot velho tratado como atual;
+* build local verde e remoto vermelho;
+* documentação dizendo uma coisa e runtime outra;
+* UI travando;
+* lentidão nova;
+* dependência incompatível;
+* duplicação arquitetural;
+* regra que existe mas não é consumida;
+* CI que pode ser burlada.
+
+**Tudo vira a mesma espécie: `EXPECTED != OBSERVED → investigar até causa → corrigir → provar → endurecer`.**
+
+Isso é o que eu colocaria no coração da CentralDark. Não “um bot que sabe consertar bug”, mas **um organismo que não aceita diferença conhecida entre intenção e realidade sem tentar fechá-la sozinho.** 🔥
+
+[1]: https://hypothesis.readthedocs.io/en/latest/?utm_source=chatgpt.com "Hypothesis 6.165.0 documentation"
+[2]: https://eprints.whiterose.ac.uk/id/eprint/110335/?utm_source=chatgpt.com "A Survey on Metamorphic Testing - White Rose Research Online"
+[3]: https://google.github.io/oss-fuzz/?utm_source=chatgpt.com "OSS-Fuzz | Documentation for OSS-Fuzz"

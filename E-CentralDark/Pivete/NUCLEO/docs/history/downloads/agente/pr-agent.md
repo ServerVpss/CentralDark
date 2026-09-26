@@ -1,0 +1,109 @@
+# AGENTE - pr-agent.yml
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\.grok\worktrees\pivete-centraldark\test\.github\workflows\pr-agent.yml
+**SHA:** 4f705aed03d4d2f3
+**Timestamp:** 2026-08-28T02:56:03.728821
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Comandos
+- run: python3 -m pip install pr-agent --quiet --upgrade
+- run: |
+- run: python3 -m pip install pr-agent --quiet --upgrade
+- run: |
+- run: python3 -m pip install pr-agent --quiet --upgrade
+- run: |
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+name: PR Review — Multi-IA (paralelo)
+
+# 3 IAs revisam o mesmo PR em paralelo — cada uma posta seu review independente.
+# Secrets necessários: GROQ_API_KEY · GEMINI_API_KEY · ANTHROPIC_API_KEY
+# Se um secret não estiver configurado, aquele job pula sem falhar.
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize]
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: pr-agent-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+
+  review-groq:
+    name: "⚡ Groq — Llama3-70B"
+    runs-on: [self-hosted, Linux]
+    if: github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Instalar pr-agent
+        run: python3 -m pip install pr-agent --quiet --upgrade
+      - name: Review
+        env:
+          GROQ_API_KEY:         ${{ secrets.GROQ_API_KEY }}
+          GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -z "$GROQ_API_KEY" ]; then echo "⚠️ GROQ_API_KEY não configurado — pulando"; exit 0; fi
+          export CONFIG__AI_PROVIDER=groq
+          export CONFIG__MODEL=llama3-70b-8192
+          echo "🤖 Groq Llama3-70B iniciando review..."
+          python3 -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
+
+  review-gemini:
+    name: "✨ Gemini — Flash 1.5"
+    runs-on: [self-hosted, Linux]
+    if: github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Instalar pr-agent
+        run: python3 -m pip install pr-agent --quiet --upgrade
+      - name: Review
+        env:
+          GEMINI_API_KEY:       ${{ secrets.GEMINI_API_KEY }}
+          GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then echo "⚠️ GEMINI_API_KEY não configurado — pulando"; exit 0; fi
+          export CONFIG__AI_PROVIDER=google
+          export CONFIG__MODEL=gemini/gemini-1.5-flash
+          export GOOGLE_AI_STUDIO_KEY=$GEMINI_API_KEY
+          echo "🤖 Gemini Flash 1.5 iniciando review..."
+          python3 -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
+
+  review-claude:
+    name: "🧠 Claude — Sonnet 4.6"
+    runs-on: [self-hosted, Linux]
+    if: github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Instalar pr-agent
+        run: python3 -m pip install pr-agent --quiet --upgrade
+      - name: Review
+        env:
+          ANTHROPIC_API_KEY:    ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_BASE_URL:   https://claude.ap7.site
+          GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then echo "⚠️ ANTHROPIC_API_KEY não configurado — pulando"; exit 0; fi
+          export CONFIG__AI_PROVIDER=anthropic
+          export CONFIG__MODEL=claude-sonnet-4-6
+          echo "🤖 Claude Sonnet 4.6 iniciando review (via proxy ap7)..."
+          python3 -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
+
+```

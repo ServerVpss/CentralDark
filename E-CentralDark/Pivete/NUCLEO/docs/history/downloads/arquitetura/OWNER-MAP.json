@@ -1,0 +1,11 @@
+{
+  "session_harvest": ".agents/skills/session-intelligence-harvester/",
+  "knowledge_compile": ".agents/skills/knowledge-compiler/",
+  "counterproof": ".agents/skills/meta-lupa/",
+  "orchestration": "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md",
+  "proof": "docs/CONSCIENCIA/PROOF-OWNERSHIP.json",
+  "reversible_execution": "docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md",
+  "remediation": "docs/CONSCIENCIA/REMEDICAO.md",
+  "graph_projection": "scripts/grafo-vivo/",
+  "active_pr": 1119
+}

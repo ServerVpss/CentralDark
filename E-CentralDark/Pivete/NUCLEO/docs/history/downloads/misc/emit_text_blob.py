@@ -1,0 +1,273 @@
+#!/usr/bin/env python3
+# meteor-decomp — clean-room decompilation of FINAL FANTASY XIV 1.x client binaries
+# Copyright (C) 2026  Samuel Stegall
+# SPDX-License-Identifier: AGPL-3.0-or-later
+"""
+Emit ONE giant naked-asm function whose body is `_emit` of every byte
+in orig's `.text` section. Compiled to a single .obj, this lands the
+entire `.text` content as a single CODE section (CNT_CODE / EXECUTE /
+READ) — matching orig's section attributes byte-for-byte.
+
+Why a separate tool from `emit_data_sections.py --include-text`:
+that tool emits `.text` as `__declspec(allocate(".text")) const unsigned
+char[]` which gets CNT_INITIALIZED_DATA characteristics (0x40), forcing
+link.exe to create a second `.text` section. By using a NAKED
+FUNCTION, we get CNT_CODE characteristics (0x20) which matches orig
+exactly.
+
+Trade-off: the entire .text is one opaque function blob. We can't
+substitute individual functions with rosetta sources. For the first
+working byte-identical link, that's fine; granularity comes later
+once the link path is closed.
+
+Reads:
+  build/pe-layout/<binary>.json
+  orig/<binary>.exe
+
+Writes:
+  src/<binary>/_passthrough/_section_text_blob.cpp
+
+Usage:
+  tools/emit_text_blob.py ffxivlogin
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+PE_LAYOUT = REPO_ROOT / "build" / "pe-layout"
+ORIG = REPO_ROOT / "orig"
+SRC = REPO_ROOT / "src"
+
+LICENSE_HEADER = """\
+// meteor-decomp — clean-room decompilation of FINAL FANTASY XIV 1.x client binaries
+// Copyright (C) 2026  Samuel Stegall
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+"""
+
+
+# cl.exe runs out of heap space (`fatal error C1060`) at roughly
+# 9-10 million `_emit` lines (~180 MB of source). For binaries whose
+# .text exceeds the threshold (ffxivboot, ffxivgame), chunk the
+# blob across multiple .cpp files. Each chunk gets its own
+# `.text$X<chunk_offset>` subsection so link.exe lays them out
+# in offset order. With patched align=1, chunks pack tightly.
+DEFAULT_CHUNK_BYTES = 1_000_000  # ~1 MB per chunk, ~30 MB source — safe
+
+
+def _load_swaps(binary: str) -> list[tuple[int, int]]:
+    """Read `_swap_manifest.json` and return [(rva, size)] of byte
+    ranges to SKIP when emitting the blob — those RVAs are filled by
+    a `_swap_FUN_<va>.cpp` wrapped rosetta source instead."""
+    manifest_path = SRC / binary / "_passthrough" / "_swap_manifest.json"
+    if not manifest_path.exists():
+        return []
+    manifest = json.loads(manifest_path.read_text())
+    return sorted(
+        ((s["rva"], s["size"]) for s in manifest.get("swaps", [])),
+        key=lambda t: t[0],
+    )
+
+
+def _split_chunks_by_swaps(
+    body: bytes, text_vaddr: int, swaps: list[tuple[int, int]],
+    max_chunk: int,
+) -> list[tuple[int, bytes]]:
+    """Walk `body` (orig .text) and produce a list of (start_offset, bytes)
+    chunks to emit. Each `swap` (rva, size) drops a hole at `rva-text_vaddr`,
+    splitting the surrounding chunks. Chunks larger than `max_chunk` are
+    further split at byte boundaries so cl.exe's heap doesn't OOM."""
+    # Build a list of "byte spans" to emit: walk body offset cursor,
+    # for each swap split a hole, then carry on.
+    spans: list[tuple[int, int]] = []  # (offset, length)
+    cursor = 0
+    for swap_rva, swap_size in swaps:
+        swap_off = swap_rva - text_vaddr
+        if swap_off < 0 or swap_off >= len(body):
+            continue
+        if cursor < swap_off:
+            spans.append((cursor, swap_off - cursor))
+        cursor = swap_off + swap_size
+    if cursor < len(body):
+        spans.append((cursor, len(body) - cursor))
+
+    # Now further split each span if larger than max_chunk.
+    chunks: list[tuple[int, bytes]] = []
+    for off, length in spans:
+        n_sub = (length + max_chunk - 1) // max_chunk
+        for i in range(n_sub):
+            sub_off = off + i * max_chunk
+            sub_len = min(max_chunk, length - i * max_chunk)
+            chunks.append((sub_off, body[sub_off:sub_off + sub_len]))
+    return chunks
+
+
+def emit(binary: str, dry_run: bool = False, chunk_bytes: int = DEFAULT_CHUNK_BYTES) -> dict:
+    pe_path = PE_LAYOUT / f"{binary}.json"
+    orig_path = ORIG / f"{binary}.exe"
+    pe = json.loads(pe_path.read_text())
+    text_sec = next(s for s in pe["sections"] if s["name"] == ".text")
+    orig_bytes = orig_path.read_bytes()
+    body = orig_bytes[text_sec["raw_pointer"]:text_sec["raw_pointer"] + text_sec["raw_size"]]
+    text_vaddr = text_sec["virtual_address"]
+
+    out_dir = SRC / binary / "_passthrough"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    # Wipe stale chunk source files AND their .obj counterparts so a
+    # smaller new emit doesn't leave orphans (LNK2005 from duplicate
+    # `_text_blob_*` symbols across new and stale .objs).
+    for stale in out_dir.glob("_section_text_blob*.cpp"):
+        stale.unlink()
+    obj_dir = REPO_ROOT / "build" / "obj" / "_passthrough" / binary
+    if obj_dir.exists():
+        for stale in obj_dir.glob("_section_text_blob*.obj"):
+            stale.unlink()
+
+    swaps = _load_swaps(binary)
+    chunks = _split_chunks_by_swaps(body, text_vaddr, swaps, chunk_bytes)
+
+    # Single-chunk fast path (no swaps, body fits in one chunk).
+    if not swaps and len(chunks) == 1:
+        out_path = out_dir / "_section_text_blob.cpp"
+        src = _emit_one_chunk(binary, chunks[0][1], "_text_blob",
+                              chunks[0][0], chunks[0][0] + len(chunks[0][1]),
+                              text_sec, single=True)
+        if not dry_run:
+            out_path.write_text(src)
+        return {"binary": binary, "bytes": len(body), "chunks": 1, "swaps": 0,
+                "out": str(out_path.relative_to(REPO_ROOT))}
+
+    # Multi-chunk path. To keep .obj count manageable when there are
+    # many small swaps splitting the body (ffxivgame with thousands of
+    # swaps would otherwise produce thousands of tiny .cpp/.obj files),
+    # group adjacent chunks into a SINGLE .cpp that contains multiple
+    # naked functions, each in its own `.text$X<rva>` subsection. Each
+    # output .cpp accumulates up to `chunk_bytes` of body content.
+    # The first chunk's symbol is always `_text_blob` so link_pe.sh's
+    # /ENTRY:_text_blob keeps working.
+    groups: list[list[tuple[int, bytes]]] = [[]]
+    group_size = 0
+    for start, chunk in chunks:
+        # If adding this chunk would push the group past the
+        # chunk_bytes budget AND the group already has at least one
+        # chunk, start a new group.
+        if group_size + len(chunk) > chunk_bytes and groups[-1]:
+            groups.append([])
+            group_size = 0
+        groups[-1].append((start, chunk))
+        group_size += len(chunk)
+    if not groups[-1]:
+        groups.pop()
+
+    written: list[str] = []
+    for gi, group in enumerate(groups):
+        out_path = out_dir / f"_section_text_blob_{gi:04d}.cpp"
+        src = _emit_chunk_group(binary, group, text_sec,
+                                first_group=(gi == 0))
+        if not dry_run:
+            out_path.write_text(src)
+        written.append(out_path.name)
+    return {"binary": binary, "bytes": len(body), "chunks": len(chunks),
+            "groups": len(groups), "swaps": len(swaps),
+            "out": ", ".join(written[:3]) + ("…" if len(written) > 3 else "")}
+
+
+def _emit_chunk_group(binary: str, group: list[tuple[int, bytes]],
+                      text_sec: dict, first_group: bool) -> str:
+    """Emit one .cpp with multiple naked-asm function chunks. Each
+    chunk gets its own `code_seg(".text$X<rva>")` and naked function
+    so link.exe places it at the right RVA. The first chunk in the
+    first group is named `_text_blob` (link entry symbol)."""
+    text_vaddr = text_sec["virtual_address"]
+    out: list[str] = [LICENSE_HEADER, ""]
+    out.append(f"// AUTO-GENERATED by tools/emit_text_blob.py — do not edit.")
+    out.append(f"// {binary}.exe `.text` chunk group: {len(group)} chunk(s),")
+    out.append(f"// total {sum(len(c) for _, c in group):,} bytes")
+    out.append("//")
+    out.append("// Multiple naked functions per file = fewer .obj round-trips")
+    out.append("// vs one-chunk-per-file. Each function still gets its own")
+    out.append("// `.text$X<rva>` subsection so link.exe places it correctly.")
+    out.append("")
+    for i, (start, chunk) in enumerate(group):
+        chunk_rva = text_vaddr + start
+        is_first = first_group and i == 0
+        sym = "_text_blob" if is_first else f"_text_blob_{start:08x}"
+        out.append(f'#pragma code_seg(".text$X{chunk_rva:08x}")')
+        out.append(f'#pragma comment(linker, "/INCLUDE:_{sym}")')
+        out.append(f'extern "C" __declspec(naked) void {sym}() {{')
+        out.append('    __asm {')
+        for j, b in enumerate(chunk):
+            if j and j % 16 == 0:
+                out.append("")
+            out.append(f'        _emit 0x{b:02x}')
+        out.append('    }')
+        out.append('}')
+        out.append('#pragma code_seg()')
+        out.append('')
+    return "\n".join(out)
+
+
+def _emit_one_chunk(binary: str, body: bytes, sym: str, start: int,
+                    end: int, text_sec: dict, single: bool) -> str:
+    """Emit one naked-asm function chunk.
+
+    The subsection key is the RVA (text_vaddr + body_offset), NOT the
+    body_offset itself, so it sorts lexicographically alongside swap
+    subsections that key on RVA. If we used body_offset, a swap at
+    `.text$X00001350` would land AFTER `.text$X00000353` (the chunk
+    after the hole) instead of inside the hole.
+    """
+    chunk_rva = text_sec["virtual_address"] + start
+    lines = [LICENSE_HEADER, ""]
+    lines.append(f"// AUTO-GENERATED by tools/emit_text_blob.py — do not edit.")
+    lines.append(f"// {binary}.exe `.text` section bytes [{start}..{end}) as a naked-asm fn.")
+    lines.append(f"//   chunk size: {len(body):,} bytes")
+    lines.append(f"//   chunk vaddr: 0x{chunk_rva:08x}")
+    if not single:
+        lines.append(f"//   (one of multiple chunks; cl.exe OOMs on >~9 M `_emit` lines)")
+    lines.append("//")
+    lines.append("// CNT_CODE + MEM_EXECUTE + MEM_READ section characteristics match")
+    lines.append("// orig's `.text` (naked function in `code_seg` gets these flags).")
+    lines.append("")
+    lines.append(f'#pragma code_seg(".text$X{chunk_rva:08x}")')
+    lines.append(f'#pragma comment(linker, "/INCLUDE:_{sym}")')
+    lines.append(f'extern "C" __declspec(naked) void {sym}() {{')
+    lines.append('    __asm {')
+    for i, b in enumerate(body):
+        if i and i % 16 == 0:
+            lines.append("")
+        lines.append(f'        _emit 0x{b:02x}')
+    lines.append('    }')
+    lines.append('}')
+    lines.append('#pragma code_seg()')
+    lines.append('')
+    return "\n".join(lines)
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("binary", help="binary stem")
+    ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--chunk-bytes", type=int, default=DEFAULT_CHUNK_BYTES,
+                    help=f"max bytes per chunk .cpp (default {DEFAULT_CHUNK_BYTES:,})")
+    args = ap.parse_args()
+    res = emit(args.binary, args.dry_run, chunk_bytes=args.chunk_bytes)
+    print(f"=== emit_text_blob ===")
+    for k, v in res.items():
+        print(f"  {k}: {v}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

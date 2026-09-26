@@ -1,0 +1,1810 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\lib\ssh\ssh-sk-helper.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+@.rsrc
+@.reloc
+ATUWVSH
+@[^_]A\1
+AWAVAUATUWVSH
+X[^_]A\A]A^A_1
+h[^_]1
+h[^_]1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+([^_]1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+AVAUATUWVSH
+0[^_]A\A]A^1
+([^_]1
+AUATUWVSH
+([^_]A\A]1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+H3D$pH
+H3T$xH
+AWAVAUATUWVSH
+x[^_]A\A]A^A_1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+tPH;I8tS
+ttH;I8
+t`H;I8tc
+tlH;I8tvD
+tjH;I8ttD
+H;[8tr
+tzH;I8
+H;[8tt
+AUATUWVSH
+H[^_]A\A]1
+AWAVAUATUWVSH
+([^_]A\A]A^A_1
+D$@8D$?uMH
+([^_]1
+ATUWVSH
+-----BEGH3
+IN OPENSH3W
+ [^_]A\1
+SH PRIVAH3G
+TE KEY--H3W
+-----ENDH3
+ OPENSSHH3W
+ PRIVATEH3G
+ KEY----H3W
+openssh-H9
+-key-v1
+ATUWVSH
+ [^_]A\1
+([^_]1
+([^_]1
+([^_]1
+([^_]1
+AUATUWVSH
+H[^_]A\A]1
+AWAVAUATUWVSH
+H[^_]A\A]A^A_1
+AWAVAUATUWVSH
+H[^_]A\A]A^A_1
+ATUWVSH
+0[^_]A\1
+([^_]1
+([^_]1
+8[^_]1
+8[^_]H
+ATUWVSH
+`[^_]A\1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+bcdfghklH
+mnprstvzA
+3D9d$0
+--------A
+--------E
+--------L
+--------E
+--------H
+--------E
+--------D
+--------E
+([^_]1
+AVWVSH
+([^_A^1
+ATUWVSH
+0[^_]A\1
+0[^_]A\1
+0[^_]A\1
+ATUWVSH
+ [^_]A\1
+ [^_]A\1
+8[^_]1
+ATUWVSH
+ [^_]A\1
+ [^_]A\1
+ [^_]A\1
+AUATUWVSH
+@X[^_]A\A]H
+[^_]A\A]1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+l$PL+l$X
+AWAVAUATUWVSH
+H[^_]A\A]A^A_1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+ATUWVSH
+;^ s&H
+ [^_]A\1
+ [^_]A\1
+8[^_]1
+AUATUWVSH
+L$8tTH
+[^_]A\A]1
+AWAVAUATUWVSH
+X[^_]A\A]A^A_1
+u7D9?u,A
+AUATUWVSH
+[^_]A\A]1
+ATUWVSH
+0[^_]A\1
+0[^_]A\1
+0[^_]A\1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+AUATUWVSH
+h[^_]A\A]1
+h[^_]A\A]1
+h[^_]A\A]1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+AUATUWVSH
+8[^_]A\A]1
+([^_]1
+AVAUATUWVSH
+0[^_]A\A]A^1
+AVWVSH
+8[^_A^
+8[^_A^
+AWAVATUWVSH
+p[^_]A\A^A_1
+p[^_]A\A^A_
+h[^_]1
+([^_]1
+AVWVSH
+([^_A^1
+ATUWVSH
+ [^_]A\1
+AVUWVSH
+P[^_]A^1
+h[^_]1
+8[^_]1
+h[^_]1
+H;l$PrfH
+AUATUWVSH
+([^_]A\A]1
+89abcdefI
+01234567H
+AVAUATUWVSH
+ [^_]A\A]A^1
+8[^_]1
+8[^_]1
+ATUWVSH
+ [^_]A\1
+AUATUWVSH
+([^_]A\A]1
+ATUWVSH
+@[^_]A\1
+ATUWVSH
+[^_]A\1
+ATUWVSH
+[^_]A\1
+H[^_]1
+ATUWVSH
+0[^_]A\1
+AVUWVSH
+0[^_]A^1
+0[^_]A^1
+H;L$Pu_L
+T$Hu$I
+H;D$PuPL
+T$Ht#I
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+([^_]1
+([^_]1
+([^_]1
+([^_]1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+AVAUATUWVSH
+0[^_]A\A]A^1
+([^_]1
+([^_]1
+([^_]1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+AWAVAUATUWVSH
+x[^_]A\A]A^A_1
+X[^_]1
+D$,t]H
+AVATUWVSH
+h[^_]A\A^1
+AVAUATUWVSH
+ [^_]A\A]A^1
+<$[u&L
+AVAUATUWVSH
+@[^_]A\A]A^1
+AVUWVSH
+P[^_]A^1
+ATUWVSH
+0[^_]A\1
+~D$@fH
+H[^_]1
+AVWVSH
+x[^_A^1
+8[^_]1
+AWAVAUATUWVSH
+Lcd$8D
+H[^_]A\A]A^A_1
+AWAVAUATUWVSH
+X[^_]A\A]A^A_1
+AVWVSH
+h[^_A^1
+AVAUATUWVS
+[^_]A\A]A^A_1
+ATUWVSH
+[^_]A\1
+AWAVAUATUWVSH
+H[^_]A\A]A^A_1
+AWAVAUATUWVSH
+8[^_]A\A]A^A_1
+AVAUATUWVSH
+P[^_]A\A]A^1
+ATUWVSH
+[^_]A\1
+ATUWVSH
+ [^_]A\1
+AVWVSH
+([^_A^
+([^_A^1
+D$pt0H
+X[^_]1
+X[^_]1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+AUATUWVSH
+<>=t#H
+([^_]A\A]1
+([^_]A\A]1
+AWAVUWVSH
+[^_]A^A_1
+AVATUWVSH
+x[^_]A\A^1
+AUATUWVSH
+H[^_]A\A]1
+ATUWVSH
+ [^_]A\1
+x[^_]1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+uxL+t$pL;t$xt^
+AVUWVSH
+@[^_]A^1
+AVWVSH
+8[^_A^1
+AWAVATUWVSH
+[^_]A\A^A_1
+AUATUWVSH
+8[^_]A\A]1
+ATUWVSH
+[^_]A\1
+ATUWVSH
+ [^_]A\1
+AUATUWVSH
+X[^_]A\A]1
+ATUWVSH
+`[^_]A\1
+h[^_]1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+h[^_]1
+AWAVWVSH
+[^_A^A_1
+ATUWVSH
+ [^_]A\1
+AVAUATUWVSH
+@[^_]A\A]A^1
+([^_]1
+([^_]1
+ u6L;I
+ATUWVSH
+0[^_]A\1
+AUATUWVSH
+h[^_]A\A]1
+AUATUWVSH
+X[^_]A\A]1
+ATUWVSH
+[^_]A\1
+)D$PfA;
+AVAUATUWVSH
+0[^_]A\A]A^1
+AVAUATUWVS
+[^_]A\A]A^A_1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+[^_A^1
+([^_]1
+([^_]1
+AUATUWVSH
+([^_]A\A]1
+AWAVAUATUWVSH
+[^_]A\A]A^A_1
+ATUWVS
+aticBlow
+DynamiteH
+OxychromH
+fishSwatH
+[^_]A\A]1
+AWAVAUATUWVSH
+H)T$8H
+H)l$8H
+[^_]A\A]A^A_1
+AUATUWVSH
+8[^_]A\A]1
+AWAVAUATUWVSH
+H[^_]A\A]A^A_1
+AVAUATUWVSH
+0[^_]A\A]A^1
+AVAUATUWVSH
+0[^_]A\A]A^1
+AVAUATUWVSH
+0[^_]A\A]A^1
+AWAVAUATUWVSH
+H[^_]A\A]A^A_1
+8[^_]1
+AVUWVSH
+@[^_]A^1
+L$htXA
+AWAVAUATUWVSH
+H[^_]A\A]A^A_1
+([^_]1
+([^_]1
+AWAVAUATUWVSH
+[^_]A\A]A^A_
+ssh-sk-helper.c
+%s: %s
+invalid error code %d
+%s: sshbuf_new failed
+%s: buffer error
+usage: %s [-v]
+%s: dup: %s
+ssh_msg_recv failed
+received message len %zu
+%s: parse version
+unsupported version: received %d, expected %d
+%s: parse
+%s: trailing data in request
+%s: Unable to parse private key
+%s: Unsupported key type %s
+ready to sign with key %s, provider %s: msg len %zu, compat 0x%lx
+Signing failed: %s
+%s: compose
+%s: bad type %u
+Enrollment failed: %s
+%s: encode key
+sshsk_load_resident failed: %s
+key %zu %s %s uidlen %zu
+%s: compose key
+%s: unsupported request type %u
+reply len %zu
+ssh_msg_send failed
+process_load_resident
+process_enroll
+reply_error
+process_sign
+ssh-sk.c
+array alloc failed
+alloc failed
+device
+sk_enroll response invalid
+sshkey_new failed
+allocation failed
+sshbuf_put_string
+Authenticator returned invalid ECDSA key
+Assigning EC_KEY failed
+invalid size: %zu
+malloc failed
+strdup application failed
+put key handle
+No FIDO SecurityKeyProvider specified
+calloc failed
+strdup failed
+internal
+sk_api_version
+provider %s is not an OpenSSH FIDO library
+Provider "%s" dlopen failed: %s
+Provider "%s" dlsym(sk_api_version) failed: %s
+provider %s implements version 0x%08lx
+Provider "%s" implements unsupported version 0x%08lx (supported: 0x%08lx)
+sk_enroll
+Provider %s dlsym(sk_enroll) failed: %s
+sk_sign
+Provider "%s" dlsym(sk_sign) failed: %s
+sk_load_resident_keys
+Provider "%s" dlsym(sk_load_resident_keys) failed: %s
+ with-pin
+provider "%s", device "%s", application "%s", userid "%s", flags 0x%02x, challenge len %zu%s
+unsupported key type
+missing provider
+missing application
+using random challenge
+Missing enrollment challenge
+using explicit challenge len=%zd
+provider "%s" failure %d
+ssh-sk-attest-v01
+compose
+provider "%s", key %s, flags 0x%02x%s
+sk_sign failed with code %d
+compose outer
+sk_sign response invalid
+compose inner
+, have-pin
+provider "%s"%s
+Provider "%s" returned failure %d
+rk %zu: slot %zu, alg %d, app "%s", uidlen %zu
+recallocarray failed
+sshsk_load_resident
+sshsk_ed25519_sig
+sshsk_ecdsa_sig
+sshsk_sign
+fill_attestation_blob
+sshsk_ed25519_assemble
+sshsk_ecdsa_assemble
+sshsk_key_from_response
+sshsk_open
+sshsk_add_option
+sshsk_enroll
+sk-usbhid.c
+%s: %s
+path == NULL
+calloc sk failed
+strdup path failed
+fido_dev_new failed
+fido_dev_open %s failed: %s
+libcrypto setup failed
+fido_cred_pubkey_ptr failed
+bad fido_cred_pubkey_len %zu
+BN_bin2bn failed
+EC_POINT_set_affine_coordinates failed
+bad pubkey length %zu
+malloc pubkey failed
+EC_POINT_point2oct failed
+bad fido_cred_pubkey_len len %zu
+device
+strdup device failed
+requested device %s
+requested unsupported option %s
+unknown required option
+device is not fido2
+fido_cbor_info_new failed
+fido_dev_get_cbor_info: %s
+option %s is unknown
+option %s is %s
+calloc skv failed
+fido_dev_info_ptr failed
+sk_open failed
+windows://hello
+fido_dev_info_new failed
+fido_dev_info_manifest failed: %s
+%zu device(s) detected
+selecting sk by cred
+sk_openv failed
+fido_assert_new failed
+fido_assert_set_clientdata: %s
+fido_assert_set_rp: %s
+fido_assert_allow_cred: %s
+fido_assert_up: %s
+fido_dev_get_assert: %s
+found key in %s
+selecting sk by touch
+fido_dev_get_touch_begin %s failed: %s
+sk_touch_begin failed
+polling %s
+fido_dev_get_touch_status %s: %s
+no device left to poll
+sk_touch_poll failed
+timeout
+enroll_response == NULL
+user too long
+requested user %s
+unsupported key type %d
+failed to find sk
+using device %s
+fido_assert_set_up: %s
+fido_assert_set_uv: %s
+%zu signatures returned
+credential exists
+key exists
+key_lookup failed
+fido_cred_new failed
+fido_cred_set_type: %s
+fido_cred_set_clientdata: %s
+fido_cred_set_rk: %s
+openssh
+fido_cred_set_user: %s
+fido_cred_set_rp: %s
+%s does not support credprot, refusing to create unprotected resident/verify-required key
+fido_cred_set_prot: %s
+fido_dev_make_cred: %s
+fido_cred_verify: %s
+self-attested credential
+fido_cred_verify_self: %s
+no attestation data
+calloc response failed
+pack_public_key failed
+calloc key handle failed
+calloc signature failed
+attestation cert len=%zu
+calloc attestation cert failed
+authdata len=%zu
+calloc authdata failed
+sign_response == NULL
+check_sk_options uv
+d2i_ECDSA_SIG failed
+bad length %zu
+pack_sig failed
+trying %s
+no PIN specified
+alloc failed
+check_sk_options failed
+device %s does not support resident keys
+get metadata for %s failed: %s
+existing %llu, remaining %llu
+alloc rp failed
+get RPs for %s failed: %s
+Device %s has resident keys for %zu RPs
+alloc rk failed
+get RKs for %s slot %zu failed: %s
+RP "%s" has %zu resident keys
+no RK in slot %zu
+Device %s RP "%s" user "%s" uidlen %zu slot %zu: type %d flags 0x%02x prot 0x%02x
+alloc sk_resident_key
+pack public key failed
+alloc rksp
+read_rks failed for %s
+rp %zu: name="%s" id="%s" hashlen=%zu
+(none)
+read_rks
+ssh_sk_load_resident_keys
+pack_sig_ed25519
+pack_sig_ecdsa
+check_sign_load_resident_options
+ssh_sk_sign
+skdebug
+pack_public_key_ed25519
+pack_public_key_ecdsa
+key_lookup
+sk_touch_poll
+sk_touch_begin
+sk_select_by_touch
+sk_try
+check_sk_options
+sk_openv
+sk_select_by_cred
+sk_probe
+sk_open
+check_enroll_options
+ssh_sk_enroll
+success
+unexpected internal error
+memory allocation failed
+incomplete message
+invalid format
+bignum is negative
+string is too large
+bignum is too large
+elliptic curve point is too large
+insufficient buffer space
+invalid argument
+key bits do not match
+invalid elliptic curve
+key type does not match
+unknown or unsupported key type
+elliptic curve does not match
+plain key provided where certificate required
+key lacks certificate data
+unknown/unsupported certificate type
+invalid certificate signing key
+invalid elliptic curve value
+incorrect signature
+error in libcrypto
+unexpected bytes remain after decoding
+invalid certificate
+communication with agent failed
+agent refused operation
+DH GEX group out of range
+disconnected
+message authentication code incorrect
+no matching cipher found
+no matching MAC found
+no matching compression method found
+no matching key exchange method found
+no matching host key type found
+protocol version mismatch
+could not read protocol version
+could not load host key
+rekeying not supported by peer
+passphrase is too short (minimum five characters)
+file changed while reading
+key encrypted using unsupported cipher
+incorrect passphrase supplied to decrypt private key
+bad permissions
+certificate does not match key
+key not found
+agent not present
+agent contains no identities
+internal error: buffer is read-only
+KRL file has invalid magic number
+Key is revoked
+Connection closed
+Connection timed out
+Connection corrupted
+Protocol error
+Invalid key length
+number is too large
+signature algorithm not supported
+requested feature not supported
+device not found
+unknown error
+%s%02x
+[REDIGIDO-PRESERVACAO]
+openssh-key-v1
+ssh-unknown
+unknown
+ssh-rsa
+rsa-sha2-256
+rsa-sha2-512
+ssh-rsa-cert-v01@openssh.com
+rsa-sha2-256-cert-v01@openssh.com
+rsa-sha2-512-cert-v01@openssh.com
+sk-ecdsa-sha2-nistp256@openssh.com
+webauthn-sk-ecdsa-sha2-nistp256@openssh.com
+sk-ecdsa-sha2-nistp256-cert-v01@openssh.com
+webauthn-sk-ecdsa-sha2-nistp256-cert-v01@openssh.com
+nistp256
+nistp384
+nistp521
+ .o+=*BOX@%&#/^SE
+[%s %u]
+Certificate invalid: not a host certificate
+Certificate invalid: not a user certificate
+Key is not a certificate
+Certificate invalid: name is not a listed principal
+Certificate lacks principal list
+Certificate invalid: expired
+Certificate invalid: not yet valid
+Certificate contains unsupported critical options
+Certificate signed with disallowed algorithm
+forever
+before %s
+after %s
+from %s to %s
+aes256-ctr
+bcrypt
+point=(NULL)
+%s: BN_new failed
+%s: EC_POINT_get_affine_coordinates
+exponent=
+(NULL)
+sshkey_dump_ec_point
+%.4zu: 
+buffer len = %zu
+3des-cbc
+none,zlib@openssh.com
+zlib@openssh.com,none
+aes128-cbc
+aes192-cbc
+aes256-cbc
+aes128-ctr
+aes192-ctr
+aes256-ctr
+aes128-gcm@openssh.com
+aes256-gcm@openssh.com
+chacha20-poly1305@openssh.com
+debug3
+debug2
+debug1
+internal error
+%s: %s
+%s%s%.*s
+%.500s
+DAEMON
+Unrecognized internal syslog level code %d
+Unrecognized internal syslog facility code %d
+Couldn't open logfile %s: %s
+UNKNOWN
+%.48s:%.48s():%d (bin=%s, pid=%ld)
+VERBOSE
+DEBUG1
+DEBUG2
+DEBUG3
+AUTHPRIV
+LOCAL0
+LOCAL1
+LOCAL2
+LOCAL3
+LOCAL4
+LOCAL5
+LOCAL6
+LOCAL7
+xmalloc.c
+xmalloc: zero size
+xmalloc: out of memory (allocating %zu bytes)
+xcalloc: zero size
+xcalloc: nmemb * size > SIZE_MAX
+xcalloc: out of memory (allocating %zu bytes)
+xreallocarray: out of memory (%zu elements of %zu bytes)
+xrecallocarray: out of memory (%zu elements of %zu bytes)
+xvasprintf: could not allocate memory
+xvasprintf
+xrecallocarray
+xreallocarray
+xcalloc
+xmalloc
+addrmatch.c
+couldn't parse address %.100s
+inconsistent mask length for match network "%.100s"
+empty entry in list "%.100s"
+list entry "%.100s" too long
+0123456789abcdefABCDEF.:/
+list entry "%.100s" contains invalid characters
+Invalid network entry "%.100s"
+Inconsistent mask length for network "%.100s"
+addr_match_cidr_list
+addr_match_list
+misc.c
+sshbuf_new failed
+NULL replacement for token %s
+too many keys
+percent expansion without token list
+environment variable '%s' missing closing '}'
+zero-length environment variable
+env var ${%s} has no value
+expand ${%s} -> '%s'
+sshbuf_put ${}
+sshbuf_put_u8 %%
+invalid format
+sshbuf_put %%-repl
+unknown key %%%c
+sshbuf_dup_string failed
+fcntl(%d, F_GETFL): %s
+fd %d is O_NONBLOCK
+fd %d setting O_NONBLOCK
+fcntl(%d, F_SETFL, O_NONBLOCK): %s
+fd %d is not O_NONBLOCK
+fd %d clearing O_NONBLOCK
+fcntl(%d, F_SETFL, ~O_NONBLOCK): %s
+getsockopt TCP_NODELAY: %.100s
+fd %d is TCP_NODELAY
+fd %d setting TCP_NODELAY
+setsockopt TCP_NODELAY: %.100s
+setsockopt SO_REUSEADDR fd %d: %s
+Setting routing domain is not supported on this platform
+invalid TOS %d
+set socket %d IP_TOS 0x%02x
+setsockopt socket %d IP_TOS %d: %s
+set socket %d IPV6_TCLASS 0x%02x
+setsockopt socket %d IPV6_TCLASS %d: %s
+unsupported socket family %d
+getsockopt: %s
+0123456789.
+%02lluw%01ud%02uh
+%01ud%02uh%02um
+%02u:%02u:%02u
+[%s]:%d
+put_host_port: asprintf: %s
+put_host_port: %s
+argument too long
+too many arguments
+arglist corrupt
+tried to replace invalid arg %d >= %d
+No such user %s
+No such uid %ld
+%s%s%s
+xasprintf failed
+Path too long
+failed
+Tunnel interfaces are not supported on this platform
+/dev/null
+Couldn't open /dev/null: %s
+dup2: %s
+tohex: length > 65536
+clock_gettime: %s
+TMPDIR
+/tmp/ssh-XXXXXXXXXXXX
+%s/ssh-XXXXXXXXXXXX
+template string too short
+0x%02x
+path "%s" too long for Unix domain socket
+socket: %.100s
+unlink(%s): %.100s
+cannot bind to path %s: %s
+cannot listen on path %s: %s
+set socket %d IPV6_V6ONLY
+setsockopt IPV6_V6ONLY: %s
+/dev/tty
+already daemonized
+sshbuf_put_u8
+assemble
+malloc failed
+%s waitpid: %s
+%s %s exited on signal %d
+%s %s failed, status %d
+realpath %s failed: %s
+%s is not a regular file
+bad ownership or modes for file %s
+dirname() failed
+bad ownership or modes for directory %s
+cannot stat file %s: %s
+Invalid environment variable "%.100s"
+environment size mismatch
+child_set_env: too many env vars
+empty domain name
+domain name "%.100s" starts with invalid character
+domain name "%.100s" contains consecutive separators
+domain name "%.100s" contains invalid characters
+missing
+%Y-%m-%dT%H:%M
+%Y-%m-%d
+%Y-%m-%dT%H:%M:%S
+%.4s-%.2s-%.2s
+%.4s-%.2s-%.2sT%.2s:%.2s
+%.4s-%.2s-%.2sT%.2s:%.2s:%.2s
+UNKNOWN-TIME
+missing start quote
+memory allocation failed
+missing end quote
+%s line %d: Too many %s entries
+sigaction(%s): %s
+open %s: %s
+dup2: %s
+execve
+%s: inconsistent arguments
+%s: no user for current uid
+%s command "%s" running as %s (flags 0x%x)
+inconsistent flags
+inconsistent flags/output
+%s path is not absolute
+Could not stat %s "%s": %s
+Unsafe %s "%s": %s
+%s: pipe: %s
+%s: fork: %s
+/bin:/usr/sbin:/sbin:/usr/bin
+LOGNAME
+%s: open %s: %s
+%s: dup2: %s
+%s: initgroups(%s, %u): %s
+%s: setresgid %u: %s
+%s: setresuid %u: %s
+%s %s "%s": %s
+%s: fdopen: %s
+%s pid %ld
+fstat %s: %s
+%s bad size %lld
+mmap %s: %s
+%s does not contain expected string %s
+lib_contains_symbol
+subprocess
+stdfd_devnull
+ssh_signal
+opt_array_append2
+child_set_env
+exited_cleanly
+argv_assemble
+daemonized
+sock_set_v6only
+unix_listener
+mktemp_proto
+monotime_ts
+tun_open
+percent_dollar_expand
+percent_expand
+vdollar_percent_expand
+tilde_expand
+replacearg
+addargs
+put_host_port
+timeout_connect
+set_sock_tos
+set_rdomain
+set_reuseaddr
+set_nodelay
+unset_nonblock
+set_nonblock
+lowdelay
+throughput
+reliability
+ecdsa-sha2-nistp521-cert-v01@openssh.com
+ECDSA-CERT
+ecdsa-sha2-nistp521
+ecdsa-sha2-nistp384-cert-v01@openssh.com
+ecdsa-sha2-nistp384
+ecdsa-sha2-nistp256-cert-v01@openssh.com
+ecdsa-sha2-nistp256
+webauthn-sk-ecdsa-sha2-nistp256@openssh.com
+webauthn-sk-ecdsa-sha2-nistp256-cert-v01@openssh.com
+sk-ecdsa-sha2-nistp256@openssh.com
+{"type":"webauthn.get","challenge":"
+","origin":"
+ECDSA-SK-CERT
+ECDSA-SK
+sk-ecdsa-sha2-nistp256-cert-v01@openssh.com
+ssh-ed25519-sk.c
+crypto_sign_ed25519_open failed: %d
+ssh_ed25519_sk_verify
+sk-ssh-ed25519-cert-v01@openssh.com
+ED25519-SK-CERT
+sk-ssh-ed25519@openssh.com
+ED25519-SK
+ssh-rsa
+rsa-sha2-256
+rsa-sha2-512
+ssh-rsa-cert-v01@openssh.com
+rsa-sha2-256-cert-v01@openssh.com
+rsa-sha2-512-cert-v01@openssh.com
+RSA-CERT
+type %u len %zu
+write: %s
+ssh_msg_recv entering
+read header: %s
+read: bad msg_len %u
+reserve
+read: %s
+ssh_msg_recv
+ssh_msg_send
+ssh-ed25519
+ssh-ed25519.c
+crypto_sign_ed25519_open failed: %d
+ssh_ed25519_verify
+ssh-ed25519-cert-v01@openssh.com
+ED25519-CERT
+ED25519
+SHA256
+SHA384
+SHA512
+ed25519-openssl.c
+EVP_PKEY_CTX_new_id failed
+EVP_PKEY_keygen_init failed
+EVP_PKEY_keygen failed
+EVP_PKEY_get_raw_public_key failed
+public key length mismatch: %zu
+EVP_PKEY_get_raw_private_key failed
+private key length mismatch: %zu
+EVP_PKEY_new_raw_private_key failed
+EVP_MD_CTX_new failed
+EVP_DigestSignInit failed
+EVP_DigestSign failed
+signature length mismatch: %zu
+message length overflow: siglen=%zu mlen=%llu
+signed message bad length: %llu
+message bad length: %llu
+EVP_PKEY_new_raw_public_key failed
+EVP_DigestVerifyInit failed
+EVP_DigestVerify failed
+crypto_sign_ed25519_open
+crypto_sign_ed25519
+crypto_sign_ed25519_keypair
+/proc/%ld/fd
+ALLUSERSPROFILE=
+COMPUTERNAME=
+COMSPEC=
+CYGWIN=
+PATHEXT=
+PROGRAMFILES=
+SYSTEMDRIVE=
+SYSTEMROOT=
+WINDIR=
+bsd-setres_id.c
+setregid %lu: %.100s
+setreuid %lu: %.100s
+setresuid
+setresgid
+ iciNWq
+Ze2Zh@
+A4x{%`
+BFUa.X
+w``u N
+invalid
+too large
+too small
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+BIO_ctrl
+BIO_free
+BIO_new
+BIO_s_mem
+BIO_write
+BN_CTX_free
+BN_CTX_new
+BN_bin2bn
+BN_bn2bin
+BN_clear_free
+BN_cmp
+BN_div
+BN_dup
+BN_is_one
+BN_new
+BN_num_bits
+BN_print_fp
+BN_set_flags
+BN_sub
+BN_value_one
+ECDSA_SIG_free
+ECDSA_SIG_get0
+ECDSA_SIG_new
+ECDSA_SIG_set0
+EC_GROUP_cmp
+EC_GROUP_free
+EC_GROUP_get_cofactor
+EC_GROUP_get_curve_name
+EC_GROUP_get_order
+EC_GROUP_new_by_curve_name
+EC_GROUP_set_asn1_flag
+EC_KEY_free
+EC_KEY_get0_group
+EC_KEY_get0_private_key
+EC_KEY_get0_public_key
+EC_KEY_new_by_curve_name
+EC_KEY_set_group
+EC_KEY_set_private_key
+EC_KEY_set_public_key
+EC_POINT_free
+EC_POINT_get_affine_coordinates
+EC_POINT_is_at_infinity
+EC_POINT_mul
+EC_POINT_new
+EC_POINT_oct2point
+EC_POINT_point2oct
+EC_POINT_set_affine_coordinates
+ERR_get_error
+ERR_peek_error
+ERR_peek_last_error
+EVP_CIPHER_CTX_ctrl
+EVP_CIPHER_CTX_free
+EVP_CIPHER_CTX_get_iv_length
+EVP_CIPHER_CTX_get_key_length
+EVP_CIPHER_CTX_get_updated_iv
+EVP_CIPHER_CTX_iv
+EVP_CIPHER_CTX_iv_noconst
+EVP_CIPHER_CTX_new
+EVP_CIPHER_CTX_set_key_length
+EVP_Cipher
+EVP_CipherInit
+EVP_Digest
+EVP_DigestFinal_ex
+EVP_DigestInit_ex
+EVP_DigestSign
+EVP_DigestSignInit
+EVP_DigestUpdate
+EVP_DigestVerify
+EVP_DigestVerifyInit
+EVP_MD_CTX_copy_ex
+EVP_MD_CTX_free
+EVP_MD_CTX_get0_md
+EVP_MD_CTX_new
+EVP_MD_get_block_size
+EVP_PKEY_CTX_free
+EVP_PKEY_CTX_new_id
+EVP_PKEY_CTX_set_ec_paramgen_curve_nid
+EVP_PKEY_CTX_set_rsa_keygen_bits
+EVP_PKEY_cmp
+EVP_PKEY_free
+EVP_PKEY_get0_EC_KEY
+EVP_PKEY_get0_RSA
+EVP_PKEY_get1_EC_KEY
+EVP_PKEY_get1_RSA
+EVP_PKEY_get_base_id
+EVP_PKEY_get_bits
+EVP_PKEY_get_raw_private_key
+EVP_PKEY_get_raw_public_key
+EVP_PKEY_get_size
+EVP_PKEY_keygen
+EVP_PKEY_keygen_init
+EVP_PKEY_new
+EVP_PKEY_new_raw_private_key
+EVP_PKEY_new_raw_public_key
+EVP_PKEY_set1_EC_KEY
+EVP_PKEY_set1_RSA
+EVP_PKEY_up_ref
+EVP_aes_128_cbc
+EVP_aes_128_ctr
+EVP_aes_128_gcm
+EVP_aes_192_cbc
+EVP_aes_192_ctr
+EVP_aes_256_cbc
+EVP_aes_256_ctr
+EVP_aes_256_gcm
+EVP_chacha20
+EVP_des_ede3_cbc
+EVP_md5
+EVP_sha1
+EVP_sha256
+EVP_sha384
+EVP_sha512
+PEM_read_bio_PrivateKey
+PEM_write_bio_ECPrivateKey
+PEM_write_bio_PrivateKey
+PEM_write_bio_RSAPrivateKey
+RSA_blinding_on
+RSA_free
+RSA_get0_crt_params
+RSA_get0_factors
+RSA_get0_key
+RSA_new
+RSA_set0_crt_params
+RSA_set0_factors
+RSA_set0_key
+d2i_ECDSA_SIG
+i2d_ECDSA_SIG
+fido_assert_allow_cred
+fido_assert_count
+fido_assert_flags
+fido_assert_free
+fido_assert_new
+fido_assert_set_clientdata
+fido_assert_set_rp
+fido_assert_set_up
+fido_assert_set_uv
+fido_assert_sig_len
+fido_assert_sig_ptr
+fido_assert_sigcount
+fido_assert_user_id_len
+fido_assert_user_id_ptr
+fido_cbor_info_free
+fido_cbor_info_new
+fido_cbor_info_options_len
+fido_cbor_info_options_name_ptr
+fido_cbor_info_options_value_ptr
+fido_cred_authdata_len
+fido_cred_authdata_ptr
+fido_cred_flags
+fido_cred_fmt
+fido_cred_free
+fido_cred_id_len
+fido_cred_id_ptr
+fido_cred_new
+fido_cred_prot
+fido_cred_pubkey_len
+fido_cred_pubkey_ptr
+fido_cred_set_clientdata
+fido_cred_set_prot
+fido_cred_set_rk
+fido_cred_set_rp
+fido_cred_set_type
+fido_cred_set_user
+fido_cred_sig_len
+fido_cred_sig_ptr
+fido_cred_type
+fido_cred_user_id_len
+fido_cred_user_id_ptr
+fido_cred_user_name
+fido_cred_verify
+fido_cred_verify_self
+fido_cred_x5c_len
+fido_cred_x5c_ptr
+fido_credman_get_dev_metadata
+fido_credman_get_dev_rk
+fido_credman_get_dev_rp
+fido_credman_metadata_free
+fido_credman_metadata_new
+fido_credman_rk
+fido_credman_rk_count
+fido_credman_rk_existing
+fido_credman_rk_free
+fido_credman_rk_new
+fido_credman_rk_remaining
+fido_credman_rp_count
+fido_credman_rp_free
+fido_credman_rp_id
+fido_credman_rp_id_hash_len
+fido_credman_rp_name
+fido_credman_rp_new
+fido_dev_cancel
+fido_dev_close
+fido_dev_free
+fido_dev_get_assert
+fido_dev_get_cbor_info
+fido_dev_get_touch_begin
+fido_dev_get_touch_status
+fido_dev_info_free
+fido_dev_info_manifest
+fido_dev_info_new
+fido_dev_info_path
+fido_dev_info_ptr
+fido_dev_is_fido2
+fido_dev_is_winhello
+fido_dev_make_cred
+fido_dev_new
+fido_dev_open
+fido_dev_supports_cred_prot
+fido_init
+fido_strerr
+__b64_ntop
+__b64_pton
+__errno
+__getreent
+__locale_ctype_ptr
+__main
+__progname
+__stack_chk_fail
+__stack_chk_guard
+_dll_crt0
+_impure_ptr
+arc4random
+arc4random_buf
+asprintf
+calloc
+clock_gettime
+close_range
+closedir
+closelog
+connect
+cygwin_internal
+dirname
+dlclose
+dlerror
+dll_dllcrt0
+dlopen
+environ
+execve
+explicit_bzero
+fdopen
+fprintf
+freeaddrinfo
+fwrite
+gai_strerror
+getaddrinfo
+getenv
+geteuid
+getnameinfo
+getopt
+getpagesize
+getpid
+getppid
+getpwnam
+getpwuid
+getservbyname
+getsid
+getsockname
+getsockopt
+gettimeofday
+getuid
+initgroups
+listen
+localtime_r
+malloc
+mbstowcs
+memchr
+memcmp
+memcpy
+memmem
+memmove
+memset
+mktime
+msys_detach_dll
+munmap
+nanosleep
+opendir
+openlog
+pathconf
+posix_memalign
+readdir
+realloc
+reallocarray
+realpath
+setregid
+setreuid
+setsockopt
+sigaction
+sigfillset
+sigprocmask
+snprintf
+socket
+strcasecmp
+strchr
+strcmp
+strcspn
+strdup
+strerror
+strftime
+strlcat
+strlcpy
+strlen
+strncasecmp
+strncmp
+strndup
+strpbrk
+strptime
+strrchr
+strsep
+strsignal
+strspn
+strtod
+strtol
+strtoll
+sysconf
+syslog
+timegm
+timingsafe_bcmp
+tolower
+towlower
+unlink
+vasprintf
+vsnprintf
+waitpid
+__addvdi3
+__addvsi3
+__mulvdi3
+__mulvsi3
+__negvdi2
+__negvsi2
+__subvdi3
+__subvsi3
+GetModuleHandleA
+msys-crypto-3.dll
+msys-fido2-1.dll
+msys-2.0.dll
+msys-gcc_s-seh-1.dll
+KERNEL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__imp_setsockopt
+__imp_fido_cred_free
+__nm___progname
+__imp_BN_sub
+__imp_dlopen
+__imp_explicit_bzero
+__imp_getuid
+__imp_fido_credman_rp_new
+__imp_fido_cred_flags
+__imp_openlog
+__imp_fido_dev_is_fido2
+__imp_EC_POINT_set_affine_coordinates
+__lib64_libkernel32_a_iname
+__imp_strptime
+__imp_getsockname
+__imp_EVP_Digest
+__imp_fido_cred_user_id_len
+__imp_EVP_CIPHER_CTX_set_key_length
+__imp_fido_cred_set_clientdata
+__imp_EVP_PKEY_get1_EC_KEY
+__imp_fido_cred_user_id_ptr
+__imp__dll_crt0
+__imp_tolower
+__imp_ECDSA_SIG_set0
+__imp_freeaddrinfo
+__imp_pathconf
+__imp_strndup
+__imp_calloc
+__imp_BIO_new
+_head_msys_crypto_3_dll
+__imp_EVP_PKEY_free
+__imp_EC_KEY_get0_group
+__imp_fido_dev_get_cbor_info
+__imp_EC_GROUP_set_asn1_flag
+__imp_EVP_DigestFinal_ex
+__imp_d2i_ECDSA_SIG
+__imp_EVP_PKEY_CTX_new_id
+__imp_strsignal
+__imp_EVP_PKEY_get0_EC_KEY
+__imp_towlower
+__imp_getpid
+__imp___stack_chk_guard
+__imp___stack_chk_fail
+__imp_fido_cred_new
+__imp_fido_cred_set_rk
+__imp_EVP_CIPHER_CTX_new
+__imp_EVP_PKEY_get0_RSA
+__imp_fido_assert_sig_ptr
+__imp_getpagesize
+__imp_fido_credman_get_dev_rp
+__imp_arc4random_buf
+__imp_strlcpy
+__imp_EVP_des_ede3_cbc
+__imp_strspn
+__imp_vasprintf
+__imp_BN_is_one
+__imp_BN_num_bits
+__imp_fputc
+__imp_fido_cred_fmt
+__imp_EVP_DigestUpdate
+__imp_RSA_get0_key
+__imp_EVP_Cipher
+__imp_fido_dev_get_touch_status
+__imp_EVP_PKEY_new_raw_public_key
+__imp_EVP_PKEY_get1_RSA
+__imp_BN_cmp
+_head_msys_gcc_s_seh_1_dll
+__imp_EC_GROUP_get_curve_name
+__imp_fido_dev_open
+__imp_BIO_write
+__imp_nanosleep
+__imp_strpbrk
+__imp_getservbyname
+__imp_getenv
+__imp_EC_KEY_get0_public_key
+__imp_EVP_PKEY_set1_EC_KEY
+__imp_timegm
+__imp_fido_cred_authdata_len
+__imp_fido_dev_close
+__imp_environ
+__imp_ECDSA_SIG_free
+__imp_fido_cred_id_ptr
+__imp_fido_cbor_info_new
+__nm___stack_chk_guard
+_head_msys_2_0_dll
+__imp_listen
+__imp_EVP_PKEY_CTX_set_ec_paramgen_curve_nid
+__imp_fido_strerr
+__imp_mktime
+__imp_sysconf
+__imp_setregid
+__imp_EVP_PKEY_set1_RSA
+__imp_realpath
+__imp_sigaction
+__imp_strtol
+__imp_EC_POINT_new
+__imp_fido_assert_set_clientdata
+__imp_fido_credman_rp_id
+__imp_fido_credman_rk_new
+__imp_EVP_DigestVerifyInit
+__imp_strcmp
+__imp___progname
+__imp_EVP_PKEY_get_base_id
+__imp_read
+__imp_EVP_CIPHER_CTX_ctrl
+__imp_timingsafe_bcmp
+__imp_fido_assert_set_up
+__imp_cygwin_internal
+__imp_BN_CTX_free
+__imp_posix_memalign
+__imp_strrchr
+__imp_free
+__imp_fdopen
+__imp_kill
+__imp_EVP_CIPHER_CTX_free
+__imp___errno
+__imp_readdir
+__imp_sigprocmask
+__imp_EC_POINT_free
+__imp_EVP_MD_CTX_copy_ex
+__imp_EVP_aes_192_cbc
+__imp_EC_KEY_get0_private_key
+__imp_fido_cred_id_len
+__imp_ERR_peek_error
+__imp_EVP_DigestSign
+__imp_RSA_set0_crt_params
+__nm__impure_ptr
+__imp_EVP_aes_128_cbc
+__imp_fido_dev_supports_cred_prot
+__imp_memchr
+__imp_fido_assert_new
+__imp_EVP_PKEY_get_raw_public_key
+__imp_EVP_sha512
+__imp_EVP_MD_get_block_size
+__imp_dup2
+__imp_syslog
+__imp_EC_GROUP_free
+__imp_strdup
+__imp_fido_credman_get_dev_metadata
+__imp_closelog
+__imp_fido_dev_new
+__imp_EVP_CIPHER_CTX_get_key_length
+__imp_write
+__imp_EC_GROUP_get_order
+__imp__exit
+__imp_EVP_sha384
+__imp_fido_dev_get_assert
+__imp_dup
+__imp_fido_cbor_info_options_len
+__imp_PEM_write_bio_PrivateKey
+__imp_RSA_free
+__imp_fido_credman_rk_count
+__imp_fido_cred_verify_self
+__imp_memset
+__imp_EC_KEY_set_group
+__IAT_end__
+__imp_fido_credman_rp_free
+__imp_memcpy
+__imp_localtime_r
+__imp_BN_set_flags
+__imp_EVP_MD_CTX_new
+__imp_fork
+__imp_PEM_write_bio_RSAPrivateKey
+__imp_memmove
+__imp_i2d_ECDSA_SIG
+__imp___mulvdi3
+__imp_ECDSA_SIG_get0
+__imp_getopt
+__imp_dll_dllcrt0
+msys_crypto_3_dll_iname
+__imp_EC_POINT_is_at_infinity
+__imp_BN_clear_free
+__imp_fstat
+__imp_EC_GROUP_get_cofactor
+__imp_strlcat
+__imp_strerror
+__imp_memmem
+__imp_fido_assert_user_id_ptr
+__imp_RSA_get0_crt_params
+__imp_BIO_free
+__imp_fido_assert_free
+__imp_RSA_set0_key
+__imp___addvdi3
+__imp___locale_ctype_ptr
+__imp_fwrite
+__imp_fido_assert_set_uv
+__imp_fido_credman_rk_remaining
+__imp_setreuid
+_head_lib64_libkernel32_a
+__imp_dlsym
+__imp_pipe
+__imp_msys_detach_dll
+__imp_strftime
+msys_fido2_1_dll_iname
+__imp_gettimeofday
+__imp_fido_cred_set_prot
+__imp_fido_cred_pubkey_len
+__imp_fido_cred_sig_len
+__imp_EVP_PKEY_get_size
+__imp_fido_cbor_info_free
+__imp_fido_credman_rk_existing
+__imp_EVP_DigestVerify
+__imp_open
+__imp_BN_new
+__imp_fido_assert_user_id_len
+__imp_close_range
+__imp_bind
+__imp___b64_ntop
+__imp_fido_cbor_info_options_value_ptr
+__imp_mbstowcs
+__imp_EVP_aes_256_ctr
+__imp_fido_init
+__imp_snprintf
+__imp_getpwnam
+__imp___getreent
+__imp_EC_POINT_oct2point
+__imp_getsid
+__imp_vsnprintf
+__imp_fido_assert_set_rp
+__imp_fido_dev_info_new
+__imp_sigfillset
+__imp_RSA_new
+__imp_GetModuleHandleA
+__imp_EVP_CIPHER_CTX_get_updated_iv
+__imp_strsep
+__imp___main
+__imp_fido_cred_sig_ptr
+__imp_strlen
+__imp_EVP_DigestSignInit
+__imp_EVP_CIPHER_CTX_iv
+__imp_asprintf
+__imp_fido_dev_free
+__imp_malloc
+__imp_EVP_sha256
+__imp_fido_assert_sigcount
+__imp_fido_cred_prot
+__imp_PEM_read_bio_PrivateKey
+__imp___negvdi2
+__imp_EC_GROUP_new_by_curve_name
+__imp_dlerror
+_head_msys_fido2_1_dll
+__imp_RSA_get0_factors
+__imp__impure_ptr
+__imp_stat
+__imp_realloc
+__imp_exit
+__imp_fido_credman_metadata_new
+__imp_ppoll
+__imp_fido_dev_info_free
+__imp_EVP_aes_256_cbc
+__imp_EVP_CipherInit
+__imp_fido_cred_user_name
+__imp_BN_bn2bin
+__imp_EVP_PKEY_new
+__imp_time
+__imp_RSA_set0_factors
+__IAT_start__
+__imp_fido_cred_set_type
+__imp_fido_dev_info_ptr
+__imp_EVP_md5
+__imp_fido_cred_authdata_ptr
+__imp_EC_KEY_free
+__imp_fido_cred_set_user
+__imp_EC_POINT_mul
+__imp___addvsi3
+__imp___mulvsi3
+__imp_EVP_PKEY_cmp
+__imp_fido_cred_x5c_len
+__imp_fido_assert_allow_cred
+__imp_EVP_PKEY_up_ref
+__imp_unlink
+__imp_poll
+__imp_fido_cred_set_rp
+__imp_dlclose
+__imp_EC_KEY_new_by_curve_name
+__imp_EVP_PKEY_CTX_set_rsa_keygen_bits
+__imp_fcntl
+__imp_getnameinfo
+__imp_strcspn
+__imp_closedir
+__imp_EC_GROUP_cmp
+__imp_EVP_aes_128_ctr
+__imp_fprintf
+__imp_fido_credman_rp_count
+__imp_EVP_MD_CTX_get0_md
+__imp_EVP_MD_CTX_free
+__imp_fido_dev_info_path
+__imp___subvsi3
+__imp_fido_dev_make_cred
+__imp_fido_credman_rp_name
+__imp_dirname
+__imp_dirfd
+__imp_fido_cbor_info_options_name_ptr
+__imp___subvdi3
+__imp_strncasecmp
+__imp_fido_dev_cancel
+__imp_EVP_PKEY_keygen
+__imp_BN_div
+__imp_getpwuid
+__imp_munmap
+__imp_EVP_PKEY_new_raw_private_key
+__imp_fido_credman_get_dev_rk
+__imp_strcasecmp
+__imp_fido_assert_count
+__imp_fido_dev_is_winhello
+__imp_ECDSA_SIG_new
+__imp_geteuid
+__imp_EC_KEY_set_private_key
+__imp_raise
+__imp_strtod
+__imp_waitpid
+__imp_strncmp
+__imp_BN_value_one
+__imp_getppid
+__imp_EVP_aes_256_gcm
+__imp_strchr
+__imp_initgroups
+__imp_close
+__imp_EC_POINT_get_affine_coordinates
+__imp_fido_cred_verify
+__imp_EVP_chacha20
+__imp_getsockopt
+__imp_EVP_PKEY_CTX_free
+__imp_ERR_peek_last_error
+__imp_PEM_write_bio_ECPrivateKey
+__imp_EVP_PKEY_get_bits
+__imp_socket
+__imp_fido_cred_type
+__imp_BN_dup
+__imp_fido_assert_sig_len
+__imp_mmap
+__imp_fido_assert_flags
+__imp_EC_POINT_point2oct
+__imp_BIO_ctrl
+__imp_BN_bin2bn
+__imp_EVP_DigestInit_ex
+__imp_reallocarray
+__imp_EVP_PKEY_get_raw_private_key
+__imp_execve
+__imp_fido_dev_get_touch_begin
+__imp_EVP_CIPHER_CTX_get_iv_length
+__nm_environ
+__imp_EVP_CIPHER_CTX_iv_noconst
+__imp_fido_credman_metadata_free
+__imp_EVP_sha1
+__imp_BIO_s_mem
+__imp_fido_cred_pubkey_ptr
+__imp_readv
+__imp_fido_dev_info_manifest
+__imp_ERR_get_error
+__imp_fido_credman_rk_free
+__imp_fido_credman_rp_id_hash_len
+__imp_EC_KEY_set_public_key
+__imp_opendir
+__imp_RSA_blinding_on
+__imp_clock_gettime
+__imp_BN_print_fp
+__imp_EVP_aes_128_gcm
+__imp_strtoll
+__imp___b64_pton
+__imp_execv
+__imp_connect
+__imp___negvsi2
+__imp_getaddrinfo
+__imp_EVP_aes_192_ctr
+__imp_BN_CTX_new
+__imp_EVP_PKEY_keygen_init
+__imp_memcmp
+__imp_fido_cred_x5c_ptr
+__imp_fido_credman_rk
+msys_gcc_s_seh_1_dll_iname
+__imp_gai_strerror
+msys_2_0_dll_iname
+__imp_arc4random

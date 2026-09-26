@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "centraldark://contracts/reality-judge",
+  "title": "CentralDark Reality Judge Receipt",
+  "type": "object",
+  "required": [
+    "target",
+    "claim",
+    "verdict",
+    "proof_refs"
+  ],
+  "properties": {
+    "target": {
+      "type": "string"
+    },
+    "claim": {
+      "type": "string"
+    },
+    "verdict": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "UNKNOWN",
+        "BLOCKED"
+      ]
+    },
+    "proof_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "writer_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "judge_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "remeasured_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

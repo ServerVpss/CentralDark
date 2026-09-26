@@ -1,0 +1,278 @@
+schema: CENTRALDARK_DELTAUTIL_GEMINI_MODAL
+schema_version: 1
+mode: EXTEND_EXISTING_ONLY
+owner:
+  canonical: DELTAUTIL
+  reuse_existing: true
+  second_delta_engine_forbidden: true
+master:
+  required: true
+  event: CENTRALDARK
+  internal_phase: DELTAUTIL_RECONCILE
+semantic_compaction:
+  enabled: true
+  grammar_may_shrink: true
+  preserve:
+  - canonical_id
+  - intent
+  - owner
+  - source_ref
+  - revision_or_head
+  - dependencies
+  - proof_target
+  - tests
+  - counterproof
+  - security_gates
+  - receipt
+  - next_cursor
+  never_drop:
+  - semantic_field
+  - proof_field
+  - failure_boundary
+  - authority_boundary
+  verbose_history_preserved: true
+  digest_is_retrieval_layer_not_replacement: true
+delta_candidate:
+  accepted_sources:
+  - CHAT
+  - GITHUB_URL
+  - DRIVE_FILE
+  - MARKDOWN
+  - ZIP
+  - MANIFEST
+  - AUTHORIZED_WEBHOOK
+  - LOCAL_PACKAGE
+  flow:
+  - INGEST
+  - NORMALIZE
+  - SECRET_SCRUB
+  - DEDUPE
+  - REALITY_SCOPE_GATE
+  - SEMANTIC_DIGEST
+  - EXISTING_OWNER_MATCH
+  - SCORE
+  - GEMINI_REVIEW_IF_AVAILABLE
+  - FALSIFIER
+  - PREVIEW
+  - ONE_WRITER_IF_APPROVED
+  - TEST
+  - DOCUMENTATION_GATE
+  - RECEIPT
+scores:
+  proof_semantics: DECISION_AID_NOT_PROOF
+  unknown_must_remain_unknown: true
+  compatibility_weights:
+    owner_match: 25
+    extension_only: 15
+    contract_match: 15
+    tests: 20
+    no_writer_collision: 10
+    secret_boundary: 10
+    documentation: 5
+  display:
+  - compatibility_percent
+  - evidence_coverage_percent
+  - integration_readiness_percent
+  - security_gate_coverage_percent
+  - regression_risk_percent
+  - projected_gain_percent_or_unknown
+visual_status:
+  green:
+    glyph: 🟢
+    meaning: ACTIVE_OR_PASS
+  yellow:
+    glyph: 🟡
+    meaning: PENDING_OR_UNKNOWN
+  red:
+    glyph: 🔴
+    meaning: BLOCKED_OR_CONFLICT
+  blue:
+    glyph: 🔵
+    meaning: AVAILABLE_OR_INFO
+  black:
+    glyph: ⚫
+    meaning: DISABLED
+  color_alone_is_proof: false
+gemini_modal:
+  role: READ_ONLY_ANALYST
+  route: centraldark-router
+  may_write: false
+  may_install: false
+  may_self_approve: false
+  sees_raw_secrets: false
+  panels:
+  - SUMMARY
+  - SOURCE
+  - OWNER_MATCH
+  - COMPATIBILITY
+  - EXPECTED_GAIN
+  - REGRESSION_RISK
+  - SECURITY_GATES
+  - CONFLICTS
+  - BEFORE_AFTER_GRAPH
+  - TEST_PLAN
+  - RECEIPT_PREVIEW
+  admin_actions:
+  - PREVIEW
+  - TEST
+  - IMPORT
+  - MERGE_INTO_EXISTING_OWNER
+  - REJECT
+workspace_plugin_admin:
+  sections:
+  - WORKSPACES
+  - PLUGINS
+  - CONNECTIONS
+  - DELTA_INBOX
+  - GEMINI_MODAL
+  external_navigation_minimized: true
+  embed_strategy_order:
+  - NATIVE_ADAPTER
+  - SAFE_IFRAME_IF_ALLOWED
+  - SERVER_SIDE_API_ADAPTER
+  - ONE_TIME_EXTERNAL_AUTH_IF_REQUIRED
+  safe_iframe:
+    require_provider_frame_permission: true
+    require_csp_frame_ancestors_compatible: true
+    require_x_frame_options_compatible: true
+    unknown: DO_NOT_EMBED
+    bypass_security_headers: false
+  plugin_install:
+    dry_run_first: true
+    compatibility_preview_required: true
+    owner_match_required: true
+    falsifier_required: true
+    tests_required: true
+    receipt_required: true
+    master_context_required: true
+    second_engine_forbidden: true
+app_registry:
+  mode: ONE_HUB_MANY_APPS
+  canonical_owner: HUB_CONNECTIONS
+  second_app_control_plane_forbidden: true
+  provider_record_required_fields:
+  - canonical_id
+  - display_name
+  - provider
+  - connection_state
+  - workspace_or_account
+  - auth_mode
+  - secret_ref
+  - capabilities
+  - permissions_state
+  - health
+  - last_measured
+  - source_ref
+  - receipt_ref
+  states:
+    CONNECTED: 🟢
+    PENDING_OR_UNKNOWN: 🟡
+    BLOCKED_OR_CONFLICT: 🔴
+    AVAILABLE: 🔵
+    DISABLED: ⚫
+  invariants:
+    raw_secret_in_context: false
+    token_in_docs: false
+    connection_implies_write_authority: false
+    oauth_scope_implies_runtime_success: false
+    display_name_changes_canonical_id: false
+  admin_actions:
+  - CONNECT
+  - REAUTHORIZE
+  - TEST
+  - DETAILS
+  - ENABLE
+  - DISABLE
+  - DISCONNECT
+  auth_lifecycle:
+  - DISCOVER
+  - AUTHORIZE_IF_REQUIRED
+  - STORE_SECRETREF
+  - MEASURE_SCOPES_OR_CAPABILITIES
+  - TEST
+  - REGISTER
+  - REFRESH_WHEN_PROVIDER_SUPPORTS
+  - REMEASURE
+  - RECEIPT
+  provider_adapters:
+    SLACK:
+      measured_state: CONNECTED
+      workspace: CENTRALDARK
+      workspace_id: T0BTRETGDC5
+      capabilities:
+      - WORKSPACES
+      - CHANNELS
+      - MESSAGES
+      - FILES
+      - CANVAS
+      - REMINDERS
+      - PROFILE
+      secret_storage: SecretRef
+      direct_api_adapter: true
+    FIGMA:
+      measured_state: CONNECTED
+      account_handle: SegredoiDEV
+      plan_tier: starter
+      seat: View
+      capabilities:
+      - DESIGN_CONTEXT
+      - SCREENSHOT
+      - FIGJAM
+      - SLIDES
+      - CODE_CONNECT
+      - DESIGN_LIBRARY
+      - WEAVE
+      oauth_refresh_source_ref: https://developers.figma.com/docs/rest-api/#refresh-oauth2
+      write_authority: MEASURE_PER_TARGET
+      secret_storage: SecretRef
+update_fabric:
+  role: CONDITIONAL_CAPABILITY_UNDER_DELTAUTIL
+  activate_when:
+  - UPDATE_INTENT
+  - DISTRIBUTION_PACKAGE_INTENT
+  - BUILDER_INTENT
+  - NEW_EXTERNAL_DELTA
+  do_not_activate_for_unrelated_missions: true
+  ingress:
+  - DRIVE
+  - GITHUB
+  - CLI
+  - TERMINAL
+  - SSH
+  - AUTHORIZED_WEBHOOK
+  - HUB_UPLOAD
+  outcome:
+  - RECONCILED_DELTA
+  - PACKAGE_UPDATED_IN_PLACE
+  - DISTRIBUTION_CANDIDATE
+  - READY_FOR_DEPLOY
+  - BLOCKED_WITH_NEXT_CURSOR
+  same_logical_package: true
+  new_parallel_package_for_same_lineage: false
+  bidirectional: true
+  conflict: STOP_WRITE_AND_RECONCILE
+temporal_display:
+  package_date_key: YYYY-MM-DD
+  human_locale: pt-BR
+  human_datetime: DD/MM/YYYY HH:mm:ss
+  timezone: America/Sao_Paulo
+  store_timestamp: RFC3339_WITH_OFFSET
+  sort_by_machine_key_display_by_human_format: true
+builder_factory:
+  reuse_existing_builder_owner: true
+  role: FACTORY_NOT_AUTHORITY
+  can_generate:
+  - SITE
+  - MODULE
+  - INFRA_PIECE
+  - DISTRIBUTION_PACKAGE
+  - UI_COMPONENT
+  candidate_requires:
+  - manifest
+  - dependencies
+  - documentation
+  - tests
+  - rollback_or_recovery
+  - receipt
+  raw_secrets_in_generated_package: false
+  deploy_requires_explicit_intent: true

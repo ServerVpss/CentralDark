@@ -1,0 +1,12 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\react\dist\primitives\attachment\AttachmentName.d.ts
+
+import { FC } from "react";
+
+//#region src/primitives/attachment/AttachmentName.d.ts
+declare namespace AttachmentPrimitiveName {
+  type Props = Record<string, never>;
+}
+declare const AttachmentPrimitiveName: FC<AttachmentPrimitiveName.Props>;
+//#endregion
+export { AttachmentPrimitiveName };
+//# sourceMappingURL=AttachmentName.d.ts.map

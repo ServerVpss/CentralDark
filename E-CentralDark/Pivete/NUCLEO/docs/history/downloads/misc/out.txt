@@ -1,0 +1,5 @@
+status=SUPPORT_REQUIRED
+support_required=true
+missing_capabilities=mermaid,canvas_html
+support_labels=🤖 AUTO,🆘 AJUDA-NECESSÁRIA,🤖 IA-DOCUMENTAR,assign:chatgpt
+artifact_digest=35216d5ab4cd80fc39b0c282a27b794a643f838324b2f48f44d4fb33496a2f6a

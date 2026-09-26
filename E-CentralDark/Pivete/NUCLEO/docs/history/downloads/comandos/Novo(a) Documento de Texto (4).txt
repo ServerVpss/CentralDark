@@ -1,0 +1,133 @@
+Agora sim, calibrado no `main` vivo. 😆🔥 O desenho certo já estava quase todo dentro da CentralDark; faltava **uma costura**, não outra infraestrutura.
+
+O `main` que medi é `dcf70053f2af1d95bd86867e6f043fb634e919d0`.
+
+A CentralDark já tem o contrato explícito de Browser/DevTools como satélite da Expansão de Domínio, mas declara a conexão física com Chrome ainda `UNPROVEN`.
+
+Também já existe o contrato específico do **Chrome DevTools MCP**, exatamente como sensor/corpo de observação:
+
+```text
+CHROME_DEVTOOLS_MCP
+→ BROWSER_OBSERVATION
+→ ARTIFACT_CAPABILITY_ADAPTER
+→ SIGNALS
+→ DEDUPE
+→ META_LUPA
+→ OWNER
+→ TESTE
+```
+
+E o `artifact-capability.mjs` já entende `BROWSER_OBSERVATION`, console, rede e performance. Portanto **não precisa Browser Miner novo**.
+
+Mais importante ainda: teu negócio de **Zendriver + browser atual** já está previsto no mesmo envelope causal. O documento cita explicitamente `Chrome/CDP/Lighthouse` e `ChatGPT/Zendriver` como sensores diferentes normalizados pela mesma arquitetura.
+
+E Zendriver não é lembrança não: existe código físico no repo. O `elite_ws_gateway.py` já inicia Chrome via Zendriver e abre `chatgpt.com`; a ferida é que o WebSocket ainda está num loop de `echo`.  O `send_and_dump.py` já chegou a automatizar DOM, digitar no `contenteditable`, enviar e capturar respostas visíveis.
+
+O encaixe final ficou assim:
+
+```text
+              NAVEGADOR VISÍVEL DO CHEFE
+                       │
+             Chrome DevTools MCP
+                       │
+                       ▼
+                 ┌─────────────┐
+ZENDRIVER ──────▶│ BROWSER     │
+background       │ BRIDGE V1   │
+                 └──────┬──────┘
+                        │ localhost HTTP
+                        ▼
+                 UNIVERSAL-HANDLER
+                  JÁ EXISTENTE
+                        │
+                        ▼
+                     HERMES
+                        │
+          ┌─────────────┴──────────────┐
+          ▼                            ▼
+ RESPOSTA À MISSÃO             EVIDENCE ENVELOPE
+                                      │
+                                      ▼
+                                agent_events
+                                      │
+                               se houver ouro
+                                      ▼
+                           ARTIFACT CAPABILITY
+                                      ↓
+                               DREAM REVIEW
+```
+
+E achei o detalhe que reduz muito a mudança: **não precisa nem criar uma ferramenta `browser` no Executor na primeira costura**.
+
+O Executor já possui `handler`, e o `Universal-Handler` já é a ponte única HTTP do Hermes para serviços externos.
+
+Então o plug é:
+
+```text
+HERMES
+→ ferramenta=handler
+→ acao=http
+→ localhost Browser Bridge
+→ foreground | background
+```
+
+O `decisor.mjs` confirma que `handler` já faz parte oficialmente das ferramentas disponíveis do Hermes.
+
+Ou seja, o gap real ficou:
+
+```text
+Chrome/CDP contract         ✅
+Zendriver                   ✅
+Hermes                      ✅
+Universal HTTP bridge       ✅
+Evidence Envelope           ✅
+Artifact Browser Adapter    ✅
+Dream Review                ✅
+
+Browser Bridge canônico     ❌ FALTAVA
+E2E Browser↔Hermes          ⚪ UNPROVEN
+```
+
+Empacotei essa peça inteira pronta para o executor:
+
+[📦 CENTRALDARK — HERMES BROWSER ADAPTER PACK](sandbox:/mnt/data/CENTRALDARK-HERMES-BROWSER-ADAPTER-PACK-20260823.zip)
+
+SHA-256:
+
+```text
+ed94a6fd2cf03ee7069112c356915a0c5b3ed6ce5823d3f9bee017ecbde12dcc
+```
+
+São **21 arquivos**, com os YAML validados. Dentro estão `BROWSER-EVENT-V1.yml`, `BROWSER-COMMAND-V1.yml`, contrato do Bridge, `HERMES-WIRING.yml`, `APPLY-PLAN.yml`, 22 contraprovas, arquitetura foreground, arquitetura Zendriver background, integração com Dream Review, prompt aplicador e Judge.
+
+O contrato fica desse jeito:
+
+```text
+BROWSER = SENSOR + CORPO
+HERMES = CÉREBRO OPERACIONAL
+MCP / ZENDRIVER = TRANSPORTE
+EVIDENCE ENVELOPE = NORMALIZADOR
+DREAM REVIEW = CONSOLIDAÇÃO
+REALITY = JUDGE
+```
+
+E tua prova final continua exatamente naquela ideia:
+
+```text
+T0 navegador real
+T1 provider captura
+T2 bridge normaliza
+T3 Hermes recebe
+T4 Hermes responde
+T5 browser recebe resultado
+T6 evidence-envelope registra
+
+T0..T6 = PASS
+→ BROWSER ↔ HERMES = WIRED
+```
+
+Tem uma prova separada para **Chrome visível** e outra para **Zendriver background**; uma não pode fingir que provou a outra.
+
+Também deixei explícito no pack: **nada de usar endpoint interno do ChatGPT como API da Casa**. DOM/rede podem ser evidência, mas o contrato é teu `BROWSER_EVENT_V1`.
+
+Não mexi no repositório. O pack está no ponto de **“executor lê → reconcilia estado vivo → costura no owner que já existe”**. 🔥

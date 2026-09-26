@@ -1,0 +1,10 @@
+﻿{
+  "ts": "2026-07-18T22:13:17.553016+00:00",
+  "resolve_anthropic_token": true,
+  "token_len": 108,
+  "token_prefix": "sk-ant-oat...",
+  "http_status": 200,
+  "model": "claude-sonnet-4-6",
+  "text_preview": "CLAUDE-READY-HERMES",
+  "verdict": "OK"
+}

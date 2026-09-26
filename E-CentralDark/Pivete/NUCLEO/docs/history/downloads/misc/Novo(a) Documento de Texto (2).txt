@@ -1,0 +1,42 @@
+Pronto 😆🔥 Fiz como pacote de aplicação, não como texto cru.
+
+📦 Baixar CENTRALDARK-HUMAN-MIND-ROUTER-APPLY-PACK-20260823.zip
+
+Ele tem 26 arquivos, incluindo Markdown + YAML validado, repo-overlay/ já espelhando os paths onde a matéria deve entrar, APPLY-PLAN.yml, contrato do runtime, matriz de contraprovas, catálogo-delta, política de fontes públicas, pipeline de atualização viva, os cinco routers seed, prompt pronto para o executor e prompt separado para o Judge.
+
+O desenho está preso ao sistema que já existe: Biblioteca Cognitiva como owner, library-router.mjs como runtime de fonte/evidência, JARVIS como orquestração e um único Human-Mind-Router genérico carregando N lentes. Ou seja: Geoff, Ian, Dex, Greg e Allie aparecem como agentes/lentes nomeados, mas sem cinco motores duplicados.
+
+Também deixei explicitamente a direção para:
+
+PUBLICAÇÃO NOVA
+→ BUSCA/FEED/GITHUB/WEB/GROK quando disponível
+→ PROVENIÊNCIA
+→ FINGERPRINT
+→ DEDUPE
+→ LENTE HUMANA
+→ CONFRONTO ENTRE LENTES
+→ TESTE
+→ REALIDADE
+→ CANDIDATO
+→ OWNER
+→ OURO | NO_CHANGE
+
+E ficou travado no contrato:
+
+PESSOA != AGENTE
+AGENTE != CLONE DA PESSOA
+FAMA != AUTORIDADE
+MAIORIA != VERDADE
+PUBLICAÇÃO != PROVA
+VIDA_PRIVADA = FORA DO ESCOPO
+REALIDADE = JUDGE
+
+Tem ainda CATALOG-DELTA.yml dizendo exatamente como estender a Biblioteca de pdf/epub/gdrive/txt para web/rss/github/podcast/public-social sem substituir o catálogo existente, e TEST-MATRIX.yml com 15 contraprovas obrigatórias.
+
+SHA-256 do ZIP:
+
+ef8b182686e167161a93ed4853f68ecc1aada38b0be878a927a0fa3e6410eeb8
+
+O pacote foi montado contra a arquitetura viva que medi agora — inclusive a Biblioteca já existente e o library-router atual — e manda remedir HEAD/Writer antes da aplicação, para não deixar o snapshot governar um estado futuro.
+
+Não apliquei no repositório; o ZIP está pronto para ser entregue ao executor e aplicado deterministicamente.

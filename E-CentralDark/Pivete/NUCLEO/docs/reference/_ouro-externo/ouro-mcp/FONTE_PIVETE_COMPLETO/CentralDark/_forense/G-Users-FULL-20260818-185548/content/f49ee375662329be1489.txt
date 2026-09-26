@@ -1,0 +1,10 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\react\providers\MessageByIdProvider.d.ts
+
+import { FC, PropsWithChildren } from "react";
+//#region src/react/providers/MessageByIdProvider.d.ts
+declare const MessageByIdProvider: FC<PropsWithChildren<{
+  id: string;
+}>>;
+//#endregion
+export { MessageByIdProvider };
+//# sourceMappingURL=MessageByIdProvider.d.ts.map

@@ -1,0 +1,57 @@
+schema: CENTRALDARK_PLUG_PLAY_CAPABILITY_PACKAGE
+schema_version: 1
+owner: UPDATE_FABRIC
+master: CENTRALDARK
+purpose: qualquer peça principal pode ser entregue a outro agente e instalada no owner
+  correto sem conhecimento implícito
+required_manifest:
+- package_id
+- lineage_id
+- capability_id
+- display_name_ptbr
+- owner_expected
+- compatibility_contract
+- dependencies
+- files
+- documentation
+- tests
+- falsifiers
+- install_plan
+- rollback_plan
+- proof_target
+- receipt_schema
+- source_provenance
+install_flow:
+- ACORDAR
+- MEASURE_TARGET
+- LOCATE_EXISTING_OWNER
+- PROVE_COMPATIBILITY
+- DRY_RUN
+- SNAPSHOT_OR_RECOVERY_POINT
+- APPLY_MINIMUM_DELTA
+- CODE_DOCUMENTATION_GATE
+- TEST
+- COUNTERPROOF
+- REMEASURE
+- RECEIPT
+- NEXT_CURSOR
+rules:
+  package_is_authority: false
+  package_may_create_parallel_owner: false
+  package_may_weaken_gate: false
+  install_to_guessed_path: false
+  raw_secret_in_package: false
+  display_name_may_change_without_changing_canonical_id: true
+  same_lineage_improves_in_place: true
+technical_acceptance:
+  review_every_capability: true
+  executor_self_approval_allowed: false
+  judge_may_mutate: false
+  latest_tested_head_required: true
+  ci_latest_head_green_when_material: true
+  no_proof_no_pass: true
+handoff:
+  required: true
+  contract: docs/AGENT-GENERATIONAL-HANDOFF.md
+  next_agent_remeasures: true
+  chat_memory_is_state: false

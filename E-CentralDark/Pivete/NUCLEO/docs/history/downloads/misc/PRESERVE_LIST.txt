@@ -1,0 +1,23 @@
+PRESERVE_LIST — CENTRALDARK
+
+Não remover sem absorção + contraprova:
+
+E:\CentralDark
+E:\CentralDark\Pivete
+E:\CentralDark\vault
+E:\CentralDark\.hermes
+E:\CentralDark\workspace
+C:\Users\danda\.claude
+C:\Users\danda\.codex
+C:\Users\danda\.copilot
+C:\Users\danda\.ssh
+C:\Users\danda\AppData
+
+Preservar por princípio:
+- owners canônicos;
+- receipts;
+- histórico Git;
+- configs de runtime com consumidor ativo;
+- junctions/symlinks até target ser provado;
+- material Lovable até inventário fechar;
+- qualquer item UNKNOWN.

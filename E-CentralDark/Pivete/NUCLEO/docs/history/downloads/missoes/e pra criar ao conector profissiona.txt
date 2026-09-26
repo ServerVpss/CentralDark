@@ -1,0 +1,33 @@
+e pra criar ao conector profissionala  poderia ser o claude ? no seu maximo ?: Minha recomendação para o MCP CentralDark:
+
+O modelo do Claude Code (com 3 tiers de risco) é atualmente o mais maduro e profissional. Ele equilibra bem:
+
+
+
+
+
+Segurança
+
+
+
+Experiência do usuário
+
+
+
+Clareza visual
+
+Quer que eu siga com base nesse modelo? Posso:
+
+
+
+
+
+Adaptar os 3 tiers para o seu caso (Leitura / Escrita / Destrutivo)
+
+
+
+Criar o modal visual mais próximo possível do estilo do Claude Code
+
+
+
+Montar a estrutura de permissions.json

@@ -1,0 +1,5 @@
+# TESTE ZIP FIX
+
+COMANDO: teste_zip_fix
+PROMPT: verifica se zip handler funciona
+GATE: FILE_SECURITY_GATE

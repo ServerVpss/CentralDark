@@ -1,0 +1,35 @@
+{
+  "schema": "CENTRALDARK_DOCUMENTATION_CODE_MAP_UI",
+  "language": "pt-BR",
+  "tabs": ["Visão técnica", "Mapa mental", "Código", "Chamadores", "Testes", "Erros", "Histórico"],
+  "symbol_card": {
+    "status": "🟡",
+    "canonical_name": "detectPatternDrift",
+    "display_description": "Detecta quando um padrão antigo deixou de representar o sistema.",
+    "source": {"path": "...", "line_start": 0, "line_end": 0},
+    "owner": "...",
+    "inputs": [],
+    "outputs": [],
+    "does": [],
+    "does_not": [],
+    "side_effects": [],
+    "errors": [],
+    "tests": [],
+    "callers": [],
+    "dependencies": [],
+    "patterns": [],
+    "proof": [],
+    "last_verified_revision": null
+  },
+  "mental_map": {
+    "flow": "ENTRADA → FUNÇÃO → SAÍDA",
+    "emoji": "🧠",
+    "one_line": "Uma frase para recuperação rápida."
+  },
+  "rules": {
+    "technical_view_required": true,
+    "mental_map_required": true,
+    "mental_map_may_replace_technical_view": false,
+    "unknown_is_pass": false
+  }
+}

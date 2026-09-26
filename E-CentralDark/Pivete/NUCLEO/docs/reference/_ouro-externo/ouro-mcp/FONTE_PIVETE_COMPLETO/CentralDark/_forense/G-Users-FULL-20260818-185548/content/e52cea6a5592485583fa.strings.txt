@@ -1,0 +1,12 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\share\vim\vim92\ftplugin\leex.vim
+
+" Vim ftplugin file
+" Language:     Leex (Erlang Lexical Analyzer Generator)
+" Maintainer:   Jon Parise <jon@indelible.org>
+" Last Change:  2025 Nov 29
+" Filenames:    *.xrl
+" References:
+" - https://www.erlang.org/doc/apps/parsetools/leex.html
+if exists('b:did_ftplugin')
+  finish
+runtime! ftplugin/erlang.vim

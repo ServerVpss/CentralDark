@@ -1,0 +1,13 @@
+== CASO A: segredo em governance.writer.workspace (campo legitimo) ==
+  [OK] calibrar(): sem valor original + contem <REDACTED>
+== CASO B: segredo estilo Bearer no verdict de close() ==
+  [OK] close() memoria: sem valor original + contem <REDACTED>
+== CASO C: recibo de close() PERSISTIDO EM DISCO ==
+  [OK] arquivo em disco sem valor original
+== CASO D: instancia viva deve permanecer INTEGRA ==
+  [OK] instancia viva preservada (reload/continuacao intactos)
+== CASO E: close() SEM aprovacao do Judge deve ser REJEITADO ==
+  [OK] close() bloqueou autoaprovacao (APROVACAO_AUSENTE)
+
+PONTO_8_VERDICT = CORRIGIDO (prova independente, 5 casos)
+ponto8 exit=0

@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-08-24T06:02:27.053Z",
+  "issues": [
+    {
+      "id": "VITE_MISSING_IN_NODE_MODULES",
+      "description": "vite declarado em package.json e package-lock.json mas AUSENTE em node_modules/",
+      "evidence": "package.json: ^5.4.21, lockfile: 5.4.21, node_modules/vite: false"
+    }
+  ],
+  "root_cause_candidates": [
+    {
+      "cause": "npm cache corruption / extraction failure",
+      "evidence": "package-lock.json has vite but node_modules/vite missing",
+      "likelihood": "high"
+    }
+  ],
+  "severity": "critical"
+}

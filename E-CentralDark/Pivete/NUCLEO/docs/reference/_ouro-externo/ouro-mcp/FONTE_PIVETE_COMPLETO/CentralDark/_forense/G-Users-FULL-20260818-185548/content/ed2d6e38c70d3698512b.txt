@@ -1,0 +1,22 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@dnd-kit\core\dist\utilities\algorithms\types.d.ts
+
+import type { Active, Data, DroppableContainer, RectMap } from '../../store';
+import type { Coordinates, ClientRect, UniqueIdentifier } from '../../types';
+export interface Collision {
+    id: UniqueIdentifier;
+    data?: Data;
+}
+export interface CollisionDescriptor extends Collision {
+    data: {
+        droppableContainer: DroppableContainer;
+        value: number;
+        [key: string]: any;
+    };
+}
+export declare type CollisionDetection = (args: {
+    active: Active;
+    collisionRect: ClientRect;
+    droppableRects: RectMap;
+    droppableContainers: DroppableContainer[];
+    pointerCoordinates: Coordinates | null;
+}) => Collision[];

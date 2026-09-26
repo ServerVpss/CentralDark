@@ -1,0 +1,17 @@
+{
+  "scope": "ENVELOPE_PAYLOAD_AND_INNER_CANONICAL_ZIP",
+  "created_at_utc": "2026-08-24T10:17:39+00:00",
+  "inner_zip_sha256": "0443d87a6ffe64de4c6ffeea3932a2dd1cf5cedb65e6d7c296ba3392458654cc",
+  "inner_zip_crc": "PASS",
+  "inner_zip_sidecar_match": "PASS",
+  "inner_zip_external_receipt_match": "PASS",
+  "inner_zip_extraction_equivalence": "PASS",
+  "inner_zip_internal_receipt_present": true,
+  "weak_pass_only_audit": "SUPERSEDED",
+  "live_state_remeasured": true,
+  "live_main": "fe98e4b70a8bbf6ab1fed9481ad50c48c6636f5f",
+  "payload_hash_count": 61,
+  "handoff_payload_inside_envelope_percent": 100,
+  "envelope_package_fixed_point": "PENDING_EXTERNAL_VERIFY",
+  "project_global_fixed_point": "NOT_PROVEN"
+}

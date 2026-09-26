@@ -1,0 +1,2744 @@
+{
+  "mission": "CENTRALDARK-CASA-BACKUP-ORGANIZACAO-SYNC-01",
+  "turn": 10,
+  "phase": "R3_DISK_C",
+  "timestamp_utc": "2026-08-02T10:51:54.876309Z",
+  "scan_roots": [
+    "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache",
+    "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\scripts",
+    "C:\\Users\\danda\\AppData\\Local\\Temp"
+  ],
+  "candidates_found": 390,
+  "candidates": [
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\checkup_card.txt",
+      "size": 1592,
+      "mtime": "2026-07-24T08:16:15.575819",
+      "category": "hermes-cache",
+      "relative": "checkup_card.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\dbg_case.md",
+      "size": 92,
+      "mtime": "2026-07-24T07:11:54.175968",
+      "category": "hermes-cache",
+      "relative": "dbg_case.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\dbg_crlf.md",
+      "size": 0,
+      "mtime": "2026-07-24T07:12:43.375141",
+      "category": "hermes-cache",
+      "relative": "dbg_crlf.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\g0_h.md",
+      "size": 44,
+      "mtime": "2026-07-24T07:20:37.942609",
+      "category": "hermes-cache",
+      "relative": "g0_h.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\g0_s.md",
+      "size": 744,
+      "mtime": "2026-07-24T07:20:37.948609",
+      "category": "hermes-cache",
+      "relative": "g0_s.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\gate0_memtest.py",
+      "size": 3873,
+      "mtime": "2026-07-24T07:48:32.387226",
+      "category": "hermes-cache",
+      "relative": "gate0_memtest.py"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\gate0_result.txt",
+      "size": 225,
+      "mtime": "2026-07-24T07:48:37.460386",
+      "category": "hermes-cache",
+      "relative": "gate0_result.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\model_catalog.json",
+      "size": 6830,
+      "mtime": "2026-08-02T07:31:58.173960",
+      "category": "hermes-cache",
+      "relative": "model_catalog.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\nous_recommended_cache.json",
+      "size": 8696,
+      "mtime": "2026-08-02T07:42:30.875321",
+      "category": "hermes-cache",
+      "relative": "nous_recommended_cache.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\openrouter_model_metadata.json",
+      "size": 266832,
+      "mtime": "2026-08-02T06:56:08.404092",
+      "category": "hermes-cache",
+      "relative": "openrouter_model_metadata.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\or_create.py",
+      "size": 1027,
+      "mtime": "2026-07-24T07:30:27.445639",
+      "category": "hermes-cache",
+      "relative": "or_create.py"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\or_keys.json",
+      "size": 2,
+      "mtime": "2026-07-24T07:30:53.522185",
+      "category": "hermes-cache",
+      "relative": "or_keys.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\sol_browser_report_wait.py",
+      "size": 8092,
+      "mtime": "2026-08-02T06:12:41.431311",
+      "category": "hermes-cache",
+      "relative": "sol_browser_report_wait.py"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\sol_browser_turn.py",
+      "size": 8248,
+      "mtime": "2026-08-02T05:42:33.062881",
+      "category": "hermes-cache",
+      "relative": "sol_browser_turn.py"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\sol_browser_wait.py",
+      "size": 2510,
+      "mtime": "2026-08-02T06:10:10.251402",
+      "category": "hermes-cache",
+      "relative": "sol_browser_wait.py"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\stt_e2e_proof.py",
+      "size": 7761,
+      "mtime": "2026-07-18T18:42:41.714478",
+      "category": "hermes-cache",
+      "relative": "stt_e2e_proof.py"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\tool_discovery_cache.json",
+      "size": 13156,
+      "mtime": "2026-08-02T05:15:45.737069",
+      "category": "hermes-cache",
+      "relative": "tool_discovery_cache.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\write_fecho_18.py",
+      "size": 9291,
+      "mtime": "2026-07-18T19:26:38.536164",
+      "category": "hermes-cache",
+      "relative": "write_fecho_18.py"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\write_sec19.py",
+      "size": 5020,
+      "mtime": "2026-07-18T19:52:47.900056",
+      "category": "hermes-cache",
+      "relative": "write_sec19.py"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\audio_8a7609e6a0ce.ogg",
+      "size": 36598,
+      "mtime": "2026-08-02T06:18:14.676281",
+      "category": "hermes-cache",
+      "relative": "audio\\audio_8a7609e6a0ce.ogg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\audio_ef47a71c2969.ogg",
+      "size": 56477,
+      "mtime": "2026-08-02T04:11:58.068493",
+      "category": "hermes-cache",
+      "relative": "audio\\audio_ef47a71c2969.ogg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\tts_20260802_040237_155443.mp3",
+      "size": 162432,
+      "mtime": "2026-08-02T04:02:47.782916",
+      "category": "hermes-cache",
+      "relative": "audio\\tts_20260802_040237_155443.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\0251895a4a614efd_c528580d4fb46ec3_8fa6aad188e0.mp3",
+      "size": 1340928,
+      "mtime": "2026-07-22T14:30:58.303738",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\0251895a4a614efd_c528580d4fb46ec3_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\09374f4f94bba2e4_61d0379211edf43f_8fa6aad188e0.mp3",
+      "size": 1859328,
+      "mtime": "2026-07-22T12:40:13.682387",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\09374f4f94bba2e4_61d0379211edf43f_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\097e1912a27dd453_c992c3dae9fd1d0a_8fa6aad188e0.mp3",
+      "size": 694656,
+      "mtime": "2026-07-22T15:00:00.109155",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\097e1912a27dd453_c992c3dae9fd1d0a_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\0ac0dd3314f89d39_59e254e6e153b331_8fa6aad188e0.mp3",
+      "size": 4693632,
+      "mtime": "2026-07-22T13:54:38.463447",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\0ac0dd3314f89d39_59e254e6e153b331_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\0b1400282d5ff4ac_e814dc1589582ea6_8fa6aad188e0.mp3",
+      "size": 448896,
+      "mtime": "2026-07-20T14:12:37.822750",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\0b1400282d5ff4ac_e814dc1589582ea6_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\106753d9f6935500_4b76492e374bab26_8fa6aad188e0.mp3",
+      "size": 427392,
+      "mtime": "2026-07-20T12:30:21.911115",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\106753d9f6935500_4b76492e374bab26_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\13967ffc3553268a_d362a353445569a2_8fa6aad188e0.mp3",
+      "size": 1236864,
+      "mtime": "2026-07-20T14:03:40.912222",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\13967ffc3553268a_d362a353445569a2_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\1402229f5a3b5914_e7e75054ae66aef1_8fa6aad188e0.mp3",
+      "size": 1724928,
+      "mtime": "2026-07-20T15:49:36.267580",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\1402229f5a3b5914_e7e75054ae66aef1_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\14ad55422b865bf8_377970fbf7c2ee75_8fa6aad188e0.mp3",
+      "size": 892800,
+      "mtime": "2026-07-20T16:04:00.652892",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\14ad55422b865bf8_377970fbf7c2ee75_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\1513fd741ca6435b_cc06c246616c64d7_8fa6aad188e0.mp3",
+      "size": 1189632,
+      "mtime": "2026-07-20T14:28:43.263638",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\1513fd741ca6435b_cc06c246616c64d7_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\18e204a4051ac187_e17a2df9eaaf9574_8fa6aad188e0.mp3",
+      "size": 1631232,
+      "mtime": "2026-07-20T14:12:24.642219",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\18e204a4051ac187_e17a2df9eaaf9574_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\1c97a69e8b695739_5df6ce791b3b5bbd_8fa6aad188e0.mp3",
+      "size": 975360,
+      "mtime": "2026-07-20T15:47:40.973296",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\1c97a69e8b695739_5df6ce791b3b5bbd_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\1f5cb45a7ddf225b_97ecf43e0f7441df_8fa6aad188e0.mp3",
+      "size": 1459200,
+      "mtime": "2026-07-22T16:49:45.395885",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\1f5cb45a7ddf225b_97ecf43e0f7441df_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\245d7042214bf928_12752f423c2745af_8fa6aad188e0.mp3",
+      "size": 2920320,
+      "mtime": "2026-07-22T10:23:35.166525",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\245d7042214bf928_12752f423c2745af_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\29e9a65c2da984fb_b2b6a1bf0d86cdce_8fa6aad188e0.mp3",
+      "size": 248832,
+      "mtime": "2026-07-20T14:02:39.894645",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\29e9a65c2da984fb_b2b6a1bf0d86cdce_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\2afe3ccc528ee47e_54cfa7f952a02c7c_8fa6aad188e0.mp3",
+      "size": 2044800,
+      "mtime": "2026-07-22T10:33:05.929102",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\2afe3ccc528ee47e_54cfa7f952a02c7c_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\2c98989794c9b792_99ef330f7449dcd6_8fa6aad188e0.mp3",
+      "size": 2178432,
+      "mtime": "2026-07-20T17:30:12.724290",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\2c98989794c9b792_99ef330f7449dcd6_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\2db4d58b713a0a75_469d6deb13a1b818_8fa6aad188e0.mp3",
+      "size": 309888,
+      "mtime": "2026-07-22T15:01:39.998724",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\2db4d58b713a0a75_469d6deb13a1b818_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\2dcc9bf715cdedc9_1f0b3b1be29f9462_8fa6aad188e0.mp3",
+      "size": 758400,
+      "mtime": "2026-07-20T13:26:13.429688",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\2dcc9bf715cdedc9_1f0b3b1be29f9462_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\2eb127ca3e056bf8_7bdc26e1d38178cc_8fa6aad188e0.mp3",
+      "size": 1720320,
+      "mtime": "2026-07-20T13:34:08.248615",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\2eb127ca3e056bf8_7bdc26e1d38178cc_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\3024d5eb892ade2d_3eb71c30fbee8ef0_8fa6aad188e0.mp3",
+      "size": 1859328,
+      "mtime": "2026-07-22T10:54:29.018905",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\3024d5eb892ade2d_3eb71c30fbee8ef0_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\351d8bcbed238b87_1be4a1cc6758853d_8fa6aad188e0.mp3",
+      "size": 118656,
+      "mtime": "2026-07-20T16:42:14.673868",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\351d8bcbed238b87_1be4a1cc6758853d_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\3725ab0d196d5e05_3e4d7ae384c2b4b9_8fa6aad188e0.mp3",
+      "size": 1943424,
+      "mtime": "2026-07-20T14:47:16.445141",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\3725ab0d196d5e05_3e4d7ae384c2b4b9_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\38c3a5abc99f8b44_4c5932037629d2a2_8fa6aad188e0.mp3",
+      "size": 1968768,
+      "mtime": "2026-07-22T16:38:27.599943",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\38c3a5abc99f8b44_4c5932037629d2a2_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\394ed63d70be65a4_f6eaf157a63d65dc_8fa6aad188e0.mp3",
+      "size": 292224,
+      "mtime": "2026-07-22T14:47:39.036883",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\394ed63d70be65a4_f6eaf157a63d65dc_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\3b874938cb77e1a1_04bf4066ab0f8baa_8fa6aad188e0.mp3",
+      "size": 1431168,
+      "mtime": "2026-07-22T15:22:55.940250",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\3b874938cb77e1a1_04bf4066ab0f8baa_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\3ce8841daf043838_96125bc4805f9d99_8fa6aad188e0.mp3",
+      "size": 344064,
+      "mtime": "2026-07-22T12:38:00.877364",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\3ce8841daf043838_96125bc4805f9d99_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\3f05568a40ff587a_01f9cbd9c4adeee5_8fa6aad188e0.mp3",
+      "size": 2623488,
+      "mtime": "2026-07-20T14:37:30.102783",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\3f05568a40ff587a_01f9cbd9c4adeee5_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\42233f3cec19ed29_2e5d2f43a0389477_8fa6aad188e0.mp3",
+      "size": 535296,
+      "mtime": "2026-07-20T15:59:09.019844",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\42233f3cec19ed29_2e5d2f43a0389477_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\4294a9a6c35254a3_a301bafa25e09b3a_8fa6aad188e0.mp3",
+      "size": 2069760,
+      "mtime": "2026-07-20T12:29:49.549969",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\4294a9a6c35254a3_a301bafa25e09b3a_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\478b58a39f085c74_7d4193263ee445fb_8fa6aad188e0.mp3",
+      "size": 1621632,
+      "mtime": "2026-07-22T12:22:14.686305",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\478b58a39f085c74_7d4193263ee445fb_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\4a64dd01aae855c6_c4521a4d8d69dbb1_8fa6aad188e0.mp3",
+      "size": 618624,
+      "mtime": "2026-07-20T13:26:34.163694",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\4a64dd01aae855c6_c4521a4d8d69dbb1_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\4ce733342797ebec_9948c66d711a817e_8fa6aad188e0.mp3",
+      "size": 83328,
+      "mtime": "2026-07-22T07:16:58.118837",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\4ce733342797ebec_9948c66d711a817e_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\5148ab6dc12bfb36_4a1ac49d8c358c0b_8fa6aad188e0.mp3",
+      "size": 901632,
+      "mtime": "2026-07-20T14:02:15.997508",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\5148ab6dc12bfb36_4a1ac49d8c358c0b_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\53b78d439a291685_66768f8bad0f0d7b_8fa6aad188e0.mp3",
+      "size": 2319360,
+      "mtime": "2026-07-20T14:07:17.743776",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\53b78d439a291685_66768f8bad0f0d7b_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\5426d6b918319e53_6b12a4b5e380805c_8fa6aad188e0.mp3",
+      "size": 232320,
+      "mtime": "2026-07-22T16:27:55.855700",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\5426d6b918319e53_6b12a4b5e380805c_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\58f80a9e20c030c6_276fe9e554a71afd_8fa6aad188e0.mp3",
+      "size": 509568,
+      "mtime": "2026-07-22T16:04:04.241329",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\58f80a9e20c030c6_276fe9e554a71afd_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\595df4e436002b76_0471abb82cfab73f_8fa6aad188e0.mp3",
+      "size": 4616064,
+      "mtime": "2026-07-20T18:03:54.178246",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\595df4e436002b76_0471abb82cfab73f_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\5cc004eb51b5f48d_da86c73fe4f4b5cf_8fa6aad188e0.mp3",
+      "size": 1245696,
+      "mtime": "2026-07-20T14:05:48.828735",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\5cc004eb51b5f48d_da86c73fe4f4b5cf_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\5dd20aa8293411eb_f4ecb59f7152fec3_8fa6aad188e0.mp3",
+      "size": 1413888,
+      "mtime": "2026-07-22T17:02:12.674016",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\5dd20aa8293411eb_f4ecb59f7152fec3_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\6106f68a3ca17859_0e8b9b9309c529ff_8fa6aad188e0.mp3",
+      "size": 1896192,
+      "mtime": "2026-07-22T13:44:24.557881",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\6106f68a3ca17859_0e8b9b9309c529ff_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\6123d3e25c25dd8b_0752a67b9a290bd8_8fa6aad188e0.mp3",
+      "size": 1024128,
+      "mtime": "2026-07-20T14:27:14.886656",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\6123d3e25c25dd8b_0752a67b9a290bd8_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\6252b5af23e755cc_9cdf08a86802b2fb_8fa6aad188e0.mp3",
+      "size": 860160,
+      "mtime": "2026-07-22T10:29:32.725059",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\6252b5af23e755cc_9cdf08a86802b2fb_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\6510028db452dcb4_648b058ab2ef739c_8fa6aad188e0.mp3",
+      "size": 417024,
+      "mtime": "2026-07-20T14:10:22.007716",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\6510028db452dcb4_648b058ab2ef739c_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\65340ae730539e0d_f8b004a903bafc92_8fa6aad188e0.mp3",
+      "size": 3020160,
+      "mtime": "2026-07-20T17:37:33.960633",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\65340ae730539e0d_f8b004a903bafc92_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\655d9b35ba0413fa_93af96094f7918df_8fa6aad188e0.mp3",
+      "size": 241920,
+      "mtime": "2026-07-20T14:09:20.857195",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\655d9b35ba0413fa_93af96094f7918df_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\65e874850fe2e381_c87ef4f9546e88ba_8fa6aad188e0.mp3",
+      "size": 3925632,
+      "mtime": "2026-07-20T12:48:30.214652",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\65e874850fe2e381_c87ef4f9546e88ba_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\68eca0ef0c0523e3_929c1688c6d3860a_8fa6aad188e0.mp3",
+      "size": 1979520,
+      "mtime": "2026-07-22T11:03:23.699257",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\68eca0ef0c0523e3_929c1688c6d3860a_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\695f6034c3adc477_1978318cd551db6c_8fa6aad188e0.mp3",
+      "size": 1374720,
+      "mtime": "2026-07-22T13:51:03.454699",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\695f6034c3adc477_1978318cd551db6c_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\6a2ff8b9e9b0cd95_c774615e4e842ba0_8fa6aad188e0.mp3",
+      "size": 1479168,
+      "mtime": "2026-07-20T14:34:24.474176",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\6a2ff8b9e9b0cd95_c774615e4e842ba0_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\6b4e264e0607641f_2a475629e18c0fa6_8fa6aad188e0.mp3",
+      "size": 617088,
+      "mtime": "2026-07-22T16:03:21.390728",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\6b4e264e0607641f_2a475629e18c0fa6_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\6c7a0eb7fee95d1c_7c5b5b821fa0d2d1_8fa6aad188e0.mp3",
+      "size": 1266432,
+      "mtime": "2026-07-20T14:31:20.530290",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\6c7a0eb7fee95d1c_7c5b5b821fa0d2d1_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\6eeb02e6bf3250eb_45d0e1e6f7b51ca2_8fa6aad188e0.mp3",
+      "size": 1640832,
+      "mtime": "2026-07-20T17:33:29.016931",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\6eeb02e6bf3250eb_45d0e1e6f7b51ca2_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\6f42d6d3f7f69847_5ac23e38dbfb733f_8fa6aad188e0.mp3",
+      "size": 1602432,
+      "mtime": "2026-07-20T14:15:23.752292",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\6f42d6d3f7f69847_5ac23e38dbfb733f_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\6fd5fbeb435a2e31_3720eee6e2a65aad_8fa6aad188e0.mp3",
+      "size": 670464,
+      "mtime": "2026-07-20T15:58:33.980338",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\6fd5fbeb435a2e31_3720eee6e2a65aad_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\725ce845914f86d0_90d7d686277574c9_8fa6aad188e0.mp3",
+      "size": 4573824,
+      "mtime": "2026-07-22T16:45:20.839083",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\725ce845914f86d0_90d7d686277574c9_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\76a718c317c58d2c_704d9fa64d33376a_8fa6aad188e0.mp3",
+      "size": 796032,
+      "mtime": "2026-07-20T14:09:08.616927",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\76a718c317c58d2c_704d9fa64d33376a_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\7743bcf0987d5c60_4f6f90e6bfe30f47_8fa6aad188e0.mp3",
+      "size": 3495168,
+      "mtime": "2026-07-20T16:41:57.028851",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\7743bcf0987d5c60_4f6f90e6bfe30f47_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\7810735137c16ff1_33116ddbe71b6aa6_8fa6aad188e0.mp3",
+      "size": 2058624,
+      "mtime": "2026-07-22T10:28:41.869929",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\7810735137c16ff1_33116ddbe71b6aa6_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\7a853f8ea496d691_2b11713bf7aa41aa_8fa6aad188e0.mp3",
+      "size": 855168,
+      "mtime": "2026-07-20T14:25:23.814775",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\7a853f8ea496d691_2b11713bf7aa41aa_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\7ac3ecea7d4f5097_8f3b4a03a594a158_8fa6aad188e0.mp3",
+      "size": 867456,
+      "mtime": "2026-07-20T17:43:51.737386",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\7ac3ecea7d4f5097_8f3b4a03a594a158_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\7ba6471596a6ee58_7bbc6d6d8e8a4a04_8fa6aad188e0.mp3",
+      "size": 1270656,
+      "mtime": "2026-07-22T13:28:47.790197",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\7ba6471596a6ee58_7bbc6d6d8e8a4a04_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\7bcdbe88bbe93be2_dd9592a0b0872cfc_8fa6aad188e0.mp3",
+      "size": 592896,
+      "mtime": "2026-07-20T13:05:03.522573",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\7bcdbe88bbe93be2_dd9592a0b0872cfc_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\7e542bff70bc38c3_e7453042c8d8f3e9_8fa6aad188e0.mp3",
+      "size": 2956800,
+      "mtime": "2026-07-20T18:15:34.569313",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\7e542bff70bc38c3_e7453042c8d8f3e9_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\808ff7da11c1e6ef_b9654a3a1be414f3_8fa6aad188e0.mp3",
+      "size": 371328,
+      "mtime": "2026-07-20T14:09:41.133570",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\808ff7da11c1e6ef_b9654a3a1be414f3_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\84f50cb817718b21_502e05e56a678841_8fa6aad188e0.mp3",
+      "size": 4917120,
+      "mtime": "2026-07-22T16:58:47.828171",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\84f50cb817718b21_502e05e56a678841_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\872899f8a9f72195_88b7ff5e586b84cf_8fa6aad188e0.mp3",
+      "size": 92928,
+      "mtime": "2026-07-22T16:57:24.609199",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\872899f8a9f72195_88b7ff5e586b84cf_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\87e2cb7ea70be23d_df5fd3bcc1a43d73_8fa6aad188e0.mp3",
+      "size": 1636224,
+      "mtime": "2026-07-20T13:15:38.328665",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\87e2cb7ea70be23d_df5fd3bcc1a43d73_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\87ef902fcb7dd64b_eeabd98a3546be00_8fa6aad188e0.mp3",
+      "size": 2317056,
+      "mtime": "2026-07-20T13:08:58.811702",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\87ef902fcb7dd64b_eeabd98a3546be00_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\8a50b3dccb3ddd17_43accc35262f886f_8fa6aad188e0.mp3",
+      "size": 1745664,
+      "mtime": "2026-07-22T12:20:29.082031",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\8a50b3dccb3ddd17_43accc35262f886f_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\9199e15d91ee0c0f_9e5a6f136f79e042_8fa6aad188e0.mp3",
+      "size": 241920,
+      "mtime": "2026-07-20T14:03:03.451532",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\9199e15d91ee0c0f_9e5a6f136f79e042_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\9257a147fdb92420_3a504649f4762302_8fa6aad188e0.mp3",
+      "size": 713088,
+      "mtime": "2026-07-20T16:02:45.656352",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\9257a147fdb92420_3a504649f4762302_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\928f0d495e18f221_626869eb6675acd3_8fa6aad188e0.mp3",
+      "size": 1849728,
+      "mtime": "2026-07-20T14:29:28.138140",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\928f0d495e18f221_626869eb6675acd3_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\92b5270b107e2c7c_036edc0a415fce4c_8fa6aad188e0.mp3",
+      "size": 1564032,
+      "mtime": "2026-07-20T16:37:58.957647",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\92b5270b107e2c7c_036edc0a415fce4c_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\94447c2060c414a6_32a0fe9578ccb7f1_8fa6aad188e0.mp3",
+      "size": 102528,
+      "mtime": "2026-07-20T13:32:25.040644",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\94447c2060c414a6_32a0fe9578ccb7f1_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\960a05ce92179538_bebde00a78b65422_8fa6aad188e0.mp3",
+      "size": 4054656,
+      "mtime": "2026-07-22T16:56:14.942478",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\960a05ce92179538_bebde00a78b65422_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\97274008a92ce6e7_64fe3d7e2aa9c0df_8fa6aad188e0.mp3",
+      "size": 3273600,
+      "mtime": "2026-07-20T14:52:15.396863",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\97274008a92ce6e7_64fe3d7e2aa9c0df_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\9acfa35aeb15ddb9_bafa70513041ba01_8fa6aad188e0.mp3",
+      "size": 285696,
+      "mtime": "2026-07-20T17:41:50.908725",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\9acfa35aeb15ddb9_bafa70513041ba01_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\9be3edf6cebfcc39_77b1941bb45cea2f_8fa6aad188e0.mp3",
+      "size": 427392,
+      "mtime": "2026-07-20T18:16:28.621007",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\9be3edf6cebfcc39_77b1941bb45cea2f_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\9d2d19c7c7bab0f9_089bf05ce009706e_8fa6aad188e0.mp3",
+      "size": 1473024,
+      "mtime": "2026-07-22T16:39:41.945704",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\9d2d19c7c7bab0f9_089bf05ce009706e_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\9d478598cefdae6a_a1cbf969ab0c1598_8fa6aad188e0.mp3",
+      "size": 5760,
+      "mtime": "2026-07-20T16:06:09.127480",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\9d478598cefdae6a_a1cbf969ab0c1598_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\9f7c0ee4ddcdfe10_976839cdfe848920_8fa6aad188e0.mp3",
+      "size": 109056,
+      "mtime": "2026-07-22T07:19:13.728730",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\9f7c0ee4ddcdfe10_976839cdfe848920_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\9faab31001bb0c98_40a8d6d2c698349b_8fa6aad188e0.mp3",
+      "size": 2565120,
+      "mtime": "2026-07-22T11:26:50.672866",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\9faab31001bb0c98_40a8d6d2c698349b_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\9ffffda4fc2b33d6_57ae9483ead7807d_8fa6aad188e0.mp3",
+      "size": 2524800,
+      "mtime": "2026-07-22T13:53:44.798218",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\9ffffda4fc2b33d6_57ae9483ead7807d_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\a01df1f2e7a32454_d2217f1b4b7223fd_8fa6aad188e0.mp3",
+      "size": 1526400,
+      "mtime": "2026-07-20T16:05:51.801171",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\a01df1f2e7a32454_d2217f1b4b7223fd_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\a098fdef9b70187e_bce974c789cf177b_8fa6aad188e0.mp3",
+      "size": 838656,
+      "mtime": "2026-07-22T14:53:52.347663",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\a098fdef9b70187e_bce974c789cf177b_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\a462447138659d14_c8d845256a40c5fb_8fa6aad188e0.mp3",
+      "size": 1129728,
+      "mtime": "2026-07-22T10:30:25.504848",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\a462447138659d14_c8d845256a40c5fb_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\a5946a810527240f_4e85c7cc479da7db_8fa6aad188e0.mp3",
+      "size": 2537088,
+      "mtime": "2026-07-20T13:25:52.289708",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\a5946a810527240f_4e85c7cc479da7db_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\abbddb5ad752d1ea_e24b51b6e2626d98_8fa6aad188e0.mp3",
+      "size": 4086528,
+      "mtime": "2026-07-22T13:19:11.480390",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\abbddb5ad752d1ea_e24b51b6e2626d98_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\ac2e55a2f97d0ecd_9bc30d8ee3e82ea4_8fa6aad188e0.mp3",
+      "size": 461568,
+      "mtime": "2026-07-20T15:55:30.418298",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\ac2e55a2f97d0ecd_9bc30d8ee3e82ea4_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\acc18f45366a92ec_3b94fe57cfe2b343_8fa6aad188e0.mp3",
+      "size": 284160,
+      "mtime": "2026-07-22T09:05:06.223314",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\acc18f45366a92ec_3b94fe57cfe2b343_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\ae1cdbac32ed9c7a_f3d6b63e00e1d0d8_8fa6aad188e0.mp3",
+      "size": 5543424,
+      "mtime": "2026-07-20T17:46:46.289149",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\ae1cdbac32ed9c7a_f3d6b63e00e1d0d8_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\b0dae4447d14b89e_f63ab53a759585aa_8fa6aad188e0.mp3",
+      "size": 3392256,
+      "mtime": "2026-07-22T13:25:40.285767",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\b0dae4447d14b89e_f63ab53a759585aa_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\b2e0c54d07ae0bd2_101420c1fda49bb8_8fa6aad188e0.mp3",
+      "size": 2332800,
+      "mtime": "2026-07-22T11:14:53.651789",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\b2e0c54d07ae0bd2_101420c1fda49bb8_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\b42be46825b12112_f009f45da1079b8e_8fa6aad188e0.mp3",
+      "size": 1813632,
+      "mtime": "2026-07-22T11:29:54.774095",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\b42be46825b12112_f009f45da1079b8e_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\b54533dd6e294281_5d3bf25a1617201b_8fa6aad188e0.mp3",
+      "size": 279168,
+      "mtime": "2026-07-22T14:56:29.773560",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\b54533dd6e294281_5d3bf25a1617201b_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\b79e42664b3a95f9_6aa5875af65c49ab_8fa6aad188e0.mp3",
+      "size": 3461760,
+      "mtime": "2026-07-22T16:59:28.365110",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\b79e42664b3a95f9_6aa5875af65c49ab_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\b8353202e50a5680_840f333e801089b2_8fa6aad188e0.mp3",
+      "size": 1721856,
+      "mtime": "2026-07-22T13:41:43.891949",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\b8353202e50a5680_840f333e801089b2_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\b88e7f3218284e64_0e82e2846e98acb1_8fa6aad188e0.mp3",
+      "size": 998400,
+      "mtime": "2026-07-20T14:08:22.759152",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\b88e7f3218284e64_0e82e2846e98acb1_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\b8cc437673f4572d_b787ffe5bd73a0bb_8fa6aad188e0.mp3",
+      "size": 1473024,
+      "mtime": "2026-07-22T10:48:22.001928",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\b8cc437673f4572d_b787ffe5bd73a0bb_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\ba79bfcbc454d23c_3c3f5ba1613b77d7_8fa6aad188e0.mp3",
+      "size": 874368,
+      "mtime": "2026-07-20T15:47:03.362141",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\ba79bfcbc454d23c_3c3f5ba1613b77d7_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\bbd1a6ebf4730934_b84b78e98b6c993d_8fa6aad188e0.mp3",
+      "size": 139392,
+      "mtime": "2026-07-22T10:02:35.918148",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\bbd1a6ebf4730934_b84b78e98b6c993d_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\bc553cf1456df85d_122e6e31e8659e9c_8fa6aad188e0.mp3",
+      "size": 288768,
+      "mtime": "2026-07-20T15:59:56.712008",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\bc553cf1456df85d_122e6e31e8659e9c_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\be33a57082a88112_b792756a08d6736b_8fa6aad188e0.mp3",
+      "size": 2367360,
+      "mtime": "2026-07-20T12:41:48.212526",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\be33a57082a88112_b792756a08d6736b_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\be664a47d14ef79e_993fc3279094eac8_8fa6aad188e0.mp3",
+      "size": 1448064,
+      "mtime": "2026-07-22T14:03:15.251264",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\be664a47d14ef79e_993fc3279094eac8_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\c16d606a3cdfe4b3_5381e0483558a36e_8fa6aad188e0.mp3",
+      "size": 2058624,
+      "mtime": "2026-07-20T16:28:07.067282",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\c16d606a3cdfe4b3_5381e0483558a36e_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\c178586465164ff8_13c125be65ebeb20_8fa6aad188e0.mp3",
+      "size": 1695360,
+      "mtime": "2026-07-22T12:29:25.823596",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\c178586465164ff8_13c125be65ebeb20_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\c1f8aa9d10a8ecf1_e65c8b6c591664c8_8fa6aad188e0.mp3",
+      "size": 1589760,
+      "mtime": "2026-07-22T15:11:29.905597",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\c1f8aa9d10a8ecf1_e65c8b6c591664c8_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\c2538fcb95eff946_103a7fd6ec6f266f_8fa6aad188e0.mp3",
+      "size": 1606656,
+      "mtime": "2026-07-20T12:32:15.894715",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\c2538fcb95eff946_103a7fd6ec6f266f_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\c2849a300fc4ccc8_e6f334b4b4153696_8fa6aad188e0.mp3",
+      "size": 337920,
+      "mtime": "2026-07-20T16:07:13.265326",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\c2849a300fc4ccc8_e6f334b4b4153696_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\c45895c139245dc8_fcb9c086ec4c9517_8fa6aad188e0.mp3",
+      "size": 1246464,
+      "mtime": "2026-07-22T16:42:11.992548",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\c45895c139245dc8_fcb9c086ec4c9517_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\c77b9049ddb94113_4139aa2b85732cb7_8fa6aad188e0.mp3",
+      "size": 5189760,
+      "mtime": "2026-07-22T16:44:18.641680",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\c77b9049ddb94113_4139aa2b85732cb7_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\c8051fa58465b6d5_1b71df96a5fe8ed0_8fa6aad188e0.mp3",
+      "size": 1160064,
+      "mtime": "2026-07-20T16:38:48.570062",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\c8051fa58465b6d5_1b71df96a5fe8ed0_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\c80aec97be9c8c41_5e2aa06e012336ce_8fa6aad188e0.mp3",
+      "size": 2105088,
+      "mtime": "2026-07-22T13:19:39.338535",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\c80aec97be9c8c41_5e2aa06e012336ce_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\c8c6881dba048372_e9dcc8797be0182a_8fa6aad188e0.mp3",
+      "size": 1900032,
+      "mtime": "2026-07-22T13:17:43.689600",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\c8c6881dba048372_e9dcc8797be0182a_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\cb9605b59fd301c0_583762e635a741d9_8fa6aad188e0.mp3",
+      "size": 1312128,
+      "mtime": "2026-07-22T14:58:47.070053",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\cb9605b59fd301c0_583762e635a741d9_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\cc7de1724cc42607_37a4a7bd00e5ecf2_8fa6aad188e0.mp3",
+      "size": 236160,
+      "mtime": "2026-07-22T10:04:04.933267",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\cc7de1724cc42607_37a4a7bd00e5ecf2_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\cd32b77ff9afd5c7_9e45bb89a11f061c_8fa6aad188e0.mp3",
+      "size": 384000,
+      "mtime": "2026-07-22T11:31:14.732115",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\cd32b77ff9afd5c7_9e45bb89a11f061c_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\cd6ded5bc594632f_7cd284a86e3b7e4d_8fa6aad188e0.mp3",
+      "size": 917760,
+      "mtime": "2026-07-22T16:04:18.667596",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\cd6ded5bc594632f_7cd284a86e3b7e4d_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\d0051fe8dfdb0319_3b782806b80a53e2_8fa6aad188e0.mp3",
+      "size": 1150464,
+      "mtime": "2026-07-20T13:16:52.633538",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\d0051fe8dfdb0319_3b782806b80a53e2_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\d188c01180084af6_94c6d88e2fa2da0c_8fa6aad188e0.mp3",
+      "size": 2031360,
+      "mtime": "2026-07-22T13:56:11.045576",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\d188c01180084af6_94c6d88e2fa2da0c_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\d232bb5d1019c140_6d1f70e3281c066a_8fa6aad188e0.mp3",
+      "size": 5230464,
+      "mtime": "2026-07-22T13:37:01.393865",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\d232bb5d1019c140_6d1f70e3281c066a_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\d274490b15fdf581_00ac4b89c7739513_8fa6aad188e0.mp3",
+      "size": 833664,
+      "mtime": "2026-07-22T16:19:33.491192",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\d274490b15fdf581_00ac4b89c7739513_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\d33225433f087ea9_bc8bd273359afcb4_8fa6aad188e0.mp3",
+      "size": 1173120,
+      "mtime": "2026-07-22T16:31:26.338133",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\d33225433f087ea9_bc8bd273359afcb4_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\d3327fdbc7c1d15d_43dc89d7520cf859_8fa6aad188e0.mp3",
+      "size": 146688,
+      "mtime": "2026-07-22T16:18:34.671987",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\d3327fdbc7c1d15d_43dc89d7520cf859_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\d33e5aa23c97613f_58232f8708e2cab0_8fa6aad188e0.mp3",
+      "size": 69888,
+      "mtime": "2026-07-22T14:46:59.965588",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\d33e5aa23c97613f_58232f8708e2cab0_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\d374c5faaac57eaa_a5d3af20e4cd30ec_8fa6aad188e0.mp3",
+      "size": 1906560,
+      "mtime": "2026-07-20T14:43:53.147614",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\d374c5faaac57eaa_a5d3af20e4cd30ec_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\d630cbadf0aed091_e95023d9eb7e2eb4_8fa6aad188e0.mp3",
+      "size": 1456128,
+      "mtime": "2026-07-22T07:18:42.879043",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\d630cbadf0aed091_e95023d9eb7e2eb4_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\d765ea1ef27f10ec_e3194fa07240807c_8fa6aad188e0.mp3",
+      "size": 1352064,
+      "mtime": "2026-07-22T16:26:27.532237",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\d765ea1ef27f10ec_e3194fa07240807c_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\d89bccc4d2c22cd1_f6606100f947623a_8fa6aad188e0.mp3",
+      "size": 2327424,
+      "mtime": "2026-07-20T16:42:46.740417",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\d89bccc4d2c22cd1_f6606100f947623a_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\d9375cee18c5599f_80652f5ac87717fe_8fa6aad188e0.mp3",
+      "size": 1618560,
+      "mtime": "2026-07-20T13:21:56.076870",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\d9375cee18c5599f_80652f5ac87717fe_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\dc615c629a44e94f_7f710c65c64c38c4_8fa6aad188e0.mp3",
+      "size": 1314432,
+      "mtime": "2026-07-20T14:40:52.146548",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\dc615c629a44e94f_7f710c65c64c38c4_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\e18f41078a835af8_7e6cb154af85726e_8fa6aad188e0.mp3",
+      "size": 967296,
+      "mtime": "2026-07-22T14:49:52.532352",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\e18f41078a835af8_7e6cb154af85726e_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\e49bef13f86e2a84_b02cfab4fa119bca_8fa6aad188e0.mp3",
+      "size": 461568,
+      "mtime": "2026-07-22T16:35:18.619179",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\e49bef13f86e2a84_b02cfab4fa119bca_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\e4ddafcf3888cc6c_3a779e8ee07995c8_8fa6aad188e0.mp3",
+      "size": 1495296,
+      "mtime": "2026-07-22T13:52:41.331009",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\e4ddafcf3888cc6c_3a779e8ee07995c8_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\e5a94eeeb25fc3c7_a4c6d5e084fefc07_8fa6aad188e0.mp3",
+      "size": 503424,
+      "mtime": "2026-07-20T15:59:26.626175",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\e5a94eeeb25fc3c7_a4c6d5e084fefc07_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\e9d9fa6849fa589f_e527787e7f4d76ec_8fa6aad188e0.mp3",
+      "size": 5426688,
+      "mtime": "2026-07-22T10:27:23.410511",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\e9d9fa6849fa589f_e527787e7f4d76ec_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\ecc79a6aa8c99df8_2af6c68640ed0a4e_8fa6aad188e0.mp3",
+      "size": 2085888,
+      "mtime": "2026-07-22T17:01:02.126893",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\ecc79a6aa8c99df8_2af6c68640ed0a4e_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\ecef2b356c59c482_109aa695de7cd38b_8fa6aad188e0.mp3",
+      "size": 2123520,
+      "mtime": "2026-07-22T12:42:37.812080",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\ecef2b356c59c482_109aa695de7cd38b_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\ede9a022aae5b26b_bfa556ba357548c2_8fa6aad188e0.mp3",
+      "size": 1417728,
+      "mtime": "2026-07-22T12:41:14.967332",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\ede9a022aae5b26b_bfa556ba357548c2_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\ee6d112805019199_dbe85d618875a205_8fa6aad188e0.mp3",
+      "size": 3399168,
+      "mtime": "2026-07-22T13:34:57.512741",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\ee6d112805019199_dbe85d618875a205_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\f33eea53b006f590_a9c89f037b1bee30_8fa6aad188e0.mp3",
+      "size": 895488,
+      "mtime": "2026-07-20T13:17:42.641165",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\f33eea53b006f590_a9c89f037b1bee30_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\f424d0cde59a36fa_2674c6d138201b36_8fa6aad188e0.mp3",
+      "size": 1321728,
+      "mtime": "2026-07-20T14:57:08.792456",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\f424d0cde59a36fa_2674c6d138201b36_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\fb1b878bcd5f816a_710585565a3bffff_8fa6aad188e0.mp3",
+      "size": 576768,
+      "mtime": "2026-07-22T10:27:45.046237",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\fb1b878bcd5f816a_710585565a3bffff_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\fb647287b934bca6_df79a904c21a369c_8fa6aad188e0.mp3",
+      "size": 4199424,
+      "mtime": "2026-07-20T16:43:34.529473",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\fb647287b934bca6_df79a904c21a369c_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\fcc800aa403eb326_6fd672bd82db7ccd_8fa6aad188e0.mp3",
+      "size": 1155456,
+      "mtime": "2026-07-22T14:33:38.712121",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\fcc800aa403eb326_6fd672bd82db7ccd_8fa6aad188e0.mp3"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\audio\\mission\\fcc800aa403eb326_6fd672bd82db7ccd_8fa6aad188e0.mp3.lnk",
+      "size": 2695,
+      "mtime": "2026-07-29T04:09:41.903545",
+      "category": "hermes-cache",
+      "relative": "audio\\mission\\fcc800aa403eb326_6fd672bd82db7ccd_8fa6aad188e0.mp3.lnk"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-0-20260718_105249_532422.txt",
+      "size": 2198,
+      "mtime": "2026-07-18T10:52:49.532423",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-0-20260718_105249_532422.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-0-20260718_105400_929760.txt",
+      "size": 2427,
+      "mtime": "2026-07-18T10:54:00.929760",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-0-20260718_105400_929760.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-0-20260718_123450_212601.txt",
+      "size": 10313,
+      "mtime": "2026-07-18T12:34:50.213603",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-0-20260718_123450_212601.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-0-20260718_170142_941774.txt",
+      "size": 6838,
+      "mtime": "2026-07-18T17:01:42.942741",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-0-20260718_170142_941774.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-0-20260719_144203_911001.txt",
+      "size": 14343,
+      "mtime": "2026-07-19T14:42:03.912005",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-0-20260719_144203_911001.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-0-20260719_150433_746955.txt",
+      "size": 9317,
+      "mtime": "2026-07-19T15:04:33.747953",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-0-20260719_150433_746955.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-0-20260722_132831_267431.txt",
+      "size": 3863,
+      "mtime": "2026-07-22T13:28:31.267432",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-0-20260722_132831_267431.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-0-20260722_135317_248411.txt",
+      "size": 2520,
+      "mtime": "2026-07-22T13:53:17.249168",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-0-20260722_135317_248411.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-0-20260722_164430_031955.txt",
+      "size": 4433,
+      "mtime": "2026-07-22T16:44:30.031955",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-0-20260722_164430_031955.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-0-20260722_165758_388171.txt",
+      "size": 3561,
+      "mtime": "2026-07-22T16:57:58.388172",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-0-20260722_165758_388171.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-0-20260722_170039_643537.txt",
+      "size": 4338,
+      "mtime": "2026-07-22T17:00:39.644541",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-0-20260722_170039_643537.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-0-20260724_005854_070323.txt",
+      "size": 4033,
+      "mtime": "2026-07-24T00:58:54.071323",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-0-20260724_005854_070323.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-0-20260727_014359_386278.txt",
+      "size": 7131,
+      "mtime": "2026-07-27T01:43:59.386279",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-0-20260727_014359_386278.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-0-20260802_043352_354477.txt",
+      "size": 5405,
+      "mtime": "2026-08-02T04:33:52.354478",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-0-20260802_043352_354477.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-0-20260802_051651_960344.txt",
+      "size": 2153,
+      "mtime": "2026-08-02T05:16:51.960345",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-0-20260802_051651_960344.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-1-20260718_123450_214603.txt",
+      "size": 4207,
+      "mtime": "2026-07-18T12:34:50.215605",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-1-20260718_123450_214603.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-1-20260718_145807_321446.txt",
+      "size": 5724,
+      "mtime": "2026-07-18T14:58:07.322443",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-1-20260718_145807_321446.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-1-20260718_170142_942741.txt",
+      "size": 7254,
+      "mtime": "2026-07-18T17:01:42.943774",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-1-20260718_170142_942741.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-1-20260718_170932_928465.txt",
+      "size": 3361,
+      "mtime": "2026-07-18T17:09:32.928465",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-1-20260718_170932_928465.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-1-20260719_144203_913002.txt",
+      "size": 14753,
+      "mtime": "2026-07-19T14:42:03.914513",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-1-20260719_144203_913002.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-1-20260719_150433_748950.txt",
+      "size": 9883,
+      "mtime": "2026-07-19T15:04:33.748950",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-1-20260719_150433_748950.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-1-20260722_135317_249167.txt",
+      "size": 3636,
+      "mtime": "2026-07-22T13:53:17.250175",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-1-20260722_135317_249167.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-1-20260722_164430_032954.txt",
+      "size": 4221,
+      "mtime": "2026-07-22T16:44:30.032954",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-1-20260722_164430_032954.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-1-20260722_165758_389167.txt",
+      "size": 6221,
+      "mtime": "2026-07-22T16:57:58.390168",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-1-20260722_165758_389167.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-1-20260722_170039_645541.txt",
+      "size": 3999,
+      "mtime": "2026-07-22T17:00:39.645542",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-1-20260722_170039_645541.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-1-20260802_043352_355478.txt",
+      "size": 4612,
+      "mtime": "2026-08-02T04:33:52.356478",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-1-20260802_043352_355478.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-2-20260718_145807_324442.txt",
+      "size": 7809,
+      "mtime": "2026-07-18T14:58:07.325446",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-2-20260718_145807_324442.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-2-20260718_170142_944743.txt",
+      "size": 5325,
+      "mtime": "2026-07-18T17:01:42.944743",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-2-20260718_170142_944743.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\subagent-summary-2-20260802_043352_356477.txt",
+      "size": 3812,
+      "mtime": "2026-08-02T04:33:52.358478",
+      "category": "hermes-cache",
+      "relative": "delegation\\subagent-summary-2-20260802_043352_356477.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_01b91416\\manifest.json",
+      "size": 1248,
+      "mtime": "2026-08-02T03:50:46.362712",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_01b91416\\manifest.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_01b91416\\task-0.log",
+      "size": 1609,
+      "mtime": "2026-08-02T03:50:46.360716",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_01b91416\\task-0.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_01b91416\\task-1.log",
+      "size": 1467,
+      "mtime": "2026-08-02T03:50:46.361712",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_01b91416\\task-1.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_086df3f3\\manifest.json",
+      "size": 2447,
+      "mtime": "2026-07-28T09:23:03.677047",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_086df3f3\\manifest.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_086df3f3\\task-0.log",
+      "size": 7267,
+      "mtime": "2026-07-28T09:23:03.673048",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_086df3f3\\task-0.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_086df3f3\\task-1.log",
+      "size": 17715,
+      "mtime": "2026-07-28T09:23:20.772707",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_086df3f3\\task-1.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_086df3f3\\task-2.log",
+      "size": 20713,
+      "mtime": "2026-07-28T09:23:03.675050",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_086df3f3\\task-2.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_103c6f02\\manifest.json",
+      "size": 1604,
+      "mtime": "2026-07-29T02:27:14.655483",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_103c6f02\\manifest.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_103c6f02\\task-0.log",
+      "size": 7207,
+      "mtime": "2026-07-29T02:27:14.652478",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_103c6f02\\task-0.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_103c6f02\\task-1.log",
+      "size": 11287,
+      "mtime": "2026-07-29T02:27:14.653480",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_103c6f02\\task-1.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_10d8c7ec\\manifest.json",
+      "size": 799,
+      "mtime": "2026-07-29T02:20:16.742456",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_10d8c7ec\\manifest.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_10d8c7ec\\task-0.log",
+      "size": 8953,
+      "mtime": "2026-07-29T02:20:16.737456",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_10d8c7ec\\task-0.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_3cd880c9\\manifest.json",
+      "size": 1443,
+      "mtime": "2026-07-26T18:09:21.813709",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_3cd880c9\\manifest.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_3cd880c9\\task-0.log",
+      "size": 2081,
+      "mtime": "2026-07-26T18:09:21.811712",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_3cd880c9\\task-0.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_3cd880c9\\task-1.log",
+      "size": 1815,
+      "mtime": "2026-07-26T18:09:21.812710",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_3cd880c9\\task-1.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_3dfdf696\\manifest.json",
+      "size": 1263,
+      "mtime": "2026-08-02T04:33:52.360989",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_3dfdf696\\manifest.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_3dfdf696\\task-0.log",
+      "size": 18394,
+      "mtime": "2026-08-02T04:33:52.359984",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_3dfdf696\\task-0.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_3dfdf696\\task-1.log",
+      "size": 35438,
+      "mtime": "2026-08-02T04:33:52.359984",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_3dfdf696\\task-1.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_3dfdf696\\task-2.log",
+      "size": 4617,
+      "mtime": "2026-08-02T04:33:52.360989",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_3dfdf696\\task-2.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_4bd0c1b1\\manifest.json",
+      "size": 580,
+      "mtime": "2026-08-02T06:08:09.341814",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_4bd0c1b1\\manifest.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_4bd0c1b1\\task-0.log",
+      "size": 4751,
+      "mtime": "2026-08-02T06:08:09.340810",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_4bd0c1b1\\task-0.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_5d8ecda7\\manifest.json",
+      "size": 892,
+      "mtime": "2026-07-29T01:57:53.839314",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_5d8ecda7\\manifest.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_5d8ecda7\\task-0.log",
+      "size": 11211,
+      "mtime": "2026-07-29T01:57:53.838021",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_5d8ecda7\\task-0.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_64798b2b\\manifest.json",
+      "size": 470,
+      "mtime": "2026-08-02T04:47:45.217963",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_64798b2b\\manifest.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_64798b2b\\task-0.log",
+      "size": 7493,
+      "mtime": "2026-08-02T04:47:45.216962",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_64798b2b\\task-0.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_941c814b\\manifest.json",
+      "size": 908,
+      "mtime": "2026-07-29T01:47:12.453006",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_941c814b\\manifest.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_941c814b\\task-0.log",
+      "size": 5634,
+      "mtime": "2026-07-29T01:47:12.451997",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_941c814b\\task-0.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_95c12496\\manifest.json",
+      "size": 1501,
+      "mtime": "2026-07-29T00:43:13.914541",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_95c12496\\manifest.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_95c12496\\task-0.log",
+      "size": 6736,
+      "mtime": "2026-07-29T00:43:13.912517",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_95c12496\\task-0.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_95c12496\\task-1.log",
+      "size": 4933,
+      "mtime": "2026-07-29T00:43:13.912517",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_95c12496\\task-1.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_99f45492\\manifest.json",
+      "size": 907,
+      "mtime": "2026-07-29T01:50:33.153831",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_99f45492\\manifest.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_99f45492\\task-0.log",
+      "size": 8791,
+      "mtime": "2026-07-29T01:50:33.151832",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_99f45492\\task-0.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_b6db62a5\\manifest.json",
+      "size": 480,
+      "mtime": "2026-08-02T05:16:51.962339",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_b6db62a5\\manifest.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_b6db62a5\\task-0.log",
+      "size": 8010,
+      "mtime": "2026-08-02T05:16:51.961371",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_b6db62a5\\task-0.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_c8c813de\\manifest.json",
+      "size": 1108,
+      "mtime": "2026-07-27T01:43:59.604271",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_c8c813de\\manifest.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_c8c813de\\task-0.log",
+      "size": 17618,
+      "mtime": "2026-07-27T01:43:59.602274",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_c8c813de\\task-0.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_c8c813de\\task-1.log",
+      "size": 16908,
+      "mtime": "2026-07-27T01:43:59.602274",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_c8c813de\\task-1.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_c8c813de\\task-2.log",
+      "size": 21765,
+      "mtime": "2026-07-27T01:43:59.603273",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_c8c813de\\task-2.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_e8f3079a\\manifest.json",
+      "size": 1163,
+      "mtime": "2026-07-29T01:18:49.719327",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_e8f3079a\\manifest.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_e8f3079a\\task-0.log",
+      "size": 6680,
+      "mtime": "2026-07-29T01:18:49.716321",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_e8f3079a\\task-0.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\delegation\\live\\deleg_e8f3079a\\task-1.log",
+      "size": 13813,
+      "mtime": "2026-07-29T01:18:52.246662",
+      "category": "hermes-cache",
+      "relative": "delegation\\live\\deleg_e8f3079a\\task-1.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\documents\\doc_88b32ec5837e_Novo(a) Documento de Texto.txt",
+      "size": 19155,
+      "mtime": "2026-08-02T07:45:38.607810",
+      "category": "hermes-cache",
+      "relative": "documents\\doc_88b32ec5837e_Novo(a) Documento de Texto.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\gate0_snap\\HOJE.md",
+      "size": 110,
+      "mtime": "2026-07-24T07:48:32.664503",
+      "category": "hermes-cache",
+      "relative": "gate0_snap\\HOJE.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\gate0_snap\\REGRAS.md",
+      "size": 1637,
+      "mtime": "2026-07-24T07:48:32.669501",
+      "category": "hermes-cache",
+      "relative": "gate0_snap\\REGRAS.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\gate0_snap\\SEMANA.md",
+      "size": 63,
+      "mtime": "2026-07-24T07:48:32.667502",
+      "category": "hermes-cache",
+      "relative": "gate0_snap\\SEMANA.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_089327ceb26d.jpg",
+      "size": 116203,
+      "mtime": "2026-08-02T04:50:57.245833",
+      "category": "hermes-cache",
+      "relative": "images\\img_089327ceb26d.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_0d0cf8fa385a.jpg",
+      "size": 112758,
+      "mtime": "2026-08-02T04:31:01.965176",
+      "category": "hermes-cache",
+      "relative": "images\\img_0d0cf8fa385a.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_28bf3d3669e3.jpg",
+      "size": 309660,
+      "mtime": "2026-08-02T04:18:21.870811",
+      "category": "hermes-cache",
+      "relative": "images\\img_28bf3d3669e3.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_3d27c2fb59c4.jpg",
+      "size": 100175,
+      "mtime": "2026-08-02T06:36:05.726099",
+      "category": "hermes-cache",
+      "relative": "images\\img_3d27c2fb59c4.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_5217d9e9fe41.jpg",
+      "size": 63810,
+      "mtime": "2026-08-02T05:39:01.168256",
+      "category": "hermes-cache",
+      "relative": "images\\img_5217d9e9fe41.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_7172ba20d47c.jpg",
+      "size": 106700,
+      "mtime": "2026-08-02T05:34:34.805507",
+      "category": "hermes-cache",
+      "relative": "images\\img_7172ba20d47c.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_72e0104729b3.jpg",
+      "size": 101835,
+      "mtime": "2026-08-02T04:46:03.418848",
+      "category": "hermes-cache",
+      "relative": "images\\img_72e0104729b3.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_78c913eea1d6.jpg",
+      "size": 64290,
+      "mtime": "2026-08-02T06:51:11.392636",
+      "category": "hermes-cache",
+      "relative": "images\\img_78c913eea1d6.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_7ab49081d16e.jpg",
+      "size": 314859,
+      "mtime": "2026-08-02T06:01:09.429039",
+      "category": "hermes-cache",
+      "relative": "images\\img_7ab49081d16e.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_7b1f63da712f.jpg",
+      "size": 121617,
+      "mtime": "2026-08-02T04:44:30.796174",
+      "category": "hermes-cache",
+      "relative": "images\\img_7b1f63da712f.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_8de4db016f12.jpg",
+      "size": 37143,
+      "mtime": "2026-08-02T07:42:28.776942",
+      "category": "hermes-cache",
+      "relative": "images\\img_8de4db016f12.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_a338aedabfeb.jpg",
+      "size": 87019,
+      "mtime": "2026-08-02T06:26:32.448067",
+      "category": "hermes-cache",
+      "relative": "images\\img_a338aedabfeb.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_a45bece4e493.jpg",
+      "size": 126218,
+      "mtime": "2026-08-02T06:36:06.604702",
+      "category": "hermes-cache",
+      "relative": "images\\img_a45bece4e493.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_a5bf3108733d.jpg",
+      "size": 54596,
+      "mtime": "2026-08-02T05:39:01.877662",
+      "category": "hermes-cache",
+      "relative": "images\\img_a5bf3108733d.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_ada84b290181.jpg",
+      "size": 264860,
+      "mtime": "2026-08-02T06:01:06.101344",
+      "category": "hermes-cache",
+      "relative": "images\\img_ada84b290181.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_afe4a209a87c.jpg",
+      "size": 123210,
+      "mtime": "2026-08-02T04:06:54.356734",
+      "category": "hermes-cache",
+      "relative": "images\\img_afe4a209a87c.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_b44eaad0670f.jpg",
+      "size": 84931,
+      "mtime": "2026-08-02T05:34:00.638441",
+      "category": "hermes-cache",
+      "relative": "images\\img_b44eaad0670f.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_b8f812b8d5e4.jpg",
+      "size": 121194,
+      "mtime": "2026-08-02T06:51:12.873237",
+      "category": "hermes-cache",
+      "relative": "images\\img_b8f812b8d5e4.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_d0cb68dbd63b.jpg",
+      "size": 159901,
+      "mtime": "2026-08-02T04:32:14.351343",
+      "category": "hermes-cache",
+      "relative": "images\\img_d0cb68dbd63b.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_d1d2ad5c166c.jpg",
+      "size": 268827,
+      "mtime": "2026-08-02T05:52:17.243764",
+      "category": "hermes-cache",
+      "relative": "images\\img_d1d2ad5c166c.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_d462b0ea7a64.jpg",
+      "size": 48063,
+      "mtime": "2026-08-02T06:33:43.483516",
+      "category": "hermes-cache",
+      "relative": "images\\img_d462b0ea7a64.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_d51f6f9ac353.jpg",
+      "size": 38407,
+      "mtime": "2026-08-02T06:33:44.361453",
+      "category": "hermes-cache",
+      "relative": "images\\img_d51f6f9ac353.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_df57b163704e.jpg",
+      "size": 69957,
+      "mtime": "2026-08-02T04:24:34.664432",
+      "category": "hermes-cache",
+      "relative": "images\\img_df57b163704e.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\images\\img_ede37e493fbc.jpg",
+      "size": 116176,
+      "mtime": "2026-08-02T06:50:26.876179",
+      "category": "hermes-cache",
+      "relative": "images\\img_ede37e493fbc.jpg"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\meta-lupa\\BOOT-OBRIGATORIO-FRIO-20260729-005429.json",
+      "size": 600,
+      "mtime": "2026-07-29T00:54:31.069216",
+      "category": "hermes-cache",
+      "relative": "meta-lupa\\BOOT-OBRIGATORIO-FRIO-20260729-005429.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\meta-lupa\\BOOT-OBRIGATORIO-OPERACIONAL-20260729-010224.json",
+      "size": 607,
+      "mtime": "2026-07-29T01:02:26.247622",
+      "category": "hermes-cache",
+      "relative": "meta-lupa\\BOOT-OBRIGATORIO-OPERACIONAL-20260729-010224.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-snap-2313235120c1.sh",
+      "size": 8677,
+      "mtime": "2026-07-26T19:15:50.783570",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-snap-2313235120c1.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-snap-2e0bd28467fa.sh",
+      "size": 8677,
+      "mtime": "2026-07-26T19:36:59.930958",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-snap-2e0bd28467fa.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-snap-363a26d84a4d.sh",
+      "size": 9147,
+      "mtime": "2026-07-18T18:49:26.580686",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-snap-363a26d84a4d.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-snap-6bf6296b4407.sh",
+      "size": 8516,
+      "mtime": "2026-07-18T19:26:44.787128",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-snap-6bf6296b4407.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-snap-85ec344c9468.sh",
+      "size": 69729,
+      "mtime": "2026-07-19T21:24:27.544484",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-snap-85ec344c9468.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-snap-8ecacf29d491.sh",
+      "size": 9356,
+      "mtime": "2026-07-18T04:42:38.039201",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-snap-8ecacf29d491.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-snap-92046b115688.sh",
+      "size": 8959,
+      "mtime": "2026-07-18T04:44:18.895047",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-snap-92046b115688.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-snap-a8829c7c97c2.sh",
+      "size": 6483,
+      "mtime": "2026-07-19T15:07:51.883875",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-snap-a8829c7c97c2.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-snap-afbe1227ef18.sh",
+      "size": 11653,
+      "mtime": "2026-08-02T07:50:35.335003",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-snap-afbe1227ef18.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-snap-b9e6d02c46b0.sh",
+      "size": 10878,
+      "mtime": "2026-07-18T04:52:15.704350",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-snap-b9e6d02c46b0.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-snap-bc70672231ac.sh",
+      "size": 11846,
+      "mtime": "2026-08-02T01:54:42.283782",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-snap-bc70672231ac.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-snap-c24ef5bce83e.sh",
+      "size": 9913,
+      "mtime": "2026-07-28T10:28:46.551276",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-snap-c24ef5bce83e.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-snap-dc1538ccd163.sh",
+      "size": 9122,
+      "mtime": "2026-07-18T04:30:16.541293",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-snap-dc1538ccd163.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-snap-ed1ebeb36449.sh",
+      "size": 10715,
+      "mtime": "2026-07-18T19:17:18.912740",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-snap-ed1ebeb36449.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-snap-ee7d895144bc.sh",
+      "size": 11083,
+      "mtime": "2026-07-22T17:02:44.534675",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-snap-ee7d895144bc.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-snap-f073ce93a7c4.sh",
+      "size": 9926,
+      "mtime": "2026-07-29T00:37:10.259401",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-snap-f073ce93a7c4.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-results\\call-e09aa06b-e148-42d6-8529-668e66f1320c-110.txt",
+      "size": 273633,
+      "mtime": "2026-07-18T18:04:57.669655",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-results\\call-e09aa06b-e148-42d6-8529-668e66f1320c-110.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-results\\call_0Grkjkn7C2mM0IhhvjDIaMw9.txt",
+      "size": 126160,
+      "mtime": "2026-08-02T04:29:00.109650",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-results\\call_0Grkjkn7C2mM0IhhvjDIaMw9.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-results\\call_b6BZ4rKbfy6vvqouEPgpfvad.txt",
+      "size": 60439,
+      "mtime": "2026-07-19T14:06:35.475001",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-results\\call_b6BZ4rKbfy6vvqouEPgpfvad.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-results\\call_BetAoYW6ptuQVQunvwlCKJHW.txt",
+      "size": 51486,
+      "mtime": "2026-07-18T16:20:30.290102",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-results\\call_BetAoYW6ptuQVQunvwlCKJHW.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-results\\call_CoF5NwgmpHBgcXNQhFWsFO4e.txt",
+      "size": 128355,
+      "mtime": "2026-07-29T02:23:40.614271",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-results\\call_CoF5NwgmpHBgcXNQhFWsFO4e.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-results\\call_d81c1adf6f8543e681bce0a5.txt",
+      "size": 138612,
+      "mtime": "2026-07-22T17:49:07.130287",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-results\\call_d81c1adf6f8543e681bce0a5.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-results\\call_fDoGY5WsNlx1P8v3ep8TjYoS.txt",
+      "size": 51800,
+      "mtime": "2026-07-18T16:20:29.493987",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-results\\call_fDoGY5WsNlx1P8v3ep8TjYoS.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-results\\call_FHmx9XEN0TlmSyGquo09IgQt.txt",
+      "size": 99465,
+      "mtime": "2026-08-02T04:31:27.424591",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-results\\call_FHmx9XEN0TlmSyGquo09IgQt.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-results\\call_JEborPfAhs6jsHvrOOs5QhhE.txt",
+      "size": 52213,
+      "mtime": "2026-07-18T16:20:29.072005",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-results\\call_JEborPfAhs6jsHvrOOs5QhhE.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-results\\call_qDaACtCeFgZCXKCe3FQ0oP1l.txt",
+      "size": 102446,
+      "mtime": "2026-08-02T04:31:27.015538",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-results\\call_qDaACtCeFgZCXKCe3FQ0oP1l.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-results\\call_W2ZTa4Tr7D3IakvAwQOvDFyx.txt",
+      "size": 52909,
+      "mtime": "2026-07-18T16:20:28.680735",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-results\\call_W2ZTa4Tr7D3IakvAwQOvDFyx.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\terminal\\hermes-results\\call_WJVX5LSUM33c4x6UcqogjEkg.txt",
+      "size": 51466,
+      "mtime": "2026-07-18T16:20:29.906707",
+      "category": "hermes-cache",
+      "relative": "terminal\\hermes-results\\call_WJVX5LSUM33c4x6UcqogjEkg.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\api.github.com-2d57563951.md",
+      "size": 16090,
+      "mtime": "2026-07-24T08:09:40.899895",
+      "category": "hermes-cache",
+      "relative": "web\\api.github.com-2d57563951.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\api.github.com-7ef5e48b1b.md",
+      "size": 46671,
+      "mtime": "2026-07-29T02:26:13.645993",
+      "category": "hermes-cache",
+      "relative": "web\\api.github.com-7ef5e48b1b.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\blakecrosley.com-f8f2693c40.md",
+      "size": 249696,
+      "mtime": "2026-07-28T07:43:33.438153",
+      "category": "hermes-cache",
+      "relative": "web\\blakecrosley.com-f8f2693c40.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-0c4abb6de5.txt",
+      "size": 84360,
+      "mtime": "2026-07-18T04:37:40.100393",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-0c4abb6de5.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-0f8dc796b5.txt",
+      "size": 44365,
+      "mtime": "2026-07-18T06:10:16.206450",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-0f8dc796b5.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-109734f4c5.txt",
+      "size": 36501,
+      "mtime": "2026-07-18T05:45:32.244711",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-109734f4c5.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-3336ec06ae.txt",
+      "size": 16376,
+      "mtime": "2026-07-18T06:05:47.667930",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-3336ec06ae.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-3913528c15.txt",
+      "size": 135356,
+      "mtime": "2026-07-18T05:58:41.996045",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-3913528c15.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-516e1829f7.txt",
+      "size": 60172,
+      "mtime": "2026-07-18T02:35:17.511753",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-516e1829f7.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-681302d233.txt",
+      "size": 79022,
+      "mtime": "2026-07-18T05:49:04.327854",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-681302d233.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-704cb225d7.txt",
+      "size": 93784,
+      "mtime": "2026-07-18T12:57:26.362105",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-704cb225d7.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-70a57af0e6.txt",
+      "size": 95628,
+      "mtime": "2026-07-18T05:15:36.702999",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-70a57af0e6.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-744279c847.txt",
+      "size": 99479,
+      "mtime": "2026-08-02T04:29:43.965899",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-744279c847.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-95adadb462.txt",
+      "size": 330863,
+      "mtime": "2026-08-02T04:31:25.518503",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-95adadb462.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-9646d1d839.txt",
+      "size": 64228,
+      "mtime": "2026-08-02T04:30:32.497007",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-9646d1d839.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-a19c19d5f3.txt",
+      "size": 170679,
+      "mtime": "2026-08-02T04:30:11.704271",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-a19c19d5f3.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-a50364adbd.txt",
+      "size": 1208116,
+      "mtime": "2026-07-18T16:19:55.931046",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-a50364adbd.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-a6da59af1f.txt",
+      "size": 27154,
+      "mtime": "2026-07-18T05:48:39.719402",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-a6da59af1f.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-acbc69de39.txt",
+      "size": 39148,
+      "mtime": "2026-07-18T12:39:46.160935",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-acbc69de39.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-bf354db356.txt",
+      "size": 55174,
+      "mtime": "2026-07-18T06:04:37.860300",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-bf354db356.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-c207c98d65.txt",
+      "size": 59731,
+      "mtime": "2026-07-18T05:15:24.097632",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-c207c98d65.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-cc2e379e45.txt",
+      "size": 182949,
+      "mtime": "2026-07-18T12:31:06.003167",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-cc2e379e45.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-d645ac22bc.txt",
+      "size": 55309,
+      "mtime": "2026-07-18T06:04:50.297915",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-d645ac22bc.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-d9f84bdeaf.txt",
+      "size": 29293,
+      "mtime": "2026-07-18T06:05:00.706471",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-d9f84bdeaf.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-da6ae77c33.txt",
+      "size": 23699,
+      "mtime": "2026-07-18T04:42:27.212864",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-da6ae77c33.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-dc0fbcb03c.txt",
+      "size": 30626,
+      "mtime": "2026-07-18T05:56:57.430041",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-dc0fbcb03c.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-dc664e19da.txt",
+      "size": 51883,
+      "mtime": "2026-07-18T02:35:37.994191",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-dc664e19da.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-e1339cc57b.txt",
+      "size": 1219416,
+      "mtime": "2026-07-18T12:57:15.510284",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-e1339cc57b.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-e3d59e301b.txt",
+      "size": 99040,
+      "mtime": "2026-08-02T03:38:02.547494",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-e3d59e301b.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\browser-snapshot-ea54a3bc73.txt",
+      "size": 48946,
+      "mtime": "2026-07-18T05:15:02.484872",
+      "category": "hermes-cache",
+      "relative": "web\\browser-snapshot-ea54a3bc73.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\code.claude.com-20106b0f3b.md",
+      "size": 197312,
+      "mtime": "2026-07-29T01:04:56.540593",
+      "category": "hermes-cache",
+      "relative": "web\\code.claude.com-20106b0f3b.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\github.com-07bbfd1526.md",
+      "size": 33063,
+      "mtime": "2026-07-26T04:04:35.364164",
+      "category": "hermes-cache",
+      "relative": "web\\github.com-07bbfd1526.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\github.com-2c4fe0435a.md",
+      "size": 15423,
+      "mtime": "2026-07-26T03:51:25.454658",
+      "category": "hermes-cache",
+      "relative": "web\\github.com-2c4fe0435a.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\github.com-401c6af5b5.md",
+      "size": 149503,
+      "mtime": "2026-08-02T05:53:27.122191",
+      "category": "hermes-cache",
+      "relative": "web\\github.com-401c6af5b5.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\github.com-50b03c2bcd.md",
+      "size": 54315,
+      "mtime": "2026-07-29T02:24:11.550433",
+      "category": "hermes-cache",
+      "relative": "web\\github.com-50b03c2bcd.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\github.com-95b1d9b437.md",
+      "size": 84333,
+      "mtime": "2026-07-27T16:46:36.480204",
+      "category": "hermes-cache",
+      "relative": "web\\github.com-95b1d9b437.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\github.com-96f1b2c412.md",
+      "size": 74244,
+      "mtime": "2026-07-29T02:24:11.583731",
+      "category": "hermes-cache",
+      "relative": "web\\github.com-96f1b2c412.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\github.com-a0c006d623.md",
+      "size": 22674,
+      "mtime": "2026-08-02T05:52:11.044265",
+      "category": "hermes-cache",
+      "relative": "web\\github.com-a0c006d623.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\hermes-agent.nousresearch.com-08759e4c89.md",
+      "size": 95559,
+      "mtime": "2026-08-02T03:54:04.611897",
+      "category": "hermes-cache",
+      "relative": "web\\hermes-agent.nousresearch.com-08759e4c89.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\hermes-agent.nousresearch.com-1904c594a3.md",
+      "size": 34164,
+      "mtime": "2026-08-02T04:28:55.599371",
+      "category": "hermes-cache",
+      "relative": "web\\hermes-agent.nousresearch.com-1904c594a3.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\hermes-agent.nousresearch.com-2235233911.md",
+      "size": 93330,
+      "mtime": "2026-07-29T00:34:54.290737",
+      "category": "hermes-cache",
+      "relative": "web\\hermes-agent.nousresearch.com-2235233911.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\hermes-agent.nousresearch.com-6fec2bc0f3.md",
+      "size": 32597,
+      "mtime": "2026-08-02T03:50:52.759564",
+      "category": "hermes-cache",
+      "relative": "web\\hermes-agent.nousresearch.com-6fec2bc0f3.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\hermes-agent.nousresearch.com-7d674527ed.md",
+      "size": 35933,
+      "mtime": "2026-08-02T04:29:16.521708",
+      "category": "hermes-cache",
+      "relative": "web\\hermes-agent.nousresearch.com-7d674527ed.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\hermes-agent.nousresearch.com-a3904273e4.md",
+      "size": 47648,
+      "mtime": "2026-08-02T03:54:04.609896",
+      "category": "hermes-cache",
+      "relative": "web\\hermes-agent.nousresearch.com-a3904273e4.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\hermes-agent.nousresearch.com-b1f6e8e7b3.md",
+      "size": 46274,
+      "mtime": "2026-08-02T04:29:16.756979",
+      "category": "hermes-cache",
+      "relative": "web\\hermes-agent.nousresearch.com-b1f6e8e7b3.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\hermes-agent.nousresearch.com-bae99f0e10.md",
+      "size": 26954,
+      "mtime": "2026-07-29T01:13:58.295567",
+      "category": "hermes-cache",
+      "relative": "web\\hermes-agent.nousresearch.com-bae99f0e10.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\hermes-agent.nousresearch.com-bb5299aeb7.md",
+      "size": 63982,
+      "mtime": "2026-07-26T17:55:57.428816",
+      "category": "hermes-cache",
+      "relative": "web\\hermes-agent.nousresearch.com-bb5299aeb7.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\hermes-agent.nousresearch.com-c489970ec7.md",
+      "size": 22985,
+      "mtime": "2026-07-28T07:43:33.439659",
+      "category": "hermes-cache",
+      "relative": "web\\hermes-agent.nousresearch.com-c489970ec7.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\hermes-agent.nousresearch.com-caa1345f2a.md",
+      "size": 106009,
+      "mtime": "2026-08-02T04:28:55.597367",
+      "category": "hermes-cache",
+      "relative": "web\\hermes-agent.nousresearch.com-caa1345f2a.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\hermes-agent.nousresearch.com-d2605d4f11.md",
+      "size": 27796,
+      "mtime": "2026-08-02T03:54:04.607900",
+      "category": "hermes-cache",
+      "relative": "web\\hermes-agent.nousresearch.com-d2605d4f11.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\hermes-agent.nousresearch.com-d36f8af9d6.md",
+      "size": 56094,
+      "mtime": "2026-08-02T04:49:04.636269",
+      "category": "hermes-cache",
+      "relative": "web\\hermes-agent.nousresearch.com-d36f8af9d6.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\hermes-agent.nousresearch.com-e6a675d567.md",
+      "size": 34225,
+      "mtime": "2026-07-24T06:23:20.453298",
+      "category": "hermes-cache",
+      "relative": "web\\hermes-agent.nousresearch.com-e6a675d567.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\hermes-agent.nousresearch.com-ed52f7b069.md",
+      "size": 34164,
+      "mtime": "2026-08-02T04:29:16.474887",
+      "category": "hermes-cache",
+      "relative": "web\\hermes-agent.nousresearch.com-ed52f7b069.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\hermes-agent.nousresearch.com-f7d7f70687.md",
+      "size": 175366,
+      "mtime": "2026-08-02T04:29:16.676766",
+      "category": "hermes-cache",
+      "relative": "web\\hermes-agent.nousresearch.com-f7d7f70687.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\hermes-agent.nousresearch.com-fccdab2f71.md",
+      "size": 91229,
+      "mtime": "2026-08-02T04:29:16.797448",
+      "category": "hermes-cache",
+      "relative": "web\\hermes-agent.nousresearch.com-fccdab2f71.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\medium.com-765d8a9491.md",
+      "size": 41971,
+      "mtime": "2026-08-02T05:52:57.571013",
+      "category": "hermes-cache",
+      "relative": "web\\medium.com-765d8a9491.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\openrouter.ai-3b058c114e.md",
+      "size": 10919,
+      "mtime": "2026-07-24T07:34:49.764622",
+      "category": "hermes-cache",
+      "relative": "web\\openrouter.ai-3b058c114e.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\playwright.dev-c13c2e85f0.md",
+      "size": 70654,
+      "mtime": "2026-07-29T02:26:33.283705",
+      "category": "hermes-cache",
+      "relative": "web\\playwright.dev-c13c2e85f0.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\raw.githubusercontent.com-69fe3a5656.md",
+      "size": 67726,
+      "mtime": "2026-08-02T03:44:04.529127",
+      "category": "hermes-cache",
+      "relative": "web\\raw.githubusercontent.com-69fe3a5656.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\raw.githubusercontent.com-be3ad49226.md",
+      "size": 35138,
+      "mtime": "2026-07-29T02:24:52.925496",
+      "category": "hermes-cache",
+      "relative": "web\\raw.githubusercontent.com-be3ad49226.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\raw.githubusercontent.com-effbfae02e.md",
+      "size": 300331,
+      "mtime": "2026-07-24T08:09:40.897896",
+      "category": "hermes-cache",
+      "relative": "web\\raw.githubusercontent.com-effbfae02e.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\www.ietf.org-33c30584f7.md",
+      "size": 32409,
+      "mtime": "2026-07-22T19:17:45.944362",
+      "category": "hermes-cache",
+      "relative": "web\\www.ietf.org-33c30584f7.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\web\\www.w3.org-98b684e008.md",
+      "size": 1073183,
+      "mtime": "2026-07-29T02:26:33.293791",
+      "category": "hermes-cache",
+      "relative": "web\\www.w3.org-98b684e008.md"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\cache\\__pycache__\\sol_browser_report_wait.cpython-311.pyc",
+      "size": 14189,
+      "mtime": "2026-08-02T06:10:58.261542",
+      "category": "hermes-cache",
+      "relative": "__pycache__\\sol_browser_report_wait.cpython-311.pyc"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\scripts\\atualizar-manual-sessao.py",
+      "size": 474,
+      "mtime": "2026-07-26T12:34:12.194145",
+      "category": "hermes-scripts",
+      "relative": "atualizar-manual-sessao.py"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\scripts\\atualizar-manual-sessao.sh",
+      "size": 3480,
+      "mtime": "2026-07-26T13:49:54.665078",
+      "category": "hermes-scripts",
+      "relative": "atualizar-manual-sessao.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\scripts\\atualizar-mapa-hermes.py",
+      "size": 470,
+      "mtime": "2026-07-26T12:34:12.195146",
+      "category": "hermes-scripts",
+      "relative": "atualizar-mapa-hermes.py"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\scripts\\atualizar-mapa-hermes.sh",
+      "size": 178,
+      "mtime": "2026-07-19T14:56:42.240893",
+      "category": "hermes-scripts",
+      "relative": "atualizar-mapa-hermes.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\scripts\\claude-code-proxy.py",
+      "size": 5048,
+      "mtime": "2026-07-26T17:47:00.179975",
+      "category": "hermes-scripts",
+      "relative": "claude-code-proxy.py"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\scripts\\claude-proxy.log",
+      "size": 93,
+      "mtime": "2026-07-26T18:11:42.751727",
+      "category": "hermes-scripts",
+      "relative": "claude-proxy.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\scripts\\destilar-3-temp.py",
+      "size": 451,
+      "mtime": "2026-07-26T12:34:12.196146",
+      "category": "hermes-scripts",
+      "relative": "destilar-3-temp.py"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\scripts\\find_children.ps1",
+      "size": 170,
+      "mtime": "2026-07-20T16:35:44.961775",
+      "category": "hermes-scripts",
+      "relative": "find_children.ps1"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\scripts\\find_terminal.ps1",
+      "size": 437,
+      "mtime": "2026-07-20T16:31:30.842956",
+      "category": "hermes-scripts",
+      "relative": "find_terminal.ps1"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\scripts\\gateway-watchdog.log",
+      "size": 68730,
+      "mtime": "2026-08-02T07:50:08.200137",
+      "category": "hermes-scripts",
+      "relative": "gateway-watchdog.log"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\scripts\\gateway-watchdog.py",
+      "size": 460,
+      "mtime": "2026-07-26T12:34:12.193146",
+      "category": "hermes-scripts",
+      "relative": "gateway-watchdog.py"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\scripts\\gateway-watchdog.sh",
+      "size": 588,
+      "mtime": "2026-07-22T20:11:15.304900",
+      "category": "hermes-scripts",
+      "relative": "gateway-watchdog.sh"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\Temp\\claude-5b40-cwd",
+      "size": 49,
+      "mtime": "2026-08-01T11:31:12.847256",
+      "category": "windows-temp",
+      "relative": "claude-5b40-cwd"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\Temp\\hermes-pty-active-4jst5w4v.json",
+      "size": 25,
+      "mtime": "2026-08-02T01:59:19.203938",
+      "category": "windows-temp",
+      "relative": "hermes-pty-active-4jst5w4v.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\Temp\\hermes-pty-active-7cmvmxnv.json",
+      "size": 25,
+      "mtime": "2026-08-02T01:41:16.115981",
+      "category": "windows-temp",
+      "relative": "hermes-pty-active-7cmvmxnv.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\Temp\\hermes-pty-active-rcj55hqs.json",
+      "size": 0,
+      "mtime": "2026-08-02T01:58:30.973353",
+      "category": "windows-temp",
+      "relative": "hermes-pty-active-rcj55hqs.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\Temp\\hermes-tui-active-session-ivi5q6cr.json",
+      "size": 25,
+      "mtime": "2026-08-02T01:27:06.898200",
+      "category": "windows-temp",
+      "relative": "hermes-tui-active-session-ivi5q6cr.json"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\Temp\\pivete-config-check.txt",
+      "size": 9137,
+      "mtime": "2026-08-02T04:01:02.342308",
+      "category": "windows-temp",
+      "relative": "pivete-config-check.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\Temp\\hermes_sandbox_auveux5f\\hermes_tools.py",
+      "size": 6135,
+      "mtime": "2026-08-02T07:51:49.171740",
+      "category": "windows-temp",
+      "relative": "hermes_sandbox_auveux5f\\hermes_tools.py"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\Temp\\iiaytcr3\\Microsoft.DiagnosticsHub.BenchmarkDotNet.50D74C3EBD2094A7221D\\Microsoft.DiagnosticsHub.BenchmarkDotNet.vsix",
+      "size": 113720,
+      "mtime": "2026-07-14T18:07:31.543139",
+      "category": "windows-temp",
+      "relative": "iiaytcr3\\Microsoft.DiagnosticsHub.BenchmarkDotNet.50D74C3EBD2094A7221D\\Microsoft.DiagnosticsHub.BenchmarkDotNet.vsix"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\Temp\\iiaytcr3\\Microsoft.DiagnosticsHub.BenchmarkDotNet.Resources.DBC36C752AAD4E8351FB\\Microsoft.DiagnosticsHub.BenchmarkDotNet.Resources.ptb.vsix",
+      "size": 22052,
+      "mtime": "2026-07-14T18:07:31.277864",
+      "category": "windows-temp",
+      "relative": "iiaytcr3\\Microsoft.DiagnosticsHub.BenchmarkDotNet.Resources.DBC36C752AAD4E8351FB\\Microsoft.DiagnosticsHub.BenchmarkDotNet.Resources.ptb.vsix"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\Temp\\iiaytcr3\\Microsoft.DiagnosticsHub.BenchmarkDotNet.Targeted.5FF967BE2947EA2C54C2\\Microsoft.DiagnosticsHub.BenchmarkDotNet.x64.vsix",
+      "size": 75153,
+      "mtime": "2026-07-14T18:07:31.403996",
+      "category": "windows-temp",
+      "relative": "iiaytcr3\\Microsoft.DiagnosticsHub.BenchmarkDotNet.Targeted.5FF967BE2947EA2C54C2\\Microsoft.DiagnosticsHub.BenchmarkDotNet.x64.vsix"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\Temp\\iiaytcr3\\Microsoft.DiagnosticsHub.DotNetAsync.02194F874F8807303555\\Microsoft.DiagnosticsHub.DotNetAsync.vsix",
+      "size": 128112,
+      "mtime": "2026-07-14T18:07:30.799964",
+      "category": "windows-temp",
+      "relative": "iiaytcr3\\Microsoft.DiagnosticsHub.DotNetAsync.02194F874F8807303555\\Microsoft.DiagnosticsHub.DotNetAsync.vsix"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\Temp\\iiaytcr3\\Microsoft.DiagnosticsHub.DotNetAsync.Resources.9882ECB238D49BD77CBB\\Microsoft.DiagnosticsHub.DotNetAsync.Resources.ptb.vsix",
+      "size": 22985,
+      "mtime": "2026-07-14T18:07:30.538943",
+      "category": "windows-temp",
+      "relative": "iiaytcr3\\Microsoft.DiagnosticsHub.DotNetAsync.Resources.9882ECB238D49BD77CBB\\Microsoft.DiagnosticsHub.DotNetAsync.Resources.ptb.vsix"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\Temp\\iiaytcr3\\Microsoft.DiagnosticsHub.DotNetAsync.Targeted.B69017E05E32954E6DDE\\Microsoft.DiagnosticsHub.DotNetAsync.x64.vsix",
+      "size": 48072,
+      "mtime": "2026-07-14T18:07:30.677884",
+      "category": "windows-temp",
+      "relative": "iiaytcr3\\Microsoft.DiagnosticsHub.DotNetAsync.Targeted.B69017E05E32954E6DDE\\Microsoft.DiagnosticsHub.DotNetAsync.x64.vsix"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\Temp\\Rar$DIa38200.33944.rartemp\\centraldark-agentic-loop-4k-completo.png",
+      "size": 277999,
+      "mtime": "2026-07-30T20:40:30",
+      "category": "windows-temp",
+      "relative": "Rar$DIa38200.33944.rartemp\\centraldark-agentic-loop-4k-completo.png"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\Temp\\tmp.Ipiu5nIrEf\\tests\\test_delta_contract.py",
+      "size": 23418,
+      "mtime": "2026-08-01T14:35:05.577404",
+      "category": "windows-temp",
+      "relative": "tmp.Ipiu5nIrEf\\tests\\test_delta_contract.py"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\Temp\\tmp0593zxsd\\evidence.txt",
+      "size": 17,
+      "mtime": "2026-08-01T18:44:15.021276",
+      "category": "windows-temp",
+      "relative": "tmp0593zxsd\\evidence.txt"
+    },
+    {
+      "path": "C:\\Users\\danda\\AppData\\Local\\Temp\\tmpgexanmky\\evidence.txt",
+      "size": 17,
+      "mtime": "2026-08-01T18:43:57.086266",
+      "category": "windows-temp",
+      "relative": "tmpgexanmky\\evidence.txt"
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+# COMANDO - migration-config.yaml
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\aiox-core\.aios-core\core\migration\migration-config.yaml
+**SHA:** fdfc02364ba8ac59
+**Timestamp:** 2026-08-28T02:01:59.698366
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Comandos
+- confirmBeforeExecute: true
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+# AIOS Migration Configuration
+# Story 2.14 - Migration Script v2.0 → v2.1
+
+version: "1.0.0"
+story: "2.14"
+
+# Supported migration paths
+migrations:
+  - from: "2.0"
+    to: "2.1"
+    description: "Migrate from flat to modular structure"
+    status: "supported"
+
+# Backup configuration
+backup:
+  prefix: ".aios-backup-"
+  format: "YYYY-MM-DD"
+  include:
+    - ".aios-core/**"
+    - "aios.config.js"
+    - "aios.config.json"
+    - ".aios/config.yaml"
+    - ".mcp.json"
+  exclude:
+    - "node_modules/**"
+    - ".git/**"
+    - "*.log"
+  verification:
+    algorithm: "md5"
+    parallel: true
+
+# Module configuration for v2.1
+modules:
+  core:
+    description: "Core framework utilities and runtime"
+    directories:
+      - registry
+      - quality-gates
+      - manifest
+      - utils
+      - elicitation
+      - session
+      - config
+      - mcp
+      - data
+      - docs
+  development:
+    description: "Development tools and workflows"
+    directories:
+      - agents
+      - tasks
+      - templates
+      - checklists
+      - scripts
+      - personas
+  product:
+    description: "Product interfaces and APIs"
+    directories:
+      - cli
+      - api
+  infrastructure:
+    description: "Infrastructure and deployment"
+    directories:
+      - hooks
+      - telemetry
+      - integrations
+
+# Validation settings
+validation:
+  structure: true
+  imports: true
+  lint: true
+  tests: true
+  timeout:
+    lint: 60000      # 1 minute
+    tests: 300000    # 5 minutes
+
+# Safety settings
+safety:
+  requireBackup: true
+  verifyBackup: true
+  confirmBeforeExecute: true
+  atomicOperations: true
+
+```

@@ -1,0 +1,7 @@
+  http://googleusercontent.com/image_generation_content/0
+
+Feito: Cristalização oficial e geração do cartão operacional da CentralDark incorporando a lente definitiva de cinco etapas no fluxo do Hermes.
+Evidência: O cartão traduz visualmente a evolução rigorosa do diagnóstico (FÍSICO → TEMPORAL → CAUSAL → CONTRAPROVA → PROVA) gerada diretamente no runtime.
+Pendência: Nenhuma. O padrão está fixado e operacional.
+Próximo passo: Seguir aplicando o rigor e a autonomia para manter a produção estável e zero regressão.
+Qual BOOT usar: KIMETSU_LEGACY_FIXED_POINT / Strict Legacy / Zero Regressão.

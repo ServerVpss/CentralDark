@@ -1,0 +1,25 @@
+{
+  "method": "Cada achado tem um check() que le o TEXTO de um arquivo (nunca o caminho do worktree rastreado) e retorna true se o achado estiver corrigido. Rodado contra `git show HEAD:<path>` (estado antes da correção, RED) e contra o arquivo de trabalho atual (depois da correção, GREEN). O worktree nunca foi mutado; a leitura RED usa o blob do HEAD antigo via git, não uma cópia editada.",
+  "red_against_pre_fix_head": { "head_sha": "8f5925f0abef0467f8204d327c97cebe152351d4", "fixed": 0, "total": 10 },
+  "green_against_current_worktree": { "fixed": 10, "total": 10 },
+  "note": "Um bug real do proprio Writer foi pego pela contraprova: a primeira edicao do path do plano mestre corrigiu so path_instructions (.coderabbit.yaml linha 64) e deixou uma segunda referencia ao mesmo caminho morto em knowledge_base.code_guidelines.filePatterns (linha 107). O check coderabbit_master_plan_path ficou STILL_BROKEN no primeiro GREEN, forcando a segunda correcao antes de declarar PASS.",
+  "checks": [
+    { "name": "coderabbit_fail_commit_status", "file": ".coderabbit.yaml", "mission_item": 3 },
+    { "name": "coderabbit_master_plan_path", "file": ".coderabbit.yaml", "mission_item": 11 },
+    { "name": "coderabbit_issue_enrichment", "file": ".coderabbit.yaml", "mission_item": 5 },
+    { "name": "jarvis_authority_note", "file": "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md", "mission_item": 1 },
+    { "name": "leia_me_ia_source_split", "file": "LEIA-ME-IA.md", "mission_item": 2 },
+    { "name": "loop_doc_no_false_approval", "file": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md", "mission_item": 6 },
+    { "name": "loop_doc_origin_normalization", "file": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md", "mission_item": 7 },
+    { "name": "loop_doc_secret_exposure_fail_closed", "file": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md", "mission_item": 8 },
+    { "name": "loop_doc_pass_not_approval", "file": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md", "mission_item": 9 },
+    { "name": "loop_doc_receipt_target_field", "file": "docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md", "mission_item": 10 }
+  ],
+  "operation_receipt_validator": {
+    "item": 4,
+    "location": ".agents/skills/meta-lupa/scripts/meta_lupa.py (validate_operation_receipt + cmd validate-operation-receipt)",
+    "tests": ".agents/skills/meta-lupa/testes/test_operation_receipt_validator.py",
+    "test_result": "15 passed",
+    "full_suite_result": "144 passed, 4 skipped (sem regressao)"
+  }
+}

@@ -1,0 +1,12 @@
+# CONTRATO TESTE 2
+
+CONTRATO: Teste de escrita no destino correto
+GATE: FILE_SECURITY_GATE v2
+INVARIANTE: EXTENSION != TRUST
+REGRAS:
+- UNKNOWN != PASS
+- ERROR != PASS
+- SKIPPED != PASS
+
+RISCO: nenhum
+GAP: nenhum

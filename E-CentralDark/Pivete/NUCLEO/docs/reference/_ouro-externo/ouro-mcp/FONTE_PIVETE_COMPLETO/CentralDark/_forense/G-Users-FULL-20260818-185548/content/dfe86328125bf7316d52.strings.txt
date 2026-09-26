@@ -1,0 +1,297 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\hermes_cli\__pycache__\_early_recovery.cpython-311.pyc
+
+d=d>d.
+Dependency-light venv recovery that runs BEFORE hermes_cli.main's imports.
+The ``hermes`` console entry point is ``hermes_cli.main:main``.  Importing
+``hermes_cli.main`` pulls in third-party packages at module level (``dotenv``
+via ``hermes_cli.env_loader``, ``yaml`` via ``hermes_cli.config``, ...).  In
+the exact failure state the update-recovery markers exist for 
+ a failed lazy
+backend refresh or interrupted core install that wiped a core package's
+import files (#57828) 
+ a normal launch crashes *while importing main.py*,
+before ``_recover_from_interrupted_install()`` can run.  The marker system is
+unreachable precisely when it is needed most.
+This module is deliberately **stdlib-only** so importing it can never fail on
+a corrupted venv.  ``hermes_cli.main`` imports and calls
+:func:`recover_if_needed` at the very top of its module body, before any
+third-party import.
+Scope: this early pass only repairs enough for ``hermes_cli.main`` to become
+importable again (force-reinstall of the known-fragile core packages, using
+the pins from pyproject.toml).  It NEVER clears the recovery markers 
+full, confirmed marker lifecycle stays with ``_recover_from_interrupted_install()``
+in main.py, which runs right after import succeeds.
+annotationsN)
+SafeDumper)
+dotenv
+load_dotenv)
+Command)
+certifi
+contents)
+print)
+cryptography
+__version__)
+encodez
+tuple[tuple[str, str], ...]
+LAZY_REFRESH_IMPORT_PROBES
+PyYAMLz
+python-dotenvr
+PyJWT)
+dict[str, str]
+LAZY_REFRESH_REPAIR_PACKAGESF
+return
+zCWhether this updater already completed its deferred native install.)
+_UPDATE_RETRY_RECOVERED
+NC:\Users\danda\AppData\Local\hermes\hermes-agent\hermes_cli\_early_recovery.py
+$_should_skip_external_secret_sourcesr
+__file__
+resolve
+parentr
+_project_rootr#
+Best-effort stdlib-only process liveness probe.
+    ``os.kill(pid, 0)`` is not a no-op on Windows, so use the Win32 process
+    handle API there.  An access-denied result is conservatively live: racing
+    an elevated updater is worse than postponing recovery for one launch.
+win32Ni
+kernel32T)
+use_last_error
+platform
+ctypes
+WinDLL
+c_ulong
+OpenProcess
+argtypes
+c_void_p
+restype
+WaitForSingleObject
+CloseHandle
+get_last_error
+Exception
+ProcessLookupError
+PermissionError
+OSError)
+synchronizer(
+handles
+     r
+_pid_is_runningr@
+markerc
+z?True when a legacy update marker names a process still running.
+replace
+encoding
+errorsF
+read_textr=
+splitlines
+partition
+stripr@
+ValueError)
+separator
+values
+      r
+_marker_owner_is_liverS
+packages
+list[str]
+project_rootc
+Map bare package names to their pinned specs from pyproject.toml.
+    Stdlib-only (tomllib + naive requirement-head parsing 
+ ``packaging`` may
+    itself be broken in the failure state this module exists for).  Unknown
+    packages fall back to their bare name.
+pyproject.tomlr
+project
+dependencies
+lower)
+name_to_specs
+<listcomp>z!_pinned_specs.<locals>.<listcomp>
+is_file
+tomllib
+loadrb
+splitrL
+pyprojectri
+raw_deps
+           @r
+_pinned_specsrt
+True when certifi imports but its ``cacert.pem`` is missing/corrupt.
+    A brew Python upgrade or an interrupted venv rebuild can leave certifi's
+    distribution metadata (and even the module) intact while the bundled
+    ``cacert.pem`` is gone or a dangling symlink 
+ every TLS connection then
+    fails with an opaque ``Could not find a suitable TLS CA certificate
+    bundle`` from deep inside httpx/requests (#29866). An attribute probe
+    alone passes in that state, so validate the bundle path itself.
+whererh
+st_sizer8
+bundles
+_certifi_bundle_brokenrz
+Import-probe the fragile core packages in THIS process.
+    Returns repair package names (deduped, probe order) for modules that fail
+    to import or lack their sentinel attribute.  Failed imports leave nothing
+    in ``sys.modules``, so a post-repair retry in the same process works.
+    certifi additionally gets a bundle-file check: the module can import
+    cleanly while ``cacert.pem`` is missing (#29866).
+ missing r
+z%certifi cacert.pem missing or corrupt)
+importlib
+import_module
+hasattr
+ImportErrorrz
+append)
+broken
+mod_name
+     r
+_probe_broken_packagesr
+str | Nonec
+Locate a ``uv`` binary without importing third-party modules.
+    uv-managed base interpreters carry an ``EXTERNALLY-MANAGED`` marker, so
+    the stdlib ``pip`` fallback below refuses to touch them.  In that state
+    the only sanctioned installer is uv itself, which Hermes already vendors
+    (``~/.hermes/bin/uv.exe``) or the user has on PATH.  Stdlib-only.
+    r'
+uv.exe
+.hermes
+.localz
+.cargo)
+homerh
+shutil
+which)
+candidates
+_find_uv_binaryr
+True when ``sys.executable`` is a uv/standalone-builds managed install.
+    Those interpreters ship an ``EXTERNALLY-MANAGED`` marker next to their
+    stdlib (PEP 668), so ``python -m pip install`` aborts with
+    ``externally-managed-environment``.  The early repair must then go
+    through uv (or explicitly override pip) or the reinstall no-ops and the
+    venv stays broken (#83569).
+stdlibz
+EXTERNALLY-MANAGEDTF)
+sysconfigr
+get_path
+existsr"
+'_base_interpreter_is_externally_managedr
+specsc
+``uv pip`` (or stdlib ``pip``) force-reinstall of the given specs.
+    Streams nothing to stdout (``hermes acp`` speaks JSON-RPC on stdout);
+    output is captured and replayed to stderr only on failure.  Never raises.
+    Two installer paths, in priority order:
+    1. ``uv pip install`` with ``VIRTUAL_ENV`` pointed at the project venv 
+       required when the base interpreter is uv-managed (Windows git checkouts
+       install exactly this way: uv's Python declares PEP 668
+       ``EXTERNALLY-MANAGED`` and plain ``python -m pip`` refuses to run).
+    2. ``sys.executable -m pip`` as before, for self-contained venvs whose
+       interpreter carries no PEP 668 marker.
+VIRTUAL_ENV
+PYTHONHOMEN
+PYTHONPATH
+installz
+--force-reinstallTrC
+capture_output
+textrF
+fileFu*
+ Early venv repair could not run uv: uw
+ Base interpreter is externally managed and no uv binary was found; retrying repair via pip with PEP 668 override.z
+ensurepipz
+--upgradez
+--default-pip)
+--break-system-packages)
+ Early venv repair could not run pip: )
+environr
+subprocess
+returncode
+stderr
+stdoutr
+executabler
+extend)
+externally_managedr
+result
+pip_cmds
+         r
+_run_repair_installr
+True when running under pytest AND ``root`` is this module's own
+    checkout 
+ the one whose venv is executing the suite right now.
+    Lifecycle tests spawn real subprocesses that import ``hermes_cli.main``
+    with recovery armed; ``PYTEST_CURRENT_TEST`` rides the inherited env into
+    those children. Without this guard, a genuinely-broken dev venv gets a
+    REAL ``ensurepip`` + ``pip install --force-reinstall`` from inside a
+    running test suite. Tests that sandbox ``project_root`` to a tmp_path are
+    unaffected (same posture as ``managed_scope._under_pytest``).
+PYTEST_CURRENT_TEST)
+_pytest_owns_live_checkoutr
+Path | None
+list[str] | None
+Repair wiped core packages so ``hermes_cli.main`` can import at all.
+    Fast path (no marker present) is two ``lstat`` calls.  Only acts when a
+    recovery marker from a prior ``hermes update`` exists AND an import probe
+    confirms a core package is actually broken.  Markers are intentionally
+    NOT cleared here 
+ ``_recover_from_interrupted_install()`` in main.py owns
+    the confirmed marker lifecycle and runs immediately after import succeeds.
+    Never raises: on any failure the import of main.py proceeds and surfaces
+    the real error.
+    Nr]
+.update-incompletez
+.lazy-refresh-incompleterX
+updateT
+.update-incomplete.lock
+ Core package(s) broken by an interrupted update 
+ repairing before launch: z
+ Core packages repaired.u9
+ Automatic repair incomplete. Recover manually with:z
+    z" -m pip install --force-reinstall 
+_complete_pending_core_installr
+O_CREAT
+O_EXCL
+O_WRONLY
+getpidr
+FileExistsError
+timerw
+st_mtime
+unlinkr=
+core_marker
+lazy_marker
+completedr
+lock_path
+           r
+recover_if_neededr
+z?Single-flight claim on the shared recovery lock.  Never raises.r
+_claim_recovery_lockr
+z0Best-effort release of the shared recovery lock.r
+_release_recovery_lockr
+Run the pending core install BEFORE main.py can import native modules.
+    ``recover_if_needed`` invokes this when ``.update-incomplete`` exists 
+    a prior ``hermes update`` (or the self-lock preflight, #83569) left the
+    dependency sync deliberately unfinished.  Completing it here matters on
+    Windows: the deferral exists precisely because the process that wrote the
+    marker had a native venv extension mapped; this process, running before
+    ``hermes_cli.main``'s third-party imports, maps nothing yet, so the
+    installer can replace ``.pyd`` files without hitting the lock.
+    Marker lifecycle: cleared on success; kept (attempts counter bumped) on
+    failure for the next launch or main.py's post-import recovery.  An
+    attempts ceiling caps automatic retries so a persistent installer
+    failure does not block every launch (``hermes acp`` included).
+    Never raises: any failure leaves the marker for the post-import path and
+    returns ``False``.  Returns ``True`` only after the install succeeds.
+_install_repairrC
+attemptsu:
+ Pending interrupted-update install has already failed uJ
+ times in the early pass 
+ leaving it for the post-import recovery path.r
+ A previous `hermes update` was interrupted mid-install 
+ finishing dependency installation now (before any native extensions load)...u;
+ Early interrupted-install completion failed (attempt 
+): z]  The next launch will retry; hermes will keep working from the current venv in the meantime.u:
+ Dependency installation completed in the early pass.T)
+hermes_clir
+jsonr%
+loadsrb
+AttributeErrorr=
+ _EARLY_CORE_INSTALL_MAX_ATTEMPTSr
+run_core_installr8
+bump_marker_attemptsr
+_jsonr
+new_attemptss
+        r
+__doc__
+__future__r
+pathlibr
+__annotations__r
+<module>r

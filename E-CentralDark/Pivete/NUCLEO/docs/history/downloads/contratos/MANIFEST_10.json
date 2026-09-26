@@ -1,0 +1,103 @@
+{
+  "schema": "centraldark.architecture.package.manifest.v1",
+  "package": "CENTRALDARK_ARQUITETURA_CANONICA_2026-08-24",
+  "repo": "ServerVpss/CentralDark",
+  "observed_at": "2026-08-24T20:45:00-03:00",
+  "main_sha": "53ba5d5f4704a57305702ed3ccb681f64d714848",
+  "architecture_merge_sha": "cbd3fa6d48e122d139485ff034f1be33ed83c5f5",
+  "file_count_without_manifest_and_sums": 17,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1199,
+      "sha256": "110041d7558aeb057b01145b2bfe4c7be5d297be6321f9e43ef1f1e2abe61505"
+    },
+    {
+      "path": "architecture/ARCHITECTURE.md",
+      "bytes": 3877,
+      "sha256": "8789345cf5545086ca22ccdf2aa11210cd2a2272f4e3faf725e0b405752676dc"
+    },
+    {
+      "path": "architecture/ARCHITECTURE.mmd",
+      "bytes": 979,
+      "sha256": "72ee7f11562b36807cd4eddbbe68e4151e08cd49b9520220baa4fbb3c2551de5"
+    },
+    {
+      "path": "architecture/EPISTEMIC_STATE_MACHINE.md",
+      "bytes": 686,
+      "sha256": "ecf866825bdaa8ea9278328a09d38812c327e14b3b328e9b492f9d9c49702e9f"
+    },
+    {
+      "path": "architecture/MATERIAL_ALCHEMY.md",
+      "bytes": 981,
+      "sha256": "0c74b411595657261f9b5ff4e227183c159c609ced3b883efc7184081267f818"
+    },
+    {
+      "path": "architecture/POMBO_HANDOFF.md",
+      "bytes": 803,
+      "sha256": "a8ca4fbe99674a107badc90de30606a391895e1f9cb78d707a45504e785a161f"
+    },
+    {
+      "path": "contracts/CORE_CONTRACT.yml",
+      "bytes": 1102,
+      "sha256": "a13ad2f64053894ed7082b491168f0385c832dc2f69f54407fecab30fb982baa"
+    },
+    {
+      "path": "contracts/INVARIANTS.md",
+      "bytes": 837,
+      "sha256": "c6dc900d2145ea61351c20bdebdecf7a341f4d6a75ff36ee1d86f80cdf01164f"
+    },
+    {
+      "path": "evidence/CURRENT_UNKNOWN.md",
+      "bytes": 506,
+      "sha256": "70c4248a74ba04620670fb321e1090176eeaafc7609ed5420658b663fe8a3dd6"
+    },
+    {
+      "path": "evidence/MAIN_STATE.txt",
+      "bytes": 368,
+      "sha256": "004d1936e3611756f068e810546d1b3bbc6a4484c0d61e5e3778dbeeb8057832"
+    },
+    {
+      "path": "evidence/PR_MATRIX.md",
+      "bytes": 1695,
+      "sha256": "70d4275b24159b88238aa8ba721c4bf4cbdf1bbf321ce10db61a0a6724031cc5"
+    },
+    {
+      "path": "evidence/SOURCE_REFERENCES.json",
+      "bytes": 780,
+      "sha256": "6a8999c6b5084f169765ae2386e0876ad9c2010ff4d621b7744882d39fa994c0"
+    },
+    {
+      "path": "evidence/TACTICAL_TIMELINE.md",
+      "bytes": 644,
+      "sha256": "ecb88c2d6943aafba260c6811f93998de01b8c5772c111fec90c7c91bcbc407b"
+    },
+    {
+      "path": "receipts/PACKAGE_RECEIPT.md",
+      "bytes": 592,
+      "sha256": "dba75ad309d10a19c33b8c4334fb681e07e222f04d1545f35ff818a473f475ef"
+    },
+    {
+      "path": "tools/verify_package.py",
+      "bytes": 779,
+      "sha256": "42e456d4b069be4dbd0fb9e04862b814c8095df52ef5543cecd71d38fb453512"
+    },
+    {
+      "path": "visuals/amadurecimento_tatico_da_casa.png",
+      "bytes": 2555602,
+      "sha256": "9c5fd4bc7486f79b1014f323e1e65e53a380e9b54177d68d0ecf2cd9761ebe4b"
+    },
+    {
+      "path": "visuals/ouro_sendo_coletado.png",
+      "bytes": 2500810,
+      "sha256": "252709f127cde40ba571ec54a6f2fda44b8989b6715f73db8f5817414f87217f"
+    }
+  ],
+  "claims": {
+    "architecture_on_main": true,
+    "pr_1144_merged": true,
+    "package_proves_external_runtime": false,
+    "papagaio_mode": "OFF",
+    "pombo_mode": "CHECKSUM_ON"
+  }
+}

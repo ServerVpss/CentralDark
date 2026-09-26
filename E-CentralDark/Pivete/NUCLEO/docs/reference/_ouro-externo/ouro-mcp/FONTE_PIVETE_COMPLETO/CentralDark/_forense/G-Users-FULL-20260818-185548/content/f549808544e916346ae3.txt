@@ -1,0 +1,4 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@streamdown\code\node_modules\@shikijs\langs\dist\nu.mjs
+
+/* Alias nu for nushell */
+export { default } from './nushell.mjs'

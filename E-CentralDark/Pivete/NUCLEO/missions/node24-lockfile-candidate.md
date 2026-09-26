@@ -1,0 +1,93 @@
+# MISSAO - node24-lockfile-candidate.yml
+**Origem:** E:\CentralDark\_MAPA_CASA\PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE\.grok\worktrees\pivete-centraldark\test\.github\workflows\node24-lockfile-candidate.yml
+**SHA:** 9f7f5e1d91b04230
+**Timestamp:** 2026-08-28T02:56:03.422739
+**Portoes:** {"ocorrencias": true, "ganho": true, "contraprova": true, "sha": true}
+
+## Ouro Extraido
+
+### Comandos
+- run:
+- run: |
+- run: |
+- run: |
+
+### Ouro Bruto (primeiros 5000 chars)
+```
+name: Node 24 lockfile candidate
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/modulos/mcp/package-lock.json'
+      - '.github/workflows/node24-lockfile-candidate.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: node24-lockfile-candidate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  generate:
+    name: Gerar e provar lockfile com Node 24/npm 11
+    if: github.repository == 'ServerVpss/CentralDark' && github.event.pull_request.head.repo.full_name == github.repository
+    # Esta capacidade é realmente Windows-específica (@esbuild/win32-x64).
+    # Política da Casa: plataforma específica continua sendo SELF-HOSTED; nunca GitHub-hosted.
+    runs-on: [self-hosted, Windows, X64]
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Checkout exact PR HEAD
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - name: Setup Node 24
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: apps/modulos/mcp/package-lock.json
+
+      - name: Provar capacidade Windows antes de gerar
+        run: |
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = 'Stop'
+          if ($env:RUNNER_OS -ne 'Windows') { throw "WINDOWS_SELF_HOSTED_REQUIRED runner_os=$env:RUNNER_OS" }
+          Write-Host "EXECUTOR=self-hosted-windows-x64"
+          Write-Host "CAPABILITY=@esbuild/win32-x64"
+
+      - name: Gerar lockfile com dependências opcionais (Windows nativo)
+        working-directory: apps/modulos/mcp
+        run: |
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = 'Stop'
+          node --version
+          npm --version
+          Remove-Item -Force -ErrorAction SilentlyContinue package-lock.json
+          npm install --include=optional --ignore-scripts --no-audit --no-fund --legacy-peer-deps
+
+      - name: Verificar dependências opcionais @esbuild/* (Windows)
+        working-directory: apps/modulos/mcp
+        run: |
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = 'Continue'
+          Write-Host "Verificando dependências @esbuild/* instaladas (Windows):"
+          npm ls @esbuild/win32-x64 | Write-Host
+          npm ls @esbuild/* 2>$null | Select-Object -First 20
+
+      - name: Publicar lockfile candidato
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: mcp-package-lock-node24-${{ github.event.pull_request.head.sha }}
+          path: apps/modulos/mcp/package-lock.json
+          if-no-files-found: error
+          retention-days: 2
+
+```

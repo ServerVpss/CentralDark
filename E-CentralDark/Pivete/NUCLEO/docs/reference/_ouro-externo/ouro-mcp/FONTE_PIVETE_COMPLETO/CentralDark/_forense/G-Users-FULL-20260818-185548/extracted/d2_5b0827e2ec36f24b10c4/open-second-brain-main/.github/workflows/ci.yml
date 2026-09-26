@@ -1,0 +1,83 @@
+name: CI
+
+# Runs the full validation gate on every pull request and on pushes to main.
+# This is the check branch protection should require, so unformatted,
+# lint-erroring, or type-broken code can never merge to main again.
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Set up Python (Hermes plugin tests)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install JS dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Verify manifest version sync
+        run: bun run sync-version:check
+
+      - name: OpenClaw bundle is in sync with sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          # The release workflow has always checked this, but only on a tag -
+          # so a stale `openclaw/index.js` shipped to plugin users and turned
+          # the release job red two versions running before anyone looked.
+          # Checking it here fails the pull request that caused it instead.
+          bun build src/openclaw/index.ts \
+            --outfile /tmp/openclaw-rebuild.js \
+            --target=node --format=esm \
+            --external openclaw/plugin-sdk/plugin-entry
+          diff -q /tmp/openclaw-rebuild.js openclaw/index.js \
+            || { echo "openclaw/index.js is out of date; run: bun run build:openclaw" >&2; exit 1; }
+
+      - name: Broken-link ratchet
+        run: bun run link-ratchet:check
+
+      - name: Hardcoded path hygiene (report-only)
+        run: bun run check:paths
+
+      - name: Formatting check
+        run: bun run fmt:check
+
+      - name: Lint
+        run: bun run lint
+
+      - name: Typecheck
+        run: bun run typecheck
+
+      - name: TypeScript test suite
+        run: bun test
+
+      - name: Python plugin tests
+        run: python -m unittest discover -s tests/python -v
+
+      - name: Python package compiles
+        run: python -m compileall -q plugins/hermes

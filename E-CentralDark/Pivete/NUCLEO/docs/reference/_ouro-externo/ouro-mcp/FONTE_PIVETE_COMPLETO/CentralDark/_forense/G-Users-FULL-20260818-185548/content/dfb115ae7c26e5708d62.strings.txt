@@ -1,0 +1,200 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\git\usr\bin\xxd.exe
+
+!This program cannot be run in DOS mode.
+`.data
+.rdata
+@.buildid5
+@.pdata
+@.xdata
+.idata
+@.rsrc
+@.reloc
+AWAVAUATUWVSH
+D$PD9d$D
+[^_]A\A]A^A_
+D;d$D|
+L$tD;|$Du[
+ED$`E1
+HcD$tL
+|$8H9x
+0123456789abcdef0123456789ABCDEF
+xxd 2026-03-25 by Juergen Weigert et al.
+%s: %s
+Usage:
+       %s [options] [infile [outfile]]
+    or
+       %s -r [-s [-]offset] [-c cols] [-ps] [infile [outfile]]
+Options:
+    -a          toggle autoskip: A single '*' replaces nul-lines. Default off.
+    -b          binary digit dump (incompatible with -ps). Default hex.
+    -C          capitalize variable names in C include file style (-i).
+    -c cols     format <cols> octets per line. Default 16 (-i: 12, -ps: 30).
+    -E          show characters in EBCDIC. Default ASCII.
+    -e          little-endian dump (incompatible with -ps,-i,-r).
+    -g bytes    number of octets per group in normal output. Default 2 (-e: 4).
+    -h          print this summary.
+    -i          output in C include file style.
+    -t          append terminating zero to C include output (-i).
+    -l len      stop after <len> octets.
+    -n name     set the variable name used in C include output (-i).
+    -o off      add <off> to the displayed file position.
+    -ps         output in postscript plain hexdump style.
+    -r          reverse operation: convert (or patch) hexdump into binary.
+    -r -s off   revert with <off> added to file positions found in hexdump.
+    -d          show offset in decimal instead of hex.
+(or +: rel.) 
+[+][-]
+    -s %sseek  start at <seek> bytes abs. %sinfile offset.
+    -u          use upper case hex letters.
+    -R when     colorize the output; <when> can be 'always', 'auto' or 'never'. Default: 'auto'.
+    -v          show version: "%s%s".
+%s0x%02x
+%s0X%02X
+NO_COLOR
+apitalize
+always
+only one of -b, -e, -u, -p, -i can be used
+%s: invalid number of columns (max. %d).
+number of octets per group must be a power of 2 with -e.
+Sorry, cannot seek backwards.
+Sorry, cannot revert this type of hexdump
+Sorry, cannot seek.
+unsigned char %s
+[] = {
+unsigned int %s
+_%s = %d;
+%08ld:
+%08lx:
+.<(+|&
+!$*);~-/
+`:#@'="
+abcdefghi
+jklmnopqr^
+stuvwxyz
+{ABCDEFGHI
+}JKLMNOPQR
+STUVWXYZ
+0123456789
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+GCC: (GNU) 15.2.0
+__getreent
+__locale_ctype_ptr
+__main
+__memset_chk
+__sprintf_chk
+__stpcpy_chk
+_dll_crt0
+_impure_ptr
+_setmode
+calloc
+cygwin_internal
+dll_dllcrt0
+fclose
+fdopen
+fflush
+fileno
+fprintf
+fwrite
+getenv
+isatty
+malloc
+memset
+msys_detach_dll
+perror
+posix_memalign
+realloc
+rewind
+strcmp
+strncmp
+strtol
+strtoul
+toupper
+GetModuleHandleA
+msys-2.0.dll
+KERNEL32.dll
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!--The ID below indicates application support for Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!--The ID below indicates application support for Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!--The ID below indicates application support for Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!--The ID below indicates application support for Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/> 
+      <!--The ID below indicates application support for Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/> 
+    </application>
+  </compatibility>
+</assembly>
+__imp___stpcpy_chk
+__lib64_libkernel32_a_iname
+__imp__dll_crt0
+__imp_calloc
+__imp_fileno
+__imp_ftell
+__imp_getenv
+_head_msys_2_0_dll
+__imp_strtol
+__imp_strcmp
+__imp_cygwin_internal
+__imp_posix_memalign
+__imp_free
+__imp_fdopen
+__nm__impure_ptr
+__imp_fputs
+__imp_memset
+__imp__setmode
+__IAT_end__
+__imp_dll_dllcrt0
+__imp_rewind
+__imp___locale_ctype_ptr
+__imp_fwrite
+__imp_strtoul
+__imp_putc
+_head_lib64_libkernel32_a
+__imp_msys_detach_dll
+__imp_open
+__imp_toupper
+__imp___getreent
+__imp_GetModuleHandleA
+__imp___main
+__imp_malloc
+__imp__impure_ptr
+__imp_realloc
+__imp_exit
+__IAT_start__
+__imp_perror
+__imp_isatty
+__imp_fprintf
+__imp___memset_chk
+__imp_fclose
+__imp_strncmp
+__imp_fflush
+__imp___sprintf_chk
+__imp_fopen
+__imp_fseek
+__imp_getc
+msys_2_0_dll_iname

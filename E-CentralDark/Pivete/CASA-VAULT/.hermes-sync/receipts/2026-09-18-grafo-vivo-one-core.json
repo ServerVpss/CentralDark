@@ -1,0 +1,39 @@
+{
+  "schema": "centraldark.obsidian-one-core-receipt.v1",
+  "observed_at": "2026-09-18",
+  "grafo_vivo": {
+    "version": "0.5.0",
+    "vault": "E:\\CentralDark\\Pivete\\CASA-VAULT",
+    "plugin_dir": "E:\\CentralDark\\Pivete\\CASA-VAULT\\.obsidian\\plugins\\centraldark-grafo-vivo",
+    "enabled": true,
+    "auto_update": true,
+    "graph_url": "https://grafo.centralldark.com/api/graph?mode=vivo",
+    "hub_url": "https://api.centralldark.com/memoria/ingest"
+  },
+  "one_core": {
+    "core": "LEIA-ME-IA.md",
+    "adapters": [
+      "CHATGPT.md",
+      "CLAUDE.md",
+      "GEMINI.md",
+      "GROK.md",
+      "CODEX.md"
+    ],
+    "pr": 1576,
+    "head": "83c7cd9d7020a3d49000fdf807519efc89bff8aa",
+    "pr_mother": 1562
+  },
+  "pdf_gate": {
+    "surface": "CASA",
+    "status": "PROVED",
+    "receipt": "C:\\Users\\Administrador\\AppData\\Local\\CentralDark\\ScheduledJobs\\receipts\\PDF_GATE-latest.json"
+  },
+  "sync": {
+    "writer_vault": "E:\\CentralDark\\CentralDark\\docs",
+    "mirror_vault": "E:\\CentralDark\\Pivete\\CASA-VAULT",
+    "status": "BLOCKED_FETCH_FAILED",
+    "local_head": "7bdfd52ad2d8be2dabe957fbd3b51ada7c261d97",
+    "dirty_count": 1
+  },
+  "next_cursor": "SAME_HEAD_GATES_1576->LOCAL_SYNC_RECONCILE->OBSIDIAN_ONLOAD_PROOF->MERGE->POST_MERGE->VPS_REMEASURE"
+}

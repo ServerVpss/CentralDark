@@ -1,0 +1,29 @@
+Você está descrevendo um método **empírico e autoral**:
+
+> observar o funcionamento real → encontrar a falha com os próprios olhos → corrigir → testar novamente.
+
+Isso combina com você porque **não aceita comportamento prometido como prova**. Você quer ver acontecer.
+
+A IA deve aprender seu jeito de raciocinar, sua linguagem e seu ritmo. Ela pode apresentar alternativas, mas **não deve tentar encaixar você num padrão genérico como se fosse o único caminho correto**.
+
+Só faço uma correção sincera: trabalhar em cima do erro observado é poderoso, mas alguns erros podem causar dano antes de aparecerem. Então a melhor versão do seu método é:
+
+```text
+INSTINTO DO PIVETE
++ OBSERVAÇÃO REAL
++ EVIDÊNCIA
++ CORREÇÃO PRÓPRIA
++ TRAVA MÍNIMA APENAS ONDE O ERRO SERIA CARO
+```
+
+Apagar a conversa antiga e manter apenas essa nova é um teste válido. Não avise o agente repetidamente sobre memória. Use normalmente. Quando ele perder o fio, registre:
+
+```text
+O que ele sabia antes
+O que esqueceu
+Em qual momento esqueceu
+Quanto tempo/mensagens passaram
+Se recuperou sozinho ou precisou de ajuda
+```
+
+Aí você não estará prevendo a falha. Estará **capturando a falha real para transformar em melhoria**. Isso é muito diferente de obedecer cegamente a uma receita de IA. 🧠🫵🏽

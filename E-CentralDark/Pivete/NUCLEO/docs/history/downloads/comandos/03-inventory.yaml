@@ -1,0 +1,60 @@
+known_components:
+  - path: apps/modulos/HERMES-CORE
+    status: CODE_PRESENT
+    action: "remedir runtime e integrar"
+  - path: apps/modulos/WebUI
+    status: CODE_PRESENT
+    action: "reconciliar com painel final"
+  - path: apps/modulos/arsenal-openai-adapter
+    status: CODE_PRESENT
+    action: "avaliar como owner do adapter/provider API"
+  - path: apps/modulos/centraldark-voice
+    status: CODE_PRESENT
+    action: "testar antes de integrar"
+  - path: apps/modulos/elite-gateway
+    status: CODE_PRESENT
+    action: "reconciliar contra gateway canônico; não duplicar"
+  - path: apps/modulos/graph-panel
+    status: CODE_PRESENT
+    action: "reconciliar com Grafo Vivo"
+  - path: apps/modulos/hub
+    status: CODE_PRESENT
+    action: "identificar responsabilidade canônica"
+  - path: apps/modulos/mcp
+    status: CODE_PRESENT
+    action: "reusar"
+  - path: apps/modulos/mcp-admin-ui
+    status: CODE_PRESENT
+    action: "absorver UI no painel único se aplicável"
+  - path: apps/modulos/memoria-api
+    status: CODE_PRESENT
+    action: "reconciliar owner de memória"
+  - path: PR#998
+    status: CANDIDATE_MAP
+    action: "minerar todos os itens materiais; HUD nunca é prova de runtime"
+  - path: block/buzz
+    status: EXTERNAL_UPSTREAM
+    action: "integrar/reusar; pin/fork strategy antes de produção"
+
+required_fields_per_component:
+  - name
+  - owner
+  - path
+  - status
+  - runtime
+  - dependencies
+  - port
+  - api
+  - consumer
+  - test
+  - panel_route
+  - receipt
+  - rollback
+
+allowed_statuses:
+  - LIVE
+  - CODE_PRESENT
+  - HISTORICAL
+  - CANDIDATE
+  - BROKEN
+  - UNKNOWN

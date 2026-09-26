@@ -1,0 +1,9 @@
+flowchart LR
+  O[Observed listener] --> R[Port Registry]
+  C[Canonical service contract] --> R
+  R --> E{Expected vs observed}
+  E -- match --> P[PASS]
+  E -- mismatch --> F[FAIL]
+  E -- expectation unknown --> U[UNKNOWN + map owner]
+  T[Trigger Registry] --> D[Documentation tab]
+  R --> D

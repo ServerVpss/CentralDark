@@ -1,0 +1,7 @@
+SOURCE=G:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\fff713c3d0c5db75\AppData\Local\hermes\hermes-agent\node_modules\@assistant-ui\core\dist\internal\duplicate-detection.d.ts
+
+//#region src/internal/duplicate-detection.d.ts
+declare function checkDuplicateCore(): void;
+//#endregion
+export { checkDuplicateCore };
+//# sourceMappingURL=duplicate-detection.d.ts.map

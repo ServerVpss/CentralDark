@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CentralDark Gemini Modal Candidate",
+  "type": "object",
+  "required": [
+    "candidate_id",
+    "status",
+    "source",
+    "owner_match",
+    "scores",
+    "proof"
+  ],
+  "properties": {
+    "candidate_id": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "ACTIVE_PASS",
+        "PENDING_UNKNOWN",
+        "BLOCKED_CONFLICT",
+        "AVAILABLE_INFO",
+        "DISABLED"
+      ]
+    },
+    "source": {
+      "type": "object"
+    },
+    "owner_match": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "scores": {
+      "type": "object",
+      "properties": {
+        "compatibility_percent": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "evidence_coverage_percent": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "integration_readiness_percent": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "security_gate_coverage_percent": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "regression_risk_percent": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "projected_gain_percent": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    },
+    "proof": {
+      "type": "object"
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "PREVIEW",
+          "TEST",
+          "IMPORT",
+          "MERGE_INTO_EXISTING_OWNER",
+          "REJECT"
+        ]
+      }
+    }
+  }
+}

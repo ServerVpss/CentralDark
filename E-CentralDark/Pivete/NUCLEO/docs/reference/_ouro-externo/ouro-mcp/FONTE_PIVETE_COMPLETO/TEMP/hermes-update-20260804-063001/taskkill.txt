@@ -1,0 +1,11 @@
+﻿├èXITO: o processo com PID 30232 (processo filho de PID 13324) foi finalizado.
+├èXITO: o processo com PID 61568 (processo filho de PID 56752) foi finalizado.
+├èXITO: o processo com PID 62292 (processo filho de PID 63756) foi finalizado.
+├èXITO: o processo com PID 56056 (processo filho de PID 49848) foi finalizado.
+├èXITO: o processo com PID 13324 (processo filho de PID 63760) foi finalizado.
+├èXITO: o processo com PID 56752 (processo filho de PID 63760) foi finalizado.
+├èXITO: o processo com PID 63756 (processo filho de PID 63760) foi finalizado.
+├èXITO: o processo com PID 49848 (processo filho de PID 63760) foi finalizado.
+├èXITO: o processo com PID 63760 (processo filho de PID 63676) foi finalizado.
+├èXITO: o processo com PID 63676 (processo filho de PID 16916) foi finalizado.
+├èXITO: o processo com PID 16916 (processo filho de PID 34368) foi finalizado.
