@@ -1,0 +1,8 @@
+flowchart LR
+    M[mission_id] --> R[request_id]
+    R --> C[correlation_id]
+    C --> T[trace_id]
+    T --> S[span_id]
+    S --> E[evidence-envelope]
+    E --> A[agent_events]
+    A --> P[projections]

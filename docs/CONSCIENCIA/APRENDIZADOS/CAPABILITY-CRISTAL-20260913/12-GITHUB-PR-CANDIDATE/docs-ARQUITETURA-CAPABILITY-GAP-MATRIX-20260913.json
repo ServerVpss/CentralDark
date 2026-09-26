@@ -1,0 +1,974 @@
+[
+  {
+    "domain": "Cognitive",
+    "capability": "Modo Padrão",
+    "status": "EXISTING",
+    "owner_or_candidate": "CAPACIDADES-COGNITIVAS",
+    "useful_delta": "modo rápido/suficiente por default",
+    "source": "CentralDark history",
+    "priority": "P2"
+  },
+  {
+    "domain": "Cognitive",
+    "capability": "Sistema 2",
+    "status": "EXISTING",
+    "owner_or_candidate": "CAPACIDADES-COGNITIVAS",
+    "useful_delta": "deliberação para tarefa difícil",
+    "source": "CentralDark history",
+    "priority": "P1"
+  },
+  {
+    "domain": "Cognitive",
+    "capability": "ReAct Loop",
+    "status": "EXISTING",
+    "owner_or_candidate": "cot-react-loop",
+    "useful_delta": "observe→act→observe→re-evaluate→verify",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Cognitive",
+    "capability": "Fable Loop",
+    "status": "EXISTING",
+    "owner_or_candidate": "fable-loop",
+    "useful_delta": "classify→define done→evidence→act→verify→report",
+    "source": "Manual/Fable + CentralDark",
+    "priority": "P0"
+  },
+  {
+    "domain": "Cognitive",
+    "capability": "Auto-crítica",
+    "status": "EXISTING",
+    "owner_or_candidate": "MetaLupa / cognitive mode",
+    "useful_delta": "criticar hipótese e resposta",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Cognitive",
+    "capability": "17 Respirações / Kimetsu",
+    "status": "EXISTING",
+    "owner_or_candidate": "centraldark-operational-method",
+    "useful_delta": "cadência de contexto e contraprova",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Cognitive",
+    "capability": "Multibússola",
+    "status": "EXISTING",
+    "owner_or_candidate": "MULTIBUSSOLA",
+    "useful_delta": "físico→temporal→causal→contraprova",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Cognitive",
+    "capability": "MetaLupa FRIA/MÉDIA/QUENTE",
+    "status": "EXISTING",
+    "owner_or_candidate": "meta-lupa",
+    "useful_delta": "falsificação calibrada por risco",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Cognitive",
+    "capability": "Reality Judge",
+    "status": "EXISTING",
+    "owner_or_candidate": "Reality Judge",
+    "useful_delta": "writer != judge",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Cognitive",
+    "capability": "Knowledge Compiler",
+    "status": "EXISTING",
+    "owner_or_candidate": "knowledge-compiler",
+    "useful_delta": "multi-fontes→cristal único",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Cognitive",
+    "capability": "Capability Contract Router",
+    "status": "EXISTING",
+    "owner_or_candidate": "capability-contract-router",
+    "useful_delta": "intenção+estado→capability+owner+handoff",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Cognitive",
+    "capability": "DELTAUTIL",
+    "status": "EXISTING",
+    "owner_or_candidate": "DELTAUTIL",
+    "useful_delta": "extrair somente ouro ausente no owner vivo",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Cognitive",
+    "capability": "PEGATUDO universal",
+    "status": "PARTIAL",
+    "owner_or_candidate": "harvester/router",
+    "useful_delta": "enumerar N capacidades por input, não parar no primeiro delta",
+    "source": "CentralDark history + this session",
+    "priority": "P0"
+  },
+  {
+    "domain": "Cognitive",
+    "capability": "Instinto Superior",
+    "status": "EXISTING",
+    "owner_or_candidate": "REGRAS + skill telemetria",
+    "useful_delta": "guardar mecanismo de reencontro + known_failures",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Cognitive",
+    "capability": "Self-healing por recorrência",
+    "status": "PARTIAL",
+    "owner_or_candidate": "memory-linker + known_failures",
+    "useful_delta": "recorrência→causa→fix→counterproof→regression",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Prompt",
+    "capability": "System prompt anatomy",
+    "status": "EXISTING",
+    "owner_or_candidate": "CONSCIÊNCIA / boot",
+    "useful_delta": "identidade, ferramentas, segurança e prioridades explícitas",
+    "source": "Manual Oculto",
+    "priority": "P1"
+  },
+  {
+    "domain": "Prompt",
+    "capability": "Prompt Mínimo Viável",
+    "status": "PARTIAL",
+    "owner_or_candidate": "prompt/skill owner",
+    "useful_delta": "começar pequeno; crescer apenas por falha observada",
+    "source": "Manual Oculto",
+    "priority": "P1"
+  },
+  {
+    "domain": "Prompt",
+    "capability": "Persona separada de autoridade",
+    "status": "EXISTING",
+    "owner_or_candidate": "identity/rules",
+    "useful_delta": "voz != permissão != owner",
+    "source": "Manual Oculto",
+    "priority": "P1"
+  },
+  {
+    "domain": "Prompt",
+    "capability": "Tool Contract",
+    "status": "EXISTING",
+    "owner_or_candidate": "skills + MCP contracts",
+    "useful_delta": "gatilho, pré-condição, exclusão, batching, chaining",
+    "source": "Manual Oculto",
+    "priority": "P0"
+  },
+  {
+    "domain": "Prompt",
+    "capability": "Behavior mining from logs",
+    "status": "PARTIAL",
+    "owner_or_candidate": "Dream Review / knowledge compiler",
+    "useful_delta": "logs→padrão→guia de decisão→skill candidate",
+    "source": "Manual Oculto/Fable",
+    "priority": "P0"
+  },
+  {
+    "domain": "Prompt",
+    "capability": "Prompt diff semântico",
+    "status": "PARTIAL",
+    "owner_or_candidate": "Git + analysis",
+    "useful_delta": "comparar efeito comportamental, não só texto",
+    "source": "Manual Oculto/FEP",
+    "priority": "P1"
+  },
+  {
+    "domain": "Prompt",
+    "capability": "Prompt onion detector",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "existing prompt owner",
+    "useful_delta": "detectar camadas repetidas/contraditórias",
+    "source": "Manual Oculto",
+    "priority": "P1"
+  },
+  {
+    "domain": "Prompt",
+    "capability": "Emphasis inflation detector",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "existing prompt owner",
+    "useful_delta": "detectar excesso de ALWAYS/NEVER/URGENT",
+    "source": "Manual Oculto",
+    "priority": "P2"
+  },
+  {
+    "domain": "Prompt",
+    "capability": "Rule-with-why gate",
+    "status": "PARTIAL",
+    "owner_or_candidate": "Forja / docs gate",
+    "useful_delta": "regra material deve ter motivo e prova",
+    "source": "Manual Oculto",
+    "priority": "P1"
+  },
+  {
+    "domain": "Prompt",
+    "capability": "Consolidation without behavior loss",
+    "status": "PARTIAL",
+    "owner_or_candidate": "Knowledge Compiler",
+    "useful_delta": "comprimir regras mantendo comportamento comprovado",
+    "source": "Manual Oculto",
+    "priority": "P0"
+  },
+  {
+    "domain": "Agentic",
+    "capability": "Agentic steerability",
+    "status": "PARTIAL",
+    "owner_or_candidate": "cognitive/prompt owner",
+    "useful_delta": "controle explícito de personalidade/estilo sem fundir identidade",
+    "source": "FEP GPT prompting guide",
+    "priority": "P1"
+  },
+  {
+    "domain": "Agentic",
+    "capability": "Solution persistence",
+    "status": "EXISTING",
+    "owner_or_candidate": "operational method",
+    "useful_delta": "continuar até done/stop gate",
+    "source": "FEP GPT prompting guide",
+    "priority": "P0"
+  },
+  {
+    "domain": "Agentic",
+    "capability": "Tool calling patterns",
+    "status": "EXISTING",
+    "owner_or_candidate": "skills/router",
+    "useful_delta": "quando usar read/apply/shell e como encadear",
+    "source": "FEP GPT prompting guide",
+    "priority": "P0"
+  },
+  {
+    "domain": "Agentic",
+    "capability": "Planning protocol",
+    "status": "EXISTING",
+    "owner_or_candidate": "operational method",
+    "useful_delta": "planejar→agir→atualizar→verificar",
+    "source": "FEP GPT prompting guide",
+    "priority": "P1"
+  },
+  {
+    "domain": "Agentic",
+    "capability": "Metaprompt root-cause + surgical revision",
+    "status": "PARTIAL",
+    "owner_or_candidate": "MetaLupa",
+    "useful_delta": "achar causa e revisar cirurgicamente",
+    "source": "FEP GPT prompting guide",
+    "priority": "P0"
+  },
+  {
+    "domain": "QA",
+    "capability": "Risk profiling",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "Forja/QA owner",
+    "useful_delta": "risco técnico, integração, regressão, mitigação",
+    "source": "FEP BMAD core",
+    "priority": "P1"
+  },
+  {
+    "domain": "QA",
+    "capability": "Test design per acceptance criterion",
+    "status": "PARTIAL",
+    "owner_or_candidate": "tests/Forja",
+    "useful_delta": "cenários por AC + nível unit/integration/E2E",
+    "source": "FEP BMAD core",
+    "priority": "P0"
+  },
+  {
+    "domain": "QA",
+    "capability": "Requirements tracing",
+    "status": "PARTIAL",
+    "owner_or_candidate": "trace/evidence",
+    "useful_delta": "AC→teste→evidência de cobertura",
+    "source": "FEP BMAD core",
+    "priority": "P0"
+  },
+  {
+    "domain": "QA",
+    "capability": "NFR assessment",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "Forja/QA owner",
+    "useful_delta": "security/performance/reliability/maintainability gate",
+    "source": "FEP BMAD core",
+    "priority": "P1"
+  },
+  {
+    "domain": "QA",
+    "capability": "Quality gate decision",
+    "status": "EXISTING",
+    "owner_or_candidate": "Reality Judge/Forja",
+    "useful_delta": "PASS/CONCERNS/FAIL/WAIVED equivalente",
+    "source": "FEP BMAD core",
+    "priority": "P0"
+  },
+  {
+    "domain": "QA",
+    "capability": "Brownfield-first workflow",
+    "status": "EXISTING",
+    "owner_or_candidate": "REUSE_BEFORE_CREATE",
+    "useful_delta": "tratar sistema existente antes de greenfield",
+    "source": "FEP BMAD core",
+    "priority": "P0"
+  },
+  {
+    "domain": "Agents",
+    "capability": "Role-specialized team",
+    "status": "EXISTING",
+    "owner_or_candidate": "Hermes executors",
+    "useful_delta": "analyst/architect/dev/qa/etc como papéis, não cores",
+    "source": "BMAD/FEA",
+    "priority": "P1"
+  },
+  {
+    "domain": "Agents",
+    "capability": "Semi-automatic/full-automatic execution modes",
+    "status": "PARTIAL",
+    "owner_or_candidate": "autonomous task routing",
+    "useful_delta": "selecionar autonomia por risco/escopo",
+    "source": "BMAD Academy",
+    "priority": "P1"
+  },
+  {
+    "domain": "Agents",
+    "capability": "Advanced elicitation",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "planning owner",
+    "useful_delta": "forçar alternativas, riscos e critérios antes de mutar",
+    "source": "BMAD",
+    "priority": "P2"
+  },
+  {
+    "domain": "AI",
+    "capability": "Prompt engineering advanced",
+    "status": "EXISTING",
+    "owner_or_candidate": "prompt/skills",
+    "useful_delta": "zero/few-shot, role, CoT-mode UI, examples",
+    "source": "FEA-IA",
+    "priority": "P2"
+  },
+  {
+    "domain": "AI",
+    "capability": "LangChain integration concepts",
+    "status": "PARTIAL",
+    "owner_or_candidate": "tool/runtime adapters",
+    "useful_delta": "chains/retrieval/tools como adapters, não core",
+    "source": "FEA-IA",
+    "priority": "P2"
+  },
+  {
+    "domain": "AI",
+    "capability": "Autonomous agents (AGNO patterns)",
+    "status": "PARTIAL",
+    "owner_or_candidate": "Hermes-Core",
+    "useful_delta": "autonomia, tools, memory, planning",
+    "source": "FEA-IA",
+    "priority": "P1"
+  },
+  {
+    "domain": "AI",
+    "capability": "Multi-agent orchestration (CrewAI patterns)",
+    "status": "EXISTING",
+    "owner_or_candidate": "SOL+Hermes",
+    "useful_delta": "papéis, delegation, shared mission",
+    "source": "FEA-IA",
+    "priority": "P1"
+  },
+  {
+    "domain": "AI",
+    "capability": "MCP fundamentals",
+    "status": "EXISTING",
+    "owner_or_candidate": "CentralDark MCP",
+    "useful_delta": "universal capability surface",
+    "source": "FEA-IA",
+    "priority": "P0"
+  },
+  {
+    "domain": "AI",
+    "capability": "Production/deploy",
+    "status": "EXISTING",
+    "owner_or_candidate": "Actions/VPS deploy",
+    "useful_delta": "build, deploy, monitor, rollback",
+    "source": "FEA-IA",
+    "priority": "P1"
+  },
+  {
+    "domain": "AI",
+    "capability": "Multimodal fundamentals",
+    "status": "PARTIAL",
+    "owner_or_candidate": "BRAIN visual/media",
+    "useful_delta": "texto+imagem+áudio+vídeo como sources",
+    "source": "FEA-IA",
+    "priority": "P1"
+  },
+  {
+    "domain": "UI",
+    "capability": "Dockable multi-pane workspace",
+    "status": "PARTIAL",
+    "owner_or_candidate": "SalaControle/Bolt",
+    "useful_delta": "painéis destacáveis/reacopláveis sem perder estado",
+    "source": "Google Drive 2026-09-08",
+    "priority": "P1"
+  },
+  {
+    "domain": "UI",
+    "capability": "Single-instance shared UI state",
+    "status": "PARTIAL",
+    "owner_or_candidate": "SalaControle",
+    "useful_delta": "view != process; fechar floating reancora",
+    "source": "Google Drive 2026-09-08",
+    "priority": "P0"
+  },
+  {
+    "domain": "Agents",
+    "capability": "Feature toggles for agents/connectors/executors",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "capability registry/router",
+    "useful_delta": "is_active runtime sem quebrar core",
+    "source": "Google Drive 2026-09-08",
+    "priority": "P1"
+  },
+  {
+    "domain": "Agents",
+    "capability": "Event-bus message exchange",
+    "status": "PARTIAL",
+    "owner_or_candidate": "Hub/router",
+    "useful_delta": "substituir acoplamento direto por eventos no owner existente",
+    "source": "Google Drive 2026-09-08",
+    "priority": "P1"
+  },
+  {
+    "domain": "Runtime",
+    "capability": "Unified module registry",
+    "status": "PARTIAL",
+    "owner_or_candidate": "MCP catalog/Hermes registry",
+    "useful_delta": "agent|connector|executor + lifecycle + state",
+    "source": "Google Drive 2026-09-08",
+    "priority": "P1"
+  },
+  {
+    "domain": "Runtime",
+    "capability": "Dependency preflight invariants",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "dependency-intelligence owner",
+    "useful_delta": "checar Python/Rust/Node/OS antes de instalar/carregar",
+    "source": "Google Drive 2026-09-08",
+    "priority": "P1"
+  },
+  {
+    "domain": "Runtime",
+    "capability": "Dependency auto-update with rollback",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "dependency-intelligence owner",
+    "useful_delta": "manifest→validate→hot reload→rollback",
+    "source": "Google Drive 2026-09-08",
+    "priority": "P1"
+  },
+  {
+    "domain": "Accounts",
+    "capability": "Multi-account Google Hub",
+    "status": "PARTIAL",
+    "owner_or_candidate": "Account Hub/OAuth Broker",
+    "useful_delta": "N contas→um fluxo, origem preservada",
+    "source": "Google Drive 2026-09-08",
+    "priority": "P1"
+  },
+  {
+    "domain": "Accounts",
+    "capability": "Chromium profile registry",
+    "status": "PARTIAL",
+    "owner_or_candidate": "browser/profile owner",
+    "useful_delta": "perfis isolados + status + account linkage",
+    "source": "Google Drive 2026-09-08",
+    "priority": "P2"
+  },
+  {
+    "domain": "Accounts",
+    "capability": "Per-account feature toggle",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "Account Hub",
+    "useful_delta": "ativar/desativar consumo sem duplicar arquitetura",
+    "source": "Google Drive 2026-09-08",
+    "priority": "P2"
+  },
+  {
+    "domain": "Memory",
+    "capability": "Dream Review",
+    "status": "EXISTING",
+    "owner_or_candidate": "scripts/memory-linker",
+    "useful_delta": "handoff→patterns→candidate→autonomy queue",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Memory",
+    "capability": "Pattern Discovery",
+    "status": "EXISTING",
+    "owner_or_candidate": "memory-linker",
+    "useful_delta": "dedupe/fingerprint/pattern candidates",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Memory",
+    "capability": "LAST_GOOD_STATE",
+    "status": "PARTIAL",
+    "owner_or_candidate": "checkpoints",
+    "useful_delta": "herança intersessão/model swap",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Semantic",
+    "capability": "Hybrid retrieval EXACT/STRUCTURED/LEXICAL/VECTOR/GRAPH",
+    "status": "EXISTING",
+    "owner_or_candidate": "Semantic Fabric",
+    "useful_delta": "retrieval seletivo por consulta",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Semantic",
+    "capability": "Embedding model/version/dimension gate",
+    "status": "PARTIAL",
+    "owner_or_candidate": "Semantic Fabric",
+    "useful_delta": "não misturar espaços vetoriais",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Semantic",
+    "capability": "Secret scrub before embedding",
+    "status": "PARTIAL",
+    "owner_or_candidate": "Semantic Fabric/security",
+    "useful_delta": "segredo não entra em embedding",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Semantic",
+    "capability": "Semantic benchmark Recall@K/MRR/NDCG",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "evaluation harness",
+    "useful_delta": "benchmark de retrieval e regressão",
+    "source": "CentralDark history synthesis",
+    "priority": "P1"
+  },
+  {
+    "domain": "Trace",
+    "capability": "Trace IDs end-to-end",
+    "status": "EXISTING",
+    "owner_or_candidate": "trace-context",
+    "useful_delta": "mission/request/correlation/trace/span",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Trace",
+    "capability": "Message↔trace round trip",
+    "status": "PARTIAL",
+    "owner_or_candidate": "trace + Personal Context refs",
+    "useful_delta": "resposta→evento→fonte→artefato",
+    "source": "Olho de Deus",
+    "priority": "P0"
+  },
+  {
+    "domain": "Trace",
+    "capability": "TURN_CONTEXT_MISMATCH",
+    "status": "GAP",
+    "owner_or_candidate": "existing trace owner",
+    "useful_delta": "detector estrutural + semântico de contexto errado",
+    "source": "Olho de Deus",
+    "priority": "P0"
+  },
+  {
+    "domain": "Trace",
+    "capability": "Trace Viewer",
+    "status": "GAP",
+    "owner_or_candidate": "SalaControle extension",
+    "useful_delta": "visualizar cadeia causal no cockpit",
+    "source": "Cockpit sweep",
+    "priority": "P1"
+  },
+  {
+    "domain": "Trace",
+    "capability": "Preservation export + restore drill",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "existing memory/export owner",
+    "useful_delta": "BagIt/JSONL/CSV/SQLite + hash restore",
+    "source": "Olho de Deus",
+    "priority": "P2"
+  },
+  {
+    "domain": "Media",
+    "capability": "YouTube transcript",
+    "status": "VERIFY_LIVE",
+    "owner_or_candidate": "CentralDark MCP media",
+    "useful_delta": "transcrever vídeo por ID/URL",
+    "source": "CentralDark historical runtime",
+    "priority": "P0"
+  },
+  {
+    "domain": "Media",
+    "capability": "Frame extraction local all/fps/timestamps",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "MCP media owner",
+    "useful_delta": "ffprobe+ffmpeg+hash+manifest",
+    "source": "previous package",
+    "priority": "P0"
+  },
+  {
+    "domain": "Media",
+    "capability": "Frame semantic vectorization",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "Semantic Fabric visual owner",
+    "useful_delta": "frame→embedding→vector metadata",
+    "source": "session requirement",
+    "priority": "P0"
+  },
+  {
+    "domain": "Media",
+    "capability": "Video chapter semantic index",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "media+semantic owner",
+    "useful_delta": "transcript+timestamp+frame+concept",
+    "source": "session requirement",
+    "priority": "P1"
+  },
+  {
+    "domain": "Media",
+    "capability": "Scene-change sampling",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "media owner",
+    "useful_delta": "dedupe visual e reduzir frames redundantes",
+    "source": "session synthesis",
+    "priority": "P2"
+  },
+  {
+    "domain": "Media",
+    "capability": "Video download job",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "media owner",
+    "useful_delta": "URL→job→artifact→provenance",
+    "source": "inemaVOX",
+    "priority": "P1"
+  },
+  {
+    "domain": "Media",
+    "capability": "ASR transcription pipeline",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "media owner",
+    "useful_delta": "Whisper/Parakeet style model adapter",
+    "source": "inemaVOX",
+    "priority": "P1"
+  },
+  {
+    "domain": "Media",
+    "capability": "Translation pipeline",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "media owner",
+    "useful_delta": "transcript→translation with terms preserved",
+    "source": "inemaVOX",
+    "priority": "P2"
+  },
+  {
+    "domain": "Media",
+    "capability": "TTS synthesis",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "media owner",
+    "useful_delta": "text→speech model adapter",
+    "source": "inemaVOX",
+    "priority": "P1"
+  },
+  {
+    "domain": "Media",
+    "capability": "Voice clone",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "media owner",
+    "useful_delta": "voice sample→TTS voice profile",
+    "source": "inemaVOX",
+    "priority": "P2"
+  },
+  {
+    "domain": "Media",
+    "capability": "Dubbing pipeline",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "media owner",
+    "useful_delta": "ASR→translate→TTS→sync→mux",
+    "source": "inemaVOX",
+    "priority": "P1"
+  },
+  {
+    "domain": "Media",
+    "capability": "Diarization",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "media owner",
+    "useful_delta": "speaker segmentation",
+    "source": "inemaVOX",
+    "priority": "P2"
+  },
+  {
+    "domain": "Media",
+    "capability": "Audio/video synchronization",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "media owner",
+    "useful_delta": "timing alignment + presets",
+    "source": "inemaVOX",
+    "priority": "P1"
+  },
+  {
+    "domain": "Media",
+    "capability": "Media job queue + WebSocket progress",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "job/runtime owner",
+    "useful_delta": "queued/running/completed + live progress",
+    "source": "inemaVOX",
+    "priority": "P1"
+  },
+  {
+    "domain": "Media",
+    "capability": "Model manager / GPU fallback",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "runtime/model owner",
+    "useful_delta": "GPU detect→fallback CPU/model",
+    "source": "inemaVOX",
+    "priority": "P1"
+  },
+  {
+    "domain": "Media",
+    "capability": "Media checkpoint/resume",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "job/checkpoint owner",
+    "useful_delta": "retomar pipeline sem repetir etapas concluídas",
+    "source": "inemaVOX",
+    "priority": "P1"
+  },
+  {
+    "domain": "MCP",
+    "capability": "One public CentralDark MCP",
+    "status": "EXISTING",
+    "owner_or_candidate": "CentralDark MCP",
+    "useful_delta": "um endpoint, N capabilities",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "MCP",
+    "capability": "OAuth 2.1 PKCE",
+    "status": "VERIFY_LIVE",
+    "owner_or_candidate": "MCP auth owner",
+    "useful_delta": "login automático do cliente",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "MCP",
+    "capability": "OAuth Broker",
+    "status": "EXISTING",
+    "owner_or_candidate": "oauth-broker",
+    "useful_delta": "provider start/callback/token refresh",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "MCP",
+    "capability": "Account Hub",
+    "status": "EXISTING",
+    "owner_or_candidate": "/accounts",
+    "useful_delta": "accounts/providers/connections",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "MCP",
+    "capability": "Tool capability signature",
+    "status": "PARTIAL",
+    "owner_or_candidate": "MCP catalog + capability router",
+    "useful_delta": "cada tool declara capability/inputs/side-effects/proof",
+    "source": "session synthesis",
+    "priority": "P0"
+  },
+  {
+    "domain": "MCP",
+    "capability": "Package capability scanner",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "DELTAUTIL/harvester",
+    "useful_delta": "zip/html/md/json→N capability candidates",
+    "source": "this session",
+    "priority": "P0"
+  },
+  {
+    "domain": "MCP",
+    "capability": "Generative capability search",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "capability router",
+    "useful_delta": "gap→search→candidate→sandbox→Forja",
+    "source": "this session",
+    "priority": "P0"
+  },
+  {
+    "domain": "MCP",
+    "capability": "Video frame tool registration",
+    "status": "NEW_DELTA",
+    "owner_or_candidate": "MCP media owner",
+    "useful_delta": "registrar capability do pacote anterior",
+    "source": "previous package",
+    "priority": "P0"
+  },
+  {
+    "domain": "MCP",
+    "capability": "Composio OAuth client proof",
+    "status": "GAP",
+    "owner_or_candidate": "existing MCP auth",
+    "useful_delta": "OAuth→callback→tools/list live proof",
+    "source": "this session",
+    "priority": "P0"
+  },
+  {
+    "domain": "Cockpit",
+    "capability": "Cockpit Shell",
+    "status": "EXISTING",
+    "owner_or_candidate": "SalaControle",
+    "useful_delta": "UI base com abas",
+    "source": "repo sweep historical",
+    "priority": "P1"
+  },
+  {
+    "domain": "Cockpit",
+    "capability": "Electron bridge",
+    "status": "EXISTING",
+    "owner_or_candidate": "Bolt",
+    "useful_delta": "window.centraldark bridge",
+    "source": "repo sweep historical",
+    "priority": "P1"
+  },
+  {
+    "domain": "Cockpit",
+    "capability": "Terminal/PTY",
+    "status": "GAP",
+    "owner_or_candidate": "SalaControle/Bolt candidate",
+    "useful_delta": "terminal vivo, após remeasure de owner oculto",
+    "source": "repo sweep historical",
+    "priority": "P0"
+  },
+  {
+    "domain": "Cockpit",
+    "capability": "Live logs",
+    "status": "PARTIAL",
+    "owner_or_candidate": "useCockpitLive",
+    "useful_delta": "substituir mock por SSE/WebSocket runtime",
+    "source": "repo sweep historical",
+    "priority": "P0"
+  },
+  {
+    "domain": "Cockpit",
+    "capability": "Session Manager",
+    "status": "GAP",
+    "owner_or_candidate": "Hermes-Core candidate",
+    "useful_delta": "registry live de sessões",
+    "source": "repo sweep historical",
+    "priority": "P1"
+  },
+  {
+    "domain": "Cockpit",
+    "capability": "Command Channel",
+    "status": "GAP",
+    "owner_or_candidate": "Bolt/Hermes bridge candidate",
+    "useful_delta": "canal bidirecional UI→runtime",
+    "source": "repo sweep historical",
+    "priority": "P0"
+  },
+  {
+    "domain": "Cockpit",
+    "capability": "Agent Manager UI",
+    "status": "PARTIAL",
+    "owner_or_candidate": "Hermes-Core + SalaControle",
+    "useful_delta": "backend existe, UI falta",
+    "source": "repo sweep historical",
+    "priority": "P1"
+  },
+  {
+    "domain": "Cockpit",
+    "capability": "MCP Panel UI",
+    "status": "PARTIAL",
+    "owner_or_candidate": "MCP admin + SalaControle",
+    "useful_delta": "backend existe, UI falta",
+    "source": "repo sweep historical",
+    "priority": "P1"
+  },
+  {
+    "domain": "Cockpit",
+    "capability": "Process Viewer live",
+    "status": "PARTIAL",
+    "owner_or_candidate": "Status",
+    "useful_delta": "trocar dados estáticos por live",
+    "source": "repo sweep historical",
+    "priority": "P1"
+  },
+  {
+    "domain": "Cockpit",
+    "capability": "Receipt Viewer live",
+    "status": "PARTIAL",
+    "owner_or_candidate": "COCKPIT-AVANCO + SalaControle",
+    "useful_delta": "receipt JSON→timeline UI",
+    "source": "repo sweep historical",
+    "priority": "P1"
+  },
+  {
+    "domain": "Security",
+    "capability": "Security gates read/write/destructive",
+    "status": "EXISTING",
+    "owner_or_candidate": "OAuth/Admin",
+    "useful_delta": "gates por operação",
+    "source": "repo sweep historical",
+    "priority": "P0"
+  },
+  {
+    "domain": "Security",
+    "capability": "Sensitive quarantine",
+    "status": "PARTIAL",
+    "owner_or_candidate": "source envelope/security",
+    "useful_delta": "token/secret metadata sem imprimir valores",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Security",
+    "capability": "AI proxy bridge secret separation",
+    "status": "EXISTING",
+    "owner_or_candidate": "ai-proxy",
+    "useful_delta": "bridge credential outside provider secret",
+    "source": "AI-PROXY-ARQUITETURA.md",
+    "priority": "P0"
+  },
+  {
+    "domain": "Deploy",
+    "capability": "GitHub→VPS deploy evidence",
+    "status": "EXISTING",
+    "owner_or_candidate": "Actions/deploy",
+    "useful_delta": "merged != deployed; compare heads",
+    "source": "CentralDark history",
+    "priority": "P0"
+  },
+  {
+    "domain": "Deploy",
+    "capability": "Behavior regression before promotion",
+    "status": "PARTIAL",
+    "owner_or_candidate": "evaluating-llms-harness + Forja",
+    "useful_delta": "prompt/skill changes need behavior tests",
+    "source": "FEP + CentralDark history",
+    "priority": "P0"
+  }
+]

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CentralDark — Graph Agentic Lens</title><link rel="stylesheet" href="./graph-lens.css"></head>
+<body><div id="app">
+<aside class="panel">
+  <div class="brand">🪬 CENTRALDARK GRAPH LENS</div>
+  <div class="sub">Patch candidate do graph-panel existente · read-only</div>
+  <button id="live">LIVE: OFF</button>
+  <div class="metric"><span>fonte</span><b id="source">sample</b></div>
+  <div class="metric"><span>nós</span><b id="nNodes">0</b></div>
+  <div class="metric"><span>arestas</span><b id="nEdges">0</b></div>
+  <h3>Foco</h3>
+  <input id="search" placeholder="id, label, trace, termo...">
+  <select id="state"><option value="">todos states</option><option>CURRENT</option><option>UNKNOWN</option><option>CONFLICT</option><option>HISTORICAL</option></select>
+  <select id="type"><option value="">todos tipos</option><option>MISSION</option><option>ACTOR</option><option>ACTIVITY</option><option>TOOL</option><option>SOURCE</option><option>EVIDENCE</option><option>MEMORY</option><option>DECISION</option><option>RESULT</option><option>SERVICE</option></select>
+  <select id="edges"><option value="primary">PRIMARY SPINE</option><option value="causal">causal</option><option value="all">todas relações</option></select>
+  <button id="reset">reset câmera</button>
+  <h3>Regra visual</h3>
+  <div class="sub">Núcleo é lente virtual. Arestas são desviadas do raio protegido. Nós transbordam para anéis novos quando o setor lota.</div>
+</aside>
+<main id="stage"><canvas id="graph"></canvas>
+  <div id="hud"><span class="good">●</span> read-only &nbsp; <span class="kbd">wheel</span> zoom &nbsp; <span class="kbd">drag</span> pan &nbsp; <span class="kbd">click</span> inspect</div>
+  <div id="legend">
+    <span class="legendItem"><i class="sw" style="background:#5bd3ff"></i>causal</span>
+    <span class="legendItem"><i class="sw" style="background:#7f8ea2"></i>reference</span>
+    <span class="legendItem"><b class="warn">?</b> UNKNOWN</span>
+    <span class="legendItem"><b class="bad">!</b> CONFLICT</span>
+    <span class="legendItem">espessura = volume, não verdade</span>
+  </div>
+</main>
+<aside class="panel right">
+  <div class="brand">AGENTIC PROBES</div>
+  <div class="sub">heurística local; sugestão ≠ autoridade</div>
+  <div id="agentic"></div>
+  <h3>Node inspector</h3><div id="nodeDetail"></div>
+</aside>
+</div><script type="module" src="./graph-lens.js"></script></body></html>

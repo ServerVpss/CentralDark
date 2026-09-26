@@ -1,0 +1,198 @@
+[
+  {
+    "file": "IMG_6140.jpeg",
+    "sha256": "513faf997edc9cd6e1afb00ea6e334aa076fa835acccf75dbcc505e3b814d99d",
+    "bytes": 701466,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "desktop multi-pane CentralDark view with SOL/P2/P3 execution lanes",
+      "visible parallel investigation of Supabase RPC/schema, graph-panel PM2, Hermes webhook",
+      "Kanban wounds/status appear in separate lane"
+    ]
+  },
+  {
+    "file": "IMG_6139.jpeg",
+    "sha256": "40cbf8900c34a132381e9cf64a34627bda8350f19cb1f41bbbf664cee1ac0341",
+    "bytes": 515896,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "multi-pane orchestration continues across independent executor lanes",
+      "MCP/Hub and Supabase inspection visible in parallel",
+      "evidence of operator-visible execution rather than silent background work"
+    ]
+  },
+  {
+    "file": "IMG_6132(2).png",
+    "sha256": "a0dee13c43d64e4dcd3fefc1e73a5e40db996e59098045b0a9e63498265acf55",
+    "bytes": 721615,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "Hermes mobile session investigating GitHub runner/workflow state with many tool calls",
+      "run/PR checks and memory-linker inspection visible"
+    ]
+  },
+  {
+    "file": "IMG_6128(1).png",
+    "sha256": "7dfc1e223da0d0114afcd2c3dbb661e8b860c305b7c3444e7167d6ca92e4e3d4",
+    "bytes": 701715,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "runner investigation identifies scratch/grok-build git/submodule contamination pattern",
+      "distinguishes provisional runner workaround from permanent repository correction"
+    ]
+  },
+  {
+    "file": "IMG_6131(2).png",
+    "sha256": "2efb8e21e81bd1fa57ed3ffdd15ef4ede1c44eb129ed098c856b803771480c77",
+    "bytes": 784665,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "specific GitHub Actions run investigation shown",
+      "agent explicitly plans parallel checks across current run, failing sentinel run, and recent runs"
+    ]
+  },
+  {
+    "file": "IMG_6116(1).png",
+    "sha256": "5a4070931d0ce09fea82ac3fa784b7a5485e839d921dbfcf300f75291f7a4227",
+    "bytes": 571581,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "Hermes config/memory/MCP context shown; MCP authentication requirement called out"
+    ]
+  },
+  {
+    "file": "IMG_6115(1).png",
+    "sha256": "63abd1dba4b753ae2035191346d21dc893725bd9cc2738bd510aae0fac436406",
+    "bytes": 634145,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "OAuth interactive login blocker represented as explicit blocker with resume condition"
+    ]
+  },
+  {
+    "file": "IMG_6114(1).png",
+    "sha256": "d208f94acfef8350a922758f1f505dafaa08a5dd3aea5a1fd57c121a2832734d",
+    "bytes": 595475,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "MCP active catalog reported stale vs compiled capability; promotion/restart still pending",
+      "OAuth metadata pass but interactive token is human frontier"
+    ]
+  },
+  {
+    "file": "IMG_6113(1).png",
+    "sha256": "20edd49e073053297ca841f9c81fda5e684c9bc638e4820d3fcefb52245bdb4b",
+    "bytes": 643005,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "youtube_transcript capability shown in source/dist and catalog memory",
+      "external npm server duplication explicitly rejected"
+    ]
+  },
+  {
+    "file": "IMG_6112(1).png",
+    "sha256": "4b43983e6c09ad8b24488b2e58a601628474d83b726c7615d0b80ed1967d7247",
+    "bytes": 588820,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "REUSE_BEFORE_CREATE proof for youtube transcript; one CentralDark MCP retained"
+    ]
+  },
+  {
+    "file": "IMG_6111(1).png",
+    "sha256": "018a7b2c8c0e18d3234ae31888032b1814ae8a2e685225a93622b441a38cc25f",
+    "bytes": 628844,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "capability exists in code/dist while active process catalog is still old",
+      "runtime promotion distinguished from source existence"
+    ]
+  },
+  {
+    "file": "IMG_6110(1).png",
+    "sha256": "ad9b5d4e5bbfda0e4b76d428cf67f2bf246f8b8f07c7b39cf18cc5b3af09d1ad",
+    "bytes": 623784,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "Graphify pipeline described as fail-closed instead of falling back to stale map"
+    ]
+  },
+  {
+    "file": "IMG_6109(1).png",
+    "sha256": "7a1374e265c175df27982d2553756418f48b8913dcbb107983df783cf0470ab7",
+    "bytes": 576000,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "post-commit hook shown updating graph/map and logging",
+      "graph snapshot figures shown as observed output, not treated here as current live proof"
+    ]
+  },
+  {
+    "file": "IMG_6108(1).png",
+    "sha256": "980b44439b7cc239521bddc1c2eac3db414d1d764a58b7c87cbf25cf98f4ba9b",
+    "bytes": 565243,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "semantic/owner rules shown: semantic match != owner proof; graph relation != authority"
+    ]
+  },
+  {
+    "file": "718ca7c7-601d-4d3d-98da-39e004d2427c.png",
+    "sha256": "0f0b563f37bb09d283b0dcdf4cda352136556297a0bdf0f701aca82bcfae9f51",
+    "bytes": 195522,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "snapshot related to multilingual/subagent execution surface",
+      "used as evidence of output-surface behavior only, not runtime truth"
+    ]
+  },
+  {
+    "file": "e17a240f-030a-49e6-b00a-f7c2cff63085.png",
+    "sha256": "0f0b563f37bb09d283b0dcdf4cda352136556297a0bdf0f701aca82bcfae9f51",
+    "bytes": 195522,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "snapshot related to multilingual/subagent execution surface",
+      "used as evidence of output-surface behavior only, not runtime truth"
+    ]
+  },
+  {
+    "file": "984c5b5e-6403-4283-8d53-de977254b211.png",
+    "sha256": "a179078a391804f2645d598dfc56a07361c3826806228b3274a1ad206c769612",
+    "bytes": 201253,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "snapshot related to multilingual/subagent execution surface",
+      "used as evidence of output-surface behavior only, not runtime truth"
+    ]
+  },
+  {
+    "file": "ce4efaf2-e816-48b2-969d-5692bfd304fc.png",
+    "sha256": "c62f0deff67fd06fe4c4e26fc998d9f0dda6dabc899e15946b8d865b385d2719",
+    "bytes": 199262,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "snapshot related to multilingual/subagent execution surface",
+      "used as evidence of output-surface behavior only, not runtime truth"
+    ]
+  },
+  {
+    "file": "8bd15c6f-4997-4381-bd63-10318c6462c6.png",
+    "sha256": "a638eadcb18f448f8d5258372f2e3534c3a009d71d49a8e4a5139dc03b3b0058",
+    "bytes": 531706,
+    "classification": "USER_PROVIDED_SNAPSHOT_NOT_LIVE_PROOF",
+    "observations": [
+      "snapshot related to multilingual/subagent execution surface",
+      "used as evidence of output-surface behavior only, not runtime truth"
+    ]
+  },
+  {
+    "file": "BASELINE-SCORE-STORY.md",
+    "sha256": "9fe8d21f089a24e498f6d7663771e403890123a6674660c4741e0337a448d747",
+    "bytes": 13107,
+    "classification": "BASELINE_SELF_ASSESSMENT_ARTIFACT",
+    "observations": [
+      "contains previous dimension-by-dimension scorecard and narrative baseline"
+    ]
+  }
+]
