@@ -1,0 +1,28 @@
+﻿CENTRALDARK CLEANUP — DeleteSafe
+================================
+AuditZipSHA256=7bbc7d0a6f96ccad6696894c5420e7a8ba511de2f34b679ca8204711c2192b2d
+AuditIdentical=6093
+SafeScopeExpected=393
+SafeRowsObserved=393
+
+WouldDelete=0
+WouldFreeBytes=0
+WouldFreeMiB=0
+
+Deleted=393
+DeletedBytes=175473871
+DeletedMiB=167.34
+
+Skipped=0
+
+Protected / next:
+.hermes-web-ui=3067 files -> quarantine only after live dormancy proof
+Documents=2581 -> protected
+OneDrive=14 -> protected
+aiox-core=33 -> protected dirty Git
+.hermes=2 -> protected tool state
+.grok=2 -> protected tool state
+Videos=1 -> protected/not material
+
+Receipt=C:\CentralDark-Audit\CLEANUP-PROOF-20260824-131946\receipt.csv
+Residual=C:\CentralDark-Audit\CLEANUP-PROOF-20260824-131946\residual-duplicates.csv

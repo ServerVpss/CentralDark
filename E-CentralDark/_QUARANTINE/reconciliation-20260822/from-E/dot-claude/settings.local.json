@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__a9ea3f91-60bb-4af1-8306-6adba001e027__github_check_token",
+      "mcp__a9ea3f91-60bb-4af1-8306-6adba001e027__github_list_repos",
+      "mcp__a9ea3f91-60bb-4af1-8306-6adba001e027__github_get_repo",
+      "mcp__a9ea3f91-60bb-4af1-8306-6adba001e027__vps_git_status",
+      "mcp__a9ea3f91-60bb-4af1-8306-6adba001e027__deploy_status",
+      "WebFetch(domain:github.com)",
+      "mcp__a9ea3f91-60bb-4af1-8306-6adba001e027__github_read",
+      "mcp__a9ea3f91-60bb-4af1-8306-6adba001e027__github_get_file",
+      "Bash(git checkout *)",
+      "PowerShell(Write-Output \"=== PROCESSOS PYTHON/NODE ===\"; Get-CimInstance Win32_Process -Filter \"Name like '%python%' or Name like '%node%' or Name like '%bun%'\" | Select-Object ProcessId, Name, @{n='CL';e={$_.CommandLine}} | Format-List | Out-String -Width 300)",
+      "PowerShell(cd E:/CentralDark/Pivete/CentralDark/.agents/contratos/delta-canonico; python -m pytest tests/test_delta_contract.py -v > \"C:\\\\Users\\\\danda\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\E--CentralDark\\\\be73f24c-683e-4a6a-ab73-d248cae7a051\\\\scratchpad\\\\suite.txt\" 2>&1; Write-Output \"EXIT=$LASTEXITCODE\"; Get-Content \"C:\\\\Users\\\\danda\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\E--CentralDark\\\\be73f24c-683e-4a6a-ab73-d248cae7a051\\\\scratchpad\\\\suite.txt\" -Tail 45)",
+      "PowerShell(ssh -o BatchMode=yes -o ConnectTimeout=15 Segredo-VPS \"pm2 jlist\" 2>&1)",
+      "PowerShell(ssh -o BatchMode=yes -o ConnectTimeout=15 Segredo-VPS \"pm2 list --no-color | head -50; echo '=== ID 27 ==='; pm2 describe 27 --no-color 2>/dev/null | head -40\" 2>&1)",
+      "mcp__36ab435f-c915-4cf1-9f90-43fb755d24f8__mcp_status",
+      "mcp__36ab435f-c915-4cf1-9f90-43fb755d24f8__elite_gateway_logs",
+      "mcp__36ab435f-c915-4cf1-9f90-43fb755d24f8__deploy_status",
+      "mcp__36ab435f-c915-4cf1-9f90-43fb755d24f8__ler_pendencias",
+      "PowerShell(if \\(Test-Path \"$env:USERPROFILE\\\\.ssh\"\\) { Write-Output \"--- arquivos em .ssh \\(so nomes\\) ---\"; Get-ChildItem \"$env:USERPROFILE\\\\.ssh\" | Select-Object -ExpandProperty Name } else { Write-Output \"sem pasta .ssh\" }; Write-Output \"--- ssh client ---\"; $s = Get-Command ssh -ErrorAction SilentlyContinue; if \\($s\\) { Write-Output $s.Source } else { Write-Output \"ssh NAO encontrado\" })",
+      "PowerShell(Get-Content \"$env:USERPROFILE\\\\.ssh\\\\config\" | Select-String -NotMatch 'Password|Token|Key ')",
+      "Bash(ssh -o BatchMode=yes -o ConnectTimeout=15 Segredo-VPS 'echo \"=== QUEM ESTA NA 8080/8082 ===\"; ss -ltnp 2>/dev/null | grep -E \":\\(8080|8082\\)\" || echo \"NINGUEM escutando 8080/8082\"; echo; echo \"=== TODAS PORTAS LISTEN ===\"; ss -ltn 2>/dev/null | awk \"NR>1{print \\\\$4}\" | sort -u | head -40')",
+      "PowerShell(Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -match 'hermes' -or $_.CommandLine -match 'ATUALIZAR-HERMES' -or $_.Name -match 'python' -or $_.Name -match 'powershell' } | Select-Object ProcessId, Name, CreationDate, @{N='CmdLine';E={$_.CommandLine}} | Format-Table -AutoSize -Wrap)"
+    ]
+  }
+}

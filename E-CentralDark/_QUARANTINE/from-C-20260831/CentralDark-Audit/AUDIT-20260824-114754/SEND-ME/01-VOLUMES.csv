@@ -1,0 +1,3 @@
+﻿"DeviceID","VolumeName","FileSystem","SizeBytes","FreeBytes","VolumeSerialNumber","Status"
+"C:","","NTFS","511125221376","145615114240","EA385F48","OBSERVED"
+"E:","","NTFS","483626315776","294306926592","7277A760","OBSERVED"

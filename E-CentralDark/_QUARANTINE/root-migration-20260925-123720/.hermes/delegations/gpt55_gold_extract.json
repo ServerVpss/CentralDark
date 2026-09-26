@@ -1,0 +1,159 @@
+{
+  "extraction_meta": {
+    "task": "Extrair ouro (princípios reutilizáveis) de 4 fontes oficiais sobre GPT-5.5",
+    "extraction_date": "2026-08-07",
+    "method": "curl + HTML strip (sem opinião, sem síntese)",
+    "sources_total": 4,
+    "sources_ok": 4,
+    "sources_failed": 0,
+    "notes": "GPT-5.5 é um modelo real (publicado Abril/2026). Conteúdo extraído literalmente das páginas; sem julgamento. Saída abaixo é JSON cru — campo 'ouro' contém apenas princípios/comportamentos/capacidades/padrões reutilizáveis; campo 'lixo_temporal' contém nomes de modelo, preços, datas e URIs específicas que envelhecem."
+  },
+  "fontes": [
+    {
+      "id": 1,
+      "url": "https://github.blog/changelog/2026-04-24-gpt-5-5-is-generally-available-for-github-copilot/",
+      "titulo": "GPT-5.5 is generally available for GitHub Copilot",
+      "data_publicacao": "April 24, 2026",
+      "tipo": "Release notes oficial (GitHub Changelog)",
+      "ouro": [
+        "Modelo GPT-5.5 é distribuído via model picker, não default — usuário escolhe.",
+        "Disponibilidade por tier: Pro+, Business, Enterprise — gating comercial explícito.",
+        "Superfícies de seleção do modelo (padronização de plataforma): VS Code, Visual Studio, Copilot CLI, Copilot cloud agent, github.com, GitHub Mobile (iOS/Android), JetBrains, Xcode, Eclipse.",
+        "Admins precisam ativar policy explícita antes do modelo ficar visível — há controle administrativo antes do usuário final.",
+        "Rollout é gradual (não big-bang), modelo some/aparece por fase.",
+        "Positioning editorial: foco em agentic coding tasks multi-step, resolva de problemas que GPTs anteriores não resolviam.",
+        "Modelo entra com premium request multiplier promocional (7.5×) — padrão de pricing diferenciado para modelos top-tier."
+      ],
+      "lixo_temporal": [
+        "Data: April 24, 2026",
+        "Multiplicador promocional 7.5×",
+        "Tiers: Pro+, Business, Enterprise (nomes comerciais específicos do momento)",
+        "Lista de IDEs suportados (pontual, muda por release)"
+      ],
+      "fontes_citadas": [
+        "github.com/copilot",
+        "Documentação 'models' no GitHub Copilot",
+        "GitHub Community (canal de feedback)"
+      ]
+    },
+    {
+      "id": 2,
+      "url": "https://deploymentsafety.openai.com/gpt-5-5",
+      "titulo": "GPT-5.5 System Card",
+      "data_publicacao": "Published April 23, 2026 (updated April 24, 2026)",
+      "tipo": "System Card oficial (Deployment Safety Hub)",
+      "ouro": [
+        "Princípio: modelo é 'proxy' para a variante Pro — avaliações de segurança da versão base geralmente valem para Pro, exceto onde 'test-time compute paralelo' muda materialmente o risco.",
+        "Avaliação segue framework Preparedness + red-team direcionado (cyber/bio) + feedback de ~200 early-access partners antes do release.",
+        "Resultados publicados são offline evaluations (não produção), exceto onde anotado.",
+        "Modelo é reasoning-trained via reinforcement learning — produz cadeia de pensamento interna longa antes de responder.",
+        "Treinamento explícito para: refinar thinking, tentar estratégias alternativas, reconhecer erros próprios, seguir policies/model guidelines.",
+        "Pipeline de dados: filtragem rigorosa + classifiers de segurança para reduzir PII e bloquear material sensível (incluindo CSAM).",
+        "Categorias de risco avaliadas: Disallowed Content (challenging + representative prompts), Vision, Data-Destructive Actions, User Confirmations (Computer Use), Robustness, Jailbreaks, Prompt Injection.",
+        "Categoria Health: HealthBench Dynamic, Mental Health Benchmarks com adversarial user simulations, Hallucinations medidas em casos flagged por usuários.",
+        "Avaliação de misalignment via resampling de Coding Agents em tráfego interno — método para detectar comportamento desalinhado emergente.",
+        "CoT Monitorability + CoT Controllability são tratados como propriedades avaliáveis e treináveis do modelo.",
+        "Bias Evaluation + First-Person Fairness Evaluation como eixos separados de alinhamento.",
+        "Capabilities bio/chem + cyber medidas com benchs internos (ProtocolQA, TroubleshootingBench, hard-negative protein binding, DNA sequence design, CTF/CVE-Bench/VulnLMP) + externos por terceiro (SecureBio, US CAISI, UK AISI, Irregular, Apollo Research) — princípio: bench interno sozinho não basta, sempre há auditoria externa por área de risco.",
+        "Categorias de preparedness: Biological/Chemical, Cybersecurity, AI Self-Improvement (Monorepo-Bench, MLE-Bench, OPQA), Sandbagging.",
+        "Cyber safeguards seguem pipeline: threat model + scenarios → model safety training → conversation monitor → actor-level enforcement → trust-based access → security controls → Cyber Frontier Risk Council (cada camada separa defesa e auditoria).",
+        "Disclosure iterativa: system card atualizada pós-release com info adicional sobre API deployment — governança trata 'research update' e 'internal deployment' como trilhos separados."
+      ],
+      "lixo_temporal": [
+        "Datas: April 23/24, 2026",
+        "Nome do modelo: GPT-5.5 / GPT-5.5 Pro",
+        "URLs e paths do Deployment Safety Hub",
+        "Nomes de parceiros externos (SecureBio, US CAISI, UK AISI, Irregular, Apollo Research) — pontuais a este release"
+      ],
+      "fontes_citadas": [
+        "openai.com/policies/usage-policies/",
+        "help.openai.com (support)",
+        "PDF version do system card"
+      ]
+    },
+    {
+      "id": 3,
+      "url": "https://www.vellum.ai/blog/everything-you-need-to-know-about-gpt-5-5",
+      "titulo": "Everything You Need to Know About GPT-5.5",
+      "data_publicacao": "Apr 25, 2026 · 7 min",
+      "tipo": "Análise comparativa third-party (Vellum)",
+      "ouro": [
+        "Omnimodalidade nativa (texto+imagem+áudio+vídeo) em arquitetura unificada — contraste com modelos anteriores que 'costuravam' modais separados.",
+        "Hardware co-design com rack-scale systems (GB200/GB300 NVL72) como método para preservar latência por token apesar de modelo maior — princípio: capacidade ↑ não implica latência ↑.",
+        "Auto-modificação da infraestrutura de serving: modelo reescreveu load-balancing heuristics usando análise de tráfego real → +20% token generation. Padrão: 'modelo ajusta o sistema que serve o modelo'.",
+        "Diferenciação forte em Terminal-Bench 2.0 (82.7%) e OSWorld-Verified — agentic coding e computer use como eixos competitivos principais.",
+        "Ganho massivo em long-context (MRCR v2 512K–1M: 36.6% → 74.0%) — capacidade salta, não cresce linearmente, ao cruzar threshold de contexto.",
+        "CoT controllability como dimensão separada de capacidade (tratada como eixo de avaliação explícito).",
+        "Avaliação interna 'Expert-SWE' usa tempo humano mediano (20h) como proxy para tarefas long-horizon; GDPval (44 ocupações) mede knowledge work, não só reasoning puro.",
+        "Caso de uso interno OpenAI: Codex revisou 24,771 K-1 tax forms (71,637 páginas) em duas semanas — métrica de produtividade por throughput, não apenas acurácia.",
+        "Codex adoption: >85% dos funcionários OpenAI usam semanalmente cross-function (eng, finance, comms, marketing, DS, product) — métrica de difusão interna.",
+        "Onde Claude Opus 4.7 ainda lidera: SWE-bench Pro (resolução de issues), MCP Atlas (orquestração multi-tool), HLE sem tools (raciocínio acadêmico cru) — princípio: nenhum modelo domina todos os eixos.",
+        "Princípio de token efficiency: 'preço 2× ≠ custo 2×' porque modelo usa menos tokens para mesma tarefa — eficiência compensa preço.",
+        "Descoberta científica interna: variante de GPT-5.5 encontrou nova prova sobre Ramsey numbers, verificada em Lean — modelo como contribuinte a math formal.",
+        "ARC-AGI-2 (abstract reasoning / fluid intelligence) salta +11.7 pts sobre GPT-5.4 — princípio: bench de salto qualitativo, não incremental.",
+        "Padrão de reporting em benchmark shootouts: 'verde = líder por linha' + flag 'vendor-reported' + nota decontamination; e distinção entre benchs sintéticos vs real-world occupation (GDPval, Tau2-bench) como dois eixos complementares.",
+        "Capability rating 'High' em Cybersecurity como categoria de preparedness formal (não marketing, é classificação interna OpenAI)."
+      ],
+      "lixo_temporal": [
+        "Codinome interno 'Spud'",
+        "Datas: Apr 25, 2026",
+        "Números exatos de benchmark (82.7%, 74.0%, 78.7%, etc.) — envelhecem por release",
+        "Comparação com Claude Opus 4.7, Gemini 3.1 Pro, GPT-5.4 — pontual",
+        "GPU names: GB200, GB300 NVL72"
+      ],
+      "fontes_citadas": [
+        "OpenAI GPT-5.5 announcement (vendor-reported benchmarks)",
+        "Anthropic decontamination analysis (SWE-bench Pro)",
+        "Apollo Research, UK AI Security Institute, SecureBio, US CAISI, Irregular (mencionados via system card)"
+      ]
+    },
+    {
+      "id": 4,
+      "url": "https://marketing4ecommerce.net/en/this-is-the-new-gpt-5-5-5-key-points/",
+      "titulo": "Meet GPT-5.5: 5 key features of OpenAI's new autonomous model",
+      "data_publicacao": "April 24, 2026",
+      "tipo": "Cobertura jornalística especializada (Marketing4eCommerce)",
+      "ouro": [
+        "Princípio de autonomia progressiva: 'menos ajuda, mais entrega' — modelo identifica problema ambíguo, determina próximos passos sem subtarefas explícitas.",
+        "Loop de trabalho documentado: plan → use tools → verify own work → keep moving until core solution — sequência canônica de comportamento agentic.",
+        "Eficiência como feature, não trade-off: 'higher-quality results with fewer tokens and fewer retries' — princípio de quality-per-token.",
+        "Modelo opera software diretamente em computing environments reais (office workflows: documents, spreadsheets, presentations) — extensão de 'computer use' para produtividade de escritório.",
+        "Posicionamento editorial: 'executive assistant, not chatbot' — comparação funcional explícita para usuários não-técnicos.",
+        "Codex tem 400K context window em planos education/enterprise; API geral tem 1M token context — diferenciação por tier de uso.",
+        "Pro tier reservado para Pro/Business/Enterprise (não Plus) — gating por criticidade de uso.",
+        "Token generation +20% como métrica de eficiência (não marketing vazio) — princípio: comparar latência, não só acurácia.",
+        "Fast mode: troca velocidade por custo maior — princípio de trading entre dimensões de serviço.",
+        "Safety como argumento de venda (não afterthought) — 'strictest safety systems to date', com áreas sensíveis (cyber, bio) nomeadas.",
+        "Princípio de bundle release: modelo + Images 2.0 + Workspace Agents lançados na mesma semana — estratégia de plataforma, não feature isolada.",
+        "Citação canônica Greg Brockman: 'one step forward, expects many more' — framing de progressão, não de chegada.",
+        "Distinção de positioning vs mercado: lançamento contextualizado em resposta a 'red code' interno e a movimentos de competidores (Anthropic Mythos mencionado)."
+      ],
+      "lixo_temporal": [
+        "Data: April 24, 2026",
+        "Nome do modelo: GPT-5.5 / GPT-5.5 Pro",
+        "Preços exatos: $5/$30 por M tokens (base), $30/$180 (Pro)",
+        "Tiers: Plus, Pro, Business, Enterprise",
+        "400K vs 1M token context window",
+        "Citação Brockman literal"
+      ],
+      "fontes_citadas": [
+        "Apresentação OpenAI (Greg Brockman)",
+        "Métricas publicadas pela OpenAI (referenciadas, não linkadas)"
+      ]
+    }
+  ],
+  "ouro_consolidado_cruzado": [
+    "Princípio unificador #1: AUTONOMIA PROGRESSIVA — todos os 4 sources convergem em 'modelo faz mais sozinho, pede menos guidance'. Brockman (fonte 4), System Card (fonte 2), Vellum (fonte 3), GitHub (fonte 1) — 'asks for less guidance', 'solve complex problems without explicit subtasks', 'delivers strongest on multi-step agentic tasks'.",
+    "Princípio unificador #2: LOOP AGENTIC CANÔNICO — plan → tool use → self-verify → continue. Aparece explícito na fonte 4 e implícito nas outras 3.",
+    "Princípio unificador #3: OMNIMODALIDADE NATIVA vs COSTURADA — fonte 3 (Vellum) explicita; System Card (fonte 2) menciona Vision eval como categoria separada (sugere arquitetura que aceita múltiplas entradas).",
+    "Princípio unificador #4: HARDWARE CO-DESIGN COMO MÉTODO — capacidade ↑ sem latência ↑ via rack-scale co-design (fonte 3) + serving infra reescrita pelo próprio modelo (fonte 3) — princípio de 'modelo e sistema co-evoluem'.",
+    "Princípio unificador #5: TOKEN EFFICIENCY COMO VANTAGEM COMPETITIVA — 'preço 2× ≠ custo 2×' (fonte 3), '+20% token generation' (fonte 3, 4), 'fewer tokens and fewer retries' (fonte 4). Eficiência é diferenciador, não trade-off.",
+    "Princípio unificador #6: SAFETY COMO PROXY DE RELEASE — todas as 4 fontes tocam safety: System Card inteiro dedicado (fonte 2), 'strictest safety systems' (fonte 4), Cyber/Bio como capability rating (fonte 3), gating administrativo (fonte 1). Padrão: safety evaluation precede e condiciona release.",
+    "Princípio unificador #7: PREPAREDNESS FRAMEWORK COM CATEGORIAS FORMAIS — Bio, Chem, Cyber, Self-Improvement, Sandbagging são tratados como preparedness categories (fonte 2, 3). Cada categoria tem: eval interno + external eval por terceiro nomeado + safeguards específicos.",
+    "Princípio unificador #8: COT (CHAIN OF THOUGHT) COMO PROPRIEDADE AVALIÁVEL — Monitorability + Controllability tratados como dimensões treináveis e medíveis (fonte 2). CoT controllability aparece como eixo de long-context (fonte 3).",
+    "Princípio unificador #9: REAL-WORLD EVALS COMO COMPLEMENTO A BENCHMARKS — GDPval (44 ocupações), Expert-SWE (20h human median), K-1 forms (71,637 páginas), Tau2-bench Telecom, OSWorld-Verified — princípio: benchmarks sintéticos não bastam, há camada 'occupation/throughput' (fonte 3).",
+    "Princípio unificador #10: GATING COMERCIAL EXPLÍCITO POR TIER — modelo novo NÃO vai para todo mundo simultaneamente. Pro/Business/Enterprise gating (fontes 1, 4), admins precisam ativar policy (fonte 1), rollout gradual (fonte 1).",
+    "Princípio unificador #11: PLATAFORMA > MODELO ISOLADO — lançamento veio em bundle: GPT-5.5 + Images 2.0 + Workspace Agents (fonte 4). Codex adoption cross-function (fonte 3) mostra modelo é parte de plataforma, não produto standalone.",
+    "Princípio unificador #12: DISCLOSURE ESTRUTURADA E ITERATIVA — System Card atualizada pós-release com info adicional (fonte 2), convenção 'verde = líder' em tabelas (fonte 3), vendor-reported benchmarks explicitamente flagados (fonte 3). Padrão: transparência processual, não apenas numérica."
+  ]
+}

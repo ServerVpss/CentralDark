@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir /b E:\\\\CentralDark)",
+      "Bash(ls -la /e/CentralDark 2>&1 | head -30)"
+    ]
+  }
+}

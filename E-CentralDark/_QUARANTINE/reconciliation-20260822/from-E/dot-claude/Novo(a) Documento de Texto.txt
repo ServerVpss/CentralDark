@@ -1,0 +1,164 @@
+**Você escreveu a primeira versão do algoritmo com as próprias mãos.** Não estava “apenas depurando manualmente”.
+
+## Nome técnico do que você fez
+
+**Garantia de runtime em circuito fechado** — ou, no seu jeito:
+
+> **Você ensinou o sistema a seguir o rastro até o defeito, corrigir o mínimo e provar que voltou certo.**
+
+O circuito que você executou foi:
+
+```text
+INTENÇÃO DO CHEFE
+→ ação real no bot
+→ log ao vivo
+→ processo identificado
+→ rota/configuração medida
+→ ruído eliminado
+→ causa comprovada
+→ correção mínima
+→ contraprova
+→ recibo
+→ aprendizado para não investigar tudo novamente
+```
+
+Você provou, por exemplo, que:
+
+* `online` no PM2 não significava API funcional;
+* o HubBot vivo mantinha configuração antiga;
+* a `bridge` retornava `503` porque estava desligada;
+* o arquivo no disco já apontava para outra rota;
+* `CentralDark-AiDiag` saindo com código `0` era execução agendada, não queda;
+* a ponte Grok por arquivos dependia de um consumidor no PC que não estava respondendo;
+* os processos reais incluem HubBot, Guardião, OAuthBroker, ArsenalProxy, MCP e EliteHTTP, cada qual com script e diretório próprios.   
+
+## O que deve virar código bruto
+
+Tudo que já possui resposta objetiva vira **script determinístico**, não nova análise de IA:
+
+```text
+PM2 online, mas endpoint falha
+→ detectar automaticamente
+
+configuração do PM2 diferente do arquivo
+→ comparar por hash, sem mostrar segredo
+
+cron termina com código 0
+→ classificar como execução saudável, não queda
+
+arquivo de pedido novo + resposta velha
+→ declarar consumidor ausente ou atrasado
+
+rota devolve texto 503
+→ rota morta
+
+rota devolve JSON 401 com chave falsa
+→ protocolo vivo, autenticação funcionando como gate
+
+processo mudou PID/restart/status
+→ registrar transição real
+
+correção aplicada
+→ repetir as mesmas provas automaticamente
+```
+
+A IA não precisa gastar tokens redescobrindo isso. **Ela entra somente quando o detector encontrar algo que nenhuma regra conhecida consegue classificar.**
+
+## Onde encaixa sem criar outro sistema
+
+O repositório já possui:
+
+* `scripts/sentinela/run.mjs`;
+* `sentinela-divergencias.yml`;
+* `vps-healthcheck.yml`.
+
+Essas peças já verificam endpoints, workflows com falha, carga, disco, memória e PM2. O material também confirma uma lacuna específica: o comparativo GitHub `main` versus runtime da VPS ainda dependia de execução manual. 
+
+Portanto, não é para criar “Monitoramento Novo”, “runtime-v2” ou um quarto workflow.
+
+```text
+scripts/sentinela/run.mjs
+→ cérebro determinístico compartilhado
+
+sentinela-divergencias.yml
+→ visão GitHub, endpoints e divergências
+
+vps-healthcheck.yml
+→ visão do runtime na VPS
+
+mesma saída estruturada
+→ receipt JSON sanitizado
+
+mesmas regras
+→ CI, bot, painel e IA leem a mesma verdade
+```
+
+## A autonomia correta
+
+Não é “deixar uma IA solta corrigindo tudo”.
+
+É:
+
+```text
+DEFEITO CONHECIDO
+→ script detecta
+→ aplica correção segura previamente autorizada
+→ contraprova
+→ receipt
+
+DEFEITO DESCONHECIDO
+→ IA da VPS recebe snapshot sanitizado
+→ investiga em read-only
+→ propõe causa e correção
+→ Delta entra somente se o território for amplo
+
+AÇÃO DESTRUTIVA OU FORA DO ESCOPO
+→ trava no Chefe
+```
+
+Isso se chama **autonomia por evidência**, não autonomia por confiança em modelo.
+
+## O que continua sendo seu
+
+Você define:
+
+* os nomes canônicos;
+* o que cada processo significa;
+* qual comportamento é correto;
+* quais reparos podem ocorrer sozinhos;
+* quais ações precisam parar em você;
+* quando uma peça é ativa, legado ou aposentada.
+
+O código transforma isso em regra reproduzível.
+
+## Ordem exata para a IA da VPS
+
+Ainda no fio atual, sem escrever antes de conhecer a espinha:
+
+```text
+Leia somente:
+- /tmp/centraldark-espinha-ia.txt
+- scripts/sentinela/run.mjs
+- .github/workflows/sentinela-divergencias.yml
+- .github/workflows/vps-healthcheck.yml
+- os scripts PM2 dos processos envolvidos
+
+Objetivo:
+transformar a depuração manual comprovada em verificações determinísticas
+dentro do sistema canônico existente.
+
+Primeiro entregue:
+1. o que já existe;
+2. o que está duplicado;
+3. quais verificações manuais podem virar funções;
+4. quais correções são seguras para autoexecução;
+5. quais exigem gate humano;
+6. diff mínimo proposto.
+
+Não crie workflow, monitor, diretório ou versão paralela.
+Não edite antes de apresentar essa matriz.
+Não exponha secrets.
+Não renomeie processos; os nomes serão definidos por SEGREDO/CHEFE.
+```
+
+**Papo reto:** você fez manualmente o treinamento operacional do futuro sentinela. Agora terminamos de provar a espinha Grok/OAuth/TokenRouter e convertemos os movimentos repetíveis em código. Depois disso, o sistema não “analisa tudo novamente”: ele reconhece o padrão, age e só chama inteligência quando aparece algo realmente novo.

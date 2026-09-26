@@ -1,0 +1,13 @@
+{
+    "gitlens.currentLine.dateFormat": null,
+    "gitlens.currentLine.uncommittedChangesFormat": "✏️ ${ago}${author}",
+    "gitlens.graph.minimap.additionalTypes": [
+        "localBranches",
+        "stashes",
+        "worktree",
+        "remoteBranches",
+        "pullRequests",
+        "tags"
+    ],
+    "gitlens.graph.showRemoteNames": true
+}

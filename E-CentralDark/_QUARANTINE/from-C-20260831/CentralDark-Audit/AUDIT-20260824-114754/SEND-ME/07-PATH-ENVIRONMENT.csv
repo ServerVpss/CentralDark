@@ -1,0 +1,6 @@
+﻿"Name","Scope","Value"
+"USERPROFILE","Process","C:\Users\danda"
+"LOCALAPPDATA","Process","C:\Users\danda\AppData\Local"
+"APPDATA","Process","C:\Users\danda\AppData\Roaming"
+"HERMES_HOME","Process","C:\Users\danda\AppData\Local\hermes"
+"HERMES_HOME","User","C:\Users\danda\AppData\Local\hermes"

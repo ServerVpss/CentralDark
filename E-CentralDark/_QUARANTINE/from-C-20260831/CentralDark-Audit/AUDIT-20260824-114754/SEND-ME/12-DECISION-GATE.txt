@@ -1,0 +1,12 @@
+﻿DECISION_GATE=READ_ONLY_COMPLETE_PENDING_EXTERNAL_REVIEW
+MOVE_ALLOWED=FALSE
+DELETE_ALLOWED=FALSE
+QUARANTINE_ALLOWED=FALSE
+GITHUB_SYNC_ALLOWED=FALSE
+
+NEXT:
+1. Revisar candidatos, repos Git, runtime consumers, links e probes.
+2. Classificar caminhos com evidência:
+   ACTIVE | COMPATIBILITY | HISTORICAL | BACKUP | CANDIDATE | UNKNOWN
+3. Só depois definir absorção mínima em E:\CentralDark.
+4. Só depois reconciliar Casa <-> GitHub.

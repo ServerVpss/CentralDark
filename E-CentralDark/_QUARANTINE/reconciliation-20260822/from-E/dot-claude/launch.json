@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "sol-desktop-vite",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "Sol/sol-desktop-poc-source/apps/sol-desktop", "run", "dev"],
+      "port": 1420
+    },
+    {
+      "name": "omniroute-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "MOTOR-TESTE/OmniRoute", "run", "dev"],
+      "port": 20128
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+﻿CENTRALDARK — AUDITORIA LOCAL WINDOWS v2
+========================================
+Timestamp local:      2026-08-24 12:56:31
+UserRoot:             C:\Users\danda
+HouseRoot:            E:\CentralDark
+AuditRoot:            C:\CentralDark-Audit
+
+MODO
+----------------------------------------
+SOURCE_ROOTS_READ_ONLY=TRUE
+FILES_MOVED=0
+FILES_DELETED=0
+FILES_RENAMED=0
+GIT_PULL=0
+GIT_PUSH=0
+GIT_RESET=0
+PROCESS_COMMANDLINE_EXPORTED=FALSE
+SECRET_CONTENT_EXPORTED=FALSE
+
+MEDIÇÃO
+----------------------------------------
+Inventory records:    293674
+User candidates:      17758
+Git repositories:     23
+Reparse links:        100
+Runtime consumers:    73
+Runtime probes:       3
+Errors captured:      14
+Protected top-level omitted from SEND:
+27
+
+COMPARAÇÃO C -> E
+----------------------------------------
+Identical already in House:
+6093
+
+Same name / review delta:
+2686
+
+Not found by hash/name:
+8977
+
+Not hashed / metadata review:
+2
+
+Hash error / UNKNOWN:
+0
+
+CONTRATO
+----------------------------------------
+CURRENT_C_PHYSICAL_LAYOUT=PARTIAL_WITH_DECLARED_PRUNES
+CURRENT_E_PHYSICAL_LAYOUT=PARTIAL_WITH_DECLARED_PRUNES
+CURRENT_HERMES_HOME=EVIDENCE_ONLY_IF_ENV_OR_RUNTIME_PROBE_PRESENT
+CURRENT_ACTIVE_VAULT=UNKNOWN_UNLESS_RUNTIME_OR_LINK_EVIDENCE
+ACTIVE_CONSUMER=EVIDENCE_ONLY_IF_ROOT_REFERENCE_PRESENT
+PROCESS_NAME_MATCH_ONLY_IS_NOT_CONSUMER_PROOF=TRUE
+PATH_FOUND_DOES_NOT_MEAN_ACTIVE=TRUE
+RECOVERY_PATH_DOES_NOT_MEAN_MIGRATION=TRUE
+NO_DATA_MOVE_WITHOUT_REVIEW=TRUE
+NO_FALSE_GREEN=TRUE
+
+NÃO ENVIAR
+----------------------------------------
+C:\CentralDark-Audit\AUDIT-20260824-114754\LOCAL-PRIVATE-NAO-ENVIAR
+
+ENVIAR
+----------------------------------------
+Somente o ZIP SEND sanitizado gerado ao final.
