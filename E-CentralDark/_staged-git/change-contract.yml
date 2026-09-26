@@ -1,0 +1,40 @@
+name: CentralDark Change Contract
+
+on:
+  pull_request:
+  push:
+    branches: [main, 'fix/**', 'feat/**', 'refactor/**', 'chore/**']
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate staged change contract
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            git diff --name-only "origin/${{ github.base_ref }}...${{ github.sha }}" > /tmp/centraldark-files
+          else
+            git diff-tree --no-commit-id --name-only -r "${{ github.sha }}" > /tmp/centraldark-files
+          fi
+          if grep -Eiq '(^|/)(\.env(\..*)?|secrets/|.*\.(pem|key)$|.*credentials.*|CREDENCIAIS-TEMP)' /tmp/centraldark-files; then
+            echo 'CENTRALDARK_CONTRACT=FAIL_SECRET_PATH'
+            cat /tmp/centraldark-files
+            exit 1
+          fi
+          if grep -Evq '^docs/CONSCIENCIA/RECEIPTS/|^CHANGELOG\.md$' /tmp/centraldark-files; then
+            if ! grep -Eq '^docs/CONSCIENCIA/RECEIPTS/[^/]+\.md$' /tmp/centraldark-files; then
+              echo 'CENTRALDARK_CONTRACT=FAIL_RECEIPT_MISSING'
+              exit 1
+            fi
+          fi
+          echo 'CENTRALDARK_CONTRACT=PASS'
