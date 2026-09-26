@@ -1,0 +1,110 @@
+{
+  "name": "hermes-vscode-router-provider",
+  "displayName": "Hermes Router for Copilot",
+  "description": "Expose the local Hermes OpenAI-compatible router as selectable VS Code Chat models.",
+  "version": "0.1.0",
+  "publisher": "centraldark-local",
+  "license": "MIT",
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "hermes",
+    "copilot",
+    "openai-compatible",
+    "local-models",
+    "agent"
+  ],
+  "main": "./extension.js",
+  "engines": {
+    "vscode": "^1.109.0"
+  },
+  "activationEvents": [
+    "onLanguageModelChatProvider:hermes-router",
+    "onCommand:hermes-router.refreshModels",
+    "onCommand:hermes-router.setApiKey"
+  ],
+  "contributes": {
+    "languageModelChatProviders": [
+      {
+        "vendor": "hermes-router",
+        "displayName": "Hermes Router",
+        "configuration": {
+          "managementCommand": "hermes-router.setApiKey"
+        }
+      }
+    ],
+    "commands": [
+      {
+        "command": "hermes-router.refreshModels",
+        "title": "Hermes Router: Refresh Models"
+      },
+      {
+        "command": "hermes-router.setApiKey",
+        "title": "Hermes Router: Set API Key"
+      }
+    ],
+    "configuration": {
+      "title": "Hermes Router",
+      "properties": {
+        "hermesRouter.baseUrl": {
+          "type": "string",
+          "default": "http://127.0.0.1:8099/v1",
+          "description": "Hermes OpenAI-compatible API base URL.",
+          "order": 1
+        },
+        "hermesRouter.apiKeyEnv": {
+          "type": "string",
+          "default": "CENTRALDARK_ROUTER_KEY",
+          "description": "Environment variable containing the router API key. Leave empty when the local router does not require authentication.",
+          "order": 2
+        },
+        "hermesRouter.configPath": {
+          "type": "string",
+          "default": "",
+          "description": "Optional Hermes config.yaml path. When empty, the extension asks `hermes config path` and uses the active profile.",
+          "order": 3
+        },
+        "hermesRouter.providerName": {
+          "type": "string",
+          "default": "centraldark-router",
+          "description": "Provider name whose `models` list should be imported from Hermes config.yaml.",
+          "order": 4
+        },
+        "hermesRouter.includeConfiguredModels": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include model IDs listed in the active Hermes provider configuration, in addition to /v1/models.",
+          "order": 5
+        },
+        "hermesRouter.maxInputTokens": {
+          "type": "number",
+          "default": 114688,
+          "minimum": 1,
+          "description": "Advertised input context size for Hermes models.",
+          "order": 6
+        },
+        "hermesRouter.maxOutputTokens": {
+          "type": "number",
+          "default": 8192,
+          "minimum": 1,
+          "description": "Default maximum output tokens sent to the router.",
+          "order": 7
+        },
+        "hermesRouter.refreshIntervalSeconds": {
+          "type": "number",
+          "default": 30,
+          "minimum": 0,
+          "description": "How often to refresh the router model list. Set to 0 to disable periodic refresh.",
+          "order": 8
+        }
+      }
+    }
+  },
+  "files": [
+    "package.json",
+    "extension.js",
+    "README.md"
+  ]
+}

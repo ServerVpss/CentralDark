@@ -1,0 +1,98 @@
+{
+  "schema": "centraldark.band-score.v1",
+  "status": "ACTIVE_CONTRACT",
+  "authority": {
+    "human_intent": "SEGREDO/CHEFE",
+    "coordination": "SOL",
+    "execution": "PIVETE/HERMES",
+    "judge": "REALIDADE",
+    "writer_policy": "ONE_WRITER_PER_SCOPE"
+  },
+  "source_of_truth": {
+    "operational_method": ".agents/skills/centraldark-operational-method/SKILL.md",
+    "breathing_reference": ".agents/skills/centraldark-operational-method/references/regenerative-self-refinement-engine.md",
+    "band_concept": "docs/BRAIN/01-CONCEITOS/Banda/BANDA_INTENCAO_UNICA_COMPASSO.md",
+    "intent_state": "docs/BRAIN/01-CONCEITOS/Banda/INTENT_SYNC_STATE.md"
+  },
+  "breaths": {
+    "total": 17,
+    "classification": "OPERATIONAL_SLOTS_NOT_HISTORICAL_STYLE_COUNT",
+    "items": [
+      {"id": "concentracao-total", "name": "Concentração Total", "kind": "meta", "role": "kernel"},
+      {"id": "sol", "name": "Sol", "kind": "policy", "role": "meta_orchestration"},
+      {"id": "lua", "name": "Lua", "kind": "policy", "role": "adversarial_mirror"},
+      {"id": "agua", "name": "Água", "kind": "policy", "role": "adaptation"},
+      {"id": "chamas", "name": "Chamas", "kind": "policy", "role": "decisive_execution"},
+      {"id": "trovao", "name": "Trovão", "kind": "policy", "role": "fast_causal_trace"},
+      {"id": "vento", "name": "Vento", "kind": "policy", "role": "exploration"},
+      {"id": "pedra", "name": "Pedra", "kind": "policy", "role": "stability"},
+      {"id": "flor", "name": "Flor", "kind": "policy", "role": "precision"},
+      {"id": "inseto", "name": "Inseto", "kind": "policy", "role": "small_targeted_intervention"},
+      {"id": "serpente", "name": "Serpente", "kind": "policy", "role": "indirect_path"},
+      {"id": "amor", "name": "Amor", "kind": "policy", "role": "integration"},
+      {"id": "som", "name": "Som", "kind": "policy", "role": "signal_orchestration"},
+      {"id": "nevoa", "name": "Névoa", "kind": "policy", "role": "ambiguity_handling"},
+      {"id": "fera", "name": "Fera", "kind": "policy", "role": "field_detection"},
+      {"id": "regeneracao-monotonica", "name": "Regeneração Monotônica", "kind": "meta", "role": "self_refinement_without_regression"},
+      {"id": "continuar-ate-fixed-point", "name": "Continuar até Fixed Point", "kind": "meta", "role": "continuous_execution_until_objective_stop"}
+    ]
+  },
+  "note_contract": {
+    "definition": "MATERIAL_OPERATIONAL_EVENT",
+    "emit_after_each_material_note": true,
+    "required_fields": [
+      "mission_id", "event_id", "parent_event_id", "trail_id", "observed_head",
+      "writer", "breath_id", "note_id", "action", "observation",
+      "evidence_refs", "verdict", "next_breath", "learning_ref"
+    ],
+    "verdicts": ["PASS", "FAIL", "BLOCKED", "UNKNOWN", "SKIP_JUSTIFICADO"]
+  },
+  "thunder_trail": {
+    "owner": "scripts/agent-call.mjs",
+    "protocol": "CENTRALDARK_AGENT_CALL_V1",
+    "reuse_existing_trail_id": true,
+    "new_event_bus": false,
+    "emit_after_each_material_note": true,
+    "dedupe_key": ["mission_id", "event_id"],
+    "ordering": ["parent_event_id", "event_id"],
+    "stale_head": "BLOCK",
+    "route_drift": "BLOCK"
+  },
+  "bindings": {
+    "graphrag": {
+      "path": "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs",
+      "mode": "FIXED_SCORE_PLUS_DYNAMIC_MEMORY"
+    },
+    "learning": {
+      "path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "mode": "CURATED_LEARNING"
+    },
+    "graph": {
+      "generator": "scripts/grafo-vivo/gerar-grafo-vivo.mjs",
+      "derived_not_authority": true,
+      "required_nodes": ["band-score", "graphrag-master", "aprendizados"],
+      "required_edges": [
+        ["band-score", "graphrag-master"],
+        ["graphrag-master", "aprendizados"],
+        ["aprendizados", "band-score"]
+      ]
+    }
+  },
+  "response_envelope": {
+    "always_parseable": true,
+    "required_fields": ["ok", "status", "error"],
+    "error_policy": "STRUCTURED_NOT_SWALLOWED",
+    "error_nullable": true,
+    "fail_closed": true
+  },
+  "invariants": [
+    "MANY_SURFACES_ONE_SONG",
+    "SAME_INTENT_ID_SAME_MISSION",
+    "ONE_WRITER_PER_SCOPE",
+    "UNKNOWN_IS_NOT_PASS",
+    "POETRY_IS_NOT_PROOF",
+    "GRAPH_IS_DERIVED_NOT_AUTHORITY",
+    "NO_NEW_EVENT_BUS",
+    "REALITY_IS_JUDGE"
+  ]
+}

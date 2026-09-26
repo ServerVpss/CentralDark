@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "package_id": "AIOS-GOLD-ASSAY-20260828",
+  "status": "CANDIDATE_EXTERNAL_LEARNING",
+  "authority": "SEGREDO/CHEFE",
+  "centraldark": {
+    "repository": "ServerVpss/CentralDark",
+    "base_sha": "269a943b9905b907cc421c1036951a4ca6495f01",
+    "one_system_only": true,
+    "reuse_before_create": true
+  },
+  "source_archive": {
+    "name": "aiox-core.zip",
+    "size_bytes": 452524182,
+    "sha256": "fd4eebcb50259a198ca4d68a63fc1a9c4445042f47b48e64a036f597c63dd411",
+    "entries": 49136,
+    "files": 43569,
+    "files_excluding_node_modules": 3420,
+    "development_agents": 27,
+    "development_tasks": 197,
+    "development_workflows": 15,
+    "raw_archive_committed": false,
+    "reason_not_committed": [
+      "third_party_dependency_not_wanted",
+      "archive_size_452524182_bytes",
+      "license_requires_conservative_handling",
+      "behavioral_distillation_preferred"
+    ]
+  },
+  "license_observation": {
+    "license_file": "Commons Clause License Condition v1.0 plus MIT text",
+    "package_json_claim": "MIT",
+    "raw_code_copy_allowed_by_this_assay": false
+  },
+  "candidate_capabilities": [
+    "dependency-impact-analysis",
+    "visual-impact-projection",
+    "design-token-extraction",
+    "dtcg-token-export",
+    "atomic-component-classification",
+    "design-quality-pipeline",
+    "ide-copilot-view-projection",
+    "precompact-session-digest",
+    "codebase-migration-orphan-inventory",
+    "dynamic-gate-selection",
+    "health-check-registry-pattern"
+  ],
+  "explicit_rejections": [
+    "aios-orchestrator",
+    "aios-agent-governance",
+    "aios-mcp-framework",
+    "aios-second-brain",
+    "red-team-import",
+    "semantic-merge-as-writer",
+    "third-party-runtime-connection",
+    "raw-package-vendoring"
+  ],
+  "counterexamples": [
+    {
+      "id": "DECLARED_STRUCTURE_VALIDATOR_NOT_PRESENT",
+      "claim": "root package.json references .aios-core/infrastructure/scripts/source-tree-guardian/index.js",
+      "observed": "referenced path not found in measured ZIP"
+    },
+    {
+      "id": "TEST_QUALITY_UNDEFINED_CONTENT",
+      "path": "aiox-core/.aios-core/infrastructure/scripts/test-quality-assessment.js",
+      "sha256": "300699a7a5003ef1f18b4e865f761a8e76d0b82e001f0ba17317ef05d41c79db",
+      "observed": "multiple methods accept _content but reference content"
+    }
+  ],
+  "proof": {
+    "hermes_plan": "HERMES-PROOF-PLAN.md",
+    "capability_matrix": "CAPABILITY-MATRIX.md",
+    "hashes": "SHA256SUMS.txt",
+    "counterproof": "COUNTERPROOF.md",
+    "implementation_authorized": false,
+    "merge_authorized_by_package": false,
+    "fixed_point": false
+  }
+}

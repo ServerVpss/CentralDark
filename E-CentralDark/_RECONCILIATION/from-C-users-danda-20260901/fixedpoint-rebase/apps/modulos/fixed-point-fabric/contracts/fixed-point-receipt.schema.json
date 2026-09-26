@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Fixed Point Receipt",
+  "type": "object",
+  "required": ["snapshot", "fixed_point"],
+  "properties": {
+    "snapshot": {
+      "type": "object",
+      "required": ["snapshot_id", "signature", "receipts"],
+      "properties": {
+        "snapshot_id": {"type": "string"},
+        "signature": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "receipts": {"type": "array", "minItems": 4}
+      }
+    },
+    "fixed_point": {
+      "type": "object",
+      "required": ["reached", "stable_samples", "required_samples", "blockers"],
+      "properties": {
+        "reached": {"type": "boolean"},
+        "stable_samples": {"type": "integer"},
+        "required_samples": {"type": "integer", "minimum": 2},
+        "blockers": {"type": "array"}
+      }
+    }
+  }
+}
+

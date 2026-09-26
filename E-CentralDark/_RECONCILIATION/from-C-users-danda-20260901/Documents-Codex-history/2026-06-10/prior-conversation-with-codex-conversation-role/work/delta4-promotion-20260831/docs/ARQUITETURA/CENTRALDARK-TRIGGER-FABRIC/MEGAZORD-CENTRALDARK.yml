@@ -1,0 +1,200 @@
+schema: centraldark.megazord.v1
+name: MEGAZORD-CENTRALDARK
+status: CANONICAL_COMPOSITE_ARCHITECTURE
+authority: SEGREDO/CHEFE
+system_owner: CENTRALDARK
+architecture_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
+capability_router: .agents/skills/capability-contract-router/SKILL.md
+engine_binding: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+runtime_plug: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml
+spiral_traversal: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SPIRAL-TRAVERSAL.yml
+
+semantics:
+  zord: OBSERVED_CAPABILITY_OR_RESOURCE
+  megazord: MINIMUM_SUFFICIENT_COMPOSITION_FOR_CURRENT_INTENT
+  new_agent: false
+  new_authority: false
+  second_orchestrator: false
+  second_brain: false
+  second_router: false
+  target_runtime_is_replaceable: true
+
+activation:
+  mode: AUTO
+  control_plane_required: true
+  target_runtime_may_be_absent_before_selection: true
+  when_all:
+    - CONTROL_PLANE_PRESENT
+    - CANONICAL_CONTEXT_DISCOVERABLE
+    - CAPABILITY_ROUTER_DISCOVERABLE
+  explicit_trigger_also_supported: true
+  explicit_triggers: ["!CENTRALDARK", "@@CentralDark", "MEGAZORD-CENTRALDARK"]
+  user_repetition_required: false
+
+resource_discovery:
+  mode: DISCOVER_MEASURE_ROUTE
+  search_where_available: true
+  sources:
+    - MCP
+    - CENTRALDARK_HUB
+    - CENTRALDARK_API
+    - GITHUB
+    - FILES
+    - MEMORY
+    - CONNECTORS
+    - RUNTIME
+    - CI
+    - TOOLS
+    - MODELS
+    - ADAPTERS
+    - SCREENPIPE
+    - AIOX_DERIVED_CAPABILITIES
+    - FUTURE_DISCOVERED_CAPABILITIES
+  unknown_capability_is_available: false
+  configured_is_active: false
+  documented_is_executable: false
+  discovered_resource_requires_measurement: true
+
+screenpipe:
+  role: GLOBAL_LIVE_OBSERVATION_SENSOR
+  skill: .agents/skills/screenpipe-live-observer/SKILL.md
+  handoff_owner: docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md
+  auto_discover: true
+  selectable_by_any_authorized_actor: true
+  mutation_authority: false
+  capabilities:
+    - LIVE_DESKTOP_OBSERVATION
+    - SCREEN_HISTORY_SEARCH
+    - OCR_CONTEXT
+    - ACCESSIBILITY_CONTEXT
+    - AUDIO_TRANSCRIPT_CONTEXT
+    - INPUT_EVENT_CONTEXT
+    - CLIPBOARD_CONTEXT
+    - FRAME_CONTEXT
+    - WINDOW_APP_TIMELINE
+    - SCREENPIPE_ACTIVITY_SUMMARY
+    - SCREENPIPE_MEETING_CONTEXT
+    - SCREENPIPE_AUTOMATION_TARGETING_CONTEXT
+    - SCREENPIPE_VIDEO_EXPORT
+  availability_requires:
+    - HEALTH_OK
+    - RECENT_DATA_PRESENT
+    - TARGET_QUERY_RETURNS_USABLE_EVIDENCE
+  rules:
+    history_is_current_state: false
+    screenshot_is_live_state: false
+    screenpipe_is_authority: false
+    screenpipe_is_handoff: false
+    cross_surface_transport_requires_proven_channel: true
+    no_information_gain: DROP_DUPLICATE
+
+spiral:
+  alias: CARACOL
+  role: DERIVED_NAVIGATION_TRAVERSAL
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SPIRAL-TRAVERSAL.yml
+  verifier: scripts/trigger-fabric/spiral_traversal.py
+  covers_all_catalogued_metadata: true
+  preload_all_bodies: false
+  semantic_edges_created: false
+  graph_topology_mutation: false
+  node_repositioning_required: false
+  forward_reverse_required: true
+  ten_front_rendezvous: true
+  no_fragment_drop: true
+  materialize_body_only_when_relevant: true
+
+composition:
+  discover_all_relevant: true
+  activate_all_discovered: false
+  selection_policy: MINIMUM_SUFFICIENT_SET
+  reuse_before_create: true
+  one_system_only: true
+  one_writer_per_scope: true
+  parallelize_read_only_perception: true
+  serialize_mutation: true
+  capability_gap: FAIL_CLOSED
+  no_information_gain: STOP_EXPANSION
+
+adapter_contract:
+  adapter: CAPABILITY_CONTRACT_ROUTER
+  input:
+    - CURRENT_INTENT
+    - LIVE_STATE
+    - CURRENT_CONTEXT
+    - REQUIRED_CAPABILITIES
+    - AVAILABLE_RESOURCES
+    - RISK
+    - SCOPE
+    - WRITER_SCOPE
+    - PROOF_TARGET
+  pipeline:
+    - DISCOVER
+    - SPIRAL_CATALOGUE_METADATA
+    - MEASURE
+    - CLASSIFY
+    - DEDUPE
+    - FILTER
+    - COVER
+    - SELECT_MINIMUM_SUFFICIENT_SET
+    - SELECT_OR_MATERIALIZE_RUNTIME
+    - ASSIGN
+    - EXECUTE
+    - OBSERVE
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - RECEIPT
+    - REMEASURE
+  missing_required_capability: BLOCKED_CAPABILITY_GAP
+
+context_contract:
+  catalogue_all_relevant_metadata: true
+  full_body_preload: false
+  body_context_policy: MINIMUM_SUFFICIENT_CONTEXT
+  retrieval_policy: PRECISE_RETRIEVAL_SMALL_CONTEXT
+  spiral_traversal_preserves_discoverability: true
+  github_when_relevant: true
+  mcp_when_relevant: true
+  files_when_relevant: true
+  memory_when_relevant: true
+  runtime_when_relevant: true
+  connectors_when_relevant: true
+  screenpipe_when_relevant: true
+  background_context_may_change_answer: true
+  background_context_may_not_expand_user_output_scope: true
+  no_information_gain: STOP_EXPANSION
+
+round_trip:
+  forward: OUTER_TO_NUCLEUS
+  reverse: NUCLEUS_TO_OUTER
+  adaptive_fronts_max: 10
+  fronts_are_read_only_until_rendezvous: true
+  require_same_discovered_set: true
+  divergence: META_LUPA_RECONCILE_RERUN
+
+proof:
+  reality_is_judge: true
+  unknown_is_not_pass: true
+  merged_is_not_deployed: true
+  documented_is_not_executed: true
+  action_is_not_proof: true
+  route_ready_is_not_task_done: true
+  graph_edge_is_not_causality: true
+  traversal_edge_is_not_semantic_edge: true
+
+fixed_point:
+  requires:
+    - REQUIRED_CAPABILITIES_COVERED
+    - SPIRAL_FORWARD_REVERSE_COVERAGE_PASS
+    - NO_FRAGMENT_DROP
+    - NO_MATERIAL_UNKNOWN
+    - NO_WRITER_CONFLICT
+    - NO_FORBIDDEN_CAPABILITY
+    - APPLICABLE_COUNTERPROOF_PASS
+    - REALITY_JUDGE_PASS
+  main_is_consequence_not_fixed_point: true
+  deploy_is_consequence_not_fixed_point: true
+  house_runtime_test_is_material_boundary: true
+
+invariant:
+  formula: "CATALOGUED_UNIVERSE + SPIRAL_TRAVERSAL + CURRENT_INTENT + CAPABILITY_ROUTER + SELECTED_RUNTIME -> MEGAZORD_CENTRALDARK"
+  slogan: "Zords=Megazord; todos os pontos alcançáveis, só o necessário materializado."

@@ -1,0 +1,414 @@
+schema: centraldark.external-capability-adapter.v1
+name: AIOX-CAPABILITY-ADAPTER
+status: EXTERNAL_REFERENCE_HARVESTED
+owner: CENTRALDARK_TRIGGER_FABRIC
+consumer: MEGAZORD-CENTRALDARK
+router: .agents/skills/capability-contract-router/SKILL.md
+
+provenance:
+  repository: SynkraAI/aiox-core
+  branch: main
+  inspected_sha: 4ef6530ff03b83aea953e4a426f95e012b8b70c5
+  package: "@aiox-squads/core@5.4.1"
+  license: MIT
+  import_policy: PATTERNS_AND_CAPABILITIES_NOT_BLIND_VENDOR_COPY
+
+semantics:
+  aiox_is_authority: false
+  aiox_is_second_brain: false
+  aiox_is_second_router: false
+  aiox_is_required_runtime: false
+  capability_source_only: true
+  centraldark_owner_wins: true
+  reuse_before_create: true
+  one_writer_per_scope: true
+  reality_is_judge: true
+
+inspection:
+  inspected_sources:
+    - package.json
+    - .aiox-core/core-config.yaml
+    - bin/aiox.js
+    - .aiox-core/core/ui/panel-renderer.js
+    - .aiox-core/core/orchestration/parallel-executor.js
+    - .aiox-core/core/synapse/context/context-tracker.js
+    - .aiox-core/infrastructure/scripts/collect-tool-usage.js
+    - .aiox-core/infrastructure/scripts/usage-analytics.js
+    - .aiox-core/infrastructure/scripts/llm-routing/usage-tracker/index.js
+    - .aiox-core/core/health-check/checks/local/network.js
+  local_sandbox_clone:
+    attempted: true
+    result: BLOCKED_NO_NETWORK_IN_EXECUTION_SANDBOX
+    fallback: GITHUB_SOURCE_API_FULL_TEXT_INSPECTION
+
+capabilities:
+  cli_runtime:
+    status: SOURCE_INSPECTED
+    capabilities:
+      - CLI_COMMAND_DISPATCH
+      - INSTALL_UPDATE_VALIDATE_DOCTOR
+      - SYSTEM_INFO
+      - SERVICE_DISCOVERY
+      - EXTERNAL_EXECUTOR_DELEGATION
+      - CONFIG_LAYERING
+      - WORKER_SEARCH
+    evidence:
+      - bin/aiox.js
+      - package.json
+
+  cli_presentation:
+    status: SOURCE_INSPECTED
+    capabilities:
+      - ANSI_COLOR_RENDERING
+      - BOX_DRAWING_UI
+      - STATUS_INDICATORS
+      - PIPELINE_PROGRESS_RENDERING
+      - ACTIVE_TERMINAL_STATUS
+      - ELAPSED_TIME_RENDERING
+      - ERROR_PANEL
+    implementation_notes:
+      libraries: [chalk, cli-progress, ora, asciichart, ansi-to-html]
+      rune_fire_or_charizard_builtin: NOT_FOUND_IN_INSPECTED_AIOX_SOURCE
+    evidence:
+      - .aiox-core/core/ui/panel-renderer.js
+      - package.json
+
+  mcp_and_computer_access:
+    status: DECLARED_IN_CANONICAL_CONFIG
+    capabilities:
+      - MCP_GATEWAY
+      - DESKTOP_FILE_TERMINAL_SYSTEM_OPERATIONS
+      - BROWSER_AUTOMATION
+      - LIBRARY_DOCUMENTATION_LOOKUP
+      - OPTIONAL_WEB_SEARCH_EXTRACTION
+    declared_servers:
+      - context7
+      - desktop-commander
+      - playwright
+      - exa
+    risk_boundary:
+      desktop_commander_declared_path: "${USER_HOME}"
+      broad_host_access_possible_when_enabled: true
+      availability_requires_runtime_measurement: true
+      configured_is_executed: false
+      external_search_requires_api_key_when_configured: true
+    evidence:
+      - .aiox-core/core-config.yaml
+
+  ide_and_agent_sync:
+    status: DECLARED_IN_CANONICAL_CONFIG
+    capabilities:
+      - AGENT_DEFINITION_SYNC
+      - SKILL_SYNC
+      - STRICT_DRIFT_VALIDATION
+      - ORPHAN_DETECTION
+      - MULTI_IDE_TARGETING
+    targets:
+      - claude-code
+      - codex
+      - gemini
+      - github-copilot
+      - cursor
+      - antigravity
+      - kimi
+    rules:
+      source_is_single_owner: true
+      generated_targets_are_consumers: true
+      fail_on_drift: true
+    evidence:
+      - .aiox-core/core-config.yaml
+      - package.json
+
+  context_engine:
+    status: SOURCE_INSPECTED
+    capabilities:
+      - MODEL_CONTEXT_WINDOW_REGISTRY
+      - CONTEXT_PRESSURE_ESTIMATION
+      - CONTEXT_BRACKETS
+      - DYNAMIC_TOKEN_BUDGET
+      - LAYER_FILTERING
+      - MEMORY_HINT_ACTIVATION
+      - HANDOFF_WARNING_AT_CRITICAL_CONTEXT
+    brackets:
+      FRESH: ">=60% remaining"
+      MODERATE: "40-60% remaining"
+      DEPLETED: "25-40% remaining"
+      CRITICAL: "<25% remaining"
+    centraldark_mapping:
+      context_pressure: CONTEXT_STATE
+      critical_handoff_warning: HANDOFF_PREP
+      token_budget: OUTPUT_CONTEXT_BUDGET
+      import_algorithm_verbatim: false
+      preserve_existing_centraldark_handoff_owner: true
+    evidence:
+      - .aiox-core/core/synapse/context/context-tracker.js
+      - .aiox-core/core-config.yaml
+
+  orchestration:
+    status: SOURCE_INSPECTED_AND_DECLARED
+    capabilities:
+      - PARALLEL_READ_OR_INDEPENDENT_PHASE_EXECUTION
+      - BOUNDED_CONCURRENCY
+      - ALL_SETTLED_FAILURE_ISOLATION
+      - RUNNING_TASK_STATUS
+      - COMPLETION_WAIT
+      - CANCELLATION_MARKING
+      - EXECUTION_SUMMARY
+    default_max_concurrency: 3
+    hard_cap_seen_in_source: 10
+    centraldark_mapping:
+      parallel_read_only_perception: true
+      mutation_parallelism: FORBIDDEN_WHEN_WRITER_SCOPE_CONFLICTS
+      one_writer_per_scope: true
+    evidence:
+      - .aiox-core/core/orchestration/parallel-executor.js
+
+  self_healing_and_change_safety:
+    status: DECLARED_IN_CANONICAL_CONFIG
+    capabilities:
+      - CODE_REVIEW_SELF_HEALING
+      - CONFLICT_RESOLUTION
+      - DEPENDENCY_IMPACT_ANALYSIS
+      - MODIFICATION_VALIDATION
+      - SANDBOX_TESTING
+      - ROLLBACK_HANDLER
+      - SAFE_REMOVAL_HANDLER
+      - TRANSACTION_MANAGER
+      - MIGRATION_ROLLBACK
+      - REDUNDANCY_ANALYSIS
+      - COMPATIBILITY_CHECK
+      - PERFORMANCE_ANALYSIS
+      - TEST_GENERATION_AND_UPDATE
+    coderabbit_policy:
+      enabled: true
+      max_iterations: 3
+      critical: AUTO_FIX
+      high: AUTO_FIX
+      medium: DOCUMENT_AS_DEBT
+      low: IGNORE
+    centraldark_mapping:
+      do_not_copy_severity_policy_blindly: true
+      existing_self_healing_binding_remains_owner: true
+      counterproof_required: true
+      reality_judge_required: true
+    evidence:
+      - .aiox-core/core-config.yaml
+
+  git_and_worktrees:
+    status: DECLARED_IN_CANONICAL_CONFIG
+    capabilities:
+      - GIT_STATUS_CONTEXT
+      - RECENT_WORK_CONTEXT
+      - PR_CREATION
+      - ISSUE_MANAGEMENT
+      - CONVENTIONAL_COMMIT_MAPPING
+      - SEMANTIC_RELEASE
+      - WORKTREE_AUTO_CREATE
+      - STALE_WORKTREE_POLICY
+      - BRANCH_MANAGEMENT
+    centraldark_mapping:
+      native_pr_owner: GITHUB
+      do_not_create_parallel_pr_policy: true
+      one_mission_one_live_pr: PRESERVE_CENTRALDARK_RULE
+    evidence:
+      - .aiox-core/core-config.yaml
+      - package.json
+
+  decision_and_project_state:
+    status: DECLARED_IN_CANONICAL_CONFIG
+    capabilities:
+      - ASYNC_DECISION_LOGGING
+      - ADR_FORMAT
+      - PROJECT_STATUS_AUTOLOAD
+      - GIT_BRANCH_STATUS
+      - RECENT_WORK_SUMMARY
+      - CURRENT_EPIC_STORY_CONTEXT
+      - MODIFICATION_HISTORY
+      - VERSION_TRACKING
+    centraldark_mapping:
+      second_brain_creation: false
+      route_to_existing_memory_and_receipt_owners: true
+    evidence:
+      - .aiox-core/core-config.yaml
+
+  analytics_local:
+    status: SOURCE_INSPECTED
+    capabilities:
+      - TOOL_USAGE_COUNTS
+      - TOKEN_COST_COUNTS
+      - SESSION_AGGREGATION
+      - RETENTION_PRUNING
+      - COMPONENT_REFERENCE_ANALYSIS
+      - HOTSPOT_DETECTION
+      - UNUSED_COMPONENT_DETECTION
+      - CROSS_REFERENCE_ANALYSIS
+    storage:
+      tool_usage: .aiox/analytics/tool-usage.json
+      rolling_retention_days: 30
+    privacy_observed_in_collector:
+      user_content_collected: false
+      payloads_collected: false
+      fields: [tool_name, invocation_count, token_cost_input, token_cost_output, session_id, timestamp]
+      outbound_upload_in_inspected_collector: false
+    evidence:
+      - .aiox-core/infrastructure/scripts/collect-tool-usage.js
+      - .aiox-core/infrastructure/scripts/usage-analytics.js
+
+  llm_usage_proxy:
+    status: SOURCE_INSPECTED
+    capabilities:
+      - LOCAL_HTTP_PROXY
+      - PROVIDER_FORWARDING
+      - TOKEN_USAGE_ACCOUNTING
+      - COST_ACCOUNTING
+      - STREAMING_USAGE_EXTRACTION
+      - LOCAL_USAGE_ENDPOINT
+    observed_target: api.deepseek.com
+    observed_bind: 127.0.0.1
+    observed_default_port: 8787
+    local_usage_store: ~/.aiox/usage-tracking/deepseek-usage.json
+    risk_boundary:
+      request_body_is_forwarded_to_provider: true
+      this_is_provider_transport_not_hidden_local_analytics: true
+      do_not_enable_as_centraldark_router: true
+      centraldark_omni_router_remains_transport_owner: true
+      no_secret_copy_to_repo: true
+    evidence:
+      - .aiox-core/infrastructure/scripts/llm-routing/usage-tracker/index.js
+
+  network_and_updates:
+    status: SOURCE_INSPECTED_AND_DECLARED
+    capabilities:
+      - NETWORK_HEALTH_CHECK
+      - NPM_REGISTRY_REACHABILITY
+      - GITHUB_REACHABILITY
+      - UPDATE_CHECK
+      - INSTALL_VALIDATION
+      - MANIFEST_HASH_VALIDATION
+    observed_network_health_targets:
+      - registry.npmjs.org
+      - github.com
+    rules:
+      health_probe_is_not_data_exfiltration_proof: true
+      outbound_provider_transport_must_be_explicitly_classified: true
+    evidence:
+      - .aiox-core/core/health-check/checks/local/network.js
+      - bin/aiox.js
+      - package.json
+
+  framework_protection:
+    status: DECLARED_IN_CANONICAL_CONFIG
+    capabilities:
+      - PROTECTED_CORE_PATHS
+      - MUTABLE_EXCEPTION_PATHS
+      - INSTALLER_GENERATED_DENY_RULES
+      - SOURCE_TREE_GUARDIAN
+      - MANIFEST_VALIDATION
+      - PUBLISH_SAFETY_GATE
+    centraldark_mapping:
+      reuse_as_pattern: true
+      centraldark_path_owners_remain_authoritative: true
+    evidence:
+      - .aiox-core/core-config.yaml
+      - package.json
+
+  pattern_learning_and_improvement:
+    status: DECLARED_IN_CANONICAL_CONFIG
+    capabilities:
+      - IMPROVEMENT_ENGINE
+      - IMPROVEMENT_VALIDATOR
+      - PATTERN_LEARNER
+      - METRICS_TRACKER
+      - USAGE_TRACKER
+      - CHANGE_PROPAGATION_PREDICTION
+      - MODIFICATION_RISK_ASSESSMENT
+      - REFACTORING_SUGGESTION
+    centraldark_mapping:
+      may_supply_candidates_to: META_LUPA
+      may_not_self_promote_without: [TEST, COUNTERPROOF, REALITY_JUDGE]
+    evidence:
+      - .aiox-core/core-config.yaml
+
+harvest_policy:
+  absorb:
+    - CONTEXT_PRESSURE_BRACKETS_AS_PATTERN
+    - HANDOFF_WARNING_ON_CONTEXT_CRITICAL
+    - MULTI_IDE_SINGLE_SOURCE_SYNC_PATTERN
+    - STRICT_DRIFT_VALIDATION_PATTERN
+    - BOUNDED_PARALLEL_EXECUTION_PATTERN
+    - LOCAL_SANITIZED_TOOL_USAGE_PATTERN
+    - COMPONENT_HOTSPOT_AND_UNUSED_ANALYSIS_PATTERN
+    - SOURCE_TREE_PROTECTION_PATTERN
+    - MANIFEST_HASH_VALIDATION_PATTERN
+    - SAFE_ROLLBACK_AND_TRANSACTION_PATTERNS
+    - PROJECT_STATUS_AUTOLOAD_PATTERN
+    - DECISION_LOGGING_PATTERN
+    - MCP_CAPABILITY_DISCOVERY_PATTERN
+    - CLI_OBSERVABILITY_RENDERING_PATTERN
+  route_to_existing_owners:
+    context_and_handoff: docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md
+    capabilities: .agents/skills/capability-contract-router/SKILL.md
+    self_healing: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+    runtime_transport: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
+    live_desktop_sensor: .agents/skills/screenpipe-live-observer/SKILL.md
+    proof: REALITY_JUDGE
+  reject_blind_import:
+    - SECOND_ROUTER
+    - SECOND_BRAIN
+    - AIOX_AUTHORITY
+    - PROVIDER_PROXY_AS_DEFAULT
+    - EXTERNAL_AUTO_FIX_POLICY_WITHOUT_CENTRALDARK_GATES
+    - BROAD_HOME_ACCESS_WITHOUT_RUNTIME_BOUNDARY
+    - GENERATED_AGENT_COPY_AS_NEW_OWNER
+    - TELEMETRY_OR_ANALYTICS_UPLOAD_NOT_EXPLICITLY_PROVEN
+
+runtime_adapter:
+  discover_when_any:
+    - AIOX_CORE_PRESENT
+    - AIOX_CLI_PRESENT
+    - AIOX_CONFIG_PRESENT
+    - AIOX_DERIVED_CAPABILITY_REQUIRED
+  measure:
+    - PATH
+    - VERSION
+    - CONFIG
+    - MCP_HEALTH
+    - AVAILABLE_COMMANDS
+    - ACTIVE_SERVICES
+    - NETWORK_BOUNDARIES
+    - MUTATION_SCOPE
+  expose_to_megazord:
+    - AIOX_CLI
+    - AIOX_MCP
+    - AIOX_BROWSER_AUTOMATION
+    - AIOX_DESKTOP_OPERATIONS
+    - AIOX_IDE_SYNC
+    - AIOX_CONTEXT_BRACKETS
+    - AIOX_PARALLEL_EXECUTION
+    - AIOX_USAGE_ANALYTICS_LOCAL
+    - AIOX_COMPONENT_USAGE_ANALYSIS
+    - AIOX_CHANGE_SAFETY_PATTERNS
+    - AIOX_PROJECT_STATUS
+    - AIOX_DECISION_LOGGING
+  configured_is_available: false
+  source_present_is_runtime_active: false
+  availability_requires_measurement: true
+
+security_boundary:
+  no_hidden_exfiltration_claim: NOT_PROVEN_GLOBALLY
+  inspected_local_analytics_are_local_only: true
+  inspected_deepseek_proxy_forwards_request_content: true
+  desktop_commander_can_reach_user_home_when_enabled: true
+  playwright_can_control_browser_when_enabled: true
+  exa_can_call_external_search_when_configured: true
+  github_features_can_mutate_prs_issues_when_authorized: true
+  secrets_must_not_enter_repo: true
+  least_capability_required: true
+
+fixed_point:
+  external_source_sha_pinned: true
+  capability_catalog_classified: true
+  owners_mapped: true
+  duplicate_architecture_created: false
+  unmeasured_runtime_claims_are_unknown: true
+  result: AIOX_CAPABILITY_HARVEST_READY_FOR_CENTRALDARK_GATES

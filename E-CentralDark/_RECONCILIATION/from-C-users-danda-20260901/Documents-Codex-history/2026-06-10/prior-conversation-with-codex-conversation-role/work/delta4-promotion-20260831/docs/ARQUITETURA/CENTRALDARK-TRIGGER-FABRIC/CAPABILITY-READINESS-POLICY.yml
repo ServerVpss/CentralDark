@@ -1,0 +1,163 @@
+schema: centraldark.capability-readiness.v1
+name: CAPABILITY-READINESS-POLICY
+status: CANONICAL_CONTRACT_CANDIDATE
+owner: CENTRALDARK_TRIGGER_FABRIC
+consumer: MEGAZORD-CENTRALDARK
+
+intent:
+  statement: "Estar capacitado para usar uma capacidade não significa manter essa capacidade instalada, carregada ou ativa o tempo todo."
+  goal: "Preservar o conteúdo, programação, contratos, adapters, manifests e procedimentos completos para ativação futura sob demanda, sem sobrecarregar Casa ou VPS."
+
+invariants:
+  CAPABILITY_CATALOGUED_IS_NOT_INSTALLED: true
+  INSTALLED_IS_NOT_LOADED: true
+  LOADED_IS_NOT_ACTIVE: true
+  ACTIVE_IS_NOT_SELECTED: true
+  SELECTED_IS_NOT_EXECUTED: true
+  EXECUTED_IS_NOT_PROVEN: true
+  DISCOVERED_IS_NOT_REQUIRED: true
+  AVAILABLE_IS_NOT_ALWAYS_ON: true
+  LOCAL_MODEL_SUPPORTED_IS_NOT_LOCAL_MODEL_RESIDENT: true
+  READINESS_DOES_NOT_REQUIRE_RESOURCE_RESIDENCY: true
+
+readiness_model:
+  states:
+    CATALOGUED:
+      meaning: "Capacidade conhecida, classificada e com owner/destino definido."
+    READY_TO_MATERIALIZE:
+      meaning: "Código, configuração, adapters, comandos, manifests e testes necessários existem ou têm origem determinística para instalação/ativação."
+    INSTALLED:
+      meaning: "Dependência/binário/modelo está fisicamente presente no runtime alvo."
+    LOADED:
+      meaning: "Está consumindo memória/CPU/GPU/disco/processos do runtime."
+    ACTIVE:
+      meaning: "Serviço/modelo/tool está operacional neste instante."
+    SELECTED:
+      meaning: "Capability Contract Router escolheu a capacidade para a intenção vigente."
+  normal_policy: CATALOGUED_OR_READY_TO_MATERIALIZE
+  runtime_residency_policy: ON_DEMAND
+
+artifacts_to_preserve_ready:
+  - SOURCE_CODE
+  - PROGRAMMING_LOGIC
+  - SKILLS
+  - ADAPTERS
+  - CONTRACTS
+  - MANIFESTS
+  - CONFIG_TEMPLATES
+  - INSTALL_RECIPES
+  - START_STOP_RECIPES
+  - HEALTH_CHECKS
+  - TEST_FIXTURES
+  - COUNTERPROOF_PROCEDURES
+  - VERSION_AND_PROVENANCE
+  - RESOURCE_REQUIREMENTS
+  - ROLLBACK_PROCEDURES
+  - OWNER_AND_HANDOFF_MAPPING
+
+heavy_runtime_policy:
+  examples:
+    - LOCAL_LLM
+    - EMBEDDING_MODEL
+    - RERANKER
+    - GPU_RUNTIME
+    - LARGE_INDEX
+    - HEAVY_BROWSER_WORKER
+    - OPTIONAL_DATABASE_SERVICE
+  default: DO_NOT_INSTALL_OR_LOAD_UNLESS_SELECTED
+  selection_requires:
+    - CURRENT_INTENT_REQUIRES_CAPABILITY
+    - CAPABILITY_ROUTER_SELECTS_IT
+    - TARGET_RUNTIME_HAS_RESOURCES
+    - RESOURCE_BUDGET_ACCEPTABLE
+    - NO_LIGHTER_EQUIVALENT_ALREADY_AVAILABLE
+    - INSTALL_OR_START_PATH_KNOWN
+    - HEALTH_PROBE_DEFINED
+    - STOP_OR_UNLOAD_PATH_KNOWN
+  after_use:
+    - REMEASURE_NEED
+    - STOP_OR_UNLOAD_IF_NO_LONGER_REQUIRED
+    - PRESERVE_READY_ARTIFACTS
+    - PRESERVE_RECEIPT
+
+local_llm_policy:
+  install_all_local_llms: false
+  keep_all_local_llms_loaded: false
+  keep_all_local_llms_running: false
+  catalogue_supported_models: true
+  preserve_integration_code: true
+  preserve_model_adapter_contracts: true
+  preserve_install_and_activation_recipes: true
+  preserve_resource_profiles: true
+  materialize_only_when_needed: true
+  allow_remote_or_existing_engine_when_sufficient: true
+  vps_weight_is_selection_factor: true
+  house_weight_is_selection_factor: true
+  model_is_replaceable_engine: true
+  model_is_not_identity: true
+
+resource_budget:
+  dimensions:
+    - DISK
+    - RAM
+    - VRAM
+    - CPU
+    - GPU
+    - NETWORK
+    - STARTUP_TIME
+    - STEADY_STATE_COST
+    - PROCESS_COUNT
+    - PORTS
+  rules:
+    CAPABILITY_WITHOUT_BUDGET_FIT: NOT_SELECTED
+    HEAVIER_WHEN_LIGHTER_SUFFICIENT: FORBIDDEN
+    IDLE_HEAVY_RUNTIME_WITHOUT_CURRENT_NEED: STOP_OR_UNLOAD
+    INSTALLATION_MAY_BE_DEFERRED: true
+    KNOWLEDGE_AND_CODE_MUST_REMAIN_READY: true
+
+megazord_semantics:
+  discover_relevant_resources: true
+  catalogue_broad_capabilities: true
+  activate_all_discovered: false
+  install_all_catalogued: false
+  preload_all_models: false
+  selection_policy: MINIMUM_SUFFICIENT_SET
+  lazy_materialization: true
+  lazy_activation: true
+  reusable_capability_blueprints: true
+  one_system_only: true
+  one_writer_per_scope: true
+
+example:
+  local_llm_supported_but_not_needed:
+    catalogue: PASS
+    adapter_source: PASS
+    install_recipe: PASS
+    tests_or_health_contract: PASS
+    model_binary_present: OPTIONAL
+    model_loaded_in_ram_or_vram: false
+    service_running: false
+    status: READY_NOT_RESIDENT
+  local_llm_needed_now:
+    first: MEASURE_EXISTING_ENGINES_AND_RESOURCES
+    then: SELECT_MINIMUM_SUFFICIENT_ENGINE
+    if_local_selected: MATERIALIZE_OR_START_LOCAL_MODEL
+    after: HEALTH_CHECK_AND_REALITY_JUDGE
+
+proof:
+  readiness_requires:
+    - OWNER_KNOWN
+    - SOURCE_OR_REPRODUCIBLE_ORIGIN_KNOWN
+    - ACTIVATION_PATH_KNOWN
+    - RESOURCE_REQUIREMENTS_KNOWN
+    - HEALTH_OR_TEST_CONTRACT_KNOWN
+    - ROLLBACK_OR_STOP_PATH_KNOWN
+  runtime_active_requires:
+    - PROCESS_OR_SERVICE_OBSERVED
+    - HEALTH_PASS
+    - EXPECTED_VERSION_OR_SHA_WHEN_APPLICABLE
+  unknown_is_not_pass: true
+
+slogan:
+  technical: "CAPABILITY_READY != CAPABILITY_RESIDENT"
+  operational: "ARSENAL COMPLETO, PESO SOB DEMANDA"
