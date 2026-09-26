@@ -37,12 +37,15 @@ Deno.serve(async (req) => {
     }
 
     const text =
-      `<b>🟢 MCP CentralDark voltou ao ar</b>\n\n` +
-      `Detectado pelo hub logo após ajuste na VPS.\n\n` +
+      `⭕ <b>!AURÉOLA CANÔNICA</b>\n` +
+      `🟢 <b>CHEFE, o MCP CentralDark voltou a responder.</b>\n` +
+      `👉 O que aconteceu: o Hub mediu a passagem de OFFLINE para ONLINE depois do ajuste na VPS.\n` +
+      `🔎 <b>!CONTRAPROVA</b>: este verde prova a recuperação observada pelo Hub; não prova o sistema inteiro.\n\n` +
       `<b>Versão:</b> <code>${version}</code>\n` +
       `<b>Tools:</b> ${tools}\n` +
       `<b>Latência:</b> ${latency}\n` +
-      `<b>Hora:</b> ${new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}`;
+      `<b>Hora:</b> ${new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}\n` +
+      `⚖️ <i>REALIDADE É O JUIZ.</i>`;
 
     const tg = await fetch("https://connector-gateway.lovable.dev/telegram/sendMessage", {
       method: "POST",

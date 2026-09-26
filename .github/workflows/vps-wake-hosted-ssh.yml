@@ -1,4 +1,4 @@
-name: VPS wake via hosted SSH
+name: ⚙️ VPS wake via hosted SSH
 
 # Self-hosted NÃO acorda a si mesmo. Este job roda no GitHub hosted
 # (ubuntu-latest) com as chaves VPS_*_LOVABLE já no repo.
@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
-      - name: SSH na VPS e restart runner
+      - name: 🔹 SSH na VPS e restart runner
         env:
           VPS_SSH_KEY_LOVABLE: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
           VPS_HOST_LOVABLE: ${{ secrets.VPS_HOST_LOVABLE }}

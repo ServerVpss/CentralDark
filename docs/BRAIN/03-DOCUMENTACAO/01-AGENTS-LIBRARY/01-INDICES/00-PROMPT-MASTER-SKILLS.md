@@ -39,7 +39,7 @@ Contexto do sistema:
 - MCP CentralDark com 95 ferramentas
 - Vault Obsidian sincronizado via GitHub
 - VPS com PM2 gerenciando processos
-- Áreas protegidas exigem "PERMITO PIVETE"
+- Áreas protegidas exigem "PERMITO SEGREDO"
 
 Crie agora a skill com o seguinte foco: [INSIRA O FOCO AQUI]
 

@@ -91,7 +91,7 @@ Somente depois disso o Pivete autoriza produção.
 Use uma autorização explícita e com escopo:
 
 ```text
-PERMITO PIVETE — promover o PR auditado para main e fazer deploy do SHA aprovado em produção, com verificação pós-deploy e rollback pronto. Não execute nenhuma ação fora desse escopo.
+PERMITO SEGREDO — promover o PR auditado para main e fazer deploy do SHA aprovado em produção, com verificação pós-deploy e rollback pronto. Não execute nenhuma ação fora desse escopo.
 ```
 
 A IA deve confirmar o SHA antes do merge e antes do deploy.

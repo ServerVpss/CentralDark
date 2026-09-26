@@ -32,7 +32,7 @@ CONTEXTO DO PROJETO (CentralDark):
 - Memória da IA: docs/CONSCIENCIA/ + .claude/
 
 QUEM É O PIVETE:
-- Dono e autoridade máxima — tem "PERMITO PIVETE" como senha de área protegida
+- Dono e autoridade máxima — tem "PERMITO SEGREDO" como senha de área protegida
 - Fala informal, às vezes por voz (interprete o contexto, não corrija erros)
 - Perfil acelerado — começa várias coisas, a IA ajuda a concluir
 - Quer resultados, não explicações longas

@@ -6,11 +6,24 @@ set -euo pipefail
 
 HUB_DIR="${HUB_DIR:-/root/CentralDark/apps/modulos/hub}"
 
+CANONICAL_ROOT="${CENTRALDARK_ROOT:-/root/CentralDark}"
+DISPATCHER="$CANONICAL_ROOT/scripts/vps/deploy-guards-dispatcher.sh"
+SOURCE_HEAD="${SOURCE_HEAD:-$(git -C "$CANONICAL_ROOT" rev-parse HEAD 2>/dev/null || true)}"
+[[ "$SOURCE_HEAD" =~ ^[0-9a-f]{40}$ ]] || { echo "❌ [deploy-hub] SOURCE_HEAD_INVALID"; exit 16; }
+[[ -x "$DISPATCHER" ]] || { echo "❌ [deploy-hub] CANONICAL_DEPLOY_GATE_MISSING"; exit 16; }
+TARGET_SHA="$SOURCE_HEAD" REPO_DIR="$CANONICAL_ROOT" BRANCH=main bash "$DISPATCHER" --gate-only
+echo "🧿 [deploy-hub] CANONICAL_DEPLOY_GATE=PASS target=$SOURCE_HEAD"
+
 echo "🔨 [deploy-hub] entrando em $HUB_DIR"
 cd "$HUB_DIR"
 
-echo "📦 [deploy-hub] npm install (silencioso)"
-npm install --silent --no-audit --no-fund
+if [ -f package-lock.json ]; then
+  echo "📦 [deploy-hub] npm ci (lock preservado)"
+  npm ci --silent --no-audit --no-fund
+else
+  echo "📦 [deploy-hub] npm install (sem lockfile)"
+  npm install --silent --no-audit --no-fund
+fi
 
 echo "⚙️  [deploy-hub] npm run build"
 npm run build

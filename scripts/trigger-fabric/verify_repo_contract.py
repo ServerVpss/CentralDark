@@ -85,6 +85,47 @@ check('LEIA-ME-IA.md',[
  'NO_BLIND_OVERWRITE=true',
  'DURABLE_CONTINUITY_REQUIRES_RECEIPT_AND_NEXT_CURSOR=true',
 ], classification='HUMAN_OBJECTIVE_AND_REMOTE_REALITY_BOUNDARY')
+check('LEIA-ME-IA.md',[
+ 'MATERIAL_FROM_CHEFE_AUTO_INGEST=true',
+ 'MATERIAL_FROM_CHEFE_IS_NOT_AUTOMATIC_FACT=true',
+ 'PROVEN_MATERIAL_AUTO_CRYSTALLIZES_IN_EXISTING_OWNER=true',
+ 'UNPROVEN_MATERIAL_STAYS_CANDIDATE_OR_UNKNOWN=true',
+ 'ASK_TO_CRYSTALLIZE_ALREADY_PROVEN_DELTA=false',
+ 'PRE_RESPONSE_MATERIAL_RECONCILIATION_REQUIRED=true',
+ 'GRILL_ME_MATERIAL_PREFLIGHT=true',
+ 'FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true',
+], classification='MATERIAL_FIRST_COGNITIVE_ROUTE_CONTRACT')
+check('AGENTS.md',[
+ 'MATERIAL_FROM_CHEFE_AUTO_INGEST=true',
+ 'MATERIAL_COGNITIVE_ROUTE=CHEFE_MATERIAL',
+ 'GRAPHRAG_SEMANTIC_LINKER',
+], classification='MATERIAL_FIRST_AGENT_SEMANTICS')
+check('AGENTS.md',[
+ 'CREATE_PR_MERGEABLE_SNAPSHOT_IS_NOT_FINAL=true',
+ 'REMEASURE_PR_LIVE_BEFORE_HUMAN_RETURN=true',
+ 'SAME_HEAD_GATES_CLOSED_ON_CURRENT_HEAD_REQUIRED=true',
+ 'PENDING_QUEUED_SKIPPED_UNKNOWN_ARE_NOT_PASS=true',
+ 'POST_PR_CONTINUE_UNTIL_MERGED_OR_MATERIAL_BLOCKER=true',
+ 'RETURN_WITH_OPEN_ELIGIBLE_PR=FORBIDDEN',
+], classification='POST_PR_FAST_PATH_CONTINUATION_GUARD')
+check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',[
+ 'SOUL_MATERIAL_FIRST_COGNITIVE_ROUTE=true',
+ 'HISTORICAL_SUCCESS_IS_NOT_CURRENT_PASS=true',
+ 'CURRENT_USE_REQUIRES_EQUIVALENT_CONDITIONS_OR_REMEASURE=true',
+], classification='MATERIAL_FIRST_SOUL_BINDING')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/KNOWLEDGE-HUB.yml',[
+ 'material_first_cognitive_route:',
+ 'KNOWLEDGE_COLLECTOR',
+ 'GRAPHRAG_MASTER',
+ 'SEMANTIC_LINKER',
+ 'ASK_TO_CRYSTALLIZE_ALREADY_PROVEN_DELTA: false',
+], classification='MATERIAL_FIRST_GRAPH_BINDING')
+check('scripts/lupa/portable-kernel.mjs',[
+ "id: 'MATERIAL_FIRST_COGNITIVE_CRYSTALLIZATION'",
+ 'MATERIAL_FROM_CHEFE_AUTO_INGEST=true',
+ 'MATERIAL_COGNITIVE_ROUTE=CHEFE_MATERIAL',
+], classification='MATERIAL_FIRST_PORTABLE_KERNEL_BINDING')
+
 check('CENTRALDARK_AI_BOOT.yaml',[
  'adaptive_payload: true',
  'observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"',
@@ -188,6 +229,17 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'mandatory_before_human_return: true',
  'no_new_workflow_when_owner_exists: true',
  'yellow_status_semantics: FORBIDDEN',
+ 'create_pr_mergeable_snapshot_is_final: false',
+ 'remeasure_live_mergeability_before_human_return: true',
+ 'queued_or_in_progress_auxiliary_is_material_blocker: false',
+ 'post_pr_continue_until_merged_or_material_blocker: true',
+ 'return_with_open_eligible_pr: FORBIDDEN',
+ 'centraldark_pattern_monitor:',
+ 'outside_percent_red_threshold: 80',
+ 'unknown_prevents_green: true',
+ 'metric_scope: OBSERVED_MEASURABLE_DIMENSIONS_ONLY',
+ 'global_behavior_claim_from_partial_telemetry: FORBIDDEN',
+ 'refresh_source: /admin/api/operational-snapshot',
  'github_hosted_runner: FORBIDDEN',
  'scope: ALL_ACTIVE_ROOT_GITHUB_WORKFLOWS',
  'scope: ALL_PR_COMMIT_AND_RUNTIME_ELIGIBLE_FAILURES',
@@ -277,6 +329,24 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
  'SAME_FAILURE_NO_NEW_INFO -> REUSE_CRYSTAL',
  'explicit_triggers: ["!CENTRALDARK", "#CENTRALDARK"]',
 ])
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
+ 'id: TIK_TAK',
+ 'canonical_rule: REGRA-ZERO-CENTRALDARK',
+ 'semantic_family: AUTOMATION_FACTORY_OUTER_LOOP',
+ 'wraps_master_cycle: true',
+ 'GEOFF: AUTOMATION_FACTORY',
+ 'IAN: STRUCTURAL_SKEPTIC',
+ 'GREG: OBSERVABILITY_PROOF',
+ 'DEX: HUMAN_AGENT_COORDINATION',
+ 'does_not_fanout_agents: true',
+ 'is_swarm_trigger: false',
+ 'creates_new_brain_or_router: false',
+ 'TIK_TAK -> REMEASURE_CURRENT_STATE + /GOAL + GEOFF + IAN + GREG + DEX + HERMES + REALIDADE',
+], classification='TIK_TAK_OUTER_LOOP_NO_SWARM_REGRESSION')
+check('docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',[
+ '"GREG_VERDICT_REQUIRED_BEFORE_GREEN"',
+ '"DEX_APPROVAL_REQUIRED_FOR_CRITICAL_DELTA"',
+], classification='TIK_TAK_HARD_GATES_REGISTERED')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
  'engine_is_owner: false','prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md','LOAD_REFERENCE',
  'SELF_HEALING_FAILURE_LOOP','ANY_PR_OR_COMMIT_GATE','CANONICAL_SELF_HOSTED_RUNNER_POLICY'
@@ -311,7 +381,19 @@ check('apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs',['export async
 check('scripts/memory-linker/README.md',['NO_NEW_INFORMATION=STOP=true','DIRECT_CANONICAL_MUTATION=false','AUTONOMY_QUEUE_DIRECT_APPLY=false'])
 check('scripts/memory-linker/dream-review-run.mjs')
 check('scripts/memory-linker/pattern-discovery.mjs')
-check('.agents/skills/session-intelligence-harvester/SKILL.md',['Run on session end (hook).'],'DECLARED_HOOK_NOT_RUNTIME_PROOF')
+check('.agents/skills/session-intelligence-harvester/SKILL.md',['Run on session end (hook).'],'SESSION_END_HOOK_CONTRACT')
+check('apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py',[
+ 'def emit_session_harvest_candidate()',
+ '"kind": "session.harvest"',
+ '"owner": HARVEST_OWNER',
+ 'MEMORIA_INGEST_TOKEN',
+ 'MEMORIA_INGEST_RECEIPT_INVALID',
+ 'SAME_SESSION_DELTA_FINGERPRINT',
+], classification='SESSION_END_HARVEST_BRIDGE_IMPLEMENTED_RUNTIME_PROOF_PENDING')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
+ 'event: SESSION_END',
+ 'status: IMPLEMENTED_RUNTIME_PROOF_PENDING',
+], classification='SESSION_END_TRIGGER_BINDING')
 check('.agents/skills/knowledge-compiler/SKILL.md',[
  'MUITO MINERIO ENTRA',
  'POUCO OURO SAI',
