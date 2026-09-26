@@ -97,6 +97,7 @@ canonical_flow:
   - FIXED_POINT
   - POST_GREEN_LOCK
   - REGISTRA
+  - RASTRO
   - BOOT
 
 executable_recipe_binding:
@@ -601,3 +602,12 @@ proven_path_executable_recipe_contract_2026_09_26:
     next executor loads PROVEN-CLAIMS.lock.json, matches owner/objective/
     fingerprint, adapts declared bindings only, runs same sequence and proof,
     then classifies divergence as DELTA_NEW or no divergence as REUSE_CRYSTAL.
+
+
+rastro_lock:
+  token: "🔏 !RASTRO"
+  owner: AGENTS.md
+  response_without_trace: INVALID
+  write_claim_fields: [COMMIT_SHA, PATH, LINK, READBACK]
+  memory_claim_requires_location: true
+  ledger_1562_same_turn_for_direct_main: true
