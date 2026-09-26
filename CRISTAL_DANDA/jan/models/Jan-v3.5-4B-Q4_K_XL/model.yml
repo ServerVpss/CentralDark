@@ -1,0 +1,12 @@
+batch_size: 2048
+ctx_size: 9192
+embedding: false
+embedding_check_v: 3
+model_path: llamacpp/models/Jan-v3.5-4B-Q4_K_XL/model.gguf
+mtp_check_v: 1
+mtp_layers: 0
+n_gpu_layers: 44
+name: Jan-v3.5-4B
+size_bytes: 2999182176
+template_kwargs: []
+template_kwargs_check_v: 1
