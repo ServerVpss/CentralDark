@@ -117,3 +117,16 @@ RESUME_CONDITION=origem reachável e pelo menos um runner existente online; heal
 EVIDENCE_REF=issuecomment-5845459762; Cloudflare zone 6986cded70ab6bec23a765496807b614; GitHub runner API /actions/runners; HEAD check run 36235717988; HTTPS 523.
 FIXED_POINT: false.
 NEXT_CURSOR: após recuperar VM/canal de gerenciamento, iniciar exatamente os dois owners runner existentes conforme supervisão segura, reexecutar CI no HEAD atual, confirmar health público e read-only status VPS; resolver delta causal remanescente. Não mergear PR-mãe #1562.
+
+## Continuação de resgate — rota hosted e owner runner (2026-09-26T10:49Z)
+
+- CURRENT main: d3122ae67c560205d83f7853032942dae5c677de. PR #1698 HEAD antes do delta: 8ea96a9e7461db0f6d0d10d8cca8a032baef2559. Ambos os runners continuam OFFLINE/busy=false.
+- Disparada a rota existente vps-wake-hosted-ssh.yml: run 36236919466, job 108390274161. SSH falhou na resolução DNS do host vindo de VPS_HOST_LOVABLE antes do TCP: “Could not resolve hostname [REDACTED]: Temporary failure in name resolution”, exit 255. Nenhum valor de secret lido ou reproduzido.
+- Confirmado em fontes independentes o destino canônico 89.117.78.124. Probes Casa→origem nas portas 22, 80, 443, 8099, 3030, 3031 e 9400 deram timeout. HTTPS público admin/mcp/api retornou 523; hub não respondeu no timeout. Cloudflare DNS lido: registros A proxied apontam ao IP canônico, sem evidência de DNS incorreto.
+- Inventário de nomes GitHub Secrets não inclui CONTABO_*; nenhum reboot Contabo executado. O script existente scripts/vps-reboot-forensic.py não lê MUTATION e chama reboot incondicionalmente; também tenta criar /workspace/.forensics, que falhou com Permission denied no run 34292378221. Esse caminho permanece bloqueado e não foi acionado.
+- Com aprovação explícita do SEGREDO/CHEFE nesta conversa, aplicado no owner existente .github/workflows/vps-wake-hosted-ssh.yml o fallback fail-closed: host secret só é aceito se resolver exatamente ao IP canônico; se não resolver, usa o IP fixo validado; se resolver para IP diferente, encerra sem SSH. O host secret não é impresso. A mutação remota continua limitada a actions.runner.centraldark.service.
+- Contraprova local: YAML parse PASS; bash -n PASS; alias não resolvido→fallback canônico PASS; host canônico→match PASS; IP inesperado→exit 68 PASS; segredo não impresso PASS; mock do serviço confirma inativo→active e falha se restart falha; validar-porta-de-entrada PASS; 3 testes de badge PASS; cobertura 65/65, MISSING=0, EXTRA=0 PASS; verify_repo_contract PASS; git diff --check PASS.
+- Receita do progresso publicada e conferida: https://github.com/ServerVpss/CentralDark/pull/1562#issuecomment-5845651593.
+
+FIXED_POINT: false — patch ainda precisa ser enviado/testado no GitHub; o runner continua offline até a rota SSH funcionar; VPS e health público continuam sem PASS.
+NEXT_CURSOR: commitar e pushar o patch + receipt na branch existente; disparar vps-wake-hosted-ssh.yml nessa branch. Se SSH conectar, re-medrir runners/PR SAME_HEAD e VPS runtime; se falhar em TCP, parar com blocker exato da origem/Contabo e não executar o forensic reboot owner inseguro.
