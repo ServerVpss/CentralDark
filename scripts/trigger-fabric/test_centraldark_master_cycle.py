@@ -17,6 +17,28 @@ class ContinuousDeltaContractTest(unittest.TestCase):
         self.assertTrue(receipt["next_master_active"])
         self.assertIn("DELTA_UTIL", receipt["expanded_chain"])
 
+    def test_master_exposes_visual_trigger_chain_and_intent_alignment(self):
+        receipt = MODULE.resolve("!CENTRALDARK", chefe_source=True)
+        self.assertTrue(receipt["visual_trigger_chain"].startswith("⭕ !AURÉOLA CANÔNICA → 👑 !CENTRALDARK → 🌅 ACORDAR → 🎯 CALIBRAR"))
+        self.assertIn("🧾 REGISTRA → 🚀 BOOT", receipt["visual_trigger_chain"])
+        self.assertEqual("VISIBLE_ROUTE_DEBUGGER", receipt["aureola"]["role"])
+        self.assertEqual("STOP_AND_RECONCILE", receipt["aureola"]["mismatch_action"])
+        self.assertFalse(receipt["aureola"]["route_trace_is_technical_proof"])
+        alignment = receipt["intent_alignment"]
+        self.assertEqual("CALIBRAR", alignment["phase"])
+        self.assertEqual("🎯", alignment["emoji"])
+        self.assertEqual(80, alignment["threshold_percent"])
+        self.assertEqual("INTERPRETATION_ALIGNMENT_NOT_RUNTIME_PASS", alignment["percentage_means"])
+        self.assertTrue(alignment["continuous_recalibration"])
+        self.assertTrue(alignment["do_not_parrot_chefe"])
+        self.assertTrue(alignment["align_thought_not_wording"])
+        self.assertEqual("DELTA_TO_ACTIVE_INTENT_FIRST", alignment["new_chefe_material"])
+        self.assertTrue(alignment["preserve_compatible_active_intent"])
+        self.assertEqual("EXPLICIT_REPLACE_OR_PROVEN_MATERIAL_INCOMPATIBILITY", alignment["replacement_requires"])
+        self.assertTrue(alignment["pertinence_first"])
+        self.assertTrue(alignment["minimum_sufficient_loop"])
+        self.assertTrue(alignment["triggers_are_conditional_not_ritual"])
+
     def test_bot_entry_activates_without_plain_word_guess(self):
         receipt = MODULE.resolve("fala normal", bot_entry=True, chefe_source=True)
         self.assertEqual("BOT_ENTRY", receipt["activation_source"])
@@ -120,6 +142,7 @@ class ContinuousDeltaContractTest(unittest.TestCase):
             "!CENTRALUTIL": "DELTA_UTIL",
             "!CONTRAPROVA": "CONTRAPROVA",
             "!REMEDICAO": "REMEDICAO",
+            "!TIK-TAK": "TIK_TAK",
             "!FIXED_POINT": "FIXED_POINT",
             "!REGISTRA": "REGISTRA",
             "!BOOT": "BOOT",
@@ -132,6 +155,45 @@ class ContinuousDeltaContractTest(unittest.TestCase):
                 self.assertEqual("!CENTRALDARK", receipt["master_funnel"]["canonical_entry"])
                 self.assertIn(expected, receipt["master_funnel"]["matched_trigger_ids"])
                 self.assertTrue(receipt["master_funnel"]["all_explicit_human_triggers_enter_master_once"])
+
+    def test_tik_tak_wraps_master_loop_and_preserves_remeasurement_without_swarm(self):
+        receipt = MODULE.resolve("!TIK-TAK", chefe_source=True)
+        contract = receipt["tik_tak"]
+        self.assertTrue(receipt["master_cycle_active"])
+        self.assertIn("TIK_TAK", receipt["master_funnel"]["requested_phases"])
+        self.assertTrue(contract["active"])
+        self.assertEqual("REGRA-ZERO-CENTRALDARK", contract["canonical_rule"])
+        self.assertEqual("AUTOMATION_FACTORY_OUTER_LOOP", contract["semantic_family"])
+        self.assertTrue(contract["wraps_master_cycle"])
+        self.assertEqual("/goal", contract["goal_step"])
+        self.assertEqual(["GEOFF", "IAN", "GREG", "DEX", "HERMES", "REALIDADE"], contract["role_order"])
+        self.assertEqual({
+            "GEOFF": "AUTOMATION_FACTORY",
+            "IAN": "STRUCTURAL_SKEPTIC",
+            "GREG": "OBSERVABILITY_PROOF",
+            "DEX": "HUMAN_AGENT_COORDINATION",
+            "HERMES": "EXECUTION_ROLE",
+            "REALIDADE": "REALITY_JUDGE",
+        }, contract["role_bindings"])
+        self.assertEqual(["IMPLEMENTACAO", "SIMPLIFICACAO"], contract["geoff_formula"])
+        self.assertTrue(contract["greg_verdict_required_before_green"])
+        self.assertTrue(contract["dex_approval_required_for_critical_delta"])
+        self.assertTrue(contract["ci_pending_is_not_pass"])
+        self.assertTrue(contract["merge_is_not_deploy"])
+        self.assertTrue(contract["hermes_is_executor"])
+        self.assertTrue(contract["reality_is_judge"])
+        self.assertTrue(contract["select_existing_executor_only"])
+        self.assertTrue(contract["works_above_coding_agents"])
+        self.assertTrue(contract["invalidate_only_affected_stale_proof"])
+        self.assertTrue(contract["remeasure_current_target"])
+        self.assertTrue(contract["rerun_affected_gates"])
+        self.assertTrue(contract["same_head_counterproof_required"])
+        self.assertTrue(contract["preserve_unaffected_valid_proof"])
+        self.assertEqual("PROOF_OR_FIXED_POINT_OR_NEXT_CURSOR", contract["continue_until"])
+        self.assertFalse(contract["fanout_agents"])
+        self.assertFalse(contract["is_swarm_trigger"])
+        self.assertFalse(contract["creates_new_owner"])
+        self.assertFalse(contract["creates_new_brain_or_router"])
 
     def test_active_master_does_not_reenter_on_subtrigger(self):
         receipt = MODULE.resolve("#ACORDAR", master_active=True, chefe_source=True)

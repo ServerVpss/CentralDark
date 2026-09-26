@@ -23,14 +23,14 @@ export const CANONICAL_MAP_PATH = "apps/modulos/mapeamento/config/mapa-canonico.
 export const PR_MOTHER_NUMBER = 1562;
 
 export const DEFAULT_REQUIRED_WORKFLOWS = Object.freeze([
-  "porta-de-entrada",
-  "codex-validate",
-  "lupa-conformance",
-  "Lupa Drift Guard",
+  "⚙️ porta-de-entrada",
+  "⚙️ codex-validate",
+  "⚙️ lupa-conformance",
+  "⚙️ Lupa Drift Guard",
   "🧠 Trigger Fabric Full Package — pacote e contraprova",
-  "PR Title Contract",
-  "PR auto-review (Codex + checklist)",
-  "Pipeline — Telegram + Painel",
+  "⚙️ PR Title Contract",
+  "⚙️ PR auto-review (Codex + checklist)",
+  "⚙️ Pipeline — Telegram + Painel",
 ]);
 
 export const BLOCKING_LABELS = Object.freeze([
@@ -500,6 +500,18 @@ export async function validateCanonicalSnapshot({ headSha, readSnapshot, trusted
     verdict: errors.length ? "FAIL" : "PASS",
   };
 }
+
+export function promotionLaneDecision({ matchingChild = null, directMainExplicit = false, globalRule = false } = {}) {
+  if (!matchingChild) return { decision: "DIRECT_MAIN_ALLOWED", reason: "NO_COMPATIBLE_CHILD", child_trace_required: false, post_main_child_receipt_required: false, pr_mother_receipt_required: true };
+  const childOpen = matchingChild.state === "open" && matchingChild.draft !== true;
+  const childConflicting = matchingChild.mergeable === false || matchingChild.mergeable_state === "dirty" || matchingChild.mergeable_state === "blocked_by_conflict";
+  const childHealthy = childOpen && !childConflicting;
+  if (childHealthy && !directMainExplicit) return { decision: "CHILD_REQUIRED", reason: "COMPATIBLE_CHILD_HEALTHY", child_number: matchingChild.number ?? null, child_trace_required: true, post_main_child_receipt_required: true, pr_mother_receipt_required: true };
+  if (childHealthy && directMainExplicit) return { decision: "DIRECT_MAIN_ALLOWED_AFTER_CHILD_TRACE", reason: "EXPLICIT_CHILD_BYPASS", child_number: matchingChild.number ?? null, child_trace_required: true, post_main_child_receipt_required: true, pr_mother_receipt_required: true };
+  if (!childHealthy && (directMainExplicit || globalRule)) return { decision: "DIRECT_MAIN_ALLOWED_AFTER_CHILD_TRACE", reason: "CHILD_STALE_OR_CONFLICTING", child_number: matchingChild.number ?? null, child_trace_required: true, child_blocked_receipt: "CHILD_LANE_STALE_BLOCKED", post_main_child_receipt_required: true, pr_mother_receipt_required: true };
+  return { decision: "CHILD_STALE_BLOCKED", reason: childOpen ? "CHILD_CONFLICTING" : "CHILD_NOT_ACTIVE", child_number: matchingChild.number ?? null, child_trace_required: true, child_blocked_receipt: "CHILD_LANE_STALE_BLOCKED", post_main_child_receipt_required: false, pr_mother_receipt_required: true };
+}
+
 
 export function waitAgeMs(pr, now = null) {
   if (now == null) return null;

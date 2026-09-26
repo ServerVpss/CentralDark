@@ -1,3 +1,9 @@
+---
+tags:
+  - 11-pendências
+  - ACORDAR
+---
+
 # 🔥 Hermes Vivo — 4 Cérebros em Cascata
 
 > Versão: v2 (implantada 03/07/2026)
@@ -17,12 +23,12 @@
 
 ## ⚡ Cascata (ordem de fallback)
 
-| # | Modelo | Timeout | Como é chamado |
-|---|---|---|---|
-| 1 | `google/gemini-3-flash-preview` | 15s | `darkai` (padrão) |
-| 2 | `google/gemini-2.5-pro` | 30s | `darkai --model ...` |
-| 3 | `openai/gpt-5-mini` | 45s | `darkai --model ...` |
-| 4 | **Elite Anthropic Proxy** (`claude-sonnet-4-5`) | 30s + 1 retry (2s backoff) | `fetch` direto pra `https://claude.ap7.site/v1/messages` |
+| #   | Modelo                                          | Timeout                    | Como é chamado                                           |
+| --- | ----------------------------------------------- | -------------------------- | -------------------------------------------------------- |
+| 1   | `google/gemini-3-flash-preview`                 | 15s                        | `darkai` (padrão)                                        |
+| 2   | `google/gemini-2.5-pro`                         | 30s                        | `darkai --model ...`                                     |
+| 3   | `openai/gpt-5-mini`                             | 45s                        | `darkai --model ...`                                     |
+| 4   | **Elite Anthropic Proxy** (`claude-sonnet-4-5`) | 30s + 1 retry (2s backoff) | `fetch` direto pra `https://claude.ap7.site/v1/messages` |
 
 Se **todos os 4** falharem → erro total (extremamente raro).
 

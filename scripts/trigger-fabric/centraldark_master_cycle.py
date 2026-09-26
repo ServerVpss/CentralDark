@@ -7,6 +7,22 @@ import unicodedata
 from pathlib import Path
 
 MASTER = "!CENTRALDARK"
+TRIGGER_EMOJIS = {
+    "CENTRALDARK": "👑",
+    "ACORDAR": "🌅",
+    "CALIBRAR": "🎯",
+    "MULTIBUSSOLA": "🧭",
+    "META_LUPA": "🔎",
+    "RECONCILIAR": "🔄",
+    "DELTA_UTIL": "💎",
+    "CONTRAPROVA": "🧪",
+    "REMEDICAO": "📏",
+    "FIXED_POINT": "📍",
+    "REGISTRA": "🧾",
+    "BOOT": "🚀",
+}
+INTENT_ALIGNMENT_THRESHOLD_PERCENT = 80
+
 CHAIN = [
     "ACORDAR",
     "CALIBRAR",
@@ -71,6 +87,34 @@ MULTIBUSSOLA_PROOF_GATES = [
     "REMEDICAO_T1",
     "REALITY_JUDGE",
 ]
+TIK_TAK_ROLE_ORDER = ["GEOFF", "IAN", "GREG", "DEX", "HERMES", "REALIDADE"]
+TIK_TAK_ROLE_BINDINGS = {
+    "GEOFF": "AUTOMATION_FACTORY",
+    "IAN": "STRUCTURAL_SKEPTIC",
+    "GREG": "OBSERVABILITY_PROOF",
+    "DEX": "HUMAN_AGENT_COORDINATION",
+    "HERMES": "EXECUTION_ROLE",
+    "REALIDADE": "REALITY_JUDGE",
+}
+TIK_TAK_OUTER_LOOP = [
+    "REMEASURE_CURRENT_STATE",
+    "/goal",
+    "SELECT_EXISTING_EXECUTOR",
+    "LAUNCH_THROUGH_EXISTING_OWNER",
+    "OBSERVE",
+    "REVIEW",
+    "COUNTERPROOF",
+    "REMEASURE",
+    "CONTINUE_TO_PROOF_FIXED_POINT_OR_NEXT_CURSOR",
+]
+TIK_TAK_LOCKS = [
+    "GREG_VERDICT_REQUIRED_BEFORE_GREEN",
+    "DEX_APPROVAL_REQUIRED_FOR_CRITICAL_DELTA",
+    "CI_PENDING_IS_NOT_PASS",
+    "MERGE_IS_NOT_DEPLOY",
+    "HERMES_IS_EXECUTOR",
+    "REALIDADE_IS_JUDGE",
+]
 NEGATION_TOKENS = {"nao", "nunca", "sem"}
 
 MASTER_INGRESS_ALIASES = {
@@ -84,6 +128,7 @@ MASTER_INGRESS_ALIASES = {
     "DELTA_UTIL": ("!delta utils", "!deltautils", "!delta util", "!deltautil", "!delta útil", "!centralutil"),
     "CONTRAPROVA": ("!contraprova",),
     "REMEDICAO": ("!remedição", "!remedicao"),
+    "TIK_TAK": ("!tik-tak", "!tik_tak", "#tik-tak", "#tik_tak"),
     "FIXED_POINT": ("!fixed_point",),
     "REGISTRA": ("!registra",),
     "BOOT": ("!boot",),
@@ -422,6 +467,7 @@ def resolve(
     chefe_material = bool(chefe_source and master_cycle_active and not ambiguous_ingress)
     delta_match, delta_active, delta_ambiguous = _resolve_delta(normalized)
     harvest_active = bool(delta_active or chefe_material)
+    tik_tak_active = "TIK_TAK" in ids
     meta_match = next((a for a in MULTIBUSSOLA_META_ALIASES if _phrase_match(normalized, a)), None)
     meta_active = meta_match is not None
 
@@ -454,6 +500,42 @@ def resolve(
         "activation_source": activation_source,
         "next_master_active": master_cycle_active,
         "expanded_chain": CHAIN if master_cycle_active else [],
+        "visual_trigger_chain": (
+            " → ".join([
+                "⭕ !AURÉOLA CANÔNICA",
+                f"{TRIGGER_EMOJIS['CENTRALDARK']} !CENTRALDARK",
+                *[f"{TRIGGER_EMOJIS[x]} {x}" for x in CHAIN],
+            ]) if master_cycle_active else ""
+        ),
+        "aureola": {
+            "role": "VISIBLE_ROUTE_DEBUGGER",
+            "contract": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml",
+            "visible_fields": ["CURRENT_PHASE", "MULTIBUSSOLA_AXIS", "DESTINATION_OWNER", "NEXT_GATE"],
+            "compare": ["INTENT_ROUTE", "ACTUAL_ROUTE"],
+            "mismatch_action": "STOP_AND_RECONCILE",
+            "route_trace_is_private_reasoning": False,
+            "route_trace_is_technical_proof": False,
+            "bible_reference_is_semantic_cue_not_proof": True,
+            "material_discovery_is_learning_candidate_not_fact": True,
+        },
+        "intent_alignment": {
+            "phase": "CALIBRAR",
+            "emoji": TRIGGER_EMOJIS["CALIBRAR"],
+            "threshold_percent": INTENT_ALIGNMENT_THRESHOLD_PERCENT,
+            "percentage_means": "INTERPRETATION_ALIGNMENT_NOT_RUNTIME_PASS",
+            "continuous_recalibration": True,
+            "new_chefe_material": "DELTA_TO_ACTIVE_INTENT_FIRST",
+            "preserve_compatible_active_intent": True,
+            "replacement_requires": "EXPLICIT_REPLACE_OR_PROVEN_MATERIAL_INCOMPATIBILITY",
+            "pertinence_first": True,
+            "minimum_sufficient_loop": True,
+            "triggers_are_conditional_not_ritual": True,
+            "new_teaching": "REMIX_MINIMUM_DELTA_IN_EXISTING_RULE",
+            "do_not_parrot_chefe": True,
+            "align_thought_not_wording": True,
+            "execute_when_gte_threshold_and_scope_authorized": True,
+            "below_threshold_or_material_contradiction": "ASK_ONLY_INDISPENSABLE_GAP",
+        },
         "guided_telemetry": guided_telemetry,
         "session_provenance": {
             "session_id": session_ref,
@@ -496,6 +578,38 @@ def resolve(
             "screen_is_runtime_proof": False,
             "repetition_is_independent_proof": False,
             "temporal_label_is_authority": False,
+        },
+        "tik_tak": {
+            "canonical_signal": "!TIK-TAK",
+            "active": tik_tak_active,
+            "canonical_rule": "REGRA-ZERO-CENTRALDARK" if tik_tak_active else None,
+            "semantic_family": "AUTOMATION_FACTORY_OUTER_LOOP" if tik_tak_active else None,
+            "owner": "docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md" if tik_tak_active else None,
+            "wraps_master_cycle": tik_tak_active,
+            "goal_step": "/goal" if tik_tak_active else None,
+            "role_order": TIK_TAK_ROLE_ORDER if tik_tak_active else [],
+            "role_bindings": TIK_TAK_ROLE_BINDINGS if tik_tak_active else {},
+            "geoff_formula": ["IMPLEMENTACAO", "SIMPLIFICACAO"] if tik_tak_active else [],
+            "outer_loop_sequence": TIK_TAK_OUTER_LOOP if tik_tak_active else [],
+            "locks": TIK_TAK_LOCKS if tik_tak_active else [],
+            "greg_verdict_required_before_green": tik_tak_active,
+            "dex_approval_required_for_critical_delta": tik_tak_active,
+            "ci_pending_is_not_pass": tik_tak_active,
+            "merge_is_not_deploy": tik_tak_active,
+            "hermes_is_executor": tik_tak_active,
+            "reality_is_judge": tik_tak_active,
+            "select_existing_executor_only": tik_tak_active,
+            "works_above_coding_agents": tik_tak_active,
+            "invalidate_only_affected_stale_proof": tik_tak_active,
+            "remeasure_current_target": tik_tak_active,
+            "rerun_affected_gates": tik_tak_active,
+            "same_head_counterproof_required": tik_tak_active,
+            "preserve_unaffected_valid_proof": tik_tak_active,
+            "continue_until": "PROOF_OR_FIXED_POINT_OR_NEXT_CURSOR" if tik_tak_active else None,
+            "fanout_agents": False,
+            "is_swarm_trigger": False,
+            "creates_new_owner": False,
+            "creates_new_brain_or_router": False,
         },
         "identity_naming_guard": {
             "canonical_identity_is_single": True,
@@ -665,6 +779,7 @@ def self_test():
         ("!CENTRALUTIL", "DELTA_UTIL"),
         ("!CONTRAPROVA", "CONTRAPROVA"),
         ("!REMEDICAO", "REMEDICAO"),
+        ("!TIK-TAK", "TIK_TAK"),
         ("!FIXED_POINT", "FIXED_POINT"),
         ("!REGISTRA", "REGISTRA"),
         ("!BOOT", "BOOT"),
@@ -676,6 +791,24 @@ def self_test():
             and r["activation_source"] == "SUBTRIGGER_FUNNEL"
             and phase in r["master_funnel"]["matched_trigger_ids"],
         )
+
+    r = resolve("!TIK-TAK", chefe_source=True)
+    add(
+        "tik_tak_outer_loop_preserves_remeasurement_without_swarm",
+        r["tik_tak"]["active"]
+        and r["tik_tak"]["canonical_rule"] == "REGRA-ZERO-CENTRALDARK"
+        and r["tik_tak"]["semantic_family"] == "AUTOMATION_FACTORY_OUTER_LOOP"
+        and r["tik_tak"]["role_order"] == TIK_TAK_ROLE_ORDER
+        and r["tik_tak"]["role_bindings"] == TIK_TAK_ROLE_BINDINGS
+        and r["tik_tak"]["outer_loop_sequence"] == TIK_TAK_OUTER_LOOP
+        and r["tik_tak"]["greg_verdict_required_before_green"]
+        and r["tik_tak"]["dex_approval_required_for_critical_delta"]
+        and r["tik_tak"]["invalidate_only_affected_stale_proof"]
+        and r["tik_tak"]["same_head_counterproof_required"]
+        and not r["tik_tak"]["fanout_agents"]
+        and not r["tik_tak"]["is_swarm_trigger"]
+        and not r["tik_tak"]["creates_new_brain_or_router"],
+    )
 
     r = resolve("!CENTRALDARK", chefe_source=True)
     add("master", r["explicit_match"] and r["expanded_chain"] == CHAIN)

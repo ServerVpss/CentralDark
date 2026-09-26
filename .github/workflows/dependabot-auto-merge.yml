@@ -18,11 +18,11 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows:
-      - porta-de-entrada
-      - PR auto-review (Codex + checklist)
-      - codex-validate
-      - lupa-conformance
-      - Lupa Drift Guard
+      - ⚙️ porta-de-entrada
+      - ⚙️ PR auto-review (Codex + checklist)
+      - ⚙️ codex-validate
+      - ⚙️ lupa-conformance
+      - ⚙️ Lupa Drift Guard
     types: [completed]
   repository_dispatch:
     types: [centraldark_dependabot_reconcile]
@@ -84,7 +84,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🇧🇷 Padronizar título em PT-BR com selo semântico
+      - name: 🔹 🇧🇷 Padronizar título em PT-BR com selo semântico
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           DEPENDENCY_NAMES: ${{ steps.meta.outputs.dependency-names }}
@@ -294,7 +294,7 @@ jobs:
          github.event.pull_request.head.repo.full_name == github.repository) ||
         github.event_name == 'schedule' ||
         github.event_name == 'workflow_dispatch' ||
-        github.event_name == 'workflow_run' ||
+        (github.event_name == 'workflow_run' && startsWith(github.event.workflow_run.head_branch, 'dependabot/')) ||
         github.event_name == 'repository_dispatch'
       )
     runs-on: [self-hosted, Linux]
@@ -522,7 +522,7 @@ jobs:
           echo 'UNKNOWN_IS_PASS=0'
 
   reconcile-house-pr:
-    name: 🪡 Casa — reconciliar PR humano no mesmo motor
+    name: 🪡 Casa — reconciliar PR humano → promotor canônico
     if: >-
       github.event_name == 'pull_request_target' &&
       github.repository == 'ServerVpss/CentralDark' &&
@@ -563,6 +563,8 @@ jobs:
           echo "HOUSE_CONFLICT_OWNER=scripts/dependabot/resolve-conflicts.sh"
           echo "AUTO_REVIEW_UNKNOWN=true"
           echo "PR_MOTHER_1562_PROTECTED=true"
+          echo "DIRECT_MERGE=0"
+          echo "PROMOTION_OWNER=.github/workflows/autonomia-promocao.yml"
           echo "UNKNOWN_IS_PASS=0"
 
   reconcile-all-open-prs:
@@ -610,4 +612,7 @@ jobs:
           echo "COMMIT_TO_PR_BRANCH=true"
           echo "RERUN_FAILED_ONCE=true"
           echo "DIRECT_MAIN_WRITE=0"
+          echo "DIRECT_MERGE=0"
+          echo "HUMAN_PR_PROMOTION_OWNER=.github/workflows/autonomia-promocao.yml"
+          echo "DEPENDABOT_PROMOTION_OWNER=.github/workflows/dependabot-auto-merge.yml"
           echo "UNKNOWN_IS_PASS=0"

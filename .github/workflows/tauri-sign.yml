@@ -1,5 +1,5 @@
 # .github/workflows/tauri-sign.yml
-name: Tauri Windows Sign
+name: ⚙️ Tauri Windows Sign
 
 on:
   push:
@@ -19,36 +19,36 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: 🔹 Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
 
-      - name: Setup Rust
+      - name: 🔹 Setup Rust
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: x86_64-pc-windows-msvc
 
-      - name: Import Code Signing Certificate
+      - name: 🔹 Import Code Signing Certificate
         uses: actions/import-code-signing-cert@v3
         with:
           certificate: ${{ secrets.WINDOWS_CERT_PFX_BASE64 }}
           password: ${{ secrets.WINDOWS_CERT_PASSWORD }}
 
-      - name: Verify Certificate Imported
+      - name: 🔹 Verify Certificate Imported
         run: |
           Get-ChildItem Cert:\\CurrentUser\\My -CodeSigningCert | Where-Object {$_.Thumbprint -eq "${{ secrets.WINDOWS_CERT_THUMBPRINT }}".Replace(" ", "")}
 
-      - name: Install Dependencies
+      - name: 🔹 Install Dependencies
         run: npm ci
         working-directory: ./apps/sol-desktop
 
-      - name: Build Frontend
+      - name: 🔹 Build Frontend
         run: npm run build
         working-directory: ./apps/sol-desktop
 
-      - name: Build Tauri (Signed)
+      - name: 🔹 Build Tauri (Signed)
         uses: tauri-apps/tauri-action@v0
         env:
           TAURI_SIGNING_WINDOWS_CERT_THUMBPRINT: ${{ secrets.WINDOWS_CERT_THUMBPRINT }}
@@ -59,7 +59,7 @@ jobs:
           releaseBody: "Build assinado com certificado EV"
           args: --target x86_64-pc-windows-msvc
 
-      - name: Upload Artifacts
+      - name: 🔹 Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: sol-desktop-signed

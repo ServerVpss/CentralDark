@@ -15,6 +15,8 @@ GLOBAL_GATE_RECEIPT_DIR="${GLOBAL_GATE_RECEIPT_DIR:-/tmp/centraldark-global-cont
 # CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED
 POLICY_PATH=".agents/skills/centraldark-esteira-motor/SKILL.md"
 SOURCE_DEPLOY_PATH="scripts/vps/centraldark-deploy.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DISPATCHER="$SCRIPT_DIR/deploy-guards-dispatcher.sh"
 
 [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "TARGET_SHA_INVALID"; exit 61; }
 [[ -d "$REPO_DIR/.git" ]] || { echo "REPO_DIR_INVALID"; exit 62; }
@@ -26,6 +28,13 @@ BACKUP_ROOT_REAL="$(realpath -m "$BACKUP_ROOT")"
 case "$BACKUP_ROOT_REAL" in
   "$REPO_REAL"|"$REPO_REAL"/*) echo "BACKUP_ROOT_INSIDE_REPOSITORY"; exit 82 ;;
 esac
+[[ -x "$DISPATCHER" ]] || { echo "CANONICAL_DEPLOY_GATE_UNAVAILABLE"; exit 90; }
+TARGET_SHA="$TARGET_SHA" REPO_DIR="$REPO_DIR" BRANCH=main bash "$DISPATCHER" --gate-only || {
+  echo "CANONICAL_TLC23_DEPLOY_GATE=BLOCK"
+  exit 91
+}
+echo "CANONICAL_TLC23_DEPLOY_GATE=PASS"
+
 mkdir -p -- "$BACKUP_ROOT_REAL"
 chmod 700 -- "$BACKUP_ROOT_REAL"
 [[ ! -L "$BACKUP_ROOT" ]] || { echo "BACKUP_ROOT_SYMLINK_BLOCKED"; exit 81; }
@@ -61,15 +70,7 @@ elif [[ "${GITHUB_EVENT_NAME:-}" == "push" && "${BEFORE_SHA:-}" =~ ^[0-9a-f]{40}
 fi
 
 if [[ "$SOURCE_SYNC_REQUIRED" -eq 1 ]]; then
-  SOURCE_SYNC_SCRIPT="$(mktemp "$RUNNER_TEMP/centraldark-source-sync.XXXXXX")"
-  chmod 700 "$SOURCE_SYNC_SCRIPT"
-  git show "$TARGET_SHA:$SOURCE_DEPLOY_PATH" > "$SOURCE_SYNC_SCRIPT" || {
-    rm -f "$SOURCE_SYNC_SCRIPT"
-    echo "SOURCE_SYNC_SCRIPT_UNAVAILABLE"
-    exit 88
-  }
-  REPO_DIR="$REPO_DIR" BRANCH=main bash "$SOURCE_SYNC_SCRIPT" --apply --source-only
-  rm -f "$SOURCE_SYNC_SCRIPT"
+  REPO_DIR="$REPO_DIR" BRANCH=main bash "$DISPATCHER" --apply --source-only
   echo "source_synced=true" >> "$GITHUB_OUTPUT"
   echo "MICRO_DEPLOY_SOURCE_SYNC=PROVED"
 else

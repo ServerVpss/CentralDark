@@ -81,6 +81,46 @@ async function remeasureMergeability(number) {
   return pr;
 }
 
+async function listAll(path, key) {
+  const out = [];
+  for (let page = 1; page <= 10; page += 1) {
+    const sep = path.includes('?') ? '&' : '?';
+    const response = await api(`${path}${sep}per_page=100&page=${page}`);
+    if (!response.ok) return { ok: false, status: response.status, items: out };
+    const batch = Array.isArray(response.data?.[key]) ? response.data[key]
+      : Array.isArray(response.data) ? response.data : [];
+    out.push(...batch);
+    if (batch.length < 100) return { ok: true, status: response.status, items: out };
+  }
+  return { ok: false, status: 508, items: out };
+}
+
+async function dispatchCanonicalOwner(pr) {
+  const author = String(pr?.user?.login || '');
+  const dependabot = author === 'dependabot[bot]';
+  const eventType = dependabot ? 'centraldark_dependabot_reconcile' : 'centraldark_autonomia_recheck';
+  const response = await api('/dispatches', {
+    method: 'POST',
+    body: {
+      event_type: eventType,
+      client_payload: {
+        pr_number: Number(pr?.number || 0),
+        head_sha: pr?.head?.sha || null,
+        source: 'house_pr_reconciler',
+        reconciliation_only: true,
+        canonical_promotion_owner: dependabot
+          ? '.github/workflows/dependabot-auto-merge.yml'
+          : '.github/workflows/autonomia-promocao.yml',
+      },
+    },
+  });
+  return {
+    ok: response.ok,
+    status: response.status,
+    event_type: eventType,
+    dependabot,
+  };
+}
 const list = await api('/pulls?state=open&per_page=100');
 if (!list.ok) {
   console.error(`BLOCKED_LIST_PRS status=${list.status}`);
@@ -188,10 +228,29 @@ for (const item of prs) {
   }
 
   const rerun = await rerunFailedOnce(pr.head.sha);
-  receipt.action = rerun.requested > 0 ? 'RERUN_FAILED_JOBS' : 'UP_TO_DATE_NO_RERUN';
-  receipt.state = pr.mergeable ? 'MERGEABLE' : 'NOT_MERGEABLE';
   receipt.reruns = rerun.requested;
-  if (rerun.requested > 0) acted += 1;
+  if (rerun.requested > 0) {
+    receipt.action = 'RERUN_FAILED_JOBS';
+    receipt.state = 'WAIT_NEW_RESULT';
+    acted += 1;
+    summary.push(receipt);
+    continue;
+  }
+
+  const routed = await dispatchCanonicalOwner(pr);
+  receipt.action = routed.ok
+    ? (routed.dependabot ? 'ROUTED_TO_DEPENDABOT_CANONICAL_OWNER' : 'ROUTED_TO_AUTONOMIA_PROMOTER')
+    : 'CANONICAL_PROMOTION_DISPATCH_FAILED';
+  receipt.state = routed.ok ? 'WAIT_CANONICAL_OWNER' : `HTTP_${routed.status}`;
+  receipt.canonical_event = routed.event_type;
+  receipt.merge_sha = null;
+  if (routed.ok) {
+    acted += 1;
+    console.log(`PR #${number} RECONCILIATION_COMPLETE route=${routed.event_type} head=${pr.head.sha} direct_merge=0`);
+  } else {
+    blocked += 1;
+    console.error(`PR #${number} CANONICAL_DISPATCH_FAILED event=${routed.event_type} status=${routed.status}`);
+  }
   summary.push(receipt);
 }
 

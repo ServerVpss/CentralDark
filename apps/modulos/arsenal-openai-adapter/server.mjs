@@ -368,6 +368,74 @@ const server = http.createServer(async (req, res) => {
       try { res.end(); } catch {}
     }
   }
+  if (pathOnly === '/v1/messages') {
+    let body = '';
+    for await (const chunk of req) body += chunk;
+    try {
+      const payload = JSON.parse(body || '{}');
+      const requestedModel = payload.model || 'arsenal-router';
+      const modo = MODEL_ALIASES[requestedModel]
+        || (requestedModel.startsWith('arsenal-') ? requestedModel : null);
+      req._auditSetModel?.(modo ? `${requestedModel}->${modo}` : `passthrough:${requestedModel}`);
+
+      const msgs = [];
+      if (payload.system) {
+        msgs.push({
+          role: 'system',
+          content: typeof payload.system === 'string' ? payload.system : JSON.stringify(payload.system),
+        });
+      }
+      for (const m of (payload.messages || [])) {
+        const content = typeof m.content === 'string'
+          ? m.content
+          : (Array.isArray(m.content)
+              ? m.content.map(part => part?.text || part?.content || '').join('\n')
+              : String(m.content || ''));
+        msgs.push({ role: m.role || 'user', content });
+      }
+
+      let resposta;
+      if (modo) {
+        const MODOS = {
+          'arsenal-router': modoRouter,
+          'arsenal-parallel': modoParallel,
+          'arsenal-debate': modoDebate,
+          'arsenal-hermes': modoHermes,
+        };
+        const rodar = MODOS[modo] || modoRouter;
+        const regras = await lerRegras();
+        resposta = await rodar(regras, msgs);
+      } else {
+        const catalogo = await fetchAbacusCatalog();
+        if (!catalogo.includes(requestedModel)) {
+          return json(res, 400, {
+            type: 'error',
+            error: { type: 'invalid_request_error', message: `modelo desconhecido: ${requestedModel}` },
+          });
+        }
+        resposta = await callProvider(requestedModel, msgs);
+      }
+
+      const msgId = 'msg_' + Math.random().toString(36).slice(2, 14);
+      return json(res, 200, {
+        id: msgId,
+        type: 'message',
+        role: 'assistant',
+        model: requestedModel,
+        content: [{ type: 'text', text: resposta }],
+        stop_reason: 'end_turn',
+        stop_sequence: null,
+        usage: { input_tokens: 0, output_tokens: 0 },
+      });
+    } catch (e) {
+      console.error('erro /v1/messages:', e);
+      return json(res, 500, {
+        type: 'error',
+        error: { type: 'api_error', message: e.message },
+      });
+    }
+  }
+
   json(res, 404, { error: 'not found' });
 });
 

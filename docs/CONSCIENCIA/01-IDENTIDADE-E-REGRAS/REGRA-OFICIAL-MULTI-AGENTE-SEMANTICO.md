@@ -154,6 +154,43 @@ ONE_WRITER_PER_SCOPE=true
 
 A Forja é fábrica de capacidade/bot sob demanda, não sétimo membro obrigatório do gabinete. Especialista fixo é função operacional; modelo/provider continua substituível.
 
+### 5.1.1 REGRA-ZERO-CENTRALDARK — Greg / Auditor Determinístico
+
+```text
+CANONICAL_RULE=REGRA-ZERO-CENTRALDARK
+DISPLAY_NAME=Greg Pstrucha — Auditor Determinístico
+ROLE=OBSERVABILITY_PROOF
+
+GREG=REGRESSÃO/FALSO-VERDE + PROVA_DETERMINÍSTICA + OBSERVABILIDADE
+
+VALIDAR=
+  DIFF
+  + AST
+  + TESTES
+  + INVARIANTES
+  + CONTRATOS
+  + RECIBOS
+
+VEREDITO=PROVADO | QUEBRADO | EVIDÊNCIA FALTANTE
+
+ACTION_REQUIRES_PROOF=true
+CI_PENDING_IS_NOT_PASS=true
+NARRATIVE_IS_NOT_PROOF=true
+ISOLATED_SCREENSHOT_IS_NOT_PROOF=true
+
+CONFLICT_FLOW=
+  PRESERVE_LEGACY
+  → RECONCILE
+  → ONLY_THEN_ALTER
+```
+
+Greg é o nome visual do papel funcional já existente `OBSERVABILITY_PROOF`. Não cria persona clonada, novo agente, nova autoridade, novo Writer ou segundo sistema.
+
+Owner executável: `apps/modulos/HERMES-CORE/core/cognitive-council.mjs`.
+
+A resposta pública do auditor usa um dos três vereditos acima. Receipt pode trazer detalhes e referências, mas narrativa, print isolado ou CI pendente nunca promovem claim para `PROVADO`.
+
+
 ### 5.2 Núcleo único — uma CentralDark, múltiplas superfícies e papéis
 
 ```text

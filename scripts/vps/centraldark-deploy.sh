@@ -2,7 +2,7 @@
 # ══════════════════════════════════════════════════════════════════════
 # CentralDark — deploy do repositório na VPS
 #
-# Escopo: levar <caminho-vps> ao SHA de origin/main e reiniciar os
+# Escopo: levar /root/CentralDark ao SHA de origin/main e reiniciar os
 # serviços declarados. NÃO substitui deploy-operational-guards.sh, que é
 # estreito (só HermesVerificador + mapeamento). Este cobre o repo.
 #
@@ -31,7 +31,7 @@
 # ══════════════════════════════════════════════════════════════════════
 set -Eeuo pipefail
 
-REPO_DIR="${REPO_DIR:-<caminho-vps>}"
+REPO_DIR="${REPO_DIR:-/root/CentralDark}"
 BRANCH="${BRANCH:-main}"
 MCP_HEALTH="${MCP_HEALTH:-http://127.0.0.1:9100/health}"
 APPS="${APPS:-}"
@@ -65,6 +65,15 @@ for arg in "$@"; do
 done
 
 [[ "$TOTAL" -eq 1 && "$SOURCE_ONLY" -eq 1 ]] && { echo "--total e --source-only são mutuamente exclusivos"; exit 2; }
+
+CANONICAL_DEPLOY_GATE="${CENTRALDARK_CANONICAL_DEPLOY_GATE:-}"
+CANONICAL_DEPLOY_TARGET="${CENTRALDARK_CANONICAL_DEPLOY_TARGET:-}"
+
+# Fail-closed antes de qualquer fetch/cache/backup/runtime mutation.
+if [[ "$APPLY" -eq 1 && "$CANONICAL_DEPLOY_GATE" != "PASS" ]]; then
+  printf 'DIRECT_DEPLOY_BYPASS_BLOCKED use scripts/vps/deploy-guards-dispatcher.sh\n' >&2
+  exit 16
+fi
 
 log() { printf '%s %s\n' "$(date -u '+%H:%M:%SZ')" "$*"; }
 die() { log "FALHA: $*"; exit "${2:-1}"; }
@@ -286,7 +295,10 @@ normalize_runtime_churn() {
       git restore --source="origin/$BRANCH" --worktree -- "$path" || return 1
     fi
   done
-  find apps/modulos/grupo-evolucao/missions -maxdepth 1 -type f -name "drift-*.json" -delete 2>/dev/null || true
+  if [[ -d apps/modulos/grupo-evolucao/missions ]]; then
+    git restore --source="origin/$BRANCH" --worktree -- apps/modulos/grupo-evolucao/missions 2>/dev/null || true
+    git clean -f -- apps/modulos/grupo-evolucao/missions >/dev/null 2>&1 || true
+  fi
   log "RUNTIME_CHURN_NORMALIZED=PASS"
 }
 settle_runtime_churn() {
@@ -383,6 +395,11 @@ git fetch --prune origin "$BRANCH" --quiet || die "fetch de origin/$BRANCH falho
 
 HEAD_ANTES="$(git rev-parse HEAD)"
 ALVO="$(git rev-parse "origin/$BRANCH")"
+if [[ "$APPLY" -eq 1 ]]; then
+  [[ "$CANONICAL_DEPLOY_GATE" == "PASS" ]] || die "DIRECT_DEPLOY_BYPASS_BLOCKED use scripts/vps/deploy-guards-dispatcher.sh" 16
+  [[ "$CANONICAL_DEPLOY_TARGET" =~ ^[0-9a-f]{40}$ ]] || die "CANONICAL_DEPLOY_TARGET_INVALID" 16
+  [[ "$CANONICAL_DEPLOY_TARGET" == "$ALVO" ]] || die "CANONICAL_DEPLOY_TARGET_DRIFT gated=$CANONICAL_DEPLOY_TARGET origin=$ALVO" 16
+fi
 ATRAS="$(git rev-list --count "HEAD..origin/$BRANCH")"
 AFRENTE="$(git rev-list --count "origin/$BRANCH..HEAD")"
 SUJOS="$(contar_sujos_deploy)"
@@ -394,7 +411,7 @@ log "ATRAS=$ATRAS AFRENTE=$AFRENTE DEPLOY_DIRTY=$SUJOS UNTRACKED_PRESERVED=$UNTR
 
 # Cache canônico limpo para consumidores de SOUL/skills/runtime. Ele é uma
 # projeção descartável de origin/main e NÃO substitui o checkout operacional.
-# Isso permite reancoragem mesmo quando <caminho-vps> contém estado vivo
+# Isso permite reancoragem mesmo quando /root/CentralDark contém estado vivo
 # ainda não reconciliado. O fluxo reverso continua passando pelo writer
 # canônico; nunca promovemos a árvore suja por rsync/reset cego.
 if [[ "$CANONICAL_CACHE" -eq 1 ]]; then

@@ -1,4 +1,4 @@
-name: PR Mother Pulse
+name: ⚙️ PR Mother Pulse
 
 on:
   pull_request_target:
@@ -24,7 +24,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 5
     steps:
-      - name: Reagir no PR-mãe e registrar quem movimentou
+      - name: 🔹 Reagir no PR-mãe e registrar quem movimentou
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

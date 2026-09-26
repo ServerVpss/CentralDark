@@ -1,4 +1,4 @@
-name: VPS Reboot Forensic
+name: ⚙️ VPS Reboot Forensic
 
 on:
   workflow_dispatch:
@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   forensic:
-    name: Contabo/Cloudflare Forensics + Reboot
+    name: 🧩 Contabo/Cloudflare Forensics + Reboot
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -25,22 +25,22 @@ jobs:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       MUTATION: ${{ github.event.inputs.mutation == true && '1' || '0' }}
     steps:
-      - name: Checkout repository
+      - name: 🔹 Checkout repository
         uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
-      - name: Setup Python
+      - name: 🔹 Setup Python
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: Run VPS Reboot Forensic
+      - name: 🔹 Run VPS Reboot Forensic
         run: |
           cd /home/runner/work/CentralDark/CentralDark
           python3 scripts/vps-reboot-forensic.py
 
-      - name: Upload forensics artifacts
+      - name: 🔹 Upload forensics artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:

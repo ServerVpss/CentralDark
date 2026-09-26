@@ -103,3 +103,27 @@ EVIDENCE = JUDGE_IN_SCOPE
 8. SAME_HEAD CI aplicável verde.
 
 Até lá: **arquitetura aprovada, botão funcional ainda NÃO declarado.**
+
+## Replay de caminho já provado
+
+Owner: `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml`
+
+```text
+PROVEN_PATH_REPLAY_LOCK=true
+PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO=true
+SAME_FINGERPRINT_REUSES_PROVEN_RECIPE=true
+CAMINHO_JA_PROVADO
+→ CARREGAR_RECEITA_SELADA
+→ COMPARAR_FINGERPRINT
+→ ADAPTAR_SOMENTE_BINDINGS_DO_AMBIENTE
+→ EXECUTAR_MESMA_SEQUENCIA
+→ RODAR_MESMA_PROVA
+→ COMPARAR_SCHEMA_DE_RESULTADO + EFEITO_ESPERADO
+→ DIVERGENCIA = DELTA_NOVO
+→ SEM_DIVERGENCIA = REUSE_PROOF_NO_REPEAT
+```
+
+Não exigir que um agente novo reinterpretе do zero uma sequência já comprovada.
+Mudança de host/path/auth-ref pode ser adaptação de ambiente; mudança de objetivo,
+owner, lógica de prova ou efeito esperado exige revalidação do cone afetado.
+

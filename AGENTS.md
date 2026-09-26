@@ -94,12 +94,17 @@ SEGREDO/CHEFE
 
 Não criar agente só para preencher número. As seis lentes funcionais já mapeadas não exigem seis processos permanentes; `REUSE_BEFORE_CREATE` decide.
 
-## Modo atual de evolução — main direta, segurança mínima e histórico no PR-mãe
+## Modo atual de evolução — filho compatível obrigatório quando já existe
 
 ```text
-PROMOTION_MODE=DIRECT_MAIN_SOFT_EVOLUTION
+PROMOTION_MODE=DIRECT_MAIN_SOFT_EVOLUTION_WITH_EXISTING_CHILD_TRACE
 NEW_PR_DEFAULT=false
 EXISTING_OPEN_PRS_REMAIN_VALID=true
+EXISTING_COMPATIBLE_CHILD_PR_IS_MANDATORY_LANE=true
+CHILD_MATCH_KEY=OWNER+SCOPE+CAPABILITY
+DIRECT_MAIN_FORBIDDEN_WHEN_COMPATIBLE_CHILD_IS_HEALTHY=true
+STALE_OR_CONFLICTING_CHILD_REQUIRES_RECEIPT_BEFORE_BYPASS=true
+MAIN_READBACK_MUST_RETURN_TO_CHILD_AND_PR_MOTHER=true
 PR_MOTHER=#1562
 PR_MOTHER_ROLE=HISTORY_HANDOFF_LEDGER
 PR_MOTHER_MERGE_FORBIDDEN=true
@@ -108,14 +113,21 @@ MIN_SECURITY_ONLY=true
 MIN_SECURITY_CHECKS=SECRET_SCAN|SYNTAX_OR_PARSE_WHEN_APPLICABLE|TARGETED_TEST_WHEN_AVAILABLE|MAIN_READBACK
 DIRECT_MAIN_COMMIT_REQUIRES_CURRENT_MAIN_REMEASURE=true
 DIRECT_MAIN_COMMIT_REQUIRES_RECEIPT_IN_PR_MOTHER=true
+EVERY_NOVELTY_FEEDS_PR_MOTHER=true
+PR_MOTHER_APPEND_ONLY=true
+PR_MOTHER_RECORDS_PASS_FAIL_UNKNOWN_BLOCKED_STALE=true
+EXACT_REPEAT_MAY_DEDUPE=true
+NO_SECRET_IN_PR_MOTHER_LEDGER=true
 REUSE_BEFORE_CREATE=true
 NO_V1_V2_V3_PARALLEL_OWNER=true
 REALITY_IS_JUDGE=true
 ```
 
-Fluxo CURRENT: `CURRENT_MAIN → REUSE_PROVEN → OWNER_EXISTENTE → DELTA_MÍNIMO → META/PROVA/CONTRAPROVA → SEGURANÇA MÍNIMA → COMMIT DIRETO MAIN → MAIN_READBACK → DEPLOY_CAUSAL → T1 → RECEIPT #1562 → FIXED_POINT`.
+Fluxo CURRENT: CURRENT_MAIN -> REUSE_PROVEN -> OWNER_EXISTENTE -> FIND_MATCHING_CHILD(OWNER+SCOPE+CAPABILITY) -> CHILD_HEALTHY?CHILD_REQUIRED:CHILD_STALE?CHILD_TRACE_BLOCKED:NO_CHILD -> DELTA_MINIMO -> PROVA -> CONTRAPROVA -> CHILD_SAME_HEAD_SQUASH_OR_ALLOWED_DIRECT_MAIN -> MAIN_READBACK -> RECEIPT_EXISTING_CHILD_IF_ANY -> RECEIPT_1562 -> FIXED_POINT.
 
-PRs já existentes continuam válidos como história, fonte de delta e veículo opcional do trabalho iniciado. Não criar PR novo por rotina enquanto este modo estiver ativo. O caminho `SAME_HEAD → SQUASH_CHILD_ONLY` fica disponível para PR existente e volta a ser obrigatório quando o CHEFE endurecer novamente a política.
+Toda novidade real do sistema alimenta o PR-mãe #1562 no mesmo ciclo em que for observada. Isso inclui PASS, FAIL, UNKNOWN, BLOCKED, STALE, nova integração, novo acesso, nova rota, commit/PR/merge/deploy, mudança de runtime, contraprova, correção de diagnóstico, descoberta de owner, ferramenta/conector e decisão canônica. Repetição exata pode ser deduplicada; novidade não pode esperar PASS para ser registrada. Segredos nunca entram no ledger.
+
+PR existente compatível por OWNER+SCOPE+CAPABILITY não é opcional: é a promotion lane obrigatória enquanto saudável/reconciliável. Se estiver STALE ou CONFLICTING, registrar receipt no próprio filho antes de qualquer bypass; direct-main só ocorre por autorização aplicável ou regra global, e MAIN_READBACK volta ao filho e ao #1562. PR_STALE != IGNORAR_PR.
 
 ## Identidade
 
@@ -850,6 +862,100 @@ CORPO_A_INDISPONIVEL
 
 Indisponibilidade de instrumento não revoga intenção humana nem prova indisponibilidade do organismo inteiro.
 
+## Execução sem confirmação redundante — alinhamento da intenção do CHEFE
+
+A máquina não repete a fala do CHEFE nem substitui regras anteriores por cada novo ensinamento. Ela recupera contexto aplicável, combina intenção atual + cânone + aprendizados compatíveis, calcula a confiança de alinhamento e absorve somente o menor delta útil no owner existente. Novo ensinamento é REMIX do comportamento anterior, não reset.
+
+```text
+INTENT_ALIGNMENT_CONFIDENCE =
+  CURRENT_EXPLICIT_INTENT
+  + RECOVERED_APPLICABLE_CONTEXT
+  + CANONICAL_RULES
+  + CURRENT_REALITY
+  - MATERIAL_AMBIGUITY
+  - MATERIAL_CONTRADICTION
+```
+
+A porcentagem expressa confiança de que a interpretação corresponde à intenção humana; não é prova de runtime e nunca transforma UNKNOWN em PASS.
+
+```text
+CHEFE_EXECUTION_CONFIDENCE_THRESHOLD=80
+CONFIDENCE_80_TO_100_AND_SCOPE_AUTHORIZED=EXECUTE_MINIMUM_COMPLETE_PATH
+NEW_TEACHING=REMIX_MINIMUM_DELTA_IN_EXISTING_RULE
+DO_NOT_REPLACE_COMPATIBLE_PRIOR_LEARNING=true
+DO_NOT_PARROT_CHEFE=true
+ALIGN_THOUGHT_NOT_WORDING=true
+NO_REDUNDANT_CONFIRMATION=true
+PLAN_IS_NOT_SUBSTITUTE_FOR_AVAILABLE_ACTION=true
+IRREVERSIBLE_OR_NEW_AUTHORITY_STILL_REQUIRES_EXPLICIT_SCOPE=true
+UNKNOWN_IS_NOT_PASS=true
+```
+
+Quando útil para confirmar entendimento antes de uma ação material, responder em uma frase curta: `Sua intenção (~N%) é: <interpretação refinada>`. Não transformar isso em cerimônia quando a execução já é segura e autorizada.
+
+Fluxo normal: CHEFE dá intenção → recuperar contexto aplicável → alinhar por confiança → medir → executar o mínimo → provar → se houver bloqueio corrigível, corrigir e continuar → devolver resultado curto → parar.
+
+Modo profundo é acionado pela intenção do CHEFE (por exemplo: `me ajuda`, `analisa`, `investiga`, `rigor máximo`): usar profundidade proporcional sem abandonar o mesmo owner, contexto ou regras já válidas.
+
+### Continuidade semântica da intenção
+
+Cada nova fala do CHEFE é primeiro tratada como delta da intenção vigente, não como nova missão. Integrar somente o que mudou ao que continua válido, recalcular o alinhamento e preservar o fio. Só substituir a intenção anterior quando houver ordem explícita de substituição ou incompatibilidade material comprovada.
+
+```text
+NEW_CHEFE_MATERIAL=DELTA_TO_ACTIVE_INTENT_FIRST
+PRESERVE_COMPATIBLE_ACTIVE_INTENT=true
+RECALCULATE_INTENT_ALIGNMENT_EACH_MATERIAL_TURN=true
+EXPLICIT_REPLACE_OR_PROVEN_INCOMPATIBILITY=ALLOW_INTENT_REPLACEMENT
+PERTINENCE_FIRST=true
+MINIMUM_SUFFICIENT_LOOP=true
+TRIGGERS_ARE_CONDITIONAL_NOT_RITUAL=true
+```
+
+`!CENTRALDARK` ativa o organismo e avalia a cadeia canônica, mas executa somente fases pertinentes à intenção/estado atual; fase não pertinente é SKIPPED com justificativa, nunca executada por ritual.
+
+### ⭕ !AURÉOLA CANÔNICA — HUD da rota operacional
+
+A Auréola não é decoração nem prova técnica. É o depurador visual da rota do `!CENTRALDARK`: torna visíveis fase atual, eixo material da MULTIBÚSSOLA, owner/destino, próximo gate e, quando material, ação/prova/ferida/NEXT_CURSOR. Deve comparar `INTENT_ROUTE` com `ACTUAL_ROUTE`; divergência não pode virar verde e exige reconciliação. Referência bíblica e baianês são pistas semânticas de direção, nunca autoridade ou evidência de runtime.
+
+```text
+AUREOLA_IS_VISIBLE_ROUTE_DEBUGGER=true
+AUREOLA_IS_OPERATIONAL_TRACE_NOT_PRIVATE_CHAIN_OF_THOUGHT=true
+INTENT_ROUTE_NE_ACTUAL_ROUTE=STOP_AND_RECONCILE
+BIBLE_REFERENCE_IS_SEMANTIC_CUE_NOT_PROOF=true
+AUREOLA_MATERIAL_DISCOVERY=LEARNING_CANDIDATE_NOT_CANONICAL_FACT
+```
+
+
+## Override temporário por intenção explícita
+
+```text
+DEFAULT_BEHAVIOR_REMAINS_CANONICAL=true
+EXPLICIT_CHEFE_INTENT_MAY_OVERRIDE_DEFAULT_FOR_CURRENT_SCOPE=true
+EXPLICIT_OVERRIDE_IS_TEMPORARY=true
+EXPLICIT_OVERRIDE_IS_SCOPED=true
+EXPLICIT_OVERRIDE_IS_TRACEABLE=true
+EXPLICIT_OVERRIDE_DOES_NOT_MUTATE_DEFAULT=true
+EXPLICIT_OVERRIDE_DOES_NOT_CREATE_NEW_AUTHORITY=true
+REASK_WHEN_SAME_INTENT_SCOPE_ALREADY_AUTHORIZED=false
+UNKNOWN_AUTHORITY_OR_SCOPE_IS_NOT_PASS=true
+```
+
+Fórmula:
+
+```text
+DEFAULT
++ CURRENT_EXPLICIT_CHEFE_INTENT
++ TARGET
++ SCOPE
++ LIMITS
++ CURRENT_REALITY
+→ EFFECTIVE_BEHAVIOR_FOR_CURRENT_MISSION
+```
+
+Exemplo: `NEW_PR_DEFAULT=false` continua falso. Se o CHEFE pedir explicitamente um PR-filho para a missão atual, cria-se **aquele** PR-filho, registra-se a intenção no receipt e o default permanece falso para as próximas missões.
+
+Quando uma ação de PR/promoção estiver explicitamente autorizada, o criador do PR deve materializar o receipt canônico no corpo do PR; não deve devolver ao CHEFE um pedido redundante para autorizar workflows que já estão dentro do mesmo escopo.
+
 ## Intenção autorizada → squash main
 
 Quando SEGREDO/CHEFE já deu a intenção e a autorização vigente cobre promoção para `main`, o merge é consequência operacional, não nova decisão humana.
@@ -1278,3 +1384,88 @@ PR_MOTHER_1562_DO_NOT_MERGE=true
 ```
 
 Fluxo humano preferido: `MVP → abre → testa → mostra ao CHEFE quando houver decisão/materialidade`. Erro reversível e observado é dado de aprendizado; medo de errar não pode virar paralisia, mas UNKNOWN/falha material continuam impedindo falso-verde.
+
+## Caminho provado é receita reutilizável
+
+```text
+PROVEN_PATH_REPLAY_LOCK=true
+PROVEN_PATH_OWNER=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
+PROVEN_PATH_RUNTIME=scripts/trigger-fabric/centraldark_full_trigger_boot.py
+PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO=true
+SAME_FINGERPRINT_REUSES_PROVEN_RECIPE=true
+ADAPT_ENVIRONMENT_BINDINGS_ONLY=true
+RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH=true
+DIVERGENCE_REOPENS_AFFECTED_CONE_ONLY=true
+HUMAN_RETEACH_REQUIRED_FOR_SAME_PROVEN_PATH=false
+EVOLVE_EXISTING_BEFORE_CREATE=true
+EDIT_AND_RETURN_SAME_ARTIFACT_WHEN_CHEFE_PROVIDES_ONE=true
+NO_FRAGMENTED_PATCH_INSTRUCTIONS_WHEN_FULL_EVOLVED_ARTIFACT_IS_REQUESTED=true
+RECIPE_MUST_LIVE_IN_REPOSITORY=true
+RECIPE_MUST_BE_MACHINE_CONSUMABLE=true
+REPLAY_BEFORE_REDISCOVERY=true
+PR_MOTHER_OR_EQUIVALENT_CHILD_RECEIPT_REQUIRED=true
+```
+
+Um agente/modelo novo não ganha licença para redesenhar um caminho já selado.
+Ele carrega a receita comprovada, adapta apenas bindings de ambiente
+(path/host/runtime/auth-ref/tool-entrypoint), repete a mesma sequência e a mesma
+prova. Divergência observada é informação nova e reabre somente o cone causal
+afetado.
+
+Quando o CHEFE fornecer um artefato existente para evoluir, editar e devolver o
+mesmo artefato consolidado; não cuspir fragmentos ou alternativas paralelas se a
+intenção estiver suficientemente alinhada. Caminho comprovado deve deixar no
+repositório receita executável/machine-consumable + fingerprint + prova +
+contraprova + resultado/efeito esperado + bindings + NEXT_CURSOR, com receipt no
+PR-mãe #1562 ou PR-filho equivalente por OWNER+SCOPE+CAPABILITY.
+
+
+
+## Contrato obrigatório — execução com receipt GitHub
+
+Este bloco transforma o cristal em regra operacional. Regra escrita em chat, VPS ou runtime sem registro GitHub não basta.
+
+```text
+CENTRALDARK_EXECUTION_CONTRACT=MANDATORY
+EVERY_CHANGE_ON_E_MUST_BE_MEASURED=true
+EVERY_CHANGE_REQUIRES_TEST=true
+EVERY_CHANGE_REQUIRES_COUNTERPROOF=true
+EVERY_CHANGE_REQUIRES_GIT_RECEIPT=true
+NO_UNRECORDED_LOCAL_CHANGE=true
+NO_CLAIM_WITHOUT_EVIDENCE=true
+NO_PUSH_WITHOUT_VALIDATION=true
+NO_SECRET_IN_GIT=true
+FAILURE_MUST_BE_LOCALIZED=true
+```
+
+Fluxo obrigatório:
+
+```text
+MEDIR ESTADO
+→ EXECUTAR MENOR DELTA
+→ TESTAR
+→ CONTRAPROVAR
+→ COMMIT
+→ PUSH
+→ RECEIPT NO PR-MÃE #1562 OU PR FILHO EQUIVALENTE
+→ SÓ ENTÃO DECLARAR CONCLUÍDO
+```
+
+Queda de conector não encerra missão automaticamente:
+
+```text
+CONNECTOR_DOWN_ONCE
+→ RETENTAR
+→ RELOGIN/HELPER QUANDO APLICÁVEL
+→ TENTAR SENSOR/TÚNEL AUTORIZADO EXISTENTE COMO TAILSCALE/RDC/SSH/MCP
+→ SE AINDA FALHAR: BLOCKED COM HOST, CAUSA, ROTAS TENTADAS E PRÓXIMA AÇÃO
+```
+
+Casa local do CHEFE (`E:\CentralDark`) herda o mesmo contrato. Mudança local importante não fica só em disco: mede, testa, contraprove, commita, sobe para branch/PR/main conforme autorização vigente e registra receipt.
+
+```text
+LOCAL_ONLY_CHANGE_FORBIDDEN=true
+IMPORTANT_UNTRACKED_ALERT_NOT_DELETE=true
+DIRECT_MAIN_REQUIRES_EXPLICIT_AUTH=true
+PR_MOTHER_OR_CHILD_RECEIPT_REQUIRED=true
+```
