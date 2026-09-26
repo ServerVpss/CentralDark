@@ -99,3 +99,21 @@ BLOCKER_EXACT: BOTH_SELF_HOSTED_RUNNERS_OFFLINE prevents queued CI jobs from sta
 
 FIXED_POINT: false. Local badge-index delta proved; remote CI SAME_HEAD, deployment, VPS runtime, Screenpipe and global CASA/GitHub/VPS convergence not proven.
 NEXT_CURSOR: keep PR #1698 open; resume on one existing runner returning online, rerun/read checks for current HEAD, fix any new causal failure; retry VPS read-only SSH after transport recovery. Do not merge #1562 or claim deploy/total convergence.
+
+## Re-prova de saúde pública e origem — 2026-09-26T10:32Z
+
+- HTTPS `https://admin.centralldark.com/contas/health` retornou HTTP 523 via Cloudflare, corpo `error code: 523`; `https://admin.centralldark.com/contas/ai-review.html` e `https://centralldark.com/health` também retornaram 523.
+- Leitura Cloudflare API: zona `centralldark.com` ACTIVE; DNS tem 16 registros e todos os A observados (incluindo admin, api, app, raiz, wildcard) apontam para `89.117.78.124` proxied=true. Nenhum health check Cloudflare configurado. Configuração de DNS está coerente com o IP esperado; sem prova de erro DNS/cache.
+- Prova direta Casa → IP `89.117.78.124` em TCP ports 22, 80, 443, 8099, 3030, 3031, 9400: todos TIMEOUT. Origem inacessível da Casa; Cloudflare também não alcança a origem (523).
+- Provider identificado por RDAP/web lookup como Contabo AS40021; esta sessão não tem ferramenta de gestão Contabo conectada nem canal comprovado para poder ligar/inspecionar VM. Nenhum reboot/power/DNS mutation executado.
+- API GitHub re-medida: os dois runners seguem OFFLINE/busy=false; gate `🧩 Porta...` para head `1722661ae52f4c9d77846fd1ae2b5c664f81c9d8` está QUEUED (outros checks também permanecem queued). PR #1698 OPEN/MERGEABLE, main `f3693fda6b18a23436db5b34ab127f5240ea4c91`.
+
+BLOCKER_ID=ORIGIN_VPS_UNREACHABLE_AND_EXISTING_RUNNERS_OFFLINE
+CLAIM_TARGET=89.117.78.124 (VM Contabo que hospeda CentralDark e dois runners self-hosted)
+OBSERVED_ERROR=SSH/TCP timeout em múltiplas portas; Cloudflare HTTP 523; ambos runner IDs visíveis na API como OFFLINE
+WHY_MACHINE_CANNOT_RESOLVE=sem reachability da VM e sem conectado no provedor Contabo para inspecionar/power-cycle; não há API de gerenciamento Contabo nem runner disponível nesta sessão. Alterar DNS não resolveria a falta de conexão com origem; criar runner hospedado violaria política existente.
+HUMAN_ONLY_INPUT_IF_ANY=restaurar a VM/rede existente no painel Contabo ou prover canal de gestão autorizado já usado pela Casa; depois desta única fronteira, retomar de forma autônoma.
+RESUME_CONDITION=origem reachável e pelo menos um runner existente online; health público responde, CI SAME_HEAD conclui; depois reconciliar VPS runtime e Screenpipe.
+EVIDENCE_REF=issuecomment-5845459762; Cloudflare zone 6986cded70ab6bec23a765496807b614; GitHub runner API /actions/runners; HEAD check run 36235717988; HTTPS 523.
+FIXED_POINT: false.
+NEXT_CURSOR: após recuperar VM/canal de gerenciamento, iniciar exatamente os dois owners runner existentes conforme supervisão segura, reexecutar CI no HEAD atual, confirmar health público e read-only status VPS; resolver delta causal remanescente. Não mergear PR-mãe #1562.
