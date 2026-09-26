@@ -917,6 +917,7 @@ TRIGGERS_ARE_CONDITIONAL_NOT_RITUAL=true
 NO_UNREQUESTED_ADVICE=true
 NO_INVENTED_MISSION=true
 OBSERVATION != EXECUTION_REQUEST
+EXPLICIT_ORDER = EXECUTION_REQUEST → procura owner → mede erro → corrige → testa → contraprova → registra rastro → continua
 CHEFE_OBSERVATION → RESPONDER_SO_O_PERTINENTE (sem conselho, sem risco não pedido, sem missão nova)
 ```
 

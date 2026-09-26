@@ -2,6 +2,7 @@
 """CentralDark 🔏 !RASTRO fiscal.
 
 TRACE_PRESENT != TRACE_VALID
+RESPONSE_WITHOUT_TRACE=INVALID
 
 Reads a response/receipt/report, extracts trace claims and verifies them against
 GitHub. The verifier is fail-closed:
