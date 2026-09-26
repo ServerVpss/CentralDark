@@ -1,0 +1,18 @@
+﻿{
+    "schema":  "centraldark.scheduled-sector-receipt.v1",
+    "sector":  "SCREENPIPE_CRYSTAL",
+    "surface":  "CASA",
+    "started_at":  "2026-09-26T11:50:02.6004080-03:00",
+    "ended_at":  "2026-09-26T11:50:02.6114333-03:00",
+    "duration_seconds":  0.011,
+    "command":  "process screenpipe-app + validar-cristal-casa-remote-screenpipe",
+    "exit_code":  91,
+    "probe_result":  "PROBE_FAIL_OR_UNKNOWN",
+    "final_pass_claimed":  false,
+    "pdf_gate_promoted":  false,
+    "current_gt_historical":  true,
+    "unknown_is_not_pass":  true,
+    "action_is_not_proof":  true,
+    "reality_is_judge":  true,
+    "log":  "C:\\Users\\Administrador\\AppData\\Local\\CentralDark\\ScheduledJobs\\logs\\SCREENPIPE_CRYSTAL-20260926-115002.log"
+}

@@ -1,0 +1,20 @@
+{
+  "MISSION_ID": "CENTRALDARK_MULTIWINDOW_OMEGA_RECONCILIATION",
+  "SNAPSHOT_ID": "UNKNOWN",
+  "TIMESTAMP": "2026-08-27T18:33:23.6356884-03:00",
+  "TERMINALS": [
+    {
+      "TERMINAL_ID": "T0_20980",
+      "ENGINE": "HERMES_AGENT",
+      "PID": 20980,
+      "WORKSPACE": "E:\\e\\CentralDark\\Pivete\\CentralDark",
+      "STATE": "ACTIVE",
+      "MISSION_ID": "CENTRALDARK_MULTIWINDOW_OMEGA_RECONCILIATION",
+      "SNAPSHOT_ID": "UNKNOWN",
+      "LAST_RECEIPT": ""
+    }
+  ],
+  "ENGINE": "HERMES_AGENT",
+  "WORKSPACE": "E:\\e\\CentralDark\\Pivete\\CentralDark",
+  "STATE": "ACTIVE"
+}

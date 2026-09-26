@@ -1,0 +1,60 @@
+{
+  "schema": "centraldark.pdf-gate-receipt.v2",
+  "observed_at": "2026-09-18T14:12:57.3387794-03:00",
+  "sector": "PDF_GATE",
+  "surface": "CASA",
+  "owners_inspected": [
+    "E:\\CentralDark\\CentralDark\\scripts\\lupa\\pdf-conformance-cc2003.mjs",
+    "E:\\CentralDark\\runtime\\scheduled-jobs\\run-scheduled-sector.ps1"
+  ],
+  "files_altered": [
+    "E:\\CentralDark\\runtime\\scheduled-jobs\\run-scheduled-sector.ps1"
+  ],
+  "backups_created": [
+    "E:\\CentralDark\\CentralDark\\scripts\\lupa\\pdf-conformance-cc2003.mjs.bak-20260918-132608",
+    "E:\\CentralDark\\runtime\\scheduled-jobs\\run-scheduled-sector.ps1.bak-20260918-132608"
+  ],
+  "tests": {
+    "identity": {
+      "result": "PASS",
+      "reason": "BYTE_IDENTITY_MATCH",
+      "sha256": "b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1",
+      "size_bytes": 206674
+    },
+    "policy": {
+      "result": "PASS",
+      "required": [
+        "ARTIFACT_NAME_IS_NOT_IDENTITY=true",
+        "EMPTY_PATH_IS_NOT_ARTIFACT_MISSING=true",
+        "UNKNOWN_IS_NOT_PASS=true"
+      ]
+    },
+    "self_test": {
+      "result": "PASS"
+    },
+    "node_test": {
+      "result": "PASS",
+      "tests": 5,
+      "passed": 5,
+      "failed": 0
+    },
+    "tamper_counterproof": {
+      "result": "PASS",
+      "tampered_status": "REFUTED_IN_SCOPE",
+      "tampered_reason": "BYTE_IDENTITY_MISMATCH",
+      "tampered_sha256": "50272412acb8011ada075a3838219d0e44098dfd10ce9c5da394eda18679134a"
+    }
+  },
+  "runner_exit_code": 0,
+  "probe_result": "PROBE_PASS",
+  "final_pass_claimed": true,
+  "pdf_gate_promoted": true,
+  "required_chain": "TLC23/HORN->PDF_GATE->COUNTERPROOF->PASS",
+  "source_receipt": "C:\\Users\\Administrador\\AppData\\Local\\CentralDark\\ScheduledJobs\\receipts\\PDF_GATE-latest.json",
+  "source_log": "C:\\Users\\Administrador\\AppData\\Local\\CentralDark\\ScheduledJobs\\logs\\PDF_GATE-20260918-141256.log",
+  "vps_desktop_commander": {
+    "current_control_plane_state": "OFFLINE",
+    "note": "vmi3256920 not online in current device list; prior authenticated session is historical, not current proof"
+  },
+  "final_result": "PDF_GATE_PROVED"
+}

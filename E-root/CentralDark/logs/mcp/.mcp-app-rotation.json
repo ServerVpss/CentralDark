@@ -1,0 +1,20 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 30
+    },
+    "auditLog": "\\root\\CentralDark\\logs\\mcp\\.mcp-app-rotation.json",
+    "files": [
+        {
+            "date": 1790167031621,
+            "name": "\\root\\CentralDark\\logs\\mcp\\mcp-app-2026-09-23.jsonl",
+            "hash": "c8bd3e32405ef7042317168a341280a04f0bfb8123613879a700367f7ac24255"
+        },
+        {
+            "date": 1790380548232,
+            "name": "\\root\\CentralDark\\logs\\mcp\\mcp-app-2026-09-25.jsonl",
+            "hash": "ce51e0d9afb573e27962f447a62dc08d32107a86bb9dd895b84315c7ee65d4de"
+        }
+    ],
+    "hashType": "sha256"
+}

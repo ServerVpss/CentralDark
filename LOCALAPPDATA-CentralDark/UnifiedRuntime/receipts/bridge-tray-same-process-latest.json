@@ -1,0 +1,15 @@
+﻿{
+    "observed_at":  "2026-09-18T16:06:13.2675148-03:00",
+    "pid_original":  41948,
+    "window_handle_before":  2758044,
+    "visible_before":  true,
+    "visible_after_minimize":  false,
+    "state_after_minimize":  "TRAY_MINIMIZED",
+    "second_launch_pid":  1892,
+    "second_launch_exited":  true,
+    "process_count_after_second_launch":  1,
+    "original_pid_still_alive":  true,
+    "visible_after_restore":  true,
+    "state_after_restore":  "RESTORED",
+    "same_process_proved":  true
+}

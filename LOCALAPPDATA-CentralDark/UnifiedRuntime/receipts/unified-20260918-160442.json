@@ -1,0 +1,30 @@
+﻿{
+    "schema":  "centraldark.unified.oneshot.canonical",
+    "observed_at":  "2026-09-18T16:04:35.3918594-03:00",
+    "root":  "E:\\CentralDark\\CentralDark-Unified-OneShot",
+    "runtime":  "C:\\Users\\Administrador\\AppData\\Local\\CentralDark\\UnifiedRuntime",
+    "profiles":  "Segredo",
+    "checks":  {
+                   "CASA_FOUND":  true,
+                   "MCP_9100_LOCAL":  false,
+                   "MCP_PUBLIC":  "HTTP_401",
+                   "MCP_PUBLIC_REACHABLE":  true,
+                   "MCP_ROUTE_AVAILABLE":  true,
+                   "AUTH_SEGREDO":  "SKIPPED_BY_OPERATOR",
+                   "SCREENPIPE_FOUND":  true,
+                   "SCREENPIPE_3030_API":  true,
+                   "SCREENPIPE_3031_MCP_HTTP":  false,
+                   "SCREENPIPE_MCP_HTTP_REQUIRED":  false,
+                   "BRIDGE_EXE_PRESENT":  true,
+                   "BRIDGE_PROCESS_COUNT":  1,
+                   "BRIDGE_SINGLE_INSTANCE":  true,
+                   "BRIDGE_PID":  34852,
+                   "BRIDGE_TRAY_SAME_PROCESS_STATE":  true,
+                   "BRIDGE_SINGLE_INSTANCE_STATE":  true,
+                   "BRIDGE_RUNTIME_STATE":  "STARTED"
+               },
+    "unknown_is_not_pass":  true,
+    "tray_is_bridge_state":  true,
+    "one_system_only":  true,
+    "completed_at":  "2026-09-18T16:04:42.5256606-03:00"
+}

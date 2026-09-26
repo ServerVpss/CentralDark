@@ -1,0 +1,70 @@
+{
+  "id": "hermes-centraldark-instinto-superior",
+  "displayName": "Hermes — Instinto Superior",
+  "description": "FIXED_POINT administrativo com nove ações, 144 quadros e efeitos preservados.",
+  "spritesheetPath": "spritesheet.webp",
+  "cell": [
+    192,
+    208
+  ],
+  "grid": [
+    16,
+    9
+  ],
+  "states": [
+    {
+      "name": "idle",
+      "row": 0,
+      "frames": 16,
+      "fps": 60
+    },
+    {
+      "name": "running-right",
+      "row": 1,
+      "frames": 16,
+      "fps": 60
+    },
+    {
+      "name": "running-left",
+      "row": 2,
+      "frames": 16,
+      "fps": 60
+    },
+    {
+      "name": "waving",
+      "row": 3,
+      "frames": 16,
+      "fps": 60
+    },
+    {
+      "name": "jumping",
+      "row": 4,
+      "frames": 16,
+      "fps": 60
+    },
+    {
+      "name": "failed",
+      "row": 5,
+      "frames": 16,
+      "fps": 60
+    },
+    {
+      "name": "waiting",
+      "row": 6,
+      "frames": 16,
+      "fps": 60
+    },
+    {
+      "name": "sitting",
+      "row": 7,
+      "frames": 16,
+      "fps": 60
+    },
+    {
+      "name": "review",
+      "row": 8,
+      "frames": 16,
+      "fps": 60
+    }
+  ]
+}

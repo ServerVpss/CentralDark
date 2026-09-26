@@ -1,0 +1,27 @@
+﻿{
+    "schema":  "centraldark.pdf-gate-fix-receipt.v1",
+    "observed_at":  "2026-09-18T16:19:11.7344105-03:00",
+    "owners":  [
+                   "E:\\CentralDark\\CentralDark\\scripts\\lupa\\pdf-conformance-cc2003.mjs",
+                   "E:\\CentralDark\\runtime\\scheduled-jobs\\run-scheduled-sector.ps1"
+               ],
+    "backups":  [
+                    "E:\\CentralDark\\CentralDark\\scripts\\lupa\\pdf-conformance-cc2003.mjs.bak-20260918-132608",
+                    "E:\\CentralDark\\runtime\\scheduled-jobs\\run-scheduled-sector.ps1.bak-20260918-132608"
+                ],
+    "changed":  {
+                    "mjs":  false,
+                    "runner":  true
+                },
+    "tests":  {
+                  "identity":  true,
+                  "policy":  true,
+                  "self_test":  true,
+                  "node_test":  true,
+                  "tamper":  true
+              },
+    "node_test_summary":  "5 passed; 0 failed",
+    "final_pdf_gate":  true,
+    "latest_receipt":  "C:\\Users\\Administrador\\AppData\\Local\\CentralDark\\ScheduledJobs\\receipts\\PDF_GATE-latest.json",
+    "log":  "C:\\Users\\Administrador\\AppData\\Local\\CentralDark\\ScheduledJobs\\logs\\PDF_GATE-20260918-161811.log"
+}

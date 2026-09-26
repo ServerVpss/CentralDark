@@ -1,0 +1,11 @@
+﻿{
+  "schema": "centraldark.bridge.runtime-state.v1",
+  "observed_at": "2026-09-26T13:41:22.7822751-03:00",
+  "started_at": "2026-09-26T13:40:37.4476535-03:00",
+  "pid": 30060,
+  "state": "TRAY_HIDDEN",
+  "visible": false,
+  "window_state": "Normal",
+  "tray_same_process": true,
+  "single_instance": true
+}
