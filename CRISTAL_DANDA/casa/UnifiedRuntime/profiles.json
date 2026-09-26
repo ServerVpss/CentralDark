@@ -1,0 +1,18 @@
+{
+  "active": "Fulanoo",
+  "profiles": [
+    {
+      "account_slot": "Segredo",
+      "id": "Segredo",
+      "isolated_auth": true,
+      "isolated_remote_home": true
+    },
+    {
+      "account_slot": "Fulano",
+      "id": "Fulano",
+      "isolated_auth": true,
+      "isolated_remote_home": true
+    }
+  ],
+  "schema": "centraldark.unified.profiles.v1"
+}
