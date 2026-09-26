@@ -332,7 +332,7 @@ def verify_text(text: str, repo: str, backend: Any) -> FiscalResult:
     trace_present = bool(data["sha"] or data["path"] or data["link"] or data["readback"])
 
     if data["write_claim"] and not trace_present:
-        checks.append(Check("write_claim_has_trace", "FAIL", "write claim without SHA/path/link/readback"))
+        checks.append(Check("write_claim_has_trace", "FAIL", f"RESPONSE_WITHOUT_TRACE={RESPONSE_WITHOUT_TRACE}: write claim without SHA/path/link/readback"))
     elif data["write_claim"]:
         checks.append(Check("write_claim_has_trace", "PASS", "write claim contains trace material"))
 
