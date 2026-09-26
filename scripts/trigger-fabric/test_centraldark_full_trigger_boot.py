@@ -234,7 +234,7 @@ def test_canonical_chain_contains_full_core_flow():
     required = {
         "DESTINATION_LOCK", "ACORDAR", "CALIBRAR", "MULTIBUSSOLA", "META_LUPA",
         "RECONCILIAR", "DELTA_UTIL", "CONTRAPROVA", "REMEDICAO", "FIXED_POINT",
-        "POST_GREEN_LOCK", "REGISTRA", "BOOT",
+        "POST_GREEN_LOCK", "REGISTRA", "RASTRO", "BOOT",
     }
     assert required.issubset(set(mod.CANONICAL_CHAIN))
 
