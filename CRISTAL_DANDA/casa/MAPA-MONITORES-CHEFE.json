@@ -1,0 +1,99 @@
+{
+  "sol_wrong_capture": "PrimaryScreen = Identify #4 DISPLAY2",
+  "windows_identify": {
+    "1": {
+      "role": "TOP",
+      "apps": [
+        "VS Code",
+        "Hermes terminals"
+      ],
+      "W": 1760,
+      "win_identify": 1,
+      "Y": -863,
+      "note": "acima do primary",
+      "H": 990,
+      "X": -1927,
+      "device": "\\\\.\\DISPLAY1"
+    },
+    "2": {
+      "role": "RIGHT_IN_IDENTIFY_UI",
+      "apps": [
+        "ChatGPT",
+        "assistant"
+      ],
+      "W": 1920,
+      "win_identify": 2,
+      "Y": 138,
+      "note": "no Identify aparece à direita do 4; em coords fica vizinho esquerdo do primary (X negativo). Preferir DeviceName+bounds.",
+      "H": 1080,
+      "X": -1920,
+      "device": "\\\\.\\DISPLAY4"
+    },
+    "3": {
+      "role": "LEFT",
+      "apps": [
+        "Browser OAuth CentralDark"
+      ],
+      "W": 1080,
+      "win_identify": 3,
+      "Y": 127,
+      "note": "mais à esquerda",
+      "H": 1920,
+      "X": -3000,
+      "device": "\\\\.\\DISPLAY3"
+    },
+    "4": {
+      "role": "CENTER_PRIMARY",
+      "apps": [
+        "Display Settings",
+        "taskbar"
+      ],
+      "W": 1080,
+      "win_identify": 4,
+      "Y": 0,
+      "note": "PrimaryScreen; captura default do Sol errou aqui",
+      "H": 1920,
+      "X": 0,
+      "device": "\\\\.\\DISPLAY2"
+    }
+  },
+  "machine": "SEGREDO",
+  "ts": "2026-09-11T03:10:02",
+  "source_identify_shot": "CHEFE Windows Identify 2026-09-11",
+  "capture_rule": "NUNCA usar só PrimaryScreen. Capturar pelo DeviceName/bounds do Identify ID pedido. Zero regressão: não abrir Code/chat/terminal novo.",
+  "all_screens": [
+    {
+      "DeviceName": "\\\\.\\DISPLAY2",
+      "Primary": true,
+      "X": 0,
+      "Y": 0,
+      "W": 1080,
+      "H": 1920
+    },
+    {
+      "DeviceName": "\\\\.\\DISPLAY3",
+      "Primary": false,
+      "X": -3000,
+      "Y": 127,
+      "W": 1080,
+      "H": 1920
+    },
+    {
+      "DeviceName": "\\\\.\\DISPLAY4",
+      "Primary": false,
+      "X": -1920,
+      "Y": 138,
+      "W": 1920,
+      "H": 1080
+    },
+    {
+      "DeviceName": "\\\\.\\DISPLAY1",
+      "Primary": false,
+      "X": -1927,
+      "Y": -863,
+      "W": 1760,
+      "H": 990
+    }
+  ],
+  "hermes_target_monitor": "Identify #1 TOP DISPLAY1"
+}
