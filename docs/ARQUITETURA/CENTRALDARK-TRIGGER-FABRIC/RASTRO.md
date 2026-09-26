@@ -50,3 +50,31 @@ No new brain, dispatcher, MCP, GraphRAG, scheduler, promoter, label taxonomy or 
 Base `main` remeasured before this delta: `078bf351acaae46091669aa6acdec76ef1d10730` at `2026-08-24T19:12:57.724Z` (`16:12:57 BRT`).
 
 `BASE_HEAD` is provenance. Final current-state claims require remeasurement.
+
+
+## Fiscal executável
+
+`TRACE_PRESENT != TRACE_VALID`.
+
+Owner continua sendo este arquivo; o fiscal é apenas verificador executável:
+
+- runtime: `scripts/trigger-fabric/rastro_fiscal.py`
+- contraprova: `scripts/trigger-fabric/test_rastro_fiscal.py`
+- integração estrutural/execução de testes: `scripts/trigger-fabric/verify_repo_contract.py`
+
+Contrato:
+
+```text
+INPUT=response|receipt|report
+EXTRACT=COMMIT_SHA|PATH|LINK|READBACK|MEMORY_LOCATION|LEDGER_REF|CURRENT_MAIN
+VERIFY=GITHUB_REMOTE
+VERDICT_PER_CLAIM=PASS|FAIL|UNKNOWN
+TRACE_PRESENT != TRACE_VALID
+NETWORK_OR_PROVIDER_UNAVAILABLE=UNKNOWN
+WRITE_WITHOUT_TRACE=FAIL
+MEMORY_WITHOUT_LOCATION=FAIL
+DIRECT_MAIN_WITHOUT_LEDGER_1562=FAIL
+STALE_CURRENT_MAIN=FAIL
+```
+
+O fiscal não cria segundo judge, segundo owner ou segunda verdade. Ele reconstrói a prova citada e devolve evidência para o Reality Judge.
