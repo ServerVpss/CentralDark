@@ -1,0 +1,28 @@
+{
+  "hermes-agent": {
+    "archived_at": null,
+    "created_at": "2026-08-08T11:29:57.964395+00:00",
+    "created_by": null,
+    "last_patched_at": null,
+    "last_used_at": "2026-08-08T16:15:54.704847+00:00",
+    "last_viewed_at": "2026-08-08T16:15:54.653324+00:00",
+    "patch_count": 0,
+    "pinned": false,
+    "state": "active",
+    "use_count": 9,
+    "view_count": 9
+  },
+  "hermes-multi-profile-orchestration": {
+    "archived_at": null,
+    "created_at": "2026-08-08T16:29:36.536533+00:00",
+    "created_by": "agent",
+    "last_patched_at": "2026-08-08T16:32:37.714569+00:00",
+    "last_used_at": null,
+    "last_viewed_at": null,
+    "patch_count": 3,
+    "pinned": false,
+    "state": "active",
+    "use_count": 0,
+    "view_count": 0
+  }
+}

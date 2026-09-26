@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la /root/CentralDark/apps/ 2>/dev/null)",
+      "Read(//root/CentralDark/**)",
+      "mcp__claude_ai_CentralDark__vps_list_dir_safe",
+      "mcp__claude_ai_CentralDark__ler_consciencia",
+      "mcp__claude_ai_CentralDark__vps_read_file_safe",
+      "Bash(node -e \"const j=require\\('e:/CentralDark/sol-desktop-poc/.claude/settings.json'\\); console.log\\('JSON valido. Total allow:', j.permissions.allow.length\\);\")",
+      "Bash(ls -la \"E:/CentralDark/_MAPA_CASA/\" 2>&1 | head -30; echo \"=== RECONCILIATION ===\"; ls -la \"E:/CentralDark/_RECONCILIATION/OURO/MAPA_CASA/PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE/\" 2>&1 | head -30)",
+      "Read(//e/CentralDark/_MAPA_CASA/**)",
+      "Read(//e/CentralDark/_RECONCILIATION/OURO/MAPA_CASA/PASTA DO CHEFE JOGA ARQUIOVOS QUAIS QUUER SER GARIMPO DO CHEFE/**)",
+      "Bash(echo \"=== BIBLIOTECA existe? ===\"; find \"E:/CentralDark\" -maxdepth 7 -type d -iname \"BIBLIOTECA\" 2>/dev/null | head; echo \"=== _SOBRA_BRAIN/03-DOCUMENTACAO ===\"; ls -la \"E:/CentralDark/_RECONCILIADO/_SOBRA_BRAIN/03-DOCUMENTACAO/\" 2>&1 | head -20)",
+      "Read(//e/CentralDark/**)",
+      "Read(//e/CentralDark/_RECONCILIADO/_SOBRA_BRAIN/03-DOCUMENTACAO/**)",
+      "Bash(node -e \"const j=require\\('e:/CentralDark/sol-desktop-poc/.claude/settings.json'\\);console.log\\('OK defaultMode='+j.permissions.defaultMode\\);console.log\\('allow='+j.permissions.allow.length\\);console.log\\('dirs='+JSON.stringify\\(j.permissions.additionalDirectories\\)\\)\")",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\).on\\('end',\\(\\)=>{try{JSON.parse\\(d\\).forEach\\(p=>console.log\\(\\\\`#\\\\${p.number} [\\\\${p.mergeable}] draft=\\\\${p.isDraft} \\\\${p.title.slice\\(0,70\\)}\\\\`\\)\\)}catch\\(e\\){console.log\\(d.slice\\(0,500\\)\\)}}\\)\")",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\).on\\('end',\\(\\)=>{try{const r=JSON.parse\\(d\\);const f=r.filter\\(x=>x.conclusion==='failure'\\);console.log\\('TOTAL='+r.length+'  FAILURES='+f.length\\);console.log\\('=== VERMELHOS ==='\\);f.forEach\\(x=>console.log\\(x.databaseId+'  '+x.headBranch+'  '+\\(x.workflowName||x.name\\)\\)\\)}catch\\(e\\){console.log\\(d.slice\\(0,800\\)\\)}}\\)\")",
+      "Bash(gh run *)"
+    ]
+  }
+}

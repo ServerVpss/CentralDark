@@ -1,0 +1,194 @@
+Para copiar a legenda completa deste vídeo e enviar para o GPT, você pode usar a transcrição que forneci abaixo. Basta selecionar o texto, copiar e colar onde desejar:
+
+**Transcrição completa:**
+
+0:00 Hugging face open sourced the whole
+0:02 real-time voice loop microphone in
+0:04 spoken answer out and every stage
+0:06 swappable. The repo is called speech to
+0:08 speech. Apache 2.0 license and a single
+0:12 pip install. Four stages run the thing.
+0:14 Voice detection, speech to text, a
+0:16 language model, then text to speech. The
+0:19 piece that made me sit up is the front
+0:20 door. It speaks OpenAI real-time
+0:23 protocol. You point the official OpenAI
+0:25 Python client at your own laptop. Same
+0:28 client code, same events. The one line
+0:30 you change is the base URL. It now reads
+0:33 127.0.0.1.
+0:36 Your app has no idea it stopped talking
+0:38 to OpenAI. It just gets audio back. And
+0:41 every stage underneath is a flag.
+0:42 Different recognizer, different model,
+0:45 different voice. Which leaves one honest
+0:47 question. Which of those four stages is
+0:49 making the person wait? That answer
+0:51 moved on the 1st of July by a factor of
+0:53 35 7,000 stars. 9,000 robots already
+0:57 running it. Let me show you the numbers.
+0:59 Quick bit of context because the name is
+1:01 older than the thing. This repo went up
+1:03 in August 2024 as a fun demo. It has
+1:06 been rebuilt since and the version
+1:08 pushed this week is a different animal.
+1:10 A websocket server, a raw audio socket
+1:13 mode, and a plain microphone mode for
+1:15 when you just want to talk to your
+1:16 laptop. Start where the audio starts.
+1:19 Salo voice detection version 5 sits in
+1:22 front of everything and decides when you
+1:23 began speaking and when you stopped.
+1:25 That sounds like plumbing. It is the
+1:27 single biggest reason a voice agent
+1:28 feels polite or feels rude. You get the
+1:31 dials, too. The minimum silence before
+1:33 it calls your turn over is 64
+1:35 milliseconds out of the box. Raise it
+1:37 and the assistant waits while you think.
+1:39 Drop it and it jumps on your pauses.
+1:41 That one number is most of its
+1:43 personality. It also handles being
+1:45 interrupted. Switch on interrupt
+1:47 response and talking over the assistant
+1:49 cancels what it was saying mid-sentence,
+1:51 the way a person would stop. Try that
+1:53 with a request response API. Stage two
+1:56 is transcription and the default here is
+1:58 not whisper anymore. It is NVIDIA
+2:00 parakeet TDT 600 million parameters
+2:03 version 3. 25 European languages and it
+2:06 works out which one you are speaking
+2:08 without being told. 6.34% average word
+2:11 error rate on the open ASR leaderboard
+2:13 at roughly 3,000 times real time. 10
+2:16 minutes of recorded audio transcribed in
+2:18 about a fifth of a second of compute
+2:20 from a 600 million parameter model.
+2:23 Whisper is still in the box if you want
+2:24 it through transformers or faster
+2:26 whisper. On a Mac, there is lightning
+2:28 whisper on MLX building for Chinese.
+2:31 Perfimer is one flag away. Same
+2:34 pipeline, different ears. Stage three is
+2:36 the brain. And this is where the repo
+2:38 flatly refuses to choose for you. Any
+2:40 OpenAI compatible endpoint works. Open
+2:43 AAI itself, hugging face inference
+2:45 providers, open router, a VLM server, a
+2:49 llama, CPP server, humming under your
+2:51 desk, or skip the server and run the
+2:54 model in process through transformers on
+2:56 a GPU or MLXLM on Apple silicon. The
+3:00 stage is a socket. What you push into it
+3:02 is your business. Stage four is the
+3:04 voice, and the default got a serious
+3:06 upgrade. QN3TTS,
+3:08 the 12 hertz, 1.7 billion custom voice
+3:11 model Alibaba open sourced under Apache
+3:13 2 in January. 3 seconds of reference
+3:16 audio and it clones a voice. It streams
+3:18 in packets of about 320 milliseconds and
+3:21 the first packet lands in under 120.
+3:24 That number matters more than the total
+3:26 because the moment the first syllable
+3:28 arrives, the person stops feeling
+3:29 ignored. And you can trade it out for
+3:32 something smaller in the same breath.
+3:33 Cocooro pocket TTS chat TTS or MetaMMS
+3:38 if you need a language the others do not
+3:40 cover any ears any brain any mouth so
+3:43 back to the question I opened with add
+3:45 it up detection is milliseconds parakeet
+3:48 is effectively milliseconds the voice
+3:50 starts inside a tenth of a second three
+3:52 of the four stages are close to free
+3:54 which leaves the language model holding
+3:55 the entire delay on its own in a cascade
+3:58 nothing can be spoken until the model
+4:00 has produced something to say and it
+4:02 wants to think first on On the 1st of
+4:04 July, Hugging Face published a recipe
+4:06 with cerebras that go straight at that
+4:08 stage. Parakeet in front, Quinn 3 TTS
+4:11 behind and in the middle, Google
+4:13 DeepMind Gemma 4 at 31 billion
+4:15 parameters running on Cerebra's wafer
+4:17 scale hardware. 1851 output tokens per
+4:20 second measured by artificial analysis
+4:23 around 35 times a typical GPU endpoint.
+4:26 First token back in 1 and a half
+4:28 seconds. And that figure already
+4:29 includes the model reasoning before it
+4:31 answers. And this is not a small model
+4:33 bought cheap. Gemma 4 lands next to
+4:35 Claude Haiku 4.5 on the artificial
+4:38 analysis intelligence index while
+4:40 running about 18 times faster on that
+4:42 silicon. You are not trading brains for
+4:44 speed here. The way you switch it on is
+4:46 one flag. Model name Google/Gema431b
+4:50 it cerebras pointed at the hugging face
+4:53 router. Nothing else in your pipeline
+4:55 moves. That is what modular is actually
+4:57 for. And the framing hugging face uses
+4:59 is sharper than raw speed. They are
+5:01 hunting the 95th percentile, not the
+5:04 average. It is the occasional 3-second
+5:06 stall that makes an assistant feel
+5:08 broken. Your median was fine. Your tail
+5:10 was the problem. Now flip it the other
+5:12 way because none of this drags you onto
+5:14 somebody cloud. Run Llama server with
+5:17 Gemma 4E4B and GGUF. Point the pipeline
+5:20 at 127.0.0.1
+5:23 on port 8080. And that is the whole
+5:26 setup. On a Mac, it collapses to one
+5:28 flag. Local MAC optimal settings. Metal
+5:31 for all three models. Parakeet for the
+5:33 ears. MLXLM for the thinking. QN3TS
+5:37 through MLX audio for the mouth. Works
+5:39 in airplane mode. CPU only. Coco is 82
+5:43 million parameters with 54 voices and
+5:45 runs about six times realtime on a
+5:47 laptop with no GPU at all. Or QI Pocket
+5:50 TTS, 100 million parameters, first chunk
+5:53 of audio out in roughly 200
+5:55 milliseconds. Which brings us to the
+5:56 part your finance team cares about. The
+5:58 open AI real-time model bills audio by
+6:01 the token. $32 per million tokens in 64
+6:04 out. Your speech is build at one token
+6:07 per 100 milliseconds. It speech one per
+6:09 50. So a minute of you talking is 600
+6:12 tokens and a minute of it answering is
+6:14 1,200. Measured sessions land between
+6:16 about 5 cents and 46 cents a
+6:18 conversation minute. Now multiply that
+6:20 by a support queue that runs all day.
+6:22 And before you file this under weekend
+6:24 project, over 9,000 Reachi minis are
+6:27 running this stack right now. That is a
+6:29 $299 desktop robot hugging face builds
+6:32 with Pollen Robotics. 10,000 sold as of
+6:35 May. I will be straight about what it
+6:37 cost you. This is a cascade, not one
+6:40 endto-end audio model. So you own four
+6:42 moving parts and four ways to fail with
+6:44 no support contract behind any of them.
+6:46 And it moves fast. The 2024 lineup,
+6:49 Parlor TTS, Melotise, Distill Whisper,
+6:53 is gone from the readme. Pin your
+6:54 versions. Here is what I would do with a
+6:56 free evening. Install it. Run the Mac
+6:59 settings flag or the llama.cp recipe and
+7:02 time each of the four stages yourself on
+7:04 your own hardware. The entire argument
+7:06 for this repo is that you can finally
+7:08 measure which stage is slow. A complete
+7:10 voice loop Apache licensed answering to
+7:12 OpenAI own client library. Swap one flag
+7:15 and you are on wafer scale silicon. Swap
+7:18 another and you are offline on a laptop.
+7:20 Go find your bottleneck. Cloud codes the
+7:23 open AI stack every week.

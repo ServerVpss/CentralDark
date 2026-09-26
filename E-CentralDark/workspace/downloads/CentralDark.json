@@ -1,0 +1,15 @@
+{
+  "id": 3093,
+  "name": "CentralDark",
+  "target": "actions",
+  "source_type": "Repository",
+  "source": "ServerVpss/CentralDark",
+  "enforcement": "active",
+  "conditions": {},
+  "rules": [
+    {
+      "type": "require_lockfile"
+    }
+  ],
+  "bypass_actors": []
+}

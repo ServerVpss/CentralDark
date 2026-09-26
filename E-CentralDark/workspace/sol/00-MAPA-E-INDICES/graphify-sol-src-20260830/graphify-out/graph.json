@@ -1,0 +1,1589 @@
+{
+  "nodes": [
+    {
+      "id": "app",
+      "label": "App.tsx",
+      "file_type": "code",
+      "source_file": "App.tsx",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "app_message",
+      "label": "Message",
+      "file_type": "code",
+      "source_file": "App.tsx",
+      "source_location": "L29",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "app_modules",
+      "label": "modules",
+      "file_type": "code",
+      "source_file": "App.tsx",
+      "source_location": "L36",
+      "_origin": "ast"
+    },
+    {
+      "id": "app_statelabel",
+      "label": "stateLabel",
+      "file_type": "code",
+      "source_file": "App.tsx",
+      "source_location": "L47",
+      "_origin": "ast"
+    },
+    {
+      "id": "app_app",
+      "label": "App()",
+      "file_type": "code",
+      "source_file": "App.tsx",
+      "source_location": "L57",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "app_metric",
+      "label": "Metric()",
+      "file_type": "code",
+      "source_file": "App.tsx",
+      "source_location": "L297",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "app_modulepanel",
+      "label": "ModulePanel()",
+      "file_type": "code",
+      "source_file": "App.tsx",
+      "source_location": "L301",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "core_intent_test",
+      "label": "intent.test.ts",
+      "file_type": "code",
+      "source_file": "core/intent.test.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "core_intent",
+      "label": "intent.ts",
+      "file_type": "code",
+      "source_file": "core/intent.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "core_intent_intent",
+      "label": "Intent",
+      "file_type": "code",
+      "source_file": "core/intent.ts",
+      "source_location": "L1",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "core_intent_classifiedintent",
+      "label": "ClassifiedIntent",
+      "file_type": "code",
+      "source_file": "core/intent.ts",
+      "source_location": "L8",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "core_intent_normalized",
+      "label": "normalized()",
+      "file_type": "code",
+      "source_file": "core/intent.ts",
+      "source_location": "L15",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "core_intent_classifylocal",
+      "label": "classifyLocal()",
+      "file_type": "code",
+      "source_file": "core/intent.ts",
+      "source_location": "L18",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "core_redaction_test",
+      "label": "redaction.test.ts",
+      "file_type": "code",
+      "source_file": "core/redaction.test.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "core_redaction",
+      "label": "redaction.ts",
+      "file_type": "code",
+      "source_file": "core/redaction.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "core_redaction_redact",
+      "label": "redact()",
+      "file_type": "code",
+      "source_file": "core/redaction.ts",
+      "source_location": "L4",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "core_state_test",
+      "label": "state.test.ts",
+      "file_type": "code",
+      "source_file": "core/state.test.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "core_state",
+      "label": "state.ts",
+      "file_type": "code",
+      "source_file": "core/state.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "core_state_solstate",
+      "label": "SolState",
+      "file_type": "code",
+      "source_file": "core/state.ts",
+      "source_location": "L1",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "core_state_allowed",
+      "label": "allowed",
+      "file_type": "code",
+      "source_file": "core/state.ts",
+      "source_location": "L10",
+      "_origin": "ast"
+    },
+    {
+      "id": "core_state_cantransition",
+      "label": "canTransition()",
+      "file_type": "code",
+      "source_file": "core/state.ts",
+      "source_location": "L20",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "core_state_transition",
+      "label": "transition()",
+      "file_type": "code",
+      "source_file": "core/state.ts",
+      "source_location": "L24",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_gateway",
+      "label": "gateway.ts",
+      "file_type": "code",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_gateway_solreply",
+      "label": "SolReply",
+      "file_type": "code",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L5",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_gateway_solhistoryitem",
+      "label": "SolHistoryItem",
+      "file_type": "code",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L11",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_gateway_sessionid",
+      "label": "sessionId()",
+      "file_type": "code",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L18",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_gateway_asksol",
+      "label": "askSol()",
+      "file_type": "code",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L26",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_gateway_localfallback",
+      "label": "localFallback()",
+      "file_type": "code",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L75",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_settings",
+      "label": "settings.ts",
+      "file_type": "code",
+      "source_file": "lib/settings.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_settings_solsettings",
+      "label": "SolSettings",
+      "file_type": "code",
+      "source_file": "lib/settings.ts",
+      "source_location": "L1",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_settings_defaults",
+      "label": "defaults",
+      "file_type": "code",
+      "source_file": "lib/settings.ts",
+      "source_location": "L16",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_settings_loadsettings",
+      "label": "loadSettings()",
+      "file_type": "code",
+      "source_file": "lib/settings.ts",
+      "source_location": "L29",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_settings_savesettings",
+      "label": "saveSettings()",
+      "file_type": "code",
+      "source_file": "lib/settings.ts",
+      "source_location": "L37",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_tauri",
+      "label": "tauri.ts",
+      "file_type": "code",
+      "source_file": "lib/tauri.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_tauri_istauri",
+      "label": "isTauri()",
+      "file_type": "code",
+      "source_file": "lib/tauri.ts",
+      "source_location": "L1",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_tauri_installpushtotalkshortcut",
+      "label": "installPushToTalkShortcut()",
+      "file_type": "code",
+      "source_file": "lib/tauri.ts",
+      "source_location": "L5",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "plugin_global_shortcut",
+      "label": "@tauri-apps/plugin-global-shortcut",
+      "file_type": "code",
+      "source_file": "@tauri-apps/plugin-global-shortcut",
+      "confidence": "EXTRACTED",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_voice",
+      "label": "voice.ts",
+      "file_type": "code",
+      "source_file": "lib/voice.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_voice_solrecognizer",
+      "label": "SolRecognizer",
+      "file_type": "code",
+      "source_file": "lib/voice.ts",
+      "source_location": "L3",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_voice_solrecognizer_start",
+      "label": ".start()",
+      "file_type": "code",
+      "source_file": "lib/voice.ts",
+      "source_location": "L4",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_voice_solrecognizer_stop",
+      "label": ".stop()",
+      "file_type": "code",
+      "source_file": "lib/voice.ts",
+      "source_location": "L5",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_voice_solrecognizer_abort",
+      "label": ".abort()",
+      "file_type": "code",
+      "source_file": "lib/voice.ts",
+      "source_location": "L6",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_voice_browserrecognitionevent",
+      "label": "BrowserRecognitionEvent",
+      "file_type": "code",
+      "source_file": "lib/voice.ts",
+      "source_location": "L9",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_voice_browserrecognition",
+      "label": "BrowserRecognition",
+      "file_type": "code",
+      "source_file": "lib/voice.ts",
+      "source_location": "L13",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_voice_browserrecognition_start",
+      "label": ".start()",
+      "file_type": "code",
+      "source_file": "lib/voice.ts",
+      "source_location": "L17",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_voice_browserrecognition_stop",
+      "label": ".stop()",
+      "file_type": "code",
+      "source_file": "lib/voice.ts",
+      "source_location": "L18",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_voice_browserrecognition_abort",
+      "label": ".abort()",
+      "file_type": "code",
+      "source_file": "lib/voice.ts",
+      "source_location": "L19",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_voice_recognitionconstructor",
+      "label": "RecognitionConstructor",
+      "file_type": "code",
+      "source_file": "lib/voice.ts",
+      "source_location": "L25",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_voice_window",
+      "label": "Window",
+      "file_type": "code",
+      "source_file": "lib/voice.ts",
+      "source_location": "L28",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_voice_createrecognition",
+      "label": "createRecognition()",
+      "file_type": "code",
+      "source_file": "lib/voice.ts",
+      "source_location": "L34",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_voice_createlocalrecorder",
+      "label": "createLocalRecorder()",
+      "file_type": "code",
+      "source_file": "lib/voice.ts",
+      "source_location": "L62",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_voice_stopvoice",
+      "label": "stopVoice()",
+      "file_type": "code",
+      "source_file": "lib/voice.ts",
+      "source_location": "L144",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "lib_voice_speak",
+      "label": "speak()",
+      "file_type": "code",
+      "source_file": "lib/voice.ts",
+      "source_location": "L153",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "main",
+      "label": "main.tsx",
+      "file_type": "code",
+      "source_file": "main.tsx",
+      "source_location": "L1",
+      "_origin": "ast"
+    }
+  ],
+  "edges": [
+    {
+      "source": "app",
+      "target": "ref_react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "ref_lucide_react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "core_intent",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "core_intent_classifylocal",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "core_state",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "core_state_solstate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "lib_gateway",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "lib_gateway_asksol",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "lib_settings",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "lib_settings_defaults",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "lib_settings_loadsettings",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "lib_settings_savesettings",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "lib_settings_solsettings",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "lib_tauri",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "lib_tauri_installpushtotalkshortcut",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "lib_voice",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "lib_voice_createrecognition",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "lib_voice_speak",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "lib_voice_stopvoice",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "app_message",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "app_modules",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "app_statelabel",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "app_app",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L57",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "app_metric",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L297",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app",
+      "target": "app_modulepanel",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "App.tsx",
+      "source_location": "L301",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_intent_test",
+      "target": "ref_vitest",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "core/intent.test.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_intent_test",
+      "target": "core_intent",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "core/intent.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_intent_test",
+      "target": "core_intent_classifylocal",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "core/intent.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_intent",
+      "target": "core_intent_intent",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "core/intent.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_intent",
+      "target": "core_intent_classifiedintent",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "core/intent.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_intent",
+      "target": "core_intent_normalized",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "core/intent.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_intent",
+      "target": "core_intent_classifylocal",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "core/intent.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_intent_classifylocal",
+      "target": "core_intent_normalized",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "core/intent.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_redaction_test",
+      "target": "ref_vitest",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "core/redaction.test.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_redaction_test",
+      "target": "core_redaction",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "core/redaction.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_redaction_test",
+      "target": "core_redaction_redact",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "core/redaction.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_redaction",
+      "target": "core_redaction_redact",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "core/redaction.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_state_test",
+      "target": "ref_vitest",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "core/state.test.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_state_test",
+      "target": "core_state",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "core/state.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_state_test",
+      "target": "core_state_cantransition",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "core/state.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_state_test",
+      "target": "core_state_transition",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "core/state.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_state",
+      "target": "core_state_solstate",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "core/state.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_state",
+      "target": "core_state_allowed",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "core/state.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_state",
+      "target": "core_state_cantransition",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "core/state.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_state",
+      "target": "core_state_transition",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "core/state.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "core_state_transition",
+      "target": "core_state_cantransition",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "core/state.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_gateway",
+      "target": "core_intent",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_gateway",
+      "target": "core_intent_classifiedintent",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_gateway",
+      "target": "core_redaction",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_gateway",
+      "target": "core_redaction_redact",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_gateway",
+      "target": "lib_settings",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_gateway",
+      "target": "lib_settings_solsettings",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_gateway",
+      "target": "lib_gateway_solreply",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_gateway",
+      "target": "lib_gateway_solhistoryitem",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_gateway",
+      "target": "lib_gateway_sessionid",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_gateway",
+      "target": "lib_gateway_asksol",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_gateway",
+      "target": "lib_gateway_localfallback",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_gateway_asksol",
+      "target": "lib_gateway_localfallback",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_gateway_asksol",
+      "target": "lib_gateway_sessionid",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/gateway.ts",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_settings",
+      "target": "lib_settings_solsettings",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settings.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_settings",
+      "target": "lib_settings_defaults",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settings.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_settings",
+      "target": "lib_settings_loadsettings",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settings.ts",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_settings",
+      "target": "lib_settings_savesettings",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settings.ts",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_tauri",
+      "target": "lib_tauri_istauri",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/tauri.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_tauri",
+      "target": "lib_tauri_installpushtotalkshortcut",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/tauri.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_tauri_installpushtotalkshortcut",
+      "target": "lib_tauri_istauri",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/tauri.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_tauri_installpushtotalkshortcut",
+      "target": "ref_tauri_apps_plugin_global_shortcut",
+      "relation": "imports_from",
+      "context": "import",
+      "deferred": true,
+      "confidence": "EXTRACTED",
+      "source_file": "lib/tauri.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_tauri",
+      "target": "plugin_global_shortcut",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/tauri.ts",
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice",
+      "target": "lib_settings",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice",
+      "target": "lib_settings_solsettings",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice",
+      "target": "lib_voice_solrecognizer",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice_solrecognizer",
+      "target": "lib_voice_solrecognizer_start",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice_solrecognizer",
+      "target": "lib_voice_solrecognizer_stop",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice_solrecognizer",
+      "target": "lib_voice_solrecognizer_abort",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice",
+      "target": "lib_voice_browserrecognitionevent",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice",
+      "target": "lib_voice_browserrecognition",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice_browserrecognition",
+      "target": "lib_voice_browserrecognition_start",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice_browserrecognition",
+      "target": "lib_voice_browserrecognition_stop",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice_browserrecognition",
+      "target": "lib_voice_browserrecognition_abort",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice",
+      "target": "lib_voice_recognitionconstructor",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice",
+      "target": "lib_voice_window",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice",
+      "target": "lib_voice_createrecognition",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice",
+      "target": "lib_voice_createlocalrecorder",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L62",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice",
+      "target": "lib_voice_stopvoice",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L144",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice",
+      "target": "lib_voice_speak",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L153",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice_createrecognition",
+      "target": "lib_voice_createlocalrecorder",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice_createlocalrecorder",
+      "target": "lib_voice_browserrecognition_stop",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L76",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice_createlocalrecorder",
+      "target": "lib_voice_browserrecognition_start",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L124",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_voice_speak",
+      "target": "lib_voice_stopvoice",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/voice.ts",
+      "source_location": "L154",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "main",
+      "target": "ref_react",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "main.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "main",
+      "target": "ref_react_dom_client",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "main.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "main",
+      "target": "app",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "main.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "main",
+      "target": "styles",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "main.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "main",
+      "target": "app_app",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "main.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app_app",
+      "target": "lib_settings_loadsettings",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "App.tsx",
+      "source_location": "L60",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app_app",
+      "target": "lib_voice_stopvoice",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "App.tsx",
+      "source_location": "L84",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app_app",
+      "target": "core_intent_classifylocal",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "App.tsx",
+      "source_location": "L101",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app_app",
+      "target": "lib_gateway_asksol",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "App.tsx",
+      "source_location": "L111",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app_app",
+      "target": "lib_voice_speak",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "App.tsx",
+      "source_location": "L117",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app_app",
+      "target": "lib_voice_createrecognition",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "App.tsx",
+      "source_location": "L144",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app_app",
+      "target": "lib_tauri_installpushtotalkshortcut",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "App.tsx",
+      "source_location": "L172",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app_app",
+      "target": "lib_settings_savesettings",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "App.tsx",
+      "source_location": "L195",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "lib_gateway_asksol",
+      "target": "core_redaction_redact",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "lib/gateway.ts",
+      "source_location": "L70",
+      "weight": 1.0,
+      "_origin": "ast"
+    }
+  ],
+  "hyperedges": [],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

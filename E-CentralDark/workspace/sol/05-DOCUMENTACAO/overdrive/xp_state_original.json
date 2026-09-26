@@ -1,0 +1,36 @@
+{
+  "total_xp": 265,
+  "level": 1,
+  "current_level_xp": 265,
+  "xp_to_next_level": 500,
+  "skills_used": 5,
+  "actions_history": [
+    {
+      "skill": "overdrive-recovery",
+      "action": "debug",
+      "complexity": 7,
+      "xp_gained": 48,
+      "latency": 2.0,
+      "efficiency": 100,
+      "timestamp": "2026-08-08T21:58:54.558233+00:00"
+    },
+    {
+      "skill": "overdrive-visualizer",
+      "action": "complex",
+      "complexity": 8,
+      "xp_gained": 49,
+      "latency": 1.5,
+      "efficiency": 100,
+      "timestamp": "2026-08-08T22:00:39.456873+00:00"
+    }
+  ],
+  "efficiency_scores": [
+    100,
+    100,
+    100,
+    100,
+    100
+  ],
+  "created_at": "2026-08-08T00:00:00+00:00",
+  "last_updated": "2026-08-08T22:00:39.456888+00:00"
+}

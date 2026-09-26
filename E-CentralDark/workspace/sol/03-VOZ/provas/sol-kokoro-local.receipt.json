@@ -1,0 +1,21 @@
+{
+  "schema": "centraldark.sol.voice-local-receipt.v1",
+  "status": "PASS",
+  "endpoint": "http://127.0.0.1:8880/v1/audio/speech",
+  "health": "http://127.0.0.1:8880/health",
+  "model": "kokoro",
+  "voice": "pf_dora",
+  "format": "wav",
+  "proof_file": "sol-kokoro-local.wav",
+  "proof_bytes": 177244,
+  "proof_sha256": "1228968d37fc039b30ee838a6f25e233d29b18ef47b44084cad5cd9768f21d24",
+  "model_sha256": "496dba118d1a58f5f3db2efc88dbdc216e0483fc89fe6e47ee1f2c53f18ad1e4",
+  "notes": [
+    "local-only",
+    "no-secrets",
+    "no-production",
+    "no-docker",
+    "no-pm2",
+    "no-caddy-reload"
+  ]
+}

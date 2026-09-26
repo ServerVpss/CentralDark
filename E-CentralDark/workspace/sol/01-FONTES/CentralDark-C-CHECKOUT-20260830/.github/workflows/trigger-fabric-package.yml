@@ -1,0 +1,221 @@
+name: Trigger Fabric Full Package
+
+on:
+  pull_request:
+    paths:
+      - 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/**'
+      - 'scripts/trigger-fabric/**'
+      - '.github/workflows/trigger-fabric-package.yml'
+      - 'LEIA-ME-IA.md'
+      - 'AGENTS.md'
+      - 'docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md'
+      - 'docs/CONSCIENCIA/MULTIBUSSOLA.md'
+      - 'docs/CONSCIENCIA/MAPA-DO-CEREBRO.md'
+      - 'docs/CONSCIENCIA/PIVETE-IA/PIVETE-18-ROTA-MEMORIA.md'
+      - 'docs/CONSCIENCIA/APRENDIZADOS/**'
+      - 'docs/BRAIN/00-MAPA-SISTEMA/BRAIN.md'
+      - '.agents/skills/meta-lupa/**'
+      - '.agents/skills/distinct-engineering-compiler/**'
+      - '.agents/skills/capability-contract-router/**'
+      - '.agents/skills/signal-territory-crystallizer/**'
+      - '.agents/skills/engine-gap-closure/**'
+      - 'apps/modulos/HERMES-CORE/**'
+      - 'scripts/memory-linker/**'
+      - '.agents/skills/session-intelligence-harvester/**'
+      - '.agents/skills/knowledge-compiler/**'
+      - '.agents/skills/vector-memory/**'
+      - 'docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md'
+      - '.github/workflows/autonomia-promocao.yml'
+      - '.github/workflows/porta-de-entrada.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trigger-fabric-package-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-counterproof-package:
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact PR state
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Prove checkout HEAD
+        if: github.event_name == 'pull_request'
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          test "$actual" = "$EXPECTED_HEAD"
+          echo "HEAD_SHA=$actual"
+
+      - name: Setup Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v6
+        with:
+          python-version: '3.11'
+
+      - name: Verify repository contract facts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/trigger-fabric/verify_repo_contract.py . \
+            | tee docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
+          grep -q '^REPO_CONTRACT_VERIFY=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
+          grep -q '^BOT_ENTRY_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
+          grep -q '^OUTPUT_GUARD_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
+
+      - name: Verify master cycle and artifact properties
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/trigger-fabric/centraldark_master_cycle.py --self-test \
+            | tee "$RUNNER_TEMP/master-cycle-self-test.txt"
+          grep -q '"ok": true' "$RUNNER_TEMP/master-cycle-self-test.txt"
+          python scripts/trigger-fabric/verify_artifact_properties.py --self-test
+          python scripts/trigger-fabric/verify_artifact_properties.py --check-critical .
+          node apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs --self-test \
+            | tee "$RUNNER_TEMP/graphrag-master-cycle-self-test.txt"
+          grep -q '"ok":true\|"ok": true' "$RUNNER_TEMP/graphrag-master-cycle-self-test.txt"
+          echo 'CENTRALDARK_MASTER_CYCLE=PASS'
+          echo 'ARTIFACT_PROPERTIES=PASS'
+          echo 'HERMES_GRAPHRAG_MASTER_CYCLE=PASS'
+
+      - name: "Verify gatilho -> aprendizado sync (novo evento exige update em APRENDIZADOS.md no mesmo diff)"
+        if: github.event_name == 'pull_request'
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          python scripts/trigger-fabric/verify_gatilho_aprendizado_sync.py . "$BASE_SHA"
+
+      - name: Verify distinct engineering compiler binding
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s .agents/skills/distinct-engineering-compiler/SKILL.md
+          test -s .agents/skills/distinct-engineering-compiler/scripts/fixed_point_miner.py
+          grep -q '^name: distinct-engineering-compiler$' .agents/skills/distinct-engineering-compiler/SKILL.md
+          grep -q 'RED GAP lane' .agents/skills/distinct-engineering-compiler/SKILL.md
+          grep -q '10 × 12 bidirecional' .agents/skills/distinct-engineering-compiler/SKILL.md
+          grep -q 'SERIALIZE_MUTATION=true' .agents/skills/distinct-engineering-compiler/SKILL.md
+          grep -q 'DISTINCT_ENGINEERING_COMPILER_ON_MATERIAL_GAP' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+          grep -q 'RED_ISSUE' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+          grep -q 'RED_PR_OR_FAILED_CHECK' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+          echo 'DISTINCT_ENGINEERING_COMPILER_BINDING=PASS'
+
+      - name: Counterprove bounded 10x12 fixed-point miner
+        shell: bash
+        run: |
+          set -euo pipefail
+          python .agents/skills/distinct-engineering-compiler/scripts/fixed_point_miner.py --self-test \
+            | tee "$RUNNER_TEMP/fixed-point-miner.txt"
+          grep -q '"status": "PASS"' "$RUNNER_TEMP/fixed-point-miner.txt"
+          grep -q '"fixed_point": true' "$RUNNER_TEMP/fixed-point-miner.txt"
+          echo 'FIXED_POINT_MINER_10X12=PASS'
+
+      - name: Verify semantic crystal capability fabric
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s .agents/skills/capability-contract-router/SKILL.md
+          test -s .agents/skills/signal-territory-crystallizer/SKILL.md
+          test -s .agents/skills/distinct-engineering-compiler/references/signal-territory-fixed-point.md
+          test -s docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SIGNAL-TERRITORY-CAPABILITY-CRYSTAL.md
+          test -s scripts/trigger-fabric/semantic_crystal_tool.py
+          grep -q '^name: capability-contract-router$' .agents/skills/capability-contract-router/SKILL.md
+          grep -q '^name: signal-territory-crystallizer$' .agents/skills/signal-territory-crystallizer/SKILL.md
+          grep -q 'CAPABILITY_CONTRACT_ROUTER' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+          grep -q 'SIGNAL_TERRITORY_CRYSTALLIZATION' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+          grep -q 'FIXED_POINT_10X12_ADVERSARIAL_WHEN_CRYSTALLIZING' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+          python scripts/trigger-fabric/semantic_crystal_tool.py --self-test \
+            | tee "$RUNNER_TEMP/semantic-crystal-self-test.txt"
+          grep -q '^SEMANTIC_CRYSTAL_TOOL_SELF_TEST=PASS$' "$RUNNER_TEMP/semantic-crystal-self-test.txt"
+          echo 'SEMANTIC_CRYSTAL_CAPABILITY_FABRIC=PASS'
+
+      - name: Verify engine gap closure contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s .agents/skills/engine-gap-closure/SKILL.md
+          grep -q 'BOUNDARY_GUARD_PROFILE' .agents/skills/engine-gap-closure/SKILL.md
+          grep -q 'ENGINE_CAPABILITY_CARD' .agents/skills/engine-gap-closure/SKILL.md
+          grep -q 'SELF_HEALING_FAILURE_LOOP' .agents/skills/engine-gap-closure/SKILL.md
+          grep -q 'ENGINE_GAP_FIXED_POINT' .agents/skills/engine-gap-closure/SKILL.md
+          test -s scripts/trigger-fabric/engine_gap_fixed_point.py
+          python scripts/trigger-fabric/engine_gap_probe.py --self-test \
+            | tee .artifacts-engine-gap-probe-self-test.txt
+          grep -q '"ok": true' .artifacts-engine-gap-probe-self-test.txt
+          python scripts/trigger-fabric/engine_gap_fixed_point.py --self-test \
+            | tee .artifacts-engine-gap-fixed-point-self-test.txt
+          grep -q '"ok": true' .artifacts-engine-gap-fixed-point-self-test.txt
+          grep -q 'positive_reaches_fixed_point' .artifacts-engine-gap-fixed-point-self-test.txt
+          grep -q 'unknown_writer_blocks_false_green' .artifacts-engine-gap-fixed-point-self-test.txt
+          grep -q 'unknown_runtime_blocks_false_green' .artifacts-engine-gap-fixed-point-self-test.txt
+          grep -q 'engine-gap-closure/SKILL.md' docs/ARQUITETURA/CENTRALDARK-OMNI-ROUTER.md
+          echo 'ENGINE_GAP_CLOSURE_CONTRACT=PASS'
+          echo 'ENGINE_GAP_SELF_HEALING_FIXED_POINT=PASS'
+
+      - name: Render architecture PNG from canonical Mermaid
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx -y @mermaid-js/mermaid-cli@11.9.0 \
+            -i docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.mmd \
+            -o docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.png \
+            -b transparent
+          test -s docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.png
+
+      - name: Build deterministic full ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .artifacts/trigger-fabric
+          python scripts/trigger-fabric/build_package.py | tee .artifacts/trigger-fabric/build-result.txt
+          test -s .artifacts/trigger-fabric/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE.zip
+
+      - name: Fresh-extraction counterproof
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/trigger-fabric-verify
+          mkdir -p /tmp/trigger-fabric-verify
+          python - <<'PY'
+          import zipfile
+          z='.artifacts/trigger-fabric/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE.zip'
+          with zipfile.ZipFile(z) as f:
+              f.extractall('/tmp/trigger-fabric-verify')
+          PY
+          python scripts/trigger-fabric/verify_package.py \
+            /tmp/trigger-fabric-verify/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE \
+            | tee .artifacts/trigger-fabric/extracted-verify-result.txt
+          grep -q '^VERIFY=PASS$' .artifacts/trigger-fabric/extracted-verify-result.txt
+          grep -q '^BOT_ENTRY_CONTRACT=PASS$' .artifacts/trigger-fabric/extracted-verify-result.txt
+          grep -q '^OUTPUT_GUARD_CONTRACT=PASS$' .artifacts/trigger-fabric/extracted-verify-result.txt
+
+      - name: Prove one final ZIP only
+        shell: bash
+        run: |
+          set -euo pipefail
+          count=$(find .artifacts/trigger-fabric -maxdepth 1 -type f -name '*.zip' | wc -l)
+          test "$count" -eq 1
+          sha256sum .artifacts/trigger-fabric/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE.zip \
+            | tee .artifacts/trigger-fabric/ZIP-SHA256.txt
+
+      - name: Upload canonical ZIP
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE
+          path: .artifacts/trigger-fabric/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE.zip
+          if-no-files-found: error
+          retention-days: 30

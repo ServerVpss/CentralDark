@@ -1,0 +1,37 @@
+{
+  "schema": "centraldark.executor.boot.v1",
+  "timestamp_utc": "2026-08-18T12:14:30.979620+00:00",
+  "package": {
+    "mission_sha256": "e4d971ec5593776e08e37dea3d92a5cf1e582728c57944d98f5005095e77ee1a",
+    "master_sha256": "5f142b1552fa8cc74d6783873e58151f68870106f1439f268434fb279d8dbbb5"
+  },
+  "git": {
+    "executable": "C:\\Users\\danda\\AppData\\Local\\hermes\\git\\cmd\\git.exe"
+  },
+  "repo_probe": {
+    "discovery": "git_marker+rev_parse",
+    "candidate": "C:\\CentralDark\\Pivete\\CentralDark",
+    "git_executable": "C:\\Users\\danda\\AppData\\Local\\hermes\\git\\cmd\\git.exe",
+    "probe_code": 0,
+    "probe_err": ""
+  },
+  "repo": {
+    "root": "C:\\CentralDark\\Pivete\\CentralDark",
+    "branch": "fix/ci-self-hosted-fallback-deterministico",
+    "head": "c844a6857477d756052d2c9a5aab531546093a00",
+    "dirty": true,
+    "status_short": [
+      "M \"docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md\"",
+      "?? .agents/contratos/",
+      "?? NUL",
+      "?? docs/BRAIN/.obsidian/"
+    ],
+    "remote_sanitized": [
+      "origin\thttps://github.com/ServerVpss/CentralDark.git (fetch)",
+      "origin\thttps://github.com/ServerVpss/CentralDark.git (push)"
+    ],
+    "agents_md": "C:\\CentralDark\\Pivete\\CentralDark\\AGENTS.md",
+    "leia_me_ia": "C:\\CentralDark\\Pivete\\CentralDark\\LEIA-ME-IA.md"
+  },
+  "status": "BOOT_MEASURED"
+}

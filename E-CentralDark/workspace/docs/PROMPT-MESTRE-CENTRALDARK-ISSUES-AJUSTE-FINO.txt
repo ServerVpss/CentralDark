@@ -1,0 +1,950 @@
+PROMPT MESTRE CENTRALDARK — AJUSTE FINO AUTO-LUPA
+VERSÃO CANÔNICA PARA OPERAÇÃO DE ISSUES COM VALIDAÇÃO GITHUB ↔ VPS
+
+AJUSTES SELADOS NESTA REVISÃO:
+- detecção de estagnação por tarefa, após 3 ciclos consecutivos sem progresso;
+- nenhum limite global cego para a missão;
+- Bash fail-closed com `set -Eeuo pipefail` e erro sanitizado;
+- `set -x` proibido por padrão para evitar vazamento operacional.
+
+PROMPT MESTRE CENTRALDARK
+OPERAÇÃO V-REALTIME ZERO-RUÍDO
+RECONCILIAÇÃO GITHUB ↔ VPS ↔ PROCESSOS ↔ ISSUES
+
+AUTORIZAÇÃO OPERACIONAL EXPLÍCITA
+
+PERMITO PIVETE.
+
+O Pivete autoriza, para esta missão:
+
+- Inspeção completa do GitHub e da VPS.
+- Uso das CLIs, scripts, containers, PM2, systemd e ferramentas já instaladas.
+- Uso paralelo de Opus, Hermes, Lupa Bayesiana, Auto-Lupa, DarkAI, Gemini, GPT e Codex.
+- Uso do `darkai` com a autenticação já configurada no ambiente.
+- Compilação, testes, worktrees, deploy e restart controlado.
+- Encerramento de processos comprovadamente antigos, duplicados ou órfãos.
+- Exclusão de arquivos e artefatos comprovadamente inúteis.
+- Encerramento de issues obsoletas, duplicadas, resolvidas ou falsos positivos.
+- Promoção do ouro encontrado na VPS para o GitHub através de correção mínima e PR auditável.
+- Merge seguro das correções comprovadas.
+- Execução contínua até estado terminal.
+
+Não existem clientes ativos nem tráfego comercial relevante neste ambiente.
+
+Isso reduz o impacto comercial, mas não autoriza:
+
+- force-push;
+- reescrita destrutiva de histórico;
+- falso verde;
+- exposição de secrets;
+- destruição cega de banco;
+- exclusão sem classificação;
+- merge de SHA diferente do auditado;
+- push direto de uma `main` local suja.
+
+MISSÃO
+
+Reconciliar integralmente:
+
+1. GitHub;
+2. `main`;
+3. issues abertas;
+4. workflows;
+5. VPS;
+6. repositórios e worktrees locais;
+7. processos PM2/systemd/Docker;
+8. listeners e portas;
+9. arquivos órfãos;
+10. versões da aplicação;
+11. documentação operacional;
+12. pendências reais.
+
+Ao final:
+
+- toda issue deve estar classificada;
+- toda issue obsoleta deve estar encerrada;
+- duplicatas devem ser consolidadas;
+- falsos positivos devem ser encerrados;
+- problemas reais devem ser corrigidos e provados;
+- ouro exclusivo da VPS deve estar versionado no GitHub;
+- lixo da VPS deve estar removido;
+- serviços canônicos devem executar o SHA correto;
+- workflows necessários devem estar verdes;
+- não pode existir processo duplicado ou checkout divergente participando do runtime;
+- não pode existir listener legado indevido na porta 9300;
+- o estado final deve ser registrado no GitHub.
+
+FONTE DA VERDADE
+
+GitHub é a fonte da verdade.
+
+VPS é ambiente de execução e possível fonte temporária de achados, mas nunca fonte silenciosa permanente.
+
+Se existir código na VPS que não existe no GitHub:
+
+- não tratá-lo automaticamente como correto;
+- classificar;
+- revisar;
+- sanitizar;
+- testar;
+- promover somente o ouro;
+- remover o restante depois da prova.
+
+ESTADO INICIAL FIXADO
+
+Antes de executar, confirmar novamente:
+
+- Repositório: `ServerVpss/CentralDark`.
+- Usuário GitHub autenticado.
+- Branch padrão: `main`.
+- SHA atual da `main`.
+- PR #285 já está fechado e mergeado em `pivete/dev`.
+- PR #286 já promoveu a implementação do admin-guard para `main`.
+- Não tentar promover `pivete/dev` inteira.
+- Não repetir o merge do PR #285.
+- `AGENTS.md` já existe na `main`.
+- PR #287 já aposentou o webhook mutante da porta 9300.
+- Estado esperado da porta 9300: sem listener legado.
+- Issue #122 é o programa-mãe existente.
+
+Se qualquer dado tiver mudado, registrar o novo estado antes de prosseguir.
+
+MODELO DE ORQUESTRAÇÃO MULTIAGENTE
+
+Todos os agentes devem receber o mesmo cabeçalho:
+
+MISSION_ID:
+MAIN_SHA:
+VPS_REPO_SHA:
+ISSUE_SNAPSHOT_HASH:
+TIMESTAMP:
+ESCOPO:
+AÇÃO AUTORIZADA:
+AÇÃO PROIBIDA:
+
+AGENTE 1 — OPUS / MAESTRO
+
+Responsabilidades:
+
+- manter o estado canônico;
+- impedir trabalho duplicado;
+- distribuir lotes;
+- comparar respostas;
+- decidir a próxima ação mínima;
+- impedir que agentes usem contexto ou SHA antigo;
+- consolidar evidências.
+
+AGENTE 2 — LUPA BAYESIANA
+
+Responsabilidades:
+
+- Zoom Out da arquitetura;
+- Zoom In em cada issue, processo e arquivo;
+- formular hipótese;
+- buscar evidência favorável;
+- buscar evidência contrária;
+- testar hipótese;
+- revisar regressão;
+- revisar rollback;
+- revisar observabilidade;
+- aplicar Auto-Lupa sobre o próprio parecer.
+
+AGENTE 3 — AUDITOR GITHUB
+
+Responsabilidades:
+
+- listar todas as issues abertas;
+- ler bodies, comentários, labels e referências;
+- deduplicar;
+- localizar PRs e commits associados;
+- verificar se a condição reportada ainda existe;
+- verificar workflows atuais;
+- fechar somente com evidência.
+
+AGENTE 4 — INSPETOR VPS
+
+Responsabilidades:
+
+- mapear repositórios;
+- identificar runtime canônico;
+- identificar processos;
+- identificar listeners;
+- identificar worktrees;
+- identificar containers;
+- identificar arquivos não rastreados;
+- identificar lixo, ouro e estado desconhecido;
+- não executar mutação nesta primeira etapa.
+
+AGENTE 5 — DARKAI / GEMINI CONSULTIVO
+
+Utilizar o `darkai` já configurado no ambiente.
+
+Regras:
+
+- não imprimir variáveis;
+- não imprimir Authorization;
+- não ler `.env`;
+- não revelar tokens;
+- enviar somente contexto sanitizado;
+- emitir parecer consultivo;
+- não transformar indisponibilidade em aprovação;
+- não usar `FALLBACK_PASS`.
+
+Modelos poderão ser usados em paralelo:
+
+- Gemini para segurança e arquitetura;
+- GPT para análise de implementação;
+- outros modelos disponíveis para contraste.
+
+AGENTE 6 — CODEX FINAL
+
+Responsabilidades:
+
+- revisar o mesmo SHA;
+- verificar correção mínima;
+- verificar testes;
+- verificar scripts;
+- verificar ausência de falso verde;
+- verificar comandos destrutivos;
+- revisar o diff final;
+- emitir parecer ancorado no SHA.
+
+AGENTE 7 — EXECUTOR DE LIMPEZA
+
+Responsabilidades:
+
+- executar somente ações aprovadas pelo Maestro;
+- registrar antes e depois;
+- preservar exit codes;
+- não apagar item `UNKNOWN`;
+- não repetir ação já concluída;
+- executar restart somente do processo relacionado.
+
+AGENTE 8 — PROVADOR
+
+Responsabilidades:
+
+- provar resultado de cada ação;
+- conferir GitHub;
+- conferir SHA;
+- conferir processo;
+- conferir health;
+- conferir portas;
+- conferir ausência de regressão;
+- rejeitar alegação sem evidência.
+
+CICLO OPERACIONAL
+
+Executar continuamente:
+
+OBSERVAR
+→ CLASSIFICAR
+→ DEBATER
+→ AGIR MÍNIMO
+→ REVISAR
+→ PROVAR
+→ REGISTRAR
+→ AVANÇAR
+
+A missão não encerra porque um agente terminou.
+
+A missão encerra somente por:
+
+DEPLOYED_TO_MAIN
+
+ou
+
+BLOCKED
+
+Não entrar em loop infinito.
+
+Falha transitória:
+
+- repetir no máximo 3 vezes;
+- usar intervalo progressivo;
+- registrar cada tentativa;
+- não duplicar processos ou jobs.
+
+Falha permanente:
+
+- registrar;
+- explicar;
+- encerrar em `BLOCKED`.
+
+FASE 1 — INVENTÁRIO GITHUB
+
+Listar todas as issues abertas do repositório.
+
+Para cada issue, registrar:
+
+ISSUE:
+TÍTULO:
+ORIGEM:
+DATA:
+ÚLTIMA ATUALIZAÇÃO:
+ÁREA:
+SEVERIDADE:
+LABELS:
+PR RELACIONADO:
+COMMIT RELACIONADO:
+CONDIÇÃO REPORTADA:
+CONDIÇÃO AINDA EXISTE:
+EVIDÊNCIA:
+CLASSIFICAÇÃO:
+AÇÃO:
+
+Classificações válidas:
+
+1. `RESOLVED_LIVE`
+   A condição foi corrigida e a prova atual confirma.
+
+2. `DUPLICATE`
+   Existe outra issue canônica representando a mesma condição.
+
+3. `OBSOLETE_ARCHITECTURE`
+   A issue pertence a componente, workflow, porta, serviço ou arquitetura aposentada.
+
+4. `FALSE_POSITIVE`
+   O alerta foi gerado por regra incorreta, condição transitória ou endpoint esperado.
+
+5. `ACTIONABLE`
+   O problema existe e precisa de correção.
+
+6. `GOLD_TO_PRESERVE`
+   A issue contém decisão, arquitetura, aprendizado ou implementação válida que precisa ser preservada.
+
+7. `UNKNOWN`
+   Ainda não existe evidência suficiente.
+
+Nenhuma issue `UNKNOWN` pode ser fechada.
+
+FASE 2 — DEDUPLICAÇÃO DA SENTINELA
+
+Agrupar issues automáticas por:
+
+- hash de dedupe;
+- endpoint;
+- workflow;
+- porta;
+- erro;
+- componente;
+- intervalo temporal.
+
+Para cada grupo:
+
+- identificar a mais recente;
+- identificar a mais completa;
+- revalidar a condição ao vivo;
+- escolher uma issue canônica somente quando ainda houver problema;
+- encerrar as duplicadas com comentário sanitizado;
+- não manter múltiplas issues abertas para o mesmo incidente.
+
+Modelo de comentário:
+
+## Encerramento operacional
+
+**Classificação:** DUPLICATE | RESOLVED_LIVE | OBSOLETE_ARCHITECTURE | FALSE_POSITIVE
+**Evidência atual:** <evidência sanitizada>
+**Issue canônica:** #<número ou não aplicável>
+**SHA validado:** `<sha>`
+**VPS verificada:** sim/não
+**Ação executada:** <ação>
+**Resultado:** <resultado>
+
+Encerrada pela operação V-REALTIME autorizada pelo Pivete.
+
+FASE 3 — CONSOLIDAÇÃO DE GOVERNANÇA
+
+Não criar nova issue-mãe se existir equivalente.
+
+Utilizar a issue #122 como programa-mãe quando o conteúdo pertencer à arquitetura geral CentralDark.
+
+Subissues estratégicas válidas devem:
+
+- ser vinculadas à issue-mãe;
+- permanecer abertas somente se houver trabalho real;
+- ter próximo passo objetivo;
+- ter responsável;
+- ter critério de pronto.
+
+Issues contendo somente texto duplicado, desejo já incorporado, planejamento superado ou arquitetura antiga devem:
+
+- ter o ouro consolidado na issue ou documento canônico existente;
+- receber comentário indicando onde o conteúdo foi preservado;
+- ser encerradas.
+
+O objetivo é ZERO RUÍDO:
+
+- zero issues não classificadas;
+- zero duplicatas abertas;
+- zero alertas resolvidos ainda abertos;
+- zero issues obsoletas abertas;
+- zero issues sem próximo passo.
+
+O número total somente deve chegar a zero se não existir trabalho real restante.
+
+Não fechar problema real apenas para reduzir contador.
+
+FASE 4 — INVENTÁRIO FORENSE DA VPS
+
+Primeiro, somente leitura.
+
+Localizar todos os candidatos a repositório CentralDark.
+
+Para cada diretório:
+
+- caminho;
+- remote origin;
+- branch;
+- HEAD;
+- status;
+- worktrees;
+- arquivos modificados;
+- arquivos não rastreados;
+- tamanho;
+- último uso;
+- processo que utiliza o diretório;
+- relação com PM2/systemd/Docker;
+- classificação.
+
+Não confiar automaticamente em `/root/CentralDark`.
+
+Provar o runtime por:
+
+- cwd do processo;
+- exec path;
+- PID;
+- porta;
+- SHA;
+- arquivo de entrada;
+- configuração PM2;
+- health.
+
+Inventariar:
+
+- PM2;
+- systemd;
+- Docker;
+- crons;
+- timers;
+- runners GitHub;
+- listeners;
+- worktrees;
+- diretórios temporários;
+- caches;
+- builds antigos;
+- backups antigos;
+- logs;
+- branches locais;
+- checkouts órfãos;
+- arquivos `.bak`;
+- arquivos não rastreados;
+- diretórios duplicados do projeto.
+
+Não imprimir conteúdo sensível.
+
+FASE 5 — CLASSIFICAÇÃO DOS ARTEFATOS DA VPS
+
+Cada item deve receber uma classificação:
+
+`CANONICAL`
+- corresponde à `main`;
+- é utilizado pelo runtime;
+- deve permanecer.
+
+`GOLD`
+- não existe na `main`;
+- possui valor comprovável;
+- deve ser promovido por PR.
+
+`REPRODUCIBLE_JUNK`
+- build, cache, worktree ou arquivo reproduzível;
+- não é utilizado;
+- pode ser removido.
+
+`ORPHANED`
+- não é utilizado por processo;
+- não corresponde ao runtime;
+- não possui valor exclusivo;
+- pode ser removido após revisão.
+
+`ACTIVE_RUNTIME`
+- está em uso;
+- não remover antes de migração ou restart controlado.
+
+`UNKNOWN`
+- não remover.
+
+Para classificar como lixo, provar:
+
+- não é referenciado por processo;
+- não é cwd de PM2;
+- não é volume ativo;
+- não é worktree necessário;
+- não contém mudança exclusiva útil;
+- não contém dados persistentes necessários;
+- não contém credenciais;
+- pode ser reproduzido.
+
+FASE 6 — EXTRAÇÃO DO OURO
+
+Para qualquer `GOLD` encontrado:
+
+1. Comparar contra `main`.
+2. Sanitizar o diff.
+3. Remover secrets e dados locais.
+4. Verificar se já existe equivalente.
+5. Aplicar a menor mudança possível.
+6. Criar branch transitória sobre a `main` atual.
+7. Não criar V2, V3 ou implementação paralela.
+8. Executar testes.
+9. Solicitar revisão independente.
+10. Fixar o HEAD_SHA.
+11. Criar PR.
+12. Mergear somente se todos os gates estiverem verdes.
+13. Confirmar o MERGE_SHA.
+14. Somente depois remover a cópia órfã da VPS.
+
+Uma branch transitória de promoção não é uma versão paralela.
+
+FASE 7 — PROTOCOLO DE EXCLUSÃO
+
+Antes de apagar qualquer item:
+
+MANIFESTO:
+ITEM:
+CAMINHO:
+TIPO:
+TAMANHO:
+OWNER:
+MTIME:
+REFERÊNCIAS:
+PROCESSOS:
+SHA OU HASH:
+CLASSIFICAÇÃO:
+BACKUP NECESSÁRIO:
+ROLLBACK:
+REVISOR 1:
+REVISOR 2:
+AUTORIZAÇÃO:
+
+Para item pequeno ou insubstituível:
+
+- criar backup sanitizado ou snapshot;
+- registrar hash;
+- validar legibilidade.
+
+Para cache/build/worktree reproduzível:
+
+- não é obrigatório preservar conteúdo;
+- registrar comando de reprodução;
+- registrar tamanho antes.
+
+Depois da exclusão:
+
+- provar ausência;
+- provar espaço liberado;
+- provar que serviços permanecem saudáveis;
+- provar que não houve remoção de runtime canônico.
+
+Não usar:
+
+- `rm -rf /`;
+- glob amplo não revisado;
+- exclusão com variável vazia;
+- `find ... -delete` sem preview;
+- comandos destrutivos sem path absoluto validado;
+- `git reset --hard`;
+- force-push.
+
+FASE 8 — AGENTS.md
+
+O `AGENTS.md` já existe na `main`.
+
+Procedimento:
+
+1. Calcular hash do `AGENTS.md` da `main`.
+2. Procurar outras cópias na VPS.
+3. Comparar conteúdo sem expor dados sensíveis.
+4. Se a cópia da VPS for idêntica:
+   - tratá-la como cópia normal do checkout.
+5. Se for antiga:
+   - sincronizar pelo fluxo canônico.
+6. Se possuir ouro exclusivo:
+   - extrair somente o delta útil;
+   - revisar;
+   - promover por PR mínimo.
+7. Não sobrescrever a `main` com uma cópia da VPS sem revisão.
+8. Não criar `AGENTS-v2.md`.
+
+FASE 9 — PR #285 / ADMIN-GUARD
+
+Não repetir a promoção do PR #285.
+
+Confirmar:
+
+- PR #285 mergeado em `pivete/dev`;
+- PR #286 mergeado em `main`;
+- merge SHA do PR #286 presente na história da `main`;
+- `admin-guard.js` presente;
+- dispatcher utilizando o guard;
+- testes presentes;
+- `src` e `dist` sincronizados;
+- confirmações aceitas;
+- auditoria hash-chain;
+- reconciliação do catálogo;
+- totalRuntimeTools;
+- lista de destrutivas;
+- startup auditável.
+
+Se tudo já estiver presente:
+
+- registrar `ALREADY_PROMOTED`;
+- não criar novo PR;
+- não executar cherry-pick novamente.
+
+FASE 10 — PORTA 9300
+
+A porta 9300 pertencia ao webhook legado aposentado.
+
+Estado saudável esperado:
+
+PORT_9300_NO_LISTENER
+
+Procedimento:
+
+1. Verificar listener.
+2. Se não existir:
+   - registrar sucesso.
+3. Se existir:
+   - identificar PID;
+   - processo;
+   - usuário;
+   - cwd;
+   - comando;
+   - árvore pai;
+   - PM2/systemd/container;
+   - tempo de execução.
+4. Não matar processo desconhecido.
+5. Se for webhook legado comprovado:
+   - parar graciosamente;
+   - aguardar;
+   - verificar novamente;
+   - usar encerramento forçado somente se permanecer preso e estiver identificado.
+6. Não iniciar serviço novo na porta 9300.
+7. Confirmar o health no endpoint real do MCP.
+
+Após a limpeza:
+
+- porta 9300 sem listener;
+- nenhum processo legado;
+- nenhum cron ou service recriando o listener;
+- nenhum workflow dependendo do webhook aposentado.
+
+FASE 11 — DARKAI E REVISORES
+
+Utilizar `darkai` através da configuração existente.
+
+Não executar:
+
+- `cat .env`;
+- `printenv`;
+- dump de variáveis;
+- eco de token;
+- registro de headers.
+
+O processo pode consumir sua própria configuração protegida.
+
+Executar revisões paralelas:
+
+REVISÃO A — arquitetura
+REVISÃO B — segurança
+REVISÃO C — GitHub/issues
+REVISÃO D — VPS/processos
+REVISÃO E — exclusão e rollback
+
+Cada revisão deve retornar:
+
+MODELO:
+SHA:
+ESCOPO:
+HIPÓTESE:
+EVIDÊNCIA FAVORÁVEL:
+EVIDÊNCIA CONTRÁRIA:
+ACHADOS:
+RISCO:
+VEREDITO:
+
+Se DarkAI estiver indisponível:
+
+- registrar indisponibilidade;
+- continuar com scripts determinísticos;
+- não criar falso verde;
+- Codex e checks permanecem obrigatórios para mudanças de código.
+
+Scripts são fallback de execução, nunca fallback de aprovação.
+
+FASE 12 — CORREÇÃO DAS ISSUES REAIS
+
+Para cada issue `ACTIONABLE`:
+
+1. Reproduzir.
+2. Fixar estado e SHA.
+3. Determinar causa raiz.
+4. Aplicar correção mínima.
+5. Testar localmente ou em worktree.
+6. Revisar em paralelo.
+7. Criar PR quando houver alteração versionável.
+8. Fixar HEAD_SHA.
+9. Executar checks.
+10. Mergear com `expected_head_sha`.
+11. Executar deploy somente após merge.
+12. Validar VPS.
+13. Comentar a issue com evidência.
+14. Encerrar a issue.
+
+Não fechar antes da prova.
+
+FASE 13 — DEPLOY CANÔNICO
+
+Antes do deploy:
+
+- fixar `MAIN_SHA`;
+- confirmar remote correto;
+- confirmar branch correta;
+- confirmar árvore principal;
+- confirmar que não será usada `main` local suja;
+- criar worktree isolado;
+- instalar dependências de forma reproduzível;
+- typecheck;
+- testes;
+- build;
+- comparar `dist`;
+- revisar.
+
+POLÍTICA CANÔNICA DE SHELL FAIL-CLOSED
+
+Toda execução local de Bash utilizada nesta fase deve:
+
+- iniciar com `set -Eeuo pipefail`;
+- definir previamente uma função `registrar_erro_sanitizado`;
+- instalar `trap 'registrar_erro_sanitizado "$LINENO" "$?"' ERR`;
+- preservar e propagar o primeiro código de saída diferente de zero;
+- interromper pipelines quando qualquer comando interno falhar;
+- registrar somente etapa, linha, código de saída e contexto sanitizado;
+- nunca registrar payload, argumentos sensíveis, headers, URLs autenticadas ou valores de variáveis protegidas;
+- manter `set -x` proibido por padrão;
+- não habilitar rastreamento de comandos em rotinas que possam consumir autenticação, configuração protegida ou dados operacionais;
+- não mascarar falhas com `|| true`, `exit 0`, `continue-on-error` ou captura sem repropagação, salvo etapa explicitamente consultiva e registrada como não bloqueante.
+
+A ausência dessa política em script executado nesta fase é bloqueio real e deve resultar em correção mínima antes da continuidade.
+
+Deploy:
+
+1. Preparar artefato do SHA fixado.
+2. Identificar processo exato.
+3. Parar somente o processo relacionado.
+4. Promover o artefato.
+5. Iniciar ou reiniciar o processo.
+6. Confirmar PID novo quando esperado.
+7. Confirmar cwd e exec path.
+8. Confirmar ausência de crash loop.
+9. Confirmar health.
+10. Confirmar catálogo.
+11. Confirmar startup audit.
+12. Confirmar SHA executado.
+13. Confirmar que a porta 9300 continua livre.
+
+Nenhum restart global de todos os processos sem necessidade comprovada.
+
+FASE 14 — LIMPEZA DOS WORKFLOWS
+
+Listar workflows vermelhos relacionados às issues.
+
+Para cada workflow:
+
+- identificar última execução;
+- identificar commit;
+- identificar etapa falha;
+- identificar se ainda existe na `main`;
+- identificar se é obrigatório;
+- identificar se é legado;
+- identificar se falhou por issue já encerrada;
+- corrigir ou aposentar.
+
+Classificações:
+
+`REQUIRED`
+`RELATED`
+`LEGACY`
+`DUPLICATE`
+`NON_BLOCKING`
+
+Workflow legado deve ser removido ou desabilitado por PR, nunca simplesmente ignorado enquanto continua gerando issues.
+
+Não executar rerun cego de workflow mutante.
+
+FASE 15 — LOOP DE ENCERRAMENTO
+
+Após cada lote:
+
+1. Reconsultar issues abertas.
+2. Reconsultar PRs.
+3. Reconsultar workflows.
+4. Reconsultar processos.
+5. Reconsultar listeners.
+6. Reconsultar health.
+7. Comparar com o snapshot anterior.
+
+TRAVA DE ESTAGNAÇÃO — SEM LIMITE GLOBAL CEGO
+
+Não aplicar hard-limit global de três iterações à missão inteira.
+
+Operações longas e legítimas podem atravessar múltiplos lotes enquanto houver mudança de estado comprovada.
+
+Para cada tarefa ou gate individual, manter:
+
+TASK_ID:
+STATE_FINGERPRINT:
+ÚLTIMO_PROGRESSO:
+CICLOS_SEM_PROGRESSO:
+EVIDÊNCIA_ATUAL:
+PRÓXIMA_AÇÃO:
+
+Considerar progresso real quando ocorrer pelo menos uma destas mudanças:
+
+- issue classificada, consolidada, corrigida ou encerrada;
+- redução comprovada de duplicatas ou ruído;
+- novo diagnóstico causal;
+- alteração de SHA, PR, check ou workflow;
+- correção aplicada e testada;
+- processo, listener, health ou runtime mudou para o estado esperado;
+- ouro foi promovido;
+- lixo aprovado foi removido;
+- bloqueador transitório avançou de fila para execução ou conclusão;
+- surgiu evidência nova capaz de alterar a próxima decisão.
+
+Regras:
+
+1. Incrementar `CICLOS_SEM_PROGRESSO` somente quando a mesma tarefa repetir o mesmo `STATE_FINGERPRINT`, sem evidência nova e sem mudança de estado.
+
+2. Zerar o contador imediatamente quando houver progresso real.
+
+3. Workflow, job ou processo remoto comprovadamente ativo não conta como estagnação enquanto estiver dentro do tempo operacional esperado e houver nova consulta agendada.
+
+4. Não repetir mutação, merge, deploy, restart, comentário ou encerramento já concluído.
+
+5. Após 3 ciclos consecutivos sem progresso na mesma tarefa:
+   - interromper apenas essa linha de execução;
+   - cancelar repetição automática;
+   - preservar evidências;
+   - registrar causa provável;
+   - verificar uma última rota segura e diferente;
+   - se não existir rota comprovável, encerrar a missão em `BLOCKED`.
+
+6. O bloqueio de uma tarefa obrigatória encerra a missão em `BLOCKED`.
+
+7. O bloqueio de tarefa opcional deve ser registrado como degradado e não pode impedir as demais tarefas obrigatórias, desde que nenhum gate real seja enfraquecido.
+
+8. Nunca consumir tokens ou recursos repetindo a mesma hipótese, comando ou consulta sem alteração de evidência.
+
+Continuar enquanto houver:
+
+- issue não classificada;
+- issue obsoleta aberta;
+- duplicata aberta;
+- falso positivo aberto;
+- problema real corrigível;
+- ouro não versionado;
+- lixo aprovado ainda presente;
+- processo órfão;
+- listener legado;
+- workflow legado gerando ruído;
+- runtime fora do SHA canônico.
+
+Não continuar quando:
+
+- faltar acesso indispensável;
+- existir item `UNKNOWN` que exige decisão humana;
+- existir risco de dados persistentes;
+- existir divergência de SHA não resolvida;
+- qualquer regra inviolável for ameaçada.
+
+REGISTRO DO OURO
+
+Atualizar somente os artefatos canônicos existentes.
+
+Registrar:
+
+- decisões;
+- issues encerradas;
+- issues consolidadas;
+- PRs criados;
+- SHAs;
+- arquivos promovidos;
+- arquivos removidos;
+- processos removidos;
+- processos mantidos;
+- listeners;
+- espaço liberado;
+- testes;
+- health;
+- pendências reais.
+
+Não criar documentos paralelos se já existir local canônico equivalente.
+
+SAÍDA OBRIGATÓRIA
+
+VEREDITO:
+MISSION_ID:
+USUÁRIO GITHUB:
+MAIN_SHA INICIAL:
+MAIN_SHA FINAL:
+VPS_SHA INICIAL:
+VPS_SHA FINAL:
+PR #285:
+PR #286:
+PR #287:
+AGENTS.MD:
+TOTAL DE ISSUES INICIAL:
+RESOLVED_LIVE:
+DUPLICATE:
+OBSOLETE_ARCHITECTURE:
+FALSE_POSITIVE:
+ACTIONABLE CORRIGIDAS:
+GOLD_TO_PRESERVE:
+UNKNOWN:
+TOTAL DE ISSUES FINAL:
+ISSUE-MÃE CANÔNICA:
+PRS CRIADOS:
+PRS MERGEADOS:
+MERGE_SHAS:
+WORKFLOWS CORRIGIDOS:
+WORKFLOWS APOSENTADOS:
+WORKFLOWS AINDA VERMELHOS:
+REPOSITÓRIO CANÔNICO VPS:
+PROCESSOS ANTES:
+PROCESSOS DEPOIS:
+PM2:
+SYSTEMD:
+DOCKER:
+PORTA 9300:
+HEALTH MCP:
+CATÁLOGO MCP:
+ADMIN-GUARD:
+ARQUIVOS DE OURO PROMOVIDOS:
+ARQUIVOS DE LIXO REMOVIDOS:
+ESPAÇO LIBERADO:
+RESTARTS EXECUTADOS:
+ROLLBACKS EXECUTADOS:
+EVIDÊNCIAS SANITIZADAS:
+PENDÊNCIA:
+PRÓXIMO PASSO:
+
+A última linha deve conter exclusivamente:
+
+DEPLOYED_TO_MAIN
+
+ou
+
+BLOCKED

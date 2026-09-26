@@ -1,0 +1,43 @@
+{
+  "mission_id": "CENTRALDARK-CONVERGENCIA-01-36-TOTAL",
+  "calibration_head": "fdf034dd75515b07a611f192b4068d0ebc4adfd5",
+  "final_main_head": "fdf034dd75515b07a611f192b4068d0ebc4adfd5",
+  "production_head": null,
+  "manifest_sha256": "dd24104837021c33d08ff2e5f7bcbdeb35ef3629379e44ccf7e3b0707f77eb12",
+  "zip_sha256": "df7fe9501a438066fd088be1656170ea02bb69fccf00379b661aa13ea3f18ac9",
+  "zip_bytes": 227687,
+  "zip_verified": true,
+  "verification": {
+    "zip_exists": true,
+    "zip_size_gt_zero": true,
+    "zip_crc": "PASS",
+    "members": 106,
+    "manifest_entries": 106,
+    "members_match_manifest": true,
+    "fresh_extract": true,
+    "hash_revalidation": "PASS",
+    "dangerous_paths": 0,
+    "json_files_valid": true,
+    "packages_36_36": true,
+    "baseline_historical_zip_preserved_exact": true,
+    "secret_scan": "PASS",
+    "sensitive_file_paths": 0,
+    "issues": []
+  },
+  "packages_observed": 36,
+  "packages_reconciled": 36,
+  "meta_lupa_identity_match": true,
+  "multiagent": {
+    "real_subagent": false,
+    "solo_matrix": true,
+    "independent_judge": false
+  },
+  "repo_write": false,
+  "pr": null,
+  "merge_sha": null,
+  "deploy": false,
+  "production_proved": false,
+  "real_gap_count": 1,
+  "blocking_reason_for_promotion": "INDEPENDENT_JUDGE_UNAVAILABLE + related active PR/writer scopes + no runtime/VPS validation in this execution",
+  "generated_at": "2026-08-08T02:30:50.964248+00:00"
+}

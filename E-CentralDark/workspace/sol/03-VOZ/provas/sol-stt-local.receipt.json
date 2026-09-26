@@ -1,0 +1,25 @@
+{
+  "proof": "SOL_STT_LOCAL",
+  "status": "PASS",
+  "engine": "faster-whisper",
+  "version": "1.2.1",
+  "model": "Systran/faster-whisper-base",
+  "model_source": "local_huggingface_cache",
+  "device": "cpu",
+  "compute_type": "int8",
+  "language": "pt",
+  "input": "E:/CentralDark/workspace/sol/03-VOZ/provas/sol-kokoro-local.wav",
+  "observed_text": "Se ele local OK, voce entrar o dark funcionando em casa.",
+  "http_counterproof": {
+    "endpoint": "http://127.0.0.1:8790/v1/audio/transcriptions",
+    "method": "POST multipart/form-data",
+    "status_code": 200,
+    "proof": "SOL_STT_LOCAL",
+    "parser_fixed": true
+  },
+  "local_files_only": true,
+  "download": false,
+  "production": false,
+  "secrets_read": false,
+  "observed_at": "2026-08-30"
+}

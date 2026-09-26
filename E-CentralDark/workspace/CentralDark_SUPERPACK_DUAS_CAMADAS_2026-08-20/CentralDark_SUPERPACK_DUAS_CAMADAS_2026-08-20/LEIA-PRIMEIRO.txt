@@ -1,0 +1,15 @@
+CENTRALDARK — SUPERPACK DUAS CAMADAS
+
+1) Extraia esta pasta.
+2) Dê dois cliques em START-DUAS-CAMADAS.bat.
+3) Ele encontra BASE + PACOTE 2, calcula SHA256, extrai e cria:
+   _CentralDark_Duas_Camadas\MISSION-MERGED.md
+4) Entregue MISSION-MERGED.md ao Hermes/agente que vai trabalhar.
+
+SEGURANÇA:
+- não executa deploy;
+- não reinicia serviços;
+- não muda DNS/Caddy;
+- não roda migration;
+- não lê/imprime segredo;
+- não inicia agente sozinho porque a sintaxe/entrada do CLI deve ser medida, não inventada.

@@ -1,0 +1,118 @@
+---
+name: .claude/skills/headless-ui-principles/SKILL.md
+description: |
+  ヘッドレスUIアーキテクチャとスタイル非依存コンポーネント設計の専門知識。
+  
+  📖 参照書籍:
+  - 『Don't Make Me Think』（Steve Krug）: ユーザビリティ
+  
+  📚 リソース参照:
+  - `resources/Level1_basics.md`: レベル1の基礎ガイド
+  - `resources/Level2_intermediate.md`: レベル2の実務ガイド
+  - `resources/Level3_advanced.md`: レベル3の応用ガイド
+  - `resources/Level4_expert.md`: レベル4の専門ガイド
+  - `resources/aria-patterns.md`: WAI-ARIAパターン実装ガイド
+  - `resources/headless-architecture.md`: ヘッドレスアーキテクチャ詳細
+  - `resources/legacy-skill.md`: 旧SKILL.mdの全文
+  - `resources/library-comparison.md`: Radix UI/Headless UI/React Aria/Downshift/Ariakitの特徴・評価・選択ガイド
+  - `scripts/check-a11y.mjs`: a11yを検証するスクリプト
+  - `scripts/log_usage.mjs`: 使用記録・自動評価スクリプト
+  - `scripts/validate-skill.mjs`: スキル構造検証スクリプト
+  - `templates/headless-component-template.tsx`: コンポーネントテンプレート
+  - `templates/headless-hook-template.ts`: カスタムフックテンプレート
+  
+  Use proactively when handling headless ui principles tasks.
+version: 1.0.0
+level: 1
+last_updated: 2025-12-24
+references:
+  - book: "Don't Make Me Think"
+    author: "Steve Krug"
+    concepts:
+      - "ユーザビリティ"
+      - "情報設計"
+---
+
+# .claude/skills/headless-ui-principles/SKILL.md
+
+## 概要
+
+ヘッドレスUIアーキテクチャとスタイル非依存コンポーネント設計の専門知識。
+
+詳細な手順や背景は `resources/Level1_basics.md` と `resources/Level2_intermediate.md` を参照してください。
+
+
+## ワークフロー
+
+### Phase 1: 目的と前提の整理
+
+**目的**: タスクの目的と前提条件を明確にする
+
+**アクション**:
+
+1. `resources/Level1_basics.md` と `resources/Level2_intermediate.md` を確認
+2. 必要な resources/scripts/templates を特定
+
+### Phase 2: スキル適用
+
+**目的**: スキルの指針に従って具体的な作業を進める
+
+**アクション**:
+
+1. 関連リソースやテンプレートを参照しながら作業を実施
+2. 重要な判断点をメモとして残す
+
+### Phase 3: 検証と記録
+
+**目的**: 成果物の検証と実行記録の保存
+
+**アクション**:
+
+1. `scripts/validate-skill.mjs` でスキル構造を確認
+2. 成果物が目的に合致するか確認
+3. `scripts/log_usage.mjs` を実行して記録を残す
+
+
+## ベストプラクティス
+
+### すべきこと
+- カスタムデザインシステムを構築する時
+- 完全なスタイル制御が必要な時
+- 再利用可能なUI ロジックを抽出する時
+- アクセシビリティを確保しながら柔軟性を保ちたい時
+
+### 避けるべきこと
+- アンチパターンや注意点を確認せずに進めることを避ける
+
+## コマンドリファレンス
+
+### リソース読み取り
+```bash
+cat .claude/skills/headless-ui-principles/resources/Level1_basics.md
+cat .claude/skills/headless-ui-principles/resources/Level2_intermediate.md
+cat .claude/skills/headless-ui-principles/resources/Level3_advanced.md
+cat .claude/skills/headless-ui-principles/resources/Level4_expert.md
+cat .claude/skills/headless-ui-principles/resources/aria-patterns.md
+cat .claude/skills/headless-ui-principles/resources/headless-architecture.md
+cat .claude/skills/headless-ui-principles/resources/legacy-skill.md
+cat .claude/skills/headless-ui-principles/resources/library-comparison.md
+```
+
+### スクリプト実行
+```bash
+node .claude/skills/headless-ui-principles/scripts/check-a11y.mjs --help
+node .claude/skills/headless-ui-principles/scripts/log_usage.mjs --help
+node .claude/skills/headless-ui-principles/scripts/validate-skill.mjs --help
+```
+
+### テンプレート参照
+```bash
+cat .claude/skills/headless-ui-principles/templates/headless-component-template.tsx
+cat .claude/skills/headless-ui-principles/templates/headless-hook-template.ts
+```
+
+## 変更履歴
+
+| Version | Date | Changes |
+| --- | --- | --- |
+| 1.0.0 | 2025-12-24 | Spec alignment and required artifacts added |

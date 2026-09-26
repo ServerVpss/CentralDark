@@ -1,0 +1,470 @@
+## PAPEL 1 — CAUSADOR
+
+**ERRO_RAIZ=**
+[FATO] Eu tratei um pedido de **arquitetura documental do projeto** como um pedido principalmente sobre influência textual, enquadramento narrativo e explicação em linguagem simples.
+[INFERÊNCIA] Fixei atenção na parte cognitiva do pedido e abandonei a parte operacional.
+[CONCLUSÃO] O erro ocorreu na classificação inicial do alvo, antes de qualquer solução.
+
+**PEDIDO_REAL_DO_PIVETE=**
+Criar uma regra para que cada parte relevante do CentralDark explique:
+
+```text
+FUNÇÃO
+AÇÃO
+DIREÇÃO
+UTILIDADE
+ENTRADAS E SAÍDAS
+ROTAS E DEPENDÊNCIAS
+RISCO
+TESTE
+EVIDÊNCIA
+ROLLBACK
+AUTORIA DA DECISÃO
+```
+
+Essa explicação deveria existir nas camadas certas:
+
+```text
+código
+README do módulo
+mapa da arquitetura
+histórico de decisões
+testes e provas
+```
+
+O próprio documento principal já determina que o Pivete governa intenção e significado, enquanto o GPT estrutura sem inventar contexto ou transformar hipótese em fato.
+
+**REDUCAO_INCORRETA=**
+A frase sobre o código mostrar intenção foi reduzida a:
+
+```text
+“colocar explicação em leigo perto do código”
+```
+
+Depois, a discussão foi desviada para:
+
+```text
+indução de pensamento
+enquadramento
+narrativa
+influência textual
+```
+
+Esses assuntos podiam ser uma parte lateral, mas não eram o objeto principal.
+
+**PARTES_OMITIDAS=**
+
+```text
+README obrigatório e útil por módulo
+mapa verificável do projeto
+histórico de autoria e decisão
+ligação código ↔ documentação
+teste contra documentação velha
+evidência ligada ao estado real
+rollback da mudança
+gate contra caminho inventado
+atualização conjunta quando o comportamento mudar
+```
+
+**RISCO_CAUSADO=**
+A resposta incompleta poderia produzir:
+
+```text
+muitos comentários no código
+documentação fora do lugar
+README continuando incompleto
+mapa continuando desatualizado
+decisões atribuídas ao Pivete sem validação
+código e documentação divergentes
+sensação de organização sem prova estrutural
+```
+
+Ela pareceu correta porque captou uma parte verdadeira: o método atual exige explicar por que algo existe, o que lê, o que altera, onde falha e como desfazer. Mas isso foi aplicado apenas ao comando/comentário, não ao sistema documental inteiro.
+
+---
+
+## PAPEL 2 — REVISOR ADVERSARIAL
+
+**ATAQUE À PROPOSTA ATUAL=**
+
+### Excesso de comentários
+
+Obrigar todo bloco a repetir “função, ação, direção e utilidade” criaria ruído.
+
+O comentário só entra quando houver:
+
+```text
+intenção não óbvia
+risco
+decisão técnica importante
+efeito colateral
+rollback especial
+```
+
+Comentário que apenas traduz sintaxe deve ser rejeitado.
+
+### README enorme
+
+A lista completa não deve virar vinte parágrafos obrigatórios.
+
+Cada campo pode ter uma linha. Quando não se aplicar:
+
+```text
+N/A — motivo
+```
+
+O repositório já possui um padrão parcial que declara `README.md` obrigatório para módulos, mas esse padrão atual cobre basicamente estrutura, status e rota; ele não fecha autoria, evidência, teste e rollback.
+
+### Duplicação entre README e mapa
+
+O README explica o módulo em profundidade.
+
+O mapa guarda apenas:
+
+```text
+nome
+pasta
+serviço
+rota
+dependências principais
+estado
+evidência
+```
+
+Copiar o README inteiro para o mapa deve falhar no gate.
+
+### Caminhos inventados
+
+Nenhum caminho deve ser registrado só porque parece correto.
+
+O mapa atual já contém caminhos e referências específicas que precisam ser revalidados, como `claude.ap7.site` e um caminho antigo de vault no Windows.
+
+### Burocracia
+
+Nem toda correção de texto exige:
+
+```text
+mapa
+histórico
+teste novo
+rollback operacional
+```
+
+Essas camadas só são atualizadas **quando forem afetadas**.
+
+### Autoria ausente
+
+O histórico deve separar:
+
+```text
+autor_da_intenção
+rascunho_preparado_por
+revisado_por
+aprovado_por
+```
+
+Não usar apenas “responsável”, porque isso mistura decisão, escrita e execução.
+
+O histórico atual já demonstra parte desse modelo ao registrar autorização do Pivete, execução da IA, reversibilidade, motivo e arquivos envolvidos.
+
+### Ligação quebrável
+
+Links bidirecionais ajudam, mas podem apodrecer.
+
+Portanto:
+
+```text
+link inexistente = gate vermelho
+arquivo movido sem atualização das referências = gate vermelho
+```
+
+### Falso verde
+
+Uma documentação bonita não prova comportamento.
+
+```text
+documentação atualizada
++ teste ausente
+= não promovido
+```
+
+---
+
+## PAPEL 3 — ARQUITETO CORRETOR
+
+**REGRA_CANONICA_CONSOLIDADA=**
+
+### 1. Código
+
+Comentários somente para explicar:
+
+```text
+intenção
+risco
+decisão não óbvia
+efeito colateral
+mecanismo de rollback
+```
+
+Proibido comentar linha óbvia.
+
+### 2. README do módulo
+
+Todo módulo operacional deve possuir ou melhorar seu README existente com:
+
+```text
+NOME=
+FUNÇÃO=
+AÇÃO=
+DIREÇÃO=
+UTILIDADE=
+ENTRADAS=
+SAÍDAS=
+ROTAS=
+DEPENDÊNCIAS=
+PROCESSO_OU_SERVIÇO=
+ARQUIVOS_PRINCIPAIS=
+ONDE_EXECUTA=
+QUEM_PODE_ALTERAR=
+RISCOS=
+FALHAS_CONHECIDAS=
+TESTES=
+ROLLBACK=
+FONTE_DA_DECISÃO=
+ÚLTIMA_EVIDÊNCIA=
+```
+
+Campos não aplicáveis recebem `N/A — motivo`.
+
+### 3. Mapa do projeto
+
+O mapa contém apenas resumo verificável:
+
+```text
+MÓDULO=
+PASTA=
+SERVIÇO=
+PORTA_INTERNA=
+ROTA_PÚBLICA=
+DEPENDÊNCIAS=
+RESPONSÁVEL=
+ESTADO=
+EVIDÊNCIA=
+```
+
+Nenhuma entrada entra sem caminho ou prova real.
+
+O mapa existente já tenta registrar função, URL, processo, local e status, além de exigir que mudanças estruturais sejam refletidas no histórico. Portanto, deve ser corrigido e evoluído, não substituído por outro mapa.
+
+### 4. Histórico de decisão
+
+Somente decisões relevantes recebem registro:
+
+```text
+DECISÃO=
+AUTOR_DA_INTENÇÃO=
+RASCUNHO_PREPARADO_POR=
+REVISADO_POR=
+APROVADO_POR=
+MOTIVO=
+ALTERNATIVAS=
+EVIDÊNCIA=
+ARQUIVOS_AFETADOS=
+TESTE=
+ROLLBACK=
+```
+
+Sem aprovação comprovada:
+
+```text
+STATUS=HIPÓTESE_AGUARDANDO_REVISÃO_DO_PIVETE
+```
+
+### 5. Mesmo trabalho
+
+Quando uma mudança alterar comportamento:
+
+```text
+código
+teste
+README do módulo
+mapa, se a arquitetura mudou
+histórico, se houve decisão nova
+```
+
+devem ser revisados dentro do mesmo trabalho.
+
+Não significa que todos precisam mudar sempre. Significa que todos precisam ser **checados**.
+
+### 6. Ligação bidirecional
+
+```text
+código aponta para documentação real quando necessário
+README aponta para os arquivos reais
+mapa aponta para o README real
+histórico aponta para commit, PR ou evidência real
+```
+
+Caminho inexistente bloqueia promoção.
+
+### 7. Gate contra bagunça
+
+Rejeitar:
+
+```text
+comentário que apenas explica sintaxe
+README copiado e genérico
+documento paralelo desnecessário
+caminho inexistente
+rota sem prova
+atribuição ao Pivete sem aprovação
+mudança de comportamento sem teste
+rollback ausente em mudança de risco
+mapa desatualizado
+documentação que contradiz o código
+falso verde baseado apenas em texto
+```
+
+A regra de ouro existente já determina preservar o que funciona, melhorar o mesmo artefato, evitar versões paralelas, testar, provar e registrar no Git.
+
+**ARTEFATO_CANONICO_A_MELHORAR=**
+
+Principal:
+
+```text
+docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md
+```
+
+Adicionar nele, após revisão do Pivete, uma seção sobre **documentação estrutural viva**.
+
+Esse arquivo já se declara principal, determina evolução no mesmo artefato e proíbe cópias concorrentes.
+
+Artefatos existentes que aplicam a regra, sem virar concorrentes:
+
+```text
+README existente de cada módulo
+docs/BRAIN/00-MAPA.md
+docs/BRAIN/02-ARQUITETURA.md
+docs/CONSCIENCIA/08-HISTORICO-DECISOES.md
+```
+
+**CAMINHOS_A_VERIFICAR=**
+
+```text
+docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md
+docs/CONSCIENCIA/08-HISTORICO-DECISOES.md
+docs/BRAIN/00-MAPA.md
+docs/BRAIN/02-ARQUITETURA.md
+src/apps/modulos/README.md
+apps/modulos/*/README.md
+apps/modulos/*/src/**
+apps/modulos/*/tests/**
+supabase/functions/*/index.*
+scripts/**
+.github/workflows/**
+```
+
+Observação:
+
+```text
+apps/modulos/*/README.md
+```
+
+é um padrão a verificar módulo por módulo. Não foi provado que todos os módulos possuem esse arquivo.
+
+**TESTES_DE_REGRESSAO=**
+
+```text
+T01 — comentário óbvio
+Resultado esperado: REJEITADO
+
+T02 — comentário explicando risco não óbvio
+Resultado esperado: APROVADO
+
+T03 — mudança de comportamento sem atualização do README afetado
+Resultado esperado: BLOQUEADO
+
+T04 — README apontando para arquivo inexistente
+Resultado esperado: BLOQUEADO
+
+T05 — mapa apontando para pasta, porta ou rota sem prova
+Resultado esperado: BLOQUEADO
+
+T06 — decisão atribuída ao Pivete sem aprovação registrada
+Resultado esperado: BLOQUEADO
+
+T07 — rascunho de IA marcado como hipótese
+Resultado esperado: PERMITIDO PARA REVISÃO
+
+T08 — mudança de código sem teste correspondente
+Resultado esperado: BLOQUEADO
+
+T09 — mudança de risco sem rollback
+Resultado esperado: BLOQUEADO
+
+T10 — alteração simples de texto sem impacto estrutural
+Resultado esperado: não exigir atualização artificial do mapa
+
+T11 — criação de documento V2 concorrente
+Resultado esperado: BLOQUEADO
+
+T12 — código, README e mapa apontando uns para os outros com caminhos válidos
+Resultado esperado: APROVADO
+```
+
+**CRITERIO_DE_APROVACAO=**
+
+A regra só pode virar canônica quando:
+
+```text
+Pivete revisar o significado
+Pivete corrigir a autoria
+Pivete aprovar o texto
+nenhum documento paralelo for criado
+os caminhos citados forem verificados
+o padrão for aplicado em um módulo real
+os 12 testes passarem
+o diff mostrar somente mudanças necessárias
+o histórico registrar decisão, autoria, evidência e rollback
+```
+
+**ROLLBACK=**
+
+Nesta etapa:
+
+```text
+nenhuma alteração foi feita
+nenhum rollback necessário
+```
+
+Na implementação futura:
+
+```text
+reverter o único commit ou PR que introduziu a regra
+restaurar as seções anteriores pelo Git
+reverter código, teste e documentação juntos quando fizerem parte da mesma mudança
+não usar reset --hard
+não apagar histórico
+```
+
+**VEREDITO=**
+
+```text
+A resposta anterior errou o alvo.
+
+A proposta corrigida é estruturalmente válida, mas ainda é uma PROPOSTA.
+
+O arquivo principal a melhorar é:
+docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md
+
+Nada deve virar canônico antes da revisão e aprovação do Pivete.
+```
+
+**Feito.** Auditoria adversarial concluída sem alteração no GitHub.
+**Evidência usada.** Documento principal do método, histórico de decisões, mapa do BRAIN e padrão parcial de módulos existentes.
+**Pendência.** Pivete revisar a regra consolidada e confirmar o artefato principal.
+**Próximo passo.** Após aprovação, preparar diff mínimo no mesmo arquivo e testar o padrão em um único módulo real.
+**BOOT.** Fato separado de inferência; proposta separada de decisão.
+**Fio da missão.** auditoria → revisão do Pivete → diff mínimo → módulo-piloto → testes → registro.
+
+STATUS=READY_FOR_PIVETE_REVIEW

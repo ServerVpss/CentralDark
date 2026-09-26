@@ -1,0 +1,197 @@
+{
+  "schema": "centraldark.appcentraldark-evoluir-inventory.v1",
+  "source": {
+    "hash_report": "e:/centraldark/workspace/sol/00-mapa-e-indices/_workspace_hash_report-organized-20260830.json",
+    "historical_root": "e:/centraldark/workspace/sol/01-fontes/appcentraldark-evoluir",
+    "declared_snapshot_sha256": "378848b430f182bc54b48839e2eef09c20220aaa7ee7c8d9bb725283490de009"
+  },
+  "totals": {
+    "source_items_total": 11360,
+    "files": 10260,
+    "directories": 1100,
+    "classifications": {
+      "CONSOLIDATE": 96,
+      "DROP_WITH_PROOF": 3,
+      "HISTORY_REFERENCE": 7,
+      "QUARANTINE": 8,
+      "REIMPLEMENT_CLEAN_ROOM": 177,
+      "REUSE": 11069
+    }
+  },
+  "closure": {
+    "source_items_classified": 11360,
+    "unclassified": 0,
+    "silently_dropped": 0,
+    "drop_with_proof": 3,
+    "capabilities_total": 14,
+    "capabilities_with_destination": 14,
+    "unowned": [],
+    "classification_fixed_point": true,
+    "mission_fixed_point": false,
+    "mission_fixed_point_reason": "RUNTIME_E2E_AND_COUNTERPROOF_REQUIRED"
+  },
+  "capabilities": [
+    {
+      "id": "desktop_tauri_surface",
+      "source": [
+        "node.exe",
+        "uninstall.exe",
+        "resources/icon.*"
+      ],
+      "owner": "apps/sol-desktop",
+      "destination": "TAURI_LOCAL_SURFACE",
+      "owner_present": true
+    },
+    {
+      "id": "pty_panes_processes",
+      "source": [
+        "sidecar/dist/core.*",
+        "sidecar/dist/spawnHelpers.*",
+        "sidecar/dist/panePaste.*"
+      ],
+      "owner": "apps/modulos/HERMES-CORE",
+      "destination": "HERMES_EXECUTION_RUNTIME",
+      "owner_present": true
+    },
+    {
+      "id": "model_engines",
+      "source": [
+        "sidecar/dist/GeminiLiveSession.*",
+        "sidecar/node_modules/@anthropic-ai/*"
+      ],
+      "owner": "apps/modulos/elite-gateway/scripts/centraldark_omni_router.py",
+      "destination": "OMNI_ROUTER_ENGINES",
+      "owner_present": true
+    },
+    {
+      "id": "capability_routing",
+      "source": [
+        "sidecar/dist/catalogStore.*",
+        "sidecar/dist/agentSpecWriter.*"
+      ],
+      "owner": ".agents/skills/capability-contract-router",
+      "destination": "CAPABILITY_CONTRACT_ROUTER",
+      "owner_present": true
+    },
+    {
+      "id": "jarvis_coordination",
+      "source": [
+        "sidecar/dist/JarvisService.*",
+        "sidecar/dist/jarvisLivePrompt.*"
+      ],
+      "owner": "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md",
+      "destination": "JARVIS_AGENT_CALL_HUB",
+      "owner_present": true
+    },
+    {
+      "id": "hub_missions_squads_cron",
+      "source": [
+        "sidecar/dist/cronTickLoop.*",
+        "sidecar/dist/squadPersistFields.*"
+      ],
+      "owner": "apps/modulos/mcp/src/hub-mission-consumer.js",
+      "destination": "CENTRALDARK_HUB",
+      "owner_present": true
+    },
+    {
+      "id": "mcp_tools_apis",
+      "source": [
+        "sidecar/dist/mcpCliInject.*",
+        "sidecar/node_modules/@modelcontextprotocol/*"
+      ],
+      "owner": "apps/modulos/mcp/src/index.js",
+      "destination": "CENTRALDARK_MCP",
+      "owner_present": true
+    },
+    {
+      "id": "session_memory_context",
+      "source": [
+        "sidecar/dist/JarvisMemory.*",
+        ".overclock-app/session.json"
+      ],
+      "owner": "apps/modulos/mcp/src/lib/personal-context-store.js",
+      "destination": "CANONICAL_SESSION_MEMORY",
+      "owner_present": true
+    },
+    {
+      "id": "voice_stt_tts_live",
+      "source": [
+        "sidecar/dist/voiceSafeText.*",
+        "sidecar/dist/GeminiLiveSession.*"
+      ],
+      "owner": "supabase/functions/audio-speech/index.ts",
+      "destination": "CENTRALDARK_AUDIO_CONTRACT",
+      "owner_present": true
+    },
+    {
+      "id": "transcript_watchers",
+      "source": [
+        "sidecar/dist/ClaudeTranscriptWatcher.*",
+        "sidecar/dist/CodexTranscriptWatcher.*"
+      ],
+      "owner": "scripts/memory-linker",
+      "destination": "MEMORY_LINKER_INGESTION",
+      "owner_present": true
+    },
+    {
+      "id": "remote_bridge_preview",
+      "source": [
+        "sidecar/dist/remoteBridge.*",
+        "sidecar/dist/previewServer.*"
+      ],
+      "owner": "apps/modulos/HERMES-CORE",
+      "destination": "HERMES_REMOTE_PREVIEW",
+      "owner_present": true
+    },
+    {
+      "id": "visual_observation_qa",
+      "source": [
+        "resources/qa-swarm/*",
+        "resources/qa-vision/*"
+      ],
+      "owner": "scripts/lupa",
+      "destination": "METALUPA_REALITY_JUDGE",
+      "owner_present": true
+    },
+    {
+      "id": "builder_playbooks",
+      "source": [
+        "resources/absurd-landing/*",
+        "resources/cinema*",
+        "resources/squad-former/*"
+      ],
+      "owner": "apps/modulos/Bolt",
+      "destination": "BOLT_BUILDER_CAPABILITIES",
+      "owner_present": true
+    },
+    {
+      "id": "local_runtime_state",
+      "source": [
+        ".overclock-app/*"
+      ],
+      "owner": "LOCAL_RUNTIME_ONLY",
+      "destination": "QUARANTINE_NOT_GIT",
+      "owner_present": true
+    }
+  ],
+  "mirror": {
+    "measured": true,
+    "root": "e:/centraldark/pivete/markdown/appcentraldark evoluir",
+    "actual_files": 10259,
+    "shared_files": 10258,
+    "missing": [
+      ".overclock-app/messages.db-shm",
+      ".overclock-app/messages.db-wal"
+    ],
+    "added": [
+      "to de Texto.txt"
+    ],
+    "transient_missing": [
+      ".overclock-app/messages.db-shm",
+      ".overclock-app/messages.db-wal"
+    ],
+    "material_missing": [],
+    "capability_evidence_preserved": true,
+    "status": "PASS"
+  }
+}

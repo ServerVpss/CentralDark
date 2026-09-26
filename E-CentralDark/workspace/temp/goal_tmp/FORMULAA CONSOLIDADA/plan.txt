@@ -1,0 +1,317 @@
+/goal CONTINUAR ATÉ O LIMITE REAL — SEM RECOMEÇAR
+
+MODELO_EXECUTOR_ATUAL=OPUS_5
+AUTORIDADE=PIVETE
+
+PERMITO PIVETE BOLT_BUILDER_CICLO_COMPLETO
+
+Leia integralmente e trate como fonte canônica:
+
+1. o plan.txt já carregado;
+2. PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md;
+3. o MANUAL.html atual;
+4. o estado real do Git, GitHub, VPS, containers e Builder.
+
+Não crie outro plano.
+Não reinicie a missão.
+Não volte ao inventário já concluído.
+Não repita recaps.
+Recupere o fio pela máquina e continue do estado comprovado.
+
+ESTADO JÁ PROVADO:
+
+PR_396=MERGED
+HEAD=50bcc613c
+TESTS=72/72_PASS
+ACTIONRUNNER=INTEGRADO
+CLASSIFICADOR=ATIVO
+BUILDER_LOCAL=HTTP_200
+BUILDER_PUBLICO=HTTP_200
+ISSUE_53=FECHADA
+BOLT_ONLINE=SIM
+
+OBJETIVO:
+
+Prosseguir pelas fases restantes do plano até:
+
+BOLT ONLINE
+→ PROJETO REAL ABRE
+→ WORKSPACE ISOLADO FUNCIONA
+→ PREVIEW AO VIVO FUNCIONA
+→ ALTERAÇÃO VISUAL APARECE
+→ ERRO CONTROLADO É DETECTADO
+→ CLASSIFICADOR EXPLICA A CAUSA
+→ ACTIONRUNNER TENTA CORRIGIR
+→ PREVIEW VOLTA SAUDÁVEL
+→ PUBLICAR FUNCIONA
+→ VOLTAR FUNCIONA
+→ CASA ENVIA MISSÃO
+→ VPS EXECUTA
+→ CASA ACOMPANHA
+→ PAINEL MOSTRA O ESTADO
+→ MANUAL É ATUALIZADO
+→ GITHUB REGISTRA
+→ OPERAÇÃO FICA CONTÍNUA
+
+ORDEM OBRIGATÓRIA:
+
+FASE 3 — PREVIEW REAL
+
+1. localizar o projeto real atual;
+2. identificar workspace, processo, container, porta e URL;
+3. habilitar ou corrigir preview por workspace;
+4. provar carregamento;
+5. provar HMR ou mecanismo equivalente;
+6. provar isolamento;
+7. provar restart;
+8. provar concorrência mínima;
+9. capturar evidência visual antes/depois.
+
+FASE 4 — LOOP DE AGENTES
+
+1. receber ordem em linguagem comum;
+2. converter para tarefa do projeto;
+3. alterar no workspace;
+4. executar build;
+5. coletar erro;
+6. classificar causa;
+7. acionar ActionRunner;
+8. corrigir;
+9. reconstruir;
+10. atualizar preview;
+11. mostrar resultado único ao Pivete.
+
+FASE 5 — PUBLICAR E VOLTAR
+
+1. congelar candidato;
+2. registrar HEAD e hash;
+3. rodar testes;
+4. criar branch/commit/PR quando necessário;
+5. aguardar checks;
+6. mergear somente com checks verdes e escopo limpo;
+7. publicar o Bolt atual;
+8. reiniciar somente o container necessário;
+9. validar HTTP local e público;
+10. guardar referência anterior;
+11. executar teste real do VOLTAR;
+12. restaurar novamente a versão atual após provar o rollback.
+
+AUTORIZAÇÃO DE PUBLICAÇÃO:
+
+PUBLICAR_BUILDER_NESTE_ESCOPO=AUTORIZADO
+MERGE_COM_CHECKS_VERDES=AUTORIZADO
+RESTART_SOMENTE_CONTAINER_BUILDER=AUTORIZADO
+ROLLBACK_CONTROLADO_DO_BUILDER=AUTORIZADO
+
+FASE 6 — PONTE CASA ↔ VPS
+
+Implementar no sistema existente:
+
+TASK_ID
+ORIGIN
+OWNER
+MISSION
+SCOPE
+PROJECT
+ALLOWED_ACTIONS
+DENIED_ACTIONS
+EXPECTED_OUTPUT
+TIMEOUT
+ROLLBACK
+EVIDENCE_REQUIRED
+AUTHORIZATION_ID
+
+Provar:
+
+HERMES_CASA_ENVIA
+→ WORKER_VPS_RECEBE
+→ EVENTOS_RETORNAM
+→ CANCELAMENTO_FUNCIONA
+→ RECONEXÃO_FUNCIONA
+→ RESULTADO_E_EVIDÊNCIA_CHEGAM
+
+Não transportar memória pessoal completa nem credencial bruta.
+
+FASE 7 — PAINEL ADMINISTRATIVO
+
+Usar HUB e componentes existentes.
+
+Mostrar:
+
+NOME
+FUNÇÃO_EM_LEIGO
+STATUS
+PROCESSO
+CONTAINER
+HOST
+PORTA
+ROTAS
+ENTRADA
+SAÍDA
+MODELO
+DEPENDÊNCIAS
+CONSUMIDORES
+ORIGEM
+ÚLTIMA_PROVA
+RISCO
+COMO_PARAR
+COMO_RESTAURAR
+
+Não criar outro painel se o HUB atual puder receber esta visão.
+
+FASE 8 — HUB E CANAIS
+
+Ligar somente o que já possuir infraestrutura e acesso disponível.
+
+Prioridade:
+
+HUB
+→ HERMES DESKTOP
+→ EVENTOS
+→ NOTIFICAÇÕES
+
+Telegram, WhatsApp, voz ou canais que exigirem escolha, conta, gasto ou credencial indispensável podem ficar registrados como bloqueio externo sem travar o restante.
+
+FASE 9 — PRIMEIRO PROJETO
+
+Usar um projeto de teste existente ou criar um exemplo mínimo dentro do mecanismo canônico do Bolt.
+
+Provar:
+
+IMPORTAR
+→ IDENTIFICAR TECNOLOGIA
+→ WORKSPACE
+→ PREVIEW
+→ ALTERAÇÃO VISUAL
+→ ERRO
+→ CORREÇÃO
+→ PUBLICAR
+→ VOLTAR
+→ REGISTRAR
+
+Não migrar negócio real sem escolha do Pivete.
+
+FASE 10 — OPERAÇÃO CONTÍNUA
+
+Preparar no sistema existente:
+
+health;
+logs;
+estado da missão;
+eventos;
+histórico;
+custo quando disponível;
+detecção de estagnação;
+recuperação;
+rollback;
+registro de aprendizado;
+refinamento do Builder pelo próprio Builder.
+
+REGRAS DE EXECUÇÃO:
+
+- um único escritor por arquivo;
+- leitores e revisores podem trabalhar em paralelo;
+- escrita deve ser serializada;
+- correção mínima;
+- preservar o que já funciona;
+- não criar V1, V2 ou V3;
+- não criar Builder paralelo;
+- não criar outro Jarvis;
+- não criar outra memória;
+- não fazer force-push;
+- não usar git reset --hard;
+- não fazer push direto de main local suja;
+- não apagar arquivo fora do escopo;
+- não alterar DNS, Caddy, banco, migrations ou serviços externos ao Bolt;
+- não alterar nem rotacionar credenciais nesta missão;
+- não imprimir valores de secrets;
+- usar branch, commit, PR, checks e rollback;
+- não declarar verde sem prova visual e operacional;
+- se uma ferramenta faltar, procurar alternativa existente e continuar;
+- se um teste falhar, corrigir e repetir;
+- não transformar dúvida sem risco em pedido de autorização;
+- não parar após cada etapa técnica previsível.
+
+INTERRUPÇÃO SOMENTE POR:
+
+BLOCKER_TARGET_NOT_FOUND
+BLOCKER_ACCESS_INDISPENSABLE
+BLOCKER_DATA_LOSS_PROBABLE
+BLOCKER_NEW_COST
+BLOCKER_INTENT_CONFLICT
+BLOCKER_VISUAL_DECISION_PIVETE
+BLOCKER_EXTERNAL_IRREVERSIBLE_OUTSIDE_SCOPE
+
+Qualquer outro problema deve ser investigado, contornado, testado e registrado.
+
+ATUALIZAÇÕES SOMENTE EM TRANSIÇÕES:
+
+PHASE_STARTED
+PHASE_PROVED
+BLOCKER_REAL
+PR_CREATED
+PR_MERGED
+DEPLOYED
+ROLLBACK_PROVED
+MANUAL_UPDATED
+MISSION_COMPLETE
+
+FORMATO DE TRANSIÇÃO:
+
+PHASE=
+STATE=
+HEAD_SHA=
+FILES_CHANGED=
+TESTS=
+VISUAL_PROOF=
+RUNTIME_PROOF=
+GIT_PROOF=
+ROLLBACK=
+BLOCKERS=
+NEXT_ACTION=
+
+MANUAL:
+
+Atualize o MANUAL.html existente.
+Não criar MANUAL-v2, final, novo ou paralelo.
+Preservar todas as seções antigas.
+Adicionar estado real, provas, pendências, histórico e próximo passo.
+Não registrar afirmação sem evidência.
+Não inserir secrets.
+
+ENCERRAMENTO:
+
+Só encerrar quando:
+
+1. todos os itens executáveis com os acessos atuais estiverem concluídos; ou
+2. existir bloqueio externo objetivo que impeça continuidade.
+
+SAÍDA FINAL:
+
+STATUS_FINAL=
+PHASES_COMPLETED=
+HEAD_SHA=
+PRS=
+BUILDER_ONLINE=
+PROJECT_OPENED=
+WORKSPACE_PROVED=
+PREVIEW_PROVED=
+VISUAL_CHANGE_PROVED=
+CONTROLLED_ERROR_PROVED=
+CLASSIFIER_PROVED=
+ACTIONRUNNER_PROVED=
+AUTO_CORRECTION_PROVED=
+PUBLISH_PROVED=
+ROLLBACK_PROVED=
+HOUSE_VPS_BRIDGE_PROVED=
+PANEL_PROVED=
+MANUAL_UPDATED=
+TESTS=
+FILES_CHANGED=
+SERVICES_CHANGED=
+BLOCKERS_EXTERNAL=
+PENDENCIAS_REAIS=
+NEXT_ACTION=
+FIO_DA_MISSAO=
+
+Continue agora do HEAD atual.

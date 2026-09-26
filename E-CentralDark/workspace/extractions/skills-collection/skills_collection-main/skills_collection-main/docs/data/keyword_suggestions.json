@@ -1,0 +1,1056 @@
+{
+  "collection_dir": "/Users/mattnigh/Documents/My Repos/skills_collection/collection",
+  "top": 120,
+  "min": 20,
+  "ignore": [
+    "blob",
+    "claude",
+    "collection",
+    "context",
+    "discovered_at",
+    "documentation",
+    "example",
+    "examples",
+    "github.com",
+    "html_url",
+    "https",
+    "local_path",
+    "pattern",
+    "patterns",
+    "phase",
+    "references",
+    "sha",
+    "skill",
+    "skill.md",
+    "skills",
+    "structure",
+    "validation",
+    "workflow"
+  ],
+  "tokens": [
+    [
+      "code",
+      10567
+    ],
+    [
+      "path",
+      10263
+    ],
+    [
+      "not",
+      10025
+    ],
+    [
+      "all",
+      9911
+    ],
+    [
+      "test",
+      9850
+    ],
+    [
+      "what",
+      9239
+    ],
+    [
+      "repo",
+      8448
+    ],
+    [
+      "step",
+      8333
+    ],
+    [
+      "data",
+      8065
+    ],
+    [
+      "user",
+      7973
+    ],
+    [
+      "file",
+      7529
+    ],
+    [
+      "files",
+      7404
+    ],
+    [
+      "create",
+      7291
+    ],
+    [
+      "description",
+      6989
+    ],
+    [
+      "name",
+      6971
+    ],
+    [
+      "api",
+      6944
+    ],
+    [
+      "analysis",
+      6616
+    ],
+    [
+      "resources",
+      6544
+    ],
+    [
+      "content",
+      6366
+    ],
+    [
+      "check",
+      6362
+    ],
+    [
+      "reference",
+      6340
+    ],
+    [
+      "before",
+      6210
+    ],
+    [
+      "agent",
+      6030
+    ],
+    [
+      "new",
+      5786
+    ],
+    [
+      "scripts",
+      5635
+    ],
+    [
+      "testing",
+      5629
+    ],
+    [
+      "tests",
+      5577
+    ],
+    [
+      "integration",
+      5525
+    ],
+    [
+      "error",
+      5508
+    ],
+    [
+      "design",
+      5064
+    ],
+    [
+      "quality",
+      4955
+    ],
+    [
+      "docs",
+      4889
+    ],
+    [
+      "output",
+      4835
+    ],
+    [
+      "each",
+      4627
+    ],
+    [
+      "performance",
+      4617
+    ],
+    [
+      "only",
+      4536
+    ],
+    [
+      "review",
+      4508
+    ],
+    [
+      "type",
+      4472
+    ],
+    [
+      "complete",
+      4418
+    ],
+    [
+      "add",
+      4340
+    ],
+    [
+      "version",
+      4303
+    ],
+    [
+      "project",
+      4289
+    ],
+    [
+      "specific",
+      4195
+    ],
+    [
+      "read",
+      4184
+    ],
+    [
+      "implementation",
+      4176
+    ],
+    [
+      "using",
+      4155
+    ],
+    [
+      "run",
+      4138
+    ],
+    [
+      "best",
+      4130
+    ],
+    [
+      "common",
+      4044
+    ],
+    [
+      "task",
+      3998
+    ],
+    [
+      "issues",
+      3949
+    ],
+    [
+      "key",
+      3938
+    ],
+    [
+      "architecture",
+      3866
+    ],
+    [
+      "after",
+      3850
+    ],
+    [
+      "can",
+      3848
+    ],
+    [
+      "format",
+      3836
+    ],
+    [
+      "agents",
+      3780
+    ],
+    [
+      "system",
+      3697
+    ],
+    [
+      "verify",
+      3656
+    ],
+    [
+      "template",
+      3616
+    ],
+    [
+      "multiple",
+      3576
+    ],
+    [
+      "critical",
+      3552
+    ],
+    [
+      "templates",
+      3549
+    ],
+    [
+      "changes",
+      3513
+    ],
+    [
+      "see",
+      3507
+    ],
+    [
+      "workflows",
+      3505
+    ],
+    [
+      "fix",
+      3474
+    ],
+    [
+      "security",
+      3473
+    ],
+    [
+      "state",
+      3457
+    ],
+    [
+      "core",
+      3421
+    ],
+    [
+      "practices",
+      3386
+    ],
+    [
+      "time",
+      3359
+    ],
+    [
+      "configuration",
+      3339
+    ],
+    [
+      "required",
+      3334
+    ],
+    [
+      "need",
+      3324
+    ],
+    [
+      "tasks",
+      3321
+    ],
+    [
+      "development",
+      3313
+    ],
+    [
+      "usage",
+      3282
+    ],
+    [
+      "update",
+      3272
+    ],
+    [
+      "management",
+      3249
+    ],
+    [
+      "don",
+      3184
+    ],
+    [
+      "requirements",
+      3162
+    ],
+    [
+      "database",
+      3159
+    ],
+    [
+      "work",
+      3128
+    ],
+    [
+      "without",
+      3124
+    ],
+    [
+      "tools",
+      3090
+    ],
+    [
+      "first",
+      3068
+    ],
+    [
+      "creating",
+      3067
+    ],
+    [
+      "quick",
+      3065
+    ],
+    [
+      "comprehensive",
+      3048
+    ],
+    [
+      "text",
+      3029
+    ],
+    [
+      "build",
+      3022
+    ],
+    [
+      "feature",
+      2995
+    ],
+    [
+      "purpose",
+      2977
+    ],
+    [
+      "always",
+      2902
+    ],
+    [
+      "clear",
+      2898
+    ],
+    [
+      "script",
+      2888
+    ],
+    [
+      "features",
+      2873
+    ],
+    [
+      "must",
+      2858
+    ],
+    [
+      "document",
+      2858
+    ],
+    [
+      "issue",
+      2856
+    ],
+    [
+      "model",
+      2843
+    ],
+    [
+      "process",
+      2825
+    ],
+    [
+      "tool",
+      2818
+    ],
+    [
+      "types",
+      2813
+    ],
+    [
+      "identify",
+      2806
+    ],
+    [
+      "validate",
+      2803
+    ],
+    [
+      "components",
+      2791
+    ],
+    [
+      "write",
+      2757
+    ],
+    [
+      "execution",
+      2749
+    ],
+    [
+      "errors",
+      2744
+    ],
+    [
+      "search",
+      2732
+    ],
+    [
+      "status",
+      2708
+    ],
+    [
+      "operations",
+      2697
+    ],
+    [
+      "optimization",
+      2695
+    ],
+    [
+      "handling",
+      2675
+    ],
+    [
+      "any",
+      2641
+    ],
+    [
+      "complex",
+      2626
+    ],
+    [
+      "include",
+      2625
+    ],
+    [
+      "summary",
+      2614
+    ]
+  ],
+  "bigrams": [
+    [
+      "best practices",
+      2955
+    ],
+    [
+      "error handling",
+      1678
+    ],
+    [
+      "quick reference",
+      962
+    ],
+    [
+      "version 1.0.0",
+      921
+    ],
+    [
+      "progressive disclosure",
+      855
+    ],
+    [
+      "success criteria",
+      773
+    ],
+    [
+      "quick start",
+      753
+    ],
+    [
+      "daishiman aiworkfloworchestrator",
+      740
+    ],
+    [
+      "what does",
+      663
+    ],
+    [
+      "edge cases",
+      661
+    ],
+    [
+      "creating new",
+      611
+    ],
+    [
+      "allowed-tools read",
+      604
+    ],
+    [
+      "not just",
+      580
+    ],
+    [
+      "yaml frontmatter",
+      552
+    ],
+    [
+      "code review",
+      548
+    ],
+    [
+      "root cause",
+      537
+    ],
+    [
+      "resources level2_intermediate.md",
+      515
+    ],
+    [
+      "read write",
+      513
+    ],
+    [
+      "resources level1_basics.md",
+      505
+    ],
+    [
+      "create new",
+      495
+    ],
+    [
+      "level1_basics.md resources",
+      489
+    ],
+    [
+      "not found",
+      480
+    ],
+    [
+      "resources legacy-skill.md",
+      468
+    ],
+    [
+      "code quality",
+      461
+    ],
+    [
+      "quality gates",
+      458
+    ],
+    [
+      "integration other",
+      457
+    ],
+    [
+      "details summary",
+      445
+    ],
+    [
+      "github actions",
+      444
+    ],
+    [
+      "level2_intermediate.md resources",
+      444
+    ],
+    [
+      "performance optimization",
+      438
+    ],
+    [
+      "test coverage",
+      423
+    ],
+    [
+      "environment variables",
+      407
+    ],
+    [
+      "business logic",
+      406
+    ],
+    [
+      "last updated",
+      404
+    ],
+    [
+      "output format",
+      393
+    ],
+    [
+      "user asks",
+      384
+    ],
+    [
+      "common issues",
+      379
+    ],
+    [
+      "across all",
+      377
+    ],
+    [
+      "repo daishiman",
+      370
+    ],
+    [
+      "aiworkfloworchestrator path",
+      370
+    ],
+    [
+      "aiworkfloworchestrator 14ce755471417bd7e3f0151384f2009c671099e4",
+      370
+    ],
+    [
+      "name description",
+      362
+    ],
+    [
+      "error messages",
+      359
+    ],
+    [
+      "naming conventions",
+      358
+    ],
+    [
+      "write edit",
+      352
+    ],
+    [
+      "reference files",
+      351
+    ],
+    [
+      "rather than",
+      349
+    ],
+    [
+      "next steps",
+      347
+    ],
+    [
+      "state management",
+      342
+    ],
+    [
+      "api key",
+      339
+    ],
+    [
+      "ask user",
+      329
+    ],
+    [
+      "design system",
+      328
+    ],
+    [
+      "user wants",
+      327
+    ],
+    [
+      "scripts assets",
+      325
+    ],
+    [
+      "grep glob",
+      324
+    ],
+    [
+      "mcp tools",
+      321
+    ],
+    [
+      "acceptance criteria",
+      316
+    ],
+    [
+      "bundled resources",
+      315
+    ],
+    [
+      "over time",
+      306
+    ],
+    [
+      "checklist before",
+      297
+    ],
+    [
+      "scripts log_usage.mjs",
+      297
+    ],
+    [
+      "scripts validate-skill.mjs",
+      297
+    ],
+    [
+      "breaking changes",
+      296
+    ],
+    [
+      "unit tests",
+      294
+    ],
+    [
+      "file paths",
+      287
+    ],
+    [
+      "common mistakes",
+      286
+    ],
+    [
+      "rest api",
+      285
+    ],
+    [
+      "user request",
+      282
+    ],
+    [
+      "mcp servers",
+      282
+    ],
+    [
+      "summary strong",
+      282
+    ],
+    [
+      "strong summary",
+      282
+    ],
+    [
+      "rdmptv adbautoplayer",
+      282
+    ],
+    [
+      "progress tracking",
+      279
+    ],
+    [
+      "rate limiting",
+      279
+    ],
+    [
+      "does not",
+      274
+    ],
+    [
+      "resources scripts",
+      271
+    ],
+    [
+      "required fields",
+      269
+    ],
+    [
+      "quality gate",
+      267
+    ],
+    [
+      "step create",
+      265
+    ],
+    [
+      "file path",
+      262
+    ],
+    [
+      "sdk-users apps",
+      262
+    ],
+    [
+      "before creating",
+      259
+    ],
+    [
+      "repo rysweet",
+      258
+    ],
+    [
+      "technical debt",
+      252
+    ],
+    [
+      "mcp server",
+      251
+    ],
+    [
+      "quality standards",
+      251
+    ],
+    [
+      "decision tree",
+      249
+    ],
+    [
+      "repo stharrold",
+      249
+    ],
+    [
+      "app router",
+      246
+    ],
+    [
+      "apps dataflow",
+      246
+    ],
+    [
+      "before writing",
+      242
+    ],
+    [
+      "most common",
+      240
+    ],
+    [
+      "across multiple",
+      240
+    ],
+    [
+      "user says",
+      239
+    ],
+    [
+      "core principles",
+      236
+    ],
+    [
+      "run tests",
+      236
+    ],
+    [
+      "user requests",
+      235
+    ],
+    [
+      "user mentions",
+      235
+    ],
+    [
+      "after each",
+      234
+    ],
+    [
+      "test content",
+      229
+    ],
+    [
+      "type safety",
+      228
+    ],
+    [
+      "all tests",
+      228
+    ],
+    [
+      "common pitfalls",
+      227
+    ],
+    [
+      "core capabilities",
+      226
+    ],
+    [
+      "step identify",
+      225
+    ],
+    [
+      "tests pass",
+      225
+    ],
+    [
+      "doesn exist",
+      224
+    ],
+    [
+      "parallel execution",
+      223
+    ],
+    [
+      "dark mode",
+      223
+    ],
+    [
+      "slash commands",
+      220
+    ],
+    [
+      "project root",
+      219
+    ],
+    [
+      "red flags",
+      219
+    ],
+    [
+      "core concepts",
+      217
+    ],
+    [
+      "questions what",
+      217
+    ],
+    [
+      "src components",
+      215
+    ],
+    [
+      "database schema",
+      214
+    ],
+    [
+      "api reference",
+      213
+    ],
+    [
+      "why matters",
+      212
+    ],
+    [
+      "too many",
+      210
+    ],
+    [
+      "quality assurance",
+      206
+    ]
+  ],
+  "phrases": [
+    [
+      "github actions",
+      444
+    ],
+    [
+      "unit tests",
+      295
+    ],
+    [
+      "app router",
+      252
+    ],
+    [
+      "integration tests",
+      206
+    ],
+    [
+      "prompt engineering",
+      139
+    ],
+    [
+      "azure devops",
+      96
+    ],
+    [
+      "pages router",
+      78
+    ],
+    [
+      "gitlab ci",
+      74
+    ],
+    [
+      "feature flags",
+      69
+    ],
+    [
+      "cloudflare workers",
+      65
+    ],
+    [
+      "google cloud",
+      32
+    ],
+    [
+      "cloudflare r2",
+      18
+    ],
+    [
+      "vector database",
+      18
+    ],
+    [
+      "anthropic claude",
+      11
+    ],
+    [
+      "openai api",
+      6
+    ]
+  ]
+}

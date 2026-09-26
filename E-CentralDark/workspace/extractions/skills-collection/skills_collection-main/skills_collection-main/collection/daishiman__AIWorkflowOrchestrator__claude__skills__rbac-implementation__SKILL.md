@@ -1,0 +1,120 @@
+---
+name: .claude/skills/rbac-implementation/SKILL.md
+description: |
+  ロールベースアクセス制御（RBAC）の設計と実装パターン。
+  最小権限の原則に基づくロール体系設計、多層アクセス制御、
+  権限チェックロジック、ポリシーエンジン構築を提供。
+  
+  📖 参照書籍:
+  - 『The Pragmatic Programmer』（Andrew Hunt, David Thomas）: 実践的改善
+  
+  📚 リソース参照:
+  - `resources/Level1_basics.md`: レベル1の基礎ガイド
+  - `resources/Level2_intermediate.md`: レベル2の実務ガイド
+  - `resources/Level3_advanced.md`: レベル3の応用ガイド
+  - `resources/Level4_expert.md`: レベル4の専門ガイド
+  - `resources/legacy-skill.md`: 旧SKILL.mdの全文
+  - `resources/multi-layer-access-control.md`: 多層アクセス制御の設計
+  - `resources/role-permission-design.md`: ロール・権限設計ガイド
+  - `scripts/log_usage.mjs`: 使用記録・自動評価スクリプト
+  - `scripts/validate-rbac-config.mjs`: RBAC設定検証スクリプト
+  - `scripts/validate-skill.mjs`: スキル構造検証スクリプト
+  - `templates/rbac-middleware-template.ts`: RBAC Middleware Template
+  - `resources/requirements-index.md`: 要求仕様の索引（docs/00-requirements と同期）
+  
+  Use proactively when handling rbac implementation tasks.
+version: 1.0.0
+level: 1
+last_updated: 2025-12-24
+references:
+  - book: "The Pragmatic Programmer"
+    author: "Andrew Hunt, David Thomas"
+    concepts:
+      - "実践的改善"
+      - "品質維持"
+---
+
+# RBAC Implementation
+
+## 概要
+
+ロールベースアクセス制御（RBAC）の設計と実装パターン。
+最小権限の原則に基づくロール体系設計、多層アクセス制御、
+権限チェックロジック、ポリシーエンジン構築を提供。
+
+詳細な手順や背景は `resources/Level1_basics.md` と `resources/Level2_intermediate.md` を参照してください。
+
+
+## ワークフロー
+
+### Phase 1: 目的と前提の整理
+
+**目的**: タスクの目的と前提条件を明確にする
+
+**アクション**:
+
+1. `resources/Level1_basics.md` と `resources/Level2_intermediate.md` を確認
+2. 必要な resources/scripts/templates を特定
+
+### Phase 2: スキル適用
+
+**目的**: スキルの指針に従って具体的な作業を進める
+
+**アクション**:
+
+1. 関連リソースやテンプレートを参照しながら作業を実施
+2. 重要な判断点をメモとして残す
+
+### Phase 3: 検証と記録
+
+**目的**: 成果物の検証と実行記録の保存
+
+**アクション**:
+
+1. `scripts/validate-skill.mjs` でスキル構造を確認
+2. 成果物が目的に合致するか確認
+3. `scripts/log_usage.mjs` を実行して記録を残す
+
+
+## ベストプラクティス
+
+### すべきこと
+- ロールと権限の体系を設計する時
+- アクセス制御を多層で実装する時（ミドルウェア、APIルート、データ層）
+- 権限チェックロジックを実装する時
+- 動的権限管理が必要な時
+- ポリシーベースアクセス制御を実装する時
+
+### 避けるべきこと
+- アンチパターンや注意点を確認せずに進めることを避ける
+
+## コマンドリファレンス
+
+### リソース読み取り
+```bash
+cat .claude/skills/rbac-implementation/resources/Level1_basics.md
+cat .claude/skills/rbac-implementation/resources/Level2_intermediate.md
+cat .claude/skills/rbac-implementation/resources/Level3_advanced.md
+cat .claude/skills/rbac-implementation/resources/Level4_expert.md
+cat .claude/skills/rbac-implementation/resources/legacy-skill.md
+cat .claude/skills/rbac-implementation/resources/multi-layer-access-control.md
+cat .claude/skills/rbac-implementation/resources/role-permission-design.md
+```
+
+### スクリプト実行
+```bash
+node .claude/skills/rbac-implementation/scripts/log_usage.mjs --help
+node .claude/skills/rbac-implementation/scripts/validate-rbac-config.mjs --help
+node .claude/skills/rbac-implementation/scripts/validate-skill.mjs --help
+```
+
+### テンプレート参照
+```bash
+cat .claude/skills/rbac-implementation/templates/rbac-middleware-template.ts
+```
+
+## 変更履歴
+
+| Version | Date | Changes |
+| --- | --- | --- |
+| 1.0.0 | 2025-12-24 | Spec alignment and required artifacts added |

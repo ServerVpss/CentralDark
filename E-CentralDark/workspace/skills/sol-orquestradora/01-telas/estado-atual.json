@@ -1,0 +1,31 @@
+{
+  "measured_at": "2026-08-30T22:13:07.8169859-03:00",
+  "measurement_source": "Screenpipe accessibility, frame 142120",
+  "visible_terminal_count": 13,
+  "root_terminal_session_count": 13,
+  "shell_related_process_count": 56,
+  "observed_level": 13,
+  "actionable_level": 13,
+  "distinct_tab_names": 2,
+  "visible_terminals": [
+    { "id": "T1", "surface": "CodexTab", "name": "CentralDark-local" },
+    { "id": "T2", "surface": "CodexTab", "name": "CentralDark-local" },
+    { "id": "T3", "surface": "CodexTab", "name": "CentralDark-local" },
+    { "id": "T4", "surface": "CodexTab", "name": "CentralDark-local" },
+    { "id": "T5", "surface": "CodexTab", "name": "MINGW64 visualizations" },
+    { "id": "T6", "surface": "CodexTab", "name": "CentralDark-local" },
+    { "id": "T7", "surface": "CodexTab", "name": "CentralDark-local" },
+    { "id": "T8", "surface": "CodexTab", "name": "CentralDark-local" },
+    { "id": "T9", "surface": "CodexTab", "name": "CentralDark-local" },
+    { "id": "T10", "surface": "CodexTab", "name": "CentralDark-local" },
+    { "id": "T11", "surface": "CodexTab", "name": "CentralDark-local" },
+    { "id": "T12", "surface": "CodexTab", "name": "CentralDark-local" },
+    { "id": "T13", "surface": "CodexTab", "name": "CentralDark-local" }
+  ],
+  "anchoring": {
+    "status": "OBSERVED_NOT_CAUSALLY_LINKED",
+    "mapping": "T1..T13 <-> S1..S13 by current ordinal only",
+    "revalidation_required": true
+  },
+  "root_session_pids": [29272, 2756, 14980, 20840, 29208, 10248, 11408, 6840, 12304, 19424, 19224, 12136, 23536]
+}

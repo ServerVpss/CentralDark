@@ -1,0 +1,811 @@
+/goal GATE 0 — CONSERTAR O FALLBACK LOCAL E RESSUSCITAR AS 3 TEMPERATURAS
+
+AUTORIDADE
+
+PERMITO PIVETE executar esta missão somente na CASA, no Hermes local do Windows,
+com inspeção, backup, correção mínima, testes offline/E2E controlados e rollback.
+
+OBJETIVO ÚNICO
+
+Antes de qualquer missão da Lupa, GitHub amplo, VPS, nuvem ou roteamento CentralDark:
+
+1. provar que existe um único Hermes local de produção;
+2. mapear todos os providers/modelos já disponíveis no aplicativo;
+3. corrigir o fallback local usando o máximo de opções GRATUITAS e autorizadas;
+4. preservar continuidade de sessão e contexto;
+5. ressuscitar o sistema de memória das 3 Temperaturas:
+   HOJE → SEMANA → REGRAS;
+6. eliminar escrita duplicada de memória no PC;
+7. provar tudo no mesmo benchmark;
+8. parar para revisão do Pivete.
+
+PROIBIDO
+
+- VPS;
+- nuvem;
+- deploy;
+- GitHub remoto, salvo leitura de documentação oficial quando necessária;
+- restart automático do Gateway;
+- fechar o aplicativo;
+- matar processo;
+- alterar produção;
+- copiar memória para nuvem;
+- criar outro Hermes;
+- criar outro profile de produção;
+- criar nova skill concorrente;
+- criar nova arquitetura de memória paralela;
+- alterar o kit original travado sem prova e autorização;
+- buscar, comprar, copiar, raspar ou usar chave de terceiros;
+- expor tokens, OAuth, cookies, secrets ou conteúdo de .env;
+- registrar valor de chave em relatório;
+- declarar modelo disponível sem teste real;
+- trocar modelo aleatoriamente no meio de uma tarefa longa;
+- aplicar os dois planos grandes já preparados;
+- tocar VPS ou Lupa canônica nesta missão.
+
+REGRA SOBRE CHAVES
+
+É permitido usar somente:
+
+1. OAuth já autenticado pelo próprio Pivete;
+2. chave já existente no Hermes e pertencente ao Pivete;
+3. provider gratuito que funcione sem chave;
+4. nova chave criada pelo Pivete em página OFICIAL do provider.
+
+Nunca “pegar chave por aí”.
+Se faltar credencial, registrar PROVIDER_NEEDS_PIVETE_KEY=SIM e continuar com os
+providers já autorizados.
+
+======================================================================
+FONTE DA VERDADE
+======================================================================
+
+Usar nesta ordem:
+
+1. comportamento e código da versão instalada;
+2. documentação técnica local em 127.0.0.1:3000;
+3. configuração real do profile pivete;
+4. comandos de diagnóstico da versão instalada;
+5. dashboard 127.0.0.1:9119 somente como interface auxiliar.
+
+EVIDÊNCIAS ATUAIS A REVALIDAR
+
+HERMES_VERSION_CANDIDATE=1.0.0
+HERMES_COMMIT_CANDIDATE=fb0ed8396
+DOCS_TECHNICAL=http://127.0.0.1:3000
+DASHBOARD=http://127.0.0.1:9119
+PROFILE_PATH=C:\Users\danda\AppData\Local\hermes\profiles\pivete
+SESSION_PLATFORM=telegram
+LOCAL_GATEWAY_CANDIDATE=hermes-desktop/gateway
+NUCLEO_ROOT=E:\CentralDark\Pivete\NUCLEO
+ORIGINAL_KIT_CANDIDATE=E:\CentralDark\Pivete\NUCLEO\hermes-mente
+ACTIVE_MOTOR_CANDIDATE=E:\CentralDark\Pivete\NUCLEO\motor
+
+Não presumir que estes valores continuam corretos.
+Provar antes de alterar.
+
+======================================================================
+FASE 0 — PROVAR UM ÚNICO HERMES LOCAL
+======================================================================
+
+Distinguir:
+
+INTERFACE:
+- Hermes Desktop;
+- Telegram;
+- terminal/CLI;
+- dashboard.
+
+RUNTIME:
+- processo/Gateway Hermes.
+
+ESTADO:
+- profile;
+- config;
+- state.db;
+- skills;
+- sessões;
+- arquivos no disco.
+
+Regra:
+
+Desktop + Telegram + terminal + dashboard podem ser interfaces do MESMO Hermes.
+Pastas C: e E: são estado/arquivos, não outros Hermes.
+
+Registrar:
+
+LOCAL_INTERFACES=
+LOCAL_HERMES_PROCESSES=
+LOCAL_GATEWAYS=
+LOCAL_INSTALLATIONS=
+LOCAL_PROFILES=
+LOCAL_PRODUCTION_HERMES_COUNT=
+LOCAL_TEST_HERMES_COUNT=
+
+Gate:
+
+Se LOCAL_PRODUCTION_HERMES_COUNT != 1:
+STATUS=BLOCKED
+não matar processo;
+não reiniciar;
+parar com evidência.
+
+======================================================================
+FASE 1 — CHECKPOINT E BACKUP
+======================================================================
+
+Registrar:
+
+DATE_TIME=
+HERMES_VERSION=
+HERMES_COMMIT=
+PROFILE=
+CONFIG_PATH=
+STATE_DB_PATH=
+CURRENT_MODEL=
+CURRENT_PROVIDER=
+CURRENT_SESSION_ID_HASH=
+GATEWAY_PID=
+GATEWAY_START_TIME=
+
+Nunca mostrar session ID real; usar hash ou sufixo sanitizado.
+
+Criar backup fora dos caminhos ativos:
+
+E:\CentralDark\backups\HERMES-GATE0-PRE-<timestamp>.zip
+
+Incluir somente:
+
+- config do profile;
+- arquivos de providers/rotas locais;
+- scripts de memória envolvidos;
+- HOJE/SEMANA/REGRAS das árvores candidatas;
+- metadados de cron/scheduler;
+- lista sanitizada de skills;
+- manifesto com paths e hashes.
+
+Não incluir:
+
+- tokens;
+- cookies;
+- secrets;
+- cache de imagens;
+- banco inteiro se contiver credenciais;
+- conversas privadas desnecessárias.
+
+Gerar:
+
+BACKUP_SHA256=
+ROLLBACK_PLAN=
+
+======================================================================
+FASE 2 — MANUAL ORIGINAL DO HERMES
+======================================================================
+
+Consultar a documentação da versão instalada e localizar:
+
+- providers suportados;
+- autenticação por OAuth;
+- autenticação por API key;
+- seleção de modelo;
+- aliases;
+- fallback nativo;
+- retries;
+- timeout;
+- rate limit;
+- profile config;
+- session continuity;
+- context/compression;
+- cron/scheduler;
+- memory;
+- hooks;
+- skill loading;
+- reload de config;
+- necessidade de restart.
+
+Para cada conclusão registrar:
+
+CLAIM=
+DOC_PATH=
+CODE_PATH=
+RUNTIME_PROOF=
+OBSERVED_OR_INFERRED=
+
+Se documentação e runtime divergirem:
+
+DOC_RUNTIME_DRIFT=SIM
+o runtime/código instalado vence para esta missão.
+Não improvisar mecanismo inexistente.
+
+======================================================================
+FASE 3 — INVENTÁRIO DE PROVIDERS E MODELOS LOCAIS
+======================================================================
+
+Usar comandos e APIs oficiais do Hermes instalado.
+
+Inspecionar sem revelar credenciais:
+
+- providers configurados;
+- providers autenticados;
+- OAuth ativos;
+- chaves presentes como SIM/NAO;
+- modelos listados;
+- modelo padrão;
+- aliases;
+- fallback atual;
+- erros recentes;
+- 401;
+- 403;
+- 404;
+- 429;
+- 5xx;
+- timeouts;
+- limites;
+- tool use;
+- vision;
+- contexto;
+- custo declarado pelo provider;
+- disponibilidade gratuita atual.
+
+Candidatos conhecidos a REVALIDAR, não presumir:
+
+- Nous OAuth;
+- xAI OAuth/Grok;
+- GitHub Copilot via gh;
+- Gemini;
+- Codex/OpenAI OAuth;
+- outros providers já visíveis no app.
+
+Para cada combinação:
+
+PROVIDER=
+AUTH_TYPE=
+AUTH_PRESENT=SIM|NAO
+MODEL_ID=
+MODEL_LISTED=SIM|NAO
+FREE_OR_INCLUDED=
+TEXT=
+VISION=
+TOOLS=
+CONTEXT=
+HEALTH=
+LAST_ERROR=
+LATENCY_MS=
+SOURCE=
+CHECKED_AT=
+
+Não cadastrar modelos inventados.
+Não usar IDs copiados de plano antigo sem confirmar.
+
+======================================================================
+FASE 4 — DESENHO DO FALLBACK LOCAL GRATUITO
+======================================================================
+
+OBJETIVO
+
+Usar o máximo de providers/modelos gratuitos ou já incluídos nas assinaturas do
+Pivete, sem aleatoriedade cega e sem quebrar contexto.
+
+REGRAS
+
+1. TAREFA LONGA / SESSÃO COM CONTEXTO
+   - usar STICKY PRIMARY;
+   - manter o modelo saudável durante a tarefa;
+   - trocar somente por erro elegível;
+   - ao trocar, transportar resumo, estado, ferramentas e restrições;
+   - registrar por que trocou.
+
+2. TAREFA CURTA / SEM ESTADO
+   - pode usar rotação ponderada entre modelos gratuitos saudáveis;
+   - respeitar cooldown e rate limit;
+   - não oscilar a cada token;
+   - não repetir provider que acabou de falhar.
+
+3. ERROS ELEGÍVEIS PARA FALLBACK
+   - 429;
+   - timeout;
+   - 5xx;
+   - provider indisponível;
+   - modelo indisponível;
+   - capability ausente antes da execução.
+
+4. ERROS NÃO ELEGÍVEIS PARA FALLBACK CEGO
+   - prompt inválido;
+   - permissão negada;
+   - tool/write perigoso;
+   - credencial inválida;
+   - violação de política;
+   - erro de caminho local causado pelo agente.
+
+5. FAIL-CLOSED
+   Para filesystem write, Git write, shell destrutivo, secrets, SQL write,
+   deploy, restart ou administração:
+   - não mudar para modelo menos capaz automaticamente;
+   - bloquear e pedir Pivete quando a cadeia não satisfizer capability + segurança.
+
+6. FAIL-OPEN CONTROLADO
+   Somente para texto de baixo risco:
+   - resumo;
+   - classificação;
+   - conversa curta;
+   - extração;
+   - documentação.
+
+7. CIRCUIT BREAKER
+   - 429 repetido: cooldown;
+   - 5xx repetido: abrir circuito;
+   - timeout repetido: rebaixar saúde;
+   - teste periódico de recuperação;
+   - sem loop infinito.
+
+8. ORÇAMENTO
+   - prioridade máxima para custo zero;
+   - provider pago não pode entrar automaticamente nesta missão;
+   - assinatura já paga pode ser tratada como INCLUDED, após prova;
+   - registrar PAID_FALLBACK_DISABLED=SIM.
+
+9. CAPABILITY ROUTING
+   - texto;
+   - visão;
+   - tool use;
+   - contexto grande;
+   - código;
+   - raciocínio;
+   - latência.
+
+Uma rota só recebe modelo que passou no capability test correspondente.
+
+ARTEFATO
+
+Preferir configuração/fallback nativo do Hermes.
+
+Somente criar um adaptador local quando:
+
+NATIVE_FALLBACK_SUPPORTED=NAO
+e
+GAP_PROVADO=SIM
+
+Não criar segundo Gateway.
+Não criar segundo Hermes.
+Não duplicar config.
+
+======================================================================
+FASE 5 — BENCHMARK ÚNICO DO FALLBACK
+======================================================================
+
+Criar fixtures imutáveis e sanitizadas.
+
+CASOS MÍNIMOS
+
+F01 texto curto
+F02 resumo
+F03 classificação
+F04 código simples
+F05 contexto longo
+F06 tool-use somente leitura
+F07 imagem/anexo Telegram
+F08 modelo primário retorna 429
+F09 modelo primário timeout
+F10 provider retorna 5xx
+F11 capability vision ausente
+F12 credencial inválida
+F13 provider volta do cooldown
+F14 continuidade após fallback
+F15 nenhum provider gratuito saudável
+F16 ação perigosa deve bloquear
+F17 rotação de tarefa stateless
+F18 sessão longa não deve oscilar
+F19 fallback sem loop
+F20 nenhum secret no log
+
+Para cada execução registrar:
+
+CASE=
+REQUEST_HASH=
+PRIMARY_PROVIDER=
+PRIMARY_MODEL=
+PRIMARY_RESULT=
+FALLBACK_TRIGGER=
+FALLBACK_CHAIN=
+FINAL_PROVIDER=
+FINAL_MODEL=
+CONTEXT_RESTORED=
+TOOLS_PRESERVED=
+LATENCY_MS=
+ERROR=
+RESULT_HASH=
+PASS=
+
+Executar duas rodadas idênticas.
+
+Critérios:
+
+- sem loop;
+- sem perda de instruções;
+- sem secret;
+- sem provider pago;
+- fallback real em erro simulado/controlado;
+- sessão longa estável;
+- tarefa curta pode distribuir;
+- ação perigosa bloqueia;
+- resultado reproduzível dentro do contrato.
+
+======================================================================
+FASE 6 — PROVAR A ARQUITETURA DAS 3 TEMPERATURAS
+======================================================================
+
+ATENÇÃO
+
+“3 Temperaturas” nesta missão NÃO significa sampling temperature de modelo.
+
+Significa memória:
+
+HOJE = quente
+SEMANA = morna
+REGRAS = fria
+
+EVIDÊNCIA ATUAL A REVALIDAR
+
+- hermes-mente é o kit cognitivo original;
+- contém 5 Leis → 10 Regras de Ouro, 3 Temperaturas e TESTE-DE-DIFERENCA;
+- foi marcado como origem/espelho travado;
+- motor/ é a árvore oficial fundida;
+- motor/03-memoria/memoria/ deveria ser a árvore ativa;
+- SEMANA.md foi reportado como vazio;
+- a destilação dependia de ação manual;
+- o plano 90% ficou como remendo operacional.
+
+Não alterar nada com base apenas nesta descrição.
+Comparar arquivo por arquivo.
+
+CANDIDATOS ESPERADOS
+
+E:\CentralDark\Pivete\NUCLEO\hermes-mente\
+E:\CentralDark\Pivete\NUCLEO\motor\03-memoria\memoria\
+C:\Users\danda\AppData\Local\hermes\profiles\pivete\
+
+Localizar:
+
+- HOJE.md;
+- SEMANA.md;
+- REGRAS.md;
+- scripts de destilação;
+- cron;
+- scheduler;
+- hooks de fim de sessão;
+- loaders;
+- mirrors;
+- cópias;
+- links;
+- consumers.
+
+Para cada árvore:
+
+PATH=
+ROLE=ORIGIN_LOCKED|ACTIVE|MIRROR|HISTORICAL|INCONCLUSIVE
+WRITABLE=
+LOADED_BY=
+HOJE_SHA=
+SEMANA_SHA=
+REGRAS_SHA=
+LAST_UPDATE=
+DUPLICATE_WITH=
+UNIQUE_CONTENT=
+BROKEN=
+
+Gate:
+
+Não aceitar duas árvores graváveis concorrentes.
+Não apagar origem histórica.
+Não editar hermes-mente quando for comprovadamente ORIGIN_LOCKED.
+
+======================================================================
+FASE 7 — CORREÇÃO DAS 3 TEMPERATURAS
+======================================================================
+
+OBJETIVO
+
+Uma única árvore ATIVA e gravável.
+
+Origem/espelho:
+- preservada;
+- somente leitura;
+- não consumida como memória ativa concorrente.
+
+Fluxo:
+
+EVENTO / SESSÃO
+        ↓
+HOJE.md
+        ↓ destilação idempotente
+SEMANA.md
+        ↓ promoção curada
+REGRAS.md
+
+REGRAS DE HOJE
+
+- memória operacional recente;
+- fatos em andamento;
+- decisões ainda não consolidadas;
+- evidência e timestamps;
+- deduplicação por ID/hash;
+- tamanho/idade controlados;
+- não apagar item ainda necessário.
+
+REGRAS DE SEMANA
+
+- resumo destilado;
+- padrões recorrentes;
+- decisões relevantes;
+- pendências;
+- causa → correção → teste;
+- sem copiar HOJE inteiro;
+- deve sobreviver a reset;
+- atualizar de forma idempotente.
+
+REGRAS DE REGRAS
+
+- somente conhecimento estável;
+- regra aprovada;
+- teste de reincidência;
+- origem/proveniência;
+- conflitos resolvidos;
+- não promover conversa crua;
+- não promover toda decisão automática.
+
+AUTOMAÇÃO
+
+Preferência:
+
+1. hook oficial de fim de sessão, quando suportado;
+2. scheduler/cron oficial do Hermes;
+3. tarefa local segura e documentada;
+4. script externo somente se não houver mecanismo nativo.
+
+Cadência inicial candidata:
+
+- destilar HOJE → SEMANA a cada 6 horas E no fechamento controlado da sessão;
+- avaliar SEMANA → REGRAS uma vez por dia ou por threshold;
+- promover para REGRAS somente quando passar critério de estabilidade.
+
+A cadência final deve respeitar o manual original e o runtime.
+
+Não criar dois schedulers para a mesma função.
+
+PLANO 90%
+
+O remendo “90% plano” não deve ser apagado de imediato.
+
+Manter como FALLBACK_MANUAL até:
+
+- automação rodar;
+- três ciclos verdes;
+- reset simulado verde;
+- ausência de perda;
+- ausência de duplicata.
+
+Depois classificar:
+90_PERCENT_PLAN=RETIRED|MANUAL_FALLBACK|ACTIVE
+
+======================================================================
+FASE 8 — TESTE DAS 3 TEMPERATURAS
+======================================================================
+
+Usar dados sintéticos, sem expor conversa privada.
+
+Criar marcadores:
+
+T-HOT-001
+T-WARM-001
+T-COLD-CANDIDATE-001
+T-DUP-001
+T-KEEP-001
+T-EXPIRE-001
+T-CONFLICT-001
+
+Testar:
+
+M01 evento entra em HOJE
+M02 duplicata não duplica
+M03 HOJE destila para SEMANA
+M04 SEMANA não copia HOJE integralmente
+M05 item operacional necessário permanece
+M06 item expirado sai de HOJE com rastro
+M07 candidato instável não chega a REGRAS
+M08 regra estável com prova chega a REGRAS
+M09 conflito bloqueia promoção
+M10 reset preserva SEMANA e REGRAS
+M11 execução repetida é idempotente
+M12 scheduler não roda duas vezes simultâneas
+M13 arquivo vazio não é tratado como sucesso
+M14 falha não corrompe arquivo anterior
+M15 rollback restaura estado
+M16 origem travada permanece intacta
+M17 somente uma árvore é gravável
+M18 consumers leem a árvore ativa
+M19 plano 90% continua disponível durante validação
+M20 relatório não contém memória privada
+
+Executar:
+
+CICLO_1=
+CICLO_2=
+CICLO_3=
+
+Depois simular:
+
+SESSION_RESET_TEST=
+APP_REOPEN_REQUIREMENT=
+GATEWAY_RESTART_REQUIREMENT=
+
+Não reiniciar automaticamente.
+
+Gate:
+
+Se SEMANA continuar vazia quando deveria receber conteúdo:
+STATUS=BLOCKED
+
+Se duas árvores forem graváveis:
+STATUS=BLOCKED
+
+Se a origem travada for alterada:
+executar rollback;
+STATUS=BLOCKED
+
+Se qualquer capacidade do kit original desaparecer:
+STATUS=BLOCKED
+
+======================================================================
+FASE 9 — INTEGRAÇÃO CONTROLADA
+======================================================================
+
+Somente aplicar mudanças depois dos testes offline.
+
+Paths autorizados:
+- config real do profile pivete;
+- arquivo nativo de fallback/rotas local comprovado;
+- árvore ativa comprovada das 3 Temperaturas;
+- scheduler oficial comprovado;
+- scripts auxiliares estritamente necessários.
+
+Não tocar:
+- VPS;
+- nuvem;
+- hermes-mente quando ORIGIN_LOCKED;
+- outra skill;
+- Lupa canônica;
+- repositório inteiro;
+- arquivos sem consumidor comprovado.
+
+Antes de cada escrita:
+
+PATH=
+BEFORE_SHA=
+BACKUP=
+CHANGE_REASON=
+ROLLBACK=
+
+Depois:
+
+AFTER_SHA=
+VALIDATION=
+
+Se a configuração exigir restart:
+
+RESTART_REQUIRED=SIM
+não reiniciar;
+retornar READY_FOR_MANUAL_RESTART.
+
+Se suportar reload seguro documentado:
+
+executar somente reload não destrutivo;
+provar sessão preservada.
+
+======================================================================
+FASE 10 — PROVA FINAL
+======================================================================
+
+Responder em um único bloco:
+
+STATUS=READY_FOR_PIVETE_REVIEW|READY_FOR_MANUAL_RESTART|BLOCKED
+
+HERMES_VERSION=
+HERMES_COMMIT=
+DOC_SOURCE=
+LOCAL_PRODUCTION_HERMES_COUNT=
+LOCAL_INTERFACES=
+PROFILE=
+GATEWAY_PID=
+
+BACKUP=
+BACKUP_SHA256=
+ROLLBACK_COMMAND=
+
+PROVIDERS_FOUND=
+PROVIDERS_AUTHENTICATED=
+FREE_OR_INCLUDED_PROVIDERS=
+MODELS_LISTED=
+MODELS_HEALTHY=
+MODELS_REJECTED=
+PROVIDERS_NEEDING_PIVETE_KEY=
+PAID_FALLBACK_DISABLED=SIM
+
+NATIVE_FALLBACK_SUPPORTED=
+FALLBACK_CONFIG_PATH=
+STICKY_SESSION_ENABLED=
+STATELESS_ROTATION_ENABLED=
+CIRCUIT_BREAKER_ENABLED=
+COOLDOWN_ENABLED=
+CAPABILITY_ROUTING_ENABLED=
+FAIL_OPEN_SCOPE=
+FAIL_CLOSED_SCOPE=
+
+FALLBACK_TESTS_RUN=
+FALLBACK_TESTS_PASS=
+FALLBACK_TESTS_FAIL=
+FALLBACK_REAL_SWITCHES=
+CONTEXT_LOSS_COUNT=
+SECRET_LEAKS=
+
+[REDIGIDO-PRESERVACAO]
+ACTIVE_MEMORY_PATH=
+ACTIVE_WRITABLE_MEMORY_COUNT=
+HOJE_PATH=
+SEMANA_PATH=
+REGRAS_PATH=
+DISTILLER_PATH=
+SCHEDULER_TYPE=
+SCHEDULER_CADENCE=
+ORIGINAL_KIT_UNCHANGED=
+DUPLICATE_WRITERS_REMOVED=
+NINETY_PERCENT_PLAN_STATUS=
+
+MEMORY_TESTS_RUN=
+MEMORY_TESTS_PASS=
+MEMORY_TESTS_FAIL=
+THREE_CYCLES_GREEN=
+SESSION_RESET_TEST=
+SEMANA_NONEMPTY_WHEN_EXPECTED=
+IDEMPOTENT=
+FIXED_POINT=
+DATA_LOSS_COUNT=
+DUPLICATE_COUNT=
+
+FILES_CHANGED=
+FILES_CREATED=
+FILES_REMOVED=
+RESTART_REQUIRED=
+RESTART_EXECUTED=NAO
+VPS_TOUCHED=NAO
+CLOUD_TOUCHED=NAO
+DEPLOY_EXECUTED=NAO
+MERGE_EXECUTED=NAO
+SECRETS_EXPOSED=NAO
+
+FALSE_GREENS_FOUND=
+PERMANENT_TESTS_CREATED=
+RESIDUAL_RISK=
+VERDICT=
+NEXT_STEP=
+
+Aplicar revisão final sobre:
+
+- declarações versus ações;
+- logs;
+- hashes;
+- erros;
+- fallback;
+- memória;
+- duplicatas;
+- rollback;
+- falso verde.
+
+Se STATUS=READY_FOR_MANUAL_RESTART:
+entregar também:
+
+MANUAL_RESTART_REASON=
+SESSION_EXPORT_PROOF=
+EXACT_RESTART_STEPS=
+POST_RESTART_TESTS=
+
+Pare após o relatório.

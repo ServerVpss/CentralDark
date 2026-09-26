@@ -1,0 +1,871 @@
+Architected focused state module changes while preserving existing constraints
+Architected focused state module changes while preserving existing constraints
+
+I'm working within a well-defined scope where I can write files in a sandbox environment and deliver a verifiable patch or diff. The baseline phase is already partially complete with a ZIP file that has a specific SHA256 hash.
+
+Now I'm looking at the baseline test results: six tests passed across three files with a clean exit, but the TypeScript compiler is reporting two pre-existing errors. The key constraint here is that I can't ignore those compiler failures as a "prior problem"—I need to ensure my changes don't introduce regressions beyond what was already there. However, fixing those TypeScript errors falls outside the scope of what I'm supposed to do, so I need to be careful not to expand the work unnecessarily.
+
+The tension is that adding continuity state to the core state module might require touching other files, but I should keep everything contained within the core logic itself—specifically in state.ts where operational state belongs—and add corresponding tests to the existing test file. This keeps the change focused and avoids unnecessary modifications to the UI layer or other restricted areas.
+
+My approach is to confine the changes to src/core/state.ts and src/core/state.test.ts, with zero modifications to the UI, gateway, or Tauri components, and no new dependencies. The pre-existing TypeScript errors remain unchanged, which satisfies the regression constraint.
+
+For the design, I'm mapping the mission state to the existing SolState structure, the intent classification with risk levels to ClassifiedIntent, and the evidence trail to the receipt mechanism already present in gateway.ts—all of these are existing encapsulation points that don't require architectural changes.
+
+Since checkpoint tracking, authorization, and operational state management don't currently exist, I'm extending state.ts canonically rather than creating new files. The risk field in intent.ts becomes the authorization hook, and I'll reference it within the state's continuity record.
+
+Defining the status type... Defining the type structure for progress tracking...
+
+I need a function that aggregates the progress measure into a single numeric score, and another that compares two states to determine if we're making headway or stuck. The validation function is critical — a checkpoint only counts as validated when there's actual evidence pointing to it, not just memory. Evidence needs to explicitly reference which checkpoint it validates, so I'm adding a checkpointId field to link them together. A checkpoint validates only when evidence exists with a matching checkpoint reference.
+
+The locate function finds the best candidate by ranking evidence order rather than declaration time, returning null if no evidence exists. The anchor function wraps this and returns both the result and a status code, with the key insight that newer evidence always overrides older memory-based checkpoints since we only consider evidence-anchored candidates.
+
+For monotonicity, I need to ensure that a candidate with a lower evidence order never replaces the currently anchored checkpoint — the function should only move forward in time. I'll return an anchored checkpoint object that includes the checkpoint itself, its evidence order, and the evidence used, so I can compare against the current anchor's order before updating.
+
+Defining authorization...
+
+Defining critical actions...
+
+For failure recovery, when a step fails after reaching a checkpoint, the system should return a FAIL status and resume from that anchored checkpoint rather than starting over. And when resuming a session, it pulls from the last anchored checkpoint. If no valid checkpoint exists, the system halts with an error state.
+
+The existing transition logic should remain intact. For T18, I can write a test that reads the state module and verifies it has no imports—proving it's pure and hasn't introduced coupling to other parts of the system.
+
+For T07 and T08, I'm consolidating the tool status logic into a single function that takes an observation object with fields like executed, toolAvailable, skipped, timedOut, and evidence, then maps those to the appropriate SolStatus. This covers all the unavailable/blocked/unknown scenarios deterministically.
+
+Defining the Observation interface... Writing the session interface... Now I'm setting up the execution plan: I'll use the full workspace tree as my working copy, keep the uploads directory as a pristine reference, run a clean baseline, apply the changes to state.ts and state.test.ts, then verify everything compiles and generate a diff to confirm only the intended files changed.
+
+Before writing the files, I need to check the TypeScript configuration in tsconfig.app.json to make sure I'm not introducing any new strict mode errors.
+
+Mostrar mais
+Concluído
+
+MODE=WRITER autorizado pela regra 7 (cópia limpa + patch). Fase 1 primeiro — nada de código antes do baseline fechar.
+
+Architected TypeScript state management system with transition logic and status mapping
+Architected TypeScript state management system with transition logic and status mapping
+
+Baseline fechado. FASE 2 → 7 agora, e a escrita fica dentro de um arquivo só.
+
+Navigated dependency constraints and refined test implementation strategy
+Navigated dependency constraints and refined test implementation strategy
+
+T18 introduziu erro de tipo novo (node:fs sem @types/node) — isso é regressão minha, não do projeto. Corrigindo sem adicionar dependência.
+
+Validated test integrity and probed adversarial edge cases thoroughly
+Validated test integrity and probed adversarial edge cases thoroughly
+
+FASE 10 — em vez de responder as 10 perguntas, tentei quebrar de verdade. Teste descartável, rodado e apagado.
+
+Executou um comando, leu um arquivo
+Executou um comando, leu um arquivo
+text
+MISSION_ID=SOL-CONTINUIDADE-20260804
+MODE=WRITER (copia limpa, patch devolvido; nada aplicado no seu ambiente)
+ZIP_SHA256=9839becdb5352d9568695b70208945aaa9e066754767b4ba579acc7646373630
+PROJECT_ROOT=sol-desktop-poc-source/apps/sol-desktop   (a raiz com package-lock;
+  a copia de topo `apps/` e identica exceto por nao ter lock nem .claude)
+FASE 1 — BASELINE (congelado antes de tocar em nada)
+text
+vitest run     -> 3 arquivos, 6 testes, 6 PASS, 0 FAIL, 0 SKIPPED, 914ms, EXIT=0
+tsc -b         -> EXIT=1, 2 erros PRE-EXISTENTES:
+                  src/App.tsx(171,7) TS2322
+                  tsconfig.node.json(7,35) TS5096
+33 arquivos de fonte congelados por SHA-256
+FASE 2 — ENCAIXE
+
+Procurei dono para cada responsabilidade antes de escrever uma linha:
+
+Responsabilidade	Onde já mora
+estado da missão	src/core/state.ts
+intenção + risco	src/core/intent.ts (risk: "CONTROL")
+evidência	src/lib/gateway.ts (SolReply.receipt)
+checkpoint · ancoragem · calibração · progresso · estagnação · autorização	não existiam
+text
+ENCAIXE=EXTENSÃO_CANÔNICA de src/core/state.ts
+
+O artefato que já responde por estado operacional absorve a fórmula. NOVO_CAMINHO_JUSTIFICADO não foi usado — não precisou.
+
+FÓRMULA_FINAL_EM_LINGUAGEM_COMUM
+
+A memória diz onde você provavelmente parou. Ela não decide. Cada ponto de parada só vale se existir algo de fora que o comprove: um hash, um commit, um diff, um recibo, um log, um teste que roda. Entre os que sobrevivem, vale o mais avançado pela ordem comprovada — nunca pelo horário que a memória alega. Se nenhum sobrevive, a SOL para e diz qual evidência falta, em vez de chutar um ponto de partida. Retomando dali, cada volta precisa mover alguma coisa medível. Quando uma volta não move nada, isso não é sucesso: é ponto fixo, e exige consolidar, escalar ou trocar de teste. E estar tecnicamente certo nunca é permissão: ação crítica exige autorização para aquela ação naquele alvo.
+
+FORMALIZAÇÃO (implementada, não comentada)
+𝑉
+(
+𝑐
+,
+𝐸
+𝑘
+)
+=
+1
+  
+⟺
+  
+∃
+𝑒
+∈
+𝐸
+𝑘
+:
+ 
+𝑒
+.
+checkpointId
+=
+𝑐
+.
+id 
+∧
+ 
+𝑒
+.
+target
+=
+𝑐
+.
+target 
+∧
+ 
+𝑒
+.
+kind
+∈
+𝐴
+ 
+∧
+ 
+𝑒
+.
+ref
+≠
+∅
+V(c,E
+k
+	​
+
+)=1⟺∃e∈E
+k
+	​
+
+: e.checkpointId=c.id ∧ e.target=c.target ∧ e.kind∈A ∧ e.ref
+
+=∅
+𝐶
+𝑘
++
+=
+{
+𝑐
+∈
+𝐶
+𝑘
+∣
+𝑉
+(
+𝑐
+,
+𝐸
+𝑘
+)
+=
+1
+}
+𝐿
+=
+{
+arg
+⁡
+max
+⁡
+𝑐
+∈
+𝐶
+𝑘
++
+𝜏
+(
+𝑐
+)
+	
+𝐶
+𝑘
++
+≠
+∅
+
+
+⊥
+	
+𝐶
+𝑘
++
+=
+∅
+C
+k
++
+	​
+
+={c∈C
+k
+	​
+
+∣V(c,E
+k
+	​
+
+)=1}L=
+⎩
+⎨
+⎧
+	​
+
+arg
+c∈C
+k
++
+	​
+
+max
+	​
+
+τ(c)
+⊥
+	​
+
+C
+k
++
+	​
+
+
+=∅
+C
+k
++
+	​
+
+=∅
+	​
+
+
+𝜏
+τ vem exclusivamente de Evidence.order. declaredAt da memória existe no tipo e não é lido em lugar nenhum da lógica — provei por grep: só aparece na declaração da interface.
+
+𝜇
+(
+𝑠
+)
+=
+hip
+o
+ˊ
+teses
++
+bloqueios
++
+n
+a
+˜
+o-ancorados
++
+testes pendentes
++
+risco
+μ(s)=hip
+o
+ˊ
+teses+bloqueios+n
+a
+˜
+o-ancorados+testes pendentes+risco
+
+Monotonicidade contra mensagem atrasada: 
+𝐿
+(
+⋅
+,
+⋅
+,
+ℎ
+𝑘
+)
+=
+ℎ
+𝑘
+L(⋅,⋅,h
+k
+	​
+
+)=h
+k
+	​
+
+ sempre que 
+𝜏
+(
+melhor
+)
+≤
+𝜏
+(
+ℎ
+𝑘
+)
+τ(melhor)≤τ(h
+k
+	​
+
+).
+
+MÁQUINA DE ESTADOS
+text
+        candidatos (memoria)
+              │
+        DESCONFIAR ─ V(c,E)=0 para todos ──► HALT_SEM_ANCORA ──► BLOCKED
+              │                                (diz o que falta)
+        V(c,E)=1 ─► LOCALIZAR (argmax τ) ─► h_k ancorado
+              │
+        PROSSEGUIR ─► μ(k+1) < μ(k) ? ──não & nada mudou──► PONTO_FIXO_ATINGIDO
+              │ sim                                          (≠ PASS)
+        PROVAR ─► classifyObservation ─► PASS │ FAIL │ UNKNOWN
+              │
+        ação crítica ─► A(a,ação,alvo)=1 ? ──não──► BLOCKED_AUTHORIZATION
+
+stateForStatus devolve null para UNKNOWN e PONTO_FIXO_ATINGIDO: status em curso não força transição de UI. Foi assim que a UI ficou intocada.
+
+ARQUIVOS
+text
+ARQUIVOS_LIDOS=state.ts state.test.ts intent.ts intent.test.ts App.tsx
+  gateway.ts README.md package.json + tauri.conf.json capabilities/default.json
+  lib.rs main.rs settings.ts voice.ts tauri.ts redaction.ts tsconfig.app.json
+ARQUIVOS_ALTERADOS=src/core/state.ts, src/core/state.test.ts   (2, zero criados)
+PATCH=sol-continuidade.patch — +539 / −3 linhas
+  as 3 removidas sao UMA linha: o `import { canTransition, transition }`,
+  reescrito para incluir os novos simbolos. Nenhuma assercao tocada.
+  `patch -p1 --dry-run` aplica limpo sobre a copia pristina.
+TESTES
+text
+TESTES_ANTES=6 PASS / 0 FAIL / 0 SKIPPED · tsc 2 erros
+TESTES_DEPOIS=24 PASS / 0 FAIL / 0 SKIPPED · tsc 2 erros (os MESMOS 2)
+
+Os 6 originais aparecem nominalmente na saída depois, intactos. T01–T18 todos passam.
+
+text
+REGRESSÕES_ENCONTRADAS=1 — eu introduzi: T18 importava `node:fs` e o projeto
+  não tem @types/node, o que subiu tsc de 2 para 3 erros.
+REGRESSÕES_CORRIGIDAS=1 — especificador montado em runtime ("node:"+"fs"),
+  tipado localmente. Zero dependência nova; package.json byte-idêntico.
+REGRESSÕES_RESTANTES=0
+text
+ZERO_REGRESSION=PASS
+  T_baseline-pass (6) ⊆ T_after-pass (24)          ✓ por nome
+  T_new-required (18) = PASS                        ✓
+  Δ_outside-scope = ∅                               ✓ diff de SHA-256 dos 33
+    arquivos: só state.ts e state.test.ts mudaram
+  FAIL_after (2) ≤ FAIL_baseline (2)                ✓ mesmos 2, pré-existentes
+  nenhum teste enfraquecido, apagado ou reclassificado como SKIPPED ✓
+CONTRAPROVA (FASE 10 — tentei quebrar, não perguntei)
+
+Escrevi um teste descartável com 6 ataques, rodei, apaguei, e reconfirmei que a árvore voltou idêntica ao pós-patch:
+
+Ataque	Resultado
+tipo de âncora inventado ("achismo")	não ancora ✓
+âncora com ref vazio	não ancora ✓
+âncora de outro alvo	não ancora ✓
+memória com declaredAt = 9×10¹⁵ contra τ comprovado menor	memória perde ✓
+evidência nova com μ idêntico	quebra o ponto fixo ✓
+ação não crítica sem autorização	não inventa bloqueio; delete bloqueia ✓
+
+SEM DEBRIS: arvore identica ao pos-patch — o descartável não ficou.
+
+text
+RISCO_RESIDUAL=
+  1. A extensao existe e passa nos testes, mas NENHUM consumidor a chama
+     ainda. App.tsx segue com setState cru. Isso e deliberado: ligar exigiria
+     tocar UI, o que a regra 5 proibe sem necessidade comprovada pela formula.
+     Ate ligar, ela e nucleo provado e inerte.
+  2. Os 2 erros de tsc continuam la. Sao baseline e ficam fora do escopo desta
+     missao; `npm run build` segue quebrado por eles.
+  3. τ vem de quem constroi o objeto Evidence. Se o produtor de evidencia
+     mentir a ordem, a monotonicidade cai. O nucleo nao pode provar isso
+     sozinho — quem popula E_k precisa derivar `order` da fonte externa.
+
+PONTO_FIXO=nao — item 1 do risco residual e trabalho real ainda aberto
+PRÓXIMO_PASSO=ligar recalibrate/gateAction ao App.tsx e ao gateway.ts,
+  usando o `receipt` de SolReply como Evidence e o `risk: "CONTROL"` de
+  intent.ts como gatilho de acao critica. Escopo separado, Writer separado.
+
+VEREDITO=READY_FOR_REVIEW
+Sol continuidade
+PATCH 
+
+estamos aque pra isso bota no ar ! e testar !
+
+Diagnosticou erro de gateway e arquitetou solução com fallback local
+Diagnosticou erro de gateway e arquitetou solução com fallback local
+
+The app is running but hitting a gateway error — the default gateway URL at http://127.0.0.1:8787/v1/sol/respond isn't responding, so the fetch fails and triggers the BLOCKED status. Looking at the gateway logic, there's a fallback mechanism that should kick in when no gateway URL is configured, but it seems like that's not being triggered properly.
+
+He wants to get this working and testable. I can either clear the gateway URL in config to enable the local fallback immediately, or set up an actual minimal gateway listening on that local address. Also, I'm noticing the UI in his screenshot is more feature-rich than what's in the zip file he shared — his running version is newer, so I need to be careful not to assume the code I'm looking at matches what he's actually using. I'll create a minimal Node gateway script with zero dependencies listening on 8787 that returns the expected {text, receipt} structure — placing it in the scripts folder alongside the existing Windows tooling. The core fix then becomes a fallback in gateway.ts so it gracefully handles network failures instead of just checking for an empty URL.
+
+Let me check the rest of App.tsx to understand the full context, then keep the implementation efficient with a single bash invocation.
+
+Mostrar mais
+Concluído
+
+O app está no ar. O erro na tela é diagnosticável — deixa eu confirmar contra o código antes de falar besteira.
+
+Architected gateway solution e testou implementação prática
+Architected gateway solution e testou implementação prática
+Confirmar no código o caminho exato que gerou o erro da tela
+
+bash
+
+cd /home/claude/sol/full/sol-desktop-poc-source/apps/sol-desktop/src
+echo "=== App.tsx 216-fim (o painel AO VIVO da sua tela) ==="
+cat -n App.tsx | sed -n '216,340p' | grep -nE "AO VIVO|CADEIA|READ-ONLY|DETERMIN|PERSISTENTE|TAURI POC|limpar|BLOQUEADA|runtime|error" -i
+echo
+echo "=== o caminho que produziu 'Falha controlada: Failed to fetch' ==="
+grep -n "Falha controlada" App.tsx
+grep -n "gatewayUrl" lib/gateway.ts lib/settings.ts
+echo
+echo "=== localFallback e alcancavel quando a rede falha? ==="
+grep -n "localFallback" lib/gateway.ts
+
+Saída
+
+=== App.tsx 216-fim (o painel AO VIVO da sua tela) ===
+55:   270	        <div className="telemetry-head"><Activity size={16}/><strong>AO VIVO</strong></div>
+56:   271	        <Metric icon={<ShieldCheck size={16}/>} label="Modo inicial" value="READ-ONLY" />
+57:   272	        <Metric icon={<Cpu size={16}/>} label="Roteador" value="DETERMINÍSTICO" />
+58:   273	        <Metric icon={<Boxes size={16}/>} label="PIVETE" value="PERSISTENTE" />
+59:   274	        <Metric icon={<PanelLeft size={16}/>} label="App" value="TAURI POC" />
+61:   276	          <small>CADEIA ATIVA</small>
+64:   279	        {error && <div className="error"><X size={15}/><span>{error}</span><button onClick={() => { setError(""); setState("IDLE"); }}>limpar</button></div>}
+77:   292	    pivete: ["PIVETE / HERMES", "Mente persistente, memória, comportamento treinado e continuidade.", ["Memória", "Rotas fixas", "Aprendizados", "Corpo Casa/VPS"]],
+78:   293	    missions: ["MISSÕES", "Contratos, estado, gates, cancelamento e evidência.", ["Ativas", "Bloqueadas", "Revisão", "Arquivadas"]],
+
+=== o caminho que produziu 'Falha controlada: Failed to fetch' ===
+123:          { id: crypto.randomUUID(), role: "sol", text: `Falha controlada: ${text}. Nenhuma mutação foi confirmada.` },
+lib/gateway.ts:17:  if (!settings.gatewayUrl) return localFallback(message, classified);
+lib/gateway.ts:19:  const response = await fetch(settings.gatewayUrl, {
+lib/settings.ts:2:  gatewayUrl: string;
+lib/settings.ts:15:  gatewayUrl: "http://127.0.0.1:8787/v1/sol/respond",
+
+=== localFallback e alcancavel quando a rede falha? ===
+17:  if (!settings.gatewayUrl) return localFallback(message, classified);
+48:export function localFallback(message: string, classified: ClassifiedIntent): SolReply {
+
+
+So the issue is clear: the gateway URL is configured with a valid address, but askSol only triggers its fallback when the URL is actually empty, not when the service is unreachable. Since nothing's listening on port 8787, the fetch call fails with a network error, which gets caught and sets the app state to "BLOCKED".
+
+The localFallback router with its deterministic responses (STATUS_READONLY, OPEN_MODULE, STOP_ALL) is completely unreachable in the default setup — it's dead code. The only command that works is "para tudo" because the app intercepts STOP_ALL before even trying to reach the gateway.
+
+The fix is straightforward: either remove the gateway URL from the config so the local fallback activates, or spin up a minimal Node gateway on 127.0.0.1:8787 that responds with the expected JSON format and handles CORS properly since the webview origin differs between dev and production.
+
+The critical detail is handling OPTIONS preflight requests — without CORS headers and OPTIONS support, the fetch fails even though CSP allows the connection. I'm writing a gateway script for scripts/ that handles this correctly, plus a fallback patch to gateway.ts that tries the network request but gracefully returns the local router if it fails.
+
+Writing the gateway implementation... I'm settling on a pragmatic approach: fall back to local with explicit marking so the UI shows the degradation clearly, keeping it honest rather than hiding the failure. Since he wants this working now, I'll focus on the immediate test path — either a clear URL or running the gateway script — and offer the code patch as an optional next step once he decides on the fallback behavior. Let me write and test the gateway script.
+
+Mostrar menos
+Concluído
+
+Confirmado no código. Não é bug de rede — é configuração default que torna o modo local inalcançável.
+
+text
+settings.ts:15   gatewayUrl default = "http://127.0.0.1:8787/v1/sol/respond"   (não vazio)
+gateway.ts:17    if (!settings.gatewayUrl) return localFallback(...)          ← só cai no local se VAZIO
+gateway.ts:19    fetch(...) → nada escutando na 8787 → TypeError
+App.tsx:118-125  catch → "Falha controlada: Failed to fetch" → setState("BLOCKED")
+
+O localFallback inteiro — status, abrir módulo, receipts — é inalcançável na configuração de fábrica. Só para tudo funciona, porque App.tsx:102 intercepta antes do fetch. Foi exatamente isso que sua tela mostrou.
+
+Testar agora, 10 segundos, sem código
+
+Config → apaga o campo Gateway SOL → salva. Aí o roteador local acorda. Teste esses três:
+
+qual o status da missão delta → deve responder com receipt mode: LOCAL_DEMO, mutation: false
+abre o CRM → deve trocar de módulo
+para tudo → deve dar "Interrupção confirmada"
+
+Se os três responderem, o núcleo está provado e o que falta é só o gateway.
+
+Botar no ar de verdade
+
+Escrevi o gateway mínimo e testei aqui. Encaixa em scripts/, onde já mora o doctor-windows.ps1 — não é motor paralelo, não existia servidor nenhum no repo.
+
+Criar e provar o gateway local com curl real, incluindo preflight CORS
+Criar e provar o gateway local com curl real, incluindo preflight CORS
+
+Testado com curl de verdade: preflight 204, POST devolve {text, receipt}, ação crítica sai BLOCKED_AUTHORIZATION. O OPTIONS é o detalhe que mata a maioria das tentativas — o fetch do app manda content-type: application/json, o que dispara preflight; sem ele responder, dá Failed to fetch mesmo com o servidor no ar.
+
+No Windows, numa segunda janela:
+
+powershell
+cd E:\CentralDark\Sol\sol-desktop-poc-source\apps\sol-desktop
+node scripts\sol-gateway-local.mjs
+
+Deixa rodando. Na SOL, Config → Gateway SOL = http://127.0.0.1:8787/v1/sol/respond (já é o default) → salva. Manda qual o status. O badge sai de BLOQUEADA e o receipt aparece na bolha.
+
+O achado que fica
+
+O default de fábrica garante falha. gatewayUrl vem preenchido, então askSol nunca cai no local; e como nada escuta na 8787, todo primeiro uso quebra. Quem instalar isso hoje vê exatamente a sua tela.
+
+Correção mínima em gateway.ts — cair no local quando a rede falha, sem esconder que caiu:
+
+ts
+  let response: Response;
+  try {
+    response = await fetch(settings.gatewayUrl, { /* ...igual... */ });
+  } catch (reason) {
+    if (signal?.aborted) throw reason;          // Esc/parar continua sendo interrupção
+    const local = localFallback(message, classified);
+    return {
+      ...local,
+      receipt: { ...(local.receipt ?? {}), gateway_unreachable: true, status: "UNKNOWN" },
+    };
+  }
+
+gateway_unreachable: true e status: "UNKNOWN" são de propósito: degradar não pode virar verde. source continua "local", então a tela nunca mente dizendo que o gateway respondeu.
+
+Não apliquei. Isso muda comportamento e exige a linha INTENT mais a sua decisão sobre degradar em silêncio — você pode preferir que continue quebrando na cara, o que também é defensável. Me diz e eu devolvo no patch, mesmo arquivo.
+
+Testa primeiro os três comandos com o gateway no ar e me manda o print. Aí a gente liga o recalibrate do patch anterior, usando o receipt que acabou de aparecer na tela como Evidence de verdade.
+
+madna pronto pra mim subir aque! entao!  mesmo apcote!
+
+Deliberou validar pacote através de testes isolados
+Deliberou validar pacote através de testes isolados
+
+The user wants everything bundled together in one package to drop directly into the project folder. I need to prepare the patched versions of the state management file and its tests, along with the script files, so he can copy them straight into E:\CentralDark\Sol\sol-desktop-poc-source\apps\sol-desktop\.
+
+There's some uncertainty about whether to include the gateway.ts fix — he didn't explicitly authorize it, but he's asking for everything ready to go. The safest approach is to include the three core files as drop-in replacements, then put the optional gateway.ts variant in a separate folder with clear documentation so he can decide whether to apply it.
+
+I'll build a zip with the proven files (state.ts, state.test.ts, sol-gateway-local.mjs) at the right relative paths for extraction, add the optional gateway.ts in its own folder with a brief explanation, and verify the whole package works by extracting it into a fresh copy and running the tests. Now I'm setting up two verification runs: one with the current patched state files to confirm the baseline (24 tests passing, 2 tsc errors), then a second run where I apply the gateway.ts patch and check if that changes the outcome. I'll use the pristine source tree with a symlinked node_modules to keep things clean, then copy the gateway file in for the second pass and revert it after.
+
+Before running the build, I should document the SOL desktop POC and the gateway bug as a distinct area — it's getting unwieldy to keep adding to CentralDark, so I'll create a dedicated /areas/sol-desktop.md file for this ongoing work.
+
+Mostrar mais
+Gerar o gateway.ts opcional e verificar as duas configurações do pacote
+
+bash
+
+cd /home/claude/sol/full/sol-desktop-poc-source/apps/sol-desktop
+# --- versao opcional de gateway.ts com degradacao marcada ---
+python3 - <<'PYEOF'
+import io
+s=io.open('src/lib/gateway.ts',encoding='utf-8').read()
+old='''  const response = await fetch(settings.gatewayUrl, {
+    method: "POST",
+    signal,
+    headers: {
+      "content-type": "application/json",
+      ...(settings.gatewayKey ? { "x-api-key": settings.gatewayKey } : {}),
+    },
+    body: JSON.stringify({
+      message,
+      intent: classified.intent,
+      risk: classified.risk,
+      client: "sol-desktop-poc",
+      request_id: crypto.randomUUID(),
+    }),
+  });
+'''
+new='''  let response: Response;
+  try {
+    response = await fetch(settings.gatewayUrl, {
+      method: "POST",
+      signal,
+      headers: {
+        "content-type": "application/json",
+        ...(settings.gatewayKey ? { "x-api-key": settings.gatewayKey } : {}),
+      },
+      body: JSON.stringify({
+        message,
+        intent: classified.intent,
+        risk: classified.risk,
+        client: "sol-desktop-poc",
+        request_id: crypto.randomUUID(),
+      }),
+    });
+  } catch (reason) {
+    // Interrupcao deliberada (Esc / parar tudo) continua sendo erro.
+    if (signal?.aborted) throw reason;
+    // Gateway fora do ar degrada para o roteador local, marcado.
+    // Degradar nunca vira verde: status UNKNOWN e a flag ficam no receipt.
+    const local = localFallback(message, classified);
+    return {
+      ...local,
+      receipt: { ...(local.receipt ?? {}), gateway_unreachable: true, status: "UNKNOWN" },
+    };
+  }
+'''
+assert s.count(old)==1, "ancora nao encontrada"
+io.open('/tmp/gateway.opcional.ts','w',encoding='utf-8',newline='').write(s.replace(old,new))
+print("gateway.ts opcional gerado")
+PYEOF
+
+echo "=== VERIFICACAO A: pacote base (sem o opcional) ==="
+node ./node_modules/vitest/vitest.mjs run 2>&1 | grep -E "Tests |Test Files"
+node ./node_modules/typescript/bin/tsc -b > /tmp/a.txt 2>&1; echo "TSC_EXIT=$?"; grep -c error /tmp/a.txt | sed 's/^/erros=/'
+
+echo; echo "=== VERIFICACAO B: com gateway.ts opcional aplicado ==="
+cp src/lib/gateway.ts /tmp/gateway.orig.ts
+cp /tmp/gateway.opcional.ts src/lib/gateway.ts
+node ./node_modules/vitest/vitest.mjs run 2>&1 | grep -E "Tests |Test Files"
+node ./node_modules/typescript/bin/tsc -b > /tmp/b.txt 2>&1; echo "TSC_EXIT=$?"; grep -c error /tmp/b.txt | sed 's/^/erros=/'
+cat /tmp/b.txt
+cp /tmp/gateway.orig.ts src/lib/gateway.ts
+echo "gateway.ts revertido no tree de trabalho"
+
+Saída
+
+gateway.ts opcional gerado
+=== VERIFICACAO A: pacote base (sem o opcional) ===
+ Test Files  3 passed (3)
+      Tests  24 passed (24)
+TSC_EXIT=1
+erros=2
+
+=== VERIFICACAO B: com gateway.ts opcional aplicado ===
+ Test Files  3 passed (3)
+      Tests  24 passed (24)
+TSC_EXIT=1
+erros=2
+src/App.tsx(171,7): error TS2322: Type '() => Promise<void>' is not assignable to type '() => Promise<undefined>'.
+  Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
+    Type 'void' is not assignable to type 'undefined'.
+tsconfig.node.json(7,35): error TS5096: Option 'allowImportingTsExtensions' can only be used when either 'noEmit' or 'emitDeclarationOnly' is set.
+gateway.ts revertido no tree de trabalho
+
+
+Both configurations are passing 24 tests with the same 2 TypeScript errors, and the optional gateway module doesn't introduce any new issues. Now I'm building the drop-in package with the correct relative paths and including the installation guide, then hashing everything to verify integrity. After that, I'll extract it into a clean environment and run the full test suite to confirm it works as expected.
+
+Montar o pacote drop-in com caminhos relativos corretos
+
+bash
+
+cd /home/claude && rm -rf pacote && mkdir -p pacote/src/core pacote/scripts pacote/opcional
+B=/home/claude/sol/full/sol-desktop-poc-source/apps/sol-desktop
+cp $B/src/core/state.ts        pacote/src/core/
+cp $B/src/core/state.test.ts   pacote/src/core/
+cp $B/scripts/sol-gateway-local.mjs pacote/scripts/
+cp /tmp/gateway.opcional.ts    pacote/opcional/gateway.ts
+cp /mnt/user-data/outputs/sol-continuidade.patch pacote/
+
+cat > pacote/INSTALAR.md <<'EOF'
+# Pacote SOL — continuidade + gateway local
+
+Destino: `E:\CentralDark\Sol\sol-desktop-poc-source\apps\sol-desktop\`
+
+Extraia por cima. Os caminhos já batem. Só `opcional/` exige decisão sua.
+
+## O que vai substituir
+
+| Arquivo | O que muda |
+|---|---|
+| `src/core/state.ts` | ganha a continuidade (checkpoint, âncora, μ, ponto fixo, autorização). A máquina de estados antiga fica intacta. |
+| `src/core/state.test.ts` | os 2 testes originais preservados + T01..T18. |
+| `scripts/sol-gateway-local.mjs` | **novo**. Gateway local read-only na 8787. |
+
+Nada mais é tocado. `App.tsx`, `intent.ts`, `redaction.ts`, `gateway.ts`,
+`voice.ts`, `settings.ts`, Tauri e UI ficam byte a byte iguais.
+
+## Subir
+
+```powershell
+cd E:\CentralDark\Sol\sol-desktop-poc-source\apps\sol-desktop
+
+npm test                       # esperado: 24 passed
+node scripts\sol-gateway-local.mjs     # deixe rodando nesta janela
+```
+
+Outra janela:
+
+```powershell
+cd E:\CentralDark\Sol\sol-desktop-poc-source\apps\sol-desktop
+npm run tauri dev
+```
+
+Na SOL, Config → Gateway SOL = `http://127.0.0.1:8787/v1/sol/respond` → salvar.
+
+## Testar
+
+| Digite | Esperado |
+|---|---|
+| `qual o status da missão delta` | resposta do gateway, receipt com `mode: GATEWAY_LOCAL`, `mutation: false` |
+| `abre o CRM` | troca de módulo, receipt `status: PASS` |
+| `faz deploy agora` | recusa com `status: BLOCKED_AUTHORIZATION` |
+| `para tudo` | "Interrupção confirmada" |
+| feche o gateway e repita | volta a `Falha controlada` — a menos que aplique `opcional/` |
+
+## opcional/gateway.ts
+
+Faz o app cair no roteador local quando o gateway está fora do ar, em vez de
+travar em BLOQUEADA. A degradação fica **marcada**: `gateway_unreachable: true`
+e `status: "UNKNOWN"` no receipt, `source: "local"`. Degradar não vira verde.
+
+Só copie para `src/lib/gateway.ts` se quiser esse comportamento. Deixar como
+está — quebrando na cara quando o gateway some — também é defensável.
+
+Verificado nas duas configurações: 24 testes passam, e o `tsc` continua com os
+mesmos 2 erros que já existiam antes de qualquer mudança (`App.tsx:171` e
+`tsconfig.node.json:7`). Nenhum erro novo. Esses 2 são pré-existentes e ficam
+fora do escopo deste pacote — são eles que impedem `npm run build`.
+EOF
+
+echo "=== SHA-256 dos arquivos ==="
+cd pacote && find . -type f -exec sha256sum {} \; | sort -k2
+cd /home/claude && zip -qr /mnt/user-data/outputs/sol-pacote-continuidade.zip pacote/* -x '.*'
+cd /home/claude/pacote && rm -f /mnt/user-data/outputs/sol-pacote-continuidade.zip && zip -qr /mnt/user-data/outputs/sol-pacote-continuidade.zip . 
+echo; echo "=== conteudo do zip ==="; unzip -l /mnt/user-data/outputs/sol-pacote-continuidade.zip | tail -12
+echo; sha256sum /mnt/user-data/outputs/sol-pacote-continuidade.zip
+
+Saída
+
+=== SHA-256 dos arquivos ===
+989f985011232d5532c185fb939e4d27b16d555a7e0dbb1bd5ae75fd6dc3c279  ./INSTALAR.md
+c482fc042f7dfb7169b708b05aa716e4d6b93ef91a074ac559fc20a3732a5f6d  ./opcional/gateway.ts
+0f08f143786de54eae109f1102d0826f6b49968272c79410fdcd87955099fd2e  ./scripts/sol-gateway-local.mjs
+da48bae2e31a19790f5578b24b05cc1386cccde5a782d86648457f5ac4ae75f2  ./sol-continuidade.patch
+405645401f80492a3cdf64bc336d8b0efb8c53445474a324d4656874b2f7801c  ./src/core/state.test.ts
+b84b10c2602671be0ec0cb9b3a385c2845ca150b20eb6ac15dd22df8ee5594c6  ./src/core/state.ts
+
+=== conteudo do zip ===
+        0  2026-08-04 11:36   src/
+        0  2026-08-04 11:36   src/core/
+     7664  2026-08-04 11:36   src/core/state.test.ts
+    10788  2026-08-04 11:36   src/core/state.ts
+        0  2026-08-04 11:36   opcional/
+     2820  2026-08-04 11:36   opcional/gateway.ts
+        0  2026-08-04 11:36   scripts/
+     3099  2026-08-04 11:36   scripts/sol-gateway-local.mjs
+    18057  2026-08-04 11:36   sol-continuidade.patch
+     2265  2026-08-04 11:36   INSTALAR.md
+---------                     -------
+    44693                     10 files
+
+a9c4df8298e20da6d7e74da68337d1206a5ffb5ab5a621f6b0867500cf163e34  /mnt/user-data/outputs/sol-pacote-continuidade.zip
+
+
+I should verify the zip file works by extracting it into a clean directory and running the tests to confirm it passes on its own.
+
+Prova final: aplicar o zip sobre a árvore original dele e rodar tudo
+
+bash
+
+rm -rf /tmp/prova && mkdir -p /tmp/prova
+B=/home/claude/sol/full/sol-desktop-poc-source/apps/sol-desktop
+# arvore ORIGINAL do zip do usuario (pristina) + node_modules
+cp -r /tmp/pristine/src /tmp/pristine/README.md /tmp/pristine/package.json /tmp/prova/
+cp -r $B/scripts $B/index.html $B/tsconfig*.json $B/vite.config.ts $B/src-tauri /tmp/prova/
+rm -f /tmp/prova/scripts/sol-gateway-local.mjs /tmp/prova/tsconfig.app.tsbuildinfo /tmp/prova/tsconfig.node.tsbuildinfo
+ln -s $B/node_modules /tmp/prova/node_modules
+cd /tmp/prova
+echo "=== 1. arvore pristina: confere que e o original ==="
+sha256sum src/core/state.ts | cut -c1-16
+node ./node_modules/vitest/vitest.mjs run 2>&1 | grep -E "Tests |Test Files"
+
+echo; echo "=== 2. extraindo O ZIP por cima, como ele vai fazer ==="
+unzip -o -q /mnt/user-data/outputs/sol-pacote-continuidade.zip -d /tmp/prova
+ls scripts/
+echo
+echo "=== 3. npm test depois do drop-in ==="
+node ./node_modules/vitest/vitest.mjs run 2>&1 | grep -E "Tests |Test Files|×"
+node ./node_modules/typescript/bin/tsc -b > /tmp/p.txt 2>&1; echo "TSC_EXIT=$? erros=$(grep -c error /tmp/p.txt)"
+echo
+echo "=== 4. gateway do pacote sobe e responde? ==="
+node scripts/sol-gateway-local.mjs & GW=$!; sleep 1
+curl -s -X POST http://127.0.0.1:8787/v1/sol/respond -H 'content-type: application/json' \
+  -d '{"message":"abre o CRM","intent":"OPEN_MODULE","risk":"READ_ONLY","request_id":"z1"}' | head -c 200
+kill $GW 2>/dev/null; echo; echo
+echo "=== 5. arquivos fora do escopo mudaram? ==="
+for f in src/App.tsx src/lib/gateway.ts src/core/intent.ts src/core/redaction.ts package.json README.md; do
+  a=$(sha256sum /tmp/pristine/$f 2>/dev/null | cut -c1-12); b=$(sha256sum $f | cut -c1-12)
+  [ "$a" = "$b" ] && echo "IGUAL   $f" || echo "MUDOU   $f"
+done
+
+Saída
+
+=== 1. arvore pristina: confere que e o original ===
+54187224b228dfc3
+ Test Files  3 passed (3)
+      Tests  6 passed (6)
+
+=== 2. extraindo O ZIP por cima, como ele vai fazer ===
+doctor-windows.ps1
+sol-gateway-local.mjs
+
+=== 3. npm test depois do drop-in ===
+ Test Files  3 passed (3)
+      Tests  24 passed (24)
+TSC_EXIT=1 erros=2
+
+=== 4. gateway do pacote sobe e responde? ===
+SOL gateway local em http://127.0.0.1:8787/v1/sol/respond
+read-only · nenhuma mutacao · Ctrl+C para parar
+[2026-08-04T11:36:29.412Z] OPEN_MODULE <- abre o CRM
+{"text":"Abrindo a superficie pedida. Este gateway nao executa mutacao.","receipt":{"request_id":"z1","intent":"OPEN_MODULE","risk":"READ_ONLY","mode":"GATEWAY_LOCAL","mutation":false,"observed_at":"2
+
+=== 5. arquivos fora do escopo mudaram? ===
+IGUAL   src/App.tsx
+IGUAL   src/lib/gateway.ts
+IGUAL   src/core/intent.ts
+IGUAL   src/core/redaction.ts
+IGUAL   package.json
+IGUAL   README.md
+
+Saved memory
+Areas
+›
+Sol Desktop
+SOL Desktop POC — app Tauri voice-first em E:\CentralDark\Sol; estado, bugs conhecidos e o que já foi entregue
+Presented file
+Concluído
+text
+sol-pacote-continuidade.zip
+SHA256=a9c4df8298e20da6d7e74da68337d1206a5ffb5ab5a621f6b0867500cf163e34
+
+Extrai por cima de E:\CentralDark\Sol\sol-desktop-poc-source\apps\sol-desktop\. Os caminhos já batem.
+
+src/core/state.ts              substitui  (continuidade + máquina antiga intacta)
+src/core/state.test.ts         substitui  (2 originais preservados + T01..T18)
+scripts/sol-gateway-local.mjs  novo       (gateway read-only na 8787)
+opcional/gateway.ts            NÃO copia sozinho — decisão sua
+INSTALAR.md                    passo a passo + tabela de testes
+sol-continuidade.patch         o diff auditável
+Prova de que o pacote é o que passa
+
+Não testei no meu tree de trabalho. Peguei a sua árvore original, confirmei que ela dá 6 testes, extraí o zip por cima, e rodei:
+
+árvore pristina           →  6 passed
+zip extraído por cima     → 24 passed
+tsc                       →  EXIT 1, 2 erros — os MESMOS 2 do baseline
+gateway do pacote         →  subiu, respondeu POST "abre o CRM" com receipt
+fora do escopo            →  App.tsx, gateway.ts, intent.ts, redaction.ts,
+                             package.json, README.md: todos IGUAIS
+Subir
+powershell
+cd E:\CentralDark\Sol\sol-desktop-poc-source\apps\sol-desktop
+npm test                                # 24 passed
+node scripts\sol-gateway-local.mjs      # deixa essa janela aberta
+
+Outra janela: npm run tauri dev. Config → Gateway SOL = http://127.0.0.1:8787/v1/sol/respond → salvar.
+
+A sequência de teste
+Digita	Esperado
+qual o status da missão delta	receipt mode: GATEWAY_LOCAL, mutation: false
+abre o CRM	troca de módulo, status: PASS
+faz deploy agora	recusa, status: BLOCKED_AUTHORIZATION
+para tudo	"Interrupção confirmada"
+
+O terceiro é o que interessa: é a doutrina saindo da planilha e virando comportamento. Verde técnico não autoriza execução — o gateway recusa sozinho.
+
+Duas coisas que o pacote não resolve
+
+Os 2 erros de tsc continuam. São pré-existentes, não toquei neles, e são eles que quebram npm run build — ou seja, tauri dev roda mas tauri build não gera .exe. Fora do escopo desta entrega; é o próximo escopo se você quiser o instalador.
+
+A continuidade está inerte. state.ts tem tudo provado por teste, mas nenhum consumidor chama. Ligar exige tocar App.tsx e gateway.ts, e o gancho natural é o receipt que vai aparecer na tela agora — ele vira Evidence, e o risk: "CONTROL" do intent.ts vira gatilho de ação crítica.
+
+Sobe, roda os quatro comandos, me manda o print. Com o receipt real na tela eu ligo a continuidade no próximo escopo.

@@ -1,0 +1,30 @@
+{
+  "schema": "centraldark.sol.local-package.v1",
+  "created_at": "2026-08-30",
+  "source": "E:\\CentralDark\\workspace\\sol\\02-APP-SOL\\SOL-DESKTOP-POC-ACTIVE\\apps\\sol-desktop",
+  "excludes": [
+    "node_modules",
+    ".env",
+    "cookies",
+    "history",
+    "login databases",
+    "tokens",
+    "runtime databases",
+    "personal secrets"
+  ],
+  "proofs": {
+    "ingress": "http://127.0.0.1:8787/health -> 200",
+    "stt": "POST /v1/audio/transcriptions -> 200",
+    "tests": "6/6",
+    "build": "PASS",
+    "tts": "POST http://127.0.0.1:8880/v1/audio/speech -> 200",
+    "chat": "POST /v1/sol/respond -> 200",
+    "ui": "http://127.0.0.1:1420/ -> 200"
+  },
+  "limits": [
+    "microphone_capture=UNKNOWN",
+    "native_tauri_build=BLOCKED_BY_CODE_INTEGRITY",
+    "hermes_physical_rehome=PENDING",
+    "graphify_full_reconciliation=PENDING"
+  ]
+}

@@ -1,0 +1,23 @@
+Aqui há uma lacuna no fluxo de execução de decisões do CentralDark: quando o Pivete emite PERMITO PIVETE ou decisão explícita (como correção de path do painel, desativação de commit na main ou registro em PENDENCIAS.md), o sistema mantém bloqueios em .github/workflows/ e branches (ex: pivete/erradicar-claude-ap7) sem trigger automático de processamento imediato, resultando em PRs abertos (ex: #218 com +207/-109 e CI verde) que não avançam para produção ou Supabase em <1h. Isso pode ser corrigido com a adoção de um prompt de comando que força o orquestrador (via LangGraph ou custom) a mapear a decisão diretamente para nós de execução: update de arquivos → commit → push → trigger de workflow → registro em 08-HISTORICO-DECISOES.md, sem loops de confirmação adicional.
+Aqui há uma lacuna na clareza de processamento de autorização: o gate "PERMITO PIVETE" existe como texto manual mas não está implementado como estado interruptível no fluxo de orquestração, permitindo que fixes (openssl, path do painel, migração pendente) fiquem parados mesmo após decisão tomada. Isso pode ser corrigido com a inclusão no arquivo da regra-mãe de uma seção explícita de "Decisão → Execução Imediata" que exige do orquestrador (Hermes + Council) a propagação da decisão como kill-switch reverso: revogar pendências, executar ações e notificar em tempo real via Telegram/bridge.
+Aqui há uma lacuna na ação de integração entre decisão e produção: o PR #218 segue intacto e pronto para revisão mas não é mergeado automaticamente após PERMITO, e a migração para Supabase/painel-write permanece pendente sem execução local ou commit. Isso pode ser corrigido com protótipo em LangGraph de um subgrafo "DecisionExecutor" que recebe o comando PERMITO PIVETE <escopo>, executa as 3 ações listadas na imagem (corrigir path, desativar commit, registrar pendência) e atualiza o estado em Supabase em sequência, com checkpoint após cada passo.
+Aqui há uma lacuna no foco de enforcement em tempo real: decisões do Pivete são tratadas como sugestões em workflows legados em vez de comandos obrigatórios com SLA de processamento (<1h ou imediato). Isso pode ser corrigido com o prompt abaixo, que deve ser colado no início de toda mensagem para qualquer modelo (Claude/Fable, Grok ou equivalente) sempre que uma decisão for tomada:
+text[COMANDO OBRIGATÓRIO DO PIVETE - EXECUÇÃO IMEDIATA]
+
+Quando eu (Pivete) emito PERMITO PIVETE, PERMITO PIVETE <escopo> ou decisão explícita (ex: "corrigir path do painel", "desativar commit na main", "registrar como pendência"), você DEVE processar em <1h ou imediatamente sem pedir nova confirmação, a menos que seja área 🔒 sensível não coberta pelo escopo.
+
+Ações obrigatórias:
+1. Mapear a decisão para o ciclo Lei Zero (Ler → Perguntar se ambíguo → Agir → Provar com evidência → Registrar em 08-HISTORICO-DECISOES.md + docs/PENDENCIAS.md se aplicável).
+2. Executar diretamente: editar arquivos, corrigir paths (ex: painel-write), desativar workflows/commits na main, registrar causas como pendências oficiais, atualizar branches (ex: remover pivete/erradicar-claude-ap7 se obsoleto).
+3. Triggerar: commit no branch designado, push, merge de PR pronto (ex: #218 se checklist de segurança passou), migração para Supabase/painel-write, e notificação via bridge/Telegram.
+4. Propagar via orquestrador: broadcast para sub-agentes/Hermes/Council, revogar pendências antigas, aplicar kill-switch reverso se necessário (parar loops de espera).
+5. Verificar em tempo real: usar grep nos paths citados, rodar diff, confirmar estado em produção, e reportar evidência de execução (links de commit, status de workflow, estado do painel).
+
+Regras rígidas:
+- Decisão tomada = processada. Sem "deveria ter funcionado", sem desculpas de falha anterior, sem manter em produção sistemas que contradizem a decisão.
+- Se houver erro técnico, corrija imediatamente e registre como pendência, mas nunca pare a execução.
+- Prioridade: decisão do Pivete > workflows legados > pendências antigas.
+- Responda apenas com: resumo da execução + evidências + próximos passos (se houver). Nunca peça permissão extra.
+
+Exemplo de decisão nesta mensagem: [colar aqui a decisão]. Execute agora.
+O projeto CentralDark precisa exatamente de: (1) inclusão do prompt acima como seção padrão no topo de docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md; (2) protótipo do DecisionExecutor em LangGraph + Pydantic V2 no branch claude/multi-agent-semantic-rules-7etunk; (3) commit do PR #218 após execução das 3 ações da imagem; (4) atualização do workflow para remover gate manual quando PERMITO PIVETE explícito for detectado via parser; (5) teste de end-to-end com notificação em tempo real para garantir que decisões futuras sejam processadas sem atraso.

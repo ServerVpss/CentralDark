@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>skills_collection — Explorer</title>
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="title-row">
+          <h1>skills_collection</h1>
+          <div class="meta" id="meta"></div>
+        </div>
+        <p class="sub">
+          Search and explore all skills in <code>collection/</code> with live filtering.
+        </p>
+
+        <div class="controls">
+          <label class="control">
+            <div class="label">Search</div>
+            <input id="q" type="search" placeholder="Try: nextjs, n8n, systematic-debugging, repo:dotfiles" autocomplete="off" />
+          </label>
+
+          <label class="control">
+            <div class="label">Repo</div>
+            <select id="repoFilter">
+              <option value="">All repos</option>
+            </select>
+          </label>
+
+          <label class="control">
+            <div class="label">Code language</div>
+            <select id="langFilter">
+              <option value="">Any</option>
+            </select>
+          </label>
+
+          <label class="control checkbox">
+            <input id="hasCode" type="checkbox" />
+            <span>Has code blocks</span>
+          </label>
+
+          <button id="reset" class="btn">Reset</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card" style="margin-top: 16px;">
+        <div class="results-header">
+          <div>
+            <div class="card-title">Results</div>
+            <div class="hint" id="resultsHint"></div>
+          </div>
+          <div class="hint" id="status"></div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="table" id="resultsTable">
+            <colgroup>
+              <col class="col-title" />
+              <col class="col-repo" />
+              <col class="col-words" />
+              <col class="col-links" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th class="col-title">Title</th>
+                <th class="col-repo">Owner/Repo</th>
+                <th class="num">Words</th>
+                <th>Links</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div>
+          Tip: Use <code>repo:OWNER/REPO</code> in search.
+        </div>
+      </footer>
+    </main>
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>

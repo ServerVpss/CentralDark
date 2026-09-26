@@ -1,0 +1,166 @@
+# Plano — Arquitetura Completa de Roteamento CentralDark
+
+Uso pessoal do Pivete. Sem cliente final. Sem distribuição. Uma única porta de entrada, várias rotas por baixo, sempre priorizando o mais barato (ou grátis) que resolva a tarefa com qualidade.
+
+## 1. Visão geral
+
+```text
+Cockpit / Hermes / MCP / darkai / Arsenal / TelePainel
+                    ↓ tudo entra por 1 porta
+        Elite Gateway (api.centralldark.com)
+                    ↓ intent_router classifica
+   ┌────────────┬──────────────┬──────────────┬──────────────┐
+   │  TIER FREE │  TIER BARATO │  TIER MÉDIO  │   TIER TOPO  │
+   ├────────────┼──────────────┼──────────────┼──────────────┤
+   │ OpenRouter │  OpenRouter  │  OpenRouter  │  OpenRouter  │
+   │   :free    │   Nemotron   │   GPT-5.6    │   GPT-5.6    │
+   │  (Llama,   │   Nano/Super │   Luna/Terra │   Sol / 5.5  │
+   │  Mistral,  │   ($0.05-    │   ($1-$15)   │   Nemotron   │
+   │  Qwen etc) │   $0.45)     │              │   Ultra 550B │
+   │            │              │              │   ($0.50-    │
+   │            │              │              │   $2.20)     │
+   └────────────┴──────────────┴──────────────┴──────────────┘
+                    ↓ fallback em cascata
+              Abacus RouteLLM (fixo mensal, GPT/Claude)
+                    ↓ auditoria
+              HUB Supabase (ai_requests)
+                    ↓ observabilidade
+              Cockpit / SalaControle (painel de custo)
+```
+
+## 2. Tiers e política de escolha
+
+Todo request cai primeiro no tier mais barato que consegue resolver. Só sobe se o classificador tiver alta confiança de que precisa.
+
+### Tier FREE (custo zero, latência maior, limite diário)
+Modelos `:free` do OpenRouter — pagam com rate-limit, não com dinheiro.
+- `meta-llama/llama-3.3-70b-instruct:free`
+- `qwen/qwen-2.5-72b-instruct:free`
+- `google/gemini-2.0-flash-exp:free`
+- `mistralai/mistral-small-24b:free`
+- `nvidia/nemotron-nano-9b:free`
+
+**Uso:** chat curto, classificação, extração simples, resumo pequeno, testes internos, tarefas assíncronas sem pressa. **Meta: 60-70% do volume diário aqui.**
+
+### Tier BARATO (Nemotron família pequena/média)
+- `nvidia/nemotron-3-nano-30b` — $0.05/$0.20
+- `nvidia/nemotron-3-super-120b` — $0.08/$0.45
+
+**Uso:** quando o Free bateu rate-limit ou a tarefa precisa de contexto maior/qualidade um pouco melhor.
+
+### Tier MÉDIO (GPT-5.6 pequenos)
+- `openai/gpt-5.6-luna` — $1/$6
+- `openai/gpt-5.6-terra` — $2.50/$15
+
+**Uso:** código, revisão, SQL, análise técnica leve, chamadas com tool use.
+
+### Tier TOPO (raciocínio pesado, arquitetura, conselho)
+- `nvidia/nemotron-3-ultra-550b` — $0.50/$2.20 ← campeão custo/benefício
+- `openai/gpt-5.6-sol` — $5/$30 (segunda voz do Council)
+- `openai/gpt-5.5` — $5/$30 (referência anterior)
+
+**Uso:** Hermes Council, decisão estratégica, contexto > 4k chars, dossiê, debate multi-modelo.
+
+## 3. Roteador de intenção (intent_router)
+
+O que já existe em `scripts/router/` (PR #316) vira base, mas cresce muito:
+
+- Classificação em 2 estágios: heurística (regex + tamanho + palavras-chave) → se ambíguo, chama Free (Llama 3.3 `:free`) só pra decidir bucket. Custo do classificador: ~zero.
+- Buckets: `chat_curto`, `codigo`, `revisao`, `sql`, `raciocinio_pesado`, `arquitetura`, `conselho`, `contexto_grande`, `tool_use`, `default`.
+- Cada bucket tem `[modelo_primario, fallback_1, fallback_2, fallback_3]`.
+- Config viva em `scripts/router/rotas.json` com hot-reload — mudar rota é uma linha, sem redeploy.
+- Cache LRU 512 itens pra prompts repetidos.
+- Metadados no retorno: `{categoria, modelo, tier, custo_estimado, latencia_alvo, fallback_chain, versao, ts}`.
+
+## 4. Fallback em cascata (fail-open, nunca deixa o Pivete no vácuo)
+
+Regra: se o modelo primário der 429 (rate-limit), 5xx, timeout > latência-alvo, ou erro do provider, cai automaticamente pro próximo. Cadeia padrão por tier:
+
+```text
+FREE       → BARATO → MÉDIO → TOPO
+BARATO     → FREE   → MÉDIO → TOPO
+MÉDIO      → Nemotron Ultra → Terra → Luna
+TOPO       → Nemotron Ultra → Sol → Terra
+```
+
+Cadeias específicas em `rotas.json` sobrescrevem a genérica.
+
+## 5. Elite Gateway (fachada única em `api.centralldark.com`)
+
+Já existe (PM2 `CentralDark-EliteHTTP`). O plano é reforçar sem tocar no que funciona:
+
+- Endpoint único `POST /v1/chat/completions` (compatível OpenAI). Cliente manda `model: "auto"` e o gateway decide, ou pode forçar um modelo específico.
+- Detrás disso: `intent_router` → adapter certo (OpenRouter / Abacus / Zendriver ChatGPT Plus).
+- Chaves do provider vivem no `.env` da VPS. **Nunca no repo, nunca no frontend.**
+- Rate-limit por chave (`cdk_live_...`) — controla uso próprio pra não estourar orçamento.
+- Auditoria: cada request grava linha em `ai_requests` no HUB Supabase (modelo real usado, tokens, custo estimado, latência, sucesso/erro, fallback acionado).
+
+## 6. Auditoria e observabilidade
+
+Tabela `ai_requests` no HUB (já existe, expandir schema):
+- `id, ts, rota_pedida, modelo_escolhido, tier, tokens_in, tokens_out, custo_usd, latencia_ms, fallback_acionado, erro, prompt_hash, usuario`
+
+Views/painéis novos na `SalaControle` (`/admin/cockpit`):
+- **Custo hoje/mês** (soma agrupada por tier).
+- **Distribuição por tier** (% de requests em Free/Barato/Médio/Topo).
+- **Top 10 modelos por gasto**.
+- **Alertas Lupa Bayesiana:** se Free cair pra <40% do volume em 24h, ou se Topo passar de X USD/dia, ping no Telegram (Card Hermes).
+
+## 7. Lupa Bayesiana aplicada (falsificadores ativos)
+
+- Se Nemotron Ultra em 48h tiver erro > 5% ou p95 > 8s → derruba pra Terra automaticamente e avisa.
+- Se um modelo Free ficar > 70% de 429 em 1h → tira ele da cadeia por 6h.
+- Se custo/dia estourar orçamento configurado → força tudo pra tier Free/Barato até meia-noite.
+- Cada decisão automática gera aprendizado em `APRENDIZADOS.md`.
+
+## 8. Onde mora o código (respeitando áreas 🔒)
+
+- `scripts/router/rotas.json` — tabela viva de rotas (expandir a que existe no PR #316).
+- `scripts/router/intent_router.py` — classificador 2 estágios (expandir).
+- `scripts/router/fallback.py` — nova cadeia de fallback com backoff.
+- `scripts/router/free_pool.py` — nova; gerencia rotação entre modelos `:free` do OpenRouter respeitando rate-limits.
+- `apps/modulos/elite-gateway/` (🔒) — só toca depois de você autorizar; adaptação mínima pra chamar o `intent_router` antes do adapter.
+- `apps/modulos/HERMES-CORE/core/cadeia.json` (🔒) — atualizar rotas do Council; só com autorização.
+- `docs/RELATORIOS/2026-07-24-arquitetura-roteamento-completa.md` — documento mestre novo, consolida os 3 relatórios antigos.
+- Painel na `SalaControle.tsx` — nova aba "Roteamento" com métricas.
+
+## 9. Fluxo Git (Padrão CentralDark)
+
+- Branch: `feat/roteamento-completo-free-tiers-2026-07-24`.
+- Base: `pivete/dev`.
+- PR: draft → `pivete/dev`, labels `backend`, `assign:lovable`, `revisao-humana`.
+- Nada de push na main. Nada de merge sem sua ordem. Nada de deploy sem sua ordem.
+- Áreas 🔒 (elite-gateway, HERMES-CORE) só entram no PR depois de você marcar "PERMITO PIVETE".
+
+## 10. Ordem de execução (checklist)
+
+- [ ] Confirmar plano contigo
+- [ ] Criar branch `feat/roteamento-completo-free-tiers-2026-07-24`
+- [ ] Documento mestre `docs/RELATORIOS/2026-07-24-arquitetura-roteamento-completa.md` juntando os 3 anteriores
+- [ ] Expandir `scripts/router/rotas.json` com 4 tiers + pool Free
+- [ ] Expandir `intent_router.py` com classificador 2 estágios
+- [ ] Criar `scripts/router/free_pool.py` (rotação Free respeitando rate-limit)
+- [ ] Criar `scripts/router/fallback.py` (cascata + backoff)
+- [ ] Testes de conformidade em `.agents/skills/lupa-bayesiana/testes/` (20+ casos)
+- [ ] Migration expandindo `ai_requests` no HUB (com sua autorização)
+- [ ] Nova aba "Roteamento" na `SalaControle.tsx` (frontend Lovable)
+- [ ] Falsificadores Lupa Bayesiana em `scripts/router/lupa_falsificadores.py`
+- [ ] Abrir PR draft com checklist `[ ]` no body
+- [ ] Entregar link do PR + SHAs + prova de testes
+
+## 11. Fora de escopo (não faço nesse PR)
+
+- Distribuir chave `cdk_live_...` pra ninguém (uso pessoal seu, confirmado).
+- Mexer no adapter Zendriver do ChatGPT Plus (área que funciona, respeitar).
+- Deploy em produção — só quando você mandar.
+- Criar conta OpenRouter — você decide se cria e paga os $10 iniciais.
+
+## 12. Prova ao terminar
+
+- SHA de cada commit
+- URL do PR draft
+- Saída dos testes locais (20+ verdes)
+- 5 exemplos reais mostrando request → tier escolhido → modelo → fallback (se houve) → custo
+- Linha nova em `docs/ENTREGAS-LOVABLE.md` no topo
+
+Confirma e eu começo pela branch + documento mestre + expansão do `rotas.json`.

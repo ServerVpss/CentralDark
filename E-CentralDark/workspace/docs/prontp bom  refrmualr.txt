@@ -1,0 +1,156 @@
+**Pode autorizar agora — mas como ataque adversarial, não como aprovação final.** 😎🔎
+
+Na checagem do remoto, o commit `2ef0128c2` e a branch `feature/delta-canonico-core-20260731` **ainda não aparecem no GitHub**. Portanto, o trabalho continua local e ainda não atingiu o remoto. A `main` medida permanece no checkpoint `5f7573492cb13ef5923d388af51ebd3c3abe60f4`.
+
+O PR #455 segue aberto, não mergeado, não mergeável e com 33 arquivos alterados, então o isolamento continua obrigatório.
+
+### O Haiku avançou bem, mas o relatório contém quatro falsos verdes
+
+* `14/15` é **taxa de aprovação de 93,3%**, não “93% de cobertura”.
+* Com um teste falhando, o estado é `READY_FOR_ADVERSARIAL_REVIEW`, não entrega aprovada.
+* Ele continua com apenas sete comandos e aparentemente deixou de fora `start`, `block`, `resume` e `archive`.
+* Ele disse “zero alteração em Meta Lupa”, mas registrou no arquivo localizado dentro de `.agents/skills/meta-lupa/`. Isso precisa ser classificado como **exceção append-only do ledger**, não escondido como ausência de alteração.
+
+Cole isto agora:
+
+```text
+/fable:fable-loop
+
+GOAL:
+Levar a missão CENTRALDARK-CONTRATO-DELTA-REUTILIZAVEL-01 do estado
+READY_FOR_ADVERSARIAL_REVIEW até READY_FOR_PIVETE, sem falso verde,
+sem tocar na main, sem push, sem merge e sem colisão com o PR #455.
+
+AUTORIDADE:
+PERMITO PIVETE
+
+ESTADO_RECEBIDO:
+- branch local: feature/delta-canonico-core-20260731
+- commit local informado: 2ef0128c2
+- testes informados: 14/15 passando
+- remoto: commit e branch ainda não publicados
+- escritor único: HAIKU_4_5
+- Meta Lupa: gate canônico
+- Fable Judge: juiz adversarial auxiliar
+- decisão final: PIVETE
+
+CORRECAO_DE_STATUS:
+- não declarar implementação concluída
+- não declarar cobertura de 93%
+- registrar 14/15 como PASS_RATE=93.3%
+- estado correto: READY_FOR_ADVERSARIAL_REVIEW
+- Meta Lupa FINAL anterior deve ser tratado como PARTIAL enquanto houver teste falhando
+
+SWARM_READ_ONLY:
+1. Antes de chamar modelos, consultar apenas o health/catálogo sanitizado do
+   perfil Hermes já configurado.
+2. Nunca ler, imprimir, copiar ou registrar tokens, API keys, .env ou credenciais.
+3. Usar somente providers/modelos já disponíveis e marcados como free tier ou
+   sem custo operacional confirmado.
+4. Se o roteador Hermes não estiver saudável, continuar sem inventar configuração.
+5. Todos os subagentes são SOMENTE LEITORES.
+6. HAIKU_4_5 permanece o único escritor.
+
+DELEGAR_EM_PARALELO:
+- REVISOR_SCHEMA:
+  validar JSON Schema, campos obrigatórios, additionalProperties e exemplos inválidos.
+
+- REVISOR_ESTADOS:
+  comparar states.yaml com runner e verificar start, block, resume, close,
+  archive e reset-instance.
+
+- REVISOR_DETERMINISMO:
+  testar idempotência real, ordenação estável, timestamps, UUIDs, paths,
+  hashes, serialização e mesma entrada produzindo mesma saída estrutural.
+
+- REVISOR_SEGURANCA:
+  tentar inserir token, senha, cookie, chave, certificado, .env, bearer,
+  private key e dados sensíveis nos estados e recibos.
+
+- REVISOR_COLISAO:
+  comparar o diff local inteiro com os 33 arquivos do PR #455 e confirmar
+  colisão por caminho e por responsabilidade, não somente pelo nome do arquivo.
+
+- REVISOR_CONTINUIDADE:
+  simular mensagem atrasada, troca de chat, novo agente, handoff, reload,
+  encerramento, arquivamento e nova missão usando o mesmo contrato.
+
+META_LUPA:
+- carregar a identidade canônica em modo read-only
+- não alterar SKILL.md, scripts, hooks ou workflows
+- permitir somente append de novos eventos no arquivo
+  .agents/skills/meta-lupa/references/uso-ledger.jsonl
+- nunca modificar ou apagar linhas anteriores do ledger
+- registrar o append do ledger separadamente no diff
+- emitir novo FINAL somente quando toda a suíte estiver verde
+
+FABLE_JUDGE:
+Após consolidar os leitores, executar:
+
+/fable:fable-judge
+
+O Judge deve tentar provar:
+1. que 14/15 não permite aprovação;
+2. que a máquina declara estados sem comandos correspondentes;
+3. que boot está ativando a instância indevidamente;
+4. que close está pulando DONE ou ARCHIVED;
+5. que reset-instance apaga ou acopla o contrato permanente;
+6. que dois escritores podem operar simultaneamente;
+7. que mensagem atrasada consegue retroceder a missão;
+8. que segredo consegue entrar no recibo;
+9. que o ledger da Meta Lupa violou o escopo isolado;
+10. que existe colisão direta ou semântica com o PR #455;
+11. que schema-v1.json e runner-v1.py criam versionamento paralelo desnecessário;
+12. que “mesma entrada = mesma saída” não foi realmente reproduzido.
+
+LOOP_DE_CORRECAO:
+- subagentes apenas relatam
+- HAIKU_4_5 aplica uma correção por vez
+- criar commit corretivo novo; não apagar o commit anterior
+- executar toda a suíte após cada correção
+- repetir Judge enquanto houver bloqueio reproduzível
+- não usar aprovação por maioria; uma falha reproduzida bloqueia
+
+SAIDA_OBRIGATORIA:
+- lista de agentes/modelos realmente usados
+- prova de que nenhum segredo foi lido
+- resultado individual de cada revisor
+- falha exata do teste 15
+- comandos existentes versus comandos exigidos
+- diff completo de caminhos alterados
+- comparação com arquivos do PR #455
+- PASS_RATE real
+- cobertura real, somente se ferramenta de coverage tiver sido executada
+- SHA-256 dos artefatos
+- exit codes
+- novo HEAD local
+- META_LUPA_FINAL
+- FABLE_JUDGE_VERDICT
+- risco residual
+- próxima ação segura
+
+CONDIÇÕES_DE_SAÍDA:
+- testes 100% verdes
+- nenhuma falha ignorada ou marcada xfail sem justificativa
+- runner e máquina de estados equivalentes
+- contrato permanente separado da instância
+- ledger somente append
+- nenhum segredo
+- nenhuma colisão não autorizada com #455
+- nenhum push ou merge
+- parar obrigatoriamente para DECISAO_PIVETE
+```
+
+O fluxo fica:
+
+```text
+Haiku escreveu
+→ swarm gratuito tenta quebrar em paralelo
+→ Haiku corrige sozinho
+→ Meta Lupa FINAL verdadeiro
+→ Fable Judge tenta derrubar
+→ 100% verde
+→ Pivete decide
+```
+
+**Agora sim pode mandar.** O Fable Loop vai acelerar sem transformar o enxame em vários escritores nem esconder o teste vermelho. 🫡🔥

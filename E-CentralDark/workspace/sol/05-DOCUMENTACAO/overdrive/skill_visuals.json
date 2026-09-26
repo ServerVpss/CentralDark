@@ -1,0 +1,97 @@
+{
+  "_meta": {
+    "description": "Mapa de skills → emoji + cor + estilo de animação. Cada skill ganha identidade visual única.",
+    "animation_styles": {
+      "rainbow": "Arco-íris deslizando pelo texto, cada letra cor diferente",
+      "pulse": "Pulsando — brilho expanding/contracting com ◯→◉",
+      "wave": "Onda senoidal — amplitude vertical animada",
+      "explosion": "Explosão de partículas ✨💥⭐💥✨ ao ganhar XP",
+      "shimmer": "Brilho metálico — gradiente que reflete luz",
+      "fire": "Fogo 🔥 subindo — emojis de chama animados",
+      "ice": "Gelo ❄ cristalizando — congelamento animado",
+      "electric": "Elétrico ⚡ piscando — raios animados",
+      "cosmic": "Cósmico 🌌 com estrelas e galáxia",
+      "matrix": "Matrix — caracteres caindo em verde"
+    }
+  },
+
+  "skills": {
+    "hermes-agent": { "emoji": "🧙", "color": "#9b59b6", "style": "cosmic", "label": "Hermes Agent" },
+    "web_search": { "emoji": "🔮", "color": "#3498db", "style": "shimmer", "label": "Web Search" },
+    "web_extract": { "emoji": "📡", "color": "#2ecc71", "style": "shimmer", "label": "Web Extract" },
+    "image_generate": { "emoji": "🎨", "color": "#e74c3c", "style": "rainbow", "label": "Image Gen" },
+    "terminal": { "emoji": "💻", "color": "#f39c12", "style": "matrix", "label": "Terminal" },
+    "read_file": { "emoji": "📄", "color": "#1abc9c", "style": "wave", "label": "Read File" },
+    "write_file": { "emoji": "✍️", "color": "#e67e22", "style": "fire", "label": "Write File" },
+    "patch": { "emoji": "🔧", "color": "#95a5a6", "style": "pulse", "label": "Patch" },
+    "search_files": { "emoji": "🔍", "color": "#16a085", "style": "shimmer", "label": "Search" },
+    "vision_analyze": { "emoji": "👁️", "color": "#8e44ad", "style": "cosmic", "label": "Vision" },
+    "execute_code": { "emoji": "🐍", "color": "#27ae60", "style": "matrix", "label": "Execute" },
+    "delegate_task": { "emoji": "🤖", "color": "#34495e", "style": "electric", "label": "Delegate" },
+    "memory": { "emoji": "🧠", "color": "#9b59b6", "style": "cosmic", "label": "Memory" },
+    "skill_manage": { "emoji": "📚", "color": "#e74c3c", "style": "rainbow", "label": "Skill" },
+    "cronjob": { "emoji": "⏰", "color": "#f39c12", "style": "pulse", "label": "Cron" },
+    "computer_use": { "emoji": "🖱️", "color": "#2ecc71", "style": "wave", "label": "Computer" },
+    "browser_navigate": { "emoji": "🌐", "color": "#3498db", "style": "shimmer", "label": "Browser" },
+    "text_to_speech": { "emoji": "🗣️", "color": "#1abc9c", "style": "wave", "label": "TTS" },
+
+    "github-auth": { "emoji": "🔐", "color": "#95a5a6", "style": "pulse", "label": "GitHub Auth" },
+    "github-pr-workflow": { "emoji": "🔀", "color": "#e74c3c", "style": "fire", "label": "GitHub PR" },
+    "github-issues": { "emoji": "📋", "color": "#e67e22", "style": "pulse", "label": "Issues" },
+    "github-code-review": { "emoji": "🔬", "color": "#9b59b6", "style": "shimmer", "label": "Review" },
+    "github-repo-management": { "emoji": "📦", "color": "#f39c12", "style": "pulse", "label": "Repo" },
+
+    "arxiv": { "emoji": "📑", "color": "#3498db", "style": "cosmic", "label": "ArXiv" },
+    "blogwatcher": { "emoji": "📰", "color": "#2ecc71", "style": "shimmer", "label": "Blogwatcher" },
+    "llm-wiki": { "emoji": "🧩", "color": "#9b59b6", "style": "cosmic", "label": "LLM Wiki" },
+    "polymarket": { "emoji": "📈", "color": "#27ae60", "style": "wave", "label": "Polymarket" },
+    "grounded-citations": { "emoji": "📚", "color": "#1abc9c", "style": "pulse", "label": "Citations" },
+
+    "pdf": { "emoji": "📄", "color": "#e74c3c", "style": "wave", "label": "PDF" },
+    "docx": { "emoji": "📝", "color": "#3498db", "style": "shimmer", "label": "DOCX" },
+    "xlsx": { "emoji": "📊", "color": "#27ae60", "style": "matrix", "label": "XLSX" },
+    "powerpoint": { "emoji": "📽️", "color": "#e67e22", "style": "fire", "label": "PPTX" },
+    "notion": { "emoji": "🗂️", "color": "#1abc9c", "style": "shimmer", "label": "Notion" },
+    "airtable": { "emoji": "🗃️", "color": "#f39c12", "style": "pulse", "label": "Airtable" },
+    "google-workspace": { "emoji": "🗂️", "color": "#e74c3c", "style": "rainbow", "label": "G Suite" },
+    "maps": { "emoji": "🗺️", "color": "#2ecc71", "style": "wave", "label": "Maps" },
+
+    "obsidian": { "emoji": "📔", "color": "#9b59b6", "style": "cosmic", "label": "Obsidian" },
+    "himalaya": { "emoji": "✉️", "color": "#3498db", "style": "pulse", "label": "Email" },
+
+    "comfyui": { "emoji": "🎭", "color": "#9b59b6", "style": "rainbow", "label": "ComfyUI" },
+    "excalidraw": { "emoji": "✏️", "color": "#e74c3c", "style": "rainbow", "label": "Excalidraw" },
+    "p5js": { "emoji": "🎪", "color": "#f39c12", "style": "rainbow", "label": "p5.js" },
+    "manim-video": { "emoji": "🎬", "color": "#8e44ad", "style": "cosmic", "label": "Manim" },
+    "ascii-art": { "emoji": "ASCII", "color": "#27ae60", "style": "matrix", "label": "ASCII Art" },
+    "architecture-diagram": { "emoji": "🏗️", "color": "#95a5a6", "style": "shimmer", "label": "Architecture" },
+
+    "claude-code": { "emoji": "🤖", "color": "#e74c3c", "style": "electric", "label": "Claude Code" },
+    "codex": { "emoji": "⚡", "color": "#27ae60", "style": "electric", "label": "Codex" },
+    "opencode": { "emoji": "🔓", "color": "#f39c12", "style": "fire", "label": "OpenCode" },
+
+    "systematic-debugging": { "emoji": "🐛", "color": "#e74c3c", "style": "fire", "label": "Debug" },
+    "test-driven-development": { "emoji": "🧪", "color": "#27ae60", "style": "pulse", "label": "TDD" },
+    "plan": { "emoji": "🗺️", "color": "#3498db", "style": "cosmic", "label": "Plan" },
+    "spike": { "emoji": "💥", "color": "#e67e22", "style": "explosion", "label": "Spike" },
+    "simplify-code": { "emoji": "✂️", "color": "#95a5a6", "style": "shimmer", "label": "Simplify" },
+    "dogfood": { "emoji": "🐶", "color": "#f39c12", "style": "wave", "label": "Dogfood" },
+
+    "llama-cpp": { "emoji": "🦙", "color": "#27ae60", "style": "matrix", "label": "llama.cpp" },
+    "huggingface-hub": { "emoji": "🤗", "color": "#e74c3c", "style": "rainbow", "label": "HF Hub" },
+    "weights-and-biases": { "emoji": "🪄", "color": "#9b59b6", "style": "cosmic", "label": "W&B" },
+
+    "youtube-content": { "emoji": "▶️", "color": "#e74c3c", "style": "fire", "label": "YouTube" },
+    "gif-search": { "emoji": "GIF", "color": "#f39c12", "style": "rainbow", "label": "GIF" },
+    "songsee": { "emoji": "🎵", "color": "#9b59b6", "style": "wave", "label": "Songsee" },
+    "songwriting-and-ai-music": { "emoji": "🎶", "color": "#8e44ad", "style": "rainbow", "label": "Music" },
+    "ascii-video": { "emoji": "📹", "color": "#27ae60", "style": "matrix", "label": "ASCII Video" },
+    "humanizer": { "emoji": "💀", "color": "#95a5a6", "style": "shimmer", "label": "Humanizer" },
+
+    "overdrive-xp": { "emoji": "🧪", "color": "#ff6b35", "style": "rainbow", "label": "Overdrive XP" },
+    "overdrive-rainbow": { "emoji": "🌈", "color": "#9b59b6", "style": "rainbow", "label": "Rainbow" },
+    "overdrive-visualizer": { "emoji": "🎆", "color": "#e74c3c", "style": "explosion", "label": "Visualizer" },
+
+    "_default": { "emoji": "⚡", "color": "#f39c12", "style": "pulse", "label": "Unknown Skill" }
+  }
+}

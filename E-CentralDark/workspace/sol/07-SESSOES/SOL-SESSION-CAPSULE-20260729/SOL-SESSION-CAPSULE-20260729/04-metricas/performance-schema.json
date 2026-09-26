@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sol://schemas/performance-event/1.0.0",
+  "title": "SOL Hermes Performance Event",
+  "type": "object",
+  "required": [
+    "pattern_id",
+    "mission",
+    "workload_equivalent",
+    "valid",
+    "started_at",
+    "completed_at",
+    "monotonic_elapsed_seconds"
+  ],
+  "properties": {
+    "pattern_id": { "type": "string", "minLength": 1 },
+    "mission": { "type": "string", "minLength": 1 },
+    "workload_equivalent": { "type": "boolean" },
+    "valid": { "type": "boolean" },
+    "started_at": { "type": "string", "format": "date-time" },
+    "completed_at": { "type": "string", "format": "date-time" },
+    "monotonic_elapsed_seconds": { "type": "number", "minimum": 0 },
+    "first_pass_success": { "type": "boolean" },
+    "timeout": { "type": "boolean" },
+    "scope_violation": { "type": "boolean" },
+    "rework_count": { "type": "integer", "minimum": 0 },
+    "human_intervention_count": { "type": "integer", "minimum": 0 },
+    "evidence_completeness": {
+      "enum": ["COMPLETE", "PARTIAL", "INVALID", "UNKNOWN"]
+    },
+    "rollback_tested": { "type": "boolean" },
+    "notes": { "type": "array", "items": { "type": "string" } }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "workload_equivalent": { "const": false }
+        },
+        "required": ["workload_equivalent"]
+      },
+      "then": {
+        "properties": {
+          "percentage_gain_allowed": { "const": false }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}
+

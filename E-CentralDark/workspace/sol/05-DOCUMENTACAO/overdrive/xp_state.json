@@ -1,0 +1,43 @@
+{
+  "total_xp": 2213,
+  "level": 4,
+  "current_level_xp": 34,
+  "xp_to_next_level": 1371,
+  "skills_used": 8,
+  "actions_history": [
+    {
+      "skill": "overdrive-evolution",
+      "action": "deploy",
+      "complexity": 10,
+      "xp_gained": 144,
+      "latency": 1.0,
+      "efficiency": 100,
+      "timestamp": "2026-08-08T22:05:59.003992+00:00"
+    },
+    {
+      "skill": "fresh-verification",
+      "action": "bonus",
+      "complexity": 3,
+      "xp_gained": 12,
+      "latency": 0.5,
+      "efficiency": 100,
+      "timestamp": "2026-08-08T22:07:02.965804+00:00"
+    },
+    {
+      "skill": "sol-auto-improvement",
+      "action": "complex",
+      "complexity": 9,
+      "xp_gained": 57,
+      "latency": 1.0,
+      "efficiency": 100,
+      "timestamp": "2026-08-08T22:08:49.312784+00:00"
+    }
+  ],
+  "efficiency_scores": [
+    100,
+    100,
+    100
+  ],
+  "created_at": "2026-08-08T00:00:00+00:00",
+  "last_updated": "2026-08-08T22:08:49.312799+00:00"
+}

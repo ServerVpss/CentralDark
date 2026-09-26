@@ -1,0 +1,25 @@
+{
+  "INGRESS_STATUS": "SUCCESS",
+  "SOURCE_SHA256": "429f5dd03471c0b878bb13b448fc1a3b94d72251d08c7e1f5c18e65241cd3fb0",
+  "CONTENT_PURPOSE": "Procedimento operacional para provar a identidade do Hermes Desktop local, identificar o Session ID real, e estabelecer observabilidade dos logs locais do Hermes como fonte de verdade para a CASA. Define um processo detalhado de 8 etapas para vinculação de runtime entre o Hermes Desktop e o sistema CentralDark.",
+  "SESSION_LINK": "Este documento estende o conceito de vinculação de runtime estabelecido em aprendizados anteriores, especificamente focando na identidade do Hermes Desktop como processo local e na extração de Session ID real dos logs nativos. Correlaciona-se com o MASTER-CYCLE.yml e com o aprendizado de 2026-08-26 sobre intenção única e ciclo mestre, aplicando esses princípios ao problema específico de observabilidade do runtime.",
+  "OWNER": "SOL",
+  "DELTA_USEFUL": [
+    "Intenção clara: provar identidade do Hermes Desktop local, processo executando, Session ID real, e transformar logs locais em fonte de observabilidade",
+    "Confirma o plano esperado como CASA (não VPS ou outro plano)",
+    "Especifica o aplicativo alvo como HERMES_DESKTOP"
+  ],
+  "PROCEDURAL_ELEMENTS": [
+    "Processo de identificação do próprio processo (PID, PPID, etc.)",
+    "Processo de identificação da sessão real (ui_session, session_key, agent_session_id)",
+    "Critérios para provar que é CASA (host local, Hermes Desktop local, processo pertencente ao device, workspace E:\\CentralDark)",
+    "Procedimento para observabilidade local com leitura read-only dos logs nativos",
+    "Investigação de correlação com PowerShell azul",
+    "Scheduler de saúde para monitoramento contínuo",
+    "Atualização do índice com ponteiros para o último estado",
+    "Requisito de contraprova com duas medições independentes"
+  ],
+  "ACTION": "Leitura read-only autorizada do attachment, cálculo do SHA-256, análise de intenção e plano, identificação de elementos procedimentais, correlação com documentos canônicos existentes, determinação do owner e destino apropriado.",
+  "PROOF": "SHA-256: 429f5dd03471c0b878bb13b448fc1a3b94d72251d08c7e1f5c18e65241cd3fb0\n\nCorrelação canônica:\n1. Alinhamento com os princípios do MASTER-CYCLE.yml (sequência de gatilhos, contrato de delta contínuo)\n2. Aplicação do conceito de intenção única do aprendizado de 2026-08-26\n3. Extensão do protocolo de HUD operacional para incluir vinculação de runtime específico do Hermes Desktop\n4. Conformidade com os princípios de REUSE_BEFORE_CREATE (usa scheduler existente), ONE_SYSTEM_ONLY (não cria runtime paralelo), e UNKNOWN != PASS (exige prova real do Session ID)\n5. Especifica destino concreto para projeção no CentralDark: E:\\CentralDark\\LOGS\\CASA\\HERMES_DESKTOP",
+  "NEXT_CURSOR": "Arquivar o delta útil em E:/CentralDark/LOGS/CASA/HERMES_DESKTOP/SESSION_ID_BINDING_PROCEDURE.md seguindo a estrutura de documentos operacionais da CentralDark, depois limpar o staging temporário em E:/CentralDark/workspace/temp/"
+}

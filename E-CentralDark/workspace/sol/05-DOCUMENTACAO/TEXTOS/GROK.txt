@@ -1,0 +1,142 @@
+**Não está totalmente errado.** A arquitetura (imagem + prompt) é uma das mais rigorosas e honestas que já vi para “autonomia real por código”. Ela acerta o essencial: evidência primeiro, gates determinísticos, IA só onde código não resolve, stop-write + rollback, zero force-push, zero falso-verde, escritor único, receipt + auditoria, provider fallback sem virar PASS, etc.
+
+O ponto fraco **não é o desenho conceitual**. É a **cobertura incompleta e pouco concreta do monitor de produção** (a camada que realmente fecha o loop “deploy → observação → stop-write → rollback”).
+
+### 1. Onde está o problema na imagem
+
+Na **CAMADA DE AUTOPROTEÇÃO & ROLLBACK**:
+
+- Monitor de Produção: “ERROR RATE / LATÊNCIA / HEALTH CHECKS”
+- Detector de Anomalias: “REGRAS DETERMINÍSTICAS (EX: 3 erros 500/60s)”
+- Depois: STOP-WRITE → ROLLBACK → ALERTA CRÍTICO
+
+O exemplo explícito é **só HTTP 500**.  
+Latência e health checks aparecem como rótulos, mas o único número concreto e a seta de decisão estão amarrados a “3 erros 500/60s”.
+
+Isso cria a impressão visual de que o gatilho principal (e praticamente o único detalhado) é 5xx. O resto fica genérico.
+
+### 2. Onde está o problema no prompt
+
+Na **FASE 9 — STOP-WRITE E ROLLBACK AUTOMÁTICO**:
+
+Lista de sinais:
+- HTTP 5xx
+- latência
+- health checks
+- crash loop
+- erros críticos
+- falha de dependência
+- queda de disponibilidade
+- inconsistência de versão
+- divergência de SHA
+
+Política versionada (exemplo):
+```
+PRODUCTION_ERROR_THRESHOLD=
+PRODUCTION_WINDOW=
+LATENCY_THRESHOLD=
+HEALTHCHECK_FAILURES=
+ROLLBACK_TARGET=
+```
+
+**Problemas concretos:**
+
+1. **Só HTTP 500 (ou 5xx) não é suficiente**  
+   - 200 com body errado / lógica quebrada  
+   - 4xx em massa (auth, rate-limit, validação)  
+   - latency p99/p95 explodindo sem 5xx  
+   - crash-loop / OOM / restart storm (PM2)  
+   - health endpoint retorna 200 mas versão/SHA divergente  
+   - dependência externa down (DB, Redis, provedor)  
+   - error rate de negócio (ex.: % de falhas em operação crítica)  
+   - inconsistência de artefato (SHA do runtime ≠ SHA do merge)
+
+2. **Falta contrato determinístico fechado**  
+   Os placeholders existem, mas não há:
+   - schema versionado da política (JSON Schema / Zod)
+   - janela exata + quantos pontos de medição
+   - combinação de sinais (OR / AND ponderado)
+   - cooldown / hysteresys para não flip-flop
+   - prova de que o rollback target é o artefato anterior comprovado (hash + receipt)
+   - teste de contrato que força o rollback em ambiente seguro
+
+3. **“Erro de produção” ainda é vago**  
+   O prompt fala “erros críticos” e “falha de dependência”, mas não define como o runtime os classifica de forma **determinística e auditável** (sem IA no caminho crítico do stop-write).
+
+4. **Dependência de observabilidade real**  
+   Se o monitor só enxerga 5xx do load-balancer e o health é superficial, o sistema pode ficar “verde” com aplicação quebrada. A autonomia de deploy/rollback fica falsa.
+
+O resto do prompt (Fases 0–8, 10–14) é sólido e alinhado com a imagem. O gap real está quase todo concentrado na camada de produção.
+
+### 3. Sobre o repositório
+
+`https://github.com/ServerVpss/CentralDark` retorna 404 (privado ou inexistente publicamente).  
+O status público em `mcp.centralldark.com/status` mostra o sistema vivo (GitHub API ok, 102 tools, VPS/PM2, etc.), mas **não consigo ler o código canônico** (scripts de autonomia, workflows, provider-health, agent-notify, HERMES-CORE Log-Verificador, etc.).
+
+Sem acesso ao código não dá para dizer “já existe X e está incompleto” com SHA. Só dá para apontar o gap de contrato.
+
+### 4. Prompt candidato (corrigido e focando o gap)
+
+Use isto como evolução direta do seu prompt (não substitui tudo — só fecha a FASE 9 + testes + política):
+
+```text
+FASE 9 — STOP-WRITE E ROLLBACK AUTOMÁTICO (CONTRATO FECHADO)
+
+POLÍTICA_VERSIONADA (arquivo canônico versionado, ex: config/production-guardrails.json):
+
+{
+  "version": "1.0.0",
+  "window_seconds": 60,
+  "signals": {
+    "http_5xx_rate": { "threshold": 0.05, "min_requests": 20, "action": "STOP_WRITE" },
+    "http_5xx_count": { "threshold": 3, "window": 60, "action": "STOP_WRITE" },
+    "latency_p99_ms": { "threshold": 2000, "action": "STOP_WRITE" },
+    "healthcheck_consecutive_failures": { "threshold": 3, "action": "STOP_WRITE" },
+    "process_restarts": { "threshold": 5, "window": 300, "action": "STOP_WRITE" },
+    "artifact_sha_mismatch": { "action": "STOP_WRITE" },
+    "dependency_critical_down": { "action": "STOP_WRITE" },
+    "business_error_rate": { "threshold": 0.10, "min_ops": 50, "action": "STOP_WRITE" }
+  },
+  "combine": "ANY",
+  "cooldown_seconds": 300,
+  "rollback_target": "PREVIOUS_PROVEN_ARTIFACT",
+  "max_rollback_attempts": 1
+}
+
+REGRAS OBRIGATÓRIAS:
+- Todo sinal deve ser coletado por código (não por IA).
+- Health check deve validar: HTTP 200 + body schema + versão/SHA do artefato deployado.
+- Artifact imutável com hash + commit SHA + environment.
+- Ao disparar qualquer sinal:
+  1. STOP_WRITE = true (bloqueia novos deploys e writes de promoção)
+  2. Congela o candidato atual
+  3. Rollback para o artefato anterior com receipt válido
+  4. Revalida health + SHA
+  5. Gera receipt de incidente
+  6. Notifica (Telegram/Painel) com causa sanitizada
+- Rollback falhou → PRODUCTION_BLOCKED + alerta crítico (nunca retry infinito)
+- Teste de contrato obrigatório (ambiente seguro):
+  - injetar 5xx → STOP_WRITE + rollback
+  - injetar latency → STOP_WRITE
+  - injetar health fail → STOP_WRITE
+  - injetar SHA mismatch → STOP_WRITE
+  - rollback bem-sucedido → incidente registrado
+  - rollback falho → PRODUCTION_BLOCKED
+
+Nunca declarar autonomia completa sem prova ponta-a-ponta destes sinais no mesmo conjunto de SHAs.
+```
+
+### Resumo direto
+
+| Parte              | Status                          | Erro principal                                      |
+|--------------------|---------------------------------|-----------------------------------------------------|
+| Visão geral        | Forte                           | —                                                   |
+| Gates + correção   | Forte                           | —                                                   |
+| Merge / promoção   | Forte                           | —                                                   |
+| Deploy             | Bom                             | Falta artefato imutável + prova de SHA no runtime   |
+| **Monitor/Rollback** | **Fraco / incompleto**        | **Só 5xx é insuficiente; política ainda placeholder** |
+| Testes de contrato | Quase completo                  | Falta testes forçados da camada de produção         |
+
+Você está certo: **não está totalmente errado**. O desenho é excelente. O único lugar que ainda deixa a autonomia “quase” (e não “fechada”) é a camada de observação + decisão de stop-write/rollback. Feche o contrato de sinais com números, schema, health profundo e testes injetados, e o loop fica de verdade determinístico.
+
+Se liberar o repositório (ou colar os arquivos-chave: `github-autonomia-*.mjs`, workflows de autonomia, provider-health, agent-notify e a config de produção atual), eu aponto exatamente o que já existe vs. o que falta com evidência de SHA.

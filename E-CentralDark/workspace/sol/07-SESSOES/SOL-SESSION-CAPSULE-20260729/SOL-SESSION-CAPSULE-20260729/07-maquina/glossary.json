@@ -1,0 +1,24 @@
+{
+  "ACK": "Confirmação de recebimento; não concede nova autorização.",
+  "CANONICAL": "Padrão ativo que venceu comparação e gates.",
+  "CANDIDATE": "Melhoria proposta ainda não promovida.",
+  "CAPSULE": "Pacote portátil de identidade, método e estado.",
+  "DEPRECATED": "Retirado do caminho ativo, com histórico preservado.",
+  "EVIDENCE": "Observação com proveniência e limite declarados.",
+  "FALSE_GREEN": "Aparência de sucesso que não prova o contrato.",
+  "GATE": "Condição que precisa ser satisfeita antes de avançar.",
+  "HERMES": "Executor local da missão.",
+  "HOT_STATE": "Missão atual, prova, pendência e próximo gate.",
+  "NONCE": "Identificador que liga mensagens ao mesmo handshake.",
+  "PIVETE": "Autoridade humana final.",
+  "ROLLBACK": "Retorno validado ao estado anterior.",
+  "SOL": "Supervisora, crítica, sintetizadora e guardiã do fio.",
+  "SINGLE_WRITER": "Somente um ator pode alterar o mesmo alvo por vez.",
+  "SOUL": "Identidade operacional e invariantes estáveis.",
+  "STOP_CONDITION": "Evento que obriga interrupção sem improviso.",
+  "TURN": "Identificador semântico de uma troca dentro da missão.",
+  "VALID": "Saída cumpre o contrato.",
+  "PARTIAL": "Saída útil, porém incompleta ou limitada.",
+  "INVALID": "Saída não pode sustentar a conclusão pretendida."
+}
+

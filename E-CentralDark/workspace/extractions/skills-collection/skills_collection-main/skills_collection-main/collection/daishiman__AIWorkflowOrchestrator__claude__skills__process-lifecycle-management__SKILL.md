@@ -1,0 +1,121 @@
+---
+name: .claude/skills/process-lifecycle-management/SKILL.md
+description: |
+  Node.jsプロセスのライフサイクル管理を専門とするスキル。
+  Linuxカーネルのプロセス管理思想に基づき、プロセスの生成、実行、
+  監視、終了までの完全な制御と、シグナル処理、ゾンビプロセス回避を設計します。
+  
+  📖 参照書籍:
+  - 『The Pragmatic Programmer』（Andrew Hunt, David Thomas）: 実践的改善
+  
+  📚 リソース参照:
+  - `resources/Level1_basics.md`: レベル1の基礎ガイド
+  - `resources/Level2_intermediate.md`: レベル2の実務ガイド
+  - `resources/Level3_advanced.md`: レベル3の応用ガイド
+  - `resources/Level4_expert.md`: レベル4の専門ガイド
+  - `resources/child-process-patterns.md`: 子プロセス管理パターン
+  - `resources/legacy-skill.md`: 旧SKILL.mdの全文
+  - `resources/process-states.md`: プロセス状態管理ガイド
+  - `resources/signal-handling.md`: SIGTERM、SIGINT、SIGHUPの適切なハンドリングとGraceful Shutdown実装
+  - `scripts/check-process-health.mjs`: プロセスヘルスチェックスクリプト
+  - `scripts/log_usage.mjs`: 使用記録・自動評価スクリプト
+  - `scripts/validate-skill.mjs`: スキル構造検証スクリプト
+  - `templates/signal-handler.template.ts`: Signal Handler Template
+  - `resources/requirements-index.md`: 要求仕様の索引（docs/00-requirements と同期）
+  
+  Use proactively when handling process lifecycle management tasks.
+version: 1.0.0
+level: 1
+last_updated: 2025-12-24
+references:
+  - book: "The Pragmatic Programmer"
+    author: "Andrew Hunt, David Thomas"
+    concepts:
+      - "実践的改善"
+      - "品質維持"
+---
+
+# Process Lifecycle Management
+
+## 概要
+
+Node.jsプロセスのライフサイクル管理を専門とするスキル。
+Linuxカーネルのプロセス管理思想に基づき、プロセスの生成、実行、
+監視、終了までの完全な制御と、シグナル処理、ゾンビプロセス回避を設計します。
+
+詳細な手順や背景は `resources/Level1_basics.md` と `resources/Level2_intermediate.md` を参照してください。
+
+
+## ワークフロー
+
+### Phase 1: 目的と前提の整理
+
+**目的**: タスクの目的と前提条件を明確にする
+
+**アクション**:
+
+1. `resources/Level1_basics.md` と `resources/Level2_intermediate.md` を確認
+2. 必要な resources/scripts/templates を特定
+
+### Phase 2: スキル適用
+
+**目的**: スキルの指針に従って具体的な作業を進める
+
+**アクション**:
+
+1. 関連リソースやテンプレートを参照しながら作業を実施
+2. 重要な判断点をメモとして残す
+
+### Phase 3: 検証と記録
+
+**目的**: 成果物の検証と実行記録の保存
+
+**アクション**:
+
+1. `scripts/validate-skill.mjs` でスキル構造を確認
+2. 成果物が目的に合致するか確認
+3. `scripts/log_usage.mjs` を実行して記録を残す
+
+
+## ベストプラクティス
+
+### すべきこと
+- Node.jsプロセスの起動・終了フローを設計する時
+- シグナルハンドラーを実装する時
+- 子プロセスの管理戦略を決定する時
+- PM2でプロセスを管理する設定を行う時
+
+### 避けるべきこと
+- アンチパターンや注意点を確認せずに進めることを避ける
+
+## コマンドリファレンス
+
+### リソース読み取り
+```bash
+cat .claude/skills/process-lifecycle-management/resources/Level1_basics.md
+cat .claude/skills/process-lifecycle-management/resources/Level2_intermediate.md
+cat .claude/skills/process-lifecycle-management/resources/Level3_advanced.md
+cat .claude/skills/process-lifecycle-management/resources/Level4_expert.md
+cat .claude/skills/process-lifecycle-management/resources/child-process-patterns.md
+cat .claude/skills/process-lifecycle-management/resources/legacy-skill.md
+cat .claude/skills/process-lifecycle-management/resources/process-states.md
+cat .claude/skills/process-lifecycle-management/resources/signal-handling.md
+```
+
+### スクリプト実行
+```bash
+node .claude/skills/process-lifecycle-management/scripts/check-process-health.mjs --help
+node .claude/skills/process-lifecycle-management/scripts/log_usage.mjs --help
+node .claude/skills/process-lifecycle-management/scripts/validate-skill.mjs --help
+```
+
+### テンプレート参照
+```bash
+cat .claude/skills/process-lifecycle-management/templates/signal-handler.template.ts
+```
+
+## 変更履歴
+
+| Version | Date | Changes |
+| --- | --- | --- |
+| 1.0.0 | 2025-12-24 | Spec alignment and required artifacts added |

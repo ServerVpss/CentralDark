@@ -1,0 +1,2 @@
+$pids = (Get-Process -Name 'Hermes', 'python', 'MpSigStub' -ErrorAction SilentlyContinue).Id
+Get-NetTCPConnection -State Established -ErrorAction SilentlyContinue | Where-Object { $_.OwningProcess -in $pids } | Select-Object LocalAddress, LocalPort, RemoteAddress, RemotePort, State, @{Name='ProcessName';Expression={(Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue).ProcessName}} | Format-Table -AutoSize

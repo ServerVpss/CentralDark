@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sol://schemas/mission-state/1.0.0",
+  "title": "SOL Mission State",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "captured_at",
+    "authority",
+    "mission",
+    "pending",
+    "prohibited",
+    "required_reading"
+  ],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "captured_at": { "type": "string", "format": "date-time" },
+    "authority": { "const": "PIVETE" },
+    "mission": {
+      "type": "object",
+      "required": [
+        "id",
+        "mode_at_capture",
+        "phase",
+        "authorization_is_current_after_reload",
+        "next_gate"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "parent_id": { "type": ["string", "null"] },
+        "nonce": { "type": ["string", "null"] },
+        "mode_at_capture": { "type": "string" },
+        "folder_current": { "type": ["string", "null"] },
+        "phase": { "type": "string" },
+        "authorized_action_at_capture": { "type": ["string", "null"] },
+        "authorization_is_current_after_reload": { "const": false },
+        "next_gate": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "profile": { "type": "object" },
+    "last_valid_proof": { "type": "object" },
+    "latest_invalid_instrument": { "type": "object" },
+    "pending": { "type": "array", "items": { "type": "string" } },
+    "prohibited_at_capture": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "writes_to_profile_during_mission": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "folders_migrated": { "type": "integer", "minimum": 0 },
+    "required_reading": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}
+

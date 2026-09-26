@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0.0",
+  "captured_at": "2026-07-29T04:21:08-03:00",
+  "authority": "PIVETE",
+  "mission": {
+    "id": "INVENTARIO-TOTAL-HERMES-01",
+    "parent_id": "ORGANIZAR-CASA-HERMES-01",
+    "nonce": "BBC03689F2C4",
+    "mode_at_capture": "READ_ONLY",
+    "folder_current": null,
+    "phase": "PREPARACAO_DO_INSTRUMENTO_V3",
+    "authorized_action_at_capture": "PREPARE_NUL_DIAGNOSTIC_SCRIPT_V3",
+    "authorization_is_current_after_reload": false,
+    "next_gate": "REVISAO_SOL_DO_05D"
+  },
+  "profile": {
+    "name": "pivete",
+    "home": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete",
+    "hermes_version_at_proof": "0.19.0",
+    "build_date_at_proof": "2026.7.20",
+    "upstream_at_proof": "9bf1f737",
+    "executable_at_proof": "C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\hermes.exe",
+    "gateway_at_proof": "running",
+    "skills_count_at_proof": 106,
+    "volatile": true
+  },
+  "last_valid_proof": {
+    "turn": "PROFILE_SHOW_NATIVE_DIAGNOSTIC_RESULT",
+    "report_sha256": "bb03aa8abe3799437c69128eb0cb47fc9524960bdac4d1817cde1158de1aac6e",
+    "verdict": "VALID"
+  },
+  "latest_invalid_instrument": {
+    "stage": "05c",
+    "script_sha256": "ff095024e6af0315c5ae406be6b37469267bd9f827cd96b9f2c16a4c32b92d2c",
+    "line_count": 190,
+    "verdict": "INVALID",
+    "reasons": [
+      "LINE_LIMIT_EXCEEDED",
+      "ENUMERATOR_NOT_DETERMINISTICALLY_DISPOSED"
+    ],
+    "executed": false
+  },
+  "pending": [
+    "receive full stage-05d script",
+    "review stage-05d without execution",
+    "renew authorization before parser or execution",
+    "resume top-level inventory with reserved-name-safe instrument"
+  ],
+  "prohibited_at_capture": [
+    "script execution",
+    "parser execution",
+    "new collector",
+    "profile mutation",
+    "network access",
+    "editing rejected 05b or 05c",
+    "symlink or junction creation",
+    "deletion",
+    "Hermes update or restart"
+  ],
+  "writes_to_profile_during_mission": 0,
+  "folders_migrated": 0,
+  "required_reading": [
+    "../BOOTSTRAP.md",
+    "../SOUL.md",
+    "FIO-DA-MISSAO.md",
+    "../02-protocolos/COMUNICACAO-UNIFICADA.md",
+    "../02-protocolos/COLETORES-E-INSTRUMENTOS.md",
+    "../05-seguranca/REGRAS-DE-OURO.md",
+    "../06-laboratorio/DECISION-LOG.md"
+  ]
+}
+

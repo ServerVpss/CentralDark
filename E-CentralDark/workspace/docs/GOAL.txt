@@ -1,0 +1,457 @@
+/goal RELEASE_TRAIN_INSTINTO_SUPERIOR_CASA_VPS
+
+AUTORIDADE=
+SEGREDO/CHEFE
+
+COORDENADORA=
+SOL
+
+REPOSITORIO=
+ServerVpss/CentralDark
+
+CASA_LOCAL=
+C:\Users\danda\AppData\Local\hermes\profiles\pivete
+
+OBJETIVO
+Levar para a main, com código e prova, todo o conjunto determinístico já construído e necessário para:
+
+1. CI continuar mesmo quando GitHub hosted estiver bloqueado por billing;
+2. autonomia falhar fechado sem depender de uma IA específica;
+3. identificar Writer real por trailer;
+4. preservar evidência funcional contra buscas literais negativas;
+5. disponibilizar Combo Potência no menu paginado do GuardiaoCasa;
+6. notificar pelo Telegram mesmo quando SOL/IA/API principal estiver indisponível;
+7. promover somente o que estiver provado;
+8. fazer deploy canário somente do escopo VPS aplicável.
+
+NÃO criar V2, skill paralela, outro bot, outro orquestrador ou nova arquitetura.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PAPÉIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SOL
+→ coordenar
+→ manter mapa, dependências e estado
+→ não escrever código
+
+CLAUDE CODE CLI
+→ Writer exclusivo do escopo CI/GitHub/autonomia
+→ workflows, gates e testes
+→ não tocar arquivos do Combo Potência
+
+GROK CLI
+→ Writer exclusivo do escopo Casa/skills/menu Telegram
+→ anti-zona-burra, combo-potencia e plugin do GuardiaoCasa
+→ não tocar workflows GitHub
+
+PIVETE/HERMES
+→ executar comandos locais
+→ integrar somente após provas
+→ não alterar o mesmo arquivo simultaneamente com outro Writer
+
+JUDGE
+→ read-only
+→ executar testes, mutantes e contraprovas
+→ não corrigir código
+
+Cada branch possui exatamente um Writer.
+Cada Writer usa trailer:
+
+Writer: <slug>
+Writer-Session: <id-opaco>
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FASE 0 — MAPA READ-ONLY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Fixar:
+
+MAIN_SHA=$(git rev-parse origin/main)
+
+Verificar estado e diff dos PRs:
+
+#662
+#663
+#664
+#668
+#637
+
+Confirmar:
+
+- mergeable;
+- HEAD_SHA;
+- arquivos tocados;
+- sobreposição;
+- checks atuais;
+- threads abertas;
+- base desatualizada;
+- nenhum secret no diff.
+
+Localizar no perfil Pivete:
+
+skills/meta/anti-zona-burra-gate/SKILL.md
+skills/combo-potencia/
+combo-potencia-vendor/
+skill-bundles/combo-potencia.yaml
+plugins/
+adapter real do GuardiaoCasa
+testes criados
+catálogo/index das skills
+
+Não ler:
+
+.env
+tokens
+credentials
+sessions
+SQLite vivo
+chaves
+cookies
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PR 1 — DESTRAVAR CI PELO SELF-HOSTED
+WRITER=claude-code
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Criar branch limpa a partir da main atual:
+
+fix/ci-self-hosted-fallback-deterministico
+
+Usar como referência comprovada o padrão do PR #668:
+
+runs-on: [self-hosted, Linux]
+
+Aplicar somente aos workflows canônicos atualmente bloqueados por billing:
+
+.github/workflows/codex-validate.yml
+.github/workflows/porta-de-entrada.yml
+.github/workflows/lupa-conformance.yml
+.github/workflows/lupa-drift-guard.yml
+.github/workflows/pr-auto-review.yml
+.github/workflows/autonomia-promocao.yml
+
+Regras:
+
+- HEAD de fork nunca executa código no runner persistente;
+- checkout preso ao SHA;
+- persist-credentials: false;
+- timeout definido;
+- concurrency;
+- receipt com if: always();
+- billing/runner indisponível = BLOCKED, nunca PASS;
+- nenhuma execução de código externo não confiável com credencial;
+- não alterar lógica dos gates nesta PR.
+
+Testar:
+
+YAML válido
+checkout exato
+fork bloqueado
+mesmo repositório permitido
+runner self-hosted identificado
+teste real executado
+zero steps = BLOCKED
+
+Abrir PR.
+Não mergear até todos os gates self-hosted passarem.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PR 2 — GOVERNANÇA + AUTONOMIA
+WRITER=claude-code
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Após PR 1 entrar na main:
+
+1. rebasear PR #662 na main;
+2. resolver somente conflitos reais;
+3. executar todos os testes;
+4. confirmar 17/17 e gates completos;
+5. promover #662.
+
+Depois:
+
+1. rebasear PR #663 na nova main;
+2. executar testes de promoção/varredura;
+3. testar:
+   - credit limit;
+   - provider offline;
+   - timeout;
+   - token ausente;
+   - GraphQL indisponível;
+   - aviso Telegram NOT_SENT;
+   - WAIT expirado;
+4. promover #663.
+
+Depois:
+
+1. rebasear o conteúdo do PR #664;
+2. adicionar o step faltante no gate canônico:
+
+- name: Validar escritor único
+  run: node scripts/lupa/validar-escritor-unico.mjs \
+       "${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}" \
+       --mode=enforce
+
+3. executar os testes do Writer único;
+4. provar:
+   - sem trailer = FAIL;
+   - Writer único = PASS;
+   - dois Writers = FAIL;
+   - sessão parecida com credencial = REDACTED + FAIL;
+5. promover somente após o gate realmente bloquear.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PR 3 — CASA / INSTINTO SUPERIOR
+WRITER=grok-cli
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Criar branch limpa:
+
+feat/casa-instinto-superior-combo-potencia
+
+MAPA ÚNICO OBRIGATÓRIO
+
+Não copiar cegamente o perfil inteiro.
+
+Transformar os artefatos locais comprovados em fontes versionáveis e portáveis no repositório.
+
+Encaixe esperado, confirmando antes de criar:
+
+.agents/skills/anti-zona-burra-gate/
+.agents/skills/combo-potencia/
+apps/modulos/HERMES-CORE/plugins/
+apps/modulos/HERMES-CORE/tests/
+
+Se já existir encaixe equivalente, usar o existente.
+
+Incluir:
+
+1. skill anti-zona-burra-gate refinada;
+2. reconcile_result();
+3. oito testes reais;
+4. teste mutante;
+5. aliases semânticos;
+6. catálogo Combo Potência;
+7. índice dos braços;
+8. menu Telegram paginado;
+9. callback determinístico;
+10. adaptador para seleção da skill na tarefa atual.
+
+O menu deve reutilizar a infraestrutura existente do Telegram:
+
+inline_keyboard
+callback_data
+editMessageText
+
+Não criar outro bot.
+
+Callbacks:
+
+combo:root
+combo:b:<braco>:<pagina>
+combo:s:<skill>
+combo:use:<skill>
+combo:back
+combo:home
+
+Limites:
+
+- máximo 6 skills por página;
+- editar a mesma mensagem;
+- não despejar as 281 skills;
+- ECC abre por categoria/pesquisa;
+- Voltar preserva contexto;
+- Painel retorna ao menu;
+- nenhuma mensagem duplicada.
+
+Teste obrigatório:
+
+test_literal_absence_does_not_override_functional_evidence
+test_repeated_tool_without_information_gain_stops
+test_new_conclusion_cannot_erase_previous_evidence
+test_alias_requires_functional_evidence
+test_official_link_is_used_before_guessing_url
+test_menu_pagination_bounds
+test_menu_back_preserves_branch
+test_selected_skill_reaches_current_task
+test_no_duplicate_telegram_message
+test_model_swap_preserves_behavior
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PR 4 — FALLBACK DE NOTIFICAÇÃO
+WRITER=grok-cli
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Evoluir os artefatos existentes:
+
+infra/notify/notify.py
+infra/notify/notify.sh
+infra/guardiao/notifier.py
+scripts/notify-claude/notify-telegram.sh
+
+Fluxo:
+
+ROTA_PRINCIPAL
+→ 3 tentativas
+→ fila local
+→ Telegram Bot API direta
+→ Guardião/Hermes
+→ persistir para reenvio
+→ exit não zero se tudo falhar
+
+Nunca perder o evento.
+
+Estados:
+
+PRIMARY_SENT
+FALLBACK_SENT
+QUEUED_FOR_RETRY
+NOT_SENT
+BLOCKED_NO_ROUTE
+
+Não exibir token/chat_id.
+
+Testes:
+
+primary success
+primary timeout
+primary 401
+fallback success
+fallback failure
+fila criada
+evento preservado
+nenhum secret no log
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PR 5 — ESCOLA VIVA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Depois dos gates self-hosted ativos:
+
+1. rebasear PR #637;
+2. executar:
+   sync Init
+   sync Sync
+   conflito bilateral
+   arquivo privado rejeitado
+   candidato com segredo rejeitado
+   nenhuma exclusão automática
+3. confirmar diff limpo;
+4. promover para main.
+
+Não fazer deploy VPS desse PR.
+Ele pertence à Casa/Windows.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DEPLOY CONTROLADO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Somente depois de todos os PRs aplicáveis entrarem na main.
+
+Separar:
+
+CASA:
+- instalar/copiar skills no perfil Pivete;
+- copiar mesmas skills aprovadas para SOL;
+- atualizar plugin/adapter;
+- não copiar SQLite vivo;
+- reiniciar somente sessão lógica primeiro.
+
+VPS:
+- git fetch;
+- fixar MAIN_SHA aprovado;
+- backup dos arquivos que serão alterados;
+- deploy somente:
+  bot Telegram
+  notifier
+  scripts de autonomia
+  workflows consumidos pelo runner
+
+CANÁRIO VPS:
+
+1. sintaxe;
+2. testes;
+3. iniciar/recarregar somente processo afetado;
+4. abrir Combo Potência;
+5. navegar Próximo/Voltar;
+6. escolher uma skill;
+7. simular IA indisponível;
+8. confirmar fallback Telegram;
+9. confirmar receipt;
+10. verificar logs sem segredo.
+
+Rollback:
+
+- restaurar backup;
+- checkout do SHA anterior;
+- reiniciar somente processo afetado;
+- provar retorno.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+AUTONOMIA LOOP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LOOP:
+
+MAPEAR
+→ DELEGAR POR ESCOPO
+→ EXECUTAR
+→ TESTAR
+→ JUDGE READ-ONLY
+→ CORRIGIR MÍNIMO
+→ RETESTAR
+→ CONTRAPROVA
+→ RECEIPT
+→ PRÓXIMA DEPENDÊNCIA
+
+Parar quando:
+
+- mesmo erro 3 vezes sem nova evidência;
+- conflito de Writer;
+- secret necessário;
+- runner indisponível;
+- rollback não comprovado;
+- merge/deploy exigir decisão do Chefe.
+
+Nesses casos responder somente:
+
+BLOCKED
+ARQUIVO=
+LINHA=
+ERRO=
+AÇÃO_EXATA_DO_CHEFE=
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GATE FINAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CI_SELF_HOSTED=PASS
+PR_662=MERGED
+PR_663=MERGED
+WRITER_GATE=ATIVO
+ANTI_ZONA_BURRA=PASS
+COMBO_POTENCIA=PASS
+TELEGRAM_MENU=PASS
+NOTIFY_FALLBACK=PASS
+PR_637=MERGED
+CASA_CANARY=PASS
+VPS_CANARY=PASS
+ROLLBACK=PROVADO
+SECRETS_EXPOSTOS=0
+FAIL=0
+SKIPPED=0
+UNKNOWN=0
+
+Antes do merge/deploy final, parar e devolver:
+
+READY_FOR_FINAL_PROMOTION
+
+PRs=
+HEADS=
+TESTES=
+ARQUIVOS_CASA=
+ARQUIVOS_VPS=
+COMANDO_EXATO_DE_MERGE=
+COMANDO_EXATO_DE_DEPLOY=
+COMANDO_EXATO_DE_ROLLBACK=

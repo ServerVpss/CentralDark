@@ -1,0 +1,100 @@
+# Overdrive skin — neon magenta/cyan/green on dark indigo.
+# Matches the Overdrive rainbow widget and alchemical-distillation spinner.
+# Missing keys inherit the 'default' skin automatically.
+
+name: overdrive
+description: "Overdrive — neon magenta, cyan, and green on dark indigo; alchemical distillation spinner; rainbow-widget palette"
+
+colors:
+  # Base surface
+  background: "#0a0a1a"
+  status_bar_bg: "#0a0a1a"
+
+  # Neon accents
+  banner_border: "#ff00ff"    # magenta neon
+  banner_title: "#00ffff"      # cyan neon
+  banner_accent: "#ff1493"     # pink neon (deep pink)
+  ui_accent: "#00ff7f"         # green neon (spring green)
+
+  # Text hierarchy
+  banner_text: "#e6e6ff"
+  ui_text: "#e6e6ff"
+  banner_dim: "#7a7a9a"
+  ui_border: "#ff00ff"
+
+  # Semantic status (neon)
+  ui_ok: "#00ff00"
+  ui_warn: "#ffaa00"
+  ui_error: "#ff0044"
+
+  # CLI / TUI chrome
+  prompt: "#00ffff"
+  input_rule: "#ff00ff"
+  response_border: "#00ffff"
+  session_label: "#00ffff"
+  session_border: "#ff00ff"
+  status_bar_text: "#e6e6ff"
+  status_bar_good: "#00ff00"
+  status_bar_warn: "#ffaa00"
+  status_bar_critical: "#ff0044"
+
+  # Tool / thinking accents
+  ui_tool: "#00ff7f"
+  ui_thinking: "#ff00ff"
+
+# Alchemical distillation spinner — matches the Overdrive rainbow widget vibe.
+spinner:
+  waiting_faces:
+    - "⠋"
+    - "⠙"
+    - "⠹"
+    - "⠸"
+    - "⠼"
+    - "⠴"
+    - "⠦"
+    - "⠧"
+    - "⠇"
+    - "⠏"
+  thinking_faces:
+    - "🧪"
+    - "⚗️"
+    - "🔮"
+    - "✨"
+  thinking_verbs:
+    - "destilando"
+    - "sintetizando"
+    - "processando"
+    - "refinando"
+  wings:
+    - ["⟪⚡", "⚡⟫"]
+    - ["⟪✨", "✨⟫"]
+
+# Overdrive branding
+branding:
+  agent_name: "Overdrive Agent"
+  response_label: " 🧪 Overdrive "
+  prompt_symbol: "⚡"
+  help_header: "(⚡) Overdrive Commands"
+
+# Tool call prefix
+tool_prefix: "┊"
+
+# Tool emoji map — pulled from skill_visuals.json so the spinner matches each tool's identity.
+tool_emojis:
+  web_search: "🔮"
+  web_extract: "📡"
+  image_generate: "🎨"
+  terminal: "💻"
+  read_file: "📄"
+  write_file: "✍️"
+  patch: "🔧"
+  search_files: "🔍"
+  vision_analyze: "👁️"
+  execute_code: "🐍"
+  delegate_task: "🤖"
+  memory: "🧠"
+  skill_manage: "📚"
+  cronjob: "⏰"
+  computer_use: "🖱️"
+  browser_navigate: "🌐"
+  text_to_speech: "🗣️"

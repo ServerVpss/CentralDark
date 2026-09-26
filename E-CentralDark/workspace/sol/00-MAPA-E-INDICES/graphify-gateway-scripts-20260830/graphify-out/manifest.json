@@ -1,0 +1,116 @@
+{
+  "centraldark-omni-router-local.mjs": {
+    "mtime": 1788041715.177471,
+    "seen": 1788071002.8556507,
+    "ast_hash": "fcb68cb67a3846c6e6ab1d4fc9b1b4af",
+    "semantic_hash": "fcb68cb67a3846c6e6ab1d4fc9b1b4af"
+  },
+  "centraldark-omni-router-local.test.mjs": {
+    "mtime": 1788041715.181614,
+    "seen": 1788071002.855656,
+    "ast_hash": "0df2e23425d0415798b6e76aad07df1c",
+    "semantic_hash": "0df2e23425d0415798b6e76aad07df1c"
+  },
+  "centraldark_omni_router.py": {
+    "mtime": 1788040322.4763796,
+    "seen": 1788071002.855658,
+    "ast_hash": "757e00d701d01ca209ad9448068f20ee",
+    "semantic_hash": "757e00d701d01ca209ad9448068f20ee"
+  },
+  "debug_dom.py": {
+    "mtime": 1788040322.4776082,
+    "seen": 1788071002.855659,
+    "ast_hash": "d29713ddd12ffb56d404af9c705e6144",
+    "semantic_hash": "d29713ddd12ffb56d404af9c705e6144"
+  },
+  "diagnostico_dom.py": {
+    "mtime": 1788040322.4786162,
+    "seen": 1788071002.85566,
+    "ast_hash": "161c6dfc60020117809572257dd3efae",
+    "semantic_hash": "161c6dfc60020117809572257dd3efae"
+  },
+  "elite_http_gateway.py": {
+    "mtime": 1788040323.2092605,
+    "seen": 1788071002.8556612,
+    "ast_hash": "ab8041bc54c1cf4424bada509a8c63e2",
+    "semantic_hash": "ab8041bc54c1cf4424bada509a8c63e2"
+  },
+  "elite_ws_gateway.py": {
+    "mtime": 1788040323.2092605,
+    "seen": 1788071002.855662,
+    "ast_hash": "c1902a0ac416eddfe5a494097d455265",
+    "semantic_hash": "c1902a0ac416eddfe5a494097d455265"
+  },
+  "gateway_admin.py": {
+    "mtime": 1788040323.7658677,
+    "seen": 1788071002.855663,
+    "ast_hash": "bcd5f5635b6a6bd1bdaa556c8c750ddb",
+    "semantic_hash": "bcd5f5635b6a6bd1bdaa556c8c750ddb"
+  },
+  "humanizer.py": {
+    "mtime": 1788040323.7658677,
+    "seen": 1788071002.855664,
+    "ast_hash": "42b692eb9d5d3dcd92158d7ec85243bf",
+    "semantic_hash": "42b692eb9d5d3dcd92158d7ec85243bf"
+  },
+  "mapeamento_humano.py": {
+    "mtime": 1788040323.7673752,
+    "seen": 1788071002.8556652,
+    "ast_hash": "399dc05fdbd3ceea8889bbb5a1ded952",
+    "semantic_hash": "399dc05fdbd3ceea8889bbb5a1ded952"
+  },
+  "mapeamento_humano_v2.py": {
+    "mtime": 1788040323.7683847,
+    "seen": 1788071002.855666,
+    "ast_hash": "d011349f14b9dd50fba6b679c219e74b",
+    "semantic_hash": "d011349f14b9dd50fba6b679c219e74b"
+  },
+  "mapeamento_humano_v3.py": {
+    "mtime": 1788040323.7693808,
+    "seen": 1788071002.85567,
+    "ast_hash": "00ad8da9fc2b3af15427342bf60d26ad",
+    "semantic_hash": "00ad8da9fc2b3af15427342bf60d26ad"
+  },
+  "mapeamento_seletor.py": {
+    "mtime": 1788040323.7693808,
+    "seen": 1788071002.855671,
+    "ast_hash": "a0006273685f53d790b6f2a5dab27ae3",
+    "semantic_hash": "a0006273685f53d790b6f2a5dab27ae3"
+  },
+  "openai_http_gateway.py": {
+    "mtime": 1788040323.7693808,
+    "seen": 1788071002.855672,
+    "ast_hash": "e0a5f9a55169f10cb314f52452015947",
+    "semantic_hash": "e0a5f9a55169f10cb314f52452015947"
+  },
+  "pivete_routes.py": {
+    "mtime": 1788040323.7708879,
+    "seen": 1788071002.8556726,
+    "ast_hash": "d7c5e58166a60bc7d6bb0b7ef25a6ea2",
+    "semantic_hash": "d7c5e58166a60bc7d6bb0b7ef25a6ea2"
+  },
+  "send_and_dump.py": {
+    "mtime": 1788040323.771895,
+    "seen": 1788071002.8556736,
+    "ast_hash": "be9199bb35477cc61cda71dc4f581a86",
+    "semantic_hash": "be9199bb35477cc61cda71dc4f581a86"
+  },
+  "send_and_dump_fix.py": {
+    "mtime": 1788040323.771895,
+    "seen": 1788071002.8556743,
+    "ast_hash": "200edc62485e93db9dd6dea3d67bb3f5",
+    "semantic_hash": "200edc62485e93db9dd6dea3d67bb3f5"
+  },
+  "test_ws.py": {
+    "mtime": 1788040323.772895,
+    "seen": 1788071002.8556755,
+    "ast_hash": "1f07df00926f44728fc97d17e0a4f521",
+    "semantic_hash": "1f07df00926f44728fc97d17e0a4f521"
+  },
+  "zentinel_health.py": {
+    "mtime": 1788040323.7738962,
+    "seen": 1788071002.8556764,
+    "ast_hash": "cdabd7062713893e824b8d16b537fc9f",
+    "semantic_hash": "cdabd7062713893e824b8d16b537fc9f"
+  }
+}

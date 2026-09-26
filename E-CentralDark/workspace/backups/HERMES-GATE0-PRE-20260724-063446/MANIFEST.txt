@@ -1,0 +1,9 @@
+GATE-0 PRE-BACKUP
+DATE_TIME=2026-07-24 06:34:46
+HERMES_VERSION=0.19.0 (2026.7.20)
+HERMES_COMMIT=fb0ed839 (+219 carried)
+PROFILE=pivete
+CONFIG_PATH=C:/Users/danda/AppData/Local/hermes/profiles/pivete/config.yaml
+STATE_DB_PATH=.../profiles/pivete/state.db (NAO INCLUIDO - contem credenciais/sessoes)
+GATEWAY_PID=23700 (pai 37040)
+NOTE: secrets/.env nao incluidos. conversas nao incluidas.

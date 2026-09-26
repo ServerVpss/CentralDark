@@ -1,0 +1,234 @@
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	﻿2026-09-08T21:48:10.9272407Z Current runner version: '2.337.0'
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9308366Z ##[group]Runner Image Provisioner
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9309639Z Hosted Compute Agent
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9310588Z Version: 20260828.587
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9311978Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9313180Z Build Date: 2026-08-28T16:44:25Z
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9314333Z Worker ID: {f12d8149-ca2d-4c8d-89b6-ac9831375274}
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9315422Z Azure Region: westus3
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9316347Z ##[endgroup]
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9318564Z ##[group]Operating System
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9319520Z Ubuntu
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9320384Z 24.04.5
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9321148Z LTS
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9322201Z ##[endgroup]
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9323032Z ##[group]Runner Image
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9323939Z Image: ubuntu-24.04
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9324847Z Version: 20260907.300.1
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9326800Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260907.300/images/ubuntu/Ubuntu2404-Readme.md
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9329371Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260907.300
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9330824Z ##[endgroup]
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9332965Z ##[group]GITHUB_TOKEN Permissions
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9335862Z Contents: read
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9336855Z Metadata: read
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9337694Z ##[endgroup]
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9341143Z Secret source: Actions
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:10.9343182Z Prepare workflow directory
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.0318494Z Prepare all required actions
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.0394495Z Getting action download info
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.5252988Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.6066157Z Download action repository 'actions/setup-python@v6' (SHA:ece7cb06caefa5fff74198d8649806c4678c61a1)
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.6705631Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.8458243Z Complete job name: Contabo/Cloudflare Forensics + Reboot
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9232979Z ##[group]Run actions/checkout@v7
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9234377Z with:
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9235102Z   fetch-depth: 1
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9235791Z   repository: ServerVpss/CentralDark
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9239378Z   token: ***
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9239760Z   ssh-strict: true
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9240143Z   ssh-user: git
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9240532Z   persist-credentials: true
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9240961Z   clean: true
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9241346Z   sparse-checkout-cone-mode: true
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9242139Z   fetch-tags: false
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9242526Z   show-progress: true
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9242928Z   lfs: false
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9243294Z   submodules: false
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9243695Z   set-safe-directory: true
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9244141Z   allow-unsafe-pr-checkout: false
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9245001Z env:
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9245365Z   CONTABO_CLIENT_ID: 
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9245771Z   CONTABO_CLIENT_SECRET: 
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9246190Z   CONTABO_API_USER: 
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9246647Z   CONTABO_API_PASSWORD: 
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9247344Z   CLOUDFLARE_API_TOKEN: ***
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9247763Z   MUTATION: 0
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:11.9248130Z ##[endgroup]
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.1983614Z Syncing repository: ServerVpss/CentralDark
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.1986534Z ##[group]Getting Git version info
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.1987804Z Working directory is '/home/runner/work/CentralDark/CentralDark'
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.1989617Z [command]/usr/bin/git version
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.1990508Z git version 2.55.0
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.1993628Z ##[endgroup]
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2000365Z Temporarily overriding HOME='/home/runner/work/_temp/349226c5-cc09-4f00-a25b-f7ba19187758' before making global git config changes
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2010956Z Adding repository directory to the temporary git global config as a safe directory
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2013430Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/CentralDark/CentralDark
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2016499Z Deleting the contents of '/home/runner/work/CentralDark/CentralDark'
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2018554Z ##[group]Determining repository object format
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2020038Z ##[endgroup]
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2021131Z ##[group]Initializing the repository
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2030981Z [command]/usr/bin/git init /home/runner/work/CentralDark/CentralDark
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2032612Z hint: Using 'master' as the name for the initial branch. This default branch name
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2034072Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2035567Z hint: to use in all of your new repositories, which will suppress this warning,
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2036761Z hint: call:
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2037396Z hint:
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2038173Z hint: 	git config --global init.defaultBranch <name>
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2039130Z hint:
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2039993Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2041504Z hint: 'development'. The just-created branch can be renamed via this command:
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2042979Z hint:
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2043652Z hint: 	git branch -m <name>
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2044464Z hint:
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2045434Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2046818Z Initialized empty Git repository in /home/runner/work/CentralDark/CentralDark/.git/
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2048325Z [command]/usr/bin/git remote add origin https://github.com/ServerVpss/CentralDark
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2049756Z ##[endgroup]
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2050415Z ##[group]Disabling automatic garbage collection
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2051002Z [command]/usr/bin/git config --local gc.auto 0
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2052872Z ##[endgroup]
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2053935Z ##[group]Setting up auth
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2054729Z Removing SSH command configuration
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2055901Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2059504Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2062809Z Removing HTTP extra header
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2064224Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2087354Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2126216Z Removing includeIf entries pointing to credentials config files
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2127332Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2169598Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2359351Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-26b88f27-b819-467a-845f-6c0c127ad9bc.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2394126Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/CentralDark/CentralDark/.git.path /home/runner/work/_temp/git-credentials-26b88f27-b819-467a-845f-6c0c127ad9bc.config
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2420790Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/CentralDark/CentralDark/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-26b88f27-b819-467a-845f-6c0c127ad9bc.config
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2454018Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-26b88f27-b819-467a-845f-6c0c127ad9bc.config
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2484068Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-26b88f27-b819-467a-845f-6c0c127ad9bc.config
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2508238Z ##[endgroup]
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2509918Z ##[group]Fetching the repository
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:12.2516418Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +cb1585620e0e947ca3e580c2e0bc4caa6549fc90:refs/remotes/origin/main
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:14.7442936Z From https://github.com/ServerVpss/CentralDark
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:14.7452697Z  * [new ref]         cb1585620e0e947ca3e580c2e0bc4caa6549fc90 -> origin/main
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:14.7474838Z [command]/usr/bin/git branch --list --remote origin/main
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:14.7479779Z   origin/main
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:14.7489141Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:14.7510724Z cb1585620e0e947ca3e580c2e0bc4caa6549fc90
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:14.7516474Z ##[endgroup]
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:14.7518905Z ##[group]Determining the checkout info
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:14.7521000Z ##[endgroup]
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:14.7523727Z [command]/usr/bin/git sparse-checkout disable
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:14.7570354Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:14.7599423Z ##[group]Checking out the ref
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:14.7602712Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2198577Z Switched to a new branch 'main'
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2203748Z branch 'main' set up to track 'origin/main'.
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2221538Z ##[endgroup]
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2266253Z [command]/usr/bin/git log -1 --format=%H
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2290010Z cb1585620e0e947ca3e580c2e0bc4caa6549fc90
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2519455Z ##[group]Run actions/setup-python@v6
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2519836Z with:
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2520097Z   python-version: 3.11
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2520370Z   check-latest: false
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2522990Z   token: ***
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2523260Z   update-environment: true
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2523555Z   allow-prereleases: false
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2523857Z   freethreaded: false
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2524115Z env:
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2524344Z   CONTABO_CLIENT_ID: 
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2524651Z   CONTABO_CLIENT_SECRET: 
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2524944Z   CONTABO_API_USER: 
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2525242Z   CONTABO_API_PASSWORD: 
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2525675Z   CLOUDFLARE_API_TOKEN: ***
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2525950Z   MUTATION: 0
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.2526194Z ##[endgroup]
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.3862453Z ##[group]Installed versions
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.3954190Z Successfully set up CPython (3.11.16)
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.3955651Z ##[endgroup]
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4149333Z ##[group]Run cd /home/runner/work/CentralDark/CentralDark
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4150310Z ^[[36;1mcd /home/runner/work/CentralDark/CentralDark^[[0m
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4151084Z ^[[36;1mpython3 scripts/vps-reboot-forensic.py^[[0m
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4209915Z shell: /usr/bin/bash -e {0}
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4210528Z env:
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4210998Z   CONTABO_CLIENT_ID: 
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4211526Z   CONTABO_CLIENT_SECRET: 
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4212228Z   CONTABO_API_USER: 
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4212746Z   CONTABO_API_PASSWORD: 
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4213814Z   CLOUDFLARE_API_TOKEN: ***
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4214362Z   MUTATION: 0
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4214968Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.16/x64
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4215910Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.16/x64/lib/pkgconfig
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4216831Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4217671Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4218562Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4219412Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.16/x64/lib
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.4220133Z ##[endgroup]
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5381136Z [i] ============================================================
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5382922Z [i] VPS REBOOT FORENSIC - CentralDark
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5383948Z [i] ============================================================
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5384709Z [i] Phase 1: SECRETS_ENV
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5386442Z [✗] Missing required secrets: CONTABO_CLIENT_ID, CONTABO_CLIENT_SECRET, CONTABO_API_USER, CONTABO_API_PASSWORD
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5472141Z ##[error]Process completed with exit code 1.
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5573105Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5574432Z ##[group]Run actions/upload-artifact@v4
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5574750Z with:
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5575019Z   name: vps-forensics-34282569941
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5575661Z   path: /home/runner/work/CentralDark/CentralDark/.forensics/contabo/
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	/home/runner/work/CentralDark/CentralDark/.forensics/cloudflare/
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5576299Z   retention-days: 30
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5576572Z   if-no-files-found: warn
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5576857Z   compression-level: 6
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5577161Z   overwrite: false
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5577429Z   include-hidden-files: false
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5577705Z env:
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5577988Z   CONTABO_CLIENT_ID: 
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5578272Z   CONTABO_CLIENT_SECRET: 
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5578556Z   CONTABO_API_USER: 
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5578821Z   CONTABO_API_PASSWORD: 
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5579372Z   CLOUDFLARE_API_TOKEN: ***
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5579665Z   MUTATION: 0
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5579993Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.16/x64
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5580460Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.16/x64/lib/pkgconfig
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5580938Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5581364Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5581926Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5582371Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.16/x64/lib
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.5582742Z ##[endgroup]
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.7299078Z (node:2034) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.7300950Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.7401427Z Multiple search paths detected. Calculating the least common ancestor of all paths
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.7491489Z The least common ancestor is /home/runner/work/CentralDark/CentralDark/.forensics. This will be the root directory of the artifact
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.7530685Z ##[warning]No files were found with the provided path: /home/runner/work/CentralDark/CentralDark/.forensics/contabo/
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	/home/runner/work/CentralDark/CentralDark/.forensics/cloudflare/. No artifacts will be uploaded.
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.7720810Z Post job cleanup.
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.8804424Z [command]/usr/bin/git version
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.8893072Z git version 2.55.0
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.8994499Z Temporarily overriding HOME='/home/runner/work/_temp/e99e8e00-f395-4123-ac9f-19e9f56c8862' before making global git config changes
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.9015338Z Adding repository directory to the temporary git global config as a safe directory
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.9033610Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/CentralDark/CentralDark
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.9095363Z Removing SSH command configuration
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.9112529Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.9165923Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.9452493Z Removing HTTP extra header
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.9453730Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:15.9487041Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0092446Z Removing includeIf entries pointing to credentials config files
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0106155Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0172955Z includeif.gitdir:/home/runner/work/CentralDark/CentralDark/.git.path
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0174544Z includeif.gitdir:/home/runner/work/CentralDark/CentralDark/.git/worktrees/*.path
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0192803Z includeif.gitdir:/github/workspace/.git.path
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0212611Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0253200Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/CentralDark/CentralDark/.git.path
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0272644Z /home/runner/work/_temp/git-credentials-26b88f27-b819-467a-845f-6c0c127ad9bc.config
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0313511Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/CentralDark/CentralDark/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-26b88f27\-b819\-467a\-845f\-6c0c127ad9bc\.config
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0363185Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/CentralDark/CentralDark/.git/worktrees/*.path
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0372689Z /home/runner/work/_temp/git-credentials-26b88f27-b819-467a-845f-6c0c127ad9bc.config
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0418590Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/CentralDark/CentralDark/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-26b88f27\-b819\-467a\-845f\-6c0c127ad9bc\.config
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0455302Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0475851Z /github/runner_temp/git-credentials-26b88f27-b819-467a-845f-6c0c127ad9bc.config
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0522608Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-26b88f27\-b819\-467a\-845f\-6c0c127ad9bc\.config
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0526252Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0534648Z /github/runner_temp/git-credentials-26b88f27-b819-467a-845f-6c0c127ad9bc.config
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0543912Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-26b88f27\-b819\-467a\-845f\-6c0c127ad9bc\.config
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0580214Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0779571Z Removing credentials config '/home/runner/work/_temp/git-credentials-26b88f27-b819-467a-845f-6c0c127ad9bc.config'
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.0910540Z Cleaning up orphan processes
+Contabo/Cloudflare Forensics + Reboot	UNKNOWN STEP	2026-09-08T21:48:16.1122628Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

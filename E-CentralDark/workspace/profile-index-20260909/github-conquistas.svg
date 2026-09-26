@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="1054" viewBox="0 0 880 1054" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif">
+  <rect width="880" height="1054" rx="16" fill="#020617"/>
+  <text x="20" y="36" fill="#f8fafc" font-size="22" font-weight="800">🏆 Conquistas — @segredounlock</text>
+  <text x="20" y="56" fill="#64748b" font-size="12">Progresso real calculado via GraphQL · atualizado em 09/09/2026 11:36 UTC</text>
+  
+  <g transform="translate(20,70)">
+    <rect width="840" height="102" rx="14" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+    <text x="20" y="34" font-size="28">🦈</text>
+    <text x="62" y="30" fill="#f1f5f9" font-size="16" font-weight="700">Tubarão dos PRs</text>
+    <text x="62" y="50" fill="#94a3b8" font-size="12">PRs mergeados</text>
+    <text x="820" y="30" fill="#ffd700" font-size="14" font-weight="700" text-anchor="end">Ouro</text>
+    <text x="820" y="50" fill="#cbd5e1" font-size="12" text-anchor="end">616 / 1024</text>
+    <rect x="20" y="70" width="800" height="8" rx="4" fill="#1e293b"/>
+    <rect x="20" y="70" width="480" height="8" rx="4" fill="#ffd700"/>
+    <text x="20" y="96" fill="#64748b" font-size="11">Próximo nível: 1024</text>
+  </g>
+  <g transform="translate(20,188)">
+    <rect width="840" height="102" rx="14" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+    <text x="20" y="34" font-size="28">🌟</text>
+    <text x="62" y="30" fill="#f1f5f9" font-size="16" font-weight="700">Estrelado</text>
+    <text x="62" y="50" fill="#94a3b8" font-size="12">Estrelas no repo mais popular</text>
+    <text x="820" y="30" fill="#475569" font-size="14" font-weight="700" text-anchor="end">Bloqueada</text>
+    <text x="820" y="50" fill="#cbd5e1" font-size="12" text-anchor="end">2 / 16</text>
+    <rect x="20" y="70" width="800" height="8" rx="4" fill="#1e293b"/>
+    <rect x="20" y="70" width="96" height="8" rx="4" fill="#475569"/>
+    <text x="20" y="96" fill="#64748b" font-size="11">Próximo nível: 16</text>
+  </g>
+  <g transform="translate(20,306)">
+    <rect width="840" height="102" rx="14" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+    <text x="20" y="34" font-size="28">👯</text>
+    <text x="62" y="30" fill="#f1f5f9" font-size="16" font-weight="700">Dupla Extraordinária</text>
+    <text x="62" y="50" fill="#94a3b8" font-size="12">Commits com co-author</text>
+    <text x="820" y="30" fill="#e5e4e2" font-size="14" font-weight="700" text-anchor="end">Platina</text>
+    <text x="820" y="50" fill="#cbd5e1" font-size="12" text-anchor="end">56556 / 48</text>
+    <rect x="20" y="70" width="800" height="8" rx="4" fill="#1e293b"/>
+    <rect x="20" y="70" width="800" height="8" rx="4" fill="#e5e4e2"/>
+    <text x="20" y="96" fill="#64748b" font-size="11">Nível máximo atingido</text>
+  </g>
+  <g transform="translate(20,424)">
+    <rect width="840" height="102" rx="14" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+    <text x="20" y="34" font-size="28">🧠</text>
+    <text x="62" y="30" fill="#f1f5f9" font-size="16" font-weight="700">Cérebro Galáctico</text>
+    <text x="62" y="50" fill="#94a3b8" font-size="12">Respostas aceitas em Discussions</text>
+    <text x="820" y="30" fill="#cd7f32" font-size="14" font-weight="700" text-anchor="end">Bronze</text>
+    <text x="820" y="50" fill="#cbd5e1" font-size="12" text-anchor="end">2 / 8</text>
+    <rect x="20" y="70" width="800" height="8" rx="4" fill="#1e293b"/>
+    <rect x="20" y="70" width="200" height="8" rx="4" fill="#cd7f32"/>
+    <text x="20" y="96" fill="#64748b" font-size="11">Próximo nível: 8</text>
+  </g>
+  <g transform="translate(20,542)">
+    <rect width="840" height="102" rx="14" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+    <text x="20" y="34" font-size="28">⚡</text>
+    <text x="62" y="30" fill="#f1f5f9" font-size="16" font-weight="700">Saque Rápido</text>
+    <text x="62" y="50" fill="#94a3b8" font-size="12">Issue/PR fechado em &lt;5min</text>
+    <text x="820" y="30" fill="#22c55e" font-size="14" font-weight="700" text-anchor="end">Conquistada</text>
+    <text x="820" y="50" fill="#cbd5e1" font-size="12" text-anchor="end">1 / 1</text>
+    <rect x="20" y="70" width="800" height="8" rx="4" fill="#1e293b"/>
+    <rect x="20" y="70" width="800" height="8" rx="4" fill="#22c55e"/>
+    <text x="20" y="96" fill="#64748b" font-size="11">Nível máximo atingido</text>
+  </g>
+  <g transform="translate(20,660)">
+    <rect width="840" height="102" rx="14" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+    <text x="20" y="34" font-size="28">🎲</text>
+    <text x="62" y="30" fill="#f1f5f9" font-size="16" font-weight="700">YOLO (Sem Revisão)</text>
+    <text x="62" y="50" fill="#94a3b8" font-size="12">Merge sem review</text>
+    <text x="820" y="30" fill="#22c55e" font-size="14" font-weight="700" text-anchor="end">Conquistada</text>
+    <text x="820" y="50" fill="#cbd5e1" font-size="12" text-anchor="end">1 / 1</text>
+    <rect x="20" y="70" width="800" height="8" rx="4" fill="#1e293b"/>
+    <rect x="20" y="70" width="800" height="8" rx="4" fill="#22c55e"/>
+    <text x="20" y="96" fill="#64748b" font-size="11">Nível máximo atingido</text>
+  </g>
+  <g transform="translate(20,778)">
+    <rect width="840" height="102" rx="14" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+    <text x="20" y="34" font-size="28">❤️</text>
+    <text x="62" y="30" fill="#f1f5f9" font-size="16" font-weight="700">Coração na Manga</text>
+    <text x="62" y="50" fill="#94a3b8" font-size="12">Reações em comentários</text>
+    <text x="820" y="30" fill="#22c55e" font-size="14" font-weight="700" text-anchor="end">Conquistada</text>
+    <text x="820" y="50" fill="#cbd5e1" font-size="12" text-anchor="end">1 / 1</text>
+    <rect x="20" y="70" width="800" height="8" rx="4" fill="#1e293b"/>
+    <rect x="20" y="70" width="800" height="8" rx="4" fill="#22c55e"/>
+    <text x="20" y="96" fill="#64748b" font-size="11">Nível máximo atingido</text>
+  </g>
+  <g transform="translate(20,896)">
+    <rect width="840" height="102" rx="14" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+    <text x="20" y="34" font-size="28">💖</text>
+    <text x="62" y="30" fill="#f1f5f9" font-size="16" font-weight="700">Patrocinador Público</text>
+    <text x="62" y="50" fill="#94a3b8" font-size="12">Patrocinando devs open-source</text>
+    <text x="820" y="30" fill="#475569" font-size="14" font-weight="700" text-anchor="end">Bloqueada</text>
+    <text x="820" y="50" fill="#cbd5e1" font-size="12" text-anchor="end">0 / 1</text>
+    <rect x="20" y="70" width="800" height="8" rx="4" fill="#1e293b"/>
+    <rect x="20" y="70" width="0" height="8" rx="4" fill="#475569"/>
+    <text x="20" y="96" fill="#64748b" font-size="11">Próximo nível: 1</text>
+  </g>
+  <text x="860" y="1042" fill="#475569" font-size="10" text-anchor="end">gerado automaticamente · sem depender de plugin externo</text>
+</svg>

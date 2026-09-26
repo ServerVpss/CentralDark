@@ -1,0 +1,11 @@
+{
+  "total_xp": -500,
+  "level": 1,
+  "current_level_xp": 0,
+  "xp_to_next_level": 500,
+  "skills_used": 0,
+  "actions_history": [],
+  "efficiency_scores": [],
+  "created_at": "2026-08-08T00:00:00+00:00",
+  "last_updated": "2026-08-08T00:00:00+00:00"
+}

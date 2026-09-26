@@ -1,0 +1,14 @@
+{
+  "profiles": [
+    {
+      "name": "default",
+      "endpoint": "https://zendrive.default",
+      "token_path": "./tokens/default.token"
+    },
+    {
+      "name": "clientA",
+      "endpoint": "https://zendrive.clientA",
+      "token_path": "./tokens/clientA.token"
+    }
+  ]
+}

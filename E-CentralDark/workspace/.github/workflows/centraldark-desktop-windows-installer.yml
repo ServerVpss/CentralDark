@@ -1,0 +1,96 @@
+name: CentralDark Desktop — Windows Installer
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    tags:
+      - 'desktop-v*'
+    paths:
+      - 'apps/modulos/Bolt/source/**'
+      - '.github/workflows/centraldark-desktop-windows-installer.yml'
+      - 'scripts/ci/verify_windows_installer_contract.py'
+      - 'scripts/windows/build-centraldark-installer.ps1'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: centraldark-desktop-windows-installer-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contract:
+    name: 📜 Installer contract
+    runs-on: [self-hosted, Linux]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: 🔎 Verificar contrato do instalador
+        run: python scripts/ci/verify_windows_installer_contract.py
+
+  build-windows:
+    name: 🪟 Build Setup.exe
+    needs: contract
+    runs-on: [self-hosted, Windows, X64]
+    defaults:
+      run:
+        working-directory: apps/modulos/Bolt/source
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        with:
+          version: 9.14.4
+          run_install: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: pnpm
+          cache-dependency-path: apps/modulos/Bolt/source/pnpm-lock.yaml
+
+      - name: 📦 Instalar dependências congeladas
+        run: pnpm install --frozen-lockfile
+
+      - name: 🧪 Contrato do Desktop
+        run: pnpm test:centraldark-desktop
+
+      - name: 🏗️ Gerar NSIS Setup.exe
+        run: pnpm centraldark:build:win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🧿 Verificar pacote e gerar SHA256
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $exe = Get-ChildItem dist -Filter 'CentralDark-Setup-*.exe' | Select-Object -First 1
+          if (-not $exe) { throw 'CENTRALDARK_SETUP_EXE_MISSING' }
+          $latest = Get-ChildItem dist -Filter 'latest*.yml' | Select-Object -First 1
+          if (-not $latest) { throw 'CENTRALDARK_UPDATE_METADATA_MISSING' }
+          $hash = (Get-FileHash $exe.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+          "CENTRALDARK_SETUP=$($exe.Name)" | Tee-Object -FilePath dist/INSTALLER-RECEIPT.txt
+          "CENTRALDARK_SETUP_SHA256=$hash" | Tee-Object -FilePath dist/INSTALLER-RECEIPT.txt -Append
+          "UPDATE_METADATA=$($latest.Name)" | Tee-Object -FilePath dist/INSTALLER-RECEIPT.txt -Append
+          "$hash  $($exe.Name)" | Set-Content -Encoding ascii dist/SHA256SUMS.txt
+          Write-Host "INSTALLER_CONTRACT=PASS"
+
+      - name: 📤 Publicar artifact de build
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: CentralDark-Windows-Installer-${{ github.sha }}
+          path: |
+            apps/modulos/Bolt/source/dist/CentralDark-Setup-*.exe
+            apps/modulos/Bolt/source/dist/latest*.yml
+            apps/modulos/Bolt/source/dist/*.blockmap
+            apps/modulos/Bolt/source/dist/SHA256SUMS.txt
+            apps/modulos/Bolt/source/dist/INSTALLER-RECEIPT.txt
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: 🚀 Publicar release para auto-update
+        if: startsWith(github.ref, 'refs/tags/desktop-v')
+        run: pnpm exec electron-builder --win --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

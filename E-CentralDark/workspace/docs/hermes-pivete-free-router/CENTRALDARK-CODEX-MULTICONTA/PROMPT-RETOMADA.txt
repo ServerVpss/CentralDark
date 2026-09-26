@@ -1,0 +1,25 @@
+RETOME A MISSÃO EXISTENTE PELO ESTADO REAL, SEM RECOMEÇAR.
+
+WORKSPACE={{WORKSPACE}}
+WORKTREE={{WORKTREE}}
+GOAL_PACKAGE={{GOAL}}
+
+1. Confirme repo, HEAD, branch, worktree e git status.
+2. Leia goal, diff, ledger, checkpoints e arquivos modificados.
+3. Confirme a META LUPA ativa e preserve o mesmo ledger.
+4. Não crie branch, worktree, skill, ledger ou projeto paralelo.
+5. Continue do primeiro bloqueio ou teste aberto.
+6. Não declare sucesso sem testes e recibo.
+7. Não exponha secrets, tokens, `.env` ou credenciais.
+
+SAÍDA INICIAL:
+MISSION_RECOVERED=
+HEAD=
+BRANCH=
+WORKTREE=
+FILES_CHANGED=
+TESTS_PASS=
+TESTS_FAIL=
+LEDGER_STATUS=
+CURRENT_BLOCKER=
+NEXT_ACTION=

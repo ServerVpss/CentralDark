@@ -1,0 +1,422 @@
+schema: centraldark.master-cycle.v1
+status: CANONICO
+runtime_status: UNPROVEN_UNTIL_OBSERVED
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+authority: SEGREDO/CHEFE
+pr_mother_provenance: 1189
+baseline_policy: CURRENT_MAIN
+master_trigger: "!CENTRALDARK"
+master_trigger_aliases: ["!CENTRALDARK", "#CENTRALDARK"]
+master_trigger_requires_explicit_marker: true
+plain_word_centraldark_does_not_trigger: true
+bot_entry_activates_master_session: true
+explicit_trigger_activates_master_session: true
+master_session_remains_active: true
+subsequent_chefe_material_is_delta_candidate: true
+
+master_precedence:
+  human_notation: "#CENTRALDARK > #ACORDAR"
+  executable_master_trigger: "!CENTRALDARK"
+  relation: MASTER_UMBRELLA_CONTAINS_ACORDAR_PHASE
+  centraldark_master_is_above_acordar: true
+  acordar_is_subphase_not_peer_master: true
+  rename_executable_master_trigger: false
+  zero_regression_preserves_existing_master_token: true
+  existing_runtime_proof:
+    - scripts/trigger-fabric/test_centraldark_master_cycle.py#test_acordar_enters_centraldark_master_funnel
+    - scripts/trigger-fabric/centraldark_master_cycle.py#MASTER_INGRESS_ALIASES
+
+purpose: >-
+  Comprimir o ciclo operacional completo da Casa em um unico gatilho humano,
+  preservar a intencao vigente do SEGREDO/CHEFE, reconciliar passado, presente
+  e futuro sem criar segundo cerebro/router/judge, e promover somente delta
+  reutilizavel que sobreviva a prova, contraprova e remedicao.
+
+expands_to:
+  - ACORDAR
+  - CALIBRAR
+  - MULTIBUSSOLA
+  - META_LUPA
+  - RECONCILIAR
+  - DELTA_UTIL
+  - CONTRAPROVA
+  - REMEDICAO
+  - FIXED_POINT
+  - REGISTRA
+  - BOOT
+
+canonical_human_chain: "#CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
+canonical_machine_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
+canonical_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
+
+continuous_delta_contract:
+  scope: ACTIVE_MASTER_SESSION
+  input_owner: SEGREDO/CHEFE
+  every_material_is_processed: true
+  every_material_is_fact: false
+  every_material_is_persisted: false
+  language_is_identity: false
+  typo_is_rejection: false
+  time_bucket_is_authority: false
+  newest_unproved_claim_wins: false
+  newest_proved_state_wins: true
+  number_of_windows_is_vote: false
+  number_of_messages_is_vote: false
+  correlated_views_are_independent_proofs: false
+  screenshot_proves: VISIBLE_MANIFESTATION_ONLY
+  runtime_claim_requires_runtime_evidence: true
+  cross_chat_transport_requires_channel_evidence: true
+  process: [CAPTURE, LINK_DESTINATION, DEDUPE, CLASSIFY, FIND_OWNER, PROVE_OR_PRESERVE_UNKNOWN, ABSORB_MINIMAL_DELTA, COUNTERPROVE, REMEASURE]
+  classifications: [DUPLICATE, PARTIAL, NEW, SUPERSEDED, CANDIDATE, UNKNOWN, PROVED]
+
+phase_contracts:
+  ACORDAR:
+    meaning: RECOVER_LIVE_STATE
+    owner: "LEIA-ME-IA.md + AGENTS.md"
+    parent: CENTRALDARK_MASTER
+    precedence: "CENTRALDARK_MASTER > ACORDAR"
+  CALIBRAR:
+    meaning: ALIGN_INTENT_ROLE_SCOPE_TOOLS_PROOF
+    owner: "LEIA-ME-IA.md + AGENTS.md"
+  MULTIBUSSOLA:
+    meaning: MULTIAXIS_MATERIAL_PERCEPTION
+    owner: docs/CONSCIENCIA/MULTIBUSSOLA.md
+  META_LUPA:
+    meaning: FALSIFY_INTERPRETATION_AND_PROOF
+    owner: .agents/skills/meta-lupa/SKILL.md
+    ontology: TECHNIQUE_NOT_AGENT
+  RECONCILIAR:
+    meaning: REUSE_PAST_AND_CURRENT_PROVEN_DELTA_BEFORE_CREATE
+    owner: docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+  DELTA_UTIL:
+    meaning: PROCESS_ALL_CHEFE_MATERIAL_AND_ABSORB_ONLY_PROVEN_INFORMATION_GAIN
+    owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#continuous_delta_contract
+    facts_are_not_created_by_recency_repetition_or_screen: true
+  CONTRAPROVA:
+    meaning: INDEPENDENT_OR_DISCRIMINATING_COUNTERPROOF
+    owner: docs/CONSCIENCIA/PROOF-OWNERSHIP.json
+    provider: REPLACEABLE_BY_CAPABILITY
+  REMEDICAO:
+    meaning: MEASURE_T0_TO_T1
+    owner: docs/CONSCIENCIA/REMEDICAO.md
+  FIXED_POINT:
+    meaning: STOP_ONLY_AT_LOCAL_FIXED_POINT_OR_PROVEN_FRONTIER
+    owner: Trigger Fabric
+  REGISTRA:
+    meaning: WRITE_RECEIPT_LEARNING_PROVENANCE_NEXT_CURSOR_AND_PROMOTE_WHEN_AUTHORIZED
+    owner: continuity + learning owners
+    promotion:
+      target: main
+      method: squash
+      only_if:
+        - SAME_SCOPE_INTENT_AUTHORIZED
+        - APPLICABLE_GATES_PASS
+        - NO_WRITER_CONFLICT
+        - NO_MATERIAL_UNKNOWN
+      no_reask_same_scope: true
+  BOOT:
+    meaning: RETURN_NEXT_CYCLE_RECOVERABLE
+    owner: LEIA-ME-IA.md
+    runtime_restart_implied: false
+
+supporting_methods:
+  FABLE_LOOP:
+    meaning: READ_ONLY_CALIBRATION_AND_STABILIZATION
+    owner: .agents/skills/fable-loop/SKILL.md
+    ontology: METHOD_NOT_AGENT_OR_ROUTER
+    mode: READ_ONLY
+    default_routing: false
+    may_write_canonical: false
+    promotion_gate: META_LUPA_SAME_CONTROL
+
+execution_model:
+  human_intent_owner: SEGREDO/CHEFE
+  coordinator: SOL
+  executor: PIVETE/HERMES_OR_CAPABLE_PROVIDER
+  model_is_replaceable: true
+  intention_must_be_preserved: true
+  perception_material_is_separate_capability: true
+  meta_lupa_is_technique_not_agent: true
+  counterproof_provider_is_replaceable: true
+  reality_is_judge: true
+  graph_is_derived_not_authority: true
+  parallel_perception: true
+  serialized_mutation: true
+  one_writer_per_scope: true
+  role_is_discovered_from_capability_gap: true
+  role_claim_without_evidence_is_invalid: true
+  owner_must_exist_before_role_claim: true
+  writer_must_be_measured_before_mutation: true
+  one_core_many_arms: true
+  model_vote_as_truth: false
+  fanout_growth_requires_information_gain: true
+  recursion_depth_is_progress: false
+
+standard_flow:
+  canonical_entry: CENTRALDARK
+  accepted_entries: ["!CENTRALDARK", "#CENTRALDARK"]
+  many_agents_allowed: true
+  readers_parallel: true
+  parallelize_perception: true
+  serialize_mutation_per_scope: true
+  one_writer_per_conflict_scope: true
+  judge_independent_from_writer: true
+  judge_may_mutate: false
+  capability_is_authority: false
+  agent_may_reduce_human_objective: false
+  method_may_optimize: true
+  objective_must_be_preserved: true
+  full_requested_material_must_be_processed: true
+  objective_reduction_requires_explicit_human_authorization: true
+  session_observation_is_global_current_state: false
+  single_reader_may_declare_global_reality: false
+  reader_count_is_truth_vote: false
+  divergent_readers_require_rendezvous: true
+  current_reality_requires_reconciliation: true
+  reconciliation_flow: [READERS, MEASURE, RENDEZVOUS, RECONCILE, CURRENT_REALITY, ONE_WRITER, PROOF]
+  remote_screenshot_is_remote_proof: false
+  session_memory_is_current_state: false
+  connector_failure_is_provider_failure: false
+  sensor_failure_is_world_failure: false
+  transport_failure_requires_authorized_alternate_route: true
+  alternate_route_must_remeasure_same_target: true
+  remote_github_trigger_flow: [ACORDAR, CALIBRAR, CENTRALDARK, MEASURE, RENDEZVOUS, RECONCILE, CURRENT_REALITY, PROOF]
+  remote_write_gate: [REPO_CONFIRMED, PR_CONFIRMED, CURRENT_HEAD_KNOWN, AUTHORIZED_WRITE_ROUTE, BRANCH_POLICY_PASS, NO_WRITER_COLLISION, NO_SECRET_EXPOSURE]
+  durable_continuity:
+    chat_only_knowledge: FAIL
+    session_memory_is_durable_state: false
+    persistence_quorum_min: 1
+    preferred_redundancy: 2
+    mirror_is_second_owner: false
+    backup_is_source_of_truth: false
+    persistence_is_promotion: false
+    old_copy_is_current_reality: false
+    no_blind_overwrite: true
+    requires: [AUTHORIZED_DURABLE_ROUTE, MATERIAL_RECEIPT_PERSISTED, NEXT_CURSOR_PERSISTED]
+  head_integrity: TESTED_HEAD_EQUALS_COMMITTED_HEAD_EQUALS_PUSHED_PR_HEAD
+  failure_flow: [OBSERVED_FAILURE, FIND_OWNER, CREATE_FALSIFIER, PATCH_EXISTING_OWNER, ADD_NEGATIVE_TEST, RUN_EXISTING_TESTS, COUNTERPROVE, REGISTER_RECEIPT, GENERALIZE_IF_REUSABLE]
+  scope_compression_failure: AGENT_REDUCED_HUMAN_OBJECTIVE_WITHOUT_AUTHORIZATION
+
+architecture_flow:
+  - CHEFE_INTENT
+  - SOL_T0
+  - CENTRALDARK_MASTER_CYCLE
+  - META_LUPA
+  - CAPABILITY_ROUTER
+  - JARVIS_ONE_CORE_MANY_ARMS
+  - AGENT_CALL_AND_HUB_MISSION
+  - OMNI_ROUTER
+  - REPLACEABLE_ENGINES
+  - OVERCLOCK_ROLE_TAXONOMY
+  - ENXAME_FANOUT_FANIN
+  - ARSENAL_COUNCIL
+  - HERMES_N7_WORKERS
+  - TOOLS_APIS_BUILDERS
+  - EXECUTION
+  - CAUSAL_TRACE
+  - EVIDENCE_ENVELOPE
+  - RENDEZVOUS_DEDUPE
+  - META_LUPA_HARVEST
+  - DREAM_REVIEW
+  - PATTERN_DISCOVERY
+  - EVOLUTION_CANDIDATE
+  - EVOLUTION_GATES
+  - ONE_WRITER
+  - BEFORE_AFTER_EXPERIMENT
+  - SELF_VERIFICATION
+  - COUNTERPROOF
+  - REGRESSION_GATE
+  - PROOF_OWNERSHIP
+  - REALITY_JUDGE
+  - PROMOTE_OR_REJECT_ROLLBACK
+  - MISSION_FIXED_POINT
+  - REGISTRO_DO_OURO
+  - NEXT_ACORDAR
+
+trace_and_harvest:
+  invariant: "QUEM_TOCA_NA_META_LUPA_DEIXA_RASTRO"
+  model_touch_owner: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
+  evidence_owner: supabase/functions/_shared/evidence-envelope.mjs
+  evidence_entry: supabase/functions/agent-log/index.ts
+  persistence: public.agent_events
+  flow:
+    - MODEL_OR_ENGINE_INVOCATION
+    - OMNI_ROUTER_RECEIPT
+    - MODEL_TOUCH_EVENT
+    - EVIDENCE_ENVELOPE
+    - CAUSAL_DEDUPE
+    - META_LUPA_HARVEST
+    - DELTA_CANDIDATE
+  fields_when_observed:
+    - engine
+    - resolved_model
+    - mission_id
+    - trace_id
+    - request_id
+    - correlation_id
+    - writer_scope
+    - sha
+    - latency_ms
+    - tokens
+    - cost
+    - result
+    - fallback_used
+    - action_is_proof
+  rules:
+    configured_is_invocation_proven: false
+    telemetry_delivery_is_provider_success: false
+    evidence_delivery_failure_may_hide: false
+    action_is_proof: false
+    secret_redaction_required: true
+    mission_id_must_not_be_fabricated: true
+
+role_taxonomy:
+  source_provenance_pr: 1300
+  owner_behavior: JARVIS_AND_CAPABILITY_ROUTER
+  tiers:
+    SCOUT: DISCOVER_READ_ONLY
+    BUILDER: EXECUTE_WITH_WRITER_SCOPE
+    REVIEWER: REVIEW_OR_JUDGE_WITHOUT_WRITER_COLLISION
+  taxonomy_named_is_agent_implemented: false
+  catalog_is_capability: false
+  second_orchestrator_created: false
+
+self_improvement:
+  owner: "METACOGNICAO + META_LUPA + EVOLUTION_GATES"
+  meta_lupa_final: false
+  evolution_mode: EVENT_DRIVEN
+  mission_fixed_point_stops_learning_capacity: false
+  flow:
+    - META_LUPA_TRACE
+    - EVALUATION
+    - EXPERIMENTATION
+    - SELF_VERIFICATION
+    - META_IMPROVEMENT
+    - CROSS_META_REFINEMENT
+    - EVOLUTION_GATE
+    - COUNTERPROOF
+    - REGRESSION
+    - REALITY_JUDGE
+    - PROMOTE_OR_REJECT
+  canonical_gates:
+    - .agents/skills/meta-lupa/scripts/evolution_gate.py
+    - .agents/skills/meta-lupa/scripts/evolution_series_gate.py
+    - .agents/skills/meta-lupa/scripts/agi_claim_gate.py
+    - .agents/skills/meta-lupa/agents/nivel-7/
+  no_new_information: FIXED_POINT_STOP
+  meta_lupa_v2_allowed: false
+
+communication_interface:
+  preferred_human_header: "!CENTRALDARK"
+  preferred_human_hierarchy: "#CENTRALDARK > #ACORDAR"
+  expanded_chain_must_remain_recoverable: true
+  human_expression_may_be_compressed_or_noisy: true
+  preserve_meaning_before_syntax: true
+  semantic_match_is_authority: false
+  semantic_match_is_mutation_permission: false
+  presentation_layers:
+    - BAIANES_FACIL
+    - TECHNICAL_PRECISION
+    - NARRATIVE_PARALLELISM_WHEN_USEFUL
+  presentation_is_not_governance: true
+  recap_may_use_verse_cadence: true
+  technical_status_evidence_and_verdict_remain_literal: true
+  mechanical_payload_fast_path:
+    trigger: HUMAN_NEEDS_ONLY_COPY_PASTE_PAYLOAD_AND_NO_MATERIAL_DECISION_OR_RISK
+    behavior: RETURN_ONLY_REQUESTED_PAYLOAD
+    forbid:
+      - INTRODUCTION
+      - EXPLANATION
+      - OPTIONAL_OFFER
+      - SUMMARY
+      - CONCLUSION
+    preserve:
+      - EXACTNESS
+      - REQUIRED_WARNING_IF_MATERIAL
+      - BLOCKED_OR_UNKNOWN_IF_MATERIAL
+
+delta_harvest:
+  canonical_signal: "!DELTA UTILS"
+  semantic_aliases:
+    - "!DELTA UTILS"
+    - "!DELTAUTILS"
+    - DELTAUTILS
+    - "!DELTA UTIL"
+    - "!DELTAUTIL"
+    - DELTAUTIL
+    - "!DELTAUTIL"
+    - "DELTA UTIL"
+    - "DELTA UTILS"
+    - "DELTA DE AGORA"
+    - "TOMA ESSE DELTA"
+    - "PEGA O DELTA"
+  mode: DELTA_HARVEST
+  intent: USE_ONLY_WHAT_IS_USEFUL_NOW_WITHOUT_BREAKING_EXISTING_INTENT
+  invariants:
+    preserve_human_intent: true
+    zero_regression: true
+    reuse_before_create: true
+    no_v1_v2_v3: true
+    one_system_only: true
+    route_to_existing_owner: true
+    same_active_pr_when_writer_scope_matches: true
+    trigger_match_is_not_new_authority: true
+    trigger_match_is_not_unrelated_mutation_permission: true
+  material_classification:
+    repetition_pure: DROP
+    useful_delta: ABSORB
+    correction: UPDATE_BELIEF
+    contradiction: META_LUPA_THEN_RECONCILE
+    new_proof: REPLACE_STALE_PROOF_WHEN_SAME_TARGET
+    newer_state: CURRENT_EVIDENCE_WINS
+  useful_delta_requires_any:
+    - NEW_CAPABILITY
+    - NEW_EVIDENCE
+    - CORRECTION
+    - NEWER_STATE
+    - CONTRADICTION_WITH_INFORMATION_GAIN
+    - REMOVAL_OF_DUPLICATION
+    - BETTER_OWNER_BINDING
+    - LOWER_COMPLEXITY_WITH_EQUAL_OR_GREATER_CAPABILITY
+  interesting_alone_is_useful_delta: false
+  destination:
+    resolver: .agents/skills/capability-contract-router/SKILL.md
+    rule: EXISTING_OWNER_FIRST
+    minimum_sufficient_capability_set: true
+  receipt_fields:
+    - SOURCE
+    - CLASSIFICATION
+    - INFORMATION_GAIN
+    - DESTINATION_OWNER
+    - ACTION
+    - EVIDENCE_REF
+    - NEXT_CURSOR
+
+cross_chat_recovery:
+  mode: READ_ONLY_CONTEXT_RECOVERY
+  use_when_accessible: true
+  recover_before_reask: true
+  sources:
+    - CHATGPT_HISTORY
+    - CHATGPT_SAVED_MEMORY
+    - CONVERSATION_LIBRARY
+  rules:
+    - "CROSS_CHAT = CONTEXT + PROVENANCE + CANDIDATE_DELTA"
+    - "CROSS_CHAT != CURRENT_STATE"
+    - "HISTORY != CURRENT_STATE"
+    - "UNRECOVERED_CROSS_CHAT -> UNKNOWN"
+    - "GITHUB_MUST_NOT_SUBSTITUTE_MISSING_CHAT_MEMORY"
+    - "DEDUPE_REPETITION_BEFORE_CRYSTALLIZE"
+    - "CONTRADICTION -> META_LUPA + RECONCILE"
+    - "CURRENT_LIVE_EVIDENCE_OVERRIDES_STALE_CHAT_STATE"
+  may_write_canonical_directly: false
+  crystal_destination: EXISTING_OWNER_AFTER_EVIDENCE_AND_DEDUPE
+
+semantic_memory_links:
+  owner: docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md
+  properties_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
+  quality_over_quantity: true
+  typed_relations_when_useful: true
+  semantic_link_is_proof: false
+  graph_is_authority: false
+  musical_metaphor_is_navigation_only: true

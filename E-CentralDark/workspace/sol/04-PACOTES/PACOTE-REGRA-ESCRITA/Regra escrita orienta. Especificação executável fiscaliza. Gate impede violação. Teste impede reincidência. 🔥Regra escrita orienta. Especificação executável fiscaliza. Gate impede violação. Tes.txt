@@ -1,0 +1,47 @@
+  **especificação executável** — uma regra escrita que deixa de ser apenas texto e vira **máquina de estados, verificador, monitor, gate e teste automatizado**.
+
+Essa ideia aparece principalmente nestas áreas:
+
+* **Métodos formais**
+* **Model checking**
+* **Model-Based Testing**
+* **Runtime Verification**
+* **Design by Contract**
+* **Assertion-Based Verification**
+* **Policy as Code**
+* **Quality Gates de CI/CD**
+
+Não existe um único estudo dizendo exatamente a frase inteira. Ela é uma **síntese dessas áreas**. O NIST, por exemplo, descreve verificadores de modelos analisando máquinas de estados contra especificações e usando isso para gerar e avaliar testes. ([NIST][1]) A literatura de linguagens de especificação também chama propriedades transformadas em monitores que detectam violações durante a execução de **assertion-based verification**. ([IEEE Technology Navigator][2])
+
+Os “lugares” onde normalmente busco isso são:
+
+```text
+ACM Digital Library
+IEEE Xplore
+NIST Publications
+SpringerLink
+USENIX
+RFC Editor / IETF
+arXiv
+documentações oficiais de TLA+, Alloy, SPIN e similares
+```
+
+A expressão mais curta para pesquisar é:
+
+```text
+executable specification
+```
+
+Ou, mais completa:
+
+```text
+formal specification → state machine → verifier → runtime monitor
+→ CI gate → automated regression tests
+```
+
+Em português reto:
+Regra escrita orienta. Especificação executável fiscaliza. Gate impede violação. Teste impede reincidência. 🔥
+> **Regra escrita orienta. Especificação executável fiscaliza. Gate impede violação. Teste impede reincidência.** 🔥
+
+[1]: https://www.nist.gov/publications/model-checkers-software-testing?utm_source=chatgpt.com "Model Checkers in Software Testing | NIST"
+[2]: https://technav.ieee.org/topic/specification-languages/?utm_source=chatgpt.com "Specification languages | IEEE Technology Navigator"

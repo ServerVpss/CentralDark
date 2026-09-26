@@ -1,0 +1,493 @@
+MISSION_ID=CENTRALDARK-UNIFICACAO-OPERACIONAL-TOTAL-01
+TITLE=COMANDO-MÃE — CASA + VPS + GITHUB + SOL + DELTA + AUTONOMIA
+CAPTURED_AT=2026-08-01T11:44:00-03:00
+AUTHORITY=SEGREDO/CHEFE
+MODE=PARALLEL_READERS_SEPARATE_WRITERS
+LOVABLE=OUT_OF_SCOPE
+MAIN_REMOTE_HEAD=237f76cb0cbf9c1b8db6a1f8a3a35c48cdb598ea
+
+OBJETIVO
+Executar UMA missão coordenada que mede, cruza, organiza e avança simultaneamente:
+- Casa local em E:\CentralDark;
+- Hermes/PIVETE/SOL;
+- clone local CentralDark;
+- estado vivo e captura sanitizada da VPS;
+- GitHub remoto ServerVpss/CentralDark;
+- branches, commits, PRs, reviews e checks;
+- Contrato Delta;
+- autonomia/promotor/Judge;
+- SOL Desktop + Codex OAuth + voz local;
+- scripts, coletores, painéis e rotas existentes;
+- pendências, conflitos, duplicações e trabalho órfão.
+
+REGRA CENTRAL
+ARSENAL MÁXIMO = MUITOS LEITORES PARALELOS + UM ÚNICO WRITER POR ESCOPO + JUDGE SEM ESCRITA + CHEFE COMO GATE FINAL.
+
+AUTORIZADO NESTA RODADA
+- leitura completa e sanitizada;
+- comparação Casa + VPS + GitHub remoto;
+- worktrees locais isolados;
+- branches remotas NOVAS por escopo;
+- commits somente nas branches isoladas correspondentes;
+- abertura de DRAFT PRs;
+- testes, lint, schemas, secret scan e contraprovas.
+
+NÃO AUTORIZADO
+- merge;
+- push direto em main;
+- deploy;
+- restart;
+- firewall/UFW;
+- Docker/PM2/systemd/Caddy;
+- exclusão;
+- rotação de credencial;
+- limpeza de histórico;
+- aplicação mutável na VPS;
+- alteração de dados reais;
+- fechamento de PR antigo sem prova e autorização específica.
+
+APPLY_VPS_AUTHORIZED=false
+MERGE_AUTHORIZED=false
+DELETE_AUTHORIZED=false
+SECRET_ROTATION_AUTHORIZED=false
+
+FONTES DE VERDADE
+1. GitHub remoto no HEAD medido.
+2. AGENTS.md, LEIA-ME-IA.md e fontes canônicas.
+3. HEAD/branch/status/diff reais de cada worktree.
+4. Captura VPS sanitizada + manifesto + SHA-256.
+5. Estado vivo por coletores read-only.
+6. Estado local da Casa sem sobrescrever trabalho.
+7. Conversa somente como intenção.
+
+DIVERGÊNCIA
+- responder STATE_DRIFT;
+- mostrar anterior vs medido;
+- prova mais nova vence;
+- nunca corrigir silenciosamente.
+
+BASELINE REMOTO
+MAIN:
+- HEAD: 237f76cb0cbf9c1b8db6a1f8a3a35c48cdb598ea
+
+PR #584 — AUTONOMIA
+- branch: fix/autonomia-promotion-token-canonico-20260731
+- HEAD: 358b0e769048f81a3c672bd5ee31d4788dae5181
+- open, mergeable, não draft
+- 4 à frente e 1 atrás da main
+- findings:
+  1. separar Judge e Promotor;
+  2. PROMOTION_TOKEN só na promoção;
+  3. Judge com permissões mínimas;
+  4. remover GITHUB_PAT_PERFIL restante;
+  5. contraprova no HEAD exato.
+- único writer da trilha AUTONOMIA.
+
+PR #573
+- substituído por #584;
+- READ_ONLY;
+- não receber commits;
+- não fechar sem prova e autorização.
+
+PR #570
+- canário dependente;
+- não alterar HEAD;
+- não promover manualmente.
+
+PR #585 — GOVERNANÇA
+- branch: docs/modo-operacional-loop-evidencia-20260731
+- HEAD: ebf9bb4b1e0e749b860453cc89c051a2795f2bb3
+- 2 à frente e 1 atrás;
+- draft;
+- somente documentação/boot.
+
+PR #554 — PROGRAMA HERMES-CASA-MENTE-ESTENDIDA-01
+- branch: plan/hermes-casa-mente-estendida-20260730
+- programa vivo;
+- 9 à frente e 30 atrás;
+- não usar como branch técnica;
+- recebe PROGRAM_DELTA só depois dos PRs-filhos.
+
+PR #576
+- VISION_LOCKED_IMPLEMENTATION_HOLD;
+- READ_ONLY.
+
+PRs #499 e #455
+- antigos/não mergeáveis;
+- inventariar sobreposição;
+- não corrigir/rebasear/fechar nesta rodada.
+
+SOL
+- feature/sol-miniapp-voice-poc-20260731: 5 à frente e 8 atrás; fotografia/POC.
+- plan/sol-voice-first-pivete-hermes-lab-frozen-20260731: referência congelada.
+- implementação nova nasce da main atual.
+
+DELTA
+- branch local conhecida: feature/delta-canonico-core-20260731;
+- não apareceu no remoto;
+- medir branch/HEAD/status/ledger/testes/writer antes de escrever.
+
+VPS
+- captura read-only disponível;
+- rc=124 = WARNING/DEGRADED, nunca PASS;
+- nenhuma mutação até contrato por serviço.
+
+LOVABLE
+- fora do desenho ativo;
+- não é provider, fallback, dependência nem bloqueador;
+- referências apenas em inventário histórico/segurança.
+
+DIRETÓRIO DA MISSÃO
+E:\CentralDark\Pivete\TEMP\missions\CENTRALDARK-UNIFICACAO-OPERACIONAL-TOTAL-01\
+
+control/
+  mission.json
+  ownership.json
+  sources.json
+  drift.json
+  findings.json
+  decisions.json
+  receipts/
+  reports/
+  handoffs/
+
+worktrees/
+  autonomia/
+  governanca/
+  sol-runtime/
+  delta/
+  vps-plan/
+  integracao-programa/
+
+Nunca usar como writer:
+- checkout principal sujo;
+- checkout vivo da VPS;
+- branch de outro escopo;
+- Overclock de referência;
+- instalação Hermes;
+- dist quando existe src.
+
+FASE 0 — PRECHECK GLOBAL READ-ONLY
+
+LANE-00-GITHUB
+- medir main;
+- PRs abertos;
+- branches autonomia/sol/hermes/delta/vps/meta-lupa/governança;
+- base/head/ahead/behind/draft/mergeable/checks/threads/writer;
+- sobreposição e substituição;
+- saída github-state.json.
+
+LANE-01-CASA
+- medir E:\CentralDark\Pivete\CentralDark;
+- branch, HEAD, status porcelain v2, worktrees, stashes;
+- preservar modified/untracked;
+- mapear Hermes, SOL, NÚCLEO, memória, perfis e processos;
+- não abrir banco vivo nem copiar WAL/SHM;
+- saída casa-state.json.
+
+LANE-02-VPS
+- validar captura, ARCHIVE_SHA256, STATE_SHA256, SECRET_SCAN;
+- estado vivo somente read-only;
+- nunca ler valor de secret;
+- saída vps-state.json com FACT/INFERENCE/UNKNOWN.
+
+LANE-03-DELTA
+- localizar branch local;
+- medir HEAD/status/testes/ledger/writer;
+- reverificar pontos 8 e 9 sem escrever;
+- saída delta-state.json.
+
+LANE-04-SOL
+- medir fonte ativa;
+- confirmar REST 8787;
+- medir Codex CLI/login sem imprimir auth;
+- medir Hermes Edge TTS sem alterar perfil;
+- saída sol-state.json.
+
+LANE-05-AUTONOMIA
+- revisar #584 no HEAD exato;
+- validar threads;
+- comparar #573/#570/main;
+- saída autonomia-state.json.
+
+LANE-06-GOVERNANÇA
+- revisar #585;
+- comparar AGENTS.md com cânone;
+- detectar conflito;
+- saída governanca-state.json.
+
+LANE-07-LEGADO
+- mapear #499/#455/scripts/V2/V3/coletores/entrypoints;
+- KEEP/MERGE/ARCHIVE/DELETE_PENDING_AUTH;
+- sem apagar;
+- saída legado-state.json.
+
+CONTRATO DE TODO READER
+{
+  "lane": "",
+  "scope": "",
+  "source_heads": {},
+  "evidence": [],
+  "facts": [],
+  "inferences": [],
+  "unknowns": [],
+  "findings": [],
+  "overlaps": [],
+  "recommended_next_gate": "",
+  "mutations_performed": false
+}
+
+FASE 1 — RECONCILIAÇÃO
+- validar schemas e hashes;
+- rejeitar mutations_performed=true;
+- cruzar Casa/VPS/GitHub/captura/cânone;
+- gerar SOURCE_OF_TRUTH_MATRIX;
+- OWNERSHIP_MATRIX;
+- PR_DEPENDENCY_GRAPH;
+- BRANCH_OVERLAP_MATRIX;
+- FILE_COLLISION_MATRIX;
+- FINDING_REGISTER;
+- APPLY_ORDER;
+- separar FACT/INFERENCE/UNKNOWN;
+- nenhum writer começa antes de ownership.json ter exatamente um writer por escopo.
+
+OWNERSHIP
+AUTONOMIA
+- branch: fix/autonomia-promotion-token-canonico-20260731
+- PR: 584
+- writer_count=1
+
+GOVERNANCA_LOOP
+- branch: docs/modo-operacional-loop-evidencia-20260731
+- PR: 585
+- writer_count=1
+
+SOL_RUNTIME
+- nova branch: feature/sol-bridge-codex-hermes-20260801
+- base: main@237f76cb0cbf9c1b8db6a1f8a3a35c48cdb598ea
+- draft PR
+- writer_count=1
+
+DELTA_CANONICO
+- MEASURE_FIRST
+- sem PR até prova local
+- writer_count=0 até ownership comprovado
+
+VPS_REMEDIATION_CODE
+- nova branch: fix/vps-consolidacao-canonica-20260801
+- base: main@237f76cb0cbf9c1b8db6a1f8a3a35c48cdb598ea
+- draft PR
+- escreve scripts/plano/testes; não aplica VPS
+- writer_count=1
+
+PROGRAM_DELTA
+- PR 554
+- writer_count=0 durante trabalho técnico
+- atualizar só após receipts dos PRs-filhos
+
+READ_ONLY
+- #573, #570, #576, #499, #455
+- feature/sol-miniapp-voice-poc-20260731
+- plan/sol-voice-first-pivete-hermes-lab-frozen-20260731
+
+FASE 2 — IMPLEMENTAÇÃO PARALELA
+
+TRILHA A — PR #584
+- corrigir findings válidos;
+- separar Judge/Promotor;
+- token só na promoção;
+- permissões mínimas;
+- remover nome obsoleto;
+- testes;
+- atualizar sobre main sem apagar histórico auditado;
+- CI;
+- threads só resolvidas após contraprova;
+- sem merge;
+- sem canário manual.
+
+TRILHA B — PR #585
+- reconciliar drift;
+- somente docs/boot;
+- provar hierarquia;
+- CI/revisão;
+- manter draft.
+
+TRILHA C — SOL
+Branch: feature/sol-bridge-codex-hermes-20260801
+Commit 1:
+- bridge localhost;
+- /v1/sol/respond;
+- Codex OAuth oficial;
+- read-only;
+- approval never;
+- timeout/cancelamento/fila;
+- sanitização;
+- JSON SOL;
+- testes positivos/negativos;
+- sem Lovable;
+- sem Overclock;
+- sem mutar Hermes;
+- sem VPS.
+Commit 2 após gate:
+- /v1/audio/speech;
+- Hermes Edge TTS;
+- pt-BR;
+- fallback speechSynthesis;
+- áudio/interrupção;
+- sem premium padrão.
+HF speech-to-speech:
+- somente depois do REST passar;
+- spike separado;
+- medir hardware antes de modelo grande.
+
+TRILHA D — DELTA
+- medir branch local;
+- provar HEAD/writer;
+- reverificar pontos 8/9;
+- preservar append-only;
+- criar branch filha só com finding;
+- draft PR;
+- sem misturar SOL/VPS/autonomia.
+
+TRILHA E — VPS
+Branch: fix/vps-consolidacao-canonica-20260801
+- escolher coletor canônico;
+- incorporar lacunas comprovadas;
+- rc=124 DEGRADED;
+- inventário Portainer/GraphPanel/PM2/Docker/systemd/Caddy/rede;
+- plano bind localhost;
+- precheck/backup/dry-run/comandos/teste/contraprova/rollback/receipt;
+- nenhuma aplicação mutável;
+- draft PR.
+
+TRILHA F — LEGADO
+- KEEP;
+- MERGE_INTO_CANONICAL;
+- ARCHIVE_PENDING_AUTH;
+- DELETE_PENDING_AUTH;
+- ACTIVE_UNKNOWN;
+- SECURITY_BACKLOG;
+- sem apagar/mover/fechar.
+
+FASE 3 — REVIEW
+Mesmo HEAD para:
+- CodeRabbit;
+- Codex;
+- Meta Lupa;
+- Judge independente;
+- Commander/humano.
+
+Regras:
+- writer não valida próprio trabalho;
+- todos no mesmo SHA;
+- threads não resolvidas sem receipt;
+- reviewers read-only;
+- repetir apenas finding aberto;
+- máximo 3 rodadas;
+- sem convergência: BLOCKED_CONFLICT.
+
+FASE 4 — CONSOLIDAÇÃO SEM MERGE
+Saída:
+MISSION_ID=
+REMOTE_MAIN_HEAD=
+CASA_HEAD=
+VPS_CAPTURE_SHA256=
+VPS_STATE_SHA256=
+ACTIVE_WRITERS=
+PR_GRAPH=
+BRANCH_GRAPH=
+SOL_PR=
+AUTONOMIA_PR=584
+GOVERNANCA_PR=585
+DELTA_PR=
+VPS_PLAN_PR=
+P0_OPEN=
+P1_OPEN=
+UNKNOWN_CRITICAL=
+TESTS=
+SECRET_SCAN=
+ROLLBACK_PROVED=
+JUDGE_RECEIPTS=
+FILES_TO_KEEP=
+FILES_TO_MERGE=
+FILES_TO_ARCHIVE=
+FILES_TO_DELETE_PENDING_AUTH=
+STATE_DRIFT=
+OPEN_CONFLICTS=
+NEXT_APPLY_GATE=
+MERGE_AUTHORIZED=false
+VPS_APPLY_AUTHORIZED=false
+
+PROGRAM_DELTA do #554 só depois de:
+- PRs-filhos;
+- links;
+- HEADs;
+- receipts;
+- decisão do CHEFE.
+
+GLOBAL_PASS EXIGE
+P0_OPEN=0
+P1_OPEN=0
+UNKNOWN_CRITICAL=0
+SECRET_SCAN=PASS
+SCHEMAS=PASS
+TESTS=PASS
+ROLLBACK_PROVED=SIM
+JUDGE_INDEPENDENT=PASS
+WRITER_COLLISION=0
+HEAD_ANALISADO=HEAD_TESTADO
+NO_SILENT_FALLBACK=SIM
+LOVABLE_USED=false
+
+GLOBAL_PASS não autoriza merge nem VPS apply.
+
+PROIBIÇÕES
+- nenhum orquestrador concorrente;
+- darkai/lista estática não prova provider;
+- sem Lovable;
+- sem writers colidindo;
+- sem rebase automático do programa vivo;
+- sem correção nova em PR antigo;
+- UNKNOWN nunca PASS;
+- warning nunca sucesso;
+- sem painel novo antes de provar o existente;
+- sem tocar checkout sujo;
+- sem mutação VPS;
+- sem imprimir secrets;
+- sem apagar segredo antes de rotação;
+- não encerrar porque o plano foi escrito.
+
+PRIMEIRO MOVIMENTO
+Inicie AGORA a FASE 0 em paralelo.
+Não peça confirmação para leitura segura.
+
+Antes da escrita:
+STATUS=PRECHECK_COMPLETE
+REMOTE_MAIN_HEAD=
+CASA_STATE=
+VPS_STATE=
+DELTA_STATE=
+PR_GRAPH=
+OWNERSHIP_MATRIX=
+COLLISIONS=
+DRIFT=
+PROPOSED_WORKTREES=
+PROPOSED_BRANCHES=
+BLOCKERS=
+READY_FOR_PARALLEL_WRITERS=true|false
+
+Se true:
+- criar worktrees;
+- um writer por escopo;
+- executar trilhas A–F;
+- abrir somente DRAFT PRs;
+- parar antes de merge/deploy/VPS apply.
+
+PAPO RETO
+Não quero vinte IAs opinando.
+Quero vinte olhos medindo e cinco writers separados entregando.
+Não quero um comando por microetapa.
+Quero uma missão única com gates internos, estado persistente, receipts e retomada.
+Não quero velocidade teatral.
+Quero Casa + VPS + GitHub + SOL + Delta + autonomia cruzados no mesmo mapa,
+cada cirurgia na branch certa, sem colisão, sem falso verde e sem perder o fio.

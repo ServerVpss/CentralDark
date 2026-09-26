@@ -1,0 +1,26 @@
+{
+  ".gitignore": {
+    "sha256": "2cc81bb576609d802e76cd74fa93c1e40a2d7f94daab8fd8c2c837b28951c2cf",
+    "bytes": 58
+  },
+  "CentralDark-Codex-Hub.ps1": {
+    "sha256": "f9f78e3a096ffe0bedbf66b83d453e89705c1be94c6ecba69dd252fd222389e6",
+    "bytes": 8103
+  },
+  "PROMPT-RETOMADA.txt": {
+    "sha256": "2259b76e0912561b3cc6698a47c18fb5296070f7e94d013d210dafd1024b52d6",
+    "bytes": 668
+  },
+  "README.md": {
+    "sha256": "6cd625fbce0cf14dd582b570b0164813d6fc197a769acfc2293a5bb9172a0ec5",
+    "bytes": 1651
+  },
+  "SECURITY.md": {
+    "sha256": "76184cb39df78b1e6b7795f7a8212d30bcbd15aa832e49496cdf67545ae64ca5",
+    "bytes": 336
+  },
+  "Start-Hub.cmd": {
+    "sha256": "c494126cdd3e37e4c9efc7daffee1f85460d3ceb27ce1a07c334339a9e0d577e",
+    "bytes": 113
+  }
+}

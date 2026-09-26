@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sol://schemas/sol-hermes-message/2.0.0",
+  "title": "SOL Hermes Unified Message",
+  "type": "object",
+  "required": [
+    "direction",
+    "mission",
+    "nonce",
+    "turn",
+    "protocol",
+    "status",
+    "phase",
+    "pending",
+    "prohibited",
+    "next_gate",
+    "new_step_started"
+  ],
+  "properties": {
+    "direction": {
+      "enum": ["SOL_TO_HERMES", "HERMES_TO_SOL"]
+    },
+    "mission": { "type": "string", "minLength": 1 },
+    "nonce": { "type": "string", "minLength": 1 },
+    "turn": { "type": "string", "minLength": 1 },
+    "protocol": { "const": "SOL_HERMES_UNIFIED_V2" },
+    "ack": { "type": ["string", "null"] },
+    "status": { "type": "string", "minLength": 1 },
+    "result": { "type": ["string", "object", "array", "null"] },
+    "evidence": { "type": ["string", "object", "array", "null"] },
+    "errors": { "type": ["string", "array", "null"] },
+    "folder_current": { "type": ["string", "null"] },
+    "phase": { "type": "string", "minLength": 1 },
+    "authorized_action": { "type": ["string", "null"] },
+    "last_proof": { "type": ["string", "object", "null"] },
+    "pending": { "type": ["string", "array"] },
+    "prohibited": { "type": ["string", "array"] },
+    "next_gate": { "type": "string", "minLength": 1 },
+    "did_i_do_right": { "enum": ["ASK_SOL", "NOT_APPLICABLE"] },
+    "new_step_started": { "const": false }
+  },
+  "additionalProperties": false
+}
+

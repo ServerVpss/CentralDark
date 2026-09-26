@@ -1,0 +1,65 @@
+{
+  "schema": "centraldark.sol.local-counterproof.v1",
+  "observed_at": "2026-08-30T06:34:54.583Z",
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "ui_http_200",
+      "status": "PASS"
+    },
+    {
+      "name": "ingress_http_200",
+      "status": "PASS"
+    },
+    {
+      "name": "ingress_stt_adapter",
+      "status": "PASS"
+    },
+    {
+      "name": "ingress_mutation_false",
+      "status": "PASS"
+    },
+    {
+      "name": "omni_http_200",
+      "status": "PASS"
+    },
+    {
+      "name": "chat_http_200",
+      "status": "PASS"
+    },
+    {
+      "name": "chat_has_text",
+      "status": "PASS"
+    },
+    {
+      "name": "stt_http_200",
+      "status": "PASS"
+    },
+    {
+      "name": "stt_has_text",
+      "status": "PASS"
+    },
+    {
+      "name": "stt_local_proof",
+      "status": "PASS"
+    },
+    {
+      "name": "tts_http_200",
+      "status": "PASS"
+    },
+    {
+      "name": "tts_wav",
+      "status": "PASS"
+    },
+    {
+      "name": "tts_nonempty",
+      "status": "PASS"
+    }
+  ],
+  "limits": {
+    "microphone_capture": "UNKNOWN",
+    "native_tauri_build": "BLOCKED_BY_CODE_INTEGRITY"
+  },
+  "local_only": true,
+  "secrets_read": false
+}

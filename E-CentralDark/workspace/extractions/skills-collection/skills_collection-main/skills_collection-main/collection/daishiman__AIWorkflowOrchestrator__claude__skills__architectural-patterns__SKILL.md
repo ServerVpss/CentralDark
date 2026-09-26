@@ -1,0 +1,117 @@
+---
+name: .claude/skills/architectural-patterns/SKILL.md
+description: |
+  エンタープライズアーキテクチャパターン（Hexagonal、Onion、Ports and Adapters等）の
+  
+  📖 参照書籍:
+  - 『The Pragmatic Programmer』（Andrew Hunt, David Thomas）: 実践的改善
+  
+  📚 リソース参照:
+  - `resources/Level1_basics.md`: レベル1の基礎ガイド
+  - `resources/Level2_intermediate.md`: レベル2の実務ガイド
+  - `resources/Level3_advanced.md`: レベル3の応用ガイド
+  - `resources/Level4_expert.md`: レベル4の専門ガイド
+  - `resources/hexagonal-architecture.md`: ヘキサゴナルアーキテクチャ（Ports and Adapters）
+  - `resources/legacy-skill.md`: 旧SKILL.mdの全文
+  - `resources/onion-architecture.md`: オニオンアーキテクチャ（Onion Architecture）
+  - `resources/vertical-slice.md`: 垂直スライスアーキテクチャ（Vertical Slice Architecture）
+  - `scripts/evaluate-pattern-compliance.mjs`: アーキテクチャパターン準拠評価スクリプト
+  - `scripts/log_usage.mjs`: 使用記録・自動評価スクリプト
+  - `scripts/validate-skill.mjs`: スキル構造検証スクリプト
+  - `templates/pattern-comparison.md`: アーキテクチャパターン比較レポート
+  - `resources/requirements-index.md`: 要求仕様の索引（docs/00-requirements と同期）
+  
+  Use proactively when handling architectural patterns tasks.
+version: 1.0.0
+level: 1
+last_updated: 2025-12-24
+references:
+  - book: "The Pragmatic Programmer"
+    author: "Andrew Hunt, David Thomas"
+    concepts:
+      - "実践的改善"
+      - "品質維持"
+---
+
+# Architectural Patterns
+
+## 概要
+
+エンタープライズアーキテクチャパターン（Hexagonal、Onion、Ports and Adapters等）の
+
+詳細な手順や背景は `resources/Level1_basics.md` と `resources/Level2_intermediate.md` を参照してください。
+
+
+## ワークフロー
+
+### Phase 1: 目的と前提の整理
+
+**目的**: タスクの目的と前提条件を明確にする
+
+**アクション**:
+
+1. `resources/Level1_basics.md` と `resources/Level2_intermediate.md` を確認
+2. 必要な resources/scripts/templates を特定
+
+### Phase 2: スキル適用
+
+**目的**: スキルの指針に従って具体的な作業を進める
+
+**アクション**:
+
+1. 関連リソースやテンプレートを参照しながら作業を実施
+2. 重要な判断点をメモとして残す
+
+### Phase 3: 検証と記録
+
+**目的**: 成果物の検証と実行記録の保存
+
+**アクション**:
+
+1. `scripts/validate-skill.mjs` でスキル構造を確認
+2. 成果物が目的に合致するか確認
+3. `scripts/log_usage.mjs` を実行して記録を残す
+
+
+## ベストプラクティス
+
+### すべきこと
+- アーキテクチャパターンを選択・評価する時
+- 外部システムとの境界を設計する時
+- ドメイン中心の設計を実現する時
+- 既存アーキテクチャのパターン準拠を確認する時
+
+### 避けるべきこと
+- アンチパターンや注意点を確認せずに進めることを避ける
+
+## コマンドリファレンス
+
+### リソース読み取り
+```bash
+cat .claude/skills/architectural-patterns/resources/Level1_basics.md
+cat .claude/skills/architectural-patterns/resources/Level2_intermediate.md
+cat .claude/skills/architectural-patterns/resources/Level3_advanced.md
+cat .claude/skills/architectural-patterns/resources/Level4_expert.md
+cat .claude/skills/architectural-patterns/resources/hexagonal-architecture.md
+cat .claude/skills/architectural-patterns/resources/legacy-skill.md
+cat .claude/skills/architectural-patterns/resources/onion-architecture.md
+cat .claude/skills/architectural-patterns/resources/vertical-slice.md
+```
+
+### スクリプト実行
+```bash
+node .claude/skills/architectural-patterns/scripts/evaluate-pattern-compliance.mjs --help
+node .claude/skills/architectural-patterns/scripts/log_usage.mjs --help
+node .claude/skills/architectural-patterns/scripts/validate-skill.mjs --help
+```
+
+### テンプレート参照
+```bash
+cat .claude/skills/architectural-patterns/templates/pattern-comparison.md
+```
+
+## 変更履歴
+
+| Version | Date | Changes |
+| --- | --- | --- |
+| 1.0.0 | 2025-12-24 | Spec alignment and required artifacts added |

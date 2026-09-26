@@ -1,0 +1,16 @@
+{
+  "schema": "centraldark.remote-bridge.config.v2",
+  "device_label": "SEGREDO",
+  "workdir": "E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE",
+  "package": "@wonderwhy-er/desktop-commander@latest",
+  "remote_mcp": "https://mcp.desktopcommander.app/mcp",
+  "centraldark_mcp": "https://mcp.centralldark.com/mcp",
+  "github_default": "ServerVpss/CentralDark",
+  "screenpipe_url": "http://127.0.0.1:3030",
+  "screenpipe_context_file": "context\\screenpipe-latest.json",
+  "screenpipe_status_file": "context\\screenpipe-status.json",
+  "screenpipe_window_minutes": 15,
+  "read_only_first": true,
+  "secrets_in_repo": false,
+  "telegram_out_of_scope": true
+}

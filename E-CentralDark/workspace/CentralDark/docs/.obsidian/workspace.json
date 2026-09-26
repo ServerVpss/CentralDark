@@ -1,0 +1,213 @@
+{
+  "main": {
+    "id": "2ac9e0080703e40c",
+    "type": "split",
+    "children": [
+      {
+        "id": "7d83050cc7868e6d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "85198fcdba7ba921",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Visualização em gráfico"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "689311c2f6b90d7b",
+    "type": "split",
+    "children": [
+      {
+        "id": "44d41975376c929c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "362dbdc5baf1099e",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorador de arquivos"
+            }
+          },
+          {
+            "id": "f913a1ffff2eb7c2",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Procurar"
+            }
+          },
+          {
+            "id": "8ade356fbb40c4f3",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Marcadores"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "right": {
+    "id": "4c4b3e102abf8f79",
+    "type": "split",
+    "children": [
+      {
+        "id": "d082c753d967001a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c489c01304548c9f",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Links inversos"
+            }
+          },
+          {
+            "id": "893452e008cdb454",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Links de saída"
+            }
+          },
+          {
+            "id": "7de591f82aed45a9",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiquetas"
+            }
+          },
+          {
+            "id": "fb677e0232970eac",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Todas as propriedades"
+            }
+          },
+          {
+            "id": "a1fb1a4e52cd18e4",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Sumário"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir a troca rápida": false,
+      "canvas:Criar novo canvas": false,
+      "graph:Abrir visualização em gráfico": false,
+      "daily-notes:Abrir a nota de hoje": false,
+      "templates:Inserir modelo": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Criar nova base": false,
+      "markdown-importer:Abrir importador Markdown": false,
+      "audio-recorder:Começar/parar a gravação de áudio": false,
+      "zk-prefixer:Criar nova nota única": false,
+      "workspaces:Gerenciar leiautes da área de trabalho": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
+      "obsidian-git:Open Git source control": false
+    }
+  },
+  "active": "85198fcdba7ba921",
+  "lastOpenFiles": [
+    "BRAIN/03-DOCUMENTACAO/01-AGENTS-LIBRARY/01-INDICES/00-AGENTS-INDEX.md",
+    "CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md",
+    "_LEGADO_ROOT_DOCS_CONFLITOS/20260703T075750Z/CONSCIENCIA/01-REGRAS-DA-EQUIPE-IA.md",
+    "CONSCIENCIA/01-REGRAS-DA-EQUIPE-IA.md",
+    "CONSCIENCIA/08-HISTORICO-DECISOES.md",
+    "RELATORIOS/notion-sync/2026-06-25T21-15-31.md",
+    "CONSCIENCIA/23-PAPEL-LOVABLE-CENTRAL-COMANDO.md",
+    "PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md",
+    "RELATORIOS/2026-07-22-hub-control-plane-lovable-supabase.md",
+    "CONSCIENCIA/00-LEIA-PRIMEIRO.md",
+    "CONSCIENCIA/CONSCIENCIA.md",
+    "RELATORIOS/notion-sync/consistencia-2026-07-09T20-34-29.md",
+    "CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/INDICE.md",
+    "BRAIN/00-MAPA-SISTEMA/01-HUB/BRAIN.md",
+    "BRAIN/00-MAPA-SISTEMA/01-HUB/INDEX.md",
+    "Sem título 1.canvas",
+    "Sem título.canvas",
+    "Sem título.base"
+  ]
+}

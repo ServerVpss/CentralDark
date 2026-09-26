@@ -1,0 +1,81 @@
+---
+name: fable-loop
+gate: FABLE_LOOP | !CALIBRAR | !ACORDAR | #ACORDAR
+author: HERMES-CASA (perfil pivete), derivado de cot-react-loop e learning-crystal-loop
+canonical_sha_target: AUTO
+status: CRYSTALLIZED_AS_READ_ONLY_METHOD
+default_routing: false
+---
+
+# FABLE LOOP — método de calibração e estabilização
+
+Fable Loop é um método de leitura, calibração e estabilização dentro do ciclo canônico da CentralDark. Não é agente, roteador, provedor, identidade nem segundo cérebro. O roteamento padrão permanece fechado até que a Meta Lupa prove a promoção por comparação controlada aplicável.
+
+TRIGGERS: `#FABLE_LOOP` | `!FABLE_LOOP` | `#ACORDAR` + intenção explícita de loop contínuo.
+
+## Pré-flight obrigatório
+
+Antes do primeiro ciclo:
+
+- MEDIR HEAD do repositório, writer, worktree, remote e runtime aplicável;
+- REUTILIZAR `cot-react-loop` ou owner equivalente já existente; não duplicar;
+- FIXAR o writer medido antes de qualquer mutação autorizada;
+- manter HERMES/PIVETE como executor e um observador independente como contraprova.
+
+## Ciclo
+
+Cada volta deve reduzir pelo menos um `UNKNOWN` ou uma contradição material:
+
+1. MAPEAR — intenção, estado, escopo, owner e alvo de prova;
+2. LER — repositório canônico, contratos e evidência CURRENT;
+3. ENTENDER — comparar com capacidade existente; reutilizar antes de criar;
+4. BUSCAR CONTRADIÇÃO — inspecionar o lado independente;
+5. TESTAR CRENÇA — executar teste discriminante, medir e registrar hash/receipt quando aplicável;
+6. CORRIGIR — atualizar somente a menor interpretação ou delta sustentado pela prova;
+7. CONSOLIDAR — preservar somente o que sobreviveu à contraprova;
+8. REINDEXAR — atualizar índice/receipt existente, não fabricar novo contexto paralelo;
+9. REPETIR — parar no ponto fixo aplicável ou preservar a fronteira `UNKNOWN`.
+
+## Fixed point do método
+
+O método só pode encerrar a sua rodada quando:
+
+- o `REALITY_JUDGE` possuir prova aplicável;
+- o candidato permanecer no HEAD medido;
+- nenhum `UNKNOWN` tiver sido convertido em `PASS`;
+- nenhum sinal parcial tiver sido promovido a prova.
+
+Isso é ponto fixo do método; não equivale automaticamente a `GLOBAL_FIXED_POINT`.
+
+## Role gate
+
+- HERMES/PIVETE = executor e writer apenas no escopo autorizado;
+- OBSERVER = leitor independente e contraprova; não escreve no mesmo escopo;
+- RENDEZVOUS = compara observações sem votar a verdade;
+- REALITY_JUDGE = decide `PASS`, `RECONCILE` ou `UNKNOWN`;
+- `ONE_WRITER_PER_SCOPE` = nunca dois editores no mesmo escopo.
+
+## Fallback e contraprova
+
+Obrigatório para risco material:
+
+- se o executor reporta `PASS`, o observador mede por caminho independente;
+- se as observações divergem, reconciliar; não declarar `PASS`;
+- troca de provedor ou transporte exige falha material medida, não preferência.
+
+## Anti-teatro
+
+- não afirmar que uma skill foi carregada sem lê-la;
+- não transformar conversa crua em delta canônico;
+- não criar V2/V3 ou loop paralelo;
+- não repetir leitura concluída sem nova evidência.
+
+## Binding canônico
+
+```yaml
+owner: .agents/skills/fable-loop/SKILL.md
+mode: READ_ONLY_CALIBRATION
+default_routing: false
+may_write_canonical: false
+promotion_gate: META_LUPA_SAME_CONTROL
+```

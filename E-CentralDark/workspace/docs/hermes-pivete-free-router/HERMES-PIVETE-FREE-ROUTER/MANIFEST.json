@@ -1,0 +1,46 @@
+{
+  "source": "config(3).yaml",
+  "target": "C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\config.yaml",
+  "fallback_count": 15,
+  "moa_preset": "free-council",
+  "yaml_valid": true,
+  "fallback_models": [
+    "google/gemma-4-31b-it:free",
+    "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+    "google/gemma-4-26b-a4b-it:free",
+    "nvidia/nemotron-nano-12b-v2-vl:free",
+    "nvidia/nemotron-3-nano-30b-a3b:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
+    "cohere/north-mini-code:free",
+    "poolside/laguna-m.1:free",
+    "poolside/laguna-s-2.1:free",
+    "poolside/laguna-xs-2.1:free",
+    "inclusionai/ling-3.0-flash:free",
+    "openai/gpt-oss-20b:free",
+    "nvidia/nemotron-nano-9b-v2:free",
+    "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "nvidia/nemotron-3.5-content-safety:free"
+  ],
+  "files": {
+    "APLICAR-CONFIG-TESTE.ps1": {
+      "sha256": "f51005534b5e2eb4576d1267f86b866ad5ff98368bb9f068b19411d41224b79e",
+      "bytes": 1557
+    },
+    "DIFF.patch": {
+      "sha256": "baaf68dbf4b484f41a25772ae929b0513369802ff3b5e459196187737f3f5b49",
+      "bytes": 10662
+    },
+    "LEIA-ME.md": {
+      "sha256": "3617296fc7c1f2779d64e43f55c7319f680aa4dfc33a622e777ccd05c40009a1",
+      "bytes": 915
+    },
+    "RESTAURAR-CONFIG.ps1": {
+      "sha256": "64291fd7495a61d61b910f21a0cfd7b18c8261525add0a06d801b45d692d82f7",
+      "bytes": 331
+    },
+    "config.yaml": {
+      "sha256": "6e100d8ac9d187d7efbf79edfb838309bd2a14603de9918a70e1eb597b8efadd",
+      "bytes": 12546
+    }
+  }
+}

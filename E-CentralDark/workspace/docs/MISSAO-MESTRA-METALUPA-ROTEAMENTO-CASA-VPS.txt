@@ -1,0 +1,1172 @@
+/goal MISSÃO MESTRA — CONSOLIDAR A METALUPA E PROJETAR O ROTEAMENTO HÍBRIDO CASA + VPS
+
+AUTORIDADE
+
+PERMITO PIVETE executar esta missão em GATES sequenciais:
+
+GATE A — CASA:
+- documentação local;
+- inventário;
+- backup;
+- reconciliação;
+- consolidação da única Lupa;
+- perfil Hermes local;
+- testes;
+- commit e PR draft.
+
+GATE B — VPS, SOMENTE APÓS GATE A VERDE:
+- inspeção read-only;
+- inventário de processos, rotas, gateways, sessões e código;
+- criação de worktree/branch isolada;
+- testes offline;
+- correções no código da branch;
+- atualização de PR;
+- nenhuma ativação do runtime vivo.
+
+GATE C — ROTEAMENTO:
+- comparar o que já existe com os dois planos anexados;
+- desenhar uma única política canônica;
+- configurar Casa e VPS sem duplicar Hermes;
+- implementar e testar em branch isolada;
+- abrir PR empilhado ou PR posterior;
+- não fazer merge, deploy ou restart.
+
+É permitido remover duplicatas comprovadas NA CASA após preservação do conteúdo
+único, backup, teste e rollback.
+
+PROIBIDO EM TODA A MISSÃO:
+- produção;
+- deploy;
+- restart do Gateway, PM2 ou serviços;
+- merge;
+- force-push;
+- reset --hard;
+- git clean;
+- editar diretamente a worktree viva da VPS;
+- apagar sem comparação;
+- expor secrets, tokens ou valores de .env;
+- inventar nova V1, V2, V3;
+- mudar o nome técnico da skill sem decisão explícita do Pivete;
+- criar segunda Lupa concorrente;
+- criar segundo Hermes de produção no mesmo PC;
+- copiar perfis, sessões ou secrets entre Casa e VPS;
+- declarar modelo, preço, limite ou capacidade sem consultar fonte atual.
+
+OBJETIVO DO GATE A — ÚNICA LUPA CANÔNICA NA CASA
+
+1. Ler o estado REAL atual do disco.
+2. Confirmar onde está a Lupa canônica mais nova.
+3. Atualizar o clone local pela origin/main.
+4. Comparar todas as skills, loaders, documentos, symlinks e cópias da Lupa.
+5. Incorporar todo conteúdo útil e exclusivo na MESMA skill canônica.
+6. Eliminar duplicatas executáveis comprovadas.
+7. Deixar o Hermes carregando somente uma identidade ativa.
+8. Provar que nenhuma capacidade foi perdida.
+
+
+FASE -1 — DOCUMENTAÇÃO, VERSÃO E CARREGAMENTO REAL
+
+Antes da FASE 0, provar como a versão instalada do Hermes realmente descobre,
+carrega e prioriza skills.
+
+EVIDÊNCIAS ATUAIS A REVALIDAR, NÃO PRESUMIR:
+
+- Hermes reportado como versão 1.0.0, commit fb0ed8396;
+- 127.0.0.1:3000 = documentação técnica Docusaurus;
+- 127.0.0.1:9119 = dashboard que exibe a documentação, não fonte técnica final;
+- skill auxiliar reportada:
+  C:\Users\danda\AppData\Local\hermes\profiles\pivete\skills\autonomous-ai-agents\hermes-agent
+
+ORDEM DE FONTE PARA ESTA MISSÃO:
+
+1. código-fonte e comportamento da versão instalada;
+2. documentação técnica local correspondente em 127.0.0.1:3000;
+3. origin/main do repositório do Hermes, somente quando corresponder à versão instalada;
+4. dashboard 127.0.0.1:9119 apenas como superfície de consulta.
+
+Localizar e citar as páginas/arquivos que definem:
+
+- descoberta de skills;
+- prioridade entre profile, bundled e paths externos;
+- suporte real a symlink/junction;
+- carregamento de references/scripts/tests;
+- carregamento sob demanda;
+- comando correto para listar skills na versão instalada;
+- necessidade ou não de restart para refletir mudanças.
+
+Não afirmar lazy loading, symlink ou prioridade de paths sem prova na versão instalada.
+
+Se documentação e runtime divergirem:
+- registrar DOC_RUNTIME_DRIFT=SIM;
+- comportamento e código da versão instalada vencem para o diagnóstico;
+- não corrigir por improviso;
+- retornar BLOCKED quando a divergência impedir prova segura.
+
+SEPARAÇÃO DE PAPÉIS
+
+A skill `autonomous-ai-agents/hermes-agent` é auxiliar técnica do Hermes.
+Ela ensina consulta de documentação, ferramentas, mensagens e comportamento E2E.
+
+Ela NÃO deve:
+- virar segunda Lupa;
+- absorver a identidade da MetaLupa;
+- concorrer com `lupa-bayesiana`;
+- receber cópia duplicada da doutrina da Lupa.
+
+Conteúdo exclusivo sobre integração Hermes ↔ Lupa pode virar referência ou teste
+na skill canônica, somente após comparação e sem duplicação.
+
+A identidade executável candidata continua:
+
+E:\CentralDark\Pivete\CentralDark\.agents\skills\lupa-bayesiana\
+
+Não renomear `tests/` para `testes/`, ou o inverso, sem primeiro provar qual
+estrutura existe e qual é consumida pela versão instalada.
+
+FONTE DA VERDADE ESPERADA — DEVE SER VERIFICADA, NÃO PRESUMIDA
+
+REPOSITÓRIO:
+E:\CentralDark\Pivete\CentralDark
+
+REF:
+origin/main
+
+CANDIDATO CANÔNICO:
+E:\CentralDark\Pivete\CentralDark\.agents\skills\lupa-bayesiana\
+
+Não alterar o nome `lupa-bayesiana` nesta missão.
+O nome canônico final será decidido posteriormente pelo Pivete.
+
+FASE 0 — CHECKPOINT
+
+Antes de qualquer mudança:
+
+- registrar data/hora;
+- registrar branch atual;
+- registrar HEAD local;
+- registrar origin/main;
+- registrar git status;
+- não mudar de branch com worktree suja;
+- preservar mudanças existentes por commit da branch ou stash nomeado;
+- criar backup fora do mapa ativo:
+
+E:\CentralDark\backups\LUPA-PRE-RECONCILIACAO-<timestamp>.zip
+
+O backup deve conter somente as candidatas da Lupa encontradas.
+Gerar SHA-256 do ZIP.
+
+FASE 1 — ATUALIZAR A FONTE LOCAL
+
+Executar:
+
+git -C "E:\CentralDark\Pivete\CentralDark" fetch origin --prune
+
+Confirmar:
+
+git -C "E:\CentralDark\Pivete\CentralDark" rev-parse origin/main
+git -C "E:\CentralDark\Pivete\CentralDark" ls-tree -r --name-only origin/main -- ".agents/skills/lupa-bayesiana"
+
+Não fazer pull nem switch antes de provar que a worktree está segura.
+
+FASE 2 — INVENTÁRIO COMPLETO DAS CANDIDATAS
+
+Procurar somente nos territórios autorizados:
+
+E:\CentralDark\Pivete\CentralDark\
+E:\CentralDark\Pivete\NUCLEO\
+C:\Users\danda\AppData\Local\hermes\profiles\pivete\skills\
+
+Localizar:
+
+- lupa-bayesiana;
+- tecnica-da-lupa-premium;
+- MetaLupa;
+- metalupa;
+- SKILL.md cujo frontmatter ou conteúdo declare função de Lupa;
+- symlinks/junctions apontando para essas pastas;
+- loaders que chamam documentos externos;
+- cópias físicas;
+- arquivos soltos com nomes equivalentes.
+
+Para cada candidato, registrar:
+
+PATH=
+TIPO=PASTA|ARQUIVO|SYMLINK|JUNCTION|LOADER
+REALPATH=
+FRONTMATTER_NAME=
+TITULO=
+TAMANHO=
+SHA256=
+GIT_TRACKED=SIM|NAO
+GIT_REF=
+GIT_BLOB_SHA=
+SKILL_ENABLED=SIM|NAO
+CONTEUDO_UNICO=
+CONTEUDO_SOBREPOSTO=
+CONSUMIDORES=
+CLASSIFICACAO=
+
+Classificações permitidas:
+
+CANONICO_ATUAL
+RUNTIME_LINK_CANONICO
+HISTORICO
+COMPLEMENTO_COM_CONTEUDO_UNICO
+DUPLICATA_EXATA
+DUPLICATA_DEFASADA
+REFERENCIA_DOCUMENTAL
+INCONCLUSIVO
+
+Não chamar algo de duplicata somente pelo nome.
+Duplicata exige comparação de função, conteúdo, consumidores e identidade.
+
+FASE 3 — PROVAR A CANÔNICA
+
+Comparar:
+
+origin/main:.agents/skills/lupa-bayesiana/
+origin/pivete/dev:.agents/skills/lupa-bayesiana/
+cópia local do clone
+skills carregadas no profile pivete
+tecnica-da-lupa-premium
+documento em motor/10-observabilidade/
+
+Confirmar obrigatoriamente:
+
+- quantidade de linhas do SKILL.md;
+- blob SHA;
+- XP-1..XP-6;
+- contract_digest;
+- candidate_ref;
+- AutoLupa;
+- scripts;
+- references;
+- testes;
+- uso-ledger;
+- recursos de R0–R4;
+- Zoom Out;
+- Zoom In;
+- Feynman;
+- segurança;
+- dados e migração;
+- rollback;
+- observabilidade;
+- continuidade de cliente.
+
+Gate:
+
+A identidade canônica é:
+
+origin/main:.agents/skills/lupa-bayesiana/
+
+Uma cópia local, profile ou branch pode conter conteúdo mais novo ou exclusivo,
+mas isso a torna CANDIDATA DE MIGRAÇÃO — nunca fonte canônica automática.
+
+Todo conteúdo exclusivo deve ser comparado, testado e promovido na branch da
+missão antes de poder integrar a origem canônica.
+
+origin/pivete/dev nunca vence origin/main apenas por já estar carregada localmente.
+
+FASE 4 — PLANO DE CONSOLIDAÇÃO
+
+A identidade executável deve permanecer:
+
+.agents/skills/lupa-bayesiana/
+
+Não criar outra skill.
+
+Usar a estrutura interna já suportada pela skill:
+
+SKILL.md
+scripts/
+references/
+testes/
+
+O SKILL.md deve permanecer como loader e contrato principal enxuto.
+
+Conteúdos extensos da Técnica Premium devem ser incorporados como referências
+internas carregadas sob demanda, preservando integralmente o que for útil.
+
+Exemplo de organização permitida, somente se não houver arquivos equivalentes:
+
+references/risco-r0-r4.md
+references/zoom-out-in-feynman.md
+references/seguranca-dados-migracao.md
+references/rollback-observabilidade.md
+references/continuidade-arquitetura.md
+
+Antes de criar cada arquivo:
+- procurar equivalente existente;
+- preferir atualizar o arquivo existente;
+- registrar origem do conteúdo;
+- impedir perda de seções;
+- atualizar o SKILL.md para apontar para a referência.
+
+Não copiar texto duplicado para dois lugares.
+
+FASE 5 — IMPLEMENTAÇÃO MÍNIMA
+
+Criar uma branch local a partir de origin/main somente depois do Gate:
+
+reconcile/lupa-unica-<timestamp>
+
+Atualizar somente:
+
+.agents/skills/lupa-bayesiana/
+
+Alterações permitidas:
+
+- incorporar conteúdo exclusivo;
+- atualizar referências do loader;
+- ajustar scripts/testes para uma única identidade;
+- preservar ledger e histórico;
+- eliminar referência executável concorrente.
+
+Não mudar nome, slug ou caminho canônico nesta missão.
+
+FASE 6 — ELIMINAR DUPLICATAS
+
+Somente depois de:
+
+- conteúdo exclusivo incorporado;
+- diff revisado;
+- testes verdes;
+- backup com SHA;
+- rollback comprovado.
+
+Regras:
+
+1. Se for symlink duplicado:
+   - provar para onde aponta;
+   - manter somente o link que aponta à skill canônica;
+   - remover o link concorrente.
+
+2. Se for cópia física exata:
+   - provar igualdade por hash/árvore;
+   - garantir backup externo;
+   - remover do território ativo.
+
+3. Se for cópia defasada:
+   - comparar arquivo por arquivo;
+   - migrar conteúdo útil;
+   - provar que nada exclusivo ficou;
+   - remover do território ativo.
+
+4. Se for documento histórico:
+   - não apagar;
+   - marcar como histórico ou referência;
+   - remover somente sua capacidade de ser descoberta como skill executável.
+
+5. Se for conteúdo único ainda não incorporado:
+   - NÃO APAGAR;
+   - retornar BLOCKED.
+
+Nunca executar remoção ampla.
+Usar somente paths explícitos listados no relatório.
+
+FASE 7 — PERFIL HERMES
+
+O profile pivete deve carregar uma única identidade de Lupa.
+
+Preferência:
+
+profile
+→ symlink/junction
+→ E:\CentralDark\Pivete\CentralDark\.agents\skills\lupa-bayesiana\
+
+Não manter cópia física dentro do profile se um link canônico funcionar.
+
+Executar:
+
+hermes --profile pivete skills list
+
+Confirmar:
+
+- `lupa-bayesiana` enabled;
+- nenhuma segunda skill executável com função concorrente;
+- nenhum link quebrado;
+- realpath aponta para o clone canônico.
+
+Não reiniciar Gateway.
+
+FASE 8 — TESTES
+
+Rodar todos os testes existentes da skill.
+
+Testes mínimos:
+
+- testes/test_lupa.py;
+- script --help;
+- cálculos Bayes/entropia/VOI;
+- begin-use;
+- finish-use;
+- verify-ledger;
+- AutoLupa;
+- carregamento de referências;
+- descoberta pelo Hermes;
+- inexistência de duas identidades executáveis;
+- nenhuma referência quebrada;
+- nenhuma perda de R0–R4/Zoom/Feynman/segurança/rollback.
+
+Rodar pelo menos duas vezes para confirmar ponto fixo.
+
+FASE 9 — GIT
+
+Adicionar somente paths explícitos da skill.
+
+Proibido:
+
+git add -A
+git reset --hard
+git clean -fd
+force-push
+
+Criar commit local.
+
+Pode abrir PR draft se a autenticação já estiver funcional.
+Não fazer merge sem nova ordem do Pivete.
+
+FASE 10 — PROVA FINAL
+
+Responder exatamente:
+
+STATUS=READY_FOR_PIVETE_REVIEW ou BLOCKED
+
+REPO=
+ORIGIN_MAIN_SHA=
+BRANCH=
+HEAD=
+BACKUP=
+BACKUP_SHA256=
+
+CANONICAL_SKILL_PATH=
+CANONICAL_REALPATH=
+CANONICAL_SKILL_NAME=
+CANONICAL_BLOB_SHA=
+CANONICAL_LINES=
+
+CANDIDATES_FOUND=
+CANONICAL_ITEMS=
+RUNTIME_LINKS=
+HISTORICAL_ITEMS=
+UNIQUE_COMPLEMENTS=
+EXACT_DUPLICATES=
+STALE_DUPLICATES=
+INCONCLUSIVE_ITEMS=
+
+PREMIUM_UNIQUE_CONTENT_FOUND=
+PREMIUM_CONTENT_MIGRATED=
+R0_R4_PRESERVED=
+ZOOM_PRESERVED=
+FEYNMAN_PRESERVED=
+BAYES_VOI_PRESERVED=
+AUTOLUPA_PRESERVED=
+XP_PRESERVED=
+LEDGER_PRESERVED=
+TESTS_PRESERVED=
+
+DUPLICATE_PATHS_REMOVED=
+HISTORICAL_DOCS_PRESERVED=
+ACTIVE_LUPA_COUNT=
+HERMES_SKILLS_LIST_PROOF=
+
+FILES_CHANGED=
+FILES_REMOVED=
+TESTS_RUN=
+TESTS_PASS=
+TESTS_FAIL=
+
+RESTART_EXECUTED=NAO
+VPS_TOUCHED=NAO
+DEPLOY_EXECUTED=NAO
+FORCE_PUSH=NAO
+
+ROLLBACK_COMMAND=
+RESIDUAL_RISK=
+PR=
+VERDICT=
+NEXT_STEP=
+
+Aplicar AutoLupa sobre o relatório.
+
+Se ACTIVE_LUPA_COUNT for diferente de 1:
+STATUS=BLOCKED
+
+Se qualquer conteúdo exclusivo não estiver incorporado:
+STATUS=BLOCKED
+
+Se houver dúvida sobre um path:
+não apagar; STATUS=BLOCKED.
+
+TRANSIÇÃO DO GATE A:
+
+Se STATUS=BLOCKED:
+- parar;
+- não tocar VPS;
+- não iniciar roteamento.
+
+Se STATUS=READY_FOR_PIVETE_REVIEW e todos os campos abaixo forem verdadeiros:
+- ACTIVE_LUPA_COUNT=1;
+- TESTS_FAIL=0;
+- BACKUP_SHA256 preenchido;
+- ROLLBACK_COMMAND comprovado;
+- HERMES_SKILLS_LIST_PROOF válido;
+
+então aplicar a Lupa recém-consolidada sobre a própria missão e continuar
+automaticamente para o GATE A2 e depois para o GATE B.
+
+Não pedir novamente uma autorização que já está expressa neste arquivo.
+
+======================================================================
+GATE A2 — A LUPA NOVA VALIDA A SI MESMA E O HERMES LOCAL
+======================================================================
+
+OBJETIVO
+
+Usar a Lupa recém-consolidada, e não a versão antiga em memória, para auditar:
+- sua própria identidade, loader, módulos, scripts, testes e ledger;
+- a descoberta pelo Hermes;
+- a quantidade real de runtimes Hermes no PC;
+- a relação entre aplicativo, terminal, Gateway, profile e disco.
+
+PROVA OBRIGATÓRIA DO HERMES LOCAL
+
+Distinguir claramente:
+
+INTERFACES:
+- Hermes Desktop/App;
+- terminal/CLI;
+- dashboard 127.0.0.1:9119.
+
+RUNTIME:
+- Gateway/processo Hermes realmente executando.
+
+ESTADO:
+- profile;
+- skills;
+- config;
+- sessões;
+- arquivos no disco.
+
+Regra:
+
+Aplicativo + terminal + dashboard podem ser interfaces do MESMO Hermes.
+Arquivos no disco não são outro Hermes.
+Somente processos/instalações independentes contam como runtimes separados.
+
+Registrar:
+
+LOCAL_HERMES_INTERFACES=
+LOCAL_HERMES_PROCESSES=
+LOCAL_HERMES_INSTALLATIONS=
+LOCAL_HERMES_PROFILES=
+LOCAL_HERMES_PRODUCTION_COUNT=
+LOCAL_HERMES_TEST_COUNT=
+
+Se houver dois runtimes de produção concorrentes no PC:
+- não matar processo;
+- não reiniciar;
+- classificar;
+- propor consolidação;
+- STATUS_LOCAL_RUNTIME=BLOCKED.
+
+AUTOLOADER / CARREGAMENTO
+
+Provar na versão instalada:
+- o que é carregado no boot;
+- o que é descoberto sob demanda;
+- o que é apenas referência;
+- se mudança em SKILL.md exige reload, nova sessão ou restart;
+- se symlink/junction funciona;
+- qual precedência existe entre profile, bundled e repositório.
+
+Não chamar de lazy loading sem rastro.
+
+AUTOAPLICAÇÃO
+
+Executar duas rodadas idênticas da Lupa nova sobre:
+1. a própria árvore;
+2. a lista de skills do Hermes;
+3. o relatório do Gate A;
+4. o runtime local.
+
+Comparar byte a byte os resultados determinísticos aplicáveis.
+
+Saída:
+
+SELF_LUPA_RUN_1=
+SELF_LUPA_RUN_2=
+SELF_LUPA_FIXED_POINT=
+SELF_LUPA_DRIFT=
+STATUS_LOCAL_RUNTIME=
+
+Se não atingir ponto fixo material:
+STATUS=BLOCKED e parar antes da VPS.
+
+
+======================================================================
+VEREDITO ARQUITETURAL DOS DOIS PLANOS DE ROTEAMENTO
+======================================================================
+
+Os dois planos NÃO são concorrentes completos.
+
+PLANO A — ARQUITETURA COMPLETA DE ROTEAMENTO CENTRALDARK:
+- motor de escolha de modelos;
+- intent_router;
+- tiers;
+- fallback;
+- gateway;
+- auditoria de requests;
+- custo e latência.
+
+PLANO B — HERMES SOL RESIDENCIAL:
+- organismo/control plane;
+- OLHOS;
+- NORMALIZADOR;
+- MEMÓRIA CAUSAL;
+- ANTECIPADOR;
+- PREPARADOR;
+- GATE PIVETE;
+- EXECUTOR;
+- AUTOLUPA.
+
+RELAÇÃO CORRETA:
+
+HERMES / CONTROL PLANE
+├── OLHOS
+├── NORMALIZADOR
+├── MEMÓRIA
+├── ANTECIPADOR
+├── PREPARADOR
+├── GATE
+├── EXECUTOR
+│   └── ROTEAMENTO MULTI-TIER
+└── AUTOLUPA
+
+Portanto:
+- o roteamento multi-tier vive dentro do EXECUTOR;
+- o roteamento não deve virar um segundo Hermes;
+- a arquitetura SOL não deve criar módulo paralelo se as oito funções já
+  existirem no Hermes, HUB, MCP, Gateway ou Sentinela;
+- primeiro mapear e reutilizar;
+- criar novo módulo somente para lacuna comprovada.
+
+CORREÇÕES OBRIGATÓRIAS NOS PLANOS
+
+1. Nomes de modelos, IDs, preços e limites escritos nos relatórios são
+   CANDIDATOS, não fatos atuais.
+
+2. Antes de criar rotas, consultar:
+   - catálogo real dos providers;
+   - endpoint /v1/models;
+   - documentação atual;
+   - configuração existente;
+   - tool use;
+   - contexto;
+   - disponibilidade;
+   - política de dados;
+   - custo atual.
+
+3. A meta “60–70% no Free” é hipótese inicial, não KPI obrigatório.
+
+4. Fail-open é permitido somente para tarefas textuais de baixo risco.
+
+5. Para tool use, filesystem, Git write, secrets, SQL de escrita, deploy,
+   restart e ações administrativas, usar fail-closed e GATE PIVETE.
+
+6. Não gravar cada decisão diretamente em APRENDIZADOS.md.
+   Registrar primeiro no ledger/event store.
+   Promover somente aprendizado curado pela AutoLupa.
+
+7. Não presumir que ai_requests, schemas, adapters ou gateways existem.
+   Inspecionar e provar.
+
+8. origin/main é a fonte da verdade.
+   Não usar pivete/dev como base apenas porque relatório antigo sugeriu.
+
+9. Não criar /apps/modulos/HERMES-SOL automaticamente.
+   Primeiro mapear equivalentes.
+   Novo caminho exige GAP_PROVADO=SIM.
+
+
+======================================================================
+GATE B — INVENTÁRIO READ-ONLY DA VPS
+======================================================================
+
+PRÉ-CONDIÇÃO
+
+Somente entrar se:
+
+GATE_A=VERDE
+GATE_A2=VERDE
+ACTIVE_LUPA_COUNT=1
+STATUS_LOCAL_RUNTIME=OK
+SELF_LUPA_FIXED_POINT=SIM
+
+TERRITÓRIO ESPERADO, A CONFIRMAR:
+
+/root/CentralDark
+
+FASE B1 — CHECKPOINT VPS
+
+Registrar sem expor secrets:
+- hostname;
+- usuário;
+- data/hora;
+- espaço em disco;
+- memória;
+- load;
+- branch/HEAD/status de cada worktree CentralDark;
+- processos Hermes;
+- PM2/systemd/Docker relacionados;
+- portas locais;
+- gateways;
+- profiles;
+- sessões;
+- rotas;
+- arquivos de configuração;
+- existência de .env apenas como SIM/NAO;
+- hashes de arquivos sensíveis sem conteúdo.
+
+FASE B2 — QUANTOS HERMES EXISTEM
+
+Distinguir:
+- processo Hermes;
+- interface;
+- profile;
+- sessão;
+- cópia de código;
+- container;
+- serviço;
+- symlink.
+
+Registrar:
+
+VPS_HERMES_PROCESSES=
+VPS_HERMES_SERVICES=
+VPS_HERMES_CONTAINERS=
+VPS_HERMES_PROFILES=
+VPS_HERMES_CODE_COPIES=
+VPS_ACTIVE_HERMES_COUNT=
+
+Não chamar sessão de outro Hermes.
+Não chamar pasta de outro Hermes.
+
+FASE B3 — INVENTÁRIO DO ROTEAMENTO REAL
+
+Procurar equivalentes antes de criar:
+- scripts/router/;
+- rotas.json ou equivalente;
+- intent_router;
+- fallback;
+- provider adapters;
+- Elite Gateway;
+- api.centralldark.com;
+- /v1/models;
+- /v1/chat/completions;
+- HERMES-CORE;
+- HUB;
+- MCP;
+- darkai;
+- Arsenal;
+- TelePainel;
+- SalaControle;
+- ai_requests;
+- circuit breakers;
+- rate limits;
+- cache;
+- observabilidade;
+- Telegram alerts;
+- memória causal;
+- ledger de decisões.
+
+Para cada componente:
+
+PATH=
+PROCESS=
+PORT=
+OWNER=
+GIT_TRACKED=
+HEAD=
+ACTIVE=
+CONSUMERS=
+SECRETS_LOCATION_TYPE=
+CONTRACT=
+TESTS=
+HEALTH=
+DUPLICATES=
+GAPS=
+
+FASE B4 — NÃO TOCAR O RUNTIME VIVO
+
+Para implementação:
+- criar branch a partir de origin/main;
+- usar worktree isolada;
+- não editar /root/CentralDark vivo;
+- não reiniciar;
+- não recarregar;
+- não trocar .env;
+- não mudar PM2;
+- não mudar systemd;
+- não mudar Docker vivo.
+
+
+======================================================================
+GATE C — PROJETAR O ROTEAMENTO HÍBRIDO CASA + VPS
+======================================================================
+
+OBJETIVO
+
+Uma única política lógica de roteamento, com executores por território.
+
+NÃO criar:
+- dois Hermes concorrentes no mesmo PC;
+- duas tabelas canônicas de rotas;
+- secrets compartilhados por cópia;
+- profile local clonado cegamente para a VPS;
+- gateway local e VPS divergindo sem versão.
+
+DESENHO-ALVO A VALIDAR
+
+CASA:
+
+Hermes Desktop + CLI
+        ↓ mesmas interfaces do mesmo Gateway/profile
+Roteador local compartilhado
+        ├── modelo/provider local permitido
+        ├── ferramentas locais
+        └── encaminhamento autorizado para api.centralldark.com
+
+VPS:
+
+api.centralldark.com
+        ↓ Elite Gateway existente
+intent_router / policy engine
+        ↓ adapters reais disponíveis
+providers / modelos / serviços
+        ↓ auditoria no HUB
+        ↓ observabilidade e alertas
+
+FONTE ÚNICA:
+
+Git origin/main
+        ↓ política e contratos versionados
+overlays por território
+        ├── Casa: endpoints e capacidades locais
+        └── VPS: providers, limites e secrets da VPS
+
+A política é uma.
+Os runtimes e secrets são separados.
+
+MODO DEGRADADO DA CASA
+
+Se VPS estiver indisponível:
+- tarefas locais permitidas continuam localmente;
+- tarefas remotas retornam BLOCKED ou usam fallback autorizado;
+- nenhuma chave da VPS é copiada para Casa;
+- nenhuma ação perigosa é rebaixada para fallback textual.
+
+CONFIGURAÇÃO CANÔNICA
+
+Primeiro localizar arquivos equivalentes.
+
+Somente se não houver equivalente, propor:
+- schema canônico;
+- configuração-base;
+- overlay Casa;
+- overlay VPS;
+- registry de capacidades;
+- versão/hash da política.
+
+Não criar arquivos paralelos se rotas.json suportar extensão segura.
+
+HOT-RELOAD
+
+Somente habilitar se o runtime provar suporte.
+
+Exigir:
+- schema validation;
+- version/hash;
+- reload atômico;
+- rollback;
+- último config válido;
+- evento de auditoria.
+
+
+======================================================================
+GATE C2 — DUELO DE ARQUITETURAS, SOMENTE SE RESTAR DÚVIDA REAL
+======================================================================
+
+Não criar duas branches por diversão.
+
+Só executar duelo se o inventário deixar duas soluções plausíveis e incompatíveis.
+
+A — VPS-CENTRIC:
+Casa encaminha quase tudo para o Elite Gateway.
+
+B — HÍBRIDA:
+Casa classifica e resolve localmente quando permitido;
+VPS resolve provider, custo, escala e continuidade.
+
+REGRAS
+
+- mesma base origin/main;
+- mesmas fixtures;
+- mesmos testes imutáveis;
+- sem produção;
+- sem secrets;
+- branches experimentais;
+- medir latência, custo, disponibilidade, tokens, privacidade, qualidade,
+  fallback, recuperação, complexidade e regressão.
+
+A vencedora vira candidata canônica.
+A perdedora não permanece como sistema paralelo.
+
+Se a evidência já mostrar que B domina A:
+não criar duelo artificial.
+
+
+======================================================================
+GATE D — IMPLEMENTAÇÃO E GIT
+======================================================================
+
+Não misturar reconciliação da Lupa e roteamento num mega-PR.
+
+Usar UM arquivo de missão, com PRs separados e ligados:
+
+PR-A — LUPA CANÔNICA
+- somente reconciliação da skill;
+- profile/link;
+- testes;
+- documentação necessária;
+- base origin/main.
+
+PR-B — ROTEAMENTO HÍBRIDO
+- stacked PR sobre a branch do PR-A, OU
+- PR posterior a origin/main depois do PR-A;
+- DEPENDS_ON=PR-A;
+- sem merge automático.
+
+BRANCHES SUGERIDAS
+
+PR-A:
+reconcile/lupa-unica-<timestamp>
+
+PR-B:
+feat/roteamento-hibrido-casa-vps-<timestamp>
+
+IMPLEMENTAÇÃO MÍNIMA DO PR-B
+
+1. Documento consolidado.
+2. Inventário do existente.
+3. ADR comparando os planos.
+4. Registry real de modelos/capacidades.
+5. Extensão mínima do roteador existente.
+6. Fallback com orçamento, circuit breaker, backoff, capability gate,
+   privacy gate e fail-closed para ação.
+7. Auditoria/ledger.
+8. Configuração Casa.
+9. Configuração VPS.
+10. Testes determinísticos.
+11. Exemplos reproduzíveis.
+12. Nenhum deploy.
+
+Antes de tocar áreas protegidas, provar necessidade, menor diff, rollback e testes.
+
+Se exigir deploy ou migration real:
+implementar arquivo e teste no PR;
+marcar ACTIVATE_LATER=SIM;
+não executar.
+
+
+======================================================================
+TESTES DO ROTEAMENTO
+======================================================================
+
+Criar testes antes da solução final.
+
+MÍNIMO:
+
+- classificação por bucket;
+- ambiguidade;
+- modelo indisponível;
+- 429;
+- timeout;
+- 5xx;
+- custo diário;
+- limite de tier;
+- tool use;
+- ação perigosa fail-closed;
+- privacidade;
+- provider sem capacidade;
+- contexto grande;
+- fallback sem loop;
+- circuit breaker;
+- cooldown;
+- cache sem vazar contexto;
+- local offline;
+- VPS offline;
+- Casa → VPS;
+- metadados;
+- auditoria;
+- replay;
+- rollback de config;
+- config inválida;
+- hot-reload atômico, se suportado;
+- nenhuma chave no frontend/repo;
+- nenhuma rota para modelo inexistente;
+- concorrência;
+- idempotência.
+
+Executar duas vezes.
+
+CATÁLOGO DE MODELOS
+
+MODEL_ID=
+PROVIDER=
+AVAILABLE=
+TOOL_USE=
+CONTEXT=
+INPUT_PRICE=
+OUTPUT_PRICE=
+RATE_LIMIT=
+DATA_POLICY=
+SOURCE=
+CHECKED_AT=
+
+Não copiar cegamente modelos dos relatórios antigos.
+
+
+======================================================================
+AUTOLUPA FINAL
+======================================================================
+
+Aplicar a Lupa consolidada sobre:
+- a própria Lupa;
+- o Hermes local;
+- a VPS;
+- o inventário;
+- a arquitetura;
+- o roteamento;
+- PR-A;
+- PR-B;
+- testes;
+- declarações de sucesso.
+
+Perguntar:
+
+1. O que foi declarado?
+2. Qual ação ocorreu?
+3. Qual rastro prova?
+4. Qual evidência contrária foi procurada?
+5. Mecanismo observado ou inferido?
+6. Existe duplicata?
+7. Existe perda?
+8. Existe segredo exposto?
+9. Existe ação perigosa?
+10. Existe falso verde?
+11. Casa e VPS compartilham política sem duplicar runtime?
+12. App e terminal usam o mesmo Hermes local?
+13. Roteamento é Executor, não segundo Hermes?
+14. Há rollback?
+15. Há ponto fixo?
+
+Se houver falso verde:
+corrigir na branch;
+criar teste permanente;
+rodar novamente.
+
+Não reescrever histórico.
+
+
+======================================================================
+RELATÓRIO FINAL
+======================================================================
+
+Responder em um único bloco:
+
+MASTER_STATUS=READY_FOR_PIVETE_REVIEW|BLOCKED
+
+GATE_A_LUPA=
+GATE_A2_SELF_VALIDATION=
+GATE_B_VPS_AUDIT=
+GATE_C_ROUTING_DESIGN=
+GATE_D_IMPLEMENTATION=
+
+ORIGIN_MAIN_SHA=
+LOCAL_REPO=
+VPS_REPO=
+LOCAL_HERMES_PRODUCTION_COUNT=
+VPS_ACTIVE_HERMES_COUNT=
+
+CANONICAL_LUPA_PATH=
+ACTIVE_LUPA_COUNT=
+LUPA_SELF_FIXED_POINT=
+LUPA_PR=
+LUPA_PR_HEAD=
+
+ROUTING_PLAN_A_VERDICT=
+ROUTING_PLAN_B_VERDICT=
+FINAL_ARCHITECTURE=
+CONTROL_PLANE_MAPPING=
+EXECUTOR_MAPPING=
+GAP_PROVADO=
+NEW_HERMES_MODULE_CREATED=
+
+SHARED_POLICY_PATH=
+LOCAL_ROUTER_PATH=
+VPS_ROUTER_PATH=
+LOCAL_TO_VPS_FLOW=
+OFFLINE_MODE=
+SECRETS_SYNCED=NAO
+
+MODEL_CATALOG_SOURCE=
+MODELS_VALIDATED=
+UNVERIFIED_MODELS_REJECTED=
+FAIL_OPEN_SCOPE=
+FAIL_CLOSED_SCOPE=
+
+ROUTING_BRANCH=
+ROUTING_PR=
+ROUTING_PR_BASE=
+ROUTING_PR_HEAD=
+DEPENDS_ON=
+FILES_CHANGED=
+TESTS_RUN=
+TESTS_PASS=
+TESTS_FAIL=
+
+VPS_LIVE_WORKTREE_EDITED=NAO
+RESTART_EXECUTED=NAO
+DEPLOY_EXECUTED=NAO
+MERGE_EXECUTED=NAO
+FORCE_PUSH=NAO
+SECRETS_EXPOSED=NAO
+
+AUTOLUPA_ROUNDS=
+PONTO_FIXO_ATINGIDO=
+FALSE_GREENS_FOUND=
+PERMANENT_TESTS_CREATED=
+ROLLBACK_LUPA=
+ROLLBACK_ROUTING=
+RESIDUAL_RISK=
+PRODUCTION_READY=
+NEXT_STEP=
+
+Se Gate obrigatório estiver inconclusivo:
+MASTER_STATUS=BLOCKED.
+
+Se houver mais de uma Lupa executável:
+MASTER_STATUS=BLOCKED.
+
+Se houver dois Hermes locais de produção concorrentes:
+MASTER_STATUS=BLOCKED.
+
+Se algum modelo não tiver fonte atual:
+MASTER_STATUS=BLOCKED para ativação;
+PR de arquitetura pode permanecer draft.
+
+Se PR-A ou PR-B tiver check falho:
+PRODUCTION_READY=NAO.
+
+Pare após o relatório.

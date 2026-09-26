@@ -1,0 +1,43 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 15
+    labels:
+      - "🤖 AUTO"
+      - "🔄 GIT"
+      - "👑 PERMITO-SEGREDO"
+      - "🧠 AGENTE-HERMES"
+      - "✨ MELHORIA"
+      - "🤖 IA-EXECUTAR"
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      radix-ui:
+        patterns:
+          - "@radix-ui/*"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels:
+      - "🤖 AUTO"
+      - "🔄 GIT"
+      - "👑 PERMITO-SEGREDO"
+      - "🧠 AGENTE-HERMES"
+      - "✨ MELHORIA"
+      - "🤖 IA-EXECUTAR"
+    commit-message:
+      prefix: "chore(actions)"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"

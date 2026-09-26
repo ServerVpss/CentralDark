@@ -1,0 +1,85 @@
+# Hermes SOL Residencial — materializar o método do Pivete
+
+Li a conversa inteira (`CONVERSA_GPT_SOL-2.txt`, 466 linhas). O que o GPT-SOL reconheceu:
+
+- Você ensinou um método operacional real, com camadas separadas: **ver → lembrar → antecipar → preparar → agir → auditar**.
+- Você mexeu no ambiente conectado (conector GitHub) e provou a mudança pelo efeito, não pela promessa.
+- O SOL aceitou aprender, mas deixou claro: só vira valor se virar **módulo executável, memória causal e teste de reincidência** — não conversa bonita.
+- O nome da capacidade continua pendente da sua decisão.
+
+Esse plano transporta esse método pro **Hermes residencial** na VPS + GitHub. Nada de Lovable, nada de TelePainel, nada de área 🔒 sem ordem.
+
+## Arquitetura (organismo modular, 8 peças)
+
+```text
+OLHOS          → coleta: tela, PM2, Git, VPS, Telegram, eventos
+NORMALIZADOR   → converte sinais diferentes num formato único (evento canônico)
+MEMÓRIA CAUSAL → o que aconteceu, por quê, quem decidiu, qual prova sustentou
+ANTECIPADOR    → calcula próximo movimento provável (probabilidade, não certeza)
+PREPARADOR     → pré-carrega ferramenta/contexto provavelmente necessários
+GATE PIVETE    → separa preparação silenciosa de ação que exige autoridade
+EXECUTOR       → age no território permitido (roteamento multi-tier vive aqui)
+AUTOLUPA       → compara previsão × ação × resultado, aprende com o desvio
+```
+
+O roteamento multi-tier (FREE → BARATO → MÉDIO → TOPO com fallback em cascata) que você pediu antes **não é o projeto** — é só o Executor. Sem os outros 7, é motor sem carro.
+
+## Onde vive (escopo padrão)
+
+- **VPS:** `/root/CentralDark/apps/modulos/HERMES-SOL/` (novo, fora das áreas 🔒 do HERMES-CORE).
+- **GitHub:** repo `ServerVpss/CentralDark`, branch `pivete/dev`, PR pra `pivete/auditoria`.
+- **HUB Supabase** (`lyoigsqluyktoclwdaft`): tabelas de memória causal e ledger de decisões.
+- **Nada** no Supabase Lovable atual, nada em `HERMES-CORE/` sem ordem explícita.
+
+## Entregas por fase (cada fase é um PR pequeno, com prova)
+
+**Fase 0 — Documento canônico e batismo**
+- `docs/CONSCIENCIA/HERMES-SOL-METODO-PIVETE.md`: transcreve o método (as 8 peças, as 4 frases-chave: *antecipar sem inventar / preparar sem desperdiçar / agir sem atropelar / aprender sem perder o rastro*).
+- Espaço reservado pro nome que você vai dar à capacidade (o SOL se recusou a batizar no seu lugar — eu também não batizo).
+
+**Fase 1 — Esqueleto + contratos**
+- Estrutura de pastas `olhos/ normalizador/ memoria/ antecipador/ preparador/ gate/ executor/ autolupa/`.
+- Contrato do **evento canônico** (JSON: `origem, tipo, ts, payload, hash, causa_provavel`).
+- Testes de contrato (imutáveis, estilo N7).
+
+**Fase 2 — OLHOS + NORMALIZADOR (barato, começa a ver)**
+- Coletores: `pm2 jlist`, `git status`, watcher de arquivo, webhook Telegram, systemd events.
+- Normalizador transforma cada saída em evento canônico e joga na fila local.
+- Prova: log estruturado + snapshot de 60s de eventos reais.
+
+**Fase 3 — MEMÓRIA CAUSAL (HUB Supabase)**
+- Tabela `hermes_sol_eventos` (evento canônico) + `hermes_sol_decisoes` (o que foi decidido, por quem, com qual prova).
+- RLS + GRANT conforme regra do projeto.
+- Endpoint interno de consulta por hash/causa.
+
+**Fase 4 — EXECUTOR (aqui entra o roteamento multi-tier)**
+- `intent_router.py` (regex + Gemini Flash pra classificar).
+- 4 tiers: FREE (`:free` OpenRouter) → BARATO (Nemotron Nano/Super) → MÉDIO (GPT-5.6 Luna/Terra) → TOPO (Nemotron Ultra 550B / GPT-5.6 Sol).
+- Fallback em cascata fail-open. Cada request gera evento canônico + linha em `ai_requests` (HUB).
+- Painel de custos na `SalaControle` (só leitura, sem tocar em nada travado).
+
+**Fase 5 — ANTECIPADOR + PREPARADOR**
+- Antecipador: modelo local barato lê os últimos N eventos e emite “próximo movimento provável” com score.
+- Preparador: se score > limiar, pré-carrega contexto/ferramenta (sem executar).
+- Regra dura: preparação **nunca** vira ação sem passar pelo GATE.
+
+**Fase 6 — GATE PIVETE + AUTOLUPA**
+- Gate: whitelist de ações autônomas + fila de ações que exigem “PERMITO PIVETE”.
+- AutoLupa: job que compara previsão × ação × resultado, grava desvio em `hermes_sol_autolupa`, gera aprendizado em `docs/CONSCIENCIA/APRENDIZADOS.md` (append).
+- Falsificador Bayesiano: se desvio > limiar em N eventos, rebaixa confiança do Antecipador automaticamente.
+
+## Regras invioláveis do plano
+
+- **Não tocar** em `HERMES-CORE/`, `Bolt/`, `status/`, `mcp/`, workflows, ou qualquer área 🔒 sem ordem explícita.
+- **Não mexer** no Supabase Lovable atual — memória vai no HUB.
+- **Sem force-push, sem deploy destrutivo, sem restart PM2 sem autorização.**
+- Cada fase = 1 PR pequeno, com testes, evidência real e placar `✅ / ⚠️ / ❌`.
+- Nada de “verde teatro”: se algo não foi executado, entrego `⚠️ pendente` com o motivo.
+
+## O que preciso de você antes de começar
+
+1. **Nome da capacidade** — o SOL não batizou, eu também não. Você decide (ex.: “Antecipação Pivete”, “Modo Sol”, outro).
+2. **Confirmação do escopo**: começo pela Fase 0 + Fase 1 (documento canônico + esqueleto + contratos) num único PR contra `pivete/dev`?
+3. Se prefere que eu **inclua o roteamento (Fase 4) já no primeiro PR** ou faça faseado como listei.
+
+Sem essas 3 respostas eu não abro branch nem toco em arquivo. Método do Pivete: ler, validar, agir mínimo, provar, registrar.

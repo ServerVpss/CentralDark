@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# Script for CentralDark shared reconciliation
+
+# Ensure centraldark CLI exists
+if ! command -v centraldark >/dev/null 2>&1; then
+  echo "Error: 'centraldark' command not found. Install CentralDark CLI before running this script."
+  exit 1
+fi
+
+# Determine role based on active mission state (simple placeholder logic)
+if [[ -n "$ACTIVE_WRITER" ]]; then
+  ROLE="READER"
+else
+  ROLE="ACQUIRE_WRITER"
+fi
+
+# Base arguments for shared reconcilia
+ARGS=(
+  \
+  MISSION_ID=AUTO \
+  REPO=ServerVpss/CentralDark \
+  CANONICAL_BRANCH=main \
+  TRACE_MODE=SHARED \
+  ROLE=$ROLE \
+  FIRST_WRITER_WINS=true \
+  ONE_WRITER_PER_SCOPE=true \
+  MULTI_READER=true \
+  PARALLELIZE_PERCEPTION=true \
+  SERIALIZE_MUTATION=true \
+  CURRENT_OVER_HISTORY=true \
+  FETCH_BEFORE_MEASURE=true \
+  REMEASURE_BEFORE_ACTION=true \
+  REUSE_BEFORE_CREATE=true \
+  ONE_SYSTEM_ONLY=true \
+  NO_V2_V3_V4=true \
+  DIRTY_WORKTREE=BLOCK \
+  NO_FORCE_PUSH=true \
+  NO_BLIND_OVERWRITE=true \
+  NO_RESET_DESTRUCTIVE=true \
+  UNKNOWN_IS_NOT_PASS=true \
+  ACTION_IS_NOT_PROOF=true \
+  SAME_HEAD_PROOF=true \
+  CLAIM_SEAL=true \
+  SAME_SIGNAL_WITHOUT_NEW_INFORMATION=DROP_DUPLICATE \
+  META_LUPA=CONTINUOUS \
+  MULTIBUSSOLA=CONTINUOUS \
+  VERTEX_INVERSO=ON \
+  CARACOL=UNTIL_FIXED_POINT \
+  FINAL_WRITER=FIRST_WRITER \
+  FINALIZE_ONLY_BY_PRIMARY_WRITER=true \
+  READERS_RETURN='DELTA+EVIDENCE_REF+OWNER+NEXT_CURSOR' \
+  WRITER_ABSORBS_READERS=true \
+  FINAL_FLOW=REMEASURERECONCILETESTCOUNTERPROOFFIXED_POINTCOMMITPUSHPR_OR_MAINREMEASURERECEIPT \
+  BOOT='!CENTRALDARK#ACORDAR!CALIBRAR!MULTIBUSSOLA_META!META_LUPA!RECONCILIAR!CONTRAPROVA!VERTEX_INVERSO!CARACOL!FIXED_POINT!REGISTRA!BOOT' \
+  RESUME_EXISTING_MISSION=true \
+  DISCOVER_ACTIVE_MISSION=true \
+  JOIN_EXISTING_TRACE=true \
+  DO_NOT_RESTART_PROVEN_WORK=true \
+)
+
+# Execute the centraldark command with reverence
+centraldark RECONCILIAR_SHARED "${ARGS[@]}"

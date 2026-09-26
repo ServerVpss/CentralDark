@@ -1,0 +1,31 @@
+No linha:1 caractere:104
++ ... trees' -Directory | ForEach-Object { [PSCustomObject]@{Nome=+m.Name;  ...
++                                                                  ~
+Express∆o ausente ap¢s operador un†rio '+'.
+No linha:1 caractere:104
++ ...  -Directory | ForEach-Object { [PSCustomObject]@{Nome=+m.Name; GB=[ma ...
++                                                            ~~~~~~
+Token 'm.Name' inesperado na express∆o ou instruá∆o.
+No linha:1 caractere:104
++ ... trees' -Directory | ForEach-Object { [PSCustomObject]@{Nome=+m.Name;  ...
++                                                                  ~
+O literal de hash estava incompleto.
+No linha:1 caractere:242
++ ... on SilentlyContinue | Measure-Object Length -Sum).Sum/1GB,2)} }) | So ...
++                                                                  ~
+')' de fechamento ausente na express∆o.
+No linha:1 caractere:243
++ ...  SilentlyContinue | Measure-Object Length -Sum).Sum/1GB,2)} }) | Sort ...
++                                                                 ~
+Token '}' inesperado na express∆o ou instruá∆o.
+No linha:1 caractere:244
++ ... SilentlyContinue | Measure-Object Length -Sum).Sum/1GB,2)} }) | Sort- ...
++                                                                 ~
+Token ')' inesperado na express∆o ou instruá∆o.
+No linha:1 caractere:246
++ ... lentlyContinue | Measure-Object Length -Sum).Sum/1GB,2)} }) | Sort-Ob ...
++                                                                 ~
+Um elemento pipe vazio n∆o Ç permitido.
+    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : MissingExpressionAfterOperator
+ 

@@ -1,0 +1,90 @@
+/goal
+
+MISSÃO_ID=CENTRALDARK-PR660-REPARO-ANTES-DA-AUTONOMIA
+
+CONTEXTO=PRESERVADO
+NÃO_RECOMEÇAR
+PAPEL=ESCRITOR_ÚNICO
+REPOSITÓRIO=ServerVpss/CentralDark
+BRANCH=docs/pm2-fail2ban-divergencia-20260805
+PR=660
+
+AUTORIZAÇÃO_DESTA_FASE:
+- corrigir o mesmo PR #660;
+- alterar somente os três arquivos já presentes no PR;
+- atualizar o corpo do PR;
+- aplicar permito-pivete para este reparo documental;
+- executar testes e receber revisões.
+
+NÃO AUTORIZADO:
+- merge;
+- deploy;
+- VPS;
+- restart;
+- secrets;
+- workflows;
+- motor de autonomia;
+- novo PR;
+- novo documento;
+- nova skill.
+
+ESTADO ATUAL COMPROVADO:
+HEAD=9895fcf2cc1ad0df5d633e9a3adbfc25b6fcf055
+PORTA_DE_ENTRADA=FAIL
+CODEX_VALIDATE=FAIL
+CAUSA_DOS_DOIS=PIVETE_APPROVED_FALSE
+THREADS_NÃO_RESOLVIDAS=4
+CODEX_REVIEW=UNAVAILABLE
+GEMINI=NEEDS_HUMAN
+VPS_ATUAL=LEGADO_DESCARTÁVEL
+REPOSITÓRIO=FONTE_DA_VERDADE
+
+ORDEM:
+
+1. Leia integralmente as quatro threads abertas.
+2. Verifique cada finding contra o HEAD atual.
+3. Corrija somente findings ainda válidos:
+   - comandos históricos perigosos devem virar BLOCKED — NÃO EXECUTAR;
+   - nenhuma saída bruta de pm2 jlist pode ser armazenada ou publicada;
+   - UNKNOWN, SKIPPED, jlist vazio/inválido e falta de prova bloqueiam;
+   - ecosystem.config.js raiz deve ser classificado como inexistente no repo
+     e UNKNOWN no legado;
+   - ecosystem.config.cjs é somente o arquivo versionado observado;
+   - não confundir com apps/modulos/graph-panel/ecosystem.config.js.
+4. Remova a exigência de reconciliar a arquitetura nova com a VPS descartável.
+5. Atualize o corpo do PR com:
+   - PERMITO PIVETE limitado a esta correção documental;
+   - arquivos sensíveis;
+   - testes;
+   - ações sensíveis;
+   - revisão;
+   - HEAD;
+   - evidências;
+   - rollback.
+6. Aplique a label permito-pivete.
+7. Faça commit mínimo no mesmo branch.
+8. Não reexecute runs antigos antes do commit.
+9. Aguarde as execuções novas disparadas por synchronize/labeled.
+10. Corrija qualquer falha real no mesmo escopo.
+11. Responda às threads com evidência e resolva somente após prova.
+12. PARE antes do merge.
+
+SAÍDA:
+
+BASE_SHA=
+HEAD_ANTES=
+HEAD_DEPOIS=
+ARQUIVOS_ALTERADOS=
+FINDINGS_CONFIRMADOS=
+FINDINGS_REFUTADOS=
+THREADS_RESOLVIDAS=
+PORTA_DE_ENTRADA=
+CODEX_VALIDATE=
+LUPA_CONFORMANCE=
+DRIFT_GUARD=
+PR_AUTO_REVIEW=
+PIPELINE=
+ZERO_REGRESSION=
+MERGE=NAO
+VPS=NAO
+VERDICT=VERIFIED|VERIFIED_WITH_CAVEATS|BLOCKED
