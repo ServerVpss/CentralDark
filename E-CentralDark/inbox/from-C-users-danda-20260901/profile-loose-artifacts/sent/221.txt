@@ -1,0 +1,31 @@
+TITLE: [SENTINELA sentinela-759fa84ffa] Endpoints: Endpoint Install status fora do ar (HTTP 503)
+LABELS: ['sentinela', 'auto', 'p2', 'assign:claude']
+COMMENTS: 2
+
+> Aberta automaticamente pela **sentinela** (run 29504478708).
+> Hash de dedupe: `sentinela-759fa84ffa` — não reabre se já existir.
+
+## Área
+Endpoints
+
+## Severidade
+p2
+
+## Bot responsável
+`assign:claude`
+
+## Detalhe (sanitizado)
+```
+URL: https://install.centralldark.com/status.json
+Status: 503
+Latência: 207ms
+Erro: -
+```
+
+## Critério pra fechar
+- Endpoint volta 200 / workflow verde / CORS configurado / pendência registrada.
+- Bot dono comenta com PR ou justificativa.
+- Após 7 dias sem ação, sentinela-stale escala.
+
+---
+_Anti-loop: só o bot com label `assign:claude` deve agir._

@@ -1,0 +1,97 @@
+{
+  "schema": "centraldark.cleanup.proof-driven.v1",
+  "audit_zip": "SEND-CENTRALDARK-AUDIT-20260824-114754.zip",
+  "audit_sha256": "7bbc7d0a6f96ccad6696894c5420e7a8ba511de2f34b679ca8204711c2192b2d",
+  "audit_timestamp": "2026-08-24 12:56:31",
+  "user_root": "C:\\Users\\danda",
+  "house_root": "E:\\CentralDark",
+  "audit_counts": {
+    "inventory_records": 293674,
+    "identical_c_to_e": 6093,
+    "same_name_review_delta": 2686,
+    "not_found_in_house": 8977,
+    "hash_error": 0
+  },
+  "identical_by_scope": {
+    "Downloads": {
+      "files": 393,
+      "bytes": 175473871,
+      "policy": "DELETE_SAFE_AFTER_LIVE_REPROOF"
+    },
+    ".hermes-web-ui": {
+      "files": 3067,
+      "bytes": 37472898,
+      "policy": "QUARANTINE_ONLY_IF_DORMANT_PROVEN"
+    },
+    "Documents": {
+      "files": 2581,
+      "bytes": 21655242,
+      "policy": "PROTECTED_GIT_HISTORY"
+    },
+    "OneDrive": {
+      "files": 14,
+      "bytes": 107857727,
+      "policy": "PROTECTED_CLOUD_SYNC"
+    },
+    "aiox-core": {
+      "files": 33,
+      "bytes": 117620,
+      "policy": "PROTECTED_DIRTY_GIT"
+    },
+    ".hermes": {
+      "files": 2,
+      "bytes": 103731,
+      "policy": "PROTECTED_TOOL_STATE"
+    },
+    ".grok": {
+      "files": 2,
+      "bytes": 19504,
+      "policy": "PROTECTED_TOOL_STATE"
+    },
+    "Videos": {
+      "files": 1,
+      "bytes": 4958,
+      "policy": "PROTECTED_NOT_MATERIAL"
+    }
+  },
+  "live_runtime_evidence": {
+    "HERMES_HOME": "C:\\Users\\danda\\AppData\\Local\\hermes",
+    "active_hermes_runtime": true,
+    "locked_house_state_observed": true
+  },
+  "hard_protected_roots": [
+    "C:\\Users\\danda\\AppData",
+    "C:\\Users\\danda\\.hermes",
+    "C:\\Users\\danda\\.grok",
+    "C:\\Users\\danda\\.claude",
+    "C:\\Users\\danda\\.codex",
+    "C:\\Users\\danda\\.ssh",
+    "C:\\Users\\danda\\OneDrive",
+    "C:\\Users\\danda\\Documents",
+    "C:\\Users\\danda\\aiox-core"
+  ],
+  "conditional_quarantine_roots": [
+    "C:\\Users\\danda\\.hermes-web-ui"
+  ],
+  "safe_delete_roots": [
+    "C:\\Users\\danda\\Downloads"
+  ],
+  "house_proof_excluded_segments": [
+    "\\BACKUPS\\\\",
+    "\\_QUARANTINE\\\\",
+    "\\test_unzip\\\\",
+    "\\TEMP\\\\",
+    "\\tmp\\\\",
+    "\\_forense\\\\",
+    "\\workspace\\backups\\\\"
+  ],
+  "rules": {
+    "same_name_is_duplicate": false,
+    "audit_hash_without_live_reproof_is_delete_authority": false,
+    "active_runtime_may_be_deleted": false,
+    "dirty_git_may_be_deleted": false,
+    "onedrive_may_be_deleted_automatically": false,
+    "unknown_is_pass": false,
+    "final_quarantine_delete_requires_explicit_phrase": true
+  }
+}

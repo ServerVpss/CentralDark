@@ -1,0 +1,71 @@
+TITLE: Governança Lovable — ponte restrita entre créditos, agentes, VPS e repositório
+LABELS: ['🔴 RISCO-SERVIDOR', '🟡 PRECISA-DE-OK']
+
+## Vinculado
+
+Programa-mãe: #122
+Card Lovable AI no HUB: #119
+
+## Objetivo
+
+Formalizar Lovable como ponte controlada, não como fonte da verdade nem ambiente livre.
+
+## Definição oficial
+
+Lovable é uma ponte cruzada VPS <-> repositório usada para aproveitar créditos, agentes e interface operacional. Tudo que o Lovable fizer precisa obedecer à governança CentralDark.
+
+## Regras
+
+- GitHub é fonte da verdade.
+- VPS é execução real.
+- Lovable não pode decidir fluxo sozinho.
+- Lovable só pode postar/alterar nos locais corretos.
+- Lovable deve gerar diff, PR, issue ou relatório revisável.
+- Não deve tocar backend crítico sem PR/revisão.
+- Não deve fazer deploy/restart/reset.
+- Não deve expor, pedir ou armazenar secrets em chat/frontend.
+- Qualquer ação sensível exige Manual Confirm.
+
+## Risco observado
+
+O chat/ambiente do Lovable pode desviar caminho se não receber regra fixa e escopo explícito. Portanto, ele precisa de prompt de governança duro e repetível.
+
+## Prompt base sugerido
+
+```text
+BOOT CentralDark Lovable.
+
+Você é ponte de frontend/agentes, não fonte da verdade.
+
+GitHub é memória oficial.
+VPS é execução real.
+Não pedir, exibir ou armazenar secrets, .env, token, chave SSH ou credenciais.
+Não criar backend crítico sem PR/revisão.
+Não fazer deploy/restart/reset.
+Não alterar fluxo fora do escopo.
+Só postar/alterar nos caminhos autorizados.
+Toda sugestão deve virar diff, PR, issue ou relatório revisável.
+Se faltar evidência, pare e peça evidência.
+
+Missão:
+[descrever missão]
+
+Responder:
+feito, evidência, pendência, próximo passo, BOOT usado e fio da missão.
+```
+
+## Relação com #119
+
+O card Lovable AI no HUB deve seguir snapshot server-side, sem segredo no frontend e sem ping bruto ao vivo.
+
+## Critério de pronto
+
+- Política Lovable registrada em docs/CONSCIENCIA ou ARSENAL.
+- Prompt base oficializado.
+- Caminhos permitidos definidos.
+- Caminhos proibidos definidos.
+- Integração com #119 revisada.
+
+## Fio da missão
+
+Lovable controlado -> agentes úteis -> sem secrets -> GitHub registra -> VPS executa com autorização.

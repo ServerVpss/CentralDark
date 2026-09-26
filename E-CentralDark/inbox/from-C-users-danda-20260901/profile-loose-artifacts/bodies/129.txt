@@ -1,0 +1,121 @@
+TITLE: Auditor de Coerência CentralDark — documentação viva e divergências
+LABELS: ['🟡 IA-PRECISA-REVISAR', '🟢 PRONTO-PARA-IA', '🔴 FALTA-EVIDÊNCIA']
+
+## Vinculado
+
+Programa-mãe: #122
+
+## Objetivo
+
+Criar um sistema de documentação viva que compare o que foi decidido nas conversas/issues/docs com o que realmente existe no repositório e no estado operacional read-only.
+
+A meta é detectar divergências automaticamente e transformar achados em relatório, issue, PR ou aprendizado.
+
+## Nome operacional
+
+`CentralDark Consistency Auditor`
+
+Nome PT-BR: `Auditor de Coerência CentralDark`
+
+## Fontes de decisão
+
+- issues e PRs do GitHub;
+- `docs/CONSCIENCIA/`;
+- `docs/PENDENCIAS.md`;
+- `docs/RELATORIOS/`;
+- aprendizados registrados;
+- comentários oficiais em issues/PRs;
+- prompts/skills oficiais versionados;
+- registros consolidados do Pivete.
+
+## Fontes de realidade
+
+Inicialmente apenas repo/GitHub. Depois, com autorização:
+
+- arquivos atuais do repositório;
+- workflows GitHub Actions;
+- labels/issues/PRs;
+- status dos checks;
+- VPS read-only;
+- PM2 read-only;
+- Supabase schema/policies read-only;
+- Telegram bots/topics read-only;
+- HUB/status/mobile.
+
+## Comparações esperadas
+
+Detectar:
+
+- decisão documentada que ainda não existe no repo;
+- código existente sem documentação;
+- pendência resolvida mas ainda aberta;
+- issue sem label operacional;
+- label antiga ou inconsistente;
+- regra de segurança documentada mas não aplicada;
+- bot/serviço mencionado sem inventário;
+- rota/domínio citado sem arquivo correspondente;
+- PR que não atualizou docs;
+- docs que contradizem o estado atual;
+- fluxo Lovable/Telegram/Hermes/DarkAI fora do padrão.
+
+## Fluxo V1 — read-only
+
+1. Ler índice de documentos oficiais.
+2. Ler issues abertas relacionadas a arquitetura.
+3. Ler PRs relevantes.
+4. Mapear decisões consolidadas.
+5. Mapear arquivos/serviços citados.
+6. Comparar plano vs realidade do repo.
+7. Gerar relatório Markdown.
+8. Abrir issues de divergência, se necessário.
+9. Avisar no Telegram apenas quando o bus existir.
+
+## Saída esperada
+
+Relatório em:
+
+`docs/RELATORIOS/YYYY-MM-DD-auditoria-coerencia-centraldark.md`
+
+Conteúdo mínimo:
+
+- decisões encontradas;
+- arquivos/serviços relacionados;
+- divergências;
+- severidade;
+- recomendação;
+- próxima ação;
+- se precisa PR, issue ou aprendizado.
+
+## Futuro V2
+
+Permitir correções mínimas por PR:
+
+- atualizar docs;
+- fechar pendência resolvida;
+- padronizar labels;
+- adicionar links cruzados;
+- criar índice;
+- atualizar grafo.
+
+## Travas
+
+- Começar read-only.
+- Não ler secrets, `.env`, tokens ou chaves.
+- Não corrigir automaticamente na V1.
+- Não consultar VPS/Supabase/Telegram sem autorização específica.
+- Não usar chat como fonte final sem consolidar em GitHub/docs.
+- Não fazer force-push.
+- Não fazer deploy/restart/reset.
+
+## Critério de pronto V1
+
+- Auditor desenhado.
+- Fontes de decisão mapeadas.
+- Fontes de realidade mapeadas.
+- Primeiro relatório gerado.
+- Divergências transformadas em issues.
+- Link registrado na issue-mãe #122.
+
+## Fio da missão
+
+Documentação viva -> comparar decisão vs realidade -> apontar divergências -> issues/PRs corrigem -> Telegram notifica -> Mobile acompanha.

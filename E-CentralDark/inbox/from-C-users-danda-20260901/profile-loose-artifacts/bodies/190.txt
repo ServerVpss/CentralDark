@@ -1,0 +1,102 @@
+TITLE: Incidente de secrets — rotação GitHub PAT e remover chaves hardcoded
+LABELS: ['🔴 RISCO-SERVIDOR', '🟡 PRECISA-DE-OK']
+
+## Contexto
+
+Durante auditoria operacional foram apontados três itens internos referenciados como #54, #55 e #56 na rodada da VPS/Claude. Estes números não correspondem às issues GitHub #54/#55 atuais, que são sentinelas antigas fechadas.
+
+## Itens apontados
+
+### #54 — GitHub token exposto
+
+Ação humana necessária:
+
+- revogar tokens antigos/desconhecidos;
+- gerar novo token com escopo mínimo necessário;
+- armazenar em cofre/secret store;
+- nunca enviar token por chat.
+
+Variável recomendada para padronização:
+
+```text
+CENTRALDARK_GITHUB_PAT
+```
+
+Aliases runtime, se scripts legados exigirem:
+
+```text
+GH_TOKEN -> CENTRALDARK_GITHUB_PAT
+GITHUB_TOKEN -> CENTRALDARK_GITHUB_PAT
+```
+
+Observação: em GitHub Actions, preferir o `GITHUB_TOKEN` nativo quando for suficiente. Usar PAT apenas quando workflow precisar de escopo extra, como `workflow`.
+
+### #55 — Segredos hardcoded em código
+
+Áreas citadas:
+
+- WebUI;
+- elite-anthropic-proxy;
+- elite-gateway.
+
+Variáveis candidatas para padronização, sem valores:
+
+```text
+WEBUI_LOVABLE_KEY
+DARKAI_ANON_KEY
+ELITE_ANTHROPIC_API_KEY
+ELITE_GATEWAY_API_KEY
+ELITE_GATEWAY_TOKEN
+```
+
+Ponto de dúvida a confirmar:
+
+```text
+DARKAI_ANON_KEY = WEBUI_LOVABLE_KEY
+```
+
+Confirmar se é alias intencional ou erro de configuração.
+
+### #56 — Consolidação do cofre
+
+Pendência maior:
+
+- GitHub: 14 arquivos citados na auditoria;
+- Telegram: 23 arquivos citados na auditoria;
+- 7 variáveis quebradas `${...}` a checar uma a uma;
+- consolidar secret storage e documentação sanitizada.
+
+## Travas
+
+- Não colar token/chave em chat.
+- Não commitar secrets.
+- Não exibir valores reais em issue, log ou relatório.
+- Não fazer deploy/restart/PM2 sem autorização.
+- Não fazer push direto da main local suja.
+- Não usar reset/clean destrutivo.
+
+## Próximo passo seguro
+
+Executar read-only:
+
+```bash
+git grep -nE 'ghp_|github_pat_|sk-[A-Za-z0-9]|xox[baprs]-|bot[0-9]+:|DARKAI_ANON_KEY|WEBUI_LOVABLE_KEY|ELITE_ANTHROPIC|ELITE_GATEWAY|\$\{[^}]+\}' -- . ':!node_modules' ':!.git' || true
+```
+
+Gerar relatório sanitizado sem valores reais em:
+
+```text
+docs/RELATORIOS/2026-07-11-secret-rotation-hardcoded.md
+```
+
+## Critério de pronto
+
+- PAT antigo revogado pelo Pivete.
+- Novo PAT armazenado como `CENTRALDARK_GITHUB_PAT` no cofre adequado.
+- Código lê secrets do cofre/env, não de hardcode.
+- Relatório sanitizado criado.
+- Pendência #56 atualizada com variáveis confirmadas.
+
+## Fio da missão
+
+Segurança de secrets -> cofre padronizado -> Telegram/HUB/API seguros -> automação 24h.

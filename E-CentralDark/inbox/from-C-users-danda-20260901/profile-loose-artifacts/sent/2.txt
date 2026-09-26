@@ -1,0 +1,28 @@
+TITLE: [SENTINELA sentinela-3418f5ba3c] CORS: MCP sem CORS no painel: MCP health
+LABELS: []
+COMMENTS: 8
+
+> Aberta automaticamente pela **sentinela** (run 28125357078).
+> Hash de dedupe: `sentinela-3418f5ba3c` — não reabre se já existir.
+
+## Área
+CORS
+
+## Severidade
+p2
+
+## Bot responsável
+`assign:grok`
+
+## Detalhe (sanitizado)
+```
+https://mcp.centralldark.com/health responde 200 mas não envia Access-Control-Allow-Origin. O painel status.centralldark.com não consegue ler.
+```
+
+## Critério pra fechar
+- Endpoint volta 200 / workflow verde / CORS configurado / pendência registrada.
+- Bot dono comenta com PR ou justificativa.
+- Após 7 dias sem ação, sentinela-stale escala.
+
+---
+_Anti-loop: só o bot com label `assign:grok` deve agir._

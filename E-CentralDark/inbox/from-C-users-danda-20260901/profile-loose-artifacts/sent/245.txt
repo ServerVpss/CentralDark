@@ -1,0 +1,30 @@
+TITLE: [SENTINELA sentinela-cd79106019] Workflows: Workflow vermelho: PR Review — Revisores paralelos + Codex final
+LABELS: ['sentinela', 'auto', 'p2', 'assign:codex']
+COMMENTS: 2
+
+> Aberta automaticamente pela **sentinela** (run 29565649100).
+> Hash de dedupe: `sentinela-cd79106019` — não reabre se já existir.
+
+## Área
+Workflows
+
+## Severidade
+p2
+
+## Bot responsável
+`assign:codex`
+
+## Detalhe (sanitizado)
+```
+Run ID: 29557997037
+Branch: feat/codex-final-review-agent
+Link: https://github.com/ServerVpss/CentralDark/actions/runs/29557997037
+```
+
+## Critério pra fechar
+- Endpoint volta 200 / workflow verde / CORS configurado / pendência registrada.
+- Bot dono comenta com PR ou justificativa.
+- Após 7 dias sem ação, sentinela-stale escala.
+
+---
+_Anti-loop: só o bot com label `assign:codex` deve agir._

@@ -1,0 +1,30 @@
+TITLE: [SENTINELA sentinela-64b1558e6f] Workflows: Workflow vermelho: CentralDark Review — checklist + 3 revisores + Codex
+LABELS: ['sentinela', 'auto', 'p2', 'assign:codex']
+COMMENTS: 0
+
+> Aberta automaticamente pela **sentinela** (run 29796950341).
+> Hash de dedupe: `sentinela-64b1558e6f` — não reabre se já existir.
+
+## Área
+Workflows
+
+## Severidade
+p2
+
+## Bot responsável
+`assign:codex`
+
+## Detalhe (sanitizado)
+```
+Run ID: 29791982898
+Branch: pivete/ouro-consolidado
+Link: https://github.com/ServerVpss/CentralDark/actions/runs/29791982898
+```
+
+## Critério pra fechar
+- Endpoint volta 200 / workflow verde / CORS configurado / pendência registrada.
+- Bot dono comenta com PR ou justificativa.
+- Após 7 dias sem ação, sentinela-stale escala.
+
+---
+_Anti-loop: só o bot com label `assign:codex` deve agir._

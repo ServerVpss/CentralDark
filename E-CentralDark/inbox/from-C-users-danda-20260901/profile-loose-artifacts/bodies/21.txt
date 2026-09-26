@@ -1,0 +1,29 @@
+TITLE: [SENTINELA sentinela-a9b44ef96b] Workflows: Workflow vermelho: GitHub Bot Controller
+LABELS: []
+
+> Aberta automaticamente pela **sentinela** (run 28244557822).
+> Hash de dedupe: `sentinela-a9b44ef96b` — não reabre se já existir.
+
+## Área
+Workflows
+
+## Severidade
+p2
+
+## Bot responsável
+`assign:codex`
+
+## Detalhe (sanitizado)
+```
+Run ID: 28236145520
+Branch: main
+Link: https://github.com/ServerVpss/CentralDark/actions/runs/28236145520
+```
+
+## Critério pra fechar
+- Endpoint volta 200 / workflow verde / CORS configurado / pendência registrada.
+- Bot dono comenta com PR ou justificativa.
+- Após 7 dias sem ação, sentinela-stale escala.
+
+---
+_Anti-loop: só o bot com label `assign:codex` deve agir._

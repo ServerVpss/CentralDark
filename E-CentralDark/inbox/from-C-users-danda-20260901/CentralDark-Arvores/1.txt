@@ -1,0 +1,92 @@
+documentação oficial do Hermes e nos issues/PRs do repositório. E tem uma correção importante aqui: o Curator não é quem resolve esse problema. 😹
+
+O Curator cuida do ciclo de vida de skills: acompanha uso, marca skill como stale, arquiva, propõe consolidação e faz backup/rollback das skills. Ele não é o gerenciador de state.db nem o limpador de sessões.
+
+Para sessões existe outro mecanismo oficial. Hermes tem sessions.auto_prune, retention_days, vacuum_after_prune e comandos como hermes sessions export e hermes sessions prune. O auto-prune vem desligado por padrão, justamente porque o histórico alimenta session_search.
+
+E agora vem a parte boa: o erro que apareceu aí já existe no upstream praticamente com a mesma mensagem. O issue #74478 mostra session_persistence_failed mesmo com banco saudável quando outro processo Hermes segura o write lock por alguns segundos. Isso combina bastante com tua situação porque tu abriu mais de uma sessão/terminal. O PR #74480 foi merged em 30 de julho e aumentou a tolerância: writes críticos de transcript passam a esperar até 60s em vez de desistir em ~1,3s.
+
+Tem ainda outros dois casos upstream que dão a mesma mensagem enganosa: um hermes_sessions.db de 0 bytes pode travar todas as escritas mesmo com centenas de GB livres, issue #76660; e uma sessão sendo comprimida pode manter um compression lock temporário e fazer o turno abortar como session_persistence_failed, issues #81227/#75083.
+
+Então eu mandaria o pivete fazer diagnóstico baseado no próprio upstream, não sair limpando DB:
+
+!FIX_HERMES_SESSION_STORAGE_UPSTREAM
+
+Use a documentação e o upstream oficial NousResearch/hermes-agent como referência.
+
+NÃO atribua este erro a falta de disco: C: possui espaço suficiente.
+NÃO delete state.db, state.db-wal ou state.db-shm.
+
+Investigue nesta ordem:
+
+1. Identifique versão + commit real do Hermes instalado.
+2. Verifique se o runtime contém o fix do PR #74480
+   (time-based write-lock patience / transcript critical writes até 60s).
+3. Rode/consulte `hermes doctor` e logs de persistence.
+4. Classifique a causa real:
+   LOCKED
+   COMPRESSION_LOCK
+   ZERO_BYTE_SESSION_DB
+   CORRUPTION
+   PERMISSION
+   UNKNOWN
+5. Verifique múltiplos processos Hermes compartilhando o mesmo HERMES_HOME/state.db.
+6. Verifique se existe:
+   ~/.hermes/sessions/hermes_sessions.db
+   e se possui tamanho 0 bytes.
+7. Verifique integridade do state.db sem mutação destrutiva.
+8. Verifique compression lock ativo/stale.
+9. Use mecanismos oficiais de repair/session management antes de qualquer intervenção manual.
+10. Só depois aplique o menor fix seguro e teste nova escrita.
+
+Também revise a política oficial de sessões:
+sessions.auto_prune
+sessions.retention_days
+sessions.vacuum_after_prune
+sessions.min_interval_hours
+
+CURATOR != SESSION_CLEANUP
+STATE_DB != CACHE
+MULTIPLE_HERMES_WRITERS = MATERIAL_SUSPECT
+
+Após corrigir:
+PROVE_SESSION_WRITE
+→ RETOME O ÚLTIMO CHECKPOINT
+→ CONTINUE A MISSÃO SEM REINICIAR.
+
+Minha suspeita, pela evidência que temos agora, fica assim: 1º concorrência entre sessões/processos, 2º compression lock, 3º hermes_sessions.db inválido/0-byte. Falta medir antes de escolher. E não é teoria nossa: o próprio PR #74480 descreve vários processos Hermes disputando o mesmo state.db e exatamente esse abort.
+
+Tem mais uma coisa interessante: existe um RFC aberto propondo exatamente o que você imaginou antes — um spool persistente alternativo por perfil para guardar o turno quando state.db estiver temporariamente indisponível e depois reproduzi-lo no banco canônico. Ou seja, tua ideia de “se esse storage travar, escreve de forma segura em outro lugar e reconcilia depois” já apareceu no upstream como proposta.
+
+E tem issue aberto sobre state.db crescer continuamente e backup incremental, então a parte de retenção/arquivamento também é uma dor real deles, não invenção nossa.
+
+Links oficiais úteis: Documentação de Sessions do Hermes Documentação de Session Storage PR #74480 — fix de lock concorrente
+
+Oxe, dessa vez tu acertou em mandar olhar o portal antes de mexer: esse erro já tem histórico upstream e o teu uso multissessão é exatamente uma das condições que eles documentaram. 😹🔥
+
+Posso também criar uma imagem FORJA mostrando Curator ≠ Session Store e as 4 causas possíveis desse erro.
+
+nesse momento atual oq ele precisa e Self-improvement review: Patched SKILL.md: isso aque ele pot patche direto no disco dele da casa dele e nao no c la tem espaçlo kk se ligo ? ?
+
+Sim, liguei 😄
+
+A ideia correta é essa:
+
+state.db / sessão quente pode continuar no C: se o Hermes exigir isso.
+Self-improvement review → Patched SKILL.md deveria preferencialmente cristalizar na casa persistente dele no E:, não ficar engordando o profile/runtime do C:.
+
+Só tem uma condição: o Hermes precisa provar que aquele SKILL.md do E: é a fonte canônica ou que existe sincronização segura para o runtime. Hoje o profile ativo ainda tem skills dentro de C:\Users\danda\AppData\Local\hermes\profiles\pivete\skills, então simplesmente escrever no E: sem wiring pode fazer o runtime nem enxergar a mudança.
+
+Eu mandaria esse delta pequeno:
+
+SELF_IMPROVEMENT_STORAGE: cristalize patches de SKILL.md na casa canônica do Hermes em E:\CentralDark\Pivete, não no storage quente do C:.
+Antes de mudar o destino, prove qual path o runtime realmente carrega; E: = fonte canônica, C: = runtime/materialização somente quando necessário.
+
+A arquitetura boa fica:
+
+E:\CentralDark\Pivete\skills = ouro/canônico
+C:\Users\danda\AppData\Local\hermes\profiles\pivete\skills = runtime/cache/materialização
+
+Então sim: o aprendizado durável vai pro E; o C fica pro que o app realmente precisa quente. Aí fica bonito e não vira depósito no UserProfile KKKK. 😹
+
+Posso também criar uma imagem mostrando E: canônico → C: runtime.

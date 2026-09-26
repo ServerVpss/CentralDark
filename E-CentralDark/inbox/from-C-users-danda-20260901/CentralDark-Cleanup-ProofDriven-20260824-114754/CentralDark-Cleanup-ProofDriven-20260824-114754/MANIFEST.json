@@ -1,0 +1,17 @@
+[
+  {
+    "file": "CentralDark-Cleanup-ProofDriven.ps1",
+    "sha256": "da95dde6d8102f790a548f82e6d42b708b643d0608bfc16b8174ffb3ee2b832c",
+    "bytes": 26684
+  },
+  {
+    "file": "LEIA-ME.md",
+    "sha256": "d0884261516546ca097c349d79229b5ae23d43e6b230e81db4ac1efef7ce8131",
+    "bytes": 2357
+  },
+  {
+    "file": "cleanup-policy.json",
+    "sha256": "5115f9d72bf06e53ad7c4b795875e9ad87a4add8702678cad5fd7cd30f466d6e",
+    "bytes": 2596
+  }
+]

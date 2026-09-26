@@ -1,0 +1,650 @@
+{
+  "pasta_trancada": "C:\\Users\\danda\\OneDrive\\Área de Trabalho\\🔒PASTA TRANCADA APELO CHEFE🔒",
+  "pasta_existe": true,
+  "modo": "READ_ONLY_INVENTARIO",
+  "repo_clone": "E:\\CentralDark\\Pivete\\CentralDark",
+  "repo_existe": true,
+  "itens": [
+    {
+      "nome": "05358456-7c81-469b-a978-c51a85cd265c.png",
+      "tamanho_bytes": 2289784,
+      "mtime": "2026-08-24T18:07:34",
+      "sha256": "10ebb31911f192c0c6c111ed69a1a2e49963300382d7c5b941b429f18b92b063",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "0ee294df-ac5b-49ab-827e-645b9f6d3710.png",
+      "tamanho_bytes": 2018273,
+      "mtime": "2026-08-24T03:04:34",
+      "sha256": "bd460bca2b2f0120dd1674ece60d25c47ecb540392af1071c109519419f3831a",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "18e79049-cb45-4e0e-bd84-501f322133d4.png",
+      "tamanho_bytes": 1858930,
+      "mtime": "2026-08-24T02:48:06",
+      "sha256": "9b7e885b52faa4fe6d0ca62f9f1a5a76e83c95ba5546b9c9f2415159a0b09944",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "42c0b7f0-8265-41d2-9d5b-62cf1961a4f3.png",
+      "tamanho_bytes": 2448436,
+      "mtime": "2026-08-24T03:53:43",
+      "sha256": "8af0964c010227b4a38f4efd171fcd10e6e91c723166fb0bb91834589b947373",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "448d8c43-59ac-4a71-8c7d-579b9de6a713 (1).png",
+      "tamanho_bytes": 2500810,
+      "mtime": "2026-08-24T20:44:18",
+      "sha256": "252709f127cde40ba571ec54a6f2fda44b8989b6715f73db8f5817414f87217f",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "448d8c43-59ac-4a71-8c7d-579b9de6a713.png",
+      "tamanho_bytes": 2500810,
+      "mtime": "2026-08-24T20:40:55",
+      "sha256": "252709f127cde40ba571ec54a6f2fda44b8989b6715f73db8f5817414f87217f",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "4b1bb098-c55e-49ac-98e9-002206ce2770.png",
+      "tamanho_bytes": 2555602,
+      "mtime": "2026-08-24T20:32:03",
+      "sha256": "9c5fd4bc7486f79b1014f323e1e65e53a380e9b54177d68d0ecf2cd9761ebe4b",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "67101293-80d7-4ad4-9e67-3a49b37be2cb.zip",
+      "tamanho_bytes": 107939762,
+      "mtime": "2026-08-24T08:36:54",
+      "sha256": "0f1ff1ea7c9423f5002a600ea8f74a0036b53a3d20b91c1c28fe97e4d9c19c30",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "6ccd2a80-4094-4e12-914c-08d0078a164b.zip",
+      "tamanho_bytes": 74474787,
+      "mtime": "2026-08-24T08:34:46",
+      "sha256": "8fc3c72950804029e17398e0a2e29895c22e3d4184405ce360db991b31b111a6",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "85e00eb2-b270-4809-80ef-c2cec8af6e07.png",
+      "tamanho_bytes": 2598121,
+      "mtime": "2026-08-24T03:19:13",
+      "sha256": "627858375d523646f01a3856eaafd048c364c3928d007b4c1bde9b7d80c9e1d9",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "8c08aa06-f077-4033-8c58-d5ab1441d091.png",
+      "tamanho_bytes": 1856505,
+      "mtime": "2026-08-25T01:05:06",
+      "sha256": "76d78518dc0ae2b4bae42a5451aa45687bfa41f2d12f909298eb39bc4561b015",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "BIO-CONGNITIVE ATERAS.txt",
+      "tamanho_bytes": 14730,
+      "mtime": "2026-08-24T09:16:11",
+      "sha256": "724c373c32cec6023dd5c47f600211491aa967b75e92f629858772129196744f",
+      "ext": ".txt",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK-FORJA-FLASH-GROK-ONE-SHOT-20260824.md",
+      "tamanho_bytes": 27083,
+      "mtime": "2026-08-24T16:58:46",
+      "sha256": "1bf82bde2345e2e54d5a0441c51bcb96e8e5bdc720f626ed11f40d427bc21629",
+      "ext": ".md",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_ARQUITETURA_CANONICA_2026-08-24.zip",
+      "tamanho_bytes": 5046758,
+      "mtime": "2026-08-24T20:53:10",
+      "sha256": "531cdf3ccb2efe4784f27c542e9246b3b73c4dda26281b8a94a471dad6b038b1",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_BIOCOGNITIVE_OPENAI_NEURAL_ATLAS.png",
+      "tamanho_bytes": 2235973,
+      "mtime": "2026-08-24T12:39:26",
+      "sha256": "024a583798c7ac7d1099e9893cfdd015b4a8d26fcad01a4383a47d29af009518",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_BIOCOGNITIVE_OPENAI_NEURAL_ATLAS_ONE_FINAL_PACKAGE.zip",
+      "tamanho_bytes": 2482935,
+      "mtime": "2026-08-24T10:15:11",
+      "sha256": "1c11f5c16e7bd7942abf65fae3f50eb3fb8da045e6757dfe813578f7236c878c",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_CAJADO_PAPAGAIO_PROPAGACAO_PACK.zip",
+      "tamanho_bytes": 1965084,
+      "mtime": "2026-08-24T04:53:28",
+      "sha256": "9a8b827fb64897f06fea1fd6839ba2eab345f62db2d573efd8ddec22510d2d1b",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_CANONICAL_PROJECT_FINAL.zip",
+      "tamanho_bytes": 35027653,
+      "mtime": "2026-08-24T07:13:35",
+      "sha256": "0443d87a6ffe64de4c6ffeea3932a2dd1cf5cedb65e6d7c296ba3392458654cc",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_FINAL_SINGLE_DELIVERY.zip",
+      "tamanho_bytes": 70109627,
+      "mtime": "2026-08-24T07:30:50",
+      "sha256": "cd0b873dfe2f75abdf640aedd28e1d6364a3010493d49ddeb50618ef968eac25",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_FLUXO_EXECUCAO_CRISTALIZACAO_PACK.zip",
+      "tamanho_bytes": 1604147,
+      "mtime": "2026-08-24T05:51:18",
+      "sha256": "4ac792abd3643ff4928ae021dafca8b78763a8a8c4f759d71744d6b3ef125401",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_INSTINTO_SUPERIOR_COGNITIVO_ESPONTANEO_PACK (1).zip",
+      "tamanho_bytes": 1966293,
+      "mtime": "2026-08-24T05:53:49",
+      "sha256": "1040fbdd908def07008806eae987416b968a2e2e0d59260fbc90daad19ca0825",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_INSTINTO_SUPERIOR_COGNITIVO_ESPONTANEO_PACK (2).zip",
+      "tamanho_bytes": 1966293,
+      "mtime": "2026-08-24T06:05:32",
+      "sha256": "1040fbdd908def07008806eae987416b968a2e2e0d59260fbc90daad19ca0825",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_INSTINTO_SUPERIOR_COGNITIVO_ESPONTANEO_PACK.zip",
+      "tamanho_bytes": 1966293,
+      "mtime": "2026-08-24T05:03:31",
+      "sha256": "1040fbdd908def07008806eae987416b968a2e2e0d59260fbc90daad19ca0825",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_INSTINTO_SUPERIOR_EMERGENTE_PACK(1).zip",
+      "tamanho_bytes": 1939677,
+      "mtime": "2026-08-24T04:50:33",
+      "sha256": "495b1c1e02db07b342d0238368b110a449591116deaa306482e368484c3d1637",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_MAPA_CANONICO_DA_CASA_2_0_CARD_RODADA_1138.png",
+      "tamanho_bytes": 2235065,
+      "mtime": "2026-08-24T18:52:00",
+      "sha256": "db0426eafad9157b761fe3605f6ac5a8045395921db8fe7dc0d3773bdb000ab3",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_MAPA_CANONICO_DA_CASA_PACK(1).zip",
+      "tamanho_bytes": 1888158,
+      "mtime": "2026-08-24T17:36:35",
+      "sha256": "a944be155d5076bff8a1afaf9700f21d4b6a18498c69b523ea66c139d22d3bc6",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_OURO_RUNTIME_SKILLS_PACK.RECEIPT.json",
+      "tamanho_bytes": 421,
+      "mtime": "2026-08-24T07:00:40",
+      "sha256": "8cba82be2d5ddb4ce6201f36158c12cf5ee483b48082f86c936c3d094d4ee76c",
+      "ext": ".json",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_OURO_RUNTIME_SKILLS_PACK.zip",
+      "tamanho_bytes": 15832456,
+      "mtime": "2026-08-24T07:00:24",
+      "sha256": "1a036a0b59de1ac0ba85ca4cf2d2e127df95f6032f560c08a9d9962de330e2a2",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_REVISAO_FIEL_READ_ONLY.zip",
+      "tamanho_bytes": 28436,
+      "mtime": "2026-08-24T05:55:39",
+      "sha256": "a93e63f5f03a85db173f649ee8aa94e6815de51c3ca34c1507c3158146789f58",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_SESSION_MASTER_HANDOFF.zip",
+      "tamanho_bytes": 12097952,
+      "mtime": "2026-08-24T06:57:39",
+      "sha256": "81479e1e9a049b556415d7c7d06a5ec1006ae06b881a813dc51f31b3bf61e6cf",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CENTRALDARK_VISUAL_RECONCILIATION_20260824.zip",
+      "tamanho_bytes": 39095964,
+      "mtime": "2026-08-24T04:51:00",
+      "sha256": "64bdaaa469b503d3693e1b769d8ce0aeecbd98948a740a25b7948266cfcc0150",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CentralDark-Pombo-Owner-FailClosed-20260824 (1).zip",
+      "tamanho_bytes": 19800,
+      "mtime": "2026-08-24T18:54:30",
+      "sha256": "608f9e60d9d1b89f612b585687877243076978de283d893633a6ec976adf23ed",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CentralDark-Pombo-Owner-FailClosed-20260824.zip",
+      "tamanho_bytes": 19800,
+      "mtime": "2026-08-24T18:54:29",
+      "sha256": "608f9e60d9d1b89f612b585687877243076978de283d893633a6ec976adf23ed",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "CentralDark_Fluxo_Bidirecional_Auditoria_RECUPERADO_2026-08-24.zip",
+      "tamanho_bytes": 1895022,
+      "mtime": "2026-08-24T12:19:04",
+      "sha256": "6b29c83c734cad95ef5a31484ed0d1bff24ee64eb38e5c461ac1ab87a42a9eb4",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "INVENTARIO.json",
+      "tamanho_bytes": 24786,
+      "mtime": "2026-08-25T01:48:03",
+      "sha256": "d40a212ae15203bae8680ac8b11f3a6c7e9f94a06f347fc43fc320e21c56f5d7",
+      "ext": ".json",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "Novo(a) Documento de Texto (2).txt",
+      "tamanho_bytes": 0,
+      "mtime": "2026-08-24T20:13:02",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ext": ".txt",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "Novo(a) Documento de Texto.txt",
+      "tamanho_bytes": 7060,
+      "mtime": "2026-08-24T03:40:14",
+      "sha256": "a44d1a10159c551b6146bc761a79c2555045476c4cfac140fd8e252a7b99a3de",
+      "ext": ".txt",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "REMOTE_MAP.json",
+      "tamanho_bytes": 92113,
+      "mtime": "2026-08-24T22:54:58",
+      "sha256": "8e9eaec672e8916c9eb1b6b4915d285a01174568ed25f841f64282c671e650fd",
+      "ext": ".json",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "Screenshot_1.png",
+      "tamanho_bytes": 243235,
+      "mtime": "2026-08-24T03:46:28",
+      "sha256": "23f5f5af40ee80fb0e009423b4cf64cad53982d9d2580752d7a3022917558ee0",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "Screenshot_2.png",
+      "tamanho_bytes": 595480,
+      "mtime": "2026-08-24T18:57:22",
+      "sha256": "76e7fbb3f7ee35896a6b0ee161104491e455238851e0323208f4a00befd0b1ea",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "Sem título.png",
+      "tamanho_bytes": 2325558,
+      "mtime": "2026-08-24T04:08:39",
+      "sha256": "309baa0f936e10f852ac8f0794072535b5feb4717d230eda6c794c8bc4fc3d69",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "Três Peles, Um Relevo.html",
+      "tamanho_bytes": 241025,
+      "mtime": "2026-08-25T01:09:27",
+      "sha256": "2e60a6ef7aad11b0aae04b8d255c2d9a0b3ffb130ec1894e083d6292f63c34fe",
+      "ext": ".html",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "a3c27afb-b549-4604-ad93-f831f638ee62 (1).png",
+      "tamanho_bytes": 2430252,
+      "mtime": "2026-08-24T05:12:09",
+      "sha256": "5615d31d865b44f790f8717fcd05e412fb9a2b021784d25c86ccc04cebfbb2ff",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "aacf402c-1013-45df-aa89-c1b87a63e05d (1).png",
+      "tamanho_bytes": 2170857,
+      "mtime": "2026-08-24T12:13:52",
+      "sha256": "baa76336f4c22a9f8c48f58666b96929fa6e12c191779df8ca258630760f7c6c",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "aacf402c-1013-45df-aa89-c1b87a63e05d.png",
+      "tamanho_bytes": 2170857,
+      "mtime": "2026-08-24T12:04:58",
+      "sha256": "baa76336f4c22a9f8c48f58666b96929fa6e12c191779df8ca258630760f7c6c",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "ab610afb-6df4-4a68-bf8e-b674fba3c80f.png",
+      "tamanho_bytes": 2079269,
+      "mtime": "2026-08-24T05:03:19",
+      "sha256": "bccee54b6d9f9cd71c5b09b228f3e239194f1530e405f83ca9c5a2459f3d24a6",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "ace01095-245c-419b-be47-63657af34da3.png",
+      "tamanho_bytes": 1889809,
+      "mtime": "2026-08-24T12:13:43",
+      "sha256": "add761ff32acd23a1b71f850d2c6e4fe331213dc9795fbeb607d8216608c1dc1",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "arquitetura_agente_anti_flash.pdf",
+      "tamanho_bytes": 3610,
+      "mtime": "2026-08-24T21:41:30",
+      "sha256": "08637d2cc6b9e84a8f20b400387c38937a29f405ffadf24d081c4a8a635bb0bd",
+      "ext": ".pdf",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "b2f4d990-cc7a-4929-8f74-b757d7bf96ae.png",
+      "tamanho_bytes": 2611052,
+      "mtime": "2026-08-24T03:18:20",
+      "sha256": "0c1c15bab623c72fb3ca8b6c80fbf8419335e3313c06c80cb3d27c41a0551056",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "b7c2b5f9-b4a7-4112-b3c9-5d2161772b2d.png",
+      "tamanho_bytes": 1948082,
+      "mtime": "2026-08-24T22:48:43",
+      "sha256": "ef0cd39b345f6ef8afb6046094bd293f9924673b76065dd087484cbc53b69797",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "bb479217-edd4-4a7a-8383-ce7b513a5f30.png",
+      "tamanho_bytes": 1617743,
+      "mtime": "2026-08-24T06:04:04",
+      "sha256": "4844460c1cfad7914d6f73e7b93c452d9ec330e3f540c8abf02ba43e6dd63de5",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "bbd5e6551c9c186e2546ec741e24b18cf895cea2334613a529567fe4f95b0dcb.txt",
+      "tamanho_bytes": 88219,
+      "mtime": "2026-08-24T06:45:02",
+      "sha256": "473335410ecb9d9af3e4dbed3cbaed86d63d128a3d69fce126153d2c361902cf",
+      "ext": ".txt",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "bd839bd4-7980-4682-bf06-e0351bfeb33c.png",
+      "tamanho_bytes": 2546610,
+      "mtime": "2026-08-25T01:16:42",
+      "sha256": "7a60ec102c735230ba3649c13196497befd0bad7f8d009a2be3f7f3a0eb78532",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "c4c5e90d-c411-4c06-a3d8-bd7a700bc1be.png",
+      "tamanho_bytes": 1925433,
+      "mtime": "2026-08-24T22:48:46",
+      "sha256": "0646738a9831f92d2f864040bee1e2043cfa7bda80dd9ef29375a2520ff1d729",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "cc0d326c-086a-4595-8b4d-09268fd186a8.png",
+      "tamanho_bytes": 2145209,
+      "mtime": "2026-08-24T06:25:02",
+      "sha256": "d0cf983f097fbad749d20a9bb90780667db61d0b9fc968097fdd4147ebf62176",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "cf609eae-5f01-45ed-a8ab-a34248c89a54.zip",
+      "tamanho_bytes": 33795804,
+      "mtime": "2026-08-24T08:40:52",
+      "sha256": "f9a2a1427d0737070f105aa2c24feb7d5878ef993b3b3d52cea1e1d1852e9bf6",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "d7930838-e5b2-4919-bc81-070390428afd.png",
+      "tamanho_bytes": 2084708,
+      "mtime": "2026-08-24T12:13:37",
+      "sha256": "1faec16b20ca367540004244f71a562ca53d8700eb6e05e575065e68986500f0",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "d7ddd4f1-0e07-4d21-aa91-e9b695b7498c.png",
+      "tamanho_bytes": 1923607,
+      "mtime": "2026-08-24T01:24:50",
+      "sha256": "00de97180be84c373bd4e39b4007b6cde4265d33188413b78fe9e8a74ddfc3c9",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "e8382fb6-470b-42c6-b64e-5115dcc504e6.png",
+      "tamanho_bytes": 2271987,
+      "mtime": "2026-08-24T09:32:26",
+      "sha256": "e4ccbb6cf201c0852cd8a501419ca87c6e57cf23ad9bef9e9ca052946afe8026",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "ef58809b-d64d-4fda-9637-4e0c158ad83b.png",
+      "tamanho_bytes": 1891572,
+      "mtime": "2026-08-24T04:50:18",
+      "sha256": "60b1f4fabf72fc9ca820f03191f95448cebc92642c24363c459c64882a75f99d",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "fb98bac9-9f6e-4195-81df-8062d80d4310.png",
+      "tamanho_bytes": 1746943,
+      "mtime": "2026-08-25T01:23:30",
+      "sha256": "1b53dae3df7fc06703147eefe855692457ae42501d62130a46e8a4837211d8b3",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "fc194cc3-c0a0-4090-955b-37aeb25866b4.png",
+      "tamanho_bytes": 2205109,
+      "mtime": "2026-08-24T03:52:44",
+      "sha256": "b9fbb295dadc0c307316db463f4b3d5b0ab48300a7419bc6f2a0bfc17c91b7f0",
+      "ext": ".png",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    },
+    {
+      "nome": "🔒PASTA TRANCADA APELO CHEFE🔒.zip",
+      "tamanho_bytes": 454151927,
+      "mtime": "2026-08-24T19:10:21",
+      "sha256": "fdb6a44cdda4a1e42a0032a855aa726fe0fdc14c4564ce15314d700454294dce",
+      "ext": ".zip",
+      "existe_no_repo_local": false,
+      "dono_canonico": "UNKNOWN",
+      "acao_sugerida": "VERIFICAR_GAP_ANTES_DE_ABSORVER"
+    }
+  ],
+  "estatisticas": {
+    "total_itens": 63,
+    "zips": 22,
+    "ja_existentes_no_repo": 0,
+    "novos_para_verificar": 63
+  },
+  "boot_evidence": [
+    "PASTA_TRANCADA_LIDA",
+    "REPO_INDEXADO_PARA_REUSE_CHECK",
+    "INVENTARIO_GERADO_SEM_EXTRACAO"
+  ]
+}

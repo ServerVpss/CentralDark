@@ -1,0 +1,219 @@
+Pensando
+Esclarecendo arquiteturas cognitivas
+Estou distinguindo duas ideias: modelos da OpenAI geralmente usam arquiteturas computacionais, não cérebros animais específicos; já a cognição animal é estudada em muitas espécies, mas não existe um total universal de registros cognitivos.
+
+Pesquisando em 3 sites
+Busca na web finalizada
+Comparando inspiração biológica
+Estou separando inspiração biológica de arquitetura oficialmente documentada: a OpenAI usa principalmente modelos computacionais, enquanto IA pode aproveitar ideias de enxames, memória e aprendizado por reforço. Para espécies com cognição registrada, não há um número universal; depende dos critérios e das evidências disponíveis.
+
+Estimando registros cognitivos
+Não existe um catálogo mundial único. Em sentido amplo, há evidências de aprendizagem em milhares de espécies; em estudos cognitivos comparáveis, fala-se em centenas. O total varia conforme se incluem condicionamento, memória, uso de ferramentas, navegação ou comunicação.
+
+Mapeando padrões bioinspirados
+Posso separar exemplos como colônias, enxames, sistemas nervosos distribuídos, memória espacial e aprendizagem social. Eles inspiram IA em geral, mas não são arquiteturas animais oficialmente confirmadas como base central da OpenAI.
+
+Pensou por 34s
+Pronto
+
+Fontes
+·
+51
+OpenAI
+GPT-4 Technical Report
+13 de junho de 2025
+
+OpenAI
+Introducing gpt-oss | OpenAI
+
+OpenAI
+A practical guide to building agents | OpenAI
+
+OpenAI
+Novas ferramentas para criação de agentes | OpenAI
+
+Nature
+Evolution and function of neurocognitive systems in non-human animals | Scientific Reports
+7 de dezembro de 2021
+
+Nature
+Animal Cognition | Learn Science at Scitable
+
+PubMed
+Taxonomic counts of cognition in the wild.
+22 de agosto de 2011
+
+PubMed
+Systematic mapping and bibliometric analysis of meta-analyses on animal cognition - PubMed
+15 de agosto de 2025
+
+PubMed
+Does cognition differ across species, and how do we know? Lessons from research in transitive inference - PubMed
+
+openai.com
+How GPT-5.6 fuses frontier intelligence with frontier efficiency | OpenAI
+28 de julho de 2026 — OpenAI July 29, 2026 EngineeringCompany HOW GPT‑5.6 FUSES FRONTIER INTELLIGENCE WITH FRONTIER EFFICIENCY Loading… Share Accelerating inference with GPT-5.6 Sol * Accelerating inference with GP...
+
+openai.com
+How agents are transforming work | OpenAI
+24 de junho de 2026 — June 25, 2026 Company HOW AGENTS ARE TRANSFORMING WORK A new Economic Research paper measuring Codex’s economic potential at the frontier. Read the paper(opens in a new window) Loading… Share...
+
+nature.com
+Neural basis of social hierarchy across species | Nature Reviews Neuroscience
+13 de maio de 2026 — * Review Article * Published: 14 May 2026 NEURAL BASIS OF SOCIAL HIERARCHY ACROSS SPECIES * Rongzhen Yan  ORCID: orcid.org/0000-0001-8390-5734^{1,2} & * Dayu Lin  ORCID: orcid.org/0000-0003-2006-07...
+
+openai.com
+Apresentamos os agentes do workspace no ChatGPT | OpenAI
+21 de abril de 2026 — OpenAI 22 de abril de 2026 Produto APRESENTAMOS OS AGENTES DO WORKSPACE NO CHATGPT Agentes impulsionados pelo Codex para equipes. Criar um agente(abre em uma nova janela)Entre em contato(abre em...
+
+nature.com
+Connecting extinction learning in the laboratory and the wild | Nature Reviews Psychology
+19 de abril de 2026 — * Perspective * Published: 20 April 2026 CONNECTING EXTINCTION LEARNING IN THE LABORATORY AND THE WILD * Patrick Anselme  ORCID: orcid.org/0000-0001-6650-0962^{1} & * Onur Güntürkün^{1} Nature Rev...
+
+openai.com
+A próxima evolução do Agents SDK | OpenAI
+14 de abril de 2026 — OpenAI 15 de abril de 2026 Produto A PRÓXIMA EVOLUÇÃO DO AGENTS SDK O Agents SDK atualizado ajuda desenvolvedores a criar agentes que podem inspecionar arquivos, executar comandos, editar código...
+
+openai.com
+The next evolution of the Agents SDK | OpenAI
+14 de abril de 2026 — April 15, 2026 THE NEXT EVOLUTION OF THE AGENTS SDK The updated Agents SDK helps developers build agents that can inspect files, run commands, edit code, and work on long-horizon tasks within contr...
+
+nature.com
+Predator–prey interactions as drivers of cognitive evolution | Nature Reviews Biodiversity
+25 de fevereiro de 2026 — * Perspective * Published: 26 February 2026 PREDATOR–PREY INTERACTIONS AS DRIVERS OF COGNITIVE EVOLUTION * Eamonn I. F. Wooster  ORCID: orcid.org/0000-0002-2907-4076^{1}, * Martin J. Whiting  ORCID...
+
+nature.com
+Leveraging insights from neuroscience to build adaptive artificial intelligence | Nature Neuroscience
+29 de dezembro de 2025 — LEVERAGING INSIGHTS FROM NEUROSCIENCE TO BUILD ADAPTIVE ARTIFICIAL INTELLIGENCE * Mackenzie Weygandt Mathis  ORCID: orcid.org/0000-0001-7368-4456^{1} Nature Neuroscience volume 29, pages 13–24 (202...
+
+openai.com
+gpt-oss-safeguard technical report | OpenAI
+28 de outubro de 2025 — OpenAI October 29, 2025 SafetyRelease GPT-OSS-SAFEGUARD TECHNICAL REPORT Performance and baseline evaluations of gpt-oss-safeguard-120b and gpt-oss-safeguard-20b Read technical report(opens in a...
+
+openai.com
+Introducing AgentKit | OpenAI
+5 de outubro de 2025 — October 6, 2025 INTRODUCING AGENTKIT New tools for building, deploying, and optimizing agents. Loading… Share Design workflows with Agent Builder * Design workflows with Agent Builder * Embed a...
+
+nature.com
+Addressing the theory crisis in statistical learning research | npj Science of Learning
+28 de setembro de 2025 — However, examining changes in other statistical learning phenomena across development using longitudinal studies may actually aid attempts to establish causality. By measuring these other related cogn...
+
+openai.com
+Apresentamos o agente do ChatGPT: a união entre investigação e ação | OpenAI
+16 de julho de 2025 — UMA EVOLUÇÃO NATURAL DO OPERATOR E DA INVESTIGAÇÃO Antes, o Operator e a investigação já apresentavam alguns pontos fortes exclusivos: o Operator podia rolar, clicar e digitar na web. Já a investigaç...
+
+openai.com
+Novas ferramentas para criação de agentes | OpenAI
+10 de março de 2025 — OpenAI 11 de março de 2025 Produto NOVAS FERRAMENTAS PARA A CRIAÇÃO DE AGENTES A nossa plataforma está evoluindo para ajudar desenvolvedores e empresas a criar agentes úteis e confiáveis. Testar...
+
+openai.com
+New tools for building agents | OpenAI
+10 de março de 2025 — March 11, 2025 Product NEW TOOLS FOR BUILDING AGENTS Introducing the Responses API * Introducing the Responses API * What this means for existing APIs * Introducing built-in tools in the Response...
+
+openai.com
+Technical Success Office Hours (November 2024) - Video | OpenAI Forum
+17 de novembro de 2024 — Now it is important to call out, and this has already been called out, but, uh, Swarm is like, Swarm is not an official framework. It's, it's mostly an exploration. It's great for prototyping, great f...
+
+openai.com
+Openai swarm for agents and agent handoffs - #7 by Foxalabs - API - OpenAI Developer Community
+12 de outubro de 2024 — OPENAI SWARM FOR AGENTS AND AGENT HANDOFFS API swarm Foxalabs October 13, 2024, 11:51pm 7 It’s not an official OpenAI product nor will it be supported by OpenAI. It “was” a repo by an OpenAI dev...
+
+nih.gov
+Understanding the limits to animal cognition - PubMed
+7 de abril de 2024 — . 2024 Apr 8;34(7):R294-R300. doi: 10.1016/j.cub.2024.02.043. UNDERSTANDING THE LIMITS TO ANIMAL COGNITION Scarlett R Howard^{  1 }, Andrew B Barron^{  2 } Affiliations Expand AFFILIATIONS * ^{...
+
+nature.com
+The cognitive challenges of cooperation in human and nonhuman animals | Nature Reviews Psychology
+20 de julho de 2023 — * Review Article * Published: 21 July 2023 THE COGNITIVE CHALLENGES OF COOPERATION IN HUMAN AND NONHUMAN ANIMALS * Alicia P. Melis  ORCID: orcid.org/0000-0003-0355-9718^{1} & * Nichola J. Raihani^{...
+
+nih.gov
+Following the human point: Research with nonhuman animals since Povinelli, Nelson, and Boysen (1990) - PubMed
+28 de setembro de 2022 — . 2023 Mar;51(1):34-47. doi: 10.3758/s13420-022-00546-0. Epub 2022 Sep 29. FOLLOWING THE HUMAN POINT: RESEARCH WITH NONHUMAN ANIMALS SINCE POVINELLI, NELSON, AND BOYSEN (1990) Maeve K McCreary^{...
+
+nih.gov
+Integrative Comparative Cognition: Can Neurobiology and Neurogenomics Inform Comparative Analyses of Cognitive Phenotype? - PubMed
+30 de setembro de 2020 — . 2020 Oct 1;60(4):925-928. doi: 10.1093/icb/icaa113. INTEGRATIVE COMPARATIVE COGNITION: CAN NEUROBIOLOGY AND NEUROGENOMICS INFORM COMPARATIVE ANALYSES OF COGNITIVE PHENOTYPE? Sabrina S Burmeister...
+
+nih.gov
+Trialling Meta-Research in Comparative Cognition: Claims and Statistical Inference in Animal Physical Cognition - PubMed
+31 de julho de 2020 — . 2020 Aug;7(3):419-444. doi: 10.26451/abc.07.03.09.2020. TRIALLING META-RESEARCH IN COMPARATIVE COGNITION: CLAIMS AND STATISTICAL INFERENCE IN ANIMAL PHYSICAL COGNITION Benjamin G Farrar^{  1   2...
+
+nature.com
+The neural and computational systems of social learning | Nature Reviews Neuroscience
+11 de março de 2020 — * Review Article * Published: 12 March 2020 THE NEURAL AND COMPUTATIONAL SYSTEMS OF SOCIAL LEARNING * Andreas Olsson  ORCID: orcid.org/0000-0001-5272-7744^{1}, * Ewelina Knapska^{2} & * Björn Linds...
+
+nature.com
+A critique of pure learning and what artificial neural networks can learn from animal brains | Nature Communications
+20 de agosto de 2019 — A critique of pure learning and what artificial neural networks can learn from animal brains Download PDF Download PDF * Perspective * Open access * Published: 21 August 2019 A CRITIQUE OF PURE L...
+
+openai.com
+Generative modeling with sparse transformers | OpenAI
+22 de abril de 2019 — OpenAI April 23, 2019 Publication GENERATIVE MODELING WITH SPARSE TRANSFORMERS Read paper(opens in a new window)(opens in a new window) Loading… Share Deep attention * Deep attention * Sparse...
+
+openai.com
+Better language models and their implications | OpenAI
+13 de fevereiro de 2019 — February 14, 2019 Milestone BETTER LANGUAGE MODELS AND THEIR IMPLICATIONS Read paper(opens in a new window)View code(opens in a new window) Illustration: Ben Barry We’ve trained a large-scale un...
+
+openai.com
+Improving language understanding with unsupervised learning | OpenAI
+10 de junho de 2018 — IMPROVING LANGUAGE UNDERSTANDING WITH UNSUPERVISED LEARNING Read paper(opens in a new window)(opens in a new window) Illustration: Ben Barry Loading… Share Why unsupervised learning? * Why unsu...
+
+nih.gov
+Cognitive test batteries in animal cognition research: evaluating the past, present and future of comparative psychometrics - PubMed
+8 de outubro de 2017 — . 2017 Nov;20(6):1003-1018. doi: 10.1007/s10071-017-1135-1. Epub 2017 Oct 9. COGNITIVE TEST BATTERIES IN ANIMAL COGNITION RESEARCH: EVALUATING THE PAST, PRESENT AND FUTURE OF COMPARATIVE PSYCHOMETR...
+
+nih.gov
+Comparative Cognition: Past, Present, and Future - PubMed
+31 de dezembro de 2013 — . 2014 Jan 1;27(1):3-30. COMPARATIVE COGNITION: PAST, PRESENT, AND FUTURE Michael J Beran^{  1 }, Audrey E Parrish^{  2 }, Bonnie M Perdue^{  3 }, David A Washburn^{  2 } Affiliations Expand AFFI...
+
+nih.gov
+Comparative cognition: Practical shortcomings and some potential ways forward - PubMed
+. 2020 Sep;74(3):160-169. doi: 10.1037/cep0000204. COMPARATIVE COGNITION: PRACTICAL SHORTCOMINGS AND SOME POTENTIAL WAYS FORWARD Anastasia Krasheninnikova^{  1 }, Pizza Ka Yee Chow^{  1 }, Auguste...
+
+nih.gov
+Comparative cognition: Perspectives, challenges, and prospects - PubMed
+. 2021 Feb;135(1):21-24. doi: 10.1037/com0000271. COMPARATIVE COGNITION: PERSPECTIVES, CHALLENGES, AND PROSPECTS Jonathon D Crystal^{  1 } Affiliations Expand AFFILIATION * ^{1} Department of P...
+
+nih.gov
+Species comparative studies and cognitive development.
+SPECIES COMPARATIVE STUDIES AND COGNITIVE DEVELOPMENT. Trends in cognitive sciences PMID: 15737820 Publication date: 2005 Mar Publication status: ppublish Journal abbreviation: Trends Cogn Sci J...
+
+nature.com
+Corollary discharge across the animal kingdom | Nature Reviews Neuroscience
+* Review Article * Published: August 2008 COROLLARY DISCHARGE ACROSS THE ANIMAL KINGDOM * Trinity B. Crapse^{1} & * Marc A. Sommer^{1} Nature Reviews Neuroscience volume 9, pages 587–600 (2008)...
+
+nature.com
+Animal Cognition | Learn Science at Scitable
+ANIMAL COGNITION By: Alison N. P. Stevens, Ph.D. & Jeffrey R. Stevens, Ph.D. (Max Planck Institute for Human Dev., Berlin, Germany; Dept. of Psychology, University of NE-Lincoln) © 2012 Nature Educa...
+
+nature.com
+Abstract Concept Learning in Non-Human Animals | Animal Behaviour | Zoology | Biological sciences | Topics | Nature Index
+ABSTRACT CONCEPT LEARNING IN NON-HUMAN ANIMALS SUMMARY Abstract concept learning refers to the ability of an animal to form rules or relations that transcend specific sensory features of individual...
+
+openai.com
+Solutions for agentic workflows | OpenAI
+OpenAI for agentic workflows AI AGENTS THAT AMPLIFY WHAT YOU DO Deploy agents that can reason, take action, and assist across a wide range of work—from simple tasks to complex projects. FIND THE...
+
+openai.com
+Research | OpenAI
+OpenAI Research PIONEERING RESEARCH ON THE PATH TO AGI We believe our research will eventually lead to artificial general intelligence, a system that can solve human-level problems. Our mission is...
+
+openai.com
+OpenAI Research | Publication | OpenAI
+OpenAI RESEARCH * All * Publication * Conclusion * Milestone * Release Filter Sort [Input] Switch cards to show Media [Input] Switch cards to hide Media Company Aug 18, 2026 Pacing model...
+
+openai.com
+Investigações | OpenAI
+OpenAI Investigações PESQUISA PIONEIRA RUMO À AGI Acreditamos que nossa pesquisa um dia resultará na inteligência artificial geral, um sistema que poderia resolver problemas no nível humano. Nossa...
+
+openai.com
+GPT-4V(ision) technical work and authors | OpenAI
+GPT‑4V(ISION) TECHNICAL WORK AND AUTHORS This document acknowledges the contributors and technical work done as part of the GPT‑4V project. GPT‑4V refers to the technology that enables the integrati...
+
+openai.com
+Investigações da OpenAI | Publicação | OpenAI
+OpenAI INVESTIGAÇÕES * Tudo * Publicação * Conclusão * Marco * Lançamento Trocar cartões para ocultar mídia Empresa 18 de ago. de 2026 Desenvolvimento de modelos com capacidades cibernéticas c...
+
+openai.com
+Safety & responsibility | OpenAI
+SAFETY AT EVERY STEP We believe in AI’s potential to make life better for everyone, which means making it

@@ -1,0 +1,21 @@
+Sim. O modelo padrão atual (z-ai/glm-5.2, provider nous) é gratuito e funcional, mas existem modelos mais fortes e também gratuitos dentro do mesmo ecossistema nous (não exigem chave de API externa).
+
+Exemplos de modelos livres e mais capazes que você pode usar diretamente:
+
+- nous/hermes-3-llama-3-1-8b  
+- nous/hermes-3-llama-3-1-70b  
+- nous/hermes-2-mixtral-8x7b-dpo  
+- nous/capybara-7b (especializado em raciocínio)
+
+Para trocar, basta executar:
+
+bash
+hermes model set nous/hermes-3-llama-3-1-70b
+hermes model set nous/capybara-7b
+
+
+Depois rode hermes model para confirmar o atual. Todos esses são hospedados pela Nous Research e funcionam sem nenhuma configuração de chave extra – são considerados "locais" no sentido de que o Hermes já os inclui em seu catálogo gratuito.
+
+Se quiser testar qual se sente melhor para suas tarefas, pode alternar entre eles e comparar. O protocolo !CENTRALDARK continua o mesmo; só muda o motor de inferência.
+
+Quer que eu faça a troca agora para um desses e verifique se está tudo OK? Resposta curta: sim ou não. 😎

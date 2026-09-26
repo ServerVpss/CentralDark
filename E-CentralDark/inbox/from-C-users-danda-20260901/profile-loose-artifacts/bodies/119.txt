@@ -1,0 +1,282 @@
+TITLE: Implementar card Lovable AI no HUB com snapshot server-side
+LABELS: ['🔴 RISCO-SERVIDOR', '🟢 PRONTO-PARA-IA']
+
+## Objetivo
+
+Adicionar o card **Lovable AI** no HUB CentralDark (`/root/CentralDark/apps/modulos/hub`, domínio `mcp.centralldark.com`, aba Conectores) usando arquitetura de **snapshot server-side**, sem tocar no projeto Lovable atual, sem expor segredo no frontend e sem ping ao vivo a cada abertura do modal.
+
+## Princípios
+
+- Evidência primeiro
+- Leitura antes de escrita
+- Frontend nunca recebe segredo
+- Ações sensíveis ficam fora da V1
+- Git remoto é a memória oficial
+- Branch/PR antes de merge
+- Registrar o ouro no fim
+
+## Escopo V1
+
+- descoberta remota de balance/saldo
+- fallback para consumo local estimado
+- telemetria em `hub.lovable_ai_usage`
+- snapshot consolidado em `hub.lovable_ai_snapshot`
+- edge function `lovable-gateway-status`
+- card + modal no HUB consumindo snapshot
+- documentação oficial + aprendizado
+
+## Ajustes finais aprovados
+
+### 1. Gate da Fase A em 3 estados
+
+A decisão da fonte de saldo precisa aceitar:
+
+- `remote`
+- `local`
+- `unknown`
+
+Definição:
+
+- `remote`: há prova suficiente de saldo remoto confiável
+- `local`: não há saldo remoto confiável; usar contabilidade local
+- `unknown`: ainda sem prova suficiente; card mostra indisponível
+
+### 2. `POST /refresh` com trava de concorrência
+
+O refresh precisa ter:
+
+- lock de execução
+- idempotência curta
+- rate-limit
+- timeout por modelo
+- resposta `409 refresh_in_progress` quando já houver refresh ativo
+
+### 3. `summary_json` como contrato oficial do frontend
+
+Contrato mínimo sugerido:
+
+```json
+{
+  "gateway_status": "up|degraded|down",
+  "models_up": 15,
+  "models_total": 17,
+  "snapshot_age_sec": 42,
+  "balance_mode": "remote|local|unknown",
+  "calls_today": 1234,
+  "error_rate_24h": 0.8,
+  "top_model": "google/gemini-3-flash-preview",
+  "top_caller": "hermes",
+  "last_402_at": null,
+  "staleness": "fresh|stale|outdated"
+}
+```
+
+### 4. V1 sem BRL inventado
+
+Não usar `R$` na V1 sem pricing comprovado.
+Usar:
+
+- `estimated_cost_usd`
+- ou `estimated_units`
+
+### 5. `pm2 save` só se houver mudança persistente real em PM2
+
+`pm2 save` não entra como passo fixo. Só rodar se a implementação realmente alterar estado persistente do PM2.
+
+### 6. Indicador de staleness
+
+Adicionar estado do snapshot:
+
+- `fresh` = < 2 min
+- `stale` = 2–10 min
+- `outdated` = > 10 min
+
+## Fase A — Descoberta read-only
+
+Executar 4 agentes em paralelo, somente leitura:
+
+- Agente 1: varrer repo/docs/aprendizados/LEMBRANCAS por `saldo`, `credits`, `billing`, `balance`, `usage`, `quota`
+- Agente 2: sondar endpoints candidatos do gateway com timeout curto e 1 tentativa cada
+- Agente 3: inspecionar headers de uma chamada real barata ao gateway com allowlist `x-ratelimit-*`, `x-usage-*`, `x-credits-*`, `x-lovable-*`
+- Agente 4: buscar memória/chat por evidência anterior de saldo Lovable
+
+### Gate obrigatório ao final da Fase A
+
+Registrar decisão:
+
+- `remote`
+- `local`
+- `unknown`
+
+Sem esse gate, nada da Fase B começa.
+
+## Fase B — Backend (HUB Supabase `lyoigsqluyktoclwdaft`)
+
+### Migration
+
+Criar:
+
+#### `hub.lovable_ai_usage`
+
+Campos:
+
+- `id`
+- `created_at`
+- `model`
+- `tokens_in`
+- `tokens_out`
+- `latency_ms`
+- `status_code`
+- `error_msg`
+- `caller`
+- `request_kind`
+- `estimated_cost_usd` nullable
+
+#### `hub.lovable_ai_snapshot`
+
+Campos:
+
+- `id`
+- `created_at`
+- `source_balance`
+- `balance_json`
+- `models_json`
+- `headers_json`
+- `summary_json`
+- `checked_by`
+
+### Segurança
+
+RLS:
+
+- `authenticated` lê
+- `service_role` escreve
+
+GRANTs no mesmo migration.
+
+### Edge function
+
+Criar `supabase/functions/lovable-gateway-status/` com:
+
+- `GET /snapshot`
+- `GET /activity`
+- `POST /refresh`
+- `GET /models` opcional
+
+Sem `LOVABLE_API_KEY` vazando para browser.
+
+### Worker de snapshot
+
+Cron/job que executa refresh periódico. A UI deve ler o snapshot pronto, não disparar ping bruto por padrão.
+
+## Fase C — Frontend (`apps/modulos/hub`)
+
+### Card resumido
+
+Exibir:
+
+- status da integração
+- modelos vivos/total
+- idade do snapshot
+- modo do saldo (`remote|local|unknown`)
+- botão `Detalhes`
+
+### Modal
+
+Consumir apenas snapshot consolidado + activity.
+
+Blocos:
+
+1. Identidade
+2. Saldo / consumo
+3. Modelos
+4. Rate limit (só se houver header confiável)
+5. Atividade recente
+6. Config do proxy sem segredo
+
+### Fora da V1
+
+- rotacionar chave
+- exibir pedaço real de chave
+- testar todos os modelos livremente no clique
+- BRL sem pricing comprovado
+- live ping contínuo dos 17 modelos
+
+## Fase D — Git / PR / deploy
+
+Fluxo oficial:
+
+1. branch limpa baseada no remoto
+2. commit por camada
+3. PR
+4. validação
+5. merge autorizado
+6. deploy controlado
+7. `pm2 save` apenas se aplicável
+
+Se houver hotfix direto na VPS, usar **VPS Direct Hotfix Controlado**.
+
+## Fase E — Registrar o ouro
+
+### Artefato 1
+
+`docs/RELATORIOS/2026-07-07-lovable-balance-discovery.md`
+
+Conteúdo:
+
+- endpoints testados
+- headers encontrados
+- decisão `remote|local|unknown`
+- prints
+- limitações
+
+### Artefato 2
+
+`docs/CONSCIENCIA/ARSENAL/README.md`
+
+Conteúdo:
+
+- Lovable Gateway
+- ai-proxy DarkAI
+- Elite Anthropic ap7
+- Gemini
+- Groq
+- Hermes
+- Arsenal Adapter
+- validação
+- rotação
+- reconstrução do zero
+
+### Artefato 3
+
+`registrar_aprendizado`
+
+Título:
+
+`Arsenal CentralDark — matriz de roteamento IA (2026-07-07)`
+
+## Ordem de execução
+
+1. Fase A — descoberta read-only
+2. Gate `remote|local|unknown`
+3. migration (`usage` + `snapshot`)
+4. instrumentação assíncrona do `ai-proxy`
+5. edge function `lovable-gateway-status`
+6. worker de snapshot
+7. card resumido no HUB
+8. modal lendo snapshot + activity
+9. docs
+10. `registrar_aprendizado`
+11. PR
+12. validação
+13. deploy controlado
+14. notificação Card Hermes
+
+## Próximo passo seguro
+
+Começar **somente pela Fase A read-only**.
+Nada de escrita, deploy, PM2, migration ou frontend antes do gate da descoberta.
+
+## Fio da missão
+
+Registrar plano oficial -> executar Fase A read-only -> decidir `remote|local|unknown` -> seguir implementação por camadas com PR e validação.

@@ -1,0 +1,173 @@
+{
+  "ok": true,
+  "cases": [
+    {
+      "kind": "master",
+      "input": "!CENTRALDARK",
+      "expected": true,
+      "got": true,
+      "ok": true
+    },
+    {
+      "kind": "master",
+      "input": "!centraldark fecha essa missão",
+      "expected": true,
+      "got": true,
+      "ok": true
+    },
+    {
+      "kind": "master",
+      "input": "!central-dark fecha",
+      "expected": true,
+      "got": true,
+      "ok": true
+    },
+    {
+      "kind": "master",
+      "input": "!cdark",
+      "expected": true,
+      "got": true,
+      "ok": true
+    },
+    {
+      "kind": "master",
+      "input": "!CENTRALDARK, fecha",
+      "expected": true,
+      "got": true,
+      "ok": true
+    },
+    {
+      "kind": "master",
+      "input": "aciona !CENTRALDARK.",
+      "expected": true,
+      "got": true,
+      "ok": true
+    },
+    {
+      "kind": "master",
+      "input": "CentralDark e o nome do repo",
+      "expected": false,
+      "got": false,
+      "ok": true
+    },
+    {
+      "kind": "master",
+      "input": "fala normal",
+      "expected": false,
+      "got": false,
+      "ok": true
+    },
+    {
+      "kind": "delta",
+      "input": "!DELTA UTILS usa só o útil",
+      "expected": true,
+      "got": true,
+      "ambiguous": false,
+      "ok": true
+    },
+    {
+      "kind": "delta",
+      "input": "!DELTAUTILS",
+      "expected": true,
+      "got": true,
+      "ambiguous": false,
+      "ok": true
+    },
+    {
+      "kind": "delta",
+      "input": "DELTAUTILS",
+      "expected": true,
+      "got": true,
+      "ambiguous": false,
+      "ok": true
+    },
+    {
+      "kind": "delta",
+      "input": "!DELTAUTIL",
+      "expected": true,
+      "got": true,
+      "ambiguous": false,
+      "ok": true
+    },
+    {
+      "kind": "delta",
+      "input": "DELTAUTIL",
+      "expected": true,
+      "got": true,
+      "ambiguous": false,
+      "ok": true
+    },
+    {
+      "kind": "delta",
+      "input": "!DELTAÚTIL",
+      "expected": true,
+      "got": true,
+      "ambiguous": false,
+      "ok": true
+    },
+    {
+      "kind": "delta",
+      "input": "pega o delta desse material",
+      "expected": true,
+      "got": true,
+      "ambiguous": false,
+      "ok": true
+    },
+    {
+      "kind": "delta",
+      "input": "toma esse delta aí",
+      "expected": true,
+      "got": true,
+      "ambiguous": false,
+      "ok": true
+    },
+    {
+      "kind": "delta",
+      "input": "usa o delta de agora",
+      "expected": true,
+      "got": true,
+      "ambiguous": false,
+      "ok": true
+    },
+    {
+      "kind": "delta",
+      "input": "não pega o delta desse material",
+      "expected": false,
+      "got": false,
+      "ambiguous": true,
+      "ok": true
+    },
+    {
+      "kind": "delta",
+      "input": "a instrução pega o delta não deve ser executada",
+      "expected": false,
+      "got": false,
+      "ambiguous": true,
+      "ok": true
+    },
+    {
+      "kind": "delta",
+      "input": "não execute !DELTAUTIL agora",
+      "expected": false,
+      "got": false,
+      "ambiguous": true,
+      "ok": true
+    },
+    {
+      "kind": "delta",
+      "input": "a palavra delta aparece num relatório",
+      "expected": false,
+      "got": false,
+      "ambiguous": false,
+      "ok": true
+    },
+    {
+      "kind": "delta",
+      "input": "utilidade marginal sem pedido de delta",
+      "expected": false,
+      "got": false,
+      "ambiguous": false,
+      "ok": true
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+TITLE: Research Cell e bases de conhecimento — treinamento, refinamento, síntese e RAG privado
+LABELS: ['🟡 IA-PRECISA-REVISAR', '🟢 PRONTO-PARA-IA']
+
+## Vinculado
+
+Programa-mãe: #122
+
+## Objetivo
+
+Planejar uma célula privada de pesquisa e conhecimento para alimentar Hermes, DarkAI, Jarvis, Mobile, Obsidian e agentes.
+
+## Setores conceituais
+
+### Escola
+
+- prompts;
+- refinamento;
+- técnicas;
+- semântica;
+- extração;
+- síntese;
+- avaliação de modelos;
+- base de treinamento.
+
+### Conselho
+
+- governança;
+- decisões;
+- revisão de risco;
+- aprovação;
+- auditoria;
+- políticas.
+
+### Prefeitura
+
+- serviços reais;
+- sites;
+- cobranças;
+- módulos;
+- tarefas;
+- pendências;
+- rotinas administrativas.
+
+## Bases sugeridas
+
+### Base viva operacional
+
+- `docs/CONSCIENCIA`;
+- aprendizados;
+- pendências;
+- runbooks;
+- relatórios;
+- prompts oficiais;
+- grafo.
+
+### Base vetorial / RAG
+
+- embeddings do repo;
+- embeddings dos docs;
+- embeddings de aprendizados;
+- embeddings de relatórios;
+- embeddings do grafo.
+
+### Base de observabilidade
+
+- chamadas de agentes;
+- eventos Hermes;
+- eventos ai-proxy;
+- bugs;
+- auditorias;
+- snapshots HUB/status/mobile.
+
+## Funções de agentes
+
+- `Research-Web-Agent`
+- `Research-Repo-Agent`
+- `Research-Docs-Agent`
+- `Research-Logs-Agent`
+- `Research-UI-Agent`
+- `Research-Synthesizer`
+- `Evidence-Curator`
+
+## Técnicas a avaliar
+
+- SPDD: https://martinfowler.com/articles/structured-prompt-driven/
+- pxpipe: https://github.com/teamchong/pxpipe
+- unlimited-ai-proxy como lab router: https://github.com/pedrofariasx/unlimited-ai-proxy/tree/main/src
+- roteamento 10-80-10;
+- local LLM para trabalho privado/repetitivo.
+
+## Travas
+
+- Não indexar secrets.
+- Não mandar envs/logs crus para RAG.
+- Não usar material sensível em Telegram.
+- RAG não vira autoridade final para deploy.
+- Modelo local não aprova ação crítica sozinho.
+
+## Critério de pronto
+
+- Taxonomia dos setores aprovada.
+- Fontes permitidas/proibidas definidas.
+- Pipeline RAG desenhado.
+- Política de sanitização definida.
+- Piloto local LLM planejado.
+
+## Fio da missão
+
+Research Cell coleta -> sintetiza -> alimenta Hermes/DarkAI/Jarvis -> GitHub registra -> Mobile mostra.

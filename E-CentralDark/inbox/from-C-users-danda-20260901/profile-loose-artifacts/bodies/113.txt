@@ -1,0 +1,68 @@
+TITLE: Incidente Supabase RLS saneado — monitorar permissões pós-hardening
+LABELS: []
+
+## Contexto
+
+Em 2026-07-07, o Supabase Security Advisor alertou o projeto CentralDark sobre tabela pública com RLS desativado / acesso público inseguro.
+
+## Feito
+
+- Corrigida a Supabase CLI local:
+  - `project_id` ajustado para o projeto correto.
+  - Bloco duplicado `[functions.plugin-release]` removido.
+  - Criado ponteiro `supabase/.temp/project-ref`.
+- Conexão via `psql` com `SUPABASE_DB_URL`, sem exposição de segredo.
+- Aplicado saneamento A+B de policies no banco, com log e validação.
+
+## Evidência operacional
+
+Antes:
+- Amostra indicava 11 policies de escrita com `roles={public}`.
+- 7 policies do tipo `Service role ...` estavam erroneamente `TO public`.
+
+Aplicado:
+- 7 `ALTER POLICY`: policies `Service role ...` agora `TO service_role`.
+- 4 `DROP/CREATE`: policies `Allow all operations ...` recriadas apenas para `service_role`.
+
+Depois:
+- `Service role ...` sem `service_role`: 0.
+- Policies de escrita abertas para `public`: 0.
+- Tabelas `public` sem RLS: 0.
+- Tabelas com RLS mas sem policy, bloqueadas por design:
+  - `_schema_migrations`
+  - `bot_settings`
+  - `ia_approval_requests`
+
+Logs locais na VPS:
+
+```text
+/root/CentralDark/revisoes/supabase-rls-fix-YYYYMMDD-HHMMSS/
+  before.txt
+  apply.txt
+  after.txt
+  audit.txt
+```
+
+## Pendência
+
+Se algum fluxo dependia de escrita via `anon`/`public`, poderá falhar por permissão. A correção futura deve ser feita com policy específica, por exemplo `TO authenticated` com predicate por owner/user/bot.
+
+## Próximo passo
+
+- Monitorar erros de permissão nos serviços que escrevem nessas tabelas.
+- Criar auditoria contínua RLS read-only.
+- Revisar Edge Functions públicas com `service_role` e `verify_jwt=false`.
+- Voltar ao PR #109 para estabilizar `supabase-bot` e workflows relacionados.
+
+## Regras
+
+- Não expor secrets.
+- Não abrir acesso público genérico para resolver erro de permissão.
+- Novas policies ou alterações de acesso exigem Manual Confirm.
+
+## Fio da missão
+
+CLI local: OK.  
+RLS: OK.  
+Policies saneadas: OK.  
+Agora: monitorar impacto e retomar PR #109 / runner self-hosted.

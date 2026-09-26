@@ -1,0 +1,11 @@
+{
+  "package": "CENTRALDARK_OURO_RUNTIME_SKILLS_PACK.zip",
+  "sha256": "1a036a0b59de1ac0ba85ca4cf2d2e127df95f6032f560c08a9d9962de330e2a2",
+  "zip_test": "PASS",
+  "entries": 35,
+  "fixed_point_scope": "PACKAGE_ONLY",
+  "git_mutation": false,
+  "hermes_runtime_mutation": false,
+  "semantic_verdict": "CURATED_WITH_ZERO_TRUST; UNKNOWN_RUNTIME_CLAIMS_PRESERVED_AS_UNKNOWN",
+  "created_at_utc": "2026-08-24T09:55:34+00:00"
+}

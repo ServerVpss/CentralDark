@@ -1,0 +1,84 @@
+TITLE: Telegram Operations Bus — grupo privado com tópicos para observabilidade CentralDark
+LABELS: ['🟡 IA-PRECISA-REVISAR', '🔴 RISCO-SERVIDOR', '🟢 PRONTO-PARA-IA']
+
+## Vinculado
+
+Programa-mãe: #122
+
+## Objetivo
+
+Planejar e implementar uma base privada no Telegram para acompanhar a CentralDark em tempo real, usando um grupo principal com tópicos.
+
+Telegram será janela viva de observabilidade, não fonte da verdade.
+
+## Base técnica confirmada
+
+A Telegram Bot API permite:
+
+- criar tópicos com `createForumTopic`;
+- enviar mensagens para tópico específico usando `message_thread_id`;
+- gerenciar tópicos quando o bot é admin com permissão `can_manage_topics`.
+
+Fonte: https://core.telegram.org/bots/api
+
+## Estrutura inicial sugerida
+
+- `00 · Jarvis — comando central`
+- `01 · Hermes — fila e execuções`
+- `02 · DarkAI — estratégia e debate`
+- `03 · Research Cell — buscas e achados`
+- `04 · Security — RLS, auth, vazamentos`
+- `05 · Repo & PRs — issues, PRs, checks, labels`
+- `06 · VPS & Infra — PM2, Caddy, runner, deploy`
+- `07 · Mobile — app admin de bolso`
+- `08 · UI Bugs — screenshots, console, network`
+- `09 · Billing & Tokens — custos, rotas, economia`
+- `10 · Escola — treinamento, prompts, refinamento`
+- `11 · Conselho — decisões e governança`
+- `12 · Prefeitura — módulos, serviços, cobranças`
+- `13 · Obsidian / Conhecimento — base viva`
+- `14 · Alertas Críticos — incidentes reais`
+
+## Eventos a notificar
+
+- nova issue;
+- comentário relevante em issue;
+- novo PR;
+- check quebrado;
+- runner queued/offline;
+- deploy iniciado/concluído/falhou;
+- webhook health;
+- alerta de segurança;
+- relatório Hermes;
+- achado Research Cell;
+- bug UI confirmado;
+- aprendizado registrado.
+
+## Dúvidas de desenho
+
+1. Usar um único grupo privado com tópicos ou separar canal Status para público/futuro?
+2. Quais eventos vão para canal Status e quais ficam privados?
+3. Quais bots podem postar em cada tópico?
+4. Como sanitizar logs antes de enviar?
+5. Qual formato padrão da mensagem curta?
+6. Qual relação com o Mobile Admin?
+
+## Travas
+
+- Não enviar secrets, tokens, `.env`, payload sensível ou logs crus.
+- Telegram não substitui GitHub/docs/Supabase como memória oficial.
+- Bot precisa operar com allowlist de tópicos e templates.
+- Ações sensíveis continuam exigindo Manual Confirm.
+
+## Critério de pronto
+
+- Arquitetura dos tópicos aprovada.
+- Contrato de mensagem definido.
+- Bot/gateway planejado.
+- Integração GitHub -> Telegram desenhada.
+- Integração Hermes -> Telegram desenhada.
+- Plano de implantação em fases definido.
+
+## Fio da missão
+
+Telegram privado por tópicos -> notificações vivas -> GitHub registra -> Mobile acompanha -> Hermes executa.

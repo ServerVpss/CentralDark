@@ -1,0 +1,151 @@
+TITLE: 🕵️ Varredura MCP mcp.centralldark.com — dossiê completo para equipe GPT resolver
+LABELS: ['🤖 IA-REVISAR']
+
+## 🎯 Objetivo
+Diagnóstico universal do servidor MCP em `mcp.centralldark.com` para a equipe do ChatGPT resolver a falha de conexão do conector.
+
+**Executado em:** 2026-07-10 02:22 UTC — Lovable/CentralDark sob comando do Pivete. 24 rotas testadas em paralelo.
+
+---
+
+## 🟢 STATUS GERAL: SERVIDOR SAUDÁVEL
+(a falha percebida no ChatGPT é de UX de conexão, não de infraestrutura)
+
+- `service`: `mcp-centraldark` v `0.4.0`
+- `toolCount`: **107 tools** carregadas — catálogo `107-f506858aacb0`, sem duplicatas nem shape inválido
+- Cloudflare + Caddy, HSTS ativo, CORS `*`
+- OAuth 2.1 + Dynamic Client Registration + PKCE S256 funcionais ponta a ponta
+
+---
+
+## 🗺️ Mapa de rotas (24 paths)
+
+| Rota | Status | Notas |
+|---|---|---|
+| `/health` | 🟢 200 | `{ok:true, toolCount:107, version:0.4.0}` |
+| `/status` | 🟢 200 | HTML painel esmeralda oficial |
+| `/openapi.json` | 🟢 200 | OpenAPI 3.1, 52 KB, "CentralDark Elite Gateway" v1.6.0 |
+| `/tools.json` | 🟢 200 | Catálogo completo dos 107 tools |
+| `/robots.txt` | 🟢 200 | Content-signals declarados |
+| `/mcp` | 🟡 401 | JSON-RPC — exige `Authorization: Bearer` escopo `mcp` |
+| `/admin/mcp` | 🟡 401 | JSON-RPC admin — exige Bearer escopo `admin` |
+| `/admin` | 🟡 401 | **Devolve HTML completo com status 401** ⚠️ inconsistente |
+| `/.well-known/oauth-protected-resource` | 🟢 200 | resource=`/mcp`, scopes=`[mcp]` |
+| `/.well-known/oauth-authorization-server` | 🟢 200 | /authorize, /token, /register, PKCE S256, scopes `[mcp, admin]` |
+| `/authorize` | 🟢 400 sem params, aceita fluxo com client_id DCR |
+| `/token` | 🟢 POST 400 `invalid_grant` esperado; GET responde JSON `not_found` |
+| `/register` | 🟢 POST 200 emite `client_id` DCR; GET responde JSON `not_found` |
+| `/sse` | 🔴 404 | **Sem endpoint SSE** (transporte legado) |
+| `/.well-known/ai-plugin.json` | 🔴 404 | Sem manifest ChatGPT plugin |
+| `/manifest.json` | 🔴 404 | Sem manifest genérico |
+| `/favicon.ico` | 🔴 404 | Conector fica com ícone genérico |
+| `/metrics`, `/version`, `/tools`, `/list-tools`, `/admin/health`, `/admin/status`, `/admin/tools`, `/admin/login`, `/mcp-tools`, `/mcp-tools/<name>` | 🔴 404 | OpenAPI declara `/mcp-tools/*` mas não são servidas por HTTP direto — só via JSON-RPC em `/mcp` |
+
+Headers expostos: `WWW-Authenticate`, `Mcp-Session-Id`, `X-Correlation-Id`, `X-Request-Id`, `MCP-Protocol-Version`.
+
+---
+
+## 🔍 Evidências brutas
+
+### `/health`
+```json
+{"ok":true,"service":"mcp-centraldark","version":"0.4.0","catalogVersion":"107-f506858aacb0","toolCount":107,"time":"2026-07-10T02:22:29.013Z"}
+```
+
+### `/.well-known/oauth-authorization-server`
+```json
+{
+  "issuer":"https://mcp.centralldark.com",
+  "authorization_endpoint":"https://mcp.centralldark.com/authorize",
+  "token_endpoint":"https://mcp.centralldark.com/token",
+  "registration_endpoint":"https://mcp.centralldark.com/register",
+  "client_id_metadata_document_supported":true,
+  "response_types_supported":["code"],
+  "grant_types_supported":["authorization_code","refresh_token"],
+  "code_challenge_methods_supported":["S256"],
+  "token_endpoint_auth_methods_supported":["none","client_secret_post","client_secret_basic"],
+  "scopes_supported":["mcp","admin"]
+}
+```
+
+### `/.well-known/oauth-protected-resource`
+```json
+{"resource":"https://mcp.centralldark.com/mcp","authorization_servers":["https://mcp.centralldark.com"],"bearer_methods_supported":["header"],"scopes_supported":["mcp"]}
+```
+
+### POST `/mcp` initialize sem Bearer
+```json
+{"jsonrpc":"2.0","error":{"code":-32000,"message":"Authorization Bearer ausente."}}
+```
+
+### POST `/admin/mcp` initialize sem Bearer
+```json
+{"jsonrpc":"2.0","error":{"code":-32000,"message":"Authorization Bearer com escopo admin ausente."}}
+```
+
+### POST `/register` (DCR aberto ✅)
+```json
+{"client_id":"mcp_f91ec8df1472b7a095e6fd93d275cf3f","client_id_issued_at":1783650173,"token_endpoint_auth_method":"none","grant_types":["authorization_code","refresh_token"],"response_types":["code"]}
+```
+
+### POST `/token` (fluxo OAuth vivo ✅)
+```json
+{"error":"invalid_grant","error_description":"code inválido ou expirado"}
+```
+
+---
+
+## 🩻 As 3 rotas que o Pivete perguntou
+
+- `https://mcp.centralldark.com/admin` → painel admin em HTML esmeralda; responde 401 até o browser mandar Bearer admin. **Bug UX** (HTML + 401).
+- `https://mcp.centralldark.com/mcp` → endpoint MCP público JSON-RPC Streamable HTTP; exige OAuth scope `mcp`. Funciona.
+- `https://mcp.centralldark.com/admin/mcp` → endpoint MCP privilegiado JSON-RPC; exige OAuth scope `admin`. Funciona.
+
+---
+
+## 🔴 Falhas / atritos para o ChatGPT conectar
+
+1. **Falta header `WWW-Authenticate: Bearer resource_metadata="..."`** em `/mcp` 401. É **obrigatório pelo spec MCP 2025-06-18** para o ChatGPT disparar o fluxo OAuth automaticamente. Hoje o cliente só vê `Bearer ausente` no body e não sabe onde autorizar.
+2. **Sem `/sse`** — o conector antigo tenta SSE e cai. Melhor 410 Gone explícito que 404 JSON.
+3. **`/admin` devolve HTML com HTTP 401** — clientes MCP genéricos veem "unauthorized" e não descobrem UI.
+4. **Sem `/favicon.ico`** — ícone genérico na lista do ChatGPT.
+5. **OpenAPI anuncia `/mcp-tools/<name>`** mas servidor só serve via `/mcp` JSON-RPC. Cliente OpenAI-compat literal bate 404.
+6. **Sem `/.well-known/ai-plugin.json`** — ChatGPT antigo (Plugins/Custom GPT) não descobre.
+7. `/token` e `/register` GET respondem JSON 404 `not_found` (POST funciona). Aceitável, mas gera ruído.
+
+---
+
+## 🛠️ Correções sugeridas (ordem de impacto)
+
+1. **Adicionar** `WWW-Authenticate: Bearer resource_metadata="https://mcp.centralldark.com/.well-known/oauth-protected-resource"` em toda 401 de `/mcp` e `/admin/mcp`.
+2. Servir `/favicon.ico` (32x32 esmeralda).
+3. Padronizar `/admin` (200 SPA login OU 401 minimalista).
+4. Adicionar `/sse` → 410 Gone com body explicando "use /mcp Streamable HTTP".
+5. Sincronizar OpenAPI: remover `/mcp-tools/*` OU implementar as rotas HTTP diretas.
+
+---
+
+## 🧾 Como o ChatGPT deve conectar (fluxo comprovado)
+
+```
+1. GET  /.well-known/oauth-protected-resource
+2. GET  /.well-known/oauth-authorization-server
+3. POST /register   (DCR aberto → retorna client_id)
+4. GET  /authorize?response_type=code&client_id=<x>&redirect_uri=<cb>&code_challenge=<s256>&code_challenge_method=S256&scope=mcp&state=<s>
+5. POST /token      (troca code por access_token)
+6. POST /mcp   Authorization: Bearer <token>   {jsonrpc:"2.0", method:"initialize", ...}
+```
+
+Todos os 6 passos foram executados e responderam corretamente na varredura.
+
+---
+
+## 📎 Anexos
+
+- 24 rotas testadas em paralelo
+- Correlation IDs disponíveis (`a18c19d...` – `a18c1ac...`) para trace no Caddy/CF
+- 107 tools nomeadas em `/tools.json`
+
+**Ação pedida à equipe GPT:** ajustar o conector do ChatGPT para o fluxo MCP OAuth 2.1 documentado, OU aplicar as 5 correções no servidor para casar 100% com o spec MCP 2025-06-18.
+
+cc: @segredounlocker

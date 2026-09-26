@@ -1,0 +1,131 @@
+TITLE: CentralDark Skills Matrix — base local de skills/prompts com SQLite FTS5 e curadoria
+LABELS: ['🟡 IA-PRECISA-REVISAR', '🟢 PRONTO-PARA-IA', '🔴 FALTA-EVIDÊNCIA']
+
+## Vinculado
+
+Programa-mãe: #122
+Research Cell/RAG: #126
+GrafoRAG/Jarvis 3D: #130
+
+## Objetivo
+
+Desenhar uma base local consultável de skills, prompts, ferramentas e técnicas para alimentar agentes, DarkAI, Hermes, Research Cell, Escola e GrafoRAG.
+
+## Problema
+
+Bases grandes de skills podem ter milhões de registros e poucos GB de texto, mas não devem ser jogadas inteiras no contexto da IA.
+
+O padrão correto é:
+
+```text
+coleta/curadoria -> banco local indexado -> busca rápida -> injeção seletiva no prompt
+```
+
+## Arquitetura V1 sugerida
+
+`Sincronização em background + SQLite FTS5 + score de relevância`
+
+Fluxo:
+
+```text
+Usuário/missão
+-> Agente Orquestrador
+-> SQLite FTS5 local
+-> busca por domínio/termo
+-> retorna top N skills por score
+-> injeta apenas o necessário no modelo
+-> registra uso/resultado
+```
+
+## Estrutura conceitual
+
+### Tabela FTS
+
+`skills_fts`
+
+- `nome`
+- `prompt_base`
+- `dominio`
+- `tags`
+
+### Tabela de metadados
+
+`skills_meta`
+
+- `id`
+- `score`
+- `url_origem`
+- `fonte`
+- `risco`
+- `status_curadoria`
+- `ultima_verificacao`
+- `usos`
+- `sucessos`
+- `falhas`
+
+## Política de curadoria
+
+Uma skill só pode ser usada automaticamente se tiver:
+
+- fonte conhecida;
+- domínio compatível;
+- score mínimo;
+- risco classificado;
+- ausência de secrets;
+- utilidade comprovada ou revisão humana/IA.
+
+Skills desconhecidas entram como `candidate`, não como `approved`.
+
+## Estados de curadoria
+
+- `candidate`
+- `reviewed`
+- `approved`
+- `deprecated`
+- `blocked`
+
+## Onde usar
+
+- Escola: treinamento e refinamento de prompts.
+- Research Cell: coleta, ranking e evidência.
+- DarkAI: escolher técnica/modelo/skill.
+- Hermes: executar fluxo longo usando skill selecionada.
+- GrafoRAG: representar skills como nós e relações.
+
+## Riscos
+
+- raspar fonte externa sem licença/termos;
+- coletar lixo em massa;
+- transformar prompt ruim em regra oficial;
+- indexar segredo sem querer;
+- commitar banco grande no repo principal;
+- usar skill não revisada em produção.
+
+## Travas
+
+- V1 é design/read-only.
+- Não fazer raspagem real sem autorização.
+- Não commitar `.db` grande no repo principal sem decisão.
+- Não indexar secrets, `.env`, tokens, dumps, credenciais ou logs crus.
+- Não usar skill externa como regra oficial sem curadoria.
+
+## Decisões pendentes
+
+1. A base fica na VPS, máquina local ou ambos?
+2. O banco `.db` fica fora do repo e só o schema vai para o GitHub?
+3. Qual fonte inicial de skills é permitida?
+4. Qual modelo faz a curadoria inicial?
+5. Qual score mínimo para uso automático?
+6. Como registrar sucesso/falha após uso?
+
+## Critério de pronto V1
+
+- schema aprovado;
+- política de curadoria aprovada;
+- fonte inicial definida;
+- plano de ingestão aprovado;
+- integração com #126 e #130 definida.
+
+## Fio da missão
+
+Skills Matrix -> busca local rápida -> agentes usam só o necessário -> GrafoRAG entende relações -> CentralDark ganha memória técnica curada.

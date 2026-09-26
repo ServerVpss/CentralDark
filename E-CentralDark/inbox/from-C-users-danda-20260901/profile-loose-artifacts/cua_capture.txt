@@ -1,0 +1,130 @@
+cua-driver 0.22.2 — cross-platform computer-use automation driver
+Usage: cua-driver [SUBCOMMAND] [OPTIONS]
+Subcommands: mcp, list-tools, describe, call, serve, stop, revoke, status, config, telemetry, recording, update, check-update, doctor, diagnose, permissions, autostart, skills, manifest, channel, cursor-theme, sessions, history
+
+permissions options (macOS):
+  cua-driver permissions status   Report Accessibility + Screen Recording status. Read-only (no prompt).
+                                  Answers via a running daemon, so the result carries the CuaDriver
+                                  identity (com.trycua.driver). If no daemon is running it reports
+                                  `unknown` rather than your terminal's grants. Add --json for the payload.
+  cua-driver permissions grant    Launch CuaDriver via LaunchServices so dialogs attribute to the app,
+                                  explain and request Accessibility, Screen Recording, and Tahoe's
+                                  direct-capture consent, then verify live capture. This is the correct
+                                  way to grant; the read-only status command never triggers that probe.
+
+Updating cua-driver:
+  cua-driver check-update         Ask GitHub whether a newer release is available. Read-only.
+                                  Default output is human-friendly text.
+    --json                        Emit a machine-readable JSON payload (same shape as the
+                                  check_for_update MCP tool). Hermes branches on update_available.
+    --no-cache                    Skip the 20h on-disk cache and force a fresh GitHub round-trip.
+  cua-driver update               Same check as above, then suggest --apply if outdated.
+    --apply                       Download + install the latest release via the canonical installer.
+    --json                        Emit the structured check payload (does not change --apply behaviour).
+  cua-driver channel status      Show the saved stable/nightly update channel.
+  cua-driver channel set <name>  Save stable or nightly; run update --apply to switch binaries.
+    --json                        Emit machine-readable channel state.
+
+autostart options (Windows-only today):
+  cua-driver autostart enable     Register a logon Scheduled Task so serve starts at every interactive logon.
+  cua-driver autostart disable    Remove the autostart entry. No-op if not registered.
+  cua-driver autostart status     Print whether the entry is registered + whether the daemon is running.
+  cua-driver autostart kick       Start the entry now without re-logging.
+
+skills options (agent skill-pack management, opt-in):
+  cua-driver skills install       Fetch the versioned skill pack from GitHub Releases and symlink it
+                                  into each detected agent's skills/ dir (Claude Code, Codex, Prime Agent,
+                                  OpenClaw, OpenCode). Idempotent. Never overwrites existing user links.
+  cua-driver skills update        Re-fetch the skill pack from GitHub, refreshing the local copy + links.
+  cua-driver skills uninstall     Remove the agent symlinks. Add --all to also delete the local copy.
+  cua-driver skills status        Report local install state + per-agent link state. Read-only.
+  cua-driver skills path          Print where the local skill pack lives.
+  --from main                     (install only) Fetch latest from main branch instead of the tagged release.
+
+agent authorization (serve only):
+  --permission-mode <mode>        standard (default), bounded, or unrestricted.
+  --grant existing-profile       Pre-authorize existing logged-in Chromium attachment
+                                  for this runtime. Repeatable for future grant types.
+  --dangerously-bypass-approvals  Select unrestricted mode and acknowledge its risk.
+                                  The mode is fixed for the daemon lifetime and cannot
+                                  be changed by a tool call.
+                                  This is separate from --no-permissions-gate, which only
+                                  controls the macOS OS-permission onboarding UI.
+  --capability-manifest <path>    Narrow-only tool/resource manifest; required in bounded mode.
+  --approve-capability-manifest   Required with --capability-manifest; the trusted launcher asserts
+                                  that the human reviewed this exact manifest at startup.
+  --session-policy <path>         Deprecated alias for --capability-manifest.
+  --approve-session-policy        Deprecated alias for --approve-capability-manifest.
+
+authorization revocation:
+  cua-driver revoke --session <id>  Stop and revoke one session's grants.
+  cua-driver revoke --all           Stop and revoke every live session.
+                                      Revocation is deny-only and never needs a token.
+
+mcp options:
+  --direct                Own the runtime in this MCP process. On macOS this
+                          deliberately attributes TCC to the invoking host.
+                          Mutually exclusive with --socket.
+  --embedded              Declare embedding-host mode (also:
+                          CUA_DRIVER_EMBEDDED=1). Without --direct, the host
+                          must start `cua-driver serve --embedded` and pass
+                          its private endpoint with --socket.
+                          See Skills/cua-driver/EMBEDDING.md.
+  --host-bundle-id <id>   Advisory host bundle id label for check_permissions output.
+  --socket <path>         Select an explicit daemon socket/pipe endpoint.
+  --claude-code-computer-use-compat
+                          Select the Claude Code computer-use compat surface.
+                          Now forwarded to the proxy-launched daemon (was a no-op
+                          on the proxy path — the path you actually run — because
+                          the daemon hardcoded compat=false). Note: the compat
+                          screenshot tool itself was removed in #1692, so the flag
+                          has no tool-surface effect today; the wiring is in place
+                          for any future compat-gated tool.
+
+agent cursor overlay (serve only — needs the daemon UI runloop):
+  The overlay is ON by default: every MCP session automatically gets its own
+  cursor (keyed by session id) that shows where the agent acts without moving the
+  real pointer. It is removed when the session ends. A pure accessibility (AX)
+  action snaps the cursor with a brief pulse on its first action instead of a long
+  glide, so it can be easy to miss — do a pixel click or move_cursor first
+  for a visibly gliding demo. These flags tune the overlay on `serve`/`mcp`:
+  --no-overlay            Disable the cursor overlay entirely for this daemon.
+  --cursor-theme <id>     Select an installed theme (default: cua.default).
+  --cursor-reduced-motion <auto|on|off>
+                          Follow the OS setting, force stills, or allow motion.
+  Set these on `cua-driver serve`; MCP and one-shot CLI processes are clients
+  and do not own the daemon's overlay configuration or UI runloop.
+
+cursor-theme options (trusted local workflow):
+  cua-driver cursor-theme validate <source.lottie>
+  cua-driver cursor-theme build <source.lottie> --output <theme.cua-theme>
+  cua-driver cursor-theme inspect <theme.cua-theme> [--json]
+  cua-driver cursor-theme preview <theme.cua-theme> --output <directory>
+  cua-driver cursor-theme install <theme.cua-theme>
+  cua-driver cursor-theme list [--json]
+  cua-driver cursor-theme uninstall <theme-id>
+                                  Theme installation is local-only and is never an agent tool.
+
+manifest options:
+  cua-driver manifest             Emit a stable JSON description of this CLI's surface
+                                  (subcommands, args, MCP invocation, version). Read-only.
+                                  Consumers (Hermes, Claude Code, …) read it to drop
+                                  hardcoded launch argv like _CUA_DRIVER_ARGS = ["mcp"].
+    --pretty / -p                 Pretty-print the JSON.
+
+doctor options:
+  --json                  Emit the probe report as JSON for scripting.
+
+experimental options (default: off):
+  --experimental-history      Admit encrypted local Computer History for this daemon.
+                              Capture remains off until `cua-driver history enable`.
+  cua-driver history enable   Opt in and initialize encrypted local history.
+  cua-driver history status|pause|resume|flush|list|show|disable|delete
+  --experimental-pip          Show a small always-on-top window with the latest
+                              post-action screenshot + a 1-line label. macOS only
+                              today; Win/Linux print a not-yet-implemented notice.
+  --experimental-pip-geometry WxH[+X+Y]   Override window size (and optional top-left
+                                          origin). Defaults to 480x360 in the top-right
+                                          corner of the main display.
+
+EXITCODE=0

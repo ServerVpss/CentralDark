@@ -1,0 +1,31 @@
+TITLE: [SENTINELA sentinela-38c4260f17] Endpoints: Endpoint MCP tools fora do ar (HTTP 0)
+LABELS: []
+COMMENTS: 6
+
+> Aberta automaticamente pela **sentinela** (run 28472254593).
+> Hash de dedupe: `sentinela-38c4260f17` — não reabre se já existir.
+
+## Área
+Endpoints
+
+## Severidade
+p1
+
+## Bot responsável
+`assign:codex`
+
+## Detalhe (sanitizado)
+```
+URL: https://mcp.centralldark.com/tools.json
+Status: 0
+Latência: 43ms
+Erro: fetch failed
+```
+
+## Critério pra fechar
+- Endpoint volta 200 / workflow verde / CORS configurado / pendência registrada.
+- Bot dono comenta com PR ou justificativa.
+- Após 7 dias sem ação, sentinela-stale escala.
+
+---
+_Anti-loop: só o bot com label `assign:codex` deve agir._

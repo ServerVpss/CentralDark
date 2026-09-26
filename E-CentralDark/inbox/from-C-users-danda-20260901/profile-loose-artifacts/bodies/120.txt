@@ -1,0 +1,30 @@
+TITLE: [DOCS] Arsenal Multi-IA Central Dark — pendências consolidadas da conversa de 2026-07-07
+LABELS: []
+
+Registrar e acompanhar a consolidação da doutrina Arsenal Multi-IA discutida na conversa de 2026-07-07.
+
+## Escopo
+- formalizar Arsenal Master
+- formalizar política de roteamento
+- formalizar handoff oficial
+- integrar handoff ao status.centralldark.com
+- definir painel admin definitivo
+- classificar IAs por papel
+- definir política de custo e esforço
+- produzir mapa visual definitivo
+
+## Artefatos já iniciados na branch
+- docs/CONSCIENCIA/ARSENAL-MULTI-IA-2026-07-07/README.md
+- docs/CONSCIENCIA/ARSENAL-MULTI-IA-2026-07-07/REGISTRO-BRUTO-DA-CONVERSA.md
+- docs/CONSCIENCIA/ARSENAL-MULTI-IA-2026-07-07/LINKS-VIDEOS-E-REFERENCIAS.md
+- docs/CONSCIENCIA/ARSENAL-MULTI-IA-2026-07-07/CONSTITUICAO-OFICIAL-DO-ARSENAL.md
+- docs/CONSCIENCIA/ARSENAL-MULTI-IA-2026-07-07/HANDOFF.md
+- docs/CONSCIENCIA/ARSENAL-MULTI-IA-2026-07-07/ARQUITETURA.txt
+- docs/CONSCIENCIA/ARSENAL-MULTI-IA-2026-07-07/POSTER-PLANEJAMENTO.svg
+
+## Checklist inicial
+- [ ] consolidar documentos finais
+- [ ] validar naming e localização dos artefatos
+- [ ] decidir o que entra no status e o que entra no admin
+- [ ] mapear modelos atuais por papel
+- [ ] transformar a doutrina em política oficial do sistema

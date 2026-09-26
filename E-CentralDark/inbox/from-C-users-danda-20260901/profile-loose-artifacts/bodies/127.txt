@@ -1,0 +1,87 @@
+TITLE: Mobile Admin e grafo operacional — cockpit de bolso e mapa vivo CentralDark
+LABELS: ['🟡 IA-PRECISA-REVISAR', '🔴 RISCO-SERVIDOR', '🟢 PRONTO-PARA-IA']
+
+## Vinculado
+
+Programa-mãe: #122
+
+## Objetivo
+
+Consolidar o Mobile Admin como app/PWA de bolso para comandar e acompanhar a CentralDark, e refazer o grafo como mapa operacional vivo.
+
+## Contexto
+
+Existe referência ao módulo:
+
+`/root/CentralDark/apps/modulos/comando-mobile`
+
+Avaliar se o nome ideal deve virar:
+
+- `apps/modulos/mobile`
+- ou `apps/modulos/mobile-admin`
+
+## Papel do Mobile Admin
+
+- cockpit de bolso;
+- snapshots;
+- alertas;
+- fila Hermes;
+- status de gateways;
+- bugs abertos;
+- PRs/checks;
+- ações que exigem Manual Confirm;
+- links rápidos para HUB/status/Telegram/GitHub;
+- visão de serviços, cobranças, trabalhos e pendências.
+
+## Estratégia recomendada
+
+- PWA primeiro;
+- wrapper nativo depois se necessário;
+- sem secrets no frontend;
+- consumir snapshots seguros;
+- ações sensíveis sempre com confirmação.
+
+## Grafo operacional
+
+Refazer o grafo com camadas:
+
+- Infra;
+- Gateways;
+- Agentes;
+- Memória;
+- Fluxos;
+- Produtos;
+- Domínios.
+
+Cada nó deve ter:
+
+- nome;
+- função;
+- entrada;
+- saída;
+- dependências;
+- risco;
+- ambiente;
+- leitura/escrita;
+- quem aprova;
+- link para issue/doc/serviço.
+
+## Dúvidas
+
+1. Renomear `comando-mobile` para `mobile` ou `mobile-admin`?
+2. Qual domínio oficial: `mobile.centralldark.com`?
+3. Mobile consome quais endpoints primeiro?
+4. Como mostrar Telegram topics no app?
+5. Como mostrar grafo vivo no app?
+
+## Critério de pronto
+
+- Nome oficial decidido.
+- Inventário do módulo atual feito.
+- Rotas/endpoints definidos.
+- Primeiro grafo operacional desenhado.
+- Relação Mobile <-> Telegram <-> Hermes definida.
+
+## Fio da missão
+
+Mobile vira bolso operacional -> grafo vira mapa vivo -> Jarvis controla -> Hermes executa -> GitHub registra.

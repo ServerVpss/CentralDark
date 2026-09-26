@@ -1,0 +1,30 @@
+TITLE: [SENTINELA sentinela-6a754ac5c2] Endpoints: Endpoint API fora do ar (HTTP 502)
+LABELS: []
+
+> Aberta automaticamente pela **sentinela** (run 28752043181).
+> Hash de dedupe: `sentinela-6a754ac5c2` — não reabre se já existir.
+
+## Área
+Endpoints
+
+## Severidade
+p2
+
+## Bot responsável
+`assign:codex`
+
+## Detalhe (sanitizado)
+```
+URL: https://api.centralldark.com/health
+Status: 502
+Latência: 328ms
+Erro: -
+```
+
+## Critério pra fechar
+- Endpoint volta 200 / workflow verde / CORS configurado / pendência registrada.
+- Bot dono comenta com PR ou justificativa.
+- Após 7 dias sem ação, sentinela-stale escala.
+
+---
+_Anti-loop: só o bot com label `assign:codex` deve agir._

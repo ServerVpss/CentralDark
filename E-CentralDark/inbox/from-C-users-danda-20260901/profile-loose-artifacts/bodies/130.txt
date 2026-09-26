@@ -1,0 +1,158 @@
+TITLE: GrafoRAG Jarvis 3D — grafo operacional vivo, setores, núcleos e orquestração multiagente
+LABELS: ['🟡 IA-PRECISA-REVISAR', '🔴 RISCO-SERVIDOR', '🟢 PRONTO-PARA-IA']
+
+## Vinculado
+
+Programa-mãe: #122
+Mobile/grafo: #127
+Auditor de coerência: #129
+Research Cell/RAG: #126
+
+## Objetivo
+
+Refazer o grafo CentralDark como um grafo operacional vivo estilo Jarvis, com visual 3D/2D navegável, setores, núcleos, categorias, status, riscos, agentes e relação direta com repo, VPS, Telegram, Mobile e documentação viva.
+
+O grafo atual é contexto/protótipo. O grafo final deve ser redesenhado com intenção operacional.
+
+## Diferença de conceitos
+
+### Graphify / graph visual
+
+Ferramenta ou função para visualizar estrutura do codebase, arquivos e relações. Útil para enxergar arquitetura, mas não é automaticamente uma base de raciocínio.
+
+### GraphRAG / GrafoRAG
+
+Arquitetura de conhecimento que extrai entidades, relações e comunidades a partir de dados/docs/código para consulta por IA. A documentação do Microsoft GraphRAG descreve um processo com indexação, extração de entidades/relações/claims, clustering hierárquico e consulta por modos como Global Search, Local Search e DRIFT Search.
+
+Fonte: https://microsoft.github.io/graphrag/
+
+## Direção CentralDark
+
+O CentralDark deve unir os dois:
+
+- visual operacional estilo Jarvis;
+- base GrafoRAG/RAG para IA consultar e raciocinar;
+- dados vindos do repo, docs, issues, PRs, VPS read-only, PM2, Telegram e Mobile.
+
+## Categorias visuais obrigatórias
+
+Cada nó deve ter categoria clara:
+
+- `🟢 ativo`
+- `🟡 planejado`
+- `🔴 risco/sensível`
+- `🔵 documentação`
+- `🟣 agente/IA`
+- `⚙️ serviço VPS`
+- `🔄 integração`
+- `🧠 conhecimento/RAG`
+- `📱 mobile/UI`
+- `🧾 issue/PR`
+
+## Campos mínimos por nó
+
+- `id`
+- `nome`
+- `tipo`
+- `setor`
+- `status`
+- `risco`
+- `ambiente`
+- `entrada`
+- `saída`
+- `dependências`
+- `quem_chama`
+- `quem_aprova`
+- `links` para issue/doc/arquivo/serviço
+- `last_seen`
+- `fonte_evidencia`
+
+## Setores/núcleos sugeridos
+
+Cada setor deve ter um núcleo e satélites:
+
+- `Jarvis Core`: comando central e cockpit.
+- `Hermes Core`: filas, loops, jobs longos, executor.
+- `DarkAI Core`: estratégia, debate, roteamento.
+- `Agentes IA`: GPT, Codex, Gemini, Claude, Mistral, local LLM, etc.
+- `Research Cell`: web/repo/docs/logs/UI/síntese/evidência.
+- `VPS & Infra`: PM2, Caddy, runners, deploy, serviços.
+- `Repo & GitHub`: issues, PRs, labels, Actions, branches.
+- `Telegram Bus`: tópicos, bots, notificações, status.
+- `Mobile Admin`: PWA/app de bolso, comandos, snapshots.
+- `HUB & Status`: status pages, cards, painéis.
+- `Supabase`: schemas, RLS, functions, snapshots, quotas.
+- `Escola`: treinamento, prompts, técnicas, semântica.
+- `Conselho`: governança, decisões, aprovação, risco.
+- `Prefeitura`: serviços reais, cobranças, trabalhos, pendências.
+
+## Orquestração multi-monitor sugerida
+
+Usar os monitores como cockpit humano:
+
+- Monitor 1: GitHub/issues/PRs/docs.
+- Monitor 2: VS Code/repo/grafo.
+- Monitor 3: VPS/terminais/PM2/logs read-only.
+- Monitor 4: Telegram/status/mobile/browser.
+
+Função: Pivete comanda e observa, agentes executam em trilhas separadas, tudo consolidado em pastas/relatórios numerados.
+
+## Sistema de consolidação por lotes
+
+Criar pasta/estrutura para execuções paralelas:
+
+`docs/RELATORIOS/MISSOES/<YYYY-MM-DD>/<mission-id>/`
+
+Cada agente grava:
+
+- `00-escopo.md`
+- `01-achados.md`
+- `02-evidencias.md`
+- `03-diffs-propostos.md`
+- `04-riscos.md`
+- `05-proximo-passo.md`
+
+Um consolidador monta:
+
+`MAPA-DO-TESOURO.md`
+
+com a síntese final da missão.
+
+## V1 — read-only
+
+1. Inventariar o grafo atual e arquivos relacionados.
+2. Mapear fontes de dados do grafo.
+3. Definir schema JSON dos nós/links.
+4. Gerar relatório de arquitetura.
+5. Definir layout 2D/3D e controles mínimos.
+6. Definir como o Mobile Admin e Telegram vão consumir snapshots.
+
+## V2 — implementação controlada
+
+- Criar/ajustar gerador de grafo.
+- Criar snapshot JSON público/sanitizado.
+- Criar tela Jarvis 3D/2D navegável.
+- Adicionar filtros por setor/status/risco.
+- Adicionar painel de detalhes por nó.
+- Conectar issues/docs/serviços por link.
+- Criar export para RAG/GrafoRAG.
+
+## Travas
+
+- Não indexar secrets.
+- Não incluir `.env`, tokens, chaves, connection strings ou logs crus.
+- VPS/Supabase/Telegram apenas read-only até autorização.
+- Correções por branch/PR.
+- Nada de deploy/restart sem Manual Confirm.
+
+## Critério de pronto V1
+
+- Schema de nó/link aprovado.
+- Setores e núcleos definidos.
+- Primeiro snapshot sanitizado gerado.
+- Primeiro relatório em `docs/RELATORIOS`.
+- Decisão: implementar 2D primeiro, 3D depois, ou 3D direto.
+
+## Fio da missão
+
+Grafo atual é contexto -> GrafoRAG/Jarvis 3D nasce com schema -> agentes consultam -> Telegram observa -> Mobile controla -> GitHub registra.

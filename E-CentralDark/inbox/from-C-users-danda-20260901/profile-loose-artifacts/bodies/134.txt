@@ -1,0 +1,115 @@
+TITLE: Inventário de subdomínios CentralDark — classificar manter, unificar ou migrar para api/hub/mobile
+LABELS: ['🟡 IA-PRECISA-REVISAR', '🟢 PRONTO-PARA-IA', '🔴 FALTA-EVIDÊNCIA']
+
+## Vinculado
+
+Programa-mãe: #122
+HUB + API Gateway: #133
+Telegram Bus: #123
+GrafoRAG/Jarvis 3D: #130
+
+## Objetivo
+
+Registrar e classificar os subdomínios atuais da CentralDark para decidir o que deve continuar como subdomínio, virar rota em `api.centralldark.com`, virar módulo do HUB, aparecer no Mobile Admin ou ser descontinuado.
+
+## Inventário inicial recebido
+
+### Núcleo público
+
+- `centralldark.com`
+- `www.centralldark.com`
+- `status.centralldark.com` — Mega Painel
+- `api.centralldark.com` — Gateway OpenAI-compatible/APIs
+- `ui.centralldark.com` — Open WebUI
+
+### Operação/Deploy/Instalação
+
+- `mcp.centralldark.com` — MCP público
+- `install.centralldark.com` — instalador/status
+- `deploy.centralldark.com` — webhook de deploy
+- `webhook.centralldark.com` — webhook GitHub -> VPS legado/alternativo
+
+### Módulos/Apps
+
+- `builder.centralldark.com` — Builder Bolt
+- `hub.centralldark.com` — Hub operacional
+- `grafo.centralldark.com` — API/visual do Grafo Vivo
+- `telepainel.centralldark.com` — Telepainel
+- `bot.centralldark.com` — Webhook/Docs WhatsApp
+
+### Verticais citadas nos docs
+
+- `whatsapp.centralldark.com`
+- `crm.centralldark.com`
+- `financeiro.centralldark.com`
+- `app.centralldark.com` — painel/login legado
+- `bridge.centralldark.com` — bridge/extensão
+- `gateway.centralldark.com` — alias mencionado em docs
+
+## Classificação necessária
+
+Para cada domínio, preencher:
+
+| domínio | função atual | serviço/processo | path no repo | status HTTP | manter subdomínio | virar rota API | virar módulo HUB | virar mobile | risco | dono |
+|---|---|---|---|---|---|---|---|---|---|---|
+
+## Hipótese inicial
+
+### Manter como subdomínio dedicado
+
+- `status.centralldark.com`
+- `mcp.centralldark.com`
+- `hub.centralldark.com`
+- `ui.centralldark.com`
+- `grafo.centralldark.com`
+- `mobile.centralldark.com` quando existir
+
+### Avaliar unificação em `api.centralldark.com`
+
+- `deploy.centralldark.com`
+- `webhook.centralldark.com`
+- `gateway.centralldark.com`
+- rotas internas de eventos/API
+
+### Avaliar virar módulo do HUB/Mobile
+
+- `install.centralldark.com`
+- `builder.centralldark.com`
+- `telepainel.centralldark.com`
+- `bot.centralldark.com`
+- `crm.centralldark.com`
+- `financeiro.centralldark.com`
+- `app.centralldark.com`
+- `bridge.centralldark.com`
+
+## Investigação read-only sugerida
+
+Sem alterar DNS/Caddy/Nginx/PM2:
+
+```bash
+find /root/CentralDark -type f \( -name '*.md' -o -name '*.js' -o -name '*.mjs' -o -name '*.ts' -o -name '*.tsx' -o -name '*.json' -o -name '*.yml' -o -name '*.yaml' -o -name '*.conf' \) -print0 | xargs -0 grep -InE '[a-z0-9.-]+\.centralldark\.com' || true
+pm2 list
+```
+
+Se existir Caddy/Nginx local, listar somente arquivos de config e domínios, sem secrets.
+
+## Travas
+
+- Não alterar DNS.
+- Não alterar Caddy/Nginx.
+- Não reiniciar serviços.
+- Não apagar subdomínios.
+- Não expor secrets.
+- Não fazer deploy.
+
+## Critério de pronto
+
+- Relatório com tabela completa.
+- Domínios sem dono marcados.
+- Domínios duplicados/legados marcados.
+- Proposta de arquitetura `subdomínios vs rotas`.
+- Relação com #133 atualizada.
+
+## Fio da missão
+
+Inventário de domínios -> arquitetura API/HUB/Mobile -> Telegram V0 -> automação CentralDark.

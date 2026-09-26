@@ -1,0 +1,131 @@
+TITLE: 🚨 SALA DE GUERRA P0 — reativar agentes, destravar workflows e zerar fila sem spam
+LABELS: ['🔴 RISCO-SERVIDOR', '🤖 IA-VALIDAR', '🧠 AGENTE-CODEX', '🧠 AGENTE-CLAUDE', '🛡️ SENTINELA', '🟡 PENDÊNCIA']
+COMMENTS: 2
+
+## Ordem do Pivete
+
+O CentralDark não pode ficar apenas monitorando e comentando "ainda na fila". Cada alerta precisa terminar em uma destas saídas:
+
+```text
+RESOLVIDO com PR + prova
+BLOQUEADO com motivo + responsável humano
+ENCERRADO porque o serviço já voltou e a issue ficou obsoleta
+```
+
+## Diagnóstico confirmado
+
+### 1. Orquestração quebrada
+
+- #21 — GitHub Bot Controller vermelho há 14 dias, sem PR.
+- #16 — VPS SSH Exec vermelho.
+- #68 — Pipeline Telegram + Painel vermelho.
+- #117 — supabase-bot vermelho.
+
+Enquanto o Bot Controller estiver quebrado, labels como `assign:codex` e `assign:lovable` não garantem que um agente realmente execute a missão.
+
+### 2. Monitoramento sem solução
+
+- #23 — `install.centralldark.com/status.json` em HTTP 502 há 13 dias.
+- Os comentários são apenas check-ins automáticos; nenhum PR foi ligado.
+- #195 concentra a correção do 502 e a mudança da Sentinela para evento real.
+
+### 3. Fila de PRs parada
+
+- #157 — mergeável; precisa auditoria e decisão.
+- #149, #142, #109 e #108 — mergeáveis, porém sem revisão final.
+- #155, #150, #147, #146 e #141 — não mergeáveis; precisam rebase, substituição ou encerramento.
+- #155 aparentemente substitui parte do #150; evitar duas soluções concorrentes.
+- #147 possui alerta de segurança automático e não pode seguir sem revisão.
+
+### 4. Segurança bloqueada por ação humana
+
+- #190 aguarda rotação humana do PAT e remoção de secrets hardcoded.
+- Nenhum agente pode inventar ou publicar segredo.
+
+### 5. Auditoria incompleta
+
+- #144 distribuiu agentes Codex e Claude, mas o arquivo esperado `docs/AUDITORIAS/AUDITORIA-FLUXO-DE-OURO.md` não existe na `main`.
+
+## Plano obrigatório por fases
+
+### FASE 1 — restaurar o sistema que chama os agentes
+
+Responsável inicial: `assign:codex`
+
+1. Diagnosticar #21 primeiro.
+2. Corrigir Bot Controller em branch própria.
+3. Provar com uma issue-teste inofensiva que um label gera execução real e comentário do agente.
+4. Depois validar #16, #68 e #117.
+
+**Sem esta fase, não abrir mais missões automáticas.**
+
+### FASE 2 — corrigir incidente real
+
+1. Executar #195 e #23.
+2. Corrigir o HTTP 502 do Install.
+3. Confirmar 200 interno e externo.
+4. Fechar #23 após duas verificações verdes consecutivas.
+
+### FASE 3 — parar spam e usar mudança de estado
+
+```text
+estado igual → não commitar, não comentar, não disparar webhook
+UP → DOWN → abrir/atualizar incidente + webhook
+DOWN → UP → registrar recuperação + webhook
+```
+
+Guardar telemetria em Supabase, artifact, cache ou storage — não em commits repetidos na `main`.
+
+### FASE 4 — limpar fila de PRs
+
+Para cada PR aberto, responder:
+
+```text
+MANTER E AUDITAR
+ATUALIZAR/REBASEAR
+SUBSTITUÍDO POR OUTRO PR
+FECHAR COMO OBSOLETO
+BLOQUEADO POR SEGURANÇA
+```
+
+Nenhum PR deve ficar indefinidamente aberto sem decisão.
+
+### FASE 5 — regra permanente de autonomia
+
+Cada agente precisa registrar:
+
+```text
+Missão recebida:
+Início real:
+Branch:
+SHA:
+Ação executada:
+Teste:
+PR:
+Bloqueio, se houver:
+Próximo responsável:
+Status: TRABALHANDO | RESOLVIDO | BLOQUEADO
+```
+
+Check-in sem mudança de estado é proibido.
+
+## Critério de conclusão desta Sala de Guerra
+
+- Bot Controller verde e testado.
+- VPS SSH Exec, Telegram/Painel e supabase-bot classificados como resolvidos ou bloqueados com causa.
+- Install retornando 200.
+- Sentinela sem commits repetitivos na `main`.
+- Todas as issues stale classificadas.
+- Todos os PRs abertos com decisão explícita.
+- #144 concluída com relatório no GitHub.
+- #190 mantida bloqueada até ação humana segura.
+
+## Restrições
+
+- Não fazer force-push.
+- Não editar produção às cegas.
+- Não expor secrets.
+- Não fazer merge automático para `main`.
+- Toda correção deve usar branch, PR, teste, evidência e rollback.
+
+**Prioridade:** P0 — restaurar capacidade de execução antes de gerar mais alertas.

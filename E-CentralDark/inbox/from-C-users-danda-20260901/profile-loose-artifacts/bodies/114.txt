@@ -1,0 +1,45 @@
+TITLE: Padronizar cores das labels operacionais em português
+LABELS: []
+
+## Objetivo
+
+Ajustar as cores das labels operacionais oficiais do CentralDark para ficarem mais visuais e fáceis para operação leiga.
+
+Arquivo oficial de referência:
+
+```text
+docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md
+```
+
+## Labels e cores sugeridas
+
+| Label | Cor sugerida | Uso |
+|---|---|---|
+| 🟢 PRONTO-PARA-IA | `#2EA043` | Tarefa pronta para IA trabalhar. |
+| 🟡 IA-PRECISA-REVISAR | `#D29922` | PR/código precisa revisão IA/Codex. |
+| 🔴 RISCO-SERVIDOR | `#DA3633` | VPS, deploy, PM2, Caddy, runner, banco ou produção. |
+| 🟡 PRECISA-DE-OK | `#F2CC60` | Pausado aguardando autorização humana. |
+| 🔴 SEGURANÇA | `#B62324` | RLS, secrets, tokens, auth, banco ou vazamento. |
+| 🟢 CORREÇÃO-SEGURA | `#238636` | Correção de baixo risco em branch/PR. |
+| 🔴 FALTA-EVIDÊNCIA | `#CF222E` | Falta print/log/teste/prova antes de agir. |
+
+## Como resolver
+
+Opção A — GitHub UI:
+
+1. Abrir `Settings` do repositório.
+2. Entrar em `Labels`.
+3. Editar cada label acima.
+4. Aplicar as cores sugeridas.
+
+Opção B — Automação futura:
+
+Criar script ou GitHub App com permissão de labels para atualizar descrição/cor via API.
+
+## Estado atual
+
+As labels já existem e foram aplicadas no PR #109, mas estão com cor padrão `#ededed`.
+
+## Fio da missão
+
+Labels oficiais criadas -> falta cor visual -> depois voltar ao PR #109.

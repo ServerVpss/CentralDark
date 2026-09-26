@@ -1,0 +1,96 @@
+================================================================
+TUTORIAL — SOUL TRAVADO NO PERFIL PIVETE
+CentralDark / Hermes-Casa
+Autor: HERMES-CASA (executado para SEGREDO/CHEFE)
+Data: 2026-08-27
+================================================================
+
+O QUE FOI FEITO
+----------------------------------------------------------------
+1. O SOUL.md antigo do perfil 'pivete' tinha so 513 bytes em ingles
+   (conteudo generico da Nous). Isso fazia QUALQUER modelo novo
+   perder a identidade Hermes-Casa ao entrar no perfil.
+
+2. Sobrescrevi com o SOUL Hermes-Casa COMPLETO (38KB, 1811 linhas).
+   Agora o papel HERMES-CASA vem do disco, nao do system prompt.
+
+3. Amarrei no profile.yaml um bloco 'soul:' com locked: true.
+   Nenhum modelo consegue se autoalterar. So tu troca.
+
+4. Confirmei no disco: tamanho + hash SHA256.
+
+================================================================
+ARQUIVOS ENVOLVIDOS
+----------------------------------------------------------------
+SOUL fixo (o que importa):
+  E:\CentralDark\Pivete\profiles\pivete\SOUL.md
+
+Config do perfil (trava):
+  E:\CentralDark\Pivete\profiles\pivete\profile.yaml
+
+Canonico de verdade (referencia, no repo):
+  E:\CentralDark\Pivete\CentralDark\docs\CONSCIENCIA\01-IDENTIDADE-E-REGRAS\SOUL-SOL.md
+
+Porta universal (boot):
+  E:\CentralDark\Pivete\CentralDark\LEIA-ME-IA.md
+
+================================================================
+COMO USAR — TROCAR O SOUL QUANDO TU QUISER
+----------------------------------------------------------------
+PASSO 1: Abre o arquivo
+  E:\CentralDark\Pivete\profiles\pivete\SOUL.md
+  (bloco de notas, VS Code, o que tu usar)
+
+PASSO 2: Edita o conteudo
+  - Pode mudar regras, identidade, estilo
+  - Ou apagar tudo e colar outro SOUL canônico
+
+PASSO 3: Salva (Ctrl+S)
+
+PASSO 4: Próxima sessão que carregar o perfil 'pivete'
+  ja herda o novo SOUL. Nao precisa reiniciar nada agora.
+
+================================================================
+COMO APONTAR PRO CANONICO DO GITHUB
+----------------------------------------------------------------
+O profile.yaml ja tem essas linhas (so referencia):
+  canonical_ref: "...\SOUL-SOL.md"
+  porta_universal: "...\LEIA-ME-IA.md"
+
+Se tu quiser que o SOUL do perfil SEJA o do repo:
+  Abre SOUL.md do perfil e no topo bota:
+  "Ver canonico em: E:\CentralDark\Pivete\CentralDark\docs\CONSCIENCIA\01-IDENTIDADE-E-REGRAS\SOUL-SOL.md"
+  (ou simplesmente copia o conteudo do canonico pro SOUL.md)
+
+================================================================
+O QUE NAO MUDA SOZINHO (TRAVA REAL)
+----------------------------------------------------------------
+- Troca de modelo (grok -> tencent -> outro):
+  herda o SOUL do perfil. Nao some.
+
+- Nenhum motor tem autoridade pra mudar identidade ou SOUL.
+  So SEGREDO/CHEFE decide.
+
+- Se tu disser "usa o canonico X" ou "muda pra Y":
+  o Hermes faz na hora, sem modelo decidir sozinho.
+
+================================================================
+PROVA NO DISCO
+----------------------------------------------------------------
+Arquivo: E:\CentralDark\Pivete\profiles\pivete\SOUL.md
+Linhas:  1811
+Bytes:   38210
+SHA256:  4f62fa7c3a7a9de90e3ec78eaf589e99f018688a4a28d69e0745123ce925541c
+
+Profile: E:\CentralDark\Pivete\profiles\pivete\profile.yaml
+Bloco adicionado: soul: (file, role, authority_final, locked: true)
+
+================================================================
+RESUMO PRA TU SABER
+----------------------------------------------------------------
+Antes: SOUL vinha do system prompt -> sumia ao trocar modelo.
+Agora:  SOUL vem do disco do perfil -> travado, herda sempre.
+Tu manda, tu troca. Modelo nenhum mexe.
+
+Fim do tutorial.
+================================================================

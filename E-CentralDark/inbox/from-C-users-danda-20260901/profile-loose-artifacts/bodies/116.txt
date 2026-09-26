@@ -1,0 +1,98 @@
+TITLE: Varredura automática de bugs no ui.centralldark.com com agentes
+LABELS: ['🔴 RISCO-SERVIDOR', '🟢 PRONTO-PARA-IA', '🔴 FALTA-EVIDÊNCIA']
+
+## Objetivo
+
+Criar uma rotina operacional para varrer `https://ui.centralldark.com/` em busca de bugs usando agentes, com ciclo repetível até não encontrar novos erros relevantes.
+
+## Contexto
+
+Pivete quer usar o arsenal CentralDark, DarkAI, Hermes, gateways e agentes disponíveis para auditar a UI, gerar evidência, abrir correções em GitHub e manter produção controlada.
+
+## Regra principal
+
+Ler -> evidenciar -> agir mínimo -> validar -> registrar -> retomar o fio.
+
+## Escopo inicial
+
+- URL alvo: https://ui.centralldark.com/
+- Tipo: auditoria de UI/produção.
+- Modo inicial: read-only.
+- Correções: apenas por branch/PR, uma correção por PR quando possível.
+- Deploy/restart: somente com autorização humana explícita.
+
+## Agentes sugeridos
+
+- `CentralDark-UI-Sentinel`: abre a UI, captura screenshots e fluxo visual.
+- `CentralDark-Console-Auditor`: coleta erros de console JavaScript.
+- `CentralDark-Network-Auditor`: coleta falhas HTTP, assets 404/500, CORS e APIs quebradas.
+- `CentralDark-Accessibility-Agent`: verifica navegação básica, contraste, labels e problemas simples de UX.
+- `CentralDark-PR-Fixer`: cria branch limpa e PR mínimo para cada bug confirmado.
+- `CentralDark-Hermes-Orchestrator`: coordena loops longos e consolida relatório.
+
+## Loop operacional
+
+### Início
+
+1. Confirmar que `https://ui.centralldark.com/` responde.
+2. Capturar HTTP status, headers e HTML inicial.
+3. Abrir a página com browser/headless.
+4. Registrar screenshot inicial.
+5. Coletar erros de console e rede.
+6. Listar rotas ou links visíveis.
+
+### Meio
+
+1. Classificar bugs por severidade.
+2. Para cada bug confirmado, abrir issue ou checklist.
+3. Corrigir em branch limpa.
+4. Validar local/build/teste quando existir.
+5. Abrir PR com evidência antes/depois.
+6. Reexecutar a auditoria.
+
+### Fim
+
+Encerrar o ciclo quando:
+
+- página principal carrega sem erro crítico;
+- sem console error relevante;
+- sem asset/API 404/500 relevante;
+- rotas principais acessíveis;
+- relatório final registrado no GitHub;
+- pendências restantes viram issues separadas.
+
+## Evidência read-only sugerida na VPS/agente
+
+```bash
+curl -I https://ui.centralldark.com/ || true
+curl -fsS https://ui.centralldark.com/ | head -80 || true
+```
+
+Depois, usar Playwright/browser agent para:
+
+- screenshot desktop;
+- screenshot mobile;
+- console errors;
+- network failures;
+- navegação nos botões principais;
+- relatório Markdown em `docs/RELATORIOS/` ou comentário na issue.
+
+## Travas
+
+- Não pedir secrets, `.env`, tokens ou chaves.
+- Não alterar produção na primeira rodada.
+- Não fazer deploy/restart sem Manual Confirm.
+- Não usar main local suja da VPS para push.
+- Não fazer force-push.
+- Não misturar vários bugs grandes no mesmo PR.
+
+## Critério de pronto
+
+- Relatório da primeira varredura anexado.
+- Lista de bugs confirmados criada.
+- PRs abertos para correções mínimas.
+- Nova varredura após correções sem erros críticos.
+
+## Fio da missão
+
+UI auditada por agentes -> bugs viram PRs -> GitHub registra tudo -> deploy só com autorização.

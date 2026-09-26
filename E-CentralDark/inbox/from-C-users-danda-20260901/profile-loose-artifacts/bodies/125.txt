@@ -1,0 +1,79 @@
+TITLE: Travas de repo correto — auditoria de remotes, pre-push hook e sentinela anti-secret
+LABELS: ['🔴 RISCO-SERVIDOR', '🟡 PRECISA-DE-OK']
+
+## Vinculado
+
+Programa-mãe: #122
+
+## Objetivo
+
+Impedir commits/pushes no repositório errado, branch cruzada ou vazamento de credenciais por erro operacional.
+
+## Plano em fases
+
+### Fase 1 — Diagnóstico read-only
+
+Verificar remotes na VPS, sem alterar nada:
+
+- `/root/CentralDark`
+- outros repositórios suspeitos, se existirem
+- caminhos relacionados a painel, Telegram, HUB, Lovable e mobile
+
+Coletar:
+
+```bash
+git remote -v
+git branch --show-current
+git status --short
+git rev-parse --show-toplevel
+```
+
+### Fase 2 — Correção de remote
+
+Somente com autorização humana explícita.
+
+Se `/root/CentralDark` não apontar para `ServerVpss/CentralDark`, corrigir com `git remote set-url origin ...` e validar com `git fetch --dry-run`.
+
+### Fase 3 — Hook local `pre-push`
+
+Criar trava local que valide:
+
+- remote correto;
+- branch esperada;
+- nenhum secret óbvio nos staged files;
+- bloqueio de push da main local suja/divergente.
+
+### Fase 4 — GitHub Actions sentinela
+
+Criar workflow `sentinela-repo-correto.yml` para PRs:
+
+- scanner anti-secret;
+- checagem de caminhos proibidos;
+- checagem de artefatos sensíveis;
+- relatório claro.
+
+## Artefato esperado
+
+`docs/RELATORIOS/2026-07-07-auditoria-remotes.md`
+
+Deve conter antes/depois, evidências e recomendações.
+
+## Travas
+
+- Não fazer `git reset --hard`.
+- Não fazer force-push.
+- Não corrigir remote sem autorização.
+- Não commitar secrets.
+- Não confiar em main local suja da VPS.
+
+## Critério de pronto
+
+- Remotes auditados.
+- Relatório criado.
+- Hook proposto/testado.
+- Workflow sentinela proposto/testado.
+- PR aberto.
+
+## Fio da missão
+
+Auditar remotes -> travar erro operacional -> proteger repo -> manter GitHub como fonte da verdade.

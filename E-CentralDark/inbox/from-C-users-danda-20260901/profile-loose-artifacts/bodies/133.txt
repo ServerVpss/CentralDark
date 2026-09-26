@@ -1,0 +1,155 @@
+TITLE: HUB + API Gateway CentralDark — conectores, rota única e fallback híbrido de LLMs
+LABELS: ['🟡 IA-PRECISA-REVISAR', '🔴 RISCO-SERVIDOR', '🟢 PRONTO-PARA-IA']
+
+## Vinculado
+
+Programa-mãe: #122
+Telegram Bus: #123
+Governança Lovable: #124
+Research Cell/RAG: #126
+GrafoRAG/Jarvis 3D: #130
+
+## Objetivo
+
+Consolidar `https://hub.centralldark.com/` como painel de conectores/contas/multicontas e `https://api.centralldark.com/` como rota única organizada para APIs, gateways, conectores, LLMs e fallback híbrido.
+
+## Contexto
+
+O HUB já existe e mostra área de conectores para:
+
+- Grok/xAI;
+- Claude;
+- OpenAI;
+- Gemini;
+- Notion;
+- GitHub;
+- Google Drive;
+- Supabase;
+- gateways ativos como MCP Gateway, Telegram MTProto e Supabase HUB.
+
+O objetivo é conectar várias contas por provedor em um só lugar, com OAuth/API Key controlado, auditoria, expiração, logs no Hermes e snapshot seguro para painéis.
+
+## Evidência visual reportada
+
+Na tela do HUB aparece erro:
+
+```text
+Could not find the table 'api.oauth_connections' in the schema cache
+```
+
+Isso indica provável falta de migration/schema/cache para a tabela `api.oauth_connections` ou desalinhamento entre frontend/backend/Supabase.
+
+## Princípio de arquitetura
+
+```text
+hub.centralldark.com = painel/admin/conectores
+api.centralldark.com = gateway/rota única de APIs
+mcp.centralldark.com = tools/MCP
+status.centralldark.com = observabilidade pública/sanitizada
+mobile.centralldark.com = app/PWA de bolso
+```
+
+Evitar multiplicar subdomínios sem necessidade. Preferir módulos/rotas quando fizer sentido.
+
+## Rota única sugerida em api.centralldark.com
+
+Estrutura inicial:
+
+```text
+/api/health
+/api/connectors
+/api/connectors/:provider
+/api/oauth/:provider/start
+/api/oauth/:provider/callback
+/api/keys/store
+/api/keys/list
+/api/gateways/llm/chat
+/api/gateways/llm/models
+/api/gateways/llm/route
+/api/gateways/llm/usage
+/api/telegram/events
+/api/github/events
+/api/hermes/events
+/api/audit/events
+```
+
+## Fallback híbrido de LLMs
+
+Objetivo: se um provedor falhar, degradar para outro com registro/auditoria.
+
+Fluxo:
+
+```text
+pedido
+-> policy/router
+-> provedor primário
+-> se falhar: fallback 1
+-> se falhar: fallback 2
+-> registra uso/erro/latência
+-> retorna resposta ou erro explicado
+```
+
+## Provedores/camadas a avaliar
+
+- OpenAI/Codex/GPT;
+- Claude/Anthropic;
+- Gemini;
+- Grok/xAI;
+- Mistral;
+- Groq;
+- Lovable Gateway;
+- ai-proxy DarkAI;
+- Elite Anthropic/API própria;
+- local LLM;
+- proxies experimentais em sandbox.
+
+## Sobre proxies externos
+
+Referências citadas:
+
+- `xtekky/gpt4free`: avaliar apenas em sandbox/laboratório, nunca como rota crítica sem auditoria legal, segurança, estabilidade e termos de uso.
+- `pedrofariasx/unlimited-ai-proxy`: avaliar como lab router OpenAI-compatible, com autenticação, rate limit, logs e isolamento antes de qualquer uso sensível.
+
+## Travas
+
+- Não pedir, expor ou salvar secrets em chat/frontend.
+- OAuth tokens e API keys devem ficar server-side, cifrados ou em secret storage apropriado.
+- Frontend só consome status/snapshot sanitizado.
+- Nada de provider experimental em produção sem sandbox e avaliação.
+- Toda rota precisa ter owner, risco, log e política.
+- Ação sensível exige Manual Confirm.
+
+## Fase A — read-only/design
+
+1. Inventariar rotas atuais do HUB/API.
+2. Confirmar schema/tabelas esperadas.
+3. Confirmar erro `api.oauth_connections`.
+4. Mapear provedores já existentes.
+5. Mapear onde estão os connectors atuais.
+6. Definir contrato de rota única para `api.centralldark.com`.
+7. Definir política de fallback.
+8. Gerar relatório sem tocar em secrets.
+
+## Correção provável do erro atual
+
+Após evidência:
+
+- criar migration da tabela `api.oauth_connections`; ou
+- corrigir schema usado pelo frontend/backend; ou
+- refresh/reload schema cache Supabase; ou
+- apontar frontend para endpoint correto.
+
+Somente aplicar após diagnóstico read-only.
+
+## Critério de pronto V1
+
+- Mapa de rotas do HUB/API.
+- Contrato de connectors.
+- Diagnóstico do erro `api.oauth_connections`.
+- Política de fallback LLM.
+- Plano de secret storage.
+- Integração com Telegram Bus definida.
+
+## Fio da missão
+
+HUB concentra contas -> API centraliza rotas -> Telegram mostra eventos -> Hermes executa -> GitHub registra -> Mobile controla.

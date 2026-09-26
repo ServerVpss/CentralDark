@@ -1,0 +1,30 @@
+TITLE: [SENTINELA sentinela-58c6b2427d] Workflows: Workflow vermelho: supabase-bot
+LABELS: []
+COMMENTS: 2
+
+> Aberta automaticamente pela **sentinela** (run 28894660790).
+> Hash de dedupe: `sentinela-58c6b2427d` — não reabre se já existir.
+
+## Área
+Workflows
+
+## Severidade
+p2
+
+## Bot responsável
+`assign:codex`
+
+## Detalhe (sanitizado)
+```
+Run ID: 28864217118
+Branch: main
+Link: https://github.com/ServerVpss/CentralDark/actions/runs/28864217118
+```
+
+## Critério pra fechar
+- Endpoint volta 200 / workflow verde / CORS configurado / pendência registrada.
+- Bot dono comenta com PR ou justificativa.
+- Após 7 dias sem ação, sentinela-stale escala.
+
+---
+_Anti-loop: só o bot com label `assign:codex` deve agir._

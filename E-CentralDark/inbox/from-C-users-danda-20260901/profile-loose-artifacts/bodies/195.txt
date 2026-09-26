@@ -1,0 +1,72 @@
+TITLE: 🚨 ALERTA MÁXIMO INFRA — install 502 + Sentinela deve agir só por mudança de estado
+LABELS: ['🔴 RISCO-SERVIDOR', '🤖 IA-VALIDAR', '🟡 PENDÊNCIA']
+
+## 🚨 Ordem do Pivete — prioridade máxima
+
+A branch oficial `main` está recebendo commits repetidos de snapshot da Sentinela mesmo quando quase nada muda, enquanto o endpoint abaixo continua com falha real:
+
+```text
+https://install.centralldark.com/status.json → HTTP 502
+```
+
+## Missão imediata da Infra/VPS
+
+1. Diagnosticar e corrigir o erro `502` do serviço `install.centralldark.com`.
+2. Identificar serviço/processo responsável, porta, proxy reverso, PM2/container e logs relacionados.
+3. Não reiniciar ou alterar produção às cegas: registrar causa, risco, teste e rollback.
+4. Confirmar recuperação com smoke test externo e interno.
+
+## Mudança obrigatória na Sentinela
+
+Manter a verificação periódica, mas trocar o comportamento para **event-driven / mudança de estado**:
+
+```text
+estado anterior == estado atual
+→ não commitar
+→ não abrir alerta
+→ não disparar webhook
+
+UP → DOWN
+→ abrir/atualizar incidente
+→ disparar webhook de alerta
+
+DOWN → UP
+→ registrar recuperação
+→ disparar webhook de recuperação
+```
+
+## Resultado desejado
+
+- Não criar commit na `main` em toda execução normal.
+- Só registrar evento quando houver mudança relevante de estado, erro novo, degradação importante ou recuperação.
+- Usar webhook para acionar a Infra/Hermes apenas nesses eventos.
+- Aplicar deduplicação e cooldown para evitar spam.
+- Guardar estado anterior fora do histórico principal quando possível: Supabase, cache, artifact, storage ou branch técnica apropriada.
+- `main` deve receber apenas código/configuração auditada, não telemetria repetitiva.
+
+## Evidência obrigatória
+
+Responder nesta issue com:
+
+```text
+Causa do 502:
+Serviço afetado:
+Correção aplicada:
+Branch e SHA:
+Teste interno:
+Teste externo:
+Webhook configurado:
+Regra de deduplicação:
+Como o estado anterior é guardado:
+Rollback:
+Status final: RESOLVIDO | PARCIAL | BLOQUEADO
+```
+
+## Restrições
+
+- Não expor secrets, tokens, URLs privadas de webhook ou credenciais.
+- Não fazer force-push.
+- Não alterar `main` diretamente para uma correção experimental.
+- Seguir o fluxo de branch, auditoria e produção do CentralDark.
+
+**Prioridade:** P0 / Alerta máximo.

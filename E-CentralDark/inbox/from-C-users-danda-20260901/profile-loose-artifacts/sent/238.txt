@@ -1,0 +1,31 @@
+TITLE: [SENTINELA sentinela-e2d5aeabac] Endpoints: Endpoint MCP health fora do ar (HTTP 502)
+LABELS: ['sentinela', 'auto', 'p2', 'assign:grok']
+COMMENTS: 2
+
+> Aberta automaticamente pela **sentinela** (run 29565649100).
+> Hash de dedupe: `sentinela-e2d5aeabac` — não reabre se já existir.
+
+## Área
+Endpoints
+
+## Severidade
+p2
+
+## Bot responsável
+`assign:grok`
+
+## Detalhe (sanitizado)
+```
+URL: https://mcp.centralldark.com/health
+Status: 502
+Latência: 237ms
+Erro: -
+```
+
+## Critério pra fechar
+- Endpoint volta 200 / workflow verde / CORS configurado / pendência registrada.
+- Bot dono comenta com PR ou justificativa.
+- Após 7 dias sem ação, sentinela-stale escala.
+
+---
+_Anti-loop: só o bot com label `assign:grok` deve agir._

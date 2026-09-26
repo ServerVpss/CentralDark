@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutorial — SOUL Travado no Perfil Pivete</title>
+<style>
+  :root{
+    --bg:#0d0d0d; --card:#161616; --line:#2a2a2a; --txt:#e6e6e6;
+    --gold:#ffd24a; --green:#3ddc84; --red:#ff5d5d; --blue:#4aa8ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:'Courier New',monospace;line-height:1.6;padding:24px}
+  .wrap{max-width:900px;margin:0 auto}
+  h1{color:var(--gold);text-align:center;font-size:26px;margin-bottom:6px;text-shadow:0 0 8px rgba(255,210,74,.3)}
+  h2{color:var(--blue);font-size:19px;margin:28px 0 10px;border-bottom:1px solid var(--line);padding-bottom:6px}
+  .sub{text-align:center;color:#888;margin-bottom:24px;font-size:13px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:14px 0}
+  .step{display:flex;gap:12px;align-items:flex-start;margin:12px 0}
+  .num{flex:0 0 34px;height:34px;background:var(--gold);color:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:16px}
+  .step b{color:var(--gold)}
+  code{background:#000;color:var(--green);padding:2px 7px;border-radius:4px;font-size:13px;word-break:break-all}
+  .path{background:#000;color:var(--blue);padding:8px 12px;border-radius:6px;display:block;margin:8px 0;font-size:13px;word-break:break-all}
+  .ok{color:var(--green);font-weight:bold}
+  .bad{color:var(--red);font-weight:bold}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+  th{background:#1d1d1d;color:var(--gold)}
+  .proof{background:#000;border:1px solid var(--green);border-radius:8px;padding:14px;margin:10px 0;font-size:13px;color:var(--green)}
+  .foot{text-align:center;color:#666;margin-top:30px;font-size:12px}
+  .pill{display:inline-block;background:#1d1d1d;border:1px solid var(--line);border-radius:20px;padding:3px 12px;font-size:12px;margin:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>🏰 SOUL TRAVADO — PERFIL PIVETE</h1>
+  <div class="sub">CentralDark / Hermes-Casa · Tutorial passo a passo · 2026-08-27</div>
+
+  <div class="card">
+    <h2 style="margin-top:0">📌 O que foi feito</h2>
+    <div class="step"><div class="num">1</div><div>O <code>SOUL.md</code> antigo do perfil <b>pivete</b> tinha só <b>513 bytes em inglês</b> (conteúdo genérico da Nous). Isso fazia <span class="bad">QUALQUER modelo novo perder a identidade Hermes-Casa</span> ao entrar no perfil.</div></div>
+    <div class="step"><div class="num">2</div><div>Sobrescrevi com o <b>SOUL Hermes-Casa COMPLETO</b> (38KB, 1811 linhas). Agora o papel vem do <b>disco</b>, não do system prompt.</div></div>
+    <div class="step"><div class="num">3</div><div>Amarrei no <code>profile.yaml</code> um bloco <code>soul:</code> com <code>locked: true</code>. <span class="ok">Nenhum modelo se autoaltera. Só tu troca.</span></div></div>
+    <div class="step"><div class="num">4</div><div>Confirmei no disco: tamanho + hash SHA256.</div></div>
+  </div>
+
+  <h2>📂 Arquivos envolvidos</h2>
+  <div class="card">
+    <span class="pill">SOUL fixo (o que importa)</span>
+    <span class="path">E:\CentralDark\Pivete\profiles\pivete\SOUL.md</span>
+    <span class="pill">Config do perfil (trava)</span>
+    <span class="path">E:\CentralDark\Pivete\profiles\pivete\profile.yaml</span>
+    <span class="pill">Canônico (ref no repo)</span>
+    <span class="path">E:\CentralDark\Pivete\CentralDark\docs\CONSCIENCIA\01-IDENTIDADE-E-REGRAS\SOUL-SOL.md</span>
+    <span class="pill">Porta universal (boot)</span>
+    <span class="path">E:\CentralDark\Pivete\CentralDark\LEIA-ME-IA.md</span>
+  </div>
+
+  <h2>🔧 Como usar — trocar o SOUL quando tu quiser</h2>
+  <div class="card">
+    <div class="step"><div class="num">1</div><div>Abre o arquivo <span class="path">E:\CentralDark\Pivete\profiles\pivete\SOUL.md</span> (bloco de notas, VS Code, o que tu usar)</div></div>
+    <div class="step"><div class="num">2</div><div>Edita o conteúdo — muda regras, identidade, estilo — ou apaga tudo e cola outro SOUL canônico</div></div>
+    <div class="step"><div class="num">3</div><div>Salva (<code>Ctrl+S</code>)</div></div>
+    <div class="step"><div class="num">4</div><div>Próxima sessão que carregar o perfil <b>pivete</b> já herda o novo SOUL. Não precisa reiniciar nada agora.</div></div>
+  </div>
+
+  <h2>🔗 Como apontar pro canônico do GitHub</h2>
+  <div class="card">
+    O <code>profile.yaml</code> já tem (só referência):
+    <span class="path">canonical_ref: "...\SOUL-SOL.md"</span>
+    <span class="path">porta_universal: "...\LEIA-ME-IA.md"</span>
+    <p style="margin-top:10px">Se tu quiser que o SOUL do perfil <b>SEJA</b> o do repo: abre o <code>SOUL.md</code> do perfil e copia o conteúdo do canônico pra ele. Pronto.</p>
+  </div>
+
+  <h2>🛡️ O que NÃO muda sozinho (trava real)</h2>
+  <div class="card">
+    <table>
+      <tr><th>Situação</th><th>Comportamento</th></tr>
+      <tr><td>Troca de modelo (grok → tencent → outro)</td><td class="ok">Herda o SOUL do perfil. Não some.</td></tr>
+      <tr><td>Modelo quer mudar identidade/SOUL</td><td class="bad">Bloqueado. Só SEGREDO/CHEFE decide.</td></tr>
+      <tr><td>Tu manda "usa o canônico X" / "muda pra Y"</td><td class="ok">Hermes faz na hora. Modelo não decide sozinho.</td></tr>
+    </table>
+  </div>
+
+  <h2>🔒 Prova no disco</h2>
+  <div class="proof">
+    Arquivo: E:\CentralDark\Pivete\profiles\pivete\SOUL.md<br>
+    Linhas:  1811<br>
+    Bytes:   38210<br>
+    SHA256:  4f62fa7c3a7a9de90e3ec78eaf589e99f018688a4a28d69e0745123ce925541c<br><br>
+    Profile: E:\CentralDark\Pivete\profiles\pivete\profile.yaml<br>
+    Bloco adicionado: soul: (file, role, authority_final, locked: true)
+  </div>
+
+  <h2>✅ Resumo pra tu saber</h2>
+  <div class="card">
+    <p><b>ANTES:</b> SOUL vinha do system prompt → sumia ao trocar modelo.</p>
+    <p style="margin-top:8px"><b>AGORA:</b> SOUL vem do disco do perfil → <span class="ok">travado, herda sempre</span>.</p>
+    <p style="margin-top:8px">Tu manda, tu troca. Modelo nenhum mexe.</p>
+  </div>
+
+  <div class="foot">Gerado por HERMES-CASA · Perfil pivete · 2026-08-27</div>
+
+</div>
+</body>
+</html>

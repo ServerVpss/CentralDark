@@ -1,0 +1,98 @@
+TITLE: Programa CentralDark Arsenal Jarvis Home — arquitetura viva de IAs, repo, VPS, Telegram e mobile
+LABELS: ['🟡 IA-PRECISA-REVISAR', '🔴 RISCO-SERVIDOR', '🟢 PRONTO-PARA-IA']
+
+## Objetivo
+
+Consolidar a arquitetura viva do CentralDark como ecossistema privado de operação, conhecimento, automação, auditoria e controle por IAs.
+
+A CentralDark deve funcionar como base central do Pivete: conhecimento, módulos, serviços, sites, cobranças, trabalhos, pendências, dívidas, plataformas, GitHub, VPS, Telegram, Obsidian, mobile e agentes.
+
+## Princípio central
+
+CentralDark é operação real.
+Não é demo.
+Não é achismo.
+Não é gambiarra silenciosa.
+
+Ler -> evidenciar -> agir mínimo -> provar -> registrar -> retomar o fio.
+
+## Arquitetura nominal
+
+- `Jarvis`: central de controle, cockpit, interface de comando.
+- `Hermes`: mordomo executor, filas, loops, jobs longos, missões assíncronas.
+- `DarkAI`: cérebro estratégico, debate, roteamento, escolha de agentes/modelos.
+- `Research Cell`: pesquisa, síntese, evidência, varredura web/repo/logs/docs.
+- `Local LLM`: força privada, barata e repetitiva para triagem, RAG, resumo e classificação.
+- `GitHub`: memória oficial, issues, PRs, labels, histórico e revisão.
+- `VPS`: execução real, PM2, deploy, workers, runners, serviços.
+- `Telegram Topics`: janela viva de observabilidade e conversa operacional.
+- `Mobile Admin`: app/PWA de bolso para comando e acompanhamento.
+- `Supabase/Obsidian/docs`: base viva, snapshots, conhecimento e relatórios.
+
+## Camadas do programa
+
+1. Governança Lovable como ponte restrita VPS <-> repositório.
+2. Card Lovable AI no HUB com snapshot server-side (#119).
+3. Telegram Operations Bus com grupo privado e tópicos.
+4. Travas de repo correto, remote correto e scanner anti-secret.
+5. Research Cell e bases de conhecimento/treinamento/refinamento.
+6. Política 10-80-10 de orquestração e economia de tokens.
+7. Local LLM piloto e roteamento de modelos.
+8. Mobile Admin/PWA como bolso operacional.
+9. Grafo operacional novo.
+10. Auditoria contínua de bugs, segurança, secrets e PRs.
+
+## Política 10-80-10
+
+- 10% planejamento por modelo topo.
+- 80% execução por agentes/modelos médios/locais.
+- 10% validação final por modelo topo.
+
+Regra: modelo caro não faz trabalho braçal; modelo caro planeja, revisa e decide risco.
+
+## Structured Prompt-Driven Development
+
+Prompts oficiais devem virar artefatos versionados, revisáveis e reutilizáveis junto com o código. Quando a execução divergir da intenção, corrigir o prompt/skill antes de multiplicar correções soltas.
+
+Referência: https://martinfowler.com/articles/structured-prompt-driven/
+
+## Proxies e compressão de contexto
+
+### unlimited-ai-proxy
+
+Usar inicialmente como laboratório/sandbox de roteamento OpenAI-compatible, nunca como proxy crítico cru em produção.
+
+Referência: https://github.com/pedrofariasx/unlimited-ai-proxy/tree/main/src
+
+### pxpipe
+
+Avaliar como técnica de compressão de contexto para blocos longos, com restrição forte: não usar para secrets, SHAs, IDs exatos, credenciais, hashes ou valores que exigem fidelidade byte a byte.
+
+Referência: https://github.com/teamchong/pxpipe
+
+## Travas gerais
+
+- Não pedir ou expor secrets, `.env`, tokens, SSH keys ou credenciais.
+- GitHub é fonte da verdade.
+- VPS é execução real, não fonte silenciosa.
+- Telegram é janela viva, não fonte da verdade.
+- Lovable é ponte controlada, não ambiente livre.
+- Ações sensíveis exigem Manual Confirm.
+- Sem force-push.
+- Sem push direto da main local suja da VPS.
+- Sem deploy/restart/reset sem autorização explícita.
+
+## Critério de pronto do programa
+
+- Issue-mãe criada.
+- Subissues por camada criadas.
+- Tópicos Telegram desenhados.
+- Nomes oficiais definidos.
+- Fluxo GitHub -> Telegram -> Hermes -> Mobile definido.
+- Research Cell planejada.
+- Guardrails Lovable definidos.
+- Próximas ações priorizadas.
+
+## Fio da missão
+
+Consolidar arquitetura -> quebrar em subissues -> agentes debatem no GitHub -> execução por camadas -> Telegram observa -> Mobile controla -> GitHub registra.

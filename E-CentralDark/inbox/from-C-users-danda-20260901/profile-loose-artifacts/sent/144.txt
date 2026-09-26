@@ -1,0 +1,212 @@
+TITLE: 🛡️ AUDITORIA FLUXO DE OURO — rotas, pastas ocultas, scripts duplicados e commits automáticos
+LABELS: ['🔴 RISCO-SERVIDOR', '🤖 IA-REVISAR', '🤖 IA-VALIDAR', '🧠 AGENTE-CODEX', '🧠 AGENTE-CLAUDE', '📚 DOCS', '🔄 GIT-DIVERGÊNCIA', '🛡️ SENTINELA', '🟡 PENDÊNCIA']
+COMMENTS: 11
+
+# 🛡️ AUDITORIA FLUXO DE OURO — CentralDark
+
+## Objetivo
+
+Auditar o repositório para impedir que qualquer IA, script, pasta oculta ou automação saia do Fluxo de Ouro.
+
+Fluxo oficial:
+
+```txt
+PIVETE COMANDA.
+IA ORGANIZA.
+GITHUB REGISTRA.
+VPS EXECUTA.
+SUPABASE GUARDA ESTADO VIVO.
+GATEWAY CENTRALDARK ROTEIA.
+AÇÕES PROVAM.
+NADA NO ESCURO.
+```
+
+Gateway oficial:
+
+```txt
+https://api.centralldark.com/
+```
+
+Documento base:
+
+```txt
+docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md
+```
+
+---
+
+## Escopo da auditoria
+
+### 1. Rotas/endpoints antigos
+
+Procurar e classificar referências a:
+
+```txt
+claude.ap7.site
+ANTHROPIC_BASE_URL
+api.centralldark.com
+Elite Anthropic
+proxy Anthropic
+```
+
+Decisão esperada:
+
+```txt
+api.centralldark.com = gateway oficial
+endpoints antigos = mapear antes de trocar/remover
+```
+
+---
+
+### 2. Pastas ocultas e diretórios especiais
+
+Revisar especialmente:
+
+```txt
+.agents/
+.claude/
+.github/workflows/
+.lovable/
+qualquer pasta começando com ponto
+```
+
+Objetivo:
+
+```txt
+ver se alguma IA está recebendo instrução antiga
+ver se algum workflow faz commit/push automático
+ver se há comando que edita VPS ou main fora do padrão
+```
+
+---
+
+### 3. Scripts duplicados ou variantes
+
+Procurar padrões como:
+
+```txt
+v1
+v2
+v3
+final
+novo
+corrigido
+agora-vai
+backup
+old
+copy
+```
+
+Regra oficial:
+
+```txt
+MESMA FUNÇÃO = ATUALIZAR O SCRIPT ATUAL.
+NÃO ACUMULAR v1/v2/v3 SEM NECESSIDADE.
+```
+
+---
+
+### 4. Commits automáticos e loops
+
+Investigar qualquer automação que:
+
+```txt
+commita sozinha
+git commit
+git push direto na main
+atualiza timestamp
+atualiza painel-data.json
+corrige memória automaticamente
+```
+
+Achado já confirmado:
+
+```txt
+Commits repetidos chore(painel): IA atualiza painel — atualização
+Arquivo: apps/modulos/status/painel-data.json
+Mudança: updatedAt / updatedAtBR
+```
+
+Decisão esperada:
+
+```txt
+Estado vivo não deve commitar na main.
+Estado vivo deve ir para Supabase / Edge Function / painel-write.
+```
+
+---
+
+### 5. Consciência e memória
+
+Revisar principalmente:
+
+```txt
+docs/CONSCIENCIA/
+docs/BRAIN/
+docs/APRENDIZADOS/
+docs/GOVERNANCA/
+CLAUDE.md
+```
+
+Objetivo:
+
+```txt
+ver se existe instrução antiga que contradiz o Fluxo de Ouro
+ver se alguma IA é orientada a editar VPS direto
+ver se há referência a endpoint antigo como oficial
+```
+
+---
+
+## Regras durante a auditoria
+
+```txt
+NÃO deletar nada sem mapa.
+NÃO renomear pasta sem saber dependência.
+NÃO mexer na VPS sem necessidade.
+NÃO fazer pull/push da VPS sem mapa de divergência.
+NÃO trocar endpoint sem autorização do Pivete.
+```
+
+---
+
+## Saída esperada
+
+Criar relatório em:
+
+```txt
+docs/AUDITORIAS/AUDITORIA-FLUXO-DE-OURO.md
+```
+
+Com categorias:
+
+```txt
+🟢 OK / MANTER
+🟡 REVISAR
+🔴 CORRIGIR
+♻️ UNIFICAR
+🧊 ARQUIVAR / REMOVER DEPOIS
+```
+
+---
+
+## Status inicial
+
+```txt
+🟢 Arquitetura oficial registrada
+🟢 Gateway oficial definido: https://api.centralldark.com/
+🟡 Auditoria estrutural ainda pendente
+🟡 Pastas ocultas ainda pendentes
+🟡 Scripts duplicados ainda pendentes
+🔴 Commits automáticos do painel já detectados
+```
+
+## BOOT
+
+```txt
+BOOT CENTRALDARK AUDITORIA FLUXO DE OURO
+```
+
+## Fio da missão
+
+Selar o Fluxo de Ouro para nenhuma IA quebrar a arquitetura: GitHub como Fonte da Verdade, VPS como executor, Supabase como estado vivo e Gateway oficial em https://api.centralldark.com/.

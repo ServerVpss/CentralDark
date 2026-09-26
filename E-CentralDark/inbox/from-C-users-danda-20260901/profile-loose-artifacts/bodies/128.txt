@@ -1,0 +1,52 @@
+TITLE: Consolidar Foco vigente — CentralDark 10/10 via consciência oficial
+LABELS: ['🟡 IA-PRECISA-REVISAR', '🟢 PRONTO-PARA-IA']
+
+## Vinculado
+
+Programa-mãe: #122
+
+## Objetivo
+
+Registrar o foco oficial vigente da CentralDark como consciência de alto nível, para que agentes e IAs herdem a mesma direção.
+
+## Ideia original
+
+Usar ferramenta/fluxo equivalente a `consolidar_pensamento` para gravar em `docs/CONSCIENCIA/LEMBRANCAS/` no repo `ServerVpss/CentralDark`.
+
+## Registro sugerido
+
+- Título: `Foco vigente — CentralDark 10/10`
+- Tags: `foco-missao`, `centraldark`, `arquitetura`, `governanca`, `cognitivo`, `semantico`
+- Relevância: alta
+- Eixo: presente
+- Promovida: true
+
+## Conteúdo mínimo
+
+- concentração total na CentralDark como ecossistema privado real;
+- GitHub como memória oficial;
+- VPS como execução real;
+- Jarvis como central de controle;
+- Hermes como executor/orquestrador longo;
+- DarkAI como cérebro estratégico;
+- Research Cell como coleta/síntese/evidência;
+- Telegram como janela viva;
+- Mobile Admin como bolso operacional;
+- governança contra secrets e ações sensíveis;
+- ciclo: ler, evidenciar, agir mínimo, provar, registrar, retomar fio.
+
+## Travas
+
+- Sanitizar qualquer conteúdo antes de registrar.
+- Não registrar secrets, caminhos sensíveis desnecessários ou payloads privados.
+- Registrar via PR/commit ou ferramenta oficial com histórico.
+
+## Critério de pronto
+
+- Lembrança/consciência criada.
+- Commit/PR ou registro oficial gerado.
+- Link adicionado na issue-mãe #122.
+
+## Fio da missão
+
+Foco vigente consolidado -> agentes herdam direção -> execução fica consistente.

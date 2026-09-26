@@ -1,0 +1,71 @@
+TITLE: Inventariar CLIs de IA em campo e avaliar instalar Codex CLI na VPS
+LABELS: ['🔴 RISCO-SERVIDOR', '🟡 PRECISA-DE-OK']
+
+## Objetivo
+
+Mapear todas as CLIs e agentes de IA que já estão operando na VPS e decidir se faz sentido instalar/ativar também a Codex CLI.
+
+## Contexto
+
+Pivete quer aumentar a força operacional em campo, juntando CLIs, DarkAI, Hermes, gateways e agentes já existentes para ganhar velocidade em varredura, correção e revisão.
+
+## Regras
+
+- Primeiro read-only.
+- Não instalar nada antes do inventário.
+- Não expor secrets, tokens, `.env` ou chaves.
+- Não alterar PM2, Docker, Caddy ou PATH sem autorização humana.
+- Qualquer instalação ou login/autenticação Codex CLI exige Manual Confirm.
+
+## Inventário read-only solicitado
+
+Rodar na VPS:
+
+```bash
+which codex || true
+codex --version || true
+which openai || true
+openai --version || true
+which claude || true
+claude --version || true
+which gemini || true
+gemini --version || true
+which groq || true
+groq --version || true
+which darkai || true
+darkai --version || true
+which ollama || true
+ollama --version || true
+pm2 list
+systemctl list-units --type=service | grep -Ei 'codex|darkai|hermes|ollama|openai|gemini|claude|mcp|agent|runner' || true
+```
+
+## Perguntas a responder
+
+1. Quais CLIs existem na VPS?
+2. Quais estão operando via PM2/systemd/Docker?
+3. Quais precisam token/login?
+4. Quais podem trabalhar sem risco em modo read-only?
+5. Codex CLI já existe?
+6. Se não existe, vale instalar agora ou aguardar padronização?
+7. Qual modelo de operação é melhor: PM2, container, job isolado ou Hermes worker?
+
+## Critério de pronto
+
+Relatório com:
+
+- lista das CLIs encontradas;
+- versão;
+- caminho;
+- modo de execução;
+- risco;
+- recomendação;
+- se Codex CLI deve ou não ser instalado.
+
+## Fonte oficial Codex
+
+Docs Codex CLI: https://developers.openai.com/codex/cli
+
+## Fio da missão
+
+Inventariar arsenal em campo -> decidir Codex CLI -> organizar agentes -> automatizar varreduras com controle.
