@@ -1,9 +1,9 @@
 ---
 name: centraldark-capability-hud
-description: Boot de capacidades reais da sessão. Use antes de alegar que uma ferramenta, conector, workflow, runtime, arquivo ou ponte não está disponível; mede o que está carregado, tenta probes seguros e retorna bloqueio real com próximo identificador mínimo.
+description: Boot de capacidades reais da sessão. Use no começo de missão operacional e como parte obrigatória de #ACORDAR/!ACORDAR antes de alegar que uma ferramenta, conector, workflow, runtime, arquivo ou ponte não está disponível; mede o que está carregado, tenta probes seguros e retorna bloqueio real com próximo identificador mínimo.
 metadata:
   type: diagnostic
-  version: "1.0"
+  version: "1.1"
   owner: SEGREDO/CHEFE
 ---
 
@@ -13,7 +13,19 @@ metadata:
 
 Use no começo de missão operacional e sempre que o CHEFE cobrar execução direta, ferramenta conectada, GitHub, workflow, Desktop Commander, Google Drive, Casa, VPS, runtime ou ponte.
 
-Também use antes de responder:
+Também é parte obrigatória de:
+
+```text
+#ACORDAR
+!ACORDAR
+#acordar
+!acordar
+ACORDAR
+```
+
+`#ACORDAR` não é só recuperar memória/HEAD. Agora ele também acorda a capacidade real da sessão: quais ferramentas existem, quais foram probeadas, onde parou e qual identificador mínimo falta.
+
+Use antes de responder:
 
 ```text
 nao consigo
@@ -25,6 +37,12 @@ preciso do run id
 ## Regra curta
 
 ```text
+#ACORDAR
+→ LOAD_CAPABILITY_HUD
+→ MAPEAR_ROTAS_DISPONIVEIS
+→ PROBE_RELEVANTE_SEGURO
+→ SEGUIR ATE PASS | CAUSA_RAIZ | BLOQUEIO_REAL
+
 INTENCAO >= 95%
 → IDENTIFICAR OWNER/ROTA
 → DESCOBRIR FERRAMENTA DISPONIVEL

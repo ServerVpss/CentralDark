@@ -4,6 +4,14 @@
   "owner": "SEGREDO/CHEFE",
   "source_of_truth": "ServerVpss/CentralDark@main",
   "purpose": "Antes de responder 'nao consigo' ou voltar cedo, medir as capacidades realmente carregadas na sessao e separar capacidade de raciocinio de capacidade de execucao.",
+  "trigger_binding": {
+    "canonical_trigger": "#ACORDAR",
+    "aliases": ["#ACORDAR", "!ACORDAR", "#acordar", "!acordar", "ACORDAR", "acordar"],
+    "called_by_acordar": true,
+    "acordar_must_load_capability_hud": true,
+    "acordar_must_probe_relevant_route_before_claiming_limit": true,
+    "acordar_goal": "acordar a sessao ja sabendo o que esta realmente utilizavel, nao descobrir no meio nem voltar cedo por suposicao"
+  },
   "core_problem": {
     "thinking_capacity": "usually_available",
     "acting_capacity": "session_and_tool_dependent",
@@ -14,7 +22,8 @@
     "before_claiming_unavailable": true,
     "before_asking_for_missing_identifier": true,
     "probe_relevant_tools_first": true,
-    "record_where_it_stopped": true
+    "record_where_it_stopped": true,
+    "also_on_acordar": true
   },
   "capability_classes": {
     "github": {
