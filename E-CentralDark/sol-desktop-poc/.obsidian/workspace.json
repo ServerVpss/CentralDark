@@ -1,0 +1,196 @@
+{
+  "main": {
+    "id": "796bd8e97a1c7e48",
+    "type": "split",
+    "children": [
+      {
+        "id": "a48c1f700b373dc1",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "361a032e74d8af43",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Visualização em gráfico"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "bfe5e03c9c68b6de",
+    "type": "split",
+    "children": [
+      {
+        "id": "958be21c866b2cd1",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "109061ffbe2d4f51",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorador de arquivos"
+            }
+          },
+          {
+            "id": "c9226a20f64ec507",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Procurar"
+            }
+          },
+          {
+            "id": "f498be1f495ce7d7",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Marcadores"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "c233c4b961b2b94a",
+    "type": "split",
+    "children": [
+      {
+        "id": "45867db71277fa4b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6b5a0aeaaa5f3e9e",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Links inversos"
+            }
+          },
+          {
+            "id": "bc415f750b8a7924",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Links de saída"
+            }
+          },
+          {
+            "id": "2089afeb4bec47e1",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiquetas"
+            }
+          },
+          {
+            "id": "a06974ada1b962f4",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Todas as propriedades"
+            }
+          },
+          {
+            "id": "bceac8562088a3da",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Sumário"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir a troca rápida": false,
+      "graph:Abrir visualização em gráfico": false,
+      "canvas:Criar novo canvas": false,
+      "daily-notes:Abrir a nota de hoje": false,
+      "templates:Inserir modelo": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Criar nova base": false
+    }
+  },
+  "active": "361a032e74d8af43",
+  "lastOpenFiles": [
+    "BridgeMind-sol-desktop-poc— Agent Super App for Mac, Windows & Linux_files sol-desktop-poc CONTINUE/icons/notification-bell.wav",
+    "BridgeMind-sol-desktop-poc— Agent Super App for Mac, Windows & Linux_files sol-desktop-poc/openai.svg",
+    "BridgeMind-sol-desktop-poc— Agent Super App for Mac, Windows & Linux_files sol-desktop-poc/grok.png",
+    "BridgeMind-sol-desktop-poc— Agent Super App for Mac, Windows & Linux_files sol-desktop-poc/gemini.png",
+    "BridgeMind-sol-desktop-poc— Agent Super App for Mac, Windows & Linux_files sol-desktop-poc/cursor.svg",
+    "BridgeMind-sol-desktop-poc— Agent Super App for Mac, Windows & Linux_files sol-desktop-poc/copilot.png",
+    "BridgeMind-sol-desktop-poc— Agent Super App for Mac, Windows & Linux_files sol-desktop-poc/claude.svg",
+    "index.md",
+    "BridgeMind-sol-desktop-poc— Agent Super App for Mac, Windows & Linux_files sol-desktop-poc.rar"
+  ]
+}

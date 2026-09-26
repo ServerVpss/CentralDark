@@ -1,0 +1,398 @@
+.:
+total 41
+drwxr-xr-x 1 danda 197609    0 Sep  3 13:49 .
+drwxr-xr-x 1 danda 197609    0 Sep  3 09:44 ..
+drwxr-xr-x 1 danda 197609    0 Aug 30 10:51 .hermes
+drwxr-xr-x 1 danda 197609    0 Sep  2 23:44 BridgeMind One
+-rw-r--r-- 1 danda 197609    0 Sep  3 13:49 index.txt
+-rw-r--r-- 1 danda 197609 4845 Aug 30 13:18 segredo.tail6d7aa4.ts.net.crt
+-rw-r--r-- 1 danda 197609  227 Aug 30 13:18 segredo.tail6d7aa4.ts.net.key
+
+./.hermes:
+total 0
+drwxr-xr-x 1 danda 197609 0 Aug 30 10:51 .
+drwxr-xr-x 1 danda 197609 0 Sep  3 13:49 ..
+drwxr-xr-x 1 danda 197609 0 Aug 30 10:51 desktop-attachments
+
+./.hermes/desktop-attachments:
+total 56
+drwxr-xr-x 1 danda 197609     0 Aug 30 10:51 .
+drwxr-xr-x 1 danda 197609     0 Aug 30 10:51 ..
+-rw-r--r-- 1 danda 197609 55796 Aug 30 10:51 ciclico-cx1.html
+
+./BridgeMind One:
+total 237120
+drwxr-xr-x 1 danda 197609         0 Sep  2 23:44 .
+drwxr-xr-x 1 danda 197609         0 Sep  3 13:49 ..
+-rwxr-xr-x 1 danda 197609  18325776 Sep  1 20:38 bridgemind-one-rust.exe
+drwxr-xr-x 1 danda 197609         0 Sep  2 17:10 icons
+drwxr-xr-x 1 danda 197609         0 Sep  2 17:10 Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64
+-rw-r--r-- 1 danda 197609 224345104 Sep  2 23:51 Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64.7z
+-rwxr-xr-x 1 danda 197609    118456 Sep  2 17:10 uninstall.exe
+
+./BridgeMind One/icons:
+total 92
+drwxr-xr-x 1 danda 197609     0 Sep  2 17:10 .
+drwxr-xr-x 1 danda 197609     0 Sep  2 23:44 ..
+-rw-r--r-- 1 danda 197609 86444 Sep  1 20:26 notification-bell.wav
+
+./BridgeMind One/Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64:
+total 505683
+drwxr-xr-x 1 danda 197609         0 Sep  2 17:10 .
+drwxr-xr-x 1 danda 197609         0 Sep  2 23:44 ..
+-rw-r--r-- 1 danda 197609       228 Jul 26 13:37 150.0.4078.105.manifest
+drwxr-xr-x 1 danda 197609         0 Sep  2 17:08 AdSelectionAttestationsPreloaded
+-rwxr-xr-x 1 danda 197609    331760 Jul 26 16:17 concrt140.dll
+-rw-r--r-- 1 danda 197609      8192 Jul 26 13:37 Copilot.dat
+-rw-r--r-- 1 danda 197609      5424 Jul 26 13:37 copilot_overlay_images_100_percent.pak
+-rw-r--r-- 1 danda 197609      6178 Jul 26 13:37 copilot_overlay_images_200_percent.pak
+-rw-r--r-- 1 danda 197609     21561 Jul 26 13:37 copilot_overlay_unscaled_images.pak
+-rwxr-xr-x 1 danda 197609   4526408 Jul 26 16:17 copilotapp.exe
+-rwxr-xr-x 1 danda 197609   4751576 Jul 26 16:17 d3dcompiler_47.dll
+-rw-r--r-- 1 danda 197609     18112 Jul 26 13:37 delegatedWebFeatures.sccd
+-rwxr-xr-x 1 danda 197609   5360840 Jul 26 16:17 dual_engine_adapter_x64.dll
+-rwxr-xr-x 1 danda 197609  20409672 Jul 26 16:17 dxcompiler.dll
+-rwxr-xr-x 1 danda 197609   1519840 Jul 26 16:17 dxil.dll
+drwxr-xr-x 1 danda 197609         0 Sep  2 17:08 EBWebView
+-rw-r--r-- 1 danda 197609     12288 Jul 26 13:37 Edge.dat
+drwxr-xr-x 1 danda 197609         0 Sep  2 17:09 edge_feedback
+-rw-r--r-- 1 danda 197609      8192 Jul 26 13:37 EdgeWebView.dat
+-rwxr-xr-x 1 danda 197609   5354824 Jul 26 16:17 elevated_tracing_service.exe
+-rwxr-xr-x 1 danda 197609     16200 Jul 26 16:17 eventlog_provider.dll
+drwxr-xr-x 1 danda 197609         0 Sep  2 17:08 Extensions
+-rwxr-xr-x 1 danda 197609   3066184 Jul 26 16:18 ffmpeg.dll
+-rw-r--r-- 1 danda 197609  12461408 Jul 26 13:37 icudtl.dat
+drwxr-xr-x 1 danda 197609         0 Sep  2 17:08 Installer
+-rwxr-xr-x 1 danda 197609   1293128 Jul 26 16:18 learning_tools.dll
+-rwxr-xr-x 1 danda 197609    501952 Jul 26 16:21 libEGL.dll
+-rwxr-xr-x 1 danda 197609   7128256 Jul 26 16:21 libGLESv2.dll
+drwxr-xr-x 1 danda 197609         0 Sep  2 17:08 Locales
+drwxr-xr-x 1 danda 197609         0 Sep  2 17:08 MEIPreload
+-rwxr-xr-x 1 danda 197609    453960 Jul 26 16:17 microsoft_shell_integration.dll
+-rwxr-xr-x 1 danda 197609   8708936 Jul 26 16:17 mip_core_gn.dll
+-rwxr-xr-x 1 danda 197609   4526408 Jul 26 16:17 mscopilot.exe
+-rwxr-xr-x 1 danda 197609 331670856 Jul 26 16:18 msedge.dll
+-rw-r--r-- 1 danda 197609      1389 Jul 26 16:23 msedge.dll.sig
+-rw-r--r-- 1 danda 197609   1259954 Jul 26 13:37 msedge_100_percent.pak
+-rw-r--r-- 1 danda 197609   1965159 Jul 26 13:37 msedge_200_percent.pak
+-rwxr-xr-x 1 danda 197609   3965256 Jul 26 16:17 msedge_elf.dll
+-rwxr-xr-x 1 danda 197609    118600 Jul 26 16:17 msedge_wer.dll
+-rwxr-xr-x 1 danda 197609   4429640 Jul 26 16:17 msedgewebview2.exe
+-rw-r--r-- 1 danda 197609      1389 Jul 26 16:23 msedgewebview2.exe.sig
+-rwxr-xr-x 1 danda 197609  19430728 Jul 26 16:17 mspdf.dll
+-rwxr-xr-x 1 danda 197609    563616 Jul 26 16:17 msvcp140.dll
+-rwxr-xr-x 1 danda 197609     41456 Jul 26 16:17 msvcp140_codecvt_ids.dll
+-rwxr-xr-x 1 danda 197609   2782024 Jul 26 16:17 notification_helper.exe
+-rwxr-xr-x 1 danda 197609   6017352 Jul 26 16:18 oneauth.dll
+-rwxr-xr-x 1 danda 197609   3362120 Jul 26 16:17 oneds.dll
+-rwxr-xr-x 1 danda 197609  10785096 Jul 26 16:18 onnxruntime.dll
+-rwxr-xr-x 1 danda 197609    463168 Jul 26 16:17 onramp.dll
+drwxr-xr-x 1 danda 197609         0 Sep  2 17:08 PdfPreview
+-rwxr-xr-x 1 danda 197609   3087176 Jul 26 16:17 platform_experiences_helper.exe
+-rwxr-xr-x 1 danda 197609    116216 Jul 26 16:17 prefs_enclave_x64.dll
+-rw-r--r-- 1 danda 197609  35323736 Jul 26 13:37 resources.pak
+-rw-r--r-- 1 danda 197609       270 Jul 26 13:37 show_third_party_software_licenses.bat
+-rwxr-xr-x 1 danda 197609   3969864 Jul 26 16:18 telclient.dll
+-rw-r--r-- 1 danda 197609     18615 Jul 26 13:37 textInputMethod.sccd
+drwxr-xr-x 1 danda 197609         0 Sep  2 17:08 Trust Protection Lists
+-rw-r--r-- 1 danda 197609    757624 Jul 26 13:37 v8_context_snapshot.bin
+-rwxr-xr-x 1 danda 197609    360944 Jul 26 16:17 vccorlib140.dll
+-rwxr-xr-x 1 danda 197609    133536 Jul 26 16:17 vcruntime140.dll
+-rwxr-xr-x 1 danda 197609     57328 Jul 26 16:17 vcruntime140_1.dll
+-rwxr-xr-x 1 danda 197609   4703048 Jul 26 16:17 vk_swiftshader.dll
+-rw-r--r-- 1 danda 197609       106 Jul 26 13:37 vk_swiftshader_icd.json
+-rwxr-xr-x 1 danda 197609    936264 Jul 26 16:17 vulkan-1.dll
+-rwxr-xr-x 1 danda 197609    248136 Jul 26 16:18 wdag.dll
+-rwxr-xr-x 1 danda 197609     31560 Jul 26 16:17 webview2_integration.dll
+drwxr-xr-x 1 danda 197609         0 Sep  2 17:09 WidevineCdm
+-rwxr-xr-x 1 danda 197609    551240 Jul 26 16:18 wns_push_client.dll
+
+./BridgeMind One/Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64/AdSelectionAttestationsPreloaded:
+total 14
+drwxr-xr-x 1 danda 197609   0 Sep  2 17:08 .
+drwxr-xr-x 1 danda 197609   0 Sep  2 17:10 ..
+-rw-r--r-- 1 danda 197609  63 Jul 26 13:37 ad-selection-attestations.dat
+-rw-r--r-- 1 danda 197609 128 Jul 26 13:37 manifest.json
+
+./BridgeMind One/Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64/EBWebView:
+total 12
+drwxr-xr-x 1 danda 197609 0 Sep  2 17:08 .
+drwxr-xr-x 1 danda 197609 0 Sep  2 17:10 ..
+drwxr-xr-x 1 danda 197609 0 Sep  2 17:08 x64
+drwxr-xr-x 1 danda 197609 0 Sep  2 17:08 x86
+
+./BridgeMind One/Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64/EBWebView/x64:
+total 8676
+drwxr-xr-x 1 danda 197609       0 Sep  2 17:08 .
+drwxr-xr-x 1 danda 197609       0 Sep  2 17:08 ..
+-rwxr-xr-x 1 danda 197609 8881992 Jul 26 16:17 EmbeddedBrowserWebView.dll
+
+./BridgeMind One/Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64/EBWebView/x86:
+total 5536
+drwxr-xr-x 1 danda 197609       0 Sep  2 17:08 .
+drwxr-xr-x 1 danda 197609       0 Sep  2 17:08 ..
+-rwxr-xr-x 1 danda 197609 5666632 Jul 26 16:17 EmbeddedBrowserWebView.dll
+
+./BridgeMind One/Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64/edge_feedback:
+total 56
+drwxr-xr-x 1 danda 197609     0 Sep  2 17:09 .
+drwxr-xr-x 1 danda 197609     0 Sep  2 17:10 ..
+-rw-r--r-- 1 danda 197609 24910 Jul 26 13:37 camera_mf_trace.wprp
+-rw-r--r-- 1 danda 197609 12735 Jul 26 13:37 mf_trace.wprp
+
+./BridgeMind One/Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64/Extensions:
+total 13
+drwxr-xr-x 1 danda 197609  0 Sep  2 17:08 .
+drwxr-xr-x 1 danda 197609  0 Sep  2 17:10 ..
+-rw-r--r-- 1 danda 197609 99 Jul 26 13:37 external_extensions.json
+
+./BridgeMind One/Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64/Installer:
+total 44
+drwxr-xr-x 1 danda 197609     0 Sep  2 17:08 .
+drwxr-xr-x 1 danda 197609     0 Sep  2 17:10 ..
+-rwxr-xr-x 1 danda 197609 31056 Jul 26 16:22 copilot_setup.exe
+
+./BridgeMind One/Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64/Locales:
+total 123340
+drwxr-xr-x 1 danda 197609       0 Sep  2 17:08 .
+drwxr-xr-x 1 danda 197609       0 Sep  2 17:10 ..
+-rw-r--r-- 1 danda 197609  994212 Jul 26 13:37 af.pak
+-rw-r--r-- 1 danda 197609 1459816 Jul 26 13:37 am.pak
+-rw-r--r-- 1 danda 197609 1509568 Jul 26 13:37 ar.pak
+-rw-r--r-- 1 danda 197609 2153978 Jul 26 13:37 as.pak
+-rw-r--r-- 1 danda 197609 1139577 Jul 26 13:37 az.pak
+-rw-r--r-- 1 danda 197609 1704892 Jul 26 13:37 bg.pak
+-rw-r--r-- 1 danda 197609 2228654 Jul 26 13:37 bn-IN.pak
+-rw-r--r-- 1 danda 197609 1062429 Jul 26 13:37 bs.pak
+-rw-r--r-- 1 danda 197609 1114052 Jul 26 13:37 ca.pak
+-rw-r--r-- 1 danda 197609 1111886 Jul 26 13:37 ca-Es-VALENCIA.pak
+-rw-r--r-- 1 danda 197609   65864 Jul 26 13:37 copilot_overlay_strings_af.pak
+-rw-r--r-- 1 danda 197609   95583 Jul 26 13:37 copilot_overlay_strings_am.pak
+-rw-r--r-- 1 danda 197609   91944 Jul 26 13:37 copilot_overlay_strings_ar.pak
+-rw-r--r-- 1 danda 197609  142520 Jul 26 13:37 copilot_overlay_strings_as.pak
+-rw-r--r-- 1 danda 197609   73888 Jul 26 13:37 copilot_overlay_strings_az.pak
+-rw-r--r-- 1 danda 197609  108718 Jul 26 13:37 copilot_overlay_strings_bg.pak
+-rw-r--r-- 1 danda 197609  148890 Jul 26 13:37 copilot_overlay_strings_bn-IN.pak
+-rw-r--r-- 1 danda 197609   68389 Jul 26 13:37 copilot_overlay_strings_bs.pak
+-rw-r--r-- 1 danda 197609   71991 Jul 26 13:37 copilot_overlay_strings_ca.pak
+-rw-r--r-- 1 danda 197609   72176 Jul 26 13:37 copilot_overlay_strings_ca-Es-VALENCIA.pak
+-rw-r--r-- 1 danda 197609   70010 Jul 26 13:37 copilot_overlay_strings_cs.pak
+-rw-r--r-- 1 danda 197609   70051 Jul 26 13:37 copilot_overlay_strings_cy.pak
+-rw-r--r-- 1 danda 197609   65409 Jul 26 13:37 copilot_overlay_strings_da.pak
+-rw-r--r-- 1 danda 197609   72914 Jul 26 13:37 copilot_overlay_strings_de.pak
+-rw-r--r-- 1 danda 197609  123001 Jul 26 13:37 copilot_overlay_strings_el.pak
+-rw-r--r-- 1 danda 197609   60201 Jul 26 13:37 copilot_overlay_strings_en-GB.pak
+-rw-r--r-- 1 danda 197609   59596 Jul 26 13:37 copilot_overlay_strings_en-US.pak
+-rw-r--r-- 1 danda 197609   70167 Jul 26 13:37 copilot_overlay_strings_es.pak
+-rw-r--r-- 1 danda 197609   70361 Jul 26 13:37 copilot_overlay_strings_es-419.pak
+-rw-r--r-- 1 danda 197609   64318 Jul 26 13:37 copilot_overlay_strings_et.pak
+-rw-r--r-- 1 danda 197609   66246 Jul 26 13:37 copilot_overlay_strings_eu.pak
+-rw-r--r-- 1 danda 197609  102530 Jul 26 13:37 copilot_overlay_strings_fa.pak
+-rw-r--r-- 1 danda 197609   67719 Jul 26 13:37 copilot_overlay_strings_fi.pak
+-rw-r--r-- 1 danda 197609   73633 Jul 26 13:37 copilot_overlay_strings_fil.pak
+-rw-r--r-- 1 danda 197609   77045 Jul 26 13:37 copilot_overlay_strings_fr.pak
+-rw-r--r-- 1 danda 197609   77505 Jul 26 13:37 copilot_overlay_strings_fr-CA.pak
+-rw-r--r-- 1 danda 197609   76942 Jul 26 13:37 copilot_overlay_strings_ga.pak
+-rw-r--r-- 1 danda 197609   78635 Jul 26 13:37 copilot_overlay_strings_gd.pak
+-rw-r--r-- 1 danda 197609   68663 Jul 26 13:37 copilot_overlay_strings_gl.pak
+-rw-r--r-- 1 danda 197609  144060 Jul 26 13:37 copilot_overlay_strings_gu.pak
+-rw-r--r-- 1 danda 197609   83126 Jul 26 13:37 copilot_overlay_strings_he.pak
+-rw-r--r-- 1 danda 197609  140784 Jul 26 13:37 copilot_overlay_strings_hi.pak
+-rw-r--r-- 1 danda 197609   68921 Jul 26 13:37 copilot_overlay_strings_hr.pak
+-rw-r--r-- 1 danda 197609   73997 Jul 26 13:37 copilot_overlay_strings_hu.pak
+-rw-r--r-- 1 danda 197609   65451 Jul 26 13:37 copilot_overlay_strings_id.pak
+-rw-r--r-- 1 danda 197609   69388 Jul 26 13:37 copilot_overlay_strings_is.pak
+-rw-r--r-- 1 danda 197609   70107 Jul 26 13:37 copilot_overlay_strings_it.pak
+-rw-r--r-- 1 danda 197609   84640 Jul 26 13:37 copilot_overlay_strings_ja.pak
+-rw-r--r-- 1 danda 197609  151710 Jul 26 13:37 copilot_overlay_strings_ka.pak
+-rw-r--r-- 1 danda 197609  111938 Jul 26 13:37 copilot_overlay_strings_kk.pak
+-rw-r--r-- 1 danda 197609  153038 Jul 26 13:37 copilot_overlay_strings_km.pak
+-rw-r--r-- 1 danda 197609  155272 Jul 26 13:37 copilot_overlay_strings_kn.pak
+-rw-r--r-- 1 danda 197609   73167 Jul 26 13:37 copilot_overlay_strings_ko.pak
+-rw-r--r-- 1 danda 197609  134828 Jul 26 13:37 copilot_overlay_strings_kok.pak
+-rw-r--r-- 1 danda 197609   70684 Jul 26 13:37 copilot_overlay_strings_lb.pak
+-rw-r--r-- 1 danda 197609  138670 Jul 26 13:37 copilot_overlay_strings_lo.pak
+-rw-r--r-- 1 danda 197609   73014 Jul 26 13:37 copilot_overlay_strings_lt.pak
+-rw-r--r-- 1 danda 197609   70399 Jul 26 13:37 copilot_overlay_strings_lv.pak
+-rw-r--r-- 1 danda 197609   71299 Jul 26 13:37 copilot_overlay_strings_mi.pak
+-rw-r--r-- 1 danda 197609  110234 Jul 26 13:37 copilot_overlay_strings_mk.pak
+-rw-r--r-- 1 danda 197609  172137 Jul 26 13:37 copilot_overlay_strings_ml.pak
+-rw-r--r-- 1 danda 197609  144484 Jul 26 13:37 copilot_overlay_strings_mr.pak
+-rw-r--r-- 1 danda 197609   67829 Jul 26 13:37 copilot_overlay_strings_ms.pak
+-rw-r--r-- 1 danda 197609   73244 Jul 26 13:37 copilot_overlay_strings_mt.pak
+-rw-r--r-- 1 danda 197609   63761 Jul 26 13:37 copilot_overlay_strings_nb.pak
+-rw-r--r-- 1 danda 197609  148778 Jul 26 13:37 copilot_overlay_strings_ne.pak
+-rw-r--r-- 1 danda 197609   68554 Jul 26 13:37 copilot_overlay_strings_nl.pak
+-rw-r--r-- 1 danda 197609   63624 Jul 26 13:37 copilot_overlay_strings_nn.pak
+-rw-r--r-- 1 danda 197609  155177 Jul 26 13:37 copilot_overlay_strings_or.pak
+-rw-r--r-- 1 danda 197609  147736 Jul 26 13:37 copilot_overlay_strings_pa.pak
+-rw-r--r-- 1 danda 197609   75374 Jul 26 13:37 copilot_overlay_strings_pl.pak
+-rw-r--r-- 1 danda 197609   68759 Jul 26 13:37 copilot_overlay_strings_pt-BR.pak
+-rw-r--r-- 1 danda 197609   71036 Jul 26 13:37 copilot_overlay_strings_pt-PT.pak
+-rw-r--r-- 1 danda 197609   71065 Jul 26 13:37 copilot_overlay_strings_qu.pak
+-rw-r--r-- 1 danda 197609   71896 Jul 26 13:37 copilot_overlay_strings_ro.pak
+-rw-r--r-- 1 danda 197609  109977 Jul 26 13:37 copilot_overlay_strings_ru.pak
+-rw-r--r-- 1 danda 197609   71516 Jul 26 13:37 copilot_overlay_strings_sk.pak
+-rw-r--r-- 1 danda 197609   69294 Jul 26 13:37 copilot_overlay_strings_sl.pak
+-rw-r--r-- 1 danda 197609   71093 Jul 26 13:37 copilot_overlay_strings_sq.pak
+-rw-r--r-- 1 danda 197609  107715 Jul 26 13:37 copilot_overlay_strings_sr.pak
+-rw-r--r-- 1 danda 197609  105943 Jul 26 13:37 copilot_overlay_strings_sr-Cyrl-BA.pak
+-rw-r--r-- 1 danda 197609   69188 Jul 26 13:37 copilot_overlay_strings_sr-Latn-RS.pak
+-rw-r--r-- 1 danda 197609   64931 Jul 26 13:37 copilot_overlay_strings_sv.pak
+-rw-r--r-- 1 danda 197609  166937 Jul 26 13:37 copilot_overlay_strings_ta.pak
+-rw-r--r-- 1 danda 197609  153817 Jul 26 13:37 copilot_overlay_strings_te.pak
+-rw-r--r-- 1 danda 197609  136036 Jul 26 13:37 copilot_overlay_strings_th.pak
+-rw-r--r-- 1 danda 197609   70516 Jul 26 13:37 copilot_overlay_strings_tr.pak
+-rw-r--r-- 1 danda 197609  107439 Jul 26 13:37 copilot_overlay_strings_tt.pak
+-rw-r--r-- 1 danda 197609  108408 Jul 26 13:37 copilot_overlay_strings_ug.pak
+-rw-r--r-- 1 danda 197609  106414 Jul 26 13:37 copilot_overlay_strings_uk.pak
+-rw-r--r-- 1 danda 197609  104340 Jul 26 13:37 copilot_overlay_strings_ur.pak
+-rw-r--r-- 1 danda 197609   80629 Jul 26 13:37 copilot_overlay_strings_vi.pak
+-rw-r--r-- 1 danda 197609   56672 Jul 26 13:37 copilot_overlay_strings_zh-CN.pak
+-rw-r--r-- 1 danda 197609   58918 Jul 26 13:37 copilot_overlay_strings_zh-TW.pak
+-rw-r--r-- 1 danda 197609 1110078 Jul 26 13:37 cs.pak
+-rw-r--r-- 1 danda 197609 1095750 Jul 26 13:37 cy.pak
+-rw-r--r-- 1 danda 197609  994464 Jul 26 13:37 da.pak
+-rw-r--r-- 1 danda 197609 1108158 Jul 26 13:37 de.pak
+-rw-r--r-- 1 danda 197609 1884325 Jul 26 13:37 el.pak
+-rw-r--r-- 1 danda 197609  906885 Jul 26 13:37 en-GB.pak
+-rw-r--r-- 1 danda 197609  889972 Jul 26 13:37 en-US.pak
+-rw-r--r-- 1 danda 197609 1100077 Jul 26 13:37 es.pak
+-rw-r--r-- 1 danda 197609 1098920 Jul 26 13:37 es-419.pak
+-rw-r--r-- 1 danda 197609  984880 Jul 26 13:37 et.pak
+-rw-r--r-- 1 danda 197609 1024220 Jul 26 13:37 eu.pak
+-rw-r--r-- 1 danda 197609 1534750 Jul 26 13:37 fa.pak
+-rw-r--r-- 1 danda 197609 1028238 Jul 26 13:37 fi.pak
+-rw-r--r-- 1 danda 197609 1109669 Jul 26 13:37 fil.pak
+-rw-r--r-- 1 danda 197609 1175441 Jul 26 13:37 fr.pak
+-rw-r--r-- 1 danda 197609 1183444 Jul 26 13:37 fr-CA.pak
+-rw-r--r-- 1 danda 197609 1178547 Jul 26 13:37 ga.pak
+-rw-r--r-- 1 danda 197609 1239221 Jul 26 13:37 gd.pak
+-rw-r--r-- 1 danda 197609 1053676 Jul 26 13:37 gl.pak
+-rw-r--r-- 1 danda 197609 2109187 Jul 26 13:37 gu.pak
+-rw-r--r-- 1 danda 197609 1275107 Jul 26 13:37 he.pak
+-rw-r--r-- 1 danda 197609 2105392 Jul 26 13:37 hi.pak
+-rw-r--r-- 1 danda 197609 1075215 Jul 26 13:37 hr.pak
+-rw-r--r-- 1 danda 197609 1137795 Jul 26 13:37 hu.pak
+-rw-r--r-- 1 danda 197609  972972 Jul 26 13:37 id.pak
+-rw-r--r-- 1 danda 197609 1042187 Jul 26 13:37 is.pak
+-rw-r--r-- 1 danda 197609 1085827 Jul 26 13:37 it.pak
+-rw-r--r-- 1 danda 197609 1269246 Jul 26 13:37 ja.pak
+-rw-r--r-- 1 danda 197609 2354971 Jul 26 13:37 ka.pak
+-rw-r--r-- 1 danda 197609 1668232 Jul 26 13:37 kk.pak
+-rw-r--r-- 1 danda 197609 2264170 Jul 26 13:37 km.pak
+-rw-r--r-- 1 danda 197609 2355891 Jul 26 13:37 kn.pak
+-rw-r--r-- 1 danda 197609 1070666 Jul 26 13:37 ko.pak
+-rw-r--r-- 1 danda 197609 2038425 Jul 26 13:37 kok.pak
+-rw-r--r-- 1 danda 197609 1071857 Jul 26 13:37 lb.pak
+-rw-r--r-- 1 danda 197609 2060175 Jul 26 13:37 lo.pak
+-rw-r--r-- 1 danda 197609 1123077 Jul 26 13:37 lt.pak
+-rw-r--r-- 1 danda 197609 1095130 Jul 26 13:37 lv.pak
+-rw-r--r-- 1 danda 197609 1072129 Jul 26 13:37 mi.pak
+-rw-r--r-- 1 danda 197609 1703416 Jul 26 13:37 mk.pak
+-rw-r--r-- 1 danda 197609 2579538 Jul 26 13:37 ml.pak
+-rw-r--r-- 1 danda 197609 2125611 Jul 26 13:37 mr.pak
+-rw-r--r-- 1 danda 197609 1002538 Jul 26 13:37 ms.pak
+-rw-r--r-- 1 danda 197609 1140212 Jul 26 13:37 mt.pak
+-rw-r--r-- 1 danda 197609  968889 Jul 26 13:37 nb.pak
+-rw-r--r-- 1 danda 197609 2260412 Jul 26 13:37 ne.pak
+-rw-r--r-- 1 danda 197609 1036422 Jul 26 13:37 nl.pak
+-rw-r--r-- 1 danda 197609  973140 Jul 26 13:37 nn.pak
+-rw-r--r-- 1 danda 197609 2346187 Jul 26 13:37 or.pak
+-rw-r--r-- 1 danda 197609 2151108 Jul 26 13:37 pa.pak
+-rw-r--r-- 1 danda 197609 1154653 Jul 26 13:37 pl.pak
+-rw-r--r-- 1 danda 197609 1067829 Jul 26 13:37 pt-BR.pak
+-rw-r--r-- 1 danda 197609 1097248 Jul 26 13:37 pt-PT.pak
+-rw-r--r-- 1 danda 197609 1098323 Jul 26 13:37 qu.pak
+-rw-r--r-- 1 danda 197609 1111144 Jul 26 13:37 ro.pak
+-rw-r--r-- 1 danda 197609 1743222 Jul 26 13:37 ru.pak
+-rw-r--r-- 1 danda 197609 1130170 Jul 26 13:37 sk.pak
+-rw-r--r-- 1 danda 197609 1072983 Jul 26 13:37 sl.pak
+-rw-r--r-- 1 danda 197609 1087491 Jul 26 13:37 sq.pak
+-rw-r--r-- 1 danda 197609 1663215 Jul 26 13:37 sr.pak
+-rw-r--r-- 1 danda 197609 1646911 Jul 26 13:37 sr-Cyrl-BA.pak
+-rw-r--r-- 1 danda 197609 1066437 Jul 26 13:37 sr-Latn-RS.pak
+-rw-r--r-- 1 danda 197609  995631 Jul 26 13:37 sv.pak
+-rw-r--r-- 1 danda 197609 2570887 Jul 26 13:37 ta.pak
+-rw-r--r-- 1 danda 197609 2326107 Jul 26 13:37 te.pak
+-rw-r--r-- 1 danda 197609 2036766 Jul 26 13:37 th.pak
+-rw-r--r-- 1 danda 197609 1066806 Jul 26 13:37 tr.pak
+-rw-r--r-- 1 danda 197609 1671251 Jul 26 13:37 tt.pak
+-rw-r--r-- 1 danda 197609 1617638 Jul 26 13:37 ug.pak
+-rw-r--r-- 1 danda 197609 1707227 Jul 26 13:37 uk.pak
+-rw-r--r-- 1 danda 197609 1555121 Jul 26 13:37 ur.pak
+-rw-r--r-- 1 danda 197609 1218059 Jul 26 13:37 vi.pak
+-rw-r--r-- 1 danda 197609  854159 Jul 26 13:37 zh-CN.pak
+-rw-r--r-- 1 danda 197609  882201 Jul 26 13:37 zh-TW.pak
+
+./BridgeMind One/Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64/MEIPreload:
+total 25
+drwxr-xr-x 1 danda 197609    0 Sep  2 17:08 .
+drwxr-xr-x 1 danda 197609    0 Sep  2 17:10 ..
+-rw-r--r-- 1 danda 197609  238 Jul 26 13:37 manifest.json
+-rw-r--r-- 1 danda 197609 8254 Jul 26 13:37 preloaded_data.pb
+
+./BridgeMind One/Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64/PdfPreview:
+total 268
+drwxr-xr-x 1 danda 197609      0 Sep  2 17:08 .
+drwxr-xr-x 1 danda 197609      0 Sep  2 17:10 ..
+-rwxr-xr-x 1 danda 197609 258376 Jul 26 16:18 PdfPreviewHandler.dll
+
+./BridgeMind One/Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64/Trust Protection Lists:
+total 21
+drwxr-xr-x 1 danda 197609   0 Sep  2 17:08 .
+drwxr-xr-x 1 danda 197609   0 Sep  2 17:10 ..
+-rw-r--r-- 1 danda 197609 132 Jul 26 13:37 manifest.json
+drwxr-xr-x 1 danda 197609   0 Sep  2 17:08 Mu
+drwxr-xr-x 1 danda 197609   0 Sep  2 17:08 Sigma
+
+./BridgeMind One/Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64/Trust Protection Lists/Mu:
+total 160
+drwxr-xr-x 1 danda 197609     0 Sep  2 17:08 .
+drwxr-xr-x 1 danda 197609     0 Sep  2 17:08 ..
+-rw-r--r-- 1 danda 197609 20362 Jul 26 13:37 Advertising
+-rw-r--r-- 1 danda 197609  4106 Jul 26 13:37 Analytics
+-rw-r--r-- 1 danda 197609   689 Jul 26 13:37 CompatExceptions
+-rw-r--r-- 1 danda 197609  4540 Jul 26 13:37 Content
+-rw-r--r-- 1 danda 197609   668 Jul 26 13:37 Cryptomining
+-rw-r--r-- 1 danda 197609 69999 Jul 26 13:37 Entities
+-rw-r--r-- 1 danda 197609  1124 Jul 26 13:37 Fingerprinting
+-rw-r--r-- 1 danda 197609 35147 Jul 26 13:37 LICENSE
+-rw-r--r-- 1 danda 197609    34 Jul 26 13:37 Other
+-rw-r--r-- 1 danda 197609   754 Jul 26 13:37 Social
+-rw-r--r-- 1 danda 197609   105 Jul 26 13:37 TransparentAdvertisers
+
+./BridgeMind One/Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64/Trust Protection Lists/Sigma:
+total 183
+drwxr-xr-x 1 danda 197609      0 Sep  2 17:08 .
+drwxr-xr-x 1 danda 197609      0 Sep  2 17:08 ..
+-rw-r--r-- 1 danda 197609  20812 Jul 26 13:37 Advertising
+-rw-r--r-- 1 danda 197609   3243 Jul 26 13:37 Analytics
+-rw-r--r-- 1 danda 197609   5111 Jul 26 13:37 Content
+-rw-r--r-- 1 danda 197609     32 Jul 26 13:37 Cryptomining
+-rw-r--r-- 1 danda 197609 129152 Jul 26 13:37 Entities
+-rw-r--r-- 1 danda 197609   2342 Jul 26 13:37 Fingerprinting
+-rw-r--r-- 1 danda 197609     66 Jul 26 13:37 LICENSE
+-rw-r--r-- 1 danda 197609     34 Jul 26 13:37 Other
+-rw-r--r-- 1 danda 197609   3424 Jul 26 13:37 Social
+-rw-r--r-- 1 danda 197609   1816 Jul 26 13:37 Staging
+
+./BridgeMind One/Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64/WidevineCdm:
+total 16
+drwxr-xr-x 1 danda 197609    0 Sep  2 17:09 .
+drwxr-xr-x 1 danda 197609    0 Sep  2 17:10 ..
+drwxr-xr-x 1 danda 197609    0 Sep  2 17:08 _platform_specific
+-rw-r--r-- 1 danda 197609 1001 Jul 26 13:37 manifest.json
+
+./BridgeMind One/Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64/WidevineCdm/_platform_specific:
+total 0
+drwxr-xr-x 1 danda 197609 0 Sep  2 17:08 .
+drwxr-xr-x 1 danda 197609 0 Sep  2 17:09 ..
+drwxr-xr-x 1 danda 197609 0 Sep  2 17:09 win_x64
+
+./BridgeMind One/Microsoft.WebView2.FixedVersionRuntime.150.0.4078.105.x64/WidevineCdm/_platform_specific/win_x64:
+total 19424
+drwxr-xr-x 1 danda 197609        0 Sep  2 17:09 .
+drwxr-xr-x 1 danda 197609        0 Sep  2 17:08 ..
+-rwxr-xr-x 1 danda 197609 19883920 Jul 26 16:20 widevinecdm.dll
+-rw-r--r-- 1 danda 197609     1389 Jul 26 16:23 widevinecdm.dll.sig
