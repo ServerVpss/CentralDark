@@ -58,6 +58,9 @@ MEMORY_CLAIM_RE = re.compile(
 )
 DIRECT_MAIN_RE = re.compile(r"\b(main)\b", re.I)
 
+# Canonical executable output-guard contract.
+RESPONSE_WITHOUT_TRACE = "INVALID"
+
 
 @dataclass
 class Check:
