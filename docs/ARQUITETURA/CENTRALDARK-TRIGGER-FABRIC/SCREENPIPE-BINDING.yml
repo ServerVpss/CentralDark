@@ -38,6 +38,9 @@ intent_goal_spine:
     invalidate_only_dependent_claims: true
 
 runtime:
+  runtime_host: CASA_WINDOWS
+  vps_port_3030_owner: CENTRALDARK_GRAPH_PANEL
+  do_not_run_screenpipe_on_vps_3030: true
   auto_discover: true
   local_data_root_default: "%USERPROFILE%\\.screenpipe"
   daemon_api_default: "http://localhost:3030"
