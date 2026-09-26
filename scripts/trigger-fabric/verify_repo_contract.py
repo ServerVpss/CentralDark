@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
-import json, sys, re
+import json, sys, re, subprocess
 
 ROOT=Path(sys.argv[1] if len(sys.argv)>1 else '.').resolve()
 checks=[]
@@ -14,6 +14,16 @@ def check(path, needles=(), classification='PROVEN_IN_REPO'):
             if needle not in text: missing.append(needle)
         ok=ok and not missing
     checks.append({'path':path,'classification':classification,'ok':ok,'missing':missing})
+
+def check_command(name, argv, classification='EXECUTABLE_CONTRACT_TEST'):
+    try:
+        proc=subprocess.run(argv,cwd=ROOT,text=True,capture_output=True,timeout=60,check=False)
+        ok=proc.returncode==0
+        detail=(proc.stdout+'\n'+proc.stderr).strip()[-4000:]
+    except Exception as exc:
+        ok=False
+        detail=f'{type(exc).__name__}: {exc}'
+    checks.append({'path':name,'classification':classification,'ok':ok,'missing':[] if ok else [detail]})
 
 def check_absent(path, forbidden=(), classification='PROVEN_ABSENT_IN_REPO'):
     p=ROOT/path
@@ -347,6 +357,30 @@ check('docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',[
  '"GREG_VERDICT_REQUIRED_BEFORE_GREEN"',
  '"DEX_APPROVAL_REQUIRED_FOR_CRITICAL_DELTA"',
 ], classification='TIK_TAK_HARD_GATES_REGISTERED')
+check('scripts/trigger-fabric/rastro_fiscal.py',[
+ 'TRACE_PRESENT != TRACE_VALID',
+ 'class GitHubBackend',
+ 'class FakeBackend',
+ 'def verify_text(',
+ 'RESPONSE_WITHOUT_TRACE',
+], classification='RASTRO_FISCAL_EXECUTABLE')
+check('scripts/trigger-fabric/test_rastro_fiscal.py',[
+ 'test_true_complete_trace_passes',
+ 'test_fake_commit_fails',
+ 'test_false_path_fails',
+ 'test_content_does_not_support_claim_fails',
+ 'test_old_head_presented_as_current_fails',
+ 'test_gravei_without_trace_fails',
+ 'test_memory_without_location_fails',
+ 'test_github_unavailable_is_unknown',
+ 'test_direct_main_without_ledger_fails',
+], classification='RASTRO_FISCAL_COUNTERPROOF')
+check_command(
+ 'scripts/trigger-fabric/test_rastro_fiscal.py',
+ [sys.executable, str(ROOT/'scripts/trigger-fabric/test_rastro_fiscal.py')],
+ classification='RASTRO_FISCAL_EXECUTABLE_TESTS',
+)
+
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SYSTEM-SENTINEL.yml',[
  'FIXED_POINT_ROUTE_IS_DETERMINISTIC: true',
  'SAME_FINGERPRINT_NO_FULL_REPLAY: true',
