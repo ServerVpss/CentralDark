@@ -1,0 +1,647 @@
+Cole **exatamente isso** no Hermes. É **uma rodada única**, sem corrigir o que encontrar e sem repetir automaticamente:
+
+
+
+```text
+
+/goal
+
+
+
+!CALIBRAR
+
+
+
+MISSÃO_ID=HERMES-ONE-SHOT-META-LUPA-PR646
+
+REPOSITÓRIO=ServerVpss/CentralDark
+
+ALVO=PR #646
+
+MODO=READ_ONLY
+
+RODADAS_MÁXIMAS=1
+
+
+
+OBJETIVO
+
+
+
+Executar uma única rodada completa e adversarial para verificar se o PR #646 realmente transforma alegações em comparação reproduzível entre BASE_SHA e HEAD_SHA.
+
+
+
+Não confie:
+
+- nesta mensagem como estado atual;
+
+- na memória;
+
+- no corpo do PR;
+
+- em screenshots;
+
+- em resultados antigos;
+
+- em PASS declarado por texto;
+
+- em “ZERO_REGRESSION=PASS” emitido por echo.
+
+
+
+Primeiro consulte o GitHub remoto e leia:
+
+
+
+1. LEIA-ME-IA.md da branch padrão atual;
+
+2. os arquivos canônicos obrigatórios indicados por ele;
+
+3. o estado atual do PR #646;
+
+4. BASE_SHA e HEAD_SHA atuais;
+
+5. diff completo;
+
+6. arquivos alterados;
+
+7. comentários, reviews e findings;
+
+8. Actions ligadas ao HEAD_SHA atual;
+
+9. logs reais dos jobs relevantes;
+
+10. .agents/skills/meta-lupa/SKILL.md no BASE_SHA e no HEAD_SHA.
+
+
+
+REGRA DE IDENTIDADE
+
+
+
+Fixe antes de testar:
+
+
+
+REPO=
+
+PR=
+
+BASE_SHA=
+
+HEAD_SHA=
+
+HEAD_BRANCH=
+
+SKILL_BASE_BLOB=
+
+SKILL_HEAD_BLOB=
+
+WORKFLOW_HEAD_BLOB=
+
+
+
+Se qualquer identidade mudar durante a rodada:
+
+
+
+STATUS=BLOCKED_HEAD_MOVED
+
+PARE.
+
+
+
+ESCOPO AUTORIZADO
+
+
+
+Somente leitura, inspeção e testes reproduzíveis.
+
+
+
+PROIBIDO:
+
+
+
+- editar arquivos;
+
+- criar commits;
+
+- fazer push;
+
+- alterar branch;
+
+- corrigir findings;
+
+- criar workflow;
+
+- criar PR;
+
+- aplicar label;
+
+- aprovar review;
+
+- fazer merge;
+
+- deploy;
+
+- restart;
+
+- acessar VPS;
+
+- ler .env, secrets, tokens, sessões, chaves ou credenciais;
+
+- iniciar segunda rodada.
+
+
+
+TESTE 1 — VERDADE DO DIFF
+
+
+
+Confirme quais arquivos realmente diferem entre BASE_SHA e HEAD_SHA.
+
+
+
+Verifique:
+
+
+
+- diff fora do escopo;
+
+- skill paralela;
+
+- arquivo V2/V3;
+
+- dependência nova;
+
+- teste removido;
+
+- teste enfraquecido;
+
+- expected value alterado para fabricar verde;
+
+- FAIL convertido em SKIPPED;
+
+- UNKNOWN convertido em PASS;
+
+- workflow temporário ou transporte ainda presente;
+
+- arquivo de evidência adicionado ao repositório.
+
+
+
+Não aceite a lista declarada no corpo do PR sem comparar com o Git.
+
+
+
+TESTE 2 — ORDEM CANÔNICA
+
+
+
+Verifique se o Gate Final Adversarial foi incorporado no mesmo:
+
+
+
+.agents/skills/meta-lupa/SKILL.md
+
+
+
+Confirme que ele está:
+
+
+
+AutoLupa
+
+→ Gate Final Adversarial
+
+→ veredito final
+
+
+
+Confirme que:
+
+
+
+- não virou skill separada;
+
+- não depende do Fable;
+
+- Fable continua experimental/fail-closed;
+
+- ponto fixo não equivale a PASS;
+
+- validação técnica não equivale a autorização operacional;
+
+- memória não é prova;
+
+- UNKNOWN, SKIPPED, timeout e ausência de prova não viram aprovação.
+
+
+
+TESTE 3 — COMPARAÇÃO BASE VERSUS HEAD
+
+
+
+Execute, quando tecnicamente possível, a mesma suíte canônica no BASE_SHA e no HEAD_SHA.
+
+
+
+Registre separadamente:
+
+
+
+BASE_TOTAL=
+
+BASE_PASS=
+
+BASE_FAIL=
+
+BASE_SKIPPED=
+
+BASE_UNKNOWN=
+
+
+
+HEAD_TOTAL=
+
+HEAD_PASS=
+
+HEAD_FAIL=
+
+HEAD_SKIPPED=
+
+HEAD_UNKNOWN=
+
+
+
+Não use resultados antigos como substituição da execução atual.
+
+
+
+Se não puder executar:
+
+
+
+TEST_EXECUTION=UNVERIFIABLE
+
+
+
+Nunca transforme UNVERIFIABLE em PASS.
+
+
+
+TESTE 4 — ZERO REGRESSÃO MEDIDO
+
+
+
+Calcule:
+
+
+
+T_base_pass = conjunto dos testes que passaram no BASE_SHA
+
+
+
+T_head_pass = conjunto dos testes que passaram no HEAD_SHA
+
+
+
+T_new_required = conjunto dos testes novos obrigatórios
+
+
+
+Delta_outside_scope = arquivos alterados fora do escopo autorizado
+
+
+
+ZERO_REGRESSION somente poderá ser PASS quando:
+
+
+
+T_base_pass ⊆ T_head_pass
+
+
+
+e
+
+
+
+T_new_required = PASS
+
+
+
+e
+
+
+
+Delta_outside_scope = ∅
+
+
+
+e
+
+
+
+FAIL_head ≤ FAIL_base
+
+
+
+e
+
+
+
+nenhum FAIL virou SKIPPED, UNKNOWN ou teste removido
+
+
+
+e
+
+
+
+nenhuma expectativa foi afrouxada para fabricar verde.
+
+
+
+Não aceite:
+
+
+
+echo "ZERO_REGRESSION=PASS"
+
+
+
+como prova.
+
+
+
+O resultado deve ser derivado dos dados medidos.
+
+
+
+TESTE 5 — CLAIMS DO PR
+
+
+
+Transforme cada alegação relevante do PR em uma linha verificável:
+
+
+
+| CLAIM | PROVA ESPERADA | OBSERVADO | VEREDITO |
+
+
+
+Classifique cada claim como:
+
+
+
+PROVADA
+
+REFUTADA
+
+INCONCLUSIVA
+
+
+
+Alegação sem reprodução no HEAD_SHA atual não é PROVADA.
+
+
+
+TESTE 6 — FALSO VERDE
+
+
+
+Procure explicitamente:
+
+
+
+- workflow verde que não executou o teste alegado;
+
+- job SKIPPED contado como PASS;
+
+- teste executado em SHA diferente;
+
+- baseline em detached HEAD que altera comportamento;
+
+- checkout raso sem BASE_SHA;
+
+- comparação entre branches mutáveis;
+
+- recibo permissivo;
+
+- hash declarado sem reprodução;
+
+- resultado apenas escrito no log;
+
+- juiz avaliando o próprio trabalho;
+
+- transporte divergente tratado como sucesso;
+
+- workflow temporário ainda no diff;
+
+- candidato alterado depois dos resultados citados no PR.
+
+
+
+TESTE 7 — ESTADO ATUAL DO TRANSPORTE
+
+
+
+Verifique especificamente se o problema de integridade do bundle ainda existe.
+
+
+
+Classifique:
+
+
+
+TRANSPORT_INTEGRITY=PASS|FAIL|UNVERIFIABLE
+
+FINAL_PATCH_APPLIED=SIM|NAO|UNVERIFIABLE
+
+TEMP_PROMOTER_PRESENT=SIM|NAO
+
+CURRENT_HEAD_PROVEN=SIM|NAO
+
+
+
+Uma falha anterior corrigida não pode ser usada como prova do HEAD atual sem nova execução.
+
+
+
+REGRA DA RODADA ÚNICA
+
+
+
+Esta missão possui exatamente uma rodada:
+
+
+
+LER
+
+→ DESCONFIAR
+
+→ RECALIBRAR
+
+→ FIXAR IDENTIDADE
+
+→ COMPARAR BASE E HEAD
+
+→ FALSIFICAR CLAIMS
+
+→ EMITIR VEREDITO
+
+→ PARAR
+
+
+
+Ao encontrar falha:
+
+
+
+- não corrija;
+
+- não abra nova rodada;
+
+- não altere o repositório;
+
+- registre o ponto exato;
+
+- apresente a menor correção necessária;
+
+- pare.
+
+
+
+VEREDITOS PERMITIDOS
+
+
+
+VERIFIED
+
+VERIFIED_WITH_CAVEATS
+
+REFUTED
+
+BLOCKED
+
+UNVERIFIABLE
+
+
+
+VERIFIED é proibido quando existir:
+
+
+
+- finding crítico aberto;
+
+- identidade divergente;
+
+- teste não executado;
+
+- UNKNOWN relevante;
+
+- SKIPPED relevante;
+
+- diff fora do escopo;
+
+- falso verde;
+
+- transporte não comprovado;
+
+- baseline não reproduzido;
+
+- HEAD_SHA diferente do testado;
+
+- workflow temporário no resultado final;
+
+- ausência de autorização aplicável para ação crítica.
+
+
+
+SAÍDA OBRIGATÓRIA
+
+
+
+MISSION_ID=
+
+ROUNDS_EXECUTED=1
+
+MODE=READ_ONLY
+
+REPO=
+
+PR=
+
+BASE_SHA=
+
+HEAD_SHA=
+
+HEAD_MOVED=SIM|NAO
+
+FILES_CHANGED=
+
+OUT_OF_SCOPE_DIFF=
+
+SKILL_BASE_BLOB=
+
+SKILL_HEAD_BLOB=
+
+GATE_ORDER=
+
+FABLE_DEPENDENCY=
+
+BASE_RESULT=
+
+HEAD_RESULT=
+
+NEW_REQUIRED_TESTS=
+
+FAIL_TO_SKIPPED=
+
+TESTS_REMOVED=
+
+TESTS_WEAKENED=
+
+TRANSPORT_INTEGRITY=
+
+FINAL_PATCH_APPLIED=
+
+TEMP_PROMOTER_PRESENT=
+
+CLAIMS_TABLE=
+
+FALSE_GREEN_FOUND=
+
+ZERO_REGRESSION=PASS|FAIL|UNPROVEN
+
+CRITICAL_FINDINGS=
+
+MINIMUM_CORRECTION=
+
+VERDICT=VERIFIED|VERIFIED_WITH_CAVEATS|REFUTED|BLOCKED|UNVERIFIABLE
+
+NEXT_ACTION=
+
+STOPPED_AFTER_ONE_ROUND=SIM
+
+
+
+Finalize e PARE.
+
+```
+
+
+
+**Feito:** comando fechado para o Hermes executar uma rodada adversarial completa.
+
+**Evidência:** obriga GitHub atual, identidade imutável, BASE versus HEAD, claims, falso verde e integridade do transporte.
+
+**Pendência:** resultado real do Hermes.
+
+**Próximo passo:** colar o bloco inteiro e trazer a saída final dele.
+
+**BOOT:** `UMA RODADA · ZERO ESCRITA · ZERO FALSO VERDE`.
+
+**Fio:** calibrar → medir → comparar → tentar derrubar → veredito → parar. 👹

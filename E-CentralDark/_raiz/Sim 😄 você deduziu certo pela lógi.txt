@@ -1,0 +1,45 @@
+Sim 😄 **você deduziu certo pela lógica, e eu confirmei agora na documentação oficial do Hermes.**
+
+O funcionamento oficial é exatamente este:
+
+```text
+Ferramenta compatível com OpenAI
+        ↓
+http://127.0.0.1:8642/v1
+        ↓
+API Server do Hermes
+        ↓
+profile pivete
+        ↓
+SOUL + memória + skills + ferramentas + modelo configurado
+```
+
+A documentação afirma que o API Server expõe o **Hermes Agent completo como backend OpenAI-compatible**, incluindo terminal, arquivos, pesquisa, memória e skills. Também confirma que `/v1/models` anuncia, por padrão, **o nome do profile** — portanto o profile `pivete` aparece como modelo `pivete`. ([GitHub][1])
+
+E cada profile realmente é um agente isolado, com seu próprio:
+
+```text
+config.yaml
+.env
+SOUL.md
+USER.md / MEMORY.md
+sessões
+skills
+cronjobs
+gateway
+banco de estado
+```
+
+([GitHub][2])
+
+Então você falou sem ter lido, mas **acertou a arquitetura inteira**: o Pivete pode virar o cérebro central e as outras interfaces viram apenas portas diferentes para acessar o mesmo profile. 🔥
+
+Só há dois detalhes:
+
+* ferramentas OpenAI-compatible conectam diretamente;
+* ferramentas sem suporte OpenAI precisam de uma pequena ponte HTTP.
+
+E o campo `model: pivete` identifica o agente exposto; o LLM real continua sendo escolhido no `config.yaml` do servidor. ([GitHub][1])
+
+[1]: https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/api-server.md?utm_source=chatgpt.com "hermes-agent/website/docs/user-guide/features/api-server.md at main · NousResearch/hermes-agent · GitHub"
+[2]: https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/profiles.md?utm_source=chatgpt.com "hermes-agent/website/docs/user-guide/profiles.md at main · NousResearch/hermes-agent · GitHub"

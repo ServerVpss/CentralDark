@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  centraldark:
+    build:
+      context: ./CentralDark
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./CentralDark/src:/app/src
+    restart: unless-stopped

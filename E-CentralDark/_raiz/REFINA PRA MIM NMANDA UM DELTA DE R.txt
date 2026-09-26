@@ -1,0 +1,60 @@
+REFINA PRA MIM NMANDA UM DELTA DE REFINAMANDO NOS MANDOS  TO EM MODO ZERO TRUST  ME MANDAUM PRONPNPT CRISTAZIADO PRA  BOTA PRESSAO ! 
+AGORA BORA CRISTILIZAR 
+ ELE TA INDO BOM ?  
+ COMO EU FAÇO ISSO VOLTA PAREC QUE ELE O INFILTRADO FEZ ISSO PRA NAO TER OCMO EU ATIVA ?    
+EU FIZ ISSO E OHOEMNES TA DO OUTRO LADAO ATACANDO 
+ BORA BORA ZERO TRUST BORA CRISTAIZA O HEMERS AGORA  
+Fontes
+
+DisableRealtimeMonitoring : False
+MAPSReporting             : 2
+CloudBlockLevel           : 2
+
+
+
+PS C:\WINDOWS\system32> Get-MpComputerStatus | Select-Object AMServiceEnabled, RealTimeProtectionEnabled, IsTamperProtected | Format-List
+
+
+AMServiceEnabled          : True
+RealTimeProtectionEnabled : True
+IsTamperProtected         : True
+
+
+
+PS C:\WINDOWS\system32> 3 TRUE
+Fontes
+ ME MANDA OS COMANDOIS QUE TU FEZ AI PRA OPIAR TODA  EZ QU EUT DIGITA ELES APGA SOZINHO
+
+🟢 Sequência completa pra restabelecer o Defender (copia + cola no PowerShell elevado)
+
+# 0. Abrir PowerShell como **Administrador**
+
+# 1. Reativar todos os recursos-chave
+Set-MpPreference -DisableRealtimeMonitoring $false           # proteção em tempo real
+Set-MpPreference -MAPSReporting 2                             # proteção em nuvem (nível 2)
+Set-MpPreference -SubmitSamplesConsent 1                      # envio automático seguro
+Set-MpPreference -CloudBlockLevel High                        # bloqueio agressivo
+Set-MpPreference -EnableNetworkProtection Enabled             # proteção web/exploits
+
+# 2. Limpar políticas de GPO/Intune que travam o Defender
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /f
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Policy Manager" /f  # fallback
+
+# 3. Forçar atualização de políticas e assinaturas
+gpupdate /force
+Update-MpSignature                                            # baixa definicões mais recentes
+
+# 4. Conferir se tudo voltou
+Get-MpPreference |
+  Format-List DisableRealtimeMonitoring, MAPSReporting, CloudBlockLevel
+
+Get-MpComputerStatus |
+  Select-Object AMServiceEnabled, RealTimeProtectionEnabled, IsTamperProtected |
+  Format-List
+
+🟡 Observações rápidas
+
+Executar sempre como administrador — senão o reg delete falha.
+Se seu PC pertence a domínio/Intune, a política pode voltar no próximo sync; peça ao admin pra liberar.
+“IsTamperProtected : True” indica que o Defender blindou as chaves de novo.
+Reiniciar ajuda a garantir que o serviço carregue

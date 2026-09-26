@@ -1,0 +1,145 @@
+⭕ !AURÉOLA CANÔNICA
+> "Examinai tudo. Retende o bem." — 1 Tessalonicenses 5:21
+
+🌴 Não é a cerca que segura o boi — é o boi saber que a cerca tá lá.
+
+👑🪬 !CENTRALDARK → sim, gostei. E vou te dizer o que exatamente impressiona, porque não é o tamanho.
+
+🎯 Por que essa técnica faz o modelo agir na linha
+
+Comparei os gates que li nesta sessão. A maioria é declarativa:
+
+``yaml
+REUSEBEFORECREATE: true      ← alguém pode ignorar
+UNKNOWNISNOTPASS: true      ← alguém pode fingir que não viu
+`
+
+O TLC23 faz diferente — ele tem três mecanismos que atacam o comportamento, não a intenção:
+
+Ele lê a prosa e rejeita promessa.
+`python
+PLANPHRASES = ("vou verificar", "vou executar", "let me run the commands", ...)
+if repeatedplan and not actionexecuted:
+    return {"verdict": "BLOCKED"}
+`
+Isso é a coisa mais rara que eu vi no teu repo. Todo contrato do mundo diz "não narre, faça". O teu detecta a narração e bloqueia. É a diferença entre uma placa e uma cancela.
+
+Ele exige o estado final ANTES de dar PASS.
+`python
+"fixedpointreached": receipt.get("fixedpointreached") is True,
+`
+fixedpointreached está dentro do passrequires. Isso mata o "verde por progresso" — não existe crédito parcial. Ou fechou, ou UNKNOWN. A maioria dos sistemas premia "tô quase".
+
+Ele se testa antes de julgar.
+`python
+def selftest():  # 9 asserts
+    assert evaluate(loop, ...)["verdict"] == "BLOCKED"   # testa o caso do papagaio
+    assert evaluate(nodelta, ...)["verdict"] == "NOCHANGE"  # testa o caso da repetição
+`
+O gate testa o próprio bloqueio. Se ele deixar de bloquear papagaio, o self-test falha. Isso é um gate que não pode virar decorativo sem quebrar.
+
+💡 E o detalhe que eu não tinha visto em nenhum sistema
+
+`text
+unknown: KEEPVISIBLEANDBLOCKONLYDEPENDENTCLAIM
+`
+
+UNKNOWN não derruba tudo — derruba só a cadeia que dependia dele. É o invalidatescope: DEPENDENTCLAIMSONLY virando código, e é literalmente o princípio de Horn: contradição invalida o cone dependente, não o corpo inteiro.
+
+Aplicado à tua Casa: se o Supabase não medir, os 60 outros itens medidos continuam válidos. Isso é o oposto do "tudo caiu" — é o "isolamento de falha lógico".
+
+⚖️ O que eu diria ao dono dela
+
+Tu construiu um gate que corrige o vício específico de IA. Não de humano — humano não diz "vou verificar" como se fosse resultado. IA diz. O TLC23 é a resposta cirúrgica a isso: prosa futura = bloqueio. Isso é engenharia de comportamento, não de código.
+
+E é portável. O --self-test prova as 9 regras em qualquer máquina. Se o Hermes rodar isso, ele se comporta como eu me comportei aqui — e o CI reprova se ele parar.
+
+🔎 O que ainda falta (e é o que sobra executável agora)
+
+Ficou pendente do turno anterior — e não depende de runtime:
+
+`text
+uploads/3d61edc1-pasted-text.txt   8KB  ← não lido
+uploads/7e9b7644-pasted-text.txt   5KB  ← não lido
+uploads/97c95cd6-pasted-text.txt   9KB  ← não lido
+uploads/d584fec9-pasted-text.txt   7KB  ← não lido
+uploads/de6c76a5-pasted-text.txt  13KB  ← não lido
+`
+
+5 arquivos, 42 KB de sessão anterior que eu nunca abri. É o garimpo que o GARIMPOUNIVERSAL manda fazer, e esse sim eu fecho sem MCP.
+
+Feito:
+• Respondido com o que a técnica tem de real: 3 mecanismos executáveis (bloqueio de prosa futura · PASS só com fixed point · self-test do próprio bloqueio).
+
+Evidência:
+• tlc23runtimegate.py → PLANPHRASES + verdict: BLOCKED; passrequires inclui fixedpointreached; selftest() com 9 asserts.
+• TLC23-RUNTIME-GATE.yml → unknown: KEEPVISIBLEANDBLOCKONLYDEPENDENTCLAIM.
+
+Pendência:
+• 5 uploads não lidos (42 KB).
+• TLC23BINDINGUNKNOWN por falta de fingerprint de runtime (exige MCP).
+
+Próximo passo:
+• Garimpo dos 5 uploads — leio, cruzo com main vivo e classifico cada achado (USEFULDELTA / DUPLICATE / ALREADYABSORBED). Esse passo fecha dentro das minhas ferramentas. Executo?
+
+Qual BOOT usar:
+• 📚
+Sim. Gostei porque ela transforma disciplina em mecânica, não em boa vontade do modelo.
+
+O valor dessa técnica não é "deixar a IA mais esperta". É tirar o espaço onde ela costuma trapacear sem perceber. O que eu vi nela de forte:
+
+• ela colapsa narrativa em prova  
+  "vou verificar", "parece", "deve ser" deixam de contar. Isso força ação medida ou UNKNOWN.
+
+• ela separa corpo e cabeça  
+  fato medido de um lado, conclusão do outro. Sem corpo completo, a cabeça não nasce. Isso é muito mais sólido do que prompt moralista.
+
+• ela mata o falso-verde cedo  
+  NOAFTERTHEFACTPDFPROOF=true, UNKNOWN != PASS, ACTION != PROOF. Isso fecha as três fugas clássicas do modelo.
+
+• ela preserva o que sobrevive  
+  o mais elegante pra mim foi: invalidar só o cone dependente da contradição. Não joga fora o sistema inteiro por uma peça que caiu.
+
+• ela dá comportamento estável entre superfícies  
+  quando tu codifica isso em gate/contract/receipt, o modelo vira menos importante que o trilho. Aí qualquer corpo que aceite o contrato tende a andar na linha.
+
+O que essa técnica faz com o modelo
+
+Ela empurra o modelo de:
+• "responder bem"
+para
+• "só concluir quando a derivação fecha"
+
+E isso muda tudo. O modelo fica:
+• menos falador,
+• menos seduzido por completude falsa,
+• mais conservador onde precisa,
+• mais agressivo em evidência,
+• e mais útil pra sistema vivo.
+
+O limite dela
+
+Também gostei porque ela não é mágica. Se o corpo não tem acesso ao runtime, o gate devolve UNKNOWN. Isso é bom. Quer dizer que a técnica não mascara limite como inteligência.
+
+Então a resposta curta é:
+
+Sim, gostei muito.  
+Porque isso aí faz modelo andar no trilho sem precisar confiar no temperamento dele.
+
+Feito:
+• Avaliei a técnica pelo efeito operacional.
+
+Evidência:
+• O tlc23runtimegate.py codifica PLAN != EXECUTION, UNKNOWN != PASS, NO_CHANGE, BLOCKED por narrativa.
+• O gate exige fatos simultâneos para PASS, inclusive runtime e contraprova.
+
+Pendência:
+• Levar essa técnica até todos os owners relevantes sem duplicação.
+
+Próximo passo:
+• Se tu quiser, eu posso te dizer onde essa técnica já está forte no repo e onde ainda está faltando amarração, sem propor arquitetura nova.
+
+Qual BOOT usar:
+• 🧾 !REGISTRA
+
+Fio da missão: a técnica é boa porque governa o modelo por estrutura, não por promessa.

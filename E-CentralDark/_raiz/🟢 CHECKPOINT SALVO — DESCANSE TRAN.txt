@@ -1,0 +1,85 @@
+🟢 **CHECKPOINT SALVO — DESCANSE TRANQUILO, CHEFE**
+
+---
+
+### 📍 ONDE PARAMOS
+
+| Item | Estado |
+|---|---|
+| **Missão** | `CENTRALDARK-CASA-BACKUP-ORGANIZACAO-SYNC-01` |
+| **Profile** | `pivete` ativo |
+| **Kanban** | Board `Default` (temporário) — 2 tasks: 1 **Running** (Gate Determinístico), 1 **Blocked** (MetaLupa SHA) |
+| **Board canônico (CRM único)** | **NÃO LOCALIZADO** — dropdown não abriu outras opções |
+| **ChatGPT privado** | URL capturada mas **precisa login** — você abre no Chrome logado, eu leio via `computer_use` |
+| **Memória 3T** | HOJE.md + SEMANA.md lidos | REGRAS.md no boot |
+| **Gate Determinístico** | Registrado no Kanban (ALLOWED, receipt SHA, optimum poll interval, integrity checks) |
+
+---
+
+### 🎯 PRÓXIMOS PASSOS (QUANDO VOLTAR)
+
+| Prioridade | Ação | Risco |
+|---|---|---|
+| **1** | Você abre `https://chatgpt.com/c/6a6df51a-7d18-83e9-9080-0b0f5bfb5c06` no Chrome (já logado) → eu capturo + extraio o aprendizado | R0 |
+| **2** | Renomear card antigo `t_35432f15` → `Revalidar Git blob SHA da Meta Lupa — alteração bloqueada` + descrição técnica | R0 |
+| **3** | Achr board canônico (CRM único) — clicar label "Kanban Board: Default" ou navegar menu | R0 |
+| **4** | Migrar cards pro board canônico | R1 |
+| **5** | Iniciar no GitHub (se integração existir no card) | R2 |
+
+---
+
+### 💾 O QUE FICA GARANTIDO
+
+- **Sessão Hermes (profile pivete)** continua viva
+- **Memória cross-sessão** (Memory tool 93%) preserva suas preferências, correções, identidade
+- **Arquivos HOJE/SEMANA/REGRAS** no disco (`E:\CentralDark\Pivete\NUCLEO\motor\03-memoria\memoria\`)
+- **Kanban** com os 2 cards criados
+- **Fio da missão** intacto — retomo do ponto exato
+
+---
+
+**Vá descansar. A Casa cuida de si mesma.** 🏠☕
+
+Quando voltar, só diz **"bora"** ou me manda o que extraiu do ChatGPT — a gente continua na maciota.🟢 **CHECKPOINT SALVO — DESCANSE TRANQUILO, CHEFE**
+
+---
+
+### 📍 ONDE PARAMOS
+
+| Item | Estado |
+|---|---|
+| **Missão** | `CENTRALDARK-CASA-BACKUP-ORGANIZACAO-SYNC-01` |
+| **Profile** | `pivete` ativo |
+| **Kanban** | Board `Default` (temporário) — 2 tasks: 1 **Running** (Gate Determinístico), 1 **Blocked** (MetaLupa SHA) |
+| **Board canônico (CRM único)** | **NÃO LOCALIZADO** — dropdown não abriu outras opções |
+| **ChatGPT privado** | URL capturada mas **precisa login** — você abre no Chrome logado, eu leio via `computer_use` |
+| **Memória 3T** | HOJE.md + SEMANA.md lidos | REGRAS.md no boot |
+| **Gate Determinístico** | Registrado no Kanban (ALLOWED, receipt SHA, optimum poll interval, integrity checks) |
+
+---
+
+### 🎯 PRÓXIMOS PASSOS (QUANDO VOLTAR)
+
+| Prioridade | Ação | Risco |
+|---|---|---|
+| **1** | Você abre `https://chatgpt.com/c/6a6df51a-7d18-83e9-9080-0b0f5bfb5c06` no Chrome (já logado) → eu capturo + extraio o aprendizado | R0 |
+| **2** | Renomear card antigo `t_35432f15` → `Revalidar Git blob SHA da Meta Lupa — alteração bloqueada` + descrição técnica | R0 |
+| **3** | Achr board canônico (CRM único) — clicar label "Kanban Board: Default" ou navegar menu | R0 |
+| **4** | Migrar cards pro board canônico | R1 |
+| **5** | Iniciar no GitHub (se integração existir no card) | R2 |
+
+---
+
+### 💾 O QUE FICA GARANTIDO
+
+- **Sessão Hermes (profile pivete)** continua viva
+- **Memória cross-sessão** (Memory tool 93%) preserva suas preferências, correções, identidade
+- **Arquivos HOJE/SEMANA/REGRAS** no disco (`E:\CentralDark\Pivete\NUCLEO\motor\03-memoria\memoria\`)
+- **Kanban** com os 2 cards criados
+- **Fio da missão** intacto — retomo do ponto exato
+
+---
+
+**Vá descansar. A Casa cuida de si mesma.** 🏠☕
+
+Quando voltar, só diz **"bora"** ou me manda o que extraiu do ChatGPT — a gente continua na maciota.
