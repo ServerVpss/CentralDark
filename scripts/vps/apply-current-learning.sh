@@ -33,6 +33,8 @@ FILES=(
   ".github/workflows/vps-exec-selfhosted.yml"
   "scripts/vps/centraldark-deploy.sh"
   "scripts/vps/hydrate-provider-secrets.sh"
+  "scripts/vps/apply-current-learning.sh"
+  "scripts/vps/main-pinned-microdeploy.sh"
 )
 
 exec 9>"$LOCK"
