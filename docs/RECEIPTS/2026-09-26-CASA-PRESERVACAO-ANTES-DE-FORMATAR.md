@@ -144,3 +144,19 @@ DANDA_13_LOCAL_ARTIFACTS_REMOTE=PASS (ramo preservacao/casa-danda-arqueologia-20
 ```
 
 Quando a Casa voltar online: ler `MANIFESTO_CRISTAL_DANDA.jsonl` + `ARQUEOLOGIA_DANDA_RECEIPT.json`, rehash, publicar apenas os 13 artefatos sanitizados/únicos em cofre/owner apropriado e fazer read-back remoto. Só então zerar a pendência Danda.
+
+## 🧭 Regras do CHEFE fixadas nesta sessão (para qualquer motor que chegar depois)
+
+```text
+CHEFE_DECIDE_O_QUE_IMPORTA=true
+EXECUTA → CONFERE → REGISTRA → SEGUE (menos pergunta, mais execução e prova)
+TRAZ_SOLUCAO_NAO_PROBLEMA=true
+ESCOPO=SO_CENTRALDARK (não varrer pasta/projeto que não é CentralDark)
+CHAVE=DESCARTAVEL → guardar ONDE mora + NOME, nunca valor; re-derivar após reset (docs/MAPEAMENTO-ENV.md)
+ESCRITA=DIRETO_NA_MAIN; CI só quando o CHEFE mandar endurecer
+NAO_FAZER_O_CHEFE_REEXPLICAR=true (ler este receipt + MAPEAMENTO-ENV antes de agir na Casa)
+```
+
+Próximo cursor: Casa formatada → seguir "Restaurar a Casa" acima → montar Golden Capsule
+(VMware + Linux + Docker + Hermes + IA local, Obsidian ↔ GitHub, MCP CentralDark com as duas rotas, painel admin local com acesso remoto).
+O documento `CENTRALDARK_MATRIZ_BIDIRECIONAL_GOLDEN_CAPSULE_01.md` foi gerado no ChatGPT e ainda precisa entrar na main.
