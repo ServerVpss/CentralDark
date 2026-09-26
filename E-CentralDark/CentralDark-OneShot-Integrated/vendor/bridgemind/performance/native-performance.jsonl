@@ -1,0 +1,16 @@
+{"schemaVersion":1,"id":"startup.setup_application","durationMs":322,"durationMicros":322184}
+{"schemaVersion":1,"id":"startup.ready","durationMs":4095,"durationMicros":4095028}
+{"schemaVersion":1,"id":"auth.bootstrap","durationMs":1,"durationMicros":1791}
+{"schemaVersion":1,"id":"startup.setup_application","durationMs":623,"durationMicros":623532}
+{"schemaVersion":1,"id":"startup.ready","durationMs":12774,"durationMicros":12774292}
+{"schemaVersion":1,"id":"auth.bootstrap","durationMs":7,"durationMicros":7178}
+{"schemaVersion":1,"id":"auth.teardown","durationMs":0,"durationMicros":715}
+{"schemaVersion":1,"id":"startup.setup_application","durationMs":552,"durationMicros":552130}
+{"schemaVersion":1,"id":"startup.ready","durationMs":3762,"durationMicros":3762957}
+{"schemaVersion":1,"id":"auth.bootstrap","durationMs":5,"durationMicros":5127}
+{"schemaVersion":1,"id":"startup.setup_application","durationMs":505,"durationMicros":505981}
+{"schemaVersion":1,"id":"startup.ready","durationMs":7970,"durationMicros":7970188}
+{"schemaVersion":1,"id":"auth.bootstrap","durationMs":4,"durationMicros":4799}
+{"schemaVersion":1,"id":"startup.setup_application","durationMs":618,"durationMicros":618716}
+{"schemaVersion":1,"id":"startup.ready","durationMs":8141,"durationMicros":8141698}
+{"schemaVersion":1,"id":"auth.bootstrap","durationMs":5,"durationMicros":5740}

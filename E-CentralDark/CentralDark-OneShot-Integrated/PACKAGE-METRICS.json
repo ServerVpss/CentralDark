@@ -1,0 +1,19 @@
+{
+  "files": 298,
+  "bytes": 280253559,
+  "includes": [
+    "bridge-builder",
+    "remote-tray",
+    "desktop-commander-dist",
+    "bridgemind-state",
+    "webview2-fixed-runtime-archive",
+    "speech-core",
+    "screenpipe-discovery-launcher",
+    "vps-payload"
+  ],
+  "excluded_sensitive_separate_inputs": [
+    "*.key",
+    "*.crt"
+  ],
+  "unknown_is_not_pass": true
+}

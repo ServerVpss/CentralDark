@@ -1,0 +1,39 @@
+{
+  "name": "CentralDark-Remote-Tray",
+  "status": "OFICIAL_NPX_ATUAL",
+  "device": "SEGREDO",
+  "entrypoint": "ABRIR-CENTRALDARK-REMOTE-TRAY.cmd",
+  "exe": "CentralDark-Remote-Tray.exe",
+  "engine": "engine/CentralDark-Remote-Tray.ps1",
+  "parser": "engine/CentralDark-Remote-Parser.psm1",
+  "owner_preserved": "@wonderwhy-er/desktop-commander@latest remote",
+  "endpoint": "https://mcp.desktopcommander.app/mcp",
+  "login_url": "https://mcp.desktopcommander.app/device/verify",
+  "runtime": "%LOCALAPPDATA%\\CentralDark\\Remote-Tray",
+  "rules": [
+    "CURRENT_GT_HISTORICAL",
+    "REALITY_EQUALS_JUDGE",
+    "UNKNOWN_NE_PASS",
+    "DOCUMENTED_NE_EXECUTED",
+    "ACTION_NE_PROOF",
+    "REUSE_BEFORE_CREATE",
+    "ONE_SYSTEM_ONLY"
+  ],
+  "regression_block": [
+    "NO_V2_V3_V4_V5",
+    "NO_PARALLEL_OWNER",
+    "NO_SECRET_HANDLING"
+  ],
+  "error_read": {
+    "mcp_32603": true,
+    "unexpected_json_input": true,
+    "auth_code_generated": false,
+    "meaning": "Desktop Commander falhou antes de abrir fluxo de autenticação"
+  },
+  "built_from": "CentralDark-Remote-Tray working package from conversation/library",
+  "generated_at": "2026-09-09T19:09:10",
+  "entrypoint_terminal": "ABRIR-MODO-TERMINAL-NPX-ATUAL.cmd",
+  "entrypoint_tray": "ABRIR-CENTRALDARK-REMOTE-TRAY.cmd",
+  "screenpipe": "OUT_OF_SCOPE",
+  "chatgpt_tool_last_measure": "list_devices=[]"
+}
