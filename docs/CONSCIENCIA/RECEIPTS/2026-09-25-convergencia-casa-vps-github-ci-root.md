@@ -85,3 +85,17 @@ COUNTERPROOF: `python3 scripts/ci/verify_status_badge_coverage.test.py` PASS (3 
 
 FILES_CHANGED_THIS_CONTINUATION: docs/STATUS-BADGES.md.
 NEXT_CURSOR: commitar e subir regeneração do índice; medir falha exata no commit novo; continuar até CI SAME_HEAD, causa-raiz remanescente ou blocker real. Não promover enquanto checks materiais falharem/penderem.
+
+## Medição de bloqueadores vivos após push
+
+SNAPSHOT_2026-09-26T10:21Z:
+- PR #1698 OPEN + MERGEABLE, branch head `c7642b588b979306189e76e371107ad7e2f8532a`; checks do HEAD acionados, incluindo porta-de-entrada, permanecem QUEUED.
+- GitHub Actions runner inventory: `vmi3256920` (labels `self-hosted, Linux, X64, centraldark`) OFFLINE e `vmi3256920-centraldark` (labels `self-hosted, Linux, X64, centraldark-ci`) OFFLINE; ambos `busy=false`. Causa material para impossibilidade de executar os gates self-hosted enquanto offline.
+- VPS SSH via alias `segredo-vpss` resolve a `89.117.78.124:22`, user `root`, identity local configurada; probe BatchMode/ConnectTimeout=8 retornou `Connection timed out` (exit 255). SSH_CONFIG foi lido sem expor chave privada. Rota VPS indisponível a partir desta sessão; VPS/deploy/runtime permanece UNKNOWN, sem mutação.
+- CASA medida diretamente em `E:/CentralDark`: branch `fix/mcp-health-telegram-owner-20260920`, HEAD `375558fd59f4ea9e9b1cd59961b81c25d2e8d17d`, `git status --porcelain`=55 entradas (dirty não classificado; preservado), Node v26.7.0, npm 11.19.0; Hermes.exe e pycharm64.exe em execução. Portas Screenpipe 3030/3031 não aparecem em LISTEN; 3210 LISTEN em loopback (serviço separado, não presumido Screenpipe). Nenhuma alteração feita na Casa.
+- GitHub `main` re-medida: `f3693fda6b18a23436db5b34ab127f5240ea4c91`. PR-mãe #1562 OPEN e não mergeado. Registro de progresso publicado e re-lido: https://github.com/ServerVpss/CentralDark/pull/1562#issuecomment-5845438868.
+
+BLOCKER_EXACT: BOTH_SELF_HOSTED_RUNNERS_OFFLINE prevents queued CI jobs from starting; SSH_TCP_22_TIMEOUT_TO_89.117.78.124 prevents VPS readback/deploy diagnosis. No authorization to mutate server/runner or reset dirty Casa state. Recovery condition: at least one existing labeled runner online OR authorized alternate runner capacity; SSH transport reachable again (or another already-authorized proof channel), then resume at PR HEAD checks and VPS read-only reconciliation.
+
+FIXED_POINT: false. Local badge-index delta proved; remote CI SAME_HEAD, deployment, VPS runtime, Screenpipe and global CASA/GitHub/VPS convergence not proven.
+NEXT_CURSOR: keep PR #1698 open; resume on one existing runner returning online, rerun/read checks for current HEAD, fix any new causal failure; retry VPS read-only SSH after transport recovery. Do not merge #1562 or claim deploy/total convergence.
