@@ -136,6 +136,18 @@ class RastroFiscalTests(unittest.TestCase):
         self.assertEqual(2, len(b.calls))
 
 
+    def test_response_without_trace_contract_is_executable(self):
+        self.assertEqual("INVALID", M.RESPONSE_WITHOUT_TRACE)
+        r = M.verify_text("Gravei a regra na main.", REPO, backend())
+        self.assertEqual("FAIL", r.verdict)
+        self.assertTrue(
+            any(
+                c.name == "write_claim_has_trace"
+                and "RESPONSE_WITHOUT_TRACE=INVALID" in c.detail
+                for c in r.checks
+            )
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
