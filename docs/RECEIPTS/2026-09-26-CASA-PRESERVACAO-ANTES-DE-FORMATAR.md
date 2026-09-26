@@ -160,3 +160,31 @@ NAO_FAZER_O_CHEFE_REEXPLICAR=true (ler este receipt + MAPEAMENTO-ENV antes de ag
 Próximo cursor: Casa formatada → seguir "Restaurar a Casa" acima → montar Golden Capsule
 (VMware + Linux + Docker + Hermes + IA local, Obsidian ↔ GitHub, MCP CentralDark com as duas rotas, painel admin local com acesso remoto).
 O documento `CENTRALDARK_MATRIZ_BIDIRECIONAL_GOLDEN_CAPSULE_01.md` foi gerado no ChatGPT e ainda precisa entrar na main.
+
+
+## 🟡 Golden Capsule cristalizada na main
+
+Estado observado em 2026-09-26:
+
+```text
+GOLDEN_CAPSULE_DOC=PASS
+ROUTE_MATRIX_DOC=PASS
+CHEFE_AUTHORITY_CONTRACT=PASS
+MAIN_COMMIT=b16dc982c66b874fba0ba66394591c6d59a3aec7
+OWNER_PATH=docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/CENTRALDARK-MATRIZ-BIDIRECIONAL-GOLDEN-CAPSULE.md
+```
+
+O documento consolida no mesmo owner já existente de Instinto Superior / OS:
+
+- Golden Capsule;
+- matriz bidirecional de rotas;
+- CentralDark MCP + rota direta Desktop Commander;
+- Obsidian como memória viva;
+- Git/GitHub como cristal externo;
+- Hermes como executor local;
+- IA local;
+- restauração pós-formatação;
+- autoridade operacional do CHEFE no domínio local;
+- `ONE_SYSTEM_ONLY`, `ONE_WRITER_PER_SCOPE`, `CURRENT > HISTORY`, `UNKNOWN != PASS`.
+
+Não cria um segundo núcleo nem um segundo owner de OS; é evolução do owner existente.
