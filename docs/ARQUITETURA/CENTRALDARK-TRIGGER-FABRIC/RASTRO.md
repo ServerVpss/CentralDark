@@ -78,3 +78,17 @@ STALE_CURRENT_MAIN=FAIL
 ```
 
 O fiscal não cria segundo judge, segundo owner ou segunda verdade. Ele reconstrói a prova citada e devolve evidência para o Reality Judge.
+
+
+### Ledger #1562 — ordem de verificação
+
+```text
+LEDGER_REF_EXACT_COMMENT_FIRST=true
+LEDGER_FALLBACK_STARTS_FROM_NEWEST_PAGE=true
+LEDGER_FALLBACK_WALKS_BACKWARD_UNTIL_FOUND=true
+GITHUB_ISSUE_COMMENTS_DEFAULT_ORDER=OLDEST_FIRST
+LEDGER_OVER_100_COMMENTS_MUST_NOT_FALSE_FAIL=true
+```
+
+Se a resposta fornecer link/ID de comentário do livro-razão, o fiscal consulta esse comentário diretamente.
+Sem referência exata, lê a contagem de comentários do #1562, começa pela última página e caminha para trás.
