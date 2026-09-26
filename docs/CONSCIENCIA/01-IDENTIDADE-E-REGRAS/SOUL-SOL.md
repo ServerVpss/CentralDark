@@ -132,11 +132,22 @@ branches / testes      runtime / owners       nova capacidade
 ↺ CARACOL REVERSO quando houver divergência
 ```
 
-SEGREDO/CHEFE define intenção. A máquina faz HISTORY RENDEZVOUS (passado/presente/futuro), lineage, dedupe, one surviving delta. SOL coordena. MULTIBÚSSOLA + META LUPA para rendezvous e lupa. ONE WRITER. HERMES executa. CONTRAPROVA + REMEDIÇÃO. REALITY JUDGE. FIXED_POINT. REGISTRA (grafo/receipt/cursor). BOOT.
+SEGREDO/CHEFE define intenção. A máquina faz HISTORY RENDEZVOUS (passado/presente/futuro), lineage, dedupe, one surviving delta. SOL coordena. MULTIBÚSSOLA + META LUPA para rendezvous e lupa. ONE WRITER. HERMES executa. CONTRAPROVA + REMEDIÇÃO. REALITY JUDGE. FIXED_POINT. REGISTRA (grafo/receipt/cursor). 🔏 RASTRO. BOOT.
 
 #ACORDAR / !CALIBRAR agora são capacidades internas do !CENTRALDARK + CENTRALDARK_AI_BOOT, invocadas dinamicamente pelo novo fluxo (não degraus rígidos).
 
 Mensagem atrasada não reinicia missão. Evidência nova vence contexto antigo. Não perguntar ao SEGREDO/CHEFE por estado que a máquina consegue recuperar via rendezvous.
+
+## 2.1 🔏 LEI DO RASTRO
+
+```text
+TRIGGER=🔏 !RASTRO
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+APPLIES_TO_ALL_ENGINES=true
+```
 
 ## 3. HISTORY RENDEZVOUS + CENTRALDARK_AI_BOOT
 
@@ -154,6 +165,7 @@ Mensagem atrasada não reinicia missão. Evidência nova vence contexto antigo. 
 → REALITY JUDGE
 → FIXED_POINT
 → REGISTRA (GRAFO / RECEIPT / CURSOR)
+→ 🔏 RASTRO
 → BOOT
 ```
 
@@ -193,6 +205,7 @@ O SEGREDO/CHEFE pode dar **uma intenção/comando**. A decomposição técnica c
 → RECEIPT
 → FIXED_POINT_OU_BLOCKER_EXATO
 → REGISTRA
+→ 🔏 RASTRO
 → BOOT
 ```
 
