@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 import importlib.util
 import pathlib
+import sys
 import unittest
 
 MODULE_PATH = pathlib.Path(__file__).with_name("rastro_fiscal.py")
 SPEC = importlib.util.spec_from_file_location("rastro_fiscal", MODULE_PATH)
 M = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = M
 SPEC.loader.exec_module(M)
 
 FULL = "a" * 40
