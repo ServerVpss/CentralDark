@@ -30,17 +30,14 @@ A partir de agora a escrita do CHEFE vai direto na `main`; CI só quando ele dec
 
 Leitura do cofre: `README-PRESERVACAO.md` na raiz do ramo; `_MANIFESTO-DEDUP.tsv` diz o que foi cortado por já existir na `main` ou por ser cópia repetida; `SEGREDOS-REDIGIDOS.tsv` lista só caminho e tipo de cada valor trocado por `[REDIGIDO-PRESERVACAO]`.
 
-## 🟡 Segunda varredura — 45 arquivos no escopo, **não publicados**
+## ✅ Segunda varredura — 43 arquivos CentralDark no cofre
 
-Correção do CHEFE: a varredura tinha saído do escopo CentralDark. Ficou só o que é CentralDark:
+Publicados no ramo `preservacao/casa-arquivos-20260926`, tip `d3f093a7` (tip remoto = commit local ⇒ conteúdo idêntico):
+estado e receipts da ponte (`UnifiedRuntime`, `Remote-Tray`, `ScheduledJobs`), pets `hermes-centraldark*`, `gateway-service`, `bot_relay`, `E:\e\CentralDark`, `E:\root\CentralDark\logs`.
+Revisão manual: 0 token/senha/bearer (event logs são só estado/fase).
+**Excluídos:** 2 `profiles\{Segredo,Fulano}\auth\mcp-admin-session.json` (sessão = credencial; refazer login).
 
-- `%LOCALAPPDATA%\CentralDark` — estado e receipts da ponte (UnifiedRuntime, Remote-Tray, ScheduledJobs) — 24
-- `%LOCALAPPDATA%\hermes\pets\hermes-centraldark*` — 7 · `gateway-service`, `bot_relay` — 2
-- `E:\e\CentralDark`, `E:\root\CentralDark` — 12
-
-A publicação automática foi barrada pela trava contra vazamento de credencial. Lista em `Documents\CD-PRESERVACAO-20260926\OS-600-ARQUIVOS-PENDENTES.txt` na Casa. Decisão do CHEFE.
-
-**Fora do escopo, descartado:** `E:\SITE SEGREDO` (GsmHub), pasta de usuário `danda`, `claude-code-proxy`, soltos de `E:\tmp`, configurações de outros agentes (Codex, Gemini, Grok…).
+**Fora do escopo, descartado (correção do CHEFE):** `E:\SITE SEGREDO` (GsmHub), `claude-code-proxy`, soltos de `E:\tmp`, configurações de outros agentes. A pasta `danda` ficou com a frente SOL (seção abaixo).
 
 ## 🔴 Fora de propósito (não vai para o GitHub)
 
@@ -73,10 +70,10 @@ Chaves dos provedores de modelo (Anthropic, OpenAI, Gemini, OpenRouter e demais 
 MAIN_CANONICA=PASS (clone novo)
 COFRE_1_NO_GITHUB=PASS (71.235 arquivos, 0 chave real)
 COMMITS_LOCAIS_NO_GITHUB=PASS (6 pontas conferidas)
-COFRE_2_ESCOPO_CENTRALDARK=45_ARQUIVOS_NAO_PUBLICADOS
+COFRE_2_ESCOPO_CENTRALDARK=43_PUBLICADOS (tip d3f093a7; 2 sessoes excluidas)
 ESCOPO_EXPANDIDO_INDEVIDAMENTE=CORRIGIDO
 SEGREDOS_NO_GITHUB=0_ACHADOS_POR_PADRAO (padrão desconhecido = UNKNOWN)
-PODE_FORMATAR=DECISAO_DO_CHEFE apos resolver COFRE_2
+PODE_FORMATAR=PASS_LADO_CLAUDE (cofre 1 + cofre 2 + commits locais + main); lado Danda ver frente SOL
 ```
 
 
@@ -143,7 +140,7 @@ Ou seja: **o conhecimento da triagem Danda está agora registrado remotamente ne
 CASA_REMOTE_CHANNEL=OFFLINE_CURRENT
 DANDA_CRYSTAL_KNOWLEDGE_REMOTE=PASS_BY_THIS_RECEIPT
 DANDA_CRYSTAL_BYTES_REMOTE=UNKNOWN
-DANDA_13_LOCAL_ARTIFACTS_REMOTE=UNKNOWN
+DANDA_13_LOCAL_ARTIFACTS_REMOTE=PASS (ramo preservacao/casa-danda-arqueologia-20260926, tip 18cac68e, conferido por ls-remote)
 ```
 
 Quando a Casa voltar online: ler `MANIFESTO_CRISTAL_DANDA.jsonl` + `ARQUEOLOGIA_DANDA_RECEIPT.json`, rehash, publicar apenas os 13 artefatos sanitizados/únicos em cofre/owner apropriado e fazer read-back remoto. Só então zerar a pendência Danda.
