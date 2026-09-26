@@ -521,6 +521,76 @@
         "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
         "raw_output_byte_equality_required": false
       }
+    },
+    "PROVEN_PATH_EXECUTABLE_RECIPE_CONTRACT": {
+      "claim_key": "PROVEN_PATH_EXECUTABLE_RECIPE_CONTRACT",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+      "lock_key": "a5ea4b5e42ea44846d96f8fa6fac91a24975e2c9241284b09281c3b2f4cb54b6",
+      "state": "SEALED_PROVEN",
+      "proof_target": "MACHINE_CONSUMABLE_REPLAY_CONTRACT_FOR_PROVEN_PATHS",
+      "evidence_ref": "CHEFE_DELTA_2026-09-25T21:21-03:00 + CURRENT_MAIN_28a45d3eef2e4077496a88462a8004ce2a088456",
+      "observed_at": "2026-09-26T00:21:38Z",
+      "counterproof": "PASS",
+      "receipt_ref": "PR_MOTHER_1562 + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "ffe0c4dd2f5ec38bc62c6e1241abe9202339e34d6f69b0953131a96cb8a50b31",
+        "fingerprint_material_count": 8,
+        "fingerprint_material": [
+          "CONTRACT_SCHEMA=centraldark.proven-deterministic-lock.v1",
+          "OWNER=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+          "REGISTRY=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json",
+          "CONSUMER=scripts/trigger-fabric/centraldark_full_trigger_boot.py",
+          "RECIPE_REQUIRED_FIELDS=owner,objective,preconditions,execution_sequence,environment_bindings,dependency_fingerprint,proof,counterproof,expected_result_format_effect,evidence,next_cursor",
+          "LAW=REPLAY_BEFORE_REDISCOVERY",
+          "RESULT_SCHEMA=centraldark.proven-replay.result.v1",
+          "PR_MOTHER=1562"
+        ],
+        "execution_commands": [
+          "test -f docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+          "test -f docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json",
+          "python3 - <<'PY'\nimport json\nfrom pathlib import Path\nlock=Path('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml').read_text(encoding='utf-8')\nfor token in ['PROVEN_PATH_BECOMES_EXECUTABLE_RECIPE: true','RECIPE_MUST_LIVE_IN_REPOSITORY: true','RECIPE_MUST_BE_MACHINE_CONSUMABLE: true','REPLAY_BEFORE_REDISCOVERY: true','ADAPT_ENV_BINDINGS_ONLY: true']:\n    assert token in lock, token\nj=json.loads(Path('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json').read_text(encoding='utf-8'))\nassert 'PROVEN_PATH_EXECUTABLE_RECIPE_CONTRACT' in j['claims']\nPY"
+        ],
+        "proof_commands": [
+          "python3 scripts/trigger-fabric/test_centraldark_full_trigger_boot.py",
+          "python3 - <<'PY'\nimport json\nfrom pathlib import Path\nentry=json.loads(Path('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json').read_text(encoding='utf-8'))['claims']['PROVEN_PATH_EXECUTABLE_RECIPE_CONTRACT']\nr=entry['proven_path_replay']\nassert entry['state']=='SEALED_PROVEN'\nassert r['commands_executable'] is True\nassert r['execution_policy']=='READ_ONLY'\nassert r['dependency_fingerprint']=='ffe0c4dd2f5ec38bc62c6e1241abe9202339e34d6f69b0953131a96cb8a50b31'\nassert r['expected_effect']=='NEXT_EXECUTOR_CAN_REPLAY_WITHOUT_REDISCOVERY'\nassert r['raw_output_byte_equality_required'] is False\nPY"
+        ],
+        "expected_results": [
+          "CONTRACT_FLAGS_PRESENT",
+          "REGISTRY_CLAIM_PRESENT",
+          "RECIPE_FIELDS_MACHINE_CONSUMABLE",
+          "NO_REDISCOVERY_REQUIRED"
+        ],
+        "expected_effect": "NEXT_EXECUTOR_CAN_REPLAY_WITHOUT_REDISCOVERY",
+        "result_schema": "centraldark.proven-replay.result.v1",
+        "environment_bindings": [],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "python3 scripts/trigger-fabric/test_centraldark_full_trigger_boot.py",
+        "self_test_result": "PASS_EXPECTED_BY_SAME_HEAD_CI",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false,
+        "required_recipe_fields": [
+          "owner",
+          "objective",
+          "preconditions",
+          "execution_sequence",
+          "environment_bindings",
+          "dependency_fingerprint",
+          "proof",
+          "counterproof",
+          "expected_result_format_effect",
+          "evidence",
+          "next_cursor"
+        ],
+        "replay_outcomes": {
+          "same_fingerprint_same_proof": "REUSE_CRYSTAL",
+          "changed_fingerprint": "REVALIDATE_AFFECTED_CONE_ONLY",
+          "same_fingerprint_proof_diverged": "DELTA_NEW",
+          "undeclared_binding": "DENY_FAIL_CLOSED"
+        }
+      }
     }
   }
 }
