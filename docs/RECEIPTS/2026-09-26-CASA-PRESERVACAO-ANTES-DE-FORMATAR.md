@@ -30,16 +30,17 @@ A partir de agora a escrita do CHEFE vai direto na `main`; CI só quando ele dec
 
 Leitura do cofre: `README-PRESERVACAO.md` na raiz do ramo; `_MANIFESTO-DEDUP.tsv` diz o que foi cortado por já existir na `main` ou por ser cópia repetida; `SEGREDOS-REDIGIDOS.tsv` lista só caminho e tipo de cada valor trocado por `[REDIGIDO-PRESERVACAO]`.
 
-## 🟡 Segunda varredura — pronta, **não publicada**
+## 🟡 Segunda varredura — 45 arquivos no escopo, **não publicados**
 
-Achados que a primeira coleta não pegou (600 arquivos novos após dedup, ~7 mil já existiam):
+Correção do CHEFE: a varredura tinha saído do escopo CentralDark. Ficou só o que é CentralDark:
 
-- `E:\SITE SEGREDO` (projeto `GsmHub-Admin-Plus-master`, 309 arquivos)
-- `%LOCALAPPDATA%\CentralDark` (receipts do Remote-Tray, ScheduledJobs, UnifiedRuntime — 24)
-- `%LOCALAPPDATA%\hermes\pets`, `gateway-service`, `bot_relay` (110)
-- `E:\c\Users\danda`, `E:\e\CentralDark`, `E:\root`, soltos de `E:\tmp` e `E:\tmp\claude-code-proxy`
+- `%LOCALAPPDATA%\CentralDark` — estado e receipts da ponte (UnifiedRuntime, Remote-Tray, ScheduledJobs) — 24
+- `%LOCALAPPDATA%\hermes\pets\hermes-centraldark*` — 7 · `gateway-service`, `bot_relay` — 2
+- `E:\e\CentralDark`, `E:\root\CentralDark` — 12
 
-A publicação automática foi **barrada pela trava de segurança contra vazamento de credencial** (há arquivos de pasta de usuário e de configuração de agentes). Os arquivos continuam no computador em `Documents\CD-PRESERVACAO-20260926\` (`casa-arquivos-4..7.zip`, `stage3..6`). Decisão do CHEFE: revisar e subir, ou descartar.
+A publicação automática foi barrada pela trava contra vazamento de credencial. Lista em `Documents\CD-PRESERVACAO-20260926\OS-600-ARQUIVOS-PENDENTES.txt` na Casa. Decisão do CHEFE.
+
+**Fora do escopo, descartado:** `E:\SITE SEGREDO` (GsmHub), pasta de usuário `danda`, `claude-code-proxy`, soltos de `E:\tmp`, configurações de outros agentes (Codex, Gemini, Grok…).
 
 ## 🔴 Fora de propósito (não vai para o GitHub)
 
@@ -72,7 +73,8 @@ Chaves dos provedores de modelo (Anthropic, OpenAI, Gemini, OpenRouter e demais 
 MAIN_CANONICA=PASS (clone novo)
 COFRE_1_NO_GITHUB=PASS (71.235 arquivos, 0 chave real)
 COMMITS_LOCAIS_NO_GITHUB=PASS (6 pontas conferidas)
-COFRE_2_SEGUNDA_VARREDURA=PRONTO_LOCAL_NAO_PUBLICADO
+COFRE_2_ESCOPO_CENTRALDARK=45_ARQUIVOS_NAO_PUBLICADOS
+ESCOPO_EXPANDIDO_INDEVIDAMENTE=CORRIGIDO
 SEGREDOS_NO_GITHUB=0_ACHADOS_POR_PADRAO (padrão desconhecido = UNKNOWN)
 PODE_FORMATAR=DECISAO_DO_CHEFE apos resolver COFRE_2
 ```
