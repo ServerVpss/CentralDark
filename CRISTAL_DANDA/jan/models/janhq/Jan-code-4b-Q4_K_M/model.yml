@@ -1,0 +1,12 @@
+batch_size: 2048
+ctx_size: 4192
+embedding: false
+embedding_check_v: 3
+model_path: llamacpp/models/janhq/Jan-code-4b-Q4_K_M/model.gguf
+mtp_check_v: 1
+mtp_layers: 0
+n_gpu_layers: 40
+name: Jan-coder
+size_bytes: 2716066656
+template_kwargs: []
+template_kwargs_check_v: 1
