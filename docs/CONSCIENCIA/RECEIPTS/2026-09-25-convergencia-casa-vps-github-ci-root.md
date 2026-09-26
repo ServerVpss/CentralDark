@@ -11,6 +11,8 @@ FILES_CHANGED:
 - .github/workflows/inventario-casa.yml
 - .github/workflows/recibo-telegram-gabarito.yml
 - .github/workflows/remote-desktop-multi-account-live-reconcile.yml
+- .github/workflows/porta-de-entrada.yml
+- .github/workflows/status-badge-fabric.yml
 - scripts/vps/deploy-operational-guards.sh
 - docs/CONSCIENCIA/RECEIPTS/2026-09-25-convergencia-casa-vps-github-ci-root.md
 
@@ -20,11 +22,15 @@ CAUSE_ROOT:
   - DEPLOY_GATE_BYPASS:scripts/vps/deploy-operational-guards.sh:esperado=scripts/vps/deploy-guards-dispatcher.sh
   - falha de validação mascarada: .github/workflows/remote-desktop-multi-account-live-reconcile.yml:77
 - Contraprova local do verify_repo_contract.py também mostrou política global de runner falhando por ubuntu-latest em inventario-casa.yml e recibo-telegram-gabarito.yml.
+- Após push do PR filho, nova branch acionou porta-de-entrada com github.event.before zerado; o gate de identidade caiu em EXTERNAL_DELTA_REF_INCOMPLETE porque auditou HEAD sem base material.
+- Status Badge Fabric disparou em push de branch filha e tentou criar PR com GITHUB_TOKEN, bloqueado pela política GitHub Actions createPullRequest.
 
 DELTA:
 - scripts/vps/deploy-operational-guards.sh agora declara explicitamente CANONICAL_DEPLOY_GATE="scripts/vps/deploy-guards-dispatcher.sh" junto ao dispatcher existente.
 - remote-desktop-multi-account-live-reconcile.yml removeu o padrão `test ... || true` que mascarava validação; agora usa if explícito e emite WATCHDOG_STATE_MISSING quando o arquivo não existe.
 - inventario-casa.yml e recibo-telegram-gabarito.yml passaram de ubuntu-latest para [self-hosted, Linux], preservando a política canônica já existente.
+- porta-de-entrada.yml agora transforma before=40 zeros em fallback explícito para origin/main antes dos relatórios/gate de identidade.
+- status-badge-fabric.yml não executa a job de regeneração em push de branch filha; preserva schedule/workflow_dispatch/push main.
 
 TESTS:
 - bash -n scripts/vps/deploy-operational-guards.sh: PASS
