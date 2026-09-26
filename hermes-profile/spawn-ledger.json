@@ -1,0 +1,30 @@
+[
+  {
+    "pid": 18240,
+    "create_time": 1790435565.6261969,
+    "purpose": "serve",
+    "install": "bb29d2737d4d",
+    "spawner_pid": 25944,
+    "spawner_create": 1790435559.88,
+    "registered_at": 1790435576.7481403,
+    "argv": "-c serve --host 127.0.0.1 --port 0",
+    "host": "127.0.0.1",
+    "port": 51651,
+    "profile": "",
+    "hermes_home": "c:\\users\\administrador\\appdata\\local\\hermes"
+  },
+  {
+    "pid": 31648,
+    "create_time": 1790437041.6656585,
+    "purpose": "cli",
+    "install": "bb29d2737d4d",
+    "spawner_pid": 25944,
+    "spawner_create": 1790435559.88,
+    "registered_at": 1790437046.9318218,
+    "argv": "C:\\Users\\Administrador\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\hermes chat -q Responda exatamente: HERMES_JAN_LOCAL_OK --provider jan -m Jan-v3.5-4B-Q4_K_XL",
+    "host": "",
+    "port": null,
+    "profile": "",
+    "hermes_home": "c:\\users\\administrador\\appdata\\local\\hermes"
+  }
+]
