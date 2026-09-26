@@ -1,0 +1,2 @@
+# placeholder para disparar workflow 067
+Arquivo de trigger para run-once 067.

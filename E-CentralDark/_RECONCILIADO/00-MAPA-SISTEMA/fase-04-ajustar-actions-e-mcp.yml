@@ -1,0 +1,198 @@
+name: "#FASE 04/05 — Corrigir Actions e MCP allowlist"
+run-name: "#FASE 04/05 — Corrigir título Actions + validar MCP allowlist"
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  ajustar:
+    name: "#FASE 04/05 — Aplicar correção guiada"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "#FASE 01/05 — Baixar repositório"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "#FASE 02/05 — Corrigir títulos leigos dos workflows"
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def set_header(path_str: str, name: str, run_name: str):
+              path = Path(path_str)
+              text = path.read_text(encoding="utf-8")
+              lines = text.splitlines()
+              if not lines or not lines[0].startswith("name:"):
+                  raise SystemExit(f"Arquivo sem name na primeira linha: {path}")
+              out = [f'name: "{name}"', f'run-name: "{run_name}"']
+              i = 1
+              if i < len(lines) and lines[i].startswith("run-name:"):
+                  i += 1
+              while i < len(lines) and lines[i].strip() == "":
+                  i += 1
+              out.append("")
+              out.extend(lines[i:])
+              path.write_text("\n".join(out).rstrip() + "\n", encoding="utf-8")
+
+          set_header(
+              ".github/workflows/deploy.yml",
+              "#FASE 03/05 — Deploy Clone Deck",
+              "#FASE 03/05 — Deploy VPS — ${{ github.event_name }} — run-once ${{ github.event.inputs.FORCE_RUN_ONCE || 'auto' }}"
+          )
+          set_header(
+              ".github/workflows/deploy-fallback.yml",
+              "#FASE 04/05 — Deploy fallback seguro",
+              "#FASE 04/05 — Fallback seguro — ${{ github.event.workflow_run.conclusion || github.event_name }}"
+          )
+          PY
+
+          if git diff --quiet -- .github/workflows/deploy.yml .github/workflows/deploy-fallback.yml; then
+            echo "Sem alteração: títulos já estavam no padrão #FASE."
+          else
+            git config user.name "SegredoiDev"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add .github/workflows/deploy.yml .github/workflows/deploy-fallback.yml
+            git commit -m "#FASE 02/05: padronizar títulos leigos dos workflows" -m "Co-authored-by: SegredoiDev <<conta-bot>>"
+            git push
+          fi
+
+      - name: "#FASE 03/05 — Reconstruir chave SSH da VPS"
+        env:
+          VPS_SSH_KEY_LOVABLE: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
+          VPS_HOST_LOVABLE: ${{ secrets.VPS_HOST_LOVABLE }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${VPS_SSH_KEY_LOVABLE:-}" ]; then
+            echo "::error::secret VPS_SSH_KEY_LOVABLE vazio"
+            exit 1
+          fi
+          python3 - <<'PY'
+          import os, re, base64, textwrap
+          raw = os.environ["VPS_SSH_KEY_LOVABLE"]
+          s = raw.replace("\\n", "\n")
+          if "BEGIN" in s and s.count("\n") > 3:
+              key = s.strip() + "\n"
+          else:
+              m = re.search(r"(-----BEGIN [^-]+-----)(.*?)(-----END [^-]+-----)", s, re.S)
+              if m:
+                  header, body, footer = m.group(1), m.group(2), m.group(3)
+                  body = re.sub(r"\s+", "", body)
+                  wrapped = "\n".join(textwrap.wrap(body, 70))
+                  key = f"{header}\n{wrapped}\n{footer}\n"
+              else:
+                  b64 = re.sub(r"\s+", "", s)
+                  key = base64.b64decode(b64).decode("utf-8").strip() + "\n"
+          with open("/tmp/vps_key", "w") as f:
+              f.write(key)
+          os.chmod("/tmp/vps_key", 0o600)
+          print(f"chave reconstruida: {len(key)} bytes, {key.count(chr(10))} linhas")
+          PY
+          ssh-keygen -y -f /tmp/vps_key >/dev/null
+          mkdir -p ~/.ssh
+          if [ -n "${VPS_HOST_LOVABLE:-}" ]; then
+            ssh-keyscan -H "$VPS_HOST_LOVABLE" >> ~/.ssh/known_hosts 2>/dev/null || true
+          fi
+
+      - name: "#FASE 04/05 — Aplicar allowlist MCP na VPS"
+        env:
+          VPS_USER_LOVABLE: ${{ secrets.VPS_USER_LOVABLE }}
+          VPS_HOST_LOVABLE: ${{ secrets.VPS_HOST_LOVABLE }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          VPS_USER="${VPS_USER_LOVABLE:-root}"
+          VPS_HOST="${VPS_HOST_LOVABLE:?VPS_HOST_LOVABLE vazio}"
+          ssh -i /tmp/vps_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR "$VPS_USER@$VPS_HOST" 'bash -s' <<'REMOTE'
+          set -euo pipefail
+          TS="$(date +%Y%m%d-%H%M%S)"
+          OUT="/root/Multizap/revisoes/$TS/fase-04-mcp-allowlist"
+          mkdir -p "$OUT"
+          chmod 700 "$OUT" 2>/dev/null || true
+          {
+            echo "#FASE 04/05 — Aplicar allowlist MCP"
+            echo "Relatorio: $OUT"
+            echo "Objetivo: fazer MCP-CentralDark aparecer na lista de serviços reiniciáveis pelo conector."
+          } | tee "$OUT/resumo.txt"
+
+          cd /root
+          git fetch origin main
+          git reset --hard origin/main
+
+          PM2_JSON="$(pm2 jlist)"
+          MCP_ID="$(printf '%s' "$PM2_JSON" | node -e 'const fs=require("fs"); const data=JSON.parse(fs.readFileSync(0,"utf8")); const p=data.find(x=>x.name==="MCP-CentralDark"); if(!p) process.exit(2); console.log(p.pm_id);')"
+          MCP_DIR="$(printf '%s' "$PM2_JSON" | node -e 'const fs=require("fs"), path=require("path"); const data=JSON.parse(fs.readFileSync(0,"utf8")); const p=data.find(x=>x.name==="MCP-CentralDark"); if(!p) process.exit(2); const env=p.pm2_env||{}; console.log(env.pm_cwd || path.dirname(env.pm_exec_path||""));')"
+          echo "MCP_ID=$MCP_ID" | tee -a "$OUT/resumo.txt"
+          echo "MCP_DIR=$MCP_DIR" | tee -a "$OUT/resumo.txt"
+
+          ENV_FILE="$MCP_DIR/.env"
+          install -m 600 /dev/null "$ENV_FILE.tmp"
+          [ -f "$ENV_FILE" ] && cp -a "$ENV_FILE" "$OUT/env.bak" && cp "$ENV_FILE" "$ENV_FILE.tmp"
+          python3 - "$ENV_FILE.tmp" <<'PY'
+          from pathlib import Path
+          import sys
+          path = Path(sys.argv[1])
+          wanted = ["CloneDeck-Supabase-Sync", "MultiZap-TelegramBot", "MCP-CentralDark"]
+          text = path.read_text(encoding="utf-8", errors="ignore") if path.exists() else ""
+          lines = text.splitlines()
+          out = []
+          found = False
+          for line in lines:
+              if line.startswith("PM2_ALLOWED_RESTART="):
+                  found = True
+                  raw = line.split("=", 1)[1].strip().strip('"').strip("'")
+                  current = [x.strip() for x in raw.split(",") if x.strip()]
+                  for item in wanted:
+                      if item not in current:
+                          current.append(item)
+                  out.append("PM2_ALLOWED_RESTART=" + ",".join(current))
+              else:
+                  out.append(line)
+          if not found:
+              out.append("PM2_ALLOWED_RESTART=" + ",".join(wanted))
+          path.write_text("\n".join(out).rstrip() + "\n", encoding="utf-8")
+          PY
+          mv "$ENV_FILE.tmp" "$ENV_FILE"
+          chmod 600 "$ENV_FILE"
+          grep '^PM2_ALLOWED_RESTART=' "$ENV_FILE" | tee "$OUT/env.sanitizado.txt" | tee -a "$OUT/resumo.txt"
+
+          cd "$MCP_DIR"
+          npm run build > "$OUT/npm-build.log" 2>&1
+          set -a
+          . "$ENV_FILE"
+          set +a
+          export PM2_ALLOWED_RESTART="CloneDeck-Supabase-Sync,MultiZap-TelegramBot,MCP-CentralDark"
+          pm2 restart MCP-CentralDark --update-env > "$OUT/pm2-restart.log" 2>&1
+          pm2 save > "$OUT/pm2-save.log" 2>&1 || true
+          sleep 8
+          pm2 describe MCP-CentralDark --no-color > "$OUT/pm2-describe.txt" 2>&1
+          cat > "$OUT/RESUMO_PARA_CHATGPT.txt" <<EOF
+          STATUS: OK
+          #FASE 04/05 — MCP allowlist aplicada
+          Esperado agora: vps_list_allowed_services deve mostrar MCP-CentralDark.
+          Relatorio: $OUT
+          EOF
+          cat "$OUT/RESUMO_PARA_CHATGPT.txt"
+          REMOTE
+
+      - name: "#FASE 05/05 — Resumo para leigo"
+        shell: bash
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<'MD'
+          ## #FASE 05/05 — Resultado esperado
+
+          ✅ Títulos dos workflows corrigidos para aparecerem com `#FASE` nas próximas execuções.
+          ✅ VPS atualizada no commit mais recente.
+          ✅ MCP-CentralDark reiniciado com `PM2_ALLOWED_RESTART` incluindo ele mesmo.
+
+          Próximo teste no ChatGPT: chamar `vps_list_allowed_services` e conferir se aparece `MCP-CentralDark`.
+          MD

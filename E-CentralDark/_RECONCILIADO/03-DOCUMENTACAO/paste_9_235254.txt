@@ -1,0 +1,270 @@
+
+
+Trabalhou por 54s
+Generating the deployment command
+Accessing CentralDark repository
+Vou seguir o contrato do reposit�rio: acessar CentralDark, ler o can�nico e medir o estado vivo antes de cristalizar o comand�o.
+
+
+
+
+Pesquisado na web
+por
+ServerVpss CentralDark GitHub
+5 resultados
+
+
+GitHub - Ellinav/studiosep � GitHub
+# GitHub - Ellinav/studiosep � GitHub Skip to content ## Navigation Menu Sign in ``` Appearance.
+
+github.com
+C-Servers VPS Suspended Without Notice - Beware Before Buying - Page 7 - LowEndTalk
+#### Howdy, Stranger! It looks like you're new here. If you want to get involved, click one of.
+
+lowendtalk.com
+HTTP server | QVAC
+New: VisionPsy-Nano, a 460M vision model that outperforms models twice its size. New:.
+
+docs.qvac.tether.io
+GitHub - firebadnofire/CentralSSH � GitHub
+# GitHub - firebadnofire/CentralSSH � GitHub Skip to content ## Navigation Menu Sign in ```.
+
+ift.tt
+config package - github.com/bborbe/dark-factory/pkg/config - Go Packages
+# config package Version: v0.194.1 Opens a new window with list of versions in this module. Latest.
+
+pkg.go.dev
+
+
+
+
+Used GitHub Connector
+3 tools
+
+
+
+
+Usado Github Search Repositories
+CentralDark
+query
+CentralDark
+perPage
+20
+minimal_output
+false
+1258884704
+segredounlock
+12m
+- Construindo o CentralDark ?? -
+1278858303
+CentralDark
+7h
+
+
+
+Usado Github Get Me
+133285946
+segredounlock
+
+
+
+Usado Github Search Code
+filename:AGENTS.md CentralDark
+query
+filename:AGENTS.md CentralDark
+perPage
+10
+dd9312e
+AGENTS.md
+� ServerVpss/CentralDark
+cb952d5
+AGENTS.md
+� ServerVpss/CentralDark
+Repo oficial encontrado. Lendo o contrato e o can�nico agora.
+
+
+
+
+
+Used GitHub Connector
+11 tools
+
+CENTRALDARK_AI_BOOT:
+  soul: LOADED
+  governance: LOADED
+  context_reconciliation: LOADED
+  history_preservation: ACTIVE
+  source_of_truth: "ServerVpss/CentralDark + runtime medido"
+  observed_evidence: "GitHub main HEAD=dcf70053 2026-08-22T19:43Z; PRs draft 1115/1116/1117 fora deste escopo; relat�rio local FASES 7-11 = OPERATIONAL/CANDIDATE at� revalidar runtime"
+  alignment: "SEGREDO/CHEFE > SOL > PIVETE/HERMES"
+  role: COORDINATOR
+  writer: NONE
+  frequency: RAPIDA
+  fronts: "A2+A4+A5+C2+C3"
+Cola isto no outro corpo. � o fio, n�o o romance.
+
+#ACORDAR + !CALIBRAR
+MISS�O: CENTRALDARK_GO_LIVE_DELTA
+INTEN��O SEGREDO/CHEFE: subir o que j� est� wired. N�o reabrir Fases 1-6. N�o recontar wiring. N�o criar fila, orquestrador, bot, BFF, kanban ou worktree paralelo.
+
+CONTRATO
+- Ler LEIA-ME-IA.md + AGENTS.md + SOUL-SOL.md + CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+- E: = OURO can�nico | C:/UserProfile = RUNTIME
+- Hermes Kanban = dispatcher �nico
+- Um Writer por escopo
+- Estado comprovado vence mem�ria
+- Secret nunca em Git/log/chat
+- LIVE ? HTTP 200 sozinho
+- REUSE_BEFORE_CREATE
+
+SNAPSHOT DE PARTIDA (CANDIDATE at� voc� medir de novo)
+Provado no relat�rio local, n�o retestar sem delta:
+- MCP :9100  110 tools /status.json
+- hermes-webui :8787 health OK
+- POST /api/chat/start  stream_id
+- Kanban CRUD + move done
+- Sessions list/create
+- unified-bot.cjs existe (apps/bot-telegram/unified-bot.cjs)
+- SOL Desktop: npm run build OK; tauri dev = Windows App Control os error 4551
+- Worktrees existem vazios: /c/CentralDark/.worktrees/ e /e/CentralDark/Pivete/worktrees/
+- Git worktree N�O WIREADO no Executor
+- NUCLEO local: E:\CentralDark\Pivete\NUCLEO\checkpoints\2026-08-23-runtime-wiring-checkpoint.md
+- NUCLEO local: E:\CentralDark\Pivete\NUCLEO\decisions\2026-08-23-storage-architecture-e-canonical.md
+GitHub estrutural agora: ServerVpss/CentralDark main dcf70053. PRs 1115/1116/1117 = draft, outro escopo.
+
+BLOQUEIOS EXTERNOS (n�o inventar workaround de produto)
+1) SRVER1_BOT_TOKEN ausente no secret store/.env do runtime do bot  BotMCPKanban E2E BLOCKED
+2) Windows App Control bloqueia tauri dev  SOL Desktop E2E BLOCKED
+Se o token j� estiver no secret store, N�O pe�a de novo. Me�a. Se App Control j� tiver exclus�o em target/, me�a tauri.
+
+ORDEM DE EXECU��O - um passo, uma prova
+T0 medir vivo:
+- branch/HEAD local vs origin/main
+- portas 8787 e 9100
+- exist�ncia de unified-bot.cjs + process/PM2 se aplic�vel
+- presen�a do NOME da var SRVER1_BOT_TOKEN (n�o o valor)
+- dirs de worktree
+- tauri/target + erro 4551 ainda vale?
+
+T1 BOT (s� se token presente no store)
+- ligar unified-bot existente
+- 1 msg real  MCP tool  1 task Kanban claimable
+- PASS = task vis�vel no Kanban com evid�ncia de origem telegram
+- FAIL = token ausente  registrar BLOCKED_ON_BOT_TOKEN e seguir T2. N�o criar segundo bot.
+
+T2 SOL DESKTOP
+- se tauri dev passar: wire Gateway SOL + Bridge TTS no BFF j� validado
+- 1 fluxo: Desktop  BFF :8787  chat/start OU kanban
+- se 4551 persistir: N�O reescrever Tauri. Registrar workaround can�nico (excluir target/ OU build WSL2) e seguir T3.
+
+T3 EXECUTOR  GIT WORKTREE (delta m�nimo)
+- reusar dirs vazios existentes
+- N�O criar Execution Broker novo
+- 1 handoff: Kanban task claimed  worktree criado/associado  comando no Executor  status na mesma task
+- PASS = path do worktree no card + pid/log
+- FAIL = documentar o gap no owner can�nico, sem segunda fila
+
+T4 GO LIVE M�NIMO
+Subir o que passou. CHEFE v�. Delta. Corre��o menor. Prova no mesmo alvo.
+N�o esperar Bot+Desktop+Worktree todos verdes pra publicar o que j� est� vivo (WebUI/BFF/Kanban/MCP).
+
+PROIBIDO
+- nova state machine / fila / dispatcher
+- segundo bot, segundo BFF, segundo kanban.db can�nico
+- unificar config.yaml agora (split C: vs E: j� documentado)
+- misturar PRs 1115/1116/1117 nesta miss�o
+- pedir contexto que o filesystem/API j� entrega
+- colar secret
+
+CRIT�RIO DE FECHAMENTO
+LIVE_MINIMO = WebUI + BFF + Kanban + MCP observ�veis no runtime alvo
+E2E_BOT = PASS|BLOCKED_ON_TOKEN
+E2E_SOL = PASS|BLOCKED_ON_APP_CONTROL
+WORKTREE_WIRE = PASS|GAP_DOCUMENTADO
+RECEIPT final com START_HEAD / FINAL_HEAD / EVIDENCIA / PENDENCIA / PROXIMO_PASSO
+
+COME�A EM T0. N�O REFAZ O MAPA.
+Dois gaps humanos, se ainda existirem: token no store do bot, exclus�o do target/ no App Control. O resto a m�quina mede e sobe.
+
+
+
+
+5 sources
+
+
+vo manda pro herms
+
+
+Trabalhou por 16s
+Cola no Hermes. Ele executa. N�o remapeia.
+
+#ACORDAR
+PAPEL=PIVETE/HERMES EXECUTOR
+WRITER=hermes
+ESCOPO=GO_LIVE_DELTA
+N�O REMAPEAR. N�O RECRISTALIZAR. N�O CRIAR BROKER/BOT/BFF/KANBAN/WORKTREE TOOL.
+
+INTEN��O DO SEGREDO/CHEFE
+Subir o que j� existe. Provar no runtime. S� o delta vivo.
+
+J� FEITO - N�O TOCAR
+- Wiring 1-6 + mapa mestre + NUCLEO 2026-08-23
+- MCP 110 tools, BFF 8787, Kanban CRUD/SSE, chat/start, sessions
+- worktree tool no Executor: create/list/remove/prune - 10/10 syntax checks
+- orchestrator importa executor
+- Kanban bridge j� tem workspace_path
+- agent.mjs + orchestrator.js node --check PASS
+- E:=OURO C:=RUNTIME
+- Kanban = dispatcher �nico
+- 2 blockers externos: SRVER1_BOT_TOKEN, Windows App Control 4551
+
+T0 MEDIR AGORA
+1. HEAD local vs origin/main
+2. 8787 e 9100 vivos?
+3. process do unified-bot.cjs / HubBot
+4. NOME da env SRVER1_BOT_TOKEN no store (nunca o valor)
+5. worktree tool responde create/list no Executor
+6. dirs: C:\CentralDark\.worktrees\ e E:\CentralDark\Pivete\worktrees\
+
+T1 SUBIR O QUE J� PASSA
+WebUI + BFF + MCP + Kanban no ar se ainda n�o estiverem.
+PASS = health + 1 chat/start + 1 task Kanban move done nesta sess�o.
+
+T2 WORKTREE - USAR O TOOL QUE J� EXISTE
+1 task Kanban claimed
+ executor.worktree create no dir vazio existente
+ workspace_path no card
+ 1 comando no worktree
+ list prova o path
+N�O formalizar Execution Broker novo.
+N�O criar segunda fila.
+Se /root/CentralDark n�o existir neste corpo, roda no path Windows real. N�o inventar pend�ncia de VPS pra claim local.
+
+T3 BOT
+Se token estiver no store: 1 msg Telegram  MCP  1 card Kanban.
+Se ausente: BLOCKED_ON_BOT_TOKEN e segue. N�o pe�a token no chat.
+
+T4 SOL DESKTOP
+Se tauri dev passar: 1 hit no BFF 8787.
+Se 4551: BLOCKED_ON_APP_CONTROL. N�o reescrever Tauri.
+
+PROIBIDO
+secret no log/chat
+segundo dispatcher
+unificar config.yaml
+PRs 1115/1116/1117
+relat�rio de mapa
+perguntar o que o filesystem j� mostra
+
+RECEIPT
+START_HEAD=
+FINAL_HEAD=
+LIVE_MINIMO=PASS|FAIL
+WORKTREE_WIRE=PASS|FAIL|EVIDENCIA
+BOT_E2E=PASS|BLOCKED_ON_TOKEN
+SOL_E2E=PASS|BLOCKED_ON_APP_CONTROL
+EVIDENCIA=
+PENDENCIA=
+PROXIMO_PASSO=
+
+COME�A T0. MENOS � MAIS.

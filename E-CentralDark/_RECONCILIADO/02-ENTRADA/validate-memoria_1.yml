@@ -1,0 +1,36 @@
+name: Validate Memoria Operacional
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'conexao-ia/MEMORIA_OPERACIONAL_IA.md'
+      - 'conexao-ia/CHECKLIST_EXECUCAO.md'
+      - 'conexao-ia/validate_memoria_checklist.py'
+      - '.github/workflows/validate-memoria.yml'
+  pull_request:
+    paths:
+      - 'conexao-ia/**'
+      - '.github/workflows/validate-memoria.yml'
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate memoria e checklist
+        run: python conexao-ia/validate_memoria_checklist.py

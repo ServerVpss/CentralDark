@@ -1,0 +1,43 @@
+name: Lovable Sync Ping
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"
+  push:
+    paths:
+      - ".github/workflows/lovable-sync-ping.yml"
+
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - name: Atualizar ping da Lovable
+        run: |
+          mkdir -p .lovable
+          {
+            echo "# Lovable Sync Ping"
+            echo ""
+            echo "Último ping: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            echo ""
+            echo "Este arquivo serve apenas para forçar novo evento GitHub -> Lovable."
+          } > .lovable/sync-ping.md
+
+      - name: Commit e push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .lovable/sync-ping.md
+          git commit -m "chore(lovable): sync ping" || echo "sem mudanças"
+          git push

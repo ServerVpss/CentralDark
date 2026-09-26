@@ -1,0 +1,78 @@
+# WuzAPI/Whatsmeow — ISOLADO do Baileys de Recargas Brasil.
+# Versão final validada na VPS em 2026-05-20.
+#
+# Pontos críticos que destravaram o deploy:
+#   - SEM atributo "version:" (obsoleto no Compose v2, gera warning).
+#   - SEM container_name fixo (evita "Conflict: container name already in use"
+#     de deploys anteriores). Nomes ficam <project>-<service>-1.
+#   - project name fixo: multizap-gateway
+#   - Rede explícita multizap-wuzapi-net.
+#   - Postgres exposto na rede com ALIAS "postgres" (e também pelo nome do
+#     serviço "postgreswuzapi"). DB_HOST=postgres porque versões recentes da
+#     WuzAPI fazem lookup contra esse hostname interno.
+#   - depends_on com condition: service_healthy garante ordem correta.
+#   - Porta exposta SOMENTE em loopback: 127.0.0.1:${WUZAPI_PORT:-8081}:8080.
+#   - Container WuzAPI escuta sempre em 8080 internamente.
+#   - WUZAPI_GLOBAL_ENCRYPTION_KEY e WUZAPI_GLOBAL_HMAC_KEY carregados do .env.
+
+name: multizap-gateway
+
+services:
+  postgreswuzapi:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-wuzapi_multizap}
+      POSTGRES_USER: ${POSTGRES_USER:-wuzapi_multizap}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres-wuzapi-multizap-data:/var/lib/postgresql/data
+    networks:
+      multizap-wuzapi-net:
+        aliases:
+          - postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  wuzapi:
+    image: asternic/wuzapi:latest
+    restart: always
+    depends_on:
+      postgreswuzapi:
+        condition: service_healthy
+    environment:
+      WUZAPI_ADMIN_TOKEN: ${WUZAPI_ADMIN_TOKEN}
+      WUZAPI_GLOBAL_ENCRYPTION_KEY: ${WUZAPI_GLOBAL_ENCRYPTION_KEY}
+      WUZAPI_GLOBAL_HMAC_KEY: ${WUZAPI_GLOBAL_HMAC_KEY}
+      TZ: ${TZ:-America/Sao_Paulo}
+      # DB_HOST=postgres bate com o alias da rede acima.
+      # Não trocar para "postgreswuzapi" — quebrou no teste real
+      # (lookup postgreswuzapi on 127.0.0.53:53 connection refused).
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: ${POSTGRES_USER:-wuzapi_multizap}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB:-wuzapi_multizap}
+    volumes:
+      - wuzapi-multizap-data:/app/data
+      - wuzapi-multizap-files:/app/files
+    ports:
+      - "127.0.0.1:${WUZAPI_PORT:-8081}:8080"
+    networks:
+      - multizap-wuzapi-net
+
+volumes:
+  postgres-wuzapi-multizap-data:
+    name: postgres-wuzapi-multizap-data
+  wuzapi-multizap-data:
+    name: wuzapi-multizap-data
+  wuzapi-multizap-files:
+    name: wuzapi-multizap-files
+
+networks:
+  multizap-wuzapi-net:
+    name: multizap-wuzapi-net
+    driver: bridge

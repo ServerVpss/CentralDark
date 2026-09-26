@@ -1,0 +1,2937 @@
+/*
+ * Tema NexChat — camada visual isolada
+ * Todos os seletores começam com .nexchat-root pra não vazar pro resto do app.
+ * Tokens inspirados no template NexChat (licenciado pelo cliente via ThemeForest)
+ * e mapeados pra coexistir com o design system do MultiZap.
+ */
+
+.nexchat-root {
+  /* paleta */
+  --nx-primary: #13ec5b;
+  --nx-primary-soft: rgba(19, 236, 91, 0.1);
+  --nx-blue: #3b82f6;
+  --nx-purple: #8b5cf6;
+  --nx-success: #2ecb71;
+  --nx-danger: #e74c3c;
+  --nx-warning: #f1c40f;
+
+  /* superfícies (dark default) */
+  --nx-bg: rgb(16 34 22);
+  --nx-surface: rgb(22 43 30);
+  --nx-surface-hover: rgb(28 51 36);
+  --nx-text: #ffffff;
+  --nx-text-muted: rgb(157 185 166);
+  --nx-border: rgba(255, 255, 255, 0.05);
+  --nx-glass: color-mix(in srgb, rgb(22 43 30) 85%, transparent);
+
+  /* shape */
+  --nx-radius-sm: 8px;
+  --nx-radius-md: 14px;
+  --nx-radius-lg: 20px;
+  --nx-radius-xl: 30px;
+  --nx-radius-2xl: 40px;
+
+  /* sombras */
+  --nx-shadow-md: 0 4px 10px rgba(0, 0, 0, 0.1);
+  --nx-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --nx-shadow-glow: 0 0 20px color-mix(in srgb, var(--nx-primary) 25%, transparent);
+
+  --nx-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  background-color: var(--nx-bg);
+  color: var(--nx-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* overlay tokens (dark default) — usados em camadas semi-transparentes */
+.nexchat-root {
+  --nx-overlay-soft: rgba(255, 255, 255, 0.05);
+  --nx-overlay: rgba(255, 255, 255, 0.08);
+  --nx-overlay-strong: rgba(255, 255, 255, 0.12);
+  --nx-shadow-card: 0 20px 50px rgba(0, 0, 0, 0.5);
+  --nx-shadow-drawer: -8px 0 30px rgba(0, 0, 0, 0.4);
+}
+
+/* light mode */
+:root:not(.dark) .nexchat-root {
+  --nx-bg: #f6f8f6;
+  --nx-surface: #ffffff;
+  --nx-surface-hover: #eef3ef;
+  --nx-text: #102216;
+  --nx-text-muted: #5a7565;
+  --nx-border: rgba(16, 34, 22, 0.08);
+  --nx-glass: color-mix(in srgb, #ffffff 85%, transparent);
+  --nx-overlay-soft: rgba(16, 34, 22, 0.05);
+  --nx-overlay: rgba(16, 34, 22, 0.08);
+  --nx-overlay-strong: rgba(16, 34, 22, 0.12);
+  --nx-shadow-card: 0 20px 50px rgba(16, 34, 22, 0.12);
+  --nx-shadow-drawer: -8px 0 30px rgba(16, 34, 22, 0.12);
+}
+
+/* ---------- shell ---------- */
+.nexchat-root .nx-shell {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  background: var(--nx-bg);
+  color: var(--nx-text);
+  overflow: hidden;
+}
+
+/* ---------- navigation rail ---------- */
+.nexchat-root .nx-rail {
+  width: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 0;
+  background: var(--nx-surface);
+  border-right: 1px solid var(--nx-border);
+}
+.nexchat-root .nx-rail-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--nx-primary);
+  color: #102216;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: var(--nx-shadow-glow);
+}
+.nexchat-root .nx-rail-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+}
+.nexchat-root .nx-rail-btn {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2px;
+  border-radius: 14px;
+  color: var(--nx-text-muted);
+  transition: var(--nx-transition);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.nexchat-root .nx-rail-btn:hover {
+  background: var(--nx-surface-hover);
+  color: var(--nx-text);
+}
+.nexchat-root .nx-rail-btn[data-active="true"] {
+  background: var(--nx-primary-soft);
+  color: var(--nx-primary);
+}
+/* Rótulo só aparece no mobile (bottom nav). Desktop: rail só com ícones. */
+.nexchat-root .nx-rail-label {
+  display: none;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+/* ---------- conversation list ---------- */
+.nexchat-root .nx-list {
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  background: var(--nx-surface);
+  border-right: 1px solid var(--nx-border);
+  min-width: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+.nexchat-root .nx-list-header {
+  padding: 12px 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-bottom: 1px solid var(--nx-border);
+}
+.nexchat-root .nx-list-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 28px;
+}
+.nexchat-root .nx-list-title {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.nexchat-root .nx-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  background: var(--nx-surface-hover);
+  border-radius: var(--nx-radius-md);
+  border: 1px solid transparent;
+  transition: var(--nx-transition);
+}
+.nexchat-root .nx-search:focus-within {
+  border-color: var(--nx-primary);
+  box-shadow: 0 0 0 2px var(--nx-primary-soft);
+}
+.nexchat-root .nx-search input {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: var(--nx-text);
+  font-size: 13px;
+}
+
+.nexchat-root .nx-filters {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nexchat-root .nx-filters::-webkit-scrollbar { display: none; }
+.nexchat-root .nx-filter {
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--nx-text-muted);
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--nx-primary) 22%, transparent);
+  cursor: pointer;
+  white-space: nowrap;
+  text-transform: capitalize;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.nexchat-root .nx-filter:hover {
+  background: color-mix(in srgb, var(--nx-primary) 8%, transparent);
+  color: var(--nx-text);
+}
+.nexchat-root .nx-filter[data-active="true"] {
+  background: #0f7a4a;
+  color: #ffffff;
+  border-color: rgba(255,255,255,0.06);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.08) inset, 0 4px 12px rgba(0,0,0,0.28);
+}
+.nexchat-root .nx-filter[data-active="true"]:hover {
+  background: #0c6840;
+}
+.nexchat-root .nx-list-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+.nexchat-root .nx-list-scroll::-webkit-scrollbar { width: 6px; }
+.nexchat-root .nx-list-scroll::-webkit-scrollbar-thumb {
+  background: var(--nx-surface-hover);
+  border-radius: 3px;
+}
+
+/* item da lista de conversas — fiel ao print verde do NexChat */
+.nexchat-root .nx-item {
+  position: relative;
+  display: flex;
+  gap: 14px;
+  padding: 12px 14px;
+  margin: 2px 0;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: background .18s ease, transform .15s ease, box-shadow .2s ease;
+  align-items: center;
+  border: 1px solid transparent;
+}
+.nexchat-root .nx-item:hover {
+  background: color-mix(in srgb, var(--nx-primary) 6%, var(--nx-surface-hover));
+}
+.nexchat-root .nx-item[data-active="true"] {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--nx-primary) 22%, transparent),
+    color-mix(in srgb, var(--nx-primary) 8%, transparent));
+  border-color: color-mix(in srgb, var(--nx-primary) 28%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--nx-primary) 18%, transparent),
+    0 12px 28px -16px color-mix(in srgb, var(--nx-primary) 50%, transparent);
+}
+/* barra/indicador verde na lateral esquerda do item ativo */
+.nexchat-root .nx-item[data-active="true"]::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 18%;
+  bottom: 18%;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--nx-primary);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--nx-primary) 70%, transparent);
+}
+.nexchat-root .nx-avatar {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--nx-surface-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--nx-text);
+  flex-shrink: 0;
+}
+.nexchat-root .nx-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 999px; }
+.nexchat-root .nx-avatar-dot {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--nx-success);
+  border: 2px solid var(--nx-surface);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--nx-success) 40%, transparent);
+  z-index: 2;
+}
+.nexchat-root .nx-item-info { flex: 1; min-width: 0; }
+.nexchat-root .nx-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.nexchat-root .nx-item-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--nx-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nexchat-root .nx-item-time {
+  font-size: 11px;
+  color: var(--nx-text-muted);
+  flex-shrink: 0;
+}
+.nexchat-root .nx-item-msg {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 2px;
+}
+.nexchat-root .nx-item-msg p {
+  font-size: 13px;
+  color: var(--nx-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0;
+  flex: 1;
+}
+.nexchat-root .nx-unread {
+  background: var(--nx-primary);
+  color: #102216;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  min-width: 22px;
+  text-align: center;
+}
+
+/* ---------- chat window ---------- */
+.nexchat-root .nx-chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--nx-bg);
+  position: relative;
+  overflow: hidden;
+}
+.nexchat-root .nx-chat::before {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  background:
+    radial-gradient(circle at 20% 30%, color-mix(in srgb, var(--nx-primary) 8%, transparent) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.08) 0%, transparent 40%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+.nexchat-root .nx-chat-header {
+  height: 72px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--nx-glass);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--nx-border);
+  position: relative;
+  z-index: 10;
+}
+.nexchat-root .nx-chat-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.nexchat-root .nx-chat-user h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--nx-text);
+  margin: 0;
+}
+.nexchat-root .nx-chat-user p {
+  font-size: 12px;
+  color: var(--nx-success);
+  margin: 0;
+}
+.nexchat-root .nx-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--nx-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nx-text-muted);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: var(--nx-transition);
+}
+.nexchat-root .nx-icon-btn:hover {
+  background: var(--nx-surface-hover);
+  color: var(--nx-text);
+}
+
+/* messages */
+.nexchat-root .nx-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+}
+.nexchat-root .nx-row {
+  display: flex;
+  align-items: flex-end;
+  max-width: 80%;
+  gap: 8px;
+  animation: nx-pop 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.2) both;
+}
+.nexchat-root .nx-row[data-me="true"] {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+.nexchat-root .nx-row-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--nx-primary) 35%, transparent), color-mix(in srgb, var(--nx-primary) 15%, transparent));
+  color: var(--nx-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--nx-primary) 30%, transparent);
+}
+.nexchat-root .nx-row-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.nexchat-root .nx-row-avatar[data-hidden] { visibility: hidden; }
+
+.nexchat-root .nx-bubble {
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  background: var(--nx-surface);
+  color: var(--nx-text);
+  border: 1px solid var(--nx-border);
+  border-radius: var(--nx-radius-lg) var(--nx-radius-lg) var(--nx-radius-lg) 0;
+  max-width: 100%;
+  word-wrap: break-word;
+}
+.nexchat-root[data-theme="dark"] .nx-bubble,
+.nexchat-root:not([data-theme="light"]) .nx-bubble {
+  background: color-mix(in srgb, var(--nx-primary) 14%, var(--nx-surface));
+  border-color: color-mix(in srgb, var(--nx-primary) 25%, transparent);
+}
+.nexchat-root .nx-row[data-me="true"] .nx-bubble {
+  background: var(--nx-primary);
+  color: #0a1a10;
+  border: 1px solid transparent;
+  border-radius: var(--nx-radius-lg) var(--nx-radius-lg) 0 var(--nx-radius-lg);
+  box-shadow: none;
+}
+.nexchat-root .nx-bubble-time {
+  display: block;
+  margin-top: 4px;
+  font-size: 10px;
+  color: var(--nx-text-muted);
+  opacity: 0.85;
+  text-align: right;
+}
+.nexchat-root .nx-row[data-me="true"] .nx-bubble-time {
+  color: #0a1a10;
+  opacity: 0.65;
+}
+.nexchat-root .nx-row[data-system="true"] {
+  align-self: center;
+  max-width: 100%;
+}
+.nexchat-root .nx-row[data-system="true"] .nx-bubble {
+  background: var(--nx-glass);
+  color: var(--nx-text-muted);
+  font-size: 12px;
+  border-radius: 999px;
+  padding: 6px 14px;
+  text-align: center;
+}
+
+@keyframes nx-pop {
+  from { opacity: 0; transform: translateY(8px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* composer */
+.nexchat-root .nx-composer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--nx-border);
+  background: var(--nx-bg);
+  position: relative;
+  z-index: 10;
+}
+.nexchat-root .nx-composer-inner {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+.nexchat-root .nx-input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--nx-surface-hover);
+  border-radius: var(--nx-radius-xl);
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  transition: var(--nx-transition);
+}
+.nexchat-root .nx-input-wrap:focus-within {
+  border-color: var(--nx-primary);
+  box-shadow: 0 0 0 2px var(--nx-primary-soft);
+}
+.nexchat-root .nx-input-wrap textarea {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  resize: none;
+  color: var(--nx-text);
+  font-size: 14px;
+  font-family: inherit;
+  padding: 8px 0;
+  max-height: 120px;
+}
+.nexchat-root .nx-send {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--nx-primary);
+  color: #102216;
+  border: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--nx-transition);
+  box-shadow: var(--nx-shadow-glow);
+  flex-shrink: 0;
+}
+.nexchat-root .nx-send:hover { transform: scale(1.05); }
+.nexchat-root .nx-send:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+/* readonly banner */
+.nexchat-root .nx-readonly-banner {
+  padding: 14px 20px;
+  background: color-mix(in srgb, var(--nx-warning) 15%, transparent);
+  color: var(--nx-warning);
+  border-top: 1px solid color-mix(in srgb, var(--nx-warning) 30%, transparent);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* contact panel */
+.nexchat-root .nx-panel {
+  width: 320px;
+  background: var(--nx-surface);
+  border-left: 1px solid var(--nx-border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.nexchat-root .nx-panel-header {
+  padding: 32px 24px;
+  text-align: center;
+  border-bottom: 1px solid var(--nx-border);
+}
+.nexchat-root .nx-panel-avatar {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 16px;
+  border-radius: 999px;
+  background: var(--nx-surface-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 800;
+}
+.nexchat-root .nx-panel-section {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--nx-border);
+}
+.nexchat-root .nx-panel-section h4 {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--nx-text-muted);
+  margin: 0 0 10px;
+  letter-spacing: 0.04em;
+}
+
+/* badges */
+.nexchat-root .nx-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--nx-surface-hover);
+  color: var(--nx-text);
+}
+.nexchat-root .nx-badge[data-tone="success"] { background: color-mix(in srgb, var(--nx-success) 18%, transparent); color: var(--nx-success); }
+.nexchat-root .nx-badge[data-tone="danger"]  { background: color-mix(in srgb, var(--nx-danger) 18%, transparent);  color: var(--nx-danger); }
+.nexchat-root .nx-badge[data-tone="warn"]    { background: color-mix(in srgb, var(--nx-warning) 18%, transparent); color: var(--nx-warning); }
+.nexchat-root .nx-badge[data-tone="primary"] { background: var(--nx-primary-soft); color: var(--nx-primary); }
+.nexchat-root .nx-badge[data-tone="info"]    { background: color-mix(in srgb, var(--nx-blue) 18%, transparent);    color: var(--nx-blue); }
+
+/* payment card */
+.nexchat-root .nx-pay {
+  background: linear-gradient(135deg, var(--nx-surface), var(--nx-surface-hover));
+  border: 1px solid var(--nx-border);
+  border-radius: var(--nx-radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 320px;
+}
+.nexchat-root .nx-pay-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.nexchat-root .nx-pay-amount {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--nx-text);
+}
+.nexchat-root .nx-pay-pix {
+  background: var(--nx-bg);
+  border: 1px dashed var(--nx-border);
+  border-radius: var(--nx-radius-sm);
+  padding: 10px 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  color: var(--nx-text-muted);
+  word-break: break-all;
+  max-height: 80px;
+  overflow-y: auto;
+}
+.nexchat-root .nx-pay-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.nexchat-root .nx-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--nx-radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid var(--nx-border);
+  background: var(--nx-surface-hover);
+  color: var(--nx-text);
+  cursor: pointer;
+  transition: var(--nx-transition);
+}
+.nexchat-root .nx-btn:hover { background: var(--nx-surface); }
+.nexchat-root .nx-btn[data-variant="primary"] {
+  background: var(--nx-primary);
+  color: #102216;
+  border-color: transparent;
+}
+
+/* empty state */
+.nexchat-root .nx-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  text-align: center;
+  position: relative;
+  background: var(--nx-bg);
+}
+.nexchat-root .nx-empty-art {
+  width: 160px;
+  height: 160px;
+  border-radius: var(--nx-radius-2xl);
+  background: var(--nx-primary-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  box-shadow: var(--nx-shadow-glow);
+}
+.nexchat-root .nx-empty h2 {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--nx-text);
+  margin: 0 0 8px;
+}
+.nexchat-root .nx-empty p {
+  color: var(--nx-text-muted);
+  font-size: 14px;
+  max-width: 360px;
+  margin: 0;
+}
+
+/* mobile — bottom nav fiel ao print NexChat (verde, 5 itens com ícone + rótulo) */
+@media (max-width: 1023.98px) {
+  .nexchat-root .nx-shell {
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    padding-bottom: 72px; /* reserva pro bottom nav */
+  }
+  .nexchat-root .nx-list-pane { flex: 1 1 auto; min-height: 0; overflow: hidden; }
+  .nexchat-root .nx-list { width: 100%; flex: 1; min-height: 0; }
+  .nexchat-root .nx-list-header { flex-shrink: 0; }
+  .nexchat-root .nx-list-scroll { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+  .nexchat-root .nx-panel { display: none; }
+
+  /* Rail vira bottom navigation */
+  .nexchat-root .nx-rail {
+    width: 100%;
+    height: 72px;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-between;
+    padding: 6px 4px;
+    padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+    background: var(--nx-surface);
+    border-right: 0;
+    border-top: 1px solid var(--nx-border);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    box-shadow: 0 -8px 24px -16px rgba(0,0,0,0.5);
+  }
+  .nexchat-root .nx-rail-top,
+  .nexchat-root .nx-rail-bottom { display: none; }
+  .nexchat-root .nx-rail-main {
+    flex: 1;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+  }
+  .nexchat-root .nx-rail-btn {
+    flex: 1;
+    height: 100%;
+    width: auto;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    border-radius: 12px;
+    padding: 4px 2px;
+  }
+  .nexchat-root .nx-rail-label { display: inline-block; }
+  .nexchat-root .nx-rail-btn[data-active="true"] {
+    background: var(--nx-primary-soft);
+    color: var(--nx-primary);
+  }
+  .nexchat-root .nx-rail-btn[data-active="true"] .nx-rail-label {
+    color: var(--nx-primary);
+  }
+
+  /* ===== Conversa aberta no mobile: barra inferior SEMPRE visível =====
+     Mantém o bottom nav (Chats/Grupos/Chamadas/Status/Config) fixo na tela
+     mesmo com a conversa aberta, pra navegação ficar sempre acessível. */
+  .nexchat-root .nx-shell.nx-shell-chat-open {
+    padding-bottom: 72px;
+  }
+  .nexchat-root .nx-shell.nx-shell-chat-open .nx-rail {
+    display: flex;
+  }
+
+
+  /* Header chat: sticky no topo, com safe-area */
+  .nexchat-root .nx-chat-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 0 12px;
+    padding-top: env(safe-area-inset-top, 0px);
+    height: calc(60px + env(safe-area-inset-top, 0px));
+  }
+  .nexchat-root .nx-chat-user h3 { font-size: 14px; }
+  .nexchat-root .nx-chat-user p { font-size: 11px; }
+
+  .nexchat-root .nx-messages {
+    padding: 16px 12px 12px;
+    gap: 10px;
+  }
+  .nexchat-root .nx-row { max-width: 85%; }
+  .nexchat-root .nx-bubble {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  /* Composer mobile: sticky no fundo, respeita safe area iOS */
+  .nexchat-root .nx-composer {
+    padding: 10px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+  }
+  .nexchat-root .nx-composer-inner { gap: 8px; }
+  .nexchat-root .nx-input-wrap { padding: 6px 10px; }
+  .nexchat-root .nx-input-wrap textarea { font-size: 15px; padding: 6px 0; }
+  .nexchat-root .nx-send { width: 44px; height: 44px; }
+  .nexchat-root .nx-composer-plus { width: 32px; height: 32px; }
+}
+
+/* ===== Botão + do composer (transparente, sem fundo — sobra espaço pro input) ===== */
+.nexchat-root .nx-composer-plus {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--nx-text-muted);
+  border: 0;
+  cursor: pointer;
+  transition: var(--nx-transition);
+  padding: 0;
+}
+.nexchat-root .nx-composer-plus:hover {
+  background: color-mix(in srgb, var(--nx-primary) 12%, transparent);
+  color: var(--nx-primary);
+}
+.nexchat-root .nx-composer-plus:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+
+/* ===== Pinned message (barra fina abaixo do header) ===== */
+.nexchat-root .nx-pinned {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: var(--nx-glass);
+  border-bottom: 1px solid var(--nx-border);
+  font-size: 12px;
+  color: var(--nx-text-muted);
+  position: relative;
+  z-index: 9;
+}
+.nexchat-root .nx-pinned-icon {
+  color: var(--nx-primary);
+  flex-shrink: 0;
+}
+.nexchat-root .nx-pinned-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.nexchat-root .nx-pinned-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--nx-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.nexchat-root .nx-pinned-body {
+  font-size: 13px;
+  color: var(--nx-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===== Indicador "digitando" (três pontos animados) ===== */
+.nexchat-root .nx-typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 14px;
+  background: var(--nx-surface-hover);
+  border: 1px solid var(--nx-border);
+  border-radius: var(--nx-radius-lg) var(--nx-radius-lg) var(--nx-radius-lg) 0;
+  align-self: flex-start;
+}
+.nexchat-root .nx-typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--nx-text-muted);
+  animation: nx-typing-bounce 1.2s infinite ease-in-out;
+}
+.nexchat-root .nx-typing span:nth-child(2) { animation-delay: 0.15s; }
+.nexchat-root .nx-typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes nx-typing-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+
+/* =========================================================================
+   Fase 7 — Tema NexChat global (App Shell + telas /app + /admin)
+   Aplica-se quando body.nexchat-theme-active estiver presente
+   (controlado pelo toggle Master em /admin/aparencia via NexThemeWrapper).
+   Reescreve os design tokens do shadcn pra paleta NexChat, sem tocar
+   em backend, RLS, WuzAPI, PIX ou qualquer lógica sensível.
+   ========================================================================= */
+
+/* Light mode global — paleta NexChat clara */
+body.nexchat-theme-active {
+  --radius: 0.9rem;
+  --background: oklch(0.985 0.008 150);
+  --foreground: oklch(0.18 0.03 155);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.03 155);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.03 155);
+  --primary: oklch(0.72 0.22 145);
+  --primary-foreground: oklch(0.13 0.02 155);
+  --secondary: oklch(0.96 0.02 150);
+  --secondary-foreground: oklch(0.25 0.03 155);
+  --muted: oklch(0.96 0.01 150);
+  --muted-foreground: oklch(0.52 0.02 155);
+  --accent: oklch(0.93 0.08 150);
+  --accent-foreground: oklch(0.25 0.06 155);
+  --border: oklch(0.91 0.015 150);
+  --input: oklch(0.94 0.015 150);
+  --ring: oklch(0.72 0.22 145);
+  --sidebar: oklch(0.99 0.005 150);
+  --sidebar-foreground: oklch(0.22 0.025 155);
+  --sidebar-primary: oklch(0.95 0.015 150);
+  --sidebar-primary-foreground: oklch(0.18 0.03 155);
+  --sidebar-accent: oklch(0.96 0.02 150);
+  --sidebar-accent-foreground: oklch(0.2 0.03 155);
+  --sidebar-border: oklch(0.91 0.015 150);
+  --sidebar-ring: oklch(0.72 0.22 145);
+}
+
+/* Dark mode global — paleta NexChat escura (verde neon sobre verde profundo) */
+body.nexchat-theme-active.dark,
+.dark body.nexchat-theme-active,
+html.dark body.nexchat-theme-active {
+  --background: oklch(0.18 0.035 155);
+  --foreground: oklch(0.98 0.01 150);
+  --card: oklch(0.22 0.04 155);
+  --card-foreground: oklch(0.98 0.01 150);
+  --popover: oklch(0.22 0.04 155);
+  --popover-foreground: oklch(0.98 0.01 150);
+  --primary: oklch(0.82 0.24 145);
+  --primary-foreground: oklch(0.15 0.04 155);
+  --secondary: oklch(0.26 0.035 155);
+  --secondary-foreground: oklch(0.98 0.01 150);
+  --muted: oklch(0.24 0.03 155);
+  --muted-foreground: oklch(0.72 0.02 150);
+  --accent: oklch(0.32 0.09 150);
+  --accent-foreground: oklch(0.98 0.02 150);
+  --border: oklch(0.3 0.025 155);
+  --input: oklch(0.26 0.03 155);
+  --ring: oklch(0.82 0.24 145);
+  --sidebar: oklch(0.2 0.04 155);
+  --sidebar-foreground: oklch(0.98 0.01 150);
+  --sidebar-primary: oklch(0.26 0.04 155);
+  --sidebar-primary-foreground: oklch(0.98 0.01 150);
+  --sidebar-accent: oklch(0.28 0.04 155);
+  --sidebar-accent-foreground: oklch(0.98 0.01 150);
+  --sidebar-border: oklch(0.3 0.025 155);
+  --sidebar-ring: oklch(0.82 0.24 145);
+}
+
+/* Polimento global: cantos arredondados, sombras suaves, transição premium */
+body.nexchat-theme-active [data-slot="card"],
+body.nexchat-theme-active .rounded-lg,
+body.nexchat-theme-active .rounded-xl {
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+body.nexchat-theme-active [data-slot="card"] {
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px -12px rgba(0, 0, 0, 0.08);
+}
+body.nexchat-theme-active.dark [data-slot="card"],
+.dark body.nexchat-theme-active [data-slot="card"] {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+}
+
+/* Botões — sombra suave e radius NexChat */
+body.nexchat-theme-active button[data-slot="button"]:not([data-variant="ghost"]):not([data-variant="link"]) {
+  border-radius: 12px;
+  transition: var(--nx-transition, all 0.2s ease);
+}
+body.nexchat-theme-active button[data-slot="button"][data-variant="default"]:hover {
+  box-shadow: 0 0 18px color-mix(in oklab, var(--primary) 35%, transparent);
+}
+
+/* Inputs — borda mais suave + foco verde NexChat */
+body.nexchat-theme-active input[data-slot="input"],
+body.nexchat-theme-active textarea,
+body.nexchat-theme-active [data-slot="select-trigger"] {
+  border-radius: 12px;
+}
+
+/* Modais / Popovers — glassmorphism leve */
+body.nexchat-theme-active [data-slot="dialog-content"],
+body.nexchat-theme-active [data-slot="popover-content"],
+body.nexchat-theme-active [data-slot="dropdown-menu-content"] {
+  border-radius: 18px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.18),
+              0 0 0 1px color-mix(in oklab, var(--border) 60%, transparent);
+}
+
+/* Sidebar — toque NexChat (cantos + transição) */
+body.nexchat-theme-active aside,
+body.nexchat-theme-active [data-slot="sidebar"] {
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Tabs — pill arredondado */
+body.nexchat-theme-active [data-slot="tabs-list"] {
+  border-radius: 14px;
+  padding: 4px;
+  background: color-mix(in oklab, var(--muted) 80%, transparent);
+}
+body.nexchat-theme-active [data-slot="tabs-trigger"] {
+  border-radius: 10px;
+}
+
+/* Badges — radius NexChat */
+body.nexchat-theme-active [data-slot="badge"] {
+  border-radius: 999px;
+}
+
+/* Scrollbars — finas e discretas (visual NexChat) */
+body.nexchat-theme-active *::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+body.nexchat-theme-active *::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--muted-foreground) 30%, transparent);
+  border-radius: 999px;
+}
+body.nexchat-theme-active *::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklab, var(--muted-foreground) 50%, transparent);
+}
+
+/* Mobile — garante que nada vaze horizontalmente */
+@media (max-width: 1023.98px) {
+  body.nexchat-theme-active {
+    overflow-x: hidden;
+  }
+}
+
+/* =========================================================================
+   Fase 7.1 — Auditoria visual: overrides defensivos pra classes hardcoded
+   Escopo: SOMENTE dentro de body.nexchat-theme-active.
+   Objetivo: neutralizar bg-white/bg-black/text-white/text-black/border-gray-*
+   em componentes compartilhados (whatsapp, notifications, onboarding,
+   modais ui, inbox legacy, app-topbar) sem editar os arquivos.
+   ========================================================================= */
+
+/* Backgrounds hardcoded → usar tokens NexChat */
+body.nexchat-theme-active .bg-white {
+  background-color: var(--card) !important;
+  color: var(--card-foreground);
+}
+body.nexchat-theme-active .bg-black {
+  background-color: var(--background) !important;
+  color: var(--foreground);
+}
+body.nexchat-theme-active .bg-gray-50,
+body.nexchat-theme-active .bg-gray-100,
+body.nexchat-theme-active .bg-gray-200 {
+  background-color: var(--muted) !important;
+}
+body.nexchat-theme-active .bg-gray-700,
+body.nexchat-theme-active .bg-gray-800,
+body.nexchat-theme-active .bg-gray-900,
+body.nexchat-theme-active .bg-gray-950 {
+  background-color: var(--card) !important;
+}
+
+/* Textos hardcoded → tokens NexChat */
+body.nexchat-theme-active .text-black {
+  color: var(--foreground) !important;
+}
+/* text-white é frequentemente usado dentro de botões primary onde já fica certo;
+   só ajustamos quando está sobre bg-white (que viramos card) */
+body.nexchat-theme-active .bg-white .text-white,
+body.nexchat-theme-active .bg-gray-50 .text-white,
+body.nexchat-theme-active .bg-gray-100 .text-white {
+  color: var(--card-foreground) !important;
+}
+body.nexchat-theme-active .text-gray-700,
+body.nexchat-theme-active .text-gray-800,
+body.nexchat-theme-active .text-gray-900 {
+  color: var(--foreground) !important;
+}
+body.nexchat-theme-active .text-gray-400,
+body.nexchat-theme-active .text-gray-500,
+body.nexchat-theme-active .text-gray-600 {
+  color: var(--muted-foreground) !important;
+}
+
+/* Bordas cinza → token border NexChat */
+body.nexchat-theme-active .border-gray-100,
+body.nexchat-theme-active .border-gray-200,
+body.nexchat-theme-active .border-gray-300,
+body.nexchat-theme-active .border-gray-700,
+body.nexchat-theme-active .border-gray-800 {
+  border-color: var(--border) !important;
+}
+
+/* Tabelas — fundo do header e linhas no padrão NexChat */
+body.nexchat-theme-active table thead tr,
+body.nexchat-theme-active [data-slot="table-header"] tr {
+  background-color: color-mix(in oklab, var(--muted) 70%, transparent);
+}
+body.nexchat-theme-active table tbody tr:hover,
+body.nexchat-theme-active [data-slot="table-row"]:hover {
+  background-color: color-mix(in oklab, var(--accent) 35%, transparent);
+}
+body.nexchat-theme-active table {
+  border-color: var(--border);
+}
+body.nexchat-theme-active table th,
+body.nexchat-theme-active table td {
+  border-color: var(--border);
+}
+
+/* Drawer / Sheet — glassmorphism igual ao dialog */
+body.nexchat-theme-active [data-slot="sheet-content"],
+body.nexchat-theme-active [data-slot="drawer-content"] {
+  border-radius: 18px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.22),
+              0 0 0 1px color-mix(in oklab, var(--border) 60%, transparent);
+}
+
+/* Alerts / Toasts — radius NexChat */
+body.nexchat-theme-active [data-slot="alert"],
+body.nexchat-theme-active [data-sonner-toast] {
+  border-radius: 14px;
+}
+
+/* Skeletons — radius coerente */
+body.nexchat-theme-active [data-slot="skeleton"] {
+  border-radius: 10px;
+}
+
+/* Switch — toque verde NexChat (usa --primary já redefinido) */
+body.nexchat-theme-active [data-slot="switch"][data-state="checked"] {
+  background-color: var(--primary);
+}
+
+/* Mobile — modais fullscreen quando vira viewport apertado */
+@media (max-width: 640px) {
+  body.nexchat-theme-active [data-slot="dialog-content"] {
+    width: calc(100vw - 16px);
+    max-width: calc(100vw - 16px);
+    border-radius: 16px;
+  }
+  body.nexchat-theme-active [data-slot="sheet-content"][data-side="right"],
+  body.nexchat-theme-active [data-slot="sheet-content"][data-side="left"] {
+    width: 100vw;
+    max-width: 100vw;
+  }
+  /* tabelas largas: scroll horizontal sem overflow no body */
+  body.nexchat-theme-active table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* Garantia anti-overflow em qualquer viewport */
+body.nexchat-theme-active main,
+body.nexchat-theme-active [role="main"] {
+  min-width: 0;
+}
+
+/* =========================================================================
+   Fase 7.2 — Correções cirúrgicas
+   - Botões "bg-emerald-600 hover:bg-emerald-700" hardcoded competem com o
+     primary do NexChat (que já é verde). Mapeamos pro --primary.
+   - Banner azul claro (bg-blue-50/100) na topbar fica gritante no dark.
+   - Inputs/selects/popover/dropdown com radius e glass coerentes.
+   - Mobile: padding mínimo em containers apertados.
+   Status semânticos (emerald-500 dot, amber warning, red error) ficam
+   intactos — são informação, não tema.
+   ========================================================================= */
+
+body.nexchat-theme-active .bg-emerald-600,
+body.nexchat-theme-active .bg-emerald-700 {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+}
+body.nexchat-theme-active .hover\:bg-emerald-600:hover,
+body.nexchat-theme-active .hover\:bg-emerald-700:hover {
+  background-color: color-mix(in oklab, var(--primary) 88%, black) !important;
+}
+
+body.nexchat-theme-active .bg-blue-50,
+body.nexchat-theme-active .bg-blue-100 {
+  background-color: color-mix(in oklab, var(--muted) 80%, transparent) !important;
+}
+body.nexchat-theme-active .hover\:bg-blue-100:hover {
+  background-color: var(--accent) !important;
+}
+
+body.nexchat-theme-active [data-slot="input"],
+body.nexchat-theme-active [data-slot="textarea"],
+body.nexchat-theme-active [data-slot="select-trigger"],
+body.nexchat-theme-active [data-slot="dropdown-menu-content"],
+body.nexchat-theme-active [data-slot="popover-content"],
+body.nexchat-theme-active [data-slot="select-content"] {
+  border-radius: 12px;
+  border-color: var(--border);
+}
+body.nexchat-theme-active [data-slot="dropdown-menu-content"],
+body.nexchat-theme-active [data-slot="popover-content"],
+body.nexchat-theme-active [data-slot="select-content"] {
+  background-color: color-mix(in oklab, var(--card) 92%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+body.nexchat-theme-active [data-slot="card"] {
+  border-radius: 14px;
+}
+
+body.nexchat-theme-active table td .truncate,
+body.nexchat-theme-active table td .line-clamp-1,
+body.nexchat-theme-active table td .line-clamp-2 {
+  max-width: 100%;
+}
+
+@media (max-width: 640px) {
+  body.nexchat-theme-active .container {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  body.nexchat-theme-active .flex.flex-wrap.gap-2 > * {
+    min-width: 0;
+  }
+}
+
+/* =========================================================================
+   Fase 7.2 — Lapidação visual após teste real em /app/inbox
+   - Mídia/imagem: bolha media-only, preview maior, fallback elegante
+   - Painel lateral: largura menor, ícones nos headings, empty states
+   - Chat central: contraste de bolhas, espaçamento, glass mais premium
+   - Mobile: lista/conversa full-screen, sem overflow
+   ========================================================================= */
+
+/* ----- imagem na bolha ----- */
+.nexchat-root .nx-bubble-media {
+  padding: 4px !important;
+  background: var(--nx-surface) !important;
+  overflow: hidden;
+}
+.nexchat-root .nx-row[data-me="true"] .nx-bubble-media {
+  background: color-mix(in srgb, var(--nx-primary) 20%, var(--nx-surface)) !important;
+}
+.nexchat-root .nx-bubble-img-btn {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.nexchat-root .nx-bubble-img {
+  display: block;
+  max-width: 320px;
+  width: 100%;
+  max-height: 380px;
+  object-fit: cover;
+  border-radius: 12px;
+  transition: transform 0.25s ease;
+}
+.nexchat-root .nx-bubble-img-btn:hover .nx-bubble-img { transform: scale(1.02); }
+.nexchat-root .nx-bubble-img-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 240px;
+  height: 160px;
+  border-radius: 12px;
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--nx-surface-hover) 80%, transparent),
+    color-mix(in srgb, var(--nx-primary) 8%, var(--nx-surface)));
+  color: var(--nx-text-muted);
+  font-size: 12px;
+  border: 1px dashed var(--nx-border);
+}
+
+/* ----- painel lateral lapidado ----- */
+.nexchat-root .nx-panel { width: 300px; }
+@media (min-width: 1400px) {
+  .nexchat-root .nx-panel { width: 320px; }
+}
+.nexchat-root .nx-panel-header { padding: 24px 20px 20px; }
+.nexchat-root .nx-panel-avatar {
+  width: 80px; height: 80px; font-size: 26px; margin-bottom: 12px;
+  background: linear-gradient(135deg, var(--nx-primary-soft), var(--nx-surface-hover));
+  color: var(--nx-primary);
+}
+.nexchat-root .nx-panel-meta {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--nx-text-muted); font-size: 12px; margin-top: 6px;
+}
+.nexchat-root .nx-panel-section { padding: 14px 20px; }
+.nexchat-root .nx-panel-section h4 {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-bottom: 8px;
+}
+.nexchat-root .nx-panel-value { font-size: 13px; color: var(--nx-text); }
+.nexchat-root .nx-panel-notes {
+  font-size: 12.5px; color: var(--nx-text);
+  white-space: pre-wrap; line-height: 1.5;
+  padding: 10px 12px; border-radius: 10px;
+  background: var(--nx-surface-hover);
+  border: 1px solid var(--nx-border);
+}
+.nexchat-root .nx-panel-empty {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: 10px;
+  background: color-mix(in srgb, var(--nx-surface-hover) 60%, transparent);
+  border: 1px dashed var(--nx-border);
+  color: var(--nx-text-muted); font-size: 12px;
+}
+.nexchat-root .nx-panel-empty-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 8px;
+  background: var(--nx-surface);
+  color: var(--nx-primary);
+}
+
+/* ----- chat central premium ----- */
+.nexchat-root .nx-messages { padding: 24px 28px; gap: 12px; }
+.nexchat-root .nx-bubble {
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  backdrop-filter: blur(8px);
+}
+.nexchat-root .nx-row[data-me="true"] .nx-bubble {
+  background: var(--nx-primary);
+  color: #0a1a10;
+}
+.nexchat-root .nx-chat::before {
+  inset: -30%;
+  background:
+    radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--nx-primary) 10%, transparent) 0%, transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(59,130,246,0.07) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--nx-primary) 4%, transparent) 0%, transparent 60%);
+}
+
+/* ----- topbar consistência ----- */
+.nexchat-root .nx-chat-header { padding: 0 20px; }
+.nexchat-root .nx-icon-btn { border-radius: 10px; }
+.nexchat-root .nx-icon-btn:hover {
+  background: var(--nx-primary-soft);
+  color: var(--nx-primary);
+}
+
+/* ----- lista de conversas: hover/active mais fiel ----- */
+.nexchat-root .nx-conv-item { transition: var(--nx-transition); }
+.nexchat-root .nx-conv-item:hover {
+  background: color-mix(in srgb, var(--nx-primary) 5%, var(--nx-surface-hover));
+}
+
+/* ----- mobile (390/414px) ----- */
+@media (max-width: 1023.98px) {
+  .nexchat-root .nx-messages { padding: 16px 14px; gap: 10px; }
+  .nexchat-root .nx-bubble-img { max-width: 260px; max-height: 320px; }
+  .nexchat-root .nx-bubble-img-fallback { width: 200px; height: 140px; }
+  .nexchat-root .nx-chat-header { padding: 0 14px; height: 60px; }
+  .nexchat-root .nx-composer { padding: 12px 14px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+  .nexchat-root .nx-row { max-width: 88%; }
+}
+
+/* ============================================================
+   /app/chat — layout fiel ao template (Messenger-style)
+   ============================================================ */
+.nexchat-root .nx-messenger-list {
+  display: flex; flex-direction: column;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .nexchat-root .nx-messenger-list { max-width: 360px; }
+}
+
+/* Stories / Status horizontal */
+.nexchat-root .nx-stories {
+  display: flex; gap: 14px; padding: 10px 14px 12px;
+  overflow-x: auto; scrollbar-width: none;
+  border-bottom: 1px solid var(--nx-border);
+}
+.nexchat-root .nx-stories::-webkit-scrollbar { display: none; }
+.nexchat-root .nx-story {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  background: transparent; border: 0; cursor: pointer; min-width: 56px;
+  color: var(--nx-text);
+}
+.nexchat-root .nx-story-avatar {
+  width: 52px; height: 52px; border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--nx-surface-hover); color: var(--nx-text-muted);
+  font-weight: 700; font-size: 14px; overflow: hidden;
+}
+.nexchat-root .nx-story-avatar img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.nexchat-root .nx-story-ring {
+  box-shadow: 0 0 0 2px var(--nx-bg), 0 0 0 4px var(--nx-primary, hsl(var(--primary)));
+}
+.nexchat-root .nx-story-add-ring {
+  border: 2px dashed var(--nx-border);
+  color: var(--nx-text-muted);
+}
+.nexchat-root .nx-story-name {
+  font-size: 11px; color: var(--nx-text-muted);
+  max-width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* Ask AI card */
+.nexchat-root .nx-ask-ai {
+  display: flex; align-items: center; gap: 10px;
+  margin: 8px 14px; padding: 6px 10px;
+  border-radius: 10px;
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--nx-primary) 14%, transparent),
+    color-mix(in srgb, var(--nx-primary) 3%, transparent));
+  border: 1px solid color-mix(in srgb, var(--nx-primary) 20%, transparent);
+  box-shadow: 0 4px 12px -10px color-mix(in srgb, var(--nx-primary) 45%, transparent);
+  text-decoration: none; color: var(--nx-text);
+  transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
+  min-height: 0;
+}
+.nexchat-root .nx-ask-ai:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--nx-primary) 20%, transparent),
+    color-mix(in srgb, var(--nx-primary) 6%, transparent));
+  box-shadow: 0 8px 18px -12px color-mix(in srgb, var(--nx-primary) 55%, transparent);
+}
+.nexchat-root .nx-ask-ai-icon {
+  width: 26px; height: 26px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--nx-primary, hsl(var(--primary)));
+  color: #102216;
+  box-shadow: 0 4px 10px -6px color-mix(in srgb, var(--nx-primary) 60%, transparent);
+  flex-shrink: 0;
+}
+.nexchat-root .nx-ask-ai-icon svg { width: 14px; height: 14px; }
+.nexchat-root .nx-ask-ai-text {
+  display: flex; flex-direction: row; align-items: baseline; gap: 8px; min-width: 0; flex: 1;
+}
+.nexchat-root .nx-ask-ai-text strong { font-size: 12.5px; font-weight: 600; color: var(--nx-text); line-height: 1; }
+.nexchat-root .nx-ask-ai-text small {
+  font-size: 9px; letter-spacing: 0.08em;
+  color: var(--nx-text-muted); text-transform: uppercase; font-weight: 600; line-height: 1;
+}
+.nexchat-root .nx-ask-ai::after {
+  content: "›";
+  font-size: 16px; line-height: 1; font-weight: 400;
+  color: color-mix(in srgb, var(--nx-primary) 80%, var(--nx-text));
+  margin-left: 2px;
+}
+
+
+/* Footer "Nova mensagem" */
+.nexchat-root .nx-list-footer {
+  padding: 12px 14px; border-top: 1px solid var(--nx-border);
+}
+.nexchat-root .nx-new-msg-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 12px 16px; border-radius: 999px;
+  background: #0f7a4a;
+  color: #ffffff;
+  font-weight: 600; font-size: 14px; text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 4px 12px rgba(0,0,0,0.25);
+  transition: background .15s ease, transform .1s ease;
+}
+.nexchat-root .nx-new-msg-btn:hover {
+  background: #0c6840;
+  transform: translateY(-1px);
+}
+
+/* Botão fechar painel direito */
+.nexchat-root .nx-panel-close {
+  position: absolute; top: 14px; right: 14px; z-index: 2;
+}
+
+/* ============================================================
+   /app/chat — Empty state fiel ao EmptyState.tsx do template
+   ============================================================ */
+.nexchat-root .nx-chat-empty {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--nx-surface);
+  min-height: 100%;
+}
+.nexchat-root .nx-chat-empty-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at center, var(--nx-surface-hover) 0%, var(--nx-bg) 90%);
+  pointer-events: none;
+}
+.nexchat-root .nx-chat-empty-glow {
+  position: absolute;
+  width: 380px; height: 380px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--nx-primary) 8%, transparent);
+  filter: blur(80px);
+  pointer-events: none;
+}
+.nexchat-root .nx-chat-empty-glow-tr { top: -120px; right: -120px; }
+.nexchat-root .nx-chat-empty-glow-bl { bottom: -120px; left: -120px; }
+
+.nexchat-root .nx-chat-empty-inner {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; max-width: 640px; padding: 0 24px;
+}
+
+.nexchat-root .nx-chat-empty-mock {
+  position: relative;
+  width: 260px; height: 260px;
+  margin-bottom: 40px;
+  animation: nx-float 6s ease-in-out infinite;
+}
+@media (min-width: 768px) {
+  .nexchat-root .nx-chat-empty-mock { width: 300px; height: 300px; }
+}
+@keyframes nx-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.nexchat-root .nx-chat-empty-pulse {
+  position: absolute; inset: 0;
+  background: color-mix(in srgb, var(--nx-primary) 10%, transparent);
+  border-radius: 40px; filter: blur(40px);
+  animation: nx-pulse 3s ease-in-out infinite;
+}
+@keyframes nx-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+.nexchat-root .nx-chat-empty-card {
+  position: absolute; inset: 0;
+  background: var(--nx-surface-hover);
+  border-radius: 24px;
+  border: 1px solid var(--nx-overlay-soft);
+  opacity: 0.5;
+  transform-origin: center;
+}
+.nexchat-root .nx-chat-empty-card-back { transform: rotate(6deg) scale(0.95); }
+.nexchat-root .nx-chat-empty-card-mid {
+  transform: rotate(-3deg) scale(0.95);
+  border-color: var(--nx-overlay-strong);
+}
+.nexchat-root .nx-chat-empty-window {
+  position: absolute; inset: 0;
+  background: var(--nx-bg);
+  border-radius: 24px;
+  border: 1px solid var(--nx-overlay-strong);
+  box-shadow: var(--nx-shadow-card);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.nexchat-root .nx-chat-empty-window-bar {
+  height: 36px;
+  background: var(--nx-surface-hover);
+  border-bottom: 1px solid var(--nx-overlay-soft);
+  display: flex; align-items: center; gap: 6px;
+  padding: 0 14px;
+}
+.nexchat-root .nx-chat-empty-dot {
+  width: 9px; height: 9px; border-radius: 999px;
+}
+.nexchat-root .nx-chat-empty-dot[data-color="red"] { background: rgba(239,68,68,0.4); }
+.nexchat-root .nx-chat-empty-dot[data-color="yellow"] { background: rgba(234,179,8,0.4); }
+.nexchat-root .nx-chat-empty-dot[data-color="green"] { background: rgba(34,197,94,0.4); }
+.nexchat-root .nx-chat-empty-window-body {
+  flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 12px;
+}
+.nexchat-root .nx-chat-empty-line {
+  height: 10px;
+  background: var(--nx-overlay-soft);
+  border-radius: 999px;
+}
+.nexchat-root .nx-chat-empty-bubble {
+  height: 32px; border-radius: 14px;
+}
+.nexchat-root .nx-chat-empty-bubble-me {
+  align-self: flex-end;
+  background: color-mix(in srgb, var(--nx-primary) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--nx-primary) 20%, transparent);
+  border-top-right-radius: 4px;
+}
+.nexchat-root .nx-chat-empty-bubble-them {
+  align-self: flex-start;
+  background: var(--nx-overlay-soft);
+  border: 1px solid var(--nx-overlay-soft);
+  border-top-left-radius: 4px;
+}
+.nexchat-root .nx-chat-empty-badge {
+  position: absolute;
+  right: -18px; bottom: -18px;
+  width: 70px; height: 70px;
+  background: var(--nx-primary);
+  border-radius: 22px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--nx-bg);
+  transform: rotate(12deg);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--nx-primary) 30%, transparent);
+}
+
+.nexchat-root .nx-chat-empty-title {
+  font-size: 30px; font-weight: 900;
+  letter-spacing: -0.02em; line-height: 1.1;
+  color: var(--nx-text); margin: 0 0 16px;
+}
+@media (min-width: 768px) {
+  .nexchat-root .nx-chat-empty-title { font-size: 40px; }
+}
+.nexchat-root .nx-chat-empty-title-accent {
+  color: var(--nx-primary);
+  font-style: italic;
+}
+.nexchat-root .nx-chat-empty-subtitle {
+  font-size: 15px; line-height: 1.6;
+  color: var(--nx-text-muted);
+  max-width: 480px; margin: 0 0 28px;
+}
+@media (min-width: 768px) {
+  .nexchat-root .nx-chat-empty-subtitle { font-size: 17px; }
+}
+.nexchat-root .nx-chat-empty-cta-row {
+  display: flex; align-items: center; gap: 12px;
+  flex-wrap: wrap; justify-content: center;
+  margin-bottom: 56px;
+}
+.nexchat-root .nx-chat-empty-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 24px; border-radius: 14px;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: var(--nx-transition);
+  border: 1px solid transparent;
+}
+.nexchat-root .nx-chat-empty-btn-primary {
+  background: var(--nx-primary);
+  color: #102216;
+  box-shadow: var(--nx-shadow-glow);
+}
+.nexchat-root .nx-chat-empty-btn-primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+.nexchat-root .nx-chat-empty-btn-ghost {
+  background: var(--nx-overlay-soft);
+  border-color: var(--nx-overlay);
+  color: var(--nx-text-muted);
+}
+.nexchat-root .nx-chat-empty-btn-ghost svg { color: var(--nx-primary); }
+.nexchat-root .nx-chat-empty-btn-ghost:hover {
+  color: var(--nx-text);
+  border-color: color-mix(in srgb, var(--nx-primary) 30%, var(--nx-overlay));
+}
+.nexchat-root .nx-chat-empty-version {
+  font-size: 12px; color: color-mix(in srgb, var(--nx-text-muted) 60%, transparent);
+  font-weight: 500;
+}
+
+
+/* ============================================================
+   /app/chat — Contact Info Sidebar (fiel a .chat-info-sidebar)
+   ============================================================ */
+.nexchat-root .nx-info-sidebar {
+  width: 320px;
+  height: 100%;
+  background: var(--nx-surface);
+  border-left: 1px solid var(--nx-border);
+  display: flex; flex-direction: column;
+  flex-shrink: 0;
+}
+@media (min-width: 1400px) {
+  .nexchat-root .nx-info-sidebar { width: 340px; }
+}
+@media (max-width: 1023.98px) {
+  .nexchat-root .nx-info-sidebar {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: min(85vw, 320px); z-index: 60;
+    box-shadow: var(--nx-shadow-drawer);
+  }
+}
+
+.nexchat-root .nx-info-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--nx-border);
+  flex-shrink: 0;
+}
+.nexchat-root .nx-info-header-title {
+  font-weight: 700; font-size: 14px; color: var(--nx-text);
+}
+
+.nexchat-root .nx-info-profile {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid var(--nx-border);
+}
+.nexchat-root .nx-info-avatar {
+  position: relative;
+  width: 84px; height: 84px;
+  border-radius: 999px;
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--nx-primary) 30%, transparent),
+    color-mix(in srgb, var(--nx-blue) 30%, transparent));
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 28px; color: var(--nx-text);
+  border: 3px solid color-mix(in srgb, var(--nx-primary) 25%, transparent);
+}
+.nexchat-root .nx-info-avatar img {
+  width: 100%; height: 100%; object-fit: cover; border-radius: 999px;
+}
+.nexchat-root .nx-info-avatar-dot {
+  position: absolute; bottom: 4px; right: 4px;
+  width: 14px; height: 14px;
+  background: var(--nx-success);
+  border-radius: 999px;
+  border: 3px solid var(--nx-surface);
+}
+.nexchat-root .nx-info-name {
+  margin: 14px 0 4px;
+  font-size: 18px; font-weight: 800; color: var(--nx-text);
+  text-align: center; line-height: 1.2;
+}
+.nexchat-root .nx-info-phone {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 0;
+  font-size: 13px; color: var(--nx-text-muted);
+}
+.nexchat-root .nx-info-badges {
+  display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; justify-content: center;
+}
+
+.nexchat-root .nx-info-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0 24px;
+}
+
+.nexchat-root .nx-info-section {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--nx-border);
+}
+.nexchat-root .nx-info-section:last-child { border-bottom: 0; }
+.nexchat-root .nx-info-section-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.nexchat-root .nx-info-section-title {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--nx-text-muted);
+}
+.nexchat-root .nx-info-section-title svg { color: var(--nx-primary); }
+.nexchat-root .nx-info-section-body { font-size: 13px; color: var(--nx-text); }
+
+.nexchat-root .nx-info-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 0;
+  font-size: 13px;
+}
+.nexchat-root .nx-info-row span { color: var(--nx-text-muted); }
+.nexchat-root .nx-info-row strong { font-weight: 600; color: var(--nx-text); }
+
+.nexchat-root .nx-info-value {
+  font-size: 14px; font-weight: 600; color: var(--nx-text);
+}
+.nexchat-root .nx-info-empty {
+  font-size: 12px; color: color-mix(in srgb, var(--nx-text-muted) 80%, transparent);
+  font-style: italic;
+}
+.nexchat-root .nx-info-tags {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.nexchat-root .nx-info-notes {
+  padding: 10px 12px; border-radius: 10px;
+  background: var(--nx-surface-hover);
+  border: 1px solid var(--nx-border);
+  font-size: 13px; line-height: 1.5; color: var(--nx-text);
+  white-space: pre-wrap; word-break: break-word;
+}
+.nexchat-root .nx-info-link {
+  background: transparent; border: 0;
+  font-size: 12px; font-weight: 700; color: var(--nx-primary);
+  cursor: pointer;
+}
+.nexchat-root .nx-info-link:hover { text-decoration: underline; }
+
+.nexchat-root .nx-info-media-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+}
+.nexchat-root .nx-info-media-item {
+  position: relative; aspect-ratio: 1 / 1;
+  border-radius: 10px; overflow: hidden;
+  background: var(--nx-surface-hover);
+  border: 0; padding: 0; cursor: zoom-in;
+  transition: transform .15s ease;
+}
+.nexchat-root .nx-info-media-item:hover { transform: scale(1.04); }
+.nexchat-root .nx-info-media-item img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+
+/* Botão desabilitado no header (call/video sem suporte) */
+.nexchat-root .nx-icon-btn[data-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.nexchat-root .nx-icon-btn[data-disabled="true"]:hover {
+  background: transparent;
+  color: var(--nx-text-muted);
+}
+
+/* Botão "+" redondo pra adicionar etiqueta no painel direito */
+.nexchat-root .nx-tag-add-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--nx-primary) 35%, transparent);
+  background: var(--nx-primary-soft);
+  color: var(--nx-primary);
+  cursor: pointer;
+  padding: 0;
+  transition: transform .12s ease, background .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.nexchat-root .nx-tag-add-btn:hover {
+  background: var(--nx-primary);
+  color: #06210f;
+  border-color: var(--nx-primary);
+  transform: scale(1.08);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--nx-primary) 22%, transparent);
+}
+.nexchat-root .nx-tag-add-btn:active { transform: scale(0.96); }
+
+/* ============================================================
+   /app/chat — Lista (mobile) fiel ao print verde do NexChat
+   Polimento final pra bater 100% com o template no mobile.
+   ============================================================ */
+@media (max-width: 767px) {
+  /* Lista ocupa tela toda e deixa espaço pra bottom nav (72 + safe-area) */
+  .nexchat-root .nx-messenger-list {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* ---------- Topo "Mensagens" ---------- */
+  .nexchat-root .nx-list-header {
+    padding: 22px 12px 10px;
+    gap: 14px;
+    border-bottom: 0;
+    padding-top: calc(18px + env(safe-area-inset-top, 0px));
+  }
+  .nexchat-root .nx-list-title {
+    font-size: 30px;
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  /* ---------- Search bar ---------- */
+  .nexchat-root .nx-list-header .nx-search {
+    border-radius: 999px;
+    padding: 13px 18px;
+    gap: 12px;
+    background: var(--nx-surface-hover);
+  }
+  .nexchat-root .nx-list-header .nx-search input {
+    font-size: 15px;
+  }
+
+  /* ---------- Stories / Status ---------- */
+  .nexchat-root .nx-stories {
+    padding: 16px 4px;
+    gap: 10px;
+    border-bottom: 0;
+    overflow: hidden;
+    align-items: center;
+  }
+  .nexchat-root .nx-story { min-width: 60px; gap: 7px; }
+  .nexchat-root .nx-story-avatar {
+    width: 56px; height: 56px;
+    font-size: 15px;
+  }
+  .nexchat-root .nx-story-ring {
+    box-shadow:
+      0 0 0 2px var(--nx-bg),
+      0 0 0 4px var(--nx-primary),
+      0 0 12px -2px color-mix(in srgb, var(--nx-primary) 70%, transparent);
+  }
+  .nexchat-root .nx-story-add-ring {
+    border: 2px dashed color-mix(in srgb, var(--nx-primary) 60%, transparent);
+    color: var(--nx-primary);
+    background: color-mix(in srgb, var(--nx-primary) 8%, var(--nx-surface));
+  }
+  .nexchat-root .nx-story-name {
+    font-size: 12px;
+    color: var(--nx-text);
+    font-weight: 500;
+    max-width: 64px;
+  }
+
+  /* ---------- Filtros (pills All / Unread / Groups / Channels) ---------- */
+  .nexchat-root .nx-filters {
+    padding: 4px 12px 12px !important;
+    gap: 6px;
+  }
+  .nexchat-root .nx-filter {
+    padding: 7px 13px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--nx-primary) 6%, var(--nx-surface-hover));
+    color: var(--nx-text-muted);
+    border: 1px solid transparent;
+    transition: var(--nx-transition);
+  }
+  .nexchat-root .nx-filter[data-active="true"] {
+    background: var(--nx-primary);
+    color: #06210f;
+    box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--nx-primary) 55%, transparent);
+  }
+
+  /* ---------- Ask AI card ---------- */
+  .nexchat-root .nx-ask-ai {
+    margin: 4px 14px 8px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    background: linear-gradient(135deg,
+      color-mix(in srgb, var(--nx-primary) 16%, var(--nx-surface)),
+      color-mix(in srgb, var(--nx-primary) 5%, var(--nx-surface)));
+    border: 1px solid color-mix(in srgb, var(--nx-primary) 26%, transparent);
+  }
+  .nexchat-root .nx-ask-ai-icon {
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    background: var(--nx-primary);
+    color: #06210f;
+    box-shadow: 0 3px 10px -6px color-mix(in srgb, var(--nx-primary) 55%, transparent);
+  }
+  .nexchat-root .nx-ask-ai-text strong { font-size: 13px; }
+  .nexchat-root .nx-ask-ai-text small {
+    font-size: 9px; letter-spacing: 0.08em;
+  }
+
+
+  /* ---------- Lista de conversas ---------- */
+  .nexchat-root .nx-list-scroll {
+    padding: 4px 8px 12px;
+  }
+  .nexchat-root .nx-item {
+    padding: 12px 14px;
+    border-radius: 16px;
+    gap: 14px;
+  }
+  .nexchat-root .nx-item .nx-avatar {
+    width: 52px; height: 52px;
+    font-size: 16px;
+  }
+  .nexchat-root .nx-item-name { font-size: 15px; font-weight: 700; }
+  .nexchat-root .nx-item-msg p { font-size: 13px; }
+  .nexchat-root .nx-item-time { font-size: 11px; }
+
+  /* ---------- Botão flutuante "Nova mensagem" ---------- */
+  .nexchat-root .nx-list-footer {
+    position: fixed;
+    left: 0; right: 0;
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    padding: 10px 18px 12px;
+    background: linear-gradient(to top, var(--nx-bg) 60%, transparent);
+    border-top: 0;
+    z-index: 40;
+    pointer-events: none;
+  }
+  .nexchat-root .nx-list-footer .nx-new-msg-btn {
+    pointer-events: auto;
+    padding: 14px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 999px;
+    box-shadow:
+      0 10px 30px -10px color-mix(in srgb, var(--nx-primary) 70%, transparent),
+      0 4px 12px -4px rgba(0,0,0,0.4);
+  }
+
+  /* ---------- Bottom navigation: item ativo ganha "pill" verde ---------- */
+  .nexchat-root .nx-rail-btn[data-active="true"] {
+    background: transparent;
+  }
+  .nexchat-root .nx-rail-btn[data-active="true"] svg {
+    color: var(--nx-primary);
+    filter: drop-shadow(0 0 6px color-mix(in srgb, var(--nx-primary) 60%, transparent));
+  }
+  .nexchat-root .nx-rail-btn[data-active="true"] .nx-rail-label {
+    color: var(--nx-primary);
+    font-weight: 700;
+  }
+  .nexchat-root .nx-rail-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  /* Bottom nav com efeito glass (vidro fosco) + glow verde no topo */
+  .nexchat-root .nx-rail {
+    border-top-left-radius: 22px;
+    border-top-right-radius: 22px;
+    background: color-mix(in srgb, var(--nx-surface) 55%, transparent);
+    backdrop-filter: blur(22px) saturate(160%);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    border-top: 1px solid color-mix(in srgb, var(--nx-primary) 18%, transparent);
+    box-shadow:
+      0 -10px 30px -12px color-mix(in srgb, var(--nx-primary) 28%, transparent),
+      inset 0 1px 0 color-mix(in srgb, white 6%, transparent);
+  }
+  /* sublinhado verde luminoso embaixo do item ativo */
+  .nexchat-root .nx-rail-btn[data-active="true"]::after {
+    content: "";
+    position: absolute;
+    left: 22%; right: 22%; bottom: 4px;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--nx-primary);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--nx-primary) 80%, transparent);
+  }
+  .nexchat-root .nx-rail-btn { position: relative; }
+}
+
+/* Botão voltar do header: só aparece no mobile */
+.nexchat-root .nx-back-mobile-only { display: none; }
+@media (max-width: 1023.98px) {
+  .nexchat-root .nx-back-mobile-only { display: inline-flex; }
+}
+
+/* ===== Badge de canal (Meta / QR) — bem discreto ===== */
+.nexchat-root .nx-item-rowright {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.nexchat-root .nx-channel-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 16px;
+  padding: 0 6px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  line-height: 1;
+  opacity: 0.85;
+}
+.nexchat-root .nx-channel-pill[data-channel="meta"] {
+  color: #6cb6ff;
+  background: color-mix(in srgb, #6cb6ff 10%, transparent);
+  border-color: color-mix(in srgb, #6cb6ff 22%, transparent);
+}
+.nexchat-root .nx-channel-pill[data-channel="qr"] {
+  color: var(--nx-primary, #22c55e);
+  background: color-mix(in srgb, var(--nx-primary, #22c55e) 10%, transparent);
+  border-color: color-mix(in srgb, var(--nx-primary, #22c55e) 22%, transparent);
+}
+.nexchat-root .nx-channel-pill[data-channel="web"] {
+  color: #c084fc;
+  background: color-mix(in srgb, #c084fc 10%, transparent);
+  border-color: color-mix(in srgb, #c084fc 22%, transparent);
+}
+
+
+/* Tinta de canal SÓ no item ativo/selecionado (não em todos) */
+.nexchat-root .nx-item[data-active="true"][data-channel="meta"] {
+  background-image: linear-gradient(90deg, color-mix(in srgb, #6cb6ff 22%, transparent) 0%, color-mix(in srgb, #6cb6ff 5%, transparent) 70%, transparent 100%);
+  box-shadow: inset 3px 0 0 #6cb6ff;
+}
+.nexchat-root .nx-item[data-active="true"][data-channel="qr"] {
+  background-image: linear-gradient(90deg, color-mix(in srgb, var(--nx-primary, #22c55e) 22%, transparent) 0%, color-mix(in srgb, var(--nx-primary, #22c55e) 5%, transparent) 70%, transparent 100%);
+  box-shadow: inset 3px 0 0 var(--nx-primary, #22c55e);
+}
+.nexchat-root .nx-item[data-active="true"][data-channel="web"] {
+  background-image: linear-gradient(90deg, color-mix(in srgb, #c084fc 22%, transparent) 0%, color-mix(in srgb, #c084fc 5%, transparent) 70%, transparent 100%);
+  box-shadow: inset 3px 0 0 #c084fc;
+}
+/* Faixinha vertical de 2px na borda esquerda como reforço discreto */
+.nexchat-root .nx-item[data-channel]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  border-radius: 0 2px 2px 0;
+  opacity: 0.55;
+}
+.nexchat-root .nx-item[data-channel="meta"]::after { background: #6cb6ff; }
+.nexchat-root .nx-item[data-channel="qr"]::after { background: var(--nx-primary, #22c55e); }
+.nexchat-root .nx-item[data-channel="web"]::after { background: #c084fc; }
+/* Garante que o ::after se posicione corretamente (nx-item já tem position relative? força) */
+.nexchat-root .nx-item { position: relative; }
+
+/* ===== Card aguardando resposta (vermelho discreto) ===== */
+.nexchat-root .nx-item[data-waiting="true"] {
+  background: color-mix(in srgb, #ef4444 8%, transparent);
+  border-left: 3px solid #ef4444;
+}
+.nexchat-root .nx-item[data-waiting="true"]:hover {
+  background: color-mix(in srgb, #ef4444 14%, transparent);
+}
+.nexchat-root .nx-item[data-waiting="true"] .nx-item-name {
+  color: #ef4444;
+}
+.nexchat-root .nx-item[data-waiting="true"][data-active="true"] {
+  background: color-mix(in srgb, #ef4444 18%, transparent);
+}
+
+/* ===== Bolhas IA vs humano (diferenciação visual) ===== */
+.nexchat-root .nx-row[data-author="ai"] .nx-bubble {
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  color: #fff;
+  border-color: transparent;
+}
+.nexchat-root .nx-row[data-author="ai"] .nx-bubble-time { color: #fff; opacity: 0.75; }
+.nexchat-root .nx-row[data-author="bot"] .nx-bubble {
+  background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+  color: #fff;
+  border-color: transparent;
+}
+.nexchat-root .nx-row[data-author="bot"] .nx-bubble-time { color: #fff; opacity: 0.75; }
+
+/* ===== Mini badge META/QR/WEB dentro da bolha (Fase 2) ===== */
+.nexchat-root .nx-bubble-channel {
+  display: inline-block;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-right: 5px;
+  vertical-align: middle;
+  line-height: 1.2;
+  opacity: 0.75;
+  border: 1px solid transparent;
+}
+.nexchat-root .nx-bubble-channel[data-channel="meta"] {
+  color: #6cb6ff;
+  background: color-mix(in srgb, #6cb6ff 10%, transparent);
+  border-color: color-mix(in srgb, #6cb6ff 22%, transparent);
+}
+.nexchat-root .nx-bubble-channel[data-channel="qr"] {
+  color: var(--nx-primary, #22c55e);
+  background: color-mix(in srgb, var(--nx-primary, #22c55e) 10%, transparent);
+  border-color: color-mix(in srgb, var(--nx-primary, #22c55e) 22%, transparent);
+}
+.nexchat-root .nx-bubble-channel[data-channel="web"] {
+  color: #c084fc;
+  background: color-mix(in srgb, #c084fc 10%, transparent);
+  border-color: color-mix(in srgb, #c084fc 22%, transparent);
+}
+
+/* Indicador "Respondendo via ..." acima do composer */
+.nexchat-root .nx-send-channel-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  font-size: 11px;
+  color: var(--nx-text-muted);
+  border-top: 1px solid var(--nx-border);
+  background: var(--nx-surface);
+}
+.nexchat-root .nx-send-channel-hint[data-tone="warn"] { color: #f59e0b; }
+.nexchat-root .nx-send-channel-hint[data-tone="danger"] { color: #ef4444; }
+
+/* =========================================================
+   Stories / Status row + Ask AI card — base (desktop + mobile)
+   Mobile já tem overrides no @media (max-width: 1023.98px) acima.
+   ========================================================= */
+.nexchat-root .nx-stories {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 4px 8px;
+  overflow: hidden;
+  scrollbar-width: none;
+}
+
+.nexchat-root .nx-stories::-webkit-scrollbar { display: none; }
+.nexchat-root .nx-story {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 56px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: var(--nx-text);
+}
+.nexchat-root .nx-story-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--nx-text);
+  background: var(--nx-surface-hover);
+  overflow: hidden;
+  position: relative;
+}
+.nexchat-root .nx-story-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.nexchat-root .nx-story-ring {
+  box-shadow:
+    0 0 0 2px var(--nx-surface),
+    0 0 0 4px var(--nx-primary);
+}
+.nexchat-root .nx-story-ring[data-channel="meta"] {
+  box-shadow: 0 0 0 2px var(--nx-surface), 0 0 0 4px #1877f2;
+}
+.nexchat-root .nx-story-ring[data-channel="web"] {
+  box-shadow: 0 0 0 2px var(--nx-surface), 0 0 0 4px #8b5cf6;
+}
+.nexchat-root .nx-story-add-ring {
+  border: 2px dashed color-mix(in srgb, var(--nx-primary) 60%, transparent);
+  color: var(--nx-primary);
+  background: color-mix(in srgb, var(--nx-primary) 8%, var(--nx-surface));
+}
+.nexchat-root .nx-story-name {
+  font-size: 11px;
+  color: var(--nx-text);
+  font-weight: 500;
+  max-width: 64px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Ask AI card */
+.nexchat-root .nx-ask-ai {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--nx-text);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--nx-primary) 14%, var(--nx-surface)),
+    color-mix(in srgb, var(--nx-primary) 4%, var(--nx-surface)));
+  border: 1px solid color-mix(in srgb, var(--nx-primary) 24%, transparent);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.nexchat-root .nx-ask-ai:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--nx-primary) 45%, transparent);
+  box-shadow: 0 4px 12px -8px color-mix(in srgb, var(--nx-primary) 50%, transparent);
+}
+.nexchat-root .nx-ask-ai-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--nx-primary);
+  color: #06210f;
+  flex-shrink: 0;
+}
+.nexchat-root .nx-ask-ai-icon svg { width: 14px; height: 14px; }
+.nexchat-root .nx-ask-ai-text {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+.nexchat-root .nx-ask-ai-text strong {
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1;
+}
+.nexchat-root .nx-ask-ai-text small {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: var(--nx-text-muted);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.nexchat-root .nx-ask-ai-chev {
+  color: var(--nx-text-muted);
+  flex-shrink: 0;
+}
+
+/* Badge "Beta vX.Y.Z" ao lado do CTA principal — fiel ao print MultiZap Desktop */
+.nexchat-root .nx-chat-empty-badge-beta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 18px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--nx-primary) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--nx-primary) 28%, transparent);
+  color: var(--nx-text);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.nexchat-root .nx-chat-empty-badge-beta svg { color: var(--nx-primary); }
+
+
+
+/* Animação do painel de contato agora é controlada via Framer Motion
+   (AnimatePresence) em NexInboxLayout — abertura E fechamento suaves. */
+
+/* ============================================================
+   PASSO 3/6 — Compactação de topo + ganho de espaço da lista
+   Override final: tudo aqui é incremental e reversível
+   (remover este bloco volta ao estado do passo 2).
+   ============================================================ */
+
+.nexchat-root .nx-list-header {
+  padding: 8px 12px 8px;
+  gap: 8px;
+}
+.nexchat-root .nx-list-title { font-size: 16px; }
+.nexchat-root .nx-list-title-row { min-height: 24px; }
+
+.nexchat-root .nx-list-header .nx-search { padding: 6px 10px; }
+.nexchat-root .nx-list-header .nx-search input { font-size: 12.5px; }
+
+.nexchat-root .nx-list-header .nx-stories {
+  gap: 10px;
+  padding: 2px 2px 4px;
+}
+.nexchat-root .nx-list-header .nx-story { min-width: 48px; gap: 4px; }
+.nexchat-root .nx-list-header .nx-story-avatar { width: 44px; height: 44px; font-size: 13px; }
+.nexchat-root .nx-list-header .nx-story-name { font-size: 10.5px; max-width: 56px; }
+
+.nexchat-root .nx-list-header .nx-filters { gap: 5px; }
+.nexchat-root .nx-list-header .nx-filter {
+  padding: 4px 12px;
+  font-size: 11.5px;
+}
+
+.nexchat-root .nx-list-header .nx-ask-ai { padding: 5px 10px; gap: 8px; }
+.nexchat-root .nx-list-header .nx-ask-ai-icon { width: 22px; height: 22px; border-radius: 7px; }
+.nexchat-root .nx-list-header .nx-ask-ai-icon svg { width: 12px; height: 12px; }
+.nexchat-root .nx-list-header .nx-ask-ai-text strong { font-size: 12px; }
+.nexchat-root .nx-list-header .nx-ask-ai-text small { font-size: 8.5px; }
+
+.nexchat-root .nx-list-scroll { padding: 4px 6px; }
+
+@media (max-width: 1023.98px) {
+  .nexchat-root .nx-list-header { padding: 8px 10px; gap: 8px; }
+  .nexchat-root .nx-list-header .nx-stories {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nexchat-root .nx-list-header .nx-filters {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+  }
+  .nexchat-root .nx-list-header .nx-filter { flex: 0 0 auto; }
+}
+
+@media (max-width: 640px) {
+  .nexchat-root .nx-list-header { padding: 6px 8px; gap: 6px; }
+  .nexchat-root .nx-list-title { font-size: 15px; }
+  .nexchat-root .nx-list-header .nx-story { min-width: 46px; }
+  .nexchat-root .nx-list-header .nx-story-avatar { width: 42px; height: 42px; }
+  .nexchat-root .nx-list-header .nx-filter { padding: 4px 10px; font-size: 11px; }
+}
+
+
+
+/* ============================================================
+   PASSO 4/6 — Refino visual: header da conversa + bolhas
+   Override final, incremental e reversível.
+   ============================================================ */
+
+/* Header da conversa: mais elegante, gradiente sutil, linha mais limpa */
+.nexchat-root .nx-chat-header {
+  height: 64px;
+  padding: 0 18px;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--nx-primary) 6%, var(--nx-surface)) 0%,
+      var(--nx-surface) 100%);
+  border-bottom: 1px solid color-mix(in srgb, var(--nx-primary) 14%, var(--nx-border));
+  box-shadow: 0 1px 0 rgba(255,255,255,0.02) inset, 0 2px 12px -8px rgba(0,0,0,0.45);
+}
+.nexchat-root .nx-chat-user { gap: 11px; }
+.nexchat-root .nx-chat-user h3 {
+  font-size: 14.5px;
+  letter-spacing: -0.01em;
+}
+.nexchat-root .nx-chat-user p {
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.nexchat-root .nx-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+}
+.nexchat-root .nx-icon-btn:hover {
+  background: color-mix(in srgb, var(--nx-primary) 10%, var(--nx-surface-hover));
+}
+
+/* Mensagens: respiro um pouquinho menor pra caber mais conteúdo */
+.nexchat-root .nx-messages {
+  padding: 20px 22px;
+  gap: 10px;
+}
+
+/* Bolhas: cantos mais consistentes (whatsapp-like), sombra discreta, leitura melhor */
+.nexchat-root .nx-bubble {
+  padding: 9px 13px 8px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  border-radius: 14px 14px 14px 4px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.18), 0 0 0 1px rgba(255,255,255,0.02) inset;
+}
+.nexchat-root[data-theme="dark"] .nx-bubble,
+.nexchat-root:not([data-theme="light"]) .nx-bubble {
+  background: color-mix(in srgb, var(--nx-primary) 10%, var(--nx-surface));
+  border-color: color-mix(in srgb, var(--nx-primary) 18%, transparent);
+}
+.nexchat-root .nx-row[data-me="true"] .nx-bubble {
+  border-radius: 14px 14px 4px 14px;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--nx-primary) 100%, white 0%),
+    color-mix(in srgb, var(--nx-primary) 88%, black 6%));
+  box-shadow: 0 2px 6px -2px color-mix(in srgb, var(--nx-primary) 45%, transparent),
+              0 1px 0 rgba(255,255,255,0.18) inset;
+}
+
+/* Hora menor e mais discreta */
+.nexchat-root .nx-bubble-time {
+  font-size: 9.5px;
+  margin-top: 2px;
+  letter-spacing: 0.02em;
+  opacity: 0.7;
+}
+
+/* Avatar da linha um pouco menor pra equilibrar com bolha refinada */
+.nexchat-root .nx-row-avatar { width: 28px; height: 28px; font-size: 11px; }
+
+/* Linha de sistema: mais "chip" discreto */
+.nexchat-root .nx-row[data-system="true"] .nx-bubble {
+  font-size: 11px;
+  padding: 4px 12px;
+  border: 1px solid var(--nx-border);
+  box-shadow: none;
+}
+
+/* Badge de canal na bolha (META/QR/WEB): mais sutil */
+.nexchat-root .nx-bubble-channel {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  padding: 1px 6px;
+  border-radius: 6px;
+  opacity: 0.85;
+}
+
+/* Tablet / Mobile */
+@media (max-width: 1023.98px) {
+  .nexchat-root .nx-chat-header { height: 56px; padding: 0 12px; }
+  .nexchat-root .nx-chat-user h3 { font-size: 14px; }
+  .nexchat-root .nx-chat-user p { font-size: 11px; }
+  .nexchat-root .nx-icon-btn { width: 34px; height: 34px; }
+  .nexchat-root .nx-messages { padding: 14px 12px; gap: 8px; }
+  .nexchat-root .nx-bubble {
+    padding: 8px 11px 7px;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .nexchat-root .nx-row { max-width: 88%; }
+}
+
+@media (max-width: 640px) {
+  .nexchat-root .nx-chat-header { height: 52px; padding: 0 10px; gap: 8px; flex-wrap: nowrap; overflow: hidden; }
+  .nexchat-root .nx-chat-user { flex: 1 1 auto; min-width: 0; gap: 8px; overflow: hidden; }
+  .nexchat-root .nx-chat-user-info { flex: 1 1 auto; min-width: 0; overflow: hidden; }
+  .nexchat-root .nx-chat-user-info h3 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nexchat-root .nx-chat-user-subtitle { display: none; }
+  .nexchat-root .nx-chat-user-badges { display: none; }
+  .nexchat-root .nx-chat-user-avatar { width: 36px !important; height: 36px !important; flex-shrink: 0; }
+  .nexchat-root .nx-chat-header-actions { flex-shrink: 0; display: flex; gap: 2px; align-items: center; }
+  .nexchat-root .nx-messages { padding: 12px 10px; }
+  .nexchat-root .nx-row { max-width: 92%; }
+  .nexchat-root .nx-row-avatar { width: 26px; height: 26px; }
+}
+
+
+/* ===================================================================
+   PASSO 5/6 — Composer visual (CSS only, sem mexer em lógica)
+   Rollback: apagar este bloco até o fim do arquivo.
+   =================================================================== */
+.nexchat-root .nx-composer {
+  padding: 8px 12px;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg,
+    rgba(255,255,255,0.015) 0%,
+    rgba(0,0,0,0.18) 100%);
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.nexchat-root .nx-composer-inner {
+  gap: 8px;
+  align-items: flex-end;
+}
+.nexchat-root .nx-input-wrap {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 22px;
+  padding: 6px 10px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.18) inset;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+}
+.nexchat-root .nx-input-wrap:focus-within {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(34,197,94,0.45);
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.10),
+              0 1px 2px rgba(0,0,0,0.18) inset;
+}
+.nexchat-root .nx-input-wrap textarea {
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 6px 4px;
+  min-height: 24px;
+  max-height: 140px;
+}
+.nexchat-root .nx-input-wrap textarea::placeholder {
+  opacity: 0.55;
+}
+.nexchat-root .nx-composer .nx-icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: var(--nx-text-muted);
+  transition: color .15s ease, background .15s ease, transform .12s ease;
+}
+.nexchat-root .nx-composer .nx-icon-btn:hover {
+  color: #22c55e;
+  background: rgba(34,197,94,0.10);
+}
+.nexchat-root .nx-composer-plus {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--nx-text-muted);
+  transition: all .15s ease;
+  flex-shrink: 0;
+}
+.nexchat-root .nx-composer-plus:hover {
+  background: rgba(34,197,94,0.12);
+  border-color: rgba(34,197,94,0.35);
+  color: #22c55e;
+  transform: rotate(45deg);
+}
+.nexchat-root .nx-send {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(34,197,94,0.28),
+              0 0 0 1px rgba(255,255,255,0.06) inset;
+  transition: transform .12s ease, box-shadow .15s ease, filter .15s ease;
+}
+.nexchat-root .nx-send:hover {
+  transform: scale(1.06);
+  box-shadow: 0 4px 14px rgba(34,197,94,0.40),
+              0 0 0 1px rgba(255,255,255,0.10) inset;
+  filter: brightness(1.05);
+}
+.nexchat-root .nx-send:active { transform: scale(0.96); }
+.nexchat-root .nx-send:disabled {
+  opacity: 0.45;
+  box-shadow: none;
+  filter: grayscale(0.3);
+}
+
+/* Composer em modo NOTA INTERNA — tom âmbar discreto */
+.nexchat-root .nx-composer[data-note="true"] {
+  background: linear-gradient(180deg,
+    rgba(245,158,11,0.04) 0%,
+    rgba(245,158,11,0.08) 100%);
+  border-top: 1px solid rgba(245,158,11,0.25);
+}
+
+/* Toggle Resposta / Nota interna — chips menores */
+.nexchat-root .nx-composer .nx-btn {
+  font-size: 11.5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+/* Tablet */
+@media (max-width: 1023px) {
+  .nexchat-root .nx-composer { padding: 7px 10px; padding-bottom: calc(7px + env(safe-area-inset-bottom)); }
+  .nexchat-root .nx-input-wrap { padding: 5px 9px; border-radius: 20px; }
+  .nexchat-root .nx-input-wrap textarea { font-size: 14px; }
+  .nexchat-root .nx-send { width: 40px; height: 40px; }
+  .nexchat-root .nx-composer-plus { width: 34px; height: 34px; }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .nexchat-root .nx-composer { padding: 6px 8px; padding-bottom: calc(6px + env(safe-area-inset-bottom)); gap: 6px; }
+  .nexchat-root .nx-composer-inner { gap: 6px; }
+  .nexchat-root .nx-input-wrap { padding: 5px 8px; border-radius: 18px; }
+  .nexchat-root .nx-input-wrap textarea { font-size: 15px; padding: 5px 2px; }
+  .nexchat-root .nx-composer .nx-icon-btn { width: 32px; height: 32px; }
+  .nexchat-root .nx-send { width: 38px; height: 38px; }
+  .nexchat-root .nx-composer-plus { width: 32px; height: 32px; }
+}
+
+/* ===================================================================
+   PASSO 6/6 — Polimento final (CSS only)
+   Rollback: apagar este bloco até o fim do arquivo.
+   =================================================================== */
+
+/* Scrollbars discretas e premium em todas as áreas roláveis */
+.nexchat-root .nx-list-scroll,
+.nexchat-root .nx-messages {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.08) transparent;
+}
+.nexchat-root .nx-list-scroll::-webkit-scrollbar,
+.nexchat-root .nx-messages::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.nexchat-root .nx-list-scroll::-webkit-scrollbar-track,
+.nexchat-root .nx-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+.nexchat-root .nx-list-scroll::-webkit-scrollbar-thumb,
+.nexchat-root .nx-messages::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  transition: background .15s ease;
+}
+.nexchat-root .nx-list-scroll:hover::-webkit-scrollbar-thumb,
+.nexchat-root .nx-messages:hover::-webkit-scrollbar-thumb {
+  background: rgba(34,197,94,0.25);
+}
+
+/* Estado vazio mais bonito (sem conversa selecionada / sem resultados) */
+.nexchat-root .nx-empty {
+  background: radial-gradient(ellipse at center top,
+              rgba(34,197,94,0.04) 0%,
+              transparent 60%);
+}
+.nexchat-root .nx-empty-art {
+  filter: drop-shadow(0 4px 18px rgba(34,197,94,0.18));
+  animation: nx-float 4s ease-in-out infinite;
+}
+.nexchat-root .nx-empty h2 {
+  letter-spacing: -0.01em;
+}
+.nexchat-root .nx-empty p {
+  opacity: 0.7;
+  max-width: 320px;
+}
+@keyframes nx-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+/* Micro-animação de entrada das bolhas de mensagem */
+@keyframes nx-bubble-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+.nexchat-root .nx-row {
+  animation: nx-bubble-in .18s ease-out both;
+}
+
+/* Micro-animação de entrada dos itens da lista de conversas */
+@keyframes nx-item-in {
+  from { opacity: 0; transform: translateX(-4px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.nexchat-root .nx-conv-item {
+  animation: nx-item-in .14s ease-out both;
+  transition: background .12s ease, border-color .12s ease;
+}
+.nexchat-root .nx-conv-item:hover {
+  background: rgba(255,255,255,0.025);
+}
+
+/* Contraste do texto secundário — leve melhora de legibilidade */
+.nexchat-root .nx-conv-preview,
+.nexchat-root .nx-chat-user p {
+  color: color-mix(in srgb, var(--nx-text-muted) 88%, white 12%);
+}
+
+/* Foco visível acessível em todos os botões/links do chat */
+.nexchat-root .nx-icon-btn:focus-visible,
+.nexchat-root .nx-btn:focus-visible,
+.nexchat-root .nx-composer-plus:focus-visible,
+.nexchat-root .nx-send:focus-visible,
+.nexchat-root .nx-conv-item:focus-visible {
+  outline: 2px solid rgba(34,197,94,0.55);
+  outline-offset: 2px;
+}
+
+/* Respeito a preferências de reduzir animação */
+@media (prefers-reduced-motion: reduce) {
+  .nexchat-root .nx-row,
+  .nexchat-root .nx-conv-item,
+  .nexchat-root .nx-empty-art {
+    animation: none !important;
+  }
+  .nexchat-root * {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Ajustes finos mobile */
+@media (max-width: 640px) {
+  .nexchat-root .nx-list-scroll::-webkit-scrollbar,
+  .nexchat-root .nx-messages::-webkit-scrollbar {
+    width: 0; /* esconde scrollbar no mobile, mantém scroll nativo */
+  }
+  .nexchat-root .nx-empty p { max-width: 260px; font-size: 13px; }
+}
+
+/* ===================================================================
+   HOTFIX 6.1/6 — Mobile list/thread split
+   Rollback: apagar este bloco até o fim do arquivo.
+   =================================================================== */
+@media (max-width: 1023px) {
+  /* Shell ocupa altura real do viewport mobile (lida com barra do browser) */
+  .nexchat-root,
+  .nexchat-root .nx-shell {
+    height: 100dvh;
+    max-height: 100dvh;
+    min-height: 0;
+  }
+
+  /* Quando o chat está aberto no mobile, a lista DESAPARECE de fato.
+     O !important blinda contra inline-style residual. */
+  .nexchat-root .nx-shell.nx-shell-chat-open .nx-list-pane {
+    display: none !important;
+  }
+
+  /* Quando NÃO há chat aberto E a lista está renderizada (aba Chats),
+     esconde o painel do chat. Quando railTab é Grupos/Chamadas/Status,
+     a lista NÃO é renderizada — então o feature panel aparece em fullscreen
+     no mobile (HOTFIX 6.2). */
+  .nexchat-root .nx-shell:not(.nx-shell-chat-open):has(.nx-list-pane) .nx-chat {
+    display: none !important;
+  }
+
+
+  /* Garante que o composer fica sempre visível no fim — não corta */
+  .nexchat-root .nx-chat {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .nexchat-root .nx-messages {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+  .nexchat-root .nx-composer {
+    flex: 0 0 auto;
+  }
+}
+
+/* Nome do participante em mensagens de grupo (estilo WhatsApp). */
+.nexchat-root .nx-bubble-sender {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--nx-green, #25d366);
+  margin-bottom: 2px;
+  line-height: 1.1;
+  letter-spacing: 0.1px;
+}
+
+/* ============================================================
+   Modo "aplicativo": sem zoom, sem double-tap, sem seleção
+   acidental, status-bar respeitada e microanimações leves
+   ============================================================ */
+.nexchat-root {
+  /* impede pinch / double-tap zoom dentro do chat */
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: contain;
+}
+/* inputs continuam selecionáveis */
+.nexchat-root input,
+.nexchat-root textarea,
+.nexchat-root [contenteditable="true"] {
+  touch-action: auto;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* Fundo da "barra de status" (área do relógio) no mobile —
+   evita faixa transparente entre o relógio do celular e o header */
+@media (max-width: 767px) {
+  .nexchat-root .nx-chat-header {
+    background: var(--nx-surface);
+    backdrop-filter: saturate(140%) blur(8px);
+    -webkit-backdrop-filter: saturate(140%) blur(8px);
+    box-shadow: 0 1px 0 var(--nx-border);
+  }
+  .nexchat-root .nx-list-header {
+    background: var(--nx-bg);
+  }
+}
+
+/* Microanimações nos botões e itens de menu (estilo app nativo) */
+.nexchat-root .nx-icon-btn,
+.nexchat-root .nx-send,
+.nexchat-root .nx-composer-plus,
+.nexchat-root .nx-rail-item,
+.nexchat-root .nx-conv-item,
+.nexchat-root [role="menuitem"],
+.nexchat-root button {
+  transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1),
+              background-color 0.18s ease,
+              opacity 0.18s ease;
+}
+.nexchat-root .nx-icon-btn:active,
+.nexchat-root .nx-send:active,
+.nexchat-root .nx-composer-plus:active,
+.nexchat-root .nx-rail-item:active,
+.nexchat-root .nx-conv-item:active,
+.nexchat-root [role="menuitem"]:active,
+.nexchat-root button:active {
+  transform: scale(0.94);
+}
+@media (hover: hover) {
+  .nexchat-root .nx-icon-btn:hover,
+  .nexchat-root .nx-send:hover,
+  .nexchat-root .nx-composer-plus:hover {
+    transform: translateY(-1px);
+  }
+}
+
+/* Respeita usuários que pediram menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  .nexchat-root *,
+  .nexchat-root *::before,
+  .nexchat-root *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

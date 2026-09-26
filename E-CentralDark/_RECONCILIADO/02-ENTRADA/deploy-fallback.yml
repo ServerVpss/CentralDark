@@ -1,0 +1,20 @@
+name: deploy-fallback.yml manual
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  manual_only:
+    name: Manual only
+    runs-on: ubuntu-latest
+    steps:
+      - name: Workflow desativado no push
+        shell: bash
+        run: |
+          echo "Workflow tornado manual-only."
+          echo "Arquivo: deploy-fallback.yml"
+          echo "Motivo: limpeza dos workflows vermelhos e pausa de automações antigas."
+          echo "Este workflow não roda mais em push."

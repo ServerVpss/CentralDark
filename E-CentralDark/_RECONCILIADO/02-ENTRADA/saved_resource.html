@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<!-- saved from url=(0253)https://7c309790-e1e3-44a9-a47c-0aa6ec5d915d.frame.claudeusercontent.com/_f/1787630042-2320/?__frame_t=2ZX5ydjwJ_7aFrXTxZ0qcA_D.036f85c4-a2a3-41dc-a009-fb32b34090a1.6dc916e0-8719-4c37-a44b-ea88e543ed1c.1787634535&__frame_v=manifest.0012e129155e2ab1.json -->
+<html data-palette="emerald"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!-- frame-runtime --><!--<base href="/_f/1787630042-2320/">--><base href="."><script>window.__FRAME_PREAMBLE={"capabilities":{"artifact":"artifact.oqIe8shs.js","assets":"assets.DBUJcvq_.js","comments":"comments.GLuHR3zP.js","db":"db.CRhVHzSt.js","downloads":"downloads.C3GSvEDP.js","embed":"embed.CZsbekoQ.js","mcp":"mcp.D3B2EyQu.js","network":"network.B5UA9Su4.js","permissions":"permissions.BNySkLV5.js","room":"room.DE7EMui-.js","sample":"sample.BW2Uysoh.js","self":"artifact.oqIe8shs.js","user":"user.BpKav-Rf.js"},"transforms":"_transforms.h3_8GSUa.js","comments":"_comments.BOgkE6qU.js","translate":"_translate.5HCW4BJh.js"}</script><script>(function(){"use strict";var Y=["light","dark","system"],X=/^[A-Za-z0-9_-]{1,64}$/,D=/^[a-zA-Z_:][a-zA-Z0-9_:.-]{0,127}$/,G=new Set(["class","hidden","value","checked"]);function V(e){const t=e.toLowerCase();return t.startsWith("data-")||t.startsWith("aria-")||G.has(t)}var be="http://www.w3.org/1999/xhtml",Z="http://www.w3.org/2000/svg",J=new Set(["script","style","iframe","noscript","noframes","noembed","xmp","plaintext","template","title","textarea","object","embed"]),Q=new Set(["script","style"]);function ee(e){const t=e.localName.toLowerCase();return e.namespaceURI==="http://www.w3.org/1999/xhtml"?!J.has(t):e.namespaceURI===Z?!Q.has(t):!1}var te=new Set(["html","head","body","frameset"]);function re(e){return e.namespaceURI==="http://www.w3.org/1999/xhtml"&&te.has(e.localName)}function ne(e){if(e===null||typeof e!="object")return!1;const t=e;if(typeof t.target!="string"||!X.test(t.target)||t.text!==void 0&&typeof t.text!="string")return!1;if(t.attrsSet!==void 0){if(t.attrsSet===null||typeof t.attrsSet!="object")return!1;for(const[n,s]of Object.entries(t.attrsSet))if(!D.test(n)||typeof s!="string")return!1}if(t.attrsRemoved!==void 0){if(!Array.isArray(t.attrsRemoved))return!1;for(const n of t.attrsRemoved)if(typeof n!="string"||!D.test(n))return!1}return!0}function se(e,t){if(e===null||typeof e!="object")return!1;const{seq:n,elements:s}=e;if(typeof n!="number"||!Number.isSafeInteger(n)||!Array.isArray(s)||s.length===0||s.length>64)return!1;for(let o=0;o<s.length;o++)if(!t(s[o]))return!1;return!0}function ae(e){return e===null||typeof e!="object"?!1:se(e.__frame_patch,ne)}function oe(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_init;return t!==null&&typeof t=="object"}function ie(e){return e!==null&&typeof e=="object"&&e.__frame_size_poke===!0}function le(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_theme;if(t===null||typeof t!="object")return!1;const n=t.theme;return typeof n=="string"&&Y.includes(n)}var O="__frame_scroll",ce=150,ue=310,fe=160,pe=3e4;function de(){let e=0,t=!1,n=!1,s=!1,o=0,l=null;const c=i=>{try{sessionStorage.setItem(O,JSON.stringify({y:i}))}catch{}},f=()=>{if(clearTimeout(e),l===null)return;const i=l;l=null,c(i)},S=()=>{if(t){t=!1;return}n=!0,l=scrollY,clearTimeout(e),e=setTimeout(f,ce)};try{addEventListener("scroll",S,{passive:!0}),addEventListener("pagehide",f)}catch{}const v=()=>{let i;try{i=sessionStorage.getItem(O)}catch{return null}if(i===null)return null;let d;try{d=JSON.parse(i)}catch{d=null}const u=d?.y;if(!(typeof u=="number"&&Number.isFinite(u)&&u>=0)){try{sessionStorage.removeItem(O)}catch{}return null}return u};let b=!1;const m=i=>{try{const d=scrollY;scrollTo({top:i,left:0,behavior:"instant"}),o=i,s=!0,clearTimeout(e),l=null,c(i);const u=scrollY;u!==d&&(t=!0),u!==i&&!b&&(b=!0,addEventListener("load",()=>{try{if(scrollY===u){const h=v();m(h!==null?h:o)}}catch{}},{once:!0}))}catch{}},y=()=>{try{return!!location.hash}catch{return!0}};let g=!1;const E=()=>{try{if(g||innerWidth>ue||innerHeight>fe)return;g=!0;const i=Date.now(),d=()=>{try{removeEventListener("resize",d)}catch{}if(Date.now()-i>pe||n||y())return;const u=v();m(u!==null?u:o)};addEventListener("resize",d)}catch{}};let r=!1,p=!1;return{restore(){if(r||(r=!0,y()))return;const i=v();i!==null&&(m(i),E())},promoted(){if(p||(p=!0,y()))return;const i=v();i!==null?(m(i),E()):s&&m(o)}}}var Ee="modulepreload",Ae=function(e){return"/"+e},Re={},me=function(t,n,s){let o=Promise.resolve();function l(c){const f=new Event("vite:preloadError",{cancelable:!0});if(f.payload=c,window.dispatchEvent(f),!f.defaultPrevented)throw c}return o.then(c=>{for(const f of c||[])f.status==="rejected"&&l(f.reason);return t().catch(l)})};(function(){const e=Object.defineProperty,t=globalThis,n=["RTCPeerConnection","webkitRTCPeerConnection","RTCDataChannel","RTCIceCandidate","RTCSessionDescription","RTCRtpSender","RTCRtpReceiver"];let s=0;for(let o=0;o<n.length;o++){const l=n[o];try{e(t,l,{value:void 0,writable:!1,configurable:!1})}catch{try{delete t[l]}catch{}try{e(t,l,{value:void 0,writable:!1,configurable:!0})}catch{}}typeof t[l]=="function"&&s++}if(s&&window!==top)try{parent.postMessage({__frame_rtc_lockdown_failed:s},"*")}catch{}})();var he=1e4,_e=Object.freeze([...window.__FRAME_PREAMBLE?.origins??["https://claude.ai","https://preview.claude.ai"]]);function F(e){for(const t of _e)if(t.endsWith(":*"))try{const n=new URL(e);if(`${n.protocol}//${n.hostname}:*`===t)return!0}catch{}else if(e===t)return!0;return!1}var M=Object.freeze({...window.__FRAME_PREAMBLE?.capabilities}),j=window.__FRAME_PREAMBLE?.transforms,N=window.__FRAME_PREAMBLE?.comments,I=window.__FRAME_PREAMBLE?.translate,L=/^[\w.-]+\.js$/;function T(e){return me(()=>import("/_runtime/"+e),void 0)}function z(e,t){return{contract:e.contract,changes:new Set(e.changes??[]),flags:new Set(e.flags??[]),capabilities:e.capabilities??{},capBudgets:e.capBudgets??{},transforms:new Map,shellOrigin:t,mount:W,pipe:()=>({wrap:(n,s)=>(...o)=>{try{return s(...o)}catch(l){return Promise.reject(l)}}})}}var P=null,w=null;function q(e,t,n){try{Object.defineProperty(e,t,{value:n,writable:!1,configurable:!1,enumerable:!0})}catch{try{Object.defineProperty(e,t,{value:n,writable:!1,configurable:!0,enumerable:!0})}catch{}}}var B=!1;function ve(e,t){const n=[];for(const s of e.elements){const o=document.querySelector(`[data-id="${s.target}"]`);if(!o){parent.postMessage({__frame_patch_miss:{seq:e.seq}},t);return}if([...Object.keys(s.attrsSet??{}),...s.attrsRemoved??[]].some(l=>!V(l))){parent.postMessage({__frame_patch_miss:{seq:e.seq}},t);return}if(s.text!==void 0&&(!ee(o)||re(o))){parent.postMessage({__frame_patch_miss:{seq:e.seq}},t);return}for(const[l,c]of Object.entries(s.attrsSet??{}))if(!$(o,l)){try{o.setAttribute(l,c)}catch{}H(o,l,c)}for(const l of s.attrsRemoved??[])$(o,l)||(o.removeAttribute(l),H(o,l,null));typeof s.text=="string"&&(o.textContent=s.text),n.push(s.target)}try{document.dispatchEvent(new CustomEvent("claude:edit",{detail:{seq:e.seq,targets:n}}))}catch{}}function H(e,t,n){if(!(e instanceof HTMLInputElement))return;const s=t.toLowerCase();s==="checked"?e.checked=n!==null:s==="value"&&e.type!=="file"&&(e.value=n??"")}function $(e,t){const n=t.toLowerCase(),s=e;return n==="data-id"||(n==="value"||n==="checked")&&(s.__artifactSecret===!0||/^(password|hidden|file)$/.test(s.type??"")||/(^|\s)(cc-|one-time-code|current-password|new-password)/i.test(`${e.getAttribute("autocomplete")??""} ${s.autocomplete??""}`))}function K(e){const t=document.documentElement;e==="light"||e==="dark"?(t.dataset.theme=e,t.style.colorScheme=e,B=!0):B&&(delete t.dataset.theme,t.style.colorScheme="",B=!1)}var R=new Map;function ye(){let e;const t={u:new Promise(n=>{e=n}),r:n=>{t.done=!0,e(n)},done:!1,nulled:!1};return t}var ge=Object.freeze(Object.assign(Object.create(null),{call:Function.prototype.call,apply:Function.prototype.apply,bind:Function.prototype.bind})),W=(e,t)=>{const n=R.get(e);if(!n||n.done){n?.nulled&&w&&parent.postMessage({__frame_cap_telemetry:{kind:"cap-load-error",cap:e}},w);return}const s=typeof t=="function"?Object.setPrototypeOf(t,ge):Object.assign(Object.create(null),t);typeof s.then=="function"&&delete s.then,n.r(Object.freeze(s))},U=Object.getOwnPropertyDescriptor(window,"claude");if(window!==top&&!(U&&U.writable===!1)){const e=j&&L.test(j)?T(j).catch(()=>{}):Promise.resolve(void 0),t=r=>{if(r.type==="auxclick"&&r.button!==1)return;const p=r.target,i=p&&p.closest?p.closest("a[href],area[href]"):null;if(!i)return;const d=i.getAttribute("href");if(!d)return;let u,h;try{u=new URL(d,document.baseURI),h=new URL(document.baseURI).origin}catch{return}if((u.protocol==="http:"||u.protocol==="https:")&&u.origin!==h){r.preventDefault();const _=(i.getAttribute("target")??"").toLowerCase(),C=r.type==="auxclick"||r.metaKey||r.ctrlKey||r.shiftKey||r.altKey||!["","_self","_top","_parent"].includes(_);parent.postMessage({__frame_nav:!0,url:u.href,newTab:C},"*")}};addEventListener("click",t,!0),addEventListener("auxclick",t,!0);const n={},s=r=>{r.isTrusted&&(n.pointer=!0)},o=r=>{r.isTrusted&&(n.click=!0)};addEventListener("pointermove",s,{capture:!0,passive:!0}),addEventListener("click",o,{capture:!0,passive:!0}),e.then(r=>{r?.wireNav&&(r.wireNav(),removeEventListener("click",t,!0),removeEventListener("auxclick",t,!0),removeEventListener("pointermove",s,!0),removeEventListener("click",o,!0),r.wireEngagement?.(n))});let l=null;try{l=de()}catch{}const c=U?.value??{};q(window,"claude",c);for(const r of Object.keys(M)){if(c[r]!==void 0){q(c,r,c[r]);continue}R.set(r,ye())}if(c.use===void 0){const r=p=>{if(typeof p!="string"||!Object.hasOwn(M,p))return Promise.resolve(null);const i=R.get(p);return i?i.u:Promise.resolve(c[p]??null)};try{Object.defineProperty(c,"use",{value:r,writable:!0,configurable:!0,enumerable:!1})}catch{}}let f=null,S=null,v=0;const b=r=>{r.source!==parent||!F(r.origin)||oe(r.data)&&(f=r.data.__frame_init,w=r.origin,removeEventListener("message",b),clearTimeout(v),S?.())};addEventListener("message",b),parent.postMessage({__frame_connect:!0},"*");const m=new Promise(r=>{S=r,v=setTimeout(()=>{removeEventListener("message",b),r()},he)}),y=document.readyState==="loading"?new Promise(r=>document.addEventListener("DOMContentLoaded",()=>r(),{once:!0})):Promise.resolve();y.then(()=>{try{l?.restore()}catch{}});const g={cb:null},E=r=>{if(!(r.source!==parent||!F(r.origin))&&ie(r.data)){try{l?.promoted()}catch{}g.cb?.()}};addEventListener("message",E),m.then(async()=>{if(!f||!w){for(const a of R.values())a.nulled=!0,a.r(null);return}K(f.theme);const r=w;let p=!1,i=!1;addEventListener("message",a=>{if(a.source!==parent||a.origin!==r)return;le(a.data)&&K(a.data.__frame_theme.theme),ae(a.data)&&ve(a.data.__frame_patch,r);const k=a.data?.__fc_mode;k&&typeof k=="object"&&!p&&N&&L.test(N)&&(p=!0,T(N).then(x=>x.install?.(r,k.on===!0)).catch(()=>{}));const A=a.data?.__ft_cmd;A&&typeof A=="object"&&!i&&I&&L.test(I)&&(i=!0,T(I).then(x=>x.install?.(r,A)).catch(()=>{}))});const d=Object.keys(f.capabilities??{}).filter(a=>Object.hasOwn(M,a)).map(a=>[a,M[a]]).filter(a=>typeof a[1]=="string"&&L.test(a[1])),u=await Promise.allSettled(d.map(([,a])=>T(a))),h=await e,_=w;if(h?.buildBoot||parent.postMessage({__frame_cap_telemetry:{kind:"cap-load-error",cap:"_transforms"}},_),h?.buildBoot)try{P=h.buildBoot(f,h.TRANSFORMS??{},{shellOrigin:_,mount:W},a=>parent.postMessage({__frame_cap_telemetry:a},_))}catch{parent.postMessage({__frame_cap_telemetry:{kind:"cap-load-error",cap:"_transforms"}},_),P=z(f,_)}else P=z(f,_);const C=a=>parent.postMessage({__frame_cap_telemetry:{kind:"cap-load-error",cap:a}},_),we=P;u.forEach((a,k)=>{const A=d[k][0];if(a.status!=="fulfilled"){C(A);return}try{a.value?.install?.(we)}catch{C(A)}});for(const a of R.values())a.done||(a.nulled=!0,a.r(null));await y,parent.postMessage({__frame_ready:!0},w),e.then(a=>a?.installSizeReporter?.(_,g))})}})();</script><!-- /frame-runtime --><meta name="viewport" content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>Três Peles, Um Relevo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="./css2" rel="stylesheet">
+
+<style>
+/* ============================================================================
+   TRÊS PALETAS OFICIAIS — valores reais, medidos
+   emerald      src/index.css + variables.scss[data-theme='emerald']
+   operational  variables.scss[data-theme='operational']
+   forge        variables.scss[data-theme='forge'] + forja-de-cartas.html
+   THEME_SWITCH != REDESIGN — estrutura idêntica, só trocam tokens.
+   ============================================================================ */
+
+/* ---- EMERALD claro (padrão) ---- */
+:root,
+:root[data-palette="emerald"]{
+  --fundo:#f7fdf9;  --fundo-2:#f0fdf4;  --superficie:#ffffff;  --superficie-2:#f6faf7;
+  --texto:#0a0a0a;  --texto-2:#4a5a52;  --texto-3:#6b7a72;
+  --borda:#dce8e1;  --acento:#1a8754;  --acento-luz:#22a566;  --acento-txt:#ffffff;
+  --ok:#1a8754;     --alerta:#b8860b;   --erro:#c0392b;
+  --raio:0.5rem;    --display:'Geist';
+  --relevo-sombra:hsl(152 30% 20% / .16);
+  --brilho-1:hsl(152 45% 99% / .72);  --brilho-2:hsl(152 50% 88% / .26);
+  --mistura:soft-light;  --grade:hsl(152 24% 45% / .07);
+  --nome-tema:"emerald";
+}
+
+/* ---- EMERALD escuro ---- */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]):not([data-palette="operational"]):not([data-palette="forge"]){
+    --fundo:#0a0a0a;  --fundo-2:#0f0f0f;  --superficie:#0f0f0f;  --superficie-2:#141414;
+    --texto:#ebebeb;  --texto-2:#8c8c8c;  --texto-3:#6e6e6e;
+    --borda:#1f1f1f;  --acento:#22c77e;  --acento-luz:#2fe093;  --acento-txt:#0a0a0a;
+    --ok:#22c77e;     --alerta:#e0a020;  --erro:#e05a4a;
+    --relevo-sombra:hsl(152 40% 1% / .85);
+    --brilho-1:hsl(152 60% 92% / .28);  --brilho-2:hsl(152 55% 70% / .10);
+    --grade:hsl(152 40% 60% / .05);
+  }
+}
+:root[data-theme="dark"]:not([data-palette="operational"]):not([data-palette="forge"]){
+  --fundo:#0a0a0a;  --fundo-2:#0f0f0f;  --superficie:#0f0f0f;  --superficie-2:#141414;
+  --texto:#ebebeb;  --texto-2:#8c8c8c;  --texto-3:#6e6e6e;
+  --borda:#1f1f1f;  --acento:#22c77e;  --acento-luz:#2fe093;  --acento-txt:#0a0a0a;
+  --ok:#22c77e;     --alerta:#e0a020;  --erro:#e05a4a;
+  --relevo-sombra:hsl(152 40% 1% / .85);
+  --brilho-1:hsl(152 60% 92% / .28);  --brilho-2:hsl(152 55% 70% / .10);
+  --grade:hsl(152 40% 60% / .05);
+}
+
+/* ---- OPERATIONAL claro · o mesmo ciano, mas em sala iluminada ----
+   Derivado do #4fc3ff: no claro o ciano puro não tem contraste sobre branco,
+   então o acento escurece para #0a6e9e e o ciano volta como realce. */
+:root[data-palette="operational"]{
+  --fundo:#f4f8fc;  --fundo-2:#eaf2f9;  --superficie:#ffffff;  --superficie-2:#f2f7fb;
+  --texto:#0b1420;  --texto-2:#41566f;  --texto-3:#63799a;
+  --borda:#cfdeeb;  --acento:#0a6e9e;  --acento-luz:#4fc3ff;  --acento-txt:#ffffff;
+  --ok:#0a6e9e;     --alerta:#b06f00;  --erro:#c53a2e;
+  --relevo-sombra:hsl(210 40% 25% / .16);
+  --brilho-1:hsl(198 96% 99% / .78);  --brilho-2:hsl(200 85% 86% / .30);
+  --mistura:soft-light;  --grade:hsl(205 55% 45% / .07);
+  --nome-tema:"operational";
+}
+/* ---- OPERATIONAL escuro · HUD navy + ciano. Sala de controle, não joia. ---- */
+@media (prefers-color-scheme: dark){
+  :root[data-palette="operational"]:not([data-theme="light"]){
+    --fundo:#05070d;  --fundo-2:#0b1420;  --superficie:#0b1420;  --superficie-2:#0e1a2c;
+    --texto:#e9eef7;  --texto-2:#7f96b6;  --texto-3:#54688a;
+    --borda:rgba(79,195,255,.16);  --acento:#4fc3ff;  --acento-luz:#7ad3ff;  --acento-txt:#05070d;
+    --ok:#4fc3ff;     --alerta:#ffb020;  --erro:#ff4b3e;
+    --relevo-sombra:hsl(215 60% 1% / .88);
+    --brilho-1:hsl(198 96% 88% / .40);  --brilho-2:hsl(205 88% 66% / .14);
+    --mistura:screen;  --grade:hsl(200 80% 60% / .06);
+  }
+}
+:root[data-palette="operational"][data-theme="dark"]{
+  --fundo:#05070d;  --fundo-2:#0b1420;  --superficie:#0b1420;  --superficie-2:#0e1a2c;
+  --texto:#e9eef7;  --texto-2:#7f96b6;  --texto-3:#54688a;
+  --borda:rgba(79,195,255,.16);  --acento:#4fc3ff;  --acento-luz:#7ad3ff;  --acento-txt:#05070d;
+  --ok:#4fc3ff;     --alerta:#ffb020;  --erro:#ff4b3e;
+  --relevo-sombra:hsl(215 60% 1% / .88);
+  --brilho-1:hsl(198 96% 88% / .40);  --brilho-2:hsl(205 88% 66% / .14);
+  --mistura:screen;  --grade:hsl(200 80% 60% / .06);
+}
+
+/* ---- FORGE claro · o pergaminho da carta ----
+   Zero cor inventada: são os tokens do interior da carta, que já existiam.
+   --pergaminho #EFE2C6 · --tinta #2A2013 · --ouro #C0902B */
+:root[data-palette="forge"]{
+  --fundo:#efe2c6;  --fundo-2:#e4d2ac;  --superficie:#f7efd9;  --superficie-2:#e9d9b4;
+  --texto:#2a2013;  --texto-2:#5b4a32;  --texto-3:#7a5a15;
+  --borda:rgba(122,90,21,.32);  --acento:#8a6519;  --acento-luz:#c0902b;  --acento-txt:#f7efd9;
+  --ok:#2e6b24;     --alerta:#8a6519;  --erro:#7c1f12;
+  --relevo-sombra:hsl(40 35% 22% / .22);
+  --brilho-1:hsl(44 85% 99% / .80);  --brilho-2:hsl(40 70% 84% / .30);
+  --mistura:soft-light;  --grade:hsl(38 45% 38% / .07);
+  --display:'Cinzel';
+  --nome-tema:"forge";
+}
+/* ---- FORGE escuro · o breu e o bisel. Premium, lendário. ---- */
+@media (prefers-color-scheme: dark){
+  :root[data-palette="forge"]:not([data-theme="light"]){
+    --fundo:#0a0906;  --fundo-2:#100d07;  --superficie:#1d1709;  --superficie-2:#2b2415;
+    --texto:#f2db98;  --texto-2:#9c8352;  --texto-3:#8a6519;
+    --borda:rgba(192,144,43,.24);  --acento:#c0902b;  --acento-luz:#f4da95;  --acento-txt:#0a0906;
+    --ok:#7bc96f;     --alerta:#e9b44c;  --erro:#a8341f;
+    --relevo-sombra:hsl(40 40% 1% / .92);
+    --brilho-1:hsl(44 82% 92% / .44);  --brilho-2:hsl(40 76% 76% / .16);
+    --grade:hsl(42 60% 50% / .06);
+  }
+}
+:root[data-palette="forge"][data-theme="dark"]{
+  --fundo:#0a0906;  --fundo-2:#100d07;  --superficie:#1d1709;  --superficie-2:#2b2415;
+  --texto:#f2db98;  --texto-2:#9c8352;  --texto-3:#8a6519;
+  --borda:rgba(192,144,43,.24);  --acento:#c0902b;  --acento-luz:#f4da95;  --acento-txt:#0a0906;
+  --ok:#7bc96f;     --alerta:#e9b44c;  --erro:#a8341f;
+  --relevo-sombra:hsl(40 40% 1% / .92);
+  --brilho-1:hsl(44 82% 92% / .44);  --brilho-2:hsl(40 76% 76% / .16);
+  --grade:hsl(42 60% 50% / .06);
+}
+
+/* ============================================================================
+   ESTRUTURA DO RELEVO — idêntica nas três. Nenhuma linha muda por tema.
+   ============================================================================ */
+:root{ --persp:900px; --ang:9deg; --z1:22px; --z2:34px; --z3:52px; --zl:70px; --px:0; --py:0; }
+
+.palco{ perspective:var(--persp); perspective-origin:50% 40%; }
+.relevo{
+  position:relative; transform-style:preserve-3d;
+  transform:rotateY(calc(var(--px) * var(--ang))) rotateX(calc(var(--py) * -1 * var(--ang)));
+  transition:transform .45s cubic-bezier(.2,.7,.3,1), box-shadow .45s ease;
+  box-shadow:calc(var(--px) * -14px) calc(var(--py) * -10px + 14px) 34px -12px var(--relevo-sombra);
+}
+.palco:hover .relevo,.palco:focus-within .relevo{ transition:transform .09s linear, box-shadow .09s linear; }
+.r1{ transform:translateZ(var(--z1)); }
+.r2{ transform:translateZ(var(--z2)); }
+.r3{ transform:translateZ(var(--z3)); }
+.luz{
+  position:absolute; inset:0; pointer-events:none; border-radius:inherit;
+  transform:translateZ(var(--zl)); opacity:0; transition:opacity .4s ease;
+  background:radial-gradient(42% 34% at calc(50% + var(--px)*54%) calc(50% + var(--py)*54%),
+    var(--brilho-1) 0%, var(--brilho-2) 40%, transparent 74%);
+  mix-blend-mode:var(--mistura);
+}
+.palco:hover .luz,.palco:focus-within .luz{ opacity:1; transition:opacity .12s ease; }
+
+body.chapado .relevo{ transform:none !important; box-shadow:0 1px 3px var(--relevo-sombra) !important; }
+body.chapado .r1,body.chapado .r2,body.chapado .r3{ transform:none !important; }
+body.chapado .luz{ display:none !important; }
+
+@media (prefers-reduced-motion:reduce){
+  .relevo{transform:none;transition:none;} .luz{display:none;}
+  .r1,.r2,.r3{transform:none;}
+}
+
+/* ============================================================================
+   PÁGINA
+   ============================================================================ */
+*{box-sizing:border-box;}
+body{
+  margin:0; min-height:100vh; color:var(--texto);
+  font-family:'Geist',system-ui,-apple-system,sans-serif;
+  padding:clamp(24px,5vw,52px) clamp(16px,4vw,40px) 80px;
+  background:
+    linear-gradient(var(--grade) 1px,transparent 1px) 0 0/44px 44px,
+    linear-gradient(90deg,var(--grade) 1px,transparent 1px) 0 0/44px 44px,
+    var(--fundo);
+  transition:background-color .3s ease, color .3s ease;
+}
+.wrap{max-width:1060px;margin:0 auto;}
+
+.eyebrow{
+  font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--acento);margin:0 0 12px;
+}
+
+/* ---- assinatura da Casa ---- */
+.lema{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--acento);
+  padding:6px 13px 6px 11px;margin:0 0 18px;
+  border:1px solid var(--borda);border-radius:999px;
+  background:color-mix(in srgb, var(--acento) 7%, transparent);
+}
+.lema .olho{ font-size:12px; letter-spacing:0; opacity:.9; }
+.lema .div{ opacity:.42; }
+
+.rodape-lema{
+  margin-top:clamp(40px,5vw,64px);padding-top:26px;
+  border-top:1px solid var(--borda);
+  display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.rodape-lema .frase{
+  font-family:var(--display),'Geist',serif;
+  font-size:clamp(17px,2.4vw,23px);font-weight:600;letter-spacing:-.01em;
+  color:var(--texto);margin:0;
+}
+.rodape-lema .frase em{ font-style:normal;color:var(--acento); }
+.rodape-lema .assina{
+  font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--texto-3);margin:0;
+}
+h1{
+  font-family:var(--display),'Geist',serif;
+  font-size:clamp(30px,4.6vw,46px);line-height:1.06;margin:0 0 12px;
+  letter-spacing:-.02em;font-weight:600;text-wrap:balance;
+}
+.lede{margin:0;max-width:62ch;font-size:clamp(15px,1.6vw,17px);line-height:1.6;color:var(--texto-2);}
+
+.barra{
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  margin:26px 0 0;padding-top:22px;border-top:1px solid var(--borda);
+}
+.grupo{display:flex;gap:0;border:1px solid var(--borda);border-radius:calc(var(--raio) + 3px);overflow:hidden;}
+button{
+  font-family:'Geist',sans-serif;font-size:13px;font-weight:500;
+  height:34px;padding:0 15px;border:0;background:transparent;
+  color:var(--texto-2);cursor:pointer;transition:background .16s,color .16s;
+}
+.grupo button + button{border-left:1px solid var(--borda);}
+.grupo button:hover{color:var(--texto);}
+.grupo button[aria-pressed="true"]{background:var(--acento);color:var(--acento-txt);font-weight:600;}
+.solo{
+  border:1px solid var(--borda);border-radius:calc(var(--raio) + 3px);
+  background:var(--superficie-2);
+}
+.solo:hover{border-color:var(--acento);color:var(--texto);}
+button:focus-visible{outline:2px solid var(--acento);outline-offset:2px;}
+.marca{
+  font-family:'Geist Mono',monospace;font-size:11px;color:var(--texto-3);
+  margin-left:auto;letter-spacing:.08em;
+}
+.marca b{color:var(--acento);font-weight:500;}
+
+.secao{margin-top:clamp(32px,4.5vw,50px);}
+.secao > h2{
+  font-family:'Geist Mono',monospace;font-size:11px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--texto-3);margin:0 0 16px;
+}
+
+.tiles{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));}
+.cartao{
+  border:1px solid var(--borda);border-radius:calc(var(--raio) * 1.6);
+  background:var(--superficie);overflow:hidden;
+}
+.tile{padding:17px 18px 15px;}
+.rot{font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--texto-3);margin:0 0 7px;}
+.val{font-size:29px;font-weight:600;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;margin:0 0 8px;}
+.pill{display:inline-flex;align-items:center;gap:5px;font-family:'Geist Mono',monospace;font-size:10.5px;padding:3px 8px;border-radius:999px;}
+.pill::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;}
+.pill.ok{color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent);}
+.pill.al{color:var(--alerta);background:color-mix(in srgb,var(--alerta) 16%,transparent);}
+.pill.no{color:var(--erro);background:color-mix(in srgb,var(--erro) 16%,transparent);}
+
+.duo{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));}
+.painel{padding:22px 23px 20px;}
+.painel h3{margin:0 0 6px;font-family:var(--display),'Geist',serif;font-size:17px;font-weight:600;letter-spacing:-.01em;}
+.painel p{margin:0 0 16px;font-size:14px;line-height:1.58;color:var(--texto-2);}
+.linhas{display:flex;flex-direction:column;gap:8px;}
+.linha{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  font-size:13px;padding:9px 11px;border-radius:var(--raio);
+  background:var(--superficie-2);border:1px solid var(--borda);
+}
+.linha code{font-family:'Geist Mono',monospace;font-size:11.5px;color:var(--texto-3);}
+
+.nota{
+  margin-top:clamp(32px,4.5vw,50px);padding:20px 22px;
+  border:1px solid var(--borda);border-radius:calc(var(--raio) * 1.6);background:var(--superficie);
+}
+.nota h2{margin:0 0 12px;font-family:var(--display),'Geist',serif;font-size:15px;font-weight:600;}
+.nota dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:7px 16px;font-size:13px;}
+.nota dt{font-family:'Geist Mono',monospace;font-size:11px;color:var(--acento);}
+.nota dd{margin:0;color:var(--texto-2);}
+</style>
+
+<div class="wrap">
+<header>
+  <p class="lema"><span class="olho">🔍</span> Lupa na mão <span class="div">·</span> Intenção na frente</p>
+  <p class="eyebrow">CentralDark · três temas globais oficiais</p>
+  <h1>Três Peles, Um Relevo</h1>
+  <p class="lede">A mesma página, os mesmos componentes, o mesmo relevo tátil. Só a paleta troca —
+  e ela vem inteira do <code>variables.scss</code>, sem um valor inventado. Passe o mouse nos painéis.</p>
+  <div class="barra">
+    <div class="grupo" role="group" aria-label="Escolher tema">
+      <button data-p="emerald" aria-pressed="true">Esmeralda</button>
+      <button data-p="operational" aria-pressed="false">Azul</button>
+      <button data-p="forge" aria-pressed="false">Dourado</button>
+    </div>
+    <button class="solo" id="bChapado">Ver sem relevo</button>
+    <button class="solo" id="bClaro">Claro / escuro</button>
+    <span class="marca">tema: <b id="marcaTema">emerald</b></span>
+  </div>
+</header>
+
+<section class="secao">
+  <h2>Indicadores</h2>
+  <div class="tiles">
+    <div class="palco"><div class="cartao relevo">
+      <div class="tile r1"><p class="rot">PRs abertos</p><p class="val r2">4</p><span class="pill al r3">checks na fila</span></div>
+      <div class="luz"></div></div></div>
+    <div class="palco"><div class="cartao relevo">
+      <div class="tile r1"><p class="rot">Runner</p><p class="val r2">1</p><span class="pill no r3">saturado</span></div>
+      <div class="luz"></div></div></div>
+    <div class="palco"><div class="cartao relevo">
+      <div class="tile r1"><p class="rot">Integridade</p><p class="val r2">18/18</p><span class="pill ok r3">hashes conferem</span></div>
+      <div class="luz"></div></div></div>
+    <div class="palco"><div class="cartao relevo">
+      <div class="tile r1"><p class="rot">Temas oficiais</p><p class="val r2">3</p><span class="pill ok r3">mesma estrutura</span></div>
+      <div class="luz"></div></div></div>
+  </div>
+</section>
+
+<section class="secao">
+  <h2>Painéis</h2>
+  <div class="duo">
+    <div class="palco"><div class="cartao relevo">
+      <div class="painel r1">
+        <h3 class="r2">Trocar pele não é redesenhar</h3>
+        <p>Layout, componentes, navegação e conteúdo continuam iguais nos três. O que muda é o valor
+        do token — cor de fundo, acento, borda, e a luz do relevo.</p>
+        <div class="linhas r3">
+          <div class="linha"><span>Estrutura do relevo</span><code>idêntica</code></div>
+          <div class="linha"><span>Tokens de cor</span><code>por tema</code></div>
+          <div class="linha"><span>Tokens de luz</span><code>por tema</code></div>
+        </div>
+      </div><div class="luz"></div></div></div>
+
+    <div class="palco"><div class="cartao relevo">
+      <div class="painel r1">
+        <h3 class="r2">Cada pele reflete diferente</h3>
+        <p>Esmeralda tem brilho frio e discreto. Azul usa <code>screen</code> — luz dura de painel.
+        Dourado usa <code>soft-light</code>, que é como metal reage.</p>
+        <div class="linhas r3">
+          <div class="linha"><span>Esmeralda</span><code>verde frio</code></div>
+          <div class="linha"><span>Azul escuro</span><code>screen · ciano duro</code></div>
+          <div class="linha"><span>Dourado claro</span><code>pergaminho</code></div>
+        </div>
+      </div><div class="luz"></div></div></div>
+  </div>
+</section>
+
+<div class="nota">
+  <h2>De onde veio cada valor</h2>
+  <dl>
+    <dt>emerald</dt><dd><code>src/index.css</code> + <code>variables.scss[emerald]</code> — claro e escuro</dd>
+    <dt>operational</dt><dd>escuro: <code>variables.scss</code>, <code>#4fc3ff</code> sobre <code>#05070d</code>. Claro: acento escurecido para <code>#0a6e9e</code>, porque ciano puro não tem contraste sobre branco</dd>
+    <dt>forge</dt><dd>escuro: <code>#c0902b</code> sobre <code>#100d07</code>. Claro: o <strong>pergaminho da carta</strong> — <code>#EFE2C6</code>, <code>#2A2013</code>, <code>#C0902B</code>, tokens que já existiam</dd>
+    <dt>relevo</dt><dd>escada de <code>translateZ</code> · sombra que contra-desloca · brilho no ponteiro</dd>
+    <dt>ângulo</dt><dd><code>9°</code> aqui; <code>20°</code> na carta colecionável</dd>
+    <dt>cobertura</dt><dd>3 paletas × 2 claridades = <strong>6 combinações</strong>, todas com relevo</dd>
+  </dl>
+</div>
+
+<footer class="rodape-lema">
+  <p class="frase"><em>Lupa na mão.</em> Intenção na frente.</p>
+  <p class="assina">CentralDark · SEGREDO/CHEFE</p>
+</footer>
+</div>
+
+<script>
+(function(){
+  var raiz = document.documentElement;
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    document.querySelectorAll('.palco').forEach(function(p){
+      var a = p.querySelector('.relevo'); if(!a) return;
+      p.addEventListener('pointermove',function(ev){
+        var r=a.getBoundingClientRect();
+        a.style.setProperty('--px',((ev.clientX-r.left)/r.width -.5).toFixed(3));
+        a.style.setProperty('--py',((ev.clientY-r.top )/r.height-.5).toFixed(3));
+      });
+      p.addEventListener('pointerleave',function(){
+        a.style.setProperty('--px',0); a.style.setProperty('--py',0);
+      });
+    });
+  }
+
+  var botoes = document.querySelectorAll('.grupo button');
+  var marca  = document.getElementById('marcaTema');
+  var claro  = document.getElementById('bClaro');
+  botoes.forEach(function(b){
+    b.onclick = function(){
+      botoes.forEach(function(o){ o.setAttribute('aria-pressed', o===b ? 'true':'false'); });
+      raiz.setAttribute('data-palette', b.dataset.p);
+      marca.textContent = b.dataset.p;
+    };
+  });
+
+  var chapado = document.getElementById('bChapado');
+  chapado.onclick = function(){
+    var off = document.body.classList.toggle('chapado');
+    this.textContent = off ? 'Ver com relevo' : 'Ver sem relevo';
+  };
+  claro.onclick = function(){
+    var atual = raiz.getAttribute('data-theme');
+    if(!atual) atual = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light';
+    raiz.setAttribute('data-theme', atual === 'dark' ? 'light':'dark');
+  };
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,19 @@
+{
+  "apps": [
+    {
+      "name": "MCP-CentralDark",
+      "script": "dist/index.js",
+      "cwd": "/root/CentralDark/apps/mcp",
+      "instances": 1,
+      "exec_mode": "fork",
+      "autorestart": true,
+      "max_memory_restart": "400M",
+      "env_file": "/root/CentralDark/secrets/mcp.env",
+      "log_file": "/root/CentralDark/logs/mcp/out.log",
+      "error_file": "/root/CentralDark/logs/mcp/err.log",
+      "out_file": "/root/CentralDark/logs/mcp/out.log",
+      "merge_logs": true,
+      "log_date_format": "YYYY-MM-DD HH:mm:ss Z"
+    }
+  ]
+}

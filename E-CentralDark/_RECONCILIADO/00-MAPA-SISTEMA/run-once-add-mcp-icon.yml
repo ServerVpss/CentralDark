@@ -1,0 +1,199 @@
+name: Run once - add MCP icon
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/run-once-add-mcp-icon.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: run-once-add-mcp-icon
+  cancel-in-progress: false
+
+jobs:
+  add-mcp-icon:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Add CentralDark MCP icon
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          target="CentralDark/apps/mcp/centraldark-mcp-icon.png"
+          mkdir -p "$(dirname "$target")"
+
+          cat > /tmp/centraldark-mcp-icon.b64 <<'ICON_B64'
+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
+ICON_B64
+
+          base64 -d /tmp/centraldark-mcp-icon.b64 > "$target"
+          got="$(sha256sum "$target" | awk '{print $1}')"
+          expected="c8bb521bdfbb9fa33e2d75f4052b404e2fb824be412766af88596207aaed6ca5"
+
+          if [ "$got" != "$expected" ]; then
+            echo "sha256 mismatch: got=$got expected=$expected"
+            exit 1
+          fi
+
+          git config user.name "CentralDark Bot"
+          git config user.email "hakimalektheg@gmail.com"
+
+          if git diff --quiet -- "$target"; then
+            echo "Icon already up to date."
+            exit 0
+          fi
+
+          git add "$target"
+          git commit -m "chore(mcp): adicionar icone do conector CentralDark" \
+            -m "Co-authored-by: SegredoiDev <hakimalektheg@gmail.com>"
+          git push

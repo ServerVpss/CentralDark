@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --color-primary: #13ec5b;
+
+    /* Variables for light mode (default for .light class or implicit) */
+    --color-background-dark: 246 248 246;
+    /* #f6f8f6 */
+    --color-surface-dark: 255 255 255;
+    /* #ffffff */
+    --color-surface-hover: 241 245 242;
+    /* #f1f5f2 */
+    --color-text-secondary: 90 117 101;
+    /* #5a7565 */
+    --color-white: 16 34 22;
+    /* very dark green/black #102216 */
+    --color-black: 255 255 255;
+    /* white */
+
+    --color-scrollbar-thumb: #ced6d1;
+    --color-scrollbar-thumb-hover: #b4c2b9;
+}
+
+html.dark {
+    /* Variables for dark mode */
+    --color-background-dark: 16 34 22;
+    /* #102216 */
+    --color-surface-dark: 22 43 30;
+    /* #162b1e */
+    --color-surface-hover: 28 51 36;
+    /* #1c3324 */
+    --color-text-secondary: 157 185 166;
+    /* #9db9a6 */
+    --color-white: 255 255 255;
+    /* #ffffff */
+    --color-black: 0 0 0;
+    /* #000000 */
+
+    --color-scrollbar-thumb: #28392e;
+    --color-scrollbar-thumb-hover: #3b5443;
+}
+
+@layer utilities {
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar-thumb);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-scrollbar-thumb-hover);
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.material-symbols-outlined.fill {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+body {
+    @apply bg-background-dark font-display text-white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}

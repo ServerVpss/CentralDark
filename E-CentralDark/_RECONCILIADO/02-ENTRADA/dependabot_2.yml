@@ -1,0 +1,95 @@
+# Dependabot — atualizações diárias, foco em patches de segurança
+# Escopo: npm dos pacotes ativos + GitHub Actions
+# Majors bloqueadas. Auto-merge dos patches via .github/workflows/dependabot-auto-merge.yml
+# Obs: o GitHub Dependabot só aceita "daily | weekly | monthly" (não tem "a cada 5 minutos").
+# Pra testar mais rápido, dá pra disparar manualmente em Insights → Dependency graph → Dependabot → "Check for updates".
+
+version: 2
+updates:
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: "ci(actions)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "security"
+      - "github-actions"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # bot-server (Lotes 2–10 WhatsApp read-only)
+  - package-ecosystem: "npm"
+    directory: "/CentralDark/apps/bot-server"
+    schedule:
+      interval: "daily"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: "deps(bot-server)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "security"
+      - "bot-server"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # MCP CentralDark
+  - package-ecosystem: "npm"
+    directory: "/CentralDark/apps/mcp"
+    schedule:
+      interval: "daily"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: "deps(mcp)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "security"
+      - "mcp"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Install callback (porta de entrada oficial)
+  - package-ecosystem: "npm"
+    directory: "/CentralDark/apps/install-callback"
+    schedule:
+      interval: "daily"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: "deps(install-callback)"
+    labels:
+      - "dependencies"
+      - "security"
+      - "install-callback"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Frontend principal (Lovable preview)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: "deps(frontend)"
+    labels:
+      - "dependencies"
+      - "security"
+      - "frontend"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]

@@ -1,0 +1,27 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-05-30",
+  "categories": [
+    { "key": "communication", "label": "Comunicação", "icon": "💬" },
+    { "key": "ai", "label": "Inteligência Artificial", "icon": "🤖" },
+    { "key": "automation", "label": "Automação", "icon": "⚡" },
+    { "key": "payments", "label": "Pagamentos", "icon": "💰" },
+    { "key": "monitoring", "label": "Monitoramento", "icon": "📊" },
+    { "key": "deploy", "label": "Deploy & CI/CD", "icon": "🚀" },
+    { "key": "security", "label": "Segurança", "icon": "🔒" },
+    { "key": "custom", "label": "Customizadas", "icon": "🔧" }
+  ],
+  "skills": [
+    { "slug": "telegram-alerts", "name": "Telegram Alertas", "category": "communication", "icon": "📨", "enabled": false, "source": "built-in" },
+    { "slug": "telegram-bot", "name": "Telegram Bot", "category": "communication", "icon": "🤖", "enabled": false, "source": "built-in" },
+    { "slug": "whatsapp-wuzapi", "name": "WhatsApp WuzAPI", "category": "communication", "icon": "📱", "enabled": false, "source": "built-in" },
+    { "slug": "ai-central", "name": "Central de IA", "category": "ai", "icon": "🧠", "enabled": false, "source": "built-in" },
+    { "slug": "ai-assistant", "name": "Assistente IA", "category": "ai", "icon": "💡", "enabled": false, "source": "built-in" },
+    { "slug": "auto-replies", "name": "Auto Respostas", "category": "automation", "icon": "⚡", "enabled": false, "source": "built-in" },
+    { "slug": "chatbot-flows", "name": "Fluxos de Chatbot", "category": "automation", "icon": "🔀", "enabled": false, "source": "built-in" },
+    { "slug": "campaigns", "name": "Campanhas", "category": "automation", "icon": "📢", "enabled": false, "source": "built-in" },
+    { "slug": "pix-payments", "name": "Pagamentos PIX", "category": "payments", "icon": "💳", "enabled": false, "source": "built-in" },
+    { "slug": "monitor-heartbeat", "name": "Monitor", "category": "monitoring", "icon": "💓", "enabled": false, "source": "built-in" },
+    { "slug": "github-deploy", "name": "GitHub Deploy", "category": "deploy", "icon": "🚀", "enabled": false, "source": "built-in" }
+  ]
+}

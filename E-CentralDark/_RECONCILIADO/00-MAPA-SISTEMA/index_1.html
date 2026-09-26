@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> NexChat - Modern React Web Messenger & AI Chat Template Documentation</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #333;
+            background-color: #f8f9fa;
+            position: relative;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 280px;
+            background: #fff;
+            padding: 2rem 1rem;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+            overflow-y: auto;
+        }
+
+        .sidebar-logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #000;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-logo span {
+            color: #13ec5b;
+        }
+
+        .nav-link {
+            color: #555;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #f1f8f4;
+            color: #13ec5b;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 3rem 4rem;
+        }
+
+        section {
+            background: #fff;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            margin-bottom: 2rem;
+        }
+
+        section h2 {
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            color: #1a1a1a;
+        }
+
+        section h3 {
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            color: #2c2c2c;
+        }
+
+        code {
+            background: #f4f5f7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #d63384;
+            font-family: monospace;
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: #fff;
+            padding: 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+
+        .feature-list li {
+            margin-bottom: 10px;
+        }
+
+        .feature-list li i {
+            color: #13ec5b;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#doc-navbar" data-bs-offset="50">
+
+    <!-- Sidebar -->
+    <nav id="doc-navbar" class="sidebar flex-column">
+        <div class="sidebar-logo">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M12 2C6.477 2 2 6.03 2 11C2 13.565 3.243 15.882 5.253 17.518C5.02 18.736 4.301 19.957 4.215 20.101C4.095 20.3 4.103 20.547 4.237 20.738C4.37 20.929 4.605 21.031 4.846 20.999C6.917 20.725 8.799 19.78 10.038 19.062C10.671 19.18 11.328 19.24 12 19.24C17.523 19.24 22 15.21 22 10.24C22 5.27 17.523 1.24 12 1.24V2Z"
+                    fill="#13ec5b" />
+            </svg>
+            Next<span>Chat</span>
+        </div>
+        <ul class="nav flex-column gap-1">
+            <li class="nav-item">
+                <a class="nav-link" href="#introduction">1. Introduction</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#key-features">2. Key Features</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#technologies">3. Technologies Used</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#getting-started">4. Getting Started</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#folder-structure">5. Folder Structure</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#customization">6. Customization</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#credits">7. Credits & Assets</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#support">8. Support</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#changelog">9. Changelog</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <!-- Header -->
+        <div class="mb-5">
+            <h1 class="fw-bolder display-4 mb-3">NexChat Documentation</h1>
+            <p class="lead text-muted">Premium Modern Web Messenger React Template</p>
+            <div class="d-flex gap-3 text-muted small">
+                <span>Created: <strong>February 2026</strong></span>
+                <span>By: <strong>paicode</strong></span>
+            </div>
+            <hr class="mt-4">
+            <div class="alert alert-success mt-4 bg-success text-white border-0" role="alert">
+                Thank you for purchasing NexChat! This beautiful, lightweight template is built to strict standards.
+                If you have any questions that are beyond the scope of this help file, please feel free to email via my
+                user page contact form here. Thanks so much!
+            </div>
+        </div>
+
+        <section id="introduction">
+            <h2>1. Introduction</h2>
+            <p><strong>NexChat</strong> is a powerful, highly customizable, and ultra-modern web messenger UI built
+                with React.js, Vite, Tailwind CSS, and SCSS. It was meticulously designed to handle light and dark mode
+                automatically while delivering an ultra-premium "glassmorphism" aesthetic.</p>
+            <p>Whether you are building a generic chat application, an AI-powered conversational interface, or a
+                community portal, NexChat provides the elegant UI components necessary to accelerate your development
+                process while ensuring absolute pixel-perfect visual fidelity.</p>
+        </section>
+
+        <section id="key-features">
+            <h2>2. Key Features</h2>
+            <ul class="feature-list list-unstyled">
+                <li>🟢 <strong>Dynamic Template & Customization:</strong> Instantly switch between Light/Dark mode,
+                    change
+                    Template color palettes natively, and toggle chat wallpapers.</li>
+                <li>🟢 <strong>Integrated AI Assistant:</strong> Specialized "Ask AI" components with distinct glowing
+                    UI chat bubbles and intelligent capabilities integration.</li>
+                <li>🟢 <strong>Voice & Video Calling:</strong> High-end UI screens for incoming, outgoing, and active
+                    voice and video calls featuring sonic-pulse animations.</li>
+                <li>🟢 <strong>Status Updates (Stories):</strong> Mobile-inspired "Stories" style status viewer for
+                    sharing ephemeral images and videos with contacts.</li>
+                <li>🟢 <strong>Groups & Channels:</strong> Organized list views and dynamic chat layouts tailored for
+                    multi-participant groups and broadcast channels.</li>
+                <li>🟢 <strong>Advanced Messaging Tools:</strong> Fully designed context menus mapped to Message Edit,
+                    Delete, Quick Reply, and Forwarding UI workflows.</li>
+                <li>🟢 <strong>User Online Status:</strong> Dedicated presence indicators showing real-time active,
+                    busy, invisible, or offline states across the app.</li>
+                <li>🟢 <strong>Poll System:</strong> Interactive polling UI designs nested directly inside message
+                    bubbles for community voting and group tracking.</li>
+                <li>🟢 <strong>Premium Glassmorphism Aesthetic:</strong> Carefully calibrated translucent panes with
+                    backdrop blurring mapped safely to CSS mixins.</li>
+                <li>🟢 <strong>Fluid & Responsive:</strong> Completely flexbox/grid-based layout prioritizing modern
+                    viewport fluidity (Desktop, Tablet, Mobile).</li>
+                <li>🟢 <strong>Vite Build Tool:</strong> Blazing-fast hot module replacement (HMR) and optimized build
+                    times compared to Create React App.</li>
+                <li>🟢 <strong>Tailwind CSS + SCSS:</strong> Combines the rapid prototyping of Tailwind's utility
+                    classes with the structured architecture of professional SCSS.</li>
+                <li>🟢 <strong>Zustand State Management:</strong> Ultra-lightweight and predictable state management
+                    system built-in for handling user settings and states.</li>
+            </ul>
+        </section>
+
+        <section id="technologies">
+            <h2>3. Technologies Used</h2>
+            <p>This project utilizes standard and highly adopted modern frontend technologies to ensure ease of use and
+                long-term maintainability:</p>
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="p-3 border rounded text-center">
+                        <h4 class="h5 fw-bold">React 19</h4>
+                        <p class="text-muted small mb-0">Component-based architecture</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 border rounded text-center">
+                        <h4 class="h5 fw-bold">Vite</h4>
+                        <p class="text-muted small mb-0">Lightning fast frontend tooling</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 border rounded text-center">
+                        <h4 class="h5 fw-bold">Tailwind CSS (v3)</h4>
+                        <p class="text-muted small mb-0">Utility-first styling framework</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-3">
+                    <div class="p-3 border rounded text-center">
+                        <h4 class="h5 fw-bold">Sass / SCSS</h4>
+                        <p class="text-muted small mb-0">CSS with superpowers</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-3">
+                    <div class="p-3 border rounded text-center">
+                        <h4 class="h5 fw-bold">Zustand</h4>
+                        <p class="text-muted small mb-0">Modern State Management</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="getting-started">
+            <h2>4. Getting Started</h2>
+            <p>Follow these simple steps to get your project up and running in your local development environment.</p>
+
+            <h3>Prerequisites</h3>
+            <p>Ensure you have <a href="https://nodejs.org/" target="_blank">Node.js</a> installed (v16.0 or higher is
+                recommended).</p>
+
+            <h3>Installation Steps</h3>
+            <ol>
+                <li class="mb-3">
+                    <strong>Extract the Archive</strong>
+                    <br>Unzip the downloaded package to your preferred directory.
+                </li>
+                <li class="mb-3">
+                    <strong>Install Dependencies</strong>
+                    <br>Open your terminal/command prompt, navigate to the extracted root directory, and run the
+                    following command:
+                    <pre class="mt-2">npm install</pre>
+                </li>
+                <li class="mb-3">
+                    <strong>Start the Development Server</strong>
+                    <br>Once dependencies are installed, start the local Vite server:
+                    <pre class="mt-2">npm run dev</pre>
+                    <p class="text-muted mt-2 small">This will start your app on `http://localhost:3000` (or the next
+                        available port).</p>
+                </li>
+                <li class="mb-3">
+                    <strong>Build for Production</strong>
+                    <br>When you are ready to deploy your app, run:
+                    <pre class="mt-2">npm run build</pre>
+                    <p class="text-muted mt-2 small">This command will compile and bundle your app into the
+                        <code>/dist</code> folder, optimizing your SCSS and Javascript for the highest performance.
+                    </p>
+                </li>
+            </ol>
+        </section>
+
+        <section id="folder-structure">
+            <h2>5. Folder Structure</h2>
+            <p>The template features a perfectly organized, modular directory structure:</p>
+            <pre>
+nexchat/
+├── documentation/       # This help documentation folder
+├── node_modules/        # Installed NPM packages (generated)
+├── public/              # Static files (images, icons, manifest)
+├── src/                 # Main Source Code
+│   ├── assets/          
+│   │   └── scss/        # Core SCSS architecture (Layouts, Components, Variables)
+│   ├── components/      # Reusable React components (ChatList, ProfileSettings, etc)
+│   ├── constants/       # Mock data and fixed strings used across the app
+│   ├── pages/           # High-level route views (Landing, Messenger, Auth)
+│   ├── store/           # Zustand state files (themeStore.ts)
+│   ├── App.tsx          # Main React Application router/wrapper
+│   ├── index.css        # Tailwind directives and CSS Custom Properties
+│   └── index.tsx        # React DOM entry point
+├── .gitignore
+├── index.html           # Main HTML shell
+├── package.json         # Project configuration and script commands
+├── tailwind.config.js   # Tailwind framework configurations
+├── tsconfig.json        # TypeScript configurations
+└── vite.config.ts       # Vite bundler configurations</pre>
+        </section>
+
+        <section id="customization">
+            <h2>6. Customization</h2>
+
+            <h3>Modifying Template Colors</h3>
+            <p>NexChat uses a powerful combination of CSS Variables and Tailwind configuration to instantly switch
+                colors globally without breaking the SASS builds.</p>
+            <p>To change the primary structural colors of Light and Dark Template, open <code>src/index.css</code> and
+                update the root RGB values:</p>
+            <pre>
+:root {
+    --color-primary: #13ec5b; /* Main Brand Accent Color */
+
+    /* Light Mode Variables */
+    --color-background-dark: 246 248 246; 
+    --color-surface-dark: 255 255 255; 
+}
+
+html.dark {
+    /* Dark Mode Variables */
+    --color-background-dark: 16 34 22; 
+    --color-surface-dark: 22 43 30; 
+}</pre>
+
+            <h3>SCSS Architecture</h3>
+            <p>If you prefer writing highly specific custom classes, navigate to <code>src/assets/scss/</code>. The
+                styles are split modularly:</p>
+            <ul>
+                <li><code>_variables.scss</code>: Contains SASS color mappings that listen to Tailwind variables
+                    automatically.</li>
+                <li><code>_mixins.scss</code>: Contains helpers like the `scrollbar` generator and `glass` blur logic.
+                </li>
+                <li><code>layout/</code>: Contains the backbone grids and containers like <code>_sidebar.scss</code> and
+                    <code>_chat.scss</code>
+                </li>
+                <li><code>components/</code>: Granular control over the UI elements like <code>_buttons.scss</code>.
+                </li>
+            </ul>
+
+            <h3>Adding/Removing Dependencies</h3>
+            <p>Since this project uses NPM, you can simply run <code>npm install [package-name]</code> to add a new
+                library, or remove unused components safely.</p>
+        </section>
+
+        <section id="credits">
+            <h2>7. Credits & Assets</h2>
+            <p>The following assets and libraries were instrumental in building NexChat:</p>
+            <ul>
+                <li><strong>Fonts:</strong> <a href="https://fonts.google.com/specimen/Plus+Jakarta+Sans"
+                        target="_blank">Plus Jakarta Sans</a> via Google Fonts.</li>
+                <li><strong>Icons:</strong> <a href="https://fonts.google.com/icons" target="_blank">Google Material
+                        Symbols</a> (Outlined & Rounded variants).</li>
+                <li><strong>State Management:</strong> <a href="https://github.com/pmndrs/zustand"
+                        target="_blank">Zustand</a> by Poimandres.</li>
+                <li><strong>Build System:</strong> <a href="https://vitejs.dev/" target="_blank">Vite</a>.</li>
+                <li><strong>Styling:</strong> <a href="https://tailwindcss.com/" target="_blank">Tailwind CSS</a> and <a
+                        href="https://sass-lang.com/" target="_blank">Sass</a>.</li>
+                <li><strong>Routing:</strong> <a href="https://reactrouter.com/" target="_blank">React Router v6</a>.
+                </li>
+            </ul>
+        </section>
+
+        <section id="support">
+            <h2>8. Support</h2>
+            <p>If you face any issues during installation or have questions regarding customization, please contact
+                <strong>paicode</strong> through our ThemeForest profile support section or email us at
+                <a href="mailto:support@picode.in">support@picode.in</a>. We are happy to help
+                troubleshoot bugs or structure-related inquiries!
+            </p>
+            <p><em>Note: Custom development or integration of specific backends (Firebase, Supabase, Node.js) is outside
+                    the scope of item support.</em></p>
+        </section>
+
+        <section id="changelog">
+            <h2>9. Changelog</h2>
+            <div class="mb-4">
+                <h3 class="h5 fw-bold mb-2">Version 1.1 <span class="badge bg-success ms-2" style="font-size: 10px; padding: 4px 8px;">Latest</span></h3>
+                <p class="text-muted small mb-2">Released: March 2026</p>
+                <ul class="feature-list list-unstyled">
+                    <li>🟢 responsive issues fix</li>
+                </ul>
+            </div>
+            <div class="mb-1">
+                <h3 class="h5 fw-bold mb-2">Version 1.0</h3>
+                <p class="text-muted small mb-2">Released: February 2026</p>
+                <ul class="feature-list list-unstyled">
+                    <li>🟢 init version</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer class="text-center text-muted small mt-5 mb-5">
+            <p>&copy; 2026 paicode. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JS for ScrollSpy -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

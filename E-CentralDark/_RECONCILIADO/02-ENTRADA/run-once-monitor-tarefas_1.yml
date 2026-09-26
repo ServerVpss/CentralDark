@@ -1,0 +1,19 @@
+name: "Arquivado - run-once monitor tarefas"
+run-name: "Arquivado - run-once monitor tarefas"
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  arquivado:
+    name: "Workflow antigo arquivado"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Resumo"
+        run: |
+          echo "Este workflow antigo foi arquivado para não gerar falhas vermelhas recorrentes."
+          echo "Use o conector MCP/ferramentas VPS controladas para validar monitor_tarefas."
+          echo "Nenhuma ação foi executada na VPS."

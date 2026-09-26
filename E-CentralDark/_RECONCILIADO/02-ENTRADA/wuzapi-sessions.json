@@ -1,0 +1,20 @@
+{
+  "generatedAt": "2026-06-10T02:00:00.000Z",
+  "total": 1,
+  "connected": 1,
+  "disconnected": 0,
+  "sessions": [
+    {
+      "id": "10b1c03c***",
+      "name": "WhatsApp Principal",
+      "jid": "5535****55676:41",
+      "connected": true,
+      "loggedIn": true,
+      "hasQr": false,
+      "webhook": "https://proxy.multizap.dev/webhooks/wuzapi?…(mascarado)",
+      "events": "All"
+    }
+  ],
+  "logsHint": "Ver logs sanitizados na VPS: docker logs multizap-gateway-wuzapi-1 --tail 200",
+  "nextRun": "~15min (workflow wuzapi-sessions-monitor)"
+}

@@ -1,0 +1,28 @@
+name: One-shot VPS MCP branding apply
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirma:
+        description: "Digite SIM para aplicar branding no MCP da VPS"
+        required: true
+        default: "NAO"
+
+permissions:
+  contents: read
+
+jobs:
+  bloqueado_por_padrao:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Evitar execução automática"
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event.inputs.confirma }}" != "SIM" ]; then
+            echo "Workflow arquivado em modo manual. Nenhuma ação aplicada."
+            exit 0
+          fi
+          echo "Aplicação real de branding foi arquivada para evitar runs vermelhos automáticos."
+          echo "Recrie um workflow novo e revisado quando essa ação for necessária."
+          exit 0

@@ -1,0 +1,64 @@
+version: "3.9"
+
+# WuzAPI/Whatsmeow — ISOLADO do Baileys de Recargas Brasil.
+# Exposto somente em 127.0.0.1:8081 (loopback). Nada de porta pública.
+# Banco e volumes têm nomes próprios (sufixo "-atendimento").
+
+name: atendimento-whatsapp-gateway
+
+services:
+  postgres-wuzapi-atendimento:
+    image: postgres:16-alpine
+    container_name: postgres-wuzapi-atendimento
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres-wuzapi-atendimento-data:/var/lib/postgresql/data
+    networks:
+      - atendimento-wuzapi-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  wuzapi-atendimento:
+    image: ghcr.io/asternic/wuzapi:latest
+    container_name: wuzapi-atendimento
+    restart: always
+    depends_on:
+      postgres-wuzapi-atendimento:
+        condition: service_healthy
+    environment:
+      WUZAPI_ADMIN_TOKEN: ${WUZAPI_ADMIN_TOKEN}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+      DB_HOST: postgres-wuzapi-atendimento
+      DB_PORT: 5432
+      WUZAPI_PORT: ${WUZAPI_PORT}
+      TZ: America/Fortaleza
+    volumes:
+      - wuzapi-atendimento-data:/app/data
+      - wuzapi-atendimento-files:/app/files
+    ports:
+      # 127.0.0.1 = só acessível localmente (Node Gateway na mesma VPS).
+      - "127.0.0.1:8081:${WUZAPI_PORT}"
+    networks:
+      - atendimento-wuzapi-net
+
+volumes:
+  postgres-wuzapi-atendimento-data:
+    name: postgres-wuzapi-atendimento-data
+  wuzapi-atendimento-data:
+    name: wuzapi-atendimento-data
+  wuzapi-atendimento-files:
+    name: wuzapi-atendimento-files
+
+networks:
+  atendimento-wuzapi-net:
+    name: atendimento-wuzapi-net
+    driver: bridge

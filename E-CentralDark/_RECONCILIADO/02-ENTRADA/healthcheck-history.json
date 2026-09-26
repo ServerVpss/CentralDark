@@ -1,0 +1,5 @@
+{
+  "marker": "vps-healthcheck-history",
+  "description": "Histórico de execuções do bot vps-healthcheck. Append-only, máx 30 dias. Atualizado pelo workflow `.github/workflows/vps-healthcheck.yml`.",
+  "events": []
+}

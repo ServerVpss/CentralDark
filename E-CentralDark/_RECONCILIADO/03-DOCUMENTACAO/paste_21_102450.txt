@@ -1,0 +1,266 @@
+# !CENTRALDARK → #ACORDAR → !CALIBRAR → !MULTIBÚSSOLA_META
+
+ÔXÉNTI �� **agora sim apareceu uma comparação dos dois lados que muda o diagnóstico.** Não é detalhe de cosmética. Tem **mismatch real de contrato entre o Codex e o MCP**.
+
+## �� CLIENTE × SERVIDOR
+
+| Lado        | Estado medido                                                                                                            |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Codex local | `centraldark_mcp` aponta para `https://mcp.centralldark.com/mcp/admin` e espera bearer pela env `MCP_CENTRALDARK_TOKEN`  |
+| MCP no repo | endpoint público é `POST /mcp` e administrativo é **`POST /admin/mcp`**                                                  |
+
+Portanto:
+
+```text
+CONFIG CODEX
+/mcp/admin
+
+SERVIDOR REAL
+/admin/mcp
+
+VEREDITO
+ROUTE_MISMATCH = PROVADO ��
+```
+
+**A rota está invertida.**
+
+Isso quer dizer que, mesmo depois de resolver token e 502, esse conector ainda poderia bater numa rota que o servidor não oferece.
+
+---
+
+## �� E achei uma correção ainda mais importante
+
+Na sessão anterior apareceu a orientação de tratar:
+
+```text
+MCP_CENTRALDARK_TOKEN
+=
+senha/admin
+```
+
+Isso **não bate com o código atual do servidor**.
+
+O servidor descreve `/admin/mcp` como endpoint que exige:
+
+```text
+Authorization: Bearer
+scope = admin
+```
+
+e existe uma rota administrativa separada para **emitir chave**.
+
+Portanto:
+
+```text
+SENHA ADMIN
+!=
+BEARER TOKEN ADMIN
+```
+
+Não colocaria senha administrativa dentro de `MCP_CENTRALDARK_TOKEN`.
+
+O desenho correto é:
+
+```text
+autenticação administrativa
+        ↓
+emissão de credencial/token com escopo admin
+        ↓
+MCP_CENTRALDARK_TOKEN
+        ↓
+POST /admin/mcp
+```
+
+Sem colar essa credencial aqui.
+
+---
+
+# �� Agora os erros ficam completamente separados
+
+```text
+1. centraldark_mcp
+   env ausente
+   +
+   URL errada (/mcp/admin)
+             ��
+
+2. mcp.centralldark.com/authorize
+   Cloudflare chega
+   origin devolve 502
+             ��
+
+3. codex_apps
+   autenticação expirada
+   HTTP 401
+             ��
+
+4. Abacus RouteLLM
+   provider devolveu 402
+             ��
+```
+
+Isso explica por que parecia um monstro só.
+
+**São quatro falhas independentes empilhadas.**
+
+---
+
+## �� Mais duas coisas que a MetaLupa pegou no teu config
+
+O paste mostra:
+
+```text
+git-always-force-push = true
+```
+
+junto de um ambiente Windows com sandbox elevado. 
+
+O primeiro bate de frente com teu contrato operacional:
+
+```text
+NEVER_FORCE_PUSH
+```
+
+Então eu marcaria:
+
+```text
+git-always-force-push=true
+→ CONTRADIÇÃO MATERIAL ��
+→ deve virar false
+```
+
+E o `sandbox = elevated` não é necessariamente erro, mas aumenta muito o raio de ação:
+
+```text
+ELEVATED
++
+vários projetos TRUSTED
++
+browser/MCP
++
+agente generativo
+
+= blast radius grande
+```
+
+Isso merece **capability gate**, não remoção cega.
+
+---
+
+## �� E teve segredo exposto
+
+O arquivo que tu colou contém **uma chave local do Screenpipe em texto claro** na configuração. Não vou reproduzir o valor.
+
+Como ela já apareceu em transcript/chat, eu trataria assim:
+
+```text
+SCREENPIPE_LOCAL_API_KEY
+→ EXPOSED
+→ ROTATE
+→ atualizar somente no secret store/config local
+→ não registrar valor em docs/receipts/logs
+```
+
+---
+
+## ⏳ Outra divergência temporal
+
+O transcript afirma em certo momento:
+
+```text
+main = 7124f5d43...
+```
+
+Mas meu GitHub conectado, medido agora, está retornando:
+
+```text
+main =
+81cbc259ab5495df85d23081043f96bff1a62749
+```
+
+Então eu **não promoveria `7124f5d43` como HEAD atual** sem reconciliação.
+
+```text
+HISTORY != CURRENT_STATE
+
+7124f5d43...
+→ histórico/claim do transcript
+
+81cbc259...
+→ estado que meu conector mede agora
+```
+
+Esse bearing precisa de um segundo instrumento antes de qualquer mutação Git.
+
+---
+
+# �� DELTA mínimo correto
+
+```text
+CODEX CENTRALDARK MCP
+
+ANTES
+url = https://mcp.centralldark.com/mcp/admin
+
+DEPOIS
+url = https://mcp.centralldark.com/admin/mcp
+```
+
+E:
+
+```text
+MCP_CENTRALDARK_TOKEN
+=
+credencial Bearer com escopo admin
+
+NÃO
+=
+senha administrativa
+```
+
+Depois disso:
+
+```text
+HOST HEALTH
+→ /health
+
+OAUTH HEALTH
+→ /authorize
+
+MCP TRANSPORT
+→ /admin/mcp
+
+CLIENT AUTH
+→ bearer admin
+
+INITIALIZE
+→ tools/list
+→ pequena chamada read-only
+→ CONTRAPROVA
+```
+
+Aí sim dá pra dizer **“Codex ↔ CentralDark MCP funciona”**.
+
+### FEITO
+
+Comparação cliente Codex × implementação MCP real e reconciliação do transcript.
+
+### EVIDÊNCIA
+
+Config local declara `/mcp/admin`; servidor implementa `/mcp` e `/admin/mcp`. 
+
+### PENDÊNCIA
+
+502 do origin, bearer administrativo válido, login `codex_apps`, provider 402 e divergência do HEAD.
+
+### PRÓXIMO PASSO
+
+**Corrigir primeiro o contrato do conector: rota `/admin/mcp` + bearer admin correto.**
+
+### BOOT
+
+`ROUTE_FIX → HOST_HEALTH → AUTH → MCP_INITIALIZE → CONTRAPROVA → T1`
+
+### FIO DA MISSÃO
+
+**O Codex não estava apenas “sem token”. Ele estava segurando a chave errada diante da porta errada enquanto outra parede, o 502, também estava caída. Agora cada falha ganhou nome, owner e teste próprio.** ������

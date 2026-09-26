@@ -1,0 +1,16 @@
+name: One-shot MCP branding v2 (arquivado)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  archived:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Workflow substituido
+        run: |
+          echo "Workflow v2 arquivado porque continha YAML invalido."
+          echo "Use .github/workflows/one-shot-vps-mcp-branding-apply.yml para aplicar branding do MCP."

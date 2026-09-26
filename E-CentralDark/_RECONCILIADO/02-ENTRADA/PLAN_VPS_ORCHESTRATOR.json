@@ -1,0 +1,21 @@
+{
+  "project": "MultiZap / clone-deck",
+  "basePath": "/root/Multizap",
+  "repoPath": "/root/Multizap/apps/clone-deck",
+  "executionRules": [
+    "Branch Protection is active. Use git checkout -b -> push -> gh pr create -> gh pr merge.",
+    "Do NOT touch apps/bot or apps/crm source trees without explicit mapping.",
+    "Do NOT print ENV values in logs. Mask them.",
+    "Execute sequence strictly via auto-orquestrador.sh."
+  ],
+  "directories": {
+    "legacyFixes": "tools/legacy-fixes",
+    "runOnce": "scripts/run-once",
+    "revisions": "revisoes"
+  },
+  "deploymentCommands": {
+    "connect": "ssh -i $VPS_SSH_KEY $VPS_USER@$VPS_HOST",
+    "sync": "cd /root/Multizap/apps/clone-deck && git fetch origin main && git checkout main && git pull origin main --ff-only",
+    "triggerOrchestrator": "MAX_STEPS=10 bash scripts/ia/auto-orquestrador.sh <TARGET_TASK_NAME>"
+  }
+}

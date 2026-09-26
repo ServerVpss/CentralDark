@@ -1,0 +1,18 @@
+name: Sync to segredounlock (DEPRECATED)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deprecated:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deprecated workflow
+        run: |
+          echo "Este workflow foi desativado."
+          echo "Método oficial: .github/workflows/mirror-to-segredounlock.yml"
+          echo "Motivo: evitar dois métodos concorrentes de espelhamento."
+          echo "O espelho segredounlock/clone-deck deve permanecer com Actions desativadas nas Settings."

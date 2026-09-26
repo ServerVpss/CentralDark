@@ -1,0 +1,200 @@
+2026-08-24 01:51:40,656 WARNING api.config: [SLOW] models.session_visit total=4328.0ms stages: disk_age_check:6036.030252933502=15.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=156.0ms force_refresh_start=0.0ms force_refresh_done=4157.0ms
+2026-08-24 01:51:44,560 WARNING api.config: [SLOW] models.session_visit total=3016.0ms stages: disk_age_check:6041.240906238556=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=3016.0ms
+2026-08-24 01:52:02,270 INFO [20260822_212523_da1915] agent.conversation_loop: API call #1148: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=340345 out=2943 total=343288 latency=103.6s cache=332640/340345 (98%)
+2026-08-24 01:52:04,358 INFO [20260822_212523_da1915] agent.tool_executor: tool write_file completed (1.93s, 686 chars)
+2026-08-24 01:52:04,448 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:52:10,880 INFO [20260822_212523_da1915] agent.conversation_loop: API call #1149: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=343271 out=474 total=343745 latency=6.4s cache=328320/343271 (96%)
+2026-08-24 01:52:11,037 INFO [20260822_212523_da1915] agent.tool_executor: tool todo completed (0.00s, 1214 chars)
+2026-08-24 01:52:11,130 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:52:11,407 WARNING api.config: [SLOW] models.session_visit total=4313.0ms stages: disk_age_check:6066.799411535263=47.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=156.0ms force_refresh_start=0.0ms force_refresh_done=4110.0ms
+2026-08-24 01:52:14,844 WARNING api.config: [SLOW] models.session_visit total=3437.0ms stages: disk_age_check:6071.1119265556335=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=3437.0ms
+2026-08-24 01:52:21,419 WARNING api.config: [SLOW] models.session_visit total=4625.0ms stages: disk_age_check:6076.488742589951=15.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=125.0ms force_refresh_start=0.0ms force_refresh_done=4485.0ms
+2026-08-24 01:52:24,389 WARNING api.config: [SLOW] models.session_visit total=2891.0ms stages: disk_age_check:6081.200221538544=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=2891.0ms
+2026-08-24 01:52:34,799 INFO api.config: live provider-catalog rebuild exceeded 4.0s budget - serving fallback, refreshing catalog out-of-band
+2026-08-24 01:52:34,800 WARNING api.config: [SLOW] models.session_visit total=4343.0ms stages: disk_age_check:6090.156351566315=15.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=156.0ms force_refresh_start=0.0ms force_refresh_done=4172.0ms
+2026-08-24 01:52:41,826 WARNING api.config: [SLOW] models.session_visit total=2797.0ms stages: disk_age_check:6098.730000495911=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=2797.0ms
+2026-08-24 01:52:46,024 INFO [20260822_212523_da1915] agent.conversation_loop: API call #1150: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=344156 out=2188 total=346344 latency=34.9s cache=332640/344156 (97%)
+2026-08-24 01:52:48,258 INFO [20260822_212523_da1915] agent.tool_executor: tool write_file completed (2.10s, 694 chars)
+2026-08-24 01:52:48,337 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:52:53,401 INFO api.config: live provider-catalog rebuild exceeded 4.0s budget - serving fallback, refreshing catalog out-of-band
+2026-08-24 01:52:53,402 WARNING api.config: [SLOW] models.session_visit total=4484.0ms stages: disk_age_check:6108.606983661652=15.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=125.0ms force_refresh_start=0.0ms force_refresh_done=4344.0ms
+2026-08-24 01:53:00,619 INFO [20260822_212523_da1915] agent.conversation_loop: API call #1151: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=346536 out=451 total=346987 latency=12.3s cache=336960/346536 (97%)
+2026-08-24 01:53:00,771 INFO [20260822_212523_da1915] agent.tool_executor: tool todo completed (0.00s, 1216 chars)
+2026-08-24 01:53:00,839 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:53:04,021 INFO [20260822_212523_da1915] agent.conversation_loop: API call #1152: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=347421 out=79 total=347500 latency=3.1s cache=341280/347421 (98%)
+2026-08-24 01:53:06,035 WARNING api.config: [SLOW] models.session_visit total=3860.0ms stages: disk_age_check:6121.867818593979=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=3860.0ms
+2026-08-24 01:53:06,608 INFO [20260822_212523_da1915] agent.tool_executor: tool terminal completed (2.40s, 183 chars)
+2026-08-24 01:53:06,684 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:53:09,576 WARNING api.config: [SLOW] models.session_visit total=3547.0ms stages: disk_age_check:6125.736430168152=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=3547.0ms
+2026-08-24 01:53:12,802 WARNING api.config: [SLOW] models.session_visit total=3218.0ms stages: disk_age_check:6129.277851104736=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=3218.0ms
+2026-08-24 01:53:21,282 INFO api.config: live provider-catalog rebuild exceeded 4.0s budget - serving fallback, refreshing catalog out-of-band
+2026-08-24 01:53:21,283 WARNING api.config: [SLOW] models.session_visit total=4313.0ms stages: disk_age_check:6136.666779994965=16.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=109.0ms force_refresh_start=0.0ms force_refresh_done=4188.0ms
+2026-08-24 01:53:27,926 INFO [20260822_212523_da1915] agent.conversation_loop: API call #1153: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=347574 out=1869 total=349443 latency=21.2s cache=341280/347574 (98%)
+2026-08-24 01:53:30,185 INFO [20260822_212523_da1915] agent.tool_executor: tool write_file completed (2.14s, 674 chars)
+2026-08-24 01:53:30,296 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:53:31,806 WARNING api.config: [SLOW] models.session_visit total=4078.0ms stages: disk_age_check:6147.421579360962=16.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=140.0ms force_refresh_start=0.0ms force_refresh_done=3922.0ms
+2026-08-24 01:53:39,932 INFO [20260822_212523_da1915] agent.conversation_loop: API call #1154: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=349636 out=487 total=350123 latency=9.6s cache=336960/349636 (96%)
+2026-08-24 01:53:40,056 INFO [20260822_212523_da1915] agent.tool_executor: tool todo completed (0.00s, 1218 chars)
+2026-08-24 01:53:40,150 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:53:41,955 INFO api.config: live provider-catalog rebuild exceeded 4.0s budget - serving fallback, refreshing catalog out-of-band
+2026-08-24 01:53:41,957 WARNING api.config: [SLOW] models.session_visit total=4016.0ms stages: disk_age_check:6157.638427019119=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=4016.0ms
+2026-08-24 01:53:50,573 INFO [20260822_212523_da1915] agent.conversation_loop: API call #1155: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=350521 out=904 total=351425 latency=10.4s cache=341280/350521 (97%)
+2026-08-24 01:53:52,705 INFO [20260822_212523_da1915] agent.tool_executor: tool write_file completed (2.02s, 694 chars)
+2026-08-24 01:53:52,781 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:54:11,772 WARNING api.config: [SLOW] models.session_visit total=3844.0ms stages: disk_age_check:6187.625994443893=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=3844.0ms
+2026-08-24 01:54:17,035 WARNING api.config: [SLOW] models.session_visit total=3532.0ms stages: disk_age_check:6193.203817605972=16.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=63.0ms force_refresh_start=0.0ms force_refresh_done=3453.0ms
+2026-08-24 01:54:28,323 WARNING api.config: [SLOW] models.session_visit total=4016.0ms stages: disk_age_check:6204.000435352325=16.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=125.0ms force_refresh_start=0.0ms force_refresh_done=3875.0ms
+2026-08-24 01:54:41,990 INFO api.config: live provider-catalog rebuild exceeded 4.0s budget - serving fallback, refreshing catalog out-of-band
+2026-08-24 01:54:41,992 WARNING api.config: [SLOW] models.session_visit total=4016.0ms stages: disk_age_check:6217.678025722504=16.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=4000.0ms
+2026-08-24 01:55:05,471 INFO api.config: live provider-catalog rebuild exceeded 4.0s budget - serving fallback, refreshing catalog out-of-band
+2026-08-24 01:55:05,472 WARNING api.config: [SLOW] models.session_visit total=4359.0ms stages: disk_age_check:6240.809201955795=15.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=110.0ms force_refresh_start=0.0ms force_refresh_done=4234.0ms
+2026-08-24 01:55:10,902 WARNING api.config: [SLOW] models.session_visit total=3766.0ms stages: disk_age_check:6246.822560548782=16.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=188.0ms force_refresh_start=0.0ms force_refresh_done=3562.0ms
+2026-08-24 01:55:12,666 INFO [20260822_212523_da1915] agent.conversation_loop: API call #1156: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=351617 out=458 total=352075 latency=79.9s cache=345600/351617 (98%)
+2026-08-24 01:55:13,201 INFO [20260822_212523_da1915] agent.tool_executor: tool todo completed (0.00s, 1220 chars)
+2026-08-24 01:55:13,281 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:55:27,604 INFO [20260822_212523_da1915] agent.conversation_loop: API call #1157: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=352502 out=1692 total=354194 latency=14.3s cache=345600/352502 (98%)
+2026-08-24 01:55:29,733 INFO [20260822_212523_da1915] agent.tool_executor: tool write_file completed (2.01s, 718 chars)
+2026-08-24 01:55:29,945 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:55:40,336 INFO [20260822_212523_da1915] agent.conversation_loop: API call #1158: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=354388 out=454 total=354842 latency=10.4s cache=345600/354388 (98%)
+2026-08-24 01:55:40,497 INFO [20260822_212523_da1915] agent.tool_executor: tool todo completed (0.00s, 1219 chars)
+2026-08-24 01:55:40,545 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:55:41,842 WARNING api.config: [SLOW] models.session_visit total=3922.0ms stages: disk_age_check:6277.630159378052=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=16.0ms force_refresh_start=0.0ms force_refresh_done=3906.0ms
+2026-08-24 01:56:02,345 INFO [20260822_212523_da1915] agent.conversation_loop: API call #1159: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=355272 out=3209 total=358481 latency=21.8s cache=349920/355272 (98%)
+2026-08-24 01:56:02,496 INFO [20260822_212523_da1915] agent.conversation_loop: Turn ended: reason=text_response(finish_reason=stop) model=nvidia/nemotron-3-ultra-550b-a55b api_calls=49/500 budget=49/500 tool_turns=549 last_msg_role=assistant response_len=8903 session=20260822_212523_da1915
+2026-08-24 01:56:02,597 INFO run_agent: OpenAI client created (agent_init, shared=True) thread=bg-review:63936 provider=nvidia base_url=https://integrate.api.nvidia.com/v1 model=nvidia/nemotron-3-ultra-550b-a55b
+2026-08-24 01:56:02,609 INFO [20260822_212523_da1915] agent.turn_context: conversation turn: session=20260822_212523_da1915 model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia platform=tui history=1188 msg='Review the conversation above and update two things:  **Memory**: who the user i...'
+2026-08-24 01:56:02,625 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:56:02,681 INFO tools.vision_tools: Analyzing image: E:\CentralDark\Pivete\images\clip_20260824_014135_26.png
+2026-08-24 01:56:02,681 INFO tools.vision_tools: User prompt: Describe everything visible in this image in thorough detail. Include any text, code, data, objects,
+2026-08-24 01:56:02,695 INFO tools.vision_tools: Image ready (2701.0 KB)
+2026-08-24 01:56:02,695 INFO tools.vision_tools: Converting image to base64...
+2026-08-24 01:56:02,709 INFO run_agent: OpenAI client created (chat_completion_stream_request, shared=False) thread=Thread-5412 (<lambda>):41876 provider=nvidia base_url=https://integrate.api.nvidia.com/v1 model=nvidia/nemotron-3-ultra-550b-a55b
+2026-08-24 01:56:02,753 INFO tools.vision_tools: Image converted to base64 (3601.4 KB)
+2026-08-24 01:56:02,753 INFO tools.vision_tools: Processing image with vision model...
+2026-08-24 01:56:03,233 INFO agent.auxiliary_client: Vision auto-detect: using main provider nous (stepfun/step-3.7-flash:free)
+2026-08-24 01:56:11,935 INFO api.config: live provider-catalog rebuild exceeded 4.0s budget - serving fallback, refreshing catalog out-of-band
+2026-08-24 01:56:11,936 WARNING api.config: [SLOW] models.session_visit total=4016.0ms stages: disk_age_check:6307.619199752808=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=4016.0ms
+2026-08-24 01:56:18,183 INFO [20260822_212523_da1915] agent.conversation_loop: API call #1: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=359741 out=1460 total=361201 latency=15.5s cache=341280/359741 (95%)
+2026-08-24 01:56:18,380 INFO [20260822_212523_da1915] agent.tool_executor: tool skill_view completed (0.20s, 61868 chars)
+2026-08-24 01:56:18,389 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:56:41,992 WARNING api.config: [SLOW] models.session_visit total=4016.0ms stages: disk_age_check:6337.675073385239=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=4016.0ms
+2026-08-24 01:56:49,588 INFO [20260822_212523_da1915] agent.conversation_loop: API call #2: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=380816 out=3571 total=384387 latency=31.2s cache=354240/380816 (93%)
+2026-08-24 01:56:49,594 WARNING [20260822_212523_da1915] agent.tool_executor: Tool memory returned error (0.00s): {"error": "operations must be a list of {action, content?, old_text?} objects.", "success": false}
+2026-08-24 01:56:49,602 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:57:08,868 INFO tools.vision_tools: Image analysis completed (6749 characters)
+2026-08-24 01:57:08,872 INFO tools.vision_tools: Analyzing image: E:\CentralDark\Pivete\images\clip_20260824_014142_27.png
+2026-08-24 01:57:08,872 INFO tools.vision_tools: User prompt: Describe everything visible in this image in thorough detail. Include any text, code, data, objects,
+2026-08-24 01:57:08,881 INFO tools.vision_tools: Image ready (2701.0 KB)
+2026-08-24 01:57:08,883 INFO tools.vision_tools: Converting image to base64...
+2026-08-24 01:57:08,894 INFO tools.vision_tools: Image converted to base64 (3601.4 KB)
+2026-08-24 01:57:08,894 INFO tools.vision_tools: Processing image with vision model...
+2026-08-24 01:57:08,920 INFO agent.auxiliary_client: Vision auto-detect: using main provider nous (stepfun/step-3.7-flash:free)
+2026-08-24 01:57:09,540 INFO [20260822_212523_da1915] agent.conversation_loop: API call #3: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=383420 out=986 total=384406 latency=19.9s cache=375840/383420 (98%)
+2026-08-24 01:57:09,556 WARNING [20260822_212523_da1915] agent.tool_executor: Tool memory returned error (0.01s): {"success": false, "error": "Operation 1 (replace): old_text is required. No operations were applied (batch is all-or-nothing).", "current_entries": ["User: CHEFE/SEGREDO/PIVETE (authority). Vocativo 
+2026-08-24 01:57:09,563 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:57:11,727 WARNING api.config: [SLOW] models.session_visit total=3781.0ms stages: disk_age_check:6367.641717910767=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=3781.0ms
+2026-08-24 01:57:23,484 INFO [20260822_212523_da1915] agent.conversation_loop: API call #4: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=385177 out=260 total=385437 latency=13.9s cache=349920/385177 (91%)
+2026-08-24 01:57:23,488 WARNING [20260822_212523_da1915] agent.tool_executor: Tool memory returned error (0.00s): {"success": false, "error": "After applying all 3 operations, memory would be at 2,861/2,200 chars -- over the limit. Remove or shorten more entries in the same batch (see current_entries below), then
+2026-08-24 01:57:23,496 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:57:29,902 INFO [20260822_212523_da1915] agent.conversation_loop: API call #5: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=386337 out=611 total=386948 latency=6.4s cache=380160/386337 (98%)
+2026-08-24 01:57:29,911 WARNING [20260822_212523_da1915] agent.tool_executor: Tool memory returned error (0.00s): {"success": false, "error": "After applying all 2 operations, memory would be at 2,861/2,200 chars -- over the limit. Remove or shorten more entries in the same batch (see current_entries below), then
+2026-08-24 01:57:29,918 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:57:39,657 INFO [20260822_212523_da1915] agent.conversation_loop: API call #6: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=387839 out=590 total=388429 latency=9.7s cache=375840/387839 (97%)
+2026-08-24 01:57:39,661 WARNING [20260822_212523_da1915] agent.tool_executor: Tool memory returned error (0.00s): {"success": false, "done": true, "error": "Memory consolidation failed 4 times this turn. Stop retrying memory calls - leave memory unchanged for now and continue with your reply to the user. The fact
+2026-08-24 01:57:39,669 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:57:41,793 WARNING api.config: [SLOW] models.session_visit total=3860.0ms stages: disk_age_check:6397.618967056274=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=3860.0ms
+2026-08-24 01:57:50,424 INFO tools.vision_tools: Image analysis completed (6085 characters)
+2026-08-24 01:57:50,447 INFO [20260822_212523_da1915] agent.turn_context: conversation turn: session=20260822_212523_da1915 model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia platform=tui history=1188 msg='[The user attached an image: This is a detailed description of the infographic t...'
+2026-08-24 01:57:50,595 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:57:51,265 INFO [20260822_212523_da1915] agent.conversation_loop: API call #7: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=388555 out=600 total=389155 latency=11.6s cache=380160/388555 (98%)
+2026-08-24 01:57:51,272 WARNING [20260822_212523_da1915] agent.tool_executor: Tool memory returned error (0.00s): {"success": false, "error": "Operation 2 (remove): no entry matched 'Current: Auto-destilador daemon robusto (signal handlers, health 8788, auto-restart, PID file, runtime state auto-save 60s, prova o
+2026-08-24 01:57:51,289 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:58:08,286 INFO [20260822_212523_da1915] agent.conversation_loop: API call #1160: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=362889 out=934 total=363823 latency=17.7s cache=341280/362889 (94%)
+2026-08-24 01:58:08,461 INFO [20260822_212523_da1915] agent.conversation_loop: Turn ended: reason=text_response(finish_reason=stop) model=nvidia/nemotron-3-ultra-550b-a55b api_calls=1/500 budget=1/500 tool_turns=549 last_msg_role=assistant response_len=1820 session=20260822_212523_da1915
+2026-08-24 01:58:10,727 INFO [20260822_212523_da1915] agent.conversation_loop: API call #8: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=390170 out=1564 total=391734 latency=19.4s cache=380160/390170 (97%)
+2026-08-24 01:58:10,920 INFO [20260822_212523_da1915] agent.tool_executor: tool skill_manage completed (0.19s, 554 chars)
+2026-08-24 01:58:10,928 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:58:11,977 WARNING api.config: live provider-catalog rebuild exceeded 4.0s budget - serving fallback, refreshing catalog out-of-band
+2026-08-24 01:58:11,979 WARNING api.config: [SLOW] models.session_visit total=4015.0ms stages: disk_age_check:6427.65069937706=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=4015.0ms
+2026-08-24 01:58:39,361 INFO [20260822_212523_da1915] agent.conversation_loop: API call #9: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=391677 out=1348 total=393025 latency=28.4s cache=384480/391677 (98%)
+2026-08-24 01:58:39,540 INFO [20260822_212523_da1915] agent.tool_executor: tool skill_manage completed (0.18s, 278 chars)
+2026-08-24 01:58:39,549 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:58:41,938 INFO api.config: live provider-catalog rebuild exceeded 4.0s budget - serving fallback, refreshing catalog out-of-band
+2026-08-24 01:58:41,939 WARNING api.config: [SLOW] models.session_visit total=4016.0ms stages: disk_age_check:6457.626594781876=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=4016.0ms
+2026-08-24 01:58:56,809 INFO [20260822_212523_da1915] agent.conversation_loop: API call #10: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=393084 out=457 total=393541 latency=17.2s cache=380160/393084 (97%)
+2026-08-24 01:58:56,813 INFO [20260822_212523_da1915] agent.conversation_loop: Turn ended: reason=text_response(finish_reason=stop) model=nvidia/nemotron-3-ultra-550b-a55b api_calls=10/16 budget=10/16 tool_turns=558 last_msg_role=assistant response_len=1475 session=20260822_212523_da1915
+2026-08-24 01:58:56,815 INFO [20260822_212523_da1915] run_agent: OpenAI client closed (agent_close, shared=True, tcp_force_closed=0) thread=bg-review:63936 provider=nvidia base_url=https://integrate.api.nvidia.com/v1 model=nvidia/nemotron-3-ultra-550b-a55b
+2026-08-24 01:58:56,816 INFO [20260822_212523_da1915] run_agent: OpenAI client closed (agent_close, shared=False, tcp_force_closed=0) thread=bg-review:63936 provider=nvidia base_url=https://integrate.api.nvidia.com/v1 model=nvidia/nemotron-3-ultra-550b-a55b
+2026-08-24 01:59:11,908 WARNING api.config: [SLOW] models.session_visit total=3985.0ms stages: disk_age_check:6487.627336978912=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=3985.0ms
+2026-08-24 01:59:14,054 INFO tools.vision_tools: Analyzing image: E:\CentralDark\Pivete\images\clip_20260824_015816_28.png
+2026-08-24 01:59:14,054 INFO tools.vision_tools: User prompt: Describe everything visible in this image in thorough detail. Include any text, code, data, objects,
+2026-08-24 01:59:14,062 INFO tools.vision_tools: Image ready (71.9 KB)
+2026-08-24 01:59:14,062 INFO tools.vision_tools: Converting image to base64...
+2026-08-24 01:59:14,063 INFO tools.vision_tools: Image converted to base64 (95.9 KB)
+2026-08-24 01:59:14,063 INFO tools.vision_tools: Processing image with vision model...
+2026-08-24 01:59:14,089 INFO agent.auxiliary_client: Vision auto-detect: using main provider nous (stepfun/step-3.7-flash:free)
+2026-08-24 01:59:44,267 INFO tools.vision_tools: Image analysis completed (3871 characters)
+2026-08-24 01:59:44,274 INFO [20260822_212523_da1915] agent.turn_context: conversation turn: session=20260822_212523_da1915 model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia platform=tui history=1190 msg='[The user attached an image: This is a screenshot of a **dark mode Google Chrome...'
+2026-08-24 01:59:44,424 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 01:59:55,879 INFO [20260822_212523_da1915] agent.conversation_loop: API call #1161: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=360588 out=286 total=360874 latency=11.4s cache=349920/360588 (97%)
+2026-08-24 01:59:56,042 INFO [20260822_212523_da1915] tools.vision_tools: Analyzing image: E:\CentralDark\Pivete\images\clip_20260824_015816_28.png
+2026-08-24 01:59:56,042 INFO [20260822_212523_da1915] tools.vision_tools: User prompt: Fully describe and explain everything about this image, then answer the following question:
+
+Analyze
+2026-08-24 01:59:56,051 INFO [20260822_212523_da1915] tools.vision_tools: Image ready (71.9 KB)
+2026-08-24 01:59:56,051 INFO [20260822_212523_da1915] tools.vision_tools: Converting image to base64...
+2026-08-24 01:59:56,052 INFO [20260822_212523_da1915] tools.vision_tools: Image converted to base64 (95.9 KB)
+2026-08-24 01:59:56,052 INFO [20260822_212523_da1915] tools.vision_tools: Processing image with vision model...
+2026-08-24 01:59:56,682 INFO [20260822_212523_da1915] agent.credential_pool: credential pool: marking OPENROUTER_API_KEY exhausted (status=402), rotating
+2026-08-24 01:59:56,682 INFO [20260822_212523_da1915] agent.credential_pool: credential pool: no available entries (all exhausted or empty)
+2026-08-24 01:59:56,682 WARNING [20260822_212523_da1915] agent.auxiliary_client: Auxiliary: marking openrouter unhealthy for 600s (payment / credit error). Subsequent auxiliary calls will skip it until 02:09:56.
+2026-08-24 01:59:56,682 INFO [20260822_212523_da1915] agent.auxiliary_client: Auxiliary vision (async): payment error on openrouter (Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 65536 tokens, but can only afford 1050. To increase, visit https://openrouter.ai/settings/credits and add more credits', 'code': 402, 'metadata': {'limit_source': 'openrouter_credits', 'remedy_hint': 'Add credits at https://openrouter.ai/settings/credits, or lower max_tokens / prompt size to fit your remaining balance.', 'provider_name': None, 'previous_errors': [{'code': 402, 'message': 'This request requires more credits, or fewer max_tokens. You requested up to 65536 tokens, but can only afford 1050. To increase, visit https://openrouter.ai/settings/credits and add more credits'}]}}, 'user_id': 'user_3FSNsaUr0nVWuqTymYXzaordIgC'}), trying fallback
+2026-08-24 01:59:56,702 INFO [20260822_212523_da1915] agent.auxiliary_client: Auxiliary vision: payment error on openrouter - falling back to main agent model main-agent(nvidia) (nvidia/nemotron-3-ultra-550b-a55b)
+2026-08-24 01:59:58,183 ERROR [20260822_212523_da1915] tools.vision_tools: Error analyzing image: Error code: 400 - {'error': {'message': 'ValueError: Received multimodal data but multimodal processing is not enabled. Use --enable-multimodal flag to enable multimodal processing.', 'type': 'Bad Request', 'code': 400}}
+Traceback (most recent call last):
+  File "C:\Users\danda\AppData\Local\hermes\hermes-agent\tools\vision_tools.py", line 1278, in vision_analyze_tool
+    response = await async_call_llm(**call_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\danda\AppData\Local\hermes\hermes-agent\agent\auxiliary_client.py", line 2882, in wrapped
+    return await callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\danda\AppData\Local\hermes\hermes-agent\agent\auxiliary_client.py", line 9367, in async_call_llm
+    return await _async_call_llm_impl(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\danda\AppData\Local\hermes\hermes-agent\agent\auxiliary_client.py", line 9884, in _async_call_llm_impl
+    fb_resp = await _call_fallback_candidate_async(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\danda\AppData\Local\hermes\hermes-agent\agent\auxiliary_client.py", line 4808, in _call_fallback_candidate_async
+    await _relay_async_completion(
+  File "C:\Users\danda\AppData\Local\hermes\hermes-agent\agent\auxiliary_client.py", line 2969, in _relay_async_completion
+    return await relay_llm.execute_current_async(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\danda\AppData\Local\hermes\hermes-agent\agent\relay_llm.py", line 239, in execute_current_async
+    return await execute_async(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\danda\AppData\Local\hermes\hermes-agent\agent\relay_llm.py", line 125, in execute_async
+    return await callback(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\openai\resources\chat\completions\completions.py", line 2700, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\openai\_base_client.py", line 1884, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\danda\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\openai\_base_client.py", line 1669, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.BadRequestError: Error code: 400 - {'error': {'message': 'ValueError: Received multimodal data but multimodal processing is not enabled. Use --enable-multimodal flag to enable multimodal processing.', 'type': 'Bad Request', 'code': 400}}
+2026-08-24 01:59:58,185 WARNING [20260822_212523_da1915] agent.tool_executor: Tool vision_analyze returned error (2.15s): {
+  "success": false,
+  "error": "Error analyzing image: Error code: 400 - {'error': {'message': 'ValueError: Received multimodal data but multimodal processing is not enabled. Use --enable-multimodal
+2026-08-24 01:59:58,270 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 02:00:34,815 INFO [20260822_212523_da1915] agent.conversation_loop: API call #1162: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=360878 out=863 total=361741 latency=36.5s cache=349920/360878 (97%)
+2026-08-24 02:00:35,437 INFO [20260822_212523_da1915] agent.conversation_loop: Turn ended: reason=text_response(finish_reason=stop) model=nvidia/nemotron-3-ultra-550b-a55b api_calls=2/500 budget=2/500 tool_turns=550 last_msg_role=assistant response_len=2336 session=20260822_212523_da1915
+2026-08-24 02:01:23,825 INFO [20260822_212523_da1915] agent.turn_context: conversation turn: session=20260822_212523_da1915 model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia platform=tui history=1194 msg='VC TM QUE FALA OQ FAZ  CADA COISA QUE TU TA FAZENDO SE NAO EU N SEI DA A RESPOST...'
+2026-08-24 02:01:23,977 WARNING [20260822_212523_da1915] run_agent: Pre-call sanitizer: healed 12 empty non-final message(s) by substituting placeholder content - an empty-content turn was in the transcript and would 400 the request ('messages must have non-empty content' / INVALID_REQUEST_BODY). Self-recovering the poisoned transcript in memory; no restart needed.
+2026-08-24 02:01:58,756 INFO [20260822_212523_da1915] agent.conversation_loop: API call #1163: model=nvidia/nemotron-3-ultra-550b-a55b provider=nvidia in=360766 out=1011 total=361777 latency=34.8s cache=354240/360766 (98%)
+2026-08-24 02:01:58,920 INFO [20260822_212523_da1915] agent.conversation_loop: Turn ended: reason=text_response(finish_reason=stop) model=nvidia/nemotron-3-ultra-550b-a55b api_calls=1/500 budget=1/500 tool_turns=550 last_msg_role=assistant response_len=2694 session=20260822_212523_da1915
+2026-08-24 02:02:38,142 INFO api.config: live provider-catalog rebuild exceeded 4.0s budget - serving fallback, refreshing catalog out-of-band
+2026-08-24 02:02:38,144 WARNING api.config: [SLOW] models.session_visit total=4031.0ms stages: disk_age_check:6693.804371595383=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=0.0ms force_refresh_start=0.0ms force_refresh_done=4031.0ms
+2026-08-24 02:02:41,913 WARNING api.config: [SLOW] models.session_visit total=3157.0ms stages: disk_age_check:6698.449494123459=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=141.0ms force_refresh_start=0.0ms force_refresh_done=3016.0ms
+2026-08-24 02:02:44,945 WARNING api.config: [SLOW] models.session_visit total=3031.0ms stages: disk_age_check:6701.61417222023=0.0ms cache_age_stale_or_missing=0.0ms stale_cached_loaded:True=15.0ms force_refresh_start=0.0ms force_refresh_done=3016.0ms

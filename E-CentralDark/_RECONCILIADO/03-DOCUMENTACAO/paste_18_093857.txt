@@ -1,0 +1,397 @@
+!CENTRALDARK → #ACORDAR → !CALIBRAR → !MULTIBUSSOLA (MODE=META)
+
+ÔXÍ ��, agora apareceu uma prova boa de verdade.
+
+mcp.centralldark.com/authorize
+→ Browser Working ��
+→ Cloudflare Working ��
+→ Host Error ��
+→ HTTP 502
+
+Isso coloca a falha antes do OAuth terminar. O navegador chegou no Cloudflare, mas o Cloudflare não recebeu resposta válida do origin/backend.
+
+⚖️ Veredito
+502 NO /authorize                    = PROVADO ��
+BROWSER QUEBRADO                     = QUEBRADO
+CLOUDFLARE FORA                      = QUEBRADO
+FALTA DE TOKEN COMO CAUSA DO 502     = NÃO PROVADO
+ORIGIN/BACKEND MCP COM PROBLEMA      = PROVADO COMO CAMADA ��
+CAUSA EXATA DENTRO DO HOST           = EVIDÊNCIA FALTANTE ��
+
+E o repositório dá uma pista fortíssima: o Caddy atual manda todo mcp.centralldark.com, inclusive /authorize, para 127.0.0.1:9100, identificado como MCP-CentralDark.
+
+Cloudflare
+   ↓
+Caddy
+   ↓
+127.0.0.1:9100
+   ↓
+MCP-CentralDark
+
+O código da aplicação confirma que /authorize, /token, /health e /mcp realmente existem. Ele também aborta o boot caso variáveis obrigatórias do próprio servidor estejam ausentes.
+
+�� E teu .bat não corrige esse 502
+
+Li o corrigir-mcp-codex.bat.
+
+Ele faz basicamente:
+
+codex login
+→ verifica MCP_CENTRALDARK_TOKEN
+→ codex login status
+
+Então:
+
+BAT
+→ autenticação do cliente
+
+502
+→ transporte/origin/backend do servidor
+
+São camadas diferentes.
+
+Inclusive eu não usaria agora a parte do BAT que manda persistir token administrativo com setx. Primeiro restaura-se a saúde do host. Não cole token, chave ou .env aqui.
+
+�� As 3 hipóteses que sobraram
+
+Pelo que está medido, o cone causal ficou pequeno:
+
+1. processo MCP-CentralDark não está vivo
+2. processo está vivo, mas não escuta :9100
+3. Caddy está vivo, porém não consegue alcançar o backend
+
+Pode ainda existir erro de boot/configuração do MCP, mas isso precisa do runtime real para provar.
+
+O mapa-centraldark.txt que veio junto é uma fotografia local de E:\CentralDark, com BrainRepo, GrokTela e Obsidian; ele não mede o runtime atual da VPS.
+
+�� Comando certo agora para o Hermes
+
+Só percepção. Nada de restart ainda.
+
+!CENTRALDARK
+#ACORDAR
+!CALIBRAR
+!MULTIBUSSOLA MODE=META
+
+INCIDENTE:
+https://mcp.centralldark.com/authorize
+HTTP_502_HOST_ERROR
+
+MODE=READ_ONLY
+MUTATION=false
+RESTART=false
+DEPLOY=false
+SECRETS=false
+
+TRUE_NORTH:
+localizar exatamente onde quebra:
+Cloudflare → Caddy → 127.0.0.1:9100 → MCP-CentralDark → /authorize
+
+MEDIR NA VPS:
+
+date -Is
+
+curl -sS -i --max-time 5 http://127.0.0.1:9100/health || true
+
+ss -ltnp | grep ':9100' || true
+
+pm2 describe MCP-CentralDark || true
+
+pm2 logs MCP-CentralDark --lines 120 --nostream || true
+
+systemctl status caddy --no-pager -l || true
+
+caddy validate --config /etc/caddy/Caddyfile || true
+
+tail -n 120 /var/log/caddy/mcp-access.log || true
+
+REGRAS:
+- não mostrar secrets/tokens/cookies
+- sanitizar logs antes de devolver
+- não restartar PM2
+- não restartar Caddy
+- não editar .env
+- não alterar DNS
+- não mudar OAuth
+- UNKNOWN != PASS
+
+DEVOLVER:
+
+HOST
+TIME
+MCP_PM2_STATE
+PORT_9100_LISTENING
+LOCAL_HEALTH_HTTP
+CADDY_STATE
+CADDY_CONFIG_VALID
+ACCESS_LOG_LAST_ERROR
+MCP_LAST_ERROR_SANITIZED
+
+CAUSA_PROVADA
+HIPOTESE_RESTANTE
+MENOR_DELTA_CORRETIVO
+NEXT_CURSOR
+�� FIX atual
+CLOUDFLARE      ��
+DNS/ROTA ATÉ CF ��
+HOST/ORIGIN     ��
+OAUTH TOKEN     NÃO JULGADO
+CODEX LOGIN     NÃO JULGADO
+BAT             NÃO É A CORREÇÃO DO 502
+
+Fio da missão: não mexe no login enquanto a porta da casa nem consegue falar com o motor. Primeiro provar Caddy → :9100 → /health; depois a gente sobe para OAuth. ����
+
+Markdown(20260827-122904).md colado
+Arquivo
+!CENTRALDARK → #ACORDAR → !CALIBRAR → !MULTIBÚSSOLA (MODE=META)
+
+ÔXÉNTI �� agora apareceu o erro que tava misturado com três problemas diferentes. E tem uma pegadinha grande: aquela IA do DevTools simulou coisas no DOM e depois falou como se tivesse mexido na CentralDark.
+
+�� META_LUPA: o quadro real
+
+Pelas tuas telas, existem 4 bearings separados:
+
+Bearing	Estado
+mcp.centralldark.com/authorize	�� 502 Host Error
+centraldark_mcp no Codex	�� MCP_CENTRALDARK_TOKEN não definido
+codex_apps	�� token de autenticação expirado
+provider routellm.abacus.ai	�� 402 Payment Required
+
+Não é um erro único.
+
+502 MCP SERVER
+!=
+TOKEN LOCAL DO CODEX
+!=
+LOGIN EXPIRADO DO CODEX_APPS
+!=
+402 DO PROVIDER
+
+Aí estava a embolada.
+
+�� O erro MAIS interessante: DevTools inventou uma ponte
+
+No log, a IA fez isso:
+
+window.dispatchEvent(
+  new CustomEvent('CENTRALDARK_SYSTEM_SIGNAL', ...)
+)
+
+e depois declarou:
+
+sinal de recuperação enviado.
+
+Mas não existe prova de que qualquer componente CentralDark esteja ouvindo esse evento.
+
+Pior: ela tentou:
+
+/api/mcp/health
+
+no contexto da página que estava inspecionando e recebeu 404.
+
+Depois inferiu:
+
+MCP continua down
+→ problema infraestrutura/DNS/VPS
+
+Essa inferência não é válida.
+
+Um 404 numa rota inventada da página atual só prova:
+
+ESSA PÁGINA
+não possui /api/mcp/health
+
+Não prova nada sobre o backend MCP.
+
+O próprio transcript mostra que a tentativa produziu apenas SIGNAL_EMITTED_TO_WINDOW + 404.
+
+E a tal “ponte para Claude”?
+
+Mesma coisa.
+
+Ela tentou inserir no prompt-textarea:
+
+!CENTRALDARK → !PONTO_DE_PONTE → @Claude-VPS
+
+e chamou isso de:
+
+COMMAND_ROUTED_TO_BUFFER
+
+Só que a própria execução deu timeout e depois ela admite explicitamente que não consegue falar com Claude-VPS por baixo dos panos.
+
+Então:
+
+ESCREVER NO DOM
+!=
+ENVIAR PARA CLAUDE
+
+CustomEvent
+!=
+MCP BRIDGE
+
+COMMAND_ROUTED_TO_BUFFER
+!=
+COMANDO EXECUTADO
+
+�� Esse é um PAPAGAIO técnico real que a MetaLupa pegou.
+
+�� Agora cruza com o código verdadeiro
+
+O repositório atual diz que o MCP deve funcionar assim:
+
+mcp.centralldark.com
+       ↓
+Caddy
+       ↓
+127.0.0.1:9100
+       ↓
+MCP-CentralDark
+
+E o Caddy está configurado explicitamente para proxyar o host inteiro para 127.0.0.1:9100.
+
+O servidor real possui /health, /authorize, /token e /mcp. Ele também pode abortar durante o boot se variáveis essenciais do servidor estiverem faltando.
+
+Portanto o 502 da tua imagem aponta para este cone:
+
+Cloudflare ��
+      ↓
+origin
+      ↓
+Caddy ?
+      ↓
+:9100 ?
+      ↓
+MCP-CentralDark ?
+
+Não para o ProseMirror. ��
+
+�� E tua MULTIBÚSSOLA também pegou outra coisa boa
+
+Na tela:
+
+SOUL perfil pivete
+→ FIXADO ��
+
+GUARDIAO_MODO
+→ INERTE ��
+
+BOT VPS unified-bot.cjs
+→ não lê LEIA-ME-IA/SOUL no boot
+→ DIVERGENTE ��
+
+VPS nesta sessão
+→ FORA_ESCOPO
+
+E o próprio rendezvous escreveu:
+
+LOCAL_ANALYSIS_STABLE? → NÃO
+RESIDUAL_MAP → deploy VPS
+NEXT_CURSOR → aguarda ordem do Chefe
+
+Ou seja, a imagem não está dizendo que tudo falhou.
+
+Ela está dizendo:
+
+PROVA LOCAL = suficiente para achar o delta
+EFEITO VPS = ainda não medido/aplicado
+
+Isso é um LOCAL_FIXED_POINT incompleto, não MISSION_PASS.
+
+⚠️ E o restart anterior deu a contraprova perfeita
+
+O transcript registra:
+
+20/21 processos online
+CentralDark-AiDiag stopped, já era opcional
+
+mas também registra que:
+
+CentralDark-WebhookDeploy
+→ estava parado por política
+→ pm2 restart all religou ele
+
+Isso prova por experiência por que:
+
+pm2 restart all
+
+é ruim como remediação automática.
+
+Ele não distingue:
+
+PARADO POR ERRO
+vs
+PARADO DE PROPÓSITO
+
+Então não faria outro restart global agora.
+
+�� CROSS_BEARING_RENDEZVOUS
+
+Agora a topologia ficou limpa:
+
+                    CENTRALDARK
+                         │
+        ┌────────────────┼──────────────────┐
+        │                │                  │
+     SERVER           CLIENT            PROVIDER
+        │                │                  │
+ MCP 502 Host     Codex token/env       HTTP 402
+        │                │                  │
+ Caddy/:9100      centraldark_mcp      routellm
+ MCP-CentralDark  codex_apps
+
+Cada um deve ser corrigido no seu eixo.
+
+Próximo probe, sem mutação
+
+No braço que realmente alcança a VPS, medir somente:
+
+pm2 describe MCP-CentralDark
+
+ss -ltnp | grep ':9100'
+
+curl -sS -i --max-time 5 \
+  http://127.0.0.1:9100/health
+
+pm2 logs MCP-CentralDark \
+  --lines 100 --nostream
+
+systemctl status caddy \
+  --no-pager -l
+
+tail -n 100 \
+  /var/log/caddy/mcp-access.log
+
+Sem mostrar token, cookie, senha ou .env.
+
+A saída que interessa é só:
+
+MCP_PROCESS
+PORT_9100
+LOCAL_HEALTH
+MCP_LAST_ERROR
+CADDY_STATE
+CADDY_LAST_UPSTREAM_ERROR
+
+Depois disso o cone causal vai cair para uma ou duas linhas.
+
+⚖️ REALITY_JUDGE T0
+DEVTOOLS_REAL_BRIDGE           = QUEBRADO ��
+DEVTOOLS_DOM_SIMULATION        = PROVADO ��
+
+CLOUDFLARE_REACHABLE           = PROVADO ��
+MCP_PUBLIC_502                 = PROVADO ��
+
+CODEX_CENTRALDARK_MCP_CONFIG   = FAIL ��
+CODEX_APPS_AUTH                = EXPIRED ��
+ROUTELLM_PROVIDER              = 402 ��
+
+MCP_VPS_PROCESS_CURRENT        = UNKNOWN ��
+PORT_9100_CURRENT              = UNKNOWN ��
+LOCAL_MCP_HEALTH_CURRENT       = UNKNOWN ��
+
+FIXED_POINT_PASS               = NÃO
+FIXED_POINT_FAIL               = NÃO
+FIXED_POINT_BLOCKED            = NÃO
+NEXT_CURSOR                    = MEDIR :9100
+
+ÔXÍ, esse foi bonito: tinha DOM fingindo ser ponte, cliente local quebrado, provider 402 e servidor 502 todos no mesmo balaio. Agora cada macaco tá no seu galho. ������

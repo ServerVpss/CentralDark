@@ -1,0 +1,447 @@
+Oxe, agora eu lembrei da espinha certa KKK 😹. Não era só MCP + Desktop. Tem um conjunto principal que já estava desenhado pra encaixar no runtime.
+
+A arquitetura consolidada põe o fluxo assim: WebUI/Telegram → CentralDark BFF → Hermes Runs/Sessions Adapter → centraldark-orchestrator → Hermes Kanban → builders/reviewers → Execution Broker/worktrees → Preview/GitHub, com Gateway e Supabase ligados pelo BFF. E tem uma decisão importante: Hermes Kanban é o dispatcher único; não é pra criar outra fila/orquestrador concorrente.
+
+Também achei as peças concretas que tu tava lembrando: apps/bot-telegram, apps/modulos/HERMES-CORE, apps/modulos/arsenal-openai-adapter, apps/modulos/memoria-api, apps/modulos/oauth-broker, status/graph e plugin do Obsidian. E o bot antigo tem regra explícita: reutilizar o existente, não criar bot concorrente com o mesmo token.
+
+Manda esse delta pro pivete:
+
+!ACORDAR
+!CALIBRAR
+!MULTIBUSSOLA
+!METALUPA
+
+MISSÃO: CENTRALDARK_RUNTIME_WIRING
+
+Continue do FIXED_POINT atual.
+NÃO reinicie a reconciliação.
+NÃO recrie sistemas que já existem.
+
+OBJETIVO:
+Aplicar/reconciliar no runtime atual as peças PRINCIPAIS já existentes
+da CentralDark e deixar a arquitetura integrada e executável.
+
+REGRA MÃE:
+
+REUSE_BEFORE_CREATE
+ONE_SYSTEM_ONLY
+LIVE_STATE > HISTORY
+UNKNOWN != PASS
+
+==================================================
+1. MEDIR RUNTIME REAL PRIMEIRO
+==================================================
+
+Revalide:
+
+CURRENT_HERMES_RUNTIME=
+CURRENT_ENTRYPOINT=
+CURRENT_PROFILE=
+CURRENT_SOUL=
+CURRENT_BACKEND=
+CURRENT_DESKTOP=
+CURRENT_MCP=
+
+Use o runtime vivo atual como baseline.
+
+Não substituir runtime funcional por cópia histórica.
+
+==================================================
+2. ESPINHA CANÔNICA A INTEGRAR
+==================================================
+
+Objetivo lógico:
+
+SOL / interfaces
+        ↓
+CentralDark BFF
+        ↓
+Policy / Approval / Budget
+        ↓
+Hermes Runs/Sessions Adapter
+        ↓
+centraldark-orchestrator
+        ↓
+Hermes Kanban
+        ↓
+builders / reviewers isolados
+        ↓
+Execution Broker + Worktrees
+        ↓
+Live Preview / GitHub Gate
+
+Hermes Kanban = ÚNICO dispatcher.
+
+NÃO criar:
+- segunda fila;
+- segundo scheduler concorrente;
+- segundo dispatcher;
+- state machine paralela desnecessária.
+
+==================================================
+3. PEÇAS EXISTENTES — REUTILIZAR
+==================================================
+
+Localize, valide e conecte conforme estado vivo:
+
+apps/bot-telegram/
+apps/modulos/HERMES-CORE/
+apps/modulos/arsenal-openai-adapter/
+apps/modulos/memoria-api/
+apps/modulos/oauth-broker/
+apps/modulos/status/
+apps/modulos/graph-panel/
+apps/modulos/obsidian-plugin-grafo-vivo/
+apps/modulos/mcp/
+
+Também localizar:
+
+CentralDark BFF
+Hermes Runs/Sessions Adapter
+centraldark-orchestrator
+Execution Broker
+Live Preview
+GitHub Gate
+AI Gateway
+Supabase integration
+hermes-webui
+
+Se já existe:
+REUSE / PATCH / WIRE.
+
+Se não existe de verdade:
+MISSING_COMPONENT
+→ provar gap
+→ implementar somente o delta mínimo necessário.
+
+==================================================
+4. BOT CENTRALDARK
+==================================================
+
+Existe bot CentralDark já consolidado.
+
+REUSE_EXISTING_BOT=TRUE
+CREATE_COMPETING_BOT=FALSE
+
+Não criar outro bot com mesmo propósito/token.
+
+O bot / Telegram / Mini App é interface.
+
+Ele NÃO deve acessar diretamente:
+
+Hermes DB
+kanban.db
+runner
+Docker socket
+secrets
+
+Fluxo correto:
+
+BOT / MINI APP
+→ BFF
+→ POLICY
+→ ADAPTER
+→ HERMES
+
+Preservar callbacks e integração existente quando válidos.
+
+==================================================
+5. ADAPTADORES
+==================================================
+
+Validar:
+
+apps/modulos/arsenal-openai-adapter/
+
+e qualquer ProviderAdapter atual.
+
+Provider/model é substituível.
+
+ADAPTER != ORCHESTRATOR
+
+Normalizar via adapter:
+
+AUTH
+CAPABILITIES
+TIMEOUT
+STREAMING
+ERROR
+RETRY
+QUOTA
+COST
+
+Não acoplar a CentralDark diretamente a um único modelo/provider.
+
+Também validar o:
+
+Hermes Runs/Sessions Adapter
+
+como ponte oficial BFF ↔ Hermes.
+
+==================================================
+6. HERMES CORE / KANBAN
+==================================================
+
+Hermes continua sendo executor/orquestrador operacional.
+
+Não escrever diretamente em:
+
+kanban.db
+state.db
+
+Usar APIs/CLI/contratos oficiais.
+
+Validar capacidades:
+
+/v1/capabilities
+/v1/runs
+/v1/runs/{id}/approval
+/v1/runs/{id}/stop
+/api/sessions/*
+/v1/skills
+/v1/toolsets
+hermes kanban ... --json
+
+Config alvo somente SE compatível com estado vivo:
+
+auto_decompose=false
+dispatch_in_gateway=true
+max_in_progress=2
+max_in_progress_per_profile=1
+orchestrator_profile=centraldark-orchestrator
+default_assignee=centraldark-builder
+
+Não aplicar config histórica cegamente.
+Compare com runtime atual antes.
+
+==================================================
+7. SOL DESKTOP
+==================================================
+
+SOL Desktop será NOVA INTERFACE, não novo cérebro concorrente.
+
+Fluxo desejado:
+
+SOL DESKTOP
+→ BFF / APIs oficiais
+→ Hermes runtime
+
+Não:
+
+SOL Desktop → banco interno direto
+SOL Desktop → Docker direto
+SOL Desktop → secrets
+SOL Desktop → kanban.db direto
+
+Se POC já compila:
+
+BUILD
+→ RUN
+→ conectar ao runtime atual
+→ validar sessão/status/comando
+→ provar janela funcional.
+
+SOL_SOUL:
+usar somente se houver fonte canônica comprovada.
+
+Se ainda não estiver canônica:
+não inventar versão final.
+
+==================================================
+8. MCP
+==================================================
+
+Descobrir capability real.
+
+Conectar ao Hermes somente depois de:
+
+MCP_RUNNING
+MCP_CAPABILITIES_MEASURED
+MCP_AUTH_VALIDATED
+MCP_SCOPE_VALIDATED
+
+Começar por leitura.
+
+Não liberar mutação global automaticamente.
+
+==================================================
+9. MEMÓRIA / OBSIDIAN
+==================================================
+
+NUCLEO =
+E:\CentralDark\Pivete\NUCLEO
+
+Hermes organiza/cristaliza.
+
+Obsidian = visão navegável do segundo cérebro.
+
+Integrar memoria-api / NUCLEO / Obsidian sem criar cérebro paralelo.
+
+NO_DUPLICATE_BRAIN.
+
+==================================================
+10. LEGADO
+==================================================
+
+elite-gateway / Zendriver / browser automation ChatGPT:
+
+LEGACY_FROZEN=TRUE
+NO_NEW_USE=TRUE
+
+Não religar para facilitar integração.
+
+Preservar arquivos por enquanto.
+
+==================================================
+11. TESTE DE PONTA A PONTA
+==================================================
+
+Depois de integrar, provar UMA missão real local:
+
+INTERFACE
+→ BFF
+→ POLICY
+→ RUNS/SESSIONS ADAPTER
+→ ORCHESTRATOR
+→ KANBAN
+→ WORKER
+→ RESULT
+→ STATUS/LOG
+→ MEMÓRIA quando aplicável
+
+Teste também:
+
+BOT_EXISTING_ROUTE
+SOL_DESKTOP_ROUTE
+MCP_ROUTE
+
+somente nos componentes realmente disponíveis.
+
+Não simular PASS.
+
+==================================================
+12. SEGURANÇA / GATES
+==================================================
+
+NO_RANDOM_INSTALL
+NO_PERMANENT_DELETE
+NO_FORCE_PUSH
+NO_SECRET_EXPOSURE
+NO_UNKNOWN_EXECUTION
+NO_DIRECT_DB_MUTATION
+NO_DUPLICATE_DISPATCHER
+ONE_WRITER_PER_SCOPE
+
+GitHub:
+branch/worktree limpos.
+main local não é bancada de mutação.
+
+Produção/deploy/remoto:
+somente com autorização explícita.
+
+==================================================
+13. AUTONOMIA
+==================================================
+
+Não pare para perguntar "continuo?" entre etapas.
+
+RECOVER
+→ MEASURE
+→ WIRE
+→ TEST
+→ COUNTERPROOF
+→ REMEDIATE
+→ RETEST
+→ CRYSTALLIZE
+→ FIXED_POINT
+
+Se componente estiver faltando:
+não paralise tudo.
+
+registre BLOCKER
+→ continue outras frentes independentes.
+
+Só interrompa CHEFE para:
+
+senha/MFA
+instalação realmente necessária
+secret novo
+deploy
+produção
+mutação irreversível
+risco material não resolvível
+
+==================================================
+14. FIXED_POINT
+==================================================
+
+Só fechar quando:
+
+RUNTIME_BASELINE_VALIDATED=TRUE
+BFF_STATE_KNOWN=TRUE
+RUNS_ADAPTER_STATE_KNOWN=TRUE
+ORCHESTRATOR_STATE_KNOWN=TRUE
+KANBAN_STATE_KNOWN=TRUE
+BOT_STATE_KNOWN=TRUE
+ARSENAL_ADAPTER_STATE_KNOWN=TRUE
+MCP_STATE_KNOWN=TRUE
+SOL_DESKTOP_STATE_KNOWN=TRUE
+MEMORY_STATE_KNOWN=TRUE
+
+e:
+
+NO_DUPLICATE_ORCHESTRATOR=TRUE
+NO_DUPLICATE_BOT=TRUE
+NO_LEGACY_REACTIVATION=TRUE
+COUNTERPROOF_SURVIVED=TRUE
+NO_DETECTED_REGRESSION=TRUE
+
+==================================================
+15. RELATÓRIO
+==================================================
+
+CURRENT_RUNTIME=
+
+BFF=
+RUNS_SESSIONS_ADAPTER=
+CENTRALDARK_ORCHESTRATOR=
+HERMES_KANBAN=
+EXECUTION_BROKER=
+
+BOT_CENTRALDARK=
+HERMES_CORE=
+ARSENAL_ADAPTER=
+MEMORIA_API=
+OAUTH_BROKER=
+STATUS_PANEL=
+GRAPH_PANEL=
+OBSIDIAN_PLUGIN=
+
+MCP=
+SOL_DESKTOP=
+
+LEGACY_GATEWAY=
+
+END_TO_END_TEST=
+REGRESSION=
+BLOCKERS=
+FIXED_POINT=
+
+FEITO=
+EVIDÊNCIA=
+PENDÊNCIA=
+PRÓXIMO_PASSO=
+FIO_DA_MISSÃO=
+
+APLIQUE AS PEÇAS EXISTENTES NO RUNTIME.
+NÃO REESCREVA A CASA.
+CONECTE O QUE JÁ TEM.
+REALIDADE É O JUIZ.
+
+Essa é a missão que eu colocaria agora. O ponto principal é: não mandar ele construir “CentralDark 3” KKKK. Ele vai descobrir quais dessas peças já estão implementadas, quais estão só documentadas e quais precisam de um adaptador mínimo.
+
+E tem uma correção importante do plano antigo: a arquitetura v1 falava em construir fila/state machine própria, mas a v2 substituiu isso justamente porque o Hermes Kanban já oferece boards, dispatcher, worktrees, retries, verifier, synthesizer e handoffs. Então o pivete deve ligar as peças ao Kanban, não duplicá-lo.
+
+Também existe evidência do runtime Desktop real inicializando Hermes em C:\Users\danda\AppData\Local\hermes\hermes-agent; então ele tem que revalidar isso antes de patchar qualquer runtime.
+
+Oxe, agora sim tu puxou a gaveta que tava faltando: bot + BFF + adapter + Kanban + broker + memória + Desktop, tudo no mesmo fio. 😹🔥

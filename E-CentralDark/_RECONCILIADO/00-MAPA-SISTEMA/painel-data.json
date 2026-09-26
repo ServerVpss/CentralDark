@@ -1,0 +1,1406 @@
+{
+  "updatedAt": "2026-06-11T13:43:27.637Z",
+  "project": {
+    "name": "CentralDark / MultiZap",
+    "subtitle": "Mega painel vivo do projeto",
+    "phase": "Estado vivo multi-IA + checkpoint contínuo",
+    "summary": "CentralDark opera com ChatGPT, Lovable, Grok, Codex, Copilot, GitHub, VPS e Mega Painel no mesmo fluxo. Cada tarefa relevante deve atualizar estado, docs, pendências, relatórios e painel para não perder evolução.",
+    "overallProgress": 86,
+    "liveFallback": {
+      "mcpStatus": "online",
+      "mcpToolCount": 83,
+      "mcpVersion": "0.4.0",
+      "note": "Fallback para Tools públicas não ficar zerado se o navegador bloquear chamada ao vivo."
+    },
+    "mcpStatus": "online",
+    "mcpMode": "obra",
+    "mcpToolCount": 83,
+    "mcpVersion": "0.4.0"
+  },
+  "maturity": [
+    {
+      "name": "🧠 Memória e consciência",
+      "value": 94,
+      "status": "forte",
+      "detail": "Auto-aprendizado + gatilhos de pendências + cientista de sistemas inquebráveis. Memória sempre lida em reconexão."
+    },
+    {
+      "name": "🔌 MCP / conector",
+      "value": 85,
+      "status": "ativo",
+      "detail": "MCP público online, watchdog + alertas Telegram + página /status. 83 tools no catálogo."
+    },
+    {
+      "name": "🎨 Frontend bot/site",
+      "value": 75,
+      "status": "andando",
+      "detail": "Site e bot seguem o modelo estático; Lovable pode melhorar telas."
+    },
+    {
+      "name": "🧑‍💻 Codex integrado",
+      "value": 82,
+      "status": "integrado",
+      "detail": "AGENTS/CODEX/prompt/PR template + codex-validate + pr-auto-review automático em todo PR."
+    },
+    {
+      "name": "🖥️ VPS / PM2",
+      "value": 70,
+      "status": "rodando",
+      "detail": "Produção ativa, mas working tree sujo (#109) e webhook-bot ausente do PM2. Auditoria read-only pronta pra rodar."
+    },
+    {
+      "name": "🧪 Testes e checker",
+      "value": 58,
+      "status": "parcial",
+      "detail": "9 validadores offline cobrem Lotes 2–10 do bot-server. bot-server-validate.yml roda em todo PR."
+    },
+    {
+      "name": "💼 CRM final",
+      "value": 30,
+      "status": "pendente",
+      "detail": "CRM fica para depois da fase bot/MCP, sem atropelar produção."
+    },
+    {
+      "name": "📦 Instalador",
+      "value": 56,
+      "status": "meio caminho",
+      "detail": "Instalador já existe, mas ainda precisa ficar profissional de ponta a ponta."
+    },
+    {
+      "name": "🤖 Multi-IA",
+      "value": 65,
+      "status": "em montagem",
+      "detail": "ChatGPT + MCP + Codex + Lovable + Sentinela + Dispatcher + Supabase Bot. Time com escopo definido."
+    },
+    {
+      "name": "🤖 Multi-IA sincronizada",
+      "value": 72,
+      "status": "em evolução",
+      "detail": "ChatGPT, Lovable, Grok, Codex e Copilot com papéis definidos. Mega Painel vira mapa visual obrigatório do estado vivo."
+    },
+    {
+      "name": "📍 Estado vivo / Mega Painel",
+      "value": 80,
+      "status": "obrigatório",
+      "detail": "README, consciência, pendências, relatórios e cards devem refletir cada passo relevante."
+    }
+  ],
+  "agents": [
+    {
+      "name": "ChatGPT + MCP",
+      "emoji": "🧠",
+      "role": "Comando central",
+      "power": 94,
+      "description": "Orquestra estado, valida, registra memória, gera scripts/ZIPs e passa o pente fino final."
+    },
+    {
+      "name": "Codex",
+      "emoji": "🧑‍💻",
+      "role": "Código e revisão",
+      "power": 84,
+      "description": "Revisa PRs, valida arquitetura, cria guardrails e ajuda a manter o repo profissional."
+    },
+    {
+      "name": "Lovable",
+      "emoji": "🎨",
+      "role": "Frontend e UI",
+      "power": 78,
+      "description": "Evolui telas, docs visuais e experiência do produto com rapidez."
+    },
+    {
+      "name": "GitHub",
+      "emoji": "🐙",
+      "role": "Fonte oficial",
+      "power": 90,
+      "description": "Fonte oficial com PRs, issues, workflows, checks, consciência operacional e espelho passivo documentado."
+    },
+    {
+      "name": "VPS + PM2",
+      "emoji": "🖥️",
+      "role": "Produção real",
+      "power": 80,
+      "description": "Roda os serviços reais, portas, health checks e relatórios."
+    },
+    {
+      "name": "Grok / apoio",
+      "emoji": "🔎",
+      "role": "Segunda opinião",
+      "power": 65,
+      "description": "Operador VPS — SSH nativo, surgical pra reset/limpeza/merge conflict que o Lovable não toca."
+    },
+    {
+      "name": "Dependabot",
+      "emoji": "📦",
+      "role": "Atualizações",
+      "power": 70,
+      "description": "PRs semanais de npm + Actions, pré-configurado pra 5 pacotes (bot-server, mcp, install-callback, frontend, actions)."
+    },
+    {
+      "name": "CodeQL",
+      "emoji": "🛡️",
+      "role": "Segurança",
+      "power": 70,
+      "description": "Análise estática JS/TS em push/PR/weekly. Alerta vulnerabilidade antes do merge."
+    },
+    {
+      "name": "Sentinela",
+      "emoji": "🛰️",
+      "role": "Vigia 24/7",
+      "power": 80,
+      "description": "Roda a cada 6h, detecta divergência em endpoints/workflows/CORS/PM2 e abre Issue com label assign:<bot> + p1/p2/p3."
+    },
+    {
+      "name": "Supabase Bot",
+      "emoji": "🟢",
+      "role": "Banco read-only",
+      "power": 60,
+      "description": "Health, schema, RLS e migrations. Escrita só com label confirm:write."
+    },
+    {
+      "name": "Dispatcher",
+      "emoji": "🧭",
+      "role": "Roteador",
+      "power": 75,
+      "description": "Ouve issues.labeled e posta briefing pro bot dono. Anti-loop por label."
+    },
+    {
+      "name": "Grok",
+      "emoji": "🔎",
+      "role": "Auditor VPS",
+      "power": 70,
+      "description": "Ajuda em causa-raiz, logs, divergências de VPS e segunda opinião técnica."
+    },
+    {
+      "name": "Copilot",
+      "emoji": "🛠️",
+      "role": "Apoio no editor",
+      "power": 60,
+      "description": "Ajuda com sugestões de código, sem decidir produção sozinho."
+    }
+  ],
+  "milestones": [
+    {
+      "title": "MCP público online",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "Prompt base do Codex no repo",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "Painel de evolução do projeto",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "Mapa Vivo do projeto",
+      "status": "doing",
+      "percent": 88
+    },
+    {
+      "title": "Kit Codex profissional",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "Modo Obra validado no MCP",
+      "status": "doing",
+      "percent": 65
+    },
+    {
+      "title": "CRM no modelo estático final",
+      "status": "later",
+      "percent": 30
+    },
+    {
+      "title": "Checker end-to-end completo",
+      "status": "later",
+      "percent": 46
+    },
+    {
+      "title": "OAuth MCP validado no processo real",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "PM2 status real na VPS",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "Aprendizados pós-queda do conector",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "Validar vps_pm2_ls via conector",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "Guardrails Codex contra arquivos sensíveis",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "Corrigir ferramenta de memória do espelho",
+      "status": "next",
+      "percent": 25
+    },
+    {
+      "title": "Lote 2/3 WhatsApp read-only (adaptador + getCentralDarkChats)",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "Lote 4 — GET /v1/whatsapp/chats",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "Lote 5 — GET /v1/whatsapp/contacts",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "Lote 6 — GET /v1/whatsapp/contacts/:phone/avatar",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "Lote 7 — GET /v1/whatsapp/groups",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "Lote 8 — GET /v1/whatsapp/groups/:groupJid/participants",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "Lote 9 — GET /v1/whatsapp/groups/:groupJid (detalhes)",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "Lote 10 — GET /v1/whatsapp/messages/:chatId/history",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "Bots GitHub reforçados (Dependabot + CodeQL + auto-review)",
+      "status": "done",
+      "percent": 100
+    },
+    {
+      "title": "Auditoria working-tree VPS pós-Lote 10 (#109)",
+      "status": "doing",
+      "percent": 30
+    },
+    {
+      "title": "Lote 11 — frontend chat live read-only",
+      "status": "next",
+      "percent": 0
+    },
+    {
+      "title": "Sentinela 24/7 + Dispatcher",
+      "status": "doing",
+      "percent": 80
+    },
+    {
+      "title": "Supabase Bot integrado",
+      "status": "doing",
+      "percent": 60
+    },
+    {
+      "title": "CORS do MCP no painel",
+      "status": "next",
+      "percent": 20
+    }
+  ],
+  "nextSteps": [
+    "Rodar `bash /root/CentralDark/scripts/auditoria/working-tree-vps.sh` na VPS e revisar buckets A/B/C/D antes de qualquer limpeza.",
+    "Decidir webhook-bot: ressuscitar no PM2 ou aposentar oficialmente (2 camadas redundantes cobrem).",
+    "Lote 11 — frontend chat live read-only consumindo as 7 rotas /v1/whatsapp/*.",
+    "Observar primeiro PR pós-pr-auto-review.yml e ajustar checklist se Codex pedir.",
+    "Avaliar release-please + semantic-pr depois que Dependabot/CodeQL estabilizarem.",
+    "Documentar política de versionamento (SemVer) no CONSCIENCIA.md.",
+    "Confirmar Caddy roteando api.centralldark.com pros endpoints /v1/whatsapp/* quando bot-server subir.",
+    "Plano de envio (POST /v1/whatsapp/send) só após confirmação separada — sai do modo read-only."
+  ],
+  "safeRules": [
+    "Aprendizados e eventos do projeto devem ser registrados no Mega Painel quando forem relevantes, sem expor segredos reais.",
+    "Não expor tokens, senhas, cookies, sessions, chaves ou .env real.",
+    "Caddy, Docker, WuzAPI, WhatsApp, CRM e banco real exigem confirmação explícita.",
+    "Logs completos ficam em revisoes/; chat e painel mostram apenas resumo limpo.",
+    "Toda mudança importante deve aparecer no painel vivo.",
+    "segredounlock/clone-deck é espelho passivo; não gravar memória, pendência ou workflow operacional nele sem confirmação explícita.",
+    "Agentes não devem ler, abrir, copiar, editar, resumir ou usar arquivos sensíveis como contexto.",
+    "Antes de mergear PR, verificar comentários de agentes e tratar alertas P0/P1/P2."
+  ],
+  "events": [
+    {
+      "time": "2026-06-11T13:43:27.637Z",
+      "title": "Push na main · afea287ab59a999fab6f910d05185bfd8962984c",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "pendencia(#50): VPS com 12 arquivos modificados sem commit\n\nCo-authored-by: SegredoDev <segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-11T13:33:24.839Z",
+      "title": "Push na main · 3fcfeadb47df352d805910fe55d88cfd3af52f0d",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "docs(scripts): consolidar tema netflix centralizado\n\nCria scripts/lib/theme.sh como fonte oficial do Tema Netflix Centralizado.\n\nDocumenta o padrao em scripts/lib e docs/CONSCIENCIA, com ponte curta no README.\n\nCo-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-11T11:17:54.022Z",
+      "title": "Push na main · d2320729e2ce793614df1664f62656b789cbc657",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "chore(gitignore): ignore legacy folder apps/clone-deck/apps/bot"
+    },
+    {
+      "time": "2026-06-11T11:03:41.899Z",
+      "title": "Push na main · 9d03f4e4ac582fc8ca105e87fcdc22c6731753d7",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "chore(repo): remove legacy folder apps/clone-deck/apps/bot\n\n- Pasta antiga do monorepo clone-deck\n- Frontend foi migrado para CentralDark/apps/bot\n- Remoção solicitada para limpeza do repositório"
+    },
+    {
+      "time": "2026-06-11T10:40:17.820Z",
+      "title": "Push na main · 1f00401d24f9797ffc91e2cfca27d7d735a18da3",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "feat(scripts): introduzir tema Netflix centralizado v2.1 com barra de progresso animada\n\n- Cria tema centralizado em scripts/lib/theme.sh\n- Inclui funções: netflix_header, netflix_step, netflix_success, etc.\n- Adiciona barra de progresso animada (netflix_progress_bar)\n- Adiciona spinner animado (netflix_loading)\n- Tema agora é carregado automaticamente via .bashrc\n- Objetivo: padronizar visual de todos os scripts da VPS"
+    },
+    {
+      "time": "2026-06-11T10:09:39.449Z",
+      "title": "Push na main · 70b926741e0634fdd658d1fa278be325617f7093",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "aprendizado(#128): Tema Netflix centralizado para scripts\n\nCo-authored-by: SegredoDev <segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-11T10:03:44.455Z",
+      "title": "Sentinela rodou",
+      "area": "Bots",
+      "status": "feito",
+      "detail": "Varredura automática de divergências (workflow run 27339231909)."
+    },
+    {
+      "time": "2026-06-11T06:45:05.403Z",
+      "title": "Push na main · 8757798697fd4544e5caf3ba80ad7e8e2d59380b",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "docs(multizap): registrar proximo lote bot\n\nCompleta a pendencia do MultiZap/Bot e remove entrada de aprendizado malformada.\n\nMantem Lote 2 e runtime sensivel fora de escopo."
+    },
+    {
+      "time": "2026-06-11T06:24:18.768Z",
+      "title": "Push na main · f4f8bbb3fdd687886aa0975ca3cf31ad1a520bc9",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "aprendizado(#128): undefined\n\nCo-authored-by: SegredoDev <segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-11T06:23:14.801Z",
+      "title": "Push na main · 27dde68da0e53c490564ad50fdcb477e66d54975",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "aprendizado(#127): Próximo objetivo MultiZap/Bot após Lote Ferramentas + A/B/C\n\nCo-authored-by: SegredoDev <segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-11T04:48:17.792Z",
+      "title": "Push na main · f95f3b55d6a7d9b0b649e59eeb6ba400c178b3f7",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "ci(bots): corrigir workflows e alinhar automacao\n\nCorrige workflows falhos de Linear/Dependabot.\n\nAlinha labels usadas por bots e dependencias.\n\nConsolida documentacao do time de bots e atualiza painel.\n\nMantem acoes sensiveis fora de escopo.\n\nCo-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-11T03:22:43.443Z",
+      "title": "Push na main · 8549c95cb9abad2b27b0cc176f4449a1392c82e6",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "docs(codex): documentar ambiente local de ferramentas\n\nAdiciona setup recomendado do ambiente Codex/Windows.\n\nAdiciona checker read-only de ferramentas e instalador portatil fora do repo.\n\nNao executa gh auth login nem grava tokens.\n\nCo-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-11T02:34:30.165Z",
+      "title": "Sentinela rodou",
+      "area": "Bots",
+      "status": "feito",
+      "detail": "Varredura automática de divergências (workflow run 27319952025)."
+    },
+    {
+      "time": "2026-06-11T00:37:01.042Z",
+      "title": "Push na main · e5d3a54be472959350b69061dab8902c115079af",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "docs(consciencia): consolidar cofre oficial de secrets\n\nRegistra /root/CentralDark/secrets como cofre oficial e reforça regras sanitizadas para auditoria de secrets.\n\nFecha o Lote 1 da quarentena .env e mantém o Lote 2 fora de escopo.\n\nCo-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-10T23:51:33.216Z",
+      "title": "Push na main · ebc07af1d4de0763040b32bfa4a1bdc6c3093724",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "aprendizado(#125): Respostas devem destacar qual IA usar e prioridade\n\nCo-authored-by: SegredoDev <segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-10T23:40:10.456Z",
+      "title": "Push na main · 39ca9af31309ddd8294494680a9b750ae265e2ed",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "aprendizado(#124): Fluxo leva-e-traz entre IAs\n\nCo-authored-by: SegredoDev <segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-10T20:20:10.813Z",
+      "title": "Push na main · b98b2d5824a355860885ea549cde91ef31d7592c",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "aprendizado(#123): Fluxo leva-e-traz entre IAs sem perder contexto\n\nCo-authored-by: SegredoDev <segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-10T20:11:31.961Z",
+      "title": "Push na main · da747840900a6367aa551f4415015b883f8fbd54",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "docs(consciencia): adicionar prompt mestre multi-ia\n\nCentraliza o comando operacional para qualquer IA assumir o CentralDark com segurança.\n\nCo-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>\n\nCo-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-10T20:09:42.220Z",
+      "title": "Sentinela rodou",
+      "area": "Bots",
+      "status": "feito",
+      "detail": "Varredura automática de divergências (workflow run 27303149190)."
+    },
+    {
+      "time": "2026-06-10T19:37:24.020Z",
+      "title": "Push na main · 1c3ad0750a4c760b5ac0f942c97a0b96d4ad7fec",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "Quarentenou 4 .env sensíveis\n\nX-Lovable-Edit-ID: edt-2b00dc7a-05ad-4430-ba6b-e6b2c8761c11\nCo-authored-by: segredounlock <133285946+segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-10T19:17:40.106Z",
+      "title": "Push na main · e094dff8bc0f089af837dbf7853bf121ced7ff31",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "Corrigiu PM2_RESTART_CMD\n\nX-Lovable-Edit-ID: edt-084b9ed2-1103-4e45-9588-3623dd4bf491\nCo-authored-by: segredounlock <133285946+segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-10T19:13:00.200Z",
+      "title": "Push na main · 8b5550273fe62f4242d7edd594e3233b93067e2f",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "Criou script dry-run quarentena\n\nX-Lovable-Edit-ID: edt-d67e08e7-5076-429a-9073-996f1fe32232\nCo-authored-by: segredounlock <133285946+segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-10T18:52:13.091Z",
+      "title": "Push na main · c5149346946928eb27feda3cd3bb753a718888f9",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "Corrigiu parser SSE do MCP\n\nX-Lovable-Edit-ID: edt-ed89a355-e935-47ed-a87c-f315e5cce9ff\nCo-authored-by: segredounlock <133285946+segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-10T17:50:27.541Z",
+      "title": "Push na main · 022b0778a719f8cddc6e9495a024db0f1cf7d426",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "fix(mcp): padronizar token MCP com fallback limpo (MCP_CENTRALDARK_TOKEN)"
+    },
+    {
+      "time": "2026-06-10T17:23:02.254Z",
+      "title": "Push na main · 91185ddcc011b329ed1067aa5785d4c2c9dc142f",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "Migrou bot para pasta oficial\n\nX-Lovable-Edit-ID: edt-da7735ac-f287-493e-a4d5-2637a73e0ed6\nCo-authored-by: segredounlock <133285946+segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-10T17:09:44.179Z",
+      "title": "Push na main · 2bc26acbe26b17367ba9c8e8605b4034853885e0",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "Corrigiu VPS apontando pra docs\n\nX-Lovable-Edit-ID: edt-c68bf19f-b257-42cd-9c80-77cd5f03a99b\nCo-authored-by: segredounlock <133285946+segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-10T16:12:02.175Z",
+      "title": "Push na main · 9f8b105065708556e288abee2cb3eb1688636a6a",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "docs: adicionar continuidade para próxima IA"
+    },
+    {
+      "time": "2026-06-10T15:47:28.724Z",
+      "title": "Push na main · 0701b9168861651a018ab396fa010a5e35abbd71",
+      "area": "Repositório",
+      "status": "feito",
+      "detail": "aprendizado(#122): Segurança e alinhamento antes de realtime/webhook\n\nCo-authored-by: SegredoDev <segredounlock@users.noreply.github.com>"
+    },
+    {
+      "time": "2026-06-10T14:51:02.662Z",
+      "title": "Sentinela rodou",
+      "area": "Bots",
+      "status": "feito",
+      "detail": "Varredura automática de divergências (workflow run 27284778846)."
+    },
+    {
+      "time": "2026-06-10T09:39:22.880Z",
+      "title": "Sentinela rodou",
+      "area": "Bots",
+      "status": "feito",
+      "detail": "Varredura automática de divergências (workflow run 27267391886)."
+    }
+  ],
+  "publicEndpoints": [
+    {
+      "name": "MCP Health",
+      "url": "https://mcp.centralldark.com/health",
+      "type": "health"
+    },
+    {
+      "name": "MCP Status",
+      "url": "https://mcp.centralldark.com/status.json",
+      "type": "status"
+    },
+    {
+      "name": "Install Status",
+      "url": "https://install.centralldark.com/status.json",
+      "type": "status"
+    }
+  ],
+  "aiSuggestions": [
+    {
+      "id": "bots-github-reforcados-2026-06-09",
+      "title": "Bots GitHub agora operam o repo 24/7",
+      "origin": "Auditoria + plano aprovado Modo Lovable/Modo Segredo",
+      "suggestion": "Dependabot abre PRs semanais; CodeQL escaneia em push/PR/weekly; pr-auto-review marca todo PR com label + checklist + heart; bot-server-validate roda 9 validadores offline; farm-co-author confirma trailer SegredoiDev; painel-auto-update mantém status.centralldark.com vivo a cada push."
+    },
+    {
+      "id": "bot-chat-contatos-proximo-bloco",
+      "title": "Retomar Bot: chat, contatos, fotos e grupos",
+      "origin": "Fluxo oficial do projeto",
+      "priority": "alta",
+      "status": "próximo",
+      "relatedIssue": null,
+      "relatedPr": null,
+      "needsConfirmation": false,
+      "summary": "Depois da base de governança/Codex, voltar para validar o bot: chat ao vivo, contatos, fotos e grupos.",
+      "copyText": "Retome o fluxo do Bot/MultiZap: validar QR, chat ao vivo, contatos, fotos e grupos, sem mexer no CRM e salvando logs sanitizados.",
+      "instruction": "Usar para voltar ao trabalho principal do bot."
+    },
+    {
+      "id": "github-agent-architecture",
+      "title": "Arquitetar agente GitHub profissional",
+      "origin": "Usuário / ChatGPT",
+      "priority": "alta",
+      "status": "nova",
+      "relatedIssue": 12,
+      "relatedPr": null,
+      "needsConfirmation": false,
+      "summary": "Desenhar camada própria com GitHub App, Actions ou Probot para observar PRs/issues, sem substituir o Codex.",
+      "copyText": "Crie um documento comparando GitHub App, GitHub Actions e Probot para o CentralDark, mantendo Codex como agente principal e criando apenas uma camada de observação e apoio.",
+      "instruction": "Usar para iniciar a arquitetura do agente GitHub profissional."
+    },
+    {
+      "id": "codex-issue-9-review-trigger",
+      "title": "Investigar gatilho real do Codex em PRs",
+      "origin": "Codex / ChatGPT",
+      "priority": "alta",
+      "status": "em análise",
+      "relatedIssue": 9,
+      "relatedPr": 11,
+      "needsConfirmation": false,
+      "summary": "O Codex revisou o PR #4, mas não revisou PRs #7, #10 e ainda não revisou o PR #11. Registrar o padrão real antes de automatizar fallback.",
+      "copyText": "Verifique a timeline do PR #11 e compare com o PR #4. Procure evento reviewed do chatgpt-codex-connector[bot] e registre o resultado na Issue #9.",
+      "instruction": "Usar quando quiser pedir ao ChatGPT para continuar a investigação do Codex sem perder contexto."
+    },
+    {
+      "id": "github-pr-observar-codex-tool",
+      "title": "Implementar tool github_pr_observar_codex",
+      "origin": "Issue #9 / Aprendizado #73",
+      "priority": "alta",
+      "status": "em preparação",
+      "relatedIssue": 9,
+      "relatedPr": null,
+      "needsConfirmation": false,
+      "summary": "Criar ferramenta limpa para identificar reação, comentário, review e evento reviewed do Codex em PRs/issues.",
+      "copyText": "Implemente a tool github_pr_observar_codex como leitura segura: ela deve resumir checks, comentários, reações, reviews e evento reviewed sem despejar JSON no chat.",
+      "instruction": "Usar antes de mergear PRs relevantes para saber se o Codex realmente atuou."
+    }
+  ],
+  "liveStatus": [
+    {
+      "name": "MCP Health",
+      "url": "https://mcp.centralldark.com/health"
+    },
+    {
+      "name": "MCP Status",
+      "url": "https://mcp.centralldark.com/status.json"
+    },
+    {
+      "name": "Install Status",
+      "url": "https://install.centralldark.com/status.json"
+    },
+    {
+      "name": "API Health",
+      "url": "https://api.centralldark.com/health"
+    }
+  ],
+  "livingState": {
+    "updatedAt": "2026-06-09T20:03:28Z",
+    "officialStatusPage": "https://status.centralldark.com",
+    "officialApi": "https://api.centralldark.com",
+    "rule": "Toda tarefa relevante deve atualizar README, consciência, pendências quando houver, relatórios, Mega Painel e handoff.",
+    "agents": [
+      "ChatGPT + MCP",
+      "Lovable",
+      "Grok",
+      "Codex",
+      "Copilot",
+      "GitHub Actions",
+      "VPS + PM2"
+    ],
+    "nextReview": "Validar painel após cada commit relevante e conferir se novos cards/pendências apareceram."
+  },
+  "iaCards": [
+    {
+      "id": "ia-chatgpt-mcp",
+      "title": "ChatGPT + MCP",
+      "type": "ia",
+      "owner": "ChatGPT",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 80,
+      "criteriaDone": 8,
+      "criteriaTotal": 10,
+      "source": "CONSCIENCIA",
+      "evidence": "Orquestra plano + MCP + memória.",
+      "nextAction": "Concluir Modo Obra E2E",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "ia-lovable",
+      "title": "Lovable",
+      "type": "ia",
+      "owner": "Lovable",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 70,
+      "criteriaDone": 7,
+      "criteriaTotal": 10,
+      "source": "README",
+      "evidence": "Edita frontend, sync auto pra ServerVpss/clone-deck.",
+      "nextAction": "Cards de bot/IA no Mega Painel",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "ia-grok",
+      "title": "Grok",
+      "type": "ia",
+      "owner": "Grok",
+      "status": "em_analise",
+      "severity": "p2",
+      "progress": 40,
+      "criteriaDone": 4,
+      "criteriaTotal": 10,
+      "source": "PENDENCIAS",
+      "evidence": "Worktrees vigiados (#30). Sem tarefa ativa.",
+      "nextAction": "Definir escopo seguro de execução",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "ia-codex",
+      "title": "Codex",
+      "type": "ia",
+      "owner": "Codex",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 60,
+      "criteriaDone": 6,
+      "criteriaTotal": 10,
+      "source": "CONSCIENCIA",
+      "evidence": "pr-auto-review + codex-validate ativos.",
+      "nextAction": "Investigar gap em PRs #7/#10/#11",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "ia-copilot",
+      "title": "Copilot",
+      "type": "ia",
+      "owner": "Copilot",
+      "status": "planejado",
+      "severity": "p3",
+      "progress": 20,
+      "criteriaDone": 2,
+      "criteriaTotal": 10,
+      "source": "README",
+      "evidence": "Pendente ativação no plano Student Pack.",
+      "nextAction": "Habilitar Copilot Free",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "ia-github-actions",
+      "title": "GitHub Actions",
+      "type": "ia",
+      "owner": "GitHub",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 70,
+      "criteriaDone": 7,
+      "criteriaTotal": 10,
+      "source": "GitHub",
+      "evidence": "Sentinela + dispatcher + deploy-fallback ativos.",
+      "nextAction": "Reduzir workflows vermelhos",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "ia-vps-pm2",
+      "title": "VPS / PM2",
+      "type": "ia",
+      "owner": "VPS",
+      "status": "em_execucao",
+      "severity": "p1",
+      "progress": 60,
+      "criteriaDone": 6,
+      "criteriaTotal": 10,
+      "source": "VPS",
+      "evidence": "Working tree sujo (#109) e webhook-bot fora do PM2.",
+      "nextAction": "Auditoria read-only do git status",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    }
+  ],
+  "botCards": [
+    {
+      "id": "bot-faxineiro-repo",
+      "title": "faxineiro-repo",
+      "type": "bot",
+      "owner": "GitHub",
+      "status": "em_execucao",
+      "severity": "p3",
+      "progress": 60,
+      "criteriaDone": 6,
+      "criteriaTotal": 10,
+      "source": "GitHub",
+      "evidence": "Limpa branches/PRs antigos.",
+      "nextAction": "Validar última execução",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "bot-auditor-divergencia",
+      "title": "auditor-divergencia",
+      "type": "bot",
+      "owner": "GitHub",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 70,
+      "criteriaDone": 7,
+      "criteriaTotal": 10,
+      "source": "GitHub",
+      "evidence": "Compara repo vs VPS vs painel.",
+      "nextAction": "Conectar findings ao painel",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "bot-vigia-actions",
+      "title": "vigia-actions",
+      "type": "bot",
+      "owner": "GitHub",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 60,
+      "criteriaDone": 6,
+      "criteriaTotal": 10,
+      "source": "GitHub",
+      "evidence": "Reporta workflows vermelhos.",
+      "nextAction": "Auto-card de workflow fail",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "bot-sentinela",
+      "title": "sentinela",
+      "type": "bot",
+      "owner": "GitHub",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 80,
+      "criteriaDone": 8,
+      "criteriaTotal": 10,
+      "source": "CONSCIENCIA",
+      "evidence": "Cron 6h, detecta divergências, abre Issue com dedupe.",
+      "nextAction": "Cobrir CORS adicionais",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "bot-dependabot",
+      "title": "dependabot",
+      "type": "bot",
+      "owner": "GitHub",
+      "status": "em_execucao",
+      "severity": "p3",
+      "progress": 70,
+      "criteriaDone": 7,
+      "criteriaTotal": 10,
+      "source": "GitHub",
+      "evidence": "Bumps semanais.",
+      "nextAction": "Auto-merge minor",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "bot-codeql",
+      "title": "codeql",
+      "type": "bot",
+      "owner": "GitHub",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 50,
+      "criteriaDone": 5,
+      "criteriaTotal": 10,
+      "source": "GitHub",
+      "evidence": "Ativo só em repo público.",
+      "nextAction": "Habilitar GHAS quando viável",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "bot-guarda-seguranca",
+      "title": "guarda-seguranca",
+      "type": "bot",
+      "owner": "GitHub",
+      "status": "planejado",
+      "severity": "p2",
+      "progress": 30,
+      "criteriaDone": 3,
+      "criteriaTotal": 10,
+      "source": "PENDENCIAS",
+      "evidence": "Verifica leak de segredos.",
+      "nextAction": "Definir rules secret-scan",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "bot-painel-vivo",
+      "title": "painel-vivo",
+      "type": "bot",
+      "owner": "Lovable",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 60,
+      "criteriaDone": 6,
+      "criteriaTotal": 10,
+      "source": "PENDENCIAS",
+      "evidence": "Atualiza painel-data.json.",
+      "nextAction": "Auto-card on novo aprendizado",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "bot-vps-healthcheck",
+      "title": "vps-healthcheck",
+      "type": "bot",
+      "owner": "VPS",
+      "status": "em_execucao",
+      "severity": "p1",
+      "progress": 90,
+      "criteriaDone": 9,
+      "criteriaTotal": 10,
+      "source": "VPS",
+      "evidence": "Lote 7 entregue: workflow `.github/workflows/vps-healthcheck.yml` roda 10 checks read-only via SSH (PM2, portas, disco, inode, memória, load, Caddy, git HEAD, uptime, /root/.grok/worktrees), classifica severidade e mantém 1 Issue consolidada (assign:grok + revisao-humana). Cron 6h + manual.",
+      "nextAction": "Conectar findings ao painel via painel-contadores",
+      "links": [],
+      "updatedAt": "2026-06-10T01:30:00.000Z"
+    },
+    {
+      "id": "bot-doc-guardiao",
+      "title": "doc-guardiao",
+      "type": "bot",
+      "owner": "GitHub",
+      "status": "planejado",
+      "severity": "p3",
+      "progress": 30,
+      "criteriaDone": 3,
+      "criteriaTotal": 10,
+      "source": "CONSCIENCIA",
+      "evidence": "README+PLANO por pasta.",
+      "nextAction": "Lint automático de docs",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "bot-dispatcher",
+      "title": "dispatcher",
+      "type": "bot",
+      "owner": "GitHub",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 70,
+      "criteriaDone": 7,
+      "criteriaTotal": 10,
+      "source": "CONSCIENCIA",
+      "evidence": "Roteia label assign:<bot> pros donos.",
+      "nextAction": "Cobrir novas labels",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    }
+  ],
+  "sectorCards": [
+    {
+      "id": "setor-memoria-consciencia",
+      "title": "Memória e consciência",
+      "type": "doc",
+      "owner": "ChatGPT",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 90,
+      "criteriaDone": 9,
+      "criteriaTotal": 10,
+      "source": "CONSCIENCIA",
+      "evidence": "Auto-aprendizado + cientista de sistemas.",
+      "nextAction": "Mover handoff pro painel",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "setor-mcp-conector",
+      "title": "MCP / conector",
+      "type": "api",
+      "owner": "ChatGPT",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 80,
+      "criteriaDone": 8,
+      "criteriaTotal": 10,
+      "source": "MCP",
+      "evidence": "83 tools, watchdog + Telegram. | status.json devolve ok:false com toolCount:84 — pendência #120",
+      "nextAction": "Investigar subcheck que zera ok no status.json do MCP (ver PENDENCIAS #120).",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "setor-frontend-bot",
+      "title": "Frontend bot/site",
+      "type": "doc",
+      "owner": "Lovable",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 70,
+      "criteriaDone": 7,
+      "criteriaTotal": 10,
+      "source": "README",
+      "evidence": "Vite+React em apps/bot.",
+      "nextAction": "Cards revisão humana",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "setor-codex",
+      "title": "Codex integrado",
+      "type": "ia",
+      "owner": "Codex",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 80,
+      "criteriaDone": 8,
+      "criteriaTotal": 10,
+      "source": "CONSCIENCIA",
+      "evidence": "pr-auto-review + validate.",
+      "nextAction": "Cobrir PRs antigos",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "setor-vps-pm2",
+      "title": "VPS / PM2",
+      "type": "vps",
+      "owner": "VPS",
+      "status": "em_execucao",
+      "severity": "p1",
+      "progress": 60,
+      "criteriaDone": 6,
+      "criteriaTotal": 10,
+      "source": "VPS",
+      "evidence": "webhook-bot fora.",
+      "nextAction": "Restaurar serviço",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "setor-testes",
+      "title": "Testes / checker",
+      "type": "doc",
+      "owner": "GitHub",
+      "status": "planejado",
+      "severity": "p2",
+      "progress": 40,
+      "criteriaDone": 4,
+      "criteriaTotal": 10,
+      "source": "GitHub",
+      "evidence": "Coverage baixa.",
+      "nextAction": "Smoke tests rota nova",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "setor-crm",
+      "title": "CRM final",
+      "type": "doc",
+      "owner": "humano",
+      "status": "planejado",
+      "severity": "p3",
+      "progress": 10,
+      "criteriaDone": 1,
+      "criteriaTotal": 10,
+      "source": "README",
+      "evidence": "Bloqueado até bot pronto.",
+      "nextAction": "Aguardar fase 4",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "setor-instalador",
+      "title": "Instalador",
+      "type": "doc",
+      "owner": "ChatGPT",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 80,
+      "criteriaDone": 8,
+      "criteriaTotal": 10,
+      "source": "README",
+      "evidence": "install.sh + auto-update.",
+      "nextAction": "Doc por mudança",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "setor-multi-ia",
+      "title": "Multi-IA",
+      "type": "doc",
+      "owner": "ChatGPT",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 70,
+      "criteriaDone": 7,
+      "criteriaTotal": 10,
+      "source": "CONSCIENCIA",
+      "evidence": "Handoff e regras claras.",
+      "nextAction": "Replicar pra Grok/Copilot",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "setor-seguranca",
+      "title": "Segurança",
+      "type": "seguranca",
+      "owner": "GitHub",
+      "status": "em_execucao",
+      "severity": "p1",
+      "progress": 60,
+      "criteriaDone": 6,
+      "criteriaTotal": 10,
+      "source": "CONSCIENCIA",
+      "evidence": "Bloqueio explícito + guarda.",
+      "nextAction": "Secret-scan ativo",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "setor-bots",
+      "title": "Bots especialistas",
+      "type": "bot",
+      "owner": "GitHub",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 90,
+      "criteriaDone": 9,
+      "criteriaTotal": 10,
+      "source": "CONSCIENCIA",
+      "evidence": "Lote 0 ✅ vigia consertado. Lote 1 ✅ 22 labels oficiais (bots-labels-seed.yml) + PROTOCOLO-REVISAO-HUMANA.md + pr-auto-review.yml auto-marcando checklist.",
+      "nextAction": "Lote 2: doc-guardiao (cobrar README.md + PLANO.md por pasta, modo relatório).",
+      "links": [],
+      "updatedAt": "2026-06-10T02:00:00.000Z"
+    },
+    {
+      "id": "setor-workflows",
+      "title": "GitHub workflows",
+      "type": "workflow",
+      "owner": "GitHub",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 70,
+      "criteriaDone": 7,
+      "criteriaTotal": 10,
+      "source": "GitHub",
+      "evidence": "CI verde majoritário.",
+      "nextAction": "CodeQL condicional pronto",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "setor-pendencias",
+      "title": "Pendências humanas",
+      "type": "pendencia",
+      "owner": "humano",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 60,
+      "criteriaDone": 6,
+      "criteriaTotal": 10,
+      "source": "PENDENCIAS",
+      "evidence": "Lista única em docs/PENDENCIAS.md.",
+      "nextAction": "Migrar pra Linear",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "setor-api-publica",
+      "title": "API pública",
+      "type": "api",
+      "owner": "VPS",
+      "status": "em_execucao",
+      "severity": "p2",
+      "progress": 60,
+      "criteriaDone": 6,
+      "criteriaTotal": 10,
+      "source": "VPS",
+      "evidence": "api.centralldark.com online.",
+      "nextAction": "Documentar rotas",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "setor-whatsapp-readonly",
+      "title": "WhatsApp read-only",
+      "type": "api",
+      "owner": "Codex",
+      "status": "em_execucao",
+      "severity": "p1",
+      "progress": 60,
+      "criteriaDone": 6,
+      "criteriaTotal": 10,
+      "source": "PENDENCIAS",
+      "evidence": "Contacts pronto, faltam outras.",
+      "nextAction": "Implementar groups/history",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "setor-chat-live",
+      "title": "Chat ao vivo",
+      "type": "api",
+      "owner": "humano",
+      "status": "aguardando_revisao_humana",
+      "severity": "p2",
+      "progress": 20,
+      "criteriaDone": 2,
+      "criteriaTotal": 10,
+      "source": "PENDENCIAS",
+      "evidence": "Depende do bot read-only.",
+      "nextAction": "Aguardar fase",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "setor-contatos",
+      "title": "Contatos",
+      "type": "api",
+      "owner": "Codex",
+      "status": "validado",
+      "severity": "p3",
+      "progress": 100,
+      "criteriaDone": 10,
+      "criteriaTotal": 10,
+      "source": "RELATORIO",
+      "evidence": "Lote 5 validado 13/13.",
+      "nextAction": "Ligar no frontend",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "setor-grupos",
+      "title": "Grupos",
+      "type": "api",
+      "owner": "Codex",
+      "status": "planejado",
+      "severity": "p2",
+      "progress": 20,
+      "criteriaDone": 2,
+      "criteriaTotal": 10,
+      "source": "PENDENCIAS",
+      "evidence": "Endpoint não criado.",
+      "nextAction": "Decompor /group/list",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    },
+    {
+      "id": "setor-historico",
+      "title": "Histórico de mensagens",
+      "type": "api",
+      "owner": "Codex",
+      "status": "planejado",
+      "severity": "p2",
+      "progress": 10,
+      "criteriaDone": 1,
+      "criteriaTotal": 10,
+      "source": "PENDENCIAS",
+      "evidence": "Sem rota.",
+      "nextAction": "Definir esquema",
+      "links": [],
+      "updatedAt": "2026-06-10T00:04:18.783102Z"
+    }
+  ],
+  "humanReview": [
+    {
+      "id": "rh-codex-pr11",
+      "kind": "PR",
+      "number": 11,
+      "title": "Aguardando review do Codex",
+      "bot": "codex",
+      "severity": "p2",
+      "summary": "PR não revisado pelo Codex; investigar gatilho real.",
+      "nextAction": "Rodar tool github_pr_observar_codex",
+      "url": "https://github.com/ServerVpss/CentralDark/pull/11",
+      "status": "aguardando_revisao_humana"
+    },
+    {
+      "id": "rh-issue-109",
+      "kind": "Issue",
+      "number": 109,
+      "title": "Working tree sujo na VPS",
+      "bot": "vps-healthcheck",
+      "severity": "p1",
+      "summary": "git status mostra deletados/modificados fora de escopo.",
+      "nextAction": "Auditoria read-only antes de qualquer ação",
+      "url": "https://github.com/ServerVpss/CentralDark/issues/109",
+      "status": "aguardando_revisao_humana"
+    }
+  ],
+  "iaTimeline": [
+    {
+      "time": "2026-06-10T00:04:18.783102Z",
+      "ia": "Lovable",
+      "action": "Mega Painel auto-vivo entregue",
+      "area": "projeto-dashboard",
+      "result": "sucesso",
+      "status": "sucesso",
+      "report": "docs/RELATORIOS/lovable/2026-06-10-mega-painel.md"
+    },
+    {
+      "time": "2026-06-09T23:59:35Z",
+      "ia": "ChatGPT",
+      "action": "Integração MCP+Linear+Notion+Sentry",
+      "area": "CentralDark/apps/mcp",
+      "result": "sucesso",
+      "status": "sucesso",
+      "report": ""
+    },
+    {
+      "time": "2026-06-09T20:03:28Z",
+      "ia": "Codex",
+      "action": "pr-auto-review + codex-validate",
+      "area": ".github/workflows",
+      "result": "sucesso",
+      "status": "sucesso",
+      "report": ""
+    },
+    {
+      "time": "2026-06-09T18:00:00Z",
+      "ia": "VPS",
+      "action": "Webhook-bot caiu",
+      "area": "PM2",
+      "result": "erro",
+      "status": "erro",
+      "report": ""
+    },
+    {
+      "time": "2026-06-08T12:00:00Z",
+      "ia": "GitHub Actions",
+      "action": "Sentinela cron 6h",
+      "area": "workflows",
+      "result": "sucesso",
+      "status": "sucesso",
+      "report": ""
+    }
+  ],
+  "phases": [
+    {
+      "name": "Fase 0 — Fundação",
+      "percent": 100,
+      "status": "concluido",
+      "items": [
+        "Repo+VPS espelho",
+        "Memória eterna",
+        "Instalador"
+      ]
+    },
+    {
+      "name": "Fase 1 — MCP público",
+      "percent": 95,
+      "status": "em_execucao",
+      "items": [
+        "mcp.centralldark.com",
+        "83 tools",
+        "Integrações Linear/Notion/Sentry"
+      ]
+    },
+    {
+      "name": "Fase 2 — Bot WhatsApp read-only",
+      "percent": 40,
+      "status": "em_execucao",
+      "items": [
+        "Contacts ok",
+        "Groups/history faltam",
+        "Frontend pendente"
+      ]
+    },
+    {
+      "name": "Fase 3 — Chat ao vivo",
+      "percent": 10,
+      "status": "aguardando_revisao_humana",
+      "items": [
+        "Depende da fase 2"
+      ]
+    },
+    {
+      "name": "Fase 4 — CRM final",
+      "percent": 5,
+      "status": "bloqueado",
+      "items": [
+        "Aguardando fase 2/3"
+      ]
+    }
+  ],
+  "weights": {
+    "github": 0.2,
+    "vps": 0.2,
+    "mcp": 0.15,
+    "docs": 0.15,
+    "whatsapp": 0.15,
+    "seguranca": 0.1,
+    "frontend": 0.05
+  },
+  "mcpTest": {
+    "readOnly": true,
+    "endpoints": {
+      "status": "https://mcp.centralldark.com/status.json",
+      "health": "https://mcp.centralldark.com/health",
+      "readme": "https://raw.githubusercontent.com/ServerVpss/clone-deck/main/README.md",
+      "consciencia": "https://raw.githubusercontent.com/ServerVpss/clone-deck/main/docs/CONSCIENCIA/09-ESTADO-ATUAL.md",
+      "pendencias": "https://raw.githubusercontent.com/ServerVpss/clone-deck/main/docs/PENDENCIAS.md",
+      "relatorios": "https://api.github.com/repos/ServerVpss/clone-deck/contents/docs/RELATORIOS"
+    }
+  },
+  "updatedAtBR": "11/06/2026, 10:43:27 BRT"
+}

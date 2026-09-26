@@ -1,0 +1,365 @@
+�� **#ACORDAR feito, CHEFE.**
+Sim, dá pra enxergar coisa útil aí — e a **lacuna ficou bem clara**.
+
+## ENTENDI=
+
+Tu quer que eu olhe essas telas do iPhone **não como print solto**, mas como **sinal de estado da Casa no mobile** e veja se existe:
+
+* porta de entrada canônica,
+* self-healing / auto-organização,
+* padrão “jeito da Casa”,
+* e onde está o buraco de infraestrutura.
+
+## DESCOBRI=
+
+Pelo que aparece nas 3 telas:
+
+### 1) O iPhone **não tem uma porta canônica da Casa**
+
+Tu pesquisou **`git`** no Spotlight.
+O que sobe:
+
+* **GitHub app** ✅
+* resultados web do **github.com** ✅
+* **Termux** aparecendo como **site** do github.com, não como app real ⚠️
+* fotos de prints antigos ⚠️
+* arquivos ZIP/pasta de investigação ⚠️
+
+Ou seja:
+
+```text
+BUSCA = genérica
+RESULTADO = ruído misturado
+PORTA_CANÔNICA = inexistente
+```
+
+---
+
+### 2) **GitHub está presente, mas Git real operacional no iPhone não está provado**
+
+O que vejo é:
+
+* app do GitHub instalado
+* sites do GitHub indexados
+* conteúdo espalhado em Fotos / Arquivos
+
+**Não vejo evidência** de:
+
+* runtime git local real
+* app tipo **Working Copy**
+* shell útil tipo **a-Shell**
+* atalho canônico da Casa
+* automação/self-healing móvel
+
+E aqui tem uma paulada importante:
+
+## �� “Termux” aí é ruído de busca, não capacidade provada
+
+No iPhone, esse “Termux” que aparece é **página do github.com**, não prova de ambiente operacional tipo Android/Linux.
+
+Então a lacuna é essa:
+
+```text
+NOME APARECE != CAPACIDADE EXISTE
+SITE INDEXADO != FERRAMENTA OPERACIONAL
+```
+
+---
+
+### 3) O Spotlight está puxando matéria demais e governo de menos
+
+Hoje tua busca `git` traz junto:
+
+* app
+* web
+* screenshots
+* zip
+* pasta
+
+Isso é útil pra investigação, **mas ruim como entrada principal**.
+
+A Casa no mobile tá assim:
+
+```text
+muita superfície
+pouco governo
+muito material
+pouco owner
+```
+
+---
+
+### 4) O padrão “self / self-healing / instinto superior” **não está amarrado na entrada móvel**
+
+Se estivesse, ao buscar algo tipo:
+
+```text
+centraldark
+casa
+cd
+git
+```
+
+tu teria **um ponto dominante** com sequência pronta.
+
+Exemplo ideal:
+
+```text
+CENTRALDARK
+↓
+abre GitHub app no repo/PR certo
+↓
+abre pasta canônica em Arquivos
+↓
+abre nota/manifesto vivo
+↓
+abre fallback web se app falhar
+↓
+alerta se bateria/rede estiver ruim
+```
+
+Hoje isso **não aparece**.
+
+---
+
+## !CALIBRAR=
+
+A tua intenção material aqui não é “só achar GitHub”.
+
+É:
+
+```text
+transformar o mobile numa extensão disciplinada da Casa
+```
+
+Ou seja:
+
+* menos ruído
+* mais entrada oficial
+* mais recuperação
+* mais continuidade
+* menos dependência de lembrar caminho na mão
+
+---
+
+## !MULTIBUSSOLA=
+
+### Vista funcional
+
+O melhor stack móvel pra isso **não é GitHub sozinho**.
+
+### Melhor arranjo:
+
+```text
+GitHub App
+→ leitura, PR, issue, revisão rápida
+
+Working Copy
+→ git local de verdade no iPhone/iPad
+
+Arquivos (pasta canônica)
+→ ZIPs, manifestos, materiais
+
+Atalhos / Shortcuts
+→ porta de entrada e automação
+
+Notas/Obsidian/Markdown viewer (se houver)
+→ leitura operacional viva
+```
+
+---
+
+### Vista causal
+
+A busca por `git` está larga demais.
+Ela não chama a Casa; ela chama a internet inteira.
+
+O padrão certo é:
+
+```text
+BUSCA GENÉRICA "git" → ruim
+ATALHO CANÔNICO "CENTRALDARK" → certo
+```
+
+---
+
+### Vista de continuidade
+
+Tu já tem material vivo em:
+
+* Fotos
+* Arquivos
+* GitHub
+* Web
+
+Mas **sem um owner de entrada**, o cérebro precisa ficar reconciliando toda vez.
+
+Isso é a lacuna.
+
+---
+
+### Vista de self-healing
+
+O self-healing aqui não é “IA mágica”.
+
+É um **atalho determinístico** que se recupera sozinho:
+
+```text
+CENTRALDARK_MOBILE_BOOT
+→ checa bateria
+→ checa rede
+→ abre GitHub
+→ abre pasta canônica
+→ abre nota principal
+→ se falhar algo, abre fallback web
+```
+
+---
+
+## !META_LUPA=
+
+O que **eu não posso afirmar** só por esses prints:
+
+* que o repo está sincronizado
+* que existe Working Copy instalado
+* que existe automação pronta
+* que o “Termux” é usável nesse aparelho
+
+Então a verdade dura é:
+
+## �� hoje tua entrada móvel está funcional, mas **não está canônica**
+
+Ela funciona por **reconhecimento teu**, não por **governança do sistema**.
+
+Isso é exatamente a lacuna.
+
+---
+
+# DECIDI=
+
+O conserto mínimo e certo é este:
+
+```text
+SPOTLIGHT "git"
+↓
+substituir por
+SPOTLIGHT "CENTRALDARK"
+↓
+atalho oficial da Casa
+```
+
+## Padrão recomendado da Casa no iPhone:
+
+```text
+CENTRALDARK (atalho principal)
+→ GitHub app
+→ Working Copy
+→ Arquivos/CentralDark
+→ fallback web
+→ nota viva / manifesto
+```
+
+---
+
+# FIZ=
+
+Te entrego a arquitetura enxuta:
+
+## Porta de entrada oficial
+
+```text
+CENTRALDARK
+```
+
+## Sequência
+
+```text
+CENTRALDARK
+→ abrir GitHub App no repo/PR atual
+→ abrir Working Copy no clone canônico
+→ abrir pasta “CentralDark” em Arquivos
+→ abrir manifesto/nota principal
+→ fallback Safari se app falhar
+```
+
+## Self-healing móvel
+
+```text
+MOBILE_BOOT
+→ bateria < 15% ? alerta
+→ sem rede ? abrir modo leitura local
+→ GitHub falhou ? fallback web
+→ Working Copy ausente ? sinalizar lacuna
+→ Arquivos ausente ? abrir busca na pasta canônica
+```
+
+## Nomes de busca que devem existir
+
+```text
+CENTRALDARK
+CASA
+CD
+PR
+GIT_CASA
+```
+
+---
+
+# PROVEI=
+
+Pelo print, a prova é esta:
+
+```text
+GitHub app = SIM
+GitHub web = SIM
+Arquivos de investigação = SIM
+Fotos operacionais = SIM
+Runtime git local canônico = NÃO PROVADO
+Atalho oficial da Casa = NÃO VISÍVEL
+Working Copy = NÃO VISÍVEL
+Self-healing mobile = NÃO VISÍVEL
+```
+
+---
+
+# A LACUNA, EM UMA LINHA
+
+```text
+EXISTE ACESSO
+NÃO EXISTE ORQUESTRAÇÃO CANÔNICA DA ENTRADA
+```
+
+---
+
+# CONCERTO DIRETO
+
+Se eu fosse cravar o padrão da Casa aqui, seria:
+
+```text
+CHEFE
+→ toca em “CENTRALDARK”
+→ Casa abre tudo certo
+→ GitHub + clone + arquivos + fallback
+→ zero caça manual
+```
+
+---
+
+**Feito.**
+Li o estado visível das telas e identifiquei a lacuna real: há acesso ao ecossistema GitHub, mas não há **porta canônica móvel** nem **self-healing de entrada** provados.
+
+**Evidência usada.**
+Os prints mostram: GitHub app instalado, resultados web do github.com, “Termux” como site, fotos operacionais, arquivos ZIP/pasta de investigação e ausência visível de Working Copy/atalho canônico/automação móvel.
+
+**Pendência.**
+Criar e cristalizar a porta oficial móvel da Casa: **atalho CENTRALDARK + clone git local real + fallback + pasta canônica**.
+
+**Próximo passo.**
+Se tu quiser, eu monto agora o **desenho exato do atalho iPhone “CENTRALDARK”**, com fluxo pronto:
+`CENTRALDARK → GitHub → Working Copy → Arquivos → fallback → self-healing`.
+
+**BOOT.**
+`CHEFE → MOBILE_ENTRY → GITHUB/CLONE/FILES → FALLBACK → CONTINUIDADE`.
+
+**Fio da missão.**
+`estado móvel → lacuna de entrada → owner canônico → self-healing → continuidade`.

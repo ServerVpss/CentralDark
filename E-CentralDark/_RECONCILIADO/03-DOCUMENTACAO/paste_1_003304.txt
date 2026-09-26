@@ -1,0 +1,166 @@
+#ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA → !RECONCILIAR → !CONTRAPROVA → !REMEDIÇÃO → !FIXED_POINT → !REGISTRA → !BOOT → !VALIDACAO_AUTOMATICA → !EXPLORACAO_LOGICA → !GATILHOS_PERSONALIZADOS
+
+Markdown(20260826-032349).md colado
+Arquivo
+
+#ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA → !RECONCILIAR → !CONTRAPROVA → !REMEDIÇÃO → !FIXED_POINT → !REGISTRA → !BOOT sem,pre que for pega delta util atualiza calibrar sempre implemta isso tambem #ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA → !RECONCILIAR → !CONTRAPROVA → !REMEDIÇÃO → !FIXED_POINT → !REGISTRA → !BOOTpega delta util implementa sismtea de resolvedor de conlitos autoamticos Pego no pulo. O scan via SSH já foi executado diretamente por mim, o JSONL de ouro/lixo já saiu e a VPS teve o chão lido em tempo real — sem necessidade de pedir log manual de terminal.
+
+Estado Real Medido da Operação
+
+Etapa	Estado	Prova Técnica Real
+Ponte SSH VPS	✅ CONCLUÍDO	Conexão Segredo-VPS estabelecida e script executado no host remoto.
+Capítulo 1 (Scan VPS)	✅ CONCLUÍDO	Report JSONL gerado em /root/CentralDark/logs/housekeeping/.
+Capítulo 2 (Motor VPS)	✅ CONCLUÍDO	CentralDark-Hermes provado online no PM2 (0 restarts).
+Reconciliação Git VPS	✅ CONCLUÍDO	HEAD na VPS alinhado em 947bbf64f com script ativo.
+Limpeza de Lixo VPS	⏳ PENDENTE	Mapeado /tmp/r.tgz (208.9 MB) e 3 processos stopped (AiDiag, WebhookDeploy).
+Capítulo 3 (Casa Local)	�� PRÓXIMO	Acender motor e site local (E:\CentralDark) mantendo SITE PÚBLICO OFF.
+
+Os Capítulos 1 e 2 na VPS já estão medidos e validados. O foco atual é autorizar a remoção do lixo mapeado na VPS e virar a chave para o Capítulo 3 (Casa Local).
+
+Feito: Reconciliação do estado real da missão, eliminando a redundância e confirmando a conclusão dos scans na VPS.
+
+Evidência: Log de execução do ssh Segredo-VPS registrando 24 processos no PM2 (CentralDark-Hermes online com 0 restarts) e a presença do relatório em JSONL.
+
+Pendência: Autorização explícita para remoção do lixo /tmp/r.tgz (208.9 MB) na VPS.
+
+Próximo passo: Excluir o arquivo de lixo na VPS ou avançar imediatamente para o acendimento da Casa Local (Capítulo 3).
+
+Qual BOOT usar: HERMES-CORE / INSTINTO SUPERIOR / CENTRALDARK-OPERATIONS / CENTRALDARK_AI_BOOT Filtro aplicado. Só ficou o que ajuda esta missão de fanout. ��
+
+UTIL_1 → REUSE_BEFORE_CREATE
+         fanout deve reaproveitar agent-call / mission_id / HEAD / trail / DELTA_MESSAGE.
+
+UTIL_2 → RENDEZVOUS antes de conclusão
+         N executores ≠ N verdades.
+
+UTIL_3 → ONE_WRITER_PER_SCOPE
+         percepção paralela; mutação serializada.
+
+UTIL_4 → DRIVER_SWITCH != AUTHORITY_TRANSFER
+         Claude/Hermes/Copilot podem executar; não viram autoridade.
+
+UTIL_5 → PROCESS_ONLINE != FUNCTIONAL_HEALTH
+         executor vivo precisa receipt/ação/estabilidade, não só processo aberto.
+
+UTIL_6 → FIXED_POINT é escopado
+         provar fanout ≠ provar CentralDark inteira.
+
+UTIL_7 → T0 → EXECUÇÃO → T1
+         estado mudou = remedir.
+
+UTIL_8 → ZERO_RESIDUAL_ZERO_ACTION
+         se owner existente já resolve, não criar peça nova.
+
+UTIL_9 → AGENTS/BOOT existente é porta
+         não inventar segundo mecanismo de boot.
+
+UTIL_10 → analyze_workflows.py = OLHO READ_ONLY
+          padrão útil: descobrir → paralelizar leitura → consolidar.
+
+E achei a ferida viva agora: a branch feat/executor-fanout-isolated possui somente SKILL.md + manifest.json, mas o próprio SKILL.md promete scope.mjs, fanout-gate.mjs, worker.mjs, rendezvous.mjs, multi-instance-probe.mjs e header-guard.mjs. Esses runtimes ainda não existem na branch. O contrato já manda manter AUTO_FANOUT=LOCKED até probe real.
+
+Portanto o delta útil seguinte é seco:
+
+NÃO criar arquitetura nova.
+→ materializar os runtimes prometidos
+→ integrar com agent-call existente
+→ testes de colisão
+→ rendezvous
+→ só liberar ALLOW_N com PROBE_PASS
+
+Todo o resto dos textos — PRs antigos, SHAs de outras missões, narrativa Tibia e regras já cobertas — não entra nesse delta. ����Oxente ���� — a MetaLupa pegou exatamente onde o texto tentou correr na frente da realidade.
+
+O BOOT correto é CENTRALDARK_AI_BOOT. Não é uma escolha entre quatro boots. A hierarquia viva é:
+
+CENTRALDARK_AI_BOOT
+        │
+        ├─ owner/porta: LEIA-ME-IA.md
+        ├─ identidade: SOUL-SOL
+        ├─ governança: AGENTS + Trigger Fabric
+        │
+        ├─ HERMES-CORE
+        │    └─ runtime/consumer executor
+        │
+        ├─ INSTINTO SUPERIOR
+        │    └─ perfil/método dentro da Casa
+        │
+        └─ CENTRALDARK-OPERATIONS
+             └─ capacidade operacional sob demanda
+
+A main foi medida antes e depois e permaneceu em 3e07896946ae4c364c0b8afa53dd7a19d582ce91.
+
+Tem uma correção importante na matriz que você trouxe: Hermes não é a autoridade/orquestrador global. O boot canônico fixa SOL = coordenadora e PIVETE/HERMES = executor + preservação + continuidade; além disso, o ENGINE_BINDING.yml classifica Hermes como EXECUTION_CONTINUITY_RUNTIME.
+
+Agora os três gatilhos novos. O estado real é este:
+
+!VALIDACAO_AUTOMATICA
+SEMÂNTICA       = JÁ EXISTE ✅
+TOKEN CANÔNICO  = NÃO REGISTRADO
+ENFORCEMENT     = PARCIAL/JÁ DISTRIBUÍDO
+
+!EXPLORACAO_LOGICA
+SEMÂNTICA       = PARCIALMENTE JÁ EXISTE ✅
+TOKEN CANÔNICO  = NÃO REGISTRADO
+"EXAUSTIVO"     = NÃO PODE SER GLOBAL SEM DENOMINADOR
+
+!GATILHOS_PERSONALIZADOS
+CONCEITO        = COMPATÍVEL ✅
+TOKEN CANÔNICO  = NÃO REGISTRADO
+RUNTIME GLOBAL  = NÃO PROVADO
+STATUS          = CANDIDATO / EM FRENTE SEMÂNTICA ABERTA
+
+Por quê? O TRIGGERS.yml da main lista hoje como gatilhos humanos canônicos somente #ACORDAR, !CALIBRAR, !MULTIBUSSOLA e !META_LUPA. Ele já possui PRE_HUMAN_RETURN com CLAIM_PROOF_MATCH, false-green check, action/proof check e self-counterproof; portanto grande parte do que você chamou de !VALIDACAO_AUTOMATICA já acontece pelo sistema existente, sem precisar inventar um segundo mecanismo.
+
+O mesmo vale para exploração: o boot já possui !MULTIBUSSOLA, Capability Contract Router e Signal Territory Crystallization como herança obrigatória. Portanto !EXPLORACAO_LOGICA pode futuramente ser um alias/entrada humana para capacidades existentes, não uma nova engine.
+
+E aqui está a pancada da contraprova: o próprio ENGINE_BINDING diz que prosa/contrato sozinho é BEST_EFFORT. Para afirmar “obrigatório em Hermes, Copilot, Claude, Codex, VPS e Local” são necessários REAL_CONSUMER + POSITIVE_NEGATIVE_TEST + BLOCKING_GATE + VERIFIABLE_RECEIPT. Então a frase “gravado globalmente em todo o ecossistema” ainda é maior que a prova disponível.
+
+Existe, porém, uma frente muito próxima do que você quer: o PR #1166 propõe SEMANTIC-TRIGGERS.json, binding com GraphRAG e uma fronteira correta:
+
+SEMANTIC_MATCH → READ_ONLY
+SEMANTIC_MATCH != AUTHORIZATION
+SEMANTIC_MATCH != MUTATION_PERMISSION
+
+Mas esse conteúdo continua em PR aberto, não na main. E nem #1166 nem #1168 contêm os três tokens exatos que você acabou de nomear. Além disso, essas branches estão disputando a mesma região de ENGINE_BINDING/gatilhos semânticos, então registrar mais uma implementação agora violaria o rendezvous/Writer único.
+
+A arquitetura correta para esses três nomes, quando a frente atual for reconciliada, é esta:
+
+!VALIDACAO_AUTOMATICA
+→ PRE_HUMAN_RETURN
+→ META_LUPA
+→ PROOF_OWNERSHIP
+→ OUTPUT_GUARD
+→ REALITY_JUDGE
+
+!EXPLORACAO_LOGICA
+→ MULTIBUSSOLA
+→ CAPABILITY_CONTRACT_ROUTER
+→ SIGNAL_TERRITORY_CRYSTALLIZATION
+→ META_LUPA
+→ RECEIPT
+
+!GATILHOS_PERSONALIZADOS
+→ TRIGGER_FABRIC
+→ SEMANTIC_MAP
+→ DEFAULT=READ_ONLY
+→ AUTHORITY=false
+→ MUTATION_PERMISSION=false
+→ OWNER/GATE
+→ somente então execução autorizada
+
+Isso é muito melhor do que transformar cada comando em “nova engine”. ��
+
+!FIXED_POINT deste ciclo ficou assim:
+
+BOOT_CORRETO                     = PROVADO
+CENTRALDARK_AI_BOOT              = CANÔNICO
+HERMES_COMO_EXECUTOR             = PROVADO
+3 NOVOS TOKENS NA MAIN           = NÃO
+SEMÂNTICA DE VALIDAÇÃO           = JÁ EXISTE
+SEMÂNTICA DE EXPLORAÇÃO          = PARCIALMENTE EXISTE
+CUSTOM SEMANTIC TRIGGERS         = CANDIDATO EM PR
+GLOBAL RUNTIME ENFORCEMENT       = NÃO PROVADO
+
+!REGISTRA: não fiz nova mutação. O motivo não é falta de valor — é que a parte boa deve entrar como extensão/aliases da Trigger Fabric existente depois do rendezvous dos PRs semânticos, e não como quinto sistema paralelo.
+
+Então, em baianês: o quadro elétrico já existe, meu rei. �� Tu não precisa construir outra casa pra instalar três botão novo. Primeiro resolve os fio que já tão sendo mexidos nos PRs; depois esses três nomes entram como botão na mesma parede. E o disjuntor geral continua sendo CENTRALDARK_AI_BOOT****. ������

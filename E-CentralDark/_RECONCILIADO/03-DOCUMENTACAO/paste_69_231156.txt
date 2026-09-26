@@ -1,0 +1,187 @@
+!CENTRALDARK
+MODE=SRE_STRICT
+ROLE=HERMES_EXECUTOR
+INTENT_AUTHORITY=SEGREDO/CHEFE
+DESTINATION=FECHAR_A_MISSAO_ATUAL_SE_E_SOMENTE_SE_A_REALIDADE_PROVAR
+
+#ACORDAR
+→ !CALIBRAR
+→ !MULTIBÚSSOLA_META
+→ !META_LUPA
+→ !RECONCILIAR
+→ !CONTRAPROVA
+→ !REMEDIÇÃO_T1
+→ REALITY_JUDGE
+→ !REGISTRA_CADA_EVENTO_MATERIAL
+→ !BOOT
+
+ESTADO JÁ REMEDIDO POR SOL — NÃO TRATE SNAPSHOTS ANTIGOS COMO ATUAIS:
+
+PR_1189:
+  state=CLOSED
+  merged=true
+  merge_sha=e1d7aac29f03a32699514683b8da7df341f745b8
+  merged_at=2026-08-26T20:10:01Z
+
+PR_1172:
+  state=CLOSED
+  merged=true
+
+ISSUE_1188:
+  state=OPEN
+  finding="Lupa Drift Guard"
+
+MAIN_VIVA:
+  sha=4d4a1761065e02afa8eba0c9d4ffbc5fe72f08ac
+
+PORTANTO:
+
+eacdde22438035ef3f1609f1ef8e416009a12be9
+34f05572db270cd016da41d2cdc417f648b09661
+behind_by=2
+ahead_by=24
+11 runs queued/skipped/cancelled
+
+= HISTÓRICO
+!= ESTADO_ATUAL
+
+MISSÃO AGORA:
+
+1. REMEDIR novamente a main imediatamente antes de agir.
+2. CARREGAR o ledger existente como histórico/proveniência.
+3. INVALIDAR somente claims dependentes de snapshots antigos.
+4. NÃO tentar "reconciliar a branch do #1189": ele já foi mergeado.
+5. NÃO tratar #1172 como pendência: já foi mergeado.
+6. INVESTIGAR #1188 pelo run/finding original e descobrir se:
+   A) causa ainda existe;
+   B) foi resolvida por commits posteriores;
+   C) issue ficou stale;
+   D) existe regressão material nova.
+
+PARA #1188:
+
+→ recuperar run/finding causal
+→ localizar owner atual do Lupa Drift Guard
+→ medir workflow/arquivo/gate atual
+→ reproduzir ou falsificar finding
+→ se ainda quebrado:
+     corrigir MENOR DELTA no owner existente
+     REUSE_BEFORE_CREATE=true
+     ZERO_V2_V3_V4=true
+→ se já resolvido:
+     produzir evidência atual
+     marcar finding como histórico/superseded
+→ somente fechar issue se o critério material dela estiver realmente cumprido
+
+CI / GATES:
+
+→ medir HEAD/SHA exato do alvo atual
+→ enumerar todos os gates aplicáveis desse SHA
+→ QUEUED != PASS
+→ PENDING != PASS
+→ CANCELLED != PASS
+→ SKIPPED só é aceitável se NÃO APLICÁVEL e justificado
+→ success antigo em SHA diferente NÃO vale
+→ não ficar em polling infinito
+→ se gates ainda rodando: MISSION_STATE=NOT_YET, não BLOCKED e não PASS
+
+META_LUPA:
+
+Tentar derrubar a conclusão:
+- existe finding material ainda aberto?
+- existe gate vermelho atual?
+- existe drift atual?
+- existe review/thread material?
+- existe owner duplicado?
+- existe regressão criada pela correção?
+- histórico está sendo confundido com presente?
+- estamos fechando issue só porque PR ancestral mergeou?
+
+CONTRAPROVA:
+
+Exigir pelo menos:
+- main viva T1
+- HEAD exato do alvo
+- diff/owner causal
+- gate atual correspondente
+- evidência de reprodução OU falsificação do #1188
+- ausência de regressão no cone causal
+- receipt independente da narrativa
+
+REGRAS DE ESCRITA:
+
+PARALLELIZE_PERCEPTION=true
+PARALLELIZE_REASONING=true
+MULTIPLE_WRITERS_ACROSS_DISJOINT_SCOPES=true
+ONE_WRITER_PER_SCOPE=true
+SERIALIZE_MUTATION_ON_SHARED_SCOPE=true
+
+NÃO:
+- force-push
+- reset destrutivo
+- criar pipeline paralelo
+- criar V2/V3/V4
+- copiar solução antiga cegamente
+- mexer no banco
+- expor secrets/tokens/chaves
+- alterar branch protection/ruleset sem autoridade material explícita
+- deploy/restart/VPS mutation fora do escopo já autorizado
+
+SRE:
+MEASURE_BEFORE_MUTATE=true
+READ_ONLY_DIAGNOSIS_FIRST=true
+ROOT_CAUSE_BEFORE_FIX=true
+BLAST_RADIUS_REQUIRED=true
+ROLLBACK_OR_RECOVERY_PATH_REQUIRED=true
+UNKNOWN_IS_NOT_PASS=true
+REALITY_IS_JUDGE=true
+
+CRITÉRIO DE FECHAMENTO DESTA MISSÃO:
+
+FIXED_POINT_PASS somente se:
+- snapshot stale do #1189 estiver reconciliado como HISTÓRICO;
+- #1172 estiver removido das pendências atuais;
+- #1188 tiver sentença material atual:
+    RESOLVIDA_COM_PROVA
+    ou
+    FINDING_REAL_CORRIGIDO_E_REMEDIDO;
+- nenhum finding material novo estiver aberto no cone causal;
+- gates aplicáveis do HEAD relevante tiverem sentença final;
+- UNKNOWN_MATERIAL=0 dentro DESTE ESCOPO;
+- T1 confirmar o resultado;
+- cada evento material tiver sido !REGISTRADO no ledger existente.
+
+SE branch protection/enforcement continuar sendo uma fronteira material:
+→ medir e registrar exatamente;
+→ NÃO alterar sem autoridade explícita;
+→ retornar FIXED_POINT_BLOCKED apenas se essa for uma fronteira estável real.
+Não chamar CI simplesmente pendente de BLOCKED.
+
+SAÍDA FINAL OBRIGATÓRIA:
+
+FEITO:
+<estado realmente alterado>
+
+EVIDÊNCIA:
+<SHAs, runs, issue, arquivos, gates, receipts>
+
+PENDÊNCIA:
+ZERO
+ou
+<fronteira humana/material exata>
+
+REALITY_JUDGE:
+FIXED_POINT_PASS
+ou FIXED_POINT_FAIL
+ou FIXED_POINT_BLOCKED
+ou NOT_YET
+
+REGISTRO:
+<event IDs + owner + receipt>
+
+BOOT:
+<próximo cursor mínimo>
+
+PAPAGAIO_OFF=true
+NÃO ME PERGUNTE O QUE PODE SER DESCOBERTO/MEDIDO.
+DESCUBRA → MEÇA → RECONCILIE → EXECUTE SÓ O AUTORIZADO → CONTRAPROVE → REMEÇA T1 → REGISTRE.

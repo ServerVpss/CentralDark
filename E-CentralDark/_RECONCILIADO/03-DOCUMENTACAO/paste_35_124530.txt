@@ -1,0 +1,278 @@
+# !CENTRALDARK — REDUZIR CONFLITOS DE PR / DEPENDABOT
+
+```text
+!CENTRALDARK
+#ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA → !RECONCILIAR → !CONTRAPROVA → !REMEDIÇÃO → !FIXED_POINT → !REGISTRA → !BOOT
+
+REPO_CANONICO=ServerVpss/CentralDark
+
+INTENÇÃO_DO_CHEFE:
+Reduzir a causa dos conflitos recorrentes entre PRs do Dependabot e a main, reutilizando a infraestrutura já existente da CentralDark.
+
+NÃO criar novo bot, novo workflow paralelo, novo router ou segundo sistema.
+
+PRINCÍPIOS:
+REUSE_BEFORE_CREATE=true
+ONE_SYSTEM_ONLY=true
+ONE_OWNER_PER_CAPABILITY=true
+ONE_WRITER_PER_SCOPE=true
+UNKNOWN_IS_NOT_PASS=true
+ACTION_IS_NOT_PROOF=true
+SAME_HEAD_GATES=true
+SERIALIZE_MUTATION=true
+NO_FORCE_PUSH=true
+NO_DEPLOY=true
+NO_RESTART=true
+NO_VPS_MUTATION=true
+
+ESTADO JÁ MEDIDO:
+- existe `.github/dependabot.yml`
+- existe `.github/workflows/dependabot-auto-merge.yml`
+- o workflow atual já:
+  - reconhece PRs do Dependabot
+  - coleta metadata
+  - aprova
+  - habilita auto-merge SQUASH somente para PATCH
+  - deixa MINOR para revisão humana
+- majors já estão bloqueados
+- há muitos PRs npm simultâneos alterando `package.json` e `package-lock.json`
+- vários `@radix-ui/*` estão sendo abertos em PRs separados e competindo pelos mesmos manifests
+- PRs do Dependabot suportam rebase/recriação sobre a main atual
+- alterações manuais na branch do Dependabot não devem ser o mecanismo padrão de reconciliação
+
+DESTINO:
+
+1. REDUZIR A FONTE DOS CONFLITOS
+
+No `.github/dependabot.yml`:
+
+→ preservar política existente
+→ NÃO liberar majors
+→ agrupar atualizações relacionadas de `@radix-ui/*`
+→ grupo deve aceitar somente minor/patch compatíveis com a política atual
+→ não transformar todo npm em um único PR gigante
+→ manter grupos pequenos por família/capacidade
+→ começar somente por `@radix-ui/*`, pois é o conflito material já observado
+
+Resultado desejado:
+
+ANTES:
+@radix-ui/react-slot        → PR
+@radix-ui/react-select      → PR
+@radix-ui/react-slider      → PR
+@radix-ui/react-toggle      → PR
+@radix-ui/react-label       → PR
+...
+
+DEPOIS:
+@radix-ui/* compatíveis
+→ 1 PR agrupado
+→ 1 alteração coordenada de package.json/package-lock.json
+
+2. ABSORVER RECONCILIAÇÃO NO OWNER EXISTENTE
+
+Modificar SOMENTE o workflow existente:
+
+`.github/workflows/dependabot-auto-merge.yml`
+
+Não criar outro workflow.
+
+Quando um PR do Dependabot estiver atrás da main ou conflitado:
+
+DEPENDABOT_PR
+→ detectar estado
+→ solicitar mecanismo nativo de rebase do Dependabot
+→ preferir `@dependabot rebase`
+→ NÃO resolver automaticamente conteúdo conflitante escolhendo current/incoming/both
+→ NÃO editar manualmente package.json/package-lock.json apenas para fabricar mergeability
+→ esperar novo HEAD do próprio Dependabot
+→ novos gates devem executar sobre esse novo HEAD
+
+3. POLÍTICA DE MERGE
+
+PATCH:
+novo HEAD
+→ sem conflito
+→ todos gates exigidos no MESMO HEAD
+→ auto-merge SQUASH permitido
+
+MINOR:
+novo HEAD
+→ sem conflito
+→ gates executados
+→ permanece revisão humana conforme política atual
+
+MAJOR:
+continua bloqueado
+
+SE:
+mergeable=false
+OU mergeability=UNKNOWN
+OU check pendente
+OU check falhou
+OU HEAD mudou depois da medição
+OU conflito semântico real
+
+ENTÃO:
+STOP
+NÃO MERGEAR
+
+4. NÃO CONFUNDIR PR HUMANO COM DEPENDABOT
+
+DEPENDABOT:
+main mudou
+→ Dependabot rebase/recreate
+→ novo HEAD
+→ gates
+→ squash conforme política
+
+PR HUMANO:
+main mudou/conflitou
+→ reconciliar semanticamente com main
+→ preservar intenção e owners
+→ testar novo HEAD
+→ squash somente após same-head gates
+
+Não aplicar resolução cega de Dependabot a PR humano.
+
+5. ESTADO VIVO PRIMEIRO
+
+Antes de editar:
+
+→ ler `.github/dependabot.yml`
+→ ler `.github/workflows/dependabot-auto-merge.yml`
+→ medir PRs Dependabot abertos
+→ medir quais alteram os mesmos manifests
+→ confirmar capacidades nativas atuais do GitHub/Dependabot
+→ procurar workflows/rulesets existentes relacionados a atualização de branch, merge queue ou auto-merge
+→ se owner existente já fizer parte do necessário, absorver o delta nele
+
+GAP_REAL obrigatório antes de criar qualquer arquivo novo.
+
+6. CORREÇÃO MÍNIMA
+
+Esperado inicialmente:
+
+A)
+`.github/dependabot.yml`
+→ adicionar somente agrupamento `@radix-ui/*`
+
+B)
+`.github/workflows/dependabot-auto-merge.yml`
+→ adicionar tratamento determinístico para branch stale/conflitada usando rebase nativo do Dependabot
+→ preservar todo comportamento já funcional
+
+Não refatorar o que não precisa.
+Não renomear estrutura sem causa.
+Não criar V2.
+Não duplicar política.
+
+7. TESTE / CONTRAPROVA
+
+Provar obrigatoriamente:
+
+TESTE A — agrupamento
+→ configuração do Dependabot é válida
+→ `@radix-ui/*` está coberto pelo grupo esperado
+→ majors continuam fora
+
+TESTE B — PATCH limpo
+→ comportamento atual de aprovação + SQUASH continua funcionando
+
+TESTE C — MINOR
+→ continua sem auto-merge
+
+TESTE D — conflito/stale
+→ workflow não faz merge
+→ solicita rebase/reconciliação
+→ HEAD novo invalida qualquer prova do HEAD anterior
+
+TESTE E — falha
+→ gate vermelho impede merge
+
+TESTE F — UNKNOWN
+→ não pode virar PASS
+
+TESTE G — PR humano
+→ workflow Dependabot não interfere
+
+TESTE H — regressão
+→ nenhum workflow paralelo criado
+→ políticas existentes preservadas
+
+8. REMEDIÇÃO
+
+Comparar T0 → T1:
+
+T0:
+muitos PRs Radix separados
++ colisão repetida em package.json/package-lock.json
++ reconciliação manual Update branch → gates → squash
+
+T1 esperado:
+menos PRs concorrentes
++ Radix agrupado
++ Dependabot reconciliando com main pelo mecanismo nativo
++ gates sempre relativos ao HEAD atual
++ squash somente depois da prova
++ intervenção humana reservada para MINOR, conflito semântico ou falha real
+
+9. GIT / SEGURANÇA
+
+→ trabalhar em branch própria
+→ não fazer force-push
+→ não fazer push direto de main local suja
+→ não fazer deploy/restart
+→ não alterar VPS
+→ preservar histórico
+→ commit mínimo e causal
+→ abrir/atualizar somente um PR para esse delta
+
+10. FECHAMENTO OBRIGATÓRIO
+
+Entregar:
+
+FEITO:
+arquivos realmente alterados e comportamento implementado
+
+EVIDÊNCIA:
+diff
+SHA
+testes
+checks
+estado do PR
+prova SAME_HEAD
+
+PENDÊNCIA:
+somente UNKNOWN/bloqueio real
+
+CONTRAPROVA:
+o que foi tentado para derrubar a conclusão
+
+VEREDITO:
+PROVADO / QUEBRADO / EVIDÊNCIA FALTANTE
+
+PRÓXIMO PASSO:
+continuação causal mínima
+
+BOOT:
+!CENTRALDARK → DEPENDABOT_RECONCILE → SAME_HEAD_GATES → SQUASH
+
+FIO DA MISSÃO:
+conflitos manuais recorrentes
+→ causa localizada em PRs concorrentes
+→ reduzir concorrência por agrupamento
+→ reconciliar Dependabot pelo owner nativo
+→ provar HEAD novo
+→ squash somente após realidade validar
+
+NÃO declarar FIXED_POINT enquanto não houver evidência de pelo menos um ciclo real:
+
+MAIN MUDA
+→ PR DEPENDABOT FICA STALE/CONFLITADO
+→ REBASE
+→ NOVO HEAD
+→ GATES
+→ MERGEABILITY LIMPA
+→ SQUASH OU HOLD CONFORME SEMVER
+```

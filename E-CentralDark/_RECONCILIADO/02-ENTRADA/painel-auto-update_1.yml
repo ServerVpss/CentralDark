@@ -1,0 +1,70 @@
+name: painel auto-update
+
+# Em todo push na main, registra um evento "push <sha>" no Mega Painel
+# (CentralDark/apps/projeto-dashboard/painel-data.json) e commita de volta.
+# Mantém status.centralldark.com sempre vivo sem ação manual.
+#
+# ⚠️ EXCEÇÃO à regra "bots só via PR" (#116):
+# painel-data.json é DADO GERADO (snapshot operacional), não código.
+# Faz push direto pra status.centralldark.com nunca ficar estagnado.
+# Workflows que tocam CÓDIGO continuam obrigados a abrir PR.
+# Ignora push do próprio bot pra evitar loop.
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "CentralDark/apps/projeto-dashboard/painel-data.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: painel-auto-update
+  cancel-in-progress: false
+
+jobs:
+  registrar:
+    name: Registrar push no painel
+    runs-on: ubuntu-latest
+    if: github.repository == 'ServerVpss/CentralDark' && github.actor != 'github-actions[bot]'
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Atualizar painel-data.json
+        env:
+          SHA: ${{ github.sha }}
+          ACTOR: ${{ github.actor }}
+          MSG: ${{ github.event.head_commit.message }}
+        run: |
+          node CentralDark/apps/projeto-dashboard/atualizar-painel-vivo.mjs
+        # atualizar-painel-vivo.mjs lê variáveis PAINEL_* — passamos via env
+        # através de um wrapper:
+
+      - name: Wrapper se não houver PAINEL_EVENTO
+        env:
+          PAINEL_EVENTO: "Push na main · ${{ github.sha }}"
+          PAINEL_EVENTO_DETALHE: "${{ github.event.head_commit.message }}"
+          PAINEL_EVENTO_AREA: "Repositório"
+        run: |
+          # roda de novo só pra garantir que o evento foi anexado
+          node CentralDark/apps/projeto-dashboard/atualizar-painel-vivo.mjs
+
+      - name: Commit + push
+        run: |
+          git config user.name 'CentralDark Bot'
+          git config user.email 'actions@github.com'
+          git add -- CentralDark/apps/projeto-dashboard/painel-data.json
+          if git diff --cached --quiet; then
+            echo "Nada pra commitar."
+            exit 0
+          fi
+          git commit -m "chore(painel): registrar push ${GITHUB_SHA:0:7}
+
+          Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
+          git push

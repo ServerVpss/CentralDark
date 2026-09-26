@@ -1,0 +1,4 @@
+project_id = "clone-deck"
+
+[functions.mcp-proxy]
+verify_jwt = false

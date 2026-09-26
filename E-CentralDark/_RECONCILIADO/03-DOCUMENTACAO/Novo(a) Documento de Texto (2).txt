@@ -1,0 +1,879 @@
+Perfeito. **As linhas vermelhas devem representar retorno automático para correção, nunca erro provocado.** A autonomia real fica assim:
+
+```text
+REGRA PASSOU → AVANÇA
+REGRA FALHOU → CORRIGE A CAUSA EXATA
+SEM PROGRESSO → BLOQUEIA E NOTIFICA
+UNKNOWN REAL → ESCALA
+```
+
+## [CLAUDE_CODE] Comandão para materializar a arquitetura
+
+```text
+/goal
+
+MISSÃO_ID=CENTRALDARK-AUTONOMIA-DETERMINISTICA-END-TO-END
+
+MISSÃO:
+
+Transformar o fluxo mult agente existente do repositório
+ServerVpss/CentralDark em uma operação autônoma, determinística,
+testável, observável e recuperável.
+
+A autonomia deve acontecer por CÓDIGO.
+
+IA não substitui:
+- validação;
+- estado;
+- hash;
+- políticas;
+- gates;
+- CI;
+- merge;
+- deploy;
+- rollback;
+- notificação;
+- auditoria.
+
+IA atua somente para:
+- produzir código;
+- interpretar requisitos;
+- investigar falhas não determinísticas;
+- propor correção;
+- resolver UNKNOWN sem regra programada.
+
+ESCOPO DE AUTONOMIA:
+
+Autonomia de 100% significa:
+
+100% das ações já autorizadas,
+dentro do escopo declarado,
+executadas automaticamente
+quando as condições determinísticas forem satisfeitas.
+
+Não significa liberdade irrestrita para alterar qualquer parte do sistema.
+
+FONTE_DA_VERDADE=ServerVpss/CentralDark
+GITHUB=FONTE_CANÔNICA
+VPS=EXECUTOR_RUNTIME
+PIVETE=AUTORIDADE_FINAL
+ESCRITOR=ÚNICO
+AGENTES_PARALELOS=READ_ONLY
+
+AUTORIZAÇÃO DESTA MISSÃO:
+
+AUTORIZADO:
+- analisar o repositório integralmente;
+- melhorar componentes canônicos existentes;
+- escrever código;
+- criar ou atualizar testes;
+- criar branch;
+- commitar;
+- abrir ou atualizar um único PR;
+- corrigir o mesmo PR;
+- responder revisões;
+- aplicar labels já autorizadas pela missão;
+- executar CI;
+- realizar merge automático somente após todos os gates obrigatórios;
+- executar deploy pelo workflow canônico após merge comprovado;
+- realizar rollback automático se os gates de produção falharem;
+- enviar notificações sanitizadas ao Telegram/Painel.
+
+NÃO AUTORIZADO:
+- force-push;
+- apagar histórico Git;
+- expor secrets;
+- imprimir tokens;
+- modificar infraestrutura manualmente por SSH;
+- executar comandos destrutivos diretamente na VPS;
+- criar V1, V2, V3 ou sistema paralelo;
+- fabricar evidência;
+- transformar UNKNOWN em PASS;
+- ignorar gate falho;
+- alterar escopo silenciosamente.
+
+==================================================
+FASE 0 — BOOT, INVENTÁRIO E NÃO DUPLICAÇÃO
+==================================================
+
+Antes de escrever:
+
+1. Leia integralmente os contratos canônicos aplicáveis:
+
+- LEIA-ME-IA.md
+- AGENTS.md
+- CLAUDE.md
+- CODEX.md
+- docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
+- docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md
+- .agents/skills/meta-lupa/SKILL.md
+- .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
+
+2. Localize e leia:
+
+- scripts/github-autonomia-promocao.mjs
+- scripts/github-autonomia-varredura.mjs
+- scripts/github-autonomia-promocao.test.mjs
+- scripts/github-autonomia-varredura.test.mjs
+- .github/workflows/autonomia-promocao.yml
+- .github/workflows/porta-de-entrada.yml
+- .github/workflows/codex-validate.yml
+- .github/workflows/pr-auto-review.yml
+- apps/modulos/HERMES-CORE/agents/Log-Verificador/provider-health.mjs
+- apps/modulos/HERMES-CORE/agents/Log-Verificador/agent.mjs
+- scripts/agent-notify.mjs
+- mapa canônico e validadores existentes.
+
+3. Inventarie:
+
+MAIN_SHA=
+BRANCHES_RELACIONADAS=
+PRS_RELACIONADOS=
+COMPONENTES_CANÔNICOS=
+TESTES_EXISTENTES=
+WORKFLOWS_EXISTENTES=
+NOTIFICADOR_EXISTENTE=
+CLASSIFICADOR_PROVIDER_EXISTENTE=
+PROMOTOR_EXISTENTE=
+LACUNAS_REAIS=
+
+4. Não crie componente novo quando já existir equivalente.
+
+Classifique cada capacidade:
+
+EXISTE_E_FUNCIONA
+EXISTE_MAS_INCOMPLETA
+EXISTE_MAS_DIVERGE
+NÃO_EXISTE
+UNKNOWN
+
+5. Fixe BASE_SHA antes da primeira escrita.
+
+==================================================
+FASE 1 — CONTRATO DE ENTRADA DETERMINÍSTICO
+==================================================
+
+Todo ticket deve ser transformado em um contrato estruturado:
+
+{
+  "mission_id": "...",
+  "intention": "...",
+  "scope": ["paths autorizados"],
+  "forbidden_paths": ["secrets", ".env", "sessions", ".ssh"],
+  "risk": "R0|R1|R2|R3",
+  "actions": {
+    "write": true,
+    "open_pr": true,
+    "merge": true,
+    "deploy": true,
+    "rollback": true
+  },
+  "required_checks": [],
+  "definition_of_done": [],
+  "authorization": {
+    "authority": "PIVETE",
+    "marker": "PERMITO PIVETE",
+    "mission_bound": true
+  }
+}
+
+Validação obrigatória:
+
+- JSON Schema ou Zod;
+- mission_id presente;
+- escopo não vazio;
+- ações autorizadas explicitamente;
+- nenhuma interseção com caminhos proibidos;
+- base SHA existente;
+- definição de pronto verificável;
+- autorização presa à missão.
+
+Entrada inválida:
+
+INPUT_CONTRACT_BLOCKED
+
+Nenhum agente inicia antes de o contrato ser válido.
+
+==================================================
+FASE 2 — FACTORY ROUTER DETERMINÍSTICO
+==================================================
+
+Criar ou evoluir o roteador canônico existente.
+
+O roteamento deve considerar:
+
+- tipo da tarefa;
+- risco;
+- arquivos afetados;
+- necessidade de código;
+- necessidade de pesquisa;
+- complexidade;
+- disponibilidade dos providers;
+- custo estimado;
+- histórico de desempenho;
+- confiança baseada em evidência real.
+
+Papéis:
+
+PLANNER:
+- cria plano estruturado;
+- não escreve código.
+
+READERS:
+- pesquisam em paralelo;
+- somente leitura;
+- não modificam o repositório.
+
+WRITER:
+- único agente autorizado a escrever;
+- recebe resultados consolidados.
+
+TESTER:
+- executa testes;
+- não modifica código.
+
+REVIEWER:
+- procura regressão, falso verde, duplicação e falha de segurança;
+- não aprova o próprio trabalho.
+
+AUDITOR:
+- verifica evidência, hashes, logs, contratos e gates.
+
+PROMOTER:
+- executa merge somente depois de prova completa.
+
+NOTIFIER:
+- informa mudança de estado;
+- nunca decide.
+
+O roteador não deve depender de escolha manual de modelo.
+
+Classes de modelo:
+
+FAST_CHEAP:
+- busca;
+- classificação;
+- inventário;
+- tarefas repetitivas.
+
+ROBUST:
+- implementação;
+- arquitetura;
+- conflito complexo.
+
+FINAL_REVIEW:
+- revisão adversarial final;
+- somente quando necessário.
+
+Provider indisponível:
+
+- detectar por código;
+- classificar motivo;
+- selecionar fallback permitido;
+- registrar fallback;
+- nunca converter indisponibilidade em PASS.
+
+==================================================
+FASE 3 — WORKTREES PARALELAS CONTROLADAS
+==================================================
+
+Cada frente independente deve usar worktree isolada.
+
+Regras:
+
+- uma worktree por tarefa independente;
+- nenhuma worktree escreve no mesmo arquivo simultaneamente;
+- detectar sobreposição antes de despachar;
+- sobreposição real → serializar;
+- cada worktree possui branch, HEAD e escopo fixados;
+- nenhum merge local silencioso;
+- resultados retornam ao agregador.
+
+O agregador deve produzir:
+
+WORKTREE=
+BASE_SHA=
+HEAD_SHA=
+FILES_CHANGED=
+TESTS=
+RESULT=
+CONFLICTS=
+EVIDENCE=
+
+Somente o escritor principal integra resultados.
+
+==================================================
+FASE 4 — QUALIDADE FECHADA POR CÓDIGO
+==================================================
+
+Pipeline obrigatório:
+
+LINT
+→ FORMAT_CHECK
+→ TYPECHECK
+→ UNIT_TESTS
+→ INTEGRATION_TESTS
+→ SECURITY_SCAN
+→ SECRET_SCAN
+→ POLICY_AS_CODE
+→ COVERAGE
+→ BUILD
+→ DIFF_CHECK
+→ REVIEW
+→ PR_READY
+
+Cada gate retorna somente:
+
+PASS
+FAIL
+BLOCKED
+UNKNOWN
+NOT_APPLICABLE
+
+Regras:
+
+- SKIPPED nunca equivale a PASS;
+- UNKNOWN nunca libera próxima etapa;
+- ausência de workflow nunca vira verde;
+- teste indisponível bloqueia quando obrigatório;
+- resultado deve estar preso ao HEAD exato;
+- mudança de HEAD invalida evidência anterior.
+
+Linhas vermelhas do diagrama representam:
+
+FAIL
+→ capturar erro exato
+→ sanitizar
+→ identificar arquivo/linha/regra
+→ devolver ao escritor
+→ aplicar correção mínima
+→ executar novamente apenas os gates afetados
+→ depois executar regressão completa
+
+A IA nunca erra de propósito.
+
+Ela recebe a falha produzida pelo código e tenta corrigi-la.
+
+==================================================
+FASE 5 — AUTOCORREÇÃO SEM LOOP INFINITO
+==================================================
+
+Não usar apenas um limite cego de tentativas.
+
+Controlar por progresso real:
+
+CORRECTION_FINGERPRINT =
+HEAD
++ arquivos alterados
++ teste falho
++ mensagem normalizada
++ causa classificada
+
+Continuar quando:
+
+- o HEAD mudou;
+- a causa mudou;
+- o número de testes passando aumentou;
+- o diff reduziu;
+- a evidência melhorou.
+
+Parar quando:
+
+- três execuções consecutivas possuem fingerprint equivalente;
+- nenhuma evidência nova foi produzida;
+- a mesma correção foi desfeita e reaplicada;
+- custo cresce sem mudança de estado;
+- aparece conflito de política;
+- aparece risco de segurança;
+- aparece UNKNOWN real.
+
+Estados:
+
+AUTO_CORRECTING
+STAGNATED
+MODEL_UNAVAILABLE
+SECURITY_BLOCKED
+POLICY_BLOCKED
+UNKNOWN
+READY
+
+STAGNATED não chama o Pivete para apertar botão.
+
+Deve enviar:
+
+- causa;
+- teste;
+- última mudança;
+- ações tentadas;
+- pergunta única necessária.
+
+==================================================
+FASE 6 — MERGE GATE LÓGICO
+==================================================
+
+Remover aprovação subjetiva de rotina.
+
+O merge é liberado somente quando:
+
+AUTHORIZATION_VALID=true
+HEAD_IMMUTABLE=true
+BASE_CURRENT=true
+MERGEABLE=true
+CONFLICTS=0
+UNRESOLVED_THREADS=0
+REQUIRED_CHECKS=PASS
+SECURITY_CRITICAL=0
+SECRET_FINDINGS=0
+COVERAGE>=META_CONFIGURADA
+BUILD=PASS
+POLICY_AS_CODE=PASS
+DIFF_CHECK=PASS
+AUDIT_RECEIPT=VALID
+
+Cobertura não deve usar número inventado.
+
+A meta deve:
+
+- vir de configuração versionada;
+- respeitar baseline;
+- impedir redução injustificada;
+- exigir cobertura de código novo quando aplicável.
+
+Merge:
+
+- squash merge;
+- sem force-push;
+- expected_head_sha obrigatório;
+- falha ou mudança de HEAD → cancelar e reavaliar;
+- registrar commit final e receipt.
+
+Se qualquer condição for falsa:
+
+MERGE_BLOCKED
+
+==================================================
+FASE 7 — PROMOTION TOKEN E SEPARAÇÃO DE PODERES
+==================================================
+
+O promotor deve possuir identidade separada.
+
+Regra:
+
+PROMOTION_TOKEN ausente
+→ BLOCKED
+
+Proibido:
+
+PROMOTION_TOKEN || github.token
+
+O token do workflow comum não pode substituir silenciosamente
+a identidade do promotor.
+
+Juiz:
+
+- read-only;
+- avalia candidato;
+- gera receipt;
+- nunca mergeia.
+
+Promotor:
+
+- recebe receipt válido;
+- revalida HEAD;
+- revalida gates;
+- executa merge;
+- registra resultado.
+
+Nenhum executor aprova o próprio trabalho.
+
+==================================================
+FASE 8 — DEPLOY AUTÔNOMO E SEGURO
+==================================================
+
+Deploy somente após merge comprovado.
+
+Não executar comandos manuais na VPS.
+
+Fluxo:
+
+MERGE
+→ BUILD REPRODUZÍVEL
+→ ARTEFATO COM HASH
+→ DEPLOY WORKFLOW
+→ CANÁRIO
+→ HEALTH CHECK
+→ PROMOÇÃO
+→ OBSERVAÇÃO
+→ PROVA
+
+O deploy deve usar:
+
+- artifact imutável;
+- commit SHA;
+- checksum;
+- ambiente declarado;
+- timeout;
+- health endpoint;
+- logs sanitizados;
+- rollback conhecido.
+
+Nunca:
+
+- git pull manual na VPS;
+- pm2 delete all;
+- reiniciar tudo;
+- preservar lixo histórico;
+- usar estado antigo da VPS como fonte da verdade.
+
+A VPS executa exatamente o artefato produzido pelo GitHub.
+
+==================================================
+FASE 9 — STOP-WRITE E ROLLBACK AUTOMÁTICO
+==================================================
+
+Monitorar após deploy:
+
+- HTTP 5xx;
+- latência;
+- health checks;
+- crash loop;
+- erros críticos;
+- falha de dependência;
+- queda de disponibilidade;
+- inconsistência de versão;
+- divergência de SHA.
+
+Política versionada, por exemplo:
+
+PRODUCTION_ERROR_THRESHOLD=
+PRODUCTION_WINDOW=
+LATENCY_THRESHOLD=
+HEALTHCHECK_FAILURES=
+ROLLBACK_TARGET=
+
+Ao atingir a regra:
+
+1. STOP_WRITE=true;
+2. impedir novos deploys;
+3. congelar o candidato atual;
+4. executar rollback para artefato anterior comprovado;
+5. validar health;
+6. registrar receipt;
+7. notificar canais;
+8. abrir incidente automático.
+
+Rollback falhou:
+
+SECURITY_BLOCKED
+ou
+PRODUCTION_BLOCKED
+
+Nunca continuar tentando indefinidamente.
+
+==================================================
+FASE 10 — PROVIDER HEALTH E FALLBACK
+==================================================
+
+Reutilizar o classificador já existente.
+
+Não criar outro.
+
+Detectar:
+
+CREDITS_LOW
+CREDITS_EXHAUSTED
+RATE_LIMITED
+BILLING_BLOCKED
+PROVIDER_OFFLINE
+TIMEOUT
+INVALID_RESPONSE
+
+Resposta:
+
+CREDITS_LOW
+→ notificar
+→ continuar até limite configurado.
+
+CREDITS_EXHAUSTED
+→ selecionar fallback.
+
+RATE_LIMITED
+→ aplicar backoff controlado ou fallback.
+
+PROVIDER_OFFLINE
+→ fallback.
+
+Todos os providers indisponíveis
+→ MODEL_UNAVAILABLE
+→ manter gates determinísticos ativos
+→ bloquear apenas etapas que realmente exigem IA.
+
+Nenhum payload sensível deve aparecer em log.
+
+==================================================
+FASE 11 — TELEGRAM, WEBHOOK E PAINEL
+==================================================
+
+Reutilizar o notificador existente.
+
+Criar apenas adaptador para GitHub Actions quando necessário.
+
+Eventos:
+
+MISSION_STARTED
+INPUT_CONTRACT_VALIDATED
+BUILD_STARTED
+TEST_FAILED
+AUTO_CORRECTION_STARTED
+AUTO_CORRECTION_STAGNATED
+PROVIDER_CREDITS_LOW
+PROVIDER_UNAVAILABLE
+FALLBACK_SELECTED
+SECURITY_BLOCKED
+PR_READY
+MERGE_STARTED
+MERGE_COMPLETED
+DEPLOY_STARTED
+DEPLOY_COMPLETED
+PRODUCTION_ERROR
+STOP_WRITE_ENABLED
+ROLLBACK_STARTED
+ROLLBACK_COMPLETED
+MISSION_COMPLETED
+
+Formato:
+
+CENTRALDARK AUTONOMY
+
+MISSION=
+PR=
+HEAD=
+EVENT=
+CAUSE=
+AUTOMATIC_ACTION=
+STATUS=
+LINK=
+
+Deduplicação:
+
+MISSION
++ PR
++ HEAD
++ EVENT
++ CAUSE
+
+Falha do Telegram:
+
+NOTIFICATION_STATUS=NOT_SENT
+
+Não transformar falha de notificação em envio comprovado.
+
+==================================================
+FASE 12 — AUDITORIA IMUTÁVEL
+==================================================
+
+Cada transição deve registrar:
+
+TIMESTAMP=
+MISSION_ID=
+AGENT_ROLE=
+INPUT_HASH=
+BASE_SHA=
+HEAD_SHA=
+ACTION=
+DECISION=
+RULE=
+EVIDENCE=
+RESULT=
+NEXT_STATE=
+
+Não criar “blockchain” fictícia.
+
+Usar:
+
+- histórico Git;
+- artifacts assinados ou com checksum;
+- logs da Action;
+- receipts com hash;
+- retenção configurada;
+- commits e tags quando apropriado.
+
+Receipt deve ser:
+
+- preso ao repositório;
+- preso ao PR;
+- preso ao HEAD;
+- preso à missão;
+- preso ao escopo;
+- expirável;
+- verificável;
+- inválido após adulteração.
+
+==================================================
+FASE 13 — TESTES DE CONTRATO
+==================================================
+
+Adicionar aos testes canônicos existentes:
+
+A. entrada inválida
+→ fábrica não inicia.
+
+B. autorização ausente
+→ bloqueado.
+
+C. autorização válida e escopo compatível
+→ pipeline inicia.
+
+D. dois agentes tentam escrever o mesmo arquivo
+→ serialização ou bloqueio.
+
+E. lint falha
+→ erro volta ao escritor.
+
+F. correção muda o resultado
+→ nova tentativa permitida.
+
+G. três fingerprints iguais
+→ STAGNATED.
+
+H. provider sem crédito
+→ fallback + notificação.
+
+I. todos providers indisponíveis
+→ MODEL_UNAVAILABLE, nunca PASS.
+
+J. workflow ausente
+→ BLOCKED.
+
+K. check skipped
+→ não conta como PASS.
+
+L. HEAD muda
+→ receipt invalidado.
+
+M. thread não resolvida
+→ merge bloqueado.
+
+N. segredo suspeito
+→ SECURITY_BLOCKED sem mostrar o valor.
+
+O. gates verdes
+→ PR_READY.
+
+P. receipt válido
+→ merge executado pelo promotor.
+
+Q. health falha após deploy
+→ STOP_WRITE + rollback.
+
+R. rollback restaura saúde
+→ incidente registrado.
+
+S. rollback falha
+→ produção bloqueada e alerta crítico.
+
+T. evento repetido
+→ notificação deduplicada.
+
+==================================================
+FASE 14 — REGRA DE OURO
+==================================================
+
+- Evidência primeiro.
+- Correção mínima.
+- Melhorar o que já existe.
+- Zero versões paralelas.
+- Zero force-push.
+- Zero falso verde.
+- Zero segredo em log.
+- Zero decisão subjetiva quando existe regra programável.
+- IA somente onde código determinístico não resolve.
+- Pivete não opera botões de rotina.
+- Pivete não repete autorização válida.
+- Código briga com PR.
+- Actions provam.
+- Git registra.
+- Runtime executa.
+- Monitoramento confirma.
+
+==================================================
+ENTREGA
+==================================================
+
+A entrega não é um plano documental.
+
+Entregar:
+
+1. código funcional;
+2. testes;
+3. workflows;
+4. receipts;
+5. notificações;
+6. documentação mínima atualizada;
+7. PR único;
+8. CI completo;
+9. merge comprovado;
+10. deploy comprovado;
+11. rollback testado em ambiente seguro;
+12. evidência do estado final.
+
+Não declarar autonomia completa antes de provar o ciclo:
+
+TICKET
+→ CONTRATO
+→ AGENTES
+→ CÓDIGO
+→ TESTES
+→ CORREÇÃO
+→ PR
+→ MERGE
+→ DEPLOY
+→ MONITORAMENTO
+→ ROLLBACK
+→ REGISTRO
+
+SAÍDA FINAL:
+
+MISSION_ID=
+BASE_SHA=
+HEAD_SHA=
+PR=
+FILES_CHANGED=
+CANONICAL_COMPONENTS_REUSED=
+NEW_COMPONENTS_JUSTIFIED=
+INPUT_SCHEMA=
+ROUTER=
+WORKTREES=
+QUALITY_GATES=
+AUTO_CORRECTION=
+STAGNATION_DETECTION=
+PROVIDER_FALLBACK=
+AUTHORIZATION_RECEIPT=
+MERGE_GATE=
+PROMOTION_TOKEN_SEPARATION=
+TELEGRAM=
+DEPLOY=
+STOP_WRITE=
+ROLLBACK=
+BASE_TESTS=
+HEAD_TESTS=
+ZERO_REGRESSION=
+UNRESOLVED_THREADS=
+SECURITY_FINDINGS=
+PRODUCTION_PROOF=
+VERDICT=
+
+VEREDITOS PERMITIDOS:
+
+VERIFIED
+VERIFIED_WITH_CAVEATS
+BLOCKED
+
+VERIFIED somente após prova ponta a ponta no mesmo conjunto de SHAs.
+
+Continue sem pedir microaprovações.
+Pare somente diante de bloqueio técnico real, risco de segurança ou UNKNOWN
+que não possa ser resolvido por código, repositório, testes ou evidência.
+```
+
+**Essa é a autonomia verdadeira que sua imagem tenta representar:** não retirar segurança, mas retirar o humano das tarefas repetitivas, transformando intenção já autorizada em contrato, código, gates, correção automática, merge, deploy, monitoramento e rollback. 🔥🛡️
