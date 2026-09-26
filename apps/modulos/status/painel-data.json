@@ -4,10 +4,10 @@
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
-    "phase": "Micro-deploy / Bot / Trigger Fabric",
-    "currentTask": "Cristalizar fallback MAIN-PINNED + single reusable worktree em 5 superfícies",
+    "phase": "MCP / Deploy / CentralDark Capabilities",
+    "currentTask": "Adicionar capacidades CentralDark ao catálogo MCP",
     "branch": "main",
-    "lastCommit": "aa49e167cb8df4aecf69e77d6c374bb6aef835c5",
+    "lastCommit": "bb912ca6f961b477ad1063dfd762183f8eb6c7d1",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -523,7 +523,7 @@
     "MultiZap-BOT errored — não crítico",
     "Pendência A9: executar tela Arsenal de Skills no Lovable"
   ],
-  "nextIA": "Reusar a skill main-pinned-runtime-fast-path quando o deploy canônico estiver FAIL/BLOCKED; scratch único com LOCK e cleanup obrigatório",
+  "nextIA": "Manter 4 capacidades read-only em PASS; fechar gates de compensação das 2 mutantes antes de promover quarentena para aprovada",
   "linearSync": {
     "statusConexao": "ok",
     "statusConexaoDetalhe": "Conectado — workspace Segredo (SEG) configurado em português",
@@ -598,6 +598,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-09-26T00:06:07Z",
+      "titulo": "Capacidades CentralDark vivas no MCP",
+      "detalhe": "MCP expandido de 126 para 132 tools; Deploy/VPS de 11 para 17 com 6 capacidades CentralDark vivas.",
+      "area": "MCP / Deploy / CentralDark Capabilities",
+      "sha": "bb912ca",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-09-25T21:58:31Z",
       "titulo": "Fallback oficial MAIN-PINNED cristalizado",
@@ -988,14 +996,6 @@
       "detalhe": "fix(dependabot): CI sempre verde — sistema autonomo com 20 frentes cristalizadas (#1407)",
       "area": "Repositório",
       "sha": "1e903a9",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-09-04T05:54:21.698Z",
-      "titulo": "Push na main · eb8169783ddfacc9293482ed3f4f410ee28f5dd6",
-      "detalhe": "Auto PR: feat/coderabbit-bridge (#1406)",
-      "area": "Repositório",
-      "sha": "eb81697",
       "actor": "segredounlock"
     }
   ],
