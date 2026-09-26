@@ -1,0 +1,94 @@
+flowchart TD
+  CHEFE["SEGREDO / CHEFE<br/>INTENCAO + DESTINO + PROOF TARGET"] --> SOL["SOL / T0"]
+  SOL --> MASTER["!CENTRALDARK MASTER CYCLE"]
+  MASTER --> BOOT["#ACORDAR + !CALIBRAR + !MULTIBUSSOLA"]
+  BOOT --> META["!META_LUPA + !RECONCILIAR + !CONTRAPROVA"]
+  META --> FIX["!REMEDICAO + !FIXED_POINT + !REGISTRA + !BOOT"]
+  FIX --> CAP["CAPABILITY CONTRACT ROUTER<br/>minimum sufficient set"]
+  CAP --> FRONT["CEREBRO DA FRENTE / OPERACIONAL<br/>missao + decisao + execucao"]
+  FRONT --> JARVIS["JARVIS<br/>ONE CORE / MANY ARMS"]
+  JARVIS --> SCOUTS["READ-ONLY FANOUT<br/>SCOUTS / PERCEPCAO"]
+  SCOUTS --> RENDEZ1["RENDEZVOUS<br/>normalize + dedupe + conflict test"]
+  RENDEZ1 --> WRITER0["ONE WRITER PER SCOPE"]
+  WRITER0 --> CALL["CENTRALDARK_AGENT_CALL_V1<br/>+ HUB MISSION / CLAIM"]
+  CALL --> OMNI["CENTRALDARK OMNI ROUTER"]
+
+  OMNI --> OAI["OpenAI"]
+  OMNI --> CLAUDE["Claude Code"]
+  OMNI --> HERMESENG["Hermes endpoint"]
+  OMNI --> NOUS["Nous"]
+  OMNI -. measured future .-> FUTURE["Future engine"]
+  OAI --> ROLES
+  CLAUDE --> ROLES
+  HERMESENG --> ROLES
+  NOUS --> ROLES
+  FUTURE --> ROLES
+
+  ROLES["OVERCLOCK ROLE TAXONOMY<br/>SCOUT | BUILDER | REVIEWER"] --> SWARM["ENXAME / FAN-OUT + FAN-IN"]
+  SWARM --> ARSENAL["ARSENAL<br/>router + parallel + debate + judge"]
+  ARSENAL --> HCORE["HERMES CORE + N7 + WORKERS"]
+  HCORE --> TOOLS["MCP + APIs + TOOLS + BUILDERS"]
+  TOOLS --> EXEC["EXECUTION"]
+
+  EXEC --> TRACE["CAUSAL TRACE<br/>mission / request / correlation / trace / span"]
+  TRACE --> EVID["EVIDENCE ENVELOPE<br/>sanitize + causal dedupe"]
+
+  subgraph INGRESSES["AUTHORIZED SURFACE / CONTEXT INGRESSES"]
+    SCREENPIPE["Screenpipe / Browser Bridge<br/>screen + audio + browser context"]
+    SAVED["Saved HTML / Notepad / Recorder"]
+    DOCSENSOR["Screenshot / Print-PDF"]
+    LIVEOBS["runtime / logs / network / storage"]
+  end
+  SCREENPIPE --> INGEST["MATERIAL INGEST<br/>provenance + sanitize + quarantine"]
+  SAVED --> INGEST
+  DOCSENSOR --> INGEST
+  LIVEOBS --> INGEST
+  INGEST --> REAR
+
+  EVID --> REAR["CEREBRO DE RETAGUARDA / MEMORY LAYER<br/>materia + fragmentos + historico + proveniencia"]
+  REAR --> EVENTS["agent_events / observable receipts"]
+  EVENTS --> RENDEZ2["CROSS-ARM RENDEZVOUS<br/>dedupe + contradiction"]
+  RENDEZ2 --> HARVEST["META_LUPA HARVEST"]
+  HARVEST --> LINKER["MEMORY LINKER / SESSION HARVESTER<br/>mineradores, nao cerebro"]
+  LINKER --> DREAM["DREAM REVIEW + PATTERN DISCOVERY<br/>candidate only"]
+  DREAM --> CAND["EVOLUTION CANDIDATE"]
+  CAND --> GATES["EVOLUTION GATES<br/>evolution + series + AGI claim"]
+  GATES --> WRITER1["ONE WRITER"]
+  WRITER1 --> EXP["BEFORE -> AFTER EXPERIMENT"]
+  EXP --> SELF["SELF VERIFICATION"]
+  SELF --> COUNTER["COUNTERPROOF + REGRESSION"]
+  COUNTER --> PROOF["PROOF OWNERSHIP"]
+  PROOF --> JUDGE["REALITY JUDGE"]
+  JUDGE -->|SURVIVES| PROMOTE["PROMOTE<br/>same canonical owner"]
+  JUDGE -->|FAILS| REJECT["REJECT / ROLLBACK"]
+  PROMOTE --> FP["MISSION FIXED POINT"]
+  REJECT --> FP
+  FP --> GOLD["REGISTRO DO OURO<br/>OWNER / CRYSTAL / FLASH"]
+  GOLD --> NEXT["NEXT #ACORDAR"]
+  NEXT --> MASTER
+
+  OMNI -. MODEL_TOUCH when configured .-> EVID
+  GOLD -. learned delta returns to operational front .-> FRONT
+  SCREENPIPE -. sensor/context only; not authority .-> FRONT
+
+  LOGICAL["SECOND_BRAIN_LOGICAL = ONE<br/>TWO COGNITIVE ROLES != TWO AUTHORITIES"]
+  FRONT -. same logical brain .- LOGICAL
+  REAR -. same logical brain .- LOGICAL
+
+  subgraph RESERVES["FUTURE RESERVES - NOT ACTIVE BY PRESENCE"]
+    ODS["ODS<br/>DEFERRED UNTIL MEASURED"]
+    BUZZ["Buzz<br/>collaboration/event view"]
+    MAUS["OpenMausBot<br/>agent roster/UX"]
+    LOVE["Open-Lovable<br/>builder pattern source"]
+    GROK["Grok Build<br/>future engine candidate"]
+    EXTLEARN["AIOS/[EXT_REDACTED]<br/>external learning candidates"]
+  end
+
+  ODS -. capability only after measurement .-> OMNI
+  BUZZ -. adapter/view only .-> EVENTS
+  MAUS -. view only .-> JARVIS
+  LOVE -. reference only .-> TOOLS
+  GROK -. invocation must be proven .-> OMNI
+  EXTLEARN -. delta only / no control plane .-> HARVEST
+
+  LOCAL["LOCAL AI RUNTIME<br/>UNKNOWN / DEFERRED"] -. measure first .-> ODS

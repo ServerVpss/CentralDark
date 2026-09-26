@@ -1,0 +1,13 @@
+﻿E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\.agents\skills\meta-lupa\guardrails\test_horn_caracol_gate.py
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\.agents\skills\meta-lupa\scripts\agi_claim_gate.py
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\.agents\skills\meta-lupa\scripts\evolution_gate.py
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\.agents\skills\meta-lupa\scripts\evolution_series_gate.py
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\.agents\skills\meta-lupa\scripts\horn_caracol_gate.py
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\.agents\skills\meta-lupa\testes\test_evolution_gate.py
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\apps\modulos\elite-gateway\scripts\elite_http_gateway.py
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\apps\modulos\elite-gateway\scripts\elite_ws_gateway.py
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\apps\modulos\elite-gateway\scripts\gateway_admin.py
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\apps\modulos\elite-gateway\scripts\openai_http_gateway.py
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\apps\modulos\elite-gateway\test-local\zendrive_gateway_bridge.py
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\apps\modulos\fixed-point-fabric\src\centraldark_fixed_point\centraldark_gate.py
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\apps\modulos\fixed-point-fabric\tests\test_centraldark_gate.py

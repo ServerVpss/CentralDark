@@ -1,0 +1,21 @@
+﻿
+LineNumber Line                                                                                       
+---------- ----                                                                                       
+         3 //   • /admin/api/logs            — busca/filtro por rota, cid, level + últimos N          
+         4 //   • /admin/api/metricas        — contagem de erros nos últimos 5 min                    
+         5 //   • /admin/api/e2e             — teste end-to-end DCR → authorize → token → tools/list  
+         6 //   • /admin/api/e2e/publico     — versão pública leve (só liveness, sem senha admin)     
+       114 <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+       133 <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+       240       <h2>Buscar logs <span class="badge">/admin/api/logs</span></h2>                      
+       357   const r = await fetch('/admin/api/metricas'); const j = await r.json();                  
+       364   const r = await fetch('/admin/api/tools'); const j = await r.json();                     
+       396   const r = await fetch('/admin/api/logs?'+q.toString()); const j = await r.json();        
+       410   const r = await fetch('/admin/api/testar-sse', {method:'POST'});                         
+       419     const r = await fetch('/admin/api/e2e', {method:'POST'});                              
+       453         //           As rotas protegidas de verdade (/admin/api/*) seguem 401              
+       510             { metodo: "POST", path: "/admin/api/e2e", protegido: true },                   
+       511             { metodo: "GET", path: "/admin/api/logs", protegido: true },                   
+       512             { metodo: "GET", path: "/admin/api/metricas", protegido: true },               
+
+

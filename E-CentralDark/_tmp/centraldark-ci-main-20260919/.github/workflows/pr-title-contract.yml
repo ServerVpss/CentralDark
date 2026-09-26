@@ -1,0 +1,132 @@
+name: PR Title Contract
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+  workflow_dispatch:
+  schedule:
+    - cron: '17 * * * *'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  normalize-and-validate-title:
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    steps:
+      - name: Normalize current or all open PR titles
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPOSITORY: ${{ github.repository }}
+          EVENT_NAME: ${{ github.event_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          node <<'NODE'
+          const token = process.env.GH_TOKEN;
+          const repo = process.env.GH_REPOSITORY;
+          const eventName = process.env.EVENT_NAME;
+
+          if (!token || !repo) {
+            console.error('Missing GitHub runtime context.');
+            process.exit(1);
+          }
+
+          const hasEmojiPrefix = (title) => {
+            const first = Array.from((title ?? '').trim())[0] ?? '';
+            return /\p{Extended_Pictographic}/u.test(first);
+          };
+
+          const inferEmoji = (title) => {
+            const t = (title ?? '').toLocaleLowerCase('pt-BR');
+            if (/dependabot|chore\(deps\)|\bdeps\b|\bbump/.test(t)) return '🤖';
+            if (/security|seguran|auth|oauth|secret|token/.test(t)) return '🔐';
+            if (/deploy|release|runtime|produção|producao/.test(t)) return '🚀';
+            if (/test|spec|proof|prova/.test(t)) return '🧪';
+            if (/arch|arquitet|brain|memory|memória|memoria|core|docs/.test(t)) return '🧠';
+            if (/fix|bug|lupa|porta|repair|restore/.test(t)) return '🧿';
+            return '🧿';
+          };
+
+          const normalizeTitle = (raw) => {
+            const trimmed = (raw ?? '').trim().replace(/\s+/g, ' ');
+            if (!trimmed) throw new Error('PR title is empty.');
+
+            const chars = Array.from(trimmed);
+            const first = chars[0] ?? '';
+            const prefixed = /\p{Extended_Pictographic}/u.test(first);
+            const emoji = prefixed ? first : inferEmoji(trimmed);
+            const rest = (prefixed ? trimmed.slice(first.length) : trimmed).trim();
+
+            if (!rest || !(rest.match(/\p{L}/gu) ?? []).length) {
+              throw new Error(`PR title has no alphabetic text: ${raw}`);
+            }
+
+            return `${emoji} ${rest.toLocaleUpperCase('pt-BR')}`;
+          };
+
+          const validateTitle = (title) => {
+            const trimmed = (title ?? '').trim();
+            const first = Array.from(trimmed)[0] ?? '';
+            if (!/\p{Extended_Pictographic}/u.test(first)) {
+              throw new Error(`PR title must start with an emoji: ${title}`);
+            }
+            const rest = trimmed.slice(first.length).trim();
+            if (!rest || !(rest.match(/\p{L}/gu) ?? []).length) {
+              throw new Error(`PR title must contain alphabetic text: ${title}`);
+            }
+            if (rest !== rest.toLocaleUpperCase('pt-BR')) {
+              throw new Error(`PR title text must be uppercase: ${title}`);
+            }
+          };
+
+          async function api(path, init = {}) {
+            const res = await fetch(`https://api.github.com/repos/${repo}${path}`, {
+              ...init,
+              headers: {
+                Accept: 'application/vnd.github+json',
+                Authorization: `Bearer ${token}`,
+                'X-GitHub-Api-Version': '2022-11-28',
+                ...(init.headers || {}),
+              },
+            });
+            if (!res.ok) {
+              const text = await res.text();
+              throw new Error(`${init.method || 'GET'} ${path} -> ${res.status}: ${text.slice(0, 500)}`);
+            }
+            if (res.status === 204) return null;
+            return res.json();
+          }
+
+          async function repair(pr) {
+            const normalized = normalizeTitle(pr.title);
+            if (normalized !== pr.title) {
+              console.log(`REPAIR PR #${pr.number}: ${pr.title} -> ${normalized}`);
+              await api(`/pulls/${pr.number}`, {
+                method: 'PATCH',
+                body: JSON.stringify({ title: normalized }),
+                headers: { 'Content-Type': 'application/json' },
+              });
+            } else {
+              console.log(`NO_CHANGE PR #${pr.number}: ${pr.title}`);
+            }
+            validateTitle(normalized);
+            return normalized;
+          }
+
+          if (eventName === 'pull_request') {
+            const number = Number(process.env.PR_NUMBER);
+            if (!Number.isInteger(number) || number < 1) {
+              throw new Error('Invalid pull request number.');
+            }
+            await repair({ number, title: process.env.PR_TITLE ?? '' });
+          } else {
+            const prs = await api('/pulls?state=open&per_page=100');
+            console.log(`OPEN_PRS=${prs.length}`);
+            for (const pr of prs) await repair(pr);
+          }
+
+          console.log('PASS: all inspected PR titles satisfy emoji prefix + uppercase contract.');
+          NODE

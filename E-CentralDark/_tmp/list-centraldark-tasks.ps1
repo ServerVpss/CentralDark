@@ -1,0 +1,1 @@
+Get-ScheduledTask | Where-Object { $_.TaskName -match 'CentralDark|Hermes|Pivete|Screenpipe' } | Select-Object TaskName,State,TaskPath | Sort-Object TaskName | Format-Table -AutoSize

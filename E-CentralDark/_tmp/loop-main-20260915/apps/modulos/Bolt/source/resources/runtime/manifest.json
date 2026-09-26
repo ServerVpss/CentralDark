@@ -1,0 +1,77 @@
+{
+  "schema": "centraldark.runtime-capsule/v1",
+  "owner": "apps/modulos/Bolt/source",
+  "entrypoint": "CentralDark.exe",
+  "source_of_truth": "ServerVpss/CentralDark@main",
+  "capability_router": ".agents/skills/capability-contract-router/SKILL.md",
+  "runtime_plug_contract": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml",
+  "policy": {
+    "one_system_only": true,
+    "user_machine_package_install": false,
+    "external_global_runtime_fallback": false,
+    "external_appdata_hermes_venv_allowed": false,
+    "release_must_fail_closed_if_required_sidecar_missing": true,
+    "optional_provider_failure_must_not_kill_core": true,
+    "selected_provider_requires_fresh_health": true,
+    "third_party_binary_bundle_requires_license_version_and_hash_proof": true
+  },
+  "components": {
+    "electron_node": {
+      "mode": "embedded-by-electron",
+      "bundle_status": "PROVED_BY_BUILD_OWNER"
+    },
+    "hermes": {
+      "mode": "bundled-sidecar",
+      "bundle_status": "UNKNOWN",
+      "required_for_fixed_point": true,
+      "resolution_root": "resources/runtime/hermes"
+    }
+  },
+  "capability_providers": {
+    "desktop_commander": {
+      "mode": "external-mcp-provider",
+      "bundle_status": "NOT_BUNDLED_BY_THIS_CONTRACT",
+      "required_for_core_start": false,
+      "activation": "CAPABILITY_CONTRACT_ROUTER",
+      "package_pin": "@wonderwhy-er/desktop-commander@0.2.48",
+      "remote_mcp": "https://mcp.desktopcommander.app/mcp",
+      "capabilities": [
+        "FILESYSTEM_READ",
+        "FILESYSTEM_WRITE",
+        "DIRECTORY_MANAGEMENT",
+        "CONTENT_SEARCH",
+        "TERMINAL_EXECUTION",
+        "PROCESS_OBSERVATION",
+        "REMOTE_DEVICE_CONTROL"
+      ]
+    },
+    "screenpipe": {
+      "mode": "local-sensor-provider",
+      "bundle_status": "NOT_BUNDLED_BY_THIS_CONTRACT",
+      "required_for_core_start": false,
+      "activation": "CAPABILITY_CONTRACT_ROUTER",
+      "local_api": "http://127.0.0.1:3030",
+      "capabilities": [
+        "LIVE_DESKTOP_OBSERVATION",
+        "SCREEN_HISTORY_SEARCH",
+        "OCR_CONTEXT",
+        "ACCESSIBILITY_CONTEXT",
+        "AUDIO_TRANSCRIPT_CONTEXT",
+        "INPUT_EVENT_CONTEXT",
+        "CLIPBOARD_CONTEXT",
+        "FRAME_CONTEXT",
+        "WINDOW_APP_TIMELINE",
+        "AUTOMATION_TARGETING_CONTEXT"
+      ]
+    }
+  },
+  "laws": [
+    "INSTALLED_ON_PC != BUNDLED",
+    "PROCESS_EXISTS != RUNTIME_HEALTHY",
+    "PACKAGED != EXECUTED",
+    "CAPABILITY_AVAILABLE != PROVIDER_BUNDLED",
+    "PROVIDER_INSTALLED != PROVIDER_HEALTHY",
+    "OPTIONAL_PROVIDER_DOWN != CENTRALDARK_DOWN",
+    "UNKNOWN != PASS"
+  ]
+}

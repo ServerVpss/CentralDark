@@ -1,0 +1,2 @@
+$r=Test-NetConnection 89.117.78.124 -Port 22 -WarningAction SilentlyContinue
+[pscustomobject]@{RemoteAddress=$r.RemoteAddress.IPAddressToString;RemotePort=$r.RemotePort;TcpTestSucceeded=$r.TcpTestSucceeded}|ConvertTo-Json -Compress

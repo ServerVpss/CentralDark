@@ -1,0 +1,10 @@
+$ErrorActionPreference='Stop'
+$p="$env:USERPROFILE\.desktop-commander-device\device.json"
+if(-not (Test-Path -LiteralPath $p)){ Write-Output 'DEVICE_CONFIG=ABSENT'; exit 0 }
+$j=Get-Content -Raw -LiteralPath $p | ConvertFrom-Json
+Write-Output 'DEVICE_CONFIG=PRESENT'
+Write-Output ('DEVICE_ID_PRESENT=' + [bool]$j.deviceId)
+Write-Output ('SESSION_PRESENT=' + [bool]$j.session)
+Write-Output ('ACCESS_TOKEN_PRESENT=' + [bool]$j.session.access_token)
+Write-Output ('REFRESH_TOKEN_PRESENT=' + [bool]$j.session.refresh_token)
+Write-Output ('FILE_LASTWRITE=' + (Get-Item -LiteralPath $p).LastWriteTime.ToString('o'))

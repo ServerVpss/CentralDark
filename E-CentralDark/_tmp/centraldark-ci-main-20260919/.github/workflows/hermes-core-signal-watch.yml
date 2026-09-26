@@ -1,0 +1,394 @@
+name: Hermes Core Signal Watch
+
+on:
+  pull_request:
+    paths:
+      - 'apps/modulos/HERMES-CORE/**'
+      - 'scripts/hermes/signal-watch-notify.mjs'
+      - 'scripts/webhook/lib/notify-telegram.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'apps/modulos/HERMES-CORE/**'
+      - 'scripts/hermes/signal-watch-notify.mjs'
+      - 'scripts/webhook/lib/notify-telegram.mjs'
+  schedule:
+    - cron: '17 7 * * *'
+  pull_request_review:
+    types: [submitted, edited]
+  issue_comment:
+    types: [created, edited]
+  repository_dispatch:
+    types: [centraldark_review_signal, hermes_official_update_check]
+  workflow_run:
+    workflows:
+      - porta-de-entrada
+      - codex-validate
+      - lupa-conformance
+      - Lupa Drift Guard
+      - PR Title Contract
+      - PR auto-review (Codex + checklist)
+      - Pipeline — Telegram + Painel
+      - PR — artefato de aprendizado automático
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hermes-core-signal-watch-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  post-job-autonomy:
+    name: ⚡ Jobs concluídos → Hermes autonomia
+    if: github.event_name == 'workflow_run'
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      actions: read
+      pull-requests: read
+      contents: read
+    steps:
+      - name: 🔗 Encaminhar conclusão ao promotor canônico
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          WORKFLOW_NAME: ${{ github.event.workflow_run.name }}
+          WORKFLOW_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number || '' }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = Number(process.env.PR_NUMBER || 0);
+            if (!prNumber) {
+              core.notice(`HERMES_POST_JOB=SKIP_NO_PR workflow=${process.env.WORKFLOW_NAME}`);
+              return;
+            }
+            await github.request('POST /repos/{owner}/{repo}/dispatches', {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'centraldark_autonomia_recheck',
+              client_payload: {
+                pr_number: prNumber,
+                head_sha: process.env.HEAD_SHA || null,
+                source: 'hermes_post_job',
+                workflow: process.env.WORKFLOW_NAME || null,
+                conclusion: process.env.WORKFLOW_CONCLUSION || null,
+              },
+            });
+            core.notice(`HERMES_POST_JOB_AUTONOMY=DISPATCHED pr=${prNumber} workflow=${process.env.WORKFLOW_NAME}`);
+
+  scan:
+    if: github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout same HEAD
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
+      - name: Provar parser e classificador do Signal Watcher
+        run: |
+          set -euo pipefail
+          node --check apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.mjs
+          node --test apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.test.mjs
+
+      - name: Varrer HERMES-CORE byte/source aplicável
+        id: scan
+        run: |
+          set -euo pipefail
+          set +e
+          node apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.mjs --scan-core \
+            > "$RUNNER_TEMP/hermes-signal.json"
+          code=$?
+          set -e
+          cat "$RUNNER_TEMP/hermes-signal.json"
+          echo '## 🧿 Hermes Core Signal Watch' >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/hermes-signal.json" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          if [ "$code" -eq 2 ]; then
+            echo 'NODE_CHECK_FAIL=1' >> "$GITHUB_ENV"
+            exit 2
+          fi
+
+      - name: Receipt
+        if: always()
+        run: |
+          echo "HEAD_SHA=${GITHUB_SHA}"
+          echo "SIGNAL_WATCHER=apps/modulos/HERMES-CORE/agents/Signal-Watcher/agent.mjs"
+          echo "NODE_CHECK_FAIL=${NODE_CHECK_FAIL:-0}"
+          echo 'STATIC_FALLBACK_CANDIDATE_IS_NOT_RUNTIME_FAILURE=1'
+          echo 'CANDIDATE_IS_NOT_PROVEN=1'
+          echo 'UNKNOWN_IS_NOT_PASS=1'
+
+  official-update:
+    name: Hermes oficial → check → plan → backup → update → restart → prova
+    if: >-
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'repository_dispatch' && github.event.action == 'hermes_official_update_check')
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 35
+    permissions:
+      contents: read
+    env:
+      HERMES_APP: CentralDark-Hermes
+    steps:
+      - name: Atualizar Hermes oficial somente quando houver delta
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          mkdir -p "${HOME}/.hermes/logs/update_receipts"
+          RECEIPT="${HOME}/.hermes/logs/update_receipts/centraldark-official-update-last.json"
+          CHECK_LOG="${RUNNER_TEMP}/hermes-update-check.log"
+          PLAN_LOG="${RUNNER_TEMP}/hermes-update-plan.log"
+          UPDATE_LOG="${RUNNER_TEMP}/hermes-update-apply.log"
+          POSTCHECK_LOG="${RUNNER_TEMP}/hermes-update-postcheck.log"
+
+          loud_fail() {
+            local code="$1" step="$2" observed="$3"
+            printf '\n============================================================\n' >&2
+            printf '🚨 HERMES OFFICIAL UPDATE FALHOU\n' >&2
+            printf 'HOST=%s\n' "$(hostname)" >&2
+            printf 'STEP=%s\n' "$step" >&2
+            printf 'ERROR=%s\n' "$observed" >&2
+            printf 'WHO_CAN_RESOLVE=HERMES_UPSTREAM_OR_CENTRALDARK_RUNTIME_OWNER\n' >&2
+            printf 'NEXT_CURSOR=inspect_receipt_and_logs_then_retry_with_new_information\n' >&2
+            printf '============================================================\n' >&2
+            jq -n --arg state FAIL --arg step "$step" --arg error "$observed" --arg at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+              '{schema:"centraldark.hermes-official-update.v1",state:$state,step:$step,error:$error,observed_at:$at,unknown_is_not_pass:true}' > "$RECEIPT" || true
+            exit "$code"
+          }
+
+          exec 9>/tmp/centraldark-hermes-official-update.lock
+          flock -w 10 9 || {
+            echo 'HERMES_OFFICIAL_UPDATE=NO_CHANGE_LOCK_BUSY'
+            exit 0
+          }
+
+          command -v hermes >/dev/null 2>&1 || loud_fail 31 PRECHECK 'hermes command not found'
+          BEFORE_VERSION="$(hermes --version 2>&1 | head -n1 || true)"
+          [[ -n "$BEFORE_VERSION" ]] || loud_fail 32 PRECHECK 'hermes --version returned empty output'
+
+          set +e
+          hermes update --check >"$CHECK_LOG" 2>&1
+          CHECK_RC=$?
+          set -e
+          cat "$CHECK_LOG"
+          [[ "$CHECK_RC" -eq 0 ]] || loud_fail 33 CHECK "$(tail -n 8 "$CHECK_LOG" | tr '\n' ' ' | cut -c1-700)"
+
+          if grep -Fq 'Already up to date' "$CHECK_LOG"; then
+            jq -n --arg state NO_CHANGE --arg version "$BEFORE_VERSION" --arg at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+              '{schema:"centraldark.hermes-official-update.v1",state:$state,version:$version,observed_at:$at,check:"official_hermes_update_check",unknown_is_not_pass:true}' > "$RECEIPT"
+            echo 'HERMES_OFFICIAL_UPDATE=NO_CHANGE_ALREADY_CURRENT'
+            exit 0
+          fi
+
+          grep -Fq 'Update available' "$CHECK_LOG" || loud_fail 34 CHECK 'unclassified hermes update --check output'
+
+          hermes update --plan >"$PLAN_LOG" 2>&1 || loud_fail 35 PLAN "$(tail -n 12 "$PLAN_LOG" | tr '\n' ' ' | cut -c1-900)"
+          cat "$PLAN_LOG"
+
+          PM2_PRESENT=false
+          OLD_PM2_PID=0
+          if command -v pm2 >/dev/null 2>&1 && pm2 describe "$HERMES_APP" >/dev/null 2>&1; then
+            PM2_PRESENT=true
+            OLD_PM2_PID="$(pm2 pid "$HERMES_APP" | tail -n1)"
+          fi
+
+          START_EPOCH="$(date +%s)"
+          set +e
+          hermes update --backup --yes >"$UPDATE_LOG" 2>&1
+          UPDATE_RC=$?
+          set -e
+          cat "$UPDATE_LOG"
+          [[ "$UPDATE_RC" -eq 0 ]] || loud_fail 36 APPLY "$(tail -n 20 "$UPDATE_LOG" | tr '\n' ' ' | cut -c1-1200)"
+
+          GATEWAY_RESULT=NOT_APPLICABLE
+          if hermes gateway status >/dev/null 2>&1; then
+            if hermes gateway restart >/dev/null 2>&1; then
+              GATEWAY_RESULT=RESTARTED
+            else
+              hermes gateway stop >/dev/null 2>&1 || true
+              hermes gateway start >/dev/null 2>&1 || loud_fail 37 GATEWAY_RESTART 'restart and stop/start fallback both failed'
+              GATEWAY_RESULT=RESTARTED_BY_STOP_START_FALLBACK
+            fi
+            hermes gateway status >/dev/null 2>&1 || loud_fail 38 GATEWAY_VERIFY 'gateway status failed after restart'
+          fi
+
+          NEW_PM2_PID=0
+          PM2_RESULT=NOT_APPLICABLE
+          if [[ "$PM2_PRESENT" == true ]]; then
+            pm2 restart "$HERMES_APP" --update-env >/dev/null || loud_fail 39 PM2_RESTART 'CentralDark-Hermes restart failed'
+            for _ in $(seq 1 20); do
+              NEW_PM2_PID="$(pm2 pid "$HERMES_APP" | tail -n1)"
+              if [[ "$NEW_PM2_PID" =~ ^[0-9]+$ && "$NEW_PM2_PID" -gt 0 ]] && pm2 describe "$HERMES_APP" >/dev/null 2>&1; then
+                break
+              fi
+              sleep 1
+            done
+            [[ "$NEW_PM2_PID" =~ ^[0-9]+$ && "$NEW_PM2_PID" -gt 0 ]] || loud_fail 40 PM2_VERIFY 'CentralDark-Hermes has no live PID after restart'
+            pm2 describe "$HERMES_APP" >/dev/null 2>&1 || loud_fail 41 PM2_VERIFY 'CentralDark-Hermes describe failed after restart'
+            PM2_RESULT=RESTARTED_AND_PRESENT
+          fi
+
+          hermes update --check >"$POSTCHECK_LOG" 2>&1 || loud_fail 42 POSTCHECK 'post-update check command failed'
+          cat "$POSTCHECK_LOG"
+          grep -Fq 'Already up to date' "$POSTCHECK_LOG" || loud_fail 43 POSTCHECK 'Hermes still reports update available after apply'
+
+          AFTER_VERSION="$(hermes --version 2>&1 | head -n1 || true)"
+          [[ -n "$AFTER_VERSION" ]] || loud_fail 44 VERIFY 'post-update hermes --version returned empty output'
+
+          BUILD_RESULT=NOT_OBSERVED
+          if grep -Eq 'Web UI built|built in [0-9.]+s|Building web UI' "$UPDATE_LOG"; then
+            BUILD_RESULT=OBSERVED_IN_OFFICIAL_UPDATER
+          fi
+
+          jq -n \
+            --arg state PASS \
+            --arg before "$BEFORE_VERSION" \
+            --arg after "$AFTER_VERSION" \
+            --arg gateway "$GATEWAY_RESULT" \
+            --arg pm2 "$PM2_RESULT" \
+            --arg build "$BUILD_RESULT" \
+            --argjson old_pm2_pid "${OLD_PM2_PID:-0}" \
+            --argjson new_pm2_pid "${NEW_PM2_PID:-0}" \
+            --argjson started_epoch "$START_EPOCH" \
+            --arg at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            '{schema:"centraldark.hermes-official-update.v1",state:$state,before_version:$before,after_version:$after,gateway:$gateway,centraldark_pm2:$pm2,build:$build,old_pm2_pid:$old_pm2_pid,new_pm2_pid:$new_pm2_pid,started_epoch:$started_epoch,observed_at:$at,source:"NousResearch/hermes-agent official updater",check:"hermes update --check",plan:"hermes update --plan",apply:"hermes update --backup --yes",postcheck:"Already up to date",unknown_is_not_pass:true}' > "$RECEIPT"
+
+          echo 'HERMES_OFFICIAL_UPDATE=PASS'
+          echo "BEFORE_VERSION=$BEFORE_VERSION"
+          echo "AFTER_VERSION=$AFTER_VERSION"
+          echo "BUILD_RESULT=$BUILD_RESULT"
+          echo "GATEWAY_RESULT=$GATEWAY_RESULT"
+          echo "PM2_RESULT=$PM2_RESULT"
+          echo "RECEIPT=$RECEIPT"
+
+      - name: Receipt resumido
+        if: always()
+        shell: bash
+        run: |
+          echo 'REUSE_BEFORE_CREATE=true'
+          echo 'UPDATER_OWNER=.github/workflows/hermes-core-signal-watch.yml'
+          echo 'OFFICIAL_UPDATE_COMMAND=hermes update'
+          echo 'WEBHOOK_ACCELERATOR=repository_dispatch:hermes_official_update_check'
+          echo 'SCHEDULE_FALLBACK=existing_daily_signal_watch'
+          echo 'MICROCOMMAND_CHAIN_TO_HUMAN=false'
+          echo 'UNKNOWN_IS_NOT_PASS=1'
+  review-signal:
+    name: CodeRabbit webhook → Signal Watcher → API advisory → autonomia
+    if: >-
+      (github.event_name == 'pull_request_review' && startsWith(github.actor, 'coderabbit')) ||
+      (github.event_name == 'issue_comment' && github.event.issue.pull_request && startsWith(github.actor, 'coderabbit')) ||
+      (github.event_name == 'repository_dispatch' && github.event.client_payload.source == 'coderabbit')
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 8
+    permissions:
+      contents: write
+      pull-requests: read
+      issues: read
+    steps:
+      - name: Checkout confiável da main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
+      - name: Normalizar review e executar bridge existente
+        id: bridge
+        shell: bash
+        env:
+          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY }}
+          EVENT_NAME: ${{ github.event_name }}
+          ACTOR: ${{ github.actor }}
+          REVIEW_BODY: ${{ github.event.review.body || github.event.comment.body || github.event.client_payload.body || '' }}
+          REVIEW_URL: ${{ github.event.review.html_url || github.event.comment.html_url || github.event.client_payload.url || '' }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number || github.event.client_payload.pr_number || '' }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.client_payload.head_sha || '' }}
+        run: |
+          set -euo pipefail
+          EVENT_B64="$(node - <<'NODE'
+          const event = {
+            source: 'coderabbit_github_webhook',
+            sender: process.env.ACTOR || 'coderabbit',
+            subject: `CodeRabbit review PR #${process.env.PR_NUMBER || 'UNKNOWN'}`,
+            body: process.env.REVIEW_BODY || '',
+            url: process.env.REVIEW_URL || '',
+            observed_at: new Date().toISOString(),
+            metadata: { event_name: process.env.EVENT_NAME, pr_number: process.env.PR_NUMBER || null, head_sha: process.env.HEAD_SHA || null },
+          };
+          process.stdout.write(Buffer.from(JSON.stringify(event), 'utf8').toString('base64url'));
+          NODE
+          )"
+          CENTRALDARK_API_URL='' node scripts/coderabbit-bridge.mjs --once --json-only --event-b64 "$EVENT_B64" > "$RUNNER_TEMP/coderabbit-receipt.json"
+          cat "$RUNNER_TEMP/coderabbit-receipt.json" >> "$GITHUB_STEP_SUMMARY"
+          SIGNAL_STATE="$(node -e "const r=require(process.argv[1]); process.stdout.write(r.signal_watcher?.receipt?.state || 'UNKNOWN')" "$RUNNER_TEMP/coderabbit-receipt.json")"
+          echo "signal_state=$SIGNAL_STATE" >> "$GITHUB_OUTPUT"
+          echo "pr_number=${PR_NUMBER}" >> "$GITHUB_OUTPUT"
+          echo "head_sha=${HEAD_SHA}" >> "$GITHUB_OUTPUT"
+
+      - name: ⚡ Provar fast-path do repositório
+        id: repo_merge_policy
+        if: steps.bridge.outputs.signal_state == 'CANDIDATE' && steps.bridge.outputs.pr_number != ''
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const repoState = await github.rest.repos.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+            const autoMerge = repoState.data.allow_auto_merge === true;
+            const squash = repoState.data.allow_squash_merge === true;
+            core.setOutput('auto_merge', String(autoMerge));
+            core.setOutput('squash', String(squash));
+            core.notice(`CODERABBIT_FAST_POLICY auto_merge=${autoMerge} squash=${squash}`);
+
+      - name: ⚡ Webhook → API GitHub → autonomia canônica
+        if: >-
+          steps.bridge.outputs.signal_state == 'CANDIDATE' &&
+          steps.bridge.outputs.pr_number != '' &&
+          steps.repo_merge_policy.outputs.auto_merge == 'true' &&
+          steps.repo_merge_policy.outputs.squash == 'true'
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          PR_NUMBER: ${{ steps.bridge.outputs.pr_number }}
+          HEAD_SHA: ${{ steps.bridge.outputs.head_sha }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.request('POST /repos/{owner}/{repo}/dispatches', {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'centraldark_autonomia_recheck',
+              client_payload: {
+                pr_number: Number(process.env.PR_NUMBER),
+                head_sha: process.env.HEAD_SHA || null,
+                source: 'coderabbit_signal',
+                fast_path: true,
+                auto_merge: true,
+                squash: true,
+                merge_method: 'squash',
+              },
+            });
+            core.notice(`CODERABBIT_FAST_AUTONOMIA_DISPATCHED pr=${process.env.PR_NUMBER} method=squash`);
+
+      - name: Receipt
+        if: always()
+        run: |
+          echo 'CODERABBIT_ROLE=REVIEW_ONLY'
+          echo 'SIGNAL_WATCHER=CANONICAL_OWNER'
+          echo 'CENTRALDARK_API=ADVISORY_FALLBACK_ONLY'
+          echo 'MODEL_ADVISORY_IS_NOT_PROOF=1'
+          echo 'MUTATION_OWNER=AUTONOMIA_PROMOCAO_EXISTENTE'
+          echo 'UNKNOWN_IS_NOT_PASS=1'

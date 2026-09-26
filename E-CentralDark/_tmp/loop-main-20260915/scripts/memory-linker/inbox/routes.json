@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "scripts/memory-linker/",
+  "default_dropbox": "scripts/memory-linker/inbox/",
+  "direct_canonical_mutation": false,
+  "apply_allowed": false,
+  "routes": [
+    {
+      "alias": "garimpo-chefe",
+      "kind": "RAW_MATERIAL_RESERVOIR",
+      "target": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/GARIMPO-CHEFE.md",
+      "role": "contrato do garimpo físico/histórico do Chefe",
+      "canonical_write": false
+    },
+    {
+      "alias": "evolucao",
+      "kind": "EVOLUTION_MATERIAL",
+      "target": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/",
+      "role": "material de evolução/Arsenal; consumir via Dream Review antes de cristalizar",
+      "canonical_write": false
+    },
+    {
+      "alias": "aprendizados",
+      "kind": "LEARNING_CANDIDATE",
+      "target": "docs/CONSCIENCIA/APRENDIZADOS/",
+      "role": "aprendizados canônicos; inbox só propõe candidatos",
+      "canonical_write": false
+    },
+    {
+      "alias": "dream-review",
+      "kind": "MINING_ENGINE",
+      "target": "scripts/memory-linker/dream-review-run.mjs",
+      "role": "motor de mineração/candidatura; não escreve canônico direto",
+      "canonical_write": false
+    }
+  ]
+}

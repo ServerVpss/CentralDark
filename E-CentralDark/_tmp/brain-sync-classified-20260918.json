@@ -1,0 +1,1154 @@
+﻿[
+    {
+        "path":  ".hermes-sync-manifest.json",
+        "state":  "VAULT_ONLY",
+        "classification":  "VAULT_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  null,
+        "vault_hash":  "BDE7EE7EB4CF4BB15DC1CE8931429961D1403EA71589305F0F4AF62D969F67AF"
+    },
+    {
+        "path":  ".obsidian\\community-plugins.json",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "6B8F3ADD4E4BEB2BAE932DB6F504E25C214161641F13B90E3F6C219125DD150E",
+        "vault_hash":  null
+    },
+    {
+        "path":  ".obsidian\\graph.json",
+        "state":  "HASH_DIFF",
+        "classification":  "REPO_CHANGED_ONLY",
+        "baseline":  "CE0282331ECB1D3DA3C4273030D45244B748F2BF93E6F9AA99FA34809C0C9DA2",
+        "repo_hash":  "68E8760224372B212A5CE6B1076AC055F747BDC9E3D45D781BCE5853E82C54CB",
+        "vault_hash":  "CE0282331ECB1D3DA3C4273030D45244B748F2BF93E6F9AA99FA34809C0C9DA2"
+    },
+    {
+        "path":  ".obsidian\\plugins\\dataview\\main.js",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "BCDB7A7882051A30427A3FA370533C1052019591E7551BCC12611BB9A726BBB3",
+        "vault_hash":  null
+    },
+    {
+        "path":  ".obsidian\\plugins\\dataview\\manifest.json",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "9235DB47112DA81B85591C79ECB9AE2574E5E72207056E976472F90616286185",
+        "vault_hash":  null
+    },
+    {
+        "path":  ".obsidian\\plugins\\dataview\\styles.css",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "3306DD9032E00F989BA7233A37FD255BC4D3F4340CEE661762E952F3F6AA1DE9",
+        "vault_hash":  null
+    },
+    {
+        "path":  ".obsidian\\plugins\\obsidian-excalidraw-plugin\\data.json",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "581FB1A8CA8E2511B8CB1F6E321FF9A098CE1DDAB030BA8403320DC4F085BFC3",
+        "vault_hash":  null
+    },
+    {
+        "path":  ".obsidian\\plugins\\obsidian-excalidraw-plugin\\main.js",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "54523935387146D1D6D7A0BD8C41253885C234F5902E842A06B093F2092A5D23",
+        "vault_hash":  null
+    },
+    {
+        "path":  ".obsidian\\plugins\\obsidian-excalidraw-plugin\\manifest.json",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "30BFC399DAE79F7CA1CE050BB2A9497AADA72EF576BE831375571F5444F428A2",
+        "vault_hash":  null
+    },
+    {
+        "path":  ".obsidian\\plugins\\obsidian-excalidraw-plugin\\styles.css",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "4A9B329E24ABDC310CCD8A0FB91C7863619CEEA2A0D266981A86D6C5EBD1ABEA",
+        "vault_hash":  null
+    },
+    {
+        "path":  ".obsidian\\plugins\\templater-obsidian\\main.js",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "791F62D05857D43085DEE8E4738009C7A9D35B1CF3891DFD0C7827FF7344F8E1",
+        "vault_hash":  null
+    },
+    {
+        "path":  ".obsidian\\plugins\\templater-obsidian\\manifest.json",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "75985188FAC8B518EEBB791370A24DAE1A2476CCE3912DE4709778DBDE0171E4",
+        "vault_hash":  null
+    },
+    {
+        "path":  ".obsidian\\plugins\\templater-obsidian\\styles.css",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "EB94063BE602679F397E3E35FCB7F6A4B027DA82E17C213BB44A267C6B45D8DE",
+        "vault_hash":  null
+    },
+    {
+        "path":  ".obsidian\\workspace.json",
+        "state":  "HASH_DIFF",
+        "classification":  "REPO_CHANGED_ONLY",
+        "baseline":  "B54B3250273627E02DD47D68987F2126D505692E611E99F9DA1EAFD00C852E6E",
+        "repo_hash":  "3C4DA3F19CA38A67805E6E6D15DEB9E2583E734CB65D29A2CCBC5E45E5DC8DDB",
+        "vault_hash":  "B54B3250273627E02DD47D68987F2126D505692E611E99F9DA1EAFD00C852E6E"
+    },
+    {
+        "path":  "00 - Mapa do Sistema\\GRAFO-VIVO.md",
+        "state":  "HASH_DIFF",
+        "classification":  "BOTH_CHANGED_CONFLICT",
+        "baseline":  "BDA14F5AC814BEE66CF4D6AFBE5861979B970E2BFC2F7F7F2DE3FDA2128CDA2E",
+        "repo_hash":  "0FD5A469E98C8DD3C6DD9263A861FEA5A956A60FCDB35BF1FC33FB0208AE25B6",
+        "vault_hash":  "A865D345668B8EB5E04FEFD3D62D8F4586D189FEC0629EB7571D20D9DBDFF580"
+    },
+    {
+        "path":  "00-MAPA-SISTEMA\\01-HUB\\00-MAPA.md",
+        "state":  "HASH_DIFF",
+        "classification":  "REPO_CHANGED_ONLY",
+        "baseline":  "E472822CE009CDA106CBF60A06C4130CDD2389313263B625FA2FAC88768138B5",
+        "repo_hash":  "40FA52FA7AD8A86AC160DD21EF92D9038D12661B3FE851979CB417D8E4D0411D",
+        "vault_hash":  "E472822CE009CDA106CBF60A06C4130CDD2389313263B625FA2FAC88768138B5"
+    },
+    {
+        "path":  "00-MAPA-SISTEMA\\01-HUB\\00-POSTURA-PIVETE.md",
+        "state":  "HASH_DIFF",
+        "classification":  "REPO_CHANGED_ONLY",
+        "baseline":  "9B72C831632D0FE933835C8A3368DE6F1C24E54DC1E42B038CF9B9840DFEC8B8",
+        "repo_hash":  "CA020C8F4AC39BC972F2AAB0A80E64402596BD70B3DDE06D1D6A08103091432C",
+        "vault_hash":  "9B72C831632D0FE933835C8A3368DE6F1C24E54DC1E42B038CF9B9840DFEC8B8"
+    },
+    {
+        "path":  "00-MAPA-SISTEMA\\01-HUB\\POSTURA-SEGREDO-CHEFE.md",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "8116A534732DC5CCA1C9E1C9F7833CD8A7CA5AB5A302C488D667C2878E4E76B0",
+        "vault_hash":  null
+    },
+    {
+        "path":  "01-CONCEITOS\\02-BANDA\\BANDA_COMPASSO_GLOBAL.json",
+        "state":  "HASH_DIFF",
+        "classification":  "REPO_CHANGED_ONLY",
+        "baseline":  "D65BE2977A6963A6A76AD088CE74D6F9ED480FDEA5EB009A9F0AF4A58B8B4589",
+        "repo_hash":  "363E12562ACE5A5953976FF7A050E29B237E8FFCDA7750B150C754385A21595D",
+        "vault_hash":  "D65BE2977A6963A6A76AD088CE74D6F9ED480FDEA5EB009A9F0AF4A58B8B4589"
+    },
+    {
+        "path":  "01-CONCEITOS\\02-BANDA\\BANDA_COMPASSO_GLOBAL.md",
+        "state":  "HASH_DIFF",
+        "classification":  "BOTH_CHANGED_CONFLICT",
+        "baseline":  "B794DF11BC17B08340A9F828286ECF9198FAD7617D10E661E7A41784B321E33E",
+        "repo_hash":  "4812083FA067DDE78D1A2C2D6C8BF5A5618BEB5DA51C3924339BF161CAAF8339",
+        "vault_hash":  "D68FC9991CD6F743B105DB90EC184C5CFA99D672A1CD187B05805F0DBA0BF1FF"
+    },
+    {
+        "path":  "01-CONCEITOS\\02-BANDA\\BANDA_INTENCAO_UNICA_COMPASSO.md",
+        "state":  "HASH_DIFF",
+        "classification":  "REPO_CHANGED_ONLY",
+        "baseline":  "445AF340EA520DE94BDC81BC418C76B976E4495A4C6DC020A48726602DD0CCB2",
+        "repo_hash":  "4B2C353D4EF3D35B96BE0CC3B5239B2B02B7959E4F709731CC12D4359664BB1F",
+        "vault_hash":  "445AF340EA520DE94BDC81BC418C76B976E4495A4C6DC020A48726602DD0CCB2"
+    },
+    {
+        "path":  "01-CONCEITOS\\02-BANDA\\INTENT_SYNC_STATE.md",
+        "state":  "HASH_DIFF",
+        "classification":  "REPO_CHANGED_ONLY",
+        "baseline":  "1D76985CD3D14FFDCA37C45EDFBFD0FD634C4176E7D4559CD46A54449CEFACAE",
+        "repo_hash":  "4A244E51492EE0C16B6EB5B7E9BDB53C0C19631C5102ED297159C0B74F5466B7",
+        "vault_hash":  "1D76985CD3D14FFDCA37C45EDFBFD0FD634C4176E7D4559CD46A54449CEFACAE"
+    },
+    {
+        "path":  "01-CONCEITOS\\02-BANDA\\LACUNA_BANDA_INTENCAO_UNICA.md",
+        "state":  "HASH_DIFF",
+        "classification":  "REPO_CHANGED_ONLY",
+        "baseline":  "A43F1D44A053062A1E73C11486472490E26BE3C29181D5311E180BD4E22A68BE",
+        "repo_hash":  "5F27CDA343B14EFC690336BDC7CB4B38ADFD12A5796AF65FED74B1D53E8C0DE2",
+        "vault_hash":  "A43F1D44A053062A1E73C11486472490E26BE3C29181D5311E180BD4E22A68BE"
+    },
+    {
+        "path":  "02-ENTRADA\\01-RAW\\CONVERGENCIA_DUPLICACAO_20260819.md",
+        "state":  "HASH_DIFF",
+        "classification":  "VAULT_CHANGED_ONLY",
+        "baseline":  "DBAE049273A9E5AC87193D8DD7D69563A1BB81804F15EF1E5C2A1977ECA271A4",
+        "repo_hash":  "DBAE049273A9E5AC87193D8DD7D69563A1BB81804F15EF1E5C2A1977ECA271A4",
+        "vault_hash":  "3ED5FAEEE4E83CF293D6C687962E40F4911898ACDB686D0346A06BAD8821BBFD"
+    },
+    {
+        "path":  "03-DOCUMENTACAO\\02-BIBLIOTECA\\HUB-PERSISTENT-SWEEP.md",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "D96AB4816D829E9343E0DDA2B3FD49865F1BD11B5AA311B9DD368AAA59F686A6",
+        "vault_hash":  null
+    },
+    {
+        "path":  "03-DOCUMENTACAO\\02-BIBLIOTECA\\SETORES\\ML-CIENCIA-DE-DADOS\\LOCAL-OFFLINE-CORPUS.md",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "1BBC0A7826FD68D3CB0C2EACDBF2967F4470974DA95821DA09CE76880DB66640",
+        "vault_hash":  null
+    },
+    {
+        "path":  "03-DOCUMENTACAO\\02-BIBLIOTECA\\SETORES\\ML-CIENCIA-DE-DADOS\\README.md",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "68C6C4AAACB5189BC1F50871847E1A17D7C18CBCBFC3E732DECF87C3AB2F00D3",
+        "vault_hash":  null
+    },
+    {
+        "path":  "03-DOCUMENTACAO\\02-BIBLIOTECA\\SETORES\\ML-CIENCIA-DE-DADOS\\sector-manifest.json",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "BF79313819945E3B70756AF94EED1A50B1D10710D2BFB22E70E528203095A671",
+        "vault_hash":  null
+    },
+    {
+        "path":  "03-DOCUMENTACAO\\03-GUIAS\\INVENTARIO-METODOS-HERMES.md",
+        "state":  "HASH_DIFF",
+        "classification":  "REPO_CHANGED_ONLY",
+        "baseline":  "C667C407055B2D8CF1B5828A333295ECD06A99AA24FE9C6824B379055E1E3EC1",
+        "repo_hash":  "CEB5005DFCA4FBC7EFF68ABB71E08AACDFB80738D5190DE0B1C3768D6F683593",
+        "vault_hash":  "C667C407055B2D8CF1B5828A333295ECD06A99AA24FE9C6824B379055E1E3EC1"
+    },
+    {
+        "path":  "07-APRENDIZADOS-MEMORIAS\\01-OURO\\dependabot-supreme-adaptacao-evolucao.md",
+        "state":  "HASH_DIFF",
+        "classification":  "VAULT_CHANGED_ONLY",
+        "baseline":  "19EF5B17DC0942D09D0637173D1236AC48FF9F3205F7BDA5EF6E017485942B1F",
+        "repo_hash":  "19EF5B17DC0942D09D0637173D1236AC48FF9F3205F7BDA5EF6E017485942B1F",
+        "vault_hash":  "3687C0D719D28BF6BDEB7DFF06FE2E33F18D51F2239A39C2CD5C011A73A4E784"
+    },
+    {
+        "path":  "07-APRENDIZADOS-MEMORIAS\\01-OURO\\dependabot-supreme-finalizacao.md",
+        "state":  "HASH_DIFF",
+        "classification":  "VAULT_CHANGED_ONLY",
+        "baseline":  "1E584DD0B8A161DF125EDD9129CE16D253155560809A2610D3DB0BE1BEE13118",
+        "repo_hash":  "1E584DD0B8A161DF125EDD9129CE16D253155560809A2610D3DB0BE1BEE13118",
+        "vault_hash":  "ED2EF42D78432A78A701C85F7F228641F104BADB9E5F7178974CF0E5824F1C19"
+    },
+    {
+        "path":  "07-APRENDIZADOS-MEMORIAS\\01-OURO\\dependabot-supreme-flexibilidade.md",
+        "state":  "HASH_DIFF",
+        "classification":  "VAULT_CHANGED_ONLY",
+        "baseline":  "F6D06012E85F067BF74453639F80D8ED0F726D6CC60F32D85E87DD697DAD53FC",
+        "repo_hash":  "F6D06012E85F067BF74453639F80D8ED0F726D6CC60F32D85E87DD697DAD53FC",
+        "vault_hash":  "C1CCA3BD3C3FE01006EA32FD29CD99F2AF197D5AE5FC3CC32CF3277C53C7DE0C"
+    },
+    {
+        "path":  "07-APRENDIZADOS-MEMORIAS\\01-OURO\\dependabot-supreme-hooks.md",
+        "state":  "HASH_DIFF",
+        "classification":  "VAULT_CHANGED_ONLY",
+        "baseline":  "80E7BC55F05D237494DF64BE6F913CF15FC9C0E0C45D4EBC38F1F26644B289D8",
+        "repo_hash":  "80E7BC55F05D237494DF64BE6F913CF15FC9C0E0C45D4EBC38F1F26644B289D8",
+        "vault_hash":  "0DCF49BD4BEB5F80A644837F37B53C2D5B37938FB0CE38FBD08D9B65F7C40DC5"
+    },
+    {
+        "path":  "07-APRENDIZADOS-MEMORIAS\\02-SESSOES\\2026-09-09-dependabot-resolver-trusted-source-cristal.md",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "3BCA3D877F77CB8FFB402DB6D5CB87AACD3BAE3C8B3772E115F38D3B55AC80CF",
+        "vault_hash":  null
+    },
+    {
+        "path":  "07-APRENDIZADOS-MEMORIAS\\02-SESSOES\\2026-09-09-squash-horn-fixed-point.md",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "5CAD63FB3BF32118537D71D4DD61E348C3927DF9DE068F376F562699B0112622",
+        "vault_hash":  null
+    },
+    {
+        "path":  "07-APRENDIZADOS-MEMORIAS\\2026-09-03-CRISTAL-SESSAO-CENTRALDARK.md",
+        "state":  "HASH_DIFF",
+        "classification":  "VAULT_CHANGED_ONLY",
+        "baseline":  "B73D4988DD7D00F162071EE8045E1DEAA1C4A6F8254812ED3DE4D545DF51BC87",
+        "repo_hash":  "B73D4988DD7D00F162071EE8045E1DEAA1C4A6F8254812ED3DE4D545DF51BC87",
+        "vault_hash":  "1BBCD5EA426A0EA1BB1BEEB2EFC1E718364408B58DA23F1E182CE0B36907E223"
+    },
+    {
+        "path":  "07-APRENDIZADOS-MEMORIAS\\2026-09-03-REGISTER-BEFORE-REPORT-RECEIPT.md",
+        "state":  "HASH_DIFF",
+        "classification":  "VAULT_CHANGED_ONLY",
+        "baseline":  "F82D692BA2BA076A489869DB81ACF86B991ACF70A4D28777DC9F77053CD3B547",
+        "repo_hash":  "F82D692BA2BA076A489869DB81ACF86B991ACF70A4D28777DC9F77053CD3B547",
+        "vault_hash":  "09229B1B578A305CBCE589E891B9DA09CECA0AE3BFFD981618191DAA445C57C7"
+    },
+    {
+        "path":  "07-APRENDIZADOS-MEMORIAS\\2026-09-05-CONVERGENCIA-MAIN-PR-MAE-ABSORVIDO.md",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "FC7CA15771B4D2161304B6787BE22614342EF331A6EBBBF6288B70BA8EA5BDA6",
+        "vault_hash":  null
+    },
+    {
+        "path":  "07-APRENDIZADOS-MEMORIAS\\2026-09-06-OMNIROUTE-CAPABILITY-ABSORPTION.md",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "75659CBD19D7AE89B0FA602762CDDA82F51FDF40334B5D2AE30E35A99A0530E9",
+        "vault_hash":  null
+    },
+    {
+        "path":  "07-APRENDIZADOS-MEMORIAS\\2026-09-09-CRISTAL-FULL-SESSAO-CENTRALDARK.md",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "84F3C1A27748BA9640097836C6BEB8401CB55D03EFCE69A598C2D03A7FA206A7",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\01-CARTAZES-CANONICOS\\centraldark-plan-progress.html",
+        "state":  "VAULT_ONLY",
+        "classification":  "REPO_MISSING_UNCHANGED_VAULT",
+        "baseline":  "178223426F3EF139ABBFD3AE760AB07BECF60D6B4A655FCB029198D60B72AB16",
+        "repo_hash":  null,
+        "vault_hash":  "178223426F3EF139ABBFD3AE760AB07BECF60D6B4A655FCB029198D60B72AB16"
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\01-CARTAZES-CANONICOS\\manifest.json",
+        "state":  "HASH_DIFF",
+        "classification":  "REPO_CHANGED_ONLY",
+        "baseline":  "A41BE25888300D774E350AB477033A012EB991215B77052C9019506AFCC04B40",
+        "repo_hash":  "AA4430985FCB6CF14B9C7CA99B31E361EAEB2113515A5AEB756A885B4F2A3DCE",
+        "vault_hash":  "A41BE25888300D774E350AB477033A012EB991215B77052C9019506AFCC04B40"
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\03-trajetoria-vivida.zip",
+        "state":  "VAULT_ONLY",
+        "classification":  "VAULT_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  null,
+        "vault_hash":  "0EF296930FB03954D0A2712D23FB63FBBE357D8141AF81F1DCFA5EE49D75EC46"
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Arquitetura Anti-Flash CentralDark.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "C8072139FAF1FBE157C684F041E8DC33D8143B0F492CFA03469F1194C851C1F2",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Arquitetura CentralDark em Neon F گ.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "8198FC2FC2EAE5A60837A3AB4330C33B5996E8C8273BF6B98EF9108FC8165168",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Arquitetura CentralDark_ Sistema Hermes em Ação.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "AAEC43FF244A205E761B7116832E8EF0F8D034EDF16F8E39766B39AC1C7A9C4E",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Arquitetura Completa do Auto-Destilador.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "69BB7F548938B2402EDFFD43C4E57AAB6B71B4BECB51EF49AFCFA3799A644B68",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Arquitetura Viva Centraldark 2026.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "20473E7C12921544CE5F13F55C5E916EB42F0F110815EDC5D7FA80780A505833",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Artefato de prova - Incidente Drive Docs.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "BD0B6EC7F00F79D9CA25A4BEB7C4BD85C9AED9A67892496F9EA70E1A0B971E81",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Auditoria da Autonomia CentralDark.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "ADD761FF32ACD23A1B71F850D2C6E4FE331213DC9795FBEB607D8216608C1DC1",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Badge Cyberpunk PR Confirmado.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "1FAEC16B20CA367540004244F71A562CA53D8700EB6E05E575065E68986500F0",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\bodas de ouro_ 50 anos de amor.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "1B065B2965FD5CAA43D0E0E809B49137822E0F67C506D3A932EAA498BD1C9B6E",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark — Cockpit do Chefe.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "1B53DAE3DF7FC06703147EEFE855692457AE42501D62130A46E8A4837211D8B3",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Centraldark — Ouro Operacional.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "5C39408C9E8DBE38D03E3020128FE98FE753E43FCCDD3AEC0B905A97D47993B2",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark Bahia Core_ Arquitetura Inteligente.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "C43B3DB54402AE5157547FE9B566715FC290C7E7796AAB7D7C9A617988F41DA6",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark centro de comando defensivo.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "64CA3BD8CB385E3C3792CB209F27256D2C26C7000467934FB6393486F9202B35",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark comando AI avançado.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "CF949E9395D47543AE2F8AF77F73324EB4152DF8E264AC1510ABC5E84B362620",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Centraldark_ A Casa Que Aprende.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "538B9C2DCDCFFEB39A896701608BFF0FA1B99C7823FC8D8C6C6C26C084CE9764",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark_ Amadurecimento Tático da Casa.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "9C5FD4BC7486F79B1014F323E1E65E53A380E9B54177D68D0ECF2CD9761EBE4B",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark_ Arquitetura em Duas Camadas.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "3216295E0008A980365B8EAF2E7B9BACDB9B6E0098A2B7B52EBA449BD8FE509D",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark_ Arquitetura em Prova.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "657EF1529B706EEE467BB93B246CD551DB9FAD32D1D0BBC413862DC950AE1B8E",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark_ Arquitetura Operacional e Prova Mínima.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "619CC351E2CB34DD12091AB0AD0108AA356C04A493D89FBE8D4DF8694EDC4132",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark_ Arquitetura Operacional.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "C5025A87D092AB751697C496BAAA2F9B1C8A0B1BD65DB3670548BB9BDCAB31E1",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark_ Arquitetura Viva 2026.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "94F483348F5BF45225E46AE17937FDD51D4A697AD16BD1337D410F5933A19DD9",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark_ Garimpo Cognitivo Neon.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "F59D00D1A0E9192157E09B241DAEE3C90ACE407B0AF4BB446DA7E5612C31F654",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark_ Hub de IA Colaborativa.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "61DC33262BD10AE4E36ED6F57A2A74D6686BAE84D8DFB1EE5BDD7FDE8EADE3F5",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark_ Infográfico do Sistema Supremo.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "EAE2FB8FDD51263DD08D4DF7C5168ED4044DEFC39434416B57216ECF41A8D3C2",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark_ Mapa Canônico da Casa.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "FA1E3F19F2D388F26290315F1E70263CF95A0D9083C149A6F2949B8CE188E407",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Centraldark_ Ouro sendo coletado.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "252709F127CDE40BA571EC54A6F2FDA44B8989B6715F73DB8F5817414F87217F",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark_ Pipeline Autônomo Neon.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "A55B352A938DF56FF8164B043DDFF77866BC60A69115B035F8BE23E0853AFCEC",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark_ Sol, Hermes e Jarviz.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "EBB3BDF02FA2E70DA5AA7B8C3715DB52E800358987D2A59BBA876B7ADDB468A4",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark_ Templo dos Oráculos.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "3197186EEE65CB1666454EACDE71812764475DF8E243BAE43F4617F0939EA5C6",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Centraldark_ Visão Multibússola.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "76D78518DC0AE2B4BAE42A5451AA45687BFA41F2D12F909298EB39BC4561B015",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\centraldark_o_cajado_da_correção.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "A3F6A0616D939F981D27CD9F860AA81BA789CD1112D9CC05B52D36E63A0C64B0",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\centraldark-computador-de-bordo.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "9C7E5652262E697F62EE3800C007BD87E88A870733DBE40AEE440CCC54262B74",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\centraldark-computador-de-bordo.svg",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "1757198BBC90EB04F1C8FACA8FB209FDC4BFA81FA2CC169542CCE3BB36983340",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\centraldark-modo-arsenal.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "F65F22542B0B9878DEB4D0D3DAD6371A0ED6118CD49B18E92E2DE029ED4AD117",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\centraldark-modo-arsenal.svg",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "A74E6506B4D42D3F92B6CFF966CE62BCC4F30E4F77FF1675990C94DFEB0C2FB1",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\CentralDark-Templo-dos-Oraculos-4K.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "A87CF8D3714C317FBDB576E7ECC378E9901F14DD30E3B7C1D19B602599E0E507",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Coletor de Ouro_ Filtro da Infraestrutura.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "43E540F8CFEFE35B28DDE9E6CE6707E39C54F711080CCA2E97C224AA62B89B55",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\emblema premium de segurança digital.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "F76E2455D30890A2EB7D19397913637F7D9323AD413E7510F29EA5C04254D3C8",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Fluxo Canônico Centraldark_ Prova e Realidade.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "76D84E1E3BF2A68F786FD66B2E6AE94BB622FBA546CF476746214A82B0D29CDE",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Fluxo Canônico_ Delta Mínimo Provado.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "B22A25F3B7C25E2F010A97576E0D9EE9EFA1CAC98E1ABAB4649E49A33EDDBEBD",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Fluxo Geral — Frente #1115.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "9F312CFE348DACA8BB4F1B281E109AF1920C44BBD1E1EA4EA67F1F862B52465F",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Fluxo Operacional Centraldark em HUD.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "7042B5E900B91C8A028A1480F4A9A8A235820EEDE104CDB7E62A55494426BEBC",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Fluxo Operacional CentralDark.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "260DDFD9B98FA254E9A23278134ED6154D33F049D5345B2DCE74613987F79FE5",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Fluxo tecnológico GitHub ↔ VPS.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "6E3B2A02A389A0CC0C3E9F62B67611C74908BC6DA9739A2EB47BEB34771B073C",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Garimpo Cognitivo CentralDark em Ação.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "02E17BC1DA19722FF5FE20A21F64D6119E498F682D980F44F14FE76757290E43",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Garimpo Cognitivo Centraldark_ Mapa do Ouro Digital.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "C4F1A739428099DBCB3D9E5DFEFC23D1863372C24A2533CC5715013E013338F1",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-1(1).png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "1B5622576391ACE19D755F1A915433E9784638663973DAF50B873202C08C8AA9",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-1(4).png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "34FDFA52BD196509DAFA521F1A39332837D9C1D702AB7E1C93AB6CE180CEF0CE",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-1(5).png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "D3427969680C409765CEF9AD2C0D64C1B0240D287EA0EF5FBB3D2AF29AF8B797",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-1(6).png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "605ECF68737FE8305B6FD33410C6EA6C155F04FBFFB1184466968F4957571602",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-1(7).png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "F518732695F645324D669D2CB0941B9F4D025B45536B25CCDC395E8883D15D65",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-1(8).png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "B16E22EE0C4BA407593C36FE9E9FB4CDB4C9E8822269AC3084343F16E534A651",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-1.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "B30B3DF655D948712B4371B1E82C42CB095A2C0C9BA1F80B87941A9FFB3D0BF0",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-2(1).png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "52EE44447EF3D112BC0794993DE862B501F9C94359E360332173C87BD5DF75F1",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-2(2).png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "28AE3271E0F23E37BCCFF8BF87F13B1FCCE5A2386CAFE4F2349E0D42AD595B95",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-2(4).png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "6DEC8CAC820781CC31D102C99B6E62BA44CA19A709AC0A657A4E1909537225CB",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-2(5).png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "CE9054F5F2B17903BD9F64ABA058C16B83FF1DA260EC7778114B635A87233190",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-2.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "3DDE2B1FF46750DC215942DEE5A7B9DAA1CC029BD7499DDB686D119CD7B5C90B",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-3(1).png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "2E00878BB85B6E3E65519FD1804449E6ABEB7CDE47F82B57573A04825781ECC0",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-3(2).png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "9BB2B9024E28ED473F7D75DC8DC8156E1E902D64D979CC1A3B7785485DA53340",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-3.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "98A58A3F23F116FB6A13AFE32C4AB3A03166BF7A09308107F741351A12EE1548",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-4(1).png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "4BB04D0A3AF4260B596C6F0AE2D9D6D5D880CF8FDA74E93B7F22FA8CB4F3F8B4",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-4.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "7A4024E6CD7EFFA6D34DB275F9F954C0E06B7E22FE6E66B51D9D26E5068C7455",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-5.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "04D4904A4004A1B888B1A025DF43BFA265549F806A06F6ED5CC0DC650EFA90FB",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\image-gen-7.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "404F839A645DE1AD7D62412F4013042391674E0DA4BEAD4FD1CE1DCF0994718F",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Infográfico Neon da Casa_ Uma Só Direção.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "1C7C8E20822655A750866D6555A731945EF2C8AE3C10E1361B2E4D93121045B1",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Infográfico Neon de Configuração do Chat no VS Code.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "C348B9B4464DE8A1927F9EE5E06EF9A6040378B820A089A23ECB00BB20E32B2D",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Infográfico Sci-Fi_ Lacuna Fechada.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "4844460C1CFAD7914D6F73E7B93C452D9EC330E3F540C8ABF02BA43E6DD63DE5",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Loop da Sessão Viva.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "93F16D981C475B3E08894FA081AAC0FE533A7D8CC7F9E9FC78BB3B579DE4FD40",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Mapa Arquitetural CentralDark OS.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "B2094788B44FE99B29EF1895C23D9DD3B21119BB54D2EF750993BE53C08B0706",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Mapa Canônico Centraldark em HUD Neon.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "936AC38D45800378EE5532ACD346A976FD329315ECEB73617BC8A81C2211D994",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Mapa Mental Operacional CentralDark.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "81135D27ED86261CA897959BE1411E9CA7A4A927886376727C04ADD1AA96989E",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Mascotes da Central Dark em breve.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "B64550F74FDC30563F1205AAB36C73292E8825A46C90DD5F977FDE5CB4CC9D99",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\O Futuro em Código Neon.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "B2BC837165AC3E113D3973100D5E51A6830E296E79C71F6438A3D274F6672A88",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Padrão Operacional CentralDark em Interface Sci-Fi.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "D0CF983F097FBAD749D20A9BB90780667DB61D0B9FC968097FDD4147EBF62176",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Painel Arquitetural do Motor Hermes.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "E597AD5FF7F339EF55CA0ABFD88EE26454D1B8E90C924E40F35F3BCEC946D07E",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Painel CentralDark_ Evidências e Artefatos.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "49BB1CFBD82351EE0FA803D6CF550096CA8522D7BE1C78E577AE9E8FF23561D3",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Painel de controle CentralDark Hub.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "34E3422F464265DEC36F0E246FB79383ED78BBFBA2833C331D327C29FB767707",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Painel de Reconciliação Técnica CentralDark V8 e Vite.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "3684E37F060696B5C34252E89D9B6120672A099DD98DA56BE3946C1CB9867732",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Painel Operacional CentralDark.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "D72625D5A1822FC9571C3BF8F0C2D75A12EC7D606B1668C0894696BE92EB3DA4",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Plano Canônico_ Fable Loop Operacional.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "6668639A3CFBE3B982615B870DA2EECFAA1B81BF47B978226D0842C73B4D3E0D",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Plano CentralDark_ Reconciliação e Build Local.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "66BF3BEABCA1D6FA8C85FA5DFA9A4D8153EBD3A23B5BD41ECA16BAB891C384E7",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Pombo-Correio com Checklist Neon.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "BAA76336F4C22A9F8C48F58666B96929FA6E12C191779DF8CA258630760F7C6C",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Portão de Segurança de Arquivos.7z",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "DD3678D7C304770D52C7C783D78CC7BC3F0B992DEF8A58C22FDB7BB118EEEF76",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Portão de Segurança de Arquivos.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "A57BCDE733D7EA0B09361D9164C59DB5D28DDEFADF0BE6C2AAAF647BE9A638DC",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Pôster futurista Centraldark_ Sol, Hermes e Jarviz.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "EC1ECB60603659BCD70E1276C7A00F2DE8B113EB0209DFF5DF699D5A33491D37",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Retrato Cósmico do Guardião Cibernético.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "D41AB0EB9E95D2352F6A57F4583B9A63266C972DC445F63095D6B2CFDE02A030",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Sincronia Global de Intenções e Eventos.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "10002B019F3DBC321E2BB02DD71145E89E54B83BEF185352C94FB4D0CCE80B0D",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Soberano da Intenção_ Prova e Realidade.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "535A2922947D79793AB8E3393E4B448A76665B486ABAB2101745F194238C99B0",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Story #1097_ missão, critérios e prova.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "F66F44863925B28467C3B5BA2F9D8C1860F27D1F0888BF0B0DC653B31A32F76B",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Templo Centraldark_ Prova da Convergência.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "30E21AE7F613259B64C63485EFEB7B65DD0CEE4D3D7247B5CAE83B542D27DF9A",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\BIBLIOTECA_CHATGPT\\Uma Só Direção_ Manual CentralDark.png",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "0600BCD4C125D23542FC929A5D977ACF5D891153F682C08D0F2AB64D8E9CB8AE",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\RECIBO\\LEIA-ME.md",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "B6D4A9DCAECC27A475798E8C469908DD6160A95A339B7AF0EF8B309E3F89E960",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\RECIBO\\MANIFESTO-IMAGENS.csv",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "3A242A8CEAED1F454794D2720C9B0B499B2686F9FE48728A4624AAE618CDC7E4",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\RECIBO\\RECEIPT.json",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "AA6208094289598C87E25552EC98B136D39DAF8D725FCFBF2CCCCE19A691E260",
+        "vault_hash":  null
+    },
+    {
+        "path":  "08-ARTEFATOS-VISUAIS\\CARTAZES-CANONICOS\\RECIBO\\SHA256SUMS.txt",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "4F4431EF0944EB77600F919A76FB75237BADA316137DC77F5F99F72205BD7199",
+        "vault_hash":  null
+    },
+    {
+        "path":  "CentralDark.md",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "FF36994BA819DC253833C49F032824322388548848F4C9B73694322D8B96054C",
+        "vault_hash":  null
+    },
+    {
+        "path":  "cristalizacao-source-a-ledger.json",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "96FAF4627E5B69ACBDC2AA54FC0C84A7FC521A23C7DF3B4E9384F863F06D16F6",
+        "vault_hash":  null
+    },
+    {
+        "path":  "cristalizacao-source-b-ledger.json",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "F7B184401E328C12AC2B5AC11E9FB51C817CE668892365B3684477EF78D04329",
+        "vault_hash":  null
+    },
+    {
+        "path":  "Excalidraw\\Drawing 2026-09-07 04.53.02.excalidraw.md",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "13211530EEBE418805CD33B9630B30AC51A973AF2559DC58FA597F715E088FDA",
+        "vault_hash":  null
+    },
+    {
+        "path":  "Excalidraw\\Drawing 2026-09-07 07.06.07.excalidraw.md",
+        "state":  "REPO_ONLY",
+        "classification":  "REPO_NEW_OR_CHANGED",
+        "baseline":  null,
+        "repo_hash":  "13211530EEBE418805CD33B9630B30AC51A973AF2559DC58FA597F715E088FDA",
+        "vault_hash":  null
+    }
+]

@@ -1,0 +1,10 @@
+﻿
+LineNumber Line                                                                           
+---------- ----                                                                           
+        24   artifact_never_invents_canonical: true                                       
+       258     - ARTIFACT_PROPERTIES                                                      
+       284 artifact_properties:                                                           
+       285   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
+       288 operational_rule_learning:                                                     
+
+

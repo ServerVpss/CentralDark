@@ -1,0 +1,121 @@
+name: Auto PR + Micro Deploy
+
+on:
+  push:
+    branches:
+      - 'feat/**'
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: write
+
+jobs:
+  create_pr_and_deploy:
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact pushed HEAD
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Prove checkout HEAD
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          test "$actual" = "$EXPECTED_HEAD"
+          echo "TESTED_HEAD=$actual"
+
+      - name: Ensure PR exists (create if missing)
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const branch = process.env.GITHUB_REF.replace('refs/heads/', '');
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prs = await github.rest.pulls.list({ owner, repo, head: `${owner}:${branch}`, state: 'open' });
+            if (prs.data.length === 0) {
+              const body = [
+                '# !CENTRALDARK',
+                '',
+                'Micro-deploy causal em prova reversível e isolada.',
+                '',
+                'Refs #1444',
+                '',
+                '`PRODUCTION_DEPLOY=NOT_CLAIMED`',
+                '`UNKNOWN != PASS`',
+              ].join('\n');
+              const created = await github.rest.pulls.create({
+                owner,
+                repo,
+                title: '🚀 TEST(DEPLOY): PROVAR MICRO-DEPLOY REVERSÍVEL NO HEAD EXATO',
+                head: branch,
+                base: 'main',
+                body,
+                draft: false,
+              });
+              core.info(`Created PR: ${created.data.html_url}`);
+            } else {
+              core.info(`PR already exists: ${prs.data[0].html_url}`);
+            }
+
+      - name: Run repository tests when present
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f ./scripts/test.sh ]; then
+            chmod +x ./scripts/test.sh
+            ./scripts/test.sh
+          else
+            echo "No scripts/test.sh; SKIP_JUSTIFICADO=NO_GLOBAL_TEST_SCRIPT"
+          fi
+
+      - name: Counterprove micro-deploy engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          chmod +x ./scripts/micro_deploy.sh ./scripts/micro_deploy.test.sh
+          ./scripts/micro_deploy.test.sh | tee "$RUNNER_TEMP/micro-deploy-self-test.txt"
+          grep -q '^MICRO_DEPLOY_SELF_TEST=PASS$' "$RUNNER_TEMP/micro-deploy-self-test.txt"
+
+      - name: Execute isolated reversible micro-deploy proof
+        shell: bash
+        env:
+          MICRO_DEPLOY_MODE: proof
+          MICRO_DEPLOY_ACTION: cycle
+          MICRO_DEPLOY_COMPONENT: centraldark-micro-deploy-canary
+          MICRO_DEPLOY_OWNER: docs/CONSCIENCIA/03-FLUXO-DEPLOY.md
+          MICRO_DEPLOY_LOGDIR: files
+          GATES_HEAD_EXATO: WORKFLOW_SAME_HEAD
+          NEXT_CURSOR: REVIEW_RECEIPT_THEN_REALITY_JUDGE
+        run: |
+          set -euo pipefail
+          export MICRO_DEPLOY_TARGET_ROOT="$RUNNER_TEMP/centraldark-micro-deploy-proof"
+          chmod +x ./scripts/micro_deploy.sh
+          ./scripts/micro_deploy.sh "$GITHUB_REF" "$GITHUB_SHA"
+          latest="$(ls -1t files/deploy-*.log | head -n1)"
+          grep -q "^SOURCE_SHA=$GITHUB_SHA$" "$latest"
+          grep -q '^RUNTIME_BINDING=PASS$' "$latest"
+          grep -q '^ROLLBACK_RESULT=PASS$' "$latest"
+          grep -q '^RUNTIME_RECEIPT=PASS$' "$latest"
+          grep -q '^RESULT=PASS$' "$latest"
+          echo "MICRO_DEPLOY_ENGINE_PROOF=PASS"
+          echo "PRODUCTION_MICRO_DEPLOY=NOT_PROVEN"
+
+      - name: Upload micro-deploy proof receipt
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: micro-deploy-proof-${{ github.sha }}
+          path: |
+            files/deploy-*.log
+            ${{ runner.temp }}/micro-deploy-self-test.txt
+          if-no-files-found: warn
+          retention-days: 30

@@ -1,0 +1,207 @@
+schema: centraldark.artifact-properties.v1
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
+status: CANONICAL_CONTRACT
+source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
+
+# Propriedades obrigatórias de todo artefato derivado consumido por Hermes.
+groups:
+  A_IDENTIDADE:
+    title:
+      required: true
+      type: string
+      description: Nome canônico curto do artefato
+    status:
+      required: true
+      type: enum
+      values:
+        - CANONICO
+        - DERIVED_VIEW
+        - CANDIDATE
+        - KNOWLEDGE_ONLY
+        - QUARANTINE
+        - HISTORICAL
+        - SUPERSEDED
+        - FLASH_READY
+        - UNPROVEN
+        - BLOCKED
+    source_rule:
+      required: true
+      type: string
+      default: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
+  B_TEMPORAL:
+    date:
+      required: true
+      type: date
+      description: Data de criação ou do fato original
+    updated:
+      required: true
+      type: datetime
+      description: Última medição/atualização material
+    observed_at:
+      required: false
+      type: datetime
+      description: Quando a Casa ingeriu/observou
+  C_CLASSIFICACAO:
+    tags:
+      required: true
+      type: list
+      min_items: 1
+      description: Etiquetas operacionais (alfabéticas no índice)
+    category:
+      required: true
+      type: string
+      description: Grupo alfabético de categoria (A..Z + domínio)
+    sensitivity:
+      required: true
+      type: enum
+      values: [PUBLIC, INTERNAL, SENSITIVE_QUARANTINE]
+  D_PROVENIENCIA:
+    source:
+      required: true
+      type: string
+    source_class:
+      required: true
+      type: enum
+      values:
+        - HUMAN_AUTHORITY
+        - TOOL_MEASURED
+        - INTERNAL
+        - EXTERNAL_UNTRUSTED
+        - UNDECLARED
+    head_sha:
+      required: false
+      type: string
+    content_sha256:
+      required: false
+      type: string
+    conversation_refs:
+      required: false
+      type: list
+      description: Referências recuperáveis de chats/conversas quando forem fonte de contexto ou proveniência
+  E_GOVERNANCA:
+    owner:
+      required: true
+      type: string
+    consumer:
+      required: false
+      type: string
+    writer:
+      required: false
+      type: string
+  F_SEMANTICA:
+    related_notes:
+      required: false
+      type: list
+      description: Notas/owners relacionados; qualidade acima de quantidade
+  G_LIFECYCLE:
+    artifact_class:
+      required: false
+      type: enum
+      values: [SOURCE, WORKTREE, BUILD, TEMP, CACHE, LOG, RECEIPT, RUNTIME_STATE]
+    lifecycle_state:
+      required: false
+      type: enum
+      values: [ACTIVE, RECONSTRUCTIBLE, PERSISTED, CLEANUP_ELIGIBLE, EXPIRED, REMOVED]
+    environment_id:
+      required: false
+      type: enum
+      values: [CASA, GITHUB, VPS, EXTERNAL]
+    mission_id:
+      required: false
+      type: string
+    parent_event_id:
+      required: false
+      type: string
+    cleanup_eligible:
+      required: false
+      type: boolean
+    expires_at:
+      required: false
+      type: datetime
+    relation_types:
+      required: false
+      type: list
+      values: [PARTE_DE, EXPLICA, DEPENDE_DE, COMPLEMENTA, EXEMPLO_DE, CONTRASTA_COM, EVOLUIU_PARA, FONTE_DE]
+      owner: docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md
+    semantic_summary:
+      required: false
+      type: string
+      description: Frase curta explicando por que os links existem
+
+rules:
+  artifact_never_invents_canonical: true
+  derived_view_is_not_authority: true
+  missing_required_property: BLOCK_PROMOTION_TO_FLASH
+  hermes_consumes_only_with_properties: true
+  alphabetical_category_index: true
+  status_derives_from_proof_not_hope: true
+  cross_chat_reference_is_current_state: false
+  semantic_link_is_proof: false
+  graph_is_authority: false
+  semantic_links_quality_over_quantity: true
+  artifact_name_is_not_identity: true
+  upload_suffix_is_transient: true
+  discover_by_hash_first: true
+  known_locations_first: true
+  empty_path_with_known_identity: RESOLVE_REFERENCE
+  empty_path_is_not_artifact_missing: true
+  same_hash_and_size_different_name: SAME_ARTIFACT
+  same_name_different_hash: FAIL_CLOSED
+  unresolved_known_identity: UNKNOWN
+  unknown_is_not_pass: true
+  agent_created_artifact_requires_lifecycle_classification: true
+  temp_is_not_canonical_asset: true
+  cache_is_reconstructible_not_authority: true
+  npm_npx_cache_node_modules_is_source_code: false
+  package_manager_cache_must_not_be_copied_into_apps_modulos: true
+  source_dependency_promotion_requires_existing_owner_or_manifest: true
+  casa_tmp_owner: E:\CentralDark\_tmp
+  casa_cache_owner: E:\CentralDark\cache
+  casa_site_build_preview_owner: C:\CentralDark
+  same_taxonomy_does_not_mean_same_environment_state: true
+
+identity_resolution:
+  applies_to: ALL_ENGINES_AND_SURFACES
+  consumers: [HERMES_LOCAL, HERMES_VPS, CI_CD, MCP, CLI, DESKTOP, SITE, API, HARNESS]
+  source_of_identity_priority:
+    - content_sha256
+    - size_bytes
+    - provenance
+    - canonical_owner
+    - display_name
+  algorithm:
+    - ACCEPT_EXPLICIT_PATH_WHEN_PROVIDED
+    - ELSE_SEARCH_AUTHORIZED_KNOWN_LOCATIONS_ONLY
+    - FILTER_BY_SIZE_WHEN_KNOWN
+    - VERIFY_SHA256
+    - MATCHED_IDENTITY_IS_REUSABLE
+    - MISMATCH_IS_FAIL_CLOSED
+    - NOT_FOUND_IS_UNKNOWN_NOT_MISSING
+  forbidden:
+    - TRUST_UPLOAD_SUFFIX_AS_IDENTITY
+    - GLOBAL_BLIND_DISK_SCAN
+    - SECRET_DIRECTORY_SCAN_WITHOUT_SCOPE
+    - NAME_ONLY_GREEN
+  learned_example:
+    source: tlc23.pdf
+    historical_aliases: ["tlc23(2).pdf", "tlc23(3).pdf"]
+    expected_size_bytes: 206674
+    expected_sha256: b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
+    owner: scripts/lupa/pdf-conformance-cc2003.mjs
+
+example_frontmatter: |
+  ---
+  title: "Diagramas do Sistema CentralDark"
+  date: 2026-06-29
+  updated: 2026-08-15T00:00:00-03:00
+  status: DERIVED_VIEW
+  tags: [diagrama, arquitetura, fluxo, mermaid, sistema]
+  category: "A-Arquitetura"
+  sensitivity: INTERNAL
+  source: docs/ARQUITETURA/
+  source_class: INTERNAL
+  source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
+  related_notes: [docs/CONSCIENCIA/MAPA-DO-CEREBRO.md]
+  relation_types: [PARTE_DE]
+  ---

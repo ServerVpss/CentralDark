@@ -1,0 +1,69 @@
+name: SOL — aplicar Tailscale MCP privado (one-shot)
+
+on:
+  push:
+    branches: [sol/tailscale-mcp-pairing-20260913]
+    paths:
+      - "scripts/vps/configure-tailscale-private-mcp.sh"
+      - "scripts/hermes/bind-skill-workshop.sh"
+      - ".github/workflows/sol-apply-tailscale-mcp-candidate.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sol-tailscale-mcp-one-shot
+  cancel-in-progress: false
+
+jobs:
+  apply-vps:
+    if: github.repository == 'ServerVpss/CentralDark'
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+
+      - name: Contraprova do runner antes de mutar
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          echo "CANDIDATE_HEAD=${GITHUB_SHA}"
+          [[ -d /root/CentralDark/.git ]] || { echo 'VPS_REPO_MISSING'; exit 20; }
+          command -v tailscale >/dev/null || { echo 'TAILSCALE_MISSING'; exit 21; }
+          command -v pm2 >/dev/null || { echo 'PM2_MISSING'; exit 22; }
+          tailscale status >/dev/null || { echo 'TAILSCALE_OFFLINE'; exit 23; }
+          pm2 describe CentralDark-MCP >/dev/null || { echo 'MCP_PM2_MISSING'; exit 24; }
+          curl -fsS --max-time 4 http://127.0.0.1:9100/health | grep -q 'mcp-centraldark' || { echo 'MCP_LOCAL_HEALTH_FAIL'; exit 25; }
+          echo 'PRECHECK=PASS'
+
+      - name: Aplicar rota privada Tailscale do MCP
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          bash scripts/vps/configure-tailscale-private-mcp.sh
+
+      - name: Ligar skill-workshop ao Hermes por referência
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          REPO_ROOT=/root/CentralDark HERMES_HOME=/root/.hermes bash scripts/hermes/bind-skill-workshop.sh
+
+      - name: Receipt e contraprova final
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          echo '=== TAILSCALE SERVE ==='
+          tailscale serve status
+          echo '=== MCP LOCAL ==='
+          curl -fsS --max-time 4 http://127.0.0.1:9100/health
+          echo
+          echo '=== HERMES SKILL BIND ==='
+          [[ -L /root/.hermes/skills/skill-workshop ]] || { echo 'HERMES_BIND_NOT_SYMLINK'; exit 30; }
+          [[ "$(readlink -f /root/.hermes/skills/skill-workshop)" == "/root/CentralDark/.agents/skills/skill-workshop" ]] || { echo 'HERMES_BIND_TARGET_MISMATCH'; exit 31; }
+          [[ -f /root/.hermes/skills/skill-workshop/SKILL.md ]] || { echo 'HERMES_SKILL_MISSING'; exit 32; }
+          echo 'TAILSCALE_PRIVATE_ROUTE=PASS'
+          echo 'HERMES_SKILL_WORKSHOP_BIND=PASS'
+          echo 'PUBLIC_9100_DIRECT_BIND=ABSENT'

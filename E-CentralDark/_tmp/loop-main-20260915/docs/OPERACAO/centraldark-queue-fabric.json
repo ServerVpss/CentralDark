@@ -1,0 +1,49 @@
+{
+  "schema": "centraldark.queue-fabric.v1",
+  "status": "CANDIDATE_CODE_BACKED",
+  "owner": ".agents/skills/centraldark-operational-method/SKILL.md",
+  "pr": 1463,
+  "purpose": "Classificar checks, micro deploys, dependabot, conflict resolver, Casa, VPS, site e main em uma esteira unica, sem confundir fila com prova.",
+  "invariants": [
+    "QUEUED != PASS",
+    "PENDING != PASS",
+    "SKIPPED != PASS",
+    "CANCELLED != PASS",
+    "RERUN_ALL_WHILE_QUEUED=false",
+    "FAILED_JOB_RERUN_ONLY_AFTER_COMPLETED_FAILURE=true",
+    "SAME_HEAD_REQUIRED=true",
+    "MAIN_PROMOTION_AFTER_CI_AND_RECEIPT=true",
+    "SITE_PROOF != CASA_PROOF",
+    "CASA_PROOF != VPS_PROOF",
+    "VNC_VIEW != PROOF"
+  ],
+  "rerun_policy": {
+    "queued_or_pending": "WAIT",
+    "in_progress": "WAIT",
+    "completed_success": "KEEP",
+    "completed_failure": "RERUN_FAILED_ONLY_OR_FIX_ROOT_CAUSE",
+    "completed_cancelled": "RERUN_FAILED_ONLY_IF_HEAD_STILL_CURRENT",
+    "head_changed": "DO_NOT_RERUN_OLD_HEAD"
+  },
+  "micro_deploy_policy": {
+    "before_main": "BLOCKED",
+    "after_same_head_ci": "CANDIDATE",
+    "after_main_green": "ALLOW_MICRO_DEPLOY",
+    "requires": ["artifact", "rollback", "health", "receipt"]
+  },
+  "phases": [
+    { "id": "00_BOOT_TRILHO", "emoji": "🧿", "name_prefix": "00 🧿", "domain": "pr", "role": "abre trilho, intencao, refs e estado vivo" },
+    { "id": "01_LABEL_GATE", "emoji": "🏷️", "name_prefix": "01 🏷️", "domain": "github", "role": "separa promocao, proveniencia, capacidade, status e resultado" },
+    { "id": "02_HANDOFF_CONTRACT", "emoji": "🧾", "name_prefix": "02 🧾", "domain": "github", "role": "garante handoff bruto no PR/commit/issue" },
+    { "id": "03_TEST_CONTRACT", "emoji": "🧪", "name_prefix": "03 🧪", "domain": "ci", "role": "executa testes de contrato antes de promocao" },
+    { "id": "04_HORN_LINE_GATE", "emoji": "🦌", "name_prefix": "04 🦌", "domain": "logic", "role": "deriva allow/block/unknown por regra Horn" },
+    { "id": "05_CONNECTOR_ROUTER", "emoji": "🔌", "name_prefix": "05 🔌", "domain": "connectors", "role": "aciona conectores por demanda material, nao todos cegamente" },
+    { "id": "06_CODEX_VALIDATE", "emoji": "🤖", "name_prefix": "06 🤖", "domain": "agent", "role": "validacao de agente como capacidade, nao autoridade" },
+    { "id": "07_PACKAGE_ARTIFACT", "emoji": "📦", "name_prefix": "07 📦", "domain": "artifact", "role": "pacote, hash, reproducibilidade e rollback" },
+    { "id": "08_MICRO_DEPLOY", "emoji": "🚀", "name_prefix": "08 🚀", "domain": "deploy", "role": "deploy pequeno apos prova, nunca antes" },
+    { "id": "09_SITE_HTTP_CHECK", "emoji": "🌐", "name_prefix": "09 🌐", "domain": "site", "role": "HTTP, artifact e evidencia publica" },
+    { "id": "10_CASA_RECEIPT", "emoji": "🏠", "name_prefix": "10 🏠", "domain": "casa", "role": "device, workdir, processo, testes locais e receipt" },
+    { "id": "11_MAIN_PROMOTION_GATE", "emoji": "🧷", "name_prefix": "11 🧷", "domain": "main", "role": "squash/update main somente com same-head aprovado" },
+    { "id": "12_DEPENDABOT_CONFLICT_RESOLVER", "emoji": "🔁", "name_prefix": "12 🔁", "domain": "maintenance", "role": "dependabot, update branch, squash e resolucao de conflito sem misturar com PR-trilho" }
+  ]
+}

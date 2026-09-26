@@ -1,0 +1,21 @@
+from pathlib import Path
+P=Path(r'E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\apps\modulos\mcp\src\device-pairing.js')
+t=P.read_text(encoding='utf-8-sig')
+def r(old,new):
+ global t
+ if old not in t: raise SystemExit('MISSING:'+old[:80])
+ t=t.replace(old,new,1)
+r('const DEFAULT_STALE_MS = 45_000;','const DEFAULT_STALE_MS = 45_000;\nconst DEFAULT_DEVICE_TOKEN_TTL_MS = Number(process.env.CENTRALDARK_DEVICE_TOKEN_TTL_MS || 30 * 24 * 60 * 60_000);')
+r('  const staleMs = Number(options.staleMs || DEFAULT_STALE_MS);','  const staleMs = Number(options.staleMs || DEFAULT_STALE_MS);\n  const deviceTokenTtlMs = Number(options.deviceTokenTtlMs || DEFAULT_DEVICE_TOKEN_TTL_MS);')
+r('      tokenDelivered: false,\n      token: "",','      tokenDelivered: false,\n      token: "",\n      refreshToken: "",')
+r('    const token = randomBytes(32).toString("base64url");\n    const deviceId = randomUUID();','    const token = randomBytes(32).toString("base64url");\n    const refreshToken = randomBytes(40).toString("base64url");\n    const deviceId = randomUUID();')
+r('      token_hash: sha256(token),\n      paired_at: new Date(now()).toISOString(),','      token_hash: sha256(token),\n      refresh_token_hash: sha256(refreshToken),\n      token_expires_at: new Date(now() + deviceTokenTtlMs).toISOString(),\n      paired_at: new Date(now()).toISOString(),')
+r('    item.token = token;\n    item.approvedAt = now();','    item.token = token;\n    item.refreshToken = refreshToken;\n    item.tokenExpiresAt = now() + deviceTokenTtlMs;\n    item.approvedAt = now();')
+r('    item.tokenDelivered = true;\n    const token = item.token;\n    item.token = "";\n    return { status: "approved", device_id: item.deviceId, token };','    item.tokenDelivered = true;\n    const token = item.token;\n    const refreshToken = item.refreshToken;\n    item.token = "";\n    item.refreshToken = "";\n    return { status: "approved", device_id: item.deviceId, token, refresh_token: refreshToken, token_expires_at: new Date(item.tokenExpiresAt).toISOString() };')
+r('    const device = registry.devices.find((entry) => safeEqual(entry.token_hash || "", tokenHash));\n    if (!device) return { ok: false, error: "invalid_device_token" };','    const device = registry.devices.find((entry) => safeEqual(entry.token_hash || "", tokenHash));\n    if (!device) return { ok: false, error: "invalid_device_token" };\n    if (device.token_expires_at && Date.parse(device.token_expires_at) <= now()) return { ok: false, error: "device_token_expired" };')
+r('  function listDevices() {\n    const registry = readRegistry();','  function refresh({ refreshToken }) {\n    const refreshHash = sha256(refreshToken || "");\n    const registry = readRegistry();\n    const device = registry.devices.find((entry) => safeEqual(entry.refresh_token_hash || "", refreshHash));\n    if (!device) return { ok: false, error: "invalid_refresh_token" };\n    const token = randomBytes(32).toString("base64url");\n    device.token_hash = sha256(token);\n    device.token_expires_at = new Date(now() + deviceTokenTtlMs).toISOString();\n    writeRegistry(registry);\n    return { ok: true, device_id: device.device_id, token, token_expires_at: device.token_expires_at };\n  }\n  function listDevices() {\n    const registry = readRegistry();')
+r('    return registry.devices.map(({ token_hash: _secret, ...device }) => ({','    return registry.devices.map(({ token_hash: _secret, refresh_token_hash: _refreshSecret, ...device }) => ({')
+r('  return { start, approve, status, heartbeat, listDevices, registryPath };','  return { start, approve, status, heartbeat, refresh, listDevices, registryPath };')
+r('  router.post("/heartbeat", (req, res) => {','  router.post("/token/refresh", (req, res) => {\n    const result = store.refresh({ refreshToken: bearerFrom(req) });\n    res.status(result.ok ? 200 : 401).json(result);\n  });\n  router.post("/heartbeat", (req, res) => {')
+P.write_text(t,encoding='utf-8',newline='\n')
+print('PATCHED device-pairing.js')

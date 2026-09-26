@@ -1,0 +1,400 @@
+﻿docs\BOTS\README.md:16:| **ChatGPT + MCP** | `assign:chatgpt` | Comando central, valida├º├úo cadeia 7 passos, fechamento e suporte Mermaid/Canvas | `mcp.centralldark.com` | manual (humano) |
+docs\APRENDIZADOS\MCP\MCP-EXPLICADO.md:63:- Nosso servidor: `CentralDark-MCP` (PM2, porta 9100, `https://mcp.centralldark.com`).
+apps\modulos\WebUI\mcpo-config\config.json:5:      "url": "https://mcp.centralldark.com/mcp",
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\sentinela\last-snapshot.json:6:      "url": "https://mcp.centralldark.com/health",
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\sentinela\last-snapshot.json:14:      "url": "https://mcp.centralldark.com/status.json",
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\sentinela\last-snapshot.json:22:      "url": "https://mcp.centralldark.com/tools.json",
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:127:- **Sintoma:** `https://mcp.centralldark.com/status.json` responde com `ok:false` enquanto `toolCount:84` e demais subchecks parecem OK. O Mega Painel j├í foi ajustado pra tratar o card como verde quando `toolCount>0 && !error` (ver APRENDIZADOS #110), mas a raiz no MCP segue.
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:189:- **Valida├º├úo curl ao vivo:** `GET https://mcp.centralldark.com/health` com `Origin: https://status.centralldark.com` ÔåÆ 200 + headers CORS completos ┬À `OPTIONS` ÔåÆ 204 + headers CORS.
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:241:- **Sintoma:** `mcp.centralldark.com` devolvia Cloudflare 521 ÔÇö Caddy `failed` desde 16:01 do dia 06/06 (durante o cleanup de disco que liberou 56GB).
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:248:- **Cadeia validada 7/7:** repo OK ┬À install.Caddyfile no FS ┬À Caddy `active` ┬À 127.0.0.1:9100/9200 200 ┬À Caddyfile aponta certo ┬À `mcp.centralldark.com/health` 200 ┬À `install.centralldark.com/status` 200 com marcador novo.
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:251:- **Sintoma:** `https://mcp.centralldark.com/health` e `/tools.json` devolviam 502; PM2 mostrava `online` mas com 24 restarts e porta 9100 livre (loop de crash).
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:627:  - `GET https://mcp.centralldark.com/skills` (lista)
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:628:  - `GET https://mcp.centralldark.com/skills/<nome>` (manifesto)
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:629:  - `GET https://mcp.centralldark.com/skills/<nome>/SKILL.md` (markdown cru)
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:630:  - `GET https://mcp.centralldark.com/skills/<nome>/install.sh` (script bash auto-detect)
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:632:- **Comando final pro usu├írio:** `curl -sL https://mcp.centralldark.com/skills/centraldark-consciencia/install.sh | bash`
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:637:  1. `curl https://mcp.centralldark.com/skills` retorna JSON com `centraldark-consciencia`
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:638:  2. `curl https://mcp.centralldark.com/skills/centraldark-consciencia/SKILL.md` retorna o markdown completo
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:639:  3. Rodar `curl -sL https://mcp.centralldark.com/skills/centraldark-consciencia/install.sh | bash` num Claude Code novo e confirmar que o arquivo aparece em `~/.claude/skills/centraldark-consciencia/SKILL.md`
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:718:- **Dom├¡nio:** `https://mcp.centralldark.com` (SSL autom├ítico via Caddy)
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:738:  - Abrir `https://mcp.centralldark.com/status` no navegador.
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:782:    - mcp.centralldark.com respondendo
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:797:  - **MCP (IA externa):** `https://mcp.centralldark.com` + `/status`
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\PENDENCIAS.md:853:- **Objetivo futuro:** subir endpoints `/authorize` `/token` `/register` pr├│prios em `mcp.centralldark.com` (ou `auth.centralldark.com`), com tela de login no visual do CentralDark ÔÇö sem depender do GitHub.
+docs\ARQUITETURA\MAPA-DE-ROTAS-VPS.md:14:| mcp.centralldark.com | MCP | :9100 | CentralDark-MCP |
+docs\ARQUITETURA\CENTRALDARK-REMOTE-MCP-GATEWAY.md:7:- MCP da Casa: `https://mcp.centralldark.com/mcp`
+docs\ARQUITETURA\CENTRALDARK-TRIGGER-FABRIC\CAPABILITY-READINESS-POLICY.yml:344:    mcp_external: "https://mcp.centralldark.com/mcp"
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\CUSTOM-GPT-SETUP.md:94:https://mcp.centralldark.com/mcp
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\CONSCIENCIA.md:91:| Dom├¡nio MCP | `https://mcp.centralldark.com` |
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\CONSCIENCIA.md:292:| Dom├¡nio p├║blico | `https://mcp.centralldark.com` |
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\CONSCIENCIA.md:294:| OAuth callback | `https://mcp.centralldark.com/oauth/callback` |
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\CONSCIENCIA.md:299:| Status p├║blico | `https://mcp.centralldark.com/status` (HTML auto-refresh) e `/status.json` |
+apps\modulos\WebUI\custom-css\hermes-panel.js:193:      const r = await fetch('https://mcp.centralldark.com/hermes/boot', { cache: 'no-store' });
+docs\INSTALADOR\README.md:35:| `13-mcp.md` | Servidor MCP CentralDark (porta 9100, dom├¡nio `mcp.centralldark.com`, Caddy + PM2) |
+docs\INSTALADOR\README.md:58:- [x] MCP CentralDark de p├® em `mcp.centralldark.com` (porta 9100, PM2 `MCP-CentralDark`)
+docs\INSTALADOR\30-skill-consciencia.md:28:curl -sL https://mcp.centralldark.com/skills/centraldark-consciencia/install.sh | bash
+docs\INSTALADOR\30-skill-consciencia.md:36:**Rotas dispon├¡veis (mesmas em `mcp.centralldark.com` e `install.centralldark.com`):**
+docs\INSTALADOR\24-mcp-status-design.md:4:> URL p├║blica: https://mcp.centralldark.com/status
+docs\INSTALADOR\24-mcp-status-design.md:49:curl -s https://mcp.centralldark.com/status | grep -E 'dotBad|dotWarn|dotOk' | head -3
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\APRENDIZADOS.md:361:- **Aprendizado:** Estado confirmado: MCP-CentralDark voltou a responder pelo conector. mcp_admin_status retornou ok=true com runtimeTools=69 e destructiveTools=7. mcp_policy_summary retornou autoSafe=true, sensitiveConfirmed=true e hardSecretBlock=true. A pol├¡tica mant├®m secrets reais bloqueados e a├º├Áes sens├¡veis com confirma├º├úo expl├¡cita. Callback usado: https://mcp.centralldark.com/oauth/callback. N├úo expor valores reais de client secret, tokens ou env runtime.
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\APRENDIZADOS.md:1158:- **Aprendizado:** Para o MCP CentralDark com VS Code, GITHUB_CLIENT_ID precisa ser o Client ID real do GitHub OAuth App; GITHUB_OAUTH_CALLBACK deve ser https://mcp.centralldark.com/oauth/callback; GITHUB_OAUTH_SCOPES deve ser exatamente "repo workflow read:org", sem barras invertidas. A URL final correta tem scope=repo+workflow+read%3Aorg e n├úo cont├®m %5C.
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\APRENDIZADOS.md:1163:- **Contexto:** A tela de login em [mcp.centralldark.com]:3000/auth pertence ao container Docker open-webui, imagem ghcr.io/open-webui/open-webui:main, expondo 3000->8080. A personaliza├º├úo visual pode ser feita pelos arquivos /app/build/static/custom.css e /app/build/static/loader.js, tamb├®m espelhados em /app/backend/open_webui/static/.
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\APRENDIZADOS.md:1206:- **Aprendizado:** Quando houver dois processos MCP no PM2, nao deletar no impulso. Primeiro validar qual processo esta realmente servindo mcp.centralldark.com, porta 9100, health, tools.json, catalogVersion, runtime tools e logs sanitizados. Se CentralDark-MCP for confirmado como processo real e MCP-CentralDark como duplicado, a acao segura e planejar: parar/deletar somente o duplicado, salvar PM2 e reiniciar o MCP real com update-env. Sempre registrar evidencias antes, porque deletar o MCP errado pode derrubar o conector.
+docs\INSTALADOR\16-cloudflare-dns.md:157:Se `mcp.centralldark.com/health` j├í retorna `{"ok":true,"service":"mcp-centraldark"}`,
+docs\INSTALADOR\15-cloudflare-api.md:95:[cf]    OK       mcp.centralldark.com j├í aponta certo
+docs\INSTALADOR\14-conectar-ia-externa.md:18:A ponte que entrega isso pra IA externa ├® o **MCP CentralDark**, que t├í rodando em `mcp.centralldark.com`.
+docs\INSTALADOR\14-conectar-ia-externa.md:26:3. URL: `https://mcp.centralldark.com/mcp`
+docs\INSTALADOR\14-conectar-ia-externa.md:44:2. URL: `https://mcp.centralldark.com/mcp`
+docs\INSTALADOR\14-conectar-ia-externa.md:53:2. URL: `https://mcp.centralldark.com/mcp`
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\13-COMANDO-UNICO-VPS.md:44:  sleep 2 && curl -s -o /dev/null -w "HTTP %{http_code}\n" https://mcp.centralldark.com/status
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\13-COMANDO-UNICO-VPS.md:85:  sleep 2 && curl -s -o /dev/null -w "HTTP %{http_code}\n" https://mcp.centralldark.com/status
+docs\INSTALADOR\12-historico-decisoes.md:40:- **Decis├úo:** ChatGPT (Custom Connector) plugado em `https://mcp.centralldark.com/mcp` usando o OAuth do GitHub j├í existente (Client ID `Ov23li1y2mZ3qbjVB4mC`, login com `segredounlock`).
+docs\INSTALADOR\12-historico-decisoes.md:45:- **Cloudflare:** DNS de `mcp.centralldark.com` j├í apontado pra VPS via Cloudflare (registro A); SSL termina no Caddy.
+docs\INSTALADOR\03-portas-e-rede.md:20:| 9100 | `MCP-CentralDark` | MCP em `mcp.centralldark.com` |
+docs\INSTALADOR\03-portas-e-rede.md:42:| `mcp.centralldark.com` | proxy ÔåÆ 9100 (MCP) |
+docs\INSTALADOR\03-portas-e-rede.md:54:| `mcp.centralldark.com` | MCP (IA externa) + `/status` |
+docs\INSTALADOR\00-COMO-COMECAR.md:79:- **`--mcp`** ÔÇö sobe o MCP CentralDark (porta 9100, dom├¡nio `mcp.centralldark.com`).
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\09-ESTADO-ATUAL.md:19:| MCP p├║blico | https://mcp.centralldark.com |
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\08-HISTORICO-DECISOES.md:37:**Decis├úo:** MCP pr├│prio rodando em `mcp.centralldark.com` (porta 9100), OAuth GitHub. Conecta ChatGPT (e outros LLMs) direto ao repo + VPS.
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\06-MCP-CENTRALDARK.md:14:- **Dom├¡nio:** `https://mcp.centralldark.com`
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\06-MCP-CENTRALDARK.md:15:- **Health:** `https://mcp.centralldark.com/health` (HTTP 200 = ok)
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\06-MCP-CENTRALDARK.md:16:- **Endpoint MCP:** `https://mcp.centralldark.com/mcp`
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\06-MCP-CENTRALDARK.md:29:2. URL: `https://mcp.centralldark.com/mcp`
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\06-MCP-CENTRALDARK.md:36:- `https://mcp.centralldark.com/health` ÔåÆ deve mostrar `catalogVersion` + `toolCount`.
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\06-MCP-CENTRALDARK.md:37:- `https://mcp.centralldark.com/tools.json` ÔåÆ lista crua de todas as tools publicadas agora.
+docs\_LEGADO_ROOT_DOCS_CONFLITOS\20260703T075750Z\CONSCIENCIA\06-MCP-CENTRALDARK.md:38:- `https://mcp.centralldark.com/status.json` ÔåÆ mesmo `catalog` aparece dentro.
+docs\HANDOFF\2026-09-09-remote-auth-observability-receipt.md:58:O MCP pr├│prio `https://mcp.centralldark.com/mcp` j├í existe no config, mas n├úo deve substituir a rota externa funcional at├® haver prova viva de handshake Casa ÔåÆ CentralDark MCP ÔåÆ tool call ÔåÆ receipt.
+docs\HANDOFF\2026-09-09-centraldark-casa-remote-screenpipe-cristal-full.md:189:- Caddy roteando `mcp.centralldark.com` para o backend 9100;
+apps\modulos\status\README.md:28:- `https://mcp.centralldark.com/health`
+apps\modulos\status\README.md:29:- `https://mcp.centralldark.com/status.json`
+apps\modulos\status\painel-data.json:296:      "url": "https://mcp.centralldark.com/health",
+apps\modulos\status\painel-data.json:312:      "status": "https://mcp.centralldark.com/status.json",
+apps\modulos\status\painel-data.json:313:      "health": "https://mcp.centralldark.com/health",
+apps\modulos\status\painel-data.json:317:      "relatorios": "https://mcp.centralldark.com/status.json"
+apps\modulos\status\painel-data.json:1214:      "evidence": "v0.4.0 ┬À 92 tools ┬À online em mcp.centralldark.com ┬À OAuth MCP ativo",
+apps\modulos\status\painel-data.json:1219:      "source": "mcp.centralldark.com",
+apps\modulos\status\painel-data.json:1223:          "url": "https://mcp.centralldark.com/health"
+apps\modulos\status\mcp-health.json:3:  "url": "https://mcp.centralldark.com/health",
+apps\modulos\status\index.html:456:            <a href="https://mcp.centralldark.com/status" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+apps\modulos\status\index.html:459:            <a href="https://mcp.centralldark.com/tools.json" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+apps\modulos\status\graph-data.json:1164:      "IAÔåÆMCP: Lovable/Claude ÔåÆ fn-ponte-mcp ÔåÆ mcp.centralldark.com ÔåÆ tools (VPS/GitHub/Supabase/Notion/Linear/Elite)",
+docs\tarefas\resultados\20260607-0235-diagnostico-mcp-grok-conector.md:74:https://mcp.centralldark.com/mcp
+docs\tarefas\resultados\20260607-0235-diagnostico-mcp-grok-conector.md:109:   - `https://mcp.centralldark.com/health`
+docs\tarefas\resultados\20260607-0235-diagnostico-mcp-grok-conector.md:110:   - `https://mcp.centralldark.com/tools.json`
+docs\tarefas\resultados\20260607-0235-diagnostico-mcp-grok-conector.md:111:   - `https://mcp.centralldark.com/.well-known/oauth-protected-resource`
+docs\tarefas\resultados\20260607-0235-diagnostico-mcp-grok-conector.md:112:   - `https://mcp.centralldark.com/.well-known/oauth-authorization-server`
+docs\tarefas\resultados\20260607-0235-diagnostico-mcp-grok-conector.md:113:   - `https://mcp.centralldark.com/.well-known/oauth-protected-resource/mcp`
+docs\tarefas\resultados\20260607-0235-diagnostico-mcp-grok-conector.md:114:   - `https://mcp.centralldark.com/.well-known/oauth-authorization-server/mcp`
+docs\tarefas\resultados\20260607-0235-diagnostico-mcp-grok-conector.md:115:   - `POST https://mcp.centralldark.com/mcp` sem Authorization, registrar apenas status/headers/erro sanitizado.
+docs\tarefas\resultados\20260607-0115-diagnostico-mcp-dns-conector.md:15:Resumo executivo: MCP-CentralDark (PM2 id 8) est├í online e respondendo corretamente em 127.0.0.1:9100 e via p├║blico. DNS de mcp.centralldark.com resolve (A/AAAA Cloudflare). HTTPS p├║blico via Caddy + Cloudflare retorna 200/OK em /health e /status.json (vers├úo runtime 0.4.0, 56 tools, conectores GitHub ok, 12 clients). /mcp responde 401 esperado (OAuth/Bearer ausente) com proxy correto. Erro "Name does not resolve" no Grok foi pontual/transiente no cliente (VS Code/.vscode-server ou fetch do conector); m├íquina local, dig/getent/curl e ChatGPT via MCP funcionam. Watcher "failed to watch root recursively" em /root/Multizap/revisoes/ (100418 arquivos, ~1GB) n├úo ├® do MCP/Caddy/PM2 (watch desabilitado); ├® do watcher de arquivos do VS Code/code-server (chokidar-like) ÔÇö inotify j├í elevado (187145). N├úo exige corre├º├úo de infraestrutura.
+docs\tarefas\resultados\20260607-0115-diagnostico-mcp-dns-conector.md:19:Causa prov├ível do erro: Oscila├º├úo pontual do cliente Grok (VS Code remote/.vscode-server ou MCP client config). "failed to lookup address information: Name does not resolve https://mcp.centralldark.com/mcp". DNS/Caddy/MCP nunca estiveram fora (ChatGPT usou conector para pm2/tarefas; todos os curls/dig locais + p├║blicos funcionam agora e na hora dos testes). N├úo ├® rota p├║blica quebrada, Caddy down, MCP crash ou URL errada (dom├¡nio e /mcp batem com Caddyfile).
+docs\tarefas\resultados\20260607-0115-diagnostico-mcp-dns-conector.md:22:- Nada para MCP/DNS/Caddy/PM2 (tudo saud├ível e respondendo). Monitore com: pm2 ls, curl -sS https://mcp.centralldark.com/health, ss -tlnp.
+docs\tarefas\resultados\20260607-0115-diagnostico-mcp-dns-conector.md:31:- Confirmar a config exata de MCP server/URL usada no lado "Grok" (VS Code MCP extension, .grok config, ou connector) est├í apontando para https://mcp.centralldark.com/mcp (atual est├í correta por Caddy).
+docs\tarefas\resultados\20260607-0115-diagnostico-mcp-dns-conector.md:55:https://mcp.centralldark.com/mcp
+docs\tarefas\resultados\20260607-0115-diagnostico-mcp-dns-conector.md:85:- `getent hosts mcp.centralldark.com`
+docs\tarefas\resultados\20260607-0115-diagnostico-mcp-dns-conector.md:86:- `nslookup mcp.centralldark.com` ou `dig mcp.centralldark.com`, se existir
+docs\tarefas\resultados\20260607-0115-diagnostico-mcp-dns-conector.md:87:- `curl -I https://mcp.centralldark.com/health`
+docs\tarefas\resultados\20260607-0115-diagnostico-mcp-dns-conector.md:88:- `curl -sS https://mcp.centralldark.com/health`
+docs\tarefas\resultados\20260607-0115-diagnostico-mcp-dns-conector.md:89:- `curl -sS https://mcp.centralldark.com/status.json | head`
+docs\tarefas\resultados\20260607-0115-diagnostico-mcp-dns-conector.md:110:2. Dom├¡nio p├║blico `mcp.centralldark.com` resolve DNS corretamente?
+docs\tarefas\concluidas\20260607-0235-diagnostico-mcp-grok-conector.md:27:https://mcp.centralldark.com/mcp
+docs\tarefas\concluidas\20260607-0235-diagnostico-mcp-grok-conector.md:62:   - `https://mcp.centralldark.com/health`
+docs\tarefas\concluidas\20260607-0235-diagnostico-mcp-grok-conector.md:63:   - `https://mcp.centralldark.com/tools.json`
+docs\tarefas\concluidas\20260607-0235-diagnostico-mcp-grok-conector.md:64:   - `https://mcp.centralldark.com/.well-known/oauth-protected-resource`
+docs\tarefas\concluidas\20260607-0235-diagnostico-mcp-grok-conector.md:65:   - `https://mcp.centralldark.com/.well-known/oauth-authorization-server`
+docs\tarefas\concluidas\20260607-0235-diagnostico-mcp-grok-conector.md:66:   - `https://mcp.centralldark.com/.well-known/oauth-protected-resource/mcp`
+docs\tarefas\concluidas\20260607-0235-diagnostico-mcp-grok-conector.md:67:   - `https://mcp.centralldark.com/.well-known/oauth-authorization-server/mcp`
+docs\tarefas\concluidas\20260607-0235-diagnostico-mcp-grok-conector.md:68:   - `POST https://mcp.centralldark.com/mcp` sem Authorization, registrar apenas status/headers/erro sanitizado.
+docs\tarefas\concluidas\20260607-0115-diagnostico-mcp-dns-conector.md:15:https://mcp.centralldark.com/mcp
+docs\tarefas\concluidas\20260607-0115-diagnostico-mcp-dns-conector.md:45:- `getent hosts mcp.centralldark.com`
+docs\tarefas\concluidas\20260607-0115-diagnostico-mcp-dns-conector.md:46:- `nslookup mcp.centralldark.com` ou `dig mcp.centralldark.com`, se existir
+docs\tarefas\concluidas\20260607-0115-diagnostico-mcp-dns-conector.md:47:- `curl -I https://mcp.centralldark.com/health`
+docs\tarefas\concluidas\20260607-0115-diagnostico-mcp-dns-conector.md:48:- `curl -sS https://mcp.centralldark.com/health`
+docs\tarefas\concluidas\20260607-0115-diagnostico-mcp-dns-conector.md:49:- `curl -sS https://mcp.centralldark.com/status.json | head`
+docs\tarefas\concluidas\20260607-0115-diagnostico-mcp-dns-conector.md:70:2. Dom├¡nio p├║blico `mcp.centralldark.com` resolve DNS corretamente?
+docs\sentinela\last-snapshot.json:6:      "url": "https://mcp.centralldark.com/health",
+docs\sentinela\last-snapshot.json:14:      "url": "https://mcp.centralldark.com/status.json",
+docs\sentinela\last-snapshot.json:22:      "url": "https://mcp.centralldark.com/tools.json",
+scripts\watchdog\mcp-watchdog.sh:14:MCP_URL="${MCP_HEALTH_URL:-https://mcp.centralldark.com/health}"
+scripts\vps-deploy.sh:68:curl -sf https://mcp.centralldark.com/health >/dev/null && echo "  Ô£à MCP OK" || echo "  ÔØî MCP FAIL"
+scripts\validar-painel-vivo.mjs:27:  { name: 'MCP Health', url: 'https://mcp.centralldark.com/health' },
+scripts\validar-painel-vivo.mjs:28:  { name: 'MCP Status', url: 'https://mcp.centralldark.com/status.json' },
+docs\CONSCIENCIA\sentinela\last-snapshot.json:6:      "url": "https://mcp.centralldark.com/health",
+docs\CONSCIENCIA\sentinela\last-snapshot.json:14:      "url": "https://mcp.centralldark.com/status.json",
+docs\CONSCIENCIA\sentinela\last-snapshot.json:22:      "url": "https://mcp.centralldark.com/tools.json",
+docs\RELATORIOS\SEGREDO-RELIQUIA\ADDENDUM-IPHONE-CASA-REDE-20260816.md:138:E o checker reconhece `mcp.centralldark.com/health` como MCP existente quando responde corretamente.
+docs\CONSCIENCIA\RELATORIOS\notion-sync\orphans-2026-06-25-arquivados-36.md:66:- MCP CentralDark pr├│prio em mcp.centralldark.com
+docs\CONSCIENCIA\RELATORIOS\notion-sync\latest.md:312:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\investigacao-orfaos-aprendizados.md:47:| 254 | mcp.centralldark.com DNS-only exige cert Let's Encrypt expl├¡cito | mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-latest.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-30T14-43-42.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-30T14-11-29.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-30T11-37-11.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-30T11-32-38.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-30T11-27-47.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-30T09-16-53.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-30T08-40-16.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-30T04-33-14.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-30T04-18-09.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-30T04-06-22.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-30T03-56-54.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-30T03-42-41.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-30T02-26-52.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-30T02-17-16.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-30T00-26-59.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-29T22-58-38.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-29T19-18-21.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-29T19-07-02.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-29T18-53-42.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-29T14-14-54.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-29T13-21-56.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-29T12-59-35.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-28T22-38-11.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-28T17-54-22.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-28T12-05-25.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-28T10-56-57.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-28T10-53-26.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-28T10-39-40.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-28T10-36-35.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-28T10-33-01.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-27T16-58-17.md:319:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-26T06-48-30.md:314:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-26T00-18-48.md:314:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-26T00-15-28.md:314:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-25T23-00-20.md:314:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-25T21-15-33.md:87:- MCP CentralDark pr├│prio em mcp.centralldark.com
+docs\CONSCIENCIA\RELATORIOS\notion-sync\consistencia-2026-06-25T21-15-33.md:362:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-30T14-43-39.md:312:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-30T14-11-27.md:312:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-30T11-37-08.md:312:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-30T11-32-35.md:312:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-30T11-27-45.md:312:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-30T09-16-51.md:312:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+apps\modulos\mcp-admin-ui\vite.config.ts:14:      "/admin/api": { target: "https://mcp.centralldark.com", changeOrigin: true, secure: true },
+apps\modulos\mcp-admin-ui\vite.config.ts:15:      "/admin/login": { target: "https://mcp.centralldark.com", changeOrigin: true, secure: true },
+apps\modulos\mcp-admin-ui\vite.config.ts:16:      "/admin/logout": { target: "https://mcp.centralldark.com", changeOrigin: true, secure: true },
+apps\modulos\mcp-admin-ui\vite.config.ts:17:      "/tools.json": { target: "https://mcp.centralldark.com", changeOrigin: true, secure: true },
+apps\modulos\mcp-admin-ui\vite.config.ts:18:      "/health": { target: "https://mcp.centralldark.com", changeOrigin: true, secure: true },
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-30T08-40-13.md:312:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-30T04-33-12.md:311:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-30T04-18-07.md:311:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-30T04-06-20.md:310:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-30T03-56-52.md:309:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-30T03-42-39.md:309:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-30T02-26-50.md:308:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-30T02-17-14.md:308:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-30T00-26-57.md:308:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-29T22-58-36.md:307:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-29T19-18-18.md:306:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-29T19-07-00.md:305:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-29T18-53-39.md:305:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-29T14-14-50.md:304:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-29T13-21-53.md:304:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-29T12-59-33.md:304:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-28T22-38-10.md:302:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-28T17-54-19.md:302:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-28T12-05-23.md:302:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-28T10-56-55.md:302:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-28T10-53-23.md:302:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-28T10-39-38.md:302:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-28T10-36-33.md:302:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-28T10-32-59.md:302:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-27T16-58-15.md:302:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-26T06-48-28.md:302:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-26T00-18-46.md:302:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-26T00-15-26.md:302:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-25T23-00-16.md:302:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\RELATORIOS\notion-sync\2026-06-25T21-15-31.md:302:| aprendizados | atualizado | #254 ÔÇö mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\PLANO-RECONCILIACAO-DOMINIOS.md:15:ÔööÔöÇÔöÇ MCP   -> https://mcp.centralldark.com/
+docs\CONSCIENCIA\PLANO-RECONCILIACAO-DOMINIOS.md:58:- `api.centralldark.com` e `mcp.centralldark.com` nao mudam ÔÇö ja sao portas
+apps\modulos\mcp-admin-ui\src\pages\LoginPage.tsx:74:          Acesso restrito ao admin CentralDark ┬À mcp.centralldark.com
+docs\CONSCIENCIA\PENDENCIAS\MCP-LOCAL-STDIO-VPS.md:84:- **N├âO confundir** com o MCP remoto existente (`mcp.centralldark.com` ÔÇö HTTP/OAuth, rodando em `/root/CentralDark/APP/infra/mcp/`). Esse novo ├® **separado**, **local**, **stdio**, **pessoal**.
+docs\CONSCIENCIA\OMNI-MEGAZORD-LOOP.md:79:  mcp.centralldark.com (MCP)
+docs\CONSCIENCIA\OMNI-MEGAZORD-LOOP.md:82:  mcp.centralldark.com/mcp
+docs\CONSCIENCIA\OMNI-MEGAZORD-LOOP.md:83:  mcp.centralldark.com/admin
+docs\CONSCIENCIA\MCP-FLUXO.md:17:https://mcp.centralldark.com/authorize
+docs\CONSCIENCIA\MCP-FLUXO.md:36:| Dom├¡nio p├║blico          | `mcp.centralldark.com` (Caddy ÔåÆ 127.0.0.1:9100)              |
+apps\modulos\mcp-admin-ui\src\components\ConnectorTab.tsx:10:      "url": "https://mcp.centralldark.com/mcp"
+apps\modulos\mcp-admin-ui\src\components\ConnectorTab.tsx:20:      "url": "https://mcp.centralldark.com/mcp",
+apps\modulos\mcp-admin-ui\src\components\ConnectorTab.tsx:30:url = "https://mcp.centralldark.com/mcp"`,
+apps\modulos\mcp-admin-ui\src\components\ConnectorTab.tsx:34:    code: `endpoint: https://mcp.centralldark.com/mcp
+apps\modulos\mcp-admin-ui\src\components\ConnectorTab.tsx:50:          <code className="font-mono text-primary">https://mcp.centralldark.com/mcp</code>
+.agents\skills\centraldark-operational-method\references\centraldark-remote-bridge.md:26:  "centraldark_mcp": "https://mcp.centralldark.com/mcp",
+.agents\skills\centraldark-operational-method\references\centraldark-remote-bridge.md:38:2. Redireciona para https://mcp.centralldark.com/oauth/authorize
+.agents\skills\centraldark-operational-method\references\centraldark-remote-bridge.md:97:curl -H "Authorization: Bearer <TOKEN>" https://mcp.centralldark.com/admin/mcp
+.agents\skills\centraldark-operational-method\references\centraldark-remote-bridge.md:104:2. **mcp-tunnel.json tem "active: false"** ÔÇö o tunnel local aponta para `localhost:9100/mcp` mas o remote bridge funciona via `mcp.centralldark.com`. N├úo confundir os dois endpoints.
+.agents\skills\centraldark-operational-method\references\2026-09-02-sol-audit-hud-fable51-t1.md:132:A inten├º├úo vigente do CHEFE mant├®m CentralDark como uma API e um MCP com superf├¡cies normal/admin no mesmo organismo. Nesta auditoria, a leitura HTTP externa direta de `api.centralldark.com`, `mcp.centralldark.com/mcp` e `mcp.centralldark.com/admin` n├úo produziu resposta observ├ível pelo fetch dispon├¡vel; portanto:
+.agents\skills\centraldark-operational-method\references\2026-09-02-session-hud-garimpo-mcp-reconciliation.md:115:O reposit├│rio atual cont├®m refer├¬ncias materiais a `https://api.centralldark.com` como gateway/API p├║blica e ao MCP CentralDark em `https://mcp.centralldark.com`.
+.agents\skills\centraldark-operational-method\references\2026-09-02-session-hud-garimpo-mcp-reconciliation.md:120:https://mcp.centralldark.com/mcp
+docs\CONSCIENCIA\CUSTOM-GPT-SETUP.md:101:https://mcp.centralldark.com/mcp
+scripts\sentinela\run.mjs:47:  { name: 'MCP health', url: 'https://mcp.centralldark.com/health', bot: 'grok' },
+scripts\sentinela\run.mjs:48:  { name: 'MCP status', url: 'https://mcp.centralldark.com/status.json', bot: 'grok' },
+scripts\sentinela\run.mjs:49:  { name: 'MCP tools', url: 'https://mcp.centralldark.com/tools.json', bot: 'codex' },
+scripts\sentinela\run.mjs:121:    if (r.url.includes('mcp.centralldark.com') && r.status >= 200 && r.status < 400 && !r.cors) {
+scripts\run-once\setup-mcp-vps.sh:129:log "curl -s https://mcp.centralldark.com/health | jq"
+scripts\run-once\20260607-instalar-grok-safe.sh:68:echo "https://mcp.centralldark.com/mcp"
+scripts\run-once\20260607-instalar-grok-safe.sh:92:echo "MCP correto: https://mcp.centralldark.com/mcp"
+docs\CONSCIENCIA\ARSENAL\EVOLUCAO\2026-07-03\aula-tutor-hermes.md:50:curl -sS --max-time 10 --retry 2 --retry-delay 2 https://mcp.centralldark.com/health
+docs\CONSCIENCIA\ARSENAL\EVOLUCAO\2026-07-03\aula-tutor-hermes.md:52:curl -s -o /dev/null -w '%{http_code}' --max-time 5 https://mcp.centralldark.com/health
+docs\CONSCIENCIA\ARSENAL\EVOLUCAO\2026-07-03\aula-tutor-hermes.md:54:curl -sS --max-time 10 https://mcp.centralldark.com/health | jq -r '.status'
+docs\CONSCIENCIA\ARQUIVO-MORTO\root-md-antigos\CHECKPOINT-2026-06-07.md:81:   - `https://mcp.centralldark.com/health`
+docs\CONSCIENCIA\ARQUIVO-MORTO\root-md-antigos\CHECKPOINT-2026-06-07.md:82:   - `https://mcp.centralldark.com/tools.json`
+docs\CONSCIENCIA\ARQUIVO-MORTO\root-md-antigos\CHECKPOINT-2026-06-07.md:83:   - `https://mcp.centralldark.com/status`
+docs\CONSCIENCIA\ARQUIVO-MORTO\root-md-antigos\CHECKPOINT-2026-06-07.md:84:   - `https://mcp.centralldark.com/status.json`
+scripts\rollback-mcp.sh:30:    curl -fsS https://mcp.centralldark.com/health >/dev/null && echo "Ô£à Rollback OK" || (echo "ÔØî Health falhou ap├│s rollback"; exit 2)
+scripts\remote-bridge\CentralDark-Remote-One.go:27:	centraldarkMCP = "https://mcp.centralldark.com/mcp"
+scripts\remote-bridge\CENTRALDARK-REMOTE-BRIDGE.config.json:7:  "centraldark_mcp": "https://mcp.centralldark.com/mcp",
+scripts\remote-bridge\CENTRALDARK-REMOTE-BRIDGE.config.json:9:    "protected_resource_metadata": "https://mcp.centralldark.com/.well-known/oauth-protected-resource",
+scripts\remote-bridge\CENTRALDARK-REMOTE-BRIDGE.config.json:10:    "authorization_server_metadata": "https://mcp.centralldark.com/.well-known/oauth-authorization-server",
+scripts\postdeploy-healthcheck.sh:10:BASE="${MCP_BASE_URL:-https://mcp.centralldark.com}"
+docs\CONSCIENCIA\APRENDIZADOS.md:222:- **Contexto:** Remedia├º├úo T0ÔåÆT3 nesta superf├¡cie Grok App Builder, 2026-09-08T17:51Z. T0/T1 semantic_health/lookup/model_info = SEMANTIC_BRIDGE_EXIT code=2. T2: semantic_* sumiram da superf├¡cie Grok (admin 83). T3: tools voltaram na superf├¡cie Grok; health/lookup/model_info = EXIT code=1 signal=null, authority PERCEPTION_ONLY. mcp_admin_catalog filter=semantic returned=0 em 114 tools v1-f8ff6720fec3. Public https://mcp.centralldark.com /health: catalogVersion 113-75c9a26592e8 toolCount 113; deploy_validate_mcp_catalog runtimeToolCount 74. GitHub main ad4ed0a (docs biblioteca). VPS branch main cc5af475e4e, 8 behind, dirty s├│ painel/status/relat├│rios/telepainel untracked ÔÇö o mass-D da consci├¬ncia no T2 foi working-tree transit├│rio, n├úo wipe de main. PM2: HermesVerificador errored (16 restarts); AiDiag stopped; WebhookDeploy online; MCP 1 restart / 229 min; LIVE global N├âO. JS can├┤nico (semantic.js sha dac86f65) ainda engole stderr do filho Python. execute_command existe no cat├ílogo admin (destructive) mas N├âO est├í exposto como tool conectada Grok; mcp_admin_call tamb├®m n├úo.
+scripts\menu\cdstatus.sh:134:echo -e "${ITEM}        centralldark.com  ┬À  mcp.centralldark.com${NC}"
+scripts\menu\cdmenu.sh:214:  printf "${ITEM} %*scentralldark.com  ┬À  mcp.centralldark.com${NC}\n" \
+scripts\menu\cdmenu.sh:218:  printf "${ITEM}  mcp.centralldark.com${NC}\n"
+docs\RELATORIOS\notion-sync\orphans-2026-06-25-arquivados-36.md:59:- MCP CentralDark pr├│prio em mcp.centralldark.com
+docs\RELATORIOS\notion-sync\investigacao-orfaos-aprendizados.md:40:| 254 | mcp.centralldark.com DNS-only exige cert Let's Encrypt expl├¡cito | mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin |
+docs\CONSCIENCIA\APRENDIZADOS\MCP\MCP-EXPLICADO.md:63:- Nosso servidor: `CentralDark-MCP` (PM2, porta 9100, `https://mcp.centralldark.com`).
+apps\modulos\mcp\src\tools\core\mcp-diagnostics.js:102:            publicUrl: z.string().url().optional().describe("URL p├║blica do MCP. Padr├úo: https://mcp.centralldark.com"),
+apps\modulos\mcp\src\tools\core\mcp-diagnostics.js:105:            const base = (input.publicUrl ?? "https://mcp.centralldark.com").replace(/\/+$/, "");
+scripts\mcp\receipt.json:5:  "canonical_public_mcp": "https://mcp.centralldark.com/mcp",
+scripts\mcp\receipt.json:9:      "url": "https://mcp.centralldark.com/mcp",
+scripts\mcp\receipt.json:31:    "url": "https://mcp.centralldark.com/mcp"
+scripts\mcp\mcp-public-oauth.json:11:    "url": "https://mcp.centralldark.com/mcp",
+scripts\mcp\mcp-active.json:11:    "url": "https://mcp.centralldark.com/mcp",
+scripts\mcp\check-mcp-status.sh:27:HTTP=$(curl -s -o /tmp/mcp-auth.body -w "%{http_code}" "https://mcp.centralldark.com/authorize?client_id=probe&redirect_uri=https://x/y&response_type=code" || echo "000")
+docs\RELATORIOS\notion-sync\consistencia-2026-07-24T23-39-19.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-24T23-39-19.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-23T22-22-52.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-23T22-22-52.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-22T20-17-09.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-22T20-17-09.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-22T15-50-36.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-22T15-50-36.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-22T02-52-28.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-22T02-52-28.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-22T01-38-38.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-22T01-38-38.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-22T01-01-15.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-22T01-01-15.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-21T11-12-09.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-21T11-12-09.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-21T10-28-21.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-21T10-28-21.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-21T09-31-35.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-21T09-31-35.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-21T01-39-20.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-21T01-39-20.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-21T01-21-57.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-21T01-21-57.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-21T01-09-45.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-21T01-09-45.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-21T00-51-40.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-21T00-51-40.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-19T10-11-44.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-19T10-11-44.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-19T07-45-02.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-19T07-45-02.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-18T21-55-41.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-18T21-55-41.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-18T21-47-13.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-18T21-47-13.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-18T18-02-54.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-18T18-02-54.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-17T06-45-07.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-17T06-45-07.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-17T06-36-23.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-17T06-36-23.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-17T06-18-26.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-17T06-18-26.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-17T04-05-49.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-17T04-05-49.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-16T23-56-53.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-16T23-56-53.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-16T23-14-49.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-16T23-14-49.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-16T13-27-04.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-16T13-27-04.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-16T13-18-37.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-16T13-18-37.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-16T13-00-21.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-16T13-00-21.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-15T22-05-00.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-15T22-05-00.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-14T15-42-50.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-14T15-42-50.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-14T10-28-31.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-14T10-28-31.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-14T10-16-30.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-14T10-16-30.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-14T10-06-54.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-14T10-06-54.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-11T16-53-58.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-11T16-53-58.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-10T19-22-29.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-10T19-22-29.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-10T18-29-22.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-10T18-29-22.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-10T15-13-00.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-10T15-13-00.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-10T15-04-05.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-10T15-04-05.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-10T03-24-09.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-10T03-24-09.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-10T03-15-35.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-10T03-15-35.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-10T00-52-37.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-10T00-52-37.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-09T20-52-25.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-09T20-52-25.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-09T20-34-29.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-09T20-34-29.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-09T19-01-42.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-09T19-01-42.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-09T18-52-44.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-09T18-52-44.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-09T18-10-32.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-09T18-10-32.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-09T17-59-02.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-09T17-59-02.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-09T14-43-25.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-09T14-43-25.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-09T00-00-14.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-09T00-00-14.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T20-10-47.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T20-10-47.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T20-02-17.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T20-02-17.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T19-53-30.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T19-53-30.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T15-58-48.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T15-58-48.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T15-33-59.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T15-33-59.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T09-26-02.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T09-26-02.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+apps\modulos\mcp\src\tools\consciencia\consciencia.js:122:        description: "Adiciona uma tarefa ao arquivo docs/PENDENCIAS.md na se├º├úo de prioridade indicada. O servidor remove credenciais, caminhos internos e endere├ºos de servidor antes de gravar ÔÇö sempre use nomes p├║blicos (ex.: mcp.centralldark.com).",
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T09-13-52.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T09-13-52.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T09-05-44.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T09-05-44.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T08-57-01.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T08-57-01.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T08-29-14.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T08-29-14.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T07-04-34.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-08T07-04-34.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-07T19-31-11.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-07T19-31-11.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-07T19-10-55.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-07T19-10-55.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-07T17-31-25.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-07T17-31-25.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-07T17-14-29.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-07T17-14-29.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-07T16-34-21.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-07T16-34-21.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-07T16-24-43.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-07T16-24-43.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com
+docs\RELATORIOS\notion-sync\consistencia-2026-07-07T16-15-25.md:312:- 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt expl├¡cito, n├úo CF-Origin
+docs\RELATORIOS\notion-sync\consistencia-2026-07-07T16-15-25.md:355:- 279. WebUI j├í tem acesso ├á VPS/docs via mcpo ÔåÆ mcp.centralldark.com

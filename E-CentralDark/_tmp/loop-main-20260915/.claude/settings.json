@@ -1,0 +1,49 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e 'console.log*')"
+    ],
+    "deny": [
+      "Bash(node -e*)",
+      "Bash(node *|sh)",
+      "Bash(curl *|sh)",
+      "Bash(wget *|sh)",
+      "Bash(rm -rf*)",
+      "Bash(*--no-verify*)"
+    ],
+    "additionalDirectories": [
+      "/root/.vscode-server/data/Machine"
+    ]
+  },
+  "hermes": {
+    "core_path": "/root/CentralDark/apps/modulos/HERMES-CORE",
+    "core_path_relativo": "apps/modulos/HERMES-CORE",
+    "config": "apps/modulos/mcp/config/hermes.json",
+    "boot_log": "apps/modulos/mcp/logs/hermes-boot.json",
+    "boot_endpoint": "https://mcp.centralldark.com/hermes/boot"
+  },
+  "hooks": {
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/memory-linker/precompact-session-digest.mjs"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /root/CentralDark/scripts/notify-claude/notify-telegram.sh '🤖' 'Claude Code — CentralDark' 'Resposta concluída. Aguardando próxima instrução do Pivete.'"
+          }
+        ]
+      }
+    ]
+  }
+}

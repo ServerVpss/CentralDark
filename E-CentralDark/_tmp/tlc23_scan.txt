@@ -1,0 +1,70 @@
+=== USER_REPORTED_ERROR ===
+=== NEW_DISCOVERY ===
+=== E:\CentralDark\_tmp ===
+=== C:\CentralDark ===
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\BRAIN\00-MAPA-SISTEMA\01-HUB\00-MAPA.md:69:C:\CentralDark = legado a reconciliar, n+úo baseline por padr+úo
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\BRAIN\02-ENTRADA\MAPA-CPUID-MONITORAMENTO.md:60:- **Baixado:** `C:\CentralDark\workspace\tools\benchlab\BENCHLAB_v1.0.0.zip` (51MB)
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\BRAIN\02-ENTRADA\MAPA-CPUID-MONITORAMENTO.md:61:- **Extra+¡do:** `C:\CentralDark\workspace\tools\benchlab\` ÔåÆ `BENCHLAB.exe` + plugins (Device.Core, Device.Plugin)
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\BRAIN\07-APRENDIZADOS-MEMORIAS\01-OURO\OURO-CHEFE.md:20:8. **Organiza+º+úo:** tudo dentro de C:\CentralDark\, nada espalhado. Fonte da verdade = GitHub.
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\BRAIN\07-APRENDIZADOS-MEMORIAS\01-OURO\OURO-CHEFE.md:43:27. **[2026-08-20] Dois vaults Obsidian confirmados no disco, prop+¦sitos distintos:** `C:\CentralDark\.obsidian` (escopo raiz, indexava 6.469 arquivos de `node_modules` como notas ÔÇö corrigido com `userIgnoreFilters` em `app.json`) vs `C:\CentralDark\Pivete\CentralDark\docs\BRAIN\.obsidian` (escopo `docs/BRAIN`, organizado com MOCs, +® o vault que eu edito). N+úo s+úo "3 fontes de verdade" (GitHub + Casa + VPS) ÔÇö +® 1 GitHub (`ServerVpss/CentralDark`) + N clones locais. `.obsidian` de vault fica FORA do controle git ÔÇö mexer nele n+úo afeta CI/PR/repo.
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\SEGREDO-RELIQUIA\RECONCILIACAO-SOL-HERMES-20260819.md:31:`C:\CentralDark\_MAPA_CASA\` cont+®m:
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\2026-09-05-COMITE-CONVERGENCIA-CASA-OMNI-SENTINELA.md:73:- `C:\CentralDark` = LEGADO / ENTRADA PARA RECONCILIA+ç+âO, salvo contraprova expl+¡cita posterior.
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\2026-09-05-COMITE-CONVERGENCIA-CASA-OMNI-SENTINELA.md:75:- Dado pr+¦prio da CentralDark sob `C:\CentralDark` deve emitir `HOUSE_PATH_DRIFT` antes de qualquer movimenta+º+úo.
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\2026-09-05-COMITE-CONVERGENCIA-CASA-OMNI-SENTINELA.md:140:- `HOUSE_PATH_DRIFT` ÔÇö dado da Casa apontou para `C:\CentralDark` em vez da Casa vigente.
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\2026-09-05-COMITE-CONVERGENCIA-CASA-OMNI-SENTINELA.md:185:- migra+º+úo f+¡sica completa de todo dado pr+¦prio residual de `C:\CentralDark` para `E:\CentralDark`.
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\scripts\trigger-fabric\system_sentinel.py:246:        "house_path_drift": classify_signature(r"owner ainda aponta C:\CentralDark\Pivete") == "HOUSE_PATH_DRIFT",
+=== artifact_lifecycle ===
+=== TLC23_OPEN ===
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\apps\modulos\HERMES-CORE\core\universal-method-contract.mjs:19:  'CENTRALDARK', 'TLC23_OPEN', 'DESTINATION_LOCK', 'ACORDAR', 'CALIBRAR',
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\ARQUITETURA\CENTRALDARK-TRIGGER-FABRIC\UNIVERSAL-ENGINE-METHOD.yml:29:  - TLC23_OPEN
+=== REMEDICAO ===
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\LEIA-ME-IA.md:65:16. `docs/CONSCIENCIA/REMEDICAO.md` depois de qualquer muta+º+úo ÔÇö medir T0 ÔåÆ T1 antes de declarar o veredito.
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\BRAIN\07-APRENDIZADOS-MEMORIAS\2026-09-03-REGISTER-BEFORE-REPORT-RECEIPT.md:6:owner: "docs/CONSCIENCIA/REMEDICAO.md + .github/pull_request_template.md"
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\BRAIN\07-APRENDIZADOS-MEMORIAS\2026-09-03-REGISTER-BEFORE-REPORT-RECEIPT.md:25:OWNER=docs/CONSCIENCIA/REMEDICAO.md
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\BRAIN\07-APRENDIZADOS-MEMORIAS\2026-09-03-REGISTER-BEFORE-REPORT-RECEIPT.md:29:EVIDENCE_REF=GitHub read-back docs/CONSCIENCIA/REMEDICAO.md
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\BRAIN\07-APRENDIZADOS-MEMORIAS\2026-09-03-REGISTER-BEFORE-REPORT-RECEIPT.md:69:OWNER=docs/CONSCIENCIA/REMEDICAO.md
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\BRAIN\07-APRENDIZADOS-MEMORIAS\2026-09-03-REGISTER-BEFORE-REPORT-RECEIPT.md:120:REMEDICAO_MD_GIT_BLOB_SHA1=e1dd291cfb1735099026a2cec4630768423bd030
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\CONSCIENCIA\REMEDICAO.md:29:!REMEDICAO
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\BRAIN\07-APRENDIZADOS-MEMORIAS\01-OURO\OURO-CHEFE.md:46:29. **[2026-08-20, CRIADO E PROVADO ÔÇö n+úo achado, criado por ordem expl+¡cita do CHEFE] `!EXECU+ç+âO_REVERS+ìVEL` e `!REMEDI+ç+âO` registrados como gatilhos oficiais.** Owners novos: `docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md`, `docs/CONSCIENCIA/REMEDICAO.md`. Registrados em `ADMINISTRAVEIS.json` + `.md`. **Prova real:** teste `admin-administrables.test.mjs` rodado localmente, 3/3 pass, confirmando bije+º+úo entre os 5 marcadores can+¦nicos e os 5 itens do registro. Pegadinha encontrada e corrigida: marcador `ADMINISTRABLE_COMMAND=X` NUNCA pode ir entre crases (`` `X` ``) ÔÇö o regex `^\s*ADMINISTRABLE_COMMAND` exige in+¡cio de linha limpo, crase quebra o match silenciosamente (zero erro, s+¦ zero resultado). Arquivos precisam estar `git add`ados ÔÇö o teste l+¬ via `git ls-files`, arquivo s+¦ no disco n+úo conta. CHEFE corrigiu explicitamente: "eu j+í tomei a partir do momento que mandei criar algo ou fazer" ÔÇö ordem de cria+º+úo +® diferente de pedido de confirmar hip+¦tese; quando +® ordem, prova vem DEPOIS da execu+º+úo, n+úo trava a execu+º+úo.
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\BRAIN\03-DOCUMENTACAO\02-BIBLIOTECA\catalog.json:418:        "[[REMEDICAO]]"
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\BRAIN\03-DOCUMENTACAO\02-BIBLIOTECA\catalog.json:1090:        "[[REMEDICAO]]"
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\BRAIN\03-DOCUMENTACAO\02-BIBLIOTECA\catalog.json:1122:        "[[REMEDICAO]]"
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\CONSCIENCIA\PADRAO-RESPOSTA-SEGREDO-CHEFE.md:641:PESQUISA|TESTE|CONTRAPROVA|REMEDICAO
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\CONSCIENCIA\LEGENDA-TEMPORAL-T0-TN-TDELTA.md:150:TIPO=TEMPO/REMEDICAO
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\CONSCIENCIA\LEGENDA-TEMPORAL-T0-TN-TDELTA.md:164:TIPO=TEMPO/REMEDICAO
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\latest.md:528:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-15T02-04-39.md:528:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-14T04-19-51.md:527:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-14T03-56-41.md:526:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-14T00-37-09.md:524:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-13T23-39-26.md:524:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-13T19-04-58.md:524:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-13T15-01-06.md:524:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-13T08-34-43.md:524:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-12T19-08-12.md:521:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-12T18-27-13.md:521:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-10T19-09-00.md:512:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-10T18-24-49.md:511:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-10T16-07-35.md:510:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-09T20-41-44.md:510:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-09T17-40-58.md:509:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-09T07-27-32.md:507:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-09T03-22-30.md:507:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-07T22-16-35.md:503:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-07T11-39-09.md:503:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-07T10-14-58.md:503:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-06T19-00-27.md:503:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-06T18-32-47.md:502:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-06T03-19-41.md:501:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-06T00-51-15.md:497:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-05T22-21-18.md:496:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-05T21-55-02.md:494:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-05T20-34-31.md:492:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-05T18-57-13.md:492:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-05T16-36-27.md:491:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-05T16-07-47.md:489:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-05T11-58-30.md:488:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-05T11-17-38.md:488:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-05T10-51-57.md:486:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-05T09-45-04.md:486:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
+E:\CentralDark\worktrees\tlc23-master-fixed-point-20260915\docs\RELATORIOS\notion-sync\2026-09-05T09-12-47.md:486:| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |

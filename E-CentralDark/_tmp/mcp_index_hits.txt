@@ -1,0 +1,61 @@
+﻿
+LineNumber Line                                                                                                        
+---------- ----                                                                                                        
+        16 import { createDevicePairingRouter } from "./device-pairing.js";                                            
+        18 import { providerAdminBridge } from "./provider-admin-bridge.js";                                           
+        19 import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, admi...
+        44         "CENTRALDARK_ADMIN_KEY",                                                                            
+        60 // Captura logs pro buffer do painel /admin (deve rodar ANTES do primeiro log)                              
+        61 bootstrapAdminLogCapture();                                                                                 
+        84 // Device pairing da Casa: approval -> token one-shot -> heartbeat -> registry.                             
+        85 app.use("/connections/centraldark", createDevicePairingRouter());                                           
+        97 // V2: healthcheck profundo (Health Score consumido pelo painel /admin)                                     
+       108 // Existe porque a UI /admin e mantida; sem ele o conector fica com icone                                   
+       151 // ───────────────────────────── Painel /admin (NOC do Dono) ─────────────                                  
+       152 app.get("/admin", adminGet);                                                                                
+       153 app.post("/admin/login", adminLogin);                                                                       
+       154 app.get("/admin/logout", adminLogout);                                                                      
+       155 app.get("/admin/api/rotas", adminRotas);                                                                    
+       156 app.get("/admin/api/tools", adminTools);                                                                    
+       157 app.get("/admin/api/logs", adminBuscarLogs);                                                                
+       158 app.get("/admin/api/metricas", adminMetricas);                                                              
+       159 app.post("/admin/api/e2e", adminE2E);                                                                       
+       160 app.get("/admin/api/e2e/publico", adminE2EPublico);                                                         
+       161 app.get("/admin/logs/stream", adminLogsStream);                                                             
+       162 app.post("/admin/api/testar-sse", adminTestarSse);                                                          
+       163 app.post("/admin/provider", providerAdminBridge);                                                           
+       164 // Emissão administrativa de chave (autenticada por senha) — usada pelo painel                              
+       165 // /admin (aba Chaves) e pelo fluxo "Entrar com GitHub" da Ponte MCP.                                       
+       166 app.post("/admin/api/issue-key", handleIssueKey);                                                           
+       221         "/admin/mcp": {                                                                                     
+       223                 summary: "Endpoint MCP administrativo (JSON-RPC 2.0)",                                      
+       224                 description: "Exige Authorization: Bearer com escopo admin. Toda destrutiva passa pelo di...
+       225                 operationId: "mcpAdminJsonRpc",                                                             
+       226                 security: [{ oauth2: ["admin"] }],                                                          
+       228                 responses: { ...respostaJson, "401": { description: "Bearer com escopo admin ausente" }, ...
+       260                             scopes: { mcp: "Ferramentas nao destrutivas", admin: "Dispatcher administrati...
+       320 app.get("/.well-known/oauth-protected-resource/admin", getProtectedResourceMetadata);                       
+       321 app.get("/.well-known/oauth-protected-resource/admin/mcp", getProtectedResourceMetadata);                   
+       325 app.get("/.well-known/oauth-authorization-server/admin", getAuthorizationServerMetadata);                   
+       345 function unauthorizedAdmin(req, res, msg, status = 401) {                                                   
+       347     res.setHeader("WWW-Authenticate", `Bearer realm="mcp-admin", resource_metadata="${config.publicUrl}/....
+       496         admin: false,                                                                                       
+       515 // ─────────────── /admin/mcp — endpoint MCP com escopo admin obrigatório ───────────────                   
+       516 function requireAdminScope(req, res) {                                                                      
+       518     if (!bearer) { unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente."); return ...
+       520     if (!at) { unauthorizedAdmin(req, res, "Access token admin inválido ou expirado."); return null; }      
+       522     if (!/\badmin\b/.test(scope)) {                                                                         
+       523         unauthorizedAdmin(req, res, "escopo admin obrigatório", 403);                                       
+       528         callerUser: at.gh_login || "github-admin",                                                          
+       532 app.post("/admin/mcp", (req, res) => {                                                                      
+       534     const auth = requireAdminScope(req, res);                                                               
+       536     l.info("mcp_admin_request_authorized", { method: req.body?.method || "unknown", actor: auth.callerUse...
+       539         admin: true,                                                                                        
+       543         l.error("mcp_admin_handler_unhandled", { error: String(err) });                                     
+       547                 error: { code: -32603, message: "Erro interno do servidor MCP admin", data: { cid: req.ci...
+       554 app.get("/admin/mcp", (req, res) => {                                                                       
+       555     unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente.");                          
+       561 const ADMIN_KEY = process.env.CENTRALDARK_ADMIN_KEY;                                                        
+       565     if (token !== ADMIN_KEY) {                                                                              
+
+

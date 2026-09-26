@@ -1,0 +1,85 @@
+
+export function policyCheck() {
+  const required = {
+    ARTIFACT_NAME_IS_NOT_IDENTITY: true,
+    UPLOAD_SUFFIX_IS_TRANSIENT: true,
+    DISCOVER_BY_HASH_FIRST: true,
+    KNOWN_LOCATIONS_FIRST: true,
+    EMPTY_PATH_IS_NOT_ARTIFACT_MISSING: true,
+    UNKNOWN_IS_NOT_PASS: true,
+  };
+
+  const missing = Object.entries(required)
+    .filter(([key, value]) => ARTIFACT_IDENTITY_POLICY[key] !== value)
+    .map(([key]) => key);
+
+  return {
+    status: missing.length === 0 ? 'PASS' : 'FAIL',
+    missing,
+    policy: ARTIFACT_IDENTITY_POLICY,
+  };
+}
+
+export function tamperCounterproof(sourcePath) {
+  const dir = mkdtempSync(path.join(os.tmpdir(), 'centraldark-pdf-gate-'));
+  try {
+    const tampered = path.join(dir, 'tlc23.pdf');
+    copyFileSync(sourcePath, tampered);
+    const bytes = Buffer.from(readFileSync(tampered));
+    bytes[0] = bytes[0] ^ 0xff;
+    writeFileSync(tampered, bytes);
+
+    const result = inspectArtifact(tampered);
+    const passed = result.status === 'REFUTED_IN_SCOPE' &&
+      result.reason === 'BYTE_IDENTITY_MISMATCH';
+
+    return {
+      status: passed ? 'PASS' : 'FAIL',
+      expected: 'BYTE_IDENTITY_MISMATCH',
+      result,
+    };
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+export function runGate(explicitPath) {
+  const stages = {};
+  const identity = resolvePdfReference(explicitPath);
+  stages.identity = identity.status === 'PROVED_IN_SCOPE'
+    ? { status: 'PASS', result: identity }
+    : { status: 'FAIL', result: identity };
+
+  stages.policy = policyCheck();
+
+  try {
+    stages.selfTest = selfTest();
+  } catch (error) {
+    stages.selfTest = { status: 'FAIL', error: String(error?.message || error) };
+  }
+
+  const testPath = path.join(__dirname, 'pdf-conformance-cc2003.test.mjs');
+  const nodeTest = spawnSync(process.execPath, ['--test', testPath], {
+    cwd: ROOT,
+    encoding: 'utf8',
+  });
+
+  stages.nodeTest = {
+    status: nodeTest.status === 0 ? 'PASS' : 'FAIL',
+    exitCode: nodeTest.status,
+    stdout: nodeTest.stdout,
+    stderr: nodeTest.stderr,
+  };
+
+  stages.tamper = stages.identity.status === 'PASS'
+    ? tamperCounterproof(identity.path)
+    : { status: 'FAIL', reason: 'IDENTITY_NOT_PROVED' };
+
+  const promoted = Object.values(stages).every((stage) => stage.status === 'PASS');
+  return {
+    status: promoted ? 'PASS' : 'FAIL',
+    pdfGatePromoted: promoted,
+    requiredChain: 'identity->policy->self-test->node:test->tamper-counterproof',
+    stages,
+  };
+}
