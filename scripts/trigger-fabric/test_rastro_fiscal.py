@@ -89,6 +89,53 @@ class RastroFiscalTests(unittest.TestCase):
         r = M.verify_text(text, REPO, backend())
         self.assertEqual("FAIL", r.verdict)
 
+    def test_ledger_exact_comment_ref_is_checked_directly(self):
+        class ExactCommentBackend(M.GitHubBackend):
+            def __init__(self):
+                super().__init__(REPO)
+                self.calls = []
+
+            def _gh(self, endpoint):
+                self.calls.append(endpoint)
+                if endpoint == "repos/ServerVpss/CentralDark/issues/comments/5850127935":
+                    return {"body": f"receipt commit {FULL}"}
+                raise AssertionError(f"unexpected endpoint: {endpoint}")
+
+        b = ExactCommentBackend()
+        self.assertTrue(
+            b.ledger_has_sha(
+                FULL,
+                1562,
+                "https://github.com/ServerVpss/CentralDark/pull/1562#issuecomment-5850127935",
+            )
+        )
+        self.assertEqual(
+            ["repos/ServerVpss/CentralDark/issues/comments/5850127935"],
+            b.calls,
+        )
+
+    def test_ledger_over_100_comments_starts_from_newest_page(self):
+        class PaginatedBackend(M.GitHubBackend):
+            def __init__(self):
+                super().__init__(REPO)
+                self.calls = []
+
+            def _gh(self, endpoint):
+                self.calls.append(endpoint)
+                if endpoint == "repos/ServerVpss/CentralDark/issues/1562":
+                    return {"comments": 299}
+                if endpoint.endswith("comments?per_page=100&page=3"):
+                    return [{"body": "old"} for _ in range(98)] + [{"body": f"receipt {FULL}"}]
+                if "comments?per_page=100&page=" in endpoint:
+                    return [{"body": "older"}]
+                raise AssertionError(f"unexpected endpoint: {endpoint}")
+
+        b = PaginatedBackend()
+        self.assertTrue(b.ledger_has_sha(FULL, 1562))
+        self.assertIn("comments?per_page=100&page=3", b.calls[1])
+        self.assertEqual(2, len(b.calls))
+
+
 
 if __name__ == "__main__":
     unittest.main()
