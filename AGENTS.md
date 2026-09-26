@@ -914,6 +914,10 @@ EXPLICIT_REPLACE_OR_PROVEN_INCOMPATIBILITY=ALLOW_INTENT_REPLACEMENT
 PERTINENCE_FIRST=true
 MINIMUM_SUFFICIENT_LOOP=true
 TRIGGERS_ARE_CONDITIONAL_NOT_RITUAL=true
+NO_UNREQUESTED_ADVICE=true
+NO_INVENTED_MISSION=true
+OBSERVATION != EXECUTION_REQUEST
+CHEFE_OBSERVATION → RESPONDER_SO_O_PERTINENTE (sem conselho, sem risco não pedido, sem missão nova)
 ```
 
 `!CENTRALDARK` ativa o organismo e avalia a cadeia canônica, mas executa somente fases pertinentes à intenção/estado atual; fase não pertinente é SKIPPED com justificativa, nunca executada por ritual.
