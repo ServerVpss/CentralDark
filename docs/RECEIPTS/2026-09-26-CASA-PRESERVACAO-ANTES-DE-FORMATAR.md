@@ -78,3 +78,72 @@ ESCOPO_EXPANDIDO_INDEVIDAMENTE=CORRIGIDO
 SEGREDOS_NO_GITHUB=0_ACHADOS_POR_PADRAO (padrão desconhecido = UNKNOWN)
 PODE_FORMATAR=DECISAO_DO_CHEFE apos resolver COFRE_2
 ```
+
+
+## 🟣 Frente SOL — arqueologia Danda recuperada antes da formatação
+
+Fonte: histórico de tool calls fornecido pelo CHEFE nesta sessão. **É evidência histórica observada, não medição CURRENT da Casa**, porque o dispositivo SEGREDO está offline no Remote Desktop Commander na revalidação atual.
+
+O histórico prova que a frente Danda já executou uma cristalização local em `E:\CentralDark\_RECONCILIATION` com:
+
+```text
+CRYSTAL_ITEMS=13
+CRYSTAL_BYTES=49957
+CRISTAL_NOVO=7
+DELTA_UTIL=6
+JA_NO_GITHUB_VERIFIED=4
+ANTI_SECRET_CRYSTAL=PASS_0_HITS
+REHASH=PASS_13_SOURCE_UNCHANGED_AND_CRYSTAL_MATCH
+PRIVATE_FILES_COPIED=0
+GGUF_COPIED=false
+JAN_MODELS_FINGERPRINTED=3
+FINAL_COUNTERPROOF=UNKNOWN_BRANCH_CURRENT_BASE_BLOCKED
+```
+
+Itens cristalizados/reconciliados nessa frente:
+
+1. `%LOCALAPPDATA%\hermes\SOUL.md` → preservar delta útil no owner SOUL/HERMES existente, sem nova SOUL.
+2. `%USERPROFILE%\.centraldark\MAPA-MONITORES-CHEFE.json` → binding físico da Casa.
+3. `%USERPROFILE%\.hermes\scripts\cadeia-free-watchdog.ps1` → bindings 8099/8788/3030; reconciliar com fixed-point-fabric/Screenpipe.
+4. `%USERPROFILE%\.hermes\scripts\webui-watchdog.ps1` → recuperação local do WebUI 8788; absorver binding no owner existente.
+5. `%LOCALAPPDATA%\CentralDark\UnifiedRuntime\active-profile.txt` → evidência de divergência de selector.
+6. `%LOCALAPPDATA%\CentralDark\UnifiedRuntime\profiles.json` → perfis Segredo/Fulano + divergência de active.
+7. `UnifiedRuntime\tools\LogCollector\COLLECT-CENTRALDARK-LOGS.ps1` → coletor local candidato a absorção.
+8. `UnifiedRuntime\tools\LogCollector\RUN-COLLECTOR.cmd` → launcher do coletor.
+9. `Jan-v3.5-4B-Q4_K_XL\model.yml` → configuração/fingerprint de modelo local.
+10. `Jan-code-4b-Q4_K_M\model.yml` → configuração/fingerprint de modelo local.
+11. `sentence-transformer-mini\model.yml` → configuração/fingerprint de embedding local.
+12. `JAN_MODELS_DANDA_RAW.jsonl` → manifesto de hash/tamanho dos três modelos; sem copiar ~GB de GGUF.
+13. `hermes\config.sanitized.yaml` → configuração Hermes sanitizada; paths normalizados e valores sensíveis recriados localmente.
+
+Ferida preservada:
+
+```text
+HERMES_LOCAL_ACTIVE=default
+HERMES_DESKTOP_ACTIVE=pivete
+UNIFIED_RUNTIME_ACTIVE=Fulanoo
+UNIFIED_RUNTIME_DECLARED_PROFILES=Segredo,Fulano
+VERDICT=DIVERGED_DO_NOT_RESTORE_BLINDLY
+```
+
+Também foi observado:
+
+```text
+PRIOR_OURO_EXACT_HASH_MATCHES=0
+PRIOR_SNAPSHOT_EXACT_HASH_MATCHES=0
+GITHUB_WRITE_PERFORMED=false
+GITHUB_PUSH_PERFORMED=false
+```
+
+Ou seja: **o conhecimento da triagem Danda está agora registrado remotamente neste receipt**, mas os 13 artefatos locais ainda não estão comprovados como publicados byte-a-byte no GitHub.
+
+### Gate restante para liberar formatação
+
+```text
+CASA_REMOTE_CHANNEL=OFFLINE_CURRENT
+DANDA_CRYSTAL_KNOWLEDGE_REMOTE=PASS_BY_THIS_RECEIPT
+DANDA_CRYSTAL_BYTES_REMOTE=UNKNOWN
+DANDA_13_LOCAL_ARTIFACTS_REMOTE=UNKNOWN
+```
+
+Quando a Casa voltar online: ler `MANIFESTO_CRISTAL_DANDA.jsonl` + `ARQUEOLOGIA_DANDA_RECEIPT.json`, rehash, publicar apenas os 13 artefatos sanitizados/únicos em cofre/owner apropriado e fazer read-back remoto. Só então zerar a pendência Danda.
