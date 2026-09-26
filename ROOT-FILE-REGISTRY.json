@@ -6,7 +6,16 @@
   "enforcement": {
     "pre_commit_hook": ".githooks/pre-commit-root-contract.sh",
     "skill": ".agents/skills/root-file-contract-router/SKILL.md",
-    "yaml_binding": "root-file-binding.yaml"
+    "yaml_binding": "root-file-binding.yaml",
+    "lei_do_rastro": {
+      "gatilho": "🔏 !RASTRO",
+      "owner": "AGENTS.md",
+      "response_without_trace": "INVALID",
+      "every_write_claim_to_chefe": "COMMIT_SHA+PATH+LINK+READBACK",
+      "every_memory_claim_names_where": true,
+      "ledger_1562_receipt_same_turn_as_direct_main": true,
+      "applies_to_all_engines": true
+    }
   },
   "categories": {
     "core": {
