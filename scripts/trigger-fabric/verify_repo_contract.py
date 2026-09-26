@@ -363,6 +363,9 @@ check('scripts/trigger-fabric/rastro_fiscal.py',[
  'class FakeBackend',
  'def verify_text(',
  'RESPONSE_WITHOUT_TRACE',
+ 'def _ledger_comment_id(',
+ 'issues/comments/{comment_id}',
+ 'comments?per_page=100&page={page}',
 ], classification='RASTRO_FISCAL_EXECUTABLE')
 check('scripts/trigger-fabric/test_rastro_fiscal.py',[
  'test_true_complete_trace_passes',
@@ -374,6 +377,8 @@ check('scripts/trigger-fabric/test_rastro_fiscal.py',[
  'test_memory_without_location_fails',
  'test_github_unavailable_is_unknown',
  'test_direct_main_without_ledger_fails',
+ 'test_ledger_exact_comment_ref_is_checked_directly',
+ 'test_ledger_over_100_comments_starts_from_newest_page',
 ], classification='RASTRO_FISCAL_COUNTERPROOF')
 check_command(
  'scripts/trigger-fabric/test_rastro_fiscal.py',
