@@ -15,7 +15,8 @@
     "screenpipe:record": "screenpipe record",
     "screenpipe:health": "screenpipe health",
     "screenpipe:mcp": "screenpipe-mcp",
-    "screenpipe:mcp:http": "screenpipe-mcp --http --port 3031"
+    "screenpipe:mcp:http": "screenpipe-mcp --http --port 3031",
+    "screenpipe:supervisor": "node apps/modulos/screenpipe-launcher.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
