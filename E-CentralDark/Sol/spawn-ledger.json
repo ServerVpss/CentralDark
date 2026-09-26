@@ -1,0 +1,15 @@
+[
+  {
+    "pid": 47856,
+    "create_time": 1789404931.583955,
+    "purpose": "serve",
+    "install": "83b674ef9dc1",
+    "spawner_pid": 14068,
+    "spawner_create": 1789404864.093,
+    "registered_at": 1789404951.3319438,
+    "argv": "C:\\Users\\danda\\AppData\\Local\\hermes\\hermes-agent\\hermes_cli\\main.py serve --host 127.0.0.1 --port 0",
+    "host": "127.0.0.1",
+    "port": 53256,
+    "profile": ""
+  }
+]

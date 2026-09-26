@@ -1,0 +1,67 @@
+{
+  "hermes-agent": {
+    "archived_at": null,
+    "created_at": "2026-09-05T01:32:35.351610+00:00",
+    "created_by": null,
+    "last_patched_at": null,
+    "last_used_at": "2026-09-05T01:32:35.519094+00:00",
+    "last_viewed_at": "2026-09-05T01:32:35.351610+00:00",
+    "patch_count": 0,
+    "pinned": false,
+    "state": "active",
+    "use_count": 1,
+    "view_count": 1
+  },
+  "hermes-agent-skill-authoring": {
+    "archived_at": null,
+    "created_at": "2026-09-05T01:32:23.074591+00:00",
+    "created_by": null,
+    "last_patched_at": null,
+    "last_used_at": "2026-09-05T01:32:23.387112+00:00",
+    "last_viewed_at": "2026-09-05T01:32:23.074591+00:00",
+    "patch_count": 0,
+    "pinned": false,
+    "state": "active",
+    "use_count": 1,
+    "view_count": 1
+  },
+  "plan": {
+    "archived_at": null,
+    "created_at": "2026-09-05T01:32:26.357237+00:00",
+    "created_by": null,
+    "last_patched_at": null,
+    "last_used_at": "2026-09-05T01:32:26.937709+00:00",
+    "last_viewed_at": "2026-09-05T01:32:26.357237+00:00",
+    "patch_count": 0,
+    "pinned": false,
+    "state": "active",
+    "use_count": 1,
+    "view_count": 1
+  },
+  "songsee": {
+    "archived_at": null,
+    "created_at": "2026-09-04T10:31:18.877349+00:00",
+    "created_by": null,
+    "last_patched_at": null,
+    "last_used_at": "2026-09-04T11:24:02.807439+00:00",
+    "last_viewed_at": "2026-09-04T11:24:02.769103+00:00",
+    "patch_count": 0,
+    "pinned": false,
+    "state": "active",
+    "use_count": 3,
+    "view_count": 3
+  },
+  "systematic-debugging": {
+    "archived_at": null,
+    "created_at": "2026-09-04T10:58:21.322391+00:00",
+    "created_by": null,
+    "last_patched_at": null,
+    "last_used_at": "2026-09-04T10:58:21.378821+00:00",
+    "last_viewed_at": "2026-09-04T10:58:21.322391+00:00",
+    "patch_count": 0,
+    "pinned": false,
+    "state": "active",
+    "use_count": 1,
+    "view_count": 1
+  }
+}
