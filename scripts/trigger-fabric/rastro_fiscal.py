@@ -337,6 +337,7 @@ def verify_text(text: str, repo: str, backend: Any) -> FiscalResult:
             checks.append(Check("link_matches", "FAIL", "LINK is not a supported GitHub commit/blob URL"))
 
     if data["path"]:
+        content: Optional[str] = None
         if not sha:
             checks.append(Check("path_at_commit", "UNKNOWN", "PATH supplied without COMMIT_SHA"))
         elif commit_obj is None and any(c.name == "commit_exists" and c.verdict != "PASS" for c in checks):
