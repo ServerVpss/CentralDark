@@ -15,6 +15,12 @@ invariants:
   action_is_not_proof: true
   learning_never_discarded: true
   proven_becomes_deterministic_candidate: true
+  proven_path_becomes_executable_recipe: true
+  recipe_must_live_in_repository: true
+  recipe_must_be_machine_consumable: true
+  fingerprint_required: true
+  replay_before_rediscovery: true
+  adapt_env_bindings_only: true
   deterministic_requires_real_consumer: true
   deterministic_requires_positive_negative_test: true
   deterministic_requires_verifiable_receipt: true
@@ -168,6 +174,17 @@ proven_path_replay:
     RUN_SAME_PROOF + COMPARE_RESULT + DIVERGENCE_BECOMES_DELTA
   laws:
     PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO: true
+    PROVEN_PATH_BECOMES_EXECUTABLE_RECIPE: true
+    RECIPE_MUST_LIVE_IN_REPOSITORY: true
+    RECIPE_MUST_BE_MACHINE_CONSUMABLE: true
+    FINGERPRINT_REQUIRED: true
+    REPLAY_BEFORE_REDISCOVERY: true
+    ADAPT_ENV_BINDINGS_ONLY: true
+    SAME_FINGERPRINT_SAME_PROOF: REUSE_CRYSTAL
+    CHANGED_FINGERPRINT: REVALIDATE_AFFECTED_CONE_ONLY
+    DOCUMENTED_IS_NOT_EXECUTABLE_RECIPE: true
+    RECEIPT_IS_NOT_PROOF: true
+    FINGERPRINT_MATCH_IS_NOT_RUNTIME_PASS: true
     SAME_FINGERPRINT_REUSES_PROVEN_RECIPE: true
     ENVIRONMENT_ADAPTATION_MAY_CHANGE_BINDINGS_NOT_GOAL: true
     ENVIRONMENT_ADAPTATION_MAY_CHANGE_PATHS_HOSTS_AUTH_REFS: true
@@ -187,6 +204,20 @@ proven_path_replay:
     - SELF_TEST_COMMAND
     - SELF_TEST_RESULT
     - RECEIPT_REF
+  machine_consumable_recipe_requires:
+    owner: REQUIRED
+    objective: REQUIRED
+    preconditions: REQUIRED
+    execution_sequence: REQUIRED
+    environment_bindings: DECLARED_OR_EMPTY
+    dependency_fingerprint: REQUIRED
+    proof: REQUIRED
+    counterproof: REQUIRED
+    expected_result_format_effect: REQUIRED
+    evidence: REQUIRED
+    next_cursor: REQUIRED
+    storage: REPOSITORY_ONLY
+    registry: PROVEN_CLAIMS_LOCK_JSON
   replay_flow:
     - LOAD_SEALED_CLAIM
     - COMPARE_DEPENDENCY_FINGERPRINT
@@ -524,3 +555,49 @@ session_crystallization_2026_09_25_runtime_extension:
     CHANGED_FINGERPRINT: REVALIDATE_AFFECTED_CONE_ONLY
     UNDECLARED_BINDING: DENY_FAIL_CLOSED
     MUTATING_WITHOUT_AUTHORITY_FLAG: BLOCKED
+
+
+proven_path_executable_recipe_contract_2026_09_26:
+  marker: PROVEN_PATH_BECOMES_EXECUTABLE_RECIPE
+  status: SEALED_AS_MACHINE_CONSUMABLE_CONTRACT
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
+  registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json
+  consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+  pr_mother: 1562
+  objective: >-
+    Todo caminho ja provado deve virar receita executavel consumivel por
+    outro executor sem redescoberta, adaptando somente bindings declarados
+    do ambiente e comparando resultado, formato e efeito esperado.
+  laws:
+    PROVEN_PATH_BECOMES_EXECUTABLE_RECIPE: true
+    RECIPE_MUST_LIVE_IN_REPOSITORY: true
+    RECIPE_MUST_BE_MACHINE_CONSUMABLE: true
+    FINGERPRINT_REQUIRED: true
+    REPLAY_BEFORE_REDISCOVERY: true
+    ADAPT_ENV_BINDINGS_ONLY: true
+    SAME_FINGERPRINT_SAME_PROOF: REUSE_CRYSTAL
+    CHANGED_FINGERPRINT: REVALIDATE_AFFECTED_CONE_ONLY
+    DOCUMENTED_IS_NOT_EXECUTABLE_RECIPE: true
+    RECEIPT_IS_NOT_PROOF: true
+    FINGERPRINT_MATCH_IS_NOT_RUNTIME_PASS: true
+  required_recipe_fields:
+    - owner
+    - objective
+    - preconditions
+    - execution_sequence
+    - environment_bindings
+    - dependency_fingerprint
+    - proof
+    - counterproof
+    - expected_result_format_effect
+    - evidence
+    - next_cursor
+  replay_outcomes:
+    same_fingerprint_same_proof: REUSE_CRYSTAL
+    changed_fingerprint: REVALIDATE_AFFECTED_CONE_ONLY
+    same_fingerprint_proof_diverged: DELTA_NEW
+    undeclared_binding: DENY_FAIL_CLOSED
+  next_cursor: >-
+    next executor loads PROVEN-CLAIMS.lock.json, matches owner/objective/
+    fingerprint, adapts declared bindings only, runs same sequence and proof,
+    then classifies divergence as DELTA_NEW or no divergence as REUSE_CRYSTAL.

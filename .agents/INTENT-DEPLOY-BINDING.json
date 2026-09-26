@@ -128,5 +128,14 @@
     "commit_exists_is_not_ci_pass": true,
     "patched_is_not_root_cause_fixed": true,
     "no_parallel_architecture": true
+  },
+  "lei_do_rastro": {
+    "owner": "AGENTS.md",
+    "gatilho": "🔏 !RASTRO",
+    "RESPONSE_WITHOUT_TRACE": "INVALID",
+    "EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES": "COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)",
+    "EVERY_MEMORY_CLAIM_NAMES_WHERE": true,
+    "LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN": true,
+    "APPLIES_TO_ALL_ENGINES": true
   }
 }
