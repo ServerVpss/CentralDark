@@ -287,6 +287,11 @@ export const PROVIDER_CAPABILITY_MATRIX = Object.freeze([
     permission: "DNS Read", evidenceRef: "https://tailscale.com/api#tag/dns",
     requiredParams: ["tailnet"],
   }),
+  capability("tailscale", "network.logs", {
+    status: "READ_SUPPORTED", method: "GET", path: "/tailnet/{tailnet}/logging/network",
+    permission: "logs:network:read", evidenceRef: "https://tailscale.com/docs/features/logging/network-flow-logs",
+    requiredParams: ["tailnet"], queryParams: ["start", "end"],
+  }),
   capability("tailscale", "keys.list", {
     status: "READ_SUPPORTED", method: "GET", path: "/tailnet/{tailnet}/keys",
     permission: "Keys Read", evidenceRef: "https://tailscale.com/api#tag/keys",
@@ -573,6 +578,145 @@ async function callProvider(provider, request, { requestId } = {}) {
   return { httpStatus: response.status, data: redacted };
 }
 
+export function summarizeTailscaleNetworkLogs(payload) {
+  const logs = Array.isArray(payload?.logs)
+    ? payload.logs
+    : Array.isArray(payload?.records)
+      ? payload.records.flatMap((record) => Array.isArray(record?.logs) ? record.logs : [record])
+      : [];
+  const nodes = new Set();
+  let virtualFlows = 0;
+  let subnetFlows = 0;
+  let exitFlows = 0;
+  let physicalFlows = 0;
+  let txBytes = 0;
+  let rxBytes = 0;
+  let txPackets = 0;
+  let rxPackets = 0;
+  let lastLoggedAt = null;
+  const countTraffic = (items) => {
+    if (!Array.isArray(items)) return 0;
+    for (const flow of items) {
+      txBytes += Number(flow?.txBytes || 0);
+      rxBytes += Number(flow?.rxBytes || 0);
+      txPackets += Number(flow?.txPkts || flow?.txPackets || 0);
+      rxPackets += Number(flow?.rxPkts || flow?.rxPackets || 0);
+    }
+    return items.length;
+  };
+  for (const logItem of logs) {
+    if (logItem?.nodeId) nodes.add(String(logItem.nodeId));
+    if (logItem?.srcNode?.nodeId) nodes.add(String(logItem.srcNode.nodeId));
+    for (const dst of Array.isArray(logItem?.dstNodes) ? logItem.dstNodes : []) {
+      if (dst?.nodeId) nodes.add(String(dst.nodeId));
+    }
+    virtualFlows += countTraffic(logItem?.virtualTraffic);
+    subnetFlows += countTraffic(logItem?.subnetTraffic);
+    exitFlows += countTraffic(logItem?.exitTraffic);
+    physicalFlows += countTraffic(logItem?.physicalTraffic);
+    if (logItem?.logged && (!lastLoggedAt || String(logItem.logged) > lastLoggedAt)) lastLoggedAt = String(logItem.logged);
+  }
+  return {
+    logMessages: logs.length,
+    nodeCount: nodes.size,
+    virtualFlows,
+    subnetFlows,
+    exitFlows,
+    physicalFlows,
+    txBytes,
+    rxBytes,
+    txPackets,
+    rxPackets,
+    lastLoggedAt,
+  };
+}
+
+export async function readTailscaleCapability(capabilityName, params = {}) {
+  const request = buildProviderRequest("tailscale", capabilityName, params);
+  if (!["READ_SUPPORTED", "FINANCIAL_READ_SUPPORTED", "DEPRECATED"].includes(request.item.status)) {
+    throw new Error("TAILSCALE_READ_CAPABILITY_REQUIRED");
+  }
+  if (request.item.secretBearing === true) {
+    throw new Error("BLOCKED_SECRET_BEARING_RESPONSE");
+  }
+  const result = await callProvider("tailscale", request);
+  return {
+    ok: true,
+    status: "PASS",
+    provider: "tailscale",
+    capability: capabilityName,
+    httpStatus: result.httpStatus,
+    evidenceRef: request.item.evidenceRef,
+    data: result.data,
+  };
+}
+
+export async function readTailscaleNetworkLogs({ start, end, tailnet = "-", limit = 200 } = {}) {
+  const endDate = end ? new Date(end) : new Date();
+  const startDate = start ? new Date(start) : new Date(endDate.getTime() - 15 * 60_000);
+  if (!Number.isFinite(startDate.getTime()) || !Number.isFinite(endDate.getTime())) throw new Error("TAILSCALE_LOG_WINDOW_INVALID");
+  if (startDate >= endDate) throw new Error("TAILSCALE_LOG_WINDOW_INVALID");
+  if (endDate.getTime() - startDate.getTime() > 24 * 60 * 60_000) throw new Error("TAILSCALE_LOG_WINDOW_TOO_LARGE");
+  const safeLimit = Math.max(1, Math.min(500, Number(limit) || 200));
+  const request = buildProviderRequest("tailscale", "network.logs", {
+    tailnet,
+    query: { start: startDate.toISOString(), end: endDate.toISOString() },
+  });
+  const result = await callProvider("tailscale", request);
+  const payload = result.data && typeof result.data === "object" ? result.data : {};
+  const allLogs = Array.isArray(payload.logs)
+    ? payload.logs
+    : Array.isArray(payload.records)
+      ? payload.records.flatMap((record) => Array.isArray(record?.logs) ? record.logs : [record])
+      : [];
+  const logs = allLogs.slice(Math.max(0, allLogs.length - safeLimit));
+  return {
+    ok: true,
+    status: "PASS",
+    provider: "tailscale",
+    capability: "network.logs",
+    httpStatus: result.httpStatus,
+    window: { start: startDate.toISOString(), end: endDate.toISOString() },
+    summary: summarizeTailscaleNetworkLogs({ logs: allLogs }),
+    logs: deepRedact(logs),
+    truncated: allLogs.length > logs.length,
+    totalKnown: allLogs.length,
+    returned: logs.length,
+    source: "TAILSCALE_API_LOGGING_NETWORK",
+  };
+}
+
+async function readTailscaleBridgeStatus() {
+  const response = await fetch("http://127.0.0.1:8098/api/tailscale/status", {
+    headers: { accept: "application/json" },
+    signal: AbortSignal.timeout(7_000),
+  });
+  const text = await response.text();
+  let parsed;
+  try { parsed = text ? JSON.parse(text) : null; } catch { parsed = { text: text.slice(0, 2_000) }; }
+  const data = deepRedact(parsed);
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: `TAILSCALE_BRIDGE_HTTP_${response.status}`,
+      provider: "tailscale",
+      capability: "bridge.status",
+      httpStatus: response.status,
+      source: "oauth-broker:/api/tailscale/status",
+      data,
+    };
+  }
+  return {
+    ok: true,
+    status: "PASS",
+    provider: "tailscale",
+    capability: "bridge.status",
+    httpStatus: response.status,
+    source: "oauth-broker:/api/tailscale/status",
+    data,
+  };
+}
+
 function operationFingerprint(input) {
   return createHash("sha256").update(JSON.stringify(input)).digest("hex");
 }
@@ -637,7 +781,126 @@ const providerInputSchema = z.object({
   params: z.record(z.string(), z.unknown()).optional().default({}),
 });
 
+export const tailscaleTools = [
+  {
+    name: "tailscale_status",
+    description: "Prova conectividade read-only com a API Tailscale pelo cofre existente e resume devices/capacidades sem expor credencial.",
+    annotations: { ...READ, title: "Tailscale — status vivo" },
+    inputSchema: z.object({
+      tailnet: z.string().max(160).optional().default("-"),
+    }),
+    handler: async (input) => {
+      try {
+        const configured = Boolean(loadTailscaleKey());
+        if (!configured) {
+          return jsonBlock({ ok: false, status: "TAILSCALE_CREDENTIALS_MISSING", configured: false });
+        }
+        const live = await readTailscaleCapability("devices.list", { tailnet: input.tailnet });
+        const devices = Array.isArray(live.data?.devices)
+          ? live.data.devices
+          : Array.isArray(live.data)
+            ? live.data
+            : [];
+        return jsonBlock({
+          ok: true,
+          status: "PASS",
+          provider: "tailscale",
+          configured: true,
+          httpStatus: live.httpStatus,
+          tailnet: input.tailnet,
+          deviceCount: devices.length,
+          capabilities: PROVIDER_CAPABILITY_MATRIX
+            .filter((item) => item.provider === "tailscale" && item.secretBearing !== true)
+            .map((item) => ({
+              capability: item.capability,
+              status: item.status,
+              permission: item.permission,
+              controlPlaneStatus: item.controlPlaneStatus,
+            })),
+          secretExposed: false,
+        });
+      } catch (error) {
+        return jsonBlock({
+          ok: false,
+          status: sanitizeError(error),
+          provider: "tailscale",
+          configured: Boolean(loadTailscaleKey()),
+          secretExposed: false,
+        });
+      }
+    },
+  },
+  {
+    name: "tailscale_bridge_status",
+    description: "Mede a ponte Tailscale viva da VPS para a Casa reutilizando o OAuth Broker existente; retorna estado da tailnet e probes read-only já canônicos.",
+    annotations: { ...READ, title: "Tailscale — ponte VPS ↔ Casa" },
+    inputSchema: z.object({}),
+    handler: async () => {
+      try {
+        return jsonBlock(await readTailscaleBridgeStatus());
+      } catch (error) {
+        return jsonBlock({
+          ok: false,
+          status: sanitizeError(error),
+          provider: "tailscale",
+          capability: "bridge.status",
+          source: "oauth-broker:/api/tailscale/status",
+        });
+      }
+    },
+  },
+  {
+    name: "tailscale_devices_list",
+    description: "Lista devices do tailnet pela capability allowlisted existente devices.list. Somente leitura e resposta redigida.",
+    annotations: { ...READ, title: "Tailscale — devices" },
+    inputSchema: z.object({
+      tailnet: z.string().max(160).optional().default("-"),
+    }),
+    handler: async (input) => {
+      try {
+        return jsonBlock(await readTailscaleCapability("devices.list", { tailnet: input.tailnet }));
+      } catch (error) {
+        return jsonBlock({ ok: false, status: sanitizeError(error), provider: "tailscale", capability: "devices.list" });
+      }
+    },
+  },
+  {
+    name: "tailscale_dns_nameservers",
+    description: "Le os nameservers DNS do tailnet pela capability allowlisted existente dns.nameservers. Somente leitura.",
+    annotations: { ...READ, title: "Tailscale — DNS nameservers" },
+    inputSchema: z.object({
+      tailnet: z.string().max(160).optional().default("-"),
+    }),
+    handler: async (input) => {
+      try {
+        return jsonBlock(await readTailscaleCapability("dns.nameservers", { tailnet: input.tailnet }));
+      } catch (error) {
+        return jsonBlock({ ok: false, status: sanitizeError(error), provider: "tailscale", capability: "dns.nameservers" });
+      }
+    },
+  },
+  {
+    name: "tailscale_network_logs",
+    description: "Le Network Flow Logs do Tailscale pela API oficial usando o cofre existente. Janela padrao 15 min, maximo 24h, sem expor credencial.",
+    annotations: { ...READ, title: "Tailscale — Network Flow Logs" },
+    inputSchema: z.object({
+      start: z.string().optional(),
+      end: z.string().optional(),
+      tailnet: z.string().max(160).optional().default("-"),
+      limit: z.number().int().min(1).max(500).optional().default(200),
+    }),
+    handler: async (input) => {
+      try {
+        return jsonBlock(await readTailscaleNetworkLogs(input));
+      } catch (error) {
+        return jsonBlock({ ok: false, status: sanitizeError(error), provider: "tailscale", capability: "network.logs" });
+      }
+    },
+  },
+];
+
 export const adminProviderControlTools = [
+  ...tailscaleTools,
   {
     name: "provider_capabilities",
     description: "Matriz canônica de capacidades oficiais Contabo/Cloudflare/Tailscale usadas pelo cockpit Admin. Não executa ação externa.",
