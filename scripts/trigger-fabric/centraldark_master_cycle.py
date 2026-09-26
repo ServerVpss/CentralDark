@@ -19,6 +19,7 @@ TRIGGER_EMOJIS = {
     "REMEDICAO": "📏",
     "FIXED_POINT": "📍",
     "REGISTRA": "🧾",
+    "RASTRO": "🔏",
     "BOOT": "🚀",
 }
 INTENT_ALIGNMENT_THRESHOLD_PERCENT = 80
@@ -34,6 +35,7 @@ CHAIN = [
     "REMEDICAO",
     "FIXED_POINT",
     "REGISTRA",
+    "RASTRO",
     "BOOT",
 ]
 
@@ -131,6 +133,7 @@ MASTER_INGRESS_ALIASES = {
     "TIK_TAK": ("!tik-tak", "!tik_tak", "#tik-tak", "#tik_tak"),
     "FIXED_POINT": ("!fixed_point",),
     "REGISTRA": ("!registra",),
+    "RASTRO": ("!rastro", "!lei do rastro", "!cadeado"),
     "BOOT": ("!boot",),
     "FABLE_LOOP": ("!fable_loop", "#fable_loop", "!fabler_loop", "#fabler_loop"),
 }
@@ -782,6 +785,7 @@ def self_test():
         ("!TIK-TAK", "TIK_TAK"),
         ("!FIXED_POINT", "FIXED_POINT"),
         ("!REGISTRA", "REGISTRA"),
+        ("!RASTRO", "RASTRO"),
         ("!BOOT", "BOOT"),
     ):
         r = resolve(token, chefe_source=True)
