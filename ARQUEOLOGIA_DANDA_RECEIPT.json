@@ -1,0 +1,51 @@
+{
+  "mission": "ARQUEOLOGIA_OURO_CASA_DANDA",
+  "observed_at": "2026-09-26",
+  "workspace": "E:\\CentralDark\\_RECONCILIATION",
+  "crystal": "E:\\CentralDark\\_RECONCILIATION\\CRISTAL_DANDA",
+  "manifest": "E:\\CentralDark\\_RECONCILIATION\\MANIFESTO_CRISTAL_DANDA.jsonl",
+  "github_repository": "ServerVpss/CentralDark",
+  "github_main_current": "d3122ae67c560205d83f7853032942dae5c677de",
+  "local_reused_repo": "E:\\CentralDark\\_RECONCILIATION\\from-C-users-danda-20260901\\fixedpoint-rebase",
+  "local_origin_main_observed": "413e1e26d30be4227ede5968f391f5b34a9f0e11",
+  "local_repo_current_branch": "fix/close-external-source-gate-20260831",
+  "local_repo_dirty_preexisting": true,
+  "desired_branch": "preservacao/casa-danda-arqueologia-20260926",
+  "desired_branch_created": false,
+  "remote_desired_branch_exists": false,
+  "github_write_performed": false,
+  "github_push_performed": false,
+  "branch_blocker": "LOCAL_GIT_CANNOT_FETCH_PRIVATE_CURRENT_MAIN_AUTH_INVALID; current main object absent locally; stale base refused",
+  "crystal_items": 13,
+  "crystal_bytes": 49957,
+  "cristal_novo": 7,
+  "delta_util": 6,
+  "ja_no_github_verified": 4,
+  "prior_ouro_exact_hash_matches": 0,
+  "prior_snapshot_exact_hash_matches": 0,
+  "focused_secret_risks": {
+    "excluded_files": 2,
+    "sanitized_fields": 1,
+    "total_proven": 3,
+    "total_global": "UNKNOWN"
+  },
+  "private_files_copied": 0,
+  "private_total_existing": "UNKNOWN_TOOL_SAFETY_BLOCKED_METADATA_COUNT",
+  "discard_curated": 4,
+  "discard_preliminary_partial_inventory": 300,
+  "anti_secret_crystal": "PASS_0_HITS",
+  "rehash": "PASS_13_SOURCE_UNCHANGED_AND_CRYSTAL_MATCH",
+  "gguf_copied": false,
+  "jan_models_fingerprinted": 3,
+  "profile_selector_observation": {
+    "hermes_local_active": "default",
+    "hermes_desktop_active": "pivete",
+    "unified_runtime_active": "Fulanoo",
+    "unified_runtime_declared_profiles": [
+      "Segredo",
+      "Fulano"
+    ],
+    "verdict": "DIVERGED_DO_NOT_RESTORE_BLINDLY"
+  },
+  "final_counterproof": "UNKNOWN_BRANCH_CURRENT_BASE_BLOCKED"
+}
