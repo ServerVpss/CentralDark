@@ -239,6 +239,200 @@ def test_canonical_chain_contains_full_core_flow():
     assert required.issubset(set(mod.CANONICAL_CHAIN))
 
 
+def test_dependency_fingerprint_is_order_stable():
+    a = mod.dependency_fingerprint(["B=2", "A=1"])
+    b = mod.dependency_fingerprint(["A=1", "B=2"])
+    c = mod.dependency_fingerprint(["A=1", "B=3"])
+    assert a == b
+    assert a != c
+    assert len(a) == 64
+
+
+def _executable_entry(fp: str, execution: str, proof: str, policy: str = "READ_ONLY"):
+    return {
+        "claim_key": "REPLAY_TEST", "owner": "test-owner", "state": "SEALED_PROVEN",
+        "proven_path_replay": {
+            "marker": "PROVEN_PATH_REPLAY_LOCK", "dependency_fingerprint": fp,
+            "execution_commands": [execution], "proof_commands": [proof],
+            "environment_bindings": ["WORKSPACE"], "commands_executable": True,
+            "execution_policy": policy, "proof_commands_read_only": True,
+            "expected_effect": "PROOF_COMMANDS_PASS",
+            "result_schema": "centraldark.proven-replay.result.v1",
+            "raw_output_byte_equality_required": False,
+        },
+    }
+
+
+def test_executable_replay_reuses_crystal():
+    fp = mod.dependency_fingerprint(["OWNER=test", "VERSION=1"])
+    ref = "$" + "{WORKSPACE}"
+    with tempfile.TemporaryDirectory() as td:
+        entry = _executable_entry(fp, f'printf ok > "{ref}/value.txt"', f'test "$(cat "{ref}/value.txt")" = ok')
+        result = mod.execute_proven_recipe(entry=entry, current_fingerprint=fp, bindings={"WORKSPACE": td}, repo=Path(td))
+        assert result["verdict"] == "REUSE_CRYSTAL"
+        assert result["execution_pass"] is True
+        assert result["proof_pass"] is True
+        assert result["expected_effect_match"] is True
+
+
+def test_changed_fingerprint_does_not_execute_recipe():
+    fp = mod.dependency_fingerprint(["VERSION=1"])
+    changed = mod.dependency_fingerprint(["VERSION=2"])
+    ref = "$" + "{WORKSPACE}"
+    with tempfile.TemporaryDirectory() as td:
+        entry = _executable_entry(fp, f'printf no > "{ref}/value.txt"', f'test -f "{ref}/value.txt"')
+        result = mod.execute_proven_recipe(entry=entry, current_fingerprint=changed, bindings={"WORKSPACE": td}, repo=Path(td))
+        assert result["verdict"] == "REVALIDATE"
+        assert result["executed"] is False
+        assert not (Path(td) / "value.txt").exists()
+
+
+def test_replay_rejects_undeclared_binding():
+    fp = mod.dependency_fingerprint(["VERSION=1"])
+    ref = "$" + "{WORKSPACE}"
+    with tempfile.TemporaryDirectory() as td:
+        entry = _executable_entry(fp, f'printf ok > "{ref}/value.txt"', f'test -f "{ref}/value.txt"')
+        result = mod.execute_proven_recipe(entry=entry, current_fingerprint=fp, bindings={"WORKSPACE": td, "SECRET_EXTRA": "x"}, repo=Path(td))
+        assert result["verdict"] == "DENY"
+        assert result["action"] == "BINDING_CONTRACT_MISMATCH"
+        assert result["undeclared_bindings"] == ["SECRET_EXTRA"]
+
+
+def test_proof_divergence_becomes_delta_new():
+    fp = mod.dependency_fingerprint(["VERSION=1"])
+    ref = "$" + "{WORKSPACE}"
+    with tempfile.TemporaryDirectory() as td:
+        entry = _executable_entry(fp, f'printf bad > "{ref}/value.txt"', f'test "$(cat "{ref}/value.txt")" = good')
+        result = mod.execute_proven_recipe(entry=entry, current_fingerprint=fp, bindings={"WORKSPACE": td}, repo=Path(td))
+        assert result["verdict"] == "DELTA_NEW"
+        assert result["action"] == "REVALIDATE_AFFECTED_CONE_ONLY"
+        assert result["proof_pass"] is False
+
+
+def test_mutating_recipe_requires_explicit_flag():
+    fp = mod.dependency_fingerprint(["VERSION=1"])
+    ref = "$" + "{WORKSPACE}"
+    with tempfile.TemporaryDirectory() as td:
+        entry = _executable_entry(fp, f'printf changed > "{ref}/value.txt"', f'test -f "{ref}/value.txt"', policy="MUTATING_AUTHORIZED_ONLY")
+        result = mod.execute_proven_recipe(entry=entry, current_fingerprint=fp, bindings={"WORKSPACE": td}, repo=Path(td), allow_mutation=False)
+        assert result["verdict"] == "BLOCKED"
+        assert result["action"] == "MUTATION_AUTHORITY_FLAG_REQUIRED"
+        assert not (Path(td) / "value.txt").exists()
+
+
+def test_lock_contract_binds_executable_replay_runtime():
+    text = (REPO / "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml").read_text(encoding="utf-8")
+    required = {
+        "session_crystallization_2026_09_25_runtime_extension:",
+        "SEALED_RECIPE_REQUIRES_FINGERPRINT: true",
+        "BINDING_VALUES_MUST_NOT_ENTER_RECEIPT: true",
+        "PROOF_DIVERGENCE_IS_DELTA_NEW: true",
+        "MUTATING_RECIPE_REQUIRES_EXPLICIT_MUTATION_AUTHORITY_FLAG: true",
+        "RUNNER_READY_IS_NOT_SAFE_TO_START: true",
+        "SAME_USER_IS_NOT_SAME_AUTH_CONTEXT: true",
+        "WORKDIR_IS_NOT_DEVICE_IDENTITY: true",
+        "SAME_FINGERPRINT_AND_PROOF_PASS: REUSE_CRYSTAL",
+        "CHANGED_FINGERPRINT: REVALIDATE_AFFECTED_CONE_ONLY",
+    }
+    for token in required:
+        assert token in text, token
+
+
+def test_session_registry_has_replayable_claims():
+    p = REPO / "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json"
+    data = json.loads(p.read_text(encoding="utf-8"))
+    required = {
+        "PROVEN_REPLAY_EXECUTOR_PATH",
+        "CASA_GARIMPO_REMOTE_BRIDGE_SOURCE_PATH",
+        "GH_AUTH_CONTEXT_RESOLUTION_PATH",
+        "SELF_HOSTED_RUNNER_CAPACITY_DIAGNOSIS_PATH",
+    }
+    assert required.issubset(data["claims"])
+    for key in required:
+        entry = data["claims"][key]
+        recipe = entry["proven_path_replay"]
+        assert entry["state"] == "SEALED_PROVEN"
+        assert recipe["commands_executable"] is True
+        assert recipe["raw_output_byte_equality_required"] is False
+
+
+def test_reseal_fingerprint_requires_same_lock_and_counterproof():
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        reg = root / "claims.json"
+        old_fp = mod.dependency_fingerprint(["VERSION=1"])
+        data = {
+            "schema": "centraldark.proven-claims-lock.v1",
+            "claims": {
+                "CLAIM_X": {
+                    "claim_key": "CLAIM_X",
+                    "owner": "owner/a",
+                    "lock_key": mod.lock_key("CLAIM_X", "owner/a"),
+                    "state": "SEALED_PROVEN",
+                    "observed_at": "old",
+                    "counterproof": "PASS",
+                    "proven_path_replay": {
+                        "dependency_fingerprint": old_fp,
+                        "execution_commands": ["true"],
+                        "proof_commands": ["true"],
+                    },
+                }
+            },
+        }
+        mod.atomic_write_json(reg, data)
+        bad = argparse.Namespace(
+            repo=str(REPO), registry=str(reg), claim="CLAIM_X", owner="owner/a",
+            lock_key="wrong", cause_ref="main changed", counterproof_result="PASS",
+            current_target_remeasured=True, dependency_fingerprint=None,
+            fingerprint_material=["VERSION=2"], observed_at="now",
+            evidence_ref="", receipt_ref="",
+        )
+        assert mod.cmd_reseal_fingerprint(bad) == 6
+        assert mod.load_registry(reg)["claims"]["CLAIM_X"]["proven_path_replay"]["dependency_fingerprint"] == old_fp
+
+
+def test_reseal_fingerprint_updates_same_claim_after_counterproof():
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        reg = root / "claims.json"
+        lock = mod.lock_key("CLAIM_X", "owner/a")
+        old_fp = mod.dependency_fingerprint(["VERSION=1"])
+        new_fp = mod.dependency_fingerprint(["VERSION=2"])
+        data = {
+            "schema": "centraldark.proven-claims-lock.v1",
+            "claims": {
+                "CLAIM_X": {
+                    "claim_key": "CLAIM_X",
+                    "owner": "owner/a",
+                    "lock_key": lock,
+                    "state": "SEALED_PROVEN",
+                    "observed_at": "old",
+                    "counterproof": "PASS",
+                    "proven_path_replay": {
+                        "dependency_fingerprint": old_fp,
+                        "execution_commands": ["true"],
+                        "proof_commands": ["true"],
+                    },
+                }
+            },
+        }
+        mod.atomic_write_json(reg, data)
+        args = argparse.Namespace(
+            repo=str(REPO), registry=str(reg), claim="CLAIM_X", owner="owner/a",
+            lock_key=lock, cause_ref="main changed", counterproof_result="PASS",
+            current_target_remeasured=True, dependency_fingerprint=None,
+            fingerprint_material=["VERSION=2"], observed_at="now",
+            evidence_ref="evidence-new", receipt_ref="receipt-new",
+        )
+        assert mod.cmd_reseal_fingerprint(args) == 0
+        claim = mod.load_registry(reg)["claims"]["CLAIM_X"]
+        assert claim["proven_path_replay"]["dependency_fingerprint"] == new_fp
+        assert claim["lock_key"] == lock
+        assert claim["reopen_history"][-1]["old_dependency_fingerprint"] == old_fp
+        assert claim["reopen_history"][-1]["new_dependency_fingerprint"] == new_fp
+        assert claim["reopen_history"][-1]["scope"] == "AFFECTED_CONE_ONLY"
+
+
 if __name__ == "__main__":
     tests = [
         test_normalization_variants,
@@ -257,6 +451,16 @@ if __name__ == "__main__":
         test_runtime_preflight_is_inherited_by_engine_master_and_method,
         test_lock_key_is_stable_and_owner_bound,
         test_registry_roundtrip,
+        test_dependency_fingerprint_is_order_stable,
+        test_executable_replay_reuses_crystal,
+        test_changed_fingerprint_does_not_execute_recipe,
+        test_replay_rejects_undeclared_binding,
+        test_proof_divergence_becomes_delta_new,
+        test_mutating_recipe_requires_explicit_flag,
+        test_lock_contract_binds_executable_replay_runtime,
+        test_session_registry_has_replayable_claims,
+        test_reseal_fingerprint_requires_same_lock_and_counterproof,
+        test_reseal_fingerprint_updates_same_claim_after_counterproof,
         test_canonical_chain_contains_full_core_flow,
     ]
     for test in tests:

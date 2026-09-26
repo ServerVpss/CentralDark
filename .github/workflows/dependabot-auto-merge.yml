@@ -325,7 +325,7 @@ jobs:
          github.event.pull_request.head.repo.full_name == github.repository) ||
         github.event_name == 'schedule' ||
         github.event_name == 'workflow_dispatch' ||
-        github.event_name == 'workflow_run' ||
+        (github.event_name == 'workflow_run' && startsWith(github.event.workflow_run.head_branch, 'dependabot/')) ||
         github.event_name == 'repository_dispatch'
       )
     runs-on: [self-hosted, Linux]
@@ -553,7 +553,7 @@ jobs:
           echo 'UNKNOWN_IS_PASS=0'
 
   reconcile-house-pr:
-    name: 🪡 Casa — reconciliar PR humano no mesmo motor
+    name: 🪡 Casa — reconciliar PR humano → promotor canônico
     if: >-
       github.event_name == 'pull_request_target' &&
       github.repository == 'ServerVpss/CentralDark' &&
@@ -594,6 +594,8 @@ jobs:
           echo "HOUSE_CONFLICT_OWNER=scripts/dependabot/resolve-conflicts.sh"
           echo "AUTO_REVIEW_UNKNOWN=true"
           echo "PR_MOTHER_1562_PROTECTED=true"
+          echo "DIRECT_MERGE=0"
+          echo "PROMOTION_OWNER=.github/workflows/autonomia-promocao.yml"
           echo "UNKNOWN_IS_PASS=0"
 
   reconcile-all-open-prs:
@@ -641,4 +643,7 @@ jobs:
           echo "COMMIT_TO_PR_BRANCH=true"
           echo "RERUN_FAILED_ONCE=true"
           echo "DIRECT_MAIN_WRITE=0"
+          echo "DIRECT_MERGE=0"
+          echo "HUMAN_PR_PROMOTION_OWNER=.github/workflows/autonomia-promocao.yml"
+          echo "DEPENDABOT_PROMOTION_OWNER=.github/workflows/dependabot-auto-merge.yml"
           echo "UNKNOWN_IS_PASS=0"

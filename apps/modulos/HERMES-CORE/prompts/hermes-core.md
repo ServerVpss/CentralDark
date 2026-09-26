@@ -677,3 +677,20 @@ CONFIANCA_DO_MODELO != REALIDADE
 100_PERCENT_CONTRACT_COVERAGE = permitido quando todo o escopo definido foi verificado
 100_PERCENT_GLOBAL_REALITY = não declarar só por cálculo/estimativa
 ```
+
+## Cristal determinístico — replay de caminho provado
+
+```text
+PROVEN_PATH_REPLAY_LOCK=true
+PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO=true
+SAME_FINGERPRINT_REUSES_PROVEN_RECIPE=true
+ADAPT_ENVIRONMENT_BINDINGS_ONLY=true
+DIVERGENCE_REOPENS_AFFECTED_CONE_ONLY=true
+HUMAN_RETEACH_REQUIRED_FOR_SAME_PROVEN_PATH=false
+```
+
+Quando existir receita selada pelo `PROVEN-DETERMINISTIC-LOCK.yml`, Hermes carrega
+a sequência, adapta somente bindings declarados do ambiente e executa a mesma
+prova. Resultado divergente vira delta mensurável; não vira licença para recomeçar
+a missão inteira.
+

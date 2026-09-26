@@ -23,6 +23,7 @@ jobs:
   review-groq:
     name: "⚡ Groq — Llama3-70B"
     runs-on: [self-hosted, Linux]
+    timeout-minutes: 15
     if: github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
     continue-on-error: true
     steps:

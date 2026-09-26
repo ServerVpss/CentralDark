@@ -495,3 +495,20 @@ Entrar no repo = reconstruir contexto, carregar provas ainda válidas e medir so
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral + provas reutilizáveis
 - [[CONSCIENCIA]] — documento mestre
+
+
+## Receita provada no boot
+
+Ao entrar numa missão, antes de reabrir uma investigação, procurar receita/receipt ainda válido no `MAPA-DO-CEREBRO.md`.
+
+```text
+RECIPE_VALID
+→ LOAD
+→ ADAPT_ENV_BINDINGS_ONLY
+→ EXECUTE
+→ REPROVE_EQUIVALENCE
+→ MATCH = CONTINUE_NEXT_CURSOR
+→ DIVERGED = OPEN_ONLY_NEW_DELTA
+```
+
+Não repetir prova já válida; não criar commit artificial quando não existe mudança durável.

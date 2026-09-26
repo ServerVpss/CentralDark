@@ -1711,14 +1711,17 @@
     },
     {
       "id": "MEASURE_BEFORE_CREATION",
+      "aliases": [
+        "REMEASURE_BEFORE_CREATE"
+      ],
       "emoji": "👁️",
-      "anchor": "MEDE ANTES DE CRIAR",
+      "anchor": "MEDE E, SE O ALVO PUDER TER MUDADO, REMEDE ANTES DE CRIAR",
       "pr_refs": [
         1632,
         1633,
         1634
       ],
-      "value": "REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE",
+      "value": "REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE; LIVE/DRIFTABLE TARGET => FRESH SAME-TARGET REMEASUREMENT",
       "runtime_required": false
     },
     {
