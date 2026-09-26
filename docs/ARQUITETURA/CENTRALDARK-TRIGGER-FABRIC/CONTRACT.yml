@@ -6,6 +6,11 @@ authority:
   executor_continuity: HERMES/PIVETE
   judge: REALITY
 principles:
+  response_without_trace_invalid: true
+  every_write_claim_to_chefe_requires_commit_sha_path_link_readback: true
+  every_memory_claim_must_name_storage_location: true
+  direct_main_write_requires_ledger_1562_receipt_same_turn: true
+  rastro_applies_to_all_engines: true
   one_system_only: true
   reuse_before_create: true
   one_owner_per_capability: true
@@ -560,3 +565,14 @@ measurement_confidence:
     allowed_when: ALL_DEFINED_SCOPE_CONDITIONS_ARE_DETERMINISTICALLY_VERIFIED
     means: DEFINED_SCOPE_CONTRACT_COMPLETE
     does_not_mean: EXTERNAL_WORLD_INFALLIBLE
+
+
+rastro_lock:
+  marker: "🔏 !RASTRO"
+  owner: "AGENTS.md + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md"
+  response_without_trace: INVALID
+  write_claim_required_fields: [COMMIT_SHA, PATH, LINK, READBACK]
+  memory_claim_requires_location: true
+  direct_main_requires_ledger_1562_same_turn: true
+  applies_to_all_engines: true
+  authority_expansion: false
