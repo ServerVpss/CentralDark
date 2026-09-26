@@ -1,0 +1,11 @@
+centraldark-agentic-loop-4k-clean.png
+centraldark-agentic-loop-4k-completo.png
+centraldark-espinha-ia.txt
+centraldark-evidence
+claude
+codex-swarm
+codex-test
+DEPURAÇAO FULL.txt
+grok_response.json
+hermes-watchdog.log
+Novo(a) Documento de Texto.txt

@@ -1,0 +1,123 @@
+Cola no Hermes. Um Writer. 10 frentes só de leitura. Cristaliza no NUCLEO que já existe. Não nasce terceiro cérebro.
+
+```text
+#ACORDAR + !CALIBRAR
+PAPEL=PIVETE/HERMES EXECUTOR+PRESERVACAO
+WRITER=hermes
+ESCOPO=CRISTALIZAR_ESTADO + ENDURECER_SEGURANCA + MAPA_BIBLIOTECA_EXISTENTE
+INTENÇÃO SEGREDO/CHEFE: fechar o ouro do que já foi feito, subir a segurança no delta real, dizer em que parte estamos, e mapear em paralelo a biblioteca / segundo cérebro / Obsidian remoto que JÁ EXISTE.
+
+NÃO REABRIR FASES 1-13.
+NÃO CRIAR segundo NUCLEO, segundo vault, segundo kanban, segundo bot, segunda memória.
+NÃO COLAR VALOR DE SECRET. Só NOME + presente/ausente + permissão + gitignore.
+
+RECEIPT VIVO DE PARTIDA (revalidar T0, não discutir)
+START_HEAD=e54f04af576a1e450f5c40ca1b795ee868e1048e
+LIVE_MINIMO=PASS
+MCP 9100=110 tools
+BFF 8787=chat/start + kanban t_fee8067a todo→ready→done
+WORKTREE_WIRE=GAP_DOCUMENTADO (tool 10/10; WORKTREE_ROOT hardcoded /root/CentralDark)
+BOT_E2E=BLOCKED_ON_TOKEN
+SOL_E2E=BLOCKED_ON_APP_CONTROL (4551)
+Git worktrees Windows=2 (main + relquia-worktree locked)
+NUCLEO E:\CentralDark\Pivete\NUCLEO\ já tem decisions/checkpoints/patterns 2026-08-22/23
+
+════════════════════════════════
+A) 10 FRENTES PARALELAS — READ ONLY
+Rendezvous antes de escrever 1 arquivo.
+════════════════════════════════
+F1 NUCLEO_LOCAL
+E:\CentralDark\Pivete\NUCLEO\{decisions,checkpoints,patterns,learnings,failures,contracts,missions,skills}
+Ler os 7 docs 2026-08-22/23. Classificar DUPLICADO|PARCIAL|GAP.
+
+F2 SKILLS_OURO
+E:\...\NUCLEO\skills (60) vs symlinks C:. Contar. Achar skill centraldark-operational-method recém-patchada. Diff do patch. Sem regressão de segurança.
+
+F3 VAULT_OBSIDIAN_LOCAL
+E:\CentralDark\vault\ + C: .obsidian/
+Mapear pastas, MOCs, plugins, remote/sync config SEM abrir conteúdo secreto.
+
+F4 BIBLIOTECA_SEGUNDO_CEREBRO
+Ler patterns/2026-08-23-mapa-completo-segundo-cerebro.md
+Completar só o que faltar: roots, owners, o que é ouro vs cache.
+
+F5 REMOTOS_OBSIDIAN
+Até 10 alvos: remote/sync/publish/git/iCloud/OneDrive/Dropbox/GitHub vault/obsidian-git/livros/biblioteca.
+STATUS=FACT|UNKNOWN. URL/path se existir. NÃO clonar o mundo.
+
+F6 RUNTIME_PORTS
+9100 / 8787 / 1420 / processos bot / worktree dirs / HEAD vs origin.
+
+F7 SECRETS_HIGIENE  (segurança)
+Inventário de LOCAIS: C:\CentralDark\secrets , .env*, tokens/, sessions/, .ssh
+Só: path existe? gitignored? ACL? NOME de var presente?
+PROIBIDO: cat de valor, copiar secret pra NUCLEO/chat/git.
+
+F8 WORKTREE_SECURITY
+Onde WORKTREE_ROOT está hardcoded.
+Risco: path VPS em host Windows; create fora do root; prune largo.
+Delta mínimo: root por ambiente (E:/C: local vs /root/CentralDark VPS), allowlist, sem seguir symlink pra fora.
+
+F9 GIT_CANONICO
+origin/main SHA. Não misturar PRs 1115/1116/1117. Não force-push. Não commitar secret/mcp dist sujo.
+
+F10 CONTRATO
+LEIA-ME-IA + AGENTS + 02-PERMISSOES + reconciliação.
+Lembrar: segundo cérebro paralelo SEM GAP_REAL é proibido. Aqui o gap é MAPA do que já existe, não criar outro.
+
+════════════════════════════════
+B) SEGURANÇA — SÓ DELTA CAUSAL
+════════════════════════════════
+1. Receipts/logs: sanitizar token/cookie/Authorization.
+2. .gitignore cobre secrets/, .env, sessions/, target/ se aplicável.
+3. WORKTREE_ROOT não fica preso em /root/CentralDark neste Windows.
+4. App Control 4551: NÃO desligar Defender. Só documentar exclusão de target/ se CHEFE fizer.
+5. Bot: sem token = NÃO sobe processo. Não pedir token no chat.
+6. config.yaml split C:/E: permanece documentado. Sem unificar agora.
+7. Skill patched: se o patch afrouxou gate, reverter o afrouxamento.
+
+Se 3 for 5 linhas no owner do tool, faz. Se virar framework, PARA e documenta o gap.
+
+════════════════════════════════
+C) UM WRITER DEPOIS DO RENDEZVOUS
+════════════════════════════════
+Atualizar no menor delta, owners já existentes:
+- E:\CentralDark\Pivete\NUCLEO\checkpoints\2026-08-23-runtime-wiring-checkpoint.md
+- E:\CentralDark\Pivete\NUCLEO\patterns\2026-08-23-mapa-completo-segundo-cerebro.md
+- E:\CentralDark\Pivete\NUCLEO\patterns\2026-08-23-mapa-mestre-centraldark-fixed-point.md
+- E:\CentralDark\Pivete\NUCLEO\decisions\2026-08-23-execution-broker-worktree-wiring.md
+- 1 learning curto em learnings/ SÓ se houver delta reutilizável de segurança/worktree
+NÃO criar 2026-08-23-final-final.md.
+
+════════════════════════════════
+D) RESPOSTA AO CHEFE — SÓ ISTO
+════════════════════════════════
+ONDE_ESTAMOS=
+  FASE=LIVE_MINIMO
+  STATUS=PASS_COM_3_GAPS
+  AR=WebUI+BFF+MCP+Kanban
+  FORA_DO_AR=Bot Telegram, SOL Desktop tauri dev, worktree tool no Windows
+
+MAPA_BIBLIOTECA=
+  ROOTS=
+  OBSIDIAN_LOCAL=
+  REMOTOS_N=
+  REMOTOS_LISTA= path|sync|UNKNOWN
+  OURO_VS_CACHE=
+
+SEGURANCA=
+  SECRETS_NO_GIT=PASS|FAIL
+  VALUES_EXPOSED=NAO
+  WORKTREE_ROOT_FIX=FEITO|GAP
+  BOT_SEM_TOKEN_NAO_SOBE=PASS
+  APP_CONTROL=EXTERNO
+
+GAPS=
+  1 TOKEN
+  2 APP_CONTROL_TARGET
+  3 WORKTREE_ROOT_WINDOWS
+
+PROIBIDO no texto final: valor de secret, mapa de 200 linhas, “missão concluída” se T0 divergir.
+
+COMEÇA F1-F10 EM PARALELO. ESCREVE SÓ DEPOIS. MENOS É MAIS.
+```

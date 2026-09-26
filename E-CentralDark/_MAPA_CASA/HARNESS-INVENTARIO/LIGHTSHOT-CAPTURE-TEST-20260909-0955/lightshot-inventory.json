@@ -1,0 +1,132 @@
+{
+  "pass": true,
+  "mode": "read-only + safe launch check; no screen capture; no file move",
+  "install": {
+    "DisplayName": "Lightshot-5.5.0.7",
+    "DisplayVersion": "5.5.0.7",
+    "Publisher": "Skillbrains",
+    "InstallLocation": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\",
+    "UninstallString": "\"C:\\Program Files (x86)\\Skillbrains\\lightshot\\unins000.exe\""
+  },
+  "exe": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\5.5.0.7\\Lightshot.exe",
+  "version": {
+    "FileVersion": "5.5.0.4",
+    "ProductVersion": "5.5.0.4",
+    "ProductName": "Lightshot",
+    "CompanyName": "Skillbrains",
+    "OriginalFilename": "Lightshot",
+    "FileDescription": "Lightshot"
+  },
+  "process_before": {
+    "Id": 65204,
+    "ProcessName": "Lightshot",
+    "Path": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\5.5.0.7\\Lightshot.exe",
+    "StartTime": "2026-09-09T08:45:39.289741-03:00"
+  },
+  "launch": {
+    "attempted": false,
+    "reason": "already running or exe missing",
+    "started_pid": null
+  },
+  "process_after": {
+    "Id": 65204,
+    "ProcessName": "Lightshot",
+    "Path": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\5.5.0.7\\Lightshot.exe",
+    "StartTime": "2026-09-09T08:45:39.289741-03:00"
+  },
+  "install_files": [
+    {
+      "Name": "locales",
+      "Length": null,
+      "LastWriteTime": "2026-07-03T00:54:47.0452109-03:00",
+      "FullName": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\5.5.0.7\\locales"
+    },
+    {
+      "Name": "asw-04ce417f-f952-4a4f-b1cf-0253d0ceb13f",
+      "Length": 0,
+      "LastWriteTime": "2025-04-10T07:12:28.9232084-03:00",
+      "FullName": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\5.5.0.7\\asw-04ce417f-f952-4a4f-b1cf-0253d0ceb13f"
+    },
+    {
+      "Name": "asw-3627dc51-8063-4450-b6d3-e54c3943335c",
+      "Length": 0,
+      "LastWriteTime": "2025-08-21T11:11:36.9464019-03:00",
+      "FullName": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\5.5.0.7\\asw-3627dc51-8063-4450-b6d3-e54c3943335c"
+    },
+    {
+      "Name": "asw-83168f4a-30d0-4701-a664-257d30a15c54",
+      "Length": 0,
+      "LastWriteTime": "2025-05-02T22:47:43.7036255-03:00",
+      "FullName": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\5.5.0.7\\asw-83168f4a-30d0-4701-a664-257d30a15c54"
+    },
+    {
+      "Name": "asw-9a127b2e-20d9-4f61-bcc2-18491f114f77",
+      "Length": 0,
+      "LastWriteTime": "2025-08-16T00:31:39.0210753-03:00",
+      "FullName": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\5.5.0.7\\asw-9a127b2e-20d9-4f61-bcc2-18491f114f77"
+    },
+    {
+      "Name": "asw-c7dc9445-e86b-4215-a14b-6f6a4ed30d43",
+      "Length": 0,
+      "LastWriteTime": "2025-08-18T12:47:14.3469019-03:00",
+      "FullName": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\5.5.0.7\\asw-c7dc9445-e86b-4215-a14b-6f6a4ed30d43"
+    },
+    {
+      "Name": "asw-f1ef753d-626b-4f0f-b5c0-ed688c655e2a",
+      "Length": 0,
+      "LastWriteTime": "2025-05-15T13:13:01.5890697-03:00",
+      "FullName": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\5.5.0.7\\asw-f1ef753d-626b-4f0f-b5c0-ed688c655e2a"
+    },
+    {
+      "Name": "DXGIODScreenshot.dll",
+      "Length": 95656,
+      "LastWriteTime": "2019-07-21T23:21:52-03:00",
+      "FullName": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\5.5.0.7\\DXGIODScreenshot.dll"
+    },
+    {
+      "Name": "learnmore_ru.url",
+      "Length": 63,
+      "LastWriteTime": "2019-07-02T18:39:14-03:00",
+      "FullName": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\5.5.0.7\\learnmore_ru.url"
+    },
+    {
+      "Name": "learnmore.url",
+      "Length": 60,
+      "LastWriteTime": "2019-07-02T18:39:14-03:00",
+      "FullName": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\5.5.0.7\\learnmore.url"
+    },
+    {
+      "Name": "Lightshot.dll",
+      "Length": 502696,
+      "LastWriteTime": "2019-07-21T23:21:52-03:00",
+      "FullName": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\5.5.0.7\\Lightshot.dll"
+    },
+    {
+      "Name": "Lightshot.exe",
+      "Length": 499624,
+      "LastWriteTime": "2019-07-21T23:21:52-03:00",
+      "FullName": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\5.5.0.7\\Lightshot.exe"
+    },
+    {
+      "Name": "net.dll",
+      "Length": 532904,
+      "LastWriteTime": "2019-07-21T23:21:52-03:00",
+      "FullName": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\5.5.0.7\\net.dll"
+    },
+    {
+      "Name": "uploader.dll",
+      "Length": 220584,
+      "LastWriteTime": "2019-07-21T23:21:52-03:00",
+      "FullName": "C:\\Program Files (x86)\\Skillbrains\\lightshot\\5.5.0.7\\uploader.dll"
+    }
+  ],
+  "settings_roots": null,
+  "settings_files_sample": [],
+  "recommended_harness_function": "centraldark.captureScreen.request",
+  "consent_options": [
+    "deny",
+    "allow_once",
+    "allow_session",
+    "allow_forever"
+  ]
+}

@@ -1,0 +1,72 @@
+## 2026-09-09 10:10 - Captura de tela real
+- REQUEST: capturar uma tela da Casa e retornar pelo mesmo fluxo remoto.
+- CAPTURE_FUNCTION: PowerShell + System.Windows.Forms.Screen + System.Drawing.Graphics.CopyFromScreen.
+- OUTPUT: E:\CentralDark\_MAPA_CASA\HARNESS-INVENTARIO\capture-now.png
+- SIZE_BYTES: 138615
+- RETURN_FUNCTION: Remote_Desktop_Commander.read_file
+- RESULT: PASS; imagem renderizada de volta no chat pelo mesmo conector.
+- EXTERNAL_UPLOAD: false
+- MOVE_PERFORMED: false
+- ZERO_REGRESSION: true
+## 2026-09-09 10:18 - Calibração da espinha dorsal
+- MODE: read-only; nenhuma ponte alterada.
+- REMOTE_DESKTOP_COMMANDER: PASS; v0.2.48; client=desktop-commander-client; Node 26.5.1; Python 3.13.15.
+- CAPTURE_RETURN: PASS via CopyFromScreen -> PNG local -> Remote_Desktop_Commander.read_file.
+- SSH_VSCODE: PASS; ssh.exe PID 2352 ouvindo 127.0.0.1/[::1]:35645 e :49930.
+- WINRM_POWERSHELL: PASS; serviço Running/Automatic; listener :5985.
+- TAILSCALE: PASS-process/service; tailscaled ativo; listener 100.125.83.74:443 e fd7a:...:443.
+- VSCODE: PASS-process; múltiplos Code.exe ativos com listeners locais.
+- CODEX: PASS-process; codex.exe ativo pela extensão VS Code e por codex-acp@1.1.7; runtime CUA Node ativo.
+- AGENT_BROWSER_CHROME: PASS-process; Chrome 152 em C:\Users\danda\.agent-browser\browsers; múltiplas instâncias.
+- CLAUDE_CHROME_NATIVE_HOST: PASS-process; chrome-native-host.exe ativo dentro do pacote Claude.
+- LIGHTSHOT: PASS-process; Lightshot 5.5.0.7 ativo.
+- HERMES_ROUTER_8099: FAIL-NOW; localhost:8099 recusou /health e /v1/models.
+- CHROME_DEVTOOLS_9222: FAIL-NOW; localhost:9222 recusou /json/version.
+- REMOTE_MCP_REPO_OWNER: scripts/remote-bridge/CentralDark-Remote-Bridge.ps1 + CENTRALDARK-REMOTE-BRIDGE.config.json + docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md.
+- REPO_HARNESS_OWNER: scripts/trigger-fabric/runtime_plug_conformance.py + .agents/skills/centraldark-operational-method/scripts/casa_boot.py.
+- RULE: INVENTARIAR -> CLASSIFICAR -> ESPELHAR -> TESTAR -> MOVER; UNKNOWN != PASS; zero regressão.
+## 2026-09-09 10:33 - Documento raiz da arquitetura total
+- CREATED: docs\ARQUITETURA-TOTAL-CENTRALDARK-HARNESS-CASA.md
+- PURPOSE: índice vivo da arquitetura full-stack/full-platform da Casa.
+- SOURCES: boas práticas de codificação + boas práticas de código fornecidas pelo Chefe.
+- POLICY: documentação cresce junto com código, testes, dependências e decisões.
+- TREE_POLICY: ramo já provado não desaparece; apenas muda status com evidência.
+- CHANGE_RECORD: versão, owner, arquivos, dependências, motivo, risco, teste, prova, rollback, status e próximo cursor.
+- ZERO_REGRESSION: true
+- MOVE_PERFORMED: false
+## 2026-09-09 10:33 - 🚨 DANGER / ⚠️ CAUTION lock
+- ROOT: E:\CentralDark\_MAPA_CASA\HARNESS-INVENTARIO
+- LOCK_FILE: .centraldark-lock.json
+- POLICY_DOC: docs\DANGER-LOCK-POLICY.md
+- DEFAULT_STATE: CLOSED
+- UNLOCK_PHRASE: PERMITO SEGREDO
+- READ_WHEN_CLOSED: true
+- WRITE_WHEN_CLOSED: false
+- AUTO_CLOSE_ON_IDLE: true
+- PHYSICAL_ACL_ENFORCEMENT: NOT_APPLIED; evitar auto-bloqueio sem teste isolado.
+- ZERO_REGRESSION: true
+## 2026-09-09 — DELTA COSTURADO: lógica, prova e SOL POC
+- `tlc23(3).pdf` confirmado na Library: Lógica Computacional, Horn, satisfazibilidade, Herbrand e resolução.
+- criado `docs/FORMAL-HORN-REALITY-GATE.md`.
+- criado `docs/CLAIM-HARNESS-META-JUDGE.md`.
+- criado `docs/SOL-POC-PARALLEL-BRIDGE.md`.
+- GitHub confirma `PROOF-OWNERSHIP.json` com prova acíclica, âncora externa e autocertificação sem contraprova = UNPROVEN.
+- PR #1463 contém `centraldark-horn-line-gate`, preanswer gate, PR-trilho e continuidade, logo o Harness deve reutilizar esse mesmo owner sem criar sistema paralelo.
+- `E:\CentralDark\sol-desktop-poc` foi remedido e classificado como superfície experimental paralela, não segundo Core.
+- runtime WebView2 fixo 150.0.4078.105 detectado no ramo SOL POC.
+- arquivos sensíveis detectados no diretório SOL POC permanecem fora de leitura/cópia/log/commit.
+- novo veredito: `SUPPORTED/PROVED_IN_SCOPE != VERDADE_ABSOLUTA`.
+- novo fixed point: fechamento no escopo e premissas declarados, não conclusão metafísica.
+- NEXT_CURSOR: ligar CLAIM_CLASSIFIER → HORN_GATE → PROOF_LEDGER → META_JUDGE ao Harness executável existente, medindo owner e zero regressão antes de código novo.
+## 2026-09-09 — Hermes CLI Overlay / Sync Gate
+- Entrada do Chefe cristalizada e refinada sem modificar Hermes upstream.
+- criado `docs/HERMES-CLI-OVERLAY-SYNC-GATE.md`.
+- criado `docs/HERMES-CLI-OVERLAY.contract.yml`.
+- `DEFAULT_LANGUAGE=pt-BR`; `/language`, `/lang pt-BR`, `/lang en-US` entram como contrato de UX.
+- `/updateBR` definido como alias de upstream update + overlay reconcile + verify + rollback, não fork de updater.
+- fluxo VPS versionável: DETECT → OWNER → DIFF → TEST → COUNTERPROOF → COMMIT → PUSH/PR → REMOTE_VERIFY → RECEIPT.
+- secrets/env/tokens/keys/cache/PID/socket/local-db/log transitório permanecem fora de promoção Git.
+- GitHub medido: HERMES-CORE já possui prompt canônico, scope-lock gate, método universal e Trigger Fabric de learning/receipt/next_cursor.
+- implementação direta de locale/overlay não foi encontrada na busca atual e ficou `OWNER_GAP`, evitando arquitetura paralela.
+- arquitetura raiz atualizada com o ramo Hermes CLI Overlay.
+- NEXT_CURSOR: medir local/upstream TUI hooks, updater real e ponto mínimo de injeção antes de implementar Beta 1.

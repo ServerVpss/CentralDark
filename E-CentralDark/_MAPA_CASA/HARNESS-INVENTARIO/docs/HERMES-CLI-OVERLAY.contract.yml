@@ -1,0 +1,22 @@
+schema: centraldark.hermes-cli-overlay.v1
+owner_family: apps/modulos/HERMES-CORE
+mode: overlay_not_fork
+upstream_mutation: forbidden
+reuse_before_create: true
+one_system_only: true
+unknown_is_not_pass: true
+
+locale:
+  default: pt-BR
+  supported: [pt-BR, en-US]
+  commands: [/language, /lang]
+  missing_translation: LOCALE_MISS
+
+update:
+  alias: /updateBR
+  stages: [UPSTREAM_UPDATE, VERSION_DIFF, OVERLAY_COMPAT, LOCALE_TEST, COMMAND_TEST, SKILL_TEST, ROUTING_TEST, SYNC_GATE, RECEIPT]
+  rollback_on_fail: true
+
+vps_sync_gate:
+  versionable_flow: [DETECT, OWNER, DIFF, TEST, COUNTERPROOF, COMMIT, PUSH_OR_PR, REMOTE_VERIFY, RECEIPT]
+  excluded_classes: [SECRET, ENV, TOKEN, KEY, CACHE, PID, SOCKET, LOCAL_DB, TRANSIENT_LOG]

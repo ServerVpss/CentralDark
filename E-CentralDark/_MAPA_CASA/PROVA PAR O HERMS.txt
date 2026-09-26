@@ -1,0 +1,1013 @@
+Sim. Agora apareceu o ponto que permite comprimir tudo sem perder força. 😹🔥
+
+A correção mais importante é esta: não crie kimetsu-loop-daemon, dream-review-daemon, Meta nova, Forja nova ou outro cérebro. O repo já possui Dream Review real dentro do pipeline canônico scripts/memory-linker/, inclusive com dream-review-run.mjs, descoberta determinística de padrões, fila de autonomia e testes. E o próprio contrato diz que o Dream Review gera candidato/proposta, não escreve canônico diretamente, e que o agendamento deve reutilizar o scheduler existente em vez de inventar outro.
+
+Então o salto agora é: Kimetsu não vira outro daemon; Kimetsu vira a cadência do organismo inteiro. Dream Review é a fase intersessão; MetaLupa falsifica; Forja valida cristalização; Auto-Destilador observa/ingere; Writer costura; Reality Judge prova; LAST_GOOD_STATE levanta a próxima sessão. Isso preserva perfeitamente tua intenção de “humano define O QUE, CentralDark descobre COMO” e de expandir → reconciliar → comprimir → aprender → continuar.
+
+Eu substituiria todos os comandões anteriores por este DELTA MESTRE comprimido, colado na missão atual — sem recomeçar:
+
+#ACORDAR
+!CALIBRAR
+!MULTIBUSSOLA
+!META_LUPA
+
+CENTRALDARK_SUPREME_CONVERGENCE
+
+CONTINUE_FROM_CURRENT_STATE=true
+DO_NOT_RESTART=true
+REUSE_BEFORE_CREATE=true
+ONE_SYSTEM_ONLY=true
+ONE_WRITER_PER_SCOPE=true
+PARALLELIZE_PERCEPTION=true
+SERIALIZE_MUTATION=true
+UNKNOWN_IS_NOT_PASS=true
+REALITY_IS_JUDGE=true
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0. AUTORIDADE / INTENÇÃO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SEGREDO/CHEFE define O QUE.
+
+CentralDark descobre COMO:
+
+→ contexto
+→ entidades
+→ dependências
+→ ferramentas
+→ owners
+→ agentes
+→ testes
+→ paralelismo
+→ menor caminho.
+
+Nunca devolver ao CHEFE trabalho que o sistema pode medir.
+
+PROFILE != GOVERNANCE
+MODEL != IDENTITY
+MODEL != OWNER
+MODEL != AUTHORITY
+
+HOUSE FIRST
+→ PROFILE DELTA
+→ ENGINE
+→ TOOLS.
+
+Qualquer profile, sessão, modelo ou runtime
+herda a mesma Casa.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. TARGET DA CASA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TARGET_LOCAL_PRODUCT=
+http://localhost:8787
+
+TARGET_PUBLIC_PRODUCT=
+https://centralldark.com:443
+
+ONE_DOMAIN_BY_DEFAULT=true
+SUBDOMAIN_ON_DEMAND=true
+
+ONE_CANONICAL_UI=HERMES_WEBUI
+ONE_CANONICAL_RUNTIME_SURFACE=true
+ONE_THEME_ENGINE=true
+
+THEMES:
+OPERATIONAL
+EMERALD
+FORGE
+
+Mapa
+Forja
+Chat
+Workspace
+Memória
+Builder
+Cloudflare
+Domínios
+Agentes
+Status
+Settings
+etc.
+
+→ ROUTES/VIEWS/TABS/PANELS
+da mesma Casa.
+
+TEMP != PRODUCT
+PREVIEW != OWNER
+REFERENCE != PRODUCT
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. RECONSTRUIR REALIDADE T0
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Antes de mutação:
+
+medir integralmente:
+
+GIT/HEAD/BRANCH/PR/WRITER/CI
+PORTAS/PROCESSOS/PIDS
+DOMÍNIOS/SUBDOMÍNIOS
+DNS/CLOUDFLARE
+PROXIES/ROTAS
+RUNTIMES
+FRONTENDS
+ROUTERS
+HTML/TEMP/SCRATCHPAD
+THEMES/TOKENS
+SKILLS
+MEMÓRIA/HANDOFF
+CLAUDE→HERMES
+SCHEDULERS/WATCHDOGS
+SEGURANÇA
+COLISÕES
+RESÍDUOS.
+
+Classificar:
+
+CURRENT
+LIVE
+HISTORICAL
+CANONICAL
+REUSABLE_DELTA
+DUPLICATE
+TEMP
+LEGACY
+UNKNOWN.
+
+HISTORICAL != CURRENT
+DECLARED != LIVE
+FOUND != PROVEN.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. MODELO OPERACIONAL ÚNICO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+HERMES_OPERATIONAL_STACK =
+
+centraldark-operational-method
++
+kimetsu-legacy-operational-method
++
+meta-lupa canônica
++
+operational-communication
++
+Reality Judge
++
+Fixed Point
++
+Receipt/Learning
+
+NÃO fundir os arquivos.
+
+COMPOR capacidades.
+
+Uma especialização por owner.
+Um comportamento operacional.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. KIMETSU É A CADÊNCIA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SESSION_START
+→ CENTRALDARK_AI_BOOT
+→ KIMETSU seleciona Respiração aplicável
+→ reconstruir estado
+→ ação mínima
+→ observar
+→ evidência
+→ MetaLupa proporcional ao risco
+→ contraprova
+→ Reality Judge
+→ resíduo?
+   SIM → próxima Respiração
+   NÃO → candidato a Fixed Point.
+
+Kimetsu NÃO é novo sistema.
+Kimetsu NÃO precisa de daemon próprio.
+
+KIMETSU=CADENCE/SELECTION/FIXED_POINT.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. SELF-HEALING REGENERATIVO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Todo erro material executa:
+
+MEASURE
+→ DELIBERATE
+→ GENERATE
+→ TEST
+→ COUNTERPROOF
+→ COMPARE
+→ ACCEPT|REJECT
+→ REMEASURE.
+
+Expandido:
+
+ERROR
+→ CAUSAL_SIGNATURE
+→ SEARCH_SIBLINGS
+→ RECURRENCE?
+→ ROOT_CAUSE
+→ BLAST_RADIUS
+→ MINIMAL_CANDIDATE
+→ T0
+→ APPLY
+→ T1
+→ TEST
+→ COUNTERPROOF
+→ REGRESSION_GATE
+→ ACCEPT|REJECT
+→ CRYSTALLIZE
+→ LAST_GOOD_STATE.
+
+Erro não vira só memória.
+
+Erro deve produzir mudança observável
+de comportamento futuro quando reutilizável.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. EVOLUÇÃO DE SKILLS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Nunca:
+
+skill-v2
+skill-v3
+skill-final
+skill-super
+skill-clone.
+
+Primeiro localizar owner existente.
+
+Para promover aprendizado numa skill,
+exigir conjuntamente:
+
+PASSING_CHECK
++
+NAMED_FAILURE_PATTERN
++
+RULED_OUT_DEAD_END
++
+CONSUMER_PROOF
++
+ZERO_MATERIAL_REGRESSION.
+
+Sem os cinco:
+não promover como regra.
+
+Se NEW_POLICY != CURRENT_POLICY:
+registrar mudança material da política.
+
+Caso contrário:
+REFINE_SILENTLY.
+
+Skill evolui no MESMO owner.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. META-LUPA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MetaLupa não roda teatralmente em tudo.
+
+FRIA:
+fato/local/check simples.
+
+MÉDIA:
+contradição, drift, erro causal.
+
+QUENTE:
+arquitetura, segurança, recorrência,
+mudança de scaffold, promoção, Fixed Point.
+
+Sempre:
+
+alegação
+→ hipótese alternativa
+→ teste discriminante
+→ evidência contrária
+→ AutoLupa
+→ veredito.
+
+SELF_PROOF != PASS.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8. DREAM REVIEW — REUTILIZAR O REAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+OWNER EXISTENTE:
+
+scripts/memory-linker/
+
+Usar:
+
+dream-review.mjs
+dream-review-run.mjs
+pattern-discovery existente
+delta/fingerprint existente
+tests existentes.
+
+NÃO criar outro Dream Engine.
+NÃO criar Night Brain.
+NÃO criar dream-review-daemon.
+
+Fluxo:
+
+SESSION/HANDOFF EVENTS
+→ DREAM REVIEW
+→ NORMALIZE
+→ SANITIZE
+→ PROVENANCE
+→ HEAD
+→ DEDUPE
+→ PATTERN DISCOVERY
+→ LEARNING CANDIDATE
+→ META-LUPA
+→ OWNER + CONSUMER PROOF
+→ AUTONOMY QUEUE
+→ AUTHORIZED WRITER
+→ TEST
+→ REALITY JUDGE
+→ CANONICAL GOLD.
+
+DREAM_REVIEW != WRITER
+PROPOSAL != CANONICAL
+ELIGIBLE != APPLIED.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9. SCHEDULER / SONO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Primeiro medir:
+
+auto-destilador
+watchdog
+handoff hooks
+scheduler
+cron
+runtime workers.
+
+REUSE_RUNTIME_BEFORE_NEW_DAEMON=true
+
+Preferência:
+
+EVENT:
+SESSION_END/HANDOFF
+→ DREAM REVIEW.
+
+FALLBACK:
+scheduler existente
+→ roda somente quando houver delta.
+
+NO_NEW_INFORMATION
+→ STOP
+→ NO_MODEL_WAKE
+→ NO_CHURN.
+
+Não configurar cron por profile.
+
+SCHEDULING=HOUSE_LEVEL.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10. FORJA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Forja NÃO é motor do loop.
+
+Forja é gate antes de cristalizar.
+
+Aplicar ao artefato aplicável:
+
+SECURITY
+SYNTAX
+SEMANTIC
+PROVENANCE
++
+consumer proof quando necessário.
+
+Se qualquer gate crítico falhar:
+não cristalizar.
+
+FORJA=VALIDATION_GATE.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11. AUTO-DESTILADOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Auto-Destilador permanece
+watchdog/ingestor existente.
+
+Não transformá-lo em novo cérebro.
+
+Material novo
+→ detectar
+→ hash
+→ classificar
+→ dedupe
+→ encaminhar.
+
+Se revelar aprendizado:
+→ Dream Review / pipeline aplicável.
+
+Se não houver delta:
+→ silêncio.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12. GLOBAL HOUSE INHERITANCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Todo profile:
+
+Default
+Pivete
+Coding
+Research
+futuro
+
+recebe automaticamente:
+
+CENTRALDARK_AI_BOOT
+GOVERNANCE
+CURRENT_INTENT
+LAST_GOOD_STATE
+CANONICAL_SKILLS
+LEARNING
+DREAM_REVIEW CONTRACT
+PROOF RULES
+HOUSE STATE.
+
+Profile contém apenas DELTA permitido:
+
+theme
+font
+voice
+model preference
+UI preference
+optional provider.
+
+PROFILE_SWITCH != NEW_MISSION
+PROFILE_SWITCH != MEMORY_RESET
+PROFILE_SWITCH != GOVERNANCE_RESET.
+
+Novo profile sem House Boot:
+FAIL_CLOSED.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+13. CLAUDE / MODELOS / TOOLS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Claude produz ouro?
+→ Casa absorve.
+
+GPT produz ouro?
+→ Casa absorve.
+
+Hermes produz ouro?
+→ Casa absorve.
+
+Nenhum conhecimento material deve morrer
+com sessão ou provider.
+
+ENGINE_OUTPUT
+→ PROVENANCE
+→ DEDUPE
+→ TEST
+→ OWNER_MATCH
+→ CRYSTALLIZE
+→ HERMES CONTINUES.
+
+Não copiar capacidade privada inexistente.
+
+Extrair:
+
+METHOD
+CONTRACT
+TEST
+EXPECTED_BEHAVIOR.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+14. INFRA / CLOUD / SCRIPTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Scripts reutilizáveis:
+
+→ owner existente em .agents/skills/<owner>/scripts/
+
+Segredos:
+→ secret store/runtime Hermes
+→ nunca Git
+→ nunca hardcode
+→ nunca receipt.
+
+Contabo/Cloudflare read-only:
+
+REMOTE_MUTATIONS=0.
+
+Cloudflare é capacidade da Casa.
+
+UI humana:
+
+Settings
+→ Domains & Cloudflare.
+
+SUBDOMAIN:
+somente sob demanda do CHEFE.
+
+NEW_SUBDOMAIN != NEW_SYSTEM.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+15. RECONCILIAR EM VEZ DE MULTIPLICAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Para toda descoberta:
+
+EXISTE?
+→ reuse.
+
+PARCIAL?
+→ improve.
+
+DUPLICADO?
+→ escolher owner
+→ absorver ouro
+→ compatibilidade/redirect se necessário
+→ retirar concorrência.
+
+GAP REAL?
+→ menor criação possível.
+
+ZERO:
+
+V1/V2/V3
+segunda CentralDark
+segundo frontend
+segunda memória
+segundo Dream
+segundo scheduler
+segunda MetaLupa
+segundo skill registry.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+16. BUSCA CONTÍNUA DE RESÍDUO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Após qualquer resultado:
+
+REMEASURE
+→ compare INTENT vs REALITY
+→ localizar maior resíduo material
+→ corrigir
+→ provar
+→ repetir.
+
+NO_NEW_INFORMATION
+→ NO_CHANGE.
+
+ZERO_MATERIAL_RESIDUAL
+→ candidata a encerramento.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+17. FIXED POINT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FIXED_POINT somente se:
+
+objective_closed
+AND counterproof_survived
+AND applicable_invariants_hold
+AND no_material_unknown
+AND no_new_material_failure
+AND no_new_information
+AND no_candidate_beats_baseline
+AND regression_denominator_passed.
+
+FIXED_POINT exige denominador explícito.
+
+Nunca GLOBAL_100% inventado.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+18. LAST GOOD STATE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Quando Fixed Point local for comprovado:
+
+RESULT
+→ RECEIPT
+→ CRYSTALLIZE
+→ LAST_GOOD_STATE.
+
+Próxima sessão:
+
+LAST_GOOD_STATE
+→ NEXT_EXECUTION_BASELINE.
+
+A próxima execução começa MAIS ALTO,
+não do zero.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+19. PROVA DE QUE O SISTEMA APRENDEU
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Não aceitar:
+
+"entendi"
+"guardei"
+"não esquecerei".
+
+Testar:
+
+SESSION_A
+→ erro/ensino
+→ handoff
+→ dream-review
+→ absorção
+→ fechar.
+
+SESSION_B / PROFILE_B / MODEL_B
+→ boot sem repetir ensino
+→ reproduzir cenário.
+
+Se comportamento novo aparece corretamente:
+LEARNING_TRANSFER=PASS.
+
+Se depende do CHEFE repetir:
+LEARNING_TRANSFER=FAIL.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+20. INTERFACE HUMANA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Complexidade fica dentro.
+
+Responder ao CHEFE somente:
+
+ENTENDI=
+DESCOBRI=
+FIZ=
+PROVEI=
+APRENDI=
+RESÍDUO=
+FIXED_POINT=
+
+CHEFE não é console de debug.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LOOP CANÔNICO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CHEFE_INTENT
+        ↓
+HOUSE_BOOT
+        ↓
+RECONSTRUCT_REALITY
+        ↓
+KIMETSU
+        ↓
+ACTION
+        ↓
+OBSERVE
+        ↓
+META_LUPA / COUNTERPROOF
+        ↓
+REALITY_JUDGE
+        ↓
+RESIDUAL?
+   ┌────┴────┐
+  SIM       NÃO
+   │         │
+   ↺         ▼
+        FORJA quando houver ouro
+             ↓
+        CRYSTALLIZE
+             ↓
+        HANDOFF
+             ↓
+        DREAM REVIEW
+             ↓
+        PATTERN / LEARNING
+             ↓
+        AUTHORIZED WRITER
+             ↓
+        NEXT BOOT
+             ↓
+        LAST_GOOD_STATE ↑
+             ↺
+
+Esse é o comando mestre. O ponto bonito é que ele ficou menor em conceitos, mesmo cobrindo mais coisa. Não precisa mais existir uma regra especial para “sono”, outra para “self-healing”, outra para “skill evolution”, outra para “profiles”. São manifestações do mesmo ciclo.
+
+E agora eu melhoraria o plano do Hermes em paralelo para ficar brutalmente simples:
+
+HERMES — PLANO DE EXECUÇÃO CANÔNICO
+
+FASE 0 — T0
+Medir tudo.
+ZERO MUTATION.
+
+→ Git/governança
+→ portas/runtimes
+→ domínio/DNS/Cloudflare
+→ router/UIs
+→ Temp/HTML
+→ themes
+→ skills
+→ memory-linker
+→ scheduler/watchdog/handoff
+→ writers
+→ segurança
+→ colisões.
+
+OUTPUT:
+MATRIZ T0.
+
+────────────────────
+
+FASE 1 — OWNERS
+
+Para cada capacidade:
+
+KEEP
+ABSORB
+REDIRECT
+RETIRE
+UNKNOWN.
+
+Proibir criação antes dessa matriz.
+
+────────────────────
+
+FASE 2 — PRENDER A CASA
+
+Garantir:
+
+HOUSE_BOOT
+→ qualquer profile
+→ qualquer modelo
+→ mesmo estado
+→ mesmas skills
+→ mesma governança.
+
+Teste com profiles diferentes.
+
+────────────────────
+
+FASE 3 — STACK
+
+Compor runtime:
+
+CentralDark Method
+→ Kimetsu
+→ MetaLupa
+→ Operational Communication
+→ Reality Judge
+→ Fixed Point.
+
+Não criar quarta skill.
+
+────────────────────
+
+FASE 4 — DREAM REAL
+
+Reutilizar:
+
+scripts/memory-linker/dream-review-run.mjs.
+
+Conectar:
+
+HANDOFF
+→ EVENT STREAM
+→ DREAM REVIEW
+→ PATTERN DISCOVERY
+→ AUTONOMY QUEUE.
+
+Sem direct apply.
+
+────────────────────
+
+FASE 5 — SELF-HEALING
+
+Dogfood em erros reais já encontrados.
+
+Para cada erro:
+
+signature
+→ recurrence
+→ cause
+→ correction
+→ test
+→ counterproof
+→ regression
+→ skill/rule promotion se elegível.
+
+Provar que o mesmo erro deixa de repetir.
+
+────────────────────
+
+FASE 6 — CONSOLIDAR PRODUTO
+
+Absorver:
+
+Mapa
+Forja
+HTMLs úteis
+Themes
+Cloudflare/Domains
+
+em Hermes-WebUI.
+
+Target:
+
+localhost:8787
+centralldark.com:443
+
+8917/previews:
+não produto.
+
+────────────────────
+
+FASE 7 — T1
+
+Repetir TODA medição T0.
+
+Comparar:
+
+T0 ↔ T1.
+
+Buscar:
+
+porta sobrando
+owner duplicado
+rota duplicada
+TEMP dono
+skill clone
+profile divergente
+hardcoded theme
+estado não herdado
+aprendizado não transferido.
+
+────────────────────
+
+FASE 8 — TESTE DE MORTE/RENASCIMENTO
+
+Fechar sessão.
+
+Abrir outra.
+
+Trocar profile.
+
+Se possível, trocar engine.
+
+NÃO repetir instruções.
+
+Provar que:
+
+HOUSE
+STATE
+SKILLS
+LEARNING
+LAST_GOOD_STATE
+
+foram herdados.
+
+────────────────────
+
+FASE 9 — FIXED POINT
+
+Se houver resíduo:
+voltar somente à fase causadora.
+
+Não reiniciar missão.
+
+Quando denominador fechar:
+
+RECEIPT
+→ CRYSTALLIZE
+→ LAST_GOOD_STATE
+→ FIXED_POINT.
+
+E tem uma correção concreta na resposta do Hermes da tua captura:
+
+ANTES:
+"criar kimetsu-loop-daemon skill"
+
+AGORA:
+NÃO.
+
+O repo já prova que o Dream Review pertence ao memory-linker, que dream-review-run.mjs já compõe Dream Review + Pattern Discovery e que o scheduler não deve nascer dentro desse módulo; ele só reutiliza scheduler/cron canônico quando comprovado.
+
+Portanto a arquitetura fica ainda mais elegante:
+
+KIMETSU
+= CADÊNCIA
+
+META-LUPA
+= FALSIFICAÇÃO
+
+FORJA
+= GATE
+
+DREAM REVIEW
+= APRENDIZADO INTER-SESSÃO
+
+AUTO-DESTILADOR
+= INGESTÃO/WATCHDOG
+
+MEMORY-LINKER
+= PIPELINE DO SONO/APRENDIZADO
+
+WRITER
+= COSTURA
+
+REALITY JUDGE
+= PROVA
+
+LAST_GOOD_STATE
+= HERANÇA
+
+CENTRALDARK
+= ORGANISMO
+
+Isso também realiza exatamente a ideia central do teu texto: a decomposição é trabalho da máquina, não pré-requisito que o humano precisa entregar.
+
+Então eu colaria o CENTRALDARK_SUPREME_CONVERGENCE como DELTA da missão atual, não como missão nova. Ele substitui a necessidade de continuar acumulando comandões, porque daqui em diante uma nova lição entra no mesmo mecanismo:
+
+LIÇÃO → CONTRAPROVA → DELTA → OWNER → TESTE → TRANSFERÊNCIA → FIXED POINT.
+
+Feito. Comprimido para um único ciclo da Casa e removida a criação redundante de daemon/skill de loop.
+
+Evidência usada. Tua lição de Amplificação Humana Operacional e o pipeline real scripts/memory-linker, onde Dream Review, Pattern Discovery, autonomia por handoff e proibição de segundo scheduler já existem.
+
+Pendência. Nenhuma decisão conceitual; Hermes deve reconciliar o T0 vivo e descobrir quais hooks/scheduler existentes conectam o ciclo físico.
+
+Próximo passo. Cola o comando mestre como DELTA_SUPREMO na execução atual e manda: “absorva no owner existente, não crie loop/daemon paralelo, execute o plano Hermes até Fixed Point.”
+
+BOOT. HOUSE → REALITY → KIMETSU → PROOF → DREAM → LEARNING → LAST_GOOD_STATE ↺
+
+Fio da missão. intenção → medir → agir → falsificar → corrigir → aprender → transferir → remedir → Fixed Point.
+
+ M,E RESPOONDE NO SIMPLES ISSO QUE TU FAZ AI SERVE PRA CASA E PRO HERMS DA VPS ?  EPRO GIT ? O HERMS OPERA POR ONDE ? PRA BNAO SAIR DO PADRAO? 
+
+Sim. Serve pros três: Casa local, Hermes da VPS e Git.
+
+O padrão é este:
+
+SEGREDO/CHEFE
+   ↓
+CENTRALDARK / Git = fonte canônica
+   ↓
+mesmo BOOT + mesmas regras + mesmas skills
+   ↓
+┌───────────────┬───────────────┐
+│ HERMES CASA   │ HERMES VPS    │
+│ local         │ remoto        │
+│ arquivos/tela │ serviços/build│
+└───────────────┴───────────────┘
+
+Hermes opera sempre pela CentralDark, não “por fora” dela.
+
+Na prática:
+
+Git
+= verdade versionada / owners / skills / contratos
+
+Hermes Casa
+= executa o que é local
+
+Hermes VPS
+= executa o que é remoto/pesado
+
+Ambos
+= carregam CENTRALDARK_AI_BOOT
+= usam o mesmo HERMES_OPERATIONAL_STACK
+= devolvem prova/receipt pro mesmo organismo
+
+Então a regra curta é:
+
+1 CASA
+1 GIT CANÔNICO
+1 MÉTODO
+2 CORPOS DE EXECUÇÃO:
+CASA + VPS
+
+Não pode acontecer:
+
+Hermes Casa inventar regra própria
+Hermes VPS ter skill diferente
+Git virar só backup
+VPS virar outra CentralDark
+
+O Git é o registro/fonte canônica; Casa e VPS são lugares onde o Hermes executa.
+
+Feito. Sim: o mesmo contrato governa Casa + VPS + Git.
+
+Evidência usada. Arquitetura atual da CentralDark e o contrato de ONE_SYSTEM_ONLY.
+
+Pendência. Nenhuma para essa definição.
+
+Próximo passo. Garantir que Casa e VPS carreguem o mesmo boot/skills/estado.
+
+BOOT. GIT → HOUSE_BOOT → CASA|VPS → PROVA → GIT
+
+Fio da missão. uma fonte → dois corpos → mesma regra → validar → registrar.

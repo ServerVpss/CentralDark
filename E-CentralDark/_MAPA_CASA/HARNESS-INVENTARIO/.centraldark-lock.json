@@ -1,0 +1,17 @@
+{
+  "schema": "centraldark.harness.lock.v1",
+  "root": "E:\\CentralDark\\_MAPA_CASA\\HARNESS-INVENTARIO",
+  "state": "OPEN",
+  "severity": ["DANGER", "CAUTION"],
+  "unlock_phrase": "PERMITO SEGREDO",
+  "explicit_permission_required": true,
+  "current_authorization": "CHEFE declarou CADEADO ABERTO nesta sessão",
+  "scope": "DOCUMENTACAO_E_ARQUITETURA_SEM_MUTACAO_DE_RUNTIME",
+  "default_on_idle": "CLOSED",
+  "allow_reads_when_closed": true,
+  "allow_writes_when_closed": false,
+  "allow_move_delete_when_closed": false,
+  "zero_regression": true,
+  "unknown_is_not_pass": true,
+  "opened_at": "2026-09-09T11:00:00-03:00"
+}

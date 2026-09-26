@@ -1,0 +1,23 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+
+<WindowsRE version="2.0">
+  <WinreBCD id="{4aaba3e4-9b6b-11f0-ba17-50ebf637ad4f}"/>
+  <WinreLocation path="\Recovery\WindowsRE" id="0" offset="483817160704" guid="{0dcaed36-7b0a-42d0-89d3-d96c110db478}"/>
+  <ImageLocation path="" id="0" offset="0" guid="{00000000-0000-0000-0000-000000000000}"/>
+  <PBRImageLocation path="" id="0" offset="0" guid="{00000000-0000-0000-0000-000000000000}" index="0"/>
+  <PBRCustomImageLocation path="" id="0" offset="0" guid="{00000000-0000-0000-0000-000000000000}" index="0"/>
+  <InstallState state="1"/>
+  <OsInstallAvailable state="0"/>
+  <CustomImageAvailable state="0"/>
+  <IsAutoRepairOn state="1"/>
+  <WinREStaged state="0"/>
+  <OperationParam path=""/>
+  <OperationPermanent state="0"/>
+  <OsBuildVersion path="26100.1.amd64fre.ge_release.240331-1435"/>
+  <OemTool state="0"/>
+  <IsServer state="0"/>
+  <DownlevelWinreLocation path="" id="0" offset="0" guid="{00000000-0000-0000-0000-000000000000}"/>
+  <IsWimBoot state="0"/>
+  <NarratorScheduled state="0"/>
+  <ScheduledOperation state="5"/>
+</WindowsRE>
