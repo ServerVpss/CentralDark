@@ -72,3 +72,16 @@ NEXT_CURSOR:
 - Para Screenpipe: quando Casa runtime estiver disponível, provar PROCESS + HEALTH + RECENT_DATA + QUERY_USABLE + MCP_CONSUMPTION no owner existente; no VPS, manter 3030 do GraphPanel e não tentar daemon nativo bloqueado por GLIBC.
 
 FIXED_POINT: false — delta local provado; CI remoto, deploy e Screenpipe permanecem pendentes/bloqueados conforme acima.
+
+## Continuação — badge coverage no HEAD d4a9c4ae0d0ebf0339f080ab1e2572f575c6c9e6
+
+CURRENT: PR #1698 head d4a9c4ae0d0ebf0339f080ab1e2572f575c6c9e6. Porta-de-entrada no run 36212760342/job 108355764409 falhou no step Status Badge Fabric: WORKFLOW_FILES=65, WORKFLOW_BADGES_INDEXED=62, MISSING=3 (centraldark-execution-contract.yml, inventario-casa.yml, recibo-telegram-gabarito.yml). Os steps anteriores passaram, incluindo REPO_CONTRACT_VERIFY, CANONICAL_RUNNER_POLICY, SELF_HEALING_CONTRACT e PORTA_OK.
+
+CAUSE_ROOT: os três workflows acabaram de entrar/serem atualizados no conjunto de workflows, mas o índice canônico docs/STATUS-BADGES.md não havia sido regenerado. O teste do radar também localizou os mesmos 3 workflows como violações do cânone visual; esse delta visual já foi corrigido no HEAD d4a9c4ae0d0ebf0339f080ab1e2572f575c6c9e6.
+
+CORRECTION: executado o gerador existente em modo local determinístico `BADGE_FABRIC_LOCAL_ONLY=1 python3 scripts/ci/generate_status_badges.py`, sem inventar branch/PR/run telemetry. O mesmo índice canônico foi regenerado, cobrindo os 65 workflows atuais.
+
+COUNTERPROOF: `python3 scripts/ci/verify_status_badge_coverage.test.py` PASS (3 testes); `python3 scripts/ci/verify_status_badge_coverage.py` PASS (`WORKFLOW_FILES=65`, `WORKFLOW_BADGES_INDEXED=65`, `MISSING=0`, `EXTRA=0`); `git diff --check` PASS. O novo delta foi aplicado ao mesmo branch/owner; o CI do commit subsequente ainda precisa reexecutar para provar GitHub/SAME_HEAD.
+
+FILES_CHANGED_THIS_CONTINUATION: docs/STATUS-BADGES.md.
+NEXT_CURSOR: commitar e subir regeneração do índice; medir falha exata no commit novo; continuar até CI SAME_HEAD, causa-raiz remanescente ou blocker real. Não promover enquanto checks materiais falharem/penderem.
