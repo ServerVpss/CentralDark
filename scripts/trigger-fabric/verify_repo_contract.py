@@ -347,6 +347,45 @@ check('docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',[
  '"GREG_VERDICT_REQUIRED_BEFORE_GREEN"',
  '"DEX_APPROVAL_REQUIRED_FOR_CRITICAL_DELTA"',
 ], classification='TIK_TAK_HARD_GATES_REGISTERED')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SYSTEM-SENTINEL.yml',[
+ 'FIXED_POINT_ROUTE_IS_DETERMINISTIC: true',
+ 'SAME_FINGERPRINT_NO_FULL_REPLAY: true',
+ 'event_type: centraldark_sentinel_route',
+ 'same_fingerprint: REUSE_PROOF_NO_REPEAT',
+ 'changed_fingerprint: REVALIDATE_AFFECTED_CHAIN_ONLY',
+ 'runner: scripts/sentinela/run.mjs',
+ 'kernel_runtime: scripts/trigger-fabric/system_sentinel.py',
+], classification='SENTINEL_DETERMINISTIC_FIXED_ROUTE_CONTRACT')
+check('scripts/trigger-fabric/system_sentinel.py',[
+ 'FIXED_ROUTE = [',
+ '"INTENT"',
+ '"CONTRACT_CURRENT"',
+ '"SENSOR"',
+ '"T0"',
+ '"REALITY_JUDGE"',
+ '"HUD"',
+ '"NEXT_CURSOR"',
+ '"REUSE_PROOF_NO_REPEAT"',
+ '"REVALIDATE_AFFECTED_CHAIN_ONLY"',
+ 'FIXED_POINT_SEALED',
+ '--route-json',
+], classification='SENTINEL_DETERMINISTIC_FIXED_ROUTE_RUNTIME')
+check('.github/workflows/sentinela-divergencias.yml',[
+ 'centraldark_sentinel_route',
+ 'CENTRALDARK_SENTINEL_STATE_PATH',
+ 'python3 scripts/trigger-fabric/system_sentinel.py --self-test',
+ 'node scripts/sentinela/run.mjs',
+], classification='SENTINEL_EXISTING_RUNNER_API_BINDING')
+check('.github/workflows/hermes-core-signal-watch.yml',[
+ "event_type: 'centraldark_sentinel_route'",
+ "source: 'coderabbit'",
+ 'CODERABBIT_SENTINEL_ROUTE=DISPATCHED',
+], classification='CODERABBIT_TO_SENTINEL_API_ROUTE')
+check('.github/workflows/dependabot-auto-merge.yml',[
+ "event_type: 'centraldark_sentinel_route'",
+ "source: 'dependabot'",
+ 'DEPENDABOT_SENTINEL_ROUTE=DISPATCHED',
+], classification='DEPENDABOT_TO_SENTINEL_API_ROUTE')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
  'engine_is_owner: false','prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md','LOAD_REFERENCE',
  'SELF_HEALING_FAILURE_LOOP','ANY_PR_OR_COMMIT_GATE','CANONICAL_SELF_HOSTED_RUNNER_POLICY'
