@@ -1,0 +1,647 @@
+module.exports = [
+"[externals]/path [external] (path, cjs)", ((__turbopack_context__, module, exports) => {
+
+const mod = __turbopack_context__.x("path", () => require("path"));
+
+module.exports = mod;
+}),
+"[externals]/os [external] (os, cjs)", ((__turbopack_context__, module, exports) => {
+
+const mod = __turbopack_context__.x("os", () => require("os"));
+
+module.exports = mod;
+}),
+"[externals]/fs [external] (fs, cjs)", ((__turbopack_context__, module, exports) => {
+
+const mod = __turbopack_context__.x("fs", () => require("fs"));
+
+module.exports = mod;
+}),
+"[project]/src/lib/dataPaths.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "APP_NAME",
+    ()=>APP_NAME,
+    "getDefaultDataDir",
+    ()=>getDefaultDataDir,
+    "getLegacyDotDataDir",
+    ()=>getLegacyDotDataDir,
+    "isSamePath",
+    ()=>isSamePath,
+    "resolveDataDir",
+    ()=>resolveDataDir,
+    "resolveWritableDataDir",
+    ()=>resolveWritableDataDir
+]);
+var __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/path [external] (path, cjs)");
+var __TURBOPACK__imported__module__$5b$externals$5d2f$os__$5b$external$5d$__$28$os$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/os [external] (os, cjs)");
+var __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/fs [external] (fs, cjs)");
+;
+;
+;
+const APP_NAME = "omniroute";
+function fallbackHomeDir() {
+    const envHome = process.env.HOME || process.env.USERPROFILE;
+    if (typeof envHome === "string" && envHome.trim().length > 0) {
+        return __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].resolve(envHome);
+    }
+    return __TURBOPACK__imported__module__$5b$externals$5d2f$os__$5b$external$5d$__$28$os$2c$__cjs$29$__["default"].tmpdir();
+}
+function safeHomeDir() {
+    try {
+        return __TURBOPACK__imported__module__$5b$externals$5d2f$os__$5b$external$5d$__$28$os$2c$__cjs$29$__["default"].homedir();
+    } catch  {
+        return fallbackHomeDir();
+    }
+}
+function normalizeConfiguredPath(dir) {
+    if (typeof dir !== "string") return null;
+    const trimmed = dir.trim();
+    if (!trimmed) return null;
+    return __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].resolve(trimmed);
+}
+function getLegacyDotDataDir() {
+    return __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join(safeHomeDir(), `.${APP_NAME}`);
+}
+function getDefaultDataDir() {
+    const homeDir = safeHomeDir();
+    const legacyDir = getLegacyDotDataDir();
+    // Preserve legacy path if it exists to avoid data loss on updates (e.g., Windows migration)
+    if (__TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["default"].existsSync(legacyDir)) {
+        try {
+            if (__TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["default"].statSync(legacyDir).isDirectory()) {
+                return legacyDir;
+            }
+        } catch  {
+        // Ignore stat errors
+        }
+    }
+    if ("TURBOPACK compile-time truthy", 1) {
+        const appData = process.env.APPDATA || __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join(homeDir, "AppData", "Roaming");
+        return __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join(appData, APP_NAME);
+    }
+    //TURBOPACK unreachable
+    ;
+    // Support XDG on Linux/macOS when explicitly configured.
+    const xdgConfigHome = undefined;
+}
+function resolveDataDir({ isCloud = false } = {}) {
+    if (isCloud) return "/tmp";
+    const configured = normalizeConfiguredPath(process.env.DATA_DIR);
+    if (configured) return configured;
+    return getDefaultDataDir();
+}
+function resolveWritableDataDir({ isCloud = false } = {}) {
+    const resolved = resolveDataDir({
+        isCloud
+    });
+    // Cloud/serverless never owns a writable home dir; leave its sentinel alone.
+    if (isCloud) return resolved;
+    // No explicit override → already the default user dir; nothing to fall back to.
+    const configured = normalizeConfiguredPath(process.env.DATA_DIR);
+    if (!configured) return resolved;
+    try {
+        __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["default"].mkdirSync(resolved, {
+            recursive: true
+        });
+        return resolved;
+    } catch (err) {
+        const code = err?.code;
+        if (code === "EACCES" || code === "EPERM") {
+            const fallback = getDefaultDataDir();
+            console.warn(`[DATA_DIR] '${resolved}' is not writable (${code}) → falling back to '${fallback}'`);
+            return fallback;
+        }
+        throw err;
+    }
+}
+function isSamePath(a, b) {
+    if (!a || !b) return false;
+    const normalizedA = __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].resolve(a);
+    const normalizedB = __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].resolve(b);
+    if ("TURBOPACK compile-time truthy", 1) {
+        return normalizedA.toLowerCase() === normalizedB.toLowerCase();
+    }
+    //TURBOPACK unreachable
+    ;
+}
+}),
+"[project]/src/lib/logEnv.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "getAppLogFilePath",
+    ()=>getAppLogFilePath,
+    "getAppLogFormat",
+    ()=>getAppLogFormat,
+    "getAppLogLevel",
+    ()=>getAppLogLevel,
+    "getAppLogMaxFileSize",
+    ()=>getAppLogMaxFileSize,
+    "getAppLogMaxFiles",
+    ()=>getAppLogMaxFiles,
+    "getAppLogRetentionDays",
+    ()=>getAppLogRetentionDays,
+    "getAppLogRetentionDaysOverride",
+    ()=>getAppLogRetentionDaysOverride,
+    "getAppLogToFile",
+    ()=>getAppLogToFile,
+    "getCallLogMaxEntries",
+    ()=>getCallLogMaxEntries,
+    "getCallLogPipelineCaptureStreamChunks",
+    ()=>getCallLogPipelineCaptureStreamChunks,
+    "getCallLogPipelineMaxSizeBytes",
+    ()=>getCallLogPipelineMaxSizeBytes,
+    "getCallLogRetentionDays",
+    ()=>getCallLogRetentionDays,
+    "getCallLogRetentionDaysOverride",
+    ()=>getCallLogRetentionDaysOverride,
+    "getCallLogsTableMaxRows",
+    ()=>getCallLogsTableMaxRows,
+    "getChatLogArrayTailItems",
+    ()=>getChatLogArrayTailItems,
+    "getChatLogMaxDepth",
+    ()=>getChatLogMaxDepth,
+    "getChatLogMaxObjectKeys",
+    ()=>getChatLogMaxObjectKeys,
+    "getChatLogTextLimit",
+    ()=>getChatLogTextLimit,
+    "getProxyLogsTableMaxRows",
+    ()=>getProxyLogsTableMaxRows,
+    "isChatDebugFileEnabled",
+    ()=>isChatDebugFileEnabled,
+    "parseFileSize",
+    ()=>parseFileSize
+]);
+var __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/path [external] (path, cjs)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$dataPaths$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/dataPaths.ts [instrumentation] (ecmascript)");
+;
+;
+const DEFAULT_APP_LOG_RETENTION_DAYS = 7;
+const DEFAULT_CALL_LOG_RETENTION_DAYS = 7;
+const DEFAULT_APP_LOG_MAX_SIZE = 50 * 1024 * 1024;
+const DEFAULT_APP_LOG_MAX_FILES = 20;
+const DEFAULT_CALL_LOG_MAX_ENTRIES = 10000;
+const DEFAULT_CALL_LOGS_TABLE_MAX_ROWS = 100000;
+const DEFAULT_CALL_LOG_PIPELINE_MAX_SIZE_KB = 512;
+const DEFAULT_PROXY_LOGS_TABLE_MAX_ROWS = 100000;
+/**
+ * Default app log path, anchored to DATA_DIR (never `process.cwd()`).
+ *
+ * The globally-installed CLI runs from an arbitrary working directory, so anchoring
+ * the default to cwd made file logging silently no-op under an unrelated directory
+ * (#6197). Computed lazily so a per-process/per-test `DATA_DIR` override is honoured
+ * (the env var is read at call time, not at module load). Uses the pure
+ * `resolveDataDir()` resolver — no directory creation side effects in a path getter.
+ */ function getDefaultAppLogPath() {
+    return __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$dataPaths$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["resolveDataDir"])(), "logs", "application", "app.log");
+}
+function parsePositiveInt(value, fallback) {
+    if (!value) return fallback;
+    const parsed = Number.parseInt(value, 10);
+    return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
+function parseNonNegativeInt(value, fallback) {
+    if (value === undefined || value === "") return fallback;
+    const parsed = Number.parseInt(value, 10);
+    return Number.isInteger(parsed) && parsed >= 0 ? parsed : fallback;
+}
+function parseBoolean(value, fallback) {
+    if (!value) return fallback;
+    const normalized = value.trim().toLowerCase();
+    if ([
+        "1",
+        "true",
+        "yes",
+        "on"
+    ].includes(normalized)) return true;
+    if ([
+        "0",
+        "false",
+        "no",
+        "off"
+    ].includes(normalized)) return false;
+    return fallback;
+}
+function parseFileSize(raw) {
+    if (!raw) return DEFAULT_APP_LOG_MAX_SIZE;
+    const match = raw.match(/^(\d+)\s*(k|m|g|kb|mb|gb)?$/i);
+    if (!match) return DEFAULT_APP_LOG_MAX_SIZE;
+    const num = parseInt(match[1], 10);
+    const unit = (match[2] || "").toLowerCase();
+    switch(unit){
+        case "k":
+        case "kb":
+            return num * 1024;
+        case "m":
+        case "mb":
+            return num * 1024 * 1024;
+        case "g":
+        case "gb":
+            return num * 1024 * 1024 * 1024;
+        default:
+            return num;
+    }
+}
+function getAppLogToFile() {
+    return process.env.APP_LOG_TO_FILE !== "false";
+}
+function getAppLogFilePath() {
+    return process.env.APP_LOG_FILE_PATH || getDefaultAppLogPath();
+}
+function getAppLogMaxFileSize() {
+    return parseFileSize(process.env.APP_LOG_MAX_FILE_SIZE);
+}
+function getAppLogRetentionDays() {
+    return parsePositiveInt(process.env.APP_LOG_RETENTION_DAYS, DEFAULT_APP_LOG_RETENTION_DAYS);
+}
+function getCallLogRetentionDays() {
+    return parsePositiveInt(process.env.CALL_LOG_RETENTION_DAYS, DEFAULT_CALL_LOG_RETENTION_DAYS);
+}
+/**
+ * Returns the explicit operator-set retention override (a positive integer), or `null`
+ * when the env var is unset/empty/invalid. Callers give an explicit env var precedence
+ * over the dashboard's database retention, while falling back to the dashboard (not the
+ * hardcoded 7-day default) when the operator did not set the env var. (#4354)
+ */ function parsePositiveIntOrNull(value) {
+    if (value === undefined || value === "") return null;
+    const parsed = Number.parseInt(value, 10);
+    return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
+}
+function getAppLogRetentionDaysOverride() {
+    return parsePositiveIntOrNull(process.env.APP_LOG_RETENTION_DAYS);
+}
+function getCallLogRetentionDaysOverride() {
+    return parsePositiveIntOrNull(process.env.CALL_LOG_RETENTION_DAYS);
+}
+function getAppLogMaxFiles() {
+    return parsePositiveInt(process.env.APP_LOG_MAX_FILES, DEFAULT_APP_LOG_MAX_FILES);
+}
+function getCallLogMaxEntries() {
+    return parsePositiveInt(process.env.CALL_LOG_MAX_ENTRIES, DEFAULT_CALL_LOG_MAX_ENTRIES);
+}
+function getCallLogsTableMaxRows() {
+    return parsePositiveInt(process.env.CALL_LOGS_TABLE_MAX_ROWS, DEFAULT_CALL_LOGS_TABLE_MAX_ROWS);
+}
+function getCallLogPipelineCaptureStreamChunks() {
+    return parseBoolean(process.env.CALL_LOG_PIPELINE_CAPTURE_STREAM_CHUNKS, true);
+}
+function getCallLogPipelineMaxSizeBytes() {
+    return parsePositiveInt(process.env.CALL_LOG_PIPELINE_MAX_SIZE_KB, DEFAULT_CALL_LOG_PIPELINE_MAX_SIZE_KB) * 1024;
+}
+function getProxyLogsTableMaxRows() {
+    return parsePositiveInt(process.env.PROXY_LOGS_TABLE_MAX_ROWS, DEFAULT_PROXY_LOGS_TABLE_MAX_ROWS);
+}
+function getAppLogLevel(defaultLevel) {
+    return process.env.APP_LOG_LEVEL || defaultLevel;
+}
+function getAppLogFormat(defaultFormat) {
+    return process.env.APP_LOG_FORMAT || defaultFormat;
+}
+function getChatLogTextLimit() {
+    return parsePositiveInt(process.env.CHAT_LOG_TEXT_LIMIT, 64 * 1024);
+}
+function getChatLogArrayTailItems() {
+    return parsePositiveInt(process.env.CHAT_LOG_ARRAY_TAIL_ITEMS, 24);
+}
+function getChatLogMaxDepth() {
+    return parsePositiveInt(process.env.CHAT_LOG_MAX_DEPTH, 6);
+}
+function getChatLogMaxObjectKeys() {
+    return parseNonNegativeInt(process.env.CHAT_LOG_MAX_OBJECT_KEYS, 80);
+}
+function isChatDebugFileEnabled() {
+    if (parseBoolean(process.env.CHAT_DEBUG_FILE, false)) return true;
+    return process.env.APP_LOG_LEVEL?.trim().toLowerCase() === "debug";
+}
+}),
+"[project]/open-sse/utils/logger.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "createLogger",
+    ()=>createLogger,
+    "default",
+    ()=>__TURBOPACK__default__export__,
+    "defaultLogger",
+    ()=>defaultLogger,
+    "generateRequestId",
+    ()=>generateRequestId,
+    "log",
+    ()=>log,
+    "logger",
+    ()=>logger,
+    "maskKey",
+    ()=>maskKey
+]);
+/**
+ * Structured console logger utility for omniroute.
+ *
+ * Provides consistent, machine-parseable log output across the codebase.
+ * Supports two output formats controlled by APP_LOG_FORMAT env var:
+ *   - "text" (default): [LEVEL] [TAG] message {metadata}
+ *   - "json": Single-line JSON objects for log aggregators
+ *
+ * Usage:
+ *   import { logger, createLogger, generateRequestId } from "../utils/logger.ts";
+ *
+ *   // Tag-based (simple — for services/utilities):
+ *   const log = logger("CHAT");
+ *   log.info("Request received", { model: "claude-4" });
+ *
+ *   // Request-scoped (with correlation ID — for request pipelines):
+ *   const reqLog = createLogger(generateRequestId());
+ *   reqLog.info("AUTH", "Token refreshed", { provider: "claude" });
+ *
+ * Environment variables:
+ *   APP_LOG_LEVEL  — minimum level: debug | info | warn | error (default: info)
+ *   APP_LOG_FORMAT — output format: text | json (default: text)
+ */ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$logEnv$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/logEnv.ts [instrumentation] (ecmascript)");
+;
+const LEVELS = {
+    debug: 0,
+    info: 1,
+    warn: 2,
+    error: 3
+};
+function isLogLevel(value) {
+    return Object.prototype.hasOwnProperty.call(LEVELS, value);
+}
+const configuredLevel = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$logEnv$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["getAppLogLevel"])("info").toLowerCase();
+const currentLevel = isLogLevel(configuredLevel) ? LEVELS[configuredLevel] : LEVELS.info;
+const jsonFormat = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$logEnv$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["getAppLogFormat"])("text") === "json";
+let requestCounter = 0;
+function generateRequestId() {
+    return `req_${Date.now()}_${++requestCounter}`;
+}
+function maskKey(key) {
+    if (!key || key.length < 12) return "(redacted)";
+    return `${key.slice(0, 6)}...${key.slice(-4)}`;
+}
+/**
+ * Get the correct console method for a log level.
+ * @param {string} level
+ * @returns {Function}
+ */ function getConsoleFn(level) {
+    switch(level){
+        case "debug":
+            return console.debug;
+        case "warn":
+            return console.warn;
+        case "error":
+            return console.error;
+        default:
+            return console.log;
+    }
+}
+/**
+ * Format metadata object as compact JSON string for log output.
+ * Omits keys with null/undefined values to keep logs clean.
+ * @param {object} [meta] - Optional metadata
+ * @returns {string} Formatted metadata string or empty string
+ */ function formatMeta(meta) {
+    if (!meta || typeof meta !== "object") return "";
+    const cleaned = {};
+    for (const [k, v] of Object.entries(meta)){
+        if (v !== undefined && v !== null) cleaned[k] = v;
+    }
+    return Object.keys(cleaned).length > 0 ? ` ${JSON.stringify(cleaned)}` : "";
+}
+function logger(tag) {
+    const emit = (level, message, meta)=>{
+        if (LEVELS[level] < currentLevel) return;
+        const consoleFn = getConsoleFn(level);
+        if (jsonFormat) {
+            const entry = {
+                ts: new Date().toISOString(),
+                level,
+                tag,
+                msg: message
+            };
+            if (meta && typeof meta === "object" && Object.keys(meta).length > 0) {
+                entry.data = meta;
+            }
+            consoleFn(JSON.stringify(entry));
+        } else {
+            consoleFn(`[${level.toUpperCase()}] [${tag}] ${message}${formatMeta(meta)}`);
+        }
+    };
+    return {
+        debug: (message, meta)=>emit("debug", message, meta),
+        info: (message, meta)=>emit("info", message, meta),
+        warn: (message, meta)=>emit("warn", message, meta),
+        error: (message, meta)=>emit("error", message, meta)
+    };
+}
+function createLogger(requestId = null) {
+    const emit = (level, tag, message, data)=>{
+        if (LEVELS[level] < currentLevel) return;
+        const consoleFn = getConsoleFn(level);
+        if (jsonFormat) {
+            const entry = {
+                ts: new Date().toISOString(),
+                level,
+                tag,
+                msg: message
+            };
+            if (requestId) entry.reqId = requestId;
+            if (data && typeof data === "object" && Object.keys(data).length > 0) {
+                entry.data = data;
+            }
+            consoleFn(JSON.stringify(entry));
+        } else {
+            const ts = new Date().toISOString().slice(11, 23); // HH:MM:SS.mmm
+            const prefix = requestId ? `[${requestId}]` : "";
+            const dataStr = formatMeta(data);
+            consoleFn(`${ts} ${prefix}[${tag}] ${message}${dataStr}`);
+        }
+    };
+    return {
+        debug: (tag, msg, data)=>emit("debug", tag, msg, data),
+        info: (tag, msg, data)=>emit("info", tag, msg, data),
+        warn: (tag, msg, data)=>emit("warn", tag, msg, data),
+        error: (tag, msg, data)=>emit("error", tag, msg, data)
+    };
+}
+const defaultLogger = createLogger();
+const log = defaultLogger;
+const __TURBOPACK__default__export__ = logger;
+}),
+"[project]/src/lib/gamification/events.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "emitGamificationEvent",
+    ()=>emitGamificationEvent
+]);
+/**
+ * Gamification event emitter — called from chat pipeline.
+ *
+ * @module lib/gamification/events
+ */ var __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$logger$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/open-sse/utils/logger.ts [instrumentation] (ecmascript)");
+;
+const log = (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$logger$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["logger"])("GAMIFICATION");
+async function emitGamificationEvent(params) {
+    const { apiKeyId, action, metadata } = params;
+    if (!apiKeyId) return; // Skip if no API key
+    try {
+        // 1. Award XP
+        const xpAmount = getXpForAction(action);
+        if (xpAmount > 0) {
+            const { addXp } = await __turbopack_context__.A("[project]/src/lib/db/gamification.ts [instrumentation] (ecmascript, async loader)");
+            addXp(apiKeyId, action, xpAmount, metadata ? JSON.stringify(metadata) : undefined);
+            // Update level
+            const { getXp, updateLevel } = await __turbopack_context__.A("[project]/src/lib/db/gamification.ts [instrumentation] (ecmascript, async loader)");
+            const xp = getXp(apiKeyId);
+            if (xp) {
+                const { calculateLevel } = await __turbopack_context__.A("[project]/src/lib/gamification/xp.ts [instrumentation] (ecmascript, async loader)");
+                const newLevel = calculateLevel(xp.totalXp);
+                if (newLevel !== xp.currentLevel) {
+                    updateLevel(apiKeyId, newLevel);
+                    log.info("events.level_up", {
+                        apiKeyId,
+                        oldLevel: xp.currentLevel,
+                        newLevel
+                    });
+                }
+            }
+        }
+        // 2. Update streak
+        if (action === "request") {
+            const { updateStreak } = await __turbopack_context__.A("[project]/src/lib/gamification/streaks.ts [instrumentation] (ecmascript, async loader)");
+            const streak = await updateStreak(apiKeyId);
+            // Check streak badges
+            if (streak >= 365) {
+                await checkAndUnlockBadge(apiKeyId, "unstoppable");
+            } else if (streak >= 30) {
+                await checkAndUnlockBadge(apiKeyId, "monthly-master");
+            } else if (streak >= 7) {
+                await checkAndUnlockBadge(apiKeyId, "weekly-warrior");
+            } else if (streak >= 3) {
+                await checkAndUnlockBadge(apiKeyId, "daily-user");
+            }
+        }
+        // 3. Update leaderboard
+        const { updateScore } = await __turbopack_context__.A("[project]/src/lib/gamification/leaderboard.ts [instrumentation] (ecmascript, async loader)");
+        await updateScore(apiKeyId, "global", xpAmount);
+        // Update weekly/monthly
+        await updateScore(apiKeyId, "weekly", xpAmount);
+        await updateScore(apiKeyId, "monthly", xpAmount);
+        // Update specific scopes
+        if (action === "token_share") {
+            await updateScore(apiKeyId, "tokens_shared", xpAmount);
+        }
+        // 4. Check action count badges
+        await checkActionCountBadges(apiKeyId, action);
+    } catch (err) {
+        // Never throw — gamification must not break the request pipeline
+        log.error("events.error", {
+            apiKeyId,
+            action,
+            error: err instanceof Error ? err.message : String(err)
+        });
+    }
+}
+/**
+ * Get XP amount for an action.
+ */ function getXpForAction(action) {
+    const rewards = {
+        request: 1,
+        provider_switch: 5,
+        model_switch: 3,
+        combo_create: 10,
+        combo_use: 2,
+        token_share: 1,
+        invite_redeem: 50,
+        daily_login: 5
+    };
+    return rewards[action] || 0;
+}
+/**
+ * Check and unlock a specific badge.
+ */ async function checkAndUnlockBadge(apiKeyId, badgeId) {
+    const { unlockBadge, hasBadge } = await __turbopack_context__.A("[project]/src/lib/db/gamification.ts [instrumentation] (ecmascript, async loader)");
+    // #3472: dedup via user_badges directly. getBadges() INNER-JOINs badge_definitions, which is
+    // empty until seeded, so it falsely reported "not earned" and re-emitted the unlock event on
+    // every request.
+    if (!hasBadge(apiKeyId, badgeId)) {
+        unlockBadge(apiKeyId, badgeId);
+        log.info("events.badge_unlocked", {
+            apiKeyId,
+            badgeId
+        });
+        // Look up badge details from badge_definitions
+        const { getDbInstance } = await __turbopack_context__.A("[project]/src/lib/db/core.ts [instrumentation] (ecmascript, async loader)");
+        const badgeRow = getDbInstance().prepare("SELECT name, description, icon, rarity FROM badge_definitions WHERE id = ?").get(badgeId);
+        // Record notification for SSE toast
+        const { recordBadgeUnlock } = await __turbopack_context__.A("[project]/src/lib/gamification/notifications.ts [instrumentation] (ecmascript, async loader)");
+        recordBadgeUnlock(apiKeyId, {
+            badgeId,
+            badgeName: badgeRow?.name ?? badgeId,
+            badgeDescription: badgeRow?.description ?? "",
+            badgeIcon: badgeRow?.icon ?? "award",
+            badgeRarity: badgeRow?.rarity ?? "common",
+            unlockedAt: new Date().toISOString()
+        });
+    }
+}
+/**
+ * Check action count badges after an action.
+ */ async function checkActionCountBadges(apiKeyId, action) {
+    const { getDbInstance } = await __turbopack_context__.A("[project]/src/lib/db/core.ts [instrumentation] (ecmascript, async loader)");
+    const db = getDbInstance();
+    // Count total actions of this type
+    const row = db.prepare("SELECT COALESCE(COUNT(*), 0) AS count FROM xp_audit_log WHERE api_key_id = ? AND action = ?").get(apiKeyId, action);
+    const count = row.count;
+    // Badge thresholds
+    const thresholds = {
+        request: [
+            {
+                id: "first-token",
+                threshold: 1
+            },
+            {
+                id: "token-consumer",
+                threshold: 1000
+            },
+            {
+                id: "token-machine",
+                threshold: 10000
+            },
+            {
+                id: "token-whale",
+                threshold: 100000
+            }
+        ],
+        token_share: [
+            {
+                id: "generous",
+                threshold: 1000
+            },
+            {
+                id: "philanthropist",
+                threshold: 10000
+            },
+            {
+                id: "token-santa",
+                threshold: 100000
+            },
+            {
+                id: "community-hero",
+                threshold: 1000000
+            }
+        ]
+    };
+    const badges = thresholds[action];
+    if (!badges) return;
+    for (const badge of badges){
+        if (count >= badge.threshold) {
+            await checkAndUnlockBadge(apiKeyId, badge.id);
+        }
+    }
+}
+}),
+];
+
+//# sourceMappingURL=%5Broot-of-the-server%5D__05dzuu2._.js.map

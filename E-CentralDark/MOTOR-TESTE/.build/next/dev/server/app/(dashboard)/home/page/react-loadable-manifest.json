@@ -1,0 +1,18 @@
+{
+  "[project]/src/app/(dashboard)/home/ProviderTopology.tsx [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/src/app/(dashboard)/home/ProviderTopology.tsx [app-client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/node_modules_0e9mb6w._.js",
+      "static/chunks/src_0quy356._.js",
+      "static/chunks/node_modules_@xyflow_react_dist_style_0w-ra00.css",
+      "static/chunks/src_app_(dashboard)_home_ProviderTopology_tsx_1c-5r5k._.js"
+    ]
+  },
+  "[project]/src/app/(dashboard)/home/ProviderQuotaWidget.tsx [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/src/app/(dashboard)/home/ProviderQuotaWidget.tsx [app-client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/src_0lhk9vj._.js",
+      "static/chunks/src_app_(dashboard)_home_ProviderQuotaWidget_tsx_1c-5r5k._.js"
+    ]
+  }
+}

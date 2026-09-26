@@ -1,0 +1,3 @@
+{
+  "/api/providers/openrouter-stats/route": "app/api/providers/openrouter-stats/route.js"
+}

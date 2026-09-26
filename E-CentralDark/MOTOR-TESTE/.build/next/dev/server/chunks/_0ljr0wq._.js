@@ -1,0 +1,68 @@
+module.exports = [
+"[project]/src/shared/constants/pricing.ts [app-route] (ecmascript, async loader)", ((__turbopack_context__) => {
+
+__turbopack_context__.v((parentImport) => {
+    return Promise.all([
+  "server/chunks/src_shared_1e6j_yi._.js"
+].map((chunk) => __turbopack_context__.l(chunk))).then(() => {
+        return parentImport("[project]/src/shared/constants/pricing.ts [app-route] (ecmascript)");
+    });
+});
+}),
+"[project]/src/lib/config/runtimeSettings.ts [app-route] (ecmascript, async loader)", ((__turbopack_context__) => {
+
+__turbopack_context__.v((parentImport) => {
+    return Promise.all([
+  "server/chunks/_0uqnxnl._.js",
+  "server/chunks/src_lib_0tejrsc._.js",
+  "server/chunks/src_shared_15_pcr7._.js",
+  "server/chunks/src_05kt5qi._.js",
+  "server/chunks/open-sse_1yh3dhg._.js",
+  "server/chunks/[externals]__1wfcoia._.js",
+  "server/chunks/node_modules_undici_lib_dispatcher_0wsv20j._.js",
+  "server/chunks/node_modules_undici_lib_llhttp_0za4hxz._.js",
+  "server/chunks/node_modules_undici_lib_web_0aaxqvf._.js",
+  "server/chunks/node_modules_undici_lib_1bi8efe._.js",
+  "server/chunks/node_modules_undici_index_00yosc1.js",
+  "server/chunks/[root-of-the-server]__1qi-cm4._.js"
+].map((chunk) => __turbopack_context__.l(chunk))).then(() => {
+        return parentImport("[project]/src/lib/config/runtimeSettings.ts [app-route] (ecmascript)");
+    });
+});
+}),
+"[project]/src/shared/services/codexCatalogRevalidation.ts [app-route] (ecmascript, async loader)", ((__turbopack_context__) => {
+
+__turbopack_context__.v((parentImport) => {
+    return Promise.all([
+  "server/chunks/_1v-bpgk._.js",
+  "server/chunks/src_0b1pxq7._.js",
+  "server/chunks/open-sse_0sjnol1._.js",
+  "server/chunks/[externals]_node_crypto_1kn79-7._.js",
+  "server/chunks/[root-of-the-server]__00ptqs_._.js"
+].map((chunk) => __turbopack_context__.l(chunk))).then(() => {
+        return parentImport("[project]/src/shared/services/codexCatalogRevalidation.ts [app-route] (ecmascript)");
+    });
+});
+}),
+"[project]/open-sse/utils/proxyFallback.ts [app-route] (ecmascript, async loader)", ((__turbopack_context__) => {
+
+__turbopack_context__.v((parentImport) => {
+    return Promise.all([
+  "server/chunks/_10jiu4w._.js",
+  "server/chunks/open-sse_1qhe00k._.js",
+  "server/chunks/src_lib_1uccabl._.js",
+  "server/chunks/src_shared_08pd8w2._.js",
+  "server/chunks/src_05kt5qi._.js",
+  "server/chunks/[externals]__1x2g06a._.js",
+  "server/chunks/node_modules_undici_lib_dispatcher_0wsv20j._.js",
+  "server/chunks/node_modules_undici_lib_llhttp_0za4hxz._.js",
+  "server/chunks/node_modules_undici_lib_web_0aaxqvf._.js",
+  "server/chunks/node_modules_undici_lib_1bi8efe._.js",
+  "server/chunks/node_modules_undici_index_00yosc1.js",
+  "server/chunks/[root-of-the-server]__0tou8xs._.js"
+].map((chunk) => __turbopack_context__.l(chunk))).then(() => {
+        return parentImport("[project]/open-sse/utils/proxyFallback.ts [app-route] (ecmascript)");
+    });
+});
+}),
+];

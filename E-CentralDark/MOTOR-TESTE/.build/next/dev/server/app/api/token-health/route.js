@@ -1,0 +1,12 @@
+var R=require("../../../chunks/[turbopack]_runtime.js")("server/app/api/token-health/route.js")
+R.c("server/chunks/_1l07772._.js")
+R.c("server/chunks/src_lib_db_1cka_7u._.js")
+R.c("server/chunks/src_lib_17x886o._.js")
+R.c("server/chunks/src_shared_12n-eto._.js")
+R.c("server/chunks/src_126kaow._.js")
+R.c("server/chunks/open-sse_1nylr-5._.js")
+R.c("server/chunks/[externals]__1y_wbrm._.js")
+R.c("server/chunks/[root-of-the-server]__09k629h._.js")
+R.c("server/chunks/_next-internal_server_app_api_token-health_route_actions_08kot-n.js")
+R.m("[project]/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/src/app/api/token-health/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)")
+module.exports=R.m("[project]/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/src/app/api/token-health/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)").exports

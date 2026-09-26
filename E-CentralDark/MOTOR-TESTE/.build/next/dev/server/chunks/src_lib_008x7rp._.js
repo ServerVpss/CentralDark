@@ -1,0 +1,4518 @@
+module.exports = [
+"[project]/src/lib/dataPaths.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "APP_NAME",
+    ()=>APP_NAME,
+    "getDefaultDataDir",
+    ()=>getDefaultDataDir,
+    "getLegacyDotDataDir",
+    ()=>getLegacyDotDataDir,
+    "isSamePath",
+    ()=>isSamePath,
+    "resolveDataDir",
+    ()=>resolveDataDir,
+    "resolveWritableDataDir",
+    ()=>resolveWritableDataDir
+]);
+var __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/path [external] (path, cjs)");
+var __TURBOPACK__imported__module__$5b$externals$5d2f$os__$5b$external$5d$__$28$os$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/os [external] (os, cjs)");
+var __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/fs [external] (fs, cjs)");
+;
+;
+;
+const APP_NAME = "omniroute";
+function fallbackHomeDir() {
+    const envHome = process.env.HOME || process.env.USERPROFILE;
+    if (typeof envHome === "string" && envHome.trim().length > 0) {
+        return __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].resolve(envHome);
+    }
+    return __TURBOPACK__imported__module__$5b$externals$5d2f$os__$5b$external$5d$__$28$os$2c$__cjs$29$__["default"].tmpdir();
+}
+function safeHomeDir() {
+    try {
+        return __TURBOPACK__imported__module__$5b$externals$5d2f$os__$5b$external$5d$__$28$os$2c$__cjs$29$__["default"].homedir();
+    } catch  {
+        return fallbackHomeDir();
+    }
+}
+function normalizeConfiguredPath(dir) {
+    if (typeof dir !== "string") return null;
+    const trimmed = dir.trim();
+    if (!trimmed) return null;
+    return __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].resolve(trimmed);
+}
+function getLegacyDotDataDir() {
+    return __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join(safeHomeDir(), `.${APP_NAME}`);
+}
+function getDefaultDataDir() {
+    const homeDir = safeHomeDir();
+    const legacyDir = getLegacyDotDataDir();
+    // Preserve legacy path if it exists to avoid data loss on updates (e.g., Windows migration)
+    if (__TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["default"].existsSync(legacyDir)) {
+        try {
+            if (__TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["default"].statSync(legacyDir).isDirectory()) {
+                return legacyDir;
+            }
+        } catch  {
+        // Ignore stat errors
+        }
+    }
+    if ("TURBOPACK compile-time truthy", 1) {
+        const appData = process.env.APPDATA || __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join(homeDir, "AppData", "Roaming");
+        return __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join(appData, APP_NAME);
+    }
+    //TURBOPACK unreachable
+    ;
+    // Support XDG on Linux/macOS when explicitly configured.
+    const xdgConfigHome = undefined;
+}
+function resolveDataDir({ isCloud = false } = {}) {
+    if (isCloud) return "/tmp";
+    const configured = normalizeConfiguredPath(process.env.DATA_DIR);
+    if (configured) return configured;
+    return getDefaultDataDir();
+}
+function resolveWritableDataDir({ isCloud = false } = {}) {
+    const resolved = resolveDataDir({
+        isCloud
+    });
+    // Cloud/serverless never owns a writable home dir; leave its sentinel alone.
+    if (isCloud) return resolved;
+    // No explicit override → already the default user dir; nothing to fall back to.
+    const configured = normalizeConfiguredPath(process.env.DATA_DIR);
+    if (!configured) return resolved;
+    try {
+        __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["default"].mkdirSync(resolved, {
+            recursive: true
+        });
+        return resolved;
+    } catch (err) {
+        const code = err?.code;
+        if (code === "EACCES" || code === "EPERM") {
+            const fallback = getDefaultDataDir();
+            console.warn(`[DATA_DIR] '${resolved}' is not writable (${code}) → falling back to '${fallback}'`);
+            return fallback;
+        }
+        throw err;
+    }
+}
+function isSamePath(a, b) {
+    if (!a || !b) return false;
+    const normalizedA = __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].resolve(a);
+    const normalizedB = __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].resolve(b);
+    if ("TURBOPACK compile-time truthy", 1) {
+        return normalizedA.toLowerCase() === normalizedB.toLowerCase();
+    }
+    //TURBOPACK unreachable
+    ;
+}
+}),
+"[project]/src/lib/combos/steps.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+/**
+ * @file steps.ts
+ * @description Combo step normalization helpers for model, combo-ref, provider-wildcard, and routing metadata.
+ *
+ * @changes
+ * - [2026-07-25] [Composer] - Preserve provider-wildcard steps during combo normalization
+ */ __turbopack_context__.s([
+    "COMBO_SCHEMA_VERSION",
+    ()=>COMBO_SCHEMA_VERSION,
+    "getComboModelProvider",
+    ()=>getComboModelProvider,
+    "getComboModelString",
+    ()=>getComboModelString,
+    "getComboStepTarget",
+    ()=>getComboStepTarget,
+    "getComboStepWeight",
+    ()=>getComboStepWeight,
+    "normalizeComboModels",
+    ()=>normalizeComboModels,
+    "normalizeComboRecord",
+    ()=>normalizeComboRecord,
+    "normalizeComboStep",
+    ()=>normalizeComboStep
+]);
+const COMBO_SCHEMA_VERSION = 2;
+function isRecord(value) {
+    return !!value && typeof value === "object" && !Array.isArray(value);
+}
+function toTrimmedString(value) {
+    return typeof value === "string" && value.trim().length > 0 ? value.trim() : null;
+}
+function toWeight(value) {
+    const parsed = typeof value === "number" ? value : typeof value === "string" && value.trim().length > 0 ? Number(value) : 0;
+    if (!Number.isFinite(parsed)) return 0;
+    return Math.max(0, Math.min(100, parsed));
+}
+function collectComboNames(allCombos) {
+    const names = new Set();
+    if (!allCombos) return names;
+    if (!Array.isArray(allCombos) && typeof allCombos[Symbol.iterator] === "function" && !(isRecord(allCombos) && Array.isArray(allCombos.combos))) {
+        for (const value of allCombos){
+            const name = toTrimmedString(value);
+            if (name) names.add(name);
+        }
+        return names;
+    }
+    const combosFromRecord = isRecord(allCombos) && Array.isArray(allCombos.combos) ? allCombos.combos : [];
+    const combos = Array.isArray(allCombos) ? allCombos : combosFromRecord;
+    for (const combo of combos){
+        const name = typeof combo === "string" ? toTrimmedString(combo) : toTrimmedString(combo?.name);
+        if (name) names.add(name);
+    }
+    return names;
+}
+function parseProviderId(model) {
+    const trimmed = model.trim();
+    const slashIndex = trimmed.indexOf("/");
+    if (slashIndex <= 0) return null;
+    const providerId = trimmed.slice(0, slashIndex).trim();
+    return providerId.length > 0 ? providerId : null;
+}
+function parseProviderWildcardPattern(target) {
+    const trimmed = target.trim();
+    const slashIndex = trimmed.indexOf("/");
+    if (slashIndex <= 0) return null;
+    const providerId = trimmed.slice(0, slashIndex).trim();
+    const modelPattern = trimmed.slice(slashIndex + 1).trim();
+    if (!providerId || !modelPattern.includes("*")) return null;
+    return {
+        providerId,
+        modelPattern
+    };
+}
+function toFullModelString(model, providerId) {
+    const trimmedModel = model.trim();
+    if (trimmedModel.includes("/")) return trimmedModel;
+    const normalizedProviderId = toTrimmedString(providerId);
+    return normalizedProviderId ? `${normalizedProviderId}/${trimmedModel}` : trimmedModel;
+}
+function slugify(value) {
+    const slug = value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    return slug.length > 0 ? slug : "step";
+}
+function buildStepId(kind, comboName, index, seed) {
+    const kindSlug = kind === "combo-ref" ? "ref" : kind === "provider-wildcard" ? "wildcard" : "model";
+    const parts = [
+        slugify(comboName || "combo"),
+        kindSlug,
+        String(index + 1),
+        slugify(seed)
+    ];
+    return parts.join("-").slice(0, 200);
+}
+function shouldTreatAsComboRef(target, providerId, options) {
+    if (providerId) return false;
+    const comboNames = collectComboNames(options.allCombos);
+    return comboNames.has(target) || target === toTrimmedString(options.comboName);
+}
+function getComboStepWeight(value) {
+    if (typeof value === "string") return 0;
+    if (!isRecord(value)) return 0;
+    return toWeight(value.weight);
+}
+function getComboModelString(value) {
+    if (typeof value === "string") return toTrimmedString(value);
+    if (!isRecord(value) || value.kind === "combo-ref") return null;
+    const rawModel = toTrimmedString(value.model);
+    if (!rawModel) return null;
+    const providerId = toTrimmedString(value.providerId) || toTrimmedString(value.provider) || parseProviderId(rawModel);
+    return toFullModelString(rawModel, providerId);
+}
+function getComboModelProvider(value) {
+    if (typeof value === "string") return parseProviderId(value);
+    if (!isRecord(value) || value.kind === "combo-ref") return null;
+    return toTrimmedString(value.providerId) || toTrimmedString(value.provider) || parseProviderId(toTrimmedString(value.model) || "");
+}
+function getComboStepTarget(value, options = {}) {
+    if (typeof value === "string") {
+        const target = toTrimmedString(value);
+        if (!target) return null;
+        return shouldTreatAsComboRef(target, null, options) ? target : target;
+    }
+    if (!isRecord(value)) return null;
+    if (value.kind === "combo-ref") return toTrimmedString(value.comboName);
+    if (value.kind === "provider-wildcard") {
+        const providerId = toTrimmedString(value.providerId);
+        const modelPattern = toTrimmedString(value.modelPattern) || "*";
+        return providerId ? `${providerId}/${modelPattern}` : null;
+    }
+    const rawModel = toTrimmedString(value.model);
+    if (!rawModel) return null;
+    const isExplicitModel = value.kind === "model";
+    const providerId = toTrimmedString(value.providerId) || toTrimmedString(value.provider) || parseProviderId(rawModel);
+    if (!isExplicitModel && shouldTreatAsComboRef(rawModel, providerId, options)) {
+        return rawModel;
+    }
+    return toFullModelString(rawModel, providerId);
+}
+function normalizeComboStep(value, options = {}) {
+    const comboName = toTrimmedString(options.comboName);
+    const index = typeof options.index === "number" ? options.index : 0;
+    if (typeof value === "string") {
+        const target = toTrimmedString(value);
+        if (!target) return null;
+        if (shouldTreatAsComboRef(target, null, options)) {
+            return {
+                id: buildStepId("combo-ref", comboName, index, target),
+                kind: "combo-ref",
+                comboName: target,
+                weight: 0
+            };
+        }
+        const wildcardPattern = parseProviderWildcardPattern(target);
+        if (wildcardPattern) {
+            return {
+                id: buildStepId("provider-wildcard", comboName, index, `${wildcardPattern.providerId}/${wildcardPattern.modelPattern}`),
+                kind: "provider-wildcard",
+                providerId: wildcardPattern.providerId,
+                modelPattern: wildcardPattern.modelPattern,
+                weight: 0
+            };
+        }
+        const providerId = parseProviderId(target);
+        return {
+            id: buildStepId("model", comboName, index, target),
+            kind: "model",
+            model: target,
+            ...providerId ? {
+                providerId
+            } : {},
+            weight: 0
+        };
+    }
+    if (!isRecord(value)) return null;
+    const explicitId = toTrimmedString(value.id);
+    const weight = toWeight(value.weight);
+    const label = toTrimmedString(value.label);
+    const prompt = toTrimmedString(value.prompt);
+    if (value.kind === "combo-ref") {
+        const comboRefName = toTrimmedString(value.comboName);
+        if (!comboRefName) return null;
+        return {
+            id: explicitId || buildStepId("combo-ref", comboName, index, comboRefName),
+            kind: "combo-ref",
+            comboName: comboRefName,
+            weight,
+            ...label ? {
+                label
+            } : {}
+        };
+    }
+    if (value.kind === "provider-wildcard") {
+        const providerId = toTrimmedString(value.providerId) || toTrimmedString(value.provider) || parseProviderId(toTrimmedString(value.model) || "");
+        if (!providerId) return null;
+        const modelPattern = toTrimmedString(value.modelPattern) || "*";
+        const connectionId = value.connectionId === null ? null : toTrimmedString(value.connectionId) || undefined;
+        const allowedConnectionIds = Array.isArray(value.allowedConnectionIds) ? value.allowedConnectionIds.map((connId)=>toTrimmedString(connId)).filter((connId)=>!!connId) : undefined;
+        return {
+            id: explicitId || buildStepId("provider-wildcard", comboName, index, connectionId ? `${providerId}/${modelPattern}:${connectionId}` : `${providerId}/${modelPattern}`),
+            kind: "provider-wildcard",
+            providerId,
+            modelPattern,
+            ...connectionId !== undefined ? {
+                connectionId
+            } : {},
+            weight,
+            ...label ? {
+                label
+            } : {},
+            ...allowedConnectionIds && allowedConnectionIds.length > 0 ? {
+                allowedConnectionIds
+            } : {}
+        };
+    }
+    const rawModel = toTrimmedString(value.model);
+    if (!rawModel) return null;
+    const isExplicitModel = value.kind === "model";
+    const providerId = toTrimmedString(value.providerId) || toTrimmedString(value.provider) || parseProviderId(rawModel);
+    const wildcardPattern = parseProviderWildcardPattern(rawModel);
+    if (wildcardPattern) {
+        const connectionId = value.connectionId === null ? null : toTrimmedString(value.connectionId) || undefined;
+        const allowedConnectionIds = Array.isArray(value.allowedConnectionIds) ? value.allowedConnectionIds.map((connId)=>toTrimmedString(connId)).filter((connId)=>!!connId) : undefined;
+        return {
+            id: explicitId || buildStepId("provider-wildcard", comboName, index, connectionId ? `${wildcardPattern.providerId}/${wildcardPattern.modelPattern}:${connectionId}` : `${wildcardPattern.providerId}/${wildcardPattern.modelPattern}`),
+            kind: "provider-wildcard",
+            providerId: wildcardPattern.providerId,
+            modelPattern: wildcardPattern.modelPattern,
+            ...connectionId !== undefined ? {
+                connectionId
+            } : {},
+            weight,
+            ...label ? {
+                label
+            } : {},
+            ...allowedConnectionIds && allowedConnectionIds.length > 0 ? {
+                allowedConnectionIds
+            } : {}
+        };
+    }
+    if (!isExplicitModel && shouldTreatAsComboRef(rawModel, providerId, options)) {
+        return {
+            id: explicitId || buildStepId("combo-ref", comboName, index, rawModel),
+            kind: "combo-ref",
+            comboName: rawModel,
+            weight,
+            ...label ? {
+                label
+            } : {}
+        };
+    }
+    const model = toFullModelString(rawModel, providerId);
+    const connectionId = value.connectionId === null ? null : toTrimmedString(value.connectionId) || undefined;
+    const tags = Array.isArray(value.tags) ? value.tags.map((tag)=>toTrimmedString(tag)).filter((tag)=>!!tag) : undefined;
+    const allowedConnectionIds = Array.isArray(value.allowedConnectionIds) ? value.allowedConnectionIds.map((connId)=>toTrimmedString(connId)).filter((connId)=>!!connId) : undefined;
+    return {
+        id: explicitId || buildStepId("model", comboName, index, connectionId ? `${model}:${connectionId}` : model),
+        kind: "model",
+        model,
+        ...providerId ? {
+            providerId
+        } : {},
+        ...connectionId !== undefined ? {
+            connectionId
+        } : {},
+        weight,
+        ...label ? {
+            label
+        } : {},
+        ...prompt ? {
+            prompt
+        } : {},
+        ...tags && tags.length > 0 ? {
+            tags
+        } : {},
+        ...allowedConnectionIds && allowedConnectionIds.length > 0 ? {
+            allowedConnectionIds
+        } : {}
+    };
+}
+function normalizeComboModels(models, options = {}) {
+    const list = Array.isArray(models) ? models : [];
+    return list.map((value, index)=>normalizeComboStep(value, {
+            ...options,
+            index
+        })).filter((value)=>value !== null);
+}
+function normalizeComboRecord(combo, options = {}) {
+    const comboName = toTrimmedString(combo.name);
+    return {
+        ...combo,
+        version: COMBO_SCHEMA_VERSION,
+        models: normalizeComboModels(combo.models, {
+            comboName,
+            allCombos: options.allCombos
+        })
+    };
+}
+}),
+"[project]/src/lib/combos/invariants.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "ComboInvariantError",
+    ()=>ComboInvariantError,
+    "validateComboInvariant",
+    ()=>validateComboInvariant
+]);
+class ComboInvariantError extends Error {
+}
+const FAMILY_PATTERNS = [
+    [
+        "gpt",
+        /^gpt(?:-|$)/i
+    ],
+    [
+        "claude",
+        /^claude(?:-|$)/i
+    ],
+    [
+        "gemini",
+        /^gemini(?:-|$)/i
+    ],
+    [
+        "glm",
+        /^glm(?:-|$)/i
+    ],
+    [
+        "kimi",
+        /^kimi(?:-|$)/i
+    ],
+    [
+        "llama",
+        /^llama(?:-|$)/i
+    ],
+    [
+        "minimax",
+        /^minimax(?:-|$)/i
+    ],
+    [
+        "mistral",
+        /^(?:mistral|mixtral)(?:-|$)/i
+    ]
+];
+function strings(value) {
+    return Array.isArray(value) ? value.filter((item)=>typeof item === "string") : [];
+}
+function modelFamily(model) {
+    const bare = model.slice(model.lastIndexOf("/") + 1);
+    return FAMILY_PATTERNS.find(([, pattern])=>pattern.test(bare))?.[0] ?? null;
+}
+function validateComboInvariant(combo) {
+    const invariant = combo.invariant && typeof combo.invariant === "object" && !Array.isArray(combo.invariant) ? combo.invariant : {};
+    const providers = new Set([
+        ...strings(combo.allowedProviders),
+        ...strings(invariant.allowedProviders)
+    ]);
+    const families = new Set([
+        ...strings(combo.allowedModelFamilies),
+        ...strings(invariant.allowedModelFamilies)
+    ]);
+    if (providers.size === 0 && families.size === 0) return;
+    const targets = Array.isArray(combo.models) ? combo.models : [];
+    targets.forEach((value, index)=>{
+        if (!value || typeof value !== "object" || Array.isArray(value)) return;
+        const target = value;
+        if (target.kind === "combo-ref") return;
+        const model = typeof target.model === "string" ? target.model : "";
+        const provider = typeof target.providerId === "string" ? target.providerId : typeof target.provider === "string" ? target.provider : model.includes("/") ? model.slice(0, model.indexOf("/")) : "";
+        const family = modelFamily(model);
+        if (providers.size > 0 && !providers.has(provider) || families.size > 0 && (!family || !families.has(family))) {
+            const targetName = model.includes("/") ? model : `${provider}/${model}`;
+            throw new ComboInvariantError(`Combo "${String(combo.name ?? "unnamed")}" target ${index + 1} (${targetName}) violates its invariant`);
+        }
+    });
+}
+}),
+"[project]/src/lib/piiSanitizer.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "sanitizePII",
+    ()=>sanitizePII,
+    "sanitizePIIChunk",
+    ()=>sanitizePIIChunk,
+    "sanitizePIIResponse",
+    ()=>sanitizePIIResponse
+]);
+/**
+ * Output PII Sanitization — L-3
+ *
+ * Scans LLM response text for PII patterns and optionally redacts them.
+ * This is the OUTPUT-side counterpart to the input sanitizer.
+ * Configurable via environment variables:
+ *
+ *   PII_RESPONSE_SANITIZATION=true|false  (default: false)
+ *   PII_RESPONSE_SANITIZATION_MODE=redact|warn|block  (default: redact)
+ *
+ * @module lib/piiSanitizer
+ */ // ── Configuration ──
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$utils$2f$featureFlags$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/utils/featureFlags.ts [instrumentation] (ecmascript)");
+;
+const isEnabled = ()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$utils$2f$featureFlags$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["isFeatureFlagEnabled"])("PII_RESPONSE_SANITIZATION");
+const VALID_MODES = [
+    "redact",
+    "warn",
+    "block",
+    "off"
+];
+const getMode = ()=>{
+    const value = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$utils$2f$featureFlags$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["resolveFeatureFlag"])("PII_RESPONSE_SANITIZATION_MODE");
+    if (value === "" || value === undefined || value === null) return "redact";
+    if (String(value) === "false") return "off";
+    if (VALID_MODES.includes(value)) return value;
+    console.error(`[PII] Invalid PII_RESPONSE_SANITIZATION_MODE: "${value}", defaulting to "redact"`);
+    return "redact";
+};
+const PII_PATTERNS = [
+    {
+        name: "email",
+        regex: /(?<=^|[^A-Za-z0-9])[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}(?=$|[^A-Za-z0-9])/g,
+        replacement: "[EMAIL_REDACTED]",
+        severity: "medium"
+    },
+    {
+        name: "ssn",
+        regex: /(?<=^|[^A-Za-z0-9])\d{3}-\d{2}-\d{4}(?=$|[^A-Za-z0-9])/g,
+        replacement: "[SSN_REDACTED]",
+        severity: "high"
+    },
+    {
+        name: "credit_card",
+        regex: /(?<=^|[^A-Za-z0-9])(?:\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}|\d{4}[-\s]?\d{6}[-\s]?\d{4,5})(?=$|[^A-Za-z0-9])/g,
+        replacement: "[CC_REDACTED]",
+        severity: "high"
+    },
+    {
+        name: "phone_us",
+        regex: /(?<=^|[^A-Za-z0-9])(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}(?=$|[^A-Za-z0-9])/g,
+        replacement: "[PHONE_REDACTED]",
+        severity: "medium"
+    },
+    {
+        name: "phone_br",
+        regex: /(?<=^|[^A-Za-z0-9])(?:\+?55[-.\s]?)?\(?\d{2}\)?[-.\s]?(?:9\d{4}|[2-5]\d{3})[-.\s]?\d{4}(?=$|[^A-Za-z0-9])/g,
+        replacement: "[PHONE_REDACTED]",
+        severity: "medium"
+    },
+    {
+        name: "cpf",
+        regex: /(?<=^|[^A-Za-z0-9])\d{3}\.?\d{3}\.?\d{3}-?\d{2}(?=$|[^A-Za-z0-9])/g,
+        replacement: "[CPF_REDACTED]",
+        severity: "high"
+    },
+    {
+        name: "cnpj",
+        regex: /(?<=^|[^A-Za-z0-9])\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}(?=$|[^A-Za-z0-9])/g,
+        replacement: "[CNPJ_REDACTED]",
+        severity: "high"
+    },
+    {
+        name: "ip_address",
+        regex: /(?<=^|[^A-Za-z0-9])(?:\d{1,3}\.){3}\d{1,3}(?=$|[^A-Za-z0-9])/g,
+        replacement: "[IP_REDACTED]",
+        severity: "low"
+    },
+    {
+        name: "ipv6_address",
+        regex: /(?<=^|[^A-Za-z0-9:])(?:[0-9a-fA-F]{1,4}(?::[0-9a-fA-F]{1,4}){7}|(?:[0-9a-fA-F]{1,4}:){1,7}:|::(?:[0-9a-fA-F]{1,4}:){0,6}[0-9a-fA-F]{1,4}|::|[0-9a-fA-F]{1,4}::(?:[0-9a-fA-F]{1,4}:){0,5}[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){2}:(?:[0-9a-fA-F]{1,4}:){0,4}[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){3}:(?:[0-9a-fA-F]{1,4}:){0,3}[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){4}:(?:[0-9a-fA-F]{1,4}:){0,2}[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){5}:(?:[0-9a-fA-F]{1,4}:){0,1}[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){6}:[0-9a-fA-F]{1,4})(?=$|[^A-Za-z0-9])(?!:[0-9a-fA-F:])/g,
+        replacement: "[IP_REDACTED]",
+        severity: "low"
+    },
+    {
+        name: "aws_key",
+        regex: /(?<=^|[^A-Za-z0-9])AKIA[0-9A-Z]{16}(?=$|[^A-Za-z0-9])/g,
+        replacement: "[AWS_KEY_REDACTED]",
+        severity: "high"
+    },
+    {
+        name: "api_key_generic",
+        regex: /(?<=^|[^A-Za-z0-9])(?:sk|pk|api|key|token)[_-][a-zA-Z0-9]{20,}(?=$|[^A-Za-z0-9])/gi,
+        replacement: "[API_KEY_REDACTED]",
+        severity: "high"
+    }
+];
+function sanitizePII(text, isStreaming = false) {
+    if (!isEnabled() || !text || typeof text !== "string") {
+        return {
+            text,
+            detections: [],
+            redacted: false
+        };
+    }
+    const mode = getMode();
+    const detections = [];
+    // Build a map of clean character index to original character index.
+    // Ignore zero-width and invisible formatting characters to prevent obfuscation bypasses.
+    const IGNORED_CHARS = new Set([
+        "\u200B",
+        "\u200C",
+        "\u200D",
+        "\u200E",
+        "\u200F",
+        "\uFEFF",
+        "\u2060",
+        "\u00AD",
+        // Bidirectional formatting controls
+        "\u202A",
+        "\u202B",
+        "\u202C",
+        "\u202D",
+        "\u202E",
+        "\u2066",
+        "\u2067",
+        "\u2068",
+        "\u2069"
+    ]);
+    const cleanToOrig = [];
+    let cleanText = "";
+    for(let i = 0; i < text.length; i++){
+        const char = text[i];
+        if (IGNORED_CHARS.has(char)) {
+        // Obfuscator / joiner, ignore in clean text
+        } else {
+            cleanToOrig.push(i);
+            cleanText += char;
+        }
+    }
+    cleanToOrig.push(text.length);
+    const ranges = [];
+    let endMatchIndex = undefined;
+    for (const pattern of PII_PATTERNS){
+        pattern.regex.lastIndex = 0;
+        let match;
+        while((match = pattern.regex.exec(cleanText)) !== null){
+            const cleanStart = match.index;
+            const cleanEnd = cleanStart + match[0].length;
+            const start = cleanToOrig[cleanStart];
+            const end = cleanToOrig[cleanEnd];
+            // Perform checksum validation to minimize false positives
+            if (pattern.name === "credit_card" && !isValidLuhn(match[0].replace(/[-\s]/g, ""))) {
+                continue;
+            }
+            if (pattern.name === "cpf" && !isValidCPF(match[0])) {
+                continue;
+            }
+            if (pattern.name === "cnpj" && !isValidCNPJ(match[0])) {
+                continue;
+            }
+            if (isStreaming && cleanEnd === cleanText.length) {
+                // Prevent premature redaction of variable-length PII touching the end of the streaming buffer.
+                // Clamp maximum match length to 100 to prevent infinite buffer accumulation (OOM).
+                const matchLength = cleanEnd - cleanStart;
+                if (matchLength < 100) {
+                    if (endMatchIndex === undefined || start < endMatchIndex) {
+                        endMatchIndex = start;
+                    }
+                }
+            } else {
+                ranges.push({
+                    start,
+                    end,
+                    replacement: pattern.replacement,
+                    pattern: pattern.name
+                });
+            }
+            if (!pattern.regex.global) {
+                break;
+            }
+        }
+    }
+    const patternCounts = new Map();
+    for (const range of ranges){
+        patternCounts.set(range.pattern, (patternCounts.get(range.pattern) || 0) + 1);
+    }
+    for (const [name, count] of patternCounts.entries()){
+        const patternDef = PII_PATTERNS.find((p)=>p.name === name);
+        detections.push({
+            pattern: name,
+            count,
+            severity: patternDef?.severity || "medium"
+        });
+    }
+    if (detections.length > 0) {
+        if (mode === "warn") {
+            console.warn(`[PII] Detected PII in response: ${detections.map((d)=>`${d.pattern}(${d.count})`).join(", ")}`);
+        } else if (mode === "block") {
+            // Log the matched pattern types server-side, but never put them in the
+            // thrown message — it can surface to the client via controller.error
+            // (Hard Rule #12: no internal detail in response/stream errors).
+            console.warn(`[PII] Blocked response due to PII detection: ${detections.map((d)=>d.pattern).join(", ")}`);
+            throw new Error("[PII] Blocked response due to PII detection");
+        }
+    }
+    let sanitized = text;
+    if (mode === "redact" && ranges.length > 0) {
+        // Sort ranges from right to left to avoid shifting offsets
+        ranges.sort((a, b)=>b.start - a.start);
+        // Merge overlapping or adjacent ranges
+        const mergedRanges = [];
+        for (const r of ranges){
+            if (mergedRanges.length === 0) {
+                mergedRanges.push(r);
+            } else {
+                const last = mergedRanges[mergedRanges.length - 1];
+                if (r.end >= last.start) {
+                    last.start = Math.min(r.start, last.start);
+                    last.end = Math.max(r.end, last.end);
+                } else {
+                    mergedRanges.push(r);
+                }
+            }
+        }
+        for (const range of mergedRanges){
+            sanitized = sanitized.slice(0, range.start) + range.replacement + sanitized.slice(range.end);
+        }
+    }
+    return {
+        text: mode === "redact" ? sanitized : text,
+        detections,
+        redacted: mode === "redact" && detections.length > 0,
+        endMatchIndex
+    };
+}
+function sanitizePIIChunk(chunk, isStopSignal = false) {
+    if (!isEnabled()) return chunk;
+    // If it's a stop signal, we are flushing the final chunk, so we shouldn't treat it as a partial streaming buffer (force redaction)
+    const { text } = sanitizePII(chunk, !isStopSignal);
+    return text;
+}
+function sanitizePIIResponse(response) {
+    if (!isEnabled() || !response) return response;
+    try {
+        const visited = new WeakSet();
+        // Deep sanitize the entire response object recursively
+        const deepSanitize = (obj, depth = 0)=>{
+            if (depth > 100) {
+                throw new Error("Maximum sanitization depth exceeded");
+            }
+            if (!obj) return obj;
+            if (typeof obj === "string") {
+                return sanitizePII(obj).text;
+            }
+            if (typeof obj === "object") {
+                if (visited.has(obj)) {
+                    return "[CIRCULAR_REFERENCE_REDACTED]";
+                }
+                visited.add(obj);
+                if (Array.isArray(obj)) {
+                    for(let i = 0; i < obj.length; i++){
+                        obj[i] = deepSanitize(obj[i], depth + 1);
+                    }
+                } else {
+                    for (const key of Object.keys(obj)){
+                        // Skip known non-PII system metadata keys to optimize performance
+                        if ([
+                            "id",
+                            "model",
+                            "object",
+                            "created",
+                            "finish_reason",
+                            "finishReason",
+                            "role",
+                            "type",
+                            "index",
+                            "stop_reason"
+                        ].includes(key)) {
+                            continue;
+                        }
+                        obj[key] = deepSanitize(obj[key], depth + 1);
+                    }
+                }
+            }
+            return obj;
+        };
+        return deepSanitize(response);
+    } catch (err) {
+        if (err?.message?.startsWith("[PII] Blocked response")) {
+            throw err;
+        }
+        // Fail secure — try raw string sanitization instead of failing open
+        try {
+            const serialized = JSON.stringify(response);
+            const { text: sanitized } = sanitizePII(serialized);
+            return JSON.parse(sanitized);
+        } catch (fallbackErr) {
+            // Suppress err.message — never surface upstream error detail to the client
+            // (Hard Rule #12). The underlying error is available in server logs.
+            console.warn("[PII] Sanitization fallback failed:", err?.message);
+            throw new Error("[PII] Blocked response due to sanitization failure");
+        }
+    }
+}
+// ── Checksum Validation Helpers ──
+function isValidLuhn(digits) {
+    let sum = 0;
+    let shouldDouble = false;
+    for(let i = digits.length - 1; i >= 0; i--){
+        let digit = parseInt(digits[i], 10);
+        if (shouldDouble) {
+            digit *= 2;
+            if (digit > 9) digit -= 9;
+        }
+        sum += digit;
+        shouldDouble = !shouldDouble;
+    }
+    return sum % 10 === 0;
+}
+function isValidCPF(cpf) {
+    const digits = cpf.replace(/\D/g, "");
+    if (digits.length !== 11) return false;
+    if (/^(\d)\1{10}$/.test(digits)) return false;
+    let sum = 0;
+    for(let i = 0; i < 9; i++){
+        sum += parseInt(digits[i], 10) * (10 - i);
+    }
+    let rev = 11 - sum % 11;
+    if (rev === 10 || rev === 11) rev = 0;
+    if (rev !== parseInt(digits[9], 10)) return false;
+    sum = 0;
+    for(let i = 0; i < 10; i++){
+        sum += parseInt(digits[i], 10) * (11 - i);
+    }
+    rev = 11 - sum % 11;
+    if (rev === 10 || rev === 11) rev = 0;
+    if (rev !== parseInt(digits[10], 10)) return false;
+    return true;
+}
+function isValidCNPJ(cnpj) {
+    const digits = cnpj.replace(/\D/g, "");
+    if (digits.length !== 14) return false;
+    if (/^(\d)\1{13}$/.test(digits)) return false;
+    let size = 12;
+    let numbers = digits.substring(0, size);
+    const tempDigits = digits.substring(size);
+    let sum = 0;
+    let pos = size - 7;
+    for(let i = size; i >= 1; i--){
+        sum += parseInt(numbers.charAt(size - i), 10) * pos--;
+        if (pos < 2) pos = 9;
+    }
+    let result = sum % 11 < 2 ? 0 : 11 - sum % 11;
+    if (result !== parseInt(tempDigits.charAt(0), 10)) return false;
+    size = 13;
+    numbers = digits.substring(0, size);
+    sum = 0;
+    pos = size - 7;
+    for(let i = size; i >= 1; i--){
+        sum += parseInt(numbers.charAt(size - i), 10) * pos--;
+        if (pos < 2) pos = 9;
+    }
+    result = sum % 11 < 2 ? 0 : 11 - sum % 11;
+    if (result !== parseInt(tempDigits.charAt(1), 10)) return false;
+    return true;
+}
+}),
+"[project]/src/lib/logPayloads.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "cloneLogPayload",
+    ()=>cloneLogPayload,
+    "normalizePayloadForLog",
+    ()=>normalizePayloadForLog,
+    "parseStoredPayload",
+    ()=>parseStoredPayload,
+    "protectPayloadForLog",
+    ()=>protectPayloadForLog,
+    "redactPayload",
+    ()=>redactPayload,
+    "sanitizePayloadPII",
+    ()=>sanitizePayloadPII,
+    "serializePayloadForStorage",
+    ()=>serializePayloadForStorage
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$piiSanitizer$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/piiSanitizer.ts [instrumentation] (ecmascript)");
+;
+const SENSITIVE_KEYS = new Set([
+    "api_key",
+    "apiKey",
+    "api-key",
+    "authorization",
+    "Authorization",
+    "x-api-key",
+    "X-Api-Key",
+    "x-goog-api-key",
+    "access_token",
+    "accessToken",
+    "refresh_token",
+    "refreshToken",
+    "password",
+    "secret",
+    "token"
+]);
+/**
+ * True for any binary/opaque byte view (Uint8Array, Buffer, DataView, other
+ * typed arrays). `Array.isArray()` returns false for these, so callers that
+ * branch on it before recursing would otherwise fall into the generic-object
+ * branch and enumerate one JS property key per decoded byte (#7297).
+ */ function isOpaqueBinary(value) {
+    return ArrayBuffer.isView(value);
+}
+function describeOpaqueBinary(value) {
+    const byteLength = value.byteLength;
+    return `[binary ${byteLength} bytes]`;
+}
+function cloneLogPayload(value) {
+    if (value === null || value === undefined) return value;
+    if (typeof globalThis.structuredClone === "function") {
+        return globalThis.structuredClone(value);
+    }
+    return JSON.parse(JSON.stringify(value));
+}
+function normalizePayloadForLog(payload) {
+    if (typeof payload !== "string") return payload;
+    const trimmed = payload.trim();
+    if (!trimmed) return "";
+    try {
+        return JSON.parse(trimmed);
+    } catch  {
+        return {
+            _rawText: payload
+        };
+    }
+}
+function redactPayload(payload) {
+    if (!payload || typeof payload !== "object") return payload;
+    if (isOpaqueBinary(payload)) return describeOpaqueBinary(payload);
+    if (Array.isArray(payload)) return payload.map(redactPayload);
+    const redacted = {};
+    for (const [key, value] of Object.entries(payload)){
+        if (SENSITIVE_KEYS.has(key)) {
+            redacted[key] = "[REDACTED]";
+        } else if (typeof value === "string" && value.startsWith("Bearer ")) {
+            redacted[key] = "Bearer [REDACTED]";
+        } else if (typeof value === "object" && value !== null) {
+            redacted[key] = redactPayload(value);
+        } else {
+            redacted[key] = value;
+        }
+    }
+    return redacted;
+}
+function sanitizePayloadPII(payload) {
+    if (typeof payload === "string") {
+        return (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$piiSanitizer$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["sanitizePII"])(payload).text;
+    }
+    if (!payload || typeof payload !== "object") {
+        return payload;
+    }
+    if (isOpaqueBinary(payload)) {
+        return describeOpaqueBinary(payload);
+    }
+    if (Array.isArray(payload)) {
+        return payload.map(sanitizePayloadPII);
+    }
+    const sanitized = {};
+    for (const [key, value] of Object.entries(payload)){
+        sanitized[key] = sanitizePayloadPII(value);
+    }
+    return sanitized;
+}
+function protectPayloadForLog(payload) {
+    if (payload === null || payload === undefined) return null;
+    const normalized = normalizePayloadForLog(payload);
+    const piiSanitized = sanitizePayloadPII(normalized);
+    return redactPayload(piiSanitized);
+}
+function serializePayloadForStorage(payload, maxLength = 65536) {
+    if (payload === null || payload === undefined) return null;
+    const exact = JSON.stringify(payload);
+    if (exact.length <= maxLength) {
+        return exact;
+    }
+    return JSON.stringify({
+        _truncated: true,
+        _originalSize: exact.length,
+        _preview: exact.slice(0, maxLength)
+    });
+}
+function parseStoredPayload(value) {
+    if (typeof value !== "string" || value.trim().length === 0) return null;
+    try {
+        return JSON.parse(value);
+    } catch  {
+        return {
+            _rawText: value
+        };
+    }
+}
+}),
+"[project]/src/lib/logEnv.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "getAppLogFilePath",
+    ()=>getAppLogFilePath,
+    "getAppLogFormat",
+    ()=>getAppLogFormat,
+    "getAppLogLevel",
+    ()=>getAppLogLevel,
+    "getAppLogMaxFileSize",
+    ()=>getAppLogMaxFileSize,
+    "getAppLogMaxFiles",
+    ()=>getAppLogMaxFiles,
+    "getAppLogRetentionDays",
+    ()=>getAppLogRetentionDays,
+    "getAppLogRetentionDaysOverride",
+    ()=>getAppLogRetentionDaysOverride,
+    "getAppLogToFile",
+    ()=>getAppLogToFile,
+    "getCallLogMaxEntries",
+    ()=>getCallLogMaxEntries,
+    "getCallLogPipelineCaptureStreamChunks",
+    ()=>getCallLogPipelineCaptureStreamChunks,
+    "getCallLogPipelineMaxSizeBytes",
+    ()=>getCallLogPipelineMaxSizeBytes,
+    "getCallLogRetentionDays",
+    ()=>getCallLogRetentionDays,
+    "getCallLogRetentionDaysOverride",
+    ()=>getCallLogRetentionDaysOverride,
+    "getCallLogsTableMaxRows",
+    ()=>getCallLogsTableMaxRows,
+    "getChatLogArrayTailItems",
+    ()=>getChatLogArrayTailItems,
+    "getChatLogMaxDepth",
+    ()=>getChatLogMaxDepth,
+    "getChatLogMaxObjectKeys",
+    ()=>getChatLogMaxObjectKeys,
+    "getChatLogTextLimit",
+    ()=>getChatLogTextLimit,
+    "getProxyLogsTableMaxRows",
+    ()=>getProxyLogsTableMaxRows,
+    "isChatDebugFileEnabled",
+    ()=>isChatDebugFileEnabled,
+    "parseFileSize",
+    ()=>parseFileSize
+]);
+var __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/path [external] (path, cjs)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$dataPaths$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/dataPaths.ts [instrumentation] (ecmascript)");
+;
+;
+const DEFAULT_APP_LOG_RETENTION_DAYS = 7;
+const DEFAULT_CALL_LOG_RETENTION_DAYS = 7;
+const DEFAULT_APP_LOG_MAX_SIZE = 50 * 1024 * 1024;
+const DEFAULT_APP_LOG_MAX_FILES = 20;
+const DEFAULT_CALL_LOG_MAX_ENTRIES = 10000;
+const DEFAULT_CALL_LOGS_TABLE_MAX_ROWS = 100000;
+const DEFAULT_CALL_LOG_PIPELINE_MAX_SIZE_KB = 512;
+const DEFAULT_PROXY_LOGS_TABLE_MAX_ROWS = 100000;
+/**
+ * Default app log path, anchored to DATA_DIR (never `process.cwd()`).
+ *
+ * The globally-installed CLI runs from an arbitrary working directory, so anchoring
+ * the default to cwd made file logging silently no-op under an unrelated directory
+ * (#6197). Computed lazily so a per-process/per-test `DATA_DIR` override is honoured
+ * (the env var is read at call time, not at module load). Uses the pure
+ * `resolveDataDir()` resolver — no directory creation side effects in a path getter.
+ */ function getDefaultAppLogPath() {
+    return __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$dataPaths$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["resolveDataDir"])(), "logs", "application", "app.log");
+}
+function parsePositiveInt(value, fallback) {
+    if (!value) return fallback;
+    const parsed = Number.parseInt(value, 10);
+    return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
+function parseNonNegativeInt(value, fallback) {
+    if (value === undefined || value === "") return fallback;
+    const parsed = Number.parseInt(value, 10);
+    return Number.isInteger(parsed) && parsed >= 0 ? parsed : fallback;
+}
+function parseBoolean(value, fallback) {
+    if (!value) return fallback;
+    const normalized = value.trim().toLowerCase();
+    if ([
+        "1",
+        "true",
+        "yes",
+        "on"
+    ].includes(normalized)) return true;
+    if ([
+        "0",
+        "false",
+        "no",
+        "off"
+    ].includes(normalized)) return false;
+    return fallback;
+}
+function parseFileSize(raw) {
+    if (!raw) return DEFAULT_APP_LOG_MAX_SIZE;
+    const match = raw.match(/^(\d+)\s*(k|m|g|kb|mb|gb)?$/i);
+    if (!match) return DEFAULT_APP_LOG_MAX_SIZE;
+    const num = parseInt(match[1], 10);
+    const unit = (match[2] || "").toLowerCase();
+    switch(unit){
+        case "k":
+        case "kb":
+            return num * 1024;
+        case "m":
+        case "mb":
+            return num * 1024 * 1024;
+        case "g":
+        case "gb":
+            return num * 1024 * 1024 * 1024;
+        default:
+            return num;
+    }
+}
+function getAppLogToFile() {
+    return process.env.APP_LOG_TO_FILE !== "false";
+}
+function getAppLogFilePath() {
+    return process.env.APP_LOG_FILE_PATH || getDefaultAppLogPath();
+}
+function getAppLogMaxFileSize() {
+    return parseFileSize(process.env.APP_LOG_MAX_FILE_SIZE);
+}
+function getAppLogRetentionDays() {
+    return parsePositiveInt(process.env.APP_LOG_RETENTION_DAYS, DEFAULT_APP_LOG_RETENTION_DAYS);
+}
+function getCallLogRetentionDays() {
+    return parsePositiveInt(process.env.CALL_LOG_RETENTION_DAYS, DEFAULT_CALL_LOG_RETENTION_DAYS);
+}
+/**
+ * Returns the explicit operator-set retention override (a positive integer), or `null`
+ * when the env var is unset/empty/invalid. Callers give an explicit env var precedence
+ * over the dashboard's database retention, while falling back to the dashboard (not the
+ * hardcoded 7-day default) when the operator did not set the env var. (#4354)
+ */ function parsePositiveIntOrNull(value) {
+    if (value === undefined || value === "") return null;
+    const parsed = Number.parseInt(value, 10);
+    return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
+}
+function getAppLogRetentionDaysOverride() {
+    return parsePositiveIntOrNull(process.env.APP_LOG_RETENTION_DAYS);
+}
+function getCallLogRetentionDaysOverride() {
+    return parsePositiveIntOrNull(process.env.CALL_LOG_RETENTION_DAYS);
+}
+function getAppLogMaxFiles() {
+    return parsePositiveInt(process.env.APP_LOG_MAX_FILES, DEFAULT_APP_LOG_MAX_FILES);
+}
+function getCallLogMaxEntries() {
+    return parsePositiveInt(process.env.CALL_LOG_MAX_ENTRIES, DEFAULT_CALL_LOG_MAX_ENTRIES);
+}
+function getCallLogsTableMaxRows() {
+    return parsePositiveInt(process.env.CALL_LOGS_TABLE_MAX_ROWS, DEFAULT_CALL_LOGS_TABLE_MAX_ROWS);
+}
+function getCallLogPipelineCaptureStreamChunks() {
+    return parseBoolean(process.env.CALL_LOG_PIPELINE_CAPTURE_STREAM_CHUNKS, true);
+}
+function getCallLogPipelineMaxSizeBytes() {
+    return parsePositiveInt(process.env.CALL_LOG_PIPELINE_MAX_SIZE_KB, DEFAULT_CALL_LOG_PIPELINE_MAX_SIZE_KB) * 1024;
+}
+function getProxyLogsTableMaxRows() {
+    return parsePositiveInt(process.env.PROXY_LOGS_TABLE_MAX_ROWS, DEFAULT_PROXY_LOGS_TABLE_MAX_ROWS);
+}
+function getAppLogLevel(defaultLevel) {
+    return process.env.APP_LOG_LEVEL || defaultLevel;
+}
+function getAppLogFormat(defaultFormat) {
+    return process.env.APP_LOG_FORMAT || defaultFormat;
+}
+function getChatLogTextLimit() {
+    return parsePositiveInt(process.env.CHAT_LOG_TEXT_LIMIT, 64 * 1024);
+}
+function getChatLogArrayTailItems() {
+    return parsePositiveInt(process.env.CHAT_LOG_ARRAY_TAIL_ITEMS, 24);
+}
+function getChatLogMaxDepth() {
+    return parsePositiveInt(process.env.CHAT_LOG_MAX_DEPTH, 6);
+}
+function getChatLogMaxObjectKeys() {
+    return parseNonNegativeInt(process.env.CHAT_LOG_MAX_OBJECT_KEYS, 80);
+}
+function isChatDebugFileEnabled() {
+    if (parseBoolean(process.env.CHAT_DEBUG_FILE, false)) return true;
+    return process.env.APP_LOG_LEVEL?.trim().toLowerCase() === "debug";
+}
+}),
+"[project]/src/lib/usage/callLogArtifacts.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "CALL_LOGS_DIR",
+    ()=>CALL_LOGS_DIR,
+    "MAX_CALL_LOG_ARTIFACT_BYTES",
+    ()=>MAX_CALL_LOG_ARTIFACT_BYTES,
+    "buildArtifactRelativePath",
+    ()=>buildArtifactRelativePath,
+    "cleanupEmptyCallLogDirs",
+    ()=>cleanupEmptyCallLogDirs,
+    "deleteCallArtifact",
+    ()=>deleteCallArtifact,
+    "listCallLogArtifactFiles",
+    ()=>listCallLogArtifactFiles,
+    "purgeCallLogArtifactDirectory",
+    ()=>purgeCallLogArtifactDirectory,
+    "readCallArtifact",
+    ()=>readCallArtifact,
+    "writeCallArtifact",
+    ()=>writeCallArtifact
+]);
+var __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/node:fs [external] (node:fs, cjs)");
+var __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$path__$5b$external$5d$__$28$node$3a$path$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/node:path [external] (node:path, cjs)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$dataPaths$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/dataPaths.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$logEnv$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/logEnv.ts [instrumentation] (ecmascript)");
+;
+;
+;
+;
+const isCloud = typeof globalThis.caches === "object" && globalThis.caches !== null;
+const isBuildPhase = process.env.NEXT_PHASE === "phase-production-build";
+const DATA_DIR = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$dataPaths$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["resolveDataDir"])({
+    isCloud
+});
+const CALL_LOGS_DIR = isCloud ? null : __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$path__$5b$external$5d$__$28$node$3a$path$2c$__cjs$29$__["default"].join(DATA_DIR, "call_logs");
+const MAX_CALL_LOG_ARTIFACT_BYTES = 512 * 1024;
+const SIZE_LIMIT_EXCEEDED_REASON = "call_log_artifact_size_limit_exceeded";
+const OMITTED_FOR_SIZE_LIMIT = "[omitted: call log artifact size limit exceeded]";
+const STREAM_CHUNKS_OMITTED_FOR_SIZE_LIMIT = "[stream chunks omitted: call log artifact size limit exceeded]";
+function buildArtifactRelativePath(timestamp, id) {
+    const parsed = new Date(timestamp);
+    const safeTimestamp = (Number.isNaN(parsed.getTime()) ? new Date().toISOString() : parsed.toISOString()).replace(/[:]/g, "-");
+    const dateFolder = safeTimestamp.slice(0, 10);
+    return __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$path__$5b$external$5d$__$28$node$3a$path$2c$__cjs$29$__["default"].posix.join(dateFolder, `${safeTimestamp}_${id}.json`);
+}
+function computeArtifactChecksum(serialized) {
+    const bytes = Buffer.from(serialized);
+    let hash = 0x811c9dc5;
+    for (const byte of bytes){
+        hash ^= byte;
+        hash = Math.imul(hash, 0x01000193) >>> 0;
+    }
+    return hash.toString(16).padStart(8, "0");
+}
+function truncateArtifactForStorage(artifact) {
+    const pipeline = artifact.pipeline;
+    if (!pipeline?.streamChunks) return artifact;
+    return {
+        ...artifact,
+        pipeline: {
+            ...pipeline,
+            streamChunks: {
+                provider: pipeline.streamChunks.provider?.length ? [
+                    STREAM_CHUNKS_OMITTED_FOR_SIZE_LIMIT
+                ] : undefined,
+                openai: pipeline.streamChunks.openai?.length ? [
+                    STREAM_CHUNKS_OMITTED_FOR_SIZE_LIMIT
+                ] : undefined,
+                client: pipeline.streamChunks.client?.length ? [
+                    STREAM_CHUNKS_OMITTED_FOR_SIZE_LIMIT
+                ] : undefined
+            }
+        }
+    };
+}
+function omitOversizedPipeline(artifact) {
+    if (!artifact.pipeline) return artifact;
+    return {
+        ...artifact,
+        pipeline: {
+            error: {
+                _omniroute_truncated: true,
+                reason: SIZE_LIMIT_EXCEEDED_REASON
+            }
+        }
+    };
+}
+function getArtifactMaxBytes(artifact) {
+    return artifact.pipeline ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$logEnv$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["getCallLogPipelineMaxSizeBytes"])() : MAX_CALL_LOG_ARTIFACT_BYTES;
+}
+function buildMinimalArtifactForSizeLimit(artifact) {
+    return {
+        schemaVersion: artifact.schemaVersion,
+        summary: artifact.summary,
+        requestBody: OMITTED_FOR_SIZE_LIMIT,
+        responseBody: OMITTED_FOR_SIZE_LIMIT,
+        error: artifact.error ? OMITTED_FOR_SIZE_LIMIT : null,
+        pipeline: {
+            error: {
+                _omniroute_truncated: true,
+                reason: SIZE_LIMIT_EXCEEDED_REASON
+            }
+        }
+    };
+}
+function serializeFinalSizeLimitFallback(artifact, maxBytes) {
+    const withSummary = JSON.stringify(buildMinimalArtifactForSizeLimit(artifact));
+    if (Buffer.byteLength(withSummary) <= maxBytes) {
+        return withSummary;
+    }
+    return JSON.stringify({
+        schemaVersion: artifact.schemaVersion,
+        _omniroute_truncated: true,
+        reason: SIZE_LIMIT_EXCEEDED_REASON
+    });
+}
+function serializeArtifactForStorage(artifact) {
+    // Debug mode: write full untruncated payload
+    if ((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$logEnv$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["isChatDebugFileEnabled"])()) {
+        return JSON.stringify(artifact, null, 2);
+    }
+    const maxBytes = getArtifactMaxBytes(artifact);
+    // Single-pass, non-pretty serialization on the hot path. Artifacts are machine-read via
+    // JSON.parse (readCallArtifact), so pretty-printing only doubled the bytes and CPU of
+    // serializing large request/response bodies on every request — a contributor to the
+    // CPU-runaway. The debug path above keeps pretty output for human inspection.
+    const serialized = JSON.stringify(artifact);
+    if (Buffer.byteLength(serialized) <= maxBytes) {
+        return serialized;
+    }
+    const truncated = JSON.stringify(truncateArtifactForStorage(artifact));
+    if (Buffer.byteLength(truncated) <= maxBytes) {
+        return truncated;
+    }
+    const withoutPipeline = JSON.stringify(omitOversizedPipeline(artifact));
+    if (Buffer.byteLength(withoutPipeline) <= maxBytes) {
+        return withoutPipeline;
+    }
+    const minimal = JSON.stringify({
+        ...omitOversizedPipeline(artifact),
+        requestBody: OMITTED_FOR_SIZE_LIMIT,
+        responseBody: OMITTED_FOR_SIZE_LIMIT,
+        error: artifact.error ? OMITTED_FOR_SIZE_LIMIT : null
+    });
+    if (Buffer.byteLength(minimal) <= maxBytes) {
+        return minimal;
+    }
+    return serializeFinalSizeLimitFallback(artifact, maxBytes);
+}
+function writeCallArtifact(artifact, relativePath = buildArtifactRelativePath(artifact.summary.timestamp, artifact.summary.id)) {
+    if (!CALL_LOGS_DIR || isBuildPhase) return null;
+    const absPath = __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$path__$5b$external$5d$__$28$node$3a$path$2c$__cjs$29$__["default"].join(CALL_LOGS_DIR, relativePath);
+    const tmpPath = `${absPath}.${process.pid}.${Date.now()}.tmp`;
+    try {
+        const serialized = serializeArtifactForStorage(artifact);
+        const sizeBytes = Buffer.byteLength(serialized);
+        // Keep the legacy field name for storage compatibility, but use a non-cryptographic checksum
+        // so artifact bookkeeping is not treated as password hashing by static analysis.
+        const fileChecksum = computeArtifactChecksum(serialized);
+        __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].mkdirSync(__TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$path__$5b$external$5d$__$28$node$3a$path$2c$__cjs$29$__["default"].dirname(absPath), {
+            recursive: true
+        });
+        __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].writeFileSync(tmpPath, serialized);
+        __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].renameSync(tmpPath, absPath);
+        return {
+            relPath: relativePath,
+            sizeBytes,
+            sha256: fileChecksum
+        };
+    } catch (error) {
+        try {
+            __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].rmSync(tmpPath, {
+                force: true
+            });
+        } catch  {
+        // Best effort cleanup only.
+        }
+        console.error("[callLogs] Failed to write request artifact:", error.message);
+        return null;
+    }
+}
+function readCallArtifact(relativePath) {
+    if (!CALL_LOGS_DIR || !relativePath) {
+        return {
+            artifact: null,
+            state: "missing"
+        };
+    }
+    try {
+        const absPath = __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$path__$5b$external$5d$__$28$node$3a$path$2c$__cjs$29$__["default"].join(CALL_LOGS_DIR, relativePath);
+        if (!__TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].existsSync(absPath)) {
+            return {
+                artifact: null,
+                state: "missing"
+            };
+        }
+        return {
+            artifact: JSON.parse(__TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].readFileSync(absPath, "utf8")),
+            state: "ready"
+        };
+    } catch (error) {
+        console.error("[callLogs] Failed to read request artifact:", error.message);
+        return {
+            artifact: null,
+            state: "corrupt"
+        };
+    }
+}
+function deleteCallArtifact(relativePath) {
+    if (!CALL_LOGS_DIR || !relativePath) return false;
+    try {
+        const absPath = __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$path__$5b$external$5d$__$28$node$3a$path$2c$__cjs$29$__["default"].join(CALL_LOGS_DIR, relativePath);
+        if (!__TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].existsSync(absPath)) return false;
+        __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].rmSync(absPath, {
+            force: true
+        });
+        return true;
+    } catch  {
+        return false;
+    }
+}
+function cleanupEmptyCallLogDirs(baseDir = CALL_LOGS_DIR) {
+    if (!baseDir || !__TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].existsSync(baseDir)) return;
+    try {
+        for (const entry of __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].readdirSync(baseDir)){
+            const entryPath = __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$path__$5b$external$5d$__$28$node$3a$path$2c$__cjs$29$__["default"].join(baseDir, entry);
+            const stat = __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].statSync(entryPath);
+            if (!stat.isDirectory()) continue;
+            if (__TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].readdirSync(entryPath).length === 0) {
+                __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].rmSync(entryPath, {
+                    recursive: true,
+                    force: true
+                });
+            }
+        }
+    } catch  {
+    // Best effort only.
+    }
+}
+function listCallLogArtifactFiles(baseDir = CALL_LOGS_DIR) {
+    if (!baseDir || !__TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].existsSync(baseDir)) return [];
+    return __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].readdirSync(baseDir).flatMap((entry)=>{
+        const entryPath = __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$path__$5b$external$5d$__$28$node$3a$path$2c$__cjs$29$__["default"].join(baseDir, entry);
+        try {
+            const stat = __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].statSync(entryPath);
+            if (!stat.isDirectory()) return [];
+            return __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].readdirSync(entryPath).filter((file)=>file.endsWith(".json")).map((file)=>{
+                const absPath = __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$path__$5b$external$5d$__$28$node$3a$path$2c$__cjs$29$__["default"].join(entryPath, file);
+                const fileStat = __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].statSync(absPath);
+                return {
+                    relativePath: __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$path__$5b$external$5d$__$28$node$3a$path$2c$__cjs$29$__["default"].posix.join(entry, file),
+                    absPath,
+                    mtimeMs: fileStat.mtimeMs
+                };
+            });
+        } catch  {
+            return [];
+        }
+    }).sort((a, b)=>b.mtimeMs - a.mtimeMs);
+}
+function purgeCallLogArtifactDirectory(baseDir = CALL_LOGS_DIR) {
+    const result = {
+        deletedArtifacts: 0,
+        errors: 0
+    };
+    if (!baseDir || !__TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].existsSync(baseDir)) return result;
+    try {
+        result.deletedArtifacts = listCallLogArtifactFiles(baseDir).length;
+    } catch  {
+        result.deletedArtifacts = 0;
+    }
+    try {
+        __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["default"].rmSync(baseDir, {
+            recursive: true,
+            force: true
+        });
+    } catch (error) {
+        console.error("[callLogArtifacts] Failed to purge call log artifacts:", error);
+        result.deletedArtifacts = 0;
+        result.errors++;
+    }
+    return result;
+}
+}),
+"[project]/src/lib/usage/accountIdentity.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "resolveImportedUsageAccountIdentity",
+    ()=>resolveImportedUsageAccountIdentity,
+    "resolveOrphanedUsageAccountIdentity",
+    ()=>resolveOrphanedUsageAccountIdentity,
+    "resolveUsageAccountIdentity",
+    ()=>resolveUsageAccountIdentity
+]);
+function identityString(value) {
+    return typeof value === "string" && value ? value : null;
+}
+function displayString(value) {
+    if (typeof value !== "string") return null;
+    const trimmed = value.trim();
+    return trimmed || null;
+}
+function sanePriority(value) {
+    return typeof value === "number" && Number.isSafeInteger(value) && value >= 0 && value <= 4 ? value : null;
+}
+function toProviderSpecificData(value) {
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+        return value;
+    }
+    if (typeof value !== "string" || !value) return {};
+    try {
+        const parsed = JSON.parse(value);
+        return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+    } catch  {
+        return {};
+    }
+}
+function resolveUsageAccountIdentity(connection) {
+    const provider = identityString(connection?.provider) || "unknown";
+    const connectionId = identityString(connection?.id) || "unknown";
+    const authType = identityString(connection?.authType ?? connection?.auth_type);
+    const email = identityString(connection?.email);
+    const providerSpecificData = toProviderSpecificData(connection?.providerSpecificData ?? connection?.provider_specific_data);
+    const workspaceId = identityString(providerSpecificData.workspaceId);
+    const chatgptUserId = identityString(providerSpecificData.chatgptUserId);
+    const username = identityString(providerSpecificData.username);
+    let identityParts;
+    if (authType === "oauth" && provider === "codex" && workspaceId && chatgptUserId) {
+        identityParts = [
+            "oauth",
+            provider,
+            "workspace",
+            workspaceId,
+            "user",
+            chatgptUserId
+        ];
+    } else if (authType === "oauth" && provider === "codex" && chatgptUserId) {
+        identityParts = [
+            "oauth",
+            provider,
+            "user",
+            chatgptUserId
+        ];
+    } else if (authType === "oauth" && provider === "codex" && workspaceId && email) {
+        identityParts = [
+            "oauth",
+            provider,
+            "workspace",
+            workspaceId,
+            "email",
+            email
+        ];
+    } else if (authType === "oauth" && provider !== "codex" && email) {
+        identityParts = username ? [
+            "oauth",
+            provider,
+            "email",
+            email,
+            "username",
+            username
+        ] : [
+            "oauth",
+            provider,
+            "email",
+            email
+        ];
+    } else {
+        identityParts = [
+            "connection",
+            provider,
+            connectionId
+        ];
+    }
+    const displayName = displayString(connection?.displayName ?? connection?.display_name);
+    const displayEmail = displayString(connection?.email);
+    const name = displayString(connection?.name);
+    const id = displayString(connection?.id);
+    return {
+        accountKey: JSON.stringify(identityParts),
+        accountLabel: displayName || displayEmail || name || id || "unknown",
+        accountLabelPriority: displayName ? 4 : displayEmail ? 3 : name ? 2 : id ? 1 : 0
+    };
+}
+function resolveOrphanedUsageAccountIdentity(provider, connectionId) {
+    return resolveUsageAccountIdentity({
+        provider,
+        id: connectionId
+    });
+}
+function resolveImportedUsageAccountIdentity(row, fallback) {
+    return {
+        accountKey: identityString(row.account_key ?? row.accountKey) || fallback.accountKey,
+        accountLabel: displayString(row.account_label ?? row.accountLabel) || fallback.accountLabel,
+        accountLabelPriority: sanePriority(row.account_label_priority ?? row.accountLabelPriority) ?? fallback.accountLabelPriority
+    };
+}
+}),
+"[project]/src/lib/oauth/gitlab.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "GITLAB_DUO_DEFAULT_BASE_URL",
+    ()=>GITLAB_DUO_DEFAULT_BASE_URL,
+    "buildGitLabDirectGatewayUrl",
+    ()=>buildGitLabDirectGatewayUrl,
+    "buildGitLabOAuthEndpoints",
+    ()=>buildGitLabOAuthEndpoints,
+    "getCachedGitLabDirectAccess",
+    ()=>getCachedGitLabDirectAccess,
+    "isGitLabDirectAccessDisabled",
+    ()=>isGitLabDirectAccessDisabled,
+    "normalizeGitLabBaseUrl",
+    ()=>normalizeGitLabBaseUrl,
+    "parseGitLabDirectAccessDetails",
+    ()=>parseGitLabDirectAccessDetails,
+    "resolveGitLabOAuthBaseUrl",
+    ()=>resolveGitLabOAuthBaseUrl
+]);
+const GITLAB_DUO_DEFAULT_BASE_URL = process.env.GITLAB_DUO_BASE_URL || process.env.GITLAB_BASE_URL || "https://gitlab.com";
+function asRecord(value) {
+    return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+}
+function normalizeGitLabBaseUrl(baseUrl) {
+    const raw = typeof baseUrl === "string" ? baseUrl.trim() : "";
+    return (raw || GITLAB_DUO_DEFAULT_BASE_URL).replace(/\/$/, "");
+}
+function resolveGitLabOAuthBaseUrl(providerSpecificData) {
+    const data = asRecord(providerSpecificData);
+    return normalizeGitLabBaseUrl(data.baseUrl);
+}
+function buildGitLabOAuthEndpoints(baseUrl) {
+    const root = normalizeGitLabBaseUrl(baseUrl);
+    return {
+        root,
+        authorizeUrl: `${root}/oauth/authorize`,
+        tokenUrl: `${root}/oauth/token`,
+        userUrl: `${root}/api/v4/user`,
+        directAccessUrl: `${root}/api/v4/code_suggestions/direct_access`,
+        publicCompletionsUrl: `${root}/api/v4/code_suggestions/completions`
+    };
+}
+function buildGitLabDirectGatewayUrl(baseUrl) {
+    const normalized = normalizeGitLabBaseUrl(baseUrl);
+    if (normalized.endsWith("/ai/v2/completions")) {
+        return normalized;
+    }
+    if (normalized.endsWith("/ai/v2")) {
+        return `${normalized}/completions`;
+    }
+    return `${normalized}/ai/v2/completions`;
+}
+function parseGitLabDirectAccessDetails(payload) {
+    const data = asRecord(payload);
+    const token = typeof data.token === "string" ? data.token.trim() : "";
+    const baseUrl = typeof data.base_url === "string" ? data.base_url.trim() : "";
+    if (!token || !baseUrl) {
+        return null;
+    }
+    const rawHeaders = asRecord(data.headers);
+    const headers = Object.fromEntries(Object.entries(rawHeaders).filter((entry)=>typeof entry[0] === "string" && typeof entry[1] === "string"));
+    const expiresAt = typeof data.expires_at === "number" && Number.isFinite(data.expires_at) ? new Date(data.expires_at * 1000).toISOString() : null;
+    return {
+        token,
+        baseUrl: normalizeGitLabBaseUrl(baseUrl),
+        expiresAt,
+        headers
+    };
+}
+function getCachedGitLabDirectAccess(providerSpecificData, minValidityMs = 60_000) {
+    const data = asRecord(providerSpecificData);
+    const cache = data.gitlabDirectAccess ?? data.directAccessCache;
+    const parsed = parseGitLabDirectAccessDetails(cache);
+    if (!parsed) {
+        return null;
+    }
+    if (!parsed.expiresAt) {
+        return parsed;
+    }
+    const expiresAtMs = new Date(parsed.expiresAt).getTime();
+    if (!Number.isFinite(expiresAtMs) || expiresAtMs <= Date.now() + minValidityMs) {
+        return null;
+    }
+    return parsed;
+}
+function isGitLabDirectAccessDisabled(status, bodyText) {
+    return status === 403 && bodyText.toLowerCase().includes("direct connections are disabled");
+}
+}),
+"[project]/src/lib/oauth/utils/codexConnectionSelection.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "pickCodexConnectionForUser",
+    ()=>pickCodexConnectionForUser
+]);
+function toRecord(value) {
+    if (value && typeof value === "object" && !Array.isArray(value)) return value;
+    if (typeof value !== "string" || !value) return {};
+    try {
+        const parsed = JSON.parse(value);
+        return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+    } catch  {
+        return {};
+    }
+}
+function nonEmptyString(value) {
+    if (typeof value !== "string") return null;
+    const trimmed = value.trim();
+    return trimmed || null;
+}
+function readIdentity(connection) {
+    const providerSpecificData = toRecord(connection.providerSpecificData ?? connection.provider_specific_data);
+    return {
+        workspaceId: nonEmptyString(providerSpecificData.workspaceId),
+        userId: nonEmptyString(providerSpecificData.chatgptUserId),
+        email: nonEmptyString(connection.email)
+    };
+}
+function pickCodexConnectionForUser(workspaceMatches, userId, email) {
+    const identities = workspaceMatches.map((connection)=>({
+            connection,
+            identity: readIdentity(connection)
+        }));
+    const exact = identities.find(({ identity })=>identity.userId === userId);
+    if (exact) return exact.connection;
+    if (identities.some(({ identity })=>identity.userId !== null)) return null;
+    const normalizedEmail = nonEmptyString(email);
+    const compatibleEmail = normalizedEmail ? identities.find(({ identity })=>identity.email === normalizedEmail) : null;
+    return compatibleEmail?.connection || identities.find(({ identity })=>identity.email === null)?.connection || null;
+}
+}),
+"[project]/src/lib/oauth/constants/oauth.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "AGY_CONFIG",
+    ()=>AGY_CONFIG,
+    "ANTIGRAVITY_CONFIG",
+    ()=>ANTIGRAVITY_CONFIG,
+    "AWS_REGION_PATTERN",
+    ()=>AWS_REGION_PATTERN,
+    "CLAUDE_CONFIG",
+    ()=>CLAUDE_CONFIG,
+    "CLINE_CONFIG",
+    ()=>CLINE_CONFIG,
+    "CODEBUDDY_CN_CONFIG",
+    ()=>CODEBUDDY_CN_CONFIG,
+    "CODEX_CONFIG",
+    ()=>CODEX_CONFIG,
+    "CURSOR_CONFIG",
+    ()=>CURSOR_CONFIG,
+    "GHE_COPILOT_CONFIG",
+    ()=>GHE_COPILOT_CONFIG,
+    "GITHUB_CONFIG",
+    ()=>GITHUB_CONFIG,
+    "GITLAB_DUO_CONFIG",
+    ()=>GITLAB_DUO_CONFIG,
+    "GROK_BUILD_OAUTH_CONFIG",
+    ()=>GROK_BUILD_OAUTH_CONFIG,
+    "GROK_CLI_CONFIG",
+    ()=>GROK_CLI_CONFIG,
+    "KILOCODE_CONFIG",
+    ()=>KILOCODE_CONFIG,
+    "KIMI_CODING_CONFIG",
+    ()=>KIMI_CODING_CONFIG,
+    "KIRO_CONFIG",
+    ()=>KIRO_CONFIG,
+    "OAUTH_TIMEOUT",
+    ()=>OAUTH_TIMEOUT,
+    "OPENAI_CONFIG",
+    ()=>OPENAI_CONFIG,
+    "PROVIDERS",
+    ()=>PROVIDERS,
+    "QODER_CONFIG",
+    ()=>QODER_CONFIG,
+    "RAYCAST_CONFIG",
+    ()=>RAYCAST_CONFIG,
+    "TRAE_CONFIG",
+    ()=>TRAE_CONFIG,
+    "WINDSURF_CONFIG",
+    ()=>WINDSURF_CONFIG,
+    "XAI_OAUTH_CONFIG",
+    ()=>XAI_OAUTH_CONFIG,
+    "ZED_CONFIG",
+    ()=>ZED_CONFIG,
+    "ZED_HOSTED_CONFIG",
+    ()=>ZED_HOSTED_CONFIG,
+    "assertValidAwsRegion",
+    ()=>assertValidAwsRegion
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$antigravityUpstream$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/open-sse/config/antigravityUpstream.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$providerHeaderProfiles$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/open-sse/config/providerHeaderProfiles.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$grokBuild$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/open-sse/config/grokBuild.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$publicCreds$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/open-sse/utils/publicCreds.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$oauth$2f$gitlab$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/oauth/gitlab.ts [instrumentation] (ecmascript)");
+;
+;
+;
+;
+;
+const CLAUDE_CONFIG = {
+    clientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$publicCreds$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["resolvePublicCred"])("claude_id", "CLAUDE_OAUTH_CLIENT_ID"),
+    authorizeUrl: "https://claude.ai/oauth/authorize",
+    tokenUrl: "https://api.anthropic.com/v1/oauth/token",
+    redirectUri: process.env.CLAUDE_CODE_REDIRECT_URI || "https://platform.claude.com/oauth/code/callback",
+    scopes: [
+        "org:create_api_key",
+        "user:profile",
+        "user:inference",
+        "user:sessions:claude_code",
+        "user:mcp_servers"
+    ],
+    codeChallengeMethod: "S256"
+};
+const CODEX_CONFIG = {
+    clientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$publicCreds$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["resolvePublicCred"])("codex_id", "CODEX_OAUTH_CLIENT_ID"),
+    authorizeUrl: "https://auth.openai.com/oauth/authorize",
+    tokenUrl: "https://auth.openai.com/oauth/token",
+    scope: "openid profile email offline_access",
+    codeChallengeMethod: "S256",
+    // Additional OpenAI-specific params
+    extraParams: {
+        id_token_add_organizations: "true",
+        codex_cli_simplified_flow: "true",
+        originator: "codex_cli_rs",
+        // prompt=login forces Auth0/OpenAI to RE-AUTHENTICATE the user instead of
+        // silently reusing an existing browser session. This is THE KEY parameter
+        // that enables multi-account OAuth on the same device + same client_id:
+        // without it, OAuth flow #2 carries over session state from OAuth flow #1
+        // and Auth0 invalidates the previous account's refresh_token family as a
+        // "session takeover". With prompt=login, each OAuth flow creates an
+        // isolated session that does not trample siblings.
+        // Ported from ndycode/codex-multi-auth (auth.ts: forceNewLogin option) —
+        // the only known tool that sustains multiple Codex OAuth accounts.
+        prompt: "login"
+    }
+};
+// Qoder OAuth Configuration (Authorization Code)
+const QODER_OAUTH_AUTHORIZE_URL = process.env.QODER_OAUTH_AUTHORIZE_URL || "";
+const QODER_OAUTH_TOKEN_URL = process.env.QODER_OAUTH_TOKEN_URL || "";
+const QODER_OAUTH_USERINFO_URL = process.env.QODER_OAUTH_USERINFO_URL || "";
+const QODER_OAUTH_CLIENT_ID = process.env.QODER_OAUTH_CLIENT_ID || "";
+const QODER_OAUTH_CLIENT_SECRET = process.env.QODER_OAUTH_CLIENT_SECRET || "";
+const QODER_OAUTH_ENABLED = !!QODER_OAUTH_AUTHORIZE_URL && !!QODER_OAUTH_TOKEN_URL && !!QODER_OAUTH_USERINFO_URL && !!QODER_OAUTH_CLIENT_ID && !!QODER_OAUTH_CLIENT_SECRET;
+const QODER_CONFIG = {
+    enabled: QODER_OAUTH_ENABLED,
+    clientId: QODER_OAUTH_CLIENT_ID,
+    clientSecret: QODER_OAUTH_CLIENT_SECRET,
+    authorizeUrl: QODER_OAUTH_AUTHORIZE_URL,
+    tokenUrl: QODER_OAUTH_TOKEN_URL,
+    userInfoUrl: QODER_OAUTH_USERINFO_URL,
+    extraParams: {
+        loginMethod: "phone",
+        type: "phone"
+    }
+};
+const CODEBUDDY_CN_CONFIG = {
+    baseUrl: "https://copilot.tencent.com",
+    stateUrl: "https://copilot.tencent.com/v2/plugin/auth/state",
+    tokenUrl: "https://copilot.tencent.com/v2/plugin/auth/token",
+    refreshUrl: "https://copilot.tencent.com/v2/plugin/auth/token/refresh",
+    userAgent: "CLI/2.63.2 CodeBuddy/2.63.2",
+    platform: "CLI",
+    pollInterval: 5000
+};
+const GROK_CLI_CONFIG = {
+    clientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$publicCreds$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["resolvePublicCred"])("grok_id", "GROK_OAUTH_CLIENT_ID"),
+    issuer: __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$grokBuild$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["GROK_BUILD_OAUTH_ISSUER"],
+    deviceCodeUrl: __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$grokBuild$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["GROK_BUILD_DEVICE_CODE_URL"],
+    tokenUrl: __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$grokBuild$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["GROK_BUILD_TOKEN_URL"],
+    scope: __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$grokBuild$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["GROK_BUILD_OAUTH_SCOPES"].join(" ")
+};
+const GROK_BUILD_OAUTH_CONFIG = {
+    clientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$publicCreds$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["resolvePublicCred"])("grok_id", "GROK_OAUTH_CLIENT_ID"),
+    authorizeUrl: "https://auth.x.ai/oauth2/authorize",
+    tokenUrl: "https://auth.x.ai/oauth2/token",
+    scope: "openid profile email offline_access grok-cli:access",
+    codeChallengeMethod: "S256",
+    loopbackPort: 56122,
+    callbackPath: "/callback",
+    callbackHost: "127.0.0.1"
+};
+const XAI_OAUTH_CONFIG = {
+    clientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$publicCreds$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["resolvePublicCred"])("grok_id", "GROK_OAUTH_CLIENT_ID"),
+    authorizeUrl: "https://auth.x.ai/oauth2/authorize",
+    tokenUrl: "https://auth.x.ai/oauth2/token",
+    scope: "openid profile email offline_access grok-cli:access api:access",
+    codeChallengeMethod: "S256",
+    loopbackPort: 56121,
+    callbackPath: "/callback",
+    callbackHost: "127.0.0.1"
+};
+const KIMI_CODING_CONFIG = {
+    clientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$publicCreds$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["resolvePublicCred"])("kimi_id", "KIMI_CODING_OAUTH_CLIENT_ID"),
+    deviceCodeUrl: "https://auth.kimi.com/api/oauth/device_authorization",
+    tokenUrl: "https://auth.kimi.com/api/oauth/token"
+};
+const KILOCODE_CONFIG = {
+    apiBaseUrl: "https://api.kilo.ai",
+    initiateUrl: "https://api.kilo.ai/api/device-auth/codes",
+    pollUrlBase: "https://api.kilo.ai/api/device-auth/codes"
+};
+const CLINE_CONFIG = {
+    appBaseUrl: "https://app.cline.bot",
+    apiBaseUrl: "https://api.cline.bot",
+    authorizeUrl: "https://api.cline.bot/api/v1/auth/authorize",
+    tokenExchangeUrl: "https://api.cline.bot/api/v1/auth/token",
+    refreshUrl: "https://api.cline.bot/api/v1/auth/refresh"
+};
+const ANTIGRAVITY_CONFIG = {
+    clientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$publicCreds$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["resolvePublicCred"])("antigravity_id", "ANTIGRAVITY_OAUTH_CLIENT_ID"),
+    clientSecret: (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$publicCreds$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["resolvePublicCred"])("antigravity_alt", "ANTIGRAVITY_OAUTH_CLIENT_SECRET"),
+    authorizeUrl: "https://accounts.google.com/o/oauth2/v2/auth",
+    tokenUrl: "https://oauth2.googleapis.com/token",
+    userInfoUrl: "https://www.googleapis.com/oauth2/v1/userinfo",
+    // No "openid" scope — the working 9router flow requests only the Cloud Code /
+    // userinfo scopes below. "openid" (with PKCE) routed Google into the hanging
+    // `firstparty/nativeapp` consent. Match 9router exactly (antigravity login fix).
+    scopes: [
+        "https://www.googleapis.com/auth/cloud-platform",
+        "https://www.googleapis.com/auth/userinfo.email",
+        "https://www.googleapis.com/auth/userinfo.profile",
+        "https://www.googleapis.com/auth/cclog",
+        "https://www.googleapis.com/auth/experimentsandconfigs"
+    ],
+    // Antigravity specific
+    apiEndpoint: __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$antigravityUpstream$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["ANTIGRAVITY_RUNTIME_BASE_URLS"][0],
+    apiVersion: "v1internal",
+    loadCodeAssistEndpoints: __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$antigravityUpstream$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["ANTIGRAVITY_BOOTSTRAP_BASE_URLS"].map((baseUrl)=>`${baseUrl}/v1internal:loadCodeAssist`),
+    onboardUserEndpoints: __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$antigravityUpstream$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["ANTIGRAVITY_BOOTSTRAP_BASE_URLS"].map((baseUrl)=>`${baseUrl}/v1internal:onboardUser`),
+    fetchAvailableModelsEndpoints: (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$antigravityUpstream$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["getAntigravityFetchAvailableModelsUrls"])(),
+    loadCodeAssistEndpoint: `${__TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$antigravityUpstream$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["ANTIGRAVITY_BOOTSTRAP_BASE_URLS"][0]}/v1internal:loadCodeAssist`,
+    onboardUserEndpoint: `${__TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$antigravityUpstream$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["ANTIGRAVITY_BOOTSTRAP_BASE_URLS"][0]}/v1internal:onboardUser`,
+    fetchAvailableModelsEndpoint: (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$antigravityUpstream$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["getAntigravityFetchAvailableModelsUrls"])()[0]
+};
+const AGY_CONFIG = {
+    clientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$publicCreds$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["resolvePublicCred"])("antigravity_id", "ANTIGRAVITY_OAUTH_CLIENT_ID"),
+    clientSecret: (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$publicCreds$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["resolvePublicCred"])("antigravity_alt", "ANTIGRAVITY_OAUTH_CLIENT_SECRET"),
+    authorizeUrl: "https://accounts.google.com/o/oauth2/v2/auth",
+    tokenUrl: "https://oauth2.googleapis.com/token",
+    userInfoUrl: "https://www.googleapis.com/oauth2/v1/userinfo",
+    scopes: [
+        ...ANTIGRAVITY_CONFIG.scopes
+    ],
+    // Reuse the antigravity Code Assist endpoints (identical backend).
+    apiEndpoint: ANTIGRAVITY_CONFIG.apiEndpoint,
+    apiVersion: ANTIGRAVITY_CONFIG.apiVersion,
+    loadCodeAssistEndpoints: [
+        ...ANTIGRAVITY_CONFIG.loadCodeAssistEndpoints
+    ],
+    onboardUserEndpoints: [
+        ...ANTIGRAVITY_CONFIG.onboardUserEndpoints
+    ],
+    fetchAvailableModelsEndpoints: [
+        ...ANTIGRAVITY_CONFIG.fetchAvailableModelsEndpoints
+    ],
+    loadCodeAssistEndpoint: ANTIGRAVITY_CONFIG.loadCodeAssistEndpoint,
+    onboardUserEndpoint: ANTIGRAVITY_CONFIG.onboardUserEndpoint,
+    fetchAvailableModelsEndpoint: ANTIGRAVITY_CONFIG.fetchAvailableModelsEndpoint
+};
+const OPENAI_CONFIG = {
+    clientId: CODEX_CONFIG.clientId,
+    authorizeUrl: "https://auth.openai.com/oauth/authorize",
+    tokenUrl: "https://auth.openai.com/oauth/token",
+    scope: "openid profile email offline_access",
+    codeChallengeMethod: "S256",
+    extraParams: {
+        id_token_add_organizations: "true",
+        originator: "openai_native",
+        prompt: "login"
+    }
+};
+const GITHUB_CONFIG = {
+    clientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$publicCreds$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["resolvePublicCred"])("github_copilot_id", "GITHUB_OAUTH_CLIENT_ID"),
+    deviceCodeUrl: "https://github.com/login/device/code",
+    tokenUrl: "https://github.com/login/oauth/access_token",
+    userInfoUrl: "https://api.github.com/user",
+    scopes: "read:user",
+    apiVersion: __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$providerHeaderProfiles$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["GITHUB_COPILOT_API_VERSION"],
+    copilotTokenUrl: "https://api.github.com/copilot_internal/v2/token",
+    userAgent: __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$providerHeaderProfiles$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["GITHUB_COPILOT_CHAT_USER_AGENT"],
+    editorVersion: __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$providerHeaderProfiles$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["GITHUB_COPILOT_EDITOR_VERSION"],
+    editorPluginVersion: __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$providerHeaderProfiles$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["GITHUB_COPILOT_CHAT_PLUGIN_VERSION"]
+};
+const GHE_COPILOT_CONFIG = {
+    clientId: process.env.GHE_COPILOT_OAUTH_CLIENT_ID || (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$publicCreds$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["resolvePublicCred"])("github_copilot_id", "GITHUB_OAUTH_CLIENT_ID"),
+    deviceCodeUrl: "",
+    tokenUrl: "",
+    userInfoUrl: "",
+    scopes: "read:user",
+    apiVersion: __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$providerHeaderProfiles$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["GITHUB_COPILOT_API_VERSION"],
+    copilotTokenUrl: "",
+    userAgent: __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$providerHeaderProfiles$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["GITHUB_COPILOT_CHAT_USER_AGENT"],
+    editorVersion: __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$providerHeaderProfiles$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["GITHUB_COPILOT_EDITOR_VERSION"],
+    editorPluginVersion: __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$config$2f$providerHeaderProfiles$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["GITHUB_COPILOT_CHAT_PLUGIN_VERSION"]
+};
+const GITLAB_DUO_ENDPOINTS = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$oauth$2f$gitlab$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["buildGitLabOAuthEndpoints"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$oauth$2f$gitlab$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["GITLAB_DUO_DEFAULT_BASE_URL"]);
+const GITLAB_DUO_CONFIG = {
+    baseUrl: GITLAB_DUO_ENDPOINTS.root,
+    clientId: process.env.GITLAB_DUO_OAUTH_CLIENT_ID || process.env.GITLAB_OAUTH_CLIENT_ID || "",
+    clientSecret: process.env.GITLAB_DUO_OAUTH_CLIENT_SECRET || process.env.GITLAB_OAUTH_CLIENT_SECRET || "",
+    authorizeUrl: GITLAB_DUO_ENDPOINTS.authorizeUrl,
+    tokenUrl: GITLAB_DUO_ENDPOINTS.tokenUrl,
+    userInfoUrl: GITLAB_DUO_ENDPOINTS.userUrl,
+    directAccessUrl: GITLAB_DUO_ENDPOINTS.directAccessUrl,
+    scope: "ai_features read_user",
+    codeChallengeMethod: "S256"
+};
+const AWS_REGION_PATTERN = /^[a-z]{2}-[a-z]+-\d{1,2}$/;
+function assertValidAwsRegion(region) {
+    if (typeof region !== "string" || !AWS_REGION_PATTERN.test(region)) {
+        throw new Error("Invalid region");
+    }
+    return region;
+}
+const KIRO_CONFIG = {
+    // AWS SSO OIDC endpoints for Builder ID/IDC (Device Code Flow)
+    ssoOidcEndpoint: "https://oidc.us-east-1.amazonaws.com",
+    registerClientUrl: "https://oidc.us-east-1.amazonaws.com/client/register",
+    deviceAuthUrl: "https://oidc.us-east-1.amazonaws.com/device_authorization",
+    tokenUrl: "https://oidc.us-east-1.amazonaws.com/token",
+    // AWS Builder ID default start URL
+    startUrl: "https://view.awsapps.com/start",
+    // Client registration params
+    clientName: "kiro-oauth-client",
+    clientType: "public",
+    scopes: [
+        "codewhisperer:completions",
+        "codewhisperer:analysis",
+        "codewhisperer:conversations"
+    ],
+    grantTypes: [
+        "urn:ietf:params:oauth:grant-type:device_code",
+        "refresh_token"
+    ],
+    issuerUrl: "https://identitycenter.amazonaws.com/ssoins-722374e8c3c8e6c6",
+    // Social auth endpoints (Google/GitHub via AWS Cognito)
+    socialAuthEndpoint: "https://prod.us-east-1.auth.desktop.kiro.dev",
+    socialLoginUrl: "https://prod.us-east-1.auth.desktop.kiro.dev/login",
+    socialTokenUrl: "https://prod.us-east-1.auth.desktop.kiro.dev/oauth/token",
+    socialRefreshUrl: "https://prod.us-east-1.auth.desktop.kiro.dev/refreshToken",
+    // Social device-code flow (Google/GitHub).
+    // `socialClientId` is a public CLI identifier — Kiro's device endpoint accepts
+    // any non-empty string and behaves like a User-Agent rather than a secret.
+    // The env override exists so operators on locked-down builds can pin a
+    // custom value if AWS ever starts enforcing this field (Hard Rule #11 spirit).
+    socialClientId: process.env.KIRO_OAUTH_CLIENT_ID || "kiro-cli",
+    socialDeviceAuthorizeUrl: "https://prod.us-east-1.auth.desktop.kiro.dev/oauth/device/authorization",
+    socialDevicePollUrl: "https://prod.us-east-1.auth.desktop.kiro.dev/oauth/device/poll",
+    // Auth methods
+    authMethods: [
+        "builder-id",
+        "idc",
+        "google",
+        "github",
+        "import"
+    ]
+};
+const CURSOR_CONFIG = {
+    // API endpoints
+    apiEndpoint: "https://api2.cursor.sh",
+    chatEndpoint: "/aiserver.v1.ChatService/StreamUnifiedChatWithTools",
+    modelsEndpoint: "/aiserver.v1.AiService/GetDefaultModelNudgeData",
+    // Additional endpoints
+    api3Endpoint: "https://api3.cursor.sh",
+    agentEndpoint: "https://agent.api5.cursor.sh",
+    agentNonPrivacyEndpoint: "https://agentn.api5.cursor.sh",
+    // Client metadata
+    clientVersion: "3.2.14",
+    clientType: "ide",
+    // Token storage locations (for user reference)
+    tokenStoragePaths: {
+        linux: "~/.config/Cursor/User/globalStorage/state.vscdb",
+        macos: "/Users/<user>/Library/Application Support/Cursor/User/globalStorage/state.vscdb",
+        windows: "%APPDATA%\\Cursor\\User\\globalStorage\\state.vscdb"
+    },
+    // Database keys
+    dbKeys: {
+        accessToken: "[REDIGIDO-PRESERVACAO]",
+        machineId: "storage.serviceMachineId"
+    }
+};
+const TRAE_CONFIG = {
+    apiEndpoint: "https://api.trae.ai",
+    clientType: "ide",
+    tokenStoragePaths: {
+        linux: "~/.config/Trae/User/globalStorage/state.vscdb",
+        macos: "/Users/<user>/Library/Application Support/Trae/User/globalStorage/state.vscdb",
+        windows: "%APPDATA%\\Trae\\User\\globalStorage\\state.vscdb"
+    },
+    // Chat completions path (mirrored from OpenAI-compatible providers)
+    chatEndpoint: "/v1/chat/completions",
+    // Trae website — users retrieve their token here after signing in
+    webUrl: "https://trae.ai",
+    // SOLO remote agent base — the executor's real upstream. Also set as the
+    // provider registry baseUrl, which is the source of truth at request time.
+    soloApiEndpoint: "https://core-normal.trae.ai/api/remote/v1",
+    // SOLO model catalogue endpoint (relative to soloApiEndpoint).
+    modelsEndpoint: "/models?functions=solo_agent_remote,solo_work_remote",
+    // Authorization scheme: `Authorization: Cloud-IDE-JWT <token>` (RS256).
+    authScheme: "Cloud-IDE-JWT",
+    // Observed Cloud-IDE-JWT lifetime — drives default expiry hints.
+    tokenLifetimeDays: 14,
+    // Token storage note — solo.trae.ai exposes no public SQLite/keychain path,
+    // so the token is captured via the /authorize flow or pasted manually.
+    tokenNote: "Authorize via trae.ai in the popup, or sign in to solo.trae.ai and paste the Cloud-IDE-JWT from the Authorization header (~14-day lifetime)."
+};
+const RAYCAST_CONFIG = {
+    apiEndpoint: "https://backend.raycast.com",
+    chatEndpoint: "/api/v1/ai/chat_completions",
+    modelsEndpoint: "/api/v1/ai/models",
+    clientType: "macos-app",
+    captureInstructions: "macOS only: use Auto-Import (Keychain + Raycast DB) or capture Bearer, X-Raycast-DeviceId, and optional X-Raycast-Signature JWT from backend.raycast.com traffic."
+};
+const WINDSURF_CONFIG = {
+    // RETIRED 2026-05-29 — endpoint returns 404 post-rebrand. Phase 2 will replace.
+    authorizeUrl: "https://app.devin.ai/editor/signin",
+    // RETIRED 2026-05-29 — PKCE flow disabled, see header comment.
+    codeChallengeMethod: "S256",
+    // RETIRED 2026-05-29 — no callback server is started for windsurf/devin-cli.
+    callbackPort: 0,
+    // RETIRED 2026-05-29 — no callback path is registered for windsurf/devin-cli.
+    callbackPath: "/auth/callback",
+    // RETIRED 2026-05-29 — exchange endpoint no longer reached because PKCE is disabled.
+    apiServerUrl: "https://server.codeium.com",
+    // RETIRED 2026-05-29 — see apiServerUrl.
+    exchangePath: "/exa.seat_management_pb.SeatManagementService/ExchangePKCEAuthorizationCode",
+    // ── Active fields (still consumed by runtime) ─────────────────────────────
+    // Inference server URL (gRPC-web requests go here)
+    inferenceUrl: "https://server.self-serve.windsurf.com",
+    // Primary login path: the user runs the "Windsurf: Provide Auth Token" command
+    // inside the Windsurf/VS Code IDE (or clicks the Jupyter "Get Windsurf
+    // Authentication Token" button), which opens this URL WITH an IDE-supplied
+    // `?state=<xyz>` param and renders the token. Opening this bare URL directly
+    // only shows a "Redirecting" page with no token (#3324).
+    showAuthTokenUrl: "https://windsurf.com/show-auth-token",
+    // Token refresh via Firebase Secure Token Service (reserved for Phase 2).
+    // Default is the public Firebase Web client identifier embedded in the
+    // Windsurf/Devin CLI binary; users may override via WINDSURF_FIREBASE_API_KEY.
+    firebaseApiKey: (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$publicCreds$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["resolvePublicCred"])("windsurf_fb", "WINDSURF_FIREBASE_API_KEY"),
+    firebaseTokenUrl: "https://securetoken.googleapis.com/v1/token",
+    // IDE identity sent with every gRPC request
+    ideName: "windsurf",
+    ideVersion: "3.14.0",
+    extensionVersion: "3.14.0"
+};
+const ZED_CONFIG = {
+    importUrl: "/api/providers/zed/import",
+    discoverUrl: "/api/providers/zed/discover",
+    manualImportUrl: "/api/providers/zed/manual-import"
+};
+const ZED_HOSTED_CONFIG = {
+    webBaseUrl: "https://zed.dev",
+    cloudBaseUrl: "https://cloud.zed.dev",
+    llmBaseUrl: "https://cloud.zed.dev",
+    nativeSignInPath: "/native_app_signin",
+    userInfoUrl: "https://cloud.zed.dev/client/users/me",
+    llmTokenUrl: "https://cloud.zed.dev/client/llm_tokens",
+    modelsUrl: "https://cloud.zed.dev/models",
+    completionsUrl: "https://cloud.zed.dev/completions",
+    defaultNativeAppPort: 58443
+};
+const OAUTH_TIMEOUT = 300000;
+const PROVIDERS = {
+    CLAUDE: "claude",
+    CODEX: "codex",
+    GEMINI: "gemini",
+    QODER: "qoder",
+    ANTIGRAVITY: "antigravity",
+    AGY: "agy",
+    KIMI_CODING: "kimi-coding",
+    OPENAI: "openai",
+    GITHUB: "github",
+    GHE_COPILOT: "ghe-copilot",
+    GITLAB_DUO: "gitlab-duo",
+    KIRO: "kiro",
+    AMAZON_Q: "amazon-q",
+    CURSOR: "cursor",
+    KILOCODE: "kilocode",
+    CLINE: "cline",
+    CLINEPASS: "clinepass",
+    WINDSURF: "windsurf",
+    DEVIN_CLI: "devin-cli",
+    TRAE: "trae",
+    CODEBUDDY_CN: "codebuddy-cn",
+    GROK_CLI: "grok-cli",
+    XAI_OAUTH: "xai-oauth",
+    ZED: "zed",
+    ZED_HOSTED: "zed-hosted"
+};
+}),
+"[project]/src/lib/providers/requestDefaults.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "CODEX_REASONING_EFFORT_VALUES",
+    ()=>CODEX_REASONING_EFFORT_VALUES,
+    "buildOpenAIStoreSessionId",
+    ()=>buildOpenAIStoreSessionId,
+    "ensureOpenAIStoreSessionFallback",
+    ()=>ensureOpenAIStoreSessionFallback,
+    "getClaudeCodeCompatibleRequestDefaults",
+    ()=>getClaudeCodeCompatibleRequestDefaults,
+    "getCodexRequestDefaults",
+    ()=>getCodexRequestDefaults,
+    "getProviderRequestDefaults",
+    ()=>getProviderRequestDefaults,
+    "isOpenAIResponsesStoreEnabled",
+    ()=>isOpenAIResponsesStoreEnabled,
+    "normalizeCacheOverride",
+    ()=>normalizeCacheOverride,
+    "normalizeClaudeCodeCompatibleContext1m",
+    ()=>normalizeClaudeCodeCompatibleContext1m,
+    "normalizeClaudeCodeCompatibleRedactThinking",
+    ()=>normalizeClaudeCodeCompatibleRedactThinking,
+    "normalizeClaudeCodeCompatibleSummarizeThinking",
+    ()=>normalizeClaudeCodeCompatibleSummarizeThinking,
+    "normalizeCodexReasoningEffort",
+    ()=>normalizeCodexReasoningEffort,
+    "normalizeCodexServiceTier",
+    ()=>normalizeCodexServiceTier,
+    "normalizeProviderSpecificData",
+    ()=>normalizeProviderSpecificData,
+    "normalizeRequestDefaults",
+    ()=>normalizeRequestDefaults,
+    "sanitizeProviderSpecificDataForResponse",
+    ()=>sanitizeProviderSpecificDataForResponse
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$domain$2f$connectionModelRules$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/domain/connectionModelRules.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$domain$2f$tagRouter$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/domain/tagRouter.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$constants$2f$openRouterPreset$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/constants/openRouterPreset.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$constants$2f$upstreamHeaders$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/constants/upstreamHeaders.ts [instrumentation] (ecmascript)");
+const CLAUDE_CODE_COMPATIBLE_PROVIDER_PREFIX = "anthropic-compatible-cc-";
+;
+;
+;
+;
+const CODEX_REASONING_EFFORT_VALUES = [
+    "none",
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max"
+];
+const CODEX_REASONING_EFFORT_SET = new Set(CODEX_REASONING_EFFORT_VALUES);
+function asRecord(value) {
+    return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+}
+function normalizeString(value) {
+    if (typeof value !== "string") return undefined;
+    const normalized = value.trim().toLowerCase();
+    return normalized || undefined;
+}
+const BEDROCK_REGION_PATTERN = /^[a-z]{2}(?:-gov)?-[a-z]+-\d+$/i;
+function normalizeAwsRegion(value) {
+    const normalized = normalizeString(value);
+    if (!normalized || !BEDROCK_REGION_PATTERN.test(normalized)) return undefined;
+    return normalized;
+}
+function hasNonEmptyString(value) {
+    return typeof value === "string" && value.trim().length > 0;
+}
+function isClaudeCodeCompatibleProvider(provider) {
+    return typeof provider === "string" && provider.startsWith(CLAUDE_CODE_COMPATIBLE_PROVIDER_PREFIX);
+}
+function normalizeCodexReasoningEffort(value) {
+    const normalized = normalizeString(value);
+    if (!normalized || !CODEX_REASONING_EFFORT_SET.has(normalized)) {
+        return undefined;
+    }
+    return normalized;
+}
+function normalizeCodexServiceTier(value) {
+    const normalized = normalizeString(value);
+    if (!normalized) return undefined;
+    if (normalized === "fast" || normalized === "priority") return "priority";
+    if (normalized === "default" || normalized === "flex") return normalized;
+    return undefined;
+}
+function normalizeClaudeCodeCompatibleContext1m(value) {
+    return value === true ? true : undefined;
+}
+function normalizeClaudeCodeCompatibleRedactThinking(value) {
+    return value === true ? true : undefined;
+}
+function normalizeClaudeCodeCompatibleSummarizeThinking(value) {
+    return value === true ? true : undefined;
+}
+function normalizeRequestDefaults(provider, value) {
+    const record = asRecord(value);
+    if (Object.keys(record).length === 0) return undefined;
+    const normalized = {
+        ...record
+    };
+    if (provider === "codex") {
+        const reasoningEffort = normalizeCodexReasoningEffort(record.reasoningEffort);
+        if (reasoningEffort) {
+            normalized.reasoningEffort = reasoningEffort;
+        } else {
+            delete normalized.reasoningEffort;
+        }
+        const serviceTier = normalizeCodexServiceTier(record.serviceTier);
+        if (serviceTier) {
+            normalized.serviceTier = serviceTier;
+        } else {
+            delete normalized.serviceTier;
+        }
+    }
+    if (isClaudeCodeCompatibleProvider(provider)) {
+        const context1m = normalizeClaudeCodeCompatibleContext1m(record.context1m);
+        if (context1m) {
+            normalized.context1m = true;
+        } else {
+            delete normalized.context1m;
+        }
+        const redactThinking = normalizeClaudeCodeCompatibleRedactThinking(record.redactThinking);
+        if (redactThinking) {
+            normalized.redactThinking = true;
+        } else {
+            delete normalized.redactThinking;
+        }
+        const summarizeThinking = normalizeClaudeCodeCompatibleSummarizeThinking(record.summarizeThinking);
+        if (summarizeThinking) {
+            normalized.summarizeThinking = true;
+        } else {
+            delete normalized.summarizeThinking;
+        }
+    }
+    return Object.keys(normalized).length > 0 ? normalized : undefined;
+}
+const CACHE_PASSTHROUGH_VALUES = new Set([
+    "strip",
+    "openai-format",
+    "claude-format"
+]);
+function normalizeCacheOverride(value) {
+    const record = asRecord(value);
+    if (Object.keys(record).length === 0) return undefined;
+    const normalized = {};
+    if (typeof record.supportsPromptCaching === "boolean") {
+        normalized.supportsPromptCaching = record.supportsPromptCaching;
+    }
+    if (typeof record.cacheControlPassthrough === "string" && CACHE_PASSTHROUGH_VALUES.has(record.cacheControlPassthrough)) {
+        normalized.cacheControlPassthrough = record.cacheControlPassthrough;
+    }
+    return Object.keys(normalized).length > 0 ? normalized : undefined;
+}
+// #6880 — extracted so normalizeProviderSpecificData() stays under the
+// max-lines-per-function gate: normalizes the two nested-object sub-fields
+// (requestDefaults, cache) in one pass.
+function normalizeNestedSubObjects(provider, normalized) {
+    if ("requestDefaults" in normalized) {
+        const requestDefaults = normalizeRequestDefaults(provider, normalized.requestDefaults);
+        if (requestDefaults) {
+            normalized.requestDefaults = requestDefaults;
+        } else {
+            delete normalized.requestDefaults;
+        }
+    }
+    if ("cache" in normalized) {
+        const cache = normalizeCacheOverride(normalized.cache);
+        if (cache) {
+            normalized.cache = cache;
+        } else {
+            delete normalized.cache;
+        }
+    }
+}
+function normalizeProviderSpecificData(provider, value) {
+    const record = asRecord(value);
+    if (Object.keys(record).length === 0) return undefined;
+    const normalized = {
+        ...record
+    };
+    normalizeNestedSubObjects(provider, normalized);
+    if ("openaiStoreEnabled" in normalized && typeof normalized.openaiStoreEnabled !== "boolean") {
+        delete normalized.openaiStoreEnabled;
+    }
+    if ("blockExtraUsage" in normalized && typeof normalized.blockExtraUsage !== "boolean") {
+        delete normalized.blockExtraUsage;
+    }
+    // #2997: per-connection transient-cooldown opt-out — only persist a real boolean.
+    if ("disableCooling" in normalized && typeof normalized.disableCooling !== "boolean") {
+        delete normalized.disableCooling;
+    }
+    if ("autoFetchModels" in normalized && typeof normalized.autoFetchModels !== "boolean") {
+        delete normalized.autoFetchModels;
+    }
+    if ("preset" in normalized) {
+        const preset = provider === "openrouter" ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$constants$2f$openRouterPreset$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["normalizeOpenRouterPreset"])(normalized.preset) : null;
+        if (preset) {
+            normalized.preset = preset;
+        } else {
+            delete normalized.preset;
+        }
+    }
+    if (provider === "bedrock" && "region" in normalized) {
+        const region = normalizeAwsRegion(normalized.region);
+        if (region) {
+            normalized.region = region;
+        } else {
+            delete normalized.region;
+        }
+    }
+    if ("tag" in normalized) {
+        if (typeof normalized.tag === "string") {
+            const trimmedTag = normalized.tag.trim();
+            if (trimmedTag) {
+                normalized.tag = trimmedTag;
+            } else {
+                delete normalized.tag;
+            }
+        } else {
+            delete normalized.tag;
+        }
+    }
+    if ("tags" in normalized) {
+        const tags = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$domain$2f$tagRouter$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["normalizeRoutingTags"])(normalized.tags);
+        if (tags.length > 0) {
+            normalized.tags = tags;
+        } else {
+            delete normalized.tags;
+        }
+    }
+    if ("excludedModels" in normalized || "excluded_models" in normalized) {
+        const excludedModels = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$domain$2f$connectionModelRules$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["normalizeExcludedModelPatterns"])(normalized.excludedModels ?? normalized.excluded_models);
+        if (excludedModels.length > 0) {
+            normalized.excludedModels = excludedModels;
+        } else {
+            delete normalized.excludedModels;
+        }
+        delete normalized.excluded_models;
+    }
+    // #8369: connection-level custom upstream headers — sanitize each key against the
+    // forbidden-header denylist and drop entries with non-string or empty values.
+    if ("customHeaders" in normalized) {
+        const raw = normalized.customHeaders;
+        if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+            const cleaned = {};
+            for (const [key, value] of Object.entries(raw)){
+                const trimmedKey = key.trim();
+                if (!trimmedKey) continue;
+                if ((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$constants$2f$upstreamHeaders$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["isForbiddenCustomHeaderName"])(trimmedKey)) continue;
+                if (typeof value === "string" && value.trim().length > 0) {
+                    cleaned[trimmedKey] = value.trim();
+                }
+            }
+            if (Object.keys(cleaned).length > 0) {
+                normalized.customHeaders = cleaned;
+            } else {
+                delete normalized.customHeaders;
+            }
+        } else {
+            delete normalized.customHeaders;
+        }
+    }
+    return Object.keys(normalized).length > 0 ? normalized : undefined;
+}
+function sanitizeProviderSpecificDataForResponse(value) {
+    const record = asRecord(value);
+    if (Object.keys(record).length === 0) return undefined;
+    const sanitized = {
+        ...record
+    };
+    delete sanitized.consoleApiKey;
+    delete sanitized.secretAccessKey;
+    delete sanitized.awsSecretAccessKey;
+    delete sanitized.sessionToken;
+    delete sanitized.awsSessionToken;
+    delete sanitized.openCodeGoAuthCookie;
+    delete sanitized.opencodeGoAuthCookie;
+    delete sanitized.authCookie;
+    delete sanitized.ollamaUsageCookie;
+    delete sanitized.ollamaCloudUsageCookie;
+    delete sanitized.ollamaCloudCookie;
+    delete sanitized.usageCookie;
+    return sanitized;
+}
+function isOpenAIResponsesStoreEnabled(providerSpecificData) {
+    return asRecord(providerSpecificData).openaiStoreEnabled === true;
+}
+function buildOpenAIStoreSessionId(sessionId) {
+    if (!hasNonEmptyString(sessionId)) return undefined;
+    const normalized = String(sessionId).trim().replace(/^ext:/i, "").replace(/[^a-zA-Z0-9._:-]+/g, "-").replace(/-+/g, "-").replace(/^-+|-+$/g, "").slice(0, 96);
+    if (!normalized) return undefined;
+    return `omniroute-session-${normalized}`;
+}
+function ensureOpenAIStoreSessionFallback(body, sessionId) {
+    const explicitSessionId = body.session_id;
+    const explicitConversationId = body.conversation_id;
+    const promptCacheKey = body.prompt_cache_key ?? body.promptCacheKey;
+    if (hasNonEmptyString(explicitSessionId) || hasNonEmptyString(explicitConversationId) || hasNonEmptyString(promptCacheKey)) {
+        return body;
+    }
+    const fallbackSessionId = buildOpenAIStoreSessionId(sessionId);
+    if (!fallbackSessionId) return body;
+    return {
+        ...body,
+        session_id: fallbackSessionId
+    };
+}
+function getProviderRequestDefaults(provider, providerSpecificData) {
+    return normalizeRequestDefaults(provider, asRecord(providerSpecificData).requestDefaults) || {};
+}
+function getCodexRequestDefaults(providerSpecificData) {
+    const defaults = getProviderRequestDefaults("codex", providerSpecificData);
+    const reasoningEffort = normalizeCodexReasoningEffort(defaults.reasoningEffort);
+    const serviceTier = normalizeCodexServiceTier(defaults.serviceTier);
+    return {
+        ...reasoningEffort ? {
+            reasoningEffort
+        } : {},
+        ...serviceTier ? {
+            serviceTier
+        } : {}
+    };
+}
+function getClaudeCodeCompatibleRequestDefaults(providerSpecificData) {
+    const defaults = getProviderRequestDefaults("anthropic-compatible-cc-default", providerSpecificData);
+    const context1m = normalizeClaudeCodeCompatibleContext1m(defaults.context1m);
+    const redactThinking = normalizeClaudeCodeCompatibleRedactThinking(defaults.redactThinking);
+    const summarizeThinking = normalizeClaudeCodeCompatibleSummarizeThinking(defaults.summarizeThinking);
+    return {
+        ...context1m ? {
+            context1m
+        } : {},
+        ...redactThinking ? {
+            redactThinking
+        } : {},
+        ...summarizeThinking ? {
+            summarizeThinking
+        } : {}
+    };
+}
+}),
+"[project]/src/lib/compliance/noLog.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "isNoLog",
+    ()=>isNoLog,
+    "setNoLog",
+    ()=>setNoLog
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$core$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/lib/db/core.ts [instrumentation] (ecmascript) <locals>");
+;
+// #2650: extracted from compliance/index.ts to break the
+// callLogs.ts → compliance/index.ts → callLogs.ts cycle that deadlocks
+// the bundled MCP server under Node.js 24's stricter ESM evaluation.
+function getDb() {
+    try {
+        return (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$core$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["getDbInstance"])();
+    } catch  {
+        return null;
+    }
+}
+const noLogKeys = new Set();
+const noLogDbCache = new Map();
+let noLogColumnVerified = false;
+let hasNoLogColumn = false;
+const NO_LOG_CACHE_TTL_MS = 30_000;
+const noLogIdsFromEnv = (process.env.NO_LOG_API_KEY_IDS || "").split(",").map((value)=>value.trim()).filter(Boolean);
+for (const id of noLogIdsFromEnv){
+    noLogKeys.add(id);
+}
+function setNoLog(apiKeyId, noLog) {
+    if (noLog) {
+        noLogKeys.add(apiKeyId);
+    } else {
+        noLogKeys.delete(apiKeyId);
+    }
+    noLogDbCache.set(apiKeyId, {
+        value: noLog,
+        timestamp: Date.now()
+    });
+}
+function ensureNoLogColumn(db) {
+    if (noLogColumnVerified) {
+        return hasNoLogColumn;
+    }
+    try {
+        const columns = db.prepare("PRAGMA table_info(api_keys)").all();
+        hasNoLogColumn = columns.some((column)=>column.name === "no_log");
+    } catch  {
+        hasNoLogColumn = false;
+    }
+    noLogColumnVerified = true;
+    return hasNoLogColumn;
+}
+function readNoLogFromDb(apiKeyId) {
+    const db = getDb();
+    if (!db || !apiKeyId) return false;
+    if (!ensureNoLogColumn(db)) return false;
+    const cached = noLogDbCache.get(apiKeyId);
+    if (cached && Date.now() - cached.timestamp < NO_LOG_CACHE_TTL_MS) {
+        return cached.value;
+    }
+    try {
+        const row = db.prepare("SELECT no_log FROM api_keys WHERE id = ?").get(apiKeyId);
+        const value = Boolean(row && Number(row.no_log) === 1);
+        noLogDbCache.set(apiKeyId, {
+            value,
+            timestamp: Date.now()
+        });
+        return value;
+    } catch  {
+        return false;
+    }
+}
+function isNoLog(apiKeyId) {
+    if (!apiKeyId) return false;
+    if (noLogKeys.has(apiKeyId)) return true;
+    const persistedNoLog = readNoLogFromDb(apiKeyId);
+    if (persistedNoLog) {
+        noLogKeys.add(apiKeyId);
+    }
+    return persistedNoLog;
+}
+}),
+"[project]/src/lib/pricingSync.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "clearSyncedPricing",
+    ()=>clearSyncedPricing,
+    "fetchLiteLLMPricing",
+    ()=>fetchLiteLLMPricing,
+    "getSyncStatus",
+    ()=>getSyncStatus,
+    "getSyncedPricing",
+    ()=>getSyncedPricing,
+    "initPricingSync",
+    ()=>initPricingSync,
+    "saveSyncedPricing",
+    ()=>saveSyncedPricing,
+    "startPeriodicSync",
+    ()=>startPeriodicSync,
+    "stopPeriodicSync",
+    ()=>stopPeriodicSync,
+    "syncPricingFromSources",
+    ()=>syncPricingFromSources,
+    "transformToOmniRoute",
+    ()=>transformToOmniRoute
+]);
+/**
+ * pricingSync.ts — External pricing sync engine.
+ *
+ * Fetches pricing data from external sources (LiteLLM) and stores it
+ * in a separate namespace (`pricing_synced`) so user overrides are
+ * never touched.
+ *
+ * Resolution order: user overrides > synced external > hardcoded defaults
+ *
+ * Opt-in via PRICING_SYNC_ENABLED=true (default: false).
+ */ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$core$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/lib/db/core.ts [instrumentation] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$readCache$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/readCache.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$backup$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/backup.ts [instrumentation] (ecmascript)");
+;
+;
+;
+// ─── Configuration ───────────────────────────────────────
+const SUPPORTED_SOURCES = [
+    "litellm"
+];
+const parsedInterval = parseInt(process.env.PRICING_SYNC_INTERVAL || "86400", 10);
+const SYNC_INTERVAL_MS = Number.isFinite(parsedInterval) && parsedInterval > 0 ? parsedInterval * 1000 : 86400 * 1000;
+const SYNC_SOURCES = (process.env.PRICING_SYNC_SOURCES || "litellm").split(",").map((s)=>s.trim()).filter((s)=>SUPPORTED_SOURCES.includes(s));
+const LITELLM_PRICING_URL = "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json";
+// ─── Provider mapping: LiteLLM provider → OmniRoute aliases ─────
+const LITELLM_PROVIDER_MAP = {
+    openai: [
+        "openai",
+        "cx"
+    ],
+    anthropic: [
+        "anthropic",
+        "cc"
+    ],
+    vertex_ai: [
+        "gemini"
+    ],
+    "vertex_ai-anthropic_models": [
+        "anthropic"
+    ],
+    google: [
+        "gemini"
+    ],
+    deepseek: [
+        "if"
+    ],
+    groq: [
+        "groq"
+    ],
+    together_ai: [
+        "openrouter"
+    ],
+    bedrock: [
+        "kiro"
+    ],
+    fireworks_ai: [
+        "fireworks"
+    ],
+    cerebras: [
+        "cerebras"
+    ],
+    nvidia_nim: [
+        "nvidia"
+    ],
+    siliconflow: [
+        "siliconflow"
+    ],
+    "vertex_ai-language_models": [
+        "gemini"
+    ],
+    "vertex_ai-mistral_models": [
+        "mistral"
+    ],
+    gemini: [
+        "gemini"
+    ],
+    bedrock_converse: [
+        "kiro"
+    ],
+    cloudflare: [
+        "cloudflare-ai"
+    ],
+    stability: [
+        "stability-ai"
+    ]
+};
+// ─── Periodic sync state ─────────────────────────────────
+let syncTimer = null;
+let lastSyncTime = null;
+let lastSyncModelCount = 0;
+let activeSyncIntervalMs = SYNC_INTERVAL_MS;
+async function fetchLiteLLMPricing() {
+    const response = await fetch(LITELLM_PRICING_URL, {
+        signal: AbortSignal.timeout(30000)
+    });
+    if (!response.ok) {
+        throw new Error(`LiteLLM fetch failed [${response.status}]: ${response.statusText}`);
+    }
+    const text = await response.text();
+    try {
+        return JSON.parse(text);
+    } catch  {
+        throw new Error(`LiteLLM returned invalid JSON (${text.slice(0, 100)}...)`);
+    }
+}
+function transformToOmniRoute(raw) {
+    const result = {};
+    for (const [modelKey, info] of Object.entries(raw)){
+        const NON_TOKEN_FIELDS = [
+            "input_cost_per_second",
+            "output_cost_per_second",
+            "input_cost_per_image",
+            "output_cost_per_image",
+            "input_cost_per_pixel",
+            "output_cost_per_pixel",
+            "input_cost_per_character",
+            "output_cost_per_character",
+            "input_cost_per_video_per_second",
+            "output_cost_per_video_per_second",
+            "search_unit_cost",
+            "ocr_cost_per_page"
+        ];
+        const hasToken = info.input_cost_per_token != null || info.output_cost_per_token != null;
+        const hasNonToken = NON_TOKEN_FIELDS.some((f)=>info[f] != null);
+        if (!hasToken && !hasNonToken) continue;
+        const inputCost = (info.input_cost_per_token || 0) * 1_000_000;
+        const outputCost = (info.output_cost_per_token || 0) * 1_000_000;
+        const entry = {
+            input: Math.round(inputCost * 1000) / 1000,
+            output: Math.round(outputCost * 1000) / 1000
+        };
+        if (info.mode) entry.mode = info.mode;
+        if (info.cache_read_input_token_cost != null) {
+            entry.cached = Math.round(info.cache_read_input_token_cost * 1_000_000 * 1000) / 1000;
+        }
+        if (info.cache_creation_input_token_cost != null) {
+            entry.cache_creation = Math.round(info.cache_creation_input_token_cost * 1_000_000 * 1000) / 1000;
+        }
+        for (const f of NON_TOKEN_FIELDS){
+            const v = info[f];
+            if (typeof v === "number" && Number.isFinite(v)) entry[f] = v;
+        }
+        // Extract model name (strip provider prefix from key)
+        // LiteLLM keys look like: "openai/gpt-4o", "anthropic/claude-3-opus"
+        const slashIdx = modelKey.indexOf("/");
+        const modelName = slashIdx >= 0 ? modelKey.slice(slashIdx + 1) : modelKey;
+        // Map to OmniRoute providers
+        const litellmProvider = info.litellm_provider || "";
+        const omniRouteProviders = LITELLM_PROVIDER_MAP[litellmProvider];
+        if (omniRouteProviders) {
+            for (const provider of omniRouteProviders){
+                if (!result[provider]) result[provider] = {};
+                result[provider][modelName] = entry;
+            }
+        } else if (litellmProvider) {
+            // Use litellm_provider as-is for unknown providers
+            if (!result[litellmProvider]) result[litellmProvider] = {};
+            result[litellmProvider][modelName] = entry;
+        }
+    }
+    return result;
+}
+// ─── DB: Synced pricing namespace ────────────────────────
+function toRecord(value) {
+    return value && typeof value === "object" ? value : {};
+}
+function getSyncedPricing() {
+    const db = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$core$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["getDbInstance"])();
+    const rows = db.prepare("SELECT key, value FROM key_value WHERE namespace = 'pricing_synced'").all();
+    const synced = {};
+    for (const row of rows){
+        const record = toRecord(row);
+        const key = typeof record.key === "string" ? record.key : null;
+        const rawValue = typeof record.value === "string" ? record.value : null;
+        if (!key || rawValue === null) continue;
+        try {
+            synced[key] = JSON.parse(rawValue);
+        } catch  {
+            console.warn(`[PRICING_SYNC] Corrupted data for provider "${key}", skipping`);
+        }
+    }
+    return synced;
+}
+function saveSyncedPricing(data) {
+    const db = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$core$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["getDbInstance"])();
+    const del = db.prepare("DELETE FROM key_value WHERE namespace = 'pricing_synced'");
+    const insert = db.prepare("INSERT INTO key_value (namespace, key, value) VALUES ('pricing_synced', ?, ?)");
+    const tx = db.transaction(()=>{
+        del.run();
+        for (const [provider, models] of Object.entries(data)){
+            insert.run(provider, JSON.stringify(models));
+        }
+    });
+    tx();
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$backup$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["backupDbFile"])("pre-write");
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$readCache$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["invalidateDbCache"])("pricing");
+}
+function clearSyncedPricing() {
+    const db = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$core$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["getDbInstance"])();
+    db.prepare("DELETE FROM key_value WHERE namespace = 'pricing_synced'").run();
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$backup$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["backupDbFile"])("pre-write");
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$readCache$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["invalidateDbCache"])("pricing");
+}
+// ─── DB: Sync status namespace ───────────────────────────
+//
+// Persisted separately from `pricing_synced` because Next.js standalone
+// builds load this module from independent webpack chunks (e.g. the
+// instrumentation hook vs an API route handler) — each gets its OWN
+// top-level module state. Module-level vars (`lastSyncTime`,
+// `lastSyncModelCount`) are therefore invisible across those instances;
+// persisting them to the DB lets any instance read the real status.
+const SYNC_STATUS_NAMESPACE = "pricing_sync_status";
+const SYNC_STATUS_KEY = "last_sync";
+function readPersistedSyncStatus() {
+    const db = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$core$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["getDbInstance"])();
+    const row = db.prepare("SELECT value FROM key_value WHERE namespace = ? AND key = ?").get(SYNC_STATUS_NAMESPACE, SYNC_STATUS_KEY);
+    const record = toRecord(row);
+    const rawValue = typeof record.value === "string" ? record.value : null;
+    if (!rawValue) return null;
+    try {
+        const parsed = JSON.parse(rawValue);
+        if (typeof parsed.lastSyncTime !== "string") return null;
+        return {
+            lastSyncTime: parsed.lastSyncTime,
+            lastSyncModelCount: typeof parsed.lastSyncModelCount === "number" ? parsed.lastSyncModelCount : 0
+        };
+    } catch  {
+        return null;
+    }
+}
+function writePersistedSyncStatus(lastSync, modelCount) {
+    const db = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$core$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["getDbInstance"])();
+    db.prepare("INSERT INTO key_value (namespace, key, value) VALUES (?, ?, ?) " + "ON CONFLICT(namespace, key) DO UPDATE SET value = excluded.value").run(SYNC_STATUS_NAMESPACE, SYNC_STATUS_KEY, JSON.stringify({
+        lastSyncTime: lastSync,
+        lastSyncModelCount: modelCount
+    }));
+}
+async function syncPricingFromSources(opts) {
+    const requestedSources = opts?.sources || SYNC_SOURCES;
+    const dryRun = opts?.dryRun ?? false;
+    // Validate sources
+    const validSources = requestedSources.filter((s)=>SUPPORTED_SOURCES.includes(s));
+    const invalidSources = requestedSources.filter((s)=>!SUPPORTED_SOURCES.includes(s));
+    if (validSources.length === 0) {
+        const supported = SUPPORTED_SOURCES.join(", ");
+        return {
+            success: false,
+            modelCount: 0,
+            providerCount: 0,
+            source: requestedSources.join(","),
+            dryRun,
+            error: `No valid sources provided. Supported: ${supported}. Invalid: ${invalidSources.join(", ")}`
+        };
+    }
+    try {
+        const aggregated = {};
+        for (const source of validSources){
+            if (source === "litellm") {
+                const raw = await fetchLiteLLMPricing();
+                const transformed = transformToOmniRoute(raw);
+                for (const [provider, models] of Object.entries(transformed)){
+                    if (!aggregated[provider]) aggregated[provider] = {};
+                    Object.assign(aggregated[provider], models);
+                }
+            }
+        }
+        const modelCount = Object.values(aggregated).reduce((sum, models)=>sum + Object.keys(models).length, 0);
+        const providerCount = Object.keys(aggregated).length;
+        if (!dryRun) {
+            saveSyncedPricing(aggregated);
+            lastSyncTime = new Date().toISOString();
+            lastSyncModelCount = modelCount;
+            writePersistedSyncStatus(lastSyncTime, modelCount);
+        }
+        return {
+            success: true,
+            modelCount,
+            providerCount,
+            source: validSources.join(","),
+            dryRun,
+            ...invalidSources.length > 0 ? {
+                warnings: [
+                    `Unknown sources ignored: ${invalidSources.join(", ")}`
+                ]
+            } : {},
+            ...dryRun ? {
+                data: aggregated
+            } : {}
+        };
+    } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        console.warn("[PRICING_SYNC] Sync failed:", message);
+        return {
+            success: false,
+            modelCount: 0,
+            providerCount: 0,
+            source: requestedSources.join(","),
+            dryRun,
+            error: message
+        };
+    }
+}
+function startPeriodicSync(intervalMs) {
+    if (syncTimer) return; // Already running
+    const interval = intervalMs ?? SYNC_INTERVAL_MS;
+    activeSyncIntervalMs = interval;
+    console.log(`[PRICING_SYNC] Starting periodic sync every ${interval / 1000}s`);
+    // Initial sync (non-blocking)
+    syncPricingFromSources().then((result)=>{
+        if (result.success) {
+            console.log(`[PRICING_SYNC] Initial sync complete: ${result.modelCount} models from ${result.providerCount} providers`);
+        }
+    }).catch((err)=>{
+        console.warn("[PRICING_SYNC] Initial sync error:", err instanceof Error ? err.message : err);
+    });
+    syncTimer = setInterval(()=>{
+        syncPricingFromSources().then((result)=>{
+            if (result.success) {
+                console.log(`[PRICING_SYNC] Periodic sync complete: ${result.modelCount} models`);
+            }
+        }).catch((err)=>{
+            console.warn("[PRICING_SYNC] Periodic sync error:", err instanceof Error ? err.message : err);
+        });
+    }, interval);
+    if (syncTimer && typeof syncTimer === "object" && "unref" in syncTimer) {
+        syncTimer.unref?.();
+    }
+}
+function stopPeriodicSync() {
+    if (syncTimer) {
+        clearInterval(syncTimer);
+        syncTimer = null;
+        console.log("[PRICING_SYNC] Periodic sync stopped");
+    }
+}
+function getSyncStatus() {
+    const enabled = process.env.PRICING_SYNC_ENABLED === "true";
+    // `lastSyncTime`/`lastSyncModelCount` are only reliably populated on the
+    // module instance that performed the sync (see note above
+    // writePersistedSyncStatus) — fall back to the persisted DB record so
+    // status reads from a different module instance still see it.
+    const persisted = lastSyncTime === null ? readPersistedSyncStatus() : null;
+    const effectiveLastSync = lastSyncTime ?? persisted?.lastSyncTime ?? null;
+    const effectiveModelCount = lastSyncTime !== null ? lastSyncModelCount : persisted?.lastSyncModelCount ?? 0;
+    return {
+        enabled,
+        lastSync: effectiveLastSync,
+        lastSyncModelCount: effectiveModelCount,
+        nextSync: enabled && effectiveLastSync ? new Date(new Date(effectiveLastSync).getTime() + activeSyncIntervalMs).toISOString() : null,
+        intervalMs: activeSyncIntervalMs,
+        sources: SYNC_SOURCES
+    };
+}
+async function initPricingSync() {
+    if (process.env.PRICING_SYNC_ENABLED !== "true") {
+        console.log("[PRICING_SYNC] Disabled (set PRICING_SYNC_ENABLED=true to enable)");
+        return;
+    }
+    startPeriodicSync();
+}
+}),
+"[project]/src/lib/gamification/xp.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+/**
+ * XP/Level Engine for OmniRoute Gamification
+ *
+ * Pure functions for XP calculations, level progression, and reward definitions.
+ * No side effects or DB calls — all stateful logic lives in the persistence layer.
+ */ // ─── XP Curve ────────────────────────────────────────────────────────────────
+/**
+ * XP required for a specific level (delta, not cumulative).
+ * Polynomial curve: `xp_for_level(n) = floor(100 * n^1.5)`
+ *
+ * @param level - Target level (must be >= 1)
+ * @returns XP needed to gain this level (0 for level 1)
+ *
+ * @example
+ * xpForLevel(1)  // 0
+ * xpForLevel(10) // 3162
+ * xpForLevel(50) // 35355
+ */ __turbopack_context__.s([
+    "XP_REWARDS",
+    ()=>XP_REWARDS,
+    "calculateLevel",
+    ()=>calculateLevel,
+    "cumulativeXpForLevel",
+    ()=>cumulativeXpForLevel,
+    "getLevelTier",
+    ()=>getLevelTier,
+    "getLevelTitle",
+    ()=>getLevelTitle,
+    "xpForLevel",
+    ()=>xpForLevel,
+    "xpToNextLevel",
+    ()=>xpToNextLevel
+]);
+function xpForLevel(level) {
+    if (level <= 1) return 0;
+    return Math.floor(100 * Math.pow(level, 1.5));
+}
+function cumulativeXpForLevel(level) {
+    if (level <= 1) return 0;
+    let total = 0;
+    for(let i = 2; i <= level; i++){
+        total += xpForLevel(i);
+    }
+    return total;
+}
+function calculateLevel(totalXp) {
+    if (totalXp <= 0) return 1;
+    return Math.max(1, Math.floor(Math.pow(totalXp * 2.5 / 100, 0.4)));
+}
+function xpToNextLevel(totalXp) {
+    const currentLevel = calculateLevel(totalXp);
+    const nextLevelXp = cumulativeXpForLevel(currentLevel + 1);
+    return nextLevelXp - totalXp;
+}
+function getLevelTitle(level) {
+    if (level >= 76) return "Legend";
+    if (level >= 51) return "Master";
+    if (level >= 26) return "Expert";
+    if (level >= 11) return "Explorer";
+    return "Beginner";
+}
+function getLevelTier(level) {
+    if (level >= 76) return "diamond";
+    if (level >= 51) return "platinum";
+    if (level >= 26) return "gold";
+    if (level >= 11) return "silver";
+    return "bronze";
+}
+const XP_REWARDS = {
+    /** Per API request routed through OmniRoute */ request: 1,
+    /** Switching to a different provider */ provider_switch: 5,
+    /** Switching to a different model */ model_switch: 3,
+    /** Creating a new combo */ combo_create: 10,
+    /** Using a combo for a request */ combo_use: 2,
+    /** Per 1 000 tokens shared with another user */ token_share: 1,
+    /** Redeeming an invite code */ invite_redeem: 50,
+    /** Daily active usage (once per day) */ daily_login: 5,
+    /** Per consecutive streak day (multiplied by streak length) */ streak_bonus: 2,
+    /** Unlocking a badge */ badge_unlock: 10
+};
+}),
+"[project]/src/lib/spend/batchWriter.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "SpendBatchWriter",
+    ()=>SpendBatchWriter,
+    "discardSpendBatchEntries",
+    ()=>discardSpendBatchEntries,
+    "flushSpendBatchWriter",
+    ()=>flushSpendBatchWriter,
+    "resetSpendBatchWriterForTests",
+    ()=>resetSpendBatchWriterForTests,
+    "spendBatchWriter",
+    ()=>spendBatchWriter,
+    "startSpendBatchWriter",
+    ()=>startSpendBatchWriter,
+    "stopSpendBatchWriter",
+    ()=>stopSpendBatchWriter
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$domainState$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/domainState.ts [instrumentation] (ecmascript)");
+;
+const DEFAULT_FLUSH_INTERVAL_MS = 60_000;
+const DEFAULT_MAX_BUFFER_SIZE = 1_000;
+function getFlushIntervalMs() {
+    const parsed = Number.parseInt(process.env.OMNIROUTE_SPEND_FLUSH_INTERVAL_MS || "", 10);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_FLUSH_INTERVAL_MS;
+}
+function getMaxBufferSize() {
+    const parsed = Number.parseInt(process.env.OMNIROUTE_SPEND_MAX_BUFFER_SIZE || "", 10);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_MAX_BUFFER_SIZE;
+}
+function normalizeEntry(entry) {
+    if (!entry?.apiKeyId || !Number.isFinite(entry.cost) || entry.cost <= 0) return null;
+    return {
+        apiKeyId: entry.apiKeyId,
+        cost: entry.cost,
+        timestamp: Number.isFinite(entry.timestamp) ? entry.timestamp : Date.now()
+    };
+}
+class SpendBatchWriter {
+    buffer = [];
+    inFlightEntries = [];
+    discardedApiKeyIds = new Set();
+    timer = null;
+    started = false;
+    flushPromise = null;
+    persistEntries;
+    logger;
+    flushIntervalMs;
+    maxBufferSize;
+    constructor(options = {}){
+        this.persistEntries = options.persistEntries || __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$domainState$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["batchSaveCostEntries"];
+        this.logger = options.logger || console;
+        this.flushIntervalMs = options.flushIntervalMs ?? getFlushIntervalMs();
+        this.maxBufferSize = options.maxBufferSize ?? getMaxBufferSize();
+    }
+    start() {
+        if (this.started) return;
+        this.started = true;
+        this.timer = setInterval(()=>{
+            void this.flush();
+        }, this.flushIntervalMs);
+        this.timer.unref?.();
+    }
+    increment(apiKeyId, cost, timestamp = Date.now()) {
+        const entry = normalizeEntry({
+            apiKeyId,
+            cost,
+            timestamp
+        });
+        if (!entry) return;
+        this.start();
+        this.discardedApiKeyIds.delete(entry.apiKeyId);
+        this.buffer.push(entry);
+        if (this.buffer.length >= this.maxBufferSize) {
+            void this.flush();
+        }
+    }
+    getBufferedEntries(apiKeyId, sinceTimestamp = 0, untilTimestamp = Number.POSITIVE_INFINITY) {
+        const matchesWindow = (entry)=>entry.apiKeyId === apiKeyId && entry.timestamp >= sinceTimestamp && entry.timestamp < untilTimestamp;
+        return [
+            ...this.inFlightEntries,
+            ...this.buffer
+        ].filter(matchesWindow);
+    }
+    getPendingCostTotal(apiKeyId, sinceTimestamp = 0, untilTimestamp = Number.POSITIVE_INFINITY) {
+        return this.getBufferedEntries(apiKeyId, sinceTimestamp, untilTimestamp).reduce((sum, entry)=>sum + entry.cost, 0);
+    }
+    discardEntries(apiKeyId) {
+        this.discardedApiKeyIds.add(apiKeyId);
+        this.buffer = this.buffer.filter((entry)=>entry.apiKeyId !== apiKeyId);
+        this.inFlightEntries = this.inFlightEntries.filter((entry)=>entry.apiKeyId !== apiKeyId);
+    }
+    async flush() {
+        if (this.flushPromise) {
+            return this.flushPromise;
+        }
+        if (this.buffer.length === 0) {
+            return {
+                flushedEntries: 0,
+                uniqueKeys: 0,
+                requeued: false
+            };
+        }
+        const entriesToFlush = [
+            ...this.buffer
+        ];
+        this.buffer = [];
+        this.inFlightEntries = entriesToFlush;
+        this.flushPromise = (async ()=>{
+            const entriesToPersist = entriesToFlush.filter((entry)=>!this.discardedApiKeyIds.has(entry.apiKeyId));
+            const uniqueKeys = new Set(entriesToPersist.map((entry)=>entry.apiKeyId)).size;
+            try {
+                if (entriesToPersist.length > 0) {
+                    await this.persistEntries(entriesToPersist);
+                }
+                this.logger.log(`[SpendWriter] Flushed ${entriesToPersist.length} cost entr${entriesToPersist.length === 1 ? "y" : "ies"} across ${uniqueKeys} key(s)`);
+                return {
+                    flushedEntries: entriesToPersist.length,
+                    uniqueKeys,
+                    requeued: false
+                };
+            } catch (error) {
+                this.buffer = [
+                    ...entriesToPersist,
+                    ...this.buffer
+                ];
+                const message = error instanceof Error ? error.message : String(error);
+                this.logger.error(`[SpendWriter] Flush error: ${message}`);
+                return {
+                    flushedEntries: 0,
+                    uniqueKeys,
+                    requeued: true
+                };
+            } finally{
+                this.inFlightEntries = [];
+                this.flushPromise = null;
+            }
+        })();
+        return this.flushPromise;
+    }
+    async stop() {
+        if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = null;
+        }
+        this.started = false;
+        return this.flush();
+    }
+    resetForTests() {
+        if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = null;
+        }
+        this.started = false;
+        this.buffer = [];
+        this.inFlightEntries = [];
+        this.discardedApiKeyIds.clear();
+        this.flushPromise = null;
+    }
+}
+const spendBatchWriter = new SpendBatchWriter();
+function startSpendBatchWriter() {
+    spendBatchWriter.start();
+}
+async function flushSpendBatchWriter() {
+    return spendBatchWriter.flush();
+}
+async function stopSpendBatchWriter() {
+    return spendBatchWriter.stop();
+}
+function resetSpendBatchWriterForTests() {
+    spendBatchWriter.resetForTests();
+}
+function discardSpendBatchEntries(apiKeyId) {
+    spendBatchWriter.discardEntries(apiKeyId);
+}
+}),
+"[project]/src/lib/localDb.ts [instrumentation] (ecmascript) <locals>", ((__turbopack_context__) => {
+"use strict";
+
+return __turbopack_context__.a(async (__turbopack_handle_async_dependencies__, __turbopack_async_result__) => { try {
+
+__turbopack_context__.s([]);
+/**
+ * localDb.js — Re-export layer for backward compatibility.
+ *
+ * All 27+ consumer files import from "@/lib/localDb".
+ * This thin layer re-exports everything from the domain-specific DB modules,
+ * so zero consumer changes are needed.
+ */ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/lib/db/providers.ts [instrumentation] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$models$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/lib/db/models.ts [instrumentation] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$combos$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/combos.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$ccrBlocks$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/ccrBlocks.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$compressionCacheStats$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/compressionCacheStats.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$compressionCombos$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/compressionCombos.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$compressionContextBudget$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/compressionContextBudget.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$compressionRunTelemetry$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/compressionRunTelemetry.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$modelContextOverrides$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/modelContextOverrides.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$apiKeys$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/apiKeys.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$evals$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/evals.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$settings$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/lib/db/settings.ts [instrumentation] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$databaseSettings$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/databaseSettings.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$proxies$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/lib/db/proxies.ts [instrumentation] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$pricingSync$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/pricingSync.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$backup$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/backup.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$skills$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/skills.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$readCache$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/readCache.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$registeredKeys$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/registeredKeys.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$modelComboMappings$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/modelComboMappings.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$files$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/files.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$batches$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/batches.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$reasoningRoutingRules$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/reasoningRoutingRules.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$autoCandidateOverrides$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/autoCandidateOverrides.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$webhooks$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/webhooks.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$webhookDeliveries$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/webhookDeliveries.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$discoveryResults$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/discoveryResults.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$quotaSnapshots$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/quotaSnapshots.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$sessionAccountAffinity$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/sessionAccountAffinity.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$quotaResetEvents$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/quotaResetEvents.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$versionManager$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/versionManager.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$syncTokens$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/syncTokens.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$upstreamProxy$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/upstreamProxy.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providerLimits$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/providerLimits.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$creditBalance$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/creditBalance.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$compressionAnalytics$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/compressionAnalytics.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$reasoningCache$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/reasoningCache.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$oneproxy$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/oneproxy.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$gamification$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/gamification.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$featureFlags$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/featureFlags.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$contextHandoffs$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/contextHandoffs.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$middleware$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/middleware.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$apiKeyGroups$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/apiKeyGroups.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$relayProxies$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/relayProxies.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$freeProxies$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/freeProxies.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$playgroundPresets$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/playgroundPresets.ts [instrumentation] (ecmascript)");
+// Plan 21 — Memory Engine Redesign
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$memoryVec$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/memoryVec.ts [instrumentation] (ecmascript)");
+// T-A-F2: AgentBridge state/mappings/bypass + Inspector custom hosts/sessions
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$agentBridgeState$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/agentBridgeState.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$agentBridgeMappings$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/agentBridgeMappings.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$agentBridgeBypass$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/agentBridgeBypass.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$inspectorCustomHosts$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/inspectorCustomHosts.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$inspectorSessions$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/inspectorSessions.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$omp$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/omp.ts [instrumentation] (ecmascript)");
+// Quota Sharing — Group B (planos 16+22)
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$quotaPools$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/quotaPools.ts [instrumentation] (ecmascript)");
+// Quota per-(key, model) caps — Group B Fase 3 #7
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$quotaModelCaps$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/quotaModelCaps.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$quotaGroups$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/quotaGroups.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$quotaConsumption$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/quotaConsumption.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providerPlans$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/providerPlans.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$tokenLimits$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/tokenLimits.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$plugins$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/plugins.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$apiKeyContextSources$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/apiKeyContextSources.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$localCorpus$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/localCorpus.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$usageSummary$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/usageSummary.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$modelIntelligence$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/modelIntelligence.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$callLogStats$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/callLogStats.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$usageAnalytics$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/lib/db/usageAnalytics.ts [instrumentation] (ecmascript) <locals>");
+// ---------------------------------------------------------------------------
+// usage_logs — auto-routing analytics (#3500 slice 4)
+// ---------------------------------------------------------------------------
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$usageLogs$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/usageLogs.ts [instrumentation] (ecmascript)");
+// ---------------------------------------------------------------------------
+// semantic_cache — cache entries CRUD (#3500 slice 4)
+// ---------------------------------------------------------------------------
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$semanticCache$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/semanticCache.ts [instrumentation] (ecmascript)");
+// ---------------------------------------------------------------------------
+// proxy_logs — export query (#3500 slice 4)
+// ---------------------------------------------------------------------------
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$proxyLogs$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/proxyLogs.ts [instrumentation] (ecmascript)");
+// Provider param filters — denylist/allowlist config per provider/model (#6625)
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$paramFilters$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/paramFilters.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$interceptionRules$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/interceptionRules.ts [instrumentation] (ecmascript)"); // Per-model web-search/web-fetch interception rules (#3384)
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$ccDiscoveryAliases$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/ccDiscoveryAliases.ts [instrumentation] (ecmascript)"); // Claude Code discovery-alias gate (flag + per-provider/model overrides)
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$ccDiscoveryMetrics$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/ccDiscoveryMetrics.ts [instrumentation] (ecmascript)"); // Claude Code discovery-alias usage counters (alias requests + discovery hits)
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$functionalGatewayMirrors$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/functionalGatewayMirrors.ts [instrumentation] (ecmascript)"); // Functional-gateway mirror gate (flag + per-provider/model overrides)
+// Radar client — local feed cache + settings (opt-in, encrypted supporter key)
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$radar$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/radar.ts [instrumentation] (ecmascript)");
+var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
+    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__,
+    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$models$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__,
+    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$apiKeys$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__,
+    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$settings$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__,
+    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$inspectorSessions$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__
+]);
+[__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$models$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$apiKeys$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$settings$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$inspectorSessions$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__] = __turbopack_async_dependencies__.then ? (await __turbopack_async_dependencies__)() : __turbopack_async_dependencies__;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+__turbopack_async_result__();
+} catch(e) { __turbopack_async_result__(e); } }, false);}),
+"[project]/src/lib/proxyHealth.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "__setProxyHealthTcpCheckForTesting",
+    ()=>__setProxyHealthTcpCheckForTesting,
+    "getAllProxyHealthStatuses",
+    ()=>getAllProxyHealthStatuses,
+    "getCachedProxyHealth",
+    ()=>getCachedProxyHealth,
+    "invalidateProxyHealth",
+    ()=>invalidateProxyHealth,
+    "isProxyReachable",
+    ()=>isProxyReachable
+]);
+/**
+ * T14: Proxy Fast-Fail — TCP health check with in-memory cache.
+ *
+ * When a configured HTTP/SOCKS5 proxy is unreachable, every request
+ * through OmniRoute used to wait for the full PROXY_TIMEOUT_MS (30s)
+ * before failing. This module detects dead proxies in <2s via a quick
+ * TCP connection check, caching the result to avoid overhead per request.
+ *
+ * Ref: sub2api PR #1167 (fix: proxy-fast-fail)
+ */ var __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$net__$5b$external$5d$__$28$node$3a$net$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/node:net [external] (node:net, cjs)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$proxyFamily$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/open-sse/utils/proxyFamily.ts [instrumentation] (ecmascript)");
+;
+;
+// Configurable via env vars
+const FAST_FAIL_TIMEOUT_MS = parseInt(process.env.PROXY_FAST_FAIL_TIMEOUT_MS ?? "2000", 10);
+const HEALTH_CACHE_TTL_MS = parseInt(process.env.PROXY_HEALTH_CACHE_TTL_MS ?? "30000", 10);
+const UNHEALTHY_CACHE_TTL_MS = parseInt(process.env.PROXY_HEALTH_UNHEALTHY_CACHE_TTL_MS ?? "2000", 10);
+// In-memory cache: proxyUrl → health entry
+const proxyHealthCache = new Map();
+const proxyHealthInflight = new Map();
+let tcpCheckImpl = tcpCheck;
+async function isProxyReachable(proxyUrl, timeoutMs = FAST_FAIL_TIMEOUT_MS, cacheTtlMs = HEALTH_CACHE_TTL_MS) {
+    const cached = proxyHealthCache.get(proxyUrl);
+    if (cached && Date.now() - cached.checkedAt < cached.ttlMs) {
+        return cached.healthy;
+    }
+    let url;
+    try {
+        url = new URL(proxyUrl);
+    } catch  {
+        // Malformed URL — treat as unreachable
+        proxyHealthCache.set(proxyUrl, {
+            healthy: false,
+            checkedAt: Date.now(),
+            ttlMs: cacheTtlMs
+        });
+        return false;
+    }
+    const host = (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$utils$2f$proxyFamily$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["stripIpv6Brackets"])(url.hostname);
+    const port = parseInt(url.port || defaultPortForScheme(url.protocol), 10);
+    if (!host || isNaN(port)) {
+        proxyHealthCache.set(proxyUrl, {
+            healthy: false,
+            checkedAt: Date.now(),
+            ttlMs: cacheTtlMs
+        });
+        return false;
+    }
+    const existingProbe = proxyHealthInflight.get(proxyUrl);
+    if (existingProbe) {
+        return existingProbe;
+    }
+    const probe = tcpCheckImpl(host, port, timeoutMs).then((healthy)=>{
+        proxyHealthCache.set(proxyUrl, {
+            healthy,
+            checkedAt: Date.now(),
+            ttlMs: healthy ? cacheTtlMs : Math.min(cacheTtlMs, UNHEALTHY_CACHE_TTL_MS)
+        });
+        return healthy;
+    });
+    proxyHealthInflight.set(proxyUrl, probe);
+    try {
+        return await probe;
+    } finally{
+        if (proxyHealthInflight.get(proxyUrl) === probe) {
+            proxyHealthInflight.delete(proxyUrl);
+        }
+    }
+}
+function getCachedProxyHealth(proxyUrl) {
+    const cached = proxyHealthCache.get(proxyUrl);
+    if (!cached) return null;
+    if (Date.now() - cached.checkedAt >= cached.ttlMs) return null; // stale
+    return cached.healthy;
+}
+function invalidateProxyHealth(proxyUrl) {
+    proxyHealthCache.delete(proxyUrl);
+    proxyHealthInflight.delete(proxyUrl);
+}
+function getAllProxyHealthStatuses() {
+    const now = Date.now();
+    return [
+        ...proxyHealthCache.entries()
+    ].map(([proxyUrl, entry])=>({
+            proxyUrl,
+            healthy: entry.healthy,
+            checkedAt: entry.checkedAt,
+            stale: now - entry.checkedAt >= entry.ttlMs
+        }));
+}
+// ─── Internals ────────────────────────────────────────────────────────────────
+function defaultPortForScheme(protocol) {
+    switch(protocol.replace(":", "").toLowerCase()){
+        case "https":
+            return "443";
+        case "socks5":
+        case "socks5h":
+            return "1080";
+        case "http":
+        default:
+            return "8080";
+    }
+}
+function tcpCheck(host, port, timeoutMs) {
+    return new Promise((resolve)=>{
+        const socket = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$net__$5b$external$5d$__$28$node$3a$net$2c$__cjs$29$__["createConnection"])({
+            host,
+            port
+        }, ()=>{
+            socket.destroy();
+            resolve(true);
+        });
+        socket.setTimeout(timeoutMs);
+        socket.on("error", ()=>resolve(false));
+        socket.on("timeout", ()=>{
+            socket.destroy();
+            resolve(false);
+        });
+    });
+}
+function __setProxyHealthTcpCheckForTesting(check) {
+    tcpCheckImpl = check ?? tcpCheck;
+}
+}),
+"[project]/src/lib/tokenHealthCheckCopilot.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+return __turbopack_context__.a(async (__turbopack_handle_async_dependencies__, __turbopack_async_result__) => { try {
+
+__turbopack_context__.s([
+    "refreshGithubCopilotSubTokenIfNeeded",
+    ()=>refreshGithubCopilotSubTokenIfNeeded
+]);
+// @ts-nocheck
+/**
+ * GitHub Copilot sub-token refresh helper for the proactive token health check.
+ *
+ * GitHub Copilot issues a short-lived (~30 min) API token separate from the
+ * GitHub OAuth token. After a successful OAuth refresh, the health check must
+ * also refresh this sub-token before it expires mid-session. The Copilot
+ * token expiry is stored in providerSpecificData.copilotTokenExpiresAt (Unix
+ * seconds). Extracted out of tokenHealthCheck.ts to keep that file under the
+ * frozen file-size budget (see config/quality/file-size-baseline.json).
+ */ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$localDb$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/lib/localDb.ts [instrumentation] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/lib/db/providers.ts [instrumentation] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/open-sse/services/tokenRefresh.ts [instrumentation] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2f$providers$2f$copilot$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/open-sse/services/tokenRefresh/providers/copilot.ts [instrumentation] (ecmascript)");
+var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
+    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$localDb$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__,
+    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__,
+    __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__,
+    __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2f$providers$2f$copilot$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__
+]);
+[__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$localDb$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2f$providers$2f$copilot$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__] = __turbopack_async_dependencies__.then ? (await __turbopack_async_dependencies__)() : __turbopack_async_dependencies__;
+;
+;
+async function refreshGithubCopilotSubTokenIfNeeded(params) {
+    const { conn, result, proxyConfig, healthCheckLog, log, logWarn, logError, getConnectionLogLabel, logPrefix } = params;
+    if (String(conn.provider || "").toLowerCase() !== "github") return;
+    // Re-read the latest connection after the OAuth refresh (onPersist may have updated it).
+    const latestConn = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["getProviderConnectionById"])(conn.id).catch(()=>null) || conn;
+    const accessTokenForCopilot = result.accessToken || latestConn.accessToken;
+    if (!accessTokenForCopilot) return;
+    const copilotExpiresAtRaw = latestConn.providerSpecificData?.copilotTokenExpiresAt ?? conn.providerSpecificData?.copilotTokenExpiresAt;
+    const copilotExpiresAtMs = typeof copilotExpiresAtRaw === "number" && copilotExpiresAtRaw < 1e12 ? copilotExpiresAtRaw * 1000 // Unix seconds → ms
+     : typeof copilotExpiresAtRaw === "string" ? new Date(copilotExpiresAtRaw).getTime() : typeof copilotExpiresAtRaw === "number" ? copilotExpiresAtRaw : 0;
+    const copilotAboutToExpire = !copilotExpiresAtMs || copilotExpiresAtMs - Date.now() < 5 * 60 * 1000;
+    if (!copilotAboutToExpire) return;
+    log(`${logPrefix} Refreshing GitHub Copilot sub-token for ${getConnectionLogLabel(conn)}`);
+    try {
+        const copilotResult = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2f$providers$2f$copilot$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["refreshCopilotToken"])(accessTokenForCopilot, healthCheckLog, proxyConfig);
+        if (copilotResult?.token) {
+            await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["updateProviderConnection"])(conn.id, {
+                providerSpecificData: {
+                    ...latestConn.providerSpecificData || {},
+                    copilotToken: copilotResult.token,
+                    copilotTokenExpiresAt: copilotResult.expiresAt
+                }
+            });
+            log(`${logPrefix} ✓ GitHub Copilot sub-token refreshed for ${getConnectionLogLabel(conn)}`);
+        } else {
+            logWarn(`${logPrefix} ✗ GitHub Copilot sub-token refresh failed for ${getConnectionLogLabel(conn)}`);
+        }
+    } catch (copilotErr) {
+        logError(`${logPrefix} Error refreshing Copilot sub-token:`, copilotErr?.message || copilotErr);
+    }
+}
+__turbopack_async_result__();
+} catch(e) { __turbopack_async_result__(e); } }, false);}),
+"[project]/src/lib/tokenHealthCheck.ts [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+return __turbopack_context__.a(async (__turbopack_handle_async_dependencies__, __turbopack_async_result__) => { try {
+
+__turbopack_context__.s([
+    "buildRefreshFailureUpdate",
+    ()=>buildRefreshFailureUpdate,
+    "buildTransientRefreshRetryUpdate",
+    ()=>buildTransientRefreshRetryUpdate,
+    "checkConnection",
+    ()=>checkConnection,
+    "clearHealthCheckLogCache",
+    ()=>clearHealthCheckLogCache,
+    "clearRefreshCircuit",
+    ()=>clearRefreshCircuit,
+    "default",
+    ()=>__TURBOPACK__default__export__,
+    "extractResolvedProxyConfig",
+    ()=>extractResolvedProxyConfig,
+    "getRefreshBackoffUntil",
+    ()=>getRefreshBackoffUntil,
+    "initTokenHealthCheck",
+    ()=>initTokenHealthCheck,
+    "isInRefreshBackoff",
+    ()=>isInRefreshBackoff,
+    "shouldHideLogs",
+    ()=>shouldHideLogs,
+    "stopTokenHealthCheck",
+    ()=>stopTokenHealthCheck,
+    "sweep",
+    ()=>sweep
+]);
+// @ts-nocheck
+/**
+ * Proactive Token Health Check Scheduler
+ *
+ * Background job that periodically refreshes OAuth tokens before they expire.
+ * Each connection can configure its own `healthCheckInterval` (minutes).
+ * Default: 60 minutes.  0 = disabled.
+ *
+ * The scheduler runs a lightweight sweep every TICK_MS (60 s).
+ * For each eligible connection it calls the provider-specific refresh function,
+ * updates the DB, and logs the result.
+ */ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$localDb$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/lib/localDb.ts [instrumentation] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/lib/db/providers.ts [instrumentation] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$readCache$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db/readCache.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$settings$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/lib/db/settings.ts [instrumentation] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/open-sse/services/tokenRefresh.ts [instrumentation] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2f$shared$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/open-sse/services/tokenRefresh/shared.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2f$providers$2f$copilot$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/open-sse/services/tokenRefresh/providers/copilot.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$utils$2f$maskEmail$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/utils/maskEmail.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$utils$2f$testProcess$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/utils/testProcess.ts [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$tokenHealthCheckCopilot$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/tokenHealthCheckCopilot.ts [instrumentation] (ecmascript)");
+var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
+    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$localDb$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__,
+    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__,
+    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$settings$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__,
+    __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__,
+    __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2f$providers$2f$copilot$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__,
+    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$tokenHealthCheckCopilot$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__
+]);
+[__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$localDb$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$settings$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2f$providers$2f$copilot$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$tokenHealthCheckCopilot$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__] = __turbopack_async_dependencies__.then ? (await __turbopack_async_dependencies__)() : __turbopack_async_dependencies__;
+;
+;
+;
+;
+;
+const LOG_PREFIX = "[HealthCheck]";
+const TRUE_ENV_VALUES = new Set([
+    "1",
+    "true",
+    "yes",
+    "on"
+]);
+const TICK_MS = 60 * 1000; // sweep interval: every 60 seconds (restored — #7719 dropped the const but kept two call sites)
+const DEFAULT_BATCH_SIZE = 20;
+const DEFAULT_HEALTH_CHECK_INTERVAL_MIN = 60; // default per-connection interval
+function isBuildProcess() {
+    return typeof process !== "undefined" && process.env.NEXT_PHASE === "phase-production-build";
+}
+function getConnectionLogLabel(conn) {
+    return (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$utils$2f$maskEmail$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["pickMaskedDisplayValue"])([
+        conn.name,
+        conn.email
+    ], conn.id || "-");
+}
+function extractResolvedProxyConfig(resolvedProxy) {
+    if (resolvedProxy && typeof resolvedProxy === "object" && !Array.isArray(resolvedProxy) && "proxy" in resolvedProxy) {
+        return resolvedProxy.proxy ?? null;
+    }
+    return resolvedProxy ?? null;
+}
+function getEffectiveTokenExpiryIso(conn) {
+    if (!conn || typeof conn !== "object") return null;
+    return conn.tokenExpiresAt || conn.expiresAt || null;
+}
+function getEffectiveTokenExpiryMs(conn) {
+    const effectiveExpiry = getEffectiveTokenExpiryIso(conn);
+    if (!effectiveExpiry) return 0;
+    const expiryMs = new Date(effectiveExpiry).getTime();
+    return Number.isFinite(expiryMs) ? expiryMs : 0;
+}
+const TOKEN_EXPIRY_BUFFER = 5 * 60 * 1000; // 5 minutes
+function getCopilotTokenExpiryMs(expiresAt) {
+    if (typeof expiresAt === "number" && Number.isFinite(expiresAt)) {
+        return expiresAt < 1e12 ? expiresAt * 1000 : expiresAt;
+    }
+    if (typeof expiresAt === "string" && expiresAt.trim()) {
+        const parsed = new Date(expiresAt).getTime();
+        return Number.isFinite(parsed) ? parsed : 0;
+    }
+    return 0;
+}
+// Providers whose OAuth flow yields only a GitHub-style access token (no
+// refresh_token) plus a short-lived Copilot sub-token: github.com Copilot and
+// GHE Copilot (device-code flow against the enterprise host) both fit this
+// shape. Keep both in sync — adding a github-token-only provider elsewhere
+// (e.g. new GHE-flavored Copilot variant) must also list it here.
+const GITHUB_ACCESS_TOKEN_ONLY_PROVIDERS = new Set([
+    "github",
+    "ghe-copilot"
+]);
+function isGitHubAccessTokenOnlyConnection(conn) {
+    return GITHUB_ACCESS_TOKEN_ONLY_PROVIDERS.has(String(conn?.provider || "").toLowerCase()) && typeof conn?.accessToken === "string" && conn.accessToken.trim().length > 0;
+}
+/**
+ * Resolve the Copilot token endpoint base URL for a connection. github.com
+ * Copilot always uses api.github.com; GHE Copilot uses its own per-enterprise
+ * host stored in providerSpecificData.gheUrl at connect time.
+ */ function getCopilotTokenBaseUrl(conn) {
+    if (String(conn?.provider || "").toLowerCase() === "ghe-copilot") {
+        const gheUrl = conn?.providerSpecificData?.gheUrl;
+        if (typeof gheUrl === "string" && gheUrl.trim().length > 0) {
+            return `${gheUrl.trim().replace(/\/+$/, "")}/api/v3`;
+        }
+    }
+    return "https://api.github.com";
+}
+function canClearGitHubNoRefreshTokenState(conn) {
+    return !conn?.testStatus || conn.testStatus === "active" || conn.testStatus === "expired" && conn.errorCode === "no_refresh_token";
+}
+// ── Refresh circuit breaker ───────────────────────────────────────────────
+// A refresh that returns null (network blip, dead proxy, unclassified error)
+// leaves the connection active, so the next 60s sweep retries immediately —
+// the production refresh loop (claude/aa5dd5cf 1352×, kimi 270×). We track
+// consecutive failures and back off exponentially so a stuck connection stops
+// hammering the upstream (and stops flooding the logs) instead of looping.
+const REFRESH_CIRCUIT_BASE_MIN = 5;
+const REFRESH_CIRCUIT_MAX_MIN = 240; // cap at 4h
+const TRANSIENT_REFRESH_RETRY_MIN = 2; // flat 2-minute retry for network/timeout errors
+function getRefreshBackoffUntil(streak, now) {
+    const steps = Math.max(0, streak - 1);
+    const backoffMin = Math.min(REFRESH_CIRCUIT_BASE_MIN * 2 ** steps, REFRESH_CIRCUIT_MAX_MIN);
+    return new Date(new Date(now).getTime() + backoffMin * 60 * 1000).toISOString();
+}
+function isInRefreshBackoff(conn, nowMs) {
+    const until = conn?.providerSpecificData?.refreshCircuit?.until;
+    if (typeof until !== "string") return false;
+    const untilMs = new Date(until).getTime();
+    return Number.isFinite(untilMs) && untilMs > nowMs;
+}
+function buildRefreshFailureUpdate(conn, now) {
+    const wasExpired = conn.testStatus === "expired";
+    const retryCount = (conn.expiredRetryCount ?? 0) + (wasExpired ? 1 : 0);
+    // Circuit breaker: increment the consecutive-failure streak and set an
+    // exponential backoff window so the next sweep skips this connection instead
+    // of retrying every 60s. Cleared by a successful refresh (clearRefreshCircuit).
+    // Guard: providerSpecificData may be a primitive or null - treat as empty.
+    const psd = typeof conn.providerSpecificData === "object" && conn.providerSpecificData !== null ? conn.providerSpecificData : {};
+    const prevStreak = psd.refreshCircuit?.streak ?? 0;
+    const streak = prevStreak + 1;
+    return {
+        lastHealthCheckAt: now,
+        // A failed background refresh should not evict otherwise healthy accounts
+        // from request routing. Keep non-expired connections active and only persist
+        // the refresh error metadata for observability.
+        testStatus: wasExpired ? "expired" : "active",
+        lastError: "Health check: token refresh failed",
+        lastErrorAt: now,
+        lastErrorType: "token_refresh_failed",
+        lastErrorSource: "oauth",
+        errorCode: "refresh_failed",
+        providerSpecificData: {
+            ...psd,
+            refreshCircuit: {
+                streak,
+                until: getRefreshBackoffUntil(streak, now),
+                lastFailAt: now
+            }
+        },
+        ...wasExpired ? {
+            expiredRetryCount: retryCount,
+            expiredRetryAt: now
+        } : {}
+    };
+}
+function buildTransientRefreshRetryUpdate(conn, now) {
+    const wasExpired = conn.testStatus === "expired";
+    const retryCount = (conn.expiredRetryCount ?? 0) + (wasExpired ? 1 : 0);
+    // Preserve existing streak from any prior permanent failures so a transient
+    // error does not reset the exponential backoff ladder.
+    // Guard: providerSpecificData may be a primitive or null - treat as empty.
+    const psd = typeof conn.providerSpecificData === "object" && conn.providerSpecificData !== null ? conn.providerSpecificData : {};
+    const existingCircuit = psd.refreshCircuit;
+    const existingStreak = existingCircuit?.streak ?? 0;
+    const parsedExistingUntil = existingCircuit?.until ? new Date(existingCircuit.until).getTime() : 0;
+    // Guard against NaN from malformed date strings - treat as no existing backoff.
+    const existingUntil = Number.isFinite(parsedExistingUntil) ? parsedExistingUntil : 0;
+    const transientUntil = new Date(now).getTime() + TRANSIENT_REFRESH_RETRY_MIN * 60 * 1000;
+    // Use the longer of the two: preserve an existing permanent backoff
+    // (e.g. 4h from exponential) or extend to the transient window.
+    const useTransient = existingUntil <= transientUntil;
+    const until = useTransient ? new Date(transientUntil).toISOString() : existingCircuit?.until ?? new Date(transientUntil).toISOString();
+    return {
+        lastHealthCheckAt: now,
+        testStatus: wasExpired ? "expired" : "active",
+        lastError: "Health check: token refresh transient error (network/timeout)",
+        lastErrorAt: now,
+        lastErrorType: "token_refresh_transient",
+        lastErrorSource: "oauth",
+        errorCode: "refresh_transient",
+        providerSpecificData: {
+            ...psd,
+            refreshCircuit: {
+                streak: existingStreak,
+                until,
+                lastFailAt: now,
+                // Always set the transient flag for observability. When the existing
+                // backoff is longer (useTransient=false), the transient error occurred
+                // but the permanent backoff was preserved - flag it as false so
+                // observers can distinguish this from a pure transient retry.
+                transient: useTransient
+            }
+        },
+        ...wasExpired ? {
+            expiredRetryCount: retryCount,
+            expiredRetryAt: now
+        } : {}
+    };
+}
+function clearRefreshCircuit(providerSpecificData) {
+    if (!providerSpecificData || typeof providerSpecificData !== "object") return undefined;
+    if (!("refreshCircuit" in providerSpecificData)) return undefined;
+    const next = {
+        ...providerSpecificData
+    };
+    delete next.refreshCircuit;
+    return next;
+}
+/**
+ * Concurrent-check batch size for the sweep, read per-call (not at module
+ * load) so tests — and operators — can override it via HEALTHCHECK_BATCH_SIZE
+ * without restarting the process. #7719 hardcoded this to a module-level
+ * `const BATCH_SIZE = 20`, silently dropping the configurability restored
+ * here (#7875). Falls back to DEFAULT_BATCH_SIZE on a missing/invalid value.
+ */ function getConfiguredBatchSize() {
+    const configured = parseInt(process.env.HEALTHCHECK_BATCH_SIZE || "", 10);
+    return Number.isFinite(configured) && configured > 0 ? configured : DEFAULT_BATCH_SIZE;
+}
+function isEnvFlagEnabled(name) {
+    const value = process.env[name];
+    if (!value) return false;
+    return TRUE_ENV_VALUES.has(value.trim().toLowerCase());
+}
+function isHealthCheckDisabled() {
+    return isEnvFlagEnabled("OMNIROUTE_DISABLE_TOKEN_HEALTHCHECK") || isBuildProcess() || (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$utils$2f$testProcess$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["isAutomatedTestProcess"])();
+}
+/**
+ * Providers excluded from the PROACTIVE sweep, comma-separated, case-insensitive
+ * (e.g. "codex,openai"). Targeted alternative to OMNIROUTE_DISABLE_TOKEN_HEALTHCHECK:
+ * keeps rotating-token cascade providers (Codex/OpenAI share one Auth0 family) on the
+ * reactive 401 path WITHOUT starving short-TTL providers (Kimi-coding) sweep-wide.
+ */ function getHealthCheckSkipProviders() {
+    const raw = process.env.OMNIROUTE_HEALTHCHECK_SKIP_PROVIDERS || "";
+    return new Set(raw.split(",").map((s)=>s.trim().toLowerCase()).filter(Boolean));
+}
+// ── Logging helper ───────────────────────────────────────────────────────────
+let cachedHideLogs = null;
+let cacheTimestamp = 0;
+let pendingHideLogs = null;
+const CACHE_TTL = 30_000; // Cache settings for 30 seconds
+async function shouldHideLogs() {
+    if (isEnvFlagEnabled("OMNIROUTE_HIDE_HEALTHCHECK_LOGS") || isBuildProcess() || (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$utils$2f$testProcess$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["isAutomatedTestProcess"])()) {
+        return true;
+    }
+    const now = Date.now();
+    // Return cached value if valid
+    if (cachedHideLogs !== null && now - cacheTimestamp < CACHE_TTL) {
+        return cachedHideLogs;
+    }
+    // Return pending promise if a query is already in progress (request coalescing)
+    if (pendingHideLogs !== null) {
+        return pendingHideLogs;
+    }
+    // Create new promise for DB query
+    pendingHideLogs = (async ()=>{
+        try {
+            const settings = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$settings$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["getSettings"])();
+            cachedHideLogs = settings.hideHealthCheckLogs === true;
+            cacheTimestamp = now;
+            return cachedHideLogs;
+        } catch  {
+            return false;
+        } finally{
+            pendingHideLogs = null;
+        }
+    })();
+    return pendingHideLogs;
+}
+function log(message, ...args) {
+    shouldHideLogs().then((hide)=>{
+        if (!hide) console.log(message, ...args);
+    });
+}
+function logWarn(message, ...args) {
+    shouldHideLogs().then((hide)=>{
+        if (!hide) console.warn(message, ...args);
+    });
+}
+function logError(message, ...args) {
+    shouldHideLogs().then((hide)=>{
+        if (!hide) console.error(message, ...args);
+    });
+}
+function clearHealthCheckLogCache() {
+    cachedHideLogs = null;
+    cacheTimestamp = 0;
+}
+function getHCState() {
+    if (!globalThis.__omnirouteTokenHC) {
+        globalThis.__omnirouteTokenHC = {
+            initialized: false,
+            interval: null,
+            initTimeout: null,
+            sweeping: false
+        };
+    }
+    return globalThis.__omnirouteTokenHC;
+}
+function initTokenHealthCheck() {
+    const state = getHCState();
+    if (state.initialized || isHealthCheckDisabled()) return;
+    state.initialized = true;
+    log(`${LOG_PREFIX} Starting proactive token health-check (tick every ${TICK_MS / 1000}s)`);
+    const timer = setTimeout(()=>{
+        state.initTimeout = null;
+        sweep();
+        state.interval = setInterval(sweep, TICK_MS);
+        if (state.interval && typeof state.interval === "object" && "unref" in state.interval) {
+            state.interval.unref?.();
+        }
+    }, 10_000);
+    state.initTimeout = timer;
+    if (timer && typeof timer === "object" && "unref" in timer) {
+        timer.unref?.();
+    }
+}
+function stopTokenHealthCheck() {
+    const state = getHCState();
+    if (state.initTimeout) {
+        clearTimeout(state.initTimeout);
+        state.initTimeout = null;
+    }
+    if (state.interval) {
+        clearInterval(state.interval);
+        state.interval = null;
+    }
+    state.initialized = false;
+}
+async function sweep() {
+    const state = getHCState();
+    if (state.sweeping) {
+        return log(`${LOG_PREFIX} Sweep skipped — previous sweep still in progress`);
+    }
+    state.sweeping = true;
+    try {
+        const connections = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["getProviderConnections"])({
+            authType: "oauth"
+        });
+        if (!connections || connections.length === 0) return;
+        const staggerMs = parseInt(process.env.HEALTHCHECK_STAGGER_MS || "3000", 10);
+        const total = connections.length;
+        // Process connections in concurrent batches. Within a single batch
+        // connections are checked concurrently (same-epoch start) so the array
+        // is drained faster and the event loop can service requests between
+        // batches. The inter-batch stagger preserves the original burst-
+        // prevention intent (Issue #1220) while reducing total sweep time from
+        // O(total × staggerMs) to O(total ÷ batchSize × staggerMs).
+        const batchSize = Math.min(getConfiguredBatchSize(), total);
+        for(let offset = 0; offset < total; offset += batchSize){
+            const batchEnd = Math.min(offset + batchSize, total);
+            const batch = [];
+            for(let i = offset; i < batchEnd; i++){
+                const conn = connections[i];
+                batch.push(checkConnection(conn).catch((err)=>{
+                    logError(`${LOG_PREFIX} Error checking ${conn.name || conn.id}:`, err.message);
+                }));
+            }
+            await Promise.all(batch);
+            // Stagger between batches (not between individual connections) to
+            // prevent sustained bursting while reducing total sweep duration.
+            if (batchEnd < total) {
+                if (staggerMs > 0) {
+                    const jitterMin = parseInt(process.env.HEALTHCHECK_JITTER_MIN_MS || "500", 10);
+                    const jitterMax = parseInt(process.env.HEALTHCHECK_JITTER_MAX_MS || "5000", 10);
+                    const jitter = jitterMin + Math.random() * Math.max(0, jitterMax - jitterMin);
+                    await new Promise((resolve)=>setTimeout(resolve, staggerMs + jitter));
+                }
+                // Yield a microtask so the event loop can service pending I/O
+                // (DB contention, network responses) before the next batch starts.
+                await new Promise((resolve)=>setTimeout(resolve, 0));
+            }
+        }
+    } catch (err) {
+        logError(`${LOG_PREFIX} Sweep error:`, err.message);
+    } finally{
+        state.sweeping = false;
+    }
+}
+async function checkConnection(conn) {
+    if (!conn?.id) return;
+    const latestConnection = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$readCache$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["getCachedProviderConnectionById"])(conn.id) || conn;
+    conn = latestConnection;
+    // Per-provider opt-out of proactive refresh (e.g. Codex/OpenAI cascade
+    // providers) — their token stays on the reactive, serialized 401 path while
+    // other providers keep being refreshed proactively.
+    if (getHealthCheckSkipProviders().has(String(conn.provider || "").toLowerCase())) {
+        return;
+    }
+    // Determine interval (0 = disabled)
+    const intervalMin = conn.healthCheckInterval ?? DEFAULT_HEALTH_CHECK_INTERVAL_MIN;
+    if (intervalMin <= 0) return;
+    if (!conn.isActive) return;
+    // #8182: skip terminal connections (credits_exhausted / banned / expired).
+    // These can never self-heal via a token refresh — probing them wastes
+    // CPU and network on every sweep cycle. Mirrors isTerminalConnectionStatus
+    // in src/sse/services/auth.ts and TERMINAL_CONNECTION_STATUSES in
+    // src/lib/quota/connectionRecovery.ts.
+    //
+    // #5326 exception: a GitHub Copilot access-token-only connection parked in
+    // "expired" with errorCode "no_refresh_token" is NOT actually terminal — it's
+    // the exact target of the self-heal below (canClearGitHubNoRefreshTokenState),
+    // which clears that stale status back to "active" once the Copilot sub-token
+    // proves usable. Treating it as terminal here made that self-heal unreachable,
+    // leaving healthy Copilot connections stuck at "expired" forever.
+    const isRecoverableGithubCopilotNoRefresh = conn.testStatus === "expired" && conn.errorCode === "no_refresh_token" && isGitHubAccessTokenOnlyConnection(conn);
+    const terminalStatuses = new Set([
+        "credits_exhausted",
+        "banned",
+        "expired"
+    ]);
+    if (typeof conn.testStatus === "string" && terminalStatuses.has(conn.testStatus.toLowerCase()) && !isRecoverableGithubCopilotNoRefresh) {
+        return;
+    }
+    // Deprecated upstream (see DEPRECATED_PROVIDERS in tokenRefresh): the provider is not
+    // routable, so refreshing kept a credential alive that could never answer a request.
+    // Surface that as a terminal state naming the migration, instead of the silent
+    // `Skipping … (refresh unsupported)` that dropping it from supportsTokenRefresh alone
+    // would produce — which would leave the row at "active" forever, doing nothing.
+    //
+    // Placed AFTER the terminal-status guard above, which makes this idempotent for free:
+    // once marked "expired" the connection is skipped on every later sweep, so this writes
+    // exactly once instead of rewriting the same reason each cycle.
+    const deprecation = (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["getDeprecationNotice"])(String(conn.provider || ""));
+    if (deprecation) {
+        const now = new Date().toISOString();
+        await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["updateProviderConnection"])(conn.id, {
+            testStatus: "expired",
+            lastHealthCheckAt: now,
+            lastError: deprecation.reason,
+            lastErrorAt: now,
+            lastErrorType: "provider_deprecated",
+            lastErrorSource: "oauth",
+            errorCode: "provider_deprecated"
+        });
+        log(`${LOG_PREFIX} ${conn.provider}/${getConnectionLogLabel(conn)} is a deprecated provider; marking expired (migrate to ${deprecation.migrateTo})`);
+        return;
+    }
+    if (!conn.refreshToken || typeof conn.refreshToken !== "string") {
+        if (isGitHubAccessTokenOnlyConnection(conn)) {
+            const now = new Date().toISOString();
+            const providerSpecificData = conn.providerSpecificData || {};
+            const hasCopilotToken = typeof providerSpecificData.copilotToken === "string" && providerSpecificData.copilotToken.trim().length > 0;
+            const copilotExpiresAtMs = getCopilotTokenExpiryMs(providerSpecificData.copilotTokenExpiresAt);
+            const copilotAboutToExpire = !hasCopilotToken || !copilotExpiresAtMs || copilotExpiresAtMs - Date.now() < TOKEN_EXPIRY_BUFFER;
+            let refreshedProviderSpecificData = null;
+            if (copilotAboutToExpire) {
+                const hideLogs = await shouldHideLogs();
+                const proxyResolution = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$settings$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["resolveProxyForConnection"])(conn.id);
+                const proxyConfig = extractResolvedProxyConfig(proxyResolution);
+                const healthCheckLog = {
+                    info: (tag, msg)=>{
+                        if (!hideLogs) console.log(LOG_PREFIX, `[${tag}]`, msg);
+                    },
+                    warn: (tag, msg)=>{
+                        if (!hideLogs) console.warn(LOG_PREFIX, `[${tag}]`, msg);
+                    },
+                    error: (tag, msg, extra)=>{
+                        if (!hideLogs) console.error(LOG_PREFIX, `[${tag}]`, msg, extra || "");
+                    }
+                };
+                const copilotResult = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2f$providers$2f$copilot$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["refreshCopilotToken"])(conn.accessToken, healthCheckLog, proxyConfig, getCopilotTokenBaseUrl(conn));
+                if (copilotResult?.token) {
+                    refreshedProviderSpecificData = {
+                        ...providerSpecificData,
+                        copilotToken: copilotResult.token,
+                        copilotTokenExpiresAt: copilotResult.expiresAt
+                    };
+                }
+            }
+            if (canClearGitHubNoRefreshTokenState(conn)) {
+                await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["updateProviderConnection"])(conn.id, {
+                    lastHealthCheckAt: now,
+                    testStatus: "active",
+                    lastError: copilotAboutToExpire && !refreshedProviderSpecificData ? "Health check: Copilot token refresh failed" : null,
+                    lastErrorAt: copilotAboutToExpire && !refreshedProviderSpecificData ? now : null,
+                    lastErrorType: copilotAboutToExpire && !refreshedProviderSpecificData ? "token_refresh_failed" : null,
+                    lastErrorSource: copilotAboutToExpire && !refreshedProviderSpecificData ? "oauth" : null,
+                    errorCode: copilotAboutToExpire && !refreshedProviderSpecificData ? "refresh_failed" : null,
+                    expiredRetryCount: null,
+                    expiredRetryAt: null,
+                    ...refreshedProviderSpecificData ? {
+                        providerSpecificData: refreshedProviderSpecificData
+                    } : {}
+                });
+            } else {
+                await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["updateProviderConnection"])(conn.id, {
+                    lastHealthCheckAt: now,
+                    ...refreshedProviderSpecificData ? {
+                        providerSpecificData: refreshedProviderSpecificData
+                    } : {}
+                });
+            }
+            // Steady-state ticks stay silent: this path runs once per TICK_MS (60s) for
+            // EVERY github/ghe-copilot connection, so an unconditional line here emits
+            // ~1440 entries/day per connection all saying the same nothing-changed thing.
+            // Only report when the sweep actually did work — a Copilot sub-token refresh
+            // attempt — so a genuine refresh failure still surfaces in the log.
+            if (copilotAboutToExpire) {
+                log(`${LOG_PREFIX} ${conn.provider}/${getConnectionLogLabel(conn)} Copilot token ${refreshedProviderSpecificData ? "refreshed" : "refresh FAILED"} (no refresh token; connection stays active)`);
+            }
+            return;
+        }
+        // #5326: a refresh-CAPABLE provider (e.g. antigravity/gemini) with no usable
+        // refresh token can never self-heal via the sweep — it genuinely needs re-auth.
+        // Silently skipping here left the row at testStatus="active" while the dashboard
+        // badge (which derives expiry from tokenExpiresAt||expiresAt) showed a confusing
+        // cosmetic "Token Expired". Surface reality as a terminal "expired" status instead.
+        // Guard tightly so we do NOT clobber:
+        //   - providers without refresh tokens (supportsTokenRefresh=false; #8407 devin-cli)
+        //   - connections already in a terminal/specific state (expired/banned/credits_exhausted)
+        //   - transient cooldown state (unavailable) owned by the request path
+        const refreshCapableNeedsReauth = (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["supportsTokenRefresh"])(conn.provider) && (!conn.testStatus || conn.testStatus === "active") && !(conn.apiKey && conn.apiKey.length > 0); // API-key-only connections don't need refresh tokens
+        if (refreshCapableNeedsReauth) {
+            const now = new Date().toISOString();
+            await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["updateProviderConnection"])(conn.id, {
+                testStatus: "expired",
+                lastHealthCheckAt: now,
+                lastError: "No refresh token available — re-authenticate this account.",
+                lastErrorAt: now,
+                lastErrorType: "no_refresh_token",
+                lastErrorSource: "oauth",
+                errorCode: "no_refresh_token"
+            });
+            log(`${LOG_PREFIX} ${conn.provider}/${getConnectionLogLabel(conn)} has no refresh token; marking expired (needs re-auth)`);
+        }
+        return;
+    }
+    // Retry expired connections with exponential backoff up to EXPIRED_RETRY_MAX times.
+    if (conn.testStatus === "expired") {
+        const retryCount = conn.expiredRetryCount ?? 0;
+        if (retryCount >= EXPIRED_RETRY_MAX) return;
+        const lastRetry = conn.expiredRetryAt ? new Date(conn.expiredRetryAt).getTime() : 0;
+        const backoffMs = EXPIRED_RETRY_BACKOFF_MIN * 60 * 1000 * Math.pow(2, retryCount);
+        if (Date.now() - lastRetry < backoffMs) return;
+        log(`${LOG_PREFIX} Retrying expired ${conn.provider}/${getConnectionLogLabel(conn)} (attempt ${retryCount + 1}/${EXPIRED_RETRY_MAX})`);
+    }
+    if (!(0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["supportsTokenRefresh"])(conn.provider)) {
+        const now = new Date().toISOString();
+        await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["updateProviderConnection"])(conn.id, {
+            lastHealthCheckAt: now
+        });
+        log(`${LOG_PREFIX} Skipping ${conn.provider}/${getConnectionLogLabel(conn)} (refresh unsupported)`);
+        return;
+    }
+    const intervalMs = intervalMin * 60 * 1000;
+    const lastCheck = conn.lastHealthCheckAt ? new Date(conn.lastHealthCheckAt).getTime() : 0;
+    // Prefer expiry-driven refresh when the provider returns a concrete expiry timestamp.
+    // Rotating-token providers such as Codex should not be refreshed on a fixed hourly
+    // cadence while the access token is still valid for days.
+    const tokenExpiresAt = getEffectiveTokenExpiryMs(conn);
+    const hasKnownExpiry = tokenExpiresAt > 0;
+    const isAboutToExpire = hasKnownExpiry && tokenExpiresAt - Date.now() < TOKEN_EXPIRY_BUFFER;
+    // ROTATING_REFRESH_PROVIDERS — providers whose refresh_tokens are SINGLE-USE
+    // (each refresh consumes the old one and returns a new one). For these, refreshing
+    // on a fixed interval — instead of strictly on imminent expiry — burns rotations
+    // unnecessarily AND can trigger Auth0's token family revocation (especially OpenAI
+    // Codex). 9router did not have this background sweep; it was introduced in OmniRoute
+    // and is the root cause of "adding account B invalidates account A" reports.
+    // The interval path is kept ONLY for non-rotating providers where token state can
+    // drift silently (e.g. cookie-based, opaque sessions without expires_at).
+    const ROTATING_REFRESH_PROVIDERS = new Set([
+        "codex",
+        "openai",
+        "kimi-coding",
+        "cline",
+        "kiro",
+        "amazon-q",
+        "gitlab-duo",
+        "claude"
+    ]);
+    const isRotatingProvider = ROTATING_REFRESH_PROVIDERS.has(String(conn.provider || "").toLowerCase());
+    const shouldRefreshByInterval = !hasKnownExpiry && !isRotatingProvider && Date.now() - lastCheck >= intervalMs;
+    if (!isAboutToExpire && !shouldRefreshByInterval) return;
+    // Circuit breaker: if recent refreshes for this connection failed, wait out
+    // the exponential backoff window instead of retrying every 60s tick. This is
+    // what stops the refresh loop when getAccessToken keeps returning null
+    // (dead proxy / network blip / unclassified upstream error).
+    if (isInRefreshBackoff(conn, Date.now())) {
+        return;
+    }
+    const reason = isAboutToExpire ? "token expiring soon" : `interval: ${intervalMin}min`;
+    log(`${LOG_PREFIX} Refreshing ${conn.provider}/${getConnectionLogLabel(conn)} (${reason})`);
+    const attemptedRefreshToken = conn.refreshToken;
+    const attemptedAccessToken = conn.accessToken || null;
+    const credentials = {
+        connectionId: conn.id,
+        refreshToken: attemptedRefreshToken,
+        accessToken: attemptedAccessToken,
+        expiresAt: getEffectiveTokenExpiryIso(conn),
+        providerSpecificData: conn.providerSpecificData
+    };
+    const hideLogs = await shouldHideLogs();
+    const proxyResolution = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$settings$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["resolveProxyForConnection"])(conn.id);
+    const proxyConfig = extractResolvedProxyConfig(proxyResolution);
+    const healthCheckLog = {
+        info: (tag, msg)=>{
+            if (!hideLogs) console.log(LOG_PREFIX, `[${tag}]`, msg);
+        },
+        warn: (tag, msg)=>{
+            if (!hideLogs) console.warn(LOG_PREFIX, `[${tag}]`, msg);
+        },
+        error: (tag, msg, extra)=>{
+            if (!hideLogs) console.error(LOG_PREFIX, `[${tag}]`, msg, extra || "");
+        }
+    };
+    let persistedResult = null;
+    let result;
+    try {
+        result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["getAccessToken"])(conn.provider, credentials, healthCheckLog, proxyConfig, async (refreshResult)=>{
+            const now = new Date().toISOString();
+            const updateData = {
+                accessToken: refreshResult.accessToken,
+                lastHealthCheckAt: now,
+                testStatus: "active",
+                lastError: null,
+                lastErrorAt: null,
+                lastErrorType: null,
+                lastErrorSource: null,
+                errorCode: null,
+                expiredRetryCount: null,
+                expiredRetryAt: null
+            };
+            if (refreshResult.refreshToken) {
+                updateData.refreshToken = refreshResult.refreshToken;
+            }
+            if (refreshResult.expiresAt) {
+                updateData.expiresAt = refreshResult.expiresAt;
+                updateData.tokenExpiresAt = refreshResult.expiresAt;
+            } else if (refreshResult.expiresIn) {
+                const expiresAt = new Date(Date.now() + refreshResult.expiresIn * 1000).toISOString();
+                updateData.expiresAt = expiresAt;
+                updateData.tokenExpiresAt = expiresAt;
+            }
+            // Merge new providerSpecificData and ALWAYS clear the refresh circuit
+            // breaker streak on a successful refresh.
+            const mergedProviderData = {
+                ...conn.providerSpecificData || {},
+                ...refreshResult.providerSpecificData || {}
+            };
+            const clearedProviderData = clearRefreshCircuit(mergedProviderData);
+            if (clearedProviderData !== undefined) {
+                updateData.providerSpecificData = clearedProviderData;
+            } else if (refreshResult.providerSpecificData) {
+                updateData.providerSpecificData = mergedProviderData;
+            }
+            try {
+                await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["updateProviderConnection"])(conn.id, updateData);
+            } catch (dbErr) {
+                // DB write failed after successful refresh - log but do not throw.
+                // The outer catch would misclassify this as a network error.
+                logWarn(`${LOG_PREFIX} ~ ${conn.provider}/${getConnectionLogLabel(conn)} DB write failed after successful refresh` + ` (${dbErr instanceof Error ? dbErr.message : String(dbErr)}); token not persisted`);
+                return;
+            }
+            // Mark as persisted AFTER the DB write succeeds.
+            persistedResult = refreshResult;
+        });
+    } catch (err) {
+        // If onPersist already wrote a successful result, do not overwrite it.
+        if (persistedResult) {
+            logWarn(`${LOG_PREFIX} ~ ${conn.provider}/${getConnectionLogLabel(conn)} refresh error after successful persist` + ` (${err instanceof Error ? err.message : String(err)}); ignoring`);
+            return;
+        }
+        // Classify: only network/timeout errors are transient. Programming errors
+        // and DB failures fall through to the exponential backoff path.
+        const errObj = typeof err === "object" && err !== null ? err : {};
+        const errName = err instanceof Error ? err.name : String(errObj.name ?? "");
+        const errMsg = err instanceof Error ? err.message : String(err);
+        const errCode = String(errObj.code ?? "");
+        // Also check err.cause for wrapped fetch errors.
+        const errCause = errObj.cause instanceof Error ? errObj.cause.message : "";
+        const errCauseCode = String(errObj.cause?.code ?? "");
+        const combinedMsg = `${errMsg} ${errCause}`;
+        const combinedCode = `${errCode} ${errCauseCode}`;
+        const isTransientNetworkError = errName === "AbortError" || errName === "TimeoutError" || /ETIMEDOUT|ECONNREFUSED|ECONNRESET|ECONNABORTED|EPIPE|EHOSTUNREACH|ENETUNREACH|ENOTCONN|ENOTFOUND|EAI_AGAIN|ERR_NETWORK|ERR_SOCKET|ERR_CONNECTION|socket hang up|fetch failed/i.test(combinedMsg) || /ETIMEDOUT|ECONNREFUSED|ECONNRESET|ECONNABORTED|EPIPE|EHOSTUNREACH|ENETUNREACH|ENOTCONN|ENOTFOUND|EAI_AGAIN|ERR_NETWORK|ERR_SOCKET|ERR_CONNECTION/i.test(combinedCode);
+        if (isTransientNetworkError) {
+            const transientNow = new Date().toISOString();
+            const updateData = buildTransientRefreshRetryUpdate(conn, transientNow);
+            try {
+                await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["updateProviderConnection"])(conn.id, updateData);
+            } catch (dbErr) {
+                logWarn(`${LOG_PREFIX} ~ ${conn.provider}/${getConnectionLogLabel(conn)} DB write failed after transient error` + ` (${dbErr instanceof Error ? dbErr.message : String(dbErr)}); state not persisted`);
+            }
+            logWarn(`${LOG_PREFIX} ~ ${conn.provider}/${getConnectionLogLabel(conn)} refresh transient error` + ` (${err instanceof Error ? err.message : String(err)}); retry in ${TRANSIENT_REFRESH_RETRY_MIN}min`);
+        } else {
+            // Non-transient error: apply standard exponential backoff.
+            const failNow = new Date().toISOString();
+            const updateData = buildRefreshFailureUpdate(conn, failNow);
+            try {
+                await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["updateProviderConnection"])(conn.id, updateData);
+            } catch (dbErr) {
+                logWarn(`${LOG_PREFIX} ~ ${conn.provider}/${getConnectionLogLabel(conn)} DB write failed after permanent error` + ` (${dbErr instanceof Error ? dbErr.message : String(dbErr)}); state not persisted`);
+            }
+            logWarn(`${LOG_PREFIX} ~ ${conn.provider}/${getConnectionLogLabel(conn)} refresh error` + ` (${err instanceof Error ? err.message : String(err)}); applying exponential backoff`);
+        }
+        return;
+    }
+    const now = new Date().toISOString();
+    // ─── Handle unrecoverable errors (e.g. refresh_token_reused) ───────────
+    // OpenAI Codex uses rotating one-time-use refresh tokens.
+    // Once used, the old token is permanently invalidated.
+    // Retrying will never succeed → deactivate and stop the loop.
+    if ((0, __TURBOPACK__imported__module__$5b$project$5d2f$open$2d$sse$2f$services$2f$tokenRefresh$2f$shared$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["isUnrecoverableRefreshError"])(result)) {
+        const currentConnection = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$readCache$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["getCachedProviderConnectionById"])(conn.id);
+        const credentialsChangedSinceSweep = !!currentConnection && (currentConnection.refreshToken !== attemptedRefreshToken || (currentConnection.accessToken || null) !== attemptedAccessToken);
+        if (credentialsChangedSinceSweep) {
+            await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["updateProviderConnection"])(conn.id, {
+                lastHealthCheckAt: now
+            });
+            logWarn(`${LOG_PREFIX} ! ${conn.provider}/${getConnectionLogLabel(conn)} changed during refresh; skipping stale deactivation`);
+            return;
+        }
+        const accessTokenStillValid = getEffectiveTokenExpiryMs(currentConnection || conn) > Date.now() + TOKEN_EXPIRY_BUFFER;
+        if (accessTokenStillValid) {
+            await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["updateProviderConnection"])(conn.id, {
+                lastHealthCheckAt: now,
+                testStatus: "active",
+                lastError: `Health check refresh failed (${result.error}). Re-authenticate before the current access token expires.`,
+                lastErrorAt: now,
+                lastErrorType: result.error,
+                lastErrorSource: "oauth",
+                errorCode: result.error
+            });
+            logWarn(`${LOG_PREFIX} ! ${conn.provider}/${getConnectionLogLabel(conn)} refresh token is invalid (${result.error}), but the current access token is still valid; keeping connection active`);
+            return;
+        }
+        await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["updateProviderConnection"])(conn.id, {
+            lastHealthCheckAt: now,
+            testStatus: "expired",
+            lastError: isRotatingProvider ? `Refresh token consumed (${result.error}). Please re-authenticate this account.` : `Refresh token rejected (${result.error}). Please re-authenticate this account.`,
+            lastErrorAt: now,
+            lastErrorType: result.error,
+            lastErrorSource: "oauth",
+            errorCode: result.error,
+            isActive: false,
+            // Only rotating-token providers (Codex/OpenAI/etc.) have single-use refresh
+            // tokens that are genuinely consumed and worthless after a failed refresh, so
+            // clearing them is safe. For non-rotating providers (Google: antigravity /
+            // gemini) the stored refresh_token is the user's only recovery
+            // artifact — nulling it caused #3679 (the connection reports "No valid refresh
+            // token available" and can never recover even after re-activation). Preserve it.
+            ...isRotatingProvider ? {
+                refreshToken: null
+            } : {}
+        });
+        logError(`${LOG_PREFIX} ✗ ${conn.provider}/${getConnectionLogLabel(conn)} — ` + `Refresh token is permanently invalid (${result.error}). ` + `Connection deactivated. Re-authenticate to restore.`);
+        return;
+    }
+    if (result && result.accessToken) {
+        // onPersist already wrote the core token fields atomically inside the mutex.
+        // Only write the lastHealthCheckAt timestamp (and any fields onPersist may have
+        // missed) here, to avoid a redundant full update that would race against another
+        // concurrent refresh that already wrote fresh credentials.
+        if (persistedResult) {
+            await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["updateProviderConnection"])(conn.id, {
+                lastHealthCheckAt: now
+            });
+        } else {
+            // No onPersist (e.g. no connectionId — token-hash dedup path). Write all fields.
+            const updateData = {
+                accessToken: result.accessToken,
+                lastHealthCheckAt: now,
+                testStatus: "active",
+                lastError: null,
+                lastErrorAt: null,
+                lastErrorType: null,
+                lastErrorSource: null,
+                errorCode: null,
+                expiredRetryCount: null,
+                expiredRetryAt: null
+            };
+            if (result.refreshToken) {
+                updateData.refreshToken = result.refreshToken;
+            }
+            if (result.expiresAt) {
+                updateData.expiresAt = result.expiresAt;
+                updateData.tokenExpiresAt = result.expiresAt;
+            } else if (result.expiresIn) {
+                const expiresAt = new Date(Date.now() + result.expiresIn * 1000).toISOString();
+                updateData.expiresAt = expiresAt;
+                updateData.tokenExpiresAt = expiresAt;
+            }
+            if (result.providerSpecificData) {
+                updateData.providerSpecificData = {
+                    ...conn.providerSpecificData || {},
+                    ...result.providerSpecificData
+                };
+            }
+            await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["updateProviderConnection"])(conn.id, updateData);
+        }
+        log(`${LOG_PREFIX} ✓ ${conn.provider}/${getConnectionLogLabel(conn)} refreshed`);
+        // ── GitHub Copilot sub-token refresh ──────────────────────────────────────
+        // Extracted to tokenHealthCheckCopilot.ts to keep this file under the
+        // frozen file-size budget. See that file's header comment for context.
+        await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$tokenHealthCheckCopilot$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__["refreshGithubCopilotSubTokenIfNeeded"])({
+            conn,
+            result,
+            proxyConfig,
+            healthCheckLog,
+            log,
+            logWarn,
+            logError,
+            getConnectionLogLabel,
+            logPrefix: LOG_PREFIX
+        });
+    } else {
+        const updateData = buildRefreshFailureUpdate(conn, now);
+        await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2f$providers$2e$ts__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__["updateProviderConnection"])(conn.id, updateData);
+        logWarn(`${LOG_PREFIX} ✗ ${conn.provider}/${getConnectionLogLabel(conn)} refresh failed` + (conn.testStatus === "expired" ? ` (${updateData.expiredRetryCount}/${EXPIRED_RETRY_MAX} expired retries used)` : ""));
+    }
+}
+// Auto-start when imported
+initTokenHealthCheck();
+const __TURBOPACK__default__export__ = initTokenHealthCheck;
+__turbopack_async_result__();
+} catch(e) { __turbopack_async_result__(e); } }, false);}),
+];
+
+//# sourceMappingURL=src_lib_008x7rp._.js.map

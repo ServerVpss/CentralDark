@@ -1,0 +1,12 @@
+var R=require("../../../../chunks/[turbopack]_runtime.js")("server/app/api/sync/cloud/route.js")
+R.c("server/chunks/[root-of-the-server]__0k5l8tw._.js")
+R.c("server/chunks/src_lib_db_1cka_7u._.js")
+R.c("server/chunks/src_lib_1_edyml._.js")
+R.c("server/chunks/src_shared_06ej3cz._.js")
+R.c("server/chunks/src_0e_inna._.js")
+R.c("server/chunks/open-sse_1nylr-5._.js")
+R.c("server/chunks/[externals]__166dukd._.js")
+R.c("server/chunks/[root-of-the-server]__0njyix7._.js")
+R.c("server/chunks/_next-internal_server_app_api_sync_cloud_route_actions_0rq1ela.js")
+R.m("[project]/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/src/app/api/sync/cloud/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)")
+module.exports=R.m("[project]/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/src/app/api/sync/cloud/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)").exports

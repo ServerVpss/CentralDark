@@ -1,0 +1,16 @@
+{
+  "[project]/src/shared/components/ModelSelectModal.tsx [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/src/shared/components/ModelSelectModal.tsx [app-client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/src_shared_components_ModelSelectModal_tsx_1g2i3br._.js",
+      "static/chunks/src_shared_components_ModelSelectModal_tsx_1or41yp._.js"
+    ]
+  },
+  "[project]/src/shared/components/ProxyConfigModal.tsx [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/src/shared/components/ProxyConfigModal.tsx [app-client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/src_shared_components_ProxyConfigModal_tsx_1m23i5p._.js",
+      "static/chunks/src_shared_components_ProxyConfigModal_tsx_1or41yp._.js"
+    ]
+  }
+}

@@ -1,0 +1,313 @@
+module.exports = [
+"[externals]/node:fs/promises [external] (node:fs/promises, cjs)", ((__turbopack_context__, module, exports) => {
+
+const mod = __turbopack_context__.x("node:fs/promises", () => require("node:fs/promises"));
+
+module.exports = mod;
+}),
+"[externals]/node:crypto [external] (node:crypto, cjs)", ((__turbopack_context__, module, exports) => {
+
+const mod = __turbopack_context__.x("node:crypto", () => require("node:crypto"));
+
+module.exports = mod;
+}),
+"[externals]/node:path [external] (node:path, cjs)", ((__turbopack_context__, module, exports) => {
+
+const mod = __turbopack_context__.x("node:path", () => require("node:path"));
+
+module.exports = mod;
+}),
+"[externals]/node:os [external] (node:os, cjs)", ((__turbopack_context__, module, exports) => {
+
+const mod = __turbopack_context__.x("node:os", () => require("node:os"));
+
+module.exports = mod;
+}),
+"[externals]/node:fs [external] (node:fs, cjs)", ((__turbopack_context__, module, exports) => {
+
+const mod = __turbopack_context__.x("node:fs", () => require("node:fs"));
+
+module.exports = mod;
+}),
+"[project]/node_modules/@aws-sdk/credential-provider-web-identity/dist-es/index.js [instrumentation] (ecmascript) <locals>", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([]);
+;
+;
+}),
+"[project]/node_modules/@aws-sdk/core/dist-es/submodules/client/setCredentialFeature.js [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "setCredentialFeature",
+    ()=>setCredentialFeature
+]);
+function setCredentialFeature(credentials, feature, value) {
+    if (!credentials.$source) {
+        credentials.$source = {};
+    }
+    credentials.$source[feature] = value;
+    return credentials;
+}
+}),
+"[project]/node_modules/@smithy/core/dist-es/submodules/config/property-provider/ProviderError.js [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "ProviderError",
+    ()=>ProviderError
+]);
+class ProviderError extends Error {
+    name = "ProviderError";
+    tryNextLink;
+    constructor(message, options = true){
+        let logger;
+        let tryNextLink = true;
+        if (typeof options === "boolean") {
+            logger = undefined;
+            tryNextLink = options;
+        } else if (options != null && typeof options === "object") {
+            logger = options.logger;
+            tryNextLink = options.tryNextLink ?? true;
+        }
+        super(message);
+        this.tryNextLink = tryNextLink;
+        Object.setPrototypeOf(this, ProviderError.prototype);
+        logger?.debug?.(`@smithy/property-provider ${tryNextLink ? "->" : "(!)"} ${message}`);
+    }
+    static from(error, options = true) {
+        return Object.assign(new this(error.message, options), error);
+    }
+}
+}),
+"[project]/node_modules/@smithy/core/dist-es/submodules/config/property-provider/CredentialsProviderError.js [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "CredentialsProviderError",
+    ()=>CredentialsProviderError
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$smithy$2f$core$2f$dist$2d$es$2f$submodules$2f$config$2f$property$2d$provider$2f$ProviderError$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@smithy/core/dist-es/submodules/config/property-provider/ProviderError.js [instrumentation] (ecmascript)");
+;
+class CredentialsProviderError extends __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$smithy$2f$core$2f$dist$2d$es$2f$submodules$2f$config$2f$property$2d$provider$2f$ProviderError$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__["ProviderError"] {
+    name = "CredentialsProviderError";
+    constructor(message, options = true){
+        super(message, options);
+        Object.setPrototypeOf(this, CredentialsProviderError.prototype);
+    }
+}
+}),
+"[project]/node_modules/@smithy/core/dist-es/submodules/config/shared-ini-file-loader/getHomeDir.js [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "getHomeDir",
+    ()=>getHomeDir
+]);
+var __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$os__$5b$external$5d$__$28$node$3a$os$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/node:os [external] (node:os, cjs)");
+var __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$path__$5b$external$5d$__$28$node$3a$path$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/node:path [external] (node:path, cjs)");
+;
+;
+const homeDirCache = {};
+const getHomeDirCacheKey = ()=>{
+    if (process && process.geteuid) {
+        return `${process.geteuid()}`;
+    }
+    return "DEFAULT";
+};
+const getHomeDir = ()=>{
+    const { HOME, USERPROFILE, HOMEPATH, HOMEDRIVE = `C:${__TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$path__$5b$external$5d$__$28$node$3a$path$2c$__cjs$29$__["sep"]}` } = process.env;
+    if (HOME) return HOME;
+    if (USERPROFILE) return USERPROFILE;
+    if (HOMEPATH) return `${HOMEDRIVE}${HOMEPATH}`;
+    const homeDirCacheKey = getHomeDirCacheKey();
+    if (!homeDirCache[homeDirCacheKey]) homeDirCache[homeDirCacheKey] = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$os__$5b$external$5d$__$28$node$3a$os$2c$__cjs$29$__["homedir"])();
+    return homeDirCache[homeDirCacheKey];
+};
+}),
+"[project]/node_modules/@smithy/core/dist-es/submodules/config/shared-ini-file-loader/getSSOTokenFilepath.js [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "getSSOTokenFilepath",
+    ()=>getSSOTokenFilepath
+]);
+var __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$crypto__$5b$external$5d$__$28$node$3a$crypto$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/node:crypto [external] (node:crypto, cjs)");
+var __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$path__$5b$external$5d$__$28$node$3a$path$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/node:path [external] (node:path, cjs)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$smithy$2f$core$2f$dist$2d$es$2f$submodules$2f$config$2f$shared$2d$ini$2d$file$2d$loader$2f$getHomeDir$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@smithy/core/dist-es/submodules/config/shared-ini-file-loader/getHomeDir.js [instrumentation] (ecmascript)");
+;
+;
+;
+const getSSOTokenFilepath = (id)=>{
+    const hasher = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$crypto__$5b$external$5d$__$28$node$3a$crypto$2c$__cjs$29$__["createHash"])("sha1");
+    const cacheName = hasher.update(id).digest("hex");
+    return (0, __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$path__$5b$external$5d$__$28$node$3a$path$2c$__cjs$29$__["join"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$smithy$2f$core$2f$dist$2d$es$2f$submodules$2f$config$2f$shared$2d$ini$2d$file$2d$loader$2f$getHomeDir$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__["getHomeDir"])(), ".aws", "sso", "cache", `${cacheName}.json`);
+};
+}),
+"[project]/node_modules/@smithy/core/dist-es/submodules/config/shared-ini-file-loader/getSSOTokenFromFile.js [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "getSSOTokenFromFile",
+    ()=>getSSOTokenFromFile,
+    "tokenIntercept",
+    ()=>tokenIntercept
+]);
+var __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs$2f$promises__$5b$external$5d$__$28$node$3a$fs$2f$promises$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/node:fs/promises [external] (node:fs/promises, cjs)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$smithy$2f$core$2f$dist$2d$es$2f$submodules$2f$config$2f$shared$2d$ini$2d$file$2d$loader$2f$getSSOTokenFilepath$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@smithy/core/dist-es/submodules/config/shared-ini-file-loader/getSSOTokenFilepath.js [instrumentation] (ecmascript)");
+;
+;
+const tokenIntercept = {};
+const getSSOTokenFromFile = async (id)=>{
+    if (tokenIntercept[id]) {
+        return tokenIntercept[id];
+    }
+    const ssoTokenFilepath = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$smithy$2f$core$2f$dist$2d$es$2f$submodules$2f$config$2f$shared$2d$ini$2d$file$2d$loader$2f$getSSOTokenFilepath$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__["getSSOTokenFilepath"])(id);
+    const ssoTokenText = await (0, __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs$2f$promises__$5b$external$5d$__$28$node$3a$fs$2f$promises$2c$__cjs$29$__["readFile"])(ssoTokenFilepath, "utf8");
+    return JSON.parse(ssoTokenText);
+};
+}),
+"[project]/node_modules/@smithy/core/dist-es/submodules/config/shared-ini-file-loader/readFile.js [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "fileIntercept",
+    ()=>fileIntercept,
+    "filePromises",
+    ()=>filePromises,
+    "readFile",
+    ()=>readFile
+]);
+var __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs$2f$promises__$5b$external$5d$__$28$node$3a$fs$2f$promises$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/node:fs/promises [external] (node:fs/promises, cjs)");
+;
+const filePromises = {};
+const fileIntercept = {};
+const readFile = (path, options)=>{
+    if (fileIntercept[path] !== undefined) {
+        return fileIntercept[path];
+    }
+    if (!filePromises[path] || options?.ignoreCache) {
+        filePromises[path] = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs$2f$promises__$5b$external$5d$__$28$node$3a$fs$2f$promises$2c$__cjs$29$__["readFile"])(path, "utf8");
+    }
+    return filePromises[path];
+};
+}),
+"[project]/node_modules/@smithy/core/dist-es/submodules/config/shared-ini-file-loader/externalDataInterceptor.js [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "externalDataInterceptor",
+    ()=>externalDataInterceptor
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$smithy$2f$core$2f$dist$2d$es$2f$submodules$2f$config$2f$shared$2d$ini$2d$file$2d$loader$2f$getSSOTokenFromFile$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@smithy/core/dist-es/submodules/config/shared-ini-file-loader/getSSOTokenFromFile.js [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$smithy$2f$core$2f$dist$2d$es$2f$submodules$2f$config$2f$shared$2d$ini$2d$file$2d$loader$2f$readFile$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@smithy/core/dist-es/submodules/config/shared-ini-file-loader/readFile.js [instrumentation] (ecmascript)");
+;
+;
+const externalDataInterceptor = {
+    getFileRecord () {
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$smithy$2f$core$2f$dist$2d$es$2f$submodules$2f$config$2f$shared$2d$ini$2d$file$2d$loader$2f$readFile$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__["fileIntercept"];
+    },
+    interceptFile (path, contents) {
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$smithy$2f$core$2f$dist$2d$es$2f$submodules$2f$config$2f$shared$2d$ini$2d$file$2d$loader$2f$readFile$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__["fileIntercept"][path] = Promise.resolve(contents);
+    },
+    getTokenRecord () {
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$smithy$2f$core$2f$dist$2d$es$2f$submodules$2f$config$2f$shared$2d$ini$2d$file$2d$loader$2f$getSSOTokenFromFile$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__["tokenIntercept"];
+    },
+    interceptToken (id, contents) {
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$smithy$2f$core$2f$dist$2d$es$2f$submodules$2f$config$2f$shared$2d$ini$2d$file$2d$loader$2f$getSSOTokenFromFile$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__["tokenIntercept"][id] = contents;
+    }
+};
+}),
+"[project]/node_modules/@aws-sdk/credential-provider-web-identity/dist-es/fromWebToken.js [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "fromWebToken",
+    ()=>fromWebToken
+]);
+const fromWebToken = (init)=>async (awsIdentityProperties)=>{
+        init.logger?.debug("@aws-sdk/credential-provider-web-identity - fromWebToken");
+        const { roleArn, roleSessionName, webIdentityToken, providerId, policyArns, policy, durationSeconds } = init;
+        let { roleAssumerWithWebIdentity } = init;
+        if (!roleAssumerWithWebIdentity) {
+            const { getDefaultRoleAssumerWithWebIdentity } = await __turbopack_context__.A("[project]/node_modules/@aws-sdk/nested-clients/dist-es/submodules/sts/index.js [instrumentation] (ecmascript, async loader)");
+            roleAssumerWithWebIdentity = getDefaultRoleAssumerWithWebIdentity({
+                ...init.clientConfig,
+                credentialProviderLogger: init.logger,
+                parentClientConfig: {
+                    ...awsIdentityProperties?.callerClientConfig,
+                    ...init.parentClientConfig
+                }
+            }, init.clientPlugins);
+        }
+        return roleAssumerWithWebIdentity({
+            RoleArn: roleArn,
+            RoleSessionName: roleSessionName ?? `aws-sdk-js-session-${Date.now()}`,
+            WebIdentityToken: webIdentityToken,
+            ProviderId: providerId,
+            PolicyArns: policyArns,
+            Policy: policy,
+            DurationSeconds: durationSeconds
+        });
+    };
+}),
+"[project]/node_modules/@aws-sdk/credential-provider-web-identity/dist-es/fromTokenFile.js [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "fromTokenFile",
+    ()=>fromTokenFile
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$aws$2d$sdk$2f$core$2f$dist$2d$es$2f$submodules$2f$client$2f$setCredentialFeature$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@aws-sdk/core/dist-es/submodules/client/setCredentialFeature.js [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$smithy$2f$core$2f$dist$2d$es$2f$submodules$2f$config$2f$property$2d$provider$2f$CredentialsProviderError$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@smithy/core/dist-es/submodules/config/property-provider/CredentialsProviderError.js [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$smithy$2f$core$2f$dist$2d$es$2f$submodules$2f$config$2f$shared$2d$ini$2d$file$2d$loader$2f$externalDataInterceptor$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@smithy/core/dist-es/submodules/config/shared-ini-file-loader/externalDataInterceptor.js [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/node:fs [external] (node:fs, cjs)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$aws$2d$sdk$2f$credential$2d$provider$2d$web$2d$identity$2f$dist$2d$es$2f$fromWebToken$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@aws-sdk/credential-provider-web-identity/dist-es/fromWebToken.js [instrumentation] (ecmascript)");
+;
+;
+;
+;
+const ENV_TOKEN_FILE = "AWS_WEB_IDENTITY_TOKEN_FILE";
+const ENV_ROLE_ARN = "AWS_ROLE_ARN";
+const ENV_ROLE_SESSION_NAME = "AWS_ROLE_SESSION_NAME";
+const fromTokenFile = (init = {})=>async (awsIdentityProperties)=>{
+        init.logger?.debug("@aws-sdk/credential-provider-web-identity - fromTokenFile");
+        const webIdentityTokenFile = init?.webIdentityTokenFile ?? process.env[ENV_TOKEN_FILE];
+        const roleArn = init?.roleArn ?? process.env[ENV_ROLE_ARN];
+        const roleSessionName = init?.roleSessionName ?? process.env[ENV_ROLE_SESSION_NAME];
+        if (!webIdentityTokenFile || !roleArn) {
+            throw new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$smithy$2f$core$2f$dist$2d$es$2f$submodules$2f$config$2f$property$2d$provider$2f$CredentialsProviderError$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__["CredentialsProviderError"]("Web identity configuration not specified", {
+                logger: init.logger
+            });
+        }
+        const credentials = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$aws$2d$sdk$2f$credential$2d$provider$2d$web$2d$identity$2f$dist$2d$es$2f$fromWebToken$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__["fromWebToken"])({
+            ...init,
+            webIdentityToken: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$smithy$2f$core$2f$dist$2d$es$2f$submodules$2f$config$2f$shared$2d$ini$2d$file$2d$loader$2f$externalDataInterceptor$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__["externalDataInterceptor"]?.getTokenRecord?.()[webIdentityTokenFile] ?? (0, __TURBOPACK__imported__module__$5b$externals$5d2f$node$3a$fs__$5b$external$5d$__$28$node$3a$fs$2c$__cjs$29$__["readFileSync"])(webIdentityTokenFile, {
+                encoding: "ascii"
+            }),
+            roleArn,
+            roleSessionName
+        })(awsIdentityProperties);
+        if (webIdentityTokenFile === process.env[ENV_TOKEN_FILE]) {
+            (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$aws$2d$sdk$2f$core$2f$dist$2d$es$2f$submodules$2f$client$2f$setCredentialFeature$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__["setCredentialFeature"])(credentials, "CREDENTIALS_ENV_VARS_STS_WEB_ID_TOKEN", "h");
+        }
+        return credentials;
+    };
+}),
+"[project]/node_modules/@aws-sdk/credential-provider-web-identity/dist-es/index.js [instrumentation] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "fromTokenFile",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$aws$2d$sdk$2f$credential$2d$provider$2d$web$2d$identity$2f$dist$2d$es$2f$fromTokenFile$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__["fromTokenFile"],
+    "fromWebToken",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$aws$2d$sdk$2f$credential$2d$provider$2d$web$2d$identity$2f$dist$2d$es$2f$fromWebToken$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__["fromWebToken"]
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$aws$2d$sdk$2f$credential$2d$provider$2d$web$2d$identity$2f$dist$2d$es$2f$index$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/@aws-sdk/credential-provider-web-identity/dist-es/index.js [instrumentation] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$aws$2d$sdk$2f$credential$2d$provider$2d$web$2d$identity$2f$dist$2d$es$2f$fromTokenFile$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@aws-sdk/credential-provider-web-identity/dist-es/fromTokenFile.js [instrumentation] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$aws$2d$sdk$2f$credential$2d$provider$2d$web$2d$identity$2f$dist$2d$es$2f$fromWebToken$2e$js__$5b$instrumentation$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@aws-sdk/credential-provider-web-identity/dist-es/fromWebToken.js [instrumentation] (ecmascript)");
+}),
+];
+
+//# sourceMappingURL=%5Broot-of-the-server%5D__0bwbh6j._.js.map

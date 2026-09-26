@@ -1,0 +1,12 @@
+module.exports = [
+"[project]/src/lib/quota/quotaKey.ts [app-route] (ecmascript, async loader)", ((__turbopack_context__) => {
+
+__turbopack_context__.v((parentImport) => {
+    return Promise.all([
+  "server/chunks/src_lib_quota_1wwuc2j._.js"
+].map((chunk) => __turbopack_context__.l(chunk))).then(() => {
+        return parentImport("[project]/src/lib/quota/quotaKey.ts [app-route] (ecmascript)");
+    });
+});
+}),
+];
