@@ -1,0 +1,20 @@
+{
+  "schema": "centraldark.crystal.receipt.v1",
+  "id": "GOAL-COTREACT-LOOP-20260918-1928",
+  "created_at_local": "2026-09-18T19:28:00-03:00",
+  "source_surface": "chat_screenshot_goal_output",
+  "status": "CRYSTALLIZED_AS_OPERATIONAL_METHOD",
+  "not_pdf_gate_pass": true,
+  "delta_useful": [
+    "BOOT_OR_PLAN != DELIVERABLE",
+    "PREAMBLE != PROOF",
+    "SCOPE_LOCK != EXECUTION",
+    "CANDIDATE_SHA256=UNPROVEN != PASS",
+    "GOAL_REQUIRES_MATERIAL_EVIDENCE"
+  ],
+  "files_written": [
+    "E:\\CentralDark\\Pivete\\CASA-VAULT\\00-CANONICO\\docs\\GOAL\\GOAL-COTREACT-LOOP-20260918.md",
+    "E:\\CentralDark\\Pivete\\CASA-VAULT\\🧾CHECK-LIST DIARIO🤖.md"
+  ],
+  "next_cursor": "Return to PDF_GATE owner lock, then complete identity-policy-selftest-node-test-tamper-runner-receipt chain."
+}

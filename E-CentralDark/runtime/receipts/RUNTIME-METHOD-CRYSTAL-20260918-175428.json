@@ -1,0 +1,39 @@
+﻿{
+    "schema":  "centraldark.runtime-method-crystal.receipt.v1",
+    "observed_at":  "2026-09-18T17:54:28.7305323-03:00",
+    "branch":  "main",
+    "head":  "7bdfd52ad2d8be2dabe957fbd3b51ada7c261d97",
+    "delta":  "FAILURE_AUTO_RESEARCH_AND_NO_PROOF_NO_PASS",
+    "rules":  [
+                  "NO_PROOF_NO_PASS",
+                  "FAILURE_OPENS_INVESTIGATION",
+                  "UNRESOLVED_FAILURE_AUTO_RESEARCH",
+                  "OFFICIAL_SOURCE_FIRST",
+                  "CORRECTION_TARGETS_SMALLEST_EXISTING_OWNER",
+                  "RETEST_AFTER_CORRECTION_REQUIRED",
+                  "CORRECTION_RECEIPT_REQUIRED"
+              ],
+    "failure_found":  "ENGINE_REGISTRY_SECTION_MISSING",
+    "root_cause":  "validator parser was CRLF-sensitive",
+    "correction":  "normalize CRLF before parsing ENGINE_BINDING registry",
+    "test":  "node apps/modulos/HERMES-CORE/core/universal-method-contract.mjs --self-test",
+    "test_exit_code":  0,
+    "test_pass":  true,
+    "files":  [
+                  {
+                      "path":  "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml",
+                      "sha256":  "575fab60c32fd15d128a59c89663defc7e207d44ee9e082c9ec24c3958482a6e"
+                  },
+                  {
+                      "path":  "apps/modulos/HERMES-CORE/core/universal-method-contract.mjs",
+                      "sha256":  "e908096b95afbe18b29702965e9c12bb0555fe298ffedf955d3af6d4ab50de09"
+                  },
+                  {
+                      "path":  "apps/modulos/HERMES-CORE/prompts/hermes-core.md",
+                      "sha256":  "574dd22ae3ba37833b4d6c9d043feae024bc3cf3f9d4db830b20b174bb9c1669"
+                  }
+              ],
+    "pdf_gate_promoted":  false,
+    "reality_is_judge":  true,
+    "unknown_is_not_pass":  true
+}
