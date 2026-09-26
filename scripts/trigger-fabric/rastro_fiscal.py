@@ -144,15 +144,48 @@ class GitHubBackend:
         except Exception as exc:
             raise BackendUnavailable(f"cannot decode content {path}@{ref}: {exc}") from exc
 
-    def ledger_has_sha(self, sha: str, issue: int = 1562) -> Optional[bool]:
-        # gh --paginate is intentionally avoided here so the verifier remains
-        # deterministic and bounded. The newest 100 comments are the live
-        # operational ledger window.
-        obj = self._gh(f"repos/{self.repo}/issues/{issue}/comments?per_page=100")
-        if obj is None:
-            return None
+    def ledger_has_sha(
+        self,
+        sha: str,
+        issue: int = 1562,
+        ledger_ref: Optional[str] = None,
+    ) -> Optional[bool]:
         needle = sha.lower()
-        return any(needle in str(item.get("body") or "").lower() for item in obj)
+
+        # Preferred route: if the response cites an exact ledger comment,
+        # verify that comment directly instead of searching the thread.
+        comment_id = _ledger_comment_id(ledger_ref)
+        if comment_id is not None:
+            obj = self._gh(f"repos/{self.repo}/issues/comments/{comment_id}")
+            if obj is None:
+                return False
+            return needle in str(obj.get("body") or "").lower()
+
+        # Fallback route: GitHub issue comments are oldest-first by default.
+        # Read the issue comment count, start at the newest page, then walk
+        # backwards until the cited SHA is found. This prevents false FAILs
+        # once #1562 grows beyond 100 comments.
+        issue_obj = self._gh(f"repos/{self.repo}/issues/{issue}")
+        if issue_obj is None:
+            return None
+        try:
+            total = int(issue_obj.get("comments") or 0)
+        except (TypeError, ValueError):
+            raise BackendUnavailable("invalid ledger comment count from GitHub")
+        if total == 0:
+            return False
+
+        page = max(1, (total + 99) // 100)
+        while page >= 1:
+            obj = self._gh(
+                f"repos/{self.repo}/issues/{issue}/comments?per_page=100&page={page}"
+            )
+            if obj is None:
+                return None
+            if any(needle in str(item.get("body") or "").lower() for item in obj):
+                return True
+            page -= 1
+        return False
 
 
 class FakeBackend:
@@ -195,10 +228,32 @@ class FakeBackend:
             return None
         return self.commits.get(full, {}).get(path)
 
-    def ledger_has_sha(self, sha: str, issue: int = 1562) -> Optional[bool]:
+    def ledger_has_sha(
+        self,
+        sha: str,
+        issue: int = 1562,
+        ledger_ref: Optional[str] = None,
+    ) -> Optional[bool]:
         self._guard()
         full = self._resolve(sha) or sha
         return any(full.lower().startswith(x) or x.startswith(full.lower()) for x in self.ledger)
+
+
+def _ledger_comment_id(ref: Optional[str]) -> Optional[int]:
+    if not ref:
+        return None
+    raw = ref.strip()
+    for pattern in (
+        r"issuecomment-(\d+)",
+        r"/issues/comments/(\d+)",
+        r"\bcomment(?:_id)?\s*[:=#-]?\s*(\d{6,})\b",
+    ):
+        match = re.search(pattern, raw, re.I)
+        if match:
+            return int(match.group(1))
+    if re.fullmatch(r"\d{6,}", raw):
+        return int(raw)
+    return None
 
 
 def _first(pattern: re.Pattern[str], text: str) -> Optional[str]:
@@ -370,7 +425,7 @@ def verify_text(text: str, repo: str, backend: Any) -> FiscalResult:
             checks.append(Check("ledger_1562", "FAIL", "direct-main write claim without COMMIT_SHA"))
         else:
             try:
-                found = backend.ledger_has_sha(sha, 1562)
+                found = backend.ledger_has_sha(sha, 1562, data.get("ledger_ref"))
             except BackendUnavailable as exc:
                 checks.append(Check("ledger_1562", "UNKNOWN", str(exc)))
             else:
