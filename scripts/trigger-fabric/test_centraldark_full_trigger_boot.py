@@ -29,7 +29,13 @@ def test_normalization_variants():
 def test_prose_does_not_activate():
     assert mod.explicit_command_context("estou falando sobre #ACORDAR") is False
     assert mod.explicit_command_context("#ACORDAR agora") is True
-    assert mod.explicit_command_context("acordar agora") is True
+    # CHEFE 2026-09-27: marcador simples resolve — palavra solta no texto é neutra
+    assert mod.explicit_command_context("acordar agora") is False
+    assert mod.explicit_command_context("!acordar agora") is True
+    for marked in ("#CALIBRAR", "!META_LUPA", "!DELTAUTIL", "!CONTRAPROVA", "!REMEDICAO", "!FIXED_POINT", "!REGISTRA", "!RASTRO", "!BOOT"):
+        assert mod.explicit_command_context(marked + " agora") is True, marked
+    for bare in ("calibrar agora", "registra isso", "boot da maquina"):
+        assert mod.explicit_command_context(bare) is False, bare
     assert mod.explicit_command_context("CentralDark") is False
     assert mod.explicit_command_context("CentralDark visualize o painel") is True
     assert mod.explicit_command_context("CentralDark visualize") is False

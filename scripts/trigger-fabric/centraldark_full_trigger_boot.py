@@ -27,7 +27,6 @@ import tempfile
 import unicodedata
 from pathlib import Path
 
-from centraldark_master_cycle import normalize as normalize_master_text
 from centraldark_master_cycle import resolve as resolve_master_cycle
 
 FABRIC = Path("docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC")
@@ -81,28 +80,15 @@ def normalize_command(value: str) -> str:
 
 
 def explicit_command_context(value: str) -> bool:
-    """Evita ativar gatilho por simples mencao no meio de prosa."""
-    s = value.lstrip()
-    if not s:
+    """Leitor único: a decisão de gatilho é do ciclo mestre (texto).
+
+    CHEFE 2026-09-27: marcador simples resolve — no texto, "#ACORDAR"/"!ACORDAR"
+    disparam; a palavra solta "acordar" em prosa não. Sem lista própria aqui.
+    """
+    if not value.strip():
         return False
-    first = s.splitlines()[0].strip()
-    first_token = first.split()[0] if first.split() else ""
-    normalized = normalize_command(first_token)
-    normalized_tokens = [normalize_command(token) for token in normalize_master_text(value).split()]
-    has_master_wake = (
-        "CENTRALDARK" in normalized_tokens
-        or "CDARK" in normalized_tokens
-        or any(normalized_tokens[i:i + 2] == ["CENTRAL", "DARK"] for i in range(len(normalized_tokens) - 1))
-    )
-    if has_master_wake:
-        receipt = resolve_master_cycle(value, chefe_source=True, input_mode="text")
-        return bool(receipt.get("master_cycle_active"))
-    known = {
-        "ACORDAR", "ACORDA", "CALIBRAR", "MULTIBUSSOLA",
-        "METALUPA", "RECONCILIAR", "DELTAUTIL", "DELTAUTILS", "CONTRAPROVA",
-        "REMEDICAO", "FIXEDPOINT", "REGISTRA", "RASTRO", "BOOT",
-    }
-    return normalized in known
+    receipt = resolve_master_cycle(value, chefe_source=True, input_mode="text")
+    return bool(receipt.get("master_cycle_active"))
 
 
 def classify_realtime_feedback(value: str) -> dict:
