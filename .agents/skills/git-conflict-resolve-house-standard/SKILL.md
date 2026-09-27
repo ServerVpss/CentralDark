@@ -253,3 +253,23 @@ MERGED != CI_PASS
 
 Realidade nova (outro gerenciador de pacotes, outro lockfile, outro
 ecossistema) atualiza **este arquivo e o motor no lugar**. Nunca um segundo.
+
+
+## 💎 Método reutilizável da COSTURA autônoma
+
+A síntese portátil/ensinável deste owner vive em:
+
+`.agents/skills/centraldark-autonomous-conflict-costura/SKILL.md`
+
+Esse skill é **METHOD_ADAPTER**, não segundo resolvedor. Ele formaliza o ciclo
+`CURRENT|INCOMING|BOTH|STRUCTURED|YELLOW`, o aprendizado por replay e a
+fronteira amarela. Owner, motor, registry e Judge continuam sendo os desta
+skill canônica.
+
+```text
+METHOD_SKILL_IS_NOT_SECOND_OWNER=true
+METHOD_SKILL_IS_NOT_SECOND_RESOLVER=true
+AUTONOMOUS_KNOWN_CONFLICTS=true
+UNKNOWN_CONFLICT_STOPS_YELLOW=true
+PROVEN_YELLOW_RESOLUTION_ENTERS_EXISTING_REGISTRY=true
+```
