@@ -25,6 +25,25 @@ def check_command(name, argv, classification='EXECUTABLE_CONTRACT_TEST'):
         detail=f'{type(exc).__name__}: {exc}'
     checks.append({'path':name,'classification':classification,'ok':ok,'missing':[] if ok else [detail]})
 
+def check_values(path, expected, classification='PROVEN_VALUE_IN_REPO'):
+    """Valor real, não trecho: toda ocorrência ativa (fora de comentário) de KEY
+    (KEY=v ou KEY: v) precisa ter o valor exigido; contradição ou valor trocado reprova."""
+    p=ROOT/path
+    if not p.exists():
+        checks.append({'path':path,'classification':classification,'ok':False,'missing':['FILE_MISSING']}); return
+    text=p.read_text(encoding='utf-8',errors='replace'); problems=[]
+    for key,want in expected.items():
+        pat=re.compile(r'(?<![A-Za-z0-9_])'+re.escape(key)+r'\s*[:=]\s*"?([^\s"#`|,;)]+)')
+        found=[]
+        for line in text.splitlines():
+            active=line.split(' #',1)[0]
+            if active.lstrip().startswith('#') and not active.lstrip().startswith('# '):
+                continue
+            found+=pat.findall(active)
+        if not found: problems.append(f'{key}: ausente')
+        elif any(f!=want for f in found): problems.append(f'{key}: {found} esperado {want}')
+    checks.append({'path':path,'classification':classification,'ok':not problems,'missing':problems})
+
 def check_absent(path, forbidden=(), classification='PROVEN_ABSENT_IN_REPO'):
     p=ROOT/path
     ok=p.exists(); violations=[]; text=''
@@ -602,6 +621,22 @@ check('AGENTS.md',[
  'PROVEN_CRYSTAL_DIVERGENCE=REOPEN_AFFECTED_CONE_ONLY',
  'CENTRALDARK_UNIFIED_SURFACE_PARITY_OWNER=docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml',
 ], classification='AGENT_PROVEN_CRYSTAL_FAST_PATH_BINDING')
+check_values('AGENTS.md',{
+ 'PROVEN_CRYSTAL_DIRECT_MAIN_FAST_PATH':'true','PROVEN_CRYSTAL_FULL_CI_REPROOF':'false',
+ 'PROVEN_CRYSTAL_SAME_FINGERPRINT':'PASSAGE_OPEN','PROVEN_CRYSTAL_DIVERGENCE':'REOPEN_AFFECTED_CONE_ONLY',
+}, classification='AGENT_PROVEN_CRYSTAL_FAST_PATH_VALUES')
+check_values('LEIA-ME-IA.md',{
+ 'CENTRALDARK_UNIFIED_SURFACE_PARITY_REQUIRED':'true','PROVEN_CRYSTAL_DIRECT_MAIN_FAST_PATH':'true',
+ 'PROVEN_CRYSTAL_FULL_CI_REPROOF':'false','PROVEN_CRYSTAL_REVALIDATE':'AFFECTED_CONE_ONLY',
+}, classification='CENTRALDARK_CORE_PROVEN_CRYSTAL_VALUES')
+check_values('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',{
+ 'same_fingerprint':'PASSAGE_OPEN','reproof_policy':'AFFECTED_CONE_ONLY',
+ 'full_ci_reproof_for_unchanged_proven_crystal':'false','direct_main_allowed_when_authorized':'true',
+}, classification='PROVEN_CRYSTAL_MAIN_FAST_PATH_VALUES')
+check_values('CENTRALDARK_AI_BOOT.yaml',{
+ 'unified_surface_parity_contract':'LOADED','unchanged_proven_crystal_full_ci_reproof':'false',
+ 'same_semantics_across_text_voice_work_desktop':'true',
+}, classification='CENTRALDARK_BOOT_PROVEN_CRYSTAL_VALUES')
 
 failed=[c for c in checks if not c['ok'] and not c.get('exempted', False)]
 print(json.dumps({'checks':checks,'failed':len(failed),'runner_violations':runner_violations},ensure_ascii=False,indent=2))
