@@ -24,8 +24,7 @@ function montarSelo(marcas: MarcasProvenance, modo: ModoExport) {
   }
 
   const agora = new Date().toLocaleString(marcas.idioma);
-  const origem =
-    typeof window !== "undefined" ? window.location.href : "local-first";
+  const origem = typeof window !== "undefined" ? window.location.href : "local-first";
 
   el.innerHTML = `
     <h1>${marcas.titulo}</h1>
