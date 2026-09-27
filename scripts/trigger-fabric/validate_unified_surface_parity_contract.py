@@ -40,7 +40,7 @@ REQUIRED_MARKERS = {
     ],
     INVOCATION_GRAMMAR: [
         "# CENTRALDARK_INVOCATION_GRAMMAR_01",
-        "Owner: CENTRALDARK_UNIFIED_SURFACE_PARITY_01",
+        "**Owner:** CENTRALDARK_UNIFIED_SURFACE_PARITY_01",
         "SOB_DEMANDA: true",
         "SAME_INTENT_PIPELINE: true",
         "wake_word:",
@@ -103,6 +103,8 @@ FORBIDDEN_MARKERS = {
     SKILL: [
         "novo sistema paralelo",
         "Este skill substitui Hermes integralmente",
+        "substitui Hermes",
+        "substitui SOL",
     ],
     RECEIPT: [
         "já testado na Casa após formatação",
@@ -149,6 +151,25 @@ def read_text(path: Path) -> str:
         raise AssertionError(f"MISSING_FILE: {path}")
 
 
+# Proibição só vale para a forma afirmativa. "NAO_CRIAR_X", "não X",
+# "forbid X" e "X: false" são a regra correta, não a violação.
+NEGATION_PREFIX = re.compile(
+    r"(NAO_CRIAR_|NAO_|NÃO_|\bnão\s+(?:\w+\s+){0,2}|\bnao\s+(?:\w+\s+){0,2}|\bnunca\s+|forbid_?)$",
+    re.I,
+)
+
+
+def affirmative_occurrence(text: str, marker: str) -> bool:
+    start = 0
+    while (i := text.find(marker, start)) != -1:
+        line_start = text.rfind("\n", 0, i) + 1
+        before = text[line_start:i]
+        if not NEGATION_PREFIX.search(before):
+            return True
+        start = i + len(marker)
+    return False
+
+
 def validate_file(path: Path) -> list[str]:
     errors: list[str] = []
     text = read_text(path)
@@ -158,7 +179,7 @@ def validate_file(path: Path) -> list[str]:
             errors.append(f"MISSING_MARKER {path}: {marker}")
 
     for marker in FORBIDDEN_MARKERS.get(path, []):
-        if marker in text:
+        if affirmative_occurrence(text, marker):
             errors.append(f"FORBIDDEN_MARKER {path}: {marker}")
 
     errors.extend(validate_values(path, text))
