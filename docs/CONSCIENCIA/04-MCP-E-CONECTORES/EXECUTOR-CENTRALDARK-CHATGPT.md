@@ -254,3 +254,29 @@ A experiência desejada fica:
 ```
 
 A ferramenta pode desaparecer da frente do CHEFE; a prova não.
+
+
+## 🔗 Continuidade com a COSTURA
+
+O modo executor e a COSTURA são capacidades do mesmo organismo, não sistemas paralelos:
+
+```text
+CHAT_INTENT
+→ HOUSE_EXECUTION_WHEN_AUTHORIZED
+→ READBACK
+→ GIT_DELTA_WHEN_APPLICABLE
+→ MAIN_ADVANCE
+→ COSTURA_EVENT_LOOP
+→ CURRENT_PR_HEAD
+→ SAME_HEAD_PROOF
+```
+
+```text
+EXECUTOR_DOES_NOT_OWN_GIT_CONFLICT_POLICY=true
+COSTURA_DOES_NOT_GRANT_HOUSE_ACCESS=true
+ONE_SYSTEM_ONLY=true
+REUSE_EXISTING_OWNERS=true
+```
+
+Memória operacional da sessão: `docs/CONSCIENCIA/APRENDIZADOS.md#62-chat--casa--costura-viva-execução-conversacional-sensor-de-evento-e-identidade-por-evidência`.
+
