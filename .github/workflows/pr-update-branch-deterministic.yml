@@ -3,6 +3,11 @@
 # Função: apertar autonomamente o equivalente ao botão GitHub "Update branch"
 # para qualquer PR aberto da própria CentralDark que esteja atrás da main.
 #
+# Costura evoluída no mesmo objeto:
+# - depois do 202 Accepted, remede a PR até confirmar head/compare/checks.
+# - STITCH_CONFIRMED exige behind_by_after == 0.
+# - pending/skipped/unknown continuam amarelo; não viram PASS.
+#
 # Cadeados:
 # - update-branch é sincronização, não aprovação.
 # - não faz merge, squash, deploy nem ignora checks.
@@ -42,22 +47,22 @@ concurrency:
 
 jobs:
   update-branch:
-    name: 🔄 PUT /pulls/{PR}/update-branch
+    name: 🔄🪡 PUT /pulls/{PR}/update-branch + estabilização
     if: github.repository == 'ServerVpss/CentralDark'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
 
     steps:
-      - name: 📥 Checkout somente do código confiável da base/main
+      - name: 📥 Checkout somente do código confiável da main
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ github.event.pull_request.base.sha || github.sha }}
+          ref: main
           path: .ci-house
           persist-credentials: false
           fetch-depth: 1
           submodules: false
 
-      - name: 🔄 Aplicar update-branch determinístico
+      - name: 🔄🪡 Aplicar update-branch determinístico com costura estabilizada
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -66,9 +71,15 @@ jobs:
           BASE_BRANCH: main
           UPDATE_BRANCH_INCLUDE_PROTECTED: 'true'
           UPDATE_BRANCH_FAIL_ON_BLOCKED: 'true'
+          UPDATE_BRANCH_STITCH_SETTLE_MS: '3000'
+          UPDATE_BRANCH_STITCH_POLL_ATTEMPTS: '8'
+          UPDATE_BRANCH_STITCH_POLL_INTERVAL_MS: '5000'
+          UPDATE_BRANCH_CHECKS_POLL_ATTEMPTS: '2'
+          UPDATE_BRANCH_CHECKS_POLL_INTERVAL_MS: '4000'
         run: |
           set -euo pipefail
           echo 'CENTRALDARK_ANY_PR_UPDATE_BRANCH_DETERMINISTIC=true'
+          echo 'CENTRALDARK_STITCH_STABILIZATION=true'
           echo 'ENDPOINT=PUT /pulls/{PR}/update-branch'
           echo 'TARGET_PR='"${TARGET_PR:-ALL_OPEN}"''
           node .ci-house/scripts/github/update-branch-deterministic.mjs
@@ -83,6 +94,9 @@ jobs:
           echo "JOB_STATUS=$JOB_STATUS"
           echo "TARGET_PR=${TARGET_PR:-ALL_OPEN}"
           echo 'ACTION=PUT_UPDATE_BRANCH_WHEN_BEHIND_MAIN'
+          echo 'STITCH_STABILIZATION=ENABLED'
+          echo 'STITCH_GREEN_REQUIRES=COMPARE_AFTER_BEHIND_BY_0'
+          echo 'CHECKS_PENDING_OR_SKIPPED=NOT_PASS'
           echo 'MERGE=NOT_DONE'
           echo 'APPROVAL=NOT_DONE'
           echo 'DEPLOY=NOT_DONE'
