@@ -71,6 +71,27 @@ class ParityValidatorCounterproof(unittest.TestCase):
             text = text.replace(old, new, 1)
         path.write_text(text, encoding="utf-8")
 
+    def set_plugin_fields(self, **fields: str) -> None:
+        """Fixa campos PLUGIN_* do recibo sem depender do estado atual (UNKNOWN ou PASS real)."""
+        path = self.tmp / Path("docs/RECEIPTS/2026-09-26-CENTRALDARK-UNIFIED-SURFACE-PARITY-01.md")
+        text = path.read_text(encoding="utf-8")
+        import re as _re
+        for key, value in fields.items():
+            pattern = _re.compile(rf"(?m)^{_re.escape(key)}=.*$")
+            if value is None:
+                text = pattern.sub("", text)
+            elif pattern.search(text):
+                text = pattern.sub(f"{key}={value}", text)
+            else:
+                text = text.rstrip("\n") + f"\n{key}={value}\n"
+        path.write_text(text, encoding="utf-8")
+
+    UNKNOWN_PLUGIN = dict(PLUGIN_PUBLICATION_STATUS="UNKNOWN", PLUGIN_ID="UNKNOWN", PLUGIN_RELEASE_ID="UNKNOWN",
+                          PLUGIN_URL="UNKNOWN", PLUGIN_SCOPE="UNKNOWN", PLUGIN_RELEASE_READBACK="UNKNOWN")
+    FULL_PLUGIN = dict(PLUGIN_PUBLICATION_STATUS="PASS", PLUGIN_ID="plg_x", PLUGIN_RELEASE_ID="rel_1",
+                       PLUGIN_URL="https://example.invalid/p", PLUGIN_SCOPE="USER",
+                       PLUGIN_RELEASE_READBACK="rel_1|is_current=true")
+
     def assert_fail(self, marker: str) -> None:
         code, out = self.run_validator()
         self.assertNotEqual(code, 0, out)
@@ -129,7 +150,7 @@ class ParityValidatorCounterproof(unittest.TestCase):
         self.assert_fail("ROUTE_ABOVE_IS_SUBSET_OF_OWNER")
 
     def test_plugin_publication_pass_requires_identity_release_url(self) -> None:
-        self.mutate(RECEIPT, "PLUGIN_PUBLICATION_STATUS=UNKNOWN", "PLUGIN_PUBLICATION_STATUS=PASS")
+        self.set_plugin_fields(**{**self.UNKNOWN_PLUGIN, "PLUGIN_PUBLICATION_STATUS": "PASS"})
         self.assert_fail("PLUGIN_PUBLICATION_PROOF_INCOMPLETE")
 
     def test_plugin_directory_miss_cannot_become_absence_proof(self) -> None:
@@ -141,30 +162,16 @@ class ParityValidatorCounterproof(unittest.TestCase):
     RECEIPT_PATH = Path("docs/RECEIPTS/2026-09-26-CENTRALDARK-UNIFIED-SURFACE-PARITY-01.md")
 
     def test_hidden_second_plugin_pass_fails(self) -> None:
+        self.set_plugin_fields(**self.UNKNOWN_PLUGIN)
         self.mutate(self.RECEIPT_PATH, None, "PLUGIN_PUBLICATION_STATUS=PASS")
         self.assert_fail("PLUGIN_PUBLICATION_STATUS_CONFLICT")
 
     def test_plugin_pass_without_release_readback_fails(self) -> None:
-        for old, new in [
-            ("PLUGIN_PUBLICATION_STATUS=UNKNOWN", "PLUGIN_PUBLICATION_STATUS=PASS"),
-            ("PLUGIN_ID=UNKNOWN", "PLUGIN_ID=plg_x"),
-            ("PLUGIN_RELEASE_ID=UNKNOWN", "PLUGIN_RELEASE_ID=rel_1"),
-            ("PLUGIN_URL=UNKNOWN", "PLUGIN_URL=https://example.invalid/p"),
-            ("PLUGIN_SCOPE=UNKNOWN", "PLUGIN_SCOPE=casa"),
-        ]:
-            self.mutate(self.RECEIPT_PATH, old, new)
+        self.set_plugin_fields(**{**self.FULL_PLUGIN, "PLUGIN_RELEASE_READBACK": "UNKNOWN"})
         self.assert_fail("PLUGIN_RELEASE_READBACK")
 
     def test_plugin_pass_with_full_identity_and_readback_passes(self) -> None:
-        for old, new in [
-            ("PLUGIN_PUBLICATION_STATUS=UNKNOWN", "PLUGIN_PUBLICATION_STATUS=PASS"),
-            ("PLUGIN_ID=UNKNOWN", "PLUGIN_ID=plg_x"),
-            ("PLUGIN_RELEASE_ID=UNKNOWN", "PLUGIN_RELEASE_ID=rel_1"),
-            ("PLUGIN_URL=UNKNOWN", "PLUGIN_URL=https://example.invalid/p"),
-            ("PLUGIN_SCOPE=UNKNOWN", "PLUGIN_SCOPE=casa"),
-            ("PLUGIN_RELEASE_READBACK=UNKNOWN", "PLUGIN_RELEASE_READBACK=rel_1@2026-09-27"),
-        ]:
-            self.mutate(self.RECEIPT_PATH, old, new)
+        self.set_plugin_fields(**self.FULL_PLUGIN)
         code, out = self.run_validator()
         self.assertEqual(code, 0, out)
 
