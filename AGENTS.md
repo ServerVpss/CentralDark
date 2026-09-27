@@ -331,6 +331,66 @@ AUTO_RESUME_AFTER_HUMAN_FRONTIER=true
 MACHINE_DIAGNOSTICS_MUST_NOT_BE_REDELEGATED_TO_HUMAN=true
 ```
 
+## Método adaptativo — mesma régua, avanço + backcheck, ponto suficiente
+
+A CentralDark não persegue `100%` como promessa global de inteligência. Sistemas probabilísticos podem errar; o contrato reduz erro por observação, auditoria, correção e replay. Percentual só vale quando o denominador é provado.
+
+```text
+GLOBAL_100_PERCENT_CLAIM=FORBIDDEN
+PROBABILISTIC_SYSTEM_EXPECTS_ERROR=true
+ERROR_IS_CORRECTION_SIGNAL=true
+BINARY_DETERMINISTIC_GATE_MAY_REACH_100_PERCENT_IN_NARROW_SCOPE=true
+FIXED_POINT != PERFECTION
+FIXED_POINT = SUFFICIENT_FOR_CURRENT_GOAL + AUDITABLE + REPAIRABLE + NO_MATERIAL_BLOCKER
+HUMAN_SATISFACTION_CAN_CLOSE_ITERATIVE_SCOPE=true
+SATISFACTION_BAND_REFERENCE=80..95
+SATISFACTION_BAND_IS_NOT_UNIVERSAL_GATE=true
+RISK_CRITICAL_SCOPE_MAY_REQUIRE_STRONGER_APPLICABLE_GATES=true
+```
+
+Todos os modelos/canais trabalham pela mesma régua. Modelo, número de agentes e confiança retórica não decidem verdade.
+
+```text
+ONE_AI != SYSTEM_UNIT
+SYSTEM_UNIT = CHEFE_INTENT + CANONICAL_STATE + OWNERS + PROOF + RECEIPTS + REALITY_JUDGE
+SAME_RULER_FOR_ALL_ENGINES=true
+MAJORITY != PROOF
+CONFIDENCE != PROOF
+AGENT_DIVERGENCE_WITHOUT_DISCRIMINATING_PROOF=UNKNOWN
+NO_FORCED_WINNER=true
+NULL_OR_UNKNOWN → RETURN_TO_LAST_PROVEN_CHECKPOINT
+```
+
+A execução usa janela móvel de avanço e auditoria. O padrão `20/5/1` é referência adaptativa, não número sagrado.
+
+```text
+FORWARD_WINDOW_DEFAULT=20
+BACKCHECK_WINDOW_DEFAULT=5
+REWIND_ON_LOCAL_ERROR_DEFAULT=1
+WINDOWS_ARE_ADAPTIVE=true
+
+⚙️ EDITA
+→ ⏩ AVANÇA N
+→ 🔙 AUDITA K casas anteriores
+   ├─ sem delta material → continua
+   └─ erro/drift → ↩️ volta ao menor ponto causal
+                 → 🪡 costura
+                 → 🧪 retesta
+                 → 🔙 backcheck curto
+                 → ⏩ reentra no mesmo trilho
+```
+
+```text
+PROGRESS != FORGETTING
+BACKCHECK_IS_AUDIT_NOT_REWORK=true
+LOCAL_REPAIR_BEFORE_FULL_ROLLBACK=true
+REJOIN_SAME_TRAIL=true
+NO_SILENT_REROUTE=true
+REPLAY_BEFORE_REDISCOVERY=true
+```
+
+Quando o escopo já possui `review_forward_ref`, `review_backward_ref`, `checkpoint_before` e `checkpoint_after`, reutilizar `scripts/agent-call.md`; não criar protocolo paralelo.
+
 ## Conformidade entre superfícies — mesmo CORE, corpos substituíveis
 
 Jan, Hermes, ChatGPT, Claude, Gemini, Grok, Codex, Copilot, CLI, worker ou

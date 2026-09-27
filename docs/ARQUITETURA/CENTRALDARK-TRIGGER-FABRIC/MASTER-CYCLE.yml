@@ -687,3 +687,40 @@ semantic_memory_links:
   semantic_link_is_proof: false
   graph_is_authority: false
   musical_metaphor_is_navigation_only: true
+
+adaptive_backcheck_contract:
+  owner: "AGENTS.md#metodo-adaptativo-mesma-regua-avanco--backcheck-ponto-suficiente"
+  creates_new_method: false
+  reuse_existing_live_editing: true
+  reuse_existing_agent_call: true
+  forward_window_default: 20
+  backcheck_window_default: 5
+  rewind_on_local_error_default: 1
+  windows_are_adaptive: true
+  backcheck_is_audit_not_rework: true
+  local_repair_before_full_rollback: true
+  rejoin_same_trail: true
+  no_silent_reroute: true
+  replay_before_rediscovery: true
+  flow: [EDIT, FORWARD_N, BACKCHECK_K, AUDIT, LOCAL_REPAIR_IF_NEEDED, RETEST, REJOIN_SAME_TRAIL, CONTINUE]
+
+probabilistic_fixed_point_contract:
+  global_100_percent_claim_forbidden: true
+  probabilistic_system_expects_error: true
+  error_is_correction_signal: true
+  binary_deterministic_gate_may_reach_100_percent_in_narrow_scope: true
+  fixed_point_is_perfection: false
+  human_satisfaction_can_close_iterative_scope: true
+  satisfaction_band_reference: "80..95"
+  satisfaction_band_is_universal_gate: false
+  fixed_point_requires: [CURRENT_GOAL_SUFFICIENT, AUDITABLE, REPAIRABLE, NO_MATERIAL_BLOCKER]
+
+multi_agent_same_ruler:
+  one_ai_is_system_unit: false
+  same_ruler_for_all_engines: true
+  majority_is_proof: false
+  confidence_is_proof: false
+  divergence_without_discriminating_proof: UNKNOWN
+  forced_winner: false
+  unknown_recovery: RETURN_TO_LAST_PROVEN_CHECKPOINT
+

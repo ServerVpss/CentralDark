@@ -1,0 +1,89 @@
+# 🔄 PR Update Branch — determinístico
+#
+# Função: apertar autonomamente o equivalente ao botão GitHub "Update branch"
+# para qualquer PR aberto da própria CentralDark que esteja atrás da main.
+#
+# Cadeados:
+# - update-branch é sincronização, não aprovação.
+# - não faz merge, squash, deploy nem ignora checks.
+# - conflito/UNKNOWN não vira PASS.
+# - pull_request_target executa somente código confiável da base/main.
+
+name: 🔄 PR Update Branch — determinístico
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review, edited]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR específico para sincronizar; vazio = varrer PRs abertos'
+        required: false
+        type: string
+  repository_dispatch:
+    types:
+      - centraldark_update_branch_reconcile
+      - centraldark_pr_update_branch
+  schedule:
+    - cron: '11,41 * * * *'
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+  statuses: read
+  actions: read
+
+concurrency:
+  group: update-branch-${{ github.event_name }}-${{ github.event.pull_request.number || inputs.pr_number || github.event.client_payload.pr_number || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  update-branch:
+    name: 🔄 PUT /pulls/{PR}/update-branch
+    if: github.repository == 'ServerVpss/CentralDark'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📥 Checkout somente do código confiável da base/main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha || github.sha }}
+          path: .ci-house
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
+      - name: 🔄 Aplicar update-branch determinístico
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TARGET_PR: ${{ github.event.pull_request.number || inputs.pr_number || github.event.client_payload.pr_number || '' }}
+          BASE_BRANCH: main
+          UPDATE_BRANCH_INCLUDE_PROTECTED: 'true'
+          UPDATE_BRANCH_FAIL_ON_BLOCKED: 'true'
+        run: |
+          set -euo pipefail
+          echo 'CENTRALDARK_ANY_PR_UPDATE_BRANCH_DETERMINISTIC=true'
+          echo 'ENDPOINT=PUT /pulls/{PR}/update-branch'
+          echo 'TARGET_PR='"${TARGET_PR:-ALL_OPEN}"''
+          node .ci-house/scripts/github/update-branch-deterministic.mjs
+
+      - name: 🧾 Receipt
+        if: always()
+        shell: bash
+        env:
+          JOB_STATUS: ${{ job.status }}
+          TARGET_PR: ${{ github.event.pull_request.number || inputs.pr_number || github.event.client_payload.pr_number || '' }}
+        run: |
+          echo "JOB_STATUS=$JOB_STATUS"
+          echo "TARGET_PR=${TARGET_PR:-ALL_OPEN}"
+          echo 'ACTION=PUT_UPDATE_BRANCH_WHEN_BEHIND_MAIN'
+          echo 'MERGE=NOT_DONE'
+          echo 'APPROVAL=NOT_DONE'
+          echo 'DEPLOY=NOT_DONE'
+          echo 'UNKNOWN_IS_PASS=0'

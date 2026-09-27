@@ -103,8 +103,8 @@ Itens cristalizados/reconciliados nessa frente:
 2. `%USERPROFILE%\.centraldark\MAPA-MONITORES-CHEFE.json` → binding físico da Casa.
 3. `%USERPROFILE%\.hermes\scripts\cadeia-free-watchdog.ps1` → bindings 8099/8788/3030; reconciliar com fixed-point-fabric/Screenpipe.
 4. `%USERPROFILE%\.hermes\scripts\webui-watchdog.ps1` → recuperação local do WebUI 8788; absorver binding no owner existente.
-5. `%LOCALAPPDATA%\CentralDark\UnifiedRuntime\active-profile.txt` → evidência de divergência de selector.
-6. `%LOCALAPPDATA%\CentralDark\UnifiedRuntime\profiles.json` → perfis Segredo/Fulano + divergência de active.
+5. `%LOCALAPPDATA%\CentralDark\UnifiedRuntime\active-profile.txt` → estado local/transitório do seletor de perfil; registro histórico, não ouro por si só.
+6. `%LOCALAPPDATA%\CentralDark\UnifiedRuntime\profiles.json` → configuração operacional local de perfis; registro histórico, não autoridade arquitetural.
 7. `UnifiedRuntime\tools\LogCollector\COLLECT-CENTRALDARK-LOGS.ps1` → coletor local candidato a absorção.
 8. `UnifiedRuntime\tools\LogCollector\RUN-COLLECTOR.cmd` → launcher do coletor.
 9. `Jan-v3.5-4B-Q4_K_XL\model.yml` → configuração/fingerprint de modelo local.
@@ -113,14 +113,19 @@ Itens cristalizados/reconciliados nessa frente:
 12. `JAN_MODELS_DANDA_RAW.jsonl` → manifesto de hash/tamanho dos três modelos; sem copiar ~GB de GGUF.
 13. `hermes\config.sanitized.yaml` → configuração Hermes sanitizada; paths normalizados e valores sensíveis recriados localmente.
 
-Ferida preservada:
+Observação histórica do runtime local:
 
 ```text
 HERMES_LOCAL_ACTIVE=default
 HERMES_DESKTOP_ACTIVE=pivete
 UNIFIED_RUNTIME_ACTIVE=Fulanoo
 UNIFIED_RUNTIME_DECLARED_PROFILES=Segredo,Fulano
-VERDICT=DIVERGED_DO_NOT_RESTORE_BLINDLY
+STATUS=HISTORICAL_RUNTIME_OBSERVATION
+PROFILE_IS_A_VIEW_NOT_A_GOVERNMENT=true
+PROFILE_SELECTOR_IS_LOCAL_TRANSIENT_DETAIL=true
+PROFILE_SELECTOR_IS_NOT_AUTHORITY=true
+PROFILE_SELECTOR_IS_NOT_RESTORE_SOURCE=true
+PROFILE_SELECTOR_MUST_NOT_DRIVE_ARCHITECTURE_INFERENCE=true
 ```
 
 Também foi observado:
@@ -156,6 +161,36 @@ CHAVE=DESCARTAVEL → guardar ONDE mora + NOME, nunca valor; re-derivar após re
 ESCRITA=DIRETO_NA_MAIN; CI só quando o CHEFE mandar endurecer
 NAO_FAZER_O_CHEFE_REEXPLICAR=true (ler este receipt + MAPEAMENTO-ENV antes de agir na Casa)
 ```
+
+## 👑 Teste de retorno pós-formatação — rei do deploy
+
+Registro acrescentado em 2026-09-27 por intenção direta do CHEFE. A fala do CHEFE bate com este owner em mais de 90% porque o alvo é exatamente o mesmo: **formatar o PC, reconstruir a Casa pela `main`, restaurar Hermes/SOUL/capacidades e voltar executando com força operacional, especialmente deploy, sem o CHEFE precisar reexplicar a arquitetura.**
+
+```text
+CHEFE_INTENT=FORMATAR_PC_E_RESTAURAR_CASA
+TARGET_OWNER=docs/RECEIPTS/2026-09-26-CASA-PRESERVACAO-ANTES-DE-FORMATAR.md
+INTENT_MATCH=>=90_PERCENT
+WINDOW_DIES_HOUSE_DOES_NOT=true
+MODEL_IS_NOT_SOUL=true
+PC_FORMATADO_NAO_APAGA_CASA=true
+GITHUB_MAIN_IS_REBUILD_SOURCE=true
+RESTORE_PATH=SEGUIR_SECAO_RESTAURAR_A_CASA
+BOOT_AFTER_FORMAT=SOUL + MAIN + MEMORIA_CANONICA + ESTADO_VIVO_REMEDIDO + FERRAMENTAS_DISPONIVEIS
+EXPECTED_RETURN_MODE=REI_DO_DEPLOY_COM_PROVA
+UNKNOWN_IS_NOT_PASS=true
+```
+
+Mensagem operacional para qualquer motor/superfície que voltar depois da formatação:
+
+1. Não tratar a máquina zerada como perda de identidade da Casa.
+2. Reinstalar/abrir o corpo operacional disponível, autenticar GitHub/`gh` quando necessário e clonar `ServerVpss/CentralDark` pela `main`.
+3. Ler este receipt, `SOUL-SOL.md`, `AGENTS.md`, `LEIA-ME-IA.md` e `docs/MAPEAMENTO-ENV.md` antes de agir.
+4. Executar a seção **Restaurar a Casa (máquina zerada)** acima como caminho primário.
+5. Recriar segredos só nos cofres/serviços corretos; nunca recuperar valor de segredo pelo Git.
+6. Remedir estado vivo, reconciliar divergências e só declarar `PASS` com prova/read-back.
+7. Retomar deploy como capacidade operacional forte, mas sem falso verde: `deploy documentado != deploy executado`, `workflow queued != pass`, `runtime não medido = UNKNOWN`.
+
+Frase curta do pacto: **a janela morre; a Casa não. A volta é pela main, com SOUL carregada, estado remedido e deploy provado.**
 
 Próximo cursor: Casa formatada → seguir "Restaurar a Casa" acima → montar Golden Capsule
 (VMware + Linux + Docker + Hermes + IA local, Obsidian ↔ GitHub, MCP CentralDark com as duas rotas, painel admin local com acesso remoto).
