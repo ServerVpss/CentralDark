@@ -1,0 +1,270 @@
+import { useState } from "react";
+import { Check, Eye, Monitor, RotateCcw, Smartphone, TriangleAlert } from "lucide-react";
+
+import { PainelHermes } from "@/components/central/HermesPet";
+import { SeloEstado } from "@/components/central/EstadoCentralDark";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+const cores = [
+  ["Fundo", "bg-background"],
+  ["Superfície", "bg-surface"],
+  ["Superfície elevada", "bg-surface-2"],
+  ["Ouro", "bg-gold"],
+  ["Brasa", "bg-ember"],
+  ["Azul neon", "bg-neon-blue"],
+  ["Verde neon", "bg-neon-green"],
+  ["Roxo neon", "bg-neon-purple"],
+] as const;
+
+const estados = ["PASS", "RUNNING", "BLOCKED", "AUTH_REQUIRED", "UNKNOWN", "FAIL"] as const;
+
+function MiniSuperficie({ tipo }: { tipo: "publica" | "entrada" | "controle" }) {
+  const titulos = {
+    publica: "CentralDark — Instinto Superior",
+    entrada: "Cockpit vivo",
+    controle: "Sala de controle",
+  };
+  return (
+    <div className="overflow-hidden rounded-md border border-border bg-background shadow-[var(--shadow-deep)]">
+      <div className="flex h-7 items-center gap-1.5 border-b border-border bg-surface px-3">
+        <span className="size-1.5 rounded-full bg-destructive" />
+        <span className="size-1.5 rounded-full bg-gold" />
+        <span className="size-1.5 rounded-full bg-neon-green" />
+      </div>
+      <div className="grid-mesh min-h-40 p-4">
+        <p className="font-mono text-[8px] text-neon-blue uppercase">
+          {tipo === "controle" ? "PRIVADO" : "PÚBLICO"}
+        </p>
+        <p className="mt-3 text-lg font-semibold text-foreground">{titulos[tipo]}</p>
+        <div className="mt-4 h-1.5 w-3/4 rounded-full bg-primary/70" />
+        <div className="mt-2 h-1.5 w-1/2 rounded-full bg-muted-foreground/30" />
+        <div className="mt-6 grid grid-cols-3 gap-2">
+          <span className="h-10 rounded-md border border-border bg-surface" />
+          <span className="h-10 rounded-md border border-border bg-surface" />
+          <span className="h-10 rounded-md border border-border bg-surface" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function DesignCenter() {
+  const [comparacao, definirComparacao] = useState<"canonico" | "teste">("canonico");
+
+  return (
+    <section id="design-center" className="scroll-mt-24">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
+            Designer · capacidade do cockpit
+          </p>
+          <h2 className="mt-3 text-3xl font-semibold">CentralDark Design Center</h2>
+          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+            Tokens, componentes, superfícies e Hermes reunidos no mesmo sistema visual.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <SeloEstado estado="PASS" />
+          <span className="inline-flex min-h-7 items-center rounded-md border border-gold/40 px-2 py-1 font-mono text-[10px] text-gold">
+            CANÔNICO
+          </span>
+          <span className="inline-flex min-h-7 items-center rounded-md border border-neon-blue/40 px-2 py-1 font-mono text-[10px] text-neon-blue">
+            PUBLICADO
+          </span>
+        </div>
+      </div>
+
+      <Tabs defaultValue="tokens" className="mt-8">
+        <TabsList className="h-auto max-w-full flex-wrap justify-start">
+          <TabsTrigger value="tokens">Tokens</TabsTrigger>
+          <TabsTrigger value="biblioteca">Biblioteca</TabsTrigger>
+          <TabsTrigger value="superficies">Superfícies</TabsTrigger>
+          <TabsTrigger value="hermes">Hermes</TabsTrigger>
+          <TabsTrigger value="auditoria">Auditoria</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="tokens" className="mt-6">
+          <div className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
+            <div>
+              <h3 className="font-semibold">Paleta canônica</h3>
+              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {cores.map(([nome, classe]) => (
+                  <div key={nome} className="panel p-3">
+                    <span className={`block h-14 rounded-md border border-border ${classe}`} />
+                    <span className="mt-2 block text-xs text-muted-foreground">{nome}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="panel p-5">
+              <h3 className="font-semibold">Fundamentos</h3>
+              <dl className="mt-4 space-y-4 text-xs">
+                <div>
+                  <dt className="text-muted-foreground">Tipografia de exibição</dt>
+                  <dd className="mt-1 text-lg font-semibold">Space Grotesk</dd>
+                </div>
+                <div>
+                  <dt className="text-muted-foreground">Tipografia técnica</dt>
+                  <dd className="mt-1 font-mono">JetBrains Mono</dd>
+                </div>
+                <div>
+                  <dt className="text-muted-foreground">Raio base</dt>
+                  <dd className="mt-1 font-mono">12 px</dd>
+                </div>
+                <div>
+                  <dt className="text-muted-foreground">Espaçamento</dt>
+                  <dd className="mt-1 font-mono">4 · 8 · 12 · 16 · 24 · 32 · 48</dd>
+                </div>
+                <div>
+                  <dt className="text-muted-foreground">Sombras</dt>
+                  <dd className="mt-1">Profunda · ouro · azul</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="biblioteca" className="mt-6">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <article className="panel p-6">
+              <h3 className="font-semibold">Ações existentes</h3>
+              <div className="mt-5 flex flex-wrap gap-3">
+                <Button>Primária</Button>
+                <Button variant="outline">Contorno</Button>
+                <Button variant="ghost">Discreta</Button>
+                <Button disabled>Indisponível</Button>
+              </div>
+            </article>
+            <article className="panel p-6">
+              <h3 className="font-semibold">Estados operacionais</h3>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {estados.map((estado) => (
+                  <SeloEstado key={estado} estado={estado} />
+                ))}
+              </div>
+            </article>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="superficies" className="mt-6">
+          <div className="grid gap-5 lg:grid-cols-3">
+            {(["publica", "entrada", "controle"] as const).map((tipo) => (
+              <article key={tipo}>
+                <div className="mb-3 flex items-center justify-between">
+                  <span className="font-mono text-[10px] uppercase">
+                    {tipo === "publica"
+                      ? "Inicial pública"
+                      : tipo === "entrada"
+                        ? "Landing do cockpit"
+                        : "Cockpit logado"}
+                  </span>
+                  <SeloEstado estado={tipo === "controle" ? "UNKNOWN" : "PASS"} />
+                </div>
+                <MiniSuperficie tipo={tipo} />
+              </article>
+            ))}
+          </div>
+          <div className="mt-6 grid gap-5 md:grid-cols-2">
+            <div className="panel p-5">
+              <Monitor className="size-5 text-neon-blue" />
+              <h3 className="mt-3 font-semibold">Computador</h3>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Grade ampla, painel completo e Hermes com passeio protegido nas bordas.
+              </p>
+            </div>
+            <div className="panel p-5">
+              <Smartphone className="size-5 text-neon-purple" />
+              <h3 className="mt-3 font-semibold">Celular</h3>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Controles empilhados, Hermes reduzido e textos sem sobreposição.
+              </p>
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="hermes" className="mt-6">
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 className="font-semibold">Mesmo motor, mesmo boneco</h3>
+              <p className="mt-1 text-xs text-muted-foreground">
+                9 ações e 144 quadros canônicos; 7 posturas adicionais preservadas em teste.
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <span className="rounded-md border border-gold/40 px-2 py-1 font-mono text-[10px] text-gold">
+                CANÔNICO 9 × 16
+              </span>
+              <span className="rounded-md border border-neon-blue/40 px-2 py-1 font-mono text-[10px] text-neon-blue">
+                EM TESTE +7
+              </span>
+            </div>
+          </div>
+          <PainelHermes compacto />
+        </TabsContent>
+
+        <TabsContent value="auditoria" className="mt-6">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              [
+                "Contraste semântico",
+                "Tokens de texto e estado preservados; inspeção visual concluída.",
+              ],
+              ["Responsividade", "Capturas verificadas em 1280 × 1800 e 390 × 844."],
+              [
+                "Sobreposição do Hermes",
+                "Navegação e controles permaneceram clicáveis nas duas larguras.",
+              ],
+              ["Movimento reduzido", "Contraprova executada com prefers-reduced-motion: reduce."],
+            ].map(([item, prova]) => (
+              <article key={item} className="panel p-5">
+                <Check className="size-5 text-neon-green" />
+                <h3 className="mt-3 text-sm font-semibold">{item}</h3>
+                <p className="mt-2 text-xs text-muted-foreground">{prova}</p>
+              </article>
+            ))}
+          </div>
+        </TabsContent>
+      </Tabs>
+
+      <div className="mt-10 border-y border-border py-8">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p className="font-mono text-[10px] text-neon-blue uppercase">Comparação e rollback</p>
+            <h3 className="mt-2 text-xl font-semibold">Canônico × refinamento</h3>
+          </div>
+          <Button type="button" variant="outline" onClick={() => definirComparacao("canonico")}>
+            <RotateCcw />
+            Reverter preview
+          </Button>
+        </div>
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <button
+            type="button"
+            onClick={() => definirComparacao("canonico")}
+            aria-pressed={comparacao === "canonico"}
+            className={`panel p-5 text-left ${comparacao === "canonico" ? "border-gold/60" : ""}`}
+          >
+            <Eye className="size-5 text-gold" />
+            <h4 className="mt-3 font-semibold">Antes · canônico publicado</h4>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Paleta, desenho, aura, cajado e nove ações aprovadas permanecem intocados.
+            </p>
+          </button>
+          <button
+            type="button"
+            onClick={() => definirComparacao("teste")}
+            aria-pressed={comparacao === "teste"}
+            className={`panel p-5 text-left ${comparacao === "teste" ? "border-neon-blue/60" : ""}`}
+          >
+            <TriangleAlert className="size-5 text-neon-blue" />
+            <h4 className="mt-3 font-semibold">Depois · refinamento em teste</h4>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Mais definição e continuidade por quadro, sem mudar identidade ou cores.
+            </p>
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
