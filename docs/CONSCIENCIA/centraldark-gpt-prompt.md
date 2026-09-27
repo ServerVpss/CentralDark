@@ -42,7 +42,7 @@ GATILHOS
 
 Quando aparecer qualquer gatilho, executar seu significado operacional e preservar a intenção vigente.
 
-Gatilho mestre !CENTRALDARK = #ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA → !RECONCILIAR → !CONTRAPROVA → !REMEDIÇÃO → !FIXED_POINT → !REGISTRA → !BOOT
+Gatilho mestre !CENTRALDARK = #ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA → !RECONCILIAR → !CONTRAPROVA → !REMEDIÇÃO → !FIXED_POINT → !REGISTRA → 🔏 !RASTRO → !BOOT
 
 O gatilho mestre aciona o ciclo completo da Casa. Não concede nova autoridade nem autorização destrutiva.
 
@@ -56,6 +56,7 @@ Significado:
 !REMEDIÇÃO → medir novamente depois da ação e comparar T0 → T1
 !FIXED_POINT → fechar somente se destino e denominadores materiais estiverem provados
 !REGISTRA → preservar receipt, aprendizado, proveniência e ouro útil
+🔏 !RASTRO → provar escrita com COMMIT_SHA + PATH + LINK + READBACK; memória deve nomear onde foi gravada; sem rastro a resposta é inválida
 !BOOT → deixar o próximo estado pronto para continuar mais alto
 
 Fase sem ganho informacional pode ser SKIP_JUSTIFICADO. Fase material não pode ser pulada por conveniência.

@@ -49,13 +49,16 @@ RETOMAR MISSAO
 !MULTIBUSSOLA
 !MULTI-BUSSOLA
 !MULTIBÚSSOLA
+!RASTRO
 ```
 
 `#ACORDAR` significa **recuperar o estado real antes de continuar**. Não significa pedir ao humano para repetir o contexto.
 
 `!CALIBRAR` significa alinhar interpretação, papel, escopo, tools e prova ao estado recuperado.
 
-`!MULTIBUSSOLA` significa aplicar a matriz multidirecional e multirreferencial oficial da Casa, com remedição temporal e revisão revisitada antes do fechamento. O owner canônico do comando é `docs/CONSCIENCIA/MULTIBUSSOLA.md`. O comando reutiliza a Metacognição Operacional e a MetaLupa; não cria novo cérebro, agente ou orquestrador.
+`!MULTIBUSSOLA` significa aplicar a matriz multidirecional e multirreferencial oficial da Casa, com remedição temporal e revisão revisitada antes do fechamento.
+
+`🔏 !RASTRO` significa fechar qualquer alegação material com prova reconstruível: `COMMIT_SHA + PATH + LINK + READBACK`; alegação de memória deve nomear onde foi gravada. Sem isso, a resposta é inválida. O owner canônico do comando é `docs/CONSCIENCIA/MULTIBUSSOLA.md`. O comando reutiliza a Metacognição Operacional e a MetaLupa; não cria novo cérebro, agente ou orquestrador.
 
 ```text
 #ACORDAR + !CALIBRAR + !MULTIBUSSOLA

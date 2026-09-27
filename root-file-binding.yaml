@@ -2,6 +2,14 @@ version: 1.0.0
 owner: SOL
 authority: SEGREDO/CHEFE
 enforcement:
+  rastro_lock:
+    gatilho: "🔏 !RASTRO"
+    owner: AGENTS.md
+    response_without_trace: INVALID
+    write_claim_fields: [COMMIT_SHA, PATH, LINK, READBACK]
+    memory_claim_requires_location: true
+    ledger_1562_same_turn_for_direct_main: true
+    applies_to_all_engines: true
   json_registry: ROOT-FILE-REGISTRY.json
   markdown_doc: ROOT-FILE-REGISTRY.md
   skill: .agents/skills/root-file-contract-router/SKILL.md

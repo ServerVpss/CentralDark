@@ -154,6 +154,33 @@ SCRUB_CONTROLLED_LOGS_AFTER_USE=true
 ROTATE_OR_DISCARD_AFTER_USE=true
 ```
 
+## Binding da gramática CentralDark
+
+```text
+CENTRALDARK_INVOCATION_GRAMMAR_01=true
+CANONICAL_INVOCATION_GRAMMAR=docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md
+VOICE_CLASSIFIER_OWNER=.claude/skills/synced/voice-semantic-classifier/SKILL.md
+UNIFIED_SURFACE_OWNER=.agents/skills/centraldark-unified-surface-parity/SKILL.md
+GRAMMAR_DISPATCH_PRECEDES_TOOL_SELECTION=true
+NO_SECOND_PARSER=true
+SAME_NORMALIZED_INTENT_ACROSS_SURFACES=true
+```
+
+Rota:
+
+```text
+CentralDark + verbo + payload
+→ normalizar intenção
+→ se origem=voz, reutilizar voice-semantic-classifier
+→ aplicar verb_dispatch canônico
+→ selecionar owner/capability pertinente
+→ executar somente se autorizado
+→ provar
+→ receipt
+```
+
+visualize permanece observação/renderização; não autoriza mutação. Gatilho é condicional, não ritual.
+
 ## Resultado esperado
 
 O agente não escolhe ritual completo. Ele calcula intenção, mede capacidade real da sessão, escolhe o gatilho mínimo pertinente, usa os cristais corretos, executa o menor caminho completo, prova efeito, registra receipt e deixa NEXT_CURSOR.

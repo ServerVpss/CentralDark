@@ -65,5 +65,14 @@
     "tool_listed_is_not_tool_active": true
   },
   "canonical_skill": ".agents/skills/centraldark-capability-hud/SKILL.md",
-  "receipts": "#1562 or equivalent child when material"
+  "receipts": "#1562 or equivalent child when material",
+  "lei_do_rastro": {
+    "owner": "AGENTS.md",
+    "gatilho": "🔏 !RASTRO",
+    "RESPONSE_WITHOUT_TRACE": "INVALID",
+    "EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES": "COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)",
+    "EVERY_MEMORY_CLAIM_NAMES_WHERE": true,
+    "LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN": true,
+    "APPLIES_TO_ALL_ENGINES": true
+  }
 }

@@ -1,0 +1,22 @@
+{
+  "generative_agents": {
+    "url": "https://research.google/pubs/generative-agents-interactive-simulacra-of-human-behavior/",
+    "useful_principle": "experience record -> higher-level reflections -> retrieval for planning",
+    "integration": "supports Dream Review as reflection layer, not authority"
+  },
+  "reflexion": {
+    "url": "https://arxiv.org/abs/2303.11366",
+    "useful_principle": "feedback -> reflection -> episodic memory -> improved later trials",
+    "integration": "supports outcome-driven reflection"
+  },
+  "dream_skill": {
+    "url": "https://github.com/teman2050/dream-skill",
+    "useful_principle": "append-only archive + re-emergence detection + scheduled distillation",
+    "integration": "take delta ideas only; no architecture import"
+  },
+  "memvault": {
+    "url": "https://github.com/dreamor/MemVault",
+    "useful_principle": "delta-write, near-duplicate skip, residual merge, outcome lessons, supersede provenance",
+    "integration": "DELTAUTIL candidates; no second memory store"
+  }
+}

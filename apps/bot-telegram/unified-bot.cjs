@@ -850,20 +850,61 @@ ${cogLine}${termLine}  HIST.    ${String(sess.history.length).padStart(2)} msgs 
 }
 
 // ── Status VPS (endpoints internos) ───────────────────────────────────────
+async function getExecutionTopologyStatus() {
+  try {
+    const r = await fetch(`http://localhost:${MCP_PORT}/health/deep`, {
+      signal: AbortSignal.timeout(3000),
+      headers: MCP_TOKEN ? { 'Authorization': `Bearer ${MCP_TOKEN}` } : {},
+    });
+    const payload = await r.json().catch(() => ({}));
+    const topology = payload?.operationalSnapshot?.executionTopology;
+    if (!r.ok || !topology || !Array.isArray(topology.lanes)) {
+      return [
+        '  ⚪ EXECUÇÃO  UNKNOWN',
+        '     fonte=/health/deep sem topologia válida',
+      ];
+    }
+
+    const stateIcon = (state) => state === 'RUNNING' ? '🟢' : '⚪';
+    const lanes = topology.lanes.map((lane) => {
+      const count = Number(lane?.processCount || 0);
+      return `  ${stateIcon(lane?.state)} ${String(lane?.label || lane?.id || '?').slice(0, 22).padEnd(22)} ${lane?.state || 'UNKNOWN'} x${count}`;
+    });
+
+    const activity = topology.mcpActivity || {};
+    const execState = topology.verdict || 'UNKNOWN_NOT_PASS';
+    const age = Number.isFinite(activity.ageMs) ? `${Math.round(activity.ageMs / 1000)}s` : 'UNKNOWN';
+    return [
+      `  🧭 EXECUÇÃO  ${execState}`,
+      `     MCP tools/call=${activity.state || 'UNKNOWN'} age=${age}`,
+      `     BOT multiplicity=${topology?.duplicateSignals?.telegramBotMultiplicity || 'UNKNOWN'}`,
+      ...lanes,
+    ];
+  } catch {
+    return [
+      '  ⚪ EXECUÇÃO  UNKNOWN',
+      '     /health/deep indisponível',
+    ];
+  }
+}
+
 async function getVPSStatus() {
   const checks = [
     { name: 'Webhook Deploy  ', url: 'http://localhost:9300/health' },
     { name: 'Contas Admin    ', url: 'http://localhost:9400/health' },
     { name: 'MCP CentralDark ', url: `http://localhost:${MCP_PORT}/health` },
   ];
-  const results = await Promise.all(checks.map(async c => {
-    try {
-      const r = await fetch(c.url, { signal: AbortSignal.timeout(3000) });
-      return `  ${r.ok ? '✅' : '⚠️'} ${c.name}`;
-    } catch {
-      return `  ❌ ${c.name}`;
-    }
-  }));
+  const [results, execution] = await Promise.all([
+    Promise.all(checks.map(async item => {
+      try {
+        const r = await fetch(item.url, { signal: AbortSignal.timeout(3000) });
+        return `  ${r.ok ? '✅' : '⚠️'} ${item.name}`;
+      } catch {
+        return `  ❌ ${item.name}`;
+      }
+    })),
+    getExecutionTopologyStatus(),
+  ]);
   const ts = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
   return `<pre>┌────────────────────────────────┐
 │  📊  STATUS VPS                │
@@ -871,7 +912,10 @@ async function getVPSStatus() {
 
 ${results.join('\n')}
   ──────────────────────────────
+${execution.join('\n')}
+  ──────────────────────────────
   MODO     ${_botMode.toUpperCase().padEnd(24)}
+  LEI      PROCESSO ≠ EXECUÇÃO PROVADA
 
   ⏰ ${ts}</pre>`;
 }

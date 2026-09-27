@@ -332,3 +332,45 @@ GLOBAL_FIXED_POINT=false
 ```
 
 `UNKNOWN != PASS`.
+
+## 🧊 2026-09-26 · Delta antes da formatação da Casa
+
+Contexto: o CHEFE apagou a VPS e vai formatar a Casa. GitHub passa a ser a única fonte. Preservação completa registrada em `docs/RECEIPTS/2026-09-26-CASA-PRESERVACAO-ANTES-DE-FORMATAR.md`.
+
+### Medido nesta sessão (antes da VPS ser apagada)
+
+```text
+PUBLIC_MCP_401_SEM_CREDENCIAL=PASS (cadeado ativo, não é offline)
+VPS_DC_REMOTE_UNITS=2 ativos (conta1, conta2)
+VPS_ELITE_GATEWAY=AUSENTE (404)
+VPS_ATRASADA_EM_RELACAO_A_MAIN=17 commits
+SENSOR_WINDOWS_SEGREDO_LAST_SEEN=2026-09-22T23:38:09Z (offline na medição)
+CASA_DESKTOP_COMMANDER_APPS=CentralDark+Filesystem/Terminal+Supabase+WebSearch conectados (print do CHEFE)
+```
+
+### Screenpipe — evidência do log (21–23/09)
+
+```text
+SCREENPIPE_MCP=v0.20.0 via stdio → http://localhost:3030 (lançado por bun.exe)
+QUEDA_INESPERADA=2026-09-21T21:23:36Z; 2026-09-23T20:50:52Z ("process exiting early")
+REINSTALA_DEPENDENCIAS_A_CADA_PARTIDA=true ("Resolving dependencies")
+INSTANCIA_DUPLA_EM_PARTIDAS=true
+SCREENPIPE_FORA_DA_PONTE_E_DO_CADEADO=true
+PATH_MISTURA_USUARIOS=danda+Administrador
+CAUSA_RAIZ_DAS_QUEDAS=UNKNOWN (contraprova: 21/09 11:16→21:23 estável ~10h)
+```
+
+### Decisão de arquitetura do CHEFE (não criar programa separado)
+
+```text
+SINAL_DE_VIDA=DENTRO_DA_PROPRIA_PONTE (sem sensor/vigia separado)
+QUEM_DETECTA_MORTE=o outro lado (morto não avisa que morreu)
+SILENCIO_ALEM_DO_LIMITE=OFFLINE|UNKNOWN (silêncio nunca é verde)
+RELIGAR_PONTE=tarefa do Windows no logon + reiniciar se falhar (configuração, não programa)
+SCREENPIPE=supervisionado pela ponte, acesso externo só pela 9100 autenticada, 3030 só 127.0.0.1
+EXECUCAO_REMOTA=DESLIGADA salvo ordem explícita
+FASE_ATUAL=SÓ_LOCAL (VPS fora de escopo; envio para VPS preparado e desligado)
+```
+
+Provas pendentes para fechar a ponte na Casa reinstalada: P1 instância única · P2 bandeja=mesmo PID · P3 9100 recusa sem credencial e lista com credencial · P4 ferramentas do Screenpipe pela 9100 · P5 3030 não exposto · P6 queda do Screenpipe religa sozinha · P7 queda da ponte religa e estado fica velho na queda · P8 arquivo de estado = ferramenta de saúde · P9 execução remota recusada · P10 reinício do PC sobe tudo 1x.
+Todas `UNKNOWN` até execução real.

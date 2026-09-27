@@ -26,8 +26,21 @@ CHEFE -> HUB -> CONNECTOR -> OWNER_SECRET_OR_OAUTH -> TEST -> EFFECT -> RECEIPT_
 - nao commitar segredo;
 - nao gravar valor em receipt;
 - nao transformar segredo em memoria;
+- nao levar segredo para Git, log, PR, issue, comentario ou artefato permanente;
+- se pacote vier com segredo, sinalizar tipo/caminho/funcao sem valor e continuar o delta util;
+- cofre/local/origem segura sao donos do valor; Git guarda prova e receita sem valor;
 - limpar logs sob controle quando aplicavel;
 - registrar apenas provider, owner, destino, status e resultado.
+
+```text
+SEGREDO_DETECTADO=true
+VALOR_EXIBIDO=false
+VALOR_COMMITADO=false
+VALOR_LOGADO=false
+VALOR_PERSISTIDO_EM_RECEIPT=false
+COFRE_E_DONO_DO_VALOR=true
+DELTA_UTIL_CONTINUA=true
+```
 
 ## Leitura de status
 

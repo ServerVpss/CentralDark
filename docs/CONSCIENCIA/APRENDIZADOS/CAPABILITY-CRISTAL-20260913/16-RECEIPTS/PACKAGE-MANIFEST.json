@@ -1,0 +1,667 @@
+{
+  "package": "CentralDark-Capability-Cristal-20260913",
+  "evolution": "AGENTIC-SENIOR-GRAPH-LENS",
+  "capability_count": 175,
+  "status_counts": {
+    "EXISTING": 43,
+    "PARTIAL": 51,
+    "NEW_DELTA": 69,
+    "GAP": 10,
+    "VERIFY_LIVE": 2
+  },
+  "graph_lens_tests": [
+    {
+      "test": "node_check:layout-core.mjs",
+      "pass": true,
+      "stderr": ""
+    },
+    {
+      "test": "node_check:graph-lens.js",
+      "pass": true,
+      "stderr": ""
+    },
+    {
+      "test": "node_check:dev-server.mjs",
+      "pass": true,
+      "stderr": ""
+    },
+    {
+      "test": "node_check:layout-core.test.mjs",
+      "pass": true,
+      "stderr": ""
+    },
+    {
+      "test": "layout_core_geometry",
+      "pass": true,
+      "stdout": "PASS layout-core: nucleus protected, ring spacing, edge detour",
+      "stderr": ""
+    },
+    {
+      "test": "local_site_http",
+      "pass": true,
+      "http": "200"
+    },
+    {
+      "test": "local_api_demo_http",
+      "pass": true,
+      "http": "200"
+    }
+  ],
+  "files": [
+    {
+      "path": "00-MASTER/AGENT-COMMAND.txt",
+      "bytes": 2726,
+      "sha256": "6c25b161f6a2d58d496eb032302a4773ab715f4c176c3adeea9e72552c54f0ed"
+    },
+    {
+      "path": "00-MASTER/CENTRALDARK-CAPABILITY-CRYSTAL.md",
+      "bytes": 1572,
+      "sha256": "aaaa5888ba3ee01d23cb44ae959b6cdfb6012995b9d74309d7fc21d521a52d13"
+    },
+    {
+      "path": "00-MASTER/PREVIOUS-PACKAGE-SHA256.txt",
+      "bytes": 143,
+      "sha256": "83036c213d45fbbfaa0daae91241ec99cfa1b2d05592f0e1baf78fdac1234569"
+    },
+    {
+      "path": "00-MASTER/WRITER-DREAM-TOOL-PREFLIGHT-ADDENDUM.md",
+      "bytes": 632,
+      "sha256": "a12be889884dbae7fc3b93539290442f943c30b06f49c9e7a069f5eeef34de64"
+    },
+    {
+      "path": "01-CAPABILITY-MATRIX/CAPABILITIES.csv",
+      "bytes": 21719,
+      "sha256": "252a3568649256f1b67719d2f133e7294252000d19fb42358a3ce28ed21c397e"
+    },
+    {
+      "path": "01-CAPABILITY-MATRIX/CAPABILITIES.json",
+      "bytes": 49160,
+      "sha256": "f808ef0b83096f14cf4390298281414d6879e94ce10e27291e5d271617e74e0e"
+    },
+    {
+      "path": "01-CAPABILITY-MATRIX/CAPABILITY-MATRIX.md",
+      "bytes": 21468,
+      "sha256": "a22a7d09de3628fa51c7fcea00801cbab5a89071caffd265afaa666e4731b21c"
+    },
+    {
+      "path": "01-CAPABILITY-MATRIX/DELTA-UTIL-ONLY.json",
+      "bytes": 34834,
+      "sha256": "0f73d64fe7985d53758b14ab13fc482c5c0cc44f9b8ef467cd599828e05d6752"
+    },
+    {
+      "path": "02-DELTAUTIL-PEGATUDO/DELTAUTIL-UNIVERSAL.md",
+      "bytes": 1144,
+      "sha256": "acbd083d2e0aa818193a532e5f0a946bf8ac0ae0ca95fd2d69726102051f4ae4"
+    },
+    {
+      "path": "02-DELTAUTIL-PEGATUDO/capability-intake.schema.json",
+      "bytes": 1538,
+      "sha256": "e20f0fbd2f3c514002c9238e6b1e44ab06d70d47b44518c36a50c348f5559b8c"
+    },
+    {
+      "path": "03-AGENTIC-GENERATIVE/GENERATIVE-CAPABILITY-ACQUISITION.md",
+      "bytes": 989,
+      "sha256": "fb14291f2225317e2dec4cb68a099801af26ad67cdce76f49fc392a31c4aee60"
+    },
+    {
+      "path": "04-PROMPT-BEHAVIOR/PROMPT-BEHAVIOR-CAPABILITIES.md",
+      "bytes": 921,
+      "sha256": "8aeb8097f8cc74d591fde0fde1655a7a777021d788580c667dc51ef0199f46aa"
+    },
+    {
+      "path": "05-AGENTS-QA-ORCHESTRATION/AGENT-QA-CAPABILITIES.md",
+      "bytes": 663,
+      "sha256": "d0073a7528e7a7837a4c77bc8e02587daa9a607587250d41f0c2052e84d977a7"
+    },
+    {
+      "path": "06-MEMORY-SEMANTIC-TRACE/SEMANTIC-TRACE-CAPABILITIES.md",
+      "bytes": 643,
+      "sha256": "058efe96753aef1679530ab95834ee0949ad4ac4cfd4e3dc1bec3295a688d9e6"
+    },
+    {
+      "path": "07-MULTIMODAL-MEDIA/MULTIMODAL-CAPABILITIES.md",
+      "bytes": 645,
+      "sha256": "b189d3427fb40345575903a9cb6fcb7ac5a480fe869adae9e78c02174058c19e"
+    },
+    {
+      "path": "08-MCP-AUTH-CONNECTORS/MCP-CAPABILITY-CANDIDATES.json",
+      "bytes": 1491,
+      "sha256": "b775d94c955244d5b20a7ecb6b0d5f18ceacd4e57af99068f93ef3ef8b79e6be"
+    },
+    {
+      "path": "08-MCP-AUTH-CONNECTORS/README.md",
+      "bytes": 268,
+      "sha256": "dfe5e3576b1f53228db3cca0dc635c8c5225d2ea8e3fcf6afa740ff90d5ad94f"
+    },
+    {
+      "path": "09-COCKPIT-UI-RUNTIME/COCKPIT-GAP-MAP.md",
+      "bytes": 491,
+      "sha256": "5eeaadb03c2ccc6934ea7f9de55d02f5f7fc77990d402f9dbe96bcd87f5046a8"
+    },
+    {
+      "path": "10-DEPENDENCIES-AUTOUPDATE/DEPENDENCY-CAPABILITIES.md",
+      "bytes": 562,
+      "sha256": "951dc6441ff8a8133ad13f3b0c6ff6c9d09305234b9e1c09d29f2c77cbe0bf5e"
+    },
+    {
+      "path": "11-GOOGLE-DRIVE-DELTA/DRIVE-CAPABILITY-SOURCES.json",
+      "bytes": 1333,
+      "sha256": "57debdc63ce3f3135d0b508d83f283b0097d8d7c73cb4834608e25ef81309fcb"
+    },
+    {
+      "path": "11-GOOGLE-DRIVE-DELTA/DRIVE-DELTA.md",
+      "bytes": 1070,
+      "sha256": "548838eeed03ae34346d683b50099cd3eafea1440a6c55f16fcd5013f2bebe21"
+    },
+    {
+      "path": "12-GITHUB-PR-CANDIDATE/PR-BODY.md",
+      "bytes": 816,
+      "sha256": "84bfd1b493027d43d5e3be76cc4d8094630652f10355f659972da4f55ad3ec63"
+    },
+    {
+      "path": "12-GITHUB-PR-CANDIDATE/docs-ARQUITETURA-CAPABILITY-GAP-MATRIX-20260913.json",
+      "bytes": 29124,
+      "sha256": "c3e921d057698d7eb152b7731a5013e73fc71c7b196beba6a8d954562dada4a7"
+    },
+    {
+      "path": "12-GITHUB-PR-CANDIDATE/docs-CONSCIENCIA-CENTRALDARK-CAPABILITY-CRYSTAL-20260913.md",
+      "bytes": 1572,
+      "sha256": "aaaa5888ba3ee01d23cb44ae959b6cdfb6012995b9d74309d7fc21d521a52d13"
+    },
+    {
+      "path": "12-GITHUB-PR-CANDIDATE/docs-CONSCIENCIA-DELTAUTIL-CAPABILITY-INTAKE.md",
+      "bytes": 1144,
+      "sha256": "acbd083d2e0aa818193a532e5f0a946bf8ac0ae0ca95fd2d69726102051f4ae4"
+    },
+    {
+      "path": "13-SOURCE-MANIFESTS/ARCHIVE-INVENTORY.json",
+      "bytes": 30264,
+      "sha256": "bc918a150723aab78531ba81af431e5007e64ff4c6b5552dfc2be12dd582eea7"
+    },
+    {
+      "path": "13-SOURCE-MANIFESTS/SOURCE-MANIFEST.json",
+      "bytes": 1903,
+      "sha256": "dc04cd3a00c8387a51d7c31e3f5276624db3cdbc3f7e1354cf9cfd4d442918cd"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/AI-PROXY-ARQUITETURA.md",
+      "bytes": 6498,
+      "sha256": "92b9396ec33c8d248cefd0fad2ba7f903cb65920fe0d0f8bfba5439e745793e6"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/CENTRALDARK-SESSION-CRYSTAL-20260913.md",
+      "bytes": 16669,
+      "sha256": "75e54f9a0b3b3a191575a32937e98148379f7624041351b2670a5f39140b0f52"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/00-CRISTAL/SESSION-CRYSTAL.md",
+      "bytes": 1362,
+      "sha256": "3d96e788eec24e68a332d759f8fab12d1494e65bed4d039f406ebe35cf16448d"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/01-VIDEO-DIGEST/VIDEO-DIGEST-POR-CAPITULOS.md",
+      "bytes": 8256,
+      "sha256": "87190fe59d198e3b67369f84968406a57401c5b60533b350e92290ea3f094c1e"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/02-CENTRALDARK-CROSSWALK/CROSSWALK.md",
+      "bytes": 1667,
+      "sha256": "a84b654e73f82daf35259bb23a7a9e8b211e530effaa16c52daf6c0c0a512c1a"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/03-TUTORIAL/TUTORIAL-OPERACIONAL.md",
+      "bytes": 2885,
+      "sha256": "1af274a8d56b0c57550735ab8bdb63eeea377a6c2f4838ef47ee73fc2d65a8d4"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/04-MERMAID/01-one-system.mmd",
+      "bytes": 223,
+      "sha256": "c43f19cf35b6c4326018705919f3c2665d376d26fabb74d19a9f3b043e188df6"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/04-MERMAID/02-video-frame-pipeline.mmd",
+      "bytes": 306,
+      "sha256": "879ce85db6acf2ccf8c300f3eb80209d13f7995f5f1fd6ee39010f5d137668eb"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/04-MERMAID/03-rag.mmd",
+      "bytes": 355,
+      "sha256": "8f461dc3a34c3068dcbedafb751abd2cb7530ab5355fe19cec9049ac46eb5404"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/04-MERMAID/04-agents.mmd",
+      "bytes": 238,
+      "sha256": "e43acc2c95172bed2115053f8566721c4a8d0d91fafa2513ecf45fb7ba5382e5"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/04-MERMAID/05-trace.mmd",
+      "bytes": 202,
+      "sha256": "dab1a0d4e31e57bfa48f11749f112e811fb26c6053325054aa416a0fc572c90f"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/04-MERMAID/06-mcp-frame-tool.mmd",
+      "bytes": 449,
+      "sha256": "3925a9c3d4eb3227de0ef075313c3048b34152ccaa3b355572138102f3668293"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/05-VECTORS-SVG/01-one-system.svg",
+      "bytes": 2637,
+      "sha256": "6dac2eba7533ba69e89141e7fa54c36d31dd8b4e0958d9da9390a1f22dc1689c"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/05-VECTORS-SVG/02-video-trace.svg",
+      "bytes": 2651,
+      "sha256": "adb0025b3d58de9bebc777b8be5c8a6ffab2c98991a576fbfb1576102e912691"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/05-VECTORS-SVG/03-rag-hybrid.svg",
+      "bytes": 2654,
+      "sha256": "e2a7f2bc830cb1bb8e4a212954efe47c0d061e5e6435712036c4b54e7820a387"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/05-VECTORS-SVG/04-agent-teams.svg",
+      "bytes": 2635,
+      "sha256": "924e5b49a5f48471f8c358b0e08e6c706afbfa46d11d108fcad06840fd29a695"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/06-FRAMES-DEMO-ORIGINAIS/README.md",
+      "bytes": 235,
+      "sha256": "2dcf208259078dd1932fc98230e08322109be8a7dd4f09c0fcc415f1f488e63a"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/06-FRAMES-DEMO-ORIGINAIS/frame-0001.svg",
+      "bytes": 706,
+      "sha256": "1831aabb77ef75b8efb96e46b1280d278a65c4448d0f4db47f7b84b61069b67d"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/06-FRAMES-DEMO-ORIGINAIS/frame-0002.svg",
+      "bytes": 699,
+      "sha256": "4f6e4136f149c40fa295baa07873916b2157a10a080b40b09ab7faabb3834a8f"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/06-FRAMES-DEMO-ORIGINAIS/frame-0003.svg",
+      "bytes": 693,
+      "sha256": "5cc16362406720c0a3f43e4e6080135e592092cdcdcf390acc226b1c52637975"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/06-FRAMES-DEMO-ORIGINAIS/frame-0004.svg",
+      "bytes": 700,
+      "sha256": "0e336bb7a00e7109df257f02e815d9b0d2aad1cd6eabcb0cc36382def7161b4a"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/06-FRAMES-DEMO-ORIGINAIS/frame-0005.svg",
+      "bytes": 706,
+      "sha256": "195a1f9bbd25713798b17a92cf275d9c3cfcc6f9a6332983e02e85628e883140"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/06-FRAMES-DEMO-ORIGINAIS/frame-0006.svg",
+      "bytes": 702,
+      "sha256": "cbf53304708fed58fd038f3a2c3b8cd9b251b0247dc456eb39f23f50241a9d0f"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/07-MCP-VIDEO-FRAME-CAPABILITY/INTEGRATION-NOTES.md",
+      "bytes": 769,
+      "sha256": "813ee98b1ef4945735059623904ed3c797d36f43af43a4c4802cac3abc1e1c6e"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/07-MCP-VIDEO-FRAME-CAPABILITY/README.md",
+      "bytes": 1106,
+      "sha256": "d317d1e62c984a24bc868c3e4ba5cd11be3a9fb3745fc376130560adb900619a"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/07-MCP-VIDEO-FRAME-CAPABILITY/mcp-tool-adapter.mjs",
+      "bytes": 247,
+      "sha256": "44635beaedfb252367a2e5b0fef0480ff6612023b416845bb3afe32c8b807ff6"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/07-MCP-VIDEO-FRAME-CAPABILITY/tool-schema.json",
+      "bytes": 1188,
+      "sha256": "f8c119d7074df216c82101be09b7bb15fc80d47d9df4280dfe3b70f738a4f29b"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/07-MCP-VIDEO-FRAME-CAPABILITY/video-frame-tool.mjs",
+      "bytes": 4447,
+      "sha256": "ead8ee7a50e324e1b32d88dd6a460f81b3ec9ab63555820749d1c0f9d3c89c88"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/08-TRANSCRIPT-DIGEST/README.md",
+      "bytes": 1091,
+      "sha256": "9fb51175004e8ecc070d603c71e659282034e76a362a961bfcf0eb47517f645c"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/09-RECEIPTS/manifest.json",
+      "bytes": 5094,
+      "sha256": "2c1d8d39398c756256538b36e29ae83630e7242c5b12000f767b267f98025a38"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/09-RECEIPTS/source-index.json",
+      "bytes": 670,
+      "sha256": "b0b2416683d044a37e699f74551feb771672cff88824a9a1408257cd8fc86e21"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/VIDEO-CRISTAL-BASE/README.md",
+      "bytes": 1091,
+      "sha256": "fb9df11fd5771ebbca5af84864dccf682e8aa7b5df5eff29344a02c5cc1aacbb"
+    },
+    {
+      "path": "14-PREVIOUS-WORK/validate-ai-proxy.sh",
+      "bytes": 5289,
+      "sha256": "ceb46c6700f4ed3a0b0c445a4a4c59f220173eeed58d906c8091d84a4fbba990"
+    },
+    {
+      "path": "15-RAW-SOURCES/BMAD-Academy-main.zip",
+      "bytes": 641189,
+      "sha256": "22f252a3a4b16aaf9bfaf6f608efc5b46bd22686120a37fcc94d4488c578fcb6"
+    },
+    {
+      "path": "15-RAW-SOURCES/CentralDark-ClaudeCode-Video-Cristal-20260913.zip",
+      "bytes": 26565,
+      "sha256": "256434d141b0453b9df786ba7bf4e6cf32cd8b1cadb14d57b24cfc0d8b874c49"
+    },
+    {
+      "path": "15-RAW-SOURCES/FEA-IA-main(1).zip",
+      "bytes": 12582705,
+      "sha256": "aeb201bfa4b678395cff79f2f2531e1c37ffd1d2d38bfde9fcfe9936e6076839"
+    },
+    {
+      "path": "15-RAW-SOURCES/FEP-main.zip",
+      "bytes": 92207206,
+      "sha256": "0c43fcf85cfd59c5a4e253a79907337f6f564233dfc503fa4692aad3c354ca2d"
+    },
+    {
+      "path": "15-RAW-SOURCES/QUARANTINE/Downloads.zip",
+      "bytes": 5906925,
+      "sha256": "ced90c440e59b65ff5a731345a583924432a1b7359f47efb00d4e48cf58ca4bf"
+    },
+    {
+      "path": "15-RAW-SOURCES/QUARANTINE/Fechar PR 585.html",
+      "bytes": 3040956,
+      "sha256": "9a19c018930e3da265eb0bd28887d0652621cef3c635662b8fc2c3285da3976b"
+    },
+    {
+      "path": "15-RAW-SOURCES/inemavox-main.zip",
+      "bytes": 260577,
+      "sha256": "1ab2ff4ca989212fe212ab34d88c333dc60c566fc03b54809020703c6ed358cb"
+    },
+    {
+      "path": "15-RAW-SOURCES/manual-oculto-ia-curso-main.zip",
+      "bytes": 1437311,
+      "sha256": "9d74a8f91d6162944b29f0ffa38b5857cf73a158e130188b67cacf7be1f559bb"
+    },
+    {
+      "path": "17-WRITER-DREAM-BOUNDARY/COHERENCE-REVIEW.md",
+      "bytes": 2817,
+      "sha256": "9a1503bb905a6d6a301e108e27dd7ca21c14cd8a35a26e46ece53f84dfcb667f"
+    },
+    {
+      "path": "17-WRITER-DREAM-BOUNDARY/DELTAUTIL-ADDENDUM.md",
+      "bytes": 559,
+      "sha256": "659a6feab55650628cb24895f8ac214c4475ab7a93562ca3ffa7e77895b6ac64"
+    },
+    {
+      "path": "17-WRITER-DREAM-BOUNDARY/DREAM-CYCLE.yml",
+      "bytes": 1209,
+      "sha256": "0b9266e6e093139a280a627383ad649b348c929fe57a969942f54f95ecd061c4"
+    },
+    {
+      "path": "17-WRITER-DREAM-BOUNDARY/SENTINEL-REUSE.md",
+      "bytes": 738,
+      "sha256": "efd3dafd0b0f8427f44f693f5f70b289c81853c31dad6b541939c3dcd9e0bc97"
+    },
+    {
+      "path": "17-WRITER-DREAM-BOUNDARY/WRITER-BOUNDARY.yml",
+      "bytes": 1394,
+      "sha256": "6a3c2a839ad3ad0a5d29f6824726f00815950b1c0473bce3aa08568829506034"
+    },
+    {
+      "path": "18-TOOL-PREFLIGHT/TOOL-PREFLIGHT-CONTRACT.md",
+      "bytes": 1089,
+      "sha256": "fe1cdfceea414fcf86bfb0c1caa586cbae33c1ab960e9cc940a3756444693a04"
+    },
+    {
+      "path": "18-TOOL-PREFLIGHT/tool-preflight.yml",
+      "bytes": 400,
+      "sha256": "b5000089c60698efbcbac16ac4a5c59c1319cf71a69c9a6a5de5fc2ed518842d"
+    },
+    {
+      "path": "19-PR585-EVIDENCE/Fechar-PR-585-extracted.txt",
+      "bytes": 105131,
+      "sha256": "2c6f89bf75bc4fe95ea75683826ed90dab59230daa0e09d6cdf8258fed467b98"
+    },
+    {
+      "path": "19-PR585-EVIDENCE/PR585-CAPABILITY-EXTRACTION.md",
+      "bytes": 587,
+      "sha256": "16603200d941f29257517c30ea7eed6c379d385a76beb4e60f447b8f60729bf5"
+    },
+    {
+      "path": "20-EXTERNAL-RESEARCH-DELTA/SOURCE-INDEX.json",
+      "bytes": 1025,
+      "sha256": "2750ad26be4b2ea9831872530afad11b253bcd586b04e2b6bb0d3e094dd46e31"
+    },
+    {
+      "path": "21-MULTILINGUAL-AGENTIC-ROBUSTNESS/CROSS-LINGUAL-CONTRACT.md",
+      "bytes": 1439,
+      "sha256": "82d0a513acf20e88eb05a83cf54c9521651cebc6103d0a5e60baa36ad5e1e0dd"
+    },
+    {
+      "path": "21-MULTILINGUAL-AGENTIC-ROBUSTNESS/SEMANTIC-INVARIANCE-BENCHMARK.md",
+      "bytes": 586,
+      "sha256": "5391f816a00b76ba3d678a51a2af10265f141cb5772f824d8dfbceb4f93b2c98"
+    },
+    {
+      "path": "21-MULTILINGUAL-AGENTIC-ROBUSTNESS/worker-receipt-crosslingual.schema.json",
+      "bytes": 1061,
+      "sha256": "3945cc48d7a69f4df9667cf11b2b73dbb17b3b99ddb73b7baaa12a89182b8efc"
+    },
+    {
+      "path": "22-ARSENAL-50-CRITICAL/ACTUAL-TEST-RESULTS.json",
+      "bytes": 937,
+      "sha256": "6d2a1fe16241aa705b785b58464356b7f51851ec965d79e151d3abf709f8b0d0"
+    },
+    {
+      "path": "22-ARSENAL-50-CRITICAL/ARSENAL-50-REPORT.md",
+      "bytes": 3591,
+      "sha256": "7e0bb257b8cc8ea10a84dbfd12a600bc4847177faef5ce5273c3a9941ba80711"
+    },
+    {
+      "path": "22-ARSENAL-50-CRITICAL/ARSENAL-50.csv",
+      "bytes": 4520,
+      "sha256": "f9c2510fc5f1e1e0a0e3769266c278edb24c970ea047a43993c6829b8f3bde1d"
+    },
+    {
+      "path": "22-ARSENAL-50-CRITICAL/ARSENAL-50.json",
+      "bytes": 10942,
+      "sha256": "735a4fb4163f134a45a9202c7fa93401fe5692e30836dda2bbe2e7f3a6a23e22"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/718ca7c7-601d-4d3d-98da-39e004d2427c.png",
+      "bytes": 195522,
+      "sha256": "0f0b563f37bb09d283b0dcdf4cda352136556297a0bdf0f701aca82bcfae9f51"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/8bd15c6f-4997-4381-bd63-10318c6462c6.png",
+      "bytes": 531706,
+      "sha256": "a638eadcb18f448f8d5258372f2e3534c3a009d71d49a8e4a5139dc03b3b0058"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/984c5b5e-6403-4283-8d53-de977254b211.png",
+      "bytes": 201253,
+      "sha256": "a179078a391804f2645d598dfc56a07361c3826806228b3274a1ad206c769612"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/BASELINE-SCORE-STORY.md",
+      "bytes": 13107,
+      "sha256": "9fe8d21f089a24e498f6d7663771e403890123a6674660c4741e0337a448d747"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/EVIDENCE-INDEX.json",
+      "bytes": 7623,
+      "sha256": "3092c0b3325fee84ef7b6d86483e7a999a24d1e197782cc8f55667ac40ddaecd"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/IMG_6108(1).png",
+      "bytes": 565243,
+      "sha256": "980b44439b7cc239521bddc1c2eac3db414d1d764a58b7c87cbf25cf98f4ba9b"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/IMG_6109(1).png",
+      "bytes": 576000,
+      "sha256": "7a1374e265c175df27982d2553756418f48b8913dcbb107983df783cf0470ab7"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/IMG_6110(1).png",
+      "bytes": 623784,
+      "sha256": "ad9b5d4e5bbfda0e4b76d428cf67f2bf246f8b8f07c7b39cf18cc5b3af09d1ad"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/IMG_6111(1).png",
+      "bytes": 628844,
+      "sha256": "018a7b2c8c0e18d3234ae31888032b1814ae8a2e685225a93622b441a38cc25f"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/IMG_6112(1).png",
+      "bytes": 588820,
+      "sha256": "4b43983e6c09ad8b24488b2e58a601628474d83b726c7615d0b80ed1967d7247"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/IMG_6113(1).png",
+      "bytes": 643005,
+      "sha256": "20edd49e073053297ca841f9c81fda5e684c9bc638e4820d3fcefb52245bdb4b"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/IMG_6114(1).png",
+      "bytes": 595475,
+      "sha256": "d208f94acfef8350a922758f1f505dafaa08a5dd3aea5a1fd57c121a2832734d"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/IMG_6115(1).png",
+      "bytes": 634145,
+      "sha256": "63abd1dba4b753ae2035191346d21dc893725bd9cc2738bd510aae0fac436406"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/IMG_6116(1).png",
+      "bytes": 571581,
+      "sha256": "5a4070931d0ce09fea82ac3fa784b7a5485e839d921dbfcf300f75291f7a4227"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/IMG_6128(1).png",
+      "bytes": 701715,
+      "sha256": "7dfc1e223da0d0114afcd2c3dbb661e8b860c305b7c3444e7167d6ca92e4e3d4"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/IMG_6131(2).png",
+      "bytes": 784665,
+      "sha256": "2efb8e21e81bd1fa57ed3ffdd15ef4ede1c44eb129ed098c856b803771480c77"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/IMG_6132(2).png",
+      "bytes": 721615,
+      "sha256": "a0dee13c43d64e4dcd3fefc1e73a5e40db996e59098045b0a9e63498265acf55"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/IMG_6139.jpeg",
+      "bytes": 515896,
+      "sha256": "40cbf8900c34a132381e9cf64a34627bda8350f19cb1f41bbbf664cee1ac0341"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/IMG_6140.jpeg",
+      "bytes": 701466,
+      "sha256": "513faf997edc9cd6e1afb00ea6e334aa076fa835acccf75dbcc505e3b814d99d"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/ce4efaf2-e816-48b2-969d-5692bfd304fc.png",
+      "bytes": 199262,
+      "sha256": "c62f0deff67fd06fe4c4e26fc998d9f0dda6dabc899e15946b8d865b385d2719"
+    },
+    {
+      "path": "23-RUNTIME-EVIDENCE-SNAPSHOTS/e17a240f-030a-49e6-b00a-f7c2cff63085.png",
+      "bytes": 195522,
+      "sha256": "0f0b563f37bb09d283b0dcdf4cda352136556297a0bdf0f701aca82bcfae9f51"
+    },
+    {
+      "path": "24-LEVEL-SCORECARD/HISTORIA-E-PLACAR.md",
+      "bytes": 2053,
+      "sha256": "b9400dbf0fc29945f63af11e06d405ddea90df248261672ed8e5907cc3840bf8"
+    },
+    {
+      "path": "24-LEVEL-SCORECARD/SCORECARD.json",
+      "bytes": 2303,
+      "sha256": "6c141cfc0114b08b98392969342caa1fc27326294d94b51df311dd6129d9e82d"
+    },
+    {
+      "path": "25-FIXED-POINT-MAX/AGI-LIKE-LADDER.md",
+      "bytes": 1179,
+      "sha256": "c101c4babace72c62a498f2e227434ef1d9f5e42369e942af315936b4170eda9"
+    },
+    {
+      "path": "25-FIXED-POINT-MAX/FIXED-POINT-MAX.yml",
+      "bytes": 1060,
+      "sha256": "f4b3f9a39472f22a127a64b15599db9d05ce9b27d07f304bd5c10f2a6dc76ec1"
+    },
+    {
+      "path": "26-EVOLUTION-TRACE/EVOLUTION-RECEIPT.json",
+      "bytes": 1910,
+      "sha256": "e3a7f19cda3a1b68a0a7aae549c80d3e16b5b7b6f1ba59dedb324f1e946e76e1"
+    },
+    {
+      "path": "26-EVOLUTION-TRACE/EVOLUTION-TRACE.md",
+      "bytes": 587,
+      "sha256": "8eebe9def4867b9bff72e01a0be215aa15935ab33d8b43e3accae4a01400110b"
+    },
+    {
+      "path": "27-GRAPH-AGENTIC-LENS-SITE/INTEGRATION-PATCH.md",
+      "bytes": 717,
+      "sha256": "f93b6368eb0d17ea2e43ae8608b0a158bed6150d7adb49077c0cb3a909c974c4"
+    },
+    {
+      "path": "27-GRAPH-AGENTIC-LENS-SITE/README.md",
+      "bytes": 2214,
+      "sha256": "7f25340dbf4583363554d1023413d2def6dd7a644b5d43a3dddb1aed8d095e8a"
+    },
+    {
+      "path": "27-GRAPH-AGENTIC-LENS-SITE/TEST-RESULTS.json",
+      "bytes": 664,
+      "sha256": "400556b9623fca49c0bea200bc2297b31ff7d09c5ff5e9bdb73a875e8ae941cc"
+    },
+    {
+      "path": "27-GRAPH-AGENTIC-LENS-SITE/VISUAL-CRITIQUE.md",
+      "bytes": 1245,
+      "sha256": "d92e2d52cb471bc82793c08e3b74582242e5eac926a7c73cc1e2cdffcca35ac9"
+    },
+    {
+      "path": "27-GRAPH-AGENTIC-LENS-SITE/dev-server.mjs",
+      "bytes": 1134,
+      "sha256": "b84d21bbe0a2f1dd9ea5dd619f63d56c6d70672586c519345dffbb7d81ced9e1"
+    },
+    {
+      "path": "27-GRAPH-AGENTIC-LENS-SITE/patch-candidate/public/graph-lens.css",
+      "bytes": 2485,
+      "sha256": "96efca0e96f3fa8387fdce9cf7276a530c368e0c6c9be2cd54363139d00f1afb"
+    },
+    {
+      "path": "27-GRAPH-AGENTIC-LENS-SITE/patch-candidate/public/graph-lens.js",
+      "bytes": 9542,
+      "sha256": "f610af8f3329e6ee3384aec6a7fca76d598ab984e6b3b64ccd5488d722a5633d"
+    },
+    {
+      "path": "27-GRAPH-AGENTIC-LENS-SITE/patch-candidate/public/index.html",
+      "bytes": 2551,
+      "sha256": "0ece70e2735191902c2db5db2c1f72baf9d5749a4bd1e5207881a123c81d2cbd"
+    },
+    {
+      "path": "27-GRAPH-AGENTIC-LENS-SITE/patch-candidate/public/layout-core.mjs",
+      "bytes": 2640,
+      "sha256": "4f0c248ee81c097ebdcc38f1e43a623a52d5ea6671ceec7b127ef1da0846606a"
+    },
+    {
+      "path": "27-GRAPH-AGENTIC-LENS-SITE/patch-candidate/public/sample-graph.json",
+      "bytes": 141599,
+      "sha256": "4efa5f4ee891818ee9c97fce569fa9529f930d4ea30aeeec9284aebede333c12"
+    },
+    {
+      "path": "27-GRAPH-AGENTIC-LENS-SITE/tests/layout-core.test.mjs",
+      "bytes": 1201,
+      "sha256": "1b6691b75c976884aaf127d6e1b00ac8d75ea229b5f44fa4d1f228452b27fb26"
+    }
+  ]
+}

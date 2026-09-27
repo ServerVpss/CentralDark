@@ -29,7 +29,22 @@ def test_normalization_variants():
 def test_prose_does_not_activate():
     assert mod.explicit_command_context("estou falando sobre #ACORDAR") is False
     assert mod.explicit_command_context("#ACORDAR agora") is True
-    assert mod.explicit_command_context("acordar agora") is True
+    # CHEFE 2026-09-27: marcador simples resolve — palavra solta no texto é neutra
+    assert mod.explicit_command_context("acordar agora") is False
+    assert mod.explicit_command_context("!acordar agora") is True
+    for marked in ("#CALIBRAR", "!META_LUPA", "!DELTAUTIL", "!CONTRAPROVA", "!REMEDICAO", "!FIXED_POINT", "!REGISTRA", "!RASTRO", "!BOOT"):
+        assert mod.explicit_command_context(marked + " agora") is True, marked
+    for bare in ("calibrar agora", "registra isso", "boot da maquina"):
+        assert mod.explicit_command_context(bare) is False, bare
+    assert mod.explicit_command_context("CentralDark") is False
+    assert mod.explicit_command_context("CentralDark visualize o painel") is True
+    assert mod.explicit_command_context("CentralDark visualize") is False
+    assert mod.explicit_command_context("CentralDark faça essa correção") is True
+    assert mod.explicit_command_context("Central Dark mede o estado") is True
+    assert mod.explicit_command_context("CentralDark, visualize") is False
+    assert mod.explicit_command_context("CentralDark, visualize o estado") is True
+    assert mod.explicit_command_context("o centraldark visualize o painel") is True
+    assert mod.explicit_command_context("falei de centraldark ontem") is False
 
 
 def test_realtime_feedback_routes_without_mutation_permission():
@@ -234,7 +249,7 @@ def test_canonical_chain_contains_full_core_flow():
     required = {
         "DESTINATION_LOCK", "ACORDAR", "CALIBRAR", "MULTIBUSSOLA", "META_LUPA",
         "RECONCILIAR", "DELTA_UTIL", "CONTRAPROVA", "REMEDICAO", "FIXED_POINT",
-        "POST_GREEN_LOCK", "REGISTRA", "BOOT",
+        "POST_GREEN_LOCK", "REGISTRA", "RASTRO", "BOOT",
     }
     assert required.issubset(set(mod.CANONICAL_CHAIN))
 
@@ -356,6 +371,44 @@ def test_session_registry_has_replayable_claims():
         assert recipe["raw_output_byte_equality_required"] is False
 
 
+def test_proven_path_executable_recipe_contract_is_machine_consumable():
+    lock_text = (REPO / "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml").read_text(encoding="utf-8")
+    required_tokens = {
+        "PROVEN_PATH_BECOMES_EXECUTABLE_RECIPE: true",
+        "RECIPE_MUST_LIVE_IN_REPOSITORY: true",
+        "RECIPE_MUST_BE_MACHINE_CONSUMABLE: true",
+        "FINGERPRINT_REQUIRED: true",
+        "REPLAY_BEFORE_REDISCOVERY: true",
+        "ADAPT_ENV_BINDINGS_ONLY: true",
+        "SAME_FINGERPRINT_SAME_PROOF: REUSE_CRYSTAL",
+        "CHANGED_FINGERPRINT: REVALIDATE_AFFECTED_CONE_ONLY",
+        "DOCUMENTED_IS_NOT_EXECUTABLE_RECIPE: true",
+        "RECEIPT_IS_NOT_PROOF: true",
+        "FINGERPRINT_MATCH_IS_NOT_RUNTIME_PASS: true",
+        "proven_path_executable_recipe_contract_2026_09_26:",
+    }
+    for token in required_tokens:
+        assert token in lock_text, token
+
+    p = REPO / "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json"
+    entry = json.loads(p.read_text(encoding="utf-8"))["claims"]["PROVEN_PATH_EXECUTABLE_RECIPE_CONTRACT"]
+    recipe = entry["proven_path_replay"]
+    assert entry["state"] == "SEALED_PROVEN"
+    assert entry["owner"] == "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml"
+    assert recipe["commands_executable"] is True
+    assert recipe["execution_policy"] == "READ_ONLY"
+    assert recipe["dependency_fingerprint"] == "ffe0c4dd2f5ec38bc62c6e1241abe9202339e34d6f69b0953131a96cb8a50b31"
+    assert recipe["expected_effect"] == "NEXT_EXECUTOR_CAN_REPLAY_WITHOUT_REDISCOVERY"
+    assert recipe["raw_output_byte_equality_required"] is False
+    assert set(recipe["required_recipe_fields"]) >= {
+        "owner", "objective", "preconditions", "execution_sequence",
+        "environment_bindings", "dependency_fingerprint", "proof", "counterproof",
+        "expected_result_format_effect", "evidence", "next_cursor",
+    }
+    assert recipe["replay_outcomes"]["same_fingerprint_same_proof"] == "REUSE_CRYSTAL"
+    assert recipe["replay_outcomes"]["changed_fingerprint"] == "REVALIDATE_AFFECTED_CONE_ONLY"
+
+
 def test_reseal_fingerprint_requires_same_lock_and_counterproof():
     with tempfile.TemporaryDirectory() as td:
         root = Path(td)
@@ -459,6 +512,7 @@ if __name__ == "__main__":
         test_mutating_recipe_requires_explicit_flag,
         test_lock_contract_binds_executable_replay_runtime,
         test_session_registry_has_replayable_claims,
+        test_proven_path_executable_recipe_contract_is_machine_consumable,
         test_reseal_fingerprint_requires_same_lock_and_counterproof,
         test_reseal_fingerprint_updates_same_claim_after_counterproof,
         test_canonical_chain_contains_full_core_flow,
