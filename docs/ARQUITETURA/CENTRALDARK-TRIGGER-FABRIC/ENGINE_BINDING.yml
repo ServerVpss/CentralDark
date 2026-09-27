@@ -69,6 +69,7 @@ mandatory_inheritance:
   - FIXED_POINT
   - POST_GREEN_LOCK
   - REGISTRA
+  - RASTRO
   - BOOT
   - DISTINCT_ENGINEERING_COMPILER_ON_MATERIAL_GAP
   - CAPABILITY_CONTRACT_ROUTER
@@ -171,7 +172,7 @@ master_cycle_binding:
   hud_fixed_live_data_required: true
   explicit_trigger: "!CENTRALDARK"
   plain_word_centraldark_does_not_trigger: true
-  expands_to: [ACORDAR, CALIBRAR, MULTIBUSSOLA, AUREOLA_BAHIA_BIBLICA, META_LUPA, RECONCILIAR, DELTA_UTIL, CONTRAPROVA, REMEDICAO, SEMANTIC_GREEN, FIXED_POINT, POST_GREEN_LOCK, REGISTRA, BOOT]
+  expands_to: [ACORDAR, CALIBRAR, MULTIBUSSOLA, AUREOLA_BAHIA_BIBLICA, META_LUPA, RECONCILIAR, DELTA_UTIL, CONTRAPROVA, REMEDICAO, SEMANTIC_GREEN, FIXED_POINT, POST_GREEN_LOCK, REGISTRA, RASTRO, BOOT]
   session_state_consumer: scripts/trigger-fabric/centraldark_master_cycle.py#resolve_with_session_state
   session_state_requires_caller_file: true
   explicit_activation_requires_chefe_provenance: true
@@ -355,3 +356,12 @@ labels:
   authority: "👑 PERMITO-SEGREDO"
   confirmed_result: "✅ PR CONFIRMADO"
   label_is_authority: false
+
+
+rastro_binding:
+  token: "🔏 !RASTRO"
+  owner: "AGENTS.md"
+  inherited_by_all_engines: true
+  response_without_trace: INVALID
+  required_on_write_claim: [COMMIT_SHA, PATH, LINK, READBACK]
+  memory_claim_requires_location: true

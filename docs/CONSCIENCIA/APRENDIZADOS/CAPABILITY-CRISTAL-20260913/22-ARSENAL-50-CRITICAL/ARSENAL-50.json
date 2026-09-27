@@ -1,0 +1,402 @@
+[
+  {
+    "id": "A01",
+    "gate": "One system / no parallel core",
+    "domain": "Architecture",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 3,
+    "reason": "base package invariants"
+  },
+  {
+    "id": "A02",
+    "gate": "Owner per capability",
+    "domain": "Architecture",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "owner model exists; complete runtime ownership not fully remeasured"
+  },
+  {
+    "id": "A03",
+    "gate": "REUSE_BEFORE_CREATE",
+    "domain": "Architecture",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 3,
+    "reason": "multiple explicit examples including YouTube"
+  },
+  {
+    "id": "A04",
+    "gate": "Tool preflight before analysis",
+    "domain": "Architecture",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "contract present; connector availability varies by turn"
+  },
+  {
+    "id": "A05",
+    "gate": "Current state > history",
+    "domain": "Architecture",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 3,
+    "reason": "package rule + screenshot distinctions"
+  },
+  {
+    "id": "A06",
+    "gate": "Writer != Judge",
+    "domain": "Governance",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "contract present; runtime enforcement not remeasured"
+  },
+  {
+    "id": "A07",
+    "gate": "Technical MetaLupa pre-write gate",
+    "domain": "Governance",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 1,
+    "reason": "specified; historical WRITE_BEFORE_BEGIN gap"
+  },
+  {
+    "id": "A08",
+    "gate": "One writer per scope",
+    "domain": "Governance",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "documented/historical"
+  },
+  {
+    "id": "A09",
+    "gate": "Isolated worktree for mutable mission",
+    "domain": "Governance",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "pattern historically used; not universal runtime proof"
+  },
+  {
+    "id": "A10",
+    "gate": "Clean canonical main invariant",
+    "domain": "Governance",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 1,
+    "reason": "new contract, runtime not applied"
+  },
+  {
+    "id": "A11",
+    "gate": "Secret gate before commit",
+    "domain": "Security",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "contracts present, runtime paths vary"
+  },
+  {
+    "id": "A12",
+    "gate": "Metadata-only secret handling",
+    "domain": "Security",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 3,
+    "reason": "screenshots and package rules"
+  },
+  {
+    "id": "A13",
+    "gate": "Force-push forbidden",
+    "domain": "Git",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 3,
+    "reason": "explicit house rule"
+  },
+  {
+    "id": "A14",
+    "gate": "Source/dist/runtime separation",
+    "domain": "MCP",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 4,
+    "reason": "screenshots explicitly show source+dist yes, active catalog old"
+  },
+  {
+    "id": "A15",
+    "gate": "MCP active catalog staleness detection",
+    "domain": "MCP",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "new capability; evidence of stale catalog exists"
+  },
+  {
+    "id": "A16",
+    "gate": "YouTube transcript capability reuse",
+    "domain": "MCP",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 3,
+    "reason": "source/dist existence shown; runtime promotion pending"
+  },
+  {
+    "id": "A17",
+    "gate": "YouTube tool active runtime proof",
+    "domain": "MCP",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 1,
+    "reason": "screenshots say active process does not announce yet"
+  },
+  {
+    "id": "A18",
+    "gate": "OAuth blocker typed + resume condition",
+    "domain": "MCP",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 3,
+    "reason": "screenshots show blocker/owner/missing dependency/resume condition"
+  },
+  {
+    "id": "A19",
+    "gate": "One public MCP entry",
+    "domain": "MCP",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "architecture/historical evidence; current turn live MCP unavailable"
+  },
+  {
+    "id": "A20",
+    "gate": "Supabase live schema/RPC introspection",
+    "domain": "Data",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "investigation shown; missing RPC identified"
+  },
+  {
+    "id": "A21",
+    "gate": "Consumer contract drift detection",
+    "domain": "Data",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "hub-mission consumer vs schema wound visible"
+  },
+  {
+    "id": "A22",
+    "gate": "Migration vs consumer fallback gate",
+    "domain": "Data",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 1,
+    "reason": "decision path described, runtime resolution pending"
+  },
+  {
+    "id": "A23",
+    "gate": "Parallel reader execution",
+    "domain": "Agents",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 3,
+    "reason": "visible SOL/P2/P3 lanes"
+  },
+  {
+    "id": "A24",
+    "gate": "Receipt provenance after parallel join",
+    "domain": "Agents",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 1,
+    "reason": "new contract; join proof incomplete"
+  },
+  {
+    "id": "A25",
+    "gate": "Worker provider/model/language metadata",
+    "domain": "Agents",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 1,
+    "reason": "new contract; screenshots do not prove emitted receipt fields"
+  },
+  {
+    "id": "A26",
+    "gate": "Multilingual output preservation",
+    "domain": "Language",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "behavior observed; package now specifies preservation"
+  },
+  {
+    "id": "A27",
+    "gate": "Language divergence detection",
+    "domain": "Language",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 1,
+    "reason": "new capability"
+  },
+  {
+    "id": "A28",
+    "gate": "Semantic invariance across languages",
+    "domain": "Language",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 1,
+    "reason": "benchmark specified, not run"
+  },
+  {
+    "id": "A29",
+    "gate": "Cross-lingual contradiction detection",
+    "domain": "Language",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 1,
+    "reason": "new capability"
+  },
+  {
+    "id": "A30",
+    "gate": "Translation is projection, not truth",
+    "domain": "Language",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "new explicit invariant"
+  },
+  {
+    "id": "A31",
+    "gate": "Event-first Dream Review",
+    "domain": "Memory",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "existing contract; live scheduler not remeasured now"
+  },
+  {
+    "id": "A32",
+    "gate": "Re-emergence detection",
+    "domain": "Memory",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 1,
+    "reason": "candidate delta"
+  },
+  {
+    "id": "A33",
+    "gate": "Delta-write memory",
+    "domain": "Memory",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 1,
+    "reason": "candidate delta"
+  },
+  {
+    "id": "A34",
+    "gate": "Conflict/supersede provenance",
+    "domain": "Memory",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 1,
+    "reason": "partial"
+  },
+  {
+    "id": "A35",
+    "gate": "No-model-wake without delta",
+    "domain": "Memory",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "contract exists"
+  },
+  {
+    "id": "A36",
+    "gate": "Graphify fail-closed",
+    "domain": "Graph",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 3,
+    "reason": "screenshots state stale-map false green was removed"
+  },
+  {
+    "id": "A37",
+    "gate": "Graph freshness tied to head/source",
+    "domain": "Graph",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 1,
+    "reason": "new contract"
+  },
+  {
+    "id": "A38",
+    "gate": "Post-commit graph refresh receipt",
+    "domain": "Graph",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "hook behavior visible; receipt hardening partial"
+  },
+  {
+    "id": "A39",
+    "gate": "Graph semantic relation != authority",
+    "domain": "Graph",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 3,
+    "reason": "explicit screenshot rule"
+  },
+  {
+    "id": "A40",
+    "gate": "PM2 process != boot persistence",
+    "domain": "Runtime",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 3,
+    "reason": "screenshots explicitly distinguish"
+  },
+  {
+    "id": "A41",
+    "gate": "Graph-panel listener health",
+    "domain": "Runtime",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "wound/status shown; final resolution not proven"
+  },
+  {
+    "id": "A42",
+    "gate": "Pause → webhook resume path",
+    "domain": "Runtime",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "webhook env/auto-pause inspection shown"
+  },
+  {
+    "id": "A43",
+    "gate": "Goal judge required for strong autonomy",
+    "domain": "Autonomy",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 1,
+    "reason": "screenshots show provider/model unset; new gate"
+  },
+  {
+    "id": "A44",
+    "gate": "Human frontier exact resume condition",
+    "domain": "Autonomy",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 3,
+    "reason": "OAuth blocker screenshot demonstrates"
+  },
+  {
+    "id": "A45",
+    "gate": "Runner nested-git contamination detection",
+    "domain": "CI",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 3,
+    "reason": "screenshots identify scratch/grok-build .git issue"
+  },
+  {
+    "id": "A46",
+    "gate": "Runner state carryover detection",
+    "domain": "CI",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "investigation points to persistent runner residue"
+  },
+  {
+    "id": "A47",
+    "gate": "Provisional fix != permanent fix",
+    "domain": "CI",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 3,
+    "reason": "screenshot explicitly distinguishes"
+  },
+  {
+    "id": "A48",
+    "gate": "Tool cancel/error/blocked distinct",
+    "domain": "Observability",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 2,
+    "reason": "mobile screenshot shows cancellation wording; formal contract new"
+  },
+  {
+    "id": "A49",
+    "gate": "Package structural integrity / parseability",
+    "domain": "Artifact",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 4,
+    "reason": "actual tests run during build"
+  },
+  {
+    "id": "A50",
+    "gate": "Architecture score != runtime proof score",
+    "domain": "Evaluation",
+    "package_score_0_4": 4,
+    "runtime_evidence_score_0_4": 4,
+    "reason": "dual-score methodology enforced in package"
+  }
+]

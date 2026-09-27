@@ -53,6 +53,7 @@ SECRET_VALUE_IS_TRANSIT=true
 SECRET_VALUE_NOT_MEMORY=true
 SECRET_VALUE_NOT_RECEIPT=true
 SECRET_VALUE_NOT_GIT=true
+SECRET_VALUE_NOT_LOG=true
 CONNECTOR_STATUS_VISIBLE=true
 ROUTE_SCOPE_VISIBLE=true
 ```
@@ -70,9 +71,28 @@ NO_SECRET_COMMIT=true
 NO_SECRET_RECEIPT_VALUE=true
 NO_SECRET_MEMORY=true
 NO_SECRET_LOG_VALUE=true
+NO_SECRET_IN_GIT=true
+NO_SECRET_IN_PR_OR_ISSUE_COMMENT=true
+NO_SECRET_IN_PERMANENT_ARTIFACT=true
 MASK_SUFFIX_ONLY_WHEN_NEEDED=true
 SCRUB_CONTROLLED_LOGS_AFTER_USE=true
 ROTATE_OR_DISCARD_AFTER_USE=true
+```
+
+### Cofre nao bloqueia delta util
+
+Se um pacote, print, dump, arquivo ou sessao contiver segredo, isso nao interrompe automaticamente a missao. A obrigacao e preservar o valor no cofre/origem segura, sinalizar o tipo/caminho/funcao sem expor valor, remover ou redigir qualquer persistencia indevida e continuar o delta util.
+
+```text
+SEGREDO_DETECTADO=true
+VALOR_EXIBIDO=false
+VALOR_COMMITADO=false
+VALOR_LOGADO=false
+VALOR_PERSISTIDO_EM_RECEIPT=false
+COFRE_E_DONO_DO_VALOR=true
+GIT_PROVA_SEM_VALOR=true
+LOG_RASTREIA_SEM_VALOR=true
+DELTA_UTIL_CONTINUA=true
 ```
 
 Receipt pode registrar: provedor, owner, destino, cid, status, masked_suffix se a UI ja exibiu mascara, resultado e next_cursor. Nunca o valor inteiro.

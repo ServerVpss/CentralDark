@@ -19,6 +19,7 @@ TRIGGER_EMOJIS = {
     "REMEDICAO": "📏",
     "FIXED_POINT": "📍",
     "REGISTRA": "🧾",
+    "RASTRO": "🔏",
     "BOOT": "🚀",
 }
 INTENT_ALIGNMENT_THRESHOLD_PERCENT = 80
@@ -34,6 +35,7 @@ CHAIN = [
     "REMEDICAO",
     "FIXED_POINT",
     "REGISTRA",
+    "RASTRO",
     "BOOT",
 ]
 
@@ -64,7 +66,7 @@ GUIDED_TELEMETRY_ICONS = {
     "SKIPPED": "➖",
 }
 GUIDED_TELEMETRY_SURFACES = [
-    "CLI", "CHAT", "VOICE", "API", "MCP", "WEB", "DESKTOP", "SOL", "HERMES", "TELEGRAM"
+    "CLI", "CHAT", "VOICE", "WORK", "COWORK", "CODE_AGENT", "API", "MCP", "WEB", "DESKTOP", "SOL", "HERMES", "TELEGRAM"
 ]
 
 DELTA_CANONICAL = "!DELTA UTILS"
@@ -118,10 +120,19 @@ TIK_TAK_LOCKS = [
 NEGATION_TOKENS = {"nao", "nunca", "sem"}
 
 MASTER_INGRESS_ALIASES = {
-    "CENTRALDARK_MASTER": ("!centraldark", "#centraldark", "!central-dark", "#central-dark", "!cdark", "#cdark"),
+    "CENTRALDARK_MASTER": (
+        "!centraldark", "#centraldark", "!central-dark", "#central-dark", "!cdark", "#cdark",
+        "centraldark visualize", "central dark visualize",
+        "centraldark executar", "central dark executar",
+        "centraldark verificar", "central dark verificar",
+        "centraldark editar", "central dark editar",
+        "centraldark comitar", "central dark comitar",
+        "centraldark rodar", "central dark rodar",
+    ),
     "ACORDAR": ("#acordar", "#acorda", "!acordar", "!acorda"),
     "CALIBRAR": ("!calibrar", "#calibrar"),
     "CRISTALIZAR": ("#cristalizar", "!cristalizar", "#crystalizar", "!crystalizar", "#crystalaizar", "!crystalaizar"),
+    "GARIMPO_UNIVERSAL": ("!garimpo_universal", "!garimpo universal", "#garimpo_universal", "#garimpo universal"),
     "MULTIBUSSOLA": ("!multibussola", "!multibússola", "!multi-bussola", "!multibussola_meta", "!multibússola_meta"),
     "META_LUPA": ("!meta_lupa", "!metalupa"),
     "RECONCILIAR": ("!reconciliar",),
@@ -131,16 +142,51 @@ MASTER_INGRESS_ALIASES = {
     "TIK_TAK": ("!tik-tak", "!tik_tak", "#tik-tak", "#tik_tak"),
     "FIXED_POINT": ("!fixed_point",),
     "REGISTRA": ("!registra",),
+    "RASTRO": ("!rastro", "!lei do rastro", "!cadeado"),
     "BOOT": ("!boot",),
     "FABLE_LOOP": ("!fable_loop", "#fable_loop", "!fabler_loop", "#fabler_loop"),
 }
 
+INVOCATION_GRAMMAR_PATH = (
+    Path(__file__).resolve().parents[2]
+    / "docs" / "ARQUITETURA" / "CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md"
+)
+
+
+def _grammar_verb_aliases(path: Path = INVOCATION_GRAMMAR_PATH) -> tuple[str, ...]:
+    """Verbos do dono único (gramática §3 verb_dispatch). Sem cópia local para envelhecer."""
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return ()
+    section = text.split("## 3.", 1)[-1].split("## 4.", 1)[0]
+    verbs: list[str] = []
+    for found in re.findall(r"aliases:\s*\[([^\]]*)\]", section):
+        verbs.extend(v.strip().strip("\"'") for v in found.split(",") if v.strip())
+    phrases: list[str] = []
+    for verb in verbs:
+        phrases.extend((f"centraldark {verb}", f"central dark {verb}"))
+    return tuple(dict.fromkeys(phrases))
+
+
+GRAMMAR_VERB_PHRASES = _grammar_verb_aliases()
+MASTER_INGRESS_ALIASES["CENTRALDARK_MASTER"] = tuple(
+    dict.fromkeys(MASTER_INGRESS_ALIASES["CENTRALDARK_MASTER"] + GRAMMAR_VERB_PHRASES)
+)
+
 VOICE_INGRESS_ALIASES = {
+    "GARIMPO_UNIVERSAL": (
+        "garimpo universal",
+        "centraldark garimpo universal",
+        "central dark garimpo universal",
+    ),
     "CENTRALDARK_MASTER": (
-        "centraldark",
-        "central dark",
-        "centraldark sol",
-        "central dark sol",
+        "centraldark visualize", "central dark visualize",
+        "centraldark executar", "central dark executar",
+        "centraldark verificar", "central dark verificar",
+        "centraldark editar", "central dark editar",
+        "centraldark comitar", "central dark comitar",
+        "centraldark rodar", "central dark rodar",
     ),
     "ACORDAR": (
         "acordar",
@@ -155,6 +201,9 @@ VOICE_INGRESS_ALIASES = {
         "acorda centraldark",
     ),
 }
+VOICE_INGRESS_ALIASES["CENTRALDARK_MASTER"] = tuple(
+    dict.fromkeys(VOICE_INGRESS_ALIASES["CENTRALDARK_MASTER"] + GRAMMAR_VERB_PHRASES)
+)
 
 CANONICAL_SOL_PROFILE_ID = "ORQUESTRACAO_SOL"
 CANONICAL_SOL_PROFILE_DISPLAY = "😎 Orquestração SOL 🌞"
@@ -169,6 +218,8 @@ def normalize(text: str) -> str:
     raw = unicodedata.normalize("NFKD", str(text or ""))
     raw = "".join(ch for ch in raw if not unicodedata.combining(ch)).lower()
     raw = re.sub(r"[^a-z0-9!#@/_\-\s]+", " ", raw)
+    # "centraldark! faça" (transcrição de voz): marcador só vale no começo da palavra
+    raw = re.sub(r"(?<=[a-z0-9])[!#]+", " ", raw)
     return " ".join(raw.strip().split())
 
 
@@ -203,6 +254,13 @@ def _negated_or_discussed(normalized: str, match) -> bool:
             "apenas mencionar",
             "so mencionar",
             "somente discutir",
+            "falando sobre",
+            "falei de",
+            "falei do",
+            "falei da",
+            "falou de",
+            "falou do",
+            "falou da",
         )
     )
 
@@ -217,11 +275,18 @@ def _resolve_delta(normalized: str):
 
 def _collect_alias_matches(normalized: str, alias_map):
     active, ambiguous = [], []
+    tokens = normalized.split()
+    resume_verbs = {"continue", "continua", "prossiga", "retome"}
     for trigger_id, aliases in alias_map.items():
         for alias in aliases:
             match = _phrase_match(normalized, alias)
             if not match:
                 continue
+            if trigger_id == "CENTRALDARK_MASTER" and alias.startswith(("centraldark ", "central dark ")):
+                _, end = match
+                verb = alias.split()[-1]
+                if end == len(tokens) and verb not in resume_verbs:
+                    continue
             item = {"trigger_id": trigger_id, "alias": alias}
             (ambiguous if _negated_or_discussed(normalized, match) else active).append(item)
             break
@@ -466,7 +531,8 @@ def resolve(
 
     chefe_material = bool(chefe_source and master_cycle_active and not ambiguous_ingress)
     delta_match, delta_active, delta_ambiguous = _resolve_delta(normalized)
-    harvest_active = bool(delta_active or chefe_material)
+    garimpo_universal_active = "GARIMPO_UNIVERSAL" in ids
+    harvest_active = bool(delta_active or chefe_material or garimpo_universal_active)
     tik_tak_active = "TIK_TAK" in ids
     meta_match = next((a for a in MULTIBUSSOLA_META_ALIASES if _phrase_match(normalized, a)), None)
     meta_active = meta_match is not None
@@ -554,7 +620,8 @@ def resolve(
             "ambiguous_trigger_ids": ambiguous_ids,
             "normalized_to_master": bool(explicit_subtrigger and not inherited),
             "master_reentry_guard": bool(inherited and ids),
-            "requested_phases": [i for i in ids if i not in ("CENTRALDARK_MASTER", "FABLE_LOOP", "CRISTALIZAR")],
+            "requested_phases": [i for i in ids if i not in ("CENTRALDARK_MASTER", "FABLE_LOOP", "CRISTALIZAR", "GARIMPO_UNIVERSAL")],
+            "requested_modes": [i for i in ids if i == "GARIMPO_UNIVERSAL"],
             "requested_methods": [i for i in ids if i == "FABLE_LOOP"],
             "phase_markers": [i for i in ids if i == "CRISTALIZAR"],
             "cristalizar_is_phase_marker_not_engine": True,
@@ -566,6 +633,14 @@ def resolve(
             "canonical_signal": DELTA_CANONICAL,
             "active": harvest_active,
             "explicit_signal_active": delta_active,
+            "garimpo_universal_active": garimpo_universal_active,
+            "owner": ".agents/skills/session-intelligence-harvester/SKILL.md" if harvest_active else None,
+            "semantic_identity": "OWNER+CAPABILITY+SCOPE" if harvest_active else None,
+            "multi_surface_parallel_candidates": harvest_active,
+            "one_canonical_finalizer_per_scope": harvest_active,
+            "candidate_lane_is_not_canonical_write": harvest_active,
+            "same_finding_without_new_evidence": "DROP_DUPLICATE" if harvest_active else None,
+            "next_executor_replay": "LAST_GOOD_STATE->INPUT_DIFF->REUSE_PROOF_OR_TARGETED_REVALIDATION" if harvest_active else None,
             "candidate_from_chefe": chefe_material,
             "ambiguous_or_negated": delta_ambiguous,
             "matched_alias": delta_match,
@@ -782,6 +857,7 @@ def self_test():
         ("!TIK-TAK", "TIK_TAK"),
         ("!FIXED_POINT", "FIXED_POINT"),
         ("!REGISTRA", "REGISTRA"),
+        ("!RASTRO", "RASTRO"),
         ("!BOOT", "BOOT"),
     ):
         r = resolve(token, chefe_source=True)
@@ -883,7 +959,8 @@ def self_test():
         r = resolve(phrase, chefe_source=True)
         add("spoken_explicit_text_trigger", r["master_cycle_active"])
 
-    for phrase in ("acordar", "centraldark", "centraldark sol acordar", "sol acordar"):
+    # CHEFE 2026-09-27: voz = texto; "CentralDark" solto não abre o mestre (paridade + sob demanda)
+    for phrase in ("acordar", "centraldark visualize o estado", "centraldark sol acordar", "sol acordar"):
         r = resolve(
             phrase,
             chefe_source=True,
@@ -902,6 +979,14 @@ def self_test():
 
     r = resolve("centraldark", chefe_source=True, input_mode="text")
     add("plain_text_word_still_guarded", not r["master_cycle_active"])
+
+    for mode in ("text", "voice"):
+        add("plain_master_wake_is_neutral", not resolve("CentralDark", chefe_source=True, input_mode=mode)["master_cycle_active"])
+        add("natural_master_requires_payload", not resolve("CentralDark visualize", chefe_source=True, input_mode=mode)["master_cycle_active"])
+        add("natural_resume_uses_latest_cursor", resolve("CentralDark continue", chefe_source=True, input_mode=mode)["master_cycle_active"])
+        for verb in ("visualize", "veja", "mostra", "leia", "observe", "mede", "faça", "faz", "executa", "corrige", "pluga", "costura", "sobe", "continue", "continua", "prossiga", "retome", "cristaliza", "registra", "sela", "receipt", "rastro", "contraprova", "valida", "testa", "verifica"):
+            result = resolve(f"CentralDark {verb} alvo", chefe_source=True, input_mode=mode)
+            add("canonical_operational_verb_dispatch", result["master_cycle_active"] and result["explicit_match"])
 
     r = resolve(
         "centraldark sol acordar",
