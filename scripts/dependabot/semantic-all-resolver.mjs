@@ -19,7 +19,8 @@ if (binaryExtensions.has(ext)) {
 }
 
 const original = fs.readFileSync(file, 'utf8');
-const lines = original.split('\n');
+const newline = original.includes('\r\n') ? '\r\n' : '\n';
+const lines = original.replace(/\r\n/g, '\n').split('\n');
 const out = [];
 let conflicts = 0;
 let preservedBoth = 0;
@@ -65,7 +66,7 @@ for (let i = 0; i < lines.length; i += 1) {
   }
 }
 
-const resolved = out.join('\n');
+const resolved = out.join(newline);
 if (/^(<<<<<<< |=======|>>>>>>> )/m.test(resolved)) {
   console.error(`SEMANTIC_ALL_MARKERS_LEFT path=${file}`);
   process.exit(4);
