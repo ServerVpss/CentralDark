@@ -239,13 +239,13 @@ unexposed_platform_capability: PLATFORM_UNAVAILABLE
 | Texto nesta sessão Work | Conector GitHub leu os quatro owners; ferramenta de escrita disponível. Esta atualização será provada pelo SHA de commit retornado. | PASS após confirmar os commits |
 | Voz | Não é uma superfície exposta nesta sessão de texto; sessão/tracing/uso da Voz não foram medidos aqui. | UNKNOWN |
 | Work | Esta execução está no Work Mode; GitHub e Remote Desktop Commander estão expostos. Não prova paridade em outra sessão Work. | PASS limitado à exposição atual |
-| Desktop | Remote Desktop Commander encontrou dispositivo SEGREDO online (app 0.2.51), sessão de terminal PID 31412 (Blocked=true; Runtime=9760s), histórico recente de 20 tool calls e usage agregado de 3034 chamadas, 98% de sucesso, 60 sessões/21 ferramentas e 70% das chamadas MCP restantes no mês. | PASS para telemetria do Desktop Commander; não prova vínculo da Voz |
+| Desktop | Remote Desktop Commander encontrou dispositivo SEGREDO online (app 0.2.51), sessão de terminal PID 31412 (Blocked=true; Runtime=9760s), histórico recente de 20 tool calls e uso do Remote MCP: 3034 chamadas, 98% de sucesso, 60 sessões/21 ferramentas e 70% das chamadas restantes no mês. | PASS para telemetria de chamadas do Desktop Commander; tokens do modelo e vínculo da Voz = UNKNOWN |
 
 O histórico consultado contém chamadas `edit_block`, `start_process`, `read_process_output`, `list_sessions` e `list_processes`. Os argumentos e outputs integrais não foram copiados para este receipt.
 
-**Contraprova:** a captura de tool calls e usage existe no Desktop Commander, mas não demonstra que Texto e Voz compartilham o mesmo `SESSION_ID`, nem que a lateral da Voz mostra esses eventos. Portanto, paridade runtime Text↔Voice continua `UNKNOWN` até uma execução de Voz apresentar o mesmo contrato de sessão/tracing e a mesma prova.
+**Contraprova:** a captura de tool calls e uso do Remote MCP existe no Desktop Commander, mas não demonstra que Texto e Voz compartilham o mesmo `SESSION_ID`, nem que a lateral da Voz mostra esses eventos. Uso de chamadas MCP não equivale a contagem de tokens do modelo; tokens do modelo nesta sessão permanecem `UNKNOWN`. Portanto, paridade runtime Text↔Voice continua `UNKNOWN` até uma execução de Voz apresentar o mesmo contrato de sessão/tracing/usage e a mesma prova.
 
-**NEXT_CURSOR:** validar uma ação real acessível em Texto e Voz; comparar `SESSION_ID`, sequência `TRACE_ID/TOOL_CALL_ID`, usage, owner, resultado estruturado e receipt. Se a plataforma Voice não expuser esses campos, registrar `PLATFORM_UNAVAILABLE` com a capability específica.
+**NEXT_CURSOR:** validar uma ação real acessível em Texto e Voz; comparar `SESSION_ID`, sequência `TRACE_ID/TOOL_CALL_ID`, tokens de modelo e usage, owner, resultado estruturado e receipt. Se a plataforma Voice não expuser esses campos, registrar `PLATFORM_UNAVAILABLE` com a capability específica.
 
 
 ### Contraprova do contrato — 2026-09-27
