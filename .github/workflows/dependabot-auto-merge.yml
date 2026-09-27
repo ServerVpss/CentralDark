@@ -4,6 +4,7 @@
 # - update-branch é sincronização; aprovação de workflow run é uma ação distinta e fica restrita a PR Dependabot no HEAD CURRENT.
 # - conflito real vai para scripts/dependabot/resolve-conflicts.sh.
 # - radar varre TODOS os PRs abertos do dependabot[bot], inclusive antigos.
+# - cronômetro 30 min: vermelho concluído no HEAD CURRENT → RERUN ALL JOBS → catalisa owner existente; action_required fica com auto-approve.
 # - compatibilidade é lida do badge oficial já presente no PR, nunca inventada.
 # - PATCH exige compatibilidade >= 85; MINOR exige >= 95; MAJOR nunca faz auto-merge.
 # - compatibilidade sozinha NÃO aprova: mesmo HEAD precisa estar mergeável e sem checks pendentes/falhos.
@@ -835,3 +836,238 @@ jobs:
           echo "HUMAN_PR_PROMOTION_OWNER=.github/workflows/autonomia-promocao.yml"
           echo "DEPENDABOT_PROMOTION_OWNER=.github/workflows/dependabot-auto-merge.yml"
           echo "UNKNOWN_IS_PASS=0"
+
+
+  watchdog-rerun-all-jobs:
+    name: ⏰ Dependabot — detectar vermelho e RERUN ALL JOBS
+    if: >-
+      github.repository == 'ServerVpss/CentralDark' &&
+      (
+        github.event_name == 'schedule' ||
+        github.event_name == 'workflow_dispatch'
+      )
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 12
+    outputs:
+      rerun_count: ${{ steps.rerun.outputs.rerun_count }}
+      candidate_prs: ${{ steps.rerun.outputs.candidate_prs }}
+
+    steps:
+      - name: 🔎 Varredura auditável do HEAD CURRENT e rerun completo
+        id: rerun
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const repository = context.payload.repository?.full_name || `${owner}/${repo}`;
+
+            // FUNÇÃO 1 — listar somente PRs Dependabot abertas, mesmo repo, base main.
+            async function listDependabotPrs() {
+              const open = await github.paginate(github.rest.pulls.list, {
+                owner, repo, state: 'open', per_page: 100,
+              });
+              return open.filter((pr) =>
+                pr.user?.login === 'dependabot[bot]' &&
+                pr.head?.repo?.full_name === repository &&
+                pr.base?.ref === 'main'
+              );
+            }
+
+            // FUNÇÃO 2 — manter apenas o run mais novo de cada workflow no HEAD CURRENT.
+            // Isso impede rerun de falha histórica quando já existe execução mais nova verde.
+            function latestRunPerWorkflow(runs) {
+              const latest = new Map();
+              for (const run of runs) {
+                const key = String(run.workflow_id || run.name || run.id);
+                const prev = latest.get(key);
+                if (!prev) {
+                  latest.set(key, run);
+                  continue;
+                }
+                const prevKey = [
+                  Number(prev.run_number || 0),
+                  Number(prev.run_attempt || 0),
+                  Date.parse(prev.updated_at || prev.created_at || 0) || 0,
+                ];
+                const nextKey = [
+                  Number(run.run_number || 0),
+                  Number(run.run_attempt || 0),
+                  Date.parse(run.updated_at || run.created_at || 0) || 0,
+                ];
+                if (
+                  nextKey[0] > prevKey[0] ||
+                  (nextKey[0] === prevKey[0] && nextKey[1] > prevKey[1]) ||
+                  (nextKey[0] === prevKey[0] && nextKey[1] === prevKey[1] && nextKey[2] > prevKey[2])
+                ) latest.set(key, run);
+              }
+              return [...latest.values()];
+            }
+
+            // FUNÇÃO 3 — classificar somente vermelho/parado já concluído.
+            // action_required NÃO entra aqui: o job de auto-approve é o owner dessa condição.
+            function isRerunnableRed(run) {
+              if (run.status !== 'completed') return false;
+              const red = new Set(['failure', 'cancelled', 'timed_out', 'startup_failure', 'stale']);
+              return red.has(String(run.conclusion || '').toLowerCase());
+            }
+
+            // FUNÇÃO 4 — rerun do workflow inteiro, equivalente a "Re-run all jobs".
+            async function rerunAllJobs(run) {
+              try {
+                const result = await github.request(
+                  'POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun',
+                  { owner, repo, run_id: run.id }
+                );
+                core.notice(
+                  `RERUN_ALL_JOBS=PASS run=${run.id} workflow=${run.name} head=${run.head_sha} status=${result.status}`
+                );
+                return { ok: true, status: result.status };
+              } catch (error) {
+                const status = Number(error?.status || 0);
+                if (status === 409) {
+                  core.notice(
+                    `RERUN_ALL_JOBS=NOOP_ALREADY_RUNNING run=${run.id} workflow=${run.name}`
+                  );
+                  return { ok: true, status, noop: true };
+                }
+                core.warning(
+                  `RERUN_ALL_JOBS=BLOCKED run=${run.id} workflow=${run.name} status=${status || 'UNKNOWN'}`
+                );
+                return { ok: false, status };
+              }
+            }
+
+            const prs = await listDependabotPrs();
+            let rerunCount = 0;
+            const findings = [];
+
+            for (const initial of prs) {
+              // Remede o PR para não operar HEAD histórico.
+              const pr = (await github.rest.pulls.get({
+                owner, repo, pull_number: initial.number,
+              })).data;
+
+              if (pr.state !== 'open') continue;
+              if (pr.user?.login !== 'dependabot[bot]') continue;
+              if (pr.head?.repo?.full_name !== repository) continue;
+              if (pr.base?.ref !== 'main') continue;
+              if (!pr.head?.sha) continue;
+
+              const runs = await github.paginate(github.rest.actions.listWorkflowRunsForRepo, {
+                owner,
+                repo,
+                head_sha: pr.head.sha,
+                per_page: 100,
+              });
+
+              const latest = latestRunPerWorkflow(
+                runs.filter((run) =>
+                  run.head_sha === pr.head.sha &&
+                  run.name !== '🤖 Dependabot — radar, compatibilidade e squash seguro'
+                )
+              );
+
+              const red = latest.filter(isRerunnableRed);
+              const delegatedActionRequired = latest.filter((run) =>
+                run.status === 'completed' &&
+                String(run.conclusion || '').toLowerCase() === 'action_required'
+              );
+
+              for (const run of delegatedActionRequired) {
+                core.notice(
+                  `ACTION_REQUIRED_DELEGATED_TO_APPROVAL_OWNER pr=${pr.number} run=${run.id} workflow=${run.name}`
+                );
+              }
+
+              const prFinding = {
+                pr: pr.number,
+                head: pr.head.sha,
+                red_runs: [],
+                delegated_action_required: delegatedActionRequired.map((run) => run.id),
+              };
+
+              for (const run of red) {
+                const result = await rerunAllJobs(run);
+                prFinding.red_runs.push({
+                  id: run.id,
+                  workflow: run.name,
+                  conclusion: run.conclusion,
+                  requested: Boolean(result.ok),
+                  status: result.status || 0,
+                });
+                if (result.ok && !result.noop) rerunCount += 1;
+              }
+
+              findings.push(prFinding);
+            }
+
+            core.setOutput('rerun_count', String(rerunCount));
+            core.setOutput('candidate_prs', String(prs.length));
+            core.notice(
+              `DEPENDABOT_RERUN_TIMER_SUMMARY prs=${prs.length} rerun_all_jobs=${rerunCount}`
+            );
+            core.info(JSON.stringify(findings));
+
+      - name: 🧾 Receipt do cronômetro de rerun
+        if: always()
+        shell: bash
+        run: |
+          echo 'TIMER=30_MINUTES'
+          echo 'SCHEDULE=17,47 * * * *'
+          echo 'SCOPE=OPEN_DEPENDABOT_PRS_SAME_REPO_BASE_MAIN_CURRENT_HEAD'
+          echo 'RED=FAILURE|CANCELLED|TIMED_OUT|STARTUP_FAILURE|STALE'
+          echo 'ACTION_REQUIRED=DELEGATED_TO_EXISTING_AUTO_APPROVAL_JOB'
+          echo 'PENDING_OR_IN_PROGRESS=NO_RERUN'
+          echo 'RERUN_MODE=ALL_JOBS'
+          echo 'ENDPOINT=POST /actions/runs/{run_id}/rerun'
+          echo 'LATEST_RUN_PER_WORKFLOW_ONLY=true'
+          echo 'HISTORICAL_RED_AFTER_NEWER_GREEN=IGNORED'
+          echo "RERUN_COUNT=${{ steps.rerun.outputs.rerun_count }}"
+          echo "CANDIDATE_PRS=${{ steps.rerun.outputs.candidate_prs }}"
+          echo 'UNKNOWN_IS_PASS=0'
+
+  catalisa-after-rerun:
+    name: 🪝 Dependabot — catalisar COSTURA após rerun
+    needs: watchdog-rerun-all-jobs
+    if: >-
+      needs.watchdog-rerun-all-jobs.result == 'success' &&
+      needs.watchdog-rerun-all-jobs.outputs.rerun_count != '0'
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+
+    steps:
+      - name: 🪝 Reentrar no owner existente sem duplicar lógica
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // FUNÇÃO 5 — catalisar somente depois que houve RERUN ALL JOBS.
+            // Não resolve conflito, não aprova PR e não faz merge aqui.
+            // Apenas devolve o sistema ao owner canônico já existente.
+            await new Promise((resolve) => setTimeout(resolve, 15000));
+            await github.request('POST /repos/{owner}/{repo}/dispatches', {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'centraldark_dependabot_reconcile',
+              client_payload: {
+                source: 'dependabot_rerun_all_jobs_timer',
+                reason: 'post_rerun_catalyst',
+                rerun_count: Number('${{ needs.watchdog-rerun-all-jobs.outputs.rerun_count }}' || 0),
+                candidate_prs: Number('${{ needs.watchdog-rerun-all-jobs.outputs.candidate_prs }}' || 0),
+              },
+            });
+            core.notice('POST_RERUN_CATALYST=DISPATCHED event=centraldark_dependabot_reconcile');
+
+      - name: 🧾 Receipt do catalisador
+        if: always()
+        shell: bash
+        run: |
+          echo 'CATALYST=centraldark_dependabot_reconcile'
+          echo 'RUNS_ONLY_AFTER_RERUN_COUNT_GT_0=true'
+          echo 'CONFLICT_OWNER=UNCHANGED'
+          echo 'AUTO_APPROVAL_OWNER=UNCHANGED'
+          echo 'PROMOTION_OWNER=UNCHANGED'
+          echo 'DIRECT_MERGE=0'
+          echo 'UNKNOWN_IS_PASS=0'
