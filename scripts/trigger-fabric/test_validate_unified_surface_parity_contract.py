@@ -24,14 +24,22 @@ VALIDATOR = Path("scripts/trigger-fabric/validate_unified_surface_parity_contrac
 CONTRACT = Path("docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml")
 GRAMMAR = Path("docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md")
 SKILL = Path(".agents/skills/centraldark-unified-surface-parity/SKILL.md")
-FILES = [
-    VALIDATOR,
-    CONTRACT,
-    GRAMMAR,
-    SKILL,
-    Path("docs/RECEIPTS/2026-09-26-CENTRALDARK-UNIFIED-SURFACE-PARITY-01.md"),
-    Path("docs/RECEIPTS/2026-09-27-CENTRALDARK-INVOCATION-GRAMMAR-01.md"),
-]
+VOICE_CLASSIFIER = Path(".claude/skills/synced/voice-semantic-classifier/SKILL.md")
+INTENT_ROUTER = Path(".agents/skills/centraldark-intent-deploy-router/SKILL.md")
+
+
+def validated_files() -> list[Path]:
+    """Lê REQUIRED_FILES do próprio validador: dono novo entra sozinho na cópia."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("parity_validator", ROOT / VALIDATOR)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return [VALIDATOR] + [Path(p).resolve().relative_to(ROOT) for p in module.REQUIRED_FILES]
+
+
+FILES = validated_files()
 
 
 class ParityValidatorCounterproof(unittest.TestCase):
@@ -96,6 +104,20 @@ class ParityValidatorCounterproof(unittest.TestCase):
     def test_affirmative_replaces_sol_fails(self) -> None:
         self.mutate(SKILL, None, "Este motor substitui SOL no fluxo")
         self.assert_fail("FORBIDDEN_MARKER")
+
+    def test_voice_flag_contradiction_fails(self) -> None:
+        self.mutate(VOICE_CLASSIFIER, None, "NO_SECOND_PARSER=false")
+        self.assert_fail("CONTRADICTION")
+
+    def test_router_flag_contradiction_fails(self) -> None:
+        self.mutate(INTENT_ROUTER, None, "GRAMMAR_DISPATCH_PRECEDES_TOOL_SELECTION=false")
+        self.assert_fail("CONTRADICTION")
+
+    def test_live_voice_binding_cannot_be_declared_pass(self) -> None:
+        self.mutate(Path(".agents/INTENT-DEPLOY-BINDING.json"),
+                    '"live_voice_binding_status": "UNKNOWN_UNTIL_MEASURED"',
+                    '"live_voice_binding_status": "PASS"')
+        self.assert_fail("live_voice_binding_status")
 
     def test_negation_is_the_rule_not_the_violation(self) -> None:
         self.mutate(SKILL, None, "GEV/JEV nunca substitui Hermes")

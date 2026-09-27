@@ -598,13 +598,13 @@
       "lock_key": "90d8dcc29002ba3363da63ae7727cf83d6335712c4df264da73bc8953900f1ba",
       "state": "SEALED_PROVEN",
       "proof_target": "validador de CENTRALDARK_UNIFIED_SURFACE_PARITY_01 aprova o conjunto limpo e reprova os 6 ataques reais (valor falso em comentário, lei removida, duplicata falsa, versão paralela afirmada, substitui Hermes, substitui SOL) sem reprovar a negação",
-      "evidence_ref": "commits 6d0ab0e 2a5c5da (rasgo Claude) sobre 1fb973f 75975d7 10e5a8e ed74796 (costura SOL); suíte 8/8; suíte reprova validadores antigos e6ccf52 (5 falhas) 75975d7 (6) 10e5a8e (5)",
-      "observed_at": "2026-09-27T01:50:00Z",
+      "evidence_ref": "suíte 11/11; suíte reprova validador eb8993e (2 falhas: contradição voz e roteador)",
+      "observed_at": "2026-09-27T02:00:00Z",
       "counterproof": "PASS",
       "receipt_ref": "https://github.com/ServerVpss/CentralDark/pull/1562#issuecomment-5851670095",
       "proven_path_replay": {
         "marker": "PROVEN_PATH_REPLAY_LOCK",
-        "dependency_fingerprint": "1f2d524267d675a13a510d1902ee8ebe23ed7dbefe1529b730ed04ade609fc76",
+        "dependency_fingerprint": "937260ba5e0092ed1e905cfab93b61a3479a5042cdec0f30c8284885e69d6229",
         "fingerprint_material_count": 2,
         "execution_commands": [],
         "proof_commands": [
@@ -625,7 +625,18 @@
         "self_test_result": "PASS_8_OF_8",
         "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
         "raw_output_byte_equality_required": false
-      }
+      },
+      "reopen_history": [
+        {
+          "cause_ref": "https://github.com/ServerVpss/CentralDark/commit/eb8993e — SOL ligou 3 donos novos ao validador; rasgo Claude: contradição KEY=false passava na skill de voz e no roteador",
+          "observed_at": "2026-09-27T02:00:00Z",
+          "old_dependency_fingerprint": "1f2d524267d675a13a510d1902ee8ebe23ed7dbefe1529b730ed04ade609fc76",
+          "new_dependency_fingerprint": "937260ba5e0092ed1e905cfab93b61a3479a5042cdec0f30c8284885e69d6229",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        }
+      ]
     }
   }
 }

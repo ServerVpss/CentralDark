@@ -225,6 +225,28 @@ def validate_intent_binding_json(path: Path, text: str) -> list[str]:
     return errors
 
 
+FLAG_MARKER = re.compile(r"^([A-Z][A-Z0-9_]*)=(\S+)$")
+
+
+def validate_flag_contradictions(path: Path, text: str) -> list[str]:
+    """Marcador KEY=valor exigido não pode conviver com KEY=outro_valor ativo."""
+    errors: list[str] = []
+    for marker in REQUIRED_MARKERS.get(path, []):
+        m = FLAG_MARKER.match(marker)
+        if not m:
+            continue
+        key, expected = m.groups()
+        pattern = re.compile(rf"(?<![A-Z0-9_]){re.escape(key)}\s*=\s*([^\s`|,;)]+)")
+        for line in text.splitlines():
+            stripped = line.strip()
+            if stripped.startswith("#") and not stripped.startswith("# "):
+                continue
+            for found in pattern.findall(line):
+                if found != expected:
+                    errors.append(f"CONTRADICTION {path}: {key}={found} expected={expected}")
+    return errors
+
+
 def read_text(path: Path) -> str:
     try:
         return path.read_text(encoding="utf-8")
@@ -264,6 +286,7 @@ def validate_file(path: Path) -> list[str]:
             errors.append(f"FORBIDDEN_MARKER {path}: {marker}")
 
     errors.extend(validate_values(path, text))
+    errors.extend(validate_flag_contradictions(path, text))
     if path == INTENT_BINDING:
         errors.extend(validate_intent_binding_json(path, text))
     return errors
