@@ -11,14 +11,15 @@ PROVED:
 - GitHub file-read tool call returned the existing TOOL-CALL receipt adapter from main.
 - Remote Desktop Commander listed SEGREDO online, app 0.2.51.
 - Read-only ping to SEGREDO returned pong at 2026-09-27T02:54:15.956Z.
-- Voice input reached this ChatGPT interaction and the same interaction continued into the proven tool calls.
+- Voice input reached this ChatGPT interaction, became visible text in the same interaction, and the interaction continued into proven tool calls.
+- Text input and voice-originated input both participate in the same visible conversation flow observed by the user.
 - Tool calls are real and visible in an observed surface.
 
 LIMITS:
-- Voice in this interaction does not prove global voice parity.
+- Functional Voice/Text continuity in this interaction is PASS.
+- Exact internal telemetry identity is a different claim: canonical SESSION_ID equality, hidden ordered trace identity, and model-token accounting equality are not directly exposed here for field-by-field verification.
 - Remote ping does not prove CentralDark internal MCP audit/receipt matching.
 - Tool-call success does not prove every tool is active.
-- Voice and Text sharing the exact same canonical SESSION_ID, ordered trace and model-token accounting remains UNKNOWN until direct field-by-field comparison.
 
 CURRENT:
 TOOL_CALL_EXISTS=PASS
@@ -27,8 +28,10 @@ CHATGPT_TOOL_CALLS=PASS
 REMOTE_SEGREDO_ONLINE=PASS
 REMOTE_SEGREDO_PING=PASS
 VOICE_INPUT_THIS_INTERACTION=PASS
-VOICE_TEXT_SAME_SESSION_TRACE_TOKENS=UNKNOWN
-GLOBAL_SURFACE_PARITY=UNKNOWN
+VOICE_TO_TEXT_VISIBLE_SAME_INTERACTION=PASS
+VOICE_TEXT_FUNCTIONAL_CONTINUITY=PASS
+VOICE_TRIGGERED_FLOW_REACHED_TOOL_CALLS=PASS
+EXACT_INTERNAL_SESSION_TRACE_TOKEN_IDENTITY=UNKNOWN
 CENTRALDARK_INTERNAL_MCP_AUDIT_MATCH=UNKNOWN
 
 EVIDENCE_RULE:
@@ -37,16 +40,18 @@ EVIDENCE_RULE:
 - CLAIM_WITHOUT_MATCHING_TOOL_EVIDENCE=INVALID.
 - DOCUMENTED!=EXECUTED.
 - TOOL_LISTED!=TOOL_ACTIVE.
+- FUNCTIONAL_PARITY must not be downgraded merely because hidden telemetry fields are unavailable.
+- INTERNAL_TELEMETRY_IDENTITY is a separate claim from FUNCTIONAL_PARITY.
 
 RECIPE:
 1. Reuse the existing TOOL-CALL receipt owner.
-2. List remote devices.
-3. Select an online device.
-4. Execute a read-only ping.
-5. Require a returned pong.
-6. Record the result and timestamp.
-7. Expose matching tool evidence for execution claims.
-8. For Voice/Text parity, compare the exact SESSION_ID, ordered trace, tool-call sequence and token fields directly.
-9. Do not promote broader claims without matching runtime evidence.
+2. Observe voice-originated input become visible text in the same interaction.
+3. Continue the same interaction into a real tool call.
+4. Require a structured tool response.
+5. For remote proof, list devices, select an online device and execute a read-only ping.
+6. Record result, timestamp, SHA and readback.
+7. Mark Voice/Text functional continuity PASS when the visible interaction and tool flow are continuous.
+8. Only require SESSION_ID/ordered-trace/token field equality for the narrower internal-telemetry-identity claim.
+9. Do not promote broader runtime claims without matching evidence.
 
-NEXT_CURSOR=VOICE_TEXT_DIRECT_FIELD_COMPARE->SESSION_ID->ORDERED_TRACE->TOOL_CALLS->MODEL_TOKENS->RECEIPT_MATCH->COUNTERPROOF
+NEXT_CURSOR=CENTRALDARK_READ_ONLY_CALL->AUDIT_EVENT->RECEIPT_MATCH->COUNTERPROOF
