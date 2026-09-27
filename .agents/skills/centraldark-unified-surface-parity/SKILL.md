@@ -219,3 +219,18 @@ Resposta sem rastro para claim de escrita é inválida.
 NÃO É DAR PODER AO MODELO.
 É EXPOR A MESMA CAPABILITY REAL PARA QUALQUER MODELO AUTORIZADO.
 ```
+
+## Portão antes de subir (toda caneta)
+
+Várias canetas, uma main. Antes de qualquer envio direto na main, qualquer superfície (Claude, ChatGPT texto/voz/Work, Cowork, Hermes) roda a receita selada — não um portão inventado na hora:
+
+```text
+RECIPE=MULTI_PEN_MAIN_GATE_PATH
+REGISTRY=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json
+REPLAY=claims.MULTI_PEN_MAIN_GATE_PATH.proven_path_replay.replay_command
+REUSE_CRYSTAL → pode subir
+REVALIDATE → arquivo do portão mudou: rodar os 5 comandos, passar, re-selar (reseal-fingerprint) com causa
+DELTA_NEW → não subir; rasgar a causa
+PUSH_ONLY_AFTER_GATE_GREEN_ON_REBASED_HEAD=true
+EVERY_DIRECT_MAIN_COMMIT_HAS_1562_RECEIPT=true
+```

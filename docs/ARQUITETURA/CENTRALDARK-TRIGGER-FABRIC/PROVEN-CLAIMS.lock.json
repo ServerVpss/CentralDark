@@ -624,7 +624,13 @@
         "self_test_command": "python3 scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py",
         "self_test_result": "PASS_8_OF_8",
         "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
-        "raw_output_byte_equality_required": false
+        "raw_output_byte_equality_required": false,
+        "fingerprint_material_files": {
+          "VALIDATOR_BLOB": "scripts/trigger-fabric/validate_unified_surface_parity_contract.py",
+          "COUNTERPROOF_TEST_BLOB": "scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py"
+        },
+        "fingerprint_material_rule": "<KEY>=<git hash-object path>",
+        "replay_command": "python3 scripts/trigger-fabric/centraldark_full_trigger_boot.py replay-run --claim UNIFIED_SURFACE_PARITY_VALIDATOR_COUNTERPROOF_PATH --fingerprint-material VALIDATOR_BLOB=$(git hash-object scripts/trigger-fabric/validate_unified_surface_parity_contract.py) --fingerprint-material COUNTERPROOF_TEST_BLOB=$(git hash-object scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py)"
       },
       "reopen_history": [
         {
@@ -673,6 +679,54 @@
           "scope": "AFFECTED_CONE_ONLY"
         }
       ]
+    },
+    "MULTI_PEN_MAIN_GATE_PATH": {
+      "claim_key": "MULTI_PEN_MAIN_GATE_PATH",
+      "owner": "scripts/trigger-fabric/verify_repo_contract.py",
+      "lock_key": "4140e68eb6a6e89f5ce434ea556ae7b99918fbd9ace61aae20e59fc056a88e25",
+      "state": "SEALED_PROVEN",
+      "proof_target": "portão único que toda caneta (Claude, ChatGPT texto/voz/Work, Cowork) roda antes de subir na main: ciclo mestre texto=voz, partida, validador de paridade, contraprova do validador e verificação geral",
+      "evidence_ref": "2026-09-26/27: canetas SOL/voz/Work/Claude costuraram e rasgaram PARITY_01 e o gatilho; portão travou envio falho (97e18b2 NAO_ENVIADO) e liberou só verde",
+      "observed_at": "2026-09-27T02:45:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "https://github.com/ServerVpss/CentralDark/pull/1562#issuecomment-5851904401",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "45081086821285c804abfa234c81f0884388e90be399d753acd364009c8c1e3e",
+        "fingerprint_material_count": 7,
+        "execution_commands": [],
+        "proof_commands": [
+          "python3 scripts/trigger-fabric/test_centraldark_master_cycle.py",
+          "python3 scripts/trigger-fabric/test_centraldark_full_trigger_boot.py",
+          "python3 scripts/trigger-fabric/validate_unified_surface_parity_contract.py",
+          "python3 scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py",
+          "python3 scripts/trigger-fabric/verify_repo_contract.py"
+        ],
+        "expected_results": [
+          "5 comandos exit 0"
+        ],
+        "expected_effect": "ALL_FIVE_GATE_COMMANDS_EXIT_0_BEFORE_PUSH",
+        "result_schema": "centraldark.proven-replay.result.v1",
+        "environment_bindings": [],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "python3 scripts/trigger-fabric/verify_repo_contract.py",
+        "self_test_result": "PASS",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false,
+        "fingerprint_material_files": [
+          "scripts/trigger-fabric/test_centraldark_master_cycle.py",
+          "scripts/trigger-fabric/centraldark_master_cycle.py",
+          "scripts/trigger-fabric/test_centraldark_full_trigger_boot.py",
+          "scripts/trigger-fabric/centraldark_full_trigger_boot.py",
+          "scripts/trigger-fabric/validate_unified_surface_parity_contract.py",
+          "scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py",
+          "scripts/trigger-fabric/verify_repo_contract.py"
+        ],
+        "fingerprint_material_rule": "<basename>=<git hash-object path>",
+        "replay_command": "python3 scripts/trigger-fabric/centraldark_full_trigger_boot.py replay-run --claim MULTI_PEN_MAIN_GATE_PATH --timeout 180 $(for f in scripts/trigger-fabric/test_centraldark_master_cycle.py scripts/trigger-fabric/centraldark_master_cycle.py scripts/trigger-fabric/test_centraldark_full_trigger_boot.py scripts/trigger-fabric/centraldark_full_trigger_boot.py scripts/trigger-fabric/validate_unified_surface_parity_contract.py scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py scripts/trigger-fabric/verify_repo_contract.py; do printf -- '--fingerprint-material %s=%s ' \"$(basename $f)\" \"$(git hash-object $f)\"; done)"
+      }
     }
   }
 }

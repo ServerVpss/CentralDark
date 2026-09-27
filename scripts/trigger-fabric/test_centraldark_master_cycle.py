@@ -232,6 +232,12 @@ class ContinuousDeltaContractTest(unittest.TestCase):
                 receipt = MODULE.resolve(phrase, chefe_source=True, input_mode=mode)
                 self.assertTrue(receipt["master_cycle_active"], (phrase, mode))
 
+    def test_exclamation_after_wake_word_still_dispatches(self):
+        for phrase in ("CentralDark! Faça o deploy", "centraldark!!! visualize"):
+            for mode in ("text", "voice"):
+                self.assertTrue(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"], (phrase, mode))
+        self.assertTrue(MODULE.resolve("!CENTRALDARK", chefe_source=True)["master_cycle_active"])
+
     def test_verbs_come_from_grammar_owner(self):
         self.assertIn("centraldark faça", MODULE.GRAMMAR_VERB_PHRASES)
         self.assertIn("centraldark contraprova", MODULE.GRAMMAR_VERB_PHRASES)
@@ -243,7 +249,8 @@ class ContinuousDeltaContractTest(unittest.TestCase):
                 self.assertFalse(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"], (phrase, mode))
 
     def test_discussion_and_negation_do_not_open_master(self):
-        for phrase in ("estou falando sobre #ACORDAR", "falei de centraldark faça ontem", "centraldark não faça nada"):
+        for phrase in ("estou falando sobre #ACORDAR", "falei de centraldark faça ontem", "centraldark não faça nada",
+                       "falei do centraldark visualize ontem"):
             for mode in ("text", "voice"):
                 self.assertFalse(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"], (phrase, mode))
 
