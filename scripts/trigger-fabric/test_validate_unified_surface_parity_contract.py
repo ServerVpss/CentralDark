@@ -138,6 +138,36 @@ class ParityValidatorCounterproof(unittest.TestCase):
                     "PLUGIN_DIRECTORY_MISS_NEQ_NOT_PUBLISHED: false")
         self.assert_fail("WRONG_VALUE")
 
+    RECEIPT_PATH = Path("docs/RECEIPTS/2026-09-26-CENTRALDARK-UNIFIED-SURFACE-PARITY-01.md")
+
+    def test_hidden_second_plugin_pass_fails(self) -> None:
+        self.mutate(self.RECEIPT_PATH, None, "PLUGIN_PUBLICATION_STATUS=PASS")
+        self.assert_fail("PLUGIN_PUBLICATION_STATUS_CONFLICT")
+
+    def test_plugin_pass_without_release_readback_fails(self) -> None:
+        for old, new in [
+            ("PLUGIN_PUBLICATION_STATUS=UNKNOWN", "PLUGIN_PUBLICATION_STATUS=PASS"),
+            ("PLUGIN_ID=UNKNOWN", "PLUGIN_ID=plg_x"),
+            ("PLUGIN_RELEASE_ID=UNKNOWN", "PLUGIN_RELEASE_ID=rel_1"),
+            ("PLUGIN_URL=UNKNOWN", "PLUGIN_URL=https://example.invalid/p"),
+            ("PLUGIN_SCOPE=UNKNOWN", "PLUGIN_SCOPE=casa"),
+        ]:
+            self.mutate(self.RECEIPT_PATH, old, new)
+        self.assert_fail("PLUGIN_RELEASE_READBACK")
+
+    def test_plugin_pass_with_full_identity_and_readback_passes(self) -> None:
+        for old, new in [
+            ("PLUGIN_PUBLICATION_STATUS=UNKNOWN", "PLUGIN_PUBLICATION_STATUS=PASS"),
+            ("PLUGIN_ID=UNKNOWN", "PLUGIN_ID=plg_x"),
+            ("PLUGIN_RELEASE_ID=UNKNOWN", "PLUGIN_RELEASE_ID=rel_1"),
+            ("PLUGIN_URL=UNKNOWN", "PLUGIN_URL=https://example.invalid/p"),
+            ("PLUGIN_SCOPE=UNKNOWN", "PLUGIN_SCOPE=casa"),
+            ("PLUGIN_RELEASE_READBACK=UNKNOWN", "PLUGIN_RELEASE_READBACK=rel_1@2026-09-27"),
+        ]:
+            self.mutate(self.RECEIPT_PATH, old, new)
+        code, out = self.run_validator()
+        self.assertEqual(code, 0, out)
+
     def test_negation_is_the_rule_not_the_violation(self) -> None:
         self.mutate(SKILL, None, "GEV/JEV nunca substitui Hermes")
         self.mutate(GRAMMAR, None, "NAO_CRIAR_CENTRALDARK_UNIFIED_SURFACE_PARITY_02")

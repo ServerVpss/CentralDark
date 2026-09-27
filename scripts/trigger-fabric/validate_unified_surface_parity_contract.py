@@ -253,14 +253,25 @@ def validate_intent_binding_json(path: Path, text: str) -> list[str]:
     return errors
 
 
+def _receipt_values(text: str, key: str) -> list[str]:
+    return [m.strip() for m in re.findall(rf"(?m)^\s*{re.escape(key)}=(.*)$", text)]
+
+
 def _receipt_value(text: str, key: str):
-    match = re.search(rf"(?m)^{re.escape(key)}=(.*)$", text)
-    return match.group(1).strip() if match else None
+    """Valor único; várias linhas com valores diferentes viram conflito, não a primeira."""
+    values = _receipt_values(text, key)
+    if not values:
+        return None
+    if len(set(values)) > 1:
+        return "CONFLICT:" + "|".join(sorted(set(values)))
+    return values[0]
 
 
 def validate_plugin_publication_receipt(path: Path, text: str) -> list[str]:
     errors: list[str] = []
     status = _receipt_value(text, "PLUGIN_PUBLICATION_STATUS")
+    if status and status.startswith("CONFLICT:"):
+        return [f"PLUGIN_PUBLICATION_STATUS_CONFLICT {path}: {status}"]
     if status not in {"UNKNOWN", "PASS", "BLOCKED"}:
         return [f"PLUGIN_PUBLICATION_STATUS_INVALID {path}: {status!r}"]
     if status == "PASS":
@@ -269,9 +280,11 @@ def validate_plugin_publication_receipt(path: Path, text: str) -> list[str]:
             "PLUGIN_RELEASE_ID": _receipt_value(text, "PLUGIN_RELEASE_ID"),
             "PLUGIN_URL": _receipt_value(text, "PLUGIN_URL"),
             "PLUGIN_SCOPE": _receipt_value(text, "PLUGIN_SCOPE"),
+            # contrato: pass_requires inclui current_release_readback
+            "PLUGIN_RELEASE_READBACK": _receipt_value(text, "PLUGIN_RELEASE_READBACK"),
         }
         for key, value in required.items():
-            if value in {None, "", "UNKNOWN", "NONE", "null"}:
+            if value in {None, "", "UNKNOWN", "NONE", "null"} or str(value).startswith("CONFLICT:"):
                 errors.append(f"PLUGIN_PUBLICATION_PROOF_INCOMPLETE {path}: {key}={value!r}")
         url = required.get("PLUGIN_URL")
         if url not in {None, "", "UNKNOWN", "NONE", "null"} and not str(url).startswith("https://"):
