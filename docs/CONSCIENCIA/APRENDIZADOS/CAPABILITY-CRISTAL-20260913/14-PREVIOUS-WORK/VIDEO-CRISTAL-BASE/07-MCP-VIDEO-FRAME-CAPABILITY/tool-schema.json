@@ -1,0 +1,54 @@
+{
+  "name": "video_frames_extract_local",
+  "description": "Extrai frames de um arquivo de vídeo local autorizado, gera hashes e manifesto. Não baixa URLs remotas.",
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "input_path"
+    ],
+    "properties": {
+      "input_path": {
+        "type": "string",
+        "description": "Caminho local para vídeo autorizado."
+      },
+      "output_dir": {
+        "type": "string",
+        "description": "Diretório de saída. Default dentro do workdir CentralDark."
+      },
+      "mode": {
+        "type": "string",
+        "enum": [
+          "all",
+          "fps",
+          "timestamps"
+        ],
+        "default": "fps"
+      },
+      "fps": {
+        "type": "number",
+        "minimum": 0.001,
+        "default": 1
+      },
+      "timestamps": {
+        "type": "array",
+        "items": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "image_format": {
+        "type": "string",
+        "enum": [
+          "png",
+          "jpg"
+        ],
+        "default": "png"
+      },
+      "max_frames": {
+        "type": "integer",
+        "minimum": 0,
+        "default": 0
+      }
+    }
+  }
+}

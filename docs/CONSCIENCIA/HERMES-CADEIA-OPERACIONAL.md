@@ -118,3 +118,34 @@ ACTION != PROOF
 DOCUMENTED != EXECUTED
 REALIDADE=JUDGE
 ```
+
+
+## 🧬 Reexecução determinística de caminho provado
+
+Hermes/Pivete não refaz investigação fechada quando existe receita válida.
+
+```text
+LOAD_PROVEN_RECIPE
+→ VERIFY_PROOF_KEY
+→ BIND_ENVIRONMENT
+→ EXECUTE_CANONICAL_SEQUENCE
+→ RUN_CANONICAL_PROOF
+→ COMPARE_RESULT_FORMAT_EFFECT
+→ MATCH = REUSE_CRYSTAL
+→ DIVERGENCE = NEW_DELTA
+```
+
+Regras do executor:
+
+```text
+EXECUTOR != NOVO_HERMES
+EXECUTOR != NOVA_AUTORIDADE
+EXECUTOR != NOVO_OWNER
+ONE_HERMES_LOGICAL=true
+N_EXECUTORS_ALLOWED=true
+ONE_WRITER_PER_SCOPE=true
+```
+
+Ambiente inacessível vira `UNKNOWN_BY_ACCESS` naquele eixo; Hermes continua nos outros eixos observáveis. Nenhum corpo sobrescreve outro automaticamente: GitHub, VPS e Casa são reconciliados antes de promoção ou substituição.
+
+Commit é exigido quando há mudança durável a preservar. Execução bem-sucedida sem delta de arquivo pode terminar apenas em receipt/prova.

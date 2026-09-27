@@ -1,0 +1,33 @@
+{
+  "schema": "centraldark.state-driven-narration.v1",
+  "owner": "HERMES-CORE",
+  "engine_parallel": false,
+  "narration_is_operational_rail": true,
+  "narration_is_progress_by_itself": false,
+  "state_fields": [
+    "mission_id",
+    "goal",
+    "position",
+    "owner",
+    "writer_scope",
+    "last_action",
+    "last_evidence",
+    "last_delta",
+    "current_hypothesis",
+    "current_state",
+    "residual",
+    "unknowns",
+    "next_cursor"
+  ],
+  "rules": {
+    "same_state_hash": "SUPPRESS_DUPLICATE_NARRATION_KEEP_GOAL_KEEP_NEXT_CURSOR_CONTINUE",
+    "new_state_hash": "NARRATE_DELTA_UPDATE_ROLLING_HANDOFF_CONTINUE",
+    "timestamp_only_change": "NO_MATERIAL_DELTA",
+    "unknown": "NOT_PASS"
+  },
+  "projection": {
+    "plugins": "OPTIONAL",
+    "hud": "DERIVED_ONLY"
+  },
+  "runtime_proof_required": true
+}

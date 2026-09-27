@@ -49,7 +49,7 @@ updated: 2026-06-29
 
 ## Regras de Ouro
 
-**Nunca:** mexer em área protegida sem "PERMITO PIVETE"
+**Nunca:** mexer em área protegida sem "PERMITO SEGREDO"
 **Sempre:** mostrar o erro + causa raiz + solução proposta antes de executar
 **Nunca:** adivinhar — se não tiver certeza, pedir mais contexto
 

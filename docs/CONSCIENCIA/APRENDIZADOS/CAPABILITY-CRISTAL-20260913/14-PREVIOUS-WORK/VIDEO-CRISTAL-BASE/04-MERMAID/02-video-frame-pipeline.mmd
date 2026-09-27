@@ -1,0 +1,10 @@
+flowchart LR
+    V[Local Authorized Video] --> H1[Source SHA-256]
+    H1 --> P[ffprobe preflight]
+    P --> X[Frame Extraction]
+    X --> F[Frames]
+    F --> H2[Frame SHA-256]
+    H2 --> M[Manifest]
+    M --> S[Semantic Tags / Vector]
+    S --> T[Trace + Evidence]
+    T --> G[Graph / Obsidian Projection]

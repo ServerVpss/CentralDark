@@ -1,0 +1,38 @@
+[
+  {
+    "test": "node_check:layout-core.mjs",
+    "pass": true,
+    "stderr": ""
+  },
+  {
+    "test": "node_check:graph-lens.js",
+    "pass": true,
+    "stderr": ""
+  },
+  {
+    "test": "node_check:dev-server.mjs",
+    "pass": true,
+    "stderr": ""
+  },
+  {
+    "test": "node_check:layout-core.test.mjs",
+    "pass": true,
+    "stderr": ""
+  },
+  {
+    "test": "layout_core_geometry",
+    "pass": true,
+    "stdout": "PASS layout-core: nucleus protected, ring spacing, edge detour",
+    "stderr": ""
+  },
+  {
+    "test": "local_site_http",
+    "pass": true,
+    "http": "200"
+  },
+  {
+    "test": "local_api_demo_http",
+    "pass": true,
+    "http": "200"
+  }
+]

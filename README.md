@@ -32,6 +32,37 @@ A identidade vigente da skill é resolvida pelo arquivo canônico acima e valida
 
 A skill `meta-lupa` deve ser carregada conforme o risco/contrato da missão. Sem prova obrigatória aplicável → `BOOT_BLOQUEADO`.
 
+## 🚀 REGRA OBRIGATÓRIA — MICRO-DEPLOY POR PASS COMPROVADO
+
+Toda IA, bot, Hermes, MCP, workflow, plugin ou executor autorizado deve herdar a regra canônica:
+
+```text
+CANONICAL_RULE=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
+TRIGGER_FABRIC_BINDING=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MICRO-DEPLOY-CONTINUO-BINDING.yml
+BOT_BINDING=apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml
+MEMORY_ANCHOR=docs/CONSCIENCIA/05-APRENDIZADOS/MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
+
+QUALQUER_PASS_COMPROVADO
+→ MICRO_DEPLOY_DO_ESCOPO_AFETADO
+→ HEALTH_OU_PROVA_RUNTIME
+→ RECEIPT_PR_MAE
+→ NEXT_TIK_TAK
+```
+
+Travas permanentes:
+
+```text
+PASS_VISUAL_BADGE_ONLY=false
+ACTION_REQUIRED_IS_NOT_PASS=true
+UNKNOWN_IS_NOT_PASS=true
+LOCAL_PROOF_WITH_RUNTIME_SCOPE_REQUIRES_RUNTIME_PROOF=true
+MERGED != DEPLOYED
+DOCUMENTED != EXECUTED
+REALIDADE_IS_JUDGE=true
+```
+
+Essa regra não autoriza restart global, segredo, force-push, blind reset ou deploy fora do escopo. Ela só obriga que o escopo com PASS comprovado avance com prova runtime/receipt quando aplicável.
+
 ## 🤖 BOOT UNIVERSAL — QUALQUER IA
 
 Qualquer IA, agente, plugin ou hub que abrir este repositório deve começar por:
@@ -95,3 +126,14 @@ Proibido: `text-white`, `bg-black`, `bg-[#...]`, gradientes roxo/índigo genéri
 - **Domínio oficial**: https://centralldark.com
 - **Painel de status**: https://status.centralldark.com
 - **Repositório**: `ServerVpss/CentralDark` (sincroniza automaticamente com a VPS em `/root/CentralDark/`)
+
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+
+```text
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+```
+
+Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.

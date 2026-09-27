@@ -77,6 +77,9 @@ test('Admin injeta biblioteca sanitizada sem permitir fechamento de script pelo 
     assert.equal(html.includes(dangerous), false);
     assert.equal(html.includes('\\u003c/script\\u003e'), true);
     assert.equal(html.includes('Escritório de padrões'), true);
+    assert.equal(html.includes('🎯 PADRÃO CENTRALDARK'), true);
+    assert.equal(html.includes('centraldarkPatternMonitor'), true);
+    assert.equal(html.includes('vermelho quando ≥80%'), true);
     assert.equal(html.includes('PATTERNS_AVAILABLE'), true);
   } finally {
     if (old === undefined) delete process.env.CENTRALDARK_PATTERN_LIBRARY_PATH;

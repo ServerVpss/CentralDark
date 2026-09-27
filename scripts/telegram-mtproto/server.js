@@ -1,4 +1,5 @@
-// Servico MTProto — login do Telegram como usuario (gramjs)
+// Servico MTProto — conta de usuario via Telegram API/MTProto direto (gramjs)
+// Nenhum subdominio CentralDark participa do transporte Telegram.
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -10,14 +11,21 @@ const { Api } = require('telegram');
 const API_ID = parseInt(process.env.TELEGRAM_APP_API_ID || '0', 10);
 const API_HASH = process.env.TELEGRAM_APP_API_HASH || '';
 const PORT = parseInt(process.env.PORT || '8790', 10);
-const DATA_DIR = process.env.MTPROTO_DATA_DIR || '/root/CentralDark/data/telegram-mtproto';
+const DATA_DIR = process.env.MTPROTO_DATA_DIR || '/root/CentralDark/secrets/telegram-mtproto';
 const SESSION_FILE = path.join(DATA_DIR, 'session.txt');
 
-if (!API_ID || !API_HASH) {
-  console.error('TELEGRAM_APP_API_ID / TELEGRAM_APP_API_HASH ausentes');
-  process.exit(1);
+const CONFIGURED = !!(API_ID && API_HASH);
+
+if (!CONFIGURED) {
+  console.warn('TELEGRAM_APP_API_ID / TELEGRAM_APP_API_HASH ausentes — MTProto sobe em modo CONFIG_BLOCKED');
 }
 fs.mkdirSync(DATA_DIR, { recursive: true });
+
+function requireConfigured(res) {
+  if (CONFIGURED) return true;
+  res.status(503).json({ ok: false, status: 'CONFIG_BLOCKED', error: 'TELEGRAM_APP_API_ID / TELEGRAM_APP_API_HASH ausentes' });
+  return false;
+}
 
 const app = express();
 app.use(cors({ origin: true, credentials: false }));
@@ -38,10 +46,11 @@ async function newClient(sessionString = '') {
   return client;
 }
 
-app.get('/health', (_req, res) => res.json({ ok: true, service: 'telegram-mtproto', hasSession: fs.existsSync(SESSION_FILE) }));
+app.get('/health', (_req, res) => res.json({ ok: true, service: 'telegram-mtproto', transport: 'TELEGRAM_MTPROTO_DIRECT', configured: CONFIGURED, status: CONFIGURED ? 'READY' : 'CONFIG_BLOCKED', hasSession: fs.existsSync(SESSION_FILE) }));
 
 app.get('/status', async (_req, res) => {
   try {
+    if (!CONFIGURED) return res.json({ ok: true, connected: false, status: 'CONFIG_BLOCKED' });
     if (!fs.existsSync(SESSION_FILE)) return res.json({ ok: true, connected: false });
     const s = fs.readFileSync(SESSION_FILE, 'utf8').trim();
     const client = await newClient(s);
@@ -60,6 +69,7 @@ app.get('/status', async (_req, res) => {
 
 app.post('/start', async (req, res) => {
   try {
+    if (!requireConfigured(res)) return;
     const phone = String(req.body && req.body.phone || '').trim();
     if (!/^\+?\d{8,15}$/.test(phone)) return res.status(400).json({ ok: false, error: 'telefone invalido (use +5511999999999)' });
     if (pending.has(phone)) {
@@ -83,6 +93,7 @@ app.post('/start', async (req, res) => {
 
 app.post('/confirm', async (req, res) => {
   try {
+    if (!requireConfigured(res)) return;
     const phone = String(req.body && req.body.phone || '').trim();
     const code = String(req.body && req.body.code || '').trim();
     const password = req.body && req.body.password ? String(req.body.password) : undefined;
@@ -113,7 +124,7 @@ app.post('/confirm', async (req, res) => {
     const me = { id: String(u.id), firstName: u.firstName, username: u.username, phone: u.phone };
     await client.disconnect();
     pending.delete(phone);
-    res.json({ ok: true, sessionString, me });
+    res.json({ ok: true, sessionSaved: true, me });
   } catch (e) {
     res.status(500).json({ ok: false, error: String(e && (e.errorMessage || e.message) || e) });
   }

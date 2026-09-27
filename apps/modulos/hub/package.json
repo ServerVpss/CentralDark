@@ -9,6 +9,7 @@
     "inventory:generate": "node scripts/generate-house-inventory.mjs",
     "prebuild": "node scripts/generate-house-inventory.mjs",
     "build": "tsc -b && vite build",
+    "postbuild": "node scripts/normalize-dist-permissions.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

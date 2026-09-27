@@ -45,7 +45,8 @@ invariants:
 render_contract:
   on_explicit_centraldark:
     header_first: true
-    header: "#CENTRALDARK > #ACORDAR"
+    header: "⭕ !AURÉOLA CANÔNICA"
+    opening_verse: "“Examinai tudo. Retende o bem.” — 1 Tessalonicenses 5:21"
     show_full_operational_chain_before_result: true
     show_current_phase: true
     show_multibussola_axis: true
@@ -106,6 +107,7 @@ full_display_chain:
   - POST_GREEN_LOCK
   - "!tlc23"
   - REGISTRA
+  - RASTRO
   - HANDOFF
   - BOOT
 

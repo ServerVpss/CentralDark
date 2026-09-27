@@ -1,0 +1,66 @@
+{
+  "base_zip": "CentralDark-Capability-Cristal-20260913.zip",
+  "base_sha256": "db9ff24ead3dfe20ad02d67a18abfa48cdc491a11612c48a34851747594e2107",
+  "evolution_label": "AGENTIC-SENIOR-CROSS-LINGUAL-ARSENAL50",
+  "capabilities_before": 124,
+  "capabilities_after": 165,
+  "capability_delta": 41,
+  "arsenal_critical_gates": 50,
+  "package_design_score_100": 100.0,
+  "runtime_evidence_score_100": 53.0,
+  "personal_weighted_score_before_10": 8.208,
+  "personal_weighted_score_after_10": 8.565,
+  "notes": [
+    "No claim of scientific AGI.",
+    "No live CentralDark mutation performed: connector was unavailable in this turn.",
+    "User-provided screenshots are preserved as snapshots and not promoted to live truth.",
+    "New multilingual behavior is converted into provenance/invariance capabilities rather than celebrated as intelligence by itself."
+  ],
+  "test_results": [
+    {
+      "test": "json_parse",
+      "status": "PASS",
+      "detail": "17 files; failures=0"
+    },
+    {
+      "test": "yaml_parse",
+      "status": "PASS",
+      "detail": "4 files; failures=0"
+    },
+    {
+      "test": "node_check",
+      "status": "PASS",
+      "detail": "2 mjs; failures=0"
+    },
+    {
+      "test": "bash_syntax",
+      "status": "PASS",
+      "detail": "1 sh; failures=0"
+    },
+    {
+      "test": "capability_unique_keys",
+      "status": "PASS",
+      "detail": "165 capabilities; duplicates=0"
+    },
+    {
+      "test": "secret_shape_scan_nonraw",
+      "status": "PASS",
+      "detail": "hits=0; values never printed"
+    },
+    {
+      "test": "base_sha256_match",
+      "status": "PASS",
+      "detail": "db9ff24ead3dfe20ad02d67a18abfa48cdc491a11612c48a34851747594e2107"
+    },
+    {
+      "test": "arsenal_50_count",
+      "status": "PASS",
+      "detail": "50"
+    },
+    {
+      "test": "evidence_snapshot_hashes",
+      "status": "PASS",
+      "detail": "20 evidence records"
+    }
+  ]
+}
