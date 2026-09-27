@@ -187,8 +187,10 @@ PASS:
   - regra anti-fake materializada
   - regra replay de cristal materializada
   - Voice Tool Binding nomeado como lacuna
+  - plugin privado publicado e relido pelo backend do Plugin Creator
+  - source portátil do plugin cristalizado em .agents/plugins/centraldark-unified-surface-parity/
 UNKNOWN:
-  - plugin/voice binding realmente exposto pela plataforma atual
+  - Voice binding realmente exposto pela plataforma atual
   - GEV/JEV real online/credencial/transporte
   - testes vivos na Casa após formatação
 BLOCKED:
@@ -273,22 +275,35 @@ Este PASS cobre somente a consistência estática entre contrato, skill e receip
 
 ## 11. Delta — publicação de plugin exige identidade observável
 
-Medição desta superfície: inventário de plugins pessoais próprios retornou vazio e a busca por CentralDark no diretório não retornou correspondência. Isso não prova ausência global: workspace, privado ou artefato ainda não publicado continuam possíveis.
+T0 desta superfície: inventário de plugins pessoais próprios retornou vazio. Em seguida foi gerado um pacote portátil seguindo o schema Agent Plugins, sem segredo embutido, com skill subordinada ao owner existente e MCP canônico `https://mcp.centralldark.com/mcp`.
 
 PLUGIN_ARTIFACT_CREATED != PLUGIN_PUBLISHED
 PLUGIN_DIRECTORY_MISS != PLUGIN_ABSENT
 PUBLISHED_PLUGIN_CLAIM_REQUIRES_ID_RELEASE_URL=true
 PLUGIN_DIRECTORY_MISS_NEQ_NOT_PUBLISHED=true
 
-PLUGIN_PUBLICATION_STATUS=UNKNOWN
-PLUGIN_ID=UNKNOWN
-PLUGIN_RELEASE_ID=UNKNOWN
-PLUGIN_URL=UNKNOWN
-PLUGIN_SCOPE=UNKNOWN
-PLUGIN_RELEASE_READBACK=UNKNOWN
-OWNED_PERSONAL_PLUGIN_COUNT=0
-PUBLIC_DIRECTORY_CENTRALDARK_MATCHES=0
+PLUGIN_PUBLICATION_STATUS=PASS
+PLUGIN_ID=plugins_6ab87b459ff08191a69311acd4c77d83
+PLUGIN_RELEASE_ID=pluginrel_6ab87b470c048191b7ed42e9be8761b6
+PLUGIN_URL=https://chatgpt.com/plugins/plugins_6ab87b459ff08191a69311acd4c77d83
+PLUGIN_SCOPE=USER
+PLUGIN_RELEASE_READBACK=pluginrel_6ab87b470c048191b7ed42e9be8761b6|is_current=true|version=0.1.0
+PLUGIN_DISCOVERABILITY=PRIVATE
+PLUGIN_SOURCE_ROOT=.agents/plugins/centraldark-unified-surface-parity/
+PLUGIN_ARCHIVE_SHA256=6561371aa73d7e2fc9e0642286fed474dee87331dee17ac39d3ce69a07f41e6c
 
-PASS de publicação exige plugin_id + release_id + plugin_url + leitura de volta do release atual. Plugin publicado também não prova Voice runtime exposto.
+Readback do backend:
+- metadata retornou o mesmo `plugin_id`, versão `0.1.0`, scope `USER` e `current_release_id`;
+- listagem de releases retornou o mesmo release como `is_current=true`;
+- arquivos `plugin.json`, `mcp.json` e `skills/centraldark-unified-surface-parity/SKILL.md` foram relidos do release atual;
+- o backend adicionou compatibilidade `.codex-plugin/plugin.json` e `.mcp.json` ao release sem alterar o owner canônico no repo.
 
-NEXT_CURSOR: localizar o ID/release retornado pelo Worker e contraprovar o source/release real
+PASS de publicação cobre identidade + release + URL + scope + leitura de volta. **Não** prova que a superfície Voice desta conta expõe o MCP, tool calls, tracing ou tokens.
+
+```yaml
+PLUGIN_PUBLICATION: PASS
+LIVE_VOICE_BINDING: UNKNOWN
+LIVE_TEXT_VOICE_SESSION_PARITY: UNKNOWN
+```
+
+NEXT_CURSOR: instalar/habilitar o plugin na superfície alvo quando o cliente oferecer essa ação, concluir OAuth do MCP se solicitado e executar a mesma ação em Texto e Voz; comparar SESSION_ID, TRACE_ID/TOOL_CALL_ID, usage/tokens, owner, resultado e receipt. Se Voice não expuser a capability, registrar PLATFORM_UNAVAILABLE.
