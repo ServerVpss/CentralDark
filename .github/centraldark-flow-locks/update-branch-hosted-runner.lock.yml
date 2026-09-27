@@ -1,0 +1,59 @@
+# 🔒 CentralDark Flow Lock — update-branch hosted runner
+# Owner: SEGREDO/CHEFE
+# Data: 2026-09-27
+# Motivo: regressão provada quando o fluxo perfeito de COSTURA foi trocado de ubuntu-latest para self-hosted offline.
+
+lock_id: CENTRALDARK_UPDATE_BRANCH_HOSTED_RUNNER_LOCK
+status: ACTIVE
+owner: SEGREDO/CHEFE
+source_receipt_pr_mother: 1562
+
+protected_workflow:
+  path: .github/workflows/pr-update-branch-deterministic.yml
+  job: update-branch
+  must_remain:
+    runs_on: ubuntu-latest
+  forbidden_without_chefe_explicit_approval:
+    - "runs-on: [self-hosted, Linux]"
+    - "runs-on: self-hosted"
+    - "GLOBAL_RUNNER_POLICY aplicado cegamente neste fluxo"
+
+why_locked:
+  proven_good_flow: |
+    main avança -> update-branch -> COSTURA -> PRs recebem main -> checks reacendem -> Gmail chove notificação.
+  proven_regression: |
+    ab33962d76e7d6b7a714b32051ca71d575d2fbeb trocou ubuntu-latest por [self-hosted, Linux].
+    Runners self-hosted estavam offline; resultado medido: 1440 queued / 0 in_progress.
+  guardiao_repair: |
+    38615b10cc94d2810cb741cea337027ade1ee3ad restaurou ubuntu-latest.
+    Run 36316338537 saiu da fila e entrou em in_progress.
+
+hybrid_future_mode:
+  allowed_only_when:
+    - CHEFE_APPROVES_HYBRID=true
+    - SELF_HOSTED_RUNNER_ONLINE_PROVEN=true
+    - FALLBACK_TO_UBUNTU_LATEST_PRESERVED=true
+    - UPDATE_BRANCH_FLOW_STILL_RUNS_WITHOUT_VPS=true
+  principle: "Quando a VPS voltar, o modo pode ser híbrido; nunca substituir o caminho hosted provado sem fallback."
+
+agent_rules:
+  claude_code:
+    may_read: true
+    may_report: true
+    must_not_change_runner: true
+    must_not_apply_global_self_hosted_policy_to_this_file: true
+  codex:
+    may_read: true
+    may_report: true
+    must_preserve_lock: true
+  all_agents:
+    - UNKNOWN != PASS
+    - QUEUED != RUNNING
+    - SELF_HOSTED_OFFLINE blocks self-hosted-only jobs
+    - HOSTED_UPDATE_BRANCH_FLOW_IS_PROVEN_CRITICAL_PATH
+    - DO_NOT_BREAK_THE_RAIN_OF_NOTIFICATIONS
+
+rollback_reference:
+  bad_commit_runner_change: ab33962d76e7d6b7a714b32051ca71d575d2fbeb
+  good_repair_commit: 38615b10cc94d2810cb741cea337027ade1ee3ad
+  current_required_runner: ubuntu-latest
