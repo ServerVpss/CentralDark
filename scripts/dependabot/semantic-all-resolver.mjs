@@ -66,7 +66,9 @@ for (let i = 0; i < lines.length; i += 1) {
   }
 }
 
-const resolved = out.join(newline);
+const normalizedOut = out.map((line) => line.replace(/[ \t]+$/g, ''));
+const resolved = normalizedOut.join(newline);
+console.log('TRAILING_WHITESPACE_NORMALIZED=1');
 if (/^(<<<<<<< |=======|>>>>>>> )/m.test(resolved)) {
   console.error(`SEMANTIC_ALL_MARKERS_LEFT path=${file}`);
   process.exit(4);
