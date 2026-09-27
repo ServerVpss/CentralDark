@@ -189,6 +189,91 @@ FORMAT_VERIFIED=SIM|NAO|UNVERIFIABLE
 
 O objetivo é preservar o **mental e a inteligência** contidos nas abas, não preservar bytes temporários do aplicativo.
 
+## Modo GARIMPO_UNIVERSAL — múltiplas canetas, um cristal
+
+`!GARIMPO_UNIVERSAL` é um **modo subordinado deste owner**, não uma skill/engine paralela. Ele existe para permitir que Chat, Voz, Work/Cowork, Code Agents, SOL, Hermes e outros motores autorizados garimpem o mesmo objetivo em paralelo sem fabricar verdades concorrentes.
+
+```text
+MULTI_SURFACE_PARALLEL_CANDIDATES=true
+MULTI_MODEL_PARALLEL_READERS=true
+ONE_CANONICAL_FINALIZER_PER_SCOPE=true
+PARALLEL_CANDIDATE_IS_NOT_CANONICAL_WRITE=true
+MULTIPLE_SURFACES_ARE_NOT_MULTIPLE_BRAINS=true
+MODEL_IS_REPLACEABLE=true
+REALITY_IS_JUDGE=true
+```
+
+Cada caneta entrega **candidato + proveniência**, nunca autoridade automática:
+
+```text
+ENGINE_ID
+SURFACE_ID
+SESSION_ID
+INTENT_ID
+OWNER
+CAPABILITY
+SCOPE
+FINDING
+EVIDENCE_REF
+COUNTERPROOF_REF
+STATUS
+```
+
+Identidade semântica para dedupe:
+
+```text
+SEMANTIC_IDENTITY = OWNER + CAPABILITY + SCOPE
+
+SAME_FINDING_WITHOUT_NEW_EVIDENCE=DROP_DUPLICATE
+ALREADY_PROVEN_AND_ABSORBED=NO_CHANGE
+HISTORICAL_ONLY=DO_NOT_PROMOTE
+UNKNOWN=DO_NOT_PROMOTE
+USEFUL_DELTA=ROUTE_TO_EXISTING_OWNER
+```
+
+Fluxo canônico:
+
+```text
+CHAT|VOICE|WORK|COWORK|CODE_AGENT|HERMES|SOL
+→ SESSION-INTELLIGENCE-HARVESTER
+→ CLASSIFY + DEDUPE
+→ REUSE_BEFORE_CREATE
+→ EXISTING_OWNER
+→ MINIMAL_DELTA
+→ PROOF
+→ INDEPENDENT_COUNTERPROOF
+→ CANONICAL_FINALIZER
+→ RECEIPT
+→ NEXT_CURSOR
+```
+
+“Várias canetas” significa liberdade de leitura, análise, teste e produção de candidatos. **Não** significa várias mutações canônicas concorrentes no mesmo escopo. O finalizador mede a ponta viva antes de promover, absorve apenas o delta sobrevivente e descarta rascunho obsoleto.
+
+Continuidade determinística:
+
+```text
+LAST_GOOD_STATE
+→ INPUT_DIFF
+→ REUSE_PROOF
+  OU
+→ TARGETED_REVALIDATION
+
+PROVEN_PATH
+→ REPLAY_RECIPE
+→ ADAPT_ONLY_ENVIRONMENT_BINDINGS
+→ SAME_PROOF_LOGIC
+→ COMPARE_EFFECT
+→ DIVERGED ? NEW_DELTA : REUSE_CRYSTAL
+```
+
+Atalho operacional:
+
+```text
+!CENTRALDARK !GARIMPO_UNIVERSAL
+```
+
+Esse atalho entra no Trigger Fabric, preserva a intenção do CHEFE/SEGREDO e escolhe somente as fontes materialmente pertinentes. Ele não obriga varredura total quando o pedido é estreito.
+
 ## Output Format
 
 Não inventar probabilidade/confiança numérica. Use classe epistemológica + evidência observável.
