@@ -17,8 +17,9 @@ CONTRACT = ROOT / "docs" / "ARQUITETURA" / "CENTRALDARK-UNIFIED-SURFACE-PARITY-0
 INVOCATION_GRAMMAR = ROOT / "docs" / "ARQUITETURA" / "CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md"
 SKILL = ROOT / ".agents" / "skills" / "centraldark-unified-surface-parity" / "SKILL.md"
 RECEIPT = ROOT / "docs" / "RECEIPTS" / "2026-09-26-CENTRALDARK-UNIFIED-SURFACE-PARITY-01.md"
+INVOCATION_GRAMMAR_RECEIPT = ROOT / "docs" / "RECEIPTS" / "2026-09-27-CENTRALDARK-INVOCATION-GRAMMAR-01.md"
 
-REQUIRED_FILES = [CONTRACT, INVOCATION_GRAMMAR, SKILL, RECEIPT]
+REQUIRED_FILES = [CONTRACT, INVOCATION_GRAMMAR, SKILL, RECEIPT, INVOCATION_GRAMMAR_RECEIPT]
 
 REQUIRED_MARKERS = {
     CONTRACT: [
@@ -85,6 +86,18 @@ REQUIRED_MARKERS = {
         "voice_only_session_or_trace: forbidden",
         "UNKNOWN",
     ],
+    INVOCATION_GRAMMAR_RECEIPT: [
+        "# RECEIPT — CENTRALDARK_INVOCATION_GRAMMAR_01",
+        "Owner pai: `CENTRALDARK_UNIFIED_SURFACE_PARITY_01`",
+        "CENTRALDARK_INVOCATION_GRAMMAR_01: true",
+        "MESMA_INTENCAO → MESMO_FUNIL → MESMO_OWNER → MESMA_PROVA",
+        "NAO_CONFUNDIR_VISUALIZE_COM_EXECUTE",
+        "NAO_CARREGAR_TUDO_POR_PADRAO",
+        "NORMALIZED_INTENT_SHARED=true",
+        "PLATFORM_UNAVAILABLE_WHEN_TOOL_NOT_EXPOSED=true",
+        "validador exige o subcontrato e o receipt filho",
+        "NEXT_CURSOR:",
+    ],
 }
 
 FORBIDDEN_MARKERS = {
@@ -109,6 +122,11 @@ FORBIDDEN_MARKERS = {
     RECEIPT: [
         "já testado na Casa após formatação",
         "GEV/JEV real online PASS",
+    ],
+    INVOCATION_GRAMMAR_RECEIPT: [
+        "CENTRALDARK_UNIFIED_SURFACE_PARITY_02",
+        "runtime paralelo de voz criado",
+        "Voice binding real PASS",
     ],
 }
 
@@ -203,6 +221,7 @@ def main() -> int:
     print(f"INVOCATION_GRAMMAR={INVOCATION_GRAMMAR.relative_to(ROOT)}")
     print(f"SKILL={SKILL.relative_to(ROOT)}")
     print(f"RECEIPT={RECEIPT.relative_to(ROOT)}")
+    print(f"INVOCATION_GRAMMAR_RECEIPT={INVOCATION_GRAMMAR_RECEIPT.relative_to(ROOT)}")
     return 0
 
 
