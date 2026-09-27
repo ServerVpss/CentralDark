@@ -22,8 +22,13 @@ INTENT_BINDING = ROOT / ".agents" / "INTENT-DEPLOY-BINDING.json"
 TRIGGER_FAMILY_OWNER = ROOT / "docs" / "SEGURANCA" / "ADM-GATILHOS-OPERACIONAIS.json"
 RECEIPT = ROOT / "docs" / "RECEIPTS" / "2026-09-26-CENTRALDARK-UNIFIED-SURFACE-PARITY-01.md"
 INVOCATION_GRAMMAR_RECEIPT = ROOT / "docs" / "RECEIPTS" / "2026-09-27-CENTRALDARK-INVOCATION-GRAMMAR-01.md"
+PLUGIN_SOURCE_ROOT = ROOT / ".agents" / "plugins" / "centraldark-unified-surface-parity"
+PLUGIN_MANIFEST = PLUGIN_SOURCE_ROOT / "plugin.json"
+PLUGIN_MCP = PLUGIN_SOURCE_ROOT / "mcp.json"
+PLUGIN_BUNDLED_SKILL = PLUGIN_SOURCE_ROOT / "skills" / "centraldark-unified-surface-parity" / "SKILL.md"
+PLUGIN_SOURCE = PLUGIN_SOURCE_ROOT / "SOURCE.json"
 
-REQUIRED_FILES = [CONTRACT, INVOCATION_GRAMMAR, SKILL, VOICE_CLASSIFIER, INTENT_ROUTER, INTENT_BINDING, TRIGGER_FAMILY_OWNER, RECEIPT, INVOCATION_GRAMMAR_RECEIPT]
+REQUIRED_FILES = [CONTRACT, INVOCATION_GRAMMAR, SKILL, VOICE_CLASSIFIER, INTENT_ROUTER, INTENT_BINDING, TRIGGER_FAMILY_OWNER, RECEIPT, INVOCATION_GRAMMAR_RECEIPT, PLUGIN_MANIFEST, PLUGIN_MCP, PLUGIN_BUNDLED_SKILL, PLUGIN_SOURCE]
 
 REQUIRED_MARKERS = {
     CONTRACT: [
@@ -150,6 +155,39 @@ REQUIRED_MARKERS = {
         "NEXT_CURSOR:",
     ],
 }
+
+REQUIRED_MARKERS.update({
+    PLUGIN_MANIFEST: [
+        '\"name\": \"centraldark-unified-surface-parity\"',
+        '\"version\": \"0.1.0\"',
+        '\"repository\": \"https://github.com/ServerVpss/CentralDark\"',
+        '\"displayName\": \"CentralDark Unified Surface\"',
+        '\"capabilities\": [\"Read\", \"Write\"]',
+    ],
+    PLUGIN_MCP: [
+        '\"mcpServers\": {',
+        '\"centraldark\": {',
+        '\"type\": \"streamable-http\"',
+        '\"url\": \"https://mcp.centralldark.com/mcp\"',
+    ],
+    PLUGIN_BUNDLED_SKILL: [
+        '# CentralDark Unified Surface Parity',
+        'distribution/binding adapter, not a second owner',
+        'PLATFORM_UNAVAILABLE_WHEN_TOOL_NOT_EXPOSED=true',
+        'NO_SECOND_PARSER=true',
+        'VOICE_REUSES_EXISTING_CLASSIFIER=true',
+        'Successful plugin publication does not itself prove Voice runtime exposure',
+    ],
+    PLUGIN_SOURCE: [
+        '\"canonical_owner\": \"CENTRALDARK_UNIFIED_SURFACE_PARITY_01\"',
+        '\"published_plugin_id\": \"plugins_6ab87b459ff08191a69311acd4c77d83\"',
+        '\"published_release_id\": \"pluginrel_6ab87b470c048191b7ed42e9be8761b6\"',
+        '\"published_scope\": \"USER\"',
+        '\"published_discoverability\": \"PRIVATE\"',
+        '\"generated_artifact_is_owner\": false',
+    ],
+})
+
 
 FORBIDDEN_MARKERS = {
     CONTRACT: [
