@@ -307,3 +307,30 @@ LIVE_TEXT_VOICE_SESSION_PARITY: UNKNOWN
 ```
 
 NEXT_CURSOR: instalar/habilitar o plugin na superfície alvo quando o cliente oferecer essa ação, concluir OAuth do MCP se solicitado e executar a mesma ação em Texto e Voz; comparar SESSION_ID, TRACE_ID/TOOL_CALL_ID, usage/tokens, owner, resultado e receipt. Se Voice não expuser a capability, registrar PLATFORM_UNAVAILABLE.
+
+---
+
+## 12. Delta — paridade funcional Voz = Texto provada por SHA (2026-09-27)
+
+O CHEFE apontou, com razão, que "UNKNOWN" geral escondia uma prova que já existe. São duas afirmações diferentes e agora ficam separadas:
+
+```text
+VOICE_FUNCTIONAL_TOOL_PARITY=PASS
+VOICE_GITHUB_READ_WRITE_COMMIT_PR=PASS
+VOICE_TEXT_SAME_SESSION_ID_TRACE_TOKENS=UNKNOWN
+FUNCTIONAL_PARITY != SESSION_FIELD_IDENTITY
+```
+
+Prova da parte funcional — a sessão de Voz executou as mesmas ações reais que o Texto, na mesma `main`, com a mesma lei de rastro (sessão de Voz observada nas capturas do CHEFE; commits conferidos na `main`):
+
+| Ação real pela Voz | Evidência |
+|---|---|
+| editar código e commitar na main | `6bf7bf9` — une leitores de gatilho texto/voz |
+| editar código e commitar na main | `df76277` — partida entrega o mestre ao resolvedor canônico |
+| abrir PR com 4 commits e testes | PR #1700 (`7bff816`) |
+| escrever recibo no repositório | `d9ceed6`, `0dcd625` |
+| registrar no livro-razão | #1562 comentário 5852115919 |
+
+O que continua UNKNOWN é só identidade de campo: mesmo `SESSION_ID`, trilha ordenada e contagem de tokens do modelo entre Voz e Texto. Isso é detalhe da plataforma, medido só por comparação direta campo a campo; não reduz a capacidade funcional provada acima.
+
+Crédito: execução pela caneta de Voz; separação da afirmação pela caneta Claude a partir da correção do CHEFE.
