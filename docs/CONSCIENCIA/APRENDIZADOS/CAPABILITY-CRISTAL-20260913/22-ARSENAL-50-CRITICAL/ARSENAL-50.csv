@@ -1,0 +1,51 @@
+id,gate,domain,package_score_0_4,runtime_evidence_score_0_4,reason
+A01,One system / no parallel core,Architecture,4,3,base package invariants
+A02,Owner per capability,Architecture,4,2,owner model exists; complete runtime ownership not fully remeasured
+A03,REUSE_BEFORE_CREATE,Architecture,4,3,multiple explicit examples including YouTube
+A04,Tool preflight before analysis,Architecture,4,2,contract present; connector availability varies by turn
+A05,Current state > history,Architecture,4,3,package rule + screenshot distinctions
+A06,Writer != Judge,Governance,4,2,contract present; runtime enforcement not remeasured
+A07,Technical MetaLupa pre-write gate,Governance,4,1,specified; historical WRITE_BEFORE_BEGIN gap
+A08,One writer per scope,Governance,4,2,documented/historical
+A09,Isolated worktree for mutable mission,Governance,4,2,pattern historically used; not universal runtime proof
+A10,Clean canonical main invariant,Governance,4,1,"new contract, runtime not applied"
+A11,Secret gate before commit,Security,4,2,"contracts present, runtime paths vary"
+A12,Metadata-only secret handling,Security,4,3,screenshots and package rules
+A13,Force-push forbidden,Git,4,3,explicit house rule
+A14,Source/dist/runtime separation,MCP,4,4,"screenshots explicitly show source+dist yes, active catalog old"
+A15,MCP active catalog staleness detection,MCP,4,2,new capability; evidence of stale catalog exists
+A16,YouTube transcript capability reuse,MCP,4,3,source/dist existence shown; runtime promotion pending
+A17,YouTube tool active runtime proof,MCP,4,1,screenshots say active process does not announce yet
+A18,OAuth blocker typed + resume condition,MCP,4,3,screenshots show blocker/owner/missing dependency/resume condition
+A19,One public MCP entry,MCP,4,2,architecture/historical evidence; current turn live MCP unavailable
+A20,Supabase live schema/RPC introspection,Data,4,2,investigation shown; missing RPC identified
+A21,Consumer contract drift detection,Data,4,2,hub-mission consumer vs schema wound visible
+A22,Migration vs consumer fallback gate,Data,4,1,"decision path described, runtime resolution pending"
+A23,Parallel reader execution,Agents,4,3,visible SOL/P2/P3 lanes
+A24,Receipt provenance after parallel join,Agents,4,1,new contract; join proof incomplete
+A25,Worker provider/model/language metadata,Agents,4,1,new contract; screenshots do not prove emitted receipt fields
+A26,Multilingual output preservation,Language,4,2,behavior observed; package now specifies preservation
+A27,Language divergence detection,Language,4,1,new capability
+A28,Semantic invariance across languages,Language,4,1,"benchmark specified, not run"
+A29,Cross-lingual contradiction detection,Language,4,1,new capability
+A30,"Translation is projection, not truth",Language,4,2,new explicit invariant
+A31,Event-first Dream Review,Memory,4,2,existing contract; live scheduler not remeasured now
+A32,Re-emergence detection,Memory,4,1,candidate delta
+A33,Delta-write memory,Memory,4,1,candidate delta
+A34,Conflict/supersede provenance,Memory,4,1,partial
+A35,No-model-wake without delta,Memory,4,2,contract exists
+A36,Graphify fail-closed,Graph,4,3,screenshots state stale-map false green was removed
+A37,Graph freshness tied to head/source,Graph,4,1,new contract
+A38,Post-commit graph refresh receipt,Graph,4,2,hook behavior visible; receipt hardening partial
+A39,Graph semantic relation != authority,Graph,4,3,explicit screenshot rule
+A40,PM2 process != boot persistence,Runtime,4,3,screenshots explicitly distinguish
+A41,Graph-panel listener health,Runtime,4,2,wound/status shown; final resolution not proven
+A42,Pause → webhook resume path,Runtime,4,2,webhook env/auto-pause inspection shown
+A43,Goal judge required for strong autonomy,Autonomy,4,1,screenshots show provider/model unset; new gate
+A44,Human frontier exact resume condition,Autonomy,4,3,OAuth blocker screenshot demonstrates
+A45,Runner nested-git contamination detection,CI,4,3,screenshots identify scratch/grok-build .git issue
+A46,Runner state carryover detection,CI,4,2,investigation points to persistent runner residue
+A47,Provisional fix != permanent fix,CI,4,3,screenshot explicitly distinguishes
+A48,Tool cancel/error/blocked distinct,Observability,4,2,mobile screenshot shows cancellation wording; formal contract new
+A49,Package structural integrity / parseability,Artifact,4,4,actual tests run during build
+A50,Architecture score != runtime proof score,Evaluation,4,4,dual-score methodology enforced in package

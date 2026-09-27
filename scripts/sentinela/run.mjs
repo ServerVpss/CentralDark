@@ -14,6 +14,9 @@ const REPO = process.env.REPO_ALVO || 'ServerVpss/CentralDark';
 const SNAPSHOT_DIR = 'docs/sentinela';
 const SNAPSHOT_FILE = path.join(SNAPSHOT_DIR, 'last-snapshot.json');
 const REPORT_FILE = path.join(SNAPSHOT_DIR, 'last-report.md');
+const SYSTEM_SENTINEL = path.resolve('scripts/trigger-fabric/system_sentinel.py');
+const SYSTEM_SENTINEL_CONTRACT = path.resolve('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SYSTEM-SENTINEL.yml');
+const RUN_T0 = new Date().toISOString();
 
 const CANONICAL = Object.freeze({
   sentinela: '🛡️ SENTINELA',
@@ -71,6 +74,39 @@ async function checkEndpoint(ep) {
 
 function hash(s) {
   return createHash('sha1').update(s).digest('hex').slice(0, 10);
+}
+
+function sha256(s) {
+  return createHash('sha256').update(String(s)).digest('hex');
+}
+
+function dispatchEventFromEnv() {
+  const source = String(process.env.SENTINEL_API_SOURCE || '').trim();
+  if (!source) return null;
+  return {
+    source_surface: source,
+    event_class: String(process.env.SENTINEL_API_EVENT_CLASS || 'STATE_CHANGED').trim(),
+    state: String(process.env.SENTINEL_API_STATE || 'STATE_CHANGED').trim(),
+    target: String(process.env.SENTINEL_API_TARGET || '').trim(),
+    owner: String(process.env.SENTINEL_API_OWNER || '').trim(),
+    head_sha: String(process.env.SENTINEL_API_HEAD_SHA || '').trim(),
+    evidence_ref: String(process.env.SENTINEL_API_EVIDENCE_REF || '').trim(),
+    next_cursor: String(process.env.SENTINEL_API_NEXT_CURSOR || '').trim(),
+  };
+}
+
+function runFixedRoute(payload) {
+  const stdout = execFileSync(
+    'python3',
+    [SYSTEM_SENTINEL, '--route-json', JSON.stringify(payload)],
+    {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+      env: process.env,
+      maxBuffer: 2 * 1024 * 1024,
+    },
+  );
+  return JSON.parse(stdout);
 }
 
 function ghIssueExists(titleHash) {
@@ -178,11 +214,79 @@ const driftDivergencia = toDivergencia(driftEvidence);
 if (driftDivergencia) divergencias.push(driftDivergencia);
 const recoveryNote = describeRecovery(previousSnapshot, driftEvidence);
 
+const dispatchEvent = dispatchEventFromEnv();
+const contractHash = existsSync(SYSTEM_SENTINEL_CONTRACT)
+  ? sha256(readFileSync(SYSTEM_SENTINEL_CONTRACT, 'utf8'))
+  : '';
+const inputsHash = sha256(JSON.stringify(
+  dispatchEvent
+    ? { dispatch: dispatchEvent }
+    : {
+        endpoints: endpointsResult.map((item) => ({
+          name: item.name,
+          status: item.status,
+          cors: item.cors || null,
+        })),
+        workflowsFailures24h: wfCount,
+        drift: {
+          status: driftEvidence.status,
+          code: driftEvidence.code,
+          shaLocal: driftEvidence.shaLocal || null,
+          shaOrigin: driftEvidence.shaOrigin || null,
+          ahead: driftEvidence.ahead ?? null,
+          behind: driftEvidence.behind ?? null,
+          dirty: driftEvidence.dirty ?? null,
+        },
+      },
+));
+const localFixedPoint = !dispatchEvent && divergencias.length === 0 && driftEvidence.status === 'OK';
+const routeInput = {
+  source_surface: dispatchEvent?.source_surface || 'SYSTEM_SENTINEL_RUNNER',
+  event_class: dispatchEvent?.event_class || (localFixedPoint ? 'FIXED_POINT' : 'STATE_CHANGED'),
+  state: dispatchEvent?.state || (localFixedPoint ? 'FIXED_POINT_LOCAL' : 'STATE_CHANGED'),
+  target: dispatchEvent?.target || 'CENTRALDARK_SENTINELA',
+  owner: dispatchEvent?.owner || 'scripts/sentinela/run.mjs',
+  inputs_hash: inputsHash,
+  config_hash: contractHash,
+  head_sha: dispatchEvent?.head_sha || driftEvidence.shaOrigin || process.env.GITHUB_SHA || '',
+  security_boundary: 'SELF_HOSTED_SENTINEL_READ_ONLY_GITHUB_API',
+  counterproof: localFixedPoint ? 'PASS' : 'UNKNOWN',
+  reality_judge: localFixedPoint ? 'PASS' : 'UNKNOWN',
+  t0: RUN_T0,
+  t1: new Date().toISOString(),
+  evidence_ref: dispatchEvent?.evidence_ref || `sha256:${inputsHash}`,
+  next_cursor: dispatchEvent?.next_cursor || (localFixedPoint ? 'WAIT_FOR_MATERIAL_DELTA' : 'REMEASURE_AFFECTED_CHAIN_ONLY'),
+  fixed_point_scope: 'SENTINEL_ROUTE_LOCAL',
+};
+
+let deterministicRoute;
+try {
+  deterministicRoute = runFixedRoute(routeInput);
+} catch (error) {
+  deterministicRoute = {
+    schema: 'centraldark.sentinel-fixed-route.v1',
+    proof_state: 'NOT_PROVEN',
+    decision: 'RUN_DETERMINISTIC_ROUTE',
+    reason: 'SENTINEL_KERNEL_ROUTE_FAILED',
+    next_cursor: 'REPAIR_SENTINEL_KERNEL_ROUTE',
+    error: String(error?.stderr || error?.message || error).slice(0, 1200),
+  };
+  divergencias.push({
+    area: 'Sentinela-Route',
+    bot: 'codex',
+    sev: 'p1',
+    titulo: 'Rota determinística do Sentinela não produziu receipt',
+    detalhe: deterministicRoute.error,
+  });
+}
+
 const snapshot = {
   at: new Date().toISOString(),
   endpoints: endpointsResult,
   workflowsFailures24h: wfCount,
   vpsDrift: driftEvidence,
+  apiEvent: dispatchEvent,
+  deterministicRoute,
   divergencias: divergencias.length,
 };
 writeFileSync(SNAPSHOT_FILE, JSON.stringify(snapshot, null, 2));
@@ -262,7 +366,16 @@ ${divergencias.length === 0 ? '_Nenhuma divergência. Tudo verde._' : divergenci
 - Status: \`${driftEvidence.status}\` (${driftEvidence.code})
 - ${driftEvidence.motivo}
 ${recoveryNote ? `- ${recoveryNote}` : ''}
+
+## Rota determinística / TIK-TAK
+
+- Decisão: \`${deterministicRoute.decision || 'UNKNOWN'}\`
+- Proof state: \`${deterministicRoute.proof_state || 'UNKNOWN'}\`
+- Motivo: \`${deterministicRoute.reason || 'UNKNOWN'}\`
+- Fingerprint: \`${deterministicRoute.dependency_fingerprint || 'UNKNOWN'}\`
+- NEXT_CURSOR: \`${deterministicRoute.next_cursor || 'UNKNOWN'}\`
+- API transport: \`${deterministicRoute.api_transport || 'UNKNOWN'}\`
 `;
 writeFileSync(REPORT_FILE, report);
 
-console.log(`Sentinela rodou. Divergências: ${divergencias.length}. Issues novas: ${abertas.filter((a) => a.nova).length}.`);
+console.log(`Sentinela rodou. Divergências: ${divergencias.length}. Issues novas: ${abertas.filter((a) => a.nova).length}. Rota: ${deterministicRoute.decision || 'UNKNOWN'}.`);

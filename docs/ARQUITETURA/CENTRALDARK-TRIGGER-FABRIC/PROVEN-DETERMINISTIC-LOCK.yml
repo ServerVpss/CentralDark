@@ -29,6 +29,8 @@ invariants:
   no_new_information: REUSE_PROOF
   failed_candidate: REFUTED_MINERAL
   unresolved_candidate: UNRESOLVED_MINERAL
+  human_is_not_crystal_transport: true
+  machine_receipt_must_persist_in_vps_or_repo_owner: true
 
 lock_identity:
   key_material: [CLAIM_KEY, OWNER]
@@ -95,7 +97,36 @@ canonical_flow:
   - FIXED_POINT
   - POST_GREEN_LOCK
   - REGISTRA
+  - RASTRO
   - BOOT
+
+executable_recipe_binding:
+  recipe_projection: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-EXECUTABLE-RECIPE.yml
+  status: MACHINE_PROJECTION_OF_THIS_OWNER
+  creates_new_owner: false
+  purpose: >-
+    Guardar a receita executavel do caminho ja provado para o proximo executor
+    carregar a mesma sequencia, adaptar somente bindings de ambiente, rodar a
+    mesma prova e comparar resultado/formato/efeito antes de decidir entre
+    DELTA_NOVO e REUTILIZA_CRISTAL.
+  required_chain:
+    - CAMINHO_JA_PROVADO
+    - SELAR_RECEITA_EXECUTAVEL
+    - GUARDAR_FINGERPRINT
+    - PROXIMO_EXECUTOR_CARREGA_A_RECEITA
+    - ADAPTA_SOMENTE_BINDINGS_DO_AMBIENTE
+    - EXECUTA_A_MESMA_SEQUENCIA
+    - RODA_A_MESMA_PROVA
+    - COMPARA_RESULTADO_FORMATO_EFEITO
+    - DIVERGIU_DELTA_NOVO
+    - NAO_DIVERGIU_REUTILIZA_CRISTAL
+  environment_bindings_are_not_canonical_semantics: true
+  same_fingerprint_same_effect_reuses_crystal: true
+  changed_effect_creates_targeted_delta: true
+  unknown_difference_is_not_pass: true
+  human_handoff_block_forbidden: true
+  runtime_storage_required: true
+  runtime_storage_owner: /root/CentralDark/.artifacts/system-sentinel/receipts
 
 promotion:
   proven_learning_flow:
@@ -127,6 +158,10 @@ fixed_point:
     - FIXED_POINT
     - HUMAN_FRONTIER
     - BLOCKED_WITH_EXPLICIT_CAUSE
+  requires:
+    - SOUL_SYNC_CURRENT
+  soul_stale: FIXED_POINT_FORBIDDEN
+  soul_sync_owner: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#2.4
   infinite_retry_without_information_gain: FORBIDDEN
   reopen_entire_system_for_local_delta: FORBIDDEN
   invalidate_only_dependent_claims: true
@@ -550,6 +585,7 @@ proven_path_executable_recipe_contract_2026_09_26:
     DOCUMENTED_IS_NOT_EXECUTABLE_RECIPE: true
     RECEIPT_IS_NOT_PROOF: true
     FINGERPRINT_MATCH_IS_NOT_RUNTIME_PASS: true
+    TESTED_ONCE_IS_NOT_REPLAY_PROVEN: true
   required_recipe_fields:
     - owner
     - objective
@@ -571,3 +607,12 @@ proven_path_executable_recipe_contract_2026_09_26:
     next executor loads PROVEN-CLAIMS.lock.json, matches owner/objective/
     fingerprint, adapts declared bindings only, runs same sequence and proof,
     then classifies divergence as DELTA_NEW or no divergence as REUSE_CRYSTAL.
+
+
+rastro_lock:
+  token: "🔏 !RASTRO"
+  owner: AGENTS.md
+  response_without_trace: INVALID
+  write_claim_fields: [COMMIT_SHA, PATH, LINK, READBACK]
+  memory_claim_requires_location: true
+  ledger_1562_same_turn_for_direct_main: true

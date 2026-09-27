@@ -330,3 +330,33 @@ Skill: voice-semantic-classifier (auto-loaded)
 - MERGE-PATTERNS-CRYSTALLIZED: `docs/ARQUITETURA/MERGE-PATTERNS-CRYSTALLIZED.md` (uses this classifier)
 - LEIA-ME-IA.md: Points to this skill
 - Personal context: `personal_context_remember` (memory integration point)
+---
+
+## 15. Binding canônico — CENTRALDARK_INVOCATION_GRAMMAR_01
+
+Este classifier continua sendo o owner existente de voz. Não nasce parser paralelo.
+
+```text
+CENTRALDARK_INVOCATION_GRAMMAR_01=true
+CANONICAL_INVOCATION_GRAMMAR=docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md
+PARENT_OWNER=CENTRALDARK_UNIFIED_SURFACE_PARITY_01
+INTENT_ROUTER_OWNER=.agents/skills/centraldark-intent-deploy-router/SKILL.md
+NO_SECOND_PARSER=true
+RAW_VOICE_TRANSCRIPT_PRESERVED=true
+NORMALIZED_INTENT_SHARED=true
+TEXT_AND_VOICE_SHARE_SEMANTIC_ACTION=true
+PLATFORM_UNAVAILABLE_WHEN_TOOL_NOT_EXPOSED=true
+```
+
+Dispatch mínimo herdado do subcontrato:
+
+```text
+CentralDark visualize ...   → OBSERVE_OR_RENDER              → mutation=false
+CentralDark faça ...        → EXECUTE_IF_AUTHORIZED_SCOPE    → mutation=true
+CentralDark continue ...    → RESUME_NEXT_CURSOR
+CentralDark cristalize ...  → WRITE_TO_EXISTING_OWNER
+CentralDark contraprova ... → RUN_OR_DESIGN_COUNTERPROOF
+```
+
+A wake word seleciona o funil pertinente; ela não carrega todas as capacidades por ritual. Voz normaliza a intenção para a mesma ação semântica usada pelas outras superfícies e só então escolhe ferramenta.
+

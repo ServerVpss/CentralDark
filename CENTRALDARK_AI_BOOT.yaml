@@ -9,6 +9,8 @@ CENTRALDARK_AI_BOOT:
   governance: LOADED
   context_reconciliation: LOADED
   history_preservation: ACTIVE
+  unified_surface_parity_contract: LOADED
+  unified_surface_parity_skill: LOADED
   source_of_truth: "ServerVpss/CentralDark + runtime medido"
   observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"
   alignment: "SEGREDO/CHEFE > SOL > PIVETE/HERMES + ESPECIALISTAS"
@@ -335,10 +337,23 @@ CENTRALDARK_AI_BOOT:
     normal_architecture_build: "FLOW_CONTINUES_WITH_REUSED_PROOF"
     visual_design_refactor: "NON_BLOCKING_BY_DEFAULT"
     already_proved_same_fingerprint: "PASSAGE_OPEN"
+    proven_crystal_registra: "PASSAGE_OPEN_TO_MAIN_WITH_AFFECTED_CONE_ONLY"
+    unchanged_proven_crystal_full_ci_reproof: false
+    new_binding_targeted_test: "REQUIRED_WHEN_APPLICABLE"
+    main_readback_and_receipt: "REQUIRED"
     security_hardening: "EXPLICIT_GATE_WHEN_SECURITY_BOUNDARY_IS_BEING_HARDENED_OR_EXPOSED"
     destructive_or_irreversible: "AUTHORITY_AND_ROLLBACK_REQUIRED"
     post_deploy_remeasurement: "ALWAYS_MEASURE_RESULT_BECAUSE_DEPLOY_CHANGES_STATE"
     principle: "GATE_SERVE_PARA_SEGURANCA_E_FALSIFICACAO; NAO_PARA_REPROVAR_INVARIANTE_IMUTAVEL_A_CADA_PASSO"
+
+  centraldark_invocation_semantics:
+    master: "CENTRALDARK"
+    on_demand: true
+    accepted_examples: ["CentralDark faca", "CentralDark visualize", "CentralDark mede", "CentralDark pluga", "CentralDark costura", "CentralDark testa", "CentralDark registra"]
+    route: "INTENT_CORE -> AUTO_GRILL -> EXISTING_OWNER -> CAPABILITY -> ACTION -> COUNTERPROOF -> RECEIPT"
+    load_only_relevant_capabilities: true
+    surface_parity_owner: docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml
+    same_semantics_across_text_voice_work_desktop: true
 
   current_product_sequence:
     adaptive: true
@@ -780,3 +795,12 @@ proven_path_replay_lock:
     RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH: true
     NO_NEW_SYSTEM_FOR_PROVEN_PATH_REUSE: true
 
+
+lei_do_rastro:
+  owner: AGENTS.md
+  gatilho: "🔏 !RASTRO"
+  RESPONSE_WITHOUT_TRACE: INVALID
+  EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES: "COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)"
+  EVERY_MEMORY_CLAIM_NAMES_WHERE: true
+  LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN: true
+  APPLIES_TO_ALL_ENGINES: true

@@ -1,0 +1,16 @@
+sequenceDiagram
+    participant H as Hermes
+    participant M as CentralDark MCP
+    participant V as video_frames_extract_local
+    participant F as ffmpeg/ffprobe
+    participant E as Evidence
+
+    H->>M: tool call(local path, mode)
+    M->>V: validate request
+    V->>F: probe source
+    F-->>V: fps/duration/frames
+    V->>F: extract authorized local frames
+    F-->>V: images
+    V->>E: hashes + manifest
+    E-->>M: receipt
+    M-->>H: result

@@ -68,3 +68,15 @@ Aguardando autorização para editar: SIM
 > Abra ou inspecione a branch `pivete/dev` e leia integralmente `CLAUDE.md` antes de fazer qualquer coisa.
 
 Se `pivete/dev`, `CLAUDE.md`, `AGENTS.md` ou a hierarquia oficial não estiverem disponíveis, pare e informe ao Pivete. Não improvise regras e não use a `main` como área de desenvolvimento.
+
+
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+
+```text
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+```
+
+Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
