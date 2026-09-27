@@ -64,3 +64,12 @@
 - [x] Corrigir estados e SHAs falsamente vivos; falta de fonte continua `UNKNOWN`.
 - [x] Rodar Prettier, TypeScript, lint e build no conjunto reconciliado.
 - [ ] Contraprovar o novo SHA na URL publicada e login OAuth com navegador real.
+
+## Retomada após convergência (2026-09-27)
+
+- [x] Remedir `ServerVpss/CentralDark@main` e comparar o owner arquivo por arquivo.
+- [x] Preservar localmente Roteador e manifesto mais avançados da main.
+- [x] Finalizar `/auth/callback` público com PKCE, erro e redirecionamento seguro.
+- [x] Conceder admin server-side à conta real solicitada, sem senha ou promoção pelo cliente.
+- [ ] Confirmar e definir a senha pelo e-mail de recuperação da própria conta.
+- [ ] Provar `/sala-controle` com a sessão real dessa conta.
