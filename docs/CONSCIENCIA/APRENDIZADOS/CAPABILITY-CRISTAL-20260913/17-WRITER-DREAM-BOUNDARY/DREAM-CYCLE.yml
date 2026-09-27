@@ -1,0 +1,55 @@
+version: 1
+contract: CENTRALDARK_DREAM_CYCLE
+owner: scripts/memory-linker
+new_daemon: false
+new_scheduler: false
+direct_canonical_mutation: false
+apply_allowed_from_dream: false
+
+triggers:
+  event_first:
+    - SESSION_END
+    - HANDOFF
+    - MATERIAL_FAILURE
+    - COUNTERPROOF_FAIL
+    - RETRY_THRESHOLD
+  scheduler_backstop:
+    enabled: true
+    reuse_existing_house_scheduler: true
+    run_only_when_delta_exists: true
+    no_new_information_no_model_wake: true
+
+stages:
+  - evidence_intake
+  - reflection_candidate
+  - pattern_discovery
+  - recurrence_detection
+  - known_failure_match
+  - reemergence_detection
+  - delta_write_memory
+  - conflict_and_supersede
+  - deltoutil
+  - candidate_queue
+  - metalupa
+  - conditional_grill_me
+  - forja
+  - independent_reality_judge
+  - eligible_promotion
+
+grill_me:
+  default: false
+  invoke_when:
+    - expensive_decision
+    - ambiguous_decision
+    - hard_to_reverse
+    - high_impact_architecture_change
+
+memory_semantics:
+  log_is_knowledge: false
+  failure_is_rule: false
+  reflection_is_truth: false
+  candidate_is_canonical: false
+  near_duplicate: NO_CHANGE
+  similar: WRITE_RESIDUAL_DELTA
+  contradicted: CONFLICT
+  superseded: ARCHIVE_WITH_PROVENANCE

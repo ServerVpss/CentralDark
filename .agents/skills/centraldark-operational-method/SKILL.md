@@ -47,6 +47,20 @@ CENTRALDARK_AI_BOOT:
   writer: "NONE|nome-do-escritor-atual"
 ```
 
+## 🔏 Lei do Rastro
+
+```text
+TRIGGER=🔏 !RASTRO
+OWNER=AGENTS.md
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+APPLIES_TO_ALL_ENGINES=true
+```
+
+O rastro fecha o ciclo operacional; não cria segundo workflow, owner ou memória.
+
 ## Principio central: Menos é mais = precisao, nao brevidade
 
 | MENOS (cortar) | MAIS (garantir) |

@@ -1,0 +1,100 @@
+{
+  "method": "weighted competency score; evidence-based, not certification",
+  "before_weighted": 8.208,
+  "after_weighted": 8.565,
+  "delta": 0.357,
+  "rows": [
+    {
+      "dimension": "Arquitetura de sistemas agentic/IA",
+      "weight": 12,
+      "before": 8.8,
+      "after": 9.0,
+      "delta": 0.2
+    },
+    {
+      "dimension": "Debug / investigação / causa real",
+      "weight": 10,
+      "before": 9.1,
+      "after": 9.3,
+      "delta": 0.2
+    },
+    {
+      "dimension": "Governança / invariantes / zero-regressão",
+      "weight": 10,
+      "before": 9.0,
+      "after": 9.3,
+      "delta": 0.3
+    },
+    {
+      "dimension": "Orquestração multiagente / MCP / skills",
+      "weight": 10,
+      "before": 8.8,
+      "after": 9.1,
+      "delta": 0.3
+    },
+    {
+      "dimension": "Pensamento de plataforma / sistema único",
+      "weight": 10,
+      "before": 8.7,
+      "after": 9.0,
+      "delta": 0.3
+    },
+    {
+      "dimension": "Git / CI/CD / VPS",
+      "weight": 8,
+      "before": 7.8,
+      "after": 8.4,
+      "delta": 0.6
+    },
+    {
+      "dimension": "Observabilidade / evidência / provenance",
+      "weight": 8,
+      "before": 8.6,
+      "after": 9.0,
+      "delta": 0.4
+    },
+    {
+      "dimension": "Memória / RAG / trace semântico",
+      "weight": 8,
+      "before": 8.3,
+      "after": 8.8,
+      "delta": 0.5
+    },
+    {
+      "dimension": "Implementação de código sustentada",
+      "weight": 8,
+      "before": 6.8,
+      "after": 7.2,
+      "delta": 0.4
+    },
+    {
+      "dimension": "Test engineering formal",
+      "weight": 6,
+      "before": 6.7,
+      "after": 7.2,
+      "delta": 0.5
+    },
+    {
+      "dimension": "Algoritmos / estruturas de dados / CS",
+      "weight": 4,
+      "before": 5.5,
+      "after": 5.7,
+      "delta": 0.2
+    },
+    {
+      "dimension": "Performance / concorrência / distribuídos",
+      "weight": 3,
+      "before": 6.0,
+      "after": 6.8,
+      "delta": 0.8
+    },
+    {
+      "dimension": "Engenharia de conhecimento",
+      "weight": 3,
+      "before": 9.0,
+      "after": 9.3,
+      "delta": 0.3
+    }
+  ],
+  "interpretation": "global profile moved by new evidence mostly in CI/VPS, observability, memory/trace and orchestration; conventional CS foundations remain the biggest evidence gap"
+}

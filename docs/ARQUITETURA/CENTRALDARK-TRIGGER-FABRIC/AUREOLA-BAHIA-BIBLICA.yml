@@ -107,6 +107,7 @@ full_display_chain:
   - POST_GREEN_LOCK
   - "!tlc23"
   - REGISTRA
+  - RASTRO
   - HANDOFF
   - BOOT
 
