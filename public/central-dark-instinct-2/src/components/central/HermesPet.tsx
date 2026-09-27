@@ -715,13 +715,13 @@ export function HermesFlutuante() {
   return (
     <div
       data-hermes-flutuante
-      className="pointer-events-none fixed bottom-3 z-40 flex flex-col items-end gap-2 print:hidden sm:bottom-5"
+      className="pointer-events-none fixed bottom-2 z-20 flex max-w-16 flex-col items-end gap-1 opacity-75 print:hidden sm:bottom-5 sm:z-40 sm:max-w-none sm:gap-2 sm:opacity-100"
       style={{ left: `${x}px` }}
     >
       {visivel && (
         <div className="animate-[flutuar_4.5s_ease-in-out_infinite] motion-reduce:animate-none">
           <SpriteInstintoSuperior
-            largura={typeof window !== "undefined" && window.innerWidth < 640 ? 72 : 132}
+            largura={typeof window !== "undefined" && window.innerWidth < 640 ? 48 : 132}
             apenasMovimento={movimentoFlutuante}
             quadroForcado={controle.quadro}
             reproduzindo={controle.reproduzindo}
