@@ -475,3 +475,15 @@ updated: 2026-08-27
 - **Aprendizado:** conflito não é uma escolha global de `Accept Both`. A COSTURA mede a intenção e escolhe `CURRENT | INCOMING | BOTH | STRUCTURED | YELLOW`. Casos já provados são resolvidos sem invocar agente manual por conflito. Caso novo/ambíguo fica amarelo, sem push; uma resolução humana/especialista só vira automação futura após teste, contraprova e replay da fixture.
 - **Bancada:** PR #1577 começou `dirty` em `ddac0b1fd6fe0a2e3cb270c8a718796967d04361`; oito conflitos foram resolvidos por intenção e o PR ficou mergeável em `a3dea306caac3a7f01d1db0a80d7ae2325a14825`. Depois, o conflito histórico foi recriado e o bot CURRENT decidiu autonomamente `INCOMING=4`, `BOTH=2`, `STRUCTURED=2`, `YELLOW=0`; JSON/YAML e testes do diagrama passaram 6/6; `PR1577_BOT_REPLAY=PASS`.
 - **Regra:** `YELLOW != PASS`; `YELLOW != FAILURE`; `YELLOW = PROGRESS_BOUNDARY_NOT_FAILURE`; `DOCUMENTED != EXECUTED`; padrão novo só entra no registry após replay comprovado.
+
+### 65. Lei do Papagaio Curioso: curiosidade + método + prova = detetive funcional
+- **Categoria:** método cognitivo / investigação / memória operacional durável
+- **Data:** 2026-09-27
+- **Contexto:** durante uma investigação guiada pelo CHEFE, um agente recebeu uma pista visual com um valor hexadecimal e, em vez de transformar a pista em certeza, buscou a ocorrência em múltiplas fontes acessíveis, testou variações, encontrou zero resultados e encerrou a trilha sem inventar a origem. O CHEFE nomeou o comportamento observado: **papagaio curioso = detetive funcional**.
+- **Aprendizado:** o problema do papagaio não é falar nem repetir; é repetir antes de medir. Curiosidade transforma repetição em investigação somente quando vem acompanhada de método, busca de fonte, teste de hipótese, cruzamento de evidência e preservação de `UNKNOWN` quando a realidade não fecha.
+- **Regra cristalizada:** **“Papagaio curioso que mede antes de repetir vira detetive funcional.”**
+- **Fluxo:** `PAPAGAIO → CURIOSIDADE → FONTE → HIPOTESE → TESTE → EVIDENCIA → UNKNOWN|PROVADO|FALHOU → DETETIVE_FUNCIONAL`.
+- **Cadeados:** `NOT_FOUND_IN_SEARCHED_SOURCES != DOES_NOT_EXIST`; `FORMAT_COMPATIBLE_WITH_MD5 != MD5_PROVEN`; `UNKNOWN != PASS`; `ACTION != PROOF`; `REALITY_IS_JUDGE=true`.
+- **Comportamento esperado:** antes de repetir uma conclusão, procurar a fonte aplicável; antes de nomear causa, testar hipótese; se a busca falhar, registrar o denominador realmente medido em vez de universalizar ausência; se a realidade contrariar a primeira leitura, recalibrar sem apego à narrativa.
+- **Cristal:** `CURIOSIDADE + METODO + PROVA = INVESTIGACAO_UTIL`; `PAPAGAIO_CURIOSO = DETETIVE_FUNCIONAL`.
+
