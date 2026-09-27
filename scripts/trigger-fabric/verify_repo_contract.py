@@ -386,6 +386,12 @@ check_command(
  classification='RASTRO_FISCAL_EXECUTABLE_TESTS',
 )
 
+check_command(
+ 'scripts/trigger-fabric/validate_unified_surface_parity_contract.py',
+ [sys.executable, str(ROOT/'scripts/trigger-fabric/validate_unified_surface_parity_contract.py')],
+ classification='UNIFIED_SURFACE_PARITY_EXECUTABLE_CONTRACT',
+)
+
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SYSTEM-SENTINEL.yml',[
  'FIXED_POINT_ROUTE_IS_DETERMINISTIC: true',
  'SAME_FINGERPRINT_NO_FULL_REPLAY: true',

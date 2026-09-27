@@ -208,6 +208,16 @@ surface_parity:
       - fake_plugin_publish_claim
       - fake_artifact_link_claim
 
+claim_readback:
+  binding: scripts/trigger-fabric/rastro_fiscal.py
+  CLAIM_WITHOUT_COMMIT_ON_MAIN: INVALID
+  VALIDATED_CLAIM_REQUIRES_VALIDATOR_EXIT_0: true
+  causal_example: >
+    2026-09-26: uma superfície relatou "validou o contrato", mas o validador
+    saía FAIL (marcador proibido por trecho casava com a negação "não substitui
+    Hermes", e marcadores exigidos não batiam com o texto real). Relato sem
+    exit 0 não é PASS.
+
 execution_strategy:
   mode: hybrid
   worker_cloud_code:
