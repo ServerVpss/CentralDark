@@ -1,5 +1,3 @@
-[Reading 495 lines from start (total: 495 lines, 0 remaining)]
-
 import { useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -495,5 +493,3 @@ export function SistemaCentralDark({ estado, atualizando, atualizar }: SistemaCe
     </Tabs>
   );
 }
-
-[executed on device: SEGREDO (db22d900-db4f-449a-b775-016ae15deefb)]
