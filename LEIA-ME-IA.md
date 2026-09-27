@@ -545,6 +545,29 @@ Tailscale
 
 `DISPLAY_SHORT_LABEL != TECHNICAL_IDENTITY`: a interface pode mostrar um rótulo curto por espaço, mas tooltip, detalhe, status expandido ou resposta técnica deve preservar o nome canônico do componente.
 
+## 3.2 👑🪬 Gatilho de executor da Casa
+
+Toda engine CentralDark deve reconhecer o gatilho explícito `!EXECUTOR_CENTRALDARK` e carregar:
+
+`docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md`
+
+O nome histórico do arquivo preserva a origem da cristalização no ChatGPT, mas o contrato operacional é portátil para todas as engines.
+
+```text
+ALL_ENGINES_CAN_RECOGNIZE_EXECUTOR_TRIGGER=true
+TRIGGER=!EXECUTOR_CENTRALDARK
+TRIGGER_DOES_NOT_GRANT_ACCESS=true
+TRIGGER_DOES_NOT_EXPAND_AUTHORITY=true
+PHYSICAL_HOUSE_EXECUTION_REQUIRES_AUTHORIZED_TOOL=true
+PRIMARY_HOUSE_TOOL=Remote Desktop Commander
+NO_HOUSE_ACCESS=CAPABILITY_UNAVAILABLE
+UNKNOWN_HOUSE_ACCESS=UNKNOWN
+```
+
+Quando a ferramenta autorizada da Casa estiver disponível, o modo prefere executar o menor delta local em vez de devolver tutorial ao CHEFE, seguido de backcheck, reteste, Reality Judge e readback.
+
+Quando a ferramenta não estiver disponível, a IA pode entender o método e preservar a intenção, mas não pode alegar execução física.
+
 ## 4. Reconciliação antes de criar
 
 ```text
