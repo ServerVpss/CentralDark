@@ -268,3 +268,26 @@ DESKTOP_TRACE_AND_USAGE_PROBE: PASS
 ```
 
 Este PASS cobre somente a consistência estática entre contrato, skill e receipt. Não declara binding de Voz nem paridade viva entre sessões.
+
+---
+
+## 11. Delta — publicação de plugin exige identidade observável
+
+Medição desta superfície: inventário de plugins pessoais próprios retornou vazio e a busca por CentralDark no diretório não retornou correspondência. Isso não prova ausência global: workspace, privado ou artefato ainda não publicado continuam possíveis.
+
+PLUGIN_ARTIFACT_CREATED != PLUGIN_PUBLISHED
+PLUGIN_DIRECTORY_MISS != PLUGIN_ABSENT
+PUBLISHED_PLUGIN_CLAIM_REQUIRES_ID_RELEASE_URL=true
+PLUGIN_DIRECTORY_MISS_NEQ_NOT_PUBLISHED=true
+
+PLUGIN_PUBLICATION_STATUS=UNKNOWN
+PLUGIN_ID=UNKNOWN
+PLUGIN_RELEASE_ID=UNKNOWN
+PLUGIN_URL=UNKNOWN
+PLUGIN_SCOPE=UNKNOWN
+OWNED_PERSONAL_PLUGIN_COUNT=0
+PUBLIC_DIRECTORY_CENTRALDARK_MATCHES=0
+
+PASS de publicação exige plugin_id + release_id + plugin_url + leitura de volta do release atual. Plugin publicado também não prova Voice runtime exposto.
+
+NEXT_CURSOR: localizar o ID/release retornado pelo Worker e contraprovar o source/release real

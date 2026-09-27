@@ -42,6 +42,12 @@ REQUIRED_MARKERS = {
         "shared_ordered_trace: true",
         "same_structured_outcome: true",
         "forbid_voice_only_session_or_trace: true",
+        "plugin_publication_gate:",
+        "PLUGIN_ARTIFACT_CREATED_NE_PLUGIN_PUBLISHED: true",
+        "PLUGIN_DIRECTORY_MISS_NEQ_NOT_PUBLISHED: true",
+        "PUBLISHED_PLUGIN_CLAIM_REQUIRES_ID_RELEASE_URL: true",
+        "PLUGIN_SCOPE_MUST_BE_OBSERVED: true",
+        "VOICE_BINDING_PUBLISHED_NE_VOICE_RUNTIME_EXPOSED: true",
     ],
     INVOCATION_GRAMMAR: [
         "# CENTRALDARK_INVOCATION_GRAMMAR_01",
@@ -122,6 +128,13 @@ REQUIRED_MARKERS = {
         "NEXT_CURSOR:",
         "same_canonical_SESSION_ID: true",
         "voice_only_session_or_trace: forbidden",
+        "PLUGIN_PUBLICATION_STATUS=",
+        "PLUGIN_ID=",
+        "PLUGIN_RELEASE_ID=",
+        "PLUGIN_URL=",
+        "PLUGIN_SCOPE=",
+        "PLUGIN_DIRECTORY_MISS_NEQ_NOT_PUBLISHED=true",
+        "PUBLISHED_PLUGIN_CLAIM_REQUIRES_ID_RELEASE_URL=true",
         "UNKNOWN",
     ],
     INVOCATION_GRAMMAR_RECEIPT: [
@@ -181,6 +194,11 @@ REQUIRED_VALUES = {
         "forbid_voice_only_session_or_trace": "true",
         "CLAIM_WITHOUT_COMMIT_ON_MAIN": "INVALID",
         "VALIDATED_CLAIM_REQUIRES_VALIDATOR_EXIT_0": "true",
+        "PLUGIN_ARTIFACT_CREATED_NE_PLUGIN_PUBLISHED": "true",
+        "PLUGIN_DIRECTORY_MISS_NEQ_NOT_PUBLISHED": "true",
+        "PUBLISHED_PLUGIN_CLAIM_REQUIRES_ID_RELEASE_URL": "true",
+        "PLUGIN_SCOPE_MUST_BE_OBSERVED": "true",
+        "VOICE_BINDING_PUBLISHED_NE_VOICE_RUNTIME_EXPOSED": "true",
     },
 }
 
@@ -232,6 +250,32 @@ def validate_intent_binding_json(path: Path, text: str) -> list[str]:
     }:
         if required not in required_skills:
             errors.append(f"MISSING_CANONICAL_SKILL {path}: {required}")
+    return errors
+
+
+def _receipt_value(text: str, key: str):
+    match = re.search(rf"(?m)^{re.escape(key)}=(.*)$", text)
+    return match.group(1).strip() if match else None
+
+
+def validate_plugin_publication_receipt(path: Path, text: str) -> list[str]:
+    errors: list[str] = []
+    status = _receipt_value(text, "PLUGIN_PUBLICATION_STATUS")
+    if status not in {"UNKNOWN", "PASS", "BLOCKED"}:
+        return [f"PLUGIN_PUBLICATION_STATUS_INVALID {path}: {status!r}"]
+    if status == "PASS":
+        required = {
+            "PLUGIN_ID": _receipt_value(text, "PLUGIN_ID"),
+            "PLUGIN_RELEASE_ID": _receipt_value(text, "PLUGIN_RELEASE_ID"),
+            "PLUGIN_URL": _receipt_value(text, "PLUGIN_URL"),
+            "PLUGIN_SCOPE": _receipt_value(text, "PLUGIN_SCOPE"),
+        }
+        for key, value in required.items():
+            if value in {None, "", "UNKNOWN", "NONE", "null"}:
+                errors.append(f"PLUGIN_PUBLICATION_PROOF_INCOMPLETE {path}: {key}={value!r}")
+        url = required.get("PLUGIN_URL")
+        if url not in {None, "", "UNKNOWN", "NONE", "null"} and not str(url).startswith("https://"):
+            errors.append(f"PLUGIN_PUBLICATION_URL_INVALID {path}: {url!r}")
     return errors
 
 
@@ -322,6 +366,8 @@ def validate_file(path: Path) -> list[str]:
         errors.extend(validate_route_subset_of_owner(path, text))
     if path == INTENT_BINDING:
         errors.extend(validate_intent_binding_json(path, text))
+    if path == RECEIPT:
+        errors.extend(validate_plugin_publication_receipt(path, text))
     return errors
 
 

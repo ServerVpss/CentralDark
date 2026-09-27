@@ -218,6 +218,18 @@ claim_readback:
     Hermes", e marcadores exigidos não batiam com o texto real). Relato sem
     exit 0 não é PASS.
 
+plugin_publication_gate:
+  PLUGIN_ARTIFACT_CREATED_NE_PLUGIN_PUBLISHED: true
+  PLUGIN_DIRECTORY_MISS_NEQ_NOT_PUBLISHED: true
+  PUBLISHED_PLUGIN_CLAIM_REQUIRES_ID_RELEASE_URL: true
+  PLUGIN_SCOPE_MUST_BE_OBSERVED: true
+  VOICE_BINDING_PUBLISHED_NE_VOICE_RUNTIME_EXPOSED: true
+  pass_requires: [plugin_id, release_id, plugin_url, current_release_readback]
+  missing_identifiers_status: UNKNOWN
+  rule: >
+    Codigo, ZIP, manifest ou archive nao prova plugin publicado. PASS exige
+    identidade, release, URL e readback observaveis no escopo real.
+
 execution_strategy:
   mode: hybrid
   worker_cloud_code:

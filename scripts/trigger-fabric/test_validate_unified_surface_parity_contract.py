@@ -26,6 +26,7 @@ GRAMMAR = Path("docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocatio
 SKILL = Path(".agents/skills/centraldark-unified-surface-parity/SKILL.md")
 VOICE_CLASSIFIER = Path(".claude/skills/synced/voice-semantic-classifier/SKILL.md")
 INTENT_ROUTER = Path(".agents/skills/centraldark-intent-deploy-router/SKILL.md")
+RECEIPT = Path("docs/RECEIPTS/2026-09-26-CENTRALDARK-UNIFIED-SURFACE-PARITY-01.md")
 
 
 def validated_files() -> list[Path]:
@@ -126,6 +127,16 @@ class ParityValidatorCounterproof(unittest.TestCase):
     def test_route_claimed_as_full_family_fails(self) -> None:
         self.mutate(GRAMMAR, "ROUTE_ABOVE_IS_SUBSET_OF_OWNER=true", "ROUTE_ABOVE_IS_SUBSET_OF_OWNER=false")
         self.assert_fail("ROUTE_ABOVE_IS_SUBSET_OF_OWNER")
+
+    def test_plugin_publication_pass_requires_identity_release_url(self) -> None:
+        self.mutate(RECEIPT, "PLUGIN_PUBLICATION_STATUS=UNKNOWN", "PLUGIN_PUBLICATION_STATUS=PASS")
+        self.assert_fail("PLUGIN_PUBLICATION_PROOF_INCOMPLETE")
+
+    def test_plugin_directory_miss_cannot_become_absence_proof(self) -> None:
+        self.mutate(CONTRACT,
+                    "PLUGIN_DIRECTORY_MISS_NEQ_NOT_PUBLISHED: true",
+                    "PLUGIN_DIRECTORY_MISS_NEQ_NOT_PUBLISHED: false")
+        self.assert_fail("WRONG_VALUE")
 
     def test_negation_is_the_rule_not_the_violation(self) -> None:
         self.mutate(SKILL, None, "GEV/JEV nunca substitui Hermes")
