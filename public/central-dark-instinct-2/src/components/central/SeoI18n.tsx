@@ -58,11 +58,7 @@ export function SeoI18n() {
 
     setLink("canonical", url);
     LANGS.forEach((l) =>
-      setLink(
-        "alternate",
-        l.code === "pt-BR" ? `${BASE}/` : `${BASE}/?lang=${l.code}`,
-        l.code,
-      ),
+      setLink("alternate", l.code === "pt-BR" ? `${BASE}/` : `${BASE}/?lang=${l.code}`, l.code),
     );
     setLink("alternate", `${BASE}/`, "x-default");
   }, [lang, t]);

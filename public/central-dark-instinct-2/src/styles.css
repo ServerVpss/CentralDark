@@ -40,6 +40,8 @@
 
   --color-gold: var(--gold);
   --color-gold-soft: var(--gold-soft);
+  --color-ember: var(--ember);
+  --color-forge-light: var(--forge-light);
   --color-neon-blue: var(--neon-blue);
   --color-neon-green: var(--neon-green);
   --color-neon-purple: var(--neon-purple);
@@ -48,6 +50,8 @@
 
   --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+  --font-forge-heading: "Space Mono", ui-monospace, monospace;
+  --font-forge-body: "Rubik", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
@@ -65,6 +69,8 @@
 
   --gold: oklch(0.82 0.15 88);
   --gold-soft: oklch(0.68 0.12 84);
+  --ember: oklch(0.67 0.21 39);
+  --forge-light: oklch(0.93 0.08 88);
   --neon-blue: oklch(0.72 0.17 245);
   --neon-green: oklch(0.79 0.19 155);
   --neon-purple: oklch(0.68 0.2 305);
@@ -186,6 +192,97 @@
   box-shadow: var(--shadow-blue);
 }
 
+/* Busca compacta para as áreas técnicas, inspirada no índice sem copiar sua pele. */
+@utility technical-search {
+  min-height: 2.75rem;
+  border: 1px solid color-mix(in oklab, var(--gold) 20%, var(--border));
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--surface) 92%, var(--gold) 8%);
+  padding: 0 0.875rem;
+  box-shadow: 0 12px 36px -28px color-mix(in oklab, var(--gold) 42%, transparent);
+}
+
+/* Timeline Forja: energia dourada contida e conectores de precisão */
+@utility forge-trail {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--gold-soft) 10%,
+    var(--gold) 48%,
+    var(--ember) 76%,
+    transparent
+  );
+  box-shadow: 0 0 12px color-mix(in oklab, var(--gold) 42%, transparent);
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+    background: linear-gradient(to bottom, transparent 0%, var(--forge-light) 48%, transparent 58%);
+    background-size: 100% 34%;
+    animation: forge-flow 5.5s ease-in-out infinite;
+  }
+}
+
+@utility forge-stage {
+  position: relative;
+  border: 1px solid color-mix(in oklab, var(--gold) 15%, var(--border));
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    145deg,
+    color-mix(in oklab, var(--surface) 92%, var(--gold) 8%),
+    var(--surface)
+  );
+  box-shadow: var(--shadow-deep);
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), border-color 420ms ease, box-shadow 420ms ease;
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    content: "";
+    opacity: 0;
+    box-shadow: inset 0 0 22px color-mix(in oklab, var(--ember) 10%, transparent);
+    transition: opacity 420ms ease;
+  }
+
+  .group:hover & {
+    border-color: color-mix(in oklab, var(--gold) 42%, var(--border));
+    box-shadow: var(--shadow-deep), 0 0 24px color-mix(in oklab, var(--gold) 10%, transparent);
+  }
+
+  .group:hover &::after {
+    opacity: 1;
+  }
+}
+
+@utility forge-connector {
+  background: linear-gradient(90deg, var(--gold), color-mix(in oklab, var(--gold) 12%, transparent));
+  opacity: 0.58;
+  transition: opacity 420ms ease, filter 420ms ease;
+
+  .group:hover & {
+    opacity: 1;
+    filter: drop-shadow(0 0 4px var(--gold));
+  }
+}
+
+@utility forge-node {
+  z-index: 10;
+  border: 2px solid var(--gold);
+  background: var(--background);
+  box-shadow: 0 0 0 5px var(--background), 0 0 12px color-mix(in oklab, var(--gold) 72%, transparent);
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 420ms ease, border-color 420ms ease;
+
+  .group:hover & {
+    transform: translateX(-50%) scale(1.18);
+    border-color: var(--ember);
+    box-shadow: 0 0 0 5px var(--background), 0 0 20px color-mix(in oklab, var(--ember) 80%, transparent);
+  }
+}
+
 /* Malha técnica de fundo */
 @utility grid-mesh {
   background-image:
@@ -232,6 +329,18 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes forge-flow {
+  0%,
+  100% {
+    background-position: 0 -40%;
+    opacity: 0.35;
+  }
+  50% {
+    background-position: 0 135%;
+    opacity: 0.9;
   }
 }
 
@@ -430,3 +539,91 @@
   }
 }
 
+
+/* Flutuação suave do Hermes companheiro */
+@keyframes flutuar {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Relevo levinho: o brilho respira junto com a troca de pose */
+@keyframes hermes-relevo {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 3px var(--hermes-glow-soft))
+      drop-shadow(0 4px 10px rgba(0, 0, 0, 0.55));
+  }
+  50% {
+    filter: drop-shadow(0 0 7px var(--hermes-glow))
+      drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
+  }
+}
+.hermes-sprite {
+  position: relative;
+  isolation: isolate;
+  width: var(--hermes-w);
+  height: var(--hermes-h);
+  background-repeat: no-repeat;
+  background-size: calc(var(--hermes-cols, 8) * var(--hermes-w))
+    calc(var(--hermes-rows, 9) * var(--hermes-h));
+  image-rendering: pixelated;
+  /* A aura acompanha o quadro atual (--hermes-pulso), quadro a quadro. */
+  --hermes-pulso: 1;
+  filter: drop-shadow(0 0 calc(3px * var(--hermes-pulso)) var(--hermes-glow-soft))
+    drop-shadow(0 0 calc(7px * var(--hermes-pulso)) var(--hermes-glow-soft));
+  transition: filter 110ms linear;
+}
+.hermes-instinto {
+  /* Mantém os pixels do atlas nítidos, igual às três peles de memória. */
+  image-rendering: pixelated;
+  overflow: visible;
+}
+.hermes-instinto::before,
+.hermes-instinto::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  pointer-events: none;
+  background-image: var(--hermes-atlas);
+  background-position: var(--hermes-x) var(--hermes-y);
+  background-repeat: no-repeat;
+  background-size: calc(var(--hermes-cols) * var(--hermes-w))
+    calc(var(--hermes-rows) * var(--hermes-h));
+  image-rendering: pixelated;
+}
+.hermes-instinto::before {
+  opacity: calc(0.22 * var(--hermes-aura-pulso, 1));
+  filter: blur(2px) brightness(1.28)
+    drop-shadow(0 0 calc(7px * var(--hermes-aura-pulso, 1)) var(--hermes-glow));
+  transform: translate3d(var(--hermes-aura-deriva, 0), -1px, 0)
+    scale(calc(1 + 0.025 * var(--hermes-aura-pulso, 1)));
+  transform-origin: 50% 72%;
+  transition: opacity 34ms linear, transform 34ms linear, filter 34ms linear;
+}
+.hermes-instinto::after {
+  opacity: calc(0.12 * var(--hermes-aura-pulso, 1));
+  filter: blur(5px) brightness(1.16)
+    drop-shadow(0 0 calc(12px * var(--hermes-aura-pulso, 1)) var(--hermes-glow-soft));
+  transform: translate3d(calc(var(--hermes-aura-deriva, 0) * -0.6), -3px, 0)
+    scale(calc(1 + 0.045 * var(--hermes-aura-pulso, 1)));
+  transform-origin: 50% 78%;
+  transition: opacity 50ms linear, transform 50ms linear, filter 50ms linear;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hermes-sprite {
+    animation: none;
+    filter: drop-shadow(0 0 4px var(--hermes-glow-soft));
+  }
+  .hermes-instinto::before,
+  .hermes-instinto::after {
+    opacity: 0.12;
+    transform: none;
+    transition: none;
+  }
+}
