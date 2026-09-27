@@ -387,6 +387,11 @@ check_command(
 )
 
 check_command(
+ 'scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py',
+ [sys.executable, str(ROOT/'scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py')],
+ classification='UNIFIED_SURFACE_PARITY_COUNTERPROOF_TESTS',
+)
+check_command(
  'scripts/trigger-fabric/validate_unified_surface_parity_contract.py',
  [sys.executable, str(ROOT/'scripts/trigger-fabric/validate_unified_surface_parity_contract.py')],
  classification='UNIFIED_SURFACE_PARITY_EXECUTABLE_CONTRACT',

@@ -581,6 +581,7 @@ proven_path_executable_recipe_contract_2026_09_26:
     DOCUMENTED_IS_NOT_EXECUTABLE_RECIPE: true
     RECEIPT_IS_NOT_PROOF: true
     FINGERPRINT_MATCH_IS_NOT_RUNTIME_PASS: true
+    TESTED_ONCE_IS_NOT_REPLAY_PROVEN: true
   required_recipe_fields:
     - owner
     - objective

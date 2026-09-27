@@ -591,6 +591,41 @@
           "undeclared_binding": "DENY_FAIL_CLOSED"
         }
       }
+    },
+    "UNIFIED_SURFACE_PARITY_VALIDATOR_COUNTERPROOF_PATH": {
+      "claim_key": "UNIFIED_SURFACE_PARITY_VALIDATOR_COUNTERPROOF_PATH",
+      "owner": "scripts/trigger-fabric/validate_unified_surface_parity_contract.py",
+      "lock_key": "90d8dcc29002ba3363da63ae7727cf83d6335712c4df264da73bc8953900f1ba",
+      "state": "SEALED_PROVEN",
+      "proof_target": "validador de CENTRALDARK_UNIFIED_SURFACE_PARITY_01 aprova o conjunto limpo e reprova os 6 ataques reais (valor falso em comentário, lei removida, duplicata falsa, versão paralela afirmada, substitui Hermes, substitui SOL) sem reprovar a negação",
+      "evidence_ref": "commits 6d0ab0e 2a5c5da (rasgo Claude) sobre 1fb973f 75975d7 10e5a8e ed74796 (costura SOL); suíte 8/8; suíte reprova validadores antigos e6ccf52 (5 falhas) 75975d7 (6) 10e5a8e (5)",
+      "observed_at": "2026-09-27T01:50:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "https://github.com/ServerVpss/CentralDark/pull/1562#issuecomment-5851670095",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "1f2d524267d675a13a510d1902ee8ebe23ed7dbefe1529b730ed04ade609fc76",
+        "fingerprint_material_count": 2,
+        "execution_commands": [],
+        "proof_commands": [
+          "python3 scripts/trigger-fabric/validate_unified_surface_parity_contract.py",
+          "python3 scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py"
+        ],
+        "expected_results": [
+          "UNIFIED_SURFACE_PARITY_CONTRACT=PASS",
+          "Ran 8 tests ... OK"
+        ],
+        "expected_effect": "VALIDATOR_PASS_AND_ALL_8_COUNTERPROOF_TESTS_PASS",
+        "result_schema": "centraldark.proven-replay.result.v1",
+        "environment_bindings": [],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "python3 scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py",
+        "self_test_result": "PASS_8_OF_8",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
     }
   }
 }
