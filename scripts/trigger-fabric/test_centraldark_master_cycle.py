@@ -182,6 +182,7 @@ class ContinuousDeltaContractTest(unittest.TestCase):
             "!RASTRO": "RASTRO",
             "!BOOT": "BOOT",
             "!FABLE_LOOP": "FABLE_LOOP",
+            "!GARIMPO_UNIVERSAL": "GARIMPO_UNIVERSAL",
         }
         for token, expected in cases.items():
             with self.subTest(token=token):
@@ -190,6 +191,38 @@ class ContinuousDeltaContractTest(unittest.TestCase):
                 self.assertEqual("!CENTRALDARK", receipt["master_funnel"]["canonical_entry"])
                 self.assertIn(expected, receipt["master_funnel"]["matched_trigger_ids"])
                 self.assertTrue(receipt["master_funnel"]["all_explicit_human_triggers_enter_master_once"])
+
+    def test_garimpo_universal_reuses_harvester_across_surfaces(self):
+        for mode, phrase in (
+            ("text", "!CENTRALDARK !GARIMPO_UNIVERSAL"),
+            ("voice", "CentralDark garimpo universal"),
+        ):
+            with self.subTest(mode=mode):
+                receipt = MODULE.resolve(
+                    phrase,
+                    chefe_source=True,
+                    input_mode=mode,
+                    source_surface=mode,
+                    session_id="same-intent-session",
+                )
+                self.assertTrue(receipt["master_cycle_active"])
+                self.assertIn("GARIMPO_UNIVERSAL", receipt["master_funnel"]["matched_trigger_ids"])
+                self.assertIn("GARIMPO_UNIVERSAL", receipt["master_funnel"]["requested_modes"])
+                harvest = receipt["delta_harvest"]
+                self.assertTrue(harvest["active"])
+                self.assertTrue(harvest["garimpo_universal_active"])
+                self.assertEqual(".agents/skills/session-intelligence-harvester/SKILL.md", harvest["owner"])
+                self.assertEqual("OWNER+CAPABILITY+SCOPE", harvest["semantic_identity"])
+                self.assertTrue(harvest["multi_surface_parallel_candidates"])
+                self.assertTrue(harvest["one_canonical_finalizer_per_scope"])
+                self.assertTrue(harvest["candidate_lane_is_not_canonical_write"])
+                self.assertEqual("DROP_DUPLICATE", harvest["same_finding_without_new_evidence"])
+                self.assertEqual(
+                    "LAST_GOOD_STATE->INPUT_DIFF->REUSE_PROOF_OR_TARGETED_REVALIDATION",
+                    harvest["next_executor_replay"],
+                )
+
+
 
     def test_tik_tak_wraps_master_loop_and_preserves_remeasurement_without_swarm(self):
         receipt = MODULE.resolve("!TIK-TAK", chefe_source=True)
