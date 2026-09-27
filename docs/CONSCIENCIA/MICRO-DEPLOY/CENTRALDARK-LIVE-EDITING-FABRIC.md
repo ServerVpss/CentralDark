@@ -90,6 +90,87 @@ LOCK
 → UNLOCK
 ```
 
+## 🔙 Loop adaptativo de avanço + backcheck
+
+A edição viva não anda em linha reta até esquecer o que ficou para trás. Ela usa uma janela deslizante de progresso e auditoria curta.
+
+```text
+PROGRESSO != ESQUECIMENTO
+AVANÇO + BACKCHECK = CONTINUIDADE
+ERRO → RETORNO_CURTO → COSTURA → RETESTE → CONTINUA
+```
+
+Parâmetros de referência, não números sagrados:
+
+```text
+FORWARD_WINDOW_DEFAULT=20
+BACKCHECK_WINDOW_DEFAULT=5
+REWIND_ON_LOCAL_ERROR_DEFAULT=1
+WINDOWS_ARE_ADAPTIVE=true
+```
+
+Fluxo:
+
+```text
+🎯 INTENÇÃO
+→ ⚙️ EDITA
+→ ⏩ AVANÇA N unidades
+→ 🔙 VOLTA K unidades
+→ 🪬 AUDITA estado, vínculo e efeito
+   ├─ sem delta material → continua
+   └─ erro/drift → ↩️ retorna ao menor ponto causal
+                 → 🪡 COSTURA
+                 → 🧪 RETESTA
+                 → 🔙 BACKCHECK curto
+                 → ⏩ REENTRA no mesmo trilho
+→ 🧾 RECEIPT
+→ 🗝️ NEXT_CURSOR
+```
+
+`N` e `K` se adaptam ao risco, tamanho e causalidade do delta. O princípio é fixo; a distância não.
+
+```text
+BACKCHECK_IS_AUDIT_NOT_REWORK=true
+LOCAL_REPAIR_BEFORE_FULL_ROLLBACK=true
+REJOIN_SAME_TRAIL=true
+NO_SILENT_REROUTE=true
+UNKNOWN != PASS
+```
+
+Quando houver delegação/healing, este loop reutiliza o contrato já existente de `scripts/agent-call.md`: `review_forward_ref`, `review_backward_ref`, `checkpoint_before`, `checkpoint_after` e revalidação da fronteira afetada. Não cria segundo mecanismo.
+
+## 🪝 Gatilhos visuais e callbacks semânticos
+
+Símbolos são âncoras de recuperação de contexto, não decoração e não autoridade.
+
+```text
+👑 = CHEFE / autoridade
+🎯 = intenção / alvo
+🖥️ = sistema / superfície
+🧠 = cognição / agente
+⚙️ = execução
+⏩ = avanço
+🔙 = backcheck / retorno curto
+🪡 = costura
+🧪 = teste / contraprova
+🪬 = Reality Judge
+🧾 = receipt / rastro
+🗝️ = cristal / recuperação / NEXT_CURSOR
+```
+
+Regras:
+
+```text
+TITLE_HAS_SEMANTIC_TRIGGER=true
+TRIGGER_MUST_MATCH_CONCEPT=true
+VISUAL_TRIGGER != AUTHORITY
+VISUAL_TRIGGER != PROOF
+CALLBACK_RECONNECTS_PRIOR_CONTEXT=true
+CALLBACK_DOES_NOT_REPEAT_WHOLE_HISTORY=true
+```
+
+Um texto, painel, fluxo ou editor pode avançar e inserir `🔙` callbacks curtos para lembrar intenção, owner, checkpoint ou prova anterior antes de continuar. Isso funciona como rescue cognitivo: recupera contexto sem reiniciar a missão.
+
 ## Cadeados
 
 ```text

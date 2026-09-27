@@ -52,6 +52,7 @@ universal_chain:
   - FIXED_POINT
   - TLC23_CLOSE
   - REGISTRA
+  - RASTRO
   - HANDOFF
   - BOOT
 
@@ -360,7 +361,7 @@ fixed_hud_contract:
   always_show_on_centraldark_operational_response: true
   layout: FIXED
   data: LIVE_ONLY
-  sections_in_order: [AUREOLA_CANONICA, ACORDAR, CALIBRAR, MULTIBUSSOLA, META_LUPA, RECONCILIAR, CONTRAPROVA, T1_REMEDICAO, REALIDADE, REGISTRA, FIXED_POINT]
+  sections_in_order: [AUREOLA_CANONICA, ACORDAR, CALIBRAR, MULTIBUSSOLA, META_LUPA, RECONCILIAR, CONTRAPROVA, T1_REMEDICAO, REALIDADE, REGISTRA, RASTRO, FIXED_POINT]
   arbitrary_percent_forbidden: true
   percent_requires_explicit_denominator: true
   layout_change_requires_explicit_chefe_authorization: true
@@ -840,3 +841,13 @@ bounded_100_percent:
   current_head_when_git_material: true
   external_world_infallibility_claim: false
   calculation_only_global_runtime_claim: false
+
+
+rastro_lock:
+  token: "🔏 !RASTRO"
+  owner: AGENTS.md
+  response_without_trace: INVALID
+  write_claim_fields: [COMMIT_SHA, PATH, LINK, READBACK]
+  memory_claim_requires_location: true
+  ledger_1562_same_turn_for_direct_main: true
+  applies_to_all_engines: true

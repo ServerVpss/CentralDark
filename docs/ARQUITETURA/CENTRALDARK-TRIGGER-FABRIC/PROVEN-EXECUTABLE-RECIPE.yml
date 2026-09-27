@@ -1,0 +1,242 @@
+schema: centraldark.proven-executable-recipe.v1
+status: CANDIDATE_UNTIL_SAME_HEAD_GATES
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
+authority: SEGREDO/CHEFE
+pr_mother: 1562
+pr_child: 1681
+created_from_session: 2026-09-25
+
+purpose: >-
+  Selar o caminho ja provado como receita executavel carregavel por futuros
+  executores. O objetivo e impedir releitura do zero quando o mesmo fingerprint
+  causal permanece valido, permitindo apenas adaptacao declarada de bindings de
+  ambiente e revalidacao pelo mesmo formato de prova.
+
+source_material:
+  from_chefe: >-
+    CAMINHO_JA_PROVADO -> SELAR_RECEITA_EXECUTAVEL -> GUARDAR FINGERPRINT ->
+    PROXIMO EXECUTOR CARREGA A RECEITA -> ADAPTA SOMENTE BINDINGS DO AMBIENTE ->
+    EXECUTA A MESMA SEQUENCIA -> RODA A MESMA PROVA -> COMPARA RESULTADO/FORMATO/EFEITO ->
+    DIVERGIU = DELTA NOVO -> NAO DIVERGIU = REUTILIZA CRISTAL
+  normalized_by_machine: true
+  source_is_authority_for_intent: true
+  source_is_not_runtime_proof: true
+
+one_system_binding:
+  creates_new_architecture: false
+  creates_new_runner: false
+  creates_new_owner: false
+  existing_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
+  existing_loader: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+  existing_sentinel_kernel: scripts/trigger-fabric/system_sentinel.py
+  existing_runner: scripts/sentinela/run.mjs
+  existing_api_transport: GITHUB_REPOSITORY_DISPATCH
+  api_event_type: centraldark_sentinel_route
+
+persistence_policy:
+  crystal_lives_in_machine_state: true
+  human_loop_required: false
+  do_not_return_full_crystal_block_to_human_by_default: true
+  human_output_role: HUD_STATUS_AND_BLOCKER_ONLY
+  canonical_storage:
+    - repo_child_pr: 1681
+    - repo_recipe: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-EXECUTABLE-RECIPE.yml
+    - repo_lock: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
+    - vps_runtime_receipt: /root/CentralDark/.artifacts/system-sentinel/receipts/proven-executable-recipe-session-current.json
+    - vps_runtime_receipt_sha256: /root/CentralDark/.artifacts/system-sentinel/receipts/proven-executable-recipe-session-current.sha256
+  forbidden_handoff:
+    - ASK_CHEFE_TO_COPY_CRYSTAL_BLOCK
+    - MAKE_HUMAN_CARRY_MACHINE_RECEIPT
+    - DELIVER_THIS_EXACT_BLOCK_TO_HUMAN_AS_REQUIRED_LOOP
+    - STORE_SESSION_CRYSTAL_ONLY_IN_CHAT
+  allowed_handoff_to_human:
+    - RESULT_HUD
+    - MATERIAL_BLOCKER
+    - APPROVAL_FRONTIER
+    - SHORT_NEXT_CURSOR
+  machine_handoff_rule: >-
+    Quando uma janela, agente ou executor terminar, ele persiste o receipt e o
+    fingerprint no storage da VPS/Sentinela e no PR-filho quando houver delta de
+    codigo. O CHEFE nao vira muleque de pombo-correio do cristal; o humano recebe
+    somente estado, bloqueio real e proximo cursor curto.
+
+recipe:
+  name: CAMINHO_JA_PROVADO_EXECUTAVEL
+  version: 1
+  phases:
+    - id: CAMINHO_JA_PROVADO
+      effect: load_previous_receipt_and_owner_lineage
+      output_required: proven_path_context
+    - id: SELAR_RECEITA_EXECUTAVEL
+      effect: normalize_steps_into_machine_recipe
+      output_required: executable_recipe
+    - id: GUARDAR_FINGERPRINT
+      effect: hash_causal_identity
+      output_required: dependency_fingerprint
+    - id: PROXIMO_EXECUTOR_CARREGA_A_RECEITA
+      effect: load_recipe_before_interpretation
+      output_required: loaded_recipe_receipt
+    - id: ADAPTA_SOMENTE_BINDINGS_DO_AMBIENTE
+      effect: bind_runtime_paths_tokens_urls_profiles_without_changing_semantics
+      output_required: environment_binding_report
+    - id: EXECUTA_A_MESMA_SEQUENCIA
+      effect: replay_recipe_order_exactly
+      output_required: sequence_trace
+    - id: RODA_A_MESMA_PROVA
+      effect: run_same_proof_plan
+      output_required: proof_trace
+    - id: COMPARA_RESULTADO_FORMATO_EFEITO
+      effect: compare_result_shape_and_material_effect
+      output_required: comparison_report
+    - id: DIVERGIU_DELTA_NOVO
+      condition: comparison.diverged == true
+      effect: open_targeted_delta_on_affected_cone_only
+      output_required: delta_receipt
+    - id: NAO_DIVERGIU_REUTILIZA_CRISTAL
+      condition: comparison.diverged == false
+      effect: reuse_existing_crystal_without_reteaching
+      output_required: reused_crystal_receipt
+
+fingerprint:
+  algorithm: SHA256
+  key_material:
+    - CLAIM_KEY
+    - OWNER
+    - RECIPE_VERSION
+    - PROOF_PLAN_HASH
+    - RESULT_SCHEMA_HASH
+    - EFFECT_SCHEMA_HASH
+    - SECURITY_BOUNDARY
+  excludes_environment_bindings:
+    - absolute_path
+    - hostname
+    - runner_id
+    - ephemeral_token
+    - local_profile_name
+    - timestamp
+  environment_binding_hash_material:
+    - binding_name
+    - binding_type
+    - observed_value_class
+    - validation_probe
+  rule: >-
+    Ambiente diferente muda binding_report, nao muda receita canonica. Se a
+    diferenca altera resultado/formato/efeito, vira DELTA NOVO; se nao altera,
+    permanece REUTILIZA_CRISTAL.
+
+load_contract:
+  next_executor_must:
+    - LOAD_EXISTING_OWNER_FIRST
+    - LOAD_RECIPE_BEFORE_REASONING_FROM_ZERO
+    - MATERIALIZE_ENVIRONMENT_BINDINGS
+    - RUN_SAME_SEQUENCE
+    - RUN_SAME_PROOF
+    - COMPARE_RESULT_FORMAT_EFFECT
+    - EMIT_RECEIPT_AND_NEXT_CURSOR
+  next_executor_must_not:
+    - REINTERPRET_FROM_ZERO_WITHOUT_DELTA
+    - CREATE_PARALLEL_OWNER
+    - GENERALIZE_OUTSIDE_AFFECTED_CONE
+    - CHANGE_PROOF_TO_FORCE_PASS
+    - TREAT_UNKNOWN_AS_PASS
+    - TREAT_BINDING_DRIFT_AS_ARCHITECTURE_DRIFT_WITHOUT_PROOF
+    - ASK_HUMAN_TO_CARRY_THE_CRYSTAL_BLOCK
+    - REQUIRE_HUMAN_PARTICIPATION_IN_MACHINE_LOOP
+
+proof_plan:
+  same_sequence_required: true
+  same_proof_required: true
+  compare_dimensions:
+    result:
+      - status
+      - proof_state
+      - decision
+      - next_cursor
+    format:
+      - schema
+      - required_fields
+      - field_types
+      - receipt_shape
+    effect:
+      - owner_touched
+      - runner_used
+      - api_event_used
+      - mutation_authority
+      - dependent_claims_invalidated
+  divergence_policy:
+    any_material_difference: DELTA_NOVO
+    format_only_compatible_addition: DELTA_CANDIDATE_REVIEW
+    no_material_difference: REUTILIZA_CRISTAL
+    unknown_difference: UNKNOWN_NOT_PASS
+
+bindings:
+  allowed_to_adapt:
+    - repo_path
+    - branch_or_head
+    - runner_workspace
+    - api_base_url
+    - authenticated_profile
+    - secret_presence_boolean
+    - output_artifact_path
+  forbidden_to_adapt:
+    - owner
+    - canonical_sequence
+    - proof_plan
+    - unknown_is_not_pass
+    - one_writer_per_scope
+    - reality_is_judge
+    - result_schema
+    - effect_schema
+
+receipts:
+  seal_receita_executavel:
+    required_fields:
+      - recipe_name
+      - recipe_version
+      - owner
+      - dependency_fingerprint
+      - proof_plan_hash
+      - result_schema_hash
+      - effect_schema_hash
+      - next_cursor
+  replay_receipt:
+    required_fields:
+      - loaded_recipe
+      - environment_binding_report
+      - sequence_trace
+      - proof_trace
+      - comparison_report
+      - decision
+      - delta_or_crystal_ref
+      - next_cursor
+
+known_session_proof:
+  source_implemented: true
+  local_counterproof: PASS
+  python_compile: PASS
+  system_sentinel_self_test: PASS_20_OF_20
+  node_check_runner: PASS
+  yaml_parse: PASS_4_OF_4
+  persistence_test: FIXED_POINT_SEALED_TO_REUSE_PROOF_NO_REPEAT_TO_REVALIDATE_AFFECTED_CHAIN_ONLY
+  vps_runtime_receipt: /root/CentralDark/.artifacts/system-sentinel/receipts/proven-executable-recipe-session-current.json
+  vps_runtime_receipt_sha256: f3284c33ded0227c3caec31deaaf2de2a93f39398b447c34bd817495f09f9843
+  github_pr: 1681
+  ci_same_head: UNKNOWN_UNTIL_COMPLETED
+  runtime_deployed: false
+  merged: false
+
+invariants:
+  one_system_only: true
+  reuse_before_create: true
+  one_writer_per_scope: true
+  unknown_is_not_pass: true
+  current_gt_history: true
+  action_is_not_proof: true
+  documented_is_not_executed: true
+  merged_is_not_deployed: true
+  api_transport_is_not_authority: true
+  binding_change_is_not_architecture_change_without_effect_divergence: true
+  human_is_not_crystal_transport: true
+  machine_receipt_must_persist_in_vps_or_repo_owner: true
+
+next_cursor: CI_SAME_HEAD_THEN_RUNTIME_TIK_TAK_REPLAY_RECIPE

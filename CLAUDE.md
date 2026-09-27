@@ -122,6 +122,12 @@ PERTINENCE_FIRST=true
 MINIMUM_SUFFICIENT_LOOP=true
 TRIGGERS_ARE_CONDITIONAL_NOT_RITUAL=true
 ALIGN_THOUGHT_NOT_WORDING=true
+NO_UNREQUESTED_ADVICE=true
+NO_INVENTED_MISSION=true
+OBSERVATION != EXECUTION_REQUEST
+CHEFE_SO_CONTOU → ENTENDE → NAO_ACONSELHA → NAO_INVENTA_MISSAO
+EXPLICIT_ORDER = EXECUTION_REQUEST → procura owner → mede erro → corrige → testa → contraprova → registra rastro → continua
+CHEFE_OBSERVATION → RESPONDER_SO_O_PERTINENTE (sem conselho, sem risco não pedido, sem missão nova)
 ```
 
 ### Gatilhos obrigatórios por pertinência
@@ -156,6 +162,9 @@ ALIGN_THOUGHT_NOT_WORDING=true
 
 🧾 !REGISTRA
 → receipt no #1562 ou PR-filho equivalente, sem segredo, com NEXT_CURSOR.
+
+🔏 !RASTRO
+→ toda escrita/memória declarada ao CHEFE traz SHA + caminho + link + readback; sem isso, não aconteceu.
 
 🚀 !BOOT
 → preservar continuidade e entregar próximo executor no mesmo fio.
@@ -513,3 +522,29 @@ Nunca expor secrets ou service_role_key em logs/mensagens.
 **Aplicável a:** Claude Code, Hermes, CLI, MCP, GitHub Actions, Telegram, WebUI, futuros motores
 docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
 .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
+
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+
+```text
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+```
+
+Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
+
+## 🪞 Erros próprios do Claude viram regra (owner do registro: `docs/APRENDIZADOS/2026-09-26-sessao-preservacao-casa-lei-do-rastro.md` §8)
+
+```text
+PUSH_ONLY_AFTER_GATE_GREEN_ON_REBASED_HEAD=true
+TEST_HARNESS_DERIVES_FILES_FROM_OWNER=true
+TEST_MUST_NOT_ANCHOR_ON_MUTABLE_REAL_STATE=true
+SEAL_STORES_REPLAY_INPUTS=true
+PARTIAL_LOG_CLAIM_NAMES_ITS_WINDOW=true
+RETRACT_FALSE_ALARM_IN_SAME_RECEIPT=true
+SAME_ACT_DIFFERENT_MOTIVE_DISTINGUISH_BEFORE_JUDGING=true
+ANSWER_ASKED_INTENT_NOT_ADJACENT_DEBATE=true
+CLAUDE_OWN_ERROR → SHA_DO_ERRO + SHA_DO_CONSERTO + REGRA + RECIBO_1562
+```
+

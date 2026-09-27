@@ -1,0 +1,166 @@
+domain,capability,status,owner_or_candidate,useful_delta,source,priority
+Cognitive,Modo Padrão,EXISTING,CAPACIDADES-COGNITIVAS,modo rápido/suficiente por default,CentralDark history,P2
+Cognitive,Sistema 2,EXISTING,CAPACIDADES-COGNITIVAS,deliberação para tarefa difícil,CentralDark history,P1
+Cognitive,ReAct Loop,EXISTING,cot-react-loop,observe→act→observe→re-evaluate→verify,CentralDark history,P0
+Cognitive,Fable Loop,EXISTING,fable-loop,classify→define done→evidence→act→verify→report,Manual/Fable + CentralDark,P0
+Cognitive,Auto-crítica,EXISTING,MetaLupa / cognitive mode,criticar hipótese e resposta,CentralDark history,P0
+Cognitive,17 Respirações / Kimetsu,EXISTING,centraldark-operational-method,cadência de contexto e contraprova,CentralDark history,P0
+Cognitive,Multibússola,EXISTING,MULTIBUSSOLA,físico→temporal→causal→contraprova,CentralDark history,P0
+Cognitive,MetaLupa FRIA/MÉDIA/QUENTE,EXISTING,meta-lupa,falsificação calibrada por risco,CentralDark history,P0
+Cognitive,Reality Judge,EXISTING,Reality Judge,writer != judge,CentralDark history,P0
+Cognitive,Knowledge Compiler,EXISTING,knowledge-compiler,multi-fontes→cristal único,CentralDark history,P0
+Cognitive,Capability Contract Router,EXISTING,capability-contract-router,intenção+estado→capability+owner+handoff,CentralDark history,P0
+Cognitive,DELTAUTIL,EXISTING,DELTAUTIL,extrair somente ouro ausente no owner vivo,CentralDark history,P0
+Cognitive,PEGATUDO universal,PARTIAL,harvester/router,"enumerar N capacidades por input, não parar no primeiro delta",CentralDark history + this session,P0
+Cognitive,Instinto Superior,EXISTING,REGRAS + skill telemetria,guardar mecanismo de reencontro + known_failures,CentralDark history,P0
+Cognitive,Self-healing por recorrência,PARTIAL,memory-linker + known_failures,recorrência→causa→fix→counterproof→regression,CentralDark history,P0
+Prompt,System prompt anatomy,EXISTING,CONSCIÊNCIA / boot,"identidade, ferramentas, segurança e prioridades explícitas",Manual Oculto,P1
+Prompt,Prompt Mínimo Viável,PARTIAL,prompt/skill owner,começar pequeno; crescer apenas por falha observada,Manual Oculto,P1
+Prompt,Persona separada de autoridade,EXISTING,identity/rules,voz != permissão != owner,Manual Oculto,P1
+Prompt,Tool Contract,EXISTING,skills + MCP contracts,"gatilho, pré-condição, exclusão, batching, chaining",Manual Oculto,P0
+Prompt,Behavior mining from logs,PARTIAL,Dream Review / knowledge compiler,logs→padrão→guia de decisão→skill candidate,Manual Oculto/Fable,P0
+Prompt,Prompt diff semântico,PARTIAL,Git + analysis,"comparar efeito comportamental, não só texto",Manual Oculto/FEP,P1
+Prompt,Prompt onion detector,NEW_DELTA,existing prompt owner,detectar camadas repetidas/contraditórias,Manual Oculto,P1
+Prompt,Emphasis inflation detector,NEW_DELTA,existing prompt owner,detectar excesso de ALWAYS/NEVER/URGENT,Manual Oculto,P2
+Prompt,Rule-with-why gate,PARTIAL,Forja / docs gate,regra material deve ter motivo e prova,Manual Oculto,P1
+Prompt,Consolidation without behavior loss,PARTIAL,Knowledge Compiler,comprimir regras mantendo comportamento comprovado,Manual Oculto,P0
+Agentic,Agentic steerability,PARTIAL,cognitive/prompt owner,controle explícito de personalidade/estilo sem fundir identidade,FEP GPT prompting guide,P1
+Agentic,Solution persistence,EXISTING,operational method,continuar até done/stop gate,FEP GPT prompting guide,P0
+Agentic,Tool calling patterns,EXISTING,skills/router,quando usar read/apply/shell e como encadear,FEP GPT prompting guide,P0
+Agentic,Planning protocol,EXISTING,operational method,planejar→agir→atualizar→verificar,FEP GPT prompting guide,P1
+Agentic,Metaprompt root-cause + surgical revision,PARTIAL,MetaLupa,achar causa e revisar cirurgicamente,FEP GPT prompting guide,P0
+QA,Risk profiling,NEW_DELTA,Forja/QA owner,"risco técnico, integração, regressão, mitigação",FEP BMAD core,P1
+QA,Test design per acceptance criterion,PARTIAL,tests/Forja,cenários por AC + nível unit/integration/E2E,FEP BMAD core,P0
+QA,Requirements tracing,PARTIAL,trace/evidence,AC→teste→evidência de cobertura,FEP BMAD core,P0
+QA,NFR assessment,NEW_DELTA,Forja/QA owner,security/performance/reliability/maintainability gate,FEP BMAD core,P1
+QA,Quality gate decision,EXISTING,Reality Judge/Forja,PASS/CONCERNS/FAIL/WAIVED equivalente,FEP BMAD core,P0
+QA,Brownfield-first workflow,EXISTING,REUSE_BEFORE_CREATE,tratar sistema existente antes de greenfield,FEP BMAD core,P0
+Agents,Role-specialized team,EXISTING,Hermes executors,"analyst/architect/dev/qa/etc como papéis, não cores",BMAD/FEA,P1
+Agents,Semi-automatic/full-automatic execution modes,PARTIAL,autonomous task routing,selecionar autonomia por risco/escopo,BMAD Academy,P1
+Agents,Advanced elicitation,NEW_DELTA,planning owner,"forçar alternativas, riscos e critérios antes de mutar",BMAD,P2
+AI,Prompt engineering advanced,EXISTING,prompt/skills,"zero/few-shot, role, CoT-mode UI, examples",FEA-IA,P2
+AI,LangChain integration concepts,PARTIAL,tool/runtime adapters,"chains/retrieval/tools como adapters, não core",FEA-IA,P2
+AI,Autonomous agents (AGNO patterns),PARTIAL,Hermes-Core,"autonomia, tools, memory, planning",FEA-IA,P1
+AI,Multi-agent orchestration (CrewAI patterns),EXISTING,SOL+Hermes,"papéis, delegation, shared mission",FEA-IA,P1
+AI,MCP fundamentals,EXISTING,CentralDark MCP,universal capability surface,FEA-IA,P0
+AI,Production/deploy,EXISTING,Actions/VPS deploy,"build, deploy, monitor, rollback",FEA-IA,P1
+AI,Multimodal fundamentals,PARTIAL,BRAIN visual/media,texto+imagem+áudio+vídeo como sources,FEA-IA,P1
+UI,Dockable multi-pane workspace,PARTIAL,SalaControle/Bolt,painéis destacáveis/reacopláveis sem perder estado,Google Drive 2026-09-08,P1
+UI,Single-instance shared UI state,PARTIAL,SalaControle,view != process; fechar floating reancora,Google Drive 2026-09-08,P0
+Agents,Feature toggles for agents/connectors/executors,NEW_DELTA,capability registry/router,is_active runtime sem quebrar core,Google Drive 2026-09-08,P1
+Agents,Event-bus message exchange,PARTIAL,Hub/router,substituir acoplamento direto por eventos no owner existente,Google Drive 2026-09-08,P1
+Runtime,Unified module registry,PARTIAL,MCP catalog/Hermes registry,agent|connector|executor + lifecycle + state,Google Drive 2026-09-08,P1
+Runtime,Dependency preflight invariants,NEW_DELTA,dependency-intelligence owner,checar Python/Rust/Node/OS antes de instalar/carregar,Google Drive 2026-09-08,P1
+Runtime,Dependency auto-update with rollback,NEW_DELTA,dependency-intelligence owner,manifest→validate→hot reload→rollback,Google Drive 2026-09-08,P1
+Accounts,Multi-account Google Hub,PARTIAL,Account Hub/OAuth Broker,"N contas→um fluxo, origem preservada",Google Drive 2026-09-08,P1
+Accounts,Chromium profile registry,PARTIAL,browser/profile owner,perfis isolados + status + account linkage,Google Drive 2026-09-08,P2
+Accounts,Per-account feature toggle,NEW_DELTA,Account Hub,ativar/desativar consumo sem duplicar arquitetura,Google Drive 2026-09-08,P2
+Memory,Dream Review,EXISTING,scripts/memory-linker,handoff→patterns→candidate→autonomy queue,CentralDark history,P0
+Memory,Pattern Discovery,EXISTING,memory-linker,dedupe/fingerprint/pattern candidates,CentralDark history,P0
+Memory,LAST_GOOD_STATE,PARTIAL,checkpoints,herança intersessão/model swap,CentralDark history,P0
+Semantic,Hybrid retrieval EXACT/STRUCTURED/LEXICAL/VECTOR/GRAPH,EXISTING,Semantic Fabric,retrieval seletivo por consulta,CentralDark history,P0
+Semantic,Embedding model/version/dimension gate,PARTIAL,Semantic Fabric,não misturar espaços vetoriais,CentralDark history,P0
+Semantic,Secret scrub before embedding,PARTIAL,Semantic Fabric/security,segredo não entra em embedding,CentralDark history,P0
+Semantic,Semantic benchmark Recall@K/MRR/NDCG,NEW_DELTA,evaluation harness,benchmark de retrieval e regressão,CentralDark history synthesis,P1
+Trace,Trace IDs end-to-end,EXISTING,trace-context,mission/request/correlation/trace/span,CentralDark history,P0
+Trace,Message↔trace round trip,PARTIAL,trace + Personal Context refs,resposta→evento→fonte→artefato,Olho de Deus,P0
+Trace,TURN_CONTEXT_MISMATCH,GAP,existing trace owner,detector estrutural + semântico de contexto errado,Olho de Deus,P0
+Trace,Trace Viewer,GAP,SalaControle extension,visualizar cadeia causal no cockpit,Cockpit sweep,P1
+Trace,Preservation export + restore drill,NEW_DELTA,existing memory/export owner,BagIt/JSONL/CSV/SQLite + hash restore,Olho de Deus,P2
+Media,YouTube transcript,VERIFY_LIVE,CentralDark MCP media,transcrever vídeo por ID/URL,CentralDark historical runtime,P0
+Media,Frame extraction local all/fps/timestamps,NEW_DELTA,MCP media owner,ffprobe+ffmpeg+hash+manifest,previous package,P0
+Media,Frame semantic vectorization,NEW_DELTA,Semantic Fabric visual owner,frame→embedding→vector metadata,session requirement,P0
+Media,Video chapter semantic index,NEW_DELTA,media+semantic owner,transcript+timestamp+frame+concept,session requirement,P1
+Media,Scene-change sampling,NEW_DELTA,media owner,dedupe visual e reduzir frames redundantes,session synthesis,P2
+Media,Video download job,NEW_DELTA,media owner,URL→job→artifact→provenance,inemaVOX,P1
+Media,ASR transcription pipeline,NEW_DELTA,media owner,Whisper/Parakeet style model adapter,inemaVOX,P1
+Media,Translation pipeline,NEW_DELTA,media owner,transcript→translation with terms preserved,inemaVOX,P2
+Media,TTS synthesis,NEW_DELTA,media owner,text→speech model adapter,inemaVOX,P1
+Media,Voice clone,NEW_DELTA,media owner,voice sample→TTS voice profile,inemaVOX,P2
+Media,Dubbing pipeline,NEW_DELTA,media owner,ASR→translate→TTS→sync→mux,inemaVOX,P1
+Media,Diarization,NEW_DELTA,media owner,speaker segmentation,inemaVOX,P2
+Media,Audio/video synchronization,NEW_DELTA,media owner,timing alignment + presets,inemaVOX,P1
+Media,Media job queue + WebSocket progress,NEW_DELTA,job/runtime owner,queued/running/completed + live progress,inemaVOX,P1
+Media,Model manager / GPU fallback,NEW_DELTA,runtime/model owner,GPU detect→fallback CPU/model,inemaVOX,P1
+Media,Media checkpoint/resume,NEW_DELTA,job/checkpoint owner,retomar pipeline sem repetir etapas concluídas,inemaVOX,P1
+MCP,One public CentralDark MCP,EXISTING,CentralDark MCP,"um endpoint, N capabilities",CentralDark history,P0
+MCP,OAuth 2.1 PKCE,VERIFY_LIVE,MCP auth owner,login automático do cliente,CentralDark history,P0
+MCP,OAuth Broker,EXISTING,oauth-broker,provider start/callback/token refresh,CentralDark history,P0
+MCP,Account Hub,EXISTING,/accounts,accounts/providers/connections,CentralDark history,P0
+MCP,Tool capability signature,PARTIAL,MCP catalog + capability router,cada tool declara capability/inputs/side-effects/proof,session synthesis,P0
+MCP,Package capability scanner,NEW_DELTA,DELTAUTIL/harvester,zip/html/md/json→N capability candidates,this session,P0
+MCP,Generative capability search,NEW_DELTA,capability router,gap→search→candidate→sandbox→Forja,this session,P0
+MCP,Video frame tool registration,NEW_DELTA,MCP media owner,registrar capability do pacote anterior,previous package,P0
+MCP,Composio OAuth client proof,GAP,existing MCP auth,OAuth→callback→tools/list live proof,this session,P0
+Cockpit,Cockpit Shell,EXISTING,SalaControle,UI base com abas,repo sweep historical,P1
+Cockpit,Electron bridge,EXISTING,Bolt,window.centraldark bridge,repo sweep historical,P1
+Cockpit,Terminal/PTY,GAP,SalaControle/Bolt candidate,"terminal vivo, após remeasure de owner oculto",repo sweep historical,P0
+Cockpit,Live logs,PARTIAL,useCockpitLive,substituir mock por SSE/WebSocket runtime,repo sweep historical,P0
+Cockpit,Session Manager,GAP,Hermes-Core candidate,registry live de sessões,repo sweep historical,P1
+Cockpit,Command Channel,GAP,Bolt/Hermes bridge candidate,canal bidirecional UI→runtime,repo sweep historical,P0
+Cockpit,Agent Manager UI,PARTIAL,Hermes-Core + SalaControle,"backend existe, UI falta",repo sweep historical,P1
+Cockpit,MCP Panel UI,PARTIAL,MCP admin + SalaControle,"backend existe, UI falta",repo sweep historical,P1
+Cockpit,Process Viewer live,PARTIAL,Status,trocar dados estáticos por live,repo sweep historical,P1
+Cockpit,Receipt Viewer live,PARTIAL,COCKPIT-AVANCO + SalaControle,receipt JSON→timeline UI,repo sweep historical,P1
+Security,Security gates read/write/destructive,EXISTING,OAuth/Admin,gates por operação,repo sweep historical,P0
+Security,Sensitive quarantine,PARTIAL,source envelope/security,token/secret metadata sem imprimir valores,CentralDark history,P0
+Security,AI proxy bridge secret separation,EXISTING,ai-proxy,bridge credential outside provider secret,AI-PROXY-ARQUITETURA.md,P0
+Deploy,GitHub→VPS deploy evidence,EXISTING,Actions/deploy,merged != deployed; compare heads,CentralDark history,P0
+Deploy,Behavior regression before promotion,PARTIAL,evaluating-llms-harness + Forja,prompt/skill changes need behavior tests,FEP + CentralDark history,P0
+Operations,Tool Surface Preflight Before Analysis,NEW_DELTA,surface/capability discovery,tentar tools relevantes antes da análise; BLOCKED != OFFLINE,CHEFE 2026-09-13 + current tool probe,P0
+Git,Transactional Writer Boundary,PARTIAL,writer / operational method / git guardrails,centralizar pre-write gates,PR585 evidence + current reconciliation,P0
+Git,Technical MetaLupa Pre-Write Gate,GAP,MetaLupa + Writer Boundary,BEGIN ausente bloqueia tecnicamente write,PR585 WRITE_BEFORE_BEGIN evidence,P0
+Git,Mission-Isolated Worktree,PARTIAL,git operational method,missão mutável isola branch/scope,PR585 worktree evidence,P0
+Git,Canonical Main Clean Invariant,NEW_DELTA,git operational method,checkout canônico como espelho limpo; dirty vira violação,current reconciliation,P0
+Git,Mission-End Full Path Classification,PARTIAL,DELTAUTIL + git guardrails,todo residual recebe classe/owner,current reconciliation,P0
+Git,Safe Worktree Teardown Gate,NEW_DELTA,git operational method,só remover após clean/no unique delta/receipt/promotion,current reconciliation,P1
+Observability,Dirty-as-Pipeline-Violation Incident,PARTIAL,Guardião / sentinela-divergencias,"sentinela assertion/incident, não faxineiro",CentralDark history + current reconciliation,P0
+Deploy,Scheduled GitHub-main ↔ VPS-HEAD Drift Check,GAP,deploy_status + existing scheduler,automatizar commits-behind já existente sob demanda,CentralDark sentinela history,P1
+Memory,Event-First Dream Trigger,EXISTING,memory-linker / Dream Review,SESSION_END/HANDOFF dispara review,CentralDark Dream contract,P0
+Memory,Conditional Scheduler Dream Backstop,EXISTING,house scheduler + memory-linker,fallback temporal só quando houver delta,CentralDark Dream contract,P0
+Memory,Re-emergence Detection,NEW_DELTA,Pattern Discovery / memory-linker,padrão descartado que reaparece ganha nova avaliação,external Dream delta + CentralDark fit,P1
+Memory,Delta-Write Memory,NEW_DELTA,DELTAUTIL / Knowledge Compiler / Semantic Fabric,near-dupe NO_CHANGE; similar residual; conflito/supersede,external MemVault delta + CentralDark fit,P0
+Memory,Conflict/Supersede Provenance,PARTIAL,Semantic Fabric / memory-linker,supersede/conflict com trilha,current reconciliation,P1
+Cognitive,Selective Grill-Me Escalation,PARTIAL,grill-me skill + MetaLupa,pressure-test só em decisão material,installed skill history + current reconciliation,P2
+Memory,No-Model-Wake Without Delta,EXISTING,Dream scheduler contract,NO_NEW_INFORMATION→silêncio,CentralDark Dream contract,P0
+Language,Worker Output Language Provenance,NEW_DELTA,receipt/trace owner,worker/provider/model/language metadata per output,current screenshots,P0
+Language,Raw Multilingual Output Preservation,NEW_DELTA,evidence store,hash and preserve raw worker output before projection,current screenshots,P0
+Language,Final Locale Projection,NEW_DELTA,UI/report projection,render PT-BR without rewriting source truth,current screenshots,P1
+Language,Provider/Subagent Language Divergence Detector,NEW_DELTA,orchestration observability,detect language drift by worker/provider,current screenshots,P1
+Language,Cross-Lingual Semantic Invariance Benchmark,NEW_DELTA,evaluation harness,same mission across languages/providers must retain semantics,current synthesis,P0
+Language,Cross-Lingual Contradiction Detection,NEW_DELTA,MetaLupa/Semantic Fabric,detect semantic conflict hidden by translation/language change,current synthesis,P0
+Language,Cross-Lingual Semantic Dedupe,NEW_DELTA,Semantic Fabric,dedupe equivalent claims across languages,current synthesis,P1
+Language,Multilingual Exact-Identifier Gate,NEW_DELTA,retrieval selector,stable IDs bypass translation ambiguity,current synthesis,P0
+Language,Graph Canonical Alias Mapping,NEW_DELTA,Graph/Semantic Fabric,multilingual aliases point to one canonical entity,current synthesis,P1
+Language,Translation Is View Not Truth,NEW_DELTA,projection layer,translated text cannot replace provenance/raw evidence,current synthesis,P0
+Agents,Receipt Join Provenance Integrity,NEW_DELTA,SOL/reconcile owner,join P1..PN without losing source worker/model/language,current screenshots,P0
+Agents,Per-Worker Provider/Model/Language Metadata,NEW_DELTA,trace context,attach worker execution identity to receipts,current screenshots,P0
+Agents,Parallel Lane Causal Trace,PARTIAL,SOL/Hermes trace,parallel execution lanes converge with traceable receipts,current screenshots,P0
+Agents,Semantic Consensus Across Providers,NEW_DELTA,SOL/MetaLupa,compare claims not surface wording across providers,current synthesis,P1
+Agents,Stable Error Codes Across Languages,NEW_DELTA,runtime contracts,machine error identity remains language-independent,current synthesis,P1
+MCP,Active Catalog Staleness Detector,NEW_DELTA,MCP admin/catalog owner,detect source/dist toolCount != active process catalog,current screenshots,P0
+MCP,Source-Dist-Runtime Promotion Proof,PARTIAL,MCP deploy owner,prove capability from source -> dist -> active catalog -> tools/call,current screenshots,P0
+MCP,YouTube Transcript Runtime Promotion,GAP,MCP media owner,tool exists source/dist; active process promotion must be proven,current screenshots,P0
+MCP,Typed OAuth Human Frontier Resume,PARTIAL,MCP auth/Hermes client,blocker ID + owner + missing dependency + resume condition,current screenshots,P0
+Database,Supabase RPC/Schema Introspection,NEW_DELTA,Hub/Supabase owner,"measure tables, columns and RPC before consumer patch",current screenshots,P0
+Database,Consumer Schema Contract Drift Detector,NEW_DELTA,Hub mission consumer owner,consumer expectation vs live PostgREST/RPC schema,current screenshots,P0
+Database,Migration-vs-Consumer-Fallback Decision Gate,NEW_DELTA,Hub/Supabase owner,choose schema migration or adapt consumer after evidence,current screenshots,P1
+Runtime,PM2 Boot Persistence Proof,PARTIAL,graph-panel runtime owner,PM2 online != system boot restore proven,current screenshots,P1
+Runtime,Graph Panel Listener Health Proof,PARTIAL,graph-panel runtime owner,distinguish process online from port/listener healthy,current screenshots,P1
+Runtime,Pause-to-Webhook Resume Bridge,PARTIAL,Hermes gateway/goals owner,paused execution can emit resumable webhook with evidence,current screenshots,P1
+Runtime,Goal Judge Configuration Gate,GAP,Hermes goals owner,provider/model None must block autonomy claims,current screenshots,P0
+Graph,Graphify Fail-Closed Import,PARTIAL,graph pipeline owner,graphify/import failure stops pipeline instead of stale success,current screenshots,P0
+Graph,Graph Snapshot Freshness Contract,NEW_DELTA,graph pipeline owner,graph stats tied to source/head/timestamp before use,current synthesis,P0
+Graph,Post-Commit Graph Refresh Receipt,PARTIAL,post-commit/graph owner,hook refresh emits receipt/hash/log,current screenshots,P1
+Graph,Semantic Match Is Not Owner Proof,EXISTING,Semantic Fabric/owner resolver,semantic relation cannot grant authority,current screenshots,P0
+CI,Runner Nested-Git/Submodule Contamination Detector,NEW_DELTA,CI/runner guardrails,detect .git directory inside tracked normal directory,current screenshots,P0
+CI,Runner State Carryover Detector,NEW_DELTA,CI/runner guardrails,detect persistent self-hosted runner residue after checkout,current screenshots,P0
+CI,Provisional-vs-Permanent Fix Classifier,NEW_DELTA,MetaLupa/CI owner,runner workaround cannot masquerade as root-cause repair,current screenshots,P0
+Observability,Kanban Wound Machine-Readable Contract,PARTIAL,Hub/Kanban,wound id/status/action/human frontier structured,current screenshots,P1
+Observability,Tool Cancellation vs Failure Classification,NEW_DELTA,tool runtime receipts,cancelled/error/blocked are distinct terminal states,current screenshots,P1
+Security,Secrets Recovery Metadata-Only Path,PARTIAL,secret owner,recover/reference secret location without printing value,current screenshots,P0
+Autonomy,Bounded Open-World Capability Acquisition,PARTIAL,capability router/Forja,discover/generate/test missing capability without direct canonical write,existing package + current synthesis,P0
+Autonomy,Autonomy Claim Requires Goal Judge,NEW_DELTA,Reality Judge/goals owner,autonomy score blocked if goal_judge provider/model unset,current screenshots,P0
+Autonomy,Human Frontier With Resume Condition,EXISTING,operational method,human-only blocker must include exact resume condition,current screenshots,P0
+Evaluation,Architecture-vs-Runtime Dual Score,NEW_DELTA,evaluation harness,design maturity cannot substitute runtime proof,current request,P0
+Evaluation,50-Gate Adversarial Package Assault,NEW_DELTA,MetaLupa/Forja harness,repeatable critical suite against capability crystal,current request,P0

@@ -85,7 +85,9 @@
     ".agents/skills/centraldark-live-editing-fabric/SKILL.md",
     ".agents/skills/main-pinned-runtime-fast-path/SKILL.md",
     ".agents/skills/centraldark-hub-credential-control-plane/SKILL.md",
-    ".agents/skills/centraldark-operational-method/SKILL.md"
+    ".agents/skills/centraldark-operational-method/SKILL.md",
+    ".agents/skills/centraldark-unified-surface-parity/SKILL.md",
+    ".claude/skills/synced/voice-semantic-classifier/SKILL.md"
   ],
   "minimum_probe_contract": {
     "github_ci": "commit_or_sha -> workflow_run -> jobs -> logs -> exact failure or PASS",
@@ -128,5 +130,27 @@
     "commit_exists_is_not_ci_pass": true,
     "patched_is_not_root_cause_fixed": true,
     "no_parallel_architecture": true
+  },
+  "lei_do_rastro": {
+    "owner": "AGENTS.md",
+    "gatilho": "🔏 !RASTRO",
+    "RESPONSE_WITHOUT_TRACE": "INVALID",
+    "EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES": "COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)",
+    "EVERY_MEMORY_CLAIM_NAMES_WHERE": true,
+    "LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN": true,
+    "APPLIES_TO_ALL_ENGINES": true
+  },
+  "invocation_grammar_binding": {
+    "id": "CENTRALDARK_INVOCATION_GRAMMAR_01",
+    "canonical_contract": "docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md",
+    "unified_surface_owner": ".agents/skills/centraldark-unified-surface-parity/SKILL.md",
+    "voice_classifier_owner": ".claude/skills/synced/voice-semantic-classifier/SKILL.md",
+    "intent_router_owner": ".agents/skills/centraldark-intent-deploy-router/SKILL.md",
+    "no_second_parser": true,
+    "wake_word_is_conditional_not_ritual": true,
+    "normalized_intent_shared_across_surfaces": true,
+    "raw_voice_transcript_preserved": true,
+    "platform_unavailable_when_tool_not_exposed": true,
+    "live_voice_binding_status": "UNKNOWN_UNTIL_MEASURED"
   }
 }

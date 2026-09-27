@@ -357,6 +357,40 @@ jobs:
           echo "pr_number=${PR_NUMBER}" >> "$GITHUB_OUTPUT"
           echo "head_sha=${HEAD_SHA}" >> "$GITHUB_OUTPUT"
 
+      - name: 🧿 CodeRabbit → rota determinística do Sentinela via API GitHub
+        if: steps.bridge.outputs.pr_number != ''
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          PR_NUMBER: ${{ steps.bridge.outputs.pr_number }}
+          HEAD_SHA: ${{ steps.bridge.outputs.head_sha }}
+          SIGNAL_STATE: ${{ steps.bridge.outputs.signal_state }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = Number(process.env.PR_NUMBER || 0);
+            if (!pr) {
+              core.notice('CODERABBIT_SENTINEL_ROUTE=SKIP_NO_PR');
+              return;
+            }
+            const head = process.env.HEAD_SHA || null;
+            await github.request('POST /repos/{owner}/{repo}/dispatches', {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'centraldark_sentinel_route',
+              client_payload: {
+                source: 'coderabbit',
+                event_class: 'REVIEW_FINDING',
+                state: 'STATE_CHANGED',
+                target: `PR#${pr}`,
+                owner: '.agents/skills/auditoria-pr/SKILL.md',
+                head_sha: head,
+                evidence_ref: `github:coderabbit:pr:${pr}:head:${head || 'UNKNOWN'}`,
+                next_cursor: 'HERMES_REPRODUCE_TEST_COUNTERPROVE',
+                upstream_state: process.env.SIGNAL_STATE || 'UNKNOWN',
+              },
+            });
+            core.notice(`CODERABBIT_SENTINEL_ROUTE=DISPATCHED pr=${pr} head=${head || 'UNKNOWN'}`);
+
       - name: ⚡ Provar fast-path do repositório
         id: repo_merge_policy
         if: steps.bridge.outputs.signal_state == 'CANDIDATE' && steps.bridge.outputs.pr_number != ''
@@ -408,6 +442,8 @@ jobs:
         if: always()
         run: |
           echo 'CODERABBIT_ROLE=REVIEW_ONLY'
+          echo 'SENTINEL_ROUTE_API=repository_dispatch:centraldark_sentinel_route'
+          echo 'SENTINEL_ROUTE_MUTATION_AUTHORITY=0'
           echo 'SIGNAL_WATCHER=CANONICAL_OWNER'
           echo 'CENTRALDARK_API=ADVISORY_FALLBACK_ONLY'
           echo 'MODEL_ADVISORY_IS_NOT_PROOF=1'

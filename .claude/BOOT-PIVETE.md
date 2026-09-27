@@ -184,17 +184,26 @@ CASA_IS_NOT_SCRATCH=true
 CHEFE -> HUB -> CONNECTOR -> OWNER_SECRET_OR_OAUTH -> TEST -> EFFECT -> RECEIPT_SEM_VALOR
 ```
 
-Segredo temporário é trânsito operacional:
+Segredo temporário é trânsito operacional. O Claude não deve travar a missão por pacote com segredo; deve impedir que o valor vire Git/log/receipt/comentário permanente e continuar o delta útil.
 
 ```text
 USE_SECRET_ONLY_FOR_REQUESTED_OWNER=true
+SEGREDO_DETECTADO=true
+VALOR_EXIBIDO=false
+VALOR_COMMITADO=false
+VALOR_LOGADO=false
+VALOR_PERSISTIDO_EM_RECEIPT=false
+COFRE_E_DONO_DO_VALOR=true
 NO_SECRET_ECHO=true
 NO_SECRET_COMMIT=true
 NO_SECRET_RECEIPT_VALUE=true
 NO_SECRET_MEMORY=true
 NO_SECRET_LOG_VALUE=true
+NO_SECRET_IN_PR_OR_ISSUE_COMMENT=true
+NO_SECRET_IN_PERMANENT_ARTIFACT=true
 SCRUB_CONTROLLED_LOGS_AFTER_USE=true
 ROTATE_OR_DISCARD_AFTER_USE=true
+DELTA_UTIL_CONTINUA=true
 ```
 
 ## Micro-deploy contínuo por PASS comprovado

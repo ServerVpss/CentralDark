@@ -2,7 +2,7 @@
 title: "💬 Padrão de resposta — SEGREDO/CHEFE"
 status: "ATIVO_RECONCILIADO"
 date: 2026-06-20
-updated: 2026-09-24
+updated: 2026-09-27
 owner: "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
 truth_scope: "CHEFE_RESPONSE_STYLE_AND_DELIVERY_CONTRACT"
 canonical: true
@@ -218,6 +218,63 @@ Mapa mínimo:
 - 🔴 falha
 - 🟡 parcial
 - 🟢 ok quando provado
+
+## 🪝 Gatilhos visuais + callbacks de recuperação
+
+Em resposta estruturada, cada título material usa um símbolo que represente o conceito daquele bloco. O símbolo funciona como índice semântico e gatilho de recuperação; não é decoração, prova ou autoridade.
+
+```text
+STRUCTURED_TITLE_SEMANTIC_EMOJI=true
+TITLE_SYMBOL_MUST_MATCH_CONCEPT=true
+NORMAL_CHAT_VISUAL_VARIATION=true
+VISUAL_RHYTHM_WITHOUT_SPAM=true
+EMOJI != PROOF
+SYMBOL != AUTHORITY
+```
+
+Mapa preferencial, extensível pelo contexto:
+
+- 👑 CHEFE / autoridade humana
+- 🎯 intenção / alvo
+- 🖥️ sistema / interface / computador
+- 🖐️ OpenHands / mão operacional
+- 💻🗣️ Open Interpreter / operação do computador por linguagem
+- 🔗⚙️ n8n / fluxo e orquestração
+- 🧠⚙️ AIOS / kernel cognitivo
+- 🎞️ GIF / movimento visual
+- 🧠 cognição / agente
+- ⚙️ execução
+- ⏩ avanço
+- 🔙 backcheck / retorno curto
+- 🪡 costura / reparo local
+- 🧪 teste / contraprova
+- 🪬 Reality Judge / julgamento pela evidência
+- 🧾 receipt / rastro
+- 🗝️ cristal / recovery / NEXT_CURSOR
+
+O texto também pode usar callbacks curtos para recuperar intenção, owner, checkpoint ou ideia anterior sem repetir toda a história.
+
+```text
+CALLBACK_RECONNECTS_PRIOR_CONTEXT=true
+CALLBACK_DOES_NOT_REPEAT_WHOLE_HISTORY=true
+ENDING_CALLBACK_MAY_RECALL_OPENING_INTENT=true
+MID_RESPONSE_CALLBACK_ALLOWED_WHEN_CONTEXT_DRIFT_RISK=true
+CALLBACK_IS_RECOVERY_NOT_NEW_MISSION=true
+```
+
+Exemplo:
+
+```text
+🎯 INTENÇÃO
+→ 🖥️ SISTEMA
+→ ⚙️ EXECUÇÃO
+→ 🔙 lembra do 🎯?
+→ 🪬 PROVA
+→ 🧾 RECEIPT
+→ 🗝️ volta ao 🎯 com NEXT_CURSOR
+```
+
+Na conversa normal, variar símbolos/kaomojis quando isso melhorar presença e ritmo. Em relatório técnico, priorizar legibilidade: um gatilho por conceito material é melhor que decoração em excesso.
 
 ## 📜 Camadas narrativas
 

@@ -15,6 +15,12 @@ invariants:
   action_is_not_proof: true
   learning_never_discarded: true
   proven_becomes_deterministic_candidate: true
+  proven_path_becomes_executable_recipe: true
+  recipe_must_live_in_repository: true
+  recipe_must_be_machine_consumable: true
+  fingerprint_required: true
+  replay_before_rediscovery: true
+  adapt_env_bindings_only: true
   deterministic_requires_real_consumer: true
   deterministic_requires_positive_negative_test: true
   deterministic_requires_verifiable_receipt: true
@@ -23,6 +29,8 @@ invariants:
   no_new_information: REUSE_PROOF
   failed_candidate: REFUTED_MINERAL
   unresolved_candidate: UNRESOLVED_MINERAL
+  human_is_not_crystal_transport: true
+  machine_receipt_must_persist_in_vps_or_repo_owner: true
 
 lock_identity:
   key_material: [CLAIM_KEY, OWNER]
@@ -89,7 +97,36 @@ canonical_flow:
   - FIXED_POINT
   - POST_GREEN_LOCK
   - REGISTRA
+  - RASTRO
   - BOOT
+
+executable_recipe_binding:
+  recipe_projection: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-EXECUTABLE-RECIPE.yml
+  status: MACHINE_PROJECTION_OF_THIS_OWNER
+  creates_new_owner: false
+  purpose: >-
+    Guardar a receita executavel do caminho ja provado para o proximo executor
+    carregar a mesma sequencia, adaptar somente bindings de ambiente, rodar a
+    mesma prova e comparar resultado/formato/efeito antes de decidir entre
+    DELTA_NOVO e REUTILIZA_CRISTAL.
+  required_chain:
+    - CAMINHO_JA_PROVADO
+    - SELAR_RECEITA_EXECUTAVEL
+    - GUARDAR_FINGERPRINT
+    - PROXIMO_EXECUTOR_CARREGA_A_RECEITA
+    - ADAPTA_SOMENTE_BINDINGS_DO_AMBIENTE
+    - EXECUTA_A_MESMA_SEQUENCIA
+    - RODA_A_MESMA_PROVA
+    - COMPARA_RESULTADO_FORMATO_EFEITO
+    - DIVERGIU_DELTA_NOVO
+    - NAO_DIVERGIU_REUTILIZA_CRISTAL
+  environment_bindings_are_not_canonical_semantics: true
+  same_fingerprint_same_effect_reuses_crystal: true
+  changed_effect_creates_targeted_delta: true
+  unknown_difference_is_not_pass: true
+  human_handoff_block_forbidden: true
+  runtime_storage_required: true
+  runtime_storage_owner: /root/CentralDark/.artifacts/system-sentinel/receipts
 
 promotion:
   proven_learning_flow:
@@ -121,6 +158,10 @@ fixed_point:
     - FIXED_POINT
     - HUMAN_FRONTIER
     - BLOCKED_WITH_EXPLICIT_CAUSE
+  requires:
+    - SOUL_SYNC_CURRENT
+  soul_stale: FIXED_POINT_FORBIDDEN
+  soul_sync_owner: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#2.4
   infinite_retry_without_information_gain: FORBIDDEN
   reopen_entire_system_for_local_delta: FORBIDDEN
   invalidate_only_dependent_claims: true
@@ -138,6 +179,17 @@ proven_path_replay:
     RUN_SAME_PROOF + COMPARE_RESULT + DIVERGENCE_BECOMES_DELTA
   laws:
     PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO: true
+    PROVEN_PATH_BECOMES_EXECUTABLE_RECIPE: true
+    RECIPE_MUST_LIVE_IN_REPOSITORY: true
+    RECIPE_MUST_BE_MACHINE_CONSUMABLE: true
+    FINGERPRINT_REQUIRED: true
+    REPLAY_BEFORE_REDISCOVERY: true
+    ADAPT_ENV_BINDINGS_ONLY: true
+    SAME_FINGERPRINT_SAME_PROOF: REUSE_CRYSTAL
+    CHANGED_FINGERPRINT: REVALIDATE_AFFECTED_CONE_ONLY
+    DOCUMENTED_IS_NOT_EXECUTABLE_RECIPE: true
+    RECEIPT_IS_NOT_PROOF: true
+    FINGERPRINT_MATCH_IS_NOT_RUNTIME_PASS: true
     SAME_FINGERPRINT_REUSES_PROVEN_RECIPE: true
     ENVIRONMENT_ADAPTATION_MAY_CHANGE_BINDINGS_NOT_GOAL: true
     ENVIRONMENT_ADAPTATION_MAY_CHANGE_PATHS_HOSTS_AUTH_REFS: true
@@ -157,6 +209,20 @@ proven_path_replay:
     - SELF_TEST_COMMAND
     - SELF_TEST_RESULT
     - RECEIPT_REF
+  machine_consumable_recipe_requires:
+    owner: REQUIRED
+    objective: REQUIRED
+    preconditions: REQUIRED
+    execution_sequence: REQUIRED
+    environment_bindings: DECLARED_OR_EMPTY
+    dependency_fingerprint: REQUIRED
+    proof: REQUIRED
+    counterproof: REQUIRED
+    expected_result_format_effect: REQUIRED
+    evidence: REQUIRED
+    next_cursor: REQUIRED
+    storage: REPOSITORY_ONLY
+    registry: PROVEN_CLAIMS_LOCK_JSON
   replay_flow:
     - LOAD_SEALED_CLAIM
     - COMPARE_DEPENDENCY_FINGERPRINT
@@ -494,3 +560,59 @@ session_crystallization_2026_09_25_runtime_extension:
     CHANGED_FINGERPRINT: REVALIDATE_AFFECTED_CONE_ONLY
     UNDECLARED_BINDING: DENY_FAIL_CLOSED
     MUTATING_WITHOUT_AUTHORITY_FLAG: BLOCKED
+
+
+proven_path_executable_recipe_contract_2026_09_26:
+  marker: PROVEN_PATH_BECOMES_EXECUTABLE_RECIPE
+  status: SEALED_AS_MACHINE_CONSUMABLE_CONTRACT
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
+  registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json
+  consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+  pr_mother: 1562
+  objective: >-
+    Todo caminho ja provado deve virar receita executavel consumivel por
+    outro executor sem redescoberta, adaptando somente bindings declarados
+    do ambiente e comparando resultado, formato e efeito esperado.
+  laws:
+    PROVEN_PATH_BECOMES_EXECUTABLE_RECIPE: true
+    RECIPE_MUST_LIVE_IN_REPOSITORY: true
+    RECIPE_MUST_BE_MACHINE_CONSUMABLE: true
+    FINGERPRINT_REQUIRED: true
+    REPLAY_BEFORE_REDISCOVERY: true
+    ADAPT_ENV_BINDINGS_ONLY: true
+    SAME_FINGERPRINT_SAME_PROOF: REUSE_CRYSTAL
+    CHANGED_FINGERPRINT: REVALIDATE_AFFECTED_CONE_ONLY
+    DOCUMENTED_IS_NOT_EXECUTABLE_RECIPE: true
+    RECEIPT_IS_NOT_PROOF: true
+    FINGERPRINT_MATCH_IS_NOT_RUNTIME_PASS: true
+    TESTED_ONCE_IS_NOT_REPLAY_PROVEN: true
+  required_recipe_fields:
+    - owner
+    - objective
+    - preconditions
+    - execution_sequence
+    - environment_bindings
+    - dependency_fingerprint
+    - proof
+    - counterproof
+    - expected_result_format_effect
+    - evidence
+    - next_cursor
+  replay_outcomes:
+    same_fingerprint_same_proof: REUSE_CRYSTAL
+    changed_fingerprint: REVALIDATE_AFFECTED_CONE_ONLY
+    same_fingerprint_proof_diverged: DELTA_NEW
+    undeclared_binding: DENY_FAIL_CLOSED
+  next_cursor: >-
+    next executor loads PROVEN-CLAIMS.lock.json, matches owner/objective/
+    fingerprint, adapts declared bindings only, runs same sequence and proof,
+    then classifies divergence as DELTA_NEW or no divergence as REUSE_CRYSTAL.
+
+
+rastro_lock:
+  token: "🔏 !RASTRO"
+  owner: AGENTS.md
+  response_without_trace: INVALID
+  write_claim_fields: [COMMIT_SHA, PATH, LINK, READBACK]
+  memory_claim_requires_location: true
+  ledger_1562_same_turn_for_direct_main: true

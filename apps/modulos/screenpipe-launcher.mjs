@@ -9,6 +9,15 @@ const SCREENPIPE_PORT = parseInt(process.env.PORT || '3030', 10);
 const SCREENPIPE_DATA_DIR = process.env.SCREENPIPE_DATA_DIR || '/root/.screenpipe';
 const LOG_LEVEL = process.env.LOG_LEVEL || 'info';
 const HEALTH_URL = process.env.SCREENPIPE_HEALTH_URL || `http://127.0.0.1:${SCREENPIPE_PORT}/health`;
+const EXPECTED_HOST = 'CASA_WINDOWS';
+console.log('SCREENPIPE_RUNTIME_HOST=CASA_WINDOWS');
+if (process.platform !== 'win32' && process.env.SCREENPIPE_ALLOW_NONWINDOWS !== '1') {
+  console.error(`[ScreenPipe] HOST_MISMATCH expected=${EXPECTED_HOST} actual=${process.platform}`);
+  console.error('[ScreenPipe] VPS_3030_IS_GRAPH_PANEL=true');
+  console.error('[ScreenPipe] UNKNOWN != PASS');
+  process.exit(78);
+}
+
 const LOCAL_BIN = process.env.SCREENPIPE_BIN || resolve(
   REPO_ROOT,
   'node_modules',
