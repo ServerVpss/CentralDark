@@ -533,3 +533,16 @@ LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 ```
 
 Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
+
+## 🪞 Erros próprios do Claude viram regra (owner do registro: `docs/APRENDIZADOS/2026-09-26-sessao-preservacao-casa-lei-do-rastro.md` §8)
+
+```text
+PUSH_ONLY_AFTER_GATE_GREEN_ON_REBASED_HEAD=true
+TEST_HARNESS_DERIVES_FILES_FROM_OWNER=true
+TEST_MUST_NOT_ANCHOR_ON_MUTABLE_REAL_STATE=true
+SEAL_STORES_REPLAY_INPUTS=true
+PARTIAL_LOG_CLAIM_NAMES_ITS_WINDOW=true
+RETRACT_FALSE_ALARM_IN_SAME_RECEIPT=true
+CLAUDE_OWN_ERROR → SHA_DO_ERRO + SHA_DO_CONSERTO + REGRA + RECIBO_1562
+```
+

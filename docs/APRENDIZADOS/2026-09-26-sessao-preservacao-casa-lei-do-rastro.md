@@ -155,3 +155,27 @@ DEDO_CALIBRADO: afirmar exatamente o que a prova sustenta — nem mais, nem meno
 ```
 
 Pesquisa externa (peças, não unidade): debate multiagente melhora veracidade e tem limites de custo e "delírio coletivo"; agentes de código em paralelo por espaços de trabalho separados é prática documentada. Nenhuma fonte mostrou a combinação multi-fornecedor + multimodal + livro-razão + portão selado.
+
+## 8. Erros próprios do Claude — registrados, provados e corrigidos (ordem do CHEFE)
+
+Os erros de antes da compactação estão em §4 (conselho não pedido) e §5; o desvio de escopo e a varredura fora da CentralDark estão em §1. Abaixo, os da tarde/noite de 26→27/09. Nenhum foi pego primeiro por mim: portão, receita, outra caneta ou o CHEFE pegaram.
+
+| # | Erro do Claude | Evidência | Quem pegou | Conserto | Regra que ficou |
+|---|---|---|---|---|---|
+| 1 | envio com a main vermelha (portão só olhava o arquivo, não a saída) | `6d0ab0e` | eu, na rodada seguinte | `2a5c5da` + portão pela receita | PUSH_ONLY_AFTER_GATE_GREEN_ON_REBASED_HEAD |
+| 2 | suíte com lista fixa de arquivos → 8 falhas falsas, main vermelha | entre `eb8993e` e `6545c34` | portão geral | `6545c34` (lê REQUIRED_FILES) | TEST_HARNESS_DERIVES_FILES_FROM_OWNER |
+| 3 | re-selo feito sobre suíte quebrada | commit local `97e18b2`, NÃO enviado | replay DELTA_NEW + portão | `f4ed61d` | REVALIDATE/DELTA_NEW != verde |
+| 4 | testes de publicação ancorados em UNKNOWN; publicação real deixou main vermelha | `f4ed61d` → vermelho após `dc63ce0` | portão | `75be416` | TEST_MUST_NOT_ANCHOR_ON_MUTABLE_REAL_STATE |
+| 5 | primeiro selo guardava só a contagem da impressão → receita não determinística | `54a1d76` | eu, ao rasgar a própria máquina | `ab3d904` | SEAL_STORES_REPLAY_INPUTS |
+| 6 | rasgo falso: acusei "caminho fantasma" que era proibição correta | recibo #1562/5851742090 | eu, relendo o validador | retirado no mesmo recibo | RETRACT_FALSE_ALARM_IN_SAME_RECEIPT |
+| 7 | teste do PR #1700 sem a gramática deu falso "continue quebrado" | medição da sessão | eu, antes de publicar | refeito com a gramática no lugar | ambiente de prova igual ao do dono |
+| 8 | disse "hoje não abri o Desktop Commander" — errado para o dia | resposta ao CHEFE 27/09 00:10 | CHEFE | corrigido na conversa; registro local só cobre 21h24→ (3 chamadas) | PARTIAL_LOG_CLAIM_NAMES_ITS_WINDOW |
+| 9 | discuti "único" em vez da intenção real | conversa 27/09 00:05–00:08 | CHEFE ("intenção diminuiu pra 2") | recalibrado | DISCUTIR_O_QUE_NAO_FOI_PEDIDO = DESALINHAMENTO (§7) |
+
+```text
+CLAUDE_ERROS_REGISTRADOS=9 (+ §1/§4 antes da compactação)
+CLAUDE_ERROS_PEGOS_PELO_PROPRIO_CLAUDE_ANTES_DE_DANO=4 (5,6,7 e 1 na rodada seguinte)
+CLAUDE_ERROS_QUE_CHEGARAM_NA_MAIN=3 (1, 2, 4) — todos corrigidos com SHA
+ECO: AGENTS.md (todos os motores) · CLAUDE.md (ponte do Claude) · este aprendizado · #1562
+FISCAL: verify_repo_contract exige as 6 regras com valor true em AGENTS.md e CLAUDE.md
+```
