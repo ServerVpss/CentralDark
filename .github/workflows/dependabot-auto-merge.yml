@@ -850,7 +850,7 @@ jobs:
       github.repository == 'ServerVpss/CentralDark' &&
       (
         github.event_name == 'schedule' ||
-        github.event_name == 'workflow_dispatch'
+        (github.event_name == 'workflow_dispatch' && (inputs.target_pr == '' || inputs.target_pr == null))
       )
     runs-on: [self-hosted, Linux]
     timeout-minutes: 12
@@ -1119,6 +1119,7 @@ jobs:
           RESOLVER: .ci-house/scripts/dependabot/resolve-conflicts.sh
           CONFLICT_CLASSIFIER: .ci-house/scripts/dependabot/classify-conflict.mjs
           SEMANTIC_ALL_HELPER: .ci-house/scripts/dependabot/semantic-all-resolver.mjs
+          STRUCTURED_CONFLICT_HELPER: .ci-house/scripts/dependabot/structured-conflict-resolver.mjs
           CONFLICT_REGISTRY: .ci-house/scripts/dependabot/known-conflict-patterns.json
         run: |
           set -euo pipefail
@@ -1130,7 +1131,7 @@ jobs:
         run: |
           echo "TARGET_PR=${{ inputs.target_pr }}"
           echo "MODE=SINGLE_PR_CONFLICT_TEST"
-          echo "BUTTON_POLICY=CURRENT|INCOMING|BOTH|YELLOW"
+          echo "BUTTON_POLICY=CURRENT|INCOMING|BOTH|STRUCTURED|YELLOW"
           echo "UNKNOWN_ACTION=YELLOW_NO_PUSH"
           echo "PR_MOTHER_1562_PROTECTED=true"
           echo "OTHER_OPEN_PRS_MUTATED_BY_THIS_JOB=0"
