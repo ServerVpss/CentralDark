@@ -443,3 +443,15 @@ updated: 2026-08-27
 - **Menos é mais:** não criar `Costura V2/V3`, segundo resolvedor, segundo cérebro ou segunda verdade. Melhorar owner existente; registrar o ouro no owner + memória + receipt.
 - **Owners relacionados:** `docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md`; `.agents/skills/git-conflict-resolve-house-standard/SKILL.md`; `.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/INTERLIGADOS/README.md`; `scripts/github/update-branch-deterministic.mjs`; `.github/workflows/pr-update-branch-deterministic.yml`.
 - **Regra final:** `OBSERVATION != EXECUTION_REQUEST`; `EXPLICIT_ORDER → EXECUTE`; `ACTION != PROOF`; `UNKNOWN != PASS`; `CURRENT > HISTORY`; `REALITY_IS_JUDGE=true`.
+
+
+### 63. Dependabot: aprovação autônoma de workflow run é diferente de aprovação de PR
+- **Categoria:** automação GitHub / memória operacional durável
+- **Data:** 2026-09-27
+- **Contexto:** o CHEFE autorizou explicitamente que o Dependabot deixe de parar no botão humano `Approve workflows to run`. O owner existente `.github/workflows/dependabot-auto-merge.yml` recebeu um job dedicado que procura runs `action_required` apenas em PRs abertas de `dependabot[bot]`, mesmo repositório, base `main` e HEAD CURRENT exato.
+- **Diferença crítica:** a tentativa histórica removida em 2026-09-04 fazia `pulls.createReview(event='APPROVE')` e falhava com HTTP 422 porque GitHub Actions não podia aprovar o PR por review. A capacidade atual usa o endpoint de **aprovação do workflow run**: `POST /repos/{owner}/{repo}/actions/runs/{run_id}/approve`. Portanto `WORKFLOW_RUN_APPROVAL != PR_REVIEW_APPROVAL`.
+- **Gate material:** `dependabot[bot] + same_repo + base_main + exact_current_head + conclusion=action_required`. Não promove PR, não faz review APPROVE e não declara workflow verde antes da execução.
+- **TIK-TAK:** quatro remedições curtas, com 5 s entre rodadas, capturam runs que aparecem logo após `synchronize`; cada aprovação fica presa ao HEAD vigente.
+- **Rollback simples:** checkpoint bom anterior `d5137a91518aa52a0c39072b7afb7e495108f01d`; delta de ativação `afad4177a76659afec503af610dbec6c813b6c37`; reversão causal `git revert afad4177a76659afec503af610dbec6c813b6c37`.
+- **Primeira ativação observada:** workflow dispatch `36311584334`, no HEAD `afad4177a76659afec503af610dbec6c813b6c37`; job `🟢 Dependabot — aprovar workflows pendentes com gate` entrou em `queued`. Naquele snapshot havia zero PRs Dependabot abertas, portanto `LIVE_APPROVAL_OF_DEPENDABOT_RUN=NOT_APPLICABLE`, não PASS inventado.
+- **Regra:** `ACTION_REQUIRED != FAIL`; `ACTION_REQUIRED != PASS`; `APPROVE_REQUESTED != WORKFLOW_SUCCESS`; `UNKNOWN != PASS`; `CURRENT > HISTORY`.
