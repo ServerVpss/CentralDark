@@ -724,13 +724,13 @@
       "lock_key": "4140e68eb6a6e89f5ce434ea556ae7b99918fbd9ace61aae20e59fc056a88e25",
       "state": "SEALED_PROVEN",
       "proof_target": "portão único que toda caneta (Claude, ChatGPT texto/voz/Work, Cowork) roda antes de subir na main: ciclo mestre texto=voz, partida, validador de paridade, contraprova do validador e verificação geral",
-      "evidence_ref": "5 comandos verdes; apagar/contradizer regra reprova",
-      "observed_at": "2026-09-27T03:20:00Z",
+      "evidence_ref": "5 comandos verdes; apagar regra nova reprova",
+      "observed_at": "2026-09-27T03:26:00Z",
       "counterproof": "PASS",
       "receipt_ref": "https://github.com/ServerVpss/CentralDark/pull/1562#issuecomment-5851904401",
       "proven_path_replay": {
         "marker": "PROVEN_PATH_REPLAY_LOCK",
-        "dependency_fingerprint": "f543b10cd5df815f1e1e504eb3c73bcbd9277d8ce3e5133cb80e0741eed9e3ce",
+        "dependency_fingerprint": "266c583f8ae481a7e17df0ca7c892197a902f3ece344ce555b7aa7fb2d9adb5e",
         "fingerprint_material_count": 7,
         "execution_commands": [],
         "proof_commands": [
@@ -807,6 +807,15 @@
           "observed_at": "2026-09-27T03:20:00Z",
           "old_dependency_fingerprint": "d8455bae2a7eab5156019302308d261709ed8160eacf9b17c6d6f2da0d993dca",
           "new_dependency_fingerprint": "f543b10cd5df815f1e1e504eb3c73bcbd9277d8ce3e5133cb80e0741eed9e3ce",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "fechamento da sessão: +2 regras de erro próprio (motivo antes de julgar; responder a intenção pedida) no fiscal",
+          "observed_at": "2026-09-27T03:26:00Z",
+          "old_dependency_fingerprint": "f543b10cd5df815f1e1e504eb3c73bcbd9277d8ce3e5133cb80e0741eed9e3ce",
+          "new_dependency_fingerprint": "266c583f8ae481a7e17df0ca7c892197a902f3ece344ce555b7aa7fb2d9adb5e",
           "counterproof": "PASS",
           "current_target_remeasured": true,
           "scope": "AFFECTED_CONE_ONLY"

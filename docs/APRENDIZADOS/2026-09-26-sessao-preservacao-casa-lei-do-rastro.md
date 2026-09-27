@@ -171,11 +171,35 @@ Os erros de antes da compactação estão em §4 (conselho não pedido) e §5; o
 | 7 | teste do PR #1700 sem a gramática deu falso "continue quebrado" | medição da sessão | eu, antes de publicar | refeito com a gramática no lugar | ambiente de prova igual ao do dono |
 | 8 | disse "hoje não abri o Desktop Commander" — errado para o dia | resposta ao CHEFE 27/09 00:10 | CHEFE | corrigido na conversa; registro local só cobre 21h24→ (3 chamadas) | PARTIAL_LOG_CLAIM_NAMES_ITS_WINDOW |
 | 9 | discuti "único" em vez da intenção real | conversa 27/09 00:05–00:08 | CHEFE ("intenção diminuiu pra 2") | recalibrado | DISCUTIR_O_QUE_NAO_FOI_PEDIDO = DESALINHAMENTO (§7) |
+| 10 | tratei "sigilo para benefício próprio" e "sigilo para proteger" como a mesma coisa | conversa 27/09 00:21–00:22 | CHEFE | corrigido: sigilo protetor é legítimo | SAME_ACT_DIFFERENT_MOTIVE_DISTINGUISH_BEFORE_JUDGING |
+| 11 | respondi com debate/opinião em vez da intenção pedida (reconhecimento com prova) | conversa 27/09 00:05–00:22 | CHEFE | recalibrado; papel do Claude = executar, medir, ser honesto — não disputar | ANSWER_ASKED_INTENT_NOT_ADJACENT_DEBATE |
 
 ```text
-CLAUDE_ERROS_REGISTRADOS=9 (+ §1/§4 antes da compactação)
+CLAUDE_ERROS_REGISTRADOS=11 (+ §1/§4 antes da compactação)
 CLAUDE_ERROS_PEGOS_PELO_PROPRIO_CLAUDE_ANTES_DE_DANO=4 (5,6,7 e 1 na rodada seguinte)
 CLAUDE_ERROS_QUE_CHEGARAM_NA_MAIN=3 (1, 2, 4) — todos corrigidos com SHA
 ECO: AGENTS.md (todos os motores) · CLAUDE.md (ponte do Claude) · este aprendizado · #1562
-FISCAL: verify_repo_contract exige as 6 regras com valor true em AGENTS.md e CLAUDE.md
+FISCAL: verify_repo_contract exige as 8 regras com valor true em AGENTS.md e CLAUDE.md
 ```
+
+## 9. Fechamento da sessão 26→27/09 (chave de ouro)
+
+```text
+MAIN_NO_FECHAMENTO=medir ao vivo (último lido na abertura deste commit)
+COMMITS_NA_JANELA=56 (20h55→00h13) · 18 Claude · 38 outras canetas · recibo 56/56
+PORTAO=MULTI_PEN_MAIN_GATE_PATH verde 5/5 · replay_command no PROVEN-CLAIMS.lock.json
+PARIDADE_VOZ_TEXTO_FUNCIONAL=PASS (SHA) · IDENTIDADE_DE_SESSAO=UNKNOWN
+LEITOR_DE_GATILHO=UM_SO · marcador simples resolve no texto · verbo falado abre na voz
+CADEADOS_DO_CLAUDE=abertos por prova e atribuídos (PEN_ID=COMMIT_SHA)
+ERROS_DO_CLAUDE=11 registrados → 8 regras em AGENTS.md + CLAUDE.md com fiscal
+PLACAR_ANTIGO_SEM_METODO=UNKNOWN (não repetir)
+ABERTO_PARA_O_CHEFE: PR #1700 (ACORDAR falado) · ACTIVE_CHILD=#1649 no cartão do #1562
+```
+
+Próximo Claude, ao acordar: carregar `CLAUDE.md` → ler as 8 regras de erro próprio → rodar o `replay_command` do portão antes de qualquer envio → medir a main ao vivo (cartão do #1562 é histórico) → continuar do NEXT_CURSOR, sem refazer o que está selado.
+
+```text
+APRENDER_COM_O_ERRO=true
+ERRO_NAO_APRENDE_COM_O_CLAUDE=true
+```
+
