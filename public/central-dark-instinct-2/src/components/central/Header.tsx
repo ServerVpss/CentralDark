@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Menu, X, Languages, Waypoints } from "lucide-react";
+import { Menu, X, Languages } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { LANGS, useI18n, type Lang } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { ExportPdf } from "./ExportPdf";
@@ -12,13 +13,14 @@ const SECTIONS = [
   { id: "multimodal", key: "nav.multimodal" },
   { id: "selo", key: "nav.selo" },
   { id: "pacotao", key: "nav.pacotao" },
+  { id: "projecao", key: "nav.projecao" },
 ];
 
-const ROUTER_LABEL: Record<Lang, string> = {
-  "pt-BR": "Roteador",
-  "en-US": "Router",
-  "es-ES": "Enrutador",
-};
+const OPERACOES = [
+  { to: "/cockpit", label: "Cockpit" },
+  { to: "/roteador", label: "Roteador" },
+  { to: "/repositorio", label: "Repositório" },
+] as const;
 
 export function Header() {
   const { t, lang, setLang } = useI18n();
@@ -35,9 +37,7 @@ export function Header() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "border-b border-border bg-background/85 backdrop-blur-xl"
-          : "bg-transparent"
+        scrolled ? "border-b border-border bg-background/85 backdrop-blur-xl" : "bg-transparent"
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
@@ -65,16 +65,20 @@ export function Header() {
               {t(s.key)}
             </a>
           ))}
-          <a
-            href="/roteador"
-            className="ml-1 inline-flex items-center gap-1.5 rounded-md border border-primary/30 bg-primary/10 px-3 py-2 text-xs font-medium text-primary transition-colors hover:bg-primary/15 hover:text-foreground"
-          >
-            <Waypoints className="size-3.5" />
-            {ROUTER_LABEL[lang]}
-          </a>
         </nav>
 
         <div className="flex items-center gap-2">
+          <div className="hidden items-center gap-1 xl:flex">
+            {OPERACOES.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className="rounded-md px-2.5 py-2 font-mono text-[10px] tracking-wide text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
           <div
             role="group"
             aria-label={t("nav.langs")}
@@ -108,11 +112,7 @@ export function Header() {
             aria-controls="menu-mobile"
             onClick={() => setOpen((v) => !v)}
           >
-            {open ? (
-              <X aria-hidden className="size-5" />
-            ) : (
-              <Menu aria-hidden className="size-5" />
-            )}
+            {open ? <X aria-hidden className="size-5" /> : <Menu aria-hidden className="size-5" />}
           </Button>
         </div>
       </div>
@@ -133,20 +133,23 @@ export function Header() {
                 {t(s.key)}
               </a>
             ))}
-            <a
-              href="/roteador"
-              onClick={() => setOpen(false)}
-              className="inline-flex items-center gap-2 rounded-md border border-primary/30 bg-primary/10 px-3 py-2.5 text-sm text-primary"
-            >
-              <Waypoints className="size-4" />
-              {ROUTER_LABEL[lang]}
-            </a>
           </nav>
-          <div
-            role="group"
-            aria-label={t("nav.langs")}
-            className="mt-3 flex gap-1 sm:hidden"
+          <nav
+            aria-label="Operações"
+            className="mt-3 grid grid-cols-3 gap-1 border-t border-border pt-3"
           >
+            {OPERACOES.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                onClick={() => setOpen(false)}
+                className="rounded-md px-2 py-2.5 text-center font-mono text-[10px] text-neon-blue hover:bg-surface"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <div role="group" aria-label={t("nav.langs")} className="mt-3 flex gap-1 sm:hidden">
             {LANGS.map((l) => (
               <button
                 key={l.code}
@@ -155,9 +158,7 @@ export function Header() {
                 aria-pressed={lang === l.code}
                 aria-label={l.label}
                 className={`min-h-11 flex-1 rounded-md border border-border px-2 py-2 font-mono text-[11px] tracking-widest ${
-                  lang === l.code
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground"
+                  lang === l.code ? "bg-primary text-primary-foreground" : "text-muted-foreground"
                 }`}
               >
                 {l.flag}

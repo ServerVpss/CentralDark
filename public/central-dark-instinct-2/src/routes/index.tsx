@@ -22,13 +22,17 @@ import {
 } from "lucide-react";
 
 import heroArt from "@/assets/hero-centraldark.jpg";
-import { I18nProvider, LANGS, useI18n, type Lang } from "@/lib/i18n";
+import { LANGS, useI18n, type Lang } from "@/lib/i18n";
+import { ANCORA_CANONICA } from "@/lib/canon";
 import { Header } from "@/components/central/Header";
 import { Reveal, SectionHeading } from "@/components/central/Reveal";
 import { Timeline } from "@/components/central/Timeline";
 import { LoopDiagram } from "@/components/central/LoopDiagram";
 import { Ledger } from "@/components/central/Ledger";
+import { Projecao } from "@/components/central/Projecao";
 import { ExportPdf } from "@/components/central/ExportPdf";
+import { HermesFlutuante, HermesPeles } from "@/components/central/HermesPet";
+
 import { SeoI18n } from "@/components/central/SeoI18n";
 import { Button } from "@/components/ui/button";
 
@@ -50,8 +54,7 @@ export const Route = createFileRoute("/")({
       { property: "og:image", content: OG_IMAGE },
       {
         property: "og:image:alt",
-        content:
-          "Cadeado dourado em wireframe com rastros de luz neon sobre fundo preto",
+        content: "Cadeado dourado em wireframe com rastros de luz neon sobre fundo preto",
       },
       { property: "og:locale", content: "pt_BR" },
       { property: "og:locale:alternate", content: "en_US" },
@@ -85,13 +88,12 @@ export const Route = createFileRoute("/")({
     ],
   }),
   component: () => (
-    <I18nProvider>
+    <>
       <SeoI18n />
       <PaginaCentralDark />
-    </I18nProvider>
+    </>
   ),
 });
-
 
 function Hero() {
   const { t } = useI18n();
@@ -158,9 +160,7 @@ function Hero() {
               <Reveal key={title as string} delay={300 + i * 80}>
                 <div className="panel h-full p-5 text-left">
                   <I className="size-4 text-gold" />
-                  <p className="mt-3 text-sm font-semibold text-foreground">
-                    {t(title as string)}
-                  </p>
+                  <p className="mt-3 text-sm font-semibold text-foreground">{t(title as string)}</p>
                   <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                     {t(desc as string)}
                   </p>
@@ -187,11 +187,7 @@ function Principios() {
   return (
     <section id="principios" className="scroll-mt-24 px-4 py-24 sm:px-6">
       <div className="mx-auto max-w-6xl">
-        <SectionHeading
-          kicker={t("prin.kicker")}
-          title={t("prin.title")}
-          lead={t("prin.lead")}
-        />
+        <SectionHeading kicker={t("prin.kicker")} title={t("prin.title")} lead={t("prin.lead")} />
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((it, i) => {
             const Icon = it.icon;
@@ -244,9 +240,7 @@ function Multimodal() {
                 <div className="panel flex h-full items-start gap-4 p-5">
                   <Icon className="mt-0.5 size-5 shrink-0 text-neon-blue" />
                   <div>
-                    <h3 className="text-sm font-semibold text-foreground">
-                      {t(`multi.${m.k}`)}
-                    </h3>
+                    <h3 className="text-sm font-semibold text-foreground">{t(`multi.${m.k}`)}</h3>
                     <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                       {t(`multi.${m.k}d`)}
                     </p>
@@ -266,11 +260,7 @@ function Idiomas() {
   return (
     <section id="idiomas" className="scroll-mt-24 px-4 py-20 sm:px-6">
       <div className="mx-auto max-w-4xl">
-        <SectionHeading
-          kicker={t("lang.kicker")}
-          title={t("lang.title")}
-          lead={t("lang.lead")}
-        />
+        <SectionHeading kicker={t("lang.kicker")} title={t("lang.title")} lead={t("lang.lead")} />
         <Reveal className="mt-12">
           <div className="panel-gold flex flex-col items-center gap-5 p-7">
             <Languages aria-hidden className="size-5 text-gold" />
@@ -294,12 +284,10 @@ function Idiomas() {
                       : "border-border text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  {l.label}{" "}
-                  <span className="font-mono text-[10px] opacity-80">{l.code}</span>
+                  {l.label} <span className="font-mono text-[10px] opacity-80">{l.code}</span>
                 </button>
               ))}
             </div>
-
           </div>
         </Reveal>
       </div>
@@ -310,22 +298,16 @@ function Idiomas() {
 function Selo() {
   const { t } = useI18n();
   return (
-    <section id="selo" className="scroll-mt-24 px-4 py-24 sm:px-6">
+    <section id="selo" className="scroll-mt-24 overflow-x-clip px-4 py-24 sm:px-6">
       <div className="mx-auto max-w-6xl">
-        <SectionHeading
-          kicker={t("selo.kicker")}
-          title={t("selo.title")}
-          lead={t("selo.lead")}
-        />
+        <SectionHeading kicker={t("selo.kicker")} title={t("selo.title")} lead={t("selo.lead")} />
         <div className="mt-14 grid items-center gap-8 lg:grid-cols-2">
           <Reveal>
             <ul className="space-y-3">
               {["selo.i1", "selo.i2", "selo.i3", "selo.i4"].map((k) => (
                 <li key={k} className="panel flex items-start gap-3 p-4">
                   <Check className="mt-0.5 size-4 shrink-0 text-neon-green" />
-                  <span className="text-sm leading-relaxed text-muted-foreground">
-                    {t(k)}
-                  </span>
+                  <span className="text-sm leading-relaxed text-muted-foreground">{t(k)}</span>
                 </li>
               ))}
             </ul>
@@ -402,16 +384,49 @@ function Provenance() {
           <div className="flex items-center gap-3">
             <AlertTriangle aria-hidden className="size-4 text-destructive" />
 
-            <h2 className="text-sm font-semibold text-foreground">
-              {t("prov.title")}
-            </h2>
+            <h2 className="text-sm font-semibold text-foreground">{t("prov.title")}</h2>
             <span className="ml-auto rounded-md border border-border bg-surface-2 px-2 py-1 font-mono text-[10px] tracking-wider text-muted-foreground">
               {t("prov.tag")}
             </span>
           </div>
-          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-            {t("prov.body")}
-          </p>
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{t("prov.body")}</p>
+
+          <div className="mt-6 rounded-lg border border-border bg-surface-2 p-4">
+            <h3 className="font-mono text-[11px] tracking-wider text-foreground uppercase">
+              {t("prov.anchor.title")}
+            </h3>
+            <dl className="mt-3 grid gap-2 font-mono text-[11px] text-muted-foreground sm:grid-cols-2">
+              <div>
+                <dt className="text-foreground/70">SOURCE</dt>
+                <dd className="break-all">
+                  {ANCORA_CANONICA.repositorio}@{ANCORA_CANONICA.branch}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-foreground/70">SOURCE_HEAD</dt>
+                <dd className="break-all">{ANCORA_CANONICA.sourceHead}</dd>
+              </div>
+              <div>
+                <dt className="text-foreground/70">{t("prov.anchor.measured")}</dt>
+                <dd>{ANCORA_CANONICA.medidoEm}</dd>
+              </div>
+              <div>
+                <dt className="text-foreground/70">{t("prov.anchor.owners")}</dt>
+                <dd>
+                  <ul>
+                    {ANCORA_CANONICA.owners.map((owner) => (
+                      <li key={owner} className="break-all">
+                        {owner}
+                      </li>
+                    ))}
+                  </ul>
+                </dd>
+              </div>
+            </dl>
+            <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
+              {t("prov.anchor.note")}
+            </p>
+          </div>
         </div>
       </Reveal>
     </section>
@@ -476,7 +491,6 @@ function ExportacaoPdf() {
   );
 }
 
-
 function PaginaCentralDark() {
   const { t } = useI18n();
   return (
@@ -497,13 +511,15 @@ function PaginaCentralDark() {
         <Multimodal />
         <Idiomas />
         <Selo />
+        <HermesPeles />
         <Pacotao />
+        <Projecao />
         <Provenance />
         <ExportacaoPdf />
         <CtaFinal />
       </main>
       <Rodape />
+      <HermesFlutuante />
     </div>
   );
-
 }

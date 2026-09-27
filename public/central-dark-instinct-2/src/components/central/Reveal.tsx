@@ -64,9 +64,7 @@ export function SectionHeading({
         {title}
       </h2>
       {lead ? (
-        <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-          {lead}
-        </p>
+        <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">{lead}</p>
       ) : null}
       <div className="hairline mx-auto mt-8 w-40" />
     </div>
