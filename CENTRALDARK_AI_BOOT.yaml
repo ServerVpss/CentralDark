@@ -9,6 +9,8 @@ CENTRALDARK_AI_BOOT:
   governance: LOADED
   context_reconciliation: LOADED
   history_preservation: ACTIVE
+  unified_surface_parity_contract: LOADED
+  unified_surface_parity_skill: LOADED
   source_of_truth: "ServerVpss/CentralDark + runtime medido"
   observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"
   alignment: "SEGREDO/CHEFE > SOL > PIVETE/HERMES + ESPECIALISTAS"
@@ -335,10 +337,23 @@ CENTRALDARK_AI_BOOT:
     normal_architecture_build: "FLOW_CONTINUES_WITH_REUSED_PROOF"
     visual_design_refactor: "NON_BLOCKING_BY_DEFAULT"
     already_proved_same_fingerprint: "PASSAGE_OPEN"
+    proven_crystal_registra: "PASSAGE_OPEN_TO_MAIN_WITH_AFFECTED_CONE_ONLY"
+    unchanged_proven_crystal_full_ci_reproof: false
+    new_binding_targeted_test: "REQUIRED_WHEN_APPLICABLE"
+    main_readback_and_receipt: "REQUIRED"
     security_hardening: "EXPLICIT_GATE_WHEN_SECURITY_BOUNDARY_IS_BEING_HARDENED_OR_EXPOSED"
     destructive_or_irreversible: "AUTHORITY_AND_ROLLBACK_REQUIRED"
     post_deploy_remeasurement: "ALWAYS_MEASURE_RESULT_BECAUSE_DEPLOY_CHANGES_STATE"
     principle: "GATE_SERVE_PARA_SEGURANCA_E_FALSIFICACAO; NAO_PARA_REPROVAR_INVARIANTE_IMUTAVEL_A_CADA_PASSO"
+
+  centraldark_invocation_semantics:
+    master: "CENTRALDARK"
+    on_demand: true
+    accepted_examples: ["CentralDark faca", "CentralDark visualize", "CentralDark mede", "CentralDark pluga", "CentralDark costura", "CentralDark testa", "CentralDark registra"]
+    route: "INTENT_CORE -> AUTO_GRILL -> EXISTING_OWNER -> CAPABILITY -> ACTION -> COUNTERPROOF -> RECEIPT"
+    load_only_relevant_capabilities: true
+    surface_parity_owner: docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml
+    same_semantics_across_text_voice_work_desktop: true
 
   current_product_sequence:
     adaptive: true
@@ -374,9 +389,14 @@ CENTRALDARK_AI_BOOT:
       pr_mother_role: "PERMANENT_RENDEZVOUS_LEDGER_NOT_WRITER"
       pr_mother_merge_forbidden: true
       child_pr_only_promotion_vehicle: false
-      promotion_mode: "DIRECT_MAIN_SOFT_EVOLUTION"
+      promotion_mode: "DIRECT_MAIN_SOFT_EVOLUTION_WITH_EXISTING_CHILD_TRACE"
       new_pr_default: false
       existing_open_prs_remain_valid: true
+      existing_compatible_child_pr_is_mandatory_lane: true
+      child_match_key: "OWNER+SCOPE+CAPABILITY"
+      direct_main_forbidden_when_compatible_child_is_healthy: true
+      stale_or_conflicting_child_requires_receipt_before_bypass: true
+      main_readback_must_return_to_child_and_pr_mother: true
       pr_mother_history_ledger_required: true
       minimum_security_checks: [SECRET_SCAN, SYNTAX_OR_PARSE_WHEN_APPLICABLE, TARGETED_TEST_WHEN_AVAILABLE, MAIN_READBACK]
       hardened_pr_gate_mode: "AVAILABLE_LATER_BY_CHEFE_DECISION"
@@ -387,7 +407,7 @@ CENTRALDARK_AI_BOOT:
       open_delta_policy: "RECONCILE_ONLY_OPEN_OR_REOPENED_MATERIAL_DELTA"
       fixed_point_semantics: "CLOSES_CURRENT_DELTA_NOT_CENTRALDARK"
       after_fixed_point: "RETURN_TO_PR_MOTHER_1562_AND_CONTINUE_OPEN_DELTA_SCAN"
-    canonical_arrow_command: "⭕ !AURÉOLA → 👑🪬 !CENTRALDARK → #1562 → SHA:<CURRENT_MAIN_SHA> → CURRENT>HISTORY → REUSE_PROVEN → OPEN_DELTA_ONLY → TLC23 → HERMES_TRISMEGISTUS_CONTEXT → META_LUPA → FABLE → META_GRILL → HERMES → PROVA → CONTRAPROVA → ACEITE → RECONCILIAR → SEMANTIC_ALL → MIN_SECURITY_CHECKS → DIRECT_MAIN_COMMIT → MAIN_READBACK → DEPLOY_CAUSAL → T1 → RECEIPT → FIXED_POINT → #1562 → LOOP"
+    canonical_arrow_command: "CENTRALDARK -> #1562 -> CURRENT_MAIN -> REUSE_PROVEN -> FIND_MATCHING_CHILD_OWNER_SCOPE_CAPABILITY -> CHILD_REQUIRED_OR_STALE_TRACE_OR_NO_CHILD -> PROVA -> CONTRAPROVA -> CHILD_SQUASH_OR_ALLOWED_DIRECT_MAIN -> MAIN_READBACK -> RECEIPT_CHILD_IF_EXISTED -> RECEIPT_PR_MOTHER -> FIXED_POINT -> #1562"
     hardened_pr_arrow_when_reenabled: "OPEN_DELTA → CHILD_PR → SAME_HEAD → SQUASH_CHILD_ONLY → MAIN_READBACK"
     on_activation:
       - "MEASURE_AND_BIND_CURRENT_MAIN_SHA"
@@ -743,3 +763,44 @@ CENTRALDARK_AI_BOOT:
       - "REALITY_IS_JUDGE"
       - "ONE_SYSTEM_ONLY"
       - "REUSE_BEFORE_CREATE"
+
+proven_path_replay_lock:
+  marker: PROVEN_PATH_REPLAY_LOCK
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
+  runtime_consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+  same_rules_every_surface: true
+  agent_reinterpretation_from_zero: FORBIDDEN_WHEN_SEALED_RECIPE_MATCHES
+  same_dependency_fingerprint: REUSE_PROVEN_PATH_NO_RETHINK
+  changed_dependency_fingerprint: REVALIDATE_AFFECTED_CONE_ONLY
+  human_reteach_same_proven_path: false
+  adaptation:
+    mode: ENVIRONMENT_BINDINGS_ONLY
+    allowed: [WORKSPACE_PATH, HOST, RUNTIME_BINDING, AUTH_REFERENCE, TOOL_ENTRYPOINT]
+    forbidden: [HUMAN_GOAL, CANONICAL_OWNER, PROOF_LOGIC, EXPECTED_EFFECT]
+  execution:
+    - LOAD_SEALED_RECIPE
+    - COMPARE_DEPENDENCY_FINGERPRINT
+    - ADAPT_DECLARED_BINDINGS_ONLY
+    - EXECUTE_SAME_SEQUENCE
+    - RUN_SAME_PROOF
+    - COMPARE_RESULT_SCHEMA_AND_EXPECTED_EFFECT
+    - DIVERGENCE_TO_DELTA
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - RECEIPT
+  invariants:
+    PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO: true
+    SAME_FINGERPRINT_REUSES_PROVEN_RECIPE: true
+    RAW_OUTPUT_BYTE_EQUALITY_REQUIRED: false
+    RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH: true
+    NO_NEW_SYSTEM_FOR_PROVEN_PATH_REUSE: true
+
+
+lei_do_rastro:
+  owner: AGENTS.md
+  gatilho: "🔏 !RASTRO"
+  RESPONSE_WITHOUT_TRACE: INVALID
+  EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES: "COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)"
+  EVERY_MEMORY_CLAIM_NAMES_WHERE: true
+  LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN: true
+  APPLIES_TO_ALL_ENGINES: true

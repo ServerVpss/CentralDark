@@ -17,6 +17,28 @@ class ContinuousDeltaContractTest(unittest.TestCase):
         self.assertTrue(receipt["next_master_active"])
         self.assertIn("DELTA_UTIL", receipt["expanded_chain"])
 
+    def test_master_exposes_visual_trigger_chain_and_intent_alignment(self):
+        receipt = MODULE.resolve("!CENTRALDARK", chefe_source=True)
+        self.assertTrue(receipt["visual_trigger_chain"].startswith("⭕ !AURÉOLA CANÔNICA → 👑 !CENTRALDARK → 🌅 ACORDAR → 🎯 CALIBRAR"))
+        self.assertIn("🧾 REGISTRA → 🔏 RASTRO → 🚀 BOOT", receipt["visual_trigger_chain"])
+        self.assertEqual("VISIBLE_ROUTE_DEBUGGER", receipt["aureola"]["role"])
+        self.assertEqual("STOP_AND_RECONCILE", receipt["aureola"]["mismatch_action"])
+        self.assertFalse(receipt["aureola"]["route_trace_is_technical_proof"])
+        alignment = receipt["intent_alignment"]
+        self.assertEqual("CALIBRAR", alignment["phase"])
+        self.assertEqual("🎯", alignment["emoji"])
+        self.assertEqual(80, alignment["threshold_percent"])
+        self.assertEqual("INTERPRETATION_ALIGNMENT_NOT_RUNTIME_PASS", alignment["percentage_means"])
+        self.assertTrue(alignment["continuous_recalibration"])
+        self.assertTrue(alignment["do_not_parrot_chefe"])
+        self.assertTrue(alignment["align_thought_not_wording"])
+        self.assertEqual("DELTA_TO_ACTIVE_INTENT_FIRST", alignment["new_chefe_material"])
+        self.assertTrue(alignment["preserve_compatible_active_intent"])
+        self.assertEqual("EXPLICIT_REPLACE_OR_PROVEN_MATERIAL_INCOMPATIBILITY", alignment["replacement_requires"])
+        self.assertTrue(alignment["pertinence_first"])
+        self.assertTrue(alignment["minimum_sufficient_loop"])
+        self.assertTrue(alignment["triggers_are_conditional_not_ritual"])
+
     def test_bot_entry_activates_without_plain_word_guess(self):
         receipt = MODULE.resolve("fala normal", bot_entry=True, chefe_source=True)
         self.assertEqual("BOT_ENTRY", receipt["activation_source"])
@@ -42,9 +64,43 @@ class ContinuousDeltaContractTest(unittest.TestCase):
         self.assertFalse(receipt["delta_harvest"]["active"])
 
     def test_plain_mention_outside_session_is_not_activation(self):
+        for mode in ("text", "voice"):
+            receipt = MODULE.resolve("CentralDark", chefe_source=True, input_mode=mode)
+            self.assertFalse(receipt["master_cycle_active"])
         receipt = MODULE.resolve("CentralDark é o nome do repo")
         self.assertFalse(receipt["master_cycle_active"])
         self.assertEqual("NO_MATCH", receipt["status"])
+
+    def test_operational_master_phrase_matches_text_and_voice(self):
+        for mode in ("text", "voice"):
+            receipt = MODULE.resolve(
+                "CentralDark visualize o painel", chefe_source=True, input_mode=mode
+            )
+            self.assertTrue(receipt["master_cycle_active"])
+            self.assertTrue(receipt["explicit_match"])
+
+    def test_all_contract_verbs_dispatch_identically_in_text_and_voice(self):
+        verbs = (
+            "visualize", "veja", "mostra", "leia", "observe", "mede",
+            "faça", "faz", "executa", "corrige", "pluga", "costura", "sobe",
+            "continue", "continua", "prossiga", "retome",
+            "cristaliza", "registra", "sela", "receipt", "rastro",
+            "contraprova", "valida", "testa", "verifica",
+        )
+        for verb in verbs:
+            receipts = [
+                MODULE.resolve(f"CentralDark {verb} alvo", chefe_source=True, input_mode=mode)
+                for mode in ("text", "voice")
+            ]
+            self.assertEqual(receipts[0]["master_cycle_active"], receipts[1]["master_cycle_active"], verb)
+            self.assertTrue(receipts[0]["master_cycle_active"], verb)
+            self.assertEqual(receipts[0]["expanded_chain"], receipts[1]["expanded_chain"], verb)
+
+    def test_natural_master_requires_payload_except_resume(self):
+        for mode in ("text", "voice"):
+            for phrase in ("CentralDark", "CentralDark visualize"):
+                self.assertFalse(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"])
+            self.assertTrue(MODULE.resolve("CentralDark continue", chefe_source=True, input_mode=mode)["master_cycle_active"])
 
     def test_screen_repetition_and_time_are_not_proof(self):
         receipt = MODULE.resolve(
@@ -123,8 +179,10 @@ class ContinuousDeltaContractTest(unittest.TestCase):
             "!TIK-TAK": "TIK_TAK",
             "!FIXED_POINT": "FIXED_POINT",
             "!REGISTRA": "REGISTRA",
+            "!RASTRO": "RASTRO",
             "!BOOT": "BOOT",
             "!FABLE_LOOP": "FABLE_LOOP",
+            "!GARIMPO_UNIVERSAL": "GARIMPO_UNIVERSAL",
         }
         for token, expected in cases.items():
             with self.subTest(token=token):
@@ -133,6 +191,38 @@ class ContinuousDeltaContractTest(unittest.TestCase):
                 self.assertEqual("!CENTRALDARK", receipt["master_funnel"]["canonical_entry"])
                 self.assertIn(expected, receipt["master_funnel"]["matched_trigger_ids"])
                 self.assertTrue(receipt["master_funnel"]["all_explicit_human_triggers_enter_master_once"])
+
+    def test_garimpo_universal_reuses_harvester_across_surfaces(self):
+        for mode, phrase in (
+            ("text", "!CENTRALDARK !GARIMPO_UNIVERSAL"),
+            ("voice", "CentralDark garimpo universal"),
+        ):
+            with self.subTest(mode=mode):
+                receipt = MODULE.resolve(
+                    phrase,
+                    chefe_source=True,
+                    input_mode=mode,
+                    source_surface=mode,
+                    session_id="same-intent-session",
+                )
+                self.assertTrue(receipt["master_cycle_active"])
+                self.assertIn("GARIMPO_UNIVERSAL", receipt["master_funnel"]["matched_trigger_ids"])
+                self.assertIn("GARIMPO_UNIVERSAL", receipt["master_funnel"]["requested_modes"])
+                harvest = receipt["delta_harvest"]
+                self.assertTrue(harvest["active"])
+                self.assertTrue(harvest["garimpo_universal_active"])
+                self.assertEqual(".agents/skills/session-intelligence-harvester/SKILL.md", harvest["owner"])
+                self.assertEqual("OWNER+CAPABILITY+SCOPE", harvest["semantic_identity"])
+                self.assertTrue(harvest["multi_surface_parallel_candidates"])
+                self.assertTrue(harvest["one_canonical_finalizer_per_scope"])
+                self.assertTrue(harvest["candidate_lane_is_not_canonical_write"])
+                self.assertEqual("DROP_DUPLICATE", harvest["same_finding_without_new_evidence"])
+                self.assertEqual(
+                    "LAST_GOOD_STATE->INPUT_DIFF->REUSE_PROOF_OR_TARGETED_REVALIDATION",
+                    harvest["next_executor_replay"],
+                )
+
+
 
     def test_tik_tak_wraps_master_loop_and_preserves_remeasurement_without_swarm(self):
         receipt = MODULE.resolve("!TIK-TAK", chefe_source=True)
@@ -185,6 +275,46 @@ class ContinuousDeltaContractTest(unittest.TestCase):
         self.assertEqual("UNKNOWN", receipt["status"])
         self.assertIn("ACORDAR", receipt["master_funnel"]["ambiguous_trigger_ids"])
 
+
+    def test_embedded_self_test_passes(self):
+        result = MODULE.self_test()
+        failed = [c for c in result["cases"] if not c["ok"]]
+        self.assertTrue(result["ok"], failed)
+
+    def test_grammar_verbs_open_master_same_in_text_and_voice(self):
+        for phrase in ("CentralDark faça o deploy", "centraldark faz isso", "centraldark continua",
+                       "centraldark cristaliza isso", "centraldark contraprova este caso", "centraldark, visualize o estado"):
+            for mode in ("text", "voice"):
+                receipt = MODULE.resolve(phrase, chefe_source=True, input_mode=mode)
+                self.assertTrue(receipt["master_cycle_active"], (phrase, mode))
+
+    def test_verbs_come_from_grammar_owner(self):
+        self.assertIn("centraldark faça", MODULE.GRAMMAR_VERB_PHRASES)
+        self.assertIn("centraldark contraprova", MODULE.GRAMMAR_VERB_PHRASES)
+
+    def test_plain_word_neutral_in_text_and_voice(self):
+        # decisão do CHEFE 2026-09-27: paridade — só "CentralDark + verbo" ou marcador abre o mestre
+        for phrase in ("centraldark", "central dark", "CentralDark"):
+            for mode in ("text", "voice"):
+                self.assertFalse(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"], (phrase, mode))
+
+    def test_discussion_and_negation_do_not_open_master(self):
+        for phrase in ("estou falando sobre #ACORDAR", "falei de centraldark faça ontem", "centraldark não faça nada"):
+            for mode in ("text", "voice"):
+                self.assertFalse(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"], (phrase, mode))
+
+
+    def test_exclamation_after_wake_word_still_dispatches(self):
+        # restaurado: ab3d904 foi desfeito por escrita sobre base velha (df995f2)
+        for phrase in ("CentralDark! Faça o deploy", "centraldark!!! visualize o painel"):
+            for mode in ("text", "voice"):
+                self.assertTrue(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"], (phrase, mode))
+        self.assertTrue(MODULE.resolve("!CENTRALDARK", chefe_source=True)["master_cycle_active"])
+
+    def test_talking_about_it_does_not_dispatch(self):
+        for phrase in ("falei do centraldark visualize o painel ontem", "falou da centraldark faça o deploy"):
+            for mode in ("text", "voice"):
+                self.assertFalse(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"], (phrase, mode))
 
 if __name__ == "__main__":
     unittest.main()

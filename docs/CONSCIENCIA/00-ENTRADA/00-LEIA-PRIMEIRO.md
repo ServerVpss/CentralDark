@@ -45,6 +45,12 @@ Quando eu usar qualquer um destes comandos, execute da seguinte forma:
 
   Gere um handoff com a mesma `MISSION_ID` para o agente autorizado mais adequado. O receptor deve reler a Fonte da Verdade e validar a evidência. Nenhum aplicativo cria memória, missão ou documentação paralela.
 
+### 🔏 Lei do Rastro
+
+- **`🔏 !RASTRO`**
+  
+  Cadeado executivo universal. Se a IA disser que gravou algo, deve mostrar `COMMIT_SHA + PATH + LINK + READBACK`. Se disser que guardou em memória, deve dizer onde. Resposta material sem rastro é inválida. Aplica-se a todos os engines.
+
 ### 📝 Registro Oficial
 
 - **"Registra como oficial"** ou **"Isso é oficial agora"**

@@ -18,6 +18,7 @@ const FILES = {
   master: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml',
   engine: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',
   autoconfigRuntime: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml',
+  provenLock: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml',
   hermesPrompt: 'apps/modulos/HERMES-CORE/prompts/hermes-core.md',
   tlc23: 'docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf',
   agentCall: 'scripts/agent-call.mjs',
@@ -45,7 +46,7 @@ const REQUIRED_CHAIN = [
   'MULTIBUSSOLA', 'PEGATUDO', 'DEBITO_COGNITIVO', 'READERS_MEASURE',
   'META_LUPA', 'SCOPE_TEMPERATURE', 'DELTA_MINIMUM',
   'RENDEZVOUS', 'RECONCILE', 'OWNER', 'ONE_WRITER', 'PATCH', 'TESTE',
-  'CONTRAPROVA', 'REALITY_JUDGE', 'FIXED_POINT', 'TLC23_CLOSE', 'REGISTRA',
+  'CONTRAPROVA', 'REALITY_JUDGE', 'FIXED_POINT', 'TLC23_CLOSE', 'REGISTRA', 'RASTRO',
   'HANDOFF', 'BOOT',
 ];
 
@@ -66,6 +67,7 @@ const REQUIRED_GLOBAL_INHERITANCE = [
   'REMEDICAO',
   'FIXED_POINT',
   'REGISTRA',
+  'RASTRO',
   'BOOT',
   'ONE_WRITER_PER_SCOPE',
   'OUTPUT_GUARD',
@@ -120,6 +122,7 @@ export function validateUniversalMethod() {
   const master = read(FILES.master);
   const engine = read(FILES.engine);
   const autoconfigRuntime = read(FILES.autoconfigRuntime);
+  const provenLock = read(FILES.provenLock);
   const hermesPrompt = read(FILES.hermesPrompt);
   const agentCall = read(FILES.agentCall);
   const deployDispatcher = read(FILES.deployDispatcher);
@@ -285,6 +288,21 @@ export function validateUniversalMethod() {
     'automatic_resume_after_human_frontier: true',
   ], 'HUMAN_COMPLEXITY_ABSORPTION_CONTRACT');
 
+  requireTokens(provenLock, [
+    'marker: PROVEN_PATH_REPLAY_LOCK',
+    'PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO: true',
+    'SAME_FINGERPRINT_REUSES_PROVEN_RECIPE: true',
+    'RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH: true',
+    'REUSE_PROVEN_PATH_NO_RETHINK',
+    'REVALIDATE_AFFECTED_CONE_ONLY',
+  ], 'PROVEN_PATH_REPLAY_LOCK');
+
+  requireTokens(autoconfigRuntime, [
+    'marker: PROVEN_PATH_REPLAY_LOCK',
+    'same_dependency_fingerprint: REUSE_PROVEN_PATH_NO_RETHINK',
+    'changed_dependency_fingerprint: REVALIDATE_AFFECTED_CONE_ONLY',
+  ], 'HERMES_PROVEN_PATH_REPLAY');
+
   requireTokens(hermesPrompt, [
     '## Contrato humano universal — absorver complexidade, não devolvê-la',
     'COMPLEXITY_BELONGS_INSIDE_SYSTEM_NOT_ON_USER=true',
@@ -327,6 +345,9 @@ export function validateUniversalMethod() {
     'HERMES_RESPONSE_CONTRACT=true',
     'RESPONSE_REQUIRED_OPENING=INTENCAO_VIGENTE|TARGET|OBSERVED_CURRENT_STATE',
     'RESPONSE_REQUIRED_SECTIONS=FEITO|EVIDENCIA|CONTRAPROVA|UNKNOWN_OR_BLOCKED|FIXED_POINT|RECEIPT|NEXT_CURSOR',
+    'RASTRO_LOCK_REQUIRED=true',
+    'RESPONSE_WITHOUT_TRACE=INVALID',
+    'WRITE_CLAIM_FIELDS=COMMIT_SHA|PATH|LINK|READBACK',
     'NO_PROMISE_FUTURE_WORK_AS_DONE=true',
     'NO_ASK_CHEFE_TO_CHOOSE_MECHANICAL_BRANCH=true',
     'NO_RETURN_MACHINE_EXECUTABLE_MICROSTEPS=true',
@@ -411,6 +432,8 @@ export function validateUniversalMethod() {
     'GENERIC_ERROR_ONLY=FAIL',
     'ASK_ONE_EXACT_HUMAN_ACTION_AT_A_TIME=true',
     'AUTO_RESUME_AFTER_HUMAN_FRONTIER=true',
+    'PROVEN_PATH_REPLAY_LOCK=true',
+    'PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO=true',
   ], 'UNIVERSAL_DIRECT_MODE_AGENTS');
 
   requireTokens(portableEntry, [
@@ -443,6 +466,8 @@ export function validateUniversalMethod() {
     'TOOL_CATALOG_VISIBLE_IS_NOT_TOOL_CALL_SUCCESS=true',
     'TOOL_CLAIM_REQUIRES_MEASURED_RECEIPT=true',
     'EXECUTOR_ATTRIBUTION_REQUIRES_OBSERVED_EXECUTOR=true',
+    'PROVEN_PATH_REPLAY_LOCK=true',
+    'SAME_FINGERPRINT_REUSES_PROVEN_RECIPE=true',
     'SAME_HEAD_GREEN_PROMOTES_TO_TOTAL_DEPLOY=true',
     'TOTAL_DEPLOY_REGENERATES_FROM_PROVEN_MAIN_AND_EXISTING_RUNTIME=true',
     'HUMAN_RETEACH_REQUIRED=false',
@@ -640,9 +665,9 @@ export function validateUniversalMethod() {
     'SQUASH_CHILD_ONLY',
 
     'child_pr_only_promotion_vehicle: false',
-    'promotion_mode: "DIRECT_MAIN_SOFT_EVOLUTION"',
-    'MIN_SECURITY_CHECKS',
-    'DIRECT_MAIN_COMMIT',
+    'promotion_mode: "DIRECT_MAIN_SOFT_EVOLUTION_WITH_EXISTING_CHILD_TRACE"',
+    'minimum_security_checks:',
+    'direct_main_forbidden_when_compatible_child_is_healthy: true',
     'MAIN_READBACK',
     'required_gate_ids:',
     'LOAD_UNIVERSAL_GATE_REGISTRY',
@@ -682,6 +707,8 @@ export function validateUniversalMethod() {
     'Leitores investigam em paralelo',
     'Um Writer por escopo mutavel',
     'UNKNOWN, ANOMALY, ACHADO_PENDENTE, BLOCKED',
+    'PROVEN_PATH_REPLAY_LOCK=true',
+    'SAME_FINGERPRINT_REUSES_PROVEN_RECIPE=true',
   ], 'OPERATIONAL_METHOD_INTERVIEW_BINDING');
 
   requireTokens(perceptionOrchestra, [
@@ -929,6 +956,8 @@ export function validateUniversalMethod() {
     loud_actionable_failure_contract: true,
     automatic_resume_after_human_frontier: true,
     universal_direct_mode_contract: true,
+    proven_path_replay_lock: true,
+    proven_path_reinterpret_from_zero: false,
     measure_before_creation_global: true,
     measure_before_creation_semantic_reference: '1Ts 5:21',
     measure_before_creation_all_agents: true,

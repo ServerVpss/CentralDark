@@ -14,6 +14,7 @@ import {
   evaluateCandidate,
   executionProvenance,
   intentReceipt,
+  promotionLaneDecision,
   scanPullFiles,
   sealReceipt,
   selectLatestNonSkipped,
@@ -68,6 +69,27 @@ function successfulRuns(required) {
   }));
 }
 
+
+test("child compatible healthy is mandatory lane", () => {
+  const lane = promotionLaneDecision({ matchingChild: { number: 1579, state: "open", draft: false, mergeable: true, mergeable_state: "clean" } });
+  assert.equal(lane.decision, "CHILD_REQUIRED");
+  assert.equal(lane.child_trace_required, true);
+});
+
+test("stale child requires trace before global bypass", () => {
+  const blocked = promotionLaneDecision({ matchingChild: { number: 1579, state: "open", draft: false, mergeable: false, mergeable_state: "dirty" } });
+  assert.equal(blocked.decision, "CHILD_STALE_BLOCKED");
+  assert.equal(blocked.child_blocked_receipt, "CHILD_LANE_STALE_BLOCKED");
+  const bypass = promotionLaneDecision({ matchingChild: { number: 1579, state: "open", draft: false, mergeable: false, mergeable_state: "dirty" }, globalRule: true });
+  assert.equal(bypass.decision, "DIRECT_MAIN_ALLOWED_AFTER_CHILD_TRACE");
+  assert.equal(bypass.post_main_child_receipt_required, true);
+});
+
+test("no child keeps direct main without creating pr", () => {
+  const lane = promotionLaneDecision();
+  assert.equal(lane.decision, "DIRECT_MAIN_ALLOWED");
+  assert.equal(lane.child_trace_required, false);
+});
 
 test("Horn forward chaining converge quando nenhum fato novo pode ser acrescentado", () => {
   const proof = deriveHornFixedPoint(["A"], [
@@ -509,4 +531,17 @@ test("Trigger Fabric obrigatório dispara em todo PR para main", async () => {
   assert.ok(pullBlock, "pull_request block ausente");
   assert.match(pullBlock[1], /branches:\s*\[main\]/);
   assert.doesNotMatch(pullBlock[1], /\bpaths:/);
+});
+
+
+test("reconciliador da Casa não vira segundo promotor", async () => {
+  const source = await readFile(
+    new URL("./dependabot/reconcile-open-prs.mjs", import.meta.url),
+    "utf8",
+  );
+  assert.doesNotMatch(source, /\/pulls\/\$\{number\}\/merge/);
+  assert.doesNotMatch(source, /merge_method:\s*['"]squash['"]/);
+  assert.match(source, /centraldark_autonomia_recheck/);
+  assert.match(source, /centraldark_dependabot_reconcile/);
+  assert.match(source, /direct_merge=0/);
 });

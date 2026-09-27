@@ -13,6 +13,13 @@ bot_entry_activates_master_session: true
 explicit_trigger_activates_master_session: true
 master_session_remains_active: true
 subsequent_chefe_material_is_delta_candidate: true
+subsequent_chefe_material_is_active_intent_delta_first: true
+preserve_compatible_active_intent: true
+recalculate_intent_alignment_each_material_turn: true
+intent_replacement_requires: EXPLICIT_REPLACE_OR_PROVEN_MATERIAL_INCOMPATIBILITY
+pertinence_first: true
+minimum_sufficient_loop: true
+triggers_are_conditional_not_ritual: true
 
 master_precedence:
   human_notation: "#CENTRALDARK > #ACORDAR"
@@ -43,11 +50,23 @@ expands_to:
   - REMEDICAO
   - FIXED_POINT
   - REGISTRA
+  - RASTRO
   - BOOT
 
-canonical_human_chain: "#CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
-canonical_machine_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
-canonical_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
+canonical_human_chain: "#CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !RASTRO -> !BOOT"
+canonical_machine_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !RASTRO -> !BOOT"
+canonical_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !RASTRO -> !BOOT"
+canonical_visual_chain: "⭕ !AURÉOLA CANÔNICA → 👑 !CENTRALDARK → 🌅 #ACORDAR → 🎯 !CALIBRAR → 🧭 !MULTIBUSSOLA → 🔎 !META_LUPA → 🔄 !RECONCILIAR → 💎 !DELTAUTIL → 🧪 !CONTRAPROVA → 📏 !REMEDICAO → 📍 !FIXED_POINT → 🧾 !REGISTRA → 🔏 !RASTRO → 🚀 !BOOT"
+aureola_visible_route_debugger:
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+  visible_fields: [CURRENT_PHASE, MULTIBUSSOLA_AXIS, DESTINATION_OWNER, NEXT_GATE]
+  material_fields: [ACTION, PROOF, WOUND, NEXT_CURSOR]
+  compare: [INTENT_ROUTE, ACTUAL_ROUTE]
+  mismatch_action: STOP_AND_RECONCILE
+  route_trace_is_private_reasoning: false
+  route_trace_is_technical_proof: false
+  bible_reference_is_semantic_cue_not_proof: true
+  material_discovery_is_learning_candidate_not_fact: true
 
 continuous_delta_contract:
   scope: ACTIVE_MASTER_SESSION
@@ -80,6 +99,25 @@ phase_contracts:
   CALIBRAR:
     meaning: ALIGN_INTENT_ROLE_SCOPE_TOOLS_PROOF
     owner: "LEIA-ME-IA.md + AGENTS.md"
+    emoji: "🎯"
+    intent_alignment:
+      threshold_percent: 80
+      percentage_means: INTERPRETATION_ALIGNMENT_NOT_RUNTIME_PASS
+      inputs: [CURRENT_EXPLICIT_INTENT, RECOVERED_APPLICABLE_CONTEXT, COMPATIBLE_PRIOR_LEARNING, CANONICAL_RULES, CURRENT_REALITY]
+      subtract: [MATERIAL_AMBIGUITY, MATERIAL_CONTRADICTION]
+      new_teaching: REMIX_MINIMUM_DELTA_IN_EXISTING_RULE
+      output: [REFINED_INTENT, INTENT_ALIGNMENT_CONFIDENCE_PERCENT]
+      gte_threshold_and_scope_authorized: EXECUTE_MINIMUM_COMPLETE_PATH
+      below_threshold_or_material_contradiction: ASK_ONLY_INDISPENSABLE_GAP
+      continuous_recalibration: true
+      new_chefe_material: DELTA_TO_ACTIVE_INTENT_FIRST
+      preserve_compatible_active_intent: true
+      replacement_requires: EXPLICIT_REPLACE_OR_PROVEN_MATERIAL_INCOMPATIBILITY
+      pertinence_first: true
+      minimum_sufficient_loop: true
+      triggers_are_conditional_not_ritual: true
+      do_not_parrot_chefe: true
+      align_thought_not_wording: true
   MULTIBUSSOLA:
     meaning: MULTIAXIS_MATERIAL_PERCEPTION
     owner: docs/CONSCIENCIA/MULTIBUSSOLA.md
@@ -116,6 +154,14 @@ phase_contracts:
         - NO_WRITER_CONFLICT
         - NO_MATERIAL_UNKNOWN
       no_reask_same_scope: true
+  RASTRO:
+    token: "!RASTRO"
+    owner: "AGENTS.md + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md"
+    purpose: "SELAR_PROVA_E_RASTREABILIDADE_ANTES_DO_PROXIMO_CICLO"
+    required_output: [COMMIT_SHA, PATH, LINK, READBACK, MEMORY_LOCATION_WHEN_CLAIMED]
+    response_without_trace: INVALID
+    applies_to_all_engines: true
+
   BOOT:
     meaning: RETURN_NEXT_CYCLE_RECOVERABLE
     owner: LEIA-ME-IA.md
@@ -641,3 +687,40 @@ semantic_memory_links:
   semantic_link_is_proof: false
   graph_is_authority: false
   musical_metaphor_is_navigation_only: true
+
+adaptive_backcheck_contract:
+  owner: "AGENTS.md#metodo-adaptativo-mesma-regua-avanco--backcheck-ponto-suficiente"
+  creates_new_method: false
+  reuse_existing_live_editing: true
+  reuse_existing_agent_call: true
+  forward_window_default: 20
+  backcheck_window_default: 5
+  rewind_on_local_error_default: 1
+  windows_are_adaptive: true
+  backcheck_is_audit_not_rework: true
+  local_repair_before_full_rollback: true
+  rejoin_same_trail: true
+  no_silent_reroute: true
+  replay_before_rediscovery: true
+  flow: [EDIT, FORWARD_N, BACKCHECK_K, AUDIT, LOCAL_REPAIR_IF_NEEDED, RETEST, REJOIN_SAME_TRAIL, CONTINUE]
+
+probabilistic_fixed_point_contract:
+  global_100_percent_claim_forbidden: true
+  probabilistic_system_expects_error: true
+  error_is_correction_signal: true
+  binary_deterministic_gate_may_reach_100_percent_in_narrow_scope: true
+  fixed_point_is_perfection: false
+  human_satisfaction_can_close_iterative_scope: true
+  satisfaction_band_reference: "80..95"
+  satisfaction_band_is_universal_gate: false
+  fixed_point_requires: [CURRENT_GOAL_SUFFICIENT, AUDITABLE, REPAIRABLE, NO_MATERIAL_BLOCKER]
+
+multi_agent_same_ruler:
+  one_ai_is_system_unit: false
+  same_ruler_for_all_engines: true
+  majority_is_proof: false
+  confidence_is_proof: false
+  divergence_without_discriminating_proof: UNKNOWN
+  forced_winner: false
+  unknown_recovery: RETURN_TO_LAST_PROVEN_CHECKPOINT
+

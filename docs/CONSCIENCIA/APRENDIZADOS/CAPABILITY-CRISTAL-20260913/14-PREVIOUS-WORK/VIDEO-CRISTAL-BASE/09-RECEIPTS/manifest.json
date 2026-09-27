@@ -1,0 +1,152 @@
+{
+  "package": "CentralDark-ClaudeCode-Video-Cristal-20260913",
+  "source_video": "https://www.youtube.com/watch?v=mpALXah_PBg",
+  "file_count_before_manifest": 29,
+  "files": [
+    {
+      "path": "00-CRISTAL/SESSION-CRYSTAL.md",
+      "bytes": 1362,
+      "sha256": "3d96e788eec24e68a332d759f8fab12d1494e65bed4d039f406ebe35cf16448d"
+    },
+    {
+      "path": "01-VIDEO-DIGEST/VIDEO-DIGEST-POR-CAPITULOS.md",
+      "bytes": 8256,
+      "sha256": "87190fe59d198e3b67369f84968406a57401c5b60533b350e92290ea3f094c1e"
+    },
+    {
+      "path": "02-CENTRALDARK-CROSSWALK/CROSSWALK.md",
+      "bytes": 1667,
+      "sha256": "a84b654e73f82daf35259bb23a7a9e8b211e530effaa16c52daf6c0c0a512c1a"
+    },
+    {
+      "path": "03-TUTORIAL/TUTORIAL-OPERACIONAL.md",
+      "bytes": 2885,
+      "sha256": "1af274a8d56b0c57550735ab8bdb63eeea377a6c2f4838ef47ee73fc2d65a8d4"
+    },
+    {
+      "path": "04-MERMAID/01-one-system.mmd",
+      "bytes": 223,
+      "sha256": "c43f19cf35b6c4326018705919f3c2665d376d26fabb74d19a9f3b043e188df6"
+    },
+    {
+      "path": "04-MERMAID/02-video-frame-pipeline.mmd",
+      "bytes": 306,
+      "sha256": "879ce85db6acf2ccf8c300f3eb80209d13f7995f5f1fd6ee39010f5d137668eb"
+    },
+    {
+      "path": "04-MERMAID/03-rag.mmd",
+      "bytes": 355,
+      "sha256": "8f461dc3a34c3068dcbedafb751abd2cb7530ab5355fe19cec9049ac46eb5404"
+    },
+    {
+      "path": "04-MERMAID/04-agents.mmd",
+      "bytes": 238,
+      "sha256": "e43acc2c95172bed2115053f8566721c4a8d0d91fafa2513ecf45fb7ba5382e5"
+    },
+    {
+      "path": "04-MERMAID/05-trace.mmd",
+      "bytes": 202,
+      "sha256": "dab1a0d4e31e57bfa48f11749f112e811fb26c6053325054aa416a0fc572c90f"
+    },
+    {
+      "path": "04-MERMAID/06-mcp-frame-tool.mmd",
+      "bytes": 449,
+      "sha256": "3925a9c3d4eb3227de0ef075313c3048b34152ccaa3b355572138102f3668293"
+    },
+    {
+      "path": "05-VECTORS-SVG/01-one-system.svg",
+      "bytes": 2637,
+      "sha256": "6dac2eba7533ba69e89141e7fa54c36d31dd8b4e0958d9da9390a1f22dc1689c"
+    },
+    {
+      "path": "05-VECTORS-SVG/02-video-trace.svg",
+      "bytes": 2651,
+      "sha256": "adb0025b3d58de9bebc777b8be5c8a6ffab2c98991a576fbfb1576102e912691"
+    },
+    {
+      "path": "05-VECTORS-SVG/03-rag-hybrid.svg",
+      "bytes": 2654,
+      "sha256": "e2a7f2bc830cb1bb8e4a212954efe47c0d061e5e6435712036c4b54e7820a387"
+    },
+    {
+      "path": "05-VECTORS-SVG/04-agent-teams.svg",
+      "bytes": 2635,
+      "sha256": "924e5b49a5f48471f8c358b0e08e6c706afbfa46d11d108fcad06840fd29a695"
+    },
+    {
+      "path": "06-FRAMES-DEMO-ORIGINAIS/README.md",
+      "bytes": 235,
+      "sha256": "2dcf208259078dd1932fc98230e08322109be8a7dd4f09c0fcc415f1f488e63a"
+    },
+    {
+      "path": "06-FRAMES-DEMO-ORIGINAIS/frame-0001.svg",
+      "bytes": 706,
+      "sha256": "1831aabb77ef75b8efb96e46b1280d278a65c4448d0f4db47f7b84b61069b67d"
+    },
+    {
+      "path": "06-FRAMES-DEMO-ORIGINAIS/frame-0002.svg",
+      "bytes": 699,
+      "sha256": "4f6e4136f149c40fa295baa07873916b2157a10a080b40b09ab7faabb3834a8f"
+    },
+    {
+      "path": "06-FRAMES-DEMO-ORIGINAIS/frame-0003.svg",
+      "bytes": 693,
+      "sha256": "5cc16362406720c0a3f43e4e6080135e592092cdcdcf390acc226b1c52637975"
+    },
+    {
+      "path": "06-FRAMES-DEMO-ORIGINAIS/frame-0004.svg",
+      "bytes": 700,
+      "sha256": "0e336bb7a00e7109df257f02e815d9b0d2aad1cd6eabcb0cc36382def7161b4a"
+    },
+    {
+      "path": "06-FRAMES-DEMO-ORIGINAIS/frame-0005.svg",
+      "bytes": 706,
+      "sha256": "195a1f9bbd25713798b17a92cf275d9c3cfcc6f9a6332983e02e85628e883140"
+    },
+    {
+      "path": "06-FRAMES-DEMO-ORIGINAIS/frame-0006.svg",
+      "bytes": 702,
+      "sha256": "cbf53304708fed58fd038f3a2c3b8cd9b251b0247dc456eb39f23f50241a9d0f"
+    },
+    {
+      "path": "07-MCP-VIDEO-FRAME-CAPABILITY/INTEGRATION-NOTES.md",
+      "bytes": 769,
+      "sha256": "813ee98b1ef4945735059623904ed3c797d36f43af43a4c4802cac3abc1e1c6e"
+    },
+    {
+      "path": "07-MCP-VIDEO-FRAME-CAPABILITY/README.md",
+      "bytes": 1106,
+      "sha256": "d317d1e62c984a24bc868c3e4ba5cd11be3a9fb3745fc376130560adb900619a"
+    },
+    {
+      "path": "07-MCP-VIDEO-FRAME-CAPABILITY/mcp-tool-adapter.mjs",
+      "bytes": 247,
+      "sha256": "44635beaedfb252367a2e5b0fef0480ff6612023b416845bb3afe32c8b807ff6"
+    },
+    {
+      "path": "07-MCP-VIDEO-FRAME-CAPABILITY/tool-schema.json",
+      "bytes": 1188,
+      "sha256": "f8c119d7074df216c82101be09b7bb15fc80d47d9df4280dfe3b70f738a4f29b"
+    },
+    {
+      "path": "07-MCP-VIDEO-FRAME-CAPABILITY/video-frame-tool.mjs",
+      "bytes": 4447,
+      "sha256": "ead8ee7a50e324e1b32d88dd6a460f81b3ec9ab63555820749d1c0f9d3c89c88"
+    },
+    {
+      "path": "08-TRANSCRIPT-DIGEST/README.md",
+      "bytes": 1091,
+      "sha256": "9fb51175004e8ecc070d603c71e659282034e76a362a961bfcf0eb47517f645c"
+    },
+    {
+      "path": "09-RECEIPTS/source-index.json",
+      "bytes": 670,
+      "sha256": "b0b2416683d044a37e699f74551feb771672cff88824a9a1408257cd8fc86e21"
+    },
+    {
+      "path": "README.md",
+      "bytes": 1091,
+      "sha256": "fb9df11fd5771ebbca5af84864dccf682e8aa7b5df5eff29344a02c5cc1aacbb"
+    }
+  ]
+}

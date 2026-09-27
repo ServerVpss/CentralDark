@@ -1,0 +1,63 @@
+[
+  {
+    "source": "manual_oculto",
+    "filename": "manual-oculto-ia-curso-main.zip",
+    "bytes": 1437311,
+    "sha256": "9d74a8f91d6162944b29f0ffa38b5857cf73a158e130188b67cacf7be1f559bb"
+  },
+  {
+    "source": "fep",
+    "filename": "FEP-main.zip",
+    "bytes": 92207206,
+    "sha256": "0c43fcf85cfd59c5a4e253a79907337f6f564233dfc503fa4692aad3c354ca2d"
+  },
+  {
+    "source": "fea_ia",
+    "filename": "FEA-IA-main(1).zip",
+    "bytes": 12582705,
+    "sha256": "aeb201bfa4b678395cff79f2f2531e1c37ffd1d2d38bfde9fcfe9936e6076839"
+  },
+  {
+    "source": "bmad_academy",
+    "filename": "BMAD-Academy-main.zip",
+    "bytes": 641189,
+    "sha256": "22f252a3a4b16aaf9bfaf6f608efc5b46bd22686120a37fcc94d4488c578fcb6"
+  },
+  {
+    "source": "inemavox",
+    "filename": "inemavox-main.zip",
+    "bytes": 260577,
+    "sha256": "1ab2ff4ca989212fe212ab34d88c333dc60c566fc03b54809020703c6ed358cb"
+  },
+  {
+    "source": "video_previous_zip",
+    "filename": "CentralDark-ClaudeCode-Video-Cristal-20260913.zip",
+    "bytes": 26565,
+    "sha256": "256434d141b0453b9df786ba7bf4e6cf32cd8b1cadb14d57b24cfc0d8b874c49"
+  },
+  {
+    "source": "session_crystal",
+    "filename": "CENTRALDARK-SESSION-CRYSTAL-20260913.md",
+    "bytes": 16669,
+    "sha256": "75e54f9a0b3b3a191575a32937e98148379f7624041351b2670a5f39140b0f52"
+  },
+  {
+    "source": "ai_proxy",
+    "filename": "AI-PROXY-ARQUITETURA.md",
+    "bytes": 6498,
+    "sha256": "92b9396ec33c8d248cefd0fad2ba7f903cb65920fe0d0f8bfba5439e745793e6"
+  },
+  {
+    "source": "ai_proxy_validator",
+    "filename": "validate-ai-proxy.sh",
+    "bytes": 5289,
+    "sha256": "ceb46c6700f4ed3a0b0c445a4a4c59f220173eeed58d906c8091d84a4fbba990"
+  },
+  {
+    "source": "downloads_pr585",
+    "filename": "Downloads.zip",
+    "bytes": 5906925,
+    "sha256": "ced90c440e59b65ff5a731345a583924432a1b7359f47efb00d4e48cf58ca4bf",
+    "classification": "RAW_USER_SOURCE_QUARANTINE"
+  }
+]

@@ -310,7 +310,11 @@ jobs:
           node --test tests/hub-mission-consumer.test.mjs
           node --test tests/provider-admin-bridge.test.mjs tests/provider-control-integration.test.mjs tests/provider-control.test.mjs tests/provider-secret-boundary.test.mjs
           node --test tests/operational-telemetry.test.mjs
-          node --test tests/figma-integration.test.mjs
+          node --test ../../../apps/bot-telegram/unified-bot-status.test.mjs
+          node --test ../../../scripts/set-bot-profile.test.mjs
+          node --test ../../../scripts/diagnostics/centraldark-operator-preflight.test.mjs
+          bash -n ../../../scripts/set-bot-profile.sh
+          bash -n ../../../scripts/diagnostics/centraldark-operator-preflight.sh
           bash -n ../../../scripts/diagnostics/centraldark-forensic-sweep.sh
           bash -n ../../../scripts/mcp/check-mcp-status.sh
 

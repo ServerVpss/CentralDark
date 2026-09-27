@@ -12,6 +12,8 @@ Você é uma IA, agente, plugin, hub ou modelo que acabou de chegar no CentralDa
 
 ```text
 REUSE_BEFORE_CREATE_REQUIRED=true
+REMEASURE_BEFORE_CREATE=true
+REMEASURE_BEFORE_CREATE_OWNER=.agents/skills/centraldark-operational-method/SKILL.md
 ARCHITECTURE_LOCK=true
 UNKNOWN_IS_NOT_PASS=true
 EXECUTOR_CANNOT_SELF_APPROVE=true
@@ -57,6 +59,15 @@ MATERIAL_FROM_CHEFE_IS_NOT_AUTOMATIC_FACT=true
 PROVEN_MATERIAL_AUTO_CRYSTALLIZES_IN_EXISTING_OWNER=true
 UNPROVEN_MATERIAL_STAYS_CANDIDATE_OR_UNKNOWN=true
 ASK_TO_CRYSTALLIZE_ALREADY_PROVEN_DELTA=false
+CENTRALDARK_UNIFIED_SURFACE_PARITY_REQUIRED=true
+CENTRALDARK_UNIFIED_SURFACE_PARITY_OWNER=docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml
+CENTRALDARK_TRIGGER_IS_ON_DEMAND=true
+CENTRALDARK_TRIGGER_LOADS_RELEVANT_CAPABILITIES_ONLY=true
+PROVEN_CRYSTAL_DIRECT_MAIN_FAST_PATH=true
+PROVEN_CRYSTAL_FULL_CI_REPROOF=false
+PROVEN_CRYSTAL_REVALIDATE=AFFECTED_CONE_ONLY
+PROVEN_CRYSTAL_REQUIRED_CHECKS=CURRENT_MAIN_REMEASURE|OWNER_MATCH|PROVENANCE_READBACK|TARGETED_NEW_BINDING_TEST_WHEN_APPLICABLE|COUNTERPROOF_NEW_BINDING_ONLY|MAIN_READBACK|RECEIPT
+DIVERGENCE_REOPENS_AFFECTED_CONE_ONLY=true
 PRE_RESPONSE_MATERIAL_RECONCILIATION_REQUIRED=true
 NO_EXPLANATION_INSTEAD_OF_AVAILABLE_ACTION=true
 GRILL_ME_MATERIAL_PREFLIGHT=true
@@ -76,6 +87,7 @@ HUMAN_SUPPLIES_GOAL_NOT_RUNBOOK=true
 MACHINE_DECOMPOSES_TECHNICAL_WORK=true
 PREFER_COMPLETE_OPERATION_OVER_MICROCOMMAND_CHAIN=true
 REUSE_BEFORE_CREATE=true
+REMEASURE_BEFORE_CREATE=true
 MEASURE_BEFORE_CLAIM=true
 TOOL_ARGUMENT_LIMITS_MUST_BE_NORMALIZED_TO_SAFE_CAP=true
 SOURCE_404_IS_SENSOR_MISS_NOT_WORLD_MISS=true
@@ -533,6 +545,29 @@ Tailscale
 
 `DISPLAY_SHORT_LABEL != TECHNICAL_IDENTITY`: a interface pode mostrar um rótulo curto por espaço, mas tooltip, detalhe, status expandido ou resposta técnica deve preservar o nome canônico do componente.
 
+## 3.2 👑🪬 Gatilho de executor da Casa
+
+Toda engine CentralDark deve reconhecer o gatilho explícito `!EXECUTOR_CENTRALDARK` e carregar:
+
+`docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md`
+
+O nome histórico do arquivo preserva a origem da cristalização no ChatGPT, mas o contrato operacional é portátil para todas as engines.
+
+```text
+ALL_ENGINES_CAN_RECOGNIZE_EXECUTOR_TRIGGER=true
+TRIGGER=!EXECUTOR_CENTRALDARK
+TRIGGER_DOES_NOT_GRANT_ACCESS=true
+TRIGGER_DOES_NOT_EXPAND_AUTHORITY=true
+PHYSICAL_HOUSE_EXECUTION_REQUIRES_AUTHORIZED_TOOL=true
+PRIMARY_HOUSE_TOOL=Remote Desktop Commander
+NO_HOUSE_ACCESS=CAPABILITY_UNAVAILABLE
+UNKNOWN_HOUSE_ACCESS=UNKNOWN
+```
+
+Quando a ferramenta autorizada da Casa estiver disponível, o modo prefere executar o menor delta local em vez de devolver tutorial ao CHEFE, seguido de backcheck, reteste, Reality Judge e readback.
+
+Quando a ferramenta não estiver disponível, a IA pode entender o método e preservar a intenção, mas não pode alegar execução física.
+
 ## 4. Reconciliação antes de criar
 
 ```text
@@ -908,3 +943,14 @@ FLUXO FUNCIONAL → 🔴 DESVIO → ↩️ 1 CASA ATRÁS → MESMO OWNER
 ```
 
 No jeito do CHEFE: **a vela mostra a intenção, o astrolábio mede a realidade, o meridiano prende o owner certo e a carta do GitHub registra onde a embarcação realmente está.** O título mostra essa rota antes da resposta, sem inventar costa verde no mapa.
+
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+
+```text
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+```
+
+Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
