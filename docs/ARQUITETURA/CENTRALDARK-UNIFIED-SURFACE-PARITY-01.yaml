@@ -1,0 +1,263 @@
+id: CENTRALDARK_UNIFIED_SURFACE_PARITY_01
+status: CONTRACT_FIRST_ENGINE_LATER
+created_from: voice_to_text_crystal_2026_09_26
+purpose: >
+  Unificar Texto, Voz, Work, Desktop, Hermes, SOL, Worker e futuros modelos no
+  mesmo funil de intenção, mesmo capability bus e mesma lei de receipt, sem
+  criar arquitetura paralela.
+
+core_law:
+  INTENT_FIRST: true
+  PERTINENCE_FIRST: true
+  NO_UNREQUESTED_ADVICE: true
+  NO_INVENTED_MISSION: true
+  OBSERVATION_NEQ_EXECUTION_REQUEST: true
+  EXPLICIT_ORDER_EQ_EXECUTION_REQUEST: true
+  CRISTAL_PROVADO_EQ_REPLAY_FIRST: true
+  REUSE_BEFORE_CREATE: true
+  EVOLVE_EXISTING_BEFORE_CREATE: true
+  ONE_OWNER_PER_CAPABILITY: true
+  ONE_SYSTEM_ONLY: true
+  CURRENT_GT_HISTORY: true
+  UNKNOWN_NEQ_PASS: true
+  DOCUMENTED_NEQ_EXECUTED: true
+  EXISTS_NEQ_RUNNING: true
+  REALITY_IS_JUDGE: true
+
+trigger_master:
+  primary: "!CENTRALDARK"
+  aliases:
+    - CentralDark
+    - "#ACORDAR"
+    - "!CALIBRAR"
+    - "!AUTO_GRILL"
+    - "!GRILL_ME"
+  semantics: >
+    Sob demanda. Não puxa tudo sempre. Quando acionado, passa pelo funil completo
+    de intenção e escolhe o menor conjunto de owners/cristais/capacidades
+    pertinente ao comando.
+
+intent_gateway:
+  pipeline:
+    - raw_input
+    - normalize_context
+    - load_INTENT_CORE
+    - load_relevant_crystals
+    - self_grill_before_answer
+    - intent_score
+    - decision_gate
+    - owner_existing_first
+    - execute_or_ask
+    - verify_effect
+    - receipt
+  confidence_gate:
+    high: ">= 0.90 -> execute inside authorized scope"
+    medium: "0.70..0.89 -> deepen Auto-Grill"
+    low: "< 0.70 -> ask CHEFE"
+  multimodal_sources:
+    - text
+    - voice
+    - image
+    - video
+    - file
+    - screenshot
+    - runtime_log
+    - github
+    - desktop_commander
+    - mcp
+    - obsidian
+    - casa
+    - vps
+
+crystal_replay_protocol:
+  rule: "Cristal provado não é redescoberto; provar somente a integração nova."
+  steps:
+    - receive_crystal_package_note_script_or_proof
+    - identify_id_sha_hash_fingerprint_manifest_receipt
+    - locate_equivalent_owner_on_main
+    - if_no_direct_owner_find_semantic_equivalent_owner
+    - compare_fingerprint_structure_declared_destination
+    - plug_only_missing_delta
+    - bind_minimum_surface_hook
+    - test_live_effect
+    - write_receipt
+  forbidden:
+    - audit_whole_system_without_explicit_order
+    - reprove_proven_crystal_without_new_material_evidence
+    - create_parallel_owner
+    - create_new_architecture_for_old_material
+    - loop_around_scope
+
+auto_grill:
+  id: CENTRALDARK_AUTO_GRILL_01
+  behavior: >
+    Antes de perguntar ao CHEFE, entrevistar a si mesmo com contrato, cristais,
+    histórico, owners, logs, código e realidade atual.
+  self_questions:
+    - qual_e_a_intencao_real_do_chefe
+    - isso_e_observacao_ou_ordem_explicita
+    - existe_cristal_provado
+    - qual_e_o_owner_correto
+    - o_que_exatamente_mudou
+    - qual_e_o_menor_delta_possivel
+    - o_que_precisa_ser_testado_agora
+    - o_que_nao_precisa_ser_provado_de_novo
+    - qual_rota_observa_o_efeito
+    - qual_receipt_fecha_a_realidade
+  ask_user_only_if: lacuna_real_permanece
+
+gev_jev_adapter:
+  id: CENTRALDARK_TYPE_SAFE_INTENT_DECISION_01
+  role: optional_type_safe_decision_gate
+  not_role:
+    - hermes_replacement
+    - sol_replacement
+    - cockpit
+    - full_runtime
+    - parallel_system
+  contract_first_engine_later: true
+  input:
+    - intent_summary
+    - scope
+    - owner_candidate
+    - crystal_evidence
+    - risk_blast_radius
+    - available_routes
+  output:
+    decision_enum:
+      - EXECUTE
+      - PROPOSE_ONLY
+      - ASK_CHEFE
+      - REJECT_OUT_OF_SCOPE
+      - PLATFORM_UNAVAILABLE
+    confidence: number_0_to_1
+    reason: short_auditable
+    missing: real_gaps_only
+
+surface_parity:
+  surfaces:
+    text:
+      expected: full_tool_binding_when_connector_exposed
+    voice:
+      expected: same_actions_as_text_when_platform_supports
+      known_gap: voice_tool_binding_may_be_absent
+    work:
+      expected: heavy_implementation_surface
+    desktop:
+      expected: local_runtime_execution_and_observation
+  required_capabilities_when_supported:
+    - github_read
+    - github_write
+    - create_update_files
+    - create_branch
+    - open_pr
+    - commit_comment_receipt
+    - desktop_commander_read_write_exec
+    - centraldark_mcp_calls
+    - plugin_creator_create_update
+    - artifact_export
+    - file_upload_download
+    - session_tracing
+    - tool_call_tracing
+    - usage_tokens_trace
+    - runtime_logs
+    - health_probes
+    - intent_scoring
+    - auto_grill
+    - gev_jev_typed_decision_adapter
+  if_missing:
+    mark: PLATFORM_UNAVAILABLE
+    forbid:
+      - fake_commit_claim
+      - fake_file_claim
+      - fake_desktop_commander_claim
+      - fake_plugin_publish_claim
+      - fake_artifact_link_claim
+
+execution_strategy:
+  mode: hybrid
+  worker_cloud_code:
+    role: heavy_implementation
+    tasks:
+      - edit_multiple_files
+      - create_plugin_archive
+      - run_tests
+      - create_adapters
+      - publish_capability
+      - generate_surface_matrix
+      - commit_or_pr_if_authorized
+  chatgpt_text:
+    role: oracle_and_light_executor_when_tools_exposed
+  voice:
+    role: fast_human_surface_requiring_tool_binding
+  hermes_casa:
+    role: live_local_executor
+
+validation_policy:
+  principle: VALIDATION_COST_SHOULD_SCALE_WITH_BLAST_RADIUS
+  doc_crystal_fast_path:
+    condition:
+      - files_under_docs
+      - no_runtime_owner_changed
+      - no_workflow_changed
+      - no_package_or_deploy_changed
+    action:
+      - allow_main_fast_path
+      - minimal_render_parse_validation
+      - receipt
+  runtime_path:
+    condition:
+      - src_app_service_changed
+      - workflow_changed
+      - deploy_changed
+      - runtime_owner_changed
+    action:
+      - owner_test
+      - live_counterproof
+      - receipt
+  crystal_package_path:
+    condition:
+      - package_internally_tested
+      - manifest_or_fingerprint_present
+      - destination_mapped
+    action:
+      - replay_first
+      - prove_only_new_fit
+      - plug_owner
+      - test_live_effect
+
+anti_loop_event_contract:
+  required_fields:
+    - EVENT_ID
+    - SOURCE_ROUTE
+    - SOURCE_DEVICE
+    - INTENT_ID
+    - OWNER
+    - TIMESTAMP
+    - HASH
+    - HOP_COUNT
+    - CAUSATION_ID
+  rule: >
+    If route A receives an event caused by route B, recognize EVENT_ID and
+    CAUSATION_ID; do not emit a new event. Update state and receipt only.
+
+worker_deliverables:
+  - changed_files
+  - text_voice_work_desktop_capability_matrix
+  - available_capabilities_by_surface
+  - missing_capabilities_by_surface
+  - voice_tool_binding_design
+  - intent_gateway_contract
+  - auto_grill_contract
+  - optional_gev_jev_adapter_contract
+  - anti_fake_execution_rule
+  - anti_loop_event_contract
+  - validation_cost_by_blast_radius
+  - tests_run
+  - receipts
+  - PASS_UNKNOWN_BLOCKED
+  - NEXT_CURSOR
+
+final_sentence: >
+  Nao e dar poder ao modelo. E expor a mesma capability real para qualquer
+  modelo autorizado.
