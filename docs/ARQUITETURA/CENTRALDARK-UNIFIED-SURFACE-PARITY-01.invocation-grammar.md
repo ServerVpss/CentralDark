@@ -78,6 +78,7 @@ verb_dispatch:
 | `CentralDark continue` | `wake_word + continue + cursor=latest` | retoma do `NEXT_CURSOR`; não reinicia missão |
 | `CentralDark cristaliza isso` | `wake_word + cristalize + material=this` | grava no owner existente; receipt/readback |
 | Voz: “Central Dark mede e depois pluga” | `wake_word + mede + pluga` | mede primeiro; só pluga se escopo/autorização ficarem claros |
+| `!CENTRALDARK !GARIMPO_UNIVERSAL` | `wake_word + mode=GARIMPO_UNIVERSAL` | múltiplas superfícies mineram candidatos; um finalizador canônico promove somente delta útil |
 
 ## 5. Paridade de superfície
 
@@ -97,6 +98,33 @@ surface_parity:
 ```
 
 Se Voz não expuser tool calls, sessão, tracing ou usage/tokens, o executor marca a capacidade específica como `PLATFORM_UNAVAILABLE`. Não cria trilha lateral, não simula chamada e não declara PASS.
+
+## 5.1 Convergência multi-caneta
+
+`GARIMPO_UNIVERSAL` é modo de execução do owner existente `session-intelligence-harvester`, não nova arquitetura.
+
+```yaml
+garimpo_universal:
+  owner: .agents/skills/session-intelligence-harvester/SKILL.md
+  MULTI_SURFACE_PARALLEL_CANDIDATES: true
+  MULTI_MODEL_PARALLEL_READERS: true
+  ONE_CANONICAL_FINALIZER_PER_SCOPE: true
+  PARALLEL_CANDIDATE_IS_NOT_CANONICAL_WRITE: true
+  SEMANTIC_IDENTITY: OWNER+CAPABILITY+SCOPE
+  SAME_FINDING_WITHOUT_NEW_EVIDENCE: DROP_DUPLICATE
+  ALREADY_PROVEN_AND_ABSORBED: NO_CHANGE
+  USEFUL_DELTA: ROUTE_TO_EXISTING_OWNER
+  LAST_GOOD_STATE_REPLAY: true
+```
+
+Texto, Voz, Work/Cowork, Code Agent, SOL e Hermes podem analisar/contraprovar em paralelo. Cada superfície preserva `ENGINE_ID`, `SURFACE_ID`, `SESSION_ID` e `INTENT_ID`. A promoção canônica mede a ponta viva, deduplica por identidade semântica e deixa sobreviver somente o delta que ainda não foi absorvido.
+
+```text
+MULTI_MODEL != MULTI_TRUTH
+MULTI_SURFACE != MULTI_BRAIN
+REUSE_BEFORE_CREATE=true
+REALITY_IS_JUDGE=true
+```
 
 ## 6. Relação com owners existentes
 
