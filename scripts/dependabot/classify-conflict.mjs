@@ -59,6 +59,8 @@ let action = 'YELLOW';
 let reason = 'UNKNOWN_CODE_OR_CONFIG_REQUIRES_DISCRIMINANT';
 let conflictId = 'UNREGISTERED';
 let source = 'path-policy';
+let structuredStrategy = '';
+let semanticKey = '';
 
 if (['package.json', 'package-lock.json', 'pnpm-lock.yaml', 'yarn.lock'].includes(base)) {
   action = 'CURRENT';
@@ -79,6 +81,12 @@ if (['package.json', 'package-lock.json', 'pnpm-lock.yaml', 'yarn.lock'].include
     } else if (policy === 'PRESERVE_BOTH' || policy === 'USE_BOTH') {
       action = 'BOTH';
       reason = 'KNOWN_POLICY_PRESERVE_BOTH';
+    } else if (policy === 'STRUCTURED') {
+      action = 'STRUCTURED';
+      structuredStrategy = String(known.STRUCTURED_STRATEGY || '');
+      semanticKey = String(known.SEMANTIC_KEY || '');
+      reason = structuredStrategy ? 'KNOWN_POLICY_STRUCTURED' : 'KNOWN_POLICY_STRUCTURED_MISSING_STRATEGY';
+      if (!structuredStrategy) action = 'YELLOW';
     }
   }
 }
@@ -97,6 +105,8 @@ console.log(JSON.stringify({
   reason,
   conflict_id: conflictId,
   source,
+  structured_strategy: structuredStrategy,
+  semantic_key: semanticKey,
   current_means: 'PR_HEAD',
   incoming_means: 'MAIN',
   unknown_is_pass: false
