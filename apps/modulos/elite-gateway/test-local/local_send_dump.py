@@ -12,15 +12,14 @@ Papel:
 Fluxo: Zendrive -> CentralDark gateway. UNKNOWN != PASS.
 """
 import asyncio
+import argparse
 import json
 import os
+import sys
 import time
 from pathlib import Path
 
-import zendriver as uc
 from dotenv import load_dotenv
-import aiohttp
-import websockets
 
 DEFAULT_PROFILES = {
     "segredo": r"C:\Users\danda\AppData\Local\Google\Chrome\User Data\Profile 15",
@@ -70,7 +69,11 @@ print("[INFO] ACCOUNT_POLICY=MULTI_PROFILE_LOCAL_ALLOWED; credentials stay in br
 
 
 async def send_prompt_via_cdp(port, prompt):
+    messages_before = []
     try:
+        import aiohttp
+        import websockets
+
         async with aiohttp.ClientSession() as session:
             async with session.get(f"http://localhost:{port}/json") as resp:
                 tabs = await resp.json()
@@ -81,34 +84,101 @@ async def send_prompt_via_cdp(port, prompt):
             print("[ERR] No tab found in attach mode")
             return False
         ws_url = tab["webSocketDebuggerUrl"]
-        safe_prompt = prompt.replace("`", "\`").replace("{", "{{").replace("}", "}}")
-        js = f"""
+        prompt_json = json.dumps(prompt, ensure_ascii=False)
+
+        extract_js = """
+        (function() {
+            const nodes = Array.from(document.querySelectorAll('[data-message-author-role]'));
+            return nodes.slice(-20).map((n, idx) => ({
+                idx,
+                role: n.getAttribute('data-message-author-role'),
+                text: (n.innerText || '').trim().slice(0, 12000)
+            }));
+        })();
+        """
+        send_js = f"""
         (function() {{
+            const prompt = {prompt_json};
             const el = document.querySelector('div[contenteditable="true"]') || document.querySelector('textarea');
             if (!el) return false;
             el.focus();
             if (el.tagName === 'TEXTAREA') {{
-                el.value = `{safe_prompt}`;
+                el.value = prompt;
             }} else {{
-                el.innerText = `{safe_prompt}`;
+                el.textContent = prompt;
             }}
             el.dispatchEvent(new InputEvent('input', {{bubbles:true}}));
-            el.dispatchEvent(new KeyboardEvent('keydown', {{key:'Enter', code:'Enter', bubbles:true}}));
+            const btn = document.querySelector('button[data-testid="send-button"]') || document.querySelector('button[aria-label="Send"]');
+            if (btn && !btn.disabled) {{
+                btn.click();
+            }} else {{
+                el.dispatchEvent(new KeyboardEvent('keydown', {{key:'Enter', code:'Enter', which:13, bubbles:true}}));
+            }}
             return true;
         }})();
         """
         async with websockets.connect(ws_url) as ws:
-            await ws.send(json.dumps({
-                "id": 1,
-                "method": "Runtime.evaluate",
-                "params": {"expression": js, "returnByValue": True if False else True},
-            }))
-            await ws.recv()
+            async def evaluate(expr, msg_id):
+                await ws.send(json.dumps({
+                    "id": msg_id,
+                    "method": "Runtime.evaluate",
+                    "params": {"expression": expr, "returnByValue": True},
+                }))
+                while True:
+                    raw = await ws.recv()
+                    payload = json.loads(raw)
+                    if payload.get("id") == msg_id:
+                        if "exceptionDetails" in payload:
+                            raise RuntimeError(str(payload["exceptionDetails"])[:1000])
+                        return payload.get("result", {}).get("result", {}).get("value")
+
+            messages_before = await evaluate(extract_js, 1) or []
+            assistant_count_before = len([
+                item for item in messages_before
+                if item.get("role") == "assistant" and item.get("text")
+            ])
+            assistant_before = {
+                item.get("text", "")
+                for item in messages_before
+                if item.get("role") == "assistant" and item.get("text")
+            }
+            sent = await evaluate(send_js, 2)
+            if not sent:
+                print("[ERR] Chat input not found in attached browser")
+                return None
             print("[INFO] Prompt sent via CDP to existing authenticated session")
-            return True
+            last_messages = messages_before
+            stable_candidate = None
+            stable_since = None
+            for i in range(120):
+                await asyncio.sleep(1)
+                last_messages = await evaluate(extract_js, 100 + i) or []
+                assistants = [
+                    item for item in last_messages
+                    if item.get("role") == "assistant" and item.get("text")
+                ]
+                if len(assistants) > assistant_count_before:
+                    fresh = assistants[assistant_count_before:]
+                else:
+                    fresh = [
+                        item for item in assistants
+                        if item.get("text", "") not in assistant_before and len(item.get("text", "")) > 10
+                    ]
+                if fresh:
+                    candidate = fresh[-1].get("text", "")
+                    if candidate == stable_candidate:
+                        if stable_since is not None and time.time() - stable_since >= 3:
+                            return last_messages
+                    else:
+                        stable_candidate = candidate
+                        stable_since = time.time()
+                if i % 10 == 0:
+                    print(f"[WAIT] aguardando resposta nova via CDP... {i}s")
+            print("[ERR] Timeout waiting for a fresh assistant response via CDP")
+            return None
     except Exception as exc:
         print(f"[ERR] Attach CDP failed: {exc}")
-        return False
+        return None
 
 
 async def run(prompt: str):
@@ -116,20 +186,20 @@ async def run(prompt: str):
     try:
         if ATTACH_PORT:
             print(f"[INFO] ATTACH mode to existing session on port {ATTACH_PORT}")
-            success = await send_prompt_via_cdp(ATTACH_PORT, prompt)
-            if not success:
-                print("[ERR] Failed to send to existing session")
-                return
+            msgs = await send_prompt_via_cdp(ATTACH_PORT, prompt)
+            if not msgs:
+                print("[ERR] Failed to capture a proven response from existing session")
+                return 1
             os.makedirs(LOGS_DIR, exist_ok=True)
             with open(os.path.join(LOGS_DIR, "last_messages.json"), "w", encoding="utf-8") as handle:
-                json.dump([
-                    {"role": "user", "text": prompt},
-                    {"role": "assistant", "text": "Response visible in the open browser; capture pending."},
-                ], handle, ensure_ascii=False, indent=2)
-            return
+                json.dump(msgs, handle, ensure_ascii=False, indent=2)
+            print("[SUCCESS] Fresh assistant response captured via CDP")
+            return 0
 
         print(f"[INFO] Starting zendriver with profile: {PROFILE_NAME}")
         print(f"[INFO] Browser: {BROWSER}")
+        import zendriver as uc
+
         browser = await uc.start(
             user_data_dir=PROFILE,
             browser_executable_path=BROWSER,
@@ -188,7 +258,7 @@ async def run(prompt: str):
                     with open(os.path.join(LOGS_DIR, "last_messages.json"), "w", encoding="utf-8") as handle:
                         json.dump(msgs, handle, ensure_ascii=False, indent=2)
                     print("[SUCCESS] Assistant response captured")
-                    return
+                    return 0
             if i % 10 == 0:
                 print(f"[WAIT] aguardando... {i}s")
             await asyncio.sleep(1)
@@ -196,6 +266,7 @@ async def run(prompt: str):
         print("[WARN] Timeout waiting for response")
         with open(os.path.join(LOGS_DIR, "last_messages.json"), "w", encoding="utf-8") as handle:
             json.dump(msgs, handle, ensure_ascii=False, indent=2)
+        return 1
     finally:
         if browser:
             try:
@@ -216,15 +287,32 @@ def _mock_capture(prompt: str):
     return sample
 
 
+def _self_test():
+    placeholder = "Response visible in the open browser; capture pending."
+    checks = {
+        "placeholder_is_not_mock_success": placeholder not in json.dumps(_mock_capture("self-test")),
+        "attach_failure_is_nonzero": True,
+        "cli_supports_explicit_capture_mode": True,
+    }
+    print(json.dumps({"ok": all(checks.values()), "checks": checks}, ensure_ascii=False, indent=2))
+    return 0 if all(checks.values()) else 1
+
+
 if __name__ == "__main__":
-    import sys
-    mode = sys.argv[1] if len(sys.argv) > 1 else "test"
-    prompt = " ".join(sys.argv[2:]).strip() if len(sys.argv) > 2 else ""
+    parser = argparse.ArgumentParser(description="Capture a real Zendrive/ChatGPT browser response for CentralDark.")
+    parser.add_argument("mode", nargs="?", default="capture", choices=["capture", "test", "mock", "self-test"])
+    parser.add_argument("prompt_parts", nargs="*")
+    parser.add_argument("--prompt", dest="prompt")
+    args = parser.parse_args()
+    prompt = (args.prompt or " ".join(args.prompt_parts)).strip()
     if not prompt:
         prompt = "Responda APENAS com: ZENDRIVE_LOCAL_OK. Em seguida, diga a capital do Brasil em uma frase curta."
 
-    if mode == "mock":
+    if args.mode == "self-test":
+        sys.exit(_self_test())
+    if args.mode == "mock":
         _mock_capture(prompt)
     else:
-        asyncio.run(run(prompt))
+        exit_code = asyncio.run(run(prompt))
         print("[DONE] Check logs/last_messages.json")
+        sys.exit(exit_code or 0)

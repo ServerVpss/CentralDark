@@ -7,11 +7,44 @@ import {
   validateDelegationResult,
   validateHealingGate,
   validateHealingResult,
+  validateGlobalContractGate,
+  validateLogIncidentFanout,
+  validateChildContractLineage,
+  deriveSelfGoal,
 } from "./agent-call.mjs";
+
+
+const TLC23_SHA = "b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1";
+const tlc23HornPass = {
+  status: "PASS",
+  pdf_sha256: TLC23_SHA,
+  evidence_ref: "test:tlc23-horn:pass",
+};
+const childContract = {
+  root_contract_ref: "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+  root_contract_schema: 6,
+  root_goal_id: "RG-1",
+  parent_contract_id: "ROOT",
+  child_contract_id: "CC-1",
+  self_goal_id: "SG-1",
+  owner: "scripts/agent-call.mjs",
+  scope: ["src:x"],
+  expected_delta: "enforce child lineage",
+  done_condition: "all lineage gates pass",
+  evidence_required: ["test:agent-call"],
+  counterproof: "negative lineage cases",
+  dependencies: [],
+  next_cursor: "RUN_COUNTERPROOF",
+  status: "PENDING",
+  root_authority: "SEGREDO/CHEFE",
+  tlc23_horn_gate: tlc23HornPass,
+};
 
 const state = {
   mission_id: "M-1",
   head: { sha: "abc123" },
+  root_goal: { id: "RG-1", authority: "SEGREDO/CHEFE", scope: ["src:x"] },
+  self_goal_receipts: [],
   trail: { route_id: "TRILHO-A", origin: "A", destination: "B" },
   scope: { allowed: ["repo:read", "src:x"], denied: ["prod"] },
   writer: { agent: "hermes" },
@@ -24,6 +57,25 @@ const state = {
   },
   debug_frontiers: [],
   delegation_receipts: [],
+  global_contract_entry: {
+    scope_id: "canon/centraldark-universal-contract-20260919",
+    contract_schema: 6,
+    phase: "ENTRY",
+    observed_head: "abc123",
+    trace_id: "trace-entry-001",
+    child_contract: childContract,
+    tlc23_horn_gate: tlc23HornPass,
+    github_t0: { status: "PASS", head_sha: "abc123" },
+    vps_t0: { status: "PASS", head_sha: "vps123" },
+    cross_surface_drift_classified: true,
+    owner_proof: { status: "PASS", owner: "scripts/agent-call.mjs" },
+    writer_scope_proof: { status: "PASS", scope: "src:x" },
+    preflight: { status: "PASS", evidence_ref: "test:preflight" },
+    counterproof_plan: { status: "READY", evidence_ref: "test:counterproof-plan" },
+    rollback: { status: "PREPARED", evidence_ref: "git:rollback-anchor" },
+    next_cursor: "MUTATE_MINIMAL_THEN_T1",
+    fixed_point: false,
+  },
 };
 const base = {
   call_id: "C-1",
@@ -45,6 +97,79 @@ function check(actual, expected) {
 }
 
 check(validateAgentCall(base, state).status, "ACCEPTED");
+const logIncident = {
+  source_endpoint: "/admin/api/logs",
+  material: true,
+  target: "apps/modulos/mcp",
+  cid: "cid-1",
+  trace_id: "trace-1",
+  level: "error",
+  msg: "hub_mission_consumer_error",
+};
+check(validateLogIncidentFanout(logIncident).status, "PASS_LOG_INCIDENT_FANOUT_PLAN");
+check(validateLogIncidentFanout({ ...logIncident, material: false }).status, "NOT_APPLICABLE_LOG_SIGNAL_NOT_MATERIAL");
+check(validateLogIncidentFanout({ ...logIncident, source_endpoint: "/other" }).status, "BLOCKED_LOG_INCIDENT_SENSOR_MISMATCH");
+check(validateLogIncidentFanout({ ...logIncident, cid: "", trace_id: "" }).status, "BLOCKED_LOG_INCIDENT_CORRELATION_MISSING");
+const logPlan = validateLogIncidentFanout(logIncident);
+check(logPlan.fronts.length, 8);
+check(logPlan.fronts.every((front) => front.mode === "READ_ONLY" && front.write_authorized === false), true);
+check(logPlan.same_scope_concurrent_writers, false);
+check(logPlan.one_active_writer_per_mutable_scope, true);
+
+
+check(validateChildContractLineage(childContract, state).status, "PASS_CHILD_CONTRACT_LINEAGE");
+check(validateChildContractLineage({ ...childContract, root_goal_id: "RG-X" }, state).status, "BLOCKED_CHILD_ROOT_GOAL_CHANGE");
+check(validateChildContractLineage({ ...childContract, root_authority: "MODEL" }, state).status, "BLOCKED_CHILD_AUTHORITY_EXPANSION");
+check(validateChildContractLineage({ ...childContract, scope: ["prod"] }, state).status, "BLOCKED_CHILD_SCOPE_EXPANSION");
+check(validateChildContractLineage({ ...childContract, tlc23_horn_gate: { ...tlc23HornPass, status: "UNKNOWN" } }, state).status, "BLOCKED_CHILD_TLC23_HORN_NOT_PASS");
+check(validateChildContractLineage({ ...childContract, tlc23_horn_gate: { ...tlc23HornPass, pdf_sha256: "0".repeat(64) } }, state).status, "BLOCKED_CHILD_TLC23_PDF_HASH_MISMATCH");
+check(validateChildContractLineage(childContract, { ...state, self_goal_receipts: [{ self_goal_id: "SG-1", status: "PASS" }] }).status, "BLOCKED_DUPLICATE_SELF_GOAL");
+
+const derivedSpec = {
+  material_delta: true,
+  parent_contract_id: "ROOT",
+  owner: "scripts/agent-call.mjs",
+  scope: ["src:x"],
+  expected_delta: "derive deterministic self goal",
+  done_condition: "derived lineage validates",
+  evidence_required: ["test:self-goal"],
+  counterproof: "derive twice and compare",
+  dependencies: [],
+  next_cursor: "NEXT_SELF_GOAL",
+  tlc23_horn_gate: tlc23HornPass,
+};
+const derivedA = deriveSelfGoal(derivedSpec, state);
+const derivedB = deriveSelfGoal(derivedSpec, state);
+check(derivedA.derivation_status, "PASS_SELF_GOAL_DERIVED");
+check(derivedA.self_goal_id, derivedB.self_goal_id);
+check(deriveSelfGoal({ ...derivedSpec, material_delta: false }, state).status, "CHECKPOINT_CONTINUE");
+check(deriveSelfGoal({ ...derivedSpec, scope: ["prod"] }, state).status, "BLOCKED_CHILD_SCOPE_EXPANSION");
+
+check(validateGlobalContractGate(state.global_contract_entry, state, "ENTRY").status, "PASS_GLOBAL_CONTRACT_GATE");
+
+check(validateGlobalContractGate({ ...state.global_contract_entry, child_contract: { ...childContract, root_goal_id: "RG-X" } }, state, "ENTRY").status, "BLOCKED_CHILD_ROOT_GOAL_CHANGE");
+check(validateGlobalContractGate({ ...state.global_contract_entry, tlc23_horn_gate: { ...tlc23HornPass, status: "UNKNOWN" } }, state, "ENTRY").status, "BLOCKED_GLOBAL_CONTRACT_TLC23_HORN_GATE");
+
+check(validateAgentCall({ ...base, to: "hermes", requested_role: "EXECUTOR", write_requested: true, global_contract_entry: undefined }, { ...state, global_contract_entry: undefined }).status, "BLOCKED_GLOBAL_CONTRACT_GATE_MISSING");
+check(validateAgentCall({ ...base, to: "hermes", requested_role: "EXECUTOR", write_requested: true }, { ...state, global_contract_entry: { ...state.global_contract_entry, github_t0: { status: "UNKNOWN", head_sha: "abc123" } } }).status, "BLOCKED_GLOBAL_CONTRACT_GITHUB_T0");
+const exitGate = {
+  scope_id: "canon/centraldark-universal-contract-20260919",
+  contract_schema: 6,
+  phase: "EXIT",
+  observed_head: "abc123",
+  trace_id: "trace-exit-001",
+  github_t1: { status: "PASS", head_sha: "abc123" },
+  vps_t1: { status: "PASS", head_sha: "vps123" },
+  counterproof: { status: "PASS", evidence_ref: "test:counterproof" },
+  receipt_ref: "receipt:1",
+  hud: { status: "PASS", state_hash: "a".repeat(64) },
+  runtime_mutated: false,
+  promotion_requested: false,
+  fixed_point: false,
+  next_cursor: "SAME_HEAD_CI",
+};
+check(validateGlobalContractGate(exitGate, state, "EXIT").status, "PASS_GLOBAL_CONTRACT_GATE");
+check(validateGlobalContractGate({ ...exitGate, fixed_point: true, aggregate_fixed_point_pass: false }, state, "EXIT").status, "BLOCKED_GLOBAL_CONTRACT_FALSE_FIXED_POINT");
 check(validateAgentCall({ ...base, mission_id: "M-X" }, state).status, "BLOCKED_UNKNOWN_MISSION");
 check(validateAgentCall({ ...base, observed_head: "old" }, state).status, "BLOCKED_STALE_HEAD");
 check(validateAgentCall({ ...base, trail_id: undefined }, state).status, "BLOCKED_MISSING_TRAIL");

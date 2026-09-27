@@ -95,4 +95,11 @@ export const MCP_TOOLS_FALLBACK: McpToolStatic[] = [
   { name: 'vps_write_file_safe', description: 'Destrutivo: cria/atualiza arquivo (dry-run por padrão)', category: 'vps', tags: ['vps', 'fs', 'destructive'] },
   { name: 'motion-ui-patterns', description: 'Skill de padrões de motion UI (mcpmarket.com) — animações, transições e microinterações', category: 'skills', tags: ['skills', 'ui', 'motion', 'mcpmarket'] },
   { name: 'using-superpowers', description: 'Skill Mega Powers do repo claude-mermaid-collab — orquestração avançada', category: 'skills', tags: ['skills', 'superpowers'] },
+
+  { name: 'centraldark_deploy_capabilities', description: 'Inventário das capacidades de deploy/aprendizado CentralDark', category: 'ops', tags: ['centraldark', 'deploy', 'readonly'] },
+  { name: 'centraldark_deploy_root_gate', description: 'Gate das 5 superfícies ROOT-FILE + library-index v1.2.0', category: 'ops', tags: ['centraldark', 'deploy', 'gate', 'readonly'] },
+  { name: 'centraldark_deploy_scratch_status', description: 'Status do Single Reusable WorkTree canônico', category: 'ops', tags: ['centraldark', 'deploy', 'worktree', 'readonly'] },
+  { name: 'centraldark_deploy_recipe_status', description: 'Carrega receita MAIN-PINNED machine-consumable', category: 'ops', tags: ['centraldark', 'deploy', 'recipe', 'readonly'] },
+  { name: 'centraldark_deploy_apply_learning', description: 'Aplica aprendizado CURRENT na VPS com lock/receipt/cleanup', category: 'ops', tags: ['centraldark', 'deploy', 'admin'] },
+  { name: 'centraldark_deploy_micro_fallback', description: 'Microdeploy MAIN-PINNED por owner/fileset causal', category: 'ops', tags: ['centraldark', 'deploy', 'fallback', 'admin'] },
 ];

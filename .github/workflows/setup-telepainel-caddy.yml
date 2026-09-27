@@ -1,4 +1,4 @@
-name: setup-telepainel-caddy
+name: ⚙️ setup-telepainel-caddy
 
 on:
   workflow_dispatch: {}
@@ -10,7 +10,21 @@ jobs:
   caddy:
     runs-on: [self-hosted, Linux]
     steps:
-      - name: Diagnostico
+      - name: 🔹 Checkout exato
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+
+      - name: 🧿 TLC23 · Universal · Meta-Lupa · Horn
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          TARGET_SHA="$GITHUB_SHA" REPO_DIR=/root/CentralDark BRANCH=main \
+            bash scripts/vps/deploy-guards-dispatcher.sh --gate-only
+          echo "CANONICAL_DEPLOY_GATE=PASS TARGET_SHA=$GITHUB_SHA"
+
+      - name: 🔹 Diagnostico
         shell: bash
         run: |
           set -e
@@ -18,7 +32,7 @@ jobs:
           [ -f "$CF" ] || { echo "Caddyfile nao encontrado em $CF"; exit 1; }
           echo "=== Bloco telepainel existente? ==="
           grep -n "telepainel" "$CF" || echo "ausente"
-      - name: Adiciona bloco
+      - name: 🔹 Adiciona bloco
         shell: bash
         run: |
           set -e
@@ -43,13 +57,13 @@ jobs:
           else
             echo "Bloco ja existe."
           fi
-      - name: Validar e recarregar
+      - name: 🔹 Validar e recarregar
         shell: bash
         run: |
           set -e
           caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
           systemctl reload caddy
-      - name: Testar
+      - name: 🔹 Testar
         shell: bash
         run: |
           sleep 8

@@ -1,6 +1,8 @@
 # 🧾⚖️ Limite de prova
 
+> Gatilho canônico: 👑🪬 !CENTRALDARK → 🔗 !># INTERLIGADOS → 🧿 #ACORDAR → 🔎 !META_LUPA → ⚖️ !CONTRAPROVA.
 🔗 **!># INTERLIGADOS**
+
 
 ```text
 DOC_CRYSTALLIZED_ON_MAIN != SKILL_RUNTIME_LOADED

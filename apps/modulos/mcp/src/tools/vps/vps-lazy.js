@@ -11,7 +11,30 @@ const DEFAULT_MAX_LINES = 500;
 const MAX_READ_BYTES = 500_000;
 const MAX_SEARCH_FILES = 2_000;
 const MAX_SEARCH_MATCHES = 200;
+const DEFAULT_SEARCH_FILES = 500;
+const DEFAULT_SEARCH_MATCHES = 100;
+const DEFAULT_SEARCH_BYTES_PER_FILE = 120_000;
 const DEFAULT_TIMEOUT_MS = 60_000;
+
+export function normalizeSearchLimits(input = {}) {
+    const requested = {
+        maxFiles: input.maxFiles ?? DEFAULT_SEARCH_FILES,
+        maxMatches: input.maxMatches ?? DEFAULT_SEARCH_MATCHES,
+        maxBytesPerFile: input.maxBytesPerFile ?? DEFAULT_SEARCH_BYTES_PER_FILE,
+    };
+    const applied = {
+        maxFiles: Math.min(requested.maxFiles, MAX_SEARCH_FILES),
+        maxMatches: Math.min(requested.maxMatches, MAX_SEARCH_MATCHES),
+        maxBytesPerFile: Math.min(requested.maxBytesPerFile, MAX_READ_BYTES),
+    };
+    return {
+        requested,
+        applied,
+        clamped: requested.maxFiles !== applied.maxFiles
+            || requested.maxMatches !== applied.maxMatches
+            || requested.maxBytesPerFile !== applied.maxBytesPerFile,
+    };
+}
 const MAX_COMMAND_OUTPUT_BYTES = 160_000;
 const DENY_PATH = /(^|\/)(\.env|secrets?|credenciais|tokens?|sessions?|sessao|sessão|cofre|\.ssh)(\/|$)|\.(pem|key|p12|pfx|sqlite|sqlite3|db|dump|bak|backup)$/i;
 const SKIP_DIRS = new Set([
@@ -317,15 +340,14 @@ export const vpsLazyTools = [
             root: z.enum(["project", "mcp", "tmp"]).optional(),
             regex: z.boolean().optional(),
             caseSensitive: z.boolean().optional(),
-            maxFiles: z.number().int().min(1).max(MAX_SEARCH_FILES).optional(),
-            maxMatches: z.number().int().min(1).max(MAX_SEARCH_MATCHES).optional(),
-            maxBytesPerFile: z.number().int().min(1).max(MAX_READ_BYTES).optional(),
+            maxFiles: z.number().int().min(1).optional(),
+            maxMatches: z.number().int().min(1).optional(),
+            maxBytesPerFile: z.number().int().min(1).optional(),
         }),
         handler: async (input) => {
             const target = resolvePath(input.path ?? ".", input.root ?? "project");
-            const maxFiles = input.maxFiles ?? 500;
-            const maxMatches = input.maxMatches ?? 100;
-            const maxBytesPerFile = input.maxBytesPerFile ?? 120_000;
+            const limits = normalizeSearchLimits(input);
+            const { maxFiles, maxMatches, maxBytesPerFile } = limits.applied;
             const flags = input.caseSensitive ? "g" : "gi";
             const pattern = new RegExp(input.regex ? input.query : escapeRegex(input.query), flags);
             const matches = [];
@@ -390,6 +412,12 @@ export const vpsLazyTools = [
                 scannedFiles,
                 returned: matches.length,
                 truncated,
+                requestedLimits: limits.requested,
+                appliedLimits: limits.applied,
+                limitsClamped: limits.clamped,
+                warning: limits.clamped
+                    ? "Limites solicitados excediam o teto seguro e foram normalizados automaticamente."
+                    : null,
                 matches,
                 skipped: skipped.slice(0, 100),
             });

@@ -44,7 +44,7 @@ function materializeBundleAsRepo(bundle, root) {
     writeFileSync(target, member.content, 'utf8');
   }
   git(root, ['init', '-q']);
-  git(root, ['config', 'user.email', 'portable-kernel@test.local']);
+  git(root, ['config', 'user.email', '<contato>']);
   git(root, ['config', 'user.name', 'Portable Kernel Test']);
   git(root, ['add', '.']);
   git(root, ['commit', '-q', '-m', 'fixture']);
@@ -189,8 +189,52 @@ test('imagem é sensor e nunca substitui medição viva', () => {
   assert.equal(image.image_is_sensor, true);
   assert.equal(image.screenshot_is_current_truth, false);
   assert.equal(image.screenshot_is_trigger_for_live_measurement, true);
+  assert.equal(image.context_before_judgment, true);
+  assert.equal(image.observed_state_is_neutral_by_default, true);
+  assert.equal(image.function_before_failure, true);
+  assert.equal(image.cause_before_classification, true);
+  assert.equal(image.expected_mobility_is_not_drift, true);
+  assert.equal(image.terminal_cwd_is_not_blocker_without_causal_evidence, true);
+  assert.equal(image.do_not_invent_problem_from_screenshot, true);
+  assert.equal(image.do_not_expand_scope_from_visual_incidental_state, true);
+  assert.equal(image.user_demonstrated_context_is_primary_for_visual_scope, true);
   assert.equal(image.live_state_required_before_mutation, true);
   assert.equal(image.material_visual_finding_action, 'REMEASURE_LIVE_SOURCE_THEN_ACT_MINIMALLY');
+});
+
+test('modo direto universal é portátil, mensurável e herdado pelo kernel', () => {
+  const agents = readFileSync(join(ROOT, 'AGENTS.md'), 'utf8');
+  const entry = readFileSync(join(ROOT, 'LEIA-ME-IA.md'), 'utf8');
+  const requiredAgents = [
+    'CENTRALDARK_UNIVERSAL_DIRECT_MODE_V1=true',
+    'PREFER_COMPLETE_OPERATION_OVER_MICROCOMMAND_CHAIN=true',
+    'HUD_LAYOUT_FIXED=true',
+    'UNCHANGED_FIELDS_SHOULD_NOT_BE_REWRITTEN=true',
+    'GENERIC_ERROR_ONLY=FAIL',
+    'ASK_ONE_EXACT_HUMAN_ACTION_AT_A_TIME=true',
+    'AUTO_RESUME_AFTER_HUMAN_FRONTIER=true',
+  ];
+  for (const marker of requiredAgents) assert.ok(agents.includes(marker), `missing direct-mode marker ${marker}`);
+
+  const requiredEntry = [
+    '## 0.1 Modo Direto universal — contrato portátil',
+    'HUD_FIXED_FIELDS=',
+    'HUD_ONLY_MATERIAL_VALUES_CHANGE=true',
+    'FAILURE_MUST_SHOW=',
+    'NO_TOOL_ACCESS → EXECUTION_CAPABILITY=ADVISORY_ONLY',
+  ];
+  for (const marker of requiredEntry) assert.ok(entry.includes(marker), `missing portable direct-mode marker ${marker}`);
+
+  const full = JSON.parse(run(['--json']));
+  const axioms = full.condensed_dna?.axioms ?? [];
+  for (const marker of [
+    'HUMAN_SUPPLIES_GOAL_NOT_RUNBOOK',
+    'PREFER_COMPLETE_OPERATION_OVER_MICROCOMMAND_CHAIN',
+    'FIXED_HUD_LAYOUT_ONLY_LIVE_VALUES_CHANGE',
+    'NUMERIC_METRICS_REQUIRE_PROVEN_DENOMINATOR',
+    'LOUD_EXACT_ACTIONABLE_FAILURE',
+    'AUTO_RESUME_AFTER_HUMAN_FRONTIER',
+  ]) assert.ok(axioms.includes(marker), `missing condensed DNA axiom ${marker}`);
 });
 
 test('kernel FULL deriva DNA condensado e hashes do mesmo HEAD vivo', () => {

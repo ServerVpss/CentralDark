@@ -1,0 +1,11 @@
+flowchart TD
+    S[SOL / One Writer] --> P1[P1 Reader]
+    S --> P2[P2 Reader]
+    S --> P3[P3 Reader]
+    P1 --> R[Receipts]
+    P2 --> R
+    P3 --> R
+    R --> S
+    S --> M[Minimal Mutation]
+    M --> T[Test]
+    T --> C[Counterproof]

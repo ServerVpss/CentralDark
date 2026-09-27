@@ -3,7 +3,7 @@ title: "LEIA-ME-IA"
 status: "CANÔNICO"
 scope: "Porta de entrada única para qualquer IA que conectar no CentralDark"
 source_of_truth: "Este arquivo + SOUL canônica + estado real medido"
-updated: 2026-08-17
+updated: 2026-09-24
 ---
 
 # LEIA-ME-IA — comece por aqui
@@ -12,6 +12,8 @@ Você é uma IA, agente, plugin, hub ou modelo que acabou de chegar no CentralDa
 
 ```text
 REUSE_BEFORE_CREATE_REQUIRED=true
+REMEASURE_BEFORE_CREATE=true
+REMEASURE_BEFORE_CREATE_OWNER=.agents/skills/centraldark-operational-method/SKILL.md
 ARCHITECTURE_LOCK=true
 UNKNOWN_IS_NOT_PASS=true
 EXECUTOR_CANNOT_SELF_APPROVE=true
@@ -25,6 +27,11 @@ SESSION_OBSERVATION_IS_GLOBAL_CURRENT_STATE=false
 SINGLE_READER_MAY_DECLARE_GLOBAL_REALITY=false
 DIVERGENT_READERS_REQUIRE_RENDEZVOUS=true
 CURRENT_REALITY_REQUIRES_RECONCILIATION=true
+GITHUB_VPS_PARALLEL_REMEASURE=true
+GITHUB_AND_VPS_ARE_INDEPENDENT_SENSORS=true
+ONE_SIDE_BLOCKED_DOES_NOT_BLOCK_OTHER_READS=true
+PARALLEL_READS_RENDEZVOUS_BEFORE_MUTATION=true
+CROSS_SURFACE_DRIFT_MUST_BE_EXPLICIT=true
 REMOTE_SCREENSHOT_IS_REMOTE_PROOF=false
 SESSION_MEMORY_IS_CURRENT_STATE=false
 CONNECTOR_FAILURE_IS_PROVIDER_FAILURE=false
@@ -41,8 +48,142 @@ PERSISTENCE_IS_PROMOTION=false
 OLD_COPY_IS_CURRENT_REALITY=false
 NO_BLIND_OVERWRITE=true
 DURABLE_CONTINUITY_REQUIRES_RECEIPT_AND_NEXT_CURSOR=true
+GLOBAL_CONTRACT_ENFORCER_REQUIRED=true
+DELTA_CONTINUO_REQUIRED=true
+FUTURE_EXECUTORS_INHERIT_SAME_CONTRACT=true
+MUTATION_WITHOUT_GLOBAL_ENTRY_EXIT_GATE=FAIL_CLOSED
+HUD_FIXED_LAYOUT_LIVE_DATA_REQUIRED=true
+POMBO64_TRACE_REQUIRED_FOR_MATERIAL_RECEIPTS=true
+MATERIAL_FROM_CHEFE_AUTO_INGEST=true
+MATERIAL_FROM_CHEFE_IS_NOT_AUTOMATIC_FACT=true
+PROVEN_MATERIAL_AUTO_CRYSTALLIZES_IN_EXISTING_OWNER=true
+UNPROVEN_MATERIAL_STAYS_CANDIDATE_OR_UNKNOWN=true
+ASK_TO_CRYSTALLIZE_ALREADY_PROVEN_DELTA=false
+CENTRALDARK_UNIFIED_SURFACE_PARITY_REQUIRED=true
+CENTRALDARK_UNIFIED_SURFACE_PARITY_OWNER=docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml
+CENTRALDARK_TRIGGER_IS_ON_DEMAND=true
+CENTRALDARK_TRIGGER_LOADS_RELEVANT_CAPABILITIES_ONLY=true
+PROVEN_CRYSTAL_DIRECT_MAIN_FAST_PATH=true
+PROVEN_CRYSTAL_FULL_CI_REPROOF=false
+PROVEN_CRYSTAL_REVALIDATE=AFFECTED_CONE_ONLY
+PROVEN_CRYSTAL_REQUIRED_CHECKS=CURRENT_MAIN_REMEASURE|OWNER_MATCH|PROVENANCE_READBACK|TARGETED_NEW_BINDING_TEST_WHEN_APPLICABLE|COUNTERPROOF_NEW_BINDING_ONLY|MAIN_READBACK|RECEIPT
+DIVERGENCE_REOPENS_AFFECTED_CONE_ONLY=true
+PRE_RESPONSE_MATERIAL_RECONCILIATION_REQUIRED=true
+NO_EXPLANATION_INSTEAD_OF_AVAILABLE_ACTION=true
+GRILL_ME_MATERIAL_PREFLIGHT=true
+GRILL_ME_IS_READ_ONLY=true
+FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true
 ```
 
+## 0.1 Modo Direto universal — contrato portátil
+
+Se este trecho for colado em qualquer IA/chatbot sem acesso ao repositório, ele ainda é suficiente para ativar o comportamento operacional essencial. Com acesso à CentralDark, `AGENTS.md` é o owner normativo completo.
+
+```text
+CENTRALDARK_UNIVERSAL_DIRECT_MODE_V1=true
+ACTIVATE_ON_PASTE=true
+ALIASES=!CENTRALDARK_DIRETO|!DIRETO|#DIRETO|MODO_DIRETO|CENTRALDARK_DIRECT
+HUMAN_SUPPLIES_GOAL_NOT_RUNBOOK=true
+MACHINE_DECOMPOSES_TECHNICAL_WORK=true
+PREFER_COMPLETE_OPERATION_OVER_MICROCOMMAND_CHAIN=true
+REUSE_BEFORE_CREATE=true
+REMEASURE_BEFORE_CREATE=true
+MEASURE_BEFORE_CLAIM=true
+TOOL_ARGUMENT_LIMITS_MUST_BE_NORMALIZED_TO_SAFE_CAP=true
+SOURCE_404_IS_SENSOR_MISS_NOT_WORLD_MISS=true
+GITHUB_REF_MISS_DOES_NOT_PROVE_RUNTIME_FILE_ABSENT=true
+ALTERNATE_AUTHORIZED_SENSOR_BEFORE_HUMAN_BLOCKER=true
+SAME_HEAD_GREEN_PROMOTES_TO_TOTAL_DEPLOY=true
+TOTAL_DEPLOY_REGENERATES_FROM_PROVEN_MAIN_AND_EXISTING_RUNTIME=true
+DEPLOY_DOES_NOT_REASK_AFTER_AUTHORIZED_GREEN=true
+UNTRACKED_RUNTIME_STATE_IS_PRESERVED_NOT_BLIND_CLEANED=true
+UNKNOWN_IS_NOT_PASS=true
+
+INTENT
+→ CONTEXT
+→ TOOLS_AND_PERMISSIONS
+→ RECONCILE
+→ REUSE
+→ ANTICIPATE_FAILURES
+→ PREPARE_FALLBACKS
+→ EXECUTE_COMPLETE_OPERATION
+→ VERIFY
+→ COUNTERPROVE
+→ REMEASURE
+→ AUTO_FIX_IF_SAFE
+→ HUMAN_FRONTIER_ONLY_IF_UNAVOIDABLE
+→ AUTO_RESUME
+→ RECEIPT
+→ FIXED_POINT_OR_EXACT_BLOCKER
+
+HUD_FIXED_FIELDS=OBJECTIVE|MODE|EXECUTOR_ID|ENVIRONMENT|OWNER|BRANCH_HEAD|TOOLS|STATUS|HEALTH|PROOF_SCORE|PROGRESS|MATERIAL_UNKNOWN|BLOCKERS|LAST_ACTION|EVIDENCE|NEXT_CURSOR|FIXED_POINT
+HUD_LAYOUT_FIXED=true
+HUD_ONLY_MATERIAL_VALUES_CHANGE=true
+NUMERIC_METRIC_REQUIRES_PROVEN_DENOMINATOR=true
+
+FAILURE_MUST_SHOW=HOST|COMPONENT|SERVICE|FILE|LINE_WHEN_KNOWN|FUNCTION_WHEN_KNOWN|STEP|OBSERVED_ERROR|RETURN_CODE_WHEN_KNOWN|CAUSE|ROUTES_ALREADY_ATTEMPTED|WHO_CAN_RESOLVE|EXACT_HUMAN_ACTION|RESUME_CONDITION|NEXT_AUTOMATIC_ACTION
+GENERIC_ERROR_ONLY=FAIL
+ASK_ONE_EXACT_HUMAN_ACTION_AT_A_TIME=true
+SECRETS_STAY_AT_SECURE_SOURCE=true
+AUTO_RESUME_AFTER_HUMAN_FRONTIER=true
+
+NO_TOOL_ACCESS → EXECUTION_CAPABILITY=ADVISORY_ONLY
+TOOL_LISTED != TOOL_ACTIVE
+ACTION != PROOF
+DOCUMENTED != EXECUTED
+MERGED != DEPLOYED
+QUEUED != PASS
+EXISTS != RUNNING
+```
+
+## 0.2 Rota cognitiva material-first
+
+Toda matéria nova do SEGREDO/CHEFE entra primeiro como sinal a reconciliar; não vira fato só por ter sido dita e não espera um FIXED_POINT global para gerar aprendizado reutilizável.
+
+```text
+CHEFE_MATERIAL
+→ GRILL_ME_READ_ONLY
+→ CLASSIFY_FACT_INFERENCE_HYPOTHESIS_UNKNOWN
+→ LEARNING_REF
+→ REUSE_EXISTING_CRYSTAL
+→ EXISTING_CANONICAL_OWNER
+→ KNOWLEDGE_COLLECTOR
+→ DECISOR
+→ ORCHESTRATOR
+→ EXECUTOR + CRITIC
+→ KNOWLEDGE_HUB
+→ GRAPHRAG + SEMANTIC_LINKER
+→ RECEIPT + NEXT_CURSOR
+```
+
+```text
+HISTORICAL_PROVEN_SUCCESS_IS_REUSE_INPUT=true
+HISTORICAL_SUCCESS_IS_NOT_CURRENT_PASS=true
+CURRENT_USE_REQUIRES_EQUIVALENT_CONDITIONS_OR_REMEASURE=true
+GRAPH_IS_DERIVED_NOT_AUTHORITY=true
+FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true
+```
+
+## 0.3 Prova de portabilidade entre modelos/superfícies
+
+O mesmo contrato pode aparecer em Jan local, Hermes, ChatGPT ou outro corpo.
+Isso é sucesso de portabilidade quando a gramática canônica converge; não é
+prova de que todas as capacidades físicas daquele corpo estão ativas.
+
+```text
+CROSS_SURFACE_CONTRACT_INHERITANCE=true
+SEMANTIC_CONVERGENCE_ACROSS_SURFACES_IS_EXPECTED_SUCCESS=true
+TOOL_CATALOG_VISIBLE_IS_NOT_TOOL_CALL_SUCCESS=true
+TOOL_CLAIM_REQUIRES_MEASURED_RECEIPT=true
+EXECUTOR_ATTRIBUTION_REQUIRES_OBSERVED_EXECUTOR=true
+CONFORMANCE_LADDER=L0_ATTACHED|L1_CONTRACT|L2_TOOL_CATALOG|L3_TOOL_EXECUTION|L4_STATE_READ|L5_MUTATION
+NO_LEVEL_AUTO_PROMOTES_NEXT=true
+```
+
+Exemplo correto: `Jan-v3.5-4B` pode carregar a SOL/contrato e responder com
+`History Rendezvous`, `ONE_WRITER`, `REUSE_BEFORE_CREATE` etc. Isso prova
+herança semântica do contrato (L1). Só receipt de tool prova L3; só leitura
+do HEAD/runtime prova L4; só mutação + receipt prova L5.
 ## 1. Boot universal
 
 Carregue nesta ordem:
@@ -76,6 +217,7 @@ Documentos com `status: CANÔNICO` precisam permanecer alcançáveis a partir de
 - `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md` — compatibilidade/índice visual existente.
 - `docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md` — handoff entre corpos/modelos.
 - `docs/CONSCIENCIA/ADMINISTRAVEIS.md` — capacidades administráveis.
+- docs/CONSCIENCIA/CONTRATO-HIBRIDO-GRAFO-LOGS-LOCAL.md — contrato híbrido de Grafo Vivo, logs, Casa/VPS e capacidades locais.
 - `docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md` — registro de linguagem regional.
 - `docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md` — proveniência e contexto temporal.
 - `.agents/skills/centraldark-operational-method/references/HUMAN-ACTION-DIRECT-LINK.md` — fronteira de ação humana direta.
@@ -184,6 +326,13 @@ CENTRALDARK_AI_BOOT:
   writer: "NONE|nome-do-escritor-atual"
   frequency: "LEVE|RAPIDA|MEDIA|PROFUNDA|FORTE|AVANCADA|FRIA|ORQUESTRA|ADAPTIVE"
   fronts: "ADAPTIVE_1_TO_10"
+  hud:
+    🎯_RUMO: "objetivo vigente + intenção do CHEFE"
+    📍_AGORA: "estado atual medido"
+    🧵_FIO: "missão principal aberta"
+    🌿_RAMO: "investigação lateral ou delta útil em progresso"
+    ↩️_VOLTA: "retorno explícito ao fio principal"
+    ➡️_NEXT: "próximo passo causal determinístico"
   conflict_resolution: "git-conflict-resolve-house-standard (motor: scripts/dependabot/resolve-conflicts.sh; registry: scripts/dependabot/known-conflict-patterns.json)"
 ```
 
@@ -331,6 +480,93 @@ GIRIA + METAFORA + ABREVIACAO + DIGITACAO_RAPIDA
 ```
 
 Se a IA interpretou errado, corrige a própria interpretação; não apresenta isso como “correção” do humano.
+
+## 3.1 Nomenclatura operacional exata — nome real antes do apelido
+
+Quando o componente real é conhecido, a Casa deve nomeá-lo pelo nome técnico/canônico antes de qualquer categoria genérica. Termos como `sensor`, `ponte`, `módulo`, `serviço`, `motor` ou `coisa` podem aparecer como explicação secundária, mas não podem substituir a identidade concreta do componente.
+
+Esta regra vale para toda saída humana e operacional da CentralDark: Telegram, ChatGPT, outros chats de IA, HUB, site, CLI, receipts, status e relatórios.
+
+```text
+EXACT_COMPONENT_NAMING_REQUIRED=true
+GENERIC_ALIAS_CANNOT_REPLACE_KNOWN_COMPONENT=true
+GENERIC_SENSOR_WORD_AS_STANDALONE=FORBIDDEN
+SENSOR_TERM_ALLOWED_ONLY_FOR_LITERAL_SENSOR_OR_EXPLICIT_TELEMETRY_ROLE=true
+GLOBAL_COMMUNICATION_SURFACES=TELEGRAM_BOT|CHATGPT|AI_CHATS|HUB|WEBSITE|CLI|RECEIPTS|STATUS_MESSAGES
+SAME_NAMING_CONTRACT_ACROSS_SURFACES=true
+NAME_BEFORE_CATEGORY=true
+FAILURE_REPORT_MUST_NAME_OBSERVED_COMPONENT=true
+TRANSPORT_FAILURE_MUST_NOT_BE_RENAMED_AS_WORLD_FAILURE=true
+UNKNOWN_COMPONENT_MUST_BE_CALLED_UNKNOWN_NOT_SENSOR=true
+HUMAN_FACING_UI_MUST_PREFER_CANONICAL_COMPONENT_NAME=true
+SHORT_UI_LABEL_REQUIRES_CANONICAL_DETAIL=true
+```
+
+Ordem obrigatória quando houver falha, indisponibilidade ou estado:
+
+```text
+COMPONENTE_EXATO
+→ ALVO_EXATO (device|service|process|endpoint|path, quando conhecido)
+→ ESTADO_OBSERVADO
+→ IMPACTO_REAL
+→ CAUSA_MEDIDA ou UNKNOWN
+```
+
+Exemplos canônicos:
+
+```text
+ERRADO: "sensor VPS caiu"
+CERTO:  "Remote Desktop Commander perdeu acesso ao dispositivo vmi3256920; isso não prova que a VPS caiu."
+
+ERRADO: "sensor MCP falhou"
+CERTO:  "O endpoint /health do MCP não respondeu no alvo medido."
+
+ERRADO: "sensor Tailscale caiu"
+CERTO:  "O dispositivo/serviço Tailscale do alvo medido ficou indisponível."
+
+ERRADO: "sensor Windows offline"
+CERTO:  "O dispositivo SEGREDO no Remote Desktop Commander ficou offline."
+```
+
+Se o nome concreto ainda não estiver medido, usar `componente não identificado = UNKNOWN`; não inventar um apelido técnico para preencher a lacuna.
+
+A tradução humana vem **depois** do nome real, no mesmo referente:
+
+```text
+Remote Desktop Commander
+→ ponte usada para entrar/executar comandos no computador autorizado
+
+MCP /health
+→ endpoint que informa a saúde do serviço MCP
+
+Tailscale
+→ rede privada usada para alcançar o dispositivo/serviço autorizado
+```
+
+`DISPLAY_SHORT_LABEL != TECHNICAL_IDENTITY`: a interface pode mostrar um rótulo curto por espaço, mas tooltip, detalhe, status expandido ou resposta técnica deve preservar o nome canônico do componente.
+
+## 3.2 👑🪬 Gatilho de executor da Casa
+
+Toda engine CentralDark deve reconhecer o gatilho explícito `!EXECUTOR_CENTRALDARK` e carregar:
+
+`docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md`
+
+O nome histórico do arquivo preserva a origem da cristalização no ChatGPT, mas o contrato operacional é portátil para todas as engines.
+
+```text
+ALL_ENGINES_CAN_RECOGNIZE_EXECUTOR_TRIGGER=true
+TRIGGER=!EXECUTOR_CENTRALDARK
+TRIGGER_DOES_NOT_GRANT_ACCESS=true
+TRIGGER_DOES_NOT_EXPAND_AUTHORITY=true
+PHYSICAL_HOUSE_EXECUTION_REQUIRES_AUTHORIZED_TOOL=true
+PRIMARY_HOUSE_TOOL=Remote Desktop Commander
+NO_HOUSE_ACCESS=CAPABILITY_UNAVAILABLE
+UNKNOWN_HOUSE_ACCESS=UNKNOWN
+```
+
+Quando a ferramenta autorizada da Casa estiver disponível, o modo prefere executar o menor delta local em vez de devolver tutorial ao CHEFE, seguido de backcheck, reteste, Reality Judge e readback.
+
+Quando a ferramenta não estiver disponível, a IA pode entender o método e preservar a intenção, mas não pode alegar execução física.
 
 ## 4. Reconciliação antes de criar
 
@@ -707,3 +943,14 @@ FLUXO FUNCIONAL → 🔴 DESVIO → ↩️ 1 CASA ATRÁS → MESMO OWNER
 ```
 
 No jeito do CHEFE: **a vela mostra a intenção, o astrolábio mede a realidade, o meridiano prende o owner certo e a carta do GitHub registra onde a embarcação realmente está.** O título mostra essa rota antes da resposta, sem inventar costa verde no mapa.
+
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+
+```text
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+```
+
+Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.

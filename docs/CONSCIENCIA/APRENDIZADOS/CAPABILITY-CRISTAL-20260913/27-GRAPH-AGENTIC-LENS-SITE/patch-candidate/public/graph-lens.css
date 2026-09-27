@@ -1,0 +1,34 @@
+
+:root{
+  --bg:#05070b;--panel:#0b1018e8;--line:#1d2735;--text:#e8eef8;--muted:#8492a6;
+  --accent:#c33cff;--cyan:#56d8ff;--green:#63e6a6;--yellow:#ffd166;--red:#ff5d73;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:var(--bg);color:var(--text);font:14px/1.35 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow:hidden}
+#app{display:grid;grid-template-columns:310px 1fr 330px;height:100vh}
+.panel{background:var(--panel);border-right:1px solid #17202d;padding:14px;overflow:auto;backdrop-filter:blur(10px)}
+.panel.right{border-right:0;border-left:1px solid #17202d}
+.brand{font-size:17px;font-weight:800;letter-spacing:.06em}
+.sub{color:var(--muted);font-size:11px;margin:4px 0 14px}
+h3{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#9badc3;margin:18px 0 8px}
+input,select,button{width:100%;background:#101824;color:var(--text);border:1px solid #253246;border-radius:8px;padding:8px;margin:4px 0}
+button{cursor:pointer}
+button:hover{border-color:var(--cyan)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.badge{display:inline-block;border:1px solid #2a3b52;border-radius:999px;padding:2px 7px;margin:2px;font-size:10px;color:#b9c9dd}
+.metric{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #141d29}
+#stage{position:relative;overflow:hidden;background:
+radial-gradient(circle at center,#111724 0,#080c13 23%,#05070b 58%,#020306 100%)}
+canvas{position:absolute;inset:0;width:100%;height:100%}
+#hud{position:absolute;left:14px;top:12px;background:#07101ac0;border:1px solid #1b2d40;border-radius:8px;padding:8px 10px;pointer-events:none}
+#legend{position:absolute;left:14px;bottom:12px;background:#07101ac0;border:1px solid #1b2d40;border-radius:8px;padding:8px;max-width:520px}
+.legendItem{display:inline-flex;gap:6px;align-items:center;margin-right:12px;font-size:10px;color:#aebdd1}
+.sw{width:20px;height:2px;background:white;display:inline-block}
+.card{padding:9px;border:1px solid #1c2b3e;border-radius:9px;margin:7px 0;background:#0b121d}
+.card strong{display:block;font-size:12px}
+.card small{color:#8fa0b6}
+.card[data-state="CONFLICT"]{border-color:#8a2635}
+.card[data-state="UNKNOWN"]{border-color:#75601c}
+.kbd{border:1px solid #304158;border-bottom-width:2px;border-radius:5px;padding:1px 5px;color:#b8c8dc}
+.good{color:var(--green)} .warn{color:var(--yellow)} .bad{color:var(--red)}
+@media(max-width:1000px){#app{grid-template-columns:250px 1fr}.right{display:none}}

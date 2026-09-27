@@ -1,4 +1,4 @@
-name: Lupa Drift Guard
+name: ⚙️ Lupa Drift Guard
 
 on:
   pull_request:
@@ -19,7 +19,7 @@ jobs:
     timeout-minutes: 20
     steps:
 
-      - name: Bloquear HEAD de fork no runner persistente
+      - name: 🔹 Bloquear HEAD de fork no runner persistente
         id: fork_guard
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         shell: bash
@@ -37,14 +37,14 @@ jobs:
           echo "blocked=false" >> "$GITHUB_OUTPUT"
           echo "FORK_GUARD_OK ${HEAD_REPO}"
 
-      - name: Checkout exact PR HEAD
+      - name: 🔹 Checkout exact PR HEAD
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 2
           persist-credentials: false
 
-      - name: Provar identidade do checkout
+      - name: 🔹 Provar identidade do checkout
         shell: bash
         env:
           EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -57,12 +57,12 @@ jobs:
           fi
           echo "DRIFT_GUARD_HEAD=PASS sha=${ACTUAL_SHA}"
 
-      - name: Setup Python
+      - name: 🔹 Setup Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.11'
 
-      - name: Confirmar MetaLupa como técnica Lupa canônica única
+      - name: 🔹 Confirmar MetaLupa como técnica Lupa canônica única
         run: |
           set -e
           test -f .agents/skills/meta-lupa/SKILL.md || { echo "❌ canônica ausente"; exit 1; }
@@ -91,16 +91,16 @@ jobs:
           done
           echo "✅ meta-lupa é a única técnica Lupa canônica ativa; aliases de compatibilidade e outras skills legítimas podem coexistir"
 
-      - name: Gerar inventário de skills
+      - name: 🔹 Gerar inventário de skills
         run: |
           python3 scripts/lupa/inventario_skills.py > /tmp/inv.json
           echo "---"
           jq '.total, [.skills[].nome]' /tmp/inv.json
 
-      - name: Detectar drift (skills duplicadas + menções ativas em doc)
+      - name: 🔹 Detectar drift (skills duplicadas + menções ativas em doc)
         run: python3 scripts/lupa/detectar_drift.py
 
-      - name: Upload inventário
+      - name: 🔹 Upload inventário
         if: success()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -109,7 +109,7 @@ jobs:
             /tmp/inv.json
             docs/RELATORIOS/inventario-skills.json
 
-      - name: Receipt determinístico (sempre)
+      - name: 🔹 Receipt determinístico (sempre)
         if: always()
         shell: bash
         env:

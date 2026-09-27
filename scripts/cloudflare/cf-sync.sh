@@ -54,7 +54,7 @@ set -a; . "$CONFIG_FILE"; set +a
 : "${CF_API_TOKEN:?CF_API_TOKEN ausente em $CONFIG_FILE}"
 : "${CF_ZONE_NAME:?CF_ZONE_NAME ausente}"
 : "${CF_TARGET_IP:?CF_TARGET_IP ausente}"
-CF_SUBDOMAINS="${CF_SUBDOMAINS:-@ www app api bot crm mcp gateway webhook status}"
+CF_SUBDOMAINS="${CF_SUBDOMAINS:-@ www api mcp admin}"
 CF_PROXIED="${CF_PROXIED:-true}"
 
 api() {

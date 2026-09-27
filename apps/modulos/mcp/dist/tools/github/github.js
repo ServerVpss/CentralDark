@@ -49,6 +49,39 @@ export function canonicalLabels(labels = []) {
     }
     return [...new Set(out)];
 }
+export function normalizeRepoRef(owner, repo) {
+    const clean = (value) => String(value ?? "").trim().replace(/^\/+|\/+$/g, "");
+    const explicitOwner = clean(owner);
+    const repoInput = clean(repo);
+    if (!repoInput)
+        throw new Error("GitHub repo ausente");
+    const parts = repoInput.split("/").filter(Boolean);
+    if (parts.length > 2)
+        throw new Error(`GitHub repo inválido: ${repoInput}`);
+    let resolvedOwner = explicitOwner;
+    let resolvedRepo = parts[0];
+    if (parts.length === 2) {
+        const [embeddedOwner, embeddedRepo] = parts;
+        if (resolvedOwner && resolvedOwner.toLocaleLowerCase("en-US") !== embeddedOwner.toLocaleLowerCase("en-US")) {
+            throw new Error(`GitHub owner/repo conflitantes: owner=${resolvedOwner} repo=${repoInput}`);
+        }
+        resolvedOwner = embeddedOwner;
+        resolvedRepo = embeddedRepo;
+    }
+    if (!resolvedOwner)
+        throw new Error("GitHub owner ausente");
+    if (!resolvedRepo)
+        throw new Error("GitHub repo ausente");
+    return {
+        owner: resolvedOwner,
+        repo: resolvedRepo,
+        fullName: `${resolvedOwner}/${resolvedRepo}`,
+    };
+}
+function repoBase(owner, repo) {
+    const normalized = normalizeRepoRef(owner, repo);
+    return `/repos/${encodeURIComponent(normalized.owner)}/${encodeURIComponent(normalized.repo)}`;
+}
 export class GitHubError extends Error {
     status;
     body;
@@ -122,7 +155,7 @@ export async function checkToken(token, owner, repo) {
     let actionsWriteHint = "unknown";
     if (owner && repo) {
         try {
-            const r = (await ghFetch(token, `/repos/${owner}/${repo}`));
+            const r = (await ghFetch(token, `${repoBase(owner, repo)}`));
             repoPermissions = r.permissions;
             const hasWorkflowScope = scopes.includes("workflow") || scopes.includes("repo");
             const canPush = !!(repoPermissions?.push || repoPermissions?.maintain || repoPermissions?.admin);
@@ -166,23 +199,23 @@ export async function listRepos(token, opts = {}) {
     return ghFetch(token, `/user/repos?per_page=${perPage}&page=${page}&sort=updated`);
 }
 export async function getRepo(token, owner, repo) {
-    return ghFetch(token, `/repos/${owner}/${repo}`);
+    return ghFetch(token, `${repoBase(owner, repo)}`);
 }
 export async function listIssues(token, owner, repo, opts = {}) {
     const state = opts.state ?? "open";
     const perPage = opts.perPage ?? 30;
     const page = opts.page ?? 1;
-    return ghFetch(token, `/repos/${owner}/${repo}/issues?state=${state}&per_page=${perPage}&page=${page}`);
+    return ghFetch(token, `${repoBase(owner, repo)}/issues?state=${state}&per_page=${perPage}&page=${page}`);
 }
 export async function listPullRequests(token, owner, repo, opts = {}) {
     const state = opts.state ?? "open";
     const perPage = opts.perPage ?? 30;
     const page = opts.page ?? 1;
-    return ghFetch(token, `/repos/${owner}/${repo}/pulls?state=${state}&per_page=${perPage}&page=${page}`);
+    return ghFetch(token, `${repoBase(owner, repo)}/pulls?state=${state}&per_page=${perPage}&page=${page}`);
 }
 export async function getFileContent(token, owner, repo, path, ref) {
     const q = ref ? `?ref=${encodeURIComponent(ref)}` : "";
-    const data = await ghFetch(token, `/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}${q}`);
+    const data = await ghFetch(token, `${repoBase(owner, repo)}/contents/${encodeURIComponent(path)}${q}`);
     if (data && typeof data === "object" && "content" in data && typeof data.content === "string") {
         const decoded = Buffer.from(data.content, "base64").toString("utf-8");
         return { ...data, decoded };
@@ -192,41 +225,41 @@ export async function getFileContent(token, owner, repo, path, ref) {
 // ---------- Escrita ----------
 export async function createIssue(token, owner, repo, input) {
     const labels = canonicalLabels(input.labels || []);
-    return ghJson(token, "POST", `/repos/${owner}/${repo}/issues`, {
+    return ghJson(token, "POST", `${repoBase(owner, repo)}/issues`, {
         ...input,
         ...(input.labels ? { labels } : {}),
     });
 }
 export async function getIssue(token, owner, repo, issueNumber) {
-    return ghFetch(token, `/repos/${owner}/${repo}/issues/${issueNumber}`);
+    return ghFetch(token, `${repoBase(owner, repo)}/issues/${issueNumber}`);
 }
 export async function commentIssue(token, owner, repo, issueNumber, body) {
-    return ghJson(token, "POST", `/repos/${owner}/${repo}/issues/${issueNumber}/comments`, { body });
+    return ghJson(token, "POST", `${repoBase(owner, repo)}/issues/${issueNumber}/comments`, { body });
 }
 export async function closeIssue(token, owner, repo, issueNumber, input = {}) {
     if (input.body && input.body.trim()) {
         await commentIssue(token, owner, repo, issueNumber, input.body);
     }
-    return ghJson(token, "PATCH", `/repos/${owner}/${repo}/issues/${issueNumber}`, {
+    return ghJson(token, "PATCH", `${repoBase(owner, repo)}/issues/${issueNumber}`, {
         state: "closed",
         state_reason: input.stateReason ?? "completed",
     });
 }
 export async function createPullRequest(token, owner, repo, input) {
-    return ghJson(token, "POST", `/repos/${owner}/${repo}/pulls`, input);
+    return ghJson(token, "POST", `${repoBase(owner, repo)}/pulls`, input);
 }
 export async function mergePullRequest(token, owner, repo, pullNumber, input = {}) {
-    return ghJson(token, "PUT", `/repos/${owner}/${repo}/pulls/${pullNumber}/merge`, input);
+    return ghJson(token, "PUT", `${repoBase(owner, repo)}/pulls/${pullNumber}/merge`, input);
 }
 // Pega o SHA de uma branch.
 export async function getBranchSha(token, owner, repo, branch) {
-    const data = await ghFetch(token, `/repos/${owner}/${repo}/git/ref/heads/${encodeURIComponent(branch)}`);
+    const data = await ghFetch(token, `${repoBase(owner, repo)}/git/ref/heads/${encodeURIComponent(branch)}`);
     return data.object.sha;
 }
 // Cria uma branch nova a partir de outra (default: main).
 export async function createBranch(token, owner, repo, input) {
     const fromSha = await getBranchSha(token, owner, repo, input.fromBranch ?? "main");
-    return ghJson(token, "POST", `/repos/${owner}/${repo}/git/refs`, {
+    return ghJson(token, "POST", `${repoBase(owner, repo)}/git/refs`, {
         ref: `refs/heads/${input.newBranch}`,
         sha: fromSha,
     });
@@ -237,7 +270,7 @@ export async function listCommits(token, owner, repo, opts = {}) {
     const perPage = opts.perPage ?? 20;
     const page = opts.page ?? 1;
     const path = opts.path ? `&path=${encodeURIComponent(opts.path)}` : "";
-    return ghFetch(token, `/repos/${owner}/${repo}/commits?sha=${encodeURIComponent(sha)}&per_page=${perPage}&page=${page}${path}`);
+    return ghFetch(token, `${repoBase(owner, repo)}/commits?sha=${encodeURIComponent(sha)}&per_page=${perPage}&page=${page}${path}`);
 }
 // Lista os últimos runs do GitHub Actions.
 export async function listWorkflowRuns(token, owner, repo, opts = {}) {
@@ -248,31 +281,31 @@ export async function listWorkflowRuns(token, owner, repo, opts = {}) {
         params.set("branch", opts.branch);
     if (opts.status)
         params.set("status", opts.status);
-    return ghFetch(token, `/repos/${owner}/${repo}/actions/runs?${params.toString()}`);
+    return ghFetch(token, `${repoBase(owner, repo)}/actions/runs?${params.toString()}`);
 }
 // Reexecuta um run inteiro do GitHub Actions.
 export async function rerunWorkflowRun(token, owner, repo, runId) {
-    return ghJson(token, "POST", `/repos/${owner}/${repo}/actions/runs/${runId}/rerun`);
+    return ghJson(token, "POST", `${repoBase(owner, repo)}/actions/runs/${runId}/rerun`);
 }
 // Reexecuta apenas os jobs que falharam de um run.
 export async function rerunFailedJobs(token, owner, repo, runId) {
-    return ghJson(token, "POST", `/repos/${owner}/${repo}/actions/runs/${runId}/rerun-failed-jobs`);
+    return ghJson(token, "POST", `${repoBase(owner, repo)}/actions/runs/${runId}/rerun-failed-jobs`);
 }
 // Cancela um run em andamento.
 export async function cancelWorkflowRun(token, owner, repo, runId) {
-    return ghJson(token, "POST", `/repos/${owner}/${repo}/actions/runs/${runId}/cancel`);
+    return ghJson(token, "POST", `${repoBase(owner, repo)}/actions/runs/${runId}/cancel`);
 }
 // Deleta um run (limpeza de histórico).
 export async function deleteWorkflowRun(token, owner, repo, runId) {
-    return ghJson(token, "DELETE", `/repos/${owner}/${repo}/actions/runs/${runId}`);
+    return ghJson(token, "DELETE", `${repoBase(owner, repo)}/actions/runs/${runId}`);
 }
 // Dispara workflow_dispatch num workflow (por id numérico ou nome do arquivo, ex: deploy.yml).
 export async function dispatchWorkflow(token, owner, repo, workflowIdOrFile, input) {
-    return ghJson(token, "POST", `/repos/${owner}/${repo}/actions/workflows/${encodeURIComponent(String(workflowIdOrFile))}/dispatches`, { ref: input.ref, inputs: input.inputs });
+    return ghJson(token, "POST", `${repoBase(owner, repo)}/actions/workflows/${encodeURIComponent(String(workflowIdOrFile))}/dispatches`, { ref: input.ref, inputs: input.inputs });
 }
 // Lista workflows do repo (id + nome do arquivo).
 export async function listWorkflows(token, owner, repo) {
-    return ghFetch(token, `/repos/${owner}/${repo}/actions/workflows?per_page=100`);
+    return ghFetch(token, `${repoBase(owner, repo)}/actions/workflows?per_page=100`);
 }
 // Busca de código no repo (GitHub Search API).
 export async function searchCode(token, query, opts = {}) {
@@ -287,7 +320,7 @@ export async function createOrUpdateFile(token, owner, repo, input) {
     // Tenta pegar SHA atual (se arquivo existe)
     let sha;
     try {
-        const existing = await ghFetch(token, `/repos/${owner}/${repo}/contents/${encodeURIComponent(input.path)}${input.branch ? `?ref=${encodeURIComponent(input.branch)}` : ""}`);
+        const existing = await ghFetch(token, `${repoBase(owner, repo)}/contents/${encodeURIComponent(input.path)}${input.branch ? `?ref=${encodeURIComponent(input.branch)}` : ""}`);
         if (existing && typeof existing === "object" && "sha" in existing) {
             sha = existing.sha;
         }
@@ -306,7 +339,7 @@ export async function createOrUpdateFile(token, owner, repo, input) {
         ...(input.branch ? { branch: input.branch } : {}),
         ...(sha ? { sha } : {}),
     };
-    return ghJson(token, "PUT", `/repos/${owner}/${repo}/contents/${encodeURIComponent(input.path)}`, body);
+    return ghJson(token, "PUT", `${repoBase(owner, repo)}/contents/${encodeURIComponent(input.path)}`, body);
 }
 //# sourceMappingURL=github.js.map
 //# sourceMappingURL=github.js.map
