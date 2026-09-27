@@ -79,6 +79,32 @@ function withMandatoryRules(systemPrompt) {
     'Aplique este contrato como regra operacional. UNKNOWN nunca vira PASS. Não exponha secrets.',
   ].join('\n');
 }
+function executorCentralDarkRequested(history) {
+  const latestUser = [...(history || [])].reverse().find(m => m?.role === 'user');
+  const raw = typeof latestUser?.content === 'string'
+    ? latestUser.content
+    : JSON.stringify(latestUser?.content || '');
+  return /(^|\s)[!#]?EXECUTOR[_\s-]?CENTRALDARK(?:\s|$)/i.test(raw);
+}
+
+function withExecutorCentralDark(systemPrompt, history) {
+  if (!executorCentralDarkRequested(history)) return systemPrompt;
+  return [
+    systemPrompt,
+    '',
+    '---',
+    '[MODO EXECUTOR CENTRALDARK — GATILHO EXPLÍCITO]',
+    'TRIGGER=!EXECUTOR_CENTRALDARK',
+    'Owner: docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md',
+    'Reconheça o modo executor, mas NÃO invente acesso físico à Casa.',
+    'Antes de executar na Casa, meça se há Remote Desktop Commander ou ferramenta equivalente autorizada e ativa neste runtime.',
+    'Sem ferramenta de Casa: HOUSE_ACCESS=CAPABILITY_UNAVAILABLE. Estado incerto: HOUSE_ACCESS=UNKNOWN.',
+    'Não substitua ferramenta da Casa por shell/servidor remoto e não alegue execução física sem readback do dispositivo.',
+    'Se o acesso existir: intenção → medir alvo → menor delta → backcheck → reteste → Reality Judge → readback/receipt.',
+    'UNKNOWN != PASS. ACTION != PROOF. TRIGGER != CREDENCIAL. TRIGGER != NOVA_AUTORIDADE.',
+  ].join('\n');
+}
+
 const HERMES_TIMEOUT_MS = Math.min(
   Math.max(Number(process.env.HERMES_EXECUTOR_TIMEOUT_MS || 60_000), 15_000),
   300_000,
@@ -722,6 +748,7 @@ async function executeTool(toolName, toolInput) {
 
 async function callLLMWithTools(history, systemPrompt) {
   systemPrompt = withMandatoryRules(systemPrompt);
+  systemPrompt = withExecutorCentralDark(systemPrompt, history);
   const gatewayThenHermes = async (motivo) => {
     const gw = await callCentralDarkGateway(history, systemPrompt, motivo);
     if (gw.ok) return gw.text;
@@ -1133,6 +1160,7 @@ async function downloadTelegramPhoto(msg) {
 // ── LLM com visão (Anthropic Vision) ──────────────────────────────────────
 async function callLLMWithVision(history, systemPrompt, imageData, caption) {
   systemPrompt = withMandatoryRules(systemPrompt);
+  systemPrompt = withExecutorCentralDark(systemPrompt, history);
   if (!LLM_KEY) return '❌ ANTHROPIC_AUTH_TOKEN não configurado.';
   const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
   const userContent = [
@@ -1165,6 +1193,7 @@ async function callLLMWithVision(history, systemPrompt, imageData, caption) {
 // ── LLM (Anthropic) ────────────────────────────────────────────────────────
 async function callLLM(history, systemPrompt) {
   systemPrompt = withMandatoryRules(systemPrompt);
+  systemPrompt = withExecutorCentralDark(systemPrompt, history);
   if (USE_HERMES_PRIMARY) return callHermesExecutor(history, systemPrompt, 'BOT_USE_HERMES=1');
   if (!LLM_KEY) return callHermesExecutor(history, systemPrompt, 'ANTHROPIC_AUTH_TOKEN ausente');
   const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
