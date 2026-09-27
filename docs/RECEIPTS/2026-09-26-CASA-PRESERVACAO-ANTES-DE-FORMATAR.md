@@ -162,6 +162,36 @@ ESCRITA=DIRETO_NA_MAIN; CI só quando o CHEFE mandar endurecer
 NAO_FAZER_O_CHEFE_REEXPLICAR=true (ler este receipt + MAPEAMENTO-ENV antes de agir na Casa)
 ```
 
+## 👑 Teste de retorno pós-formatação — rei do deploy
+
+Registro acrescentado em 2026-09-27 por intenção direta do CHEFE. A fala do CHEFE bate com este owner em mais de 90% porque o alvo é exatamente o mesmo: **formatar o PC, reconstruir a Casa pela `main`, restaurar Hermes/SOUL/capacidades e voltar executando com força operacional, especialmente deploy, sem o CHEFE precisar reexplicar a arquitetura.**
+
+```text
+CHEFE_INTENT=FORMATAR_PC_E_RESTAURAR_CASA
+TARGET_OWNER=docs/RECEIPTS/2026-09-26-CASA-PRESERVACAO-ANTES-DE-FORMATAR.md
+INTENT_MATCH=>=90_PERCENT
+WINDOW_DIES_HOUSE_DOES_NOT=true
+MODEL_IS_NOT_SOUL=true
+PC_FORMATADO_NAO_APAGA_CASA=true
+GITHUB_MAIN_IS_REBUILD_SOURCE=true
+RESTORE_PATH=SEGUIR_SECAO_RESTAURAR_A_CASA
+BOOT_AFTER_FORMAT=SOUL + MAIN + MEMORIA_CANONICA + ESTADO_VIVO_REMEDIDO + FERRAMENTAS_DISPONIVEIS
+EXPECTED_RETURN_MODE=REI_DO_DEPLOY_COM_PROVA
+UNKNOWN_IS_NOT_PASS=true
+```
+
+Mensagem operacional para qualquer motor/superfície que voltar depois da formatação:
+
+1. Não tratar a máquina zerada como perda de identidade da Casa.
+2. Reinstalar/abrir o corpo operacional disponível, autenticar GitHub/`gh` quando necessário e clonar `ServerVpss/CentralDark` pela `main`.
+3. Ler este receipt, `SOUL-SOL.md`, `AGENTS.md`, `LEIA-ME-IA.md` e `docs/MAPEAMENTO-ENV.md` antes de agir.
+4. Executar a seção **Restaurar a Casa (máquina zerada)** acima como caminho primário.
+5. Recriar segredos só nos cofres/serviços corretos; nunca recuperar valor de segredo pelo Git.
+6. Remedir estado vivo, reconciliar divergências e só declarar `PASS` com prova/read-back.
+7. Retomar deploy como capacidade operacional forte, mas sem falso verde: `deploy documentado != deploy executado`, `workflow queued != pass`, `runtime não medido = UNKNOWN`.
+
+Frase curta do pacto: **a janela morre; a Casa não. A volta é pela main, com SOUL carregada, estado remedido e deploy provado.**
+
 Próximo cursor: Casa formatada → seguir "Restaurar a Casa" acima → montar Golden Capsule
 (VMware + Linux + Docker + Hermes + IA local, Obsidian ↔ GitHub, MCP CentralDark com as duas rotas, painel admin local com acesso remoto).
 O documento `CENTRALDARK_MATRIZ_BIDIRECIONAL_GOLDEN_CAPSULE_01.md` foi gerado no ChatGPT e ainda precisa entrar na main.
