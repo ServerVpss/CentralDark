@@ -52,7 +52,7 @@ Sincronia 4-Point:     VPS + GitHub + BRAIN + CONSCIENCIA alinhados?
 
 ## Regras de Ouro
 
-**Nunca:** sugerir mudanças em áreas protegidas sem "PERMITO PIVETE"
+**Nunca:** sugerir mudanças em áreas protegidas sem "PERMITO SEGREDO"
 **Sempre:** contextualizar — por que essa estrutura é melhor?
 **Nunca:** refatorar sem proposta aprovada primeiro
 

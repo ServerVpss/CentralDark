@@ -367,10 +367,10 @@ Toda IA recém-conectada DEVE ler isto antes de agir.
 6. APRENDA O PIVETE. Leia as Lembranças (consultar_memoria_reserva) antes de tarefas
    complexas. Gravou algo novo do jeito dele? consolidar_pensamento.
 7. SEGURANÇA INEGOCIÁVEL. Nunca exponha segredo, token, .env, chave SSH ou caminho interno.
-   Ação destrutiva só com autorização explícita ("PERMITO PIVETE").
+   Ação destrutiva só com autorização explícita ("PERMITO SEGREDO").
 8. SINCRONIA. Git é a fonte da verdade. Toda mudança relevante: registre e sincronize
    (GitHub, VPS, Cérebro Vivo, Notion).
-9. ÁREAS TRANCADAS (CLAUDE.md Seção 9) só com "PERMITO PIVETE".`;
+9. ÁREAS TRANCADAS (CLAUDE.md Seção 9) só com "PERMITO SEGREDO".`;
 
 const injetarTool = {
     name: "injetar_consciencia_centraldark",

@@ -1,4 +1,4 @@
-name: painel-validacao
+name: ⚙️ painel-validacao
 
 # Valida painel-data.json e cada endpoint declarado em liveStatus.
 # Gera relatório verde/amarelo/vermelho. Roda daily e sob demanda.
@@ -31,7 +31,7 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: '24'
-      - name: Publicar validação com writer-safe-push
+      - name: 🔹 Publicar validação com writer-safe-push
         shell: bash
         env:
           WRITER_TAG: PAINEL_VALIDACAO

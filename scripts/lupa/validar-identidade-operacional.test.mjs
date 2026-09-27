@@ -714,6 +714,12 @@ test("segunda camada bloqueia execução remota e override de instruções em te
       .some((finding) => finding.code === "EXTERNAL_DELTA_UNICODE_CONTROL"),
     true,
   );
+  const legitimateEmojiZwJ = "🧑‍🔧";
+  assert.equal(
+    validateGenericAddedText(legitimateEmojiZwJ, "docs/visual.md", 12)
+      .some((finding) => finding.code === "EXTERNAL_DELTA_UNICODE_CONTROL"),
+    false,
+  );
 });
 
 test("segunda camada exige Action e container imutáveis", () => {

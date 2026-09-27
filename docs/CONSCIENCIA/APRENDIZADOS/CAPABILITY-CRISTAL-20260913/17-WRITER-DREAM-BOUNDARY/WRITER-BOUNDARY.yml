@@ -1,0 +1,65 @@
+version: 1
+contract: CENTRALDARK_TRANSACTIONAL_WRITER_BOUNDARY
+scope: mutating_missions
+
+invariants:
+  one_system_only: true
+  one_writer_per_scope: true
+  canonical_main_dirty_allowed: false
+  mutation_in_canonical_checkout_by_default: false
+  isolated_mutation_root_required: true
+  force_push: false
+  commit_secrets: false
+
+pre_write:
+  require:
+    - mission_id
+    - current_owner
+    - writer_identity
+    - writer_scope_lock
+    - pinned_head
+    - meta_lupa_begin_valid
+    - secret_gate_pass
+  on_failure: BLOCK_WRITE
+
+execution:
+  preferred_mutation_root: isolated_git_worktree
+  parallel_readers: allowed
+  parallel_writers_same_scope: forbidden
+
+mission_close:
+  classify_every_path: true
+  classes:
+    - USEFUL_CODE_DOC_SKILL_CONFIG_TEST
+    - GENERATED_RUNTIME
+    - RECEIPT_EVIDENCE
+    - TELEMETRY_LOG
+    - VECTOR_SEMANTIC_DATA
+    - SECRET
+    - OTHER_WRITER
+    - UNKNOWN
+  unknown_closes_green: false
+
+promotion:
+  useful_delta:
+    - test
+    - negative_test
+    - secret_scan
+    - counterproof
+    - consumer_proof_when_applicable
+    - commit
+    - push_branch
+    - pull_request_or_existing_house_path
+    - same_head_validation
+  runtime_generated:
+    git: false
+  secrets:
+    git: false
+    print_value: false
+
+teardown:
+  delete_worktree_only_if:
+    - git_status_clean
+    - no_unique_unpromoted_delta
+    - receipt_written
+    - promotion_or_quarantine_proven

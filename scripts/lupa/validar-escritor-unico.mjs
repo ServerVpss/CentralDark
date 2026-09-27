@@ -21,6 +21,7 @@
  *
  * Nenhum valor sensível é impresso: sessões suspeitas viram REDACTED.
  */
+import { spawnSync } from "node:child_process";
 import { execFileSync } from "node:child_process";
 
 export const WRITER_SLUG = /^[a-z0-9][a-z0-9._-]{1,39}$/;
@@ -150,18 +151,28 @@ export function evaluateWriters(commits, options = {}) {
 }
 
 export function readCommits(range) {
-  const raw = execFileSync("git", ["log", "--format=%H%x1f%B%x1e", range], {
+  const args = ["log", "--format=%H%x1f%B%x1e", range, "--"];
+  const commits = [];
+  const proc = spawnSync("git", args, {
     encoding: "utf8",
-    maxBuffer: 8 * 1024 * 1024,
+    maxBuffer: 64 * 1024 * 1024,
+    stdio: ["ignore", "pipe", "pipe"],
   });
-  return raw
-    .split("\x1e")
-    .map((entry) => entry.trim())
-    .filter(Boolean)
-    .map((entry) => {
-      const [sha, ...rest] = entry.split("\x1f");
-      return { sha: sha.trim(), message: rest.join("\x1f") };
-    });
+  if (proc.error) {
+    return commits;
+  }
+  if (proc.stdout) {
+    for (const entry of proc.stdout.split("\x1e")) {
+      const trimmed = entry.trim();
+      if (!trimmed) continue;
+      const sepIndex = trimmed.indexOf("\x1f");
+      if (sepIndex < 1) continue;
+      const sha = trimmed.slice(0, sepIndex).trim();
+      const message = trimmed.slice(sepIndex + 1);
+      commits.push({ sha, message });
+    }
+  }
+  return commits;
 }
 
 export function main(argv = process.argv.slice(2)) {

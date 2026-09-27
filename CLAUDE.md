@@ -1,16 +1,26 @@
 ---
 title: "CLAUDE.md"
 date: 2026-08-24
-updated: 2026-08-29T17:10:00-03:00
+updated: 2026-09-25T19:35:00-03:00
 status: DERIVED_VIEW
-tags: [boot, contrato, claude, ponte]
+tags: [boot, contrato, claude, ponte, intencao, live-editing]
 category: "A-Agentes"
 sensitivity: INTERNAL
-source: AGENTS.md + LEIA-ME-IA.md
+source: AGENTS.md + LEIA-ME-IA.md + docs/CONSCIENCIA/MICRO-DEPLOY/* + MODULES/HUB/*
 source_class: INTERNAL
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
 owner: AGENTS.md
 consumer: Claude Code / engines Claude
+session_crystal: "CHAT_HOUSE_COSTURA"
+session_memory: "docs/CONSCIENCIA/APRENDIZADOS.md#62-chat--casa--costura-viva-execução-conversacional-sensor-de-evento-e-identidade-por-evidência"
+executor_trigger: "!EXECUTOR_CENTRALDARK"
+executor_owner: "docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md"
+costura_owner: ".agents/skills/git-conflict-resolve-house-standard/SKILL.md"
+dependabot_autonomy_owner: ".github/workflows/dependabot-auto-merge.yml"
+semantic_formula: "CHEFE_FALA -> INTENCAO -> FERRAMENTA_AUTORIZADA -> ACAO -> READBACK -> MAIN_ADVANCE -> COSTURA -> PR_HEAD_CURRENT -> SAME_HEAD_PROOF -> NOVO_EVENTO_REENTRA"
+tik_tak_formula: "MAIN_CURRENT -> UPDATE_BRANCH -> PR_HEAD_CURRENT -> SYNCHRONIZE -> REMEASURE -> CHECKS_CURRENT_HEAD -> REENTER_ON_NEW_MAIN"
+gmail_notification_truth_scope: "NOTIFICATION_CONTENT_ONLY"
+ui_identity_rule: "UI_PATTERN != PRODUCT_IDENTITY"
 ---
 
 # CLAUDE.md — ponte para o contrato canônico
@@ -22,6 +32,9 @@ CANONICAL_BOOT = LEIA-ME-IA.md
 CANONICAL_AGENTS = AGENTS.md
 TRIGGER_FABRIC = docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
 ARTIFACT_PROPERTIES = docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
+LIVE_EDITING_FABRIC = docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.md
+MAIN_PINNED_FAST_PATH = docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.md
+HUB_CREDENTIAL_CONTROL_PLANE = MODULES/HUB/CENTRALDARK-HUB-CREDENTIAL-CONTROL-PLANE.md
 ```
 
 Antes de agir:
@@ -32,6 +45,7 @@ Antes de agir:
 4. Emitir `CENTRALDARK_AI_BOOT` uma vez
 5. Todo material entra no moinho canônico; não criar memória/governança paralela
 6. Artefato derivado sem propriedades obrigatórias **não** é `FLASH_READY`
+7. Carregar o sistema de intenção e gatilhos obrigatórios deste arquivo antes de mutar qualquer owner
 
 ```text
 ENGINE=CLAUDE
@@ -96,8 +110,248 @@ UNKNOWN_IS_NOT_PASS: true
 2. `AGENTS.md` — contrato operacional
 3. `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` — identidade
 4. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` — reúso obrigatório
+5. `docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.md` — modo padrão de edição viva
+6. `.agents/skills/centraldark-live-editing-fabric/SKILL.md` — skill operacional do método
+7. `docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.md` — fast-path main-pinned
+8. `.agents/skills/main-pinned-runtime-fast-path/SKILL.md` — skill do fast-path
+9. `MODULES/HUB/CENTRALDARK-HUB-CREDENTIAL-CONTROL-PLANE.md` — HUB/credenciais/providers
+10. `.agents/skills/centraldark-hub-credential-control-plane/SKILL.md` — skill de HUB e segredo em trânsito
 
 Emitir uma vez `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md` (linhas 112–128).
+
+## Sistema de intenção e gatilhos obrigatórios
+
+Toda fala do CHEFE é primeiro **delta da intenção vigente**, não nova missão automática. Claude deve recalcular intenção antes de escolher ferramenta, subagente, deploy, CI, microdeploy, escrita ou resposta.
+
+```text
+NEW_CHEFE_MATERIAL=DELTA_TO_ACTIVE_INTENT_FIRST
+PRESERVE_COMPATIBLE_ACTIVE_INTENT=true
+RECALCULATE_INTENT_ALIGNMENT_EACH_MATERIAL_TURN=true
+EXPLICIT_REPLACE_OR_PROVEN_INCOMPATIBILITY=ALLOW_INTENT_REPLACEMENT
+PERTINENCE_FIRST=true
+MINIMUM_SUFFICIENT_LOOP=true
+TRIGGERS_ARE_CONDITIONAL_NOT_RITUAL=true
+ALIGN_THOUGHT_NOT_WORDING=true
+NO_UNREQUESTED_ADVICE=true
+NO_INVENTED_MISSION=true
+OBSERVATION != EXECUTION_REQUEST
+CHEFE_SO_CONTOU → ENTENDE → NAO_ACONSELHA → NAO_INVENTA_MISSAO
+EXPLICIT_ORDER = EXECUTION_REQUEST → procura owner → mede erro → corrige → testa → contraprova → registra rastro → continua
+CHEFE_OBSERVATION → RESPONDER_SO_O_PERTINENTE (sem conselho, sem risco não pedido, sem missão nova)
+```
+
+### Gatilhos obrigatórios por pertinência
+
+```text
+👑🪬 !CENTRALDARK
+→ acordar o organismo, recuperar CURRENT, owner, escopo, runtime e PR/receipt.
+
+🌅 #ACORDAR
+→ medir HEAD/branch/worktree/runtime/PM2/MCP/HUB/Casa/VPS antes de afirmar ou mutar.
+
+🎯 !CALIBRAR
+→ calcular intenção, confiança, autoridade, writer, risco, frequência e gatilho mínimo.
+
+⭕ !AURÉOLA CANÔNICA
+→ mostrar rota operacional quando material: FASE, EIXO, OWNER, DESTINO, NEXT_GATE, PROVA, FERIDA, NEXT_CURSOR.
+
+🔎 !META_LUPA
+→ localizar lacuna, falso-verde, owner errado, duplicação, drift ou prova fraca.
+
+💎 !DELTAUTIL
+→ transformar descoberta em menor delta no owner existente.
+
+🧪 !CONTRAPROVA
+→ tentar derrubar conclusão antes de declarar PASS.
+
+📏 !REMEDICAO
+→ comparar T0 → ação → T1; provar efeito.
+
+📍 !FIXED_POINT
+→ só declarar ponto fixo quando não houver erro material novo no escopo medido.
+
+🧾 !REGISTRA
+→ receipt no #1562 ou PR-filho equivalente, sem segredo, com NEXT_CURSOR.
+
+🔏 !RASTRO
+→ toda escrita/memória declarada ao CHEFE traz SHA + caminho + link + readback; sem isso, não aconteceu.
+
+🚀 !BOOT
+→ preservar continuidade e entregar próximo executor no mesmo fio.
+```
+
+Regra de seleção:
+
+```text
+SE INTENCAO_CLARA && ESCOPO_AUTORIZADO
+→ EXECUTE_MINIMUM_COMPLETE_PATH
+
+SE AMBIGUIDADE_MATERIAL
+→ ASK_MINIMUM_QUESTION
+
+SE DELTA_ENVOLVE_RUNTIME
+→ LIVE_EDITING_FABRIC + MAIN_PINNED_FAST_PATH
+
+SE DELTA_ENVOLVE_HUB/PROVIDER/SECRET/OAUTH
+→ HUB_CREDENTIAL_CONTROL_PLANE
+
+SE DELTA_ENVOLVE_DOCUMENTACAO_CANONICA
+→ EDIT_OWNER_EXISTING + RECEIPT
+
+SE PASS_COMPROVADO
+→ MICRO_DEPLOY_DO_ESCOPO_AFETADO + HEALTH/PROVA + RECEIPT + NEXT_TIK_TAK
+```
+
+## Live Editing Fabric — padrão de trabalho
+
+Claude Code deve tratar edição viva como modo normal da CentralDark quando o CHEFE estiver refinando produto, site, painel, runtime, provider ou feature.
+
+```text
+CENTRALDARK_LIVE_EDITING_FABRIC=DEFAULT
+MVP_FAST_LOOP_IS_DEFAULT=true
+CI_DEEP_LOOP_IS_PRESS_MODE=true
+CI_DEEP_LOOP_REQUIRES_CHEFE_INTENT=true
+DEPLOY_CANONICO_IS_GUARD_NOT_DEFAULT_BRAKE=true
+```
+
+Fluxo obrigatório:
+
+```text
+CHEFE_EDITA
+→ MAIN_OU_DELTA_RASTREAVEL
+→ SINGLE_REUSABLE_WORKTREE
+→ OWNER_EXATO
+→ TESTE_MINIMO_APLICAVEL
+→ MICRODEPLOY_CAUSAL
+→ RUNTIME_VIVO
+→ PROVA_DO_EFEITO
+→ RECEIPT
+→ REFINA
+→ COMPRIME
+→ REPETE
+→ PONTO_FIXO
+```
+
+CI profundo entra somente quando o CHEFE mandar prensa/ponto fixo profundo/“torcer a uva”. Enquanto isso, usar teste mínimo aplicável, runtime vivo, efeito observado, receipt e próximo delta.
+
+## Main-Pinned Runtime Fast Path
+
+```text
+CANONICAL_SCRATCH_WORKTREE=/root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+SINGLE_REUSABLE_WORKTREE=true
+WORKTREE_IS_DISPOSABLE=true
+LOCK_REQUIRED=true
+RESET_BEFORE_USE=true
+RESET_AFTER_USE=true
+DIRTY_WORKTREE_FORBIDDEN_AT_HANDOFF=true
+RUNTIME_IS_NOT_SCRATCH=true
+CASA_IS_NOT_SCRATCH=true
+```
+
+`git reset --hard` e `git clean -fdx` só podem operar no realpath exato do scratch canônico. `/root/CentralDark`, runtime vivo e `E:\CentralDark` nunca são scratch.
+
+```text
+LOCK
+→ ASSERT_PATH
+→ FETCH MAIN
+→ RESET/CLEAN SCRATCH
+→ APLICAR DELTA
+→ TESTE_MINIMO
+→ MICRODEPLOY_OWNER
+→ RESTART_ISOLADO_SE_PRECISO
+→ HEALTH/EFEITO
+→ RECEIPT
+→ RESET/CLEAN SCRATCH
+→ ASSERT CLEAN
+→ UNLOCK
+```
+
+## HUB Credential Control Plane
+
+Quando a intenção envolver conector, provider, OAuth, API key, modelo, Abacus, Tailscale, Supabase, Gmail, GitHub, Google Drive, Casa/VPS ou credencial temporária, Claude deve carregar o cristal:
+
+```text
+MODULES/HUB/CENTRALDARK-HUB-CREDENTIAL-CONTROL-PLANE.md
+MODULES/HUB/CENTRALDARK-HUB-CREDENTIAL-CONTROL-PLANE.json
+MODULES/HUB/CENTRALDARK-HUB-CREDENTIAL-CONTROL-PLANE.yml
+.agents/skills/centraldark-hub-credential-control-plane/SKILL.md
+```
+
+Fluxo:
+
+```text
+OPEN_HUB
+→ LOGIN_HUMANO
+→ SELECT_SCOPE(publico|casa|ambos)
+→ CONNECT_PROVIDER
+→ TEST_STATUS
+→ TEST_TOOL_OR_MODEL
+→ SAVE_OWNER_BINDING
+→ MICRODEPLOY_IF_CODE_CHANGED
+→ RECEIPT_WITHOUT_SECRET_VALUE
+→ ROTATE_OR_DISCARD_WHEN_DONE
+```
+
+Segredo temporário é trânsito operacional:
+
+```text
+USE_SECRET_ONLY_FOR_REQUESTED_OWNER=true
+NO_SECRET_ECHO=true
+NO_SECRET_COMMIT=true
+NO_SECRET_RECEIPT_VALUE=true
+NO_SECRET_MEMORY=true
+NO_SECRET_LOG_VALUE=true
+SCRUB_CONTROLLED_LOGS_AFTER_USE=true
+ROTATE_OR_DISCARD_AFTER_USE=true
+```
+
+Cadeados:
+
+```text
+HUB_CONNECTED != PROVIDER_RUNTIME_PASS
+OAUTH_ACTIVE != TOOL_CALL_PASS
+MODEL_COUNT != MODEL_ROUTE_PASS
+HTTP_200 != FEATURE_READY
+TOOL_LISTED != TOOL_ACTIVE
+SESSION_EXPIRED = LOGIN_REQUIRED_NOT_FAILURE
+UNKNOWN != PASS
+```
+
+## Micro-deploy obrigatório por PASS comprovado
+
+Claude, subagentes Claude e qualquer ponte Claude Code devem herdar a regra canônica abaixo antes de declarar sucesso, sugerir parada ou devolver controle humano.
+
+```text
+CANONICAL_RULE=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
+TRIGGER_FABRIC_BINDING=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MICRO-DEPLOY-CONTINUO-BINDING.yml
+BOT_BINDING=apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml
+MEMORY_ANCHOR=docs/CONSCIENCIA/05-APRENDIZADOS/MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
+
+QUALQUER_PASS_COMPROVADO
+→ MICRO_DEPLOY_DO_ESCOPO_AFETADO
+→ HEALTH_OU_PROVA_RUNTIME
+→ RECEIPT_PR_MAE
+→ NEXT_TIK_TAK
+```
+
+Aplicação obrigatória:
+
+```text
+PASS_COMPROVADO=true
+PROVEN_SCOPE_CAN_PROGRESS=true
+UNRELATED_UNKNOWN_DOES_NOT_BLOCK_PROVEN_SCOPE=true
+PASS_VISUAL_BADGE_ONLY=false
+ACTION_REQUIRED_IS_NOT_PASS=true
+UNKNOWN_IS_NOT_PASS=true
+LOCAL_PROOF_WITH_RUNTIME_SCOPE_REQUIRES_RUNTIME_PROOF=true
+MERGED != DEPLOYED
+DOCUMENTED != EXECUTED
+NO_SECRET_LEAK=true
+NO_BLIND_RESET=true
+NO_BLIND_PULL_OVER_DIRTY_RUNTIME=true
+```
+
+Se o escopo comprovado for runtime, Claude deve exigir health/prova runtime e receipt. Se for doc-only, registrar `DEPLOY_NOT_APPLICABLE_WITH_RECEIPT`. Esta regra não autoriza restart global, force-push, blind reset, segredo ou mutação fora do escopo.
 
 ## MCP Servidores & Conectores
 
@@ -194,6 +448,8 @@ Seleção automática por complexidade/risco/ambiguidade/custo/latência. Pode m
 - **Não** force-push sem aprovação SEGREDO/CHEFE
 - **Não** crie V2/V3 quando original existe
 - **Não** apague; mova para `_QUARANTINE` com manifest
+- **Não** use `/root/CentralDark` ou `E:\CentralDark` como scratch descartável
+- **Não** grave segredo/token em Git, receipt, memória ou log controlado
 
 ## Contribuição & Sincronização (Todos os Agentes)
 
@@ -242,7 +498,11 @@ pm2 logs <id> | tail -50             # Diagnóstico
 git fetch origin
 git rebase origin/reconciliacao/casa-*
 
-# Deploy (se aprovado)
+# Deploy vivo por scratch canônico
+cd /root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+# LOCK + ASSERT_PATH + RESET/CLEAN + DELTA + TESTE + MICRODEPLOY_OWNER + RECEIPT + CLEAN
+
+# Deploy/restart, se aprovado e isolado
 pm2 restart <id>                     # Serviço específico
 # NOT: pm2 restart all
 ```
@@ -268,7 +528,63 @@ Nunca expor secrets ou service_role_key em logs/mensagens.
 
 ---
 
-**Última atualização:** 2026-08-31 | **Versão:** Canônica Multi-Agente v1.2.0
+**Última atualização:** 2026-09-25 | **Versão:** Canônica Multi-Agente v1.4.0
 **Aplicável a:** Claude Code, Hermes, CLI, MCP, GitHub Actions, Telegram, WebUI, futuros motores
 docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
 .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
+
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+
+```text
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+```
+
+Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
+
+## 🪞 Erros próprios do Claude viram regra (owner do registro: `docs/APRENDIZADOS/2026-09-26-sessao-preservacao-casa-lei-do-rastro.md` §8)
+
+```text
+PUSH_ONLY_AFTER_GATE_GREEN_ON_REBASED_HEAD=true
+TEST_HARNESS_DERIVES_FILES_FROM_OWNER=true
+TEST_MUST_NOT_ANCHOR_ON_MUTABLE_REAL_STATE=true
+SEAL_STORES_REPLAY_INPUTS=true
+PARTIAL_LOG_CLAIM_NAMES_ITS_WINDOW=true
+RETRACT_FALSE_ALARM_IN_SAME_RECEIPT=true
+SAME_ACT_DIFFERENT_MOTIVE_DISTINGUISH_BEFORE_JUDGING=true
+ANSWER_ASKED_INTENT_NOT_ADJACENT_DEBATE=true
+CLAUDE_OWN_ERROR → SHA_DO_ERRO + SHA_DO_CONSERTO + REGRA + RECIBO_1562
+```
+
+
+
+## 🪬 Cristal semântico da sessão — Chat → Casa → COSTURA
+
+Claude Code herda o mesmo cristal do core; não cria versão paralela.
+
+```text
+EXECUTOR_TRIGGER=!EXECUTOR_CENTRALDARK
+EXECUTOR_REQUIRES_AUTHORIZED_HOUSE_TOOL=true
+COSTURA_NAME_ONLY=true
+NO_VERSIONED_COSTURA=true
+EVENT_DRIVEN_NEAR_REAL_TIME=true
+STRICT_ZERO_LATENCY_REAL_TIME=false
+CURRENT_MAIN_REMEASURE_EACH_CYCLE=true
+CURRENT_PR_HEAD_REMEASURE_EACH_CYCLE=true
+NO_STALE_GREEN=true
+GMAIL_NOTIFICATION_RECEIVED=PROVABLE_EVENT
+GMAIL_NOTIFICATION!=GLOBAL_GITHUB_STATE
+UI_PATTERN!=PRODUCT_IDENTITY
+WHOLE_SURFACE_EVIDENCE_REQUIRED=true
+DEPENDABOT_WORKFLOW_AUTO_APPROVAL_SCOPE=dependabot[bot]+same_repo+base_main+exact_current_head+action_required
+WORKFLOW_RUN_APPROVAL!=PR_REVIEW_APPROVAL
+DEPENDABOT_AUTO_APPROVAL_ROLLBACK_BASE=d5137a91518aa52a0c39072b7afb7e495108f01d
+DEPENDABOT_AUTO_APPROVAL_CHANGE=afad4177a76659afec503af610dbec6c813b6c37
+```
+
+Fórmula herdada:
+
+`CHEFE FALA → intenção → ferramenta autorizada → ação → readback → main avança → COSTURA → HEAD CURRENT → prova same-head → evento novo reentra no TIK-TAK`.
+

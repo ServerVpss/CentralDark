@@ -223,6 +223,16 @@ Conteúdo: As imagens mostraram um padrão generalizável: interfaces diferentes
 **Promovida:** CANDIDATE_IN_PR
 Conteúdo: O teste mostrou que leitura `READ_ONLY` pode mudar interpretação e comportamento da sessão sem mutar a fonte. Isso exige separar `CONTEXTO_ATIVO` de `MEMORIA_CANONICA`. O CHEFE também identificou que notas importantes sem propriedades, tags e wikilinks ficam semanticamente distantes; a correção deve reutilizar `GRAPH-INVESTIGATOR → SEMANTIC-LINKER`, ligar somente relações explicáveis e manter o mapa visual separado do mecanismo de recuperação. Para múltiplos chats, recuperar memória/histórico quando a plataforma disponibilizar, dedupar e reconciliar; não declarar transporte causal oculto entre janelas sem canal provado.
 
+### [2026-09-23T14:25-03:00] Entendimento aprovado não morre no chat
+**Data:** 2026-09-23
+**Tags:** padrão, mcp, cockpit, builder, site, pr-mae, continuidade, owner, registro
+**Tipo:** CONTRACT
+**Target:** docs/CONSCIENCIA/CONTRATO-HIBRIDO-GRAFO-LOGS-LOCAL.md
+**Sessão:** ChatGPT/CentralDark
+**Fonte:** decisão explícita do SEGREDO/CHEFE nesta sessão
+**Promovida:** CANDIDATE_IN_PR
+Conteúdo: Quando o CHEFE afirma que um entendimento/direção discutido é exatamente o que quer para a CentralDark, o sistema deve tratar essa fala como intenção executável para registrar o delta operacional no pipeline canônico de padrões, sem exigir uma segunda frase mágica. O fluxo reutiliza owner existente, CHILD_PR para mutação, #1562 como ledger, Dream Review/Pattern Discovery/Pattern Library para derivação e MCP Admin/Padrões para projeção. Conversa vaga não é autorização; segredo nunca entra; aplicação depende de owner/escopo e prova atual.
+
 ## Conexões Rápidas
 
 - [[OURO-CHEFE]] — ouro recente e correções do CHEFE.

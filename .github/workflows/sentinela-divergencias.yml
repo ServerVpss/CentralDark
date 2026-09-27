@@ -1,4 +1,4 @@
-name: sentinela-divergencias
+name: ⚙️ sentinela-divergencias
 
 # Sentinela 24/7 — varre divergências no repo, workflows, endpoints públicos,
 # PM2/MCP e drift de commit GitHub<->VPS, e abre Issue automática (com dedupe
@@ -13,6 +13,8 @@ on:
         description: 'Só relata, não abre Issue'
         required: false
         default: 'false'
+  repository_dispatch:
+    types: [centraldark_sentinel_route]
 
 permissions:
   contents: read
@@ -36,10 +38,13 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Rodar testes determinísticos do drift GitHub<->VPS
+      - name: 🔹 Rodar testes determinísticos do drift GitHub<->VPS
         run: node --test scripts/sentinela/drift.test.mjs
 
-      - name: Validar CENTRALDARK_ROOT (fail-closed, sem imprimir valor)
+      - name: ⏰ Provar kernel da rota determinística TIK-TAK
+        run: python3 scripts/trigger-fabric/system_sentinel.py --self-test
+
+      - name: 🔹 Validar CENTRALDARK_ROOT (fail-closed, sem imprimir valor)
         env:
           CENTRALDARK_ROOT: ${{ secrets.CENTRALDARK_ROOT }}
         run: |
@@ -49,16 +54,26 @@ jobs:
             exit 1
           }
 
-      - name: Rodar sentinela
+      - name: 🔹 Rodar sentinela
         id: run
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DRY_RUN: ${{ inputs.dry_run || 'false' }}
           REPO_ALVO: ${{ github.repository }}
           VPS_REPO_PATH: ${{ secrets.CENTRALDARK_ROOT }}
+          CENTRALDARK_SENTINEL_STATE_PATH: ${{ secrets.CENTRALDARK_ROOT }}/.artifacts/system-sentinel/state.json
+          CENTRALDARK_SENTINEL_EVENT_LOG_PATH: ${{ secrets.CENTRALDARK_ROOT }}/.artifacts/system-sentinel/events.jsonl
+          SENTINEL_API_SOURCE: ${{ github.event.client_payload.source || '' }}
+          SENTINEL_API_EVENT_CLASS: ${{ github.event.client_payload.event_class || '' }}
+          SENTINEL_API_STATE: ${{ github.event.client_payload.state || '' }}
+          SENTINEL_API_TARGET: ${{ github.event.client_payload.target || '' }}
+          SENTINEL_API_OWNER: ${{ github.event.client_payload.owner || '' }}
+          SENTINEL_API_HEAD_SHA: ${{ github.event.client_payload.head_sha || '' }}
+          SENTINEL_API_EVIDENCE_REF: ${{ github.event.client_payload.evidence_ref || '' }}
+          SENTINEL_API_NEXT_CURSOR: ${{ github.event.client_payload.next_cursor || '' }}
         run: node scripts/sentinela/run.mjs
 
-      - name: Publicar snapshot como artifact imutável
+      - name: 🔹 Publicar snapshot como artifact imutável
         if: success()
         uses: actions/upload-artifact@v7
         with:

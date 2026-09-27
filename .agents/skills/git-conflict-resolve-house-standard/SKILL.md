@@ -42,7 +42,9 @@ dele aceita automaticamente, sem revisão humana.
 | Caminho | Lado que vence | Por quê |
 |---|---|---|
 | `package.json`, `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock` — em qualquer diretório | **PR** (`--ours`) | o PR **é** o bump; manter a main aqui apaga o motivo do PR |
-| **todo o resto** | **main** (`--theirs`) | fail-closed de verdade: PR não promove código canônico sozinho |
+| conflito conhecido não-manifesto | política registrada (normalmente **main**) | preserva owner canônico já provado |
+| conflito desconhecido textual (`.md/.txt/.mmd/.jsonl/.csv/.rst/.adoc`) | **ambos** | auto-review preserva os dois deltas; CI/contraprova julga a composição |
+| conflito desconhecido de código/config | **PR como candidato** | preserva o delta do PR, mas NÃO promove sem same-head CI/contraprova |
 
 Sem lista de exceções para core. O default já protege tudo que não é manifesto.
 
@@ -64,17 +66,145 @@ SOURCE_REF=<evidência>
 ```
 
 Depois aplica a mesma política única: manifestos/lockfiles preservam o PR;
-conflitos conhecidos não-manifesto preservam a `main` fail-closed; conflito
-desconhecido bloqueia como `UNKNOWN_CONFLICT_PATH` e exige review.
+conflitos conhecidos seguem o registry; conflito desconhecido entra em
+`AUTO_REVIEW`. Texto usa composição dos dois lados. Código/config preserva o
+lado do PR como **candidato**, nunca como PASS: `git diff --check`, validação
+sintática aplicável e SAME_HEAD CI/contraprova decidem a promoção.
+
+```text
+UNKNOWN_CONFLICT
+→ AUTO_REVIEW
+→ APPLY_CANDIDATE
+→ COUNTERPROOF
+→ SAME_HEAD_CI
+→ PASS | REMEDIATE
+```
+
+O CHEFE não escolhe manualmente `Accept current / incoming / both` quando a
+Casa consegue produzir e testar uma resolução reversível.
+
+## 🪡 COSTURA — UI humana ↔ motor automático
+
+A interface humana e o motor automático são duas superfícies do mesmo fluxo. O nome canônico continua **COSTURA**; não versionar o nome nem criar owner paralelo.
+
+No merge usado por este owner (`branch do PR` como `HEAD`, recebendo `origin/main`):
+
+```text
+CURRENT / OURS = branch do PR
+INCOMING / THEIRS = main recebida pelo PR
+```
+
+Equivalência operacional:
+
+| Ação visível | Efeito real | Equivalente da Casa |
+|---|---|---|
+| `Update branch` | sincroniza a base atual para a branch do PR; pode criar novo HEAD | `PUT /pulls/{PR}/update-branch` |
+| `Accept Both Changes` | compõe os dois blocos daquele conflito; não prova que a composição é correta | `scripts/dependabot/semantic-all-resolver.mjs` quando a política semântica permitir ambos |
+| `Mark as resolved` | marca o arquivo como resolvido no índice; não promove o PR | `git add -- <arquivo>` depois de remover os marcadores |
+| `Commit merge` | grava a resolução + base recebida na **branch do PR**; muda o HEAD do PR | `git commit --no-edit` + push para `refs/heads/<PR_HEAD_REF>` |
+| `Merge pull request` / squash | promove um delta elegível para a base | promoção separada; nunca confundir com a COSTURA |
+
+Cadeados:
+
+```text
+UI_LABEL != RESOLUTION_POLICY
+ACCEPT_BOTH != BLIND_ACCEPT_BOTH
+MARK_AS_RESOLVED != MERGED
+COMMIT_MERGE != MERGE_PULL_REQUEST
+UPDATE_BRANCH != PROMOTION
+UPDATE_BRANCH_WRITES_MAIN=0
+COMMIT_MERGE_WRITES_MAIN=0
+HEAD_CHANGED_AFTER_COSTURA -> REVIEW_AND_CHECKS_MUST_REMEASURE_CURRENT_HEAD
+REVIEWED_SHA != CURRENT_HEAD -> REVIEW_CURRENTNESS=STALE_UNTIL_REVALIDATED
+```
+
+A astúcia é separar **mecanismo** de **política**: o botão pode preservar dois lados, mas só classificação do conflito + sintaxe/teste/contraprova dizem se os dois lados devem sobreviver.
+
+### ⏰ TIK-TAK — alimentação contínua
+
+A COSTURA é um laço vivo orientado a eventos, não uma fotografia única. Cada avanço material da `main` reabre a medição das PRs abertas e o `synchronize` do novo HEAD alimenta a próxima etapa.
+
+```text
+MAIN_ADVANCES
+→ UPDATE_BRANCH_SWEEP
+→ PR_HEAD_ADVANCES
+→ SYNCHRONIZE
+→ REMEASURE_CURRENT_HEAD
+→ CONFLICT? RESOLVE/MARK/COMMIT/PUSH
+→ SAME_HEAD_CHECKS
+→ MAIN_ADVANCES_AGAIN? REENTER_COSTURA
+```
+
+```text
+TIK_TAK_COSTURA_CONTINUA=true
+COSTURA_NAME_ONLY=true
+NO_VERSIONED_COSTURA=true
+EVENT_DRIVEN_NEAR_REAL_TIME=true
+STRICT_ZERO_LATENCY_REAL_TIME=false
+CURRENT_MAIN_REMEASURED_EACH_CYCLE=true
+PR_HEAD_REMEASURED_EACH_CYCLE=true
+NEW_MAIN_INVALIDATES_OLD_UP_TO_DATE_SNAPSHOT=true
+NEW_HEAD_INVALIDATES_OLD_REVIEW_CURRENTNESS=true
+NO_STALE_GREEN=true
+```
+
+Se a `main` avançar enquanto uma sincronização ainda assenta, isso não é regressão: a rodada corrente fica amarela até remedição, e o próximo evento/recheck continua do último HEAD provado. A meta é convergir continuamente sem transformar um snapshot antigo em verdade eterna.
+
+### 🪬 Ferida CURRENT explícita
+
+O contrato exige `CLASSIFY_EACH_CONFLICT`. O helper `semantic-all-resolver.mjs` executa a composição dos dois lados quando chamado, mas **não decide sozinho** se os lados são semanticamente compatíveis. Portanto `SEMANTIC_ALL_APPLIED=1` prova mecanismo aplicado; não prova, por si só, que `Accept Both` era a política correta para aquele arquivo.
+
+```text
+CLASSIFICATION_REQUIRED_BEFORE_SEMANTIC_ALL=true
+SEMANTIC_ALL_HELPER_IS_MECHANISM_NOT_POLICY=true
+SEMANTIC_ALL_APPLIED != SEMANTIC_COMPATIBILITY_PROVEN
+```
+
+## SAME/ALL — reconciliação semântica canônica
+
+O caso provado no PR #1613 vira regra reutilizável do mesmo owner, não um resolvedor novo.
+
+```text
+CONFLICTING_PR
+→ MEASURE_CURRENT_PR_HEAD_AND_FRESH_MAIN
+→ CLASSIFY_EACH_CONFLICT
+→ BOTH_SIDES_HAVE_USEFUL_COMPATIBLE_DELTA?
+   → YES: SEMANTIC_ALL / PRESERVE_BOTH
+   → NO: APPLY_EXISTING_PATH_POLICY_OR_TEST_DISCRIMINANT
+→ REMOVE_CONFLICT_MARKERS
+→ SYNTAX_OR_FORMAT_VALIDATION
+→ TARGETED_TESTS
+→ COUNTERPROOF
+→ SAME_HEAD_CI
+→ REMEASURE_PR_HEAD
+→ PASS | REMEDIATE | UNKNOWN
+```
+
+```text
+SAME_ALL_IS_DEFAULT_FOR_COMPATIBLE_USEFUL_DELTA=true
+SAME_ALL_IS_NOT_BLIND_ACCEPT_BOTH=true
+CONTRADICTORY_DELTA_REQUIRES_DISCRIMINANT_TEST=true
+CONFLICT_MARKERS_AFTER_RESOLUTION=FAIL
+RESOLUTION_WITHOUT_TARGETED_TEST=NOT_PROVEN
+SAME_HEAD_REQUIRED_AFTER_CONFLICT_RESOLUTION=true
+CURRENT_MAIN_MUST_BE_REMEASURED=true
+UNKNOWN_REMAINS_UNKNOWN=true
+REUSE_THIS_OWNER_FOR_ALL_EQUIVALENT_PRS=true
+```
+
+`SEMANTIC_ALL` preserva ambos somente quando os deltas coexistem sem contradição material. Código/config nunca vira PASS só porque a composição foi possível: sintaxe, teste aplicável, contraprova e SAME_HEAD continuam obrigatórios.
 
 ## Fluxo canônico
 
 ```text
-PR abre  ->  workflow dispara (ou humano roda o motor)
-         ->  motor alinha com main de forma determinística
-         ->  checks
-         ->  squash merge
-         ->  main avança
+PR abre/atualiza  ->  workflow dispara
+                  ->  Update branch contra main
+                  ->  conflito? motor único auto-revisa e resolve
+                  ->  commit + push na branch do PR
+                  ->  synchronize / same-head checks
+                  ->  rerun falho transitório uma vez quando aplicável
+                  ->  squash apenas pela política de promoção do PR
+                  ->  main avança
 ```
 
 Na mão, quando o runner estiver fora:

@@ -27,6 +27,14 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: 🧿 TLC23 · Universal · Meta-Lupa · Horn
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          TARGET_SHA="$GITHUB_SHA" REPO_DIR=/root/CentralDark BRANCH=main \
+            bash scripts/vps/deploy-guards-dispatcher.sh --gate-only
+          echo "CANONICAL_DEPLOY_GATE=PASS TARGET_SHA=$GITHUB_SHA"
+
       - name: "🧬 Build, reconciliar Caddy e publicar"
         shell: bash
         run: |
@@ -35,7 +43,7 @@ jobs:
           flock -w 90 9 || { echo "SITE_DEPLOY_LOCK_TIMEOUT"; exit 21; }
 
           echo "TARGET_SHA=${GITHUB_SHA}"
-          bash scripts/setup-centraldark-portal.sh
+          SOURCE_HEAD="$GITHUB_SHA" bash scripts/setup-centraldark-portal.sh
 
           CF=/etc/caddy/Caddyfile
           SNIPPET=/root/CentralDark/infra/caddy/portal.Caddyfile

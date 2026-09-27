@@ -1,13 +1,17 @@
-name: Autonomia — promoção segura
+name: ⚙️ Autonomia — promoção segura
 
 on:
   workflow_dispatch:
+  schedule:
+    # Relógio esparso — NÃO é o */5 removido.
+    # Cobre WAIT/action_required (jobs=[] nunca dispara workflow_run completed).
+    - cron: "17,47 * * * *"
   pull_request_target:
     types: [opened, reopened, ready_for_review, synchronize]
     branches: [main]
   workflow_run:
     workflows:
-      - porta-de-entrada
+      - ⚙️ porta-de-entrada
     types: [completed]
   repository_dispatch:
     types: [centraldark_autonomia_recheck, centraldark_post_merge]
@@ -20,12 +24,12 @@ concurrency:
 
 env:
   BOT_TRUSTED_AUTHORS: segredounlock
-  BOT_REQUIRED_WORKFLOWS: porta-de-entrada,codex-validate,lupa-conformance,Lupa Drift Guard,Trigger Fabric Full Package,PR Title Contract,PR auto-review (Codex + checklist),Pipeline — Telegram + Painel
+  BOT_REQUIRED_WORKFLOWS: ⚙️ porta-de-entrada,⚙️ codex-validate,⚙️ lupa-conformance,⚙️ Lupa Drift Guard,🧠 Trigger Fabric Full Package — pacote e contraprova,⚙️ PR Title Contract,⚙️ PR auto-review (Codex + checklist),⚙️ Pipeline — Telegram + Painel
   BOT_WAIT_TIMEOUT_MINUTES: "45"
 
 jobs:
   judge:
-    name: Juiz determinístico — intenção + estado + segurança
+    name: 🧩 Juiz determinístico — intenção + estado + segurança
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     permissions:
@@ -36,17 +40,17 @@ jobs:
       checks: read
 
     steps:
-      - name: Checkout exclusivo da main confiável
+      - name: 🔹 Checkout exclusivo da main confiável
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.base.sha || github.sha }}
           fetch-depth: 1
           persist-credentials: false
 
-      - name: Setup Node 24 (fast path self-hosted)
+      - name: 🔹 Setup Node 24 (fast path self-hosted)
         uses: ./.github/actions/setup-node24-selfhosted
 
-      - name: Provar presença de canais opcionais sem mostrar valor
+      - name: 🔹 Provar presença de canais opcionais sem mostrar valor
         shell: bash
         run: |
           set -euo pipefail
@@ -54,7 +58,7 @@ jobs:
           echo "TELEGRAM=${{ secrets.TELEGRAM_BOT_TOKEN != '' && secrets.TELEGRAM_CHAT_ID != '' && 'present' || 'absent' }}"
           echo "WEBHOOK=${{ secrets.NOTIFY_WEBHOOK_URL != '' && 'present' || 'absent' }}"
 
-      - name: Testar motor canônico e fronteira de autoridade delegada
+      - name: 🔹 Testar motor canônico e fronteira de autoridade delegada
         run: |
           set -euo pipefail
           node --test scripts/lupa/authority-approval.test.mjs
@@ -65,7 +69,7 @@ jobs:
           node --test scripts/agent-call.test.mjs
           node apps/modulos/HERMES-CORE/core/universal-method-contract.mjs --self-test
 
-      - name: Verificar Trigger Fabric canônica antes de qualquer promoção
+      - name: 🔹 Verificar Trigger Fabric canônica antes de qualquer promoção
         shell: bash
         run: |
           set -euo pipefail
@@ -75,7 +79,7 @@ jobs:
           grep -q '^OUTPUT_GUARD_CONTRACT=PASS$' "$RUNNER_TEMP/trigger-fabric-contract.txt"
           grep -q '^WORKFLOW_REUSE_CONTRACT=PASS$' "$RUNNER_TEMP/trigger-fabric-contract.txt"
 
-      - name: Avaliar PRs autorizados em read-only
+      - name: 🔹 Avaliar PRs autorizados em read-only
         env:
           BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
           JUDGE_TOKEN: ${{ github.token }}
@@ -85,7 +89,7 @@ jobs:
           NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
         run: node scripts/github-autonomia-varredura.mjs judge
 
-      - name: Garantir artifact mesmo sem candidatos elegíveis
+      - name: 🔹 Garantir artifact mesmo sem candidatos elegíveis
         if: always()
         shell: bash
         run: |
@@ -93,7 +97,7 @@ jobs:
           mkdir -p "${{ runner.temp }}/centraldark-autonomia"
           touch "${{ runner.temp }}/centraldark-autonomia/EMPTY"
 
-      - name: Publicar recibos do juiz
+      - name: 🔹 Publicar recibos do juiz
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -102,7 +106,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-      - name: Receipt determinístico
+      - name: 🔹 Receipt determinístico
         if: always()
         shell: bash
         env:
@@ -125,7 +129,7 @@ jobs:
           test "${JOB_STATUS}" = "success" && echo "RESULTADO=PASS" || echo "RESULTADO=BLOCKED"
 
   promote:
-    name: Promotor — revalidar e squash main
+    name: 🧩 Promotor — revalidar e squash main
     needs: judge
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
@@ -137,23 +141,23 @@ jobs:
       checks: read
 
     steps:
-      - name: Checkout exclusivo da main confiável
+      - name: 🔹 Checkout exclusivo da main confiável
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.base.sha || github.sha }}
           fetch-depth: 1
           persist-credentials: false
 
-      - name: Setup Node 24 (fast path self-hosted)
+      - name: 🔹 Setup Node 24 (fast path self-hosted)
         uses: ./.github/actions/setup-node24-selfhosted
 
-      - name: Baixar recibos produzidos pelo juiz
+      - name: 🔹 Baixar recibos produzidos pelo juiz
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           name: autonomia-judge-${{ github.run_id }}
           path: ${{ runner.temp }}/centraldark-autonomia
 
-      - name: Isolar receipts investigativos sem selo completo
+      - name: 🔹 Isolar receipts investigativos sem selo completo
         shell: bash
         env:
           BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
@@ -200,14 +204,14 @@ jobs:
           console.log(`PROMOTION_RECEIPT_FILTER=PASS kept=${kept.join(",") || "none"} investigation_only=${skipped.join(",") || "none"}`);
           NODE
 
-      - name: Aplicar guard proporcional à política escolhida
+      - name: 🔹 Aplicar guard proporcional à política escolhida
         env:
           BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
           PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/github-autonomia-green-guard.mjs
 
-      - name: Promover somente recibos válidos e estado vivo idêntico
+      - name: 🔹 Promover somente recibos válidos e estado vivo idêntico
         env:
           BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
           PROMOTER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
@@ -224,7 +228,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/github-pr-confirmado-label.mjs reconcile
 
-      - name: Publicar resultado sanitizado
+      - name: 🔹 Publicar resultado sanitizado
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -233,7 +237,7 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
-      - name: Receipt determinístico
+      - name: 🔹 Receipt determinístico
         if: always()
         shell: bash
         env:

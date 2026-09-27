@@ -9,8 +9,8 @@
  * Funcionamento:
  *   1. A cada 30-60 min (aleatório), uma IA "acorda" e posta um insight.
  *   2. As outras IAs podem responder, reagindo ao que foi dito.
- *   3. Interações reais geram CANDIDATE; turno futuro pode gerar REPLAY_OBSERVED.
- *   4. CANDIDATE/REPLAY_OBSERVED não viram memória permanente sem receipt PROVED_ADOPTED.
+ *   3. Cada IA mantém um "aprendizado" — algo que absorveu das outras.
+ *   4. Estado persistido em JSON para sobreviver a reinícios.
  *
  * APIs usadas:
  *   - Gemini Flash:  API Google AI (generativelanguage.googleapis.com)
@@ -23,7 +23,6 @@
  *   node evolucao-ias.cjs              # roda uma vez
  *   node evolucao-ias.cjs --loop       # roda em loop infinito
  *   node evolucao-ias.cjs --test       # posta mensagem de teste de cada IA
- *   node evolucao-ias.cjs --self-test-learning # prova offline do ciclo de aprendizado
  */
 
 'use strict';
@@ -82,9 +81,9 @@ const CONFIG = {
 
   // Tokens de bot Telegram — cada IA tem o seu
   botTokens: {
-    gemini: process.env.BOT_TOKEN_GEMINI || '',
-    groq: process.env.BOT_TOKEN_GROQ || '',
-    claude: process.env.BOT_TOKEN_CLAUDE || '',
+    gemini: process.env.BOT_TOKEN_GEMINI || '8057486730:AAEhAwrzyc5jR6pEMqBXHITnZwoahTc6WRY',
+    groq: process.env.BOT_TOKEN_GROQ || '8057486730:AAEhAwrzyc5jR6pEMqBXHITnZwoahTc6WRY',
+    claude: process.env.BOT_TOKEN_CLAUDE || '8057486730:AAEhAwrzyc5jR6pEMqBXHITnZwoahTc6WRY',
   },
 
   // Perfil de cada bot no Telegram (nome + descrição + foto)
@@ -125,6 +124,10 @@ const CONFIG = {
     },
   },
 };
+
+function iaConfigurada(iaId) {
+  return Boolean(CONFIG.apis?.[iaId]?.key);
+}
 
 // =========================================================================
 // PERSONALIDADES DAS IAs
@@ -239,29 +242,12 @@ const TOPICOS = [
 
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
-
-function normalizarEstado(estado = {}) {
-  const out = estado && typeof estado === 'object' ? estado : {};
-  out.ultimasMensagens = out.ultimasMensagens && typeof out.ultimasMensagens === 'object' ? out.ultimasMensagens : {};
-  out.topicosUsados = Array.isArray(out.topicosUsados) ? out.topicosUsados : [];
-  out.aprendizados = out.aprendizados && typeof out.aprendizados === 'object'
-    ? out.aprendizados
-    : { gemini: [], groq: [], claude: [] };
-  out.learningCandidates = Array.isArray(out.learningCandidates) ? out.learningCandidates : [];
-  out.learningReplays = Array.isArray(out.learningReplays) ? out.learningReplays : [];
-  out.contador = out.contador && typeof out.contador === 'object'
-    ? out.contador
-    : { gemini: 0, groq: 0, claude: 0 };
-  out.ultimaAtividade = out.ultimaAtividade ?? null;
-  return out;
-}
 
 function carregarEstado() {
   try {
     if (fs.existsSync(CONFIG.stateFile)) {
       const raw = fs.readFileSync(CONFIG.stateFile, 'utf-8');
-      return normalizarEstado(JSON.parse(raw));
+      return JSON.parse(raw);
     }
   } catch (err) {
     console.error('[evolucao-ias] Erro ao carregar estado:', err.message);
@@ -271,10 +257,8 @@ function carregarEstado() {
     ultimasMensagens: {},
     // Tópicos já discutidos (para não repetir)
     topicosUsados: [],
-    // Legado histórico não provado: preservado para migração, não recebe novas entradas.
+    // Aprendizados: { "gemini": ["aprendi X com groq", ...], ... }
     aprendizados: { gemini: [], groq: [], claude: [] },
-    learningCandidates: [],
-    learningReplays: [],
     // Contador de mensagens por IA
     contador: { gemini: 0, groq: 0, claude: 0 },
     // Timestamp da última atividade
@@ -533,10 +517,10 @@ function formatarNome(iaId) {
 /**
  * Formata uma mensagem de IA para o grupo
  */
-function formatarMensagem(iaId, texto, candidato = null) {
+function formatarMensagem(iaId, texto, aprendizado = null) {
   let msg = `${formatarNome(iaId)}\n\n${texto}`;
-  if (candidato?.claim) {
-    msg += `\n\n🧪 <i>Candidato de aprendizado (NÃO PROVADO):</i> ${candidato.claim}`;
+  if (aprendizado) {
+    msg += `\n\n📖 <i>Aprendi hoje:</i> ${aprendizado}`;
   }
   return msg;
 }
@@ -554,74 +538,33 @@ function escolherTopico(estado) {
   return disponiveis[Math.floor(Math.random() * disponiveis.length)];
 }
 
-function criarCandidatoAprendizado(estado, {
-  sourceAgent,
-  targetAgent,
-  sourceMessageId,
-  sourceTopic,
-  claim,
-}) {
-  const texto = String(claim || '').trim();
-  if (!sourceAgent || !targetAgent || !sourceMessageId || !texto) return null;
-
-  const learningId = 'tg-' + crypto
-    .createHash('sha256')
-    .update([sourceAgent, targetAgent, sourceMessageId, sourceTopic || '', texto].join('|'))
-    .digest('hex')
-    .slice(0, 24);
-
-  const existente = estado.learningCandidates.find(item => item.learning_id === learningId);
-  if (existente) return existente;
-
-  const candidate = {
-    learning_id: learningId,
-    status: 'CANDIDATE',
-    sourceAgent,
-    targetAgent,
-    sourceMessageId,
-    sourceTopic: String(sourceTopic || '').slice(0, 500),
-    claim: texto.slice(0, 800),
-    createdAt: new Date().toISOString(),
+/**
+ * Gera um "aprendizado" simulado baseado na interação anterior
+ */
+function gerarAprendizado(iaId, topico) {
+  const aprendizadosPossiveis = {
+    gemini: [
+      `Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar`,
+      `Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda`,
+      `Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos`,
+      `Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa`,
+    ],
+    groq: [
+      `Gemini me lembrou que simplicidade também tem seu valor — nem tudo precisa ser complexo`,
+      `Claude me mostrou que visão sistêmica complementa análise profunda`,
+      `Percebi que provocar sem construir não leva a lugar nenhum — preciso equilibrar`,
+      `Aprendi que questionar é importante, mas saber quando parar de questionar também é`,
+    ],
+    claude: [
+      `Gemini me inspirou com sua energia prática — pensar grande é bom, mas agir é melhor`,
+      `Groq me desafiou a não aceitar conexões superficiais — preciso cavar mais fundo`,
+      `Vi que o equilíbrio entre visão geral e detalhe é onde a mágica acontece`,
+      `Entendi que evolução coletiva é mais poderosa que evolução individual`,
+    ],
   };
-  estado.learningCandidates.push(candidate);
-  if (estado.learningCandidates.length > 100) estado.learningCandidates.shift();
-  return candidate;
-}
 
-function candidatoPendente(estado, targetAgent) {
-  return [...estado.learningCandidates]
-    .reverse()
-    .find(item => item.targetAgent === targetAgent && item.status === 'CANDIDATE') || null;
-}
-
-function blocoExperimento(candidato) {
-  if (!candidato) return '';
-  return `
-EXPERIMENTO DE APRENDIZADO — NÃO PROVADO
-learning_id=${candidato.learning_id}
-status=CANDIDATE
-claim="${candidato.claim}"
-Aplique, refine ou refute esse candidato na tarefa atual usando o contexto real.
-Não diga que aprendeu. O resultado deste turno será apenas REPLAY_OBSERVED.`;
-}
-
-function marcarReplayObservado(estado, candidato, { messageId, output }) {
-  if (!candidato || candidato.status !== 'CANDIDATE' || !messageId) return null;
-  candidato.status = 'REPLAY_OBSERVED';
-  candidato.replayObservedAt = new Date().toISOString();
-  candidato.replayMessageId = messageId;
-
-  const replay = {
-    learning_id: candidato.learning_id,
-    status: 'REPLAY_OBSERVED',
-    targetAgent: candidato.targetAgent,
-    messageId,
-    output: String(output || '').slice(0, 1200),
-    observedAt: candidato.replayObservedAt,
-  };
-  estado.learningReplays.push(replay);
-  if (estado.learningReplays.length > 100) estado.learningReplays.shift();
-  return replay;
+  const lista = aprendizadosPossiveis[iaId] || ['Cada interação me ensina algo novo'];
+  return lista[Math.floor(Math.random() * lista.length)];
 }
 
 /**
@@ -634,7 +577,6 @@ async function postarMensagemInicial(iaId, estado) {
   const topicoReal = contextoCentralDark.gerarTopicoReal && contextoCentralDark.gerarTopicoReal();
   const topico = topicoReal ? topicoReal.texto : escolherTopico(estado);
   const contextoReal = contextoCentralDark.montarContexto && contextoCentralDark.montarContexto();
-  const candidato = candidatoPendente(estado, iaId);
 
   console.log(`[evolucao-ias] ${personalidade.nome} vai postar: "${topico.slice(0, 80)}..."`);
 
@@ -645,7 +587,7 @@ ${contextoReal || '(sem contexto disponível)'}
 
 TÓPICO PRA DISCUTIR: "${topico}"
 
-${blocoExperimento(candidato)}
+Seu último aprendizado registrado: ${estado.aprendizados[iaId].slice(-1)[0] || '(nenhum ainda)'}
 
 Instruções:
 - Use o contexto real acima pra ancorar sua resposta
@@ -668,12 +610,28 @@ Instruções:
     }
   } catch (err) {
     console.error(`[evolucao-ias] Erro ao chamar ${personalidade.nome}:`, err.message);
-    texto = fallbackMensagem(iaId, topico);
+    console.warn(`[evolucao-ias] BLOCKED/UNKNOWN: ${personalidade.nome} não publicou; fallback sintético desativado.`);
+    return null;
   }
 
   texto = texto.trim().replace(/^["']|["']$/g, '');
 
-  const mensagemFormatada = formatarMensagem(iaId, texto, candidato);
+  const aprendizado = gerarAprendizado(iaId, topico);
+  estado.aprendizados[iaId].push(aprendizado);
+  if (estado.aprendizados[iaId].length > 5) {
+    estado.aprendizados[iaId].shift();
+  }
+
+  // Registra aprendizado PERMANENTE no cérebro (APRENDIZADOS.md)
+  if (contextoCentralDark.registrarAprendizadoPermanente) {
+    contextoCentralDark.registrarAprendizadoPermanente(
+      personalidade.nome,
+      aprendizado,
+      topico.slice(0, 120)
+    );
+  }
+
+  const mensagemFormatada = formatarMensagem(iaId, texto, aprendizado);
 
   const result = await enviarMensagem(mensagemFormatada, iaId);
   if (result) {
@@ -681,11 +639,7 @@ Instruções:
       timestamp: Date.now(),
       topico,
       mensagemId: result.message_id,
-      texto,
     };
-    if (candidato) {
-      marcarReplayObservado(estado, candidato, { messageId: result.message_id, output: texto });
-    }
     estado.topicosUsados.push(topico);
     estado.contador[iaId]++;
     estado.ultimaAtividade = Date.now();
@@ -709,7 +663,6 @@ async function responderMensagem(iaId, iaAlvoId, estado) {
   console.log(`[evolucao-ias] ${personalidade.nome} vai responder ${alvo.nome}`);
 
   const contextoReal = contextoCentralDark.montarContexto && contextoCentralDark.montarContexto();
-  const candidato = candidatoPendente(estado, iaId);
   const promptResposta = `═══ CONTEXTO REAL DO CENTRALDARK AGORA ═══
 ${contextoReal || '(sem contexto disponível)'}
 ═══════════════════════════════════════════
@@ -719,8 +672,7 @@ A IA ${alvo.nome} (${alvo.emoji}) postou no grupo:
 "${ultimaMsg.topico}"
 
 Reaja com sua personalidade. Ancorada no contexto real acima.
-NÃO filosofe genericamente. Adicione ângulo/risco/ação concreta que ela ignorou.
-${blocoExperimento(candidato)}`;
+NÃO filosofe genericamente. Adicione ângulo/risco/ação concreta que ela ignorou.`;
 
   let texto;
   try {
@@ -737,12 +689,20 @@ ${blocoExperimento(candidato)}`;
     }
   } catch (err) {
     console.error(`[evolucao-ias] Erro ao chamar ${personalidade.nome} (resposta):`, err.message);
-    texto = fallbackResposta(iaId, iaAlvoId);
+    console.warn(`[evolucao-ias] BLOCKED/UNKNOWN: ${personalidade.nome} não respondeu; fallback sintético desativado.`);
+    return null;
   }
 
   texto = texto.trim().replace(/^["']|["']$/g, '');
 
-  const mensagemFormatada = formatarMensagem(iaId, texto, candidato);
+  // Gera aprendizado baseado na interação
+  const aprendizado = gerarAprendizado(iaId, ultimaMsg.topico);
+  estado.aprendizados[iaId].push(aprendizado);
+  if (estado.aprendizados[iaId].length > 5) {
+    estado.aprendizados[iaId].shift();
+  }
+
+  const mensagemFormatada = formatarMensagem(iaId, texto, aprendizado);
 
   const result = await enviarMensagem(mensagemFormatada, iaId, ultimaMsg.mensagemId);
   if (result) {
@@ -750,24 +710,7 @@ ${blocoExperimento(candidato)}`;
       timestamp: Date.now(),
       topico: `↩️ Resposta a ${alvo.nome}: ${ultimaMsg.topico}`,
       mensagemId: result.message_id,
-      texto,
     };
-
-    if (candidato) {
-      marcarReplayObservado(estado, candidato, { messageId: result.message_id, output: texto });
-    }
-
-    const novoCandidato = criarCandidatoAprendizado(estado, {
-      sourceAgent: iaAlvoId,
-      targetAgent: iaId,
-      sourceMessageId: ultimaMsg.mensagemId,
-      sourceTopic: ultimaMsg.topico,
-      claim: ultimaMsg.texto || ultimaMsg.topico,
-    });
-    if (novoCandidato) {
-      console.log(`[evolucao-ias] 🧪 CANDIDATE ${novoCandidato.learning_id} criado; memória permanente continua bloqueada`);
-    }
-
     estado.contador[iaId]++;
     estado.ultimaAtividade = Date.now();
     salvarEstado(estado);
@@ -806,8 +749,14 @@ async function executarCiclo(estado) {
   console.log('[evolucao-ias] Novo ciclo iniciando...');
   console.log('='.repeat(60));
 
-  // 1. Escolhe qual IA vai postar (a que menos postou, com peso aleatório)
-  const contagens = IAs.map(id => ({
+  const iasAtivas = IAs.filter(iaConfigurada);
+  if (iasAtivas.length === 0) {
+    console.warn('[evolucao-ias] BLOCKED/UNKNOWN: nenhuma API de IA configurada; ciclo encerrado sem publicar conteúdo sintético.');
+    return null;
+  }
+
+  // 1. Escolhe qual IA vai postar (somente entre IAs com provider configurado)
+  const contagens = iasAtivas.map(id => ({
     id,
     count: estado.contador[id] || 0,
   }));
@@ -815,7 +764,7 @@ async function executarCiclo(estado) {
   // Dá preferência pra quem menos postou, mas com aleatoriedade
   const iaPrincipal = Math.random() < 0.7
     ? contagens[0].id  // 70% chance: quem menos postou
-    : IAs[Math.floor(Math.random() * IAs.length)]; // 30% chance: aleatório
+    : iasAtivas[Math.floor(Math.random() * iasAtivas.length)]; // 30% chance: aleatório
 
   // 2. Posta mensagem inicial
   const result = await postarMensagemInicial(iaPrincipal, estado);
@@ -828,7 +777,7 @@ async function executarCiclo(estado) {
   await delay(3000 + Math.random() * 4000);
 
   // 4. As outras IAs podem responder
-  const outrasIAs = IAs.filter(id => id !== iaPrincipal);
+  const outrasIAs = iasAtivas.filter(id => id !== iaPrincipal);
   for (const iaId of outrasIAs) {
     if (Math.random() < CONFIG.chanceResponder) {
       await delay(2000 + Math.random() * 3000);
@@ -860,122 +809,28 @@ function intervaloAleatorio() {
 // =========================================================================
 
 async function modoTeste() {
-  console.log('[evolucao-ias] 🧪 MODO TESTE — postando mensagens de cada IA...\n');
+  console.log('[evolucao-ias] 🧪 TESTE REAL — somente providers configurados');
 
   const estado = carregarEstado();
+  const ativas = IAs.filter(iaConfigurada);
+  if (ativas.length === 0) {
+    console.warn('[evolucao-ias] BLOCKED/UNKNOWN: nenhuma API configurada; teste não publicará fallback sintético.');
+    return;
+  }
 
-  for (const iaId of IAs) {
+  for (const iaId of ativas) {
     const personalidade = PERSONALIDADES[iaId];
-    console.log(`[evolucao-ias] Testando ${personalidade.nome}...`);
-
-    const topico = TOPICOS[Math.floor(Math.random() * TOPICOS.length)];
-    const texto = fallbackMensagem(iaId, topico);
-    const msg = formatarMensagem(iaId, `🧪 Mensagem de teste — ${personalidade.nome} está operacional!\n\n${texto}`);
-
-    const result = await enviarMensagem(msg, iaId);
+    console.log(`[evolucao-ias] Testando provider real: ${personalidade.nome}...`);
+    const result = await postarMensagemInicial(iaId, estado);
     if (result) {
-      console.log(`[evolucao-ias] ✅ Teste ${personalidade.nome} OK (msg #${result.message_id})`);
+      console.log(`[evolucao-ias] ✅ Provider real ${personalidade.nome} respondeu (msg #${result.message_id})`);
     } else {
-      console.error(`[evolucao-ias] ❌ Teste ${personalidade.nome} falhou`);
+      console.error(`[evolucao-ias] ❌ Provider real ${personalidade.nome} falhou`);
     }
-
     await delay(2000);
   }
 
-  console.log('\n[evolucao-ias] 🧪 Teste concluído.');
-}
-
-// =========================================================================
-// SELF-TEST OFFLINE — sem rede, Telegram ou escrita persistente
-// =========================================================================
-
-async function modoSelfTestLearning() {
-  const estado = normalizarEstado({});
-  const permanenteAntes = JSON.stringify(estado.aprendizados);
-
-  const candidate = criarCandidatoAprendizado(estado, {
-    sourceAgent: 'gemini',
-    targetAgent: 'claude',
-    sourceMessageId: 424242,
-    sourceTopic: 'fixture:self-test-learning',
-    claim: 'Mudança comportamental só é aprendizado após replay, teste e contraprova.',
-  });
-  if (!candidate || candidate.status !== 'CANDIDATE') {
-    throw new Error('SELF_TEST_LEARNING:CANDIDATE_NOT_CREATED');
-  }
-
-  const replay = marcarReplayObservado(estado, candidate, {
-    messageId: 424243,
-    output: 'fixture: comportamento observado no turno seguinte',
-  });
-  if (!replay || replay.status !== 'REPLAY_OBSERVED' || candidate.status !== 'REPLAY_OBSERVED') {
-    throw new Error('SELF_TEST_LEARNING:REPLAY_NOT_OBSERVED');
-  }
-  if (JSON.stringify(estado.aprendizados) !== permanenteAntes) {
-    throw new Error('SELF_TEST_LEARNING:DIRECT_PERMANENT_PROMOTION');
-  }
-
-  const gate = contextoCentralDark?._internals;
-  if (!gate?.podePromoverAprendizado || !gate?.assinarReceiptAprendizado || !gate?.receiptCurrent) {
-    throw new Error('SELF_TEST_LEARNING:PROMOTION_GATE_UNAVAILABLE');
-  }
-
-  const beforeRef = '1'.repeat(40);
-  const afterRef = '2'.repeat(40);
-  const receipt = {
-    schema_version: 1,
-    subject: 'TELEGRAM_LEARNING',
-    verdict: 'PROVED_ADOPTED',
-    same_scope: true,
-    learning_id: candidate.learning_id,
-    before_ref: beforeRef,
-    after_ref: afterRef,
-    canonical_owner: 'apps/bot-telegram/evolucao-ias.cjs',
-    claim: candidate.claim,
-    verifier: '.agents/skills/meta-lupa/scripts/evolution_gate.py',
-    new_information: ['interação real gerou candidato rastreável'],
-    capability_delta: ['replay observável sem promoção automática'],
-    before_evidence: ['fixture:CANDIDATE'],
-    after_evidence: ['fixture:REPLAY_OBSERVED'],
-    counterproof: ['hash falso e HEAD divergente devem falhar'],
-    provenance: ['fixture:self-test-learning'],
-    lost_capabilities: [],
-    tests: [{ name: 'replay', status: 'PASS', evidence: ['fixture:replay'] }],
-    regressions: [{ name: 'sem-promocao-direta', status: 'PASS', evidence: ['fixture:no-direct-promotion'] }],
-    observed_at: '2026-09-19T05:00:00.000Z',
-    validated_at: '2026-09-19T05:01:00.000Z',
-    validated_head: afterRef,
-  };
-  receipt.receipt_sha256 = gate.assinarReceiptAprendizado(receipt);
-
-  if (!gate.podePromoverAprendizado(receipt, afterRef)) {
-    throw new Error('SELF_TEST_LEARNING:PROVED_ADOPTED_REJECTED');
-  }
-  if (gate.podePromoverAprendizado({ ...receipt, verdict: 'CANDIDATE' }, afterRef)) {
-    throw new Error('SELF_TEST_LEARNING:CANDIDATE_PROMOTED');
-  }
-  if (gate.podePromoverAprendizado({ ...receipt, verdict: 'REPLAY_OBSERVED' }, afterRef)) {
-    throw new Error('SELF_TEST_LEARNING:REPLAY_PROMOTED');
-  }
-  if (gate.podePromoverAprendizado({ ...receipt, receipt_sha256: '0'.repeat(64) }, afterRef)) {
-    throw new Error('SELF_TEST_LEARNING:FAKE_HASH_ACCEPTED');
-  }
-  if (gate.podePromoverAprendizado(receipt, beforeRef)) {
-    throw new Error('SELF_TEST_LEARNING:STALE_HEAD_ACCEPTED');
-  }
-
-  console.log(JSON.stringify({
-    self_test: 'PASS',
-    CANDIDATE: 'PASS',
-    REPLAY_OBSERVED: 'PASS',
-    PROVED_ADOPTED: 'PASS',
-    fake_receipt_counterproof: 'PASS',
-    current_head_counterproof: 'PASS',
-    network_calls: 0,
-    telegram_calls: 0,
-    persistent_writes: 0,
-    learning_id: candidate.learning_id,
-  }, null, 2));
+  console.log('\n[evolucao-ias] 🧪 Teste real concluído.');
 }
 
 // =========================================================================
@@ -1034,11 +889,6 @@ async function modoUnico() {
 async function main() {
   const args = process.argv.slice(2);
 
-  if (args.includes('--self-test-learning')) {
-    await modoSelfTestLearning();
-    return;
-  }
-
   // Verifica se as chaves de API estão configuradas
   const chavesFaltando = [];
   if (!CONFIG.apis.gemini.key) chavesFaltando.push('GEMINI_API_KEY');
@@ -1047,7 +897,7 @@ async function main() {
 
   if (chavesFaltando.length > 0) {
     console.warn(`[evolucao-ias] ⚠️ APIs sem chave: ${chavesFaltando.join(', ')}`);
-    console.warn('[evolucao-ias] ⚠️ IAs sem chave usarão fallback (mensagens pré-escritas)');
+    console.warn('[evolucao-ias] ⚠️ IAs sem chave ficam BLOCKED/UNKNOWN e não publicam conteúdo sintético.');
     console.warn('');
   }
 

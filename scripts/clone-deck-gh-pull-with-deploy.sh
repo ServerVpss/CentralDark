@@ -11,6 +11,14 @@ case "$REPO_DIR" in
   *) printf '[ERRO] ROOT_FORA_DA_CENTRALDARK=%s\n' "$REPO_DIR" >&2; exit 20 ;;
 esac
 
+DISPATCHER="$REPO_DIR/scripts/vps/deploy-guards-dispatcher.sh"
+[ -x "$DISPATCHER" ] || { printf '[ERRO] CANONICAL_DEPLOY_GATE_MISSING\n' >&2; exit 28; }
+if ! REPO_DIR="$REPO_DIR" BRANCH="$BRANCH" bash "$DISPATCHER" --gate-only; then
+  printf '[ERRO] CANONICAL_TLC23_DEPLOY_GATE_BLOCK\n' >&2
+  exit 29
+fi
+GATED_SHA="$(git -C "$REPO_DIR" rev-parse "origin/$BRANCH")"
+
 LOG_DIR="${REPO_DIR}/logs"
 LOG="${LOG_DIR}/github-sync.log"
 LOCK="/tmp/centraldark-gh-pull.lock"
@@ -54,11 +62,7 @@ if [ -n "$DIRTY_TRACKED" ]; then
 fi
 
 BEFORE="$(git -C "$REPO_DIR" rev-parse HEAD)"
-if ! timeout 60s git -C "$REPO_DIR" fetch --prune --no-tags origin "$BRANCH" >> "$LOG" 2>&1; then
-  echo "[ERRO] FETCH_TIMEOUT_OR_FAILURE" | tee -a "$LOG"
-  exit 28
-fi
-REMOTE="$(git -C "$REPO_DIR" rev-parse "origin/$BRANCH")"
+REMOTE="$GATED_SHA"
 
 if [ "$BEFORE" = "$REMOTE" ]; then
   echo "[OK] ALREADY_SYNCED=$BEFORE" >> "$LOG"

@@ -120,12 +120,36 @@ function statusPM2() {
   return null;
 }
 
+function contratoOperacionalCanonico() {
+  const raw = lerArquivoSeguro('LEIA-ME-IA.md', Number.POSITIVE_INFINITY);
+  if (!raw) return null;
+  const chaves = new Set([
+    'REUSE_BEFORE_CREATE_REQUIRED',
+    'REMEASURE_BEFORE_CREATE',
+    'REMEASURE_BEFORE_CREATE_OWNER',
+    'UNKNOWN_IS_NOT_PASS',
+    'CURRENT_REALITY_REQUIRES_RECONCILIATION',
+    'DIVERGENT_READERS_REQUIRE_RENDEZVOUS',
+    'SENSOR_FAILURE_IS_WORLD_FAILURE',
+  ]);
+  const linhas = raw.split('\n').filter((linha) => {
+    const i = linha.indexOf('=');
+    return i > 0 && chaves.has(linha.slice(0, i).trim());
+  });
+  return linhas.length ? linhas.join('\n') : null;
+}
+
 // =========================================================================
 // MONTAGEM DO BLOCO DE CONTEXTO
 // =========================================================================
 
 function montarContexto() {
   const partes = [];
+
+  const contrato = contratoOperacionalCanonico();
+  if (contrato) {
+    partes.push(`🧿 CONTRATO OPERACIONAL CANÔNICO:\n${contrato}`);
+  }
 
   const commits = ultimosCommits(5);
   if (commits) {
