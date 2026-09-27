@@ -165,7 +165,7 @@ if [ "$YELLOW_COUNT" -gt 0 ]; then
   exit 20
 fi
 
-git diff --cached --check
+git diff --cached --check -- "${CONFLICTS[@]}"
 
 if git grep -n -E '^(<<<<<<< |=======|>>>>>>> )' -- "${CONFLICTS[@]}"; then
   echo "BLOCKED_CONFLICT_MARKERS_LEFT"
