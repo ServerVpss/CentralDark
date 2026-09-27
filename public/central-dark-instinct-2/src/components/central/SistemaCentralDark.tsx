@@ -1,3 +1,5 @@
+[Reading 495 lines from start (total: 495 lines, 0 remaining)]
+
 import { useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -153,11 +155,11 @@ function MegaPainel({ estado, atualizando, atualizar }: SistemaCentralDarkProps)
       <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-5">
         {(
           [
-          ["Informações", Info],
-          ["Sucessos", CheckCircle2],
-          ["Avisos", AlertTriangle],
-          ["Erros", XCircle],
-          ["Críticos", Siren],
+            ["Informações", Info],
+            ["Sucessos", CheckCircle2],
+            ["Avisos", AlertTriangle],
+            ["Erros", XCircle],
+            ["Críticos", Siren],
           ] satisfies Array<[string, LucideIcon]>
         ).map(([titulo, Icone]) => (
           <article key={String(titulo)} className="panel p-4">
@@ -493,3 +495,5 @@ export function SistemaCentralDark({ estado, atualizando, atualizar }: SistemaCe
     </Tabs>
   );
 }
+
+[executed on device: SEGREDO (db22d900-db4f-449a-b775-016ae15deefb)]
