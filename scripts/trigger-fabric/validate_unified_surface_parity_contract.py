@@ -32,7 +32,7 @@ REQUIRED_MARKERS = {
         "EVENT_ID",
         "CAUSATION_ID",
         "same_canonical_session: true",
-        "same_ordered_trace: true",
+        "shared_ordered_trace: true",
         "same_structured_outcome: true",
         "forbid_voice_only_session_or_trace: true",
     ],
@@ -45,9 +45,9 @@ REQUIRED_MARKERS = {
         "Voice Tool Binding",
         "TEXT ⇄ VOICE ⇄ WORK ⇄ DESKTOP",
         "PLATFORM_UNAVAILABLE",
-        "same canonical `SESSION_ID`",
-        "no session or trace exclusive to Voice",
-        "same structured outcome",
+        "único `SESSION_ID` canônico",
+        "trilha exclusiva da Voz",
+        "contrato de saída estruturada é igual",
     ],
     RECEIPT: [
         "# RECEIPT — CENTRALDARK_UNIFIED_SURFACE_PARITY_01",
@@ -72,7 +72,7 @@ FORBIDDEN_MARKERS = {
     ],
     SKILL: [
         "novo sistema paralelo",
-        "substitui Hermes",
+        "Este skill substitui Hermes integralmente",
     ],
     RECEIPT: [
         "já testado na Casa após formatação",
