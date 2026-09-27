@@ -1,0 +1,28 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "centraldark-unified-surface-parity",
+  "version": "0.1.0",
+  "description": "CentralDark intent, surface parity and MCP capability bridge for Text, Voice, Work and Desktop without parallel architecture.",
+  "author": {
+    "name": "CentralDark"
+  },
+  "repository": "https://github.com/ServerVpss/CentralDark",
+  "keywords": ["centraldark", "mcp", "voice", "intent", "tools", "parity"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "CentralDark Unified Surface",
+        "shortDescription": "One intent and capability fabric across supported surfaces.",
+        "longDescription": "Routes CentralDark intent through the existing semantic classifier, owner fabric and MCP capability bus. Unsupported surface capabilities must be reported as PLATFORM_UNAVAILABLE rather than simulated.",
+        "developerName": "CentralDark",
+        "category": "Developer Tools",
+        "capabilities": ["Read", "Write"],
+        "defaultPrompt": [
+          "CentralDark visualize the current state without mutating anything.",
+          "CentralDark continue from the latest proven NEXT_CURSOR.",
+          "CentralDark execute the requested scoped change, prove the effect, and return a receipt."
+        ]
+      }
+    }
+  }
+}

@@ -75,6 +75,15 @@ function validateContract(value) {
   if (image.image_is_sensor !== true) errors.push('IMAGE_NOT_SENSOR');
   if (image.screenshot_is_current_truth !== false) errors.push('SCREENSHOT_MUST_NOT_BE_CURRENT_TRUTH');
   if (image.screenshot_is_trigger_for_live_measurement !== true) errors.push('SCREENSHOT_MUST_TRIGGER_LIVE_MEASUREMENT');
+  if (image.context_before_judgment !== true) errors.push('CONTEXT_BEFORE_JUDGMENT_REQUIRED');
+  if (image.observed_state_is_neutral_by_default !== true) errors.push('OBSERVED_STATE_MUST_START_NEUTRAL');
+  if (image.function_before_failure !== true) errors.push('FUNCTION_BEFORE_FAILURE_REQUIRED');
+  if (image.cause_before_classification !== true) errors.push('CAUSE_BEFORE_CLASSIFICATION_REQUIRED');
+  if (image.expected_mobility_is_not_drift !== true) errors.push('EXPECTED_MOBILITY_MUST_NOT_BE_DRIFT');
+  if (image.terminal_cwd_is_not_blocker_without_causal_evidence !== true) errors.push('TERMINAL_CWD_FALSE_BLOCKER_GUARD_REQUIRED');
+  if (image.do_not_invent_problem_from_screenshot !== true) errors.push('SCREENSHOT_FALSE_PROBLEM_GUARD_REQUIRED');
+  if (image.do_not_expand_scope_from_visual_incidental_state !== true) errors.push('VISUAL_SCOPE_EXPANSION_GUARD_REQUIRED');
+  if (image.user_demonstrated_context_is_primary_for_visual_scope !== true) errors.push('USER_VISUAL_SCOPE_REQUIRED');
   if (image.live_state_required_before_mutation !== true) errors.push('LIVE_REMEASURE_REQUIRED');
   if (image.material_visual_finding_action !== 'REMEASURE_LIVE_SOURCE_THEN_ACT_MINIMALLY') errors.push('IMAGE_ACTION_INVALID');
 
@@ -337,6 +346,24 @@ const CAPABILITY_SPECS = [
     declared_limit: 'AUTO_WORK_DISCOVERY_PRODUCER=UNPROVEN',
     reproduction: 'DISCOVER_CANDIDATES_FROM_STATE_WITHOUT_CONVERTING_DISCOVERY_TO_AUTHORITY',
   },
+  {
+    id: 'MATERIAL_FIRST_COGNITIVE_CRYSTALLIZATION',
+    layer: 'LEARNING',
+    owner: 'LEIA-ME-IA.md',
+    markers: [
+      'MATERIAL_FROM_CHEFE_AUTO_INGEST=true',
+      'PROVEN_MATERIAL_AUTO_CRYSTALLIZES_IN_EXISTING_OWNER=true',
+      'PRE_RESPONSE_MATERIAL_RECONCILIATION_REQUIRED=true',
+      'FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true',
+    ],
+    consumer: 'AGENTS.md',
+    consumer_markers: [
+      'MATERIAL_FROM_CHEFE_AUTO_INGEST=true',
+      'ASK_TO_CRYSTALLIZE_ALREADY_PROVEN_DELTA=false',
+      'MATERIAL_COGNITIVE_ROUTE=CHEFE_MATERIAL',
+    ],
+    reproduction: 'INGEST_CLASSIFY_BIND_EXISTING_OWNER_CRYSTALLIZE_PROVEN_DELTA_AND_REUSE',
+  },
 ];
 
 function verifyCapability(spec) {
@@ -420,6 +447,26 @@ const condensedDna = {
     'RUNTIME_MUST_BE_MEASURED_SEPARATELY',
     'CAPABILITY_INTENT_CONDUCT_EFFECT_ARE_SEPARATE',
     'EVIDENCE_LAYER_DOES_NOT_AUTO_PROMOTE_TO_CAUSALITY',
+    'HUMAN_SUPPLIES_GOAL_NOT_RUNBOOK',
+    'PREFER_COMPLETE_OPERATION_OVER_MICROCOMMAND_CHAIN',
+    'FIXED_HUD_LAYOUT_ONLY_LIVE_VALUES_CHANGE',
+    'NUMERIC_METRICS_REQUIRE_PROVEN_DENOMINATOR',
+    'LOUD_EXACT_ACTIONABLE_FAILURE',
+    'TOOL_ARGUMENT_LIMITS_NORMALIZED_TO_SAFE_CAP',
+    'SOURCE_404_IS_SENSOR_MISS_NOT_WORLD_MISS',
+    'ALTERNATE_AUTHORIZED_SENSOR_BEFORE_BLOCKER',
+    'SAME_HEAD_GREEN_PROMOTES_TO_TOTAL_DEPLOY',
+    'TOTAL_DEPLOY_REGENERATES_FROM_PROVEN_MAIN_AND_EXISTING_RUNTIME',
+    'PROOF_COUNTERPROOF_ACCEPT_RECONCILE_DETERMINISTIC_CLOSURE',
+    'ACCEPT_ONLY_AFTER_COUNTERPROOF_SURVIVAL',
+    'COUNTERPROOF_DEFEAT_RECONCILES_BY_DISCARDING_ONLY_DISPROVEN_DELTA',
+    'SEALED_CLAIM_NO_REEXECUTE_WITHOUT_NEW_CAUSE',
+    'NEW_MATERIAL_CAUSE_REOPENS_SEAL',
+    'CROSS_SURFACE_CONTRACT_INHERITANCE',
+    'SEMANTIC_CONVERGENCE_ACROSS_SURFACES_IS_EXPECTED_SUCCESS',
+    'TOOL_CATALOG_VISIBLE_IS_NOT_TOOL_CALL_SUCCESS',
+    'EXECUTOR_ATTRIBUTION_REQUIRES_OBSERVED_EXECUTOR',
+    'AUTO_RESUME_AFTER_HUMAN_FRONTIER',
   ],
   operational_flow: contract.standard_architecture.flow,
   meta_flow: [
@@ -512,6 +559,7 @@ const receipt = {
   capabilities: capabilities.length,
   source_bytes: sourceBytes,
   condensed_dna_bytes: condensedDnaBytes,
+  condensed_dna: condensedDna,
   capability_dna_sha256: capabilityDnaSha256,
   source_fingerprint_sha256: sourceFingerprintSha256,
   package_sha256: packageSha256,

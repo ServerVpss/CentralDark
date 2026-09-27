@@ -1,4 +1,4 @@
-name: Auto PR + Micro Deploy
+name: ⚙️ Auto PR + Micro Deploy
 
 on:
   push:
@@ -14,10 +14,10 @@ jobs:
   create_pr_and_deploy:
     runs-on: [self-hosted, Linux]
     steps:
-      - name: Checkout
+      - name: 🔹 Checkout
         uses: actions/checkout@v4
 
-      - name: Ensure PR exists (create if missing)
+      - name: 🔹 Ensure PR exists (create if missing)
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -40,7 +40,7 @@ jobs:
               core.info(`PR already exists for ${branch}: ${prs.data[0].html_url}`);
             }
 
-      - name: Run tests (if present)
+      - name: 🔹 Run tests (if present)
         run: |
           if [ -f ./scripts/test.sh ]; then
             chmod +x ./scripts/test.sh
@@ -49,14 +49,14 @@ jobs:
             echo "No test.sh found, skipping tests"
           fi
 
-      - name: Micro deploy (dry-run)
+      - name: 🔹 Micro deploy (dry-run)
         env:
           DRY_RUN: true
         run: |
           chmod +x ./scripts/micro_deploy.sh || true
           ./scripts/micro_deploy.sh "$GITHUB_REF" "$GITHUB_SHA"
 
-      - name: Upload deploy log
+      - name: 🔹 Upload deploy log
         uses: actions/upload-artifact@v4
         with:
           name: micro-deploy-log

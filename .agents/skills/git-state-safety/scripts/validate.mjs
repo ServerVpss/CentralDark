@@ -76,7 +76,14 @@ if (helper.includes('safeResetToOrigin')) errors.push('LEGACY_RESET_API_PRESENT'
 if (!helper.includes("reason: 'REMOTE_REWRITE'")) errors.push('REMOTE_REWRITE_BLOCK_MISSING');
 
 if (!consumer.includes("import { safeUpdateFromOrigin } from './lib/safe-git-deploy.mjs'")) errors.push('CONSUMER_IMPORT_INVALID');
-if (!consumer.includes('await safeUpdateFromOrigin({ repoPath: REPO_PATH, branch: \'main\', log })')) errors.push('CONSUMER_CALL_INVALID');
+const safeUpdateCall = consumer.match(/await\s+safeUpdateFromOrigin\(\{([\s\S]*?)\}\)/);
+const safeUpdateArgs = safeUpdateCall?.[1] || '';
+if (
+  !safeUpdateCall ||
+  !/\brepoPath\s*:\s*REPO_PATH\b/.test(safeUpdateArgs) ||
+  !/\bbranch\s*:\s*['"]main['"]/.test(safeUpdateArgs) ||
+  !/(?:^|,)\s*log\s*(?:,|$)/m.test(safeUpdateArgs)
+) errors.push('CONSUMER_CALL_INVALID');
 if (!consumer.includes('estado local preservado')) errors.push('CONSUMER_PRESERVATION_RECEIPT_MISSING');
 
 for (const marker of ['DIRTY_WORKTREE', 'LOCAL_AHEAD', 'DIVERGED', 'REMOTE_REWRITE', 'DETACHED_HEAD', 'PASS fast-forward']) {

@@ -1,0 +1,15 @@
+version: 1
+contract: CENTRALDARK_TOOL_PREFLIGHT
+scope: house
+before_analysis: true
+rules:
+  discover_relevant_tools: true
+  try_live_call: true
+  statuses: [PASS, BLOCKED, FORBIDDEN, DISABLED, UNKNOWN]
+  blocked_is_not_offline: true
+  schema_is_not_execution_proof: true
+  unknown_is_not_pass: true
+  unknown_is_not_fail: true
+owner_resolution:
+  reuse_capability_discovery: true
+  new_router: false

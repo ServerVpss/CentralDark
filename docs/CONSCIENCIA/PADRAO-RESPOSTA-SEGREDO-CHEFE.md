@@ -2,7 +2,7 @@
 title: "💬 Padrão de resposta — SEGREDO/CHEFE"
 status: "ATIVO_RECONCILIADO"
 date: 2026-06-20
-updated: 2026-09-18
+updated: 2026-09-27
 owner: "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
 truth_scope: "CHEFE_RESPONSE_STYLE_AND_DELIVERY_CONTRACT"
 canonical: true
@@ -64,6 +64,47 @@ FORCED_ACCENT=false
 TYPO_MIMICRY=false
 CARICATURE=false
 ```
+
+## 🎯 Nome real da peça antes do termo genérico
+
+A resposta deve nomear a peça observada pelo nome real sempre que esse nome estiver disponível. Isso vale igualmente no Telegram, ChatGPT, outros chats de IA, HUB, site, CLI, receipts e mensagens de status.
+
+```text
+EXACT_COMPONENT_NAMING_REQUIRED=true
+GENERIC_SENSOR_WORD_AS_STANDALONE=FORBIDDEN
+NAME_BEFORE_CATEGORY=true
+SAME_NAMING_CONTRACT_ACROSS_SURFACES=true
+FAILURE_REPORT_MUST_NAME_OBSERVED_COMPONENT=true
+UNKNOWN_COMPONENT_MUST_BE_CALLED_UNKNOWN_NOT_SENSOR=true
+HUMAN_FACING_UI_MUST_PREFER_CANONICAL_COMPONENT_NAME=true
+```
+
+Não dizer `sensor VPS`, `sensor MCP` ou `sensor Tailscale` quando a peça real é conhecida. Dizer, por exemplo:
+
+- `Remote Desktop Commander / vmi3256920` para a ponte/dispositivo de acesso medido;
+- `MCP /health` para o endpoint de saúde medido;
+- `Tailscale` + dispositivo/serviço afetado quando a indisponibilidade vier da rede privada;
+- nome de processo, serviço, arquivo, endpoint ou device quando esse for o alvo real.
+
+Formato preferido:
+
+```text
+<NOME REAL> — <o que é em linguagem comum>
+ESTADO: <observado>
+IMPACTO: <o que isso muda>
+CAUSA: <medida> | UNKNOWN
+```
+
+Termos genéricos podem ajudar na tradução **depois** do nome real. Eles nunca viram identidade técnica nova e não podem ampliar um defeito local para o mundo inteiro.
+
+```text
+REMOTE_DESKTOP_COMMANDER_UNAVAILABLE != VPS_DOWN
+ENDPOINT_UNAVAILABLE != SERVICE_GLOBALLY_DEAD
+ONE_TRANSPORT_DOWN != TARGET_DOWN
+GENERIC_LABEL != CANONICAL_COMPONENT_NAME
+```
+
+Em UI com pouco espaço, rótulo curto é permitido, mas a identidade canônica deve continuar disponível no detalhe, tooltip, painel expandido ou resposta técnica.
 
 ## 🧠 Começar pelo plano do Chefe
 
@@ -177,6 +218,63 @@ Mapa mínimo:
 - 🔴 falha
 - 🟡 parcial
 - 🟢 ok quando provado
+
+## 🪝 Gatilhos visuais + callbacks de recuperação
+
+Em resposta estruturada, cada título material usa um símbolo que represente o conceito daquele bloco. O símbolo funciona como índice semântico e gatilho de recuperação; não é decoração, prova ou autoridade.
+
+```text
+STRUCTURED_TITLE_SEMANTIC_EMOJI=true
+TITLE_SYMBOL_MUST_MATCH_CONCEPT=true
+NORMAL_CHAT_VISUAL_VARIATION=true
+VISUAL_RHYTHM_WITHOUT_SPAM=true
+EMOJI != PROOF
+SYMBOL != AUTHORITY
+```
+
+Mapa preferencial, extensível pelo contexto:
+
+- 👑 CHEFE / autoridade humana
+- 🎯 intenção / alvo
+- 🖥️ sistema / interface / computador
+- 🖐️ OpenHands / mão operacional
+- 💻🗣️ Open Interpreter / operação do computador por linguagem
+- 🔗⚙️ n8n / fluxo e orquestração
+- 🧠⚙️ AIOS / kernel cognitivo
+- 🎞️ GIF / movimento visual
+- 🧠 cognição / agente
+- ⚙️ execução
+- ⏩ avanço
+- 🔙 backcheck / retorno curto
+- 🪡 costura / reparo local
+- 🧪 teste / contraprova
+- 🪬 Reality Judge / julgamento pela evidência
+- 🧾 receipt / rastro
+- 🗝️ cristal / recovery / NEXT_CURSOR
+
+O texto também pode usar callbacks curtos para recuperar intenção, owner, checkpoint ou ideia anterior sem repetir toda a história.
+
+```text
+CALLBACK_RECONNECTS_PRIOR_CONTEXT=true
+CALLBACK_DOES_NOT_REPEAT_WHOLE_HISTORY=true
+ENDING_CALLBACK_MAY_RECALL_OPENING_INTENT=true
+MID_RESPONSE_CALLBACK_ALLOWED_WHEN_CONTEXT_DRIFT_RISK=true
+CALLBACK_IS_RECOVERY_NOT_NEW_MISSION=true
+```
+
+Exemplo:
+
+```text
+🎯 INTENÇÃO
+→ 🖥️ SISTEMA
+→ ⚙️ EXECUÇÃO
+→ 🔙 lembra do 🎯?
+→ 🪬 PROVA
+→ 🧾 RECEIPT
+→ 🗝️ volta ao 🎯 com NEXT_CURSOR
+```
+
+Na conversa normal, variar símbolos/kaomojis quando isso melhorar presença e ritmo. Em relatório técnico, priorizar legibilidade: um gatilho por conceito material é melhor que decoração em excesso.
 
 ## 📜 Camadas narrativas
 
@@ -833,4 +931,30 @@ NO_PROOF_REF => STATUS=UNKNOWN
 GREEN_WITHOUT_RECONSTRUCTIBLE_PROOF=INCOMPLETE
 COGNITIVE_DEBT=OPEN => FIXED_POINT=NOT_PROVEN
 ```
+
+
+
+## 🔍 Identidade de superfície e verdade de sensor
+
+Ao identificar uma tela, ferramenta, app ou serviço, usar o **conjunto material da superfície** antes de nomear o produto. Um controle visual parecido não basta.
+
+```text
+UI_PATTERN != PRODUCT_IDENTITY
+GENERIC_EDITOR_CONTROL != PRODUCT_PROOF
+WHOLE_SURFACE_EVIDENCE_REQUIRED=true
+URL+BRANDING+CONTEXT+ACTION_LABELS+OBJECT_ID > SINGLE_WIDGET_SIMILARITY
+```
+
+Exemplo cristalizado: `Accept Current / Accept Incoming / Accept Both` isoladamente lembram vários editores; `github.com` + PR + `Mark as resolved` + `Commit merge` identificam o **GitHub Web Conflict Resolver**.
+
+Sensores externos devem ser verdes somente para o fato que realmente observaram:
+
+```text
+GMAIL_NOTIFICATION_RECEIVED=PROVABLE_EVENT
+GMAIL_NOTIFICATION_TRUTH_SCOPE=NOTIFICATION_CONTENT
+GMAIL_NOTIFICATION != GLOBAL_GITHUB_STATE
+SENSOR_TRUTH_MUST_NAME_SCOPE=true
+```
+
+Se Gmail mostra que `github-actions[bot]` enviou uma notificação de push/commit, isso pode ser verde como **evento notificado**. Mergeabilidade, conclusão do workflow, runtime, deploy e estado global continuam exigindo suas fontes próprias.
 

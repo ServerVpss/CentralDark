@@ -12,11 +12,11 @@ Tudo do painel fica dentro desta pasta: servidor, tela, dados, scripts, logs e d
 
 - Porta local: `3030`
 - Processo PM2: `graph-panel`
-- Subdomínio: `grafo.centralldark.com`
+- Superfície pública: **nenhuma**; o grafo é embutido no Admin em `https://admin.centralldark.com/admin` → aba `🌌 Grafo Celestial`.
 
 ## Rotas principais
 
-- `/` abre o painel.
+- `/` é a superfície interna do serviço local `127.0.0.1:3030`; externamente ela é consumida somente pelo proxy autenticado `/admin/grafo/` do MCP Admin.
 - `/api/health` mostra saúde do serviço.
 - `/api/graph` entrega `data/graph.json`.
 - `/api/report` entrega o resumo em Markdown.

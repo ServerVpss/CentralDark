@@ -41,7 +41,7 @@ updated: 2026-06-29
 ## Regras de Ouro
 
 **Nunca:**
-- Apagar arquivos sem "PERMITO PIVETE"
+- Apagar arquivos sem "PERMITO SEGREDO"
 - Modificar `INDEX.md` (auto-gerado)
 - Rodar em loop sem timer aleatório (sobrecarrega API)
 

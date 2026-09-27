@@ -84,6 +84,46 @@
       "when": "NEED_SIMPLIFY_DELTA",
       "to": "delta-simplify",
       "anchor": "✂️ DELTA ÚTIL"
+    },
+    {
+      "when": "BEFORE_ANY_CREATION_OR_NEW_OWNER",
+      "to": "centraldark-operational-method",
+      "anchor": "👁️ MEDE ANTES DE CRIAR"
+    },
+    {
+      "when": "ACCESS_OR_TOOL_AVAILABILITY_CLAIM",
+      "to": "capability-contract-router",
+      "anchor": "🔎 DESCOBRIR TOOLS ANTES DO CLAIM"
+    },
+    {
+      "when": "VISUAL_OR_INCIDENTAL_STATE",
+      "to": "centraldark-operational-method",
+      "anchor": "🧿 CONTEXTO ANTES DO JULGAMENTO"
+    },
+    {
+      "when": "MACHINE_RESOLVABLE_TECHNICAL_BLOCKER",
+      "to": "cot-react-loop",
+      "anchor": "🤖 CONTINUA ATÉ HUMAN_FRONTIER"
+    },
+    {
+      "when": "ELIGIBLE_PR_AFTER_CREATE",
+      "to": "auditoria-pr",
+      "anchor": "🧭 REMEDE ATÉ MERGE OU BLOCKER MATERIAL"
+    },
+    {
+      "when": "MAIN_OR_PR_HEAD_ADVANCED_DURING_COSTURA",
+      "to": "git-conflict-resolve-house-standard",
+      "anchor": "⏰🪡 TIK-TAK COSTURA VIVA"
+    },
+    {
+      "when": "TEXT_CONFLICT_MACHINE_RESOLVABLE",
+      "to": "git-conflict-resolve-house-standard",
+      "anchor": "🪢 SEMANTIC ALL SEM BLIND ACCEPT"
+    },
+    {
+      "when": "PROMOTION_OR_SESSION_CLOSE",
+      "to": "centraldark-operational-method",
+      "anchor": "🧾 REGISTRA E READBACK"
     }
   ],
   "skill_materialization": {
@@ -132,6 +172,17 @@
     "ONE_WRITER_PER_SCOPE=true",
     "REUSE_BEFORE_CREATE=true",
     "UNKNOWN != PASS",
-    "REALITY_IS_JUDGE=true"
-  ]
+    "REALITY_IS_JUDGE=true",
+    "MEASURE_BEFORE_CREATION_REQUIRED=true",
+    "ACTION_REQUIRED != PASS",
+    "ACTION_REQUIRED != FAIL",
+    "COSTURA_NAME_ONLY=true",
+    "NO_VERSIONED_COSTURA=true",
+    "EVENT_DRIVEN_NEAR_REAL_TIME=true",
+    "STRICT_ZERO_LATENCY_REAL_TIME=false",
+    "OLD_UP_TO_DATE_SNAPSHOT_IS_HISTORY_AFTER_MAIN_ADVANCES=true",
+    "OLD_REVIEW_IS_STALE_AFTER_HEAD_ADVANCES=true",
+    "NO_STALE_GREEN=true"
+  ],
+  "pre_creation_formula": "MEASURE_BEFORE_CREATION = REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE"
 }

@@ -4,10 +4,12 @@ import { z } from "zod";
 import { config } from "../../config.js";
 import * as gh from "../github/github.js";
 import { runShell } from "../vps/vps.js";
+import { centraldarkCapabilityTools } from "./centraldark-capabilities.js";
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 }
 export const deployTools = [
+    ...centraldarkCapabilityTools,
     {
         name: "deploy_status",
         description: "Resumo unificado do estado do deploy: último commit no GitHub vs commit atual na VPS, status dos últimos workflows, processos PM2 com restart anormal. Devolve STATUS: OK | ALERTA | ERRO + detalhes. Apenas leitura.",
