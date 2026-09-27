@@ -218,6 +218,8 @@ def normalize(text: str) -> str:
     raw = unicodedata.normalize("NFKD", str(text or ""))
     raw = "".join(ch for ch in raw if not unicodedata.combining(ch)).lower()
     raw = re.sub(r"[^a-z0-9!#@/_\-\s]+", " ", raw)
+    # "centraldark! faça" (transcrição de voz): marcador só vale no começo da palavra
+    raw = re.sub(r"(?<=[a-z0-9])[!#]+", " ", raw)
     return " ".join(raw.strip().split())
 
 
@@ -254,7 +256,11 @@ def _negated_or_discussed(normalized: str, match) -> bool:
             "somente discutir",
             "falando sobre",
             "falei de",
+            "falei do",
+            "falei da",
             "falou de",
+            "falou do",
+            "falou da",
         )
     )
 

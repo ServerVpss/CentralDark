@@ -304,5 +304,17 @@ class ContinuousDeltaContractTest(unittest.TestCase):
                 self.assertFalse(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"], (phrase, mode))
 
 
+    def test_exclamation_after_wake_word_still_dispatches(self):
+        # restaurado: ab3d904 foi desfeito por escrita sobre base velha (df995f2)
+        for phrase in ("CentralDark! Faça o deploy", "centraldark!!! visualize o painel"):
+            for mode in ("text", "voice"):
+                self.assertTrue(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"], (phrase, mode))
+        self.assertTrue(MODULE.resolve("!CENTRALDARK", chefe_source=True)["master_cycle_active"])
+
+    def test_talking_about_it_does_not_dispatch(self):
+        for phrase in ("falei do centraldark visualize o painel ontem", "falou da centraldark faça o deploy"):
+            for mode in ("text", "voice"):
+                self.assertFalse(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"], (phrase, mode))
+
 if __name__ == "__main__":
     unittest.main()
