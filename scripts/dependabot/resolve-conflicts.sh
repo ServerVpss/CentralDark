@@ -19,6 +19,7 @@ FETCH_REF="refs/centraldark/pr/${PR_NUM}"
 WORKTREE_ROOT="${CENTRALDARK_DEPENDABOT_WORKTREES:-${TMPDIR:-/tmp}/centraldark-dependabot}"
 WORKTREE="${WORKTREE_ROOT}/pr-${PR_NUM}-$$"
 SEMANTIC_ALL_HELPER="${SEMANTIC_ALL_HELPER:-scripts/dependabot/semantic-all-resolver.mjs}"
+CLASSIFIER="${CONFLICT_CLASSIFIER:-scripts/dependabot/classify-conflict.mjs}"
 
 if [ -z "$PR_HEAD_REF" ]; then
   echo "BLOCKED_MISSING_PR_HEAD_REF"
@@ -53,9 +54,10 @@ echo "🧭 RESOLVER_PR=$PR_NUM"
 echo "🔄 PR_HEAD_REF=$PR_HEAD_REF"
 echo "🏠 CASA_WORKTREE_MUTATED=0"
 echo "🧱 ISOLATED_WORKTREE=$WORKTREE"
-echo "🪬 SEMANTIC_ALL_DEFAULT=1"
-echo "🔘 GITHUB_UI_EQUIVALENT=ACCEPT_BOTH_ALL_BLOCKS_THEN_MARK_RESOLVED"
+echo "🪬 CONFLICT_DECISION_PER_FILE=1"
+echo "🔘 GITHUB_UI_EQUIVALENT=CURRENT_OR_INCOMING_OR_BOTH_THEN_MARK_RESOLVED"
 echo "⚖️ BLIND_ACCEPT_BOTH=0"
+echo "🟡 UNKNOWN_POLICY=STOP_WITHOUT_PUSH"
 
 if [ -n "${GITHUB_TOKEN:-}" ]; then
   AUTH_B64="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 | tr -d '\n')"
@@ -102,17 +104,68 @@ if [ ! -f "$SEMANTIC_ALL_HELPER" ]; then
   git merge --abort 2>/dev/null || true
   exit 5
 fi
+if [ ! -f "$CLASSIFIER" ]; then
+  echo "BLOCKED_CONFLICT_CLASSIFIER_MISSING=$CLASSIFIER"
+  git merge --abort 2>/dev/null || true
+  exit 6
+fi
+
+CURRENT_COUNT=0
+INCOMING_COUNT=0
+BOTH_COUNT=0
+YELLOW_COUNT=0
 
 for f in "${CONFLICTS[@]}"; do
-  echo "RESOLVE path=$f policy=SEMANTIC_ALL_ACCEPT_BOTH_THEN_VALIDATE"
-  node "$SEMANTIC_ALL_HELPER" "$f"
-  git add -- "$f"
+  DECISION_JSON="$(node "$CLASSIFIER" "$f")"
+  ACTION="$(node -e "const x=JSON.parse(process.argv[1]); process.stdout.write(x.action)" "$DECISION_JSON")"
+  REASON="$(node -e "const x=JSON.parse(process.argv[1]); process.stdout.write(x.reason)" "$DECISION_JSON")"
+  CONFLICT_ID="$(node -e "const x=JSON.parse(process.argv[1]); process.stdout.write(x.conflict_id)" "$DECISION_JSON")"
+  echo "CONFLICT_DECISION path=$f action=$ACTION reason=$REASON conflict_id=$CONFLICT_ID"
+
+  case "$ACTION" in
+    CURRENT)
+      git checkout --ours -- "$f"
+      CURRENT_COUNT=$((CURRENT_COUNT + 1))
+      ;;
+    INCOMING)
+      git checkout --theirs -- "$f"
+      INCOMING_COUNT=$((INCOMING_COUNT + 1))
+      ;;
+    BOTH)
+      node "$SEMANTIC_ALL_HELPER" "$f"
+      BOTH_COUNT=$((BOTH_COUNT + 1))
+      ;;
+    YELLOW)
+      echo "🟡 CONFLICT_NEEDS_DISCRIMINANT path=$f reason=$REASON"
+      YELLOW_COUNT=$((YELLOW_COUNT + 1))
+      ;;
+    *)
+      echo "BLOCKED_UNKNOWN_CLASSIFIER_ACTION path=$f action=$ACTION"
+      git merge --abort 2>/dev/null || true
+      exit 7
+      ;;
+  esac
+
+  if [ "$ACTION" != "YELLOW" ]; then
+    git add -- "$f"
+  fi
 done
 
 echo "AUTO_REVIEW_CONFLICTS=${#CONFLICTS[@]}"
-echo "SEMANTIC_ALL_APPLIED=1"
+echo "BUTTON_CURRENT_COUNT=$CURRENT_COUNT"
+echo "BUTTON_INCOMING_COUNT=$INCOMING_COUNT"
+echo "BUTTON_BOTH_COUNT=$BOTH_COUNT"
+echo "BUTTON_YELLOW_COUNT=$YELLOW_COUNT"
 
-git diff --cached --check
+if [ "$YELLOW_COUNT" -gt 0 ]; then
+  echo "🟡 CONFLICT_RESOLUTION_YELLOW count=$YELLOW_COUNT"
+  echo "🟡 YELLOW_IS_PROGRESS_BOUNDARY=1"
+  echo "NO_PUSH_ON_YELLOW=1"
+  git merge --abort 2>/dev/null || true
+  exit 20
+fi
+
+git diff --cached --check -- "${CONFLICTS[@]}"
 
 if git grep -n -E '^(<<<<<<< |=======|>>>>>>> )' -- "${CONFLICTS[@]}"; then
   echo "BLOCKED_CONFLICT_MARKERS_LEFT"
@@ -149,7 +202,7 @@ done
 
 echo "AUTO_REVIEW_COUNTERPROOF=PASS"
 
-git -c user.name='CentralDark Semantic ALL Resolver' \
+git -c user.name='CentralDark COSTURA Resolver' \
     -c user.email='actions@users.noreply.github.com' \
     commit --no-edit
 
