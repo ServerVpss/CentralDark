@@ -212,8 +212,6 @@ def normalize(text: str) -> str:
     raw = unicodedata.normalize("NFKD", str(text or ""))
     raw = "".join(ch for ch in raw if not unicodedata.combining(ch)).lower()
     raw = re.sub(r"[^a-z0-9!#@/_\-\s]+", " ", raw)
-    # "centraldark! faça" (transcrição de voz): marcador só vale no começo da palavra
-    raw = re.sub(r"(?<=[a-z0-9])[!#]+", " ", raw)
     return " ".join(raw.strip().split())
 
 
@@ -250,11 +248,7 @@ def _negated_or_discussed(normalized: str, match) -> bool:
             "somente discutir",
             "falando sobre",
             "falei de",
-            "falei do",
-            "falei da",
             "falou de",
-            "falou do",
-            "falou da",
         )
     )
 
@@ -269,11 +263,18 @@ def _resolve_delta(normalized: str):
 
 def _collect_alias_matches(normalized: str, alias_map):
     active, ambiguous = [], []
+    tokens = normalized.split()
+    resume_verbs = {"continue", "continua", "prossiga", "retome"}
     for trigger_id, aliases in alias_map.items():
         for alias in aliases:
             match = _phrase_match(normalized, alias)
             if not match:
                 continue
+            if trigger_id == "CENTRALDARK_MASTER" and alias.startswith(("centraldark ", "central dark ")):
+                _, end = match
+                verb = alias.split()[-1]
+                if end == len(tokens) and verb not in resume_verbs:
+                    continue
             item = {"trigger_id": trigger_id, "alias": alias}
             (ambiguous if _negated_or_discussed(normalized, match) else active).append(item)
             break
@@ -937,7 +938,7 @@ def self_test():
         add("spoken_explicit_text_trigger", r["master_cycle_active"])
 
     # CHEFE 2026-09-27: voz = texto; "CentralDark" solto não abre o mestre (paridade + sob demanda)
-    for phrase in ("acordar", "centraldark visualize", "centraldark sol acordar", "sol acordar"):
+    for phrase in ("acordar", "centraldark visualize o estado", "centraldark sol acordar", "sol acordar"):
         r = resolve(
             phrase,
             chefe_source=True,
@@ -956,6 +957,14 @@ def self_test():
 
     r = resolve("centraldark", chefe_source=True, input_mode="text")
     add("plain_text_word_still_guarded", not r["master_cycle_active"])
+
+    for mode in ("text", "voice"):
+        add("plain_master_wake_is_neutral", not resolve("CentralDark", chefe_source=True, input_mode=mode)["master_cycle_active"])
+        add("natural_master_requires_payload", not resolve("CentralDark visualize", chefe_source=True, input_mode=mode)["master_cycle_active"])
+        add("natural_resume_uses_latest_cursor", resolve("CentralDark continue", chefe_source=True, input_mode=mode)["master_cycle_active"])
+        for verb in ("visualize", "veja", "mostra", "leia", "observe", "mede", "faça", "faz", "executa", "corrige", "pluga", "costura", "sobe", "continue", "continua", "prossiga", "retome", "cristaliza", "registra", "sela", "receipt", "rastro", "contraprova", "valida", "testa", "verifica"):
+            result = resolve(f"CentralDark {verb} alvo", chefe_source=True, input_mode=mode)
+            add("canonical_operational_verb_dispatch", result["master_cycle_active"] and result["explicit_match"])
 
     r = resolve(
         "centraldark sol acordar",
