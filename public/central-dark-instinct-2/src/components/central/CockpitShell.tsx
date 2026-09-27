@@ -18,6 +18,7 @@ import { PainelHermes } from "@/components/central/HermesPet";
 import { DesignCenter } from "@/components/central/DesignCenter";
 import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
 import { SyncCenter } from "@/components/central/SyncCenter";
+import { SistemaCentralDark } from "@/components/central/SistemaCentralDark";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lerEstadoCentralDark } from "@/lib/cockpit.functions";
@@ -145,6 +146,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <TabsTrigger value="visao">Visão geral</TabsTrigger>
                 <TabsTrigger value="sync">Sync Center</TabsTrigger>
                 <TabsTrigger value="design">Design Center</TabsTrigger>
+                {autenticado ? (
+                  <TabsTrigger value="sistema">Sistema CentralDark</TabsTrigger>
+                ) : null}
                 <TabsTrigger value="hermes">Hermes</TabsTrigger>
                 <TabsTrigger value="downloads">Downloads</TabsTrigger>
               </TabsList>
@@ -179,6 +183,15 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             <TabsContent value="design" className="mt-10">
               <DesignCenter />
             </TabsContent>
+            {autenticado ? (
+              <TabsContent value="sistema" className="mt-10">
+                <SistemaCentralDark
+                  estado={dado}
+                  atualizando={estado.isFetching}
+                  atualizar={() => void estado.refetch()}
+                />
+              </TabsContent>
+            ) : null}
             <TabsContent value="hermes" className="mt-10">
               <div className="mb-6">
                 <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
