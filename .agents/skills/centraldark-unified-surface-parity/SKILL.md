@@ -164,6 +164,21 @@ VOICE_CLAIM_WITHOUT_TOOL_CALL=INVALID
 
 Voz deve herdar as mesmas actions do Texto quando a plataforma suportar. Onde não suportar, o executor deve declarar `PLATFORM_UNAVAILABLE` e entregar next cursor para Worker/Cloud Code/Hermes.
 
+## 6.1 Sessão, tracing e saída equivalentes
+
+Para a mesma intenção/tarefa, Texto e Voz usam um único `SESSION_ID` canônico. Cada evento preserva `SURFACE_ID` para indicar a origem, sem criar sessão ou trilha exclusiva da Voz.
+
+A lateral de observabilidade deve mostrar, na mesma sessão e em ordem:
+
+- sessões e estado;
+- tool calls com identificadores e resultado;
+- uso/tokens e agregados da sessão;
+- receipt e próximo cursor.
+
+O contrato de saída estruturada é igual nas superfícies: `INTENT_ID`, `DECISION`, `OWNER`, `ACTION_RESULT`, `EVIDENCE`, `COUNTERPROOF`, `RECEIPT_ID` e `NEXT_CURSOR`. A apresentação pode acompanhar voz ou texto; intenção, owner, ação, prova e receipt permanecem iguais.
+
+Se a plataforma não expuser sessão, tracing, tool calls ou usage, marcar aquela capacidade como `PLATFORM_UNAVAILABLE`. Não abrir caixa-preta/trilha separada para Voz e não afirmar paridade sem prova.
+
 ## 7. Estratégia de execução
 
 ```text
