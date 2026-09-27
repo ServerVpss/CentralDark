@@ -146,6 +146,33 @@ MASTER_INGRESS_ALIASES = {
     "FABLE_LOOP": ("!fable_loop", "#fable_loop", "!fabler_loop", "#fabler_loop"),
 }
 
+INVOCATION_GRAMMAR_PATH = (
+    Path(__file__).resolve().parents[2]
+    / "docs" / "ARQUITETURA" / "CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md"
+)
+
+
+def _grammar_verb_aliases(path: Path = INVOCATION_GRAMMAR_PATH) -> tuple[str, ...]:
+    """Verbos do dono único (gramática §3 verb_dispatch). Sem cópia local para envelhecer."""
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return ()
+    section = text.split("## 3.", 1)[-1].split("## 4.", 1)[0]
+    verbs: list[str] = []
+    for found in re.findall(r"aliases:\s*\[([^\]]*)\]", section):
+        verbs.extend(v.strip().strip("\"'") for v in found.split(",") if v.strip())
+    phrases: list[str] = []
+    for verb in verbs:
+        phrases.extend((f"centraldark {verb}", f"central dark {verb}"))
+    return tuple(dict.fromkeys(phrases))
+
+
+GRAMMAR_VERB_PHRASES = _grammar_verb_aliases()
+MASTER_INGRESS_ALIASES["CENTRALDARK_MASTER"] = tuple(
+    dict.fromkeys(MASTER_INGRESS_ALIASES["CENTRALDARK_MASTER"] + GRAMMAR_VERB_PHRASES)
+)
+
 VOICE_INGRESS_ALIASES = {
     "CENTRALDARK_MASTER": (
         "centraldark visualize", "central dark visualize",
@@ -168,6 +195,9 @@ VOICE_INGRESS_ALIASES = {
         "acorda centraldark",
     ),
 }
+VOICE_INGRESS_ALIASES["CENTRALDARK_MASTER"] = tuple(
+    dict.fromkeys(VOICE_INGRESS_ALIASES["CENTRALDARK_MASTER"] + GRAMMAR_VERB_PHRASES)
+)
 
 CANONICAL_SOL_PROFILE_ID = "ORQUESTRACAO_SOL"
 CANONICAL_SOL_PROFILE_DISPLAY = "😎 Orquestração SOL 🌞"
@@ -216,6 +246,9 @@ def _negated_or_discussed(normalized: str, match) -> bool:
             "apenas mencionar",
             "so mencionar",
             "somente discutir",
+            "falando sobre",
+            "falei de",
+            "falou de",
         )
     )
 
@@ -897,7 +930,8 @@ def self_test():
         r = resolve(phrase, chefe_source=True)
         add("spoken_explicit_text_trigger", r["master_cycle_active"])
 
-    for phrase in ("acordar", "centraldark", "centraldark sol acordar", "sol acordar"):
+    # CHEFE 2026-09-27: voz = texto; "CentralDark" solto não abre o mestre (paridade + sob demanda)
+    for phrase in ("acordar", "centraldark visualize", "centraldark sol acordar", "sol acordar"):
         r = resolve(
             phrase,
             chefe_source=True,

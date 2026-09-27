@@ -220,5 +220,33 @@ class ContinuousDeltaContractTest(unittest.TestCase):
         self.assertIn("ACORDAR", receipt["master_funnel"]["ambiguous_trigger_ids"])
 
 
+    def test_embedded_self_test_passes(self):
+        result = MODULE.self_test()
+        failed = [c for c in result["cases"] if not c["ok"]]
+        self.assertTrue(result["ok"], failed)
+
+    def test_grammar_verbs_open_master_same_in_text_and_voice(self):
+        for phrase in ("CentralDark faça o deploy", "centraldark faz isso", "centraldark continua",
+                       "centraldark cristaliza isso", "centraldark contraprova", "centraldark, visualize"):
+            for mode in ("text", "voice"):
+                receipt = MODULE.resolve(phrase, chefe_source=True, input_mode=mode)
+                self.assertTrue(receipt["master_cycle_active"], (phrase, mode))
+
+    def test_verbs_come_from_grammar_owner(self):
+        self.assertIn("centraldark faça", MODULE.GRAMMAR_VERB_PHRASES)
+        self.assertIn("centraldark contraprova", MODULE.GRAMMAR_VERB_PHRASES)
+
+    def test_plain_word_neutral_in_text_and_voice(self):
+        # decisão do CHEFE 2026-09-27: paridade — só "CentralDark + verbo" ou marcador abre o mestre
+        for phrase in ("centraldark", "central dark", "CentralDark"):
+            for mode in ("text", "voice"):
+                self.assertFalse(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"], (phrase, mode))
+
+    def test_discussion_and_negation_do_not_open_master(self):
+        for phrase in ("estou falando sobre #ACORDAR", "falei de centraldark faça ontem", "centraldark não faça nada"):
+            for mode in ("text", "voice"):
+                self.assertFalse(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"], (phrase, mode))
+
+
 if __name__ == "__main__":
     unittest.main()

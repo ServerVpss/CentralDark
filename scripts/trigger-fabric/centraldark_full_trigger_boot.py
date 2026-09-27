@@ -76,7 +76,7 @@ def normalize_command(value: str) -> str:
     value = strip_accents(value.strip()).upper()
     value = re.sub(r"^[!#]+", "", value)
     value = re.sub(r"[\s_-]+", "", value)
-    return value
+    return value.rstrip(",.;:!?")
 
 
 def explicit_command_context(value: str) -> bool:
