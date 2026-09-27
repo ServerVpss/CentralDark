@@ -64,9 +64,20 @@ class ContinuousDeltaContractTest(unittest.TestCase):
         self.assertFalse(receipt["delta_harvest"]["active"])
 
     def test_plain_mention_outside_session_is_not_activation(self):
+        for mode in ("text", "voice"):
+            receipt = MODULE.resolve("CentralDark", chefe_source=True, input_mode=mode)
+            self.assertFalse(receipt["master_cycle_active"])
         receipt = MODULE.resolve("CentralDark é o nome do repo")
         self.assertFalse(receipt["master_cycle_active"])
         self.assertEqual("NO_MATCH", receipt["status"])
+
+    def test_operational_master_phrase_matches_text_and_voice(self):
+        for mode in ("text", "voice"):
+            receipt = MODULE.resolve(
+                "CentralDark visualize o painel", chefe_source=True, input_mode=mode
+            )
+            self.assertTrue(receipt["master_cycle_active"])
+            self.assertTrue(receipt["explicit_match"])
 
     def test_screen_repetition_and_time_are_not_proof(self):
         receipt = MODULE.resolve(

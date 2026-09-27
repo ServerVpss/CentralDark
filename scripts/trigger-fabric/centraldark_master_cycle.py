@@ -120,7 +120,15 @@ TIK_TAK_LOCKS = [
 NEGATION_TOKENS = {"nao", "nunca", "sem"}
 
 MASTER_INGRESS_ALIASES = {
-    "CENTRALDARK_MASTER": ("!centraldark", "#centraldark", "!central-dark", "#central-dark", "!cdark", "#cdark"),
+    "CENTRALDARK_MASTER": (
+        "!centraldark", "#centraldark", "!central-dark", "#central-dark", "!cdark", "#cdark",
+        "centraldark visualize", "central dark visualize",
+        "centraldark executar", "central dark executar",
+        "centraldark verificar", "central dark verificar",
+        "centraldark editar", "central dark editar",
+        "centraldark comitar", "central dark comitar",
+        "centraldark rodar", "central dark rodar",
+    ),
     "ACORDAR": ("#acordar", "#acorda", "!acordar", "!acorda"),
     "CALIBRAR": ("!calibrar", "#calibrar"),
     "CRISTALIZAR": ("#cristalizar", "!cristalizar", "#crystalizar", "!crystalizar", "#crystalaizar", "!crystalaizar"),
@@ -140,10 +148,12 @@ MASTER_INGRESS_ALIASES = {
 
 VOICE_INGRESS_ALIASES = {
     "CENTRALDARK_MASTER": (
-        "centraldark",
-        "central dark",
-        "centraldark sol",
-        "central dark sol",
+        "centraldark visualize", "central dark visualize",
+        "centraldark executar", "central dark executar",
+        "centraldark verificar", "central dark verificar",
+        "centraldark editar", "central dark editar",
+        "centraldark comitar", "central dark comitar",
+        "centraldark rodar", "central dark rodar",
     ),
     "ACORDAR": (
         "acordar",

@@ -30,6 +30,8 @@ def test_prose_does_not_activate():
     assert mod.explicit_command_context("estou falando sobre #ACORDAR") is False
     assert mod.explicit_command_context("#ACORDAR agora") is True
     assert mod.explicit_command_context("acordar agora") is True
+    assert mod.explicit_command_context("CentralDark") is False
+    assert mod.explicit_command_context("CentralDark visualize o painel") is True
 
 
 def test_realtime_feedback_routes_without_mutation_permission():
