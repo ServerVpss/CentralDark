@@ -66,7 +66,7 @@ GUIDED_TELEMETRY_ICONS = {
     "SKIPPED": "➖",
 }
 GUIDED_TELEMETRY_SURFACES = [
-    "CLI", "CHAT", "VOICE", "API", "MCP", "WEB", "DESKTOP", "SOL", "HERMES", "TELEGRAM"
+    "CLI", "CHAT", "VOICE", "WORK", "COWORK", "CODE_AGENT", "API", "MCP", "WEB", "DESKTOP", "SOL", "HERMES", "TELEGRAM"
 ]
 
 DELTA_CANONICAL = "!DELTA UTILS"
@@ -132,6 +132,7 @@ MASTER_INGRESS_ALIASES = {
     "ACORDAR": ("#acordar", "#acorda", "!acordar", "!acorda"),
     "CALIBRAR": ("!calibrar", "#calibrar"),
     "CRISTALIZAR": ("#cristalizar", "!cristalizar", "#crystalizar", "!crystalizar", "#crystalaizar", "!crystalaizar"),
+    "GARIMPO_UNIVERSAL": ("!garimpo_universal", "!garimpo universal", "#garimpo_universal", "#garimpo universal"),
     "MULTIBUSSOLA": ("!multibussola", "!multibússola", "!multi-bussola", "!multibussola_meta", "!multibússola_meta"),
     "META_LUPA": ("!meta_lupa", "!metalupa"),
     "RECONCILIAR": ("!reconciliar",),
@@ -174,6 +175,11 @@ MASTER_INGRESS_ALIASES["CENTRALDARK_MASTER"] = tuple(
 )
 
 VOICE_INGRESS_ALIASES = {
+    "GARIMPO_UNIVERSAL": (
+        "garimpo universal",
+        "centraldark garimpo universal",
+        "central dark garimpo universal",
+    ),
     "CENTRALDARK_MASTER": (
         "centraldark visualize", "central dark visualize",
         "centraldark executar", "central dark executar",
@@ -519,7 +525,8 @@ def resolve(
 
     chefe_material = bool(chefe_source and master_cycle_active and not ambiguous_ingress)
     delta_match, delta_active, delta_ambiguous = _resolve_delta(normalized)
-    harvest_active = bool(delta_active or chefe_material)
+    garimpo_universal_active = "GARIMPO_UNIVERSAL" in ids
+    harvest_active = bool(delta_active or chefe_material or garimpo_universal_active)
     tik_tak_active = "TIK_TAK" in ids
     meta_match = next((a for a in MULTIBUSSOLA_META_ALIASES if _phrase_match(normalized, a)), None)
     meta_active = meta_match is not None
@@ -607,7 +614,8 @@ def resolve(
             "ambiguous_trigger_ids": ambiguous_ids,
             "normalized_to_master": bool(explicit_subtrigger and not inherited),
             "master_reentry_guard": bool(inherited and ids),
-            "requested_phases": [i for i in ids if i not in ("CENTRALDARK_MASTER", "FABLE_LOOP", "CRISTALIZAR")],
+            "requested_phases": [i for i in ids if i not in ("CENTRALDARK_MASTER", "FABLE_LOOP", "CRISTALIZAR", "GARIMPO_UNIVERSAL")],
+            "requested_modes": [i for i in ids if i == "GARIMPO_UNIVERSAL"],
             "requested_methods": [i for i in ids if i == "FABLE_LOOP"],
             "phase_markers": [i for i in ids if i == "CRISTALIZAR"],
             "cristalizar_is_phase_marker_not_engine": True,
@@ -619,6 +627,14 @@ def resolve(
             "canonical_signal": DELTA_CANONICAL,
             "active": harvest_active,
             "explicit_signal_active": delta_active,
+            "garimpo_universal_active": garimpo_universal_active,
+            "owner": ".agents/skills/session-intelligence-harvester/SKILL.md" if harvest_active else None,
+            "semantic_identity": "OWNER+CAPABILITY+SCOPE" if harvest_active else None,
+            "multi_surface_parallel_candidates": harvest_active,
+            "one_canonical_finalizer_per_scope": harvest_active,
+            "candidate_lane_is_not_canonical_write": harvest_active,
+            "same_finding_without_new_evidence": "DROP_DUPLICATE" if harvest_active else None,
+            "next_executor_replay": "LAST_GOOD_STATE->INPUT_DIFF->REUSE_PROOF_OR_TARGETED_REVALIDATION" if harvest_active else None,
             "candidate_from_chefe": chefe_material,
             "ambiguous_or_negated": delta_ambiguous,
             "matched_alias": delta_match,
