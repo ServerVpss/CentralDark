@@ -1,4 +1,5 @@
 <!-- LOVABLE:BEGIN -->
+
 > [!IMPORTANT]
 > This project is connected to [Lovable](https://lovable.dev). Avoid rewriting
 > published git history — force pushing, or rebasing/amending/squashing commits
@@ -7,4 +8,9 @@
 >
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
+
 <!-- LOVABLE:END -->
+
+## Decisões estruturais
+
+- O bloco Sistema (Mega Painel, Hub Segurança, Cofre e Status) pertence ao Cockpit CentralDark administrativo; o TelePainel mantém apenas funções próprias, evitando dois centros de comando.
