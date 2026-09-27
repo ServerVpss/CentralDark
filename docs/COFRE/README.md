@@ -126,6 +126,15 @@ docs/COFRE/DAQUI-PRA-FRENTE.md
 
 Este cofre contém apenas caminhos, processos, comunicação e governança. Nunca guardar nele tokens, senhas, cookies, chaves SSH, secrets, IPs internos ou credenciais reais.
 
+Segredo pode existir no cofre/origem segura/local autorizado como valor protegido. A obrigação dos agentes é não levar valor secreto para Git, log, PR, issue, comentário, receipt, aprendizado ou artefato permanente. Se um pacote contiver segredo, sinalizar tipo/caminho/função sem valor, preservar o cofre e continuar o delta útil.
+
+```text
+COFRE=VALOR_PROTEGIDO
+GIT=PROVA_E_RECEITA_SEM_VALOR
+LOG=RASTRO_OPERACIONAL_SEM_VALOR
+SEGREDO_NO_PACOTE_NAO_BLOQUEIA_DELTA_UTIL=true
+```
+
 ## Estado inicial
 
 - Criado primeiro na branch `pivete/dev`.
