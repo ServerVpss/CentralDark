@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schema_version": 2,
+  "canon_id": "centraldark.theme.forge.tokens.v1",
+  "title": "Tokens do tema forge — cor, tipografia, geometria e relevo",
+  "lema": "LUPA NA MÃO · INTENÇÃO NA FRENTE",
+  "casa": "CentralDark · SEGREDO/CHEFE",
+  "observed_at": "2026-08-24T23:20:00-03:00",
+  "extraction": {
+    "method": "leitura direta do bloco :root do asset",
+    "source": ".agents/skills/visual-design-method/assets/forja-de-cartas.html",
+    "source_sha256_original": "e8f4016dcf8b2b6f9806d8ef29a5105506ef5eba5225f3aeff9b78bcb301f348",
+    "source_sha256_com_relevo": "598c93572ff2a54ae1ac435437ca62c86061d49f7fbfc65c5acceb6d463b276c",
+    "token_count_cor_tipo_geo": 22,
+    "nota": "Valores lidos do arquivo, não digitados de memória. Se o asset mudar, este arquivo fica INVÁLIDO até nova extração."
+  },
+  "authority": {
+    "owner": "docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md",
+    "method": ".agents/skills/visual-design-method/SKILL.md",
+    "gate": ".agents/skills/visual-design-method/scripts/check-relevo-3d.mjs",
+    "rule": "ONE_DESIGN_SYSTEM + THREE_GLOBAL_OFFICIAL_THEMES",
+    "themes": [
+      "emerald",
+      "operational",
+      "forge"
+    ],
+    "this_file_is": "DERIVED_PROJECTION",
+    "this_file_is_not": "AUTHORITY"
+  },
+  "color": {
+    "--breu": {
+      "hex": "#0A0906",
+      "papel": "fundo mais profundo — o breu da forja"
+    },
+    "--carvao": {
+      "hex": "#15120C",
+      "papel": "superfície primária"
+    },
+    "--carvao-alto": {
+      "hex": "#1E1A11",
+      "papel": "superfície elevada / hover"
+    },
+    "--linha": {
+      "hex": "#3A3220",
+      "papel": "contorno, divisor"
+    },
+    "--pergaminho": {
+      "hex": "#EFE2C6",
+      "papel": "texto claro / face da carta"
+    },
+    "--pergaminho-med": {
+      "hex": "#DCC9A2",
+      "papel": "texto secundário"
+    },
+    "--pergaminho-fundo": {
+      "hex": "#C9B085",
+      "papel": "texto terciário / legenda"
+    },
+    "--tinta": {
+      "hex": "#2A2013",
+      "papel": "tinta sobre pergaminho"
+    },
+    "--tinta-fraca": {
+      "hex": "#5B4A32",
+      "papel": "tinta secundária"
+    },
+    "--ouro": {
+      "hex": "#C0902B",
+      "papel": "assinatura do tema — bisel, acento"
+    },
+    "--ouro-claro": {
+      "hex": "#F4DA95",
+      "papel": "realce, título, brilho"
+    },
+    "--ouro-escuro": {
+      "hex": "#7A5A15",
+      "papel": "sombra do metal, label"
+    },
+    "--sangue": {
+      "hex": "#7C1F12",
+      "papel": "estado FAILED_OR_BLOCKED"
+    },
+    "--ciano": {
+      "hex": "#57D9EA",
+      "papel": "raridade RARA / destaque frio"
+    },
+    "--verde": {
+      "hex": "#7BC96F",
+      "papel": "estado PROVED"
+    },
+    "--ambar": {
+      "hex": "#E9B44C",
+      "papel": "FORGE_IN_PROGRESS — nunca PASS público"
+    }
+  },
+  "type": {
+    "--disp": "'Cinzel','Palatino Linotype','Book Antiqua',Palatino,Georgia,serif",
+    "--corpo": "'EB Garamond',Georgia,'Times New Roman',serif",
+    "--antigo": "'IM Fell English','EB Garamond',Georgia,serif",
+    "--mono": "'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace",
+    "google_fonts_href": "https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap"
+  },
+  "geometry": {
+    "--carta-l": "480px",
+    "--carta-a": "672px",
+    "ratio": "1:1.4",
+    "breakpoint_720": {
+      "--carta-l": "328px",
+      "--carta-a": "459px"
+    }
+  },
+  "relevo": {
+    "descricao": "Efeito figurinha: camadas em alturas diferentes deslizam umas sobre as outras quando a carta inclina. Ver RELEVO-3D-TATIL.md.",
+    "perspectiva": "800px",
+    "perspectiva_origem": "50% 45%",
+    "angulo_max_graus": 20,
+    "escada_z": {
+      "carta-borda": 0,
+      "carta-interior": 45,
+      "carta-rodape": 65,
+      "carta-topo": 70,
+      "carta-regras": 75,
+      "carta-arte": 110,
+      "foil": 150
+    },
+    "sombra_contra_deslocamento": {
+      "x": "calc(var(--px,0) * -30px)",
+      "y": "calc(var(--py,0) * -20px + 34px)",
+      "repouso": "0px 34px",
+      "medido_px_meio_a_meio": {
+        "x": "±15px",
+        "y": "24px a 44px"
+      }
+    },
+    "holo": {
+      "antes": "animation:girar 9s linear infinite — mudava sozinho, no relógio",
+      "agora": "--ang:calc(var(--px,0) * 220deg + var(--py,0) * 120deg) — segue o ponteiro",
+      "opacidade": "calc(.30 + var(--brilho,0) * .34)",
+      "motivo": "figurinha reage a QUEM olha; timer não é reação, é animação"
+    },
+    "variaveis_do_driver": {
+      "--px": "[-0.5, +0.5] horizontal do ponteiro",
+      "--py": "[-0.5, +0.5] vertical do ponteiro",
+      "--brilho": "[0, 1] distância do centro — acende o holo",
+      "--sheen": "ângulo da faixa de luz branca"
+    },
+    "paralaxe_medida_px": {
+      "antes": 2,
+      "agora": 3,
+      "nota": "medido no breakpoint pequeno (328px); na carta cheia é maior"
+    }
+  },
+  "painel_de_ajuste": {
+    "id": "#ajustePivete",
+    "papel": "calibragem ao vivo pelo SEGREDO/CHEFE — três barras: quanto vira, fundo do desenho, força do arco-íris",
+    "some_no_export": true,
+    "nao_e": "não é tema, não é token, não é autoridade — é ferramenta"
+  },
+  "status_contract": {
+    "source": "docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/manifest.json",
+    "PROVED": {
+      "cor": "green",
+      "token": "--verde"
+    },
+    "FAILED_OR_BLOCKED": {
+      "cor": "red",
+      "token": "--sangue"
+    },
+    "NOT_PROVEN": {
+      "cor": "black",
+      "token": "--breu"
+    },
+    "QUARANTINED": {
+      "cor": "lock"
+    },
+    "FORGE_IN_PROGRESS": {
+      "cor": "fire",
+      "token": "--ambar"
+    },
+    "REGRA_DURA": "yellow may exist inside the motor only; it must never be exported as a public PASS"
+  },
+  "proibido": [
+    "criar paleta nova sem aprovação do SEGREDO/CHEFE",
+    "trocar a assinatura ouro/emerald por roxo/azul sem aprovação",
+    "hardcode de cor fora destes tokens",
+    "misturar fontes fora das quatro declaradas",
+    "exportar amarelo como aprovação pública",
+    "declarar preserve-3d sem nenhum translateZ — vira decoração, não relevo",
+    "voltar o holo para animação por timer"
+  ]
+}

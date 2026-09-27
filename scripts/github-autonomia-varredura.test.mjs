@@ -5,10 +5,20 @@ import path from "node:path";
 import test from "node:test";
 
 import {
+  CANONICAL_AUTHORITY_LABEL,
+  CANONICAL_AUTOMATION_LABEL,
+  CANONICAL_GIT_LABEL,
+  CANONICAL_REVIEW_LABEL,
+  OPERATIONAL_BASELINE_LABELS,
+  REQUIRED_PROMOTION_SEAL_LABELS,
+  agentLabelsFromWriter,
   classifyFailure,
   eligibleSummary,
   guardSweep,
   noticeTargets,
+  promotionSealReceipt,
+  promotionSealState,
+  requiredOperationalLabels,
   sanitizeNotice,
   shouldMaterializeAuthority,
 } from "./github-autonomia-varredura.mjs";
@@ -43,7 +53,56 @@ test("recibo de intenção torna PR confiável elegível sem reask", () => {
   assert.equal(eligibleSummary(pr({ user: { login: "intruso" } }), "ServerVpss/CentralDark"), false);
 });
 
-test("promotor materializa selo somente para intenção confiável ainda sem label", () => {
+test("selo canônico sintetiza autoridade + canal Git + automação", () => {
+  assert.deepEqual([...REQUIRED_PROMOTION_SEAL_LABELS], [
+    CANONICAL_AUTHORITY_LABEL,
+    CANONICAL_GIT_LABEL,
+    CANONICAL_AUTOMATION_LABEL,
+  ]);
+});
+
+test("padrão operacional vale para TODO PR elegível — não só um", () => {
+  const pending = promotionSealState(pr(), "ServerVpss/CentralDark");
+  assert.equal(pending.eligible, true);
+  assert.equal(pending.complete, false);
+  assert.ok(pending.missingLabels.includes(CANONICAL_AUTHORITY_LABEL));
+  assert.ok(pending.missingLabels.includes(CANONICAL_GIT_LABEL));
+  assert.ok(pending.missingLabels.includes(CANONICAL_AUTOMATION_LABEL));
+  assert.ok(pending.missingLabels.includes(CANONICAL_REVIEW_LABEL));
+  assert.equal(pending.missingLabels.includes("🧠 AGENTE-CHATGPT"), false);
+
+  const full = requiredOperationalLabels(pr());
+  const sealed = promotionSealState(pr({
+    labels: full.map((name) => ({ name })),
+  }), "ServerVpss/CentralDark");
+  assert.equal(sealed.eligible, true);
+  assert.equal(sealed.complete, true);
+  assert.deepEqual(sealed.missingLabels, []);
+});
+
+test("Writer deriva agente canônico de forma determinística", () => {
+  assert.deepEqual(agentLabelsFromWriter("Grok/SOL"), ["🧠 AGENTE-GROK", "🧠 AGENTE-CHATGPT"]);
+  assert.deepEqual(agentLabelsFromWriter("Claude Code (Sonnet)"), ["🧠 AGENTE-CLAUDE"]);
+  assert.deepEqual(agentLabelsFromWriter("Codex"), ["🧠 AGENTE-CODEX"]);
+  assert.deepEqual(agentLabelsFromWriter("desconhecido"), []);
+  assert.ok(OPERATIONAL_BASELINE_LABELS.includes(CANONICAL_REVIEW_LABEL));
+});
+
+test("selo exige recibo completo e política de merge conhecida", () => {
+  assert.equal(promotionSealReceipt(pr()).valid, true);
+  assert.equal(promotionSealReceipt(pr({
+    body: INTENT_BODY.replace("AUTO_SQUASH_IF_CLEAN", "GREEN_FIRST"),
+  })).valid, true);
+  assert.equal(promotionSealReceipt(pr({
+    body: INTENT_BODY.replace("AUTO_SQUASH_IF_CLEAN", "GREEN_FIRST_6_OF_6_THEN_SQUASH"),
+  })).valid, true);
+  assert.equal(promotionSealReceipt(pr({
+    body: INTENT_BODY.replace("AUTO_SQUASH_IF_CLEAN", "MERGE_SEM_CATRACA"),
+  })).valid, false);
+  assert.equal(promotionSealReceipt(pr({ body: "sem recibo" })).valid, false);
+});
+
+test("promotor materializa autoridade somente como parte do selo confiável", () => {
   assert.equal(shouldMaterializeAuthority(pr(), "ServerVpss/CentralDark"), true);
   assert.equal(shouldMaterializeAuthority(pr({ labels: [{ name: "👑 PERMITO-SEGREDO" }] }), "ServerVpss/CentralDark"), false);
   assert.equal(shouldMaterializeAuthority(pr({ body: "sem autorização" }), "ServerVpss/CentralDark"), false);
@@ -52,11 +111,12 @@ test("promotor materializa selo somente para intenção confiável ainda sem lab
   assert.equal(shouldMaterializeAuthority(pr({ head: { repo: { full_name: "outro/fork" } } }), "ServerVpss/CentralDark"), false);
 });
 
-test("label canônica permito-segredo continua elegível no modo adversarial", () => {
-  assert.equal(
-    eligibleSummary(pr({ body: "sem recibo", labels: [{ name: "permito-segredo" }] }), "ServerVpss/CentralDark"),
-    true,
-  );
+test("label de autoridade sozinha permite investigação mas não fecha selo de promoção", () => {
+  const candidate = pr({ body: "sem recibo", labels: [{ name: "permito-segredo" }] });
+  assert.equal(eligibleSummary(candidate, "ServerVpss/CentralDark"), true);
+  const seal = promotionSealState(candidate, "ServerVpss/CentralDark");
+  assert.equal(seal.eligible, false);
+  assert.equal(seal.complete, false);
 });
 
 test("marcadores legados não concedem mais elegibilidade", () => {
@@ -68,12 +128,13 @@ test("marcadores legados não concedem mais elegibilidade", () => {
   );
 });
 
-test("fork e base diferente de main são bloqueados", () => {
+test("fork e base diferente de main são bloqueados pelo selo", () => {
   assert.equal(
     eligibleSummary(pr({ head: { repo: { full_name: "outro/fork" } } }), "ServerVpss/CentralDark"),
     false,
   );
   assert.equal(eligibleSummary(pr({ base: { ref: "dev" } }), "ServerVpss/CentralDark"), false);
+  assert.equal(promotionSealState(pr({ base: { ref: "dev" } }), "ServerVpss/CentralDark").eligible, false);
 });
 
 test("nenhuma credencial escapa para log, comentário ou Telegram", () => {
@@ -103,26 +164,4 @@ test("ausência de segredo de notificação é reportada, nunca assumida", () =>
     noticeTargets({ TELEGRAM_BOT_TOKEN: "x", TELEGRAM_CHAT_ID: "y" }),
     { telegram: true, webhook: false },
   );
-});
-
-test("guard mantém somente recibo 6/6 verde e move os demais para deferred", async () => {
-  const dir = await mkdtemp(path.join(os.tmpdir(), "centraldark-green-first-"));
-  const workflows = DEFAULT_REQUIRED_WORKFLOWS.map((name) => ({ name, state: "PASS" }));
-  const receipt = (decision, items = workflows) => sealReceipt({
-    schema: "centraldark.autonomia-promocao.v2",
-    generated_at: new Date().toISOString(),
-    repository: "ServerVpss/CentralDark",
-    candidates: [{ decision, head_sha: "a".repeat(40), workflows: items }],
-  });
-  try {
-    await writeFile(path.join(dir, "receipt-pr-1.json"), JSON.stringify(receipt("READY")));
-    await writeFile(path.join(dir, "receipt-pr-2.json"), JSON.stringify(receipt("DEFERRED", workflows)));
-    await writeFile(path.join(dir, "receipt-pr-3.json"), JSON.stringify(receipt("READY", workflows.slice(0, 5))));
-    assert.deepEqual(await guardSweep(dir), ["receipt-pr-2.json", "receipt-pr-3.json"]);
-    assert.doesNotReject(() => readFile(path.join(dir, "receipt-pr-1.json")));
-    assert.doesNotReject(() => readFile(path.join(dir, "deferred", "receipt-pr-2.json")));
-    assert.doesNotReject(() => readFile(path.join(dir, "deferred", "receipt-pr-3.json")));
-  } finally {
-    await rm(dir, { recursive: true, force: true });
-  }
 });

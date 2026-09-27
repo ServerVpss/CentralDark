@@ -1,0 +1,12 @@
+"version: 1\ncontract: CENTRALDARK_AGENTIC_FIXED_POINT_MAX\nclaim_type: engineering_target_not_scientific_agi\n\
+  invariants:\n  one_system_only: true\n  one_core: true\n  reuse_before_create: true\n\
+  \  one_owner_per_capability: true\n  one_writer_per_scope: true\n  reality_is_judge:\
+  \ true\n  generated_is_not_canonical: true\n  semantic_match_is_not_authority: true\n\
+  \  language_is_not_authority: true\n  package_is_not_runtime: true\ncycle:\n  -\
+  \ tool_preflight\n  - measure_live_state\n  - map_capability\n  - resolve_owner\n\
+  \  - reuse_or_compose\n  - prove_gap\n  - generative_candidate_if_needed\n  - sandbox\n\
+  \  - positive_test\n  - negative_test\n  - multilingual_semantic_invariance\n  -\
+  \ counterproof\n  - independent_judge\n  - promote_minimal_delta\n  - runtime_consumer_proof\n\
+  \  - receipt\n  - dream_review\n  - delta_write_memory\n  - fixed_point\nstop_conditions:\n\
+  \  - unknown_owner\n  - secret_risk\n  - missing_evidence\n  - goal_judge_unconfigured_for_autonomous_write\n\
+  \  - runtime_catalog_stale\n"

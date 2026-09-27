@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Sentinela 24/7 — varre divergências e abre Issues com dedupe.
 // Read-only no repo/VPS (não toca em produção). Usa apenas HTTPS público + gh CLI.
+// Labels são consumidas do catálogo canônico; este script nunca recria aliases legados.
 
 import { execSync, execFileSync } from 'node:child_process';
 import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
@@ -13,6 +14,31 @@ const REPO = process.env.REPO_ALVO || 'ServerVpss/CentralDark';
 const SNAPSHOT_DIR = 'docs/sentinela';
 const SNAPSHOT_FILE = path.join(SNAPSHOT_DIR, 'last-snapshot.json');
 const REPORT_FILE = path.join(SNAPSHOT_DIR, 'last-report.md');
+const SYSTEM_SENTINEL = path.resolve('scripts/trigger-fabric/system_sentinel.py');
+const SYSTEM_SENTINEL_CONTRACT = path.resolve('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SYSTEM-SENTINEL.yml');
+const RUN_T0 = new Date().toISOString();
+
+const CANONICAL = Object.freeze({
+  sentinela: '🛡️ SENTINELA',
+  auto: '🤖 AUTO',
+  p1: '🔴 PRIORIDADE-ALTA',
+  p2: '🟡 PRIORIDADE-MÉDIA',
+  p3: '🟢 PRIORIDADE-BAIXA',
+  stale: '🧊 PARADO',
+  codex: '🧠 AGENTE-CODEX',
+  supabase: '🧠 AGENTE-SUPABASE',
+  claude: '🧠 AGENTE-CLAUDE',
+  grok: '🧠 AGENTE-GROK',
+  chatgpt: '🧠 AGENTE-CHATGPT',
+});
+
+function severityLabel(sev) {
+  return CANONICAL[sev] || CANONICAL.p2;
+}
+
+function agentLabel(bot) {
+  return CANONICAL[String(bot || '').toLowerCase()] || CANONICAL.codex;
+}
 
 mkdirSync(SNAPSHOT_DIR, { recursive: true });
 
@@ -50,6 +76,39 @@ function hash(s) {
   return createHash('sha1').update(s).digest('hex').slice(0, 10);
 }
 
+function sha256(s) {
+  return createHash('sha256').update(String(s)).digest('hex');
+}
+
+function dispatchEventFromEnv() {
+  const source = String(process.env.SENTINEL_API_SOURCE || '').trim();
+  if (!source) return null;
+  return {
+    source_surface: source,
+    event_class: String(process.env.SENTINEL_API_EVENT_CLASS || 'STATE_CHANGED').trim(),
+    state: String(process.env.SENTINEL_API_STATE || 'STATE_CHANGED').trim(),
+    target: String(process.env.SENTINEL_API_TARGET || '').trim(),
+    owner: String(process.env.SENTINEL_API_OWNER || '').trim(),
+    head_sha: String(process.env.SENTINEL_API_HEAD_SHA || '').trim(),
+    evidence_ref: String(process.env.SENTINEL_API_EVIDENCE_REF || '').trim(),
+    next_cursor: String(process.env.SENTINEL_API_NEXT_CURSOR || '').trim(),
+  };
+}
+
+function runFixedRoute(payload) {
+  const stdout = execFileSync(
+    'python3',
+    [SYSTEM_SENTINEL, '--route-json', JSON.stringify(payload)],
+    {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+      env: process.env,
+      maxBuffer: 2 * 1024 * 1024,
+    },
+  );
+  return JSON.parse(stdout);
+}
+
 function ghIssueExists(titleHash) {
   try {
     const out = execSync(
@@ -80,28 +139,6 @@ function ghOpenIssue({ title, body, labels }) {
   }
 }
 
-function ensureLabels() {
-  if (DRY_RUN) return;
-  const labels = [
-    ['sentinela', 'B60205', 'Aberta automaticamente pela sentinela'],
-    ['auto', 'CCCCCC', 'Criada por bot'],
-    ['p1', 'FF0000', 'Alta prioridade'],
-    ['p2', 'FFA500', 'Média'],
-    ['p3', 'FFFF00', 'Baixa'],
-    ['assign:codex', '5319E7', 'Bot responsável: Codex'],
-    ['assign:supabase-bot', '3ECF8E', 'Bot responsável: Supabase'],
-    ['assign:claude', 'FF80B0', 'Bot responsável: Claude'],
-    ['assign:grok', '1F6FEB', 'Bot responsável: Grok'],
-    ['assign:chatgpt', '10A37F', 'Bot responsável: ChatGPT'],
-    ['stale', '6E6E6E', 'Passou do TTL'],
-  ];
-  for (const [name, color, desc] of labels) {
-    try {
-      execSync(`gh label create "${name}" -R "${REPO}" -c "${color}" -d "${desc}" --force`, { stdio: 'ignore' });
-    } catch {}
-  }
-}
-
 // === Checks ===
 
 async function checkEndpoints() {
@@ -116,7 +153,6 @@ async function checkEndpoints() {
       detalhe: `URL: ${r.url}\nStatus: ${r.status}\nLatência: ${r.latencyMs}ms\nErro: ${r.error || '-'}`,
     });
   }
-  // CORS check
   for (const r of out) {
     if (r.url.includes('mcp.centralldark.com') && r.status >= 200 && r.status < 400 && !r.cors) {
       divergencias.push({
@@ -148,7 +184,7 @@ async function checkWorkflowsRuins() {
       });
     }
     return arr.length;
-  } catch (e) {
+  } catch {
     return 0;
   }
 }
@@ -157,9 +193,6 @@ function realGit(args) {
   return execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
 }
 
-// Drift GitHub <-> checkout implantado. Caminho vem só da fonte canônica
-// (secret CENTRALDARK_ROOT, mapeado pelo workflow em VPS_REPO_PATH) — nunca
-// inventado aqui. Ausência do secret é ERROR explícito, nunca skip silencioso.
 function checkVpsDrift() {
   const repoPath = process.env.VPS_REPO_PATH || '';
   if (!repoPath) {
@@ -174,9 +207,6 @@ function checkVpsDrift() {
   return evaluateDrift({ repoPath, expectedRepo: REPO, branch: 'main', git: realGit });
 }
 
-// === Run ===
-
-ensureLabels();
 const endpointsResult = await checkEndpoints();
 const wfCount = await checkWorkflowsRuins();
 const driftEvidence = checkVpsDrift();
@@ -184,17 +214,83 @@ const driftDivergencia = toDivergencia(driftEvidence);
 if (driftDivergencia) divergencias.push(driftDivergencia);
 const recoveryNote = describeRecovery(previousSnapshot, driftEvidence);
 
-// Snapshot
+const dispatchEvent = dispatchEventFromEnv();
+const contractHash = existsSync(SYSTEM_SENTINEL_CONTRACT)
+  ? sha256(readFileSync(SYSTEM_SENTINEL_CONTRACT, 'utf8'))
+  : '';
+const inputsHash = sha256(JSON.stringify(
+  dispatchEvent
+    ? { dispatch: dispatchEvent }
+    : {
+        endpoints: endpointsResult.map((item) => ({
+          name: item.name,
+          status: item.status,
+          cors: item.cors || null,
+        })),
+        workflowsFailures24h: wfCount,
+        drift: {
+          status: driftEvidence.status,
+          code: driftEvidence.code,
+          shaLocal: driftEvidence.shaLocal || null,
+          shaOrigin: driftEvidence.shaOrigin || null,
+          ahead: driftEvidence.ahead ?? null,
+          behind: driftEvidence.behind ?? null,
+          dirty: driftEvidence.dirty ?? null,
+        },
+      },
+));
+const localFixedPoint = !dispatchEvent && divergencias.length === 0 && driftEvidence.status === 'OK';
+const routeInput = {
+  source_surface: dispatchEvent?.source_surface || 'SYSTEM_SENTINEL_RUNNER',
+  event_class: dispatchEvent?.event_class || (localFixedPoint ? 'FIXED_POINT' : 'STATE_CHANGED'),
+  state: dispatchEvent?.state || (localFixedPoint ? 'FIXED_POINT_LOCAL' : 'STATE_CHANGED'),
+  target: dispatchEvent?.target || 'CENTRALDARK_SENTINELA',
+  owner: dispatchEvent?.owner || 'scripts/sentinela/run.mjs',
+  inputs_hash: inputsHash,
+  config_hash: contractHash,
+  head_sha: dispatchEvent?.head_sha || driftEvidence.shaOrigin || process.env.GITHUB_SHA || '',
+  security_boundary: 'SELF_HOSTED_SENTINEL_READ_ONLY_GITHUB_API',
+  counterproof: localFixedPoint ? 'PASS' : 'UNKNOWN',
+  reality_judge: localFixedPoint ? 'PASS' : 'UNKNOWN',
+  t0: RUN_T0,
+  t1: new Date().toISOString(),
+  evidence_ref: dispatchEvent?.evidence_ref || `sha256:${inputsHash}`,
+  next_cursor: dispatchEvent?.next_cursor || (localFixedPoint ? 'WAIT_FOR_MATERIAL_DELTA' : 'REMEASURE_AFFECTED_CHAIN_ONLY'),
+  fixed_point_scope: 'SENTINEL_ROUTE_LOCAL',
+};
+
+let deterministicRoute;
+try {
+  deterministicRoute = runFixedRoute(routeInput);
+} catch (error) {
+  deterministicRoute = {
+    schema: 'centraldark.sentinel-fixed-route.v1',
+    proof_state: 'NOT_PROVEN',
+    decision: 'RUN_DETERMINISTIC_ROUTE',
+    reason: 'SENTINEL_KERNEL_ROUTE_FAILED',
+    next_cursor: 'REPAIR_SENTINEL_KERNEL_ROUTE',
+    error: String(error?.stderr || error?.message || error).slice(0, 1200),
+  };
+  divergencias.push({
+    area: 'Sentinela-Route',
+    bot: 'codex',
+    sev: 'p1',
+    titulo: 'Rota determinística do Sentinela não produziu receipt',
+    detalhe: deterministicRoute.error,
+  });
+}
+
 const snapshot = {
   at: new Date().toISOString(),
   endpoints: endpointsResult,
   workflowsFailures24h: wfCount,
   vpsDrift: driftEvidence,
+  apiEvent: dispatchEvent,
+  deterministicRoute,
   divergencias: divergencias.length,
 };
 writeFileSync(SNAPSHOT_FILE, JSON.stringify(snapshot, null, 2));
 
-// Abrir issues com dedupe
 const abertas = [];
 const seenHashes = new Map();
 for (const d of divergencias) {
@@ -211,17 +307,20 @@ for (const d of divergencias) {
     abertas.push({ ...d, hash: h, ja: existing.number });
     continue;
   }
-  const body = `> Aberta automaticamente pela **sentinela** (run ${process.env.GITHUB_RUN_ID || 'local'}).
+
+  const agente = agentLabel(d.bot);
+  const prioridade = severityLabel(d.sev);
+  const body = `> Aberta automaticamente pela **Sentinela** (run ${process.env.GITHUB_RUN_ID || 'local'}).
 > Hash de dedupe: \`sentinela-${h}\` — não reabre se já existir.
 
 ## Área
 ${d.area}
 
 ## Severidade
-${d.sev}
+${prioridade}
 
-## Bot responsável
-\`assign:${d.bot}\`
+## Capacidade roteada
+\`${agente}\`
 
 ## Detalhe (sanitizado)
 \`\`\`
@@ -230,19 +329,18 @@ ${d.detalhe}
 
 ## Critério pra fechar
 - Endpoint volta 200 / workflow verde / CORS configurado / pendência registrada.
-- Bot dono comenta com PR ou justificativa.
-- Após 7 dias sem ação, sentinela-stale escala.
+- A capacidade roteada comenta com PR ou justificativa.
+- Telemetria transitória não vira autoridade nem Writer permanente.
 
 ---
-_Anti-loop: só o bot com label \`assign:${d.bot}\` deve agir._
+_Anti-loop: atualizar a ferida material existente; label roteia capacidade, não autoridade._
 `;
-  const labels = ['sentinela', 'auto', d.sev, `assign:${d.bot}`];
+  const labels = [CANONICAL.sentinela, CANONICAL.auto, prioridade, agente];
   const r = ghOpenIssue({ title, body, labels });
   if (r.number) seenHashes.set(h, r.number);
   abertas.push({ ...d, hash: h, nova: r.number, erro: r.error });
 }
 
-// Relatório
 const report = `# Sentinela — ${snapshot.at}
 
 | Métrica | Valor |
@@ -261,14 +359,23 @@ ${endpointsResult.map((r) => `- ${r.status >= 200 && r.status < 400 ? '🟢' : '
 
 ## Divergências
 
-${divergencias.length === 0 ? '_Nenhuma divergência. Tudo verde._' : divergencias.map((d, i) => `- **[${d.sev}]** ${d.area} → ${d.titulo} (bot: \`${d.bot}\`)`).join('\n')}
+${divergencias.length === 0 ? '_Nenhuma divergência. Tudo verde._' : divergencias.map((d) => `- **[${severityLabel(d.sev)}]** ${d.area} → ${d.titulo} (capacidade: \`${agentLabel(d.bot)}\`)`).join('\n')}
 
 ## Drift GitHub <-> VPS
 
 - Status: \`${driftEvidence.status}\` (${driftEvidence.code})
 - ${driftEvidence.motivo}
 ${recoveryNote ? `- ${recoveryNote}` : ''}
+
+## Rota determinística / TIK-TAK
+
+- Decisão: \`${deterministicRoute.decision || 'UNKNOWN'}\`
+- Proof state: \`${deterministicRoute.proof_state || 'UNKNOWN'}\`
+- Motivo: \`${deterministicRoute.reason || 'UNKNOWN'}\`
+- Fingerprint: \`${deterministicRoute.dependency_fingerprint || 'UNKNOWN'}\`
+- NEXT_CURSOR: \`${deterministicRoute.next_cursor || 'UNKNOWN'}\`
+- API transport: \`${deterministicRoute.api_transport || 'UNKNOWN'}\`
 `;
 writeFileSync(REPORT_FILE, report);
 
-console.log(`Sentinela rodou. Divergências: ${divergencias.length}. Issues novas: ${abertas.filter((a) => a.nova).length}.`);
+console.log(`Sentinela rodou. Divergências: ${divergencias.length}. Issues novas: ${abertas.filter((a) => a.nova).length}. Rota: ${deterministicRoute.decision || 'UNKNOWN'}.`);

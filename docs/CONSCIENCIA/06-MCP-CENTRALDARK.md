@@ -70,3 +70,35 @@ desconectar, reconectar e abrir conversa NOVA.
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+
+
+## Contrato operacional de runtime
+
+Números históricos de tools não são autoridade. O catálogo vigente vem do `/health`/`tools.json` do mesmo runtime observado.
+
+Fluxo de prova e recuperação:
+
+```text
+OWNER EXISTENTE
+→ build/teste em árvore limpa
+→ promoção estreita
+→ supervisor real + ambiente real
+→ porta aberta
+→ /health
+→ catálogo/tools
+→ tool alvo
+→ chamada real não destrutiva
+→ estabilidade
+```
+
+Regras absorvidas de incidentes de runtime:
+
+- `PM2 online != aplicação saudável`; startup, porta e catálogo são provas separadas.
+- `HTTP 200 != saúde composta`; quando existir health profundo/componentes, medir também.
+- mudança de dependência/framework precisa de smoke de boot; typecheck/build não pegam todos os erros de roteador em runtime.
+- não instalar dependências experimentalmente no diretório vivo; construir em worktree/release limpo.
+- variável nova precisa estar no ambiente do processo novo; um restart que preserva ambiente antigo não prova carregamento.
+- credencial de um projeto/tenant não é válida só porque a variável existe; validar o alvo sem expor o segredo.
+- `configured != active`; cliente deve descobrir catálogo e executar uma tool real antes de declarar MCP operacional ponta a ponta.
+
+A recuperação deve manter **um único** `CentralDark-MCP`; nomes/processos históricos alternativos não podem coexistir como segundo owner.

@@ -1,6 +1,6 @@
-name: VPS HealthCheck
+name: ⚙️ VPS HealthCheck
 # Bot de monitoramento — roda direto na VPS via self-hosted runner.
-# Sem SSH (runner já é local). Envia relatório pelo canal oficial notify-telegram.
+# Prova PM2 + Hermes-Verificador + rota Nous :free sem expor credenciais.
 
 on:
   workflow_dispatch:
@@ -17,14 +17,15 @@ concurrency:
 jobs:
   healthcheck:
     runs-on: [self-hosted, Linux]
-    timeout-minutes: 5
+    timeout-minutes: 8
     env:
       NOTIFY_API_KEY: ${{ secrets.NOTIFY_API_KEY }}
     steps:
-      - name: Coletar e notificar
+      - name: 🔹 Coletar, autocorrigir Hermes-Verificador e provar free-chain
         shell: bash
         run: |
           set +e
+          FAIL=0
           HOST=$(hostname)
           UPTIME=$(uptime | sed 's/^ *//')
           LOAD=$(cut -d' ' -f1-3 /proc/loadavg)
@@ -37,39 +38,137 @@ jobs:
           PM2_ERR=$(echo "$PM2_JSON" | jq '[.[]|select(.pm2_env.status=="errored")] | length' 2>/dev/null || echo 0)
 
           TIPO="sucesso"; EMOJI="✅"; ALERTAS=""
-          if [ "${PM2_ERR:-0}" -gt 0 ]; then
-            TIPO="erro"; EMOJI="❌"
-            ALERTAS="${ALERTAS}\n• PM2 com ${PM2_ERR} processo(s) em erro"
-          fi
-          if [ "${DISK_PCT:-0}" -ge 90 ]; then
-            TIPO="critico"; EMOJI="🚨"
-            ALERTAS="${ALERTAS}\n• Disco / em ${DISK_PCT}%"
-          elif [ "${DISK_PCT:-0}" -ge 80 ] && [ "$TIPO" = "sucesso" ]; then
-            TIPO="aviso"; EMOJI="⚠️"
-            ALERTAS="${ALERTAS}\n• Disco / em ${DISK_PCT}%"
+          VERIFIER_APP="CentralDark-HermesVerificador"
+          VERIFIER_DIR="/root/CentralDark/apps/modulos/HERMES-CORE/agents/Log-Verificador"
+          VERIFIER_EXEC="$VERIFIER_DIR/daemon.mjs"
+          VERIFIER_STATE="$VERIFIER_DIR/.estado.json"
+
+          verifier_json() {
+            pm2 jlist 2>/dev/null | jq -c --arg app "$VERIFIER_APP" '.[] | select(.name == $app)' | head -n1
+          }
+
+          VJSON="$(verifier_json)"
+          if [ -z "$VJSON" ] && [ -f "$VERIFIER_EXEC" ]; then
+            pm2 start "$VERIFIER_EXEC" --name "$VERIFIER_APP" --time >/dev/null 2>&1
+            pm2 save --force >/dev/null 2>&1
+            sleep 4
+            echo "HERMES_VERIFIER_SELF_HEAL=BOOTSTRAP"
+            VJSON="$(verifier_json)"
           fi
 
+          if [ -n "$VJSON" ]; then
+            VEXEC=$(echo "$VJSON" | jq -r '.pm2_env.pm_exec_path // ""')
+            VSTATUS=$(echo "$VJSON" | jq -r '.pm2_env.status // "unknown"')
+            if [ "$VEXEC" = "$VERIFIER_EXEC" ] && [ "$VSTATUS" != "online" ]; then
+              pm2 restart "$VERIFIER_APP" >/dev/null 2>&1
+              pm2 save --force >/dev/null 2>&1
+              sleep 4
+              echo "HERMES_VERIFIER_SELF_HEAL=RESTART"
+              VJSON="$(verifier_json)"
+            fi
+          fi
+
+          VEXEC=$(echo "$VJSON" | jq -r '.pm2_env.pm_exec_path // ""' 2>/dev/null)
+          VSTATUS=$(echo "$VJSON" | jq -r '.pm2_env.status // "missing"' 2>/dev/null)
+          VPID=$(echo "$VJSON" | jq -r '.pid // 0' 2>/dev/null)
+          VERIFIER_PM2="FAIL"
+          if [ "$VEXEC" = "$VERIFIER_EXEC" ] && [ "$VSTATUS" = "online" ] && [ "${VPID:-0}" -gt 0 ] 2>/dev/null; then
+            VERIFIER_PM2="PASS"
+          else
+            FAIL=1
+            ALERTAS="${ALERTAS}\n• Hermes-Verificador PM2 inválido (${VSTATUS})"
+          fi
+
+          VERIFIER_HEARTBEAT="FAIL"
+          if [ -f "$VERIFIER_STATE" ]; then
+            NOW=$(date +%s)
+            MTIME=$(stat -c %Y "$VERIFIER_STATE" 2>/dev/null || echo 0)
+            AGE=$((NOW-MTIME))
+            if [ "$AGE" -ge 0 ] && [ "$AGE" -le 180 ]; then VERIFIER_HEARTBEAT="PASS"; fi
+          fi
+          if [ "$VERIFIER_HEARTBEAT" != "PASS" ] && [ "$VERIFIER_PM2" = "PASS" ]; then
+            pm2 restart "$VERIFIER_APP" >/dev/null 2>&1
+            sleep 6
+            NOW=$(date +%s); MTIME=$(stat -c %Y "$VERIFIER_STATE" 2>/dev/null || echo 0); AGE=$((NOW-MTIME))
+            if [ -f "$VERIFIER_STATE" ] && [ "$AGE" -ge 0 ] && [ "$AGE" -le 180 ]; then
+              VERIFIER_HEARTBEAT="PASS"
+              echo "HERMES_VERIFIER_SELF_HEAL=HEARTBEAT_RESTART"
+            fi
+          fi
+          if [ "$VERIFIER_HEARTBEAT" != "PASS" ]; then
+            FAIL=1
+            ALERTAS="${ALERTAS}\n• Hermes-Verificador sem heartbeat recente"
+          fi
+
+          VERIFIER_TEST="FAIL"
+          if node --test "$VERIFIER_DIR/provider-health.test.mjs" >/tmp/centraldark-verifier-test.log 2>&1; then
+            VERIFIER_TEST="PASS"
+          else
+            FAIL=1
+            ALERTAS="${ALERTAS}\n• provider-health.test falhou"
+          fi
+
+          ROUTER_HEALTH=$(curl -fsS --max-time 4 http://127.0.0.1:8099/health 2>/dev/null)
+          ROUTER_HEALTH_OK=$(echo "$ROUTER_HEALTH" | jq -r '.ok == true and .service == "centraldark-omni-router"' 2>/dev/null)
+          NOUS_CONFIGURED=$(echo "$ROUTER_HEALTH" | jq -r '.engines.nous.configured // false' 2>/dev/null)
+          GLOBAL_FREE_ONLY=$(echo "$ROUTER_HEALTH" | jq -r '.free_only // false' 2>/dev/null)
+          FREE_CHAIN="UNKNOWN"
+          FREE_MODEL=""
+
+          if [ "$ROUTER_HEALTH_OK" = "true" ] && [ "$NOUS_CONFIGURED" = "true" ]; then
+            ROUTER_PID=$(ss -ltnp 'sport = :8099' 2>/dev/null | sed -n 's/.*pid=\([0-9][0-9]*\).*/\1/p' | head -n1)
+            ROUTER_TOKEN=""
+            if [ -n "$ROUTER_PID" ] && [ -r "/proc/$ROUTER_PID/environ" ]; then
+              ROUTER_TOKEN=$(tr '\0' '\n' < "/proc/$ROUTER_PID/environ" | sed -n 's/^CENTRALDARK_ROUTER_TOKEN=//p' | head -n1)
+            fi
+            AUTH_ARGS=()
+            if [ -n "$ROUTER_TOKEN" ]; then AUTH_ARGS=(-H "Authorization: Bearer $ROUTER_TOKEN"); fi
+            MODELS=$(curl -fsS --max-time 12 "${AUTH_ARGS[@]}" http://127.0.0.1:8099/v1/models 2>/dev/null)
+            FREE_MODEL=$(echo "$MODELS" | jq -r '.data[]?.id | select(startswith("nous/") and endswith(":free"))' 2>/dev/null | head -n1)
+
+            if [ -n "$FREE_MODEL" ] && [ "$GLOBAL_FREE_ONLY" = "true" ]; then
+              PAYLOAD=$(jq -nc --arg model "$FREE_MODEL" '{model:$model,messages:[{role:"user",content:"Responda apenas OK"}],stream:false}')
+              RESPONSE=$(curl -fsS --max-time 30 "${AUTH_ARGS[@]}" -H 'Content-Type: application/json' -d "$PAYLOAD" http://127.0.0.1:8099/v1/chat/completions 2>/dev/null)
+              ENGINE=$(echo "$RESPONSE" | jq -r '.centraldark.engine // ""' 2>/dev/null)
+              RESOLVED=$(echo "$RESPONSE" | jq -r '.centraldark.resolved_model // ""' 2>/dev/null)
+              if [ "$ENGINE" = "nous" ] && [[ "$RESOLVED" == *:free ]]; then FREE_CHAIN="PASS"; else FREE_CHAIN="FAIL"; fi
+            elif [ -n "$FREE_MODEL" ]; then
+              FREE_CHAIN="BLOCKED_GLOBAL_FREE_ONLY_FALSE"
+            else
+              FREE_CHAIN="FAIL_NO_LIVE_FREE_MODEL"
+            fi
+          else
+            FREE_CHAIN="FAIL_ROUTER_OR_NOUS"
+          fi
+
+          if [ "$FREE_CHAIN" != "PASS" ]; then
+            FAIL=1
+            ALERTAS="${ALERTAS}\n• Rota Nous free não comprovada: ${FREE_CHAIN}"
+          fi
+
+          if [ "${PM2_ERR:-0}" -gt 0 ]; then FAIL=1; ALERTAS="${ALERTAS}\n• PM2 com ${PM2_ERR} processo(s) em erro"; fi
+          if [ "${DISK_PCT:-0}" -ge 90 ]; then TIPO="critico"; EMOJI="🚨"; FAIL=1; ALERTAS="${ALERTAS}\n• Disco / em ${DISK_PCT}%"; fi
+          if [ "$FAIL" -ne 0 ] && [ "$TIPO" = "sucesso" ]; then TIPO="erro"; EMOJI="❌"; fi
+
           TITULO="${EMOJI} HealthCheck VPS"
-          MSG="<b>Host:</b> ${HOST}\n<b>Uptime:</b> ${UPTIME}\n<b>Load:</b> ${LOAD}\n<b>Disco /:</b> ${DISK}\n<b>Memória:</b> ${MEM}\n<b>PM2:</b> ${PM2_ON} online · ${PM2_OFF} parados · ${PM2_ERR} erro${ALERTAS}"
+          MSG="<b>Host:</b> ${HOST}\n<b>Uptime:</b> ${UPTIME}\n<b>Load:</b> ${LOAD}\n<b>Disco /:</b> ${DISK}\n<b>Memória:</b> ${MEM}\n<b>PM2:</b> ${PM2_ON} online · ${PM2_OFF} parados · ${PM2_ERR} erro\n<b>Hermes-Verificador:</b> pm2=${VERIFIER_PM2} heartbeat=${VERIFIER_HEARTBEAT} tests=${VERIFIER_TEST}\n<b>Nous free-chain:</b> ${FREE_CHAIN}${ALERTAS}"
 
           echo "==== Relatório ===="
           echo -e "$MSG"
+          echo "HERMES_VERIFIER_PM2=$VERIFIER_PM2"
+          echo "HERMES_VERIFIER_HEARTBEAT=$VERIFIER_HEARTBEAT"
+          echo "HERMES_VERIFIER_TEST=$VERIFIER_TEST"
+          echo "NOUS_FREE_CHAIN=$FREE_CHAIN"
+          echo "NOUS_FREE_MODEL_DISCOVERED=$([ -n "$FREE_MODEL" ] && echo true || echo false)"
+          echo "GLOBAL_FREE_ONLY=$GLOBAL_FREE_ONLY"
+          echo "UNKNOWN_IS_PASS=0"
           echo "==================="
 
-          if [ -z "${NOTIFY_API_KEY:-}" ]; then
-            echo "::warning::NOTIFY_API_KEY ausente no repo — relatório apenas no log."
-            exit 0
+          if [ -n "${NOTIFY_API_KEY:-}" ]; then
+            PAYLOAD_NOTIFY=$(jq -nc --arg origem "vps-healthcheck" --arg tipo "$TIPO" --arg titulo "$TITULO" --arg mensagem "$(echo -e "$MSG")" '{origem:$origem,tipo:$tipo,titulo:$titulo,mensagem:$mensagem}')
+            curl -sS -X POST "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/notify-telegram" -H "x-notify-key: ${NOTIFY_API_KEY}" -H "Content-Type: application/json" -d "$PAYLOAD_NOTIFY" >/dev/null 2>&1 || true
+          else
+            echo "::warning::NOTIFY_API_KEY ausente — relatório preservado no log."
           fi
 
-          PAYLOAD=$(jq -nc \
-            --arg origem "vps-healthcheck" \
-            --arg tipo "$TIPO" \
-            --arg titulo "$TITULO" \
-            --arg mensagem "$(echo -e "$MSG")" \
-            '{origem:$origem, tipo:$tipo, titulo:$titulo, mensagem:$mensagem}')
-
-          curl -sS -X POST "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/notify-telegram" \
-            -H "x-notify-key: ${NOTIFY_API_KEY}" \
-            -H "Content-Type: application/json" \
-            -d "$PAYLOAD"
-          echo
+          exit "$FAIL"

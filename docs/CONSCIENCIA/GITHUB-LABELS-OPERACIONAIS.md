@@ -1,3 +1,10 @@
+---
+title: "GITHUB LABELS OPERACIONAIS"
+date: 2026-08-27
+tags: ["consciencia"]
+updated: 2026-09-09
+---
+
 # Labels Operacionais CentralDark
 
 ## Identidade e autoridade
@@ -5,7 +12,7 @@
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+PIVETE/HERMES = papel histórico/operacional quando aplicável
 MODELO = capacidade substituível
 REALIDADE = juiz
 ```
@@ -20,6 +27,129 @@ A autorização humana canônica é:
 
 `permito-pivete`, `PERMITO-PIVETE` e outros aliases históricos não pertencem à taxonomia operacional ativa. O histórico permanece nos registros antigos, sem promover PIVETE/HERMES/modelo/bot a autoridade.
 
+## Regra model-neutral
+
+A CentralDark não deriva obrigação, capacidade, permissão, Writer ou rota operacional a partir do nome do modelo.
+
+```text
+MODEL_NAME = PROVENIENCIA_OPCIONAL
+MODEL_NAME != AUTHORITY
+MODEL_NAME != CAPABILITY
+MODEL_NAME != WRITER_LEASE
+MODEL_NAME != ROUTING_KEY
+MODEL_NAME != PROMOTION_GATE
+
+ROUTING_INPUT = INTENCAO + ESCOPO + CAPACIDADES_NECESSARIAS + SUPERFICIE + PERMISSOES + WRITER_SCOPE
+```
+
+As labels `🧠 AGENTE-*` permanecem aceitas somente para proveniência/auditoria histórica e compatibilidade. Elas não entram no baseline obrigatório, não escolhem executor e não podem bloquear ou liberar promoção.
+
+## Padrão operacional global (TODO PR elegível)
+
+Não é opcional e não vale só para um PR. O motor de autonomia materializa o padrão em **todos** os PRs com recibo válido.
+
+```text
+SELO_CANONICO_DE_PROMOCAO
+= 👑 PERMITO-SEGREDO
++ 🔄 GIT
++ 🤖 AUTO
+
+BASELINE_OPERACIONAL
+= 🟡 IA-PRECISA-REVISAR
+
+PADRAO_COMPLETO = SELO + BASELINE
+```
+
+Capacidades são expressas por labels funcionais quando materiais ao escopo:
+
+```text
+🤖 IA-PESQUISAR
+🤖 IA-REVISAR
+🤖 IA-VALIDAR
+🤖 IA-DOCUMENTAR
+🤖 IA-EXECUTAR
+🤖 IA-INFRA
+🤖 IA-FRONTEND
+🤖 AGENTIC-DEVOPS
+🔧 SELF-HEAL
+```
+
+Owner: `scripts/github-autonomia-varredura.mjs` (`requiredOperationalLabels` + promote sweep).
+
+```text
+PR_ELEGIVEL + RECIBO_VALIDO
+→ materializa labels faltantes do PADRAO_COMPLETO
+→ recheck autonomia
+→ só então promove
+```
+
+O campo `Writer:` continua necessário como receipt de caneta/lease/proveniência no escopo, mas o texto desse campo não adiciona requisito por marca/modelo.
+
+## Resultado confirmado de PR
+
+A confirmação visual canônica é:
+
+```text
+✅ PR CONFIRMADO
+```
+
+Ela fica semanticamente **ao lado** de `👑 PERMITO-SEGREDO`, mas representa outra camada:
+
+```text
+👑 PERMITO-SEGREDO = AUTORIDADE HUMANA DELEGADA / INTENÇÃO
+✅ PR CONFIRMADO   = RESULTADO DERIVADO APÓS PROVA OBSERVADA
+🟢 SUCESSO         = RESULTADO PÓS-MERGE DO PROMOTOR
+```
+
+`✅ PR CONFIRMADO` e `🟢 SUCESSO` **nunca** entram no selo de entrada. O CI só materializa confirmação depois de observar, no mesmo PR:
+
+```text
+PR_MERGED=true
++ 👑 PERMITO-SEGREDO presente
++ 🟢 SUCESSO presente
++ comentário canônico de promoção presente
++ HEAD_PROVADO == PR.head.sha
++ MERGE_SHA == PR.merge_commit_sha
++ JUDGE_RECEIPT_SHA256 = 64 hex válido
+→ ✅ PR CONFIRMADO
+```
+
+```text
+PR_CONFIRMED_IS_DERIVED_RESULT=true
+PR_CONFIRMED_IS_AUTHORITY=false
+PR_CONFIRMED_IS_PROMOTION_INPUT=false
+PR_CONFIRMED_CANNOT_SELF_PROVE=true
+UNKNOWN != CONFIRMED
+```
+
+Owner do mecanismo: `scripts/github-pr-confirmado-label.mjs`, executado dentro de `.github/workflows/autonomia-promocao.yml` depois do promotor canônico.
+
+## PARECE RESENHA, MAS É SÉRIO
+
+A etiqueta canônica de integridade de pacote é:
+
+```text
+🕊️ POMBO-CHECKSUM OBRIGATÓRIO DE PACOTE
+```
+
+Aplica-se quando PR, issue ou handoff produz ou transporta **pacote/material verificável**. Ela sinaliza que a entrega exige checksum, receipt e proveniência; não se aplica indiscriminadamente a todo conteúdo.
+
+```text
+PACKAGE_OR_MATERIAL_HANDOFF
+→ 🕊️ POMBO-CHECKSUM OBRIGATÓRIO DE PACOTE
+→ CONTENT_SHA256 / SHA256SUMS.txt
+→ RECEIPT + PROVENIÊNCIA
+→ CONTRAPROVA quando material
+
+LABEL = SINAL DE REQUISITO
+LABEL_PRESENT != CHECKSUM_VALID
+HASH_MATCH = BYTE_IDENTITY
+CHECKSUM != PROVA_SEMÂNTICA
+REALIDADE = JUIZ
+```
+
+O pombo é linguagem cultural da Casa. A integridade byte-a-byte e a continuidade verificável são o contrato técnico. **Parece resenha, mas é sério.**
+
 ## Lei do catálogo
 
 ```text
@@ -27,15 +157,20 @@ UMA_SEMÂNTICA = UMA_LABEL_CANÔNICA
 LABEL_OPERACIONAL = MAIÚSCULAS
 ALIAS_LEGADO = MIGRAR_ANTES_DE_APAGAR
 SEM_CONSUMIDOR + SEM_ROTEAMENTO + SEM_VALOR_OPERACIONAL = REMOVER
+PADRAO_OPERACIONAL_APLICA_A_TODO_PR_ELEGIVEL=true
+MODEL_LABEL_IS_PROVENANCE_ONLY=true
 ```
 
 `🧠 AGENTE-LOVABLE` e `assign:lovable` são obsoletos e não recebem novos trabalhos.
 
 ## Núcleo canônico
 
+### Autoridade / estado / capacidade
+
 - `👑 PERMITO-SEGREDO`
+- `✅ PR CONFIRMADO`
+- `🕊️ POMBO-CHECKSUM OBRIGATÓRIO DE PACOTE`
 - `🔄 GIT`, `🔄 GIT-DIVERGÊNCIA`
-- `🧠 AGENTE-CHATGPT`, `🧠 AGENTE-CLAUDE`, `🧠 AGENTE-CODEX`, `🧠 AGENTE-GROK`, `🧠 AGENTE-HERMES`, `🧠 AGENTE-JARVIS`, `🧠 AGENTE-SENTINELA`, `🧠 AGENTE-SUPABASE`
 - `🤖 AUTO`, `🤖 AGENTIC-DEVOPS`, `🤖 IA-DOCUMENTAR`, `🤖 IA-EXECUTAR`, `🤖 IA-FRONTEND`, `🤖 IA-INFRA`, `🤖 IA-PESQUISAR`, `🤖 IA-REVISAR`, `🤖 IA-VALIDAR`
 - `🐞 BUG`, `♻️ DUPLICADO`, `✨ MELHORIA`, `❓ DÚVIDA`, `🆘 AJUDA-NECESSÁRIA`, `🌱 BOM-PARA-INICIAR`, `🎨 FRONTEND`, `📚 DOCS`
 - `🔐 SEGURANÇA`, `🔧 SELF-HEAL`, `🔴 ERRO`, `🔴 FALTA-EVIDÊNCIA`, `🔴 PRIORIDADE-ALTA`, `🔴 RISCO-SERVIDOR`, `🛠️ INFRA`
@@ -43,14 +178,20 @@ SEM_CONSUMIDOR + SEM_ROTEAMENTO + SEM_VALOR_OPERACIONAL = REMOVER
 - `🟢 CORREÇÃO-SEGURA`, `🟢 PRIORIDADE-BAIXA`, `🟢 PRONTO-PARA-IA`, `🟢 SUCESSO`, `🟢 SUPABASE`
 - `🕸️ GRAPHIFY`, `🚫 INVÁLIDO`, `🧊 NÃO-FAZER`, `🧊 PARADO`, `🧩 DIVERGÊNCIA`, `🧭 PAINEL`, `SUPERSEDED`
 
+### Proveniência histórica opcional
+
+- `🧠 AGENTE-CHATGPT`, `🧠 AGENTE-CLAUDE`, `🧠 AGENTE-CODEX`, `🧠 AGENTE-GROK`, `🧠 AGENTE-HERMES`, `🧠 AGENTE-JARVIS`, `🧠 AGENTE-SENTINELA`, `🧠 AGENTE-SUPABASE`
+
+Essas labels não participam de decisão de autoridade, capacidade, Writer lease, roteamento obrigatório ou gate de promoção.
+
 ## Alias legado → canônico
 
 ```text
-assign:chatgpt      → 🧠 AGENTE-CHATGPT
-assign:claude       → 🧠 AGENTE-CLAUDE
-assign:codex        → 🧠 AGENTE-CODEX
-assign:grok         → 🧠 AGENTE-GROK
-assign:supabase-bot → 🧠 AGENTE-SUPABASE
+assign:chatgpt      → 🧠 AGENTE-CHATGPT   (proveniência somente)
+assign:claude       → 🧠 AGENTE-CLAUDE    (proveniência somente)
+assign:codex        → 🧠 AGENTE-CODEX     (proveniência somente)
+assign:grok         → 🧠 AGENTE-GROK      (proveniência somente)
+assign:supabase-bot → 🧠 AGENTE-SUPABASE  (proveniência somente)
 auto                 → 🤖 AUTO
 bug                  → 🐞 BUG
 p1                   → 🔴 PRIORIDADE-ALTA
@@ -63,6 +204,25 @@ permito-segredo      → 👑 PERMITO-SEGREDO
 📚 DOC               → 📚 DOCS
 ```
 
+## Catálogo físico GitHub
+
+No GitHub existe **uma etiqueta física por significado**. Compatibilidade com nomes antigos acontece na entrada, antes de tocar no catálogo.
+
+```text
+GITHUB_LABEL_CATALOG_CANONICAL_ONLY=true
+CANONICAL_AUTHORITY_LABEL=👑 PERMITO-SEGREDO
+LEGACY_AUTHORITY_TEXT_ALIAS=permito-segredo
+LEGACY_AUTHORITY_PHYSICAL_LABEL=false
+CANONICAL_CODEX_PROVENANCE_LABEL=🧠 AGENTE-CODEX
+LEGACY_CODEX_TEXT_ALIAS=codex
+LEGACY_CODEX_PHYSICAL_LABEL=false
+ALIAS_COMPATIBILITY_REMAINS_AT_INGRESS=true
+MIGRATE_EXISTING_USAGE_BEFORE_DELETE=true
+NEVER_CREATE_SECOND_PHYSICAL_ALIAS_LABEL=true
+```
+
+Assim, agentes e integrações antigas ainda podem dizer `permito-segredo` ou `codex`; o normalizador converte para `👑 PERMITO-SEGREDO` ou `🧠 AGENTE-CODEX`. O GitHub, porém, guarda somente a forma canônica. Isso preserva compatibilidade sem manter etiquetas duplicadas.
+
 ## Enforcement global de entrada
 
 O catálogo é único; cada superfície apenas adapta a entrada. O comportamento deve ser o mesmo para humano, bot, modelo, MCP CentralDark, HUB ou cliente futuro que passe pelo contrato da Casa.
@@ -74,6 +234,7 @@ LABEL_RECEBIDA
 → alias conhecido: converter para destino canônico
 → alias de autoridade SEGREDO: 👑 PERMITO-SEGREDO
 → alias de autoridade PIVETE/HERMES: descartar
+→ assign:* conhecido: preservar somente como proveniência, nunca roteamento/gate
 → assign:* desconhecido: descartar, não inventar agente
 → dedupe
 → GitHub recebe somente o conjunto normalizado
@@ -89,6 +250,11 @@ AUTHORITY_APPROVAL → normaliza a label observada antes de decidir autorizaçã
 CANONICAL_VISUAL_LABEL=👑 PERMITO-SEGREDO
 TEXT_ALIAS=permito-segredo
 TEXT_ALIAS_IS_COMPATIBILITY_NOT_SECOND_LABEL=true
+CONFIRMED_RESULT_LABEL=✅ PR CONFIRMADO
+CONFIRMED_RESULT_LABEL_IS_NOT_AUTHORITY=true
+OPERATIONAL_STANDARD_IS_GLOBAL=true
+MODEL_NAME_IS_PROVENANCE_ONLY=true
+CAPABILITY_ROUTING_IS_MODEL_NEUTRAL=true
 ```
 
 O HUB já descobre ferramentas pelo MCP; portanto herda a semântica do tool GitHub existente. Não duplicar catálogo, regra de autoridade ou normalizador dentro da interface.
@@ -123,5 +289,19 @@ LABEL = SINAL
 INTENÇÃO = SEGREDO/CHEFE
 ESTADO = EVIDÊNCIA
 EXECUÇÃO = CAPACIDADE AUTORIZADA
+MODELO = PROVENIÊNCIA SUBSTITUÍVEL
 REALIDADE = JUIZ
+
+👑 = AUTORIDADE
+🔄 + 🤖 + 🟡 = PADRÃO OPERACIONAL GLOBAL
+🧠 AGENTE-* = PROVENIÊNCIA OPCIONAL
+🟢 / ✅ = RESULTADO (pós-prova)
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

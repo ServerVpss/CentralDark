@@ -1,0 +1,251 @@
+/* ============================================================================
+   ██  C E N T R A L D A R K
+   ██  LUPA NA MÃO · INTENÇÃO NA FRENTE
+   ============================================================================
+   CARTAZ — componente canônico de peça postável.
+   ----------------------------------------------------------------------------
+   owner   : docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md
+   método  : .agents/skills/visual-design-method/SKILL.md
+   tokens  : .agents/skills/visual-design-method/TOKENS-FORGE.json
+   relevo  : .agents/skills/visual-design-method/assets/relevo-3-temas.css
+   gate    : .agents/skills/visual-design-method/scripts/check-cartaz.mjs
+
+   POR QUE ESTE ARQUIVO EXISTE
+
+   O padrão do cartaz nasceu desenhado à mão, direto no HTML de uma peça.
+   Enquanto ele viveu só ali, ninguém mais conseguia reproduzir: nem outro
+   agente, nem o Hermes, nem eu mesmo numa sessão futura.
+
+     prose_only_rule: NOT_LEARNED
+     -> BIND_RULE_TO_ENGINE_OR_GATE
+
+   Aqui o padrão vira classe reutilizável. Quem quiser um cartaz novo escreve
+   a marcação abaixo e recebe a mesma peça — mesmo bisel, mesma textura, mesma
+   proporção, mesmo relevo. Zero regressão por construção.
+
+   ESTRUTURA MÍNIMA
+
+     <div class="cd-palco">
+       <article class="cd-cartaz" tabindex="0">
+         <div class="cd-bisel">
+           <div class="cd-corpo">
+             <div class="cd-selo"><span>Cartaz I</span><span>Doutrina</span></div>
+             <h2 class="cd-titulo">Título curto</h2>
+             <p class="cd-fina">Linha fina em maiúscula</p>
+             <div class="cd-arte"><svg …></svg></div>
+             <p class="cd-dizer">A frase. <em>O que precisa ficar.</em></p>
+             <div class="cd-rodape"><span>CentralDark</span><span>★ Tipo</span></div>
+           </div>
+         </div>
+         <div class="cd-luz"></div>
+       </article>
+     </div>
+
+   O driver de ponteiro é o mesmo de relevo-3-temas.css: publica --px e --py
+   no elemento .cd-cartaz. Sem driver, a peça fica em repouso e continua
+   correta — o relevo é enfeite, não estrutura de leitura.
+   ============================================================================ */
+
+/* ────────────────────────────────────────────────────────────────────────────
+   1 · TOKENS DO CARTAZ
+   Herdam a paleta forge. Nenhuma cor nova é declarada aqui.
+   ──────────────────────────────────────────────────────────────────────────── */
+:root{
+  /* proporção: formato de cartaz, cai bem em feed vertical */
+  --cd-proporcao: 1 / 1.35;
+  --cd-raio: 16px;
+  --cd-bisel-espessura: 8px;
+
+  /* inclinação contida: cartaz que balança demais rouba atenção do texto */
+  --cd-angulo: 11deg;
+  --cd-perspectiva: 1000px;
+
+  /* escada de profundidade da peça */
+  --cd-z-corpo: 30px;
+  --cd-z-selo: 14px;
+  --cd-z-titulo: 24px;
+  --cd-z-arte: 38px;
+  --cd-z-luz: 58px;
+
+  /* o ouro batido: sete paradas alternando claro e escuro.
+     Menos que sete e o metal parece pintado, não martelado. */
+  --cd-bisel: linear-gradient(148deg,
+    #F6E1A4 0%, #B7862A 15%, #6A4B12 33%, #E4C874 51%,
+    #8A6519 69%, #F2DB98 85%, #8B6620 100%);
+
+  --cd-fundo-corpo:
+    radial-gradient(circle at 50% 34%, rgba(192,144,43,.10) 0%, transparent 62%),
+    linear-gradient(172deg, #181308 0%, #100D07 52%, #0A0906 100%);
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   2 · A PEÇA
+   ──────────────────────────────────────────────────────────────────────────── */
+.cd-palco{ perspective: var(--cd-perspectiva); perspective-origin: 50% 42%; }
+
+.cd-cartaz{
+  position: relative;
+  aspect-ratio: var(--cd-proporcao);
+  border-radius: var(--cd-raio);
+  transform-style: preserve-3d;
+  transform:
+    rotateY(calc(var(--px,0) * var(--cd-angulo)))
+    rotateX(calc(var(--py,0) * -1 * var(--cd-angulo)));
+  transition: transform .5s cubic-bezier(.2,.7,.3,1), box-shadow .5s ease;
+  /* a sombra contra-desloca: peça inclina para um lado, sombra foge para o outro */
+  box-shadow:
+    calc(var(--px,0) * -22px) calc(var(--py,0) * -16px + 26px)
+    56px -16px rgba(0,0,0,.9),
+    0 0 0 1px rgba(0,0,0,.6);
+}
+.cd-palco:hover .cd-cartaz,
+.cd-palco:focus-within .cd-cartaz{
+  transition: transform .09s linear, box-shadow .09s linear;
+}
+
+.cd-bisel{
+  position: absolute; inset: 0; border-radius: var(--cd-raio);
+  overflow: hidden; padding: var(--cd-bisel-espessura);
+  background: var(--cd-bisel);
+  transform: translateZ(0);
+}
+
+.cd-corpo{
+  position: relative; height: 100%; border-radius: 9px; overflow: hidden;
+  padding: 26px 24px 20px;
+  display: flex; flex-direction: column;
+  border: 1px solid rgba(192,144,43,.34);
+  background: var(--cd-fundo-corpo);
+  transform: translateZ(var(--cd-z-corpo));
+}
+
+/* textura de varredura — dá peso de objeto impresso, não de tela */
+.cd-corpo::after{
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(0deg,
+    transparent 0 3px, rgba(0,0,0,.16) 3px 4px);
+  opacity: .5;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   3 · CONTEÚDO — sempre nesta ordem
+   ──────────────────────────────────────────────────────────────────────────── */
+.cd-selo{
+  display: flex; justify-content: space-between; gap: 10px;
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 8.5px; letter-spacing: .24em; text-transform: uppercase;
+  color: var(--ouro-escuro, #7A5A15); margin: 0 0 14px;
+  transform: translateZ(var(--cd-z-selo));
+}
+
+.cd-titulo{
+  font-family: var(--disp, 'Cinzel', serif); font-weight: 700;
+  font-size: clamp(21px, 2.7vw, 27px); line-height: 1.08;
+  color: var(--ouro-claro, #F4DA95); margin: 0 0 4px;
+  letter-spacing: .02em; text-wrap: balance;
+  transform: translateZ(var(--cd-z-titulo));
+}
+
+.cd-fina{
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 9px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--tinta-fraca, #5B4A32); margin: 0 0 18px;
+  transform: translateZ(18px);
+}
+
+.cd-arte{
+  flex: 1; min-height: 0; display: grid; place-items: center;
+  margin-bottom: 16px;
+  transform: translateZ(var(--cd-z-arte));
+}
+.cd-arte svg{ width: 100%; height: 100%; max-height: 250px; display: block; }
+
+.cd-dizer{
+  font-family: var(--corpo, 'EB Garamond', Georgia, serif);
+  font-size: 15px; line-height: 1.5;
+  color: var(--pergaminho-fundo, #C9B085); margin: 0 0 14px;
+  transform: translateZ(20px);
+}
+/* o <em> não é itálico: é a parte que fica na cabeça de quem leu */
+.cd-dizer em{ font-style: normal; color: var(--ouro-claro, #F4DA95); }
+
+.cd-rodape{
+  border-top: 1px solid rgba(192,144,43,.26); padding-top: 11px;
+  display: flex; justify-content: space-between; gap: 10px;
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 8.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ouro-escuro, #7A5A15);
+  transform: translateZ(var(--cd-z-selo));
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   4 · LUZ — brilho especular seguindo o ponteiro
+   ──────────────────────────────────────────────────────────────────────────── */
+.cd-luz{
+  position: absolute; inset: 0; border-radius: var(--cd-raio);
+  pointer-events: none;
+  transform: translateZ(var(--cd-z-luz));
+  opacity: 0; transition: opacity .45s ease;
+  background: radial-gradient(
+    40% 32% at calc(50% + var(--px,0) * 56%) calc(50% + var(--py,0) * 56%),
+    rgba(255,244,206,.34) 0%, rgba(233,180,76,.12) 40%, transparent 74%);
+  mix-blend-mode: soft-light;
+}
+.cd-palco:hover .cd-luz,
+.cd-palco:focus-within .cd-luz{ opacity: 1; transition: opacity .13s ease; }
+
+/* ────────────────────────────────────────────────────────────────────────────
+   5 · GRADE — vários cartazes lado a lado
+   ──────────────────────────────────────────────────────────────────────────── */
+.cd-grade{
+  display: grid; gap: clamp(30px, 4vw, 48px);
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   6 · EXPORT — html2canvas não entende 3D, achata a peça inteira
+   ──────────────────────────────────────────────────────────────────────────── */
+.cd-cartaz.cd-exportando,
+.cd-cartaz.cd-exportando .cd-bisel,
+.cd-cartaz.cd-exportando .cd-corpo,
+.cd-cartaz.cd-exportando .cd-selo,
+.cd-cartaz.cd-exportando .cd-titulo,
+.cd-cartaz.cd-exportando .cd-fina,
+.cd-cartaz.cd-exportando .cd-arte,
+.cd-cartaz.cd-exportando .cd-dizer,
+.cd-cartaz.cd-exportando .cd-rodape{
+  transform: none !important; transition: none !important;
+}
+.cd-cartaz.cd-exportando{ box-shadow: none !important; }
+.cd-cartaz.cd-exportando .cd-luz{ display: none !important; }
+
+/* ────────────────────────────────────────────────────────────────────────────
+   7 · MOVIMENTO REDUZIDO — relevo é enfeite, ninguém paga por ele
+   ──────────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce){
+  .cd-cartaz{ transform: none; transition: none; }
+  .cd-luz{ display: none; }
+  .cd-bisel, .cd-corpo, .cd-selo, .cd-titulo,
+  .cd-fina, .cd-arte, .cd-dizer, .cd-rodape{ transform: none; }
+}
+
+/* ============================================================================
+   REGRAS DA ARTE — o que o gate não mede, mas o padrão exige
+
+   1. A arte é DESENHADA em SVG inline, nunca ícone de biblioteca.
+      Ícone genérico faz o cartaz parecer template.
+
+   2. A arte usa a mesma paleta: ouro para o que importa, sangue para o que
+      é barrado, verde para o que foi provado. Nada fora dos tokens.
+
+   3. Todo SVG carrega role="img" e aria-label descrevendo a cena.
+      Quem não enxerga também recebe o cartaz.
+
+   4. O título cabe em duas linhas. Se não couber, o título está explicando
+      em vez de nomear.
+
+   5. O .cd-dizer tem UMA frase e UM <em>. O <em> é o que a pessoa repete
+      depois de fechar a página.
+
+   6. O rodapé é sempre `CentralDark` à esquerda e `★ Tipo` à direita.
+   ============================================================================ */

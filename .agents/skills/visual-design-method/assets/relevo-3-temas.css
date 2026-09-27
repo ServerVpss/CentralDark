@@ -1,0 +1,278 @@
+/* ============================================================================
+   ██  C E N T R A L D A R K
+   ██  LUPA NA MÃO · INTENÇÃO NA FRENTE
+   ============================================================================
+   RELEVO TÁTIL — camada global, três temas
+   ----------------------------------------------------------------------------
+   owner   : docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md
+   método  : .agents/skills/visual-design-method/SKILL.md
+   gate    : .agents/skills/visual-design-method/scripts/check-relevo-3d.mjs
+   técnica : .agents/skills/visual-design-method/RELEVO-3D-TATIL.md
+
+   THEME_SWITCH != REDESIGN
+   A geometria do relevo — perspectiva, ângulo, escada de profundidade,
+   contra-deslocamento da sombra — é IDÊNTICA nos três temas. Só os tokens
+   de luz mudam: cor do brilho, tinta da sombra, cores do holo.
+
+   Duas dimensões independentes, não misturar:
+     data-theme   = light | dark        (claridade)
+     data-palette = emerald | operational | forge   (paleta)
+
+   Uso mínimo:
+     <article class="relevo" data-tilt data-tilt-glare data-tilt-max="20">
+       <div class="relevo-base">   … moldura
+         <div class="relevo-corpo">  … conteúdo
+           <div class="relevo-frente">  … o que flutua mais
+     </article>
+   ============================================================================ */
+
+/* ────────────────────────────────────────────────────────────────────────────
+   1 · ESTRUTURA — igual nos três temas
+   ──────────────────────────────────────────────────────────────────────────── */
+
+:root{
+  /* geometria: medida por calibragem, não escolhida no olho.
+     ver a tabela de paralaxe em RELEVO-3D-TATIL.md §2 */
+  --relevo-perspectiva: 800px;
+  --relevo-angulo: 20deg;
+
+  /* escada de profundidade — progressão propositalmente irregular.
+     equidistante parece maquete; desigual parece objeto. */
+  --relevo-z-base:   0px;
+  --relevo-z-corpo:  45px;
+  --relevo-z-meio:   70px;
+  --relevo-z-frente: 110px;
+  --relevo-z-luz:    150px;
+
+  /* sombra: o +34px do eixo Y é o repouso — parado, o objeto já está
+     acima da mesa. O resto contra-desloca com o ponteiro. */
+  --relevo-sombra-alcance: 70px;
+  --relevo-sombra-recuo:  -20px;
+  --relevo-sombra-repouso: 34px;
+  --relevo-sombra-desloc-x: -30px;
+  --relevo-sombra-desloc-y: -20px;
+
+  /* alimentadas pelo driver do ponteiro. Sem driver, tudo fica em repouso. */
+  --px: 0;
+  --py: 0;
+  --brilho: 0;
+}
+
+.relevo-palco{
+  perspective: var(--relevo-perspectiva);
+  perspective-origin: 50% 45%;
+}
+
+.relevo{
+  position: relative;
+  transform-style: preserve-3d;
+  transform:
+    rotateY(calc(var(--px) *  var(--relevo-angulo)))
+    rotateX(calc(var(--py) * -1 * var(--relevo-angulo)));
+  transition: transform .4s cubic-bezier(.2,.7,.3,1), box-shadow .4s ease;
+  box-shadow:
+    calc(var(--px) * var(--relevo-sombra-desloc-x))
+    calc(var(--py) * var(--relevo-sombra-desloc-y) + var(--relevo-sombra-repouso))
+    var(--relevo-sombra-alcance)
+    var(--relevo-sombra-recuo)
+    var(--relevo-sombra-cor);
+}
+
+/* perseguição rápida enquanto o ponteiro está em cima; volta lenta ao sair */
+.relevo-palco:hover .relevo,
+.relevo-palco:focus-within .relevo{
+  transition: transform .08s linear, box-shadow .08s linear;
+}
+
+/* a escada. preserve-3d sem translateZ é decoração, não relevo — INV-1 */
+.relevo-base  { transform: translateZ(var(--relevo-z-base)); }
+.relevo-corpo { transform: translateZ(var(--relevo-z-corpo)); }
+.relevo-meio  { transform: translateZ(var(--relevo-z-meio)); }
+.relevo-frente{ transform: translateZ(var(--relevo-z-frente)); }
+
+/* brilho especular seguindo o ponteiro */
+.relevo-luz{
+  position: absolute; inset: 0; pointer-events: none;
+  transform: translateZ(var(--relevo-z-luz));
+  opacity: 0; transition: opacity .4s ease;
+  background: radial-gradient(
+    38% 30% at calc(50% + var(--px) * 52%) calc(50% + var(--py) * 52%),
+    var(--relevo-brilho-forte) 0%,
+    var(--relevo-brilho-fraco) 38%,
+    transparent 72%);
+  mix-blend-mode: var(--relevo-brilho-mistura);
+}
+.relevo-palco:hover .relevo-luz,
+.relevo-palco:focus-within .relevo-luz{ opacity: 1; transition: opacity .12s ease; }
+
+/* holo: o ângulo vem do ponteiro, NUNCA de timer.
+   figurinha reage a quem olha; animação por relógio não é reação. */
+.relevo-holo{
+  position: absolute; inset: 0; pointer-events: none;
+  transform: translateZ(calc(var(--relevo-z-luz) - 4px));
+  opacity: calc(.30 + var(--brilho) * .34);
+  --ang: calc(var(--px) * 220deg + var(--py) * 120deg);
+  background: conic-gradient(from var(--ang) at 42% 38%,
+    var(--relevo-holo-1), var(--relevo-holo-2), var(--relevo-holo-3),
+    var(--relevo-holo-4), var(--relevo-holo-5), var(--relevo-holo-1));
+  mix-blend-mode: overlay;
+}
+
+@property --ang{ syntax:'<angle>'; inherits:false; initial-value:0deg; }
+
+/* export por html2canvas não entende 3D: achata a escada inteira */
+.relevo.exportando,
+.relevo.exportando .relevo-base,
+.relevo.exportando .relevo-corpo,
+.relevo.exportando .relevo-meio,
+.relevo.exportando .relevo-frente,
+.relevo.exportando .relevo-luz,
+.relevo.exportando .relevo-holo{
+  transform: none !important;
+  transition: none !important;
+}
+.relevo.exportando{ box-shadow: none !important; }
+.relevo.exportando .relevo-luz{ display: none !important; }
+
+/* INV-3 — relevo é enfeite; quem pediu menos movimento não paga por ele */
+@media (prefers-reduced-motion: reduce){
+  .relevo{ transform: none; transition: none; }
+  .relevo-luz{ display: none; }
+  .relevo-holo{ opacity: .18; }
+  .relevo-base, .relevo-corpo, .relevo-meio, .relevo-frente{ transform: none; }
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   1.5 · O LEMA — assinatura da Casa, pronta para header e rodapé
+   Herda o acento do tema ativo; não carrega cor própria.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+.lema-casa{
+  display:inline-flex; align-items:center; gap:9px;
+  font-family:var(--fonte-mono, ui-monospace, monospace);
+  font-size:10.5px; font-weight:500; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--acento, currentColor);
+  padding:6px 13px 6px 11px;
+  border:1px solid var(--borda, currentColor); border-radius:999px;
+  background:color-mix(in srgb, var(--acento, currentColor) 7%, transparent);
+  white-space:nowrap;
+}
+.lema-casa .lema-olho{ font-size:12px; letter-spacing:0; opacity:.9; }
+.lema-casa .lema-div { opacity:.42; }
+
+.lema-rodape{
+  display:flex; align-items:baseline; justify-content:space-between;
+  gap:16px; flex-wrap:wrap;
+  padding-top:26px; border-top:1px solid var(--borda, currentColor);
+}
+.lema-rodape .lema-frase{
+  margin:0; font-family:var(--fonte-display, inherit);
+  font-size:clamp(17px,2.4vw,23px); font-weight:600; letter-spacing:-.01em;
+}
+.lema-rodape .lema-frase em{ font-style:normal; color:var(--acento, currentColor); }
+.lema-rodape .lema-assina{
+  margin:0; font-family:var(--fonte-mono, ui-monospace, monospace);
+  font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; opacity:.6;
+}
+
+/* uso:
+   <p class="lema-casa"><span class="lema-olho">🔍</span> Lupa na mão
+      <span class="lema-div">·</span> Intenção na frente</p>
+
+   <footer class="lema-rodape">
+     <p class="lema-frase"><em>Lupa na mão.</em> Intenção na frente.</p>
+     <p class="lema-assina">CentralDark · SEGREDO/CHEFE</p>
+   </footer>
+*/
+
+/* ────────────────────────────────────────────────────────────────────────────
+   2 · TOKENS DE LUZ — só isto muda entre os temas
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* EMERALD · padrão institucional — verde esmeralda, luz fria e discreta
+   fonte: src/index.css (--primary: 152 65% 32% light / 152 76% 50% dark) */
+:root,
+:root[data-palette="emerald"]{
+  --relevo-sombra-cor:      hsl(152 30% 4% / .55);
+  --relevo-brilho-forte:    hsl(152 60% 96% / .38);
+  --relevo-brilho-fraco:    hsl(152 55% 82% / .14);
+  --relevo-brilho-mistura:  soft-light;
+  --relevo-holo-1: hsl(152 76% 50% / .30);
+  --relevo-holo-2: hsl(172 70% 55% / .28);
+  --relevo-holo-3: hsl(132 65% 58% / .26);
+  --relevo-holo-4: hsl(190 60% 60% / .28);
+  --relevo-holo-5: hsl(152 82% 58% / .30);
+}
+
+/* no escuro a sombra precisa de mais peso, senão some no fundo */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --relevo-sombra-cor:   hsl(152 40% 2% / .88);
+    --relevo-brilho-forte: hsl(152 70% 92% / .30);
+  }
+}
+:root[data-theme="dark"]{
+  --relevo-sombra-cor:   hsl(152 40% 2% / .88);
+  --relevo-brilho-forte: hsl(152 70% 92% / .30);
+}
+
+/* OPERATIONAL · HUD/sala de controle — navy + ciano, vermelho é alerta.
+   Luz mais dura e mais fria: é painel, não joia. */
+:root[data-palette="operational"]{
+  --relevo-sombra-cor:      hsl(215 55% 3% / .82);
+  --relevo-brilho-forte:    hsl(190 95% 88% / .42);
+  --relevo-brilho-fraco:    hsl(200 85% 70% / .16);
+  --relevo-brilho-mistura:  screen;
+  --relevo-holo-1: hsl(190 90% 60% / .32);
+  --relevo-holo-2: hsl(210 85% 58% / .30);
+  --relevo-holo-3: hsl(175 80% 55% / .28);
+  --relevo-holo-4: hsl(225 75% 62% / .30);
+  --relevo-holo-5: hsl(190 95% 66% / .32);
+}
+
+/* FORGE · premium/lendário — ouro e pergaminho.
+   Valores herdados do asset canônico forja-de-cartas.html
+   (--ouro #C0902B · --ouro-claro #F4DA95 · --breu #0A0906).
+   Único tema com holo de arco-íris cheio: é foil de carta. */
+:root[data-palette="forge"]{
+  --relevo-sombra-cor:      hsl(40 30% 2% / .90);
+  --relevo-brilho-forte:    hsl(44 80% 92% / .42);
+  --relevo-brilho-fraco:    hsl(40 75% 78% / .16);
+  --relevo-brilho-mistura:  soft-light;
+  --relevo-holo-1: hsl(330 90% 58% / .50);
+  --relevo-holo-2: hsl(44 92% 54% / .50);
+  --relevo-holo-3: hsl(160 82% 60% / .50);
+  --relevo-holo-4: hsl(205 90% 62% / .55);
+  --relevo-holo-5: hsl(280 80% 66% / .50);
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   3 · DRIVER — publica variáveis, nunca escreve transform
+   ----------------------------------------------------------------------------
+   Escrever style.transform pelo JS sobrescreve o CSS e impede compor tilt +
+   sombra + brilho na mesma expressão. O driver publica; o CSS decide.
+
+   Se usar vanilla-tilt.js (data-tilt), ELA assume o transform da .relevo —
+   então remova o `transform` da regra .relevo e mantenha o resto: a escada de
+   profundidade, a sombra e o holo continuam vindo daqui.
+
+   <script>
+   document.querySelectorAll('.relevo-palco').forEach(function (palco) {
+     var alvo = palco.querySelector('.relevo');
+     if (!alvo) return;
+     palco.addEventListener('pointermove', function (ev) {
+       var r = alvo.getBoundingClientRect();
+       var px = (ev.clientX - r.left) / r.width  - .5;
+       var py = (ev.clientY - r.top)  / r.height - .5;
+       alvo.style.setProperty('--px', px.toFixed(3));
+       alvo.style.setProperty('--py', py.toFixed(3));
+       alvo.style.setProperty('--brilho', Math.min(1, Math.hypot(px, py) * 2).toFixed(3));
+     });
+     palco.addEventListener('pointerleave', function () {
+       alvo.style.setProperty('--px', 0);
+       alvo.style.setProperty('--py', 0);
+       alvo.style.setProperty('--brilho', 0);
+     });
+   });
+   </script>
+   ──────────────────────────────────────────────────────────────────────────── */

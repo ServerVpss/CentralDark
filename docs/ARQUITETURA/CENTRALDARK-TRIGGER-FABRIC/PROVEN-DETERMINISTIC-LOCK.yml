@@ -1,0 +1,618 @@
+schema: centraldark.proven-deterministic-lock.v1
+status: CANDIDATE_UNTIL_SAME_HEAD_GATES
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC
+authority: SEGREDO/CHEFE
+
+purpose: >-
+  Tornar aprendizado comprovado reutilizavel e deterministico sem reabrir
+  raciocinio ja selado. O lock protege claim+owner; melhoria mensuravel pode
+  reabrir o mesmo claim somente com a mesma chave e causa explicita.
+
+invariants:
+  one_system_only: true
+  reuse_before_create: true
+  unknown_is_not_pass: true
+  action_is_not_proof: true
+  learning_never_discarded: true
+  proven_becomes_deterministic_candidate: true
+  proven_path_becomes_executable_recipe: true
+  recipe_must_live_in_repository: true
+  recipe_must_be_machine_consumable: true
+  fingerprint_required: true
+  replay_before_rediscovery: true
+  adapt_env_bindings_only: true
+  deterministic_requires_real_consumer: true
+  deterministic_requires_positive_negative_test: true
+  deterministic_requires_verifiable_receipt: true
+  same_head_required_when_ci_is_claimed: true
+  sealed_claim_default: LOCKED_READ_ONLY
+  no_new_information: REUSE_PROOF
+  failed_candidate: REFUTED_MINERAL
+  unresolved_candidate: UNRESOLVED_MINERAL
+  human_is_not_crystal_transport: true
+  machine_receipt_must_persist_in_vps_or_repo_owner: true
+
+lock_identity:
+  key_material: [CLAIM_KEY, OWNER]
+  algorithm: SHA256
+  stable_across_sessions: true
+  model_switch_changes_key: false
+  provider_switch_changes_key: false
+  chat_switch_changes_key: false
+  syntax_switch_changes_key: false
+
+seal_requires:
+  - CLAIM_KEY
+  - OWNER
+  - PROOF_TARGET
+  - EVIDENCE_REF
+  - OBSERVED_AT
+  - STATE_PROVED
+  - COUNTERPROOF_PASS
+  - RECEIPT_REF
+
+reopen_requires_all:
+  - SAME_LOCK_KEY
+  - REOPEN_CAUSE_REF
+  - MATERIAL_IMPROVEMENT
+  - COUNTERPROOF_PLAN
+  - CURRENT_TARGET_REMEASURED
+
+reopen_denied_when:
+  - DIFFERENT_LOCK_KEY
+  - NO_NEW_INFORMATION
+  - STYLE_ONLY_CHANGE_WITHOUT_CAPABILITY_GAIN
+  - REPEATED_CLAIM_WITHOUT_NEW_EVIDENCE
+  - MODEL_ONLY_DISAGREEMENT
+
+trigger_loader:
+  owner: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+  sources:
+    - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+    - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+    - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+  command_entry_normalization:
+    ignore_case: true
+    leading_bang_or_hash_equivalent: true
+    unicode_accents_normalized: true
+    prose_mentions_do_not_activate: true
+    line_start_or_explicit_command_context_required: true
+  load_full_registry: true
+  execute_all_phases_blindly: false
+  execute_materially_applicable_only: true
+  verses_are_presentation_and_orientation: true
+  verse_change_must_not_change_chefe_intent: true
+
+canonical_flow:
+  - DESTINATION_LOCK
+  - ACORDAR
+  - CALIBRAR
+  - MULTIBUSSOLA
+  - META_LUPA
+  - RECONCILIAR
+  - DELTA_UTIL
+  - CONTRAPROVA
+  - REMEDICAO
+  - SEMANTIC_GREEN
+  - FIXED_POINT
+  - POST_GREEN_LOCK
+  - REGISTRA
+  - RASTRO
+  - BOOT
+
+executable_recipe_binding:
+  recipe_projection: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-EXECUTABLE-RECIPE.yml
+  status: MACHINE_PROJECTION_OF_THIS_OWNER
+  creates_new_owner: false
+  purpose: >-
+    Guardar a receita executavel do caminho ja provado para o proximo executor
+    carregar a mesma sequencia, adaptar somente bindings de ambiente, rodar a
+    mesma prova e comparar resultado/formato/efeito antes de decidir entre
+    DELTA_NOVO e REUTILIZA_CRISTAL.
+  required_chain:
+    - CAMINHO_JA_PROVADO
+    - SELAR_RECEITA_EXECUTAVEL
+    - GUARDAR_FINGERPRINT
+    - PROXIMO_EXECUTOR_CARREGA_A_RECEITA
+    - ADAPTA_SOMENTE_BINDINGS_DO_AMBIENTE
+    - EXECUTA_A_MESMA_SEQUENCIA
+    - RODA_A_MESMA_PROVA
+    - COMPARA_RESULTADO_FORMATO_EFEITO
+    - DIVERGIU_DELTA_NOVO
+    - NAO_DIVERGIU_REUTILIZA_CRISTAL
+  environment_bindings_are_not_canonical_semantics: true
+  same_fingerprint_same_effect_reuses_crystal: true
+  changed_effect_creates_targeted_delta: true
+  unknown_difference_is_not_pass: true
+  human_handoff_block_forbidden: true
+  runtime_storage_required: true
+  runtime_storage_owner: /root/CentralDark/.artifacts/system-sentinel/receipts
+
+promotion:
+  proven_learning_flow:
+    - MATERIAL
+    - CLASSIFY
+    - FIND_EXISTING_OWNER
+    - TEST
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - PROVED
+    - DETERMINISTIC_IMPLEMENTATION
+    - POSITIVE_NEGATIVE_TEST
+    - RECEIPT
+    - CLAIM_SEAL
+    - REUSE_PROOF
+  improvement_flow:
+    - SEALED_CLAIM
+    - SAME_LOCK_KEY
+    - REOPEN_CAUSE_REF
+    - MATERIAL_IMPROVEMENT
+    - TARGETED_REVALIDATION
+    - COUNTERPROOF
+    - NEW_RECEIPT
+    - RESEAL_SAME_CLAIM
+
+fixed_point:
+  stop_when:
+    - NO_NEW_INFORMATION
+    - FIXED_POINT
+    - HUMAN_FRONTIER
+    - BLOCKED_WITH_EXPLICIT_CAUSE
+  requires:
+    - SOUL_SYNC_CURRENT
+  soul_stale: FIXED_POINT_FORBIDDEN
+  soul_sync_owner: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#2.4
+  infinite_retry_without_information_gain: FORBIDDEN
+  reopen_entire_system_for_local_delta: FORBIDDEN
+  invalidate_only_dependent_claims: true
+
+
+proven_path_replay:
+  marker: PROVEN_PATH_REPLAY_LOCK
+  status: CANONICAL_EXTENSION_OF_EXISTING_LOCK
+  creates_new_owner: false
+  creates_new_brain: false
+  creates_new_router: false
+  formula: >-
+    PROVEN_REPRODUCIBLE_PATH + STABLE_DEPENDENCY_FINGERPRINT ->
+    REUSE_SAME_SEQUENCE + ADAPT_ENVIRONMENT_BINDINGS_ONLY +
+    RUN_SAME_PROOF + COMPARE_RESULT + DIVERGENCE_BECOMES_DELTA
+  laws:
+    PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO: true
+    PROVEN_PATH_BECOMES_EXECUTABLE_RECIPE: true
+    RECIPE_MUST_LIVE_IN_REPOSITORY: true
+    RECIPE_MUST_BE_MACHINE_CONSUMABLE: true
+    FINGERPRINT_REQUIRED: true
+    REPLAY_BEFORE_REDISCOVERY: true
+    ADAPT_ENV_BINDINGS_ONLY: true
+    SAME_FINGERPRINT_SAME_PROOF: REUSE_CRYSTAL
+    CHANGED_FINGERPRINT: REVALIDATE_AFFECTED_CONE_ONLY
+    DOCUMENTED_IS_NOT_EXECUTABLE_RECIPE: true
+    RECEIPT_IS_NOT_PROOF: true
+    FINGERPRINT_MATCH_IS_NOT_RUNTIME_PASS: true
+    SAME_FINGERPRINT_REUSES_PROVEN_RECIPE: true
+    ENVIRONMENT_ADAPTATION_MAY_CHANGE_BINDINGS_NOT_GOAL: true
+    ENVIRONMENT_ADAPTATION_MAY_CHANGE_PATHS_HOSTS_AUTH_REFS: true
+    ENVIRONMENT_ADAPTATION_MUST_NOT_SILENTLY_CHANGE_PROOF_LOGIC: true
+    RAW_OUTPUT_BYTE_EQUALITY_REQUIRED: false
+    RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH: true
+    DIVERGENCE_IS_NEW_INFORMATION: true
+    DIVERGENCE_REOPENS_AFFECTED_CONE_ONLY: true
+    HUMAN_RETEACH_FOR_SAME_PROVEN_PATH: false
+    NEW_AGENT_REINTERPRETATION_WITHOUT_CAUSE: FORBIDDEN
+  seal_recipe_fields:
+    - DEPENDENCY_FINGERPRINT
+    - EXECUTION_COMMANDS
+    - PROOF_COMMANDS
+    - EXPECTED_RESULTS
+    - ENVIRONMENT_BINDINGS
+    - SELF_TEST_COMMAND
+    - SELF_TEST_RESULT
+    - RECEIPT_REF
+  machine_consumable_recipe_requires:
+    owner: REQUIRED
+    objective: REQUIRED
+    preconditions: REQUIRED
+    execution_sequence: REQUIRED
+    environment_bindings: DECLARED_OR_EMPTY
+    dependency_fingerprint: REQUIRED
+    proof: REQUIRED
+    counterproof: REQUIRED
+    expected_result_format_effect: REQUIRED
+    evidence: REQUIRED
+    next_cursor: REQUIRED
+    storage: REPOSITORY_ONLY
+    registry: PROVEN_CLAIMS_LOCK_JSON
+  replay_flow:
+    - LOAD_SEALED_CLAIM
+    - COMPARE_DEPENDENCY_FINGERPRINT
+    - IF_UNCHANGED_LOAD_EXECUTION_RECIPE
+    - ADAPT_DECLARED_ENVIRONMENT_BINDINGS_ONLY
+    - EXECUTE_SAME_SEQUENCE
+    - RUN_SAME_PROOF
+    - COMPARE_RESULT_SCHEMA_AND_EXPECTED_EFFECT
+    - DIVERGENCE_TO_DELTA
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - RESEAL_IF_PROVEN
+  fingerprint_changed:
+    action: REVALIDATE_AFFECTED_CONE_ONLY
+  fingerprint_unchanged:
+    action: REUSE_PROVEN_PATH_NO_RETHINK
+
+session_crystallization_2026_09_25:
+  authority: SEGREDO/CHEFE
+  intent: CRYSTALLIZE_ALL_PROVEN_SESSION_PATHS_WITHOUT_REOPENING_SETTLED_EVIDENCE
+  rule: CURRENT_OVER_HISTORY
+  criteria:
+    human_supplies_goal_not_runbook: true
+    machine_decomposes_technical_work: true
+    machine_resolvable_blocker_auto_continue: true
+    human_micromanagement_required: false
+    search_before_ask: true
+    measure_before_assume: true
+    reuse_before_create: true
+    one_system_only: true
+    one_writer_per_mutable_scope: true
+    parallelize_perception_serialize_mutation: true
+    unknown_is_not_pass: true
+    action_is_not_proof: true
+    documented_is_not_executed: true
+    merged_is_not_deployed: true
+    queued_is_not_pass: true
+    exists_is_not_running: true
+    session_memory_is_not_current_state: true
+    sensor_failure_is_not_world_failure: true
+    no_blind_pull_over_dirty_runtime: true
+    no_blind_reset_or_clean: true
+    secrets_never_enter_receipt_or_git: true
+    preserve_running_runtime_deltas_before_reconciliation: true
+    same_fingerprint_reuses_proven_recipe: true
+    fingerprint_change_revalidates_affected_cone_only: true
+    no_new_information_reuses_proof: true
+    divergence_is_delta_new: true
+    raw_byte_equality_required: false
+    result_schema_and_expected_effect_must_match: true
+    every_material_novelty_feeds_pr_mother_1562: true
+    fixed_point_requires_proof_counterproof_and_reality_judge: true
+
+  recipe_registry:
+    CURRENT_STATE_RENDEZVOUS:
+      status: PROVEN_REUSABLE
+      goal: RECOVER_CURRENT_WITHOUT_RESTARTING_MISSION
+      fingerprint_material:
+        - CANONICAL_OWNER
+        - GITHUB_MAIN_SHA
+        - RUNTIME_SHA_OR_ARTIFACT_HASH
+        - WORKTREE_DIRTY_FINGERPRINT
+        - SERVICE_OR_ENDPOINT_IDENTITY
+        - SECURITY_BOUNDARY
+      execution_sequence:
+        - RECOVER_INTENT_AND_LAST_VALID_ANCHOR
+        - MEASURE_CURRENT_GITHUB_AND_RUNTIME_AS_INDEPENDENT_SENSORS
+        - CLASSIFY_PASS_FAIL_UNKNOWN_BLOCKED_STALE
+        - RECONCILE_DIVERGENCES
+        - PRESERVE_PROVEN_GOOD
+        - SELECT_ONE_SURVIVING_DELTA
+        - EXECUTE_ONLY_IF_MUTATION_IS_AUTHORIZED_AND_OWNER_IS_PROVEN
+        - RUN_TARGETED_PROOF
+        - RUN_COUNTERPROOF
+        - REALITY_JUDGE
+        - RECEIPT_AND_NEXT_CURSOR
+      expected_effect: SAME_CURRENT_STATE_CLASSIFICATION_FOR_EQUIVALENT_INPUTS
+
+    LIVE_FABRIC_JOB_PATH:
+      status: PROVEN_REUSABLE
+      owner: centraldark-omni-router
+      environment_bindings:
+        public_status: /api/live-fabric/status
+        public_graph: /api/live-fabric/graph
+        admin_panel: https://admin.centralldark.com/omni
+        runtime_root: /root/CentralDark
+        local_workspace: "E:\\CentralDark"
+      execution_sequence:
+        - ADMIN_OR_HERMES_STARTS_JOB
+        - CENTRALDARK_API_CREATES_JOB
+        - MCP_OR_ADAPTER_EXECUTES_REAL_TOOLCALL
+        - TARGET_RETURNS_REAL_OUTPUT
+        - API_WRITES_RECEIPT
+        - GRAPH_VIVO_UPDATES
+        - HUD_PANEL_EXPLAINS_STATE
+        - NEXT_TIK_TAK
+      proof_sequence:
+        - READ_LIVE_FABRIC_STATUS
+        - READ_LIVE_FABRIC_GRAPH
+        - VERIFY_RECEIPT_EXISTS_FOR_JOB
+        - VERIFY_GRAPH_REFLECTS_JOB
+        - CLASSIFY_RESULT_WITHOUT_PROMOTING_UNKNOWN
+      expected_result_schema:
+        status_ok: boolean
+        owner: string
+        transport: string
+        receipt_ref: string
+        next_cursor: string
+      expected_effect: REAL_TOOLCALL_TO_RECEIPT_TO_GRAPH_TO_HUD
+      last_session_proof:
+        status_endpoint: PASS_200
+        graph_endpoint: PASS_200
+        owner: centraldark-omni-router
+        transport: FASTAPI
+      replay_rule: SAME_FINGERPRINT_REUSE_RECIPE
+
+    MCP_HEALTH_AND_AUTH_BOUNDARY:
+      status: PROVEN_REUSABLE
+      owner: CentralDark-MCP
+      environment_bindings:
+        health: /health
+        deep_health: /health/deep
+        canonical_admin_resource: /admin/mcp
+        compatibility_admin_alias: /mcp/admin
+      execution_sequence:
+        - PROBE_HEALTH
+        - PROBE_DEEP_HEALTH
+        - PROBE_CANONICAL_ADMIN_RESOURCE_WITHOUT_EXPOSING_SECRET
+        - PROBE_COMPATIBILITY_ALIAS
+        - COMPARE_AUTH_BOUNDARY_AND_HANDLER_BEHAVIOR
+      proof_sequence:
+        - REQUIRE_HTTP_HEALTH_PASS
+        - REQUIRE_DEEP_HEALTH_NO_CRITICAL_FAILURE
+        - REQUIRE_ADMIN_RESOURCE_AUTH_BOUNDARY
+        - REQUIRE_ALIAS_CONVERGES_TO_CANONICAL_OWNER
+      expected_effect: ONE_MCP_OWNER_WITH_COMPATIBILITY_ALIAS_NOT_SECOND_ARCHITECTURE
+      last_session_proof:
+        health: PASS_200
+        deep_health: PASS_HEALTHY_SCORE_100
+        tool_count: 126
+        admin_alias: PASS_AUTH_BOUNDARY
+      replay_rule: SAME_FINGERPRINT_REUSE_RECIPE
+
+    SAFE_GIT_RUNTIME_RECONCILIATION:
+      status: PROVEN_REUSABLE
+      goal: PRESERVE_LIVE_RUNTIME_WHILE_RECONCILING_WITH_MAIN
+      execution_sequence:
+        - MEASURE_MAIN_SHA
+        - MEASURE_RUNTIME_SHA
+        - MEASURE_DIRTY_FINGERPRINT
+        - IF_DIRTY_SNAPSHOT_DIFF
+        - PRESERVE_RUNTIME_ONLY_DELTA
+        - RECONCILE_WITHOUT_RESET_OR_CLEAN
+        - REAPPLY_ONLY_SURVIVING_DELTA
+        - REMEASURE
+        - COUNTERPROVE
+        - RECEIPT
+      expected_effect: NO_LOSS_OF_LIVE_DELTA_AND_NO_FALSE_MAIN_EQUALS_RUNTIME
+      replay_rule: SAME_FINGERPRINT_REUSE_RECIPE
+
+    PROVEN_PASS_TO_SCOPED_MICRO_DEPLOY:
+      status: PROVEN_REUSABLE
+      execution_sequence:
+        - REQUIRE_PROVEN_PASS
+        - MICRO_DEPLOY_AFFECTED_SCOPE_ONLY
+        - RUN_RUNTIME_HEALTH_OR_EQUIVALENT_PROOF
+        - WRITE_RECEIPT_TO_PR_MOTHER_1562
+        - ADVANCE_NEXT_TIK_TAK
+      reject_as_pass:
+        - UNKNOWN
+        - ACTION_ONLY
+        - DOCUMENTED_ONLY
+        - VISUAL_BADGE_ONLY
+        - QUEUED
+        - MERGED_WITHOUT_DEPLOY_PROOF
+      expected_effect: ONLY_PROVEN_SCOPE_ADVANCES
+
+  not_sealed_as_final_from_transient_session_evidence:
+    SCREENPIPE_CURRENT_FINAL: UNKNOWN
+    HERMES_DESKTOP_CURRENT_FINAL: UNKNOWN
+    HEALTH_CHECK_SH_CURRENT_FINAL: UNKNOWN
+    POST_MERGE_HOOK_CURRENT_FINAL: UNKNOWN
+    SCREENPIPE_CRON_MONITOR_CURRENT_FINAL: UNKNOWN
+    reason: >-
+      Earlier screenshots and intermediate diagnostics are retained as history,
+      but the latest reconciled evidence did not independently prove these
+      surfaces as final PASS. They must not be promoted into a sealed executable
+      recipe until remeasured.
+
+  executor_contract:
+    on_load:
+      - LOAD_RECIPE_REGISTRY
+      - MATCH_GOAL_OWNER_AND_DEPENDENCY_FINGERPRINT
+      - IF_MATCH_REUSE_WITHOUT_REINTERPRETATION
+      - ADAPT_ONLY_DECLARED_ENVIRONMENT_BINDINGS
+      - EXECUTE_SAME_SEQUENCE
+      - RUN_SAME_PROOF
+      - COMPARE_RESULT_SCHEMA_AND_EXPECTED_EFFECT
+    on_divergence:
+      - RECORD_DELTA_NEW
+      - INVALIDATE_AFFECTED_CONE_ONLY
+      - REVALIDATE
+      - RESEAL_IF_PROVEN
+    on_no_divergence:
+      - REUSE_CRYSTAL
+      - DO_NOT_ASK_CHEFE_TO_RETEACH
+
+
+
+session_crystallization_2026_09_25_completion:
+  marker: SESSION_PROVEN_PATH_EXECUTABLE_REGISTRY
+  criteria_contract_ref: docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md
+  executable_registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json
+  criteria_coverage:
+    - BOOT_BEFORE_MUTATION
+    - ABSOLUTE_PROOF_LAWS
+    - CASA_RUNTIME_PROFILE
+    - REUSE_BEFORE_CREATE
+    - FACT_HYPOTHESIS_UNKNOWN
+    - TOOL_CONFORMANCE_L0_L5
+    - DETERMINISTIC_EXECUTION
+    - DELTA_UTIL_CONTINUOUS
+    - TEST_AND_COUNTERPROOF
+    - SECURITY_ZERO_REGRESSION
+    - MOTOR_NE_ESTEIRA
+    - SCOPED_MICRO_DEPLOY
+    - TIK_TAK_EVIDENCE_EXPIRY
+    - CURRENT_MAIN_PROMOTION
+    - PR_MOTHER_1562_LEDGER
+    - HUMAN_FRONTIER
+    - LOCALIZABLE_FAILURE
+    - CASA_FIXED_POINT
+    - MEASURABLE_METRICS_ONLY
+    - FINAL_RECEIPT
+    - MENOS_E_MAIS_NO_FALSE_GREEN
+  executable_claims:
+    - TAILSCALE_WINDOWS_CONNECTIVITY_PATH
+    - TAILSCALE_NETWORK_LOGS_API_READ_PATH
+    - TAILSCALE_MCP_TOOL_SOURCE_PROOF_PR1691
+    - MICRODEPLOY_AUTONOMOUS_DIAGNOSIS_PATH
+    - HUD_RUDY_SOURCE_CONTRACT_PR1691
+    - LIVE_FABRIC_PUBLIC_STATUS_GRAPH_PATH
+    - MCP_HEALTH_DEEP_TOOLS_PATH
+  not_promoted_to_runtime_pass:
+    - HUD_RUDY_PR1691_NOT_MAIN
+    - TAILSCALE_MCP_TOOLS_PR1691_NOT_DEPLOYED
+    - CURRENT_CANONICAL_DEPLOY_RUN_QUEUED
+    - WINDOWS_REMOTE_DESKTOP_COMMANDER_OFFLINE
+    - WINDOWS_RUNNER_NOT_PROVEN
+    - GLOBAL_FIXED_POINT_NOT_PROVEN
+  replay_law: SAME_FINGERPRINT_REUSE_RECIPE__DIVERGENCE_REVALIDATE_AFFECTED_CONE_ONLY
+
+
+session_crystallization_2026_09_25_runtime_extension:
+  authority: SEGREDO/CHEFE
+  objective: TURN_PROVEN_SESSION_PATHS_INTO_REPLAYABLE_MACHINE_RECIPES
+  runtime_consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+  invariants:
+    SEALED_RECIPE_REQUIRES_FINGERPRINT: true
+    SAME_FINGERPRINT_REUSES_PROVEN_RECIPE: true
+    CHANGED_FINGERPRINT_MUST_NOT_EXECUTE_OLD_RECIPE: true
+    ADAPT_ONLY_DECLARED_ENVIRONMENT_BINDINGS: true
+    BINDING_VALUES_MUST_NOT_ENTER_RECEIPT: true
+    EXECUTION_RECEIPT_STORES_HASHES_EXIT_CODES_AND_SCHEMA_ONLY: true
+    RAW_OUTPUT_BYTE_EQUALITY_REQUIRED: false
+    RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH: true
+    PROOF_DIVERGENCE_IS_DELTA_NEW: true
+    DIVERGENCE_REOPENS_AFFECTED_CONE_ONLY: true
+    MUTATING_RECIPE_REQUIRES_EXPLICIT_MUTATION_AUTHORITY_FLAG: true
+    RESEAL_SAME_CLAIM_REQUIRES_LOCK_CAUSE_REMEASURE_COUNTERPROOF: true
+    RECIPE_EXISTENCE_IS_NOT_RUNTIME_PASS: true
+    SOURCE_ONLY_PROOF_MUST_REMAIN_SOURCE_ONLY: true
+    CAPACITY_FAIL_IS_QUEUE_OR_BLOCKED_NOT_MISSION_FAIL: true
+    RUNNER_READY_IS_NOT_SAFE_TO_START: true
+    RUNNER_BUSY_WITH_REAL_WORK_IS_NOT_ORPHAN: true
+    UI_LOOP_PAUSED_IS_NOT_GLOBAL_EXECUTION_PAUSED: true
+    SAME_USER_IS_NOT_SAME_AUTH_CONTEXT: true
+    GH_AUTH_IN_ONE_HOME_IS_NOT_GH_AUTH_IN_ALL_PROFILES: true
+    WORKDIR_IS_NOT_DEVICE_IDENTITY: true
+
+  proven_session_paths:
+    PROVEN_REPLAY_EXECUTOR_PATH:
+      status: SEALED_EXECUTABLE
+      owner: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+      policy: READ_ONLY
+      effect: SEALED_RECIPE_CAN_REPLAY_WITH_FINGERPRINT_BINDINGS_PROOF_AND_RECEIPT
+    CASA_GARIMPO_REMOTE_BRIDGE_SOURCE_PATH:
+      status: SEALED_EXECUTABLE_SOURCE
+      owner: scripts/remote-bridge/CENTRALDARK-REMOTE-BRIDGE.config.json
+      effect: GARIMPO_WORKDIR_AND_SEGREDO_DEVICE_LABEL_REMAIN_SOURCE_PROVABLE
+      runtime_identity_origin: UNKNOWN
+    GH_AUTH_CONTEXT_RESOLUTION_PATH:
+      status: SEALED_EXECUTABLE_RUNTIME_READ
+      owner: GH_CLI_AUTH_CONTEXT
+      effect: CANONICAL_GH_CONFIG_CAN_BE_PROBED_WITHOUT_REAUTH_OR_SECRET_EXPOSURE
+    SELF_HOSTED_RUNNER_CAPACITY_DIAGNOSIS_PATH:
+      status: SEALED_EXECUTABLE_RUNTIME_READ
+      owner: GITHUB_ACTIONS_SELF_HOSTED_RUNNERS
+      effect: CAPACITY_AND_RUNNER_STATE_CAN_BE_REMEASURED_WITHOUT_AI_INTERPRETATION
+    SELF_HOSTED_RUNNER2_RECOVERY_MUTATION_PATH:
+      status: PROVEN_SEQUENCE_NOT_AUTOEXECUTABLE
+      reason: MUTATION_REQUIRES_PATH_CONSTRAINTS_AND_CAPACITY_GREEN_BEFORE_AUTO_REPLAY
+      proven_sequence:
+        - STOP_AND_DISABLE_STALE_SERVICE
+        - VERIFY_OLD_RUNTIME_ABSENT
+        - INSTALL_OFFICIAL_RUNNER_IN_CANONICAL_DIR
+        - REGISTER_WITH_REPLACE_SAME_AGENT_NAME
+        - LABEL_CENTRALDARK_CI
+        - INSTALL_SERVICE
+        - KEEP_DISABLED_WHILE_CAPACITY_GATE_RED
+        - VERIFY_AGENT_ID_NAME_LABELS
+      capacity_gate_observed:
+        cpu_count: 8
+        load_was_above_cpu_count: true
+        swap_was_full: true
+        disk_was_92_TO_94_PERCENT: true
+      law: READY_BUT_CAPACITY_RED_MEANS_KEEP_OFF
+    FIGMA_HUB_MCP_PR1687_SOURCE_BUILD_PATH:
+      status: SOURCE_BUILD_PROVEN_NOT_MAIN_RUNTIME
+      source_proof:
+        tests: PASS_5_OF_5
+        typecheck: PASS
+        build: PASS
+        dist_second_build_zero_diff: PASS
+      runtime_pass: UNKNOWN
+      main_presence_at_crystallization: false
+    EXECUTION_TOPOLOGY_STATUS_PATH:
+      status: NOT_SEALED_AS_MAIN_RUNTIME
+      reason: EXECUTION_TOPOLOGY_NOT_PRESENT_IN_CURRENT_MAIN_AT_CRYSTALLIZATION
+      historical_proof_preserved: true
+
+  replay_decision:
+    SAME_FINGERPRINT_AND_PROOF_PASS: REUSE_CRYSTAL
+    SAME_FINGERPRINT_AND_PROOF_FAIL: DELTA_NEW
+    CHANGED_FINGERPRINT: REVALIDATE_AFFECTED_CONE_ONLY
+    UNDECLARED_BINDING: DENY_FAIL_CLOSED
+    MUTATING_WITHOUT_AUTHORITY_FLAG: BLOCKED
+
+
+proven_path_executable_recipe_contract_2026_09_26:
+  marker: PROVEN_PATH_BECOMES_EXECUTABLE_RECIPE
+  status: SEALED_AS_MACHINE_CONSUMABLE_CONTRACT
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
+  registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json
+  consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+  pr_mother: 1562
+  objective: >-
+    Todo caminho ja provado deve virar receita executavel consumivel por
+    outro executor sem redescoberta, adaptando somente bindings declarados
+    do ambiente e comparando resultado, formato e efeito esperado.
+  laws:
+    PROVEN_PATH_BECOMES_EXECUTABLE_RECIPE: true
+    RECIPE_MUST_LIVE_IN_REPOSITORY: true
+    RECIPE_MUST_BE_MACHINE_CONSUMABLE: true
+    FINGERPRINT_REQUIRED: true
+    REPLAY_BEFORE_REDISCOVERY: true
+    ADAPT_ENV_BINDINGS_ONLY: true
+    SAME_FINGERPRINT_SAME_PROOF: REUSE_CRYSTAL
+    CHANGED_FINGERPRINT: REVALIDATE_AFFECTED_CONE_ONLY
+    DOCUMENTED_IS_NOT_EXECUTABLE_RECIPE: true
+    RECEIPT_IS_NOT_PROOF: true
+    FINGERPRINT_MATCH_IS_NOT_RUNTIME_PASS: true
+    TESTED_ONCE_IS_NOT_REPLAY_PROVEN: true
+  required_recipe_fields:
+    - owner
+    - objective
+    - preconditions
+    - execution_sequence
+    - environment_bindings
+    - dependency_fingerprint
+    - proof
+    - counterproof
+    - expected_result_format_effect
+    - evidence
+    - next_cursor
+  replay_outcomes:
+    same_fingerprint_same_proof: REUSE_CRYSTAL
+    changed_fingerprint: REVALIDATE_AFFECTED_CONE_ONLY
+    same_fingerprint_proof_diverged: DELTA_NEW
+    undeclared_binding: DENY_FAIL_CLOSED
+  next_cursor: >-
+    next executor loads PROVEN-CLAIMS.lock.json, matches owner/objective/
+    fingerprint, adapts declared bindings only, runs same sequence and proof,
+    then classifies divergence as DELTA_NEW or no divergence as REUSE_CRYSTAL.
+
+
+rastro_lock:
+  token: "🔏 !RASTRO"
+  owner: AGENTS.md
+  response_without_trace: INVALID
+  write_claim_fields: [COMMIT_SHA, PATH, LINK, READBACK]
+  memory_claim_requires_location: true
+  ledger_1562_same_turn_for_direct_main: true

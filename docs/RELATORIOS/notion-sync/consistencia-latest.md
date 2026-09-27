@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-08-16T10:53:22.683Z
-- **Commit:** `1fca49661401c6b05c1403427c4cae9e8182708f`
+- **Gerado:** 2026-09-16T17:43:09.095Z
+- **Commit:** `b6d689a75c9f87efe6e0add547e27284dc9529ec`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 26 | 0 | 0 | 26 | 0 |
+| aprendizados | 43 | 0 | 0 | 43 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **26**
+- 🟥 Faltando no Notion: **43**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -73,5 +73,22 @@
 - 22. Painel Admin precisa ser observabilidade operacional, não só configuração
 - 23. HTTP 200, PM2 online, DNS resolvendo ou painel verde não provam LIVE
 - 24. API paga é capacidade, não identidade nem caminho obrigatório
-- 25. “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança
+- 25. "Menos é mais" significa menor movimento compatível com efeito, observabilidade e segurança
+- 26. Batch .bat: 4 armadilhas que passam em revisão superficial
+- 27. Grok App Builder é adapter, não cérebro — não scaffoldar app paralelo
+- 28. Ponte semântica fail-closed EXIT code=2 — não é verde; stderr engolido
+- 29. Dois mundos vivos: GitHub main 81bbfc7 ≠ VPS 5958d3ce27 (1252 atrás, dirty)
+- 30. Consolidacao de dominios: SPA ja e hibrido, nao falta construir path-routes
+- 31. Provider sem crédito NÃO é router quebrado
+- 32. Uma capacidade = uma linhagem = um PR de promoção por escopo
+- 33. Opinião usada como medição gera falso verde e ação destrutiva
+- 34. Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição
+- 35. T3: ponte semântica EXIT 1, três catálogos, VPS na main 8 atrás
+- 43. EXECUTION_OVER_EXPLANATION — User Values Doing over Talking
+- 44. LINGUISTIC_CALIBRATION — Bahia Expression Accuracy
+- 45. WEBUI_ADMIN_HUB — Localhost:8787 as CentralAdmin Surface
+- 46. ONE_SYSTEM_ONLY_ENFORCEMENT — User's Operational Maxim
+- 47. LARGE_FILE_INTEGRATION — Process Droped Files, Don't Just Acknowledge
+- 48. COMMIT_LIMPO — Commit não é vassoura de git status
+- 49. AUREOLA_PERMANENTE — Publicação segura e continuidade do aprendizado
 </details>

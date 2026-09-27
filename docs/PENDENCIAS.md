@@ -5,8 +5,8 @@ Status: 🔴 alta · 🟡 média · 🟢 baixa · ✅ concluído
 
 ---
 
-## 🟡 #1 — Migração centralldark.com + telepainel.centralldark.com
-**Status:** em andamento (código pronto, falta executar na VPS)
+## 🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído
+**Status:** concluído (código pronto, executado na VPS)
 **Sintoma:** site só responde pelo preview do Lovable; domínios próprios ainda não apontam.
 **Como fechar:**
 1. Apontar DNS dos 3 hostnames pro IP da VPS (`89.117.78.124`):
@@ -17,6 +17,7 @@ Status: 🔴 alta · 🟡 média · 🟢 baixa · ✅ concluído
 3. Confirmar comigo pra eu editar o Caddyfile (regra: Caddy não muda sem OK).
 4. `curl -I https://centralldark.com` e `curl -I https://telepainel.centralldark.com/dashboard` devem retornar `200`.
 5. Atualizar este item pra ✅ com a data.
++ 6. Atualizar o Megapanel/SDK com a nova URL e redeploy do painel.
 
 Detalhes técnicos: `docs/INSTALADOR/13-centraldark-portal.md`.
 
@@ -507,7 +508,7 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 - **Problema:** prefixos numéricos duplicados — `00`, `01`, `02`, `11`, `12` (triplicado!), `21` — além de possíveis números fora de ordem / buracos na sequência. Bagunça visual que o Pivete quer eliminar (regra: pastas/arquivos organizados, sem número torto).
 - **Onde:** `docs/CONSCIENCIA/*.md`.
 - **Cuidado (por isso não foi feito de imediato):** é ÁREA PROTEGIDA (CLAUDE.md Seção 9) e renomear arquivo quebra os wikilinks `[[...]]` do Obsidian. Tem que **renumerar E corrigir todos os links** que apontam pra cada arquivo no mesmo passo, senão o grafo do Pivete fica com bolinhas quebradas.
-- **Decisão do Pivete (30/06):** "só deixa anotado" — não atacar agora; ir ajustando aos poucos pela regra do escoteiro ao passar por cada arquivo, ou em tarefa dedicada com plano quando ele autorizar (PERMITO PIVETE).
+- **Decisão do Pivete (30/06):** "só deixa anotado" — não atacar agora; ir ajustando aos poucos pela regra do escoteiro ao passar por cada arquivo, ou em tarefa dedicada com plano quando ele autorizar (PERMITO SEGREDO).
 
 ### 14. Claude Code via proxy nos 2 modos (terminal + extensão VSCode) — 🟡 ABERTO (30/06/2026)
 - **Objetivo:** quando a conta principal cair, o Pivete continua trabalhando via proxy `claude.ap7.site` — tanto no terminal quanto na extensão do VSCode.
@@ -632,7 +633,8 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Sintoma:** Auditoria enxame 04/07: faltam ícone IA nos nós, labels sempre visíveis, agrupamento por setor/módulo, partículas pulsando nas arestas, tempo real (polling/ws) e movimento visível dos agentes. Pivete vai coordenar o sistema por esse painel.
 - **Onde mexer:** apps/modulos — source não-minificado do grafo/painel; rascunho de patch em /tmp/enxame/painel-patch.md (Gemini Pro)
 - **Critério pra fechar:** Painel exibindo em tempo real: nós com label+ícone IA agrupados por setor, arestas pulsando com partículas, agentes se movendo entre nós — validado visualmente pelo Pivete
-### 24. DECISÃO SELADA: Sentry descartado, monitoramento fica 100% local via PM2 — 🟢 ABERTO (05/07/2026, 17:48 BRT)
+### 24. DECISÃO SELADA: Sentry descartado, monitoramento fica 100% local via PM2 — ✅ CONCLUÍDO em 2026-08-29
+- **Resumo do fechamento:** Fechamento por reclassificação (auditoria Fabler 29/08/2026). Item é um REGISTRO DE DECISÃO, não uma tarefa: o critério "nunca reabrir pedido de configurar Sentry" é política permanente, não entregável — nunca poderia ser marcado como feito, ficando aberto para sempre e poluindo o backlog. Decisão permanece válida e selada: monitoramento 100% local via pm2 logs + deploy_status; Sentry descartado como dependência externa desnecessária.
 - **Sintoma:** sentry_listar_issues falha por falta de SENTRY_ORG — decisão: não usar Sentry, é serviço externo desnecessário
 - **Critério pra fechar:** Nunca reabrir pedido de configurar Sentry. Monitoramento de erro é local: pm2 logs + deploy_status.
 ### 25. Hermes parou de notificar no Telegram (notify falhou no heartbeat) — 🔴 ABERTO (05/07/2026, 23:55 BRT)
@@ -766,3 +768,66 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Sintoma:** O módulo app/lib/runtime/error-classifier.ts foi criado e provado (51/51 asserts contra o arquivo real), mas NÃO está ligado a nada. Hoje o ActionRunner continua tratando todo erro como ActionAlert genérico — o classificador é código correto porém inerte. Sem a ligação, o loop de auto-correção da Fase 4 do PLANO-MESTRE não existe na prática.
 - **Onde mexer:** apps/modulos/Bolt/source/app/lib/runtime/action-runner.ts — no ponto onde a falha vira ActionAlert, chamar diagnoseError() e usar o resultado: instalar automaticamente os missingPackages, aplicar calculateRetryDelay() antes de repetir, e parar quando shouldRetry() devolver false. O módulo a importar já está em ./error-classifier.
 - **Critério pra fechar:** Pré-requisito: rodar pnpm install no Bolt (não feito — instala centenas de MB). Pronto quando: pnpm test passar com error-classifier.spec.ts incluído; um erro real de pacote ausente for detectado e instalado sozinho no preview; e um erro de sintaxe NÃO gerar retry automático. Não declarar pronto sem ver o efeito no Bolt rodando — o módulo passar nos testes unitários não prova a integração.
+### 54. Reconciliar dominios de produto pra 1 site + 1 API + 1 MCP (frontend primeiro, Caddy so com veredito humano) — 🟡 ABERTO (29/08/2026, 11:41 BRT)
+- **Sintoma:** Arquitetura hoje expõe whatsapp./crm./financeiro./telepainel.centralldark.com como vhosts proprios servindo o mesmo build via hostname-detect, quando o path-routing equivalente ja existe no codigo.
+- **Onde mexer:** src/app/rotas/rotas-portal-publico.tsx (RaizPorHost), src/compartilhado/utilitarios/hostRouting.ts, infra/caddy/deploy-centraldark.Caddyfile (so com aprovacao humana explicita, ver docs/CONSCIENCIA/PLANO-RECONCILIACAO-DOMINIOS.md)
+- **Critério pra fechar:** RaizPorHost renderiza LandingCentralDark sempre; subdominios legados passam a 301 pro path equivalente via Caddy (apos veredito humano); api. e mcp. permanecem inalterados.
+### 55. Rota de voz (TTS) morta na API central — SOL fala direto com bridge, ignorando a API — 🟡 ABERTO (29/08/2026, 14:52 BRT)
+- **Sintoma:** api.centralldark.com/v1/audio/speech responde 503 "bridge desligado (rota morta)". O SOL (Config > Bridge TTS) fala direto com bridge.centraldark.com/v1/audio/speech, pulando a API central.
+- **Onde mexer:** apps/modulos/arsenal-openai-adapter/server.mjs (handler de /v1/audio/speech) + camada na frente (Caddy) que hoje devolve a rota morta
+- **Critério pra fechar:** Rota /v1/audio/speech na API central responde 200 fazendo proxy real pro bridge de TTS, e o SOL Config aponta pra ela em vez de falar direto com o bridge.
+### 56. Commit 41f1f7e85 é falso verde — ✅ CONCLUÍDO em 2026-08-29
+- **Resumo do fechamento:** Remediado no commit 328dfb027: os 3 canvas vazios foram destrackeados do PR #1369 (git rm --cached, arquivos preservados no disco conforme DETECT != DELETE). A mensagem enganosa do 41f1f7e85 fica no histórico como registro do erro, com o commit corretivo explicando a divergência. Aprendizado #33 registra a lei extraída: mensagem de commit não é prova, conteúdo de commit é prova — rodar git diff --cached --stat antes de declarar recibo, nunca git add -A cego.
+- **Sintoma:** O commit 41f1f7e85 na branch reconciliacao/casa-20260829-consolidacao tem mensagem "docs(reconciliation): inventory of E:\CentralDark — SOBRA_BRAIN classification, proof of mirrors" mas contém apenas 3 arquivos canvas vazios (docs/BRAIN/Sem título*.canvas, 1 linha cada), pegos por um git add -A cego. O relatório de inventário citado na mensagem nunca entrou no repositório.
+- **Onde mexer:** PR #1369, branch reconciliacao/casa-20260829-consolidacao, commit 41f1f7e85, arquivos docs/BRAIN/Sem título*.canvas
+
+---
+
+### 🚨🔴🔒 PENDÊNCIA CRÍTICA FUTURA — PASSO 2 · WORKSPACE HERMES EM DISCO DEDICADO
+
+**Status:** 🔴 **FUTURO / BLOQUEADO / NÃO EXECUTAR AGORA**  
+**Data:** 23/09/2026  
+**Ordem explícita do SEGREDO/CHEFE:** este é o **SEGUNDO PASSO**. O passo atual é somente sanear/remover duplicatas comprovadas. **Não mexer no perfil/pasta Pivete nesta etapa.**
+
+```text
+PR_ROLE=FUTURE_CRITICAL_PENDING
+DO_NOT_EXECUTE_NOW=true
+LOCKED=true
+STEP=2
+STEP_1=REMOVE_ONLY_PROVEN_DUPLICATES_AND_LEAVE_CURRENT_CASA_CLEAN
+STEP_1_TOUCH_PIVETE_PROFILE=false
+UNLOCK_CONDITION=STEP_1_FIXED_POINT_AND_EXPLICIT_CHEFE_REOPEN
+ONE_SYSTEM_ONLY=true
+REUSE_BEFORE_CREATE=true
+CURRENT > HISTORY
+UNKNOWN != PASS
+REALITY = JUDGE
+```
+
+**Intenção futura preservada, sem implantação:** estudar a promoção de um disco dedicado mais rápido para ser a fronteira integral de trabalho do HERMES — workspace, worktrees, build, temp, cache, logs, artifacts e tools — mantendo os demais discos como capacidades do mesmo sistema (por exemplo, garimpo/entrada bruta/arquivo) e preparando futura contenção Docker sem criar uma segunda CentralDark.
+
+**Evidência de hardware fornecida pelo CHEFE em 23/09/2026:**
+- `C:` = XPG GAMMIX S70 BLADE, NVMe PCIe x4 — fast lane atual; não decidir seu papel futuro neste PR.
+- `D:` = KINGSTON SA400S37480G, SSD 447.1 GB — **candidato forte** a workspace dedicado, ainda não promovido.
+- `E:`, `F:` e `J:` = partições do mesmo Hitachi HDS5C1010CLA382, HDD 5700 RPM — trocar E→F não constitui ganho de disco físico.
+
+**Guardrail:** modelo, letra de unidade ou path candidato **não viram decisão arquitetural sem benchmark/medição CURRENT + consumidores + rollback**. A futura migração deve fazer path virar configuração, não espalhar hardcode novo.
+
+**Não fazer neste PR / agora:**
+- não mover `E:\CentralDark`;
+- não promover `D:` a workspace;
+- não alterar `Pivete`/perfil/pastas por causa desta pendência;
+- não criar Docker/containers;
+- não mudar C:/E:/D: em runtime;
+- não apagar dados;
+- não iniciar garimpo automático.
+
+**Critério para destravar futuramente:**
+1. saneamento de duplicatas do passo 1 chega a FIXED_POINT;
+2. topologia C:/D:/E:/F:/J: é remedida ao vivo;
+3. benchmark compatível com carga Git/Node/build/arquivos pequenos discrimina o disco alvo;
+4. todos os consumidores de paths são inventariados;
+5. rollback e migração reversível são provados;
+6. SEGREDO/CHEFE reabre explicitamente o passo 2.
+
+**NEXT_CURSOR futuro:** `STEP1_DUPLICATE_CLEANUP_FIXED_POINT → REMEASURE_STORAGE → BENCHMARK → PATH_CONSUMERS → MIGRATION_PLAN → DOCKER_BOUNDARY_PLAN`.

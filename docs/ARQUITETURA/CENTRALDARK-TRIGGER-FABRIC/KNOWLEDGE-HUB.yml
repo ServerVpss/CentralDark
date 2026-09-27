@@ -1,0 +1,378 @@
+schema: centraldark.knowledge-hub.v1
+name: CENTRALDARK_KNOWLEDGE_HUB
+status: CANONICAL
+owner: CENTRALDARK_TRIGGER_FABRIC
+intent_authority: SEGREDO/CHEFE
+
+principle:
+  statement: "Uma intenção, um Hub de conhecimento, vários braços de entrada e projeção."
+  one_system_only: true
+  one_hub_only: true
+  one_writer_per_scope: true
+  graph_is_projection_not_authority: true
+  notification_is_projection_not_authority: true
+  session_is_provenance_not_authority: true
+  profile_is_presentation_not_authority: true
+  unknown_is_not_pass: true
+  current_gt_history: true
+
+canonical_profile:
+  id: ORQUESTRACAO_SOL
+  display: "😎 Orquestração SOL 🌞"
+  owner: docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md
+  model_is_profile: false
+  session_is_profile: false
+
+canonical_owners:
+  memory_api: apps/modulos/memoria-api/
+  memory_linker: scripts/memory-linker/
+  knowledge_compiler: .agents/skills/knowledge-compiler/
+  graph_panel: apps/modulos/graph-panel/
+  obsidian_plugin: apps/modulos/obsidian-plugin-grafo-vivo/
+  graph_rag: apps/modulos/HERMES-CORE/agents/GraphRAG-Master/
+  hermes_core: apps/modulos/HERMES-CORE/
+  master_cycle: scripts/trigger-fabric/centraldark_master_cycle.py
+  notification_client: src/lib/notifications-events.ts
+  notification_edge_helper: supabase/functions/_shared/notifications-events.ts
+  notification_contract: docs/NOTIFY/README.md
+  boot: CENTRALDARK_AI_BOOT.yaml
+  randolf: docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md
+  deploy_policy: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/DEPLOY-READINESS.yml
+
+unified_flow:
+  - SEGREDO_CHEFE_INTENT_GOAL
+  - CENTRALDARK_AI_BOOT
+  - HISTORY_RENDEZVOUS
+  - RANDOLF_CONTINUITY
+  - CAPABILITY_LINEAGE
+  - DEDUPE_ABSORB
+  - ONE_SURVIVING_DELTA
+  - ENEIAS_STRATEGY_WHEN_MATERIAL
+  - SOL_COORDINATION
+  - MULTIBUSSOLA
+  - META_LUPA
+  - RECONCILIAR_EXISTING_OWNER
+  - ONE_WRITER
+  - HERMES_EXECUTION
+  - COUNTERPROOF
+  - REMEASUREMENT
+  - REALITY_JUDGE
+  - FIXED_POINT
+  - REGISTER_RECEIPT_GRAPH_CURSOR
+  - NOTIFICATION_PROJECTION
+  - DEPLOY_BY_CAUSAL_SCOPE
+  - BOOT_NEXT_CYCLE
+
+master_ingress:
+  owner: scripts/trigger-fabric/centraldark_master_cycle.py
+  voice_is_modality_not_second_router: true
+  text:
+    explicit_examples:
+      - "#ACORDAR"
+      - "!CENTRALDARK"
+      - "!CENTRALDARK SOL ACORDAR"
+    plain_word_centraldark_without_marker_does_not_trigger: true
+  voice:
+    input_mode: voice
+    examples:
+      - "acordar"
+      - "centraldark"
+      - "sol acordar"
+      - "centraldark sol acordar"
+    route: SAME_MASTER_FUNNEL
+  invariant:
+    - ONE_COMMAND_FAMILY
+    - ONE_MISSION
+    - MASTER_REENTRY_GUARD
+    - UNKNOWN_IS_NOT_PASS
+
+session_provenance:
+  owner: docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md
+  observed_aliases:
+    - id: "20260905_031340_68bd10"
+      classification: CANDIDATE_ANCHOR
+      profile_display: "😎 Orquestração SOL 🌞"
+    - id: "20260905_030855_9d0c93"
+      classification: OBSERVED_SESSION_ALIAS
+    - id: "20260905_010608_8c07f9"
+      classification: OBSERVED_SESSION_ALIAS
+    - id: "20260902_231220_48846d"
+      classification: OBSERVED_SESSION_ALIAS
+    - id: "20260830_050658_252bc7"
+      classification: OBSERVED_SESSION_ALIAS
+  rules:
+    session_id_is_authority: false
+    session_id_is_current_state: false
+    exact_panel_binding_requires_runtime_evidence: true
+    session_change_is_new_mission: false
+    model_change_resets_mission: false
+
+caracol_reverse:
+  enabled: true
+  trigger:
+    - MATERIAL_DIVERGENCE
+    - STALE_EVIDENCE
+    - NEW_HEAD
+    - OWNER_DRIFT
+    - RUNTIME_DRIFT
+    - CONTRADICTORY_EVIDENCE
+  behavior:
+    - RETURN_TO_LAST_PROVEN_CURSOR
+    - PRESERVE_INDEPENDENT_PROOF
+    - INVALIDATE_ONLY_DEPENDENT_STALE_CLAIMS
+    - REMEASURE_AFFECTED_CONE
+    - DO_NOT_CREATE_PARALLEL_PIPELINE
+
+entry_surfaces:
+  chat_and_agents:
+    route: CENTRALDARK_AI_BOOT
+    event_class: MATERIAL_INGEST
+    direct_canonical_write: false
+  voice:
+    route: MASTER_CYCLE_VOICE_MODE
+    event_class: VOICE_COMMAND_OR_MATERIAL
+    direct_canonical_write: false
+  hermes_desktop:
+    route: MASTER_CYCLE_AND_RANDOLF
+    event_class: SESSION_MATERIAL
+    direct_canonical_write: false
+  sol_app:
+    route: MASTER_CYCLE_AND_RANDOLF
+    event_class: SESSION_MATERIAL
+    direct_canonical_write: false
+  github:
+    route: EXISTING_GITHUB_WORKFLOWS_AND_RECEIPTS
+    event_class: PR_COMMIT_WORKFLOW_RUNTIME_EVIDENCE
+    direct_canonical_write: writer_authorized_only
+  obsidian_plugin:
+    route:
+      read_graph: "https://grafo.centralldark.com/api/graph?mode=vivo"
+      knowledge_ingest: "https://api.centralldark.com/memoria/ingest"
+    event_class: OBSIDIAN_NOTE_OR_PLUGIN_EVENT
+    authentication: BEARER_RUNTIME_SECRET
+    direct_canonical_write: false
+  obsidian_webhooks:
+    route: "POST /memoria/ingest"
+    event_class: OBSIDIAN_WEBHOOK
+    authentication: BEARER_RUNTIME_SECRET
+    direct_canonical_write: false
+  runtime_webhooks:
+    route: "POST /memoria/ingest"
+    event_class: RUNTIME_EVENT
+    authentication: BEARER_RUNTIME_SECRET
+    direct_canonical_write: false
+  notification_events:
+    route: EXISTING_NOTIFICATION_SYSTEM
+    event_class: MATERIAL_STATE_PROJECTION
+    direct_canonical_write: false
+  firecrawl:
+    route: CAPABILITY_CONTRACT_ROUTER
+    event_class: WEB_RETRIEVAL
+    direct_canonical_write: false
+    provider_is_replaceable: true
+    provider_is_authority: false
+    provider_is_second_brain: false
+  other_web_retrieval:
+    route: CAPABILITY_CONTRACT_ROUTER
+    event_class: WEB_RETRIEVAL
+    direct_canonical_write: false
+
+firecrawl_policy:
+  source_policy_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CAPABILITY-READINESS-POLICY.yml
+  modes:
+    open_source:
+      use_when:
+        - SOURCE_CONTROL_REQUIRED
+        - INFRASTRUCTURE_CONTROL_REQUIRED
+        - OPERATIONAL_COST_ACCEPTED
+      responsibilities:
+        - AUTH
+        - TLS
+        - PERSISTENCE
+        - MONITORING
+        - CAPACITY
+        - UPGRADES
+        - RECOVERY
+    cloud:
+      use_when:
+        - FASTEST_MANAGED_PATH_REQUIRED
+        - CLOUD_ONLY_SURFACE_REQUIRED
+        - MANAGED_OPERATIONS_PREFERRED
+  default_selection: MINIMUM_SUFFICIENT_PROVIDER
+  do_not_install_globally_by_default: true
+  self_host_from_pinned_release: true
+  prove_one_scrape_before_expanding_services: true
+  cloud_or_self_host_choice_is_router_input_not_new_architecture: true
+
+knowledge_event_envelope:
+  required_fields:
+    - event_id
+    - source
+    - kind
+    - observed_at
+    - status
+    - canonical
+  optional_fields:
+    - title
+    - text
+    - path
+    - url
+    - intent_goal
+    - owner
+    - provenance
+    - source_surface
+    - session_id
+    - profile_id
+    - profile_display
+    - head_sha
+    - next_cursor
+    - metadata
+    - raw_checksum
+    - encoding_suspect
+  constraints:
+    status_default: CANDIDATE
+    canonical_default: false
+    text_normalization: NFC
+    raw_payload_must_not_be_rewritten_semantically: true
+    secret_values_must_not_be_logged: true
+    authorization_header_must_not_be_persisted: true
+    cookies_must_not_be_persisted: true
+    unknown_fields_may_be_preserved_only_after_secret_scrub: true
+
+notification_projection:
+  owner:
+    - src/lib/notifications-events.ts
+    - supabase/functions/_shared/notifications-events.ts
+    - docs/NOTIFY/README.md
+  context_fields:
+    - event_key
+    - severity
+    - source_surface
+    - session_id
+    - profile_id
+    - profile_display
+    - intent_goal
+    - owner
+    - head_sha
+    - knowledge_event_id
+    - next_cursor
+    - runtime
+  route:
+    - NOTIFICATIONS_LOG
+    - MEGA_PANEL_REALTIME
+    - TELEGRAM_WHEN_CONFIGURED
+  rules:
+    notification_is_authority: false
+    notification_delivery_is_runtime_proof: false
+    event_key_is_identity_not_verdict: true
+    secret_values_must_not_be_logged: true
+    dedupe_before_fanout: true
+    same_material_event_should_keep_same_context: true
+
+self_correction:
+  encoding_and_spelling:
+    deterministic_normalization_allowed:
+      - UTF8_NFC
+      - CONTROL_CHARACTER_STRIP_EXCEPT_NEWLINE_TAB
+      - SAFE_WHITESPACE_NORMALIZATION
+    semantic_guessing_for_corrupted_text: forbidden
+    mojibake_without_deterministic_inverse: MARK_ENCODING_SUSPECT
+    original_checksum_required: true
+  operational_learning:
+    flow:
+      - EVENT
+      - DEDUPE
+      - CLASSIFY
+      - SEARCH_EXISTING_CRYSTAL
+      - CAUSE
+      - MINIMAL_REMEDIATION
+      - TEST
+      - COUNTERPROOF
+      - REALITY_JUDGE
+      - REGISTER_LEARNING_DELTA
+    same_failure_no_new_information: REUSE_CRYSTAL
+
+promotion:
+  raw_event_to_main: forbidden
+  candidate_to_main_requires:
+    - DESTINATION_OWNER
+    - CONSUMER
+    - TEST_OR_PROOF_CONTRACT
+    - SAME_HEAD_EVIDENCE_WHEN_CODE_CHANGES
+    - COUNTERPROOF_WHEN_MATERIAL
+    - ONE_WRITER
+    - APPLICABLE_MAIN_GATE
+  percent_only_is_not_gate: true
+  controlled_live_use_can_precede_global_perfection: true
+  noncritical_unknowns_may_remain_yellow: true
+
+obsidian_semantics:
+  native_graph_is_human_projection: true
+  grafo_vivo_plugin_is_projection_and_ingest_client: true
+  plugin_does_not_become_canonical_writer: true
+  webhook_does_not_become_canonical_writer: true
+  graph_edge_does_not_prove_causality_by_itself: true
+  note_content_is_material_not_authority: true
+
+proof_boundaries:
+  plugin_installed_is_not_plugin_runtime_proven: true
+  endpoint_documented_is_not_endpoint_live: true
+  event_accepted_is_not_learning_promoted: true
+  graph_visible_is_not_runtime_causality_proven: true
+  notification_visible_is_not_causality_proven: true
+  provider_docs_is_not_provider_runtime_proven: true
+  merged_is_not_deployed: true
+  workflow_green_is_not_runtime_receipt: true
+
+slogan:
+  technical: "ONE HUB, MANY INGRESSES, ONE WRITER, REALITY JUDGES"
+  operational: "TUDO ENTRA PELO MESMO NÚCLEO; SÓ O OURO PROVADO SOBE"
+
+material_first_cognitive_route:
+  status: ACTIVE
+  authority: SEGREDO/CHEFE
+  source_is_authority: false
+  graph_is_authority: false
+  historical_success_is_current_pass: false
+  fixed_point_is_learning_gate: false
+  ingress:
+    - CHEFE_MATERIAL
+    - AGENT_MATERIAL
+    - ERROR
+    - CORRECTION
+    - TEST_FAILURE
+    - CONTRADICTION
+  flow:
+    - GRILL_ME_READ_ONLY
+    - EPISTEMIC_CLASSIFICATION
+    - LEARNING_REF
+    - SEARCH_EXISTING_CRYSTAL
+    - EXISTING_CANONICAL_OWNER
+    - SESSION_INTELLIGENCE_HARVESTER
+    - MEMORY_LINKER
+    - KNOWLEDGE_COMPILER
+    - KNOWLEDGE_COLLECTOR
+    - DECISOR
+    - ORCHESTRATOR
+    - EXECUTOR_CRITIC
+    - GRAPHRAG_MASTER
+    - SEMANTIC_LINKER
+    - RECEIPT
+    - NEXT_CURSOR
+  owners:
+    material_ingest: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md
+    learning_owner: apps/modulos/HERMES-CORE/agents/Knowledge-Collector/agent.mjs
+    decision_consumer: apps/modulos/HERMES-CORE/core/decisor.mjs
+    runtime_producer: apps/modulos/HERMES-CORE/core/orchestrator.mjs
+    graph_rag: apps/modulos/HERMES-CORE/agents/GraphRAG-Master/
+    semantic_linker: scripts/memory-linker/
+  rules:
+    MATERIAL_FROM_CHEFE_AUTO_INGEST: true
+    MATERIAL_FROM_CHEFE_IS_NOT_AUTOMATIC_FACT: true
+    PROVEN_MATERIAL_AUTO_CRYSTALLIZES_IN_EXISTING_OWNER: true
+    UNPROVEN_MATERIAL_STAYS_CANDIDATE_OR_UNKNOWN: true
+    ASK_TO_CRYSTALLIZE_ALREADY_PROVEN_DELTA: false
+    SAME_FINDING_WITHOUT_NEW_EVIDENCE: DROP_DUPLICATE
+    REPEATED_CHEFE_RETEACH_AFTER_PROMOTION: LEARNING_TRANSFER_FAIL
+    CURRENT_EQUIVALENCE_OR_REMEASURE_REQUIRED: true
+

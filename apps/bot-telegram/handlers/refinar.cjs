@@ -73,7 +73,7 @@ async function refinarHandler(deps, modo) {
     );
   }
 
-  const emoji = { router: '🎯', parallel: '⚡', debate: '🔥' }[modo] || '🧠';
+  const emoji = { router: '🎯', parallel: '🔍', debate: '🧭' }[modo] || '🧠';
   const nomeModo = { router: 'ROUTER (1 IA rápida)', parallel: 'PARALLEL (3 IAs + juiz)', debate: 'DEBATE (2 rodadas + juiz)' }[modo];
   const tempoEstimado = { router: '~10s', parallel: '~40s', debate: '~90s' }[modo];
 

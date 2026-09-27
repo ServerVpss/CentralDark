@@ -122,3 +122,11 @@ Se qualquer um dos três divergir, o PR já quebra no CI antes de chegar em revi
 - [[SKILL.md]] — `.agents/skills/meta-lupa/SKILL.md`
 - [[SOUL-SOL.md]] — autoridade e aprendizado operacional atuais
 - [[APRENDIZADOS.md]] — histórico de erros, correções e contraprovas
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

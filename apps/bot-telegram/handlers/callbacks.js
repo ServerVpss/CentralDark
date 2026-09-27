@@ -1,5 +1,6 @@
 // Handlers de callback queries (botões pressionados)
 const messages = require('../services/messages');
+const { formatBrasilia } = require('../../../central-horario/node.cjs');
 
 module.exports = {
   async callbackHandler({ type, data, chatId, messageId }) {
@@ -11,7 +12,7 @@ module.exports = {
       switch (action) {
         case 'status':
           await messages.editMessage(chatId, messageId,
-            '📊 <b>Status do Sistema</b>\n\n✅ Bot online\n⏰ ' + new Date().toLocaleString('pt-BR'),
+            '📊 <b>Status do Sistema</b>\n\n✅ Bot online\n⏰ ' + formatBrasilia(),
             [[{ text: '🔙 Menu', callback_data: 'cmd:start' }]]
           );
           return { handled: true };
@@ -30,7 +31,7 @@ module.exports = {
 
         case 'skills':
           await messages.editMessage(chatId, messageId,
-            '⚡ <b>Skills</b>\n\nSelecione uma categoria:',
+            '🔥 <b>Skills</b>\n\nSelecione uma categoria:',
             [
               [{ text: '💬 Comunicação', callback_data: 'skills:communication' }],
               [{ text: '🤖 IA', callback_data: 'skills:ai' }],

@@ -1,7 +1,7 @@
 ---
 title: "PROTOCOLO DE ORQUESTRACAO CENTRALDARK"
 tags: ["consciencia", "orquestracao", "ia", "centraldark"]
-updated: 2026-08-14
+updated: 2026-08-16
 ---
 
 # Protocolo de Orquestração CentralDark
@@ -98,6 +98,93 @@ Não criar segunda missão, segunda memória, segundo orquestrador ou segundo Wr
 | Edição controlada | escrever no escopo autorizado |
 | Execução com travas | operar com gates e rollback |
 | V-REALTIME desenvolvimento | iterar GitHub → runtime → prova sem repetir autorização ainda válida |
+
+### Planejamento compilado — `COMPILE_THEN_APPLY`
+
+Quando a missão trouxer muitas fontes, decisões concorrentes, aprendizado reutilizável ou uma solução que deve ficar rápida nas próximas execuções, o modo `Planejamento` pode operar como **compilador** antes da mutação. Isso não cria um modo de autoridade novo e não exige que o SEGREDO/CHEFE memorize um comando.
+
+```text
+COMPILE_THEN_APPLY=true
+AUTO_TRIGGER_WHEN_MULTI_SOURCE_OR_REUSABLE_LEARNING=true
+PLAN_ONLY_BEFORE_ROUTE_READY=true
+```
+
+Fluxo:
+
+```text
+INTENCAO + ESTADO_VIVO + FONTES
+→ PLANEJAR SEM MUTAR
+→ MINERAR
+→ EXTRAIR
+→ DEDUPLICAR
+→ CONTRAPROVAR
+→ ARBITRAR CONFLITOS
+→ LOCALIZAR OWNER
+→ LIGAR SKILL + CONSUMIDOR + TESTE + GATE
+→ COMPILAR ROUTE_IR
+→ ROTA PRONTA E AUTORIZACAO JA EXISTE?
+   NAO → CANDIDATE|BLOCKED + RESIDUO
+   SIM → APLICAR MENOR DELTA
+→ PROVAR
+→ CRISTALIZAR
+→ FLASH_READY
+```
+
+A separação é deliberada:
+
+```text
+FORJA = aprendizado lento, profundo e rigoroso
+FLASH = execução curta sobre rota já compilada
+
+MINERAR UMA VEZ
+→ CRISTALIZAR UMA VEZ
+→ REUTILIZAR N VEZES
+```
+
+No runtime normal, não reler o corpus inteiro se a rota continua válida:
+
+```text
+INTENCAO
+→ ROTEADOR
+→ OWNER
+→ SKILL
+→ CONSUMIDOR
+→ ACAO
+→ PROVA
+```
+
+Se entrar informação nova, recalcular somente a rota dependente do delta. Não reconstruir a Casa inteira por reflexo.
+
+```text
+NEW_INFORMATION != REBUILD_ALL
+DELTA_AFFECTED_ONLY=true
+UNAFFECTED_ROUTE_REUSE=true
+ONE_ACTIVE_ROUTE_PER_CAPABILITY_BOUNDARY=true
+```
+
+Planejamento, antecipação e rota compilada continuam sem poder criar permissão:
+
+```text
+PLAN_ONLY != EXECUTION
+COMPILED_ROUTE != AUTHORIZATION
+ANTICIPATION != AUTHORIZATION
+APPLY_REQUIRES_EXISTING_AUTHORITY=true
+```
+
+Quando progresso visível ajudar a manter o fio durante uma tarefa longa, usar somente recibo comprimido, nunca scratchpad ou cadeia privada:
+
+```text
+TICK:
+  phase: INGEST|DISTILL|ARBITRATE|COMPILE|APPLY|VERIFY|CRYSTALLIZE|FLASH_READY
+  delta: <mudanca material>
+  owner: <owner|UNKNOWN>
+  route: <route_id|PENDING>
+  blocker: <0|causa real>
+  next: <proximo passo unico>
+```
+
+Implementação chamável: `.agents/skills/knowledge-compiler/SKILL.md`.
+Owner de aprendizado/cristal: `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md`.
 
 ## Boot CentralDark
 
@@ -223,3 +310,11 @@ Aprendizado durável vai para `docs/CONSCIENCIA/APRENDIZADOS.md` ou para o artef
 ```text
 SEGREDO/CHEFE comanda; SOL coordena; PIVETE/HERMES preserva e executa; especialistas variam; GitHub registra; Actions e runtime provam. Recupere o estado real antes de continuar, reutilize antes de criar, não repita autorização ainda válida, faça o menor movimento causal e nunca converta UNKNOWN em PASS.
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

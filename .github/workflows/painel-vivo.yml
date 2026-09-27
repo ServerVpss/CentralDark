@@ -1,4 +1,4 @@
-name: painel-vivo
+name: ⚙️ painel-vivo
 
 on:
   workflow_dispatch:
@@ -34,13 +34,21 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: painel-vivo
+  cancel-in-progress: false
+
 jobs:
   atualizar-painel:
     runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
-      - name: Atualizar painel vivo
+      - name: 🔹 Publicar painel vivo com writer-safe-push
+        shell: bash
         env:
           PAINEL_EVENTO: ${{ inputs.evento }}
           PAINEL_EVENTO_DETALHE: ${{ inputs.detalhe }}
@@ -49,12 +57,16 @@ jobs:
           PAINEL_MARCO: ${{ inputs.marco }}
           PAINEL_MARCO_PCT: ${{ inputs.marco_pct }}
           PAINEL_MARCO_STATUS: ${{ inputs.marco_status }}
-        run: node CentralDark/apps/projeto-dashboard/atualizar-painel-vivo.mjs
+          ACTOR: ${{ github.actor }}
+          SHA: ${{ github.sha }}
+          WRITER_TAG: PAINEL_VIVO
+          PATHS: apps/modulos/status/painel-data.json
+          REGENERATE_CMD: node apps/modulos/status/atualizar-painel-vivo.mjs
+          COMMIT_MESSAGE: |
+            chore(painel): atualizar mapa vivo
 
-      - name: Commit painel vivo
-        run: |
-          git config user.name 'CentralDark Bot'
-          git config user.email 'actions@github.com'
-          git add -- CentralDark/apps/projeto-dashboard/painel-data.json
-          git commit -m "chore(painel): atualizar mapa vivo" || exit 0
-          git push
+            Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>
+          GIT_AUTHOR_NAME: CentralDark Bot
+          GIT_AUTHOR_EMAIL: actions@github.com
+          MAX_TRIES: "3"
+        run: bash scripts/lupa/writer-safe-push-main.sh

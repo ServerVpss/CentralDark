@@ -43,6 +43,7 @@ Documentação viva do instalador automático. Esta pasta é a **fonte única de
 | `21-ui-aio.md` | **Interface AutoScriptVPN-AIO** — banner vermelho, separadores ciano, lista de status, menu em 2 colunas |
 | `22-menu-vps.md` | **Menu colorido da VPS (`cdmenu` / `cdstatus` / `menu`)** — estilo cabrata/autoscript, painel VPS INFO + status PM2, sem expor IP |
 | `23-auto-update.md` | **Auto-update do instalador** — `install.sh` se atualiza sozinho a cada execução + flag `--update` + opção 10 no wizard |
+| `24-rebuild-deterministico.md` | **Rebuild limpo e reproduzível** — inventário read-only, fronteira de confiança, config privada, restore allowlisted, security gates e cutover |
 | `30-skill-consciencia.md` | **Skill da Consciência CentralDark** — empacota regras invioláveis em formato instalável (`skil.sh` / MCP / SSH). 1 comando e qualquer IA nova fica no padrão |
 
 
@@ -57,6 +58,7 @@ Documentação viva do instalador automático. Esta pasta é a **fonte única de
 - [x] MCP CentralDark de pé em `mcp.centralldark.com` (porta 9100, PM2 `MCP-CentralDark`)
 - [x] ChatGPT conectado via OAuth GitHub (provisório — OAuth próprio fica pra futuro)
 - [x] Cloudflare DNS automático via API (`scripts/cloudflare/cf-sync.sh` + `--cloudflare-apply`) — qualquer conta nova só precisa do token + `cloudflare.env`
+- [x] Fundação de rebuild determinístico com inventário read-only + contraprova estática (`24-rebuild-deterministico.md`)
 - [ ] Fase de instalação de dependências
 - [ ] Fase de configuração de Caddy/PM2
 - [ ] Fase de migração Supabase

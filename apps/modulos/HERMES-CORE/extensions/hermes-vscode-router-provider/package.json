@@ -1,0 +1,57 @@
+{
+  "name": "hermes-vscode-router-provider",
+  "displayName": "CentralDark Git Intelligence + Hermes Router",
+  "description": "Git intelligence clean-room da Casa: blame, history, graph, refs, worktrees, PR launchpad e ligação com o HERMES-CORE.",
+  "version": "0.3.0",
+  "publisher": "centraldark-local",
+  "private": true,
+  "engines": { "vscode": "^1.95.0" },
+  "categories": ["Other", "SCM Providers"],
+  "keywords": ["centraldark", "hermes", "git", "blame", "history", "graph", "worktree"],
+  "main": "./extension.js",
+  "activationEvents": ["onStartupFinished"],
+  "scripts": { "self-test": "node self-test.mjs" },
+  "contributes": {
+    "commands": [
+      {"command":"centraldarkGit.status","title":"CentralDark Git: Estado do Repositório"},
+      {"command":"centraldarkGit.graph","title":"CentralDark Git: Abrir Grafo de Commits"},
+      {"command":"centraldarkGit.currentLineBlame","title":"CentralDark Git: Blame da Linha Atual"},
+      {"command":"centraldarkGit.toggleFileBlame","title":"CentralDark Git: Alternar Blame do Arquivo"},
+      {"command":"centraldarkGit.fileHistory","title":"CentralDark Git: Histórico do Arquivo"},
+      {"command":"centraldarkGit.lineHistory","title":"CentralDark Git: Histórico da Linha"},
+      {"command":"centraldarkGit.commitDetails","title":"CentralDark Git: Detalhes de Commit"},
+      {"command":"centraldarkGit.compareRevision","title":"CentralDark Git: Comparar com Revisão"},
+      {"command":"centraldarkGit.refs","title":"CentralDark Git: Branches, Tags e Remotes"},
+      {"command":"centraldarkGit.worktrees","title":"CentralDark Git: Worktrees"},
+      {"command":"centraldarkGit.createWorktree","title":"CentralDark Git: Criar Worktree"},
+      {"command":"centraldarkGit.checkoutBranch","title":"CentralDark Git: Trocar Branch com Guarda"},
+      {"command":"centraldarkGit.stashes","title":"CentralDark Git: Stashes"},
+      {"command":"centraldarkGit.contributors","title":"CentralDark Git: Contribuidores"},
+      {"command":"centraldarkGit.launchpad","title":"CentralDark Git: Launchpad de PRs"},
+      {"command":"centraldarkGit.copyPatch","title":"CentralDark Git: Copiar Patch Atual"},
+      {"command":"centraldarkGit.openRemote","title":"CentralDark Git: Abrir Repositório Remoto"},
+      {"command":"centraldarkGit.refresh","title":"CentralDark Git: Atualizar Contexto"}
+    ],
+    "menus": {
+      "editor/context": [
+        {"command":"centraldarkGit.currentLineBlame","group":"centraldark@1"},
+        {"command":"centraldarkGit.fileHistory","group":"centraldark@2"},
+        {"command":"centraldarkGit.lineHistory","group":"centraldark@3"},
+        {"command":"centraldarkGit.compareRevision","group":"centraldark@4"}
+      ],
+      "scm/title": [
+        {"command":"centraldarkGit.graph","group":"navigation@1"},
+        {"command":"centraldarkGit.refresh","group":"navigation@2"}
+      ]
+    },
+    "configuration": {
+      "title": "CentralDark Git Intelligence",
+      "properties": {
+        "centraldarkGit.blame.enabled": {"type":"boolean","default":true,"description":"Mostra blame da linha atual na barra de status."},
+        "centraldarkGit.blame.maxFileLines": {"type":"number","default":3000,"minimum":100,"description":"Limite para anotações de blame de arquivo inteiro."},
+        "centraldarkGit.graph.maxCommits": {"type":"number","default":500,"minimum":50,"maximum":5000,"description":"Quantidade máxima de commits exibidos no grafo local."},
+        "centraldarkGit.launchpad.limit": {"type":"number","default":100,"minimum":10,"maximum":500,"description":"Máximo de PRs lidos pelo Launchpad quando gh estiver disponível."}
+      }
+    }
+  }
+}

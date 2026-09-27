@@ -1,0 +1,338 @@
+/* Estilos LOCAIS do preview cockpit. Escopo: .cockpit-root */
+
+.cockpit-root {
+  --ck-bg-1: #052e2b;
+  --ck-bg-2: #0a3d38;
+  --ck-fg: #ecfdf5;
+  --ck-fg-dim: #a7f3d0;
+  --ck-fg-mute: #6ee7b7cc;
+  --ck-esmeralda: #10b981;
+  --ck-esmeralda-2: #34d399;
+  --ck-border: #10b98133;
+  --ck-panel: #04211f;
+  --ck-panel-2: #062a26;
+
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  color: var(--ck-fg);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  background:
+    radial-gradient(1200px 800px at 80% -10%, #10b98122, transparent 60%),
+    radial-gradient(1000px 600px at -10% 110%, #34d39918, transparent 60%),
+    linear-gradient(135deg, var(--ck-bg-1), var(--ck-bg-2));
+}
+
+.cockpit-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.cockpit-shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 20px clamp(16px, 4vw, 48px);
+  gap: 24px;
+}
+
+/* NAV */
+.cockpit-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.cockpit-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.cockpit-brand-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ck-esmeralda);
+  box-shadow: 0 0 12px var(--ck-esmeralda);
+  animation: ck-pulse 2s ease-in-out infinite;
+}
+.cockpit-brand-name {
+  color: var(--ck-fg);
+  font-size: 15px;
+}
+.cockpit-brand-name em {
+  font-style: normal;
+  color: var(--ck-esmeralda-2);
+  text-shadow: 0 0 12px #10b98155;
+}
+.cockpit-nav-tag {
+  font-size: 11px;
+  padding: 4px 10px;
+  border: 1px solid var(--ck-border);
+  border-radius: 999px;
+  color: var(--ck-fg-dim);
+  background: #04211f88;
+}
+
+/* MAIN GRID */
+.cockpit-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(300px, 380px) 1fr;
+  gap: 24px;
+  align-items: stretch;
+}
+@media (max-width: 900px) {
+  .cockpit-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* PILOTO */
+.piloto {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  border: 1px solid var(--ck-border);
+  border-radius: 14px;
+  background: linear-gradient(180deg, #04211fcc, #062a26cc);
+  backdrop-filter: blur(6px);
+  min-height: 520px;
+}
+.piloto-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--ck-fg-mute);
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--ck-border);
+}
+.piloto-header b {
+  color: var(--ck-esmeralda-2);
+  letter-spacing: 0.08em;
+}
+.piloto-chat {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.45;
+  min-height: 240px;
+  max-height: 380px;
+  mask-image: linear-gradient(180deg, transparent 0, #000 30px, #000 calc(100% - 20px), transparent 100%);
+}
+.piloto-msg {
+  animation: ck-fade-in 0.35s ease-out both;
+}
+.piloto-msg .autor {
+  font-weight: 700;
+  margin-right: 6px;
+}
+.piloto-msg .caret {
+  display: inline-block;
+  width: 7px;
+  height: 13px;
+  vertical-align: -2px;
+  background: currentColor;
+  margin-left: 2px;
+  animation: ck-caret 1s steps(2) infinite;
+}
+.piloto-headline {
+  font-size: clamp(22px, 3vw, 30px);
+  line-height: 1.15;
+  color: var(--ck-fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto;
+  font-weight: 700;
+  margin-top: auto;
+}
+.piloto-headline em {
+  font-style: normal;
+  color: var(--ck-esmeralda-2);
+  text-shadow: 0 0 24px #10b98166;
+  animation: ck-glow 3.5s ease-in-out infinite;
+}
+.piloto-sub {
+  font-size: 13px;
+  color: var(--ck-fg-mute);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto;
+  line-height: 1.5;
+}
+
+/* GRID DE PANES */
+.panes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 16px;
+  min-height: 520px;
+}
+@media (max-width: 900px) {
+  .panes-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+  }
+}
+@media (max-width: 520px) {
+  .panes-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, minmax(140px, auto));
+  }
+}
+
+/* PANE */
+.pane {
+  --neon: #10b981;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid color-mix(in srgb, var(--neon) 35%, transparent);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #04211fee, #062a26ee);
+  padding: 12px 14px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px #00000022 inset,
+    0 0 24px color-mix(in srgb, var(--neon) 15%, transparent);
+  transition: box-shadow 0.3s ease;
+}
+.pane:hover {
+  box-shadow:
+    0 0 0 1px #00000022 inset,
+    0 0 32px color-mix(in srgb, var(--neon) 32%, transparent);
+}
+.pane-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed color-mix(in srgb, var(--neon) 30%, transparent);
+  margin-bottom: 8px;
+}
+.pane-titulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--neon);
+  text-transform: uppercase;
+}
+.pane-titulo::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--neon);
+  box-shadow: 0 0 10px var(--neon);
+  animation: ck-pulse 1.6s ease-in-out infinite;
+}
+.pane-status {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--neon) 40%, transparent);
+  color: var(--neon);
+  background: color-mix(in srgb, var(--neon) 12%, transparent);
+  white-space: nowrap;
+  animation: ck-fade-in 0.4s ease-out;
+}
+.pane-status[data-tom="wait"] {
+  opacity: 0.7;
+}
+
+.pane-logs {
+  flex: 1;
+  overflow: hidden;
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--ck-fg-dim);
+  mask-image: linear-gradient(180deg, transparent 0, #000 20px, #000 calc(100% - 14px), transparent 100%);
+  min-height: 120px;
+}
+.pane-logs ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.pane-logs li {
+  animation: ck-log-in 0.45s ease-out both;
+  color: #cbd5e1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pane-logs li:first-child { opacity: 1; }
+.pane-logs li:not(:first-child) { opacity: 0.78; }
+
+/* SYNTAX HIGHLIGHT DOS TOKENS DO TERMINAL */
+.tk { }
+.tk-cmd   { color: #34d399; font-weight: 700; }
+.tk-ok    { color: #4ade80; }
+.tk-err   { color: #f87171; font-weight: 700; }
+.tk-warn  { color: #fbbf24; }
+.tk-arrow { color: #22d3ee; font-weight: 700; }
+.tk-tag   { color: color-mix(in srgb, var(--neon) 85%, #fff); font-weight: 600; }
+.tk-str   { color: #f472b6; }
+.tk-num   { color: #fbbf24; }
+.tk-key   { color: #a78bfa; }
+.tk-text  { color: #e2e8f0; }
+.tk-dim   { color: #94a3b8; }
+
+.pane-head-right { display: flex; align-items: center; gap: 10px; }
+.pane-cost {
+  font-size: 10px;
+  color: #4ade80;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.pane-arrow { color: var(--neon); margin-right: 4px; }
+
+/* KEYFRAMES */
+@keyframes ck-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.85); }
+}
+@keyframes ck-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes ck-log-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes ck-caret {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+@keyframes ck-glow {
+  0%, 100% { text-shadow: 0 0 16px #10b98155; }
+  50% { text-shadow: 0 0 28px #10b981aa, 0 0 48px #10b98155; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cockpit-canvas { display: none; }
+  .pane-titulo::before,
+  .cockpit-brand-dot,
+  .piloto-headline em,
+  .piloto-msg .caret,
+  .pane-logs li,
+  .pane-status,
+  .piloto-msg { animation: none !important; }
+}

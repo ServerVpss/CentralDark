@@ -28,6 +28,7 @@ import {
   LogOut,
   User,
   UserCog,
+  Route,
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
@@ -79,6 +80,7 @@ const menuGroups = [
       { title: "HUB CentralDark", icon: ShieldCheck, path: "https://hub.centralldark.com", external: true },
       { title: "Cofre (ADM)", icon: ShieldAlert, path: "/cofre" },
       { title: "Status", icon: Activity, path: "/status" },
+      { title: "Capability Router", icon: Route, path: "/capability-router" },
       { title: "Teste de Módulos", icon: FlaskConical, path: "/teste-modulos" },
       { title: "Auditoria", icon: ShieldAlert, path: "/audit" },
       { title: "Segurança", icon: Shield, path: "/security" },

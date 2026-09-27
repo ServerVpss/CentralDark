@@ -1,0 +1,15 @@
+[DEBUG] Verbose mode:  false
+Starting MCP Device...
+ - Connected to Desktop Commander MCP
+Connecting to Remote MCP https://mcp.desktopcommander.app
+   - Connected to Remote MCP
+Authenticating with Remote MCP server...
+Starting device authorization flow...
+   - Requesting device code...
+   - Device code received
+Please complete authentication:
+   1. Open this URL in your browser:
+      https://mcp.desktopcommander.app/device/verify
+   2. Enter this code when prompted:
+      WCWQ-HT4D
+   Code expires in 15 minutes.

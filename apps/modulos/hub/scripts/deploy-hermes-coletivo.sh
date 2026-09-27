@@ -4,6 +4,15 @@
 #   - 4 edge functions: memory-search, debate-round, hermes-think, learn-from-outcome
 set -euo pipefail
 
+RAIZ="/root/CentralDark"
+DISPATCHER="$RAIZ/scripts/vps/deploy-guards-dispatcher.sh"
+[ -x "$DISPATCHER" ] || { echo "gate canônico de deploy ausente"; exit 16; }
+REPO_DIR="$RAIZ" BRANCH=main bash "$DISPATCHER" --gate-only
+GATED_SHA="$(git -C "$RAIZ" rev-parse origin/main)"
+HEAD_SHA="$(git -C "$RAIZ" rev-parse HEAD)"
+[ "$HEAD_SHA" = "$GATED_SHA" ] || { echo "HEAD não é o SHA gateado: $HEAD_SHA != $GATED_SHA"; exit 17; }
+echo "[gate] TLC23/Universal/Meta-Lupa/Horn PASS em $GATED_SHA"
+
 # Carrega credenciais dos locais padrão (mesmos do deploy-abacus-router)
 for f in \
   /root/CentralDark/apps/modulos/hub/.env \

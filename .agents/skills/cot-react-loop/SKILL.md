@@ -116,6 +116,44 @@ Mesmo erro + zero informação nova + zero mudança = desperdício. Evidência q
 mata hipótese/regra deve fazê-la mudar ou morrer; nunca ajustar teste ou
 rebaixar canônico só para produzir verde.
 
+### 2.2 Contexto estrutural antes da busca ampla
+
+Quando a tarefa envolve código, a descoberta deve começar pelo mapa já existente
+antes de varrer o repositório com `grep`, `glob` ou leituras amplas:
+
+```text
+INTENÇÃO
+→ ÍNDICE/GRAFO/ROTA EXISTENTE
+→ CANDIDATOS POR SIGNIFICADO
+→ RELAÇÕES: callers, callees, imports, consumidores, testes
+→ OWNER + ESCOPO
+→ CONTEXTO MÍNIMO
+→ BUSCA AMPLA SOMENTE SE O MAPA NÃO RESOLVER
+```
+
+Busca semântica só produz candidatos. Ela não escolhe sozinha entre funções que
+compartilham vocabulário mas possuem efeitos opostos. O grafo é projeção; contrato,
+consumidor, teste e runtime confirmam o alvo. Se não houver índice ou relação
+suficiente, manter `UNKNOWN` e escalar a busca de forma explícita — nunca inventar
+que o primeiro resultado é o owner.
+
+```text
+SEMANTIC_MATCH != OWNER_PROOF
+GRAPH_RELATION != AUTHORITY
+INDEX_MISS != FILE_ABSENCE
+BROAD_SCAN_IS_FALLBACK=true
+CONTEXT_MINIMUM_BEFORE_MODEL=true
+```
+
+A seleção do Bolt aplica essa regra com pré-classificação barata por caminho e
+nome antes da chamada ao modelo, preservando a lista completa como fallback e
+validando qualquer arquivo retornado contra o inventário original. O objetivo é
+reduzir tokens e rodadas, não trocar prova estrutural por uma heurística lexical.
+
+Quando a rota já foi provada para a mesma intenção, owner, ferramenta e estado,
+reutilizar a decisão e executar o próximo passo determinístico. Reabrir somente
+com nova evidência, falha observada, mudança material ou contradição provada.
+
 ## 3. Gate de entrada
 
 Antes do primeiro uso de ferramenta, fixar:
@@ -219,6 +257,93 @@ Antes da execução, escolher de 3 a 8 modos relevantes, por exemplo:
 alvo incorreto, baseline contaminada, ação sem autorização, falso verde,
 teste enfraquecido, fallback oculto, mudança fora do escopo e prova ligada
 a candidato diferente. Não criar catálogo infinito.
+
+### 4.5 Runtime image and tool output reading
+
+Quando o usuário fornece screenshots ou tool output com status labels como
+`MCP_AUTHENTICATED_E2E=PASS`, `TOOLS_LIST=HTTP_200`, `INITIALIZE=HTTP_200`,
+o sistema JÁ ESTÁ autenticado e funcional. Esses labels são fatos do runtime,
+não alegações a serem dubgadas.
+
+Não confundir runtime local do navegador (ex: `ws://127.0.0.1:3030/connections/browser/ws?token=...` 403)
+com falha do sistema central. O 403 do browser WebSocket é erro de runtime
+local do usuário, não do nosso ecossistema. Se o MCP está autenticado e as
+ferramentas listam normalmente, o WebSocket 403 é fora do escopo da missão
+central e não requer ação no repositório.
+
+```text
+RUNTIME_LABELS_SHOW_PASS → SYSTEM_IS_AUTHENTICATED
+BROWSER_WS_403 → RUNTIME_LOCAL_OUT_OF_SCOPE
+MCP_AUTHENTICATED_E2E=PASS → NO_ACTION_NEEDED_ON_REPO
+```
+
+Se houver dúvida material sobre o estado, medir via `git ls-remote`,
+`node --test`, `bash -n` — não via interpretação de screenshot.
+
+### 4.5b Git Sequence — Fetch Before Push, Never Reset Hard
+
+**Regra:** Antes de qualquer operação de push, pull ou merge, executar:
+```bash
+git fetch --no-tags origin refs/heads/main
+git status --short --branch
+git rev-parse HEAD
+git ls-remote origin refs/heads/main | cut -f1
+```
+Se `HEAD` local = `origin/main`, trabalho já está publicado — não criar
+branch, não fazer push redundante. Se `origin/main` está AHEAD do local,
+fazer merge antes de publicar. Se criando branch nova, basear em
+`origin/main`, nunca em `main` local (que pode estar stale ou já conter
+o commit publicado).
+
+**Nunca** `git reset --hard <commit-antigo>` — destrói trabalho não
+sincronizado com o remote. Se precisar descartar, usar `git reflog` para
+encontrar o SHA anterior ou `git fetch origin` para recuperar do remote.
+
+**Para criar PR-mãe:** após merge com `origin/main`, testes passando
+(42/42), `git commit --amend --no-edit`, depois `gh pr create --base main
+--head fix/writer-canonical-40`. O branch fix/writer-canonical-40 deve
+estar baseado em `origin/main` atualizado. Se o trabalho já está em
+`origin/main`, não criar branch — deletar branch local existente.
+
+Pitfall: `git pull --ff-only` não funciona quando o branch local está
+atrás (precisa de merge) ou quando está à frente (push pode rejeitar).
+Sempre medir SHA local vs remote antes de decidir a operação.
+
+### 4.6 Browser WebSocket 403 vs Central System Failure
+
+**Regra:** Quando o usuário fornece screenshot mostrando `ws://127.0.0.1:3030/connections/browser/ws?token=...` com 403, mas `MCP_AUTHENTICATED_E2E=PASS`, `TOOLS_LIST=HTTP_200`, `INITIALIZE=HTTP_200`:
+- O 403 é erro de runtime local do browser (conexão WebSocket do navegador para `127.0.0.1:3030`)
+- O sistema central (MCP, GitHub, Casa) está funcionando normalmente
+- NÃO agir no repositório — o problema é de runtime local, não do sistema central
+- Registrar como `RUNTIME_LOCAL_OUT_OF_SCOPE` e continuar a missão principal
+
+**Não confundir:**
+- WebSocket 403 → runtime local browser → FORA DO ESCOPO
+- MCP_AUTHENTICATED_E2E=PASS → sistema central autenticado → NO ACTION NEEDED
+- Se houver dúvida real, medir via `git ls-remote`, `node --test`, `bash -n`
+
+### 4.7 Execution Over Explanation — Do, Don't Fragment
+
+**Regra cristalizada (Chefe, 2026-09-11):** "so conversa bonita nao serve".
+O usuário NÃO quer fragmentos Q&A. Quer: ler integralmente → continuar a
+história de forma conectada → executar.
+
+**Quando o usuário diz "ler repo integramente e continuar a história":**
+- Ler documentos completos, não apenas cabeçalhos
+- Ler git log integralmente, não apenas últimos 5 commits
+- Compreender contexto antes de responder às perguntas do usuário
+- Executar o que foi prometido, não prometer e não executar
+- Quando usuário dizer "pare de falar e faça", parar de narrar e executar
+
+**Pitfall:** fragmentar uma leitura integral em múltiplas perguntas pontuais.
+Isso é o erro exato que o Chefe corrigiu.
+
+**Continuidade do mesmo escopo:** Se a correção já está autorizada, é
+reversível e pertence ao mesmo owner/escopo, executar diretamente: separar
+somente o delta, testar, commitar e publicar pela rota segura. Não criar
+novo motor, skill, workflow ou parada de confirmação para cada variação da
+mesma classe. Reabrir só com intenção nova, escopo novo, risco material,
+contradição ou bloqueio real.
 
 ## 5. Optimization Ladder
 
@@ -466,6 +591,13 @@ Quando JSONL for canônico:
 
 Nunca registrar cadeia de pensamento, segredo, token, `.env` integral ou
 memória pessoal desnecessária.
+
+### 10.1 SEGRET_REDOACTION — Redaction Rule
+**Regra:** Quando o CheFE diz "permito segredo", valores nunca são exibidos ou preservados. Substituir tudo que seja segredo, token, senha, API key, credential ou connection string por `[REDACTED]` em todo output, artifact, diff, receipt, log ou arquivo. Isso inclui screenshots — borrar ou omitir valores sensíveis antes de descrever.
+
+```text
+QUALQUER_VALOR_SECRETO → [REDACTED]
+```
 
 ## 11. Integração com a Casa
 

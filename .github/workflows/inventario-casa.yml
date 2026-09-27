@@ -1,0 +1,60 @@
+name: Inventario Casa
+
+on:
+  pull_request:
+    paths:
+      - '**/*'
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  inventario-casa:
+    runs-on: [self-hosted, Linux]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate deterministic inventory
+        run: |
+          python scripts/generate_centraldark_inventory.py \
+            --write \
+            --deterministic-baseline \
+            --output docs/CONSCIENCIA/INVENTARIO-CASA.json
+
+      - name: Show inventory summary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path('docs/CONSCIENCIA/INVENTARIO-CASA.json').read_text())
+          print('schema=', data['schema'])
+          print('mode=', data['generation_mode'])
+          print('counts=', data['counts'])
+          print('items=', len(data['items']))
+          print('excluded_paths=', data.get('excluded_paths', []))
+          PY
+
+      - name: Upload inventory artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: centraldark-inventario-casa
+          path: docs/CONSCIENCIA/INVENTARIO-CASA.json
+
+      - name: Promote baseline on main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- docs/CONSCIENCIA/INVENTARIO-CASA.json; then
+            echo "INVENTARIO_BASELINE_UNCHANGED"
+            exit 0
+          fi
+          git config user.name "centraldark-inventory-bot"
+          git config user.email "centraldark-inventory-bot@users.noreply.github.com"
+          git add docs/CONSCIENCIA/INVENTARIO-CASA.json
+          git commit -m "docs(inventory): atualiza baseline deterministico [skip ci]"
+          git push

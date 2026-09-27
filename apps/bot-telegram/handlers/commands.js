@@ -2,6 +2,8 @@
 // Cada handler recebe { type, chatId, text, from, update }
 // Retorna { reply, menu, handled }
 
+const { formatBrasilia } = require('../../../central-horario/node.cjs');
+
 module.exports = {
   // /start
   startHandler({ type, text, chatId }) {
@@ -12,7 +14,7 @@ module.exports = {
         text: '🤖 <b>MultiZap Bot</b>\n\nBem-vindo! Escolha uma opção:',
         buttons: [
           [{ text: '📊 Status', callback_data: 'cmd:status' }, { text: '🔌 Integrações', callback_data: 'cmd:integracoes' }],
-          [{ text: '⚡ Skills', callback_data: 'cmd:skills' }, { text: '❓ Ajuda', callback_data: 'cmd:help' }],
+          [{ text: '🔥 Skills', callback_data: 'cmd:skills' }, { text: '❓ Ajuda', callback_data: 'cmd:help' }],
         ],
       },
     };
@@ -21,7 +23,7 @@ module.exports = {
   // /status
   statusHandler({ type, text }) {
     if (type !== 'message' || text !== '/status') return null;
-    return { handled: true, reply: '📊 <b>Status do Sistema</b>\n\n✅ Bot online\n⏰ ' + new Date().toLocaleString('pt-BR') };
+    return { handled: true, reply: '📊 <b>Status do Sistema</b>\n\n✅ Bot online\n⏰ ' + formatBrasilia() };
   },
 
   // /help
@@ -39,7 +41,7 @@ module.exports = {
     return {
       handled: true,
       menu: {
-        text: '⚡ <b>Skills disponíveis</b>\n\nSelecione uma categoria:',
+        text: '🔥 <b>Skills disponíveis</b>\n\nSelecione uma categoria:',
         buttons: [
           [{ text: '💬 Comunicação', callback_data: 'skills:communication' }],
           [{ text: '🤖 IA', callback_data: 'skills:ai' }],

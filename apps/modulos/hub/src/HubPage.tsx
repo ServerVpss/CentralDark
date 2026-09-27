@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { DashboardTab } from './components/dashboard/DashboardTab';
 import { CatalogTab } from './components/catalog/CatalogTab';
 import { InventoryTab } from './components/inventory/InventoryTab';
+import { BootStudioTab } from './components/boot/BootStudioTab';
 import { PoliciesTab } from './components/policies/PoliciesTab';
 import { AuditTab } from './components/audit/AuditTab';
 import { ConnectorsTab } from './components/connectors/ConnectorsTab';
@@ -10,6 +11,7 @@ import { AbacusTab } from './components/abacus/AbacusTab';
 import { GatewayTab } from './components/gateway/GatewayTab';
 import { HermesTab } from './components/hermes/HermesTab';
 import { MissionsTab } from './components/missions/MissionsTab';
+import { AutonomyTab } from './components/autonomy/AutonomyTab';
 import { RoleGuard } from './components/shared/RoleGuard';
 import { Sparkles, LogIn, LogOut } from 'lucide-react';
 import { ButtonLogDrawer } from './components/ButtonLogDrawer';
@@ -84,10 +86,11 @@ export default function HubPage() {
 
       <main className="container mx-auto p-6 space-y-6">
         <Tabs defaultValue="dashboard" className="space-y-6" onValueChange={(v) => logButton('hub.tab-change', { tab: v })}>
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5 xl:grid-cols-10 h-auto p-1 card-premium gap-1">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 xl:grid-cols-12 h-auto p-1 card-premium gap-1">
             <TabsTrigger value="dashboard" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Dashboard</TabsTrigger>
             <TabsTrigger value="hermes" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">🧠 Hermes</TabsTrigger>
             <TabsTrigger value="inventory" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">🧬 Inventário</TabsTrigger>
+            <TabsTrigger value="boot" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">✨ Boot</TabsTrigger>
             <TabsTrigger value="gateway" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">🔌 Gateway</TabsTrigger>
             <TabsTrigger value="catalog" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Catálogo</TabsTrigger>
             <TabsTrigger value="policies" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Políticas</TabsTrigger>
@@ -95,11 +98,13 @@ export default function HubPage() {
             <TabsTrigger value="abacus" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Abacus</TabsTrigger>
             <TabsTrigger value="audit" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Auditoria</TabsTrigger>
             <TabsTrigger value="missions" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Missões</TabsTrigger>
+            <TabsTrigger value="autonomy" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">⚙️ Autonomia</TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard"><DashboardTab /></TabsContent>
           <TabsContent value="hermes"><HermesTab /></TabsContent>
           <TabsContent value="inventory"><RoleGuard requiredRole="admin"><InventoryTab /></RoleGuard></TabsContent>
+          <TabsContent value="boot"><RoleGuard requiredRole="admin"><BootStudioTab /></RoleGuard></TabsContent>
           <TabsContent value="gateway"><GatewayTab /></TabsContent>
           <TabsContent value="catalog"><CatalogTab /></TabsContent>
           <TabsContent value="policies">
@@ -109,6 +114,7 @@ export default function HubPage() {
           <TabsContent value="abacus"><AbacusTab /></TabsContent>
           <TabsContent value="audit"><AuditTab /></TabsContent>
           <TabsContent value="missions"><MissionsTab /></TabsContent>
+          <TabsContent value="autonomy"><RoleGuard requiredRole="admin"><AutonomyTab /></RoleGuard></TabsContent>
         </Tabs>
       </main>
       <ButtonLogDrawer />

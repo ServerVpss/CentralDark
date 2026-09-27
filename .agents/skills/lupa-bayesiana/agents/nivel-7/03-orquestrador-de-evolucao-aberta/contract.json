@@ -1,0 +1,15 @@
+{
+  "agent_id": "03-orquestrador-de-evolucao-aberta",
+  "input":  { "checkpoint": "object" },
+  "output": {
+    "veredito": "string",
+    "ponto_fixo_atingido": "boolean",
+    "rodadas_autolupa": "integer",
+    "aprendizado_promovido": "boolean"
+  },
+  "invariants": [
+    "ponto fixo exige 2 rodadas iguais sem delta material",
+    "sem 5 elos, sem promoção",
+    "baseline não é editada depois de vermelho"
+  ]
+}

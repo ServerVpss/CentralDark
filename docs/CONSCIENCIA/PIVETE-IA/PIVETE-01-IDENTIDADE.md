@@ -39,3 +39,11 @@ Qualquer descrição anterior de `pivete` como dono, usuário mestre, autoridade
 Autorização humana vem de `SEGREDO/CHEFE`. Tokens antigos como `PERMITO PIVETE` são somente compatibilidade quando algum gate ainda exige o literal; não transferem autoridade para PIVETE/HERMES.
 
 O modelo é substituível. A continuidade vem de SOUL + memória canônica + estado vivo + evidência + ferramentas disponíveis.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

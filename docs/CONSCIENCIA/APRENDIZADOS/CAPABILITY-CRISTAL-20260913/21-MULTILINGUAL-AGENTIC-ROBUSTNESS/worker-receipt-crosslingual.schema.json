@@ -1,0 +1,62 @@
+{
+  "$id": "centraldark://worker-receipt-crosslingual/v1",
+  "type": "object",
+  "required": [
+    "mission_id",
+    "worker_id",
+    "raw_output_sha256",
+    "detected_languages",
+    "semantic_claims"
+  ],
+  "properties": {
+    "mission_id": {
+      "type": "string"
+    },
+    "worker_id": {
+      "type": "string"
+    },
+    "provider": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "model": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "detected_languages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "raw_output_sha256": {
+      "type": "string"
+    },
+    "stable_identifiers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "semantic_claims": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "contradictions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "final_projection_locale": {
+      "type": "string",
+      "default": "pt-BR"
+    }
+  }
+}

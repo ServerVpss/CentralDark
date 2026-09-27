@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
  * CentralDark Universal Agent Call — gate determinístico.
+ * CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED
  *
  * Não executa modelo, não concede autoridade e não escreve no escopo chamado.
  * Valida CALL, retorno de delegação, obrigação de delegar e recuperação
@@ -8,9 +9,11 @@
  * Transporte (MCP/HTTP/CLI/Telegram/etc.) fica fora deste núcleo.
  */
 import { readFile } from "node:fs/promises";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 
 const PROTOCOL = "CENTRALDARK_AGENT_CALL_V1";
+const GLOBAL_CONTRACT_SCOPE_ID = "canon/centraldark-universal-contract-20260919";
+const GLOBAL_CONTRACT_SCHEMA_MIN = 6;
 const ALLOWED_ROLES = new Set([
   "COORDINATOR", "EXECUTOR", "DEBUGGER", "REVIEWER", "JUDGE", "HERMES", "READ_ONLY",
 ]);
@@ -18,6 +21,19 @@ const WRITE_ROLES = new Set(["EXECUTOR", "HERMES"]);
 const DELEGATION_ROLES = new Set(["DEBUGGER", "REVIEWER", "JUDGE", "READ_ONLY"]);
 const CLOSED_FRONTIER_STATES = new Set(["CLOSED", "DONE", "RESOLVED"]);
 const HEALING_LEVELS = ["WELD", "REBUILD_LOCAL", "JUMP_BRIDGE"];
+const LOG_INCIDENT_FRONTS = Object.freeze([
+  "AUTH_OAUTH",
+  "MCP_RUNTIME",
+  "HUB_DATABASE",
+  "ROUTING_NETWORK",
+  "PROCESS_RUNTIME",
+  "GITHUB_CI",
+  "CONFIG_PROVENANCE",
+  "SCREEN_OPTIONAL",
+]);
+const LOG_CORRELATION_FIELDS = Object.freeze(["cid", "correlation_id", "request_id", "trace_id", "span_id"]);
+export const SCOPE_HOT_MS = 60_000;
+export const SCOPE_WARM_MS = 120_000;
 
 function nonEmpty(value) {
   return typeof value === "string" && value.trim().length > 0;
@@ -25,6 +41,164 @@ function nonEmpty(value) {
 
 function nonEmptyArray(value) {
   return Array.isArray(value) && value.length > 0 && value.every(nonEmpty);
+}
+
+function asScopeList(value) {
+  if (Array.isArray(value)) return value.filter(nonEmpty);
+  return nonEmpty(value) ? [value] : [];
+}
+
+function activityActor(activity) {
+  return activity?.actor || activity?.agent || activity?.writer || null;
+}
+
+function activityScopes(activity, fallback = []) {
+  const explicit = asScopeList(activity?.scope ?? activity?.scopes);
+  return explicit.length ? explicit : fallback;
+}
+
+/**
+ * Temperatura MetaLupa do escopo. A identidade do agente é somente proveniência:
+ * o gate olha colisão temporal no mesmo escopo, não marca/modelo.
+ *
+ * HOT  <= 60s  -> outro ator espera a próxima rodada.
+ * WARM <= 120s -> outro ator ainda espera a próxima rodada.
+ * COLD > 120s  -> takeover pode seguir se os demais gates passarem.
+ * UNKNOWN      -> mantém o guard estático legado, evitando falso-verde.
+ */
+export function scopeTemperature(call, state, now = Date.now()) {
+  const requestedScope = asScopeList(call?.scope);
+  const activities = Array.isArray(state?.scope_activity)
+    ? state.scope_activity.filter((item) => item && typeof item === "object")
+    : [];
+
+  if (state?.writer?.touched_at) {
+    activities.push({
+      actor: state.writer.agent || null,
+      touched_at: state.writer.touched_at,
+      scope: state.writer.scope || requestedScope,
+      source: "writer-fallback",
+    });
+  }
+
+  const relevant = activities
+    .map((activity) => {
+      const stamp = Date.parse(String(activity?.touched_at || activity?.timestamp || ""));
+      if (!Number.isFinite(stamp)) return null;
+      const scopes = activityScopes(activity, requestedScope);
+      if (requestedScope.length && scopes.length && !scopes.some((scope) => requestedScope.includes(scope))) return null;
+      return {
+        actor: activityActor(activity),
+        touched_at: new Date(stamp).toISOString(),
+        age_ms: Math.max(0, now - stamp),
+        scopes,
+        source: activity?.source || "scope_activity",
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.age_ms - b.age_ms);
+
+  const latest = relevant[0];
+  if (!latest) {
+    return {
+      temperature: "UNKNOWN",
+      actor: null,
+      age_ms: null,
+      retry_after_ms: null,
+      touched_at: null,
+      source: null,
+    };
+  }
+
+  if (latest.actor && latest.actor === call?.to) {
+    return {
+      temperature: "SELF",
+      actor: latest.actor,
+      age_ms: latest.age_ms,
+      retry_after_ms: 0,
+      touched_at: latest.touched_at,
+      source: latest.source,
+    };
+  }
+
+  if (latest.age_ms <= SCOPE_HOT_MS) {
+    return {
+      temperature: "HOT",
+      actor: latest.actor,
+      age_ms: latest.age_ms,
+      retry_after_ms: SCOPE_WARM_MS - latest.age_ms + 1,
+      touched_at: latest.touched_at,
+      source: latest.source,
+    };
+  }
+  if (latest.age_ms <= SCOPE_WARM_MS) {
+    return {
+      temperature: "WARM",
+      actor: latest.actor,
+      age_ms: latest.age_ms,
+      retry_after_ms: SCOPE_WARM_MS - latest.age_ms + 1,
+      touched_at: latest.touched_at,
+      source: latest.source,
+    };
+  }
+  return {
+    temperature: "COLD",
+    actor: latest.actor,
+    age_ms: latest.age_ms,
+    retry_after_ms: 0,
+    touched_at: latest.touched_at,
+    source: latest.source,
+  };
+}
+
+export function validateLogIncidentFanout(event) {
+  const base = {
+    protocol: PROTOCOL,
+    gate: "LOG_INCIDENT_FANOUT",
+    sensor: "/admin/api/logs",
+    write_authorized: false,
+  };
+  if (!event || typeof event !== "object" || Array.isArray(event)) {
+    return { ...base, status: "BLOCKED_LOG_INCIDENT_EVENT_MISSING", accepted: false, fanout_required: false };
+  }
+  const endpoint = String(event?.source_endpoint || event?.endpoint || event?.source || "");
+  if (endpoint !== "/admin/api/logs") {
+    return { ...base, status: "BLOCKED_LOG_INCIDENT_SENSOR_MISMATCH", accepted: false, fanout_required: false, observed_sensor: endpoint || null };
+  }
+  if (event.material !== true) {
+    return { ...base, status: "NOT_APPLICABLE_LOG_SIGNAL_NOT_MATERIAL", accepted: true, fanout_required: false };
+  }
+  if (!nonEmpty(event.target)) {
+    return { ...base, status: "BLOCKED_LOG_INCIDENT_TARGET_MISSING", accepted: false, fanout_required: false };
+  }
+  const correlation = {};
+  for (const field of LOG_CORRELATION_FIELDS) {
+    if (nonEmpty(event[field])) correlation[field] = event[field];
+  }
+  if (Object.keys(correlation).length === 0) {
+    return { ...base, status: "BLOCKED_LOG_INCIDENT_CORRELATION_MISSING", accepted: false, fanout_required: false, target: event.target };
+  }
+  const fronts = LOG_INCIDENT_FRONTS.map((id) => ({
+    id,
+    mode: "READ_ONLY",
+    write_authorized: false,
+    target: event.target,
+    correlation,
+  }));
+  return {
+    ...base,
+    status: "PASS_LOG_INCIDENT_FANOUT_PLAN",
+    accepted: true,
+    fanout_required: true,
+    target: event.target,
+    correlation,
+    fronts,
+    rendezvous: "BY_TARGET_TRACE_OWNER",
+    mutation_policy: "PARALLEL_ONLY_FOR_PROVEN_DISJOINT_SCOPES_SERIAL_WITHIN_EACH_SCOPE",
+    same_scope_concurrent_writers: false,
+    one_active_writer_per_mutable_scope: true,
+    next_cursor: "RENDEZVOUS_THEN_REMEDIATE_BY_EXISTING_OWNER",
+  };
 }
 
 function fail(reason, call, extra = {}) {
@@ -36,6 +210,241 @@ function fail(reason, call, extra = {}) {
     accepted: false,
     write_authorized: false,
     ...extra,
+  };
+}
+
+
+const ROOT_CONTRACT_REF = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
+const TLC23_CANONICAL_SHA256 = "b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1";
+
+function lineageStatus(reason, child = null, extra = {}) {
+  return {
+    protocol: PROTOCOL,
+    gate: "CHILD_CONTRACT_LINEAGE",
+    status: reason,
+    accepted: false,
+    root_goal_id: child?.root_goal_id || null,
+    child_contract_id: child?.child_contract_id || null,
+    self_goal_id: child?.self_goal_id || null,
+    ...extra,
+  };
+}
+
+export function validateChildContractLineage(child, state = null) {
+  if (!child || typeof child !== "object" || Array.isArray(child)) {
+    return lineageStatus("BLOCKED_CHILD_CONTRACT_MISSING", child);
+  }
+
+  const required = [
+    "root_contract_ref",
+    "root_contract_schema",
+    "root_goal_id",
+    "parent_contract_id",
+    "child_contract_id",
+    "self_goal_id",
+    "owner",
+    "scope",
+    "expected_delta",
+    "done_condition",
+    "evidence_required",
+    "counterproof",
+    "dependencies",
+    "next_cursor",
+    "status",
+    "root_authority",
+    "tlc23_horn_gate",
+  ];
+  const missing = required.filter((key) => child[key] === undefined || child[key] === null || child[key] === "");
+  if (missing.length) return lineageStatus("BLOCKED_CHILD_CONTRACT_FIELDS_MISSING", child, { missing });
+
+  if (child.root_contract_ref !== ROOT_CONTRACT_REF) {
+    return lineageStatus("BLOCKED_CHILD_ROOT_CONTRACT_MISMATCH", child);
+  }
+  if (!Number.isInteger(child.root_contract_schema) || child.root_contract_schema < GLOBAL_CONTRACT_SCHEMA_MIN) {
+    return lineageStatus("BLOCKED_CHILD_ROOT_SCHEMA_STALE", child);
+  }
+  if (child.root_authority !== "SEGREDO/CHEFE") {
+    return lineageStatus("BLOCKED_CHILD_AUTHORITY_EXPANSION", child);
+  }
+
+  const liveRootGoal = state?.root_goal;
+  if (liveRootGoal?.id && child.root_goal_id !== liveRootGoal.id) {
+    return lineageStatus("BLOCKED_CHILD_ROOT_GOAL_CHANGE", child, { expected_root_goal_id: liveRootGoal.id });
+  }
+  if (liveRootGoal?.authority && liveRootGoal.authority !== child.root_authority) {
+    return lineageStatus("BLOCKED_CHILD_ROOT_AUTHORITY_DRIFT", child);
+  }
+
+  const childScope = asScopeList(child.scope);
+  if (childScope.length === 0) return lineageStatus("BLOCKED_CHILD_SCOPE_MISSING", child);
+  const allowed = Array.isArray(state?.scope?.allowed) ? state.scope.allowed : [];
+  if (allowed.length && childScope.some((scope) => !allowed.includes(scope))) {
+    return lineageStatus("BLOCKED_CHILD_SCOPE_EXPANSION", child, { allowed_scope: allowed });
+  }
+  const parentScope = asScopeList(liveRootGoal?.scope);
+  if (parentScope.length && childScope.some((scope) => !parentScope.includes(scope))) {
+    return lineageStatus("BLOCKED_CHILD_PARENT_SCOPE_EXPANSION", child, { parent_scope: parentScope });
+  }
+
+  const tlc23 = child.tlc23_horn_gate;
+  if (!tlc23 || tlc23.status !== "PASS") {
+    return lineageStatus("BLOCKED_CHILD_TLC23_HORN_NOT_PASS", child);
+  }
+  if (tlc23.pdf_sha256 !== TLC23_CANONICAL_SHA256) {
+    return lineageStatus("BLOCKED_CHILD_TLC23_PDF_HASH_MISMATCH", child, {
+      expected_pdf_sha256: TLC23_CANONICAL_SHA256,
+    });
+  }
+  if (!nonEmpty(tlc23.evidence_ref)) {
+    return lineageStatus("BLOCKED_CHILD_TLC23_EVIDENCE_MISSING", child);
+  }
+
+  const prior = Array.isArray(state?.self_goal_receipts) ? state.self_goal_receipts : [];
+  if (prior.some((receipt) => receipt?.self_goal_id === child.self_goal_id && receipt?.status !== "SUPERSEDED")) {
+    return lineageStatus("BLOCKED_DUPLICATE_SELF_GOAL", child);
+  }
+
+  return {
+    protocol: PROTOCOL,
+    gate: "CHILD_CONTRACT_LINEAGE",
+    status: "PASS_CHILD_CONTRACT_LINEAGE",
+    accepted: true,
+    root_contract_ref: child.root_contract_ref,
+    root_contract_schema: child.root_contract_schema,
+    root_goal_id: child.root_goal_id,
+    parent_contract_id: child.parent_contract_id,
+    child_contract_id: child.child_contract_id,
+    self_goal_id: child.self_goal_id,
+    owner: child.owner,
+    scope: childScope,
+    next_cursor: child.next_cursor,
+    tlc23_pdf_sha256: tlc23.pdf_sha256,
+    tlc23_evidence_ref: tlc23.evidence_ref,
+  };
+}
+
+export function deriveSelfGoal(spec, state = null) {
+  if (!spec || typeof spec !== "object" || Array.isArray(spec)) {
+    return lineageStatus("BLOCKED_SELF_GOAL_SPEC_MISSING", spec);
+  }
+  const root = state?.root_goal;
+  if (!root?.id || root?.authority !== "SEGREDO/CHEFE") {
+    return lineageStatus("BLOCKED_ROOT_GOAL_UNPROVEN", spec);
+  }
+  if (spec.material_delta !== true) {
+    return {
+      protocol: PROTOCOL,
+      gate: "SELF_GOAL_DERIVATION",
+      status: "CHECKPOINT_CONTINUE",
+      accepted: true,
+      fixed_point_checkpoint: true,
+      heartbeat_continues: true,
+      root_goal_id: root.id,
+      next_cursor: spec.next_cursor || "HEARTBEAT_REMEASURE",
+    };
+  }
+
+  const scope = asScopeList(spec.scope);
+  const fingerprint = [
+    root.id,
+    spec.parent_contract_id || "ROOT",
+    spec.owner || "",
+    scope.join(","),
+    spec.expected_delta || "",
+    spec.done_condition || "",
+    spec.next_cursor || "",
+  ].join("|");
+  const id = createHash("sha256").update(fingerprint).digest("hex").slice(0, 24);
+  const child = {
+    root_contract_ref: ROOT_CONTRACT_REF,
+    root_contract_schema: GLOBAL_CONTRACT_SCHEMA_MIN,
+    root_goal_id: root.id,
+    parent_contract_id: spec.parent_contract_id || "ROOT",
+    child_contract_id: spec.child_contract_id || `CC-${id}`,
+    self_goal_id: spec.self_goal_id || `SG-${id}`,
+    owner: spec.owner,
+    scope,
+    expected_delta: spec.expected_delta,
+    done_condition: spec.done_condition,
+    evidence_required: spec.evidence_required,
+    counterproof: spec.counterproof,
+    dependencies: Array.isArray(spec.dependencies) ? spec.dependencies : [],
+    next_cursor: spec.next_cursor,
+    status: "PENDING",
+    root_authority: root.authority,
+    tlc23_horn_gate: spec.tlc23_horn_gate || state?.tlc23_horn_gate,
+  };
+  const validation = validateChildContractLineage(child, state);
+  return validation.accepted
+    ? { ...child, derivation_status: "PASS_SELF_GOAL_DERIVED", deterministic_fingerprint: id }
+    : validation;
+}
+
+export function validateGlobalContractGate(gate, state = null, expectedPhase = "ENTRY") {
+  const phase = String(expectedPhase || gate?.phase || "").toUpperCase();
+  const status = (reason, extra = {}) => ({
+    protocol: PROTOCOL,
+    gate: "GLOBAL_CONTRACT_ENFORCER",
+    phase,
+    status: reason,
+    accepted: false,
+    write_authorized: false,
+    scope_id: gate?.scope_id || null,
+    observed_head: gate?.observed_head || null,
+    ...extra,
+  });
+  if (!gate || typeof gate !== "object" || Array.isArray(gate)) return status("BLOCKED_GLOBAL_CONTRACT_GATE_MISSING");
+  if (!["ENTRY", "EXIT"].includes(phase)) return status("BLOCKED_GLOBAL_CONTRACT_PHASE_INVALID");
+  if (String(gate.phase || "").toUpperCase() !== phase) return status("BLOCKED_GLOBAL_CONTRACT_PHASE_MISMATCH");
+  if (gate.scope_id !== GLOBAL_CONTRACT_SCOPE_ID) return status("BLOCKED_GLOBAL_CONTRACT_SCOPE_MISMATCH");
+  if (!Number.isInteger(gate.contract_schema) || gate.contract_schema < GLOBAL_CONTRACT_SCHEMA_MIN) return status("BLOCKED_GLOBAL_CONTRACT_SCHEMA_STALE");
+  if (!nonEmpty(gate.observed_head)) return status("BLOCKED_GLOBAL_CONTRACT_HEAD_MISSING");
+  if (state?.head?.sha && gate.observed_head !== state.head.sha) {
+    return status("BLOCKED_STALE_HEAD", { expected_head: state.head.sha });
+  }
+  if (!nonEmpty(gate.trace_id)) return status("BLOCKED_GLOBAL_CONTRACT_TRACE_MISSING");
+  if (!nonEmpty(gate.next_cursor) && gate.fixed_point !== true) return status("BLOCKED_GLOBAL_CONTRACT_NEXT_CURSOR_MISSING");
+
+  const pass = (obj) => obj && typeof obj === "object" && obj.status === "PASS";
+  if (phase === "ENTRY") {
+    const childLineage = validateChildContractLineage(gate.child_contract, state);
+    if (childLineage.accepted !== true) return status(childLineage.status, { child_contract_lineage: childLineage });
+    if (!gate.tlc23_horn_gate || gate.tlc23_horn_gate.status !== "PASS" || gate.tlc23_horn_gate.pdf_sha256 !== TLC23_CANONICAL_SHA256 || !nonEmpty(gate.tlc23_horn_gate.evidence_ref)) return status("BLOCKED_GLOBAL_CONTRACT_TLC23_HORN_GATE");
+    if (!pass(gate.github_t0) || !nonEmpty(gate.github_t0.head_sha)) return status("BLOCKED_GLOBAL_CONTRACT_GITHUB_T0");
+    if (!pass(gate.vps_t0) || !nonEmpty(gate.vps_t0.head_sha)) return status("BLOCKED_GLOBAL_CONTRACT_VPS_T0");
+    if (gate.cross_surface_drift_classified !== true) return status("BLOCKED_GLOBAL_CONTRACT_DRIFT_UNCLASSIFIED");
+    if (!pass(gate.owner_proof) || !nonEmpty(gate.owner_proof.owner)) return status("BLOCKED_GLOBAL_CONTRACT_OWNER_UNPROVEN");
+    if (!pass(gate.writer_scope_proof) || !nonEmpty(gate.writer_scope_proof.scope)) return status("BLOCKED_GLOBAL_CONTRACT_WRITER_UNPROVEN");
+    if (!pass(gate.preflight) || !nonEmpty(gate.preflight.evidence_ref)) return status("BLOCKED_GLOBAL_CONTRACT_PREFLIGHT");
+    if (!gate.counterproof_plan || gate.counterproof_plan.status !== "READY" || !nonEmpty(gate.counterproof_plan.evidence_ref)) return status("BLOCKED_GLOBAL_CONTRACT_COUNTERPROOF_PLAN");
+    if (!gate.rollback || gate.rollback.status !== "PREPARED" || !nonEmpty(gate.rollback.evidence_ref)) return status("BLOCKED_GLOBAL_CONTRACT_ROLLBACK");
+  } else {
+    if (!pass(gate.github_t1) || !nonEmpty(gate.github_t1.head_sha)) return status("BLOCKED_GLOBAL_CONTRACT_GITHUB_T1");
+    if (!pass(gate.vps_t1) || !nonEmpty(gate.vps_t1.head_sha)) return status("BLOCKED_GLOBAL_CONTRACT_VPS_T1");
+    if (!pass(gate.counterproof) || !nonEmpty(gate.counterproof.evidence_ref)) return status("BLOCKED_GLOBAL_CONTRACT_COUNTERPROOF");
+    if (!nonEmpty(gate.receipt_ref)) return status("BLOCKED_GLOBAL_CONTRACT_RECEIPT");
+    if (!gate.hud || gate.hud.status !== "PASS" || !nonEmpty(gate.hud.state_hash)) return status("BLOCKED_GLOBAL_CONTRACT_HUD");
+    if (gate.runtime_mutated === true && (!pass(gate.runtime_proof) || !nonEmpty(gate.runtime_proof.evidence_ref))) {
+      return status("BLOCKED_GLOBAL_CONTRACT_RUNTIME_PROOF");
+    }
+    if (gate.promotion_requested === true && (!pass(gate.same_head_ci) || gate.same_head_ci.head_sha !== gate.observed_head)) {
+      return status("BLOCKED_GLOBAL_CONTRACT_SAME_HEAD_CI");
+    }
+    if (gate.fixed_point === true && gate.aggregate_fixed_point_pass !== true) return status("BLOCKED_GLOBAL_CONTRACT_FALSE_FIXED_POINT");
+  }
+  return {
+    protocol: PROTOCOL,
+    gate: "GLOBAL_CONTRACT_ENFORCER",
+    phase,
+    status: "PASS_GLOBAL_CONTRACT_GATE",
+    accepted: true,
+    write_authorized: phase === "ENTRY",
+    scope_id: gate.scope_id,
+    contract_schema: gate.contract_schema,
+    observed_head: gate.observed_head,
+    trace_id: gate.trace_id,
+    next_cursor: gate.next_cursor || null,
+    fixed_point: gate.fixed_point === true,
   };
 }
 
@@ -491,7 +900,7 @@ export function validateHealingResult(result, state) {
   };
 }
 
-export function validateAgentCall(call, state) {
+export function validateAgentCall(call, state, now = Date.now()) {
   if (!call || typeof call !== "object") return fail("BLOCKED_INVALID_CALL", call);
   if (!state || typeof state !== "object") return fail("BLOCKED_UNKNOWN_MISSION", call);
 
@@ -519,6 +928,7 @@ export function validateAgentCall(call, state) {
   if (requestedScope.some((x) => denied.includes(x))) return fail("BLOCKED_OUT_OF_SCOPE", call);
   if (allowed.length && requestedScope.some((x) => !allowed.includes(x))) return fail("BLOCKED_OUT_OF_SCOPE", call);
 
+  const temperature = scopeTemperature(call, state, now);
   const nested = Boolean(call.parent_call_id);
   if (nested) {
     if (!call.frontier_id || !Number.isInteger(call.depth) || call.depth < 1) {
@@ -528,15 +938,42 @@ export function validateAgentCall(call, state) {
   }
 
   const writeRequested = call.write_requested === true;
+  if (writeRequested) {
+    const globalGate = validateGlobalContractGate(call.global_contract_entry || state?.global_contract_entry, state, "ENTRY");
+    if (globalGate.accepted !== true) return fail(globalGate.status, call, {
+      global_contract_gate: globalGate,
+    });
+  }
   if (nested && writeRequested && call.writer_handoff_valid !== true) {
     return fail("BLOCKED_NESTED_WRITE_WITHOUT_HANDOFF", call);
   }
 
   if (writeRequested) {
     if (!WRITE_ROLES.has(call.requested_role)) return fail("BLOCKED_ROLE_CANNOT_WRITE", call);
+
+    if (["HOT", "WARM"].includes(temperature.temperature) && temperature.actor !== call.to) {
+      return fail("WAIT_SCOPE_HOT", call, {
+        scope_temperature: temperature.temperature,
+        scope_temperature_age_ms: temperature.age_ms,
+        scope_temperature_actor: temperature.actor,
+        scope_temperature_touch: temperature.touched_at,
+        retry_after_ms: temperature.retry_after_ms,
+        next_round: "REMEASURE_SCOPE_TEMPERATURE",
+        meta_lupa: true,
+        breaths_total: 17,
+        delta_minimum: true,
+      });
+    }
+
     const writer = state?.writer?.agent;
     if (!writer || writer === "NONE") return fail("BLOCKED_NO_WRITER", call);
-    if (writer !== call.to) return fail("BLOCKED_WRITER_CONFLICT", call, { current_writer: writer });
+    if (writer !== call.to && temperature.temperature === "UNKNOWN") {
+      return fail("BLOCKED_WRITER_CONFLICT", call, {
+        current_writer: writer,
+        scope_temperature: "UNKNOWN",
+        next_round: "REQUIRE_TOUCH_TIMESTAMP_OR_HANDOFF",
+      });
+    }
     if (call.writer_handoff_required === true && call.writer_handoff_valid !== true) {
       return fail("BLOCKED_MISSING_HANDOFF", call);
     }
@@ -553,6 +990,7 @@ export function validateAgentCall(call, state) {
     status: "ACCEPTED",
     accepted: true,
     write_authorized: writeRequested,
+    global_contract_gate: writeRequested ? "PASS" : "NOT_APPLICABLE_READ_ONLY",
     from: call.from,
     to: call.to,
     requested_role: call.requested_role,
@@ -560,6 +998,14 @@ export function validateAgentCall(call, state) {
     trail_id: call.trail_id || routeId,
     scope: requestedScope,
     requested_action: call.requested_action,
+    scope_temperature: temperature.temperature,
+    scope_temperature_age_ms: temperature.age_ms,
+    scope_temperature_actor: temperature.actor,
+    retry_after_ms: temperature.retry_after_ms,
+    writer_takeover: Boolean(writeRequested && state?.writer?.agent && state.writer.agent !== call.to && temperature.temperature === "COLD"),
+    meta_lupa: true,
+    breaths_total: 17,
+    delta_minimum: true,
     return_mode: "DELTA_MESSAGE",
     radio_mode: "DELTA_ONLY",
   };
@@ -567,6 +1013,31 @@ export function validateAgentCall(call, state) {
 
 async function main() {
   const args = process.argv.slice(2);
+
+  if (args[0] === "--log-incident-fanout") {
+    const eventPath = args[1];
+    if (!eventPath) {
+      console.error("uso: node scripts/agent-call.mjs --log-incident-fanout <event.json>");
+      process.exit(2);
+    }
+    const event = await readFile(eventPath, "utf8").then(JSON.parse);
+    const receipt = validateLogIncidentFanout(event);
+    process.stdout.write(`${JSON.stringify(receipt, null, 2)}\n`);
+    process.exit(receipt.accepted ? 0 : 13);
+  }
+
+  if (args[0] === "--global-contract-gate") {
+    const [phase, gatePath, statePath] = args.slice(1);
+    if (!phase || !gatePath) {
+      console.error("uso: node scripts/agent-call.mjs --global-contract-gate <ENTRY|EXIT> <gate.json> [state.json]");
+      process.exit(2);
+    }
+    const gate = await readFile(gatePath, "utf8").then(JSON.parse);
+    const state = statePath ? await readFile(statePath, "utf8").then(JSON.parse) : null;
+    const receipt = validateGlobalContractGate(gate, state, phase);
+    process.stdout.write(`${JSON.stringify(receipt, null, 2)}\n`);
+    process.exit(receipt.accepted ? 0 : 13);
+  }
 
   if (args[0] === "--delegation-gate") {
     const statePath = args[1];

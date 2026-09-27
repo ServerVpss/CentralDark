@@ -1,0 +1,250 @@
+schema: centraldark.runtime-plug-reconciliation.v2
+name: RUNTIME-PLUG-RECONCILIATION
+status: ROUND_TRIP_RECONCILED
+owner: CENTRALDARK_TRIGGER_FABRIC
+scope: "Reclassificar arquitetura + runtime plug por prova distribuída em main, branch, runtime, logs e harness. Ausência em um arquivo nunca equivale automaticamente a ausência no sistema."
+
+proof_rule:
+  FILE_LOCAL_ABSENCE_IS_NOT_SYSTEM_ABSENCE: true
+  MAIN_EVIDENCE_HAS_HIGHEST_REPO_WEIGHT: true
+  RUNTIME_LOG_CAN_PROVE_EXECUTION_WITHOUT_PROVING_MAIN: true
+  HARNESS_PASS_CAN_PROVE_COMPONENT_WITHOUT_PROVING_GLOBAL_RUNTIME: true
+  PR_BRANCH_CAN_PROVE_IMPLEMENTED_CANDIDATE_WITHOUT_PROVING_PROMOTION: true
+  DERIVED_GRAPH_TRAVERSAL_IS_NOT_SEMANTIC_CAUSALITY: true
+  UNKNOWN_IS_NOT_PASS: true
+
+review_method:
+  forward: MANY_POINTS_TO_NUCLEUS
+  reverse: NUCLEUS_TO_MANY_POINTS
+  adaptive_fronts_max: 10
+  fronts:
+    - BOOT_IDENTITY
+    - INTENT_MASTER_CYCLE
+    - MEMORY_GRAPH
+    - CAPABILITY_ROUTING
+    - RUNTIME_ENGINE
+    - TOOLS_SENSORS
+    - HANDOFF_CONTINUITY
+    - WRITER_EXECUTION
+    - PROOF_JUDGE
+    - CI_DEPLOY_RESIDUAL
+  rendezvous_requires_same_denominator: true
+  no_information_gain: DROP_DUPLICATE
+
+reconciled_state:
+  architecture_end_to_end:
+    status: GREEN_ARCHITECTURE
+    evidence:
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.md
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml
+
+  deterministic_capability_selector:
+    status: GREEN_IMPLEMENTED_BRANCH
+    evidence:
+      - .agents/skills/capability-contract-router/scripts/route_capabilities.py
+    properties:
+      - INPUT_VALIDATION
+      - REQUIRED_CAPABILITY_COVERAGE
+      - OPTIONAL_CAPABILITY_TIEBREAK
+      - MINIMUM_CAPABILITY_SURFACE_TIEBREAK
+      - LEXICOGRAPHIC_DETERMINISTIC_TIEBREAK
+      - WRITER_CONFLICT_REJECTION
+      - FORBIDDEN_CAPABILITY_REJECTION
+      - CAPABILITY_GAP_FAIL_CLOSED
+      - SELF_TEST_FIXTURES
+
+  control_plane_before_target_runtime:
+    status: GREEN_CONTRACT_BRANCH
+    evidence:
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml
+    correction: "RUNTIME_PRESENT removed as target-runtime prerequisite; target runtime may be absent before selection/materialization."
+
+  context_policy:
+    status: GREEN_RECONCILED
+    evidence:
+      - LEIA-ME-IA.md
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml
+    rule: "CATALOGUE_ALL_RELEVANT_METADATA + MINIMUM_SUFFICIENT_CONTEXT; do not preload all bodies."
+
+  spiral_traversal:
+    status: GREEN_IMPLEMENTED_BRANCH_YELLOW_CASA_VISUAL
+    evidence:
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SPIRAL-TRAVERSAL.yml
+      - scripts/trigger-fabric/spiral_traversal.py
+      - apps/modulos/graph-panel/public/graph.js
+    properties:
+      - FORWARD_CLOSURE
+      - REVERSE_CLOSURE
+      - ZERO_DUPLICATE_NEGATIVE_TEST
+      - NO_SEMANTIC_EDGE_CREATION
+      - PRESERVE_NODE_POSITIONS
+      - RENDER_OVERLAY_ONLY
+      - TEN_FRONT_CLASSIFICATION
+    remaining: TESTE_REAL_NA_CASA_FOR_VISUAL_AND_FULL_REPO_DENOMINATOR
+
+  writer_scope_coordination:
+    status: GREEN_MAIN
+    evidence:
+      - AGENTS.md
+      - LEIA-ME-IA.md
+      - docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md
+      - docs/CONSCIENCIA/APRENDIZADOS/2026-08-28-meteor-claim-lease-absorvido.md
+
+  repo_contract_gate:
+    status: GREEN_MAIN
+    evidence:
+      - scripts/trigger-fabric/verify_repo_contract.py
+      - .github/workflows/porta-de-entrada.yml
+
+  continuity_validator:
+    status: GREEN_MAIN
+    evidence:
+      - scripts/lupa/validar-continuidade-global.mjs
+
+  omni_router_transport:
+    status: GREEN_PROVEN_PATH
+    evidence:
+      - apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
+    runtime_history:
+      - "127.0.0.1:8099 /health observed"
+      - "127.0.0.1:8099 /v1/models observed"
+      - "POST /v1/chat/completions observed in prior Casa session"
+
+  screenpipe_global_sensor:
+    status: GREEN_BRANCH_CONTRACT_YELLOW_RUNTIME_PER_HOST
+    evidence:
+      - .agents/skills/screenpipe-live-observer/SKILL.md
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SCREENPIPE-BINDING.yml
+    consumer_scope: ANY_AUTHORIZED_CENTRALDARK_ACTOR
+    remaining: AVAILABILITY_MEASURED_PER_HOST_AND_TARGET
+
+  runtime_manifest_machine_contract:
+    status: GREEN_HARNESS_BRANCH
+    evidence:
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml
+      - scripts/trigger-fabric/runtime_plug_conformance.py
+    proves:
+      - REQUIRED_FIELDS
+      - RUNTIME_KIND
+      - TRANSPORT_KIND
+      - BINDING_REQUIRED
+      - RESOURCE_PROFILE_SHAPE
+      - LIFECYCLE_REQUIRED
+      - NEGATIVE_INVALID_MANIFEST_BLOCKS
+
+  runtime_resource_fit:
+    status: GREEN_CHECKER_BRANCH_YELLOW_LIVE_PROBE
+    evidence:
+      - scripts/trigger-fabric/runtime_plug_conformance.py
+    proves:
+      - POSITIVE_RESOURCE_FIT
+      - NEGATIVE_RESOURCE_SHORTAGE_BLOCKS
+    remaining: LIVE_HOST_RESOURCE_MEASUREMENT_FEEDS_CHECKER
+
+  shared_runtime_consumer_lease:
+    status: GREEN_CONTRACT_AND_HARNESS_YELLOW_RUNTIME_BINDING
+    evidence:
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml
+      - scripts/trigger-fabric/runtime_plug_conformance.py
+    proves:
+      - IDEMPOTENT_ACQUIRE
+      - TWO_CONSUMERS
+      - FIRST_RELEASE_CANNOT_UNLOAD
+      - FINAL_RELEASE_MAY_UNLOAD
+    remaining: BIND_TO_REAL_SHARED_HEAVY_RUNTIME_OWNER
+
+  cross_engine_swap:
+    status: GREEN_ENVELOPE_HARNESS_YELLOW_LIVE_MATRIX
+    evidence:
+      - scripts/trigger-fabric/runtime_plug_conformance.py
+      - scripts/lupa/validar-continuidade-global.mjs
+      - docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md
+    proves:
+      - A_TO_B_ENVELOPE
+      - B_TO_A_ENVELOPE
+      - REQUIRED_STATE_PRESERVATION
+      - NEGATIVE_MISSING_CURSOR_BLOCKS
+    remaining: LIVE_REPRESENTATIVE_ENGINE_SWAP_IN_CASA
+
+  runtime_transport_adapters:
+    status: GREEN_CONTRACT_PARTIAL_LIVE
+    evidence:
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml
+      - apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
+    kinds: [OPENAI_COMPATIBLE_HTTP, CENTRALDARK_API, MCP, SUBPROCESS, BROWSER, CI, EMBEDDED]
+    remaining: LIVE_CONFORMANCE_ONLY_FOR_TRANSPORTS_ACTUALLY_SELECTED_BY_CURRENT_MISSION
+
+  runtime_plug_specific_gate_wiring:
+    status: GREEN_BRANCH_WIRED_TO_EXISTING_GATE
+    evidence:
+      - .github/workflows/porta-de-entrada.yml
+      - scripts/lupa/agent-core-adapters.test.mjs
+      - scripts/trigger-fabric/spiral_traversal.py
+      - scripts/trigger-fabric/runtime_plug_conformance.py
+    path: "porta-de-entrada -> node --test scripts/lupa/agent-core-adapters.test.mjs -> python self-tests"
+    new_workflow_created: false
+
+  harness_validation:
+    status: GREEN_PRIOR_COMPONENT_FIXED_POINT
+    prior_evidence:
+      - contract JSON
+      - response gate
+      - gateway middleware evidence gate/fail-closed
+      - Horn engine
+      - functional/adversarial/metamorphic tests
+      - tests/run_all.py
+      - HARNESS_FIXED_POINT=TRUE
+    boundary: GLOBAL_RUNTIME_FIXED_POINT_NOT_IMPLIED
+
+corrected_dashboard:
+  ARCHITECTURE_END_TO_END: GREEN
+  CONTROL_PLANE_BEFORE_TARGET_RUNTIME: GREEN
+  MINIMUM_CONTEXT_WITH_FULL_METADATA_DISCOVERABILITY: GREEN
+  TRIGGER_FABRIC_MAIN: GREEN
+  WRITER_COORDINATION_MAIN: GREEN
+  CONTINUITY_VALIDATOR_MAIN: GREEN
+  REPO_CONTRACT_GATE_MAIN: GREEN
+  OMNI_ROUTER_REAL_PATH: GREEN
+  CAPABILITY_SELECTOR_IMPLEMENTED: GREEN_BRANCH
+  RUNTIME_MANIFEST_CONFORMANCE: GREEN_BRANCH
+  RESOURCE_FIT_CHECKER: GREEN_BRANCH
+  SHARED_RUNTIME_LEASE_HARNESS: GREEN_BRANCH
+  CROSS_ENGINE_SWAP_ENVELOPE: GREEN_BRANCH
+  SCREENPIPE_GLOBAL_SENSOR_BINDING: GREEN_BRANCH
+  SPIRAL_FORWARD_REVERSE: GREEN_BRANCH
+  RUNTIME_PLUG_GATE_WIRING: GREEN_BRANCH
+  CARACOL_VISUAL_OVERLAY: GREEN_BRANCH_YELLOW_CASA
+  LIVE_RESOURCE_PROBE_BINDING: YELLOW
+  LIVE_SHARED_RUNTIME_LEASE_BINDING: YELLOW
+  LIVE_ENGINE_SWAP_MATRIX: YELLOW
+  GLOBAL_RUNTIME_FIXED_POINT: YELLOW_UNTIL_CASA_REMEASUREMENT
+
+many_to_few:
+  formula: "CATALOGUED_POINTS -> 10_FRONTS -> DEDUPE -> OWNERS -> CAPABILITIES -> MINIMUM_RUNTIME_SET -> NUCLEUS"
+
+few_to_many:
+  formula: "NUCLEUS -> OWNERS -> CAPABILITIES -> RUNTIMES_TOOLS -> EVIDENCE -> CATALOGUED_POINTS"
+
+rendezvous:
+  require_same_universe: true
+  require_same_material_unknown_set: true
+  require_no_fragment_drop: true
+  require_no_semantic_edge_pollution: true
+  divergence: META_LUPA_RECONCILE_AND_REPEAT
+
+next_delta:
+  principle: "Only live same-HEAD Casa gaps remain; do not rebuild proven architecture."
+  actions:
+    - FEED_LIVE_HOST_RESOURCE_PROBE_TO_CONFORMANCE_CHECKER
+    - BIND_CONSUMER_LEASE_WHEN_A_SHARED_HEAVY_RUNTIME_IS_ACTUALLY_SELECTED
+    - RUN_REPRESENTATIVE_LIVE_A_TO_B_AND_B_TO_A_SWAP
+    - RUN_CARACOL_VISUAL_AND_FULL_DENOMINATOR_TEST_IN_CASA
+    - REMEASURE_EXACT_HEAD
+
+fixed_point_boundary:
+  statement: "Main and deploy remain consequences. Remaining material boundary is same-HEAD TESTE_REAL_NA_CASA and live selected-runtime conformance."

@@ -1,0 +1,3 @@
+Failed to connect to Desktop Commander MCP: McpError: MCP error -32603: Unexpected end of JSON input
+Device startup failed: MCP error -32603: Unexpected end of JSON input
+[CENTRALDARK] REMOTE_MCP_EXIT=1

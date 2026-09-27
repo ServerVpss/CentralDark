@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-08-16T10:53:19.580Z
+# 🧠 Notion Sync — 2026-09-16T17:43:05.782Z
 
-- **Commit fonte:** `1fca49661401c6b05c1403427c4cae9e8182708f`
+- **Commit fonte:** `b6d689a75c9f87efe6e0add547e27284dc9529ec`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 412 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 490 atualizadas · ❌ 38 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 26 | 0 | 26 | 0 | 0 |
-| estrutura | 342 | 0 | 342 | 0 | 0 |
+| aprendizados | 43 | 0 | 34 | 0 | 9 |
+| estrutura | 441 | 0 | 412 | 0 | 29 |
 
 ## Operações
 
@@ -91,13 +91,31 @@
 | aprendizados | atualizado | #22 — Painel Admin precisa ser observabilidade operacional, não só configuração |
 | aprendizados | atualizado | #23 — HTTP 200, PM2 online, DNS resolvendo ou painel verde não provam LIVE |
 | aprendizados | atualizado | #24 — API paga é capacidade, não identidade nem caminho obrigatório |
-| aprendizados | atualizado | #25 — “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança |
+| aprendizados | erro | #25 — "Menos é mais" significa menor movimento compatível com efeito, observabilidade e segurança |
+| aprendizados | atualizado | #26 — Batch .bat: 4 armadilhas que passam em revisão superficial |
+| aprendizados | atualizado | #27 — Grok App Builder é adapter, não cérebro — não scaffoldar app paralelo |
+| aprendizados | atualizado | #28 — Ponte semântica fail-closed EXIT code=2 — não é verde; stderr engolido |
+| aprendizados | atualizado | #29 — Dois mundos vivos: GitHub main 81bbfc7 ≠ VPS 5958d3ce27 (1252 atrás, dirty) |
+| aprendizados | atualizado | #30 — Consolidacao de dominios: SPA ja e hibrido, nao falta construir path-routes |
+| aprendizados | atualizado | #31 — Provider sem crédito NÃO é router quebrado |
+| aprendizados | atualizado | #32 — Uma capacidade = uma linhagem = um PR de promoção por escopo |
+| aprendizados | atualizado | #33 — Opinião usada como medição gera falso verde e ação destrutiva |
+| aprendizados | atualizado | #34 — Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição |
+| aprendizados | erro | #35 — T3: ponte semântica EXIT 1, três catálogos, VPS na main 8 atrás |
+| aprendizados | erro | #43 — EXECUTION_OVER_EXPLANATION — User Values Doing over Talking |
+| aprendizados | erro | #44 — LINGUISTIC_CALIBRATION — Bahia Expression Accuracy |
+| aprendizados | erro | #45 — WEBUI_ADMIN_HUB — Localhost:8787 as CentralAdmin Surface |
+| aprendizados | erro | #46 — ONE_SYSTEM_ONLY_ENFORCEMENT — User's Operational Maxim |
+| aprendizados | erro | #47 — LARGE_FILE_INTEGRATION — Process Droped Files, Don't Just Acknowledge |
+| aprendizados | erro | #48 — COMMIT_LIMPO — Commit não é vassoura de git status |
+| aprendizados | erro | #49 — AUREOLA_PERMANENTE — Publicação segura e continuidade do aprendizado |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/FREQUENCIAS-OPERACIONAIS-SOL.md |
+| estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/LEI-ARVORE-SEMANTICA-DA-CASA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE.md |
@@ -107,11 +125,14 @@
 | estrutura | atualizado | docs/CONSCIENCIA/03-FLUXO-DEPLOY.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/ARQUITETURA-MCP-V2.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/BOAS-PRATICAS-MCP.md |
+| estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/MCP-REUSE-HORN-FIXED-POINT.md |
+| estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/PDF-CONFORMANCE-CC2003.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/RECONECTAR-CONECTOR.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/SYSTEM-PROMPT-ADMIN.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/SYSTEM-PROMPT-USUARIO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/URLS-DESCOBERTA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/ferramentas-cognitivas-e-comandos.md |
+| estrutura | atualizado | docs/CONSCIENCIA/05-INFRA/MAPA-ROTAS-CADDY.md |
 | estrutura | atualizado | docs/CONSCIENCIA/06-MCP-CENTRALDARK.md |
 | estrutura | atualizado | docs/CONSCIENCIA/07-PENDENCIAS-E-HORARIO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/08-HISTORICO-DECISOES-2026-07-10-gateway-hub.md |
@@ -132,6 +153,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/22-PADRAO-STATUS-VISUAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/23-MISSAO-REPARO-PM2-SEM-REESTRUTURAR-APPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/23-PAPEL-LOVABLE-CENTRAL-COMANDO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ADMINISTRAVEIS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/001-token-bot-vs-sessao-user.md |
 | estrutura | atualizado | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/002-arsenal-portas-fixas.md |
 | estrutura | atualizado | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/003-webui-custom-css-rota.md |
@@ -181,6 +203,42 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-07-10-gateway-138-modelos-e-schema-real-hub.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-07-10-primeiro-acesso-admin-hub.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-14-arqueologia-total-ouro-recuperado.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-16-verde-delta-fechado-promove.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-17-mapa-mental-intencao-comprimida.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-alquimia-operacional-minerio-ouro-cristal.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-estabilidade-sob-perturbacao-liberdade-com-fronteira.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-fluxo-operacional-papagaio-off-pombo-on.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-prova-secreta-bob-casa-fundamentos.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-ciclo-mestre-reconciliacao-passado-futuro.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-intencao-unica-propriedades-ciclo-mestre.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-multibussola-meta-convergencia-reversa.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-portao-desarmado-sentenca-realidade-event-ledger.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-27-MCP-LISTENER-LIFECYCLE-RECEIPT.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-27-mcp-listener-lifecycle.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-28-meteor-claim-lease-absorvido.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-28-meteor-decomp-pr-bot-assay.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/2026-08-28-revisao-mineracao-agi-e-organismo.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-FULL-TRIGGER-BOOT-PROVEN-LOCK.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-LOCAL-PUBLICADO-ZENDRIVE-RABBIT-MINERAL.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-PERMITO-SEGREDO-DEPLOY-CLASSES.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-SHARED-WRITER-LEASE-CONTRAPROVA.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-STATUS-BADGE-FABRIC-FIXED-POINT.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-VERTEX-INVERSO-PEPITAS-PROVADAS.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-WINDOWS-INSTALLER-AUTOUPDATE.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-WORKFLOW-DEDUPE-RADAR.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-05-WORKFLOW-STARTUP-FAILURE-MINERAL.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-06-VERTEX-INVERSO-RODADA2-PEPITAS-PROVADAS.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-06-VERTEX-INVERSO-RODADA3-PEPITAS-PROVADAS.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-06-VERTEX-INVERSO-RODADA4-PEPITAS-PROVADAS.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-08-CI-MENOS-E-MAIS-JUIZ-PORTA.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-08-GARIMPO-CHEFE-PR-MAIN-DELTA-CONTINUO.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-09-14-descoberta-canais-operacionais-xp.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/CAPABILITY-MATRIX.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/COUNTERPROOF.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/HERMES-PROOF-PLAN.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/AIOS-GOLD-ASSAY-20260828/README.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/EVIDENCIAS/2026-08-17-registro-visual-recibo-muitos-olhos.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/APRENDIZADOS_PROXY.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/CONFIGURACAO_CLINE.md |
@@ -190,10 +248,16 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/TUTORIAL-TERMINAL-SEM-CONTA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/conversa-mcp-webui-liberacao.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/elitehttp-vs-elite-anthropic-nao-confundir.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/erros-agente-2026-08-29-medicao-e-falso-verde.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/incidente-2026-07-05-mcp-dump-perdido.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/socorro-2026-07-05.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA-CHAVES-AI-PROXY.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA/ARVORE-DO-PROJETO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA/DOCUMENTACAO-OBRIGATORIA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA/LEIA-PRIMEIRO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA/MANUAL-DO-DONO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA/PATCH-RELEVO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/CONSELHO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-2304-em-1-frase-qual-sua-fun-o.md |
@@ -204,12 +268,37 @@
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-32-16-554Z-router-webui-teste-ao-vivo-do-webui-diga-oi-curto-no-grupo-1-fr.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T05-24-43-958Z-router-webui-diga-oi-em-uma-frase-curta.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T05-24-52-999Z-router-webui-diga-oi-em-uma-frase-curta.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-17T09-58-30-222Z-router-webui-responda-so-ok-funcionou.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-17T18-37-40-955Z-router-webui-reply-with-exactly-pong.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-17T18-37-42-967Z-router-webui-reply-with-exactly-pong.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-26T23-50-41-628Z-router-webui-responda-somente-ok.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-26T23-52-45-201Z-router-webui-ok.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-26T23-52-49-246Z-router-webui-ok.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-28T23-14-39-729Z-router-webui-responda-apenas-ok.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-28T23-23-38-639Z-router-webui-responda-apenas-ok.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-29T09-57-32-838Z-router-webui-responda-ok.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-29T09-57-39-220Z-parallel-webui-responda-ok.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-29T09-58-13-210Z-debate-webui-responda-ok.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-03T23-49-20-312Z-router-webui-responda-so-ok.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-03T23-49-22-887Z-router-webui-responda-so-ok.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-48-55-971Z-router-webui-oi.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-49-47-920Z-router-webui-oi.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-49-52-260Z-router-webui-oi.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-49-54-457Z-parallel-webui-oi.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-49-56-730Z-router-webui-oi.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-50-02-556Z-parallel-webui-oi.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-50-07-049Z-router-webui-oi.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-50-08-801Z-parallel-webui-oi.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-50-10-158Z-router-webui-oi.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-50-24-284Z-debate-webui-oi.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-02/hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-elite-gateway.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-grafo-vivo.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-tutor-hermes-2.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-tutor-hermes.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aulas-avancadas-gateway.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-29/2026-07-29T09-59-03-710Z-hermes-webui-responda-ok.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-08-04/2026-08-04T18-50-40-644Z-hermes-webui-oi.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/MULTI-MODEL-ORCHESTRATION.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/PROVA-CATALOGO-CLAUDE-DESKTOP.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/PROVA-V1-MESSAGES-CLAUDE-DESKTOP.md |
@@ -227,9 +316,12 @@
 | estrutura | atualizado | docs/CONSCIENCIA/ARTEFATOS/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARTEFATOS/centraldark-prompt-universal.md |
+| estrutura | atualizado | docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/BOT_COMMANDS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/COCKPIT-AVANCO.README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CODEX-INTEGRADO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CODEX-REVISAO-PRS.md |
+| estrutura | erro | docs/CONSCIENCIA/COMITE-OFICIAL-SEGREDO-CHEFE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CONECTOR-LIBERDADE-SEGURA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CONSCIENCIA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CONSOLIDACAO-CENTRALDARK-V2.md |
@@ -238,6 +330,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/CONTRATO-LUPA-BAYESIANA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CRON_JOBS_SETUP.md |
 | estrutura | atualizado | docs/CONSCIENCIA/CUSTOM-GPT-SETUP.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ChatOps-Optimizing-DevOps-via-Chatbots/lab-bin/ANALISE-OVERCLOCK-EXE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/00-COMECE-AQUI.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/01-O-QUE-E-DARKAI.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/02-COMO-FUNCIONA-POR-DENTRO.md |
@@ -252,30 +345,38 @@
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/BOOT-CENTRALDARK.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/COMO-ENSINAR-OUTRA-IA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/COMO-USAR.md |
+| estrutura | atualizado | docs/CONSCIENCIA/DARKAI/GUARDIAO-CONFIG.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/INSTALAR-NA-VPS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/DARKAI/OURO-COMPARTILHAMENTO-SEMANTICO-GROK-HERMES.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/PROMPT-MEGA-ESTABILIZAR.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/PROMPT-UNIVERSAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/QUICKSTART.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DARKAI/README.md |
+| estrutura | erro | docs/CONSCIENCIA/DELTA-UTIL-FULL-CENTRALDARK-HARNESS-20260909.md |
+| estrutura | atualizado | docs/CONSCIENCIA/DESAFIO-NIVEL-7-AGENTES-ERRO-ABERTO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DESEJOS-FUTUROS-MEGA-PACOTAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md |
 | estrutura | atualizado | docs/CONSCIENCIA/DNS-WILDCARD-CENTRALLDARK.md |
 | estrutura | atualizado | docs/CONSCIENCIA/EDGE_FUNCTIONS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ESCOLA-HERMES-CASA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ESPELHO-CLONE-DECK-PASSIVO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md |
+| estrutura | erro | docs/CONSCIENCIA/GAPS-ONLY.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PR-OBSERVAR-CODEX.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-AUTOMACAO-CONTINUA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-E-INTELIGENCIA-VIVA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GRUPO-EVOLUCAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GUARDIAO-DA-CONSCIENCIA.md |
+| estrutura | erro | docs/CONSCIENCIA/GUIA-COMUNICACAO-SEGREDO-CHEFE.md |
+| estrutura | erro | docs/CONSCIENCIA/HERMES-CADEIA-OPERACIONAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/INFRA-MAP.md |
 | estrutura | atualizado | docs/CONSCIENCIA/INSTALADOR/13-centraldark-portal.md |
 | estrutura | atualizado | docs/CONSCIENCIA/INSTALADOR/14-sync-monorepo.md |
-| estrutura | atualizado | docs/CONSCIENCIA/INSTALADOR/backup/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/INVENTARIO-PM2-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md |
+| estrutura | atualizado | docs/CONSCIENCIA/LEGENDA-TEMPORAL-T0-TN-TDELTA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/2026-07-30-VIVER-EM-PAZ.md |
 | estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/2026-08-06-writer-provenance-gap.md |
 | estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/2026-08-08-SELO-DE-OURO-CONVERGENCIA-E-GRATIDAO.md |
@@ -286,15 +387,21 @@
 | estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/lembrancas-202606.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MAPA-DO-CEREBRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MAPA-DOS-BOTS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/MATRIZ-ORQUESTRACAO-PERFIS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MCP-FLUXO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md |
+| estrutura | atualizado | docs/CONSCIENCIA/MISSAO-CONVERGENCIA-TRIPLA-FORMULA-20260816.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MODO-SEGREDO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/MULTIBUSSOLA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/INSTALAR-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTION-MAPA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-CARD-HERMES.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-EMOJIS.md |
+| estrutura | erro | docs/CONSCIENCIA/PADRAO-GRAFO-VIVO-MARKDOWN.md |
+| estrutura | erro | docs/CONSCIENCIA/PADRAO-LINKS-CLICAVEIS-SEGREDO-CHEFE.md |
+| estrutura | atualizado | docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PENDENCIAS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PENDENCIAS/MCP-LOCAL-STDIO-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PIVETE-IA/PIVETE-00-INVOCACAO.md |
@@ -316,14 +423,19 @@
 | estrutura | atualizado | docs/CONSCIENCIA/PIVETE-IA/PIVETE-16-SECRETS-CONNECTORS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PIVETE-IA/PIVETE-17-MCPO-INTEGRATION.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PIVETE-IA/PIVETE-18-ROTA-MEMORIA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/PLANO-RECONCILIACAO-DOMINIOS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PLANO.md |
+| estrutura | erro | docs/CONSCIENCIA/POMBO-LINEAGE-RULE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROGRAMAS/CONVERGENCIA-OMNIROUTE-CENTRALDARK.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROJECT-KNOWLEDGE-CENTRALDARK-V2.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROMPT-MESTRE-MULTI-IA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md |
+| estrutura | erro | docs/CONSCIENCIA/PROTOCOLO-PROVA-RASTRO-ANTI-PENDENCIA.md |
+| estrutura | erro | docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/REGISTRO-GUARDIAO-DECISOR-V3.md |
+| estrutura | erro | docs/CONSCIENCIA/REGRA-COMITE-DELTA-CONTINUO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-MODO-PROPOR.md |
 | estrutura | atualizado | docs/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-V2-ANALISTA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md |
@@ -407,9 +519,11 @@
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/notion-sync/investigacao-orfaos-aprendizados.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/notion-sync/latest.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RELATORIOS/notion-sync/orphans-2026-06-25-arquivados-36.md |
+| estrutura | atualizado | docs/CONSCIENCIA/REMEDICAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/REPOSITORIO-OFICIAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RETOMADA-Arsenal-TelePainel.md |
 | estrutura | atualizado | docs/CONSCIENCIA/RETOMADA-Issues-Agent.md |
+| estrutura | atualizado | docs/CONSCIENCIA/SCREENPIPE-MCP-BLOQUEIO-20260831.md |
 | estrutura | atualizado | docs/CONSCIENCIA/SCRIPTING-STANDARDS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TESTE-CODEX-TRIGGER-HANDLERS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TREINAMENTO-IAS/README.md |
@@ -424,8 +538,10 @@
 | estrutura | atualizado | docs/CONSCIENCIA/VAULT/PROMPT-MESTRE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/VAULT/REGRAS-AUTONOMIA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/VAULT/REGRAS-DOC-CHECK.md |
+| estrutura | atualizado | docs/CONSCIENCIA/VISUALIZACAO-MERMAID-PADRAO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/WEBHOOK-DEPLOY-SEGURO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/agente/elite-mapper/README.md |
+| estrutura | erro | docs/CONSCIENCIA/centraldark-gpt-prompt.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/00_RESUMO_EXECUTIVO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/01_MAPEAMENTO_ESTRUTURA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/02_LIXO_PARA_DELETAR.md |

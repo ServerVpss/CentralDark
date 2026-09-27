@@ -1,0 +1,263 @@
+/* ============================================================================
+   ██  C E N T R A L D A R K
+   ██  LUPA NA MÃO · INTENÇÃO NA FRENTE
+   ============================================================================
+   PATCH PARA src/index.css — liga o design system ao site.
+   ----------------------------------------------------------------------------
+   COMO APLICAR
+
+   1. Os dois @import vão no TOPO do arquivo, logo depois dos @import de fonte
+      que já existem (linha 6). Import precisa vir antes de qualquer regra.
+
+   2. Os blocos @layer base abaixo vão DEPOIS do bloco `.dark` que já existe
+      (após a linha 141), sem tocar em nada que está acima.
+
+   NADA É REMOVIDO. O `:root` (emerald claro) e o `.dark` (emerald escuro)
+   continuam exatamente como estão — são o padrão e seguem sendo o padrão.
+
+     REUSE_BEFORE_CREATE = true
+     THEME_SWITCH       != REDESIGN
+     ZERO_REGRESSAO      = true
+
+   ----------------------------------------------------------------------------
+   POR QUE A CONVENÇÃO É `[data-palette]` E NÃO `[data-theme]`
+
+   O site já usa a estratégia `.dark` do Tailwind para claridade. Paleta é uma
+   SEGUNDA dimensão, independente:
+
+     claridade  :root | .dark              ← já existe, não muda
+     paleta     emerald | operational | forge   ← entra agora
+
+   Assim o seletor de tema e o seletor de paleta não brigam, e as seis
+   combinações funcionam:
+
+     <html>                                    emerald claro   (padrão)
+     <html class="dark">                       emerald escuro
+     <html data-palette="operational">         azul claro
+     <html class="dark" data-palette="forge">  dourado escuro
+
+   ----------------------------------------------------------------------------
+   DE ONDE VEM CADA VALOR
+
+   emerald       src/index.css (já no arquivo) — não é tocado
+   operational   variables.scss[data-theme='operational'] — #4fc3ff / #05070d
+   forge         variables.scss[data-theme='forge'] + forja-de-cartas.html
+                 #c0902b / #100d07 / pergaminho #EFE2C6
+
+   Os nomes de token são os MESMOS do arquivo original. Nenhum componente
+   precisa mudar: eles continuam lendo --background, --primary, --border.
+   ============================================================================ */
+
+
+/* ┌──────────────────────────────────────────────────────────────────────────┐
+   │ PARTE 1 — vai no topo, junto dos @import de fonte que já existem        │
+   └──────────────────────────────────────────────────────────────────────────┘ */
+
+@import url('../.agents/skills/visual-design-method/assets/relevo-3-temas.css');
+@import url('../.agents/skills/visual-design-method/assets/cartaz-centraldark.css');
+
+
+/* ┌──────────────────────────────────────────────────────────────────────────┐
+   │ PARTE 2 — vai DEPOIS do bloco .dark existente                           │
+   └──────────────────────────────────────────────────────────────────────────┘ */
+
+@layer base {
+
+  /* ══════════════════════════════════════════════════════════════════════
+     OPERATIONAL — HUD, sala de controle. Navy e ciano, vermelho é alerta.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  /* claro — o ciano puro não passa contraste sobre branco, então o acento
+     escurece para #0a6e9e e o ciano original volta como brilho */
+  [data-palette="operational"] {
+    --background: 210 40% 97%;
+    --foreground: 213 50% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 213 50% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 213 50% 8%;
+    --primary: 197 88% 33%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 199 100% 65%;
+    --secondary: 208 42% 95%;
+    --secondary-foreground: 213 40% 14%;
+    --muted: 208 38% 94%;
+    --muted-foreground: 213 25% 35%;
+    --accent: 197 88% 33%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 4 72% 47%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 197 88% 33%;
+    --success-foreground: 0 0% 100%;
+    --warning: 33 100% 35%;
+    --warning-foreground: 0 0% 100%;
+    --border: 206 35% 86%;
+    --input: 206 35% 88%;
+    --ring: 197 88% 33%;
+
+    --relevo-sombra-cor: hsl(210 40% 25% / .16);
+    --relevo-brilho-forte: hsl(198 96% 99% / .78);
+    --relevo-brilho-fraco: hsl(200 85% 86% / .30);
+    --relevo-brilho-mistura: soft-light;
+  }
+
+  /* escuro — aqui o ciano é o herói. Mistura `screen`: luz dura de painel. */
+  .dark[data-palette="operational"],
+  [data-palette="operational"] .dark {
+    --background: 222 45% 4%;
+    --foreground: 213 45% 94%;
+    --card: 213 48% 8%;
+    --card-foreground: 213 45% 94%;
+    --popover: 213 48% 9%;
+    --popover-foreground: 213 45% 94%;
+    --primary: 199 100% 65%;
+    --primary-foreground: 222 45% 4%;
+    --primary-glow: 199 100% 76%;
+    --secondary: 213 50% 11%;
+    --secondary-foreground: 213 45% 94%;
+    --muted: 213 50% 11%;
+    --muted-foreground: 213 25% 60%;
+    --accent: 199 100% 65%;
+    --accent-foreground: 222 45% 4%;
+    --destructive: 4 100% 62%;
+    --destructive-foreground: 0 0% 98%;
+    --success: 199 100% 65%;
+    --success-foreground: 222 45% 4%;
+    --warning: 38 100% 56%;
+    --warning-foreground: 222 45% 4%;
+    --border: 199 100% 65% / .16;
+    --input: 213 40% 14%;
+    --ring: 199 100% 65%;
+
+    --relevo-sombra-cor: hsl(215 60% 1% / .88);
+    --relevo-brilho-forte: hsl(198 96% 88% / .40);
+    --relevo-brilho-fraco: hsl(205 88% 66% / .14);
+    --relevo-brilho-mistura: screen;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════
+     FORGE — premium, lendário. Ouro batido e pergaminho.
+     O claro NÃO é invenção: é o interior da carta, que já existia em token.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  /* claro — o pergaminho: #EFE2C6 de fundo, #2A2013 de tinta, #C0902B de ouro */
+  [data-palette="forge"] {
+    --background: 40 55% 86%;
+    --foreground: 36 39% 12%;
+    --card: 41 62% 91%;
+    --card-foreground: 36 39% 12%;
+    --popover: 41 62% 91%;
+    --popover-foreground: 36 39% 12%;
+    --primary: 40 70% 32%;
+    --primary-foreground: 41 62% 91%;
+    --primary-glow: 40 64% 46%;
+    --secondary: 40 47% 81%;
+    --secondary-foreground: 36 39% 12%;
+    --muted: 40 42% 78%;
+    --muted-foreground: 33 30% 27%;
+    --accent: 40 70% 32%;
+    --accent-foreground: 41 62% 91%;
+    --destructive: 8 75% 28%;
+    --destructive-foreground: 41 62% 91%;
+    --success: 111 49% 28%;
+    --success-foreground: 41 62% 91%;
+    --warning: 40 70% 32%;
+    --warning-foreground: 41 62% 91%;
+    --border: 40 70% 28% / .32;
+    --input: 40 40% 74%;
+    --ring: 40 64% 46%;
+
+    --relevo-sombra-cor: hsl(40 35% 22% / .22);
+    --relevo-brilho-forte: hsl(44 85% 99% / .80);
+    --relevo-brilho-fraco: hsl(40 70% 84% / .30);
+    --relevo-brilho-mistura: soft-light;
+  }
+
+  /* escuro — o breu e o bisel */
+  .dark[data-palette="forge"],
+  [data-palette="forge"] .dark {
+    --background: 40 25% 4%;
+    --foreground: 43 78% 77%;
+    --card: 40 54% 8%;
+    --card-foreground: 43 78% 77%;
+    --popover: 40 54% 9%;
+    --popover-foreground: 43 78% 77%;
+    --primary: 40 64% 46%;
+    --primary-foreground: 40 25% 4%;
+    --primary-glow: 43 82% 77%;
+    --secondary: 40 47% 11%;
+    --secondary-foreground: 43 78% 77%;
+    --muted: 40 47% 11%;
+    --muted-foreground: 38 32% 46%;
+    --accent: 40 64% 46%;
+    --accent-foreground: 40 25% 4%;
+    --destructive: 8 70% 39%;
+    --destructive-foreground: 43 78% 77%;
+    --success: 113 45% 61%;
+    --success-foreground: 40 25% 4%;
+    --warning: 41 78% 61%;
+    --warning-foreground: 40 25% 4%;
+    --border: 40 64% 46% / .24;
+    --input: 40 40% 14%;
+    --ring: 40 64% 46%;
+
+    --relevo-sombra-cor: hsl(40 40% 1% / .92);
+    --relevo-brilho-forte: hsl(44 82% 92% / .44);
+    --relevo-brilho-fraco: hsl(40 76% 76% / .16);
+    --relevo-brilho-mistura: soft-light;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════
+     EMERALD — o padrão. Só declara os tokens de luz do relevo, porque as
+     cores dele já estão no :root e no .dark logo acima. Nada é redefinido.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  :root {
+    --relevo-sombra-cor: hsl(152 30% 20% / .16);
+    --relevo-brilho-forte: hsl(152 45% 99% / .72);
+    --relevo-brilho-fraco: hsl(152 50% 88% / .26);
+    --relevo-brilho-mistura: soft-light;
+  }
+  .dark {
+    --relevo-sombra-cor: hsl(152 40% 1% / .85);
+    --relevo-brilho-forte: hsl(152 60% 92% / .28);
+    --relevo-brilho-fraco: hsl(152 55% 70% / .10);
+  }
+}
+
+
+/* ┌──────────────────────────────────────────────────────────────────────────┐
+   │ PARTE 3 — trocar de paleta no runtime                                   │
+   └──────────────────────────────────────────────────────────────────────────┘
+
+   O site já tem ThemeProvider para claro/escuro em src/shared/theme/.
+   Paleta é a dimensão que faltava ali — o próprio DESIGN-SISTEMA.md registra
+   isso como lacuna: "Só light/dark/system; falta dimensão de paleta".
+
+   Enquanto o ThemeProvider não ganha a segunda dimensão, isto resolve:
+
+     // ligar
+     document.documentElement.setAttribute('data-palette', 'forge');
+     localStorage.setItem('cd-palette', 'forge');
+
+     // voltar ao padrão
+     document.documentElement.removeAttribute('data-palette');
+     localStorage.removeItem('cd-palette');
+
+     // restaurar no boot, antes da primeira pintura
+     const p = localStorage.getItem('cd-palette');
+     if (p) document.documentElement.setAttribute('data-palette', p);
+
+   TODO: mover isto para src/shared/theme/ThemeProvider.tsx como segunda
+         dimensão, ao lado de light/dark/system.
+         Owner: src/shared/theme/ThemeProvider.tsx
+
+   ============================================================================
+   VERIFICAR DEPOIS DE APLICAR
+
+     node .agents/skills/visual-design-method/scripts/check-relevo-3d.mjs
+     node .agents/skills/visual-design-method/scripts/check-documentacao.mjs
+
+   E olho humano nas seis combinações: 3 paletas × claro/escuro.
+   Gate prova estrutura; se ficou bonito quem julga é gente.
+   ============================================================================ */

@@ -128,7 +128,7 @@ Cada um recebe um objetivo isolado, entrega resultado, eu consolido.
 3. **Scripts isolados em `/root/CentralDark/scripts/`.** Nunca soltos.
 4. **Pré-deploy obrigatório:** rodar `audit-rls` antes de publish.
 5. **Nunca expor service role key** ou senha do banco ao usuário.
-6. **Áreas protegidas exigem autorização explícita** ("PERMITO PIVETE").
+6. **Áreas protegidas exigem autorização explícita** ("PERMITO SEGREDO").
 
 ---
 
@@ -159,3 +159,11 @@ Tudo isso com **guardrails**: dry-run por padrão, confirmação explícita pra 
 ---
 
 Próximo: [`10-TROUBLESHOOTING.md`](10-TROUBLESHOOTING.md)
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

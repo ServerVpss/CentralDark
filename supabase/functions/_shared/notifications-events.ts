@@ -1,11 +1,6 @@
 // Helper compartilhado entre edge functions para notificações com catálogo,
 // agrupamento (debounce) e fallback. Runtime: Deno.
-//
-// Uso:
-//   import { notify, registerEvent } from "../_shared/notifications-events.ts";
-//
-//   await registerEvent({ event_key: "vps.deploy.ok", category: "deploy", severity_default: "sucesso" });
-//   await notify({ event_key: "vps.deploy.ok", title: "Deploy concluído", body: "main -> VPS" });
+// Toda notificação é projeção do estado; não é autoridade nem prova por si só.
 
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
@@ -19,26 +14,35 @@ export interface EventDefinition {
   body_template?: string;
 }
 
+export interface CentralContext {
+  ia?: string;
+  recurso?: string;
+  acao?: string;
+  status?: string;
+  source_surface?: string;
+  session_id?: string;
+  profile_id?: string;
+  profile_display?: string;
+  intent_goal?: string;
+  owner?: string;
+  head_sha?: string;
+  knowledge_event_id?: string;
+  next_cursor?: string;
+  runtime?: string;
+}
+
 export interface NotifyInput {
   event_key: string;
   severity?: Severity;
   title?: string;
   body?: string;
   link?: string;
-  payload?: Record<string, unknown> & {
-    ia?: string;
-    recurso?: string;
-    acao?: string;
-    status?: string;
-  };
+  payload?: Record<string, unknown> & CentralContext;
   group_key?: string;
   debounce_seconds?: number;
 }
 
-// Canal CentralDark — Status (também replica para Monitoramento via Telegram nativo)
 const STATUS_CHAT_ID = -1003669176367;
-
-// Cache em memória do catálogo (60s)
 const eventCache = new Map<string, { row: EventDefinition; expires: number }>();
 const CACHE_TTL_MS = 60_000;
 
@@ -56,16 +60,55 @@ function nowSP(): string {
   return new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
 }
 
-function buildBody(input: NotifyInput): string {
+function short(value: unknown, fallback = "-"): string {
+  const s = String(value ?? "").trim();
+  return (s || fallback).slice(0, 500);
+}
+
+const HUMAN_STATUS: Record<Severity, { icon: string; fala: string }> = {
+  info: { icon: "ℹ️", fala: "CHEFE, chegou uma informação nova." },
+  sucesso: { icon: "🟢", fala: "CHEFE, funcionou no escopo informado e temos prova registrada." },
+  aviso: { icon: "🟡", fala: "CHEFE, tem coisa pra conferir antes de chamar de resolvido." },
+  erro: { icon: "🔴", fala: "CHEFE, deu problema e o rastro abaixo mostra onde olhar." },
+  critico: { icon: "🚨", fala: "CHEFE, apareceu uma bronca crítica que precisa de atenção." },
+};
+
+function buildBody(input: NotifyInput, severity: Severity): string {
   const p = input.payload ?? {};
+  const human = HUMAN_STATUS[severity];
+  const status = short(p.status, severity.toUpperCase());
+  const detalhe = short(input.body, "Sem detalhe adicional.");
+  const technical = [
+    p.source_surface ? `🌐 Superfície: ${short(p.source_surface)}` : "",
+    p.owner ? `👤 Owner: ${short(p.owner)}` : "",
+    p.head_sha ? `🧾 HEAD/SHA: ${short(p.head_sha)}` : "",
+    p.runtime ? `🫀 Runtime: ${short(p.runtime)}` : "",
+    p.session_id ? `🧵 Sessão: ${short(p.session_id)}` : "",
+    p.knowledge_event_id ? `🧠 Evento Hub: ${short(p.knowledge_event_id)}` : "",
+    p.next_cursor ? `🧭 Próximo passo: ${short(p.next_cursor)}` : "",
+  ].filter(Boolean);
+
   return [
-    `🤖 IA: ${p.ia ?? "-"}`,
-    `📁 Recurso: ${p.recurso ?? "-"}`,
-    `⚙️ Ação: ${p.acao ?? "-"}`,
-    `✅ Status: ${p.status ?? "-"}`,
+    "⭕ !AURÉOLA CANÔNICA",
+    "📖 “Examinai tudo. Retende o bem.” — 1 Tessalonicenses 5:21",
+    "",
+    `${human.icon} ${human.fala}`,
+    `👉 O que aconteceu: ${detalhe}`,
+    `⚖️ Estado: ${status}`,
+    p.intent_goal ? `🎯 Intenção: ${short(p.intent_goal)}` : "",
+    p.recurso ? `📁 Onde: ${short(p.recurso)}` : "",
+    p.acao ? `⚙️ O que foi feito: ${short(p.acao)}` : "",
+    "",
+    "🔎 !CONTRAPROVA",
+    severity === "sucesso"
+      ? "🟢 PROVADO no escopo declarado. Verde não vira verdade eterna."
+      : "❓ O que ainda não foi provado continua UNKNOWN — UNKNOWN != PASS.",
+    technical.length ? "" : "",
+    ...technical,
     `🕒 Quando: ${nowSP()}`,
-    `📝 Detalhe: ${input.body ?? "-"}`,
-  ].join("\n");
+    "",
+    "⚖️ REALIDADE É O JUIZ.",
+  ].filter((line, index, all) => line !== "" || (index > 0 && all[index - 1] !== "")).join("\n");
 }
 
 export async function registerEvent(def: EventDefinition): Promise<void> {
@@ -131,11 +174,9 @@ export async function notify(input: NotifyInput): Promise<void> {
     const evt = await loadEvent(input.event_key);
     const severity: Severity = input.severity ?? evt?.severity_default ?? "info";
     const titulo = (input.title ?? evt?.title_template ?? input.event_key).slice(0, 200);
-    const mensagem = buildBody(input);
+    const mensagem = buildBody(input, severity);
     const sb = getServiceClient();
 
-    // Agrupamento por debounce: se já houve evento com mesmo group_key
-    // dentro da janela, só incrementa o contador e sai.
     if (input.group_key && input.debounce_seconds && input.debounce_seconds > 0) {
       const since = new Date(Date.now() - input.debounce_seconds * 1000).toISOString();
       const { data: recent } = await sb
@@ -155,7 +196,6 @@ export async function notify(input: NotifyInput): Promise<void> {
       }
     }
 
-    // Insere log centralizado
     await sb.from("notifications_log").insert({
       origem: "central",
       tipo: severity,
@@ -167,7 +207,6 @@ export async function notify(input: NotifyInput): Promise<void> {
       group_key: input.group_key ?? null,
     });
 
-    // Dispara notify-telegram fire-and-forget
     const url = `${getEnv("HUB_SUPABASE_URL")}/functions/v1/notify-telegram`;
     const notifyKey = Deno.env.get("NOTIFY_API_KEY") ?? "";
     const resp = await fetch(url, {
@@ -187,7 +226,6 @@ export async function notify(input: NotifyInput): Promise<void> {
     });
 
     if (!resp.ok) {
-      // Fallback: registra em audit_logs e tenta gateway direto
       await sb.from("audit_logs").insert({
         action: "notify_fallback",
         entity_type: "notification",

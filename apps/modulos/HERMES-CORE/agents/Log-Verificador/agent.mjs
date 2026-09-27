@@ -78,7 +78,7 @@ export function analisarTexto(txt) {
 }
 
 // ─── Escaneia TODOS os processos PM2 ──────────────────────────────────
-export function escanear({ ignorarPmIds = [1] } = {}) {
+export function escanear({ ignorarPmIds = [1], ignorarNomes = [] } = {}) {
   const jlist = shJSON('pm2 jlist');
   if (!jlist) return { ok: false, erro: 'pm2 jlist falhou', servicos: [] };
 
@@ -88,6 +88,7 @@ export function escanear({ ignorarPmIds = [1] } = {}) {
   for (const p of jlist) {
     if (ignorarPmIds.includes(p.pm_id)) continue;
     const nome = p.name;
+    if (ignorarNomes.includes(nome)) continue;
     const st = p.pm2_env?.status || 'unknown';
     const restarts = p.pm2_env?.restart_time ?? 0;
     const uptimeMs = p.pm2_env?.pm_uptime ? (agora - p.pm2_env.pm_uptime) : 0;
@@ -158,7 +159,15 @@ export function autoRestart(nome, { max24h = 3, cooldownMs = 30 * 60_000 } = {})
 
   try {
     execSync(`pm2 restart '${nome.replace(/'/g, "'\\''")}'`, { encoding: 'utf8', timeout: 30_000 });
-    try { execSync('pm2 save', { encoding: 'utf8', timeout: 15_000 }); } catch {}
+    try {
+      execSync('pm2 save', { encoding: 'utf8', timeout: 15_000 });
+    } catch (e) {
+      return {
+        ok: false,
+        motivo: `pm2 save falhou após restart: ${String(e.message).slice(0, 150)}`,
+        restart_aplicado: true,
+      };
+    }
     s.ultimoRestart = agora;
     s.restarts24h.push(agora);
     estado.set(nome, s);
@@ -221,6 +230,78 @@ export function resumoHorario(snap) {
     }
   }
   return linhas.join('\n');
+}
+
+// ─── Exports para gates determinísticos (aditiv unwilling whitelist) ──
+export function auditarFinalizacao({ missao, decisao, historico }) {
+  const historicoValido = Array.isArray(historico) && historico.length > 0;
+  const temMutacao = historico.some(e => e.ferramenta && e.ferramenta !== 'notificar_progresso');
+  const temTesteComportamental = historico.some(e => e.ferramenta === 'shell' && e.resultado === 'pass');
+  const decisaoValida = decisao?.terminou === true && decisao?.estado === 'FATO';
+
+  if (!historicoValido || !decisaoValida) {
+    return {
+      aprovado: false,
+      receipt: {
+        status: 'BLOCKED',
+        schema_version: 2,
+        reason: historicoValido ? 'decisao invalida' : 'historico vazio',
+        mutations_total: temMutacao ? 1 : 0,
+        mutation_proofs: [],
+        unproven_mutations: [],
+      },
+      parecer: historicoValido
+        ? 'decisao invalida: terminou=true exige estado=FATO'
+        : 'histórico vazio; missão não submetida à auditoria',
+    };
+  }
+
+  if (temMutacao && !temTesteComportamental) {
+    return {
+      aprovado: false,
+      receipt: {
+        status: 'BLOCKED',
+        schema_version: 2,
+        reason: 'mutacao sem teste comportamental',
+        mutations_total: historico.filter(e => e.ferramenta && e.ferramenta !== 'notificar_progresso').length,
+        mutation_proofs: historico.map((e, i) => ({
+          step_index: i,
+          mutation_step_ok: e.ok === true,
+          mutation_step_name: e.etapa_titulo || e.ferramenta,
+        })),
+        unproven_mutations: historico.filter(e => e.ferramenta && e.ferramenta !== 'notificar_progresso' && e.ok !== true).map((e, i) => ({
+          index: i,
+          kind: 'LOCAL',
+          detail: e.etapa_titulo || e.ferramenta,
+        })),
+      },
+      parecer: 'mutação sem teste comportamental posterior',
+    };
+  }
+
+  return {
+    aprovado: true,
+    receipt: {
+      status: 'PASS',
+      schema_version: 2,
+      mutations_total: historico.filter(e => e.ferramenta && e.ferramenta !== 'notificar_progresso').length,
+      mutation_proofs: historico.map((e, i) => ({
+        step_index: i,
+        mutation_step_ok: e.ok === true,
+        mutation_step_name: e.etapa_titulo || e.ferramenta,
+      })),
+      behavior_test_after_mutation_index: historico.findIndex(e => e.ferramenta === 'shell' && e.resultado === 'pass'),
+      unproven_mutations: [],
+    },
+    parecer: 'aprovado: evidencia + teste comportamental verificados',
+  };
+}
+
+export function resultadoAprovadoPeloCritic(resultado, critic) {
+  if (!resultado || !critic) return false;
+  if (resultado.ok !== true) return false;
+  if (critic.aprovado !== true) return false;
+  return true;
 }
 
 // CLI: node agent.mjs [escanear|resumo|restart <nome>]

@@ -1,29 +1,34 @@
 #!/usr/bin/env bash
 # ============================================================================
-#  setup-centraldark-portal.sh
-#  Migração: serve o mesmo build em dois domínios separados.
+# setup-centraldark-portal.sh
+# Owner existente do build do Portal + TelePainel.
 #
-#    centralldark.com / www.centralldark.com  → /root/CentralDark/apps/portal
-#    telepainel.centralldark.com              → /root/CentralDark/apps/Telepanel
+# centralldark.com / www.centralldark.com -> /root/CentralDark/apps/portal
+# telepainel.centralldark.com             -> /root/CentralDark/apps/Telepanel
 #
-#  Isolado do install.sh principal (que ficou intocado).
-#  Idempotente: pode rodar várias vezes.
-#
-#  Uso:
-#    bash scripts/setup-centraldark-portal.sh
+# Idempotente: atualiza os repos, builda e reconcilia o snippet Caddy.
+# A validação/reload do Caddy pertence ao workflow/caller.
 # ============================================================================
 
-set -euo pipefail
+set -Eeuo pipefail
+umask 022
 
 REPO_URL="https://github.com/segredounlock/clone-deck.git"
 CENTRALDARK_ROOT="/root/CentralDark"
+DISPATCHER="${CENTRALDARK_DEPLOY_GATE_SCRIPT:-$CENTRALDARK_ROOT/scripts/vps/deploy-guards-dispatcher.sh}"
+SOURCE_HEAD="${SOURCE_HEAD:-$(git -C "$CENTRALDARK_ROOT" rev-parse HEAD 2>/dev/null || true)}"
+[[ "$SOURCE_HEAD" =~ ^[0-9a-f]{40}$ ]] || { echo "[centraldark-portal] SOURCE_HEAD_INVALID"; exit 16; }
+[[ -x "$DISPATCHER" ]] || { echo "[centraldark-portal] CANONICAL_DEPLOY_GATE_MISSING"; exit 16; }
+TARGET_SHA="$SOURCE_HEAD" REPO_DIR="$CENTRALDARK_ROOT" BRANCH=main bash "$DISPATCHER" --gate-only
+echo "[centraldark-portal] CANONICAL_DEPLOY_GATE=PASS target=$SOURCE_HEAD"
+
 PORTAL_DIR="$CENTRALDARK_ROOT/apps/portal"
 TELEPANEL_DIR="$CENTRALDARK_ROOT/apps/Telepanel"
 CADDY_SNIPPET="$CENTRALDARK_ROOT/infra/caddy/portal.Caddyfile"
 
 log() { echo "[centraldark-portal] $*"; }
 
-log "Criando estrutura em $CENTRALDARK_ROOT"
+log "Preparando estrutura existente em $CENTRALDARK_ROOT"
 mkdir -p "$CENTRALDARK_ROOT/apps" \
          "$CENTRALDARK_ROOT/infra/caddy" \
          "$CENTRALDARK_ROOT/logs" \
@@ -31,19 +36,25 @@ mkdir -p "$CENTRALDARK_ROOT/apps" \
 
 for TARGET in "$PORTAL_DIR" "$TELEPANEL_DIR"; do
   if [ ! -d "$TARGET/.git" ]; then
-    log "Clonando repo em $TARGET"
+    log "Clonando fonte existente em $TARGET"
     git clone "$REPO_URL" "$TARGET"
   else
-    log "Atualizando repo em $TARGET"
-    (cd "$TARGET" && git pull --ff-only)
+    log "Atualizando $TARGET por fast-forward"
+    git -C "$TARGET" pull --ff-only
   fi
+
   log "Buildando $TARGET"
-  (cd "$TARGET" && npm ci --silent && npm run build)
+  (
+    cd "$TARGET"
+    npm ci --silent
+    npm run build
+    test -f dist/index.html
+  )
 done
 
-if [ ! -f "$CADDY_SNIPPET" ]; then
-  log "Gerando snippet Caddy em $CADDY_SNIPPET"
-  cat > "$CADDY_SNIPPET" <<'CADDY'
+TMP_SNIPPET="$(mktemp)"
+trap 'rm -f "$TMP_SNIPPET"' EXIT
+cat > "$TMP_SNIPPET" <<'CADDY'
 centralldark.com, www.centralldark.com {
     root * /root/CentralDark/apps/portal/dist
     try_files {path} /index.html
@@ -63,22 +74,14 @@ telepainel.centralldark.com {
     encode gzip
 }
 CADDY
+
+if [ ! -f "$CADDY_SNIPPET" ] || ! cmp -s "$TMP_SNIPPET" "$CADDY_SNIPPET"; then
+  log "Atualizando snippet Caddy canônico"
+  install -m 0644 "$TMP_SNIPPET" "$CADDY_SNIPPET"
 else
-  log "Snippet Caddy já existe — mantendo"
+  log "Snippet Caddy já está reconciliado"
 fi
 
-cat <<'AVISO'
-
-================================================================
-Snippet Caddy pronto em:
-  /root/CentralDark/infra/caddy/portal.Caddyfile
-
-Próximo passo (REQUER CONFIRMAÇÃO MANUAL — Caddy é sensível):
-  1. Adicionar no Caddyfile principal:
-       import /root/CentralDark/infra/caddy/portal.Caddyfile
-  2. Validar:   caddy validate --config /etc/caddy/Caddyfile
-  3. Recarregar: systemctl reload caddy
-
-Garantir que o DNS dos 3 hostnames já aponte pro IP da VPS antes do reload.
-================================================================
-AVISO
+log "BUILD_PORTAL=PASS path=$PORTAL_DIR/dist"
+log "BUILD_TELEPANEL=PASS path=$TELEPANEL_DIR/dist"
+log "CADDY_SNIPPET=$CADDY_SNIPPET"

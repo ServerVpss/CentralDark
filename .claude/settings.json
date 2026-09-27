@@ -1,7 +1,15 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node -e ' *)"
+      "Bash(node -e 'console.log*')"
+    ],
+    "deny": [
+      "Bash(node -e*)",
+      "Bash(node *|sh)",
+      "Bash(curl *|sh)",
+      "Bash(wget *|sh)",
+      "Bash(rm -rf*)",
+      "Bash(*--no-verify*)"
     ],
     "additionalDirectories": [
       "/root/.vscode-server/data/Machine"

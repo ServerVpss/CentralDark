@@ -1,15 +1,17 @@
 // Listener de auto-deploy do TelePanel.
-// Recebe webhook do GitHub, valida HMAC, faz git pull + npm install + vite build.
+// Recebe webhook do GitHub, valida HMAC, observa/compara o Git e só avança por fast-forward limpo antes do build.
 import http from 'http';
 import crypto from 'crypto';
 import { spawn } from 'child_process';
 import fs from 'fs';
-import { safeResetToOrigin } from './lib/safe-git-deploy.mjs';
+import { safeUpdateFromOrigin } from './lib/safe-git-deploy.mjs';
 
 const PORT = process.env.TELEPAINEL_DEPLOY_PORT || 9310;
 const REPO_PATH = '/root/CentralDark/apps/modulos/telepainel';
 const LOG_PATH = '/var/log/telepainel-deploy/deploy.log';
 const SECRET = process.env.TELEPAINEL_DEPLOY_SECRET;
+const CENTRALDARK_ROOT = process.env.CENTRALDARK_ROOT || '/root/CentralDark';
+const DISPATCHER = `${CENTRALDARK_ROOT}/scripts/vps/deploy-guards-dispatcher.sh`;
 
 if (!SECRET) {
   console.error('TELEPAINEL_DEPLOY_SECRET ausente — abortando.');
@@ -21,7 +23,11 @@ let rodando = false;
 function log(msg) {
   const linha = `[${new Date().toISOString()}] ${msg}\n`;
   process.stdout.write(linha);
-  try { fs.appendFileSync(LOG_PATH, linha); } catch {}
+  try {
+    fs.appendFileSync(LOG_PATH, linha);
+  } catch {
+    process.stderr.write(`[telepainel-deploy] LOG_APPEND_FAILED path=${LOG_PATH}\n`);
+  }
 }
 
 function rodar(comando, args) {
@@ -37,13 +43,31 @@ function rodar(comando, args) {
   });
 }
 
-async function deploy() {
+async function gateCanonico(targetSha) {
+  if (!/^[0-9a-f]{40}$/i.test(String(targetSha || ''))) throw new Error('TARGET_SHA_INVALID');
+  await new Promise((resolve, reject) => {
+    const proc = spawn('bash', [DISPATCHER, '--gate-only'], {
+      cwd: CENTRALDARK_ROOT,
+      env: { ...process.env, REPO_DIR: CENTRALDARK_ROOT, BRANCH: 'main', TARGET_SHA: targetSha },
+      shell: false,
+    });
+    proc.stdout.on('data', (d) => log(`[deploy-gate] ${d.toString().trim()}`));
+    proc.stderr.on('data', (d) => log(`[deploy-gate!] ${d.toString().trim()}`));
+    proc.on('close', (code) => code === 0 ? resolve() : reject(new Error(`canonical deploy gate saiu com codigo ${code}`)));
+  });
+}
+
+async function deploy(targetSha) {
   if (rodando) { log('Deploy ja em andamento, ignorando.'); return; }
   rodando = true;
   try {
     log('--- deploy iniciado ---');
-    const r = await safeResetToOrigin({ repoPath: REPO_PATH, branch: 'main', log });
-    if (!r.ok) { log('!!! atualização git falhou -- abortando build, versao anterior preservada'); return; }
+    await gateCanonico(targetSha);
+    const r = await safeUpdateFromOrigin({ repoPath: REPO_PATH, branch: 'main', expectedRemoteSha: targetSha, log });
+    if (!r.ok) {
+      log(`!!! atualização git bloqueada (${r.reason || 'UNKNOWN'}) -- abortando build; estado local preservado`);
+      return;
+    }
     await rodar('npm', ['install', '--no-audit', '--no-fund', '--prefer-offline']);
     await rodar('npx', ['vite', 'build']);
     log('--- deploy concluido com sucesso ---');
@@ -83,10 +107,22 @@ const server = http.createServer((req, res) => {
     const evento = req.headers['x-github-event'];
     if (evento === 'ping') { res.writeHead(200); res.end('pong'); return; }
     if (evento !== 'push') { res.writeHead(200); res.end('ignored'); return; }
-    log('push recebido -- disparando deploy');
+    let payload;
+    try {
+      payload = JSON.parse(corpo.toString('utf8'));
+    } catch {
+      log('payload JSON invalido -- rejeitado');
+      res.writeHead(400); res.end('invalid json'); return;
+    }
+    const targetSha = payload?.after || '';
+    if (!/^[0-9a-f]{40}$/i.test(targetSha)) {
+      log('push sem after SHA valido -- rejeitado');
+      res.writeHead(400); res.end('invalid target sha'); return;
+    }
+    log(`push recebido -- gateando target ${targetSha.slice(0, 12)}`);
     res.writeHead(202, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ ok: true, mensagem: 'deploy iniciado em background' }));
-    setImmediate(deploy);
+    res.end(JSON.stringify({ ok: true, mensagem: 'deploy enfileirado sob gate canonico', target: targetSha }));
+    setImmediate(() => deploy(targetSha));
   });
 });
 

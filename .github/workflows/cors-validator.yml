@@ -1,4 +1,4 @@
-name: CORS Validator
+name: ⚙️ CORS Validator
 
 on:
   workflow_dispatch:
@@ -15,11 +15,11 @@ jobs:
   validate:
     runs-on: [self-hosted, Linux]
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: "20"
-      - name: Rodar validador de CORS
+          node-version: "24"
+      - name: 🔹 Rodar validador de CORS
         env:
           API_BASE: https://api.centralldark.com
           ORIGIN: https://bot.centralldark.com

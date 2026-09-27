@@ -1,3 +1,10 @@
+---
+title: "2026 07 09 Abacus Router Hub Online"
+date: 2026-08-27
+tags: ["consciencia"]
+updated: 2026-08-27
+---
+
 # 🟢 Ouro — Abacus Router no HUB Supabase (ONLINE)
 
 **Data:** 2026-07-09
@@ -37,3 +44,11 @@
 
 ---
 _Fluxo de Ouro respeitado: mudança de estado registrada aqui em vez de commit direto na VPS._
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

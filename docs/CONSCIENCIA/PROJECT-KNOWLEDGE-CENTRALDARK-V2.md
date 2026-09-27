@@ -42,3 +42,11 @@ UNKNOWN_IS_NOT_PASS=true
 Frases históricas como `Pivete comanda`, `Pivete decide`, `aguardar autorização do Pivete` ou `merge sempre exige nova aprovação humana` pertencem ao contrato antigo e não têm autoridade normativa atual.
 
 Não criar `V3`, `FINAL` ou outro Project Knowledge paralelo. Evolução atual acontece nos artefatos canônicos acima.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

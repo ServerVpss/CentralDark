@@ -9,7 +9,7 @@ import '~/styles/diff-view.css';
 import { diffFiles, extractRelativePath } from '~/utils/diff';
 import type { FileHistory } from '~/types/actions';
 import { getLanguageFromExtension } from '~/utils/getLanguageFromExtension';
-import { themeStore } from '~/lib/stores/theme';
+import { isDarkTheme, themeStore } from '~/lib/stores/theme';
 
 interface CodeComparisonProps {
   beforeCode: string;
@@ -378,7 +378,7 @@ const NoChangesView = memo(
                       ? highlighter
                           .codeToHtml(line, {
                             lang: language,
-                            theme: theme === 'dark' ? 'github-dark' : 'github-light',
+                            theme: isDarkTheme(theme) ? 'github-dark' : 'github-light',
                           })
                           .replace(/<\/?pre[^>]*>/g, '')
                           .replace(/<\/?code[^>]*>/g, '')
@@ -424,7 +424,7 @@ const CodeLine = memo(
       if (type === 'unchanged' || !block.charChanges) {
         const highlightedCode = highlighter
           ? highlighter
-              .codeToHtml(content, { lang: language, theme: theme === 'dark' ? 'github-dark' : 'github-light' })
+              .codeToHtml(content, { lang: language, theme: isDarkTheme(theme) ? 'github-dark' : 'github-light' })
               .replace(/<\/?pre[^>]*>/g, '')
               .replace(/<\/?code[^>]*>/g, '')
           : content;
@@ -440,7 +440,7 @@ const CodeLine = memo(
               ? highlighter
                   .codeToHtml(change.value, {
                     lang: language,
-                    theme: theme === 'dark' ? 'github-dark' : 'github-light',
+                    theme: isDarkTheme(theme) ? 'github-dark' : 'github-light',
                   })
                   .replace(/<\/?pre[^>]*>/g, '')
                   .replace(/<\/?code[^>]*>/g, '')

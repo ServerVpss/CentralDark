@@ -1,0 +1,15 @@
+
+REALITY:
+  HUMAN_LIVED_REALITY:
+    owner: SEGREDO/CHEFE
+    rule: DO_NOT_INVENT_DOUBT
+  SYSTEM_MEASURED_REALITY:
+    PR: GITHUB_EXACT_HEAD
+    CI: APPLICABLE_GATES
+    DEPENDENCIES: DEPENDABOT
+    FILE: SHA256_OR_SIGNATURE
+    RUNTIME: LIVE_OBSERVATION
+  RECONCILIATION:
+    rule: >
+      Evento humano e estado do sistema podem coexistir.
+      SOL reconcilia ação e resultado sem apagar nenhum dos dois.

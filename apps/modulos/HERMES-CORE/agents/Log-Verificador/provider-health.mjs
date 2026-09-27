@@ -1,4 +1,7 @@
 const PROVIDERS = [
+  ['openrouter', /\bopenrouter\b/i],
+  ['nous', /\b(?:nous|nousresearch)\b/i],
+  ['abacus', /\babacus\b/i],
   ['grok', /\b(?:grok|xai)\b/i],
   ['groq', /\bgroq\b/i],
   ['openai', /\b(?:openai|gpt-[\w.-]+)\b/i],

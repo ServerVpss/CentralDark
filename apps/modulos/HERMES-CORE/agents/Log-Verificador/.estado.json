@@ -1,10 +1,5 @@
 {
   "alertasAtivos": {
-    "CentralDark-GuardiaoConsciencia|aviso|": {
-      "ts": 1783219640308,
-      "servico": "CentralDark-GuardiaoConsciencia",
-      "nivel": "aviso"
-    },
     "CentralDark-MCP|aviso|": {
       "ts": 1783219640308,
       "servico": "CentralDark-MCP",
@@ -29,8 +24,43 @@
       "ts": 1783258805981,
       "servico": "CentralDark-EliteAnthropic",
       "nivel": "erro"
+    },
+    "CentralDark-GrafoVivo|aviso||": {
+      "ts": 1789152471792,
+      "servico": "CentralDark-GrafoVivo",
+      "nivel": "aviso"
+    },
+    "CentralDark-MCP|erro||[FATAL] uncaughtException: Error: listen EADDRINUSE: address already in use ###.": {
+      "ts": 1789152471792,
+      "servico": "CentralDark-MCP",
+      "nivel": "erro"
+    },
+    "CentralDark-AiPromptAPI|aviso||": {
+      "ts": 1789152471792,
+      "servico": "CentralDark-AiPromptAPI",
+      "nivel": "aviso"
+    },
+    "CentralDark-LovableBridge|aviso||": {
+      "ts": 1789152471792,
+      "servico": "CentralDark-LovableBridge",
+      "nivel": "aviso"
+    },
+    "CentralDark-ArsenalAdapter|erro|abacus:billing_blocked:unknown|": {
+      "ts": 1789152471792,
+      "servico": "CentralDark-ArsenalAdapter",
+      "nivel": "erro"
+    },
+    "CentralDark-GuardiaoBot|aviso||": {
+      "ts": 1789152471792,
+      "servico": "CentralDark-GuardiaoBot",
+      "nivel": "aviso"
+    },
+    "CentralDark-GuardiaoBridge|aviso||": {
+      "ts": 1789152471792,
+      "servico": "CentralDark-GuardiaoBridge",
+      "nivel": "aviso"
     }
   },
-  "ultimoResumo": 1783256069754,
+  "ultimoResumo": 1789181441369,
   "restarts24h": {}
 }

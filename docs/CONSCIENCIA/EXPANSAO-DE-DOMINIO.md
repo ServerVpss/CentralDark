@@ -241,3 +241,11 @@ Internamente, o nome/lore é **EXPANSÃO DE DOMÍNIO**. Para documentação téc
 **Definição curta:**
 
 > **EXPANSÃO DE DOMÍNIO = A CASA MATERIALIZA O AMBIENTE CERTO AO REDOR DA INTENÇÃO DO SEGREDO/CHEFE, EXECUTA DENTRO DO PERÍMETRO AUTORIZADO E FECHA PRESERVANDO SÓ EVIDÊNCIA E OURO PROVADO.**
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

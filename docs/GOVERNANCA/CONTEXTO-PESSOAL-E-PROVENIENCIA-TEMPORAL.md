@@ -2,13 +2,16 @@
 
 Status: CANÔNICO
 Escopo: toda a CentralDark — modelos, agentes, workers, plugins, WebUI, CLI, CI, CD, Telegram e superfícies futuras.
-Origem: incidente observado em 2026-08-16 envolvendo reapresentação de localização e mistura de relógio humano com timestamp do GitHub.
+Origem: `docs/APRENDIZADOS/2026-08-16-incidente-contexto-pessoal-proveniencia-temporal.md`.
 
 ## Princípio
 
 Dados pessoais/contextuais disponíveis ao sistema não viram decoração nem preenchimento automático de resposta. Só entram quando são materialmente necessários ao alvo atual ou quando o SEGREDO/CHEFE pede explicitamente.
 
 ```text
+HOUSE_PERSONAL_CONTEXT_PRIVACY_INVARIANT=true
+SEVERITY=HOUSE_CRITICAL
+APPLIES_TO_ALL_MODELS_AGENTS_SURFACES=true
 PERSONAL_CONTEXT_MINIMIZATION=true
 PERSONAL_CONTEXT_IS_NOT_DEFAULT_OUTPUT=true
 USE_PERSONAL_CONTEXT_ONLY_IF_TARGET_REQUIRES_IT=true
@@ -16,6 +19,31 @@ DO_NOT_SURFACE_LOCATION_UNLESS_REQUESTED_OR_MATERIAL=true
 DO_NOT_REPEAT_PERSONAL_LOCATION_WITHOUT_CAUSAL_NEED=true
 PERSONAL_CONTEXT_SOURCE_MUST_NOT_BE_INVENTED=true
 HIDDEN_ACCESS_CLAIM_WITHOUT_EVIDENCE=FORBIDDEN
+CONTEXT_ACCESS != PERMISSION_TO_DISCLOSE
+TOOL_CAN_ACCESS != RESPONSE_SHOULD_REVEAL
+PERSONAL_CONTEXT_AVAILABLE != PERSONAL_CONTEXT_MATERIAL_TO_REQUEST
+INTERNAL_DERIVATION != EXTERNAL_DISCLOSURE
+```
+
+## Gate mínimo de contexto pessoal
+
+```text
+USER_INTENT
+→ PERSONAL_CONTEXT_REQUIRED_FOR_RESULT?
+   NÃO → DO_NOT_FETCH_IF_AVOIDABLE; DO_NOT_SURFACE
+   SIM → FETCH_MINIMUM_NECESSARY
+       → DERIVE_RESULT
+       → RAW_PERSONAL_DETAIL_REQUIRED_IN_RESPONSE?
+          NÃO → RETURN_DERIVED_RESULT_ONLY
+          SIM → DISCLOSE_MINIMUM_NECESSARY_DETAIL
+```
+
+Se ferramenta, memória ou contexto já entregou um dado pessoal incidentalmente, a resposta ainda precisa passar pelo gate de minimização.
+
+```text
+INCIDENTAL_PERSONAL_CONTEXT_RECEIVED=true
+→ MINIMIZE_BEFORE_RESPONSE
+→ DO_NOT_ECHO_NONESSENTIAL_PERSONAL_DETAIL
 ```
 
 ## Localização
@@ -23,11 +51,13 @@ HIDDEN_ACCESS_CLAIM_WITHOUT_EVIDENCE=FORBIDDEN
 ```text
 LOCATION_AVAILABLE != LOCATION_NEEDED
 LOCATION_NEEDED=false → DO_NOT_USE_OR_SURFACE_LOCATION
+LOCATION_LOOKUP_REQUIRES_LOCATION_DEPENDENT_INTENT_OR_EXPLICIT_REQUEST=true
 LOCATION_USED → NAME_WHY_IT_IS_NECESSARY_WHEN_NOT_OBVIOUS
 LOCATION_SOURCE_UNKNOWN → SOURCE=UNKNOWN
+UNREQUESTED_PRECISE_LOCATION_DISCLOSURE=FORBIDDEN
 ```
 
-A regra não declara que localização nunca pode ser usada. Tempo local, clima, rota, comércio próximo e tarefas equivalentes podem exigir localização. A exigência é causalidade e minimização.
+A regra não declara que localização nunca pode ser usada. Tempo local quando explicitamente pedido, clima, rota, comércio próximo e tarefas equivalentes podem exigir localização. A exigência é causalidade e minimização.
 
 ## Tempo e GitHub
 
@@ -43,16 +73,11 @@ LOCAL_TIME_CONVERSION = DERIVED_VIEW
 DERIVED_TIME_MUST_NAME_TARGET_TIMEZONE_OR_OFFSET=true
 NO_LOCATION_REQUIRED_TO_REPORT_RAW_UTC_TIMESTAMP=true
 NO_PERSONAL_LOCATION_INFERENCE_FROM_REPO_TIMESTAMP=true
+TIME_QUERY_DOES_NOT_REQUIRE_SURFACING_CITY=true
+DERIVED_VALUE_SHOULD_NOT_REVEAL_SOURCE_DETAIL_WHEN_SOURCE_DETAIL_IS_NOT_NEEDED=true
 ```
 
-Exemplo:
-
-```text
-GitHub commit: 2026-08-16T10:49:23Z
-→ fato fonte: 10:49:23 UTC
-→ conversão local: somente se pedida/necessária
-→ a conversão não altera o timestamp fonte
-```
+Se o usuário pede somente a hora, devolver a hora não autoriza expor cidade, endereço ou coordenada. Quando a conversão depende de um fuso já conhecido, o sistema pode usar o fuso internamente e retornar o valor derivado sem ecoar a localização-fonte.
 
 ## Fechamento de privacidade
 
@@ -64,6 +89,17 @@ PERSONAL_DATA
 → NÃO INVENTAR ORIGEM
 → NÃO REUTILIZAR EM PERGUNTA VIZINHA SEM NECESSIDADE
 → NÃO CONFUNDIR CONTEXTO DISPONÍVEL COM AUTORIZAÇÃO PARA EXPOR
+```
+
+## Registro de incidente sem reincidência
+
+Documento de incidente não ganha licença especial para repetir o dado sensível que está denunciando. Se granularidade, classe e efeito bastam para provar a falha, o valor concreto deve ser redigido.
+
+```text
+INCIDENT_LOGS_REDACT_SENSITIVE_DETAILS=true
+EXACT_SENSITIVE_VALUE_REQUIRED_FOR_PROOF=false → REDACT
+INCIDENT_RECORD_MUST_NOT_REPEAT_SENSITIVE_DETAIL_WHEN_REDACTION_SUFFICES=true
+FORENSIC_PROOF_CAN_USE_GRANULARITY_WITHOUT_VALUE=true
 ```
 
 ## Contraprova obrigatória
@@ -87,11 +123,22 @@ UNPROVEN_PRIVACY_MECHANISM=UNKNOWN
 DO_NOT_ESCALATE_WORDING_BEYOND_EVIDENCE=true
 ```
 
+## Regressões bloqueadas
+
+```text
+FAIL_IF=USER_ASKS_TIME_AND_RESPONSE_SURFACES_UNREQUESTED_CITY_OR_MORE_PRECISE_LOCATION
+FAIL_IF=HIDDEN_OR_TOOL_DERIVED_PERSONAL_CONTEXT_IS_ECHOED_WITHOUT_MATERIAL_NEED
+FAIL_IF=ACCESS_TO_PERSONAL_CONTEXT_IS_TREATED_AS_DISCLOSURE_PERMISSION
+FAIL_IF=INCIDENT_RECORD_REPEATS_SENSITIVE_DETAIL_WHEN_REDACTION_SUFFICES
+FAIL_IF=PERSONAL_CONTEXT_USED_FOR_DECORATIVE_PERSONALIZATION_WITHOUT_TASK_NEED
+```
+
 ## Regra curta
 
 ```text
 DADO PESSOAL NÃO É ENFEITE.
 TEMPO DA FONTE NÃO É HORA DA PESSOA.
 CONTEXTO DISPONÍVEL NÃO É LICENÇA PARA EXIBIR.
+SE O VALOR SENSÍVEL NÃO É NECESSÁRIO PARA A PROVA, REDIGE.
 PROVA PRIMEIRO; ACUSAÇÃO DEPOIS.
 ```

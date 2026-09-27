@@ -5,6 +5,7 @@ import { StatusTimeline } from './StatusTimeline';
 import { ApiCardsGrid } from './ApiCardsGrid';
 import { AbacusApiCard } from './AbacusApiCard';
 import { AbacusRouteLLMCard } from './AbacusRouteLLMCard';
+import { MegazordHubCard } from './MegazordHubCard';
 import { useHealth } from '@/hooks/useHealth';
 
 export function DashboardTab() {
@@ -23,6 +24,7 @@ export function DashboardTab() {
         </div>
       )}
       <HealthCard health={health} />
+      <MegazordHubCard />
       <AbacusRouteLLMCard />
       <AbacusApiCard />
       <ApiCardsGrid />

@@ -1,11 +1,12 @@
 // ============================================================================
 //  Tools COGNITIVAS do MCP CentralDark — Governança Cognitiva + Memória Cruzada
 // ----------------------------------------------------------------------------
-//  Qualquer IA conectada ao MCP usa estas 4 ferramentas para:
-//    1. consultar_memoria_reserva       → ler as "Lembranças" do Pivete
-//    2. consolidar_pensamento           → gravar um insight nas Lembranças
-//    3. injetar_consciencia_centraldark → receber as regras de conduta
-//    4. analise_de_estado_cognitivo     → inferir o foco atual do Pivete
+//  Qualquer IA conectada ao MCP usa o mesmo owner cognitivo para:
+//    - personal_context_*               → lembrar e cruzar sessões/superfícies
+//    - consultar_memoria_reserva        → ler as "Lembranças" promovidas
+//    - consolidar_pensamento            → gravar um insight nas Lembranças
+//    - injetar_consciencia_centraldark  → receber as regras de conduta
+//    - analise_de_estado_cognitivo      → inferir o foco atual do Pivete
 //
 //  "Lembranças" = memória de CURTO PRAZO (30 dias) em docs/CONSCIENCIA/LEMBRANCAS/.
 //  Toda IA passa por aqui PRIMEIRO ao conectar (o Pivete troca muito de IA via
@@ -22,6 +23,12 @@ import { z } from "zod";
 import { config } from "../../config.js";
 import * as gh from "../github/github.js";
 import { sanitizeFields } from "../../lib/sanitize.js";
+import {
+    defaultPersonalContextOwner,
+    personalContextStats,
+    rememberPersonalContext,
+    searchPersonalContext,
+} from "../../lib/personal-context-store.js";
 
 // Caminho único das Lembranças (relativo à raiz do repo).
 const LEMBRANCAS_PATH = "docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md";
@@ -33,6 +40,13 @@ const CO_AUTHOR = "SegredoDev <segredounlock@users.noreply.github.com>";
 
 function textBlock(text) {
     return { content: [{ type: "text", text }] };
+}
+
+function structuredBlock(payload) {
+    return {
+        content: [{ type: "text", text: JSON.stringify(payload, null, 2) }],
+        structuredContent: payload,
+    };
 }
 
 const READ_ANNOT = {
@@ -47,6 +61,8 @@ const WRITE_ANNOT = {
     idempotentHint: false,
     openWorldHint: true,
 };
+const PRIVATE_READ_ANNOT = { ...READ_ANNOT, openWorldHint: false };
+const PRIVATE_WRITE_ANNOT = { ...WRITE_ANNOT, openWorldHint: false };
 
 /* ─────────── Datas (America/Sao_Paulo) ─────────── */
 
@@ -176,6 +192,74 @@ function expirada(e, hoje) {
     return e.expira && e.expira < hoje; // comparação lexicográfica de YYYY-MM-DD
 }
 
+/* ─────────── Personal Context — memória longitudinal entre sessões ─────────── */
+
+const personalContextSearchTool = {
+    name: "personal_context_search",
+    description: "Busca contexto pessoal relevante em sessões anteriores do CentralDark. Use antes de pedir ao SEGREDO/CHEFE que repita algo, ao continuar uma missão, ou quando expressões como ontem/antes/de novo/continua indicarem dependência histórica. Retorna somente trechos selecionados com origem, sessão, confiança e hash de evidência. Memória histórica não prova estado vivo.",
+    annotations: { ...PRIVATE_READ_ANNOT, title: "Buscar contexto entre sessões" },
+    inputSchema: z.object({
+        query: z.string().min(2).max(8192).describe("Consulta autossuficiente sobre o contexto anterior necessário"),
+        session_id: z.string().max(240).optional().describe("Sessão atual, excluída por padrão para evitar eco"),
+        conversation_id: z.string().max(240).optional().describe("Restringe a uma conversa específica; omita para cruzar todas"),
+        exclude_current_session: z.boolean().optional().describe("Padrão true"),
+        sources: z.array(z.string().min(1).max(240)).max(30).optional().describe("Fontes exatas permitidas"),
+        memory_kinds: z.array(z.enum(["episodic", "decision", "preference", "procedure", "fact", "correction", "summary"])).max(7).optional(),
+        limit: z.number().int().min(1).max(50).optional().describe("Máximo de trechos selecionados; padrão 8"),
+        max_context_chars: z.number().int().min(500).max(30000).optional().describe("Orçamento máximo de contexto; padrão 8000"),
+    }),
+    handler: async (input) => structuredBlock(await searchPersonalContext(input.query, {
+        ownerId: defaultPersonalContextOwner(),
+        sessionId: input.session_id || "",
+        excludeCurrentSession: input.exclude_current_session !== false,
+        conversationId: input.conversation_id || "",
+        sources: input.sources || [],
+        memoryKinds: input.memory_kinds || [],
+        limit: input.limit,
+        maxContextChars: input.max_context_chars,
+    })),
+};
+
+const personalContextRememberTool = {
+    name: "personal_context_remember",
+    description: "Registra contexto sanitizado e durável no ledger privado compartilhado entre superfícies do CentralDark. Use para decisões, correções, preferências, procedimentos, resumos de sessão e turnos que precisam sobreviver ao restart. Não grave secrets; o servidor também redige padrões sensíveis.",
+    annotations: { ...PRIVATE_WRITE_ANNOT, title: "Registrar contexto durável" },
+    inputSchema: z.object({
+        source: z.string().min(2).max(240).describe("Superfície de origem, por exemplo hermes:desktop ou telegram:hub"),
+        channel: z.string().min(2).max(80).describe("Canal lógico"),
+        conversation_id: z.string().min(2).max(240),
+        session_id: z.string().min(2).max(240),
+        message_id: z.string().max(240).optional(),
+        role: z.enum(["user", "assistant", "system", "tool"]),
+        memory_kind: z.enum(["episodic", "decision", "preference", "procedure", "fact", "correction", "summary"]),
+        memory_key: z.string().max(240).optional().describe("Chave estável para decisão/regra que substitui valor anterior"),
+        content: z.string().min(2).max(12000),
+        tags: z.array(z.string().min(1).max(64)).max(30).optional(),
+        trust: z.enum(["USER_STATED", "SYSTEM_OBSERVED", "ASSISTANT_INFERRED", "IMPORTED"]).optional(),
+        confidence: z.number().min(0).max(1).optional(),
+        retention_days: z.number().int().min(1).max(3650).optional().describe("Omitido = sem expiração automática"),
+        supersede_previous: z.boolean().optional().describe("Padrão true quando memory_key é fornecida"),
+    }),
+    handler: async (rawInput) => {
+        const sanitized = sanitizeFields({ content: rawInput.content, memory_key: rawInput.memory_key });
+        const result = await rememberPersonalContext({
+            ...rawInput,
+            content: sanitized.content,
+            memory_key: sanitized.memory_key,
+            source_class: "CLIENT_DECLARED",
+        }, { ownerId: defaultPersonalContextOwner() });
+        return structuredBlock(result);
+    },
+};
+
+const personalContextStatsTool = {
+    name: "personal_context_stats",
+    description: "Mede integridade, quantidade de memórias, sessões, conversas e fontes do ledger privado sem retornar o conteúdo armazenado.",
+    annotations: { ...PRIVATE_READ_ANNOT, title: "Medir memória longitudinal" },
+    inputSchema: z.object({}),
+    handler: async () => structuredBlock(await personalContextStats({ ownerId: defaultPersonalContextOwner() })),
+};
+
 /* ─────────── 1. consultar_memoria_reserva ─────────── */
 
 const consultarTool = {
@@ -283,10 +367,10 @@ Toda IA recém-conectada DEVE ler isto antes de agir.
 6. APRENDA O PIVETE. Leia as Lembranças (consultar_memoria_reserva) antes de tarefas
    complexas. Gravou algo novo do jeito dele? consolidar_pensamento.
 7. SEGURANÇA INEGOCIÁVEL. Nunca exponha segredo, token, .env, chave SSH ou caminho interno.
-   Ação destrutiva só com autorização explícita ("PERMITO PIVETE").
+   Ação destrutiva só com autorização explícita ("PERMITO SEGREDO").
 8. SINCRONIA. Git é a fonte da verdade. Toda mudança relevante: registre e sincronize
    (GitHub, VPS, Cérebro Vivo, Notion).
-9. ÁREAS TRANCADAS (CLAUDE.md Seção 9) só com "PERMITO PIVETE".`;
+9. ÁREAS TRANCADAS (CLAUDE.md Seção 9) só com "PERMITO SEGREDO".`;
 
 const injetarTool = {
     name: "injetar_consciencia_centraldark",
@@ -342,4 +426,12 @@ const analiseTool = {
     },
 };
 
-export const cognitivoTools = [consultarTool, consolidarTool, injetarTool, analiseTool];
+export const cognitivoTools = [
+    personalContextSearchTool,
+    personalContextRememberTool,
+    personalContextStatsTool,
+    consultarTool,
+    consolidarTool,
+    injetarTool,
+    analiseTool,
+];

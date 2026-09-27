@@ -1,4 +1,4 @@
-name: codex-validate
+name: ⚙️ codex-validate
 
 on:
   pull_request:
@@ -17,11 +17,11 @@ concurrency:
 
 jobs:
   validate-canonical-map:
-    name: Validate canonical map and consolidated areas
+    name: 🧩 Validate canonical map and consolidated areas
     runs-on: [self-hosted, Linux]
     timeout-minutes: 20
     steps:
-      - name: Bloquear HEAD de fork no runner persistente
+      - name: 🔹 Bloquear HEAD de fork no runner persistente
         id: fork_guard
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         shell: bash
@@ -39,40 +39,44 @@ jobs:
           echo "blocked=false" >> "$GITHUB_OUTPUT"
           echo "FORK_GUARD_OK ${HEAD_REPO}"
 
-      - name: Checkout exact PR HEAD
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - name: 🔹 Checkout exact PR HEAD
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           submodules: false
 
-      - name: Prove checkout identity
+      - name: 🔹 Prove checkout identity
         env:
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$HEAD_SHA"
 
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 22
+          node-version: 24
 
-      - name: Test authenticated authority source
+      - name: 🔹 Test authenticated authority source
         run: node --test scripts/lupa/authority-approval.test.mjs
 
-      - name: Resolve authenticated authority
+      - name: 🔹 Resolve authenticated authority
         id: authority
         run: node scripts/lupa/authority-approval.mjs
 
-      - name: Test deterministic map and provider guards
+      - name: 🔹 Test deterministic map and provider guards
         run: |
           set -euo pipefail
           node --test apps/modulos/mapeamento/tests/validar-mapa.test.mjs
           node --test apps/modulos/HERMES-CORE/agents/Log-Verificador/provider-health.test.mjs
           bash -n scripts/vps/deploy-operational-guards.sh
+          bash -n scripts/vps/centraldark-deploy.sh
+          node --test scripts/vps/centraldark-total-deploy-contract.test.mjs
+          node --test apps/modulos/HERMES-CORE/core/cognitive-council.test.mjs
+          node apps/modulos/HERMES-CORE/core/universal-method-contract.mjs --self-test
 
-      - name: Enforce unique map and consolidated locks
+      - name: 🔹 Enforce unique map and consolidated locks
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -85,7 +89,7 @@ jobs:
             --head-sha "$HEAD_SHA" \
             --approved "$AUTHORITY_APPROVED"
 
-      - name: Receipt determinístico (sempre)
+      - name: 🔹 Receipt determinístico (sempre)
         if: always()
         shell: bash
         env:
@@ -118,11 +122,11 @@ jobs:
           fi
 
   validate:
-    name: Validate Codex operational kit
+    name: 🧩 Validate Codex operational kit
     runs-on: [self-hosted, Linux]
     timeout-minutes: 20
     steps:
-      - name: Bloquear HEAD de fork no runner persistente
+      - name: 🔹 Bloquear HEAD de fork no runner persistente
         id: fork_guard
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         shell: bash
@@ -140,7 +144,7 @@ jobs:
           echo "blocked=false" >> "$GITHUB_OUTPUT"
           echo "FORK_GUARD_OK ${HEAD_REPO}"
 
-      - name: Prepare isolated checkout
+      - name: 🔹 Prepare isolated checkout
         shell: bash
         run: |
           set -euo pipefail
@@ -151,15 +155,15 @@ jobs:
           fi
           rm -rf "$checkout_dir"
 
-      - name: Checkout
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - name: 🔹 Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           path: .ci-codex-validate
           persist-credentials: false
           submodules: false
 
-      - name: Prove isolated checkout identity
+      - name: 🔹 Prove isolated checkout identity
         shell: bash
         working-directory: .ci-codex-validate
         env:
@@ -168,7 +172,7 @@ jobs:
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$HEAD_SHA"
 
-      - name: Validate required Codex files
+      - name: 🔹 Validate required Codex files
         shell: bash
         working-directory: .ci-codex-validate
         run: |
@@ -176,7 +180,7 @@ jobs:
           required=("AGENTS.md" "CODEX.md" ".github/codex/prompts/centraldark-system.md" ".github/pull_request_template.md")
           for file in "${required[@]}"; do test -f "$file" || { echo "Missing required file: $file"; exit 1; }; done
 
-      - name: Check official repository references
+      - name: 🔹 Check official repository references
         shell: bash
         working-directory: .ci-codex-validate
         run: |
@@ -186,7 +190,7 @@ jobs:
           grep -q "ServerVpss/CentralDark" .github/codex/prompts/centraldark-system.md
           grep -q "ServerVpss/CentralDark" .github/pull_request_template.md
 
-      - name: Check sensitive-file guardrails are explicit
+      - name: 🔹 Check sensitive-file guardrails are explicit
         shell: bash
         working-directory: .ci-codex-validate
         run: |
@@ -200,7 +204,7 @@ jobs:
           grep -q "sessions""/" CODEX.md
           grep -q "\.ssh""/" .github/codex/prompts/centraldark-system.md
 
-      - name: Check docs do not contain real secret values
+      - name: 🔹 Check docs do not contain real secret values
         shell: bash
         working-directory: .ci-codex-validate
         run: |
@@ -225,7 +229,7 @@ jobs:
           print("OK: no real secret-like values found in Codex docs")
           PY
 
-      - name: Validate Markdown presence
+      - name: 🔹 Validate Markdown presence
         shell: bash
         working-directory: .ci-codex-validate
         run: |
@@ -235,7 +239,7 @@ jobs:
           grep -q "Autoajuste consciente" .github/codex/prompts/centraldark-system.md
           grep -q "Ações sensíveis" .github/pull_request_template.md
 
-      - name: Receipt determinístico (sempre)
+      - name: 🔹 Receipt determinístico (sempre)
         if: always()
         shell: bash
         env:
@@ -259,11 +263,11 @@ jobs:
           else echo "RESULTADO=BLOCKED"; echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"; fi
 
   validate-admin-guard:
-    name: Validate MCP admin guard and runtime build
+    name: 🧩 Validate MCP admin guard and runtime build
     runs-on: [self-hosted, Linux]
     timeout-minutes: 20
     steps:
-      - name: Bloquear HEAD de fork no runner persistente
+      - name: 🔹 Bloquear HEAD de fork no runner persistente
         id: fork_guard
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         shell: bash
@@ -276,50 +280,58 @@ jobs:
           echo "blocked=false" >> "$GITHUB_OUTPUT"
           echo "FORK_GUARD_OK ${HEAD_REPO}"
 
-      - name: Checkout
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - name: 🔹 Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
           submodules: false
 
-      - name: Setup Node
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      - name: 🔹 Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
           cache-dependency-path: apps/modulos/mcp/package-lock.json
 
-      - name: Install dependencies
+      - name: 🔹 Install dependencies
         working-directory: apps/modulos/mcp
         run: npm ci --ignore-scripts
 
-      - name: Typecheck
+      - name: 🔹 Typecheck
         working-directory: apps/modulos/mcp
         run: npm run typecheck
 
-      - name: Run MCP admin guard, mission bridge and provider control tests
+      - name: 🔹 Run MCP admin guard, mission bridge and provider control tests
         working-directory: apps/modulos/mcp
         run: |
           set -euo pipefail
           node --test tests/admin-guard.test.mjs
           node --test tests/hub-mission-consumer.test.mjs
           node --test tests/provider-admin-bridge.test.mjs tests/provider-control-integration.test.mjs tests/provider-control.test.mjs tests/provider-secret-boundary.test.mjs
+          node --test tests/operational-telemetry.test.mjs
+          node --test ../../../apps/bot-telegram/unified-bot-status.test.mjs
+          node --test ../../../scripts/set-bot-profile.test.mjs
+          node --test ../../../scripts/diagnostics/centraldark-operator-preflight.test.mjs
+          bash -n ../../../scripts/set-bot-profile.sh
+          bash -n ../../../scripts/diagnostics/centraldark-operator-preflight.sh
+          bash -n ../../../scripts/diagnostics/centraldark-forensic-sweep.sh
+          bash -n ../../../scripts/mcp/check-mcp-status.sh
 
-      - name: Build runtime dist
+      - name: 🔹 Build runtime dist
         working-directory: apps/modulos/mcp
         run: npm run build
 
-      - name: Upload compiled runtime evidence
+      - name: 🔹 Upload compiled runtime evidence
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: mcp-dist-${{ github.event.pull_request.head.sha || github.sha }}
           path: apps/modulos/mcp/dist
           if-no-files-found: error
           retention-days: 2
 
-      - name: Verify committed runtime matches build
+      - name: 🔹 Verify committed runtime matches build
         working-directory: apps/modulos/mcp
         run: |
           set -euo pipefail
@@ -332,7 +344,7 @@ jobs:
             exit 1
           fi
 
-      - name: Receipt determinístico (sempre)
+      - name: 🔹 Receipt determinístico (sempre)
         if: always()
         shell: bash
         env:
@@ -354,3 +366,115 @@ jobs:
           elif [ "${JOB_STATUS}" = "failure" ]; then echo "RESULTADO=FAIL";
           elif [ "${JOB_STATUS}" = "success" ]; then echo "RESULTADO=PASS";
           else echo "RESULTADO=BLOCKED"; echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"; fi
+
+  bot-fallback-router:
+    name: 🧩 Universal bot flow — deterministic fallback router
+    needs: [validate-canonical-map, validate, validate-admin-guard]
+    if: ${{ always() && github.event_name == 'pull_request' }}
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    steps:
+      - name: 🔹 Checkout exact PR HEAD without writer credentials
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: .ci-bot-router
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
+      - name: 🔹 Classificar resultado e apontar fallback canônico
+        shell: bash
+        working-directory: .ci-bot-router
+        env:
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          MAP_RESULT: ${{ needs.validate-canonical-map.result }}
+          CODEX_RESULT: ${{ needs.validate.result }}
+          MCP_RESULT: ${{ needs.validate-admin-guard.result }}
+        run: |
+          set -euo pipefail
+
+          skill='.agents/skills/git-conflict-resolve-house-standard/SKILL.md'
+          engine='scripts/dependabot/resolve-conflicts.sh'
+          dependabot_flow='.github/workflows/dependabot-auto-merge.yml'
+
+          for path in "$skill" "$engine" "$dependabot_flow"; do
+            test -f "$path" || {
+              echo "BOT_ROUTER_CONTRACT_FAIL missing=$path"
+              exit 1
+            }
+          done
+
+          # Um único motor de conflito; vários bots podem consumir o mesmo código.
+          # Permissão de escrita NÃO é compartilhada com o gate read-only.
+          bash -n "$engine"
+          grep -Fq 'Owner do motor: `scripts/dependabot/resolve-conflicts.sh`' "$skill"
+          grep -Fq 'scripts/dependabot/resolve-conflicts.sh' "$dependabot_flow"
+          grep -Fq 'pull_request_target:' "$dependabot_flow"
+          grep -Fq "github.event.pull_request.user.login == 'dependabot[bot]'" "$dependabot_flow"
+          grep -Fq 'github.event.pull_request.base.sha' "$dependabot_flow"
+
+          green=1
+          for result in "$MAP_RESULT" "$CODEX_RESULT" "$MCP_RESULT"; do
+            if [ "$result" != 'success' ]; then
+              green=0
+            fi
+          done
+
+          echo "PR_AUTHOR=$PR_AUTHOR"
+          echo 'UNIVERSAL_VALIDATION_OWNER=.github/workflows/codex-validate.yml'
+          echo 'GIT_CONFLICT_SKILL=.agents/skills/git-conflict-resolve-house-standard/SKILL.md'
+          echo 'GIT_CONFLICT_ENGINE=scripts/dependabot/resolve-conflicts.sh'
+          echo 'BOT_CODE_SHARED=1'
+          echo 'BOT_PERMISSION_SHARED=0'
+          echo 'BOT_FAILURE_DOES_NOT_CREATE_NEW_BOT=1'
+
+          if [ "$green" -eq 1 ]; then
+            echo 'BOT_KIND=ANY'
+            echo 'BOT_FALLBACK=NONE'
+            echo 'BOT_ROUTER=PASS'
+            exit 0
+          fi
+
+          case "$PR_AUTHOR" in
+            'dependabot[bot]')
+              echo 'BOT_KIND=DEPENDABOT'
+              echo 'BOT_FALLBACK_OWNER=.github/workflows/dependabot-auto-merge.yml'
+              echo 'BOT_FALLBACK_ENGINE=scripts/dependabot/resolve-conflicts.sh'
+              echo 'BOT_FALLBACK_REASON=VALIDATION_NOT_GREEN'
+              ;;
+            *\[bot\])
+              echo 'BOT_KIND=GENERIC_BOT'
+              echo 'BOT_FALLBACK_OWNER=OWNER_BY_FAILED_GATE'
+              echo 'BOT_FALLBACK_ENGINE=NONE'
+              echo 'BOT_FALLBACK_REASON=NO_SPECIALIZED_MUTATOR'
+              ;;
+            *)
+              echo 'BOT_KIND=HUMAN_OR_SERVICE'
+              echo 'BOT_FALLBACK_OWNER=OWNER_BY_FAILED_GATE'
+              echo 'BOT_FALLBACK_ENGINE=NONE'
+              echo 'BOT_FALLBACK_REASON=NO_BOT_MUTATION_REQUIRED'
+              ;;
+          esac
+
+          echo 'BOT_ROUTER=ROUTED'
+
+      - name: 🔹 Receipt determinístico do router
+        if: always()
+        shell: bash
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          MAP_RESULT: ${{ needs.validate-canonical-map.result }}
+          CODEX_RESULT: ${{ needs.validate.result }}
+          MCP_RESULT: ${{ needs.validate-admin-guard.result }}
+          ROUTER_STATUS: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          echo "HEAD_SHA=${HEAD_SHA}"
+          echo "MAP_RESULT=${MAP_RESULT}"
+          echo "CODEX_RESULT=${CODEX_RESULT}"
+          echo "MCP_RESULT=${MCP_RESULT}"
+          echo "ROUTER_STATUS=${ROUTER_STATUS}"
+          echo 'UNIVERSAL_BOT_FLOW=1'
+          echo 'DEPENDABOT_IS_SPECIALIZED_FALLBACK_NOT_SECOND_BRAIN=1'
+          echo 'UNKNOWN_OR_SKIPPED_IS_NOT_PASS=1'

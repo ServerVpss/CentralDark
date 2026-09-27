@@ -235,7 +235,7 @@
     modal.innerHTML = `
       <div class="box">
         <header>
-          <h2>⚡ Cadeia Hermes</h2>
+          <h2>🔥 Cadeia Hermes</h2>
           <nav class="tabs">
             <button class="tab-btn active" data-tab="cadeia">Cadeia</button>
             <button class="tab-btn" data-tab="audit">Auditoria</button>

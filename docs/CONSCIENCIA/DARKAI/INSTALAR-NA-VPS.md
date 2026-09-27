@@ -41,3 +41,11 @@ Os valores já vêm hardcoded no script como fallback, então funciona sem confi
 ```bash
 sudo rm /usr/local/bin/darkai
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

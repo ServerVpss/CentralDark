@@ -10,6 +10,10 @@ const fs = require('fs');
 const path = require('path');
 
 const BRAIN_DIR = path.resolve(__dirname, '../../../../docs/BRAIN');
+const DEFAULT_SEARCH_LIMIT = 20;
+const DEFAULT_SEARCH_HOPS = 1;
+const MAX_SEARCH_HOPS = 2;
+const DEFAULT_CONTEXT_CHARS = 12000;
 
 const TG_TOKEN   = process.env.SRVER1_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || process.env.GUARDA_TELEGRAM_BOT_TOKEN || '';
 const ADMIN_ID   = process.env.ADMIN_CHAT_ID || '';
@@ -98,13 +102,217 @@ function generateIndex() {
   return { ok: true, op: 'index', file: 'docs/BRAIN/00 - Mapa do Sistema/INDEX.md', notes: lines.filter(l => l.includes('[[')).length };
 }
 
+function normalizeWikiTarget(value) {
+  return String(value || '')
+    .split('|', 1)[0]
+    .split('#', 1)[0]
+    .trim()
+    .replace(/\\/g, '/')
+    .replace(/^\.\//, '')
+    .replace(/\.md$/i, '')
+    .toLowerCase();
+}
+
+function extractWikiLinks(text) {
+  const links = [];
+  const seen = new Set();
+  const pattern = /\[\[([^\]]+)\]\]/g;
+  let match;
+  while ((match = pattern.exec(text)) !== null) {
+    const target = normalizeWikiTarget(match[1]);
+    if (!target || seen.has(target)) continue;
+    seen.add(target);
+    links.push(target);
+  }
+  return links;
+}
+
+function listMarkdownFiles(rootDir) {
+  const files = [];
+  function walk(dir) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true })
+      .sort((a, b) => a.name.localeCompare(b.name));
+    for (const entry of entries) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(full);
+      } else if (entry.name.endsWith('.md')) {
+        files.push(full);
+      }
+    }
+  }
+  walk(rootDir);
+  return files;
+}
+
+function relativeNotePath(rootDir, filePath) {
+  return path.relative(rootDir, filePath).replace(/\\/g, '/');
+}
+
+function noteAliases(relFile) {
+  const withoutExt = relFile.replace(/\.md$/i, '');
+  const basename = path.posix.basename(withoutExt);
+  return [...new Set([normalizeWikiTarget(withoutExt), normalizeWikiTarget(basename)])];
+}
+
+function buildBrainGraph(rootDir) {
+  const notes = new Map();
+  const aliasIndex = new Map();
+
+  for (const full of listMarkdownFiles(rootDir)) {
+    const file = relativeNotePath(rootDir, full);
+    const text = fs.readFileSync(full, 'utf-8');
+    const note = {
+      file,
+      text,
+      lines: text.split('\n'),
+      links: extractWikiLinks(text),
+    };
+    notes.set(file, note);
+    for (const alias of noteAliases(file)) {
+      if (!aliasIndex.has(alias)) aliasIndex.set(alias, new Set());
+      aliasIndex.get(alias).add(file);
+    }
+  }
+
+  function resolveTarget(target) {
+    const normalized = normalizeWikiTarget(target);
+    const exact = aliasIndex.get(normalized);
+    if (exact && exact.size === 1) return [...exact][0];
+    return null;
+  }
+
+  const outgoing = new Map();
+  const backlinks = new Map();
+  for (const file of notes.keys()) {
+    outgoing.set(file, new Set());
+    backlinks.set(file, new Set());
+  }
+  for (const [file, note] of notes) {
+    for (const target of note.links) {
+      const resolved = resolveTarget(target);
+      if (!resolved || resolved === file) continue;
+      outgoing.get(file).add(resolved);
+      backlinks.get(resolved).add(file);
+    }
+  }
+
+  return { notes, outgoing, backlinks };
+}
+
+function countOccurrences(text, queryLower) {
+  if (!queryLower) return 0;
+  let count = 0;
+  let offset = 0;
+  const lower = text.toLowerCase();
+  while ((offset = lower.indexOf(queryLower, offset)) !== -1) {
+    count += 1;
+    offset += queryLower.length;
+  }
+  return count;
+}
+
+function directMatches(note, queryLower) {
+  const matches = [];
+  note.lines.forEach((line, index) => {
+    if (line.toLowerCase().includes(queryLower)) {
+      matches.push({ line: index + 1, text: line.trim().slice(0, 180) });
+    }
+  });
+  return matches;
+}
+
+function searchBrain(query, options = {}) {
+  const rootDir = options.brainDir || BRAIN_DIR;
+  const hops = Math.max(0, Math.min(MAX_SEARCH_HOPS, Number.isInteger(options.hops) ? options.hops : DEFAULT_SEARCH_HOPS));
+  const limit = Math.max(1, Number.isInteger(options.limit) ? options.limit : DEFAULT_SEARCH_LIMIT);
+  const maxChars = Math.max(500, Number.isInteger(options.maxChars) ? options.maxChars : DEFAULT_CONTEXT_CHARS);
+  const queryLower = String(query || '').trim().toLowerCase();
+  if (!queryLower) return { results: [], total: 0, direct_total: 0, hops, context_chars: 0 };
+
+  const graph = buildBrainGraph(rootDir);
+  const ranked = new Map();
+  const frontier = [];
+
+  for (const [file, note] of graph.notes) {
+    const occurrences = countOccurrences(note.text, queryLower);
+    const fileHit = file.toLowerCase().includes(queryLower);
+    if (!occurrences && !fileHit) continue;
+    const matches = directMatches(note, queryLower);
+    const score = 100 + Math.min(occurrences, 20) + (fileHit ? 20 : 0);
+    ranked.set(file, {
+      file: `docs/BRAIN/${file}`,
+      score,
+      distance: 0,
+      relation: 'DIRECT',
+      via: null,
+      matches: matches.slice(0, 5),
+      excerpt: (matches[0]?.text || note.lines.find(line => line.trim()) || '').slice(0, 240),
+    });
+    frontier.push({ file, distance: 0 });
+  }
+
+  const visitedDistance = new Map(frontier.map(item => [item.file, 0]));
+  for (let cursor = 0; cursor < frontier.length; cursor += 1) {
+    const current = frontier[cursor];
+    if (current.distance >= hops) continue;
+    const neighbors = [
+      ...[...(graph.outgoing.get(current.file) || [])].map(file => ({ file, relation: 'WIKILINK' })),
+      ...[...(graph.backlinks.get(current.file) || [])].map(file => ({ file, relation: 'BACKLINK' })),
+    ];
+    for (const neighbor of neighbors) {
+      const distance = current.distance + 1;
+      const previousDistance = visitedDistance.get(neighbor.file);
+      if (previousDistance !== undefined && previousDistance <= distance) continue;
+      visitedDistance.set(neighbor.file, distance);
+      frontier.push({ file: neighbor.file, distance });
+      if (!ranked.has(neighbor.file)) {
+        const note = graph.notes.get(neighbor.file);
+        const score = 60 - (distance * 10);
+        ranked.set(neighbor.file, {
+          file: `docs/BRAIN/${neighbor.file}`,
+          score,
+          distance,
+          relation: neighbor.relation,
+          via: `docs/BRAIN/${current.file}`,
+          matches: [],
+          excerpt: (note.lines.find(line => line.trim()) || '').trim().slice(0, 240),
+        });
+      }
+    }
+  }
+
+  const sorted = [...ranked.values()].sort((a, b) =>
+    b.score - a.score || a.distance - b.distance || a.file.localeCompare(b.file)
+  );
+
+  const results = [];
+  let contextChars = 0;
+  for (const item of sorted) {
+    if (results.length >= limit) break;
+    const itemChars = item.excerpt.length + item.matches.reduce((sum, match) => sum + match.text.length, 0);
+    if (results.length > 0 && contextChars + itemChars > maxChars) break;
+    results.push(item);
+    contextChars += itemChars;
+  }
+
+  return {
+    results,
+    total: sorted.length,
+    direct_total: [...ranked.values()].filter(item => item.distance === 0).length,
+    hops,
+    context_chars: contextChars,
+    truncated: results.length < sorted.length,
+  };
+}
+
 module.exports = {
   name: 'obsidian-writer',
   description: 'Cria notas Zettelkasten em docs/BRAIN/ com [[links]] automáticos',
   category: 'memory',
 
   async execute(params = {}) {
-    const { op = 'write', folder, title, content, from, to, query } = params;
+    const { op = 'write', folder, title, content, from, to, query, hops, limit, maxChars } = params;
 
     if (op === 'write') {
       if (!title || !content) return { error: 'Informe title e content' };
@@ -122,7 +330,8 @@ module.exports = {
       notifyAdmin(
         `<b>🧠 NOTA GRAVADA NO CÉREBRO</b>\n\n` +
         `<pre>📝 ${title}\n📁 ${folderName}\n🔗 ${linksCount} links injetados\n⏰ ${ts}</pre>\n\n` +
-        `✅ Aparece no Obsidian em ≤10 min\n` +
+        `✅ Persistido no BRAIN do repositório\n` +
+        `ℹ️ Sync físico com Obsidian: depende do canal local medido\n` +
         `<i>Caminho: ${relPath}</i>`
       );
       return {
@@ -164,24 +373,22 @@ module.exports = {
 
     if (op === 'search') {
       if (!query) return { error: 'Informe query' };
-      const results = [];
-      function searchDir(dir) {
-        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-          const full = path.join(dir, entry.name);
-          if (entry.isDirectory()) { searchDir(full); continue; }
-          if (!entry.name.endsWith('.md')) continue;
-          const text = fs.readFileSync(full, 'utf-8');
-          text.split('\n').forEach((line, i) => {
-            if (line.toLowerCase().includes(query.toLowerCase())) {
-              results.push({ file: full.replace(/.*docs\/BRAIN\//, 'docs/BRAIN/'), line: i + 1, text: line.trim().slice(0, 120) });
-            }
-          });
-        }
-      }
-      searchDir(BRAIN_DIR);
-      return { ok: true, op: 'search', query, results: results.slice(0, 20), total: results.length };
+      const search = searchBrain(query, { hops, limit, maxChars });
+      return {
+        ok: true,
+        op: 'search',
+        query,
+        graph_expanded: true,
+        ...search,
+      };
     }
 
     return { error: `Op inválida: ${op}. Use: write, link, index, list, search` };
+  },
+
+  _test: {
+    extractWikiLinks,
+    buildBrainGraph,
+    searchBrain,
   },
 };

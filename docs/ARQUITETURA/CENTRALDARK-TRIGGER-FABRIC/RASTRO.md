@@ -1,0 +1,94 @@
+# RASTRO
+
+## 🔏 !RASTRO — cadeado executivo
+
+```text
+OWNER=AGENTS.md
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+APPLIES_TO_ALL_ENGINES=true
+```
+
+
+```text
+CHEFE_INTENT
+→ DESTINATION_LOCK
+→ MEASURE_MAIN_HEAD
+→ READ SOURCE VISUALS/PACKAGE AS MATERIAL
+→ HASH/DEDUPE BEFORE DEEP READ
+→ SEARCH_CANONICAL_BOOT
+→ SEARCH_MULTIBUSSOLA
+→ SEARCH_META_LUPA
+→ SEARCH_EXISTING_TRIGGER_FABRIC
+→ SEARCH_HERMES_CORE + HERMES PROMPT
+→ SEARCH_EXISTING_CI/PROMOTION/LABEL OWNERS
+→ REUSE_BEFORE_CREATE
+→ ABSORB BOT_ENTRY INTO SAME TRIGGER FABRIC
+→ ABSORB OUTPUT_GUARD INTO SAME TRIGGER FABRIC
+→ ADD ENGINE_BINDING AS REFERENCE, NOT SECOND BRAIN
+→ BIND HERMES PROMPT TO CANONICAL CONTRACT
+→ EXTEND EXISTING AUTONOMIA PROMOTION JUDGE
+→ STRENGTHEN EXISTING PACKAGE WORKFLOW
+→ UPDATE CONTRACT/TRIGGERS/ARCHITECTURE
+→ UPDATE LIVE_STATE/HISTORY/COUNTERPROOF/RECEIPT
+→ BUILD REPRODUCIBLE ZIP
+→ HASH
+→ EXTRACT FRESH
+→ VERIFY
+→ OPEN PR
+→ LABEL WITH EXISTING TAXONOMY
+→ WAIT FOR CI
+→ REMEASURE MAIN + PR HEAD
+→ COUNTERPROOF
+→ RETURN ONLY IF DESTINATION_PROVED OR HUMAN_FRONTIER_PROVED
+```
+
+No new brain, dispatcher, MCP, GraphRAG, scheduler, promoter, label taxonomy or equivalent workflow is introduced.
+
+Base `main` remeasured before this delta: `078bf351acaae46091669aa6acdec76ef1d10730` at `2026-08-24T19:12:57.724Z` (`16:12:57 BRT`).
+
+`BASE_HEAD` is provenance. Final current-state claims require remeasurement.
+
+
+## Fiscal executável
+
+`TRACE_PRESENT != TRACE_VALID`.
+
+Owner continua sendo este arquivo; o fiscal é apenas verificador executável:
+
+- runtime: `scripts/trigger-fabric/rastro_fiscal.py`
+- contraprova: `scripts/trigger-fabric/test_rastro_fiscal.py`
+- integração estrutural/execução de testes: `scripts/trigger-fabric/verify_repo_contract.py`
+
+Contrato:
+
+```text
+INPUT=response|receipt|report
+EXTRACT=COMMIT_SHA|PATH|LINK|READBACK|MEMORY_LOCATION|LEDGER_REF|CURRENT_MAIN
+VERIFY=GITHUB_REMOTE
+VERDICT_PER_CLAIM=PASS|FAIL|UNKNOWN
+TRACE_PRESENT != TRACE_VALID
+NETWORK_OR_PROVIDER_UNAVAILABLE=UNKNOWN
+WRITE_WITHOUT_TRACE=FAIL
+MEMORY_WITHOUT_LOCATION=FAIL
+DIRECT_MAIN_WITHOUT_LEDGER_1562=FAIL
+STALE_CURRENT_MAIN=FAIL
+```
+
+O fiscal não cria segundo judge, segundo owner ou segunda verdade. Ele reconstrói a prova citada e devolve evidência para o Reality Judge.
+
+
+### Ledger #1562 — ordem de verificação
+
+```text
+LEDGER_REF_EXACT_COMMENT_FIRST=true
+LEDGER_FALLBACK_STARTS_FROM_NEWEST_PAGE=true
+LEDGER_FALLBACK_WALKS_BACKWARD_UNTIL_FOUND=true
+GITHUB_ISSUE_COMMENTS_DEFAULT_ORDER=OLDEST_FIRST
+LEDGER_OVER_100_COMMENTS_MUST_NOT_FALSE_FAIL=true
+```
+
+Se a resposta fornecer link/ID de comentário do livro-razão, o fiscal consulta esse comentário diretamente.
+Sem referência exata, lê a contagem de comentários do #1562, começa pela última página e caminha para trás.

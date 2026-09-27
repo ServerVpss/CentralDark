@@ -1,20 +1,34 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
   DEFAULT_WAIT_TIMEOUT_MS,
   FAST_MERGE_POLICY,
+  CANONICAL_MAP_PATH,
+  PR_MOTHER_NUMBER,
+  SQUASH_FIXED_POINT_GOAL,
+  actionRequiredRunIds,
   authorizationFor,
+  deriveHornFixedPoint,
   evaluateCandidate,
+  executionProvenance,
   intentReceipt,
+  promotionLaneDecision,
   scanPullFiles,
   sealReceipt,
-  selectLatestWorkflowRun,
+  selectLatestNonSkipped,
+  squashFixedPointProof,
   verifySealedReceipt,
   waitAgeMs,
   waitTimeoutMsFromEnv,
   workflowVerdicts,
+  validateCanonicalSnapshot,
 } from "./github-autonomia-promocao.mjs";
+import {
+  DEFAULT_REQUIRED_WORKFLOWS as GREEN_REQUIRED_WORKFLOWS,
+  greenDecision as greenGuardDecision,
+} from "./github-autonomia-green-guard.mjs";
 
 const INTENT_BODY = [
   "Intent-Authorized: SEGREDO/CHEFE",
@@ -55,6 +69,78 @@ function successfulRuns(required) {
   }));
 }
 
+
+test("child compatible healthy is mandatory lane", () => {
+  const lane = promotionLaneDecision({ matchingChild: { number: 1579, state: "open", draft: false, mergeable: true, mergeable_state: "clean" } });
+  assert.equal(lane.decision, "CHILD_REQUIRED");
+  assert.equal(lane.child_trace_required, true);
+});
+
+test("stale child requires trace before global bypass", () => {
+  const blocked = promotionLaneDecision({ matchingChild: { number: 1579, state: "open", draft: false, mergeable: false, mergeable_state: "dirty" } });
+  assert.equal(blocked.decision, "CHILD_STALE_BLOCKED");
+  assert.equal(blocked.child_blocked_receipt, "CHILD_LANE_STALE_BLOCKED");
+  const bypass = promotionLaneDecision({ matchingChild: { number: 1579, state: "open", draft: false, mergeable: false, mergeable_state: "dirty" }, globalRule: true });
+  assert.equal(bypass.decision, "DIRECT_MAIN_ALLOWED_AFTER_CHILD_TRACE");
+  assert.equal(bypass.post_main_child_receipt_required, true);
+});
+
+test("no child keeps direct main without creating pr", () => {
+  const lane = promotionLaneDecision();
+  assert.equal(lane.decision, "DIRECT_MAIN_ALLOWED");
+  assert.equal(lane.child_trace_required, false);
+});
+
+test("Horn forward chaining converge quando nenhum fato novo pode ser acrescentado", () => {
+  const proof = deriveHornFixedPoint(["A"], [
+    { head: "B", body: ["A"] },
+    { head: "C", body: ["B"] },
+  ]);
+  assert.equal(proof.fixed_point, true);
+  assert.deepEqual(proof.facts, ["A", "B", "C"]);
+  assert.equal(proof.rounds, 3);
+});
+
+
+test("autorreferencia circular nao cria verdade sem ancora externa", () => {
+  const proof = deriveHornFixedPoint([], [
+    { head: "A", body: ["B"] },
+    { head: "B", body: ["A"] },
+  ]);
+  assert.equal(proof.fixed_point, true);
+  assert.deepEqual(proof.facts, []);
+});
+
+test("squash exige fixed point same-head/base com recibo, autoridade e mapa vivos", () => {
+  const pr = prFixture();
+  const candidate = { decision: "READY", head_sha: pr.head.sha, base_sha: pr.base.sha };
+  const live = {
+    decision: "READY",
+    head_sha: pr.head.sha,
+    base_sha: pr.base.sha,
+    mergeable: true,
+    mergeable_state: "clean",
+    reasons: [],
+    waits: [],
+    authorization: { authorized: true },
+    canonical_validation: { verdict: "PASS" },
+  };
+
+  const proof = squashFixedPointProof({ candidate, live, pr, receiptSha: "f".repeat(64) });
+  assert.equal(proof.ready, true);
+  assert.equal(proof.verdict, "PROVED_IN_SCOPE");
+  assert.ok(proof.facts.includes(SQUASH_FIXED_POINT_GOAL));
+
+  const drift = squashFixedPointProof({
+    candidate: { ...candidate, head_sha: "c".repeat(40) },
+    live,
+    pr,
+    receiptSha: "f".repeat(64),
+  });
+  assert.equal(drift.ready, false);
+  assert.equal(drift.verdict, "REFUTED_IN_SCOPE");
+});
+
 function evaluate(pr = prFixture(), overrides = {}) {
   return evaluateCandidate({
     pr,
@@ -64,8 +150,60 @@ function evaluate(pr = prFixture(), overrides = {}) {
     workflowRuns: successfulRuns(["gate-a", "gate-b"]),
     unresolvedThreads: 0,
     securityFindings: [],
+    canonicalValidation: {
+      verdict: "PASS",
+      errors: [],
+      map_blob_sha: "c".repeat(40),
+      summary: { total: 2, passed: 2, failed: 0, consumers_total: 2, consumers_passed: 2 },
+    },
     ...overrides,
   });
+}
+
+function canonicalFixture() {
+  const identitySha = "d".repeat(40);
+  const map = {
+    schema_version: 1,
+    source_of_truth: CANONICAL_MAP_PATH,
+    sectors: [{ id: "core", label: "Core", paths: ["scripts/"] }],
+    consolidated_areas: [{ path: "scripts/", reason: "owner" }],
+    canonical_contracts: [
+      {
+        id: "entrypoint",
+        source: "LEIA-ME-IA.md",
+        consumers: ["AGENTS.md"],
+        required_tokens: ["CENTRALDARK_AI_BOOT"],
+      },
+      {
+        id: "identity",
+        source: ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA",
+        target: ".agents/skills/meta-lupa/SKILL.md",
+        identity: "git_blob_sha1",
+        consumers: ["AGENTS.md"],
+        required_tokens: ["AUTOLUPA_CANONICAL_SHA"],
+        forbidden_tokens: ["SKILL_COMMIT_SHA:"],
+      },
+    ],
+    forbidden_roots: [],
+    historical_roots: [],
+    validation_entrypoints: ["apps/modulos/mapeamento/core/validar-mapa.mjs"],
+    consolidation_evidence_policy: {
+      enabled: true,
+      legacy_without_proof: "PROTECTED_UNPROVEN",
+      efficacy_100_requires_denominator: true,
+    },
+  };
+  const files = new Map([
+    [CANONICAL_MAP_PATH, { content: JSON.stringify(map), sha: "a".repeat(40) }],
+    ["LEIA-ME-IA.md", { content: "owner", sha: "b".repeat(40) }],
+    ["AGENTS.md", { content: "CENTRALDARK_AI_BOOT\nAUTOLUPA_CANONICAL_SHA", sha: "c".repeat(40) }],
+    [".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA", {
+      content: `${identitySha} .agents/skills/meta-lupa/SKILL.md\n# comentário operacional permitido\n`,
+      sha: "e".repeat(40),
+    }],
+    [".agents/skills/meta-lupa/SKILL.md", { content: "skill", sha: identitySha }],
+  ]);
+  return { map, files, identitySha };
 }
 
 test("recibo de intenção completo é autorização canônica do fast path", () => {
@@ -81,6 +219,22 @@ test("recibo de intenção completo é autorização canônica do fast path", ()
   assert.equal(auth.viaLabel, false);
   assert.equal(auth.source, "pr-body:intent-authorized");
   assert.equal(auth.authority, "SEGREDO/CHEFE");
+});
+
+test("recibo separa conector, executor e Hermes sem inventar runtime", () => {
+  const provenance = executionProvenance({
+    GITHUB_WORKFLOW: "Autonomia — promoção segura",
+    GITHUB_RUN_ID: "123",
+    GITHUB_ACTOR: "segredounlock",
+    RUNNER_ENVIRONMENT: "self-hosted",
+    RUNNER_NAME: "casa-linux",
+    RUNNER_OS: "Linux",
+  });
+  assert.equal(provenance.connector_role, "PHYSICAL_ACCESS_PATH");
+  assert.equal(provenance.connector_transport, "GITHUB_API");
+  assert.equal(provenance.executor, "GITHUB_ACTIONS_RUNNER");
+  assert.equal(provenance.runner_name, "casa-linux");
+  assert.equal(provenance.hermes_runtime, "UNKNOWN_NOT_ATTESTED_BY_GITHUB_RECEIPT");
 });
 
 test("recibo incompleto não autoriza", () => {
@@ -117,13 +271,114 @@ test("PERMITO SEGREDO/PIVETE no body é histórico e não autoriza", () => {
   assert.equal(legacyLabel.legacy, true);
 });
 
-test("fast path só fica READY com todos os workflows obrigatórios verdes", () => {
-  const result = evaluate();
-  assert.equal(result.mode, "FAST");
-  assert.equal(result.decision, "READY");
-  assert.equal(result.workflows.length, 2);
-  assert.equal(result.workflows.every((workflow) => workflow.state === "PASS"), true);
-  assert.deepEqual(result.waits, []);
+test("fast path espera todos os workflows obrigatórios do mesmo HEAD", () => {
+  const missing = evaluate(prFixture(), { workflowRuns: [] });
+  assert.equal(missing.mode, "FAST");
+  assert.equal(missing.decision, "WAIT");
+  assert.equal(missing.workflows.every((item) => item.state === "MISSING"), true);
+  assert.match(missing.waits.join(" "), /WORKFLOW_MISSING/);
+
+  const ready = evaluate();
+  assert.equal(ready.mode, "FAST");
+  assert.equal(ready.decision, "READY");
+  assert.equal(ready.workflows.every((item) => item.state === "PASS"), true);
+});
+
+test("green-first revalida o READY e exige todos os gates no mesmo conjunto", () => {
+  const ready = evaluate();
+  assert.equal(ready.decision, "READY");
+
+  const allGreen = successfulRuns(GREEN_REQUIRED_WORKFLOWS);
+  assert.equal(greenGuardDecision(allGreen, GREEN_REQUIRED_WORKFLOWS).green, true);
+
+  const missing = allGreen.slice(0, -1);
+  assert.equal(greenGuardDecision(missing, GREEN_REQUIRED_WORKFLOWS).green, false);
+
+  const pending = structuredClone(allGreen);
+  pending[0].status = "queued";
+  pending[0].conclusion = null;
+  assert.equal(greenGuardDecision(pending, GREEN_REQUIRED_WORKFLOWS).green, false);
+
+  const failed = structuredClone(allGreen);
+  failed[1].conclusion = "failure";
+  assert.equal(greenGuardDecision(failed, GREEN_REQUIRED_WORKFLOWS).green, false);
+
+  const cancelled = structuredClone(allGreen);
+  cancelled[2].conclusion = "cancelled";
+  assert.equal(greenGuardDecision(cancelled, GREEN_REQUIRED_WORKFLOWS).green, false);
+});
+
+test("juiz emite mapa, todos os contratos e consumidores presos ao HEAD", async () => {
+  const { files, map } = canonicalFixture();
+  const result = await validateCanonicalSnapshot({
+    headSha: "f".repeat(40),
+    readSnapshot: async (path) => files.get(path) || null,
+    trustedMap: map,
+    trustedMapBlobSha: "a".repeat(40),
+  });
+
+  assert.equal(result.verdict, "PASS");
+  assert.equal(result.map_status, "PASS");
+  assert.equal(result.summary.total, 2);
+  assert.equal(result.summary.passed, 2);
+  assert.equal(result.summary.consumers_total, 2);
+  assert.equal(result.summary.consumers_passed, 2);
+  assert.deepEqual(result.contracts.map((contract) => contract.id), ["entrypoint", "identity"]);
+  assert.equal(result.contracts[1].identity.status, "PASS");
+});
+
+test("token ausente em consumidor impede READY e não vira papagaio verde", async () => {
+  const { files, map } = canonicalFixture();
+  files.set("AGENTS.md", { content: "sem os tokens", sha: "c".repeat(40) });
+  const validation = await validateCanonicalSnapshot({
+    headSha: "f".repeat(40),
+    readSnapshot: async (path) => files.get(path) || null,
+    trustedMap: map,
+  });
+
+  assert.equal(validation.verdict, "FAIL");
+  assert.match(validation.errors.join(" "), /REQUIRED_TOKEN_MISSING:CENTRALDARK_AI_BOOT/);
+  const result = evaluate(prFixture(), { canonicalValidation: validation });
+  assert.equal(result.decision, "BLOCKED");
+  assert.match(result.reasons.join(" "), /CANONICAL_VALIDATION_FAILED/);
+});
+
+test("identidade da MetaLupa divergente do blob real bloqueia promoção", async () => {
+  const { files, map } = canonicalFixture();
+  files.set(".agents/skills/meta-lupa/SKILL.md", { content: "mudou", sha: "9".repeat(40) });
+  const validation = await validateCanonicalSnapshot({
+    headSha: "f".repeat(40),
+    readSnapshot: async (path) => files.get(path) || null,
+    trustedMap: map,
+  });
+
+  assert.equal(validation.verdict, "FAIL");
+  assert.match(validation.errors.join(" "), /IDENTITY_BLOB_MISMATCH/);
+  assert.equal(validation.contracts.find((contract) => contract.id === "identity").identity.status, "FAIL");
+});
+
+test("PR não pode reduzir o denominador de contratos definido pela base confiável", async () => {
+  const { files, map } = canonicalFixture();
+  const headMap = structuredClone(map);
+  headMap.canonical_contracts[0].consumers = [];
+  files.set(CANONICAL_MAP_PATH, { content: JSON.stringify(headMap), sha: "1".repeat(40) });
+  const validation = await validateCanonicalSnapshot({
+    headSha: "f".repeat(40),
+    readSnapshot: async (path) => files.get(path) || null,
+    trustedMap: map,
+  });
+  assert.equal(validation.verdict, "FAIL");
+  assert.match(validation.errors.join(" "), /MAP_CONTRACT_DENOMINATOR_REDUCED/);
+});
+
+test("ausência do recibo canônico do mapa é bloqueio explícito", () => {
+  const result = evaluateCandidate({
+    pr: prFixture(),
+    repository: "ServerVpss/CentralDark",
+    trustedAuthors: ["segredounlock"],
+  });
+  assert.equal(result.decision, "BLOCKED");
+  assert.match(result.reasons.join(" "), /CANONICAL_VALIDATION_MISSING/);
 });
 
 test("fast path defere missing pending failure cancelled e skipped", () => {
@@ -166,6 +421,12 @@ test("fast path continua fail-closed para conflito, fork e autor externo", () =>
   assert.equal(external.decision, "BLOCKED");
   assert.match(external.reasons.join(" "), /AUTHOR_NOT_TRUSTED/);
   assert.match(external.reasons.join(" "), /HEAD_EXTERNAL_REPOSITORY/);
+});
+
+test("PR-mãe permanente #1562 nunca entra no veículo de squash", () => {
+  const mother = evaluate(prFixture({ number: PR_MOTHER_NUMBER }));
+  assert.equal(mother.decision, "BLOCKED");
+  assert.match(mother.reasons.join(" "), /PR_MOTHER_MERGE_FORBIDDEN/);
 });
 
 test("scanner bloqueia caminho sensível e segredo literal, não documentação comum", () => {
@@ -226,6 +487,23 @@ test("execução mais nova vence PASS antigo inclusive quando falhou ou foi skip
   assert.deepEqual(workflowVerdicts([], ["gate"]), [{ name: "gate", state: "MISSING", run_id: null, conclusion: null }]);
 });
 
+test("action_required não é FAIL: WAIT + run_id para approve", () => {
+  const result = evaluate(prFixture(), {
+    requiredWorkflows: ["porta-de-entrada"],
+    workflowRuns: [{
+      id: 35589535285,
+      name: "porta-de-entrada",
+      run_number: 90,
+      status: "completed",
+      conclusion: "action_required",
+    }],
+  });
+  assert.equal(result.decision, "WAIT");
+  assert.equal(result.reasons.includes("WORKFLOW_FAILED:porta-de-entrada:action_required"), false);
+  assert.match(result.waits.join(" "), /WORKFLOW_ACTION_REQUIRED:porta-de-entrada:35589535285/);
+  assert.deepEqual(actionRequiredRunIds(result.workflows), [35589535285]);
+});
+
 test("recibo selado é preso ao hash e expira", () => {
   const generated = new Date("2026-08-14T03:00:00.000Z");
   const sealed = sealReceipt({
@@ -245,4 +523,45 @@ test("janela adversarial de espera continua configurável", () => {
   assert.equal(waitAgeMs(prFixture({ updated_at: "2026-08-14T02:00:00.000Z" })), null);
   assert.equal(waitTimeoutMsFromEnv({}), DEFAULT_WAIT_TIMEOUT_MS);
   assert.equal(waitTimeoutMsFromEnv({ BOT_WAIT_TIMEOUT_MINUTES: "10" }), 600000);
+});
+
+
+test("Dependabot workflow_run não faz fan-out em main ou PR humano", async () => {
+  const workflow = await readFile(
+    new URL("../.github/workflows/dependabot-auto-merge.yml", import.meta.url),
+    "utf8",
+  );
+  assert.match(
+    workflow,
+    /github\.event_name == 'workflow_run' && startsWith\(github\.event\.workflow_run\.head_branch, 'dependabot\/'\)/,
+  );
+  assert.doesNotMatch(
+    workflow,
+    /^\s*github\.event_name == 'workflow_run' \|\|$/m,
+  );
+});
+
+
+test("Trigger Fabric obrigatório dispara em todo PR para main", async () => {
+  const workflow = await readFile(
+    new URL("../.github/workflows/trigger-fabric-package.yml", import.meta.url),
+    "utf8",
+  );
+  const pullBlock = workflow.match(/\n  pull_request:\n([\s\S]*?)\n  push:\n/);
+  assert.ok(pullBlock, "pull_request block ausente");
+  assert.match(pullBlock[1], /branches:\s*\[main\]/);
+  assert.doesNotMatch(pullBlock[1], /\bpaths:/);
+});
+
+
+test("reconciliador da Casa não vira segundo promotor", async () => {
+  const source = await readFile(
+    new URL("./dependabot/reconcile-open-prs.mjs", import.meta.url),
+    "utf8",
+  );
+  assert.doesNotMatch(source, /\/pulls\/\$\{number\}\/merge/);
+  assert.doesNotMatch(source, /merge_method:\s*['"]squash['"]/);
+  assert.match(source, /centraldark_autonomia_recheck/);
+  assert.match(source, /centraldark_dependabot_reconcile/);
+  assert.match(source, /direct_merge=0/);
 });

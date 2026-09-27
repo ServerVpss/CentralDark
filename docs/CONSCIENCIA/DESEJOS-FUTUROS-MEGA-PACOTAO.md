@@ -1,3 +1,10 @@
+---
+title: "DESEJOS FUTUROS MEGA PACOTAO"
+date: 2026-08-27
+tags: ["consciencia"]
+updated: 2026-08-27
+---
+
 # 🗺️ MEGA PACOTÃO DE DESEJOS — CentralDark
 > Documento único, versionado no repo. Cada bloco é uma fase com checklist `[ ]` — marcar `[x]` ao consolidar.
 > **Status:** rascunho vivo · **Aceita:** sugestões, PRs, refinamentos · **Dono:** Pivete
@@ -633,3 +640,11 @@ Ciclo fechado: **comandar → mapear → executar com segurança → vigiar → 
 ---
 
 _Aceita PRs. O sonho é grande e o método é paciente._
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

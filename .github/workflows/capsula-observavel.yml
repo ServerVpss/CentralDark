@@ -1,4 +1,4 @@
-name: Cápsula Observável — contrato e falso verde
+name: ⚙️ Cápsula Observável — contrato e falso verde
 
 on:
   pull_request:
@@ -23,23 +23,23 @@ concurrency:
 
 jobs:
   contrato:
-    name: Validar cápsula sem falso verde
+    name: 🧩 Validar cápsula sem falso verde
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     steps:
-      - name: Checkout exato do candidato
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - name: 🔹 Checkout exato do candidato
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Fixar Node
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      - name: 🔹 Fixar Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: '22.23.1'
+          node-version: '24'
 
-      - name: Verificar diff exato do candidato
+      - name: 🔹 Verificar diff exato do candidato
         id: diff
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -56,11 +56,11 @@ jobs:
             git diff --check "$parent" "$HEAD_SHA" -- .
           fi
 
-      - name: Executar testes discriminativos
+      - name: 🔹 Executar testes discriminativos
         id: tests
         run: node --test apps/modulos/status/capsula-observavel.test.mjs apps/modulos/status/operational-score.test.mjs
 
-      - name: Provar estado vazio fail-closed
+      - name: 🔹 Provar estado vazio fail-closed
         id: empty
         shell: bash
         run: |
@@ -80,7 +80,7 @@ jobs:
           console.log('CAPSULA_EMPTY_FAIL_CLOSED=PASS');
           NODE
 
-      - name: Provar snapshot commitado como artefato derivado
+      - name: 🔹 Provar snapshot commitado como artefato derivado
         id: snapshot
         shell: bash
         run: |
@@ -102,7 +102,7 @@ jobs:
           console.log('CAPSULA_SNAPSHOT_DERIVED=PASS');
           NODE
 
-      - name: Recibo vinculado ao candidato
+      - name: 🔹 Recibo vinculado ao candidato
         if: always()
         env:
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}

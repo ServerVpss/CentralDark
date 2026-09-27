@@ -228,7 +228,10 @@ async function renderLive(data) {
 
       rows.push({ name: ep.name, ok, detail: ms + 'ms · ' + ep.url, extra: json.version ? 'v' + json.version : 'respondendo' });
     } catch (err) {
-      rows.push({ name: ep.name, ok: false, detail: ep.url, extra: 'CORS bloqueou (sem acesso externo)' });
+      const message = err instanceof TypeError
+        ? 'falha de rede/CORS'
+        : 'HTTP/JSON falhou: ' + (err?.message || 'erro desconhecido');
+      rows.push({ name: ep.name, ok: false, detail: ep.url, extra: message });
     }
   }
 
@@ -257,7 +260,7 @@ async function renderLive(data) {
   const pm2 = data.pm2 || {};
   const pm2Entries = Object.entries(pm2);
   if (pm2Entries.length) {
-    html += '<p class="live-group-label">⚡ PM2 — processos VPS</p>';
+    html += '<p class="live-group-label">🔥 PM2 — processos VPS</p>';
     html += pm2Entries.map(([name, status]) => {
       const ok = status === 'online';
       const label = status === 'online' ? 'online' : status === 'stopped' ? 'parado' : status;

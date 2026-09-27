@@ -3,25 +3,34 @@
  * Promoção autônoma e fail-closed de pull requests do CentralDark.
  *
  * Um único motor, dois modos:
- * - FAST: intenção já autorizada + seis gates obrigatórios verdes no mesmo HEAD → squash main;
- * - ADVERSARIAL: quando solicitado → workflows/Judge/contraprova completos.
+ * - FAST: intenção já autorizada pelo SEGREDO/CHEFE → gates obrigatórios do mesmo HEAD → squash main;
+ * - ADVERSARIAL: mesmo green-first, com revisão/contraprova adicional quando solicitada.
  *
- * O código do PR nunca é executado aqui. O workflow faz checkout apenas da main confiável.
+ * O juiz lê somente a main confiável; a promoção exige que os workflows
+ * obrigatórios tenham executado e aprovado o código do PR no mesmo HEAD.
  */
 import { createHash } from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  normalizarCaminho,
+  validarDocumentoMapa,
+} from "../apps/modulos/mapeamento/core/validar-mapa.mjs";
 
 export const FAST_MERGE_POLICY = "AUTO_SQUASH_IF_CLEAN";
+export const CANONICAL_MAP_PATH = "apps/modulos/mapeamento/config/mapa-canonico.json";
+export const PR_MOTHER_NUMBER = 1562;
 
 export const DEFAULT_REQUIRED_WORKFLOWS = Object.freeze([
-  "porta-de-entrada",
-  "codex-validate",
-  "lupa-conformance",
-  "Lupa Drift Guard",
-  "PR auto-review (Codex + checklist)",
-  "Pipeline — Telegram + Painel",
+  "⚙️ porta-de-entrada",
+  "⚙️ codex-validate",
+  "⚙️ lupa-conformance",
+  "⚙️ Lupa Drift Guard",
+  "🧠 Trigger Fabric Full Package — pacote e contraprova",
+  "⚙️ PR Title Contract",
+  "⚙️ PR auto-review (Codex + checklist)",
+  "⚙️ Pipeline — Telegram + Painel",
 ]);
 
 export const BLOCKING_LABELS = Object.freeze([
@@ -33,6 +42,83 @@ export const BLOCKING_LABELS = Object.freeze([
 const RECEIPT_MAX_AGE_MS = 15 * 60 * 1000;
 const API = "https://api.github.com";
 export const DEFAULT_WAIT_TIMEOUT_MS = 45 * 60 * 1000;
+
+
+// Fechamento monotônico inspirado em forward chaining de cláusulas de Horn:
+// só adiciona fatos derivados de observações externas e para quando nenhum
+// fato novo puder ser acrescentado. Não implementa o modelo de Herbrand
+// completo; é um gate finito de promoção preso ao HEAD/base observados.
+export const SQUASH_FIXED_POINT_GOAL = "SQUASH_READY";
+export const SQUASH_HORN_RULES = Object.freeze([
+  Object.freeze({
+    head: "JUDGE_BOUND",
+    body: Object.freeze(["SEALED_RECEIPT", "JUDGE_READY", "CANDIDATE_HEAD_MATCH", "CANDIDATE_BASE_MATCH"]),
+  }),
+  Object.freeze({
+    head: "LIVE_BOUND",
+    body: Object.freeze(["LIVE_READY", "LIVE_HEAD_MATCH", "LIVE_BASE_MATCH", "MERGEABLE_LIVE", "NO_BLOCKERS"]),
+  }),
+  Object.freeze({
+    head: SQUASH_FIXED_POINT_GOAL,
+    body: Object.freeze(["JUDGE_BOUND", "LIVE_BOUND", "AUTHORITY_VALID", "CANONICAL_PASS"]),
+  }),
+]);
+
+
+export function deriveHornFixedPoint(seedFacts = [], rules = SQUASH_HORN_RULES) {
+  const facts = new Set([...seedFacts].map(String).filter(Boolean));
+  const universe = new Set([...facts, ...rules.map((rule) => String(rule.head))]);
+  const trace = [];
+  const maxRounds = universe.size + 1;
+
+  for (let round = 1; round <= maxRounds; round += 1) {
+    const snapshot = new Set(facts);
+    const additions = [];
+    for (const rule of rules) {
+      const head = String(rule.head);
+      const body = [...(rule.body || [])].map(String);
+      if (!snapshot.has(head) && body.every((fact) => snapshot.has(fact))) additions.push(head);
+    }
+    const unique = [...new Set(additions)].filter((fact) => !facts.has(fact)).sort();
+    if (!unique.length) {
+      return { fixed_point: true, rounds: round, facts: [...facts].sort(), trace,
+        progress_measure: facts.size, universe_size: universe.size };
+    }
+    for (const fact of unique) facts.add(fact);
+    trace.push({ round, added: unique });
+  }
+
+  return { fixed_point: false, rounds: maxRounds, facts: [...facts].sort(), trace,
+    progress_measure: facts.size, universe_size: universe.size };
+}
+
+
+export function squashFixedPointProof({ candidate, live, pr, receiptSha }) {
+  const seed = new Set();
+  if (/^[a-f0-9]{64}$/i.test(String(receiptSha || ""))) seed.add("SEALED_RECEIPT");
+  if (candidate?.decision === "READY") seed.add("JUDGE_READY");
+  if (candidate?.head_sha && candidate.head_sha === pr?.head?.sha) seed.add("CANDIDATE_HEAD_MATCH");
+  if (candidate?.base_sha && candidate.base_sha === pr?.base?.sha) seed.add("CANDIDATE_BASE_MATCH");
+  if (live?.decision === "READY") seed.add("LIVE_READY");
+  if (live?.head_sha && live.head_sha === pr?.head?.sha) seed.add("LIVE_HEAD_MATCH");
+  if (live?.base_sha && live.base_sha === pr?.base?.sha) seed.add("LIVE_BASE_MATCH");
+  if (live?.mergeable === true && !["dirty", "unknown"].includes(String(live?.mergeable_state || ""))) seed.add("MERGEABLE_LIVE");
+  if (!(live?.reasons || []).length && !(live?.waits || []).length) seed.add("NO_BLOCKERS");
+  if (live?.authorization?.authorized === true) seed.add("AUTHORITY_VALID");
+  if (live?.canonical_validation?.verdict === "PASS") seed.add("CANONICAL_PASS");
+
+  const closure = deriveHornFixedPoint(seed);
+  const ready = closure.fixed_point && closure.facts.includes(SQUASH_FIXED_POINT_GOAL);
+  const pending = candidate?.decision === "WAIT" || live?.decision === "WAIT" || live?.mergeable == null;
+  return {
+    ready,
+    verdict: ready ? "PROVED_IN_SCOPE" : (pending || !closure.fixed_point ? "UNKNOWN" : "REFUTED_IN_SCOPE"),
+    basis: "HORN_MONOTONE_CLOSURE",
+    achilles_guard: "FINITE_MONOTONE_PROGRESS",
+    self_reference_guard: "EXTERNAL_FACTS_ONLY_NO_GOAL_SEED",
+    ...closure,
+  };
+}
 
 const SENSITIVE_PATH = /(^|\/)(?:\.env(?:\.|$)|secrets?(?:\/|$)|tokens?(?:\/|$)|sessions?(?:\/|$)|\.ssh(?:\/|$)|credentials?(?:\/|$)|keys?(?:\/|$))/i;
 const SECRET_PATTERNS = Object.freeze([
@@ -55,6 +141,23 @@ export function parseCsv(value, fallback = []) {
     .map((item) => item.trim())
     .filter(Boolean);
   return items.length ? items : [...fallback];
+}
+
+export function executionProvenance(env = process.env) {
+  return {
+    controller: "scripts/github-autonomia-promocao.mjs",
+    connector_role: "PHYSICAL_ACCESS_PATH",
+    connector_transport: "GITHUB_API",
+    executor: "GITHUB_ACTIONS_RUNNER",
+    workflow: env.GITHUB_WORKFLOW || null,
+    run_id: env.GITHUB_RUN_ID || null,
+    actor: env.GITHUB_ACTOR || null,
+    triggering_actor: env.GITHUB_TRIGGERING_ACTOR || null,
+    runner_environment: env.RUNNER_ENVIRONMENT || null,
+    runner_name: env.RUNNER_NAME || null,
+    runner_os: env.RUNNER_OS || null,
+    hermes_runtime: "UNKNOWN_NOT_ATTESTED_BY_GITHUB_RECEIPT",
+  };
 }
 
 export function normalizedLabels(pr) {
@@ -153,15 +256,262 @@ export function selectLatestWorkflowRun(runs, workflowName) {
     })[0] || null;
 }
 
+export function isActionRequiredRun(run) {
+  return String(run?.conclusion || "") === "action_required";
+}
+
 export function workflowVerdicts(runs, requiredWorkflows) {
   return requiredWorkflows.map((name) => {
     const run = selectLatestWorkflowRun(runs, name);
     if (!run) return { name, state: "MISSING", run_id: null, conclusion: null };
+    if (isActionRequiredRun(run)) {
+      return { name, state: "ACTION_REQUIRED", run_id: run.id, conclusion: "action_required" };
+    }
     if (run.status !== "completed") return { name, state: "PENDING", run_id: run.id, conclusion: run.conclusion || null };
     if (run.conclusion === "success") return { name, state: "PASS", run_id: run.id, conclusion: run.conclusion };
     return { name, state: "FAIL", run_id: run.id, conclusion: run.conclusion || "unknown" };
   });
 }
+
+export function actionRequiredRunIds(workflows = []) {
+  return [...new Set(
+    workflows
+      .filter((item) => item?.state === "ACTION_REQUIRED" && item?.run_id)
+      .map((item) => Number(item.run_id))
+      .filter((id) => Number.isInteger(id) && id > 0),
+  )];
+}
+
+function parseIdentityRecord(text) {
+  const lines = String(text || "")
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line && !line.startsWith("#"));
+  if (lines.length !== 1) return { error: `registro de identidade deve ter uma linha útil; encontrado=${lines.length}` };
+  const match = lines[0].match(/^([0-9a-f]{40})\s+(.+)$/i);
+  if (!match) return { error: "registro de identidade inválido" };
+  try {
+    return { sha: match[1].toLowerCase(), target: normalizarCaminho(match[2].trim()) };
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
+function contractFinding(contract, errors, consumers, identity = null) {
+  return {
+    id: String(contract?.id || "<sem-id>"),
+    source: contract?.source || null,
+    source_blob_sha: contract?.source_blob_sha || null,
+    status: errors.length ? "FAIL" : "PASS",
+    errors,
+    consumers,
+    identity,
+  };
+}
+
+function mapContinuityErrors(trustedMap, headMap) {
+  const errors = [];
+  const headContracts = new Map((headMap?.canonical_contracts || []).map((contract) => [contract.id, contract]));
+  for (const trusted of trustedMap?.canonical_contracts || []) {
+    const current = headContracts.get(trusted.id);
+    if (!current) {
+      errors.push(`MAP_CONTRACT_REMOVED:${trusted.id}`);
+      continue;
+    }
+    for (const field of ["source", "target", "identity"]) {
+      if ((trusted[field] || null) !== (current[field] || null)) {
+        errors.push(`MAP_CONTRACT_FIELD_CHANGED:${trusted.id}:${field}`);
+      }
+    }
+    for (const field of ["consumers", "required_tokens", "forbidden_tokens"]) {
+      const currentValues = new Set(current[field] || []);
+      for (const value of trusted[field] || []) {
+        if (!currentValues.has(value)) errors.push(`MAP_CONTRACT_DENOMINATOR_REDUCED:${trusted.id}:${field}:${value}`);
+      }
+    }
+  }
+  return errors;
+}
+
+/**
+ * Valida o mapa e todos os consumidores no SHA remoto sem executar código do PR.
+ * `readSnapshot(path)` devolve `{ content, sha }` ou `null`, permitindo teste puro
+ * e transporte via API do GitHub no runtime do conector.
+ */
+export async function validateCanonicalSnapshot({ headSha, readSnapshot, trustedMap = null, trustedMapBlobSha = null }) {
+  const errors = [];
+  const contracts = [];
+  if (!/^[0-9a-f]{40}$/i.test(String(headSha || ""))) {
+    return {
+      head_sha: headSha || null,
+      map_path: CANONICAL_MAP_PATH,
+      map_blob_sha: null,
+      trusted_map_blob_sha: trustedMapBlobSha,
+      map_status: "FAIL",
+      contracts,
+      summary: { total: 0, passed: 0, failed: 0, consumers_total: 0, consumers_passed: 0 },
+      errors: ["HEAD_SHA_INVALID"],
+      verdict: "FAIL",
+    };
+  }
+
+  const mapFile = await readSnapshot(CANONICAL_MAP_PATH);
+  if (!mapFile) {
+    return {
+      head_sha: headSha,
+      map_path: CANONICAL_MAP_PATH,
+      map_blob_sha: null,
+      trusted_map_blob_sha: trustedMapBlobSha,
+      map_status: "FAIL",
+      contracts,
+      summary: { total: 0, passed: 0, failed: 0, consumers_total: 0, consumers_passed: 0 },
+      errors: [`MAP_MISSING:${CANONICAL_MAP_PATH}`],
+      verdict: "FAIL",
+    };
+  }
+
+  let map;
+  try {
+    map = JSON.parse(mapFile.content);
+  } catch (error) {
+    return {
+      head_sha: headSha,
+      map_path: CANONICAL_MAP_PATH,
+      map_blob_sha: mapFile.sha || null,
+      trusted_map_blob_sha: trustedMapBlobSha,
+      map_status: "FAIL",
+      contracts,
+      summary: { total: 0, passed: 0, failed: 0, consumers_total: 0, consumers_passed: 0 },
+      errors: [`MAP_JSON_INVALID:${error.message}`],
+      verdict: "FAIL",
+    };
+  }
+
+  const documentErrors = validarDocumentoMapa(map).map((error) => `MAP_DOCUMENT:${error}`);
+  errors.push(...documentErrors);
+  if (!trustedMap) errors.push("TRUSTED_BASE_MAP_MISSING");
+  else {
+    errors.push(...validarDocumentoMapa(trustedMap).map((error) => `TRUSTED_MAP_DOCUMENT:${error}`));
+    errors.push(...mapContinuityErrors(trustedMap, map));
+  }
+
+  for (const contract of map.canonical_contracts || []) {
+    const contractErrors = [];
+    const consumerFindings = [];
+    let sourcePath = null;
+    let sourceFile = null;
+    try {
+      sourcePath = normalizarCaminho(contract.source);
+      sourceFile = await readSnapshot(sourcePath);
+    } catch (error) {
+      contractErrors.push(`SOURCE_PATH_INVALID:${error.message}`);
+    }
+    if (sourcePath && !sourceFile) contractErrors.push(`SOURCE_MISSING:${sourcePath}`);
+
+    const uniqueConsumers = [];
+    const seenConsumers = new Set();
+    for (const rawConsumer of contract.consumers || []) {
+      try {
+        const consumer = normalizarCaminho(rawConsumer);
+        if (!seenConsumers.has(consumer)) {
+          seenConsumers.add(consumer);
+          uniqueConsumers.push(consumer);
+        }
+      } catch (error) {
+        contractErrors.push(`CONSUMER_PATH_INVALID:${rawConsumer}:${error.message}`);
+      }
+    }
+
+    for (const consumer of uniqueConsumers) {
+      const consumerErrors = [];
+      const file = await readSnapshot(consumer);
+      if (!file) consumerErrors.push("MISSING_OR_UNREADABLE");
+      else {
+        for (const token of contract.required_tokens || []) {
+          if (!file.content.includes(token)) consumerErrors.push(`REQUIRED_TOKEN_MISSING:${token}`);
+        }
+        for (const token of contract.forbidden_tokens || []) {
+          if (file.content.includes(token)) consumerErrors.push(`FORBIDDEN_TOKEN_PRESENT:${token}`);
+        }
+      }
+      consumerFindings.push({
+        path: consumer,
+        blob_sha: file?.sha || null,
+        status: consumerErrors.length ? "FAIL" : "PASS",
+        errors: consumerErrors,
+      });
+      for (const error of consumerErrors) contractErrors.push(`CONSUMER:${consumer}:${error}`);
+    }
+
+    let identity = null;
+    if (contract.identity === "git_blob_sha1") {
+      const parsed = parseIdentityRecord(sourceFile?.content || "");
+      identity = {
+        type: "git_blob_sha1",
+        declared_sha: parsed.sha || null,
+        declared_target: parsed.target || null,
+        target: contract.target || null,
+        target_blob_sha: null,
+        status: "FAIL",
+      };
+      if (parsed.error) contractErrors.push(`IDENTITY_RECORD_INVALID:${parsed.error}`);
+      else {
+        let target = null;
+        try { target = normalizarCaminho(contract.target); }
+        catch (error) { contractErrors.push(`IDENTITY_TARGET_INVALID:${error.message}`); }
+        if (target && parsed.target !== target) contractErrors.push(`IDENTITY_TARGET_MISMATCH:${parsed.target}:${target}`);
+        const targetFile = target ? await readSnapshot(target) : null;
+        identity.target_blob_sha = targetFile?.sha || null;
+        if (target && !targetFile) contractErrors.push(`IDENTITY_TARGET_MISSING:${target}`);
+        if (targetFile && parsed.sha !== String(targetFile.sha || "").toLowerCase()) {
+          contractErrors.push(`IDENTITY_BLOB_MISMATCH:${parsed.sha}:${targetFile.sha || "missing"}`);
+        }
+      }
+      identity.status = contractErrors.some((error) => error.startsWith("IDENTITY_")) ? "FAIL" : "PASS";
+    }
+
+    const finding = contractFinding(
+      { ...contract, source: sourcePath || contract.source, source_blob_sha: sourceFile?.sha || null },
+      contractErrors,
+      consumerFindings,
+      identity,
+    );
+    contracts.push(finding);
+    for (const error of contractErrors) errors.push(`CONTRACT:${finding.id}:${error}`);
+  }
+
+  const consumers = contracts.flatMap((contract) => contract.consumers);
+  const summary = {
+    total: contracts.length,
+    passed: contracts.filter((contract) => contract.status === "PASS").length,
+    failed: contracts.filter((contract) => contract.status === "FAIL").length,
+    consumers_total: consumers.length,
+    consumers_passed: consumers.filter((consumer) => consumer.status === "PASS").length,
+  };
+  return {
+    head_sha: headSha,
+    map_path: CANONICAL_MAP_PATH,
+    map_blob_sha: mapFile.sha || null,
+    trusted_map_blob_sha: trustedMapBlobSha,
+    map_status: documentErrors.length ? "FAIL" : "PASS",
+    contracts,
+    summary,
+    errors,
+    verdict: errors.length ? "FAIL" : "PASS",
+  };
+}
+
+export function promotionLaneDecision({ matchingChild = null, directMainExplicit = false, globalRule = false } = {}) {
+  if (!matchingChild) return { decision: "DIRECT_MAIN_ALLOWED", reason: "NO_COMPATIBLE_CHILD", child_trace_required: false, post_main_child_receipt_required: false, pr_mother_receipt_required: true };
+  const childOpen = matchingChild.state === "open" && matchingChild.draft !== true;
+  const childConflicting = matchingChild.mergeable === false || matchingChild.mergeable_state === "dirty" || matchingChild.mergeable_state === "blocked_by_conflict";
+  const childHealthy = childOpen && !childConflicting;
+  if (childHealthy && !directMainExplicit) return { decision: "CHILD_REQUIRED", reason: "COMPATIBLE_CHILD_HEALTHY", child_number: matchingChild.number ?? null, child_trace_required: true, post_main_child_receipt_required: true, pr_mother_receipt_required: true };
+  if (childHealthy && directMainExplicit) return { decision: "DIRECT_MAIN_ALLOWED_AFTER_CHILD_TRACE", reason: "EXPLICIT_CHILD_BYPASS", child_number: matchingChild.number ?? null, child_trace_required: true, post_main_child_receipt_required: true, pr_mother_receipt_required: true };
+  if (!childHealthy && (directMainExplicit || globalRule)) return { decision: "DIRECT_MAIN_ALLOWED_AFTER_CHILD_TRACE", reason: "CHILD_STALE_OR_CONFLICTING", child_number: matchingChild.number ?? null, child_trace_required: true, child_blocked_receipt: "CHILD_LANE_STALE_BLOCKED", post_main_child_receipt_required: true, pr_mother_receipt_required: true };
+  return { decision: "CHILD_STALE_BLOCKED", reason: childOpen ? "CHILD_CONFLICTING" : "CHILD_NOT_ACTIVE", child_number: matchingChild.number ?? null, child_trace_required: true, child_blocked_receipt: "CHILD_LANE_STALE_BLOCKED", post_main_child_receipt_required: false, pr_mother_receipt_required: true };
+}
+
 
 export function waitAgeMs(pr, now = null) {
   if (now == null) return null;
@@ -181,6 +531,7 @@ export function evaluateCandidate({
   blockingReview = false,
   baseUpdateRequired = false,
   securityFindings = [],
+  canonicalValidation = null,
   now = null,
   waitTimeoutMs = DEFAULT_WAIT_TIMEOUT_MS,
 }) {
@@ -195,6 +546,7 @@ export function evaluateCandidate({
 
   if (pr.state !== "open") reasons.push("PR_NOT_OPEN");
   if (pr.base?.ref !== "main") reasons.push("BASE_NOT_MAIN");
+  if (Number(pr.number) === PR_MOTHER_NUMBER) reasons.push("PR_MOTHER_MERGE_FORBIDDEN");
   if (pr.draft) reasons.push("PR_IS_DRAFT");
   if (!sameRepository) reasons.push("HEAD_EXTERNAL_REPOSITORY");
   if (!trusted) reasons.push("AUTHOR_NOT_TRUSTED");
@@ -213,15 +565,21 @@ export function evaluateCandidate({
 
   for (const finding of securityFindings) reasons.push(`SECURITY_FINDING:${finding}`);
 
+  if (!canonicalValidation) reasons.push("CANONICAL_VALIDATION_MISSING");
+  else if (canonicalValidation.verdict !== "PASS") {
+    reasons.push(`CANONICAL_VALIDATION_FAILED:${canonicalValidation.errors?.length || 0}`);
+  }
+
   if (pr.mergeable === false || pr.mergeable_state === "dirty") reasons.push("MERGE_CONFLICT");
   if (pr.mergeable == null || pr.mergeable_state === "unknown") waits.push("MERGEABILITY_PENDING");
 
-  const workflows = workflowVerdicts(workflowRuns, requiredWorkflows);
-  let technicalGateNotGreen = false;
+  const applicableWorkflows = requiredWorkflows;
+  const workflows = workflowVerdicts(workflowRuns, applicableWorkflows);
   for (const workflow of workflows) {
     if (workflow.state !== "PASS") technicalGateNotGreen = true;
     if (workflow.state === "FAIL") waits.push(`WORKFLOW_FAILED:${workflow.name}:${workflow.conclusion}`);
     if (workflow.state === "MISSING" || workflow.state === "PENDING") waits.push(`WORKFLOW_${workflow.state}:${workflow.name}`);
+    if (workflow.state === "ACTION_REQUIRED") waits.push(`WORKFLOW_ACTION_REQUIRED:${workflow.name}:${workflow.run_id}`);
   }
 
   const stalledFor = waitAgeMs(pr, now);
@@ -255,6 +613,7 @@ export function evaluateCandidate({
     base_update_required: baseUpdateRequired,
     unresolved_review_threads: unresolvedThreads,
     security_findings: securityFindings,
+    canonical_validation: canonicalValidation,
     workflows,
     reasons,
     waits,
@@ -360,6 +719,19 @@ async function fetchWorkflowRuns(client, repository, sha) {
   return (data.workflow_runs || []).filter((run) => run.head_sha === sha);
 }
 
+export async function approveActionRequiredRuns(client, repository, runIds = []) {
+  const approved = [];
+  for (const runId of runIds) {
+    try {
+      await client.request("POST", `/repos/${repository}/actions/runs/${runId}/approve`, undefined, { allow: [201, 204, 409] });
+      approved.push(runId);
+    } catch (error) {
+      console.log(`ACTION_REQUIRED_APPROVE_FAILED run=${runId} ${String(error.message || error).slice(0, 200)}`);
+    }
+  }
+  return approved;
+}
+
 async function fetchPullFiles(client, repository, number) {
   const files = [];
   for (let page = 1; page <= 10; page += 1) {
@@ -368,6 +740,34 @@ async function fetchPullFiles(client, repository, number) {
     if (batch.length < 100) return { files, overflow: false };
   }
   return { files, overflow: true };
+}
+
+function encodeRepositoryPath(value) {
+  return normalizarCaminho(value).split("/").map(encodeURIComponent).join("/");
+}
+
+function snapshotReader(client, repository, headSha) {
+  const cache = new Map();
+  return async (rawPath) => {
+    const path = normalizarCaminho(rawPath);
+    if (!cache.has(path)) {
+      cache.set(path, (async () => {
+        const payload = await client.request(
+          "GET",
+          `/repos/${repository}/contents/${encodeRepositoryPath(path)}?ref=${encodeURIComponent(headSha)}`,
+          undefined,
+          { allow: [404] },
+        );
+        if (payload?.type !== "file" || payload.encoding !== "base64" || typeof payload.content !== "string") return null;
+        return {
+          path,
+          sha: String(payload.sha || "").toLowerCase(),
+          content: Buffer.from(payload.content.replace(/\s+/g, ""), "base64").toString("utf8"),
+        };
+      })());
+    }
+    return cache.get(path);
+  };
 }
 
 async function fetchBlockingReview(client, repository, number) {
@@ -406,20 +806,33 @@ async function inspectCandidate(client, repository, number, trustedAuthors, requ
   const pr = await fetchPull(client, repository, number);
   const auth = authorizationFor(pr);
   const fastPath = auth.merge_policy === FAST_MERGE_POLICY && auth.viaBody;
-  const [needsUpdate, changed, blockingReview] = await Promise.all([
+  const headSnapshot = snapshotReader(client, repository, pr.head.sha);
+  const baseSnapshot = snapshotReader(client, repository, pr.base.sha);
+  const trustedMapFile = await baseSnapshot(CANONICAL_MAP_PATH);
+  let trustedMap = null;
+  try { trustedMap = trustedMapFile ? JSON.parse(trustedMapFile.content) : null; }
+  catch { trustedMap = null; }
+  const [needsUpdate, changed, blockingReview, canonicalValidation] = await Promise.all([
     baseUpdateRequired(client, repository, pr),
     fetchPullFiles(client, repository, number),
     fetchBlockingReview(client, repository, number),
+    validateCanonicalSnapshot({
+      headSha: pr.head.sha,
+      readSnapshot: headSnapshot,
+      trustedMap,
+      trustedMapBlobSha: trustedMapFile?.sha || null,
+    }),
   ]);
 
   const securityFindings = scanPullFiles(changed.files);
   if (changed.overflow) securityFindings.push("CHANGED_FILES_OVERFLOW");
 
-  let threadState = { unresolved: 0, overflow: false };
-  const workflowRuns = await fetchWorkflowRuns(client, repository, pr.head.sha);
-  if (!fastPath) {
-    threadState = await fetchReviewThreadState(client, repository, number);
-  }
+  const [workflowRuns, threadState] = await Promise.all([
+    fetchWorkflowRuns(client, repository, pr.head.sha),
+    fastPath
+      ? Promise.resolve({ unresolved: 0, overflow: false })
+      : fetchReviewThreadState(client, repository, number),
+  ]);
 
   return evaluateCandidate({
     pr,
@@ -432,6 +845,7 @@ async function inspectCandidate(client, repository, number, trustedAuthors, requ
     blockingReview,
     baseUpdateRequired: needsUpdate,
     securityFindings,
+    canonicalValidation,
     now: Date.now(),
     waitTimeoutMs: waitTimeoutMsFromEnv(),
   });
@@ -449,6 +863,9 @@ async function upsertBlockComment(client, repository, candidate) {
     "",
     "Bloqueios:",
     ...(candidate.reasons.length ? candidate.reasons.map((reason) => `- \`${reason}\``) : ["- estado não elegível"]),
+    ...(candidate.canonical_validation?.errors?.length
+      ? ["", "Mapa/contratos:", ...candidate.canonical_validation.errors.slice(0, 12).map((error) => `- \`${error}\``)]
+      : []),
     "",
     "Nenhum merge foi executado. O controlador reavalia automaticamente; não pede novamente a mesma autorização.",
   ];
@@ -458,7 +875,7 @@ async function upsertBlockComment(client, repository, candidate) {
   else await client.request("POST", `/repos/${repository}/issues/${candidate.pr_number}/comments`, { body: lines.join("\n") });
 }
 
-async function upsertSuccessComment(client, repository, candidate, mergeSha, receiptSha) {
+async function upsertSuccessComment(client, repository, candidate, mergeSha, receiptSha, squashProof) {
   const marker = "<!-- centraldark-autonomia-promocao-success -->";
   const body = [
     marker,
@@ -470,6 +887,13 @@ async function upsertSuccessComment(client, repository, candidate, mergeSha, rec
     `AUTHORITY=\`${candidate.authorization.authority || "UNKNOWN"}\``,
     `INTENT_SCOPE=\`${candidate.authorization.intent_scope || "label-persistente"}\``,
     `JUDGE_RECEIPT_SHA256=\`${receiptSha}\``,
+    `CANONICAL_MAP_BLOB=\`${candidate.canonical_validation?.map_blob_sha || "UNKNOWN"}\``,
+    `CANONICAL_CONTRACTS=\`${candidate.canonical_validation?.summary?.passed || 0}/${candidate.canonical_validation?.summary?.total || 0}\``,
+    `SQUASH_FIXED_POINT=\`${squashProof?.verdict || "UNKNOWN"}\``,
+    `SQUASH_LOGIC=\`${squashProof?.basis || "UNKNOWN"}\``,
+    `SQUASH_FIXED_POINT_ROUNDS=\`${squashProof?.rounds ?? "UNKNOWN"}\``,
+    `ACHILLES_GUARD=\`${squashProof?.achilles_guard || "UNKNOWN"}\``,
+    `SELF_REFERENCE_GUARD=\`${squashProof?.self_reference_guard || "UNKNOWN"}\``,
     "REASK=`NAO`",
   ].join("\n");
   await client.request("POST", `/repos/${repository}/issues/${candidate.pr_number}/comments`, { body });
@@ -487,12 +911,20 @@ async function runJudge() {
   for (const number of numbers) candidates.push(await inspectCandidate(client, repository, number, trustedAuthors, requiredWorkflows));
 
   const receipt = {
-    schema: "centraldark.autonomia-promocao.v2",
+    schema: "centraldark.autonomia-promocao.v3",
     generated_at: new Date().toISOString(),
     repository,
     event_name: process.env.GITHUB_EVENT_NAME || "unknown",
     run_id: process.env.GITHUB_RUN_ID || null,
-    required_workflows_green_first: requiredWorkflows,
+    execution_provenance: executionProvenance(process.env),
+    canonical_contract_policy: {
+      map: CANONICAL_MAP_PATH,
+      denominator: "LIVE_BASE_SHA",
+      target: "EXACT_PR_HEAD_SHA",
+      untrusted_pr_code_executed: false,
+      fail_closed: true,
+    },
+    required_workflows_adversarial: requiredWorkflows,
     candidates,
   };
   const sealed = sealReceipt(receipt);
@@ -525,7 +957,17 @@ async function runPromote() {
       await upsertBlockComment(client, repository, candidate);
       continue;
     }
-    if (candidate.decision === "WAIT" || candidate.decision === "DEFERRED") continue;
+    if (candidate.decision === "WAIT") {
+      const approved = await approveActionRequiredRuns(client, repository, actionRequiredRunIds(candidate.workflows));
+      if (approved.length) {
+        console.log(`PR=${pr.number} ACTION_REQUIRED_APPROVED runs=${approved.join(",")}`);
+        await client.request("POST", `/repos/${repository}/dispatches`, {
+          event_type: "centraldark_autonomia_recheck",
+          client_payload: { pr_number: pr.number, reason: "action_required_approved", head: pr.head.sha, run_ids: approved },
+        });
+      }
+      continue;
+    }
 
     if (candidate.decision === "UPDATE_REQUIRED") {
       const result = await client.request("PUT", `/repos/${repository}/pulls/${pr.number}/update-branch`, { expected_head_sha: pr.head.sha }, { allow: [202] });
@@ -544,6 +986,19 @@ async function runPromote() {
       continue;
     }
 
+    const squashProof = squashFixedPointProof({ candidate, live, pr, receiptSha: sealed.sha256 });
+    console.log(`PR=${pr.number} SQUASH_FIXED_POINT=${squashProof.verdict} ROUNDS=${squashProof.rounds} PROGRESS=${squashProof.progress_measure}/${squashProof.universe_size}`);
+    if (!squashProof.ready) {
+      if (squashProof.verdict === "REFUTED_IN_SCOPE") {
+        await upsertBlockComment(client, repository, {
+          ...live,
+          decision: "BLOCKED",
+          reasons: [...(live.reasons || []), "SQUASH_FIXED_POINT_NOT_PROVED"],
+        });
+      }
+      continue;
+    }
+
     const result = await client.request("PUT", `/repos/${repository}/pulls/${pr.number}/merge`, {
       sha: pr.head.sha,
       merge_method: "squash",
@@ -557,11 +1012,15 @@ async function runPromote() {
         `Judge-Receipt-SHA256: ${sealed.sha256}`,
         `Authorization: ${live.authorization.authority || "UNKNOWN"}`,
         `Intent-Scope: ${live.authorization.intent_scope || "label-persistente"}`,
+        `Squash-Fixed-Point: ${squashProof.verdict}`,
+        `Squash-Logic: ${squashProof.basis}`,
+        `Achilles-Guard: ${squashProof.achilles_guard}`,
+        `Self-Reference-Guard: ${squashProof.self_reference_guard}`,
       ].join("\n"),
     });
     if (!result.merged) throw new Error(`MERGE_REJECTED:${pr.number}:${result.message || "unknown"}`);
     console.log(`PR=${pr.number} MERGED_SHA=${result.sha}`);
-    await upsertSuccessComment(client, repository, live, result.sha, sealed.sha256);
+    await upsertSuccessComment(client, repository, live, result.sha, sealed.sha256, squashProof);
 
     await client.request("POST", `/repos/${repository}/dispatches`, {
       event_type: "centraldark_post_merge",

@@ -1,36 +1,92 @@
-name: caddy-telepainel-v2
+name: "🌐 CentralDark Site — deploy canônico"
+
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/setup-centraldark-portal.sh"
+      - ".github/workflows/caddy-telepainel-v2.yml"
+
 permissions:
   contents: read
+
+concurrency:
+  group: centraldark-site-production
+  cancel-in-progress: false
+
 jobs:
-  run:
+  deploy-site:
+    name: "🚀 Build + Caddy + prova pública"
+    if: github.repository == 'ServerVpss/CentralDark'
     runs-on: [self-hosted, Linux]
+    timeout-minutes: 20
     steps:
-      - name: setup
+      - name: "📥 Checkout do HEAD"
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 1
+
+      - name: 🧿 TLC23 · Universal · Meta-Lupa · Horn
+        shell: bash
         run: |
-          set -e
+          set -Eeuo pipefail
+          TARGET_SHA="$GITHUB_SHA" REPO_DIR=/root/CentralDark BRANCH=main \
+            bash scripts/vps/deploy-guards-dispatcher.sh --gate-only
+          echo "CANONICAL_DEPLOY_GATE=PASS TARGET_SHA=$GITHUB_SHA"
+
+      - name: "🧬 Build, reconciliar Caddy e publicar"
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          exec 9>/tmp/centraldark-site-deploy.lock
+          flock -w 90 9 || { echo "SITE_DEPLOY_LOCK_TIMEOUT"; exit 21; }
+
+          echo "TARGET_SHA=${GITHUB_SHA}"
+          SOURCE_HEAD="$GITHUB_SHA" bash scripts/setup-centraldark-portal.sh
+
           CF=/etc/caddy/Caddyfile
-          [ -f "$CF" ] || { echo "no caddyfile"; exit 1; }
-          cp "$CF" "$CF.bak.$(date +%s)"
-          if ! grep -q "telepainel.centralldark.com" "$CF"; then
-            {
-              echo ''
-              echo 'telepainel.centralldark.com {'
-              echo '    encode gzip'
-              echo '    reverse_proxy https://telegram-zen-panel-6518f4e2-5d802052.lovable.app {'
-              echo '        header_up Host telegram-zen-panel-6518f4e2-5d802052.lovable.app'
-              echo '        transport http {'
-              echo '            tls'
-              echo '            tls_server_name telegram-zen-panel-6518f4e2-5d802052.lovable.app'
-              echo '        }'
-              echo '    }'
-              echo '}'
-            } >> "$CF"
+          SNIPPET=/root/CentralDark/infra/caddy/portal.Caddyfile
+          IMPORT_LINE='import /root/CentralDark/infra/caddy/portal.Caddyfile'
+
+          test -f "$CF" || { echo "CADDYFILE_ABSENT"; exit 22; }
+          test -f "$SNIPPET" || { echo "PORTAL_SNIPPET_ABSENT"; exit 23; }
+
+          BACKUP="$(mktemp /tmp/Caddyfile.centraldark.XXXXXX)"
+          cp -a "$CF" "$BACKUP"
+          rollback() {
+            rc=$?
+            trap - EXIT ERR
+            if [ "$rc" -ne 0 ]; then
+              echo "SITE_DEPLOY_ROLLBACK rc=$rc"
+              cp -a "$BACKUP" "$CF" || true
+              caddy validate --config "$CF" --adapter caddyfile >/dev/null 2>&1 && systemctl reload caddy || true
+            fi
+            rm -f "$BACKUP"
+            exit "$rc"
+          }
+          trap rollback EXIT ERR
+
+          if ! grep -Fqx "$IMPORT_LINE" "$CF"; then
+            printf '\n%s\n' "$IMPORT_LINE" >> "$CF"
+            echo "CADDY_IMPORT=ADDED"
+          else
+            echo "CADDY_IMPORT=REUSED"
           fi
-          caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+
+          caddy validate --config "$CF" --adapter caddyfile
           systemctl reload caddy
-          sleep 8
-          curl -sI -L --max-time 25 https://telepainel.centralldark.com/ | head -20
-          echo "---"
-          curl -s -L --max-time 25 https://telepainel.centralldark.com/ | head -c 400
+
+          check_url() {
+            url="$1"
+            code="$(curl -sS -L --retry 5 --retry-delay 3 --max-time 20 -o /dev/null -w '%{http_code}' "$url")"
+            echo "PUBLIC_CHECK url=$url code=$code"
+            [ "$code" = "200" ] || return 1
+          }
+
+          check_url https://centralldark.com/
+          check_url https://www.centralldark.com/
+          check_url https://telepainel.centralldark.com/dashboard
+
+          echo "SITE_DEPLOY=PASS"
+          echo "DEPLOYED_SHA=${GITHUB_SHA}"

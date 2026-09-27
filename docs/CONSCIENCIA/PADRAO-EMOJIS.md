@@ -1,90 +1,93 @@
 ---
-title: "Padrão de Emojis — Logs e Notificações"
-date: 2026-07-03
-tags: ["consciencia", "padrao", "logs"]
-updated: 2026-07-03
+title: "🎨 Padrão de Emojis — CentralDark"
+status: "ATIVO_RECONCILIADO"
+date: 2026-08-27
+updated: 2026-09-10
+owner: "docs/CONSCIENCIA/PADRAO-EMOJIS.md"
+truth_scope: "VISUAL_TOKENS_AND_EMOJI_SEMANTICS"
+canonical: true
+tags:
+  - centraldark
+  - consciencia
+  - emojis
+  - visual
+  - gatilhos
+  - grafo-vivo
+related:
+  - "[[PADRAO-RESPOSTA-SEGREDO-CHEFE]]"
+  - "[[PADRAO-GRAFO-VIVO-MARKDOWN]]"
+  - "[[ADM-GATILHOS-OPERACIONAIS]]"
+links:
+  - "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
+  - "docs/CONSCIENCIA/PADRAO-GRAFO-VIVO-MARKDOWN.md"
+  - "docs/SEGURANCA/ADM-GATILHOS-OPERACIONAIS.json"
 ---
 
-# 📢 PADRÃO DE EMOJIS — Fonte da Verdade
+# 🎨 Padrão de Emojis — CentralDark
 
-> Toda IA/script/workflow que gerar log, notificação Telegram, mensagem GitHub ou linha no painel status DEVE usar SÓ esses emojis, na função certa. Nada de emoji aleatório, nada de mix.
+Emoji na Casa é pista visual com significado. Não é decoração, não é prova e não deve contradizer o registry de gatilhos.
 
-## 🚦 Status
-| Emoji | Uso |
-|---|---|
-| ✅ | Sucesso, ok, concluído |
-| ⚠️ | Alerta, atenção, retry |
-| ❌ | Erro, falha final |
-| 🔄 | Em andamento, retry, sincronizando |
-| ⏳ | Aguardando, fila, timeout |
-| 🔒 | Protegido, bloqueado |
+## 🧿 Gatilhos canônicos
 
-## 🛠️ Ação
-| Emoji | Uso |
-|---|---|
-| 🚀 | Deploy, publish |
-| 🛠️ | Fix, correção |
-| 🧠 | Aprendizado registrado |
-| 📦 | Build, install |
-| 🎯 | Passo/objetivo atual |
-| 🔨 | Trabalho em execução (Hermes) |
-| 🧙 | Conselho/tutor debatendo |
-| 📥 | Checkout, download |
-| 📤 | Push, upload |
+A fonte executiva dos gatilhos é `docs/SEGURANCA/ADM-GATILHOS-OPERACIONAIS.json`.
 
-## 🧩 Módulo
-| Emoji | Uso |
-|---|---|
-| 🤖 | Bots Telegram |
-| 📊 | Painel status |
-| 🧬 | HUB (hub.centralldark.com) |
-| 📡 | VPS (PM2, Caddy) |
-| 🗂️ | GitHub |
-| 💾 | Supabase |
-| 📚 | Segundo Cérebro |
-| 🩸 | TelePainel/Fiscal |
-| 🎨 | UI/UX (Esmeralda) |
-
-## 👥 Agentes
-| Emoji | Quem |
-|---|---|
-| 👑 | Pivete (admin) |
-| 🧙 | Fabler (mestre-sábio) |
-| 🔨 | Hermes (executor) |
-| 💎 | Esmeralda (visual) |
-| 🧠 | GPT-5.5 (analista) |
-| ⚡ | Gemini 3 Flash (executor rápido) |
-| 🎯 | GPT-5.4 (preciso) |
-| 🔍 | Gemini 2.5 Pro (cético) |
-| 🎨 | GPT-5 (criativo) |
-
-## 📐 Card padrão (Telegram admin)
-
-```
-🔨 Hermes · Round N · HH:MM
-🎯 Passo: <descrição curta>
-🧙 Conselho: Fabler ✅ | GPT-5.5 ✅ | Gemini Pro ⚠️
-📦 Commit: <sha> → <resumo>
-⏱️ <duração> | 🧠 +N aprendizados
+```text
+👑🪬 !CENTRALDARK
+🔗 !># INTERLIGADOS
+⭕ !AURÉOLA CANÔNICA
+🧿 #ACORDAR
+🎛️ !CALIBRAR
+🧭 !MULTIBÚSSOLA
+🔎 !META_LUPA
+🔄 !RECONCILIAR
+⚖️ !CONTRAPROVA
+🔁 !VERTEX_INVERSO
+🐚 !CARACOL
+💠 !FIXED_POINT
+🧾 !REGISTRA
+🔏 !RASTRO
+🚀 !BOOT
+💎 !DELTAÚTIL
+🪬 !MODO CIRURGIA DE RAIZ
 ```
 
-## 📏 Linha padrão (canal Status)
+## 🧠 Regra de uso
 
+```text
+EMOJI=CONTEXTO
+EMOJI != PROOF
+EMOJI_NAO_SUBSTITUI_SIGNIFICADO=true
+CANONICAL_TRIGGER_DISPLAY_MUST_MATCH_REGISTRY=true
 ```
-🔨 Hermes ▓▓▓▓▓░░░░░ 50% · <missão> · round N/~T
+
+## 🫀 Mapa semântico mínimo
+
+- 👑 autoridade humana / Chefe
+- 🧠 ideia, mente, memória, plano
+- 🫀 estado vivo da Casa
+- 🔗 conexão, interligação, grafo
+- 🏛️ GitHub / fonte oficial
+- ☁️ Drive / espelho humano
+- 🏠 Casa local
+- 🖥️ VPS / servidor
+- 🔌 MCP / conector
+- 🚪 porta / entrada técnica
+- 🧾 receipt / rastro
+- ⚖️ realidade / juiz
+- ❓ unknown
+- ⚠️ atenção / pendência
+- 🔴 falha
+- 🟡 parcial
+- 🟢 provado/ok quando medido
+
+## ⚖️ Leis
+
+```text
+BIBLICAL_NARRATIVE != PROOF
+EGYPTIAN_IMAGERY != ARCHITECTURAL_AUTHORITY
+RESENHA_CONTEXTUAL != STATUS
+LINK != PROOF
+UNKNOWN != PASS
 ```
 
-## ❌ Nunca
-- Emoji sem função (decorativo).
-- Empilhar (✅✅✅).
-- Bandeiras, comidas, mãos em log técnico.
-
-**Fonte da verdade:** este arquivo.
-
----
-
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
+Quando houver conflito entre este arquivo e o registry, o registry vence para gatilhos. Este arquivo explica o uso visual humano.

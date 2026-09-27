@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GatewayCard } from './GatewayCard';
 import { OAuthConnectors } from './OAuthConnectors';
+import { HybridMcpAdminCard } from './HybridMcpAdminCard';
 import { useMCP } from '@/hooks/useMCP';
 
 interface Connector {
@@ -20,7 +21,7 @@ export function ConnectorsTab() {
   useEffect(() => {
     const mockConnectors: Connector[] = [
       { id: '1', name: 'MCP Gateway',      type: 'mcp',      status: 'connected', lastPing: new Date().toISOString(), endpoint: 'https://mcp.centralldark.com' },
-      { id: '2', name: 'Telegram MTProto', type: 'telegram', status: 'connected', lastPing: new Date().toISOString(), endpoint: 'https://status.centralldark.com/mtproto' },
+      { id: '2', name: 'Telegram MTProto', type: 'telegram', status: 'disconnected', lastPing: new Date(0).toISOString(), endpoint: '/api/telegram/mtproto' },
       { id: '3', name: 'Supabase HUB',     type: 'database', status: 'connected', lastPing: new Date().toISOString(), endpoint: 'https://lyoigsqluyktoclwdaft.supabase.co' },
     ];
     setConnectors(mockConnectors);
@@ -34,6 +35,9 @@ export function ConnectorsTab() {
   return (
     <div className="space-y-6 p-6">
       <h2 className="text-2xl font-bold">Conectores</h2>
+
+      {/* 🔌 Admin híbrido: MCP público + túnel local/Remote Desktop Commander */}
+      <HybridMcpAdminCard />
 
       {/* 🔒 Bloco OAuth (Grok/Notion/Drive/GitHub) — fallback local ativo enquanto broker/DB pendente */}
       <OAuthConnectors />

@@ -1,0 +1,17 @@
+flowchart TD
+    A[CHEFE_INTENT] --> B[DESTINATION_LOCK]
+    B --> C[MEASURE_LIVE_STATE]
+    C --> D[SEARCH_ALL_PATHS]
+    D --> E[RESOLVE_OWNER]
+    E --> F[ACQUIRE_WRITER]
+    F --> G[EXECUTE_MIN_DELTA]
+    G --> H[COLLECT_EVIDENCE]
+    H --> I[COUNTERPROOF]
+    I --> J{REALITY_JUDGE}
+    J -->|PROVADO| K[RETURN]
+    J -->|NAO| L[REMEDIATE / ESCALATE]
+    L --> C
+    K --> M[FECHAMENTO]
+    style A fill:#ffd700,stroke:#333
+    style J fill:#ff6b6b,stroke:#333
+    style K fill:#51cf66,stroke:#333

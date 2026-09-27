@@ -4,7 +4,7 @@
   "marker": "PROOF_OWNERSHIP_REQUIRED",
   "coverage_status": "PARTIAL_EXPLICIT",
   "scope": "TOPOLOGY_ONLY",
-  "purpose": "Impedir prova circular, duplicacao de responsabilidade e PASS fabricado pelo proprio provador sem fingir que topologia prova a invariavel factual.",
+  "purpose": "Impedir prova circular, duplicacao de responsabilidade, PASS fabricado pelo proprio provador e claims de cobertura/ferramenta maiores que a observacao; exigir caminho verificavel e proporcional entre autoridade, enforcement, efeito e prova sem fingir que topologia, inventario ou listagem provam runtime ou leitura de conteudo.",
   "global_rules": {
     "self_validation_without_independent_counterproof": "UNPROVEN",
     "circular_proof": "UNPROVEN",
@@ -18,6 +18,21 @@
     "graph_structure_ok_is_not_invariant_proof": true,
     "external_anchor_must_be_observed_by_responsible_prover": true,
     "execution_status_is_out_of_scope": true,
+    "operational_claim_requires_enforcement": true,
+    "operational_claim_without_complete_chain": "UNPROVEN",
+    "documented_is_executed": false,
+    "declared_is_enforced": false,
+    "configured_is_active": false,
+    "implemented_is_reachable": false,
+    "triggered_is_completed": false,
+    "completed_is_correct": false,
+    "historical_pass_is_current_pass": false,
+    "proof_target_must_match_claim": true,
+    "local_fixed_point_is_end_of_intent": false,
+    "tool_unavailable_without_attempt": "UNPROVEN",
+    "source_listing_is_content_read": false,
+    "repository_tree_is_full_content_read": false,
+    "partial_retrieval_is_total_coverage": false,
     "credit_attribution_is_not_proof_ownership": true,
     "credit_does_not_confer_authority": true,
     "credit_does_not_prove_claim": true,
@@ -27,6 +42,89 @@
     "reputation_cannot_receive_unobserved_proof_credit": true,
     "multiple_material_credits_can_coexist": true,
     "reality_judges_claims_not_people": true
+  },
+  "operational_claim_policy": {
+    "marker": "OPERATIONAL_CLAIM_REQUIRES_ENFORCEMENT",
+    "applies_to": "CLAIMS_THAT_PRODUCE_OR_GOVERN_BEHAVIOR",
+    "technology_lock": false,
+    "enforcement_must_be_proportional": true,
+    "runtime_status_is_topology_proof": false,
+    "live_state_must_be_measured": true,
+    "monitoring_requires_real_mechanism": true,
+    "fixed_point_scope_required": true,
+    "duplicate_only_when_same_authority_and_capability": true,
+    "preserve_layer_specific_implementations": true,
+    "required_chain": [
+      "claim",
+      "authority",
+      "owner",
+      "contract",
+      "implementation_or_consumer",
+      "enforcement",
+      "execution",
+      "observable_effect",
+      "proof_target",
+      "receipt",
+      "counterproof",
+      "live_state",
+      "judge",
+      "fixed_point_scope"
+    ],
+    "classifications": [
+      "ENFORCED",
+      "PARTIAL",
+      "DOCUMENTATION_ONLY",
+      "ORPHAN",
+      "UNKNOWN",
+      "NOT_APPLICABLE"
+    ],
+    "non_pass_states": [
+      "UNKNOWN",
+      "PENDING",
+      "QUEUED",
+      "SKIPPED",
+      "CANCELLED"
+    ],
+    "mechanism_profiles": {
+      "CODE_RULE": ["test", "linter", "ci_when_applicable"],
+      "API_CONTRACT": ["schema", "implementation", "consumer_test"],
+      "WORKFLOW": ["trigger", "execution", "receipt"],
+      "DEPLOY": ["artifact", "runtime", "health_or_telemetry"],
+      "PANEL": ["real_source", "consumer", "validation"],
+      "ADMIN_DOCUMENTATION": ["owner", "marker_or_registry", "consumer", "scanner_or_gate_when_applicable"],
+      "OPERATIONAL_MEMORY": ["canonical_owner", "provenance", "dedupe", "absorption"],
+      "COMMAND": ["registry", "parser_or_consumer", "observable_behavior"],
+      "SECURITY": ["policy", "enforcement", "adversarial_test_when_applicable"],
+      "SOURCE_COVERAGE": ["source_selection", "inventory", "content_read", "coverage_receipt", "countercheck"],
+      "HUMAN_NON_AUTOMATABLE_RULE": ["explicit_authority", "procedure", "proportional_evidence_or_review"]
+    },
+    "coverage_claim_policy": {
+      "marker": "SOURCE_COVERAGE_RECEIPT_REQUIRED",
+      "applies_when_scope_is": [
+        "ALL",
+        "WHOLE",
+        "ENTIRE",
+        "100%",
+        "COMPLETE",
+        "EXHAUSTIVE"
+      ],
+      "tool_attempt_required_before_unavailable_claim": true,
+      "tree_or_listing_counts_as_content_read": false,
+      "partial_retrieval_counts_as_total_coverage": false,
+      "required_receipt_fields": [
+        "source_and_ref",
+        "inventory_denominator",
+        "content_read_numerator",
+        "skipped_or_excluded",
+        "truncation_or_pagination",
+        "method",
+        "limitations"
+      ],
+      "missing_denominator": "NOT_MEASURED",
+      "unattempted_unavailability": "UNPROVEN",
+      "tree_only_content_claim": "UNPROVEN",
+      "partial_as_total": "UNPROVEN"
+    }
   },
   "allowed_proof_classes": [
     "authenticated_authority"
@@ -43,7 +141,8 @@
     "negative_test",
     "counterproof",
     "external_anchor",
-    "depends_on"
+    "depends_on",
+    "operational_chain"
   ],
   "unregistered_known_invariants": [
     {
@@ -76,7 +175,23 @@
         "event_field": "pull_request.labels",
         "observation": "label autenticada observada no payload real de GITHUB_EVENT_PATH; arquivo seed isolado nao prova presenca da label"
       },
-      "depends_on": []
+      "depends_on": [],
+      "operational_chain": {
+        "claim": "AUTHORITY_APPROVAL_CURRENT_GITHUB_EVENT",
+        "authority": "SEGREDO/CHEFE",
+        "owner": "docs/CONSCIENCIA/02-PERMISSOES.md",
+        "contract": "docs/CONSCIENCIA/PROOF-OWNERSHIP.json",
+        "implementation_or_consumer": "scripts/lupa/authority-approval.mjs",
+        "enforcement": ".github/workflows/porta-de-entrada.yml",
+        "execution": "GITHUB_ACTIONS_CURRENT_EVENT",
+        "observable_effect": "AUTHORITY_APPROVED_OUTPUT_FOR_CURRENT_EVENT",
+        "proof_target": "CURRENT_GITHUB_EVENT_AUTHORITY_DECISION",
+        "receipt": ".github/workflows/porta-de-entrada.yml",
+        "counterproof": "scripts/lupa/authority-approval.test.mjs",
+        "live_state": "MEASURE_AT_RUNTIME",
+        "judge": "REALITY_CURRENT_GITHUB_EVENT",
+        "fixed_point_scope": "AUTHORITY_APPROVAL_CURRENT_EVENT"
+      }
     }
   ]
 }

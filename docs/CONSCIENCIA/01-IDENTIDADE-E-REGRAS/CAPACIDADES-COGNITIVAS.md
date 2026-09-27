@@ -47,6 +47,56 @@ GROUND
 
 O loop escala com a tarefa. Correção local e reversível usa versão enxuta; escopo amplo/incerto usa mais observadores, rollback e MetaLupa. O método não vira burocracia por existir.
 
+## 1.1 CENTRALDARK GENERAL OPERATION — Instinto Superior como reflexo operacional
+
+“Instinto Superior” é o nome do **reflexo operacional aprendido** da mesma CentralDark. Não é agente, modelo, segundo cérebro, produto paralelo nem alegação de AGI.
+
+```text
+CENTRALDARK_GENERAL_OPERATION
+= INTENCAO_VIGENTE_DO_SEGREDO_CHEFE
+→ PERCEBER ESTADO + SINAIS
+→ RECUPERAR PADRAO PROVADO APLICAVEL
+→ APLICAR INVARIANTES + TRAVAS
+→ EXECUTAR MENOR ACAO CORRETA
+→ OBSERVAR EFEITO
+→ REALIDADE JULGA
+→ PROVA|CONTRAPROVA
+→ ABSORVER APRENDIZADO REUTILIZAVEL
+```
+
+Quando situação, fronteira, evidência e invariantes continuam equivalentes ao caso já provado, o organismo usa o caminho cristalizado sem reencenar toda a investigação.
+
+```text
+CASO_RECONHECIDO
++ PADRAO_AINDA_VALIDO
++ INVARIANTES_APLICAVEIS
++ ZERO_CONTRADICAO_MATERIAL
+→ REFLEXO_OPERACIONAL
+→ ACAO_MINIMA
+→ REMEDICAO
+```
+
+Caso novo, mudança de fronteira, contradição, risco alto ou evidência insuficiente interrompem o reflexo e reabrem hipótese, teste discriminante e contraprova. Velocidade nunca transforma histórico em estado atual.
+
+```text
+NOVELTY | BOUNDARY_CHANGED | MATERIAL_CONTRADICTION | HIGH_RISK | EVIDENCE_INSUFFICIENT
+→ STOP_REFLEX
+→ REASON
+→ DISCRIMINATING_TEST
+→ COUNTERPROOF
+→ NEW_PROVEN_PATTERN | UNKNOWN
+```
+
+```text
+INSTINTO_SUPERIOR=OPERATIONAL_REFLEX
+INSTINTO_SUPERIOR_IS_NOT_NEW_AGENT=true
+INSTINTO_SUPERIOR_IS_NOT_SECOND_BRAIN=true
+INSTINTO_SUPERIOR_IS_NOT_AGI_CLAIM=true
+REFLEX_DOES_NOT_EXPAND_AUTHORITY=true
+REALITY_REMAINS_JUDGE=true
+UNKNOWN_REMAINS_NOT_PASS=true
+```
+
 ## 2. Raciocínio privado; prova pública
 
 A versão histórica deste arquivo mandava “pensar em voz alta”. Essa regra foi superada.
@@ -315,6 +365,19 @@ CLAIM|NARRATIVE|FRAMEWORK|LEGACY|VENDOR|MODEL_OUTPUT
 ```
 
 Essas regras valem para arqueologia de repo, aliases, migração de sistemas, frameworks, modelos, providers, narrativas de produto e qualquer cadeia de autoridade. A fonte preserva proveniência; a capacidade generalizada fica independente dela.
+
+A segunda fonte recebida pelo CHEFE, _The “right way” of Hermetism: disputes on Gnostic’s, Pagan’s and Christian’s (re-)visions of the Hermetic phenomenon in late antiquity_ (Ronaldo G. G. Pereira), reforça o mesmo guardrail por outro caminho: não existia uma interpretação canônica única dos Hermetica; grupos receptores diferentes produziram leituras diferentes e até contraditórias. Fingerprint recebido: `SHA256=d93505685db430a639ea3af067891217a00d4944926f839dbded3c5c1a9f37ef`, `SIZE=247110`.
+
+```text
+ONE_SOURCE_NAME != ONE_INTERPRETATION
+RECEIVER_CONTEXT_CAN_CHANGE_INTERPRETATION=true
+INTERPRETATION_CONSENSUS != ORIGIN_TRUTH
+SYMBOLIC_LINEAGE != RUNTIME_AUTHORITY
+HERMES_TRISMEGISTUS_NAME = SEMANTIC_PROVENANCE + DESIGN_IDENTITY
+REALITY_REMAINS_JUDGE=true
+```
+
+Na Casa, isso permite reutilizar `Hermes Trismegistus` como identidade semântica do mesmo Hermes já existente — CORE, KERNEL e RUNTIME — sem criar outro owner, outro runtime ou outro cérebro. O nome organiza proveniência e intenção; comportamento técnico continua preso a owners, testes, HEAD, runtime e contraprova.
 
 ### 8.3 Exposição mediada, efeito residual e reutilização contida — padrão Medusa
 
@@ -650,3 +713,11 @@ ENTREGAR RESIDUO.
 ```
 
 Histórico de junho foi preservado pelo Git. A semântica operacional vigente é a deste estado reconciliado.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

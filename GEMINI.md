@@ -1,52 +1,45 @@
-# GEMINI.md — boot universal CentralDark
-
-Este arquivo adapta Gemini ao contrato único do repositório. Não cria governança paralela.
-
-Ao abrir/retomar missão:
-
-1. `LEIA-ME-IA.md`;
-2. `AGENTS.md`;
-3. `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`;
-4. `docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md`;
-5. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`;
-6. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando aplicável;
-7. `.agents/skills/meta-lupa/SKILL.md` em tarefa crítica;
-8. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para identidade da skill;
-9. medir branch, HEAD, writer, runtime e tools;
-10. emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
+# Gemini — adaptador fino CentralDark
 
 ```text
-SEGREDO/CHEFE = humano e autoridade final
-SOL = identidade operacional/coordenadora; não é modelo específico
-PIVETE/HERMES = executor, preservação e continuidade
-"pivete" regional = vocativo informal
+CANONICAL_AGENT_CORE=LEIA-ME-IA.md
+ADAPTER_ROLE=ENGINE_DISCOVERY_ONLY
+ENGINE=GEMINI
 ```
 
-Gemini é motor/especialista substituível dentro da mesma SOUL.
+Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e siga o roteamento canônico definido ali. O core carrega identidade, autoridade, governança, frequências, MetaLupa, Multibússola, remediação, prova, memória, Writer e módulos sob demanda.
+
+
+Este adaptador só informa qual engine/superfície chegou. Capacidades e ferramentas físicas devem ser medidas no runtime atual.
 
 ```text
-#ACORDAR = recuperar estado real antes de continuar
-!CALIBRAR = alinhar leitura + papel + escopo + tools + evidência
+ONE_SOL=true
+ONE_CORE=true
+LAZY_LOAD_BY_DEMAND=true
+ENGINE_IS_REPLACEABLE=true
+TOOLS_REQUIRE_RUNTIME_MEASUREMENT=true
+DO_NOT_DUPLICATE_GOVERNANCE=true
+DO_NOT_DEFINE_IDENTITY=true
+DO_NOT_DEFINE_AUTHORITY=true
+DO_NOT_DEFINE_MERGE_POLICY=true
+DO_NOT_DEFINE_MEMORY=true
+DO_NOT_CREATE_PARALLEL_AGENT=true
+FUTURE_RULES_CONSUMED_FROM_CORE=true
 ```
 
-Regras:
+Regra de compatibilidade: se uma particularidade exclusiva do Gemini precisar ser documentada, registrar somente a diferença física da superfície/tool. Regras comuns pertencem ao core, nunca a este arquivo.
 
-- SEGREDO/CHEFE é autoridade final.
-- Não pedir contexto/estado que a máquina consegue recuperar.
-- Mensagem atrasada não reinicia missão.
-- Evidência nova vence contexto antigo.
-- Um writer por escopo.
-- Tool não medida = UNKNOWN.
-- Não criar memória, identidade ou sistema paralelo.
-- Quando merge/promoção já estiver autorizado no mesmo escopo, não re-perguntar.
+## Ponteiros canônicos verificáveis
+
+Este adaptador carrega os owners `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`, `.agents/skills/meta-lupa/SKILL.md` e `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` por meio de `LEIA-ME-IA.md`, e emite `CENTRALDARK_AI_BOOT`. Esses ponteiros são referências verificáveis; não duplicam governança.
+
+
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
 
 ```text
-INTENT_AUTHORIZED=true
-NO_HUMAN_REASK_FOR_MERGE=true
-MERGE_METHOD=squash
-TARGET=main
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 ```
 
-PR elegível registra `Intent-Authorized: SEGREDO/CHEFE` e `Merge-Policy: AUTO_SQUASH_IF_CLEAN`. Sem conflito + validação aplicável + sem bloqueio material = concluir squash merge.
-
-Production-first autorizado usa menor blast radius. Convergência adversarial total só é aberta quando SEGREDO/CHEFE solicitar prova específica.
+Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.

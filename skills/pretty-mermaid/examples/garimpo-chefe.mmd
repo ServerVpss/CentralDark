@@ -1,0 +1,23 @@
+flowchart LR
+    subgraph CHEFE[Pasta do CHEFE]
+        ZIP[agi-self-improvement.zip]
+    end
+    subgraph GARIMPO[Hermes Garimpo]
+        EXTRACT[extrai .zip]
+        READ[le arquivos .py]
+        FIND[identifica ouro]
+        CRYSTAL[cristaliza no NUCLEO]
+    end
+    subgraph NUCLEO[NUCLEO]
+        OURO[OURO-SELF-HEALING.md]
+    end
+    ZIP --> EXTRACT
+    EXTRACT --> READ
+    READ --> FIND
+    FIND -->|padrao reutilizavel| CRYSTAL
+    FIND -->|ruido| DROP[descarta]
+    CRYSTAL --> OURO
+    OURO -. mapeia p/ Casa .- FLUXO[Fluxo Canonico]
+    style ZIP fill:#ffd700,stroke:#333
+    style OURO fill:#51cf66,stroke:#333
+    style FIND fill:#4dabf7,stroke:#333

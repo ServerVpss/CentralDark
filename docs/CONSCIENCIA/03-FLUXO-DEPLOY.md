@@ -2,7 +2,7 @@
 title: "03 FLUXO DEPLOY"
 date: 2026-06-29
 tags: ["consciencia"]
-updated: 2026-08-14
+updated: 2026-09-05
 ---
 
 # 03 — Fluxo de deploy
@@ -24,6 +24,117 @@ SUBIR
 ```
 
 `PRODUCTION_FIRST` não significa falso verde. Significa usar o runtime real como fonte de observação sem exigir perfeição global antes da primeira visualização.
+
+## Micro-commits + micro-deploys — padrão oficial da Casa
+
+A Casa promove deltas pequenos e causais sempre que a topologia permitir. O objetivo é reduzir ruído, blast radius e tempo entre observação → correção → prova.
+
+```text
+MICRO_COMMIT_POLICY=CANONICAL
+MICRO_DEPLOY_POLICY=CANONICAL
+ONE_INTENT_PER_MICRO_COMMIT=true
+DEPLOY_SCOPE_MUST_MATCH_CAUSAL_SCOPE=true
+FULL_DEPLOY_BY_DEFAULT=false
+```
+
+Fluxo oficial:
+
+```text
+👑 INTENÇÃO + GOAL
+→ 🧿 DELTA MATERIAL
+→ ⊛ CAUSA / OWNER
+→ 🪡 MENOR CORREÇÃO COMPATÍVEL
+→ 🧾 MICRO-COMMIT COM SELO SEMÂNTICO
+→ 🧪 GATES APLICÁVEIS NO HEAD EXATO
+→ 📦 ARTEFATO/COMPONENTE DO MESMO SHA
+→ 🚀 MICRO-DEPLOY DO ESCOPO CAUSAL
+→ 🔬 PROVA NO RUNTIME/LOG
+→ 🧾 RECEIPT SHA→ARTEFATO→DEPLOY→RUNTIME
+→ 🐚 CURSOR PARA CONTINUAR OU REVERTER
+```
+
+### Leis de não-confusão
+
+```text
+MICRO_COMMIT != MICRO_DEPLOY
+MICRO_DEPLOY != GLOBAL_READY
+COMMITTED != DEPLOYED
+MERGED != DEPLOYED
+DEPLOYED_COMPONENT != WHOLE_SYSTEM_DEPLOYED
+WORKFLOW_GREEN != RUNTIME_PROOF
+OLD_HEAD != PROOF_FOR_NEW_HEAD
+UNKNOWN != PASS
+```
+
+Um micro-commit registra uma intenção material e reconstruível no Git. Um micro-deploy promove somente o componente/artefato compatível com aquele delta. Nenhum dos dois autoriza dizer que o organismo inteiro está pronto.
+
+### Quando micro-deploy é permitido
+
+Micro-deploy é preferido quando:
+
+- o componente tem owner identificável;
+- o artefato pode ser construído/provido isoladamente;
+- contratos compartilhados não foram quebrados;
+- dependências afetadas são conhecidas;
+- rollback do mesmo escopo existe;
+- a prova do runtime consegue ligar o resultado ao SHA promovido.
+
+### Quando escalar para deploy maior
+
+Escalar somente quando houver causa técnica real:
+
+- dependência compartilhada mudou;
+- contrato/schema global mudou;
+- artefato é monolítico/indivisível;
+- migração exige coordenação global;
+- runtime não suporta promoção isolada;
+- deploy parcial criaria incompatibilidade maior;
+- o Reality Judge provar que o cone causal atravessa mais de um componente.
+
+### Micro-commit legível no Git
+
+Mensagens automáticas e humanas devem seguir o padrão da Casa:
+
+```text
+<SELO> <escopo>: <ação curta ou resultado material>
+```
+
+Exemplos:
+
+```text
+🤖 deps: atualizar dependências do Bolt
+📊 painel: registrar estado da main
+🪡 reconciliar: absorver conflito do Dependabot
+🧭 router: corrigir failover de modelo
+🔊 voz: usar API oficial antes do fallback
+🧿 sentinela: detectar drift de rota
+🚀 deploy: promover componente do SHA provado
+```
+
+O selo é pista semântica, não prova. O SHA, os gates aplicáveis e o receipt do runtime continuam sendo a prova.
+
+### Receipt obrigatório de micro-deploy
+
+Quando houver promoção real, registrar quando aplicável:
+
+```text
+MICRO_DEPLOY_ID=
+INTENT_GOAL=
+COMPONENT=
+OWNER=
+SOURCE_SHA=
+ARTIFACT=
+GATES_HEAD_EXATO=
+PREVIOUS_RUNTIME=
+NEW_RUNTIME=
+RESULT=
+ROLLBACK_TARGET=
+LOG_SOURCE=
+RUNTIME_RECEIPT=
+NEXT_CURSOR=
+```
+
+Se algum campo material estiver desconhecido, manter `UNKNOWN`; não preencher por inferência.
 
 ## Deploy causal / menor blast radius
 
@@ -154,9 +265,19 @@ Mudança que afete dependência, porta, variável, serviço, pasta, rota ou migr
 
 ```text
 MENOR_CODIGO
++ MICRO_COMMIT_RECONSTRUIVEL
 + MENOR_BUILD
-+ MENOR_DEPLOY
++ MICRO_DEPLOY_CAUSAL
 + MENOR_BLAST_RADIUS
 + PROVA_NO_RUNTIME
 = MENOS_E_MAIS
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[PADRAO-RESPOSTA-SEGREDO-CHEFE]] — linguagem e perfis oficiais
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

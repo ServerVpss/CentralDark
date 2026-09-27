@@ -40,3 +40,11 @@ UNKNOWN != PASS
 ```
 
 O conteúdo anterior permanece no histórico Git para proveniência técnica.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

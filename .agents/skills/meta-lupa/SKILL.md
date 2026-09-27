@@ -82,7 +82,140 @@ Escalonamento: comece FRIA; contradição escala para MÉDIA; criticidade, recor
 13. Tratar área consolidada como bloqueada por padrão; confiança alta não desfaz trava.
 14. Executar AutoLupa sobre o próprio veredito até atingir ponto fixo evidencial, sem limite artificial de iterações e sem prometer certeza absoluta.
 15. Nenhuma promessa de alinhamento, aprendizado ou comportamento permanente pode exceder a capacidade observável do agente. Sem mecanismo persistente comprovado, rebaixar `sempre`, `nunca mais`, `garanto`, `não repetirei` ou equivalente para uma alegação testável no escopo atual.
-15. Tratar confronto útil como fonte de informação: sobreviver, cair ou permanecer UNKNOWN só vira aprendizado quando existe evidência nova e delta reutilizável de crença/regra/teste.
+16. Tratar confronto útil como fonte de informação: sobreviver, cair ou permanecer UNKNOWN só vira aprendizado quando existe evidência nova e delta reutilizável de crença/regra/teste.
+
+## Gate de realidade distribuída, tempo, escopo e Writer
+
+A Meta Lupa deve provar não só **se algo é verdade**, mas **onde, quando, em qual SHA, em qual superfície e sob qual Writer** essa verdade vale. Em sistemas distribuídos, uma evidência correta no lugar errado ou no tempo errado é falso verde.
+
+Antes de aceitar alegação operacional material, fixar:
+
+```text
+TARGET:
+SCOPE:
+OWNER:
+WRITER:
+SOURCE_OF_TRUTH:
+OBSERVED_AT:
+HEAD_SHA/CANDIDATE_REF:
+AUTH_STATE:
+RUNTIME_STATE:
+PROOF_STATE:
+```
+
+### Invariantes de realidade distribuída
+
+```text
+CURRENT > HISTORY
+ACTION != PROOF
+DOCUMENTED != EXECUTED
+COMMITTED != DEPLOYED
+MERGED != DEPLOYED
+EXISTS != RUNNING
+TOOL_LISTADO != TOOL_ATIVO
+CAPABILITY != AUTHORITY
+AUTH_REQUIRED != FAIL
+SOURCE_PATTERN != RUNTIME_PROOF
+DEVELOPMENT_MATERIAL != RUNTIME_PROOF
+UI_TRUNCATED != CONFIG_INVALID
+```
+
+`AUTH_REQUIRED` significa fronteira humana de consentimento/autenticação naquele canal. Não deve ser promovido a `FAIL` nem bloquear rotas independentes que possuam owner e autorização próprios.
+
+### Matriz de fontes da verdade
+
+Não existe uma fonte física única para todos os fatos. Resolver a fonte pela natureza do claim:
+
+```text
+CODE/VERSIONAMENTO        -> Git/repositório canônico
+BUILDER/EDITOR            -> builder observado (ex.: Lovable), sem substituir Git
+CI/CHECKS                 -> provedor CI no HEAD exato
+VPS_RUNTIME               -> processo/health/log medido na VPS
+WINDOWS_RUNTIME           -> processo/bridge/health medido na Casa
+AUTH                      -> provedor OAuth/secret binding aplicável
+PACKAGE/ARTEFATO          -> arquivo + hash + manifesto + proveniência
+DEPLOY                    -> artefato/SHA implantado + runtime remensurado
+```
+
+Uma fonte não herda autoridade probatória de outra. `BUILDER_DONE` não prova `CANONICAL_REPO_UPDATED`; `MERGED` não prova `RUNTIME_RUNNING`; screenshot não prova valor subjacente quando a UI pode truncar.
+
+### Writer por escopo, não Writer global
+
+```text
+PARALLEL_PERCEPTION_ALLOWED=true
+PARALLEL_MUTATION_DISJOINT_SCOPES_ALLOWED=true
+PARALLEL_MUTATION_SAME_SCOPE=false
+ONE_WRITER_PER_SCOPE=true
+ONE_WRITER_GLOBAL=false
+```
+
+Múltiplos agentes podem observar, testar e produzir deltas em paralelo. Escrita material concorrente é proibida somente quando os `MUTABLE_SCOPE`s se sobrepõem. Para o mesmo escopo, serializar por lease/handoff:
+
+```text
+OLD_WRITER_RELEASE
+→ HANDOFF_RECEIPT
+→ NEW_WRITER_ACQUIRE
+→ REMEASURE_BASELINE
+→ MUTATE
+```
+
+Repo igual não implica escopo igual; arquivo diferente não garante escopo diferente. Resolver escopo pela capacidade/owner/consumidores e pelo cone de impacto.
+
+### Estado operacional não binário
+
+Separar certeza epistemológica de estado operacional:
+
+```text
+PASS | RUNNING | BLOCKED | AUTH_REQUIRED | UNKNOWN | FAIL
+```
+
+Estados compostos são válidos quando evitam falso verde, por exemplo `BUILT_NOT_RUNTIME_PROVEN` e `CONTRACT_EXISTS_RUNTIME_NOT_PROVEN`.
+
+### Evidência de UI
+
+Campo cortado, ellipsis, largura visual ou screenshot parcial não provam configuração inválida. Quando a UI puder truncar:
+
+```text
+UI_RENDERED_VALUE
+→ EXPAND/TOOLTIP/API/LOG/COMMAND
+→ UNDERLYING_VALUE
+→ VERDICT
+```
+
+Sem segundo canal, manter `UNKNOWN`.
+
+## Roteamento mental distribuído dentro de `.agents/skills`
+
+A Meta Lupa permanece o owner de falsificação e aceite. As skills abaixo são **lentes especializadas reutilizáveis**, não novos Judges, Writers ou autoridades. Carregar somente as pertinentes; `SKILL_LISTADA != SKILL_CARREGADA` e `TOOL_LISTADO != TOOL_ATIVO`.
+
+```text
+centraldark-operational-method -> método, autorização, Writer e execução CentralDark
+codegraph-partner              -> símbolos, callers/callees, impacto e owner estrutural
+code-validation-sandbox        -> reproduzir bug/fix isoladamente antes de aplicar
+cot-react-loop                 -> observar → agir → medir → corrigir durante debugging
+engine-gap-closure             -> fechar gaps de runtime/router/Writer sem falso verde
+context-synthesis              -> reconciliar código, docs, conversa e fontes externas
+git-analysis                   -> história, refs, diff e causalidade de versionamento
+reality-drift-detector         -> detectar CURRENT divergindo de HISTORY
+fable-loop                     -> estabilizar prova/contraprova até fixed point
+frontend-design                -> material UI/UX quando o escopo for interface
+schema-author                  -> contratos/schema quando a ferida for estrutura de dados
+skill-workshop                 -> alterações de skills sem criar owner paralelo
+```
+
+Roteamento mínimo para debugging de código:
+
+```text
+ERRO
+→ MAPA/OWNER (codegraph-partner quando disponível)
+→ REPRODUÇÃO ISOLADA (code-validation-sandbox quando aplicável)
+→ LOOP DE CORREÇÃO (cot-react-loop)
+→ GAP DE ENGINE/RUNTIME (engine-gap-closure se houver)
+→ CONTRAPROVA E ACEITE (meta-lupa)
+→ FIXED POINT (fable-loop quando necessário)
+```
+
+Se uma skill/tool não estiver realmente disponível no runtime atual, usar o método equivalente permitido e marcar a capacidade ausente como `UNKNOWN`/`UNAVAILABLE`; nunca fingir carregamento.
 
 ## Gate de Mapa Único
 
@@ -129,6 +262,60 @@ Depois da promoção:
 
 Áreas ainda não consolidadas permanecem operáveis dentro da autorização vigente, mas continuam submetidas a mapa, prova, rollback e ausência de regressão.
 
+## Gate determinístico: prova → contraprova → aceite → reconciliação
+
+O fechamento não escolhe entre acreditar em tudo ou rejeitar tudo. Ele examina,
+tenta quebrar, retém somente o que sobrevive e reconcilia o restante sem
+apagar prova boa.
+
+```text
+CANDIDATO
+→ PROVA
+→ CONTRAPROVA_INDEPENDENTE
+→ RESULTADO
+   ├── SURVIVED
+   │   → RETER_BEM_PROVADO
+   │   → ACEITE_DETERMINISTICO
+   │   → SEAL_NO_LEDGER_EXISTENTE
+   │
+   ├── DEFEATED
+   │   → REJEITAR_DELTA_DERROTADO
+   │   → PRESERVAR_BEM_INDEPENDENTE
+   │   → RECONCILIAR
+   │
+   └── UNKNOWN
+       → NÃO_ACEITAR
+       → NÃO_REJEITAR_GLOBALMENTE
+       → NEXT_TEST
+→ AUTOLUPA
+→ FIXED_POINT somente quando não existe residual material
+```
+
+Contrato:
+
+```text
+PROOF_REQUIRED_BEFORE_ACCEPTANCE=true
+COUNTERPROOF_REQUIRED_BEFORE_ACCEPTANCE=true
+ACCEPTANCE_IS_COMPUTED_NOT_VOTED=true
+ACCEPTANCE_RESULT_ENUM=ACCEPTED|PARTIAL|REJECTED|UNKNOWN
+ACCEPTED=PROOF_SURVIVED_COUNTERPROOF_AND_NO_MATERIAL_RESIDUAL
+PARTIAL=ONLY_PROVEN_GOOD_SURVIVES_AND_RESIDUAL_RETURNS_TO_RECONCILIATION
+REJECTED=COUNTERPROOF_DEFEATED_THE_CANDIDATE
+UNKNOWN=INSUFFICIENT_EVIDENCE_NO_PASS
+SURVIVED_COUNTERPROOF_CAN_SEAL=true
+DEFEATED_COUNTERPROOF_MUST_NOT_SEAL=true
+UNKNOWN_COUNTERPROOF_MUST_NOT_SEAL=true
+RECONCILIATION_PRESERVES_PROVEN_GOOD=true
+RECONCILIATION_DISCARDS_ONLY_DISPROVEN_DELTA=true
+SEALED_CLAIM_NO_REEXECUTE_WITHOUT_NEW_MATERIAL_CAUSE=true
+NEW_MATERIAL_CAUSE_REQUIRES_REOPEN_WITH_CAUSE_REF=true
+FIXED_POINT_REQUIRES_DETERMINISTIC_CLOSURE=true
+```
+
+O aceite reutiliza o ledger já existente de claim seals. `SEAL` representa
+aceite determinístico do claim no escopo provado; `REOPEN` exige `cause_ref`
+material. Troca de agente, nova conversa, repetição da mesma discussão ou
+curiosidade sem evidência nova não reabre claim selado.
 ## Camada de tradução obrigatória
 
 Antes de apresentar qualquer equação:

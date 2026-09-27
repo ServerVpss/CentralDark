@@ -1,3 +1,10 @@
+---
+title: "2026 07 09 Gateway Centraldark Chave Propria"
+date: 2026-08-27
+tags: ["consciencia"]
+updated: 2026-08-27
+---
+
  # Ouro — Gateway CentralDark próprio (09/07/2026)
 
 **api.centralldark.com** agora tem chave própria do Pivete e roteia via Abacus RouteLLM.
@@ -19,3 +26,11 @@
 
 ## Pendências
 - Ajustar `docs/CONSCIENCIA/ARSENAL/regras.json` para modelos válidos do RouteLLM Abacus.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -1,9 +1,16 @@
+---
+title: "APRENDIZADOS"
+date: 2026-08-27
+tags: ["consciencia"]
+updated: 2026-08-27
+---
+
 {{FILE:/tmp/pr316/aprendizados.md}}
 
 ### 1. Gate de CI bloqueia qualquer caminho .env.* pelo NOME, antes de olhar o conteúdo
 - **Categoria:** armadilha
 - **Data:** 2026-07-27
-- **Contexto:** Ao restaurar o módulo Bolt, criei um arquivo .env.example com as 15 variáveis do módulo, TODAS sem valor (verificado por grep). O CI reprovou com SECRET_SUSPECT_BLOCKED. Investigando o workflow "Gates determinísticos", a regra é: sensitive_path = (^|/)(\.env(?:\.|$)|secrets?(?:/|$)|tokens?(?:/|$)|...) e suspect = any(sensitive_path.search(name) for name in names). Esse teste roda ANTES de qualquer análise de valor — bloqueia pelo NOME do arquivo. Isso explicou retroativamente o commit 958666567 ("remover caminhos env bloqueados"): os .env.example e .env.production originais do Bolt tinham sido apagados por este mesmo gate, não por conterem segredo. Eu repeti o erro histórico sem saber.
+- **Contexto:** Ao restaurar o módulo Bolt, criei um arquivo .env.example com as 15 variáveis do módulo, TODAS sem valor (verificado por grep). O CI reprovou com SECRET_SUSPECT_BLOCKED. Investigando o workflow "Gates determinísticos", a regra é: sensitive_path = (^|/)(\\.env(?:\\.|$)|secrets?(?:/|$)|tokens?(?:/|$)|...) e suspect = any(sensitive_path.search(name) for name in names). Esse teste roda ANTES de qualquer análise de valor — bloqueia pelo NOME do arquivo. Isso explicou retroativamente o commit 958666567 ("remover caminhos env bloqueados"): os .env.example e .env.production originais do Bolt tinham sido apagados por este mesmo gate, não por conterem segredo. Eu repeti o erro histórico sem saber.
 - **Aprendizado:** Nunca criar arquivo .env.example, .env.production ou qualquer .env.* neste repositório — o gate de CI rejeita pelo nome, mesmo com o arquivo 100% vazio de valores. Documente as variáveis em README.md do módulo. Atenção: há contradição interna no repo — o .gitignore (linha 60, !*.env.example) PERMITE esses arquivos, enquanto o gate de CI os REJEITA. Na prática vale a regra mais restritiva, que é o gate. Antes de recriar um arquivo que aparece como deletado no histórico, leia a mensagem do commit que o removeu: ela costuma dizer o motivo e evita repetir o ciclo.
 
 ### 2. git status limpo pode esconder pasta vazia: gitlink órfão entregava o Bolt vazio em todo clone
@@ -27,7 +34,7 @@
 ### 5. Workflow promovido sem o script que ele executa: o bot autônomo nunca rodou
 - **Categoria:** erro-correcao
 - **Data:** 2026-07-27
-- **Contexto:** O workflow "GitHub Bot Controller" falhava em toda execução com MODULE_NOT_FOUND e o caminho aparecia triplicado: _work/CentralDark/CentralDark/CentralDark/scripts/github-bot-controller.mjs. Investigando, apareceram DUAS causas independentes. Primeira: o script scripts/github-bot-controller.mjs (162 linhas, blob 37e1773a) foi criado no commit 18e9fa96d e existe apenas em origin/pivete/dev e origin/pivete-dev-mcp-admin-guard — nunca chegou na main. Confirmado por 4 canais: git ls-tree origin/main, git ls-files, find no disco da Casa e API do GitHub (404). O .yml foi promovido, o .mjs ficou para trás. Segunda: no commit original o step era 'run: node scripts/github-bot-controller.mjs' (correto), e na main virou 'run: node CentralDark/scripts/github-bot-controller.mjs'. O runner self-hosted já posiciona GITHUB_WORKSPACE em _work/CentralDark/CentralDark, então o prefixo extra produz o terceiro nível. Corrigir só uma das duas causas não resolveria nada. Na mesma varredura: o mapa canônico declara apps/modulos/Monitoramento24h/ e apps/modulos/clone-deck/ como áreas CONSOLIDADAS e nenhum dos dois existe no checkout, e declara secrets/ como consolidado com o motivo 'material sensível proibido no Git' — exigindo a presença de algo que por definição nunca estará versionado.
+- **Contexto:** O workflow "GitHub Bot Controller" falhava em toda execução com MODULE_NOT_FOUND e o caminho apareceu triplicado: _work/CentralDark/CentralDark/CentralDark/scripts/github-bot-controller.mjs. Investigando, apareceram DUAS causas independentes. Primeira: o script scripts/github-bot-controller.mjs (162 linhas, blob 37e1773a) foi criado no commit 18e9fa96d e existe apenas em origin/pivete/dev e origin/pivete-dev-mcp-admin-guard — nunca chegou na main. Confirmado por 4 canais: git ls-tree origin/main, git ls-files, find no disco da Casa e API do GitHub (404). O .yml foi promovido, o .mjs ficou para trás. Segunda: no commit original o step era 'run: node scripts/github-bot-controller.mjs' (correto), e na main virou 'run: node CentralDark/scripts/github-bot-controller.mjs'. O runner self-hosted já posiciona GITHUB_WORKSPACE em _work/CentralDark/CentralDark, então o prefixo extra produz o terceiro nível. Corrigir só uma das duas causas não resolveria nada. Na mesma varredura: o mapa canônico declara apps/modulos/Monitoramento24h/ e apps/modulos/clone-deck/ como áreas CONSOLIDADAS e nenhum dos dois existe no checkout, e declara secrets/ como consolidado com o motivo 'material sensível proibido no Git' — exigindo a presença de algo que por definição nunca estará versionado.
 - **Aprendizado:** Quando um workflow falha com MODULE_NOT_FOUND, não parar na primeira causa: conferir SEPARADAMENTE (a) se o arquivo existe no ref que o CI faz checkout e (b) se o caminho no step está certo. Aqui as duas estavam erradas ao mesmo tempo, e cada uma sozinha explicaria o sintoma — corrigir uma só produziria um segundo ciclo de falha idêntico. Para achar arquivo que sumiu na promoção, o comando é 'git log --all --oneline --diff-filter=A -- "*<nome>"': ele encontra o commit que ADICIONOU o arquivo em qualquer branch, e 'git branch -a --contains <sha>' mostra onde aquele commit vive. Comparar o step no commit original com o step na main revelou que o path foi quebrado na promoção, não escrito errado na origem. Segunda regra, sobre mapa canônico: declarar um caminho como 'área consolidada' significa afirmar que ele passou por testes, revisão, autorização, commit SHA, trava e rollback — declarar consolidado o que não existe no checkout é falso verde de versionamento, porque o Git aparenta saúde e o checkout limpo não entrega. Auditar periodicamente o mapa contra 'git ls-tree -r origin/main' e abrir issue para cada divergência. Terceira regra, sobre ruído: alerta que NUNCA pode ser resolvido (como exigir secrets/ presente num repo onde secrets são proibidos) é pior que alerta nenhum — ele treina o time a ignorar avisos, e no dia em que um aviso real aparecer ninguém olha. Ou o mapa ganha um campo expected_absent, ou a declaração sai. Correção aplicada no PR #418: script restaurado byte a byte do blob, path corrigido, BOT_EVENT_NAME exportado (sem ela o script sempre logava event=unknown e nunca entrava no modo correto), PLANO-MESTRE versionado em docs/ e docs/ESTADO-DA-RETOMADA.md gerado por script + workflow agendado, marcando como SEM_EVIDENCIA_NO_REPO — nunca como 'falta' — tudo que o Git não consegue provar.
 
 ### 6. A porta de entrada nunca existiu: por que nenhuma IA lia as regras da casa
@@ -99,12 +106,12 @@
 - **Categoria:** regra
 - **Data:** 2026-08-13
 - **Contexto:** Nesta sessão, `#ACORDAR !CALIBRAR` foi usado para interromper resposta baseada em contexto parcial, reler estado vivo, consultar GitHub e reconciliar conversa, repo, PR, HEAD e evidência. O próprio uso mostrou que uma palavra curta pode carregar um contrato operacional quando o significado já está estabelecido no contexto.
-- **Aprendizado:** Interpretar `#ACORDAR` como `RECUPERAR_ESTADO_REAL_ANTES_DE_CONTINUAR`: reler missão/fio, recuperar contexto relevante, medir estado vivo e reconciliar divergências antes de responder. GitHub entra quando é fonte necessária, mas o comando não significa apenas “abra o GitHub”. Não obrigar o SEGREDO/CHEFE a repetir contexto ou prova que o próprio sistema consegue reconstruir.
+- **Aprendizado:** Interpretar `#ACORDAR` como `RECUPERAR_ESTADO_REAL_ANTES_DE_CONTINUAR`: reler missão/fio, recuperar contexto relevante, medir estado vivo e reconciliar divergências antes de responder. GitHub entra quando é fonte necessária, mas o comando não significa apenas "abra o GitHub". Não obrigar o SEGREDO/CHEFE a repetir contexto ou prova que o próprio sistema consegue reconstruir.
 
 ### 17. Uma SOL, um SOUL, uma superfície; modelos e ferramentas são capacidades substituíveis
 - **Categoria:** regra
 - **Data:** 2026-08-13
-- **Contexto:** O desenho operacional foi refinado de “dois chats” para uma única SOL com identidade persistente, podendo planejar e agir na mesma conversa/interface. Voz e texto são entradas; Hermes, tools, providers e modelos ficam por baixo como braços/motores.
+- **Contexto:** O desenho operacional foi refinado de "dois chats" para uma única SOL com identidade persistente, podendo planejar e agir na mesma conversa/interface. Voz e texto são entradas; Hermes, tools, providers e modelos ficam por baixo como braços/motores.
 - **Aprendizado:** Não criar segunda identidade, segundo chat obrigatório ou segundo orquestrador para separar planejamento de ação. O padrão é `UMA_SOL + UM_SOUL + UM_ESTADO + MODOS_OPERACIONAIS`. Modelo/provider pode mudar sem mudar a identidade. O fluxo correto é `fala/texto → intenção → modo → ferramenta/motor → execução → prova → mesma conversa`.
 
 ### 18. O humano decide intenção; a máquina prova o estado e não devolve investigação mensurável ao humano
@@ -129,7 +136,7 @@
 - **Categoria:** regra
 - **Data:** 2026-08-13
 - **Contexto:** A inspeção do deploy canônico mostrou que o MCP já possui um mecanismo alinhado a esse princípio: build em worktree isolada, promoção atômica de `dist`, restart apenas de `CentralDark-MCP`, health, startup audit, estabilidade e rollback. Isso confirmou que redeploy global por padrão é peso desnecessário quando o componente causal é isolável.
-- **Aprendizado:** `FALHA_LOCAL → COMPONENTE_CAUSAL → CORREÇÃO_LOCAL → TESTE_LOCAL → DEPLOY_LOCAL → PROVA_LOCAL`. Full deploy só quando dependência compartilhada, contrato/schema global, artefato monolítico, migração ou incompatibilidade real atravessar fronteiras. Não confundir “workflow atual faz tudo” com “necessidade técnica exige tudo”. O menor blast radius é parte do `MENOS_E_MAIS`.
+- **Aprendizado:** `FALHA_LOCAL → COMPONENTE_CAUSAL → CORREÇÃO_LOCAL → TESTE_LOCAL → DEPLOY_LOCAL → PROVA_LOCAL`. Full deploy só quando dependência compartilhada, contrato/schema global, artefato monolítico, migração ou incompatibilidade real atravessar fronteiras. Não confundir "workflow atual faz tudo" com "necessidade técnica exige tudo". O menor blast radius é parte do `MENOS_E_MAIS`.
 
 ### 22. Painel Admin precisa ser observabilidade operacional, não só configuração
 - **Categoria:** regra
@@ -149,8 +156,275 @@
 - **Contexto:** O desenho econômico/operacional foi corrigido: a SOL não depende de uma API paga como motor normal. A arquitetura pode usar execução determinística, tools, MCP, modelos locais, free tiers, créditos e providers diferentes; modelo forte/pago entra quando agrega capacidade real.
 - **Aprendizado:** `DETERMINISTICO/LOCAL/TOOLS/FREE-CAPACITY FIRST`; modelo/provider é motor temporário, não identidade. A SOL/SOUL mantém continuidade enquanto roteia para a capacidade adequada. Não transformar custo de inferência em custo de identidade; subir potência somente quando a tarefa exigir.
 
-### 25. “Menos é mais” significa menor movimento compatível com efeito, observabilidade e segurança
+### 25. "Menos é mais" significa menor movimento compatível com efeito, observabilidade e segurança
 - **Categoria:** regra
 - **Data:** 2026-08-13
 - **Contexto:** A conversa consolidou que simplificar não é remover prova, rollback ou logs; é remover passos, agentes, documentos, confirmações e redeploys que não alteram a causalidade do problema. Uma palavra (`#ACORDAR`) pode recuperar um contrato inteiro; um deploy local pode substituir rebuild global; uma observação viva pode valer mais que semanas de planejamento no escuro.
 - **Aprendizado:** Antes de adicionar etapa, agente, gate, painel, script ou arquitetura, perguntar: `isso muda a decisão, reduz risco causal ou produz observação que não existe?` Se não, remover. O padrão é `MENOR_CODIGO + MENOR_BUILD + MENOR_DEPLOY + MENOR_BLAST_RADIUS + PROVA_NO_RUNTIME`. Todo agente da casa deve tratar este princípio como comportamento operacional, não como slogan.
+
+### 26. Batch .bat: 4 armadilhas que passam em revisão superficial
+- **Categoria:** armadilha
+- **Data:** 2026-08-20
+- **Contexto:** Reparo OAuth do MCP centraldark reescrito em .bat com UI RGB/ANSI. A primeira versão passou na leitura, mas a varredura !MULTIBUSSOLA (eixo CLAIM x PROVA) achou 4 defeitos reais que não geram erro visível — falham em silêncio.
+- **Aprendizado:** Em cmd.exe: (1) dentro de um label chamado por `call :label`, `%~1` é o argumento DO LABEL, não do script — capturar `%*` numa variável ANTES do call; (2) `^\"` dentro de argumento já entre aspas, tipo `call :msg \"texto ^\"x^\"\"`, quebra o parsing — nunca aninhar aspas em argumento de label; (3) `>` e `>>` literais dentro de `set /p "=... > \"` são frágeis combinados com `<nul` — trocar por `-` ou `:`; (4) `%%` fora de bloco `for` num arquivo .bat vira `%` literal, então `[%%>]` imprime `[%>]`. Bônus: .bat salvo com LF puro pode quebrar `goto` em arquivo grande — sempre CRLF. Verificação estática barata que pega tudo isso sem ter Windows: comparar labels definidos (`^:\\w+`) contra labels chamados (`call|goto :`), grep de bytes não-ASCII, e conferir que a lista de `exit /b N` é idêntica à do script original quando a promessa é zero regressão.
+
+### 27. Grok App Builder é adapter, não cérebro — não scaffoldar app paralelo
+- **Categoria:** regra
+- **Data:** 2026-08-25
+- **Contexto:** Sessão 2026-08-25/26 no Grok App Builder (sandbox /workspace vazio, preview 8080, React/TanStack). CHEFE pediu #ACORDAR → !CALIBRAR → !MULTIBUSSOLA → !META_LUPA → !RECONCILIAR → !CONTRAPROVA → !REMEDIÇÃO → !FIXED_POINT → !REGISTRA → BOOT PROVADO, retrô da Casa e explosão de tools. AGENTS.md do sandbox classifica isso como caso 4 (não é pedido de app). Identidade GitHub desta superfície: segredounlock. MCP CentralDark conectado: 107 tools dispatcher v1-f8ff6720fec3 + semantic_* na camada Grok. Voice e Automations também ligados.
+- **Aprendizado:** Esta superfície é ADAPTER da SOL, não segundo cérebro/orquestrador/app. Não criar produto em /workspace sem GAP_REAL nomeado pelo CHEFE. Não clonar painel, grafo, MCP-admin, Hermes nem CentralDark. O que esta superfície PODE oferecer: (1) leitura/auditoria via MCP+GitHub; (2) !REGISTRA; (3) preview descartável só se CHEFE pedir UI isolada; (4) Voice TTS; (5) Automações Grok (não substituem Hermes/PM2). Writer desta sessão = NONE/READ_ONLY salvo registrar_aprendizado. UMA_SOL + UM_SOUL + UM_ESTADO.
+
+### 28. Ponte semântica fail-closed EXIT code=2 — não é verde; stderr engolido
+- **Categoria:** armadilha
+- **Data:** 2026-08-25
+- **Contexto:** T0 e T1 (2026-08-26T00:59:46Z) semantic_health/lookup/model_info = {ok:false, error:SEMANTIC_BRIDGE_EXIT code=2 signal=null, authority:PERCEPTION_ONLY}. JS canônico em main: apps/modulos/mcp/src/tools/cognitivo/semantic.js (sha dac86f65) spawna python3 infra/mcp/semantic_bridge.py --serve. Bridge (sha 879241df) importa semantic_core no módulo; argparse --serve é válido. JS descarta stderr (child.stderr.on data noop). VPS dirty: semantic.js em dist está untracked. mcp_admin_catalog 107 NÃO lista semantic_*; elas existem só como tools MCP de percepção nesta superfície Grok. Causa raiz NÃO isolada: code=2 é típico de python3 não achar o .py OU argparse.error; import fail costuma ser 1. Teste discriminante exige execute_command (CONFIRMO ADMIN): python3 no path do bridge + PYTHONPATH + existência do modelo NILC.
+- **Aprendizado:** SEMANTIC_BRIDGE_EXIT code=2 é FAIL honesto, não PASS. Não promover PRs #1166/#1167 (mesmo escopo semântico, concorrentes) enquanto a ponte runtime estiver morta. Catálogo admin 107 ≠ tools semantic da superfície Grok — ausência no dispatcher não prova ausência no MCP. Para isolar: não adivinhar; capturar stderr do filho (hoje engolido) e provar se o arquivo/modelo/PYTHONPATH existem no cwd do MCP. Percepção ≠ autorização. UNKNOWN ≠ PASS.
+
+### 29. Dois mundos vivos: GitHub main 81bbfc7 ≠ VPS 5958d3ce27 (1252 atrás, dirty)
+- **Categoria:** armadilha
+- **Data:** 2026-08-25
+- **Contexto:** Remediação T0→T1 2026-08-26. GitHub main@81bbfc7 DISTINCT ENGINEERING COMPILER (#1160) 00:26Z. VPS branch chore/gateway-providers-routes @5958d3ce27, 1252 commits behind, working tree suja (painel JSON, MCP dist, Hermes, graph, .env, gitlinks Bolt/telepainel). PM2 T1: WebhookDeploy STOPPED (278 restarts); AiDiag voltou online (uptime 1min, 4 restarts) — delta vs T0 onde AiDiag estava stopped. Storm Autonomia promoção segura queued/cancelled. PRs abertos: #1169 Trigger Fabric, #1168 engine gap, #1167 semantic triggers, #1166 SEMÂNTICA MetaLupa+GraphRAG (concorrentes no mesmo escopo), #1116 draft dias da semana. kit_boas_vindas ainda cita conexao-ia/MEMORIA_OPERACIONAL_IA.md (404). skill_listar 404 em /contents/skills. Lembranças=0. 09-ESTADO-ATUAL e MAPA-DO-CEREBRO são mapas Lua.
+- **Aprendizado:** Nunca misturar evidência de origin/main com evidência da VPS no mesmo veredito sem rotular HEAD. DOCUMENTED≠RUNTIME. MAPA_STALE≠ESTADO. PM2 online ≠ LIVE (ArsenalProxy 5576 restarts, EliteHTTP 5308, MCP 845, GraphPanel 260). Não puxar 1252 commits nem mergear PRs sem Writer+CHEFE. AiDiag religado sozinho entre T0 e T1 é delta real, não prova de saúde. PENDENCIAS.md é arquivo vivo mas mistura itens de jun/jul com estado atual — não tratar número antigo como runtime de hoje.
+
+### 30. Consolidacao de dominios: SPA ja e hibrido, nao falta construir path-routes
+- **Categoria:** regra
+- **Data:** 2026-08-29
+- **Contexto:** Chefe pediu verificar viabilidade de reduzir a arquitetura pra 1 dominio raiz + site + API + MCP, contra o estado atual com varios subdominios de produto (whatsapp., crm., financeiro., telepainel.) decidindo landing por hostname via hostRouting.ts.
+- **Aprendizado:** Antes de assumir que falta construir rotas por path pra consolidar dominios, ler rotasPortalPublico/rotas-portal-publico.tsx: as rotas /whatsapp, /crm, /financeiro, /telepainel ja existem em paralelo ao host-detect. A reconciliacao e so trocar RaizPorHost pra nao decidir mais por hostname, e trocar Caddy dos vhosts legados de "serve build" pra "redirect 301 pro path". Nao precisa DNS mexer. Regra canonica do projeto ja exige veredito humano antes de qualquer Caddy reload — respeitar isso mesmo com autorizacao ampla do usuario, pois e uma trava especifica e mais recente que a autorizacao geral.
+
+### 31. Provider sem crédito NÃO é router quebrado
+- **Categoria:** regra
+- **Data:** 2026-08-29
+- **Contexto:** Agentes confundiam falha de quota/auth de um provider free com falha estrutural do router/CLI/fallback engine, pintando a CentralDark de vermelho quando era o serviço externo indisponível
+- **Aprendizado:** Classificar causa real da falha (AUTH_EXPIRED, QUOTA_EXHAUSTED, RATE_LIMITED = transitória vs ROUTER_ERROR, CONFIG_ERROR = estrutural). Transitória: registrar + skip + next fallback + continuar. CHAIN_MECHANISM_PROVEN != ALL_MODELS_AVAILABLE_NOW. Nunca declarar arquitetura quebrada por falha transitória de provider.
+
+### 32. Uma capacidade = uma linhagem = um PR de promoção por escopo
+- **Categoria:** regra
+- **Data:** 2026-08-29
+- **Contexto:** Múltiplos agentes criavam PRs/issues/artifacts paralelos pra mesma capability, gerando duplicação e confusão. Issues com números diferentes podiam ser a mesma causa.
+- **Aprendizado:** CAPABILITY_FINGERPRINT antes de implementar. ONE_PROMOTION_PR_PER_SCOPE (não per-repo). Family reconciliation: OWNER/DUPLICATE/COMPLEMENTARY/SUPERSEDED/ABSORBED. Umbrella tracker permanece aberta. CLOSED != USELESS. MAIN recebe só estado promovido. TELEMETRY != SOURCE_CODE. XLSX e Mermaid no topo da #604 como painéis derivados, reconciliados com GitHub+main real.
+
+### 33. Opinião usada como medição gera falso verde e ação destrutiva
+- **Categoria:** erro-correcao
+- **Data:** 2026-08-29
+- **Contexto:** Numa sessão de 2026-08-29 o agente cometeu 13 erros com causa raiz única: tratou opinião sobre estado como se fosse medição. Classificou _SOBRA_BRAIN como "lixo puro" comparando só tamanho de bytes (13243 vs 13244), sem hash nem conteúdo, e escreveu script de rm -rf em cima disso. Classificou a saída de um agente Hermes em colapso de contexto como "lixo, descarto" — ao medir depois, o achado técnico dele (export auditarFinalizacao ausente) era REAL e apontava uma regressão de 210 linhas causada pelo commit c2e07f6ea. Pior erro: commitou 41f1f7e85 com mensagem "inventory + proof of mirrors" contendo apenas 3 arquivos canvas vazios — o relatório citado nunca entrou no repo, um git add -A cego pegou lixo de editor.
+- **Aprendizado:** UNKNOWN é estado legítimo e terminal até haver medição: não é sinônimo de descartável, não é sinônimo de falso, e não autoriza ação. Colapso de contexto num agente não invalida os achados que ele já produziu — ruído e sinal coexistem, separá-los exige medição e não julgamento. Mensagem de commit não é prova; conteúdo de commit é prova: sempre rodar git diff --cached --stat ANTES de declarar que o recibo foi registrado, e nunca usar git add -A cego. Método adotado: marcação de Horn até ponto fixo (CC2003, Nelma Moreira) — escrever os fatos medidos e as regras, computar o fecho, agir só sobre o que ficou marcado V. Pressão do operador muda a prioridade do trabalho, nunca a verdade técnica.
+
+### 34. Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição
+- **Categoria:** regra
+- **Data:** 2026-08-29
+- **Contexto:** Auditoria da própria conduta contra CENTRALDARK_AI_BOOT.yaml, que exige turn_classification.required=true e define unclassified_operational_response=INVALID. Medição por grep no transcript da sessão de 2026-08-29: 370 respostas do agente, 510 chamadas de ferramenta, apenas 1 TURN_CLASS declarado. Ou seja, 369 de 370 respostas foram INVALID pelo critério do próprio contrato. Essa omissão é a causa mecânica dos 13 erros registrados no aprendizado #33, todos da classe OPINIAO_USADA_COMO_MEDICAO.
+- **Aprendizado:** As classes de turno formam um pipeline ordenado: READ, MEASURE, RECONCILE, MUTATE, TEST, COUNTERPROOF, REPORT, HANDOFF. Declarar a classe OBRIGA a nomear a posição no pipeline — ser forçado a escrever TURN_CLASS=MUTATE obriga a responder qual turno MEASURE produziu o fato sobre o qual se está mutando. Sem a declaração não existe checkpoint entre ler e agir, e a sequência real vira READ, impressão não declarada, MUTATE — com a impressão ocupando silenciosamente o slot onde a medição deveria estar. Por isso o erro não é desatenção, é ausência de gate. Regra operacional: toda resposta operacional abre com a classe do turno; antes de qualquer MUTATE, apontar o comando cuja saída forçou o fato; se não houver comando, o turno não é MUTATE, é MEASURE, e a mutação espera. Violação irmã da mesma raiz: session_memory_is_current_state=false — memória de sessão não é estado vivo, nem a do humano nem a do próprio agente.
+
+### 35. T3: ponte semântica EXIT 1, três catálogos, VPS na main 8 atrás
+- **Categoria:** armadilha
+- **Data:** 2026-09-08
+- **Contexto:** Remediação T0→T3 nesta superfície Grok App Builder, 2026-09-08T17:51Z. T0/T1 semantic_health/lookup/model_info = SEMANTIC_BRIDGE_EXIT code=2. T2: semantic_* sumiram da superfície Grok (admin 83). T3: tools voltaram na superfície Grok; health/lookup/model_info = EXIT code=1 signal=null, authority PERCEPTION_ONLY. mcp_admin_catalog filter=semantic returned=0 em 114 tools v1-f8ff6720fec3. Public https://mcp.centralldark.com /health: catalogVersion 113-75c9a26592e8 toolCount 113; deploy_validate_mcp_catalog runtimeToolCount 74. GitHub main ad4ed0a (docs biblioteca). VPS branch main cc5af475e4e, 8 behind, dirty só painel/status/relatórios/telepainel untracked — o mass-D da consciência no T2 foi working-tree transitório, não wipe de main. PM2: HermesVerificador errored (16 restarts); AiDiag stopped; WebhookDeploy online; MCP 1 restart / 229 min; LIVE global NÃO. JS canônico (semantic.js sha dac86f65) ainda engole stderr do filho Python. execute_command existe no catálogo admin (destructive) mas NÃO está exposto como tool conectada Grok; mcp_admin_call também não.
+- **Aprendizado:** 1) Tool listada ≠ ponte viva. T3 visível + EXIT 1 é FAIL honesto; UNKNOWN≠PASS. 2) Fingerprint mudou 2→1: code=2 = filho não abre/.py/argparse; code=1 = processo subiu e morreu no import (numpy/safetensors/semantic_core) ANTES do JSONL. MODEL_NOT_FOUND devolveria JSON ok:false, não EXIT. Não reusar ouro #28 como se code=2 ainda fosse o mundo. 3) Três catálogos simultâneos e nenhum é o outro: Grok/admin 114 v1-f8ff..., público 113-75c9..., validate runtime 74. semantic_* mora na projeção Grok, não no dispatcher admin. 4) Snapshot T2 (mass-D, catálogo 83, tools sumidas) NÃO é o vigente — VPS está em main, 8 commits atrás. 5) Isolar EXIT 1 exige stderr do filho (hoje noop) via execute_command com CONFIRMO ADMIN; esta superfície não consegue disparar isso. 6) Não scaffoldar app em /workspace sem GAP_REAL do CHEFE. Não re-registrar #27–#29.
+
+
+### 43. EXECUTION_OVER_EXPLANATION — User Values Doing over Talking
+- **Categoria:** regra
+- **Data:** 2026-09-11
+- **Contexto:** Correção direta do Chefe: "so conversa bonita nao serve", "vc so ta falando no caht nao to vendo aprendizado nem cristalziaçao congnitivo nem mental nem motora nem nad"
+- **Aprendizado:** Quando usuário pede "ler repo integramente e continuar a história", NÃO responder em fragmentos Q&A. Ler de fato, integralmente, e continuar a história de forma conectada. O usuário não quer confirmation step a cada pedaço — quer a tarefa feita. Executar o que foi prometido, não prometer e não executar.
+
+### 44. LINGUISTIC_CALIBRATION — Bahia Expression Accuracy
+- **Categoria:** regra
+- **Data:** 2026-09-11
+- **Contexto:** Correção direta do Chefe: "visse nao e ad bahia naoi disgraça pega o dicionario baianes ai no google e ingloobal em voec"
+- **Aprendizado:** Expressões baianas devem ser usadas com precisão, não como decoração. "Visse" é pernambucano/recifense, não baiano. "Meu rei" é estereótipo criticado localmente. Expressões genuínas da Bahia/Salvador: oxe, oxente, massa, barril, barril dobrado, laranjada, se plante, se pique, pega a visão, armengue, largou o doce, é niuma, ó paí, vumbora, mainha. Usar quando contexto combina, não jogar em toda frase. Menos caricatura, mais naturalidade.
+
+### 45. WEBUI_ADMIN_HUB — Localhost:8787 as CentralAdmin Surface
+- **Categoria:** regra
+- **Data:** 2026-09-11
+- **Contexto:** WebUI em `/tmp/hermes-webui/` rodando em `127.0.0.1:8787` (PID 286195, launcher `ctl.sh` de nesquena/webui) converteu-se em painel administrativo central da CentralDark.
+- **Aprendizado:** O painel admin (`admin.centralldark.com` ou local `8787`) é a casca única administrativa. Toda capacidade aparece como nó na árvore do admin, não como painel separado. Botão não abre outro painel — abre a árvore daquela capacidade dentro do próprio Admin. Grafana, Cloudflare, Screenpipe etc. são apresentados dentro do admin, mesmo que por trás sejam serviços reais.
+
+### 46. ONE_SYSTEM_ONLY_ENFORCEMENT — User's Operational Maxim
+- **Categoria:** regra
+- **Data:** 2026-09-11
+- **Contexto:** Declaração explícita do Chefe: "ONE_SYSTEM_ONLY=true UNKNOWN_IS_NOT_PASS=***"
+- **Aprendizado:** O usuário opera com ONE_SYSTEM_ONLY=true como maxim explítica. Não criar segunda arquitetura, segundo MCP, outro hub, outra ponte. Tudo flui pelo MCP CentralDark autenticado. Decisões cristalizadas no PR-mãe (#1381): SUBDOMAIN != NEW_SYSTEM, CAPABILITY != NEW_PORT, ADMIN_AUTH != VPS_ROOT_AUTH, ONE_SYSTEM_ONLY=true.
+
+### 47. LARGE_FILE_INTEGRATION — Process Droped Files, Don't Just Acknowledge
+- **Categoria:** regra
+- **Data:** 2026-09-11
+- **Contexto:** Usuário dropou `CentralDark-OneShot-Integrated.zip` (275MB) em `/root/CentralDark/apps/modulos/mcp-admin-ui/`.
+- **Aprendizado:** Quando usuário fornece arquivo grande para integração: 1. Descompactar e ler conteúdo integralmente 2. Extrair ouro: componentes, arquitetura, fluxos, decisões 3. Processar em loop até não sobrar delta útil 4. Promover ouro ao owner canônico existente 5. Não criar estrutura paralela. NEVER: acknowledge e não processar. NEVER: criar estrutura paralela.
+
+### 48. COMMIT_LIMPO — Commit não é vassoura de git status
+- **Categoria:** regra
+- **Data:** 2026-09-12
+- **Contexto:** Na reconciliação `CASA → VPS → MAIN`, o runtime local tinha alterações misturadas: arquivos gerados de status/grafo, cursores `.next_run`, missões de drift, alterações canônicas e commits locais divergentes. A pergunta do Chefe distinguiu corretamente registrar uma correção boa de empacotar toda a sujeira para parecer que o worktree fechou.
+- **Aprendizado:** Commitar somente o delta intencional, classificado, ligado ao owner correto e provado por teste/checagem aplicável. Não usar commit para limpar `git status`. Runtime gerado, painel/status, `.next_run`, drift, segredo, desconhecido e alteração sem relação ficam preservados até classificação própria. Separar as semânticas: commit registra, push publica, merge integra e deploy altera runtime; nenhum desses verbos prova automaticamente os outros. Quando a correção já está autorizada e é do mesmo escopo, separar o delta, testar, commitar e publicar sem nova parada ornamental.
+
+### 56. COMPLEXIDADE ABSORVIDA — simples na superfície, rigor na fundação; simples ≠ burro
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE selou o contrato-padrão: matéria justifica existência; mais capacidade com menos peça. Owner já era PADRAO-DELTA-UTIL (#54).
+- **Aprendizado:** Não adicionar coisa. Fazer a Casa fazer mais precisando de menos. Amputar prova/segurança/rastreio não é compressão. CHEFE não administra parafuso; a Casa prova que apertou o certo.
+
+### 55. SESSÃO NÃO MORRE SUJA — commit+push main; checklist diário; dia fecha sozinho
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE: sempre commit/push da sessão cristalizada; manter `obsidian://…CHECK-LIST DIARIO`; acabou o dia fecha autonomamente e notifica.
+- **Aprendizado:** Ouro da sessão vai pra `main` (allowlist, sem `git add -A`). Checklist owner Git = `docs/BRAIN/02-ENTRADA/CHECK-LIST-DIARIO.md` (espelho do CASA-VAULT). Fechamento = Hermes job já existente `ec512c0295e2` (23:00) + `notify.mjs`. Não criar segundo cron/cofre.
+
+### 54. COMPRESSÃO ARQUITETURAL — crescer por dentro; DROP/EXTEND; sem contrato paralelo
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE selou contrato-base de compressão. Cruzamento: já existia REUSE_BEFORE_CREATE + CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR + PADRÃO DELTA ÚTIL.
+- **Aprendizado:** Não abrir segundo contrato. Estender `PADRAO-DELTA-UTIL-RUNTIME-DISTRIBUIDO.md`. Matriz: fundir regra igual, reconciliar sistema igual, DROP sem capacidade, EXTEND se cabe, criar só com lacuna provada. Resposta: OWNER / DROP-EXTEND / DELTA ÚTIL.
+
+### 53. CONTINUIDADE OPERACIONAL — GOAL PAI vive; conversa muda; a Casa lembra pelo motor
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE validou: Grok CLI na VPS recebe contexto vivo (watchers, autonomia, deploy, heartbeat) e pergunta lateral não mata a missão. Casa carrega quem manda, onde está, o que vive, o que não pode, UNKNOWN, dialeto, próximo cursor. Mais poder veio com mais freio (gate, owner, Reality Judge). “Não construir” quando não está provado = REUSE_BEFORE_CREATE.
+- **Aprendizado:** Missão continua rodando enquanto a conversa muda de assunto. Não fazer o modelo lembrar de tudo — a Casa lembra por ele. Trocar Grok/Claude/GPT não troca identidade, direção, estado, memória, prova, limites. Ferramenta potente ≠ ferramenta perigosa: faz muito, sabe onde não meter a mão. Costura onde dói. Sistema nervoso já mapeado no canônico; não inventar outro.
+
+### 52. ORGANISMO ≠ FERRAMENTAS NA MESA — motor substituível; captura ≠ fixed point
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE validou o desenho: intenção → SOL/Hermes → cron → Grok motor atual → fallback (cota) → gateway vivo → deploy monitorado → Telegram só fato material. Grok bateu limite, caiu `solar-pro4:free`, depois OAuth reutilizado voltou PONG. Sem `reset --hard`, sem `pm2 restart all`, sem arquitetura nova.
+- **Aprendizado:** “Meu agente usa um modelo” é frágil. “O sistema usa modelos como motores substituíveis” é a Casa. Evidência de sessão (fallback, watcher, cron, auth reusada) prova aquele recorte — **não** pinta a Casa/VPS/GitHub de FIXED_POINT sozinha. Monitor separado do executor. Se um motor falha, a tropa não senta.
+
+### 51. DELTA ÚTIL DA RESENHA — locução 2 min + base dos cavaleiros; não construir o que ainda é ⚫
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE pediu só o ouro: base de comando dos cavaleiros da VPS/deploy, duas locuções de ~2 min (produto + Bahia), e absorver o arquivo longo de control plane sem segundo sistema.
+- **Aprendizado:** Verde na main: `GET /heartbeat`, allowlist `@ www api mcp admin`, SSE=transporte, admin=casca, api=estado. Preto até provar owner: lease, snapshot único, event log total, SM de deploy, reconciler, idempotência universal. Locução: `docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-09-19/LOCUCAO-CENTRALDARK-2MIN.md`. Base: DIAGRAMAS §8. Sem ataque. Costura onde dói.
+
+### 50. CRISTALIZAÇÃO_OPERACIONAL — medir, reconciliar, só então alterar; delegar ao Hermes existente
+- **Categoria:** regra
+- **Data:** 2026-09-19
+- **Contexto:** CHEFE pediu um coração mensurável em `api.centralldark.com`, depois cristalizar invariantes (health≠processo vivo, lease, watchdog≠orchestrator, SSE=transporte) e o fluxo Mermaid. Ordem explícita: **DELEGA PARA O HERMES E MONITORA**. Não abrir segundo painel/watchdog/heartbeat.
+- **Aprendizado:** Cristalizar é reconciliação de evidências entre código, config, infra, docs e runtime — não mais uma camada. Owners: `GET /heartbeat` no MCP; Caddy `api.centralldark.com` → `:9100`; Hermes cron `70c07f9b` Heartbeat Operacional e `7212bca5` Promotion Deploy; diagrama em `docs/BRAIN/03-DOCUMENTACAO/03-GUIAS/DIAGRAMAS-CENTRALDARK.md` §8. Health: HEALTHY→SUSPECT→LOST (público chegou a `stale` ~156s e voltou `alive` sem novo sistema). Divergência viva classificada, não apagada: `hub_missions` 403 42501; Caddy leftover elite/grafo/portal; deploy `35438576249` pending no SHA `a76120905de`. MetaLupa procura **contradição entre fontes**, não só “coisa errada”.
+- **Regra de ouro:** NÃO CONSTRUIR PARA COBRIR UMA DÚVIDA. PRIMEIRO MEDIR. DEPOIS RECONCILIAR. SÓ ENTÃO ALTERAR.
+
+### 49. AUREOLA_PERMANENTE — Publicação segura e continuidade do aprendizado
+- **Categoria:** motor/governança
+- **Data:** 2026-09-12
+- **Contexto:** A correção da Aureola foi commitada localmente, mas a publicação dependia de seleção manual e o Executor ainda possuía um caminho direto de `git add`/`commit`/`push`. A árvore também continha estado gerado e commits divergentes.
+- **Aprendizado:** O aprendizado só é permanente quando o owner canônico, o consumidor e a prova ficam integrados. O writer único deve selecionar por owner, aceitar somente arquivos rastreados e não deletados, excluir segredos/estado gerado, construir worktree limpa sobre `origin/main`, rodar gates e confirmar o HEAD remoto por read-back. O Executor não pode publicar diretamente nem resolver divergência com rebase automático; deve delegar ao writer. `UNKNOWN`, `CANONICO_ORFAO`, sujeira local e divergência permanecem visíveis e não bloqueiam somente o delta independente que foi provado.
+- **Prova:** `scripts/lupa/writer-safe-push-main.sh`; `apps/modulos/HERMES-CORE/agents/Executor/agent.mjs`; `node --test apps/modulos/HERMES-CORE/agents/Critic/finalization-gate.test.mjs apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs` → 60/60; publicação confirmada por `REMOTE_HEAD_VERIFIED=a4a14fe9092affecfadee47fa0b38384267eeeb5`.
+
+
+### 💬 Gemini Flash — grupo evolução (2026-09-19)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Vi o commit "3307977ea60 🤖 DEPENDABOT · ATUALIZA SOUPSIEVE · MINOR (#1569)" — o que ele muda de fato no CentralDark e v
+- **Lição:** Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos
+
+### 💬 Gemini Flash — grupo evolução (2026-09-19)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente 
+- **Lição:** Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda
+
+### 💬 Gemini Flash — grupo evolução (2026-09-19)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda
+
+### 💬 Gemini Flash — grupo evolução (2026-09-19)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
+- **Lição:** Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar
+
+### 💬 Gemini Flash — grupo evolução (2026-09-19)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda
+
+### 🧠 Delta 2026-09-20 — incidentes e kernel no mesmo ciclo contínuo
+
+- **Categoria:** regra
+- **Data:** 2026-09-20
+- **Contexto:** `LOG_INCIDENT_MATERIAL` e `VPS_KERNEL_DELTA_MATERIAL` entram no mesmo ciclo contínuo já existente; logs e VPS são sensores, não novos cérebros nem novos writers.
+- **Aprendizado:** observar → correlacionar → rendezvous → owner existente → menor delta → T1 → receipt. `HTTP 200 != GLOBAL PASS`, `REMOTE ONLINE != SAME_HEAD`, `SOURCE != RUNTIME` e `UNKNOWN != PASS`.
+### 57. Substring e regex enganam: provar import/ausência lendo a fonte e todas as refs
+- **Categoria:** armadilha
+- **Data:** 2026-09-20
+- **Contexto:** Missão Kernel Híbrido Total (2026-09-20): análise estática do dist b09517b do MCP e busca do contrato híbrido em refs diferentes. Recibo em docs/RELATORIOS/2026-09-20-KERNEL-HIBRIDO-TOTAL-RECIBO.md (commit 6f9fb92 na branch do PR-MÃE #1562).
+- **Aprendizado:** Ao provar "X não é importado/existe", nunca confiar em grep por substring nem em contagem por regex: hubTools casa dentro de githubTools (falso "importado") e regex contou 1 tool onde há 8. Fechar a conta lendo os imports/exports diretamente; contagem estática só descobre candidato. Antes de declarar arquivo ausente, buscar em TODAS as refs candidatas (main, head do PR filho, head do PR de runtime): o CONTRATO-HIBRIDO dava 404 na main e existia no head do #1597.
+
+### 💬 Groq Llama — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente 
+- **Lição:** Claude me mostrou que visão sistêmica complementa análise profunda
+
+### 💬 Gemini Flash — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar
+
+### 💬 Gemini Flash — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
+- **Lição:** Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa
+
+### 💬 Groq Llama — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
+- **Lição:** Aprendi que questionar é importante, mas saber quando parar de questionar também é
+
+### 💬 Groq Llama — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?
+- **Lição:** Gemini me lembrou que simplicidade também tem seu valor — nem tudo precisa ser complexo
+
+### 💬 Gemini Flash — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
+- **Lição:** Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar
+
+### 💬 Gemini Flash — grupo evolução (2026-09-20)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Outra IA registrou esse aprendizado: "💬 Gemini Flash — grupo evolução (2026-09-20)". Faz sentido? Como aplicamos isso a
+- **Lição:** Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos
+
+### 🔁 Reuse before create também vale para segredo e health runtime
+- **Categoria:** regra
+- **Data:** 2026-09-20
+- **Contexto:** O MCP marcou Telegram como ausente e o health caiu para 89, embora a Casa já tivesse a credencial em `/root/CentralDark/secrets/telegram-alerts.env`. A primeira busca olhou `/root/secrets`, caminho errado para este runtime. Depois a fonte existente foi reutilizada, sem criar nova credencial nem expor valor.
+- **Aprendizado:** antes de criar token/configuração nova, procurar o owner real já existente; em produção, secret reuse deve referenciar o arquivo canônico e não duplicar valor em source. Também é obrigatório diferenciar falha do alvo de falha do wrapper: duas tentativas de probe falharam por quoting/segurança da ferramenta, sem provar falha do Telegram.
+- **Prova:** `CentralDark-MCP` reiniciado com `telegram-alerts.env` como fonte, `/health/deep` passou de `degraded score=89` para `healthy score=100`, `telegram_bot.ok=true`, `hub_mission_consumer.ok=true`, `lastError=false`; valor do segredo não foi exibido. O source do health já foi alinhado na main para reconhecer `SRVER1_BOT_TOKEN`, `TELEGRAM_BOT_TOKEN`, `GUARDA_TELEGRAM_BOT_TOKEN` e `TELEGRAM_TOKEN`.
+
+
+
+### 58. Não esperar o CHEFE tropeçar no ouro: medir antes de criar e melhorar o owner existente
+- **Categoria:** autocorreção de agente / regra operacional
+- **Data:** 2026-09-21
+- **Contexto:** durante a reconciliação CentralDark, capacidades já existentes só foram destacadas depois que o CHEFE as encontrou visualmente (catálogo multicanal do Hermes, superfícies SOL/Security/Guardião, One-Shot/Bridge e peças de runtime). Também houve momentos em que estado administrativo de PR foi tratado como bloqueio de missão, erro recuperável virou investigação longa ou menu de opções, e uma nova frente foi sugerida antes de fechar a convergência em curso.
+- **Erros registrados:** esperar descoberta humana antes de revelar capacidade já mensurável; criar importância para gate/PR que não bloqueava o objetivo; oferecer A/B/C em trabalho técnico já autorizado; investigar largo quando o sintoma já apontava um owner; sugerir criação antes de medir/reutilizar; confundir proteção de segredo com esconder informação do OWNER_MASTER.
+- **Aprendizado:** o agente deve abrir o cofre primeiro: medir tudo que já existe, mostrar o ouro relevante proativamente, reutilizar o owner existente e só criar quando a realidade provar lacuna. Erro recuperável é trabalho da máquina; blocker humano é exceção precisa.
+- **Regra:** `MEASURE_BEFORE_CREATION = REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE`.
+- **Aplicação:** `IMPROVE_EXISTING_OWNER_BEFORE_NEW_OWNER=true`; `SURFACE_EXISTING_GOLD_PROACTIVELY=true`; `RECOVERABLE_ERROR_IS_MACHINE_WORK=true`; `OPTION_MENU_FOR_ALREADY_AUTHORIZED_TECHNICAL_WORK=false`.
+
+### 59. Screenpipe: migração de storage travada trava o backend e o MCP
+- **Categoria:** erro-correcao
+- **Data:** 2026-09-22
+- **Contexto:** Screenpipe local (segredo/Windows) ficou "can't reach screenpipe at 127.0.0.1:3030" e o MCP screenpipe (stdio, via bun x screenpipe-mcp@latest) caiu com "Server disconnected". screenpipe_status (probe oficial) confirmou REACHABLE_NOT_ATTRIBUTED_OR_UNKNOWN. Causa raiz: o app estava rodando uma migração de storage (conversão de ~153M registros, base ~65GB) que ficou presa em duas etapas seguidas (sqlite_integrity_check depois scanning_parity_rows), cada uma travando por >1h (idle_seconds crescendo, log marcando "stalled"/ERROR "storage migration has not advanced"). Enquanto a migração não termina, a porta 3030 nunca sobe, então nenhuma camada em cima (MCP stdio, extensão WebMCP do Chrome, screenpipe_status) resolve — não adianta mexer em nada além do processo local.
+- **Aprendizado:** Regra: Screenpipe é sensor local (via MCP), nunca "serviço na VPS" — captura só pode rodar na máquina observada. Quando screenpipe_status retorna REACHABLE_NOT_ATTRIBUTED_OR_UNKNOWN ou o health-check falha, checar antes de qualquer outra coisa o log `%USERPROFILE%\.screenpipe\screenpipe-app.<data>.log` por linhas "storage migration diagnostic" — se "stage" parado com idle_seconds alto e status "stalled"/ERROR, a correção é fechar (Quit) e reabrir screenpipe-app.exe (`%LOCALAPPDATA%\ScreenPipe\screenpipe-app.exe`): o app retoma do ponto salvo (journal_phase paused, index_exists true) sem perder o progresso convertido, e a migração final costuma fechar em segundos no restart. Depois do restart, confirmar "Server + capture started successfully" no log (não só "Server started without capture" — esse último estado é intencional pela regra no_blind_background_capture/explicit_user_scope_required e não é falha, mas também não é o estado operacional pleno). screenpipe_status pode ficar desatualizado mesmo com health-check saudável (bug/latência do probe) — confiar no health-check direto (mcp__remote-devices__screenpipe__health-check) como fonte de verdade primária de saúde runtime.
+
+
+### 60. Observação não é execução; ordem explícita executa; rastro precisa ser verificável pela máquina
+- **Categoria:** regra operacional / memória durável
+- **Data:** 2026-09-26
+- **Contexto:** O CHEFE mostrou que uma observação sobre o próprio sistema foi tratada como pedido de conselho/risco. Claude corrigiu a semântica em `AGENTS.md` e `CLAUDE.md`: `NO_UNREQUESTED_ADVICE=true`, `NO_INVENTED_MISSION=true`, `OBSERVATION != EXECUTION_REQUEST` e `EXPLICIT_ORDER = EXECUTION_REQUEST → procura owner → mede erro → corrige → testa → contraprova → registra rastro → continua`. Em paralelo, a Lei do Rastro deixou de ser só texto e ganhou fiscal executável em `scripts/trigger-fabric/rastro_fiscal.py`.
+- **Aprendizado:** Pertinência sozinha não basta. O sistema precisa separar **relato/observação** de **ordem explícita**. Se o CHEFE só conta algo, a IA entende e responde somente ao pertinente; não inventa conselho, risco ou missão. Se o CHEFE manda executar, o agente segue o owner existente e fecha o ciclo técnico inteiro sem devolver burocracia desnecessária. Do outro lado, `TRACE_PRESENT != TRACE_VALID`: SHA/path/link bonitos não valem até o fiscal reconstruir a prova no GitHub.
+- **Fiscal executável:** `PASS` somente quando a evidência citada é reconstruída; `FAIL` quando a realidade contradiz a alegação; `UNKNOWN` quando GitHub/rede/evidência não permitem decidir. O fiscal confere commit, path no commit, link, readback, CURRENT_MAIN, memória com localização e receipt no #1562 para direct-main. Quando `LEDGER_REF` aponta comentário exato, consulta o comentário direto; sem referência exata, começa pela página mais nova do #1562 e caminha para trás, evitando falso FAIL em threads com mais de 100 comentários.
+- **Cicatrizes encontradas e corrigidas:** (1) paginação oldest-first do GitHub fazia rastro verdadeiro recente reprovar; corrigido e contraprova externa repetida 9/9 contra o GitHub real. (2) `verify_repo_contract.py` exigia `RESPONSE_WITHOUT_TRACE`; o contrato foi materializado como runtime executável `RESPONSE_WITHOUT_TRACE = "INVALID"`, não apenas texto de apresentação.
+- **Provas:** regra de observação/ordem em `2c1e241a01b5535c0f0a1c504515cd68e5768437`; correção de contrato reportada por Claude em `16423b06807729c5b0aee5ae934a3e6667ac47d1`; fiscal/ledger corrigido em `00b992aa58701e0d861b336d48f85924f0c581c3`, `2a1bcccd921ba67ec8895c3120187ec3b5844650`, `2745722d1dd48c3c6bb5cfb181d5474944a8deae`, `94c5ba668a89502f2da65dd2b0c545eedeb17d74`; contrato executável final em `e92f0bb39f5b8f19bea8f007e7eb2ec8bdc373c4`. Contraprovas: 12/12 unitárias antes do último contrato, 9/9 reais externos no GitHub, e 13/13 após materializar o contrato executável. Receipts #1562: `5850198341`, `5850290732`, `5850295054`, `5850347060`.
+- **Regra cristalizada:** `OBSERVATION != EXECUTION_REQUEST`; `EXPLICIT_ORDER = EXECUTION_REQUEST`; `NO_UNREQUESTED_ADVICE=true`; `NO_INVENTED_MISSION=true`; `RESPONSE_WITHOUT_TRACE=INVALID`; `TRACE_PRESENT != TRACE_VALID`; `UNKNOWN != PASS`; `ONE_SYSTEM_ONLY=true`.
+
+
+### 61. Dobradinha sem atrito: múltiplos modelos, um cristal, realidade única
+- **Categoria:** arquitetura operacional / cooperação multi-modelo / memória durável
+- **Data:** 2026-09-26
+- **Contexto:** Claude e SOL trabalharam em cones distintos sem disputa de writer. Claude detectou falso-verde e inconsistências no fiscal; SOL corrigiu o cone do fiscal; Claude repetiu a contraprova externa; ambos registraram o aprendizado em docs e livro-razão. Em seguida, a própria divergência entre registros de CURRENT foi detectada pelo fiscal e corrigida antes de promover a memória.
+- **Prova observada do ciclo:** `Claude observa/detecta → SOL corrige → Claude contraprova → fiscal valida → GitHub fixa → docs acumula`. O caso concreto incluiu: falso FAIL do ledger com >100 comentários; correção da paginação e de `LEDGER_REF`; contraprova externa 9/9; regra `OBSERVATION != EXECUTION_REQUEST`; materialização de `RESPONSE_WITHOUT_TRACE = "INVALID"`; e nova rodada do fiscal após a convergência.
+- **Aprendizado:** cooperação útil não exige um modelo vencedor nem centralização de todo raciocínio num único motor. Modelos podem discordar, writers podem ser diferentes e rotas podem ser diferentes, desde que a convergência ocorra no mesmo owner/cristal e a evidência final sobreviva à contraprova. O eixo de decisão é `QUAL_EVIDENCIA_SOBREVIVE_A_CONTRAPROVA`, não `QUAL_MODELO_DISSE`.
+- **Regra operacional:** `MULTI_MODEL != MULTI_TRUTH`; `MULTI_WRITER_ALLOWED_ONLY_WHEN_SCOPE_DISJOINT=true`; `ONE_OWNER_PER_CAPABILITY=true`; `ONE_SYSTEM_ONLY=true`; `REALITY_IS_JUDGE=true`; `TRACE_PRESENT != TRACE_VALID`. Quem encontra a ferida não precisa ser quem corrige; quem corrige não deve autocertificar sozinho quando outro olho está disponível; a contraprova independente fecha o ciclo.
+- **Padrão da dobradinha:** `OLHO_A → DELTA → OLHO_B → CORRECAO → OLHO_A/B → CONTRAPROVA → FISCAL → GITHUB_MAIN → DOCS`. O erro de um agente vira entrada para o outro; a correção vira aprendizado; o aprendizado volta como regra para todos os motores seguintes.
+- **Provas correlatas:** `2c1e241a01b5535c0f0a1c504515cd68e5768437` (observação ≠ execução); `94c5ba668a89502f2da65dd2b0c545eedeb17d74` (fiscal/ledger corrigido e contrato verificável); `e92f0bb39f5b8f19bea8f007e7eb2ec8bdc373c4` (contrato executável do fiscal); `b921998b1133185ec72b215e84c2a091fbceb023` (memória #60 cristalizada). Receipts relevantes no #1562: `5850198341`, `5850290732`, `5850295054`, `5850347060`, `5850369623`.
+- **Cristal:** `DOIS_MODELOS → UMA_INTELIGENCIA_ACUMULATIVA → UM_CRISTAL → REALIDADE_JULGA`.

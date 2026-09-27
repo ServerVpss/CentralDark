@@ -1,3 +1,10 @@
+---
+title: "08 HISTORICO DECISOES 2026 07 10 Gateway Hub"
+date: 2026-08-27
+tags: ["consciencia"]
+updated: 2026-08-27
+---
+
 # Relatório 10/07/2026 — Gateway (138 modelos) + Destravar HUB
 
 ```
@@ -121,3 +128,11 @@ Relatório completo com arquivo+linha de cada botão está registrado nesta sess
 - Nenhuma migration foi aplicada no banco real (faltou credencial, documentado acima).
 - Nada de segurança/rotação de chave foi feito (você pediu pra deixar com os auditores por agora).
 - Nenhum processo PM2 além do `CentralDark-ArsenalAdapter` foi reiniciado.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -1,0 +1,9 @@
+{
+  "rules": [
+    { "when": "input.new",                        "to": "01-observador-de-padroes" },
+    { "when": "observer.output.kind == 'fato' && observer.output.is_error", "to": "02-conversor-de-erro-em-teste" },
+    { "when": "converter.output.test_created",    "to": "03-orquestrador-de-evolucao-aberta" },
+    { "when": "orchestrator.fixed_point",         "to": "END" },
+    { "when": "observer.output.kind in ['inferencia','hipotese'] && contradicts.pivete_fact", "to": "DROP_HYPOTHESIS" }
+  ]
+}

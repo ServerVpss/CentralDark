@@ -1,4 +1,4 @@
-name: PR — artefato de aprendizado automático
+name: ⚙️ PR — artefato de aprendizado automático
 
 on:
   pull_request:
@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   contract-tests:
-    name: Provar gerador no HEAD do PR
+    name: 🧩 Provar gerador no HEAD do PR
     if: >-
       github.event_name == 'pull_request' &&
       github.repository == 'ServerVpss/CentralDark' &&
@@ -27,15 +27,15 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Checkout exato do PR sem credencial persistente
+      - name: 🔹 Checkout exato do PR sem credencial persistente
         id: checkout_pr
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
 
-      - name: Sintaxe e testes discriminativos
+      - name: 🔹 Sintaxe e testes discriminativos
         id: tests
         run: |
           set -Eeuo pipefail
@@ -61,7 +61,7 @@ jobs:
             echo "skipped=$SKIPPED"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Preparar entrada do próprio PR
+      - name: 🔹 Preparar entrada do próprio PR
         id: prepare_input
         env:
           REPOSITORY: ${{ github.repository }}
@@ -114,7 +114,7 @@ jobs:
           fs.writeFileSync(`${process.env.RUNNER_TEMP}/pr-learning-input.json`, JSON.stringify(input));
           NODE
 
-      - name: Gerar Markdown e Canvas HTML
+      - name: 🔹 Gerar Markdown e Canvas HTML
         id: artifact
         run: |
           set -Eeuo pipefail
@@ -124,9 +124,9 @@ jobs:
             --html "$RUNNER_TEMP/pr-learning-artifact.html" \
             --github-output "$GITHUB_OUTPUT"
 
-      - name: Publicar artefato de prova do HEAD
+      - name: 🔹 Publicar artefato de prova do HEAD
         id: upload_contract
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: pr-learning-contract-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
           path: |
@@ -135,14 +135,14 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-      - name: Gate de caminho sensível
+      - name: 🔹 Gate de caminho sensível
         id: sensitive_gate
         if: steps.artifact.outputs.blocked == 'true'
         run: |
           echo "BLOCKED_SENSITIVE_PATH" >&2
           exit 1
 
-      - name: Receipt final do contrato
+      - name: 🔹 Receipt final do contrato
         if: always()
         env:
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
@@ -215,7 +215,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
   publish-comment:
-    name: Comentar e rotear usando somente código confiável da base
+    name: 🧩 Comentar e rotear usando somente código confiável da base
     if: >-
       github.event_name == 'pull_request_target' &&
       github.repository == 'ServerVpss/CentralDark'
@@ -226,17 +226,17 @@ jobs:
       pull-requests: write
       issues: write
     steps:
-      - name: Checkout exato da base confiável
+      - name: 🔹 Checkout exato da base confiável
         id: checkout_base
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 1
           ref: ${{ github.event.pull_request.base.sha }}
           persist-credentials: false
 
-      - name: Preparar metadados sanitizados pela API
+      - name: 🔹 Preparar metadados sanitizados pela API
         id: prepare_metadata
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           INPUT_PATH: ${{ runner.temp }}/pr-learning-input.json
         with:
@@ -274,7 +274,7 @@ jobs:
             };
             fs.writeFileSync(process.env.INPUT_PATH, JSON.stringify(input), { mode: 0o600 });
 
-      - name: Gerar artefato confiável
+      - name: 🔹 Gerar artefato confiável
         id: artifact
         run: |
           set -Eeuo pipefail
@@ -284,9 +284,9 @@ jobs:
             --html "$RUNNER_TEMP/pr-learning-artifact.html" \
             --github-output "$GITHUB_OUTPUT"
 
-      - name: Salvar Canvas e Markdown como artifact
+      - name: 🔹 Salvar Canvas e Markdown como artifact
         id: upload_published
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: pr-learning-artifact-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
           path: |
@@ -295,9 +295,9 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-      - name: Atualizar comentário idempotente e pedir suporte
+      - name: 🔹 Atualizar comentário idempotente e pedir suporte
         id: publish_comment
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           MARKDOWN_PATH: ${{ runner.temp }}/pr-learning-artifact.md
           SUPPORT_REQUIRED: ${{ steps.artifact.outputs.support_required }}
@@ -344,14 +344,14 @@ jobs:
               core.notice('CAPABILITIES_DECLARED_UNVERIFIED');
             }
 
-      - name: Gate final de caminho sensível
+      - name: 🔹 Gate final de caminho sensível
         id: publish_sensitive_gate
         if: steps.artifact.outputs.blocked == 'true'
         run: |
           echo "BLOCKED_SENSITIVE_PATH" >&2
           exit 1
 
-      - name: Receipt final do bot
+      - name: 🔹 Receipt final do bot
         if: always()
         env:
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}

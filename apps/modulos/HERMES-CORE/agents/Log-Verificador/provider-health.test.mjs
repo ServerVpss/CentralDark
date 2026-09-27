@@ -38,6 +38,19 @@ test('não confunde 429 temporário com fim de créditos', () => {
   assert.equal(event.severity, 'warning');
 });
 
+test('Nous entra no radar sem virar OpenAI genérico', () => {
+  const event = detectarEventoProvedor('Nous Research HTTP 429 rate_limited');
+  assert.equal(event.provider, 'nous');
+  assert.equal(event.kind, 'rate_limited');
+});
+
+test('OpenRouter billing block é classificado no provedor correto', () => {
+  const event = detectarEventoProvedor('OpenRouter HTTP 402 payment required');
+  assert.equal(event.provider, 'openrouter');
+  assert.equal(event.kind, 'billing_blocked');
+  assert.equal(event.severity, 'error');
+});
+
 test('só informa porcentagem quando ela veio da evidência', () => {
   const event = detectarEventoProvedor('Gemini credits remaining: 12%');
   assert.equal(event.provider, 'google');

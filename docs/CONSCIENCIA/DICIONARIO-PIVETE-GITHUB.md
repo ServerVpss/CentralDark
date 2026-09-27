@@ -361,3 +361,11 @@ Nunca criar `DICIONARIO-PIVETE-GITHUB-v2.md`.
 - Este arquivo = **só GitHub + permissões de token**
 
 **Última atualização:** 2026-07-31 — Environments, Pages, Deployments, Dependabot, perfil mínimo do promotor autônomo e nome válido `PROMOTION_TOKEN`.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

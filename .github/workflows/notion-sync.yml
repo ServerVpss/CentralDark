@@ -2,15 +2,12 @@ name: 🧠 Notion Sync (docs/CONSCIENCIA → Notion)
 # Espelha automaticamente o conteúdo de docs/CONSCIENCIA/ para o Notion
 # usando UPSERT (cria se não existe, atualiza se existe).
 ## Lei vigente: Git é fonte da verdade. Notion é painel humano.
-# Ver docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md
-# Mapa dos databases: docs/CONSCIENCIA/NOTION-MAPA.md
+## Política temporária: best-effort. Falha do Notion não bloqueia CI/main.
 
 on:
   push:
     branches: [main]
     paths:
-      # Cobertura total: qualquer .md da CONSCIENCIA dispara o sync.
-      # Arquivos sensíveis (NUNCA_ESPELHAR) disparam mas são pulados no código.
       - 'docs/CONSCIENCIA/**/*.md'
       - 'docs/PENDENCIAS.md'
       - 'scripts/notion-sync/**'
@@ -37,42 +34,46 @@ on:
         default: 'all'
 
 permissions:
-  contents: write  # precisa pra commitar relatório + changelog
+  contents: write
 
 concurrency:
   group: notion-sync
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   sync:
-    name: Espelhar para o Notion
+    name: 🧩 Espelhar para o Notion (best-effort)
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 20
+    continue-on-error: true
     steps:
       - name: 📥 Checkout do repositório
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
-      - name: 🟢 Node 20
-        uses: actions/setup-node@v4
+      - name: 🟢 Node 24
+        uses: actions/setup-node@v7
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: 📦 Instalar @notionhq/client
+        continue-on-error: true
         working-directory: scripts/notion-sync
         run: npm install --omit=dev
 
-      - name: 🧠 Executar sync (UPSERT)
+      - name: 🧠 Executar sync (UPSERT) — opcional
+        continue-on-error: true
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
           TARGET: ${{ github.event.inputs.target || 'all' }}
           GITHUB_COMMIT: ${{ github.sha }}
           GITHUB_ACTOR: ${{ github.actor }}
-        run: node scripts/notion-sync/sync.mjs
+        run: timeout --signal=TERM --kill-after=30s 10m node scripts/notion-sync/sync.mjs
 
       - name: 🧹 Cleanup de órfãos (opcional)
+        continue-on-error: true
         if: github.event.inputs.cleanup_orphans != 'no' && github.event.inputs.cleanup_orphans != ''
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
@@ -82,7 +83,8 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
         run: node scripts/notion-sync/cleanup-orphans.mjs
 
-      - name: 📊 Relatório de consistência (Git ↔ Notion)
+      - name: 📊 Relatório de consistência (Git ↔ Notion) — opcional
+        continue-on-error: true
         if: always()
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
@@ -90,23 +92,25 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
         run: node scripts/notion-sync/report-consistency.mjs
 
-      - name: 📝 Commitar relatórios + changelog
+      - name: 📝 Publicar relatórios sem bloquear a main
+        continue-on-error: true
         if: always() && github.event.inputs.dry_run != 'true'
+        shell: bash
+        env:
+          WRITER_TAG: NOTION_REPORT
+          PATHS: docs/RELATORIOS/notion-sync
+          COMMIT_MESSAGE: |
+            chore(notion-sync): relatório + changelog [skip ci]
+
+            Commit-fonte: ${{ github.sha }}
+            Disparado por: ${{ github.actor }}
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          MAX_TRIES: "3"
         run: |
-          if [ -d "docs/RELATORIOS/notion-sync" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add docs/RELATORIOS/notion-sync/
-            if ! git diff --cached --quiet; then
-              git commit -m "chore(notion-sync): relatório + changelog [skip ci]" \
-                -m "Commit-fonte: ${{ github.sha }}" \
-                -m "Disparado por: ${{ github.actor }}"
-              # Cinto de segurança: outros workflows escrevem em main em paralelo.
-              # Rebase + retry resolve o "! [rejected] main -> main (fetch first)".
-              for i in 1 2 3 4 5; do
-                git pull --rebase -X ours origin main && git push && break
-                echo "push tentativa $i falhou, aguardando e retentando..."
-                sleep $((RANDOM % 5 + 2))
-              done
-            fi
+          set -euo pipefail
+          if [ ! -d "docs/RELATORIOS/notion-sync" ]; then
+            echo 'NOTION_REPORT_DIR_ABSENT=1'
+            exit 0
           fi
+          bash scripts/lupa/writer-safe-push-main.sh

@@ -1,0 +1,18 @@
+{
+  "video": {
+    "url": "https://www.youtube.com/watch?v=mpALXah_PBg",
+    "title": "Build & Sell with Claude Code (10+ Hour Course)",
+    "duration": "10:00:05",
+    "public_summary_sources": [
+      "https://moderncreator.app/2026-03-12-nate-herk-ai-automation-build-sell-with-claude-code-10-hour-course",
+      "https://sozai.app/transcripts/channel/nate-herk-ai-automation/"
+    ]
+  },
+  "centraldark_historical_topics": [
+    "docs/BRAIN/08-ARTEFATOS-VISUAIS",
+    "Evidence Envelope / agent_events / trace IDs",
+    "semantic fabric / hybrid retrieval",
+    "centraldark-operational-method",
+    "MCP OAuth / youtube_transcript historical runtime evidence"
+  ]
+}

@@ -1,5 +1,5 @@
-appId: com.stackblitz.bolt.diy
-productName: Bolt Local
+appId: com.centraldark.desktop
+productName: CentralDark
 directories:
   buildResources: build
   output: dist
@@ -8,6 +8,7 @@ files:
   - package.json
   - node_modules/**/*
   - icons/**
+  - resources/**
   - electron-update.yml
 extraMetadata:
   main: build/electron/main/index.mjs
@@ -32,8 +33,10 @@ mac:
 win:
   icon: assets/icons/icon.ico
   target:
-    - nsis
-  artifactName: ${name}-${version}-${os}-${arch}.${ext}
+    - target: nsis
+      arch:
+        - x64
+  artifactName: CentralDark-${version}-Windows-${arch}.${ext}
 
 linux:
   icon: assets/icons/icon.png
@@ -45,18 +48,24 @@ linux:
 
 nsis:
   oneClick: false
+  perMachine: false
+  allowElevation: true
   allowToChangeInstallationDirectory: true
-  createDesktopShortcut: true
+  installerIcon: assets/icons/icon.ico
+  uninstallerIcon: assets/icons/icon.ico
+  installerHeaderIcon: assets/icons/icon.ico
+  createDesktopShortcut: always
   createStartMenuShortcut: true
-  shortcutName: ${productName}
-  artifactName: ${name}-${version}-${os}-${arch}-setup.${ext}
+  shortcutName: CentralDark
+  runAfterFinish: true
+  artifactName: CentralDark-Setup-${version}-${arch}.${ext}
 
 npmRebuild: false
 
 publish:
   provider: github
-  owner: Derek-X-Wang
-  repo: bolt.local
+  owner: ServerVpss
+  repo: CentralDark
   private: true
   releaseType: release
 

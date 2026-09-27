@@ -1,6 +1,7 @@
 // Grafo CentralDark — renderizador force-graph
 // Efeito de partículas fluindo nas arestas + cor por status/categoria + destaque no hover.
 // Mantém compat com o /api/graph atual (nodes/edges do server.js).
+// CARACOL é overlay de navegação: NÃO entra em edges, NÃO muda causalidade e NÃO muda a física.
 
 const graphEl = document.getElementById("graph");
 const nodesEl = document.getElementById("nodes");
@@ -16,6 +17,13 @@ let dadosGrafo = { nodes: [], links: [] };
 let noHover = null;
 let vizinhos = new Set();
 let arestasVizinhas = new Set();
+
+const CARACOL = {
+  enabled: true,
+  shellCount: 12,
+  alpha: 0.28,
+  lineWidth: 1.4,
+};
 
 function escapeHtml(v) {
   return String(v).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -37,13 +45,13 @@ async function getJson(path) {
 
 // Paleta por status/categoria — bate o olho e entende a saúde
 const CORES_STATUS = {
-  online: "#10b981",   // verde
+  online: "#10b981",
   healthy: "#10b981",
   ok: "#10b981",
-  degraded: "#f59e0b", // amarelo
+  degraded: "#f59e0b",
   warning: "#f59e0b",
   unstable: "#f59e0b",
-  errored: "#ef4444",  // vermelho
+  errored: "#ef4444",
   down: "#ef4444",
   offline: "#ef4444",
   stopped: "#ef4444",
@@ -67,7 +75,7 @@ function corDoNo(n) {
   if (CORES_STATUS[st]) return CORES_STATUS[st];
   const cat = String(n.category || n.group || n.type || "").toLowerCase();
   if (CORES_CATEGORIA[cat]) return CORES_CATEGORIA[cat];
-  return "#64748b"; // cinza-azulado neutro
+  return "#64748b";
 }
 function ehCritico(n) {
   const st = String(n.status || "").toLowerCase();
@@ -81,7 +89,6 @@ function normalizar(graph) {
     label: n.label || n.id,
   }));
   const idsValidos = new Set(nodes.map(n => n.id));
-  // O server pode entregar `edges` com {from,to} (vis) OU {source,target} (force). Aceita ambos.
   const links = (graph.edges || graph.links || [])
     .map(e => ({
       ...e,
@@ -106,6 +113,82 @@ function indexarVizinhos(no) {
   }
 }
 
+function textoNormalizado(n) {
+  return `${n.id || ""} ${n.label || ""}`
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+function grauDosNos() {
+  const grau = new Map(dadosGrafo.nodes.map(n => [n.id, 0]));
+  for (const l of dadosGrafo.links) {
+    const s = typeof l.source === "object" ? l.source.id : l.source;
+    const t = typeof l.target === "object" ? l.target.id : l.target;
+    grau.set(s, (grau.get(s) || 0) + 1);
+    grau.set(t, (grau.get(t) || 0) + 1);
+  }
+  return grau;
+}
+
+function centroDoCaracol() {
+  const nucleusTokens = ["leia-me-ia", "00-leia-primeiro", "mapa-do-cerebro", "consciencia"];
+  const nucleus = dadosGrafo.nodes.filter(n => nucleusTokens.some(t => textoNormalizado(n).includes(t)));
+  const prontos = nucleus.filter(n => Number.isFinite(n.x) && Number.isFinite(n.y));
+  if (prontos.length) {
+    return {
+      x: prontos.reduce((s, n) => s + n.x, 0) / prontos.length,
+      y: prontos.reduce((s, n) => s + n.y, 0) / prontos.length,
+      mode: "canonical-triad",
+    };
+  }
+
+  const grau = grauDosNos();
+  const hubs = [...dadosGrafo.nodes]
+    .filter(n => Number.isFinite(n.x) && Number.isFinite(n.y))
+    .sort((a, b) => (grau.get(b.id) || 0) - (grau.get(a.id) || 0) || String(a.id).localeCompare(String(b.id)));
+  if (hubs.length) return { x: hubs[0].x, y: hubs[0].y, mode: "highest-degree-fallback" };
+  return { x: 0, y: 0, mode: "origin-fallback" };
+}
+
+function ordemCaracol() {
+  const validos = dadosGrafo.nodes.filter(n => Number.isFinite(n.x) && Number.isFinite(n.y));
+  if (validos.length < 2) return validos;
+  const c = centroDoCaracol();
+  const polar = validos.map(n => {
+    const dx = n.x - c.x;
+    const dy = n.y - c.y;
+    return { n, r: Math.hypot(dx, dy), a: Math.atan2(dy, dx) };
+  });
+  const maxR = Math.max(1, ...polar.map(p => p.r));
+  for (const p of polar) {
+    const normalized = p.r / maxR;
+    p.shell = Math.min(CARACOL.shellCount - 1, Math.floor(normalized * CARACOL.shellCount));
+  }
+  // Linha única de fora para dentro. Cada anel gira alternadamente para reduzir cruzamentos locais.
+  polar.sort((p, q) => {
+    if (p.shell !== q.shell) return q.shell - p.shell;
+    const pa = p.shell % 2 ? -p.a : p.a;
+    const qa = q.shell % 2 ? -q.a : q.a;
+    return pa - qa || q.r - p.r || String(p.n.id).localeCompare(String(q.n.id));
+  });
+  return polar.map(p => p.n);
+}
+
+function desenharCaracol(ctx, globalScale) {
+  if (!CARACOL.enabled || noHover) return;
+  const ordem = ordemCaracol();
+  if (ordem.length < 2) return;
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(ordem[0].x, ordem[0].y);
+  for (let i = 1; i < ordem.length; i++) ctx.lineTo(ordem[i].x, ordem[i].y);
+  ctx.strokeStyle = `rgba(139,92,246,${CARACOL.alpha})`;
+  ctx.lineWidth = Math.max(0.35, CARACOL.lineWidth / globalScale);
+  ctx.setLineDash([5 / globalScale, 4 / globalScale]);
+  ctx.stroke();
+  ctx.restore();
+}
+
 function renderGraph(graph) {
   dadosGrafo = normalizar(graph);
   const largura = graphEl.clientWidth || 800;
@@ -123,7 +206,6 @@ function renderGraph(graph) {
         const alpha = foco ? 1 : 0.15;
         const r = 5 + Math.min(6, (node.val || node.size || 0) / 4);
 
-        // Pulso vivo em nó crítico
         if (ehCritico(node)) {
           const t = (Date.now() % 1400) / 1400;
           const rp = r + t * 12;
@@ -134,7 +216,6 @@ function renderGraph(graph) {
           ctx.stroke();
         }
 
-        // Nó
         ctx.beginPath();
         ctx.arc(node.x, node.y, r, 0, 2 * Math.PI);
         ctx.fillStyle = cor + (alpha < 1 ? "26" : "");
@@ -144,7 +225,6 @@ function renderGraph(graph) {
         ctx.strokeStyle = "rgba(255,255,255,.35)";
         ctx.stroke();
 
-        // Label
         const fs = Math.max(10 / scale, 3);
         ctx.font = `${fs}px Inter, system-ui, sans-serif`;
         ctx.textAlign = "center";
@@ -170,6 +250,7 @@ function renderGraph(graph) {
       })
       .linkDirectionalArrowLength(3)
       .linkDirectionalArrowRelPos(1)
+      .onRenderFramePost((ctx, globalScale) => desenharCaracol(ctx, globalScale))
       .onNodeHover(n => {
         noHover = n || null;
         indexarVizinhos(noHover);
@@ -186,7 +267,6 @@ function renderGraph(graph) {
       .d3AlphaDecay(0.035)
       .d3VelocityDecay(0.5);
 
-    // Física — espalhar bem, sem sobreposição
     if (fg.d3Force) {
       const chg = fg.d3Force("charge");
       if (chg) chg.strength(-600).distanceMax(800);
@@ -194,9 +274,7 @@ function renderGraph(graph) {
       if (lnk) lnk.distance(60).strength(0.25);
       const ctr = fg.d3Force("center");
       if (ctr && ctr.strength) ctr.strength(0.04);
-      if (window.d3 && window.d3.forceCollide) {
-        fg.d3Force("collide", window.d3.forceCollide(14));
-      }
+      if (window.d3 && window.d3.forceCollide) fg.d3Force("collide", window.d3.forceCollide(14));
     }
 
     const ajustar = () => fg.width(graphEl.clientWidth).height(graphEl.clientHeight || 600);

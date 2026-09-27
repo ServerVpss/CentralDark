@@ -1,0 +1,25 @@
+flowchart LR
+    subgraph CASA[ Casa Local ]
+        NUCLEO[(NUCLEO)]
+        WORKTREES[Worktrees]
+        AUTO[Auto-Destilador]
+    end
+    subgraph GITHUB[ ServerVpss/CentralDark ]
+        MAIN[(main)]
+        PR[Pull Requests]
+        ACTIONS[Actions Runner]
+    end
+    subgraph VPS[ VPS Produção ]
+        PM2[PM2 Processes]
+        MCP[CentralDark-MCP]
+        WEBUI[WebUI]
+    end
+    NUCLEO --> WORKTREES
+    AUTO --> NUCLEO
+    WORKTREES --> PR
+    PR --> MAIN
+    MAIN --> ACTIONS
+    ACTIONS -->|deploy| VPS
+    PM2 --> MCP
+    MCP --> WEBUI
+    NUCLEO -. "REALITY_JUDGE" .- MAIN

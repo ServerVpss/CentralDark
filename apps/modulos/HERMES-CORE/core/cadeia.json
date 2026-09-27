@@ -1,11 +1,6 @@
 {
   "descricao": "Cadeia oficial de modelos do Hermes — EDITÁVEL. O decisor.mjs recarrega este arquivo a cada 60s. Reordene, ative/desative ou ajuste timeouts sem reiniciar PM2.",
-  "atualizado_em": "2026-08-15",
-  "routing": {
-    "strategy": "priority",
-    "strategies_supported": ["priority", "cost", "latency", "round_robin"],
-    "nota": "priority=ordem do array; cost=timeout crescente (barato primeiro); latency=timeout crescente; round_robin=rotaciona início. Delta absorvido do OmniRoute sem segundo router."
-  },
+  "atualizado_em": "2026-07-17",
   "cadeia": [
     {
       "posicao": 1,
@@ -13,8 +8,6 @@
       "via": "darkai",
       "timeout_s": 15,
       "ativo": true,
-      "tier": "free",
-      "cost_weight": 1,
       "nota": "decisão rápida padrão (~90% das etapas)"
     },
     {
@@ -23,8 +16,6 @@
       "via": "darkai",
       "timeout_s": 30,
       "ativo": true,
-      "tier": "paid",
-      "cost_weight": 3,
       "nota": "raciocínio maior, contexto grande"
     },
     {
@@ -33,8 +24,6 @@
       "via": "darkai",
       "timeout_s": 20,
       "ativo": true,
-      "tier": "free",
-      "cost_weight": 1,
       "nota": "flash médio"
     },
     {
@@ -43,8 +32,6 @@
       "via": "darkai",
       "timeout_s": 15,
       "ativo": true,
-      "tier": "free",
-      "cost_weight": 1,
       "nota": "flash lite, econômico"
     },
     {
@@ -53,8 +40,6 @@
       "via": "darkai",
       "timeout_s": 60,
       "ativo": true,
-      "tier": "paid",
-      "cost_weight": 5,
       "nota": "GPT-5 completo"
     },
     {
@@ -63,8 +48,6 @@
       "via": "darkai",
       "timeout_s": 45,
       "ativo": true,
-      "tier": "paid",
-      "cost_weight": 3,
       "nota": "backup se Gemini falhar"
     },
     {
@@ -73,8 +56,6 @@
       "via": "darkai",
       "timeout_s": 20,
       "ativo": true,
-      "tier": "paid",
-      "cost_weight": 2,
       "nota": "nano rápido"
     },
     {
@@ -83,8 +64,6 @@
       "via": "darkai",
       "timeout_s": 45,
       "ativo": true,
-      "tier": "paid",
-      "cost_weight": 3,
       "nota": "chat generalista"
     },
     {
@@ -93,8 +72,6 @@
       "via": "darkai",
       "timeout_s": 90,
       "ativo": false,
-      "tier": "paid",
-      "cost_weight": 8,
       "nota": "top tier, alto custo — desligado por padrão"
     },
     {
@@ -102,60 +79,48 @@
       "modelo": "anthropic/claude-opus-4-1",
       "via": "darkai",
       "timeout_s": 60,
-      "ativo": true,
-      "tier": "paid",
-      "cost_weight": 6,
-      "nota": "opus grande"
+      "ativo": false,
+      "nota": "DESLIGADO 17/07: modelo NAO existe no gateway ai-proxy (invalid model). Nao e chave."
     },
     {
       "posicao": 11,
       "modelo": "anthropic/claude-sonnet-4-5",
       "via": "darkai",
       "timeout_s": 45,
-      "ativo": true,
-      "tier": "paid",
-      "cost_weight": 4,
-      "nota": "sonnet forte"
+      "ativo": false,
+      "nota": "DESLIGADO 17/07: modelo NAO existe no gateway ai-proxy (invalid model). Nao e chave."
     },
     {
       "posicao": 12,
       "modelo": "anthropic/claude-haiku-4-5",
       "via": "darkai",
       "timeout_s": 20,
-      "ativo": true,
-      "tier": "paid",
-      "cost_weight": 2,
-      "nota": "haiku rápido"
+      "ativo": false,
+      "nota": "DESLIGADO 17/07: modelo NAO existe no gateway ai-proxy (invalid model). Nao e chave."
     },
     {
       "posicao": 13,
       "modelo": "x-ai/grok-4",
       "via": "darkai",
       "timeout_s": 45,
-      "ativo": true,
-      "tier": "paid",
-      "cost_weight": 4,
-      "nota": "grok padrão"
+      "ativo": false,
+      "nota": "DESLIGADO 17/07: modelo NAO existe no gateway ai-proxy (invalid model). Nao e chave."
     },
     {
       "posicao": 14,
       "modelo": "x-ai/grok-4-fast",
       "via": "darkai",
       "timeout_s": 20,
-      "ativo": true,
-      "tier": "paid",
-      "cost_weight": 2,
-      "nota": "grok fast"
+      "ativo": false,
+      "nota": "DESLIGADO 17/07: modelo NAO existe no gateway ai-proxy (invalid model). Nao e chave."
     },
     {
       "posicao": 15,
       "modelo": "x-ai/grok-code-fast-1",
       "via": "darkai",
       "timeout_s": 30,
-      "ativo": true,
-      "tier": "paid",
-      "cost_weight": 3,
-      "nota": "grok código"
+      "ativo": false,
+      "nota": "DESLIGADO 17/07: modelo NAO existe no gateway ai-proxy (invalid model). Nao e chave."
     },
     {
       "posicao": 16,
@@ -163,9 +128,7 @@
       "via": "centraldark-gateway",
       "timeout_s": 30,
       "ativo": true,
-      "tier": "elite",
-      "cost_weight": 5,
-      "nota": "ELITE — última bala via Gateway CentralDark"
+      "nota": "ELITE — 2a ROTA REAL (independente do ai-proxy). Proxy local :8082 VIVO com 6 modelos anthropic (sonnet-4.6, opus-4.8, haiku-4.6). Religado 17/07 apos erro de diagnostico: eu testei a porta 8080 (outro servico) e declarei morto. So falta CENTRALLDARK_API_KEY nos secrets."
     }
   ],
   "elite": {

@@ -1,4 +1,4 @@
-name: Arsenal Adapter — Tests
+name: ⚙️ Arsenal Adapter — Tests
 
 on:
   pull_request:
@@ -14,18 +14,20 @@ on:
 
 jobs:
   test-models:
-    name: /v1/models — invariantes críticos (localhost)
-    runs-on: ubuntu-latest
+    name: 🧩 /v1/models — invariantes críticos (localhost)
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v5
-
-      - name: Setup Node 20
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: '20'
+          persist-credentials: false
 
-      - name: Sintaxe (node --check)
+      - name: 🔹 Setup Node 24
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+
+      - name: 🔹 Sintaxe (node --check)
         run: |
           cd apps/modulos/arsenal-openai-adapter
           node --check server.mjs
@@ -33,7 +35,7 @@ jobs:
           node --check tests/models.test.mjs
           echo "🟢 sintaxe OK"
 
-      - name: Subir Arsenal Adapter em localhost:8090
+      - name: 🔹 Subir Arsenal Adapter em localhost:8090
         run: |
           cd apps/modulos/arsenal-openai-adapter
           REGRAS_PATH=./regras.json PORT=8090 BIND=127.0.0.1 nohup node server.mjs > /tmp/adapter.log 2>&1 &
@@ -49,24 +51,24 @@ jobs:
           cat /tmp/adapter.log
           exit 1
 
-      - name: Teste /v1/models (localhost)
+      - name: 🔹 Teste /v1/models (localhost)
         env:
           GATEWAY_URL: http://127.0.0.1:8090
         run: |
           cd apps/modulos/arsenal-openai-adapter
           npm test
 
-      - name: Prova externa (gateway público — soft)
+      - name: 🔹 Prova externa (gateway público — soft)
         continue-on-error: true
         env:
           GATEWAY_URL: https://api.centralldark.com
           CENTRALDARK_API_KEY: ${{ secrets.CENTRALDARK_API_KEY }}
         run: |
           cd apps/modulos/arsenal-openai-adapter
-          echo "🟡 Prova externa (pode 403 se WAF bloquear IP do runner)"
-          npm test || echo "🟡 gateway externo indisponível pro runner — não crítico"
+          echo "🟡 Prova externa opcional; indisponibilidade externa não vira PASS nem derruba prova local"
+          npm test || echo "EXTERNAL_PROBE=UNAVAILABLE_NON_BLOCKING"
 
-      - name: Parar adapter
+      - name: 🔹 Parar adapter
         if: always()
         run: |
           [ -f /tmp/adapter.pid ] && kill $(cat /tmp/adapter.pid) 2>/dev/null || true

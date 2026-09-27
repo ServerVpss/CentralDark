@@ -1,4 +1,4 @@
-name: GitHub Bot Controller
+name: ⚙️ GitHub Bot Controller
 
 on:
   workflow_dispatch:
@@ -38,21 +38,21 @@ concurrency:
 
 jobs:
   controller:
-    name: Auditar PRs e fechar substituídas com segurança
+    name: 🧩 Auditar PRs e fechar substituídas com segurança
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
 
     steps:
-      - name: Checkout confiável da main
-        uses: actions/checkout@v6
+      - name: 🔹 Checkout confiável da main
+        uses: actions/checkout@v7
         with:
           ref: main
           persist-credentials: false
 
-      - name: Validar runtime Node
+      - name: 🔹 Validar runtime Node
         run: node --version
 
-      - name: Executar GitHub Bot Controller legado
+      - name: 🔹 Executar GitHub Bot Controller legado
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BOT_EXPECTED_REPOSITORY: ServerVpss/CentralDark

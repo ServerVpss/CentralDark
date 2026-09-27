@@ -1,0 +1,665 @@
+semantic_identity:
+  canonical_display_family: HERMES_TRISMEGISTUS
+  display_name: HERMES_TRISMEGISTUS_RUNTIME
+  core_display_name: HERMES_TRISMEGISTUS_CORE
+  kernel_display_name: HERMES_TRISMEGISTUS_KERNEL
+  technical_owner_unchanged: true
+  creates_new_runtime: false
+  creates_new_kernel: false
+  creates_new_core: false
+  source_guard: CENTRALDARK_AI_BOOT.yaml#hermes_trismegistus_context_gate
+  formal_truth_gate: CENTRALDARK_AI_BOOT.yaml#tcl23_horn_gate
+  judge: REALIDADE
+
+schema: centraldark.hermes-autoconfig-runtime.v1
+status: CANONICAL_RUNTIME_CONTRACT
+authority: SEGREDO/CHEFE
+pr_mother: 1562
+promoted_directly_by_chefe: 2026-09-18
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+executor: apps/modulos/HERMES-CORE/
+aureola_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+reuses:
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PERSISTENT-AUTONOMOUS-ZORDS.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SECOND-BRAIN.yml
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SPIRAL-TRAVERSAL.yml
+  - docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/MAPA-OBSIDIAN-BRAIN.md
+  - apps/modulos/HERMES-CORE/prompts/hermes-core.md
+invariants:
+  ONE_SYSTEM_ONLY: true
+  REUSE_BEFORE_CREATE: true
+  ONE_WRITER_PER_SCOPE: true
+  REALITY_IS_JUDGE: true
+  UNKNOWN_IS_NOT_PASS: true
+  NO_PARALLEL_BRAIN: true
+  NO_SECOND_ROUTER: true
+  FULL_PERMISSION_DOES_NOT_BYPASS_GATES: true
+graph_alignment:
+  structural_source_of_truth: ServerVpss/CentralDark@main
+  structural_truth_owner: GIT_MAIN_PLUS_CANONICAL_OWNERS
+  live_operational_truth: CURRENT_MEASURED_RUNTIME
+  knowledge_graph_role: DERIVED_NAVIGATION_PROJECTION
+  caracol_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SPIRAL-TRAVERSAL.yml
+  obsidian_map: docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/MAPA-OBSIDIAN-BRAIN.md
+  notes_stay_in_territory: true
+  move_notes_to_runtime_nucleus: false
+  historical_redirect_role: PROVENANCE_AND_COMPATIBILITY_ROUTE
+  historical_redirect_is_current: false
+  graph_proximity_is_causality: false
+  caracol_creates_semantic_edges: false
+  route:
+    - TERRITORY_OWNER
+    - MOC_OR_WIKILINK
+    - GRAPH_PROJECTION
+    - CARACOL_OVERLAY
+    - GIT_MAIN_CANONICAL_OWNER
+    - MASTER_CYCLE
+    - HERMES
+    - MCP_AND_SENSORS
+    - MEASURED_RUNTIME
+  proof_lane:
+    - TLC23_HORN
+    - PDF_GATE
+    - COUNTERPROOF
+    - REALITY_JUDGE
+  gate_invariants:
+    MAP_CHANGE_IS_NOT_GATE_PASS: true
+    OBSIDIAN_CHANGE_IS_NOT_GATE_PASS: true
+    HISTORICAL_REDIRECT_IS_NOT_GATE_PASS: true
+    NAVIGATION_MUST_NOT_MUTATE_TLC23_PDF_GATE_STATE: true
+    PASS_REQUIRES_CURRENT_REPRODUCIBLE_EVIDENCE: true
+
+mission:
+  objective: >-
+    Tornar Hermes auto-configuravel entre Casa e VPS sem redefinir a intencao do CHEFE,
+    inventariando runtime, MCPs, modelos, rotas, sandbox e eventos antes de mutar.
+  flow:
+    - CHEFE_INTENT
+    - CENTRALDARK_MASTER
+    - MEASURE_CURRENT_STATE
+    - INVENTORY_CAPABILITIES_ROUTES_MODELS_MCP_RUNTIME
+    - RECONCILE_EXISTING_OWNERS
+    - CHOOSE_MINIMUM_SUFFICIENT_RUNTIME
+    - EXECUTE
+    - EVIDENCE
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - RECEIPT
+    - HANDOFF
+    - NEXT_CURSOR
+runtime_profiles:
+  casa:
+    role:
+      - WORKSPACE
+      - SENSORS
+      - DESKTOP
+      - LOCAL_MCP
+      - OPTIONAL_LOCAL_MODEL
+    docker_role: SANDBOX_WORKLOAD_NOT_BRAIN
+    wsl_role: LINUX_EXECUTION_SURFACE_NOT_AUTHORITY
+    windows_event_viewer: SIGNAL_SOURCE
+    direct_event_to_hermes_gui: false
+  vps:
+    role:
+      - PRIMARY_HEADLESS_EXECUTOR
+      - WORKERS
+      - MCP_RUNTIME
+      - SCHEDULERS
+    root_execution: ONLY_WHEN_EXISTING_RUNTIME_REQUIRES_AND_SCOPE_IS_PROVEN
+    root_is_default_authority: false
+    prefer_least_required_privilege: true
+doctor_event_bridge:
+  flow:
+    - EVENT
+    - NORMALIZE
+    - FINGERPRINT
+    - DEDUPE
+    - COOLDOWN
+    - HERMES_DOCTOR
+    - CAPABILITY_ROUTER
+    - MINIMAL_REMEDIATION
+    - REMEASURE
+    - RECEIPT
+    - LEARN
+  same_fingerprint_no_new_info: NO_RERUN
+  wmi_5858: SIGNAL_NOT_COMMAND
+garimpo:
+  path_example: 'E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE'
+  architecture:
+    watcher: ONE
+    event_fields: [path, hash, mtime, type]
+    route: SECTOR_ROUTER_TO_EXISTING_OWNER
+  flow:
+    - NORMALIZE
+    - DEDUPE
+    - UNIQUE_DELTA
+    - TEST
+    - COUNTERPROOF
+    - CHILD_PR_1562
+    - SAME_HEAD_GATES
+    - MAIN
+    - MICRO_DEPLOY_IF_APPLICABLE
+    - RECEIPT
+    - HANDOFF
+model_routing:
+  model_is_replaceable: true
+  capability_is_authority: false
+  mcp_is_authority: false
+  provider_is_authority: false
+  inputs:
+    - capability_required
+    - runtime_required
+    - observed_latency_cost
+    - local_remote_availability
+    - tool_mcp_compatibility
+    - context_requirements
+    - privacy_scope
+    - current_health
+  record:
+    - selected_engine
+    - selected_model
+    - selected_runtime
+    - reason
+    - evidence
+    - fallback_used
+    - observed_at
+  local_llamacpp_jan: UNKNOWN_UNTIL_MEASURED
+security:
+  disable_defender_globally: false
+  controlled_folder_access:
+    observed_candidate:
+      process: pwsh.exe
+      target: '%userprofile%\AppData\LocalLow\Temp'
+      causality: UNKNOWN
+    remediation_flow:
+      - DIAGNOSE
+      - IDENTIFY_EXACT_PROCESS_PATH_OWNER
+      - MINIMUM_SAFE_ADAPTATION
+      - RETEST
+autonomy:
+  AGENT_DECIDES_UTILITY: false
+  CHEFE_DECIDES_OBJECTIVE: true
+  HERMES_DECIDES_IMPLEMENTATION_ROUTE: true
+  HERMES_MAY_AUTOCONTINUE_MACHINE_RESOLVABLE_BLOCKERS: true
+  HERMES_MAY_NOT_REDEFINE_OBJECTIVE: true
+persistent_loop:
+  flow:
+    - MEASURE
+    - FIND_NEW_DELTA
+    - FIX
+    - RETEST
+    - COUNTERPROOF
+    - RECEIPT
+    - NEXT
+  no_new_information: NO_CHANGE_WAIT_FOR_EVENT
+  infinite_retry_without_information_gain: FORBIDDEN
+delta_utility_runtime_gate:
+  status: ACTIVE
+  canonical_phrase: "DELTA_UTIL_CONTINUA; SEM_PROVA_NAO_PASSA"
+  applies_to:
+    - HERMES
+    - SOL
+    - PIVETE
+    - CURRENT_EXECUTOR
+  rules:
+    USEFUL_DELTA_DOES_NOT_REQUIRE_IMMEDIATE_PASS: true
+    USEFUL_DELTA_WITHOUT_PROOF_STATE: CANDIDATE_OR_UNKNOWN
+    NO_PROOF_NO_PASS: true
+    LOCAL_FAILURE_OPENS_DIAGNOSIS: true
+    MACHINE_RESOLVABLE_FAILURE_CONTINUES_AUTONOMOUSLY: true
+    SAME_FAILURE_WITHOUT_NEW_INFORMATION: REUSE_CRYSTAL_OR_NO_CHANGE
+    PROVEN_DELTA_BINDS_TO_EXISTING_OWNER_AND_RUNTIME: true
+    DUPLICATE_WITHOUT_NEW_EVIDENCE: DROP_DUPLICATE
+    HUMAN_RETURN_REQUIRES_HUMAN_FRONTIER_OR_EXACT_HARD_BLOCKER: true
+  loop:
+    - MEASURE
+    - EXTRACT_DELTA_UTIL
+    - CLASSIFY_FACT_HYPOTHESIS_UNKNOWN
+    - SEARCH_EXISTING_CRYSTAL
+    - IDENTIFY_EXISTING_OWNER
+    - APPLY_MINIMAL_SAFE_REMEDIATION
+    - TEST
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - CRYSTALLIZE_IF_PROVEN
+    - RECEIPT
+    - CONTINUE_NEXT_CURSOR
+  promotion_gate:
+    PASS_REQUIRES_EVIDENCE: true
+    UNKNOWN_IS_NOT_PASS: true
+    ACTION_IS_NOT_PROOF: true
+    DOCUMENTED_IS_NOT_EXECUTED: true
+    FAILURE_WITHOUT_SAFE_ROUTE: EXACT_BLOCKER_RECEIPT
+  fixed_point_behavior:
+    continue_while_material_delta_exists: true
+    stop_on_no_material_delta_or_human_frontier: true
+    no_information_gain: NO_CHANGE_WAIT_FOR_EVENT
+
+continuous_capability_absorption:
+  status: ACTIVE
+  owner: apps/modulos/HERMES-CORE/
+  fixed_point_is_learning_gate: false
+  approved_material_step_emits_learning_ref: true
+  proven_reusable_delta_binds_before_global_fixed_point: true
+  learning_owner: apps/modulos/HERMES-CORE/agents/Knowledge-Collector/agent.mjs
+  decision_consumer: apps/modulos/HERMES-CORE/core/decisor.mjs
+  runtime_producer: apps/modulos/HERMES-CORE/core/orchestrator.mjs
+  rules:
+    CONTINUOUS_HERMES_CAPABILITY_ABSORPTION: true
+    FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE: true
+    PROVEN_REUSABLE_DELTA_BINDS_TO_CORE_BEFORE_GLOBAL_FIXED_POINT: true
+    MATERIAL_APPROVED_STEP_EMITS_LEARNING_REF: true
+    MATERIAL_FROM_CHEFE_AUTO_INGEST: true
+    MATERIAL_FROM_CHEFE_IS_NOT_AUTOMATIC_FACT: true
+    PROVEN_MATERIAL_AUTO_CRYSTALLIZES_IN_EXISTING_OWNER: true
+    UNPROVEN_MATERIAL_STAYS_CANDIDATE_OR_UNKNOWN: true
+    ASK_TO_CRYSTALLIZE_ALREADY_PROVEN_DELTA: false
+    PRE_RESPONSE_MATERIAL_RECONCILIATION_REQUIRED: true
+    NO_EXPLANATION_INSTEAD_OF_AVAILABLE_ACTION: true
+    LEARNING_FAILURE_MUST_BE_VISIBLE: true
+    SAME_LEARNING_WITHOUT_NEW_EVIDENCE: DEDUPE
+    REUSE_BEFORE_CREATE: true
+
+official_hermes_update_continuity:
+  status: ACTIVE
+  owner: .github/workflows/hermes-core-signal-watch.yml
+  semantic_owner: apps/modulos/HERMES-CORE
+  upstream: NousResearch/hermes-agent
+  purpose: KEEP_OFFICIAL_HERMES_CURRENT_WITHOUT_HUMAN_MICROMANAGEMENT
+  reuse_before_create: true
+  new_parallel_updater: false
+  official_cli_is_update_engine: true
+  trigger_model:
+    webhook_accelerator:
+      event: repository_dispatch:hermes_official_update_check
+      optional: true
+    schedule_fallback:
+      owner: existing_hermes_core_signal_watch_schedule
+      required: true
+  deterministic_flow:
+    - HERMES_UPDATE_CHECK
+    - IF_NO_CHANGE_WRITE_RECEIPT_AND_STOP
+    - HERMES_UPDATE_PLAN
+    - HERMES_UPDATE_BACKUP_YES
+    - OFFICIAL_BUILD_AND_DEPENDENCY_REFRESH
+    - HERMES_GATEWAY_RESTART_WHEN_MANAGED
+    - CENTRALDARK_HERMES_PM2_RESTART_WHEN_PRESENT
+    - HERMES_UPDATE_POSTCHECK
+    - VERSION_REMEASURE
+    - RECEIPT
+  commands:
+    check: hermes update --check
+    plan: hermes update --plan
+    apply: hermes update --backup --yes
+    gateway_restart: hermes gateway restart
+  safety:
+    bounded_lock: true
+    update_only_when_official_check_reports_delta: true
+    full_backup_before_apply: true
+    official_updater_rollback_semantics_preserved: true
+    secret_output_forbidden: true
+    generic_failure_forbidden: true
+    exact_failure_step_required: true
+    post_update_check_must_report_current: true
+    unknown_is_not_pass: true
+  human_contract:
+    human_does_not_need_to_remember_update_command: true
+    human_does_not_receive_microcommand_chain: true
+    machine_handles_check_plan_backup_update_restart_and_verify: true
+    human_return_only_on_human_frontier_or_exact_hard_blocker: true
+  runtime_receipt: ~/.hermes/logs/update_receipts/centraldark-official-update-last.json
+  tutorial_loaded_by_core_prompt: true
+
+fixed_point:
+  require:
+    - INVENTORY_CURRENT
+    - CASA_RUNTIME_PROFILE_PROVEN
+    - VPS_RUNTIME_PROFILE_PROVEN
+    - SANDBOX_ROUTE_PROVEN
+    - WINDOWS_EVENT_BRIDGE_PROVEN
+    - DOCTOR_ROUTE_PROVEN
+    - GARIMPO_WATCHER_PROVEN
+    - MODEL_ROUTING_PROVEN
+    - MCP_ROUTING_PROVEN
+    - RECEIPT_HANDOFF_PROVEN
+    - NO_PARALLEL_BRAIN
+    - NO_SECOND_ROUTER
+    - NO_FALSE_GREEN
+    - UNKNOWN_ZERO
+
+
+zero_regression_filter:
+  status: ACTIVE
+  authority: SEGREDO_CHEFE
+  purpose: >
+    Revisar criticamente toda mutacao de codigo/infra antes de executar,
+    impedir regressao, risco operacional e complexidade inutil, e exigir
+    extensao segura do que ja funciona.
+  sequence:
+    - CHEFE_INTENT
+    - CENTRALDARK_RULE_ZERO
+    - LIVE_STATE
+    - ALIGNMENT
+    - MINIMAL_DELTA
+    - EVIDENCE
+    - COUNTERPROOF
+    - REALITY_JUDGE
+  laws:
+    CURRENT_GT_HISTORICAL: true
+    REALITY_IS_JUDGE: true
+    UNKNOWN_IS_NOT_PASS: true
+    DOCUMENTED_IS_NOT_EXECUTED: true
+    ACTION_IS_NOT_PROOF: true
+    REUSE_BEFORE_CREATE: true
+    ONE_SYSTEM_ONLY: true
+    LEGACY_PRESERVED_WHEN_CONFLICT_UNKNOWN: true
+    IRREVERSIBLE_MUTATION_REQUIRES_EXPLICIT_AUTH: true
+  execution_contract:
+    - REVIEW_PLAN_BEFORE_MUTATION
+    - MEASURE_CURRENT_RUNTIME
+    - REUSE_EXISTING_OWNER
+    - APPLY_SMALLEST_SAFE_DELTA
+    - PROVE_EXPECTED_EFFECT
+    - PROVE_NO_REGRESSION
+    - LET_CURRENT_RUNTIME_ARBITRATE
+  proof_gate:
+    always_active: true
+    lane:
+      - TLC23_HORN
+      - PDF_GATE
+      - COUNTERPROOF
+      - PASS
+    partial_execution_is_pass: false
+    token_consumption_is_pass: false
+    visual_appearance_is_pass: false
+    stale_evidence_is_pass: false
+    map_or_obsidian_change_is_pass: false
+    same_head_required: true
+    current_reproducible_evidence_required: true
+  fail_closed:
+    unknown_blocks_promotion: true
+    missing_dependency_remains_explicit: true
+    conflict_preserves_legacy_until_reconciled: true
+    no_green_by_approximation: true
+
+
+typed_boundary_policy:
+  status: ACTIVE
+  intent: >-
+    Aumentar determinismo e seguranca de interfaces criticas sem reescrever
+    indiscriminadamente todo JavaScript do runtime.
+  principle:
+    STRONGER_BOUNDARIES_BEFORE_STRONGER_EVERYWHERE: true
+    MASS_JS_TO_TS_REWRITE: FORBIDDEN_WITHOUT_PROVEN_BENEFIT
+    EXISTING_STABLE_JS_MUST_NOT_BE_REWRITTEN_ONLY_FOR_STYLE: true
+    RUNTIME_SHAPES_MUST_BE_VALIDATED_AT_TRUST_BOUNDARIES: true
+  apply_first_to:
+    - MCP_TOOL_INPUT_OUTPUT
+    - RUNTIME_RECEIPTS
+    - EVENT_ENVELOPES
+    - SCHEDULER_JOB_DEFINITIONS
+    - AUTH_SESSION_METADATA_WITHOUT_SECRETS
+    - PROVIDER_CAPABILITY_RECORDS
+    - BRIDGE_TRAY_IPC
+    - GITHUB_AUTOMATION_PAYLOADS
+  preferred_mechanisms:
+    javascript:
+      - ZOD
+      - JSON_SCHEMA
+      - JSDOC_WHERE_MIGRATION_IS_NOT_JUSTIFIED
+    typescript:
+      - STRICT_TRUE
+      - NO_IMPLICIT_ANY_TRUE
+      - DISCRIMINATED_UNIONS_FOR_STATE
+    powershell:
+      - VALIDATESET
+      - TYPED_PARAMETERS
+      - EXPLICIT_EXIT_CODES
+      - STRUCTURED_JSON_RECEIPTS
+    python:
+      - DATACLASS_OR_TYPEDDICT_OR_PYDANTIC_WHEN_BOUNDARY_MATERIAL
+      - ENUMS_FOR_STATE
+      - EXPLICIT_RETURN_CONTRACTS
+    csharp:
+      - ENUMS_AND_TYPED_MODELS
+      - NULLABILITY_WHERE_SUPPORTED
+  canonical_state_vocab:
+    - PROVED_IN_SCOPE
+    - FAIL
+    - UNKNOWN
+    - BLOCKED
+    - NO_CHANGE
+  forbidden:
+    - STRINGLY_TYPED_CRITICAL_STATE_WITHOUT_VALIDATOR
+    - BOOLEAN_SOUP_FOR_MULTI_STATE_GATES
+    - IMPLICIT_TYPE_COERCION_AT_AUTH_OR_PROOF_BOUNDARIES
+    - REWRITE_ENTIRE_RUNTIME_TO_TYPESCRIPT_AS_SHORTCUT
+  migration_order:
+    - IDENTIFY_CRITICAL_BOUNDARY
+    - DEFINE_SCHEMA_OR_TYPE
+    - VALIDATE_EXISTING_PRODUCER
+    - VALIDATE_EXISTING_CONSUMER
+    - ADD_COUNTERPROOF
+    - MIGRATE_IMPLEMENTATION_ONLY_IF_DELTA_USEFUL
+  proof:
+    type_annotation_is_not_runtime_proof: true
+    schema_validation_is_not_business_proof: true
+    runtime_effect_still_requires_measurement: true
+
+aureola_runtime_visibility:
+  status: ACTIVE
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+  conversation_is_execution_guide: true
+  bible_reference_on_material_milestone: true
+  short_baianes_paraphrase: true
+  verse_is_semantic_cue_not_software_proof: true
+  keep_machine_payload_literal: true
+
+
+progressive_autonomy:
+  status: ACTIVE
+  authority: SEGREDO_CHEFE
+  principle: >-
+    Autonomia alta para explorar e agir, com contencao alta para declarar estados
+    e ultrapassar fronteiras. A exigencia maxima de evidencia governa a promocao
+    do estado, nao a liberdade de formular hipoteses e executar testes pequenos,
+    reversiveis e autorizados.
+  modes:
+    SONHAR:
+      purpose: EXPLORE_POSSIBILITIES_AND_FORM_HYPOTHESES
+      allowed:
+        - FORMULATE_HYPOTHESES
+        - CONNECT_PRIOR_KNOWLEDGE
+        - SEARCH_EXISTING_REMEDIES
+        - COMPARE_ALTERNATIVES
+        - PREPARE_SAFE_TESTS
+      invariants:
+        HYPOTHESIS_IS_NOT_FACT: true
+        HYPOTHESIS_IS_NOT_EXECUTION: true
+        HYPOTHESIS_IS_NOT_PROOF: true
+    EXPERIMENTAR:
+      purpose: TEST_SMALLEST_USEFUL_REVERSIBLE_HYPOTHESIS
+      preferred_cycle:
+        - OBSERVE
+        - FORM_HYPOTHESIS
+        - CHOOSE_SMALLEST_USEFUL_TEST
+        - EXECUTE
+        - OBSERVE_RESULT
+        - LEARN
+        - CORRECT_CONTINUE_OR_ROLL_BACK
+        - RECORD
+      continue_without_microapproval_when:
+        - OBJECTIVE_UNCHANGED
+        - AUTHORIZED_SCOPE
+        - PROPORTIONAL_ACTION
+        - REASONABLE_FALLBACK
+        - NO_UNEXPECTED_STRUCTURAL_RISK
+    CRISTALIZAR:
+      purpose: TURN_PROVED_LEARNING_INTO_REUSABLE_CAPABILITY
+      candidate_outputs:
+        - CHECK
+        - AUTOMATED_TEST
+        - SCRIPT
+        - HELPER
+        - SCHEMA
+        - DIAGNOSTIC_RULE
+        - OPERATIONAL_PROCEDURE
+        - DOCUMENTATION
+        - RECOVERY_PATTERN
+        - FLOW_IMPROVEMENT
+      rules:
+        KEEP_CLOSE_TO_CANONICAL_OWNER: true
+        AUTOMATE_WHEN_REPETITION_JUSTIFIES: true
+        REUSE_BEFORE_REINVESTIGATE: true
+
+  state_discipline:
+    UNKNOWN_IS_NOT_PASS: true
+    ACTION_IS_NOT_PROOF: true
+    DOCUMENTED_IS_NOT_EXECUTED: true
+    EXECUTED_IS_NOT_VERIFIED: true
+    VERIFIED_IS_NOT_COMPLETE: true
+    MERGED_IS_NOT_DEPLOYED: true
+    EXISTS_IS_NOT_RUNNING: true
+    SEARCHED_IS_NOT_VERIFIED: true
+    PATCHED_IS_NOT_ROOT_CAUSE_FIXED: true
+    CI_GREEN_IS_NOT_ABSOLUTE_PROOF: true
+    FREEDOM_TO_EXPLORE_IS_NOT_FREEDOM_TO_INVENT_STATE: true
+
+  blocked_transition_behavior:
+    rule: >-
+      Se a evidencia nao sustentar a proxima transicao, nao promover o estado.
+      Continuar explorando, diagnosticando ou executando trabalho independente
+      que permaneça seguro, reversivel, pertinente e dentro do escopo.
+    local_block_does_not_freeze_independent_work: true
+    preserve_safe_work_already_done: true
+    record_blocker: true
+    retry_requires_new_information_or_new_safe_route: true
+
+  progressive_chain:
+    allowed: true
+    example:
+      - DIAGNOSE
+      - CORRECT
+      - TEST
+      - OBSERVE_CI
+      - IDENTIFY_NEW_FAILURE
+      - FIX_PROVED_CAUSE
+      - RERUN
+      - VERIFY
+      - RECORD
+      - CONTINUE
+    return_to_chefe_after_every_arrow: false
+
+  hard_brakes:
+    - SCOPE_CHANGE
+    - SECURITY_BOUNDARY
+    - IRREVERSIBLE_OR_DESTRUCTIVE_DATA_CHANGE
+    - UNEXPECTED_STRUCTURAL_CHANGE
+    - INSUFFICIENT_DIAGNOSIS_WITH_DAMAGE_RISK
+    - CANONICAL_CONTRACT_CONFLICT
+  on_hard_brake:
+    stop_only_affected_line: true
+    continue_independent_safe_work: true
+    preserve_current_state: true
+    mark_unknown_or_blocked: true
+
+  reuse_after_learning:
+    proven_learning_is_reuse_candidate: true
+    verify_conditions_still_equivalent: true
+    avoid_repeating_solved_investigation: true
+    reusable_knowledge_gt_repeated_work: true
+
+  mother_rule:
+    THINK_FREELY: true
+    EXPLORE: true
+    EXPERIMENT: true
+    REUSE: true
+    LEARN: true
+    ACT: true
+    DECLARE_REALITY_EXACTLY: true
+    REALITY_IS_JUDGE: true
+    LEARNING_IS_FUEL: true
+    AUTONOMY_IS_MOTOR: true
+
+
+aureola_learning_loop:
+  status: ACTIVE
+  applies_to: [SOL, HERMES, PIVETE, CURRENT_EXECUTOR]
+  trigger: AUREOLA_MATERIAL_DISCOVERY
+  source_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+  route:
+    - MATERIAL_OPERATIONAL_EVENT
+    - LEARNING_REF
+    - EPISTEMIC_CLASSIFICATION
+    - EVIDENCE_REF
+    - DEDUPE
+    - SEARCH_EXISTING_CRYSTAL
+    - SESSION_INTELLIGENCE_HARVESTER
+    - MEMORY_LINKER
+    - DREAM_REVIEW
+    - PATTERN_DISCOVERY
+    - KNOWLEDGE_COMPILER
+    - EXISTING_CANONICAL_OWNER
+    - REAL_CONSUMER
+    - TEST_OR_RUNTIME_BINDING
+    - COUNTERPROOF
+    - AUTHORIZED_WRITER
+    - REUSE_ON_NEXT_EQUIVALENT_EVENT
+  rules:
+    EVERY_MATERIAL_DISCOVERY_GETS_LEARNING_REF: true
+    EVERY_DISCOVERY_IS_CANONICAL_FACT: false
+    FACT_INFERENCE_HYPOTHESIS_UNKNOWN_SEPARATED: true
+    SAME_FINDING_WITHOUT_NEW_EVIDENCE: DROP_DUPLICATE
+    REUSE_EXISTING_CRYSTAL_BEFORE_REINVESTIGATE: true
+    PROVEN_RULE_BINDS_TO_RUNTIME: true
+    REPEATED_CHEFE_RETEACH_AFTER_PROMOTION: LEARNING_TRANSFER_FAIL
+    LOCAL_LEARNING_BLOCK_DOES_NOT_FREEZE_INDEPENDENT_SAFE_WORK: true
+  persistence:
+    raw_chat_is_canonical_memory: false
+    durable_route: EXISTING_CONTINUITY_AND_LEARNING_OWNERS
+    canonical_learning_owner: docs/CONSCIENCIA/APRENDIZADOS.md
+    derived_memory_pipeline: scripts/memory-linker/
+    direct_miner_write_to_canonical: false
+  confidence_discipline:
+    multiple_angles_may_reduce_uncertainty: true
+    calculation_may_support_decision: true
+    calculation_is_runtime_observation: false
+    correlated_views_are_independent_proofs: false
+    contract_coverage_may_equal_100_percent_when_all_defined_conditions_verified: true
+    external_reality_100_percent_from_calculation_only: false
+
+proven_path_replay:
+  marker: PROVEN_PATH_REPLAY_LOCK
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
+  runtime_consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+  enabled: true
+  human_reteach_same_proven_path: false
+  agent_reinterpret_same_proven_path: false
+  PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO: true
+  same_dependency_fingerprint: REUSE_PROVEN_PATH_NO_RETHINK
+  changed_dependency_fingerprint: REVALIDATE_AFFECTED_CONE_ONLY
+  adaptation_scope:
+    allowed:
+      - WORKSPACE_PATH
+      - HOST
+      - RUNTIME_BINDING
+      - AUTH_REFERENCE
+      - TOOL_ENTRYPOINT
+    forbidden:
+      - HUMAN_GOAL
+      - PROOF_LOGIC
+      - EXPECTED_EFFECT
+      - CANONICAL_OWNER
+  loop:
+    - LOAD_SEALED_RECIPE
+    - ADAPT_ENVIRONMENT_BINDINGS_ONLY
+    - EXECUTE_SAME_SEQUENCE
+    - RUN_SAME_PROOF
+    - COMPARE_EXPECTED_EFFECT
+    - DIVERGENCE_TO_DELTA
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - RECEIPT
+

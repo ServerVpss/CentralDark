@@ -104,3 +104,11 @@ A anon key pode até ir pro GitHub sem risco (é pública por design do Supabase
 ---
 
 Próximo: [`06-ENSINANDO-OUTRAS-IAS.md`](06-ENSINANDO-OUTRAS-IAS.md)
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

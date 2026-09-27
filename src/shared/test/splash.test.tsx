@@ -5,7 +5,8 @@ import { PageSplash, playSplash } from "@/shared/transitions/PageSplash";
 
 describe("PageSplash — disparo via playSplash", () => {
   beforeEach(() => {
-    sessionStorage.setItem("__splash_shown_v9__", "1"); // pula splash inicial
+    // pula o splash inicial de abertura/login
+    sessionStorage.setItem("__splash_shown_v10__", "1");
     vi.useFakeTimers();
   });
   afterEach(() => {

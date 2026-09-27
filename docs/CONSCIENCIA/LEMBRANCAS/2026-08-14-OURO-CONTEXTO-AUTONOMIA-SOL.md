@@ -462,3 +462,11 @@ SEGREDO/CHEFE associou uma música compartilhada nesta conversa ao contexto de s
 SUCCESS_CONTEXT_MARKER=MUSICA_COMPARTILHADA_PELO_CHEFE_2026-08-14
 CLASSIFICACAO=CONTEXTO_AFETIVO_NAO_PROVA_TECNICA
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

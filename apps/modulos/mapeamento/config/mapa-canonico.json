@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "source_of_truth": "apps/modulos/mapeamento/config/mapa-canonico.json",
-  "approval_label": "permito-segredo",
+  "approval_label": "👑 PERMITO-SEGREDO",
   "rules": {
     "new_module_requires_map": true,
     "protected_changes_fail_closed": true,
@@ -77,7 +77,34 @@
   ],
   "historical_roots": [
     "docs/RELATORIOS/",
-    "docs/_LEGADO_ROOT_DOCS_CONFLITOS/"
+    "docs/_LEGADO_ROOT_DOCS_CONFLITOS/",
+    "docs/CONSCIENCIA/ARSENAL/",
+    "docs/CONSCIENCIA/ARQUIVO-MORTO/",
+    "docs/CONSCIENCIA/PROJECT-KNOWLEDGE-CENTRALDARK-V2.md",
+    "docs/CONSCIENCIA/CONSOLIDACAO-CENTRALDARK-V2.md",
+    "docs/CONSOLIDACAO-CENTRALDARK-V2.md",
+    "docs/TREINAMENTO-IAS/protocolos/PROTOCOLO-V4-VETO-ABSOLUTO.md",
+    "docs/CONSCIENCIA/TREINAMENTO-IAS/protocolos/PROTOCOLO-V4-VETO-ABSOLUTO.md",
+    "docs/CONSCIENCIA/REGISTRO-GUARDIAO-DECISOR-V3.md",
+    "docs/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-V2-ANALISTA.md",
+    "docs/CONSCIENCIA/04-MCP-E-CONECTORES/ARQUITETURA-MCP-V2.md",
+    "apps/modulos/elite-gateway/scripts/",
+    "apps/modulos/graph-panel/public/",
+    "apps/modulos/hub/README.md.hub-antigo",
+    "apps/modulos/mcp/tsconfig.json.bak.20260705-170747",
+    "apps/modulos/obsidian-plugin-grafo-vivo/PLANO-ENXAME-v0.3+.md",
+    "backups/",
+    "docs/tarefas/monitor_tarefas.py.bak.20260606-235529",
+    "ecosystem.config.js.bak-20260705-133220",
+    "ecosystem.config.js.bak-20260705-133359",
+    "ecosystem.config.js.bak-20260705-134317",
+    "legacy_scripts.txt",
+    "mem/preferences/persona-workspace-v2.md",
+    "novo_scripts.txt",
+    "scripts/run-once/001-backup-whatsapp.sh",
+    ".claude/prompts/reload-centraldark-v3.md",
+    ".github/workflows/caddy-telepainel-v2.yml",
+    ".lovable/memory/features/guardiao-v2-analista.md"
   ],
   "validation_entrypoints": [
     "scripts/lupa/validar-porta-de-entrada.mjs",
@@ -87,27 +114,43 @@
     {
       "id": "comando",
       "label": "COMANDO",
-      "paths": ["apps/modulos/HERMES-CORE/"]
+      "paths": [
+        "apps/modulos/HERMES-CORE/"
+      ]
     },
     {
       "id": "arsenal",
       "label": "ARSENAL",
-      "paths": ["apps/modulos/arsenal-openai-adapter/", "docs/CONSCIENCIA/ARSENAL/"]
+      "paths": [
+        "apps/modulos/arsenal-openai-adapter/",
+        "docs/CONSCIENCIA/ARSENAL/"
+      ]
     },
     {
       "id": "escudo",
       "label": "ESCUDO",
-      "paths": ["apps/modulos/HERMES-CORE/agents/Log-Verificador/"]
+      "paths": [
+        "apps/modulos/HERMES-CORE/agents/Log-Verificador/"
+      ]
     },
     {
       "id": "inteligencia",
       "label": "INTELIGÊNCIA",
-      "paths": ["apps/modulos/graph-panel/", "apps/modulos/mapeamento/", "apps/modulos/obsidian-plugin-grafo-vivo/"]
+      "paths": [
+        "apps/modulos/graph-panel/",
+        "apps/modulos/mapeamento/",
+        "apps/modulos/fixed-point-fabric/",
+        "apps/modulos/obsidian-plugin-grafo-vivo/"
+      ]
     },
     {
       "id": "memoria",
       "label": "MEMÓRIA",
-      "paths": ["apps/modulos/memoria-api/", "docs/CONSCIENCIA/", "docs/CONSCIENCIA/LEMBRANCAS/"]
+      "paths": [
+        "apps/modulos/memoria-api/",
+        "docs/CONSCIENCIA/",
+        "docs/CONSCIENCIA/LEMBRANCAS/"
+      ]
     },
     {
       "id": "execucao",
@@ -133,43 +176,195 @@
     }
   ],
   "consolidated_areas": [
-    { "path": "LEIA-ME-IA.md", "since": "2026-07-30", "reason": "Porta universal canônica" },
-    { "path": "AGENTS.md", "since": "2026-07-30", "reason": "Contrato geral dos agentes" },
-    { "path": "CLAUDE.md", "since": "2026-07-30", "reason": "Adaptador operacional Claude" },
-    { "path": "README.md", "since": "2026-07-30", "reason": "Entrada humana do projeto" },
-    { "path": "CODEX.md", "since": "2026-07-30", "reason": "Adaptador operacional Codex" },
-    { "path": "GEMINI.md", "since": "2026-07-30", "reason": "Adaptador operacional Gemini" },
-    { "path": ".windsurfrules", "since": "2026-07-30", "reason": "Adaptador operacional Windsurf" },
-    { "path": ".github/copilot-instructions.md", "since": "2026-07-30", "reason": "Adaptador operacional Copilot" },
-    { "path": ".cursor/rules/", "since": "2026-07-30", "reason": "Adaptadores operacionais Cursor" },
-    { "path": "apps/bot-telegram/", "since": "2026-06-28", "reason": "Bot central restaurado e testado" },
-    { "path": "apps/modulos/status/", "since": "2026-07-02", "reason": "Página oficial de status consolidada" },
-    { "path": "apps/modulos/Bolt/", "since": "2026-07-02", "reason": "Construtor oficial" },
-    { "path": "apps/modulos/WebUI/", "since": "2026-07-02", "reason": "Web UI oficial" },
-    { "path": "apps/modulos/graph-panel/", "since": "2026-07-02", "reason": "Painel de grafo consolidado" },
-    { "path": "apps/modulos/elite-anthropic-proxy/", "since": "2026-07-02", "reason": "Proxy legado protegido" },
-    { "path": "scripts/webhook/", "since": "2026-06-28", "reason": "Deploy webhook consolidado" },
-    { "path": "scripts/contas-admin/", "since": "2026-06-28", "reason": "OAuth admin restaurado" },
-    { "path": ".github/workflows/", "since": null, "reason": "CI/CD crítico" },
-    { "path": ".claude/", "since": null, "reason": "Instruções persistentes" },
-    { "path": ".agents/", "since": null, "reason": "Agentes e skills" },
-    { "path": ".lovable/", "since": null, "reason": "Ponte Lovable" },
-    { "path": "infra/caddy/", "since": null, "reason": "Roteamento de subdomínios" },
-    { "path": "secrets/", "since": null, "reason": "Material sensível proibido no Git" },
-    { "path": "docs/CONSCIENCIA/", "since": null, "reason": "Cérebro Vivo" },
-    { "path": "apps/modulos/HERMES-CORE/", "since": "2026-07-05", "reason": "Núcleo Hermes consolidado" },
-    { "path": "apps/modulos/mapeamento/", "since": "2026-07-05", "reason": "Fonte oficial do mapa vivo" },
-    { "path": "apps/modulos/memoria-api/", "since": "2026-07-05", "reason": "API de memória consolidada" },
-    { "path": "apps/modulos/oauth-broker/", "since": "2026-07-05", "reason": "OAuth Broker consolidado" },
-    { "path": "apps/modulos/arsenal-openai-adapter/", "since": "2026-07-05", "reason": "Adapter do Conselho consolidado" },
-    { "path": "apps/modulos/elite-gateway/", "since": "2026-07-05", "reason": "Gateway Elite consolidado" },
-    { "path": "apps/modulos/artifacts-builder/", "since": "2026-07-05", "reason": "Builder consolidado" },
-    { "path": "apps/modulos/proxy/", "since": "2026-07-05", "reason": "Proxy de IA consolidado" },
-    { "path": "apps/modulos/lovable-proxy/", "since": "2026-07-05", "reason": "Proxy Lovable consolidado" },
-    { "path": "src/apps/modulos/telepainel/", "since": "2026-07-05", "reason": "TelePainel consolidado (caminho real; a casca apps/modulos/telepainel era gitlink orfao)" },
-    { "path": "apps/modulos/hub/", "since": "2026-07-05", "reason": "HUB consolidado" },
-    { "path": "apps/modulos/clone-deck/", "since": "2026-07-05", "reason": "Clone-deck consolidado" },
-    { "path": "apps/modulos/pivete-sync/", "since": "2026-07-05", "reason": "Sincronizador consolidado" },
-    { "path": "apps/modulos/obsidian-plugin-grafo-vivo/", "since": "2026-07-05", "reason": "Plugin do Grafo Vivo consolidado" }
+    {
+      "path": "LEIA-ME-IA.md",
+      "since": "2026-07-30",
+      "reason": "Porta universal canônica"
+    },
+    {
+      "path": "AGENTS.md",
+      "since": "2026-07-30",
+      "reason": "Contrato geral dos agentes"
+    },
+    {
+      "path": "CLAUDE.md",
+      "since": "2026-07-30",
+      "reason": "Adaptador operacional Claude"
+    },
+    {
+      "path": "README.md",
+      "since": "2026-07-30",
+      "reason": "Entrada humana do projeto"
+    },
+    {
+      "path": "CODEX.md",
+      "since": "2026-07-30",
+      "reason": "Adaptador operacional Codex"
+    },
+    {
+      "path": "GEMINI.md",
+      "since": "2026-07-30",
+      "reason": "Adaptador operacional Gemini"
+    },
+    {
+      "path": ".windsurfrules",
+      "since": "2026-07-30",
+      "reason": "Adaptador operacional Windsurf"
+    },
+    {
+      "path": ".github/copilot-instructions.md",
+      "since": "2026-07-30",
+      "reason": "Adaptador operacional Copilot"
+    },
+    {
+      "path": ".cursor/rules/",
+      "since": "2026-07-30",
+      "reason": "Adaptadores operacionais Cursor"
+    },
+    {
+      "path": "apps/bot-telegram/",
+      "since": "2026-06-28",
+      "reason": "Bot central restaurado e testado"
+    },
+    {
+      "path": "apps/modulos/status/",
+      "since": "2026-07-02",
+      "reason": "Página oficial de status consolidada"
+    },
+    {
+      "path": "apps/modulos/Bolt/",
+      "since": "2026-07-02",
+      "reason": "Construtor oficial"
+    },
+    {
+      "path": "apps/modulos/WebUI/",
+      "since": "2026-07-02",
+      "reason": "Web UI oficial"
+    },
+    {
+      "path": "apps/modulos/graph-panel/",
+      "since": "2026-07-02",
+      "reason": "Painel de grafo consolidado"
+    },
+    {
+      "path": "apps/modulos/elite-anthropic-proxy/",
+      "since": "2026-07-02",
+      "reason": "Proxy legado protegido"
+    },
+    {
+      "path": "scripts/webhook/",
+      "since": "2026-06-28",
+      "reason": "Deploy webhook consolidado"
+    },
+    {
+      "path": "scripts/contas-admin/",
+      "since": "2026-06-28",
+      "reason": "OAuth admin restaurado"
+    },
+    {
+      "path": ".github/workflows/",
+      "since": null,
+      "reason": "CI/CD crítico"
+    },
+    {
+      "path": ".claude/",
+      "since": null,
+      "reason": "Instruções persistentes"
+    },
+    {
+      "path": ".agents/",
+      "since": null,
+      "reason": "Agentes e skills"
+    },
+    {
+      "path": ".lovable/",
+      "since": null,
+      "reason": "Ponte Lovable"
+    },
+    {
+      "path": "infra/caddy/",
+      "since": null,
+      "reason": "Roteamento de subdomínios"
+    },
+    {
+      "path": "secrets/",
+      "since": null,
+      "reason": "Material sensível proibido no Git"
+    },
+    {
+      "path": "docs/CONSCIENCIA/",
+      "since": null,
+      "reason": "Cérebro Vivo"
+    },
+    {
+      "path": "apps/modulos/HERMES-CORE/",
+      "since": "2026-07-05",
+      "reason": "Núcleo Hermes consolidado"
+    },
+    {
+      "path": "apps/modulos/mapeamento/",
+      "since": "2026-07-05",
+      "reason": "Fonte oficial do mapa vivo"
+    },
+    {
+      "path": "apps/modulos/memoria-api/",
+      "since": "2026-07-05",
+      "reason": "API de memória consolidada"
+    },
+    {
+      "path": "apps/modulos/oauth-broker/",
+      "since": "2026-07-05",
+      "reason": "OAuth Broker consolidado"
+    },
+    {
+      "path": "apps/modulos/arsenal-openai-adapter/",
+      "since": "2026-07-05",
+      "reason": "Adapter do Conselho consolidado"
+    },
+    {
+      "path": "apps/modulos/elite-gateway/",
+      "since": "2026-07-05",
+      "reason": "Gateway Elite consolidado"
+    },
+    {
+      "path": "apps/modulos/artifacts-builder/",
+      "since": "2026-07-05",
+      "reason": "Builder consolidado"
+    },
+    {
+      "path": "apps/modulos/proxy/",
+      "since": "2026-07-05",
+      "reason": "Proxy de IA consolidado"
+    },
+    {
+      "path": "apps/modulos/lovable-proxy/",
+      "since": "2026-07-05",
+      "reason": "Proxy Lovable consolidado"
+    },
+    {
+      "path": "src/apps/modulos/telepainel/",
+      "since": "2026-07-05",
+      "reason": "TelePainel consolidado (caminho real; a casca apps/modulos/telepainel era gitlink orfao)"
+    },
+    {
+      "path": "apps/modulos/hub/",
+      "since": "2026-07-05",
+      "reason": "HUB consolidado"
+    },
+    {
+      "path": "apps/modulos/clone-deck/",
+      "since": "2026-07-05",
+      "reason": "Clone-deck consolidado"
+    },
+    {
+      "path": "apps/modulos/pivete-sync/",
+      "since": "2026-07-05",
+      "reason": "Sincronizador consolidado"
+    },
+    {
+      "path": "apps/modulos/obsidian-plugin-grafo-vivo/",
+      "since": "2026-07-05",
+      "reason": "Plugin do Grafo Vivo consolidado"
+    }
   ]
 }

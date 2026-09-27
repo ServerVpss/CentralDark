@@ -93,9 +93,12 @@ export function classifyFiles(files = []) {
     sensitive_paths: 0,
   };
   const sensitive = /(^|\/)(\.env(?:\.|$)|secrets?(\/|$)|tokens?(\/|$)|sessions?(\/|$)|\.ssh(\/|$)|[^/]+\.(pem|key)$)/i;
+  const backupException = /^scripts\/backup-.*\.sh$/i;
 
   for (const file of files) {
     const name = String(file?.filename ?? '');
+    if (backupException.test(name)) {}
+    else
     if (sensitive.test(name)) {
       categories.sensitive_paths++;
       continue;
@@ -158,8 +161,10 @@ export function buildArtifact(input) {
   validateInput(input);
   const stable = stableInput(input);
   const capabilities = parseCapabilities(stable.body);
-  const missing = CAPABILITY_KEYS.filter((key) => capabilities[key] !== 'SIM');
-  const supportRequired = missing.length > 0;
+  const unsupported = CAPABILITY_KEYS.filter((key) => capabilities[key] === 'NAO');
+  const undeclared = CAPABILITY_KEYS.filter((key) => capabilities[key] === 'UNKNOWN');
+  const missing = unsupported;
+  const supportRequired = unsupported.length > 0;
   const capabilitySource = 'DECLARED_UNVERIFIED';
   const categories = classifyFiles(stable.files);
   const sensitiveBlocked = categories.sensitive_paths > 0;
@@ -186,6 +191,7 @@ export function buildArtifact(input) {
     capabilities,
     categories,
     missing,
+    undeclared,
     capabilitySource,
     sensitiveBlocked,
   });
@@ -202,8 +208,10 @@ export function buildArtifact(input) {
     `    A["PR #${stable.pr_number}<br/>HEAD ${shortSha}"] --> B["${stable.files.length} arquivos<br/>+${totals.additions} / -${totals.deletions}"]`,
     '    B --> C{Capacidades declaradas?}',
     supportRequired
-      ? `    C -- "faltam: ${missing.join(', ')}" --> D["PEDIR SUPORTE<br/>labels e briefing automáticos"]`
-      : '    C -- "todas SIM" --> D["ARTEFATO AUTOSSUFICIENTE"]',
+      ? `    C -- "não suportadas: ${missing.join(', ')}" --> D["PEDIR SUPORTE<br/>labels e briefing automáticos"]`
+      : undeclared.length
+        ? `    C -- "não declaradas: ${undeclared.join(', ')}" --> D["SEGUIR SEM BLOQUEAR<br/>metadado incompleto"]`
+        : '    C -- "todas SIM" --> D["ARTEFATO AUTOSSUFICIENTE"]',
     '    D --> E["Mermaid + texto simples + YAML + Canvas HTML"]',
     '    E --> F["Revisão humana + gates + receipt no mesmo HEAD"]',
   ].join('\n');
@@ -225,6 +233,7 @@ export function buildArtifact(input) {
     'support:',
     `  required: ${supportRequired ? 'SIM' : 'NAO'}`,
     `  missing: [${missing.map((item) => JSON.stringify(item)).join(', ')}]`,
+    `  undeclared: [${undeclared.map((item) => JSON.stringify(item)).join(', ')}]`,
     `  labels: [${[...supportLabels].map((item) => JSON.stringify(item)).join(', ')}]`,
     'change_summary:',
     `  files: ${stable.files.length}`,
@@ -258,11 +267,19 @@ export function buildArtifact(input) {
           '',
           `Labels solicitadas: ${[...supportLabels].map((label) => `\`${label}\``).join(', ')}.`,
         ].join('\n')
-      : [
-          '## 🟢 Capacidades declaradas',
-          '',
-          'A autoria declarou suporte aos três formatos. Essa declaração ainda não é prova independente da capacidade.',
-        ].join('\n');
+      : undeclared.length
+        ? [
+            '## 🟡 Capacidades não declaradas — não bloqueante',
+            '',
+            `A autoria não informou: **${undeclared.join(', ')}**. Isso é metadado incompleto, não falha do PR e não pede suporte automaticamente.`,
+            '',
+            'Se algum desses formatos virar requisito material deste PR, aí sim deve ser solicitado suporte e provado no mesmo HEAD.',
+          ].join('\n')
+        : [
+            '## 🟢 Capacidades declaradas',
+            '',
+            'A autoria declarou suporte aos três formatos. Essa declaração ainda não é prova independente da capacidade.',
+          ].join('\n');
 
   const plain = [
     `PR #${stable.pr_number} no HEAD ${stable.head_sha}.`,
@@ -270,8 +287,10 @@ export function buildArtifact(input) {
     sensitiveBlocked
       ? `Há ${categories.sensitive_paths} caminho(s) sensível(is); estado bloqueado.`
       : supportRequired
-        ? `Faltam capacidades declaradas: ${missing.join(', ')}. O bot pede suporte a agentes compatíveis sem mudar a autoria do código.`
-        : 'Todas as capacidades foram declaradas como suportadas, sem verificação independente.',
+        ? `Há capacidade explicitamente não suportada: ${missing.join(', ')}. O bot pede suporte compatível sem mudar a autoria do código.`
+        : undeclared.length
+          ? `Capacidades não declaradas: ${undeclared.join(', ')}. Isso não bloqueia o PR por si só.`
+          : 'Todas as capacidades foram declaradas como suportadas, sem verificação independente.',
     `Fonte das capacidades: ${capabilitySource}.`,
     'O artefato não aprova, não reprova nem decide autorização de merge; ele organiza contexto. Testes, revisão e contratos canônicos continuam decidindo.',
   ].join(' ');
@@ -283,6 +302,17 @@ export function buildArtifact(input) {
     `**PR:** #${stable.pr_number} · **HEAD:** \`${stable.head_sha}\` · **Estado:** \`${status}\``,
     '',
     `**Título:** ${stable.title ? escapeMarkdownInline(stable.title) : '(sem título)'}`,
+    '',
+    '## 🧭 Leitura rápida',
+    '',
+    `**Estado da mensagem:** snapshot do PR no HEAD \`${stable.head_sha}\`; não representa estado eterno da main.`,
+    `**O que aconteceu:** ${stable.files.length} arquivo(s) alterado(s), +${totals.additions} / -${totals.deletions}.`,
+    `**Bloqueia agora?** ${sensitiveBlocked ? 'SIM — caminho sensível detectado.' : 'NÃO por este artefato. Os gates normais do PR continuam valendo.'}`,
+    supportRequired
+      ? `**O que falta:** suporte para capacidade explicitamente não suportada: ${missing.join(', ')}.`
+      : undeclared.length
+        ? `**O que falta:** nada bloqueante por capacidade; só falta declaração opcional de ${undeclared.join(', ')}.`
+        : '**O que falta:** este artefato não aponta pendência de capacidade; testes/revisão ainda decidem.',
     '',
     '## Mapa visual (Mermaid)',
     '',
@@ -312,6 +342,7 @@ export function buildArtifact(input) {
     `FILES=${stable.files.length}`,
     `SUPPORT_REQUIRED=${supportRequired ? 'SIM' : 'NAO'}`,
     `MISSING_CAPABILITIES=${missing.join(',') || 'NENHUMA'}`,
+    `UNDECLARED_CAPABILITIES=${undeclared.join(',') || 'NENHUMA'}`,
     `SENSITIVE_PATHS=${categories.sensitive_paths}`,
     `ARTIFACT_DIGEST=${artifactDigest}`,
     'PR_APPROVAL_DECISION=NOT_EVALUATED_BY_ARTIFACT',
@@ -387,6 +418,7 @@ ctx.fillText('SUPORTE NÃO TRANSFERE O WRITER DO CÓDIGO.',28,382);
     blocked: sensitiveBlocked,
     capability_source: capabilitySource,
     missing_capabilities: missing,
+    undeclared_capabilities: undeclared,
     support_labels: [...supportLabels],
     artifact_digest: artifactDigest,
     markdown,

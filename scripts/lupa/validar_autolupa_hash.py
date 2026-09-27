@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
-"""Guarda de integridade da Meta Lupa canônica.
+"""Guarda de integridade da Meta Lupa canônica e do formato de resposta bloqueado.
 
-Compara o git-blob SHA1 do arquivo `.agents/skills/meta-lupa/SKILL.md` com o
-hash esperado registrado em `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA`.
-
-Como ler o guard:
-    linha 1 -> <git-blob SHA1 esperado><dois espaços><caminho protegido>
-    linhas # -> explicação humana do que o hash prova e do que NÃO prova
+Valida:
+- `.agents/skills/meta-lupa/SKILL.md` contra `AUTOLUPA_CANONICAL_SHA`;
+- o formato de resposta do KIT METAGRILL-METALUPA contra `FORMATO_CANONICAL_SHA`;
+- o pin imutável do formato neste gate, impedindo troca silenciosa do arquivo + guard.
 
 Uso:
     python scripts/lupa/validar_autolupa_hash.py
-        Valida SKILL.md local contra o guard.
-
     python scripts/lupa/validar_autolupa_hash.py --fetch
-        Também compara o guard com o blob da `main` remota.
-
     python scripts/lupa/validar_autolupa_hash.py --update
-        Atualiza o guard somente quando `authority-approval.mjs` devolver
-        receipt canônico autenticado de SEGREDO/CHEFE.
+
+`--update` continua atualizando somente a identidade da Meta Lupa e exige
+autoridade canônica autenticada de SEGREDO/CHEFE. O formato de resposta não
+possui auto-update: mudança exige reconciliação explícita do cadeado.
 """
 from __future__ import annotations
 
@@ -35,6 +31,13 @@ GUARD = ROOT / ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA"
 AUTHORITY_APPROVAL = ROOT / "scripts/lupa/authority-approval.mjs"
 API_URL = "https://api.github.com/repos/ServerVpss/CentralDark/contents/.agents/skills/meta-lupa/SKILL.md?ref=main"
 SKILL_REPO_PATH = ".agents/skills/meta-lupa/SKILL.md"
+
+FORMAT_REPO_PATH = ".agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/FORMATO-RESPOSTA-CANONICO.md"
+FORMAT_PATH = ROOT / FORMAT_REPO_PATH
+FORMAT_GUARD = ROOT / ".agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/FORMATO_CANONICAL_SHA"
+FORMAT_API_URL = f"https://api.github.com/repos/ServerVpss/CentralDark/contents/{FORMAT_REPO_PATH}?ref=main"
+FORMAT_PIN = "b3e31bdc271b53272ad42181b8246aa85f880868"
+
 CANONICAL_AUTHORITY_RECEIPT = "AUTHORITY_APPROVED=true AUTHORITY=SEGREDO/CHEFE SOURCE=github-label:permito-segredo"
 
 
@@ -52,7 +55,7 @@ def git_blob_sha1(path: Path) -> str:
 
 
 def render_guard(expected_sha: str) -> str:
-    """Renderiza o guard sem perder a explicação humana da primeira linha."""
+    """Renderiza o guard da identidade principal da Meta Lupa."""
     return (
         f"{expected_sha}  {SKILL_REPO_PATH}\n"
         "# O_QUE_E=Arquivo de identidade da Meta Lupa canônica. A primeira linha prende o conteúdo versionado do SKILL.md ao git-blob SHA1 esperado.\n"
@@ -66,16 +69,19 @@ def render_guard(expected_sha: str) -> str:
     )
 
 
-def read_guard() -> str:
-    if not GUARD.exists():
-        print(f"[FAIL] GUARDA_AUSENTE={GUARD}", file=sys.stderr)
+def read_guard_path(path: Path, label: str) -> str:
+    if not path.exists():
+        print(f"[FAIL] {label}_AUSENTE={path}", file=sys.stderr)
         sys.exit(2)
-
-    tokens = GUARD.read_text(encoding="utf-8").strip().split()
+    tokens = path.read_text(encoding="utf-8").strip().split()
     if not tokens:
-        print(f"[FAIL] GUARDA_VAZIA={GUARD}", file=sys.stderr)
+        print(f"[FAIL] {label}_VAZIO={path}", file=sys.stderr)
         sys.exit(2)
     return tokens[0]
+
+
+def read_guard() -> str:
+    return read_guard_path(GUARD, "GUARDA")
 
 
 def print_identity(label: str, value: str) -> None:
@@ -105,6 +111,12 @@ def canonical_authority_approved() -> tuple[bool, str]:
     return False, reason
 
 
+def fetch_remote_blob(url: str) -> str:
+    req = urllib.request.Request(url, headers={"Accept": "application/vnd.github+json"})
+    with urllib.request.urlopen(req, timeout=10) as response:
+        return json.loads(response.read())["sha"]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--fetch", action="store_true")
@@ -114,16 +126,34 @@ def main() -> int:
     if not SKILL.exists():
         print(f"[FAIL] SKILL_AUSENTE={SKILL}", file=sys.stderr)
         return 2
+    if not FORMAT_PATH.exists():
+        print(f"[FAIL] FORMATO_AUSENTE={FORMAT_PATH}", file=sys.stderr)
+        return 2
 
     local = git_blob_sha1(SKILL)
     esperado = read_guard()
+    format_local = git_blob_sha1(FORMAT_PATH)
+    format_esperado = read_guard_path(FORMAT_GUARD, "FORMATO_GUARDA")
 
     print_identity("CAMINHO_PROTEGIDO", SKILL_REPO_PATH)
     print_identity("HASH_ESPERADO", esperado)
     print_identity("HASH_LOCAL_ATUAL", local)
+    print_identity("FORMATO_PROTEGIDO", FORMAT_REPO_PATH)
+    print_identity("FORMATO_HASH_ESPERADO", format_esperado)
+    print_identity("FORMATO_HASH_LOCAL_ATUAL", format_local)
+    print_identity("FORMATO_PIN_GATE", FORMAT_PIN)
+
+    if format_esperado != FORMAT_PIN:
+        print("[FAIL] CADEADO_FORMATO=ALTERADO", file=sys.stderr)
+        print("ACAO=Reconciliar explicitamente com SEGREDO/CHEFE; troca silenciosa é proibida.", file=sys.stderr)
+        return 2
+
+    if format_local != format_esperado:
+        print("[FAIL] FORMATO_RESPOSTA=DRIFT", file=sys.stderr)
+        print("ACAO=Restaurar o formato canônico ou promover mudança explicitamente autorizada.", file=sys.stderr)
+        return 2
 
     if args.update:
-        # Autoridade vem ANTES da mutação. Falha de aprovação deixa o guard byte a byte intacto.
         approved, receipt = canonical_authority_approved()
         if not approved:
             print(
@@ -137,7 +167,8 @@ def main() -> int:
         GUARD.write_text(render_guard(local), encoding="utf-8")
         print("[OK] GUARD_ATUALIZADO=SIM")
         print_identity("NOVO_HASH_ESPERADO", local)
-        print("SIGNIFICADO=O guard agora identifica exatamente o conteúdo versionado atual do SKILL.md.")
+        print("[OK] FORMATO_RESPOSTA=LOCKED")
+        print("SIGNIFICADO=O guard principal foi atualizado; o formato permaneceu byte-a-byte bloqueado.")
         print("NAO_PROVA=merge|deploy|producao|runtime|autorizacao_operacional")
         print(f"[AUTHORITY] {receipt}")
         return 0
@@ -153,29 +184,29 @@ def main() -> int:
         return 2
 
     print("[OK] IDENTIDADE_LOCAL=PASS")
-    print("SIGNIFICADO=O SKILL.md local corresponde ao git-blob SHA1 registrado no guard.")
+    print("[OK] FORMATO_RESPOSTA=LOCKED")
+    print("SIGNIFICADO=SKILL.md e formato de resposta correspondem aos cadeados canônicos.")
 
     if args.fetch:
         try:
-            req = urllib.request.Request(API_URL, headers={"Accept": "application/vnd.github+json"})
-            with urllib.request.urlopen(req, timeout=10) as r:
-                remoto = json.loads(r.read())["sha"]
+            remoto = fetch_remote_blob(API_URL)
+            formato_remoto = fetch_remote_blob(FORMAT_API_URL)
         except Exception as exc:
             print(f"[WARN] REMOTO_NAO_VERIFICADO={exc}", file=sys.stderr)
             print("REMOTO_STATUS=UNKNOWN")
             return 0
 
         print_identity("HASH_MAIN_REMOTA", remoto)
+        print_identity("FORMATO_HASH_MAIN_REMOTA", formato_remoto)
         if remoto != esperado:
             print("[FAIL] IDENTIDADE_REMOTA=FAIL", file=sys.stderr)
-            print(
-                "SIGNIFICADO=O guard local aponta para um blob diferente do SKILL.md da main remota.",
-                file=sys.stderr,
-            )
+            return 2
+        if formato_remoto != FORMAT_PIN:
+            print("[FAIL] FORMATO_REMOTO=DRIFT", file=sys.stderr)
             return 2
 
         print("[OK] IDENTIDADE_REMOTA=PASS")
-        print("SIGNIFICADO=guard local e SKILL.md da main remota apontam para o mesmo git-blob SHA1.")
+        print("[OK] FORMATO_REMOTO=LOCKED")
 
     return 0
 
