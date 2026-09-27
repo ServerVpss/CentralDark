@@ -57,11 +57,7 @@ export function Ledger() {
   const { t } = useI18n();
 
   return (
-    <section
-      id="ledger"
-      data-key="1"
-      className="relative scroll-mt-24 px-4 py-24 sm:px-6"
-    >
+    <section id="ledger" data-key="1" className="relative scroll-mt-24 px-4 py-24 sm:px-6">
       <div className="mx-auto max-w-5xl">
         <SectionHeading
           kicker={t("ledger.kicker")}
@@ -119,4 +115,3 @@ export function Ledger() {
     </section>
   );
 }
-

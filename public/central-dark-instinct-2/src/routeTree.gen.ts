@@ -9,43 +9,135 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as RoteadorRouteImport } from './routes/roteador'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as CockpitRouteImport } from './routes/cockpit'
+import { Route as RepositorioRouteImport } from './routes/repositorio'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as RoteadorRouteImport } from './routes/roteador'
+import { Route as AuthenticatedSalaControleRouteImport } from './routes/_authenticated/sala-controle'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 
-const RoteadorRoute = RoteadorRouteImport.update({
-  id: '/roteador',
-  path: '/roteador',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CockpitRoute = CockpitRouteImport.update({
+  id: '/cockpit',
+  path: '/cockpit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RepositorioRoute = RepositorioRouteImport.update({
+  id: '/repositorio',
+  path: '/repositorio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoteadorRoute = RoteadorRouteImport.update({
+  id: '/roteador',
+  path: '/roteador',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedSalaControleRoute =
+  AuthenticatedSalaControleRouteImport.update({
+    id: '/sala-controle',
+    path: '/sala-controle',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/callback',
+  path: '/callback',
+  getParentRoute: () => AuthRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteWithChildren
+  '/cockpit': typeof CockpitRoute
+  '/repositorio': typeof RepositorioRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/roteador': typeof RoteadorRoute
+  '/sala-controle': typeof AuthenticatedSalaControleRoute
+  '/auth/callback': typeof AuthCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteWithChildren
+  '/cockpit': typeof CockpitRoute
+  '/repositorio': typeof RepositorioRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/roteador': typeof RoteadorRoute
+  '/sala-controle': typeof AuthenticatedSalaControleRoute
+  '/auth/callback': typeof AuthCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRouteWithChildren
+  '/cockpit': typeof CockpitRoute
+  '/repositorio': typeof RepositorioRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/roteador': typeof RoteadorRoute
+  '/_authenticated/sala-controle': typeof AuthenticatedSalaControleRoute
+  '/auth/callback': typeof AuthCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/roteador'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/cockpit'
+    | '/repositorio'
+    | '/reset-password'
+    | '/roteador'
+    | '/sala-controle'
+    | '/auth/callback'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/roteador'
-  id: '__root__' | '/' | '/roteador'
+  to:
+    | '/'
+    | '/auth'
+    | '/cockpit'
+    | '/repositorio'
+    | '/reset-password'
+    | '/roteador'
+    | '/sala-controle'
+    | '/auth/callback'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/cockpit'
+    | '/repositorio'
+    | '/reset-password'
+    | '/roteador'
+    | '/_authenticated/sala-controle'
+    | '/auth/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRouteWithChildren
+  CockpitRoute: typeof CockpitRoute
+  RepositorioRoute: typeof RepositorioRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   RoteadorRoute: typeof RoteadorRoute
 }
 
@@ -58,6 +150,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cockpit': {
+      id: '/cockpit'
+      path: '/cockpit'
+      fullPath: '/cockpit'
+      preLoaderRoute: typeof CockpitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/repositorio': {
+      id: '/repositorio'
+      path: '/repositorio'
+      fullPath: '/repositorio'
+      preLoaderRoute: typeof RepositorioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/roteador': {
       id: '/roteador'
       path: '/roteador'
@@ -65,11 +192,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RoteadorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/sala-controle': {
+      id: '/_authenticated/sala-controle'
+      path: '/sala-controle'
+      fullPath: '/sala-controle'
+      preLoaderRoute: typeof AuthenticatedSalaControleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof AuthRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedSalaControleRoute: typeof AuthenticatedSalaControleRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedSalaControleRoute: AuthenticatedSalaControleRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
+interface AuthRouteChildren {
+  AuthCallbackRoute: typeof AuthCallbackRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthCallbackRoute: AuthCallbackRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRouteWithChildren,
+  CockpitRoute: CockpitRoute,
+  RepositorioRoute: RepositorioRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   RoteadorRoute: RoteadorRoute,
 }
 export const routeTree = rootRouteImport
