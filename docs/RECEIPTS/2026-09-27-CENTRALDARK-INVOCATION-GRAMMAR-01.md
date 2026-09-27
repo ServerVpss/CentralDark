@@ -161,3 +161,35 @@ NEXT_CURSOR:
   - Worker/Cloud Code deve implementar ou expor somente o binding de plataforma que ainda estiver ausente; não criar parser/owner novo
 ```
 
+
+
+---
+
+## 8. DELTAUTIL — família canônica de gatilhos sem ritual
+
+A gramática foi reconciliada com os owners já existentes da Trigger Fabric. Não nasce parser novo e não nasce segunda arquitetura.
+
+```text
+!CENTRALDARK → INTERLIGADOS → AURÉOLA → #ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA → !RECONCILIAR → !CONTRAPROVA → !REGISTRA → REALIDADE
+```
+
+Cadeados:
+
+```text
+CANONICAL_CYCLE_IS_CONDITIONAL=true
+TRIGGER_FAMILY_IS_NOT_ALWAYS_FULL_EXECUTION=true
+NO_SECOND_PARSER=true
+VOICE_REUSES_EXISTING_CLASSIFIER=true
+INTENT_ROUTER_REUSED=true
+REALITY_IS_FINAL_JUDGE=true
+```
+
+Interpretação: o ciclo define a ordem semântica e os owners disponíveis; o comando concreto ativa somente o menor subconjunto pertinente. `CentralDark visualize` não vira mutação. `CentralDark faça` pode mutar somente no escopo autorizado. `CentralDark continue` retoma o NEXT_CURSOR sem reiniciar missão.
+
+**Correção de contradição:** o NEXT_CURSOR anterior falava em “implementar parser/adaptador”. Isso conflita com `NO_SECOND_PARSER=true`. O cursor correto é reutilizar o classifier/router existentes e expor somente o binding de plataforma realmente ausente.
+
+```yaml
+STATIC_TRIGGER_FAMILY_BINDING: PASS
+LIVE_VOICE_BINDING: UNKNOWN
+DEPLOY: OUT_OF_SCOPE
+```

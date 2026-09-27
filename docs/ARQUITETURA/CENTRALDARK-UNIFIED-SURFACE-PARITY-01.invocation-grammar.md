@@ -111,6 +111,33 @@ owners:
 
 Este arquivo não é V2. Ele é subcontrato do owner `CENTRALDARK_UNIFIED_SURFACE_PARITY_01` para impedir que a semântica de “CentralDark + verbo” fique dependente de memória de chat.
 
+## 6.1 Família canônica de gatilhos — expansão condicional
+
+```text
+👑🪬 !CENTRALDARK
+→ 🔗 !># INTERLIGADOS
+→ ⭕ !AURÉOLA CANÔNICA
+→ 🧿 #ACORDAR
+→ 🎛️ !CALIBRAR
+→ 🧭 !MULTIBÚSSOLA
+→ 🔎 !META_LUPA
+→ 🔄 !RECONCILIAR
+→ ⚖️ !CONTRAPROVA
+→ 🧾 !REGISTRA
+→ ⚖️ REALIDADE
+```
+
+Este ciclo é **ordem semântica canônica**, não ritual obrigatório. `CentralDark + verbo + payload` entra por este tecido, mas só materializa os estágios pertinentes à intenção, ao risco, ao owner e à prova exigida.
+
+```text
+CANONICAL_CYCLE_IS_CONDITIONAL=true
+TRIGGER_FAMILY_IS_NOT_ALWAYS_FULL_EXECUTION=true
+NO_SECOND_PARSER=true
+VOICE_REUSES_EXISTING_CLASSIFIER=true
+INTENT_ROUTER_REUSED=true
+REALITY_IS_FINAL_JUDGE=true
+```
+
 ## 7. Não fazer
 
 ```text
@@ -134,7 +161,7 @@ UNKNOWN:
 BLOCKED:
   - nenhum bloqueio de documentação nesta etapa
 NEXT_CURSOR:
-  - Worker/Cloud Code deve implementar parser/adaptador de superfície usando esta gramática e devolver matriz Text × Voice × Work × Desktop
+  - Worker/Cloud Code deve reutilizar o voice-semantic-classifier + intent router existentes e expor somente o binding de plataforma ainda ausente; não criar parser/owner novo
 ```
 
 Verso operacional:
