@@ -1,0 +1,36 @@
+# 🛡️ Runner lock — PR Update Branch / COSTURA
+# Owner: SEGREDO/CHEFE
+# Motivo: regressão provada em 2026-09-27 quando o fluxo foi trocado de
+# ubuntu-latest para [self-hosted, Linux] enquanto os runners estavam offline.
+
+UPDATE_BRANCH_RUNNER_LOCK: GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN
+workflow: .github/workflows/pr-update-branch-deterministic.yml
+required_runner: ubuntu-latest
+forbidden_without_explicit_chefe_authorization:
+  - "runs-on: [self-hosted, Linux]"
+  - "runs-on: self-hosted"
+regression_commit: ab33962d76e7d6b7a714b32051ca71d575d2fbeb
+restoration_commit: 38615b10cc94d2810cb741cea337027ade1ee3ad
+receipt_pr_mother: 1562
+receipt_comment: 5855489772
+
+rules:
+  UPDATE_BRANCH_WRITES_MAIN: false
+  UPDATE_BRANCH_IS_SYNC_NOT_PROMOTION: true
+  COSTURA_REQUIRES_LIVE_RUNNER: true
+  GITHUB_HOSTED_IS_REQUIRED_WHILE_SELF_HOSTED_OFFLINE: true
+  SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE: true
+  HYBRID_MODE_PENDING_VPS_PROOF: true
+  CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE: true
+  UNKNOWN_IS_PASS: false
+
+hybrid_future_gate:
+  required_evidence:
+    - github_actions_runner_status_online
+    - matching_labels_self_hosted_linux
+    - queued_count_materially_reduced_or_zero
+    - chefe_explicit_authorization
+    - rollback_path_documented
+  then_allowed:
+    mode: HYBRID_HOSTED_PLUS_SELF_HOSTED
+    status: CANDIDATE_ONLY_UNTIL_PROVEN
