@@ -387,6 +387,11 @@ check_command(
 )
 
 check_command(
+ 'scripts/trigger-fabric/test_centraldark_master_cycle.py',
+ [sys.executable, str(ROOT/'scripts/trigger-fabric/test_centraldark_master_cycle.py')],
+ classification='MASTER_CYCLE_TEXT_VOICE_DISPATCH_TESTS',
+)
+check_command(
  'scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py',
  [sys.executable, str(ROOT/'scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py')],
  classification='UNIFIED_SURFACE_PARITY_COUNTERPROOF_TESTS',
