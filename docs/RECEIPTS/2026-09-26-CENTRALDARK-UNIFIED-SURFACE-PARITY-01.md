@@ -205,3 +205,44 @@ NEXT_CURSOR:
 NÃO É DAR PODER AO MODELO.
 É EXPOR A MESMA CAPABILITY REAL PARA QUALQUER MODELO AUTORIZADO.
 ```
+
+
+---
+
+## 10. Delta — sessão, tracing e saída sem caixa-preta
+
+**Requisito consolidado pelo CHEFE:** a mesma intenção em Texto/Voz deve permanecer na mesma sessão canônica, com a mesma visão lateral de sessões, tool calls, usage/tokens e receipts. A superfície pode mudar a apresentação, mas não o resultado estruturado, owner, ação ou prova.
+
+Contrato:
+
+```yaml
+same_canonical_SESSION_ID: true
+shared_ordered_TRACE: true
+sidebar: [sessions, tool_calls, usage_tokens, receipts]
+same_structured_outcome:
+  - INTENT_ID
+  - DECISION
+  - OWNER
+  - ACTION_RESULT
+  - EVIDENCE
+  - COUNTERPROOF
+  - RECEIPT_ID
+  - NEXT_CURSOR
+voice_only_session_or_trace: forbidden
+unexposed_platform_capability: PLATFORM_UNAVAILABLE
+```
+
+### Medição desta sessão — 2026-09-27 01:27 UTC
+
+| Superfície observada | Evidência atual | Estado |
+|---|---|---|
+| Texto nesta sessão Work | Conector GitHub leu os quatro owners; ferramenta de escrita disponível. Esta atualização será provada pelo SHA de commit retornado. | PASS após confirmar os commits |
+| Voz | Não é uma superfície exposta nesta sessão de texto; sessão/tracing/uso da Voz não foram medidos aqui. | UNKNOWN |
+| Work | Esta execução está no Work Mode; GitHub e Remote Desktop Commander estão expostos. Não prova paridade em outra sessão Work. | PASS limitado à exposição atual |
+| Desktop | Remote Desktop Commander encontrou dispositivo SEGREDO online (app 0.2.51), sessão de terminal PID 31412 (Blocked=true; Runtime=9760s), histórico recente de 20 tool calls e usage agregado de 3034 chamadas, 98% de sucesso, 60 sessões/21 ferramentas e 70% das chamadas MCP restantes no mês. | PASS para telemetria do Desktop Commander; não prova vínculo da Voz |
+
+O histórico consultado contém chamadas `edit_block`, `start_process`, `read_process_output`, `list_sessions` e `list_processes`. Os argumentos e outputs integrais não foram copiados para este receipt.
+
+**Contraprova:** a captura de tool calls e usage existe no Desktop Commander, mas não demonstra que Texto e Voz compartilham o mesmo `SESSION_ID`, nem que a lateral da Voz mostra esses eventos. Portanto, paridade runtime Text↔Voice continua `UNKNOWN` até uma execução de Voz apresentar o mesmo contrato de sessão/tracing e a mesma prova.
+
+**NEXT_CURSOR:** validar uma ação real acessível em Texto e Voz; comparar `SESSION_ID`, sequência `TRACE_ID/TOOL_CALL_ID`, usage, owner, resultado estruturado e receipt. Se a plataforma Voice não expuser esses campos, registrar `PLATFORM_UNAVAILABLE` com a capability específica.
