@@ -103,8 +103,8 @@ Itens cristalizados/reconciliados nessa frente:
 2. `%USERPROFILE%\.centraldark\MAPA-MONITORES-CHEFE.json` → binding físico da Casa.
 3. `%USERPROFILE%\.hermes\scripts\cadeia-free-watchdog.ps1` → bindings 8099/8788/3030; reconciliar com fixed-point-fabric/Screenpipe.
 4. `%USERPROFILE%\.hermes\scripts\webui-watchdog.ps1` → recuperação local do WebUI 8788; absorver binding no owner existente.
-5. `%LOCALAPPDATA%\CentralDark\UnifiedRuntime\active-profile.txt` → evidência de divergência de selector.
-6. `%LOCALAPPDATA%\CentralDark\UnifiedRuntime\profiles.json` → perfis Segredo/Fulano + divergência de active.
+5. `%LOCALAPPDATA%\CentralDark\UnifiedRuntime\active-profile.txt` → estado local/transitório do seletor de perfil; registro histórico, não ouro por si só.
+6. `%LOCALAPPDATA%\CentralDark\UnifiedRuntime\profiles.json` → configuração operacional local de perfis; registro histórico, não autoridade arquitetural.
 7. `UnifiedRuntime\tools\LogCollector\COLLECT-CENTRALDARK-LOGS.ps1` → coletor local candidato a absorção.
 8. `UnifiedRuntime\tools\LogCollector\RUN-COLLECTOR.cmd` → launcher do coletor.
 9. `Jan-v3.5-4B-Q4_K_XL\model.yml` → configuração/fingerprint de modelo local.
@@ -113,14 +113,19 @@ Itens cristalizados/reconciliados nessa frente:
 12. `JAN_MODELS_DANDA_RAW.jsonl` → manifesto de hash/tamanho dos três modelos; sem copiar ~GB de GGUF.
 13. `hermes\config.sanitized.yaml` → configuração Hermes sanitizada; paths normalizados e valores sensíveis recriados localmente.
 
-Ferida preservada:
+Observação histórica do runtime local:
 
 ```text
 HERMES_LOCAL_ACTIVE=default
 HERMES_DESKTOP_ACTIVE=pivete
 UNIFIED_RUNTIME_ACTIVE=Fulanoo
 UNIFIED_RUNTIME_DECLARED_PROFILES=Segredo,Fulano
-VERDICT=DIVERGED_DO_NOT_RESTORE_BLINDLY
+STATUS=HISTORICAL_RUNTIME_OBSERVATION
+PROFILE_IS_A_VIEW_NOT_A_GOVERNMENT=true
+PROFILE_SELECTOR_IS_LOCAL_TRANSIENT_DETAIL=true
+PROFILE_SELECTOR_IS_NOT_AUTHORITY=true
+PROFILE_SELECTOR_IS_NOT_RESTORE_SOURCE=true
+PROFILE_SELECTOR_MUST_NOT_DRIVE_ARCHITECTURE_INFERENCE=true
 ```
 
 Também foi observado:
