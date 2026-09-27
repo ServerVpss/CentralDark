@@ -31,6 +31,10 @@ REQUIRED_MARKERS = {
         "VALIDATION_COST_SHOULD_SCALE_WITH_BLAST_RADIUS",
         "EVENT_ID",
         "CAUSATION_ID",
+        "same_canonical_session: true",
+        "same_ordered_trace: true",
+        "same_structured_outcome: true",
+        "forbid_voice_only_session_or_trace: true",
     ],
     SKILL: [
         "canonical_id: CENTRALDARK_UNIFIED_SURFACE_PARITY_01",
@@ -41,6 +45,9 @@ REQUIRED_MARKERS = {
         "Voice Tool Binding",
         "TEXT ⇄ VOICE ⇄ WORK ⇄ DESKTOP",
         "PLATFORM_UNAVAILABLE",
+        "same canonical `SESSION_ID`",
+        "no session or trace exclusive to Voice",
+        "same structured outcome",
     ],
     RECEIPT: [
         "# RECEIPT — CENTRALDARK_UNIFIED_SURFACE_PARITY_01",
@@ -51,6 +58,9 @@ REQUIRED_MARKERS = {
         "PASS:",
         "UNKNOWN:",
         "NEXT_CURSOR:",
+        "same_canonical_SESSION_ID: true",
+        "voice_only_session_or_trace: forbidden",
+        "UNKNOWN",
     ],
 }
 
