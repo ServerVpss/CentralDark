@@ -17,6 +17,12 @@ on:
   pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review]
   workflow_dispatch:
+    inputs:
+      target_pr:
+        description: 'PR único para testar/reconciliar conflito sem varrer os demais'
+        required: false
+        default: ''
+        type: string
   workflow_run:
     workflows:
       - ⚙️ porta-de-entrada
@@ -52,7 +58,7 @@ jobs:
          github.event.pull_request.user.login == 'dependabot[bot]' &&
          github.event.pull_request.head.repo.full_name == github.repository) ||
         github.event_name == 'schedule' ||
-        github.event_name == 'workflow_dispatch' ||
+        (github.event_name == 'workflow_dispatch' && (inputs.target_pr == '' || inputs.target_pr == null)) ||
         (github.event_name == 'workflow_run' && startsWith(github.event.workflow_run.head_branch, 'dependabot/')) ||
         github.event_name == 'repository_dispatch'
       )
@@ -513,7 +519,7 @@ jobs:
          github.event.pull_request.user.login == 'dependabot[bot]' &&
          github.event.pull_request.head.repo.full_name == github.repository) ||
         github.event_name == 'schedule' ||
-        github.event_name == 'workflow_dispatch' ||
+        (github.event_name == 'workflow_dispatch' && (inputs.target_pr == '' || inputs.target_pr == null)) ||
         (github.event_name == 'workflow_run' && startsWith(github.event.workflow_run.head_branch, 'dependabot/')) ||
         github.event_name == 'repository_dispatch'
       )
@@ -793,7 +799,7 @@ jobs:
       github.repository == 'ServerVpss/CentralDark' &&
       (
         github.event_name == 'schedule' ||
-        github.event_name == 'workflow_dispatch' ||
+        (github.event_name == 'workflow_dispatch' && (inputs.target_pr == '' || inputs.target_pr == null)) ||
         github.event_name == 'repository_dispatch'
       )
     runs-on: [self-hosted, Linux]
@@ -1071,3 +1077,61 @@ jobs:
           echo 'PROMOTION_OWNER=UNCHANGED'
           echo 'DIRECT_MERGE=0'
           echo 'UNKNOWN_IS_PASS=0'
+
+
+  conflict-target-pr:
+    name: 🧪 COSTURA — testar um PR alvo
+    if: >-
+      github.repository == 'ServerVpss/CentralDark' &&
+      github.event_name == 'workflow_dispatch' &&
+      inputs.target_pr != ''
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 30
+
+    steps:
+      - name: 📥 Checkout main confiável para o motor
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          path: .ci-house
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
+      - name: 🔎 Validar alvo
+        shell: bash
+        env:
+          TARGET_PR: ${{ inputs.target_pr }}
+        run: |
+          set -euo pipefail
+          [[ "$TARGET_PR" =~ ^[0-9]+$ ]]
+          test "$TARGET_PR" != "1562"
+          echo "TARGET_PR=$TARGET_PR"
+
+      - name: 🪡 Executar owner único somente no PR alvo
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TARGET_PR: ${{ inputs.target_pr }}
+          PROTECTED_PRS: '1562'
+          REPO_DIR: /root/CentralDark
+          RESOLVER: .ci-house/scripts/dependabot/resolve-conflicts.sh
+          CONFLICT_CLASSIFIER: .ci-house/scripts/dependabot/classify-conflict.mjs
+          SEMANTIC_ALL_HELPER: .ci-house/scripts/dependabot/semantic-all-resolver.mjs
+          CONFLICT_REGISTRY: .ci-house/scripts/dependabot/known-conflict-patterns.json
+        run: |
+          set -euo pipefail
+          node .ci-house/scripts/dependabot/reconcile-open-prs.mjs
+
+      - name: 🧾 Receipt do teste alvo
+        if: always()
+        shell: bash
+        run: |
+          echo "TARGET_PR=${{ inputs.target_pr }}"
+          echo "MODE=SINGLE_PR_CONFLICT_TEST"
+          echo "BUTTON_POLICY=CURRENT|INCOMING|BOTH|YELLOW"
+          echo "UNKNOWN_ACTION=YELLOW_NO_PUSH"
+          echo "PR_MOTHER_1562_PROTECTED=true"
+          echo "OTHER_OPEN_PRS_MUTATED_BY_THIS_JOB=0"
+          echo "UNKNOWN_IS_PASS=0"
