@@ -73,7 +73,7 @@ type LiveState = "UNCONFIGURED" | "CHECKING" | "LIVE" | "UNKNOWN";
 
 const MANIFEST_URL = "/centraldark/router-capabilities.json";
 const LIVE_ROUTER_URL = String(
-  (import.meta.env.VITE_CENTRALDARK_ROUTER_URL as string | undefined) ?? "",
+  (import.meta.env["VITE_CENTRALDARK_ROUTER_URL"] as string | undefined) ?? "",
 ).replace(/\/$/, "");
 
 const labels = {
