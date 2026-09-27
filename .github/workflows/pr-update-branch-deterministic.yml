@@ -42,8 +42,10 @@ permissions:
   actions: read
 
 concurrency:
-  group: update-branch-${{ github.event_name }}-${{ github.event.pull_request.number || inputs.pr_number || github.event.client_payload.pr_number || github.sha }}
-  cancel-in-progress: false
+  # push na main: todas as varreduras no mesmo grupo; a mais nova (main mais recente) substitui a anterior já obsoleta.
+  # Demais eventos mantêm o comportamento anterior (grupo por PR/SHA, sem cancelar).
+  group: update-branch-${{ github.event_name }}-${{ github.event.pull_request.number || inputs.pr_number || github.event.client_payload.pr_number || (github.event_name == 'push' && 'main') || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'push' }}
 
 jobs:
   update-branch:
