@@ -274,6 +274,54 @@ Atalho operacional:
 
 Esse atalho entra no Trigger Fabric, preserva a intenção do CHEFE/SEGREDO e escolhe somente as fontes materialmente pertinentes. Ele não obriga varredura total quando o pedido é estreito.
 
+### Resgate de sessão perdida (CHEFE, 2026-09-27)
+
+Mesmo comando em qualquer sessão antiga, de qualquer motor. A sessão vira **sensor**, não arquiteta: todas as sessões entram no moinho, só vira commit o que sobrevive ao cruzamento com o que já existe.
+
+```text
+ALL_SESSIONS_ENTER_THE_MILL=true
+ALL_SESSIONS_BECOME_COMMIT=false
+SESSION_ENDS_IN=NO_CHANGE|DELTA_UTIL_PROMOVIDO|BLOCKED_EXACT
+SESSION_ENDS_IN_SIMILAR_NEW_THING=FAIL_DUPLICATE_ARCHITECTURE
+NEW_PATH_ONLY_IF=EXISTING_OWNER_IMPOSSIBLE_PROVEN
+FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true
+```
+
+Cristalizado só com a cadeia inteira — arquivo sozinho não é cristal:
+
+```text
+FILE → LOADER → CONSUMER → TRIGGER → REAL_EXECUTION → EVIDENCE → COUNTERPROOF
+FILE_EXISTS_IS_NOT_LOADED=true
+SKILL_EXISTS_IS_NOT_USED=true
+RULE_EXISTS_IS_NOT_ENFORCED=true
+COMMIT_EXISTS_IS_NOT_MAIN_CURRENT=true
+MAIN_CURRENT_IS_NOT_RUNTIME=true
+```
+
+Promoção: delta útil vai pelo PR filho compatível do #1562 ou, quando a regra vigente autoriza, direto na main **só depois** do portão verde na ponta rebaseada (receita `MULTI_PEN_MAIN_GATE_PATH`); recibo no #1562 no mesmo ciclo.
+
+Registro obrigatório de cada sessão garimpada:
+
+```text
+SESSION_SOURCE= · SESSION_FINGERPRINT= · MAIN_HEAD_BEFORE= · MAIN_HEAD_AFTER=
+REUSED_CRYSTALS= · USEFUL_DELTAS= · DUPLICATES_DROPPED= · CONTRADICTIONS=
+OWNERS= · CHILD_PR= · PR_MOTHER=#1562 · COMMITS= · SAME_HEAD= · MERGE=
+DEPLOY= · RUNTIME= · RECEIPTS= · NEXT_CURSOR= · FIXED_POINT=
+```
+
+Ponto fixo do resgate:
+
+```text
+SESSION_MATERIAL_CLASSIFIED=100%
+USEFUL_DELTA_ROUTED=100%
+DUPLICATE_ARCHITECTURE=0
+UNBOUND_CRYSTAL=0
+OWNER_UNKNOWN=0 · CONSUMER_UNKNOWN=0
+MAIN_CURRENT_PROVEN=true
+SOUL_SYNC_CURRENT=true
+```
+
+
 ## Output Format
 
 Não inventar probabilidade/confiança numérica. Use classe epistemológica + evidência observável.
