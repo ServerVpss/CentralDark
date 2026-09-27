@@ -464,3 +464,14 @@ updated: 2026-08-27
 - **Regra:** `ACTION_REQUIRED != FAIL`; `ACTION_REQUIRED != PASS`; `APPROVE_REQUESTED != WORKFLOW_SUCCESS`; `UNKNOWN != PASS`; `CURRENT > HISTORY`.
 
 \n
+
+
+### 64. COSTURA autônoma: resolver conhecido, amarelar desconhecido, aprender por replay
+- **Categoria:** método operacional / conflito Git / automação autônoma
+- **Data:** 2026-09-27
+- **Owner:** `.agents/skills/git-conflict-resolve-house-standard/SKILL.md`
+- **Skill do método:** `.agents/skills/centraldark-autonomous-conflict-costura/SKILL.md`
+- **Motor:** `scripts/dependabot/resolve-conflicts.sh`
+- **Aprendizado:** conflito não é uma escolha global de `Accept Both`. A COSTURA mede a intenção e escolhe `CURRENT | INCOMING | BOTH | STRUCTURED | YELLOW`. Casos já provados são resolvidos sem invocar agente manual por conflito. Caso novo/ambíguo fica amarelo, sem push; uma resolução humana/especialista só vira automação futura após teste, contraprova e replay da fixture.
+- **Bancada:** PR #1577 começou `dirty` em `ddac0b1fd6fe0a2e3cb270c8a718796967d04361`; oito conflitos foram resolvidos por intenção e o PR ficou mergeável em `a3dea306caac3a7f01d1db0a80d7ae2325a14825`. Depois, o conflito histórico foi recriado e o bot CURRENT decidiu autonomamente `INCOMING=4`, `BOTH=2`, `STRUCTURED=2`, `YELLOW=0`; JSON/YAML e testes do diagrama passaram 6/6; `PR1577_BOT_REPLAY=PASS`.
+- **Regra:** `YELLOW != PASS`; `YELLOW != FAILURE`; `YELLOW = PROGRESS_BOUNDARY_NOT_FAILURE`; `DOCUMENTED != EXECUTED`; padrão novo só entra no registry após replay comprovado.
