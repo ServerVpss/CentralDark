@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 
 import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
+import { useNotificationsLog, type NotifyTipo } from "@/hooks/useNotificationsLog";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -71,7 +72,7 @@ function ItemCofre({
 
 function MegaPainel({ estado, atualizando, atualizar }: SistemaCentralDarkProps) {
   const origem: EstadoOperacional = estado?.github ?? "UNKNOWN";
-  const [periodo, setPeriodo] = useState("24h");
+  const [periodo, setPeriodo] = useState<"1h" | "24h" | "7d">("24h");
   const commits = estado?.commits ?? [];
   const horas = periodo === "1h" ? 1 : periodo === "7d" ? 168 : 24;
   const limite = Date.now() - horas * 60 * 60 * 1000;
@@ -79,6 +80,7 @@ function MegaPainel({ estado, atualizando, atualizar }: SistemaCentralDarkProps)
     const data = Date.parse(commit.data);
     return Number.isFinite(data) && data >= limite;
   });
+  const notificacoes = useNotificationsLog(periodo);
 
   return (
     <section aria-labelledby="mega-painel-titulo">
@@ -130,7 +132,7 @@ function MegaPainel({ estado, atualizando, atualizar }: SistemaCentralDarkProps)
           <Filter className="size-4 text-neon-blue" />
           Filtros da atividade medida
         </div>
-        <Select value={periodo} onValueChange={setPeriodo}>
+        <Select value={periodo} onValueChange={(valor) => setPeriodo(valor as "1h" | "24h" | "7d")}>
           <SelectTrigger aria-label="Período do Mega Painel">
             <SelectValue />
           </SelectTrigger>
@@ -153,20 +155,27 @@ function MegaPainel({ estado, atualizando, atualizar }: SistemaCentralDarkProps)
       <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-5">
         {(
           [
-            ["Informações", Info],
-            ["Sucessos", CheckCircle2],
-            ["Avisos", AlertTriangle],
-            ["Erros", XCircle],
-            ["Críticos", Siren],
-          ] satisfies Array<[string, LucideIcon]>
-        ).map(([titulo, Icone]) => (
+            ["Informações", Info, "info"],
+            ["Sucessos", CheckCircle2, "sucesso"],
+            ["Avisos", AlertTriangle, "aviso"],
+            ["Erros", XCircle, "erro"],
+            ["Críticos", Siren, "critico"],
+          ] satisfies Array<[string, LucideIcon, NotifyTipo]>
+        ).map(([titulo, Icone, tipo]) => (
           <article key={String(titulo)} className="panel p-4">
             <Icone className="size-4 text-muted-foreground" />
             <p className="mt-3 text-xs text-muted-foreground">{String(titulo)}</p>
-            <p className="mt-1 font-mono text-lg">UNKNOWN</p>
+            <p className="mt-1 font-mono text-lg">
+              {notificacoes.stats ? notificacoes.stats.porTipo[tipo] : "UNKNOWN"}
+            </p>
           </article>
         ))}
       </div>
+      {notificacoes.erro === "AUTH_REQUIRED" && (
+        <p className="mt-3 font-mono text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
+          Notificações: AUTH_REQUIRED — ponte de leitura do TelePainel não configurada.
+        </p>
+      )}
 
       <div className="mt-6 overflow-hidden rounded-md border border-border">
         <div className="border-b border-border bg-muted/40 px-4 py-3 font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
@@ -356,6 +365,7 @@ function CentralStatus({ estado, atualizando, atualizar }: SistemaCentralDarkPro
   const medidoEm = estado?.atualizadoEm
     ? new Date(estado.atualizadoEm).toLocaleString("pt-BR")
     : "UNKNOWN";
+  const notificacoes = useNotificationsLog("24h");
 
   return (
     <section aria-labelledby="status-titulo">
@@ -418,7 +428,12 @@ function CentralStatus({ estado, atualizando, atualizar }: SistemaCentralDarkPro
         />
         <ItemCofre
           titulo="Feed de notificações"
-          detalhe="A fonte de notificações do sistema antigo ainda não está ligada ao Cockpit CentralDark."
+          detalhe={
+            notificacoes.stats
+              ? `${notificacoes.stats.total} evento(s) nas últimas 24h · ${notificacoes.stats.sucessoPct}% sem erro/crítico.`
+              : "Ponte de leitura do TelePainel não configurada nesta superfície."
+          }
+          estado={notificacoes.stats ? "PASS" : "AUTH_REQUIRED"}
         />
         <article className="panel p-5 lg:col-span-2">
           <div className="flex items-start gap-3">
