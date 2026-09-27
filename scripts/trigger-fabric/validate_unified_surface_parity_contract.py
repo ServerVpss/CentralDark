@@ -16,10 +16,13 @@ ROOT = Path(__file__).resolve().parents[2]
 CONTRACT = ROOT / "docs" / "ARQUITETURA" / "CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml"
 INVOCATION_GRAMMAR = ROOT / "docs" / "ARQUITETURA" / "CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md"
 SKILL = ROOT / ".agents" / "skills" / "centraldark-unified-surface-parity" / "SKILL.md"
+VOICE_CLASSIFIER = ROOT / ".claude" / "skills" / "synced" / "voice-semantic-classifier" / "SKILL.md"
+INTENT_ROUTER = ROOT / ".agents" / "skills" / "centraldark-intent-deploy-router" / "SKILL.md"
+INTENT_BINDING = ROOT / ".agents" / "INTENT-DEPLOY-BINDING.json"
 RECEIPT = ROOT / "docs" / "RECEIPTS" / "2026-09-26-CENTRALDARK-UNIFIED-SURFACE-PARITY-01.md"
 INVOCATION_GRAMMAR_RECEIPT = ROOT / "docs" / "RECEIPTS" / "2026-09-27-CENTRALDARK-INVOCATION-GRAMMAR-01.md"
 
-REQUIRED_FILES = [CONTRACT, INVOCATION_GRAMMAR, SKILL, RECEIPT, INVOCATION_GRAMMAR_RECEIPT]
+REQUIRED_FILES = [CONTRACT, INVOCATION_GRAMMAR, SKILL, VOICE_CLASSIFIER, INTENT_ROUTER, INTENT_BINDING, RECEIPT, INVOCATION_GRAMMAR_RECEIPT]
 
 REQUIRED_MARKERS = {
     CONTRACT: [
@@ -72,6 +75,31 @@ REQUIRED_MARKERS = {
         "único `SESSION_ID` canônico",
         "trilha exclusiva da Voz",
         "contrato de saída estruturada é igual",
+        ".claude/skills/synced/voice-semantic-classifier/SKILL.md",
+    ],
+    VOICE_CLASSIFIER: [
+        "CENTRALDARK_INVOCATION_GRAMMAR_01=true",
+        "CANONICAL_INVOCATION_GRAMMAR=docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md",
+        "NO_SECOND_PARSER=true",
+        "RAW_VOICE_TRANSCRIPT_PRESERVED=true",
+        "NORMALIZED_INTENT_SHARED=true",
+        "TEXT_AND_VOICE_SHARE_SEMANTIC_ACTION=true",
+        "PLATFORM_UNAVAILABLE_WHEN_TOOL_NOT_EXPOSED=true",
+    ],
+    INTENT_ROUTER: [
+        "CENTRALDARK_INVOCATION_GRAMMAR_01=true",
+        "VOICE_CLASSIFIER_OWNER=.claude/skills/synced/voice-semantic-classifier/SKILL.md",
+        "GRAMMAR_DISPATCH_PRECEDES_TOOL_SELECTION=true",
+        "NO_SECOND_PARSER=true",
+        "SAME_NORMALIZED_INTENT_ACROSS_SURFACES=true",
+    ],
+    INTENT_BINDING: [
+        "\"invocation_grammar_binding\": {",
+        "\"id\": \"CENTRALDARK_INVOCATION_GRAMMAR_01\"",
+        "\"voice_classifier_owner\": \".claude/skills/synced/voice-semantic-classifier/SKILL.md\"",
+        "\"no_second_parser\": true",
+        "\"normalized_intent_shared_across_surfaces\": true",
+        "\"live_voice_binding_status\": \"UNKNOWN_UNTIL_MEASURED\"",
     ],
     RECEIPT: [
         "# RECEIPT — CENTRALDARK_UNIFIED_SURFACE_PARITY_01",
@@ -115,6 +143,7 @@ FORBIDDEN_MARKERS = {
     ],
     SKILL: [
         "novo sistema paralelo",
+        ".agents/skills/voice-semantic-classifier/SKILL.md",
         "Este skill substitui Hermes integralmente",
         "substitui Hermes",
         "substitui SOL",
@@ -162,6 +191,40 @@ def validate_values(path: Path, text: str) -> list[str]:
     return errors
 
 
+def validate_intent_binding_json(path: Path, text: str) -> list[str]:
+    errors: list[str] = []
+    try:
+        data = __import__("json").loads(text)
+    except Exception as exc:
+        return [f"INVALID_JSON {path}: {exc}"]
+    b = data.get("invocation_grammar_binding")
+    expected = {
+        "id": "CENTRALDARK_INVOCATION_GRAMMAR_01",
+        "canonical_contract": "docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md",
+        "voice_classifier_owner": ".claude/skills/synced/voice-semantic-classifier/SKILL.md",
+        "intent_router_owner": ".agents/skills/centraldark-intent-deploy-router/SKILL.md",
+        "no_second_parser": True,
+        "wake_word_is_conditional_not_ritual": True,
+        "normalized_intent_shared_across_surfaces": True,
+        "raw_voice_transcript_preserved": True,
+        "platform_unavailable_when_tool_not_exposed": True,
+        "live_voice_binding_status": "UNKNOWN_UNTIL_MEASURED",
+    }
+    if not isinstance(b, dict):
+        return [f"MISSING_BINDING {path}: invocation_grammar_binding"]
+    for key, expected_value in expected.items():
+        if b.get(key) != expected_value:
+            errors.append(f"WRONG_BINDING_VALUE {path}: {key}={b.get(key)!r} expected={expected_value!r}")
+    required_skills = set(data.get("canonical_skills", []))
+    for required in {
+        ".agents/skills/centraldark-unified-surface-parity/SKILL.md",
+        ".claude/skills/synced/voice-semantic-classifier/SKILL.md",
+    }:
+        if required not in required_skills:
+            errors.append(f"MISSING_CANONICAL_SKILL {path}: {required}")
+    return errors
+
+
 def read_text(path: Path) -> str:
     try:
         return path.read_text(encoding="utf-8")
@@ -201,6 +264,8 @@ def validate_file(path: Path) -> list[str]:
             errors.append(f"FORBIDDEN_MARKER {path}: {marker}")
 
     errors.extend(validate_values(path, text))
+    if path == INTENT_BINDING:
+        errors.extend(validate_intent_binding_json(path, text))
     return errors
 
 

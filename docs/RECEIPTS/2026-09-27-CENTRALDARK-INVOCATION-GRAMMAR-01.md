@@ -109,3 +109,55 @@ NEXT_CURSOR:
 Verso operacional:
 
 > Ôchí, verbo bom não corre solto: entra pelo funil, acha o dono e só mexe onde a prova alcança.
+---
+
+## 7. DELTAUTIL — binding nos owners executáveis existentes
+
+T0 medido:
+
+```text
+.agents/skills/voice-semantic-classifier/SKILL.md = NÃO EXISTE
+.claude/skills/synced/voice-semantic-classifier/SKILL.md = owner real, vindo do PR #1616
+centraldark-intent-deploy-router = já existe
+INTENT-DEPLOY-BINDING.json = já existe
+```
+
+Costura aplicada sem parser novo:
+
+```text
+CENTRALDARK_INVOCATION_GRAMMAR_01
+→ voice-semantic-classifier existente
+→ centraldark-intent-deploy-router existente
+→ INTENT-DEPLOY-BINDING root
+→ capability/owner pertinente
+→ tool real
+→ prova/receipt
+```
+
+Cadeados:
+
+```text
+NO_SECOND_PARSER=true
+NORMALIZED_INTENT_SHARED=true
+TEXT_AND_VOICE_SHARE_SEMANTIC_ACTION=true
+PLATFORM_UNAVAILABLE_WHEN_TOOL_NOT_EXPOSED=true
+```
+
+Status desta camada:
+
+```yaml
+PASS:
+  - owner real do voice classifier identificado pelo PR #1616
+  - ponteiro stale removido do skill unificado
+  - gramática ligada ao classifier existente
+  - gramática ligada ao intent router existente
+  - binding root ganhou contrato machine-readable
+  - validador exige owners e valores reais do binding
+UNKNOWN:
+  - Voice Tool Binding real da plataforma nesta conta/sessão
+  - paridade viva de SESSION_ID/tool calls/tokens entre Texto e Voz
+BLOCKED: []
+NEXT_CURSOR:
+  - Worker/Cloud Code deve implementar ou expor somente o binding de plataforma que ainda estiver ausente; não criar parser/owner novo
+```
+

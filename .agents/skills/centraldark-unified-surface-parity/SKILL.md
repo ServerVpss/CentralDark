@@ -6,7 +6,7 @@ owners:
   - LEIA-ME-IA.md
   - .agents/skills/meta-lupa/SKILL.md
   - .agents/skills/centraldark-intent-deploy-router/SKILL.md
-  - .agents/skills/voice-semantic-classifier/SKILL.md
+  - .claude/skills/synced/voice-semantic-classifier/SKILL.md
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md
 canonical_id: CENTRALDARK_UNIFIED_SURFACE_PARITY_01
 trigger: "!CENTRALDARK"
