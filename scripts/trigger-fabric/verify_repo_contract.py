@@ -44,6 +44,29 @@ def check_values(path, expected, classification='PROVEN_VALUE_IN_REPO'):
         elif any(f!=want for f in found): problems.append(f'{key}: {found} esperado {want}')
     checks.append({'path':path,'classification':classification,'ok':not problems,'missing':problems})
 
+SOUL_AFFECTING_OWNERS=('AGENTS.md','LEIA-ME-IA.md','CLAUDE.md','CENTRALDARK_AI_BOOT.yaml','docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml')
+
+def _git_blob_sha1(path):
+    import hashlib
+    data=(ROOT/path).read_bytes()
+    return hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+
+def check_soul_sync(classification='SOUL_SYNC_CURRENT_FOR_FIXED_POINT'):
+    """SOUL guarda a impressão dos donos que afetam a alma; divergência = SOUL atrasada = sem ponto fixo."""
+    soul='docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md'
+    text=(ROOT/soul).read_text(encoding='utf-8',errors='replace')
+    m=re.search(r'SOUL_SYNC_ANCHOR_BEGIN\n(.*?)\nSOUL_SYNC_ANCHOR_END',text,re.S)
+    problems=[]
+    if not m:
+        problems.append('SOUL_SYNC_ANCHOR ausente na SOUL')
+    else:
+        anchored=dict(l.split('=',1) for l in m.group(1).strip().splitlines() if '=' in l)
+        for owner in SOUL_AFFECTING_OWNERS:
+            cur=_git_blob_sha1(owner)
+            if anchored.get(owner)!=cur:
+                problems.append(f'SOUL_STALE: {owner} mudou (âncora {anchored.get(owner)} ≠ atual {cur}) → rever SOUL §2.4 e atualizar a âncora')
+    checks.append({'path':soul,'classification':classification,'ok':not problems,'missing':problems})
+
 def check_absent(path, forbidden=(), classification='PROVEN_ABSENT_IN_REPO'):
     p=ROOT/path
     ok=p.exists(); violations=[]; text=''
@@ -629,6 +652,7 @@ for _own_error_rules_file in ('AGENTS.md','CLAUDE.md'):
     check_values(_own_error_rules_file,{'PUSH_ONLY_AFTER_GATE_GREEN_ON_REBASED_HEAD':'true','TEST_HARNESS_DERIVES_FILES_FROM_OWNER':'true','TEST_MUST_NOT_ANCHOR_ON_MUTABLE_REAL_STATE':'true','SEAL_STORES_REPLAY_INPUTS':'true','PARTIAL_LOG_CLAIM_NAMES_ITS_WINDOW':'true','RETRACT_FALSE_ALARM_IN_SAME_RECEIPT':'true','SAME_ACT_DIFFERENT_MOTIVE_DISTINGUISH_BEFORE_JUDGING':'true','ANSWER_ASKED_INTENT_NOT_ADJACENT_DEBATE':'true'}, classification='CLAUDE_OWN_ERRORS_BECOME_RULES')
 check_values('AGENTS.md',{'PARALLEL_PATHS_ALLOWED':'true','PARALLEL_SYSTEM_OR_OWNER':'FORBIDDEN','PARALLEL_PATHS_CONVERGE_TO_ONE_INTENT_AND_ONE_LIVE_STATE':'true'}, classification='PARALLEL_PATHS_CONVERGE_NOT_PARALLEL_SYSTEM')
 check_values('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',{'STOP_FOR_CHEFE_ONLY_HUMAN_ONLY_INPUT':'true','WHOLE_ARCHITECTURE_ONE_BATCH':'true','PARALLEL_PATHS_CONVERGE_TO_ONE_LIVE_STATE':'true','STALLED_WITHOUT_EXACT_DEPENDENCY_MAP_IS_AGENT_DEBT':'true','PARALLEL_PATHS_ALLOWED':'true','PARALLEL_SYSTEM_OR_OWNER':'FORBIDDEN'}, classification='SOUL_CHEFE_2026_09_27_OPERATIONAL_LAW')
+check_soul_sync()
 check_values('LEIA-ME-IA.md',{
  'CENTRALDARK_UNIFIED_SURFACE_PARITY_REQUIRED':'true','PROVEN_CRYSTAL_DIRECT_MAIN_FAST_PATH':'true',
  'PROVEN_CRYSTAL_FULL_CI_REPROOF':'false','PROVEN_CRYSTAL_REVALIDATE':'AFFECTED_CONE_ONLY',

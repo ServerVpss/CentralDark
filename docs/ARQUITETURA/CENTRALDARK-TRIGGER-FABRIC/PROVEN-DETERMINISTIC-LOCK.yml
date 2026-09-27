@@ -158,6 +158,10 @@ fixed_point:
     - FIXED_POINT
     - HUMAN_FRONTIER
     - BLOCKED_WITH_EXPLICIT_CAUSE
+  requires:
+    - SOUL_SYNC_CURRENT
+  soul_stale: FIXED_POINT_FORBIDDEN
+  soul_sync_owner: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#2.4
   infinite_retry_without_information_gain: FORBIDDEN
   reopen_entire_system_for_local_delta: FORBIDDEN
   invalidate_only_dependent_claims: true
