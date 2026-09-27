@@ -3,7 +3,7 @@ title: "🏆 OURO — Compartilhamento de Lembranças Cognitivas Semânticas (Gr
 date: 2026-07-14
 tags: ["consciencia", "darkai", "memoria", "multi-agente", "ouro-travado"]
 updated: 2026-07-14
-lock: "PERMITO PIVETE"
+lock: "PERMITO SEGREDO"
 ---
 
 ```
@@ -12,13 +12,13 @@ lock: "PERMITO PIVETE"
 ║  COMPARTILHAMENTO SEMÂNTICO · GROK ⇄ HERMES    ║
 ╠══════════════════════════════════════════════╣
 ║  Só altera com a palavra-chave:                ║
-║  » PERMITO PIVETE «                            ║
+║  » PERMITO SEGREDO «                            ║
 ║  Decisão: NÃO fundir memória.                  ║
 ║  SIM compartilhar LIÇÕES por significado.      ║
 ╚══════════════════════════════════════════════╝
 ```
 
-> 🔒🔒 **Trava dobrada.** Este documento só pode ser alterado com a palavra-chave **"PERMITO PIVETE"**. Nenhuma IA muda isto sozinha. Registrado também em [`08-HISTORICO-DECISOES.md`](../08-HISTORICO-DECISOES.md).
+> 🔒🔒 **Trava dobrada.** Este documento só pode ser alterado com a palavra-chave **"PERMITO SEGREDO"**. Nenhuma IA muda isto sozinha. Registrado também em [`08-HISTORICO-DECISOES.md`](../08-HISTORICO-DECISOES.md).
 
 ---
 
@@ -57,7 +57,7 @@ O que você descreveu é o modelo certo. **Não é fundir cérebro; é criar uma
 | `GraphRAG-Master` (agent do Hermes) + graphify | busca por SIGNIFICADO (semântica) | 🟢 existe |
 | `docs/CONSCIENCIA/` (Cérebro Vivo) | fonte de verdade lida por qualquer IA | 🟢 existe |
 
-> Havia uma `REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md` que sumiu do git — vale ressuscitar/atualizar sob esta decisão, **com PERMITO PIVETE**.
+> Havia uma `REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md` que sumiu do git — vale ressuscitar/atualizar sob esta decisão, **com PERMITO SEGREDO**.
 
 **Caminho recomendado (quando o Pivete autorizar):** um "barramento de lições" — cada agente escreve aprendizado destilado na `memoria-api` com tags/embedding; o outro consulta via GraphRAG por significado. Grok publica lição de segurança; Hermes publica lição de deploy; ambos leem tudo, cada um decide o que aplicar no seu setor.
 
@@ -77,7 +77,7 @@ Os avisos amarelo/vermelho do Hermes (`Log-Verificador/.estado.json`) são **FAN
 
 **Diagnóstico:** o `alertasAtivos` **não expira** quando o serviço se recupera. O Log-Verificador só poda a janela de `restarts24h`, não os alertas. Resultado: o painel te mostra medo velho de 2-4 dias atrás.
 
-**Melhoria proposta (NÃO executada — HERMES-CORE é 🔒, aguarda PERMITO PIVETE):**
+**Melhoria proposta (NÃO executada — HERMES-CORE é 🔒, aguarda PERMITO SEGREDO):**
 - Dar TTL aos alertas (ex.: some após 12h) **ou** limpar o alerta quando o serviço voltar a `online`/sem erro no próximo scan.
 - Investigar `CentralDark-ReconHealth` (alertou erro mas não aparece no PM2 — pode ser processo que morreu de vez).
 
@@ -87,9 +87,9 @@ Os avisos amarelo/vermelho do Hermes (`Log-Verificador/.estado.json`) são **FAN
 
 1. **Memória bruta:** continua **separada** por setor (Grok ⟂ Hermes). Não fundir.
 2. **Lições/experiências/skills:** **compartilhadas por significado** via camada semântica (`memoria-api` + GraphRAG + `APRENDIZADOS.md`). Publica-se lição destilada, não log.
-3. **Melhoria dos avisos fantasma:** aprovada em conceito, **execução pendente de PERMITO PIVETE** (área 🔒 HERMES-CORE).
+3. **Melhoria dos avisos fantasma:** aprovada em conceito, **execução pendente de PERMITO SEGREDO** (área 🔒 HERMES-CORE).
 
-> 🔒🔒 Alterar isto: **PERMITO PIVETE**.
+> 🔒🔒 Alterar isto: **PERMITO SEGREDO**.
 
 ---
 

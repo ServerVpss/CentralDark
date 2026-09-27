@@ -1,0 +1,18 @@
+name: centraldark-runtime-guard
+version: "1.0"
+description: "CentralDark runtime adapter: injects a compact live anchor, records sanitized tool receipts, and fail-closes logical-rule mutations when the canonical TLC23/Horn PDF gate is not proved."
+author: "CentralDark"
+hooks:
+  - pre_llm_call
+  - pre_tool_call
+  - post_tool_call
+  - pre_verify
+  - on_session_start
+  - on_session_end
+provides_hooks:
+  - pre_llm_call
+  - pre_tool_call
+  - post_tool_call
+  - pre_verify
+  - on_session_start
+  - on_session_end

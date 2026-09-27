@@ -1,0 +1,69 @@
+schema: centraldark.main-pinned-runtime-fast-path.v1
+status: CANONICAL_FALLBACK_BINDING
+authority: SEGREDO/CHEFE
+owner: docs/CONSCIENCIA/MICRO-DEPLOY/
+human_contract: docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.md
+machine_contract: docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json
+skill: .agents/skills/main-pinned-runtime-fast-path/SKILL.md
+hook: scripts/hooks/pre-push.main-pinned-runtime-fast-path.sh
+bot_consumer: apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml
+activation:
+  primary_deploy_states:
+  - FAIL
+  - BLOCKED
+  source_must_exist_in_main: true
+  source_sha_required: true
+  owner_scope_required: true
+sequence:
+- MEASURE_MAIN_HEAD
+- MEASURE_PRIMARY_DEPLOY_STATE
+- CONFIRM_SOURCE_SHA_IN_MAIN
+- IDENTIFY_OWNER
+- IDENTIFY_FILESET_CAUSAL
+- CREATE_CLEAN_WORKTREE
+- RUN_APPLICABLE_TESTS
+- COPY_FILESET_CAUSAL
+- RESTART_OWNER_ONLY
+- WAIT_READINESS
+- MEASURE_RUNTIME
+- COMPARE_EXPECTED_EFFECT
+- RECEIPT_PR_1562
+locks:
+  UNKNOWN_IS_NOT_PASS: true
+  NO_FORCE_PUSH: true
+  NO_BLIND_PULL: true
+  NO_BLIND_RESET: true
+  NO_SECRET_LEAK: true
+  NO_UNCOMMITTED_SOURCE_AS_DEPLOY_INPUT: true
+  CAUSAL_SCOPE_ONLY: true
+fingerprint:
+  fields:
+  - recipe_version
+  - owner
+  - fileset_causal
+  - test_command
+  - build_command
+  - restart_command
+  - health_command
+  - runtime_target
+  same: REPLAY_BEFORE_REDISCOVERY
+  changed: REVALIDATE_AFFECTED_CONE_ONLY
+scratch_worktree:
+  canonical_path: /root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+  single_reusable: true
+  disposable: true
+  lock_required: true
+  reset_before_use: true
+  reset_after_use: true
+  clean_before_use: true
+  clean_after_use: true
+  receipt_before_cleanup: true
+  dirty_handoff_forbidden: true
+  long_lived_agent_worktrees_forbidden: true
+  runtime_is_not_scratch: true
+  destructive_guard:
+    realpath_must_equal: /root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+    forbidden_paths:
+    - /root/CentralDark
+    - RUNTIME_ROOT
+    - PRIMARY_REPO_ROOT

@@ -18,11 +18,12 @@ const CLOUDFLARE_BASE = "https://api.cloudflare.com/client/v4";
 const CONTABO_BASE = "https://api.contabo.com";
 const CONTABO_AUTH = "https://auth.contabo.com/auth/realms/contabo/protocol/openid-connect/token";
 const TAILSCALE_BASE = "https://api.tailscale.com/api/v2";
-const SUPPORTED_PROVIDERS = new Set(["cloudflare", "contabo", "tailscale"]);
+const BUILDKITE_BASE = "https://api.buildkite.com/v2";
+const SUPPORTED_PROVIDERS = new Set(["cloudflare", "contabo", "tailscale", "buildkite"]);
 const PATH_VALUE_RE = /^[A-Za-z0-9._:-]{1,160}$/;
 const CURRENCY_RE = /^[A-Z]{3}$/;
 const SENSITIVE_KEY_RE = /(authorization|cookie|password|passwd|senha|secret|token|api[_-]?key|private[_-]?key|service[_-]?role|refresh[_-]?token|access[_-]?token|credential|credencial|card[_-]?number|payment[_-]?nonce)/i;
-const SENSITIVE_VALUE_RE = /(?:Bearer\s+\S{12,}|tskey-[a-z]+-\S+|gh[pousr]_[A-Za-z0-9_]{20,}|sb_(?:secret|publishable)_[A-Za-z0-9_-]{20,}|sk-[A-Za-z0-9_-]{16,}|-----BEGIN [A-Z ]*PRIVATE KEY-----)/i;
+const SENSITIVE_VALUE_RE = /(?:Bearer\s+\S{12,}|bkua_[A-Za-z0-9]+|tskey-[a-z]+-\S+|gh[pousr]_[A-Za-z0-9_]{20,}|sb_(?:secret|publishable)_[A-Za-z0-9_-]{20,}|sk-[A-Za-z0-9_-]{16,}|-----BEGIN [A-Z ]*PRIVATE KEY-----)/i;
 const capability = (provider, name, spec) => Object.freeze({
     provider,
     capability: name,
@@ -286,6 +287,44 @@ export const PROVIDER_CAPABILITY_MATRIX = Object.freeze([
         requiredParams: ["tailnet"], secretBearing: true,
         controlPlaneStatus: "BLOCKED_SECRET_BEARING_RESPONSE",
     }),
+    capability("buildkite", "user.get", {
+        status: "READ_SUPPORTED", method: "GET", path: "/user",
+        permission: "read_user", evidenceRef: "https://buildkite.com/docs/apis/rest-api/user",
+    }),
+    capability("buildkite", "organizations.list", {
+        status: "READ_SUPPORTED", method: "GET", path: "/organizations",
+        permission: "read_organizations", evidenceRef: "https://buildkite.com/docs/apis/rest-api/organizations",
+    }),
+    capability("buildkite", "pipelines.list", {
+        status: "READ_SUPPORTED", method: "GET", path: "/organizations/{org}/pipelines",
+        permission: "read_pipelines", evidenceRef: "https://buildkite.com/docs/apis/rest-api/pipelines",
+        requiredParams: ["org"],
+    }),
+    capability("buildkite", "pipelines.get", {
+        status: "READ_SUPPORTED", method: "GET", path: "/organizations/{org}/pipelines/{pipeline}",
+        permission: "read_pipelines", evidenceRef: "https://buildkite.com/docs/apis/rest-api/pipelines",
+        requiredParams: ["org", "pipeline"],
+    }),
+    capability("buildkite", "builds.list", {
+        status: "READ_SUPPORTED", method: "GET", path: "/organizations/{org}/builds",
+        permission: "read_builds", evidenceRef: "https://buildkite.com/docs/apis/rest-api/builds",
+        requiredParams: ["org"],
+    }),
+    capability("buildkite", "agents.list", {
+        status: "READ_SUPPORTED", method: "GET", path: "/organizations/{org}/agents",
+        permission: "read_agents", evidenceRef: "https://buildkite.com/docs/apis/rest-api/agents",
+        requiredParams: ["org"],
+    }),
+    capability("buildkite", "clusters.list", {
+        status: "READ_SUPPORTED", method: "GET", path: "/organizations/{org}/clusters",
+        permission: "read_clusters", evidenceRef: "https://buildkite.com/docs/apis/rest-api/clusters",
+        requiredParams: ["org"],
+    }),
+    capability("buildkite", "pipeline.write", {
+        status: "UNSUPPORTED_BY_PUBLIC_API", method: null, path: null,
+        permission: "write_pipelines", evidenceRef: "https://buildkite.com/docs/apis/rest-api/pipelines",
+        controlPlaneStatus: "QUARANTINED_UNTIL_RUNTIME_COMPENSATION_PROVEN",
+    }),
 ]);
 const capabilityByKey = new Map(PROVIDER_CAPABILITY_MATRIX.map((item) => [`${item.provider}:${item.capability}`, item]));
 function jsonBlock(data) {
@@ -307,6 +346,9 @@ export function providerCredentialStatus(env = process.env) {
         },
         tailscale: {
             "TAILSCALE_API_KEY": credentialStatus(env.TAILSCALE_API_KEY || env.TS_API_KEY),
+        },
+        buildkite: {
+            "BUILDKITE_API_TOKEN": credentialStatus(env.BUILDKITE_API_TOKEN || env.BUILDKITE_TOKEN),
         },
     };
 }
@@ -439,25 +481,30 @@ function parseEnvFile(filePath) {
     }
     return out;
 }
-function loadTailscaleKey() {
-    const fromEnv = process.env.TAILSCALE_API_KEY || process.env.TS_API_KEY;
-    if (fromEnv && fromEnv.trim())
-        return fromEnv.trim();
-    const files = [
-        "/root/CentralDark/secrets/tailscale.env",
-        "/root/CentralDark/apps/modulos/mcp/.env",
-    ];
+function loadSecretFromFiles(envKeys, files) {
+    for (const key of envKeys) {
+        const fromEnv = process.env[key];
+        if (fromEnv && String(fromEnv).trim())
+            return String(fromEnv).trim();
+    }
     for (const filePath of files) {
         const parsed = parseEnvFile(filePath);
-        const value = parsed.TAILSCALE_API_KEY || parsed.TS_API_KEY;
-        if (value)
-            return value;
+        for (const key of envKeys) {
+            if (parsed[key])
+                return parsed[key];
+        }
     }
     return "";
 }
+function loadTailscaleKey() {
+    return loadSecretFromFiles(["TAILSCALE_API_KEY", "TS_API_KEY"], ["/root/CentralDark/secrets/tailscale.env", "/root/CentralDark/apps/modulos/mcp/.env"]);
+}
+function loadBuildkiteToken() {
+    return loadSecretFromFiles(["BUILDKITE_API_TOKEN", "BUILDKITE_TOKEN"], ["/root/CentralDark/secrets/buildkite.env", "/root/CentralDark/apps/modulos/mcp/.env"]);
+}
 async function providerHeaders(provider, requestId = randomUUID()) {
     if (provider === "cloudflare") {
-        const token = process.env.CLOUDFLARE_API_TOKEN || process.env.CF_API_TOKEN;
+        const token = loadSecretFromFiles(["CLOUDFLARE_API_TOKEN", "CF_API_TOKEN"], ["/root/CentralDark/secrets/cloudflare.env", "/root/CentralDark/apps/modulos/mcp/.env"]);
         if (!token)
             throw new Error("CLOUDFLARE_CREDENTIALS_MISSING");
         return { Authorization: `Bearer ${token}`, Accept: "application/json", "Content-Type": "application/json" };
@@ -466,6 +513,12 @@ async function providerHeaders(provider, requestId = randomUUID()) {
         const token = loadTailscaleKey();
         if (!token)
             throw new Error("TAILSCALE_CREDENTIALS_MISSING");
+        return { Authorization: `Bearer ${token}`, Accept: "application/json" };
+    }
+    if (provider === "buildkite") {
+        const token = loadBuildkiteToken();
+        if (!token)
+            throw new Error("BUILDKITE_CREDENTIALS_MISSING");
         return { Authorization: `Bearer ${token}`, Accept: "application/json" };
     }
     const token = await contaboAccessToken();
@@ -481,6 +534,8 @@ function providerBase(provider) {
         return CLOUDFLARE_BASE;
     if (provider === "tailscale")
         return TAILSCALE_BASE;
+    if (provider === "buildkite")
+        return BUILDKITE_BASE;
     return CONTABO_BASE;
 }
 function sanitizeError(error) {
@@ -576,7 +631,7 @@ async function finalizeOperation({ idempotencyKey, state, httpStatus, result }) 
     });
 }
 const providerInputSchema = z.object({
-    provider: z.enum(["cloudflare", "contabo", "tailscale"]),
+    provider: z.enum(["cloudflare", "contabo", "tailscale", "buildkite"]),
     capability: z.string().min(1).max(100),
     params: z.record(z.string(), z.unknown()).optional().default({}),
 });
@@ -585,7 +640,7 @@ export const adminProviderControlTools = [
         name: "provider_capabilities",
         description: "Matriz canônica de capacidades oficiais Contabo/Cloudflare/Tailscale usadas pelo cockpit Admin. Não executa ação externa.",
         annotations: { ...READ, title: "Providers — matriz de capacidades" },
-        inputSchema: z.object({ provider: z.enum(["cloudflare", "contabo", "tailscale"]).optional() }),
+        inputSchema: z.object({ provider: z.enum(["cloudflare", "contabo", "tailscale", "buildkite"]).optional() }),
         handler: async (input) => jsonBlock({
             ok: true,
             status: "PASS",

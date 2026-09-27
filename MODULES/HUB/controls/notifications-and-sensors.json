@@ -1,0 +1,97 @@
+{
+  "schema": "centraldark.modules.hub.controls.notifications_sensors.v1",
+  "updated_at": "2026-09-24T12:11:00-03:00",
+  "purpose": "Arquivo humano/editavel para ativar/desativar notificacoes, sensores de evento, canais de retorno e gatilhos de expansao. Nao guardar segredos aqui.",
+  "global": {
+    "default_enabled": true,
+    "fail_closed": true,
+    "emit_unknown_instead_of_pass": true,
+    "require_receipt_for_score": true,
+    "write_secrets_here": false
+  },
+  "triggers": {
+    "domain_expansion": {
+      "enabled": true,
+      "canonical_phrase": "EXPANSAO DE DOMINIO",
+      "trigger_file": "MODULES/HUB/triggers/domain-expansion.trigger.json",
+      "playbook": "MODULES/HUB/playbooks/EXPANSAO-DE-DOMINIO.md",
+      "mode": "deterministic_expansion_loop",
+      "allow_micro_commits": true,
+      "require_owner_lookup_before_create": true,
+      "require_ci_or_receipt_before_pass": true,
+      "allow_promote_notification_to_pass": false,
+      "allow_parallel_brain": false,
+      "default_output_format": "Feito/Evidencia/Pendencia/Proximo passo/Qual BOOT usar/Fio da missao"
+    }
+  },
+  "channels": {
+    "telegram_bot_api": {
+      "enabled": true,
+      "notify_chefe": true,
+      "allow_notes_to_brain": true,
+      "allow_feedback_capture": true,
+      "allow_xp_write": false,
+      "reason_xp_write_disabled": "Adaptador CHEFE_FEEDBACK -> Meta-Lupa ainda nao implementado."
+    },
+    "telegram_mtproto": {
+      "enabled": true,
+      "notify_chefe": false,
+      "requires_manual_login": true,
+      "safe_health_without_config": true,
+      "allow_start_confirm": false,
+      "reason_start_confirm_disabled": "Ate configurar API_ID/API_HASH e confirmar conta pessoal fora do Git."
+    },
+    "github_actions": {
+      "enabled": true,
+      "notify_chefe": true,
+      "treat_email_as_event_only": true,
+      "query_github_before_score": true,
+      "allow_auto_pass_from_email": false
+    },
+    "gmail_notifications": {
+      "enabled": true,
+      "notify_chefe": true,
+      "treat_push_as_event_only": true,
+      "allow_sensitive_content_ingest": false
+    },
+    "vps_pm2": {
+      "enabled": true,
+      "notify_chefe": true,
+      "require_pm2_home": true,
+      "allow_restart_without_owner": false,
+      "allow_restart_after_dirty_diff": false
+    },
+    "mcp_health": {
+      "enabled": true,
+      "notify_chefe": true,
+      "require_payload_validation": true,
+      "admin_login_is_not_health": true
+    },
+    "status_centraldark": {
+      "enabled": true,
+      "notify_chefe": true,
+      "publish_unknowns": true,
+      "publish_pass_only_with_receipt": true,
+      "show_toggle_controls": true,
+      "show_domain_expansion_trigger": true
+    },
+    "meta_lupa_reward": {
+      "enabled": true,
+      "write_rewards": false,
+      "manual_feedback_capture": true,
+      "score_requires_receipt": true,
+      "reason_write_rewards_disabled": "Precisa adaptador E2E para separar elogio, direcao correta e prova tecnica."
+    }
+  },
+  "event_classification": {
+    "notification": "EVENT_ONLY",
+    "commit": "CANONICAL_RECORD_ONLY",
+    "workflow_success": "CI_PASS_ONLY",
+    "workflow_failure": "FAIL_OR_UNKNOWN",
+    "runtime_health_payload": "RUNTIME_EVIDENCE",
+    "chefe_feedback_positive": "HUMAN_FEEDBACK_ONLY",
+    "chefe_feedback_negative": "HUMAN_FEEDBACK_ONLY",
+    "domain_expansion_phrase": "DETERMINISTIC_TRIGGER",
+    "receipt_with_head_pid_payload": "PROMOTABLE_EVIDENCE"
+  }
+}

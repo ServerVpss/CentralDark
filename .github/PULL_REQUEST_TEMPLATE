@@ -1,0 +1,225 @@
+# 🪬 Solicitação de Pull Request — CentralDark
+
+```text
+╔══════════════════════════════════╗
+║  CENTRALDARK / PR VIVO          ║
+║  PADRÃO GAMIFICADO OFICIAL      ║
+╚══════════════════════════════════╝
+
+STATUS:    ⚠️ EM VALIDAÇÃO
+PRIORID:   🟢 Alta
+RESPONS:   CENTRALDARK
+EXECUTOR:  HERMES / CODEX / GATES
+
+🎯 MISSÃO: {objetivo curto e verificável}
+📌 FASE:   SOURCE → TESTES → CI → RUNTIME → RECEIPT
+⏱  TEMPO:  {medido | UNKNOWN}
+
+📊 PROGRESSO
+CRITÉRIOS: {X}/{Y} somente quando Y estiver fechado
+PROG:      {percentual calculável | NÃO CALCULÁVEL}
+
+🚨 BLOQUEIOS
+{nenhum | descrição curta e real}
+
+🎯 PRÓXIMO PASSO
+{NEXT_CURSOR objetivo}
+
+────────────────────────────────────
+🔧 DETALHE TÉCNICO (PROVA)
+HEAD_SHA:  {sha atual}
+BASE_SHA:  {sha base}
+UNKNOWN != PASS
+PASS_SHA_ANTIGO != PASS_SHA_ATUAL
+REALIDADE = JUIZ
+```
+
+## 📋 Descrição
+
+Descreva de forma clara e curta o que este PR faz, por que é necessário e qual ferida material resolve.
+
+## 🎯 Referência da missão CentralDark
+
+**MISSION_ID:**
+
+**Intent owner:** CHEFE
+
+**Owner canônico:**
+
+**Writer scope:**
+
+**NEXT_CURSOR:**
+
+### Critérios de aceitação abordados
+
+- [ ] AC-01 — descrição objetiva
+- [ ] AC-02 — descrição objetiva
+
+## 🔗 Problema relacionado
+
+Fecha #
+
+PR/issue relacionada:
+
+## 📦 Tipo de alteração
+
+- [ ] 🐛 Correção de bug
+- [ ] ✨ Nova funcionalidade
+- [ ] 💥 Alteração incompatível
+- [ ] 📚 Atualização de documentação
+- [ ] 🔧 Refatoração sem mudança funcional
+- [ ] ⚡ Melhoria de desempenho
+- [ ] 🧪 Atualização de testes
+- [ ] 🛡️ Segurança / guardrail
+- [ ] 🧠 Memória / continuidade / handoff
+
+## 🎯 Escopo
+
+- [ ] `apps/`
+- [ ] `scripts/`
+- [ ] `.github/`
+- [ ] `docs/`
+- [ ] `infra/`
+- [ ] runtime vivo
+- [ ] outro: __________________
+
+## 📝 Alterações realizadas
+
+- Alteração 1
+- Alteração 2
+- Alteração 3
+
+## 🧪 Testando
+
+- [ ] Testes adicionados para a mudança
+- [ ] Testes existentes executados
+- [ ] `git diff --check`
+- [ ] Contraprova executada
+- [ ] Same-HEAD confirmado
+- [ ] Runtime medido quando aplicável
+
+### Resultados dos testes
+
+```text
+Cole somente resultados observados.
+UNKNOWN continua UNKNOWN.
+```
+
+## 📸 Capturas de tela (se aplicável)
+
+Adicione capturas somente quando ajudarem a provar UX/estado visual.
+
+## ✅ Lista de verificação
+
+- [ ] O código segue as regras da Casa e do repositório
+- [ ] `REUSE_BEFORE_CREATE` foi respeitado
+- [ ] Não foi criado owner/engine/workflow paralelo sem necessidade
+- [ ] Autoridade, Writer, Judge e Promotor continuam separados
+- [ ] Não há novo warning conhecido sem registro
+- [ ] Testes provam a mudança no HEAD atual
+- [ ] Dependências do PR foram reconciliadas
+- [ ] `UNKNOWN != PASS`
+- [ ] `DOCUMENTED != EXECUTED`
+- [ ] `MERGED != DEPLOYED`
+
+## 🔒 Segurança
+
+- [ ] Mudança revisada para exposição de secrets/dados sensíveis
+- [ ] Menor privilégio preservado
+- [ ] Código não confiável não ganhou token privilegiado
+- [ ] Rollback/recuperação existe quando materialmente necessário
+
+## 🐰 Avaliação do CodeRabbit
+
+- [ ] Nenhum finding CRÍTICO material pendente no HEAD atual
+- [ ] Nenhum finding ALTO material pendente bloqueando merge
+- [ ] Sugestões consequenciais foram tratadas, refutadas com prova ou documentadas
+- [ ] Review snapshot corresponde ao HEAD atual
+
+> CodeRabbit é `REVIEW_ONLY`: finding é sinal, não prova. Hermes/testes/contraprova e gates determinísticos provam.
+
+## 🤖 Dependabot
+
+- [ ] Não aplicável a este PR
+- [ ] Metadados da atualização medidos
+- [ ] Compatibilidade medida quando aplicável
+- [ ] Conflito conhecido passou pelo owner canônico
+- [ ] Conflito desconhecido permaneceu fail-closed
+- [ ] Checks do mesmo HEAD estão verdes antes de promoção
+
+> Dependabot é `OBSERVED`; update-branch é sincronização, não aprovação.
+
+## 📊 Portões de Qualidade
+
+| Verificar | Status |
+|---|---|
+| Formatação / diff | ⏳ Pendente |
+| Verificação de tipo | ⏳ Pendente |
+| Testes | ⏳ Pendente |
+| Cobertura / prova equivalente | ⏳ Pendente |
+| CodeRabbit | ⏳ Pendente |
+| Dependabot | ⏳ Pendente / N/A |
+| CI same-HEAD | ⏳ Pendente |
+| Runtime | ⚪ UNKNOWN |
+| Contraprova | ⏳ Pendente |
+| Receipt | ⏳ Pendente |
+
+## 📚 Documentação
+
+- [ ] README/documentação atualizada quando necessário
+- [ ] Receipt atualizado/criado quando material
+- [ ] Aprendizado cristalizado no owner existente quando aplicável
+- [ ] NEXT_CURSOR registrado
+
+## 👥 Avaliadores
+
+Identifique somente revisores necessários ao escopo.
+
+## 🚀 Notas de implantação
+
+Há migração, deploy, reload, restart ou medição pós-merge necessária?
+
+## 🎮 Lei do progresso vivo
+
+```text
+CHECKBOX = VISUALIZAÇÃO
+EVENTO/PROVA = AUTORIDADE DO ESTADO
+
+DENOMINATOR_CLOSED=true
+→ PROGRESS = PASS / TOTAL
+
+DENOMINATOR_CLOSED=false
+→ PORCENTAGEM = NÃO CALCULÁVEL
+
+EVENT_FINGERPRINT =
+mission_id + pr_number + head_sha + gate_id + gate_state
+
+SAME_EVENT_HASH
+→ DROP_DUPLICATE
+
+STATE_CHANGED
+→ UPDATE_CHECKBOXES
+→ RECALCULATE_PROGRESS
+→ UPDATE_CARD
+
+NO_STATE_CHANGE
+→ DO_NOT_REWRITE_CARD
+→ KEEP_GOAL
+→ KEEP_NEXT_CURSOR
+```
+
+## ⚖️ Fechamento
+
+```text
+INTENT_OWNER=CHEFE
+CONTINUITY_OWNER=CENTRALDARK
+EXECUTOR=HERMES|CODEX|AGENTE_AUTORIZADO
+PROOF_OWNER=GATES
+JUDGE=REALIDADE
+
+AGENT_STOP != MISSION_STOP
+SESSION_END != GOAL_END
+MODEL_LIMIT != GOAL_END
+
+FIXED_POINT somente quando os critérios materiais do HEAD atual estiverem fechados ou existir blocker real registrado.
+```

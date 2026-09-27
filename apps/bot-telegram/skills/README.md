@@ -1,3 +1,16 @@
+---
+tags:
+  - 0-antes-de-começar
+  - metalupa
+  - segredo-chefe
+  - segundo-cerebro
+date: 2026-09-19
+source_of_truth: .agents/skills/centraldark-operational-method/SKILL.md
+missao_id: hub-mtproto
+semantic_role: session_crystal_continuity_learning_map
+---
+
+
 # WABOT Console - AI Skills & Methodology
 
 Este diretório contém o conjunto de habilidades (skills) e metodologias que governam a operação de inteligência artificial neste projeto. Estas regras são permanentes e devem ser seguidas em todas as sessões.

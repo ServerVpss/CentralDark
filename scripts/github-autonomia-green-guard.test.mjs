@@ -49,9 +49,17 @@ test("pending, failure e cancelled nunca viram verde", () => {
     success("gate", 1, { status: "queued", conclusion: null }),
     success("gate", 2, { conclusion: "failure" }),
     success("gate", 3, { conclusion: "cancelled" }),
+    success("gate", 4, { conclusion: "action_required" }),
   ]) {
     assert.equal(greenDecision([run], required).green, false);
   }
+});
+
+test("action_required é ACTION_REQUIRED, não FAIL", () => {
+  const verdicts = greenVerdicts([
+    success("gate", 11, { conclusion: "action_required" }),
+  ], ["gate"]);
+  assert.deepEqual(verdicts, [{ name: "gate", state: "ACTION_REQUIRED", run_id: 11, conclusion: "action_required" }]);
 });
 
 test("latest skipped é não-PASS e nunca cai para success antigo", () => {
@@ -83,9 +91,9 @@ test("run manual ou de outro PR no mesmo SHA não conta", () => {
 test("paginação encontra gate válido depois da primeira página sem aceitar contexto errado", async () => {
   const page1 = Array.from({ length: 100 }, (_, index) => success("outro", index + 1, { pull_requests: prLink(99) }));
   const page2 = [
-    success("porta-de-entrada", 201, { pull_requests: prLink(99) }),
-    success("codex-validate", 202, { pull_requests: prLink(100) }),
-    success("lupa-conformance", 203, { event: "workflow_dispatch", pull_requests: prLink(99) }),
+    success("⚙️ porta-de-entrada", 201, { pull_requests: prLink(99) }),
+    success("⚙️ codex-validate", 202, { pull_requests: prLink(100) }),
+    success("⚙️ lupa-conformance", 203, { event: "workflow_dispatch", pull_requests: prLink(99) }),
   ];
   const seen = [];
   const request = async (_token, _method, path) => {
@@ -94,9 +102,9 @@ test("paginação encontra gate válido depois da primeira página sem aceitar c
   };
   const runs = await runsForPullHead("token", "ServerVpss/CentralDark", HEAD, 99, request);
   assert.equal(seen.length, 2);
-  assert.deepEqual(runs.map((run) => run.name), ["outro", ...Array(99).fill("outro"), "porta-de-entrada"]);
-  assert.equal(runs.some((run) => run.name === "codex-validate"), false);
-  assert.equal(runs.some((run) => run.name === "lupa-conformance"), false);
+  assert.deepEqual(runs.map((run) => run.name), ["outro", ...Array(99).fill("outro"), "⚙️ porta-de-entrada"]);
+  assert.equal(runs.some((run) => run.name === "⚙️ codex-validate"), false);
+  assert.equal(runs.some((run) => run.name === "⚙️ lupa-conformance"), false);
 });
 
 test("FAST e ADVERSARIAL revalidam green-first; estado não READY não promove", () => {
@@ -110,14 +118,14 @@ test("FAST e ADVERSARIAL revalidam green-first; estado não READY não promove",
 
 test("lista padrão é exatamente a régua canônica de oito gates", () => {
   assert.deepEqual(DEFAULT_REQUIRED_WORKFLOWS, [
-    "porta-de-entrada",
-    "codex-validate",
-    "lupa-conformance",
-    "Lupa Drift Guard",
-    "Trigger Fabric Full Package",
-    "PR Title Contract",
-    "PR auto-review (Codex + checklist)",
-    "Pipeline — Telegram + Painel",
+    "⚙️ porta-de-entrada",
+    "⚙️ codex-validate",
+    "⚙️ lupa-conformance",
+    "⚙️ Lupa Drift Guard",
+    "🧠 Trigger Fabric Full Package — pacote e contraprova",
+    "⚙️ PR Title Contract",
+    "⚙️ PR auto-review (Codex + checklist)",
+    "⚙️ Pipeline — Telegram + Painel",
   ]);
   assert.deepEqual(parseCsv("a,b"), ["a", "b"]);
 });

@@ -66,7 +66,7 @@ O catálogo público (`/mcp-public`) é leitura livre. Ação que exige `/mcp` a
 
 ## Áreas Sensíveis — Autorização Literal Obrigatória
 
-Nunca tocar sem o Pivete dizer literalmente **"Pode seguir"** ou **"PERMITO PIVETE: (ação)"**:
+Nunca tocar sem o Pivete dizer literalmente **"Pode seguir"** ou **"PERMITO SEGREDO: (ação)"**:
 
 - WhatsApp / wuzapi-server
 - PM2 (restarts, dumps, estados)

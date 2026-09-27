@@ -10,7 +10,6 @@ const pexec = promisify(execFile);
 import { registrar as registrarNoLedger } from '../Knowledge-Collector/agent.mjs';
 import { handle as handlerUniversal } from '../Universal-Handler/agent.mjs';
 const ROOT = '/root/CentralDark';
-const APRENDIZADOS = join(dirname(fileURLToPath(import.meta.url)), '../../knowledge/aprendizados.json');
 const ARSENAL_APRENDIZADOS = join(ROOT, 'docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md');
 
 const BLOQUEIOS = [
@@ -101,38 +100,21 @@ async function _executar(ferramenta, args) {
       const licao = String(args.licao || '').trim().slice(0, 300);
       if (!licao) return { ok: false, saida: 'lição vazia' };
       try {
-        const base = JSON.parse(await readFile(APRENDIZADOS, 'utf8'));
-        base.categorias ??= {};
-        base.categorias[categoria] ??= { gatilhos: [categoria], licoes: [] };
-        if (!base.categorias[categoria].licoes.includes(licao)) {
-          base.categorias[categoria].licoes.push(licao);
-          base.atualizado = new Date().toISOString().slice(0, 10);
-          await writeFile(APRENDIZADOS, JSON.stringify(base, null, 2));
-        }
+        const registro = registrarNoLedger('licao', `hermes-runtime cat=${categoria}`, '-', licao, 'hermes');
 
-        // Não engolir falha do ledger: JSON sem ARSENAL não é sucesso completo.
-        try {
-          registrarNoLedger('licao', `hermes-runtime cat=${categoria}`, '-', licao, 'hermes');
-        } catch (e) {
-          return { ok: false, saida: `falha ao registrar no ledger: ${e.message.slice(0, 200)}` };
-        }
-
-        // Read-back dos dois destinos antes de emitir verde.
-        const jsonDepois = JSON.parse(await readFile(APRENDIZADOS, 'utf8'));
-        const jsonOk = Array.isArray(jsonDepois?.categorias?.[categoria]?.licoes)
-          && jsonDepois.categorias[categoria].licoes.includes(licao);
+        // Read-back do owner único antes de emitir verde.
         const ledgerDepois = await readFile(ARSENAL_APRENDIZADOS, 'utf8');
         const ledgerOk = ledgerDepois.includes(licao);
-        if (!jsonOk || !ledgerOk) {
+        if (!ledgerOk) {
           return {
             ok: false,
-            saida: `LEARNING_PERSISTENCE_VERIFIED=false json=${jsonOk} ledger=${ledgerOk}`,
+            saida: `LEARNING_PERSISTENCE_VERIFIED=false ledger=false learning_ref=${registro?.ref || 'UNKNOWN'}`,
           };
         }
 
         return {
           ok: true,
-          saida: `LEARNING_PERSISTENCE_VERIFIED=true categoria=${categoria} json=true ledger=true`,
+          saida: `LEARNING_PERSISTENCE_VERIFIED=true categoria=${categoria} ledger=true learning_ref=${registro?.ref || 'UNKNOWN'} deduped=${registro?.deduped === true}`,
         };
       } catch (e) {
         return {
