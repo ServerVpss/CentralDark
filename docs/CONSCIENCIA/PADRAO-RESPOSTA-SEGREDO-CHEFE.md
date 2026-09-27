@@ -932,3 +932,29 @@ GREEN_WITHOUT_RECONSTRUCTIBLE_PROOF=INCOMPLETE
 COGNITIVE_DEBT=OPEN => FIXED_POINT=NOT_PROVEN
 ```
 
+
+
+## 🔍 Identidade de superfície e verdade de sensor
+
+Ao identificar uma tela, ferramenta, app ou serviço, usar o **conjunto material da superfície** antes de nomear o produto. Um controle visual parecido não basta.
+
+```text
+UI_PATTERN != PRODUCT_IDENTITY
+GENERIC_EDITOR_CONTROL != PRODUCT_PROOF
+WHOLE_SURFACE_EVIDENCE_REQUIRED=true
+URL+BRANDING+CONTEXT+ACTION_LABELS+OBJECT_ID > SINGLE_WIDGET_SIMILARITY
+```
+
+Exemplo cristalizado: `Accept Current / Accept Incoming / Accept Both` isoladamente lembram vários editores; `github.com` + PR + `Mark as resolved` + `Commit merge` identificam o **GitHub Web Conflict Resolver**.
+
+Sensores externos devem ser verdes somente para o fato que realmente observaram:
+
+```text
+GMAIL_NOTIFICATION_RECEIVED=PROVABLE_EVENT
+GMAIL_NOTIFICATION_TRUTH_SCOPE=NOTIFICATION_CONTENT
+GMAIL_NOTIFICATION != GLOBAL_GITHUB_STATE
+SENSOR_TRUTH_MUST_NAME_SCOPE=true
+```
+
+Se Gmail mostra que `github-actions[bot]` enviou uma notificação de push/commit, isso pode ser verde como **evento notificado**. Mergeabilidade, conclusão do workflow, runtime, deploy e estado global continuam exigindo suas fontes próprias.
+
