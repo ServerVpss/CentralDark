@@ -1,4 +1,4 @@
-name: PR auto-review (Codex + checklist)
+name: ⚙️ PR auto-review (Codex + checklist)
 
 on:
   pull_request:
@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   triage:
-    name: Gates determinísticos em runner self-hosted
+    name: 🧩 Gates determinísticos em runner self-hosted
     if: github.event_name == 'pull_request' && github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
@@ -27,7 +27,7 @@ jobs:
       issues: write
     steps:
 
-      - name: Bloquear HEAD de fork no runner persistente
+      - name: 🔹 Bloquear HEAD de fork no runner persistente
         id: fork_guard
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         shell: bash
@@ -45,17 +45,17 @@ jobs:
           echo "blocked=false" >> "$GITHUB_OUTPUT"
           echo "FORK_GUARD_OK ${HEAD_REPO}"
 
-      - name: Checkout exato do PR
+      - name: 🔹 Checkout exato do PR
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Testar scanner de segredo
+      - name: 🔹 Testar scanner de segredo
         run: python3 scripts/lupa/pr_secret_scan.py --self-test
 
-      - name: Analisar diff sem executar código do PR
+      - name: 🔹 Analisar diff sem executar código do PR
         id: scan
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
@@ -76,7 +76,7 @@ jobs:
             --patch-file "$PATCH_FILE" \
             --github-output "$GITHUB_OUTPUT"
 
-      - name: Publicar checklist auditável
+      - name: 🔹 Publicar checklist auditável
         uses: actions/github-script@v9
         env:
           SECRET_SUSPECT: ${{ steps.scan.outputs.secret_suspect }}
@@ -89,31 +89,49 @@ jobs:
             const issue_number = context.payload.pull_request.number;
             const marker = '<!-- pr-auto-review-checklist -->';
             const secretOk = process.env.SECRET_SUSPECT === 'false';
+            const touchedSensitive = process.env.TOUCHED_SENSITIVE === 'true';
+            const head = context.payload.pull_request.head.sha;
             const body = [
               marker,
-              '## Revisão automática — gates determinísticos',
+              `## 🧭 PR #${issue_number} — revisão automática`,
               '',
+              `**Estado da mensagem:** snapshot deste PR no HEAD \`${head}\`; não é estado eterno da main.`,
+              `**O que aconteceu:** ${process.env.CHANGED_COUNT || '0'} arquivo(s) foram analisados pelos gates determinísticos.`,
+              `**Segurança:** ${secretOk ? 'nenhum segredo suspeito detectado pelo scanner.' : 'segredo suspeito detectado; este gate falha fechado.'}`,
+              '**Código:** `git diff --check` passou.',
+              `**Path operacional:** ${touchedSensitive ? 'TOCADO — exige revisão/autorização do escopo.' : 'não tocado.'}`,
+              `**Bloqueia agora?** ${!secretOk ? 'SIM — scanner de segredo.' : touchedSensitive ? 'DEPENDE — revisão/autorização do path operacional.' : 'NÃO por este checklist; os demais gates do HEAD continuam valendo.'}`,
+              '**O que falta:** revisão consultiva final, quando disponível. Ausência dessa revisão não vira falha do código nem PASS.',
+              '',
+              '<details>',
+              '<summary>🔧 Detalhes técnicos</summary>',
+              '',
+              '### Gates determinísticos',
               `- [${secretOk ? 'x' : ' '}] Scanner de paths e valores sensíveis`,
               '- [x] `git diff --check`',
-              '- [x] Gates determinísticos no self-hosted; scanner roda sobre diff (revisar trust do checkout); nenhum script do PR foi executado na VPS',
-              `- [x] Classificação de path operacional: ${process.env.TOUCHED_SENSITIVE === 'true' ? 'TOCADO — revisão e autorização obrigatórias' : 'não tocado'}`,
+              '- [x] Scanner no self-hosted sobre o diff; nenhum script do PR foi executado na VPS por este passo',
+              `- [x] Classificação de path operacional: ${touchedSensitive ? 'TOCADO' : 'não tocado'}`,
               '- [ ] Revisão final Codex visível',
               '',
-              `Arquivos alterados: ${process.env.CHANGED_COUNT || '0'}. HEAD: ${context.payload.pull_request.head.sha}.`,
+              `HEAD: ${head}`,
+              '',
+              '</details>',
+              '',
+              '> UNKNOWN != PASS. Este comentário organiza contexto; não aprova merge nem substitui os gates do mesmo HEAD.',
             ].join('\n');
             const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number, per_page: 100 });
             const existing = comments.find(c => c.body && c.body.includes(marker));
             if (existing) await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
             else await github.rest.issues.createComment({ owner, repo, issue_number, body });
 
-      - name: Bloquear segredo suspeito
+      - name: 🔹 Bloquear segredo suspeito
         if: steps.scan.outputs.secret_suspect == 'true'
         run: |
           echo "SECRET_SUSPECT_BLOCKED"
           exit 1
 
 
-      - name: Receipt determinístico (sempre)
+      - name: 🔹 Receipt determinístico (sempre)
         if: always()
         shell: bash
         env:
@@ -146,7 +164,7 @@ jobs:
           fi
           # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone
   gemini-advisory:
-    name: IA consultiva via API CentralDark + darkai
+    name: 🧩 IA consultiva via API CentralDark + darkai
     if: >-
       github.event_name == 'pull_request_target' &&
       github.repository == 'ServerVpss/CentralDark' &&
@@ -160,7 +178,7 @@ jobs:
       issues: write
     steps:
 
-      - name: Bloquear HEAD de fork no runner persistente
+      - name: 🔹 Bloquear HEAD de fork no runner persistente
         id: fork_guard
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         shell: bash
@@ -178,7 +196,7 @@ jobs:
           echo "blocked=false" >> "$GITHUB_OUTPUT"
           echo "FORK_GUARD_OK ${HEAD_REPO}"
 
-      - name: Preparar diff sanitizado pela API, sem checkout
+      - name: 🔹 Preparar diff sanitizado pela API, sem checkout
         id: prepare
         uses: actions/github-script@v9
         with:
@@ -222,7 +240,7 @@ jobs:
             fs.writeFileSync(diffPath, text, { encoding: 'utf8', mode: 0o600 });
             core.setOutput('status', status);
 
-      - name: Consultar IA sem poder de gate
+      - name: 🔹 Consultar IA sem poder de gate
         id: darkai
         shell: bash
         env:
@@ -329,7 +347,7 @@ jobs:
           fi
           rm -f "$RAW_FILE" "$REQUEST_FILE"
 
-      - name: Publicar evidência IA
+      - name: 🔹 Publicar evidência IA
         uses: actions/github-script@v9
         with:
           script: |
@@ -350,7 +368,7 @@ jobs:
             if (existing) await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
             else await github.rest.issues.createComment({ owner, repo, issue_number, body });
 
-      - name: Receipt determinístico (sempre)
+      - name: 🔹 Receipt determinístico (sempre)
         if: always()
         shell: bash
         env:

@@ -4,6 +4,20 @@ import { readPatternLibrary } from '../../../../scripts/memory-linker/pattern-li
 const ADMIN_REGISTRY_URL = new URL('../../../../docs/CONSCIENCIA/ADMINISTRAVEIS.json', import.meta.url);
 
 export const PATTERN_ADMIN_STYLE = `
+.pattern-monitor{display:grid;grid-template-columns:1.2fr 2fr;gap:16px;margin-bottom:16px;background:linear-gradient(135deg,var(--surf),var(--surf2));border:1px solid var(--border);border-radius:14px;padding:16px 18px;position:relative;overflow:hidden}
+.pattern-monitor::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--muted)}
+.pattern-monitor.green::before{background:var(--em2);box-shadow:0 0 16px rgba(52,211,153,.55)}
+.pattern-monitor.watch::before{background:var(--info)}
+.pattern-monitor.yellow::before{background:var(--warn)}
+.pattern-monitor.orange::before{background:#fb923c}
+.pattern-monitor.red::before{background:var(--err);box-shadow:0 0 20px rgba(248,113,113,.5)}
+.pattern-monitor.unknown::before{background:#64748b}
+.pattern-marker{display:flex;align-items:center;gap:14px}.pattern-marker-ring{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;border:6px solid var(--border2);background:rgba(3,31,29,.65);font-size:16px;font-weight:900;color:var(--text)}
+.pattern-monitor.red .pattern-marker-ring{border-color:var(--err);color:#fecaca}.pattern-monitor.orange .pattern-marker-ring{border-color:#fb923c}.pattern-monitor.yellow .pattern-marker-ring{border-color:var(--warn)}.pattern-monitor.green .pattern-marker-ring{border-color:var(--em2)}
+.pattern-monitor-title{font-size:18px;font-weight:900;color:var(--text)}.pattern-monitor-sub{font-size:11px;color:var(--muted);margin-top:4px}
+.pattern-meter{height:12px;border-radius:999px;background:rgba(3,31,29,.75);overflow:hidden;border:1px solid var(--border);margin:10px 0 8px}.pattern-meter>div{height:100%;width:0;background:linear-gradient(90deg,var(--em2),var(--warn),var(--err));transition:width .4s}
+.pattern-monitor-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.pattern-monitor-mini{background:rgba(3,31,29,.45);border:1px solid var(--border);border-radius:9px;padding:8px 10px}.pattern-monitor-mini .k{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}.pattern-monitor-mini .v{font-size:16px;font-weight:800;margin-top:2px}
+.pattern-deviations{margin-top:10px;font-size:11px;color:var(--muted)}.pattern-deviations b{color:var(--text)}.pattern-deviation-list{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.pattern-deviation{font-size:10px;padding:3px 7px;border-radius:99px;border:1px solid var(--border);color:var(--muted)}.pattern-deviation.fail{border-color:rgba(248,113,113,.45);color:#fecaca;background:rgba(248,113,113,.08)}.pattern-deviation.unknown{border-color:rgba(96,165,250,.4);color:#bfdbfe;background:rgba(96,165,250,.08)}
 .pattern-head{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
 .pattern-kpi{background:linear-gradient(135deg,var(--surf),var(--surf2));border:1px solid var(--border);border-radius:12px;padding:14px}
 .pattern-kpi .n{font-size:24px;font-weight:800;color:var(--em2);margin-top:4px}.pattern-kpi .t{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
@@ -35,13 +49,35 @@ export const PATTERN_ADMIN_STYLE = `
 .compass-shell{margin-top:14px;padding:13px;background:radial-gradient(circle at center,rgba(16,185,129,.10),rgba(3,31,29,.35));border:1px solid var(--border);border-radius:13px}.compass-title{font-size:11px;color:var(--em2);font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}.compass-grid{display:grid;grid-template-columns:repeat(3,54px);grid-template-rows:repeat(3,48px);gap:5px;justify-content:center}.compass-axis{border:1px solid var(--border2);border-radius:10px;background:rgba(3,31,29,.65);color:var(--text);font-size:22px;font-weight:800;cursor:pointer}.compass-axis:hover,.compass-axis[aria-pressed='true']{background:rgba(16,185,129,.18);color:var(--em2);box-shadow:0 0 0 1px rgba(52,211,153,.25)}.compass-center{color:var(--warn)}.compass-round{display:flex;justify-content:center;margin-top:7px}.compass-explain{min-height:44px;margin-top:10px;padding:9px 10px;background:var(--bg2);border-radius:8px;font-size:11px;color:var(--muted);line-height:1.45}.compass-explain b{color:var(--em2)}
 .admin-compasses{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}.admin-chip{font-size:10px;color:var(--muted);border:1px solid var(--border);border-radius:99px;padding:3px 7px}.admin-buttons-explain{display:grid;gap:5px;margin-top:8px}.admin-button-explain{font-size:10.5px;color:var(--muted);padding:6px 8px;border:1px solid rgba(15,89,81,.6);border-radius:7px}.admin-button-explain b{color:var(--text)}
 .admin-toast{position:fixed;right:20px;bottom:20px;z-index:99;background:var(--surf2);border:1px solid var(--border2);color:var(--text);padding:10px 14px;border-radius:10px;box-shadow:0 16px 40px rgba(0,0,0,.35);font-size:12px;display:none}.admin-toast.show{display:block}.admin-hidden-note{font-size:11px;color:var(--muted)}
-@media(max-width:900px){.pattern-office,.admin-grid{grid-template-columns:1fr}.pattern-head,.admin-kpis{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.pattern-office,.admin-grid,.pattern-monitor{grid-template-columns:1fr}.pattern-head,.admin-kpis,.pattern-monitor-grid{grid-template-columns:1fr 1fr}}
 `;
 
-export const PATTERN_ADMIN_TAB = `<div class="tab" data-p="patterns">Padrões</div><div class="tab" data-p="commands">Comandos</div>`;
+export const PATTERN_ADMIN_TAB = `<div class="tab" data-p="patterns">🧩 Padrões</div><div class="tab" data-p="commands">🎛️ Comandos</div>`;
 
 export const PATTERN_ADMIN_PANE = `
   <div class="pane" id="p-patterns">
+    <div class="pattern-monitor unknown" id="centraldarkPatternMonitor">
+      <div class="pattern-marker">
+        <div class="pattern-marker-ring" id="centraldarkPatternRing">?</div>
+        <div>
+          <div class="pattern-monitor-title">🎯 PADRÃO CENTRALDARK</div>
+          <div class="pattern-monitor-sub">Marcador vivo de aderência ao padrão operacional da Casa.</div>
+          <div class="pattern-monitor-sub">🔴 vermelho quando ≥80% dos eixos mensuráveis estiverem fora do padrão.</div>
+        </div>
+      </div>
+      <div>
+        <div class="pattern-monitor-grid">
+          <div class="pattern-monitor-mini"><div class="k">Fora do padrão</div><div class="v" id="patternOutsidePct">UNKNOWN</div></div>
+          <div class="pattern-monitor-mini"><div class="k">Aderência</div><div class="v" id="patternAlignmentPct">UNKNOWN</div></div>
+          <div class="pattern-monitor-mini"><div class="k">Desvios</div><div class="v" id="patternFailCount">0</div></div>
+          <div class="pattern-monitor-mini"><div class="k">Unknowns</div><div class="v" id="patternUnknownCount">0</div></div>
+        </div>
+        <div class="pattern-meter" title="percentual fora do padrão"><div id="patternOutsideBar"></div></div>
+        <div class="pattern-deviations" id="patternDeviationSummary">
+          Aguardando /admin/api/operational-snapshot. UNKNOWN não vira verde.
+        </div>
+      </div>
+    </div>
     <div class="pattern-head">
       <div class="pattern-kpi"><div class="t">Padrões recorrentes</div><div class="n" id="patternKpiPatterns">0</div></div>
       <div class="pattern-kpi"><div class="t">Aprendizados em observação</div><div class="n" id="patternKpiCandidates">0</div></div>
@@ -91,6 +127,33 @@ const PATTERN_LIBRARY = __PATTERN_LIBRARY_JSON__;
 const ADMIN_REGISTRY = __ADMIN_REGISTRY_JSON__;
 const ADMIN_HIDDEN_KEY = 'centraldark-admin-hidden-v1';
 let ADMIN_SHOW_HIDDEN = false;
+
+function renderPatternAlignment(snapshot){
+  const p = snapshot?.patternAlignment;
+  const monitor = $('centraldarkPatternMonitor');
+  if(!monitor) return;
+  const marker = String(p?.marker || 'UNKNOWN').toLowerCase();
+  monitor.className = 'pattern-monitor ' + marker;
+  const outside = Number.isFinite(p?.outsidePct) ? p.outsidePct : null;
+  const align = Number.isFinite(p?.alignmentPct) ? p.alignmentPct : null;
+  $('centraldarkPatternRing').textContent = outside == null ? '?' : outside + '%';
+  $('patternOutsidePct').textContent = outside == null ? 'UNKNOWN' : outside + '%';
+  $('patternAlignmentPct').textContent = align == null ? 'UNKNOWN' : align + '%';
+  $('patternFailCount').textContent = String(p?.failCount ?? 0);
+  $('patternUnknownCount').textContent = String(p?.unknownCount ?? 0);
+  $('patternOutsideBar').style.width = (outside ?? 0) + '%';
+
+  const bad = Array.isArray(p?.dimensions) ? p.dimensions.filter(x => x.state === 'FAIL' || x.state === 'UNKNOWN') : [];
+  const summary = $('patternDeviationSummary');
+  if(!bad.length){
+    summary.innerHTML = '<b>🟢 nenhum desvio mensurável neste snapshot.</b>';
+    return;
+  }
+  const chips = bad.map(x => '<span class="pattern-deviation '+String(x.state||'unknown').toLowerCase()+'">'+escapeHtml((x.state==='FAIL'?'🔴 ':'❓ ')+(x.label||x.id))+'</span>').join('');
+  summary.innerHTML =
+    '<b>Marcador '+escapeHtml(String(p?.marker || 'UNKNOWN'))+'</b> · regra: vermelho em '+escapeHtml(String(p?.redOutsidePct ?? 80))+'% fora do padrão.'+
+    '<div class="pattern-deviation-list">'+chips+'</div>';
+}
 
 function patternStatusLabel(status){
   const labels = {

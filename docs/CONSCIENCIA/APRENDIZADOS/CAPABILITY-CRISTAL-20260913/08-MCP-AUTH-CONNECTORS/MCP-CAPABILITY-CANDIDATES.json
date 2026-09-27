@@ -1,0 +1,44 @@
+[
+  {
+    "name": "capability_scan_package",
+    "status": "NEW_DELTA",
+    "purpose": "Varre ZIP/MD/HTML/JSON/code e retorna todas as capabilities candidatas, não só a primeira.",
+    "owner": "DELTAUTIL / capability router",
+    "side_effect": "read_only"
+  },
+  {
+    "name": "capability_gap_resolve",
+    "status": "NEW_DELTA",
+    "purpose": "Recebe assinatura necessária, procura owner/capability, pesquisa fontes e devolve candidato testável.",
+    "owner": "capability-contract-router",
+    "side_effect": "proposal_only"
+  },
+  {
+    "name": "video_frames_extract_local",
+    "status": "PACKAGE_READY",
+    "purpose": "Extrai all/fps/timestamps de vídeo local, hashes e manifest.",
+    "owner": "MCP media owner",
+    "side_effect": "writes_output_dir"
+  },
+  {
+    "name": "media_semantic_index",
+    "status": "NEW_DELTA",
+    "purpose": "Une transcript, frames, timestamps, embeddings e provenance.",
+    "owner": "Semantic Fabric + media owner",
+    "side_effect": "index_write_after_gates"
+  },
+  {
+    "name": "prompt_behavior_lint",
+    "status": "NEW_DELTA",
+    "purpose": "Detecta onion/redundância, emphasis inflation, conflito e falta de teste por regra.",
+    "owner": "existing prompt/Forja owner",
+    "side_effect": "read_only"
+  },
+  {
+    "name": "capability_benchmark",
+    "status": "PARTIAL",
+    "purpose": "Positive/negative/regression/consumer proof por capability.",
+    "owner": "evaluating-llms-harness / Forja",
+    "side_effect": "test_only"
+  }
+]

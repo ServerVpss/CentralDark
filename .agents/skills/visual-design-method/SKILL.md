@@ -43,6 +43,62 @@ Not every visual needs the same investment:
 
 Decide this before writing any CSS. State which one you picked and why.
 
+## 1.1 Delivery cadence — functional slice first, designer pen second
+
+When the human objective is to get a site or product surface working quickly,
+do not force the visual layer to carry architecture, backend, security and
+product polish in the same pass. Use the existing system and move in layers:
+
+```text
+HUMAN_INTENT
+→ REUSE_EXISTING_STACK
+→ SMALLEST_FUNCTIONAL_SLICE
+→ BUILD + TEST
+→ FUNCTIONAL_GREEN
+→ DESIGNER_PEN
+→ CODE_REVIEW / ACCESSIBILITY / PERFORMANCE
+→ LOVABLE_FRONTEND_POLISH_WHEN_REQUESTED
+→ REAL_BROWSER_RECHECK
+→ KEEP_SAME_COMPONENTS_AND_OWNERS
+```
+
+The "designer pen" is a **later pass over the same working surface**, not a
+second implementation. It improves hierarchy, spacing, typography, motion,
+visual rhythm and finish while preserving behavior that already works.
+
+For CentralDark specifically:
+
+- **SOL/Hermes/code-capable engines** may establish the smallest correct,
+  functional base using the current React/TypeScript/Tailwind/Vite stack.
+- **frontend-design + visual-design-method** refine the same files/components
+  after the functional path is proven.
+- **Lovable** is a frontend-only finishing surface when the CHEFE asks for it;
+  it must reuse the existing frontend and design system, not create backend,
+  VPS, API, workflow or architecture in parallel.
+- A later model/engine (Claude, Codex, or another capable engine) may perform a
+  code-quality/refinement pass, but the engine is substitutable and gains no
+  new ownership from doing so.
+
+Speed comes from **reducing scope and ceremony**, not from weakening controls:
+
+```text
+FUNCTIONAL_MVP_BEFORE_POLISH=true
+DESIGNER_PEN_AFTER_FUNCTIONAL_GREEN=true
+SIMPLIFY_SCOPE_NOT_GUARDRAILS=true
+SECURITY_NOT_RELAXED_FOR_SPEED=true
+REUSE_EXISTING_COMPONENTS=true
+SAME_FILES_SAME_OWNERS=true
+LOVABLE_FRONTEND_ONLY=true
+POLISH_ENGINE_IS_SUBSTITUTABLE=true
+ONE_SYSTEM_ONLY=true
+```
+
+If a security control is blocking a nonessential embellishment, defer the
+embellishment or choose a safer existing path. Do **not** weaken auth, CSP,
+secrets handling, approval gates or production boundaries just to make the
+visual pass easier.
+
+
 ## 2. Separate structure from skin — token-based theming
 
 If more than one official palette exists (this repo currently has three

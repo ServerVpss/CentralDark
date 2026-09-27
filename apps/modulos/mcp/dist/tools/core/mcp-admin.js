@@ -4,6 +4,7 @@ import { adminPm2Tools } from "../../modes/admin/tools/admin-pm2.js";
 import { adminShellTools } from "../../modes/admin/tools/admin-shell.js";
 import { adminVaultRwTools } from "../../modes/admin/tools/admin-vault-rw.js";
 import { adminGitTools } from "../../modes/admin/tools/admin-git.js";
+import { adminMainWriterTools } from "../../modes/admin/tools/admin-main-writer.js";
 import { adminProviderControlTools } from "../../modes/admin/tools/admin-provider-control.js";
 import { codeReviewerToolDefinition } from "../code-reviewer.js";
 import { z } from "zod";
@@ -12,6 +13,7 @@ import { eliteGatewayTools } from "../elite/elite-gateway.js";
 import { geminiTools } from "../gemini/gemini.js";
 import { integrationsTools } from "../integrations.js";
 import { painelTools } from "../painel/painel.js";
+import { operationalTelemetryTools } from "../observability/operational-telemetry.js";
 import { piveteTools } from "../pivete/pivete-tools.js";
 import { aprendizadoTools } from "../aprendizado/aprendizado.js";
 import { conscienciaTools } from "../consciencia/consciencia.js";
@@ -68,6 +70,7 @@ const runtimeTools = [
     ...adminShellTools,
     ...adminVaultRwTools,
     ...adminGitTools,
+    ...adminMainWriterTools,
     ...adminProviderControlTools,
     // MOTIVO  > estes 6 grupos existem no catalogo mas nao entravam em
     //           runtimeTools, entao 24 tools ficavam INALCANCAVEIS pelo
@@ -84,6 +87,7 @@ const runtimeTools = [
     ...geminiTools,
     ...integrationsTools,
     ...painelTools,
+    ...operationalTelemetryTools,
     ...piveteTools,
     ...youtubeMediaTools,
 ];
@@ -108,6 +112,7 @@ async function ensureStartupAuditReady() {
 }
 export const mcpAdminTools = [
     codeReviewerToolDefinition,
+    ...adminMainWriterTools,
     {
         name: "mcp_status",
         description: "Resumo simples do dispatcher MCP e do runtime disponível. Alias de leitura para manter compatibilidade com clientes antigos.",

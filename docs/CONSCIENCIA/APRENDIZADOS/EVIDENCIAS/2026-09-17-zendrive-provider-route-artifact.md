@@ -1,3 +1,17 @@
+---
+title: "Artefato automático de aprendizado — Zendrive Provider Route"
+status: "HISTORICAL"
+source_rule: "SOURCE_IMPLEMENTED_LOCALLY_RUNTIME_SEPARATE"
+date: 2026-09-17
+updated: 2026-09-17T23:31:00-03:00
+tags: ["zendrive", "provider", "router", "hermes", "aprendizado", "evidencia"]
+category: "APRENDIZADO-EVIDENCIA"
+sensitivity: "INTERNAL"
+source: "PR #1549 commit c43e83f6459068c51b421922c23dac170d12e96e"
+source_class: "INTERNAL"
+owner: "apps/modulos/elite-gateway/scripts/centraldark_omni_router.py"
+---
+
 # 🧠 Artefato automático de aprendizado — Zendrive Provider Route
 
 Data: 2026-09-17

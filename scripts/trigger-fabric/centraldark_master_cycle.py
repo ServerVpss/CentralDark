@@ -7,6 +7,23 @@ import unicodedata
 from pathlib import Path
 
 MASTER = "!CENTRALDARK"
+TRIGGER_EMOJIS = {
+    "CENTRALDARK": "👑",
+    "ACORDAR": "🌅",
+    "CALIBRAR": "🎯",
+    "MULTIBUSSOLA": "🧭",
+    "META_LUPA": "🔎",
+    "RECONCILIAR": "🔄",
+    "DELTA_UTIL": "💎",
+    "CONTRAPROVA": "🧪",
+    "REMEDICAO": "📏",
+    "FIXED_POINT": "📍",
+    "REGISTRA": "🧾",
+    "RASTRO": "🔏",
+    "BOOT": "🚀",
+}
+INTENT_ALIGNMENT_THRESHOLD_PERCENT = 80
+
 CHAIN = [
     "ACORDAR",
     "CALIBRAR",
@@ -18,12 +35,14 @@ CHAIN = [
     "REMEDICAO",
     "FIXED_POINT",
     "REGISTRA",
+    "RASTRO",
     "BOOT",
 ]
 
 GUIDED_TELEMETRY_PHASES = [
     ("ACORDAR", "#ACORDAR"),
     ("CENTRALDARK", "!CENTRALDARK"),
+    ("TOOL_DISCOVERY", "TOOL DISCOVERY"),
     ("REMEASURE", "REMEASURE"),
     ("INTENT_SCOPE", "INTENÇÃO/ESCOPO"),
     ("RENDEZVOUS", "RENDEZVOUS"),
@@ -47,7 +66,7 @@ GUIDED_TELEMETRY_ICONS = {
     "SKIPPED": "➖",
 }
 GUIDED_TELEMETRY_SURFACES = [
-    "CLI", "CHAT", "VOICE", "API", "MCP", "WEB", "DESKTOP", "SOL", "HERMES", "TELEGRAM"
+    "CLI", "CHAT", "VOICE", "WORK", "COWORK", "CODE_AGENT", "API", "MCP", "WEB", "DESKTOP", "SOL", "HERMES", "TELEGRAM"
 ]
 
 DELTA_CANONICAL = "!DELTA UTILS"
@@ -70,31 +89,104 @@ MULTIBUSSOLA_PROOF_GATES = [
     "REMEDICAO_T1",
     "REALITY_JUDGE",
 ]
+TIK_TAK_ROLE_ORDER = ["GEOFF", "IAN", "GREG", "DEX", "HERMES", "REALIDADE"]
+TIK_TAK_ROLE_BINDINGS = {
+    "GEOFF": "AUTOMATION_FACTORY",
+    "IAN": "STRUCTURAL_SKEPTIC",
+    "GREG": "OBSERVABILITY_PROOF",
+    "DEX": "HUMAN_AGENT_COORDINATION",
+    "HERMES": "EXECUTION_ROLE",
+    "REALIDADE": "REALITY_JUDGE",
+}
+TIK_TAK_OUTER_LOOP = [
+    "REMEASURE_CURRENT_STATE",
+    "/goal",
+    "SELECT_EXISTING_EXECUTOR",
+    "LAUNCH_THROUGH_EXISTING_OWNER",
+    "OBSERVE",
+    "REVIEW",
+    "COUNTERPROOF",
+    "REMEASURE",
+    "CONTINUE_TO_PROOF_FIXED_POINT_OR_NEXT_CURSOR",
+]
+TIK_TAK_LOCKS = [
+    "GREG_VERDICT_REQUIRED_BEFORE_GREEN",
+    "DEX_APPROVAL_REQUIRED_FOR_CRITICAL_DELTA",
+    "CI_PENDING_IS_NOT_PASS",
+    "MERGE_IS_NOT_DEPLOY",
+    "HERMES_IS_EXECUTOR",
+    "REALIDADE_IS_JUDGE",
+]
 NEGATION_TOKENS = {"nao", "nunca", "sem"}
 
 MASTER_INGRESS_ALIASES = {
-    "CENTRALDARK_MASTER": ("!centraldark", "#centraldark", "!central-dark", "#central-dark", "!cdark", "#cdark"),
+    "CENTRALDARK_MASTER": (
+        "!centraldark", "#centraldark", "!central-dark", "#central-dark", "!cdark", "#cdark",
+        "centraldark visualize", "central dark visualize",
+        "centraldark executar", "central dark executar",
+        "centraldark verificar", "central dark verificar",
+        "centraldark editar", "central dark editar",
+        "centraldark comitar", "central dark comitar",
+        "centraldark rodar", "central dark rodar",
+    ),
     "ACORDAR": ("#acordar", "#acorda", "!acordar", "!acorda"),
     "CALIBRAR": ("!calibrar", "#calibrar"),
     "CRISTALIZAR": ("#cristalizar", "!cristalizar", "#crystalizar", "!crystalizar", "#crystalaizar", "!crystalaizar"),
+    "GARIMPO_UNIVERSAL": ("!garimpo_universal", "!garimpo universal", "#garimpo_universal", "#garimpo universal"),
     "MULTIBUSSOLA": ("!multibussola", "!multibússola", "!multi-bussola", "!multibussola_meta", "!multibússola_meta"),
     "META_LUPA": ("!meta_lupa", "!metalupa"),
     "RECONCILIAR": ("!reconciliar",),
     "DELTA_UTIL": ("!delta utils", "!deltautils", "!delta util", "!deltautil", "!delta útil", "!centralutil"),
     "CONTRAPROVA": ("!contraprova",),
     "REMEDICAO": ("!remedição", "!remedicao"),
+    "TIK_TAK": ("!tik-tak", "!tik_tak", "#tik-tak", "#tik_tak"),
     "FIXED_POINT": ("!fixed_point",),
     "REGISTRA": ("!registra",),
+    "RASTRO": ("!rastro", "!lei do rastro", "!cadeado"),
     "BOOT": ("!boot",),
     "FABLE_LOOP": ("!fable_loop", "#fable_loop", "!fabler_loop", "#fabler_loop"),
 }
 
+INVOCATION_GRAMMAR_PATH = (
+    Path(__file__).resolve().parents[2]
+    / "docs" / "ARQUITETURA" / "CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md"
+)
+
+
+def _grammar_verb_aliases(path: Path = INVOCATION_GRAMMAR_PATH) -> tuple[str, ...]:
+    """Verbos do dono único (gramática §3 verb_dispatch). Sem cópia local para envelhecer."""
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return ()
+    section = text.split("## 3.", 1)[-1].split("## 4.", 1)[0]
+    verbs: list[str] = []
+    for found in re.findall(r"aliases:\s*\[([^\]]*)\]", section):
+        verbs.extend(v.strip().strip("\"'") for v in found.split(",") if v.strip())
+    phrases: list[str] = []
+    for verb in verbs:
+        phrases.extend((f"centraldark {verb}", f"central dark {verb}"))
+    return tuple(dict.fromkeys(phrases))
+
+
+GRAMMAR_VERB_PHRASES = _grammar_verb_aliases()
+MASTER_INGRESS_ALIASES["CENTRALDARK_MASTER"] = tuple(
+    dict.fromkeys(MASTER_INGRESS_ALIASES["CENTRALDARK_MASTER"] + GRAMMAR_VERB_PHRASES)
+)
+
 VOICE_INGRESS_ALIASES = {
+    "GARIMPO_UNIVERSAL": (
+        "garimpo universal",
+        "centraldark garimpo universal",
+        "central dark garimpo universal",
+    ),
     "CENTRALDARK_MASTER": (
-        "centraldark",
-        "central dark",
-        "centraldark sol",
-        "central dark sol",
+        "centraldark visualize", "central dark visualize",
+        "centraldark executar", "central dark executar",
+        "centraldark verificar", "central dark verificar",
+        "centraldark editar", "central dark editar",
+        "centraldark comitar", "central dark comitar",
+        "centraldark rodar", "central dark rodar",
     ),
     "ACORDAR": (
         "acordar",
@@ -109,6 +201,9 @@ VOICE_INGRESS_ALIASES = {
         "acorda centraldark",
     ),
 }
+VOICE_INGRESS_ALIASES["CENTRALDARK_MASTER"] = tuple(
+    dict.fromkeys(VOICE_INGRESS_ALIASES["CENTRALDARK_MASTER"] + GRAMMAR_VERB_PHRASES)
+)
 
 CANONICAL_SOL_PROFILE_ID = "ORQUESTRACAO_SOL"
 CANONICAL_SOL_PROFILE_DISPLAY = "😎 Orquestração SOL 🌞"
@@ -123,6 +218,8 @@ def normalize(text: str) -> str:
     raw = unicodedata.normalize("NFKD", str(text or ""))
     raw = "".join(ch for ch in raw if not unicodedata.combining(ch)).lower()
     raw = re.sub(r"[^a-z0-9!#@/_\-\s]+", " ", raw)
+    # "centraldark! faça" (transcrição de voz): marcador só vale no começo da palavra
+    raw = re.sub(r"(?<=[a-z0-9])[!#]+", " ", raw)
     return " ".join(raw.strip().split())
 
 
@@ -157,6 +254,13 @@ def _negated_or_discussed(normalized: str, match) -> bool:
             "apenas mencionar",
             "so mencionar",
             "somente discutir",
+            "falando sobre",
+            "falei de",
+            "falei do",
+            "falei da",
+            "falou de",
+            "falou do",
+            "falou da",
         )
     )
 
@@ -171,11 +275,18 @@ def _resolve_delta(normalized: str):
 
 def _collect_alias_matches(normalized: str, alias_map):
     active, ambiguous = [], []
+    tokens = normalized.split()
+    resume_verbs = {"continue", "continua", "prossiga", "retome"}
     for trigger_id, aliases in alias_map.items():
         for alias in aliases:
             match = _phrase_match(normalized, alias)
             if not match:
                 continue
+            if trigger_id == "CENTRALDARK_MASTER" and alias.startswith(("centraldark ", "central dark ")):
+                _, end = match
+                verb = alias.split()[-1]
+                if end == len(tokens) and verb not in resume_verbs:
+                    continue
             item = {"trigger_id": trigger_id, "alias": alias}
             (ambiguous if _negated_or_discussed(normalized, match) else active).append(item)
             break
@@ -420,7 +531,9 @@ def resolve(
 
     chefe_material = bool(chefe_source and master_cycle_active and not ambiguous_ingress)
     delta_match, delta_active, delta_ambiguous = _resolve_delta(normalized)
-    harvest_active = bool(delta_active or chefe_material)
+    garimpo_universal_active = "GARIMPO_UNIVERSAL" in ids
+    harvest_active = bool(delta_active or chefe_material or garimpo_universal_active)
+    tik_tak_active = "TIK_TAK" in ids
     meta_match = next((a for a in MULTIBUSSOLA_META_ALIASES if _phrase_match(normalized, a)), None)
     meta_active = meta_match is not None
 
@@ -453,6 +566,42 @@ def resolve(
         "activation_source": activation_source,
         "next_master_active": master_cycle_active,
         "expanded_chain": CHAIN if master_cycle_active else [],
+        "visual_trigger_chain": (
+            " → ".join([
+                "⭕ !AURÉOLA CANÔNICA",
+                f"{TRIGGER_EMOJIS['CENTRALDARK']} !CENTRALDARK",
+                *[f"{TRIGGER_EMOJIS[x]} {x}" for x in CHAIN],
+            ]) if master_cycle_active else ""
+        ),
+        "aureola": {
+            "role": "VISIBLE_ROUTE_DEBUGGER",
+            "contract": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml",
+            "visible_fields": ["CURRENT_PHASE", "MULTIBUSSOLA_AXIS", "DESTINATION_OWNER", "NEXT_GATE"],
+            "compare": ["INTENT_ROUTE", "ACTUAL_ROUTE"],
+            "mismatch_action": "STOP_AND_RECONCILE",
+            "route_trace_is_private_reasoning": False,
+            "route_trace_is_technical_proof": False,
+            "bible_reference_is_semantic_cue_not_proof": True,
+            "material_discovery_is_learning_candidate_not_fact": True,
+        },
+        "intent_alignment": {
+            "phase": "CALIBRAR",
+            "emoji": TRIGGER_EMOJIS["CALIBRAR"],
+            "threshold_percent": INTENT_ALIGNMENT_THRESHOLD_PERCENT,
+            "percentage_means": "INTERPRETATION_ALIGNMENT_NOT_RUNTIME_PASS",
+            "continuous_recalibration": True,
+            "new_chefe_material": "DELTA_TO_ACTIVE_INTENT_FIRST",
+            "preserve_compatible_active_intent": True,
+            "replacement_requires": "EXPLICIT_REPLACE_OR_PROVEN_MATERIAL_INCOMPATIBILITY",
+            "pertinence_first": True,
+            "minimum_sufficient_loop": True,
+            "triggers_are_conditional_not_ritual": True,
+            "new_teaching": "REMIX_MINIMUM_DELTA_IN_EXISTING_RULE",
+            "do_not_parrot_chefe": True,
+            "align_thought_not_wording": True,
+            "execute_when_gte_threshold_and_scope_authorized": True,
+            "below_threshold_or_material_contradiction": "ASK_ONLY_INDISPENSABLE_GAP",
+        },
         "guided_telemetry": guided_telemetry,
         "session_provenance": {
             "session_id": session_ref,
@@ -471,7 +620,8 @@ def resolve(
             "ambiguous_trigger_ids": ambiguous_ids,
             "normalized_to_master": bool(explicit_subtrigger and not inherited),
             "master_reentry_guard": bool(inherited and ids),
-            "requested_phases": [i for i in ids if i not in ("CENTRALDARK_MASTER", "FABLE_LOOP", "CRISTALIZAR")],
+            "requested_phases": [i for i in ids if i not in ("CENTRALDARK_MASTER", "FABLE_LOOP", "CRISTALIZAR", "GARIMPO_UNIVERSAL")],
+            "requested_modes": [i for i in ids if i == "GARIMPO_UNIVERSAL"],
             "requested_methods": [i for i in ids if i == "FABLE_LOOP"],
             "phase_markers": [i for i in ids if i == "CRISTALIZAR"],
             "cristalizar_is_phase_marker_not_engine": True,
@@ -483,6 +633,14 @@ def resolve(
             "canonical_signal": DELTA_CANONICAL,
             "active": harvest_active,
             "explicit_signal_active": delta_active,
+            "garimpo_universal_active": garimpo_universal_active,
+            "owner": ".agents/skills/session-intelligence-harvester/SKILL.md" if harvest_active else None,
+            "semantic_identity": "OWNER+CAPABILITY+SCOPE" if harvest_active else None,
+            "multi_surface_parallel_candidates": harvest_active,
+            "one_canonical_finalizer_per_scope": harvest_active,
+            "candidate_lane_is_not_canonical_write": harvest_active,
+            "same_finding_without_new_evidence": "DROP_DUPLICATE" if harvest_active else None,
+            "next_executor_replay": "LAST_GOOD_STATE->INPUT_DIFF->REUSE_PROOF_OR_TARGETED_REVALIDATION" if harvest_active else None,
             "candidate_from_chefe": chefe_material,
             "ambiguous_or_negated": delta_ambiguous,
             "matched_alias": delta_match,
@@ -495,6 +653,38 @@ def resolve(
             "screen_is_runtime_proof": False,
             "repetition_is_independent_proof": False,
             "temporal_label_is_authority": False,
+        },
+        "tik_tak": {
+            "canonical_signal": "!TIK-TAK",
+            "active": tik_tak_active,
+            "canonical_rule": "REGRA-ZERO-CENTRALDARK" if tik_tak_active else None,
+            "semantic_family": "AUTOMATION_FACTORY_OUTER_LOOP" if tik_tak_active else None,
+            "owner": "docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md" if tik_tak_active else None,
+            "wraps_master_cycle": tik_tak_active,
+            "goal_step": "/goal" if tik_tak_active else None,
+            "role_order": TIK_TAK_ROLE_ORDER if tik_tak_active else [],
+            "role_bindings": TIK_TAK_ROLE_BINDINGS if tik_tak_active else {},
+            "geoff_formula": ["IMPLEMENTACAO", "SIMPLIFICACAO"] if tik_tak_active else [],
+            "outer_loop_sequence": TIK_TAK_OUTER_LOOP if tik_tak_active else [],
+            "locks": TIK_TAK_LOCKS if tik_tak_active else [],
+            "greg_verdict_required_before_green": tik_tak_active,
+            "dex_approval_required_for_critical_delta": tik_tak_active,
+            "ci_pending_is_not_pass": tik_tak_active,
+            "merge_is_not_deploy": tik_tak_active,
+            "hermes_is_executor": tik_tak_active,
+            "reality_is_judge": tik_tak_active,
+            "select_existing_executor_only": tik_tak_active,
+            "works_above_coding_agents": tik_tak_active,
+            "invalidate_only_affected_stale_proof": tik_tak_active,
+            "remeasure_current_target": tik_tak_active,
+            "rerun_affected_gates": tik_tak_active,
+            "same_head_counterproof_required": tik_tak_active,
+            "preserve_unaffected_valid_proof": tik_tak_active,
+            "continue_until": "PROOF_OR_FIXED_POINT_OR_NEXT_CURSOR" if tik_tak_active else None,
+            "fanout_agents": False,
+            "is_swarm_trigger": False,
+            "creates_new_owner": False,
+            "creates_new_brain_or_router": False,
         },
         "identity_naming_guard": {
             "canonical_identity_is_single": True,
@@ -536,6 +726,8 @@ def resolve(
         "sensor_failure_is_world_failure": False,
         "transport_failure_requires_authorized_alternate_route": True,
         "alternate_route_must_remeasure_same_target": True,
+        "tool_discovery_required_before_access_claim": bool(master_cycle_active),
+        "claiming_no_access_before_tool_discovery_is_invalid": True,
         "remote_write_requires_proven_gate": True,
         "chat_only_knowledge": "FAIL",
         "session_memory_is_durable_state": False,
@@ -662,8 +854,10 @@ def self_test():
         ("!CENTRALUTIL", "DELTA_UTIL"),
         ("!CONTRAPROVA", "CONTRAPROVA"),
         ("!REMEDICAO", "REMEDICAO"),
+        ("!TIK-TAK", "TIK_TAK"),
         ("!FIXED_POINT", "FIXED_POINT"),
         ("!REGISTRA", "REGISTRA"),
+        ("!RASTRO", "RASTRO"),
         ("!BOOT", "BOOT"),
     ):
         r = resolve(token, chefe_source=True)
@@ -674,8 +868,32 @@ def self_test():
             and phase in r["master_funnel"]["matched_trigger_ids"],
         )
 
+    r = resolve("!TIK-TAK", chefe_source=True)
+    add(
+        "tik_tak_outer_loop_preserves_remeasurement_without_swarm",
+        r["tik_tak"]["active"]
+        and r["tik_tak"]["canonical_rule"] == "REGRA-ZERO-CENTRALDARK"
+        and r["tik_tak"]["semantic_family"] == "AUTOMATION_FACTORY_OUTER_LOOP"
+        and r["tik_tak"]["role_order"] == TIK_TAK_ROLE_ORDER
+        and r["tik_tak"]["role_bindings"] == TIK_TAK_ROLE_BINDINGS
+        and r["tik_tak"]["outer_loop_sequence"] == TIK_TAK_OUTER_LOOP
+        and r["tik_tak"]["greg_verdict_required_before_green"]
+        and r["tik_tak"]["dex_approval_required_for_critical_delta"]
+        and r["tik_tak"]["invalidate_only_affected_stale_proof"]
+        and r["tik_tak"]["same_head_counterproof_required"]
+        and not r["tik_tak"]["fanout_agents"]
+        and not r["tik_tak"]["is_swarm_trigger"]
+        and not r["tik_tak"]["creates_new_brain_or_router"],
+    )
+
     r = resolve("!CENTRALDARK", chefe_source=True)
     add("master", r["explicit_match"] and r["expanded_chain"] == CHAIN)
+    add(
+        "tool_discovery_gate_present",
+        any(step["phase"] == "TOOL_DISCOVERY" for step in r["guided_telemetry"]["steps"])
+        and r["tool_discovery_required_before_access_claim"]
+        and r["claiming_no_access_before_tool_discovery_is_invalid"],
+    )
     add(
         "guided_telemetry_required",
         r["guided_telemetry"]["render_required"] and r["guided_telemetry"]["next_cursor"] == "ACORDAR",
@@ -741,7 +959,8 @@ def self_test():
         r = resolve(phrase, chefe_source=True)
         add("spoken_explicit_text_trigger", r["master_cycle_active"])
 
-    for phrase in ("acordar", "centraldark", "centraldark sol acordar", "sol acordar"):
+    # CHEFE 2026-09-27: voz = texto; "CentralDark" solto não abre o mestre (paridade + sob demanda)
+    for phrase in ("acordar", "centraldark visualize o estado", "centraldark sol acordar", "sol acordar"):
         r = resolve(
             phrase,
             chefe_source=True,
@@ -754,11 +973,20 @@ def self_test():
             r["master_cycle_active"]
             and r["activation_source"] in {"VOICE_TRIGGER", "VOICE_SUBTRIGGER_FUNNEL"}
             and r["session_provenance"]["profile_id"] == CANONICAL_SOL_PROFILE_ID
-            and r["master_funnel"]["voice_is_modality_not_second_trigger_system"],
+            and r["master_funnel"]["voice_is_modality_not_second_trigger_system"]
+            and r["tool_discovery_required_before_access_claim"],
         )
 
     r = resolve("centraldark", chefe_source=True, input_mode="text")
     add("plain_text_word_still_guarded", not r["master_cycle_active"])
+
+    for mode in ("text", "voice"):
+        add("plain_master_wake_is_neutral", not resolve("CentralDark", chefe_source=True, input_mode=mode)["master_cycle_active"])
+        add("natural_master_requires_payload", not resolve("CentralDark visualize", chefe_source=True, input_mode=mode)["master_cycle_active"])
+        add("natural_resume_uses_latest_cursor", resolve("CentralDark continue", chefe_source=True, input_mode=mode)["master_cycle_active"])
+        for verb in ("visualize", "veja", "mostra", "leia", "observe", "mede", "faça", "faz", "executa", "corrige", "pluga", "costura", "sobe", "continue", "continua", "prossiga", "retome", "cristaliza", "registra", "sela", "receipt", "rastro", "contraprova", "valida", "testa", "verifica"):
+            result = resolve(f"CentralDark {verb} alvo", chefe_source=True, input_mode=mode)
+            add("canonical_operational_verb_dispatch", result["master_cycle_active"] and result["explicit_match"])
 
     r = resolve(
         "centraldark sol acordar",

@@ -1,0 +1,17 @@
+{
+  "id": "drift-1789938042856",
+  "tema": "Drift detectado (2 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-status-mudou",
+        "detalhe": "CentralDark-EliteAnthropic: online → errored"
+      },
+      {
+        "tipo": "commit-novo",
+        "detalhe": "d539bb47c44 → 6c50b694532"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

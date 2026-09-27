@@ -24,7 +24,7 @@ export function vetar(ferramenta, args = {}) {
   if (ferramenta === 'git' && Array.isArray(args.paths)) alvos.push(...args.paths.map(String));
   for (const a of alvos) {
     const hit = PROTEGIDAS.find(p => a.replace('/root/CentralDark/', '').includes(p));
-    if (hit) return `🔒 VETO (Critic): "${hit}" é área protegida — só o Pivete autoriza (PERMITO PIVETE). Replaneje sem tocar nela.`;
+    if (hit) return `🔒 VETO (Critic): "${hit}" é área protegida — só o Pivete autoriza (PERMITO SEGREDO). Replaneje sem tocar nela.`;
   }
   return null;
 }

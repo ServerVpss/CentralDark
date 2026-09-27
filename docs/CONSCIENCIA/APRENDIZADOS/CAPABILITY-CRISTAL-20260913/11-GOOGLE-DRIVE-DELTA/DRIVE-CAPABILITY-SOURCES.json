@@ -1,0 +1,50 @@
+[
+  {
+    "drive_file_id": "1Vs-263PYKdY9zF5nmq5oIfnLjmV3t4PlIHSftjIBPVQ",
+    "topic": "multi-agent harness + connectors + executors + feature toggles",
+    "deltas": [
+      "dockable multi-agent UI",
+      "feature toggles",
+      "multi-LLM orchestration"
+    ]
+  },
+  {
+    "drive_file_id": "1dgLPhV3mQJxopVY49zdaOY_SXk3424bH_iZ3SnhRVls",
+    "topic": "refactor zero-regression + docking + event bus",
+    "deltas": [
+      "single shared UI state",
+      "event bus",
+      "feature flags",
+      "no V2/V3"
+    ]
+  },
+  {
+    "drive_file_id": "1xkyDNkcQ3Gr3xrXiv0jUNzeYKnjrqWsEg0lhO1jxges",
+    "topic": "micro-kernel-like modularity + dependency invariants + auto-update",
+    "deltas": [
+      "dependency preflight",
+      "Rust/Python/Node capability detection",
+      "hot reload",
+      "rollback"
+    ]
+  },
+  {
+    "drive_file_id": "1WAl1lr0VWmZt7MORsmwibVkuIuuuh7kZvHTq8mkkD8I",
+    "topic": "audit trail + event harness + docking",
+    "deltas": [
+      "source trail",
+      "unified registry",
+      "shared view state"
+    ]
+  },
+  {
+    "drive_file_id": "1eW0FQCOjKjynXlA0pULU6ZI96qNz68aYEKrZGK0uy38",
+    "topic": "multi-account Google/Chromium unified flow",
+    "deltas": [
+      "Account Hub multi-account",
+      "profile registry",
+      "per-account toggles",
+      "source_account provenance"
+    ]
+  }
+]

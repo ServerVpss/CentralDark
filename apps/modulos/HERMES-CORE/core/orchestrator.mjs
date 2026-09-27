@@ -11,6 +11,7 @@ import { randomBytes, createHash } from 'node:crypto';
 import { createServer as httpCreateServer } from 'node:http';
 import { renameComRetry as renameComRetryUtil } from '../utils/fs-safe.mjs';
 import { continuityBlockReceipt, validateContinuityState } from './continuity-guard.mjs';
+import { registrar as registrarAprendizado } from '../agents/Knowledge-Collector/agent.mjs';
 
 // Carrega /root/CentralDark/.env no boot — PM2 não herda ~/.bashrc (DARKAI_URL, DARKAI_ANON_KEY, ELITE_ANTHROPIC_TOKEN)
 try {
@@ -31,6 +32,7 @@ const { atualizarGrafo } = await import('../agents/GraphRAG-Master/agent.mjs'); 
 
 const BASE = dirname(dirname(fileURLToPath(import.meta.url))); // /root/CentralDark/apps/modulos/HERMES-CORE
 const PENDENTE  = `${BASE}/missions/pendente`;
+const LEGACY_PENDENTE = '/root/CentralDark/missoes/pendente'; // compat: produtores antigos convergem no mesmo Core
 const ANDAMENTO = `${BASE}/missions/em-andamento`;
 const CONCLUIDA = `${BASE}/missions/concluidas`;
 const NOTIFY    = `${BASE}/utils/notify.mjs`;
@@ -46,6 +48,44 @@ async function garantirRuntimeDirs() {
 let ocupado = false; // trava: nunca rodar duas missões ao mesmo tempo
 
 const log = (...a) => console.log(`[${new Date().toISOString()}]`, ...a);
+
+const LEARNING_ALWAYS_TOOLS = new Set(['git', 'escrever_arquivo', 'handler']);
+const LEARNING_SKIP_TOOLS = new Set(['ler_arquivo', 'darkai', 'notificar_progresso', 'aprender']);
+const LEARNING_MATERIAL_SIGNAL = /\b(PASS|FAIL|BLOCKED|VERIFIED|ROOT_CAUSE|MISMATCH|HEALTH|DEPLOY|FIXED|REGRESSION|ERROR|ERRO|FALHA|CAUSA|CORRIG|REMEDI|RECOVER)\b/i;
+
+function compactarAprendizado(value, max = 260) {
+  return String(value ?? '')
+    .replace(/[\r\n\t]+/g, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+    .slice(0, max);
+}
+
+function deveCapturarAprendizadoMaterial(ferramenta, resultado) {
+  if (!resultado?.ok) return false;
+  if (LEARNING_SKIP_TOOLS.has(ferramenta)) return false;
+  if (LEARNING_ALWAYS_TOOLS.has(ferramenta)) return true;
+  return ferramenta === 'shell' && LEARNING_MATERIAL_SIGNAL.test(String(resultado?.saida || ''));
+}
+
+function registrarAprendizadoMaterial({ slug, etapa_titulo, ferramenta, resultado }) {
+  if (!deveCapturarAprendizadoMaterial(ferramenta, resultado)) return null;
+
+  const contexto = `missao=${compactarAprendizado(slug, 80)}; etapa=${compactarAprendizado(etapa_titulo, 120)}; ferramenta=${compactarAprendizado(ferramenta, 40)}`;
+  const acao = compactarAprendizado(resultado?.saida || 'etapa material aprovada', 260);
+  const registro = registrarAprendizado(
+    'runtime',
+    contexto,
+    'ETAPA_MATERIAL_APROVADA_PELO_CRITIC',
+    acao,
+    'HERMES_CORE_CRITIC'
+  );
+  return {
+    ref: registro?.ref || null,
+    persisted: registro?.written === true || registro?.deduped === true,
+    deduped: registro?.deduped === true,
+  };
+}
 
 // ── Rastreio de ENOTEMPTY (janela deslizante) — alimenta o /health ──
 // Cada vez que um rename bate ENOTEMPTY, guardamos o timestamp. O /health conta
@@ -109,9 +149,14 @@ function seedContinuityState(missao, slug, current = {}) {
 }
 
 async function pegarProximaMissao() {
-  if (!existsSync(PENDENTE)) return null;
-  const files = (await readdir(PENDENTE)).filter(f => f.endsWith('.md')).sort();
-  return files[0] ? join(PENDENTE, files[0]) : null;
+  // REUSE_BEFORE_CREATE: um único executor; aceita a fila canônica e a fila legada
+  // somente como portas de entrada. Toda execução converge para HERMES-CORE.
+  for (const inbox of [PENDENTE, LEGACY_PENDENTE]) {
+    if (!existsSync(inbox)) continue;
+    const files = (await readdir(inbox)).filter(f => f.endsWith('.md')).sort();
+    if (files[0]) return join(inbox, files[0]);
+  }
+  return null;
 }
 
 async function executarMissao(arquivoPendente) {
@@ -389,6 +434,24 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
     const etapaAprovada = resultadoAprovadoPeloCritic(resultado, parecer);
     const entrada = { etapa_titulo, ferramenta, args, resultado: resultado.saida, ok: etapaAprovada };
     if (parecer && !parecer.aprovado) entrada.critic = parecer.parecer.slice(0, 300);
+
+    // Aprendizado contínuo: etapa material aprovada alimenta o core AGORA.
+    // FIXED_POINT é checkpoint de verificação, não gate para capacitação do Hermes.
+    if (etapaAprovada) {
+      try {
+        const aprendizagem = registrarAprendizadoMaterial({ slug, etapa_titulo, ferramenta, resultado });
+        if (aprendizagem?.ref) {
+          entrada.learning_ref = aprendizagem.ref;
+          entrada.learning_persisted = aprendizagem.persisted === true;
+          entrada.learning_deduped = aprendizagem.deduped === true;
+          await lg(`🧠 aprendizado contínuo learning_ref=${aprendizagem.ref} persisted=${aprendizagem.persisted}`);
+        }
+      } catch (e) {
+        entrada.learning_error = String(e?.message || e).slice(0, 220);
+        await lg(`⚠️ aprendizado contínuo falhou sem mascarar a etapa: ${entrada.learning_error}`);
+      }
+    }
+
     historico.push(entrada);
     await writeFile(statePath, JSON.stringify({ ...continuityState, missao, historico, retomadas }, null, 2));
     registrarEtapa(resultado.ok);

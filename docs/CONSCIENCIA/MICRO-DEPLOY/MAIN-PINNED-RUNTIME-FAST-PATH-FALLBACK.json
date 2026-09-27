@@ -1,0 +1,125 @@
+{
+  "schema": "centraldark.main-pinned-runtime-fast-path.v1",
+  "status": "CANONICAL_FALLBACK_RECIPE",
+  "authority": "SEGREDO/CHEFE",
+  "owner": "docs/CONSCIENCIA/MICRO-DEPLOY/",
+  "primary_path": "github_actions_canonical_deploy",
+  "activation": {
+    "primary_states": [
+      "FAIL",
+      "BLOCKED"
+    ],
+    "source_must_exist_in_main": true,
+    "source_sha_required": true,
+    "owner_scope_required": true
+  },
+  "locks": {
+    "unknown_is_not_pass": true,
+    "no_force_push": true,
+    "no_blind_pull": true,
+    "no_blind_reset": true,
+    "no_secret_leak": true,
+    "no_uncommitted_source": true,
+    "causal_scope_only": true
+  },
+  "sequence": [
+    "measure_main_head",
+    "measure_primary_deploy_state",
+    "confirm_source_sha_in_main",
+    "identify_owner",
+    "identify_fileset_causal",
+    "create_clean_worktree",
+    "run_applicable_tests",
+    "copy_fileset_causal",
+    "restart_owner_only",
+    "wait_readiness",
+    "measure_runtime",
+    "compare_expected_effect",
+    "receipt_pr_1562"
+  ],
+  "bindings": [
+    "SOURCE_SHA",
+    "OWNER",
+    "WORKTREE",
+    "RUNTIME_ROOT",
+    "FILESET_CAUSAL",
+    "TEST_COMMAND",
+    "BUILD_COMMAND",
+    "RESTART_COMMAND",
+    "HEALTH_COMMAND",
+    "ROLLBACK_SOURCE"
+  ],
+  "receipt_fields": [
+    "PRIMARY_DEPLOY_STATE",
+    "PRIMARY_FAILURE_CAUSE",
+    "SOURCE_SHA",
+    "MAIN_HEAD",
+    "OWNER",
+    "FILESET_CAUSAL",
+    "TESTS",
+    "BUILD",
+    "PREVIOUS_RUNTIME",
+    "DEPLOY_ACTION",
+    "RESTART_ACTION",
+    "RUNTIME_HEALTH",
+    "RUNTIME_EFFECT",
+    "SAME_SHA",
+    "ROLLBACK_TARGET",
+    "SECRET_EXPOSED",
+    "RESULT",
+    "PR_MOTHER",
+    "NEXT_CURSOR"
+  ],
+  "consumers": {
+    "human": "MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.md",
+    "binding": "MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.yml",
+    "skill": ".agents/skills/main-pinned-runtime-fast-path/SKILL.md",
+    "bot": "apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml",
+    "hook": "scripts/hooks/pre-push.main-pinned-runtime-fast-path.sh",
+    "bot_runtime": "apps/bot-telegram/unified-bot.cjs",
+    "bot_contract": "apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml"
+  },
+  "scratch_worktree": {
+    "canonical_path": "/root/CentralDark/_worktrees/main-pinned-runtime-fastpath",
+    "single_reusable": true,
+    "disposable": true,
+    "lock_required": true,
+    "reset_before_use": true,
+    "reset_after_use": true,
+    "clean_before_use": true,
+    "clean_after_use": true,
+    "receipt_before_cleanup": true,
+    "dirty_handoff_forbidden": true,
+    "long_lived_agent_worktrees_forbidden": true,
+    "runtime_is_not_scratch": true,
+    "destructive_commands": [
+      "git reset --hard origin/main",
+      "git clean -fdx"
+    ],
+    "destructive_guard": {
+      "realpath_must_equal": "/root/CentralDark/_worktrees/main-pinned-runtime-fastpath",
+      "must_not_equal": [
+        "/root/CentralDark",
+        "RUNTIME_ROOT",
+        "PRIMARY_REPO_ROOT"
+      ]
+    },
+    "sequence": [
+      "acquire_lock",
+      "assert_scratch_path",
+      "fetch_origin_main",
+      "reset_to_origin_main",
+      "clean_scratch",
+      "apply_exact_delta",
+      "test",
+      "promote_causal_owner",
+      "restart_owner",
+      "prove_runtime",
+      "write_receipt",
+      "reset_to_origin_main",
+      "clean_scratch",
+      "assert_clean",
+      "release_lock"
+    ]
+  }
+}
