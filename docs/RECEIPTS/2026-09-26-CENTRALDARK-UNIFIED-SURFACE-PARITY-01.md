@@ -246,3 +246,25 @@ O histórico consultado contém chamadas `edit_block`, `start_process`, `read_pr
 **Contraprova:** a captura de tool calls e usage existe no Desktop Commander, mas não demonstra que Texto e Voz compartilham o mesmo `SESSION_ID`, nem que a lateral da Voz mostra esses eventos. Portanto, paridade runtime Text↔Voice continua `UNKNOWN` até uma execução de Voz apresentar o mesmo contrato de sessão/tracing e a mesma prova.
 
 **NEXT_CURSOR:** validar uma ação real acessível em Texto e Voz; comparar `SESSION_ID`, sequência `TRACE_ID/TOOL_CALL_ID`, usage, owner, resultado estruturado e receipt. Se a plataforma Voice não expuser esses campos, registrar `PLATFORM_UNAVAILABLE` com a capability específica.
+
+
+### Contraprova do contrato — 2026-09-27
+
+Os quatro arquivos foram relidos do `main` e usados como entrada do validador `scripts/trigger-fabric/validate_unified_surface_parity_contract.py`.
+
+```text
+UNIFIED_SURFACE_PARITY_CONTRACT=PASS
+exit_code=0
+validator_commit=75975d7d139a2ea7c9f2412fb7982c4e2e302770
+```
+
+A primeira execução falhou e expôs marcadores desalinhados e um falso positivo para a frase válida `GEV/JEV não substitui Hermes`. O validador foi corrigido, commitado e executado novamente; a segunda execução passou.
+
+```yaml
+STATIC_CONTRACT_VALIDATION: PASS
+LIVE_TEXT_VOICE_SESSION_PARITY: UNKNOWN
+VOICE_BINDING: UNKNOWN
+DESKTOP_TRACE_AND_USAGE_PROBE: PASS
+```
+
+Este PASS cobre somente a consistência estática entre contrato, skill e receipt. Não declara binding de Voz nem paridade viva entre sessões.
