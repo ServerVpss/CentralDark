@@ -85,7 +85,7 @@ Casa consegue produzir e testar uma resolução reversível.
 
 ## 🪡 COSTURA — UI humana ↔ motor automático
 
-A interface humana e o motor automático são duas superfícies do mesmo fluxo. O nome canônico continua **COSTURA**; não criar `V2`, `V3`, `NOVO` ou owner paralelo.
+A interface humana e o motor automático são duas superfícies do mesmo fluxo. O nome canônico continua **COSTURA**; não versionar o nome nem criar owner paralelo.
 
 No merge usado por este owner (`branch do PR` como `HEAD`, recebendo `origin/main`):
 
