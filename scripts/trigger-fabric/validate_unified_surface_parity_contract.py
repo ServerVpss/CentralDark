@@ -8,6 +8,7 @@ minimum invariants required by the CHEFE/SOL/HERMES operating law.
 
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -110,6 +111,37 @@ FORBIDDEN_MARKERS = {
 }
 
 
+# Valor real, não trecho: a chave precisa estar ativa (fora de comentário) com
+# o valor exigido, e não pode aparecer ativa com outro valor.
+REQUIRED_VALUES = {
+    CONTRACT: {
+        "CRISTAL_PROVADO_EQ_REPLAY_FIRST": "true",
+        "same_canonical_session": "true",
+        "shared_ordered_trace": "true",
+        "same_structured_outcome": "true",
+        "forbid_voice_only_session_or_trace": "true",
+        "CLAIM_WITHOUT_COMMIT_ON_MAIN": "INVALID",
+        "VALIDATED_CLAIM_REQUIRES_VALIDATOR_EXIT_0": "true",
+    },
+}
+
+
+def active_values(text: str, key: str) -> list[str]:
+    pattern = re.compile(rf"^\s*{re.escape(key)}\s*:\s*([^#\n]*?)\s*(?:#.*)?$", re.M)
+    return [m.group(1).strip().strip("\"'") for m in pattern.finditer(text)]
+
+
+def validate_values(path: Path, text: str) -> list[str]:
+    errors: list[str] = []
+    for key, expected in REQUIRED_VALUES.get(path, {}).items():
+        values = active_values(text, key)
+        if not values:
+            errors.append(f"MISSING_ACTIVE_KEY {path}: {key}")
+        elif any(v != expected for v in values):
+            errors.append(f"WRONG_VALUE {path}: {key}={values} expected={expected}")
+    return errors
+
+
 def read_text(path: Path) -> str:
     try:
         return path.read_text(encoding="utf-8")
@@ -129,6 +161,7 @@ def validate_file(path: Path) -> list[str]:
         if marker in text:
             errors.append(f"FORBIDDEN_MARKER {path}: {marker}")
 
+    errors.extend(validate_values(path, text))
     return errors
 
 
