@@ -145,6 +145,40 @@ surface_parity:
       expected: heavy_implementation_surface
     desktop:
       expected: local_runtime_execution_and_observation
+  observability_parity:
+    same_canonical_session: true
+    session_identity: "One SESSION_ID for the same intent/task across Text and Voice; retain SURFACE_ID as provenance."
+    shared_ordered_trace: true
+    sidebar_visibility:
+      sessions: same_canonical_session
+      tool_calls: same_ordered_trace
+      usage_tokens: same_session_aggregates_and_fields
+      receipts: same_session_receipts
+    event_fields:
+      - SESSION_ID
+      - TRACE_ID
+      - INTENT_ID
+      - TOOL_CALL_ID
+      - SURFACE_ID
+      - OWNER
+      - USAGE
+      - RECEIPT_ID
+    forbid_voice_only_session_or_trace: true
+    if_platform_cannot_expose_required_trace: PLATFORM_UNAVAILABLE
+  output_parity:
+    same_structured_outcome: true
+    canonical_fields:
+      - INTENT_ID
+      - DECISION
+      - OWNER
+      - ACTION_RESULT
+      - EVIDENCE
+      - COUNTERPROOF
+      - RECEIPT_ID
+      - NEXT_CURSOR
+    preserve_intent_owner_action_and_proof: true
+    rendering_may_follow_modality: true
+    forbid_separate_voice_output_contract: true
   required_capabilities_when_supported:
     - github_read
     - github_write
