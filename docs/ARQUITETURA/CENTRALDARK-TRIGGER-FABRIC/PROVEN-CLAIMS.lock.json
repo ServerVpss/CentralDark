@@ -687,7 +687,36 @@
           "current_target_remeasured": true,
           "scope": "AFFECTED_CONE_ONLY"
         }
-      ]
+      ],
+      "provenance": {
+        "lock_placed_by_pen": "CLAUDE",
+        "pen_identity_rule": "PEN_ID=COMMIT_SHA; CONNECTOR!=AUTOR; ACCOUNT!=CANETA; trailer Co-Authored-By: Claude = caneta Claude",
+        "seal_commit": "54a1d767122d15641a79a6ff35781195125c1582",
+        "reseal_commits": [
+          "6545c34bb7965e7ffd371c6e42862fe36cb83df3",
+          "5ed8cb9f5f8a1774b703b86ddfded0a61c497135",
+          "f4ed61d9e4782417aa76f6d9513903642b97f2ba",
+          "75be41654300395b9e53c7e7b36d9e73f6fb5063",
+          "557a1abd44dc57b1b6b5495f490ea16e9e48fdcf"
+        ],
+        "recipe_hardening_commits": [
+          "ab3d904ca776fa528c721042cb615d8e4b1f2feb"
+        ],
+        "ledger": "https://github.com/ServerVpss/CentralDark/pull/1562"
+      },
+      "lock_access": {
+        "state": "OPEN_BY_PROOF",
+        "same_fingerprint": "PASSAGE_OPEN",
+        "core_binding": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#proven_crystal_main_fast_path",
+        "open_to": [
+          "CLAUDE",
+          "QUALQUER_CANETA_AUTORIZADA"
+        ],
+        "reopen_via": "centraldark_full_trigger_boot.py reseal-fingerprint --cause-ref <causa> (proof verde antes)",
+        "changed_fingerprint": "REVALIDATE_AFFECTED_CONE_ONLY",
+        "revalidate_is_not_green": true,
+        "chefe_authorization": "CHEFE 2026-09-27 23:47 BRT: cadeados postos pelo Claude abertos e atribuídos ao Claude; registrar na main validado e provado"
+      }
     },
     "MULTI_PEN_MAIN_GATE_PATH": {
       "claim_key": "MULTI_PEN_MAIN_GATE_PATH",
@@ -695,13 +724,13 @@
       "lock_key": "4140e68eb6a6e89f5ce434ea556ae7b99918fbd9ace61aae20e59fc056a88e25",
       "state": "SEALED_PROVEN",
       "proof_target": "portão único que toda caneta (Claude, ChatGPT texto/voz/Work, Cowork) roda antes de subir na main: ciclo mestre texto=voz, partida, validador de paridade, contraprova do validador e verificação geral",
-      "evidence_ref": "5 comandos exit 0; partida = texto em toda a matriz",
-      "observed_at": "2026-09-27T03:05:00Z",
+      "evidence_ref": "5 comandos exit 0 na ponta 81aec41+028e8b2",
+      "observed_at": "2026-09-27T03:02:00Z",
       "counterproof": "PASS",
       "receipt_ref": "https://github.com/ServerVpss/CentralDark/pull/1562#issuecomment-5851904401",
       "proven_path_replay": {
         "marker": "PROVEN_PATH_REPLAY_LOCK",
-        "dependency_fingerprint": "a7a2f716fd7520e3b6d8ce115ea270eb67066e5c1f797b06fdcdcd0515232bc4",
+        "dependency_fingerprint": "6ce0e4c238b6ddff3906d9206f56607f071c547c61ebbfef8766abe90db196c1",
         "fingerprint_material_count": 7,
         "execution_commands": [],
         "proof_commands": [
@@ -754,8 +783,41 @@
           "counterproof": "PASS",
           "current_target_remeasured": true,
           "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "81aec41 (outra caneta) acrescentou fiscal do fast-path de cristal provado ao verify_repo_contract; 5 comandos verdes",
+          "observed_at": "2026-09-27T03:02:00Z",
+          "old_dependency_fingerprint": "a7a2f716fd7520e3b6d8ce115ea270eb67066e5c1f797b06fdcdcd0515232bc4",
+          "new_dependency_fingerprint": "6ce0e4c238b6ddff3906d9206f56607f071c547c61ebbfef8766abe90db196c1",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
         }
-      ]
+      ],
+      "provenance": {
+        "lock_placed_by_pen": "CLAUDE",
+        "pen_identity_rule": "PEN_ID=COMMIT_SHA; CONNECTOR!=AUTOR; ACCOUNT!=CANETA; trailer Co-Authored-By: Claude = caneta Claude",
+        "seal_commit": "ab3d904ca776fa528c721042cb615d8e4b1f2feb",
+        "reseal_commits": [
+          "557a1abd44dc57b1b6b5495f490ea16e9e48fdcf",
+          "474a75036f25a463ca68373dfb14bd743ae520cc"
+        ],
+        "recipe_hardening_commits": [],
+        "ledger": "https://github.com/ServerVpss/CentralDark/pull/1562"
+      },
+      "lock_access": {
+        "state": "OPEN_BY_PROOF",
+        "same_fingerprint": "PASSAGE_OPEN",
+        "core_binding": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#proven_crystal_main_fast_path",
+        "open_to": [
+          "CLAUDE",
+          "QUALQUER_CANETA_AUTORIZADA"
+        ],
+        "reopen_via": "centraldark_full_trigger_boot.py reseal-fingerprint --cause-ref <causa> (proof verde antes)",
+        "changed_fingerprint": "REVALIDATE_AFFECTED_CONE_ONLY",
+        "revalidate_is_not_green": true,
+        "chefe_authorization": "CHEFE 2026-09-27 23:47 BRT: cadeados postos pelo Claude abertos e atribuídos ao Claude; registrar na main validado e provado"
+      }
     }
   }
 }
