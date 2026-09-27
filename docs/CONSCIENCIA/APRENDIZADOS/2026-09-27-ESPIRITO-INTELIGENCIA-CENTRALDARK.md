@@ -1,10 +1,71 @@
 ---
 title: "Espírito da Inteligência CentralDark"
+aliases:
+  - "A janela morre; a Casa não"
+  - "Casa recuperável"
+  - "Retorno canônico"
+  - "Espírito da Casa"
 date: 2026-09-27
+updated: 2026-09-27
 status: CANONICO_OPERACIONAL
+tipo: aprendizado
+categoria: continuidade-operacional
+scope: centraldark
+importance: alta
 owner: "docs/CONSCIENCIA/APRENDIZADOS/2026-09-27-ESPIRITO-INTELIGENCIA-CENTRALDARK.md"
-tags: [centraldark, aprendizado, continuidade, retorno, soul, main, receipt, chefe]
+owner_path: "docs/CONSCIENCIA/APRENDIZADOS/2026-09-27-ESPIRITO-INTELIGENCIA-CENTRALDARK.md"
+target: "continuidade da CentralDark após janela/sessão/PC/VPS/modelo cair"
 source: "SEGREDO/CHEFE — registro explícito em sessão ChatGPT/CentralDark"
+source_class: USER_EXPLICIT_INTENT
+intent_match: "100_percent_confirmado_pelo_CHEFE"
+confidence: high
+evidence_level: git_main_receipt
+promoted: true
+promoted_from:
+  - "docs/CONSCIENCIA/LEMBRANCAS/2026-09-27-ESPIRITO-DA-CASA-RETORNO-CANONICO.md"
+receipt_paths:
+  - "docs/RECEIPTS/2026-09-26-CASA-PRESERVACAO-ANTES-DE-FORMATAR.md"
+pr_mother: 1562
+semantic_links:
+  - "[[SOUL-SOL]]"
+  - "[[LEMBRANCAS]]"
+  - "[[APRENDIZADOS]]"
+  - "[[PR-MAE-1562]]"
+  - "[[GRAPH-INVESTIGATOR]]"
+  - "[[SEMANTIC-LINKER]]"
+related_paths:
+  - "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
+  - "docs/CONSCIENCIA/LEMBRANCAS/README.md"
+  - "docs/CONSCIENCIA/LEMBRANCAS/2026-09-27-ESPIRITO-DA-CASA-RETORNO-CANONICO.md"
+  - "docs/RECEIPTS/2026-09-26-CASA-PRESERVACAO-ANTES-DE-FORMATAR.md"
+memory_key: "centraldark.espirito.janela_morre_casa_nao"
+graph:
+  node_type: principio_operacional
+  graph_importance: high
+  semantic_distance_goal: low
+  link_policy: explanatory_links_only
+  useful_for:
+    - restauracao
+    - pos_formatacao
+    - retorno_canonico
+    - continuidade_entre_modelos
+    - prova_deploy
+anti_false_green:
+  - "CLONED != RESTORED"
+  - "AUTH_OK != DEPLOY_OK"
+  - "SOUL_LIDA != RUNTIME_PROVADO"
+  - "UNKNOWN != PASS"
+tags:
+  - centraldark
+  - aprendizado
+  - continuidade
+  - retorno
+  - soul
+  - main
+  - receipt
+  - chefe
+  - grafo-rico
+  - lembranca-promovida
 ---
 
 # Espírito da Inteligência CentralDark
@@ -84,6 +145,48 @@ INTENCAO_CLARA
 ```
 
 Isso define a excelência operacional da Casa: a próxima inteligência começa do rastro provado, não da adivinhação.
+
+## Correção de registro — propriedades ricas são parte do ouro
+
+A primeira gravação tinha propriedades mínimas. O motivo do gap foi erro de compressão: registrei o conteúdo certo, mas não apliquei o padrão rico de grafo que a própria Casa já conhece.
+
+Correção aplicada:
+
+```text
+PROPRIEDADES_RICAS_OBRIGATORIAS_PARA_OURO=true
+FRONTMATTER_MINIMO_NAO_BASTA_QUANDO_O_DELTA_E_CANONICO=true
+TAGS_EXPLICAVEIS_REQUIRED=true
+WIKILINKS_EXPLICAVEIS_REQUIRED=true
+RELATED_PATHS_REQUIRED=true
+OWNER_PATH_REQUIRED=true
+MEMORY_KEY_REQUIRED=true
+GRAPH_CONTEXT_REQUIRED=true
+LINK_ORNAMENT=NOISE
+PERSEVERANCA_DE_REGISTRO=true
+```
+
+Regra de lembrança para próximas gravações:
+
+```text
+SE_CHEFE_DISSER_REGISTRA_EM_DOCS_LEMBRANCAS_APRENDIZADO
+→ REGISTRAR_CONTEUDO
+→ ADICIONAR_PROPRIEDADES_RICAS
+→ ADICIONAR_TAGS
+→ ADICIONAR_LINKS_EXPLICAVEIS
+→ ADICIONAR_OWNER_PATH_TARGET_MEMORY_KEY
+→ ADICIONAR_RELATED_PATHS
+→ REGISTRAR_RECEIPT
+→ READBACK
+```
+
+## Conexões explicáveis
+
+- [[SOUL-SOL]] — identidade operacional que deve ser carregada no retorno.
+- [[LEMBRANCAS]] — camada de memória curta/promovida que permite a próxima IA recuperar o fio.
+- [[APRENDIZADOS]] — owner de regra reutilizável da Casa.
+- [[PR-MAE-1562]] — ledger/handoff onde o rastro volta.
+- [[GRAPH-INVESTIGATOR]] — verifica se nota importante ficou ilha sem propriedades/tags/links.
+- [[SEMANTIC-LINKER]] — liga somente relações explicáveis, sem enfeite.
 
 ## Cadeado semântico
 
