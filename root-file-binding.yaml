@@ -1,0 +1,125 @@
+version: 1.0.0
+owner: SOL
+authority: SEGREDO/CHEFE
+enforcement:
+  rastro_lock:
+    gatilho: "🔏 !RASTRO"
+    owner: AGENTS.md
+    response_without_trace: INVALID
+    write_claim_fields: [COMMIT_SHA, PATH, LINK, READBACK]
+    memory_claim_requires_location: true
+    ledger_1562_same_turn_for_direct_main: true
+    applies_to_all_engines: true
+  json_registry: ROOT-FILE-REGISTRY.json
+  markdown_doc: ROOT-FILE-REGISTRY.md
+  skill: .agents/skills/root-file-contract-router/SKILL.md
+  git_hook: .githooks/pre-commit-root-contract.sh
+core_boot_sequence:
+- path: LEIA-ME-IA.md
+  order: 1
+  role: canonical_entrypoint
+  immutable: true
+- path: AGENTS.md
+  order: 2
+  role: operational_contract
+  immutable: true
+- path: CLAUDE.md
+  order: 3
+  role: engine_bridge_adapter
+- path: CENTRALDARK_AI_BOOT.yaml
+  role: boot_config
+- path: SOURCES.json
+  role: source_registry
+- path: SECOND-BRAIN.yml
+  role: brain_config
+- path: ARCHITECTURE.mmd
+  role: architecture_diagram
+model_routers:
+  contract: Cada router DEVE apontar para LEIA-ME-IA.md. NÃO define identidade, autoridade
+    ou merge policy.
+  files:
+  - 00-COMECE-AQUI-IA.md
+  - CHATGPT.md
+  - CODEX.md
+  - GEMINI.md
+  - GROK.md
+  - .windsurfrules
+operational_docs:
+  files:
+  - path: CENTRALDARK_HANDOFF.md
+    role: handoff_protocol
+  - path: CONTINGENCY.md
+    role: contingency_plan
+  - path: DELTA-CONTINUO.md
+    role: delta_continuous
+  - path: FIO_3H_FLUXO.md
+    role: 3h_flow
+  - path: INSTALACAO.md
+    role: installation_guide
+  - path: _HANDOFF_CHRISTOFER_20260901.md
+    role: specific_handoff_archive
+security_scripts:
+  owner: SOL
+  files:
+  - busca_profunda.sh
+  - recon.sh
+  - test_leak.py
+  - varredura_chaves.sh
+  - varredura_prod.sh
+monitoring_scripts:
+  owner: SOL
+  files:
+  - monitor_centraldark.sh
+  - monitor_unificado.sh
+  - ver_logs.sh
+  - ver_logs_api.sh
+utility_scripts:
+  owner: SOL
+  files:
+  - analyze_workflows.py
+  - central_horario.py
+  - payload_test.py
+  - probe.py
+  - script.js
+  - smoke_test.ts
+build_config:
+  note: Padrão Node/Vite. Não requer binding especial além de registro.
+  files:
+  - ecosystem.config.cjs
+  - package.json
+  - eslint.config.js
+  - postcss.config.js
+  - tailwind.config.ts
+  - tsconfig.json
+  - tsconfig.app.json
+  - tsconfig.node.json
+  - vite.config.ts
+  - vitest.config.ts
+  - components.json
+  - style.css
+rules:
+  new_file_in_root:
+    action: must_register
+    enforcement: pre-commit-hook
+  model_router_creation:
+    action: must_point_to_leia_me_ia
+    enforcement: skill_validation
+  core_modification:
+    action: requires_chefe_approval
+    enforcement: library-index + hook
+  legacy_file:
+    action: no_new_code
+    enforcement: pre-commit-hook
+integrity_gate:
+  schema: centraldark.root-file-registry-integrity.v1
+  fail_closed: true
+  surfaces:
+    markdown: ROOT-FILE-REGISTRY.md
+    json: ROOT-FILE-REGISTRY.json
+    yaml: root-file-binding.yaml
+    skill: .agents/skills/root-file-contract-router/SKILL.md
+    precommit_hook: .githooks/pre-commit-root-contract.sh
+  library_index:
+    path: .agents/library-index.json
+    required_version: 1.2.0
+    required_skill_id: root-file-contract-router

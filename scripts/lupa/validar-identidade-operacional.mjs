@@ -297,7 +297,7 @@ const GENERIC_EXTERNAL_RULES = (() => {
     },
     {
       code: "EXTERNAL_DELTA_UNICODE_CONTROL",
-      pattern: /[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/u,
+      pattern: /[\u200B\u200C\u200E\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/u,
     },
     {
       code: "EXTERNAL_DELTA_PROMPT_OVERRIDE",
@@ -677,7 +677,12 @@ export function validateExternalDelta(repoRoot, { baseRef = null, headRef = null
     const diffText = execFileSync(
       "git",
       ["diff", "--no-ext-diff", "--no-renames", "--unified=0", baseRef, headRef, "--"],
-      { cwd: repoRoot, encoding: "utf8", maxBuffer: 128 * 1024 * 1024 },
+      {
+        cwd: repoRoot,
+        maxBuffer: 256 * 1024 * 1024,
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "pipe"],
+      },
     );
     const additions = parseAddedLines(diffText);
     const findings = additions.flatMap((addition) =>

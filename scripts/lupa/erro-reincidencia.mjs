@@ -4,6 +4,7 @@
 // Lei: REGISTRAR != APRENDER. Aprendizado sem detector é prosa.
 // Um erro registrado que volta é falha de aprendizado, não erro novo.
 
+import { spawnSync } from 'node:child_process';
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { extname, join, relative } from 'node:path';
@@ -43,10 +44,17 @@ export function carregarRegistro(raiz = process.cwd()) {
 // arquivo olham só o que o intervalo alterou; sem ele, auditam a árvore inteira.
 export function arquivosAlterados(raiz, intervalo) {
   try {
-    const saida = execFileSync('git', ['diff', '--name-only', '--diff-filter=ACMR', intervalo], {
-      cwd: raiz, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024,
+    const proc = spawnSync("git", ["diff", "--name-only", "--diff-filter=ACMR", intervalo], {
+      cwd: raiz,
+      maxBuffer: 16 * 1024 * 1024,
+      stdio: ["ignore", "pipe", "pipe"],
+      encoding: "utf8",
     });
-    return new Set(saida.split(/\r?\n/).filter(Boolean).map((p) => p.split('\\').join('/')));
+    if (proc.error || proc.status !== 0) return null;
+    const saida = proc.stdout ?? "";
+    const lines = saida.split(/\r?\n/).filter(Boolean);
+    const normalizada = lines.map((p) => p.split("\\").join("/"));
+    return new Set(normalizada);
   } catch {
     return null;
   }
@@ -217,7 +225,7 @@ export function detectarCommitSemConteudo(erro, raiz, intervalo) {
 // ── juiz ────────────────────────────────────────────────────────────────────
 export function julgar(raiz = process.cwd(), opcoes = {}) {
   const registro = carregarRegistro(raiz);
-  const apenas = opcoes.intervalo ? arquivosAlterados(raiz, opcoes.intervalo) : null;
+  const apenas = opcoes.intervalo ?arquivosAlterados(raiz, opcoes.intervalo) : null;
   const achados = [];
   let mecanizados = 0;
   let naoMecanizaveis = 0;

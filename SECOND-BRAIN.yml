@@ -205,3 +205,12 @@ metadata:
   version: "1.2.0"
   provenance: "Boot + owners canônicos medidos no repositório; runtime separado de source"
   boot_dependency: true
+
+
+rastro_lock:
+  gatilho: "🔏 !RASTRO"
+  owner: AGENTS.md
+  rule: "Toda alegação de escrita ao CHEFE carrega commit SHA + path + link + readback; alegação de memória nomeia onde foi gravada."
+  response_without_trace: INVALID
+  applies_to_all_engines: true
+  memory_is_reality: false

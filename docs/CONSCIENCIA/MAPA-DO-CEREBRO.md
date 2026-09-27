@@ -477,3 +477,99 @@ REVALIDATE_ONLY_INVALIDATED_DELTA=true
 NO_REDUNDANT_REPROOF=true
 NO_NEW_GATE_FOR_ALREADY_PROVEN_FACT=true
 ```
+
+
+## Receita executável de caminho já provado
+
+Quando uma sequência operacional já foi fechada com prova suficiente, o sistema não recomeça a investigação do zero. O caminho sobrevivente vira **receita executável versionada**, com fingerprint e critérios explícitos de invalidação.
+
+```text
+CAMINHO_JA_PROVADO
+→ SELAR_RECEITA_EXECUTÁVEL
+→ GUARDAR_FINGERPRINT
+→ PRÓXIMO_EXECUTOR_CARREGA_A_RECEITA
+→ ADAPTA_SOMENTE_BINDINGS_DO_AMBIENTE
+→ EXECUTA_A_MESMA_SEQUÊNCIA
+→ RODA_A_MESMA_PROVA
+→ COMPARA_RESULTADO_FORMATO_EFEITO
+→ DIVERGIU = DELTA_NOVO
+→ NÃO_DIVERGIU = REUTILIZA_CRISTAL
+```
+
+### Estrutura mínima da receita
+
+```text
+RECIPE_ID
+OWNER
+SCOPE
+SOURCE_COMMIT|SOURCE_RECEIPT
+PROOF_KEY
+ARTIFACT_FINGERPRINT
+DEPENDENCY_FINGERPRINT
+POLICY_OR_GATE_VERSION
+ENVIRONMENT_BINDINGS
+EXECUTION_SEQUENCE
+EXPECTED_RESULT
+EXPECTED_FORMAT
+EXPECTED_EFFECT
+PROOF_SEQUENCE
+INVALIDATION_EVENTS
+NEXT_CURSOR
+```
+
+A receita separa **lógica estável** de **bindings de ambiente**. O próximo executor pode adaptar somente caminho, host, porta, container, credencial indireta, runtime ou adapter quando esses campos forem declarados como bindings; ele não reescreve a sequência canônica sem contraprova.
+
+```text
+SAME_RECIPE
++ SAME_PROOF_KEY
++ SAME_FINGERPRINT
++ BINDINGS_COMPATÍVEIS
++ SAME_RESULT_FORMAT_EFFECT
+= REUSE_CRYSTAL
+```
+
+Se houver divergência material em resultado, formato ou efeito:
+
+```text
+DIVERGENCE
+→ PRESERVAR_CRISTAL_ANTERIOR
+→ ISOLAR_DELTA
+→ REMEDIR_SOMENTE_DELTA
+→ NOVA_PROVA
+→ NOVA_RECEITA_OU_NOVA_REVISAO
+```
+
+**Fato comprovado não se repete por cerimônia.** Repete-se somente a prova mínima definida pela própria receita para confirmar equivalência no novo binding ou quando a `PROOF_KEY` for invalidada.
+
+### Critérios consolidados desta sessão
+
+```text
+REALIDADE=JUDGE
+UNKNOWN != PASS
+UNKNOWN_BY_ACCESS != FAIL_GLOBAL
+UNAVAILABLE_HERE != IMPOSSIBLE
+ONE_SYSTEM_ONLY=true
+ONE_HERMES_LOGICAL=true
+N_EXECUTORS_ALLOWED=true
+ONE_WRITER_PER_SCOPE=true
+GITHUB_CANON != VPS_RUNTIME
+VPS_RUNTIME != CASA_RUNTIME
+NO_BLIND_OVERWRITE=true
+REUSE_BEFORE_CREATE=true
+IMPROVE_BEFORE_REPLACE=true
+SIMPLIFY_BEFORE_EXPAND=true
+MEASURE_BEFORE_MUTATE=true
+NO_REDUNDANT_REPROOF=true
+NO_NEW_GATE_FOR_ALREADY_PROVEN_FACT=true
+```
+
+- GitHub conserva o canon versionado; VPS e Casa conservam seus estados vivos próprios.
+- VPS, Casa e GitHub são reconciliados; nenhum deles sobrescreve automaticamente o outro.
+- Casa pode executar o mesmo Hermes lógico em container; isso não cria segundo Hermes.
+- Hermes pode coordenar N executores; executor não vira nova autoridade, novo owner ou novo cérebro.
+- Integração opcional não vira bloqueio global só por estar ausente/falhando; só bloqueia quando o claim atual realmente depende dela.
+- Sucesso sem mudança durável de arquivo gera receipt/prova; não exige commit artificial.
+- Mudança durável e reutilizável deve ser cristalizada no owner correto e versionada.
+- Quando `!CENTRALDARK` já for o gatilho composto declarado pelo Trigger Fabric vigente, não duplicar manualmente subgatilhos na entrada; primeiro consumir o grafo canônico do próprio trigger.
+- `api.github.com/meta` é sensor de infraestrutura GitHub; não substitui checks/statuses/mergeability de PR.
+- OAuth/MCP autenticado, tool list e processo Remote/Tray são provas distintas; bridge fim-a-fim só é PASS quando uma tool call atravessa o bridge e retorna resposta válida.

@@ -19,6 +19,18 @@ SUMMARY_FILE="${LOG_DIR}/summary.txt"
 FULL_LOG="${LOG_DIR}/deploy.log"
 EXPECTED_ORIGIN_RE='^(git@github\.com:|https://github\.com/|ssh://git@github\.com/)ServerVpss/CentralDark(\.git)?$'
 
+if [ ! -d "$ROOT/.git" ]; then
+  printf 'Repositorio canônico não encontrado em ROOT\n' >&2
+  exit 23
+fi
+DISPATCHER="$ROOT/scripts/vps/deploy-guards-dispatcher.sh"
+[ -x "$DISPATCHER" ] || { printf 'CANONICAL_DEPLOY_GATE_MISSING\n' >&2; exit 26; }
+REPO_DIR="$ROOT" BRANCH=main bash "$DISPATCHER" --gate-only || {
+  printf 'CANONICAL_TLC23_DEPLOY_GATE=BLOCK\n' >&2
+  exit 27
+}
+GATED_SHA="$(git -C "$ROOT" rev-parse origin/main)"
+
 mkdir -p "$LOG_DIR"
 
 # shellcheck source=scripts/lib/theme.sh
@@ -39,6 +51,33 @@ sanitize_stream() {
 
 log_run() {
   "$@" >>"$FULL_LOG" 2>&1
+}
+
+is_runtime_generated_dirty() {
+  case "$1" in
+    apps/modulos/status/graph-data.json|\
+    apps/modulos/graph-panel/data/graph.json|\
+    apps/modulos/hub/src/generated/houseInventory.ts|\
+    apps/bot-telegram/skills/config/memory.json)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+material_dirty_from_status() {
+  local line path
+  while IFS= read -r line; do
+    [ -n "$line" ] || continue
+    path="${line:3}"
+    if is_runtime_generated_dirty "$path"; then
+      printf 'generated_dirty_allowed=%s\n' "$path" >>"$SUMMARY_FILE"
+      continue
+    fi
+    printf '%s\n' "$line"
+  done
 }
 
 write_summary() {
@@ -78,11 +117,14 @@ if [ -d "$ROOT/.git" ]; then
   printf 'branch=%s\n' "$CURRENT_BRANCH" >>"$SUMMARY_FILE"
   if [ "${WEBHOOK_DEPLOY_GIT_PULL:-0}" = "1" ]; then
     DIRTY_TRACKED="$(git -C "$ROOT" status --porcelain=v1 --untracked-files=no)"
-    if [ -n "$DIRTY_TRACKED" ]; then
+    MATERIAL_DIRTY="$(printf '%s\n' "$DIRTY_TRACKED" | material_dirty_from_status)"
+    if [ -n "$MATERIAL_DIRTY" ]; then
+      printf '%s\n' "$MATERIAL_DIRTY" >>"$FULL_LOG"
       netflix_error "BLOCKED_LOCAL_DIRTY"
       exit 22
     fi
-    log_run git -C "$ROOT" pull --ff-only origin main
+    [ -z "$DIRTY_TRACKED" ] || netflix_warning "dirty rastreado apenas em churn gerado; seguindo fail-closed no git merge"
+    log_run git -C "$ROOT" merge --ff-only "$GATED_SHA"
   else
     netflix_warning "git pull desativado; workflow canônico controla sincronização"
     printf 'git_pull=disabled\n' >>"$SUMMARY_FILE"
@@ -91,6 +133,13 @@ else
   netflix_error "Repositorio canônico não encontrado em ROOT"
   exit 23
 fi
+
+LIVE_HEAD="$(git -C "$ROOT" rev-parse HEAD)"
+if [ "$LIVE_HEAD" != "$GATED_SHA" ]; then
+  netflix_error "DEPLOY_TARGET_NOT_GATED live=$LIVE_HEAD gated=$GATED_SHA"
+  exit 28
+fi
+printf 'gated_sha=%s\n' "$GATED_SHA" >>"$SUMMARY_FILE"
 
 netflix_step 3 7 "Build apps/web quando existir"
 WEB_DIR="$ROOT/apps/web"

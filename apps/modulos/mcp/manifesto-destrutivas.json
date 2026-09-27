@@ -41,13 +41,13 @@
     "Sem isso o gate falha — pendencia sem plano vira divida invisivel."
   ],
   "versaoFormato": 1,
-  "revisadoEm": "2026-08-15",
+  "revisadoEm": "2026-09-25",
   "revisadoPor": "Chefe/SEGREDO via missao ADMIN_PROVIDER_CONTROL_PLANE_20260815",
   "geradoPor": "scripts/gerar-manifesto-destrutivas.mjs",
   "resumo": {
-    "descobertasNoCodigo": 18,
+    "descobertasNoCodigo": 20,
     "aprovadas": 12,
-    "emEngenhariaDeCompensacao": 6,
+    "emEngenhariaDeCompensacao": 8,
     "aprovadasNestaRodada": 0
   },
   "destrutivasAprovadas": [
@@ -352,6 +352,62 @@
       "responsavel": "SOL — integracao; Chefe/SEGREDO — aprovacao final",
       "ultimoTeste": "2026-08-15: contraprova de repo identificou que uma destrutiva nova fora de EmRevisao deixaria auditStartupReady global indisponivel; runtime externo nao foi tocado",
       "proximoExperimento": "apos retirada explicita de ZERO_DEPLOY: provar read-only e ledger no runtime; depois escolher UMA mutacao reversivel, construir compensador e executar os nove gates antes de qualquer promocao para destrutivasAprovadas"
+    },
+    {
+      "nome": "centraldark_deploy_apply_learning",
+      "grupo": "deploy",
+      "arquivo": "src/tools/deploy/centraldark-capabilities.js",
+      "anunciadaEmToolsJson": true,
+      "provider": "CentralDark/VPS",
+      "estado": "EM_ENGENHARIA_DE_COMPENSACAO",
+      "efeitoAtual": "QUARENTENA — capacidade implementada com dry-run e confirmação própria; aprovação final depende de replay runtime do handler.",
+      "porQueNaoPassa": "O caminho manual equivalente já foi provado, mas o handler MCP novo ainda precisa executar ação real e provar rollback/cleanup pelo próprio entrypoint antes de sair da quarentena.",
+      "compensacaoAConstruir": "Backup do fileset antes da promoção, restart isolado, receipt antes do cleanup e restauração do backup em qualquer falha pós-promoção.",
+      "comoDescobrir": "Executar primeiro dry-run, depois replay real autorizado no runtime VPS e comparar hashes/PM2/receipt/scratch antes e depois.",
+      "faltaNoHandler": "Prova runtime do entrypoint novo após deploy do catálogo.",
+      "gateFinal": {
+        "AUTHORIZATION_PROVED": true,
+        "STATE_BEFORE_CAPTURED": true,
+        "ACTION_PROVED": false,
+        "RECEIPT_PERSISTED": false,
+        "COMPENSATION_EXECUTED": false,
+        "ORIGINAL_STATE_RESTORED": false,
+        "DOUBLE_COMPENSATION_SAFE": false,
+        "NEGATIVE_TESTS_PASS": true,
+        "NO_SECRET_LEAK": true
+      },
+      "avaliadaEm": "2026-09-25",
+      "responsavel": "SOL/ChatGPT — implementação; Chefe/SEGREDO — aprovação final",
+      "ultimoTeste": "2026-09-25: caminho manual equivalente aplicado com backup, hashes, restart isolado, receipt e scratch clean; handler novo ainda não replayado.",
+      "proximoExperimento": "Após deploy MCP, chamar centraldark_deploy_apply_learning em dry-run e execução real autorizada; provocar delta reversível e comprovar rollback idempotente."
+    },
+    {
+      "nome": "centraldark_deploy_micro_fallback",
+      "grupo": "deploy",
+      "arquivo": "src/tools/deploy/centraldark-capabilities.js",
+      "anunciadaEmToolsJson": true,
+      "provider": "CentralDark/VPS",
+      "estado": "EM_ENGENHARIA_DE_COMPENSACAO",
+      "efeitoAtual": "QUARENTENA — MAIN-PINNED implementado com owner allowlist, fileset causal, backup, rollback, restart e health.",
+      "porQueNaoPassa": "A receita MAIN-PINNED foi provada manualmente, porém o handler MCP novo ainda precisa replay real com compensação executada pelo próprio script.",
+      "compensacaoAConstruir": "Restauração automática do backup do mesmo fileset causal e restart do mesmo owner em falha pós-promoção.",
+      "comoDescobrir": "Usar fileset pequeno e reversível do owner MCP, medir SHA/hash/PID/health, provocar falha controlada de health em ambiente de teste e provar rollback.",
+      "faltaNoHandler": "Replay runtime discriminante do entrypoint novo e dupla compensação segura.",
+      "gateFinal": {
+        "AUTHORIZATION_PROVED": true,
+        "STATE_BEFORE_CAPTURED": true,
+        "ACTION_PROVED": false,
+        "RECEIPT_PERSISTED": false,
+        "COMPENSATION_EXECUTED": false,
+        "ORIGINAL_STATE_RESTORED": false,
+        "DOUBLE_COMPENSATION_SAFE": false,
+        "NEGATIVE_TESTS_PASS": true,
+        "NO_SECRET_LEAK": true
+      },
+      "avaliadaEm": "2026-09-25",
+      "responsavel": "SOL/ChatGPT — implementação; Chefe/SEGREDO — aprovação final",
+      "ultimoTeste": "2026-09-25: MAIN-PINNED manual provado em MCP com same SHA, fileset causal, restart isolado e health 200; handler novo ainda não replayado.",
+      "proximoExperimento": "Após deploy MCP, dry-run do fileset; execução real em owner MCP; depois teste de rollback controlado e repetição da compensação."
     }
   ]
 }

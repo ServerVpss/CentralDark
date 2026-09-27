@@ -1,4 +1,4 @@
-name: lupa-conformance
+name: ⚙️ lupa-conformance
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 20
     steps:
 
-      - name: Bloquear HEAD de fork no runner persistente
+      - name: 🔹 Bloquear HEAD de fork no runner persistente
         id: fork_guard
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         shell: bash
@@ -45,7 +45,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Vincular branch esperada ao SHA exato
+      - name: 🔹 Vincular branch esperada ao SHA exato
         shell: bash
         env:
           EXPECTED_BRANCH: ${{ github.event.pull_request.head.ref || github.ref_name }}
@@ -81,24 +81,24 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.11'
-      - name: Instalar pytest
+      - name: 🔹 Instalar pytest
         run: pip install pytest
-      - name: Validar hash canônico da Lupa
+      - name: 🔹 Validar hash canônico da Lupa
         run: python3 scripts/lupa/validar_autolupa_hash.py
-      - name: Rodar testes de conformidade
+      - name: 🔹 Rodar testes de conformidade
         env:
           AUTOLUPA_REPORT: .agents/skills/meta-lupa/testes/fixtures/exemplo_ok.md
         run: pytest .agents/skills/meta-lupa/testes/test_autolupa_conformance.py -v
-      - name: Motor determinístico
+      - name: 🔹 Motor determinístico
         working-directory: .agents/skills/meta-lupa
         run: python3 testes/test_lupa.py
-      - name: Lacre de claims — anti-repetição e reopen causal
+      - name: 🔹 Lacre de claims — anti-repetição e reopen causal
         working-directory: .agents/skills/meta-lupa
         run: |
           set -euo pipefail
           python3 guardrails/claim_seal.py --self-test
           python3 guardrails/claim_seal.py validate references/claim-seals.jsonl
-      - name: Banda + GraphRAG + links do compasso
+      - name: 🔹 Banda + GraphRAG + links do compasso
         shell: bash
         run: |
           set -euo pipefail
@@ -152,7 +152,7 @@ jobs:
               raise SystemExit('SECOND_BRAIN_MISSING_RUNTIME_BOUNDARY')
           print('BANDA_COMPASS_LINKS=PASS')
           PY
-      - name: Evolução verificável — fail closed
+      - name: 🔹 Evolução verificável — fail closed
         working-directory: .agents/skills/meta-lupa
         run: |
           python3 scripts/evolution_gate.py --self-test
@@ -160,7 +160,7 @@ jobs:
           python3 scripts/agi_claim_gate.py --self-test
           python3 scripts/evolution_series_gate.py --scan references --repo-root ../../..
           pytest testes/test_evolution_gate.py -v
-      - name: Knowledge Compiler — FORJA rigorosa, runtime FLASH
+      - name: 🔹 Knowledge Compiler — FORJA rigorosa, runtime FLASH
         shell: bash
         run: |
           set -euo pipefail
@@ -169,40 +169,40 @@ jobs:
           node --test \
             .agents/skills/knowledge-compiler/tests/compiler.test.mjs \
             .agents/skills/knowledge-compiler/tests/contract.test.mjs
-      - name: Percentual evidencial — denominador fechado + dogfood
+      - name: 🔹 Percentual evidencial — denominador fechado + dogfood
         working-directory: .agents/skills/meta-lupa
         run: python3 scripts/percentual_evidencial.py self-test
-      - name: Validador e promotor do OPERATION_RECEIPT
+      - name: 🔹 Validador e promotor do OPERATION_RECEIPT
         run: pytest .agents/skills/meta-lupa/testes/test_operation_receipt_validator.py -v
-      - name: Guardrail do selo de ponto fixo
+      - name: 🔹 Guardrail do selo de ponto fixo
         working-directory: .agents/skills/meta-lupa
         run: python3 guardrails/validar_selo_ponto_fixo.py
-      - name: Regressão do selo e do recibo de XP
+      - name: 🔹 Regressão do selo e do recibo de XP
         working-directory: .agents/skills/meta-lupa
         run: python3 testes/test_selo_ponto_fixo.py
 
-      - name: Padrões — biblioteca longitudinal
+      - name: 🔹 Padrões — biblioteca longitudinal
         shell: bash
         run: |
           set -euo pipefail
           node --check scripts/memory-linker/pattern-library.mjs
           node --test scripts/memory-linker/pattern-library.test.mjs
 
-      - name: Padrões — ponte Lembranças para Dream Review
+      - name: 🔹 Padrões — ponte Lembranças para Dream Review
         shell: bash
         run: |
           set -euo pipefail
           node --check scripts/memory-linker/memory-reserve-events.mjs
           node --test scripts/memory-linker/memory-reserve-events.test.mjs
 
-      - name: Padrões — gavetas seguras no Admin
+      - name: 🔹 Padrões — gavetas seguras no Admin
         shell: bash
         run: |
           set -euo pipefail
           node --check apps/modulos/mcp/src/admin-patterns-ui.js
           node --test apps/modulos/mcp/src/admin-patterns-ui.test.mjs
 
-      - name: Memory Linker — sintaxe + mineração determinística
+      - name: 🔹 Memory Linker — sintaxe + mineração determinística
         shell: bash
         run: |
           set -euo pipefail
@@ -270,7 +270,7 @@ jobs:
             fi
           done
 
-      - name: Erro silencioso — catraca de novos padrões; dívida antiga explícita
+      - name: 🔹 Erro silencioso — catraca de novos padrões; dívida antiga explícita
         shell: bash
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
@@ -279,7 +279,7 @@ jobs:
           BASE_REF="${BASE_SHA:-HEAD^}"
           node scripts/lupa/no-silent-error-scan.mjs --repo-root . --base-ref "${BASE_REF}"
 
-      - name: "HUB — Inventário: gerar + typecheck + build"
+      - name: "🔹 HUB — Inventário: gerar + typecheck + build"
         shell: bash
         run: |
           set -euo pipefail
@@ -287,14 +287,14 @@ jobs:
           npm --prefix apps/modulos/hub ci --ignore-scripts
           npm --prefix apps/modulos/hub run build
 
-      - name: Semantic Core — fixtures offline + contratos
+      - name: 🔹 Semantic Core — fixtures offline + contratos
         shell: bash
         run: |
           set -euo pipefail
           python3 -m pip install --disable-pip-version-check "numpy>=1.26" "safetensors>=0.4.5"
           python3 -m unittest discover -s infra/mcp/tests -v
 
-      - name: Receipt determinístico (sempre)
+      - name: 🔹 Receipt determinístico (sempre)
         if: always()
         shell: bash
         env:
@@ -334,19 +334,19 @@ jobs:
           # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone
 
   canonical-visual-posters:
-    name: Cartazes canônicos — hashes e elos semânticos
+    name: 🧩 Cartazes canônicos — hashes e elos semânticos
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: [self-hosted, Linux]
     timeout-minutes: 5
     permissions:
       contents: read
     steps:
-      - name: Checkout
+      - name: 🔹 Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
-      - name: Contraprova do cânone visual
+      - name: 🔹 Contraprova do cânone visual
         shell: bash
         run: |
           set -euo pipefail

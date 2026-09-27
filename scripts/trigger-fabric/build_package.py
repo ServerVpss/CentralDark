@@ -29,7 +29,8 @@ resolver_dst = STAGE/'scripts'/'trigger-fabric'/'centraldark_master_cycle.py'
 resolver_dst.parent.mkdir(parents=True, exist_ok=True)
 shutil.copy2(resolver_src, resolver_dst)
 
-# O verifier exige o contrato Parceiro/Judge no mesmo caminho canônico.
+# O verifier exige a ontologia Parceiro/Judge dentro do pacote extraído.
+# Preserva o caminho canônico em vez de duplicar conteúdo dentro da família.
 partner_src = ROOT/'docs'/'ARQUITETURA'/'PADRAO-PARCEIRO-DELTA-JUDGE.md'
 partner_dst = STAGE/'docs'/'ARQUITETURA'/'PADRAO-PARCEIRO-DELTA-JUDGE.md'
 partner_dst.parent.mkdir(parents=True, exist_ok=True)

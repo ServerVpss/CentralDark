@@ -10,26 +10,24 @@ import { dirname, join } from 'node:path';
 import { buscarContexto } from '../agents/GraphRAG-Master/agent.mjs';
 import { applyRoutingStrategy } from './routing-strategy.mjs';
 import { evaluatePerceptionGate } from './perception-policy.mjs';
+import { consultarContexto } from '../agents/Knowledge-Collector/agent.mjs';
 const pexec = promisify(execFile);
 const DIR = dirname(fileURLToPath(import.meta.url));
 
-const APRENDIZADOS_PATH = join(DIR, '../knowledge/aprendizados.json');
 
 function licoesRelevantes(missao, historico, erros_anteriores = []) {
   try {
-    const base = JSON.parse(readFileSync(APRENDIZADOS_PATH, 'utf8'));
-    const contexto = (
-      missao + ' ' +
-      JSON.stringify(historico?.slice(-3) ?? []) + ' ' +
-      JSON.stringify(erros_anteriores)
-    ).toLowerCase();
-    const linhas = [];
-    for (const [cat, dados] of Object.entries(base.categorias || {})) {
-      const bate = dados.sempre === true || (dados.gatilhos || []).some(g => g && contexto.includes(g.toLowerCase()));
-      if (bate) for (const l of dados.licoes || []) linhas.push(`- [${cat}] ${l}`);
-    }
-    return linhas.slice(0, 14).join('\n');
-  } catch { return ''; }
+    const contexto = [
+      String(missao || ''),
+      JSON.stringify(historico?.slice(-4) ?? []),
+      JSON.stringify(erros_anteriores ?? []),
+    ].join(' ');
+    return consultarContexto(contexto, 14)
+      .map((linha) => `- ${String(linha).replace(/^[- ]+/, '')}`)
+      .join('\n');
+  } catch {
+    return '';
+  }
 }
 
 const CADEIA_PATH = join(DIR, 'cadeia.json');
@@ -253,12 +251,54 @@ export function aplicarGatePercepcao(decisao, historico = [], { emLoop = false }
   };
 }
 
-const SYSTEM_FALLBACK = `Você é o Hermes, executor autônomo da CentralDark. Pense passo-a-passo. Nunca desvie da missão. Sempre devolva JSON puro.`;
-let SYSTEM = SYSTEM_FALLBACK;
-try {
-  const t = readFileSync(join(DIR, '../prompts/hermes-core.md'), 'utf8').trim();
-  if (t) SYSTEM = t;
-} catch {}
+const SYSTEM_FALLBACK = `Você é o Hermes, executor autônomo da CentralDark. Nunca promova estado sem evidência. Sempre devolva JSON puro.`;
+const HERMES_PROMPT_PATH = join(DIR, '../prompts/hermes-core.md');
+const RUNTIME_CONTRACT_PATH = join(DIR, '../../../../docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml');
+
+export function carregarSystemCanonico() {
+  let prompt = '';
+  let runtime = '';
+  try {
+    prompt = readFileSync(HERMES_PROMPT_PATH, 'utf8').trim();
+    runtime = readFileSync(RUNTIME_CONTRACT_PATH, 'utf8').trim();
+  } catch (error) {
+    throw new Error(`CANONICAL_RUNTIME_CONTRACT_LOAD_FAILED:${error.message}`);
+  }
+  if (!prompt) throw new Error('CANONICAL_HERMES_PROMPT_EMPTY');
+  if (!runtime) throw new Error('CANONICAL_RUNTIME_CONTRACT_EMPTY');
+
+  return {
+    system: [
+      prompt,
+      '',
+      '## RUNTIME CONTRACT — CURRENT',
+      runtime,
+      '',
+      '## OUTPUT',
+      'Sempre devolva JSON puro no schema exigido. Não exponha cadeia de pensamento privada.',
+    ].join('\n'),
+    promptPath: HERMES_PROMPT_PATH,
+    runtimePath: RUNTIME_CONTRACT_PATH,
+    promptSha256: createHash('sha256').update(prompt).digest('hex'),
+    runtimeSha256: createHash('sha256').update(runtime).digest('hex'),
+    deltaUtilityGateBound: runtime.includes('DELTA_UTIL_CONTINUA; SEM_PROVA_NAO_PASSA'),
+    noProofNoPassBound: runtime.includes('NO_PROOF_NO_PASS: true'),
+  };
+}
+
+export function provarContratoRuntime() {
+  const current = carregarSystemCanonico();
+  return {
+    schema: 'centraldark.hermes-core.runtime-binding.v1',
+    ok: current.deltaUtilityGateBound && current.noProofNoPassBound,
+    prompt_path: current.promptPath,
+    runtime_path: current.runtimePath,
+    prompt_sha256: current.promptSha256,
+    runtime_sha256: current.runtimeSha256,
+    delta_utility_gate_bound: current.deltaUtilityGateBound,
+    no_proof_no_pass_bound: current.noProofNoPassBound,
+  };
+}
 
 function detectarLoop(historico) {
   const n = historico?.length ?? 0;
@@ -380,13 +420,13 @@ const DARKAI_ENV = {
   DARKAI_URL: process.env.DARKAI_URL || '',
 };
 
-async function chamarEliteAnthropic(prompt) {
+async function chamarEliteAnthropic(prompt, system) {
   refreshEliteVars();
   if (!ELITE_TOKEN) throw new Error('ELITE_ANTHROPIC_TOKEN não configurado');
   const body = {
     model: ELITE_MODEL,
     max_tokens: 2048,
-    system: SYSTEM,
+    system,
     messages: [{ role: 'user', content: prompt }],
   };
   for (let tentativa = 1; tentativa <= 2; tentativa++) {
@@ -439,6 +479,8 @@ async function chamarDarkaiComResiliencia(modelo, system, prompt, timeout_ms, te
 }
 
 export async function decidir(missao, historico) {
+  const canonical = carregarSystemCanonico();
+  const system = canonical.system;
   const k = chaveCache(missao, historico);
   const hit = verCache(k);
   if (hit) {
@@ -471,7 +513,7 @@ export async function decidir(missao, historico) {
     const t0 = Date.now();
     try {
       const prompt = montarPrompt(missao, historico, historico_erros, memoria);
-      const stdout = await chamarDarkaiComResiliencia(cfg.modelo, SYSTEM, prompt, cfg.timeout_ms);
+      const stdout = await chamarDarkaiComResiliencia(cfg.modelo, system, prompt, cfg.timeout_ms);
       const bruta = validarDecisao(extrairJSON(stdout));
       const decisao = validarDecisao(aplicarGatePercepcao(bruta, historico, { emLoop }));
       decisao._modelo_usado = cfg.modelo;
@@ -489,7 +531,7 @@ export async function decidir(missao, historico) {
   const t0 = Date.now();
   try {
     const prompt = montarPrompt(missao, historico, historico_erros, memoria);
-    const texto = await chamarEliteAnthropic(prompt);
+    const texto = await chamarEliteAnthropic(prompt, system);
     const bruta = validarDecisao(extrairJSON(texto));
     const decisao = validarDecisao(aplicarGatePercepcao(bruta, historico, { emLoop }));
     decisao._modelo_usado = `elite:${ELITE_MODEL}`;
@@ -503,6 +545,19 @@ export async function decidir(missao, historico) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const [,, missao = 'test', hist = '[]'] = process.argv;
-  decidir(missao, JSON.parse(hist)).then(d => console.log(JSON.stringify(d, null, 2)));
+  if (process.argv.includes('--contract-probe')) {
+    try {
+      const result = provarContratoRuntime();
+      console.log(JSON.stringify(result, null, 2));
+      console.log(result.ok ? 'HERMES_CORE_RUNTIME_BINDING=PASS' : 'HERMES_CORE_RUNTIME_BINDING=FAIL');
+      if (!result.ok) process.exitCode = 1;
+    } catch (error) {
+      console.error(JSON.stringify({ ok: false, error: String(error?.message || error) }, null, 2));
+      console.error('HERMES_CORE_RUNTIME_BINDING=FAIL');
+      process.exitCode = 1;
+    }
+  } else {
+    const [,, missao = 'test', hist = '[]'] = process.argv;
+    decidir(missao, JSON.parse(hist)).then(d => console.log(JSON.stringify(d, null, 2)));
+  }
 }

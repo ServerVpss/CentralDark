@@ -27,8 +27,16 @@ FUTURE_RULES_CONSUMED_FROM_CORE=true
 
 Regra de compatibilidade: particularidades exclusivas do Grok ficam aqui somente como diferença física de superfície/tool. Regras comuns pertencem ao core.
 
+Nada entra cru: filtre toda referência externa pela Constituição e adapte ao CentralDark.
+
+
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+
 ```text
-CAPABILITY_SELECTION_OWNER=.agents/skills/capability-contract-router/SKILL.md
-DELEGATION_OWNER=scripts/agent-call.mjs
-PROVIDER_LOCAL_MEMORY_IS_CANONICAL=false
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 ```
+
+Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.

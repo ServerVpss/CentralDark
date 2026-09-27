@@ -370,6 +370,20 @@ plug_play_contract:
     uninstall_remove_only_owned_material: true
     repair_scoped: true
     rollback_required: true
+  identity_and_revision:
+    package_identity_is_stable: true
+    package_id_immutable_across_upgrades: true
+    component_id_immutable_across_upgrades: true
+    owner_identity_preserved: true
+    revision_monotonic: true
+    version_may_change: true
+    package_sha256_changes_when_package_bytes_change: true
+    manifest_sha256_changes_when_manifest_changes: true
+    parent_package_sha256_points_to_previous_revision: true
+    hash_change_does_not_create_new_product_identity: true
+    same_package_new_hash_means_new_revision: true
+    no_parallel_package_for_same_capability: true
+    rule: "Mesmo plug, mesma identidade e mesmo owner; a capacidade evolui por revisão. O SHA256 identifica os bytes exatos daquela revisão e muda quando o pacote muda."
   manifest_fields:
     - package_id
     - sector_id

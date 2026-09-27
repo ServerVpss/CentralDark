@@ -31,7 +31,7 @@
 3. [PROMPT-MESTRE.md](./PROMPT-MESTRE.md) — carrega no início de toda missão
 4. [REFLEXOES/](./REFLEXOES/) — auto-avaliação semanal (`hermes-reflect`)
 
-## 🔒 Áreas protegidas (nunca tocar sem "PERMITO PIVETE")
+## 🔒 Áreas protegidas (nunca tocar sem "PERMITO SEGREDO")
 
 `apps/bot-telegram/` · `apps/modulos/status/` · `apps/modulos/Bolt/` · `apps/modulos/WebUI/` · `whatsapp-server` (PM2 id 1, estado `stopped` é o correto) · `infra/caddy/` · `secrets/` · `docs/CONSCIENCIA/LEMBRANCAS/`
 

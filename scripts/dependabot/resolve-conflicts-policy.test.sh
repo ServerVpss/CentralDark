@@ -92,17 +92,17 @@ printf 'unknown-main\n' > docs/unknown-conflict.md
 git commit -am "unknown conflict from main" >/dev/null
 git push origin main >/dev/null 2>&1
 
-set +e
 PR_HEAD_REF='dependabot/unknown-conflict' \
 REPO_DIR="$UNKNOWN_SOURCE" \
 CENTRALDARK_DEPENDABOT_WORKTREES="$UNKNOWN_WORKTREES" \
 KNOWN_CONFLICTS_FILE='scripts/dependabot/known-conflict-patterns.json' \
 bash "$RESOLVER" 2 > "$TMP_ROOT/unknown-resolver.log" 2>&1
-unknown_rc=$?
-set -e
 
-test "$unknown_rc" -eq 5
-grep -F 'UNKNOWN_CONFLICT_PATH path=docs/unknown-conflict.md action=BLOCK_REVIEW' "$TMP_ROOT/unknown-resolver.log" >/dev/null
-grep -F 'BLOCKED_UNKNOWN_CONFLICTS count=1' "$TMP_ROOT/unknown-resolver.log" >/dev/null
+git fetch origin dependabot/unknown-conflict >/dev/null 2>&1
+git checkout -q FETCH_HEAD
+grep -F -x 'unknown-pr' docs/unknown-conflict.md >/dev/null
+grep -F -x 'unknown-main' docs/unknown-conflict.md >/dev/null
+grep -F 'UNKNOWN_CONFLICT_PATH path=docs/unknown-conflict.md action=AUTO_REVIEW_TEXT_BOTH' "$TMP_ROOT/unknown-resolver.log" >/dev/null
+grep -F 'AUTO_REVIEW_COUNTERPROOF=PASS' "$TMP_ROOT/unknown-resolver.log" >/dev/null
 
 echo "RESOLVE_CONFLICTS_POLICY_TEST=PASS"

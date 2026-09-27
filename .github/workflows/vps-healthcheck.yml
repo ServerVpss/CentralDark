@@ -1,4 +1,4 @@
-name: VPS HealthCheck
+name: ⚙️ VPS HealthCheck
 # Bot de monitoramento — roda direto na VPS via self-hosted runner.
 # Prova PM2 + Hermes-Verificador + rota Nous :free sem expor credenciais.
 
@@ -21,7 +21,7 @@ jobs:
     env:
       NOTIFY_API_KEY: ${{ secrets.NOTIFY_API_KEY }}
     steps:
-      - name: Coletar, autocorrigir Hermes-Verificador e provar free-chain
+      - name: 🔹 Coletar, autocorrigir Hermes-Verificador e provar free-chain
         shell: bash
         run: |
           set +e

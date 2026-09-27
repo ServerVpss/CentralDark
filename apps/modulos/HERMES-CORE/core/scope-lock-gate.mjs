@@ -97,6 +97,15 @@ export function evaluateScopeLock(input = {}) {
   result.warning_required = false;
   result.new_truth = false;
   result.previous_last_good_state_preserved = true;
+  result.default_behavior_preserved = true;
+  result.override_temporary = true;
+  result.override_scope = requestedScope || null;
+  result.override_expires_on = [
+    'FIXED_POINT_OF_AUTHORIZED_DELTA',
+    'MISSION_SCOPE_CLOSED',
+    'CHEFE_EXPLICITLY_REVOKES',
+    'MATERIAL_SCOPE_OR_AUTHORITY_CHANGE',
+  ];
   return result;
 }
 
@@ -139,6 +148,9 @@ export function runSelfTest() {
   });
   assert(reopened.verdict === 'UNLOCKED_CANDIDATE' && reopened.allow_mutation, 'ACKNOWLEDGED_REOPEN_ALLOWED_AS_CANDIDATE');
   assert(reopened.previous_last_good_state_preserved === true && reopened.new_truth === false, 'LAST_GOOD_STATE_PRESERVED');
+  assert(reopened.default_behavior_preserved === true && reopened.override_temporary === true, 'EXPLICIT_OVERRIDE_DOES_NOT_MUTATE_DEFAULT');
+  assert(reopened.override_scope === base.requested_scope, 'EXPLICIT_OVERRIDE_IS_SCOPED');
+  assert(reopened.override_expires_on.includes('FIXED_POINT_OF_AUTHORIZED_DELTA'), 'EXPLICIT_OVERRIDE_EXPIRES');
 
   const outside = evaluateScopeLock({ ...base, requested_scope: 'docs/OTHER', mutation_requested: true });
   assert(outside.verdict === 'OUTSIDE_LOCK_SCOPE' && outside.allow_mutation, 'OTHER_SCOPE_NOT_BLOCKED');

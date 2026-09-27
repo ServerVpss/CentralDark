@@ -3,7 +3,7 @@ flowchart TD
   SOL --> MASTER["!CENTRALDARK MASTER CYCLE"]
   MASTER --> BOOT["#ACORDAR + !CALIBRAR + !MULTIBUSSOLA"]
   BOOT --> META["!META_LUPA + !RECONCILIAR + !CONTRAPROVA"]
-  META --> FIX["!REMEDICAO + !FIXED_POINT + !REGISTRA + !BOOT"]
+  META --> FIX["!REMEDICAO + !FIXED_POINT + !REGISTRA + 🔏 !RASTRO + !BOOT"]
   FIX --> CAP["CAPABILITY CONTRACT ROUTER<br/>minimum sufficient set"]
   CAP --> FRONT["CEREBRO DA FRENTE / OPERACIONAL<br/>missao + decisao + execucao"]
   FRONT --> JARVIS["JARVIS<br/>ONE CORE / MANY ARMS"]
@@ -39,6 +39,15 @@ flowchart TD
     DOCSENSOR["Screenshot / Print-PDF"]
     LIVEOBS["runtime / logs / network / storage"]
   end
+
+  subgraph OLHO_BIONICO["OLHO BIÔNICO ANTI-FLASH"]
+    OBAF["OLHO BIÔNICO ANTI-FLASH<br/>profile visual; não é nova engine"]
+    DERIVED_OUT["DERIVED OUTPUT<br/>saída derivada; não é fonte da verdade"]
+    HOUSE_MONITORS["MONITORES DA CASA<br/>consumidores da saída derivada"]
+    OBAF --> DERIVED_OUT --> HOUSE_MONITORS
+  end
+  DOCSENSOR --> OBAF
+  HOUSE_MONITORS --> INGEST
   SCREENPIPE --> INGEST["MATERIAL INGEST<br/>provenance + sanitize + quarantine"]
   SAVED --> INGEST
   DOCSENSOR --> INGEST
@@ -89,7 +98,7 @@ flowchart TD
     MAUS["OpenMausBot<br/>agent roster/UX"]
     LOVE["Open-Lovable<br/>builder pattern source"]
     GROK["Grok Build<br/>future engine candidate"]
-    EXTLEARN["External learning candidates"]
+    AIOS_EXT["AIOS/[EXT_REDACTED]<br/>external learning candidates"]
   end
 
   ODS -. capability only after measurement .-> OMNI
@@ -97,6 +106,6 @@ flowchart TD
   MAUS -. view only .-> JARVIS
   LOVE -. reference only .-> TOOLS
   GROK -. invocation must be proven .-> OMNI
-  EXTLEARN -. delta only / no control plane .-> HARVEST
+  AIOS_EXT -. delta only / no control plane .-> HARVEST
 
   LOCAL["LOCAL AI RUNTIME<br/>UNKNOWN / DEFERRED"] -. measure first .-> ODS
