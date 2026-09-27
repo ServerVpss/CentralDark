@@ -5,6 +5,51 @@ authority: SEGREDO/CHEFE
 runtime_consumer: apps/bot-telegram/unified-bot.cjs
 status: CANONICAL_BINDING
 mandatory_rules:
+  executor_centraldark_house_mode:
+    required: true
+    trigger: "!EXECUTOR_CENTRALDARK"
+    owner: docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md
+    trigger_registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+    mode: HOUSE_EXECUTOR_CONVERSATIONAL_MODE
+    recognize_on:
+    - CHATGPT
+    - TELEGRAM_BOT
+    - AI_CHATS
+    execution_gate:
+      primary_tool: Remote Desktop Commander
+      require_available: true
+      require_authorized: true
+      no_tool_result: CAPABILITY_UNAVAILABLE
+      unknown_tool_result: UNKNOWN
+    formula:
+    - RECOVER_CURRENT_INTENT
+    - MEASURE_HOUSE_ACCESS
+    - MEASURE_CURRENT_TARGET
+    - REUSE_BEFORE_CREATE
+    - EXECUTE_MINIMUM_SUFFICIENT_DELTA
+    - ADAPTIVE_BACKCHECK
+    - LOCAL_REPAIR_BEFORE_FULL_ROLLBACK
+    - RETEST
+    - REALITY_JUDGE
+    - READBACK
+    - RECEIPT
+    - CONTINUE_SAME_TRAIL
+    locks:
+      TRIGGER_DOES_NOT_GRANT_ACCESS: true
+      TRIGGER_DOES_NOT_EXPAND_AUTHORITY: true
+      UNKNOWN_IS_NOT_PASS: true
+      ACTION_IS_NOT_PROOF: true
+      DOCUMENTED_IS_NOT_EXECUTED: true
+      NO_SECRET_ECHO: true
+      NO_BLIND_OVERWRITE: true
+      NO_SILENT_REROUTE: true
+    visual_contract:
+      semantic_titles: true
+      callback_backcheck: "🔙"
+      reality_judge: "🪬"
+      house: "🏠"
+      execution: "⚙️"
+      receipt: "🧾"
   pr_mae_1562_toda_novidade:
     required: true
     canonical_rule: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
