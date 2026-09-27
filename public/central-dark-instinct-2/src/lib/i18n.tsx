@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 // Idiomas suportados pela interface
 export type Lang = "pt-BR" | "en-US" | "es-ES";
@@ -43,8 +36,7 @@ const pt: Dict = {
 
   "evo.kicker": "Linha do tempo",
   "evo.title": "Seis camadas de amadurecimento",
-  "evo.lead":
-    "Cada camada não substitui a anterior: ela vira músculo permanente do sistema.",
+  "evo.lead": "Cada camada não substitui a anterior: ela vira músculo permanente do sistema.",
   "evo.1.name": "Idealizador",
   "evo.1.desc":
     "A fase da intenção. Muita ideia, pouco atrito com a realidade. Aprende que desejo não é evidência.",
@@ -66,26 +58,21 @@ const pt: Dict = {
 
   "prin.kicker": "Doutrina",
   "prin.title": "MENOS É MAIS",
-  "prin.lead":
-    "Menos superfície, menos ruído, menos promessa. Mais prova por unidade de esforço.",
+  "prin.lead": "Menos superfície, menos ruído, menos promessa. Mais prova por unidade de esforço.",
   "prin.1.t": "Estado vivo primeiro",
-  "prin.1.d":
-    "Antes de agir, ler o que existe agora. Memória velha é rumor, não estado.",
+  "prin.1.d": "Antes de agir, ler o que existe agora. Memória velha é rumor, não estado.",
   "prin.2.t": "Um Writer por escopo",
-  "prin.2.d":
-    "Só um agente escreve em cada território. Leitura é livre, escrita é exclusiva.",
+  "prin.2.d": "Só um agente escreve em cada território. Leitura é livre, escrita é exclusiva.",
   "prin.3.t": "UNKNOWN / SKIPPED não é PASS",
   "prin.3.d":
     "Não verificado é não verificado. Pulou? Fica marcado como pulado, e o cadeado não fecha.",
   "prin.4.t": "Meta Lupa",
-  "prin.4.d":
-    "A revisão da revisão. Olha o que a primeira checagem deixou passar e por quê.",
+  "prin.4.d": "A revisão da revisão. Olha o que a primeira checagem deixou passar e por quê.",
   "prin.5.t": "Fable Loop adversarial",
   "prin.5.d":
     "Um narrador hostil constrói histórias plausíveis de falha sobre a própria Meta Lupa.",
   "prin.6.t": "Cadeado derivado de prova",
-  "prin.6.d":
-    "O selo não é decisão de humor: ele é uma consequência aritmética das evidências.",
+  "prin.6.d": "O selo não é decisão de humor: ele é uma consequência aritmética das evidências.",
 
   "loop.kicker": "Diagrama",
   "loop.title": "O loop que fecha o cadeado",
@@ -107,13 +94,11 @@ const pt: Dict = {
   "loop.s7.d": "Refaz a cadeia causa→efeito no estado atual.",
   "loop.s8.t": "Cadeado",
   "loop.s8.d": "Derivado da prova. Sem prova, sem cadeado.",
-  "loop.note":
-    "Qualquer etapa pode reabrir o ciclo. Um cadeado antigo com estado novo vira STALE.",
+  "loop.note": "Qualquer etapa pode reabrir o ciclo. Um cadeado antigo com estado novo vira STALE.",
 
   "ledger.kicker": "Evidence Ledger",
   "ledger.title": "Sete estados, zero ambiguidade",
-  "ledger.lead":
-    "Toda afirmação vive num destes estados. Nenhum deles é aberto à interpretação.",
+  "ledger.lead": "Toda afirmação vive num destes estados. Nenhum deles é aberto à interpretação.",
   "ledger.pass": "Verificado agora contra estado vivo.",
   "ledger.fail": "Contraprova derrubou a tese.",
   "ledger.unknown": "Nunca foi verificado. Não conta como sucesso.",
@@ -165,19 +150,63 @@ const pt: Dict = {
   "pack.lead":
     "O mesmo núcleo roda offline na sua máquina, hospedado na web ou empacotado para entregar a outra pessoa.",
   "pack.local": "Local-first",
-  "pack.locald":
-    "Roda sem backend obrigatório, sem chave e sem depender de serviço externo.",
+  "pack.locald": "Roda sem backend obrigatório, sem chave e sem depender de serviço externo.",
   "pack.online": "Online",
-  "pack.onlined":
-    "Publicação estática, carregamento rápido e nenhuma sessão obrigatória.",
+  "pack.onlined": "Publicação estática, carregamento rápido e nenhuma sessão obrigatória.",
   "pack.dist": "Distribuível",
-  "pack.distd":
-    "Exportável como pacote fechado: doutrina, ledger e selo viajam juntos.",
+  "pack.distd": "Exportável como pacote fechado: doutrina, ledger e selo viajam juntos.",
 
   "prov.title": "Aviso de provenance",
   "prov.body":
     "Este site descreve doutrina, método e estados de prova. Ele NÃO afirma nada sobre o estado atual de repositórios, branches, commits, CI ou qualquer sistema externo. Qualquer alegação desse tipo permanece UNKNOWN até ser verificada contra o estado vivo, na hora, com evidência anexada.",
   "prov.tag": "Estado externo: UNKNOWN",
+  "prov.anchor.title": "Recibo de medição canônica",
+  "prov.anchor.note":
+    "Medição read-only registrada na data abaixo. HISTORY != CURRENT_STATE: isto NÃO afirma o estado atual do repositório.",
+  "prov.anchor.owners": "Owners canônicos declarados pela fonte",
+  "prov.anchor.measured": "Medido em",
+
+  "nav.projecao": "Projeção",
+  "proj.kicker": "Convergência read-only",
+  "proj.title": "Projeção da CentralDark viva",
+  "proj.lead":
+    "Fotografia de uma leitura externa: HEAD, owners, funil de promoção e topologia. Esta tela REPRESENTA o estado medido — ela não executa nada.",
+  "proj.disclaimer":
+    "LOVABLE_IS_PROJECTION_SURFACE=true · EXTERNAL_WRITES=0 · GITHUB_CONTINUA_OWNER=true · MCP_CONTINUA_TRANSPORTE=true — nenhuma infraestrutura foi criada, movida ou alterada para exibir isto.",
+  "proj.state.PROVADO": "PROVADO",
+  "proj.state.UNKNOWN": "UNKNOWN",
+  "proj.state.BLOQUEADO": "BLOQUEADO",
+  "proj.state.HISTORICO": "HISTÓRICO",
+  "proj.head.title": "HEAD medida na fonte canônica",
+  "proj.head.commit": "Commit",
+  "proj.head.author": "Autor",
+  "proj.head.sig": "Assinatura",
+  "proj.owners.title": "Owners normativos lidos",
+  "proj.funnel.title": "Funil de promoção observado",
+  "proj.funnel.tension": "Tensão medida",
+  "proj.topo.title": "Topologia — quem executa o quê",
+  "proj.topo.inside": "Dentro desta superfície",
+  "proj.topo.outside": "Fora desta superfície (sistema externo)",
+  "proj.matrix.title": "Recibo da matriz de fusão",
+  "proj.matrix.note":
+    "UNKNOWN != PASS · DOCUMENTED != EXECUTED · EXISTS != RUNNING · REALIDADE É O JUIZ.",
+  "proj.auto.title": "Automações medidas na fonte",
+  "proj.auto.total": "Total lido",
+  "proj.auto.fired": "Disparadas por esta tela",
+  "proj.auto.note": "LISTED != RUNNING · SKIPPED != PASS.",
+  "proj.areas.title": "Áreas de conhecimento lidas",
+  "proj.health.title": "Saúde separada em camadas",
+  "proj.health.note":
+    "PROCESSO VIVO != PORTA RESPONDENDO != HTTP 200 != ROTA PÚBLICA SAUDÁVEL. Cada camada precisa da própria prova.",
+  "proj.deploy.title": "Micro-deploy medido antes de agir",
+  "proj.deploy.scope": "Escopo",
+  "proj.deploy.result": "Resultado",
+  "proj.deploy.mut": "Mutações aplicadas",
+  "proj.deploy.restart": "Reinícios provocados",
+  "proj.search.placeholder": "Buscar nesta projeção...",
+  "proj.search.label": "Buscar dados técnicos da projeção",
+  "proj.search.results": "itens",
+  "proj.search.empty": "Nenhum dado medido corresponde a essa busca.",
 
   "cta.line1": "NÃO FAZ MAIS.",
   "cta.line2": "FAZ CERTO ONDE DÓI.",
@@ -189,8 +218,7 @@ const pt: Dict = {
   "seo.title": "CentralDark",
   "seo.desc":
     "Doutrina dark-neon de prova adversarial: estado vivo primeiro, Meta Lupa, Fable Loop, Judge, evidence ledger e cadeado derivado de prova.",
-  "seo.imageAlt":
-    "Cadeado dourado em wireframe com rastros de luz neon sobre fundo preto",
+  "seo.imageAlt": "Cadeado dourado em wireframe com rastros de luz neon sobre fundo preto",
 
   "skip.main": "Pular para o conteúdo",
   "a11y.skip": "Pular para o conteúdo",
@@ -208,8 +236,75 @@ const pt: Dict = {
   "pdf.source": "Origem",
   "pdf.hint":
     "Seções-chave = evolução, loop, evidence ledger, Selo do Castelo e aviso de provenance.",
+  "pet.kicker": "COMPANHEIRO",
+  "pet.title": "Hermes — Instinto Superior",
+  "pet.lead":
+    "O guardião administrativo chegou ao Instinto Superior. As três peles anteriores permanecem abaixo como memória da evolução.",
+  "pet.adm": "ESTADO ADMINISTRATIVO",
+  "pet.instinto": "Hermes — Instinto Superior",
+  "pet.instintoLead":
+    "A armadura, o elmo alado, a capa e o cajado foram preservados. Aura, olhos, orbe, faíscas e círculo de energia respondem a cada quadro.",
+  "pet.dezMovimentos": "16 movimentos reais",
+  "pet.setentaOitoQuadros": "256 quadros · 60 fps",
+  "pet.luzMedida": "capa, cajado e aura em movimento",
+  "pet.movimentos": "Movimentos do Instinto Superior",
+  "pet.movimentosLead":
+    "Cada movimento roda com luz própria gravada na imagem e transparência verificada.",
+  "pet.memoria": "MEMÓRIA DAS TRÊS PELES",
+  "pet.memoriaLead":
+    "Forja, Celestial e Ascensão continuam disponíveis para comparação, sem substituir o estado administrativo.",
+  "pet.skins": "Peles do Hermes",
+  "pet.forja": "Forja",
+  "pet.forjad": "Bronze negro, ouro derretido e brasa laranja — a origem.",
+  "pet.celestial": "Celestial",
+  "pet.celestiald": "Azul e dourado com elmo alado prateado — o presente.",
+  "pet.ascensao": "Ascensão",
+  "pet.ascensaod": "Prata polida e violeta com brilho interno — o limite.",
+  "pet.float": "Hermes flutuante",
+  "pet.hide": "Esconder o Hermes",
+  "pet.show": "Mostrar o Hermes",
+  "pet.pc": "Instalar no computador",
+  "pet.folha": "Folha de poses",
+  "pet.folhaLead": "Cada pose da pele escolhida, com os quadros contados direto da imagem.",
+  "pet.quadros": "quadros",
+  "pet.curta": "poucos quadros — o movimento pula mais",
+  "pet.provado": "medido",
+  "pet.pose.idle": "Parado",
+  "pet.pose.running-right": "Correndo pra direita",
+  "pet.pose.running-left": "Correndo pra esquerda",
+  "pet.pose.waving": "Acenando",
+  "pet.pose.jumping": "Saltando",
+  "pet.pose.failed": "Falhando",
+  "pet.pose.waiting": "Esperando",
+  "pet.pose.sitting": "Sentado",
+  "pet.pose.review": "Revisando",
+  "pet.movimento.idle": "Parado — cajado e capa vivos",
+  "pet.movimento.running-right": "Correndo para a direita",
+  "pet.movimento.running-left": "Correndo para a esquerda",
+  "pet.movimento.waving": "Acenando",
+  "pet.movimento.jumping": "Saltando e pousando",
+  "pet.movimento.failed": "Material alert",
+  "pet.movimento.waiting": "Esperando e olhando para trás",
+  "pet.movimento.sitting": "Sentado e retornando",
+  "pet.movimento.review": "Revisando evidências",
+  "pet.movimento.alert": "Alerta e pronto para agir",
+  "pet.movimento.crouching": "Agachado e concentrado",
+  "pet.movimento.channeling": "Canalizando a CentralDark",
+  "pet.movimento.back-view": "De costas protegendo o sistema",
+  "pet.movimento.dash": "Impulso autônomo",
+  "pet.movimento.walking": "Caminhando",
+  "pet.movimento.autonomous-reveal": "Revelação autônoma",
+  "pet.painel": "PAINEL AO VIVO",
+  "pet.painelTitulo": "Comande o Hermes",
+  "pet.visual": "Pele",
+  "pet.acao": "Ação",
+  "pet.quadro": "Quadro",
+  "pet.pausar": "Pausar",
+  "pet.reproduzir": "Reproduzir",
+  "pet.passear": "Passear pela tela",
+  "pet.direcao": "Direção",
+  "pet.velocidade": "Velocidade",
 };
-
 
 const en: Dict = {
   "nav.evolucao": "Evolution",
@@ -236,8 +331,7 @@ const en: Dict = {
 
   "evo.kicker": "Timeline",
   "evo.title": "Six layers of maturing",
-  "evo.lead":
-    "No layer replaces the previous one: it becomes permanent muscle in the system.",
+  "evo.lead": "No layer replaces the previous one: it becomes permanent muscle in the system.",
   "evo.1.name": "Ideator",
   "evo.1.desc":
     "The intention phase. Plenty of ideas, little friction with reality. Learns that desire is not evidence.",
@@ -259,26 +353,20 @@ const en: Dict = {
 
   "prin.kicker": "Doctrine",
   "prin.title": "LESS IS MORE",
-  "prin.lead":
-    "Less surface, less noise, less promise. More proof per unit of effort.",
+  "prin.lead": "Less surface, less noise, less promise. More proof per unit of effort.",
   "prin.1.t": "Live state first",
-  "prin.1.d":
-    "Before acting, read what exists now. Old memory is rumor, not state.",
+  "prin.1.d": "Before acting, read what exists now. Old memory is rumor, not state.",
   "prin.2.t": "One Writer per scope",
-  "prin.2.d":
-    "Only one agent writes in each territory. Reading is free, writing is exclusive.",
+  "prin.2.d": "Only one agent writes in each territory. Reading is free, writing is exclusive.",
   "prin.3.t": "UNKNOWN / SKIPPED is not PASS",
   "prin.3.d":
     "Unverified stays unverified. Skipped stays visibly skipped, and the seal does not lock.",
   "prin.4.t": "Meta Lens",
-  "prin.4.d":
-    "The review of the review. Looks at what the first check let through, and why.",
+  "prin.4.d": "The review of the review. Looks at what the first check let through, and why.",
   "prin.5.t": "Adversarial Fable Loop",
-  "prin.5.d":
-    "A hostile narrator builds plausible failure stories about the Meta Lens itself.",
+  "prin.5.d": "A hostile narrator builds plausible failure stories about the Meta Lens itself.",
   "prin.6.t": "Proof-derived lock",
-  "prin.6.d":
-    "The seal is not a mood call: it is an arithmetic consequence of the evidence.",
+  "prin.6.d": "The seal is not a mood call: it is an arithmetic consequence of the evidence.",
 
   "loop.kicker": "Diagram",
   "loop.title": "The loop that locks the seal",
@@ -300,8 +388,7 @@ const en: Dict = {
   "loop.s7.d": "Rebuilds the cause→effect chain against current state.",
   "loop.s8.t": "Lock",
   "loop.s8.d": "Derived from proof. No proof, no lock.",
-  "loop.note":
-    "Any stage can reopen the cycle. An old lock over new state becomes STALE.",
+  "loop.note": "Any stage can reopen the cycle. An old lock over new state becomes STALE.",
 
   "ledger.kicker": "Evidence Ledger",
   "ledger.title": "Seven states, zero ambiguity",
@@ -322,8 +409,7 @@ const en: Dict = {
 
   "multi.kicker": "Multimodality",
   "multi.title": "Same doctrine, any input",
-  "multi.lead":
-    "Text, image, audio, video, code and tabular data enter the same proof ritual.",
+  "multi.lead": "Text, image, audio, video, code and tabular data enter the same proof ritual.",
   "multi.text": "Text",
   "multi.textd": "Specs, logs, diffs and adversarial narratives.",
   "multi.image": "Image",
@@ -358,18 +444,63 @@ const en: Dict = {
   "pack.lead":
     "The same core runs offline on your machine, hosted on the web, or packaged to hand to someone else.",
   "pack.local": "Local-first",
-  "pack.locald":
-    "Runs with no mandatory backend, no key and no external service dependency.",
+  "pack.locald": "Runs with no mandatory backend, no key and no external service dependency.",
   "pack.online": "Online",
   "pack.onlined": "Static publishing, fast load, no mandatory session.",
   "pack.dist": "Distributable",
-  "pack.distd":
-    "Exportable as a closed bundle: doctrine, ledger and seal travel together.",
+  "pack.distd": "Exportable as a closed bundle: doctrine, ledger and seal travel together.",
 
   "prov.title": "Provenance notice",
   "prov.body":
     "This site describes doctrine, method and proof states. It does NOT claim anything about the current state of repositories, branches, commits, CI or any external system. Any such claim stays UNKNOWN until verified against live state, at that moment, with evidence attached.",
   "prov.tag": "External state: UNKNOWN",
+  "prov.anchor.title": "Canonical measurement receipt",
+  "prov.anchor.note":
+    "Read-only measurement recorded at the date below. HISTORY != CURRENT_STATE: this does NOT assert the repository's current state.",
+  "prov.anchor.owners": "Canonical owners declared by the source",
+  "prov.anchor.measured": "Measured at",
+
+  "nav.projecao": "Projection",
+  "proj.kicker": "Read-only convergence",
+  "proj.title": "Projection of the live CentralDark",
+  "proj.lead":
+    "A snapshot of an external read: HEAD, owners, promotion funnel and topology. This screen REPRESENTS measured state — it executes nothing.",
+  "proj.disclaimer":
+    "LOVABLE_IS_PROJECTION_SURFACE=true · EXTERNAL_WRITES=0 · GITHUB_STAYS_OWNER=true · MCP_STAYS_TRANSPORT=true — no infrastructure was created, moved or changed to display this.",
+  "proj.state.PROVADO": "PROVEN",
+  "proj.state.UNKNOWN": "UNKNOWN",
+  "proj.state.BLOQUEADO": "BLOCKED",
+  "proj.state.HISTORICO": "HISTORICAL",
+  "proj.head.title": "HEAD measured at the canonical source",
+  "proj.head.commit": "Commit",
+  "proj.head.author": "Author",
+  "proj.head.sig": "Signature",
+  "proj.owners.title": "Normative owners read",
+  "proj.funnel.title": "Observed promotion funnel",
+  "proj.funnel.tension": "Measured tension",
+  "proj.topo.title": "Topology — who executes what",
+  "proj.topo.inside": "Inside this surface",
+  "proj.topo.outside": "Outside this surface (external system)",
+  "proj.matrix.title": "Fusion matrix receipt",
+  "proj.matrix.note":
+    "UNKNOWN != PASS · DOCUMENTED != EXECUTED · EXISTS != RUNNING · REALITY IS THE JUDGE.",
+  "proj.auto.title": "Automations measured at the source",
+  "proj.auto.total": "Total read",
+  "proj.auto.fired": "Triggered by this screen",
+  "proj.auto.note": "LISTED != RUNNING · SKIPPED != PASS.",
+  "proj.areas.title": "Knowledge areas read",
+  "proj.health.title": "Health split into layers",
+  "proj.health.note":
+    "PROCESS ALIVE != PORT ANSWERING != HTTP 200 != HEALTHY PUBLIC ROUTE. Every layer needs its own proof.",
+  "proj.deploy.title": "Micro-deploy measured before acting",
+  "proj.deploy.scope": "Scope",
+  "proj.deploy.result": "Result",
+  "proj.deploy.mut": "Mutations applied",
+  "proj.deploy.restart": "Restarts triggered",
+  "proj.search.placeholder": "Search this projection...",
+  "proj.search.label": "Search technical projection data",
+  "proj.search.results": "items",
+  "proj.search.empty": "No measured data matches this search.",
 
   "cta.line1": "NO MORE VOLUME.",
   "cta.line2": "DO IT RIGHT WHERE IT HURTS.",
@@ -381,8 +512,7 @@ const en: Dict = {
   "seo.title": "CentralDark",
   "seo.desc":
     "Dark-neon doctrine of adversarial proof: live state first, Meta Lens, Fable Loop, Judge, evidence ledger and a proof-derived lock.",
-  "seo.imageAlt":
-    "Golden wireframe padlock with neon light trails over a black background",
+  "seo.imageAlt": "Golden wireframe padlock with neon light trails over a black background",
 
   "skip.main": "Skip to content",
   "a11y.skip": "Skip to content",
@@ -398,10 +528,76 @@ const en: Dict = {
   "pdf.lang": "Language",
   "pdf.date": "Generated at",
   "pdf.source": "Source",
-  "pdf.hint":
-    "Key sections = evolution, loop, evidence ledger, Castle Seal and provenance notice.",
+  "pdf.hint": "Key sections = evolution, loop, evidence ledger, Castle Seal and provenance notice.",
+  "pet.kicker": "COMPANION",
+  "pet.title": "Hermes — Superior Instinct",
+  "pet.lead":
+    "The administrative guardian has reached Superior Instinct. The three earlier skins remain below as memories of the evolution.",
+  "pet.adm": "ADMINISTRATIVE STATE",
+  "pet.instinto": "Hermes — Superior Instinct",
+  "pet.instintoLead":
+    "The armor, winged helm, cape and staff were preserved. Aura, eyes, orb, sparks and energy circle respond in every frame.",
+  "pet.dezMovimentos": "16 real movements",
+  "pet.setentaOitoQuadros": "256 frames · 60 fps",
+  "pet.luzMedida": "cape, staff and aura in motion",
+  "pet.movimentos": "Superior Instinct movements",
+  "pet.movimentosLead":
+    "Each movement runs with light embedded in the image and verified transparency.",
+  "pet.memoria": "MEMORY OF THE THREE SKINS",
+  "pet.memoriaLead":
+    "Forge, Celestial and Ascension remain available for comparison without replacing the administrative state.",
+  "pet.skins": "Hermes skins",
+  "pet.forja": "Forge",
+  "pet.forjad": "Black bronze, molten gold and orange ember — the origin.",
+  "pet.celestial": "Celestial",
+  "pet.celestiald": "Blue and gold with a silver winged helm — the present.",
+  "pet.ascensao": "Ascension",
+  "pet.ascensaod": "Polished silver and violet with inner glow — the edge.",
+  "pet.float": "Floating Hermes",
+  "pet.hide": "Hide Hermes",
+  "pet.show": "Show Hermes",
+  "pet.pc": "Install on desktop",
+  "pet.folha": "Pose sheet",
+  "pet.folhaLead": "Every pose of the selected skin, with frames counted from the image itself.",
+  "pet.quadros": "frames",
+  "pet.curta": "few frames — motion skips more",
+  "pet.provado": "measured",
+  "pet.pose.idle": "Idle",
+  "pet.pose.running-right": "Running right",
+  "pet.pose.running-left": "Running left",
+  "pet.pose.waving": "Waving",
+  "pet.pose.jumping": "Jumping",
+  "pet.pose.failed": "Failing",
+  "pet.pose.waiting": "Waiting",
+  "pet.pose.sitting": "Sitting",
+  "pet.pose.review": "Reviewing",
+  "pet.movimento.idle": "Idle — living staff and cape",
+  "pet.movimento.running-right": "Running right",
+  "pet.movimento.running-left": "Running left",
+  "pet.movimento.waving": "Waving",
+  "pet.movimento.jumping": "Jumping and landing",
+  "pet.movimento.failed": "Material alert",
+  "pet.movimento.waiting": "Waiting and looking back",
+  "pet.movimento.sitting": "Sitting and returning",
+  "pet.movimento.review": "Reviewing evidence",
+  "pet.movimento.alert": "Alert and ready to act",
+  "pet.movimento.crouching": "Crouching and focused",
+  "pet.movimento.channeling": "Channeling CentralDark",
+  "pet.movimento.back-view": "Facing back while guarding the system",
+  "pet.movimento.dash": "Autonomous dash",
+  "pet.movimento.walking": "Walking",
+  "pet.movimento.autonomous-reveal": "Autonomous reveal",
+  "pet.painel": "LIVE PANEL",
+  "pet.painelTitulo": "Command Hermes",
+  "pet.visual": "Skin",
+  "pet.acao": "Action",
+  "pet.quadro": "Frame",
+  "pet.pausar": "Pause",
+  "pet.reproduzir": "Play",
+  "pet.passear": "Walk across screen",
+  "pet.direcao": "Direction",
+  "pet.velocidade": "Speed",
 };
-
 
 const es: Dict = {
   "nav.evolucao": "Evolución",
@@ -428,8 +624,7 @@ const es: Dict = {
 
   "evo.kicker": "Cronología",
   "evo.title": "Seis capas de madurez",
-  "evo.lead":
-    "Ninguna capa reemplaza a la anterior: se vuelve músculo permanente del sistema.",
+  "evo.lead": "Ninguna capa reemplaza a la anterior: se vuelve músculo permanente del sistema.",
   "evo.1.name": "Idealizador",
   "evo.1.desc":
     "La fase de la intención. Muchas ideas, poco roce con la realidad. Aprende que el deseo no es evidencia.",
@@ -451,26 +646,21 @@ const es: Dict = {
 
   "prin.kicker": "Doctrina",
   "prin.title": "MENOS ES MÁS",
-  "prin.lead":
-    "Menos superficie, menos ruido, menos promesa. Más prueba por unidad de esfuerzo.",
+  "prin.lead": "Menos superficie, menos ruido, menos promesa. Más prueba por unidad de esfuerzo.",
   "prin.1.t": "Estado vivo primero",
-  "prin.1.d":
-    "Antes de actuar, leer lo que existe ahora. La memoria vieja es rumor, no estado.",
+  "prin.1.d": "Antes de actuar, leer lo que existe ahora. La memoria vieja es rumor, no estado.",
   "prin.2.t": "Un Writer por ámbito",
-  "prin.2.d":
-    "Solo un agente escribe en cada territorio. Leer es libre, escribir es exclusivo.",
+  "prin.2.d": "Solo un agente escribe en cada territorio. Leer es libre, escribir es exclusivo.",
   "prin.3.t": "UNKNOWN / SKIPPED no es PASS",
   "prin.3.d":
     "Lo no verificado sigue no verificado. Lo omitido queda visible, y el sello no cierra.",
   "prin.4.t": "Meta Lupa",
-  "prin.4.d":
-    "La revisión de la revisión. Mira lo que dejó pasar el primer control, y por qué.",
+  "prin.4.d": "La revisión de la revisión. Mira lo que dejó pasar el primer control, y por qué.",
   "prin.5.t": "Fable Loop adversarial",
   "prin.5.d":
     "Un narrador hostil construye historias plausibles de fallo sobre la propia Meta Lupa.",
   "prin.6.t": "Cerradura derivada de prueba",
-  "prin.6.d":
-    "El sello no es cuestión de humor: es una consecuencia aritmética de la evidencia.",
+  "prin.6.d": "El sello no es cuestión de humor: es una consecuencia aritmética de la evidencia.",
 
   "loop.kicker": "Diagrama",
   "loop.title": "El loop que cierra el sello",
@@ -550,18 +740,63 @@ const es: Dict = {
   "pack.lead":
     "El mismo núcleo corre offline en tu máquina, alojado en la web o empaquetado para entregar a otra persona.",
   "pack.local": "Local-first",
-  "pack.locald":
-    "Corre sin backend obligatorio, sin clave y sin depender de servicios externos.",
+  "pack.locald": "Corre sin backend obligatorio, sin clave y sin depender de servicios externos.",
   "pack.online": "Online",
   "pack.onlined": "Publicación estática, carga rápida y ninguna sesión obligatoria.",
   "pack.dist": "Distribuible",
-  "pack.distd":
-    "Exportable como paquete cerrado: doctrina, ledger y sello viajan juntos.",
+  "pack.distd": "Exportable como paquete cerrado: doctrina, ledger y sello viajan juntos.",
 
   "prov.title": "Aviso de provenance",
   "prov.body":
     "Este sitio describe doctrina, método y estados de prueba. NO afirma nada sobre el estado actual de repositorios, ramas, commits, CI ni ningún sistema externo. Cualquier afirmación así permanece UNKNOWN hasta ser verificada contra el estado vivo, en ese momento, con evidencia adjunta.",
   "prov.tag": "Estado externo: UNKNOWN",
+  "prov.anchor.title": "Recibo de medición canónica",
+  "prov.anchor.note":
+    "Medición de solo lectura registrada en la fecha indicada. HISTORY != CURRENT_STATE: esto NO afirma el estado actual del repositorio.",
+  "prov.anchor.owners": "Owners canónicos declarados por la fuente",
+  "prov.anchor.measured": "Medido el",
+
+  "nav.projecao": "Proyección",
+  "proj.kicker": "Convergencia de solo lectura",
+  "proj.title": "Proyección de la CentralDark viva",
+  "proj.lead":
+    "Fotografía de una lectura externa: HEAD, owners, embudo de promoción y topología. Esta pantalla REPRESENTA el estado medido — no ejecuta nada.",
+  "proj.disclaimer":
+    "LOVABLE_IS_PROJECTION_SURFACE=true · EXTERNAL_WRITES=0 · GITHUB_SIGUE_OWNER=true · MCP_SIGUE_TRANSPORTE=true — no se creó, movió ni alteró ninguna infraestructura para mostrar esto.",
+  "proj.state.PROVADO": "PROBADO",
+  "proj.state.UNKNOWN": "UNKNOWN",
+  "proj.state.BLOQUEADO": "BLOQUEADO",
+  "proj.state.HISTORICO": "HISTÓRICO",
+  "proj.head.title": "HEAD medida en la fuente canónica",
+  "proj.head.commit": "Commit",
+  "proj.head.author": "Autor",
+  "proj.head.sig": "Firma",
+  "proj.owners.title": "Owners normativos leídos",
+  "proj.funnel.title": "Embudo de promoción observado",
+  "proj.funnel.tension": "Tensión medida",
+  "proj.topo.title": "Topología — quién ejecuta qué",
+  "proj.topo.inside": "Dentro de esta superficie",
+  "proj.topo.outside": "Fuera de esta superficie (sistema externo)",
+  "proj.matrix.title": "Recibo de la matriz de fusión",
+  "proj.matrix.note":
+    "UNKNOWN != PASS · DOCUMENTED != EXECUTED · EXISTS != RUNNING · LA REALIDAD ES EL JUEZ.",
+  "proj.auto.title": "Automatizaciones medidas en la fuente",
+  "proj.auto.total": "Total leído",
+  "proj.auto.fired": "Disparadas por esta pantalla",
+  "proj.auto.note": "LISTED != RUNNING · SKIPPED != PASS.",
+  "proj.areas.title": "Áreas de conocimiento leídas",
+  "proj.health.title": "Salud separada en capas",
+  "proj.health.note":
+    "PROCESO VIVO != PUERTO RESPONDIENDO != HTTP 200 != RUTA PÚBLICA SANA. Cada capa exige su propia prueba.",
+  "proj.deploy.title": "Micro-deploy medido antes de actuar",
+  "proj.deploy.scope": "Alcance",
+  "proj.deploy.result": "Resultado",
+  "proj.deploy.mut": "Mutaciones aplicadas",
+  "proj.deploy.restart": "Reinicios provocados",
+  "proj.search.placeholder": "Buscar en esta proyección...",
+  "proj.search.label": "Buscar datos técnicos de la proyección",
+  "proj.search.results": "elementos",
+  "proj.search.empty": "Ningún dato medido coincide con esta búsqueda.",
 
   "cta.line1": "NO HACE MÁS.",
   "cta.line2": "HACE BIEN DONDE DUELE.",
@@ -573,8 +808,7 @@ const es: Dict = {
   "seo.title": "CentralDark",
   "seo.desc":
     "Doctrina dark-neon de prueba adversarial: estado vivo primero, Meta Lupa, Fable Loop, Judge, evidence ledger y sello derivado de prueba.",
-  "seo.imageAlt":
-    "Candado dorado en wireframe con trazos de luz neón sobre fondo negro",
+  "seo.imageAlt": "Candado dorado en wireframe con trazos de luz neón sobre fondo negro",
 
   "skip.main": "Saltar al contenido",
   "a11y.skip": "Saltar al contenido",
@@ -592,8 +826,75 @@ const es: Dict = {
   "pdf.source": "Origen",
   "pdf.hint":
     "Secciones clave = evolución, loop, evidence ledger, Sello del Castillo y aviso de provenance.",
+  "pet.kicker": "COMPAÑERO",
+  "pet.title": "Hermes — Instinto Superior",
+  "pet.lead":
+    "El guardián administrativo alcanzó el Instinto Superior. Las tres pieles anteriores permanecen abajo como memoria de la evolución.",
+  "pet.adm": "ESTADO ADMINISTRATIVO",
+  "pet.instinto": "Hermes — Instinto Superior",
+  "pet.instintoLead":
+    "La armadura, el yelmo alado, la capa y el bastón fueron preservados. Aura, ojos, orbe, chispas y círculo de energía responden en cada cuadro.",
+  "pet.dezMovimentos": "16 movimientos reales",
+  "pet.setentaOitoQuadros": "256 cuadros · 60 fps",
+  "pet.luzMedida": "capa, bastón y aura en movimiento",
+  "pet.movimentos": "Movimientos del Instinto Superior",
+  "pet.movimentosLead":
+    "Cada movimiento funciona con luz grabada en la imagen y transparencia verificada.",
+  "pet.memoria": "MEMORIA DE LAS TRES PIELES",
+  "pet.memoriaLead":
+    "Forja, Celestial y Ascensión siguen disponibles para comparación sin reemplazar el estado administrativo.",
+  "pet.skins": "Pieles de Hermes",
+  "pet.forja": "Forja",
+  "pet.forjad": "Bronce negro, oro fundido y brasa naranja — el origen.",
+  "pet.celestial": "Celestial",
+  "pet.celestiald": "Azul y dorado con yelmo alado plateado — el presente.",
+  "pet.ascensao": "Ascensión",
+  "pet.ascensaod": "Plata pulida y violeta con brillo interno — el límite.",
+  "pet.float": "Hermes flotante",
+  "pet.hide": "Ocultar a Hermes",
+  "pet.show": "Mostrar a Hermes",
+  "pet.pc": "Instalar en la computadora",
+  "pet.folha": "Hoja de poses",
+  "pet.folhaLead": "Cada pose de la piel elegida, con los cuadros contados desde la imagen.",
+  "pet.quadros": "cuadros",
+  "pet.curta": "pocos cuadros — el movimiento salta más",
+  "pet.provado": "medido",
+  "pet.pose.idle": "Quieto",
+  "pet.pose.running-right": "Corriendo a la derecha",
+  "pet.pose.running-left": "Corriendo a la izquierda",
+  "pet.pose.waving": "Saludando",
+  "pet.pose.jumping": "Saltando",
+  "pet.pose.failed": "Fallando",
+  "pet.pose.waiting": "Esperando",
+  "pet.pose.sitting": "Sentado",
+  "pet.pose.review": "Revisando",
+  "pet.movimento.idle": "Quieto — bastón y capa vivos",
+  "pet.movimento.running-right": "Corriendo a la derecha",
+  "pet.movimento.running-left": "Corriendo a la izquierda",
+  "pet.movimento.waving": "Saludando",
+  "pet.movimento.jumping": "Saltando y aterrizando",
+  "pet.movimento.failed": "Alerta material",
+  "pet.movimento.waiting": "Esperando y mirando atrás",
+  "pet.movimento.sitting": "Sentado y regresando",
+  "pet.movimento.review": "Revisando evidencias",
+  "pet.movimento.alert": "Alerta y listo para actuar",
+  "pet.movimento.crouching": "Agachado y concentrado",
+  "pet.movimento.channeling": "Canalizando CentralDark",
+  "pet.movimento.back-view": "De espaldas protegiendo el sistema",
+  "pet.movimento.dash": "Impulso autónomo",
+  "pet.movimento.walking": "Caminando",
+  "pet.movimento.autonomous-reveal": "Revelación autónoma",
+  "pet.painel": "PANEL EN VIVO",
+  "pet.painelTitulo": "Controla a Hermes",
+  "pet.visual": "Piel",
+  "pet.acao": "Acción",
+  "pet.quadro": "Cuadro",
+  "pet.pausar": "Pausar",
+  "pet.reproduzir": "Reproducir",
+  "pet.passear": "Caminar por la pantalla",
+  "pet.direcao": "Dirección",
+  "pet.velocidade": "Velocidad",
 };
-
 
 const DICTS: Record<Lang, Dict> = { "pt-BR": pt, "en-US": en, "es-ES": es };
 
@@ -612,9 +913,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   // (?lang= na URL tem prioridade, pois é o link compartilhável por idioma)
   useEffect(() => {
     try {
-      const daUrl = new URLSearchParams(window.location.search).get(
-        "lang",
-      ) as Lang | null;
+      const daUrl = new URLSearchParams(window.location.search).get("lang") as Lang | null;
       if (daUrl && daUrl in DICTS) {
         setLang(daUrl);
         return;
@@ -625,7 +924,6 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       /* armazenamento indisponível: mantém pt-BR */
     }
   }, []);
-
 
   useEffect(() => {
     try {
@@ -651,8 +949,18 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
 
+// Valor de reserva: se por algum motivo o contexto não estiver disponível
+// (recarga parcial durante o desenvolvimento), a página continua de pé em pt-BR
+// em vez de ficar em branco.
+const RESERVA: I18nValue = {
+  lang: "pt-BR",
+  setLang: () => {},
+  t: (key: string) => {
+    const v = DICTS["pt-BR"][key] ?? key;
+    return Array.isArray(v) ? v.join(" ") : v;
+  },
+};
+
 export function useI18n(): I18nValue {
-  const ctx = useContext(I18nContext);
-  if (!ctx) throw new Error("useI18n precisa estar dentro de I18nProvider");
-  return ctx;
+  return useContext(I18nContext) ?? RESERVA;
 }
