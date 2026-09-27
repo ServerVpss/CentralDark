@@ -27,6 +27,7 @@ import tempfile
 import unicodedata
 from pathlib import Path
 
+from centraldark_master_cycle import normalize as normalize_master_text
 from centraldark_master_cycle import resolve as resolve_master_cycle
 
 FABRIC = Path("docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC")
@@ -87,11 +88,17 @@ def explicit_command_context(value: str) -> bool:
     first = s.splitlines()[0].strip()
     first_token = first.split()[0] if first.split() else ""
     normalized = normalize_command(first_token)
-    if normalized in {"CENTRALDARK", "CDARK"}:
+    normalized_tokens = [normalize_command(token) for token in normalize_master_text(value).split()]
+    has_master_wake = (
+        "CENTRALDARK" in normalized_tokens
+        or "CDARK" in normalized_tokens
+        or any(normalized_tokens[i:i + 2] == ["CENTRAL", "DARK"] for i in range(len(normalized_tokens) - 1))
+    )
+    if has_master_wake:
         receipt = resolve_master_cycle(value, chefe_source=True, input_mode="text")
         return bool(receipt.get("master_cycle_active"))
     known = {
-        "CENTRALDARK", "CDARK", "ACORDAR", "ACORDA", "CALIBRAR", "MULTIBUSSOLA",
+        "ACORDAR", "ACORDA", "CALIBRAR", "MULTIBUSSOLA",
         "METALUPA", "RECONCILIAR", "DELTAUTIL", "DELTAUTILS", "CONTRAPROVA",
         "REMEDICAO", "FIXEDPOINT", "REGISTRA", "RASTRO", "BOOT",
     }
