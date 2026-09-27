@@ -543,6 +543,20 @@ check('.github/workflows/porta-de-entrada.yml',[
  'GITHUB_HOSTED_RUNNER_ALLOWED=0','SELF_HEALING_CONTRACT_REQUIRED=1'
 ])
 check('.github/workflows/autonomia-promocao.yml',['Juiz determinístico','github-pr-confirmado-label.mjs'])
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UPDATE-BRANCH-RUNNER-LOCK.yml',[
+ 'UPDATE_BRANCH_RUNNER_LOCK: GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN',
+ 'required_runner: ubuntu-latest',
+ 'SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE: true',
+ 'HYBRID_MODE_PENDING_VPS_PROOF: true',
+ 'CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE: true',
+], classification='UPDATE_BRANCH_RUNNER_LOCK_CONTRACT')
+check('.github/workflows/pr-update-branch-deterministic.yml',[
+ 'runs-on: ubuntu-latest',
+ 'UPDATE_BRANCH_RUNNER_LOCK=GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN',
+ 'SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE=true',
+ 'HYBRID_MODE_PENDING_VPS_PROOF=true',
+ 'CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE=true',
+], classification='UPDATE_BRANCH_RUNNER_LOCK_ENFORCED')
 check('.github/workflows/trigger-fabric-package.yml',['Trigger Fabric Full Package','Fresh-extraction counterproof'])
 check('docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md',['👑 PERMITO-SEGREDO','✅ PR CONFIRMADO','Label roteia trabalho; **nunca concede autoridade humana**.'])
 check('docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md',[
@@ -567,6 +581,9 @@ forbidden_runner_labels=('ubuntu-latest','windows-latest','macos-latest')
 # vps-reboot-forensic precisa de saída pra API Contabo/Cloudflare. Autorizado
 # por PERMITO-SEGREDO no cabeçalho de cada arquivo. Isentar, não remover.
 runner_policy_exempt=frozenset({
+    # Fluxo de COSTURA provado: precisa GitHub-hosted enquanto self-hosted/VPS estiver offline.
+    # Cadeado formal: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UPDATE-BRANCH-RUNNER-LOCK.yml
+    '.github/workflows/pr-update-branch-deterministic.yml',
     '.github/workflows/vps-reboot-forensic.yml',
     '.github/workflows/vps-wake-hosted-ssh.yml',
 })
