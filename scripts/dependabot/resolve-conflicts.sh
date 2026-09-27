@@ -20,6 +20,7 @@ WORKTREE_ROOT="${CENTRALDARK_DEPENDABOT_WORKTREES:-${TMPDIR:-/tmp}/centraldark-d
 WORKTREE="${WORKTREE_ROOT}/pr-${PR_NUM}-$$"
 SEMANTIC_ALL_HELPER="${SEMANTIC_ALL_HELPER:-scripts/dependabot/semantic-all-resolver.mjs}"
 CLASSIFIER="${CONFLICT_CLASSIFIER:-scripts/dependabot/classify-conflict.mjs}"
+STRUCTURED_HELPER="${STRUCTURED_CONFLICT_HELPER:-scripts/dependabot/structured-conflict-resolver.mjs}"
 
 if [ -z "$PR_HEAD_REF" ]; then
   echo "BLOCKED_MISSING_PR_HEAD_REF"
@@ -109,10 +110,16 @@ if [ ! -f "$CLASSIFIER" ]; then
   git merge --abort 2>/dev/null || true
   exit 6
 fi
+if [ ! -f "$STRUCTURED_HELPER" ]; then
+  echo "BLOCKED_STRUCTURED_HELPER_MISSING=$STRUCTURED_HELPER"
+  git merge --abort 2>/dev/null || true
+  exit 6
+fi
 
 CURRENT_COUNT=0
 INCOMING_COUNT=0
 BOTH_COUNT=0
+STRUCTURED_COUNT=0
 YELLOW_COUNT=0
 
 for f in "${CONFLICTS[@]}"; do
@@ -120,7 +127,9 @@ for f in "${CONFLICTS[@]}"; do
   ACTION="$(node -e "const x=JSON.parse(process.argv[1]); process.stdout.write(x.action)" "$DECISION_JSON")"
   REASON="$(node -e "const x=JSON.parse(process.argv[1]); process.stdout.write(x.reason)" "$DECISION_JSON")"
   CONFLICT_ID="$(node -e "const x=JSON.parse(process.argv[1]); process.stdout.write(x.conflict_id)" "$DECISION_JSON")"
-  echo "CONFLICT_DECISION path=$f action=$ACTION reason=$REASON conflict_id=$CONFLICT_ID"
+  STRUCTURED_STRATEGY="$(node -e "const x=JSON.parse(process.argv[1]); process.stdout.write(x.structured_strategy||'')" "$DECISION_JSON")"
+  SEMANTIC_KEY="$(node -e "const x=JSON.parse(process.argv[1]); process.stdout.write(x.semantic_key||'')" "$DECISION_JSON")"
+  echo "CONFLICT_DECISION path=$f action=$ACTION reason=$REASON conflict_id=$CONFLICT_ID strategy=$STRUCTURED_STRATEGY key=$SEMANTIC_KEY"
 
   case "$ACTION" in
     CURRENT)
@@ -134,6 +143,10 @@ for f in "${CONFLICTS[@]}"; do
     BOTH)
       node "$SEMANTIC_ALL_HELPER" "$f"
       BOTH_COUNT=$((BOTH_COUNT + 1))
+      ;;
+    STRUCTURED)
+      node "$STRUCTURED_HELPER" "$f" "$STRUCTURED_STRATEGY" "$SEMANTIC_KEY"
+      STRUCTURED_COUNT=$((STRUCTURED_COUNT + 1))
       ;;
     YELLOW)
       echo "🟡 CONFLICT_NEEDS_DISCRIMINANT path=$f reason=$REASON"
@@ -155,6 +168,7 @@ echo "AUTO_REVIEW_CONFLICTS=${#CONFLICTS[@]}"
 echo "BUTTON_CURRENT_COUNT=$CURRENT_COUNT"
 echo "BUTTON_INCOMING_COUNT=$INCOMING_COUNT"
 echo "BUTTON_BOTH_COUNT=$BOTH_COUNT"
+echo "BUTTON_STRUCTURED_COUNT=$STRUCTURED_COUNT"
 echo "BUTTON_YELLOW_COUNT=$YELLOW_COUNT"
 
 if [ "$YELLOW_COUNT" -gt 0 ]; then
