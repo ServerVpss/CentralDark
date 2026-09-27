@@ -11,6 +11,16 @@ source_class: INTERNAL
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
 owner: AGENTS.md
 consumer: Claude Code / engines Claude
+session_crystal: "CHAT_HOUSE_COSTURA"
+session_memory: "docs/CONSCIENCIA/APRENDIZADOS.md#62-chat--casa--costura-viva-execução-conversacional-sensor-de-evento-e-identidade-por-evidência"
+executor_trigger: "!EXECUTOR_CENTRALDARK"
+executor_owner: "docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md"
+costura_owner: ".agents/skills/git-conflict-resolve-house-standard/SKILL.md"
+dependabot_autonomy_owner: ".github/workflows/dependabot-auto-merge.yml"
+semantic_formula: "CHEFE_FALA -> INTENCAO -> FERRAMENTA_AUTORIZADA -> ACAO -> READBACK -> MAIN_ADVANCE -> COSTURA -> PR_HEAD_CURRENT -> SAME_HEAD_PROOF -> NOVO_EVENTO_REENTRA"
+tik_tak_formula: "MAIN_CURRENT -> UPDATE_BRANCH -> PR_HEAD_CURRENT -> SYNCHRONIZE -> REMEASURE -> CHECKS_CURRENT_HEAD -> REENTER_ON_NEW_MAIN"
+gmail_notification_truth_scope: "NOTIFICATION_CONTENT_ONLY"
+ui_identity_rule: "UI_PATTERN != PRODUCT_IDENTITY"
 ---
 
 # CLAUDE.md — ponte para o contrato canônico
@@ -547,4 +557,34 @@ SAME_ACT_DIFFERENT_MOTIVE_DISTINGUISH_BEFORE_JUDGING=true
 ANSWER_ASKED_INTENT_NOT_ADJACENT_DEBATE=true
 CLAUDE_OWN_ERROR → SHA_DO_ERRO + SHA_DO_CONSERTO + REGRA + RECIBO_1562
 ```
+
+
+
+## 🪬 Cristal semântico da sessão — Chat → Casa → COSTURA
+
+Claude Code herda o mesmo cristal do core; não cria versão paralela.
+
+```text
+EXECUTOR_TRIGGER=!EXECUTOR_CENTRALDARK
+EXECUTOR_REQUIRES_AUTHORIZED_HOUSE_TOOL=true
+COSTURA_NAME_ONLY=true
+NO_VERSIONED_COSTURA=true
+EVENT_DRIVEN_NEAR_REAL_TIME=true
+STRICT_ZERO_LATENCY_REAL_TIME=false
+CURRENT_MAIN_REMEASURE_EACH_CYCLE=true
+CURRENT_PR_HEAD_REMEASURE_EACH_CYCLE=true
+NO_STALE_GREEN=true
+GMAIL_NOTIFICATION_RECEIVED=PROVABLE_EVENT
+GMAIL_NOTIFICATION!=GLOBAL_GITHUB_STATE
+UI_PATTERN!=PRODUCT_IDENTITY
+WHOLE_SURFACE_EVIDENCE_REQUIRED=true
+DEPENDABOT_WORKFLOW_AUTO_APPROVAL_SCOPE=dependabot[bot]+same_repo+base_main+exact_current_head+action_required
+WORKFLOW_RUN_APPROVAL!=PR_REVIEW_APPROVAL
+DEPENDABOT_AUTO_APPROVAL_ROLLBACK_BASE=d5137a91518aa52a0c39072b7afb7e495108f01d
+DEPENDABOT_AUTO_APPROVAL_CHANGE=afad4177a76659afec503af610dbec6c813b6c37
+```
+
+Fórmula herdada:
+
+`CHEFE FALA → intenção → ferramenta autorizada → ação → readback → main avança → COSTURA → HEAD CURRENT → prova same-head → evento novo reentra no TIK-TAK`.
 
