@@ -569,6 +569,40 @@ if branch_exempted or sha_exempted:
             c['exempted'] = True
             c['exemption_reason'] = f'branch_exempt:{current_branch}' if branch_exempted else f'sha_exempt:{current_sha}'
 
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
+ 'marker: PROVEN_CRYSTAL_MAIN_FAST_PATH',
+ 'same_fingerprint: PASSAGE_OPEN',
+ 'reproof_policy: AFFECTED_CONE_ONLY',
+ 'full_ci_reproof_for_unchanged_proven_crystal: false',
+ 'direct_main_allowed_when_authorized: true',
+ 'rule: PROVEN_CRYSTAL_REPLAY_BEFORE_REDISCOVERY',
+ 'docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml',
+ '.agents/skills/centraldark-unified-surface-parity/SKILL.md',
+], classification='PROVEN_CRYSTAL_MAIN_FAST_PATH_CONTRACT')
+
+check('CENTRALDARK_AI_BOOT.yaml',[
+ 'unified_surface_parity_contract: LOADED',
+ 'proven_crystal_registra: "PASSAGE_OPEN_TO_MAIN_WITH_AFFECTED_CONE_ONLY"',
+ 'unchanged_proven_crystal_full_ci_reproof: false',
+ 'centraldark_invocation_semantics:',
+ 'same_semantics_across_text_voice_work_desktop: true',
+], classification='CENTRALDARK_BOOT_PROVEN_CRYSTAL_BINDING')
+
+check('LEIA-ME-IA.md',[
+ 'CENTRALDARK_UNIFIED_SURFACE_PARITY_REQUIRED=true',
+ 'PROVEN_CRYSTAL_DIRECT_MAIN_FAST_PATH=true',
+ 'PROVEN_CRYSTAL_FULL_CI_REPROOF=false',
+ 'PROVEN_CRYSTAL_REVALIDATE=AFFECTED_CONE_ONLY',
+], classification='CENTRALDARK_CORE_PROVEN_CRYSTAL_BINDING')
+
+check('AGENTS.md',[
+ 'PROVEN_CRYSTAL_DIRECT_MAIN_FAST_PATH=true',
+ 'PROVEN_CRYSTAL_FULL_CI_REPROOF=false',
+ 'PROVEN_CRYSTAL_SAME_FINGERPRINT=PASSAGE_OPEN',
+ 'PROVEN_CRYSTAL_DIVERGENCE=REOPEN_AFFECTED_CONE_ONLY',
+ 'CENTRALDARK_UNIFIED_SURFACE_PARITY_OWNER=docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml',
+], classification='AGENT_PROVEN_CRYSTAL_FAST_PATH_BINDING')
+
 failed=[c for c in checks if not c['ok'] and not c.get('exempted', False)]
 print(json.dumps({'checks':checks,'failed':len(failed),'runner_violations':runner_violations},ensure_ascii=False,indent=2))
 if failed:
