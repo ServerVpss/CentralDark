@@ -9,7 +9,21 @@ export const Route = createFileRoute("/auth/callback")({
   ssr: false,
   component: AuthCallback,
   head: () => ({
-    meta: [{ title: "Concluindo acesso — CentralDark" }, { name: "robots", content: "noindex" }],
+    meta: [
+      { title: "Concluindo acesso — CentralDark" },
+      {
+        name: "description",
+        content: "Conclusão segura do acesso Google à Sala de Controle CentralDark.",
+      },
+      { property: "og:title", content: "Concluindo acesso — CentralDark" },
+      {
+        property: "og:description",
+        content: "Conclusão segura do acesso Google à Sala de Controle CentralDark.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "robots", content: "noindex" },
+    ],
   }),
 });
 
@@ -22,7 +36,12 @@ function AuthCallback() {
 
     async function concluir() {
       const parametros = new URLSearchParams(window.location.search);
-      const erroOAuth = parametros.get("error_description") ?? parametros.get("error");
+      const fragmento = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+      const erroOAuth =
+        parametros.get("error_description") ??
+        parametros.get("error") ??
+        fragmento.get("error_description") ??
+        fragmento.get("error");
       if (erroOAuth) {
         if (ativo) setErro("O provedor não concluiu o acesso.");
         return;
@@ -35,10 +54,11 @@ function AuthCallback() {
           if (ativo) setErro("O retorno do acesso expirou ou já foi utilizado.");
           return;
         }
+        window.history.replaceState({}, document.title, window.location.pathname);
       }
 
-      const { data, error } = await supabase.auth.getSession();
-      if (error || !data.session) {
+      const { data, error } = await supabase.auth.getUser();
+      if (error || !data.user) {
         if (ativo) setErro("Nenhuma sessão válida foi recebida.");
         return;
       }
@@ -71,7 +91,7 @@ function AuthCallback() {
             <Loader2 className="mx-auto size-8 animate-spin text-gold" />
             <h1 className="mt-4 text-2xl font-semibold">Concluindo acesso</h1>
             <p className="mt-3 text-sm text-muted-foreground">
-              Validando a sessão no Supabase e abrindo a sala de controle.
+              Validando sua sessão e abrindo a sala de controle.
             </p>
           </>
         )}
