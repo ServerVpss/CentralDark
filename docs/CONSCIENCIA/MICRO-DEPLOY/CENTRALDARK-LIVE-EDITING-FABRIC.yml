@@ -1,0 +1,73 @@
+schema: centraldark.live-editing-fabric.v1
+status: CANONICAL_DEFAULT_WORK_MODE
+authority: SEGREDO/CHEFE
+owner: docs/CONSCIENCIA/MICRO-DEPLOY/
+mode: CENTRALDARK_LIVE_EDITING_FABRIC
+purpose: >-
+  Fazer da edição viva determinística o padrão operacional da CentralDark:
+  editar, publicar no runtime, medir, refinar, comprimir e repetir até ponto fixo.
+
+default_loop:
+  - CHEFE_EDITA
+  - MAIN_OU_DELTA_RASTREAVEL
+  - SINGLE_REUSABLE_WORKTREE
+  - OWNER_EXATO
+  - TESTE_MINIMO_APLICAVEL
+  - MICRODEPLOY_CAUSAL
+  - RUNTIME_VIVO
+  - PROVA_DO_EFEITO
+  - RECEIPT
+  - REFINA
+  - COMPRIME
+  - PONTO_FIXO
+
+ci_policy:
+  MVP_FAST_LOOP_IS_DEFAULT: true
+  CI_DEEP_LOOP_IS_PRESS_MODE: true
+  CI_DEEP_LOOP_REQUIRES_CHEFE_INTENT: true
+  DEPLOY_CANONICO_IS_GUARD_NOT_DEFAULT_BRAKE: true
+
+scratch_worktree:
+  canonical_path: /root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+  single_reusable: true
+  disposable: true
+  lock_required: true
+  reset_before_use: true
+  reset_after_use: true
+  dirty_handoff_forbidden: true
+  runtime_is_not_scratch: true
+  casa_is_not_scratch: true
+
+secret_transit:
+  ephemeral_as_transit: true
+  use_only_for_requested_owner: true
+  no_secret_echo: true
+  no_secret_commit: true
+  no_secret_receipt_value: true
+  no_secret_memory: true
+  no_secret_log_value: true
+  scrub_controlled_logs_after_use: true
+  rotate_or_discard_after_use: true
+
+locks:
+  UNKNOWN_IS_NOT_PASS: true
+  ACTION_IS_NOT_PROOF: true
+  MERGED_IS_NOT_DEPLOYED: true
+  DOCUMENTED_IS_NOT_EXECUTED: true
+  RUNTIME_EFFECT_REQUIRED_FOR_RUNTIME_CLAIM: true
+  GROSS_DELTA_ALLOWED_IN_FAST_LOOP: true
+  GROSS_DELTA_MUST_BE_TRACKED_AND_REFINED: true
+  NO_PARALLEL_ARCHITECTURE: true
+  NO_UNRELATED_RESTART: true
+  REPLAY_BEFORE_REDISCOVERY: true
+
+receipt_minimum_fields:
+  - START_HEAD
+  - SOURCE_SHA_OR_DELTA_REF
+  - OWNER
+  - FILESET_CAUSAL
+  - TESTS
+  - RUNTIME_EFFECT
+  - SECRET_EXPOSED=false
+  - RESULT
+  - NEXT_CURSOR

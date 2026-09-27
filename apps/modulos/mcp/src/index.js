@@ -15,7 +15,7 @@ import { healthDeep } from "./health-deep.js";
 import { getOperationalSnapshot } from "./operational-telemetry.js";
 import { startHubMissionConsumer, getHubMissionConsumerStatus } from "./hub-mission-consumer.js";
 import { providerAdminBridge } from "./provider-admin-bridge.js";
-import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, getSseDiagnostics, } from "./admin.js";
+import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, getSseDiagnostics, } from "./admin.js";
 import { getLinearPublicStatus } from "./tools/integrations.js";
 import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
@@ -212,6 +212,7 @@ app.get("/admin/api/logs", adminBuscarLogs);
 app.get("/admin/api/metricas", adminMetricas);
 app.get("/admin/api/operational-snapshot", adminOperationalSnapshot);
 app.get("/admin/api/linear", adminLinear);
+app.get("/admin/api/tailscale", adminTailscale);
 app.post("/admin/api/e2e", adminE2E);
 app.get("/admin/api/e2e/publico", adminE2EPublico);
 app.get("/admin/logs/stream", adminLogsStream);
@@ -377,6 +378,10 @@ app.get("/.well-known/oauth-protected-resource/mcp", getProtectedResourceMetadat
 app.get("/mcp/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-protected-resource/admin", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-protected-resource/admin/mcp", getProtectedResourceMetadata);
+// Compatibilidade fail-safe para clientes que invertem a rota admin.
+// O metadata devolve o resource canônico /admin/mcp; não nasce segundo MCP.
+app.get("/.well-known/oauth-protected-resource/mcp/admin", getProtectedResourceMetadata);
+app.get("/mcp/admin/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-authorization-server", getAuthorizationServerMetadata);
 app.get("/.well-known/oauth-authorization-server/mcp", getAuthorizationServerMetadata);
 app.get("/mcp/.well-known/oauth-authorization-server", getAuthorizationServerMetadata);
@@ -612,41 +617,39 @@ app.post("/admin/mcp", (req, res) => {
 app.get("/admin/mcp", (req, res) => {
     unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente.");
 });
-
-// ───────── Tailscale Network Flow Logs — mesmo owner MCP/provider ─────────
-// API publica deve chegar aqui com Bearer admin. O alias /tailscaale existe
-// apenas para compatibilidade com a rota pedida pelo CHEFE; ambos usam o mesmo handler.
-async function tailscaleLogsHttp(req, res) {
+// Alias de compatibilidade: /mcp/admin converge para o MESMO handler /admin/mcp.
+// Mantemos o método e o corpo (sem redirect HTTP) porque clientes MCP/OAuth podem
+// não preservar POST/Authorization em redirects. O resource canônico continua /admin/mcp.
+app.post("/mcp/admin", (req, res) => {
+    const l = withCid(req.cid);
     const auth = requireAdminScope(req, res);
     if (!auth) return;
-    const minutes = Math.max(1, Math.min(1440, Number(req.query.minutes || 15)));
-    const end = req.query.end ? String(req.query.end) : new Date().toISOString();
-    const endDate = new Date(end);
-    if (!Number.isFinite(endDate.getTime())) {
-        res.status(400).json({ ok: false, status: "TAILSCALE_LOG_WINDOW_INVALID" });
-        return;
-    }
-    const start = req.query.start
-        ? String(req.query.start)
-        : new Date(endDate.getTime() - minutes * 60_000).toISOString();
-    try {
-        const result = await readTailscaleNetworkLogs({
-            start,
-            end: endDate.toISOString(),
-            tailnet: String(req.query.tailnet || "-"),
-            limit: Math.max(1, Math.min(500, Number(req.query.limit || 200))),
-        });
-        res.json(result);
-    }
-    catch (error) {
-        log.warn("tailscale_network_logs_http_failed", { cid: req.cid, error: String(error?.message || error) });
-        res.status(502).json({ ok: false, status: String(error?.message || "TAILSCALE_LOGS_FAILED").slice(0, 160) });
-    }
-}
-app.get("/tailscale", tailscaleLogsHttp);
-app.get("/tailscale/logs", tailscaleLogsHttp);
-app.get("/tailscaale", tailscaleLogsHttp);
-app.get("/tailscaale/logs", tailscaleLogsHttp);
+    l.info("mcp_admin_compat_request_authorized", {
+        method: req.body?.method || "unknown",
+        actor: auth.callerUser,
+        canonicalPath: "/admin/mcp",
+        requestedPath: "/mcp/admin",
+    });
+    handleMcpRequest(req, res, auth.token, {
+        cid: req.cid,
+        admin: true,
+        callerUser: auth.callerUser,
+        oauthScope: auth.oauthScope,
+    }).catch((err) => {
+        l.error("mcp_admin_compat_handler_unhandled", { error: String(err) });
+        if (!res.headersSent) {
+            res.status(500).json({
+                jsonrpc: "2.0",
+                error: { code: -32603, message: "Erro interno do servidor MCP admin", data: { cid: req.cid } },
+                id: null,
+                cid: req.cid,
+            });
+        }
+    });
+});
+app.get("/mcp/admin", (req, res) => {
+    unauthorizedAdmin(req, res, "Rota compatível; resource canônico: /admin/mcp.");
+});
 // /mcp-public removido em 30/06/2026 — expunha vps_write_file_safe sem Bearer
 // (pendência #8). Toda chamada ao MCP agora exige OAuth via /mcp.
 // ─────────────────────── Telemetria VPS (vps-reporter) ───────────────────────

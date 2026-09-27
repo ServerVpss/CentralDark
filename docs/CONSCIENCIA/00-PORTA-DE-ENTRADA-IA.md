@@ -49,13 +49,16 @@ RETOMAR MISSAO
 !MULTIBUSSOLA
 !MULTI-BUSSOLA
 !MULTIBÚSSOLA
+!RASTRO
 ```
 
 `#ACORDAR` significa **recuperar o estado real antes de continuar**. Não significa pedir ao humano para repetir o contexto.
 
 `!CALIBRAR` significa alinhar interpretação, papel, escopo, tools e prova ao estado recuperado.
 
-`!MULTIBUSSOLA` significa aplicar a matriz multidirecional e multirreferencial oficial da Casa, com remedição temporal e revisão revisitada antes do fechamento. O owner canônico do comando é `docs/CONSCIENCIA/MULTIBUSSOLA.md`. O comando reutiliza a Metacognição Operacional e a MetaLupa; não cria novo cérebro, agente ou orquestrador.
+`!MULTIBUSSOLA` significa aplicar a matriz multidirecional e multirreferencial oficial da Casa, com remedição temporal e revisão revisitada antes do fechamento.
+
+`🔏 !RASTRO` significa fechar qualquer alegação material com prova reconstruível: `COMMIT_SHA + PATH + LINK + READBACK`; alegação de memória deve nomear onde foi gravada. Sem isso, a resposta é inválida. O owner canônico do comando é `docs/CONSCIENCIA/MULTIBUSSOLA.md`. O comando reutiliza a Metacognição Operacional e a MetaLupa; não cria novo cérebro, agente ou orquestrador.
 
 ```text
 #ACORDAR + !CALIBRAR + !MULTIBUSSOLA
@@ -495,3 +498,20 @@ Entrar no repo = reconstruir contexto, carregar provas ainda válidas e medir so
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral + provas reutilizáveis
 - [[CONSCIENCIA]] — documento mestre
+
+
+## Receita provada no boot
+
+Ao entrar numa missão, antes de reabrir uma investigação, procurar receita/receipt ainda válido no `MAPA-DO-CEREBRO.md`.
+
+```text
+RECIPE_VALID
+→ LOAD
+→ ADAPT_ENV_BINDINGS_ONLY
+→ EXECUTE
+→ REPROVE_EQUIVALENCE
+→ MATCH = CONTINUE_NEXT_CURSOR
+→ DIVERGED = OPEN_ONLY_NEW_DELTA
+```
+
+Não repetir prova já válida; não criar commit artificial quando não existe mudança durável.

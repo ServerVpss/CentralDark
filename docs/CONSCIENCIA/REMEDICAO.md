@@ -121,9 +121,14 @@ REGISTRA_REQUIRED_FOR_ALL_CENTRALDARK_AGENTS_AND_SURFACES=true
 NO_MATERIAL_DELTA_NO_COMMIT_REQUIRED=true
 COMMIT_PER_MESSAGE=false
 
-PROMOTION_MODE=DIRECT_MAIN_SOFT_EVOLUTION
+PROMOTION_MODE=DIRECT_MAIN_SOFT_EVOLUTION_WITH_EXISTING_CHILD_TRACE
 NEW_PR_DEFAULT=false
 EXISTING_OPEN_PRS_REMAIN_VALID=true
+EXISTING_COMPATIBLE_CHILD_PR_IS_MANDATORY_LANE=true
+CHILD_MATCH_KEY=OWNER+SCOPE+CAPABILITY
+DIRECT_MAIN_FORBIDDEN_WHEN_COMPATIBLE_CHILD_IS_HEALTHY=true
+STALE_OR_CONFLICTING_CHILD_REQUIRES_RECEIPT_BEFORE_BYPASS=true
+MAIN_READBACK_MUST_RETURN_TO_CHILD_AND_PR_MOTHER=true
 PR_MOTHER=#1562
 PR_MOTHER_ROLE=HISTORY_HANDOFF_LEDGER
 PR_MOTHER_MERGE_FORBIDDEN=true
@@ -140,8 +145,10 @@ FULL_CI_REQUIRED_FOR_SIMPLE_LOW_RISK_MCP_DELTA=false
 SIMPLE_MCP_REQUIRES_CAUSAL_DEPLOY_WHEN_RUNTIME_AFFECTED=true
 SIMPLE_MCP_REQUIRES_T1_REMEASURE=true
 
-PR_PATH_REMAINS_OPTIONAL_FOR_EXISTING_OR_EXPLICIT_SCOPE=true
+PR_PATH_REMAINS_OPTIONAL_ONLY_WHEN_NO_COMPATIBLE_CHILD_EXISTS=true
+EXISTING_COMPATIBLE_CHILD_IS_NOT_OPTIONAL=true
 PR_AUTOMATION_MUST_NOT_BYPASS_ITS_OWN_BRANCH_BOUNDARY=true
+CHILD_STALE_IS_TRACE_REQUIRED_NOT_SILENT_IGNORE=true
 ONE_WRITER_PER_SCOPE=true
 REUSE_BEFORE_CREATE=true
 UNKNOWN_IS_NOT_PASS=true
@@ -152,7 +159,7 @@ NEXT_CURSOR_REQUIRED=true
 
 ### 5.1. Exceção operacional atual — main direta suave
 
-A política CURRENT da Casa é `DIRECT_MAIN_SOFT_EVOLUTION`. Ela não apaga o histórico nem transforma o PR-mãe em Writer. O #1562 continua sendo o ledger/handoff permanente; a escrita material normal pode ir direto à `main` quando o SEGREDO/CHEFE concede a caneta e o escopo está reconciliado.
+A política CURRENT da Casa é DIRECT_MAIN_SOFT_EVOLUTION_WITH_EXISTING_CHILD_TRACE. Antes de qualquer escrita material, procurar PR-filho compatível por OWNER+SCOPE+CAPABILITY. Filho saudável é lane obrigatória. Filho stale/conflicting recebe receipt antes de bypass permitido. Sem filho compatível, direct-main segue disponível conforme autoridade e risco.
 
 Para delta MCP simples e de baixo risco, CI pesado não é pré-condição. A exigência é menor e causal: remedir a `main`, reutilizar owner existente, aplicar delta mínimo, executar segurança mínima aplicável, ler de volta a `main`, fazer deploy causal quando houver runtime afetado, remedir T1 e registrar receipt no #1562.
 
@@ -178,7 +185,7 @@ SIMPLE_LOW_RISK_MCP_DELTA
 
 O caminho suave **não** reclassifica como "simples" mudanças de autenticação, segredos, permissões, política de segurança, migração destrutiva, schema persistente, proteção de branch, workflow privilegiado ou qualquer delta cujo blast radius esteja UNKNOWN. Esses casos continuam exigindo o caminho de prova proporcional ao risco.
 
-PR já aberto continua válido para o trabalho que nasceu nele. Dentro de automação/escopo explicitamente PR-bound, o Writer permanece na branch do PR; `DIRECT_MAIN_SOFT_EVOLUTION` não autoriza um bot de PR a saltar sua própria fronteira silenciosamente.
+PR já aberto e compatível por OWNER+SCOPE+CAPABILITY é lane obrigatória enquanto saudável. Se stale/conflicting, registrar CHILD_LANE_STALE_BLOCKED antes de bypass autorizado. Nenhuma rota pode apagar o rastro do filho.
 
 `!REGISTRA` grava fato reconstruível — intenção, escopo, owner, HEAD/estado, delta, evidência, contraprova, status e próximo cursor. Não grava raciocínio privado nem segredos.
 

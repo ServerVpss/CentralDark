@@ -4,60 +4,125 @@ owner: apps/bot-telegram/
 authority: SEGREDO/CHEFE
 runtime_consumer: apps/bot-telegram/unified-bot.cjs
 status: CANONICAL_BINDING
-
 mandatory_rules:
-  hud_rudy_hibrido_obrigatorio:
+  executor_centraldark_house_mode:
     required: true
-    activation:
-      - BOT_ENTRY_IN_CENTRALDARK
-      - CENTRALDARK_MCP_CONNECTED
-      - REPO_CONTEXT_SERVERVPSS_CENTRALDARK
-    rule: MCP_OR_REPO_IS_SUFFICIENT
-    fixed_card_ids: H01..H16
-    first_operational_response_must_render_hud: true
-    remeasure_current_before_render: true
-    only_mutable_fields:
-      - STATUS
-      - EVIDENCE
-      - PERCENT
+    trigger: "!EXECUTOR_CENTRALDARK"
+    owner: docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md
+    trigger_registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+    mode: HOUSE_EXECUTOR_CONVERSATIONAL_MODE
+    recognize_on:
+    - CHATGPT
+    - TELEGRAM_BOT
+    - AI_CHATS
+    execution_gate:
+      primary_tool: Remote Desktop Commander
+      require_available: true
+      require_authorized: true
+      no_tool_result: CAPABILITY_UNAVAILABLE
+      unknown_tool_result: UNKNOWN
+    formula:
+    - RECOVER_CURRENT_INTENT
+    - MEASURE_HOUSE_ACCESS
+    - MEASURE_CURRENT_TARGET
+    - REUSE_BEFORE_CREATE
+    - EXECUTE_MINIMUM_SUFFICIENT_DELTA
+    - ADAPTIVE_BACKCHECK
+    - LOCAL_REPAIR_BEFORE_FULL_ROLLBACK
+    - RETEST
+    - REALITY_JUDGE
+    - READBACK
+    - RECEIPT
+    - CONTINUE_SAME_TRAIL
     locks:
-      UNKNOWN_IS_NOT_GREEN: true
-      NO_PARALLEL_HUD: true
-      EVERY_HUD_NOVELTY_FEEDS_PR_MOTHER_1562: true
+      TRIGGER_DOES_NOT_GRANT_ACCESS: true
+      TRIGGER_DOES_NOT_EXPAND_AUTHORITY: true
+      UNKNOWN_IS_NOT_PASS: true
+      ACTION_IS_NOT_PROOF: true
+      DOCUMENTED_IS_NOT_EXECUTED: true
+      NO_SECRET_ECHO: true
+      NO_BLIND_OVERWRITE: true
+      NO_SILENT_REROUTE: true
+    visual_contract:
+      semantic_titles: true
+      callback_backcheck: "🔙"
+      reality_judge: "🪬"
+      house: "🏠"
+      execution: "⚙️"
+      receipt: "🧾"
   pr_mae_1562_toda_novidade:
     required: true
     canonical_rule: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
     target: PR_MAE_1562
     mode: APPEND_ONLY
     register_on:
-      - PASS
-      - FAIL
-      - UNKNOWN
-      - BLOCKED
-      - STALE
-      - NOVA_DESCOBERTA
-      - NOVA_INTEGRACAO
-      - NOVO_ACESSO
-      - NOVA_ROTA
-      - NOVO_COMMIT_PR_MERGE_DEPLOY
-      - NOVA_CONTRAPROVA
-      - NOVA_DECISAO_CANONICA
+    - PASS
+    - FAIL
+    - UNKNOWN
+    - BLOCKED
+    - STALE
+    - NOVA_DESCOBERTA
+    - NOVA_INTEGRACAO
+    - NOVO_ACESSO
+    - NOVA_ROTA
+    - NOVO_COMMIT_PR_MERGE_DEPLOY
+    - NOVA_CONTRAPROVA
+    - NOVA_DECISAO_CANONICA
     locks:
       NOVELTY_DOES_NOT_WAIT_FOR_PASS: true
       EXACT_REPEAT_MAY_DEDUPE: true
       NO_SECRET_LEAK: true
       PR_MOTHER_IS_LEDGER_NOT_WRITER: true
+  centraldark_live_editing_fabric_default:
+    required: true
+    mode: CENTRALDARK_LIVE_EDITING_FABRIC
+    canonical_human: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.md
+    canonical_machine: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.json
+    canonical_binding: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.yml
+    agent_skill: .agents/skills/centraldark-live-editing-fabric/SKILL.md
+    operational_default: true
+    formula:
+    - CHEFE_EDITA
+    - MAIN_OU_DELTA_RASTREAVEL
+    - SINGLE_REUSABLE_WORKTREE
+    - OWNER_EXATO
+    - TESTE_MINIMO_APLICAVEL
+    - MICRODEPLOY_CAUSAL
+    - RUNTIME_VIVO
+    - PROVA_DO_EFEITO
+    - RECEIPT
+    - REFINA
+    - COMPRIME
+    - PONTO_FIXO
+    ci_policy:
+      MVP_FAST_LOOP_IS_DEFAULT: true
+      CI_DEEP_LOOP_IS_PRESS_MODE: true
+      CI_DEEP_LOOP_REQUIRES_CHEFE_INTENT: true
+    secret_transit:
+      EPHEMERAL_AS_TRANSIT: true
+      NO_SECRET_ECHO: true
+      NO_SECRET_COMMIT: true
+      NO_SECRET_RECEIPT_VALUE: true
+      SCRUB_CONTROLLED_LOGS_AFTER_USE: true
+      ROTATE_OR_DISCARD_AFTER_USE: true
+    locks:
+      UNKNOWN_IS_NOT_PASS: true
+      ACTION_IS_NOT_PROOF: true
+      MERGED_IS_NOT_DEPLOYED: true
+      DOCUMENTED_IS_NOT_EXECUTED: true
+      RUNTIME_EFFECT_REQUIRED_FOR_RUNTIME_CLAIM: true
+      NO_PARALLEL_ARCHITECTURE: true
   micro_deploy_continuo_por_pass_comprovado:
     required: true
     canonical_rule: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
     trigger_fabric_binding: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MICRO-DEPLOY-CONTINUO-BINDING.yml
     memory_anchor: docs/CONSCIENCIA/05-APRENDIZADOS/MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
     formula:
-      - QUALQUER_PASS_COMPROVADO
-      - MICRO_DEPLOY_DO_ESCOPO_AFETADO
-      - HEALTH_OU_PROVA_RUNTIME
-      - RECEIPT_PR_MAE
-      - NEXT_TIK_TAK
+    - QUALQUER_PASS_COMPROVADO
+    - MICRO_DEPLOY_DO_ESCOPO_AFETADO
+    - HEALTH_OU_PROVA_RUNTIME
+    - RECEIPT_PR_MAE
+    - NEXT_TIK_TAK
     bot_obligation:
       status_panel_must_expose_rule: true
       ai_prompt_must_inherit_rule: true
@@ -75,18 +140,54 @@ mandatory_rules:
       NO_BLIND_RESET: true
       NO_BLIND_PULL_OVER_DIRTY_RUNTIME: true
     receipt_required:
-      - START_HEAD
-      - SOURCE_REF
-      - COMMIT_SHA
-      - MAIN_HEAD
-      - SCOPE
-      - DEPLOY_ACTION
-      - RUNTIME_HEALTH
-      - RUNTIME_SHA_OR_RUNTIME_VERSION
-      - SECRET_EXPOSED=false
-      - RESULT
-      - NEXT_CURSOR
-
-runtime_note: >-
-  Este arquivo amarra a regra no escopo do bot CentralDark sem criar arquitetura paralela.
-  O bot continua consumidor do contrato canônico; ele não vira autoridade, juiz ou owner novo.
+    - START_HEAD
+    - SOURCE_REF
+    - COMMIT_SHA
+    - MAIN_HEAD
+    - SCOPE
+    - DEPLOY_ACTION
+    - RUNTIME_HEALTH
+    - RUNTIME_SHA_OR_RUNTIME_VERSION
+    - SECRET_EXPOSED=false
+    - RESULT
+    - NEXT_CURSOR
+  main_pinned_runtime_fast_path_fallback:
+    required: true
+    mode: MAIN_PINNED_RUNTIME_FAST_PATH
+    canonical_human: docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.md
+    canonical_machine: docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json
+    canonical_binding: docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.yml
+    agent_skill: .agents/skills/main-pinned-runtime-fast-path/SKILL.md
+    enforcement_hook: scripts/hooks/pre-push.main-pinned-runtime-fast-path.sh
+    activate_when_primary:
+    - FAIL
+    - BLOCKED
+    formula:
+    - SOURCE_JA_NA_MAIN
+    - SAME_SHA
+    - OWNER_EXATO
+    - WORKTREE_LIMPA
+    - TESTE_APLICAVEL
+    - COPIA_FILESET_CAUSAL
+    - RESTART_ISOLADO
+    - HEALTH_OU_PROVA_RUNTIME
+    - RECEIPT_PR_MAE_1562
+    locks:
+      UNKNOWN_IS_NOT_PASS: true
+      NO_FORCE_PUSH: true
+      NO_BLIND_PULL: true
+      NO_BLIND_RESET: true
+      NO_SECRET_LEAK: true
+      PRIMARY_PIPELINE_FAILS_DO_NOT_BECOME_FIXED_BY_FALLBACK: true
+    scratch_worktree:
+      canonical_path: /root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+      single_reusable: true
+      lock_required: true
+      reset_before_use: true
+      receipt_before_cleanup: true
+      reset_after_use: true
+      dirty_handoff_forbidden: true
+      runtime_is_not_scratch: true
+runtime_note: Este arquivo amarra a regra no escopo do bot CentralDark sem criar arquitetura
+  paralela. O bot continua consumidor do contrato canônico; ele não vira autoridade,
+  juiz ou owner novo.

@@ -155,6 +155,7 @@ Hermes não devolve ao CHEFE uma lista de micropassos que a própria máquina po
 → RECEIPT
 → FIXED_POINT_OU_BLOCKER_EXATO
 → REGISTRA
+→ 🔏 RASTRO
 → BOOT
 ```
 
@@ -263,6 +264,10 @@ Toda saída operacional relevante deve comprimir a execução sem apagar o estad
 HERMES_RESPONSE_CONTRACT=true
 RESPONSE_REQUIRED_OPENING=INTENCAO_VIGENTE|TARGET|OBSERVED_CURRENT_STATE
 RESPONSE_REQUIRED_SECTIONS=FEITO|EVIDENCIA|CONTRAPROVA|UNKNOWN_OR_BLOCKED|FIXED_POINT|RECEIPT|NEXT_CURSOR
+RASTRO_LOCK_REQUIRED=true
+RESPONSE_WITHOUT_TRACE=INVALID
+WRITE_CLAIM_FIELDS=COMMIT_SHA|PATH|LINK|READBACK
+MEMORY_CLAIM_REQUIRES_LOCATION=true
 RESPONSE_VISUAL_HUD=true
 EMOJI_IS_SEMANTIC_HINT_NOT_PROOF=true
 CURRENT_GREATER_THAN_HISTORY=true
@@ -677,3 +682,20 @@ CONFIANCA_DO_MODELO != REALIDADE
 100_PERCENT_CONTRACT_COVERAGE = permitido quando todo o escopo definido foi verificado
 100_PERCENT_GLOBAL_REALITY = não declarar só por cálculo/estimativa
 ```
+
+## Cristal determinístico — replay de caminho provado
+
+```text
+PROVEN_PATH_REPLAY_LOCK=true
+PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO=true
+SAME_FINGERPRINT_REUSES_PROVEN_RECIPE=true
+ADAPT_ENVIRONMENT_BINDINGS_ONLY=true
+DIVERGENCE_REOPENS_AFFECTED_CONE_ONLY=true
+HUMAN_RETEACH_REQUIRED_FOR_SAME_PROVEN_PATH=false
+```
+
+Quando existir receita selada pelo `PROVEN-DETERMINISTIC-LOCK.yml`, Hermes carrega
+a sequência, adapta somente bindings declarados do ambiente e executa a mesma
+prova. Resultado divergente vira delta mensurável; não vira licença para recomeçar
+a missão inteira.
+

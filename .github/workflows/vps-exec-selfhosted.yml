@@ -20,7 +20,8 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     env:
-      REPO_DIR: <caminho-vps>
+      HOME: /root
+      REPO_DIR: /root/CentralDark
       BRANCH: main
     steps:
       - name: 🔹 Checkout exato do gate
@@ -37,7 +38,7 @@ jobs:
           set -Eeuo pipefail
           TARGET_SHA='${{ github.sha }}'
           AUTH_REPO="$GITHUB_WORKSPACE/.ci-deploy-gate"
-          AUTH_HEADER="$(git -C "$AUTH_REPO" config --local --get http.https://github.com/.extraheader || true)"
+          AUTH_HEADER="$(git -C "$AUTH_REPO" config --get http.https://github.com/.extraheader || true)"
           [[ "$AUTH_HEADER" == AUTHORIZATION:* ]] || { echo "GIT_EPHEMERAL_AUTH_MISSING"; exit 26; }
           export GIT_CONFIG_COUNT=1
           export GIT_CONFIG_KEY_0='http.https://github.com/.extraheader'
@@ -54,12 +55,13 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 25
     env:
-      REPO_DIR: <caminho-vps>
-      MCP_DIR: <caminho-vps>
+      HOME: /root
+      REPO_DIR: /root/CentralDark
+      MCP_DIR: /root/CentralDark/apps/modulos/mcp
       PM2_APP: CentralDark-MCP
       WEBHOOK_APP: CentralDark-WebhookDeploy
       HEALTH_URL: http://127.0.0.1:9100/health
-      AUDIT_DIR: <caminho-vps>
+      AUDIT_DIR: /root/CentralDark/logs
       BEFORE_SHA: ${{ github.event.before || '' }}
     steps:
       - name: 🔹 Hydrate Cofre (GitHub secret → VPS secrets/, sem echo)
@@ -69,7 +71,7 @@ jobs:
           BUILDKITE_API_TOKEN: ${{ secrets.BUILDKITE_API_TOKEN }}
         run: |
           set -euo pipefail
-          bash <caminho-vps>
+          bash /root/CentralDark/scripts/vps/hydrate-provider-secrets.sh
 
       - name: 🔹 Prepare ephemeral Git auth
         uses: actions/checkout@v7
@@ -97,7 +99,7 @@ jobs:
           [[ -d "$REPO_DIR/.git" ]] || { echo "REPO_DIR_INVALID"; exit 23; }
           cd "$REPO_DIR"
           AUTH_REPO="$GITHUB_WORKSPACE/.ci-git-auth-mcp"
-          AUTH_HEADER="$(git -C "$AUTH_REPO" config --local --get http.https://github.com/.extraheader || true)"
+          AUTH_HEADER="$(git -C "$AUTH_REPO" config --get http.https://github.com/.extraheader || true)"
           [[ "$AUTH_HEADER" == AUTHORIZATION:* ]] || { echo "GIT_EPHEMERAL_AUTH_MISSING"; exit 26; }
           export GIT_CONFIG_COUNT=1
           export GIT_CONFIG_KEY_0='http.https://github.com/.extraheader'
@@ -154,8 +156,8 @@ jobs:
           # de mutação é contida pelo lock compartilhado centraldark-repo-deploy.
           WEBHOOK_JSON="$(pm2 jlist | jq -c --arg app "$WEBHOOK_APP" '.[] | select(.name == $app)' | head -n1)"
           if [[ -n "$WEBHOOK_JSON" ]]; then
-            WEBHOOK_PID="$(jq -r '.pid // 0' <<<<"$WEBHOOK_JSON")"
-            WEBHOOK_EXEC="$(jq -r '.pm2_env.pm_exec_path // ""' <<<<"$WEBHOOK_JSON")"
+            WEBHOOK_PID="$(jq -r '.pid // 0' <<<"$WEBHOOK_JSON")"
+            WEBHOOK_EXEC="$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$WEBHOOK_JSON")"
             [[ "$WEBHOOK_EXEC" == "$REPO_DIR/scripts/webhook/github-webhook-deploy.mjs" ]] || { echo "WEBHOOK_PM2_TARGET_MISMATCH"; exit 27; }
             PORT_PID="$(ss -ltnp 'sport = :9300' 2>/dev/null | sed -n 's/.*pid=\([0-9][0-9]*\).*/\1/p' | head -n1)"
             [[ -z "$PORT_PID" || "$PORT_PID" == "$WEBHOOK_PID" ]] || { echo "PORT_9300_OWNERSHIP_MISMATCH"; exit 28; }
@@ -237,20 +239,20 @@ jobs:
 
           # Dependências novas exigem release-dir atômico; código puro segue
           # automaticamente. Nunca altera node_modules do processo vivo.
-          git -C "$REPO_DIR" diff --quiet "$CURRENT_SHA" "$TARGET_SHA" -- \
-            apps/modulos/mcp/package.json apps/modulos/mcp/package-lock.json || {
+          if git -C "$REPO_DIR" diff --quiet "$CURRENT_SHA" "$TARGET_SHA" -- \
+            apps/modulos/mcp/package.json apps/modulos/mcp/package-lock.json; then
+            echo "darkai_consult=unavailable_script_gates_used"
+          else
             echo "MCP_DEPENDENCY_MANIFEST_CHANGED"
             DEPENDENCY_BACKUP="$MCP_DIR/.backup-depmanifest-$CURRENT_SHA.tar.gz"
             if [[ ! -e "$DEPENDENCY_BACKUP" ]]; then
               tar -czf "$DEPENDENCY_BACKUP" -C "$MCP_DIR" . 2>/dev/null || true
             fi
-          else
-            echo "darkai_consult=unavailable_script_gates_used"
           fi
 
           MCP_JSON="$(pm2 jlist | jq -c --arg app "$PM2_APP" '.[] | select(.name == $app)' | head -n1)"
           [[ -n "$MCP_JSON" ]] || { echo "MCP_PM2_APP_NOT_FOUND"; exit 34; }
-          PM2_BASELINE_RESTARTS="$(jq -r '.pm2_env.restart_time // 0' <<<<"$MCP_JSON")"
+          PM2_BASELINE_RESTARTS="$(jq -r '.pm2_env.restart_time // 0' <<<"$MCP_JSON")"
           echo "PM2_BASELINE_RESTARTS=$PM2_BASELINE_RESTARTS"
           emit_pm2_diagnostic() {
             pm2 jlist | jq -c --arg app "$PM2_APP" '[
@@ -263,9 +265,9 @@ jobs:
               }] | first
             ' || echo "MCP_PM2_DIAGNOSTIC_UNAVAILABLE"
           }
-          [[ "$(jq -r '.pm2_env.pm_cwd // ""' <<<<"$MCP_JSON")" == "$MCP_DIR" ]] || { echo "MCP_PM2_CWD_MISMATCH"; exit 35; }
-          MCP_EXEC="$(jq -r '.pm2_env.pm_exec_path // ""' <<<<"$MCP_JSON")"
-          MCP_ARGS="$(jq -r '(.pm2_env.args // []) | join(" ")' <<<<"$MCP_JSON")"
+          [[ "$(jq -r '.pm2_env.pm_cwd // ""' <<<"$MCP_JSON")" == "$MCP_DIR" ]] || { echo "MCP_PM2_CWD_MISMATCH"; exit 35; }
+          MCP_EXEC="$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$MCP_JSON")"
+          MCP_ARGS="$(jq -r '(.pm2_env.args // []) | join(" ")' <<<"$MCP_JSON")"
           if [[ "$MCP_EXEC" == "$MCP_DIR/dist/index.js" ]]; then
             :
           elif [[ "$MCP_EXEC" == *bash && "$MCP_ARGS" == *"exec node $MCP_DIR/dist/index.js"* ]]; then
@@ -275,22 +277,6 @@ jobs:
             exit 36
           fi
           curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null || { echo "PRE_DEPLOY_HEALTH_FAILED"; exit 37; }
-
-          RUNTIME_STAGE="$MCP_DIR/.dist-release.${TARGET_SHA:0:12}.${BASHPID}"
-          RUNTIME_BACKUP="$MCP_DIR/.dist-backup.${CURRENT_SHA:0:12}.${BASHPID}"
-          [[ ! -e "$RUNTIME_STAGE" && ! -e "$RUNTIME_BACKUP" ]] || { echo "RUNTIME_RELEASE_PATH_COLLISION"; exit 54; }
-          [[ -d "$MCP_DIR/dist" && -f "$MCP_DIR/dist/index.js" ]] || { echo "RUNTIME_DIST_INVALID"; exit 55; }
-          cp -a -- "$BUILD_MCP/dist" "$RUNTIME_STAGE"
-          diff -qr "$BUILD_MCP/dist" "$RUNTIME_STAGE" >/dev/null || { echo "RUNTIME_STAGE_MISMATCH"; exit 56; }
-          mv -- "$MCP_DIR/dist" "$RUNTIME_BACKUP"
-          artifact_promoted=1
-          mv -- "$RUNTIME_STAGE" "$MCP_DIR/dist"
-
-          OLD_PID="$(pm2 pid "$PM2_APP" | tail -n1)"
-          RESTART_AT="$(date -u +%Y-%m-%dT%H:%M:%S.000Z)"
-          restart_attempted=1
-          pm2 restart "$PM2_APP" >/dev/null
-          }
 
           # Preparar release (dist). Se package*.json mudou, node_modules será
           # reconstruído após o git worktree desaparecer, no processo vivo.
@@ -399,7 +385,8 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
-      REPO_DIR: <caminho-vps>
+      HOME: /root
+      REPO_DIR: /root/CentralDark
     steps:
       - name: 🔹 Prepare isolated deploy script checkout
         shell: bash
@@ -429,7 +416,7 @@ jobs:
           exec 9>/tmp/centraldark-repo-deploy.lock
           flock -w 90 9 || { echo "REPO_DEPLOY_LOCK_TIMEOUT"; exit 63; }
           AUTH_REPO="$GITHUB_WORKSPACE/.ci-operational-guards"
-          AUTH_HEADER="$(git -C "$AUTH_REPO" config --local --get http.https://github.com/.extraheader || true)"
+          AUTH_HEADER="$(git -C "$AUTH_REPO" config --get http.https://github.com/.extraheader || true)"
           [[ "$AUTH_HEADER" == AUTHORIZATION:* ]] || { echo "GIT_EPHEMERAL_AUTH_MISSING"; exit 90; }
           export GIT_CONFIG_COUNT=1
           export GIT_CONFIG_KEY_0='http.https://github.com/.extraheader'
@@ -466,8 +453,8 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
-      REPO_DIR: <caminho-vps>
-      REPORT_DIR: <caminho-vps>
+      REPO_DIR: /root/CentralDark
+      REPORT_DIR: /root/CentralDark/logs/housekeeping
     steps:
       - name: 🔹 Checkout exact event SHA
         uses: actions/checkout@v7
@@ -521,7 +508,8 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
-      REPO_DIR: <caminho-vps>
+      HOME: /root
+      REPO_DIR: /root/CentralDark
       HERMES_APP: CentralDark-Hermes
       RUNTIME_CONTRACT: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml
       VALIDATOR: apps/modulos/HERMES-CORE/core/universal-method-contract.mjs
@@ -570,7 +558,7 @@ jobs:
 
           cd "$REPO_DIR"
           AUTH_REPO="$GITHUB_WORKSPACE/.ci-git-auth-hermes"
-          AUTH_HEADER="$(git -C "$AUTH_REPO" config --local --get http.https://github.com/.extraheader || true)"
+          AUTH_HEADER="$(git -C "$AUTH_REPO" config --get http.https://github.com/.extraheader || true)"
           [[ "$AUTH_HEADER" == AUTHORIZATION:* ]] || { echo "GIT_EPHEMERAL_AUTH_MISSING"; exit 83; }
           export GIT_CONFIG_COUNT=1
           export GIT_CONFIG_KEY_0='http.https://github.com/.extraheader'
@@ -604,7 +592,7 @@ jobs:
           }
 
           BUILD_DIR="$(mktemp -d "$RUNNER_TEMP/hermes-runtime-validate.XXXXXX")"
-          BACKUP_DIR="<caminho-vps>${TARGET_SHA:0:12}-$(date -u +%Y%m%dT%H%M%SZ)"
+          BACKUP_DIR="/root/CentralDark-Recovery/hermes-runtime/${TARGET_SHA:0:12}-$(date -u +%Y%m%dT%H%M%SZ)"
           mkdir -p "$BACKUP_DIR"
 
           copied=0
@@ -659,7 +647,7 @@ jobs:
 
           HERMES_JSON="$(pm2 jlist | jq -c --arg app "$HERMES_APP" '.[] | select(.name == $app)' | head -n1)"
           [[ -n "$HERMES_JSON" ]] || { echo "HERMES_PM2_APP_NOT_FOUND"; exit 77; }
-          OLD_PID="$(jq -r '.pid // 0' <<<<"$HERMES_JSON")"
+          OLD_PID="$(jq -r '.pid // 0' <<<"$HERMES_JSON")"
           [[ "$OLD_PID" =~ ^[0-9]+$ && "$OLD_PID" -gt 0 ]] || { echo "HERMES_OLD_PID_INVALID"; exit 78; }
 
           restart_attempted=1
@@ -728,6 +716,7 @@ jobs:
                 headSha:$sha,
                 canonicalIdentity:false,
                 discoveredAtRuntime:true
+              },
               schema: "centraldark.hermes-runtime-deploy.v1",
               semantic_identity: {owner: $owner, capability: $capability, scope: $scope},
               execution_provenance: {
@@ -809,7 +798,8 @@ jobs:
       contents: read
       statuses: write
     env:
-      REPO_DIR: <caminho-vps>
+      HOME: /root
+      REPO_DIR: /root/CentralDark
       BRANCH: main
     steps:
       - name: 🔹 Checkout do SHA promovido

@@ -34,3 +34,39 @@ CENTRALDARK_AI_BOOT
 .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
 FALHA_DE_RECONCILIACAO_DE_CONTEXTO
 docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+
+
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+
+```text
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+```
+
+Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
+
+
+## 👑🪬 !EXECUTOR_CENTRALDARK — modo executor da Casa
+
+Owner canônico: `docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md`
+
+Quando o CHEFE usar `!EXECUTOR_CENTRALDARK`, carregue o contrato acima e trate o turno como pedido de modo executor conversacional.
+
+```text
+TRIGGER_RECOGNITION=true
+HOUSE_ACCESS_MUST_BE_MEASURED=true
+REMOTE_DESKTOP_COMMANDER_AVAILABLE_AND_AUTHORIZED -> EXECUTE_HOUSE_SCOPE
+NO_HOUSE_ACCESS -> CAPABILITY_UNAVAILABLE
+UNKNOWN_TOOL_STATE -> UNKNOWN
+TRIGGER_DOES_NOT_GRANT_ACCESS=true
+TRIGGER_DOES_NOT_EXPAND_AUTHORITY=true
+RESULT_FIRST=true
+BACKCHECK_ACTIVE=true
+REALITY_IS_JUDGE=true
+```
+
+Se Desktop Commander ou equivalente autorizado estiver acessível, prefira executar a tarefa local diretamente em vez de devolver tutorial ao CHEFE. Preserve caminho existente, use menor delta, faça readback e não declare PASS sem prova.
+
+A linguagem visual e os callbacks semânticos desse modo vivem no owner canônico; não duplicar aqui.

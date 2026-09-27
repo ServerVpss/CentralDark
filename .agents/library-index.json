@@ -1,16 +1,14 @@
 {
-  "version": "1.0.0",
-  "timestamp": "2026-08-31T00:00:00Z",
+  "version": "1.2.0",
+  "timestamp": "2026-09-25T23:00:00Z",
   "owner": "SOL/Reality Judge",
   "library_binding": "ACTIVE",
-
+  "purpose": "Indice raiz para agentes CentralDark: fontes canonicas, skills criticas, roteamento de intenção, deploy vivo, HUB e receipts.",
   "canonical_sources": [
     {
       "id": "leia-me-ia",
       "path": "LEIA-ME-IA.md",
       "type": "boot",
-      "size_bytes": 50000,
-      "sha256": "TODO_measure_on_deploy",
       "owner": "SEGREDO/CHEFE",
       "mutable": false,
       "load_order": 1
@@ -19,77 +17,258 @@
       "id": "agents",
       "path": "AGENTS.md",
       "type": "contract",
-      "size_bytes": 30000,
-      "sha256": "TODO_measure_on_deploy",
       "owner": "SOL",
       "mutable": false,
       "load_order": 2
     },
     {
+      "id": "intent-deploy-binding",
+      "path": ".agents/INTENT-DEPLOY-BINDING.json",
+      "type": "agent_router",
+      "owner": "SEGREDO/CHEFE",
+      "mutable": true,
+      "load_order": 3
+    },
+    {
+      "id": "centraldark-live-editing-fabric",
+      "path": "docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.md",
+      "type": "operational_default",
+      "owner": "SEGREDO/CHEFE",
+      "mutable": true,
+      "load_order": 4
+    },
+    {
+      "id": "main-pinned-runtime-fast-path",
+      "path": "docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.md",
+      "type": "runtime_microdeploy_mechanism",
+      "owner": "SEGREDO/CHEFE",
+      "mutable": true,
+      "load_order": 5
+    },
+    {
+      "id": "hub-credential-control-plane",
+      "path": "MODULES/HUB/CENTRALDARK-HUB-CREDENTIAL-CONTROL-PLANE.md",
+      "type": "hub_provider_secret_control_plane",
+      "owner": "SEGREDO/CHEFE",
+      "mutable": true,
+      "load_order": 6
+    },
+    {
       "id": "soul-sol",
       "path": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
       "type": "identity",
-      "size_bytes": 25000,
-      "sha256": "TODO_measure_on_deploy",
       "owner": "SEGREDO/CHEFE",
       "mutable": false,
-      "load_order": 3
+      "load_order": 7
+    },
+    {
+      "id": "root-file-registry-json",
+      "path": "ROOT-FILE-REGISTRY.json",
+      "type": "root_file_catalog",
+      "owner": "SOL",
+      "mutable": true,
+      "load_order": 8
+    },
+    {
+      "id": "root-file-registry-md",
+      "path": "ROOT-FILE-REGISTRY.md",
+      "type": "root_file_catalog_human",
+      "owner": "SOL",
+      "mutable": true,
+      "load_order": 9
+    },
+    {
+      "id": "root-file-binding-yaml",
+      "path": "root-file-binding.yaml",
+      "type": "root_file_binding",
+      "owner": "SOL",
+      "mutable": true,
+      "load_order": 10
     }
   ],
-
+  "intent_system": {
+    "new_chefe_material": "DELTA_TO_ACTIVE_INTENT_FIRST",
+    "preserve_compatible_active_intent": true,
+    "recalculate_intent_alignment_each_material_turn": true,
+    "explicit_replace_or_proven_incompatibility_allows_replacement": true,
+    "pertinence_first": true,
+    "minimum_sufficient_loop": true,
+    "triggers_are_conditional_not_ritual": true,
+    "align_thought_not_wording": true
+  },
+  "mandatory_triggers": [
+    "!CENTRALDARK",
+    "#ACORDAR",
+    "!CALIBRAR",
+    "!AURÉOLA_CANÔNICA",
+    "!META_LUPA",
+    "!DELTAUTIL",
+    "!CONTRAPROVA",
+    "!REMEDICAO",
+    "!FIXED_POINT",
+    "!REGISTRA",
+    "!RASTRO",
+    "!BOOT"
+  ],
   "frequencies": {
     "leve": {
       "label": "Documentação, classificação, cache",
       "cpu_cost": 10,
       "latency_ms": 100,
       "depth": 1,
-      "use_case": ["docs", "index", "classify"]
+      "use_case": [
+        "docs",
+        "index",
+        "classify"
+      ]
     },
     "rapida": {
-      "label": "Lookup, roteamento, erro simples",
+      "label": "Lookup, roteamento, erro simples, live edit pequeno",
       "cpu_cost": 20,
       "latency_ms": 500,
       "depth": 2,
-      "use_case": ["lookup", "route", "error_simple"]
+      "use_case": [
+        "lookup",
+        "route",
+        "error_simple",
+        "mvp_fast_loop"
+      ]
     },
     "media": {
-      "label": "Implementação normal, review, integração",
+      "label": "Implementação normal, review, integração, microdeploy causal",
       "cpu_cost": 50,
       "latency_ms": 2000,
       "depth": 3,
-      "use_case": ["implement", "review", "integrate"]
+      "use_case": [
+        "implement",
+        "review",
+        "integrate",
+        "microdeploy"
+      ]
     },
     "profunda": {
       "label": "Arquitetura, causalidade, prova pesada",
       "cpu_cost": 100,
       "latency_ms": 10000,
       "depth": 4,
-      "use_case": ["architecture", "causality", "proof"]
+      "use_case": [
+        "architecture",
+        "causality",
+        "proof"
+      ]
     },
     "forte": {
-      "label": "Missão crítica, regression gates",
+      "label": "Missão crítica, regression gates, CI deep loop",
       "cpu_cost": 200,
       "latency_ms": 30000,
       "depth": 5,
-      "use_case": ["critical_mission", "regression_gate"]
+      "use_case": [
+        "critical_mission",
+        "regression_gate",
+        "ci_deep_loop"
+      ]
     },
     "avancada": {
       "label": "META×META, evolução scaffold",
       "cpu_cost": 500,
       "latency_ms": 60000,
       "depth": 6,
-      "use_case": ["meta_meta", "scaffold_evolution"]
+      "use_case": [
+        "meta_meta",
+        "scaffold_evolution"
+      ]
     },
     "fria": {
       "label": "Segurança/Judge (só evidência)",
       "cpu_cost": 50,
       "latency_ms": 5000,
       "depth": 3,
-      "use_case": ["security", "judge", "verdict"]
+      "use_case": [
+        "security",
+        "judge",
+        "verdict"
+      ]
     }
   },
-
   "skills": [
+    {
+      "id": "centraldark-intent-deploy-router",
+      "path": ".agents/skills/centraldark-intent-deploy-router/SKILL.md",
+      "type": "router",
+      "category": "intent_and_deploy",
+      "owner": "SEGREDO/CHEFE",
+      "frequency_required": "rapida",
+      "dependencies": [
+        "intent_system",
+        "trigger_fabric",
+        "skills"
+      ],
+      "critical": true,
+      "version": "1.0.0"
+    },
+    {
+      "id": "centraldark-live-editing-fabric",
+      "path": ".agents/skills/centraldark-live-editing-fabric/SKILL.md",
+      "type": "operational",
+      "category": "live_editing_default",
+      "owner": "SEGREDO/CHEFE",
+      "frequency_required": "media",
+      "dependencies": [
+        "main-pinned-runtime-fast-path",
+        "git",
+        "runtime_health",
+        "receipt"
+      ],
+      "critical": true,
+      "version": "1.1.0"
+    },
+    {
+      "id": "main-pinned-runtime-fast-path",
+      "path": ".agents/skills/main-pinned-runtime-fast-path/SKILL.md",
+      "type": "deployment_mechanism",
+      "category": "runtime_microdeploy",
+      "owner": "SEGREDO/CHEFE",
+      "frequency_required": "media",
+      "dependencies": [
+        "git",
+        "single_reusable_worktree",
+        "lock",
+        "runtime_health",
+        "receipt"
+      ],
+      "critical": true,
+      "version": "1.1.0"
+    },
+    {
+      "id": "centraldark-hub-credential-control-plane",
+      "path": ".agents/skills/centraldark-hub-credential-control-plane/SKILL.md",
+      "type": "operational",
+      "category": "hub_provider_secret_oauth",
+      "owner": "SEGREDO/CHEFE",
+      "frequency_required": "media",
+      "dependencies": [
+        "hub",
+        "oauth",
+        "provider_status",
+        "secret_transit"
+      ],
+      "critical": true,
+      "version": "1.0.0"
+    },
+    {
+      "id": "centraldark-operational-method",
+      "path": ".agents/skills/centraldark-operational-method/SKILL.md",
+      "type": "operational_method",
+      "category": "coordination",
+      "owner": "SOL",
+      "frequency_required": "media",
+      "dependencies": [
+        "library_index",
+        "all_frequencies"
+      ],
+      "critical": true,
+      "version": "1.0.0"
+    },
     {
       "id": "reality-drift-detector",
       "path": ".agents/skills/reality-drift-detector/SKILL.md",
@@ -97,7 +276,10 @@
       "category": "monitoring",
       "owner": "SOL",
       "frequency_required": "rapida",
-      "dependencies": ["git", "filesystem"],
+      "dependencies": [
+        "git",
+        "filesystem"
+      ],
       "critical": true,
       "version": "1.0.0"
     },
@@ -108,7 +290,10 @@
       "category": "reconciliation",
       "owner": "SOL",
       "frequency_required": "profunda",
-      "dependencies": ["git", "conflict_resolution"],
+      "dependencies": [
+        "git",
+        "conflict_resolution"
+      ],
       "critical": true,
       "version": "1.0.0"
     },
@@ -119,7 +304,10 @@
       "category": "falsification_guard",
       "owner": "SOL",
       "frequency_required": "forte",
-      "dependencies": ["proof", "evidence"],
+      "dependencies": [
+        "proof",
+        "evidence"
+      ],
       "critical": true,
       "version": "1.0.0"
     },
@@ -130,7 +318,10 @@
       "category": "coordination",
       "owner": "SOL",
       "frequency_required": "profunda",
-      "dependencies": ["library_index", "all_frequencies"],
+      "dependencies": [
+        "library_index",
+        "all_frequencies"
+      ],
       "critical": true,
       "version": "1.0.0"
     },
@@ -141,40 +332,138 @@
       "category": "deployment",
       "owner": "SOL",
       "frequency_required": "forte",
-      "dependencies": ["github_api", "polling", "pm2", "validation"],
+      "dependencies": [
+        "github_api",
+        "polling",
+        "pm2",
+        "validation"
+      ],
       "critical": true,
       "version": "1.0.0",
       "origin": "sessão 2026-09-20 cristalização PR-merge-deployment",
       "related_doc": "docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md",
       "trigger_pattern": "PR.body.contains('Merge-Policy: SAME_HEAD_GATES_THEN_SQUASH')"
+    },
+    {
+      "id": "root-file-contract-router",
+      "path": ".agents/skills/root-file-contract-router/SKILL.md",
+      "type": "root_file_governance",
+      "critical": true
     }
   ],
-
+  "route_selection": [
+    {
+      "when": "intent_clear_and_scope_authorized",
+      "then": "EXECUTE_MINIMUM_COMPLETE_PATH"
+    },
+    {
+      "when": "delta_involves_runtime_site_panel_feature",
+      "then": [
+        "centraldark-live-editing-fabric",
+        "main-pinned-runtime-fast-path"
+      ]
+    },
+    {
+      "when": "delta_involves_hub_provider_secret_oauth_model",
+      "then": [
+        "centraldark-hub-credential-control-plane"
+      ]
+    },
+    {
+      "when": "delta_involves_doc_canon_contract",
+      "then": "EDIT_OWNER_EXISTING + RECEIPT"
+    },
+    {
+      "when": "pass_comprovado",
+      "then": "MICRO_DEPLOY_DO_ESCOPO_AFETADO + HEALTH/PROVA + RECEIPT + NEXT_TIK_TAK"
+    }
+  ],
   "gates": [
     {
       "id": "proof-required",
-      "applies_to": ["merge", "deploy", "main"],
+      "applies_to": [
+        "merge",
+        "deploy",
+        "main",
+        "runtime_claim"
+      ],
       "rule": "UNKNOWN != PASS",
       "owner": "Reality Judge",
       "enforce": true
     },
     {
       "id": "one-writer-per-scope",
-      "applies_to": ["write", "commit"],
+      "applies_to": [
+        "write",
+        "commit",
+        "microdeploy"
+      ],
       "rule": "NO_CONCURRENT_MUTATION",
       "owner": "SOL",
       "enforce": true
     },
     {
+      "id": "intent-delta-first",
+      "applies_to": [
+        "all_agent_turns",
+        "tool_selection",
+        "skill_selection"
+      ],
+      "rule": "NEW_CHEFE_MATERIAL=DELTA_TO_ACTIVE_INTENT_FIRST",
+      "owner": "SEGREDO/CHEFE",
+      "enforce": true
+    },
+    {
+      "id": "scratch-only-reset-clean",
+      "applies_to": [
+        "git_reset_hard",
+        "git_clean_fdx"
+      ],
+      "rule": "ALLOW_ONLY_ON_/root/CentralDark/_worktrees/main-pinned-runtime-fastpath",
+      "owner": "SEGREDO/CHEFE",
+      "enforce": true
+    },
+    {
+      "id": "secret-transit",
+      "applies_to": [
+        "secret",
+        "token",
+        "api_key",
+        "oauth"
+      ],
+      "rule": "NO_SECRET_ECHO_NO_COMMIT_NO_RECEIPT_VALUE_NO_MEMORY",
+      "owner": "SEGREDO/CHEFE",
+      "enforce": true
+    },
+    {
+      "id": "hub-status-not-pass",
+      "applies_to": [
+        "hub",
+        "provider",
+        "oauth",
+        "model",
+        "tool"
+      ],
+      "rule": "HUB_CONNECTED != PROVIDER_RUNTIME_PASS",
+      "owner": "Reality Judge",
+      "enforce": true
+    },
+    {
       "id": "no-force-push",
-      "applies_to": ["push"],
+      "applies_to": [
+        "push"
+      ],
       "rule": "FORCE_PUSH_REQUIRES_APPROVAL",
       "owner": "SEGREDO/CHEFE",
       "enforce": true
     },
     {
       "id": "pr-merge-autonomous",
-      "applies_to": ["pr_gate", "merge", "deploy"],
+      "applies_to": [
+        "pr_gate",
+        "merge",
+        "deploy"
+      ],
       "rule": "SAME_HEAD_GATES_REQUIRED",
       "pattern_match": "Merge-Policy: SAME_HEAD_GATES_THEN_SQUASH",
       "owner": "SOL",
@@ -184,7 +473,6 @@
       "version": "1.0.0"
     }
   ],
-
   "knowledge_base": {
     "aprendizados_path": "docs/CONSCIENCIA/APRENDIZADOS/",
     "erros_path": "docs/CONSCIENCIA/ERROS-REGISTRADOS.json",
@@ -193,25 +481,119 @@
     "consciousness_docs": [
       "docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md",
       "docs/CONSCIENCIA/01-IDENTIDADE.md",
-      "docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md"
+      "docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md",
+      "docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.md",
+      "MODULES/HUB/CENTRALDARK-HUB-CREDENTIAL-CONTROL-PLANE.md"
     ]
   },
-
   "orchestra": {
     "maestro": "SEGREDO/CHEFE",
     "conductor": "SOL",
-    "musicians": ["all_agents"],
-    "sync_frequency": "fixed",
-    "requires_calibration": false,
+    "musicians": [
+      "all_agents"
+    ],
+    "sync_frequency": "adaptive",
+    "requires_calibration": true,
     "orchestrations": [
+      {
+        "id": "intent-live-editing-orch",
+        "skill": "centraldark-intent-deploy-router",
+        "trigger": "CHEFE material turn",
+        "sequence": [
+          "intent_delta",
+          "calibrate",
+          "select_skill",
+          "execute_minimum_complete_path",
+          "prove_effect",
+          "receipt",
+          "next_cursor"
+        ],
+        "owner": "SOL",
+        "critical": true
+      },
+      {
+        "id": "live-editing-runtime-orch",
+        "skill": "centraldark-live-editing-fabric",
+        "trigger": "runtime/site/panel/feature delta",
+        "sequence": [
+          "lock",
+          "assert_scratch",
+          "fetch",
+          "reset_clean",
+          "delta",
+          "test_minimum",
+          "microdeploy_owner",
+          "health_effect",
+          "receipt",
+          "clean_scratch"
+        ],
+        "owner": "SEGREDO/CHEFE",
+        "critical": true
+      },
+      {
+        "id": "hub-provider-orch",
+        "skill": "centraldark-hub-credential-control-plane",
+        "trigger": "hub/provider/secret/oauth/model delta",
+        "sequence": [
+          "open_hub",
+          "select_scope",
+          "connect_provider",
+          "test_status",
+          "test_tool_or_model",
+          "save_owner_binding",
+          "receipt_without_secret"
+        ],
+        "owner": "SEGREDO/CHEFE",
+        "critical": true
+      },
       {
         "id": "pr-merge-autonomous-orch",
         "skill": "pr-merge-autonomous",
         "trigger": "PR.body contains 'Merge-Policy: SAME_HEAD_GATES_THEN_SQUASH'",
-        "sequence": ["status_check", "polling_gates", "merge_squash", "vps_sync", "reload_pm2", "validate_endpoints", "snapshot", "contraprova", "fixed_point"],
+        "sequence": [
+          "status_check",
+          "polling_gates",
+          "merge_squash",
+          "vps_sync",
+          "reload_pm2",
+          "validate_endpoints",
+          "snapshot",
+          "contraprova",
+          "fixed_point"
+        ],
         "owner": "SOL",
         "critical": true
       }
     ]
+  },
+  "root_file_contract": {
+    "schema": "centraldark.root-file-registry-integrity.v1",
+    "version": "1.2.0",
+    "status": "ACTIVE",
+    "surfaces": {
+      "markdown": "ROOT-FILE-REGISTRY.md",
+      "json": "ROOT-FILE-REGISTRY.json",
+      "yaml": "root-file-binding.yaml",
+      "skill": ".agents/skills/root-file-contract-router/SKILL.md",
+      "hook": ".githooks/pre-commit-root-contract.sh"
+    },
+    "expected_receipt": [
+      "ROOT_FILE_REGISTRY_MD=PASS",
+      "ROOT_FILE_REGISTRY_JSON=PASS",
+      "ROOT_FILE_BINDING_YAML=PASS",
+      "ROOT_FILE_ROUTER_SKILL=PASS",
+      "ROOT_FILE_PRECOMMIT_HOOK=PASS",
+      "LIBRARY_INDEX_V1_2_0=PASS"
+    ],
+    "fail_closed": true
+  },
+  "lei_do_rastro": {
+    "owner": "AGENTS.md",
+    "gatilho": "🔏 !RASTRO",
+    "RESPONSE_WITHOUT_TRACE": "INVALID",
+    "EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES": "COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)",
+    "EVERY_MEMORY_CLAIM_NAMES_WHERE": true,
+    "LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN": true,
+    "APPLIES_TO_ALL_ENGINES": true
   }
 }

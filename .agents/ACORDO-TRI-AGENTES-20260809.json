@@ -122,5 +122,14 @@
     "enunciado": "Ninguém sai da reunião sem relatório escrito",
     "aplicável_a": "Todas as 3 IAs",
     "consequencia_se_violada": "Sessão se reinicia do zero"
+  },
+  "lei_do_rastro": {
+    "owner": "AGENTS.md",
+    "gatilho": "🔏 !RASTRO",
+    "RESPONSE_WITHOUT_TRACE": "INVALID",
+    "EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES": "COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)",
+    "EVERY_MEMORY_CLAIM_NAMES_WHERE": true,
+    "LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN": true,
+    "APPLIES_TO_ALL_ENGINES": true
   }
 }

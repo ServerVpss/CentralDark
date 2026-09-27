@@ -87,3 +87,62 @@ test("observações externas entram no mesmo marcador sem criar segundo monitor"
   assert.equal(snap.patternAlignment.dimensions.some((item) => item.id === "X1"), true);
   assert.equal(snap.patternAlignment.externalObservationPath, "apps/modulos/status/centraldark-pattern-observation.json");
 });
+
+
+function writeFakeProc(procRoot, pid, command) {
+  const dir = path.join(procRoot, String(pid));
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, "cmdline"), command.split(" ").join("\u0000") + "\u0000");
+}
+
+test("executionTopology prova tool-call recente e detecta multiplicidade do bot", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "centraldark-exec-topology-"));
+  const procRoot = fs.mkdtempSync(path.join(os.tmpdir(), "centraldark-proc-"));
+  const logs = path.join(root, "logs");
+  fs.mkdirSync(logs, { recursive: true });
+
+  writeFakeProc(procRoot, 101, "node /root/CentralDark/apps/modulos/mcp/dist/index.js");
+  writeFakeProc(procRoot, 201, "node /root/CentralDark/apps/bot-telegram/unified-bot.cjs");
+  writeFakeProc(procRoot, 202, "node /root/CentralDark/apps/bot-telegram/unified-bot.cjs");
+  writeFakeProc(procRoot, 301, "/usr/local/bin/hermes acp");
+  writeFakeProc(procRoot, 302, "python -m cron.scheduler --external-worker-file worker.json");
+
+  const nowMs = Date.parse("2026-09-25T03:20:00.000Z");
+  fs.writeFileSync(path.join(logs, "mcp-audit-2026-09-25.jsonl"), JSON.stringify({
+    timestamp: "2026-09-25T03:18:30.000Z",
+    event: "mcp_tool_execution",
+    method: "tools/call",
+    toolName: "github_list_commits",
+    ok: true,
+  }) + "\n");
+
+  const snap = getOperationalSnapshot({ root, procRoot, nowMs });
+  assert.equal(snap.executionTopology.schema, "centraldark.execution-topology.v1");
+  assert.equal(snap.executionTopology.aiRequired, false);
+  assert.equal(snap.executionTopology.verdict, "EXECUTION_EVIDENCE_OBSERVED");
+  assert.equal(snap.executionTopology.mcpActivity.state, "RECENT");
+  assert.equal(snap.executionTopology.duplicateSignals.telegramBotProcesses, 2);
+  assert.equal(snap.executionTopology.duplicateSignals.telegramBotMultiplicity, "WATCH_MULTIPLE");
+  assert.equal(
+    snap.executionTopology.lanes.find((lane) => lane.id === "HERMES_CRON")?.state,
+    "RUNNING",
+  );
+});
+
+test("executionTopology não confunde processo vivo com execução provada", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "centraldark-exec-unknown-"));
+  const procRoot = fs.mkdtempSync(path.join(os.tmpdir(), "centraldark-proc-"));
+  writeFakeProc(procRoot, 101, "node /root/CentralDark/apps/modulos/mcp/dist/index.js");
+  writeFakeProc(procRoot, 201, "node /root/CentralDark/apps/bot-telegram/unified-bot.cjs");
+
+  const snap = getOperationalSnapshot({
+    root,
+    procRoot,
+    nowMs: Date.parse("2026-09-25T03:20:00.000Z"),
+  });
+
+  assert.equal(snap.executionTopology.mcpActivity.state, "UNKNOWN");
+  assert.equal(snap.executionTopology.verdict, "RUNTIME_PRESENT_EXECUTION_UNKNOWN");
+  assert.equal(snap.executionTopology.rules.processPresentIsNotExecutionProof, true);
+  assert.equal(snap.executionTopology.rules.uiLoopPausedIsNotGlobalExecutionPaused, true);
+});

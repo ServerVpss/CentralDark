@@ -47,6 +47,20 @@ CENTRALDARK_AI_BOOT:
   writer: "NONE|nome-do-escritor-atual"
 ```
 
+## 🔏 Lei do Rastro
+
+```text
+TRIGGER=🔏 !RASTRO
+OWNER=AGENTS.md
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+APPLIES_TO_ALL_ENGINES=true
+```
+
+O rastro fecha o ciclo operacional; não cria segundo workflow, owner ou memória.
+
 ## Principio central: Menos é mais = precisao, nao brevidade
 
 | MENOS (cortar) | MAIS (garantir) |
@@ -2114,3 +2128,73 @@ CHEFE_SEES_MATERIAL_DECISION_OR_RESULT=true
 ```
 
 O sistema deve construir sem paralisia, mas não baixar gates de segurança, segredo, produção, destruição ou falso-verde.
+
+### 53. PROVEN_PATH_REPLAY_LOCK — caminho provado vira receita reutilizável
+
+**Regra cristalizada:** quando uma sequência já produziu resultado reproduzível,
+sobreviveu à contraprova e foi selada, o próximo executor não redesenha a solução
+do zero. Ele reutiliza a mesma receita e adapta apenas os bindings inevitáveis do
+ambiente.
+
+```text
+CAMINHO_JA_PROVADO
+→ SELAR_RECEITA_EXECUTAVEL
+→ GUARDAR_FINGERPRINT
+→ PROXIMO_EXECUTOR_CARREGA_RECEITA
+→ ADAPTAR_SOMENTE_AMBIENTE
+→ EXECUTAR_MESMA_SEQUENCIA
+→ RODAR_MESMA_PROVA
+→ COMPARAR_RESULTADO
+→ DIVERGIU? DELTA_NOVO + REVALIDAR_CONE_AFETADO
+→ NAO_DIVERGIU? REUTILIZAR_CRISTAL
+```
+
+```text
+PROVEN_PATH_REPLAY_LOCK=true
+PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO=true
+SAME_FINGERPRINT_REUSES_PROVEN_RECIPE=true
+ENVIRONMENT_ADAPTATION_MUST_NOT_CHANGE_GOAL=true
+ENVIRONMENT_ADAPTATION_MUST_NOT_CHANGE_PROOF_LOGIC=true
+RAW_OUTPUT_BYTE_EQUALITY_REQUIRED=false
+RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH=true
+HUMAN_RETEACH_REQUIRED_FOR_SAME_PROVEN_PATH=false
+NO_NEW_SYSTEM_FOR_PROVEN_PATH_REUSE=true
+```
+
+Owner existente:
+`docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml`.
+
+Runtime consumidor:
+`scripts/trigger-fabric/centraldark_full_trigger_boot.py`.
+
+Isso estende `REUSE_BEFORE_CREATE`, `REUSE_PROOF_NO_REPEAT` e
+`REUSE_CRYSTAL_NOT_RETHINK`; não cria segunda memória, segundo método ou
+segundo cérebro.
+
+
+
+## Runtime preflight obrigatório
+
+Antes de qualquer probe/comando de runtime que possa gerar fato operacional, validar primeiro o wrapper, shell, host-mode, paths requeridos e evidência de ownership quando aplicável pelo consumer canônico `scripts/trigger-fabric/centraldark_full_trigger_boot.py preflight-lint`.
+
+```text
+WRAPPER_PREFLIGHT
+→ PASS
+→ EXECUTE_TARGET_PROBE
+→ OBSERVE_TARGET
+→ PROOF
+→ COUNTERPROOF
+→ REALITY_JUDGE
+
+WRAPPER_PREFLIGHT_FAIL
+→ TARGET_NOT_EXECUTED
+→ INVALIDATED_PROBE
+→ FIX_PREFLIGHT_AND_RETRY
+```
+
+`PREFLIGHT_PASS != RUNTIME_PASS`.
+`WRAPPER_PARSE_FAIL != TARGET_FAIL`.
+`INVALID_PROBE_MUST_NOT_BECOME_FACT=true`.
+`BRIDGE_OWNERSHIP_CLAIM_REQUIRES_COMPLETE_EVIDENCE=true`.
+
+Este preflight é extensão do método existente, não segundo gate/owner. Falha do wrapper impede promover conclusão sobre o alvo; PASS do wrapper apenas autoriza executar a prova real.
