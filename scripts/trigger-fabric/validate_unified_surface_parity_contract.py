@@ -13,10 +13,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT = ROOT / "docs" / "ARQUITETURA" / "CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml"
+INVOCATION_GRAMMAR = ROOT / "docs" / "ARQUITETURA" / "CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md"
 SKILL = ROOT / ".agents" / "skills" / "centraldark-unified-surface-parity" / "SKILL.md"
 RECEIPT = ROOT / "docs" / "RECEIPTS" / "2026-09-26-CENTRALDARK-UNIFIED-SURFACE-PARITY-01.md"
 
-REQUIRED_FILES = [CONTRACT, SKILL, RECEIPT]
+REQUIRED_FILES = [CONTRACT, INVOCATION_GRAMMAR, SKILL, RECEIPT]
 
 REQUIRED_MARKERS = {
     CONTRACT: [
@@ -35,6 +36,27 @@ REQUIRED_MARKERS = {
         "shared_ordered_trace: true",
         "same_structured_outcome: true",
         "forbid_voice_only_session_or_trace: true",
+    ],
+    INVOCATION_GRAMMAR: [
+        "# CENTRALDARK_INVOCATION_GRAMMAR_01",
+        "Owner: CENTRALDARK_UNIFIED_SURFACE_PARITY_01",
+        "SOB_DEMANDA: true",
+        "SAME_INTENT_PIPELINE: true",
+        "wake_word:",
+        "verb_dispatch:",
+        "visualize:",
+        "faca:",
+        "continue:",
+        "cristalize:",
+        "contraprova:",
+        "normalized_intent_shared: true",
+        "same_canonical_SESSION_ID: true",
+        "same_tool_call_visibility_when_supported: true",
+        "same_usage_tokens_visibility_when_supported: true",
+        "NAO_CONFUNDIR_VISUALIZE_COM_EXECUTE",
+        "NAO_CARREGAR_TUDO_POR_PADRAO",
+        "PLATFORM_UNAVAILABLE",
+        "NEXT_CURSOR:",
     ],
     SKILL: [
         "canonical_id: CENTRALDARK_UNIFIED_SURFACE_PARITY_01",
@@ -69,6 +91,13 @@ FORBIDDEN_MARKERS = {
         "CENTRALDARK_UNIFIED_SURFACE_PARITY_02",
         "V2",
         "parallel_runtime: true",
+    ],
+    INVOCATION_GRAMMAR: [
+        "CENTRALDARK_UNIFIED_SURFACE_PARITY_02",
+        "parallel_voice_runtime: true",
+        "always_load_everything: true",
+        "voice_side_channel: true",
+        "VISUALIZE_EQUALS_EXECUTE: true",
     ],
     SKILL: [
         "novo sistema paralelo",
@@ -117,6 +146,7 @@ def main() -> int:
 
     print("UNIFIED_SURFACE_PARITY_CONTRACT=PASS")
     print(f"CONTRACT={CONTRACT.relative_to(ROOT)}")
+    print(f"INVOCATION_GRAMMAR={INVOCATION_GRAMMAR.relative_to(ROOT)}")
     print(f"SKILL={SKILL.relative_to(ROOT)}")
     print(f"RECEIPT={RECEIPT.relative_to(ROOT)}")
     return 0
