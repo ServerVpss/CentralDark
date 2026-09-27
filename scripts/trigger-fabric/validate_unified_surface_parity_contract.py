@@ -19,10 +19,11 @@ SKILL = ROOT / ".agents" / "skills" / "centraldark-unified-surface-parity" / "SK
 VOICE_CLASSIFIER = ROOT / ".claude" / "skills" / "synced" / "voice-semantic-classifier" / "SKILL.md"
 INTENT_ROUTER = ROOT / ".agents" / "skills" / "centraldark-intent-deploy-router" / "SKILL.md"
 INTENT_BINDING = ROOT / ".agents" / "INTENT-DEPLOY-BINDING.json"
+TRIGGER_FAMILY_OWNER = ROOT / "docs" / "SEGURANCA" / "ADM-GATILHOS-OPERACIONAIS.json"
 RECEIPT = ROOT / "docs" / "RECEIPTS" / "2026-09-26-CENTRALDARK-UNIFIED-SURFACE-PARITY-01.md"
 INVOCATION_GRAMMAR_RECEIPT = ROOT / "docs" / "RECEIPTS" / "2026-09-27-CENTRALDARK-INVOCATION-GRAMMAR-01.md"
 
-REQUIRED_FILES = [CONTRACT, INVOCATION_GRAMMAR, SKILL, VOICE_CLASSIFIER, INTENT_ROUTER, INTENT_BINDING, RECEIPT, INVOCATION_GRAMMAR_RECEIPT]
+REQUIRED_FILES = [CONTRACT, INVOCATION_GRAMMAR, SKILL, VOICE_CLASSIFIER, INTENT_ROUTER, INTENT_BINDING, TRIGGER_FAMILY_OWNER, RECEIPT, INVOCATION_GRAMMAR_RECEIPT]
 
 REQUIRED_MARKERS = {
     CONTRACT: [
@@ -63,6 +64,9 @@ REQUIRED_MARKERS = {
         "PLATFORM_UNAVAILABLE",
         "NEXT_CURSOR:",
         "CANONICAL_CYCLE_IS_CONDITIONAL=true",
+        "CANONICAL_TRIGGER_FAMILY_OWNER=docs/SEGURANCA/ADM-GATILHOS-OPERACIONAIS.json#trigger_chain",
+        "ROUTE_ABOVE_IS_SUBSET_OF_OWNER=true",
+        "FAMILY_NOT_DUPLICATED_HERE=true",
         "TRIGGER_FAMILY_IS_NOT_ALWAYS_FULL_EXECUTION=true",
         "NO_SECOND_PARSER=true",
         "VOICE_REUSES_EXISTING_CLASSIFIER=true",
@@ -253,6 +257,27 @@ def validate_flag_contradictions(path: Path, text: str) -> list[str]:
     return errors
 
 
+def validate_route_subset_of_owner(path: Path, text: str) -> list[str]:
+    """Todo elo da rota comum escrita na gramática existe na família do dono."""
+    import json
+
+    try:
+        chain = json.loads(TRIGGER_FAMILY_OWNER.read_text(encoding="utf-8"))["trigger_chain"]
+    except Exception as exc:  # dono ausente ou ilegível não vira PASS
+        return [f"TRIGGER_FAMILY_OWNER_UNREADABLE {TRIGGER_FAMILY_OWNER}: {exc}"]
+    canonical = {item.split(" ", 1)[-1].strip() for item in chain}
+    section = text.split("## 6.1", 1)[-1].split("```text", 1)[-1].split("```", 1)[0]
+    errors: list[str] = []
+    for line in section.splitlines():
+        name = line.replace("→", "").strip()
+        if not name:
+            continue
+        name = name.split(" ", 1)[-1].strip()
+        if name not in canonical:
+            errors.append(f"ROUTE_LINK_NOT_IN_OWNER {path}: {name}")
+    return errors
+
+
 def read_text(path: Path) -> str:
     try:
         return path.read_text(encoding="utf-8")
@@ -293,6 +318,8 @@ def validate_file(path: Path) -> list[str]:
 
     errors.extend(validate_values(path, text))
     errors.extend(validate_flag_contradictions(path, text))
+    if path == INVOCATION_GRAMMAR:
+        errors.extend(validate_route_subset_of_owner(path, text))
     if path == INTENT_BINDING:
         errors.extend(validate_intent_binding_json(path, text))
     return errors

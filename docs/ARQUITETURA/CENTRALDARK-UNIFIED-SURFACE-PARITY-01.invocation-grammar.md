@@ -127,6 +127,16 @@ Este arquivo não é V2. Ele é subcontrato do owner `CENTRALDARK_UNIFIED_SURFAC
 → ⚖️ REALIDADE
 ```
 
+Esta é a **rota comum** (subconjunto), não a família inteira. A família completa tem dono único e não é copiada aqui, para não envelhecer:
+
+```text
+CANONICAL_TRIGGER_FAMILY_OWNER=docs/SEGURANCA/ADM-GATILHOS-OPERACIONAIS.json#trigger_chain
+ROUTE_ABOVE_IS_SUBSET_OF_OWNER=true
+FAMILY_NOT_DUPLICATED_HERE=true
+```
+
+Os elos fora da rota comum (💎 !DELTAÚTIL, 💠 !FIXED_POINT, 🔏 !RASTRO, 🚀 !BOOT, 🔁 !VERTEX_INVERSO, 🐚 !CARACOL e demais) continuam canônicos e entram quando pertinentes; 🔏 !RASTRO é obrigatório em toda escrita declarada ao CHEFE.
+
 Este ciclo é **ordem semântica canônica**, não ritual obrigatório. `CentralDark + verbo + payload` entra por este tecido, mas só materializa os estágios pertinentes à intenção, ao risco, ao owner e à prova exigida.
 
 ```text

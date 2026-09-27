@@ -119,6 +119,14 @@ class ParityValidatorCounterproof(unittest.TestCase):
                     '"live_voice_binding_status": "PASS"')
         self.assert_fail("live_voice_binding_status")
 
+    def test_route_link_outside_owner_fails(self) -> None:
+        self.mutate(GRAMMAR, "→ 🧾 !REGISTRA", "→ 🧾 !REGISTRA\n→ 🦄 !GATILHO_INVENTADO")
+        self.assert_fail("ROUTE_LINK_NOT_IN_OWNER")
+
+    def test_route_claimed_as_full_family_fails(self) -> None:
+        self.mutate(GRAMMAR, "ROUTE_ABOVE_IS_SUBSET_OF_OWNER=true", "ROUTE_ABOVE_IS_SUBSET_OF_OWNER=false")
+        self.assert_fail("ROUTE_ABOVE_IS_SUBSET_OF_OWNER")
+
     def test_negation_is_the_rule_not_the_violation(self) -> None:
         self.mutate(SKILL, None, "GEV/JEV nunca substitui Hermes")
         self.mutate(GRAMMAR, None, "NAO_CRIAR_CENTRALDARK_UNIFIED_SURFACE_PARITY_02")
