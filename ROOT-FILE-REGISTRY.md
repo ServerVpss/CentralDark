@@ -36,7 +36,7 @@ Cada router aponta para `LEIA-ME-IA.md` como core. NÃO define identidade, autor
 | Arquivo | Engine | Linhas |
 |---|---|---|
 | `00-COMECE-AQUI-IA.md` | Universal (fallback) | 70 |
-| `CHATGPT.md` | ChatGPT | 36 |
+| `CHATGPT.md` | ChatGPT | 73 |
 | `CODEX.md` | Codex | 40 |
 | `GEMINI.md` | Gemini | 33 |
 | `GROK.md` | Grok | 21 |
