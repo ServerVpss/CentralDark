@@ -115,7 +115,7 @@
         "CHATGPT.md": {
           "role": "chatgpt_adapter",
           "owner": "SOL",
-          "lines": 36,
+          "lines": 73,
           "surfaces": [
             "this-registry"
           ],
