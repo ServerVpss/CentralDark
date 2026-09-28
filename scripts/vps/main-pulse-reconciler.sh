@@ -46,6 +46,31 @@ git -C "$REPO" fetch --prune origin main --quiet || { log "PULSE_FAIL=FETCH"; ex
 MAIN_SHA="$(git -C "$REPO" rev-parse origin/main)"
 [[ "$MAIN_SHA" =~ ^[0-9a-f]{40}$ ]] || { log "PULSE_FAIL=MAIN_SHA_INVALID"; exit 13; }
 
+# PASS só existe se o checkout vivo realmente convergir para a main materializada.
+# Untracked/runtime é preservado; apenas tracked dirty bloqueia fail-closed.
+LIVE_HEAD_BEFORE="$(git -C "$REPO" rev-parse HEAD)"
+if [[ "$LIVE_HEAD_BEFORE" != "$MAIN_SHA" ]]; then
+  LIVE_BRANCH="$(git -C "$REPO" branch --show-current)"
+  [[ "$LIVE_BRANCH" == "main" ]] || {
+    log "PULSE_FAIL=LIVE_BRANCH_NOT_MAIN branch=$LIVE_BRANCH head=$LIVE_HEAD_BEFORE main=$MAIN_SHA"
+    exit 17
+  }
+  if ! git -C "$REPO" diff --quiet || ! git -C "$REPO" diff --cached --quiet; then
+    log "PULSE_FAIL=TRACKED_DIRTY head=$LIVE_HEAD_BEFORE main=$MAIN_SHA"
+    exit 18
+  fi
+  git -C "$REPO" merge --ff-only "$MAIN_SHA" --quiet || {
+    log "PULSE_FAIL=LIVE_FF_ONLY head=$LIVE_HEAD_BEFORE main=$MAIN_SHA"
+    exit 19
+  }
+fi
+LIVE_HEAD_AFTER="$(git -C "$REPO" rev-parse HEAD)"
+[[ "$LIVE_HEAD_AFTER" == "$MAIN_SHA" ]] || {
+  log "PULSE_FAIL=LIVE_HEAD_DID_NOT_CONVERGE head=$LIVE_HEAD_AFTER main=$MAIN_SHA"
+  exit 20
+}
+log "PULSE_LIVE_HEAD=PASS before=$LIVE_HEAD_BEFORE after=$LIVE_HEAD_AFTER main=$MAIN_SHA"
+
 if [[ -n "$SOURCE" && "$SOURCE" =~ ^[0-9a-f]{40}$ && "$SOURCE" != "$MAIN_SHA" ]]; then
   if git -C "$REPO" merge-base --is-ancestor "$SOURCE" "$MAIN_SHA" 2>/dev/null; then
     log "PULSE_SOURCE_ADVANCED requested=$SOURCE current=$MAIN_SHA"
