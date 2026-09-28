@@ -31,7 +31,7 @@ log() {
 }
 
 exec 9>"$LOCK"
-flock -n 9 || { log "PULSE_SKIP=LOCK_HELD trigger=$TRIGGER"; exit 0; }
+flock -n 9 || { log "PULSE_SKIP=LOCK_HELD trigger=$TRIGGER"; exit 75; }
 
 [[ -d "$REPO/.git" ]] || { log "PULSE_FAIL=REPO_MISSING repo=$REPO"; exit 10; }
 [[ -x "$MICRODEPLOY" ]] || { log "PULSE_FAIL=MICRODEPLOY_MISSING path=$MICRODEPLOY"; exit 11; }
