@@ -83,10 +83,12 @@ log "=== 6. Gate canônico e handoff obrigatório ==="
 if grep -q -- '--gate-only' "$DISPATCHER" \
   && grep -q 'TARGET_SHA_INPUT=' "$DISPATCHER" \
   && grep -q 'TARGET_SHA_STALE' "$DISPATCHER" \
-  && grep -q 'tlc23_runtime_gate.py --self-test' "$DISPATCHER"; then
-  pass "dispatcher suporta gate-only exact-SHA com TLC23 runtime self-test"
+  && grep -q 'tlc23_runtime_gate.py --self-test' "$DISPATCHER" \
+  && grep -q 'tlc23_runtime_gate.py --cage-test --iterations 64' "$DISPATCHER" \
+  && grep -q 'TLC23_ADVERSARIAL_CAGE=PASS' "$DISPATCHER"; then
+  pass "dispatcher suporta gate-only exact-SHA com TLC23 runtime cage"
 else
-  fail "dispatcher sem gate-only exact-SHA completo"
+  fail "dispatcher sem gate-only exact-SHA + cage TLC23"
 fi
 
 if grep -q 'DIRECT_DEPLOY_BYPASS_BLOCKED' "$CENTRAL_DEPLOY" \
