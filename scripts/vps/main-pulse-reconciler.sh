@@ -8,6 +8,8 @@ LOG_FILE="$STATE_DIR/pulse.log"
 LOCK="${CENTRALDARK_MAIN_PULSE_LOCK:-/tmp/centraldark-main-pulse.lock}"
 MICRODEPLOY="${CENTRALDARK_MAIN_PINNED_MICRODEPLOY:-/root/CentralDark/scripts/vps/main-pinned-microdeploy.sh}"
 HERMES_INBOX="${CENTRALDARK_HERMES_INBOX:-/root/CentralDark/apps/modulos/HERMES-CORE/missions/pendente}"
+HERMES_ANDAMENTO="${CENTRALDARK_HERMES_ANDAMENTO:-/root/CentralDark/apps/modulos/HERMES-CORE/missions/em-andamento}"
+HERMES_CONCLUIDAS="${CENTRALDARK_HERMES_CONCLUIDAS:-/root/CentralDark/apps/modulos/HERMES-CORE/missions/concluidas}"
 SOURCE=""
 TRIGGER="timer"
 
@@ -110,27 +112,80 @@ deploy_owner hermes "${HERMES_FILES[@]}"
 deploy_owner oauth_broker "${OAUTH_FILES[@]}"
 
 if [[ "${#UNHANDLED[@]}" -gt 0 ]]; then
-  mkdir -p "$HERMES_INBOX"
-  MISSION="$HERMES_INBOX/main-pulse-${MAIN_SHA:0:12}.md"
-  if [[ ! -e "$MISSION" ]]; then
-    {
-      echo "# MAIN PULSE — classificar delta fora do microdeploy conhecido"
-      echo
-      echo "STATUS=READ_ONLY_CLASSIFICATION"
-      echo "TRIGGER=$TRIGGER"
-      echo "FROM_SHA=$LAST_SHA"
-      echo "TO_SHA=$MAIN_SHA"
-      echo "INTENCAO=identificar owner existente e menor rota de deploy; não escrever nem aprovar"
-      echo "UNKNOWN_IS_NOT_PASS=true"
-      echo "REUSE_BEFORE_CREATE=true"
-      echo
-      echo "## Arquivos fora dos owners de microdeploy"
-      printf -- '- %s\n' "${UNHANDLED[@]}"
-    } > "$MISSION"
+  # HERMES-CORE exige o contrato de continuidade antes de retomar uma missão.
+  # Para deltas sem owner conhecido, o pulso cria diretamente uma órfã JSON
+  # validável em em-andamento; o Core absorve esse JSON no mesmo executor.
+  mkdir -p "$HERMES_ANDAMENTO" "$HERMES_CONCLUIDAS"
+  MISSION_ID="main-pulse-${MAIN_SHA:0:12}"
+  MISSION="$HERMES_ANDAMENTO/$MISSION_ID.json"
+  MISSION_DIR="$HERMES_ANDAMENTO/$MISSION_ID"
+  DONE_DIR="$HERMES_CONCLUIDAS/$MISSION_ID"
+
+  if [[ ! -e "$MISSION" && ! -d "$MISSION_DIR" && ! -d "$DONE_DIR" ]]; then
+    python3 - "$MISSION" "$MISSION_ID" "$LAST_SHA" "$MAIN_SHA" "$TRIGGER" "${UNHANDLED[@]}" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+mission_path, mission_id, from_sha, to_sha, trigger, *files = sys.argv[1:]
+mission_text = (
+    "Classificar o delta da main fora dos owners de microdeploy conhecidos. "
+    "Identificar owner existente e a menor rota segura de continuidade/deploy. "
+    "Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. "
+    f"TRIGGER={trigger}; FROM_SHA={from_sha}; TO_SHA={to_sha}; "
+    "ARQUIVOS=" + ", ".join(files)
+)
+
+state = {
+    "objetivo": "Classificar delta da main sem owner de microdeploy conhecido e identificar owner existente/menor rota segura.",
+    "autoridade": "SEGREDO/CHEFE",
+    "coordenador": "SOL",
+    "escritor": "HERMES",
+    "escopo": {
+        "tipo": "DELTA_MAIN_UNHANDLED",
+        "arquivos": files,
+        "from_sha": from_sha,
+        "to_sha": to_sha,
+    },
+    "ambiente": "VPS",
+    "classe_de_acao": "READ_ONLY_CLASSIFICATION",
+    "baseline": {
+        "head_sha": to_sha,
+        "from_sha": from_sha,
+        "fonte": "origin/main",
+    },
+    "backup": {
+        "head_sha": to_sha,
+        "strategy": "NO_MUTATION_NO_BACKUP_REQUIRED",
+    },
+    "rollback": {
+        "head_sha": to_sha,
+        "strategy": "NO_MUTATION_CLASSIFICATION_ONLY",
+    },
+    "receipt": {
+        "head_sha": to_sha,
+        "expected": "HERMES_FINALIZATION_CRITIC",
+        "mission_id": mission_id,
+    },
+    "head_sha": to_sha,
+    "terminal_state": "RUNNING",
+    "historico": [],
+    "retomadas": 0,
+    "missao": mission_text,
+}
+
+payload = {
+    "titulo": mission_id,
+    "missao": mission_text,
+    "descricao": mission_text,
+    "state": state,
+}
+Path(mission_path).write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+PY
     chmod 600 "$MISSION" 2>/dev/null || true
-    log "HERMES_CLASSIFY_QUEUED=1 file=$MISSION count=${#UNHANDLED[@]}"
+    log "HERMES_CLASSIFY_QUEUED=1 contract=continuity-v1 file=$MISSION count=${#UNHANDLED[@]}"
   else
-    log "HERMES_CLASSIFY_ALREADY_QUEUED=1 file=$MISSION"
+    log "HERMES_CLASSIFY_ALREADY_QUEUED=1 mission=$MISSION_ID"
   fi
 fi
 
