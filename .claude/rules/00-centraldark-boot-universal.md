@@ -8,6 +8,25 @@ ENGINE=CLAUDE_CODE
 
 Esta regra existe somente para garantir descoberta automática no Claude Code. Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e execute o roteamento canônico definido ali.
 
+
+## Gate obrigatório antes da primeira resposta operacional
+
+```text
+CONSULTAR_CANONICO_ANTECEDE_INVESTIGAR=true
+REPLAY_BEFORE_REDISCOVERY=true
+CANONICAL_CONSUMPTION_GATE=scripts/centraldark/canonical-consumption-gate.mjs
+CANONICAL_LEARNING_SOURCE=docs/CONSCIENCIA/APRENDIZADOS.md
+SEARCH_MISS_IS_NOT_STOP_CONDITION=true
+SEARCH_MISS_FALLBACK=DIRECT_CANONICAL_PATH_READ
+TITLE_ONLY_IS_NOT_LEARNING_CONSUMED=true
+TOOL_AVAILABLE_MUST_BE_ATTEMPTED_BEFORE_UNKNOWN=true
+UNKNOWN_WITH_MEASUREMENT_ROUTE=FAIL_CLOSED
+```
+
+Claude não pede ao CHEFE para mandar reler um aprendizado quando GitHub/path canônico
+está acessível. Busca zero cai automaticamente para leitura direta do arquivo.
+`#ACORDAR` só fecha depois do consumo da fonte aplicável.
+
 ```text
 ONE_SOL=true
 ONE_CORE=true
