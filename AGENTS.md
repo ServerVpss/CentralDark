@@ -8,6 +8,12 @@
 
 ```text
 GOVERNANCE_BOOT_REQUIRED=SIM
+CANONICAL_CONSUMPTION_PREFLIGHT_REQUIRED=SIM
+CANONICAL_CONSUMPTION_GATE_PATH=scripts/centraldark/canonical-consumption-gate.mjs
+CANONICAL_SEARCH_MISS_FALLBACK=docs/CONSCIENCIA/APRENDIZADOS.md
+POINTER_MUST_OPEN_SOURCE_BEFORE_RESPONSE=SIM
+TOOL_AVAILABLE_REQUIRES_ATTEMPT_BEFORE_UNKNOWN=SIM
+UNKNOWN_WITH_MEASUREMENT_ROUTE=FAIL_CLOSED
 REUSE_BEFORE_CREATE_REQUIRED=SIM
 MEASURE_BEFORE_CREATION_REQUIRED=SIM
 MEASURE_BEFORE_CREATION_FORMULA="REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE"
@@ -46,6 +52,12 @@ DEPENDABOT_WORKFLOW_AUTO_APPROVAL_CHANGE=afad4177a76659afec503af610dbec6c813b6c3
 ```
 
 Antes de responder ou agir:
+
+0. Satisfazer o gate de consumo canônico: resolver ponteiro → main, ler o owner
+   citado, consultar `docs/CONSCIENCIA/APRENDIZADOS.md` e, se a busca semântica
+   retornar zero, fazer leitura direta do path conhecido. Se ferramenta/rota
+   autorizada existir, tentar antes de declarar `UNKNOWN`. Owner executável:
+   `scripts/centraldark/canonical-consumption-gate.mjs`.
 
 1. Ler `LEIA-ME-IA.md`.
 2. Ler `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`.
