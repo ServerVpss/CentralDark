@@ -42,6 +42,8 @@ jobs:
           VERIFIER_DIR="/root/CentralDark/apps/modulos/HERMES-CORE/agents/Log-Verificador"
           VERIFIER_EXEC="$VERIFIER_DIR/daemon.mjs"
           VERIFIER_STATE="$VERIFIER_DIR/.estado.json"
+          WEBHOOK_APP="CentralDark-WebhookDeploy"
+          WEBHOOK_EXPECTED_EXEC="/root/CentralDark/scripts/webhook/github-webhook-deploy.mjs"
 
           verifier_json() {
             pm2 jlist 2>/dev/null | jq -c --arg app "$VERIFIER_APP" '.[] | select(.name == $app)' | head -n1
@@ -100,6 +102,30 @@ jobs:
             ALERTAS="${ALERTAS}\n• Hermes-Verificador sem heartbeat recente"
           fi
 
+          # Auto-cura do executor interno do webhook: stopped também é falha material.
+          # O listener systemd externo pode continuar ativo enquanto o executor PM2/porta 9300 morre.
+          WEBHOOK_JSON="$(PM2_HOME=/root/.pm2 pm2 jlist 2>/dev/null | jq -c --arg app "$WEBHOOK_APP" '.[] | select(.name == $app)' | head -n1)"
+          WEBHOOK_STATUS="$(echo "$WEBHOOK_JSON" | jq -r '.pm2_env.status // "missing"' 2>/dev/null)"
+          WEBHOOK_EXEC="$(echo "$WEBHOOK_JSON" | jq -r '.pm2_env.pm_exec_path // ""' 2>/dev/null)"
+          if [ -n "$WEBHOOK_JSON" ] && [ "$WEBHOOK_EXEC" = "$WEBHOOK_EXPECTED_EXEC" ] && [ "$WEBHOOK_STATUS" != "online" ]; then
+            PM2_HOME=/root/.pm2 pm2 restart "$WEBHOOK_APP" >/dev/null 2>&1
+            PM2_HOME=/root/.pm2 pm2 save --force >/dev/null 2>&1
+            sleep 5
+            echo "WEBHOOK_DEPLOY_SELF_HEAL=RESTART"
+            WEBHOOK_JSON="$(PM2_HOME=/root/.pm2 pm2 jlist 2>/dev/null | jq -c --arg app "$WEBHOOK_APP" '.[] | select(.name == $app)' | head -n1)"
+            WEBHOOK_STATUS="$(echo "$WEBHOOK_JSON" | jq -r '.pm2_env.status // "missing"' 2>/dev/null)"
+            WEBHOOK_EXEC="$(echo "$WEBHOOK_JSON" | jq -r '.pm2_env.pm_exec_path // ""' 2>/dev/null)"
+          fi
+
+          WEBHOOK_PID="$(echo "$WEBHOOK_JSON" | jq -r '.pid // 0' 2>/dev/null)"
+          PORT_9300_PID="$(ss -ltnp 'sport = :9300' 2>/dev/null | sed -n 's/.*pid=\([0-9][0-9]*\).*/\1/p' | head -n1)"
+          WEBHOOK_RECEPTOR="FAIL"
+          if [ "$WEBHOOK_EXEC" = "$WEBHOOK_EXPECTED_EXEC" ] && [ "$WEBHOOK_STATUS" = "online" ] && [ "${WEBHOOK_PID:-0}" -gt 0 ] 2>/dev/null && [ "$PORT_9300_PID" = "$WEBHOOK_PID" ]; then
+            WEBHOOK_RECEPTOR="PASS"
+          else
+            FAIL=1
+            ALERTAS="${ALERTAS}\n• WebhookDeploy inválido: status=${WEBHOOK_STATUS}, pm2_pid=${WEBHOOK_PID:-0}, port9300_pid=${PORT_9300_PID:-none}"
+          fi
           VERIFIER_TEST="FAIL"
           if node --test "$VERIFIER_DIR/provider-health.test.mjs" >/tmp/centraldark-verifier-test.log 2>&1; then
             VERIFIER_TEST="PASS"
@@ -158,6 +184,7 @@ jobs:
           echo "HERMES_VERIFIER_PM2=$VERIFIER_PM2"
           echo "HERMES_VERIFIER_HEARTBEAT=$VERIFIER_HEARTBEAT"
           echo "HERMES_VERIFIER_TEST=$VERIFIER_TEST"
+          echo "WEBHOOK_RECEPTOR=$WEBHOOK_RECEPTOR"
           echo "NOUS_FREE_CHAIN=$FREE_CHAIN"
           echo "NOUS_FREE_MODEL_DISCOVERED=$([ -n "$FREE_MODEL" ] && echo true || echo false)"
           echo "GLOBAL_FREE_ONLY=$GLOBAL_FREE_ONLY"
