@@ -30,6 +30,14 @@ está acessível. Busca zero cai automaticamente para leitura direta do arquivo.
 `#ACORDAR` só fecha depois do consumo do registro canônico.
 
 ```text
+RASTRO_FISCAL_BEFORE_CURRENT_LEDGER_RETURN=true
+PR_BODY_IS_HISTORY_NOT_CURRENT=true
+LEDGER_CURRENT_REQUIRES_EXPLICIT_CURRENT_MAIN=true
+EXACT_COMMENT_ID_DIRECT_LOOKUP_BEFORE_PAGINATION=true
+MEASURABLE_CURRENT_UNKNOWN_IS_FAIL=true
+```
+
+```text
 ONE_SOL=true
 ONE_CORE=true
 LAZY_LOAD_BY_DEMAND=true
