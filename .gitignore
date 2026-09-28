@@ -149,3 +149,4 @@ _DIAGNOSTICS/
 # runtime output do GraphPanel/Status - nao versionar, escrito ao vivo por processo
 apps/modulos/status/painel-data.json
 apps/modulos/status/graph-data.json
+apps/modulos/graph-panel/data/graph.json
