@@ -22,8 +22,17 @@ EXPECTED_ORIGIN_RE='^(git@github\.com:|https://github\.com/|ssh://git@github\.co
 [ -d "$ROOT/.git" ] || { printf 'Repositorio canônico não encontrado em ROOT\n' >&2; exit 23; }
 DISPATCHER="$ROOT/scripts/vps/deploy-guards-dispatcher.sh"
 [ -x "$DISPATCHER" ] || { printf 'CANONICAL_DEPLOY_GATE_MISSING\n' >&2; exit 26; }
-REPO_DIR="$ROOT" BRANCH=main bash "$DISPATCHER" --gate-only || { printf 'CANONICAL_TLC23_DEPLOY_GATE=BLOCK\n' >&2; exit 27; }
-GATED_SHA="$(git -C "$ROOT" rev-parse origin/main)"
+
+EVENT_SHA="${WEBHOOK_DEPLOY_SHA:-}"
+[[ "$EVENT_SHA" =~ ^[0-9a-f]{40}$ ]] || { printf 'WEBHOOK_EVENT_SHA_INVALID=%s\n' "$EVENT_SHA" >&2; exit 29; }
+
+# O PASS do worker precisa estar amarrado ao SHA do evento recebido.
+# Sem isso, um origin/main stale/adiantado pode gerar code=0 sem provar o commit anunciado no log.
+REPO_DIR="$ROOT" BRANCH=main TARGET_SHA="$EVENT_SHA" bash "$DISPATCHER" --gate-only || {
+  printf 'CANONICAL_TLC23_DEPLOY_GATE=BLOCK event_sha=%s\n' "$EVENT_SHA" >&2
+  exit 27
+}
+GATED_SHA="$EVENT_SHA"
 mkdir -p "$LOG_DIR"
 
 if [ -f "$THEME" ]; then source "$THEME"; else
@@ -62,7 +71,7 @@ else
 fi
 LIVE_HEAD="$(git -C "$ROOT" rev-parse HEAD)"
 [ "$LIVE_HEAD" = "$GATED_SHA" ] || { netflix_error "DEPLOY_TARGET_NOT_GATED live=$LIVE_HEAD gated=$GATED_SHA"; exit 28; }
-printf 'gated_sha=%s\ncanonical_sweep=PASS\n' "$GATED_SHA" >>"$SUMMARY_FILE"
+printf 'gated_sha=%s\nworker_event_sha=%s\ncanonical_sweep=PASS\n' "$GATED_SHA" "$EVENT_SHA" >>"$SUMMARY_FILE"
 
 netflix_step 3 7 "Build apps/web quando existir"
 WEB_DIR="$ROOT/apps/web"
