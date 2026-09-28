@@ -7,6 +7,26 @@ description: Record taste signals and apply-evidence events into the observing-m
 
 Brain is the agent-writable observing-memory layer. It accumulates user preferences from real signals and learns from real applications.
 
+## Universal engine binding
+
+This memory contract belongs to CentralDark, not to a provider or model. The engine that receives the teaching is included in the rule; Claude, ChatGPT/OpenAI, Hermes, Grok, Gemini, Codex, local models and future engines do not get a separate exception.
+
+```text
+APPLIES_TO_ALL_ENGINES=true
+CURRENT_ENGINE_INCLUDED=true
+ENGINE_NAME_DOES_NOT_CHANGE_MEMORY_CONTRACT=true
+CHAT_ACK_IS_DURABLE_MEMORY=false
+SESSION_CONTEXT_IS_DURABLE_MEMORY=false
+PROVIDER_LOCAL_MEMORY_IS_CANONICAL=false
+CENTRALDARK_DURABLE_MEMORY_IS_PRIMARY=true
+CHEFE_CORRECTION_PREFERENCE_OR_RULE_AUTO_INGEST=true
+REUSE_EXISTING_MEMORY_OWNER=true
+CREATE_PARALLEL_MEMORY=false
+CLAIM_SAVED_WITHOUT_LOCATION_AND_READBACK=false
+```
+
+When a durable correction, preference or operating rule is expressed, the current engine must route it through this existing owner instead of merely acknowledging it in chat. If `brain_feedback` is available, use it. If that writer is unavailable, use another already-authorized durable CentralDark route; if no durable write/readback route is available, report the persistence state as `UNKNOWN` and do not claim it was saved.
+
 ## When to call `brain_feedback`
 Call **once per taste signal** the user expresses:
 - Explicit corrections: "don't do X", "stop doing Y", "use A instead of B"
