@@ -136,6 +136,22 @@ class RastroFiscalTests(unittest.TestCase):
         self.assertEqual(2, len(b.calls))
 
 
+    def test_local_shell_gap_requires_cross_surface_handoff(self):
+        text = "Sem shell nesta superficie; TLC23 BLOCKED terminal; fronteira real."
+        r = M.verify_text(text, REPO, backend(main=FULL))
+        self.assertEqual("FAIL", r.verdict)
+        self.assertTrue(any(c.name == "local_blocker_requires_cross_surface_handoff" and c.verdict == "FAIL" for c in r.checks))
+
+    def test_local_shell_gap_with_handoff_evidence_is_not_failed_by_that_rule(self):
+        text = (
+            "Sem shell nesta superficie; blocker local. "
+            "LOCAL_BLOCKED_IS_NOT_GLOBAL_BLOCKER=true "
+            "CAPABILITY_HANDOFF=CASA -> SSH -> VPS "
+            "ROTAS_TENTADAS=local_shell,mcp_catalog,casa_handoff"
+        )
+        r = M.verify_text(text, REPO, backend(main=FULL))
+        self.assertFalse(any(c.name == "local_blocker_requires_cross_surface_handoff" and c.verdict == "FAIL" for c in r.checks))
+
     def test_response_without_trace_contract_is_executable(self):
         self.assertEqual("INVALID", M.RESPONSE_WITHOUT_TRACE)
         r = M.verify_text("Gravei a regra na main.", REPO, backend())
