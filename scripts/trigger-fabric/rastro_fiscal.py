@@ -73,6 +73,18 @@ NOT_LOCATED_COMMENT_RE = re.compile(
     re.I | re.S,
 )
 
+LOCAL_CAPABILITY_TERMINAL_RE = re.compile(
+    r"(?:sem\s+shell|shell\s+(?:nao|não)\s+esta|no\s+shell|capability\s+gap).{0,500}"
+    r"(?:fronteira|terminal|blocker|bloqueio|medicao\s+(?:nao|não)\s+existe)",
+    re.I | re.S,
+)
+CAPABILITY_HANDOFF_EVIDENCE_RE = re.compile(
+    r"(?:CAPABILITY_HANDOFF|HANDOFF_RECEIPT|HANDOFF_EXHAUSTED|"
+    r"LOCAL_BLOCKED_IS_NOT_GLOBAL_BLOCKER|CASA\s*->\s*SSH\s*->\s*VPS|"
+    r"MCP_CASA|ROTAS_TENTADAS)",
+    re.I,
+)
+
 # Canonical executable output-guard contract.
 RESPONSE_WITHOUT_TRACE = "INVALID"
 
@@ -433,6 +445,20 @@ def verify_text(text: str, repo: str, backend: Any) -> FiscalResult:
                 ))
             else:
                 checks.append(Check("exact_comment_lookup", "PASS", "direct GitHub lookup confirms exact comment is absent", str(comment_id)))
+
+    if LOCAL_CAPABILITY_TERMINAL_RE.search(text):
+        if CAPABILITY_HANDOFF_EVIDENCE_RE.search(text):
+            checks.append(Check(
+                "local_blocker_requires_cross_surface_handoff",
+                "PASS",
+                "local capability blocker carries alternate-route/handoff evidence",
+            ))
+        else:
+            checks.append(Check(
+                "local_blocker_requires_cross_surface_handoff",
+                "FAIL",
+                "local capability gap was treated as terminal/human frontier without cross-surface handoff evidence",
+            ))
 
     sha = data["sha"]
     commit_obj: Optional[dict[str, Any]] = None
