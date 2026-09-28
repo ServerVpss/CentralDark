@@ -20,6 +20,24 @@ export const MODULOS_FALLBACK: ModuloPortal[] = [
   { id: "fb-4", slug: "financeiro", nome: "Financeiro",   icone: "financeiro", href: "/financeiro",           status: "em processo", ordem: 4 },
 ];
 
+const MODULOS_ADMIN_BLOQUEADOS = new Set([
+  "admin-centraldark",
+  "centraldark-admin",
+  "admin",
+]);
+
+function ehModuloPublico(modulo: ModuloPortal) {
+  const slug = modulo.slug?.trim().toLowerCase();
+  const href = modulo.href?.trim().toLowerCase();
+  const nome = modulo.nome?.trim().toLowerCase();
+
+  if (MODULOS_ADMIN_BLOQUEADOS.has(slug)) return false;
+  if (href === "/centraldark/admin" || href?.startsWith("/centraldark/admin/")) return false;
+  if (nome === "admin centraldark") return false;
+
+  return true;
+}
+
 export function useModulosPortal() {
   const [modulos, setModulos] = useState<ModuloPortal[]>(MODULOS_FALLBACK);
   const [loading, setLoading] = useState(true);
@@ -38,7 +56,7 @@ export function useModulosPortal() {
     } else if (!data || data.length === 0) {
       setModulos(MODULOS_FALLBACK);
     } else {
-      setModulos(data as ModuloPortal[]);
+      setModulos((data as ModuloPortal[]).filter(ehModuloPublico));
       setErro(null);
     }
     setLoading(false);
