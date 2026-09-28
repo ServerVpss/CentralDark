@@ -16,6 +16,8 @@ CONSULTAR_CANONICO_ANTECEDE_INVESTIGAR=true
 REPLAY_BEFORE_REDISCOVERY=true
 CANONICAL_CONSUMPTION_GATE=scripts/centraldark/canonical-consumption-gate.mjs
 CANONICAL_LEARNING_SOURCE=docs/CONSCIENCIA/APRENDIZADOS.md
+CANONICAL_LEARNING_MODE=ALL_NUMBERED_LEARNINGS
+CANONICAL_LEARNING_GATE_ARGS=--learning ALL
 SEARCH_MISS_IS_NOT_STOP_CONDITION=true
 SEARCH_MISS_FALLBACK=DIRECT_CANONICAL_PATH_READ
 TITLE_ONLY_IS_NOT_LEARNING_CONSUMED=true
@@ -24,8 +26,8 @@ UNKNOWN_WITH_MEASUREMENT_ROUTE=FAIL_CLOSED
 ```
 
 Claude não pede ao CHEFE para mandar reler um aprendizado quando GitHub/path canônico
-está acessível. Busca zero cai automaticamente para leitura direta do arquivo.
-`#ACORDAR` só fecha depois do consumo da fonte aplicável.
+está acessível. Busca zero cai automaticamente para leitura direta do arquivo. O boot consome TODOS os aprendizados numerados antes do primeiro roteamento; a seleção por pertinência vem depois desse inventário.
+`#ACORDAR` só fecha depois do consumo do registro canônico.
 
 ```text
 ONE_SOL=true
