@@ -367,13 +367,20 @@ MÉTODO ADAPTATIVO: FIXED_POINT != PERFEIÇÃO · FIXED_POINT = SUFICIENTE_PARA_
   AVANÇA → AUDITA CASAS ANTERIORES → ERRO VOLTA AO MENOR PONTO CAUSAL → COSTURA → RETESTA → REENTRA NO MESMO TRILHO (20/5/1 é referência, não número sagrado)
 ```
 
+Revisão 2026-09-28 (sem conteúdo novo a absorver): os cinco donos não mudaram desde `ab33962`, cuja sincronia já está absorvida acima. A âncora tinha voltado a valores antigos quando um arquivo inteiro foi regravado a partir de uma cópia anterior (`c074a2d`, o conserto do update-branch). Só a âncora foi reposta.
+
+```text
+FULL_FILE_WRITE_MUST_START_FROM_CURRENT_MAIN_BLOB=true (§2.3) · ANCHOR_ROLLBACK_BY_STALE_BLOB → REPOR_ANCORA_SEM_TOCAR_CONTEUDO
+UNIFY_EXISTING_PARALLELS=CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#ephemeral_artifact_policy.duplicate_control.unify_existing_parallels
+```
+
 ```text
 SOUL_SYNC_ANCHOR_BEGIN
-AGENTS.md=b2938dfc3ad806b6896d9007129bffaaa16b3465
-LEIA-ME-IA.md=dd09005de46070257a2f51b6564b555d263e13eb
-CLAUDE.md=04d24c43a230ebdefed639f4f51eee55fe04ffa6
-CENTRALDARK_AI_BOOT.yaml=09fb1381149d3b5c111de854ee0e4b91ce7b0db0
-docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=71890dff9f98061116ff66175a8ab352c836873a
+AGENTS.md=2c587636ea5f9fe607d901d19b76046dbd272073
+LEIA-ME-IA.md=1717791f2c241e888ad85fd858bfbb12477fd026
+CLAUDE.md=90d42f57052375adf8887a6d320ea84ad1422962
+CENTRALDARK_AI_BOOT.yaml=8308f679985b9c8bdded365f154f4febe081fad2
+docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=e1810e09132bda77e77617842a320122e0b3c0bb
 SOUL_SYNC_ANCHOR_END
 ```
 
