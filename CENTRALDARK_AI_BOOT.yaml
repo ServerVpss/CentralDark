@@ -78,8 +78,9 @@ CENTRALDARK_AI_BOOT:
     owner: "scripts/centraldark/canonical-consumption-gate.mjs"
     runtime_consumer: "scripts/trigger-fabric/centraldark_full_trigger_boot.py"
     canonical_source: "docs/CONSCIENCIA/APRENDIZADOS.md"
-    required_learning: 80
-    consume_latest_learning: true
+    required_learning: "ALL"
+    learning_mode: "ALL_NUMBERED_LEARNINGS"
+    consume_all_numbered_learnings: true
     consultar_canonico_antecede_investigar: true
     replay_before_rediscovery: true
     pointer_text_is_not_source: true
