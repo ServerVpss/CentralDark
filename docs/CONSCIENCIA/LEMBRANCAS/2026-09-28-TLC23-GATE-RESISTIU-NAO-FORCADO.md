@@ -82,6 +82,12 @@ mensurável ou autorizada.
 HUMAN_COUNTERPROOF_REENTERS_LOOP=true
 BICOU_A_GRADE = SAIDA_INVALIDADA = VOLTA_PRO_LOOP
 
+ERRO_LOCAL → REWIND_LOCAL → COSTURA → RETESTE → REENTRAR_NO_MESMO_TRILHO
+
+LOOP_CONTINUO
+→ continuar enquanto NEW_MATERIAL_FACT OR OPEN_PROOF_GAP OR MATERIAL_COUNTERPROOF
+→ encerrar o delta somente em NO_NEW_MATERIAL_FACT + FIXED_POINT
+
 LOOP_CONTINUA_IFF =
   NEW_MATERIAL_FACT
   OR OPEN_PROOF_GAP
@@ -112,6 +118,8 @@ O loop não é mantido porque “não pode parar”. Ele continua somente enquan
 novo e todas as condições aplicáveis convergem, aí sim o fixed point pode ser medido.
 
 ### Exemplo que originou a fórmula
+
+`“você ainda pediu autorização” = CONTRAPROVA_HUMANA_MATERIAL` quando a autorização já estava provada.
 
 A frase do CHEFE de que o papagaio “ainda bicou a grade pedindo autorização que já tinha”
 invalidou a saída anterior. A reentrada levou o agente a usar rotas que ainda não tinha tentado,
