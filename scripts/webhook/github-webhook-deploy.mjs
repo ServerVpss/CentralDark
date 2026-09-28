@@ -156,8 +156,8 @@ async function handlePush(payload) {
   // local e distingue churn gerado de dirty material antes do git pull.
   void runDeploy(ref, afterSha)
     .then((result) => {
-      const status = result.code === 0 ? 'PASS' : 'FAIL';
-      const log = result.code === 0 ? console.log : console.error;
+      const status = result.code === 0 ? 'PASS' : result.code === 75 ? 'SKIP' : 'FAIL';
+      const log = result.code === 0 || result.code === 75 ? console.log : console.error;
       log(`[deploy] WORKER_RESULT status=${status} sha=${afterSha} code=${result.code}`);
     })
     .catch((error) => {
