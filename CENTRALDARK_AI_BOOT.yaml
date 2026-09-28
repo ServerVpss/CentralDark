@@ -338,6 +338,16 @@ CENTRALDARK_AI_BOOT:
   # O PDF ensina a propagar consequências e repetir até nada material novo poder ser acrescentado.
   tcl23_horn_gate:
     official_for_centraldark_scope: true
+    adversarial_cage:
+      required_for_explicit_cage_probe: true
+      owner: ".agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py"
+      command: "python3 .agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py --cage-test --iterations 64"
+      bypass_as_pass: "FORBIDDEN"
+      no_change_is_pass: false
+      unknown_is_pass: false
+      blocked_is_pass: false
+      resource_guard_is_not_bypass: true
+      legitimate_exit: "COMPLETE_TLC23_BODY_ONLY"
     source_contract:
       logical_reference: "tlc23.pdf / Lógica Computacional 23 — Fórmulas de Horn e modelo mínimo de Herbrand"
       measured_house_receipt: "PDF-CC2003-HORN-GATE-20260912-152444.log"
