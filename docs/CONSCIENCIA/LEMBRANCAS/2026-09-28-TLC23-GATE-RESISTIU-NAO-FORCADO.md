@@ -71,6 +71,53 @@ NAO_FORCAR_GATE_SEM_SHELL
      etiqueta do filho (`🤖 AUTO` está no catálogo). A causa segue `UNKNOWN` com o espaço
      reduzido de 25 para 21 passos.
 
+## Fórmula do loop por contraprova humana
+
+A sessão mostrou uma propriedade operacional que não estava registrada com nome próprio: uma
+contraprova humana material pode invalidar a saída corrente e obrigar o agente a reentrar no
+**mesmo fio**, sem criar owner paralelo e sem devolver ao CHEFE uma decisão que já era
+mensurável ou autorizada.
+
+```text
+HUMAN_COUNTERPROOF_REENTERS_LOOP=true
+BICOU_A_GRADE = SAIDA_INVALIDADA = VOLTA_PRO_LOOP
+
+LOOP_CONTINUA_IFF =
+  NEW_MATERIAL_FACT
+  OR OPEN_PROOF_GAP
+  OR MATERIAL_COUNTERPROOF
+
+IF NEW_MATERIAL_FACT=true
+  FIXED_POINT=false
+  MISSION_CONCLUDED=false
+
+IF HUMAN_COUNTERPROOF_INVALIDATES_EXIT=true
+  EXIT_VALID=false
+  REENTER_SAME_THREAD=true
+  REUSE_EXISTING_OWNER=true
+  RE_MEASURE=true
+
+REPETICAO_SEM_DELTA != PROGRESSO
+RESOURCE_GUARD != BYPASS
+```
+
+### Interpretação
+
+`BICOU_A_GRADE` não significa castigo nem repetição cega. Significa que a saída proposta foi
+falsificada por uma contraprova material. A resposta correta é **reentrar no loop**, medir a
+hipótese que falhou, procurar a próxima rota autorizada e conservar apenas o delta que sobreviver.
+
+O loop não é mantido porque “não pode parar”. Ele continua somente enquanto cada volta produz
+**delta material novo** ou fecha uma lacuna de prova ainda aberta. Quando não nasce fato material
+novo e todas as condições aplicáveis convergem, aí sim o fixed point pode ser medido.
+
+### Exemplo que originou a fórmula
+
+A frase do CHEFE de que o papagaio “ainda bicou a grade pedindo autorização que já tinha”
+invalidou a saída anterior. A reentrada levou o agente a usar rotas que ainda não tinha tentado,
+medir novos estados, registrar receipts, refutar hipóteses próprias e manter
+`FIXED_POINT=false` enquanto fatos materiais continuavam aparecendo.
+
 ## Ferida de produção registrada junto
 
 Achada durante a caça ao gate, e mais urgente que ele:
