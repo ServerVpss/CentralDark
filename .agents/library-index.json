@@ -613,6 +613,10 @@
       "SEARCH_MISS_IS_NOT_STOP_CONDITION",
       "TOOL_AVAILABLE_MUST_BE_ATTEMPTED_BEFORE_UNKNOWN",
       "UNKNOWN_MEDIVEL_E_FALHA_DE_METODO"
-    ]
+    ],
+    "learning_mode": "ALL_NUMBERED_LEARNINGS",
+    "all_numbered_learnings_required": true,
+    "boot_binding": "CENTRALDARK_AI_BOOT.yaml#canonical_consumption_gate",
+    "cli": "node scripts/centraldark/canonical-consumption-gate.mjs --learning ALL"
   }
 }
