@@ -489,3 +489,9 @@ updated: 2026-08-27
 - **Data:** 2026-09-28
 - **Contexto:** O PR Update Branch em ubuntu-latest aparece como failure, mas o log atual provou vários PUT /pulls/{PR}/update-branch com behind_by 1→0 antes de encontrar PRs antigos conflitantes e sair com código 2.
 - **Aprendizado:** Não classificar um workflow inteiro só pela cor. Medir subpassos: preservar deltas comprovados, tratar conflitos/checks pendentes como bloqueio real e manter fail-closed. RED != USELESS; FAILURE_GLOBAL pode conter SUCCESS_LOCAL comprovado, sem virar falso-verde.
+
+### 68. Híbrido é por trilhos, não trocando o runner da COSTURA
+- **Categoria:** regra
+- **Data:** 2026-09-28
+- **Contexto:** A VPS e dois runners self-hosted voltaram online e estão executando jobs, enquanto o fluxo determinístico de Update Branch segue funcional em ubuntu-latest. O deploy self-hosted do HEAD atual ainda está pending na fila.
+- **Aprendizado:** Preservar Update Branch em GitHub-hosted. Usar self-hosted/VPS como trilho adicional de deploy/execução. HYBRID = HOSTED_SYNC + SELF_HOSTED_EXEC, sem substituir o runner que mantém a COSTURA respirando. Deploy atual só vira PROVADO após o run do HEAD realmente iniciar e concluir.
