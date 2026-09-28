@@ -2,6 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PainelConsumo } from "@/components/central/PainelConsumo";
+import { PainelAdminCentralDark } from "@/components/central/PainelAdminCentralDark";
 import { useServerFn } from "@tanstack/react-start";
 import {
   Activity,
@@ -147,6 +148,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <TabsTrigger value="sync">Sync Center</TabsTrigger>
                 <TabsTrigger value="design">Design Center</TabsTrigger>
                 {autenticado ? (
+                  <TabsTrigger value="admin">Admin CentralDark</TabsTrigger>
+                ) : null}
+                {autenticado ? (
                   <TabsTrigger value="sistema">Sistema CentralDark</TabsTrigger>
                 ) : null}
                 <TabsTrigger value="hermes">Hermes</TabsTrigger>
@@ -183,6 +187,11 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             <TabsContent value="design" className="mt-10">
               <DesignCenter />
             </TabsContent>
+            {autenticado ? (
+              <TabsContent value="admin" className="mt-10">
+                <PainelAdminCentralDark />
+              </TabsContent>
+            ) : null}
             {autenticado ? (
               <TabsContent value="sistema" className="mt-10">
                 <SistemaCentralDark
