@@ -37,7 +37,7 @@ set -Eeuo pipefail
 REPO_DIR="${REPO_DIR:-/root/CentralDark}"
 BRANCH="${BRANCH:-main}"
 MCP_HEALTH="${MCP_HEALTH:-http://127.0.0.1:9100/health}"
-SSH_KEY="${SSH_KEY:-$HOME/.ssh/deploy_centraldark}"
+SSH_KEY="${SSH_KEY:-${HOME:-/root}/.ssh/deploy_centraldark}"
 TARGET_SHA_INPUT="${TARGET_SHA:-}"
 
 CENTRALDARK_DEPLOY="$REPO_DIR/scripts/vps/centraldark-deploy.sh"
