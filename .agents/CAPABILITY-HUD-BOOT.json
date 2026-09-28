@@ -6,7 +6,14 @@
   "purpose": "Antes de responder 'nao consigo' ou voltar cedo, medir as capacidades realmente carregadas na sessao e separar capacidade de raciocinio de capacidade de execucao.",
   "trigger_binding": {
     "canonical_trigger": "#ACORDAR",
-    "aliases": ["#ACORDAR", "!ACORDAR", "#acordar", "!acordar", "ACORDAR", "acordar"],
+    "aliases": [
+      "#ACORDAR",
+      "!ACORDAR",
+      "#acordar",
+      "!acordar",
+      "ACORDAR",
+      "acordar"
+    ],
     "called_by_acordar": true,
     "acordar_must_load_capability_hud": true,
     "acordar_must_probe_relevant_route_before_claiming_limit": true,
@@ -27,22 +34,38 @@
   },
   "capability_classes": {
     "github": {
-      "minimum_probe": ["fetch current main", "fetch target file or commit", "if CI is involved try workflow-run lookup by SHA, then jobs, then logs"],
+      "minimum_probe": [
+        "fetch current main",
+        "fetch target file or commit",
+        "if CI is involved try workflow-run lookup by SHA, then jobs, then logs"
+      ],
       "expected_route": "commit_or_sha -> workflow_run -> jobs -> logs -> exact failure or PASS",
       "if_missing": "ask only for exact missing identifier: run_id, job_id, commit_sha or workflow link",
       "do_not_stop_at": "single commit read"
     },
     "remote_desktop_commander": {
-      "minimum_probe": ["discover available devices", "confirm auth context", "try harmless read/status before declaring unavailable"],
+      "minimum_probe": [
+        "discover available devices",
+        "confirm auth context",
+        "try harmless read/status before declaring unavailable"
+      ],
       "expected_route": "device -> shell/filesystem -> stdout/stderr -> proof",
       "if_missing": "state auth_context/device visibility gap"
     },
     "google_drive": {
-      "minimum_probe": ["discover mounted/connector source", "search/list requested folder", "read exact artifact when available"],
+      "minimum_probe": [
+        "discover mounted/connector source",
+        "search/list requested folder",
+        "read exact artifact when available"
+      ],
       "if_missing": "state missing file/folder id or connector visibility gap"
     },
     "runtime_local_or_vps": {
-      "minimum_probe": ["identify bridge", "run harmless pwd/git status/health when allowed", "separate Casa from VPS"],
+      "minimum_probe": [
+        "identify bridge",
+        "run harmless pwd/git status/health when allowed",
+        "separate Casa from VPS"
+      ],
       "if_missing": "state bridge/tool gap, not world failure"
     }
   },
@@ -62,7 +85,21 @@
     "minimum_question": "ask only the missing identifier/action needed to continue",
     "unknown_is_not_pass": true,
     "searched_is_not_verified": true,
-    "tool_listed_is_not_tool_active": true
+    "tool_listed_is_not_tool_active": true,
+    "intent_confidence_target_for_material_mutation": "99.9%",
+    "intent_confidence_is_technical_proof": false,
+    "meta_grill_before_material_response": true,
+    "meta_grill_before_mutation": true,
+    "evolve_existing_before_create": true,
+    "return_same_artifact_evolved": true,
+    "volta_uma_casa_on_local_error": true,
+    "green_state_must_be_preserved": true,
+    "experiment_must_not_destroy_last_proven_state": true,
+    "proven_delta_only_returns_to_green_state": true,
+    "replay_before_rediscovery": true,
+    "legacy_preservation": true,
+    "legacy_is_compatibility_not_second_owner": true,
+    "one_system_only": true
   },
   "canonical_skill": ".agents/skills/centraldark-capability-hud/SKILL.md",
   "receipts": "#1562 or equivalent child when material",
@@ -74,5 +111,14 @@
     "EVERY_MEMORY_CLAIM_NAMES_WHERE": true,
     "LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN": true,
     "APPLIES_TO_ALL_ENGINES": true
-  }
+  },
+  "canonical_schema": "centraldark.agents.capability-hud-boot",
+  "schema_compatibility": {
+    "legacy_schema_id": "centraldark.agents.capability-hud-boot.v1",
+    "legacy_schema_preserved": true,
+    "legacy_schema_is_parallel_architecture": false,
+    "canonical_owner_unchanged": true,
+    "no_v1_v2_v3_parallel_owner": true
+  },
+  "canonical_continuous_contract": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#311-contrato-contínuo--intenção--meta-grill--sol-executora--fio-verde-chefe-2026-09-28"
 }
