@@ -63,15 +63,22 @@ if (args.unknownClaimed && args.measurementRouteExists) {
   fail(32, 'UNKNOWN_MEDIVEL_E_FALHA_DE_METODO');
 }
 
-if (!args.learning) {
-  fail(33, 'LEARNING_NUMBER_REQUIRED', { usage: 'node scripts/centraldark/canonical-consumption-gate.mjs --learning 80' });
-}
-
 if (!fs.existsSync(absFile)) {
   fail(34, 'CANONICAL_PATH_REQUIRED_AFTER_SEARCH_MISS', { file: args.file });
 }
 
 const text = fs.readFileSync(absFile, 'utf8');
+
+// Sem número explícito, o boot consome diretamente o aprendizado numerado
+// mais recente. Busca zero nunca encerra a rota quando o path canônico é conhecido.
+if (!args.learning) {
+  const matches = [...text.matchAll(/^###\\s+(\\d+)\\.\\s+.+$/gm)];
+  if (!matches.length) {
+    fail(33, 'NO_NUMBERED_LEARNING_IN_CANONICAL_FILE', { file: args.file });
+  }
+  args.learning = matches.at(-1)[1];
+}
+
 const section = extractLearning(text, args.learning);
 if (!section) {
   fail(35, 'LEARNING_NOT_FOUND_IN_CANONICAL_FILE', { file: args.file, learning: args.learning });
