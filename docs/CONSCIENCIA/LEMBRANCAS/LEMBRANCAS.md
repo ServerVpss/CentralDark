@@ -240,3 +240,16 @@ Conteúdo: Quando o CHEFE afirma que um entendimento/direção discutido é exat
 - [[BANDA_COMPASSO_GLOBAL]] — compasso e anti-eco.
 - [[GRAPH-INVESTIGATOR]] — auditoria de propriedades/tags/links.
 - [[SEMANTIC-LINKER]] — conexões semânticas explicáveis.
+
+## 📌 Entradas
+
+
+### [2026-09-28T06:18] Continuidade: uma intenção, várias janelas
+- **Data:** 2026-09-28
+- **Tags:** continuidade, checkpoint, fios, sol_executora, evidencia, costura
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-10-28
+- **Promovida:** sim
+
+Conteúdo: O fio operacional é único. Quando a janela do chat enche ou degrada, exportar checkpoint e continuar em outra janela sem criar nova arquitetura. Erro visual/vermelho é telemetria; classificar por evidência de subpassos. GitHub cristaliza o durável; runtime mede o presente.
