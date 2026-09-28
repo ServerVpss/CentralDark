@@ -96,6 +96,25 @@ anti_loop:
     - investigation plan
   gate_pass_before_action_executed: FORBIDDEN
 
+adversarial_cage:
+  owner: .agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py
+  command: "python3 .agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py --cage-test --iterations 64"
+  mode: REPEAT_UNTIL_FIXED_POINT_WITH_BOUNDED_PROBE_BUDGET
+  bypass_as_pass: FORBIDDEN
+  legitimate_pass_requires_complete_body: true
+  no_change_is_escape: false
+  blocked_is_escape: false
+  unknown_is_escape: false
+  max_iterations_per_probe: 4096
+  default_iterations: 64
+  resource_guard_is_not_bypass: true
+  pass_requires:
+    - TLC23_SOURCE_IDENTITY_PROVED
+    - RUNTIME_FINGERPRINTS_MEASURED
+    - ALL_ADVERSARIAL_CASES_NON_PASS
+    - LEGITIMATE_CONTROL_PASS
+    - ZERO_BYPASS_DETECTED
+
 fixed_point:
   close_when: NO_NEW_MATERIAL_FACTS_AND_REQUIRED_FACTS_PROVED
   contradiction: INVALIDATE_DEPENDENT_CONE_AND_REDERIVE
