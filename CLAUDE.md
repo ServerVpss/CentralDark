@@ -1,7 +1,7 @@
 ---
 title: "CLAUDE.md"
 date: 2026-08-24
-updated: 2026-09-28T16:30:00-03:00
+updated: 2026-09-28T16:35:00-03:00
 status: DERIVED_VIEW
 tags: [boot, contrato, claude, ponte, intencao, live-editing]
 category: "A-Agentes"
