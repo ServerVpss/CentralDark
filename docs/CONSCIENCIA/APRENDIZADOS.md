@@ -483,3 +483,9 @@ updated: 2026-08-27
 - **Data:** 2026-09-28
 - **Contexto:** Os exports rotulados Fio A/B/C pareciam ramificações independentes, mas a reconciliação dos próprios HTMLs mostrou que a intenção permanece a mesma e só a janela de conversa muda quando o contexto enche.
 - **Aprendizado:** Não criar arquitetura paralela de memória por chat. Operar como CONTINUITY_CHECKPOINT: mesma intenção e mesmo fio; export HTML serve para recuperar contexto e provar trajetória. GitHub continua memória permanente; chat é memória operacional temporária; HTML é checkpoint.
+
+### 67. Workflow vermelho pode ter executado delta útil e falhado fechado
+- **Categoria:** regra
+- **Data:** 2026-09-28
+- **Contexto:** O PR Update Branch em ubuntu-latest aparece como failure, mas o log atual provou vários PUT /pulls/{PR}/update-branch com behind_by 1→0 antes de encontrar PRs antigos conflitantes e sair com código 2.
+- **Aprendizado:** Não classificar um workflow inteiro só pela cor. Medir subpassos: preservar deltas comprovados, tratar conflitos/checks pendentes como bloqueio real e manter fail-closed. RED != USELESS; FAILURE_GLOBAL pode conter SUCCESS_LOCAL comprovado, sem virar falso-verde.
