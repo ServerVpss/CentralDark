@@ -291,11 +291,10 @@ def cognitive_bios_state(repo: Path) -> dict:
 
 
 def canonical_consumption_gate_state(repo: Path) -> dict:
-    """Fail-closed: #80 e o aprendizado mais recente precisam ser lidos direto do canônico."""
+    """Fail-closed: todos os aprendizados numerados precisam ser consumidos direto do canônico."""
     gate = repo / CANONICAL_CONSUMPTION_GATE
     commands = {
-        "required_learning_80": ["node", str(gate), "--file", CANONICAL_LEARNINGS.as_posix(), "--learning", "80"],
-        "latest_learning": ["node", str(gate), "--file", CANONICAL_LEARNINGS.as_posix()],
+        "all_numbered_learnings": ["node", str(gate), "--file", CANONICAL_LEARNINGS.as_posix(), "--learning", "ALL"],
     }
     receipts = {}
     for name, command in commands.items():
@@ -314,9 +313,20 @@ def canonical_consumption_gate_state(repo: Path) -> dict:
             "ok": bool(payload.get("ok")) if isinstance(payload, dict) else False,
             "learning": payload.get("learning") if isinstance(payload, dict) else None,
             "source": payload.get("source") if isinstance(payload, dict) else None,
+            "count": payload.get("count") if isinstance(payload, dict) else None,
+            "first": payload.get("first") if isinstance(payload, dict) else None,
+            "last": payload.get("last") if isinstance(payload, dict) else None,
+            "includes_learning_80": payload.get("includes_learning_80") if isinstance(payload, dict) else None,
             "stdout_sha256": hashlib.sha256((proc.stdout or "").encode("utf-8")).hexdigest(),
         }
-    bound = all(x["exit_code"] == 0 and x["ok"] for x in receipts.values())
+    bound = all(
+        x["exit_code"] == 0
+        and x["ok"]
+        and x.get("learning") == "ALL"
+        and (x.get("count") or 0) > 0
+        and x.get("includes_learning_80") is True
+        for x in receipts.values()
+    )
     return {
         "status": "BOUND" if bound else "INVALID",
         "owner": CANONICAL_CONSUMPTION_GATE.as_posix(),
@@ -324,6 +334,7 @@ def canonical_consumption_gate_state(repo: Path) -> dict:
         "CONSULTAR_CANONICO_ANTECEDE_INVESTIGAR": True,
         "REPLAY_BEFORE_REDISCOVERY": True,
         "SEARCH_MISS_IS_NOT_STOP_CONDITION": True,
+        "ALL_NUMBERED_LEARNINGS_REQUIRED": True,
         "UNKNOWN_MEDIVEL_E_FALHA_DE_METODO": True,
         "receipts": receipts,
     }
