@@ -1,0 +1,1 @@
+Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=8344cd9a99d648a950c769bb04cfa2e7dd4fa224; TO_SHA=6e452b2997510f028519df30070fa5c480ca1324; ARQUIVOS=docs/CONSCIENCIA/APRENDIZADOS.md

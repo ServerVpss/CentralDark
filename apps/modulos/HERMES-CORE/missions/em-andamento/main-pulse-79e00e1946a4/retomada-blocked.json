@@ -1,0 +1,22 @@
+{
+  "schema": "centraldark.hermes-continuity-block.v1",
+  "result": "BLOCKED",
+  "mission": "main-pulse-79e00e1946a4",
+  "source": "/root/CentralDark/apps/modulos/HERMES-CORE/missions/em-andamento/main-pulse-79e00e1946a4/state.json",
+  "head_sha": null,
+  "reasons": [
+    "MISSING_FIELD:ambiente",
+    "MISSING_FIELD:autoridade",
+    "MISSING_FIELD:backup",
+    "MISSING_FIELD:baseline",
+    "MISSING_FIELD:classe_de_acao",
+    "MISSING_FIELD:coordenador",
+    "MISSING_FIELD:escopo",
+    "MISSING_FIELD:escritor",
+    "MISSING_FIELD:head_sha",
+    "MISSING_FIELD:objetivo",
+    "MISSING_FIELD:receipt",
+    "MISSING_FIELD:rollback"
+  ],
+  "fingerprint": "dc2248043ac5c7ed6ddbb001009c3a9a680bd144e72b58860dd05137eda2d5cb"
+}

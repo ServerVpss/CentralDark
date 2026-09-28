@@ -1,0 +1,48 @@
+{
+  "titulo": "main-pulse-79e00e1946a4",
+  "missao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=3749b2e88e3bd4b5e5e2054e7d9c8c8b4b82d4d2; TO_SHA=79e00e1946a42d1e36315fa1d644988215c4e569; ARQUIVOS=.agents/CAPABILITY-HUD-BOOT.json, .claude/CENTRALDARK-FLOW-LOCKS.md, CENTRALDARK_AI_BOOT.yaml, CLAUDE.md, CODEX.md",
+  "descricao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=3749b2e88e3bd4b5e5e2054e7d9c8c8b4b82d4d2; TO_SHA=79e00e1946a42d1e36315fa1d644988215c4e569; ARQUIVOS=.agents/CAPABILITY-HUD-BOOT.json, .claude/CENTRALDARK-FLOW-LOCKS.md, CENTRALDARK_AI_BOOT.yaml, CLAUDE.md, CODEX.md",
+  "state": {
+    "objetivo": "Classificar delta da main sem owner de microdeploy conhecido e identificar owner existente/menor rota segura.",
+    "autoridade": "SEGREDO/CHEFE",
+    "coordenador": "SOL",
+    "escritor": "HERMES",
+    "escopo": {
+      "tipo": "DELTA_MAIN_UNHANDLED",
+      "arquivos": [
+        ".agents/CAPABILITY-HUD-BOOT.json",
+        ".claude/CENTRALDARK-FLOW-LOCKS.md",
+        "CENTRALDARK_AI_BOOT.yaml",
+        "CLAUDE.md",
+        "CODEX.md"
+      ],
+      "from_sha": "3749b2e88e3bd4b5e5e2054e7d9c8c8b4b82d4d2",
+      "to_sha": "79e00e1946a42d1e36315fa1d644988215c4e569"
+    },
+    "ambiente": "VPS",
+    "classe_de_acao": "READ_ONLY_CLASSIFICATION",
+    "baseline": {
+      "head_sha": "79e00e1946a42d1e36315fa1d644988215c4e569",
+      "from_sha": "3749b2e88e3bd4b5e5e2054e7d9c8c8b4b82d4d2",
+      "fonte": "origin/main"
+    },
+    "backup": {
+      "head_sha": "79e00e1946a42d1e36315fa1d644988215c4e569",
+      "strategy": "NO_MUTATION_NO_BACKUP_REQUIRED"
+    },
+    "rollback": {
+      "head_sha": "79e00e1946a42d1e36315fa1d644988215c4e569",
+      "strategy": "NO_MUTATION_CLASSIFICATION_ONLY"
+    },
+    "receipt": {
+      "head_sha": "79e00e1946a42d1e36315fa1d644988215c4e569",
+      "expected": "HERMES_FINALIZATION_CRITIC",
+      "mission_id": "main-pulse-79e00e1946a4"
+    },
+    "head_sha": "79e00e1946a42d1e36315fa1d644988215c4e569",
+    "terminal_state": "RUNNING",
+    "historico": [],
+    "retomadas": 0,
+    "missao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=3749b2e88e3bd4b5e5e2054e7d9c8c8b4b82d4d2; TO_SHA=79e00e1946a42d1e36315fa1d644988215c4e569; ARQUIVOS=.agents/CAPABILITY-HUD-BOOT.json, .claude/CENTRALDARK-FLOW-LOCKS.md, CENTRALDARK_AI_BOOT.yaml, CLAUDE.md, CODEX.md"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "id": "drift-1790231469540",
+  "tema": "Drift detectado (22 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-Hermes: +8 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-WebhookDeploy: +9 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-GuardiaoConsciencia: +8 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-GuardiaoAnalista: +8 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-Respiracao: +9 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-EvolucaoIAs: +8 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-SyncDrive: +9 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-GraphPanel: +8 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-Zentinel: +8 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-MultiZap: +8 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-CloneDeck: +8 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-EliteWS: +8 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-EliteAnthropic: +8 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-ContasAdmin: +8 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-MCP: +8 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-HubBot-Srver1: +8 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-HubBot-Guardiao: +8 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-Memoria: +8 restarts"
+      },
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-HermesVerificador: +8 restarts"
+      },
+      {
+        "tipo": "mapa-violacao",
+        "detalhe": "falha de validação mascarada: .github/workflows/remote-desktop-multi-account-live-reconcile.yml:55"
+      },
+      {
+        "tipo": "mapa-violacao",
+        "detalhe": "falha de validação mascarada: .github/workflows/remote-desktop-multi-account-live-reconcile.yml:65"
+      },
+      {
+        "tipo": "commit-novo",
+        "detalhe": "ac17e5ff19a → ec52fad88be"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

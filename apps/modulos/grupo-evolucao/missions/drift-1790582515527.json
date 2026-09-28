@@ -1,0 +1,17 @@
+{
+  "id": "drift-1790582515527",
+  "tema": "Drift detectado (2 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "modulo-novo",
+        "detalhe": "opencti"
+      },
+      {
+        "tipo": "mapa-violacao",
+        "detalhe": "falha de validação mascarada: .github/workflows/remote-desktop-multi-account-live-reconcile.yml:77"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

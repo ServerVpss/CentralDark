@@ -1,0 +1,13 @@
+{
+  "id": "drift-1790361039649",
+  "tema": "Drift detectado (1 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "mapa-violacao",
+        "detalhe": "falha de validação mascarada: .github/workflows/remote-desktop-multi-account-live-reconcile.yml:77"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

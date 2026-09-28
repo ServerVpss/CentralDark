@@ -6,6 +6,11 @@ authority:
   executor_continuity: HERMES/PIVETE
   judge: REALITY
 principles:
+  response_without_trace_invalid: true
+  every_write_claim_to_chefe_requires_commit_sha_path_link_readback: true
+  every_memory_claim_must_name_storage_location: true
+  direct_main_write_requires_ledger_1562_receipt_same_turn: true
+  rastro_applies_to_all_engines: true
   one_system_only: true
   reuse_before_create: true
   one_owner_per_capability: true
@@ -204,6 +209,8 @@ bot_entry:
     - docs/CONSCIENCIA/PADRAO-EMOJIS.md
     - docs/CONSCIENCIA/MULTIBUSSOLA.md
     - .agents/skills/meta-lupa/SKILL.md
+    - .agents/skills/centraldark-unified-surface-parity/SKILL.md
+    - docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml
   install_semantics: LOAD_CANONICAL_REFERENCE_NOT_COPY_BRAIN
   runtime_activation_requires_observation: true
 model_import_contract:
@@ -257,6 +264,27 @@ continuation:
   changed_target: REVALIDATE_AFFECTED_CHAIN_ONLY
   no_new_information: NO_CHANGE_NEXT
   next_execution_baseline: LAST_GOOD_STATE
+
+proven_crystal_main_fast_path:
+  marker: PROVEN_CRYSTAL_MAIN_FAST_PATH
+  trigger: CHEFE_REGISTRA_ON_PROVEN_CRYSTAL
+  source_contract: docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml
+  skill_owner: .agents/skills/centraldark-unified-surface-parity/SKILL.md
+  same_fingerprint: PASSAGE_OPEN
+  reproof_policy: AFFECTED_CONE_ONLY
+  full_ci_reproof_for_unchanged_proven_crystal: false
+  direct_main_allowed_when_authorized: true
+  required_before_main:
+    - CURRENT_MAIN_REMEASURE
+    - OWNER_MATCH
+    - PROVENANCE_SHA_HASH_FINGERPRINT_OR_RECEIPT
+    - MINIMUM_TARGETED_TEST_FOR_NEW_BINDING_WHEN_APPLICABLE
+    - COUNTERPROOF_NEW_BINDING_ONLY
+    - MAIN_READBACK
+    - RECEIPT
+  divergence: REOPEN_AFFECTED_CONE_ONLY
+  unknown: BLOCK_FALSE_GREEN_NOT_REPLAY
+  rule: PROVEN_CRYSTAL_REPLAY_BEFORE_REDISCOVERY
 package_ingest:
   inventory_before_read: true
   hash_before_semantic_reanalysis: true
@@ -560,3 +588,14 @@ measurement_confidence:
     allowed_when: ALL_DEFINED_SCOPE_CONDITIONS_ARE_DETERMINISTICALLY_VERIFIED
     means: DEFINED_SCOPE_CONTRACT_COMPLETE
     does_not_mean: EXTERNAL_WORLD_INFALLIBLE
+
+
+rastro_lock:
+  marker: "🔏 !RASTRO"
+  owner: "AGENTS.md + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md"
+  response_without_trace: INVALID
+  write_claim_required_fields: [COMMIT_SHA, PATH, LINK, READBACK]
+  memory_claim_requires_location: true
+  direct_main_requires_ledger_1562_same_turn: true
+  applies_to_all_engines: true
+  authority_expansion: false

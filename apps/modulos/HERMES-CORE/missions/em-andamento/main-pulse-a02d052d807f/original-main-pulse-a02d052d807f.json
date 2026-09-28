@@ -1,0 +1,44 @@
+{
+  "titulo": "main-pulse-a02d052d807f",
+  "missao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=c40ec1c04b68049d1b12a6de4fe484f8902b3f5a; TO_SHA=a02d052d807fd47890bbe33ef3c93588998163b9; ARQUIVOS=scripts/webhook/deploy-job.sh",
+  "descricao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=c40ec1c04b68049d1b12a6de4fe484f8902b3f5a; TO_SHA=a02d052d807fd47890bbe33ef3c93588998163b9; ARQUIVOS=scripts/webhook/deploy-job.sh",
+  "state": {
+    "objetivo": "Classificar delta da main sem owner de microdeploy conhecido e identificar owner existente/menor rota segura.",
+    "autoridade": "SEGREDO/CHEFE",
+    "coordenador": "SOL",
+    "escritor": "HERMES",
+    "escopo": {
+      "tipo": "DELTA_MAIN_UNHANDLED",
+      "arquivos": [
+        "scripts/webhook/deploy-job.sh"
+      ],
+      "from_sha": "c40ec1c04b68049d1b12a6de4fe484f8902b3f5a",
+      "to_sha": "a02d052d807fd47890bbe33ef3c93588998163b9"
+    },
+    "ambiente": "VPS",
+    "classe_de_acao": "READ_ONLY_CLASSIFICATION",
+    "baseline": {
+      "head_sha": "a02d052d807fd47890bbe33ef3c93588998163b9",
+      "from_sha": "c40ec1c04b68049d1b12a6de4fe484f8902b3f5a",
+      "fonte": "origin/main"
+    },
+    "backup": {
+      "head_sha": "a02d052d807fd47890bbe33ef3c93588998163b9",
+      "strategy": "NO_MUTATION_NO_BACKUP_REQUIRED"
+    },
+    "rollback": {
+      "head_sha": "a02d052d807fd47890bbe33ef3c93588998163b9",
+      "strategy": "NO_MUTATION_CLASSIFICATION_ONLY"
+    },
+    "receipt": {
+      "head_sha": "a02d052d807fd47890bbe33ef3c93588998163b9",
+      "expected": "HERMES_FINALIZATION_CRITIC",
+      "mission_id": "main-pulse-a02d052d807f"
+    },
+    "head_sha": "a02d052d807fd47890bbe33ef3c93588998163b9",
+    "terminal_state": "RUNNING",
+    "historico": [],
+    "retomadas": 0,
+    "missao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=c40ec1c04b68049d1b12a6de4fe484f8902b3f5a; TO_SHA=a02d052d807fd47890bbe33ef3c93588998163b9; ARQUIVOS=scripts/webhook/deploy-job.sh"
+  }
+}

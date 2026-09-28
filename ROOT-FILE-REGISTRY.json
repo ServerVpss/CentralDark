@@ -15,21 +15,35 @@
         "LEIA-ME-IA.md": {
           "role": "canonical_entrypoint",
           "owner": "SEGREDO/CHEFE",
-          "surfaces": ["library-index", "AGENTS.md", "CLAUDE.md", "boot-universal-rule", "intent-deploy-binding"],
+          "surfaces": [
+            "library-index",
+            "AGENTS.md",
+            "CLAUDE.md",
+            "boot-universal-rule",
+            "intent-deploy-binding"
+          ],
           "boot_order": 1,
           "status": "linked"
         },
         "AGENTS.md": {
           "role": "operational_contract",
           "owner": "SEGREDO/CHEFE",
-          "surfaces": ["library-index", "CLAUDE.md", "boot-universal-rule", "intent-deploy-binding"],
+          "surfaces": [
+            "library-index",
+            "CLAUDE.md",
+            "boot-universal-rule",
+            "intent-deploy-binding"
+          ],
           "boot_order": 2,
           "status": "linked"
         },
         "CLAUDE.md": {
           "role": "engine_bridge_adapter",
           "owner": "SOL",
-          "surfaces": ["boot-universal-rule", "intent-deploy-binding"],
+          "surfaces": [
+            "boot-universal-rule",
+            "intent-deploy-binding"
+          ],
           "boot_order": 3,
           "status": "linked",
           "note": "Adapter para Claude Code/Cowork. Aponta para LEIA-ME-IA.md e AGENTS.md."
@@ -37,31 +51,42 @@
         "CENTRALDARK_AI_BOOT.yaml": {
           "role": "boot_config_yaml",
           "owner": "SOL",
-          "surfaces": ["LEIA-ME-IA.md", "AGENTS.md"],
+          "surfaces": [
+            "LEIA-ME-IA.md",
+            "AGENTS.md"
+          ],
           "status": "linked"
         },
         "SOURCES.json": {
           "role": "source_registry",
           "owner": "SOL",
-          "surfaces": ["LEIA-ME-IA.md"],
+          "surfaces": [
+            "LEIA-ME-IA.md"
+          ],
           "status": "linked"
         },
         "SECOND-BRAIN.yml": {
           "role": "brain_config",
           "owner": "SOL",
-          "surfaces": ["LEIA-ME-IA.md"],
+          "surfaces": [
+            "LEIA-ME-IA.md"
+          ],
           "status": "linked"
         },
         "ARCHITECTURE.mmd": {
           "role": "architecture_diagram",
           "owner": "SOL",
-          "surfaces": ["LEIA-ME-IA.md"],
+          "surfaces": [
+            "LEIA-ME-IA.md"
+          ],
           "status": "linked"
         },
         "README.md": {
           "role": "github_readme",
           "owner": "SEGREDO/CHEFE",
-          "surfaces": ["github"],
+          "surfaces": [
+            "github"
+          ],
           "status": "standard"
         }
       }
@@ -73,42 +98,54 @@
           "role": "universal_ia_entrypoint",
           "owner": "SOL",
           "lines": 70,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "CHATGPT.md": {
           "role": "chatgpt_adapter",
           "owner": "SOL",
           "lines": 36,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "CODEX.md": {
           "role": "codex_adapter",
           "owner": "SOL",
           "lines": 40,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "GEMINI.md": {
           "role": "gemini_adapter",
           "owner": "SOL",
           "lines": 33,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "GROK.md": {
           "role": "grok_adapter",
           "owner": "SOL",
           "lines": 21,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         ".windsurfrules": {
           "role": "windsurf_adapter",
           "owner": "SOL",
           "lines": 33,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         }
       }
@@ -120,42 +157,54 @@
           "role": "handoff_protocol",
           "owner": "SOL",
           "lines": 136,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "CONTINGENCY.md": {
           "role": "contingency_plan",
           "owner": "SEGREDO/CHEFE",
           "lines": 34,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "DELTA-CONTINUO.md": {
           "role": "delta_continuous_protocol",
           "owner": "SOL",
           "lines": 90,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "FIO_3H_FLUXO.md": {
           "role": "3h_flow_protocol",
           "owner": "SOL",
           "lines": 65,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "INSTALACAO.md": {
           "role": "installation_guide",
           "owner": "SOL",
           "lines": 84,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "_HANDOFF_CHRISTOFER_20260901.md": {
           "role": "specific_handoff_archive",
           "owner": "SOL",
           "lines": 155,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked",
           "note": "Handoff específico datado. Considerar mover para docs/HANDOFFS/"
         }
@@ -168,35 +217,45 @@
           "role": "deep_search_security",
           "owner": "SOL",
           "lines": 9,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "recon.sh": {
           "role": "reconnaissance",
           "owner": "SOL",
           "lines": 39,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "test_leak.py": {
           "role": "leak_detection_test",
           "owner": "SOL",
           "lines": 76,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "varredura_chaves.sh": {
           "role": "key_sweep",
           "owner": "SOL",
           "lines": 17,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "varredura_prod.sh": {
           "role": "prod_sweep",
           "owner": "SOL",
           "lines": 26,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         }
       }
@@ -208,28 +267,36 @@
           "role": "service_monitor",
           "owner": "SOL",
           "lines": 15,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "monitor_unificado.sh": {
           "role": "unified_monitor",
           "owner": "SOL",
           "lines": 35,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "ver_logs.sh": {
           "role": "log_viewer",
           "owner": "SOL",
           "lines": 19,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "ver_logs_api.sh": {
           "role": "api_log_viewer",
           "owner": "SOL",
           "lines": 11,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         }
       }
@@ -241,35 +308,45 @@
           "role": "workflow_analyzer",
           "owner": "SOL",
           "lines": 73,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "central_horario.py": {
           "role": "scheduling_utility",
           "owner": "SOL",
           "lines": 33,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "payload_test.py": {
           "role": "payload_tester",
           "owner": "SOL",
           "lines": 23,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "probe.py": {
           "role": "service_probe",
           "owner": "SOL",
           "lines": 58,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         },
         "script.js": {
           "role": "main_utility_script",
           "owner": "SOL",
           "lines": 659,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked",
           "note": "Script principal JS. Verificar se deve ser movido para scripts/"
         },
@@ -277,7 +354,9 @@
           "role": "smoke_test",
           "owner": "SOL",
           "lines": 128,
-          "surfaces": ["this-registry"],
+          "surfaces": [
+            "this-registry"
+          ],
           "status": "now-linked"
         }
       }
@@ -288,29 +367,76 @@
         "ecosystem.config.cjs": {
           "role": "pm2_config_active",
           "owner": "SOL",
-          "surfaces": ["pm2-runtime"],
+          "surfaces": [
+            "pm2-runtime"
+          ],
           "status": "standard"
         },
-        "package.json": { "role": "node_manifest", "status": "standard" },
-        "package-lock.json": { "role": "node_lockfile", "status": "standard" },
-        "eslint.config.js": { "role": "linter_config", "status": "standard" },
-        "postcss.config.js": { "role": "postcss_config", "status": "standard" },
-        "tailwind.config.ts": { "role": "tailwind_config", "status": "standard" },
-        "tsconfig.json": { "role": "typescript_config_base", "status": "standard" },
-        "tsconfig.app.json": { "role": "typescript_config_app", "status": "standard" },
-        "tsconfig.node.json": { "role": "typescript_config_node", "status": "standard" },
-        "vite.config.ts": { "role": "bundler_config", "status": "standard" },
-        "vitest.config.ts": { "role": "test_runner_config", "status": "standard" },
-        "components.json": { "role": "shadcn_components", "status": "standard" },
-        "style.css": { "role": "global_styles", "status": "standard" }
+        "package.json": {
+          "role": "node_manifest",
+          "status": "standard"
+        },
+        "package-lock.json": {
+          "role": "node_lockfile",
+          "status": "standard"
+        },
+        "eslint.config.js": {
+          "role": "linter_config",
+          "status": "standard"
+        },
+        "postcss.config.js": {
+          "role": "postcss_config",
+          "status": "standard"
+        },
+        "tailwind.config.ts": {
+          "role": "tailwind_config",
+          "status": "standard"
+        },
+        "tsconfig.json": {
+          "role": "typescript_config_base",
+          "status": "standard"
+        },
+        "tsconfig.app.json": {
+          "role": "typescript_config_app",
+          "status": "standard"
+        },
+        "tsconfig.node.json": {
+          "role": "typescript_config_node",
+          "status": "standard"
+        },
+        "vite.config.ts": {
+          "role": "bundler_config",
+          "status": "standard"
+        },
+        "vitest.config.ts": {
+          "role": "test_runner_config",
+          "status": "standard"
+        },
+        "components.json": {
+          "role": "shadcn_components",
+          "status": "standard"
+        },
+        "style.css": {
+          "role": "global_styles",
+          "status": "standard"
+        }
       }
     },
     "ide_config": {
       "description": "Configuração de IDEs e ferramentas externas.",
       "files": {
-        "CentralDark.code-workspace": { "role": "vscode_workspace", "status": "standard" },
-        ".coderabbit.yaml": { "role": "coderabbit_config", "status": "standard" },
-        ".graphifyignore": { "role": "graphify_ignore", "status": "standard" }
+        "CentralDark.code-workspace": {
+          "role": "vscode_workspace",
+          "status": "standard"
+        },
+        ".coderabbit.yaml": {
+          "role": "coderabbit_config",
+          "status": "standard"
+        },
+        ".graphifyignore": {
+          "role": "graphify_ignore",
+          "status": "standard"
+        }
       }
     },
     "legacy_backup": {
@@ -327,11 +453,31 @@
           "note": "Superseded by ecosystem.config.cjs",
           "action": "consider_removal"
         },
-        "ecosystem.config.js.bak-20260705-133220": { "role": "backup", "status": "legacy", "action": "remove" },
-        "ecosystem.config.js.bak-20260705-133359": { "role": "backup", "status": "legacy", "action": "remove" },
-        "ecosystem.config.js.bak-20260705-134317": { "role": "backup", "status": "legacy", "action": "remove" },
-        "ecosystem.config.js.bak-mcplogdir-20260728115631": { "role": "backup", "status": "legacy", "action": "remove" },
-        "ecosystem.config.cjs.bak-mcplogdir-20260728115631": { "role": "backup", "status": "legacy", "action": "remove" }
+        "ecosystem.config.js.bak-20260705-133220": {
+          "role": "backup",
+          "status": "legacy",
+          "action": "remove"
+        },
+        "ecosystem.config.js.bak-20260705-133359": {
+          "role": "backup",
+          "status": "legacy",
+          "action": "remove"
+        },
+        "ecosystem.config.js.bak-20260705-134317": {
+          "role": "backup",
+          "status": "legacy",
+          "action": "remove"
+        },
+        "ecosystem.config.js.bak-mcplogdir-20260728115631": {
+          "role": "backup",
+          "status": "legacy",
+          "action": "remove"
+        },
+        "ecosystem.config.cjs.bak-mcplogdir-20260728115631": {
+          "role": "backup",
+          "status": "legacy",
+          "action": "remove"
+        }
       }
     }
   },
@@ -349,5 +495,29 @@
     "standard": 16,
     "legacy": 7,
     "cleaned_this_commit": 8
+  },
+  "integrity_gate": {
+    "schema": "centraldark.root-file-registry-integrity.v1",
+    "surfaces": {
+      "ROOT_FILE_REGISTRY_MD": "ROOT-FILE-REGISTRY.md",
+      "ROOT_FILE_REGISTRY_JSON": "ROOT-FILE-REGISTRY.json",
+      "ROOT_FILE_BINDING_YAML": "root-file-binding.yaml",
+      "ROOT_FILE_ROUTER_SKILL": ".agents/skills/root-file-contract-router/SKILL.md",
+      "ROOT_FILE_PRECOMMIT_HOOK": ".githooks/pre-commit-root-contract.sh"
+    },
+    "library_index": {
+      "path": ".agents/library-index.json",
+      "required_version": "1.2.0",
+      "required_skill_id": "root-file-contract-router"
+    },
+    "expected_receipt": [
+      "ROOT_FILE_REGISTRY_MD=PASS",
+      "ROOT_FILE_REGISTRY_JSON=PASS",
+      "ROOT_FILE_BINDING_YAML=PASS",
+      "ROOT_FILE_ROUTER_SKILL=PASS",
+      "ROOT_FILE_PRECOMMIT_HOOK=PASS",
+      "LIBRARY_INDEX_V1_2_0=PASS"
+    ],
+    "fail_closed": true
   }
 }

@@ -1,0 +1,44 @@
+{
+  "titulo": "main-pulse-3dcb86bc6ee1",
+  "missao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=8785222090efdf53d950db85844fe4c87c9dab2a; TO_SHA=3dcb86bc6ee1c8409bc7e8ceb95a0b71bcce5164; ARQUIVOS=.github/workflows/remote-desktop-multi-account-live-reconcile.yml",
+  "descricao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=8785222090efdf53d950db85844fe4c87c9dab2a; TO_SHA=3dcb86bc6ee1c8409bc7e8ceb95a0b71bcce5164; ARQUIVOS=.github/workflows/remote-desktop-multi-account-live-reconcile.yml",
+  "state": {
+    "objetivo": "Classificar delta da main sem owner de microdeploy conhecido e identificar owner existente/menor rota segura.",
+    "autoridade": "SEGREDO/CHEFE",
+    "coordenador": "SOL",
+    "escritor": "HERMES",
+    "escopo": {
+      "tipo": "DELTA_MAIN_UNHANDLED",
+      "arquivos": [
+        ".github/workflows/remote-desktop-multi-account-live-reconcile.yml"
+      ],
+      "from_sha": "8785222090efdf53d950db85844fe4c87c9dab2a",
+      "to_sha": "3dcb86bc6ee1c8409bc7e8ceb95a0b71bcce5164"
+    },
+    "ambiente": "VPS",
+    "classe_de_acao": "READ_ONLY_CLASSIFICATION",
+    "baseline": {
+      "head_sha": "3dcb86bc6ee1c8409bc7e8ceb95a0b71bcce5164",
+      "from_sha": "8785222090efdf53d950db85844fe4c87c9dab2a",
+      "fonte": "origin/main"
+    },
+    "backup": {
+      "head_sha": "3dcb86bc6ee1c8409bc7e8ceb95a0b71bcce5164",
+      "strategy": "NO_MUTATION_NO_BACKUP_REQUIRED"
+    },
+    "rollback": {
+      "head_sha": "3dcb86bc6ee1c8409bc7e8ceb95a0b71bcce5164",
+      "strategy": "NO_MUTATION_CLASSIFICATION_ONLY"
+    },
+    "receipt": {
+      "head_sha": "3dcb86bc6ee1c8409bc7e8ceb95a0b71bcce5164",
+      "expected": "HERMES_FINALIZATION_CRITIC",
+      "mission_id": "main-pulse-3dcb86bc6ee1"
+    },
+    "head_sha": "3dcb86bc6ee1c8409bc7e8ceb95a0b71bcce5164",
+    "terminal_state": "RUNNING",
+    "historico": [],
+    "retomadas": 0,
+    "missao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=8785222090efdf53d950db85844fe4c87c9dab2a; TO_SHA=3dcb86bc6ee1c8409bc7e8ceb95a0b71bcce5164; ARQUIVOS=.github/workflows/remote-desktop-multi-account-live-reconcile.yml"
+  }
+}

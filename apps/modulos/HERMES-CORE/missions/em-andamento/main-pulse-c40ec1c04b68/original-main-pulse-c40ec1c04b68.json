@@ -1,0 +1,44 @@
+{
+  "titulo": "main-pulse-c40ec1c04b68",
+  "missao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=3dcb86bc6ee1c8409bc7e8ceb95a0b71bcce5164; TO_SHA=c40ec1c04b68049d1b12a6de4fe484f8902b3f5a; ARQUIVOS=.claude/skills/synced/voice-semantic-classifier/SKILL.md",
+  "descricao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=3dcb86bc6ee1c8409bc7e8ceb95a0b71bcce5164; TO_SHA=c40ec1c04b68049d1b12a6de4fe484f8902b3f5a; ARQUIVOS=.claude/skills/synced/voice-semantic-classifier/SKILL.md",
+  "state": {
+    "objetivo": "Classificar delta da main sem owner de microdeploy conhecido e identificar owner existente/menor rota segura.",
+    "autoridade": "SEGREDO/CHEFE",
+    "coordenador": "SOL",
+    "escritor": "HERMES",
+    "escopo": {
+      "tipo": "DELTA_MAIN_UNHANDLED",
+      "arquivos": [
+        ".claude/skills/synced/voice-semantic-classifier/SKILL.md"
+      ],
+      "from_sha": "3dcb86bc6ee1c8409bc7e8ceb95a0b71bcce5164",
+      "to_sha": "c40ec1c04b68049d1b12a6de4fe484f8902b3f5a"
+    },
+    "ambiente": "VPS",
+    "classe_de_acao": "READ_ONLY_CLASSIFICATION",
+    "baseline": {
+      "head_sha": "c40ec1c04b68049d1b12a6de4fe484f8902b3f5a",
+      "from_sha": "3dcb86bc6ee1c8409bc7e8ceb95a0b71bcce5164",
+      "fonte": "origin/main"
+    },
+    "backup": {
+      "head_sha": "c40ec1c04b68049d1b12a6de4fe484f8902b3f5a",
+      "strategy": "NO_MUTATION_NO_BACKUP_REQUIRED"
+    },
+    "rollback": {
+      "head_sha": "c40ec1c04b68049d1b12a6de4fe484f8902b3f5a",
+      "strategy": "NO_MUTATION_CLASSIFICATION_ONLY"
+    },
+    "receipt": {
+      "head_sha": "c40ec1c04b68049d1b12a6de4fe484f8902b3f5a",
+      "expected": "HERMES_FINALIZATION_CRITIC",
+      "mission_id": "main-pulse-c40ec1c04b68"
+    },
+    "head_sha": "c40ec1c04b68049d1b12a6de4fe484f8902b3f5a",
+    "terminal_state": "RUNNING",
+    "historico": [],
+    "retomadas": 0,
+    "missao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=3dcb86bc6ee1c8409bc7e8ceb95a0b71bcce5164; TO_SHA=c40ec1c04b68049d1b12a6de4fe484f8902b3f5a; ARQUIVOS=.claude/skills/synced/voice-semantic-classifier/SKILL.md"
+  }
+}

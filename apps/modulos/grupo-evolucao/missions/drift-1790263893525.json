@@ -1,0 +1,25 @@
+{
+  "id": "drift-1790263893525",
+  "tema": "Drift detectado (4 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "mtproto-service"
+      },
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-ArsenalAdapter"
+      },
+      {
+        "tipo": "mapa-violacao",
+        "detalhe": "falha de validação mascarada: .github/workflows/remote-desktop-multi-account-live-reconcile.yml:55"
+      },
+      {
+        "tipo": "mapa-violacao",
+        "detalhe": "falha de validação mascarada: .github/workflows/remote-desktop-multi-account-live-reconcile.yml:65"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

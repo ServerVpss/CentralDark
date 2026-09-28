@@ -2,7 +2,7 @@
 # ══════════════════════════════════════════════════════════════════════
 # CentralDark — deploy do repositório na VPS
 #
-# Escopo: levar <caminho-vps> ao SHA de origin/main e reiniciar os
+# Escopo: levar /root/CentralDark ao SHA de origin/main e reiniciar os
 # serviços declarados. NÃO substitui deploy-operational-guards.sh, que é
 # estreito (só HermesVerificador + mapeamento). Este cobre o repo.
 #
@@ -31,7 +31,7 @@
 # ══════════════════════════════════════════════════════════════════════
 set -Eeuo pipefail
 
-REPO_DIR="${REPO_DIR:-<caminho-vps>}"
+REPO_DIR="${REPO_DIR:-/root/CentralDark}"
 BRANCH="${BRANCH:-main}"
 MCP_HEALTH="${MCP_HEALTH:-http://127.0.0.1:9100/health}"
 APPS="${APPS:-}"
@@ -411,7 +411,7 @@ log "ATRAS=$ATRAS AFRENTE=$AFRENTE DEPLOY_DIRTY=$SUJOS UNTRACKED_PRESERVED=$UNTR
 
 # Cache canônico limpo para consumidores de SOUL/skills/runtime. Ele é uma
 # projeção descartável de origin/main e NÃO substitui o checkout operacional.
-# Isso permite reancoragem mesmo quando <caminho-vps> contém estado vivo
+# Isso permite reancoragem mesmo quando /root/CentralDark contém estado vivo
 # ainda não reconciliado. O fluxo reverso continua passando pelo writer
 # canônico; nunca promovemos a árvore suja por rsync/reset cego.
 if [[ "$CANONICAL_CACHE" -eq 1 ]]; then

@@ -1,0 +1,19 @@
+{
+  "policy": "CENTRALDARK_LOCAL_PORTS_OVER_TAILSCALE",
+  "mode": "allowlist_only",
+  "tailnet_ip": "100.121.152.119",
+  "tailnet_host": "",
+  "note": "Expose somente portas registradas pela CentralDark. Nao abrir portas arbitrarias.",
+  "routes": [
+    {
+      "id": "telegram-mtproto-config",
+      "service": "mtproto-service",
+      "listen_host": "100.121.152.119",
+      "listen_port": 18790,
+      "target_host": "127.0.0.1",
+      "target_port": 8790,
+      "owner": "scripts/telegram-mtproto/server.js",
+      "status_expected": "CONFIG_BLOCKED_UNTIL_TELEGRAM_APP_KEYS"
+    }
+  ]
+}

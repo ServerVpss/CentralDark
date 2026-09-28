@@ -1,0 +1,7 @@
+{
+  "missao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=ccddef9c9cd75f15c1b1582ac2895cf6db8cb838; TO_SHA=3749b2e88e3bd4b5e5e2054e7d9c8c8b4b82d4d2; ARQUIVOS=AGENTS.md, CHATGPT.md, LEIA-ME-IA.md",
+  "historico": [],
+  "retomadas": 1,
+  "terminal_state": "BLOCKED",
+  "terminal_reason": "MAX_FALHAS_DECISOR"
+}

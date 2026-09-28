@@ -1,0 +1,1 @@
+Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=c40ec1c04b68049d1b12a6de4fe484f8902b3f5a; TO_SHA=a02d052d807fd47890bbe33ef3c93588998163b9; ARQUIVOS=scripts/webhook/deploy-job.sh

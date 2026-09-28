@@ -1,0 +1,206 @@
+{
+  "objetivo": "Classificar delta da main sem owner de microdeploy conhecido e identificar owner existente/menor rota segura.",
+  "autoridade": "SEGREDO/CHEFE",
+  "coordenador": "SOL",
+  "escritor": "HERMES",
+  "escopo": {
+    "tipo": "DELTA_MAIN_UNHANDLED",
+    "arquivos": [
+      "docs/RECEIPTS/2026-09-28-main-pulse-continuity-contract-probe.md"
+    ],
+    "from_sha": "fbfc7c4180666ec8ac3a763e1912399b584e10d1",
+    "to_sha": "b9da4e05d0475eb9298f1834cb7f0d523f2e33f4"
+  },
+  "ambiente": "VPS",
+  "classe_de_acao": "READ_ONLY_CLASSIFICATION",
+  "baseline": {
+    "head_sha": "b9da4e05d0475eb9298f1834cb7f0d523f2e33f4",
+    "from_sha": "fbfc7c4180666ec8ac3a763e1912399b584e10d1",
+    "fonte": "origin/main"
+  },
+  "backup": {
+    "head_sha": "b9da4e05d0475eb9298f1834cb7f0d523f2e33f4",
+    "strategy": "NO_MUTATION_NO_BACKUP_REQUIRED"
+  },
+  "rollback": {
+    "head_sha": "b9da4e05d0475eb9298f1834cb7f0d523f2e33f4",
+    "strategy": "NO_MUTATION_CLASSIFICATION_ONLY"
+  },
+  "receipt": {
+    "head_sha": "b9da4e05d0475eb9298f1834cb7f0d523f2e33f4",
+    "expected": "HERMES_FINALIZATION_CRITIC",
+    "mission_id": "main-pulse-b9da4e05d047"
+  },
+  "head_sha": "b9da4e05d0475eb9298f1834cb7f0d523f2e33f4",
+  "terminal_state": "BLOCKED",
+  "historico": [
+    {
+      "etapa_titulo": "🔎 Lendo probe de continuidade da main",
+      "ferramenta": "ler_arquivo",
+      "args": {
+        "path": "docs/RECEIPTS/2026-09-28-main-pulse-continuity-contract-probe.md"
+      },
+      "resultado": "ENOENT: no such file or directory, open '/root/CentralDark/docs/RECEIPTS/2026-09-28-main-pulse-continuity-contract-probe.md'",
+      "ok": false,
+      "critic": "Arquivo inexistente no caminho informado; o agente deve listar o diretório RECEIPTS para validar o nome exato ou a existência do arquivo."
+    },
+    {
+      "etapa_titulo": "🔎 Listando RECEIPTS para localizar probe de continuidade",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "ls -la docs/RECEIPTS/"
+      },
+      "resultado": "total 140\ndrwxr-xr-x  2 root root 4096 Sep 25 19:33 .\ndrwxrwxr-x 39 root root 4096 Sep 25 19:33 ..\n-rw-------  1 root root  971 Sep 24 03:02 2026-09-16-HERMES-STATE-DRIVEN-NARRATION-FIXED-POINT-CANDIDATE.md\n-rw-------  1 root root 2571 Sep 24 03:02 2026-09-16-HERMES-STATE-DRIVEN-NARRATION-ROLLING-HANDOFF.md\n-rw-r--r--  1 root root 2758 Sep 19 04:34 2026-09-16-HISTORIA-DREAM-OBSIDIAN-INTERLIGADOS.md\n-rw-------  1 root root 3551 Sep 22 21:37 2026-09-16-MCP-TOOLCALL-RECEIPT-INTENT-RESILIENCE.md\n-rw-------  1 root root 5050 Sep 24 03:02 2026-09-16-PR-LIVE-GAMIFIED-STATUS-CONTRACT.md\n-rw-r--r--  1 root root 1737 Sep 22 21:49 2026-09-16-PR-REVIEW-FINDING-RUNTIME.md\n-rw-------  1 root root  487 Sep 24 03:02 2026-09-16-PR1554-GAMIFIED-VALIDATION-SEED.md\n-rw-r--r--  1 root root 3825 Sep 19 04:34 2026-09-18-PROVED-KERNEL-DIRECT-MAIN.md\n-rw-------  1 root root 2898 Sep 20 17:33 2026-09-19-HUB-POSTGREST-403-RUNTIME-REGRESSION.md\n-rw-------  1 root root 3656 Sep 22 21:37 2026-09-21-LOVABLE-CENTRALDARK-DELTA-AUDIT.md\n-rw-------  1 root root 6120 Sep 22 21:37 2026-09-22-CI-REMEDIATION-PRMAE-1562.md\n-rw-r--r--  1 root root 1759 Sep 25 19:33 2026-09-24-REMEASURE-BEFORE-CREATE.md\n-rw-------  1 root root 1118 Sep 24 07:56 2026-09-24-tailscale-local-port-runtime.md\n-rw-------  1 root root 1744 Sep 24 07:39 2026-09-24-telegram-mtproto-runtime.md\n-rw-------  1 root root 1274 Sep 24 08:38 2026-09-24-useai-bot-adapter.md\n-rw-r--r--  1 root root 9762 Sep 25 00:45 2026-09-25-current-reality-hermes-mcp-bridge-reanchor.md\n-rw-------  1 root root 1261 Sep 25 02:56 2026-09-25-gh-hybrid-rover.md\n-rw-------  1 root root 1121 Sep 25 02:56 2026-09-25-gh-mcp-conta2-root-config-route.md\n-rw-------  1 root root 4238 Sep 25 01:42 2026-09-25-vps-dirty-inventory-before-clean.md\n-rw-r--r--  1 root root 6436 Sep 19 04:34 CENTRALDARK_COT_REACT_PUBLIC_MCP_AUTH_BRIDGE_2026-09-18.md\n-rw-r--r--  1 root root 2261 Sep 11 04:31 CENTRALDARK_FONTES_GITHUB_DRIVE_RECONCILIATION.md\n-rw-r--r--  1 root root 1997 Sep 15 20:51 CENTRALDARK_HUB_MCP_HIBRIDO_ADMIN_RDC_2026-09-15.md\n-rw-r--r--  1 root root 3793 Sep 19 04:34 CENTRALDARK_ONE_LOGIN_HYBRID_AUTH_CODE_2026-09-15.md\n-rw-r--r--  1 root root 4075 Sep 11 04:31 CENTRALDARK_ZENDRIVE_OBSIDIAN_AUTOMACOES.md\n-rw-r--r--  1 root root 5058 Sep 19 04:34 PDF_CC2003_MAIN_FIXED_POINT.md\n-rw-r--r--  1 root root 3356 Sep 11 04:31 README.md\n",
+      "ok": true,
+      "learning_ref": "204397ece8819d7e",
+      "learning_persisted": true,
+      "learning_deduped": false
+    },
+    {
+      "etapa_titulo": "🔎 Localizando probe de continuidade em RECEIPTS",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "find docs/RECEIPTS -name '*pulse-continuity*' -o -name '*2026-09-28*'"
+      },
+      "resultado": "",
+      "ok": true
+    },
+    {
+      "etapa_titulo": "🔎 Localizando probe via busca parcial em RECEIPTS",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "ls -la docs/RECEIPTS/ | grep -i '2026-09-28' || ls -la docs/RECEIPTS/ | grep -i 'probe'"
+      },
+      "resultado": "exit=1 \nCommand failed: bash -lc cd /root/CentralDark && ls -la docs/RECEIPTS/ | grep -i '2026-09-28' || ls -la docs/RECEIPTS/ | grep -i 'probe'\n",
+      "ok": false,
+      "critic": "A busca falhou pois o arquivo não existe ou o nome difere; a próxima etapa deve listar todo o diretório para validar os nomes reais."
+    },
+    {
+      "etapa_titulo": "🔎 Busca recursiva de probe em RECEIPTS",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "find docs/RECEIPTS/ -maxdepth 2 -name '*probe*' -o -name '2026-09-28*'"
+      },
+      "resultado": "",
+      "ok": true
+    },
+    {
+      "etapa_titulo": "🔎 Varredura completa para localizar probe de continuidade",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "find docs/ -maxdepth 3 -name '*continuity-contract-probe.md' -o -name '*main-pulse*' || ls -R docs/RECEIPTS/"
+      },
+      "resultado": "",
+      "ok": true
+    },
+    {
+      "etapa_titulo": "🔎 Varredura global por probe de continuidade",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "find /root/CentralDark -name \"*probe*\" -o -name \"*2026-09-28*\""
+      },
+      "resultado": "/root/CentralDark/_worktrees/main-pinned-runtime-fastpath/probe.py\n/root/CentralDark/_worktrees/main-pinned-runtime-fastpath/scripts/trigger-fabric/engine_gap_probe.py\n/root/CentralDark/_worktrees/main-pinned-runtime-fastpath/docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RECEIPTS/2026-09-28-main-pulse-live-proof.md\n/root/CentralDark/_worktrees/main-pinned-runtime-fastpath/apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/probes\n/root/CentralDark/probe.py\n/root/CentralDark/scripts/contas-admin/venv/lib/python3.10/site-packages/pip/_vendor/urllib3/http2/probe.py\n/root/CentralDark/scripts/contas-admin/venv/lib/python3.10/site-packages/pip/_vendor/urllib3/http2/__pycache__/probe.cpython-310.pyc\n/root/CentralDark/scripts/trigger-fabric/engine_gap_probe.py\n/root/CentralDark/infra/guardiao/.venv/lib/python3.10/site-packages/pip/_vendor/urllib3/http2/probe.py\n/root/CentralDark/scratch/grok-build/crates/codegen/xai-grok-pager-pty-harness/src/bin/startup_tui_probe.rs\n/root/CentralDark/scratch/grok-build/crates/codegen/xai-grok-pager-pty-harness/tests/pty_e2e/minimal/minimal_switch_probe_failure_rolls_back.rs\n/root/CentralDark/scratch/grok-build/crates/codegen/xai-grok-workspace/src/bin/workspace_server_probe.rs\n/root/CentralDark/scratch/grok-build/crates/codegen/xai-grok-pager-render/src/terminal/tmux_probe.rs\n/root/CentralDark/scratch/grok-build/crates/codegen/xai-grok-pager-render/src/terminal/probe.rs\n/root/CentralDark/scratch/grok-build/crates/codegen/xai-grok-voice/src/bin/voice_probe.rs\n/root/CentralDark/scratch/grok-build/crates/codegen/xai-grok-voice/src/probe.rs\n/root/CentralDark/scratch/grok-build/crates/codegen/xai-grok-shared/examples/clipboard_probe.rs\n/root/CentralDark/scratch/grok-build/crates/codegen/xai-fast-worktree/src/git/probe.rs\n/root/CentralDark/scratch/grok-build/crates/codegen/xai-grok-pager/src/diagnostics/probes\n/root/CentralDark/scratch/grok-build/crates/codegen/xai-grok-login/src/api_key_probe.rs\n/root/CentralDark/revisoes/2026-07-04T20-28-37-533Z-enxame-probe-ap7-v2\n/root/CentralDark/revisoes/2026-07-06T19-16-55-721Z-probe\n/root/CentralDark/revisoes/2026-07-04T20-27-42-981Z-enxame-probe-ap7-models\n/root/CentralDark/revisoes/2026-07-04T20-27-55-137Z-enxame-probe-ap7-models\n/root/CentralDark/venv/lib/python3.10/site-packages/anthropic/types/beta/vaults/__pycache__/beta_managed_agents_mcp_probe.cpython-310.pyc\n/root/CentralDark/venv/lib/python3.10/site-packages/anthropic/types/beta/vaults/beta_managed_agents_mcp_probe.py\n/root/CentralDark/venv/lib/python3.10/site-packages/pip/_vendor/chardet/big5prober.py\n/root/CentralDark/venv/lib/python3.10/site-packages/pip/_vendor/chardet/charsetprober.py\n/root/CentralDark/venv/lib/python3.10/site-packages/pip/_vendor/chardet/latin1prober.py\n/root/CentralDark/venv/lib/python3.10/site-packages/pip/_vendor/chardet/escprober.py\n/root/CentralDark/venv/lib/python3.10/site-packages/pip/_vendor/chardet/sbcharsetprober.py\n/root/CentralDark/venv/lib/python3.10/site-packages/pip/_vendor/chardet/gb2312prober.py\n/root/CentralDark/venv/lib/python3.10/site-packages/pip/_vendor/chardet/sbcsgroupprober.py\n/root/CentralDark/venv/lib/python3.10/site-packages/pip/_vendor/chardet/sjisprober.py\n/root/CentralDark/venv/lib/python3.10/site-packages/pip/_vendor/chardet/hebrewprober.py\n/root/CentralDark/venv/lib/python3.10/site-packages/pip/_vendor/chardet/mbcharsetprober.py\n/root/CentralDark/venv/lib/python3.10/site-packages/pip/_vendor/chardet/utf8prober.py\n/root/CentralDark/venv/lib/python3.10/site-packages/pip/_vendor/chardet/__pycache__/sbcsgroupprober.cpython-310.pyc\n/root/CentralDark/venv/lib/python3.10/site-packages/pip/_vendor/chardet/__pycache__/charsetgroupprober.cpython-310.pyc\n/root/CentralDark/venv/lib/python3.10/site-packages/pip/_vendor/chardet/__pycache__/euckrprober.cpython-310.pyc\n/root/CentralDark/venv/lib/python3.10/site-packages/pip/_vendor/chardet/__pycache__/sjisprober.cpython-310.pyc\n/root/CentralDark/venv/lib/python3.10/site-packages/pip/_vendor/chardet/__pycache__",
+      "ok": true,
+      "learning_ref": "8ca426f129e125b8",
+      "learning_persisted": true,
+      "learning_deduped": false
+    },
+    {
+      "etapa_titulo": "🔎 Lendo probe de continuidade localizado",
+      "ferramenta": "ler_arquivo",
+      "args": {
+        "path": "_worktrees/main-pinned-runtime-fastpath/docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RECEIPTS/2026-09-28-main-pulse-live-proof.md"
+      },
+      "resultado": "---\ntitle: \"VPS Main Pulse — prova viva\"\nstatus: \"LIVE_PROBE\"\ndate: 2026-09-28\n---\n\n# VPS Main Pulse — prova viva\n\nEste arquivo é um probe benigno do trilho:\n\nMAIN_PUSH\n→ GitHub webhook de push\n→ CentralDark-WebhookDeploy\n→ /usr/local/sbin/centraldark-main-pulse\n→ owner hermes\n→ main-pinned-microdeploy.sh\n→ restart/validação do CentralDark-Hermes\n→ receipt local\n\nRegras:\n- UNKNOWN != PASS\n- MERGED != DEPLOYED\n- webhook é fast path\n- systemd timer de 60s é catch-up\n- arquivos fora dos owners conhecidos são enviados ao Hermes somente para classificação read-only.\n",
+      "ok": true
+    },
+    {
+      "etapa_titulo": "🔎 Analisando delta material entre SHAs",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "bash -lc 'cd /root/CentralDark && git diff fbfc7c4180666ec8ac3a763e1912399b584e10d1 b9da4e05d0475eb9298f1834cb7f0d523f2e33f4 -- docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RECEIPTS/2026-09-28-main-pulse-live-proof.md'"
+      },
+      "resultado": "",
+      "ok": true
+    },
+    {
+      "etapa_titulo": "🔎 Analisando diff material entre SHAs",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "git diff --name-only fbfc7c4180666ec8ac3a763e1912399b584e10d1 b9da4e05d0475eb9298f1834cb7f0d523f2e33f4"
+      },
+      "resultado": "docs/RECEIPTS/2026-09-28-main-pulse-continuity-contract-probe.md\n",
+      "ok": true
+    },
+    {
+      "etapa_titulo": "🔎 Analisando delta entre SHAs fbfc7c4...b9da4e0",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "cd /root/CentralDark && git diff --name-only fbfc7c4180666ec8ac3a763e1912399b584e10d1 b9da4e05d0475eb9298f1834cb7f0d523f2e33f4"
+      },
+      "resultado": "docs/RECEIPTS/2026-09-28-main-pulse-continuity-contract-probe.md\n",
+      "ok": true
+    },
+    {
+      "etapa_titulo": "🔎 Mapeando delta material completo entre SHAs",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "git diff --name-only fbfc7c4180666ec8ac3a763e1912399b584e10d1 b9da4e05d0475eb9298f1834cb7f0d523f2e33f4"
+      },
+      "resultado": "docs/RECEIPTS/2026-09-28-main-pulse-continuity-contract-probe.md\n",
+      "ok": true
+    },
+    {
+      "etapa_titulo": "🔎 Validando probe no worktree main-pinned",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "ls -la /root/CentralDark/_worktrees/main-pinned-runtime-fastpath/docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RECEIPTS/2026-09-28-main-pulse-live-proof.md && cat /root/CentralDark/_worktrees/main-pinned-runtime-fastpath/docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RECEIPTS/2026-09-28-main-pulse-live-proof.md"
+      },
+      "resultado": "-rw-r--r-- 1 root root 594 Sep 28 06:36 /root/CentralDark/_worktrees/main-pinned-runtime-fastpath/docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RECEIPTS/2026-09-28-main-pulse-live-proof.md\n---\ntitle: \"VPS Main Pulse — prova viva\"\nstatus: \"LIVE_PROBE\"\ndate: 2026-09-28\n---\n\n# VPS Main Pulse — prova viva\n\nEste arquivo é um probe benigno do trilho:\n\nMAIN_PUSH\n→ GitHub webhook de push\n→ CentralDark-WebhookDeploy\n→ /usr/local/sbin/centraldark-main-pulse\n→ owner hermes\n→ main-pinned-microdeploy.sh\n→ restart/validação do CentralDark-Hermes\n→ receipt local\n\nRegras:\n- UNKNOWN != PASS\n- MERGED != DEPLOYED\n- webhook é fast path\n- systemd timer de 60s é catch-up\n- arquivos fora dos owners conhecidos são enviados ao Hermes somente para classificação read-only.\n",
+      "ok": true,
+      "learning_ref": "93db09d6bc15ebd0",
+      "learning_persisted": true,
+      "learning_deduped": false
+    },
+    {
+      "etapa_titulo": "Quatro percepções antes da caneta",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "HERMES_PERCEPTION_SCOPE_KEY='handler:pm2:CentralDark-Hermes' HERMES_PERCEPTION_PROPOSAL_B64='eyJmZXJyYW1lbnRhIjoiaGFuZGxlciIsInNjb3BlX2tleSI6ImhhbmRsZXI6cG0yOkNlbnRyYWxEYXJrLUhlcm1lcyIsImVzdGFkbyI6IlRFU1RFIiwiZXRhcGFfdGl0dWxvIjoi8J-UjiBNZWRpbmRvIHJ1bnRpbWUgQ2VudHJhbERhcmstSGVybWVzIHDDs3MtcHVzaCIsInBlbnNhbWVudG8iOiJPIGRlbHRhIGlkZW50aWZpY2FkbyBlbnRyZSBmYmZjN2M0IGUgYjlkYTRlMCAoZG9jcy9SRUNFSVBUUy8yMDI2LTA5LTI4LW1haW4tcHVsc2UtY29udGludWl0eS1jb250cmFjdC1wcm9iZS5tZCkgcGVydGVuY2UgYW8gb3duZXIgSEVSTUVTIGUgYW8gZmx1eG8gZGUgJ21haW4tcHVsc2UnLiBQcmVjaXNvIG1lZGlyIG8gZXN0YWRvIGRvIHJ1bnRpbWUgcGFyYSBjb25maXJtYXIgc2UgbyBkZXBsb3kvcmVzdGFydCBhdXRvbcOhdGljbyBvY29ycmV1LiJ9' node apps/modulos/HERMES-CORE/core/perception-orchestra.mjs --active-mission"
+      },
+      "resultado": "exit=2 {\n  \"schema_version\": 2,\n  \"mode\": \"PARALLEL_PERCEPTION_SERIAL_MUTATION\",\n  \"same_intent\": true,\n  \"mission\": \"Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=webhook; FROM_SHA=fbfc7c4180666ec8ac3a763e1912399b584e10d1; TO_SHA=b9da4e05d0475eb9298f1834cb7f0d523f2e33f4; ARQUIVOS=docs/RECEIPTS/2026-09-28-main-pulse-continuity-contract-probe.md PROPOSTA MATERIAL A SER CONTRAPROVADA: {\\\"ferramenta\\\":\\\"handler\\\",\\\"scope_key\\\":\\\"handler:pm2:CentralDark-Hermes\\\",\\\"estado\\\":\\\"TESTE\\\",\\\"etapa_titulo\\\":\\\"🔎 Medindo runtime CentralDark-Hermes pós-push\\\",\\\"pensamento\\\":\\\"O delta identificado entre fbfc7c4 e b9da4e0 (docs/RECEIPTS/2026-09-28-main-pulse-continuity-contract-probe.md) pertence ao owner HERMES e ao fluxo de 'main-pulse'. Preciso medir o estado do runtime para confirmar se o deploy/restart automático ocorreu.\\\"}\",\n  \"parallel_perception\": true,\n  \"mutation_allowed\": false,\n  \"canonical_mutation_slots\": 0,\n  \"writer_required_for_mutation\": true,\n  \"model_vote_is_truth\": false,\n  \"reality_is_judge\": true,\n  \"dedupe_required\": true,\n  \"correlated_evidence_inflation_blocked\": true,\n  \"counterproof_required\": true,\n  \"gold_requires_counterproof\": true,\n  \"cognitive_council\": {\n    \"schema_version\": 1,\n    \"mode\": \"FUNCTIONAL_LENSES_OVER_EXISTING_PERCEPTION_ORCHESTRA\",\n    \"human_name\": \"MESA_DE_CONVERG\nPERCEPTION_STATE_READ_FAILED {\n  state_path: '/root/CentralDark/apps/modulos/HERMES-CORE/missions/em-andamento/main-pulse-1ee150b675fb/state.json',\n  error: \"ENOENT: no such file or directory, open '/root/CentralDark/apps/modulos/HERMES-CORE/missions/em-andamento/main-pulse-1ee150b675fb/state.json'\"\n}\nPERCEPTION_STATE_READ_FAILED {\n  state_path: '/root/CentralDark/apps/modulos/HERMES-CORE/missions/em-andamento/main-pulse-fbfc7c418066/state.json',\n  error: \"ENOENT: no such file or directory, open '/root/CentralDark/apps/modulos/HERMES-CORE/missions/em-andamento/main-pulse-fbfc7c418066/state.json'\"\n}\n",
+      "ok": false,
+      "critic": "Truncamento de payload na ferramenta shell impediu validação; a próxima etapa deve reexecutar o comando com o JSON completo e íntegro."
+    },
+    {
+      "etapa_titulo": "🔎 Executando Percepção Quádrupla (Orchestra)",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "node apps/modulos/HERMES-CORE/core/perception-orchestra.mjs --active-mission --intent 'Classificar delta main b9da4e0 fora de owners conhecidos' --probe '/root/CentralDark/_worktrees/main-pinned-runtime-fastpath/docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RECEIPTS/2026-09-28-main-pulse-live-proof.md' --diff-target 'fbfc7c4180666ec8ac3a763e1912399b584e10d1..b9da4e05d0475eb9298f1834cb7f0d523f2e33f4'"
+      },
+      "resultado": "exit=2 {\n  \"schema_version\": 2,\n  \"mode\": \"PARALLEL_PERCEPTION_SERIAL_MUTATION\",\n  \"same_intent\": true,\n  \"mission\": \"Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=webhook; FROM_SHA=fbfc7c4180666ec8ac3a763e1912399b584e10d1; TO_SHA=b9da4e05d0475eb9298f1834cb7f0d523f2e33f4; ARQUIVOS=docs/RECEIPTS/2026-09-28-main-pulse-continuity-contract-probe.md\",\n  \"parallel_perception\": true,\n  \"mutation_allowed\": false,\n  \"canonical_mutation_slots\": 0,\n  \"writer_required_for_mutation\": true,\n  \"model_vote_is_truth\": false,\n  \"reality_is_judge\": true,\n  \"dedupe_required\": true,\n  \"correlated_evidence_inflation_blocked\": true,\n  \"counterproof_required\": true,\n  \"gold_requires_counterproof\": true,\n  \"cognitive_council\": {\n    \"schema_version\": 1,\n    \"mode\": \"FUNCTIONAL_LENSES_OVER_EXISTING_PERCEPTION_ORCHESTRA\",\n    \"human_name\": \"MESA_DE_CONVERGENCIA\",\n    \"authority_plane\": {\n      \"final_authority\": \"SEGREDO/CHEFE\",\n      \"coordinator\": \"SOL\",\n      \"executor_continuity\": \"PIVETE/HERMES\",\n      \"writer_rule\": \"ONE_WRITER_PER_SCOPE\",\n      \"reality_is_judge\": true\n    },\n    \"perception_plane\": {\n      \"lenses\": [\n        {\n          \"lens\": \"AUTOMATION_FACTORY\",\n          \"purpose\": \"Pressionar automacao, loops, escala, repeticao removivel e fabrica de software sem confundir velocidade com prova.\",\n          \"cov\nPERCEPTION_STATE_READ_FAILED {\n  state_path: '/root/CentralDark/apps/modulos/HERMES-CORE/missions/em-andamento/main-pulse-1ee150b675fb/state.json',\n  error: \"ENOENT: no such file or directory, open '/root/CentralDark/apps/modulos/HERMES-CORE/missions/em-andamento/main-pulse-1ee150b675fb/state.json'\"\n}\nPERCEPTION_STATE_READ_FAILED {\n  state_path: '/root/CentralDark/apps/modulos/HERMES-CORE/missions/em-andamento/main-pulse-fbfc7c418066/state.json',\n  error: \"ENOENT: no such file or directory, open '/root/CentralDark/apps/modulos/HERMES-CORE/missions/em-andamento/main-pulse-fbfc7c418066/state.json'\"\n}\n",
+      "ok": false,
+      "critic": "Erro de path ou truncamento no buffer do shell. A próxima etapa deve usar o caminho relativo real docs/RECEIPTS/ e validar a integridade."
+    },
+    {
+      "etapa_titulo": "🔎 Validando existência do probe no path da missão",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "ls -la /root/CentralDark/docs/RECEIPTS/2026-09-28-main-pulse-continuity-contract-probe.md || echo 'ARQUIVO_AUSENTE_NO_ROOT'"
+      },
+      "resultado": "ARQUIVO_AUSENTE_NO_ROOT\n\n[stderr]\nls: cannot access '/root/CentralDark/docs/RECEIPTS/2026-09-28-main-pulse-continuity-contract-probe.md': No such file or directory\n",
+      "ok": false,
+      "critic": "3ª falha em sequência se esta contar — risco de pausa"
+    }
+  ],
+  "retomadas": 1,
+  "missao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=webhook; FROM_SHA=fbfc7c4180666ec8ac3a763e1912399b584e10d1; TO_SHA=b9da4e05d0475eb9298f1834cb7f0d523f2e33f4; ARQUIVOS=docs/RECEIPTS/2026-09-28-main-pulse-continuity-contract-probe.md",
+  "terminal_reason": "WORKING_TREE_STALE_SHA_PINNED_READ_REQUIRED",
+  "exact_blocker": {
+    "blocker_id": "B9_SHA_PINNED_READ_REQUIRED",
+    "claim_target": "main-pulse-b9da4e05d047",
+    "observed_error": "mission found docs/RECEIPTS path through git/worktree evidence but /root/CentralDark working tree lacked the file; Hermes spent extra steps and hit max failures",
+    "resume_condition": "Hermes/Main-pulse reads mission files from TO_SHA git object or synced same-head worktree before path validation",
+    "evidence_ref": "hermes.log 2026-09-28T10:14:20Z..10:20:33Z; origin/main b9da4e05d0475eb9298f1834cb7f0d523f2e33f4; fix main 0c2a8e3ca9129f2fea6c5e693ca1d8efd04d9dba"
+  }
+}

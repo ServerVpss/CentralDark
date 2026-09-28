@@ -1,0 +1,17 @@
+{
+  "id": "drift-1790382659200",
+  "tema": "Drift detectado (2 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-Hermes: +9 restarts"
+      },
+      {
+        "tipo": "mapa-violacao",
+        "detalhe": "falha de validação mascarada: .github/workflows/remote-desktop-multi-account-live-reconcile.yml:77"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

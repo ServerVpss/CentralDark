@@ -1,0 +1,30 @@
+{
+  "schema": "centraldark.live-execution-fabric.job.v1",
+  "ok": true,
+  "job_id": "live-fabric-20260925T034705Z-07a7d8d4",
+  "status": "CREATED_MEASURED",
+  "entrypoint": "admin_panel",
+  "scope": "VPS_DIRTY_TREE",
+  "dry_run": true,
+  "requested_by": "SEGREDO/CHEFE",
+  "current_head": "1df94e30ac0f0313edcc760db9e4789104772342",
+  "current_branch": "main",
+  "dirty_count_before": 34,
+  "untracked_count_before": 34,
+  "last_good_point": "CONTRACT_AND_STATUS_ENDPOINT_CREATED",
+  "first_failure_point": null,
+  "unknown_cone": [
+    "runtime_mutations_require_route_specific_counterproof"
+  ],
+  "receipt_path": "docs/CONSCIENCIA/MICRO-DEPLOY/RECEIPTS/live-fabric-20260925T034705Z-07a7d8d4.md",
+  "next_cursor": "ROUTE_SPECIFIC_MICRODEPLOY_OR_COUNTERPROOF",
+  "locks": {
+    "UNKNOWN_IS_NOT_PASS": true,
+    "UNKNOWN_IS_NOT_LIXO": true,
+    "ACTION_IS_NOT_PROOF": true,
+    "PRINTED_COMMAND_IS_NOT_EXECUTED": true,
+    "NO_SECRET_LEAK": true,
+    "NO_BLIND_DELETE": true,
+    "NO_BLIND_PULL_OVER_DIRTY_RUNTIME": true
+  }
+}

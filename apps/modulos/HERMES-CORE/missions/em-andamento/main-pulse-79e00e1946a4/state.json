@@ -1,0 +1,7 @@
+{
+  "missao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=3749b2e88e3bd4b5e5e2054e7d9c8c8b4b82d4d2; TO_SHA=79e00e1946a42d1e36315fa1d644988215c4e569; ARQUIVOS=.agents/CAPABILITY-HUD-BOOT.json, .claude/CENTRALDARK-FLOW-LOCKS.md, CENTRALDARK_AI_BOOT.yaml, CLAUDE.md, CODEX.md",
+  "historico": [],
+  "retomadas": 1,
+  "terminal_state": "BLOCKED",
+  "terminal_reason": "MAX_FALHAS_DECISOR"
+}

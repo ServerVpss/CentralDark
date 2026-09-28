@@ -1,0 +1,44 @@
+{
+  "titulo": "main-pulse-8785222090ef",
+  "missao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=38c7ff633a0c0b10e1d412b81a3f70015558e3c8; TO_SHA=8785222090efdf53d950db85844fe4c87c9dab2a; ARQUIVOS=.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/INTERLIGADOS/RECEIPTS/2026-09-26-TOOL-CALL-VOICE-REMOTE-PROOF.md",
+  "descricao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=38c7ff633a0c0b10e1d412b81a3f70015558e3c8; TO_SHA=8785222090efdf53d950db85844fe4c87c9dab2a; ARQUIVOS=.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/INTERLIGADOS/RECEIPTS/2026-09-26-TOOL-CALL-VOICE-REMOTE-PROOF.md",
+  "state": {
+    "objetivo": "Classificar delta da main sem owner de microdeploy conhecido e identificar owner existente/menor rota segura.",
+    "autoridade": "SEGREDO/CHEFE",
+    "coordenador": "SOL",
+    "escritor": "HERMES",
+    "escopo": {
+      "tipo": "DELTA_MAIN_UNHANDLED",
+      "arquivos": [
+        ".agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/INTERLIGADOS/RECEIPTS/2026-09-26-TOOL-CALL-VOICE-REMOTE-PROOF.md"
+      ],
+      "from_sha": "38c7ff633a0c0b10e1d412b81a3f70015558e3c8",
+      "to_sha": "8785222090efdf53d950db85844fe4c87c9dab2a"
+    },
+    "ambiente": "VPS",
+    "classe_de_acao": "READ_ONLY_CLASSIFICATION",
+    "baseline": {
+      "head_sha": "8785222090efdf53d950db85844fe4c87c9dab2a",
+      "from_sha": "38c7ff633a0c0b10e1d412b81a3f70015558e3c8",
+      "fonte": "origin/main"
+    },
+    "backup": {
+      "head_sha": "8785222090efdf53d950db85844fe4c87c9dab2a",
+      "strategy": "NO_MUTATION_NO_BACKUP_REQUIRED"
+    },
+    "rollback": {
+      "head_sha": "8785222090efdf53d950db85844fe4c87c9dab2a",
+      "strategy": "NO_MUTATION_CLASSIFICATION_ONLY"
+    },
+    "receipt": {
+      "head_sha": "8785222090efdf53d950db85844fe4c87c9dab2a",
+      "expected": "HERMES_FINALIZATION_CRITIC",
+      "mission_id": "main-pulse-8785222090ef"
+    },
+    "head_sha": "8785222090efdf53d950db85844fe4c87c9dab2a",
+    "terminal_state": "RUNNING",
+    "historico": [],
+    "retomadas": 0,
+    "missao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=38c7ff633a0c0b10e1d412b81a3f70015558e3c8; TO_SHA=8785222090efdf53d950db85844fe4c87c9dab2a; ARQUIVOS=.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/INTERLIGADOS/RECEIPTS/2026-09-26-TOOL-CALL-VOICE-REMOTE-PROOF.md"
+  }
+}

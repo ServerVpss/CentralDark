@@ -1,0 +1,44 @@
+{
+  "titulo": "main-pulse-66b96c230df5",
+  "missao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=6e9b99bf4c648b554f20f7bb3703793d3b31c54e; TO_SHA=66b96c230df56d81b77b10ca2966e085d2a91d4a; ARQUIVOS=docs/CONSCIENCIA/APRENDIZADOS.md",
+  "descricao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=6e9b99bf4c648b554f20f7bb3703793d3b31c54e; TO_SHA=66b96c230df56d81b77b10ca2966e085d2a91d4a; ARQUIVOS=docs/CONSCIENCIA/APRENDIZADOS.md",
+  "state": {
+    "objetivo": "Classificar delta da main sem owner de microdeploy conhecido e identificar owner existente/menor rota segura.",
+    "autoridade": "SEGREDO/CHEFE",
+    "coordenador": "SOL",
+    "escritor": "HERMES",
+    "escopo": {
+      "tipo": "DELTA_MAIN_UNHANDLED",
+      "arquivos": [
+        "docs/CONSCIENCIA/APRENDIZADOS.md"
+      ],
+      "from_sha": "6e9b99bf4c648b554f20f7bb3703793d3b31c54e",
+      "to_sha": "66b96c230df56d81b77b10ca2966e085d2a91d4a"
+    },
+    "ambiente": "VPS",
+    "classe_de_acao": "READ_ONLY_CLASSIFICATION",
+    "baseline": {
+      "head_sha": "66b96c230df56d81b77b10ca2966e085d2a91d4a",
+      "from_sha": "6e9b99bf4c648b554f20f7bb3703793d3b31c54e",
+      "fonte": "origin/main"
+    },
+    "backup": {
+      "head_sha": "66b96c230df56d81b77b10ca2966e085d2a91d4a",
+      "strategy": "NO_MUTATION_NO_BACKUP_REQUIRED"
+    },
+    "rollback": {
+      "head_sha": "66b96c230df56d81b77b10ca2966e085d2a91d4a",
+      "strategy": "NO_MUTATION_CLASSIFICATION_ONLY"
+    },
+    "receipt": {
+      "head_sha": "66b96c230df56d81b77b10ca2966e085d2a91d4a",
+      "expected": "HERMES_FINALIZATION_CRITIC",
+      "mission_id": "main-pulse-66b96c230df5"
+    },
+    "head_sha": "66b96c230df56d81b77b10ca2966e085d2a91d4a",
+    "terminal_state": "RUNNING",
+    "historico": [],
+    "retomadas": 0,
+    "missao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=6e9b99bf4c648b554f20f7bb3703793d3b31c54e; TO_SHA=66b96c230df56d81b77b10ca2966e085d2a91d4a; ARQUIVOS=docs/CONSCIENCIA/APRENDIZADOS.md"
+  }
+}

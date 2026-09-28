@@ -1,0 +1,48 @@
+{
+  "titulo": "main-pulse-553fb881cf68",
+  "missao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=5b3cf27a732b8cda8b88bc84272329a0019c30db; TO_SHA=553fb881cf6846580e945707a675fd15ca8ada5d; ARQUIVOS=src/app/rotas.tsx, src/app/rotas/rotas-telepainel.tsx, src/compartilhado/layout/Sidebar.tsx, src/paginas/centraldark-admin/hooks/useModulosPortal.ts, src/paginas/portal-publico/pages/Portal.tsx",
+  "descricao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=5b3cf27a732b8cda8b88bc84272329a0019c30db; TO_SHA=553fb881cf6846580e945707a675fd15ca8ada5d; ARQUIVOS=src/app/rotas.tsx, src/app/rotas/rotas-telepainel.tsx, src/compartilhado/layout/Sidebar.tsx, src/paginas/centraldark-admin/hooks/useModulosPortal.ts, src/paginas/portal-publico/pages/Portal.tsx",
+  "state": {
+    "objetivo": "Classificar delta da main sem owner de microdeploy conhecido e identificar owner existente/menor rota segura.",
+    "autoridade": "SEGREDO/CHEFE",
+    "coordenador": "SOL",
+    "escritor": "HERMES",
+    "escopo": {
+      "tipo": "DELTA_MAIN_UNHANDLED",
+      "arquivos": [
+        "src/app/rotas.tsx",
+        "src/app/rotas/rotas-telepainel.tsx",
+        "src/compartilhado/layout/Sidebar.tsx",
+        "src/paginas/centraldark-admin/hooks/useModulosPortal.ts",
+        "src/paginas/portal-publico/pages/Portal.tsx"
+      ],
+      "from_sha": "5b3cf27a732b8cda8b88bc84272329a0019c30db",
+      "to_sha": "553fb881cf6846580e945707a675fd15ca8ada5d"
+    },
+    "ambiente": "VPS",
+    "classe_de_acao": "READ_ONLY_CLASSIFICATION",
+    "baseline": {
+      "head_sha": "553fb881cf6846580e945707a675fd15ca8ada5d",
+      "from_sha": "5b3cf27a732b8cda8b88bc84272329a0019c30db",
+      "fonte": "origin/main"
+    },
+    "backup": {
+      "head_sha": "553fb881cf6846580e945707a675fd15ca8ada5d",
+      "strategy": "NO_MUTATION_NO_BACKUP_REQUIRED"
+    },
+    "rollback": {
+      "head_sha": "553fb881cf6846580e945707a675fd15ca8ada5d",
+      "strategy": "NO_MUTATION_CLASSIFICATION_ONLY"
+    },
+    "receipt": {
+      "head_sha": "553fb881cf6846580e945707a675fd15ca8ada5d",
+      "expected": "HERMES_FINALIZATION_CRITIC",
+      "mission_id": "main-pulse-553fb881cf68"
+    },
+    "head_sha": "553fb881cf6846580e945707a675fd15ca8ada5d",
+    "terminal_state": "RUNNING",
+    "historico": [],
+    "retomadas": 0,
+    "missao": "Classificar o delta da main fora dos owners de microdeploy conhecidos. Identificar owner existente e a menor rota segura de continuidade/deploy. Não aprovar, promover, inventar owner ou transformar UNKNOWN em PASS sem prova. TRIGGER=timer; FROM_SHA=5b3cf27a732b8cda8b88bc84272329a0019c30db; TO_SHA=553fb881cf6846580e945707a675fd15ca8ada5d; ARQUIVOS=src/app/rotas.tsx, src/app/rotas/rotas-telepainel.tsx, src/compartilhado/layout/Sidebar.tsx, src/paginas/centraldark-admin/hooks/useModulosPortal.ts, src/paginas/portal-publico/pages/Portal.tsx"
+  }
+}

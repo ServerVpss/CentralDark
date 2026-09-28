@@ -1,6 +1,6 @@
 {
-  "_note": "Grafo VIVO — regenerado por scripts/grafo-vivo/gerar-grafo-vivo.mjs. PM2: 8 online / 1 off de 9 monitorados. Gateway: 0 req/15min. Banda: 17 respirações declaradas. Compass links quebrados: 0.",
-  "updatedAt": "2026-09-12T02:52:53.123Z",
+  "_note": "Grafo VIVO — regenerado por scripts/grafo-vivo/gerar-grafo-vivo.mjs. PM2: 11 online / 1 off de 12 monitorados. Gateway: 0 req/15min. Banda: 17 respirações declaradas. Compass links quebrados: 0.",
+  "updatedAt": "2026-09-28T19:31:08.506Z",
   "nodes": [
     {
       "id": "mcp-server",
@@ -24,11 +24,9 @@
     },
     {
       "id": "elite-http-gateway",
-      "label": "🟢 Elite HTTP Gateway",
+      "label": "Elite HTTP Gateway",
       "type": "gateway",
-      "group": "core",
-      "status": "online",
-      "pm2": "CentralDark-EliteHTTP"
+      "group": "core"
     },
     {
       "id": "vps",
@@ -40,11 +38,9 @@
     },
     {
       "id": "bot-telegram",
-      "label": "🟢 @srver1bot",
+      "label": "@srver1bot",
       "type": "bot",
-      "group": "bots",
-      "status": "online",
-      "pm2": "CentralDark-HubBot"
+      "group": "bots"
     },
     {
       "id": "wuzapi-monitor",
@@ -372,9 +368,11 @@
     },
     {
       "id": "zentinel",
-      "label": "Zentinel (latência)",
+      "label": "🟢 Zentinel (latência)",
       "type": "monitoramento",
-      "group": "monitoramento"
+      "group": "monitoramento",
+      "status": "online",
+      "pm2": "CentralDark-Zentinel"
     },
     {
       "id": "guardiaoconsciencia",
@@ -386,27 +384,35 @@
     },
     {
       "id": "guardiaoanalista",
-      "label": "Guardião Analista",
+      "label": "🟢 Guardião Analista",
       "type": "monitoramento",
-      "group": "monitoramento"
+      "group": "monitoramento",
+      "status": "online",
+      "pm2": "CentralDark-GuardiaoAnalista"
     },
     {
       "id": "eliteanthropic",
-      "label": "Elite Anthropic",
+      "label": "🟢 Elite Anthropic",
       "type": "gateway",
-      "group": "edge-ia"
+      "group": "edge-ia",
+      "status": "online",
+      "pm2": "CentralDark-EliteAnthropic"
     },
     {
       "id": "elitews",
-      "label": "Elite WS",
+      "label": "🟢 Elite WS",
       "type": "gateway",
-      "group": "edge-ia"
+      "group": "edge-ia",
+      "status": "online",
+      "pm2": "CentralDark-EliteWS"
     },
     {
       "id": "evolucaoias",
-      "label": "Evolução IAs",
+      "label": "🟢 Evolução IAs",
       "type": "ia",
-      "group": "edge-ia"
+      "group": "edge-ia",
+      "status": "online",
+      "pm2": "CentralDark-EvolucaoIAs"
     },
     {
       "id": "arsenaladapter",
@@ -1166,12 +1172,12 @@
       "Sentinela: sentinela → MCP /health /tools.json → gh issue se divergência",
       "Health: fn-health-check → OPTIONS 10 EFs → fn-notify-telegram → Canal Telegram"
     ],
-    "processos_vivos": 23,
-    "online": 8,
+    "processos_vivos": 24,
+    "online": 11,
     "offline": 1,
-    "monitorados": 9,
+    "monitorados": 12,
     "gateway_req_15min": 0,
-    "gerado_em": "2026-09-12T02:52:53.123Z",
+    "gerado_em": "2026-09-28T19:31:08.506Z",
     "band_breaths_declared": 17,
     "compass_links_total": 7,
     "compass_links_broken": 0
