@@ -161,6 +161,12 @@ git worktree add --detach "$GATE_TMP" "$ALVO" --quiet \
   python3 scripts/lupa/validar_autolupa_hash.py
   python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py --self-test
   python3 .agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py --self-test
+  HERMES_RUNTIME_JSON="$(pm2 jlist 2>/dev/null)" || { echo "HERMES_RUNTIME_FINGERPRINT_UNAVAILABLE"; exit 16; }
+  [[ -n "$HERMES_RUNTIME_JSON" ]] || { echo "HERMES_RUNTIME_FINGERPRINT_EMPTY"; exit 16; }
+  CENTRALDARK_RUNTIME_FINGERPRINT="$(printf '%s|%s' "$(hostname)" "$ALVO" | sha256sum | awk '{print $1}')" \
+  HERMES_RUNTIME_FINGERPRINT="$(printf '%s' "$HERMES_RUNTIME_JSON" | sha256sum | awk '{print $1}')" \
+    python3 .agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py --cage-test --iterations 64
+  echo "TLC23_ADVERSARIAL_CAGE=PASS"
 ) || die "SHA alvo falhou Master/Universal/Meta-Lupa/Horn" 16
 
 # Gate-only prova o SHA e sai sem tocar checkout/runtime.
