@@ -852,6 +852,12 @@ proven_path_replay_lock:
 
 
 lei_do_rastro:
+  current_claim_live_measurement_required: true
+  pr_body_is_history_not_current: true
+  ledger_current_requires_explicit_current_main: true
+  exact_comment_id_direct_lookup_before_pagination: true
+  measurable_current_unknown_is_fail: true
+  pre_human_return_fiscal: "scripts/trigger-fabric/rastro_fiscal.py"
   owner: AGENTS.md
   gatilho: "🔏 !RASTRO"
   RESPONSE_WITHOUT_TRACE: INVALID
