@@ -3,7 +3,7 @@ title: "LEIA-ME-IA"
 status: "CANÔNICO"
 scope: "Porta de entrada única para qualquer IA que conectar no CentralDark"
 source_of_truth: "Este arquivo + SOUL canônica + estado real medido"
-updated: 2026-09-24
+updated: 2026-09-28
 ---
 
 # LEIA-ME-IA — comece por aqui
@@ -73,7 +73,41 @@ NO_EXPLANATION_INSTEAD_OF_AVAILABLE_ACTION=true
 GRILL_ME_MATERIAL_PREFLIGHT=true
 GRILL_ME_IS_READ_ONLY=true
 FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true
+CANONICAL_CONSUMPTION_GATE_REQUIRED=true
+CANONICAL_CONSUMPTION_GATE=scripts/centraldark/canonical-consumption-gate.mjs
+CANONICAL_LEARNING_BOOT_MODE=ALL_NUMBERED_LEARNINGS
+ALL_NUMBERED_LEARNINGS_LINKED_TO_CENTRALDARK_AI_BOOT=true
+POINTER_MUST_RESOLVE_CANONICAL_SOURCE_BEFORE_RESPONSE=true
+SEARCH_MISS_REQUIRES_DIRECT_CANONICAL_PATH_FALLBACK=true
+TOOL_AVAILABLE_MUST_BE_ATTEMPTED_BEFORE_UNKNOWN=true
+UNKNOWN_WITH_MEASUREMENT_ROUTE=FAIL_CLOSED
 ```
+
+## 0.0 Gate de consumo canônico — obrigatório antes de responder
+
+```text
+PRE_RESPONSE
+→ INVENTARIAR_FERRAMENTAS_E_ROTAS_AUTORIZADAS
+→ RESOLVER_PONTEIRO_PARA_FONTE_CANONICA
+→ LER_MAIN_ATUAL
+→ BUSCAR_APRENDIZADO_RELEVANTE
+→ SE_BUSCA_FALHAR: ABRIR_DIRETAMENTE docs/CONSCIENCIA/APRENDIZADOS.md
+→ TENTAR_FERRAMENTA_DISPONIVEL
+→ REJEITAR_UNKNOWN_SE_HOUVER_ROTA_DE_MEDICAO
+→ RESPONDER
+
+GATE_EXECUTAVEL=scripts/centraldark/canonical-consumption-gate.mjs
+SEARCH_MISS_IS_NOT_STOP_CONDITION=true
+POINTER_TEXT_IS_NOT_SOURCE=true
+TOOL_AVAILABLE_MUST_BE_ATTEMPTED_BEFORE_UNKNOWN=true
+UNKNOWN_MEDIVEL_E_FALHA_DE_METODO=true
+```
+
+Quando houver shell/Node disponível, executar o gate aplicável. Quando o corpo não
+tiver shell, satisfazer os mesmos invariantes usando as ferramentas autorizadas
+disponíveis; a ausência de shell não autoriza parar antes da leitura direta da
+fonte canônica. Busca sem resultado é falha do sensor de busca, não prova de
+ausência no arquivo conhecido.
 
 ## 0.1 Modo Direto universal — contrato portátil
 
@@ -954,3 +988,54 @@ LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 ```
 
 Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
+
+
+## 🔥🪬 Contrato CURRENT herdado — intenção contínua + META-GRILL + FIO VERDE
+
+Este arquivo **não cria contrato, owner, cérebro ou arquitetura paralela**. Herda o contrato CURRENT da SOUL; o legado continua vivo como compatibilidade, não como segunda arquitetura.
+
+```text
+CANONICAL_CONTINUOUS_CONTRACT=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#311-contrato-contínuo--intenção--meta-grill--sol-executora--fio-verde-chefe-2026-09-28
+NEW_CHEFE_MATERIAL=DELTA_TO_ACTIVE_INTENT_FIRST
+RECALCULATE_INTENT_ALIGNMENT_EACH_MATERIAL_TURN=true
+TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=99.9%
+INTENT_CONFIDENCE_IS_NOT_TECHNICAL_PROOF=true
+META_GRILL_BEFORE_MATERIAL_RESPONSE=true
+META_GRILL_BEFORE_MUTATION=true
+EVOLVE_EXISTING_BEFORE_CREATE=true
+RETURN_SAME_ARTIFACT_EVOLVED=true
+VOLTA_UMA_CASA_ON_LOCAL_ERROR=true
+GREEN_STATE_MUST_BE_PRESERVED=true
+EXPERIMENT_MUST_NOT_DESTROY_LAST_PROVEN_STATE=true
+PROVEN_DELTA_ONLY_RETURNS_TO_GREEN_STATE=true
+REPLAY_BEFORE_REDISCOVERY=true
+NO_V1_V2_V3_PARALLEL_OWNER=true
+LEGACY_PRESERVATION=true
+LEGACY_IS_COMPATIBILITY_NOT_SECOND_OWNER=true
+ONE_SYSTEM_ONLY=true
+REALITY_IS_JUDGE=true
+UNKNOWN_IS_NOT_PASS=true
+```
+
+```text
+CHEFE_FALA
+→ RECUPERA_FIO
+→ META_GRILL
+→ MEDE_CURRENT
+→ REUSE_BEFORE_CREATE
+→ OWNER_EXISTENTE
+→ MENOR_DELTA
+→ TESTE
+→ BACKCHECK
+→ CONTRAPROVA
+→ SE_ERRO: VOLTA_UMA_CASA
+→ COSTURA
+→ RETESTE
+→ READBACK
+→ REMEDIÇÃO
+→ SE_VERDE: PRESERVA_GREEN_STATE
+→ SE_EXPERIMENTO: ISOLA
+→ SE_PROVADO: ABSORVE_SOMENTE_DELTA
+→ CRISTALIZA
+→ NEXT_CURSOR
+```

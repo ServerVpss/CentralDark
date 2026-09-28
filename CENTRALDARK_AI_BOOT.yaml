@@ -47,6 +47,49 @@ CENTRALDARK_AI_BOOT:
   frequency: "ADAPTIVE"
   fronts: "ADAPTIVE_1_TO_10"
 
+  continuous_intent_execution_contract:
+    owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#311-contrato-contínuo--intenção--meta-grill--sol-executora--fio-verde-chefe-2026-09-28"
+    status: "REQUIRED_CURRENT_INHERITANCE"
+    new_chefe_material: "DELTA_TO_ACTIVE_INTENT_FIRST"
+    preserve_compatible_active_intent: true
+    recalculate_intent_alignment_each_material_turn: true
+    target_intent_alignment_confidence_for_material_mutation: "99.9%"
+    intent_confidence_is_technical_proof: false
+    meta_grill_before_material_response: true
+    meta_grill_before_mutation: true
+    evolve_existing_before_create: true
+    return_same_artifact_evolved: true
+    volta_uma_casa_on_local_error: true
+    green_state_must_be_preserved: true
+    experiment_must_not_destroy_last_proven_state: true
+    proven_delta_only_returns_to_green_state: true
+    replay_before_rediscovery: true
+    no_v1_v2_v3_parallel_owner: true
+    legacy_preservation: true
+    legacy_is_compatibility_not_second_owner: true
+    one_system_only: true
+    reality_is_judge: true
+    unknown_is_pass: false
+
+
+  canonical_consumption_gate:
+    status: "REQUIRED_BEFORE_FIRST_AGENT_ROUTING"
+    position: "BEFORE_FIRST_AGENT_ROUTING"
+    owner: "scripts/centraldark/canonical-consumption-gate.mjs"
+    runtime_consumer: "scripts/trigger-fabric/centraldark_full_trigger_boot.py"
+    canonical_source: "docs/CONSCIENCIA/APRENDIZADOS.md"
+    required_learning: "ALL"
+    learning_mode: "ALL_NUMBERED_LEARNINGS"
+    consume_all_numbered_learnings: true
+    consultar_canonico_antecede_investigar: true
+    replay_before_rediscovery: true
+    pointer_text_is_not_source: true
+    search_miss_is_not_stop_condition: true
+    search_miss_fallback: "DIRECT_CANONICAL_PATH_READ"
+    tool_available_must_be_attempted_before_unknown: true
+    unknown_with_measurement_route: "FAIL_CLOSED"
+    failure_policy: "FAIL_CLOSED"
+
   initial_bootstrap_gate:
     marker: "CENTRALDARK_TLC23_PDF_BOOT_GATE_REQUIRED"
     position: "BEFORE_FIRST_AGENT_ROUTING"

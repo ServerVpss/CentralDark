@@ -8,6 +8,14 @@
 
 ```text
 GOVERNANCE_BOOT_REQUIRED=SIM
+CANONICAL_CONSUMPTION_PREFLIGHT_REQUIRED=SIM
+CANONICAL_CONSUMPTION_GATE_PATH=scripts/centraldark/canonical-consumption-gate.mjs
+CANONICAL_LEARNING_BOOT_MODE=ALL_NUMBERED_LEARNINGS
+ALL_NUMBERED_LEARNINGS_LINKED_TO_CENTRALDARK_AI_BOOT=SIM
+CANONICAL_SEARCH_MISS_FALLBACK=docs/CONSCIENCIA/APRENDIZADOS.md
+POINTER_MUST_OPEN_SOURCE_BEFORE_RESPONSE=SIM
+TOOL_AVAILABLE_REQUIRES_ATTEMPT_BEFORE_UNKNOWN=SIM
+UNKNOWN_WITH_MEASUREMENT_ROUTE=FAIL_CLOSED
 REUSE_BEFORE_CREATE_REQUIRED=SIM
 MEASURE_BEFORE_CREATION_REQUIRED=SIM
 MEASURE_BEFORE_CREATION_FORMULA="REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE"
@@ -47,6 +55,12 @@ DEPENDABOT_WORKFLOW_AUTO_APPROVAL_CHANGE=afad4177a76659afec503af610dbec6c813b6c3
 
 Antes de responder ou agir:
 
+0. Satisfazer o gate de consumo canônico: resolver ponteiro → main, ler o owner
+   citado, consultar `docs/CONSCIENCIA/APRENDIZADOS.md` e, se a busca semântica
+   retornar zero, fazer leitura direta do path conhecido. Se ferramenta/rota
+   autorizada existir, tentar antes de declarar `UNKNOWN`. Owner executável:
+   `scripts/centraldark/canonical-consumption-gate.mjs`.
+
 1. Ler `LEIA-ME-IA.md`.
 2. Ler `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`.
 3. Ler `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/FREQUENCIAS-OPERACIONAIS-SOL.md`.
@@ -60,6 +74,58 @@ Antes de responder ou agir:
 11. Ler `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` quando houver PR em conflito, main avançando sob PR aberto, ou dependabot travado. É o **único** padrão de resolução — não abrir segundo resolvedor nem resolver na mão fora dele.
 12. Medir branch, HEAD, PR, runtime, writer e tools aplicáveis.
 13. Emitir uma vez o `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md`.
+
+
+## 🔥🪬 Contrato CURRENT herdado — intenção contínua + META-GRILL + FIO VERDE
+
+Este arquivo **não cria contrato, owner, cérebro ou arquitetura paralela**. Herda o contrato CURRENT da SOUL; o legado continua vivo como compatibilidade, não como segunda arquitetura.
+
+```text
+CANONICAL_CONTINUOUS_CONTRACT=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#311-contrato-contínuo--intenção--meta-grill--sol-executora--fio-verde-chefe-2026-09-28
+NEW_CHEFE_MATERIAL=DELTA_TO_ACTIVE_INTENT_FIRST
+RECALCULATE_INTENT_ALIGNMENT_EACH_MATERIAL_TURN=true
+TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=99.9%
+INTENT_CONFIDENCE_IS_NOT_TECHNICAL_PROOF=true
+META_GRILL_BEFORE_MATERIAL_RESPONSE=true
+META_GRILL_BEFORE_MUTATION=true
+EVOLVE_EXISTING_BEFORE_CREATE=true
+RETURN_SAME_ARTIFACT_EVOLVED=true
+VOLTA_UMA_CASA_ON_LOCAL_ERROR=true
+GREEN_STATE_MUST_BE_PRESERVED=true
+EXPERIMENT_MUST_NOT_DESTROY_LAST_PROVEN_STATE=true
+PROVEN_DELTA_ONLY_RETURNS_TO_GREEN_STATE=true
+REPLAY_BEFORE_REDISCOVERY=true
+NO_V1_V2_V3_PARALLEL_OWNER=true
+LEGACY_PRESERVATION=true
+LEGACY_IS_COMPATIBILITY_NOT_SECOND_OWNER=true
+ONE_SYSTEM_ONLY=true
+REALITY_IS_JUDGE=true
+UNKNOWN_IS_NOT_PASS=true
+```
+
+```text
+CHEFE_FALA
+→ RECUPERA_FIO
+→ META_GRILL
+→ MEDE_CURRENT
+→ REUSE_BEFORE_CREATE
+→ OWNER_EXISTENTE
+→ MENOR_DELTA
+→ TESTE
+→ BACKCHECK
+→ CONTRAPROVA
+→ SE_ERRO: VOLTA_UMA_CASA
+→ COSTURA
+→ RETESTE
+→ READBACK
+→ REMEDIÇÃO
+→ SE_VERDE: PRESERVA_GREEN_STATE
+→ SE_EXPERIMENTO: ISOLA
+→ SE_PROVADO: ABSORVE_SOMENTE_DELTA
+→ CRISTALIZA
+→ NEXT_CURSOR
+```
+
 
 ## Secrets globais — REUSE_BEFORE_CREATION
 
