@@ -109,11 +109,24 @@ log "ALVO=$ALVO"
 log "ORIGIN_SHA=$ORIGIN_SHA"
 log "ATRAS=$ATRAS  AFRENTE=$AFRENTE  RASTREADOS_SUJOS=$SUJOS  WORKTREE_DIRTY=$SUJOS_ALL"
 
-# ─── Guarda: ssh deploy ─────────────────────────────────────────────────
-if [[ ! -f "$SSH_KEY" && "$APPLY" -eq 1 ]]; then
-  die "chave de deploy ausente em $SSH_KEY (SSH_KEY)" 14
+# ─── Guarda: autenticação de deploy ─────────────────────────────────────
+# O workflow self-hosted injeta autenticação GitHub efêmera via GIT_CONFIG_*.
+# SSH_KEY é fallback, não requisito quando essa rota já foi provada no job.
+HAS_EPHEMERAL_GIT_AUTH=0
+if [[ "${GIT_CONFIG_COUNT:-0}" =~ ^[1-9][0-9]*$ ]]; then
+  for ((i=0; i<GIT_CONFIG_COUNT; i++)); do
+    key_var="GIT_CONFIG_KEY_$i"
+    value_var="GIT_CONFIG_VALUE_$i"
+    if [[ "${!key_var:-}" == "http.https://github.com/.extraheader" && "${!value_var:-}" == AUTHORIZATION:* ]]; then
+      HAS_EPHEMERAL_GIT_AUTH=1
+      break
+    fi
+  done
 fi
-info "chave de deploy: $([[ -f "$SSH_KEY" ]] && echo "presente" || echo "ausente (não aplicando)")"
+if [[ ! -f "$SSH_KEY" && "$HAS_EPHEMERAL_GIT_AUTH" -ne 1 && "$APPLY" -eq 1 ]]; then
+  die "autenticação de deploy ausente: SSH_KEY e GitHub ephemeral auth indisponíveis" 14
+fi
+info "deploy auth: ephemeral_git=$HAS_EPHEMERAL_GIT_AUTH ssh_key=$([[ -f "$SSH_KEY" ]] && echo presente || echo ausente)"
 
 # ─── Guarda: scripts existentes ─────────────────────────────────────────
 [[ -x "$CENTRALDARK_DEPLOY" ]] || die "centraldark-deploy.sh ausente ou não executável" 10
