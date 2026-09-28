@@ -317,6 +317,9 @@ def canonical_consumption_gate_state(repo: Path) -> dict:
             "first": payload.get("first") if isinstance(payload, dict) else None,
             "last": payload.get("last") if isinstance(payload, dict) else None,
             "includes_learning_80": payload.get("includes_learning_80") if isinstance(payload, dict) else None,
+            "duplicate_numbers": payload.get("duplicate_numbers") if isinstance(payload, dict) else None,
+            "missing_numbers": payload.get("missing_numbers") if isinstance(payload, dict) else None,
+            "numbering_unique": payload.get("numbering_unique") if isinstance(payload, dict) else None,
             "stdout_sha256": hashlib.sha256((proc.stdout or "").encode("utf-8")).hexdigest(),
         }
     bound = all(
