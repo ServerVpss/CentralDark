@@ -57,6 +57,21 @@ MEMORY_CLAIM_RE = re.compile(
     re.I,
 )
 DIRECT_MAIN_RE = re.compile(r"\b(main)\b", re.I)
+MEASURABLE_CURRENT_UNKNOWN_RE = re.compile(
+    r"(?:CURRENT_MAIN(?:_SHA)?|MAIN_HEAD|HEAD_CURRENT).{0,120}"
+    r"(?:UNKNOWN|NOT[_ -]?YET[_ -]?MEASURED|NAO\s+MEDID|NÃO\s+MEDID|A\s+REMEDIR|POR\s+MEDIR)",
+    re.I | re.S,
+)
+LEDGER_CURRENT_CONTEXT_RE = re.compile(
+    r"(?:#1562|PR[- _]?M[ÃA]E).{0,500}"
+    r"(?:CURRENT_MAIN(?:_SHA)?|HEAD\s+ATUAL|MAIN\s+(?:AGORA|ATUAL|CORRENTE)|CORRENTE)",
+    re.I | re.S,
+)
+NOT_LOCATED_COMMENT_RE = re.compile(
+    r"(?:NOT[_ -]?YET[_ -]?LOCATED|N[AÃ]O\s+LOCALIZAD[OA]).{0,180}(?P<after>\d{6,})"
+    r"|(?P<before>\d{6,}).{0,180}(?:NOT[_ -]?YET[_ -]?LOCATED|N[AÃ]O\s+LOCALIZAD[OA])",
+    re.I | re.S,
+)
 
 # Canonical executable output-guard contract.
 RESPONSE_WITHOUT_TRACE = "INVALID"
@@ -134,6 +149,9 @@ class GitHubBackend:
             return None
         return str(obj.get("sha") or "")
 
+    def issue_comment(self, comment_id: int) -> Optional[dict[str, Any]]:
+        return self._gh(f"repos/{self.repo}/issues/comments/{comment_id}")
+
     def file_at(self, path: str, ref: str) -> Optional[str]:
         encoded_path = urllib.parse.quote(path.strip().lstrip("/"), safe="/")
         encoded_ref = urllib.parse.quote(ref, safe="")
@@ -200,11 +218,13 @@ class FakeBackend:
         commits: Optional[dict[str, dict[str, str]]] = None,
         main: Optional[str] = None,
         ledger: Optional[set[str]] = None,
+        comments: Optional[dict[int, dict[str, Any]]] = None,
         unavailable: bool = False,
     ):
         self.commits = commits or {}
         self.main = main
         self.ledger = {x.lower() for x in (ledger or set())}
+        self.comments = comments or {}
         self.unavailable = unavailable
 
     def _guard(self) -> None:
@@ -224,6 +244,10 @@ class FakeBackend:
     def current_main(self) -> Optional[str]:
         self._guard()
         return self.main
+
+    def issue_comment(self, comment_id: int) -> Optional[dict[str, Any]]:
+        self._guard()
+        return self.comments.get(comment_id)
 
     def file_at(self, path: str, ref: str) -> Optional[str]:
         self._guard()
@@ -358,6 +382,57 @@ def verify_text(text: str, repo: str, backend: Any) -> FiscalResult:
                 checks.append(Check("current_main", "PASS", "CURRENT_MAIN matches GitHub", remote_main))
             else:
                 checks.append(Check("current_main", "FAIL", "CURRENT_MAIN is stale or false", remote_main))
+
+
+    if MEASURABLE_CURRENT_UNKNOWN_RE.search(text):
+        try:
+            remote_main = backend.current_main()
+        except BackendUnavailable as exc:
+            checks.append(Check("measurable_current_declared_unknown", "UNKNOWN", str(exc)))
+        else:
+            if remote_main:
+                checks.append(Check(
+                    "measurable_current_declared_unknown",
+                    "FAIL",
+                    "CURRENT was declared unmeasured/UNKNOWN although live GitHub main was measurable",
+                    remote_main,
+                ))
+            else:
+                checks.append(Check("measurable_current_declared_unknown", "UNKNOWN", "GitHub returned no live main SHA"))
+
+    if LEDGER_CURRENT_CONTEXT_RE.search(text) and not data["current_main_claim"]:
+        try:
+            remote_main = backend.current_main()
+        except BackendUnavailable as exc:
+            checks.append(Check("ledger_current_requires_live_main", "UNKNOWN", str(exc)))
+        else:
+            if remote_main:
+                checks.append(Check(
+                    "ledger_current_requires_live_main",
+                    "FAIL",
+                    "ledger/PR body was interpreted as CURRENT without explicit live CURRENT_MAIN measurement",
+                    remote_main,
+                ))
+            else:
+                checks.append(Check("ledger_current_requires_live_main", "UNKNOWN", "cannot bind ledger CURRENT interpretation without live main"))
+
+    comment_match = NOT_LOCATED_COMMENT_RE.search(text)
+    if comment_match:
+        comment_id = int(comment_match.group("after") or comment_match.group("before"))
+        try:
+            comment_obj = backend.issue_comment(comment_id)
+        except BackendUnavailable as exc:
+            checks.append(Check("exact_comment_lookup", "UNKNOWN", str(exc), str(comment_id)))
+        else:
+            if comment_obj is not None:
+                checks.append(Check(
+                    "exact_comment_lookup",
+                    "FAIL",
+                    "exact comment was declared NOT_YET_LOCATED although direct GitHub lookup resolves it",
+                    str(comment_id),
+                ))
+            else:
+                checks.append(Check("exact_comment_lookup", "PASS", "direct GitHub lookup confirms exact comment is absent", str(comment_id)))
 
     sha = data["sha"]
     commit_obj: Optional[dict[str, Any]] = None
