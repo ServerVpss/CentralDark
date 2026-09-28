@@ -141,6 +141,19 @@ test('T15 Hermes aprende etapa material antes da conclusão/fixed point', () => 
   assert.match(source, /FIXED_POINT é checkpoint de verificação, não gate para capacitação do Hermes/);
 });
 
+test('T15b state RUNNING preserva os 12 campos do contrato de continuidade', () => {
+  const historyPush = source.indexOf('historico.push(entrada)');
+  const runningState = source.indexOf('const runningState = {', historyPush);
+  const spreadContinuity = source.indexOf('...continuityState', runningState);
+  const writeRunningState = source.indexOf('JSON.stringify(runningState, null, 2)', runningState);
+  const legacyOverwrite = source.indexOf("JSON.stringify({ missao, historico, retomadas, terminal_state: 'RUNNING'", historyPush);
+
+  assert.ok(runningState > historyPush);
+  assert.ok(spreadContinuity > runningState, 'state RUNNING precisa preservar objetivo/autoridade/escopo/baseline/receipt');
+  assert.ok(writeRunningState > spreadContinuity);
+  assert.equal(legacyOverwrite, -1, 'não pode sobrescrever state.json descartando os campos de continuidade');
+});
+
 test('T14 Executor: commit_push falha fechado e só fica verde após ler o HEAD remoto', () => {
   const start = executorSource.indexOf("if (acao === 'commit_push')");
   const end = executorSource.indexOf('return { ok: false, saida: `ação git desconhecida', start);
