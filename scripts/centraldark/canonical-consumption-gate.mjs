@@ -72,7 +72,7 @@ const text = fs.readFileSync(absFile, 'utf8');
 // Sem número explícito, o boot consome diretamente o aprendizado numerado
 // mais recente. Busca zero nunca encerra a rota quando o path canônico é conhecido.
 if (!args.learning) {
-  const matches = [...text.matchAll(/^###\\s+(\\d+)\\.\\s+.+$/gm)];
+  const matches = [...text.matchAll(/^###\s+(\d+)\.\s+.+$/gm)];
   if (!matches.length) {
     fail(33, 'NO_NUMBERED_LEARNING_IN_CANONICAL_FILE', { file: args.file });
   }
