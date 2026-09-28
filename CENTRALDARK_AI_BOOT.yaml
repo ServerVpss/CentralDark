@@ -499,6 +499,27 @@ CENTRALDARK_AI_BOOT:
       one_writer_per_mutable_scope: true
       readers_may_parallelize_perception: true
       writer_handoff_requires: [OLD_WRITER_RELEASE, HANDOFF_RECEIPT, NEW_WRITER_ACQUIRE]
+    cross_surface_capability_handoff:
+      enabled: true
+      local_blocked_is_not_global_blocker: true
+      local_capability_gap_is_not_human_frontier: true
+      human_frontier_requires_exhausted_authorized_bodies: true
+      before_terminal_blocked:
+        - INVENTORY_AUTHORIZED_ALTERNATE_ROUTES
+        - REUSE_PROVEN_CAPABILITY_ROUTE
+        - EMIT_CAPABILITY_HANDOFF_RECEIPT_TO_PR_MOTHER_1562
+        - WAIT_FOR_OR_REMEASURE_HANDOFF_RESULT
+        - RETEST_AFFECTED_CONE
+      known_route_hints:
+        - "CASA -> SSH -> VPS"
+        - "MCP_CASA -> execute_command|vps_run_once_script"
+      known_route_hint_is_not_runtime_proof: true
+      route_must_be_remeasured_before_use: true
+      blocked_is_terminal_only_if:
+        - NO_AUTHORIZED_BODY_CAN_MEASURE
+        - HANDOFF_EXHAUSTED
+        - EXACT_BLOCKER_PROVED
+      local_shell_absent_does_not_end_system_loop: true
     human_counterproof_reentry:
       enabled: true
       trigger: "MATERIAL_HUMAN_COUNTERPROOF_INVALIDATES_CURRENT_EXIT"
