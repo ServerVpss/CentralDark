@@ -37,6 +37,8 @@ MEGAZORD = FABRIC / "MEGAZORD-CENTRALDARK.yml"
 LOCK_CONTRACT = FABRIC / "PROVEN-DETERMINISTIC-LOCK.yml"
 RUNTIME_PREFLIGHT_LINT = FABRIC / "RUNTIME-PREFLIGHT-LINT.yml"
 BOOT = Path("CENTRALDARK_AI_BOOT.yaml")
+CANONICAL_CONSUMPTION_GATE = Path("scripts/centraldark/canonical-consumption-gate.mjs")
+CANONICAL_LEARNINGS = Path("docs/CONSCIENCIA/APRENDIZADOS.md")
 COGNITIVE_CAPABILITIES = Path("docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md")
 METACOGNITION = Path("docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md")
 DEFAULT_REGISTRY = FABRIC / "PROVEN-CLAIMS.lock.json"
@@ -242,7 +244,7 @@ def lint_runtime_command(
 
 def require_files(repo: Path) -> dict[str, str]:
     result = {}
-    for rel in (TRIGGERS, MASTER, ENGINE, MEGAZORD, LOCK_CONTRACT, RUNTIME_PREFLIGHT_LINT, BOOT, COGNITIVE_CAPABILITIES, METACOGNITION):
+    for rel in (TRIGGERS, MASTER, ENGINE, MEGAZORD, LOCK_CONTRACT, RUNTIME_PREFLIGHT_LINT, BOOT, CANONICAL_CONSUMPTION_GATE, CANONICAL_LEARNINGS, COGNITIVE_CAPABILITIES, METACOGNITION):
         p = repo / rel
         if not p.exists():
             raise SystemExit(f"MISSING_CANONICAL_OWNER={rel.as_posix()}")
@@ -286,6 +288,45 @@ def cognitive_bios_state(repo: Path) -> dict:
         "law": "ADAPT_INTENSITY_AND_ROUTE; NEVER_AUTHORITY_OR_HUMAN_GOAL",
     }
 
+
+
+def canonical_consumption_gate_state(repo: Path) -> dict:
+    """Fail-closed: #80 e o aprendizado mais recente precisam ser lidos direto do canônico."""
+    gate = repo / CANONICAL_CONSUMPTION_GATE
+    commands = {
+        "required_learning_80": ["node", str(gate), "--file", CANONICAL_LEARNINGS.as_posix(), "--learning", "80"],
+        "latest_learning": ["node", str(gate), "--file", CANONICAL_LEARNINGS.as_posix()],
+    }
+    receipts = {}
+    for name, command in commands.items():
+        try:
+            proc = subprocess.run(command, cwd=repo, capture_output=True, text=True, timeout=15, check=False)
+        except FileNotFoundError:
+            return {"status": "INVALID", "reason": "NODE_RUNTIME_NOT_AVAILABLE", "owner": CANONICAL_CONSUMPTION_GATE.as_posix()}
+        except subprocess.TimeoutExpired:
+            return {"status": "INVALID", "reason": f"GATE_TIMEOUT={name}", "owner": CANONICAL_CONSUMPTION_GATE.as_posix()}
+        try:
+            payload = json.loads(proc.stdout or "{}")
+        except json.JSONDecodeError:
+            payload = {"ok": False, "reason": "GATE_OUTPUT_NOT_JSON"}
+        receipts[name] = {
+            "exit_code": proc.returncode,
+            "ok": bool(payload.get("ok")) if isinstance(payload, dict) else False,
+            "learning": payload.get("learning") if isinstance(payload, dict) else None,
+            "source": payload.get("source") if isinstance(payload, dict) else None,
+            "stdout_sha256": hashlib.sha256((proc.stdout or "").encode("utf-8")).hexdigest(),
+        }
+    bound = all(x["exit_code"] == 0 and x["ok"] for x in receipts.values())
+    return {
+        "status": "BOUND" if bound else "INVALID",
+        "owner": CANONICAL_CONSUMPTION_GATE.as_posix(),
+        "canonical_source": CANONICAL_LEARNINGS.as_posix(),
+        "CONSULTAR_CANONICO_ANTECEDE_INVESTIGAR": True,
+        "REPLAY_BEFORE_REDISCOVERY": True,
+        "SEARCH_MISS_IS_NOT_STOP_CONDITION": True,
+        "UNKNOWN_MEDIVEL_E_FALHA_DE_METODO": True,
+        "receipts": receipts,
+    }
 
 def discover_registry(repo: Path) -> dict:
     trigger_text = (repo / TRIGGERS).read_text(encoding="utf-8")
@@ -457,6 +498,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
     registry = discover_registry(repo)
     bios = cognitive_bios_state(repo)
     preflight_contract = runtime_preflight_contract_state(repo)
+    canonical_consumption = canonical_consumption_gate_state(repo)
     active = explicit_command_context(args.input)
     normalized = normalize_command(args.input.splitlines()[0].split()[0]) if args.input.strip() else ""
     result = {
@@ -471,6 +513,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
         "feedback": classify_realtime_feedback(args.input),
         "cognitive_bios": bios,
         "runtime_preflight_contract": preflight_contract,
+        "canonical_consumption": canonical_consumption,
         "hud": bios["hud"],
         "rules": {
             "case_insensitive": True,
@@ -483,6 +526,9 @@ def cmd_boot(args: argparse.Namespace) -> int:
             "realtime_feedback_persistent_per_mission": True,
             "realtime_feedback_user_repetition_required": False,
             "runtime_preflight_lint_required": True,
+            "canonical_consumption_gate_required": True,
+            "consultar_canonico_antecede_investigar": True,
+            "search_miss_is_not_stop_condition": True,
             "runtime_preflight_lint_owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
             "proven_path_replay_lock": True,
             "proven_path_must_not_be_reinterpreted_from_zero": PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO,
@@ -496,7 +542,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
     print(json.dumps(result, indent=2, ensure_ascii=False))
     if not active:
         return 4
-    return 0 if bios["status"] == "LOADED" and preflight_contract["status"] == "BOUND" else 7
+    return 0 if bios["status"] == "LOADED" and preflight_contract["status"] == "BOUND" and canonical_consumption["status"] == "BOUND" else 7
 
 
 def cmd_preflight_lint(args: argparse.Namespace) -> int:
