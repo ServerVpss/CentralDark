@@ -418,9 +418,15 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
     }
 
     historico.push(entrada);
-    await writeFile(statePath, JSON.stringify({ ...continuityState, missao, historico, retomadas }, null, 2));
-    registrarEtapa(resultado.ok);
-    await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: 'RUNNING', terminal_reason: null }, null, 2));
+    const runningState = {
+      ...continuityState,
+      missao,
+      historico,
+      retomadas,
+      terminal_state: 'RUNNING',
+      terminal_reason: null,
+    };
+    await writeFile(statePath, JSON.stringify(runningState, null, 2));
     registrarEtapa(etapaAprovada);
 
     const emoji = etapaAprovada ? '✅' : '⚠️';
