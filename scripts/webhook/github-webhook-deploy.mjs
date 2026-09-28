@@ -15,6 +15,7 @@ const PORT = Number(process.env.WEBHOOK_DEPLOY_PORT || 9300);
 const SECRET_FILE = process.env.WEBHOOK_ENV_FILE || path.join(ROOT, 'secrets/webhook.env');
 const LOCK_FILE = path.join(ROOT, 'revisoes/.webhook-deploy.lock');
 const DEPLOY_JOB = path.join(ROOT, 'scripts/webhook/deploy-job.sh');
+const MAIN_PULSE_JOB = process.env.CENTRALDARK_MAIN_PULSE_JOB || '/usr/local/sbin/centraldark-main-pulse';
 const REPO_DEPLOY_LOCK = process.env.CENTRALDARK_REPO_DEPLOY_LOCK || '/tmp/centraldark-repo-deploy.lock';
 const MAX_BODY = 2 * 1024 * 1024;
 
@@ -117,7 +118,11 @@ function runDeploy(ref, afterSha) {
       GIT_ASKPASS: process.env.CENTRALDARK_GIT_ASKPASS || path.join(ROOT, 'secrets/github-read-askpass.sh'),
       CENTRALDARK_GITHUB_TOKEN_FILE: process.env.CENTRALDARK_GITHUB_TOKEN_FILE || '/root/secrets/GITHUB_TOKEN',
     };
-    const child = spawn('flock', ['-w', '90', REPO_DEPLOY_LOCK, 'bash', DEPLOY_JOB], {
+    const pulseAvailable = fs.existsSync(MAIN_PULSE_JOB);
+    const command = pulseAvailable
+      ? [MAIN_PULSE_JOB, '--source', afterSha || '', '--trigger', 'webhook']
+      : ['flock', '-w', '90', REPO_DEPLOY_LOCK, 'bash', DEPLOY_JOB];
+    const child = spawn(command[0], command.slice(1), {
       cwd: ROOT,
       env,
       stdio: ['ignore', 'pipe', 'pipe'],
