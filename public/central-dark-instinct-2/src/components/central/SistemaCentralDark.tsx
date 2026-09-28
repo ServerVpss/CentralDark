@@ -23,6 +23,7 @@ import {
 
 import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
 import { useNotificationsLog, type NotifyTipo } from "@/hooks/useNotificationsLog";
+import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -171,9 +172,9 @@ function MegaPainel({ estado, atualizando, atualizar }: SistemaCentralDarkProps)
           </article>
         ))}
       </div>
-      {notificacoes.erro === "AUTH_REQUIRED" && (
+      {notificacoes.erro && (
         <p className="mt-3 font-mono text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
-          Notificações: AUTH_REQUIRED — ponte de leitura do TelePainel não configurada.
+          Notificações: {notificacoes.erro}
         </p>
       )}
 
@@ -254,6 +255,9 @@ function HubSeguranca({ estado }: { estado: EstadoCentralDark | undefined }) {
 }
 
 function CofreAdministrativo({ estado }: { estado: EstadoCentralDark | undefined }) {
+  const notificacoes = useNotificationsLog("24h");
+  const bots = useTelegramBotsResumo();
+  const botsAtivos = bots.bots.filter((b) => b.is_active).length;
   return (
     <section aria-labelledby="cofre-titulo">
       <p className="font-mono text-[10px] tracking-[0.2em] text-gold uppercase">Acesso restrito</p>
@@ -279,13 +283,22 @@ function CofreAdministrativo({ estado }: { estado: EstadoCentralDark | undefined
         </div>
         <TabsContent value="visao" className="mt-6 grid gap-4 md:grid-cols-3">
           <ItemCofre
-            titulo="Saúde operacional"
-            detalhe="Resumo derivado somente das medições exibidas no HUD e na Central de Status."
-            estado={(estado?.liveFabric ?? "UNKNOWN") as EstadoOperacional}
+            titulo="Notificações 24h"
+            detalhe={
+              notificacoes.stats
+                ? `${notificacoes.stats.total} evento(s) · ${notificacoes.stats.sucessoPct}% sem erro/crítico`
+                : SEM_FONTE
+            }
+            estado={notificacoes.stats ? "PASS" : "AUTH_REQUIRED"}
           />
           <ItemCofre
-            titulo="Eventos críticos"
-            detalhe="Nenhuma fonte de incidentes críticos foi autorizada para esta leitura."
+            titulo="Bots ativos"
+            detalhe={
+              bots.erro
+                ? `Sem acesso: ${bots.erro}`
+                : `${botsAtivos} ativo(s) de ${bots.bots.length} cadastrado(s)`
+            }
+            estado={bots.erro ? "AUTH_REQUIRED" : "PASS"}
           />
           <ItemCofre
             titulo="Última medição"
@@ -298,8 +311,24 @@ function CofreAdministrativo({ estado }: { estado: EstadoCentralDark | undefined
           />
         </TabsContent>
         <TabsContent value="bots" className="mt-6 grid gap-4 md:grid-cols-2">
-          <ItemCofre titulo="Bots cadastrados" detalhe={SEM_FONTE} />
-          <ItemCofre titulo="Rotas de notificação" detalhe={SEM_FONTE} />
+          {bots.erro ? (
+            <ItemCofre
+              titulo="Bots cadastrados"
+              detalhe={`Sem acesso: ${bots.erro}`}
+              estado="AUTH_REQUIRED"
+            />
+          ) : bots.bots.length === 0 ? (
+            <ItemCofre titulo="Bots cadastrados" detalhe="Nenhum bot cadastrado." />
+          ) : (
+            bots.bots.map((b) => (
+              <ItemCofre
+                key={b.id}
+                titulo={b.name}
+                detalhe={`@${b.bot_username ?? "sem username"} · ${b.health_status ?? "saúde não medida"}`}
+                estado={b.is_active ? "PASS" : "BLOCKED"}
+              />
+            ))
+          )}
         </TabsContent>
         <TabsContent value="rotas" className="mt-6 grid gap-4 md:grid-cols-2">
           <ItemCofre

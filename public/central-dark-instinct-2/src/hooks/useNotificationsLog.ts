@@ -1,11 +1,9 @@
-// Feed unificado do Mega Painel — lê `notifications_log` via ponte de leitura do TelePainel.
-// Adaptado de src/shared/hooks/useNotificationsLog.ts (TelePainel), trocando o client Supabase
-// pela ponte read-only: os dois projetos Supabase são diferentes (ver telepainel-bridge-client.ts).
+// Feed unificado do Mega Painel — lê `notifications_log` do mesmo projeto Supabase do Cockpit.
+// Adaptado de src/shared/hooks/useNotificationsLog.ts (TelePainel). RLS exige sessão
+// autenticada com papel admin (has_role(auth.uid(),'admin')); por isso reaproveita o client
+// já autenticado do Cockpit em vez de um client anônimo separado.
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  obterClienteTelePainel,
-  telepainelBridgeDisponivel,
-} from "@/integrations/supabase/telepainel-bridge-client";
+import { supabase } from "@/integrations/supabase/client";
 
 export type NotifyTipo = "info" | "sucesso" | "aviso" | "erro" | "critico";
 
@@ -28,6 +26,13 @@ const PERIODO_MS: Record<PeriodoFiltro, number> = {
 
 const MAX_FEED = 200;
 
+function extrairMensagemErro(e: unknown): string {
+  if (e instanceof Error) return e.message;
+  if (e && typeof e === "object" && "message" in e)
+    return String((e as { message: unknown }).message);
+  return String(e);
+}
+
 /** Estatísticas honestas: null enquanto não houver leitura real (nunca inventa contagem). */
 export type StatsNotificacoes = {
   porTipo: Record<NotifyTipo, number>;
@@ -47,28 +52,24 @@ export function useNotificationsLog(periodo: PeriodoFiltro = "24h") {
   );
 
   const buscar = useCallback(async () => {
-    if (!telepainelBridgeDisponivel) {
-      setErro("AUTH_REQUIRED");
-      setLoading(false);
-      return;
-    }
     setLoading(true);
     setErro(null);
     try {
-      const client = obterClienteTelePainel();
-      if (!client) throw new Error("Ponte indisponível");
-      const { data, error } = await client
+      // `notifications_log` não está no Database gerado localmente (tabela existe no banco
+      // real, mas o types.ts deste projeto não foi regenerado); cast pontual e documentado.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data, error } = await (supabase as unknown as { from: (t: string) => any })
         .from("notifications_log")
         .select("id, created_at, origem, tipo, titulo, mensagem")
         .gte("created_at", sinceIso)
         .order("created_at", { ascending: false })
         .limit(MAX_FEED);
       if (error) throw error;
-      const linhas = (data ?? []) as NotificationLog[];
+      const linhas = (data ?? []) as unknown as NotificationLog[];
       setItems(linhas);
       if (linhas[0]) setLastEventAt(new Date(linhas[0].created_at));
     } catch (e) {
-      setErro(e instanceof Error ? e.message : String(e));
+      setErro(extrairMensagemErro(e));
     } finally {
       setLoading(false);
     }
@@ -78,13 +79,9 @@ export function useNotificationsLog(periodo: PeriodoFiltro = "24h") {
     buscar();
   }, [buscar]);
 
-  // Realtime só quando a ponte existe — nunca cria segundo canal se indisponível.
   useEffect(() => {
-    if (!telepainelBridgeDisponivel) return;
-    const client = obterClienteTelePainel();
-    if (!client) return;
-    const canal = client
-      .channel("cockpit-notifications-log-bridge")
+    const canal = supabase
+      .channel("cockpit-notifications-log")
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "notifications_log" },
@@ -96,12 +93,12 @@ export function useNotificationsLog(periodo: PeriodoFiltro = "24h") {
       )
       .subscribe();
     return () => {
-      client.removeChannel(canal);
+      supabase.removeChannel(canal);
     };
   }, []);
 
   const stats: StatsNotificacoes = useMemo(() => {
-    if (!telepainelBridgeDisponivel || erro) return null;
+    if (erro) return null;
     const porTipo: Record<NotifyTipo, number> = {
       info: 0,
       sucesso: 0,
