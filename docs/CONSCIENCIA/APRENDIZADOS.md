@@ -478,3 +478,8 @@ updated: 2026-08-27
 - **Comportamento esperado:** antes de repetir uma conclusão, procurar a fonte aplicável; antes de nomear causa, testar hipótese; se a busca falhar, registrar o denominador realmente medido em vez de universalizar ausência; se a realidade contrariar a primeira leitura, recalibrar sem apego à narrativa.
 - **Cristal:** `CURIOSIDADE + METODO + PROVA = INVESTIGACAO_UTIL`; `PAPAGAIO_CURIOSO = DETETIVE_FUNCIONAL`.
 
+### 66. Um fio operacional; HTML é checkpoint entre janelas
+- **Categoria:** regra
+- **Data:** 2026-09-28
+- **Contexto:** Os exports rotulados Fio A/B/C pareciam ramificações independentes, mas a reconciliação dos próprios HTMLs mostrou que a intenção permanece a mesma e só a janela de conversa muda quando o contexto enche.
+- **Aprendizado:** Não criar arquitetura paralela de memória por chat. Operar como CONTINUITY_CHECKPOINT: mesma intenção e mesmo fio; export HTML serve para recuperar contexto e provar trajetória. GitHub continua memória permanente; chat é memória operacional temporária; HTML é checkpoint.
