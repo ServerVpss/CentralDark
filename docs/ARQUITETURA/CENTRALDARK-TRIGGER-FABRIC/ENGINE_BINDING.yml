@@ -127,7 +127,7 @@ megazord_binding:
 memory_binding:
   owner: .agents/skills/brain-memory/SKILL.md
   required_by_all_engines: true
-  applies_to: [OPENAI_CHATGPT, CLAUDE, HERMES, GROK, GEMINI, CODEX, NOUS, LOCAL_MODELS, FUTURE_ENGINES]
+  applies_to: [CHATGPT, CLAUDE, HERMES, GROK, GEMINI, CODEX, NOUS, LOCAL_MODELS, FUTURE_ENGINES]
   current_engine_included: true
   engine_switch_changes_memory_contract: false
   chat_ack_is_durable_memory: false
