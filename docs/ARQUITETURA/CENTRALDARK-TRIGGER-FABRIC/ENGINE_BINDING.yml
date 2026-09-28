@@ -124,6 +124,24 @@ megazord_binding:
   deploy_is_consequence: true
 
 
+memory_binding:
+  owner: .agents/skills/brain-memory/SKILL.md
+  required_by_all_engines: true
+  applies_to: [CHATGPT, CLAUDE, HERMES, GROK, GEMINI, CODEX, NOUS, LOCAL_MODELS, FUTURE_ENGINES]
+  current_engine_included: true
+  engine_switch_changes_memory_contract: false
+  chat_ack_is_durable_memory: false
+  session_context_is_durable_memory: false
+  provider_local_memory_is_canonical: false
+  centraldark_durable_memory_is_primary: true
+  chefe_correction_preference_or_rule_auto_ingest: true
+  reuse_existing_memory_owner: true
+  create_parallel_memory: false
+  write_when_authorized_writer_available: true
+  unavailable_writer_behavior: EXISTING_AUTHORIZED_DURABLE_ROUTE_OR_UNKNOWN
+  saved_claim_requires: [LOCATION, READBACK]
+  unknown_is_not_pass: true
+
 runtime_preflight_binding:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PREFLIGHT-LINT.yml
   executable_consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py#cmd_preflight_lint
