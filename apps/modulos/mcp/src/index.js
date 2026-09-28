@@ -377,6 +377,10 @@ app.get("/.well-known/oauth-protected-resource/mcp", getProtectedResourceMetadat
 app.get("/mcp/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-protected-resource/admin", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-protected-resource/admin/mcp", getProtectedResourceMetadata);
+// Compatibilidade fail-safe para clientes que invertem a rota admin.
+// O metadata devolve o resource canônico /admin/mcp; não nasce segundo MCP.
+app.get("/.well-known/oauth-protected-resource/mcp/admin", getProtectedResourceMetadata);
+app.get("/mcp/admin/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-authorization-server", getAuthorizationServerMetadata);
 app.get("/.well-known/oauth-authorization-server/mcp", getAuthorizationServerMetadata);
 app.get("/mcp/.well-known/oauth-authorization-server", getAuthorizationServerMetadata);
@@ -611,6 +615,39 @@ app.post("/admin/mcp", (req, res) => {
 });
 app.get("/admin/mcp", (req, res) => {
     unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente.");
+});
+// Alias de compatibilidade: /mcp/admin converge para o MESMO handler /admin/mcp.
+// Mantemos o método e o corpo (sem redirect HTTP) porque clientes MCP/OAuth podem
+// não preservar POST/Authorization em redirects. O resource canônico continua /admin/mcp.
+app.post("/mcp/admin", (req, res) => {
+    const l = withCid(req.cid);
+    const auth = requireAdminScope(req, res);
+    if (!auth) return;
+    l.info("mcp_admin_compat_request_authorized", {
+        method: req.body?.method || "unknown",
+        actor: auth.callerUser,
+        canonicalPath: "/admin/mcp",
+        requestedPath: "/mcp/admin",
+    });
+    handleMcpRequest(req, res, auth.token, {
+        cid: req.cid,
+        admin: true,
+        callerUser: auth.callerUser,
+        oauthScope: auth.oauthScope,
+    }).catch((err) => {
+        l.error("mcp_admin_compat_handler_unhandled", { error: String(err) });
+        if (!res.headersSent) {
+            res.status(500).json({
+                jsonrpc: "2.0",
+                error: { code: -32603, message: "Erro interno do servidor MCP admin", data: { cid: req.cid } },
+                id: null,
+                cid: req.cid,
+            });
+        }
+    });
+});
+app.get("/mcp/admin", (req, res) => {
+    unauthorizedAdmin(req, res, "Rota compatível; resource canônico: /admin/mcp.");
 });
 // /mcp-public removido em 30/06/2026 — expunha vps_write_file_safe sem Bearer
 // (pendência #8). Toda chamada ao MCP agora exige OAuth via /mcp.

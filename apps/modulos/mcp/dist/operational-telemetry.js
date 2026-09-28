@@ -90,6 +90,197 @@ function readTextSafe(file) {
         return "";
     }
 }
+function readTailSafe(file, maxBytes = 64 * 1024) {
+    let fd = null;
+    try {
+        const stat = fs.statSync(file);
+        const size = Math.min(stat.size, maxBytes);
+        const start = Math.max(0, stat.size - size);
+        const buf = Buffer.alloc(size);
+        fd = fs.openSync(file, "r");
+        fs.readSync(fd, buf, 0, size, start);
+        return buf.toString("utf8");
+    }
+    catch {
+        return "";
+    }
+    finally {
+        if (fd !== null) {
+            try {
+                fs.closeSync(fd);
+            }
+            catch { }
+        }
+    }
+}
+function processCmdlines(procRoot = "/proc") {
+    let entries = [];
+    try {
+        entries = fs.readdirSync(procRoot, { withFileTypes: true });
+    }
+    catch {
+        return [];
+    }
+    const rows = [];
+    for (const entry of entries) {
+        if (!entry.isDirectory() || !/^\d+$/.test(entry.name))
+            continue;
+        const pid = Number(entry.name);
+        const base = path.join(procRoot, entry.name);
+        let command = "";
+        try {
+            command = fs.readFileSync(path.join(base, "cmdline"))
+                .toString("utf8")
+                .replaceAll("\u0000", " ")
+                .trim();
+        }
+        catch { }
+        if (!command) {
+            try {
+                command = fs.readFileSync(path.join(base, "comm"), "utf8").trim();
+            }
+            catch { }
+        }
+        if (command)
+            rows.push({ pid, command });
+    }
+    return rows;
+}
+function laneFromProcesses(processes, id, label, patterns) {
+    const matches = processes.filter((row) => patterns.some((pattern) => pattern.test(row.command)));
+    return {
+        id,
+        label,
+        state: matches.length > 0 ? "RUNNING" : "NOT_OBSERVED",
+        processCount: matches.length,
+        pids: matches.slice(0, 12).map((row) => row.pid),
+        evidence: matches.length > 0 ? "PROC_CMDLINE" : "NONE",
+    };
+}
+function latestMcpToolActivity(root, nowMs = Date.now()) {
+    const logDir = path.join(root, "logs");
+    let names = [];
+    try {
+        names = fs.readdirSync(logDir)
+            .filter((name) => /^mcp-audit-.*\.jsonl(?:\.\d+)?$/.test(name))
+            .map((name) => {
+            const file = path.join(logDir, name);
+            let mtimeMs = 0;
+            try {
+                mtimeMs = fs.statSync(file).mtimeMs;
+            }
+            catch { }
+            return { file, mtimeMs };
+        })
+            .sort((a, b) => b.mtimeMs - a.mtimeMs);
+    }
+    catch { }
+    for (const candidate of names.slice(0, 4)) {
+        const lines = readTailSafe(candidate.file).split(/\r?\n/).filter(Boolean).reverse();
+        for (const line of lines) {
+            let event = null;
+            try {
+                event = JSON.parse(line);
+            }
+            catch {
+                continue;
+            }
+            const isToolCall = event?.event === "mcp_tool_execution" && event?.method === "tools/call";
+            const isLiveToolCall = event?.event === "mcp_tool_execution_live";
+            if (!isToolCall && !isLiveToolCall)
+                continue;
+            const ts = Date.parse(String(event?.timestamp || ""));
+            const ageMs = Number.isFinite(ts) ? Math.max(0, nowMs - ts) : null;
+            const recent = ageMs !== null && ageMs <= 5 * 60 * 1000;
+            return {
+                state: recent ? "RECENT" : "STALE",
+                observedAt: event?.timestamp || null,
+                ageMs,
+                toolName: typeof event?.toolName === "string" ? event.toolName : null,
+                ok: event?.ok === true || event?.status === "PASS",
+                source: path.relative(root, candidate.file).replaceAll("\\", "/"),
+            };
+        }
+    }
+    return {
+        state: "UNKNOWN",
+        observedAt: null,
+        ageMs: null,
+        toolName: null,
+        ok: null,
+        source: "logs/mcp-audit-*.jsonl*",
+    };
+}
+function executionTopologySnapshot({ root, procRoot = "/proc", nowMs = Date.now() }) {
+    const processes = processCmdlines(procRoot);
+    const lanes = [
+        laneFromProcesses(processes, "MCP_SERVER", "MCP CentralDark", [
+            /apps\/modulos\/mcp\/dist\/index\.js/i,
+        ]),
+        laneFromProcesses(processes, "TELEGRAM_BOT", "Telegram unified-bot", [
+            /apps\/bot-telegram\/unified-bot\.cjs/i,
+        ]),
+        laneFromProcesses(processes, "HERMES_RUNTIME", "Hermes runtime", [
+            /\bhermes\s+(?:acp|serve)\b/i,
+            /hermes_cli\.main\s+gateway\s+run/i,
+        ]),
+        laneFromProcesses(processes, "HERMES_CRON", "Hermes cron/external worker", [
+            /-m\s+cron\.scheduler\b/i,
+        ]),
+        laneFromProcesses(processes, "GITHUB_RUNNER", "GitHub Actions runner", [
+            /actions-runner\/.*Runner\.(?:Listener|Worker)/i,
+        ]),
+        laneFromProcesses(processes, "REMOTE_DESKTOP", "Desktop Commander Remote", [
+            /desktop-commander/i,
+        ]),
+        laneFromProcesses(processes, "GUARDIAO", "Guardião runtime", [
+            /infra\/guardiao\/.*(?:guardiao|analista)\.py/i,
+        ]),
+    ];
+    const mcpActivity = latestMcpToolActivity(root, nowMs);
+    const telegram = lanes.find((lane) => lane.id === "TELEGRAM_BOT");
+    const anyRuntime = lanes.some((lane) => lane.state === "RUNNING");
+    const executionObserved = mcpActivity.state === "RECENT";
+    return {
+        schema: "centraldark.execution-topology.v1",
+        observedAt: new Date(nowMs).toISOString(),
+        source: "PROC_CMDLINE+MCP_AUDIT",
+        aiRequired: false,
+        rules: {
+            uiLoopPausedIsNotGlobalExecutionPaused: true,
+            plannerIsNotExecutor: true,
+            monitorIsNotExecutor: true,
+            processPresentIsNotExecutionProof: true,
+            recentMcpToolCallIsExecutionEvidence: true,
+            unknownIsNotPass: true,
+        },
+        ui: {
+            state: "EXTERNAL_NOT_MEASURED",
+            semantics: "UI state cannot infer global executor state",
+        },
+        roles: {
+            coordinator: "SOL/UI",
+            controlPlane: "CentralDark MCP",
+            executionSurfaces: ["Telegram Bot", "Hermes runtime", "Hermes cron", "MCP tools"],
+            judge: "observable runtime evidence",
+        },
+        lanes,
+        mcpActivity,
+        duplicateSignals: {
+            telegramBotProcesses: telegram?.processCount ?? 0,
+            telegramBotMultiplicity: (telegram?.processCount ?? 0) > 1
+                ? "WATCH_MULTIPLE"
+                : (telegram?.processCount ?? 0) === 1
+                    ? "SINGLE"
+                    : "UNKNOWN",
+        },
+        verdict: executionObserved
+            ? "EXECUTION_EVIDENCE_OBSERVED"
+            : anyRuntime
+                ? "RUNTIME_PRESENT_EXECUTION_UNKNOWN"
+                : "UNKNOWN_NOT_PASS",
+    };
+}
 export const CENTRALDARK_PATTERN_RED_OUTSIDE_PCT = 80;
 function externalPatternDimensions(root) {
     const file = path.join(root, "apps/modulos/status/centraldark-pattern-observation.json");
@@ -224,7 +415,7 @@ function patternAlignmentSnapshot({ root, diagnostics, boundary, rules }) {
         dimensions,
     };
 }
-export function getOperationalSnapshot({ root = DEFAULT_ROOT, heartbeat = null } = {}) {
+export function getOperationalSnapshot({ root = DEFAULT_ROOT, heartbeat = null, procRoot = "/proc", nowMs = Date.now() } = {}) {
     const diagnostics = latestForensic(root);
     const cpus = os.cpus()?.length || 0;
     const load = os.loadavg();
@@ -258,6 +449,7 @@ export function getOperationalSnapshot({ root = DEFAULT_ROOT, heartbeat = null }
     };
     const boundary = secretBoundary(root);
     const patternAlignment = patternAlignmentSnapshot({ root, diagnostics, boundary, rules });
+    const executionTopology = executionTopologySnapshot({ root, procRoot, nowMs });
     return {
         schema: "centraldark.operational.snapshot.v1",
         observedAt: new Date().toISOString(),
@@ -287,6 +479,7 @@ export function getOperationalSnapshot({ root = DEFAULT_ROOT, heartbeat = null }
         forensic: diagnostics,
         secretBoundary: boundary,
         patternAlignment,
+        executionTopology,
         statusFiles: statusFileSnapshot(root),
         fronts,
         verdict: diagnostics.status === "OBSERVED" ? "OBSERVED_NOT_FIXED_POINT" : "UNKNOWN_NOT_PASS",

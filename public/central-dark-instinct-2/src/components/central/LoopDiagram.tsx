@@ -19,12 +19,7 @@ export function LoopDiagram() {
   const { t } = useI18n();
 
   return (
-    <section
-      id="loop"
-      data-key="1"
-      className="relative scroll-mt-24 px-4 py-24 sm:px-6"
-    >
-
+    <section id="loop" data-key="1" className="relative scroll-mt-24 px-4 py-24 sm:px-6">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
           kicker={t("loop.kicker")}

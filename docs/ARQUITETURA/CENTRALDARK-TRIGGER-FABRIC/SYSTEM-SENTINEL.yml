@@ -30,6 +30,10 @@ laws:
   AUTO_RECONCILE_MUST_STAY_INSIDE_PROVEN_AUTHORITY: true
   AUTO_PROVIDER_FAILOVER_REQUIRES_PROVEN_FREE_OR_ALLOWED_ROUTE: true
   PAID_OR_UNKNOWN_PRICE_ROUTE_IS_FORBIDDEN_WHEN_FREE_ONLY_POLICY_ACTIVE: true
+  FIXED_POINT_ROUTE_IS_DETERMINISTIC: true
+  SAME_FINGERPRINT_NO_FULL_REPLAY: true
+  API_TRANSPORT_IS_NOT_AUTHORITY: true
+  API_EVENT_MUST_ENTER_EXISTING_SENTINEL_RUNNER: true
 
 active_mission_spine:
   - SEGREDO_CHEFE_INTENT
@@ -268,12 +272,71 @@ self_improvement:
     - COUNTERPROOF
     - CRYSTALIZE
 
+deterministic_fixed_route:
+  purpose: >-
+    Depois que o escopo chega a um fixed point local provado, preservar a rota
+    como passagem deterministica reutilizavel. IAs futuras nao repetem o percurso
+    completo quando a identidade causal permanece igual; fazem apenas liveness
+    minimo e continuam do NEXT_CURSOR.
+  route:
+    - INTENT
+    - CONTRACT_CURRENT
+    - SENSOR
+    - T0
+    - CURRENT_STATE
+    - EXISTING_OWNER
+    - COUNTERPROOF
+    - PROBES
+    - RECONCILIATION
+    - T1
+    - REALITY_JUDGE
+    - HUD
+    - NEXT_CURSOR
+  proof_cache_key:
+    - TARGET
+    - OWNER
+    - INPUTS_HASH
+    - CONFIG_HASH
+    - HEAD_OR_ARTIFACT_HASH
+    - SECURITY_BOUNDARY
+  same_fingerprint: REUSE_PROOF_NO_REPEAT
+  changed_fingerprint: REVALIDATE_AFFECTED_CHAIN_ONLY
+  incomplete_fingerprint: RUN_DETERMINISTIC_ROUTE
+  minimal_liveness_remeasure_still_required: true
+  global_fixed_point_claim_from_local_route: false
+  mutation_authority_from_route: false
+  api:
+    transport: GITHUB_REPOSITORY_DISPATCH
+    event_type: centraldark_sentinel_route
+    api_role: TRANSPORT_ONLY
+    owner: .github/workflows/sentinela-divergencias.yml
+    runner: scripts/sentinela/run.mjs
+    kernel_runtime: scripts/trigger-fabric/system_sentinel.py
+  consumers:
+    coderabbit:
+      ingress_owner: .github/workflows/hermes-core-signal-watch.yml
+      role: REVIEW_SIGNAL_ONLY
+      direct_mutation_authority: false
+    dependabot:
+      ingress_owner: .github/workflows/dependabot-auto-merge.yml
+      role: DEPENDENCY_SIGNAL_ONLY
+      direct_mutation_authority: false
+  invariants:
+    - ONE_SYSTEM_ONLY
+    - ONE_WRITER_PER_SCOPE
+    - CURRENT_GT_HISTORY
+    - UNKNOWN_IS_NOT_PASS
+    - REVIEW_IS_NOT_PROOF
+    - MERGE_IS_NOT_DEPLOY
+    - SENSOR_FAILURE_IS_NOT_WORLD_FAILURE
+
 runtime:
   executable: scripts/trigger-fabric/system_sentinel.py
   note_watch: "python3 scripts/trigger-fabric/system_sentinel.py --watch-notes"
   ingest_event: "python3 scripts/trigger-fabric/system_sentinel.py --event-json '<json>'"
   self_test: "python3 scripts/trigger-fabric/system_sentinel.py --self-test"
   runtime_started_on_main_commit: false
+  deterministic_route_cli: "python3 scripts/trigger-fabric/system_sentinel.py --route-json '<json>'"
 
 fixed_point:
   contract_on_main: true

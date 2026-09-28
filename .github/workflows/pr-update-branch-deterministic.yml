@@ -1,0 +1,120 @@
+# 🔄 PR Update Branch — determinístico
+#
+# Função: apertar autonomamente o equivalente ao botão GitHub "Update branch"
+# para qualquer PR aberto da própria CentralDark que esteja atrás da main.
+#
+# Costura evoluída no mesmo objeto:
+# - depois do 202 Accepted, remede a PR até confirmar head/compare/checks.
+# - STITCH_CONFIRMED exige behind_by_after == 0.
+# - pending/skipped/unknown continuam amarelo; não viram PASS.
+#
+# Cadeados:
+# - update-branch é sincronização, não aprovação.
+# - não faz merge, squash, deploy nem ignora checks.
+# - conflito/UNKNOWN não vira PASS.
+# - pull_request_target executa somente código confiável da base/main.
+#
+# 🛡️ CADEADO DO GUARDIÃO — NÃO trocar o runner deste fluxo para self-hosted.
+# Regressão provada: self-hosted offline deixou a COSTURA em fila.
+# Este fluxo fica em GitHub-hosted até VPS/self-hosted ficar PROVADO online
+# e o CHEFE autorizar modo híbrido.
+# UPDATE_BRANCH_RUNNER_LOCK=GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN
+# SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE=true
+# HYBRID_MODE_PENDING_VPS_PROOF=true
+# CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE=true
+
+name: 🔄 PR Update Branch — determinístico
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review, edited]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR específico para sincronizar; vazio = varrer PRs abertos'
+        required: false
+        type: string
+  repository_dispatch:
+    types:
+      - centraldark_update_branch_reconcile
+      - centraldark_pr_update_branch
+  schedule:
+    - cron: '11,41 * * * *'
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+  statuses: read
+  actions: read
+
+concurrency:
+  # push na main: todas as varreduras no mesmo grupo; a mais nova (main mais recente) substitui a anterior já obsoleta.
+  # Demais eventos mantêm o comportamento anterior (grupo por PR/SHA, sem cancelar).
+  group: update-branch-${{ github.event_name }}-${{ github.event.pull_request.number || inputs.pr_number || github.event.client_payload.pr_number || (github.event_name == 'push' && 'main') || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'push' }}
+
+jobs:
+  update-branch:
+    name: 🔄🪡 PUT /pulls/{PR}/update-branch + estabilização
+    if: github.repository == 'ServerVpss/CentralDark'
+    # 🛡️ Runner lock: GitHub-hosted mantém a onda viva sem depender da VPS offline.
+    # Futuro híbrido só com runner self-hosted online provado + autorização explícita do CHEFE.
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: 📥 Checkout somente do código confiável da main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          path: .ci-house
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
+      - name: 🔄🪡 Aplicar update-branch determinístico com costura estabilizada
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TARGET_PR: ${{ github.event.pull_request.number || inputs.pr_number || github.event.client_payload.pr_number || '' }}
+          BASE_BRANCH: main
+          UPDATE_BRANCH_INCLUDE_PROTECTED: 'true'
+          UPDATE_BRANCH_FAIL_ON_BLOCKED: 'true'
+          UPDATE_BRANCH_STITCH_SETTLE_MS: '3000'
+          UPDATE_BRANCH_STITCH_POLL_ATTEMPTS: '8'
+          UPDATE_BRANCH_STITCH_POLL_INTERVAL_MS: '5000'
+          UPDATE_BRANCH_CHECKS_POLL_ATTEMPTS: '2'
+          UPDATE_BRANCH_CHECKS_POLL_INTERVAL_MS: '4000'
+        run: |
+          set -euo pipefail
+          echo 'CENTRALDARK_ANY_PR_UPDATE_BRANCH_DETERMINISTIC=true'
+          echo 'CENTRALDARK_STITCH_STABILIZATION=true'
+          echo 'ENDPOINT=PUT /pulls/{PR}/update-branch'
+          echo 'TARGET_PR='"${TARGET_PR:-ALL_OPEN}"''
+          node .ci-house/scripts/github/update-branch-deterministic.mjs
+
+      - name: 🧾 Receipt
+        if: always()
+        shell: bash
+        env:
+          JOB_STATUS: ${{ job.status }}
+          TARGET_PR: ${{ github.event.pull_request.number || inputs.pr_number || github.event.client_payload.pr_number || '' }}
+        run: |
+          echo "JOB_STATUS=$JOB_STATUS"
+          echo "TARGET_PR=${TARGET_PR:-ALL_OPEN}"
+          echo 'ACTION=PUT_UPDATE_BRANCH_WHEN_BEHIND_MAIN'
+          echo 'STITCH_STABILIZATION=ENABLED'
+          echo 'STITCH_GREEN_REQUIRES=COMPARE_AFTER_BEHIND_BY_0'
+          echo 'CHECKS_PENDING_OR_SKIPPED=NOT_PASS'
+          echo 'MERGE=NOT_DONE'
+          echo 'APPROVAL=NOT_DONE'
+          echo 'DEPLOY=NOT_DONE'
+          echo 'UNKNOWN_IS_PASS=0'
+          echo 'UPDATE_BRANCH_RUNNER_LOCK=GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN'
+          echo 'SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE=true'
+          echo 'HYBRID_MODE_PENDING_VPS_PROOF=true'
+          echo 'CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE=true'

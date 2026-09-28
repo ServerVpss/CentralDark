@@ -1,0 +1,16 @@
+flowchart TD
+    I[Input] --> P[Provenance]
+    P --> N[Normalize]
+    N --> D[Exact + Semantic Dedupe]
+    D --> R{Retrieval}
+    R --> E[Exact]
+    R --> L[Lexical]
+    R --> V[Vector]
+    R --> G[Graph]
+    E --> K[Rerank]
+    L --> K
+    V --> K
+    G --> K
+    K --> C[Contradiction Check]
+    C --> EE[Evidence Envelope]
+    EE --> J[Reality Judge]

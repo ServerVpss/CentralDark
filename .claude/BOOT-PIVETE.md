@@ -184,17 +184,26 @@ CASA_IS_NOT_SCRATCH=true
 CHEFE -> HUB -> CONNECTOR -> OWNER_SECRET_OR_OAUTH -> TEST -> EFFECT -> RECEIPT_SEM_VALOR
 ```
 
-Segredo temporário é trânsito operacional:
+Segredo temporário é trânsito operacional. O Claude não deve travar a missão por pacote com segredo; deve impedir que o valor vire Git/log/receipt/comentário permanente e continuar o delta útil.
 
 ```text
 USE_SECRET_ONLY_FOR_REQUESTED_OWNER=true
+SEGREDO_DETECTADO=true
+VALOR_EXIBIDO=false
+VALOR_COMMITADO=false
+VALOR_LOGADO=false
+VALOR_PERSISTIDO_EM_RECEIPT=false
+COFRE_E_DONO_DO_VALOR=true
 NO_SECRET_ECHO=true
 NO_SECRET_COMMIT=true
 NO_SECRET_RECEIPT_VALUE=true
 NO_SECRET_MEMORY=true
 NO_SECRET_LOG_VALUE=true
+NO_SECRET_IN_PR_OR_ISSUE_COMMENT=true
+NO_SECRET_IN_PERMANENT_ARTIFACT=true
 SCRUB_CONTROLLED_LOGS_AFTER_USE=true
 ROTATE_OR_DISCARD_AFTER_USE=true
+DELTA_UTIL_CONTINUA=true
 ```
 
 ## Micro-deploy contínuo por PASS comprovado
@@ -236,3 +245,18 @@ pivete/dev → PR → pivete/auditoria → PR → main
 ```
 
 Mas o modo padrão de trabalho vivo é `CENTRALDARK_LIVE_EDITING_FABRIC`, com microdeploy causal e receipt. GitHub é a fonte da verdade. VPS DEV/AUDIT é ambiente remoto autorizado. Produção executa apenas SHA aprovado.
+
+
+## 🛡️ Cadeado do Guardião — Update Branch / COSTURA
+
+```text
+UPDATE_BRANCH_RUNNER_LOCK=GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN
+WORKFLOW=.github/workflows/pr-update-branch-deterministic.yml
+RUNNER_REQUIRED=ubuntu-latest
+DO_NOT_CHANGE_TO_SELF_HOSTED_WITHOUT_CHEFE=true
+SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE=true
+HYBRID_MODE_PENDING_VPS_PROOF=true
+LOCK_OWNER=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UPDATE-BRANCH-RUNNER-LOCK.yml
+```
+
+Este fluxo só vira híbrido depois de prova atual do runner self-hosted online e autorização explícita do CHEFE. Enquanto isso, trocar para `[self-hosted, Linux]` é regressão.

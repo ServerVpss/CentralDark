@@ -27,6 +27,8 @@ import tempfile
 import unicodedata
 from pathlib import Path
 
+from centraldark_master_cycle import resolve as resolve_master_cycle
+
 FABRIC = Path("docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC")
 TRIGGERS = FABRIC / "TRIGGERS.yml"
 MASTER = FABRIC / "MASTER-CYCLE.yml"
@@ -43,7 +45,7 @@ PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO = True
 CANONICAL_CHAIN = [
     "DESTINATION_LOCK", "ACORDAR", "CALIBRAR", "MULTIBUSSOLA", "META_LUPA",
     "RECONCILIAR", "DELTA_UTIL", "CONTRAPROVA", "REMEDICAO",
-    "SEMANTIC_GREEN", "FIXED_POINT", "POST_GREEN_LOCK", "REGISTRA", "BOOT",
+    "SEMANTIC_GREEN", "FIXED_POINT", "POST_GREEN_LOCK", "REGISTRA", "RASTRO", "BOOT",
 ]
 
 RUNTIME_PREFLIGHT_REQUIRED_RECEIPT_FIELDS = (
@@ -74,23 +76,19 @@ def normalize_command(value: str) -> str:
     value = strip_accents(value.strip()).upper()
     value = re.sub(r"^[!#]+", "", value)
     value = re.sub(r"[\s_-]+", "", value)
-    return value
+    return value.rstrip(",.;:!?")
 
 
 def explicit_command_context(value: str) -> bool:
-    """Evita ativar gatilho por simples mencao no meio de prosa."""
-    s = value.lstrip()
-    if not s:
+    """Leitor único: a decisão de gatilho é do ciclo mestre (texto).
+
+    CHEFE 2026-09-27: marcador simples resolve — no texto, "#ACORDAR"/"!ACORDAR"
+    disparam; a palavra solta "acordar" em prosa não. Sem lista própria aqui.
+    """
+    if not value.strip():
         return False
-    first = s.splitlines()[0].strip()
-    first_token = first.split()[0] if first.split() else ""
-    normalized = normalize_command(first_token)
-    known = {
-        "CENTRALDARK", "CDARK", "ACORDAR", "ACORDA", "CALIBRAR", "MULTIBUSSOLA",
-        "METALUPA", "RECONCILIAR", "DELTAUTIL", "DELTAUTILS", "CONTRAPROVA",
-        "REMEDICAO", "FIXEDPOINT", "REGISTRA", "BOOT",
-    }
-    return normalized in known
+    receipt = resolve_master_cycle(value, chefe_source=True, input_mode="text")
+    return bool(receipt.get("master_cycle_active"))
 
 
 def classify_realtime_feedback(value: str) -> dict:

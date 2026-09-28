@@ -521,6 +521,366 @@
         "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
         "raw_output_byte_equality_required": false
       }
+    },
+    "PROVEN_PATH_EXECUTABLE_RECIPE_CONTRACT": {
+      "claim_key": "PROVEN_PATH_EXECUTABLE_RECIPE_CONTRACT",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+      "lock_key": "a5ea4b5e42ea44846d96f8fa6fac91a24975e2c9241284b09281c3b2f4cb54b6",
+      "state": "SEALED_PROVEN",
+      "proof_target": "MACHINE_CONSUMABLE_REPLAY_CONTRACT_FOR_PROVEN_PATHS",
+      "evidence_ref": "CHEFE_DELTA_2026-09-25T21:21-03:00 + CURRENT_MAIN_28a45d3eef2e4077496a88462a8004ce2a088456",
+      "observed_at": "2026-09-26T00:21:38Z",
+      "counterproof": "PASS",
+      "receipt_ref": "PR_MOTHER_1562 + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "ffe0c4dd2f5ec38bc62c6e1241abe9202339e34d6f69b0953131a96cb8a50b31",
+        "fingerprint_material_count": 8,
+        "fingerprint_material": [
+          "CONTRACT_SCHEMA=centraldark.proven-deterministic-lock.v1",
+          "OWNER=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+          "REGISTRY=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json",
+          "CONSUMER=scripts/trigger-fabric/centraldark_full_trigger_boot.py",
+          "RECIPE_REQUIRED_FIELDS=owner,objective,preconditions,execution_sequence,environment_bindings,dependency_fingerprint,proof,counterproof,expected_result_format_effect,evidence,next_cursor",
+          "LAW=REPLAY_BEFORE_REDISCOVERY",
+          "RESULT_SCHEMA=centraldark.proven-replay.result.v1",
+          "PR_MOTHER=1562"
+        ],
+        "execution_commands": [
+          "test -f docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+          "test -f docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json",
+          "python3 - <<'PY'\nimport json\nfrom pathlib import Path\nlock=Path('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml').read_text(encoding='utf-8')\nfor token in ['PROVEN_PATH_BECOMES_EXECUTABLE_RECIPE: true','RECIPE_MUST_LIVE_IN_REPOSITORY: true','RECIPE_MUST_BE_MACHINE_CONSUMABLE: true','REPLAY_BEFORE_REDISCOVERY: true','ADAPT_ENV_BINDINGS_ONLY: true']:\n    assert token in lock, token\nj=json.loads(Path('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json').read_text(encoding='utf-8'))\nassert 'PROVEN_PATH_EXECUTABLE_RECIPE_CONTRACT' in j['claims']\nPY"
+        ],
+        "proof_commands": [
+          "python3 scripts/trigger-fabric/test_centraldark_full_trigger_boot.py",
+          "python3 - <<'PY'\nimport json\nfrom pathlib import Path\nentry=json.loads(Path('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json').read_text(encoding='utf-8'))['claims']['PROVEN_PATH_EXECUTABLE_RECIPE_CONTRACT']\nr=entry['proven_path_replay']\nassert entry['state']=='SEALED_PROVEN'\nassert r['commands_executable'] is True\nassert r['execution_policy']=='READ_ONLY'\nassert r['dependency_fingerprint']=='ffe0c4dd2f5ec38bc62c6e1241abe9202339e34d6f69b0953131a96cb8a50b31'\nassert r['expected_effect']=='NEXT_EXECUTOR_CAN_REPLAY_WITHOUT_REDISCOVERY'\nassert r['raw_output_byte_equality_required'] is False\nPY"
+        ],
+        "expected_results": [
+          "CONTRACT_FLAGS_PRESENT",
+          "REGISTRY_CLAIM_PRESENT",
+          "RECIPE_FIELDS_MACHINE_CONSUMABLE",
+          "NO_REDISCOVERY_REQUIRED"
+        ],
+        "expected_effect": "NEXT_EXECUTOR_CAN_REPLAY_WITHOUT_REDISCOVERY",
+        "result_schema": "centraldark.proven-replay.result.v1",
+        "environment_bindings": [],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "python3 scripts/trigger-fabric/test_centraldark_full_trigger_boot.py",
+        "self_test_result": "PASS_EXPECTED_BY_SAME_HEAD_CI",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false,
+        "required_recipe_fields": [
+          "owner",
+          "objective",
+          "preconditions",
+          "execution_sequence",
+          "environment_bindings",
+          "dependency_fingerprint",
+          "proof",
+          "counterproof",
+          "expected_result_format_effect",
+          "evidence",
+          "next_cursor"
+        ],
+        "replay_outcomes": {
+          "same_fingerprint_same_proof": "REUSE_CRYSTAL",
+          "changed_fingerprint": "REVALIDATE_AFFECTED_CONE_ONLY",
+          "same_fingerprint_proof_diverged": "DELTA_NEW",
+          "undeclared_binding": "DENY_FAIL_CLOSED"
+        }
+      }
+    },
+    "UNIFIED_SURFACE_PARITY_VALIDATOR_COUNTERPROOF_PATH": {
+      "claim_key": "UNIFIED_SURFACE_PARITY_VALIDATOR_COUNTERPROOF_PATH",
+      "owner": "scripts/trigger-fabric/validate_unified_surface_parity_contract.py",
+      "lock_key": "90d8dcc29002ba3363da63ae7727cf83d6335712c4df264da73bc8953900f1ba",
+      "state": "SEALED_PROVEN",
+      "proof_target": "validador de CENTRALDARK_UNIFIED_SURFACE_PARITY_01 aprova o conjunto limpo e reprova os 6 ataques reais (valor falso em comentário, lei removida, duplicata falsa, versão paralela afirmada, substitui Hermes, substitui SOL) sem reprovar a negação",
+      "evidence_ref": "suíte 18/18 com recibo PASS real; suíte reprova validador c9b0968",
+      "observed_at": "2026-09-27T02:56:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "https://github.com/ServerVpss/CentralDark/pull/1562#issuecomment-5851670095",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "49f76c543ca56dfb66c5a3dcaf4fdf20441ae9c676bad08ca74b50f1ddfadebf",
+        "fingerprint_material_count": 2,
+        "execution_commands": [],
+        "proof_commands": [
+          "python3 scripts/trigger-fabric/validate_unified_surface_parity_contract.py",
+          "python3 scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py"
+        ],
+        "expected_results": [
+          "UNIFIED_SURFACE_PARITY_CONTRACT=PASS",
+          "Ran 8 tests ... OK"
+        ],
+        "expected_effect": "VALIDATOR_PASS_AND_ALL_8_COUNTERPROOF_TESTS_PASS",
+        "result_schema": "centraldark.proven-replay.result.v1",
+        "environment_bindings": [],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "python3 scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py",
+        "self_test_result": "PASS_8_OF_8",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false,
+        "fingerprint_material_files": {
+          "VALIDATOR_BLOB": "scripts/trigger-fabric/validate_unified_surface_parity_contract.py",
+          "COUNTERPROOF_TEST_BLOB": "scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py"
+        },
+        "fingerprint_material_rule": "<KEY>=<git hash-object path>",
+        "replay_command": "python3 scripts/trigger-fabric/centraldark_full_trigger_boot.py replay-run --claim UNIFIED_SURFACE_PARITY_VALIDATOR_COUNTERPROOF_PATH --fingerprint-material VALIDATOR_BLOB=$(git hash-object scripts/trigger-fabric/validate_unified_surface_parity_contract.py) --fingerprint-material COUNTERPROOF_TEST_BLOB=$(git hash-object scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py)"
+      },
+      "reopen_history": [
+        {
+          "cause_ref": "https://github.com/ServerVpss/CentralDark/commit/eb8993e — SOL ligou 3 donos novos ao validador; rasgo Claude: contradição KEY=false passava na skill de voz e no roteador",
+          "observed_at": "2026-09-27T02:00:00Z",
+          "old_dependency_fingerprint": "1f2d524267d675a13a510d1902ee8ebe23ed7dbefe1529b730ed04ade609fc76",
+          "new_dependency_fingerprint": "937260ba5e0092ed1e905cfab93b61a3479a5042cdec0f30c8284885e69d6229",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "https://github.com/ServerVpss/CentralDark/commit/4effa8b — rota comum escrita como família; faltavam DELTAÚTIL/FIXED_POINT/RASTRO/BOOT do dono ADM-GATILHOS",
+          "observed_at": "2026-09-27T02:05:00Z",
+          "old_dependency_fingerprint": "937260ba5e0092ed1e905cfab93b61a3479a5042cdec0f30c8284885e69d6229",
+          "new_dependency_fingerprint": "d0e17ee3f35856163fc8f34c8ea6e0184e909a1942032f2b8154896aba1ab192",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "https://github.com/ServerVpss/CentralDark/commit/c9b0968 — portão de publicação lia só 1ª linha de status e aceitava PASS sem leitura de volta da release",
+          "observed_at": "2026-09-27T02:15:00Z",
+          "old_dependency_fingerprint": "d0e17ee3f35856163fc8f34c8ea6e0184e909a1942032f2b8154896aba1ab192",
+          "new_dependency_fingerprint": "a1e4669a7e2329026367da82cd7fc26518065c4b46591bd62d3278ccd570ebf9",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "https://github.com/ServerVpss/CentralDark/commit/c9b0968 — portão de publicação; re-selo corrigido após teste de PASS completo conflitar com campo declarado",
+          "observed_at": "2026-09-27T02:20:00Z",
+          "old_dependency_fingerprint": "a1e4669a7e2329026367da82cd7fc26518065c4b46591bd62d3278ccd570ebf9",
+          "new_dependency_fingerprint": "5989037ee6aab904c397ba906fa35cd5f03eddab7d7b1054c7195459ce8b1b5e",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "https://github.com/ServerVpss/CentralDark/commit/dc63ce0 — plugin publicado (PASS real) quebrou testes ancorados em UNKNOWN; testes agora fixam o estado do recibo",
+          "observed_at": "2026-09-27T02:35:00Z",
+          "old_dependency_fingerprint": "5989037ee6aab904c397ba906fa35cd5f03eddab7d7b1054c7195459ce8b1b5e",
+          "new_dependency_fingerprint": "8aed5edd1155d29ab0a6ed6bea14d262f5b903746e5067c5c7cdea76f8ac64fa",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "18600f5 (outra caneta) acrescentou exigência de garimpo universal ao validador; suíte 18/18 segue verde",
+          "observed_at": "2026-09-27T02:56:00Z",
+          "old_dependency_fingerprint": "8aed5edd1155d29ab0a6ed6bea14d262f5b903746e5067c5c7cdea76f8ac64fa",
+          "new_dependency_fingerprint": "49f76c543ca56dfb66c5a3dcaf4fdf20441ae9c676bad08ca74b50f1ddfadebf",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        }
+      ],
+      "provenance": {
+        "lock_placed_by_pen": "CLAUDE",
+        "pen_identity_rule": "PEN_ID=COMMIT_SHA; CONNECTOR!=AUTOR; ACCOUNT!=CANETA; trailer Co-Authored-By: Claude = caneta Claude",
+        "seal_commit": "54a1d767122d15641a79a6ff35781195125c1582",
+        "reseal_commits": [
+          "6545c34bb7965e7ffd371c6e42862fe36cb83df3",
+          "5ed8cb9f5f8a1774b703b86ddfded0a61c497135",
+          "f4ed61d9e4782417aa76f6d9513903642b97f2ba",
+          "75be41654300395b9e53c7e7b36d9e73f6fb5063",
+          "557a1abd44dc57b1b6b5495f490ea16e9e48fdcf"
+        ],
+        "recipe_hardening_commits": [
+          "ab3d904ca776fa528c721042cb615d8e4b1f2feb"
+        ],
+        "ledger": "https://github.com/ServerVpss/CentralDark/pull/1562"
+      },
+      "lock_access": {
+        "state": "OPEN_BY_PROOF",
+        "same_fingerprint": "PASSAGE_OPEN",
+        "core_binding": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#proven_crystal_main_fast_path",
+        "open_to": [
+          "CLAUDE",
+          "QUALQUER_CANETA_AUTORIZADA"
+        ],
+        "reopen_via": "centraldark_full_trigger_boot.py reseal-fingerprint --cause-ref <causa> (proof verde antes)",
+        "changed_fingerprint": "REVALIDATE_AFFECTED_CONE_ONLY",
+        "revalidate_is_not_green": true,
+        "chefe_authorization": "CHEFE 2026-09-27 23:47 BRT: cadeados postos pelo Claude abertos e atribuídos ao Claude; registrar na main validado e provado"
+      }
+    },
+    "MULTI_PEN_MAIN_GATE_PATH": {
+      "claim_key": "MULTI_PEN_MAIN_GATE_PATH",
+      "owner": "scripts/trigger-fabric/verify_repo_contract.py",
+      "lock_key": "4140e68eb6a6e89f5ce434ea556ae7b99918fbd9ace61aae20e59fc056a88e25",
+      "state": "SEALED_PROVEN",
+      "proof_target": "portão único que toda caneta (Claude, ChatGPT texto/voz/Work, Cowork) roda antes de subir na main: ciclo mestre texto=voz, partida, validador de paridade, contraprova do validador e verificação geral",
+      "evidence_ref": "verify verde; toda-sessão-vira-commit reprova",
+      "observed_at": "2026-09-27T03:58:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "https://github.com/ServerVpss/CentralDark/pull/1562#issuecomment-5851904401",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "d8e7b582a3e64f93d2680dad598e538ee0f042a4fe5057d05b8c235824bc6f49",
+        "fingerprint_material_count": 7,
+        "execution_commands": [],
+        "proof_commands": [
+          "python3 scripts/trigger-fabric/test_centraldark_master_cycle.py",
+          "python3 scripts/trigger-fabric/test_centraldark_full_trigger_boot.py",
+          "python3 scripts/trigger-fabric/validate_unified_surface_parity_contract.py",
+          "python3 scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py",
+          "python3 scripts/trigger-fabric/verify_repo_contract.py"
+        ],
+        "expected_results": [
+          "5 comandos exit 0"
+        ],
+        "expected_effect": "ALL_FIVE_GATE_COMMANDS_EXIT_0_BEFORE_PUSH",
+        "result_schema": "centraldark.proven-replay.result.v1",
+        "environment_bindings": [],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "python3 scripts/trigger-fabric/verify_repo_contract.py",
+        "self_test_result": "PASS",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false,
+        "fingerprint_material_files": [
+          "scripts/trigger-fabric/test_centraldark_master_cycle.py",
+          "scripts/trigger-fabric/centraldark_master_cycle.py",
+          "scripts/trigger-fabric/test_centraldark_full_trigger_boot.py",
+          "scripts/trigger-fabric/centraldark_full_trigger_boot.py",
+          "scripts/trigger-fabric/validate_unified_surface_parity_contract.py",
+          "scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py",
+          "scripts/trigger-fabric/verify_repo_contract.py"
+        ],
+        "fingerprint_material_rule": "<basename>=<git hash-object path>",
+        "replay_command": "python3 scripts/trigger-fabric/centraldark_full_trigger_boot.py replay-run --claim MULTI_PEN_MAIN_GATE_PATH --timeout 180 $(for f in scripts/trigger-fabric/test_centraldark_master_cycle.py scripts/trigger-fabric/centraldark_master_cycle.py scripts/trigger-fabric/test_centraldark_full_trigger_boot.py scripts/trigger-fabric/centraldark_full_trigger_boot.py scripts/trigger-fabric/validate_unified_surface_parity_contract.py scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py scripts/trigger-fabric/verify_repo_contract.py; do printf -- '--fingerprint-material %s=%s ' \"$(basename $f)\" \"$(git hash-object $f)\"; done)"
+      },
+      "reopen_history": [
+        {
+          "cause_ref": "df995f2 a12bd4b cc8e25a 3366002 18600f5 mudaram arquivos do portão sem re-selar; df995f2 desfez ab3d904 (base velha) — restaurado",
+          "observed_at": "2026-09-27T02:55:00Z",
+          "old_dependency_fingerprint": "45081086821285c804abfa234c81f0884388e90be399d753acd364009c8c1e3e",
+          "new_dependency_fingerprint": "f59684c58b9b050377086a60c0260718eeb1f74046bf33e37e2da60ef44ecb61",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "CHEFE 2026-09-27: marcador simples resolve — partida delega tudo ao mestre (leitor único); acordar solto no texto = neutro",
+          "observed_at": "2026-09-27T03:05:00Z",
+          "old_dependency_fingerprint": "f59684c58b9b050377086a60c0260718eeb1f74046bf33e37e2da60ef44ecb61",
+          "new_dependency_fingerprint": "a7a2f716fd7520e3b6d8ce115ea270eb67066e5c1f797b06fdcdcd0515232bc4",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "81aec41 (outra caneta) acrescentou fiscal do fast-path de cristal provado ao verify_repo_contract; 5 comandos verdes",
+          "observed_at": "2026-09-27T03:02:00Z",
+          "old_dependency_fingerprint": "a7a2f716fd7520e3b6d8ce115ea270eb67066e5c1f797b06fdcdcd0515232bc4",
+          "new_dependency_fingerprint": "6ce0e4c238b6ddff3906d9206f56607f071c547c61ebbfef8766abe90db196c1",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "fiscal do fast-path (81aec41) aceitava contradição e valor trocado em comentário → check_values no verify_repo_contract",
+          "observed_at": "2026-09-27T03:12:00Z",
+          "old_dependency_fingerprint": "6ce0e4c238b6ddff3906d9206f56607f071c547c61ebbfef8766abe90db196c1",
+          "new_dependency_fingerprint": "d8455bae2a7eab5156019302308d261709ed8160eacf9b17c6d6f2da0d993dca",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "erros próprios do Claude viram regra: fiscal CLAUDE_OWN_ERRORS_BECOME_RULES no verify_repo_contract",
+          "observed_at": "2026-09-27T03:20:00Z",
+          "old_dependency_fingerprint": "d8455bae2a7eab5156019302308d261709ed8160eacf9b17c6d6f2da0d993dca",
+          "new_dependency_fingerprint": "f543b10cd5df815f1e1e504eb3c73bcbd9277d8ce3e5133cb80e0741eed9e3ce",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "fechamento da sessão: +2 regras de erro próprio (motivo antes de julgar; responder a intenção pedida) no fiscal",
+          "observed_at": "2026-09-27T03:26:00Z",
+          "old_dependency_fingerprint": "f543b10cd5df815f1e1e504eb3c73bcbd9277d8ce3e5133cb80e0741eed9e3ce",
+          "new_dependency_fingerprint": "266c583f8ae481a7e17df0ca7c892197a902f3ece344ce555b7aa7fb2d9adb5e",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "CHEFE 27/09 00:33: caminho paralelo != sistema paralelo — fiscal PARALLEL_PATHS_CONVERGE_NOT_PARALLEL_SYSTEM",
+          "observed_at": "2026-09-27T03:36:00Z",
+          "old_dependency_fingerprint": "266c583f8ae481a7e17df0ca7c892197a902f3ece344ce555b7aa7fb2d9adb5e",
+          "new_dependency_fingerprint": "5ac3d92def0a61d60a727945cd608efc079dbe0c433eafc8e7e9b3cdde7567aa",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "SOUL atualizada por ordem do CHEFE: fiscal SOUL_CHEFE_2026_09_27_OPERATIONAL_LAW",
+          "observed_at": "2026-09-27T03:45:00Z",
+          "old_dependency_fingerprint": "5ac3d92def0a61d60a727945cd608efc079dbe0c433eafc8e7e9b3cdde7567aa",
+          "new_dependency_fingerprint": "e10713cea184ccf7bb138d3390b8a3c1afbaa26b2a3956666ec527f3df591191",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "regra global do CHEFE: SOUL sempre atual — check_soul_sync no verify_repo_contract; ponto fixo exige SOUL_SYNC_CURRENT",
+          "observed_at": "2026-09-27T03:50:00Z",
+          "old_dependency_fingerprint": "e10713cea184ccf7bb138d3390b8a3c1afbaa26b2a3956666ec527f3df591191",
+          "new_dependency_fingerprint": "45088f7a93ef462f75c8929c2035ec3c802dabc2c5b4d5373d4875aa578377d2",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "resgate de sessão perdida absorvido no harvester: fiscal LOST_SESSION_RESCUE_IN_HARVESTER_OWNER",
+          "observed_at": "2026-09-27T03:58:00Z",
+          "old_dependency_fingerprint": "45088f7a93ef462f75c8929c2035ec3c802dabc2c5b4d5373d4875aa578377d2",
+          "new_dependency_fingerprint": "d8e7b582a3e64f93d2680dad598e538ee0f042a4fe5057d05b8c235824bc6f49",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        }
+      ],
+      "provenance": {
+        "lock_placed_by_pen": "CLAUDE",
+        "pen_identity_rule": "PEN_ID=COMMIT_SHA; CONNECTOR!=AUTOR; ACCOUNT!=CANETA; trailer Co-Authored-By: Claude = caneta Claude",
+        "seal_commit": "ab3d904ca776fa528c721042cb615d8e4b1f2feb",
+        "reseal_commits": [
+          "557a1abd44dc57b1b6b5495f490ea16e9e48fdcf",
+          "474a75036f25a463ca68373dfb14bd743ae520cc"
+        ],
+        "recipe_hardening_commits": [],
+        "ledger": "https://github.com/ServerVpss/CentralDark/pull/1562"
+      },
+      "lock_access": {
+        "state": "OPEN_BY_PROOF",
+        "same_fingerprint": "PASSAGE_OPEN",
+        "core_binding": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#proven_crystal_main_fast_path",
+        "open_to": [
+          "CLAUDE",
+          "QUALQUER_CANETA_AUTORIZADA"
+        ],
+        "reopen_via": "centraldark_full_trigger_boot.py reseal-fingerprint --cause-ref <causa> (proof verde antes)",
+        "changed_fingerprint": "REVALIDATE_AFFECTED_CONE_ONLY",
+        "revalidate_is_not_green": true,
+        "chefe_authorization": "CHEFE 2026-09-27 23:47 BRT: cadeados postos pelo Claude abertos e atribuídos ao Claude; registrar na main validado e provado"
+      }
     }
   }
 }

@@ -83,6 +83,83 @@ UNKNOWN_CONFLICT
 O CHEFE não escolhe manualmente `Accept current / incoming / both` quando a
 Casa consegue produzir e testar uma resolução reversível.
 
+## 🪡 COSTURA — UI humana ↔ motor automático
+
+A interface humana e o motor automático são duas superfícies do mesmo fluxo. O nome canônico continua **COSTURA**; não versionar o nome nem criar owner paralelo.
+
+No merge usado por este owner (`branch do PR` como `HEAD`, recebendo `origin/main`):
+
+```text
+CURRENT / OURS = branch do PR
+INCOMING / THEIRS = main recebida pelo PR
+```
+
+Equivalência operacional:
+
+| Ação visível | Efeito real | Equivalente da Casa |
+|---|---|---|
+| `Update branch` | sincroniza a base atual para a branch do PR; pode criar novo HEAD | `PUT /pulls/{PR}/update-branch` |
+| `Accept Both Changes` | compõe os dois blocos daquele conflito; não prova que a composição é correta | `scripts/dependabot/semantic-all-resolver.mjs` quando a política semântica permitir ambos |
+| `Mark as resolved` | marca o arquivo como resolvido no índice; não promove o PR | `git add -- <arquivo>` depois de remover os marcadores |
+| `Commit merge` | grava a resolução + base recebida na **branch do PR**; muda o HEAD do PR | `git commit --no-edit` + push para `refs/heads/<PR_HEAD_REF>` |
+| `Merge pull request` / squash | promove um delta elegível para a base | promoção separada; nunca confundir com a COSTURA |
+
+Cadeados:
+
+```text
+UI_LABEL != RESOLUTION_POLICY
+ACCEPT_BOTH != BLIND_ACCEPT_BOTH
+MARK_AS_RESOLVED != MERGED
+COMMIT_MERGE != MERGE_PULL_REQUEST
+UPDATE_BRANCH != PROMOTION
+UPDATE_BRANCH_WRITES_MAIN=0
+COMMIT_MERGE_WRITES_MAIN=0
+HEAD_CHANGED_AFTER_COSTURA -> REVIEW_AND_CHECKS_MUST_REMEASURE_CURRENT_HEAD
+REVIEWED_SHA != CURRENT_HEAD -> REVIEW_CURRENTNESS=STALE_UNTIL_REVALIDATED
+```
+
+A astúcia é separar **mecanismo** de **política**: o botão pode preservar dois lados, mas só classificação do conflito + sintaxe/teste/contraprova dizem se os dois lados devem sobreviver.
+
+### ⏰ TIK-TAK — alimentação contínua
+
+A COSTURA é um laço vivo orientado a eventos, não uma fotografia única. Cada avanço material da `main` reabre a medição das PRs abertas e o `synchronize` do novo HEAD alimenta a próxima etapa.
+
+```text
+MAIN_ADVANCES
+→ UPDATE_BRANCH_SWEEP
+→ PR_HEAD_ADVANCES
+→ SYNCHRONIZE
+→ REMEASURE_CURRENT_HEAD
+→ CONFLICT? RESOLVE/MARK/COMMIT/PUSH
+→ SAME_HEAD_CHECKS
+→ MAIN_ADVANCES_AGAIN? REENTER_COSTURA
+```
+
+```text
+TIK_TAK_COSTURA_CONTINUA=true
+COSTURA_NAME_ONLY=true
+NO_VERSIONED_COSTURA=true
+EVENT_DRIVEN_NEAR_REAL_TIME=true
+STRICT_ZERO_LATENCY_REAL_TIME=false
+CURRENT_MAIN_REMEASURED_EACH_CYCLE=true
+PR_HEAD_REMEASURED_EACH_CYCLE=true
+NEW_MAIN_INVALIDATES_OLD_UP_TO_DATE_SNAPSHOT=true
+NEW_HEAD_INVALIDATES_OLD_REVIEW_CURRENTNESS=true
+NO_STALE_GREEN=true
+```
+
+Se a `main` avançar enquanto uma sincronização ainda assenta, isso não é regressão: a rodada corrente fica amarela até remedição, e o próximo evento/recheck continua do último HEAD provado. A meta é convergir continuamente sem transformar um snapshot antigo em verdade eterna.
+
+### 🪬 Ferida CURRENT explícita
+
+O contrato exige `CLASSIFY_EACH_CONFLICT`. O helper `semantic-all-resolver.mjs` executa a composição dos dois lados quando chamado, mas **não decide sozinho** se os lados são semanticamente compatíveis. Portanto `SEMANTIC_ALL_APPLIED=1` prova mecanismo aplicado; não prova, por si só, que `Accept Both` era a política correta para aquele arquivo.
+
+```text
+CLASSIFICATION_REQUIRED_BEFORE_SEMANTIC_ALL=true
+SEMANTIC_ALL_HELPER_IS_MECHANISM_NOT_POLICY=true
+SEMANTIC_ALL_APPLIED != SEMANTIC_COMPATIBILITY_PROVEN
+```
+
 ## SAME/ALL — reconciliação semântica canônica
 
 O caso provado no PR #1613 vira regra reutilizável do mesmo owner, não um resolvedor novo.
@@ -176,3 +253,23 @@ MERGED != CI_PASS
 
 Realidade nova (outro gerenciador de pacotes, outro lockfile, outro
 ecossistema) atualiza **este arquivo e o motor no lugar**. Nunca um segundo.
+
+
+## 💎 Método reutilizável da COSTURA autônoma
+
+A síntese portátil/ensinável deste owner vive em:
+
+`.agents/skills/centraldark-autonomous-conflict-costura/SKILL.md`
+
+Esse skill é **METHOD_ADAPTER**, não segundo resolvedor. Ele formaliza o ciclo
+`CURRENT|INCOMING|BOTH|STRUCTURED|YELLOW`, o aprendizado por replay e a
+fronteira amarela. Owner, motor, registry e Judge continuam sendo os desta
+skill canônica.
+
+```text
+METHOD_SKILL_IS_NOT_SECOND_OWNER=true
+METHOD_SKILL_IS_NOT_SECOND_RESOLVER=true
+AUTONOMOUS_KNOWN_CONFLICTS=true
+UNKNOWN_CONFLICT_STOPS_YELLOW=true
+PROVEN_YELLOW_RESOLUTION_ENTERS_EXISTING_REGISTRY=true
+```

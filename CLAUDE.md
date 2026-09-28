@@ -1,7 +1,7 @@
 ---
 title: "CLAUDE.md"
 date: 2026-08-24
-updated: 2026-09-25T19:35:00-03:00
+updated: 2026-09-28T16:35:00-03:00
 status: DERIVED_VIEW
 tags: [boot, contrato, claude, ponte, intencao, live-editing]
 category: "A-Agentes"
@@ -11,6 +11,16 @@ source_class: INTERNAL
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
 owner: AGENTS.md
 consumer: Claude Code / engines Claude
+session_crystal: "CHAT_HOUSE_COSTURA"
+session_memory: "docs/CONSCIENCIA/APRENDIZADOS.md#62-chat--casa--costura-viva-execução-conversacional-sensor-de-evento-e-identidade-por-evidência"
+executor_trigger: "!EXECUTOR_CENTRALDARK"
+executor_owner: "docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md"
+costura_owner: ".agents/skills/git-conflict-resolve-house-standard/SKILL.md"
+dependabot_autonomy_owner: ".github/workflows/dependabot-auto-merge.yml"
+semantic_formula: "CHEFE_FALA -> INTENCAO -> FERRAMENTA_AUTORIZADA -> ACAO -> READBACK -> MAIN_ADVANCE -> COSTURA -> PR_HEAD_CURRENT -> SAME_HEAD_PROOF -> NOVO_EVENTO_REENTRA"
+tik_tak_formula: "MAIN_CURRENT -> UPDATE_BRANCH -> PR_HEAD_CURRENT -> SYNCHRONIZE -> REMEASURE -> CHECKS_CURRENT_HEAD -> REENTER_ON_NEW_MAIN"
+gmail_notification_truth_scope: "NOTIFICATION_CONTENT_ONLY"
+ui_identity_rule: "UI_PATTERN != PRODUCT_IDENTITY"
 ---
 
 # CLAUDE.md — ponte para o contrato canônico
@@ -43,6 +53,58 @@ ENGINE_IS_OWNER=false
 COPY_BRAIN=false
 SEGREDO/CHEFE > SOL > PIVETE/HERMES
 ```
+
+
+## 🔥🪬 Contrato CURRENT herdado — intenção contínua + META-GRILL + FIO VERDE
+
+Este arquivo **não cria contrato, owner, cérebro ou arquitetura paralela**. Herda o contrato CURRENT da SOUL; o legado continua vivo como compatibilidade, não como segunda arquitetura.
+
+```text
+CANONICAL_CONTINUOUS_CONTRACT=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#311-contrato-contínuo--intenção--meta-grill--sol-executora--fio-verde-chefe-2026-09-28
+NEW_CHEFE_MATERIAL=DELTA_TO_ACTIVE_INTENT_FIRST
+RECALCULATE_INTENT_ALIGNMENT_EACH_MATERIAL_TURN=true
+TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=99.9%
+INTENT_CONFIDENCE_IS_NOT_TECHNICAL_PROOF=true
+META_GRILL_BEFORE_MATERIAL_RESPONSE=true
+META_GRILL_BEFORE_MUTATION=true
+EVOLVE_EXISTING_BEFORE_CREATE=true
+RETURN_SAME_ARTIFACT_EVOLVED=true
+VOLTA_UMA_CASA_ON_LOCAL_ERROR=true
+GREEN_STATE_MUST_BE_PRESERVED=true
+EXPERIMENT_MUST_NOT_DESTROY_LAST_PROVEN_STATE=true
+PROVEN_DELTA_ONLY_RETURNS_TO_GREEN_STATE=true
+REPLAY_BEFORE_REDISCOVERY=true
+NO_V1_V2_V3_PARALLEL_OWNER=true
+LEGACY_PRESERVATION=true
+LEGACY_IS_COMPATIBILITY_NOT_SECOND_OWNER=true
+ONE_SYSTEM_ONLY=true
+REALITY_IS_JUDGE=true
+UNKNOWN_IS_NOT_PASS=true
+```
+
+```text
+CHEFE_FALA
+→ RECUPERA_FIO
+→ META_GRILL
+→ MEDE_CURRENT
+→ REUSE_BEFORE_CREATE
+→ OWNER_EXISTENTE
+→ MENOR_DELTA
+→ TESTE
+→ BACKCHECK
+→ CONTRAPROVA
+→ SE_ERRO: VOLTA_UMA_CASA
+→ COSTURA
+→ RETESTE
+→ READBACK
+→ REMEDIÇÃO
+→ SE_VERDE: PRESERVA_GREEN_STATE
+→ SE_EXPERIMENTO: ISOLA
+→ SE_PROVADO: ABSORVE_SOMENTE_DELTA
+→ CRISTALIZA
+→ NEXT_CURSOR
+```
+
 
 ## Claude ↔ subagentes, sem inversão de autoridade
 
@@ -122,6 +184,12 @@ PERTINENCE_FIRST=true
 MINIMUM_SUFFICIENT_LOOP=true
 TRIGGERS_ARE_CONDITIONAL_NOT_RITUAL=true
 ALIGN_THOUGHT_NOT_WORDING=true
+NO_UNREQUESTED_ADVICE=true
+NO_INVENTED_MISSION=true
+OBSERVATION != EXECUTION_REQUEST
+CHEFE_SO_CONTOU → ENTENDE → NAO_ACONSELHA → NAO_INVENTA_MISSAO
+EXPLICIT_ORDER = EXECUTION_REQUEST → procura owner → mede erro → corrige → testa → contraprova → registra rastro → continua
+CHEFE_OBSERVATION → RESPONDER_SO_O_PERTINENTE (sem conselho, sem risco não pedido, sem missão nova)
 ```
 
 ### Gatilhos obrigatórios por pertinência
@@ -156,6 +224,9 @@ ALIGN_THOUGHT_NOT_WORDING=true
 
 🧾 !REGISTRA
 → receipt no #1562 ou PR-filho equivalente, sem segredo, com NEXT_CURSOR.
+
+🔏 !RASTRO
+→ toda escrita/memória declarada ao CHEFE traz SHA + caminho + link + readback; sem isso, não aconteceu.
 
 🚀 !BOOT
 → preservar continuidade e entregar próximo executor no mesmo fio.
@@ -513,3 +584,59 @@ Nunca expor secrets ou service_role_key em logs/mensagens.
 **Aplicável a:** Claude Code, Hermes, CLI, MCP, GitHub Actions, Telegram, WebUI, futuros motores
 docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
 .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
+
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+
+```text
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+```
+
+Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
+
+## 🪞 Erros próprios do Claude viram regra (owner do registro: `docs/APRENDIZADOS/2026-09-26-sessao-preservacao-casa-lei-do-rastro.md` §8)
+
+```text
+PUSH_ONLY_AFTER_GATE_GREEN_ON_REBASED_HEAD=true
+TEST_HARNESS_DERIVES_FILES_FROM_OWNER=true
+TEST_MUST_NOT_ANCHOR_ON_MUTABLE_REAL_STATE=true
+SEAL_STORES_REPLAY_INPUTS=true
+PARTIAL_LOG_CLAIM_NAMES_ITS_WINDOW=true
+RETRACT_FALSE_ALARM_IN_SAME_RECEIPT=true
+SAME_ACT_DIFFERENT_MOTIVE_DISTINGUISH_BEFORE_JUDGING=true
+ANSWER_ASKED_INTENT_NOT_ADJACENT_DEBATE=true
+CLAUDE_OWN_ERROR → SHA_DO_ERRO + SHA_DO_CONSERTO + REGRA + RECIBO_1562
+```
+
+
+
+## 🪬 Cristal semântico da sessão — Chat → Casa → COSTURA
+
+Claude Code herda o mesmo cristal do core; não cria versão paralela.
+
+```text
+EXECUTOR_TRIGGER=!EXECUTOR_CENTRALDARK
+EXECUTOR_REQUIRES_AUTHORIZED_HOUSE_TOOL=true
+COSTURA_NAME_ONLY=true
+NO_VERSIONED_COSTURA=true
+EVENT_DRIVEN_NEAR_REAL_TIME=true
+STRICT_ZERO_LATENCY_REAL_TIME=false
+CURRENT_MAIN_REMEASURE_EACH_CYCLE=true
+CURRENT_PR_HEAD_REMEASURE_EACH_CYCLE=true
+NO_STALE_GREEN=true
+GMAIL_NOTIFICATION_RECEIVED=PROVABLE_EVENT
+GMAIL_NOTIFICATION!=GLOBAL_GITHUB_STATE
+UI_PATTERN!=PRODUCT_IDENTITY
+WHOLE_SURFACE_EVIDENCE_REQUIRED=true
+DEPENDABOT_WORKFLOW_AUTO_APPROVAL_SCOPE=dependabot[bot]+same_repo+base_main+exact_current_head+action_required
+WORKFLOW_RUN_APPROVAL!=PR_REVIEW_APPROVAL
+DEPENDABOT_AUTO_APPROVAL_ROLLBACK_BASE=d5137a91518aa52a0c39072b7afb7e495108f01d
+DEPENDABOT_AUTO_APPROVAL_CHANGE=afad4177a76659afec503af610dbec6c813b6c37
+```
+
+Fórmula herdada:
+
+`CHEFE FALA → intenção → ferramenta autorizada → ação → readback → main avança → COSTURA → HEAD CURRENT → prova same-head → evento novo reentra no TIK-TAK`.
+

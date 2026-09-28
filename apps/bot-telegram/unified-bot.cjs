@@ -79,6 +79,32 @@ function withMandatoryRules(systemPrompt) {
     'Aplique este contrato como regra operacional. UNKNOWN nunca vira PASS. Não exponha secrets.',
   ].join('\n');
 }
+function executorCentralDarkRequested(history) {
+  const latestUser = [...(history || [])].reverse().find(m => m?.role === 'user');
+  const raw = typeof latestUser?.content === 'string'
+    ? latestUser.content
+    : JSON.stringify(latestUser?.content || '');
+  return /(^|\s)[!#]?EXECUTOR[_\s-]?CENTRALDARK(?:\s|$)/i.test(raw);
+}
+
+function withExecutorCentralDark(systemPrompt, history) {
+  if (!executorCentralDarkRequested(history)) return systemPrompt;
+  return [
+    systemPrompt,
+    '',
+    '---',
+    '[MODO EXECUTOR CENTRALDARK — GATILHO EXPLÍCITO]',
+    'TRIGGER=!EXECUTOR_CENTRALDARK',
+    'Owner: docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md',
+    'Reconheça o modo executor, mas NÃO invente acesso físico à Casa.',
+    'Antes de executar na Casa, meça se há Remote Desktop Commander ou ferramenta equivalente autorizada e ativa neste runtime.',
+    'Sem ferramenta de Casa: HOUSE_ACCESS=CAPABILITY_UNAVAILABLE. Estado incerto: HOUSE_ACCESS=UNKNOWN.',
+    'Não substitua ferramenta da Casa por shell/servidor remoto e não alegue execução física sem readback do dispositivo.',
+    'Se o acesso existir: intenção → medir alvo → menor delta → backcheck → reteste → Reality Judge → readback/receipt.',
+    'UNKNOWN != PASS. ACTION != PROOF. TRIGGER != CREDENCIAL. TRIGGER != NOVA_AUTORIDADE.',
+  ].join('\n');
+}
+
 const HERMES_TIMEOUT_MS = Math.min(
   Math.max(Number(process.env.HERMES_EXECUTOR_TIMEOUT_MS || 60_000), 15_000),
   300_000,
@@ -722,6 +748,7 @@ async function executeTool(toolName, toolInput) {
 
 async function callLLMWithTools(history, systemPrompt) {
   systemPrompt = withMandatoryRules(systemPrompt);
+  systemPrompt = withExecutorCentralDark(systemPrompt, history);
   const gatewayThenHermes = async (motivo) => {
     const gw = await callCentralDarkGateway(history, systemPrompt, motivo);
     if (gw.ok) return gw.text;
@@ -850,20 +877,61 @@ ${cogLine}${termLine}  HIST.    ${String(sess.history.length).padStart(2)} msgs 
 }
 
 // ── Status VPS (endpoints internos) ───────────────────────────────────────
+async function getExecutionTopologyStatus() {
+  try {
+    const r = await fetch(`http://localhost:${MCP_PORT}/health/deep`, {
+      signal: AbortSignal.timeout(3000),
+      headers: MCP_TOKEN ? { 'Authorization': `Bearer ${MCP_TOKEN}` } : {},
+    });
+    const payload = await r.json().catch(() => ({}));
+    const topology = payload?.operationalSnapshot?.executionTopology;
+    if (!r.ok || !topology || !Array.isArray(topology.lanes)) {
+      return [
+        '  ⚪ EXECUÇÃO  UNKNOWN',
+        '     fonte=/health/deep sem topologia válida',
+      ];
+    }
+
+    const stateIcon = (state) => state === 'RUNNING' ? '🟢' : '⚪';
+    const lanes = topology.lanes.map((lane) => {
+      const count = Number(lane?.processCount || 0);
+      return `  ${stateIcon(lane?.state)} ${String(lane?.label || lane?.id || '?').slice(0, 22).padEnd(22)} ${lane?.state || 'UNKNOWN'} x${count}`;
+    });
+
+    const activity = topology.mcpActivity || {};
+    const execState = topology.verdict || 'UNKNOWN_NOT_PASS';
+    const age = Number.isFinite(activity.ageMs) ? `${Math.round(activity.ageMs / 1000)}s` : 'UNKNOWN';
+    return [
+      `  🧭 EXECUÇÃO  ${execState}`,
+      `     MCP tools/call=${activity.state || 'UNKNOWN'} age=${age}`,
+      `     BOT multiplicity=${topology?.duplicateSignals?.telegramBotMultiplicity || 'UNKNOWN'}`,
+      ...lanes,
+    ];
+  } catch {
+    return [
+      '  ⚪ EXECUÇÃO  UNKNOWN',
+      '     /health/deep indisponível',
+    ];
+  }
+}
+
 async function getVPSStatus() {
   const checks = [
     { name: 'Webhook Deploy  ', url: 'http://localhost:9300/health' },
     { name: 'Contas Admin    ', url: 'http://localhost:9400/health' },
     { name: 'MCP CentralDark ', url: `http://localhost:${MCP_PORT}/health` },
   ];
-  const results = await Promise.all(checks.map(async c => {
-    try {
-      const r = await fetch(c.url, { signal: AbortSignal.timeout(3000) });
-      return `  ${r.ok ? '✅' : '⚠️'} ${c.name}`;
-    } catch {
-      return `  ❌ ${c.name}`;
-    }
-  }));
+  const [results, execution] = await Promise.all([
+    Promise.all(checks.map(async item => {
+      try {
+        const r = await fetch(item.url, { signal: AbortSignal.timeout(3000) });
+        return `  ${r.ok ? '✅' : '⚠️'} ${item.name}`;
+      } catch {
+        return `  ❌ ${item.name}`;
+      }
+    })),
+    getExecutionTopologyStatus(),
+  ]);
   const ts = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
   return `<pre>┌────────────────────────────────┐
 │  📊  STATUS VPS                │
@@ -871,7 +939,10 @@ async function getVPSStatus() {
 
 ${results.join('\n')}
   ──────────────────────────────
+${execution.join('\n')}
+  ──────────────────────────────
   MODO     ${_botMode.toUpperCase().padEnd(24)}
+  LEI      PROCESSO ≠ EXECUÇÃO PROVADA
 
   ⏰ ${ts}</pre>`;
 }
@@ -1089,6 +1160,7 @@ async function downloadTelegramPhoto(msg) {
 // ── LLM com visão (Anthropic Vision) ──────────────────────────────────────
 async function callLLMWithVision(history, systemPrompt, imageData, caption) {
   systemPrompt = withMandatoryRules(systemPrompt);
+  systemPrompt = withExecutorCentralDark(systemPrompt, history);
   if (!LLM_KEY) return '❌ ANTHROPIC_AUTH_TOKEN não configurado.';
   const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
   const userContent = [
@@ -1121,6 +1193,7 @@ async function callLLMWithVision(history, systemPrompt, imageData, caption) {
 // ── LLM (Anthropic) ────────────────────────────────────────────────────────
 async function callLLM(history, systemPrompt) {
   systemPrompt = withMandatoryRules(systemPrompt);
+  systemPrompt = withExecutorCentralDark(systemPrompt, history);
   if (USE_HERMES_PRIMARY) return callHermesExecutor(history, systemPrompt, 'BOT_USE_HERMES=1');
   if (!LLM_KEY) return callHermesExecutor(history, systemPrompt, 'ANTHROPIC_AUTH_TOKEN ausente');
   const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;

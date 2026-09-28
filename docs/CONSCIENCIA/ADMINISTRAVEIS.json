@@ -22,7 +22,9 @@
       "administrable": true,
       "glyph": "📍",
       "command": "#ACORDAR",
-      "aliases": ["#ACORDA"],
+      "aliases": [
+        "#ACORDA"
+      ],
       "purpose": "Recuperar o estado real antes de continuar e retomar do ponto verdadeiro.",
       "owner": "LEIA-ME-IA.md",
       "trigger_help": "Digite #ACORDAR (ou #ACORDA) em uma superfície que carregue o contrato CentralDark. O comando recupera estado, não inventa contexto.",
@@ -34,9 +36,24 @@
         "⏭️ continuar do ponto real"
       ],
       "buttons": [
-        { "id": "copy", "label": "Copiar gatilho", "icon": "📋", "effect": "Copia #ACORDAR para a área de transferência." },
-        { "id": "edit", "label": "Editar oficial", "icon": "✏️", "effect": "Abre o owner canônico no GitHub para edição formal." },
-        { "id": "hide", "label": "Ocultar ficha", "icon": "🧽", "effect": "Oculta somente esta ficha neste navegador; não desliga o comando." }
+        {
+          "id": "copy",
+          "label": "Copiar gatilho",
+          "icon": "📋",
+          "effect": "Copia #ACORDAR para a área de transferência."
+        },
+        {
+          "id": "edit",
+          "label": "Editar oficial",
+          "icon": "✏️",
+          "effect": "Abre o owner canônico no GitHub para edição formal."
+        },
+        {
+          "id": "hide",
+          "label": "Ocultar ficha",
+          "icon": "🧽",
+          "effect": "Oculta somente esta ficha neste navegador; não desliga o comando."
+        }
       ]
     },
     {
@@ -59,9 +76,24 @@
         "📏 ajustar frequência/engine/custo/latência"
       ],
       "buttons": [
-        { "id": "copy", "label": "Copiar gatilho", "icon": "📋", "effect": "Copia !CALIBRAR para a área de transferência." },
-        { "id": "edit", "label": "Editar oficial", "icon": "✏️", "effect": "Abre o owner canônico no GitHub para edição formal." },
-        { "id": "hide", "label": "Ocultar ficha", "icon": "🧽", "effect": "Oculta somente esta ficha neste navegador; não desliga o comando." }
+        {
+          "id": "copy",
+          "label": "Copiar gatilho",
+          "icon": "📋",
+          "effect": "Copia !CALIBRAR para a área de transferência."
+        },
+        {
+          "id": "edit",
+          "label": "Editar oficial",
+          "icon": "✏️",
+          "effect": "Abre o owner canônico no GitHub para edição formal."
+        },
+        {
+          "id": "hide",
+          "label": "Ocultar ficha",
+          "icon": "🧽",
+          "effect": "Oculta somente esta ficha neste navegador; não desliga o comando."
+        }
       ]
     },
     {
@@ -76,7 +108,10 @@
       "pronunciation_pt_br": "MÚL-ti BÚS-so-la",
       "meta_spoken_alias": "Meta Bússola",
       "meta_semantics": "Meta Bússola é apenas o nome humano/falado da aplicação META_MULTIBUSSOLA; não cria novo comando, motor, agente, skill ou capacidade paralela.",
-      "aliases": ["!MULTI-BUSSOLA", "!MULTIBÚSSOLA"],
+      "aliases": [
+        "!MULTI-BUSSOLA",
+        "!MULTIBÚSSOLA"
+      ],
       "purpose": "Observar o mesmo alvo por todos os eixos e referenciais materiais, cruzar contraprovas, remedir T1 e fechar somente em fixed point.",
       "owner": "docs/CONSCIENCIA/MULTIBUSSOLA.md",
       "trigger_help": "Digite !MULTIBUSSOLA sozinho ou junto de #ACORDAR/!CALIBRAR. Nome falado: Multi Bússola (MÚL-ti BÚS-so-la). Meta Bússola significa a aplicação META_MULTIBUSSOLA e não é um novo comando. Todos os eixos são considerados; os eixos materiais são executados e skips exigem razão.",
@@ -90,16 +125,56 @@
         "🎯 fixed point local"
       ],
       "directions": [
-        { "symbol": "↖", "name": "TRANSVERSAL NO", "description": "Evidência lateral → causa/owner alternativo." },
-        { "symbol": "↑", "name": "BOTTOM-UP", "description": "Efeito → consumidor → implementação → causa → owner → intenção." },
-        { "symbol": "↗", "name": "TRANSVERSAL NE", "description": "Cruza camadas e sobe de efeito lateral para origem/causa." },
-        { "symbol": "←", "name": "REVERSE", "description": "Resultado → pré-requisitos → produtores → dependências → fonte." },
-        { "symbol": "✣", "name": "RENDEZVOUS", "description": "Cruza todos os achados: dedupe, conflito, contraprova, causalidade e resíduo." },
-        { "symbol": "→", "name": "FORWARD", "description": "Fonte → consumidores → dependentes → blast radius." },
-        { "symbol": "↙", "name": "TRANSVERSAL SO", "description": "Estado/efeito → histórico/owner alternativo sem confiar na hierarquia óbvia." },
-        { "symbol": "↓", "name": "TOP-DOWN", "description": "Intenção → regra → owner → implementação → consumidor → efeito." },
-        { "symbol": "↘", "name": "TRANSVERSAL SE", "description": "Origem/intenção → cross-layer → efeito lateral." },
-        { "symbol": "↔", "name": "ROUND-TRIP", "description": "Ida e volta: intenção↔implementação, claim↔prova, antes↔depois." }
+        {
+          "symbol": "↖",
+          "name": "TRANSVERSAL NO",
+          "description": "Evidência lateral → causa/owner alternativo."
+        },
+        {
+          "symbol": "↑",
+          "name": "BOTTOM-UP",
+          "description": "Efeito → consumidor → implementação → causa → owner → intenção."
+        },
+        {
+          "symbol": "↗",
+          "name": "TRANSVERSAL NE",
+          "description": "Cruza camadas e sobe de efeito lateral para origem/causa."
+        },
+        {
+          "symbol": "←",
+          "name": "REVERSE",
+          "description": "Resultado → pré-requisitos → produtores → dependências → fonte."
+        },
+        {
+          "symbol": "✣",
+          "name": "RENDEZVOUS",
+          "description": "Cruza todos os achados: dedupe, conflito, contraprova, causalidade e resíduo."
+        },
+        {
+          "symbol": "→",
+          "name": "FORWARD",
+          "description": "Fonte → consumidores → dependentes → blast radius."
+        },
+        {
+          "symbol": "↙",
+          "name": "TRANSVERSAL SO",
+          "description": "Estado/efeito → histórico/owner alternativo sem confiar na hierarquia óbvia."
+        },
+        {
+          "symbol": "↓",
+          "name": "TOP-DOWN",
+          "description": "Intenção → regra → owner → implementação → consumidor → efeito."
+        },
+        {
+          "symbol": "↘",
+          "name": "TRANSVERSAL SE",
+          "description": "Origem/intenção → cross-layer → efeito lateral."
+        },
+        {
+          "symbol": "↔",
+          "name": "ROUND-TRIP",
+          "description": "Ida e volta: intenção↔implementação, claim↔prova, antes↔depois."
+        }
       ],
       "compasses": [
         "científica",
@@ -116,10 +191,30 @@
         "metacognitiva"
       ],
       "buttons": [
-        { "id": "copy", "label": "Copiar gatilho", "icon": "📋", "effect": "Copia !MULTIBUSSOLA para uso em uma superfície CentralDark." },
-        { "id": "edit", "label": "Editar oficial", "icon": "✏️", "effect": "Abre MULTIBUSSOLA.md no GitHub; mudança oficial continua auditável." },
-        { "id": "hide", "label": "Ocultar ficha", "icon": "🧽", "effect": "Oculta a ficha localmente sem desligar o comando nem alterar autoridade." },
-        { "id": "reset", "label": "Restaurar visual", "icon": "↩️", "effect": "Remove preferências visuais locais e restaura a ficha no painel." }
+        {
+          "id": "copy",
+          "label": "Copiar gatilho",
+          "icon": "📋",
+          "effect": "Copia !MULTIBUSSOLA para uso em uma superfície CentralDark."
+        },
+        {
+          "id": "edit",
+          "label": "Editar oficial",
+          "icon": "✏️",
+          "effect": "Abre MULTIBUSSOLA.md no GitHub; mudança oficial continua auditável."
+        },
+        {
+          "id": "hide",
+          "label": "Ocultar ficha",
+          "icon": "🧽",
+          "effect": "Oculta a ficha localmente sem desligar o comando nem alterar autoridade."
+        },
+        {
+          "id": "reset",
+          "label": "Restaurar visual",
+          "icon": "↩️",
+          "effect": "Remove preferências visuais locais e restaura a ficha no painel."
+        }
       ]
     },
     {
@@ -130,7 +225,10 @@
       "administrable": true,
       "glyph": "🔁",
       "command": "!EXECUÇÃO_REVERSÍVEL",
-      "aliases": ["!EXECUCAO_REVERSIVEL", "!EXECUÇÃO REVERSÍVEL"],
+      "aliases": [
+        "!EXECUCAO_REVERSIVEL",
+        "!EXECUÇÃO REVERSÍVEL"
+      ],
       "purpose": "Antes de qualquer mutação: garantir menor delta possível e caminho de volta testável.",
       "owner": "docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md",
       "trigger_help": "Digite !EXECUÇÃO_REVERSÍVEL antes de mutar algo. Bloqueia ação sem rollback testado.",
@@ -141,9 +239,24 @@
         "✅ executar somente se rollback provado"
       ],
       "buttons": [
-        { "id": "copy", "label": "Copiar gatilho", "icon": "📋", "effect": "Copia !EXECUÇÃO_REVERSÍVEL para a área de transferência." },
-        { "id": "edit", "label": "Editar oficial", "icon": "✏️", "effect": "Abre o owner canônico no GitHub para edição formal." },
-        { "id": "hide", "label": "Ocultar ficha", "icon": "🧽", "effect": "Oculta somente esta ficha neste navegador; não desliga o comando." }
+        {
+          "id": "copy",
+          "label": "Copiar gatilho",
+          "icon": "📋",
+          "effect": "Copia !EXECUÇÃO_REVERSÍVEL para a área de transferência."
+        },
+        {
+          "id": "edit",
+          "label": "Editar oficial",
+          "icon": "✏️",
+          "effect": "Abre o owner canônico no GitHub para edição formal."
+        },
+        {
+          "id": "hide",
+          "label": "Ocultar ficha",
+          "icon": "🧽",
+          "effect": "Oculta somente esta ficha neste navegador; não desliga o comando."
+        }
       ]
     },
     {
@@ -154,7 +267,10 @@
       "administrable": true,
       "glyph": "🔬",
       "command": "!REMEDIÇÃO",
-      "aliases": ["!REMEDICAO", "!REMEDIÇAO"],
+      "aliases": [
+        "!REMEDICAO",
+        "!REMEDIÇAO"
+      ],
       "purpose": "Depois da ação: medir o estado real de novo, comparar T0→T1, só então declarar veredito.",
       "owner": "docs/CONSCIENCIA/REMEDICAO.md",
       "trigger_help": "Digite !REMEDIÇÃO depois de executar algo. Compara antes/depois; nunca aceita status amarelo/parcial.",
@@ -165,9 +281,79 @@
         "✅❌ veredito: PROVADO ou NÃO PROVADO — sem meio-termo"
       ],
       "buttons": [
-        { "id": "copy", "label": "Copiar gatilho", "icon": "📋", "effect": "Copia !REMEDIÇÃO para a área de transferência." },
-        { "id": "edit", "label": "Editar oficial", "icon": "✏️", "effect": "Abre o owner canônico no GitHub para edição formal." },
-        { "id": "hide", "label": "Ocultar ficha", "icon": "🧽", "effect": "Oculta somente esta ficha neste navegador; não desliga o comando." }
+        {
+          "id": "copy",
+          "label": "Copiar gatilho",
+          "icon": "📋",
+          "effect": "Copia !REMEDIÇÃO para a área de transferência."
+        },
+        {
+          "id": "edit",
+          "label": "Editar oficial",
+          "icon": "✏️",
+          "effect": "Abre o owner canônico no GitHub para edição formal."
+        },
+        {
+          "id": "hide",
+          "label": "Ocultar ficha",
+          "icon": "🧽",
+          "effect": "Oculta somente esta ficha neste navegador; não desliga o comando."
+        }
+      ]
+    },
+    {
+      "id": "executor_centraldark",
+      "title": "!EXECUTOR_CENTRALDARK",
+      "kind": "command",
+      "status": "CANONICAL",
+      "administrable": true,
+      "glyph": "👑🪬",
+      "command": "!EXECUTOR_CENTRALDARK",
+      "aliases": [
+        "!EXECUTOR CENTRALDARK",
+        "#EXECUTOR_CENTRALDARK",
+        "EXECUTOR_CENTRALDARK"
+      ],
+      "purpose": "Ativar o modo executor conversacional da Casa: a IA mede ferramenta autorizada, executa o menor delta, faz backcheck e prova o efeito sem inventar acesso.",
+      "owner": "docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md",
+      "trigger_help": "Digite !EXECUTOR_CENTRALDARK. Toda IA CentralDark reconhece o método; execução física só ocorre se houver acesso autorizado e medido à Casa, preferencialmente via Remote Desktop Commander.",
+      "capability_gate": {
+        "primary_tool": "Remote Desktop Commander",
+        "required_state": "AVAILABLE_AND_AUTHORIZED",
+        "unavailable": "CAPABILITY_UNAVAILABLE",
+        "unknown": "UNKNOWN"
+      },
+      "flow": [
+        "🎯 recuperar intenção vigente",
+        "🏠 medir acesso autorizado à Casa",
+        "🔎 medir alvo CURRENT",
+        "⚙️ executar menor delta suficiente",
+        "🔙 backcheck adaptativo",
+        "🪡 corrigir localmente se necessário",
+        "🧪 retestar/contraprovar",
+        "🪬 Reality Judge",
+        "🧾 readback/receipt",
+        "⏩ continuar no mesmo trilho"
+      ],
+      "buttons": [
+        {
+          "id": "copy",
+          "label": "Copiar gatilho",
+          "icon": "📋",
+          "effect": "Copia !EXECUTOR_CENTRALDARK para uso em uma superfície CentralDark."
+        },
+        {
+          "id": "edit",
+          "label": "Editar oficial",
+          "icon": "✏️",
+          "effect": "Abre o owner canônico do modo executor; mudança oficial continua auditável."
+        },
+        {
+          "id": "hide",
+          "label": "Ocultar ficha",
+          "icon": "🧽",
+          "effect": "Oculta somente esta ficha neste navegador; não desliga o gatilho."
+        }
       ]
     }
   ]

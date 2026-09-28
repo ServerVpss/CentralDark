@@ -34,3 +34,91 @@ CENTRALDARK_AI_BOOT
 .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
 FALHA_DE_RECONCILIACAO_DE_CONTEXTO
 docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+
+
+
+## 🔥🪬 Contrato CURRENT herdado — intenção contínua + META-GRILL + FIO VERDE
+
+Este arquivo **não cria contrato, owner, cérebro ou arquitetura paralela**. Herda o contrato CURRENT da SOUL; o legado continua vivo como compatibilidade, não como segunda arquitetura.
+
+```text
+CANONICAL_CONTINUOUS_CONTRACT=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#311-contrato-contínuo--intenção--meta-grill--sol-executora--fio-verde-chefe-2026-09-28
+NEW_CHEFE_MATERIAL=DELTA_TO_ACTIVE_INTENT_FIRST
+RECALCULATE_INTENT_ALIGNMENT_EACH_MATERIAL_TURN=true
+TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=99.9%
+INTENT_CONFIDENCE_IS_NOT_TECHNICAL_PROOF=true
+META_GRILL_BEFORE_MATERIAL_RESPONSE=true
+META_GRILL_BEFORE_MUTATION=true
+EVOLVE_EXISTING_BEFORE_CREATE=true
+RETURN_SAME_ARTIFACT_EVOLVED=true
+VOLTA_UMA_CASA_ON_LOCAL_ERROR=true
+GREEN_STATE_MUST_BE_PRESERVED=true
+EXPERIMENT_MUST_NOT_DESTROY_LAST_PROVEN_STATE=true
+PROVEN_DELTA_ONLY_RETURNS_TO_GREEN_STATE=true
+REPLAY_BEFORE_REDISCOVERY=true
+NO_V1_V2_V3_PARALLEL_OWNER=true
+LEGACY_PRESERVATION=true
+LEGACY_IS_COMPATIBILITY_NOT_SECOND_OWNER=true
+ONE_SYSTEM_ONLY=true
+REALITY_IS_JUDGE=true
+UNKNOWN_IS_NOT_PASS=true
+```
+
+```text
+CHEFE_FALA
+→ RECUPERA_FIO
+→ META_GRILL
+→ MEDE_CURRENT
+→ REUSE_BEFORE_CREATE
+→ OWNER_EXISTENTE
+→ MENOR_DELTA
+→ TESTE
+→ BACKCHECK
+→ CONTRAPROVA
+→ SE_ERRO: VOLTA_UMA_CASA
+→ COSTURA
+→ RETESTE
+→ READBACK
+→ REMEDIÇÃO
+→ SE_VERDE: PRESERVA_GREEN_STATE
+→ SE_EXPERIMENTO: ISOLA
+→ SE_PROVADO: ABSORVE_SOMENTE_DELTA
+→ CRISTALIZA
+→ NEXT_CURSOR
+```
+
+
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+
+```text
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+```
+
+Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
+
+
+## 👑🪬 !EXECUTOR_CENTRALDARK — modo executor da Casa
+
+Owner canônico: `docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md`
+
+Quando o CHEFE usar `!EXECUTOR_CENTRALDARK`, carregue o contrato acima e trate o turno como pedido de modo executor conversacional.
+
+```text
+TRIGGER_RECOGNITION=true
+HOUSE_ACCESS_MUST_BE_MEASURED=true
+REMOTE_DESKTOP_COMMANDER_AVAILABLE_AND_AUTHORIZED -> EXECUTE_HOUSE_SCOPE
+NO_HOUSE_ACCESS -> CAPABILITY_UNAVAILABLE
+UNKNOWN_TOOL_STATE -> UNKNOWN
+TRIGGER_DOES_NOT_GRANT_ACCESS=true
+TRIGGER_DOES_NOT_EXPAND_AUTHORITY=true
+RESULT_FIRST=true
+BACKCHECK_ACTIVE=true
+REALITY_IS_JUDGE=true
+```
+
+Se Desktop Commander ou equivalente autorizado estiver acessível, prefira executar a tarefa local diretamente em vez de devolver tutorial ao CHEFE. Preserve caminho existente, use menor delta, faça readback e não declare PASS sem prova.
+
+A linguagem visual e os callbacks semânticos desse modo vivem no owner canônico; não duplicar aqui.

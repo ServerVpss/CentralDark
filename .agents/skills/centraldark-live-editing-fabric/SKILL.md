@@ -3,7 +3,7 @@ name: centraldark-live-editing-fabric
 description: Modo padrão da CentralDark para edição viva determinística. Use quando o CHEFE quiser editar/refinar e ver no runtime rápido, sem transformar CI profundo em freio de MVP.
 metadata:
   type: operational
-  version: "1.1"
+  version: "1.2"
   owner: SEGREDO/CHEFE
 ---
 
@@ -53,6 +53,69 @@ runtime/site/painel/feature → LIVE_EDITING_FABRIC + MAIN_PINNED_FAST_PATH
 hub/provider/secret/oauth → HUB_CREDENTIAL_CONTROL_PLANE
 doc/canon → EDIT_OWNER_EXISTING + RECEIPT
 pass material → MICRO_DEPLOY_DO_ESCOPO_AFETADO + HEALTH/PROVA + RECEIPT
+```
+
+## 🔙 Avanço + backcheck adaptativo
+
+Este é o modo de edição da Casa: avançar sem perder a trilha anterior.
+
+```text
+PROGRESSO != ESQUECIMENTO
+FORWARD_WINDOW_DEFAULT=20
+BACKCHECK_WINDOW_DEFAULT=5
+REWIND_ON_LOCAL_ERROR_DEFAULT=1
+WINDOWS_ARE_ADAPTIVE=true
+```
+
+```text
+⚙️ EDITA
+→ ⏩ AVANÇA N
+→ 🔙 AUDITA K anteriores
+   ├─ sem delta material → continua
+   └─ erro/drift → ↩️ menor ponto causal
+                 → 🪡 COSTURA
+                 → 🧪 RETESTA
+                 → 🔙 BACKCHECK
+                 → ⏩ REENTRA NO MESMO TRILHO
+```
+
+`N` e `K` são adaptativos. O padrão 20/5 é referência operacional, não lei fixa.
+
+```text
+BACKCHECK_IS_AUDIT_NOT_REWORK=true
+LOCAL_REPAIR_BEFORE_FULL_ROLLBACK=true
+REJOIN_SAME_TRAIL=true
+NO_SILENT_REROUTE=true
+```
+
+Quando delegação/healing existir, reutilizar `scripts/agent-call.md` com revisão ida/volta e checkpoints antes/depois; não criar protocolo paralelo.
+
+## 🪝 Gatilhos visuais
+
+Use símbolos como âncoras semânticas consistentes para recuperação rápida de contexto:
+
+```text
+👑 CHEFE/autoridade
+🎯 intenção
+🖥️ sistema
+🧠 cognição/agente
+⚙️ execução
+⏩ avanço
+🔙 backcheck
+🪡 costura
+🧪 teste/contraprova
+🪬 Reality Judge
+🧾 receipt
+🗝️ cristal/NEXT_CURSOR
+```
+
+```text
+TITLE_HAS_SEMANTIC_TRIGGER=true
+TRIGGER_MUST_MATCH_CONCEPT=true
+VISUAL_TRIGGER != AUTHORITY
+VISUAL_TRIGGER != PROOF
+CALLBACK_RECONNECTS_PRIOR_CONTEXT=true
+CALLBACK_DOES_NOT_REPEAT_WHOLE_HISTORY=true
 ```
 
 ## Segredos temporários
