@@ -377,6 +377,50 @@
           "target": "CENTRALDARK-OS_AS_PRIMARY_HOST_OS",
           "rule": "when the CHEFE explicitly promotes CENTRALDARK-OS from VM/capsule to primary host OS, preserve this same semantic route and replace only the hosting/control layer that materially changed",
           "no_parallel_architecture": true
+        },
+        "route_priority": [
+          {
+            "priority": 1,
+            "route": "LOCAL_DIRECT_CENTRALDARK_OS",
+            "when": "TARGET_IS_CENTRALDARK_OS_AND_LOCAL_EXECUTOR_IS_EXPOSED_AND_MEASURED",
+            "fallback_on": [
+              "PLATFORM_UNAVAILABLE",
+              "ROUTE_UNAVAILABLE",
+              "AUTH_NOT_BOUND",
+              "EXECUTION_FAILURE"
+            ]
+          },
+          {
+            "priority": 2,
+            "route": "VPS_TAILSCALE_SSH_TO_CENTRALDARK_OS",
+            "state": "PROVEN_FALLBACK_PRESERVE",
+            "rule": "DO_NOT_REMOVE_WHEN_PRIMARY_BECOMES_AVAILABLE"
+          }
+        ],
+        "multi_account_binding": {
+          "model": "MULTI_ACCOUNT_ISOLATED_HOME",
+          "source_owner": "scripts/vps/deploy-desktop-commander-multi-account.sh",
+          "local_adaptation_policy": "REUSE_MODEL_DO_NOT_COPY_VPS_PATHS_BLINDLY",
+          "two_authenticated_local_profiles": "UNKNOWN_UNTIL_MEASURED"
+        },
+        "promotion_trace": {
+          "route": [
+            "MATERIAL_FINDING",
+            "EXISTING_OWNER",
+            "CHILD_PR_COMMIT",
+            "CHILD_PR_READBACK",
+            "CHILD_PR_RECEIPT",
+            "MOTHER_1562_RECEIPT",
+            "MAIN_PROMOTION_WHEN_APPLICABLE_GATES_PASS",
+            "MAIN_READBACK"
+          ],
+          "child_first": true,
+          "mother_ledger_same_cycle": true,
+          "main_is_canonical_destination": true,
+          "pr_mother_merge_forbidden": true,
+          "pending_or_queued_is_pass": false,
+          "unresolved_review_is_pass": false,
+          "blocked_main_state": "PENDING_PROMOTION_WITH_EXACT_BLOCKER"
         }
       }
     },
