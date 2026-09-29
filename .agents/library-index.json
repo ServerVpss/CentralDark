@@ -618,5 +618,13 @@
     "all_numbered_learnings_required": true,
     "boot_binding": "CENTRALDARK_AI_BOOT.yaml#canonical_consumption_gate",
     "cli": "node scripts/centraldark/canonical-consumption-gate.mjs --learning ALL"
+  },
+  "tool_call_visibility_contract": {
+    "owner": "docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml",
+    "learning_ref": "docs/CONSCIENCIA/APRENDIZADOS.md#82",
+    "invariant": "TOOL_CALL_EXECUTED != TOOL_CALL_VISIBLE_IN_SIDEBAR",
+    "trace_chain": ["SESSION_ID", "TRACE_ID", "TOOL_CALL_ID", "USAGE/TOKENS", "RECEIPT"],
+    "visibility_states": ["PROVED_BY_PLATFORM_RECEIPT", "USER_CONFIRMED_VISIBILITY", "PLATFORM_UNAVAILABLE", "UNKNOWN"],
+    "user_visual_confirmation_is_backend_proof": false
   }
 }
