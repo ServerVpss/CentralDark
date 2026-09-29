@@ -337,3 +337,69 @@ fixed_point:
     - MATERIAL_UNKNOWN_FROM_SCREENPIPE_ZERO
   recommendation_count_is_not_fixed_point: true
   full_house_requires_separate_reality_judge: true
+
+
+# Delta cristalizado em 2026-09-29 a partir de evidência visual fornecida pelo CHEFE.
+# A imagem prova a superfície/configuração observada, não o runtime atual.
+privacy_surface_observation_2026_09_29:
+  source: USER_PROVIDED_SCREENSHOT
+  source_role: SCREEN_OBSERVATION
+  observed_surface: SCREENPIPE_PRIVACY_SETTINGS_UI
+  observed_controls:
+    - "Require API Authentication"
+    - "Allow LAN access"
+    - "Encrypt Data at Rest"
+    - "Ignore Incognito Windows"
+    - "Pause for DRM & Remote Desktop"
+    - "Capture clipboard"
+    - "Capture keyboard"
+    - "Capture clicks"
+    - "Record Audio While Locked"
+    - "Recording Schedule"
+    - "PII Removal"
+    - "Redact secrets in agent logs"
+    - "Content filters by app/site/category"
+  evidence_classification:
+    privacy_surface_exists: PROVEN_BY_USER_PROVIDED_FRAME
+    capture_capability_is_exposed_by_ui: PROVEN_BY_USER_PROVIDED_FRAME
+    individual_toggle_state_current: UNKNOWN_UNTIL_REMEASURED
+    screen_capture_active_now: UNKNOWN_UNTIL_REMEASURED
+    audio_capture_active_now: UNKNOWN_UNTIL_REMEASURED
+    input_capture_active_now: UNKNOWN_UNTIL_REMEASURED
+    process_owning_capture: UNKNOWN_UNTIL_REMEASURED
+    local_storage_path_current: UNKNOWN_UNTIL_REMEASURED
+    telemetry_egress_destination: UNKNOWN_UNTIL_REMEASURED
+    screenpipe_to_hermes_transport: UNKNOWN_UNTIL_CAUSAL_TEST
+  secret_handling:
+    credential_field_visible_in_frame: true
+    credential_value_persisted_in_repository: false
+    credential_value_must_be_redacted_from_receipts: true
+  law:
+    - "SETTINGS_UI_EXISTS != CAPTURE_ACTIVE"
+    - "TOGGLE_VISIBLE != TOGGLE_CURRENT_STATE_PROVEN"
+    - "PROCESS_RUNNING != DATA_CAPTURE_PROVEN"
+    - "LOCAL_CAPTURE != EXTERNAL_TELEMETRY_EGRESS"
+    - "SCREENSHOT != CURRENT_RUNTIME_PROOF"
+    - "UNKNOWN != PASS"
+  next_counterproof:
+    mode: READ_ONLY
+    goal: PROVE_OR_REFUTE_CURRENT_SCREENPIPE_CAPTURE_AND_TELEMETRY_PATH
+    steps:
+      - "Identify the process/PID and executable that own Screenpipe local runtime endpoints."
+      - "Probe Screenpipe health and require recent-data evidence for the target time window."
+      - "Bind recent frames/audio/input evidence to timestamps and the owning process."
+      - "Locate the configured local capture root without exposing secrets and verify recent file/index activity."
+      - "Inspect active network connections of the owning process only when telemetry egress is material."
+      - "Classify each edge FACT|INFERENCE|HYPOTHESIS|UNKNOWN."
+      - "Remeasure T1 before any present-tense verdict."
+    pass_requires:
+      - PROCESS_ATTRIBUTION_PROVEN
+      - HEALTH_CURRENT
+      - RECENT_DATA_PRESENT_FOR_REQUESTED_CLASS
+      - STORAGE_OR_INDEX_ACTIVITY_BOUND_TO_CURRENT_RUNTIME
+      - MATERIAL_UNKNOWN_ZERO_FOR_CLAIM
+    outcomes:
+      - PASS
+      - FAIL
+      - BLOCKED
+      - UNKNOWN
