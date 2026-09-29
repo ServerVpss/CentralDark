@@ -183,6 +183,8 @@ function SpriteHermes({
         {
           "--hermes-w": `${largura}px`,
           "--hermes-h": `${altura}px`,
+          "--hermes-cols": String(folha.grade.cols),
+          "--hermes-rows": String(folha.grade.rows),
           "--hermes-glow": pele.glow,
           "--hermes-glow-soft": pele.glowSuave,
           "--hermes-pulso": pulso.toFixed(3),
