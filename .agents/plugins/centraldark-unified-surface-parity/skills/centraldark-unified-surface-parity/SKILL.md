@@ -58,6 +58,20 @@ Text, Voice, Work and Desktop use the same normalized intent and owner model. Wh
 For the same intent/task, preserve canonical identity fields when exposed:
 `SESSION_ID`, `TRACE_ID`, `INTENT_ID`, `TOOL_CALL_ID`, `SURFACE_ID`, `OWNER`, `USAGE`, `RECEIPT_ID`, `NEXT_CURSOR`.
 
+## Tool Call visibility
+
+`TOOL_CALL_EXECUTED != TOOL_CALL_VISIBLE_IN_SIDEBAR`.
+
+When tracing is exposed, preserve:
+`SESSION_ID -> TRACE_ID -> TOOL_CALL_ID -> USAGE/TOKENS -> RECEIPT`.
+
+Renderer states are:
+`PROVED_BY_PLATFORM_RECEIPT`, `USER_CONFIRMED_VISIBILITY`,
+`PLATFORM_UNAVAILABLE`, or `UNKNOWN`.
+
+Never infer that a tool did not execute only because the sidebar/JSON renderer is absent.
+Never claim renderer visibility only because a tool returned a result.
+
 ## Crystal replay
 
 A proven crystal is replay-first. Identify its SHA/hash/fingerprint/receipt, locate the existing owner, plug only the missing delta, and prove only the new integration.
