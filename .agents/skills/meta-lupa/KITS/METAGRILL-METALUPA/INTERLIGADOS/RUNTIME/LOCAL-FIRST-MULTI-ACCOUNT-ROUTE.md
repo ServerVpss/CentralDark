@@ -132,3 +132,28 @@ PRIMARY HOST FUTURE
 ```
 
 Só muda a camada física que hospeda o owner. Não nasce arquitetura paralela.
+
+## 🤖 IA nativa do openKylin
+
+A instalação atual do CENTRALDARK-OS já carrega uma camada de IA do próprio sistema. Portanto a regra de roteamento ganha um passo anterior à criação:
+
+```text
+INTENT
+→ MEASURE_NATIVE_OPENKYLIN_CAPABILITY
+→ IF_CAPABILITY_FITS: REUSE
+→ ELSE: USE_EXISTING_CENTRALDARK_CAPABILITY
+→ CREATE_ONLY_IF_NO_OWNER_OR_CAPABILITY_SURVIVES
+```
+
+```text
+REUSE_NATIVE_AI_BEFORE_CREATE=true
+NO_SECOND_OS_AI_STACK=true
+OPENKYLIN_AGENT_IS_CAPABILITY_NOT_AUTHORITY=true
+OPENKYLIN_MCP_IS_CAPABILITY_NOT_CENTRALDARK_OWNER=true
+CENTRALDARK_REMAINS_INTENT_MEMORY_RULES_PROOF_COORDINATION_LAYER=true
+```
+
+Medição desta rodada encontrou KylinBot, AI Assistant, AI Runtime/Subsystem, MCP libraries, vector engine, ASR/TTS/OCR/embeddings e processos de inferência vivos.
+
+Limite: pacote/processo presente não prova tool MCP exposta à sessão nem provider autenticado.
+
