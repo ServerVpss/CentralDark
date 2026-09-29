@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { ConexoesCentralDark } from "@/components/central/ConexoesCentralDark";
+import { ObservabilidadeCentralDark } from "@/components/central/ObservabilidadeCentralDark";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
@@ -231,6 +232,7 @@ export function PainelAdminCentralDark() {
           <TabsTrigger value="modulos">Módulos</TabsTrigger>
           <TabsTrigger value="usuarios">Usuários</TabsTrigger>
           <TabsTrigger value="conexoes">Contas / Conexões</TabsTrigger>
+          <TabsTrigger value="observabilidade">Observabilidade</TabsTrigger>
         </TabsList>
 
         <TabsContent value="visao" className="mt-6">
@@ -357,6 +359,9 @@ export function PainelAdminCentralDark() {
         </TabsContent>
         <TabsContent value="conexoes" className="mt-6">
           <ConexoesCentralDark />
+        </TabsContent>
+        <TabsContent value="observabilidade" className="mt-6">
+          <ObservabilidadeCentralDark />
         </TabsContent>
         <TabsContent value="usuarios" className="mt-6">
           <div>
