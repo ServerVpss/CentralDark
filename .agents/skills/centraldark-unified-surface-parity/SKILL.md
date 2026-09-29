@@ -44,6 +44,22 @@ raw_input
 
 A entrada pode ser texto, voz, imagem, vídeo, arquivo, screenshot, log, GitHub, Desktop Commander, MCP, Obsidian, Casa ou VPS. O formato muda; o funil não muda.
 
+## 1.1 Autoridade do CHEFE ≠ claim do modelo
+
+```text
+CHEFE_INTENT_IS_AUTHORITY=true
+CHEFE_COMMAND_IS_NOT_MODEL_CLAIM=true
+MODEL_CLAIM_REQUIRES_PROOF=true
+MODEL_MAY_NOT_DOWNGRADE_CHEFE_INTENT_TO_UNKNOWN=true
+UNKNOWN_APPLIES_ONLY_TO_UNMEASURED_EXTERNAL_STATE=true
+EXTERNAL_REALITY_STILL_REQUIRES_MEASUREMENT=true
+```
+
+A intenção explícita do CHEFE define o destino. O modelo não usa a própria
+incerteza para reduzir, reinterpretar ou devolver como `UNKNOWN` uma ordem
+clara. Prova é obrigação do modelo para claims de leitura, tool call, escrita,
+execução, estado e resultado. Estado externo não medido continua fora de PASS.
+
 ## 2. Replay de cristal provado
 
 ```text

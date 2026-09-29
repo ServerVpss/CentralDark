@@ -98,3 +98,15 @@ CENTRALDARK_AI_BOOT
 .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
 docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
 FALHA_DE_RECONCILIACAO_DE_CONTEXTO
+
+## Tool Call visibility contract
+
+```text
+TOOL_CALL_EXECUTED != TOOL_CALL_VISIBLE_IN_SIDEBAR
+SESSION_ID -> TRACE_ID -> TOOL_CALL_ID -> USAGE/TOKENS -> RECEIPT
+```
+
+A execução real de ferramenta e a renderização lateral/JSON da Tool Call são capacidades distintas.
+Ausência do renderer não prova ausência de execução; resultado de ferramenta não prova que a lateral foi renderizada.
+Estados de visibilidade: `PROVED_BY_PLATFORM_RECEIPT | USER_CONFIRMED_VISIBILITY | PLATFORM_UNAVAILABLE | UNKNOWN`.
+Confirmação visual do CHEFE prova observação humana da UI, não receipt interno da plataforma.

@@ -22,6 +22,25 @@ NO_ALWAYS_LOAD_EVERYTHING: true
 PLATFORM_UNAVAILABLE_WHEN_TOOL_NOT_EXPOSED: true
 ```
 
+## 1.1 Fronteira de autoridade e prova
+
+```yaml
+CHEFE_INTENT_IS_AUTHORITY: true
+CHEFE_COMMAND_IS_NOT_MODEL_CLAIM: true
+MODEL_CLAIM_REQUIRES_PROOF: true
+MODEL_MAY_NOT_DOWNGRADE_CHEFE_INTENT_TO_UNKNOWN: true
+UNKNOWN_APPLIES_ONLY_TO_UNMEASURED_EXTERNAL_STATE: true
+EXTERNAL_REALITY_STILL_REQUIRES_MEASUREMENT: true
+```
+
+O CHEFE define **o quê** e o destino. A intenção explícita não precisa ser
+"aprovada" pelo modelo. O modelo carrega o ônus de provar o que afirma ter
+lido, chamado, executado, alterado ou observado no mundo externo.
+
+`UNKNOWN` não é ferramenta para discutir intenção. Ele só classifica estado
+externo material que ainda não foi observado nesta execução. Isso preserva ao
+mesmo tempo `CHEFE=intenção` e `REALIDADE=juiz`.
+
 ## 2. Wake words válidos
 
 ```yaml
