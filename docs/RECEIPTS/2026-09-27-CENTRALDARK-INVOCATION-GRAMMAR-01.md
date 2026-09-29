@@ -193,3 +193,24 @@ STATIC_TRIGGER_FAMILY_BINDING: PASS
 LIVE_VOICE_BINDING: UNKNOWN
 DEPLOY: OUT_OF_SCOPE
 ```
+
+
+## Delta — autoridade da intenção vs ônus de prova do modelo
+
+Cristalizado no mesmo owner, sem parser, runtime ou arquitetura paralela:
+
+```text
+CHEFE_INTENT_IS_AUTHORITY=true
+CHEFE_COMMAND_IS_NOT_MODEL_CLAIM=true
+MODEL_CLAIM_REQUIRES_PROOF=true
+MODEL_MAY_NOT_DOWNGRADE_CHEFE_INTENT_TO_UNKNOWN=true
+UNKNOWN_APPLIES_ONLY_TO_UNMEASURED_EXTERNAL_STATE=true
+EXTERNAL_REALITY_STILL_REQUIRES_MEASUREMENT=true
+```
+
+Semântica: a ordem explícita do CHEFE trava o destino e não é rebaixada a
+`UNKNOWN` por insegurança do modelo. O modelo, por outro lado, deve provar
+claims de leitura, tool call, escrita, execução, estado externo e resultado.
+A realidade externa continua sendo medida; autoridade sobre intenção não é
+confundida com evidência sobre o mundo.
+
