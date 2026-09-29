@@ -170,6 +170,19 @@ Se uma superfície não expõe a ferramenta real, marcar `PLATFORM_UNAVAILABLE`.
 
 ## 6. Voice Tool Binding
 
+```text
+VOICE_TOOL_CALL_VISIBILITY_REUSES_UNIFIED_SURFACE_OWNER=true
+TOOL_CALL_EXECUTED != TOOL_CALL_VISIBLE_IN_SIDEBAR
+VOICE_MISSING_RENDERER_IS_NOT_EXECUTION_FAILURE=true
+VOICE_TOOL_RESULT_IS_NOT_RENDERER_PROOF=true
+VOICE_SURFACE_ID_IS_PROVENANCE_ONLY=true
+```
+
+A Voz usa o mesmo `SESSION_ID -> TRACE_ID -> TOOL_CALL_ID -> USAGE/TOKENS -> RECEIPT`
+quando a plataforma expõe a telemetria. O classificador semântico interpreta a intenção;
+ele não vira segundo owner do renderer nem cria trilha paralela.
+
+
 A lacuna observada é `Voice Tool Binding`: a superfície de voz pode ter permissão conceitual, mas não expor a action real na sessão.
 
 ```text
