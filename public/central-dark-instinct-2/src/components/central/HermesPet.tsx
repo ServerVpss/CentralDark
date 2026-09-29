@@ -4,7 +4,7 @@ import { Eye, EyeOff, Pause, Play, Sparkles } from "lucide-react";
 import hojaForja from "@/assets/hermes-sheet-forja.webp.asset.json";
 import hojaCelestial from "@/assets/hermes-sheet-celestial.webp.asset.json";
 import hojaAscensao from "@/assets/hermes-sheet-ascensao.webp.asset.json";
-import folhaInstinto from "@/assets/hermes-instinto-superior-sheet-canonico.webp.asset.json";
+import folhaInstintoUrl from "@/assets/hermes-instinto-superior-sheet.webp";
 import folha from "@/lib/hermes-folha.json";
 import instinto from "@/lib/hermes-instinto-superior.json";
 import { useI18n } from "@/lib/i18n";
@@ -302,7 +302,7 @@ function SpriteInstintoSuperior({
           "--hermes-cols": String(instinto.grade.cols),
           "--hermes-glow": "color-mix(in oklab, var(--neon-blue) 58%, transparent)",
           "--hermes-glow-soft": "color-mix(in oklab, var(--neon-purple) 24%, transparent)",
-          "--hermes-atlas": `url(${folhaInstinto.url})`,
+          "--hermes-atlas": `url(${folhaInstintoUrl})`,
           "--hermes-x": `${-quadro * largura}px`,
           "--hermes-y": `${-dados.linha * altura}px`,
           "--hermes-aura-pulso": pulsoAura.toFixed(3),
