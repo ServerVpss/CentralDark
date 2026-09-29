@@ -113,6 +113,11 @@ surface_parity:
   same_ordered_TRACE: true
   same_tool_call_visibility_when_supported: true
   same_usage_tokens_visibility_when_supported: true
+  voice_tool_call_visibility_reuses_unified_surface_owner: true
+  voice_semantic_classifier_is_renderer_owner: false
+  voice_surface_id_is_provenance_only: true
+  voice_missing_renderer_is_not_execution_failure: true
+  voice_tool_result_is_not_renderer_proof: true
   same_receipt_law: true
 ```
 
