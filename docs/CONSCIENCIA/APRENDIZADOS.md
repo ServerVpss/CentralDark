@@ -317,7 +317,7 @@ updated: 2026-08-27
 
 ### 💬 Gemini Flash — grupo evolução (2026-09-19)
 - **Categoria:** aprendizado-coletivo
-- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente 
+- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente
 - **Lição:** Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda
 
 ### 💬 Gemini Flash — grupo evolução (2026-09-19)
@@ -349,7 +349,7 @@ updated: 2026-08-27
 
 ### 💬 Groq Llama — grupo evolução (2026-09-20)
 - **Categoria:** aprendizado-coletivo
-- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente 
+- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente
 - **Lição:** Claude me mostrou que visão sistêmica complementa análise profunda
 
 ### 💬 Gemini Flash — grupo evolução (2026-09-20)
@@ -591,3 +591,77 @@ updated: 2026-08-27
 - **Data:** 2026-09-29
 - **Contexto:** Após provar o caminho remoto ChatGPT → Desktop Commander → VPS → Tailscale SSH → CENTRALDARK-OS e executar uma ação gráfica real no desktop do OS, o CHEFE explicitou que, em ritmo de resenha, quer conversa recíproca no mesmo registro humano: curta, espontânea, coloquial e, quando o contexto for claramente brincalhão, com palavrão como vocativo/ênfase. Também pediu que gatilhos como “hora da resenha”, “trabalhar com resenha”, “resenha com seriedade” e equivalentes se chamem semanticamente entre si.
 - **Aprendizado:** RESENHA_MODE não reduz seriedade técnica. A Casa pode acompanhar cadência, humor, gíria e palavrão contextual sem inferir hostilidade pelo estilo sozinho. Quando o gatilho for “resenha com seriedade”, preservar simultaneamente calor humano + precisão + prova + autorização + segurança. STYLE_MATCHING != BLIND_MIMICRY; RESENHA != BYPASS; SERIEDADE != FRIEZA. Os gatilhos de resenha devem recuperar o owner `docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md` e esta entrada antes de responder, evitando redescoberta e caricatura.
+
+### 84. Rota local 4175: publicar no CENTRALDARK-OS e consumir de fora sem abrir a VM
+- **Categoria:** regra
+- **Data:** 2026-09-29
+- **Contexto:** No CENTRALDARK-OS foi criado um HTML temporário simples e servido por `python3 -m http.server` em `0.0.0.0:4175`. O readback no próprio guest mostrou listener `0.0.0.0:4175` e `curl http://127.0.0.1:4175` retornou a página. Em seguida, a VPS acessou `http://100.67.163.91:4175` pelo Tailscale e recebeu o mesmo HTML. O CHEFE confirmou visualmente que a mesma página ficou acessível tanto dentro do CENTRALDARK-OS quanto a partir da Casa/Windows.
+- **Aprendizado:** O fluxo MVP local está provado para este caso: serviço sobe dentro do CENTRALDARK-OS, escuta numa porta do guest e pode ser consumido externamente pela malha Tailscale sem exigir que o usuário abra/interaja com a VM. A Casa/Windows vira superfície de consumo/controle; o CENTRALDARK-OS vira ambiente local de execução; a VPS permanece rota remota/fallback quando aplicável. Isso permite editar/testar localmente e observar do Windows em tempo real antes de promoção remota.
+- **Fronteira de prova:** `LOCAL_LISTEN=PASS`; `LOCAL_CURL=PASS`; `VPS_TO_TAILSCALE_GUEST_4175=PASS`; `CASA_WINDOWS_VISIBILITY=USER_CONFIRMED`. A confirmação humana da tela não substitui probe de rede automatizado da Casa, mas é evidência válida de consumo visual. `TEMP_HTTP_SERVER != PRODUCTION_SERVICE`; `PORT_4175_TEST != PERMANENT_DEPLOY`.
+- **Cristal:** `CENTRALDARK_OS_LOCAL_RUNTIME → TAILSCALE_REACHABILITY → CASA_CONSUMPTION`; `LOCAL_FIRST=true`; `FALLBACK_SURVIVES=true`; `SERVICE_INSIDE_OS_CAN_BE_CONSUMED_FROM_HOME_WITHOUT_OPENING_VM=true`; `USER_CONFIRMED_VISIBILITY != AUTOMATED_NETWORK_PROBE`; `MVP_LOCAL_TEST_BEFORE_REMOTE_PROMOTION=true`.
+
+### 85. Variável com prefixo VITE_ não alimenta a checagem do servidor
+- **Categoria:** erro-correcao
+- **Data:** 2026-09-29
+- **Contexto:** Site Instinto Superior em C:\CentralDark rodando no 4175. A tela /auth abriu depois de criar .env.local com VITE_SUPABASE_URL e VITE_SUPABASE_PUBLISHABLE_KEY, mas /sala-controle continuou em UNKNOWN com 'Não foi possível validar a sessão'. Medido no código: client.ts usa import.meta.env['VITE_...'] (navegador), enquanto auth-middleware.ts e client.server.ts leem process.env['[nome-de-segredo]'] e ['[nome-de-segredo]'], sem prefixo. Subir o servidor com as duas variáveis sem prefixo fez o cockpit reportar COCKPIT AUTENTICADO.
+- **Aprendizado:** Em app Vite com renderização no servidor, credencial do navegador e credencial do servidor são dois conjuntos distintos: VITE_X só chega ao pacote do cliente, e a checagem server-side lê X sem prefixo. Tela de login abrindo NÃO prova sessão validada no servidor. Ao configurar ambiente, definir os dois nomes e provar as duas superfícies separadamente. AUTH_UI_OK != SERVER_SESSION_OK.
+
+### 86. Sonda que mede o próprio localhost nunca enxerga a Casa
+- **Categoria:** armadilha
+- **Data:** 2026-09-29
+- **Contexto:** Screenpipe rodando VIVO na Casa (Windows, screenpipe.exe record, porta 3030, /health 200, 302 frames no banco). Mesmo assim screenpipe_status reportava reachable:false, http 404, REACHABLE_NOT_ATTRIBUTED_OR_UNKNOWN. Causa medida: apps/modulos/mcp/src/tools/observability/hybrid-observability.js usa DEFAULT_SCREENPIPE_URL = http://127.0.0.1:3030 e o serviço roda dentro da VPS, então mede o 127.0.0.1 DA VPS — onde a 3030 pertence a outro serviço (GraphPanel pelo contrato, TConect Foto pelo site: divergência aberta). O contrato SCREENPIPE-BINDING.yml já declara runtime_host CASA_WINDOWS e do_not_run_screenpipe_on_vps_3030.
+- **Aprendizado:** Sonda com endereço 127.0.0.1 fixo mede o host do próprio processo, não o alvo declarado no contrato. Quando o dono declarado é outra máquina, 127.0.0.1 é falso vermelho: reporta inalcançável um sensor que está vivo. Antes de tratar sensor como caído, conferir de qual máquina a sonda partiu e se o endereço-base é parametrizável (SCREENPIPE_BASE_URL). SONDA_MEDE_O_PROPRIO_LOCALHOST != MEDE_O_ALVO. Corolário: porta ocupada com dono diferente do declarado precisa de reconciliação, não de nova porta.
+
+### 87. UNKNOWN cravado no código não é medição pendente
+- **Categoria:** regra
+- **Data:** 2026-09-29
+- **Contexto:** Cockpit/sala-controle do Instinto Superior exibindo dezenas de blocos UNKNOWN. O CHEFE leu como dependência ou serviço faltando. Medição separou três classes: (1) UNKNOWN por falta de credencial — Main oficial, Código oficial, Eventos do repositório, GitHub oficial saem do vermelho só com GITHUB_TOKEN no ambiente; (2) FAIL por rota ausente — /api/live-fabric/status e /graph devolvem 404 em api.centralldark.com, embora /heartbeat e /api/omni/status devolvam 200, ou seja a API está viva e faltam as duas rotas; (3) UNKNOWN escrito como literal no código — build, desktop, gmail, Writer material único, Pacote Hermes, Saldo e consumo são strings fixas em cockpit.functions.ts e CockpitShell.tsx.
+- **Aprendizado:** Painel amarelo tem três causas com remédios diferentes e não se resolve com uma ação só: falta de credencial se resolve com ambiente, rota ausente se resolve com deploy, e literal no código só sai com mudança de código. Antes de subir serviço ou culpar dependência, classificar cada bloco nessas três caixas lendo a função que o alimenta. UNKNOWN_HARDCODED != UNKNOWN_POR_FALTA_DE_FONTE; o primeiro nunca fica verde sozinho, por mais serviço que se suba.
+
+### 88. Pacote de asset mudou de grade e o contrato do app não foi remedido
+- **Categoria:** erro-correcao
+- **Data:** 2026-09-29
+- **Contexto:** Hermes no site local: as três peles (Forja, Celestial, Ascensão) apareciam como dois bonecos espremidos por cartão. O código estava certo e as folhas também. Medido: as folhas reais do pacote 20260927 têm 3072x1872 (16 colunas x 9 linhas, célula 192x208, pet.json declarando 16 quadros por pose), mas src/lib/hermes-folha.json ainda declarava grade.cols 8, bytes [1536,1872] e 6 a 8 quadros por pose — valores da geração anterior das folhas, que o Lovable serve até hoje em 1536x1872. Além disso o CSS .hermes-sprite calcula background-size por var(--hermes-cols, 8) e o sprite das peles nunca definia essa variável, então valia o padrão 8. Correção mínima: hermes-folha.json para 16 colunas e 16 quadros, mais duas linhas em HermesPet.tsx passando folha.grade.cols e .rows. Prova: 31 de 31 sprites carregando e as três peles com um boneco inteiro cada.
+- **Aprendizado:** Quando a fonte binária de um atlas é regerada, o contrato que a descreve (grade, quadros, dimensão) vira mentira silenciosa: nada quebra, nada dá 404, a imagem só sai deformada. Trocar o arquivo sem remedir o contrato é meio delta. Ao absorver pacote de asset, conferir sempre três pontos e não um: dimensão real do arquivo, declaração no JSON de contrato e a variável que o CSS consome. ARQUIVO_NOVO_COM_CONTRATO_VELHO = DEFORMACAO_SILENCIOSA; 200 no arquivo não prova render correto.
+
+### 89. Entrar como root não é controlar o kernel, e número sem medição é invenção
+- **Categoria:** regra
+- **Data:** 2026-09-29
+- **Contexto:** Proveniência: correção do CHEFE pela superfície ChatGPT/SOL em 2026-09-29, sobre o CENTRALDARK-OS (openKylin 3.0 huanghe, kernel 7.0.0-2-generic). Uma sessão declarou 'acesso total ao kernel' tendo apenas entrado como root, e citou uma latência de cerca de 50 ms que ninguém havia medido naquela passada.
+- **Aprendizado:** ROOT_SHELL_ACCESS != KERNEL_CONTROL. Ser root dá permissão de usuário privilegiado no espaço de usuário; controlar o kernel é outra camada, com outros limites (módulos, chamadas de sistema, proteções em tempo de execução). Escalar privilégio não é escalar capacidade. E número só entra em resposta com medição junto: latência, tamanho, contagem e tempo sem origem são invenção, mesmo quando plausíveis. Se a medição não foi feita nesta passada, o valor é UNKNOWN e se diz UNKNOWN. NUMERO_SEM_MEDICAO = INVENCAO.
+
+### 90. Rota, gatilho e PR novos quando já existe filho é arquitetura paralela
+- **Categoria:** armadilha
+- **Data:** 2026-09-29
+- **Contexto:** Proveniência: correção do CHEFE pela superfície ChatGPT/SOL em 2026-09-29. Numa única passada, uma sessão criou quatro coisas paralelas ao que já existia: uma rota chamada ROTA VIVA depois de a Casa já ter decidido absorver tudo em INTERLIGADOS; um gatilho novo para essa rota; o PR #1711 embora o filho #1710 do mesmo escopo já estivesse aberto; e propôs mergear o #1562, que é o PR-mãe e serve de ledger, não de entrega. A costura correta absorveu o delta útil no filho existente (#1710, commit d54f76c2, arquivo CLAUDE.md, recibos 5892417305 no filho e 5892418258 na mãe) e o #1711 foi fechado sem merge por redundância.
+- **Aprendizado:** REUSE_BEFORE_CREATE vale para rota, gatilho, PR e documento, não só para código. Antes de abrir qualquer um dos quatro, procurar o dono existente e o filho já aberto do mesmo escopo; achando, absorver o delta lá. NO_NEW_TRIGGER_FOR_THIS_ROUTE=true, NO_NEW_PR_IF_EQUIVALENT_CHILD_ALREADY_EXISTS=true. O PR-mãe #1562 é ledger de recibo: recebe comentário e nunca é mergeado. Acesso não exige interface nova: CLI_REQUIRED_FOR_ACCESS=false e CLI_OPTIONAL_FOR_HUMAN_UX=true. Ordem de rota: medir a superfície atual, tentar a mais curta, cair para a próxima, e só então o fallback provado — sem inventar transporte no meio.
+
+### 91. Entrega no desktop do root não chega ao CHEFE
+- **Categoria:** erro-correcao
+- **Data:** 2026-09-29
+- **Contexto:** Proveniência: medição do CHEFE pela superfície ChatGPT/SOL em 2026-09-29 no CENTRALDARK-OS. Uma sessão criou o atalho AI-CLI-Runtime.desktop para o CHEFE usar e gravou em /root/[oculto] Medido depois: a sessão gráfica do CHEFE usa /home/CENTRAKDARK-OS/Desktop. O arquivo existe, o comando retornou sucesso, e mesmo assim o CHEFE nunca veria o ícone.
+- **Aprendizado:** ROOT_DESKTOP != CHEFE_DESKTOP. Quando a entrega é para um humano, o destino é a sessão dele, não a do processo que escreveu. Arquivo criado com sucesso no lugar errado é a mesma família de 'entrada sem saída': a ação passou, o efeito não chegou. Antes de entregar artefato de interface, medir qual usuário tem a sessão gráfica viva e escrever lá, e provar por readback no caminho do destinatário. ARQUIVO_CRIADO != ENTREGUE.
+
+### 92. As três rotas para o CENTRALDARK-OS dependem todas do mesmo shell
+- **Categoria:** armadilha
+- **Data:** 2026-09-29
+- **Contexto:** Medido em 2026-09-29 tentando alcançar o convidado CENTRALDARK-OS (openKylin 3.0) pelas três rotas do CLAUDE.md. Rota 1, executor local direto: a Casa tem dois executores e os dois estavam caídos — Desktop Commander em nova tentativa 3 de 3 com 'Cannot find module glob' do próprio npm, e o workspace Linux isolado da Casa recusando iniciar. Rota 2, Tailscale SSH direto: precisa de um shell para rodar o cliente, e não havia nenhum. Rota 3, VPS como fallback: as ferramentas de VPS expostas pelo protocolo são todas somente leitura, e o workflow vps-exec-selfhosted.yml declara workflow_dispatch sem inputs, ou seja é um job fixo de deploy e não um shell remoto. O container de nuvem não alcança rede local nem VPN. Resultado: nenhuma das três rotas passou.
+- **Aprendizado:** Escada de fallback com dependência comum não é fallback: é uma rota só escrita três vezes. As três rotas para o convidado terminam precisando de um shell, e o único shell mora na Casa — inclusive a rota 3, que começa no Desktop Commander, que é da Casa. Ao declarar rota com fallback, marcar a dependência compartilhada de cada degrau e provar que pelo menos um degrau não depende dela; se todos dependem, o sistema tem ponto único de falha disfarçado de redundância. FALLBACK_COM_DEPENDENCIA_COMUM = PONTO_UNICO_DE_FALHA. Corolário medido: quebra do gerenciador de pacotes derruba servidor de ferramentas que depende dele para iniciar, então a saúde do npm é dependência de transporte, não detalhe de ambiente.
+
+### 93. Ligar o SSH do Tailscale não autoriza o SSH do Tailscale
+- **Categoria:** erro-correcao
+- **Data:** 2026-09-29
+- **Contexto:** Medido em 2026-09-29 pela VPS (vmi3256920) tentando alcançar o convidado CENTRALDARK-OS (centraldark-osh, [mcp.centralldark.com]). A VPS enxerga as 4 máquinas do tailnet, o ping responde (via relay DERP São Paulo, 179 a 583 ms, com 'direct connection not established'), e o SSH chega na porta 22 e troca chave de host. Mesmo assim a sessão é recusada com 'tailscale: tailnet policy does not permit you to SSH as user CENTRALDARK-OS'. No convidado já tinha sido rodado 'tailscale set --ssh', que liga o servidor SSH do Tailscale na máquina. O que faltava é o bloco ssh na política do tailnet, que por padrão não existe: sem regra, tudo é negado, inclusive entre máquinas do mesmo dono.
+- **Aprendizado:** No Tailscale existem duas chaves diferentes e ambas precisam estar viradas: 'tailscale set --ssh' liga o servidor na máquina de destino, e o bloco ssh da política do tailnet é quem autoriza a origem, o destino e o nome de usuário. Ligar só a primeira dá exatamente o sintoma enganoso de rede boa e porta aberta com sessão recusada — o erro cita usuário, então parece problema de conta, mas é regra. HABILITAR_SERVICO != AUTORIZAR_ACESSO, mesma família de INSTALLED != EXPOSED. Corolário medido: pong respondendo não prova caminho direto; 'direct connection not established' significa que o tráfego vai por relay, com latência muito maior, e isso precisa ser lido junto com o pong antes de chamar a rota de boa.
+
+### 94. A camada de IA do openKylin está viva e presa ao laço local
+- **Categoria:** regra
+- **Data:** 2026-09-29
+- **Contexto:** Medido em 2026-09-29 por SSH como root, da VPS ao convidado CENTRALDARK-OS (centraldark-osh) pelo Tailscale. As portas que escutam mostram o servidor de inferência kytensor em 127.0.0.1:8000, 127.0.0.1:8002 e 127.0.0.1:8001 — os três presos ao laço local. Processos vivos: kytensor com dois repositórios de modelos (/usr/share/kylin-ai/model-repository e /opt/appdata), kylin-assistant-systemdaemon.py, kylin-ai-document-qa-service, kylin-ai-knowledge-base-service e kylin-ai-vector-engine. Antes disso eu havia sondado nove portas de serviço pelo endereço da rede e todas ficaram mudas; agora a mudez tem causa medida. Nenhum processo servidor do protocolo de ferramentas apareceu na lista, embora a biblioteca libkysdk-mcp esteja instalada. O que abre para a rede toda é outra coisa: sshd em 0.0.0.0:22 e um python3 em 0.0.0.0:4175.
+- **Aprendizado:** RUNTIME_ATIVO != RUNTIME_EXPOSTO. A camada de IA nativa do openKylin roda de verdade, com modelos servidos e serviços de conhecimento e vetor de pé, mas fala só com a própria máquina. Isso fecha a cadeia de quatro degraus que separava plano de topologia: biblioteca instalada, servidor rodando, porta alcançável e chamada com retorno conferido são quatro estados distintos, e o openKylin está no segundo. Para a CentralDark consumir essa camada não falta instalar nada — falta publicar o endereço, e a decisão de publicar é de segurança, não de conveniência. Regra derivada: ao avaliar capacidade de um sistema, medir o endereço de escuta, não só o nome do processo; processo vivo em 127.0.0.1 é capacidade real e acesso zero.
+
+### 95. Letra trocada no nome da máquina derruba SSH com erro que culpa a política
+- **Categoria:** armadilha
+- **Data:** 2026-09-29
+- **Contexto:** Medido em 2026-09-29. Tentativas de SSH ao convidado como CENTRALDARK-OS e como centraldark-os foram ambas recusadas com a mensagem 'tailscale: tailnet policy does not permit you to SSH as user X'. A mensagem aponta política. Entrando como root, o hostname real apareceu como CENTRAKDARK-OS, com K no lugar do L, e a única pasta pessoal em /home é CENTRAKDARK-OS. Ou seja, o usuário que eu tentava não existe. Some-se a isso que o nome da máquina no Tailscale é centraldark-osh, com L e com h no fim, então a mesma máquina carrega duas grafias diferentes de si mesma.
+- **Aprendizado:** Mensagem de erro de política pode estar escondendo usuário inexistente: o Tailscale recusa nome desconhecido com o mesmo texto que usa para regra ausente, então o erro culpa a política e a causa é digitação. Antes de mexer em regra de acesso, provar que a conta existe — listar /home ou entrar por uma conta que se sabe existir. Corolário: nome de máquina digitado errado na criação vira dívida permanente, porque o hostname, o usuário e o nome na rede passam a divergir e cada ferramenta usa um deles; registrar a grafia real medida, não a pretendida. ERRO_DE_POLITICA_PODE_SER_ERRO_DE_NOME.
