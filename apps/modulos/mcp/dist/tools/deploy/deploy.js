@@ -90,10 +90,14 @@ export const deployTools = [
             // 4. PM2 — processos com restart anormal ou parados
             let pm2Summary = [];
             try {
-                const res = await runShell("pm2 jlist 2>/dev/null", { timeoutMs: 15_000 });
-                // pm2 jlist pode emitir linhas de aviso antes do JSON — extrai só o array
+                const res = await runShell("PM2_HOME=/root/.pm2 pm2 jlist 2>/dev/null", { timeoutMs: 15_000 });
+                // O MCP roda com HOME isolado por perfil; PM2_HOME fixa o daemon canônico da VPS.
+                // pm2 jlist pode emitir avisos antes/depois do JSON — isola exatamente o array.
                 const jsonStart = res.stdout.indexOf("[");
-                const raw = jsonStart >= 0 ? res.stdout.slice(jsonStart) : res.stdout;
+                const jsonEnd = res.stdout.lastIndexOf("]");
+                const raw = jsonStart >= 0 && jsonEnd >= jsonStart
+                    ? res.stdout.slice(jsonStart, jsonEnd + 1)
+                    : res.stdout.trim();
                 const list = JSON.parse(raw);
                 const now = Date.now();
                 pm2Summary = list.map((p) => ({
