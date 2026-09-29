@@ -401,6 +401,12 @@ def _step_receipt(command_template: str, proc: subprocess.CompletedProcess[str])
 
 
 def _resolve_replay_shell(shell: str | None) -> str | None:
+    # CLI historically defaults to /bin/bash. On Windows that value must mean
+    # "auto-discover Git Bash", otherwise the truthy default prevents the
+    # Windows discovery branch from ever running.
+    if os.name == "nt" and shell and shell.replace("\\", "/").lower() == "/bin/bash":
+        shell = None
+
     if shell:
         candidate = Path(shell)
         if candidate.is_absolute():
