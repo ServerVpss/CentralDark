@@ -334,3 +334,33 @@ Prova da parte funcional — a sessão de Voz executou as mesmas ações reais q
 O que continua UNKNOWN é só identidade de campo: mesmo `SESSION_ID`, trilha ordenada e contagem de tokens do modelo entre Voz e Texto. Isso é detalhe da plataforma, medido só por comparação direta campo a campo; não reduz a capacidade funcional provada acima.
 
 Crédito: execução pela caneta de Voz; separação da afirmação pela caneta Claude a partir da correção do CHEFE.
+
+
+## Cristal 2026-09-28 — execução != renderer lateral
+
+```text
+TOOL_CALL_EXECUTED != TOOL_CALL_VISIBLE_IN_SIDEBAR
+```
+
+A execução real da ferramenta e a renderização visual da Tool Call no próprio ChatGPT são
+capacidades distintas. Uma ferramenta pode executar sem que a superfície mostre o Trace Viewer;
+e a presença de um painel visual não substitui receipt do backend.
+
+Quando a superfície expuser tracing, preservar a cadeia:
+
+```text
+SESSION_ID -> TRACE_ID -> TOOL_CALL_ID -> USAGE/TOKENS -> RECEIPT
+```
+
+Estados permitidos para visibilidade:
+
+```text
+TOOL_CALL_VISIBILITY=PROVED_BY_PLATFORM_RECEIPT
+TOOL_CALL_VISIBILITY=USER_CONFIRMED_VISIBILITY
+TOOL_CALL_VISIBILITY=PLATFORM_UNAVAILABLE
+TOOL_CALL_VISIBILITY=UNKNOWN
+```
+
+Nesta rodada, o CentralDark MCP executou uma Tool Call real nesta superfície; o CHEFE confirmou
+visualmente que o renderer/painel de Tool Calls voltou a aparecer. A confirmação visual do CHEFE
+é registrada como USER_CONFIRMED_VISIBILITY, sem ser confundida com prova do backend.
