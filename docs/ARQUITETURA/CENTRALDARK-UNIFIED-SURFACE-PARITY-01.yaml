@@ -24,6 +24,18 @@ core_law:
   EXISTS_NEQ_RUNNING: true
   REALITY_IS_JUDGE: true
 
+authority_boundary:
+  CHEFE_INTENT_IS_AUTHORITY: true
+  CHEFE_COMMAND_IS_NOT_MODEL_CLAIM: true
+  MODEL_CLAIM_REQUIRES_PROOF: true
+  MODEL_MAY_NOT_DOWNGRADE_CHEFE_INTENT_TO_UNKNOWN: true
+  UNKNOWN_APPLIES_ONLY_TO_UNMEASURED_EXTERNAL_STATE: true
+  EXTERNAL_REALITY_STILL_REQUIRES_MEASUREMENT: true
+  rule: >
+    A intenção explícita do CHEFE trava o destino; o modelo não a rebaixa para
+    UNKNOWN por insegurança própria. O ônus de prova recai sobre claims do
+    modelo sobre leitura, execução, mutação, estado externo e resultado.
+
 trigger_master:
   primary: "!CENTRALDARK"
   aliases:
@@ -145,6 +157,24 @@ surface_parity:
       expected: heavy_implementation_surface
     desktop:
       expected: local_runtime_execution_and_observation
+  tool_call_visibility_contract:
+    invariant: "TOOL_CALL_EXECUTED != TOOL_CALL_VISIBLE_IN_SIDEBAR"
+    tool_call_execution_is_visibility: false
+    missing_renderer_means_execution_absent: false
+    tool_result_means_renderer_visible: false
+    canonical_trace_chain:
+      - SESSION_ID
+      - TRACE_ID
+      - TOOL_CALL_ID
+      - USAGE/TOKENS
+      - RECEIPT
+    visibility_states:
+      - PROVED_BY_PLATFORM_RECEIPT
+      - USER_CONFIRMED_VISIBILITY
+      - PLATFORM_UNAVAILABLE
+      - UNKNOWN
+    user_visual_confirmation_is_backend_proof: false
+
   observability_parity:
     same_canonical_session: true
     session_identity: "One SESSION_ID for the same intent/task across Text and Voice; retain SURFACE_ID as provenance."
