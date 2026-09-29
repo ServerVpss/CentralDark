@@ -157,3 +157,35 @@ Medição desta rodada encontrou KylinBot, AI Assistant, AI Runtime/Subsystem, M
 
 Limite: pacote/processo presente não prova tool MCP exposta à sessão nem provider autenticado.
 
+## 🧠 Kytensor / Triton pela malha
+
+Estado atual provado:
+
+```text
+NATIVE_HTTP=127.0.0.1:8000
+NATIVE_GRPC=127.0.0.1:8001
+NATIVE_METRICS=127.0.0.1:8002
+
+TAILSCALE_HTTP=100.67.163.91:8000
+TAILSCALE_GRPC=100.67.163.91:8001
+TRANSPORT=systemd-socket-proxyd
+```
+
+Seleção:
+
+```text
+SAME_OS_CONSUMER → localhost:8000/8001
+CASA_OR_TAILNET_CONSUMER → 100.67.163.91:8000/8001
+PUBLIC_INTERNET → NOT_EXPOSED_BY_THIS_ROUTE
+```
+
+Regra:
+
+```text
+PRESERVE_NATIVE_LOOPBACK=true
+TAILSCALE_ONLY_REMOTE_SURFACE=true
+METRICS_STAY_LOCAL=true
+DO_NOT_REBIND_KYTENSOR_TO_0_0_0_0=true
+REMOTE_HEALTH_MUST_BE_MEASURED=true
+```
+
