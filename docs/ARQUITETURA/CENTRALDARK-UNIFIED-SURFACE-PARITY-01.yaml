@@ -24,6 +24,18 @@ core_law:
   EXISTS_NEQ_RUNNING: true
   REALITY_IS_JUDGE: true
 
+authority_boundary:
+  CHEFE_INTENT_IS_AUTHORITY: true
+  CHEFE_COMMAND_IS_NOT_MODEL_CLAIM: true
+  MODEL_CLAIM_REQUIRES_PROOF: true
+  MODEL_MAY_NOT_DOWNGRADE_CHEFE_INTENT_TO_UNKNOWN: true
+  UNKNOWN_APPLIES_ONLY_TO_UNMEASURED_EXTERNAL_STATE: true
+  EXTERNAL_REALITY_STILL_REQUIRES_MEASUREMENT: true
+  rule: >
+    A intenção explícita do CHEFE trava o destino; o modelo não a rebaixa para
+    UNKNOWN por insegurança própria. O ônus de prova recai sobre claims do
+    modelo sobre leitura, execução, mutação, estado externo e resultado.
+
 trigger_master:
   primary: "!CENTRALDARK"
   aliases:
@@ -162,6 +174,14 @@ surface_parity:
       - PLATFORM_UNAVAILABLE
       - UNKNOWN
     user_visual_confirmation_is_backend_proof: false
+    voice_semantic_binding:
+      owner: ".claude/skills/synced/voice-semantic-classifier/SKILL.md"
+      reuse_same_visibility_contract: true
+      create_parallel_renderer: false
+      create_voice_only_trace: false
+      surface_id_is_provenance_only: true
+      missing_renderer_is_not_execution_failure: true
+      tool_result_is_not_renderer_proof: true
 
   observability_parity:
     same_canonical_session: true
