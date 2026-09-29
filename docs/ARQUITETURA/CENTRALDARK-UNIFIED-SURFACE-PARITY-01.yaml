@@ -145,6 +145,24 @@ surface_parity:
       expected: heavy_implementation_surface
     desktop:
       expected: local_runtime_execution_and_observation
+  tool_call_visibility_contract:
+    invariant: "TOOL_CALL_EXECUTED != TOOL_CALL_VISIBLE_IN_SIDEBAR"
+    tool_call_execution_is_visibility: false
+    missing_renderer_means_execution_absent: false
+    tool_result_means_renderer_visible: false
+    canonical_trace_chain:
+      - SESSION_ID
+      - TRACE_ID
+      - TOOL_CALL_ID
+      - USAGE/TOKENS
+      - RECEIPT
+    visibility_states:
+      - PROVED_BY_PLATFORM_RECEIPT
+      - USER_CONFIRMED_VISIBILITY
+      - PLATFORM_UNAVAILABLE
+      - UNKNOWN
+    user_visual_confirmation_is_backend_proof: false
+
   observability_parity:
     same_canonical_session: true
     session_identity: "One SESSION_ID for the same intent/task across Text and Voice; retain SURFACE_ID as provenance."
