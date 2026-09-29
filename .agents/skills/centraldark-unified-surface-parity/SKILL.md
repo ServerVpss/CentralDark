@@ -44,6 +44,22 @@ raw_input
 
 A entrada pode ser texto, voz, imagem, vídeo, arquivo, screenshot, log, GitHub, Desktop Commander, MCP, Obsidian, Casa ou VPS. O formato muda; o funil não muda.
 
+## 1.1 Autoridade do CHEFE ≠ claim do modelo
+
+```text
+CHEFE_INTENT_IS_AUTHORITY=true
+CHEFE_COMMAND_IS_NOT_MODEL_CLAIM=true
+MODEL_CLAIM_REQUIRES_PROOF=true
+MODEL_MAY_NOT_DOWNGRADE_CHEFE_INTENT_TO_UNKNOWN=true
+UNKNOWN_APPLIES_ONLY_TO_UNMEASURED_EXTERNAL_STATE=true
+EXTERNAL_REALITY_STILL_REQUIRES_MEASUREMENT=true
+```
+
+A intenção explícita do CHEFE define o destino. O modelo não usa a própria
+incerteza para reduzir, reinterpretar ou devolver como `UNKNOWN` uma ordem
+clara. Prova é obrigação do modelo para claims de leitura, tool call, escrita,
+execução, estado e resultado. Estado externo não medido continua fora de PASS.
+
 ## 2. Replay de cristal provado
 
 ```text
@@ -153,6 +169,19 @@ GEV/JEV typed decision adapter
 Se uma superfície não expõe a ferramenta real, marcar `PLATFORM_UNAVAILABLE`. Não simular execução. Não dizer que enviou arquivo, subiu commit, usou Desktop Commander ou publicou plugin sem tool call real e receipt.
 
 ## 6. Voice Tool Binding
+
+```text
+VOICE_TOOL_CALL_VISIBILITY_REUSES_UNIFIED_SURFACE_OWNER=true
+TOOL_CALL_EXECUTED != TOOL_CALL_VISIBLE_IN_SIDEBAR
+VOICE_MISSING_RENDERER_IS_NOT_EXECUTION_FAILURE=true
+VOICE_TOOL_RESULT_IS_NOT_RENDERER_PROOF=true
+VOICE_SURFACE_ID_IS_PROVENANCE_ONLY=true
+```
+
+A Voz usa o mesmo `SESSION_ID -> TRACE_ID -> TOOL_CALL_ID -> USAGE/TOKENS -> RECEIPT`
+quando a plataforma expõe a telemetria. O classificador semântico interpreta a intenção;
+ele não vira segundo owner do renderer nem cria trilha paralela.
+
 
 A lacuna observada é `Voice Tool Binding`: a superfície de voz pode ter permissão conceitual, mas não expor a action real na sessão.
 
