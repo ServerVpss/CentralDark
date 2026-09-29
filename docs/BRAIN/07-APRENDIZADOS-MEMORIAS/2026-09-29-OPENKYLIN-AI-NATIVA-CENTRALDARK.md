@@ -54,3 +54,40 @@ UNKNOWN != PASS
 ```
 
 Próximo cursor: inventariar as tools/capabilities MCP realmente expostas pelo openKylin nesta instalação e ligar somente o delta útil ao INTERLIGADOS.
+
+## Exposição viva para Hermes/Casa
+
+```text
+kytensor native
+  127.0.0.1:8000 HTTP
+  127.0.0.1:8001 gRPC
+  127.0.0.1:8002 metrics
+
+systemd socket proxy
+  100.67.163.91:8000 → 127.0.0.1:8000
+  100.67.163.91:8001 → 127.0.0.1:8001
+```
+
+Readback provado:
+
+```text
+LOCAL_HTTP_READY=200
+TAILSCALE_HTTP_READY=200
+TAILSCALE_GRPC_TCP=PASS
+REPOSITORY_ENTRIES=30
+REPOSITORY_READY=22
+SOCKETS_ENABLED=true
+SOCKETS_ACTIVE=true
+```
+
+A porta de métricas 8002 permanece somente local. A exposição é pela malha Tailscale, não por Internet pública.
+
+O repository index atual contém principalmente ASR/TTS/embeddings/visão e serviços auxiliares. Não há prova de LLM/chat DeepSeek ou Qwen carregado no Triton desta rodada.
+
+```text
+TAILNET_EXPOSURE != PUBLIC_EXPOSURE
+CLOUD_MODEL_PACKAGE != TRITON_MODEL_READY
+LOCALHOST_SURVIVES=true
+FALLBACK_SURVIVES=true
+```
+
