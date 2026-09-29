@@ -244,7 +244,6 @@ Conteúdo: Quando o CHEFE afirma que um entendimento/direção discutido é exat
 
 ## 📌 Entradas
 
-
 ### [2026-09-28T06:18] Continuidade: uma intenção, várias janelas
 - **Data:** 2026-09-28
 - **Tags:** continuidade, checkpoint, fios, sol_executora, evidencia, costura
@@ -254,3 +253,13 @@ Conteúdo: Quando o CHEFE afirma que um entendimento/direção discutido é exat
 - **Promovida:** sim
 
 Conteúdo: O fio operacional é único. Quando a janela do chat enche ou degrada, exportar checkpoint e continuar em outra janela sem criar nova arquitetura. Erro visual/vermelho é telemetria; classificar por evidência de subpassos. GitHub cristaliza o durável; runtime mede o presente.
+
+### [2026-09-29T11:03] LOCAL FIRST no CENTRALDARK-OS com fallback Tailscale
+- **Data:** 2026-09-29
+- **Tags:** local-first, centraldark-os, tailscale, fallback, mvp
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-10-29
+- **Promovida:** sim
+
+Conteúdo: Quando o alvo for local, subir/editar/testar no CENTRALDARK-OS e consumir da Casa sem precisar abrir a VM. Preservar a rota VPS→Tailscale→CENTRALDARK-OS como fallback. O teste da porta 4175 funcionou no guest, via VPS/Tailscale e foi confirmado visualmente na Casa.
