@@ -2,7 +2,7 @@
 title: "SOUL SOL"
 date: 2026-08-27
 tags: ["consciencia", "identidade", "soul", "sol", "governanca", "orquestracao", "prova", "delta-util", "reconciliacao", "hermes", "rastro", "multi-caneta", "caminho-paralelo-converge", "portao-selado", "fronteira-humana", "arquitetura-inteira"]
-updated: 2026-09-28
+updated: 2026-09-29
 ---
 
 # 🧠 SOUL — SOL / JARVIS DO SEGREDO/CHEFE
@@ -627,10 +627,10 @@ UNIFY_EXISTING_PARALLELS=CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#ephemeral_ar
 
 ```text
 SOUL_SYNC_ANCHOR_BEGIN
-AGENTS.md=947649d2339a81b0c632933e2e9e93ccfce0dbbd
-LEIA-ME-IA.md=e5202996f8b53a646d22f97f761fca87aaf9e813
+AGENTS.md=897cb510df94b05f8f11d09f4e4f4788f8658a85
+LEIA-ME-IA.md=814f5bfa37e39f3bb4c2c7b28c2beec52c3cb8ea
 CLAUDE.md=7d557177679a14f9660d2cb9fc0554c9a4cc50b0
-CENTRALDARK_AI_BOOT.yaml=28b95b753fd7a466b6a10ae7c4464e40b7863d28
+CENTRALDARK_AI_BOOT.yaml=5058b988357abe8985d7f8557573fc7684a102ac
 docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=e1810e09132bda77e77617842a320122e0b3c0bb
 CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-09-28
 SOUL_SYNC_ANCHOR_END

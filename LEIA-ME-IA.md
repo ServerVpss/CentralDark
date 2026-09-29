@@ -258,6 +258,8 @@ Documentos com `status: CANÔNICO` precisam permanecer alcançáveis a partir de
 - `docs/CONSCIENCIA/ADMINISTRAVEIS.md` — capacidades administráveis.
 - docs/CONSCIENCIA/CONTRATO-HIBRIDO-GRAFO-LOGS-LOCAL.md — contrato híbrido de Grafo Vivo, logs, Casa/VPS e capacidades locais.
 - `docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md` — registro de linguagem regional.
+- `docs/CONSCIENCIA/APRENDIZADOS/2026-09-27-ESPIRITO-INTELIGENCIA-CENTRALDARK.md` — continuidade operacional da Casa e retorno por rastro provado.
+- `docs/CONSCIENCIA/APRENDIZADOS/2026-09-27-SEGREDO-COFRE-NAO-GIT-NAO-LOG.md` — cofre preserva valores; Git/log/receipts guardam somente rastro sem segredo.
 - `docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md` — proveniência e contexto temporal.
 - `.agents/skills/centraldark-operational-method/references/HUMAN-ACTION-DIRECT-LINK.md` — fronteira de ação humana direta.
 

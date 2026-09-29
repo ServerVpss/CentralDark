@@ -137,7 +137,7 @@ class ParityValidatorCounterproof(unittest.TestCase):
 
     def test_voice_does_not_become_renderer_owner(self) -> None:
         self.mutate(
-            INVOCATION_GRAMMAR,
+            GRAMMAR,
             "voice_semantic_classifier_is_renderer_owner: false",
             "voice_semantic_classifier_is_renderer_owner: true",
         )

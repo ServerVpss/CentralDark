@@ -48,7 +48,7 @@ SOUL_AFFECTING_OWNERS=('AGENTS.md','LEIA-ME-IA.md','CLAUDE.md','CENTRALDARK_AI_B
 
 def _git_blob_sha1(path):
     import hashlib
-    data=(ROOT/path).read_bytes()
+    data=(ROOT/path).read_bytes().replace(b'\r\n',b'\n')
     return hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
 
 def check_soul_sync(classification='SOUL_SYNC_CURRENT_FOR_FIXED_POINT'):

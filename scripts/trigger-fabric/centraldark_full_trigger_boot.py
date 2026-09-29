@@ -22,6 +22,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import subprocess
 import tempfile
 import unicodedata
@@ -399,13 +400,72 @@ def _step_receipt(command_template: str, proc: subprocess.CompletedProcess[str])
     }
 
 
+def _resolve_replay_shell(shell: str | None) -> str | None:
+    if shell:
+        candidate = Path(shell)
+        if candidate.is_absolute():
+            return str(candidate) if candidate.exists() else None
+        return shutil.which(shell)
+
+    if os.name == "nt":
+        for raw in (
+            r"C:\Program Files\Git\bin\bash.exe",
+            r"C:\Program Files\Git\usr\bin\bash.exe",
+        ):
+            candidate = Path(raw)
+            if candidate.exists():
+                return str(candidate)
+
+        found = shutil.which("bash")
+        if found and "windowsapps" not in found.lower() and "system32" not in found.lower():
+            return found
+        return None
+
+    found = shutil.which("bash")
+    if found:
+        return found
+    fallback = Path("/bin/bash")
+    return str(fallback) if fallback.exists() else None
+
+
+def _run_replay_command(
+    command: str,
+    *,
+    resolved_shell: str,
+    repo: Path,
+    env: dict[str, str],
+    timeout_seconds: int,
+) -> subprocess.CompletedProcess[str]:
+    if os.name == "nt" and resolved_shell.lower().endswith("bash.exe"):
+        return subprocess.run(
+            [resolved_shell, "-lc", command],
+            cwd=repo,
+            env=env,
+            capture_output=True,
+            text=True,
+            timeout=timeout_seconds,
+            check=False,
+        )
+    return subprocess.run(
+        command,
+        shell=True,
+        executable=resolved_shell,
+        cwd=repo,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=timeout_seconds,
+        check=False,
+    )
+
+
 def execute_proven_recipe(
     *,
     entry: dict,
     current_fingerprint: str | None,
     bindings: dict[str, str],
     repo: Path,
-    shell: str = "/bin/bash",
+    shell: str | None = None,
     timeout_seconds: int = 60,
     allow_mutation: bool = False,
 ) -> dict:
@@ -442,14 +502,40 @@ def execute_proven_recipe(
             "reinterpret_from_zero": False,
         }
 
+    resolved_shell = _resolve_replay_shell(shell)
+    if not resolved_shell:
+        return {
+            "verdict": "BLOCKED",
+            "action": "REPLAY_SHELL_UNAVAILABLE",
+            "executed": False,
+            "requested_shell": shell,
+            "platform": os.name,
+            "binding_names": sorted(supplied),
+            "reinterpret_from_zero": False,
+        }
+
     env = os.environ.copy()
-    env.update(bindings)
+    effective_bindings = dict(bindings)
+    if os.name == "nt" and resolved_shell.lower().endswith("bash.exe"):
+        for key, value in effective_bindings.items():
+            match = re.fullmatch(r"([A-Za-z]):[\\/](.*)", value)
+            if match:
+                drive = match.group(1).lower()
+                rest = match.group(2).replace("\\", "/")
+                effective_bindings[key] = f"/{drive}/{rest}"
+    env.update(effective_bindings)
     exec_receipts = []
     proof_receipts = []
     execution_complete = True
     for command in commands:
         try:
-            proc = subprocess.run(command, shell=True, executable=shell, cwd=repo, env=env, capture_output=True, text=True, timeout=timeout_seconds, check=False)
+            proc = _run_replay_command(
+                command,
+                resolved_shell=resolved_shell,
+                repo=repo,
+                env=env,
+                timeout_seconds=timeout_seconds,
+            )
             exec_receipts.append(_step_receipt(command, proc))
             if proc.returncode != 0:
                 execution_complete = False
@@ -461,7 +547,13 @@ def execute_proven_recipe(
 
     for command in proofs:
         try:
-            proc = subprocess.run(command, shell=True, executable=shell, cwd=repo, env=env, capture_output=True, text=True, timeout=timeout_seconds, check=False)
+            proc = _run_replay_command(
+                command,
+                resolved_shell=resolved_shell,
+                repo=repo,
+                env=env,
+                timeout_seconds=timeout_seconds,
+            )
             proof_receipts.append(_step_receipt(command, proc))
         except subprocess.TimeoutExpired:
             proof_receipts.append({"command_template_sha256": hashlib.sha256(command.encode("utf-8")).hexdigest(), "exit_code": None, "timeout": True})
