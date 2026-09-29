@@ -441,3 +441,34 @@ VOZ SE PEDIR \"LEIA O ID\":
 ```
 
 Esta política vale para Claude, ChatGPT/SOL, Hermes, Grok, Gemini, Codex, modelos locais e superfícies futuras que consumam este owner.
+
+## 17. Tool Call visibility no modo Voice
+
+A Voz reutiliza este mesmo classificador sem criar parser, runtime ou contrato paralelo.
+
+```text
+VOICE_REUSES_EXISTING_CLASSIFIER=true
+NO_SECOND_PARSER=true
+NO_PARALLEL_VOICE_RUNTIME=true
+
+TOOL_CALL_EXECUTED != TOOL_CALL_VISIBLE_IN_SIDEBAR
+
+VOICE_TOOL_CALL_VISIBILITY_REUSES_UNIFIED_SURFACE_OWNER=true
+VOICE_TOOL_CALL_RENDERER_IS_SURFACE_CAPABILITY=true
+VOICE_TOOL_RESULT_IS_NOT_RENDERER_PROOF=true
+VOICE_MISSING_RENDERER_IS_NOT_EXECUTION_FAILURE=true
+
+VOICE_TRACE_CHAIN =
+SESSION_ID -> TRACE_ID -> TOOL_CALL_ID -> USAGE/TOKENS -> RECEIPT
+
+VOICE_VISIBILITY_STATES =
+PROVED_BY_PLATFORM_RECEIPT |
+USER_CONFIRMED_VISIBILITY |
+PLATFORM_UNAVAILABLE |
+UNKNOWN
+```
+
+Quando o ChatGPT Voice expuser a Tool Call visual/JSON, a Voz deve mostrar a mesma trilha
+canônica da intenção, preservando `SURFACE_ID=VOICE` apenas como proveniência. Não cria
+`VOICE_SESSION_ID`, `VOICE_TRACE` ou segundo renderer canônico. Se a plataforma não expuser
+o renderer, a execução da ferramenta continua sendo julgada pelo receipt real, sem simulação.
