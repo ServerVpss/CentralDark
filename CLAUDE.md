@@ -318,6 +318,46 @@ LOCK
 → UNLOCK
 ```
 
+## 🎙️ Rota SSH Tailscale → Kernel Runtime CENTRALDARK-OS (CRISTALIZADA 2026-09-29)
+
+**ROTA OPERACIONAL PERMANENTE — Acesso direto ao sistema operacional**
+
+```bash
+# ROTA COMPROVADA E PERSISTENTE
+ssh root@100.67.163.91
+
+# VALIDAÇÃO DE SAÚDE
+whoami           # root ✅
+uname -a         # Linux CENTRAKDARK-OS 7.0.0-2-generic KYLINOS x86_64 ✅
+pwd              # /root ✅
+df -h            # Filesystems respondendo ✅
+ps aux           # Processos vivos ✅
+```
+
+**Configuração:**
+```text
+TAILSCALE_ROUTE_OPERACIONAL=100.67.163.91
+KERNEL_RUNTIME_ACCESS=SSH root@100.67.163.91
+LATENCIA_LOCAL_FIRST=~50ms (vs 506ms VPS_REMOTE)
+STATUS=OPERACIONAL_E_CRISTALIZADO
+PROPRIETARIO=!ROTA_VIVA (gatilho semântico de !CENTRALDARK)
+```
+
+**Quando usar:**
+- Acesso a filesystems, processos, kernel vivo
+- Remedição de runtime sem passar por VPS intermediário
+- Validação de latência e performance LOCAL_FIRST
+- Acesso direto a PM2, logs, sistema operacional
+
+**Referência:**
+- Aprendizado: `docs/CONSCIENCIA/APRENDIZADOS.md#84`
+- Lembrança: `docs/CONSCIENCIA/LEMBRANCAS/2026-09-29-ROTA-SSH-TAILSCALE-KERNEL-RUNTIME.md`
+- Gatilho: `!ROTA VIVA` em `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml`
+- PR-filho: `#1711` (linkado a PR-mãe `#1562`)
+
+**Lei da Casa:**
+✅ Rota autorizada (Tailscale) | ✅ Acesso comprovado | ✅ Sem bifurcação | ✅ Cristalizado
+
 ## HUB Credential Control Plane
 
 Quando a intenção envolver conector, provider, OAuth, API key, modelo, Abacus, Tailscale, Supabase, Gmail, GitHub, Google Drive, Casa/VPS ou credencial temporária, Claude deve carregar o cristal:
