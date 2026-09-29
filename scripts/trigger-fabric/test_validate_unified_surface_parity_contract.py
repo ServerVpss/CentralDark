@@ -127,6 +127,22 @@ class ParityValidatorCounterproof(unittest.TestCase):
         self.mutate(SKILL, None, "Este motor substitui SOL no fluxo")
         self.assert_fail("FORBIDDEN_MARKER")
 
+    def test_voice_canonical_preflight_is_required(self) -> None:
+        self.mutate(
+            VOICE_CLASSIFIER,
+            "VOICE_CANONICAL_CONSUMPTION_PREFLIGHT=true",
+            "VOICE_CANONICAL_CONSUMPTION_PREFLIGHT=false",
+        )
+        self.assert_fail("VOICE_CANONICAL_CONSUMPTION_PREFLIGHT=true")
+
+    def test_voice_invalid_recipient_must_rediscover_route(self) -> None:
+        self.mutate(
+            VOICE_CLASSIFIER,
+            "VOICE_INVALID_RECIPIENT_REDISCOVER_ROUTE=true",
+            "VOICE_INVALID_RECIPIENT_REDISCOVER_ROUTE=false",
+        )
+        self.assert_fail("VOICE_INVALID_RECIPIENT_REDISCOVER_ROUTE=true")
+
     def test_voice_tool_call_visibility_binding_is_required(self) -> None:
         self.mutate(
             VOICE_CLASSIFIER,
