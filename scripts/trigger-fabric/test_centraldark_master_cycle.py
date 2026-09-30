@@ -275,6 +275,15 @@ class ContinuousDeltaContractTest(unittest.TestCase):
         self.assertEqual("UNKNOWN", receipt["status"])
         self.assertIn("ACORDAR", receipt["master_funnel"]["ambiguous_trigger_ids"])
 
+    def test_master_chain_opens_and_closes_tlc23_around_reality_fixed_point(self):
+        receipt = MODULE.resolve("!CENTRALDARK", chefe_source=True)
+        chain = receipt["expanded_chain"]
+        self.assertEqual("TLC23_OPEN", chain[0])
+        self.assertLess(chain.index("REMEDICAO"), chain.index("REALITY_JUDGE"))
+        self.assertLess(chain.index("REALITY_JUDGE"), chain.index("FIXED_POINT"))
+        self.assertLess(chain.index("FIXED_POINT"), chain.index("TLC23_CLOSE"))
+        self.assertEqual(["REGISTRA", "HANDOFF", "BOOT"], chain[-3:])
+
 
     def test_embedded_self_test_passes(self):
         result = MODULE.self_test()

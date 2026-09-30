@@ -842,3 +842,14 @@ test("fronteira limpa permanece verde e integra o gate canônico", () => {
   assert.equal(report.ok, true);
   assert.deepEqual(validateExternalSourceBoundary(root), []);
 });
+
+
+test("bot injeta contrato operacional canonico de merge/deploy/fixed-point", () => {
+  const { montarContexto, _internals } = require("../../apps/bot-telegram/contexto-centraldark.cjs");
+  const contrato = _internals.contratoOperacionalCanonico();
+  assert.match(contrato, /AUTO_SQUASH_IF_CLEAN=PROVEN/);
+  assert.match(contrato, /NO_HUMAN_REASK_FOR_MERGE=PROVEN/);
+  assert.match(contrato, /MERGED != DEPLOYED/);
+  assert.match(contrato, /REALITY_JUDGE .* FIXED_POINT/);
+  assert.match(montarContexto(), /CONTRATO OPERACIONAL CANONICO/);
+});

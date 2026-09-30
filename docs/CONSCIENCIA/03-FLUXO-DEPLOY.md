@@ -37,6 +37,35 @@ DEPLOY_SCOPE_MUST_MATCH_CAUSAL_SCOPE=true
 FULL_DEPLOY_BY_DEFAULT=false
 ```
 
+### Ordem explícita do CHEFE: main + micro-deploy obrigatório
+
+Quando o SEGREDO/CHEFE der ordem explícita para uma mudança dentro do escopo
+autorizado, o trabalho não termina no commit nem no merge:
+
+```text
+ORDEM_EXPLICITA_DO_CHEFE
+→ MENOR_COMMIT_NA_MAIN
+→ BUILD/TESTE_NO_SHA_EXATO
+→ MICRO_DEPLOY_DO_MESMO_SHA
+→ PROVA_NO_RUNTIME
+→ RECEIPT
+→ FIXED_POINT
+```
+
+```text
+EXPLICIT_ORDER_WITHIN_SCOPE=true
+COMMIT_TO_MAIN_REQUIRED=true
+MICRO_DEPLOY_SAME_COMMIT_REQUIRED=true
+MERGED_WITHOUT_MICRO_DEPLOY=MISSION_OPEN
+COMMIT_WITHOUT_RUNTIME_PROOF=NOT_FINISHED
+DEPLOY_FAILURE=REMEDIATE_AND_CONTINUE
+```
+
+O commit fica preservado na `main` mesmo se a primeira tentativa de promoção
+falhar; a falha abre remediação do deploy, não invalida nem abandona o delta
+correto. Só um bloqueio material após todas as rotas autorizadas pode encerrar
+a tentativa com receipt exato; nunca converter `FAILED` em conclusão.
+
 Fluxo oficial:
 
 ```text

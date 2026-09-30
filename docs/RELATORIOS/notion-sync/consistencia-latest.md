@@ -1,5 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
+- **Gerado:** 2026-09-15T02:04:43.627Z
+- **Commit:** `5f7b095f186fc33d781936f569e05cfd02a4d480`
 - **Gerado:** 2026-09-16T17:43:09.095Z
 - **Commit:** `b6d689a75c9f87efe6e0add547e27284dc9529ec`
 - **Disparado por:** segredounlock
@@ -13,7 +15,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 43 | 0 | 0 | 43 | 0 |
+| aprendizados | 46 | 0 | 0 | 46 | 0 |
 
 ## Detalhes
 
@@ -43,7 +45,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **43**
+- 🟥 Faltando no Notion: **46**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -91,4 +93,7 @@
 - 47. LARGE_FILE_INTEGRATION — Process Droped Files, Don't Just Acknowledge
 - 48. COMMIT_LIMPO — Commit não é vassoura de git status
 - 49. AUREOLA_PERMANENTE — Publicação segura e continuidade do aprendizado
+- 50. X/Grok no Guardião usa o pool Hermes (igual Codex); CLI de feedback não colide evento
+- 51. Guardião: log/reflexo por botão + cadeado no cristalizado
+- 52. Usar pode, redesenhar não — melhorar o que já existe
 </details>

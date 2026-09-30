@@ -1,10 +1,28 @@
-KKKKKK **SIM, SR. Agora tu fechou outra peça da partitura.** 🎧🔥
+---
+title: "Dissonância Operacional Controlada"
+status: "CANDIDATE"
+owner: "docs/BRAIN/01-CONCEITOS/03-DISSONANCIA/"
+updated: 2026-09-15
+tags:
+  - dissonancia
+  - musica
+  - compasso
+  - contraprova
+  - meta-lupa
+  - self-correction
+  - centraldark
+related:
+  - "[[BANDA_COMPASSO_GLOBAL]]"
+  - "[[BANDA_INTENCAO_UNICA_COMPASSO]]"
+  - "[[META-LUPA]]"
+  - "[[BRAIN]]"
+---
 
-O que tu tá fazendo aí tem nome técnico bom: **injeção controlada de conflito para self-correction**. Em engenharia isso encosta em `fault injection`, `adversarial testing` e `mutation testing`; no teu sistema eu chamaria de:
+# Dissonância Operacional Controlada
+
+O conceito técnico é **injeção controlada de conflito para self-correction**. Em engenharia isso encosta em `fault injection`, `adversarial testing` e `mutation testing`; na CentralDark, a assinatura é:
 
 > **DISSONÂNCIA OPERACIONAL CONTROLADA** 🎼
-
-A lógica é simples:
 
 ```text
 ESTADO / TESE ATUAL
@@ -24,16 +42,14 @@ ESTADO / TESE ATUAL
 ❤️‍🔥 HARMONIA / FIXED POINT
 ```
 
-Isso encaixa PERFEITAMENTE na tua metáfora musical:
+Isso entra no mesmo compasso da [[BANDA_COMPASSO_GLOBAL]]:
 
-* `CONSONÂNCIA` = tudo está compatível.
-* `DISSONÂNCIA` = alguma coisa entrou em conflito.
-* `TENSÃO` = ainda não sabemos qual lado está certo.
-* `RESOLUÇÃO` = evidência escolheu.
-* `HARMONIA` = estado reconciliado.
-* `NOVO CRISTAL` = a Casa aprendeu a reconhecer aquele tipo de conflito no futuro.
-
-E existe um salto importante: **não esperar conflito aparecer por acidente**.
+- `CONSONÂNCIA` = tudo está compatível.
+- `DISSONÂNCIA` = alguma coisa entrou em conflito.
+- `TENSÃO` = ainda não sabemos qual lado está certo.
+- `RESOLUÇÃO` = evidência escolheu.
+- `HARMONIA` = estado reconciliado.
+- `NOVO CRISTAL` = a Casa aprendeu a reconhecer aquele tipo de conflito no futuro.
 
 A Casa pode deliberadamente criar contraprovas seguras:
 
@@ -48,11 +64,9 @@ A Casa pode deliberadamente criar contraprovas seguras:
 
 Se o sistema atravessa essas perturbações e volta ao mesmo resultado comprovado, a confiança aumenta.
 
-Mas a lei precisa ser esta:
+A lei permanece:
 
 > **CONFLITO CONTROLADO NÃO PODE CONTAMINAR O CANÔNICO.**
-
-Então:
 
 ```text
 CONFLITO_SINTÉTICO=true
@@ -68,34 +82,41 @@ CONFLITO
 → PRESERVA SÓ O DELTA PROVADO
 ```
 
-Isso é muito mais forte que “self-correction depois que erra”.
-
-É:
-
-> **a própria Casa provoca pequenas dissonâncias seguras para descobrir onde ainda não sabe se corrigir.**
-
-😹🔥 E dentro da Partitura Operacional eu colocaria uma assinatura própria:
+Na partitura operacional:
 
 ```text
 ⚡♭ DISSONÂNCIA — conflito sintético introduzido
 🔍♩ META-LUPA — tentando quebrar a crença
-🧠♫ RECALIBRAÇÃO — modelo mudou entendimento
+🧠♫ RECALIBRAÇÃO — entendimento revisado
 🔧♬ SELF-CORRECTION — causa corrigida
 🛡️♪ CONTRAPROVA — correção sobreviveu
 💎♬ CRISTAL — aprendizado absorvido
 ❤️‍🔥 HARMONIA — fixed point restaurado
 ```
 
-Aí sim tua música não é decoração. **A própria dissonância musical virou um operador cognitivo.** 🎼💎
+A dissonância musical é um operador cognitivo, não decoração.
 
-Feito. Nome fechado: **DISSONÂNCIA OPERACIONAL CONTROLADA / CONFLICT-DRIVEN SELF-CORRECTION**.
+## Gate compartilhado
 
-Evidência usada. Nos prints desta mensagem aparecem várias frentes reconciliando estado enquanto uma delas explicitamente entra em “gerando conflito”.
+A promoção desta nota para contrato ativo depende do mesmo Horn-Caracol-Compasso Gate:
 
-Pendência. Ainda precisa virar contrato/prova na Casa; o print mostra a dinâmica, não prova implementação canônica.
+```text
+COMPASSO_GLOBAL
++ MAESTRO=SOL_COORDINATION
++ DISSONANCIA_CONTROLADA
++ CARACOL_ATÉ_NÚCLEO
++ NOTA_CATALOGADA_E_LINKADA
++ CONTRAPROVA
+→ PROMOÇÃO
+```
 
-Próximo passo. Incorporar `CONTROLLED_DISSONANCE` à Partitura Operacional como contraprova isolada, reversível e ZERO DEPLOY.
+`MAESTRO` aqui não cria novo agente ou autoridade. É o papel de coordenação da SOL; a autoridade humana continua no SEGREDO/CHEFE.
 
-BOOT. `CONTROLLED_DISSONANCE | SELF_CORRECTION | META_LUPA | SYNTHETIC_CONFLICT!=CANONICAL_STATE | ZERO_DEPLOY`
+## Conexões Rápidas
 
-Fio da missão. **harmonia → provocar dissonância segura → detectar fragilidade → corrigir → contraprovаr → cristalizar → harmonia mais forte.** 🎧⚡🔍🧠🔧💎❤️‍🔥
+- [[BANDA_COMPASSO_GLOBAL]] — partitura estruturada e compasso global.
+- [[BANDA_INTENCAO_UNICA_COMPASSO]] — uma intenção, uma música, muitas superfícies.
+- [[META-LUPA]] — falsificação e contraprova.
+- [[SEMANTIC-LINKER]] — ligações semânticas explicáveis.
+- [[GRAPH-INVESTIGATOR]] — frontmatter, tags, links e órfãos.
+- [[BRAIN]] — entrada humana do grafo.

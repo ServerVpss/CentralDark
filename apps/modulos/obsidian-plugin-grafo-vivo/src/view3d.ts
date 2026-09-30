@@ -3,6 +3,7 @@
 // Consome /api/graph do graph-panel (PM2 porta 3030)
 
 import { ItemView, WorkspaceLeaf, Notice, requestUrl, Platform } from "obsidian";
+import type GrafoVivoPlugin from "./main";
 import ForceGraph3D from "3d-force-graph";
 import SpriteText from "three-spritetext";
 import * as THREE from "three";
@@ -89,7 +90,7 @@ export class Grafo3DView extends ItemView {
   private sectorSprites: Record<string, SpriteText> = {};
   private scene: THREE.Scene | null = null;
 
-  constructor(leaf: WorkspaceLeaf) {
+  constructor(leaf: WorkspaceLeaf, private plugin: GrafoVivoPlugin) {
     super(leaf);
   }
 
@@ -164,10 +165,11 @@ export class Grafo3DView extends ItemView {
 
   private async carregar() {
     try {
-      const resp = await requestUrl({
-        url: "https://grafo.centralldark.com/api/graph",
-        method: "GET",
-      });
+      const headers = this.plugin.settings.knowledgeHubToken
+        ? { Authorization: `Bearer ${this.plugin.settings.knowledgeHubToken}`, "x-api-key": this.plugin.settings.knowledgeHubToken }
+        : undefined;
+      const url = this.plugin.settings.urlGrafo.replace(/\?.*$/, "") + "?mode=full";
+      const resp = await requestUrl({ url, method: "GET", headers });
       if (resp.status < 200 || resp.status >= 300) throw new Error(`HTTP ${resp.status}`);
       const raw = resp.json;
       this.processarDados(raw);

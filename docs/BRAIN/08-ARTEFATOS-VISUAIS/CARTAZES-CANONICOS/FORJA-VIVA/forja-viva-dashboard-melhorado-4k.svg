@@ -1,0 +1,380 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3840" height="2160" viewBox="0 0 3840 2160" role="img" aria-label="CentralDark Forja Viva dashboard 4K coerente"><metadata id="centraldark-proof">{"artifact_id": "CENTRALDARK_FORJA_VIVA_DASHBOARD_4K", "create_parallel_graph": false, "dimensions": "3840x2160", "one_system_only": true, "parent_artifact_head": "0b16229ff758131ba1578fcfe89876734be5f6c0", "pr": 1543, "reality_is_judge": true, "skins": ["emerald", "operational", "forge"], "skins_defined": true, "skins_global_applied": false, "unknown_is_pass": false}</metadata>
+<defs>
+<radialGradient id="bg" cx="50%" cy="50%" r="78%"><stop offset="0%" stop-color="#1a1024"/><stop offset="55%" stop-color="#070b12"/><stop offset="100%" stop-color="#020305"/></radialGradient>
+<linearGradient id="forge" x1="0" x2="1"><stop offset="0" stop-color="#ff3b00"/><stop offset=".45" stop-color="#ffb000"/><stop offset="1" stop-color="#ff5a00"/></linearGradient>
+<linearGradient id="violet" x1="0" x2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset=".55" stop-color="#22d3ee"/><stop offset="1" stop-color="#f97316"/></linearGradient>
+<filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="soft" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="16" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<style>.small{font-family:JetBrains Mono,Consolas,monospace;font-size:24px;fill:#cbd5e1}.tiny{font-family:JetBrains Mono,Consolas,monospace;font-size:19px;fill:#94a3b8}.label{font-family:Inter,Segoe UI,Arial,sans-serif;font-weight:800;letter-spacing:1px}.panelTitle{font-family:Inter,Segoe UI,Arial,sans-serif;font-size:34px;font-weight:900;fill:#fbbf24}.ok{fill:#22c55e}.warn{fill:#f97316}.bad{fill:#ef4444}</style>
+</defs>
+<rect width="3840" height="2160" fill="url(#bg)"/>
+<circle cx="395.0" cy="1599.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.2099584954933792"/>
+<circle cx="3252.0" cy="2019.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1765888724059158"/>
+<circle cx="1217.0" cy="921.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.26611092699481115"/>
+<circle cx="1191.0" cy="1017.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.2496690543902655"/>
+<circle cx="700.0" cy="443.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.26233616443837693"/>
+<circle cx="14.0" cy="1041.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.08578172905636847"/>
+<circle cx="3498.0" cy="2064.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.27346689559140486"/>
+<circle cx="1221.0" cy="825.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.24672290350214426"/>
+<circle cx="3095.0" cy="1484.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.17408926128439156"/>
+<circle cx="565.0" cy="113.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1475051471856682"/>
+<circle cx="1784.0" cy="1237.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.164613884830654"/>
+<circle cx="2717.0" cy="1661.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.19030946281837707"/>
+<circle cx="2717.0" cy="313.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.10397854902570722"/>
+<circle cx="3581.0" cy="2120.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.2613962718899999"/>
+<circle cx="413.0" cy="1262.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1635121172559943"/>
+<circle cx="532.0" cy="720.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.17925232292412574"/>
+<circle cx="2090.0" cy="651.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.2617051967243038"/>
+<circle cx="1761.0" cy="958.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.09327313819915009"/>
+<circle cx="3356.0" cy="1508.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.13694017116029283"/>
+<circle cx="3560.0" cy="1821.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.23624980977316223"/>
+<circle cx="1277.0" cy="921.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.16067142089221015"/>
+<circle cx="219.0" cy="143.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.22247020930519507"/>
+<circle cx="3252.0" cy="1495.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.11311442117437562"/>
+<circle cx="287.0" cy="1613.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.0998652208864899"/>
+<circle cx="407.0" cy="1378.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.22254342325633247"/>
+<circle cx="2223.0" cy="830.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.11681085002473521"/>
+<circle cx="1856.0" cy="1610.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.18461569940121253"/>
+<circle cx="978.0" cy="1302.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.18043636254046405"/>
+<circle cx="232.0" cy="1517.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.16042566941950342"/>
+<circle cx="983.0" cy="1547.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1335293338108165"/>
+<circle cx="2719.0" cy="1971.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.12422455448236039"/>
+<circle cx="234.0" cy="685.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.11405449338403403"/>
+<circle cx="2575.0" cy="1986.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.17318423982261055"/>
+<circle cx="1591.0" cy="1864.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1818063506646134"/>
+<circle cx="3233.0" cy="1708.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.17007816146295995"/>
+<circle cx="819.0" cy="1189.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.16789365054413824"/>
+<circle cx="1165.0" cy="1455.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.10433083859853927"/>
+<circle cx="1724.0" cy="1301.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.23553048055582199"/>
+<circle cx="3300.0" cy="149.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.16901516925461282"/>
+<circle cx="1357.0" cy="1021.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.09350079815809698"/>
+<circle cx="855.0" cy="1897.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.21160669834775125"/>
+<circle cx="2984.0" cy="1161.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1459900394886602"/>
+<circle cx="1332.0" cy="1222.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.17516226656365164"/>
+<circle cx="1790.0" cy="1889.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.2714724259708445"/>
+<circle cx="537.0" cy="1266.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.11293601324195157"/>
+<circle cx="737.0" cy="1794.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.14356344819803318"/>
+<circle cx="3744.0" cy="122.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.264986835200315"/>
+<circle cx="2843.0" cy="973.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.24201850338449638"/>
+<circle cx="3345.0" cy="891.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.13802620449070277"/>
+<circle cx="1132.0" cy="1300.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.24443873338584082"/>
+<circle cx="1559.0" cy="987.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.2705892512850335"/>
+<circle cx="1579.0" cy="12.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.14945627961263913"/>
+<circle cx="2079.0" cy="2160.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.13857609793852618"/>
+<circle cx="1641.0" cy="2047.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.10806202283593232"/>
+<circle cx="3127.0" cy="2061.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.15005958311739728"/>
+<circle cx="2897.0" cy="1217.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.16185912412158612"/>
+<circle cx="2087.0" cy="696.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.11242315664894853"/>
+<circle cx="822.0" cy="1693.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.22375499518541542"/>
+<circle cx="57.0" cy="1223.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.23632471806684247"/>
+<circle cx="420.0" cy="375.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.26040060589799446"/>
+<circle cx="1434.0" cy="614.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.22222882084497514"/>
+<circle cx="315.0" cy="1324.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.10316206028774041"/>
+<circle cx="558.0" cy="306.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.23229085907534974"/>
+<circle cx="1818.0" cy="717.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.10928350322174969"/>
+<circle cx="2584.0" cy="860.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.09749182310133975"/>
+<circle cx="2767.0" cy="1226.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.17780312625247674"/>
+<circle cx="3707.0" cy="377.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.09502031934687163"/>
+<circle cx="2589.0" cy="391.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.2379704801983734"/>
+<circle cx="2363.0" cy="886.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.17275303939336495"/>
+<circle cx="2360.0" cy="1256.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.23212806485441018"/>
+<circle cx="19.0" cy="1226.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.2671309647949394"/>
+<circle cx="281.0" cy="983.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.09051369833136147"/>
+<circle cx="2898.0" cy="732.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.13998238404126162"/>
+<circle cx="1265.0" cy="419.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.10993023484561996"/>
+<circle cx="2074.0" cy="478.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.14351205761788494"/>
+<circle cx="3331.0" cy="1118.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1609012350112799"/>
+<circle cx="297.0" cy="320.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.16637944749876446"/>
+<circle cx="1026.0" cy="625.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1005251963830679"/>
+<circle cx="1830.0" cy="1113.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.216380279649368"/>
+<circle cx="3095.0" cy="72.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.15355903644143515"/>
+<circle cx="905.0" cy="1252.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1003766891609347"/>
+<circle cx="886.0" cy="945.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1581393841952956"/>
+<circle cx="787.0" cy="2101.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.09220681859974704"/>
+<circle cx="1345.0" cy="13.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.2781538354139912"/>
+<circle cx="942.0" cy="1734.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.21159685081883278"/>
+<circle cx="2221.0" cy="156.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.21760211527415646"/>
+<circle cx="910.0" cy="663.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.21745407600187827"/>
+<circle cx="2768.0" cy="21.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.22810489534594897"/>
+<circle cx="1061.0" cy="1510.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.12417628894904757"/>
+<circle cx="3599.0" cy="525.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.0867373287343994"/>
+<circle cx="1797.0" cy="1780.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.17541124748324158"/>
+<circle cx="2004.0" cy="1518.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.26825091467435563"/>
+<circle cx="2874.0" cy="387.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.21758897011611694"/>
+<circle cx="2555.0" cy="1898.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.10168584503856122"/>
+<circle cx="2066.0" cy="41.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.15384855875157843"/>
+<circle cx="2852.0" cy="1664.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.11577222009316149"/>
+<circle cx="1620.0" cy="876.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.08409276789727702"/>
+<circle cx="2543.0" cy="1938.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.0886460228007547"/>
+<circle cx="3468.0" cy="1395.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1211603654717193"/>
+<circle cx="2474.0" cy="566.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.2793835233600444"/>
+<circle cx="3656.0" cy="1747.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.10632187809909352"/>
+<circle cx="420.0" cy="221.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1432883239120693"/>
+<circle cx="3334.0" cy="2069.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.27625530656944824"/>
+<circle cx="1407.0" cy="931.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.19154966817373775"/>
+<circle cx="2840.0" cy="47.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.20885231139249522"/>
+<circle cx="3818.0" cy="17.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.25008368687220994"/>
+<circle cx="2696.0" cy="1930.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.25269535301513607"/>
+<circle cx="724.0" cy="1236.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.2561163860564207"/>
+<circle cx="718.0" cy="921.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.2746879405069228"/>
+<circle cx="1585.0" cy="1149.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.24449269488604503"/>
+<circle cx="1504.0" cy="1928.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.18186580582031134"/>
+<circle cx="203.0" cy="1381.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1555162461735798"/>
+<circle cx="3273.0" cy="1745.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.25862651879904136"/>
+<circle cx="2308.0" cy="1228.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1316966191401109"/>
+<circle cx="2669.0" cy="2132.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.10985966124081921"/>
+<circle cx="2987.0" cy="44.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1036705068160512"/>
+<circle cx="3521.0" cy="1736.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.13318992171665006"/>
+<circle cx="1474.0" cy="1606.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.18545214350716166"/>
+<circle cx="66.0" cy="1439.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.19502853791658126"/>
+<circle cx="289.0" cy="1730.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.11198077722538136"/>
+<circle cx="3366.0" cy="1749.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.08908618939732353"/>
+<circle cx="1858.0" cy="990.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.22192474018709785"/>
+<circle cx="1287.0" cy="9.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.2399185263446681"/>
+<circle cx="964.0" cy="179.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1316012734256023"/>
+<circle cx="1400.0" cy="328.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.13624992911432598"/>
+<circle cx="1719.0" cy="1150.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1020658026564724"/>
+<circle cx="1851.0" cy="820.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.14119226691697745"/>
+<circle cx="490.0" cy="759.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.15703261878492605"/>
+<circle cx="878.0" cy="697.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.16483628503897912"/>
+<circle cx="2211.0" cy="1830.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.09445865572879172"/>
+<circle cx="1883.0" cy="1443.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.215253090583934"/>
+<circle cx="3260.0" cy="1183.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.271778089670844"/>
+<circle cx="1397.0" cy="213.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.2332485642176912"/>
+<circle cx="112.0" cy="526.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1400680619259925"/>
+<circle cx="2144.0" cy="612.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.11255691304980112"/>
+<circle cx="1848.0" cy="2049.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.2510173432472129"/>
+<circle cx="1133.0" cy="2113.0" r="1.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1489579221812139"/>
+<circle cx="3580.0" cy="1163.0" r="1.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.19937567273895732"/>
+<circle cx="1720.0" cy="317.0" r="2.5" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.1764912208836641"/>
+<circle cx="1158.0" cy="511.0" r="2.0" fill="#f97316" stroke="#f97316" stroke-width="0" opacity="0.16373074102123297"/>
+<rect x="34" y="34" width="3772" height="2092" rx="36" fill="#050505" fill-opacity="0.35" stroke="#f97316" stroke-width="4"/>
+<rect x="54" y="54" width="3732" height="2052" rx="28" fill="#000000" fill-opacity="0.18" stroke="#0ea5e9" stroke-width="2"/>
+<rect x="90" y="110" width="760" height="1420" rx="36" fill="#09080a" fill-opacity="0.74" stroke="#f97316" stroke-width="4"/>
+<text x="145" y="205" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="62" font-weight="900" text-anchor="start" fill="#f8fafc" opacity="1">CENTRALDARK</text>
+<text x="145" y="300" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="112" font-weight="900" text-anchor="start" fill="url(#forge)" opacity="1">FORJA VIVA</text>
+<text x="150" y="360" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="29" font-weight="800" text-anchor="start" fill="#fff7ed" opacity="1">UMA PROVA. UMA VERDADE. UM FIXED POINT.</text>
+<circle cx="470.0" cy="770.0" r="255.0" fill="none" stroke="#f97316" stroke-width="10" opacity="0.9"/>
+<circle cx="470.0" cy="770.0" r="225.0" fill="#06070a" stroke="#fb923c" stroke-width="5" opacity="0.95"/>
+<circle cx="384.0" cy="750.0" r="48.0" fill="#ffb000" stroke="#fff7ed" stroke-width="0" opacity="1"/>
+<circle cx="556.0" cy="750.0" r="48.0" fill="#ffb000" stroke="#fff7ed" stroke-width="0" opacity="1"/>
+<path d="M260,635 L150,440 L325,550" fill="none" stroke="#ff4d00" stroke-width="18" stroke-linecap="round"/>
+<path d="M680,635 L790,440 L615,550" fill="none" stroke="#ff4d00" stroke-width="18" stroke-linecap="round"/>
+<text x="150" y="1120" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="39" font-weight="900" text-anchor="start" fill="#fbbf24" opacity="1">BOT_AICENTRALDARK</text>
+<text x="150" y="1175" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="28" font-weight="800" text-anchor="start" fill="#e2e8f0" opacity="1">CAPETINHA DA FORJA</text>
+<text x="150" y="1240" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="25" font-weight="600" text-anchor="start" fill="#cbd5e1" opacity="1">Código planeja. Automação executa.</text>
+<text x="150" y="1285" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="25" font-weight="600" text-anchor="start" fill="#cbd5e1" opacity="1">Realidade julga. Prova fecha.</text>
+<rect x="900" y="110" width="1560" height="255" rx="26" fill="#050b12" fill-opacity="0.88" stroke="#0ea5e9" stroke-width="3"/>
+<text x="928" y="160" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="900" text-anchor="start" fill="#fbbf24" opacity="1">ARQUITETURA CANÔNICA</text>
+<circle cx="1040.0" cy="245.0" r="43.0" fill="#111827" stroke="#67e8f9" stroke-width="3" opacity="1"/>
+<text x="1040" y="320" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="25" font-weight="700" text-anchor="middle" fill="#e5e7eb" opacity="1">Dependabot</text>
+<line x1="1110" y1="245" x2="1255" y2="245" stroke="#e5e7eb" stroke-width="5" opacity="0.8"/>
+<circle cx="1325.0" cy="245.0" r="43.0" fill="#2563eb" stroke="#67e8f9" stroke-width="3" opacity="1"/>
+<text x="1325" y="320" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="25" font-weight="700" text-anchor="middle" fill="#e5e7eb" opacity="1">GitHub Actions</text>
+<line x1="1395" y1="245" x2="1540" y2="245" stroke="#e5e7eb" stroke-width="5" opacity="0.8"/>
+<circle cx="1610.0" cy="245.0" r="43.0" fill="#f97316" stroke="#67e8f9" stroke-width="3" opacity="1"/>
+<text x="1610" y="320" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="25" font-weight="700" text-anchor="middle" fill="#e5e7eb" opacity="1">Bot</text>
+<line x1="1680" y1="245" x2="1825" y2="245" stroke="#e5e7eb" stroke-width="5" opacity="0.8"/>
+<circle cx="1895.0" cy="245.0" r="43.0" fill="#0f172a" stroke="#67e8f9" stroke-width="3" opacity="1"/>
+<text x="1895" y="320" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="25" font-weight="700" text-anchor="middle" fill="#e5e7eb" opacity="1">CLI</text>
+<line x1="1965" y1="245" x2="2110" y2="245" stroke="#e5e7eb" stroke-width="5" opacity="0.8"/>
+<circle cx="2180.0" cy="245.0" r="43.0" fill="#16a34a" stroke="#67e8f9" stroke-width="3" opacity="1"/>
+<text x="2180" y="320" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="25" font-weight="700" text-anchor="middle" fill="#e5e7eb" opacity="1">Runner</text>
+<rect x="900" y="395" width="1560" height="205" rx="26" fill="#050b12" fill-opacity="0.88" stroke="#f59e0b" stroke-width="3"/>
+<text x="928" y="445" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="900" text-anchor="start" fill="#fbbf24" opacity="1">RUNNER: BOOT END-TO-END FIXED POINT</text>
+<circle cx="975.0" cy="505.0" r="28.0" fill="#06131a" stroke="#22c55e" stroke-width="5" opacity="1"/>
+<text x="975" y="515" font-family="JetBrains Mono, Consolas, monospace" font-size="21" font-weight="900" text-anchor="middle" fill="#22c55e" opacity="1">01</text>
+<line x1="1007" y1="505" x2="1027" y2="505" stroke="#22c55e" stroke-width="4" opacity="0.85"/>
+<circle cx="1059.0" cy="505.0" r="28.0" fill="#06131a" stroke="#22c55e" stroke-width="5" opacity="1"/>
+<text x="1059" y="515" font-family="JetBrains Mono, Consolas, monospace" font-size="21" font-weight="900" text-anchor="middle" fill="#22c55e" opacity="1">02</text>
+<line x1="1091" y1="505" x2="1111" y2="505" stroke="#22c55e" stroke-width="4" opacity="0.85"/>
+<circle cx="1143.0" cy="505.0" r="28.0" fill="#06131a" stroke="#22c55e" stroke-width="5" opacity="1"/>
+<text x="1143" y="515" font-family="JetBrains Mono, Consolas, monospace" font-size="21" font-weight="900" text-anchor="middle" fill="#22c55e" opacity="1">03</text>
+<line x1="1175" y1="505" x2="1195" y2="505" stroke="#22c55e" stroke-width="4" opacity="0.85"/>
+<circle cx="1227.0" cy="505.0" r="28.0" fill="#06131a" stroke="#22c55e" stroke-width="5" opacity="1"/>
+<text x="1227" y="515" font-family="JetBrains Mono, Consolas, monospace" font-size="21" font-weight="900" text-anchor="middle" fill="#22c55e" opacity="1">04</text>
+<line x1="1259" y1="505" x2="1279" y2="505" stroke="#22c55e" stroke-width="4" opacity="0.85"/>
+<circle cx="1311.0" cy="505.0" r="28.0" fill="#06131a" stroke="#22c55e" stroke-width="5" opacity="1"/>
+<text x="1311" y="515" font-family="JetBrains Mono, Consolas, monospace" font-size="21" font-weight="900" text-anchor="middle" fill="#22c55e" opacity="1">05</text>
+<line x1="1343" y1="505" x2="1363" y2="505" stroke="#22c55e" stroke-width="4" opacity="0.85"/>
+<circle cx="1395.0" cy="505.0" r="28.0" fill="#06131a" stroke="#22c55e" stroke-width="5" opacity="1"/>
+<text x="1395" y="515" font-family="JetBrains Mono, Consolas, monospace" font-size="21" font-weight="900" text-anchor="middle" fill="#22c55e" opacity="1">06</text>
+<line x1="1427" y1="505" x2="1447" y2="505" stroke="#22c55e" stroke-width="4" opacity="0.85"/>
+<circle cx="1479.0" cy="505.0" r="28.0" fill="#06131a" stroke="#22c55e" stroke-width="5" opacity="1"/>
+<text x="1479" y="515" font-family="JetBrains Mono, Consolas, monospace" font-size="21" font-weight="900" text-anchor="middle" fill="#22c55e" opacity="1">07</text>
+<line x1="1511" y1="505" x2="1531" y2="505" stroke="#22c55e" stroke-width="4" opacity="0.85"/>
+<circle cx="1563.0" cy="505.0" r="28.0" fill="#06131a" stroke="#22c55e" stroke-width="5" opacity="1"/>
+<text x="1563" y="515" font-family="JetBrains Mono, Consolas, monospace" font-size="21" font-weight="900" text-anchor="middle" fill="#22c55e" opacity="1">08</text>
+<line x1="1595" y1="505" x2="1615" y2="505" stroke="#22c55e" stroke-width="4" opacity="0.85"/>
+<circle cx="1647.0" cy="505.0" r="28.0" fill="#06131a" stroke="#22c55e" stroke-width="5" opacity="1"/>
+<text x="1647" y="515" font-family="JetBrains Mono, Consolas, monospace" font-size="21" font-weight="900" text-anchor="middle" fill="#22c55e" opacity="1">09</text>
+<line x1="1679" y1="505" x2="1699" y2="505" stroke="#22c55e" stroke-width="4" opacity="0.85"/>
+<circle cx="1731.0" cy="505.0" r="28.0" fill="#06131a" stroke="#22c55e" stroke-width="5" opacity="1"/>
+<text x="1731" y="515" font-family="JetBrains Mono, Consolas, monospace" font-size="21" font-weight="900" text-anchor="middle" fill="#22c55e" opacity="1">10</text>
+<line x1="1763" y1="505" x2="1783" y2="505" stroke="#22c55e" stroke-width="4" opacity="0.85"/>
+<circle cx="1815.0" cy="505.0" r="28.0" fill="#06131a" stroke="#22c55e" stroke-width="5" opacity="1"/>
+<text x="1815" y="515" font-family="JetBrains Mono, Consolas, monospace" font-size="21" font-weight="900" text-anchor="middle" fill="#22c55e" opacity="1">11</text>
+<line x1="1847" y1="505" x2="1867" y2="505" stroke="#22c55e" stroke-width="4" opacity="0.85"/>
+<circle cx="1899.0" cy="505.0" r="28.0" fill="#06131a" stroke="#22c55e" stroke-width="5" opacity="1"/>
+<text x="1899" y="515" font-family="JetBrains Mono, Consolas, monospace" font-size="21" font-weight="900" text-anchor="middle" fill="#22c55e" opacity="1">12</text>
+<line x1="1931" y1="505" x2="1951" y2="505" stroke="#22c55e" stroke-width="4" opacity="0.85"/>
+<circle cx="1983.0" cy="505.0" r="28.0" fill="#06131a" stroke="#f97316" stroke-width="5" opacity="1"/>
+<text x="1983" y="515" font-family="JetBrains Mono, Consolas, monospace" font-size="21" font-weight="900" text-anchor="middle" fill="#f97316" opacity="1">13</text>
+<line x1="2015" y1="505" x2="2035" y2="505" stroke="#f97316" stroke-width="4" opacity="0.85"/>
+<circle cx="2067.0" cy="505.0" r="28.0" fill="#06131a" stroke="#f97316" stroke-width="5" opacity="1"/>
+<text x="2067" y="515" font-family="JetBrains Mono, Consolas, monospace" font-size="21" font-weight="900" text-anchor="middle" fill="#f97316" opacity="1">14</text>
+<line x1="2099" y1="505" x2="2119" y2="505" stroke="#f97316" stroke-width="4" opacity="0.85"/>
+<circle cx="2151.0" cy="505.0" r="28.0" fill="#06131a" stroke="#f97316" stroke-width="5" opacity="1"/>
+<text x="2151" y="515" font-family="JetBrains Mono, Consolas, monospace" font-size="21" font-weight="900" text-anchor="middle" fill="#f97316" opacity="1">15</text>
+<line x1="2183" y1="505" x2="2203" y2="505" stroke="#f97316" stroke-width="4" opacity="0.85"/>
+<circle cx="2235.0" cy="505.0" r="28.0" fill="#06131a" stroke="#ef4444" stroke-width="5" opacity="1"/>
+<text x="2235" y="515" font-family="JetBrains Mono, Consolas, monospace" font-size="21" font-weight="900" text-anchor="middle" fill="#ef4444" opacity="1">16</text>
+<line x1="2267" y1="505" x2="2287" y2="505" stroke="#ef4444" stroke-width="4" opacity="0.85"/>
+<circle cx="2319.0" cy="505.0" r="28.0" fill="#06131a" stroke="#ef4444" stroke-width="5" opacity="1"/>
+<text x="2319" y="515" font-family="JetBrains Mono, Consolas, monospace" font-size="21" font-weight="900" text-anchor="middle" fill="#ef4444" opacity="1">17</text>
+<rect x="900" y="630" width="1560" height="325" rx="26" fill="#050b12" fill-opacity="0.88" stroke="#f59e0b" stroke-width="3"/>
+<text x="928" y="680" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="900" text-anchor="start" fill="#fbbf24" opacity="1">REGRAS DE OURO</text>
+<circle cx="955.0" cy="718.0" r="15.0" fill="#22c55e" stroke="#22c55e" stroke-width="0" opacity="1"/>
+<text x="955" y="725" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="21" font-weight="900" text-anchor="middle" fill="#041010" opacity="1">✓</text>
+<text x="989" y="725" font-family="JetBrains Mono, Consolas, monospace" font-size="24" font-weight="700" text-anchor="start" fill="#dbeafe" opacity="1">REUSE_BEFORE_CREATE</text>
+<circle cx="955.0" cy="770.0" r="15.0" fill="#22c55e" stroke="#22c55e" stroke-width="0" opacity="1"/>
+<text x="955" y="777" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="21" font-weight="900" text-anchor="middle" fill="#041010" opacity="1">✓</text>
+<text x="989" y="777" font-family="JetBrains Mono, Consolas, monospace" font-size="24" font-weight="700" text-anchor="start" fill="#dbeafe" opacity="1">ONE_SYSTEM_ONLY</text>
+<circle cx="955.0" cy="822.0" r="15.0" fill="#22c55e" stroke="#22c55e" stroke-width="0" opacity="1"/>
+<text x="955" y="829" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="21" font-weight="900" text-anchor="middle" fill="#041010" opacity="1">✓</text>
+<text x="989" y="829" font-family="JetBrains Mono, Consolas, monospace" font-size="24" font-weight="700" text-anchor="start" fill="#dbeafe" opacity="1">ONE_WRITER_PER_SCOPE</text>
+<circle cx="955.0" cy="874.0" r="15.0" fill="#22c55e" stroke="#22c55e" stroke-width="0" opacity="1"/>
+<text x="955" y="881" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="21" font-weight="900" text-anchor="middle" fill="#041010" opacity="1">✓</text>
+<text x="989" y="881" font-family="JetBrains Mono, Consolas, monospace" font-size="24" font-weight="700" text-anchor="start" fill="#dbeafe" opacity="1">ACTION != PROOF</text>
+<circle cx="1430.0" cy="718.0" r="15.0" fill="#ef4444" stroke="#ef4444" stroke-width="0" opacity="1"/>
+<text x="1430" y="725" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="21" font-weight="900" text-anchor="middle" fill="#041010" opacity="1">✕</text>
+<text x="1464" y="725" font-family="JetBrains Mono, Consolas, monospace" font-size="24" font-weight="700" text-anchor="start" fill="#dbeafe" opacity="1">SIMULAÇÃO != REALIDADE</text>
+<circle cx="1430.0" cy="770.0" r="15.0" fill="#ef4444" stroke="#ef4444" stroke-width="0" opacity="1"/>
+<text x="1430" y="777" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="21" font-weight="900" text-anchor="middle" fill="#041010" opacity="1">✕</text>
+<text x="1464" y="777" font-family="JetBrains Mono, Consolas, monospace" font-size="24" font-weight="700" text-anchor="start" fill="#dbeafe" opacity="1">UNKNOWN != PASS</text>
+<circle cx="1430.0" cy="822.0" r="15.0" fill="#ef4444" stroke="#ef4444" stroke-width="0" opacity="1"/>
+<text x="1430" y="829" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="21" font-weight="900" text-anchor="middle" fill="#041010" opacity="1">✕</text>
+<text x="1464" y="829" font-family="JetBrains Mono, Consolas, monospace" font-size="24" font-weight="700" text-anchor="start" fill="#dbeafe" opacity="1">MERGED != DEPLOYED</text>
+<circle cx="1430.0" cy="874.0" r="15.0" fill="#22c55e" stroke="#22c55e" stroke-width="0" opacity="1"/>
+<text x="1430" y="881" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="21" font-weight="900" text-anchor="middle" fill="#041010" opacity="1">✓</text>
+<text x="1464" y="881" font-family="JetBrains Mono, Consolas, monospace" font-size="24" font-weight="700" text-anchor="start" fill="#dbeafe" opacity="1">REALITY = JUDGE</text>
+<circle cx="1905.0" cy="718.0" r="15.0" fill="#22c55e" stroke="#22c55e" stroke-width="0" opacity="1"/>
+<text x="1905" y="725" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="21" font-weight="900" text-anchor="middle" fill="#041010" opacity="1">✓</text>
+<text x="1939" y="725" font-family="JetBrains Mono, Consolas, monospace" font-size="24" font-weight="700" text-anchor="start" fill="#dbeafe" opacity="1">CONTRAPROVA SEMPRE</text>
+<rect x="2500" y="110" width="1245" height="555" rx="26" fill="#050b12" fill-opacity="0.88" stroke="#f97316" stroke-width="3"/>
+<text x="2528" y="160" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="900" text-anchor="start" fill="#fbbf24" opacity="1">CLI — COCKPIT DA FORJA VIVA</text>
+<circle cx="2550.0" cy="212.0" r="12.0" fill="#22c55e" stroke="#d1fae5" stroke-width="2" opacity="1"/><text x="2578" y="220" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="650" text-anchor="start" fill="#d8dee9" opacity="1">Respiração</text><text x="2860" y="220" font-family="JetBrains Mono, Consolas, monospace" font-size="22" font-weight="800" text-anchor="start" fill="#22c55e" opacity="1">09/17</text>
+<circle cx="2550.0" cy="270.0" r="12.0" fill="#22c55e" stroke="#d1fae5" stroke-width="2" opacity="1"/><text x="2578" y="278" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="650" text-anchor="start" fill="#d8dee9" opacity="1">Main</text><text x="2860" y="278" font-family="JetBrains Mono, Consolas, monospace" font-size="22" font-weight="800" text-anchor="start" fill="#22c55e" opacity="1">VIVA</text>
+<circle cx="2550.0" cy="328.0" r="12.0" fill="#22c55e" stroke="#d1fae5" stroke-width="2" opacity="1"/><text x="2578" y="336" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="650" text-anchor="start" fill="#d8dee9" opacity="1">PR #1540</text><text x="2860" y="336" font-family="JetBrains Mono, Consolas, monospace" font-size="22" font-weight="800" text-anchor="start" fill="#22c55e" opacity="1">MERGED</text>
+<circle cx="2550.0" cy="386.0" r="12.0" fill="#22c55e" stroke="#d1fae5" stroke-width="2" opacity="1"/><text x="2578" y="394" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="650" text-anchor="start" fill="#d8dee9" opacity="1">Estado</text><text x="2860" y="394" font-family="JetBrains Mono, Consolas, monospace" font-size="22" font-weight="800" text-anchor="start" fill="#22c55e" opacity="1">OPERACIONAL</text>
+<circle cx="2550.0" cy="444.0" r="12.0" fill="#f97316" stroke="#d1fae5" stroke-width="2" opacity="1"/><text x="2578" y="452" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="650" text-anchor="start" fill="#d8dee9" opacity="1">Lacuna</text><text x="2860" y="452" font-family="JetBrains Mono, Consolas, monospace" font-size="22" font-weight="800" text-anchor="start" fill="#f97316" opacity="1">GraphPanel skins</text>
+<circle cx="3160.0" cy="420.0" r="132.0" fill="#0b0b0f" stroke="#f97316" stroke-width="8" opacity="1"/>
+<text x="3160" y="415" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="50" font-weight="900" text-anchor="middle" fill="#fbbf24" opacity="1">FORJA</text>
+<text x="3160" y="465" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="45" font-weight="900" text-anchor="middle" fill="#ffedd5" opacity="1">VIVA</text>
+<rect x="2500" y="700" width="1245" height="360" rx="26" fill="#050b12" fill-opacity="0.88" stroke="#f59e0b" stroke-width="3"/>
+<text x="2528" y="750" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="900" text-anchor="start" fill="#fbbf24" opacity="1">3 PELES CANÔNICAS</text>
+<rect x="2580" y="800" width="190" height="170" rx="18" fill="#031013" fill-opacity="0.95" stroke="#10b981" stroke-width="3"/>
+<circle cx="2675.0" cy="860.0" r="38.0" fill="#10b981" stroke="#fff" stroke-width="2" opacity="1"/>
+<text x="2675" y="940" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="900" text-anchor="middle" fill="#10b981" opacity="1">EMERALD</text>
+<rect x="2820" y="800" width="190" height="170" rx="18" fill="#031013" fill-opacity="0.95" stroke="#22d3ee" stroke-width="3"/>
+<circle cx="2915.0" cy="860.0" r="38.0" fill="#22d3ee" stroke="#fff" stroke-width="2" opacity="1"/>
+<text x="2915" y="940" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="900" text-anchor="middle" fill="#22d3ee" opacity="1">OPERATIONAL</text>
+<rect x="3060" y="800" width="190" height="170" rx="18" fill="#031013" fill-opacity="0.95" stroke="#f97316" stroke-width="3"/>
+<circle cx="3155.0" cy="860.0" r="38.0" fill="#f97316" stroke="#fff" stroke-width="2" opacity="1"/>
+<text x="3155" y="940" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="900" text-anchor="middle" fill="#f97316" opacity="1">FORGE</text>
+<text x="3330" y="810" font-family="JetBrains Mono, Consolas, monospace" font-size="28" font-weight="900" text-anchor="start" fill="#22c55e" opacity="1">DEFINIDAS = SIM</text>
+<text x="3330" y="865" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" text-anchor="start" fill="#e2e8f0" opacity="1">6 combinações claro/escuro</text>
+<text x="3330" y="920" font-family="JetBrains Mono, Consolas, monospace" font-size="24" font-weight="900" text-anchor="start" fill="#f97316" opacity="1">APLICADAS GLOBALMENTE = NÃO</text>
+<rect x="900" y="990" width="760" height="300" rx="26" fill="#050b12" fill-opacity="0.88" stroke="#0ea5e9" stroke-width="3"/>
+<text x="928" y="1040" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="900" text-anchor="start" fill="#fbbf24" opacity="1">CONTINUIDADE DIRETA DA MAIN</text>
+<circle cx="945.0" cy="1088.0" r="12.0" fill="#22c55e" stroke="#22c55e" stroke-width="0" opacity="1"/>
+<text x="975" y="1098" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="23" font-weight="700" text-anchor="start" fill="#dbeafe" opacity="1">PR #1540 já entrou na main</text>
+<circle cx="945.0" cy="1132.0" r="12.0" fill="#22c55e" stroke="#22c55e" stroke-width="0" opacity="1"/>
+<text x="975" y="1142" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="23" font-weight="700" text-anchor="start" fill="#dbeafe" opacity="1">commit atômico</text>
+<circle cx="945.0" cy="1176.0" r="12.0" fill="#22c55e" stroke="#22c55e" stroke-width="0" opacity="1"/>
+<text x="975" y="1186" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="23" font-weight="700" text-anchor="start" fill="#dbeafe" opacity="1">contrato Mermaid + arte 4K</text>
+<circle cx="945.0" cy="1220.0" r="12.0" fill="#22c55e" stroke="#22c55e" stroke-width="0" opacity="1"/>
+<text x="975" y="1230" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="23" font-weight="700" text-anchor="start" fill="#dbeafe" opacity="1">sem segundo grafo</text>
+<rect x="1695" y="990" width="765" height="300" rx="26" fill="#050b12" fill-opacity="0.88" stroke="#ef4444" stroke-width="3"/>
+<text x="1723" y="1040" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="900" text-anchor="start" fill="#fbbf24" opacity="1">MODAL DE FALHA</text>
+<circle cx="1740.0" cy="1088.0" r="12.0" fill="#ef4444" stroke="#ef4444" stroke-width="0" opacity="1"/>
+<text x="1770" y="1098" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="23" font-weight="800" text-anchor="start" fill="#fecaca" opacity="1">GraphPanel ainda não aplica skins</text>
+<circle cx="1740.0" cy="1132.0" r="12.0" fill="#ef4444" stroke="#ef4444" stroke-width="0" opacity="1"/>
+<text x="1770" y="1142" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="23" font-weight="800" text-anchor="start" fill="#fecaca" opacity="1">2D/3D/Celestial/Vault hardcoded</text>
+<circle cx="1740.0" cy="1176.0" r="12.0" fill="#ef4444" stroke="#ef4444" stroke-width="0" opacity="1"/>
+<text x="1770" y="1186" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="23" font-weight="800" text-anchor="start" fill="#fecaca" opacity="1">não marcar como pronto</text>
+<circle cx="1740.0" cy="1220.0" r="12.0" fill="#ef4444" stroke="#ef4444" stroke-width="0" opacity="1"/>
+<text x="1770" y="1230" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="23" font-weight="800" text-anchor="start" fill="#fecaca" opacity="1">lacuna aberta</text>
+<rect x="2500" y="1090" width="560" height="440" rx="26" fill="#050b12" fill-opacity="0.88" stroke="#22c55e" stroke-width="3"/>
+<text x="2528" y="1140" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="900" text-anchor="start" fill="#fbbf24" opacity="1">FIXED POINT PARCIAL</text>
+<circle cx="2545.0" cy="1195.0" r="13.0" fill="#22c55e" stroke="#dcfce7" stroke-width="2" opacity="1"/>
+<text x="2580" y="1205" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="26" font-weight="800" text-anchor="start" fill="#dcfce7" opacity="1">artefatos 4K</text>
+<circle cx="2545.0" cy="1250.0" r="13.0" fill="#22c55e" stroke="#dcfce7" stroke-width="2" opacity="1"/>
+<text x="2580" y="1260" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="26" font-weight="800" text-anchor="start" fill="#dcfce7" opacity="1">Mermaid</text>
+<circle cx="2545.0" cy="1305.0" r="13.0" fill="#22c55e" stroke="#dcfce7" stroke-width="2" opacity="1"/>
+<text x="2580" y="1315" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="26" font-weight="800" text-anchor="start" fill="#dcfce7" opacity="1">receipt</text>
+<circle cx="2545.0" cy="1360.0" r="13.0" fill="#22c55e" stroke="#dcfce7" stroke-width="2" opacity="1"/>
+<text x="2580" y="1370" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="26" font-weight="800" text-anchor="start" fill="#dcfce7" opacity="1">sem falso-verde</text>
+<rect x="3095" y="1090" width="650" height="440" rx="26" fill="#050b12" fill-opacity="0.88" stroke="#f97316" stroke-width="3"/>
+<text x="3123" y="1140" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="900" text-anchor="start" fill="#fbbf24" opacity="1">17 RESPIRAÇÕES DA FORJA</text>
+<circle cx="3150.0" cy="1200.0" r="18.0" fill="#180605" stroke="#f97316" stroke-width="4" opacity="1"/>
+<text x="3150" y="1207" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="900" text-anchor="middle" fill="#fed7aa" opacity="1">1</text>
+<circle cx="3210.0" cy="1200.0" r="18.0" fill="#180605" stroke="#f97316" stroke-width="4" opacity="1"/>
+<text x="3210" y="1207" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="900" text-anchor="middle" fill="#fed7aa" opacity="1">2</text>
+<circle cx="3270.0" cy="1200.0" r="18.0" fill="#180605" stroke="#f97316" stroke-width="4" opacity="1"/>
+<text x="3270" y="1207" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="900" text-anchor="middle" fill="#fed7aa" opacity="1">3</text>
+<circle cx="3330.0" cy="1200.0" r="18.0" fill="#180605" stroke="#f97316" stroke-width="4" opacity="1"/>
+<text x="3330" y="1207" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="900" text-anchor="middle" fill="#fed7aa" opacity="1">4</text>
+<circle cx="3390.0" cy="1200.0" r="18.0" fill="#180605" stroke="#f97316" stroke-width="4" opacity="1"/>
+<text x="3390" y="1207" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="900" text-anchor="middle" fill="#fed7aa" opacity="1">5</text>
+<circle cx="3450.0" cy="1200.0" r="18.0" fill="#180605" stroke="#f97316" stroke-width="4" opacity="1"/>
+<text x="3450" y="1207" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="900" text-anchor="middle" fill="#fed7aa" opacity="1">6</text>
+<circle cx="3510.0" cy="1200.0" r="18.0" fill="#180605" stroke="#f97316" stroke-width="4" opacity="1"/>
+<text x="3510" y="1207" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="900" text-anchor="middle" fill="#fed7aa" opacity="1">7</text>
+<circle cx="3570.0" cy="1200.0" r="18.0" fill="#180605" stroke="#f97316" stroke-width="4" opacity="1"/>
+<text x="3570" y="1207" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="900" text-anchor="middle" fill="#fed7aa" opacity="1">8</text>
+<circle cx="3630.0" cy="1200.0" r="18.0" fill="#180605" stroke="#f97316" stroke-width="4" opacity="1"/>
+<text x="3630" y="1207" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="900" text-anchor="middle" fill="#fed7aa" opacity="1">9</text>
+<circle cx="3150.0" cy="1295.0" r="18.0" fill="#180605" stroke="#f97316" stroke-width="4" opacity="1"/>
+<text x="3150" y="1302" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="900" text-anchor="middle" fill="#fed7aa" opacity="1">10</text>
+<circle cx="3210.0" cy="1295.0" r="18.0" fill="#180605" stroke="#f97316" stroke-width="4" opacity="1"/>
+<text x="3210" y="1302" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="900" text-anchor="middle" fill="#fed7aa" opacity="1">11</text>
+<circle cx="3270.0" cy="1295.0" r="18.0" fill="#180605" stroke="#f97316" stroke-width="4" opacity="1"/>
+<text x="3270" y="1302" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="900" text-anchor="middle" fill="#fed7aa" opacity="1">12</text>
+<circle cx="3330.0" cy="1295.0" r="18.0" fill="#180605" stroke="#f97316" stroke-width="4" opacity="1"/>
+<text x="3330" y="1302" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="900" text-anchor="middle" fill="#fed7aa" opacity="1">13</text>
+<circle cx="3390.0" cy="1295.0" r="18.0" fill="#180605" stroke="#f97316" stroke-width="4" opacity="1"/>
+<text x="3390" y="1302" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="900" text-anchor="middle" fill="#fed7aa" opacity="1">14</text>
+<circle cx="3450.0" cy="1295.0" r="18.0" fill="#180605" stroke="#f97316" stroke-width="4" opacity="1"/>
+<text x="3450" y="1302" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="900" text-anchor="middle" fill="#fed7aa" opacity="1">15</text>
+<circle cx="3510.0" cy="1295.0" r="18.0" fill="#180605" stroke="#f97316" stroke-width="4" opacity="1"/>
+<text x="3510" y="1302" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="900" text-anchor="middle" fill="#fed7aa" opacity="1">16</text>
+<circle cx="3570.0" cy="1295.0" r="18.0" fill="#180605" stroke="#f97316" stroke-width="4" opacity="1"/>
+<text x="3570" y="1302" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="900" text-anchor="middle" fill="#fed7aa" opacity="1">17</text>
+<rect x="90" y="1580" width="3655" height="440" rx="26" fill="#050b12" fill-opacity="0.88" stroke="#f97316" stroke-width="3"/>
+<text x="118" y="1630" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="900" text-anchor="start" fill="#fbbf24" opacity="1">MAPA MENTAL — FLUXO TOTAL</text>
+<rect x="260" y="1725" width="360" height="185" rx="20" fill="#061018" fill-opacity="0.88" stroke="#f97316" stroke-width="3"/>
+<text x="440" y="1805" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="32" font-weight="900" text-anchor="middle" fill="#fde68a" opacity="1">Entradas</text>
+<text x="440" y="1855" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#cbd5e1" opacity="1">GitHub/CLI/Bot</text>
+<line x1="640" y1="1817" x2="790" y2="1817" stroke="#fbbf24" stroke-width="5" opacity="0.85"/>
+<rect x="815" y="1725" width="360" height="185" rx="20" fill="#061018" fill-opacity="0.88" stroke="#f97316" stroke-width="3"/>
+<text x="995" y="1805" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="32" font-weight="900" text-anchor="middle" fill="#fde68a" opacity="1">Runner</text>
+<text x="995" y="1855" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#cbd5e1" opacity="1">Boot/Jobs</text>
+<line x1="1195" y1="1817" x2="1345" y2="1817" stroke="#fbbf24" stroke-width="5" opacity="0.85"/>
+<rect x="1370" y="1725" width="360" height="185" rx="20" fill="#061018" fill-opacity="0.88" stroke="#f97316" stroke-width="3"/>
+<text x="1550" y="1805" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="32" font-weight="900" text-anchor="middle" fill="#fde68a" opacity="1">Gates</text>
+<text x="1550" y="1855" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#cbd5e1" opacity="1">TLC23/MetaLupa</text>
+<line x1="1750" y1="1817" x2="1900" y2="1817" stroke="#fbbf24" stroke-width="5" opacity="0.85"/>
+<rect x="1925" y="1725" width="360" height="185" rx="20" fill="#061018" fill-opacity="0.88" stroke="#f97316" stroke-width="3"/>
+<text x="2105" y="1805" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="32" font-weight="900" text-anchor="middle" fill="#fde68a" opacity="1">Contraprova</text>
+<text x="2105" y="1855" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#cbd5e1" opacity="1">Teste/CI</text>
+<line x1="2305" y1="1817" x2="2455" y2="1817" stroke="#fbbf24" stroke-width="5" opacity="0.85"/>
+<rect x="2480" y="1725" width="360" height="185" rx="20" fill="#061018" fill-opacity="0.88" stroke="#f97316" stroke-width="3"/>
+<text x="2660" y="1805" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="32" font-weight="900" text-anchor="middle" fill="#fde68a" opacity="1">Reality Judge</text>
+<text x="2660" y="1855" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#cbd5e1" opacity="1">Prova real</text>
+<line x1="2860" y1="1817" x2="3010" y2="1817" stroke="#fbbf24" stroke-width="5" opacity="0.85"/>
+<rect x="3035" y="1725" width="360" height="185" rx="20" fill="#061018" fill-opacity="0.88" stroke="#22c55e" stroke-width="3"/>
+<text x="3215" y="1805" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="32" font-weight="900" text-anchor="middle" fill="#fde68a" opacity="1">Fixed Point</text>
+<text x="3215" y="1855" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#cbd5e1" opacity="1">Cristal</text>
+<text x="1920.0" y="2090" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="36" font-weight="900" text-anchor="middle" fill="#ffedd5" opacity="1">UMA PROVA. UMA VERDADE. UM FIXED POINT. — REALIDADE JULGA.</text>
+<g id="rigor-proof-panel"><rect x="2670" y="1940" width="1000" height="120" rx="18" fill="#020617" fill-opacity=".94" stroke="#22d3ee" stroke-width="3"/><text x="2700" y="1982" font-family="JetBrains Mono,Consolas,monospace" font-size="22" font-weight="800" fill="#67e8f9">PR #1543 · ARTEFATO 4K · PROVA ESTRUTURAL</text><text x="2700" y="2020" font-family="JetBrains Mono,Consolas,monospace" font-size="20" fill="#86efac">REUSE_BEFORE_CREATE · ONE_SYSTEM_ONLY · REALITY=JUDGE</text><text x="2700" y="2054" font-family="JetBrains Mono,Consolas,monospace" font-size="20" fill="#fdba74">UNKNOWN != PASS · MERGED != DEPLOYED · GLOBAL_SKINS=NÃO</text></g></svg>

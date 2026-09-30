@@ -54,6 +54,11 @@ SELF_HEALING_OPERATIONAL_FAILURES=true
 SAME_FAILURE_REUSES_CRYSTAL=true
 GITHUB_HOSTED_RUNNER_ALLOWED=false
 DEFAULT_CI_EXECUTOR=self-hosted-linux
+DISCOVER_EXISTING_CHANNELS_BEFORE_BLOCKED=true
+USER_REPORTED_ERROR_IS_SIGNAL_NOT_PROOF=true
+EPHEMERAL_HELPER_IS_CANONICAL_ASSET=false
+SAFE_TEMP_CLEANUP_AFTER_PROOF=true
+MEANINGFUL_DISCOVERY_COMPARE_CANONICAL_OWNER=true
 GOVERNING_UNIVERSAL_METHOD=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml
 SEMANTIC_EXECUTION_IDENTITY=OWNER+CAPABILITY+SCOPE
 TRANSIENT_RUN_JOB_HEAD_PID=PROVENANCE_ONLY_DISCOVER_AT_RUNTIME
@@ -434,6 +439,18 @@ EVENTO/FALHA
 ```
 
 Se `FAILURE_SIGNATURE` + causa + fronteiras forem equivalentes e não houver informação nova, reutilize o cristal; não refaça o mesmo raciocínio. Se a assinatura mudou, reabra investigação. `FAILURE != STOP`: falha é sensor enquanto existir rota segura/autorizada.
+
+### Descoberta de canal + cristalização operacional contínua
+
+Antes de declarar acesso bloqueado, meça canais autorizados já vivos. Falha ao abrir uma nova rota não prova morte de uma rota existente. Erro reportado pelo CHEFE é sinal prioritário, mas só vira regra após medição e contraprova.
+
+```text
+NEW_ATTEMPT_FAILED != EXISTING_CHANNEL_DEAD
+DISCOVER_EXISTING_CHANNELS -> CLASSIFY -> REUSE_BEFORE_CREATE -> EXECUTE -> MEASURE
+MEANINGFUL_DISCOVERY -> COMPARE_CANONICAL_OWNER -> LOCAL_RECEIPT | UPDATE_EXISTING_OWNER -> TEST -> CRYSTAL
+```
+
+Artefato auxiliar temporário não vira patrimônio canônico por ter sido usado. Após o resultado estar persistido e não existir consumidor ativo, remova helper sem valor pós-missão e verifique a limpeza. Preserve somente o que for necessário para receipt, rollback ou continuidade. `NO_NEW_INFORMATION` encerra o meta-loop no fixed point.
 
 Cristal obrigatório desta classe de incidente CI:
 
