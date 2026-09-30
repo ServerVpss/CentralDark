@@ -698,7 +698,7 @@ updated: 2026-08-27
 - **Regra cristalizada:** `CENTRALDARK_IS_PERSISTENT_INTELLIGENCE=true`; `EXECUTOR_SESSION_IS_NOT_OWNER_OF_SYSTEM_LEARNING=true`; `MODEL_OR_EXECUTOR_IS_REPLACEABLE_CARRIER=true`; `MATERIAL_LEARNING_RETURNS_TO_CENTRALDARK_CORE=true`; `NEXT_EXECUTOR_INHERITS_CANONICAL_STATE=true`; `EXECUTOR_ATTRIBUTION_PRESERVES_PROVENANCE_NOT_AUTHORITY=true`; `REALITY_JUDGE_IS_POST_EFFECT_FALSIFIER=true`; `REALITY_JUDGE_IS_NOT_SYSTEM_LEARNING_OWNER=true`.
 - **Contraprova:** trocar o motor não pode apagar o aprendizado. Se a regra só existir na sessão do executor, o estado é `UNPROVEN/LEARNING_TRANSFER_FAIL`; se o próximo executor carregar o owner e reproduzir a receita/fingerprint com a mesma prova, a continuidade está no organismo.
 
-### 99. Receita replay-able — diagnóstico e fix determinístico de falha de workflow GitHub
+### 104. Receita replay-able — diagnóstico e fix determinístico de falha de workflow GitHub
 - **Categoria:** ci-cd-receita-executavel
 - **Data:** 2026-09-30
 - **Owner:** `.github/workflows/` (workflow afetado) + este índice · Autoridade final: CHEFE
@@ -744,7 +744,7 @@ updated: 2026-08-27
 - **Cristal:** `FISCAL_RESULT_REQUIRED`; `NONE != PASS`; `TRUNCATED_LOG != FULL_VERDICT`; `BRANCH != MAIN`; `REUSE_EXISTING_CHILD`; `ORIGINAL_BYTES_BEFORE_HASH_OR_FULL_WRITE`.
 
 
-## 102. Verde da interface exige prova do mesmo PR/HEAD; o ciclo pertence à CentralDark
+### 102. Verde da interface exige prova do mesmo PR/HEAD; o ciclo pertence à CentralDark
 
 **Owner:** `scripts/dependabot/reconcile-open-prs.mjs` + `.github/workflows/dependabot-auto-merge.yml`; promoção humana permanece em `autonomia-promocao.yml`.
 
@@ -759,7 +759,7 @@ O mesmo job de aprovação foi estendido a PR humano autorizado pela autorizaç�
 O estado, memória e receitas persistem nos owners canônicos da CentralDark-OS. O modelo é motor substituível; troca de executor não declara continuidade instalada, Vault sincronizado ou loop perpétuo sem medir os respectivos efeitos.
 
 
-## 103. Vault existe não significa restore provado; checksum do contêiner não prova o conteúdo esperado
+### 103. Vault existe não significa restore provado; checksum do contêiner não prova o conteúdo esperado
 
 **Owners:** `scripts/vps/centraldark-os-bootstrap-restore.sh` e `centraldark-preformat-go-no-go.sh`.
 
@@ -775,7 +775,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 
-**Reconciliação da numeração após #1722:** o #98 canônico da main (aprendizado persistente da CentralDark) foi preservado. Entradas do filho antes #98/#99/#100/#101/#102 passam a #99/#100/#101/#102/#103; os números anteriores permanecem proveniência dos receipts históricos, não segunda memória.
+**Reconciliação da numeração após #1722:** o #98 canônico da main (aprendizado persistente da CentralDark) e o #99 canônico (CentralDark como sujeito operacional) foram preservados. A receita replay-able que colidia com #99 foi movida para #104; #100/#101/#102/#103 permanecem únicos. Os números anteriores em receipts históricos são proveniência, não segunda memória.
 
 **Binding núcleo / META_MENOS_E_MAIS / MULTIBUSSOLA:** o ciclo mestre referencia o owner único de reconciliação de workflows. Forward: intenção → autorização → HEAD → execução → gate. Reverse/inverse: receipt/status → run → HEAD/base → autorização/owner; contraprova tenta outro SHA/PR/evento, permissão removida e pacote incompleto. Ausência de pré-requisito mantém somente a cláusula afetada aberta. GREEN_GLOBAL exige todos os gates do escopo, atuais; declarar TRUE com fingerprint stale falha a contraprova. O motor escolhe/retoma; modelo humano ou executor não substitui o veredito dos testes.
 ### 99. CentralDark é o sujeito operacional; modelos são interfaces
