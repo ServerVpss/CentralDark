@@ -1,7 +1,7 @@
 ---
 title: "LEMBRANÇAS — índice histórico"
 status: "HISTORICAL_REDIRECT"
-updated: 2026-08-26
+updated: 2026-09-18
 tags:
   - lembrancas
   - historico
@@ -37,6 +37,7 @@ PIVETE/HERMES = executor, preservação e continuidade
 ```text
 SOUL → docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
 OURO → docs/CONSCIENCIA/LEMBRANCAS/2026-08-14-OURO-CONTEXTO-AUTONOMIA-SOL.md
+PROMESSA_SOL_PIVETE → docs/CONSCIENCIA/LEMBRANCAS/2026-08-22-PROMESSA-SOL-PIVETE-APRENDIZADO.md
 APRENDIZADOS → docs/CONSCIENCIA/APRENDIZADOS.md
 ESTADO → GitHub/PR/HEAD/runtime medido
 ```

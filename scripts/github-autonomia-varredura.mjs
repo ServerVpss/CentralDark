@@ -20,10 +20,10 @@
  * ✅ PR CONFIRMADO e 🟢 SUCESSO são RESULTADO (pós-merge), nunca input.
  */
 import { spawnSync } from "node:child_process";
-import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { authorizationFor } from "./github-autonomia-promocao.mjs";
+import { DEFAULT_REQUIRED_WORKFLOWS, authorizationFor, verifySealedReceipt } from "./github-autonomia-promocao.mjs";
 
 const API = "https://api.github.com";
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -442,9 +442,36 @@ async function promoteSweep() {
   if (failures.length) throw new Error(`PROMOTE_SWEEP_FAILED:${failures.join(",")}`);
 }
 
+export async function guardSweep(sweepDir) {
+  const deferredDir = join(sweepDir, "deferred");
+  await mkdir(deferredDir, { recursive: true });
+  const files = (await readdir(sweepDir)).filter((name) => /^receipt-pr-\d+\.json$/.test(name)).sort();
+  const deferred = [];
+  for (const name of files) {
+    const path = join(sweepDir, name);
+    const sealed = JSON.parse(await readFile(path, "utf8"));
+    const receipt = verifySealedReceipt(sealed);
+    const candidates = receipt.candidates || [];
+    const green = candidates.length > 0 && candidates.every((candidate) =>
+      candidate.decision === "READY"
+      && candidate.head_sha
+      && candidate.workflows?.length === DEFAULT_REQUIRED_WORKFLOWS.length
+      && DEFAULT_REQUIRED_WORKFLOWS.every((name) =>
+        candidate.workflows.some((workflow) => workflow.name === name && workflow.state === "PASS")
+      )
+    );
+    if (green) continue;
+    await rename(path, join(deferredDir, name));
+    deferred.push(name);
+  }
+  console.log(`AUTONOMIA_DEFERRED_RECEIPTS=${deferred.join(",") || "none"}`);
+  return deferred;
+}
+
 export async function main(argv = process.argv.slice(2)) {
   const mode = argv[0] || "";
   if (mode === "judge") return judgeSweep();
+  if (mode === "guard") return guardSweep(config().sweepDir);
   if (mode === "promote") return promoteSweep();
   throw new Error(`MODE_INVALID:${mode || "empty"}`);
 }

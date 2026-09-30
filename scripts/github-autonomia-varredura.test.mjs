@@ -1,4 +1,7 @@
 import assert from "node:assert/strict";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 import test from "node:test";
 
 import {
@@ -11,6 +14,7 @@ import {
   agentLabelsFromWriter,
   classifyFailure,
   eligibleSummary,
+  guardSweep,
   noticeTargets,
   promotionSealReceipt,
   promotionSealState,
@@ -18,6 +22,7 @@ import {
   sanitizeNotice,
   shouldMaterializeAuthority,
 } from "./github-autonomia-varredura.mjs";
+import { DEFAULT_REQUIRED_WORKFLOWS, sealReceipt } from "./github-autonomia-promocao.mjs";
 
 const INTENT_BODY = [
   "Intent-Authorized: SEGREDO/CHEFE",

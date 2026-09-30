@@ -754,10 +754,21 @@
       "block_explicit_changes_requested",
       "route_merge_conflict_to_single_resolver_and_block_squash_until_same_head",
       "update_branch_if_base_moved",
+      "require_six_green_workflows_on_same_head",
       "revalidate_live_head_and_base",
       "squash_merge",
       "record_receipt"
     ],
+    "green_first_required_workflows": [
+      "porta-de-entrada",
+      "codex-validate",
+      "lupa-conformance",
+      "Lupa Drift Guard",
+      "PR auto-review (Codex + checklist)",
+      "Pipeline — Telegram + Painel"
+    ],
+    "non_pass_required_workflow_action": "DEFERRED_ZERO_MERGE",
+    "fast_path_waits_for_required_technical_gates": true,
     "fast_path_waits_for_full_external_convergence": false,
     "adversarial_mode_remains_in_same_engine": true,
     "adversarial_mode_requires_explicit_chefe_request": true

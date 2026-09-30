@@ -310,6 +310,13 @@ updated: 2026-08-27
 - **Prova:** `scripts/lupa/writer-safe-push-main.sh`; `apps/modulos/HERMES-CORE/agents/Executor/agent.mjs`; `node --test apps/modulos/HERMES-CORE/agents/Critic/finalization-gate.test.mjs apps/modulos/HERMES-CORE/core/continuity-guard.test.mjs` → 60/60; publicação confirmada por `REMOTE_HEAD_VERIFIED=a4a14fe9092affecfadee47fa0b38384267eeeb5`.
 
 
+
+### 50. DOCKER_BUILD_CONTEXT — erro visual antigo não é estado atual
+- **Categoria:** erro-correcao
+- **Data:** 2026-09-18
+- **Contexto:** O CHEFE mostrou o build do Docker Desktop/Gordon falhando em um Dockerfile que usava `COPY ./CentralDark/... ./` e registrava `failed to compute cache key` / `"/CentralDark/public": not found`. A mesma tentativa também mostrava contexto mínimo e múltiplos `COPY` falhando. Em seguida a Casa foi medida diretamente: `E:\CentralDark\CentralDark\public`, `src`, `package.json`, `vite.config.ts`, `tsconfig.json`, `tailwind.config.ts`, `postcss.config.js` e `index.html` EXISTEM; o Dockerfile CURRENT já havia sido corrigido para `COPY package.json package-lock.json ./` + `COPY . .`, e o `.dockerignore` CURRENT não exclui `public` ou `src`. Dockerfile SHA-256 medido: `A2C3AB3F64058C1D09ADA1B9882A7B1C5E47286F888FD6643C991BC701C2CA7D`; .dockerignore SHA-256: `4E96537B075A27C90DE3299E5AFB071409B2EAAD169BC51F293AE84496271339`. O Desktop Commander não encontrava `docker` no PATH da sessão, embora Docker Desktop estivesse vivo; usando o binário explícito, a primeira contraprova falhou por `docker-credential-desktop` fora do PATH. O helper existe em `C:\Program Files\Docker\Docker\resources\bin\docker-credential-desktop.exe`; adicionar esse diretório ao PATH é uma correção de ambiente da sessão, não prova de defeito no Docker Desktop. O build CURRENT após essa correção ainda estava em execução no momento do cristal e portanto NÃO recebe PASS.
+- **Aprendizado:** `SCREEN_ERROR != CURRENT_FILE_STATE`. Em Docker, todo `COPY` é relativo ao **build context**, não ao local visual do Dockerfile. Se o contexto já é `./CentralDark`, prefixar novamente `./CentralDark/... ` procura uma árvore duplicada que não existe. Antes de corrigir, medir quatro coisas separadamente: `BUILD_CONTEXT`, `DOCKERFILE_PATH`, `.dockerignore` e existência real dos arquivos. `BUILD_CONTEXT_TINY` ou vários `COPY ... not found` são sintomas úteis, não autorização para inventar estrutura. Depois da correção, reexecutar o build e só promover `BUILD_PASS` com exit code 0 + imagem criada. Também separar `DOCKER_CLI_NOT_IN_SESSION_PATH` de `DOCKER_ENGINE_DOWN`: sessão remota, Gordon e Docker Desktop podem herdar PATHs diferentes. Regra: `UI_ERROR_HISTORY != CURRENT_BUILD_FAIL`, `PATH_MISMATCH != ENGINE_FAILURE`, `ACTION != PROOF`, `UNKNOWN != PASS`.
+
 ### 💬 Gemini Flash — grupo evolução (2026-09-19)
 - **Categoria:** aprendizado-coletivo
 - **Contexto:** Vi o commit "3307977ea60 🤖 DEPENDABOT · ATUALIZA SOUPSIEVE · MINOR (#1569)" — o que ele muda de fato no CentralDark e v
@@ -455,6 +462,8 @@ updated: 2026-08-27
 - **Rollback simples:** checkpoint bom anterior `d5137a91518aa52a0c39072b7afb7e495108f01d`; delta de ativação `afad4177a76659afec503af610dbec6c813b6c37`; reversão causal `git revert afad4177a76659afec503af610dbec6c813b6c37`.
 - **Primeira ativação observada:** workflow dispatch `36311584334`, no HEAD `afad4177a76659afec503af610dbec6c813b6c37`; job `🟢 Dependabot — aprovar workflows pendentes com gate` entrou em `queued`. Naquele snapshot havia zero PRs Dependabot abertas, portanto `LIVE_APPROVAL_OF_DEPENDABOT_RUN=NOT_APPLICABLE`, não PASS inventado.
 - **Regra:** `ACTION_REQUIRED != FAIL`; `ACTION_REQUIRED != PASS`; `APPROVE_REQUESTED != WORKFLOW_SUCCESS`; `UNKNOWN != PASS`; `CURRENT > HISTORY`.
+
+\n
 
 
 ### 64. COSTURA autônoma: resolver conhecido, amarelar desconhecido, aprender por replay
