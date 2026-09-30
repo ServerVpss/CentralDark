@@ -67,7 +67,8 @@ validate_archive() {
       return 1
     fi
   else
-    warn "SHA256 file not found: $sha_file (skipping integrity check)"
+    err "SHA256 file not found: $sha_file"
+    return 1
   fi
 
   if ! tar -tzf "$archive" >/dev/null 2>&1; then
@@ -75,6 +76,56 @@ validate_archive() {
     return 1
   fi
 
+  if ! python3 - "$archive" <<'PY'
+import csv, hashlib, io, pathlib, re, sys, tarfile
+try:
+    with tarfile.open(sys.argv[1]) as archive:
+        members = archive.getmembers()
+        names = [m.name for m in members]
+        if len(names) != len(set(names)):
+            raise ValueError("DUPLICATE_MEMBERS")
+        if any(pathlib.PurePosixPath(m.name).is_absolute() or ".." in pathlib.PurePosixPath(m.name).parts
+               or not (m.isfile() or m.isdir()) for m in members):
+            raise ValueError("UNSAFE_MEMBERS")
+        manifests = [m for m in members if pathlib.PurePosixPath(m.name).name == "MANIFEST.tsv"]
+        if len(manifests) != 1:
+            raise ValueError("MANIFEST_REQUIRED")
+        root = pathlib.PurePosixPath(manifests[0].name).parent
+        files = {m.name: m for m in members if m.isfile()}
+        for required in ("SHA256SUMS.txt", "BOOTSTRAP-NEXT.env"):
+            if str(root / required) not in files:
+                raise ValueError("INTERNAL_METADATA_REQUIRED")
+        rows = list(csv.DictReader(io.StringIO(archive.extractfile(manifests[0]).read().decode()), delimiter="\t"))
+        if not rows:
+            raise ValueError("EMPTY_MANIFEST")
+        checked = 0
+        for row in rows:
+            destination = pathlib.PurePosixPath(row["dest"])
+            # Destinations from the canonical inventory are absolute paths inside the vault root.
+            parts = destination.parts
+            if root.name not in parts:
+                raise ValueError("DEST_OUTSIDE_VAULT")
+            relative = pathlib.PurePosixPath(*parts[parts.index(root.name) + 1:])
+            if ".." in relative.parts or relative.is_absolute():
+                raise ValueError("UNSAFE_DEST")
+            member = files.get(str(root / relative))
+            if not member or not re.fullmatch(r"[a-f0-9]{64}", row["sha256"]):
+                raise ValueError("MANIFEST_BINDING_MISSING")
+            content = archive.extractfile(member).read()
+            if len(content) != int(row["bytes"]) or hashlib.sha256(content).hexdigest() != row["sha256"]:
+                raise ValueError("MANIFEST_PAYLOAD_MISMATCH")
+            checked += 1
+        print("VAULT_MANIFEST_ENTRIES=" + str(checked))
+        print("VAULT_PAYLOAD_HASHES=PASS")
+except Exception as error:
+    allowed = {"DUPLICATE_MEMBERS", "UNSAFE_MEMBERS", "MANIFEST_REQUIRED", "INTERNAL_METADATA_REQUIRED", "EMPTY_MANIFEST", "DEST_OUTSIDE_VAULT", "UNSAFE_DEST", "MANIFEST_BINDING_MISSING", "MANIFEST_PAYLOAD_MISMATCH"}
+    reason = str(error) if str(error) in allowed else type(error).__name__
+    print("ERROR: VAULT_PAYLOAD_INVALID=" + reason, file=sys.stderr)
+    sys.exit(1)
+PY
+  then
+    return 1
+  fi
   ok "Archive valid: $archive"
   return 0
 }
@@ -129,25 +180,7 @@ main() {
       vault_ok=1
       archive_sha="$(sha256sum "$VAULT_PATH" | awk '{print $1}')"
 
-      local tmp_dir
-      tmp_dir="$(mktemp -d)"
-      tar -xzf "$VAULT_PATH" -C "$tmp_dir" 2>/dev/null || true
-      local extracted
-      extracted="$(find "$tmp_dir" -maxdepth 1 -type d ! -path "$tmp_dir" | head -1)"
 
-      if [ -n "$extracted" ]; then
-        validate_bootstrap_env "$extracted" || true
-
-        local manifest
-        manifest="$(find "$extracted" -name 'MANIFEST.tsv' -type f | head -1)"
-        if [ -n "$manifest" ]; then
-          local count
-          count="$(($(wc -l < "$manifest") - 1))"
-          ok "Manifest entries: $count"
-        fi
-      fi
-
-      rm -rf "$tmp_dir"
     fi
   else
     warn "No vault archive found"
@@ -194,11 +227,17 @@ main() {
     elif [ "$canonical_ok" = "0" ]; then
       echo "FIX_MISSING_CANONICAL_FILES"
     elif [ "$RESTORE_APPLY" = "0" ]; then
-      echo "SET_CENTRALDARK_RESTORE_APPLY=1_TO_RESTORE"
+      echo "RESTORE_APPLY_NOT_IMPLEMENTED"
     else
-      echo "RESTORE_COMPLETE_VERIFY_RUNTIME"
+      echo "RESTORE_NOT_IMPLEMENTED"
     fi
   )"
+  echo "RESTORE_APPLIED=0"
+  if [ "$RESTORE_APPLY" = "1" ]; then
+    err "RESTORE_NOT_IMPLEMENTED"
+    return 2
+  fi
+  [ "$canonical_ok" = "1" ] && [ "$vault_ok" = "1" ]
 }
 
 main "$@"

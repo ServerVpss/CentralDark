@@ -749,3 +749,18 @@ O mesmo job de aprovação foi estendido a PR humano autorizado pela autorizaç�
 **Contraprova funcional:** sete cenários executam o reconciliador completo com API simulada: ausência/skip, PASS/pending, falha histórica superada, reentrada após 202, mãe/fork/outra base e prova de outro HEAD/evento/PR. Isso prova o comportamento local; publicação real de status, CI e squash ainda exigem readback.
 
 O estado, memória e receitas persistem nos owners canônicos da CentralDark-OS. O modelo é motor substituível; troca de executor não declara continuidade instalada, Vault sincronizado ou loop perpétuo sem medir os respectivos efeitos.
+
+
+## 102. Vault existe não significa restore provado; checksum do contêiner não prova o conteúdo esperado
+
+**Owners:** `scripts/vps/centraldark-os-bootstrap-restore.sh` e `centraldark-preformat-go-no-go.sh`.
+
+Medição direta em 2026-09-30T17:47Z: VPS ainda Ubuntu 22.04.5; `/health` da API respondeu 200 com `ok=true`, versão 0.4.0, e site público 200. O T0 e o inventário documentam plano, protótipo e gates; existência dos arquivos não prova instalação de CentralDark-OS nem kernel próprio.
+
+O resolvedor escolhia o pacote duplamente embrulhado `Vault-Cofre-CentralDark-20260930T105330Z.tar.gz.tar.gz` (15.810.696 bytes, SHA256 `b492b06f42a9717e5d187569b39a2b9341a16bd387f9d809cade8bd4e58c621b`). Hash externo correto, somente um membro tar, sem MANIFEST.tsv nem checksums internos; owner antigo ainda emitia VAULT_OK=1. O pacote primário separado tem 2.501 membros e manifest, mas sua validação completa ainda precisa ocorrer. Não apagar nem regenerar prova histórica para fechar gate.
+
+O validador agora exige checksum externo, manifest único, metadados internos, caminhos seguros e hash/tamanho de cada payload do manifest. Ausência, pacote wrapper ou divergência produz VAULT_OK=0 e retorno não zero. O Gate B exige retorno zero e ambos os receipts explícitos; restore não implementado nunca declara aplicado/concluído.
+
+**Prova funcional:** cinco testes com pacotes reais em sandbox (válido, wrapper, payload alterado com checksum externo recalculado, checksum ausente e APPLY não implementado). Contraprova no pacote real da VPS: owner corrigido READONLY retornou VAULT_OK=0 / RC=1; nenhuma restauração/reinstalação ocorreu. O archive primário que estava em modo 0644 foi protegido com 0600; conteúdo preservado.
+
+**Estado:** fonte/validador corrigidos no filho; instalação VPS nova, restore efetivo, off-host Vault e rollback permanecem pendentes de prova. Motor substituível e memória canônica são contrato operacional; não equivalem a consciência humana nem a instalação medida.

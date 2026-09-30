@@ -134,7 +134,11 @@ gate_b() {
   fi
 
   local output
-  output="$(CENTRALDARK_RESTORE_APPLY=0 CENTRALDARK_BOOTSTRAP_APPLY=0 CENTRALDARK_REPO_ROOT="$REPO_ROOT" bash "$REPO_ROOT/scripts/vps/centraldark-os-bootstrap-restore.sh" 2>&1)"
+  if ! output="$(CENTRALDARK_RESTORE_APPLY=0 CENTRALDARK_BOOTSTRAP_APPLY=0 CENTRALDARK_VAULT_PATH="$VAULT_PATH" CENTRALDARK_REPO_ROOT="$REPO_ROOT" bash "$REPO_ROOT/scripts/vps/centraldark-os-bootstrap-restore.sh" 2>&1)"; then
+    echo "$output"
+    err "Gate B FAIL: restore validator failed"
+    return 1
+  fi
 
   echo "$output"
 
@@ -150,6 +154,11 @@ gate_b() {
   fi
   if echo "$output" | grep -q "VAULT_OK=1"; then
     ok "Vault OK"
+  fi
+
+  if ! grep -q "^BOOTSTRAP_VALIDATE=PASS$" <<< "$output" || ! grep -q "^VAULT_OK=1$" <<< "$output"; then
+    err "Gate B FAIL: explicit canonical and vault PASS receipts required"
+    return 1
   fi
 
   # Verificar hydrate-provider-secrets.sh syntax
