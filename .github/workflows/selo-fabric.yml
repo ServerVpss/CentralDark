@@ -292,42 +292,42 @@ jobs:
             const fingerprint = [sourceEvent, event, action || '-', runId, simulated ? requested : sha10(eventSha)].join(':');
             const marker = `<!-- CENTRALDARK_SELO_FABRIC:${fingerprint} -->`;
 
-            const existing = await github.paginate(github.rest.issues.listComments, {
-              owner,
-              repo,
-              issue_number: PR_MAE,
-              per_page: 100,
-            });
-
-            if (existing.some(c => String(c.body || '').includes(marker))) {
-              core.notice(`SELO_DEDUP=PASS fingerprint=${fingerprint}`);
-              return;
-            }
-
-            const body = [
-              marker,
-              `### ${emoji} Selo Fabric · ${tipo}`,
-              '',
-              `- **Classe:** \`${classe}\``,
-              `- **Evidência:** \`${evidence}\``,
-              `- **Origem:** \`${sourceEvent}\`${simulated ? ' → simulação explícita' : ''}`,
-              `- **Ação:** \`${action || '-'}\``,
-              `- **Detalhe:** ${detalhe || '-'}`,
-              `- **Actor:** \`@${actor}\``,
-              `- **Run:** \`${runId}\` attempt=\`${runAttempt}\``,
-              `- **UTC:** \`${ts}\``,
-              '',
-              '> EVENTO != PASS · COMMIT != DEPLOY · CI_PASS_ONLY != RUNTIME_PASS · REALIDADE JULGA',
-            ].join('\n');
-
             try {
-              await github.rest.issues.createComment({
+              const existing = await github.paginate(github.rest.issues.listComments, {
                 owner,
                 repo,
                 issue_number: PR_MAE,
-                body,
+                per_page: 100,
               });
-              core.notice(`SELO_POSTED=PASS event=${event} class=${classe} pr_mae=${PR_MAE}`);
+
+              if (existing.some(c => String(c.body || '').includes(marker))) {
+                core.notice(`SELO_DEDUP=PASS fingerprint=${fingerprint}`);
+                return;
+              }
+
+              const body = [
+                marker,
+                `### ${emoji} Selo Fabric · ${tipo}`,
+                '',
+                `- **Classe:** \`${classe}\``,
+                `- **Evidência:** \`${evidence}\``,
+                `- **Origem:** \`${sourceEvent}\`${simulated ? ' → simulação explícita' : ''}`,
+                `- **Ação:** \`${action || '-'}\``,
+                `- **Detalhe:** ${detalhe || '-'}`,
+                `- **Actor:** \`@${actor}\``,
+                `- **Run:** \`${runId}\` attempt=\`${runAttempt}\``,
+                `- **UTC:** \`${ts}\``,
+                '',
+                '> EVENTO != PASS · COMMIT != DEPLOY · CI_PASS_ONLY != RUNTIME_PASS · REALIDADE JULGA',
+              ].join('\n');
+
+              await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: PR_MAE,
+                  body,
+                });
+                core.notice(`SELO_POSTED=PASS event=${event} class=${classe} pr_mae=${PR_MAE}`);
             } catch (e) {
               const status = e.status || e.response?.status;
               const readOnly = status === 403 || /not accessible by integration|Resource not accessible/i.test(e.message || '');

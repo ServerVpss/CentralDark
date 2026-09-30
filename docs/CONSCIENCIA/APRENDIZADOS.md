@@ -711,6 +711,7 @@ updated: 2026-08-27
 - **Contraprova:** branches sem o fix continuam startup-falhando no mesmo commit-window; comparação com irmão provado (hermes/dependabot têm `workflows:`).
 - **Resultado esperado:** workflow parseia e roda; sensor verde onde tem write, warning onde é read-only; exit semantics intencionais (ex: `failOnBlocked`) preservadas.
 - **Cristal:** `STARTUP_FAILURE=0_JOBS+INSTANT+NAME_IS_PATH`; `PYTHON_YAML_PASS != GITHUB_YAML_PASS`; `SENSOR_POST_FAILURE != CI_GATE`; `MENOR_DELTA_NO_OWNER`; `REUSE_IRMAO_PROVADO`; `SAME_FINGERPRINT_SAME_FIX=REUSE`; `CHANGED_FINGERPRINT=REVALIDATE_CONE`.
+- **Limite de prova / binding adicional 2026-09-30:** no Selo, a leitura de comentários para dedupe também pode retornar 403 antes da postagem. O best-effort deve cobrir leitura e escrita do sensor. Contraprova isolada: versão anterior lança na leitura 403; versão corrigida emite warning sem SELO_POSTED; leitura/postagem 500 continuam falhando; postagem 201 produz SELO_POSTED. `JOB_SUCCESS != RECEIPT_POSTED`; 403 é sinal de permissão negada, não prova isolada da causa nem de runtime saudável. `0_JOBS+INSTANT+NAME_IS_PATH` é fingerprint candidato de startup failure, a confirmar pela definição/veredito do GitHub.
 - **NEXT_CURSOR:** mesmo fingerprint reaparece → aplicar este fix direto; fingerprint novo → medir, corrigir, e anexar aqui como binding adicional.
 
 
