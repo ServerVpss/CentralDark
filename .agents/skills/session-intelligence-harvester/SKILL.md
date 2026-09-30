@@ -322,6 +322,60 @@ SOUL_SYNC_CURRENT=true
 ```
 
 
+### Compressão canônica — pedreira → diamante (CHEFE, 2026-09-27)
+
+Compressão canônica não é resumir a conversa nem apagar a trajetória. A pedreira inteira continua como proveniência; o que atravessa para o próximo executor é o menor estado suficiente para **replay determinístico da capacidade provada**.
+
+```text
+CANONICAL_COMPRESSION_IS_NOT_SUMMARY=true
+FULL_TRAJECTORY_IS_INPUT_NOT_RUNTIME_PAYLOAD=true
+UNKNOWN_MATERIAL_MUST_STAY_UNKNOWN=true
+NEXT_EXECUTOR_MUST_NOT_REDISCOVER_PROVEN_PATH=true
+
+CRYSTAL =
+  PROVEN_STATE
+  + OWNER
+  + FINGERPRINT
+  + REPLAY_RECIPE
+  + PROOF
+  + COUNTERPROOF
+  + EXPECTED_EFFECT
+  + RECEIPT
+  + NEXT_CURSOR
+```
+
+Fluxo:
+
+```text
+PEDREIRA
+(chat|voice|work|code|branch|log|erro|historia)
+→ GARIMPO
+→ CURRENT + DEDUPE
+→ DELTA_UTIL
+→ OWNER_EXISTENTE
+→ PROOF ↔ COUNTERPROOF
+→ CRYSTAL
+→ PROXIMO_EXECUTOR
+```
+
+Regra de replay:
+
+```text
+SAME_FINGERPRINT
+→ REUSE_CRYSTAL
+→ MESMA_RECEITA
+→ ADAPT_ONLY_BINDINGS
+→ MESMA_LOGICA_DE_PROVA
+
+CHANGED_FINGERPRINT
+→ REVALIDATE_AFFECTED_CONE_ONLY
+
+DIVERGED_EFFECT
+→ NEW_DELTA
+```
+
+A compressão é válida somente se preservar o que permite ao próximo executor reproduzir e comparar o efeito. `RECEIPT != PROOF`, `FINGERPRINT_MATCH != RUNTIME_PASS` e `UNKNOWN != PASS` continuam valendo. A história pode ser longa; o cristal operacional deve ser pequeno, verificável e reutilizável.
+
 ## Output Format
 
 Não inventar probabilidade/confiança numérica. Use classe epistemológica + evidência observável.
