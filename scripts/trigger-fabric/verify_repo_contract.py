@@ -694,6 +694,24 @@ check_values('CENTRALDARK_AI_BOOT.yaml',{
  'same_semantics_across_text_voice_work_desktop':'true',
 }, classification='CENTRALDARK_BOOT_PROVEN_CRYSTAL_VALUES')
 
+check_values('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',{
+ 'CHEFE_AUTHORITY_IS_SINGLETON':'true',
+ 'DETERMINISTIC_ROUTE_FIRST':'true',
+ 'REALITY_JUDGE_AFTER_EFFECT':'true',
+ 'REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM':'true',
+ 'REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION':'true',
+ 'CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR':'true',
+ 'OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL':'true',
+}, classification='REALITY_JUDGE_NOT_GATEKEEPER_CONTRACT')
+check('docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md',[
+ 'REALITY_JUDGE_IS_NOT_HUMAN_AUTHORITY=true',
+ 'TLC23_PROOF_COUNTERPROOF_SERVE_EXECUTION=true',
+], classification='CHEFE_AUTHORITY_DURABLE_MEMORY')
+check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/FREQUENCIAS-OPERACIONAIS-SOL.md',[
+ 'REALITY_JUDGE_IS_NOT_HUMAN_AUTHORITY=true',
+ 'REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true',
+], classification='FREQUENCY_CANNOT_OVERRIDE_CHEFE_AUTHORITY')
+
 failed=[c for c in checks if not c['ok'] and not c.get('exempted', False)]
 print(json.dumps({'checks':checks,'failed':len(failed),'runner_violations':runner_violations},ensure_ascii=False,indent=2))
 if failed:
