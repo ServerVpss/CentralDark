@@ -128,3 +128,23 @@ CAPACIDADE_EXTERNA
 → PROVA
 → ABSORVER_NO_OWNER_CANONICO | NO_CHANGE
 ```
+
+
+## Autoridade CHEFE × Reality Judge — binding obrigatório
+
+Este adapter herda a SOUL CURRENT. REALITY=JUDGE significa verificação técnica pós-efeito e bloqueio de falso PASS; não é permissão para executar, não é autoridade humana e não reduz a intenção/autonomia/governança do SEGREDO/CHEFE.
+
+```text
+CHEFE_AUTHORITY_IS_SINGLETON=true
+DETERMINISTIC_ROUTE_FIRST=true
+REALITY_JUDGE_AFTER_EFFECT=true
+REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true
+REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+REALITY_JUDGE_IS_NOT_HUMAN_AUTHORITY=true
+CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true
+OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
+TLC23_PROOF_COUNTERPROOF_SERVE_EXECUTION=true
+UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM=true
+```
+
+Divergência de sensor/cache/log/modelo/workflow abre teste discriminante e correção do cone afetado; não abre veto humano concorrente.
