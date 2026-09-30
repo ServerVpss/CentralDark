@@ -162,6 +162,11 @@ jobs:
         run: |
           set -euo pipefail
           # FABLE JUDGE: before=40 zeros → SEM_BASE — do not pass null OID as merge-base/diff base
+          if [ "${BASE_SHA}" = "0000000000000000000000000000000000000000" ]; then
+            git fetch origin main --depth=1
+            BASE_SHA="$(git rev-parse origin/main)"
+            echo "IDENTIDADE_BASE_FALLBACK=origin/main:${BASE_SHA}"
+          fi
           if [ -n "${BASE_SHA}" ] && [ "${BASE_SHA}" != "0000000000000000000000000000000000000000" ]; then
             node scripts/lupa/validar-identidade-operacional.mjs \
               --base-ref "$BASE_SHA" \
@@ -285,6 +290,11 @@ jobs:
         run: |
           set -uo pipefail
           status=0
+          if [ "${BASE_SHA}" = "0000000000000000000000000000000000000000" ]; then
+            git fetch origin main --depth=1
+            BASE_SHA="$(git rev-parse origin/main)"
+            echo "REPORT_BASE_FALLBACK=origin/main:${BASE_SHA}"
+          fi
           python3 scripts/trigger-fabric/verify_repo_contract.py . || status=1
           node apps/modulos/mapeamento/core/validar-mapa.mjs \
             --repo-root "$GITHUB_WORKSPACE" \
