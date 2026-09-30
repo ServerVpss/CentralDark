@@ -1,6 +1,6 @@
 {
   "schema": "centraldark.modules.hub.controls.notifications_sensors.v1",
-  "updated_at": "2026-09-24T12:11:00-03:00",
+  "updated_at": "2026-09-30T08:07:00-03:00",
   "purpose": "Arquivo humano/editavel para ativar/desativar notificacoes, sensores de evento, canais de retorno e gatilhos de expansao. Nao guardar segredos aqui.",
   "global": {
     "default_enabled": true,
@@ -22,6 +22,35 @@
       "allow_promote_notification_to_pass": false,
       "allow_parallel_brain": false,
       "default_output_format": "Feito/Evidencia/Pendencia/Proximo passo/Qual BOOT usar/Fio da missao"
+    },
+    "github_event_router": {
+      "enabled": true,
+      "owner_workflow": ".github/workflows/selo-fabric.yml",
+      "source": "github.event_name",
+      "mode": "event_name_then_owner_route",
+      "classes": {
+        "push": "CANONICAL_RECORD_ONLY",
+        "check_suite": "CI_SENSOR",
+        "workflow_run": "CI_SENSOR",
+        "issues": "ISSUE_STATE_SENSOR",
+        "issue_comment": "COMMENT_SENSOR",
+        "pull_request": "PR_STATE_SENSOR",
+        "pull_request_review": "PR_REVIEW_SENSOR",
+        "pull_request_review_comment": "PR_REVIEW_SENSOR",
+        "release": "RELEASE_SENSOR",
+        "create": "REPOSITORY_EVENT_ONLY",
+        "delete": "REPOSITORY_EVENT_ONLY",
+        "deployment_status": "DEPLOY_SENSOR",
+        "status": "CI_SENSOR",
+        "schedule": "DETERMINISTIC_TRIGGER",
+        "workflow_dispatch": "DETERMINISTIC_TRIGGER"
+      },
+      "unknown_event_route": "EVENT_ONLY",
+      "event_is_not_pass": true,
+      "event_is_not_authority": true,
+      "owner_lookup_before_action": true,
+      "self_echo_guard": true,
+      "dedupe_marker": "CENTRALDARK_SELO_FABRIC"
     }
   },
   "channels": {
