@@ -4,169 +4,169 @@
     "h": 208
   },
   "grade": {
-    "cols": 8,
+    "cols": 16,
     "rows": 9
   },
   "peles": {
     "forja": {
-      "sha256": "fd2645a91756967d",
+      "sha256": "a1bad55da754e6ae",
       "bytes": [
-        1536,
+        3072,
         1872
       ],
       "poses": [
         {
           "id": "idle",
           "linha": 0,
-          "quadros": 6
+          "quadros": 16
         },
         {
           "id": "running-right",
           "linha": 1,
-          "quadros": 8
+          "quadros": 16
         },
         {
           "id": "running-left",
           "linha": 2,
-          "quadros": 8
+          "quadros": 16
         },
         {
           "id": "waving",
           "linha": 3,
-          "quadros": 4
+          "quadros": 16
         },
         {
           "id": "jumping",
           "linha": 4,
-          "quadros": 5
+          "quadros": 16
         },
         {
           "id": "failed",
           "linha": 5,
-          "quadros": 8
+          "quadros": 16
         },
         {
           "id": "waiting",
           "linha": 6,
-          "quadros": 6
+          "quadros": 16
         },
         {
           "id": "sitting",
           "linha": 7,
-          "quadros": 6
+          "quadros": 16
         },
         {
           "id": "review",
           "linha": 8,
-          "quadros": 6
+          "quadros": 16
         }
       ]
     },
     "celestial": {
-      "sha256": "0f27953f92996a40",
+      "sha256": "001386842dc5fb97",
       "bytes": [
-        1536,
+        3072,
         1872
       ],
       "poses": [
         {
           "id": "idle",
           "linha": 0,
-          "quadros": 6
+          "quadros": 16
         },
         {
           "id": "running-right",
           "linha": 1,
-          "quadros": 8
+          "quadros": 16
         },
         {
           "id": "running-left",
           "linha": 2,
-          "quadros": 8
+          "quadros": 16
         },
         {
           "id": "waving",
           "linha": 3,
-          "quadros": 4
+          "quadros": 16
         },
         {
           "id": "jumping",
           "linha": 4,
-          "quadros": 5
+          "quadros": 16
         },
         {
           "id": "failed",
           "linha": 5,
-          "quadros": 8
+          "quadros": 16
         },
         {
           "id": "waiting",
           "linha": 6,
-          "quadros": 6
+          "quadros": 16
         },
         {
           "id": "sitting",
           "linha": 7,
-          "quadros": 6
+          "quadros": 16
         },
         {
           "id": "review",
           "linha": 8,
-          "quadros": 6
+          "quadros": 16
         }
       ]
     },
     "ascensao": {
-      "sha256": "421d0a4f97d8f48f",
+      "sha256": "25928fcb2458a9f7",
       "bytes": [
-        1536,
+        3072,
         1872
       ],
       "poses": [
         {
           "id": "idle",
           "linha": 0,
-          "quadros": 6
+          "quadros": 16
         },
         {
           "id": "running-right",
           "linha": 1,
-          "quadros": 8
+          "quadros": 16
         },
         {
           "id": "running-left",
           "linha": 2,
-          "quadros": 8
+          "quadros": 16
         },
         {
           "id": "waving",
           "linha": 3,
-          "quadros": 4
+          "quadros": 16
         },
         {
           "id": "jumping",
           "linha": 4,
-          "quadros": 5
+          "quadros": 16
         },
         {
           "id": "failed",
           "linha": 5,
-          "quadros": 8
+          "quadros": 16
         },
         {
           "id": "waiting",
           "linha": 6,
-          "quadros": 6
+          "quadros": 16
         },
         {
           "id": "sitting",
           "linha": 7,
-          "quadros": 6
+          "quadros": 16
         },
         {
           "id": "review",
           "linha": 8,
-          "quadros": 6
+          "quadros": 16
         }
       ]
     }

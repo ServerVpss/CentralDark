@@ -2048,6 +2048,11 @@
       "CLEANUP_AT_END_OR_TTL_REQUIRED"
     ],
     "cleanup": {
+      "tool": "scripts/centraldark/ephemeral-workspace.mjs",
+      "marker_file": ".centraldark-ephemeral.json",
+      "cleanup_readback_required": true,
+      "blind_delete_without_marker": "FORBIDDEN",
+      "self_test_required_by_gate": true,
       "delete_after_use": true,
       "cleanup_on_success": true,
       "cleanup_on_failure_when_safe": true,

@@ -1,10 +1,10 @@
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { Eye, EyeOff, Pause, Play, Sparkles } from "lucide-react";
 
-import hojaForja from "@/assets/hermes-sheet-forja.webp.asset.json";
-import hojaCelestial from "@/assets/hermes-sheet-celestial.webp.asset.json";
-import hojaAscensao from "@/assets/hermes-sheet-ascensao.webp.asset.json";
-import folhaInstinto from "@/assets/hermes-instinto-superior-sheet-canonico.webp.asset.json";
+import hojaForjaUrl from "@/assets/hermes-sheet-forja.webp";
+import hojaCelestialUrl from "@/assets/hermes-sheet-celestial.webp";
+import hojaAscensaoUrl from "@/assets/hermes-sheet-ascensao.webp";
+import folhaInstintoUrl from "@/assets/hermes-instinto-superior-sheet.webp";
 import folha from "@/lib/hermes-folha.json";
 import instinto from "@/lib/hermes-instinto-superior.json";
 import { useI18n } from "@/lib/i18n";
@@ -40,7 +40,7 @@ export const PELES: {
 }[] = [
   {
     id: "forja",
-    url: hojaForja.url,
+    url: hojaForjaUrl,
     anel: "border-gold/60",
     brilho: "0 0 42px -6px color-mix(in oklab, var(--gold) 55%, transparent)",
     ponto: "bg-gold",
@@ -49,7 +49,7 @@ export const PELES: {
   },
   {
     id: "celestial",
-    url: hojaCelestial.url,
+    url: hojaCelestialUrl,
     anel: "border-neon-blue/60",
     brilho: "0 0 42px -6px color-mix(in oklab, var(--neon-blue) 55%, transparent)",
     ponto: "bg-neon-blue",
@@ -58,7 +58,7 @@ export const PELES: {
   },
   {
     id: "ascensao",
-    url: hojaAscensao.url,
+    url: hojaAscensaoUrl,
     anel: "border-neon-purple/60",
     brilho: "0 0 42px -6px color-mix(in oklab, var(--neon-purple) 55%, transparent)",
     ponto: "bg-neon-purple",
@@ -183,6 +183,8 @@ function SpriteHermes({
         {
           "--hermes-w": `${largura}px`,
           "--hermes-h": `${altura}px`,
+          "--hermes-cols": String(folha.grade.cols),
+          "--hermes-rows": String(folha.grade.rows),
           "--hermes-glow": pele.glow,
           "--hermes-glow-soft": pele.glowSuave,
           "--hermes-pulso": pulso.toFixed(3),
@@ -302,7 +304,7 @@ function SpriteInstintoSuperior({
           "--hermes-cols": String(instinto.grade.cols),
           "--hermes-glow": "color-mix(in oklab, var(--neon-blue) 58%, transparent)",
           "--hermes-glow-soft": "color-mix(in oklab, var(--neon-purple) 24%, transparent)",
-          "--hermes-atlas": `url(${folhaInstinto.url})`,
+          "--hermes-atlas": `url(${folhaInstintoUrl})`,
           "--hermes-x": `${-quadro * largura}px`,
           "--hermes-y": `${-dados.linha * altura}px`,
           "--hermes-aura-pulso": pulsoAura.toFixed(3),
