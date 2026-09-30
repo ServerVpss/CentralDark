@@ -132,3 +132,169 @@ HERMES_VPS_RUNTIME -->|HERMES_INFERENCE| NOUS_PROVIDER --> SOLAR_FREE --> SOLAR_
 
 %% CD_FLOW:runtime.hermes-reverse-route
 HERMES_VPS_RUNTIME -->|REVERSE_TRACE_REQUEST| REVERSE_ROUTE --> REVERSE_OK
+
+
+%% CD_REGISTRY_PROJECTION_BEGIN
+subgraph CANONICAL_FLOW_REGISTRY_PROJECTION["FLOW REGISTRY — projeção derivada / não autoridade"]
+%% CD_FLOW:arch.chefe-sol
+CD_REG_1_A["CHEFE"] -->|"INTENT"| CD_REG_1_B["SOL"]
+%% CD_FLOW:arch.sol-builder
+CD_REG_2_A["SOL"] -->|"DELEGATE"| CD_REG_2_B["BUILDER"]
+%% CD_FLOW:arch.sol-ui
+CD_REG_3_A["SOL"] -->|"DELEGATE"| CD_REG_3_B["UI"]
+%% CD_FLOW:arch.sol-hermes
+CD_REG_4_A["SOL"] -->|"DELEGATE"| CD_REG_4_B["HERMES"]
+%% CD_FLOW:arch.builder-gateway
+CD_REG_5_A["BUILDER"] -->|"CALL"| CD_REG_5_B["GATEWAY_ROUTER"]
+%% CD_FLOW:arch.ui-gateway
+CD_REG_6_A["UI"] -->|"CALL"| CD_REG_6_B["GATEWAY_ROUTER"]
+%% CD_FLOW:arch.hermes-gateway
+CD_REG_7_A["HERMES"] -->|"CALL"| CD_REG_7_B["GATEWAY_ROUTER"]
+%% CD_FLOW:arch.gateway-vps
+CD_REG_8_A["GATEWAY_ROUTER"] -->|"DISPATCH"| CD_REG_8_B["VPS"]
+%% CD_FLOW:arch.vps-mapa
+CD_REG_9_A["VPS"] -->|"OBSERVE"| CD_REG_9_B["MAPA_VIVO"]
+%% CD_FLOW:arch.mapa-judge
+CD_REG_10_A["MAPA_VIVO"] -->|"EVIDENCE"| CD_REG_10_B["REALITY_JUDGE"]
+%% CD_FLOW:arch.judge-sol
+CD_REG_11_A["REALITY_JUDGE"] -->|"RECEIPT"| CD_REG_11_B["SOL"]
+%% CD_FLOW:trigger.human.CENTRALDARK_MASTER
+CD_REG_12_A["CHEFE"] -->|"!CENTRALDARK"| CD_REG_12_B["docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml"]
+%% CD_FLOW:trigger.human.DELTA_UTILS
+CD_REG_13_A["CHEFE"] -->|"!DELTA UTILS"| CD_REG_13_B["docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#delta_harvest"]
+%% CD_FLOW:trigger.human.ACORDAR
+CD_REG_14_A["CHEFE"] -->|"#ACORDAR"| CD_REG_14_B["LEIA-ME-IA.md + AGENTS.md"]
+%% CD_FLOW:trigger.human.CALIBRAR
+CD_REG_15_A["CHEFE"] -->|"!CALIBRAR"| CD_REG_15_B["LEIA-ME-IA.md + AGENTS.md"]
+%% CD_FLOW:trigger.human.MULTIBUSSOLA
+CD_REG_16_A["CHEFE"] -->|"!MULTIBUSSOLA"| CD_REG_16_B["docs/CONSCIENCIA/MULTIBUSSOLA.md"]
+%% CD_FLOW:trigger.human.META_LUPA
+CD_REG_17_A["CHEFE"] -->|"!META_LUPA"| CD_REG_17_B[".agents/skills/meta-lupa/"]
+%% CD_FLOW:trigger.human.RECONCILIAR
+CD_REG_18_A["CHEFE"] -->|"!RECONCILIAR"| CD_REG_18_B["docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json"]
+%% CD_FLOW:trigger.human.CONTRAPROVA
+CD_REG_19_A["CHEFE"] -->|"!CONTRAPROVA"| CD_REG_19_B["docs/CONSCIENCIA/PROOF-OWNERSHIP.json"]
+%% CD_FLOW:trigger.human.REMEDICAO
+CD_REG_20_A["CHEFE"] -->|"!REMEDIÇÃO"| CD_REG_20_B["docs/CONSCIENCIA/REMEDICAO.md"]
+%% CD_FLOW:trigger.human.FIXED_POINT
+CD_REG_21_A["CHEFE"] -->|"!FIXED_POINT"| CD_REG_21_B["Trigger Fabric"]
+%% CD_FLOW:trigger.human.REGISTRA
+CD_REG_22_A["CHEFE"] -->|"!REGISTRA"| CD_REG_22_B["continuity + learning owners"]
+%% CD_FLOW:trigger.human.BOOT
+CD_REG_23_A["CHEFE"] -->|"!BOOT"| CD_REG_23_B["LEIA-ME-IA.md"]
+%% CD_FLOW:trigger.entry.BOT_ENTRY
+CD_REG_24_A["ENTRY_SURFACE"] -->|"BOT_ENTRY"| CD_REG_24_B["LEIA-ME-IA.md + AGENTS.md + docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md + Trigger Fabric"]
+%% CD_FLOW:trigger.entry.PRE_HUMAN_RETURN
+CD_REG_25_A["ENTRY_SURFACE"] -->|"PRE_HUMAN_RETURN"| CD_REG_25_B["docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml"]
+%% CD_FLOW:trigger.entry.RESUME
+CD_REG_26_A["ENTRY_SURFACE"] -->|"RESUME"| CD_REG_26_B["continuity/receipts/last_good_state"]
+%% CD_FLOW:trigger.learning.AUREOLA_MATERIAL_DISCOVERY
+CD_REG_27_A["LEARNING_EVENT_BUS"] -->|"AUREOLA_MATERIAL_DISCOVERY"| CD_REG_27_B[".agents/skills/session-intelligence-harvester/ + scripts/memory-linker/"]
+%% CD_FLOW:trigger.learning.MATERIAL_INGEST
+CD_REG_28_A["LEARNING_EVENT_BUS"] -->|"MATERIAL_INGEST"| CD_REG_28_B[".agents/skills/session-intelligence-harvester/"]
+%% CD_FLOW:trigger.learning.HUMAN_CORRECTION
+CD_REG_29_A["LEARNING_EVENT_BUS"] -->|"HUMAN_CORRECTION"| CD_REG_29_B[".agents/skills/session-intelligence-harvester/ + metacognição"]
+%% CD_FLOW:trigger.learning.FABLE_LOOP
+CD_REG_30_A["LEARNING_EVENT_BUS"] -->|"FABLE_LOOP"| CD_REG_30_B[".agents/skills/fable-loop/SKILL.md"]
+%% CD_FLOW:trigger.learning.TOOL_ERROR
+CD_REG_31_A["LEARNING_EVENT_BUS"] -->|"TOOL_ERROR"| CD_REG_31_B[".agents/skills/session-intelligence-harvester/ + scripts/memory-linker/"]
+%% CD_FLOW:trigger.learning.TEST_FAILURE
+CD_REG_32_A["LEARNING_EVENT_BUS"] -->|"TEST_FAILURE"| CD_REG_32_B[".agents/skills/session-intelligence-harvester/ + scripts/memory-linker/"]
+%% CD_FLOW:trigger.learning.CI_RUNNER_ROUTE_FAILURE
+CD_REG_33_A["LEARNING_EVENT_BUS"] -->|"CI_RUNNER_ROUTE_FAILURE"| CD_REG_33_B["Trigger Fabric + existing workflow owner"]
+%% CD_FLOW:trigger.learning.CONTRADICTION_FOUND
+CD_REG_34_A["LEARNING_EVENT_BUS"] -->|"CONTRADICTION_FOUND"| CD_REG_34_B[".agents/skills/meta-lupa/"]
+%% CD_FLOW:trigger.learning.PATTERN_FOUND
+CD_REG_35_A["LEARNING_EVENT_BUS"] -->|"PATTERN_FOUND"| CD_REG_35_B["scripts/memory-linker/pattern-discovery.mjs"]
+%% CD_FLOW:trigger.learning.MEMORY_DELTA
+CD_REG_36_A["LEARNING_EVENT_BUS"] -->|"MEMORY_DELTA"| CD_REG_36_B["scripts/memory-linker/"]
+%% CD_FLOW:trigger.learning.KNOWLEDGE_CRYSTAL
+CD_REG_37_A["LEARNING_EVENT_BUS"] -->|"KNOWLEDGE_CRYSTAL"| CD_REG_37_B[".agents/skills/knowledge-compiler/"]
+%% CD_FLOW:trigger.learning.CRYSTAL_PROMOTED
+CD_REG_38_A["LEARNING_EVENT_BUS"] -->|"CRYSTAL_PROMOTED"| CD_REG_38_B[".agents/skills/vector-memory/"]
+%% CD_FLOW:trigger.learning.SOURCE_CHANGED_OR_DELETED
+CD_REG_39_A["LEARNING_EVENT_BUS"] -->|"SOURCE_CHANGED_OR_DELETED"| CD_REG_39_B[".agents/skills/vector-memory/ + knowledge-compiler"]
+%% CD_FLOW:trigger.learning.POST_MUTATION
+CD_REG_40_A["LEARNING_EVENT_BUS"] -->|"POST_MUTATION"| CD_REG_40_B["remedição + session-intelligence-harvester"]
+%% CD_FLOW:trigger.learning.RUNTIME_DRIFT
+CD_REG_41_A["LEARNING_EVENT_BUS"] -->|"RUNTIME_DRIFT"| CD_REG_41_B["applicable_runtime_owner"]
+%% CD_FLOW:trigger.learning.SESSION_END
+CD_REG_42_A["LEARNING_EVENT_BUS"] -->|"SESSION_END"| CD_REG_42_B[".agents/skills/session-intelligence-harvester/SKILL.md"]
+%% CD_FLOW:trigger.automatic.ANY_PR_OR_COMMIT
+CD_REG_43_A["RUNTIME_EVENT_BUS"] -->|"ANY_PR_OR_COMMIT"| CD_REG_43_B["porta-de-entrada + autonomia-promocao + Trigger Fabric"]
+%% CD_FLOW:trigger.automatic.STATE_CHANGED
+CD_REG_44_A["RUNTIME_EVENT_BUS"] -->|"STATE_CHANGED"| CD_REG_44_B["#ACORDAR + continuity"]
+%% CD_FLOW:trigger.automatic.WRITER_CONFLICT
+CD_REG_45_A["RUNTIME_EVENT_BUS"] -->|"WRITER_CONFLICT"| CD_REG_45_B["Trigger Fabric + writer ownership"]
+%% CD_FLOW:trigger.automatic.BOUNDARY_TOUCHED
+CD_REG_46_A["RUNTIME_EVENT_BUS"] -->|"BOUNDARY_TOUCHED"| CD_REG_46_B["Trigger Fabric + applicable owner"]
+%% CD_FLOW:trigger.automatic.MATERIAL_UNKNOWN_AFFECTS_MUTATION
+CD_REG_47_A["RUNTIME_EVENT_BUS"] -->|"MATERIAL_UNKNOWN_AFFECTS_MUTATION"| CD_REG_47_B["MetaLupa + applicable owner"]
+%% CD_FLOW:trigger.automatic.PROOF_TARGET_MISMATCH
+CD_REG_48_A["RUNTIME_EVENT_BUS"] -->|"PROOF_TARGET_MISMATCH"| CD_REG_48_B["OUTPUT_GUARD + Reality Judge"]
+%% CD_FLOW:trigger.automatic.ROLLBACK_UNPROVEN_FOR_MATERIAL_MUTATION
+CD_REG_49_A["RUNTIME_EVENT_BUS"] -->|"ROLLBACK_UNPROVEN_FOR_MATERIAL_MUTATION"| CD_REG_49_B["docs/CONSCIENCIA/EXECUCAO-REVERSIVEL.md"]
+%% CD_FLOW:trigger.automatic.EVIDENCE_CONFLICT
+CD_REG_50_A["RUNTIME_EVENT_BUS"] -->|"EVIDENCE_CONFLICT"| CD_REG_50_B[".agents/skills/meta-lupa/"]
+%% CD_FLOW:trigger.automatic.MODEL_UNAVAILABLE
+CD_REG_51_A["RUNTIME_EVENT_BUS"] -->|"MODEL_UNAVAILABLE"| CD_REG_51_B["Trigger Fabric + engine capability measurement"]
+%% CD_FLOW:trigger.automatic.DEPENDENCY_FAILURE
+CD_REG_52_A["RUNTIME_EVENT_BUS"] -->|"DEPENDENCY_FAILURE"| CD_REG_52_B["applicable_dependency_owner"]
+%% CD_FLOW:trigger.automatic.MISSION_PENDING
+CD_REG_53_A["RUNTIME_EVENT_BUS"] -->|"MISSION_PENDING"| CD_REG_53_B["apps/modulos/HERMES-CORE/core/orchestrator.mjs"]
+%% CD_FLOW:trigger.automatic.ORPHAN_MISSION
+CD_REG_54_A["RUNTIME_EVENT_BUS"] -->|"ORPHAN_MISSION"| CD_REG_54_B["apps/modulos/HERMES-CORE/core/orchestrator.mjs"]
+%% CD_FLOW:trigger.automatic.GRAPH_REFRESH
+CD_REG_55_A["RUNTIME_EVENT_BUS"] -->|"GRAPH_REFRESH"| CD_REG_55_B["apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs"]
+%% CD_FLOW:trigger.automatic.DREAM_REVIEW
+CD_REG_56_A["RUNTIME_EVENT_BUS"] -->|"DREAM_REVIEW"| CD_REG_56_B["scripts/memory-linker/dream-review-run.mjs"]
+%% CD_FLOW:trigger.automatic.VECTOR_MEMORY_REFRESH
+CD_REG_57_A["RUNTIME_EVENT_BUS"] -->|"VECTOR_MEMORY_REFRESH"| CD_REG_57_B[".agents/skills/vector-memory/SKILL.md"]
+%% CD_FLOW:trigger.automatic.LEGACY_GC
+CD_REG_58_A["RUNTIME_EVENT_BUS"] -->|"LEGACY_GC"| CD_REG_58_B["apps/modulos/HERMES-CORE/core/orchestrator.mjs"]
+%% CD_FLOW:trigger.automatic.PR_UPDATED_OR_MERGED
+CD_REG_59_A["RUNTIME_EVENT_BUS"] -->|"PR_UPDATED_OR_MERGED"| CD_REG_59_B["existing_workflows"]
+%% CD_FLOW:gate.diagram-route.normalizePath
+CD_REG_60_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_60_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.git
+CD_REG_61_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_61_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.gitOk
+CD_REG_62_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_62_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.loadRegistry
+CD_REG_63_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_63_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.readBaseRegistry
+CD_REG_64_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_64_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.extractTriggerSymbols
+CD_REG_65_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_65_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.validateRegistry
+CD_REG_66_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_66_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.validateDiagram
+CD_REG_67_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_67_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.detectAddedUnits
+CD_REG_68_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_68_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.collectAddedLines
+CD_REG_69_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_69_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.effectiveBase
+CD_REG_70_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_70_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.validateTriggerCoverage
+CD_REG_71_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_71_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.validateDiffCoverage
+CD_REG_72_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_72_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.runGate
+CD_REG_73_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_73_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.arg
+CD_REG_74_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_74_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:hook.porta-de-entrada.diagram-route-gate
+CD_REG_75_A["PORTA_DE_ENTRADA"] -->|"PR_OR_COMMIT"| CD_REG_75_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:trigger.human.EXECUTOR_CENTRALDARK
+CD_REG_76_A["CHEFE"] -->|"!EXECUTOR_CENTRALDARK"| CD_REG_76_B["docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md"]
+%% CD_FLOW:trigger.human.TIK_TAK
+CD_REG_77_A["CHEFE"] -->|"!TIK-TAK"| CD_REG_77_B["docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md#81-tik-tak--automation-factory--outer-loop"]
+%% CD_FLOW:trigger.human.RASTRO
+CD_REG_78_A["CHEFE"] -->|"!RASTRO"| CD_REG_78_B["AGENTS.md + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md"]
+%% CD_FLOW:trigger.automatic.VPS_KERNEL_DELTA_MATERIAL
+CD_REG_79_A["RUNTIME_EVENT_BUS"] -->|"VPS_KERNEL_DELTA_MATERIAL"| CD_REG_79_B["apps/modulos/elite-gateway/scripts/centraldark_omni_router.py + Trigger Fabric"]
+%% CD_FLOW:trigger.automatic.LOG_INCIDENT_MATERIAL
+CD_REG_80_A["RUNTIME_EVENT_BUS"] -->|"LOG_INCIDENT_MATERIAL"| CD_REG_80_B["apps/modulos/mcp/src/admin.js + Trigger Fabric"]
+end
+%% CD_REGISTRY_PROJECTION_END
