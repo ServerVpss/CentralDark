@@ -1,0 +1,217 @@
+name: 🧿 CentralDark Reinstall — Orquestrador de Reinstalação
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Ação a executar'
+        required: true
+        type: choice
+        default: preflight
+        options:
+          - preflight
+          - firstboot
+          - health
+          - full
+      pinned_sha:
+        description: 'SHA a pinar no checkout (default: main HEAD)'
+        required: false
+        type: string
+      vault_path:
+        description: 'Caminho do vault archive na VPS'
+        required: false
+        type: string
+      instance_id:
+        description: 'Contabo instance ID'
+        required: false
+        default: 'vmi3256920'
+        type: string
+      snapshot_id:
+        description: 'Contabo snapshot ID'
+        required: false
+        default: 'snap1790430960'
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: centraldark-reinstall
+  cancel-in-progress: false
+
+env:
+  REPO_ROOT: /root/CentralDark
+  PR_MAE: 1562
+
+jobs:
+  preflight:
+    name: 🔍 Gate A+B+C — Preflight GO/NO-GO
+    runs-on: self-hosted
+    if: inputs.action == 'preflight' || inputs.action == 'full'
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run preflight
+        id: preflight
+        env:
+          CENTRALDARK_INSTANCE_ID: ${{ inputs.instance_id }}
+          CENTRALDARK_SNAPSHOT_ID: ${{ inputs.snapshot_id }}
+          CENTRALDARK_VAULT_PATH: ${{ inputs.vault_path }}
+          CENTRALDARK_REPO_ROOT: ${{ env.REPO_ROOT }}
+        run: |
+          chmod +x scripts/vps/centraldark-preformat-go-no-go.sh
+          bash scripts/vps/centraldark-preformat-go-no-go.sh 2>&1 | tee /tmp/preflight-result.txt
+          echo "result=$(tail -1 /tmp/preflight-result.txt)" >> "$GITHUB_OUTPUT"
+
+      - name: Post receipt to PR-mãe
+        if: always()
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const result = fs.readFileSync('/tmp/preflight-result.txt', 'utf8');
+            const ts = new Date().toISOString();
+            const sha = context.sha?.slice(0, 10) || 'UNKNOWN';
+
+            const body = [
+              `<!-- CENTRALDARK_REINSTALL_PREFLIGHT:${context.runId} -->`,
+              `### 🔍 Preflight GO/NO-GO — CentralDark Reinstall`,
+              '',
+              '```',
+              result.slice(-2000),
+              '```',
+              '',
+              `- **SHA:** \`${sha}\``,
+              `- **Run:** \`${context.runId}\``,
+              `- **UTC:** \`${ts}\``,
+              '',
+              '> UNKNOWN != PASS · DOCUMENTED != EXECUTED · REALITY=JUDGE',
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: Number(process.env.PR_MAE),
+              body,
+            });
+
+  firstboot:
+    name: 🚀 First Boot — CentralDark-OS
+    runs-on: self-hosted
+    needs: [preflight]
+    if: |
+      always() &&
+      (inputs.action == 'firstboot' || inputs.action == 'full') &&
+      (needs.preflight.result == 'success' || inputs.action == 'firstboot')
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run firstboot
+        env:
+          CENTRALDARK_PINNED_SHA: ${{ inputs.pinned_sha || '' }}
+          CENTRALDARK_VAULT_PATH: ${{ inputs.vault_path }}
+        run: |
+          chmod +x scripts/vps/centraldark-firstboot.sh
+          bash scripts/vps/centraldark-firstboot.sh 2>&1 | tee /tmp/firstboot-result.txt
+
+      - name: Post receipt to PR-mãe
+        if: always()
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const result = fs.readFileSync('/tmp/firstboot-result.txt', 'utf8');
+            const ts = new Date().toISOString();
+
+            const body = [
+              `<!-- CENTRALDARK_REINSTALL_FIRSTBOOT:${context.runId} -->`,
+              `### 🚀 First Boot — CentralDark-OS`,
+              '',
+              '```',
+              result.slice(-2000),
+              '```',
+              '',
+              `- **Run:** \`${context.runId}\``,
+              `- **UTC:** \`${ts}\``,
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: Number(process.env.PR_MAE),
+              body,
+            });
+
+  health:
+    name: 🏥 Post-reboot Health
+    runs-on: self-hosted
+    needs: [firstboot]
+    if: |
+      always() &&
+      (inputs.action == 'health' || inputs.action == 'full') &&
+      (needs.firstboot.result == 'success' || inputs.action == 'health')
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Health check
+        run: |
+          echo "=== POST-REBOOT HEALTH ==="
+          echo "HOSTNAME=$(hostname)"
+          echo "OS=$(cat /etc/os-release 2>/dev/null | grep PRETTY_NAME | cut -d= -f2 | tr -d '"')"
+          echo "UPTIME=$(uptime -p 2>/dev/null || uptime)"
+          echo "NODE=$(node -v 2>/dev/null || echo MISSING)"
+          echo "PM2_PROCESSES=$(pm2 jlist 2>/dev/null | python3 -c 'import sys,json;print(len(json.load(sys.stdin)))' 2>/dev/null || echo 0)"
+          echo "GIT_HEAD=$(git rev-parse --short HEAD 2>/dev/null)"
+          echo "DISK=$(df -h / 2>/dev/null | awk 'NR==2{print $5}')"
+
+          # MCP health
+          if curl -sf http://localhost:9100/health >/dev/null 2>&1; then
+            echo "MCP_HEALTH=OK"
+          else
+            echo "MCP_HEALTH=NOT_RESPONDING"
+          fi
+
+          # GitHub connectivity
+          if git ls-remote origin refs/heads/main >/dev/null 2>&1; then
+            echo "GITHUB=REACHABLE"
+          else
+            echo "GITHUB=UNREACHABLE"
+          fi
+
+          echo "HEALTH_CHECK=DONE"
+
+      - name: Post health to PR-mãe
+        if: always()
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const ts = new Date().toISOString();
+            const body = [
+              `<!-- CENTRALDARK_REINSTALL_HEALTH:${context.runId} -->`,
+              `### 🏥 Post-reboot Health — CentralDark-OS`,
+              '',
+              `- **Run:** \`${context.runId}\``,
+              `- **UTC:** \`${ts}\``,
+              '',
+              '> Health verificado pelo runner self-hosted. Se este selo existe, o runner está vivo.',
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: Number(process.env.PR_MAE),
+              body,
+            });
