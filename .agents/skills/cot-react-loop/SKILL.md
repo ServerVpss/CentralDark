@@ -345,6 +345,108 @@ novo motor, skill, workflow ou parada de confirmação para cada variação da
 mesma classe. Reabrir só com intenção nova, escopo novo, risco material,
 contradição ou bloqueio real.
 
+### 4.8 Standing Goal + `/goal` — continuidade material, não preâmbulo
+
+O bloco mostrado antes de `/goal` é um **contrato de fase**, não um novo
+motor. Ele deve reutilizar o mesmo `MISSION_ID`, goal pai, Writer, escopo e
+predicado de sucesso até existir prova material de conclusão ou uma condição
+terminal legítima.
+
+```text
+STANDING_GOAL=ACTIVE
+GOAL_PARENT=STABLE
+MICRO_GOAL=DERIVED_FROM_CURRENT_WOUND
+PHASE_CONTRACT=REHYDRATE_NOT_REINVENT
+PREAMBLE_IS_PROGRESS=false
+ITERATION_COUNTER_IS_PROGRESS=false
+PLANNING_TEXT_IS_DELIVERABLE=false
+MISSING_REQUIRED_EVIDENCE_FORCE_CONTINUE=true
+```
+
+Antes de cada fase material, reidratar do estado já existente:
+
+```text
+MISSION_ID
+OBJETIVO
+ALVO
+CANDIDATE_REF
+CANDIDATE_SHA256
+BASELINE_REF
+FIXTURE_REF
+EVALUATION_REF
+ESTADO_INICIAL
+DEFINICOES
+ESCOPO_PERMITIDO
+ESCOPO_PROIBIDO
+CONTROL_SURFACES_LOCKED
+CONTROL_SURFACES_EDITABLE
+SUCCESS_PREDICATE
+NON_COUNTING_OUTCOMES
+FAILURE_MODES
+EVIDENCE_REQUIRED
+ROLLBACK
+AUTHORIZATION_LEVEL
+WRITER
+BUDGET
+STOP_CONDITIONS
+```
+
+Campos ausentes continuam `UNPROVEN`. Valores transitórios de uma execução
+não viram arquitetura canônica.
+
+Após cada ciclo:
+
+```text
+OBSERVE
+→ COMPARE_REQUIRED_DELIVERABLES
+→ UPDATE_EVIDENCE_MAP
+→ IF_SUCCESS_PREDICATE_PROVEN: STOP_SUCCESS
+→ ELSE_IF_HUMAN_FRONTIER_OR_EXACT_BLOCKER: STOP_BLOCKED
+→ ELSE_IF_NO_NEW_INFORMATION: STOP_POINT_FIXED
+→ ELSE: CONTINUE_TOWARD_STANDING_GOAL
+```
+
+`/goal` é somente superfície de introspecção do estado do goal; não cria
+um goal novo, não altera autorização e não substitui prova.
+
+```text
+/goal RETURNS:
+  GOAL_PARENT
+  MISSION_ID
+  SUCCESS_PREDICATE
+  DELIVERABLES_REQUIRED
+  DELIVERABLES_PROVEN
+  DELIVERABLES_MISSING
+  CURRENT_HEAD_OR_BASELINE
+  CURRENT_WRITER
+  CURRENT_SCOPE
+  NEXT_CURSOR
+```
+
+Se a resposta do agente for apenas planejamento, boot, contrato ou narração
+sem arquivo/diff/output/receipt exigido pelo goal, o avaliador deve manter:
+
+```text
+GOAL_STATUS=CONTINUE
+REASON=NO_MATERIAL_DELIVERABLE_EVIDENCE
+```
+
+`EXECUTE_WITH_JUDGMENT` significa escolher o próximo passo dentro do escopo
+já autorizado. Nunca significa ampliar permissão, alterar superfícies travadas,
+ignorar Writer lease ou converter `UNKNOWN` em `PASS`.
+
+O contador visual `10/20`, `18/20` etc. mede iterações do executor, não
+porcentagem de conclusão. A conclusão é determinada apenas pelo
+`SUCCESS_PREDICATE` e pela evidência requerida.
+
+```text
+STANDING_GOAL_SURVIVES_TURN=true
+STANDING_GOAL_SURVIVES_TOOL_FAILURE=true
+CHILD_FAILURE_DOES_NOT_REPLACE_PARENT_GOAL=true
+CURRENT_WOUND_DRIVES_NEXT_MICRO_GOAL=true
+GOAL_REOPENS_ONLY_ON_NEW_MATERIAL_EVIDENCE_OR_CONTRADICTION=true
+```
+
 ## 5. Optimization Ladder
 
 ### Degrau 0 — BASELINE
