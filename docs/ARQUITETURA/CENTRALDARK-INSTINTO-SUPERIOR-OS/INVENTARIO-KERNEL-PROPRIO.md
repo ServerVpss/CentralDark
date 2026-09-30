@@ -854,16 +854,28 @@ VNC_RESCUE_TESTED=NO (requer painel Contabo)
 GATE_C=PARTIAL_PASS (snapshot existe e é recuperável via API; rollback e VNC não testados)
 ```
 
-### 13.7 Fase A — Vault status
+### 13.7 Fase A — Vault status — FULL PASS
 
 ```text
-VAULT_SCRIPT=scripts/vps/centraldark-vault-bootstrap-inventory.sh (existe no PR branch)
-VPS_BRANCH=main@ab8fe2d80eb
-VPS_HAS_VAULT_SCRIPT=NO (script está somente no branch claude/centraldark-os-kylin-ft1urg)
-VPS_WORKING_TREE=DIRTY (9 modified, 11 untracked)
-EXECUTION_SURFACE=VPS shell via rota autorizada existente
-GATE_A=NOT_STARTED (script ainda não executado no VPS)
-NEXT_ACTION=AGENTE deve sincronizar/transportar o menor delta até a VPS pela rota autorizada disponível e executar o vault; não aguardar microcomando do CHEFE se houver rota operacional
+GATE_A=FULL_PASS
+VAULT_SCRIPT=scripts/vps/centraldark-vault-bootstrap-inventory.sh
+VAULT_SCRIPT_COMMIT_MAIN=eeb1b855c3
+BOOTSTRAP_RESTORE_SCRIPT=scripts/vps/centraldark-os-bootstrap-restore.sh
+BOOTSTRAP_RESTORE_COMMIT_MAIN=9ebdd354a9
+TRANSPORT_METHOD=base64_decode_via_execute_command (bypass private repo auth + git fetch memory limit)
+EXECUTION_DATE=2026-09-30T10:53Z
+VAULT_DIRECTORY=/root/Vault-Cofre-CentralDark-20260930T105330Z/
+VAULT_ARCHIVE=/root/Vault-Cofre-CentralDark-20260930T105330Z.tar.gz
+VAULT_SHA256=b492b06f42a9717e5d187569b39a2b9341a16bd387f9d809cade8bd4e58c621b
+VAULT_ARCHIVE_SIZE=16MB
+MANIFEST_ENTRIES=1949
+UNIQUE_SHA256=2378
+BOOTSTRAP_VALIDATE=PASS
+CANONICAL_FILES_OK=1
+INSTALLER_FOUND=YES
+RESTORE_MODE=READONLY (validated, not applied)
+NEXT_STEP=SET_CENTRALDARK_RESTORE_APPLY=1_TO_RESTORE
+NEXT_GATE=C (rollback validation)
 ```
 
 
@@ -967,12 +979,12 @@ TAILSCALE_READ=PASS
 BUILDKITE_READ=PASS
 SNAPSHOT_EXISTS=PASS
 ROLLBACK_PATH_IDENTIFIED=PASS
-GATE_A=NOT_STARTED
+GATE_A=FULL_PASS (2026-09-30, SHA256=b492b06f…e8bd4e58, 1949 entries, bootstrap READONLY PASS)
 INSTINTO_SUPERIOR_FULL_ADMIN=NOT_IMPLEMENTED
 CLEAN_REINSTALL=NOT_STARTED
 ```
 
-Próximo delta do agente cloud: executar Gate A, completar restore real testável e começar a costura da superfície administrativa Instinto Superior no owner existente, sem esperar outro ciclo.
+Próximo delta do agente cloud: Gate C (rollback validation), completar restore real testável e começar a costura da superfície administrativa Instinto Superior no owner existente.
 
 
 ### 14.6 Regra de continuidade sem espera humana desnecessária
