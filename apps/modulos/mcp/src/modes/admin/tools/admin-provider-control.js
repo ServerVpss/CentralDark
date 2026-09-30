@@ -686,6 +686,37 @@ export async function readTailscaleNetworkLogs({ start, end, tailnet = "-", limi
   };
 }
 
+async function readTailscaleBridgeStatus() {
+  const response = await fetch("http://127.0.0.1:8098/api/tailscale/status", {
+    headers: { accept: "application/json" },
+    signal: AbortSignal.timeout(7_000),
+  });
+  const text = await response.text();
+  let parsed;
+  try { parsed = text ? JSON.parse(text) : null; } catch { parsed = { text: text.slice(0, 2_000) }; }
+  const data = deepRedact(parsed);
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: `TAILSCALE_BRIDGE_HTTP_${response.status}`,
+      provider: "tailscale",
+      capability: "bridge.status",
+      httpStatus: response.status,
+      source: "oauth-broker:/api/tailscale/status",
+      data,
+    };
+  }
+  return {
+    ok: true,
+    status: "PASS",
+    provider: "tailscale",
+    capability: "bridge.status",
+    httpStatus: response.status,
+    source: "oauth-broker:/api/tailscale/status",
+    data,
+  };
+}
+
 function operationFingerprint(input) {
   return createHash("sha256").update(JSON.stringify(input)).digest("hex");
 }
@@ -753,6 +784,7 @@ const providerInputSchema = z.object({
 export const tailscaleTools = [
   {
     name: "tailscale_status",
+    description: "Prova conectividade read-only com a API Tailscale pelo cofre existente e resume devices/capacidades sem expor credencial.",
     description: "Prova conectividade read-only com a API Tailscale pelo cofre existente e resume quantidade de devices e capacidades permitidas, sem expor credencial.",
     annotations: { ...READ, title: "Tailscale — status vivo" },
     inputSchema: z.object({
@@ -795,6 +827,25 @@ export const tailscaleTools = [
           provider: "tailscale",
           configured: Boolean(loadTailscaleKey()),
           secretExposed: false,
+        });
+      }
+    },
+  },
+  {
+    name: "tailscale_bridge_status",
+    description: "Mede a ponte Tailscale viva da VPS para a Casa reutilizando o OAuth Broker existente; retorna estado da tailnet e probes read-only já canônicos.",
+    annotations: { ...READ, title: "Tailscale — ponte VPS ↔ Casa" },
+    inputSchema: z.object({}),
+    handler: async () => {
+      try {
+        return jsonBlock(await readTailscaleBridgeStatus());
+      } catch (error) {
+        return jsonBlock({
+          ok: false,
+          status: sanitizeError(error),
+          provider: "tailscale",
+          capability: "bridge.status",
+          source: "oauth-broker:/api/tailscale/status",
         });
       }
     },

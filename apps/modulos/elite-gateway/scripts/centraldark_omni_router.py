@@ -15,6 +15,7 @@ import glob
 import hashlib
 import json
 import os
+from datetime import datetime, timezone
 import re
 import shutil
 import sqlite3
@@ -29,11 +30,18 @@ from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
+APP_VERSION = "0.3.0"
+DEFAULT_ENGINE = os.getenv("CENTRALDARK_DEFAULT_ENGINE", "hermes").strip().lower()
 APP_VERSION = "0.3.1"
 DEFAULT_ENGINE = os.getenv("CENTRALDARK_DEFAULT_ENGINE", "nous").strip().lower()
 ROUTER_TOKEN = os.getenv("CENTRALDARK_ROUTER_TOKEN", "").strip()
 REQUEST_TIMEOUT = float(os.getenv("CENTRALDARK_ROUTER_TIMEOUT", "180"))
-DEFAULT_FALLBACK_CHAIN = "nous,hermes,google,claude-code,xai,abacus,openai"
+DEFAULT_FALLBACK_CHAIN = "hermes,nous,google,claude-code,xai,abacus,openai"
+CENTRAL_LOG_ROOT = Path(os.getenv("CENTRALDARK_LOG_ROOT", "/root/CentralDark/logs"))
+HERMES_HEALTH_WINDOW_MINUTES = int(os.getenv("CENTRALDARK_HERMES_HEALTH_WINDOW_MINUTES", "30"))
+HERMES_HEALTH_MIN_SAMPLE = int(os.getenv("CENTRALDARK_HERMES_HEALTH_MIN_SAMPLE", "5"))
+HERMES_FAILURE_RATE_MAX = float(os.getenv("CENTRALDARK_HERMES_FAILURE_RATE_MAX", "0.25"))
+HERMES_P95_MAX_MS = int(os.getenv("CENTRALDARK_HERMES_P95_MAX_MS", "180000"))
 ANTIGRAVITY_AGENTAPI = os.getenv(
     "ANTIGRAVITY_AGENTAPI",
     "/root/snap/antigravity-cli/common/.gemini/antigravity-cli/bin/agentapi",
@@ -768,6 +776,120 @@ def free_only_allows(provider: str, target_model: str) -> bool:
     return True
 
 
+_HERMES_HEALTH_CACHE: Dict[str, Any] = {"expires_at": 0.0, "value": None}
+
+
+def _parse_iso_epoch(value: Any) -> Optional[float]:
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return parsed.timestamp()
+    except (TypeError, ValueError):
+        return None
+
+
+def _tail_text(file: Path, max_bytes: int = 512 * 1024) -> str:
+    try:
+        size = file.stat().st_size
+        with file.open("rb") as fh:
+            start = max(0, size - max_bytes)
+            fh.seek(start)
+            data = fh.read()
+        text = data.decode("utf-8", errors="ignore")
+        if start > 0 and "\n" in text:
+            text = text.split("\n", 1)[1]
+        return text
+    except OSError:
+        return ""
+
+
+def observed_hermes_health() -> Dict[str, Any]:
+    if not env_bool("CENTRALDARK_ADAPTIVE_HERMES_HEALTH", True):
+        return {"state": "DISABLED", "sample": 0, "proof": False}
+
+    now = time.time()
+    cached = _HERMES_HEALTH_CACHE.get("value")
+    if cached is not None and now < float(_HERMES_HEALTH_CACHE.get("expires_at") or 0):
+        return cached
+
+    cutoff = now - max(1, HERMES_HEALTH_WINDOW_MINUTES) * 60
+    rows: List[Dict[str, Any]] = []
+    sector = CENTRAL_LOG_ROOT / "sectors" / "agents"
+    try:
+        files = sorted(sector.glob("*.jsonl"), reverse=True)[:2]
+    except OSError:
+        files = []
+
+    for file in files:
+        for line in _tail_text(file).splitlines():
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if row.get("actor") != "hermes" or row.get("kind") != "scheduled_job":
+                continue
+            ts = _parse_iso_epoch(row.get("timestamp"))
+            if ts is None or ts < cutoff:
+                continue
+            rows.append(row)
+
+    failures = 0
+    durations: List[int] = []
+    for row in rows:
+        data = row.get("data") if isinstance(row.get("data"), dict) else {}
+        if row.get("level") == "error" or data.get("error"):
+            failures += 1
+        try:
+            duration = int(data.get("duration_ms"))
+            if duration >= 0:
+                durations.append(duration)
+        except (TypeError, ValueError):
+            pass
+
+    sample = len(rows)
+    rate = failures / sample if sample else None
+    durations.sort()
+    p95 = durations[min(len(durations) - 1, max(0, ((95 * len(durations) + 99) // 100) - 1))] if durations else None
+
+    if sample < max(1, HERMES_HEALTH_MIN_SAMPLE):
+        state = "UNKNOWN_INSUFFICIENT_SAMPLE"
+    elif (rate is not None and rate >= HERMES_FAILURE_RATE_MAX) or (p95 is not None and p95 > HERMES_P95_MAX_MS):
+        state = "DEGRADED"
+    else:
+        state = "HEALTHY"
+
+    value = {
+        "state": state,
+        "sample": sample,
+        "failures": failures,
+        "failure_rate": rate,
+        "p95_duration_ms": p95,
+        "window_minutes": HERMES_HEALTH_WINDOW_MINUTES,
+        "thresholds": {
+            "min_sample": HERMES_HEALTH_MIN_SAMPLE,
+            "failure_rate_max": HERMES_FAILURE_RATE_MAX,
+            "p95_max_ms": HERMES_P95_MAX_MS,
+        },
+        "probability_is_proof": False,
+        "proof": sample >= max(1, HERMES_HEALTH_MIN_SAMPLE),
+    }
+    _HERMES_HEALTH_CACHE["value"] = value
+    _HERMES_HEALTH_CACHE["expires_at"] = now + 15
+    return value
+
+
+def _reorder_hermes_by_health(
+    candidates: List[Tuple[str, str]],
+    health_state: str,
+) -> List[Tuple[str, str]]:
+    if health_state != "DEGRADED":
+        return candidates
+    non_hermes = [candidate for candidate in candidates if candidate[0] != "hermes"]
+    hermes = [candidate for candidate in candidates if candidate[0] == "hermes"]
+    return non_hermes + hermes
+
+
 def candidate_routes(model: str) -> List[Tuple[str, str]]:
     primary_provider, primary_target = route_model(model)
     candidates: List[Tuple[str, str]] = [(primary_provider, primary_target)]
@@ -780,6 +902,10 @@ def candidate_routes(model: str) -> List[Tuple[str, str]]:
             continue
         if normalized != primary_provider:
             candidates.append((normalized, ""))
+    is_auto = (model or "auto").strip().lower() == "auto"
+    if is_auto and env_bool("CENTRALDARK_ADAPTIVE_HERMES_HEALTH", True):
+        health = observed_hermes_health()
+        return _reorder_hermes_by_health(candidates, str(health.get("state") or "UNKNOWN"))
     return candidates
 
 
@@ -1423,6 +1549,7 @@ def health() -> Dict[str, Any]:
         "auto_fallback": env_bool("CENTRALDARK_AUTO_FALLBACK", True),
         "free_only": env_bool("CENTRALDARK_FREE_ONLY", False),
         "fallback_chain": split_csv(os.getenv("CENTRALDARK_FALLBACK_CHAIN", DEFAULT_FALLBACK_CHAIN)),
+        "hermes_adaptive_health": observed_hermes_health(),
         "engines": {provider: {"configured": provider_configured(provider)} for provider in providers},
         "wire_apis": ["chat_completions", "responses"],
         "legacy_zendriver_chatgpt": "FROZEN_NOT_ROUTED",
@@ -1511,6 +1638,9 @@ def self_test() -> int:
         "redaction": "sekret" not in sanitize("Authorization: ***"),
         "email_redaction": "user@example.com" not in sanitize("user@example.com") and "[EMAIL_REDACTED]" in sanitize("user@example.com"),
         "chain_dedup": len(candidate_routes("auto")) == len(set(candidate_routes("auto"))),
+        "hermes_first_default_chain": split_csv(DEFAULT_FALLBACK_CHAIN)[0] == "hermes",
+        "hermes_degraded_returns_frontier": _reorder_hermes_by_health([("hermes", ""), ("nous", "")], "DEGRADED")[0][0] == "nous",
+        "hermes_unknown_keeps_first": _reorder_hermes_by_health([("hermes", ""), ("nous", "")], "UNKNOWN_INSUFFICIENT_SAMPLE")[0][0] == "hermes",
         "zendrive_health_safe": zendrive_provider_health_payload().get("proof") is False,
         "zendrive_simulation_oi": _zendrive_simulation_payload([ChatMessage(role="user", content="oi")]).get("response_text") == "oi",
         "vps_delta_error_class": parse_vps_delta_line(
