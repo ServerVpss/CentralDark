@@ -141,6 +141,9 @@ scratch/
 node_modules/.cache
 .bun/
 .bunx/
+# CentralDark workspace lifecycle (Casa/VPS runtime state; never canonical source)
+_tmp/
+cache/
 
 # PostHog setup session cache (local, not application source)
 .posthog-wizard-cache/

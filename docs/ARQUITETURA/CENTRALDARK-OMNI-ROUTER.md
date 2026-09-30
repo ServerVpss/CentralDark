@@ -122,8 +122,12 @@ auto
 openai/<model>
 claude-code/<model>
 claude:<model>
-hermes/<model>
 nous/<model>
+google/<model>
+xai/<model>
+abacus/<model>
+
+HERMES não é engine selecionável: é o runtime/agente executor que pode consumir este router como backend de inferência somente quando o contrato de tool-calls estiver provado end-to-end.
 ```
 
 ## Estado do legado
@@ -149,7 +153,7 @@ Código preservado para histórico/reconciliação não é rota ativa por presen
 
 ## IA local
 
-Hermes/local endpoint e qualquer futuro runtime local obedecem:
+Hermes permanece fora do catálogo de engines. Qualquer futuro modelo/runtime de inferência local plugável obedece:
 
 ```text
 DECLARED
@@ -158,6 +162,8 @@ DECLARED
 → INVOCATION_OBSERVED
 → COUNTERPROOF_SURVIVED
 ```
+
+O router rejeita `hermes/<model>` explicitamente para impedir recursão `Hermes → Gateway → Hermes`.
 
 Na reconciliação do PR-mãe:
 
@@ -187,8 +193,8 @@ O self-test valida sem provedores externos:
 - ausência de `mission_id` fabricado;
 - `action_is_proof=false`.
 
-Execução real de Claude/OpenAI/Hermes/Nous exige configuração e invocação no
-runtime correspondente.
+Execução real de Claude/OpenAI/Nous/Google/XAI/Abacus exige configuração e invocação no
+runtime correspondente. Hermes consome o router como corpo agente quando o contrato E2E de tools estiver provado; n?o ? provider/engine do cat?logo.
 
 ## Fechamento de lacunas amarelas
 

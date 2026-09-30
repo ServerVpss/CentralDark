@@ -22,6 +22,13 @@
     "BANDA": "BANDA_COMPASSO_GLOBAL",
     "COMPASSO": "BANDA_COMPASSO_GLOBAL",
     "BANDA_GLOBAL": "BANDA_COMPASSO_GLOBAL",
+    "PARTITURA": "BANDA_COMPASSO_GLOBAL",
+    "NOTA_MUSICAL": "MATERIAL_OPERATIONAL_EVENT",
+    "EFEITO_MUSICAL": "CONTROLLED_DISSONANCE_OR_HARMONIC_RESOLUTION",
+    "MAESTRO": "SOL_COORDINATION",
+    "MAESTRIA": "PROOF_DRIVEN_ORCHESTRATION",
+    "DISSONANCIA": "CONTROLLED_DISSONANCE",
+    "HARMONIA": "FIXED_POINT",
     "META_LUPA": ".agents/skills/meta-lupa/SKILL.md",
     "AUTOLUPA": ".agents/skills/meta-lupa/SKILL.md#9-executar-a-autolupa",
     "VERTEX": "VERTEX_INVERSO",
@@ -31,6 +38,30 @@
     "REGISTRO_DO_OURO": "docs/CONSCIENCIA/APRENDIZADOS.md",
     "CLAIM_SEAL": ".agents/skills/meta-lupa/references/claim-seals.jsonl",
     "SEGUNDO_CEREBRO": "SECOND-BRAIN.yml"
+  },
+  "musical_semantics": {
+    "song": "ONE_HUMAN_INTENT",
+    "score": "BANDA_COMPASSO_GLOBAL",
+    "compass": "INTENT_FINGERPRINT_OR_MISSION_ID",
+    "beat": "EVENT_ID",
+    "tempo": "STATE_VERSION_OR_HEAD_OBSERVED",
+    "instrument": "AGENT_MODEL_OR_SURFACE",
+    "note": "SKILL_CAPABILITY_OR_MATERIAL_OPERATIONAL_EVENT",
+    "maestro": {
+      "role": "SOL_COORDINATION",
+      "new_authority": false,
+      "new_agent": false
+    },
+    "mastery": "PROOF_DRIVEN_ORCHESTRATION_WITHOUT_PARALLEL_AUTHORITY",
+    "dissonance": "CONTROLLED_CONFLICT_FOR_COUNTERPROOF",
+    "resolution": "MINIMAL_CAUSAL_REMEDIATION",
+    "harmony": "FIXED_POINT",
+    "caracol": {
+      "direction": "OUTER_EDGES_TO_NUCLEUS",
+      "all_positioned_nodes_on_trajectory": true,
+      "semantic_edge_invention": false,
+      "preserve_real_edges": true
+    }
   },
   "groups": {
     "KERNEL": [
@@ -243,6 +274,12 @@
       "claim_seal_guard": ".agents/skills/meta-lupa/guardrails/claim_seal.py",
       "mode": "CONTINUOUS_CHECKPOINTS_TO_FIXED_POINT"
     },
+    "horn_caracol_gate": {
+      "path": ".agents/skills/meta-lupa/scripts/horn_caracol_gate.py",
+      "test": ".agents/skills/meta-lupa/guardrails/test_horn_caracol_gate.py",
+      "reference": ".agents/skills/meta-lupa/references/tlc23-horn-caracol-gate.md",
+      "mode": "ONE_GATE_COMPASS_CARACOL_MUSICAL_FAIL_CLOSED"
+    },
     "graphrag": {
       "path": "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs",
       "mode": "FIXED_SCORE_PLUS_DYNAMIC_MEMORY"
@@ -265,6 +302,8 @@
     "graph": {
       "generator": "scripts/grafo-vivo/gerar-grafo-vivo.mjs",
       "derived_not_authority": true,
+      "caracol_overlay": "apps/modulos/graph-panel/public/graph.js",
+      "required_nodes": ["band-score", "graphrag-master", "aprendizados", "meta-lupa", "claim-seals", "agent-library", "casa", "vps", "github-main"],
       "required_nodes": [
         "band-score",
         "graphrag-master",
@@ -360,6 +399,10 @@
     "MANY_SURFACES_ONE_SONG",
     "SAME_INTENT_ID_SAME_MISSION",
     "ONE_WRITER_PER_SCOPE",
+    "ONE_MAESTRO_COORDINATION_ROLE_WITHOUT_NEW_AUTHORITY",
+    "EVERY_MUSICAL_NOTE_HAS_GRAPH_CONTEXT",
+    "CARACOL_CONNECTS_OUTER_POSITIONED_NODES_TO_NUCLEUS",
+    "CARACOL_POSITION_DOES_NOT_INVENT_SEMANTIC_EDGE",
     "UNKNOWN_IS_NOT_PASS",
     "POETRY_IS_NOT_PROOF",
     "GRAPH_IS_DERIVED_NOT_AUTHORITY",

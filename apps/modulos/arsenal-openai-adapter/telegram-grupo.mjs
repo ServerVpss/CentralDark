@@ -47,6 +47,27 @@ const EMOJI = {
 
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+let nextTelegramAllowedAt = 0;
+
+function parseRetryAfter(texto) {
+  try {
+    const parsed = JSON.parse(texto);
+    return Number(parsed?.parameters?.retry_after || 0);
+  } catch {
+    const m = String(texto).match(/retry after\s+(\d+)/i);
+    return m ? Number(m[1]) : 0;
+  }
+}
+
+async function respectTelegramBackoff() {
+  const now = Date.now();
+  if (now >= nextTelegramAllowedAt) return;
+  const waitMs = nextTelegramAllowedAt - now;
+  console.warn('[tg-grupo] aguardando backoff telegram', Math.ceil(waitMs / 1000));
+  await sleep(waitMs);
+}
+
 function fatiar(texto, tam = 3900) {
   const partes = [];
   let s = texto;
@@ -76,6 +97,7 @@ export async function postarComoBot(botKey, texto, opts = {}) {
     const cabecalho = i === 0 ? `${emoji} <b>${esc(nome)}</b>\n\n` : '';
     const body = cabecalho + esc(partes[i]);
     try {
+      await respectTelegramBackoff();
       const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -86,7 +108,16 @@ export async function postarComoBot(botKey, texto, opts = {}) {
           disable_web_page_preview: true,
         }),
       });
-      if (!r.ok) console.error(`[tg-grupo] ${botKey} HTTP ${r.status}: ${(await r.text()).slice(0,200)}`);
+      if (!r.ok) {
+        const textoErro = await r.text().catch(() => '');
+        if (r.status === 429) {
+          const retryAfter = parseRetryAfter(textoErro) || 30;
+          nextTelegramAllowedAt = Date.now() + (retryAfter + 1) * 1000;
+          console.error(`[tg-grupo] ${botKey} rate_limited retry_after=${retryAfter}`);
+        } else {
+          console.error(`[tg-grupo] ${botKey} HTTP ${r.status}: ${textoErro.slice(0,200)}`);
+        }
+      }
     } catch (e) { console.error(`[tg-grupo] ${botKey}:`, e.message); }
     if (partes.length > 1) await new Promise(x => setTimeout(x, 400));
   }
@@ -99,11 +130,23 @@ export async function postarPergunta(pergunta, modo) {
   if (!token) return false;
   const texto = `👤 <b>Pivete (via WebUI)</b> — <i>modo ${esc(modo)}</i>\n\n${esc(pergunta)}`;
   try {
-    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    await respectTelegramBackoff();
+    const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chat_id: CHAT_ID, text: texto, parse_mode: 'HTML' }),
     });
+    if (!r.ok) {
+      const textoErro = await r.text().catch(() => '');
+      if (r.status === 429) {
+        const retryAfter = parseRetryAfter(textoErro) || 30;
+        nextTelegramAllowedAt = Date.now() + (retryAfter + 1) * 1000;
+        console.error(`[tg-grupo] pergunta rate_limited retry_after=${retryAfter}`);
+      } else {
+        console.error(`[tg-grupo] pergunta HTTP ${r.status}: ${textoErro.slice(0,200)}`);
+      }
+      return false;
+    }
   } catch (e) { console.error('[tg-grupo] pergunta:', e.message); }
   return true;
 }

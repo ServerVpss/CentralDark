@@ -117,6 +117,32 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CAPABILITY-READINESS-POLICY.y
  'one_optional_arm_off_does_not_fail_organism: true',
  'classification_when_failure_proven: REQUIRED_UNAVAILABLE',
 ], classification='CAPABILITY_OFF_NEUTRALITY_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CAPABILITY-READINESS-POLICY.yml',[
+ 'HERMES_AGENT_BODY_IS_NOT_REPLACEABLE_MODEL: true',
+ 'OPTIONAL_EXTERNAL_OFF_MUST_NOT_BLOCK_BOOT: true',
+ 'classification: DEGRADED_NON_BLOCKING',
+ 'DEGRADED_NON_BLOCKING:',
+ 'TOOLS_FIELD_PRESERVED',
+ 'TOOL_CHOICE_PRESERVED',
+ 'TOOL_CALLS_PRESERVED',
+ 'TOOL_CALL_ID_PRESERVED',
+ 'ARGUMENTS_PRESERVED',
+ 'TOOL_RESULT_CONTINUATION_PRESERVED',
+ 'STREAMING_PRESERVED_WHEN_USED',
+ 'TIMEOUT_AND_ERROR_SEMANTICS_PRESERVED',
+ 'FALLBACK_DOES_NOT_REENTER_CALLER_HERMES',
+ 'failure_means: DO_NOT_PROMOTE_GATEWAY_AS_HERMES_BACKEND_YET',
+], classification='HERMES_GATEWAY_PROMOTION_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md',[
+ 'CHATGPT_CAN_OPERATE_CASA_SEGREDO=true',
+ 'TRANSPORT=REMOTE_DESKTOP_COMMANDER',
+ 'DEVICE=SEGREDO',
+ 'DIRECT_FILE_OPERATIONS=true',
+ 'DIRECT_PROCESS_EXECUTION=true',
+ 'DIRECT_TERMINAL_EXECUTION=true',
+ 'OBSERVABLE_ACTIONS_REQUIRED=true',
+ 'CENTRALDARK_REMAINS_CONTROL_PLANE=true',
+], classification='CHATGPT_CASA_OPERATION_CONTRACT')
 check('apps/modulos/Bolt/source/app/components/centraldark/CentralDarkCockpitShell.client.tsx',[
  'DISABLED/OFF != FAIL',
  'FAIL REQUIRES EXPECTED ACTIVE',
@@ -192,6 +218,15 @@ check('scripts/lupa/portable-kernel.mjs',[
 
 check('CENTRALDARK_AI_BOOT.yaml',[
  'adaptive_payload: true',
+ 'source_of_truth: "ServerVpss/CentralDark + runtime medido"',
+ 'model: LIVING_CANON',
+ 'persistent_canon: ServerVpss/CentralDark',
+ 'live_state: MEASURED_RUNTIME',
+ 'final_judge: REALITY',
+ 'owner: central-horario',
+ 'timezone: America/Sao_Paulo',
+ 'human_display_label: BRT',
+ 'machine_storage: UTC_RFC3339',
  'observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"',
  'role: "DISCOVER_FROM_PRESENT_GAP_AND_CAPABILITY"',
  'writer: "UNKNOWN_UNTIL_WRITER_SCOPE_MEASURED"',
@@ -309,6 +344,15 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'scope: ALL_PR_COMMIT_AND_RUNTIME_ELIGIBLE_FAILURES',
  'operational_rule_learning:',
  'proven_operational_rule_must_bind_to_runtime: true',
+ 'discover_existing_channels_before_blocked: true',
+ 'ephemeral_helper_is_not_canonical_asset: true',
+ 'user_report_is_signal_not_proof: true',
+ 'meaningful_discovery_must_compare_canonical_owner: true',
+ 'USER_REPORTED_ERROR',
+ 'NEW_DISCOVERY',
+ 'CLEAN_EPHEMERAL_HELPERS_AFTER_PROOF',
+ 'mode: EVENT_DRIVEN',
+ 'no_post_task_value: SAFE_DELETE',
  'BIND_RULE_TO_ENGINE_OR_GATE',
  'POSITIVE_TEST',
  'NEGATIVE_TEST',
@@ -388,6 +432,8 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
  'event: BOT_ENTRY','event: PRE_HUMAN_RETURN','event: RESUME',
  'event: ANY_PR_OR_COMMIT','event: CI_RUNNER_ROUTE_FAILURE',
+ 'event: USER_REPORTED_ERROR','event: NEW_DISCOVERY',
+ 'report_is_proof: false','no_material_delta: NO_CHANGE',
  'BYTE_IDENTICAL -> PROCESS_ONCE_KEEP_PROVENANCE',
  'GITHUB_HOSTED_RUNNER -> FAIL_CLOSED',
  'SAME_FAILURE_NO_NEW_INFO -> REUSE_CRYSTAL',
@@ -497,8 +543,41 @@ check('.github/workflows/dependabot-auto-merge.yml',[
 ], classification='DEPENDABOT_TO_SENTINEL_API_ROUTE')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
  'engine_is_owner: false','prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md','LOAD_REFERENCE',
+ 'agent_runtimes:', 'role: EXECUTION_CONTINUITY_RUNTIME', 'model_catalog_member: false', 'selectable_as_engine: false',
  'SELF_HEALING_FAILURE_LOOP','ANY_PR_OR_COMMIT_GATE','CANONICAL_SELF_HOSTED_RUNNER_POLICY'
-])
+], classification='ENGINE_AND_AGENT_RUNTIME_SPLIT')
+check('apps/modulos/elite-gateway/scripts/centraldark_omni_router.py',[
+ 'DEFAULT_FALLBACK_CHAIN = "nous,google,claude-code,xai,abacus,openai"',
+ 'hermes_is_agent_runtime_not_engine',
+ 'if normalized == "hermes":',
+ 'ENGINE_PROVIDERS = frozenset(',
+ 'default_engine_config_valid',
+], classification='OMNI_ROUTER_HERMES_NOT_ENGINE')
+check_absent('apps/modulos/elite-gateway/scripts/centraldark_omni_router.py',[
+ r'HERMES_BASE_URL|HERMES_AUTH_TOKEN|HERMES_MODEL',
+ r'DEFAULT_FALLBACK_CHAIN\s*=\s*["\'][^"\']*hermes',
+ r'providers\s*=\s*\[[^\]]*["\']hermes["\']',
+ r'for provider in \[[^\]]*["\']hermes["\']',
+], classification='OMNI_ROUTER_NO_HERMES_MODEL_SURFACE')
+check_absent('scripts/boot_omni_router.py',[
+ r'HERMES_BASE_URL',
+ r'CENTRALDARK_DEFAULT_ENGINE.{0,16}hermes',
+], classification='OMNI_LAUNCHER_HERMES_NOT_ENGINE')
+check_absent('scripts/launch_omni_router_direct.py',[
+ r'HERMES_BASE_URL',
+ r'CENTRALDARK_DEFAULT_ENGINE.{0,16}hermes',
+], classification='OMNI_LAUNCHER_HERMES_NOT_ENGINE')
+check_absent('scripts/launch_omni_router.sh',[
+ r'HERMES_BASE_URL',
+ r'CENTRALDARK_DEFAULT_ENGINE=\"hermes\"',
+], classification='OMNI_LAUNCHER_HERMES_NOT_ENGINE')
+check_absent('scripts/auto-redeploy-failover.mjs',[
+ r'fallbackChain:\s*\[[^\]]*[\"\']hermes[\"\']',
+], classification='OMNI_FAILOVER_HERMES_NOT_ENGINE')
+check('docs/ARQUITETURA/CENTRALDARK-OMNI-ROUTER.md',[
+ 'Hermes permanece fora do cat',
+ 'provider/engine do cat',
+], classification='OMNI_DOC_HERMES_NOT_ENGINE')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
  'UNIVERSAL_EVOLUTION_CARACOL',
  'ALL_CURRENT_SKILLS',
@@ -516,7 +595,10 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
 ], classification='UNIVERSAL_EVOLUTION_CARACOL_CONTRACT')
 check('apps/modulos/HERMES-CORE/prompts/hermes-core.md',[
  'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml','OUTPUT_GUARD','LAST_GOOD_STATE','WORKING/FORJA != PASS',
- 'Self-healing operacional universal','SAME_FAILURE_REUSES_CRYSTAL=true','GITHUB_HOSTED_RUNNER_ALLOWED=false'
+ 'Self-healing operacional universal','SAME_FAILURE_REUSES_CRYSTAL=true','GITHUB_HOSTED_RUNNER_ALLOWED=false',
+ 'DISCOVER_EXISTING_CHANNELS_BEFORE_BLOCKED=true','USER_REPORTED_ERROR_IS_SIGNAL_NOT_PROOF=true',
+ 'EPHEMERAL_HELPER_IS_CANONICAL_ASSET=false','SAFE_TEMP_CLEANUP_AFTER_PROOF=true',
+ 'MEANINGFUL_DISCOVERY_COMPARE_CANONICAL_OWNER=true'
 ])
 check('apps/modulos/HERMES-CORE/core/orchestrator.mjs',[
  'const INTERVAL  = 5000',
@@ -527,6 +609,15 @@ check('apps/modulos/HERMES-CORE/core/orchestrator.mjs',[
 ])
 check('apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs',['export async function atualizarGrafo()','export async function buscarContexto'])
 check('scripts/memory-linker/README.md',['NO_NEW_INFORMATION=STOP=true','DIRECT_CANONICAL_MUTATION=false','AUTONOMY_QUEUE_DIRECT_APPLY=false'])
+check('scripts/casa/discover-operational-channels.ps1',[
+ 'NEW_ATTEMPT_FAILED != EXISTING_CHANNEL_DEAD','Get-NetTCPConnection -State Established','OwningProcess'
+], classification='OPERATIONAL_CHANNEL_DISCOVERY_RUNTIME')
+check('docs/CONSCIENCIA/APRENDIZADOS/2026-09-14-descoberta-canais-operacionais-xp.md',[
+ 'NEW_ATTEMPT_FAILED != EXISTING_CHANNEL_DEAD',
+ 'DISCOVER_EXISTING_CHANNELS -> CLASSIFY -> REUSE_BEFORE_CREATE',
+ 'XP é métrica do sistema, não autoridade',
+ 'TEMP_USED != CANONICAL_ASSET','TEMP_HELPER_CLEANUP=PASS'
+], classification='OPERATIONAL_CHANNEL_DISCOVERY_CRYSTAL')
 check('scripts/memory-linker/dream-review-run.mjs')
 check('scripts/memory-linker/pattern-discovery.mjs')
 check('.agents/skills/session-intelligence-harvester/SKILL.md',['Run on session end (hook).'],'SESSION_END_HOOK_CONTRACT')

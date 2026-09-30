@@ -1,0 +1,33 @@
+---
+title: CentralDark Forja Viva — Continuidade direta da main
+---
+flowchart LR
+    A[PR-mãe #1540 MERGED] --> B[main viva
+455943740d1e]
+    B --> C[Delta Forja Viva
+contrato Mermaid + arte 4K]
+    C --> D{3 peles canônicas?}
+    D -->|SIM| E[emerald]
+    D -->|SIM| F[operational]
+    D -->|SIM| G[forge]
+    E --> H[6 combinações claro/escuro]
+    F --> H
+    G --> H
+    H --> I[mesma geometria de relevo]
+    I --> J{GraphPanel aplica globalmente?}
+    J -->|NÃO| K[LACUNA REAL
+2D/3D/Celestial/Vault hardcoded]
+    J -->|SIM futuro| L[GLOBAL_THEME_ENGINE]
+    K --> M[Contrato do PR
+DEFINIDAS=SIM
+APLICADAS_EM_TODA_CENTRALDARK=NÃO]
+    M --> N[Reality Judge]
+    N --> O[Fixed Point parcial
+sem falso-verde]
+
+    classDef main fill:#0b2a1b,stroke:#22c55e,color:#eafff3,stroke-width:2px;
+    classDef warn fill:#331114,stroke:#f97316,color:#ffe8d5,stroke-width:2px;
+    classDef skin fill:#10172a,stroke:#a855f7,color:#f5f3ff,stroke-width:2px;
+    class B,C,N,O main;
+    class K,M warn;
+    class E,F,G,H,I skin;
