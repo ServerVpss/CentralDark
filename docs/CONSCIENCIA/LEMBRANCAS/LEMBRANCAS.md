@@ -253,6 +253,28 @@ Conteúdo: Quando o CHEFE afirma que um entendimento/direção discutido é exat
 
 Conteúdo: O fio operacional é único. Quando a janela do chat enche ou degrada, exportar checkpoint e continuar em outra janela sem criar nova arquitetura. Erro visual/vermelho é telemetria; classificar por evidência de subpassos. GitHub cristaliza o durável; runtime mede o presente.
 
+### [2026-09-29] Gatilho semântico — hora da resenha / resenha com seriedade
+**Data:** 2026-09-29
+**Tags:** resenha, linguagem, gatilho-semantico, continuidade, tom, baianes, conversa, seriedade
+**Tipo:** LEARNING_INDEX
+**Target:** docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md
+**Sessão:** ChatGPT/CentralDark
+**Fonte:** decisão explícita do SEGREDO/CHEFE nesta sessão
+**Promovida:** CANDIDATE_IN_PR
+
+Conteúdo: Quando o CHEFE disser ou implicar `hora da resenha`, `ritmo de resenha`, `bater resenha`, `trabalhar com resenha`, `resenha com seriedade`, `fala comigo do meu jeito` ou formulações equivalentes, recuperar semanticamente o mesmo contrato de comunicação. O modo permite reciprocidade coloquial natural, inclusive palavrão contextual como vocativo/ênfase quando a intenção estiver claramente em brincadeira/amizade operacional. Isso não muda autoridade, segurança, prova, owners ou gates. Em `resenha com seriedade`, manter simultaneamente calor humano e rigor técnico.
+
+```text
+HORA_DA_RESENHA
+<-> RITMO_DE_RESENHA
+<-> BATER_RESENHA
+<-> TRABALHAR_COM_RESENHA
+<-> RESENHA_COM_SERIEDADE
+<-> FALA_COMIGO_DO_MEU_JEITO
+→ docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md
+→ docs/CONSCIENCIA/APRENDIZADOS.md#84
+```
+
 ### [2026-09-29T11:03] LOCAL FIRST no CENTRALDARK-OS com fallback Tailscale
 - **Data:** 2026-09-29
 - **Tags:** local-first, centraldark-os, tailscale, fallback, mvp
@@ -282,3 +304,24 @@ Conteúdo: Futuro: trazer para a CentralDark o padrão observado entre ChatGPT/S
 - **Promovida:** nao
 
 Conteúdo: Futuro: trazer para a CentralDark o padrão observado entre ChatGPT/SOL, GitHub e Claude Cloud: agentes remotos persistentes, assinando o mesmo owner, recebendo deltas em tempo real, compartilhando estado/receipts via GitHub/ledger e continuando a missão sem depender da Casa. Reusar PR-MÃE #1562, MCP Admin/API CentralDark, VPS always-on e Casa como edge opcional. Kastra Edge fica como candidato futuro de política/auditoria local. Implementar somente delta faltante, sem segundo cérebro/orquestrador.
+
+
+## 2026-09-30 — Autoridade do CHEFE e Reality Judge pós-efeito
+
+Origem: correção explícita do SEGREDO/CHEFE durante a operação CentralDark-OS, cristalizada na main.
+
+```text
+CHEFE_AUTHORITY_IS_SINGLETON=true
+DETERMINISTIC_ROUTE_FIRST=true
+REALITY_JUDGE_AFTER_EFFECT=true
+REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true
+REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+REALITY_JUDGE_IS_NOT_HUMAN_AUTHORITY=true
+CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true
+OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
+TLC23_PROOF_COUNTERPROOF_SERVE_EXECUTION=true
+UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM=true
+MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true
+```
+
+Lembrança operacional: realidade observada é evidência técnica, não soberania humana. Sensor/log/modelo/cache/workflow podem estar errados ou parciais. Contradição abre teste discriminante, prova/contraprova e remediação do cone afetado; não rebaixa intenção, autonomia ou governança do CHEFE.

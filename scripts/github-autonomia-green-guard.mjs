@@ -17,7 +17,7 @@ export const MAX_RUN_PAGES = 20;
 
 export const DEFAULT_REQUIRED_WORKFLOWS = Object.freeze([
   "⚙️ porta-de-entrada",
-  "⚙️ codex-validate",
+  "⚙️ CentralDark Valida — determinístico",
   "⚙️ lupa-conformance",
   "⚙️ Lupa Drift Guard",
   "🧠 Trigger Fabric Full Package — pacote e contraprova",

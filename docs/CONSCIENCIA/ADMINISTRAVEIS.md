@@ -50,7 +50,7 @@ Quando uma capacidade **for julgada e provada administrável**, a mesma mudança
 
 Formato do marcador: `ADMINISTRABLE_COMMAND=<gatilho>` em uma linha própria do canônico aplicável. O exemplo fica inline justamente para não ser confundido pelo gate com uma declaração real.
 
-O gate já existente `codex-validate` executa `tests/admin-guard.test.mjs`; esse agregador preserva o guard histórico e inclui `tests/admin-administrables.test.mjs`. O teste exige correspondência bijetiva entre marcadores canônicos e `ADMINISTRAVEIS.json`, owner real e gatilho presente no owner.
+O gate já existente `CentralDark Valida — determinístico` executa `tests/admin-guard.test.mjs`; esse agregador preserva o guard histórico e inclui `tests/admin-administrables.test.mjs`. O teste exige correspondência bijetiva entre marcadores canônicos e `ADMINISTRAVEIS.json`, owner real e gatilho presente no owner.
 
 ```text
 PROVEN_ADMINISTRABLE
