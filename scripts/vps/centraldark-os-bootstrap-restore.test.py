@@ -31,7 +31,7 @@ class VaultTests(unittest.TestCase):
         buffer = io.StringIO()
         writer = csv.writer(buffer, delimiter="\t")
         writer.writerow(["idx", "sha256", "kind", "source", "dest", "bytes"])
-        writer.writerow(["1", hashlib.sha256(payload).hexdigest(), "file", "/test/source",
+        writer.writerow(["1", hashlib.sha256(payload).hexdigest(), "file", "/root/CentralDark/secrets/test.env",
                          "/root/" + vault + "/raw/file", len(payload)])
         entries = {vault + "/MANIFEST.tsv": buffer.getvalue().encode(),
                    vault + "/SHA256SUMS.txt": b"fixture\n",
@@ -51,7 +51,9 @@ class VaultTests(unittest.TestCase):
     def run_owner(self, packet, apply="0"):
         env = dict(os.environ, CENTRALDARK_VAULT_PATH=str(packet),
                    CENTRALDARK_REPO_ROOT=str(self.repo), CENTRALDARK_RESTORE_APPLY=apply,
-                   CENTRALDARK_BOOTSTRAP_APPLY="0")
+                   CENTRALDARK_BOOTSTRAP_APPLY="0",
+                   CENTRALDARK_RESTORE_ROOT=str(self.root / "restored"),
+                   CENTRALDARK_RESTORE_BACKUP_DIR=str(self.root / "backup"))
         return subprocess.run(["bash", str(OWNER)], env=env, text=True, capture_output=True)
 
     def test_valid_readonly_payload(self):
@@ -75,12 +77,15 @@ class VaultTests(unittest.TestCase):
         result = self.run_owner(self.packet(checksum=False))
         self.assertNotEqual(result.returncode, 0)
 
-    def test_apply_never_claims_restore_complete(self):
+    def test_apply_restores_only_proven_file_payload_and_verifies_hash(self):
         result = self.run_owner(self.packet(), apply="1")
-        self.assertNotEqual(result.returncode, 0)
-        self.assertNotIn("RESTORE_COMPLETE_VERIFY_RUNTIME", result.stdout)
-        self.assertIn("RESTORE_APPLIED=0", result.stdout)
-        self.assertIn("RESTORE_NOT_IMPLEMENTED", result.stderr)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        restored = self.root / "restored" / "root" / "CentralDark" / "secrets" / "test.env"
+        self.assertEqual(restored.read_bytes(), b"TEST_VALUE=fixture-only\n")
+        self.assertIn("RESTORE_FILES_APPLIED=1", result.stdout)
+        self.assertIn("RESTORE_POST_WRITE_HASHES=PASS", result.stdout)
+        self.assertIn("RESTORE_APPLIED=1", result.stdout)
+        self.assertIn("NEXT_STEP=HYDRATE_PROCESS_ENV_AND_VERIFY_RUNTIME", result.stdout)
 
 if __name__ == "__main__":
     unittest.main()
