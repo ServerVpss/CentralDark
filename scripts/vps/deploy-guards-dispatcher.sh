@@ -109,11 +109,24 @@ log "ALVO=$ALVO"
 log "ORIGIN_SHA=$ORIGIN_SHA"
 log "ATRAS=$ATRAS  AFRENTE=$AFRENTE  RASTREADOS_SUJOS=$SUJOS  WORKTREE_DIRTY=$SUJOS_ALL"
 
-# ─── Guarda: ssh deploy ─────────────────────────────────────────────────
-if [[ ! -f "$SSH_KEY" && "$APPLY" -eq 1 ]]; then
-  die "chave de deploy ausente em $SSH_KEY (SSH_KEY)" 14
+# ─── Guarda: autenticação de deploy ─────────────────────────────────────
+# O workflow self-hosted injeta autenticação GitHub efêmera via GIT_CONFIG_*.
+# SSH_KEY é fallback, não requisito quando essa rota já foi provada no job.
+HAS_EPHEMERAL_GIT_AUTH=0
+if [[ "${GIT_CONFIG_COUNT:-0}" =~ ^[1-9][0-9]*$ ]]; then
+  for ((i=0; i<GIT_CONFIG_COUNT; i++)); do
+    key_var="GIT_CONFIG_KEY_$i"
+    value_var="GIT_CONFIG_VALUE_$i"
+    if [[ "${!key_var:-}" == "http.https://github.com/.extraheader" && "${!value_var:-}" == AUTHORIZATION:* ]]; then
+      HAS_EPHEMERAL_GIT_AUTH=1
+      break
+    fi
+  done
 fi
-info "chave de deploy: $([[ -f "$SSH_KEY" ]] && echo "presente" || echo "ausente (não aplicando)")"
+if [[ ! -f "$SSH_KEY" && "$HAS_EPHEMERAL_GIT_AUTH" -ne 1 && "$APPLY" -eq 1 ]]; then
+  die "autenticação de deploy ausente: SSH_KEY e GitHub ephemeral auth indisponíveis" 14
+fi
+info "deploy auth: ephemeral_git=$HAS_EPHEMERAL_GIT_AUTH ssh_key=$([[ -f "$SSH_KEY" ]] && echo presente || echo ausente)"
 
 # ─── Guarda: scripts existentes ─────────────────────────────────────────
 [[ -x "$CENTRALDARK_DEPLOY" ]] || die "centraldark-deploy.sh ausente ou não executável" 10
@@ -148,6 +161,12 @@ git worktree add --detach "$GATE_TMP" "$ALVO" --quiet \
   python3 scripts/lupa/validar_autolupa_hash.py
   python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py --self-test
   python3 .agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py --self-test
+  HERMES_RUNTIME_JSON="$(pm2 jlist 2>/dev/null)" || { echo "HERMES_RUNTIME_FINGERPRINT_UNAVAILABLE"; exit 16; }
+  [[ -n "$HERMES_RUNTIME_JSON" ]] || { echo "HERMES_RUNTIME_FINGERPRINT_EMPTY"; exit 16; }
+  CENTRALDARK_RUNTIME_FINGERPRINT="$(printf '%s|%s' "$(hostname)" "$ALVO" | sha256sum | awk '{print $1}')" \
+  HERMES_RUNTIME_FINGERPRINT="$(printf '%s' "$HERMES_RUNTIME_JSON" | sha256sum | awk '{print $1}')" \
+    python3 .agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py --cage-test --iterations 64
+  echo "TLC23_ADVERSARIAL_CAGE=PASS"
 ) || die "SHA alvo falhou Master/Universal/Meta-Lupa/Horn" 16
 
 # Gate-only prova o SHA e sai sem tocar checkout/runtime.

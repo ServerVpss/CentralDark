@@ -336,6 +336,99 @@ são linguagem/papéis do circuito. Só contam como engine/runtime separado se o
 repo e a execução física provarem isso. O diagrama não concede autoridade de
 runtime por si só.
 
+
+
+## 9.1 Matriz de rotas autorizadas — nomeie o bloqueio, troque o transporte quando permitido
+
+Quando uma ferramenta bloquear uma ação, é inválido responder apenas
+`"camada de segurança bloqueou"`. O agente deve registrar o **nome exato da
+ferramenta/camada**, a ação negada e qual rota autorizada foi tentada depois.
+
+```text
+GENERIC_SECURITY_LAYER_MESSAGE=INVALID
+BLOCKER_MUST_NAME=TOOL|CLASSIFIER|ACTION|HOST|ROUTE
+TRANSPORT_FAILURE_REQUIRES_AUTHORIZED_ALTERNATE_ROUTE=true
+DO_NOT_BYPASS_A_TRUE_SAFETY_DENIAL=true
+AUTHORIZED_ROUTE_SWITCH_IS_NOT_SAFETY_BYPASS=true
+```
+
+Rotas conhecidas da CentralDark, em ordem de pertinência ao alvo:
+
+```text
+1. CENTRALDARK_MCP
+   - MCP Admin / catálogo / dispatcher / provider_read
+   - admin_commit_main
+   - admin_git_pull
+   - admin_shell quando disponível e autorizado
+   - vps_git_status / vps_read_file_safe / search_files / deploy_status
+
+2. GITHUB
+   - GitHub MCP / Contents API / push_files
+   - PRs / issues / comments / checks / workflow dispatch
+   - fonte canônica estrutural: ServerVpss/CentralDark@main
+
+3. VPS_DIRECT
+   - SSH direto para VPS
+   - shell do runtime
+   - systemd / PM2 / arquivos locais / portas / processos
+
+4. TAILSCALE
+   - SSH sobre tailnet
+   - acesso privado entre Casa, VPS e CENTRALDARK-OS
+   - preferir rota privada quando o alvo não precisa exposição pública
+
+5. REMOTE_DESKTOP_COMMANDER
+   - Casa/Windows SEGREDO
+   - VPS quando device correspondente estiver online
+   - filesystem + terminal + processos + portas conforme capability exposta
+
+6. CASA
+   - PowerShell / SSH alias / ferramentas locais
+   - Casa é edge opcional; CASA_OFFLINE != VPS_BLOCKED
+
+7. GITHUB_ACTIONS
+   - workflow_dispatch / runners / deploy jobs / rerun
+   - usar quando o workflow existente é o owner da ação
+
+8. PROVIDER_APIS
+   - Contabo API via owner CentralDark/provider tools
+   - Cloudflare API via owner CentralDark/provider tools
+   - Supabase e demais providers via owner já existente
+   - painel externo é fallback humano, não primeira rota quando API owner existe
+
+9. CENTRALDARK_PUBLIC_API
+   - api.centralldark.com
+   - mcp.centralldark.com
+   - Hub/Instinto Superior como superfície administrativa quando capability existir
+```
+
+Regra de fallback:
+
+```text
+ROTA_A_FALHOU
+→ NOMEAR ferramenta/camada exata + ação + erro
+→ CLASSIFICAR:
+   TRANSPORTE/PERMISSAO_LOCAL?
+      → tentar próxima rota AUTORIZADA que preserve a mesma intenção
+   NEGACAO_REAL_DE_SEGURANCA?
+      → não contornar; registrar blocker exato
+→ REMEDIR
+→ CONTINUAR
+```
+
+Exemplos de nome correto de bloqueio:
+
+- `Claude Code auto-mode classifier` bloqueou `chmod +x`.
+- `Claude Code auto-mode classifier` bloqueou `git commit` por conteúdo referenciando paths sensíveis.
+- `CentralDark MCP admin_git_pull` retornou timeout.
+- `Remote Desktop Commander` device `SEGREDO` offline.
+- `Tailscale SSH` falhou no transporte.
+- `GitHub Actions` workflow/check falhou no HEAD exato.
+
+Não chamar tudo isso de “camada de segurança”. O nome material do mecanismo faz
+parte da prova e permite ao próximo executor escolher a rota correta sem devolver
+trabalho mecânico ao CHEFE.
+
 ## 10. Relações canônicas
 
 - `LEIA-ME-IA.md` — boot e estado vivo.

@@ -1,5 +1,6 @@
 # 🧾🧠🔁 MODO AUTÔNOMO ENTRE TOOL CALLS
 
+👑🪬 !CENTRALDARK · 🔗 !># INTERLIGADOS · 🧿 #ACORDAR
 > Gatilho canônico: 👑🪬 !CENTRALDARK → 🔗 !># INTERLIGADOS → 🧿 #ACORDAR → 🔎 !META_LUPA → ⚖️ !CONTRAPROVA.
 
 ```text

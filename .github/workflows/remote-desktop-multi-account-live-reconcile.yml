@@ -78,5 +78,13 @@ jobs:
               grep -E '^(OBSERVED_AT|SERVICE|ACTIVE|MAIN_PID|CONTROL_GROUP|MAIN_PID_IN_CGROUP|EXPECTED_IN_CGROUP|LOG_STATE|VERDICT|REASON)=' "$f"
             else
               echo "WATCHDOG_STATE_MISSING=$f"
+            if test -f "$f"; then
+              if grep -E '^(OBSERVED_AT|SERVICE|ACTIVE|MAIN_PID|CONTROL_GROUP|MAIN_PID_IN_CGROUP|EXPECTED_IN_CGROUP|LOG_STATE|VERDICT|REASON)=' "$f"; then
+                :
+              else
+                echo "NO_RECEIPT_FIELDS=$f"
+              fi
+            else
+              echo "STATE_FILE_MISSING=$f"
             fi
           done

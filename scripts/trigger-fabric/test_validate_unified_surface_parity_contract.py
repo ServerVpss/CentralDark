@@ -127,6 +127,22 @@ class ParityValidatorCounterproof(unittest.TestCase):
         self.mutate(SKILL, None, "Este motor substitui SOL no fluxo")
         self.assert_fail("FORBIDDEN_MARKER")
 
+    def test_voice_tool_call_visibility_binding_is_required(self) -> None:
+        self.mutate(
+            VOICE_CLASSIFIER,
+            "VOICE_TOOL_CALL_VISIBILITY_REUSES_UNIFIED_SURFACE_OWNER=true",
+            "VOICE_TOOL_CALL_VISIBILITY_REUSES_UNIFIED_SURFACE_OWNER=false",
+        )
+        self.assert_fail("VOICE_TOOL_CALL_VISIBILITY_REUSES_UNIFIED_SURFACE_OWNER=true")
+
+    def test_voice_does_not_become_renderer_owner(self) -> None:
+        self.mutate(
+            INVOCATION_GRAMMAR,
+            "voice_semantic_classifier_is_renderer_owner: false",
+            "voice_semantic_classifier_is_renderer_owner: true",
+        )
+        self.assert_fail("voice_semantic_classifier_is_renderer_owner: false")
+
     def test_voice_flag_contradiction_fails(self) -> None:
         self.mutate(VOICE_CLASSIFIER, None, "NO_SECOND_PARSER=false")
         self.assert_fail("CONTRADICTION")

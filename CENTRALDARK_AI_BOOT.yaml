@@ -47,6 +47,49 @@ CENTRALDARK_AI_BOOT:
   frequency: "ADAPTIVE"
   fronts: "ADAPTIVE_1_TO_10"
 
+  continuous_intent_execution_contract:
+    owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#311-contrato-contínuo--intenção--meta-grill--sol-executora--fio-verde-chefe-2026-09-28"
+    status: "REQUIRED_CURRENT_INHERITANCE"
+    new_chefe_material: "DELTA_TO_ACTIVE_INTENT_FIRST"
+    preserve_compatible_active_intent: true
+    recalculate_intent_alignment_each_material_turn: true
+    target_intent_alignment_confidence_for_material_mutation: "99.9%"
+    intent_confidence_is_technical_proof: false
+    meta_grill_before_material_response: true
+    meta_grill_before_mutation: true
+    evolve_existing_before_create: true
+    return_same_artifact_evolved: true
+    volta_uma_casa_on_local_error: true
+    green_state_must_be_preserved: true
+    experiment_must_not_destroy_last_proven_state: true
+    proven_delta_only_returns_to_green_state: true
+    replay_before_rediscovery: true
+    no_v1_v2_v3_parallel_owner: true
+    legacy_preservation: true
+    legacy_is_compatibility_not_second_owner: true
+    one_system_only: true
+    reality_is_judge: true
+    unknown_is_pass: false
+
+
+  canonical_consumption_gate:
+    status: "REQUIRED_BEFORE_FIRST_AGENT_ROUTING"
+    position: "BEFORE_FIRST_AGENT_ROUTING"
+    owner: "scripts/centraldark/canonical-consumption-gate.mjs"
+    runtime_consumer: "scripts/trigger-fabric/centraldark_full_trigger_boot.py"
+    canonical_source: "docs/CONSCIENCIA/APRENDIZADOS.md"
+    required_learning: "ALL"
+    learning_mode: "ALL_NUMBERED_LEARNINGS"
+    consume_all_numbered_learnings: true
+    consultar_canonico_antecede_investigar: true
+    replay_before_rediscovery: true
+    pointer_text_is_not_source: true
+    search_miss_is_not_stop_condition: true
+    search_miss_fallback: "DIRECT_CANONICAL_PATH_READ"
+    tool_available_must_be_attempted_before_unknown: true
+    unknown_with_measurement_route: "FAIL_CLOSED"
+    failure_policy: "FAIL_CLOSED"
+
   initial_bootstrap_gate:
     marker: "CENTRALDARK_TLC23_PDF_BOOT_GATE_REQUIRED"
     position: "BEFORE_FIRST_AGENT_ROUTING"
@@ -295,6 +338,16 @@ CENTRALDARK_AI_BOOT:
   # O PDF ensina a propagar consequências e repetir até nada material novo poder ser acrescentado.
   tcl23_horn_gate:
     official_for_centraldark_scope: true
+    adversarial_cage:
+      required_for_explicit_cage_probe: true
+      owner: ".agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py"
+      command: "python3 .agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py --cage-test --iterations 64"
+      bypass_as_pass: "FORBIDDEN"
+      no_change_is_pass: false
+      unknown_is_pass: false
+      blocked_is_pass: false
+      resource_guard_is_not_bypass: true
+      legitimate_exit: "COMPLETE_TLC23_BODY_ONLY"
     source_contract:
       logical_reference: "tlc23.pdf / Lógica Computacional 23 — Fórmulas de Horn e modelo mínimo de Herbrand"
       measured_house_receipt: "PDF-CC2003-HORN-GATE-20260912-152444.log"
@@ -345,6 +398,22 @@ CENTRALDARK_AI_BOOT:
     destructive_or_irreversible: "AUTHORITY_AND_ROLLBACK_REQUIRED"
     post_deploy_remeasurement: "ALWAYS_MEASURE_RESULT_BECAUSE_DEPLOY_CHANGES_STATE"
     principle: "GATE_SERVE_PARA_SEGURANCA_E_FALSIFICACAO; NAO_PARA_REPROVAR_INVARIANTE_IMUTAVEL_A_CADA_PASSO"
+
+  tool_call_visibility_contract:
+    owner: "docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml"
+    learning_ref: "docs/CONSCIENCIA/APRENDIZADOS.md#82"
+    execution_is_not_visibility: true
+    invariant: "TOOL_CALL_EXECUTED != TOOL_CALL_VISIBLE_IN_SIDEBAR"
+    canonical_trace_chain: "SESSION_ID -> TRACE_ID -> TOOL_CALL_ID -> USAGE/TOKENS -> RECEIPT"
+    visibility_states:
+      - PROVED_BY_PLATFORM_RECEIPT
+      - USER_CONFIRMED_VISIBILITY
+      - PLATFORM_UNAVAILABLE
+      - UNKNOWN
+    no_execution_inference_from_missing_renderer: true
+    no_renderer_inference_from_tool_result: true
+    user_visual_confirmation_is_backend_proof: false
+    applies_to: [CHATGPT_TEXT, CHATGPT_VOICE, WORK, DESKTOP, CLAUDE, HERMES, FUTURE_SURFACES]
 
   centraldark_invocation_semantics:
     master: "CENTRALDARK"
@@ -446,6 +515,47 @@ CENTRALDARK_AI_BOOT:
       one_writer_per_mutable_scope: true
       readers_may_parallelize_perception: true
       writer_handoff_requires: [OLD_WRITER_RELEASE, HANDOFF_RECEIPT, NEW_WRITER_ACQUIRE]
+    cross_surface_capability_handoff:
+      enabled: true
+      local_blocked_is_not_global_blocker: true
+      local_capability_gap_is_not_human_frontier: true
+      human_frontier_requires_exhausted_authorized_bodies: true
+      before_terminal_blocked:
+        - INVENTORY_AUTHORIZED_ALTERNATE_ROUTES
+        - REUSE_PROVEN_CAPABILITY_ROUTE
+        - EMIT_CAPABILITY_HANDOFF_RECEIPT_TO_PR_MOTHER_1562
+        - WAIT_FOR_OR_REMEASURE_HANDOFF_RESULT
+        - RETEST_AFFECTED_CONE
+      known_route_hints:
+        - "CASA -> SSH -> VPS"
+        - "MCP_CASA -> execute_command|vps_run_once_script"
+      known_route_hint_is_not_runtime_proof: true
+      route_must_be_remeasured_before_use: true
+      blocked_is_terminal_only_if:
+        - NO_AUTHORIZED_BODY_CAN_MEASURE
+        - HANDOFF_EXHAUSTED
+        - EXACT_BLOCKER_PROVED
+      local_shell_absent_does_not_end_system_loop: true
+    human_counterproof_reentry:
+      enabled: true
+      trigger: "MATERIAL_HUMAN_COUNTERPROOF_INVALIDATES_CURRENT_EXIT"
+      canonical_example: "VOCE_AINDA_PEDIU_AUTORIZACAO_WHEN_AUTH_ALREADY_PROVED"
+      reentry_sequence:
+        - ERRO_LOCAL
+        - REWIND_LOCAL
+        - COSTURA
+        - RETESTE
+        - REENTRAR_NO_MESMO_TRILHO
+      continue_while:
+        - NEW_MATERIAL_FACT
+        - OPEN_PROOF_GAP
+        - MATERIAL_COUNTERPROOF
+      close_current_delta_only_when:
+        - NO_NEW_MATERIAL_FACT
+        - FIXED_POINT
+      resource_guard_is_not_bypass: true
+      repetition_without_delta_is_not_progress: true
+      return_decision_to_chefe_when_already_authorized: FORBIDDEN
     autonomous_exhaustion_loop:
       enabled: true
       mode: "SCAN_FAIL_REPAIR_RETEST_COUNTERPROVE_REPEAT"
@@ -797,6 +907,12 @@ proven_path_replay_lock:
 
 
 lei_do_rastro:
+  current_claim_live_measurement_required: true
+  pr_body_is_history_not_current: true
+  ledger_current_requires_explicit_current_main: true
+  exact_comment_id_direct_lookup_before_pagination: true
+  measurable_current_unknown_is_fail: true
+  pre_human_return_fiscal: "scripts/trigger-fabric/rastro_fiscal.py"
   owner: AGENTS.md
   gatilho: "🔏 !RASTRO"
   RESPONSE_WITHOUT_TRACE: INVALID

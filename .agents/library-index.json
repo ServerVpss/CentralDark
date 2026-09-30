@@ -94,7 +94,12 @@
     "pertinence_first": true,
     "minimum_sufficient_loop": true,
     "triggers_are_conditional_not_ritual": true,
-    "align_thought_not_wording": true
+    "align_thought_not_wording": true,
+    "canonical_consumption_preflight_required": true,
+    "pointer_must_resolve_source_before_response": true,
+    "search_miss_requires_direct_canonical_path_fallback": true,
+    "tool_available_must_be_attempted_before_unknown": true,
+    "measurable_unknown_is_method_failure": true
   },
   "mandatory_triggers": [
     "!CENTRALDARK",
@@ -595,5 +600,31 @@
     "EVERY_MEMORY_CLAIM_NAMES_WHERE": true,
     "LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN": true,
     "APPLIES_TO_ALL_ENGINES": true
+  },
+  "pre_response_gate": {
+    "id": "canonical-consumption-gate",
+    "path": "scripts/centraldark/canonical-consumption-gate.mjs",
+    "owner": "SOL",
+    "critical": true,
+    "fail_closed": true,
+    "canonical_fallback": "docs/CONSCIENCIA/APRENDIZADOS.md",
+    "invariants": [
+      "POINTER_TEXT_IS_NOT_SOURCE",
+      "SEARCH_MISS_IS_NOT_STOP_CONDITION",
+      "TOOL_AVAILABLE_MUST_BE_ATTEMPTED_BEFORE_UNKNOWN",
+      "UNKNOWN_MEDIVEL_E_FALHA_DE_METODO"
+    ],
+    "learning_mode": "ALL_NUMBERED_LEARNINGS",
+    "all_numbered_learnings_required": true,
+    "boot_binding": "CENTRALDARK_AI_BOOT.yaml#canonical_consumption_gate",
+    "cli": "node scripts/centraldark/canonical-consumption-gate.mjs --learning ALL"
+  },
+  "tool_call_visibility_contract": {
+    "owner": "docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml",
+    "learning_ref": "docs/CONSCIENCIA/APRENDIZADOS.md#82",
+    "invariant": "TOOL_CALL_EXECUTED != TOOL_CALL_VISIBLE_IN_SIDEBAR",
+    "trace_chain": ["SESSION_ID", "TRACE_ID", "TOOL_CALL_ID", "USAGE/TOKENS", "RECEIPT"],
+    "visibility_states": ["PROVED_BY_PLATFORM_RECEIPT", "USER_CONFIRMED_VISIBILITY", "PLATFORM_UNAVAILABLE", "UNKNOWN"],
+    "user_visual_confirmation_is_backend_proof": false
   }
 }
