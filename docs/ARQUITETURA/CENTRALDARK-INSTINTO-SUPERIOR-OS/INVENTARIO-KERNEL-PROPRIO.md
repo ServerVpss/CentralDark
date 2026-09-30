@@ -277,22 +277,120 @@ Instinto Superior = painel-mãe futuro (inventário, rotação, restore, provedo
 6. Emite receipt sem segredo
 ```
 
-### 9.5 Painel Instinto Superior — stub
+### 9.5 Painel Instinto Superior — mesmo ciclo, owner administrativo mãe
 
-O painel Instinto Superior ainda não tem UI implementada. Capacidade registrada como pendência futura:
-- Inventário visual de vault/secrets (read-only)
-- Rotação de credenciais via HUB Credential Control Plane
-- Bootstrap/restore assistido
-- Owner existente candidato: `apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js`
+O **Instinto Superior** entra no mesmo ciclo do bootstrap/rebuild. Não é pendência futura separada. Ele é a superfície administrativa mãe que consolida as capacidades já existentes por API/MCP, sem duplicar owners.
+
+Capacidades obrigatórias no mesmo plano:
+
+- inventário de Vault/Cofre e estado do bootstrap;
+- CPU, RAM, disco, processos, PM2, portas e health;
+- estado dos agentes, filas, missions e receipts;
+- Contabo via provider owner existente: instância, snapshots, rollback/reinstall e estado;
+- Cloudflare via provider owner existente: zona, DNS, estado e rotação/control plane;
+- credenciais por nome/owner, sem exibir valor bruto por padrão;
+- ações de rotação/rebind/restauração com confirmação e receipt;
+- status GitHub/main/PR/deploy;
+- CentralDark-OS: versão, build, boot, update e rollback;
+- acesso local e remoto pela mesma superfície administrativa.
 
 ```text
-PAINEL_INSTINTO_SUPERIOR_UI=PENDENCIA_FUTURA
-CAPABILITY_REGISTERED=VAULT_INVENTORY+BOOTSTRAP_RESTORE
-OWNER_CANDIDATO=admin-provider-control.js
-IMPLEMENTAR_UI_QUANDO=CHEFE_AUTORIZAR
+PAINEL_INSTINTO_SUPERIOR_UI=SAME_CYCLE_REQUIRED
+PRIMARY_ADMIN_SURFACE=INSTINTO_SUPERIOR
+CONTABO_DIRECT_PANEL_REQUIRED_FOR_DAILY_OPERATION=false
+CLOUDFLARE_DIRECT_PANEL_REQUIRED_FOR_DAILY_OPERATION=false
+PROVIDER_ACTIONS_ROUTE=CentralDark_API_MCP_ADMIN
+VAULT_INVENTORY_ROUTE=INSTINTO_SUPERIOR
+RUNTIME_TELEMETRY_ROUTE=INSTINTO_SUPERIOR
+CREDENTIAL_ROTATION_ROUTE=INSTINTO_SUPERIOR
+ONE_SYSTEM_ONLY=true
 ```
 
-## 10. Próximo cursor
+## 10. Plano de execução completo — mesmo ciclo
+
+```text
+GATE_A_VAULT
+→ sincronizar scripts já promovidos em main para a VPS sem apagar dirty tree
+→ executar centraldark-vault-bootstrap-inventory.sh
+→ validar archive + SHA256 + manifest
+
+GATE_B_PROVIDERS
+→ Contabo READ
+→ Cloudflare READ
+→ CentralDark Admin/MCP READ
+→ GitHub READ
+→ registrar capabilities e bindings
+
+GATE_C_RECOVERY
+→ confirmar snapshot atual
+→ confirmar rota de rollback
+→ registrar receipt antes de qualquer reinstalação
+
+GATE_D_VPS_RECONCILIATION
+→ preservar dirty tree atual
+→ separar runtime útil de lixo/caches/backups antigos
+→ não fazer git reset/clean cego
+→ costurar somente o delta necessário
+
+GATE_E_CENTRALDARK_OS_INSTALL
+→ usar openKylin como substrato técnico
+→ instalar/reinstalar CentralDark-OS
+→ retirar branding/nome/logo/splash/wallpaper/tema openKylin da superfície visível
+→ preservar proveniência técnica interna quando necessária
+→ instalar CentralDark core pelo install.sh/owners existentes
+
+GATE_F_VAULT_RESTORE
+→ restaurar somente ouro inventariado
+→ rebind providers, bots, MCP, runtime e integrações
+→ dedupe por owner/hash
+→ testar autenticação sem imprimir valores
+
+GATE_G_INSTINTO_SUPERIOR
+→ habilitar painel mãe no mesmo ciclo
+→ inventário Vault/Bootstrap
+→ CPU/RAM/disco/processos/PM2/ports
+→ agentes/missions/receipts
+→ Contabo API
+→ Cloudflare API
+→ credenciais/rotação
+→ snapshots/rollback/reinstall
+→ GitHub/deploy/runtime health
+→ CentralDark-OS status
+
+GATE_H_FIXED_POINT
+→ boot PASS
+→ rede PASS
+→ MCP PASS
+→ Hermes/agents PASS
+→ Instinto Superior PASS
+→ provider ping-pong PASS
+→ restore/readback PASS
+→ rollback route PASS
+→ receipt no PR #1713
+→ âncora no PR-mãe #1562
+```
+
+Regra de continuidade:
+
+```text
+NO_WAIT_FOR_SEPARATE_FUTURE_PHASE=true
+DIRTY_TREE=PRESERVE_AND_RECONCILE
+NO_BLIND_RESET=true
+NO_BLIND_CLEAN=true
+MAIN_SCRIPT_EXISTS != VPS_SCRIPT_PRESENT
+DOCUMENTED != EXECUTED
+MERGED != DEPLOYED
+UNKNOWN != PASS
+```
+
+Estado material atual:
+
+- scripts Vault/Bootstrap já existem em `main`;
+- VPS ainda está atrás da `main` e com dirty tree material, portanto pull/reset cego é proibido;
+- Gate B está provado para providers conforme receipt atual do PR;
+- snapshot existe; rollback precisa ser provado pelo caminho de recuperação antes da reinstalação;
+- Instinto Superior é parte do mesmo ciclo, não backlog futuro.
+
 
 1. Medir `main` atual e owners existentes.
 2. Transformar este inventário em matriz viva JSON.
