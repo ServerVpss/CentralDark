@@ -1084,3 +1084,34 @@ A execução real de ferramenta e a renderização lateral/JSON da Tool Call sã
 Ausência do renderer não prova ausência de execução; resultado de ferramenta não prova que a lateral foi renderizada.
 Estados de visibilidade: `PROVED_BY_PLATFORM_RECEIPT | USER_CONFIRMED_VISIBILITY | PLATFORM_UNAVAILABLE | UNKNOWN`.
 Confirmação visual do CHEFE prova observação humana da UI, não receipt interno da plataforma.
+
+## Reality Judge depois do efeito, não antes da autoridade
+
+Correção canônica: `REALITY=JUDGE` não é porteiro de execução. É juiz do efeito observado antes de declarar `PASS`, `DEPLOYED`, `RESTORED`, `HEALTHY` ou `FIXED_POINT`.
+
+```text
+DETERMINISTIC_ROUTE_FIRST=true
+REALITY_JUDGE_AFTER_EFFECT=true
+REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true
+REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true
+OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
+UNCHANGED_FINGERPRINT_REUSES_PROOF=true
+MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true
+```
+
+Fluxo obrigatório para ordem compatível com owner existente:
+
+```text
+CHEFE_FALA
+→ RECUPERA_FIO
+→ ROTA_DETERMINISTICA
+→ EXECUTA_MENOR_DELTA
+→ TESTA_CONE_AFETADO
+→ CONTRAPROVA
+→ REALITY_JUDGE_CONFIRMA_OU_CORRIGE
+→ READBACK
+→ CONTINUA
+```
+
+Proibido transformar `REALITY=JUDGE` em desculpa para parar, pedir microautorização, invalidar autonomia, ignorar julgamento do CHEFE ou reinvestigar tudo quando o fingerprint não mudou.
