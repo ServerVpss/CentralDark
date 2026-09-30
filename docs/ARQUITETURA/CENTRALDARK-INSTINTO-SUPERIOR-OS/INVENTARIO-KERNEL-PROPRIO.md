@@ -763,9 +763,9 @@ VAULT_SCRIPT=scripts/vps/centraldark-vault-bootstrap-inventory.sh (existe no PR 
 VPS_BRANCH=main@ab8fe2d80eb
 VPS_HAS_VAULT_SCRIPT=NO (script está somente no branch claude/centraldark-os-kylin-ft1urg)
 VPS_WORKING_TREE=DIRTY (9 modified, 11 untracked)
-EXECUTION_SURFACE=VPS shell (requer CHEFE executar ou sync de branch)
-GATE_A=NOT_STARTED (script não disponível no VPS)
-NEXT_ACTION=CHEFE sync branch na VPS ou executar vault manualmente
+EXECUTION_SURFACE=VPS shell via rota autorizada existente
+GATE_A=NOT_STARTED (script ainda não executado no VPS)
+NEXT_ACTION=AGENTE deve sincronizar/transportar o menor delta até a VPS pela rota autorizada disponível e executar o vault; não aguardar microcomando do CHEFE se houver rota operacional
 ```
 
 
@@ -876,3 +876,30 @@ CLEAN_REINSTALL=NOT_STARTED
 
 Próximo delta do agente cloud: executar Gate A, completar restore real testável e começar a costura da superfície administrativa Instinto Superior no owner existente, sem esperar outro ciclo.
 
+
+### 14.6 Regra de continuidade sem espera humana desnecessária
+
+```text
+HUMAN_SUPPLIES_GOAL_NOT_RUNBOOK=true
+NO_MICROCOMMAND_WAIT_WHEN_AUTHORIZED_ROUTE_EXISTS=true
+IF_BRANCH_ONLY_HAS_NEEDED_SCRIPT_THEN_AGENT_SYNCS_MINIMUM_DELTA=true
+IF_VPS_MAIN_MUST_NOT_BE_SWITCHED_THEN_COPY_ONLY_REQUIRED_ARTIFACT=true
+PRESERVE_VPS_DIRTY_STATE=true
+NO_BLIND_CLEAN=true
+EXECUTE_GATE_A_AFTER_DELTA_AVAILABLE=true
+THEN_CONTINUE_TO_RESTORE_AND_INSTINTO=true
+```
+
+Para o Gate A atual:
+
+1. medir HEAD remoto e estado da VPS;
+2. preservar o working tree dirty atual;
+3. não trocar branch inteira nem limpar arquivos locais cegamente;
+4. transportar somente os scripts necessários do PR #1713 para a VPS, ou usar owner de deploy/sync já existente;
+5. executar o vault;
+6. validar SHA/manifest/archive;
+7. executar restore em READONLY;
+8. registrar receipt;
+9. continuar para a costura do Instinto Superior no mesmo ciclo.
+
+Se uma rota falhar, usar a próxima rota autorizada existente. Só retornar ao CHEFE quando houver uma fronteira humana real, não por conveniência do agente.
