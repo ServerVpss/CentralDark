@@ -26,6 +26,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const crypto = require('crypto');
 
 // Raiz do repo — descoberta a partir da localização deste arquivo
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
@@ -257,8 +258,70 @@ function gerarTopicoReal() {
  * Anexa um aprendizado ao arquivo APRENDIZADOS.md para que próximas IAs
  * herdem via kit_boas_vindas / puxar_aprendizados.
  */
-function registrarAprendizadoPermanente(iaNome, aprendizado, contextoTopico = '') {
+function canonicalJson(value) {
+  if (value === null || typeof value !== 'object') return JSON.stringify(value);
+  if (Array.isArray(value)) return '[' + value.map(canonicalJson).join(',') + ']';
+  return '{' + Object.keys(value)
+    .sort()
+    .map(key => JSON.stringify(key) + ':' + canonicalJson(value[key]))
+    .join(',') + '}';
+}
+
+function assinarReceiptAprendizado(receipt) {
+  const unsigned = { ...(receipt || {}) };
+  delete unsigned.receipt_sha256;
+  return crypto.createHash('sha256').update(canonicalJson(unsigned), 'utf8').digest('hex');
+}
+
+function receiptCurrent(receipt, currentHead) {
+  if (!receipt || typeof receipt !== 'object') return false;
+  if (!/^[0-9a-f]{40}$/i.test(String(currentHead || ''))) return false;
+  if (receipt.after_ref !== currentHead || receipt.validated_head !== currentHead) return false;
+  const observedAt = Date.parse(receipt.observed_at || '');
+  const validatedAt = Date.parse(receipt.validated_at || '');
+  if (!Number.isFinite(observedAt) || !Number.isFinite(validatedAt)) return false;
+  if (observedAt > validatedAt) return false;
+  if (validatedAt > Date.now() + 5 * 60 * 1000) return false;
+  return true;
+}
+
+function checksPass(items) {
+  return Array.isArray(items) && items.length > 0 && items.every(item =>
+    item && item.status === 'PASS' &&
+    Array.isArray(item.evidence) && item.evidence.length > 0
+  );
+}
+
+function stringsPresent(value) {
+  return Array.isArray(value) && value.length > 0 &&
+    value.every(item => typeof item === 'string' && item.trim());
+}
+
+function podePromoverAprendizado(receipt, currentHead = null) {
+  if (!receipt || receipt.verdict !== 'PROVED_ADOPTED') return false;
+  if (receipt.schema_version !== 1 || receipt.subject !== 'TELEGRAM_LEARNING') return false;
+  if (receipt.same_scope !== true) return false;
+  if (!receipt.learning_id || !/^[0-9a-f]{40}$/i.test(String(receipt.before_ref || ''))) return false;
+  if (!/^[0-9a-f]{40}$/i.test(String(receipt.after_ref || '')) || receipt.before_ref === receipt.after_ref) return false;
+  if (!receipt.canonical_owner || !receipt.claim || !receipt.verifier) return false;
+  for (const field of ['new_information','capability_delta','before_evidence','after_evidence','counterproof','provenance']) {
+    if (!stringsPresent(receipt[field])) return false;
+  }
+  if (!Array.isArray(receipt.lost_capabilities) || receipt.lost_capabilities.length !== 0) return false;
+  if (!checksPass(receipt.tests) || !checksPass(receipt.regressions)) return false;
+  if (typeof receipt.receipt_sha256 !== 'string' || !/^[0-9a-f]{64}$/i.test(receipt.receipt_sha256)) return false;
+  if (assinarReceiptAprendizado(receipt) !== receipt.receipt_sha256.toLowerCase()) return false;
+  if (currentHead && !receiptCurrent(receipt, currentHead)) return false;
+  return true;
+}
+
+function registrarAprendizadoPermanente(iaNome, aprendizado, contextoTopico = '', receipt = null) {
   try {
+    const currentHead = rodarComandoSeguro('git rev-parse HEAD');
+    if (!podePromoverAprendizado(receipt, currentHead)) {
+      console.warn('[contexto] Aprendizado não promovido: receipt PROVED_ADOPTED inválido ou fora do CURRENT');
+      return false;
+    }
     const filePath = path.join(REPO_ROOT, 'docs/CONSCIENCIA/APRENDIZADOS.md');
     if (!fs.existsSync(filePath)) return false;
 
@@ -282,6 +345,10 @@ module.exports = {
   registrarAprendizadoPermanente,
   // exports pra testes
   _internals: {
+    podePromoverAprendizado,
+    canonicalJson,
+    assinarReceiptAprendizado,
+    receiptCurrent,
     ultimosCommits,
     ultimosAprendizados,
     pendenciasAbertas,
