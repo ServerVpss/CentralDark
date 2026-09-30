@@ -736,6 +736,23 @@ MATERIAL_LEARNING_SURFACE=CONCLUSION+EVIDENCE+DELTA+IMPACT+OWNER+STATE
 PRIVATE_CHAIN_OF_THOUGHT_NOT_REQUIRED=true
 ```
 
+### O aprendizado pertence à CentralDark; o executor é portador substituível
+
+O motor/modelo/sessão que encontra um delta material não vira dono da evolução. A contribuição preserva proveniência, mas o aprendizado reutilizável precisa retornar ao owner canônico da CentralDark para sobreviver à troca de executor.
+
+```text
+CENTRALDARK_IS_PERSISTENT_INTELLIGENCE=true
+EXECUTOR_SESSION_IS_NOT_OWNER_OF_SYSTEM_LEARNING=true
+MODEL_OR_EXECUTOR_IS_REPLACEABLE_CARRIER=true
+MATERIAL_LEARNING_RETURNS_TO_CENTRALDARK_CORE=true
+NEXT_EXECUTOR_INHERITS_CANONICAL_STATE=true
+EXECUTOR_ATTRIBUTION_PRESERVES_PROVENANCE_NOT_AUTHORITY=true
+REALITY_JUDGE_IS_POST_EFFECT_FALSIFIER=true
+REALITY_JUDGE_IS_NOT_SYSTEM_LEARNING_OWNER=true
+```
+
+Contraprova mínima: substitua Claude/GPT/Hermes/Codex por outro motor. Se intenção, SOUL, owners, receitas, fingerprints, receipts e NEXT_CURSOR continuarem carregáveis e o próximo executor reproduzir o caminho provado, a continuidade pertence ao organismo. Se o aprendizado desaparecer com a sessão, houve `ZERO_SILENT_LEARNING` violado.
+
 A lei não fabrica memória nem engorda a Casa. Se não houver informação nova ou delta reutilizável, o resultado correto continua sendo `NO_CHANGE`. Se houver delta material ainda não provado, ele deve ser visível como `CANDIDATE`, nunca promovido silenciosamente como verdade canônica.
 
 ```text
