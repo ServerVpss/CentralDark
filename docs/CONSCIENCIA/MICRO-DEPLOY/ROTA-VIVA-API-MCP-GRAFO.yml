@@ -50,6 +50,7 @@ routes_append_only:
     - RECEIPTS_CROSSCHECK
     - GH_ROVER
     - TAILSCALE_PORTS
+    - TAILSCALE_NETWORK_LOGS
     - OMNI_ROUTER
     - GRAPH_PANEL
     - BRAIN_IMPORT
@@ -89,6 +90,9 @@ locks:
   REUSE_BEFORE_CREATE: true
   ONE_SYSTEM_ONLY: true
   ONE_WRITER_PER_SCOPE: true
+  TAILSCALE_LOGS_OWNER_IS_EXISTING_MCP_PROVIDER_CONTROL: true
+  TAILSCALE_LOGS_NO_SECOND_COLLECTOR: true
+  TAILSCALE_LOGS_SECRET_STAYS_IN_VPS_COFRE: true
 
 job_required_output:
   - job_id
@@ -127,3 +131,18 @@ admin_explanation_required:
     - o_que_ficou_unknown
     - qual_receipt_prova
     - proximo_cursor
+
+
+tailscale_network_logs:
+  owner: apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js
+  mcp_tool: tailscale_network_logs
+  upstream: GET /api/v2/tailnet/{tailnet}/logging/network
+  upstream_scope: logs:network:read
+  public_edge_canonical: GET https://api.centralldark.com/tailscale
+  public_edge_compat_alias: GET https://api.centralldark.com/tailscaale
+  auth: CENTRALDARK_MCP_ADMIN_OAUTH
+  default_window_minutes: 15
+  max_window_hours: 24
+  hud_card: H07
+  rule: TAILSCALE_LOGS -> MCP_EXISTENTE -> API_CENTRALDARK -> HUD_EXISTENTE
+  no_parallel_architecture: true
