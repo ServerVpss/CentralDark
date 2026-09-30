@@ -16,7 +16,8 @@ GLOBAL_GATE_RECEIPT_DIR="${GLOBAL_GATE_RECEIPT_DIR:-/tmp/centraldark-global-cont
 POLICY_PATH=".agents/skills/centraldark-esteira-motor/SKILL.md"
 SOURCE_DEPLOY_PATH="scripts/vps/centraldark-deploy.sh"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DISPATCHER="$SCRIPT_DIR/deploy-guards-dispatcher.sh"
+CANONICAL_DEPLOY_GATE="scripts/vps/deploy-guards-dispatcher.sh"
+DISPATCHER="$REPO_DIR/$CANONICAL_DEPLOY_GATE"
 
 [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "TARGET_SHA_INVALID"; exit 61; }
 [[ -d "$REPO_DIR/.git" ]] || { echo "REPO_DIR_INVALID"; exit 62; }
