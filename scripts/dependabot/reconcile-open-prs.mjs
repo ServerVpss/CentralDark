@@ -52,11 +52,13 @@ async function getPr(number) {
   return result.data;
 }
 
-async function rerunFailedOnce(headSha) {
+async function rerunFailedOnce(headSha, prNumber) {
   const runsResp = await api(`/actions/runs?head_sha=${encodeURIComponent(headSha)}&per_page=100`);
   if (!runsResp.ok) return { requested: 0, reason: `RUNS_HTTP_${runsResp.status}` };
-  const latest = [...new Set((runsResp.data?.workflow_runs || []).map(run => run.name))]
-    .map(name => selectLatestRun(runsResp.data?.workflow_runs || [], name));
+  const scopedRuns = (runsResp.data?.workflow_runs || [])
+    .filter(run => runBelongsToPullHead(run, prNumber, headSha));
+  const latest = [...new Set(scopedRuns.map(run => run.name))]
+    .map(name => selectLatestRun(scopedRuns, name));
   const failure = new Set(['failure', 'cancelled', 'timed_out', 'action_required', 'startup_failure']);
   let requested = 0;
   for (const run of latest) {
@@ -259,7 +261,7 @@ for (const item of prs) {
   });
   receipt.proof_status = advertised.status;
   if (!advertised.ok) { blocked += 1; console.error('REQUIRED_PROOF_STATUS_FAILED pr=' + number + ' status=' + advertised.status); }
-  const rerun = await rerunFailedOnce(pr.head.sha);
+  const rerun = await rerunFailedOnce(pr.head.sha, pr.number);
   receipt.reruns = rerun.requested;
   if (rerun.requested > 0) {
     receipt.action = 'RERUN_FAILED_JOBS';
