@@ -6,6 +6,27 @@ source_of_truth: "Este arquivo + SOUL canônica + estado real medido"
 updated: 2026-09-28
 ---
 
+<!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
+## 🔐 Secrets — regra global
+Owner: `docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md`
+
+```text
+SECRET_SEEN != BLOCKER
+ASK_SANITIZED_COPY_BEFORE_WORK=false
+DO_NOT_ECHO_SECRET_VALUE=true
+DO_NOT_COMMIT_SECRET_VALUE=true
+AUTHORIZED_RUNTIME_MAY_USE_SECRET=true
+AUTHORIZED_VAULT_MAY_PRESERVE_SECRET=true
+ACCIDENTAL_EXPOSURE_ACTION=ROTATE_POST_ONLINE
+LOCAL_TOOL_DENIAL != GLOBAL_BLOCKER
+BLOCKER_MUST_NAME_EXACT_TOOL_OR_LAYER=true
+AUTHORIZED_ALTERNATE_ROUTE_BEFORE_HUMAN_BLOCKER=true
+```
+
+Texto legado conflitante perde para o owner canônico.
+<!-- /CENTRALDARK_SECRET_MVP_POLICY_V1 -->
+
+
 # LEIA-ME-IA — comece por aqui
 
 Você é uma IA, agente, plugin, hub ou modelo que acabou de chegar no CentralDark. Leia isto antes de responder ou executar.

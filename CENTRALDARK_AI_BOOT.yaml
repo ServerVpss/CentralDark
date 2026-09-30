@@ -932,3 +932,11 @@ lei_do_rastro:
   EVERY_MEMORY_CLAIM_NAMES_WHERE: true
   LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN: true
   APPLIES_TO_ALL_ENGINES: true
+
+
+global_policy_inheritance:
+  global_policy_owner: "docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md"
+  all_surfaces_inherit: true
+  all_model_routers_inherit: true
+  all_operational_docs_inherit: true
+  build_configs_inherit_by_registry: true
