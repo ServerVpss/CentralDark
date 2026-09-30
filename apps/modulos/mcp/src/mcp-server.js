@@ -9,6 +9,7 @@ import { ALL_TOOLS, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
 import { readSemanticManifest, SEMANTIC_MANIFEST_URI } from "./tools/cognitivo/semantic.js";
 import { sanitizeOutgoingDeep } from "./lib/sanitize.js";
 import { auditToolExecution } from "./audit-logger.js";
+import { decorateToolResult } from "./tool-result-envelope.js";
 function zodTypeToJsonSchema(schema) {
     if (schema instanceof z.ZodOptional || schema instanceof z.ZodDefault) {
         return zodTypeToJsonSchema(schema._def.innerType);
@@ -210,10 +211,15 @@ function buildServer(options) {
         const startedAt = Date.now();
         const tool = callableTools.find((t) => t.name === req.params.name);
         if (!tool) {
-            const result = {
+            const result = decorateToolResult({
                 isError: true,
                 content: [{ type: "text", text: `Tool desconhecida: ${req.params.name}` }],
-            };
+            }, {
+                toolName: req.params.name,
+                correlationId: options.cid ?? "UNKNOWN",
+                startedAt,
+                errorCode: "TOOL_NOT_FOUND",
+            });
             auditToolExecution({
                 method: "tools/call",
                 toolName: req.params.name,
@@ -227,12 +233,17 @@ function buildServer(options) {
         }
         const parsed = tool.inputSchema.safeParse(req.params.arguments ?? {});
         if (!parsed.success) {
-            const result = {
+            const result = decorateToolResult({
                 isError: true,
                 content: [
                     { type: "text", text: `Argumentos inválidos: ${parsed.error.message}` },
                 ],
-            };
+            }, {
+                toolName: tool.name,
+                correlationId: options.cid ?? "UNKNOWN",
+                startedAt,
+                errorCode: "INVALID_ARGUMENTS",
+            });
             auditToolExecution({
                 method: "tools/call",
                 toolName: tool.name,
@@ -253,7 +264,11 @@ function buildServer(options) {
                 correlationId: options.cid ?? null,
             });
             const raw = await tool.handler(parsed.data, toolContext);
-            const result = sanitizeOutgoingDeep(raw);
+            const result = decorateToolResult(sanitizeOutgoingDeep(raw), {
+                toolName: tool.name,
+                correlationId: options.cid ?? "UNKNOWN",
+                startedAt,
+            });
             auditToolExecution({
                 method: "tools/call",
                 toolName: tool.name,
@@ -272,10 +287,15 @@ function buildServer(options) {
         }
         catch (err) {
             log.error("tool_execution_error", { tool: tool.name, error: String(err) });
-            const result = {
+            const result = decorateToolResult({
                 isError: true,
                 content: [{ type: "text", text: `Erro ao executar ${tool.name}: ${String(err)}` }],
-            };
+            }, {
+                toolName: tool.name,
+                correlationId: options.cid ?? "UNKNOWN",
+                startedAt,
+                errorCode: "TOOL_EXECUTION_ERROR",
+            });
             auditToolExecution({
                 method: "tools/call",
                 toolName: tool.name,
