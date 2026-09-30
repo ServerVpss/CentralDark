@@ -602,3 +602,125 @@ MONITOR_1713
 ```
 
 Não repetir trabalho já provado. Não transformar CI base preexistente em blocker deste escopo sem nexo causal. Não declarar formato/reinstalação concluídos antes da prova material do provider/runtime.
+
+
+## 13. Medição Fase B — Providers e controle externo
+
+**Medido em:** 2026-09-30T09:42Z | **Superfície:** Claude Code Remote via MCP Admin | **HEAD:** `e6b7fd70a9`
+
+### 13.1 Credenciais — status por provider
+
+| Provider | Credencial | Status |
+|---|---|---|
+| Cloudflare | `CLOUDFLARE_API_TOKEN` | CONFIGURED |
+| Contabo | `CONTABO_CLIENT_ID` | MISSING |
+| Contabo | `CONTABO_CLIENT_SECRET` | MISSING |
+| Contabo | `CONTABO_API_USER` | MISSING |
+| Contabo | `CONTABO_API_PASSWORD` | MISSING |
+| Tailscale | `TAILSCALE_API_KEY` | CONFIGURED |
+| Buildkite | `BUILDKITE_API_TOKEN` | CONFIGURED |
+
+### 13.2 Cloudflare — readback provado
+
+```text
+ZONE=centralldark.com
+ZONE_ID=6986cded70ab6bec23a765496807b614
+STATUS=active
+PLAN=Free Website
+NAMESERVERS=cruz.ns.cloudflare.com, isaac.ns.cloudflare.com
+ACCOUNT_ID=07710ec11bbd46fad5c16513e45ccbd9
+REGISTRAR=INWX GmbH (id: 1420)
+PERMISSIONS=zone:read, zone_settings:read, dns_records:edit, dns_records:read
+CREATED=2026-06-03
+DNS_RECORDS_COUNT=16
+ALL_PROXIED=true
+HTTP_STATUS=200
+PROVIDER_READ=PASS
+```
+
+DNS records medidos (16 A records, todos proxied via Cloudflare):
+
+| Subdomínio | Tipo | Proxied | Criado |
+|---|---|---|---|
+| `centralldark.com` | A | sim | 2026-06-03 |
+| `*.centralldark.com` | A | sim | 2026-06-03 |
+| `www` | A | sim | 2026-06-03 |
+| `api` | A | sim | 2026-06-05 |
+| `app` | A | sim | 2026-06-05 |
+| `bot` | A | sim | 2026-06-05 |
+| `crm` | A | sim | 2026-06-05 |
+| `gateway` | A | sim | 2026-06-05 |
+| `install` | A | sim | 2026-06-05 |
+| `mcp` | A | sim | 2026-06-05 |
+| `status` | A | sim | 2026-06-05 |
+| `webhook` | A | sim | 2026-06-05 |
+| `deploy` | A | sim | 2026-06-24 |
+| `telepainel` | A | sim | 2026-06-24 |
+| `grafo` | A | sim | 2026-07-04 |
+| `admin` | A | sim | 2026-09-25 |
+
+### 13.3 Tailscale — readback provado
+
+```text
+TAILNET=tail6d7aa4.ts.net
+DEVICES_COUNT=4
+HTTP_STATUS=200
+PROVIDER_READ=PASS
+```
+
+| Device | OS | Hostname | Connected | Last Seen | Key Expiry |
+|---|---|---|---|---|---|
+| `vmi3256920` | linux | VPS | true | 2026-09-30T09:43Z | disabled (never expires) |
+| `centraldark-os` | linux | centraldark-os | true | 2026-09-30T09:43Z | 2027-03-28 |
+| `SEGREDO` | windows | Casa | true | 2026-09-30T09:43Z | 2027-03-24 |
+| `celular-segredo-iphone` | iOS | iPhone | false | 2026-09-30T09:43Z | 2027-02-26 |
+
+VPS (`vmi3256920`) tem `keyExpiryDisabled=true` — rota Tailscale permanente confirmada.
+
+### 13.4 Buildkite — readback provado
+
+```text
+USER=SegredoiDev
+USER_ID=01a0b190-337e-4f32-a08c-b32ef8a68a2f
+ORG=segredoidev
+HTTP_STATUS=200
+PROVIDER_READ=PASS
+```
+
+### 13.5 Contabo — BLOQUEADO
+
+```text
+CONTABO_CLIENT_ID=MISSING
+CONTABO_CLIENT_SECRET=MISSING
+CONTABO_API_USER=MISSING
+CONTABO_API_PASSWORD=MISSING
+PROVIDER_READ=BLOCKED
+CAPABILITIES_BLOCKED=instances.list, instances.get, snapshots.list, snapshots.create, snapshots.rollback
+GATE_C_IMPACT=Fase C (Snapshot/Rollback) não pode prosseguir sem credenciais Contabo
+```
+
+As 4 credenciais Contabo são pré-requisito para Gate B (instance exact match) e Gate C (snapshot/rollback). O CHEFE precisa configurar estas credenciais no MCP runtime ou fornecer por via segura.
+
+### 13.6 Gate B — veredicto parcial
+
+```text
+CLOUDFLARE_READ=PASS (zone + DNS + account provados)
+TAILSCALE_READ=PASS (4 devices, VPS connected, key permanent)
+BUILDKITE_READ=PASS (user + org provados)
+CONTABO_READ=BLOCKED (4 credenciais MISSING)
+GITHUB_READ=PASS (repo/main/PR acessíveis via MCP)
+VPS_INSTANCE_EXACT_MATCH=UNKNOWN (requer Contabo instances.get)
+GATE_B=PARTIAL_PASS (3/4 providers provados, Contabo bloqueado)
+```
+
+### 13.7 Fase A — Vault status
+
+```text
+VAULT_SCRIPT=scripts/vps/centraldark-vault-bootstrap-inventory.sh (existe no PR branch)
+VPS_BRANCH=main@ab8fe2d80eb
+VPS_HAS_VAULT_SCRIPT=NO (script está somente no branch claude/centraldark-os-kylin-ft1urg)
+VPS_WORKING_TREE=DIRTY (9 modified, 11 untracked)
+EXECUTION_SURFACE=VPS shell (requer CHEFE executar ou sync de branch)
+GATE_A=NOT_STARTED (script não disponível no VPS)
+NEXT_ACTION=CHEFE sync branch na VPS ou executar vault manualmente
+```
