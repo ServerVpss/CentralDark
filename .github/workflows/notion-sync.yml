@@ -2,8 +2,7 @@ name: 🧠 Notion Sync (docs/CONSCIENCIA → Notion)
 # Espelha automaticamente o conteúdo de docs/CONSCIENCIA/ para o Notion
 # usando UPSERT (cria se não existe, atualiza se existe).
 ## Lei vigente: Git é fonte da verdade. Notion é painel humano.
-## Política: integração opcional. Push automático só roda com NOTION_SYNC_ENABLED=true.
-## workflow_dispatch permanece disponível para ativação/teste manual pelo Hub/admin.
+## Política temporária: best-effort. Falha do Notion não bloqueia CI/main.
 
 on:
   push:
@@ -39,12 +38,11 @@ permissions:
 
 concurrency:
   group: notion-sync
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   sync:
-    name: Espelhar para o Notion (opcional)
-    if: github.event_name == 'workflow_dispatch' || vars.NOTION_SYNC_ENABLED == 'true'
+    name: 🧩 Espelhar para o Notion (best-effort)
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 20
     continue-on-error: true
@@ -72,7 +70,7 @@ jobs:
           TARGET: ${{ github.event.inputs.target || 'all' }}
           GITHUB_COMMIT: ${{ github.sha }}
           GITHUB_ACTOR: ${{ github.actor }}
-        run: node scripts/notion-sync/sync.mjs
+        run: timeout --signal=TERM --kill-after=30s 10m node scripts/notion-sync/sync.mjs
 
       - name: 🧹 Cleanup de órfãos (opcional)
         continue-on-error: true

@@ -143,25 +143,6 @@ GRAPH_RELATION != AUTHORITY
 INDEX_MISS != FILE_ABSENCE
 BROAD_SCAN_IS_FALLBACK=true
 CONTEXT_MINIMUM_BEFORE_MODEL=true
-TRUNCATED_CONTEXT_IS_NOT_MISSION_BLOCKER=true
-FULL_CONTEXT_RELOAD_IS_NOT_REQUIRED_WHEN_OWNER_IS_IDENTIFIED=true
-READ_RELEVANT_OWNER_BEFORE_READ_WHOLE_REPOSITORY=true
-CHILD_CONTEXT_MUST_BE_BOUNDED_TO_TASK=true
-```
-
-Se um arquivo de contexto exceder o limite do corpo/modelo, não travar a missão nem
-pedir ao humano para resolver. Registrar `CONTEXT_TRUNCATED`, reduzir para o owner,
-contrato, consumidor, teste e estado material, e continuar. Se o claim depender de
-um trecho omitido, abrir somente esse trecho com paginação; `UNKNOWN` fica restrito
-ao claim afetado, não ao trabalho independente.
-
-```text
-CONTEXT_TRUNCATED
-→ PIN_RELEVANT_OWNER
-→ READ_TARGETED_RANGES
-→ PRESERVE_MISSION_ID
-→ CONTINUE_INDEPENDENT_WORK
-→ UNKNOWN_ONLY_FOR_UNREAD_CLAIM
 ```
 
 A seleção do Bolt aplica essa regra com pré-classificação barata por caminho e
@@ -364,21 +345,107 @@ novo motor, skill, workflow ou parada de confirmação para cada variação da
 mesma classe. Reabrir só com intenção nova, escopo novo, risco material,
 contradição ou bloqueio real.
 
-### 4.8 Source Code Corruption — Literal Strings in Source Files
+### 4.8 Standing Goal + `/goal` — continuidade material, não preâmbulo
 
-**Regra:** When source code files contain literal `***` or other placeholder strings that should be environment variable values (e.g., `apikey: ***` in JS headers), the file has been corrupted — either by markdown rendering, editor substitution, or prior session artifacts. NEVER treat `***` as a valid value. Always verify the actual bytes with `cat -A`, `xxd`, or `python` byte inspection. Fix by replacing the literal with the correct variable reference (`serviceRoleKey`, `${serviceRoleKey}`, etc.).
+O bloco mostrado antes de `/goal` é um **contrato de fase**, não um novo
+motor. Ele deve reutilizar o mesmo `MISSION_ID`, goal pai, Writer, escopo e
+predicado de sucesso até existir prova material de conclusão ou uma condição
+terminal legítima.
 
-**Pitfall — Node-level verification gives false negatives:** `node --check <file>` and `content.includes('***')` BOTH report false negatives after patching because the corrupt lines are ADJACENT to but distinct from the variable reference. The `include()` check may report `false` even though `***` still exists in the file on a different line. A simple grep or `include()` check on a string literal may report `false` because the variable reference (`serviceRoleKey`) is present elsewhere in the file — the corrupted lines may be adjacent but distinct.
+```text
+STANDING_GOAL=ACTIVE
+GOAL_PARENT=STABLE
+MICRO_GOAL=DERIVED_FROM_CURRENT_WOUND
+PHASE_CONTRACT=REHYDRATE_NOT_REINVENT
+PREAMBLE_IS_PROGRESS=false
+ITERATION_COUNTER_IS_PROGRESS=false
+PLANNING_TEXT_IS_DELIVERABLE=false
+MISSING_REQUIRED_EVIDENCE_FORCE_CONTINUE=true
+```
 
-**CORREÇÃO — use Python byte-level verification:** After patching, verify with `(content.match(/\*\*\*/g) || []).length === 0` AND inspect the specific lines with `cat -A` or `sed -n '<line>p' | cat -A`. The regex `match(/\*\*\*/g)` catches the literal asterisks regardless of adjacent context. Also verify the specific header lines contain the correct variable name, not `***`.
+Antes de cada fase material, reidratar do estado já existente:
 
-**Verification sequence that works:**
-1. Read file bytes with Python: `content.encode()` → search for `b'***'`
-2. After patch: `(content.match(/\*\*\*/g) || []).length === 0`
-3. Inspect specific lines: `sed -n '80,85p' file | cat -A`
-4. Confirm the file has NO `b'***'` bytes AND the target lines contain `serviceRoleKey`
+```text
+MISSION_ID
+OBJETIVO
+ALVO
+CANDIDATE_REF
+CANDIDATE_SHA256
+BASELINE_REF
+FIXTURE_REF
+EVALUATION_REF
+ESTADO_INICIAL
+DEFINICOES
+ESCOPO_PERMITIDO
+ESCOPO_PROIBIDO
+CONTROL_SURFACES_LOCKED
+CONTROL_SURFACES_EDITABLE
+SUCCESS_PREDICATE
+NON_COUNTING_OUTCOMES
+FAILURE_MODES
+EVIDENCE_REQUIRED
+ROLLBACK
+AUTHORIZATION_LEVEL
+WRITER
+BUDGET
+STOP_CONDITIONS
+```
 
-**Correção:** Use Python to do byte-level replacement. After patching, verify with: `(content.match(/\*\*\*\//g) || []).length === 0` AND the specific lines contain the correct variable name.
+Campos ausentes continuam `UNPROVEN`. Valores transitórios de uma execução
+não viram arquitetura canônica.
+
+Após cada ciclo:
+
+```text
+OBSERVE
+→ COMPARE_REQUIRED_DELIVERABLES
+→ UPDATE_EVIDENCE_MAP
+→ IF_SUCCESS_PREDICATE_PROVEN: STOP_SUCCESS
+→ ELSE_IF_HUMAN_FRONTIER_OR_EXACT_BLOCKER: STOP_BLOCKED
+→ ELSE_IF_NO_NEW_INFORMATION: STOP_POINT_FIXED
+→ ELSE: CONTINUE_TOWARD_STANDING_GOAL
+```
+
+`/goal` é somente superfície de introspecção do estado do goal; não cria
+um goal novo, não altera autorização e não substitui prova.
+
+```text
+/goal RETURNS:
+  GOAL_PARENT
+  MISSION_ID
+  SUCCESS_PREDICATE
+  DELIVERABLES_REQUIRED
+  DELIVERABLES_PROVEN
+  DELIVERABLES_MISSING
+  CURRENT_HEAD_OR_BASELINE
+  CURRENT_WRITER
+  CURRENT_SCOPE
+  NEXT_CURSOR
+```
+
+Se a resposta do agente for apenas planejamento, boot, contrato ou narração
+sem arquivo/diff/output/receipt exigido pelo goal, o avaliador deve manter:
+
+```text
+GOAL_STATUS=CONTINUE
+REASON=NO_MATERIAL_DELIVERABLE_EVIDENCE
+```
+
+`EXECUTE_WITH_JUDGMENT` significa escolher o próximo passo dentro do escopo
+já autorizado. Nunca significa ampliar permissão, alterar superfícies travadas,
+ignorar Writer lease ou converter `UNKNOWN` em `PASS`.
+
+O contador visual `10/20`, `18/20` etc. mede iterações do executor, não
+porcentagem de conclusão. A conclusão é determinada apenas pelo
+`SUCCESS_PREDICATE` e pela evidência requerida.
+
+```text
+STANDING_GOAL_SURVIVES_TURN=true
+STANDING_GOAL_SURVIVES_TOOL_FAILURE=true
+CHILD_FAILURE_DOES_NOT_REPLACE_PARENT_GOAL=true
+CURRENT_WOUND_DRIVES_NEXT_MICRO_GOAL=true
+GOAL_REOPENS_ONLY_ON_NEW_MATERIAL_EVIDENCE_OR_CONTRADICTION=true
+```
 
 ## 5. Optimization Ladder
 
@@ -819,30 +886,14 @@ Finalizar e parar.
 
 ```text
 RACIOCINIO-DELIBERADO → decide antes
-FABLE-LOOP            → calibra antes, somente leitura
 COT-REACT-LOOP        → executa, mede e corrige durante
-17 RESPIRAÇÕES        → checklist de cada giro, dona em BANDA_COMPASSO_GLOBAL.json
 META-LUPA             → tenta derrubar depois
-SEGREDO/CHEFE         → autoridade final para promoção
+SEGREDO/CHEFE          → autoridade final para promoção
 ```
 
 ```text
 ANTES → DURANTE → DEPOIS
-DECIDIR → CALIBRAR → EXECUTAR/MEDIR/CORRIGIR → FALSIFICAR/SELAR
-```
-
-As 17 respirações moram em `docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json`
-e são o checklist obrigatório de cada giro PLAN → ACT → OBSERVE → CRITIQUE → REFINE → DECIDE:
-PLAN usa 1, 2, 11, 12, 13, 14. ACT usa 14, uma ação por ciclo. OBSERVE usa 3, 4, 6, 7, 8, 15.
-CRITIQUE usa 9, 10, 16. REFINE usa 5, 12, 13. DECIDE usa 17. A lista não é duplicada aqui;
-o JSON é a partitura, esta skill é o motor. FABLE-LOOP calibra antes sem escrever;
-META-LUPA falsifica depois sem executar. Nenhum segundo loop dirige.
-
-```text
-COT_17_BINDING_REQUIRED=true
-ALL_SESSIONS_INHERIT_COT_17=true
-ALL_MODELS_INHERIT_COT_17=true
-FABLE_BEFORE_WRITE_PROHIBITED=true
+DECIDIR → EXECUTAR/MEDIR/CORRIGIR → FALSIFICAR/SELAR
 ```
 
 Não é pensar muito, repetir ferramenta, escrever logs bonitos ou autoaprovar.

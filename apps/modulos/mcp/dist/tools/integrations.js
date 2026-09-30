@@ -91,6 +91,77 @@ const WRITE = {
 // ─────────────────────────────────────────────────────────────────────────────
 // LINEAR — GraphQL
 // ─────────────────────────────────────────────────────────────────────────────
+export async function getLinearPublicStatus() {
+    const configured = Boolean(pick("LINEAR_API_KEY", "LINEAR_TOKEN", "LOVABLE_API_KEY"));
+    const checkedAt = new Date().toISOString();
+    if (!configured) {
+        return { ok: false, status: "UNAVAILABLE", configured: false, checkedAt };
+    }
+    try {
+        await linearGql(`query LinearCentralDarkProbe { viewer { id } }`);
+        return { ok: true, status: "AVAILABLE", configured: true, checkedAt };
+    }
+    catch {
+        return { ok: false, status: "ERROR", configured: true, checkedAt };
+    }
+}
+export async function getLinearAdminSnapshot(limit = 25) {
+    const checkedAt = new Date().toISOString();
+    const configured = Boolean(pick("LINEAR_API_KEY", "LINEAR_TOKEN", "LOVABLE_API_KEY"));
+    if (!configured) {
+        return {
+            ok: false,
+            status: "UNAVAILABLE",
+            configured: false,
+            checkedAt,
+            issues: [],
+        };
+    }
+    try {
+        const first = Math.max(1, Math.min(Number(limit) || 25, 100));
+        const data = await linearGql(`
+          query LinearCentralDarkAdmin($first: Int!) {
+            viewer { id name }
+            organization { id name urlKey }
+            issues(first: $first, orderBy: updatedAt) {
+              nodes {
+                id identifier title priority
+                state { name }
+                team { key name }
+                assignee { name }
+                url updatedAt
+              }
+            }
+          }
+        `, { first });
+        return {
+            ok: true,
+            status: "AVAILABLE",
+            configured: true,
+            checkedAt,
+            viewer: data.viewer ? { id: data.viewer.id, name: data.viewer.name } : null,
+            organization: data.organization ? {
+                id: data.organization.id,
+                name: data.organization.name,
+                urlKey: data.organization.urlKey,
+            } : null,
+            issues: data.issues?.nodes ?? [],
+            links: {
+                team: "https://linear.app/segredo/team/SEG",
+                codingSessions: "https://linear.app/segredo/settings/ai/coding-sessions",
+            },
+        };
+    }
+    catch {
+        return {
+            ok: false,
+            status: "ERROR",
+            configured: true,
+            checkedAt,
+            issues: [],
+        };
+    }
+}
 async function linearGql(query, variables = {}) {
     const direct = pick("LINEAR_API_KEY", "LINEAR_TOKEN");
     const lovable = pick("LOVABLE_API_KEY");
@@ -522,7 +593,152 @@ const sentryTools = [
                     : pick("LOVABLE_API_KEY")
                         ? `gateway (org=${pick("SENTRY_ORG") ?? "NÃO DEFINIDA"})`
                         : "AUSENTE",
+                figma: figmaToken() ? "cofre/HUB direto" : "AUSENTE",
                 cofre_lido: SECRET_ENV_FILES.filter((f) => existsSync(f)),
+            });
+        },
+    },
+];
+// ─────────────────────────────────────────────────────────────────────────────
+// FIGMA / FIGJAM — REST read-only
+// Owner: HUB -> MCP CentralDark. Omni Router is NOT the connector owner.
+// Token: FIGMA_ACCESS_TOKEN | FIGMA_TOKEN, never returned in responses.
+// ─────────────────────────────────────────────────────────────────────────────
+export function parseFigmaTarget(raw) {
+    const value = String(raw ?? "").trim();
+    if (!value)
+        throw new Error("Figma: informe URL ou fileKey.");
+    if (/^[0-9A-Za-z]{22,128}$/.test(value)) {
+        return { fileKey: value, nodeId: null, kind: "fileKey" };
+    }
+    let url;
+    try {
+        url = new URL(value);
+    }
+    catch {
+        throw new Error("Figma: URL/fileKey inválido.");
+    }
+    if (!/(^|\.)figma\.com$/i.test(url.hostname) && !/(^|\.)embed\.figma\.com$/i.test(url.hostname)) {
+        throw new Error("Figma: host não permitido.");
+    }
+    const parts = url.pathname.split("/").filter(Boolean);
+    const typeIndex = parts.findIndex((p) => ["design", "board", "file"].includes(p));
+    const fileKey = typeIndex >= 0 ? parts[typeIndex + 1] : null;
+    if (!fileKey || !/^[0-9A-Za-z]{22,128}$/.test(fileKey)) {
+        throw new Error("Figma: fileKey não encontrado na URL.");
+    }
+    const rawNode = url.searchParams.get("node-id");
+    const nodeId = rawNode ? rawNode.replace("-", ":") : null;
+    const kind = typeIndex >= 0 ? parts[typeIndex] : "unknown";
+    return { fileKey, nodeId, kind };
+}
+function figmaToken() {
+    return pick("FIGMA_ACCESS_TOKEN", "FIGMA_TOKEN");
+}
+async function figmaCall(path) {
+    const token = figmaToken();
+    if (!token) {
+        throw new Error("Figma: credencial ausente. Cadastre FIGMA_ACCESS_TOKEN pelo HUB/cofre canônico.");
+    }
+    const res = await fetch(`https://api.figma.com/v1${path}`, {
+        headers: {
+            "X-Figma-Token": token,
+            Accept: "application/json",
+        },
+    });
+    const text = await res.text();
+    let data = {};
+    try {
+        data = text ? JSON.parse(text) : {};
+    }
+    catch {
+        data = { raw: text.slice(0, 400) };
+    }
+    if (!res.ok) {
+        const detail = data?.err || data?.message || text.slice(0, 300) || `HTTP ${res.status}`;
+        throw new Error(`Figma ${res.status}: ${detail}`);
+    }
+    return data;
+}
+export async function getFigmaPublicStatus() {
+    const configured = Boolean(figmaToken());
+    const checkedAt = new Date().toISOString();
+    if (!configured) {
+        return { ok: false, status: "UNAVAILABLE", configured: false, checkedAt };
+    }
+    try {
+        const me = await figmaCall("/me");
+        return {
+            ok: true,
+            status: "AVAILABLE",
+            configured: true,
+            checkedAt,
+            identity: {
+                id: me.id ?? null,
+                handle: me.handle ?? null,
+            },
+        };
+    }
+    catch {
+        return { ok: false, status: "ERROR", configured: true, checkedAt };
+    }
+}
+const figmaTools = [
+    {
+        name: "figma_status",
+        description: "Mede deterministicamente se o conector Figma/FigJam do HUB está configurado e autenticado. Não expõe token.",
+        annotations: { ...READ, title: "Figma — status do conector" },
+        inputSchema: z.object({}),
+        handler: async () => jsonBlock(await getFigmaPublicStatus()),
+    },
+    {
+        name: "figma_ler_arquivo",
+        description: "Lê metadata/árvore de um arquivo Figma ou board FigJam por URL ou fileKey. Read-only.",
+        annotations: { ...READ, title: "Figma — ler arquivo/board" },
+        inputSchema: z.object({
+            target: z.string().min(1).describe("URL Figma/FigJam ou fileKey"),
+            depth: z.number().int().min(1).max(4).default(2),
+        }),
+        handler: async (input) => {
+            const target = parseFigmaTarget(input.target);
+            const qs = new URLSearchParams({ depth: String(input.depth ?? 2) });
+            const data = await figmaCall(`/files/${encodeURIComponent(target.fileKey)}?${qs}`);
+            return jsonBlock({
+                source: "figma-rest",
+                fileKey: target.fileKey,
+                kind: target.kind,
+                name: data.name ?? null,
+                version: data.version ?? null,
+                lastModified: data.lastModified ?? null,
+                editorType: data.editorType ?? null,
+                document: data.document ?? null,
+            });
+        },
+    },
+    {
+        name: "figma_ler_node",
+        description: "Lê um node específico de Figma/FigJam. Aceita URL com node-id ou nodeId explícito.",
+        annotations: { ...READ, title: "Figma — ler node" },
+        inputSchema: z.object({
+            target: z.string().min(1).describe("URL Figma/FigJam ou fileKey"),
+            nodeId: z.string().optional().describe("Ex: 0:1. Se omitido usa node-id da URL."),
+            depth: z.number().int().min(1).max(4).default(3),
+        }),
+        handler: async (input) => {
+            const target = parseFigmaTarget(input.target);
+            const nodeId = input.nodeId || target.nodeId;
+            if (!nodeId)
+                throw new Error("Figma: nodeId ausente; informe nodeId ou URL com ?node-id=.");
+            const qs = new URLSearchParams({
+                ids: nodeId,
+                depth: String(input.depth ?? 3),
+            });
+            const data = await figmaCall(`/files/${encodeURIComponent(target.fileKey)}/nodes?${qs}`);
+            return jsonBlock({
+                source: "figma-rest",
+                fileKey: target.fileKey,
+                nodeId,
+                node: data.nodes?.[nodeId] ?? null,
             });
         },
     },
@@ -534,6 +750,7 @@ export const integrationsTools = [
     ...linearTools,
     ...notionTools,
     ...sentryTools,
+    ...figmaTools,
 ];
 //# sourceMappingURL=integrations.js.map
 //# sourceMappingURL=integrations.js.map

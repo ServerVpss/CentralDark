@@ -96,6 +96,25 @@ anti_loop:
     - investigation plan
   gate_pass_before_action_executed: FORBIDDEN
 
+adversarial_cage:
+  owner: .agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py
+  command: "python3 .agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py --cage-test --iterations 64"
+  mode: REPEAT_UNTIL_FIXED_POINT_WITH_BOUNDED_PROBE_BUDGET
+  bypass_as_pass: FORBIDDEN
+  legitimate_pass_requires_complete_body: true
+  no_change_is_escape: false
+  blocked_is_escape: false
+  unknown_is_escape: false
+  max_iterations_per_probe: 4096
+  default_iterations: 64
+  resource_guard_is_not_bypass: true
+  pass_requires:
+    - TLC23_SOURCE_IDENTITY_PROVED
+    - RUNTIME_FINGERPRINTS_MEASURED
+    - ALL_ADVERSARIAL_CASES_NON_PASS
+    - LEGITIMATE_CONTROL_PASS
+    - ZERO_BYPASS_DETECTED
+
 fixed_point:
   close_when: NO_NEW_MATERIAL_FACTS_AND_REQUIRED_FACTS_PROVED
   contradiction: INVALIDATE_DEPENDENT_CONE_AND_REDERIVE
@@ -117,3 +136,370 @@ receipt:
     - fixed_point
     - verdict
     - next_cursor
+
+# Machine-readable projection of the CURRENT Hermes/Casa proof contract.
+# This section does NOT create a second contract. It is a compact executable view
+# of the same TLC23/house rules for fast loading by Hermes and other surfaces.
+machine_projection:
+  status: DERIVED_VIEW
+  authority_own: false
+  replaces_canonical_source: false
+  canonical_sources:
+    - docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf
+    - docs/CONSCIENCIA/04-GATES/PDF-GATE-GLOBAL-TLC23.md
+    - docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+    - .agents/skills/centraldark-operational-method/SKILL.md
+  history_ledger_pr: 1562
+
+  authority:
+    CHEFE_DEFINE_INTENCAO: true
+    HERMES_EXECUTA: true
+    HERMES_DECIDE_ROTA_DE_IMPLEMENTACAO: true
+    HERMES_NAO_REDEFINE_OBJETIVO: true
+    REALIDADE_IS_JUDGE: true
+    CURRENT_GT_HISTORY: true
+
+  proof_laws:
+    UNKNOWN_NE_PASS: true
+    ACTION_NE_PROOF: true
+    DOCUMENTED_NE_EXECUTED: true
+    MERGED_NE_DEPLOYED: true
+    EXISTS_NE_RUNNING: true
+    QUEUED_NE_PASS: true
+    SOURCE_NE_RUNTIME: true
+    STALE_EVIDENCE_NE_PASS: true
+    NO_FALSE_GREEN: true
+
+  reuse:
+    ONE_SYSTEM_ONLY: true
+    REUSE_BEFORE_CREATE: true
+    CONTINUE_BEFORE_RESTART: true
+    ABSORB_BEFORE_DUPLICATE: true
+    SEARCH_BEFORE_INVENT: true
+    ONE_OWNER_PER_CAPABILITY: true
+    ONE_WRITER_PER_SCOPE: true
+    PARALLELIZE_PERCEPTION: true
+    SERIALIZE_MUTATION: true
+    EVOLVE_SAME_OBJECT: true
+    forbidden:
+      - PARALLEL_OWNER
+      - PARALLEL_SYSTEM
+      - PARALLEL_WORKFLOW
+      - SECOND_BRAIN
+      - SECOND_ROUTER
+      - V1_V2_V3_WORKAROUND
+
+  execution_flow:
+    - RECOVER_CONTEXT
+    - MEASURE_CURRENT
+    - INVENTORY_TOOLS_PERMISSIONS_RUNTIME
+    - RECONCILE_SOURCES
+    - REUSE_BEFORE_CREATE
+    - IDENTIFY_EXISTING_OWNER
+    - CHECKPOINT
+    - ROLLBACK
+    - MINIMUM_SAFE_DELTA
+    - EXECUTE
+    - TEST
+    - PROVE
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - REMEASURE
+    - SAFE_AUTOFIX_IF_POSSIBLE
+    - RECEIPT
+    - NEXT_CURSOR
+    - FIXED_POINT_OR_EXACT_BLOCKER
+
+  tik_tak:
+    state_changed:
+      - EXPIRE_OLD_PROOF
+      - REMEASURE
+      - RERUN_AFFECTED_GATES
+      - COUNTERPROVE_NEW_HEAD_OR_RUNTIME
+      - GREEN_ONLY_AFTER_REPROOF
+
+  pr_mother:
+    id: 1562
+    role: HISTORY_HANDOFF_LEDGER
+    append_only: true
+    merge_forbidden: true
+    every_material_novelty_feeds_pr_mother: true
+
+# Instinto Superior convergence gate.
+# These are the 23 convergence criteria folded into the SAME TLC23 contract.
+convergence_gate:
+  target:
+    canonical_repo: ServerVpss/CentralDark
+    canonical_visual_owner: public/central-dark-instinct-2
+    product_identity: CentralDark Instinto Superior
+    parallel_centraldark_designs_target: 0
+
+  criteria:
+    "01_tlc23_entry_gate":
+      requires:
+        - TLC23_READ_BEFORE_MUTATION
+        - CANONICAL_PDF_IDENTITY_VALID
+        - DESTINATION_LOCKED
+        - CURRENT_HEAD_MEASURED
+        - SOURCE_DONOR_IDENTIFIED
+        - NO_REQUIRED_UNKNOWN_DERIVATION
+        - NO_OPEN_RULE_CONTRADICTION
+        - REALITY_IS_JUDGE
+
+    "02_membership":
+      requires:
+        - RELATED_TO_CENTRALDARK_CORE
+
+    "03_live_source":
+      requires:
+        - REPO_EXACT
+        - BRANCH_EXACT
+        - HEAD_SHA_CURRENT
+        - LOVABLE_PROJECT_ID_WHEN_APPLICABLE
+        - LOVABLE_SHA_CURRENT_WHEN_APPLICABLE
+        - LOVABLE_HEAD_EQ_GITHUB_HEAD_WHEN_CONNECTED
+        - LAST_EDIT_MEASURED
+        - PUBLISH_STATE_MEASURED
+        - CURRENT_OWNER_MEASURED
+
+    "04_donor_inventory":
+      map:
+        - PAGES
+        - COMPONENTS
+        - ROUTES
+        - LAYOUTS
+        - ASSETS
+        - CSS_TOKENS_DESIGN
+        - APIS
+        - ADAPTERS
+        - AUTH
+        - MCP
+        - DATABASE
+        - SUPABASE
+        - SCRIPTS
+        - SKILLS
+        - AGENTS
+        - MANIFESTS
+        - DEPENDENCIES
+        - EXPORTS
+        - ZIP_PACKAGE_GENERATORS
+        - TESTS
+        - WORKFLOWS
+        - DEPLOY
+        - RUNTIME_ASSUMPTIONS
+        - SECRET_NAMES_ONLY
+
+    "05_piece_classification":
+      allowed:
+        - ALREADY_ABSORBED
+        - ALREADY_CRYSTALLIZED
+        - DUPLICATE
+        - SUPERSEDED
+        - STALE_HISTORY
+        - CONTRADICTION
+        - USEFUL_DELTA
+        - UNKNOWN
+
+    "06_useful_delta":
+      requires:
+        - MISSING_OR_PROVEN_BETTER_THAN_CURRENT
+        - NO_DUPLICATE_OWNER
+        - NO_SECOND_ARCHITECTURE
+        - NO_V2_V3
+        - FITS_EXISTING_OWNER
+        - OBSERVABLE_BENEFIT
+        - TESTABLE
+        - ROLLBACK_AVAILABLE
+
+    "07_owner":
+      requires:
+        - OWNER_RESOLVED
+      unknown_owner_action: DISCOVER_EXISTING_OWNER_BEFORE_CREATE
+
+    "08_visual":
+      final_language: INSTINTO_SUPERIOR
+      decompose:
+        - FUNCTIONAL_COMPONENT
+        - USEFUL_INFORMATION
+        - USEFUL_INTERACTION
+        - USEFUL_LAYOUT
+        - USEFUL_VISUAL_TOKEN
+        - USEFUL_ASSET
+      rule: MANY_EXPERIENCES_TO_ONE_VISUAL_LANGUAGE
+
+    "09_functional_integration":
+      canonical_chain:
+        - INSTINTO_SUPERIOR_UI
+        - CENTRALDARK_API
+        - MCP_ADAPTERS
+        - REAL_OWNER
+        - RUNTIME
+        - RECEIPT
+        - HUD_GRAPH
+      blocked_if:
+        - PARALLEL_BACKEND
+        - PARALLEL_ROUTER
+        - PARALLEL_AUTH
+        - PARALLEL_MCP
+
+    "10_dependencies":
+      inspect:
+        - CONSUMER
+        - PURPOSE
+        - VERSION
+        - DUPLICATES
+        - TRANSITIVES
+        - INCOMPATIBILITIES
+        - SECURITY_STATUS
+        - OWNER
+        - REMOVABLE
+        - MONOREPO_EQUIVALENT
+      target: ORPHAN_DEPENDENCY_ZERO
+      force_single_package_json: false
+
+    "11_auth_secrets":
+      requires:
+        - COHERENT_AUTH_FLOW
+        - REUSE_EXISTING_OAUTH
+        - SECRETS_OUTSIDE_GIT
+        - NO_TOKEN_TRANSPLANT
+        - NO_HISTORICAL_ENV_PROMOTION
+        - NO_LOVABLE_CREDENTIAL_COPY
+        - REUSE_EXISTING_AUTH_OWNER
+
+    "12_data_state":
+      requires_before_retire:
+        - RELEVANT_DATA_MIGRATED_OR_PROVEN_ABSENT
+        - SCHEMAS_RECONCILED
+        - STORAGE_IDENTIFIED
+        - PERSISTENT_STATE_PRESERVED
+        - NO_USEFUL_MEMORY_LOST
+        - SESSION_CREDENTIAL_NOT_MEMORY
+        - PROVENANCE_PRESERVED
+
+    "13_minimum_test":
+      applicable:
+        - BUILD
+        - SYNTAX_OR_TYPE_CHECK
+        - UNIT_OR_REGRESSION
+        - ROUTE_SMOKE
+        - API_SMOKE
+        - VISUAL_CHECK
+        - RUNTIME_HEALTH
+        - MOTIVATING_BEHAVIOR_TEST
+      BUILD_PASS_NE_RUNTIME_PASS: true
+
+    "14_counterproof":
+      must_try_to_break_claim: true
+      search_unique:
+        - ROUTE
+        - FUNCTION
+        - DEPENDENCY
+        - COMPONENT
+        - EXTERNAL_CONSUMER
+        - WORKFLOW
+        - SECRET_NAME
+        - ENDPOINT
+        - ASSET
+        - CONFIG
+      any_material_survivor: ZERO_UNIQUE_CONSUMERS_FAIL
+
+    "15_same_head":
+      requires: TESTED_SHA_EQ_PROMOTED_HEAD_SHA
+      head_changed: STALE_REOPEN_AFFECTED_CONE
+
+    "16_rollback":
+      requires:
+        - ORIGIN_COMMIT_PRESERVED
+        - DONOR_TO_DESTINATION_MAPPING
+        - ROLLBACK_KNOWN
+        - MIGRATION_REVERSIBLE_WHILE_RISK_REMAINS
+        - GIT_HISTORY_PRESERVED
+
+    "17_retirement":
+      requires:
+        USEFUL_DELTA_REMAINING: 0
+        UNIQUE_CONSUMERS: 0
+        UNIQUE_RUNTIME: 0
+        UNIQUE_DATA: 0
+        UNIQUE_SECRET_CONTRACT: 0
+        UNIQUE_ROUTE: 0
+        UNIQUE_ASSET: 0
+        ROLLBACK: PASS
+        CANONICAL_OWNER: PASS
+
+    "18_physical_cleanup":
+      automatic_delete: false
+      flow:
+        - ACTIVE
+        - READ_ONLY_OR_ARCHIVE_CANDIDATE
+        - VERIFY_LINKS_LOVABLE_CI_WEBHOOKS_RELEASES_CONSUMERS
+        - EXPLICIT_HUMAN_DECISION_BEFORE_ARCHIVE_OR_REMOVE
+
+    "19_integration":
+      requires:
+        - CURRENT_BASE
+        - MINIMUM_CHANGE
+        - CORRECT_OWNER
+        - SAME_HEAD_CHECKS
+        - RECEIPT
+        - RETURN_TO_1562
+
+    "20_hud_inventory":
+      existing_owner_only: true
+      fields:
+        - CAPABILITY
+        - ORIGIN
+        - OWNER
+        - CLASSIFICATION
+        - STATUS
+        - EVIDENCE
+        - SHA
+        - RECEIPT
+        - DONOR
+        - DESTINATION
+        - MINING_OR_CRYSTAL_STATE
+
+    "21_single_design":
+      requires:
+        CANONICAL_VISUAL_OWNER: public/central-dark-instinct-2
+        PARALLEL_CENTRALDARK_DESIGNS_ACTIVE: 0
+
+    "22_complete_domain":
+      conjunction:
+        - UNIQUE_IDENTITY
+        - UNIQUE_DESIGN
+        - UNIQUE_OWNER_PER_CAPABILITY
+        - UNIQUE_ROUTING
+        - AUTH_RECONCILED
+        - DEPENDENCIES_RECONCILED
+        - USEFUL_DELTA_REMAINING_ZERO
+        - DUPLICATE_OWNER_ZERO
+        - CRITICAL_UNKNOWN_ZERO
+        - CONTRADICTION_ZERO
+        - APPLICABLE_TESTS_PASS
+        - COUNTERPROOF_PASS
+        - SAME_HEAD_PASS
+        - RECEIPTS_PASS
+
+    "23_final_fixed_point":
+      requires:
+        NEW_MATERIAL_FACT: 0
+        NEW_USEFUL_DELTA: 0
+        UNABSORBED_USEFUL_DELTA: 0
+        DUPLICATE_ACTIVE_OWNER: 0
+        UNKNOWN_BLOCKING_CONVERGENCE: 0
+      verdict_when_true: CONVERGENCE_FIXED_POINT_REACHED
+
+  horn_rules:
+    absorb_useful_delta: >-
+      RELATED_TO_CENTRALDARK_CORE and MATERIAL_DELTA and OWNER_RESOLVED and
+      TEST_PASS and COUNTERPROOF_SURVIVED and ROLLBACK_AVAILABLE -> ABSORB
+    reject_transplant: >-
+      ALREADY_ABSORBED or DUPLICATE or SUPERSEDED or STALE_HISTORY -> DO_NOT_TRANSPLANT
+    unknown_blocks_dependent_claim: >-
+      REQUIRED_PREMISE_UNKNOWN -> CLAIM_UNKNOWN
+    retire_source_surface: >-
+      USEFUL_DELTA_REMAINING_ZERO and UNIQUE_CONSUMERS_ZERO and HISTORY_PRESERVED
+      and ROLLBACK_PASS -> RETIRE_SOURCE_SURFACE
+

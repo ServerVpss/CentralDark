@@ -1,4 +1,4 @@
-name: Farm — trailer Co-authored-by
+name: ⚙️ Farm — trailer Co-authored-by
 
 # Em todo push na main, valida que pelo menos um dos commits novos
 # carrega o trailer Co-authored-by: SegredoiDev. Não bloqueia o push.
@@ -18,19 +18,19 @@ concurrency:
 
 jobs:
   check:
-    name: Validar trailer
+    name: 🧩 Validar trailer
     runs-on: [self-hosted, Linux]
     if: github.repository == 'ServerVpss/CentralDark'
     timeout-minutes: 3
 
     steps:
-      - name: Checkout
+      - name: 🔹 Checkout
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
           submodules: false
 
-      - name: Verificar trailer
+      - name: 🔹 Verificar trailer
         shell: bash
         continue-on-error: true
         run: |

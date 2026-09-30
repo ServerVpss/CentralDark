@@ -28,11 +28,16 @@ import { mcpPolicyTools } from "./mcp-policy.js";
 import { integrationsTools } from "../integrations.js";
 import { painelTools } from "../painel/painel.js";
 import { eliteGatewayTools } from "../elite/elite-gateway.js";
+import { hybridObservabilityTools } from "../observability/hybrid-observability.js";
+import { operationalTelemetryTools } from "../observability/operational-telemetry.js";
+import { localHybridTools } from "../local/local-compute.js";
 import { piveteTools } from "../pivete/pivete-tools.js";
 import { cognitivoTools } from "../cognitivo/cognitivo.js";
 import { semanticTools } from "../cognitivo/semantic.js";
 import { geminiTools } from "../gemini/gemini.js";
 import { youtubeMediaTools } from "../media/youtube-transcript.js";
+import { observabilityTools } from "../observability/agent-patterns.js";
+import { buildkiteTools } from "../buildkite/buildkite.js";
 const TOOL_NAME_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 const RAW_TOOLS = [
     ...aprendizadoTools,
@@ -55,11 +60,16 @@ const RAW_TOOLS = [
     ...integrationsTools,
     ...painelTools,
     ...eliteGatewayTools,
+    ...hybridObservabilityTools,
+    ...operationalTelemetryTools,
+    ...localHybridTools,
     ...piveteTools,
     ...cognitivoTools,
     ...semanticTools,
     ...geminiTools,
     ...youtubeMediaTools,
+    ...observabilityTools,
+    ...buildkiteTools,
 ];
 function isToolDefinition(tool) {
     return (typeof tool === "object" &&

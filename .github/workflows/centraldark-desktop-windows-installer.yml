@@ -1,4 +1,4 @@
-name: CentralDark Desktop — Windows Installer
+name: ⚙️ CentralDark Desktop — Windows Installer
 
 on:
   workflow_dispatch:

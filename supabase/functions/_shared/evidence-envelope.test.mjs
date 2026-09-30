@@ -34,3 +34,44 @@ test('não ecoa segredos em metadata/contexto', async () => {
   assert.equal(JSON.stringify(snapshot).includes('super-secret'), false);
   assert.equal(snapshot.events[0].context[0].authorization, '[REDACTED]');
 });
+
+
+test('NULL legítimo permanece NULL e lacuna material vira UNKNOWN', async () => {
+  const snapshot = await normalizeTelemetryBatch({
+    event: 'tool_call',
+    producer: 'github-connector',
+    target: 'compare_commits',
+    mission_id: 'm-null-contract',
+    writer_scope: 'read-only-observation',
+    sha: 'same-head',
+    result: null,
+  });
+
+  const event = snapshot.events[0];
+  assert.equal(event.result, 'UNKNOWN');
+  assert.equal(event.trace_id, null);
+  assert.equal(event.latency_ms, null);
+  assert.equal(event.tokens, null);
+  assert.equal(event.cost, null);
+});
+
+test('zero medido não é convertido em NULL', async () => {
+  const snapshot = await normalizeTelemetryBatch({
+    event: 'tool_call',
+    producer: 'github-connector',
+    target: 'compare_commits',
+    mission_id: 'm-zero-contract',
+    writer_scope: 'read-only-observation',
+    sha: 'same-head',
+    result: 'PASS',
+    latency_ms: 0,
+    tokens: 0,
+    cost: 0,
+  });
+
+  const event = snapshot.events[0];
+  assert.equal(event.result, 'PASS');
+  assert.equal(event.latency_ms, 0);
+  assert.equal(event.tokens, 0);
+  assert.equal(event.cost, 0);
+});

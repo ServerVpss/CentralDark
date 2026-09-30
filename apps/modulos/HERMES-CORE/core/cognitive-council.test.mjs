@@ -10,9 +10,93 @@ import {
   buildCognitiveCouncilPlan,
   createSourceProfile,
   evaluateUsefulCeiling,
+  evaluateGregDeterministicAudit,
+  evaluateProofCounterproofClosure,
+  evaluateSurfaceConformance,
   validateCognitiveCouncilPlan,
   validateSourceProfile,
 } from './cognitive-council.mjs';
+
+test('Greg/OBSERVABILITY_PROOF exige prova deterministica e tres vereditos', () => {
+  const proved = evaluateGregDeterministicAudit({
+    diff: 'PASS',
+    ast: 'PASS',
+    tests: 'PASS',
+    invariants: 'PASS',
+    contracts: 'PASS',
+    receipts: 'PASS',
+    ci_state: 'SUCCESS',
+    evidence_refs: ['diff:1', 'ast:1', 'tests:1', 'receipt:1'],
+  });
+  assert.equal(proved.verdict, 'PROVADO');
+
+  const broken = evaluateGregDeterministicAudit({
+    diff: 'PASS',
+    ast: 'FAIL',
+    tests: 'PASS',
+    invariants: 'PASS',
+    contracts: 'PASS',
+    receipts: 'PASS',
+    ci_state: 'SUCCESS',
+    evidence_refs: ['ast:failure'],
+  });
+  assert.equal(broken.verdict, 'QUEBRADO');
+
+  const pending = evaluateGregDeterministicAudit({
+    diff: 'PASS',
+    ast: 'PASS',
+    tests: 'PASS',
+    invariants: 'PASS',
+    contracts: 'PASS',
+    receipts: 'PASS',
+    ci_state: 'PENDING',
+    evidence_refs: ['sha:current'],
+  });
+  assert.equal(pending.verdict, 'EVIDÊNCIA FALTANTE');
+});
+
+test('Greg barra print isolado, narrativa e ACTION antes da prova/reconciliacao', () => {
+  const printOnly = evaluateGregDeterministicAudit({
+    diff: 'PASS',
+    ast: 'PASS',
+    tests: 'PASS',
+    invariants: 'PASS',
+    contracts: 'PASS',
+    receipts: 'PASS',
+    ci_state: 'SUCCESS',
+    evidence_refs: ['screenshot:isolated'],
+    isolated_screenshot: true,
+  });
+  assert.equal(printOnly.verdict, 'EVIDÊNCIA FALTANTE');
+
+  const conflict = evaluateGregDeterministicAudit({
+    diff: 'PASS',
+    ast: 'PASS',
+    tests: 'PASS',
+    invariants: 'PASS',
+    contracts: 'PASS',
+    receipts: 'PASS',
+    ci_state: 'SUCCESS',
+    evidence_refs: ['proof:all'],
+    conflict_detected: true,
+    legacy_preserved: true,
+    reconciled: false,
+  });
+  assert.equal(conflict.verdict, 'EVIDÊNCIA FALTANTE');
+
+  const actionWithoutProof = evaluateGregDeterministicAudit({
+    diff: 'PASS',
+    ast: 'PASS',
+    tests: 'UNKNOWN',
+    invariants: 'PASS',
+    contracts: 'PASS',
+    receipts: 'PASS',
+    ci_state: 'PENDING',
+    evidence_refs: ['diff:1'],
+    action_performed: true,
+  });
+  assert.equal(actionWithoutProof.verdict, 'QUEBRADO');
+});
 
 test('seis lentes funcionais cabem nos quatro ataques existentes sem novo writer', () => {
   const plan = buildCognitiveCouncilPlan();
@@ -151,4 +235,117 @@ test('fixed point so nasce quando todo gap material terminou com prova e nao apa
   assert.equal(result.useful_ceiling_reached, true);
   assert.equal(result.state, 'FIXED_POINT');
   assert.equal(result.next_rule, 'STOP_NO_NEW_INFORMATION');
+});
+
+test('aceite deterministico so nasce depois de prova + contraprova sobrevivida + reconciliacao', () => {
+  const result = evaluateProofCounterproofClosure({
+    proof_refs: ['proof:behavior'],
+    counterproof_refs: ['counterproof:negative-path'],
+    counterproof_result: 'SURVIVED',
+    retained_refs: ['delta:good'],
+  });
+  assert.equal(result.state, 'ACCEPTED_RECONCILED');
+  assert.equal(result.accepted, true);
+  assert.equal(result.reconciled, true);
+  assert.equal(result.seal_action, 'SEAL');
+  assert.equal(result.fixed_point_eligible, true);
+});
+
+test('contraprova que derrota claim reconcilia descartando somente delta derrotado', () => {
+  const result = evaluateProofCounterproofClosure({
+    proof_refs: ['proof:initial'],
+    counterproof_refs: ['counterproof:breaks-claim'],
+    counterproof_result: 'DEFEATED',
+    retained_refs: ['baseline:still-good'],
+    discarded_refs: ['delta:disproven'],
+  });
+  assert.equal(result.state, 'REJECTED_RECONCILED');
+  assert.equal(result.accepted, false);
+  assert.equal(result.reconciled, true);
+  assert.equal(result.fixed_point_eligible, true);
+  assert.deepEqual(result.retained_refs, ['baseline:still-good']);
+  assert.deepEqual(result.discarded_refs, ['delta:disproven']);
+});
+
+test('UNKNOWN ou contraprova ausente nunca viram aceite', () => {
+  const missing = evaluateProofCounterproofClosure({ proof_refs: ['proof:a'], retained_refs: ['delta:a'] });
+  assert.equal(missing.state, 'NEED_COUNTERPROOF');
+  assert.equal(missing.accepted, false);
+
+  const unknown = evaluateProofCounterproofClosure({
+    proof_refs: ['proof:a'], counterproof_refs: ['counterproof:a'], counterproof_result: 'UNKNOWN', retained_refs: ['delta:a'],
+  });
+  assert.equal(unknown.state, 'COUNTERPROOF_UNKNOWN');
+  assert.equal(unknown.accepted, false);
+  assert.equal(unknown.fixed_point_eligible, false);
+});
+
+test('claim selado nao repete ciclo sem causa material e reabre quando cause_ref aparece', () => {
+  const stable = evaluateProofCounterproofClosure({ prior_seal_state: 'SEALED' });
+  assert.equal(stable.state, 'SEALED_NO_RECHECK');
+  assert.equal(stable.accepted, true);
+  assert.equal(stable.seal_action, 'NONE');
+  assert.equal(stable.fixed_point_eligible, true);
+
+  const changed = evaluateProofCounterproofClosure({ prior_seal_state: 'SEALED', material_cause_ref: 'sha:new-runtime-delta' });
+  assert.equal(changed.state, 'REOPEN_REQUIRED');
+  assert.equal(changed.accepted, false);
+  assert.equal(changed.seal_action, 'REOPEN');
+  assert.equal(changed.material_cause_ref, 'sha:new-runtime-delta');
+});
+
+test('reconciliacao contraditoria falha fechado', () => {
+  const result = evaluateProofCounterproofClosure({
+    proof_refs: ['proof:a'], counterproof_refs: ['counterproof:a'], counterproof_result: 'SURVIVED',
+    retained_refs: ['delta:same'], discarded_refs: ['delta:same'],
+  });
+  assert.equal(result.state, 'INVALID_RECEIPT');
+  assert.equal(result.accepted, false);
+  assert.ok(result.invalid_receipts.includes('RECONCILIATION_REF_BOTH_RETAINED_AND_DISCARDED:delta:same'));
+});
+
+test('superficie local pode provar contrato sem fingir paridade fisica de tools', () => {
+  const result = evaluateSurfaceConformance({
+    surface_id: 'jan-local',
+    model_id: 'Jan-v3.5-4B',
+    contract_markers: ['History Rendezvous', 'ONE_WRITER', 'REUSE_BEFORE_CREATE'],
+    required_contract_markers: ['History Rendezvous', 'ONE_WRITER', 'REUSE_BEFORE_CREATE'],
+  });
+  assert.equal(result.levels.L0_ATTACHED, true);
+  assert.equal(result.levels.L1_CONTRACT, true);
+  assert.equal(result.levels.L2_TOOL_CATALOG, false);
+  assert.equal(result.levels.L3_TOOL_EXECUTION, false);
+  assert.equal(result.semantic_portability_proven, true);
+  assert.equal(result.physical_tool_parity_proven, false);
+  assert.equal(result.proven_levels, 2);
+  assert.equal(result.applicable_levels, 5);
+  assert.equal(result.proof_percent, 40);
+});
+
+test('claim Hermes executa em Jan sem executor observado equivalente vira drift, nao falha do core', () => {
+  const result = evaluateSurfaceConformance({
+    surface_id: 'jan-local',
+    model_id: 'Jan-v3.5-4B',
+    contract_markers: ['History Rendezvous'],
+    required_contract_markers: ['History Rendezvous'],
+    claimed_executor: 'HERMES',
+    observed_executor: 'JAN_LOCAL',
+  });
+  assert.equal(result.semantic_portability_proven, true);
+  assert.equal(result.executor_attribution_drift, true);
+  assert.equal(result.next_rule, 'CORRECT_EXECUTOR_ATTRIBUTION_THEN_MEASURE_NEXT_LEVEL');
+});
+
+test('tool catalog sem chamada real nao promove L3', () => {
+  const result = evaluateSurfaceConformance({
+    surface_id: 'surface-x',
+    required_contract_markers: ['A'],
+    contract_markers: ['A'],
+    tool_catalog_receipt: true,
+    tool_call_receipts: [],
+    canonical_state_receipt: false,
+  });
+  assert.equal(result.levels.L2_TOOL_CATALOG, true);
+  assert.equal(result.levels.L3_TOOL_EXECUTION, false);
+  assert.equal(result.physical_tool_parity_proven, false);
 });

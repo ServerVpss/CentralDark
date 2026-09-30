@@ -1,3 +1,22 @@
+
+<!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
+## 🔐 Secrets — regra global
+Owner: `docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md`
+
+```text
+SECRET_SEEN != BLOCKER
+ASK_SANITIZED_COPY_BEFORE_WORK=false
+DO_NOT_ECHO_SECRET_VALUE=true
+DO_NOT_COMMIT_SECRET_VALUE=true
+AUTHORIZED_RUNTIME_MAY_USE_SECRET=true
+AUTHORIZED_VAULT_MAY_PRESERVE_SECRET=true
+ACCIDENTAL_EXPOSURE_ACTION=ROTATE_POST_ONLINE
+LOCAL_TOOL_DENIAL != GLOBAL_BLOCKER
+BLOCKER_MUST_NAME_EXACT_TOOL_OR_LAYER=true
+AUTHORIZED_ALTERNATE_ROUTE_BEFORE_HUMAN_BLOCKER=true
+```
+<!-- /CENTRALDARK_SECRET_MVP_POLICY_V1 -->
+
 === HANDOFF CHATGPT ===
 
 MEASURED_AT=2026-08-28T15:07Z
@@ -134,3 +153,15 @@ O Hermes NÃO envia nada ao ChatGPT automaticamente.
 Este handoff foi preparado para ser entregue manualmente quando o CHEFE decidir.
 
 === END HANDOFF ===
+
+
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+
+```text
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+```
+
+Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.

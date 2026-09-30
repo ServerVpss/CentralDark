@@ -120,16 +120,72 @@ REGISTRA_REQUIRED_FOR_MATERIAL_DELTA=true
 REGISTRA_REQUIRED_FOR_ALL_CENTRALDARK_AGENTS_AND_SURFACES=true
 NO_MATERIAL_DELTA_NO_COMMIT_REQUIRED=true
 COMMIT_PER_MESSAGE=false
-SAME_SCOPE_ACTIVE_PR_REUSED=true
-ONE_ACTIVE_PROMOTION_PR_PER_SCOPE=true
-MANY_COMMITS_PER_ACTIVE_PR_ALLOWED=true
-NEW_PR_PER_CHAT=false
-NEW_PR_PER_COMMIT=false
-NEW_PR_ONLY_AFTER_PREVIOUS_SCOPE_PR_CLOSED_OR_MERGED=true
-NEW_PR_REQUIRES_REAL_MATERIAL_DELTA=true
-NEXT_PR_STARTS_FROM_CURRENT_MAIN=true
-DIRECT_MAIN_WRITE=false
+
+PROMOTION_MODE=DIRECT_MAIN_SOFT_EVOLUTION_WITH_EXISTING_CHILD_TRACE
+NEW_PR_DEFAULT=false
+EXISTING_OPEN_PRS_REMAIN_VALID=true
+EXISTING_COMPATIBLE_CHILD_PR_IS_MANDATORY_LANE=true
+CHILD_MATCH_KEY=OWNER+SCOPE+CAPABILITY
+DIRECT_MAIN_FORBIDDEN_WHEN_COMPATIBLE_CHILD_IS_HEALTHY=true
+STALE_OR_CONFLICTING_CHILD_REQUIRES_RECEIPT_BEFORE_BYPASS=true
+MAIN_READBACK_MUST_RETURN_TO_CHILD_AND_PR_MOTHER=true
+PR_MOTHER=#1562
+PR_MOTHER_ROLE=HISTORY_HANDOFF_LEDGER
+PR_MOTHER_MERGE_FORBIDDEN=true
+
+DIRECT_MAIN_WRITE=true
+DIRECT_MAIN_COMMIT_REQUIRES_CURRENT_MAIN_REMEASURE=true
+DIRECT_MAIN_COMMIT_REQUIRES_RECEIPT_IN_PR_MOTHER=true
+PR_GATE_HARDENING=DEFERRED_UNTIL_CHEFE_REENABLES
+MIN_SECURITY_ONLY=true
+MIN_SECURITY_CHECKS=SECRET_SCAN|SYNTAX_OR_PARSE_WHEN_APPLICABLE|TARGETED_TEST_WHEN_AVAILABLE|MAIN_READBACK
+
+SIMPLE_LOW_RISK_MCP_DELTA_CAN_USE_DIRECT_MAIN=true
+FULL_CI_REQUIRED_FOR_SIMPLE_LOW_RISK_MCP_DELTA=false
+SIMPLE_MCP_REQUIRES_CAUSAL_DEPLOY_WHEN_RUNTIME_AFFECTED=true
+SIMPLE_MCP_REQUIRES_T1_REMEASURE=true
+
+PR_PATH_REMAINS_OPTIONAL_ONLY_WHEN_NO_COMPATIBLE_CHILD_EXISTS=true
+EXISTING_COMPATIBLE_CHILD_IS_NOT_OPTIONAL=true
+PR_AUTOMATION_MUST_NOT_BYPASS_ITS_OWN_BRANCH_BOUNDARY=true
+CHILD_STALE_IS_TRACE_REQUIRED_NOT_SILENT_IGNORE=true
+ONE_WRITER_PER_SCOPE=true
+REUSE_BEFORE_CREATE=true
+UNKNOWN_IS_NOT_PASS=true
+NEXT_CURSOR_REQUIRED=true
 ```
+
+
+
+### 5.1. Exceção operacional atual — main direta suave
+
+A política CURRENT da Casa é DIRECT_MAIN_SOFT_EVOLUTION_WITH_EXISTING_CHILD_TRACE. Antes de qualquer escrita material, procurar PR-filho compatível por OWNER+SCOPE+CAPABILITY. Filho saudável é lane obrigatória. Filho stale/conflicting recebe receipt antes de bypass permitido. Sem filho compatível, direct-main segue disponível conforme autoridade e risco.
+
+Para delta MCP simples e de baixo risco, CI pesado não é pré-condição. A exigência é menor e causal: remedir a `main`, reutilizar owner existente, aplicar delta mínimo, executar segurança mínima aplicável, ler de volta a `main`, fazer deploy causal quando houver runtime afetado, remedir T1 e registrar receipt no #1562.
+
+```text
+CHEFE_EXPLICIT_WRITER_AUTHORITY
+→ CURRENT_MAIN_REMEASURE
+→ OWNER_EXISTENTE
+→ DELTA_MÍNIMO
+→ MIN_SECURITY_CHECKS
+→ DIRECT_MAIN_COMMIT
+→ MAIN_READBACK
+→ DEPLOY_CAUSAL_IF_APPLICABLE
+→ T1_REMEASURE
+→ RECEIPT_PR_MOTHER_1562
+→ NEXT_CURSOR
+
+SIMPLE_LOW_RISK_MCP_DELTA
+→ FULL_CI_NOT_REQUIRED
+→ TARGETED_TEST_WHEN_AVAILABLE
+→ MAIN_READBACK_REQUIRED
+→ RUNTIME_T1_REQUIRED_IF_DEPLOYED
+```
+
+O caminho suave **não** reclassifica como "simples" mudanças de autenticação, segredos, permissões, política de segurança, migração destrutiva, schema persistente, proteção de branch, workflow privilegiado ou qualquer delta cujo blast radius esteja UNKNOWN. Esses casos continuam exigindo o caminho de prova proporcional ao risco.
+
+PR já aberto e compatível por OWNER+SCOPE+CAPABILITY é lane obrigatória enquanto saudável. Se stale/conflicting, registrar CHILD_LANE_STALE_BLOCKED antes de bypass autorizado. Nenhuma rota pode apagar o rastro do filho.
 
 `!REGISTRA` grava fato reconstruível — intenção, escopo, owner, HEAD/estado, delta, evidência, contraprova, status e próximo cursor. Não grava raciocínio privado nem segredos.
 
@@ -303,6 +359,27 @@ SAY_DONE_REQUIRES_PERSISTED_EFFECT=true
 SAY_REGISTERED_REQUIRES_READ_BACK=true
 WRITE_WITHOUT_READBACK != PROVEN
 ```
+
+## 10. CHECK-LIST DIARIO obrigatório
+
+Depois de `!REGISTRA`, todo delta material deve atualizar a projeção diária do CHEFE antes do fechamento humano.
+
+```text
+DAILY_CHECKLIST_UPDATE_REQUIRED_FOR_MATERIAL_DELTA=true
+DAILY_CHECKLIST_OWNER=docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md
+DAILY_CHECKLIST_IS_DERIVED_VIEW=true
+DAILY_CHECKLIST_IS_NOT_AUTHORITY=true
+DAILY_CHECKLIST_MUST_INCLUDE_NEXT_CURSOR=true
+DAILY_CHECKLIST_MUST_PRESERVE_UNKNOWN=true
+```
+
+Fluxo:
+
+```text
+T1 → !REGISTRA → RECEIPT/COMMIT/LEDGER → 🪡 CHECK-LIST DIARIO → READBACK → RELATO AO CHEFE
+```
+
+O painel diário consolida somente fatos já registrados: feito/provado, em andamento, bloqueado, UNKNOWN, selado e próximo cursor. Não transforma tarefa narrada em tarefa executada.
 
 ADMINISTRABLE_COMMAND=!REMEDIÇÃO
 

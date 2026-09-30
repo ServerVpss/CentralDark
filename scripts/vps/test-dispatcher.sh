@@ -14,6 +14,8 @@ set -Eeuo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DISPATCHER="$SCRIPT_DIR/deploy-guards-dispatcher.sh"
+CENTRAL_DEPLOY="$SCRIPT_DIR/centraldark-deploy.sh"
+WORKFLOW="$SCRIPT_DIR/../../.github/workflows/vps-exec-selfhosted.yml"
 README="$SCRIPT_DIR/README.md"
 
 PASS=0
@@ -73,6 +75,36 @@ if grep -q 'SSH_KEY' "$DISPATCHER" && grep -q '! -f "\$SSH_KEY"' "$DISPATCHER" &
   pass "guard SSH_KEY está implementado no script (lógica presente)"
 else
   fail "guard SSH_KEY não está implementado"
+fi
+
+
+# ─── 6. Gate canônico não é opcional ─────────────────────────────────
+log "=== 6. Gate canônico e handoff obrigatório ==="
+if grep -q -- '--gate-only' "$DISPATCHER" \
+  && grep -q 'TARGET_SHA_INPUT=' "$DISPATCHER" \
+  && grep -q 'TARGET_SHA_STALE' "$DISPATCHER" \
+  && grep -q 'tlc23_runtime_gate.py --self-test' "$DISPATCHER" \
+  && grep -q 'tlc23_runtime_gate.py --cage-test --iterations 64' "$DISPATCHER" \
+  && grep -q 'TLC23_ADVERSARIAL_CAGE=PASS' "$DISPATCHER"; then
+  pass "dispatcher suporta gate-only exact-SHA com TLC23 runtime cage"
+else
+  fail "dispatcher sem gate-only exact-SHA + cage TLC23"
+fi
+
+if grep -q 'DIRECT_DEPLOY_BYPASS_BLOCKED' "$CENTRAL_DEPLOY" \
+  && grep -q 'CENTRALDARK_CANONICAL_DEPLOY_TARGET' "$CENTRAL_DEPLOY"; then
+  pass "owner mutante bloqueia chamada direta sem handoff"
+else
+  fail "centraldark-deploy ainda aceita bypass direto"
+fi
+
+if grep -q '^  deploy-universal-gate:' "$WORKFLOW" \
+  && grep -q 'needs: deploy-universal-gate' "$WORKFLOW" \
+  && grep -q "needs.deploy-universal-gate.result == 'success'" "$WORKFLOW" \
+  && grep -q 'deploy-guards-dispatcher.sh --apply --total' "$WORKFLOW"; then
+  pass "workflow converge jobs mutantes e total deploy no dispatcher"
+else
+  fail "workflow possui rota lateral ao gate canônico"
 fi
 
 # ─── Resumo ──────────────────────────────────────────────────────────

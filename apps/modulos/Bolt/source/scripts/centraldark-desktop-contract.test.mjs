@@ -48,11 +48,25 @@ test('a ponte Electron é estreita e o renderer não ganha Node', () => {
   assert.doesNotMatch(preload, /process\.env/);
 });
 
+test('cockpit projeta Linear pela rota segura do MCP sem secret no renderer', () => {
+  const cockpit = read(`${root}/app/components/centraldark/CentralDarkCockpitShell.client.tsx`);
+
+  assert.match(cockpit, /Linear \/ Coding/);
+  assert.match(cockpit, /https:\/\/mcp\.centralldark\.com\/linear\/status/);
+  assert.match(cockpit, /apps\/modulos\/mcp\/src\/tools\/integrations\.js/);
+  assert.match(cockpit, /Abrir Linear no Admin/);
+  assert.doesNotMatch(cockpit, /LINEAR_API_KEY\s*=/);
+});
+
 test('painel único projeta contas, Telegram e Cloudflare sem inventar runtime verde', () => {
   const cockpit = read(`${root}/app/components/centraldark/CentralDarkCockpitShell.client.tsx`);
+  const inventory = read(`${root}/app/components/centraldark/centraldark-hub-inventory.ts`);
 
   assert.match(cockpit, /Contas \/ Hub/);
   assert.match(cockpit, /apps\/modulos\/oauth-broker\/server\.mjs/);
+  assert.match(cockpit, /Gmail/);
+  assert.match(inventory, /id: 'GMAIL'/);
+  assert.match(inventory, /oauth-broker canônico/);
   assert.match(cockpit, /Bot Telegram/);
   assert.match(cockpit, /apps\/bot-telegram\/ \+ checker existente/);
   assert.match(cockpit, /Cloudflare \/ DNS/);
@@ -120,4 +134,26 @@ test('providers externos entram por capability sem virar dependencias rigidas do
   assert.ok(screenpipe.capabilities.includes('LIVE_DESKTOP_OBSERVATION'));
   assert.ok(screenpipe.capabilities.includes('ACCESSIBILITY_CONTEXT'));
   assert.ok(screenpipe.capabilities.includes('AUTOMATION_TARGETING_CONTEXT'));
+});
+
+test('HUD unificado reusa o cockpit, move, redimensiona e nao inventa quota', () => {
+  const index = read(`${root}/app/routes/_index.tsx`);
+  const hud = read(`${root}/app/components/centraldark/CentralDarkUnifiedHud.client.tsx`);
+  const inventory = read(`${root}/app/components/centraldark/centraldark-hub-inventory.ts`);
+  const styles = read(`${root}/app/components/centraldark/centraldark-unified-hud.scss`);
+
+  assert.match(index, /CentralDarkCockpitShell/);
+  assert.match(index, /CentralDarkUnifiedHud/);
+  assert.match(hud, /centraldark\.unifiedHud\.layout\.v1/);
+  assert.match(hud, /ResizeObserver/);
+  assert.match(hud, /pointermove/);
+  assert.match(hud, /snapshot operacional mudou/);
+  assert.match(hud, /Limites, plano, reset e tempo só ficam verdes/);
+  assert.match(styles, /resize: both/);
+  assert.match(inventory, /Dependabot/);
+  assert.match(inventory, /CodeRabbit/);
+  assert.match(inventory, /POSTHOG/);
+  assert.match(inventory, /DATADOG/);
+  assert.match(inventory, /ADAPTER_REQUIRED/);
+  assert.match(inventory, /id: 'CHATGPT'[\s\S]*?quota: 'ADAPTER_REQUIRED'/);
 });

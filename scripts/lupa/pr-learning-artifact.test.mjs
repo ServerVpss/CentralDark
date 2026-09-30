@@ -52,7 +52,7 @@ test('extrai capacidades declaradas', () => {
   });
 });
 
-test('capacidade ausente solicita suporte canônico sem transferir Writer nem fabricar ação humana', () => {
+test('somente capacidade explicitamente NAO solicita suporte; UNKNOWN não bloqueia', () => {
   const result = buildArtifact({
     ...baseInput,
     body: `AI_CAPABILITIES:
@@ -61,7 +61,8 @@ test('capacidade ausente solicita suporte canônico sem transferir Writer nem fa
   structured_yaml: SIM`,
   });
   assert.equal(result.status, 'SUPPORT_REQUIRED');
-  assert.deepEqual(result.missing_capabilities, ['mermaid', 'canvas_html']);
+  assert.deepEqual(result.missing_capabilities, ['mermaid']);
+  assert.deepEqual(result.undeclared_capabilities, ['canvas_html']);
   assert.ok(result.support_labels.includes('🧠 AGENTE-CHATGPT'));
   assert.ok(result.support_labels.includes('🟡 IA-PRECISA-REVISAR'));
   assert.ok(result.support_labels.includes('🤖 IA-DOCUMENTAR'));
@@ -86,12 +87,25 @@ test('YAML ausente roteia suporte ao Codex pela label canônica', () => {
   assert.ok(!result.support_labels.includes('🆘 AJUDA-NECESSÁRIA'));
 });
 
+test('todas capacidades UNKNOWN geram READY não bloqueante e leitura humana primeiro', () => {
+  const result = buildArtifact({ ...baseInput, body: '' });
+  assert.equal(result.status, 'READY');
+  assert.equal(result.support_required, false);
+  assert.deepEqual(result.missing_capabilities, []);
+  assert.deepEqual(result.undeclared_capabilities, ['mermaid', 'canvas_html', 'structured_yaml']);
+  assert.match(result.markdown, /## 🧭 Leitura rápida/);
+  assert.match(result.markdown, /não bloqueia o PR por si só/);
+  assert.match(result.markdown, /Bloqueia agora\?\*\* NÃO por este artefato/);
+  assert.doesNotMatch(result.markdown, /SUPPORT_REQUIRED=SIM/);
+});
+
 test('todas capacidades SIM geram READY', () => {
   const result = buildArtifact(baseInput);
   assert.equal(result.status, 'READY');
   assert.equal(result.support_required, false);
   assert.equal(result.capability_source, 'DECLARED_UNVERIFIED');
   assert.deepEqual(result.missing_capabilities, []);
+  assert.deepEqual(result.undeclared_capabilities, []);
 });
 
 test('markdown contém marker, Mermaid, YAML, fallback e receipt sem decidir merge', () => {
@@ -99,6 +113,8 @@ test('markdown contém marker, Mermaid, YAML, fallback e receipt sem decidir mer
   assert.ok(result.markdown.startsWith(MARKER));
   assert.match(result.markdown, /```mermaid/);
   assert.match(result.markdown, /artifact_type: pr_learning_card/);
+  assert.match(result.markdown, /## 🧭 Leitura rápida/);
+  assert.ok(result.markdown.indexOf('## 🧭 Leitura rápida') < result.markdown.indexOf('## Mapa visual'));
   assert.match(result.markdown, /Fallback universal em texto simples/);
   assert.match(result.markdown, /ARTIFACT_DIGEST=/);
   assert.match(result.markdown, /PR_APPROVAL_DECISION=NOT_EVALUATED_BY_ARTIFACT/);

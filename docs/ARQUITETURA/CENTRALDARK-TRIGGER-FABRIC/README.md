@@ -43,6 +43,7 @@ Expansão auditável:
 → !REMEDICAO
 → !FIXED_POINT
 → !REGISTRA
+→ 🔏 !RASTRO
 → !BOOT
 ```
 
@@ -276,3 +277,14 @@ Windows/VPS/outro alvo.
 A família não congela HEAD como verdade permanente. Qualquer HEAD posterior,
 runtime novo ou troca material de alvo exige remedição antes de promover claim
 de estado atual.
+
+
+## 🔏 Lei do Rastro
+
+`!RASTRO` é o cadeado executivo entre `!REGISTRA` e `!BOOT`.
+
+- escrita alegada ao CHEFE → `COMMIT_SHA + PATH + LINK + READBACK`;
+- memória alegada → nomear onde foi gravada;
+- commit direto na `main` → receipt no #1562 no mesmo turno;
+- resposta sem rastro → inválida;
+- todos os engines herdam o mesmo contrato.

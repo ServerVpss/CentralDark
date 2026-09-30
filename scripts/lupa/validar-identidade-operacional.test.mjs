@@ -601,6 +601,64 @@ test("bot injeta os aprendizados mais recentes, não o início truncado do canô
   assert.notEqual(_internals.ultimosAprendizados(3)[0], titulos[0]);
 });
 
+
+test("aprendizado permanente exige receipt PROVED_ADOPTED forte e CURRENT", () => {
+  const { _internals } = require("../../apps/bot-telegram/contexto-centraldark.cjs");
+  const beforeRef = "1".repeat(40);
+  const afterRef = "2".repeat(40);
+  const base = {
+    schema_version: 1,
+    subject: "TELEGRAM_LEARNING",
+    verdict: "PROVED_ADOPTED",
+    same_scope: true,
+    learning_id: "learning-1",
+    before_ref: beforeRef,
+    after_ref: afterRef,
+    canonical_owner: "apps/bot-telegram/evolucao-ias.cjs",
+    claim: "aprendizado verificável",
+    verifier: ".agents/skills/meta-lupa/scripts/evolution_gate.py",
+    new_information: ["candidate rastreável"],
+    capability_delta: ["replay observado"],
+    before_evidence: ["fixture:CANDIDATE"],
+    after_evidence: ["fixture:REPLAY_OBSERVED"],
+    counterproof: ["hash falso deve falhar"],
+    provenance: ["fixture:telegram-learning"],
+    lost_capabilities: [],
+    tests: [{ name: "replay", status: "PASS", evidence: ["replay observado"] }],
+    regressions: [{ name: "sem-regressao", status: "PASS", evidence: ["sem regressão"] }],
+    observed_at: "2026-09-19T05:00:00.000Z",
+    validated_at: "2026-09-19T05:01:00.000Z",
+    validated_head: afterRef,
+  };
+  base.receipt_sha256 = _internals.assinarReceiptAprendizado(base);
+
+  assert.equal(_internals.podePromoverAprendizado(null, afterRef), false);
+  assert.equal(_internals.podePromoverAprendizado({ ...base, verdict: "CANDIDATE" }, afterRef), false);
+  assert.equal(_internals.podePromoverAprendizado({ ...base, verdict: "REPLAY_OBSERVED" }, afterRef), false);
+  assert.equal(_internals.podePromoverAprendizado({ ...base, receipt_sha256: "0".repeat(64) }, afterRef), false);
+  assert.equal(_internals.podePromoverAprendizado(base, beforeRef), false);
+  assert.equal(_internals.receiptCurrent(base, afterRef), true);
+  assert.equal(_internals.podePromoverAprendizado(base, afterRef), true);
+});
+
+test("grupo evolução não pode chamar conversa aleatória de aprendizado", () => {
+  const source = readFileSync(join(process.cwd(), "apps/bot-telegram/evolucao-ias.cjs"), "utf8");
+  assert.doesNotMatch(source, /Aprendi hoje:/);
+  assert.doesNotMatch(source, /function\s+gerarAprendizado\s*\(/);
+  assert.match(source, /CANDIDATE/);
+  assert.match(source, /REPLAY_OBSERVED/);
+  assert.doesNotMatch(source, /BOT_TOKEN_(?:GEMINI|GROQ|CLAUDE)\s*\|\|\s*['"]\d{8,12}:/);
+});
+
+
+test("grupo evolução exige self-test offline do ciclo de aprendizado", () => {
+  const source = readFileSync(join(process.cwd(), "apps/bot-telegram/evolucao-ias.cjs"), "utf8");
+  assert.match(source, /--self-test-learning/);
+  assert.match(source, /CANDIDATE/);
+  assert.match(source, /REPLAY_OBSERVED/);
+  assert.match(source, /PROVED_ADOPTED/);
+});
+
 test("fronteira bloqueia projeto externo em superfície rastreável", () => {
   const root = mkdtempSync(join(tmpdir(), "centraldark-boundary-"));
   const dependency = ["@", "ai", "ox", "-squads/core"].join("");

@@ -6,6 +6,11 @@ authority:
   executor_continuity: HERMES/PIVETE
   judge: REALITY
 principles:
+  response_without_trace_invalid: true
+  every_write_claim_to_chefe_requires_commit_sha_path_link_readback: true
+  every_memory_claim_must_name_storage_location: true
+  direct_main_write_requires_ledger_1562_receipt_same_turn: true
+  rastro_applies_to_all_engines: true
   one_system_only: true
   reuse_before_create: true
   one_owner_per_capability: true
@@ -31,30 +36,47 @@ principles:
   package_scope_may_reach_100_percent_when_contract_fully_verified: true
   external_reality_100_percent_requires_observation: true
   same_failure_without_new_information_reuses_crystal: true
-  contract_evolution_is_structural: true
-  contract_gap_must_be_validated_before_crystallize: true
-  reusable_contract_gap_updates_existing_owner: true
-  new_contract_requires_no_existing_owner: true
   second_brain_logical_one: true
   second_brain_parallel_forbidden: true
-  discover_existing_channels_before_blocked: true
-  ephemeral_helper_is_not_canonical_asset: true
-  safe_cleanup_after_use_required: true
-  user_report_is_signal_not_proof: true
-  meaningful_discovery_must_compare_canonical_owner: true
-normative_hierarchy:
-  human_ai_entry: LEIA-ME-IA.md
-  global_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
-  master_cycle_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
-  trigger_registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
-  engine_binding: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml
-  deterministic_resolver: scripts/trigger-fabric/centraldark_master_cycle.py
-  rules:
-    contract_is_global_normative_authority: true
-    master_cycle_is_authority_for_master_trigger: true
-    trigger_registry_is_discovery_not_normative_owner: true
-    engine_binding_is_binding_not_normative_owner: true
-    specialized_owners_keep_domain_authority: true
+  human_complexity_must_be_absorbed_by_machine_when_safe: true
+  machine_discoverable_state_must_not_be_user_guesswork: true
+  machine_safe_fix_must_not_be_delegated_to_user: true
+  generic_error_without_location_and_next_action_is_invalid: true
+  chefe_alignment_filter_required: true
+  useless_complexity_must_be_reduced_before_human_output: true
+  chief_receives_decision_not_internal_topology: true
+
+global_contract_entry_policy:
+  marker: CENTRALDARK_GLOBAL_CONTRACT_ENTRY_REQUIRED
+  applies_to:
+    - CHATGPT
+    - GEMINI
+    - CLAUDE
+    - GROK
+    - ALL_CURRENT_AND_FUTURE_MODEL_ADAPTERS
+    - ALL_CURRENT_AND_FUTURE_AGENTS
+    - ALL_CURRENT_AND_FUTURE_CLIS
+    - HERMES
+    - PIVETE
+    - MCP_WORKERS
+    - NEW_TAB
+    - MODEL_CHANGE
+    - AGENT_HANDOFF
+  contract_required_before_operational_mutation: true
+  model_or_tool_may_bypass_contract: false
+  outside_contract_mutation: FAIL_CLOSED
+  parallel_workaround_for_uncovered_case: FORBIDDEN
+  uncovered_case_flow:
+    - FIND_EXISTING_OWNER
+    - IDENTIFY_MINIMAL_CONTRACT_DELTA
+    - PATCH_EXISTING_OWNER
+    - REVALIDATE_GLOBAL_CONTRACT
+    - CONTINUE_CURRENT_MISSION
+  uncovered_case_may_create_parallel_architecture: false
+  uncovered_case_may_restart_mission: false
+  delta_must_preserve_human_intent: true
+  revalidation_required_before_continue: true
+
 standard_flow:
   canonical_entry: CENTRALDARK
   accepted_entries: ["!CENTRALDARK", "#CENTRALDARK"]
@@ -83,12 +105,6 @@ standard_flow:
   sensor_failure_is_world_failure: false
   transport_failure_requires_authorized_alternate_route: true
   alternate_route_must_remeasure_same_target: true
-  operational_channel_discovery:
-    before_declaring_blocked: true
-    read_only_discovery_first: true
-    existing_live_authorized_channel_preferred: true
-    new_attempt_failed_is_existing_channel_dead: false
-    connection_exists_is_command_execution: false
   remote_github_trigger_flow: [ACORDAR, CALIBRAR, CENTRALDARK, MEASURE, RENDEZVOUS, RECONCILE, CURRENT_REALITY, PROOF]
   remote_write_gate:
     repo_confirmed: REQUIRED
@@ -122,80 +138,49 @@ standard_flow:
     - COUNTERPROVE
     - REGISTER_RECEIPT
     - GENERALIZE_IF_REUSABLE
-  contract_evolution_flow:
-    - DISCOVER_MISSING_RULE
-    - VALIDATE_AGAINST_LIVING_CANON
-    - MEASURE_RUNTIME_WHEN_APPLICABLE
-    - GENERALIZE_MINIMUM_REUSABLE_SCOPE
-    - FIND_EXISTING_CONTRACT_OWNER
-    - UPDATE_EXISTING_OWNER
-    - POSITIVE_TEST
-    - NEGATIVE_TEST
-    - COUNTERPROOF
-    - COMMIT
-    - SAME_HEAD_CI
-    - MERGE_MAIN_WHEN_GREEN
-    - RUNTIME_PROOF_WHEN_APPLICABLE
-    - PERSIST_RECEIPT
-  contract_evolution_guard:
-    discover_missing_rule: true
-    validate_before_crystallize: true
-    generalize_reusable_rules: true
-    update_existing_contract_owner: true
-    create_new_contract_only_if_no_existing_owner: true
-    new_owner_requires_proven_gap_and_governance_gate: true
-    preserve_required_existing_behavior: true
-    preserve_runtime: true
-    prose_only_rule: NOT_LEARNED
-    documented_only_rule: NOT_LEARNED
-    repeated_chefe_instruction_after_promotion: LEARNING_TRANSFER_FAIL
+  human_complexity_absorption:
+    marker: CENTRALDARK_HUMAN_COMPLEXITY_ABSORPTION_REQUIRED
+    applies_to: ALL_CURRENT_AND_FUTURE_EXECUTORS
+    human_input_default: GOAL_AND_AUTHORITY
+    technical_decomposition_owner: MACHINE
+    prefer_one_complete_operation_over_microcommand_chain: true
+    preflight_before_execution: REQUIRED
+    predictable_failure_preparation: REQUIRED
+    safe_fallbacks_before_human_return: REQUIRED
+    bounded_retry_only_with_information_gain: true
+    idempotent_reentry_when_possible: true
+    unresolved_failure_display: LOUD_EXACT_ACTIONABLE
+    exact_failure_location_required_when_available: true
+    proven_cause_or_labeled_hypothesis_required: true
+    attempted_routes_required: true
+    exact_human_action_required_at_human_frontier: true
+    one_human_action_at_a_time: true
+    secrets_enter_at_secure_source_not_chat: true
+    automatic_resume_after_human_frontier: true
+    machine_diagnostics_must_not_be_redelegated_to_human: true
+    final_remeasurement_required: true
+    final_unknown_must_remain_unknown: true
+  chefe_alignment_simplifier:
+    marker: CENTRALDARK_CHEFE_ALIGNMENT_SIMPLIFIER
+    purpose: REDUCE_USELESS_COMPLEXITY_FOR_SEGREDO_CHEFE
+    machine_internal_complexity_allowed: ONLY_WHEN_IT_REDUCES_HUMAN_COMPLEXITY_OR_PROVES_STATE
+    human_output_default: RESULT_EVIDENCE_PENDING_NEXT_CURSOR
+    forbidden_human_output: [MICROSTEP_MENU, TOOL_MENU, INTERNAL_DEBATE_DUMP, DUPLICATE_OPTIONS]
+    ask_user_to_choose_order_for_authorized_technical_work: false
+    chief_receives_decision_not_internal_topology: true
+    exact_human_action_only_at_true_human_frontier: true
+    no_new_parallel_owner_for_alignment: true
+    preserve_proof_unknown_and_blockers: true
   scope_compression_failure:
     signature: AGENT_REDUCED_HUMAN_OBJECTIVE_WITHOUT_AUTHORIZATION
     remediation: RESTORE_FULL_HUMAN_OBJECTIVE_AND_RECONCILE_IN_AUTHORIZED_SCOPE
-event_driven_autonomy:
-  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PERSISTENT-AUTONOMOUS-ZORDS.yml
-  first_execution_layer: HERMES
-  resident_contract: true
-  healthy_state: IDLE
-  wake_sources:
-    webhook: WAKE_AND_CLASSIFY
-    health_events: WAKE_AND_CLASSIFY
-    runtime_signals: WAKE_AND_CLASSIFY
-    repository_dispatch: WAKE_AND_CLASSIFY
-    cron: FAILSAFE_PATROL
-  webhook_is_mutation_permission: false
-  cron_is_failsafe_only: true
-  wake_scope: AFFECTED_CONE_ONLY
-  expand_scope_only_when_causal_cone_crosses_boundary: true
-  no_work_when_healthy: true
-  return_to_idle_after_fixed_point: true
-  runtime_residency_claim_requires_runtime_proof: true
-  duplicate_signal_without_information_gain: REUSE_PROOF_OR_DROP
-elastic_execution:
-  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PERSISTENT-AUTONOMOUS-ZORDS.yml
-  enabled: true
-  default_parallelism: 1
-  scale_with_complexity: true
-  max_concurrency_ceiling: 20
-  allocate_by: [FAILURE_SEVERITY, DEPENDENCY_COUNT, SCOPE_SIZE, UNCERTAINTY, REQUIRED_INDEPENDENT_PROOFS]
-  minimum_sufficient_set: true
-  parallelize_perception: true
-  serialize_mutation_per_scope: true
-  no_duplicate_investigation_without_information_gain: true
-  specialized_worker_is_not_owner: true
-  specialized_worker_is_not_authority: true
 second_brain:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SECOND-BRAIN.yml
   logical: ONE
   surfaces: [github_canonical, local_obsidian_files, derived_graph_vector]
   graph_vector_authority: false
 master_trigger:
-  expression: "!CENTRALDARK"
-  aliases: ["!CENTRALDARK", "#CENTRALDARK"]
-  source_of_truth: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
-  subordinate_entry_phases: [ACORDAR, CALIBRAR, MULTIBUSSOLA]
-  registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
-  resolver: scripts/trigger-fabric/centraldark_master_cycle.py
+  expression: "#ACORDAR + !CALIBRAR + !MULTIBUSSOLA"
   inherited_on_bot_entry: true
   meta_lupa: proportional_to_risk
   behavior:
@@ -224,6 +209,8 @@ bot_entry:
     - docs/CONSCIENCIA/PADRAO-EMOJIS.md
     - docs/CONSCIENCIA/MULTIBUSSOLA.md
     - .agents/skills/meta-lupa/SKILL.md
+    - .agents/skills/centraldark-unified-surface-parity/SKILL.md
+    - docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml
   install_semantics: LOAD_CANONICAL_REFERENCE_NOT_COPY_BRAIN
   runtime_activation_requires_observation: true
 model_import_contract:
@@ -277,6 +264,27 @@ continuation:
   changed_target: REVALIDATE_AFFECTED_CHAIN_ONLY
   no_new_information: NO_CHANGE_NEXT
   next_execution_baseline: LAST_GOOD_STATE
+
+proven_crystal_main_fast_path:
+  marker: PROVEN_CRYSTAL_MAIN_FAST_PATH
+  trigger: CHEFE_REGISTRA_ON_PROVEN_CRYSTAL
+  source_contract: docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml
+  skill_owner: .agents/skills/centraldark-unified-surface-parity/SKILL.md
+  same_fingerprint: PASSAGE_OPEN
+  reproof_policy: AFFECTED_CONE_ONLY
+  full_ci_reproof_for_unchanged_proven_crystal: false
+  direct_main_allowed_when_authorized: true
+  required_before_main:
+    - CURRENT_MAIN_REMEASURE
+    - OWNER_MATCH
+    - PROVENANCE_SHA_HASH_FINGERPRINT_OR_RECEIPT
+    - MINIMUM_TARGETED_TEST_FOR_NEW_BINDING_WHEN_APPLICABLE
+    - COUNTERPROOF_NEW_BINDING_ONLY
+    - MAIN_READBACK
+    - RECEIPT
+  divergence: REOPEN_AFFECTED_CONE_ONLY
+  unknown: BLOCK_FALSE_GREEN_NOT_REPLAY
+  rule: PROVEN_CRYSTAL_REPLAY_BEFORE_REDISCOVERY
 package_ingest:
   inventory_before_read: true
   hash_before_semantic_reanalysis: true
@@ -320,35 +328,13 @@ artifact_properties:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
   hermes_requires_properties: true
   missing_required: NOT_FLASH_READY
-workspace_artifact_lifecycle:
-  casa_root: E:\CentralDark
-  casa_engineering_repo: E:\CentralDark\CentralDark
-  casa_worktrees: E:\CentralDark\worktrees
-  casa_tmp: E:\CentralDark\_tmp
-  casa_cache: E:\CentralDark\cache
-  casa_site_build_preview: C:\CentralDark
-  vps_root: CENTRALDARK_VPS_ROOT
-  vps_tmp: CENTRALDARK_VPS_ROOT/_tmp
-  vps_cache: CENTRALDARK_VPS_ROOT/cache
-  same_taxonomy_not_same_state: true
-  desktop_or_os_temp_for_agent_helpers: FORBIDDEN_WHEN_CENTRALDARK_TMP_AVAILABLE
-  os_or_tool_internal_temp: ALLOWED_NOT_CANONICAL
-  npx_npm_cache_node_modules: RECONSTRUCTIBLE_PACKAGE_MANAGER_CACHE
-  package_cache_must_not_be_absorbed_wholesale_into_apps_modulos: true
-  dependencies_enter_canonical_only_through_manifest_or_existing_owner: true
-  temp_without_consumer_after_persisted_result: SAFE_DELETE_AFTER_VERIFICATION
-  cache_without_reuse_value: EXPIRE_OR_CLEAN
-  repo_or_worktree: PRESERVE_BY_GIT_OWNER_POLICY
 operational_rule_learning:
   mandatory: true
-  applies_to: [HUMAN_CORRECTION, USER_REPORTED_ERROR, NEW_DISCOVERY, TOOL_ERROR, TEST_FAILURE, CI_FAILURE, RUNTIME_DRIFT, REPEATED_MANUAL_FIX, NEW_INVARIANT]
   applies_to: [HUMAN_CORRECTION, TOOL_ERROR, TEST_FAILURE, CI_FAILURE, RUNTIME_DRIFT, REPEATED_MANUAL_FIX, NEW_INVARIANT, AUREOLA_MATERIAL_DISCOVERY]
   lifecycle:
     - OBSERVE_EVENT
     - EMIT_LEARNING_REF
     - MEASURE_LIVE_STATE
-    - COMPARE_CANONICAL_OWNER
-    - DISCOVER_EXISTING_CHANNELS_WHEN_ACCESS_RELATED
     - EXTRACT_FAILURE_OR_RULE_SIGNATURE
     - IDENTIFY_CAUSE_OR_INVARIANT
     - GENERALIZE_MINIMUM_VALID_SCOPE
@@ -361,7 +347,6 @@ operational_rule_learning:
     - REALITY_JUDGE
     - RECEIPT
     - CRYSTAL
-    - CLEAN_EPHEMERAL_HELPERS_AFTER_PROOF
     - LAST_GOOD_STATE
     - TRANSFER_TEST_ON_NEXT_EVENT
     - CONTINUE_UNTIL_SCOPE_FIXED_POINT
@@ -380,24 +365,6 @@ operational_rule_learning:
   same_rule_new_session: MUST_INHERIT_BY_REFERENCE
   same_rule_new_pr_or_commit: MUST_BE_ENFORCED_BY_EXISTING_GATE
   overgeneralization_guard: MINIMUM_VALID_SCOPE_THEN_EXPAND_BY_EVIDENCE
-  user_report:
-    semantics: SIGNAL_REQUIRES_MEASUREMENT
-    promote_without_measurement: false
-    confirmed_error_enters_learning_loop: true
-  continuous_crystallization:
-    mode: EVENT_DRIVEN
-    meaningful_discovery: COMPARE_EXISTING_CANONICAL_OWNER
-    generalizable_gap: UPDATE_EXISTING_OWNER_AND_BIND_CONSUMER_TEST_GATE
-    local_only_gap: FIX_LOCALLY_AND_RECEIPT_ONLY
-    no_material_delta: NO_CHANGE
-    fixed_point_stops_loop: true
-  ephemeral_artifact_lifecycle:
-    temp_used_is_canonical_asset: false
-    preserve_if_needed_for_receipt_or_rollback: true
-    cleanup_requires_result_persisted: true
-    cleanup_requires_no_active_consumer: true
-    no_post_task_value: SAFE_DELETE
-    cleanup_must_be_verified: true
 verified_continuity:
   source_crystal: docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md
   canonical_handoff_owner: docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md
@@ -524,6 +491,22 @@ ci_binding:
     wait_slow_self_hosted_auxiliary: false
     causal_gates_required: true
     false_green_forbidden: true
+    create_pr_mergeable_snapshot_is_final: false
+    remeasure_live_mergeability_before_human_return: true
+    queued_or_in_progress_auxiliary_is_material_blocker: false
+    post_pr_continue_until_merged_or_material_blocker: true
+    return_with_open_eligible_pr: FORBIDDEN
+  centraldark_pattern_monitor:
+    owner: apps/modulos/mcp/src/operational-telemetry.js
+    admin_surface: apps/modulos/mcp/src/admin-patterns-ui.js
+    label: PADRAO_CENTRALDARK
+    outside_percent_red_threshold: 80
+    unknown_counts_as_pass: false
+    unknown_counts_as_outside: false
+    unknown_prevents_green: true
+    metric_scope: OBSERVED_MEASURABLE_DIMENSIONS_ONLY
+    global_behavior_claim_from_partial_telemetry: FORBIDDEN
+    refresh_source: /admin/api/operational-snapshot
 self_healing:
   mandatory_for_operational_failure: true
   scope: ALL_PR_COMMIT_AND_RUNTIME_ELIGIBLE_FAILURES
@@ -605,3 +588,14 @@ measurement_confidence:
     allowed_when: ALL_DEFINED_SCOPE_CONDITIONS_ARE_DETERMINISTICALLY_VERIFIED
     means: DEFINED_SCOPE_CONTRACT_COMPLETE
     does_not_mean: EXTERNAL_WORLD_INFALLIBLE
+
+
+rastro_lock:
+  marker: "🔏 !RASTRO"
+  owner: "AGENTS.md + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md"
+  response_without_trace: INVALID
+  write_claim_required_fields: [COMMIT_SHA, PATH, LINK, READBACK]
+  memory_claim_requires_location: true
+  direct_main_requires_ledger_1562_same_turn: true
+  applies_to_all_engines: true
+  authority_expansion: false

@@ -23,7 +23,7 @@ LESS_IS_MORE_CRYSTAL -> 10-less-is-more.json
 
 Owner canônico: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md`.
 
-Regra curta: `FUNCAO > NOME -> EFEITO -> CAUSA -> CONTRAPROVA -> COMPRESSAO -> REALITY=JUDGE`.
+Regra curta: `FUNCAO > NOME -> EFEITO -> CAUSA -> CONTRAPROVA -> COMPRESSAO -> REALITY=JUDGE_AFTER_EFFECT`. Reality Judge valida efeito e PASS técnico; não é permissão de execução nem governo sobre o CHEFE.
 
 Cristal de compressão: `ESSENCIA + CLAREZA + CAPACIDADE + SEGURANCA + PROVA - EXCESSO = MENOS_E_MAIS`.
 

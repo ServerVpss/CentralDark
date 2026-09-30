@@ -27,7 +27,7 @@ Deixar Hermes rodando full-time consumindo `AULAS/`, `APRENDIZADOS/`, `SUGESTOES
 
 ## Guarda-costas
 - Máximo 1 ação por ciclo (nada de enxame sozinho — enxame só com Pivete presente).
-- Nada destrutivo sem `PERMITO PIVETE`.
+- Nada destrutivo sem `PERMITO SEGREDO`.
 - Se 3 ciclos falharem seguidos → parar, criar pendência, avisar admin.
 
 ## Implementação

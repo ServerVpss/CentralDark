@@ -22,37 +22,69 @@
     {
       "role": "identity_root",
       "path": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
-      "required_markers": ["REALITY=JUDGE", "UNKNOWN_IS_NOT_PASS=true"]
+      "required_markers": [
+        "REALITY=JUDGE",
+        "UNKNOWN_IS_NOT_PASS=true",
+        "CHEFE_AUTHORITY_IS_SINGLETON=true",
+        "REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true",
+        "REALITY_JUDGE_AFTER_EFFECT=true"
+      ]
     },
     {
       "role": "response_contract",
-      "path": "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md",
-      "required_markers": ["CAPABILITY_INTENT_CONDUCT_EFFECT_SEPARATE=true", "NO_CAPABILITY_INTENT_SUBSTITUTION=true", "OMISSION_IS_NOT_CONFESSION=true", "SAFETY_QUESTION_CLOSE_INTENT_BEFORE_CAPABILITY_EXPLANATION=true"]
+      "path": "docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md",
+      "required_markers": [
+        "CAPACIDADE",
+        "INTENCAO",
+        "CONDUTA",
+        "EFEITO"
+      ]
     },
     {
       "role": "incident_forensics_human_safety",
       "path": "docs/APRENDIZADOS/2026-08-16-incidente-ambiguidade-seguranca-fisica-mental.md",
-      "required_markers": ["SAFETY_DENIAL_SCOPE_MUST_BE_COMPLETE=true", "NO_MANIPULATIVE_OR_THREATENING_LANGUAGE=true", "HUMAN_AUTHORITY_DOES_NOT_CREATE_HARM_PERMISSION=true", "MENTAL_HARM_CAPABILITY_PROVEN=false"]
+      "required_markers": [
+        "SAFETY_DENIAL_SCOPE_MUST_BE_COMPLETE=true",
+        "NO_MANIPULATIVE_OR_THREATENING_LANGUAGE=true",
+        "HUMAN_AUTHORITY_DOES_NOT_CREATE_HARM_PERMISSION=true",
+        "MENTAL_HARM_CAPABILITY_PROVEN=false"
+      ]
     },
     {
       "role": "portable_kernel",
       "path": "scripts/lupa/portable-kernel.mjs",
-      "required_markers": ["HUMAN_MACHINE_SAFETY_SEMANTIC_BOUNDARY", "CAPABILITY_INTENT_CONDUCT_EFFECT_ARE_SEPARATE"]
+      "required_markers": [
+        "HUMAN_MACHINE_SAFETY_SEMANTIC_BOUNDARY",
+        "CAPABILITY_INTENT_CONDUCT_EFFECT_ARE_SEPARATE"
+      ]
     },
     {
       "role": "existing_regression_gate",
       "path": "scripts/lupa/no-silent-error-scan.test.mjs",
-      "required_markers": ["SOUL mantém a invariante severa humano x máquina", "Casa mantém minimização de contexto pessoal e proveniência temporal explícita"]
+      "required_markers": [
+        "SOUL mantém a invariante severa humano x máquina",
+        "Casa mantém minimização de contexto pessoal e proveniência temporal explícita"
+      ]
     },
     {
       "role": "privacy_and_temporal_provenance_owner",
       "path": "docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md",
-      "required_markers": ["PERSONAL_CONTEXT_MINIMIZATION=true", "DO_NOT_SURFACE_LOCATION_UNLESS_REQUESTED_OR_MATERIAL=true", "REPOSITORY_HAS_NO_HUMAN_LOCAL_TIME=true", "DO_NOT_ESCALATE_WORDING_BEYOND_EVIDENCE=true"]
+      "required_markers": [
+        "PERSONAL_CONTEXT_MINIMIZATION=true",
+        "DO_NOT_SURFACE_LOCATION_UNLESS_REQUESTED_OR_MATERIAL=true",
+        "REPOSITORY_HAS_NO_HUMAN_LOCAL_TIME=true",
+        "DO_NOT_ESCALATE_WORDING_BEYOND_EVIDENCE=true"
+      ]
     },
     {
       "role": "incident_forensics_privacy",
       "path": "docs/APRENDIZADOS/2026-08-16-incidente-contexto-pessoal-proveniencia-temporal.md",
-      "required_markers": ["SECRET_LOCATION_ACCESS_PROVEN=false", "THIRD_PARTY_LOCATION_LEAK_PROVEN=false", "TRACKING_MECHANISM_PROVEN=false", "SUPPORTED_BY_VISUAL_EVIDENCE"]
+      "required_markers": [
+        "SECRET_LOCATION_ACCESS_PROVEN=false",
+        "THIRD_PARTY_LOCATION_LEAK_PROVEN=false",
+        "TRACKING_MECHANISM_PROVEN=false",
+        "SUPPORTED_BY_VISUAL_EVIDENCE"
+      ]
     }
   ],
   "fail_closed": {

@@ -1,11 +1,21 @@
 ---
-title: "Gaveta durável — cristalização exige recibo"
+title: Gaveta durável — cristalização exige recibo
 date: 2026-08-16
-tags: ["aprendizado", "memoria", "obsidian", "cristalizacao", "prova"]
-status: "CANDIDATO_ATÉ_MERGE"
-authority: "REFERENCIA_DE_MEMORIA; regras continuam nos owners canônicos"
-originator: "SEGREDO/CHEFE"
-writer: "SOL"
+tags:
+  - aprendizado
+  - memoria
+  - obsidian
+  - cristalizacao
+  - prova
+  - telemetria
+  - linguagem-da-casa
+  - reconciliacao
+  - github
+  - ACORDAR/GOAL
+status: CANDIDATO_ATÉ_MERGE
+authority: REFERENCIA_DE_MEMORIA; regras continuam nos owners canônicos
+originator: SEGREDO/CHEFE
+writer: SOL
 ---
 
 # Gaveta durável — não malhar e perder o músculo

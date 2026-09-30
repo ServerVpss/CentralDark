@@ -21,7 +21,7 @@ export function ConnectorsTab() {
   useEffect(() => {
     const mockConnectors: Connector[] = [
       { id: '1', name: 'MCP Gateway',      type: 'mcp',      status: 'connected', lastPing: new Date().toISOString(), endpoint: 'https://mcp.centralldark.com' },
-      { id: '2', name: 'Telegram MTProto', type: 'telegram', status: 'connected', lastPing: new Date().toISOString(), endpoint: 'https://status.centralldark.com/mtproto' },
+      { id: '2', name: 'Telegram MTProto', type: 'telegram', status: 'disconnected', lastPing: new Date(0).toISOString(), endpoint: '/api/telegram/mtproto' },
       { id: '3', name: 'Supabase HUB',     type: 'database', status: 'connected', lastPing: new Date().toISOString(), endpoint: 'https://lyoigsqluyktoclwdaft.supabase.co' },
     ];
     setConnectors(mockConnectors);

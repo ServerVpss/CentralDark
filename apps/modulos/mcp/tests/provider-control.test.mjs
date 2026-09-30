@@ -8,6 +8,7 @@ import {
   buildProviderRequest,
   deepRedact,
   providerCredentialStatus,
+  tailscaleTools,
   validateFinancialGuard,
 } from "../src/modes/admin/tools/admin-provider-control.js";
 
@@ -23,7 +24,7 @@ test("matriz tem chave provider+capability unica e proveniencia oficial", () => 
   const keys = PROVIDER_CAPABILITY_MATRIX.map((item) => `${item.provider}:${item.capability}`);
   assert.equal(new Set(keys).size, keys.length);
   for (const item of PROVIDER_CAPABILITY_MATRIX) {
-    assert.ok(["cloudflare", "contabo"].includes(item.provider));
+    assert.ok(["cloudflare", "contabo", "tailscale", "buildkite"].includes(item.provider));
     assert.match(item.lastVerifiedAt, /^\d{4}-\d{2}-\d{2}$/);
     assert.ok(typeof item.evidenceRef === "string" && item.evidenceRef.startsWith("https://"));
   }
@@ -64,6 +65,8 @@ test("status de credencial nunca devolve valor", () => {
     CONTABO_CLIENT_SECRET: "csec",
     CONTABO_API_USER: "usr",
     CONTABO_API_PASSWORD: "pwd",
+    TAILSCALE_API_KEY: "configured-not-a-secret",
+    BUILDKITE_API_TOKEN: "configured-not-a-secret",
   };
   const status = providerCredentialStatus(env);
   assert.deepEqual(status, {
@@ -74,9 +77,33 @@ test("status de credencial nunca devolve valor", () => {
       CONTABO_API_USER: "CONFIGURED",
       CONTABO_API_PASSWORD: "CONFIGURED",
     },
+    tailscale: { TAILSCALE_API_KEY: "CONFIGURED" },
+    buildkite: { BUILDKITE_API_TOKEN: "CONFIGURED" },
   });
   const serialized = JSON.stringify(status);
   for (const value of Object.values(env)) assert.equal(serialized.includes(value), false);
+});
+
+test("buildkite pipelines.list monta path oficial", () => {
+  const req = buildProviderRequest("buildkite", "pipelines.list", { org: "segredoidev" });
+  assert.equal(req.method, "GET");
+  assert.equal(req.path, "/organizations/segredoidev/pipelines");
+});
+
+test("tailscale devices.list monta path oficial", () => {
+  const req = buildProviderRequest("tailscale", "devices.list", { tailnet: "-" });
+  assert.equal(req.method, "GET");
+  assert.equal(req.path, "/tailnet/-/devices");
+});
+
+test("tailscale network.logs monta endpoint oficial e exige janela allowlisted", () => {
+  const req = buildProviderRequest("tailscale", "network.logs", {
+    tailnet: "-",
+    query: { start: "2026-09-25T08:00:00.000Z", end: "2026-09-25T08:15:00.000Z" },
+  });
+  assert.equal(req.method, "GET");
+  assert.equal(req.path, "/tailnet/-/logging/network?start=2026-09-25T08%3A00%3A00.000Z&end=2026-09-25T08%3A15%3A00.000Z");
+  assert.equal(matrix("tailscale", "network.logs").permission, "logs:network:read");
 });
 
 test("redaction remove token senha e material de pagamento", () => {
@@ -156,4 +183,19 @@ test("fingerprints nao carregam ator bruto", () => {
   const fingerprint = __test.actorFingerprint(actor);
   assert.equal(fingerprint.includes(actor), false);
   assert.match(fingerprint, /^[0-9a-f]{24}$/);
+});
+
+
+test("tools dedicadas Tailscale reutilizam owners existentes e ficam read-only", () => {
+  assert.deepEqual(
+    tailscaleTools.map((tool) => tool.name),
+    ["tailscale_status", "tailscale_bridge_status", "tailscale_devices_list", "tailscale_dns_nameservers", "tailscale_network_logs"],
+test("tools dedicadas Tailscale reutilizam provider-control e ficam read-only", () => {
+  assert.deepEqual(
+    tailscaleTools.map((tool) => tool.name),
+    ["tailscale_status", "tailscale_devices_list", "tailscale_dns_nameservers", "tailscale_network_logs"],
+  );
+  assert.ok(tailscaleTools.every((tool) => tool.annotations.readOnlyHint === true));
+  assert.ok(tailscaleTools.every((tool) => tool.annotations.destructiveHint === false));
+  assert.equal(new Set(tailscaleTools.map((tool) => tool.name)).size, tailscaleTools.length);
 });
