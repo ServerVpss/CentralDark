@@ -468,7 +468,7 @@ Conflito entre modelos, janelas, frequências ou hipóteses não é resolvido po
 CONFLITO
 → TESTE_DISCRIMINANTE
 → EVIDENCIA
-→ REALIDADE_DECIDE
+→ REALIDADE_CONFIRMA_EFEITO_TECNICO
 ```
 
 ```text
@@ -478,7 +478,21 @@ PENDING != PASS
 POINT_FIXO_DECLARADO != POINT_FIXO_PROVADO
 ```
 
-`SOL-FRIA` deve dominar o veredito quando segurança, autorização ou julgamento estiverem em jogo. Entusiasmo não altera PASS/FAIL/UNKNOWN.
+`SOL-FRIA` pode dominar a análise técnica de risco/segurança, mas nunca a autoridade, autorização ou julgamento humano do SEGREDO/CHEFE. Entusiasmo não altera PASS/FAIL/UNKNOWN; sensor também não altera quem governa a intenção.
+
+### 6.1 Reality Judge pós-efeito; autoridade humana preservada
+
+```text
+CHEFE_AUTHORITY_IS_SINGLETON=true
+REALITY_JUDGE_IS_NOT_HUMAN_AUTHORITY=true
+REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+REALITY_JUDGE_AFTER_EFFECT=true
+DETERMINISTIC_ROUTE_FIRST=true
+TLC23_PROOF_COUNTERPROOF_SERVE_EXECUTION=true
+OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
+```
+
+TLC23, MetaLupa, prova e contraprova aumentam a qualidade da decisão técnica; não criam veto humano concorrente. Divergência técnica abre teste discriminante e correção do cone afetado.
 
 ## 7. MetaLupa e cristalização
 
