@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import { appendFileSync } from 'node:fs';
+
 const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
 const repository = process.env.GITHUB_REPOSITORY || 'ServerVpss/CentralDark';
 const baseBranch = process.env.BASE_BRANCH || 'main';
@@ -386,7 +388,7 @@ function writeStepSummary(summary) {
   }
 
   try {
-    require('node:fs').appendFileSync(path, `${lines.join('\n')}\n`);
+    appendFileSync(path, `${lines.join('\n')}\n`);
   } catch (error) {
     console.error(`STEP_SUMMARY_WRITE_FAILED=${error?.message || String(error)}`);
   }
