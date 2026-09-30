@@ -265,7 +265,7 @@ provider_read(contabo, snapshots.list, instance_id=vmi3256920) → CONTABO_CREDE
 | FORENSIC_FRESHNESS | **FAIL** (stale desde 2026-09-21) |
 | RECEIPT_PRESENT | PASS |
 
-**Alignment:** 86% GREEN (6/7 scored PASS, 1 FAIL)
+**Alignment:** 90% GREEN (9/10 scored PASS, 1 FAIL)
 
 ---
 
