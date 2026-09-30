@@ -1,11 +1,29 @@
+#!/usr/bin/env bash
+# CANONICAL_SOURCE=true — promovido de runtime local para fonte reconstruível em 2026-09-15.
+set -uo pipefail
 
-#!/bin/bash
+REPO_ROOT="${CENTRALDARK_REPO_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+INTERVAL_SECONDS="${CENTRALDARK_DRIVE_SYNC_INTERVAL_SECONDS:-120}"
+REMOTE_DOCS="${CENTRALDARK_DRIVE_DOCS_REMOTE:-gdrive:CentralDark/docs}"
 
 while true; do
+  # COPY preserva extras/revisões no Drive; este loop não usa sync destrutivo.
+  if rclone copy "$REPO_ROOT/docs" "$REMOTE_DOCS" --transfers=1 --bwlimit=2M; then
+    echo "DRIVE_DOCS_COPY=PASS"
+  else
+    echo "DRIVE_DOCS_COPY=FAIL"
+  fi
 
-  rclone sync /root/CentralDark/docs gdrive:CentralDark/docs --transfers=1 --bwlimit=2M
+  if [[ -x "$REPO_ROOT/scripts/drive-ingest-once.sh" ]]; then
+    if "$REPO_ROOT/scripts/drive-ingest-once.sh"; then
+      echo "DRIVE_DELTA_INGEST=PASS"
+    else
+      rc=$?
+      echo "DRIVE_DELTA_INGEST=FAIL rc=$rc"
+    fi
+  else
+    echo "DRIVE_DELTA_INGEST=SKIPPED_MISSING_SCRIPT"
+  fi
 
-  sleep 120
-
+  sleep "$INTERVAL_SECONDS"
 done
-

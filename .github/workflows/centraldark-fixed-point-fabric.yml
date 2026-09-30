@@ -1,0 +1,97 @@
+name: 🔥 CentralDark Forja Total — Fixed Point VPS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "apps/modulos/fixed-point-fabric/**"
+      - "scripts/drive-ingest-once.sh"
+      - "scripts/drive-ingest-once.test.sh"
+      - "scripts/sync-loop.sh"
+      - "scripts/installer/install-forja-total-vps.sh"
+      - "scripts/trigger-fabric/boot_forja_total.py"
+      - "scripts/trigger-fabric/test_boot_forja_total.py"
+      - "docs/ARQUITETURA/CENTRALDARK-FORJA-VIVA/**"
+      - "docs/INSTALADOR/**"
+      - ".github/workflows/centraldark-fixed-point-fabric.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: centraldark-forja-total-vps
+  cancel-in-progress: false
+
+jobs:
+  prove-and-deploy:
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 25
+    steps:
+      - name: Checkout exact SHA
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Provar BOOT-FORJA-TOTAL no mesmo motor
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/trigger-fabric/test_boot_forja_total.py
+          python3 scripts/trigger-fabric/boot_forja_total.py | tee "$RUNNER_TEMP/boot-forja-total.json"
+          jq -e '.status == "PASS" and .canonical_trigger == "!CENTRALDARK" and (.chain | index("FIXED_POINT") != null) and .creates_second_brain == false' "$RUNNER_TEMP/boot-forja-total.json" >/dev/null
+          echo "TRIGGER_ADAPTER_TEST=PASS"
+
+      - name: Contraprovar auto-ingest do Drive sem rede real
+        shell: bash
+        run: |
+          set -euo pipefail
+          chmod +x scripts/drive-ingest-once.sh scripts/drive-ingest-once.test.sh scripts/sync-loop.sh scripts/installer/install-forja-total-vps.sh
+          bash scripts/drive-ingest-once.test.sh
+
+      - name: Testar Fixed Point Fabric
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd apps/modulos/fixed-point-fabric
+          python3 -m unittest discover -s tests -v
+          echo "FIXED_POINT_PACKAGE_TESTS=PASS"
+
+      - name: Localizar owner PM2 existente da VPS
+        id: runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          sync_json="$(pm2 jlist | jq -c '[.[] | select(.name == "CentralDark-SyncDrive")] | first')"
+          if [[ "$sync_json" == "null" || -z "$sync_json" ]]; then
+            runtime_root="$(git rev-parse --show-toplevel)"
+          else
+            runtime_root="$(jq -r '.pm2_env.pm_cwd // ""' <<<"$sync_json")"
+          fi
+          [[ -n "$runtime_root" && -d "$runtime_root" ]] || { echo "SYNC_RUNTIME_ROOT_INVALID"; exit 43; }
+          printf 'runtime_root=%s\n' "$runtime_root" >>"$GITHUB_OUTPUT"
+          echo "RUNTIME_OWNER=CentralDark-SyncDrive"
+
+      - name: Instalar Forja Total na VPS pelo instalador canônico do componente
+        shell: bash
+        env:
+          CENTRALDARK_SOURCE_ROOT: ${{ github.workspace }}
+          CENTRALDARK_RUNTIME_ROOT: ${{ steps.runtime.outputs.runtime_root }}
+        run: |
+          set -o pipefail
+          bash scripts/installer/install-forja-total-vps.sh | tee "$RUNNER_TEMP/forja-total-vps.txt"
+          rc=${PIPESTATUS[0]}
+          if grep -q '^\[FORJA_TOTAL\] DRIVE_INGEST_RUNTIME=PASS$' "$RUNNER_TEMP/forja-total-vps.txt"; then
+            echo "DRIVE_COMPONENT_PROVEN=PASS"
+          fi
+          if [[ "$rc" -ne 0 ]]; then
+            echo "FORJA_TOTAL_VPS_INSTALL=PARTIAL_OR_BLOCKED rc=$rc"
+            exit "$rc"
+          fi
+          grep -q '^\[FORJA_TOTAL\] VPS_HEARTBEAT_HEALTH=PASS$' "$RUNNER_TEMP/forja-total-vps.txt"
+          grep -q '^\[FORJA_TOTAL\] FORJA_TOTAL_STATUS=VPS_COMPONENTS_PASS$' "$RUNNER_TEMP/forja-total-vps.txt"
+          echo "FORJA_TOTAL_VPS_INSTALL=PASS"
+          echo "FIXED_POINT=NOT_CLAIMED"
+          echo "NEXT_CURSOR=CASA_GITHUB_SCREENPIPE_RENDEZVOUS"

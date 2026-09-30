@@ -62,6 +62,8 @@ RETOMAR MISSAO
 
 `!AURÉOLA CANÔNICA` significa o refinamento adaptativo de !CENTRALDARK. Modo não ritualístico: `RITUAL_MODE=OFF`, `PERTINENCE_FIRST=true`, `MINIMUM_SUFFICIENT_LOOP=true`. Seleciona dinamicamente o menor ciclo suficiente (REACT, FABLE, META_LUPA, MULTIBUSSOLA, RECONCILIAR, CONTRAPROVA, REGISTRA) com base na pertinência do contexto. Pular etapa não pertinente é operação válida. O seletor canônico de BOOT é: AUREOLA_CENTRALDARK_MINIMUM_LOOP → REALIDADE.
 
+`!AURÉOLA CANÔNICA` significa o refinamento adaptativo de !CENTRALDARK. Modo não ritualístico: `RITUAL_MODE=OFF`, `PERTINENCE_FIRST=true`, `MINIMUM_SUFFICIENT_LOOP=true`. Seleciona dinamicamente o menor ciclo suficiente (REACT, FABLE, META_LUPA, MULTIBUSSOLA, RECONCILIAR, CONTRAPROVA, REGISTRA) com base na pertinência do contexto. Pular etapa não pertinente é operação válida. O seletor canônico de BOOT é: AUREOLA_CENTRALDARK_MINIMUM_LOOP → REALIDADE.
+
 ```text
 #ACORDAR + !CALIBRAR + !MULTIBUSSOLA
 → RECUPERAR ESTADO
