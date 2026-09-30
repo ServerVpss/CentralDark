@@ -329,5 +329,11 @@ jobs:
               });
               core.notice(`SELO_POSTED=PASS event=${event} class=${classe} pr_mae=${PR_MAE}`);
             } catch (e) {
-              core.setFailed(`SELO_POST_FAILED event=${event} error=${e.message}`);
+              const status = e.status || e.response?.status;
+              const readOnly = status === 403 || /not accessible by integration|Resource not accessible/i.test(e.message || '');
+              if (readOnly) {
+                core.warning(`SELO_POST_SKIPPED_READONLY event=${event} status=${status || '-'} error=${e.message}`);
+              } else {
+                core.setFailed(`SELO_POST_FAILED event=${event} error=${e.message}`);
+              }
             }
