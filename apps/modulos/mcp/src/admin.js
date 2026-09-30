@@ -1190,6 +1190,7 @@ export function adminRotas(req, res) {
 
 function inferirCategoria(t) {
     const n = (t.name || "").toLowerCase();
+    if (n.startsWith("tailscale_")) return "Tailscale";
     if (n.includes("github") || n.includes("repo") || n.includes("pr_")) return "GitHub";
     if (n.includes("telegram") || n.includes("bot_")) return "Telegram";
     if (n.includes("supabase") || n.includes("sql") || n.includes("db_")) return "Supabase";
