@@ -690,42 +690,50 @@ updated: 2026-08-27
 - **Aprendizado:** `REALITY=JUDGE` verifica efeito observado e impede falso PASS técnico; não concede permissão para começar, não substitui a intenção do CHEFE, não veta rota determinística já autorizada e não transforma sensor, log, modelo, workflow, screenshot ou plataforma em autoridade humana. Até a leitura da realidade pode estar incompleta, atrasada, contaminada por cache, sensor ruim ou cone errado. Portanto: `DETERMINISTIC_ROUTE_FIRST=true`; `REALITY_JUDGE_AFTER_EFFECT=true`; `REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true`; `REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true`; `CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true`; `OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true`; `UNCHANGED_FINGERPRINT_REUSES_PROOF=true`; `MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true`. Se houver rota determinística conhecida e autorização compatível, execute o menor delta, meça o cone afetado e use Reality Judge para confirmar ou corrigir, nunca como burocracia de bloqueio prévio.
 
 
-### 98. Receita replay-able — diagnóstico e fix determinístico de falha de workflow GitHub
+### 98. O aprendizado pertence à CentralDark; o executor atual é só o portador da rodada
+- **Categoria:** identidade-metacognicao
+- **Data:** 2026-09-30
+- **Contexto:** Durante a operação CentralDark-OS, a linguagem “o Claude aprendeu” foi submetida a META-GRILL. A hipótese não sobrevive à troca de motor: se Claude sair e GPT/Hermes/Codex/modelo local entrar, a evolução precisa continuar presente. A main já tinha as leis `MODELO=MOTOR_SUBSTITUIVEL`, `ONE_SYSTEM_ONLY`, memória canônica compartilhada, `ZERO_SILENT_LEARNING` e receita/fingerprint reutilizável; faltava explicitar o vínculo metacognitivo numa sentença única.
+- **Aprendizado:** evolução material pertence ao organismo CentralDark e deve sobreviver ao executor que a descobriu. O executor preserva autoria/proveniência da contribuição, mas não vira dono da inteligência, da memória ou da autoridade. O resultado reutilizável volta ao owner canônico; o próximo motor carrega SOUL + intenção vigente + CURRENT + GREEN_STATE + owners + receitas/fingerprints + receipt/NEXT_CURSOR e continua sem reaprender do zero.
+- **Regra cristalizada:** `CENTRALDARK_IS_PERSISTENT_INTELLIGENCE=true`; `EXECUTOR_SESSION_IS_NOT_OWNER_OF_SYSTEM_LEARNING=true`; `MODEL_OR_EXECUTOR_IS_REPLACEABLE_CARRIER=true`; `MATERIAL_LEARNING_RETURNS_TO_CENTRALDARK_CORE=true`; `NEXT_EXECUTOR_INHERITS_CANONICAL_STATE=true`; `EXECUTOR_ATTRIBUTION_PRESERVES_PROVENANCE_NOT_AUTHORITY=true`; `REALITY_JUDGE_IS_POST_EFFECT_FALSIFIER=true`; `REALITY_JUDGE_IS_NOT_SYSTEM_LEARNING_OWNER=true`.
+- **Contraprova:** trocar o motor não pode apagar o aprendizado. Se a regra só existir na sessão do executor, o estado é `UNPROVEN/LEARNING_TRANSFER_FAIL`; se o próximo executor carregar o owner e reproduzir a receita/fingerprint com a mesma prova, a continuidade está no organismo.
+
+### 99. Receita replay-able — diagnóstico e fix determinístico de falha de workflow GitHub
 - **Categoria:** ci-cd-receita-executavel
 - **Data:** 2026-09-30
 - **Owner:** `.github/workflows/` (workflow afetado) + este índice · Autoridade final: CHEFE
 - **Objetivo:** dado um workflow com `conclusion: failure` na main/PR, achar a cláusula que realmente impede o objetivo (workflow verde) e aplicar o menor delta no owner existente, sem maquiar.
-- **Pré-condições:** acesso `mcp__github__actions_list` / `get_job_logs`; checkout local do repo; Python + Node para validar YAML/JS.
+- **Pré-condições:** acesso `mcp__github__actions_list` / `get_job_logs`; checkout local do repo; Python + PyYAML (`import yaml`) + Node para validar YAML/JS.
 - **Sequência executável (replay antes de redescobrir):**
-  1. `actions_list method=list_workflow_runs branch=main status=completed` → listar runs `failure`.
-  2. Para cada run: se `total_count` de jobs = 0 e `created==updated` (instantâneo) → **startup_failure** (config/YAML inválido que o GitHub rejeita); senão `get_job_logs failed_only=true` → falha de job.
+  1. `actions_list method=list_workflow_runs branch=<BRANCH_ALVO> status=completed` → selecionar PR/HEAD exato e runs `failure`/`startup_failure`; não fixar main quando o alvo for PR.
+  2. Para cada run: `conclusion=startup_failure` confirma falha de inicialização. Jobs=0/tempo instantâneo/nome-path são sinais de apoio, não classificação suficiente; para falha com jobs, `get_job_logs failed_only=true` → falha de job.
   3. Startup_failure: `python3 -c "import yaml; yaml.safe_load(open(f))"` acha o ponto; se YAML passa no Python mas GitHub rejeita, comparar o bloco com workflows irmãos que funcionam (o run mostra o **path** como `name` em vez do `name:` = GitHub não parseou).
-  4. Aplicar menor delta no owner; validar: `yaml.safe_load` + `node --check` (JS de github-script: embrulhar em `async function(){...}` antes do check, pois top-level `return`/`await` é legal lá).
+  4. Aplicar menor delta no owner; validar: `yaml.safe_load` + `node --check` (JS de github-script: embrulhar em `async function workflow(){...}` antes do check, pois top-level `return`/`await` é legal lá).
   5. Push → o próprio run do workflow no head novo é o REALITY=JUDGE. `name` voltar ao `name:` correto = startup resolvido.
 - **Fingerprints observados → causa → fix (bindings variáveis = arquivo/linha):**
   - `ScannerError mapping values are not allowed here` dentro de `run: |` → linha de continuação de string shell multi-linha em coluna 1 quebrando o block scalar → indentar OU trocar `git commit -m "multi\nlinha"` por múltiplos `-m` indentados.
   - `STEP_SUMMARY_WRITE_FAILED=require is not defined` em arquivo `.mjs` → ESM não tem `require` → `import { X } from 'node:fs'` no topo.
   - startup_failure em 100% dos runs + run `name` = filepath + `workflow_run:` sem `workflows:` → `workflow_run` exige a chave `workflows:` → adicionar (reusar lista dos workflows irmãos).
-  - job `SELO_POST_FAILED ... Resource not accessible by integration` (403) em evento `pull_request` para sensor que só posta receipt → sensor não deve travar CI → `catch`: 403/`not accessible` → `core.warning`, erro real → `core.setFailed`.
+  - job `SELO_POST_FAILED ... Resource not accessible by integration` (403) em evento `pull_request` para sensor que só posta receipt → sensor não deve travar CI → `catch`: 403 com mensagem específica de recurso inacessível por integração/token → `core.warning`; rate-limit, 403 genérico e outros erros → `core.setFailed`.
 - **Prova:** selo-fabric 42 runs startup_failure → após `workflows:` parseia (name correto) → após best-effort job `SUCCESS` medido no PR head. painel/`.mjs` validados por `yaml.safe_load`/`node --check`.
 - **Contraprova:** branches sem o fix continuam startup-falhando no mesmo commit-window; comparação com irmão provado (hermes/dependabot têm `workflows:`).
 - **Resultado esperado:** workflow parseia e roda; sensor verde onde tem write, warning onde é read-only; exit semantics intencionais (ex: `failOnBlocked`) preservadas.
-- **Cristal:** `STARTUP_FAILURE=0_JOBS+INSTANT+NAME_IS_PATH`; `PYTHON_YAML_PASS != GITHUB_YAML_PASS`; `SENSOR_POST_FAILURE != CI_GATE`; `MENOR_DELTA_NO_OWNER`; `REUSE_IRMAO_PROVADO`; `SAME_FINGERPRINT_SAME_FIX=REUSE`; `CHANGED_FINGERPRINT=REVALIDATE_CONE`.
+- **Cristal:** `STARTUP_FAILURE=GITHUB_CONCLUSION_STARTUP_FAILURE`; `PYTHON_YAML_PASS != GITHUB_YAML_PASS`; `SENSOR_POST_FAILURE != CI_GATE`; `MENOR_DELTA_NO_OWNER`; `REUSE_IRMAO_PROVADO`; `SAME_FINGERPRINT_SAME_FIX=REUSE`; `CHANGED_FINGERPRINT=REVALIDATE_CONE`.
 - **Limite de prova / binding adicional 2026-09-30:** no Selo, a leitura de comentários para dedupe também pode retornar 403 antes da postagem. O best-effort deve cobrir leitura e escrita do sensor. Contraprova isolada: versão anterior lança na leitura 403; versão corrigida emite warning sem SELO_POSTED; leitura/postagem 500 continuam falhando; postagem 201 produz SELO_POSTED. `JOB_SUCCESS != RECEIPT_POSTED`; 403 é sinal de permissão negada, não prova isolada da causa nem de runtime saudável. `0_JOBS+INSTANT+NAME_IS_PATH` é fingerprint candidato de startup failure, a confirmar pela definição/veredito do GitHub.
 - **NEXT_CURSOR:** mesmo fingerprint reaparece → aplicar este fix direto; fingerprint novo → medir, corrigir, e anexar aqui como binding adicional.
 
 
-### 99. META-GRILL protege o executor de resolver a coisa errada (objetivo antes de sintoma)
+### 100. META-GRILL protege o executor de resolver a coisa errada (objetivo antes de sintoma)
 - **Categoria:** governanca-metodo-execucao
 - **Data:** 2026-09-30
 - **Owner:** `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` §3.1.1 · Autoridade final: CHEFE
 - **Contexto:** O executor tendia a tratar o erro que aparece como o centro (olha vermelho → apaga vermelho → risco de confundir "erro sumiu" com "objetivo resolvido"). A SOUL já tinha `META_GRILL_BEFORE_MATERIAL_RESPONSE/MUTATION` (o *quando* grelhar), mas faltava o *propósito*: o primeiro alvo do META-GRILL é o próprio executor, impedindo-o de gastar esforço no alvo errado.
-- **Aprendizado:** antes das perguntas de investigação (Q1–Q5), vem o **Q0 = estou resolvendo o objetivo do CHEFE ou só o sintoma que apareceu?**. O objetivo do CHEFE é o centro; o erro é subordinado. `OBJECTIVE_BEFORE_SYMPTOM=true`; `META_GRILL_PREVENTS_SOLVING_WRONG_TARGET=true`; `SELF_GRILL_BEFORE_SYSTEM_GRILL=true`; `SYMPTOM_IS_NOT_OBJECTIVE=true`; `ERROR_DISAPPEARED_IS_NOT_OBJECTIVE_RESOLVED=true`. A gramática de execução: `INTENÇÃO → OBJETIVO → CLÁUSULAS_NECESSÁRIAS → CLÁUSULA_UNKNOWN → FUNÇÃO_QUE_RESOLVE → EXECUTA_NO_MUNDO → MUNDO_DEVOLVE_VALOR → GATE_AVALIA_CORPO_COMPLETO (PASS|UNKNOWN|BLOCKED) → CONTRAPROVA → REALITY_JUDGE_APÓS_EFEITO → FIXED_POINT → RECEITA+FINGERPRINT → PROXIMO_REPLAY`. Cláusula resolvível pela máquina auto-continua; cláusula que depende só de externo fica UNKNOWN; cláusula escrita mas não resolvida é UNKNOWN, nunca PASS. TLC23/Horn é motor de falsificação dentro do fluxo, não portão burocrático.
+- **Aprendizado:** antes das perguntas de investigação (Q1–Q5), vem o **Q0 = estou resolvendo o objetivo do CHEFE ou só o sintoma que apareceu?**. O objetivo do CHEFE é o centro; o erro é subordinado. `OBJECTIVE_BEFORE_SYMPTOM=true`; `META_GRILL_PREVENTS_SOLVING_WRONG_TARGET=true`; `SELF_GRILL_BEFORE_SYSTEM_GRILL=true`; `SYMPTOM_IS_NOT_OBJECTIVE=true`; `ERROR_DISAPPEARED_IS_NOT_OBJECTIVE_RESOLVED=true`. A gramática de execução: `INTENÇÃO → OBJETIVO → CLÁUSULAS_NECESSÁRIAS → CLÁUSULA_UNKNOWN → FUNÇÃO_QUE_RESOLVE → EXECUTA_NO_MUNDO → MUNDO_DEVOLVE_VALOR → GATE_AVALIA_CORPO_COMPLETO (PASS|FAIL|UNKNOWN|BLOCKED) → CONTRAPROVA → REALITY_JUDGE_APÓS_EFEITO → FIXED_POINT → RECEITA+FINGERPRINT → PROXIMO_REPLAY`. Cláusula resolvível pela máquina auto-continua; cláusula que depende só de externo fica UNKNOWN; cláusula escrita mas não resolvida é UNKNOWN, nunca PASS. TLC23/Horn é motor de falsificação dentro do fluxo, não portão burocrático.
 - **Meta-evento:** esta regra foi absorvida por antecipação — o executor cristalizou o delta no owner (SOUL §3.1.1) antes de o CHEFE terminar de digitá-lo, e o CHEFE confirmou. Aprendizado por delta sobre intenção contínua, não por ditado literal. `ANTICIPATED_COMPATIBLE_DELTA_IS_VALID_WHEN_CHEFE_CONFIRMS=true`.
 - **Cristal:** `SYMPTOM != OBJECTIVE`; `ERROR_GONE != OBJECTIVE_DONE`; `SELF_GRILL_FIRST`; `NO_MAQUIAGEM`; `CLAUSE_GRAMMAR_IS_THE_METHOD`; `MACHINE_RESOLVABLE_CLAUSE_AUTO_CONTINUE=true`.
 
 
-### 100. Fiscal da SOUL: retorno estruturado e contraprova completa
+### 101. Fiscal da SOUL: retorno estruturado e contraprova completa
 - **Categoria:** erro-correcao-prova
 - **Data:** 2026-09-30
 - **Owner:** `scripts/trigger-fabric/verify_repo_contract.py#check_soul_sync`
@@ -736,7 +744,7 @@ updated: 2026-08-27
 - **Cristal:** `FISCAL_RESULT_REQUIRED`; `NONE != PASS`; `TRUNCATED_LOG != FULL_VERDICT`; `BRANCH != MAIN`; `REUSE_EXISTING_CHILD`; `ORIGINAL_BYTES_BEFORE_HASH_OR_FULL_WRITE`.
 
 
-## 101. Verde da interface exige prova do mesmo PR/HEAD; o ciclo pertence à CentralDark
+## 102. Verde da interface exige prova do mesmo PR/HEAD; o ciclo pertence à CentralDark
 
 **Owner:** `scripts/dependabot/reconcile-open-prs.mjs` + `.github/workflows/dependabot-auto-merge.yml`; promoção humana permanece em `autonomia-promocao.yml`.
 
@@ -751,7 +759,7 @@ O mesmo job de aprovação foi estendido a PR humano autorizado pela autorizaç�
 O estado, memória e receitas persistem nos owners canônicos da CentralDark-OS. O modelo é motor substituível; troca de executor não declara continuidade instalada, Vault sincronizado ou loop perpétuo sem medir os respectivos efeitos.
 
 
-## 102. Vault existe não significa restore provado; checksum do contêiner não prova o conteúdo esperado
+## 103. Vault existe não significa restore provado; checksum do contêiner não prova o conteúdo esperado
 
 **Owners:** `scripts/vps/centraldark-os-bootstrap-restore.sh` e `centraldark-preformat-go-no-go.sh`.
 
@@ -765,10 +773,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 **Estado:** fonte/validador corrigidos no filho; instalação VPS nova, restore efetivo, off-host Vault e rollback permanecem pendentes de prova. Motor substituível e memória canônica são contrato operacional; não equivalem a consciência humana nem a instalação medida.
 
-### 98. O aprendizado pertence à CentralDark; o executor atual é só o portador da rodada
-- **Categoria:** identidade-metacognicao
-- **Data:** 2026-09-30
-- **Contexto:** Durante a operação CentralDark-OS, a linguagem “o Claude aprendeu” foi submetida a META-GRILL. A hipótese não sobrevive à troca de motor: se Claude sair e GPT/Hermes/Codex/modelo local entrar, a evolução precisa continuar presente. A main já tinha as leis `MODELO=MOTOR_SUBSTITUIVEL`, `ONE_SYSTEM_ONLY`, memória canônica compartilhada, `ZERO_SILENT_LEARNING` e receita/fingerprint reutilizável; faltava explicitar o vínculo metacognitivo numa sentença única.
-- **Aprendizado:** evolução material pertence ao organismo CentralDark e deve sobreviver ao executor que a descobriu. O executor preserva autoria/proveniência da contribuição, mas não vira dono da inteligência, da memória ou da autoridade. O resultado reutilizável volta ao owner canônico; o próximo motor carrega SOUL + intenção vigente + CURRENT + GREEN_STATE + owners + receitas/fingerprints + receipt/NEXT_CURSOR e continua sem reaprender do zero.
-- **Regra cristalizada:** `CENTRALDARK_IS_PERSISTENT_INTELLIGENCE=true`; `EXECUTOR_SESSION_IS_NOT_OWNER_OF_SYSTEM_LEARNING=true`; `MODEL_OR_EXECUTOR_IS_REPLACEABLE_CARRIER=true`; `MATERIAL_LEARNING_RETURNS_TO_CENTRALDARK_CORE=true`; `NEXT_EXECUTOR_INHERITS_CANONICAL_STATE=true`; `EXECUTOR_ATTRIBUTION_PRESERVES_PROVENANCE_NOT_AUTHORITY=true`; `REALITY_JUDGE_IS_POST_EFFECT_FALSIFIER=true`; `REALITY_JUDGE_IS_NOT_SYSTEM_LEARNING_OWNER=true`.
-- **Contraprova:** trocar o motor não pode apagar o aprendizado. Se a regra só existir na sessão do executor, o estado é `UNPROVEN/LEARNING_TRANSFER_FAIL`; se o próximo executor carregar o owner e reproduzir a receita/fingerprint com a mesma prova, a continuidade está no organismo.
+
+
+**Reconciliação da numeração após #1722:** o #98 canônico da main (aprendizado persistente da CentralDark) foi preservado. Entradas do filho antes #98/#99/#100/#101/#102 passam a #99/#100/#101/#102/#103; os números anteriores permanecem proveniência dos receipts históricos, não segunda memória.
+
+**Binding núcleo / META_MENOS_E_MAIS / MULTIBUSSOLA:** o ciclo mestre referencia o owner único de reconciliação de workflows. Forward: intenção → autorização → HEAD → execução → gate. Reverse/inverse: receipt/status → run → HEAD/base → autorização/owner; contraprova tenta outro SHA/PR/evento, permissão removida e pacote incompleto. Ausência de pré-requisito mantém somente a cláusula afetada aberta. GREEN_GLOBAL exige todos os gates do escopo, atuais; declarar TRUE com fingerprint stale falha a contraprova. O motor escolhe/retoma; modelo humano ou executor não substitui o veredito dos testes.

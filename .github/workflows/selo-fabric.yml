@@ -73,7 +73,7 @@ concurrency:
 jobs:
   selar:
     name: 🏅 Selar evento no PR-mãe
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     if: >-
       github.repository == 'ServerVpss/CentralDark' &&
       !(
@@ -330,7 +330,7 @@ jobs:
                 core.notice(`SELO_POSTED=PASS event=${event} class=${classe} pr_mae=${PR_MAE}`);
             } catch (e) {
               const status = e.status || e.response?.status;
-              const readOnly = status === 403 || /not accessible by integration|Resource not accessible/i.test(e.message || '');
+              const readOnly = Number(status) === 403 && /Resource not accessible by integration|Resource not accessible by personal access token/i.test(e.message || '');
               if (readOnly) {
                 core.warning(`SELO_POST_SKIPPED_READONLY event=${event} status=${status || '-'} error=${e.message}`);
               } else {
