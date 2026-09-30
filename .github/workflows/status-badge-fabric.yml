@@ -21,6 +21,7 @@ concurrency:
 jobs:
   regenerate:
     name: 🧩 Regenerar índice total de badges
+    if: github.event_name != 'push' || github.ref == 'refs/heads/main'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
