@@ -712,3 +712,13 @@ updated: 2026-08-27
 - **Resultado esperado:** workflow parseia e roda; sensor verde onde tem write, warning onde é read-only; exit semantics intencionais (ex: `failOnBlocked`) preservadas.
 - **Cristal:** `STARTUP_FAILURE=0_JOBS+INSTANT+NAME_IS_PATH`; `PYTHON_YAML_PASS != GITHUB_YAML_PASS`; `SENSOR_POST_FAILURE != CI_GATE`; `MENOR_DELTA_NO_OWNER`; `REUSE_IRMAO_PROVADO`; `SAME_FINGERPRINT_SAME_FIX=REUSE`; `CHANGED_FINGERPRINT=REVALIDATE_CONE`.
 - **NEXT_CURSOR:** mesmo fingerprint reaparece → aplicar este fix direto; fingerprint novo → medir, corrigir, e anexar aqui como binding adicional.
+
+
+### 99. META-GRILL protege o executor de resolver a coisa errada (objetivo antes de sintoma)
+- **Categoria:** governanca-metodo-execucao
+- **Data:** 2026-09-30
+- **Owner:** `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` §3.1.1 · Autoridade final: CHEFE
+- **Contexto:** O executor tendia a tratar o erro que aparece como o centro (olha vermelho → apaga vermelho → risco de confundir "erro sumiu" com "objetivo resolvido"). A SOUL já tinha `META_GRILL_BEFORE_MATERIAL_RESPONSE/MUTATION` (o *quando* grelhar), mas faltava o *propósito*: o primeiro alvo do META-GRILL é o próprio executor, impedindo-o de gastar esforço no alvo errado.
+- **Aprendizado:** antes das perguntas de investigação (Q1–Q5), vem o **Q0 = estou resolvendo o objetivo do CHEFE ou só o sintoma que apareceu?**. O objetivo do CHEFE é o centro; o erro é subordinado. `OBJECTIVE_BEFORE_SYMPTOM=true`; `META_GRILL_PREVENTS_SOLVING_WRONG_TARGET=true`; `SELF_GRILL_BEFORE_SYSTEM_GRILL=true`; `SYMPTOM_IS_NOT_OBJECTIVE=true`; `ERROR_DISAPPEARED_IS_NOT_OBJECTIVE_RESOLVED=true`. A gramática de execução: `INTENÇÃO → OBJETIVO → CLÁUSULAS_NECESSÁRIAS → CLÁUSULA_UNKNOWN → FUNÇÃO_QUE_RESOLVE → EXECUTA_NO_MUNDO → MUNDO_DEVOLVE_VALOR → GATE_AVALIA_CORPO_COMPLETO (PASS|UNKNOWN|BLOCKED) → CONTRAPROVA → REALITY_JUDGE_APÓS_EFEITO → FIXED_POINT → RECEITA+FINGERPRINT → PROXIMO_REPLAY`. Cláusula resolvível pela máquina auto-continua; cláusula que depende só de externo fica UNKNOWN; cláusula escrita mas não resolvida é UNKNOWN, nunca PASS. TLC23/Horn é motor de falsificação dentro do fluxo, não portão burocrático.
+- **Meta-evento:** esta regra foi absorvida por antecipação — o executor cristalizou o delta no owner (SOUL §3.1.1) antes de o CHEFE terminar de digitá-lo, e o CHEFE confirmou. Aprendizado por delta sobre intenção contínua, não por ditado literal. `ANTICIPATED_COMPATIBLE_DELTA_IS_VALID_WHEN_CHEFE_CONFIRMS=true`.
+- **Cristal:** `SYMPTOM != OBJECTIVE`; `ERROR_GONE != OBJECTIVE_DONE`; `SELF_GRILL_FIRST`; `NO_MAQUIAGEM`; `CLAUSE_GRAMMAR_IS_THE_METHOD`; `MACHINE_RESOLVABLE_CLAUSE_AUTO_CONTINUE=true`.

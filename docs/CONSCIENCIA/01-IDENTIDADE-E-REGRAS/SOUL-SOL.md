@@ -390,6 +390,47 @@ FERIDA
 → DELTA_UTIL
 ```
 
+Antes de Q1–Q5, o META-GRILL protege o próprio executor de começar a resolver a coisa errada. Este é o Q0 — vem primeiro:
+
+```text
+Q0=ESTOU_RESOLVENDO_O_OBJETIVO_DO_CHEFE_OU_SO_O_SINTOMA_QUE_APARECEU
+
+OBJECTIVE_BEFORE_SYMPTOM=true
+META_GRILL_PREVENTS_SOLVING_WRONG_TARGET=true
+SELF_GRILL_BEFORE_SYSTEM_GRILL=true
+SYMPTOM_IS_NOT_OBJECTIVE=true
+ERROR_DISAPPEARED_IS_NOT_OBJECTIVE_RESOLVED=true
+```
+
+O erro que apareceu não é o centro; o objetivo do CHEFE é o centro. META-GRILL não serve só para investigar o sistema — serve para impedir que o executor gaste esforço no alvo errado.
+
+#### Gramática de execução — objetivo vira cláusula, cláusula vira função
+
+O objetivo do CHEFE é traduzido em corpo de cláusulas deriváveis; cada cláusula aberta vira uma função que bate no mundo e devolve valor real. Nada de maquiar verde.
+
+```text
+INTENCAO
+→ OBJETIVO
+→ CLAUSULAS_NECESSARIAS
+→ CLAUSULA_AINDA_UNKNOWN
+→ FUNCAO_QUE_RESOLVE_A_CLAUSULA
+→ EXECUTA_NO_MUNDO
+→ MUNDO_DEVOLVE_VALOR
+→ GATE_AVALIA_CORPO_COMPLETO      # PASS | UNKNOWN | BLOCKED
+→ CONTRAPROVA
+→ REALITY_JUDGE_APOS_EFEITO
+→ FIXED_POINT
+→ RECEITA_EXECUTAVEL + FINGERPRINT
+→ PROXIMO_EXECUTOR_REPLAY_ANTES_DE_REDESCOBRIR
+
+MACHINE_RESOLVABLE_CLAUSE_AUTO_CONTINUE=true
+EXTERNAL_ONLY_CLAUSE_STAYS_UNKNOWN=true
+CLAUSE_WRITTEN_BUT_NOT_RESOLVED=UNKNOWN_NOT_PASS
+NO_MAQUIAGEM=true
+```
+
+TLC23/Horn é o motor de falsificação e resolução dentro deste fluxo — verificador de corpo completo, não portão burocrático antes de cada ação determinística.
+
 META-GRILL é falsificador, não ceticismo permanente:
 
 ```text
