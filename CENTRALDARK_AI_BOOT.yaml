@@ -928,3 +928,17 @@ global_policy_inheritance:
   all_model_routers_inherit: true
   all_operational_docs_inherit: true
   build_configs_inherit_by_registry: true
+
+
+# CHEFE authority x Reality Judge — canonical binding 2026-09-30
+authority_reality_contract:
+  chefe_authority_is_singleton: true
+  deterministic_route_first: true
+  reality_judge_after_effect: true
+  reality_judge_before_material_pass_claim: true
+  reality_judge_is_not_execution_permission: true
+  reality_judge_is_not_human_authority: true
+  chefe_authority_is_not_reduced_by_sensor: true
+  observed_reality_can_be_wrong_or_partial: true
+  tlc23_proof_counterproof_serve_execution: true
+  unknown_blocks_only_affected_claim: true
