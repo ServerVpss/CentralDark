@@ -125,3 +125,14 @@ LIBRARY_INDEX_V1_2_0=PASS
 
 O juiz executável é `.githooks/pre-commit-root-contract.sh`.
 Ele valida presença, parse, referências cruzadas, library-index v1.2.0 e bloqueia novo arquivo raiz não registrado.
+
+
+## Herança global de política
+
+```text
+GLOBAL_POLICY_OWNER=docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md
+ALL_ROOT_FILES_INHERIT_GLOBAL_POLICY=true
+ALL_MODEL_ROUTERS_INHERIT_GLOBAL_POLICY=true
+ALL_OPERATIONAL_DOCS_INHERIT_GLOBAL_POLICY=true
+BUILD_CONFIGS_INHERIT_BY_REGISTRY=true
+```
