@@ -82,6 +82,19 @@ pm2 start reality-drift-detector.sh --name "drift-detector" --cron "*/5 * * * *"
 
 ## Segurança
 
+```text
+REALITY_DRIFT_DETECTOR_IS_SENSOR_NOT_AUTHORITY=true
+CHEFE_AUTHORITY_IS_SINGLETON=true
+REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+REALITY_JUDGE_AFTER_EFFECT=true
+DRIFT_SIGNAL_CAN_BE_STALE_PARTIAL_OR_WRONG=true
+DRIFT_CONTRADICTION_REQUIRES_DISCRIMINANT_TEST=true
+AUTO_EXECUTE_SCOPE=MEASURE_RECONCILE_REMEDIATE_WITHIN_EXISTING_AUTHORIZATION
+```
+
+O detector pode disparar medição/reconciliação automaticamente, mas não reescreve intenção do CHEFE, não concede autoridade a sensor e não transforma divergência em veto global.
+
+
 - **WRITE mode**: ativa tasks mas não altera main automaticamente
 - **Sem prompt**: conforme permissão SEGREDO/CHEFE
 - **Reversível**: todos os drifts registrados com snapshot
@@ -101,6 +114,6 @@ PRÓXIMO_CHECKPOINT: novo SHA256
 
 ---
 
-**Dono:** SOL/Reality Judge  
+**Dono:** SOL / owner canônico; Reality Judge = verificador técnico pós-efeito  
 **Executor:** PM2 + git hooks + CLI  
 **Integração:** CentralDark main (AGENTS.md + CLAUDE.md referência obrigatória)
