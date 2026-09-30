@@ -22,7 +22,7 @@ export const DEFAULT_REQUIRED_WORKFLOWS = Object.freeze([
   "⚙️ Lupa Drift Guard",
   "🧠 Trigger Fabric Full Package — pacote e contraprova",
   "⚙️ PR Title Contract",
-  "⚙️ PR auto-review (Codex + checklist)",
+  "⚙️ PR auto-review CentralDark — checklist determinístico",
   "⚙️ Pipeline — Telegram + Painel",
 ]);
 
