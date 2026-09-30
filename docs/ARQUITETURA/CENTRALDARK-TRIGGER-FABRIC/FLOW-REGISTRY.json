@@ -1274,6 +1274,106 @@
         "counterproof_no_match": true,
         "evidence_ref": "docs/RECEIPTS/2026-09-30-grafo-mestre-rotas-hermes-proven.md"
       }
+    },
+    {
+      "id": "trigger.human.EXECUTOR_CENTRALDARK",
+      "kind": "TRIGGER",
+      "capability": "TRIGGER:EXECUTOR_CENTRALDARK",
+      "boundary": "trigger-fabric",
+      "source": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "symbol": "EXECUTOR_CENTRALDARK",
+      "activation": "!EXECUTOR_CENTRALDARK",
+      "from": "CHEFE",
+      "to": "docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md",
+      "owner": "docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md",
+      "canonical_route": "docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
+      }
+    },
+    {
+      "id": "trigger.human.TIK_TAK",
+      "kind": "TRIGGER",
+      "capability": "TRIGGER:TIK_TAK",
+      "boundary": "trigger-fabric",
+      "source": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "symbol": "TIK_TAK",
+      "activation": "!TIK-TAK",
+      "from": "CHEFE",
+      "to": "docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md#81-tik-tak--automation-factory--outer-loop",
+      "owner": "docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md#81-tik-tak--automation-factory--outer-loop",
+      "canonical_route": "docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md#81-tik-tak--automation-factory--outer-loop",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
+      }
+    },
+    {
+      "id": "trigger.human.RASTRO",
+      "kind": "TRIGGER",
+      "capability": "TRIGGER:RASTRO",
+      "boundary": "trigger-fabric",
+      "source": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "symbol": "RASTRO",
+      "activation": "!RASTRO",
+      "from": "CHEFE",
+      "to": "AGENTS.md + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md",
+      "owner": "AGENTS.md + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md",
+      "canonical_route": "AGENTS.md + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
+      }
+    },
+    {
+      "id": "trigger.automatic.VPS_KERNEL_DELTA_MATERIAL",
+      "kind": "TRIGGER",
+      "capability": "TRIGGER:VPS_KERNEL_DELTA_MATERIAL",
+      "boundary": "trigger-fabric",
+      "source": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "symbol": "VPS_KERNEL_DELTA_MATERIAL",
+      "activation": "VPS_KERNEL_DELTA_MATERIAL",
+      "from": "RUNTIME_EVENT_BUS",
+      "to": "apps/modulos/elite-gateway/scripts/centraldark_omni_router.py + Trigger Fabric",
+      "owner": "apps/modulos/elite-gateway/scripts/centraldark_omni_router.py + Trigger Fabric",
+      "canonical_route": "apps/modulos/elite-gateway/scripts/centraldark_omni_router.py + Trigger Fabric",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
+      }
+    },
+    {
+      "id": "trigger.automatic.LOG_INCIDENT_MATERIAL",
+      "kind": "TRIGGER",
+      "capability": "TRIGGER:LOG_INCIDENT_MATERIAL",
+      "boundary": "trigger-fabric",
+      "source": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "symbol": "LOG_INCIDENT_MATERIAL",
+      "activation": "LOG_INCIDENT_MATERIAL",
+      "from": "RUNTIME_EVENT_BUS",
+      "to": "apps/modulos/mcp/src/admin.js + Trigger Fabric",
+      "owner": "apps/modulos/mcp/src/admin.js + Trigger Fabric",
+      "canonical_route": "apps/modulos/mcp/src/admin.js + Trigger Fabric",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
+      }
     }
   ]
 }
