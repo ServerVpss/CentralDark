@@ -6,6 +6,11 @@ on:
   check_suite:
     types: [completed]
   workflow_run:
+    workflows:
+      - ⚙️ porta-de-entrada
+      - ⚙️ CentralDark Valida — determinístico
+      - ⚙️ lupa-conformance
+      - ⚙️ Lupa Drift Guard
     types: [completed]
   issues:
     types: [opened, closed, reopened, labeled, unlabeled]
