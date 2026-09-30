@@ -1234,6 +1234,46 @@
       "status": "ACTIVE_EXISTING_ROUTE",
       "evidence_ref": "scripts/lupa/diagram-route-gate.test.mjs",
       "bootstrap": true
+    },
+    {
+      "id": "runtime.hermes-nous-solar",
+      "kind": "ROUTE",
+      "capability": "LLM_INFERENCE",
+      "boundary": "vps-hermes-nous-solar",
+      "source": "/root/.hermes/config.yaml",
+      "symbol": "ROUTE_HERMES_NOUS_SOLAR",
+      "activation": "HERMES_INFERENCE",
+      "from": "HERMES_VPS_RUNTIME",
+      "to": "NOUS/upstage/solar-pro4:free",
+      "owner": "CentralDark / Hermes runtime",
+      "canonical_route": "hermes-nous-solar",
+      "status": "ACTIVE_PROVEN_ROUTE",
+      "evidence_ref": "docs/RECEIPTS/2026-09-30-grafo-mestre-rotas-hermes-proven.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "docs/RECEIPTS/2026-09-30-grafo-mestre-rotas-hermes-proven.md"
+      }
+    },
+    {
+      "id": "runtime.hermes-reverse-route",
+      "kind": "SKILL",
+      "capability": "REVERSE_ROUTE_TRACE",
+      "boundary": "vps-hermes-reverse-route",
+      "source": "/root/.hermes/skills/centraldark-reverse-route/SKILL.md",
+      "symbol": "centraldark-reverse-route",
+      "activation": "REVERSE_TRACE_REQUEST",
+      "from": "HERMES_VPS_RUNTIME",
+      "to": "EFFECT_TO_OWNER_TRACE",
+      "owner": "CentralDark / Hermes runtime",
+      "canonical_route": "centraldark-reverse-route",
+      "status": "ACTIVE_PROVEN_ROUTE",
+      "evidence_ref": "docs/RECEIPTS/2026-09-30-grafo-mestre-rotas-hermes-proven.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "docs/RECEIPTS/2026-09-30-grafo-mestre-rotas-hermes-proven.md"
+      }
     }
   ]
 }
