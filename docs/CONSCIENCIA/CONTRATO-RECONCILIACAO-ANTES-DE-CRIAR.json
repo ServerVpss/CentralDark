@@ -764,7 +764,7 @@
       "codex-validate",
       "lupa-conformance",
       "Lupa Drift Guard",
-      "PR auto-review (Codex + checklist)",
+      "PR auto-review CentralDark — checklist determinístico",
       "Pipeline — Telegram + Painel"
     ],
     "non_pass_required_workflow_action": "DEFERRED_ZERO_MERGE",
