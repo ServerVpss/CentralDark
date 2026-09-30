@@ -131,9 +131,11 @@ deploy_owner() {
   log "MICRODEPLOY_PASS owner=$owner files=${#files[@]} main=$MAIN_SHA"
 }
 
+# HERMES-CORE pode ser dependência importada pelo MCP. Promove o provider
+# antes do consumidor para evitar janela de incompatibilidade entre owners.
+deploy_owner hermes "${HERMES_FILES[@]}"
 deploy_owner mcp "${MCP_FILES[@]}"
 deploy_owner hub_bot "${HUB_FILES[@]}"
-deploy_owner hermes "${HERMES_FILES[@]}"
 deploy_owner oauth_broker "${OAUTH_FILES[@]}"
 
 if [[ "${#UNHANDLED[@]}" -gt 0 ]]; then
