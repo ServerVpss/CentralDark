@@ -74,6 +74,13 @@ DELTA_CONTINUO_REQUIRED=true
 FUTURE_EXECUTORS_INHERIT_SAME_CONTRACT=true
 MUTATION_WITHOUT_GLOBAL_ENTRY_EXIT_GATE=FAIL_CLOSED
 HUD_FIXED_LAYOUT_LIVE_DATA_REQUIRED=true
+HUD_RUDY_HYBRID_ENTRY_REQUIRED=true
+HUD_RUDY_ACTIVATE_ON_MCP_CONNECTION=true
+HUD_RUDY_ACTIVATE_ON_REPO_CONTEXT=true
+HUD_RUDY_MCP_OR_REPO_IS_SUFFICIENT=true
+HUD_RUDY_FIRST_OPERATIONAL_RESPONSE_REQUIRED=true
+HUD_RUDY_FIXED_CARD_IDS=H01..H16
+HUD_RUDY_ONLY_STATUS_EVIDENCE_PERCENT_CHANGE=true
 POMBO64_TRACE_REQUIRED_FOR_MATERIAL_RECEIPTS=true
 MATERIAL_FROM_CHEFE_AUTO_INGEST=true
 MATERIAL_FROM_CHEFE_IS_NOT_AUTOMATIC_FACT=true
@@ -802,12 +809,13 @@ AUTOR CONFIAVEL + MESMO REPO
 → SEM CHANGES_REQUESTED
 → SEM CONFLITO
 → BASE ATUALIZADA
+→ SEIS GATES OBRIGATORIOS PASS NO MESMO HEAD
 → REVALIDAR HEAD/BASE
 → SQUASH MAIN
 → RECEIPT
 ```
 
-O fast path não espera convergência externa nem todos os workflows auxiliares. Conflito, segredo, mudança de escopo ou `UNKNOWN` material bloqueiam fail-closed. Não criar segundo workflow para a mesma promoção.
+O fast path não espera convergência adversarial total, mas só alcança o promotor quando os seis gates técnicos obrigatórios estão `PASS` no mesmo HEAD. `MISSING|PENDING|FAIL|CANCELLED|SKIPPED` vira `DEFERRED`, sem merge na rodada. Conflito, segredo, mudança de escopo ou `UNKNOWN` material bloqueiam fail-closed. Não criar segundo workflow para a mesma promoção.
 
 ## 9. Convergência ≠ validação mínima
 
@@ -934,6 +942,7 @@ TASKS_SECRETAS
 | aprendizados | `docs/CONSCIENCIA/APRENDIZADOS.md` |
 | metacognição / coevolução operacional | `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` |
 | ontologia de evidência / causalidade | `docs/GOVERNANCA/ONTOLOGIA-DE-EVIDENCIA-E-CAUSALIDADE.md` |
+| contexto pessoal / proveniência temporal | `docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md` |
 | pendências | `docs/PENDENCIAS.md` |
 | coordenação/escritor único | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` |
 | `!CENTRALDARK` / delta útil contínuo | `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/DELTA-CONTINUO.md` |

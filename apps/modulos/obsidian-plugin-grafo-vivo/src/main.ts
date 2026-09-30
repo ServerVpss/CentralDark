@@ -30,7 +30,7 @@ export default class GrafoVivoPlugin extends Plugin {
 
     this.registerView(
       VIEW_TYPE_GRAFO_3D,
-      (leaf) => new Grafo3DView(leaf),
+      (leaf) => new Grafo3DView(leaf, this),
     );
 
     this.registerEvent(this.app.vault.on("create", (file) => this.agendarKnowledgeAutoSync(file)));

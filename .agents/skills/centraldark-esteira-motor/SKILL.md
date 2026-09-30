@@ -11,7 +11,7 @@ metadata:
 
 ## Regra central
 
-```
+```text
 MOTOR (Hermes PM2)  !=  ESTEIRA (GitHub Actions + runner)
 MERGED != DEPLOYED
 PM2_ONLINE != MOTOR_SAUDAVEL
@@ -23,15 +23,41 @@ ARQUIVO_CONGELADO_NA_VPS != ESTADO_CANONICO
 SINTOMA_SUMIU != CAUSA_RESOLVIDA
 ```
 
-PAPAGAIO_MODE = OFF.  
+PAPAGAIO_MODE = OFF.
 POMBO_MODE = CHECKSUM_ON.
 
-## Lei da cristalização contínua + micro-deploy
+## Ordem explícita → main → micro-deploy → prova
+
+Quando a ordem do CHEFE cobre o escopo, não parar em `READY_FOR_MERGE` nem tratar
+merge como conclusão:
+
+```text
+ORDEM_EXPLICITA
+→ MENOR_COMMIT_NA_MAIN
+→ BUILD/TESTE_NO_SHA_EXATO
+→ MICRO_DEPLOY_DO_MESMO_SHA
+→ PROVA_RUNTIME
+→ RECEIPT
+→ FIXED_POINT
+```
+
+```text
+COMMIT_TO_MAIN_REQUIRED=true
+MICRO_DEPLOY_SAME_COMMIT_REQUIRED=true
+MERGED_WITHOUT_MICRO_DEPLOY=MISSION_OPEN
+COMMIT_WITHOUT_RUNTIME_PROOF=NOT_FINISHED
+DEPLOY_FAILURE=REMEDIATE_AND_CONTINUE
+```
+
+Falha da primeira tentativa mantém o commit válido na `main` e abre remediação;
+não vira conclusão nem autoriza abandonar o delta. Só `DEPLOY_ROUTE_UNKNOWN` ou
+blocker material exato depois das rotas autorizadas pode interromper.
+
 
 Ferida comprovada não pode morrer em chat, comentário, sessão ou memória privada.
 Quando a correção estiver dentro da autoridade e houver owner canônico, o fechamento obrigatório é:
 
-```
+```text
 FERIDA_PROVADA
 → CAUSA_RAIZ
 → SOLUÇÃO_NO_OWNER_EXISTENTE
@@ -63,7 +89,7 @@ Regras:
 
 Princípio contínuo:
 
-```
+```text
 PEQUENO DELTA PROVADO
 → PEQUENO COMMIT
 → MAIN
@@ -100,12 +126,56 @@ Prova funcional do motor (mínimo aplicável):
 - `vps-exec-selfhosted.yml` = deploy **MCP + operational guards**, **não** promove `CentralDark-Hermes`
 - Autonomia `*/5` multiplica fila — cancelar zumbis/duplicados, preservar deploy ativo e checks úteis
 
+## Padrão econômico de vigilância — um coração, um watchdog global
+
+Este padrão absorve o comportamento útil observado no Grok CLI sem criar um segundo sistema de monitoramento.
+
+```text
+CORACAO_GLOBAL   = GET /heartbeat  (heart=one)
+WATCHDOG_GLOBAL  = detecta + classifica + solicita reconciliação
+WATCHER_LOCAL    = observador efêmero de um alvo exato
+PROBE_LOCAL      = sensor de serviço; não vira autoridade global
+ORCHESTRATOR     = executa mutação autorizada
+LOG_OWNER        = Actions / audit / receipt do componente
+```
+
+Regras obrigatórias:
+
+- Existe **um coração global de estado**. Não abrir segundo heartbeat, segundo painel ou segunda fonte global de verdade.
+- `WATCHDOG_GLOBAL` é uma autoridade lógica de detecção. Watchdogs/timers locais que um serviço precise podem continuar existindo como **probes subordinados**; eles não viram segundo coração nem coordenador concorrente.
+- Um watcher focado nasce com chave determinística `scope|target|sha|run_id`. Para a mesma chave: **no máximo um watcher ativo**.
+- Watcher de deploy acompanha o **run/SHA alvo**. Quando o alvo termina, é substituído ou deixa de ser aplicável, o watcher encerra. É proibido pular silenciosamente para qualquer run novo e ficar eterno.
+- Todo watcher tem `deadline`, condição de saída e cursor. Loop sem limite = inválido.
+- Preferir evento/sinal existente. Polling é fallback econômico: em ausência de delta, dormir; não martelar API.
+- Cadência de baixa frequência pode ser usada para autonomia longa (ex.: 10 min). Acelerar só quando há mudança material ou janela terminal curta comprovada.
+- `NO_NEW_INFORMATION` não gera mutação nem notificação.
+- Notificar só em transição material: PASS terminal, FAIL terminal, HUMAN_FRONTIER, mudança de causa, ou repetição confirmada que atingiu o limiar do owner.
+- O heartbeat carrega **estado resumido + status_key/correlation pointer**, não o log inteiro. Detalhe continua no owner: GitHub Actions, `mcp-audit-*.jsonl`, `mcp-admin-audit-*.jsonl`, crash log ou receipt correspondente.
+- `WATCHDOG DETECTA != ORCHESTRATOR EXECUTA`. Detecção nunca ganha autoridade de mutação só porque viu uma falha.
+- Watcher focado pode nascer para uma ferida específica e, ao fechar, **colapsa de volta no coração global**. Não deixar submonitor órfão.
+
+Ciclo:
+
+```text
+SINAL/HEARTBEAT
+→ CLASSIFICAR DELTA
+→ SE SEM DELTA: DORMIR
+→ SE HÁ FERIDA: WATCHER FOCADO (1 chave)
+→ LOG/RECEIPT DO OWNER
+→ ORCHESTRATOR AUTORIZADO
+→ CONTRAPROVA
+→ FECHAR WATCHER
+→ VOLTAR AO CORAÇÃO GLOBAL
+```
+
+O objetivo é reduzir custo e ruído sem perder cobertura: **um coração para enxergar o todo; watchers curtos para ampliar uma ferida; um watchdog global para decidir quando reconciliar**.
+
 ## Dois mecanismos independentes (não confundir)
 
 Sobreviver a reboot e receber código novo são **problemas diferentes**. Um não
 substitui o outro, e provar um não prova o outro.
 
-```
+```text
 AUTOSTART  = resiliência a reboot   -> systemd/PM2 + restart policy, 0% GitHub
 DEPLOY     = push vira produção     -> Actions/SSH, disparado por commit
 ```
@@ -122,7 +192,7 @@ Prova de deploy é `git log -1` na VPS batendo com o SHA da main.
 
 Erro clássico: achar que uma chave resolve tudo.
 
-```
+```text
 chave SSH  -> o robô ENTRAR na VPS
 token/PAT  -> a VPS puxar do GitHub (git pull) DE DENTRO
 ```
@@ -175,6 +245,25 @@ Não chamar sucesso de deploy Hermes um run que só tocou MCP/Verificador.
 13. Caminho do repo na VPS tem que ser medido, não presumido. `cd` para pasta
     errada quebra o deploy com `No such file or directory` — confirmar com
     `pwd` dentro da pasta real antes de escrever no workflow.
+14. **PM2 NÃO RECARREGA `.env` — restart ≠ reload de variáveis.**
+    `pm2 restart CentralDark-MCP` NÃO pega novas variáveis do `.env`. O processo
+    continua com o ambiente original da primeira inicialização.
+    **Correção:** `pm2 delete CentralDark-MCP` → `pm2 start <entry> --cwd <dir>`
+    com `export $(grep -E '^[A-Za-z_][A-Za-z0-9_]*=' .env | sed 's/^/export /')`
+    ANTES do start, OU usar `pm2 start` com `ecosystem.config.cjs` contendo
+    `env: { ... }` com todas as variáveis. **Nunca confiar em `pm2 restart` para
+    **Nunca confiar em `pm2 restart` para atualizar env vars** — é o mecanismo mais comum de "configurei mas não pegou".
+    **Prova:** medir `/proc/<PID>/environ` após restart para confirmar a nova var está presente.
+
+    **PITFALL — PM2 env var loading: restart ≠ reload, delete + fresh start required:**
+    `pm2 restart <name>` does NOT pick up new env vars from `.env` — the child process retains the original environment.
+    **CORREÇÃO CRÍTICA — source .env, don't export via grep:** The `export $(grep -E '^[A-Za-z_][A-Za-z0-9_]*=' .env | sed 's/^/export /')` pattern FAILS when `.env` values contain special characters (dots, hyphens, slashes — e.g. `Segredo199420`, `https://...`, `sb_secret_...-...`). Bash interprets dots/hyphens in values as invalid identifiers, producing `bash: export: 'read:org': not a valid identifier`.
+    **USE INSTEAD:** `source .env` (Bash/Shell) — the safest approach — OR `pm2 start` with `ecosystem.config.cjs` containing `env: { ... }` block with all variables explicitly. If using Node.js, read the file and inject via `child_process.exec` with the full env. Never use `export $(grep ...)` when `.env` values are not guaranteed to be shell-safe identifiers.
+    **Prova:** `pm2 env <PID>` must show the new variable. If `/proc/<PID>/environ` lacks the var, the env was not loaded — `pm2 kill` + `source .env` + fresh start is required.
+    **Correção:** `pm2 kill` → `pm2 start <entry> --cwd <dir>` with env vars injected via `ecosystem.config.cjs` `env: {}` block OR background process with `export $(grep ...)` pattern. Never assume `pm2 restart` loads new env vars.
+15. `chattr +i` trava o deploy inteiro. Bloqueia `git stash`, `checkout` e
+    `reset` com `Operation not permitted`. Protege o arquivo de corromper **e**
+    de evoluir. Antes de culpar git/rede, rodar `lsattr` nos arquivos do erro.
 
 Detalhe de SHA/run da sessão: `references/sessao-erros-reais.md`.
 
@@ -182,7 +271,7 @@ Detalhe de SHA/run da sessão: `references/sessao-erros-reais.md`.
 
 ### 0. CRISTALIZAR FERIDA (quando houver delta comprovado)
 
-```
+```text
 FERIDA → CAUSA → OWNER → PATCH → TESTE → CONTRAPROVA
 → COMMIT → PUSH → MAIN → MICRO_DEPLOY APLICÁVEL
 → REMEDIÇÃO → RECEIPT
@@ -198,7 +287,7 @@ Nenhuma delas equivale a `DEPLOYED`.
 
 ### 1. ACORDAR (medir)
 
-```
+```text
 central_dark___deploy_status
 github___get_commit sha=main
 github___actions_list in_progress + queued (amostra)
@@ -222,13 +311,13 @@ Classificar — motor | esteira | ambos | UNKNOWN.
 
 ### 4. META_LUPA
 
-Hermes quebrado? só com prova funcional, não só Actions vermelho.  
-Fila serial? só se runner único online.  
+Hermes quebrado? só com prova funcional, não só Actions vermelho.
+Fila serial? só se runner único online.
 Cache miss de Node pode ser frio legítimo.
 
 ### 5. Saída + fechamento canônico
 
-```
+```text
 PROVADO=
 QUEBRADO=
 EVIDÊNCIA FALTANTE=

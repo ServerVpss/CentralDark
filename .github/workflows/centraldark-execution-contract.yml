@@ -1,4 +1,4 @@
-name: CENTRALDARK EXECUTION CONTRACT
+name: ⚙️ CENTRALDARK EXECUTION CONTRACT
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     steps:
       - uses: actions/checkout@v7
-      - name: Validate mandatory execution contract
+      - name: 🔹 Validate mandatory execution contract
         shell: bash
         run: |
           set -euo pipefail

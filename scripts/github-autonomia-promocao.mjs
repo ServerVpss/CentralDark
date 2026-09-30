@@ -24,7 +24,7 @@ export const PR_MOTHER_NUMBER = 1562;
 
 export const DEFAULT_REQUIRED_WORKFLOWS = Object.freeze([
   "⚙️ porta-de-entrada",
-  "⚙️ codex-validate",
+  "⚙️ CentralDark Valida — determinístico",
   "⚙️ lupa-conformance",
   "⚙️ Lupa Drift Guard",
   "🧠 Trigger Fabric Full Package — pacote e contraprova",
@@ -246,9 +246,9 @@ export function scanPullFiles(files = []) {
   return [...new Set(findings)];
 }
 
-export function selectLatestNonSkipped(runs, workflowName) {
+export function selectLatestWorkflowRun(runs, workflowName) {
   return [...runs]
-    .filter((run) => run.name === workflowName && run.conclusion !== "skipped")
+    .filter((run) => run.name === workflowName)
     .sort((a, b) => {
       const byNumber = Number(b.run_number || 0) - Number(a.run_number || 0);
       if (byNumber) return byNumber;
@@ -262,7 +262,7 @@ export function isActionRequiredRun(run) {
 
 export function workflowVerdicts(runs, requiredWorkflows) {
   return requiredWorkflows.map((name) => {
-    const run = selectLatestNonSkipped(runs, name);
+    const run = selectLatestWorkflowRun(runs, name);
     if (!run) return { name, state: "MISSING", run_id: null, conclusion: null };
     if (isActionRequiredRun(run)) {
       return { name, state: "ACTION_REQUIRED", run_id: run.id, conclusion: "action_required" };
@@ -576,18 +576,21 @@ export function evaluateCandidate({
   const applicableWorkflows = requiredWorkflows;
   const workflows = workflowVerdicts(workflowRuns, applicableWorkflows);
   for (const workflow of workflows) {
-    if (workflow.state === "FAIL") reasons.push(`WORKFLOW_FAILED:${workflow.name}:${workflow.conclusion}`);
+    if (workflow.state !== "PASS") technicalGateNotGreen = true;
+    if (workflow.state === "FAIL") waits.push(`WORKFLOW_FAILED:${workflow.name}:${workflow.conclusion}`);
     if (workflow.state === "MISSING" || workflow.state === "PENDING") waits.push(`WORKFLOW_${workflow.state}:${workflow.name}`);
     if (workflow.state === "ACTION_REQUIRED") waits.push(`WORKFLOW_ACTION_REQUIRED:${workflow.name}:${workflow.run_id}`);
   }
 
   const stalledFor = waitAgeMs(pr, now);
-  const waitExpired = waits.length > 0 && stalledFor !== null && stalledFor > waitTimeoutMs;
+  const operationalWaits = waits.filter((wait) => !wait.startsWith("WORKFLOW_"));
+  const waitExpired = operationalWaits.length > 0 && stalledFor !== null && stalledFor > waitTimeoutMs;
   if (waitExpired) reasons.push(`WAIT_TIMEOUT:${Math.round(stalledFor / 60000)}min:${waits.join("|")}`);
 
   let decision = "READY";
   if (reasons.length) decision = "BLOCKED";
   else if (baseUpdateRequired) decision = "UPDATE_REQUIRED";
+  else if (technicalGateNotGreen) decision = "DEFERRED";
   else if (waits.length) decision = "WAIT";
 
   return {

@@ -1,3 +1,8 @@
+import {
+  HORN_PROOF_LOCK,
+  calculateClosedDenominatorCoverage,
+} from './horn-proof-gate.mjs';
+
 const freezeRecords = (items) => Object.freeze(items.map((item) => Object.freeze({ ...item })));
 
 export const COGNITIVE_LENSES = Object.freeze({
@@ -117,6 +122,11 @@ export const CURRENT_TECHNICAL_CAPABILITIES = freezeRecords([
     name: 'Continuity Guard',
     state: 'CURRENT_TECHNICAL_NAME_PRESERVED',
     lenses: ['IDENTITY_TRUST', 'OBSERVABILITY_PROOF'],
+  },
+  {
+    name: 'Horn Proof Gate',
+    state: 'CURRENT_TECHNICAL_NAME_PRESERVED',
+    lenses: ['STRUCTURAL_SKEPTIC', 'OBSERVABILITY_PROOF'],
   },
 ]);
 
@@ -277,6 +287,10 @@ export function buildCognitiveCouncilPlan({
   const executionAttacks = sortedUnique(coverage.flatMap((item) => item.covered_by_core_attacks));
   const uncovered = coverage.filter((item) => item.covered_by_core_attacks.length === 0).map((item) => item.lens);
   if (uncovered.length) throw new Error(`COGNITIVE_COUNCIL_UNCOVERED:${uncovered.join(',')}`);
+  const attackCoverage = calculateClosedDenominatorCoverage({
+    covered: executionAttacks,
+    denominator: CORE_ATTACK_IDS,
+  });
 
   return Object.freeze({
     schema_version: 1,
@@ -297,6 +311,8 @@ export function buildCognitiveCouncilPlan({
       model_vote_is_truth: false,
       evidence_dedupe_required: true,
     }),
+    horn_logic_lock: HORN_PROOF_LOCK,
+    attack_coverage: attackCoverage,
     candidate_pool: Object.freeze(selectedCandidates.map((item) => Object.freeze({
       id: item.id,
       label: item.label,
@@ -328,6 +344,10 @@ export function validateCognitiveCouncilPlan(plan) {
   if (plan?.perception_plane?.model_vote_is_truth !== false) errors.push('COGNITIVE_COUNCIL_MODEL_VOTE_FORBIDDEN');
   if (plan?.perception_plane?.source_profile_is_authority !== false) errors.push('COGNITIVE_COUNCIL_SOURCE_AUTHORITY_FORBIDDEN');
   if (plan?.perception_plane?.source_profile_is_persona_clone !== false) errors.push('COGNITIVE_COUNCIL_PERSONA_CLONE_FORBIDDEN');
+  if (plan?.horn_logic_lock?.id !== HORN_PROOF_LOCK.id) errors.push('COGNITIVE_COUNCIL_HORN_LOCK_MISSING');
+  if (plan?.horn_logic_lock?.cognitive_gate_required !== true) errors.push('COGNITIVE_COUNCIL_HORN_COGNITIVE_GATE_REQUIRED');
+  if (plan?.horn_logic_lock?.library_gate_required !== true) errors.push('COGNITIVE_COUNCIL_HORN_LIBRARY_GATE_REQUIRED');
+  if (plan?.horn_logic_lock?.unknown_is_false !== false) errors.push('COGNITIVE_COUNCIL_HORN_UNKNOWN_DRIFT');
 
   const lensItems = Array.isArray(plan?.perception_plane?.lenses) ? plan.perception_plane.lenses : [];
   if (lensItems.length === 0) errors.push('COGNITIVE_COUNCIL_LENSES_REQUIRED');

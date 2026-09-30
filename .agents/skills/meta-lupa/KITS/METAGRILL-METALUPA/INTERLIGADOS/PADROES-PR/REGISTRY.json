@@ -2,10 +2,6 @@
   "schema": "centraldark.meta-lupa.interligados.pr-patterns.v1",
   "status": "CANONICAL_PATTERN_LAYER_ON_MAIN",
   "owner": ".agents/skills/meta-lupa/SKILL.md",
-  "scan": {
-    "rule": "CRYSTALLIZE_SURVIVING_PATTERN_ONLY; DO_NOT_PROMOTE_UNPROVEN_IMPLEMENTATION",
-    "history_rule": "CURRENT > HISTORY"
-  },
   "refresh": {
     "kind": "DEEP_RECENT_PR_PATTERN_SWEEP",
     "promotion_rule": "PROMOTE_STABLE_NON_TEMPORAL_PATTERN_ONLY; DEDUPE_SYNONYMS; KEEP_RUNTIME_SEPARATE",
@@ -78,7 +74,7 @@
     "refreshed_from_main": "325bff5340c22c9eb4768a1c7e016257df350665",
     "all_stable_pattern_delta_files_absorbed_through": "DELTA-PR-1634.md",
     "full_registry_reconciled_at_main": "373c0f3f91280f5496a844813f836dc35c1f1a8d",
-    "pattern_count": 185,
+    "pattern_count": 187,
     "latest_pattern_sweep_base_main": "f5160c865e5642bc767ec432e01d608eee2c937c",
     "full_coverage_file": "REFRESH-2026-09-21-PR-1576-1634.json",
     "full_coverage_parent_main": "ebf93c80aa1e0779883aa9b88d56cea980dc31e6"
@@ -2040,6 +2036,24 @@
         1579
       ],
       "runtime_required": false
+    },
+    {
+      "id": "OPTIONAL_NULL_METADATA_IS_NOT_FAILURE",
+      "emoji": "0️⃣",
+      "anchor": "NULL OPCIONAL EM ENVELOPE DE SUCESSO NÃO FABRICA FALHA",
+      "pr_refs": [
+        1577
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "NULL_REQUIRED_DECISION_FIELD_STAYS_UNKNOWN",
+      "emoji": "❓",
+      "anchor": "NULL EM CAMPO DECISÓRIO OBRIGATÓRIO FICA UNKNOWN",
+      "pr_refs": [
+        1577
+      ],
+      "runtime_required": false
     }
   ],
   "runtime_or_external_remeasurement_required": [
@@ -2103,6 +2117,10 @@
     "PR1616_VOICE_CLASSIFIER_RUNTIME"
   ],
   "proof_boundary": "SOURCE_PATTERN_CRYSTALLIZED != CI_GREEN != RUNTIME_PROVEN != GLOBAL_FIXED_POINT",
+  "scan": {
+    "rule": "CRYSTALLIZE_SURVIVING_PATTERN_ONLY; DO_NOT_PROMOTE_UNPROVEN_IMPLEMENTATION",
+    "history_rule": "CURRENT > HISTORY"
+  },
   "current_runtime_remeasurement_required": [
     "REMOTE_DEVICE_ONLINE_NOW",
     "SCREENPIPE_3030_LISTENING_NOW",

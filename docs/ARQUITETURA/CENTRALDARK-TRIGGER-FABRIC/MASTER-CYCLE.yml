@@ -753,3 +753,34 @@ multi_agent_same_ruler:
   forced_winner: false
   unknown_recovery: RETURN_TO_LAST_PROVEN_CHECKPOINT
 
+
+workflow_reconciliation_binding:
+  owner: .github/workflows/dependabot-auto-merge.yml
+  executor: scripts/dependabot/reconcile-open-prs.mjs
+  proof_denominator: scripts/github-autonomia-green-guard.mjs#DEFAULT_REQUIRED_WORKFLOWS
+  promotion_owner: .github/workflows/autonomia-promocao.yml
+  authorization_owner: scripts/github-autonomia-promocao.mjs#authorizationFor
+  no_model_required_for_transition: true
+  no_parallel_promoter: true
+  protected_ledger_pr: 1562
+  observation_identity: [repository, pr_number, current_head, current_base, workflow_id, run_attempt]
+  positive_horn_rules:
+    - "APPROVE_EXECUTION <- AUTHORIZED, SAME_REPO, BASE_MAIN, CURRENT_HEAD_MATCH, ACTION_REQUIRED"
+    - "RERUN_CANDIDATE <- CURRENT_HEAD_MATCH, LATEST_RUN, COMPLETED_FAILURE, ATTEMPT_BELOW_LIMIT"
+    - "PROOF_PASS <- SAME_PR_HEAD, ALL_REQUIRED_WORKFLOWS_SUCCESS"
+    - "PROMOTION_CANDIDATE <- AUTHORIZED, PROOF_PASS, CURRENT_BASE, CANONICAL_CONTRACT_PASS"
+  state_actions:
+    ACTION_REQUIRED: APPROVE_CURRENT_AUTHORIZED_EXECUTION
+    MISSING: PUBLISH_MISSING_AND_ROUTE_EXISTING_OWNER
+    SKIPPED_REQUIRED: PUBLISH_FAILURE_NO_PASS
+    PENDING: OBSERVE_NO_DUPLICATE_RERUN
+    FAIL_LATEST: RERUN_WITH_LIMIT_OR_REMEDIATE_CAUSAL_OWNER
+    STALE_HEAD_OR_BASE: INVALIDATE_OLD_PROOF_AND_RECONCILE
+    PROOF_PASS: ROUTE_CANONICAL_PROMOTER
+  directions: [FORWARD_INTENT_TO_EFFECT, REVERSE_RECEIPT_TO_OWNER, INVERSE_INVALID_PREMISE_COUNTERPROOF]
+  green_global_scope: CURRENT_AUTHORIZED_PROMOTION_SCOPE
+  green_global_requires: [CURRENT_FINGERPRINT, ALL_REQUIRED_GATES_PASS, CANONICAL_CONTRACT_PASS, NO_UNRESOLVED_MATERIAL_BLOCKER]
+  stale_is_green: false
+  external_prerequisites: [GITHUB_API, AUTHORIZED_TOKEN, MATCHING_RUNNER, CURRENT_SOURCE]
+  missing_external_prerequisite: EXACT_BLOCKER_AND_NEXT_CURSOR_NOT_FALSE_PASS
+  method_adapter: TLC23_FINITE_OPERATIONAL_FACTS_NOT_UNBOUNDED_HERBRAND_DECIDABILITY

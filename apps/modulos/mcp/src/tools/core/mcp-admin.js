@@ -5,7 +5,7 @@ import { adminShellTools } from "../../modes/admin/tools/admin-shell.js";
 import { adminVaultRwTools } from "../../modes/admin/tools/admin-vault-rw.js";
 import { adminGitTools } from "../../modes/admin/tools/admin-git.js";
 import { adminMainWriterTools } from "../../modes/admin/tools/admin-main-writer.js";
-import { adminProviderControlTools } from "../../modes/admin/tools/admin-provider-control.js";
+import { adminProviderControlTools, tailscaleTools } from "../../modes/admin/tools/admin-provider-control.js";
 
 import { codeReviewerToolDefinition } from "../code-reviewer.js";
 import { z } from "zod";
@@ -122,6 +122,7 @@ async function ensureStartupAuditReady() {
 export const mcpAdminTools = [
     codeReviewerToolDefinition,
     ...adminMainWriterTools,
+    ...tailscaleTools,
     {
         name: "mcp_status",
         description: "Resumo simples do dispatcher MCP e do runtime disponível. Alias de leitura para manter compatibilidade com clientes antigos.",

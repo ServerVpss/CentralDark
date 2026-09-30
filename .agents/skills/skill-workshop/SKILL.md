@@ -84,3 +84,25 @@ node .agents/skills/skill-workshop/scripts/workshop.mjs inspect frontend-design 
 ## No jeito da Casa
 
 A oficina virou **prateleira única**: qualquer motor da Casa olha o catálogo, pega só a ferramenta mental que a missão precisa, usa o delta útil e devolve a ferramenta para a prateleira. Não despeja a oficina inteira dentro da cabeça de todo agente.
+
+## Criação e atualização sob demanda — função Skill Creator
+
+No #ACORDAR, identificar se a intenção pede criar, corrigir ou integrar uma skill.
+Somente nesse caso carregar esta função; listar habilidades disponíveis não exige ler todos os corpos.
+O owner permanece skill-workshop: não criar outro criador, catálogo ou roteador.
+
+1. Procurar habilidade equivalente no repositório e abrir seu consumidor antes de criar.
+2. Definir quando a skill deve acionar e quando deve ficar fora. Preservar escopo e autorização.
+3. Usar SKILL.md com frontmatter name e description discriminativa. Corpo curto com procedimento; referências extensas somente sob demanda.
+4. Integrar ao ponto de descoberta/boot já existente. Não basta criar arquivo sem ligação para Hermes ou outros consumidores.
+5. Para consulta sobre produtos OpenAI, reutilizar `.agents/skills/openai-docs/SKILL.md`; não copiar sua política para cada agente. Pergunta genérica sobre programação não aciona consulta OpenAI.
+6. Validar formato, caminhos referenciados e casos observáveis: acionamento positivo, exclusão, falha de fonte/ferramenta e ausência de falso PASS. Rodar scripts novos quando houver.
+7. Avaliar comportamento com uma pergunta real e rastro de ferramentas quando o runtime estiver acessível. Formato válido não comprova que Hermes carregou a skill.
+8. Preservar provenance e publicar o delta pelo fluxo Git existente. Registrar revisão testada e distinguir branch, main e runtime.
+
+Exemplo de acionamento:
+“Crie uma skill para consultar documentação oficial” → esta função cria/integra no owner correto.
+“No ChatGPT Work tem voz?” → openai-docs consulta a fonte; não cria uma nova skill.
+“Corrige esta soma Python” → trabalho de código normal; nenhuma das duas funções é obrigatória.
+
+Proveniência: função destilada da skill Skill Creator observada no ChatGPT Work em 2026-09-11, subordinada à governança da Casa.

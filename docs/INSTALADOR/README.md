@@ -20,32 +20,32 @@ Documentação viva do instalador automático. Esta pasta é a **fonte única de
 |---|---|
 | `00-COMO-COMECAR.md` | Guia passo a passo pro leigo: contratar VPS → SSH → bootstrap → menu |
 | `README.md` | Este índice + visão geral |
-| `01-arquitetura.md` | Componentes do sistema (apps/bot, apps/clone-deck, apps/crm, api/gateway, wuzapi, webhook, Caddy, Supabase) e como eles se conversam |
+| `01-arquitetura.md` | Componentes do sistema e como eles se conversam |
 | `02-dependencias.md` | Tudo que precisa estar instalado na VPS, com versões mínimas |
 | `03-portas-e-rede.md` | Mapa de portas internas, externas e rotas Caddy |
-| `04-estrutura-pastas.md` | Layout obrigatório de `/root/Multizap/` e função de cada subpasta |
-| `05-secrets-e-env.md` | Lista de variáveis de ambiente necessárias, onde vão e como o instalador as solicita (sem expor valor) |
+| `04-estrutura-pastas.md` | Layout obrigatório da VPS e função de cada subpasta |
+| `05-secrets-e-env.md` | Variáveis necessárias e onde vivem, sem expor valor |
 | `06-banco-supabase.md` | Migrações, RLS, GRANTs, schema mínimo |
-| `07-servicos-pm2.md` | Lista de processos PM2 (nome, comando, cwd, restart policy) |
-| `08-webhooks-e-deploy.md` | Webhook GitHub→VPS, cron `gh-pull`, fluxo Lovable→GitHub→VPS |
-| `09-validacoes-finais.md` | Checklist de testes pós-instalação (HTTP, portas, BD, bot, frontend) |
-| `10-seguranca.md` | Regras invioláveis: nunca apagar sem confirmar, nunca expor secrets, etc. |
-| `11-fluxo-do-installer.md` | Passo a passo de fases do `install.sh` |
-| `12-historico-decisoes.md` | Log de decisões técnicas (cada mudança grande entra aqui) |
-| `13-mcp.md` | Servidor MCP CentralDark (porta 9100, domínio `mcp.centralldark.com`, Caddy + PM2) |
-| `14-conectar-ia-externa.md` | Como plugar ChatGPT / Claude / Cursor no MCP pra eles enxergarem a mesma consciência |
-| `15-cloudflare-api.md` | Referência da API Cloudflare: formato do `cloudflare.env` e endpoints usados (caminho avançado) |
-| `16-cloudflare-dns.md` | Cloudflare Connect Wizard — fluxo guiado por SSH (token → DNS → Caddy → relatório) |
-| `17-dns-wildcard.md` | **Caminho oficial** — wildcard DNS (`@`, `www`, `*`) + Caddy + online-check automático |
-| `18-conectar-pelo-celular.md` | **Conectar Cloudflare via QR no terminal** — `./install.sh --connect` abre sessão no `install.centralldark.com`, mostra QR e fica em long-poll |
-| `19-dependencias-auto.md` | **`ensure_deps`** — instala automaticamente curl/jq/git/qrencode/dig/... antes de `--install` e `--connect`. Suporta apt/dnf/yum/apk/brew |
-| `20-bootstrap-url.md` | **`curl -fsSL https://install.centralldark.com \| bash`** — entrada única; servidor devolve bootstrap + tarball auto-contido. Repo pode ficar privado |
-| `21-ui-aio.md` | **Interface AutoScriptVPN-AIO** — banner vermelho, separadores ciano, lista de status, menu em 2 colunas |
-| `22-menu-vps.md` | **Menu colorido da VPS (`cdmenu` / `cdstatus` / `menu`)** — estilo cabrata/autoscript, painel VPS INFO + status PM2, sem expor IP |
-| `23-auto-update.md` | **Auto-update do instalador** — `install.sh` se atualiza sozinho a cada execução + flag `--update` + opção 10 no wizard |
-| `24-rebuild-deterministico.md` | **Rebuild limpo e reproduzível** — inventário read-only, fronteira de confiança, config privada, restore allowlisted, security gates e cutover |
-| `30-skill-consciencia.md` | **Skill da Consciência CentralDark** — empacota regras invioláveis em formato instalável (`skil.sh` / MCP / SSH). 1 comando e qualquer IA nova fica no padrão |
-
+| `07-servicos-pm2.md` | Processos PM2 e políticas de restart |
+| `08-webhooks-e-deploy.md` | Webhook GitHub→VPS e fluxo de deploy |
+| `09-validacoes-finais.md` | Checklist pós-instalação |
+| `10-seguranca.md` | Regras invioláveis de segurança |
+| `11-fluxo-do-installer.md` | Fases do `install.sh` |
+| `12-historico-decisoes.md` | Decisões técnicas relevantes |
+| `13-mcp.md` | MCP CentralDark |
+| `14-conectar-ia-externa.md` | ChatGPT / Claude / Cursor no MCP |
+| `15-cloudflare-api.md` | Referência Cloudflare API |
+| `16-cloudflare-dns.md` | Cloudflare Connect Wizard |
+| `17-dns-wildcard.md` | Wildcard DNS + Caddy + online-check |
+| `18-conectar-pelo-celular.md` | Cloudflare por QR no terminal |
+| `19-dependencias-auto.md` | `ensure_deps` |
+| `20-bootstrap-url.md` | entrada única do bootstrap |
+| `21-ui-aio.md` | interface do instalador |
+| `22-menu-vps.md` | menu colorido da VPS |
+| `23-auto-update.md` | auto-update do instalador |
+| `24-rebuild-deterministico.md` | rebuild limpo e reproduzível |
+| `30-skill-consciencia.md` | skill da Consciência CentralDark |
+| `31-forja-total-drive-vps.md` | **Forja Total na VPS**: Drive auto-ingest + provenance + Memory Linker + Fixed Point heartbeat, reutilizando owners existentes |
 
 ## Regra de ouro
 
@@ -55,15 +55,13 @@ Documentação viva do instalador automático. Esta pasta é a **fonte única de
 
 - [x] Esqueleto da pasta criado
 - [x] `install.sh` com fase de verificação (`--check`)
-- [x] MCP CentralDark de pé em `mcp.centralldark.com` (porta 9100, PM2 `MCP-CentralDark`)
-- [x] ChatGPT conectado via OAuth GitHub (provisório — OAuth próprio fica pra futuro)
-- [x] Cloudflare DNS automático via API (`scripts/cloudflare/cf-sync.sh` + `--cloudflare-apply`) — qualquer conta nova só precisa do token + `cloudflare.env`
-- [x] Fundação de rebuild determinístico com inventário read-only + contraprova estática (`24-rebuild-deterministico.md`)
-- [ ] Fase de instalação de dependências
-- [ ] Fase de configuração de Caddy/PM2
+- [x] MCP CentralDark de pé em `mcp.centralldark.com` (porta 9100)
+- [x] Cloudflare DNS automático via API
+- [x] Fundação de rebuild determinístico
+- [x] Caminho versionado da Forja Total/Drive para VPS (`31-forja-total-drive-vps.md`)
+- [ ] Fixed Point global — só após runtime + contraprova + rendezvous; componente instalado não basta
 - [ ] Fase de migração Supabase
-- [ ] Fase de validação final (CHECKER END-TO-END — ver pendência #9)
+- [ ] Fase de validação final completa
 - [ ] Modo `--restore` para migração entre VPS
-- [ ] OAuth próprio CentralDark substituindo GitHub (futuro distante)
 
 A doc é preenchida incrementalmente conforme cada peça do sistema é tocada.

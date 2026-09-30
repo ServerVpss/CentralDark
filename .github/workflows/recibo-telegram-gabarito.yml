@@ -1,4 +1,4 @@
-name: Recibo Telegram Gabarito
+name: 📧 Recibo Telegram Gabarito
 
 on:
   pull_request:
@@ -23,7 +23,7 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Select changed receipt-like markdown files
+      - name: 🔍 Select changed receipt-like markdown files
         id: changed
         shell: bash
         run: |
@@ -55,7 +55,7 @@ jobs:
               print(item)
           PY
 
-      - name: Verify receipt template
+      - name: ✅ Verify receipt template
         shell: bash
         run: |
           set -euo pipefail

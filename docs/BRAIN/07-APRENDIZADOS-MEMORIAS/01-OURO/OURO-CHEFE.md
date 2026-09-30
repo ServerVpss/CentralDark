@@ -1,3 +1,34 @@
+---
+title: "Aprendizados com SEGREDO/CHEFE — Ouro"
+status: DERIVED_VIEW
+date: 2026-08-19
+updated: 2026-09-15
+tags:
+  - ouro
+  - aprendizados
+  - chefe
+  - centraldark
+  - banda
+  - compasso
+category: "A-Aprendizados"
+sensitivity: INTERNAL
+source: "SEGREDO/CHEFE + evidências e receipts citados no próprio documento"
+source_class: INTERNAL
+source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
+owner: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/"
+consumer: "navegação humana, memória derivada e recuperação contextual"
+writer: SOL
+related_notes:
+  - "[[BRAIN]]"
+  - "[[BANDA_COMPASSO_GLOBAL]]"
+  - "[[BANDA_INTENCAO_UNICA_COMPASSO]]"
+  - "[[GRAPH-INVESTIGATOR]]"
+  - "[[SEMANTIC-LINKER]]"
+relation_types:
+  - PARTE_DE
+  - COMPLEMENTA
+---
+
 # APRENDIZADOS COM O SEGREDO/CHEFE
 
 > Canal fixo: tudo que a Casa aprende DIRETAMENTE com o CHEFE.
@@ -31,7 +62,7 @@
 
 19. **Padrão real de conflito dependabot (medido 2026-08-20, PR #1087):** quando N PRs do dependabot mexem nos mesmos lockfiles e um é mergeado primeiro, os outros ficam `CONFLICTING/DIRTY` automaticamente. NÃO é bug, é comportamento esperado do dependabot. **Correção padrão, sem pensar:** comentar `@dependabot rebase` no PR conflitante — o próprio bot resolve. Nunca fazer merge manual de lockfile de dependabot.
 20. **Antes de agir num PR por causa de screenshot/imagem, medir o PR real primeiro.** A imagem pode já estar desatualizada (PR já mergeado, novo PR na mesma pasta). `gh pr list --state open --json number,headRefName,mergeable` + `gh pr diff <N> --name-only` compara com os arquivos da imagem ANTES de agir.
-21. **Loop dependabot/CI é AUTOMÁTICO — não preciso ser lembrado toda vez.** Regra travada: ao ver qualquer PR com `mergeable=CONFLICTING` E autor=dependabot E os arquivos em conflito forem só lockfile/package.json → comentar `@dependabot rebase` IMEDIATAMENTE, sem perguntar, sem esperar ordem. Isso é ação determinística de manutenção, não decisão humana. **Prova viva (2026-08-20):** comentei `@dependabot rebase` no PR #1087 às ~06:xxZ; medido depois (07:00Z) o PR estava `CLOSED` sem merge, sem PR substituto travado — o próprio bot resolveu. `EM PROCESSO != ERRO FINAL`: não julgar o estado intermediário (run failure, PR conflicting) como veredito final antes do processo terminar.
+21. **Loop dependabot/CI é AUTOMÁTICO — não preciso ser lembrado toda vez.** Regra travada: ao ver qualquer PR com `mergeable=CONFLICTING` E autor=dependabot E os arquivos em conflito forem só lockfile/package.json → comentar `@dependabot rebase` IMEDIATAMENTE, sem perguntar, sem esperar ordem. Isso é ação determinística de manutenção, não decisão humana. **Prova viva (2026-08-20):** comentei `@dependabot rebase` no PR #1087 às ~06:xxZ; medido depois (07:00Z) o PR estava `CLOSED` sem merge, sem PR substituto travado — o próprio bot resolveu. `EM PROCESSO != ERRO_FINAL`: não julgar o estado intermediário (run failure, PR conflicting) como veredito final antes do processo terminar.
 
 22. **[Fonte: COMANDO CANÔNICO — CASA HERMES + CENTRALDARK.md, garimpado 2026-08-20] Separação HERMES vs CENTRALDARK é contratual, não estética.** `CASA_HERMES != CENTRALDARK`. Podem conversar, referenciar, trocar evidência, sincronizar conhecimento autorizado. NÃO podem: assumir autoridade um do outro, duplicar canônico, sobrescrever memória um do outro sem contrato, misturar owner por proximidade semântica. Fusão por conveniência é erro.
 23. **[Mesma fonte] Gate de Autoridade formal antes de escrita canônica:** `CANONICAL_WRITE = ACORDAR_DONE AND CALIBRAR_DONE AND MULTIBUSSOLA_DONE AND LIVE_STATE_MEASURED AND EVIDENCE_ATTACHED`. Se faltar qualquer gate → `CANONICAL_WRITE=false`, `MODE=READ_ONLY`. Não é "espírito da regra" — é checklist booleano, ninguém "esquece a bússola" por engano.

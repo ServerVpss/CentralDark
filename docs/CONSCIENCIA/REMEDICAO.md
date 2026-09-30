@@ -360,6 +360,27 @@ SAY_REGISTERED_REQUIRES_READ_BACK=true
 WRITE_WITHOUT_READBACK != PROVEN
 ```
 
+## 10. CHECK-LIST DIARIO obrigatório
+
+Depois de `!REGISTRA`, todo delta material deve atualizar a projeção diária do CHEFE antes do fechamento humano.
+
+```text
+DAILY_CHECKLIST_UPDATE_REQUIRED_FOR_MATERIAL_DELTA=true
+DAILY_CHECKLIST_OWNER=docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md
+DAILY_CHECKLIST_IS_DERIVED_VIEW=true
+DAILY_CHECKLIST_IS_NOT_AUTHORITY=true
+DAILY_CHECKLIST_MUST_INCLUDE_NEXT_CURSOR=true
+DAILY_CHECKLIST_MUST_PRESERVE_UNKNOWN=true
+```
+
+Fluxo:
+
+```text
+T1 → !REGISTRA → RECEIPT/COMMIT/LEDGER → 🪡 CHECK-LIST DIARIO → READBACK → RELATO AO CHEFE
+```
+
+O painel diário consolida somente fatos já registrados: feito/provado, em andamento, bloqueado, UNKNOWN, selado e próximo cursor. Não transforma tarefa narrada em tarefa executada.
+
 ADMINISTRABLE_COMMAND=!REMEDIÇÃO
 
 ---

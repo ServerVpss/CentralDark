@@ -677,6 +677,23 @@ if (!contract) {
   const tempPolicy = contract.ephemeral_artifact_policy ?? {};
   if (tempPolicy.marker !== "CENTRALDARK_EPHEMERAL_WORKSPACE_CLEAN_REQUIRED") errors.push("CONTRATO_TEMP_POLICY_MARKER_AUSENTE");
   if (tempPolicy.temporary_suffixes_allowed !== true) errors.push("CONTRATO_TEMP_POLICY_NAO_PERMITE_COORDENACAO_EFEMERA");
+  const tempCleanupTool = tempPolicy.cleanup?.tool;
+  if (tempCleanupTool !== "scripts/centraldark/ephemeral-workspace.mjs") errors.push("CONTRATO_TEMP_POLICY_SEM_FERRAMENTA_EXECUTAVEL");
+  if (tempPolicy.cleanup?.marker_file !== ".centraldark-ephemeral.json") errors.push("CONTRATO_TEMP_POLICY_MARKER_FILE_AUSENTE");
+  if (tempPolicy.cleanup?.cleanup_readback_required !== true) errors.push("CONTRATO_TEMP_POLICY_SEM_READBACK_FINAL");
+  if (tempPolicy.cleanup?.blind_delete_without_marker !== "FORBIDDEN") errors.push("CONTRATO_TEMP_POLICY_PERMITE_DELETE_CEGO");
+  if (tempPolicy.cleanup?.self_test_required_by_gate !== true) errors.push("CONTRATO_TEMP_POLICY_SEM_SELF_TEST_GATE");
+  const tempCleanupToolPath = typeof tempCleanupTool === "string" ? join(ROOT, tempCleanupTool) : "";
+  if (!tempCleanupToolPath || !existsSync(tempCleanupToolPath)) {
+    errors.push("CONTRATO_TEMP_TOOL_NAO_EXISTE");
+  } else if (tempPolicy.cleanup?.self_test_required_by_gate === true) {
+    try {
+      const cleanupProof = execFileSync(process.execPath, [tempCleanupToolPath, "--self-test"], { cwd: ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+      if (!cleanupProof.includes('"selfTest":"PASS"')) errors.push("CONTRATO_TEMP_TOOL_SELF_TEST_SEM_PASS");
+    } catch (error) {
+      errors.push(`CONTRATO_TEMP_TOOL_SELF_TEST_FAIL:${error?.status ?? "UNKNOWN"}`);
+    }
+  }
   if (tempPolicy.cleanup?.delete_after_use !== true) errors.push("CONTRATO_TEMP_POLICY_SEM_LIMPEZA_FINAL");
   if (tempPolicy.cleanup?.final_temp_residue_target !== "ZERO_UNLESS_PROVEN_ACTIVE_OR_FORENSIC_KEEP") errors.push("CONTRATO_TEMP_POLICY_RESIDUO_SEM_ALVO_ZERO");
   if (tempPolicy.canonical_architecture?.version_suffix_for_same_capability !== "FORBIDDEN") errors.push("CONTRATO_CANONICO_PERMITE_V1V2V3");

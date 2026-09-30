@@ -17,7 +17,7 @@ data.project.overallProgress = 84;
 const maturityUpdates = {
   '🧠 Memória e consciência': { value: 94, detail: 'Auto-aprendizado + gatilhos de pendências + cientista de sistemas inquebráveis. Memória sempre lida em reconexão.' },
   '🔌 MCP / conector': { value: 85, detail: 'MCP público online, watchdog + alertas Telegram + página /status. 83 tools no catálogo.' },
-  '🧑‍💻 Codex integrado': { value: 82, detail: 'AGENTS/CODEX/prompt/PR template + codex-validate + pr-auto-review automático em todo PR.' },
+  '🧠 CentralDark Valida': { value: 82, detail: 'boot CentralDark + validação determinística + revisão automática em todo PR.' },
   '🖥️ VPS / PM2': { value: 70, detail: 'Produção ativa, mas working tree sujo (#109) e webhook-bot ausente do PM2. Auditoria read-only pronta pra rodar.' },
   '🧪 Testes e checker': { value: 58, detail: '9 validadores offline cobrem Lotes 2–10 do bot-server. bot-server-validate.yml roda em todo PR.' }
 };

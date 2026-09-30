@@ -8,6 +8,7 @@ fallback because it has different cost, rights, and runtime requirements.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -53,6 +54,9 @@ def main() -> int:
             for item in transcript
         ]
         full_text = " ".join(item["text"].strip() for item in segments if item["text"].strip())
+        transcript_hash = hashlib.sha256(
+            json.dumps(segments, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+        ).hexdigest()
         print(json.dumps({
             "ok": True,
             "status": "CAPTIONS_FETCHED",
@@ -61,6 +65,7 @@ def main() -> int:
             "language": getattr(transcript, "language_code", None),
             "is_generated": getattr(transcript, "is_generated", None),
             "segment_count": len(segments),
+            "transcript_sha256": transcript_hash,
             "full_text": full_text,
             "segments": segments,
         }, ensure_ascii=False))

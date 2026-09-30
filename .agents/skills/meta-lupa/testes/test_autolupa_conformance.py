@@ -7,7 +7,8 @@ Regras:
 4. Falha se a convocação do comitê independente (XP-3) e seu resultado estiverem ausentes.
 5. Falha se o git-blob SHA1 do SKILL.md local divergir do guard canônico.
 6. Falha se o guard deixar de explicar caminho, hash, validação, divergência e autoridade.
-6. Falha se o updater de hash voltar a aceitar marcador legado de autoridade.
+7. Falha se o updater de hash voltar a aceitar marcador legado de autoridade.
+8. Falha se o Horn-Caracol-Compasso não fechar catálogo/linkagem musical no mesmo gate.
 
 Uso:
     AUTOLUPA_REPORT=caminho.md pytest .agents/skills/meta-lupa/testes/ -v
@@ -28,6 +29,7 @@ SKILL_PATH = REPO_ROOT / ".agents/skills/meta-lupa/SKILL.md"
 HASH_GUARD = REPO_ROOT / ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA"
 HASH_UPDATER = REPO_ROOT / "scripts/lupa/validar_autolupa_hash.py"
 META_LUPA_SCRIPT = REPO_ROOT / ".agents/skills/meta-lupa/scripts/meta_lupa.py"
+HORN_CARACOL_GATE = REPO_ROOT / ".agents/skills/meta-lupa/scripts/horn_caracol_gate.py"
 PROOF_OWNERSHIP_CONTRACT = REPO_ROOT / "docs/CONSCIENCIA/PROOF-OWNERSHIP.json"
 
 CHECKS_OBRIGATORIAS = [
@@ -56,6 +58,19 @@ def _git_blob_sha1(path: Path) -> str:
 def _load_meta_lupa():
     """Carrega o motor canônico sem criar segunda implementação para testá-lo."""
     spec = importlib.util.spec_from_file_location("meta_lupa_conformance", META_LUPA_SCRIPT)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _load_horn_caracol_gate():
+    """Carrega o adapter do mesmo gate para testar compasso/grafo sem duplicá-lo."""
+    assert HORN_CARACOL_GATE.exists(), f"Gate ausente: {HORN_CARACOL_GATE}"
+    spec = importlib.util.spec_from_file_location(
+        "horn_caracol_compasso_conformance",
+        HORN_CARACOL_GATE,
+    )
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -181,3 +196,14 @@ def test_meta_lupa_herda_proof_ownership_anti_auto_prova():
     assert rules.get("proof_graph_must_be_acyclic") is True
     assert rules.get("proof_must_end_in_external_anchor") is True
     assert rules.get("graph_structure_ok_is_not_invariant_proof") is True
+
+
+def test_horn_caracol_compasso_fecha_notas_no_mesmo_gate():
+    """Compasso, caracol, maestro e notas musicais devem convergir no gate existente."""
+    gate = _load_horn_caracol_gate()
+    gate.self_test()
+    result = gate.repo_check(REPO_ROOT)
+    assert result["accepted"], (
+        "Horn-Caracol-Compasso bloqueou o repositório: "
+        + json.dumps(result, ensure_ascii=False, sort_keys=True)
+    )

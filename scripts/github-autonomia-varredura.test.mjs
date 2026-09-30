@@ -1,4 +1,7 @@
 import assert from "node:assert/strict";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 import test from "node:test";
 
 import {
@@ -11,6 +14,7 @@ import {
   agentLabelsFromWriter,
   classifyFailure,
   eligibleSummary,
+  guardSweep,
   noticeTargets,
   promotionSealReceipt,
   promotionSealState,
@@ -18,6 +22,7 @@ import {
   sanitizeNotice,
   shouldMaterializeAuthority,
 } from "./github-autonomia-varredura.mjs";
+import { DEFAULT_REQUIRED_WORKFLOWS, sealReceipt } from "./github-autonomia-promocao.mjs";
 
 const INTENT_BODY = [
   "Intent-Authorized: SEGREDO/CHEFE",
@@ -56,7 +61,7 @@ test("selo canônico sintetiza autoridade + canal Git + automação", () => {
   ]);
 });
 
-test("padrão operacional vale para TODO PR elegível — não só um", () => {
+test("padrão operacional vale para TODO PR elegível sem exigir label de agente", () => {
   const pending = promotionSealState(pr(), "ServerVpss/CentralDark");
   assert.equal(pending.eligible, true);
   assert.equal(pending.complete, false);
@@ -65,6 +70,7 @@ test("padrão operacional vale para TODO PR elegível — não só um", () => {
   assert.ok(pending.missingLabels.includes(CANONICAL_AUTOMATION_LABEL));
   assert.ok(pending.missingLabels.includes(CANONICAL_REVIEW_LABEL));
   assert.equal(pending.missingLabels.includes("🧠 AGENTE-CHATGPT"), false);
+  assert.equal(requiredOperationalLabels(pr()).includes("🧠 AGENTE-CHATGPT"), false);
 
   const full = requiredOperationalLabels(pr());
   const sealed = promotionSealState(pr({
@@ -75,7 +81,7 @@ test("padrão operacional vale para TODO PR elegível — não só um", () => {
   assert.deepEqual(sealed.missingLabels, []);
 });
 
-test("Writer deriva agente canônico de forma determinística", () => {
+test("Writer deriva agente canônico somente como proveniência determinística", () => {
   assert.deepEqual(agentLabelsFromWriter("Grok/SOL"), ["🧠 AGENTE-GROK", "🧠 AGENTE-CHATGPT"]);
   assert.deepEqual(agentLabelsFromWriter("Claude Code (Sonnet)"), ["🧠 AGENTE-CLAUDE"]);
   assert.deepEqual(agentLabelsFromWriter("Codex"), ["🧠 AGENTE-CODEX"]);
