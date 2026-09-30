@@ -75,7 +75,9 @@ def check_soul_sync(classification='SOUL_SYNC_CURRENT_FOR_FIXED_POINT'):
             cur=_git_blob_sha1(owner)
             if anchored.get(owner)!=cur:
                 problems.append(f'SOUL_STALE: {owner} mudou (âncora {anchored.get(owner)} ≠ atual {cur}) → rever SOUL §2.4 e atualizar a âncora')
-    checks.append({'path':soul,'classification':classification,'ok':not problems,'missing':problems})
+    result={'path':soul,'classification':classification,'ok':not problems,'missing':problems}
+    checks.append(result)
+    return result
 
 def check_absent(path, forbidden=(), classification='PROVEN_ABSENT_IN_REPO'):
     p=ROOT/path
