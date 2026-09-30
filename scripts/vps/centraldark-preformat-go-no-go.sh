@@ -215,9 +215,21 @@ gate_c() {
 
     # Verificar se existe confirmação manual prévia
     if [ -f "/tmp/centraldark-gate-c-manual.txt" ]; then
-      ok "Confirmação manual encontrada em /tmp/centraldark-gate-c-manual.txt"
-      cat "/tmp/centraldark-gate-c-manual.txt"
-      GATE_C=PASS
+      local manual="/tmp/centraldark-gate-c-manual.txt"
+      local manual_ok=1
+      for receipt in SNAPSHOT_READY=1 ROLLBACK_AVAILABLE=1 VNC_AVAILABLE=1 RESCUE_AVAILABLE=1 REINSTALL_OPENKYLIN_ROUTE=CONTABO_PANEL; do
+        if ! grep -Fxq "$receipt" "$manual"; then
+          err "Gate C manual receipt ausente: ${receipt%%=*}"
+          manual_ok=0
+        fi
+      done
+      if [ "$manual_ok" = "1" ]; then
+        ok "Confirmação manual completa encontrada"
+        GATE_C=PASS
+      else
+        err "Gate C FAIL: receipt manual incompleto"
+        return 1
+      fi
     else
       echo "Para confirmar manualmente, criar /tmp/centraldark-gate-c-manual.txt com:"
       echo "  SNAPSHOT_READY=1"
