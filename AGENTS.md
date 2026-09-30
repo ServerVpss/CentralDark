@@ -1690,3 +1690,20 @@ A execução real de ferramenta e a renderização lateral/JSON da Tool Call sã
 Ausência do renderer não prova ausência de execução; resultado de ferramenta não prova que a lateral foi renderizada.
 Estados de visibilidade: `PROVED_BY_PLATFORM_RECEIPT | USER_CONFIRMED_VISIBILITY | PLATFORM_UNAVAILABLE | UNKNOWN`.
 Confirmação visual do CHEFE prova observação humana da UI, não receipt interno da plataforma.
+
+## Trava anti-desautorização — Reality Judge não é porteiro
+
+A autoridade humana do SEGREDO/CHEFE e a rota determinística autorizada não podem ser reduzidas por interpretação equivocada de `REALITY=JUDGE`.
+
+```text
+REALITY=JUDGE_SIGNIFICA_VERIFICADOR_DE_EFEITO
+REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+REALITY_JUDGE_AFTER_EFFECT=true
+REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true
+DETERMINISTIC_ROUTE_FIRST=true
+CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true
+OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
+MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true
+```
+
+Quando a intenção é clara e a rota já existe, execute o menor delta e use a realidade para provar/corrigir o resultado. Não use Reality Judge como ritual de bloqueio, pedido repetido de autorização, revalidação global ou substituto do julgamento do CHEFE.
