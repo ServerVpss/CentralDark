@@ -272,3 +272,13 @@ Conteúdo: Quando o alvo for local, subir/editar/testar no CENTRALDARK-OS e cons
 - **Promovida:** nao
 
 Conteúdo: Futuro: trazer para a CentralDark o padrão observado entre ChatGPT/SOL, GitHub e Claude Cloud: agentes remotos persistentes, assinando o mesmo owner, recebendo deltas em tempo real, compartilhando estado/receipts via GitHub/ledger e continuando a missão sem depender da Casa. Reusar PR-MÃE #1562, MCP Admin/API CentralDark, VPS always-on e Casa como edge opcional. Kastra Edge fica como candidato futuro de política/auditoria local. Implementar somente delta faltante, sem segundo cérebro/orquestrador.
+
+### [2026-09-30T04:49] Kit futuro — agentes cloud + event bus CentralDark
+- **Data:** 2026-09-30
+- **Tags:** futuro, integracao, agentes-cloud, github-event-bus, handoff, pr-mae-1562, kastra-edge, centraldark-os
+- **Relevância:** alta
+- **Eixo:** futuro
+- **Expira:** 2026-10-30
+- **Promovida:** nao
+
+Conteúdo: Futuro: trazer para a CentralDark o padrão observado entre ChatGPT/SOL, GitHub e Claude Cloud: agentes remotos persistentes, assinando o mesmo owner, recebendo deltas em tempo real, compartilhando estado/receipts via GitHub/ledger e continuando a missão sem depender da Casa. Reusar PR-MÃE #1562, MCP Admin/API CentralDark, VPS always-on e Casa como edge opcional. Kastra Edge fica como candidato futuro de política/auditoria local. Implementar somente delta faltante, sem segundo cérebro/orquestrador.
