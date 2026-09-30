@@ -23,7 +23,12 @@ import { SistemaCentralDark } from "@/components/central/SistemaCentralDark";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lerEstadoCentralDark } from "@/lib/cockpit.functions";
-import pacoteHermes from "@/../public/downloads/Hermes-CentralDark-Pacotao.zip.asset.json";
+/** Pacote real servido pelo próprio site (public/downloads), sem armazenamento externo. */
+const pacoteHermes = {
+  url: "/downloads/Hermes-CentralDark-Pacotao.zip",
+  size: 47307928,
+  created_at: "2026-09-24T07:27:40Z",
+};
 
 function formatarTamanho(bytes: number) {
   return `${(bytes / 1024 / 1024).toFixed(1).replace(".", ",")} MB`;
