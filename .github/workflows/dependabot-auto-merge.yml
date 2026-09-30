@@ -27,7 +27,7 @@ on:
     workflows:
       - ⚙️ porta-de-entrada
       - ⚙️ PR auto-review (Codex + checklist)
-      - ⚙️ codex-validate
+      - ⚙️ CentralDark Valida — determinístico
       - ⚙️ lupa-conformance
       - ⚙️ Lupa Drift Guard
     types: [completed]
