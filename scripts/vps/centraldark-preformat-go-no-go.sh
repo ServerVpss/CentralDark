@@ -52,7 +52,8 @@ gate_a() {
       return 1
     fi
   else
-    warn "SHA256 file ausente — hash não verificável (NOT blocker se vault validado antes)"
+    err "SHA256 file ausente — Gate A exige checksum externo verificável"
+    return 1
   fi
 
   # Validar tar.gz
