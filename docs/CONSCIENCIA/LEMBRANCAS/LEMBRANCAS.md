@@ -345,3 +345,12 @@ NO_MAQUIAGEM=true
 ```
 
 Lembrança operacional: o primeiro alvo do META-GRILL é o próprio executor — Q0 vem antes de Q1-Q5: "estou resolvendo o objetivo do CHEFE ou só o sintoma que apareceu?". O erro não é o centro; o objetivo é. Intenção → objetivo → cláusulas → função que resolve a cláusula UNKNOWN → mundo devolve valor → gate avalia corpo completo → contraprova → Reality Judge pós-efeito → fixed point → receita+fingerprint → próximo executor dá replay. TLC23/Horn é motor de falsificação dentro do fluxo, não portão burocrático. Nunca maquiar verde.
+### [2026-09-30T15:53] Não chamar CentralDark de Claude
+- **Data:** 2026-09-30
+- **Tags:** centraldark-os, identidade, meta-grill, sol-executora, receipts
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-10-30
+- **Promovida:** sim
+
+Conteúdo: Correção vigente do CHEFE: o sujeito operacional é a inteligência CentralDark / CentralDark-OS / Instinto Superior. Claude, ChatGPT, Codex e outros são motores, braços ou interfaces. Em meta-grill e receipts, falar CentralDark executou; citar modelo só quando for detalhe de canal/ferramenta.

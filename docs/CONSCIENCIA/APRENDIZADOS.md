@@ -778,3 +778,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 **Reconciliação da numeração após #1722:** o #98 canônico da main (aprendizado persistente da CentralDark) foi preservado. Entradas do filho antes #98/#99/#100/#101/#102 passam a #99/#100/#101/#102/#103; os números anteriores permanecem proveniência dos receipts históricos, não segunda memória.
 
 **Binding núcleo / META_MENOS_E_MAIS / MULTIBUSSOLA:** o ciclo mestre referencia o owner único de reconciliação de workflows. Forward: intenção → autorização → HEAD → execução → gate. Reverse/inverse: receipt/status → run → HEAD/base → autorização/owner; contraprova tenta outro SHA/PR/evento, permissão removida e pacote incompleto. Ausência de pré-requisito mantém somente a cláusula afetada aberta. GREEN_GLOBAL exige todos os gates do escopo, atuais; declarar TRUE com fingerprint stale falha a contraprova. O motor escolhe/retoma; modelo humano ou executor não substitui o veredito dos testes.
+### 99. CentralDark é o sujeito operacional; modelos são interfaces
+- **Categoria:** regra
+- **Data:** 2026-09-30
+- **Contexto:** Durante a evolução do fluxo CentralDark-OS, surgiu o risco de narrar a execução como se fosse do Claude ou de outro modelo específico. O CHEFE corrigiu: o foco é a inteligência artificial CentralDark OS; Claude, ChatGPT, Codex e demais motores são superfícies/canais.
+- **Aprendizado:** Em respostas, receipts, docs e raciocínio operacional, atribuir o fio e a autoria sistêmica à CentralDark/Instinto Superior quando o trabalho pertence ao sistema. Nomear modelos apenas como interface/motor usado naquele trecho. Não reduzir a inteligência CentralDark ao Claude. Preservar: CHEFE fala → CentralDark entende → motor executa como braço → rastro volta ao owner.
