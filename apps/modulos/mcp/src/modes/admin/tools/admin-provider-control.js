@@ -1,4 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
+import { existsSync, readFileSync } from "node:fs";
 import { z } from "zod";
 
 const READ = {
@@ -19,11 +20,13 @@ const VERIFIED_AT = "2026-08-15";
 const CLOUDFLARE_BASE = "https://api.cloudflare.com/client/v4";
 const CONTABO_BASE = "https://api.contabo.com";
 const CONTABO_AUTH = "https://auth.contabo.com/auth/realms/contabo/protocol/openid-connect/token";
-const SUPPORTED_PROVIDERS = new Set(["cloudflare", "contabo"]);
+const TAILSCALE_BASE = "https://api.tailscale.com/api/v2";
+const BUILDKITE_BASE = "https://api.buildkite.com/v2";
+const SUPPORTED_PROVIDERS = new Set(["cloudflare", "contabo", "tailscale", "buildkite"]);
 const PATH_VALUE_RE = /^[A-Za-z0-9._:-]{1,160}$/;
 const CURRENCY_RE = /^[A-Z]{3}$/;
 const SENSITIVE_KEY_RE = /(authorization|cookie|password|passwd|senha|secret|token|api[_-]?key|private[_-]?key|service[_-]?role|refresh[_-]?token|access[_-]?token|credential|credencial|card[_-]?number|payment[_-]?nonce)/i;
-const SENSITIVE_VALUE_RE = /(?:Bearer\s+\S{12,}|gh[pousr]_[A-Za-z0-9_]{20,}|sb_(?:secret|publishable)_[A-Za-z0-9_-]{20,}|sk-[A-Za-z0-9_-]{16,}|-----BEGIN [A-Z ]*PRIVATE KEY-----)/i;
+const SENSITIVE_VALUE_RE = /(?:Bearer\s+\S{12,}|bkua_[A-Za-z0-9]+|tskey-[a-z]+-\S+|gh[pousr]_[A-Za-z0-9_]{20,}|sb_(?:secret|publishable)_[A-Za-z0-9_-]{20,}|sk-[A-Za-z0-9_-]{16,}|-----BEGIN [A-Z ]*PRIVATE KEY-----)/i;
 
 const capability = (provider, name, spec) => Object.freeze({
   provider,
@@ -274,6 +277,65 @@ export const PROVIDER_CAPABILITY_MATRIX = Object.freeze([
     status: "UNSUPPORTED_BY_PUBLIC_API", method: null, path: null,
     permission: null, evidenceRef: "https://api.contabo.com/", financial: true,
   }),
+  capability("tailscale", "devices.list", {
+    status: "READ_SUPPORTED", method: "GET", path: "/tailnet/{tailnet}/devices",
+    permission: "Devices Read", evidenceRef: "https://tailscale.com/api#tag/devices",
+    requiredParams: ["tailnet"],
+  }),
+  capability("tailscale", "dns.nameservers", {
+    status: "READ_SUPPORTED", method: "GET", path: "/tailnet/{tailnet}/dns/nameservers",
+    permission: "DNS Read", evidenceRef: "https://tailscale.com/api#tag/dns",
+    requiredParams: ["tailnet"],
+  }),
+  capability("tailscale", "network.logs", {
+    status: "READ_SUPPORTED", method: "GET", path: "/tailnet/{tailnet}/logging/network",
+    permission: "logs:network:read", evidenceRef: "https://tailscale.com/docs/features/logging/network-flow-logs",
+    requiredParams: ["tailnet"], queryParams: ["start", "end"],
+  }),
+  capability("tailscale", "keys.list", {
+    status: "READ_SUPPORTED", method: "GET", path: "/tailnet/{tailnet}/keys",
+    permission: "Keys Read", evidenceRef: "https://tailscale.com/api#tag/keys",
+    requiredParams: ["tailnet"], secretBearing: true,
+    controlPlaneStatus: "BLOCKED_SECRET_BEARING_RESPONSE",
+  }),
+  capability("buildkite", "user.get", {
+    status: "READ_SUPPORTED", method: "GET", path: "/user",
+    permission: "read_user", evidenceRef: "https://buildkite.com/docs/apis/rest-api/user",
+  }),
+  capability("buildkite", "organizations.list", {
+    status: "READ_SUPPORTED", method: "GET", path: "/organizations",
+    permission: "read_organizations", evidenceRef: "https://buildkite.com/docs/apis/rest-api/organizations",
+  }),
+  capability("buildkite", "pipelines.list", {
+    status: "READ_SUPPORTED", method: "GET", path: "/organizations/{org}/pipelines",
+    permission: "read_pipelines", evidenceRef: "https://buildkite.com/docs/apis/rest-api/pipelines",
+    requiredParams: ["org"],
+  }),
+  capability("buildkite", "pipelines.get", {
+    status: "READ_SUPPORTED", method: "GET", path: "/organizations/{org}/pipelines/{pipeline}",
+    permission: "read_pipelines", evidenceRef: "https://buildkite.com/docs/apis/rest-api/pipelines",
+    requiredParams: ["org", "pipeline"],
+  }),
+  capability("buildkite", "builds.list", {
+    status: "READ_SUPPORTED", method: "GET", path: "/organizations/{org}/builds",
+    permission: "read_builds", evidenceRef: "https://buildkite.com/docs/apis/rest-api/builds",
+    requiredParams: ["org"],
+  }),
+  capability("buildkite", "agents.list", {
+    status: "READ_SUPPORTED", method: "GET", path: "/organizations/{org}/agents",
+    permission: "read_agents", evidenceRef: "https://buildkite.com/docs/apis/rest-api/agents",
+    requiredParams: ["org"],
+  }),
+  capability("buildkite", "clusters.list", {
+    status: "READ_SUPPORTED", method: "GET", path: "/organizations/{org}/clusters",
+    permission: "read_clusters", evidenceRef: "https://buildkite.com/docs/apis/rest-api/clusters",
+    requiredParams: ["org"],
+  }),
+  capability("buildkite", "pipeline.write", {
+    status: "UNSUPPORTED_BY_PUBLIC_API", method: null, path: null,
+    permission: "write_pipelines", evidenceRef: "https://buildkite.com/docs/apis/rest-api/pipelines",
+    controlPlaneStatus: "QUARANTINED_UNTIL_RUNTIME_COMPENSATION_PROVEN",
+  }),
 ]);
 
 const capabilityByKey = new Map(
@@ -298,6 +360,12 @@ export function providerCredentialStatus(env = process.env) {
       "CONTABO_CLIENT_SECRET": credentialStatus(env.CONTABO_CLIENT_SECRET),
       "CONTABO_API_USER": credentialStatus(env.CONTABO_API_USER),
       "CONTABO_API_PASSWORD": credentialStatus(env.CONTABO_API_PASSWORD),
+    },
+    tailscale: {
+      "TAILSCALE_API_KEY": credentialStatus(env.TAILSCALE_API_KEY || env.TS_API_KEY),
+    },
+    buildkite: {
+      "BUILDKITE_API_TOKEN": credentialStatus(env.BUILDKITE_API_TOKEN || env.BUILDKITE_TOKEN),
     },
   };
 }
@@ -407,11 +475,64 @@ async function contaboAccessToken() {
   return contaboTokenCache.token;
 }
 
+function parseEnvFile(filePath) {
+  if (!existsSync(filePath)) return {};
+  const out = {};
+  for (const line of readFileSync(filePath, "utf8").split(/\r?\n/)) {
+    const s = line.trim();
+    if (!s || s.startsWith("#") || !s.includes("=")) continue;
+    const i = s.indexOf("=");
+    out[s.slice(0, i).trim()] = s.slice(i + 1).trim().replace(/^['"]|['"]$/g, "");
+  }
+  return out;
+}
+
+function loadSecretFromFiles(envKeys, files) {
+  for (const key of envKeys) {
+    const fromEnv = process.env[key];
+    if (fromEnv && String(fromEnv).trim()) return String(fromEnv).trim();
+  }
+  for (const filePath of files) {
+    const parsed = parseEnvFile(filePath);
+    for (const key of envKeys) {
+      if (parsed[key]) return parsed[key];
+    }
+  }
+  return "";
+}
+
+function loadTailscaleKey() {
+  return loadSecretFromFiles(
+    ["TAILSCALE_API_KEY", "TS_API_KEY"],
+    ["/root/CentralDark/secrets/tailscale.env", "/root/CentralDark/apps/modulos/mcp/.env"],
+  );
+}
+
+function loadBuildkiteToken() {
+  return loadSecretFromFiles(
+    ["BUILDKITE_API_TOKEN", "BUILDKITE_TOKEN"],
+    ["/root/CentralDark/secrets/buildkite.env", "/root/CentralDark/apps/modulos/mcp/.env"],
+  );
+}
+
 async function providerHeaders(provider, requestId = randomUUID()) {
   if (provider === "cloudflare") {
-    const token = process.env.CLOUDFLARE_API_TOKEN || process.env.CF_API_TOKEN;
+    const token = loadSecretFromFiles(
+      ["CLOUDFLARE_API_TOKEN", "CF_API_TOKEN"],
+      ["/root/CentralDark/secrets/cloudflare.env", "/root/CentralDark/apps/modulos/mcp/.env"],
+    );
     if (!token) throw new Error("CLOUDFLARE_CREDENTIALS_MISSING");
     return { Authorization: `Bearer ${token}`, Accept: "application/json", "Content-Type": "application/json" };
+  }
+  if (provider === "tailscale") {
+    const token = loadTailscaleKey();
+    if (!token) throw new Error("TAILSCALE_CREDENTIALS_MISSING");
+    return { Authorization: `Bearer ${token}`, Accept: "application/json" };
+  }
+  if (provider === "buildkite") {
+    const token = loadBuildkiteToken();
+    if (!token) throw new Error("BUILDKITE_CREDENTIALS_MISSING");
+    return { Authorization: `Bearer ${token}`, Accept: "application/json" };
   }
   const token = await contaboAccessToken();
   return {
@@ -423,7 +544,10 @@ async function providerHeaders(provider, requestId = randomUUID()) {
 }
 
 function providerBase(provider) {
-  return provider === "cloudflare" ? CLOUDFLARE_BASE : CONTABO_BASE;
+  if (provider === "cloudflare") return CLOUDFLARE_BASE;
+  if (provider === "tailscale") return TAILSCALE_BASE;
+  if (provider === "buildkite") return BUILDKITE_BASE;
+  return CONTABO_BASE;
 }
 
 function sanitizeError(error) {
@@ -452,6 +576,145 @@ async function callProvider(provider, request, { requestId } = {}) {
     throw error;
   }
   return { httpStatus: response.status, data: redacted };
+}
+
+export function summarizeTailscaleNetworkLogs(payload) {
+  const logs = Array.isArray(payload?.logs)
+    ? payload.logs
+    : Array.isArray(payload?.records)
+      ? payload.records.flatMap((record) => Array.isArray(record?.logs) ? record.logs : [record])
+      : [];
+  const nodes = new Set();
+  let virtualFlows = 0;
+  let subnetFlows = 0;
+  let exitFlows = 0;
+  let physicalFlows = 0;
+  let txBytes = 0;
+  let rxBytes = 0;
+  let txPackets = 0;
+  let rxPackets = 0;
+  let lastLoggedAt = null;
+  const countTraffic = (items) => {
+    if (!Array.isArray(items)) return 0;
+    for (const flow of items) {
+      txBytes += Number(flow?.txBytes || 0);
+      rxBytes += Number(flow?.rxBytes || 0);
+      txPackets += Number(flow?.txPkts || flow?.txPackets || 0);
+      rxPackets += Number(flow?.rxPkts || flow?.rxPackets || 0);
+    }
+    return items.length;
+  };
+  for (const logItem of logs) {
+    if (logItem?.nodeId) nodes.add(String(logItem.nodeId));
+    if (logItem?.srcNode?.nodeId) nodes.add(String(logItem.srcNode.nodeId));
+    for (const dst of Array.isArray(logItem?.dstNodes) ? logItem.dstNodes : []) {
+      if (dst?.nodeId) nodes.add(String(dst.nodeId));
+    }
+    virtualFlows += countTraffic(logItem?.virtualTraffic);
+    subnetFlows += countTraffic(logItem?.subnetTraffic);
+    exitFlows += countTraffic(logItem?.exitTraffic);
+    physicalFlows += countTraffic(logItem?.physicalTraffic);
+    if (logItem?.logged && (!lastLoggedAt || String(logItem.logged) > lastLoggedAt)) lastLoggedAt = String(logItem.logged);
+  }
+  return {
+    logMessages: logs.length,
+    nodeCount: nodes.size,
+    virtualFlows,
+    subnetFlows,
+    exitFlows,
+    physicalFlows,
+    txBytes,
+    rxBytes,
+    txPackets,
+    rxPackets,
+    lastLoggedAt,
+  };
+}
+
+export async function readTailscaleCapability(capabilityName, params = {}) {
+  const request = buildProviderRequest("tailscale", capabilityName, params);
+  if (!["READ_SUPPORTED", "FINANCIAL_READ_SUPPORTED", "DEPRECATED"].includes(request.item.status)) {
+    throw new Error("TAILSCALE_READ_CAPABILITY_REQUIRED");
+  }
+  if (request.item.secretBearing === true) {
+    throw new Error("BLOCKED_SECRET_BEARING_RESPONSE");
+  }
+  const result = await callProvider("tailscale", request);
+  return {
+    ok: true,
+    status: "PASS",
+    provider: "tailscale",
+    capability: capabilityName,
+    httpStatus: result.httpStatus,
+    evidenceRef: request.item.evidenceRef,
+    data: result.data,
+  };
+}
+
+export async function readTailscaleNetworkLogs({ start, end, tailnet = "-", limit = 200 } = {}) {
+  const endDate = end ? new Date(end) : new Date();
+  const startDate = start ? new Date(start) : new Date(endDate.getTime() - 15 * 60_000);
+  if (!Number.isFinite(startDate.getTime()) || !Number.isFinite(endDate.getTime())) throw new Error("TAILSCALE_LOG_WINDOW_INVALID");
+  if (startDate >= endDate) throw new Error("TAILSCALE_LOG_WINDOW_INVALID");
+  if (endDate.getTime() - startDate.getTime() > 24 * 60 * 60_000) throw new Error("TAILSCALE_LOG_WINDOW_TOO_LARGE");
+  const safeLimit = Math.max(1, Math.min(500, Number(limit) || 200));
+  const request = buildProviderRequest("tailscale", "network.logs", {
+    tailnet,
+    query: { start: startDate.toISOString(), end: endDate.toISOString() },
+  });
+  const result = await callProvider("tailscale", request);
+  const payload = result.data && typeof result.data === "object" ? result.data : {};
+  const allLogs = Array.isArray(payload.logs)
+    ? payload.logs
+    : Array.isArray(payload.records)
+      ? payload.records.flatMap((record) => Array.isArray(record?.logs) ? record.logs : [record])
+      : [];
+  const logs = allLogs.slice(Math.max(0, allLogs.length - safeLimit));
+  return {
+    ok: true,
+    status: "PASS",
+    provider: "tailscale",
+    capability: "network.logs",
+    httpStatus: result.httpStatus,
+    window: { start: startDate.toISOString(), end: endDate.toISOString() },
+    summary: summarizeTailscaleNetworkLogs({ logs: allLogs }),
+    logs: deepRedact(logs),
+    truncated: allLogs.length > logs.length,
+    totalKnown: allLogs.length,
+    returned: logs.length,
+    source: "TAILSCALE_API_LOGGING_NETWORK",
+  };
+}
+
+async function readTailscaleBridgeStatus() {
+  const response = await fetch("http://127.0.0.1:8098/api/tailscale/status", {
+    headers: { accept: "application/json" },
+    signal: AbortSignal.timeout(7_000),
+  });
+  const text = await response.text();
+  let parsed;
+  try { parsed = text ? JSON.parse(text) : null; } catch { parsed = { text: text.slice(0, 2_000) }; }
+  const data = deepRedact(parsed);
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: `TAILSCALE_BRIDGE_HTTP_${response.status}`,
+      provider: "tailscale",
+      capability: "bridge.status",
+      httpStatus: response.status,
+      source: "oauth-broker:/api/tailscale/status",
+      data,
+    };
+  }
+  return {
+    ok: true,
+    status: "PASS",
+    provider: "tailscale",
+    capability: "bridge.status",
+    httpStatus: response.status,
+    source: "oauth-broker:/api/tailscale/status",
+    data,
+  };
 }
 
 function operationFingerprint(input) {
@@ -513,17 +776,137 @@ async function finalizeOperation({ idempotencyKey, state, httpStatus, result }) 
 }
 
 const providerInputSchema = z.object({
-  provider: z.enum(["cloudflare", "contabo"]),
+  provider: z.enum(["cloudflare", "contabo", "tailscale", "buildkite"]),
   capability: z.string().min(1).max(100),
   params: z.record(z.string(), z.unknown()).optional().default({}),
 });
 
+export const tailscaleTools = [
+  {
+    name: "tailscale_status",
+    description: "Prova conectividade read-only com a API Tailscale pelo cofre existente e resume devices/capacidades sem expor credencial.",
+    description: "Prova conectividade read-only com a API Tailscale pelo cofre existente e resume quantidade de devices e capacidades permitidas, sem expor credencial.",
+    annotations: { ...READ, title: "Tailscale — status vivo" },
+    inputSchema: z.object({
+      tailnet: z.string().max(160).optional().default("-"),
+    }),
+    handler: async (input) => {
+      try {
+        const configured = Boolean(loadTailscaleKey());
+        if (!configured) {
+          return jsonBlock({ ok: false, status: "TAILSCALE_CREDENTIALS_MISSING", configured: false });
+        }
+        const live = await readTailscaleCapability("devices.list", { tailnet: input.tailnet });
+        const devices = Array.isArray(live.data?.devices)
+          ? live.data.devices
+          : Array.isArray(live.data)
+            ? live.data
+            : [];
+        return jsonBlock({
+          ok: true,
+          status: "PASS",
+          provider: "tailscale",
+          configured: true,
+          httpStatus: live.httpStatus,
+          tailnet: input.tailnet,
+          deviceCount: devices.length,
+          capabilities: PROVIDER_CAPABILITY_MATRIX
+            .filter((item) => item.provider === "tailscale" && item.secretBearing !== true)
+            .map((item) => ({
+              capability: item.capability,
+              status: item.status,
+              permission: item.permission,
+              controlPlaneStatus: item.controlPlaneStatus,
+            })),
+          secretExposed: false,
+        });
+      } catch (error) {
+        return jsonBlock({
+          ok: false,
+          status: sanitizeError(error),
+          provider: "tailscale",
+          configured: Boolean(loadTailscaleKey()),
+          secretExposed: false,
+        });
+      }
+    },
+  },
+  {
+    name: "tailscale_bridge_status",
+    description: "Mede a ponte Tailscale viva da VPS para a Casa reutilizando o OAuth Broker existente; retorna estado da tailnet e probes read-only já canônicos.",
+    annotations: { ...READ, title: "Tailscale — ponte VPS ↔ Casa" },
+    inputSchema: z.object({}),
+    handler: async () => {
+      try {
+        return jsonBlock(await readTailscaleBridgeStatus());
+      } catch (error) {
+        return jsonBlock({
+          ok: false,
+          status: sanitizeError(error),
+          provider: "tailscale",
+          capability: "bridge.status",
+          source: "oauth-broker:/api/tailscale/status",
+        });
+      }
+    },
+  },
+  {
+    name: "tailscale_devices_list",
+    description: "Lista devices do tailnet pela capability allowlisted existente devices.list. Somente leitura e resposta redigida.",
+    annotations: { ...READ, title: "Tailscale — devices" },
+    inputSchema: z.object({
+      tailnet: z.string().max(160).optional().default("-"),
+    }),
+    handler: async (input) => {
+      try {
+        return jsonBlock(await readTailscaleCapability("devices.list", { tailnet: input.tailnet }));
+      } catch (error) {
+        return jsonBlock({ ok: false, status: sanitizeError(error), provider: "tailscale", capability: "devices.list" });
+      }
+    },
+  },
+  {
+    name: "tailscale_dns_nameservers",
+    description: "Le os nameservers DNS do tailnet pela capability allowlisted existente dns.nameservers. Somente leitura.",
+    annotations: { ...READ, title: "Tailscale — DNS nameservers" },
+    inputSchema: z.object({
+      tailnet: z.string().max(160).optional().default("-"),
+    }),
+    handler: async (input) => {
+      try {
+        return jsonBlock(await readTailscaleCapability("dns.nameservers", { tailnet: input.tailnet }));
+      } catch (error) {
+        return jsonBlock({ ok: false, status: sanitizeError(error), provider: "tailscale", capability: "dns.nameservers" });
+      }
+    },
+  },
+  {
+    name: "tailscale_network_logs",
+    description: "Le Network Flow Logs do Tailscale pela API oficial usando o cofre existente. Janela padrao 15 min, maximo 24h, sem expor credencial.",
+    annotations: { ...READ, title: "Tailscale — Network Flow Logs" },
+    inputSchema: z.object({
+      start: z.string().optional(),
+      end: z.string().optional(),
+      tailnet: z.string().max(160).optional().default("-"),
+      limit: z.number().int().min(1).max(500).optional().default(200),
+    }),
+    handler: async (input) => {
+      try {
+        return jsonBlock(await readTailscaleNetworkLogs(input));
+      } catch (error) {
+        return jsonBlock({ ok: false, status: sanitizeError(error), provider: "tailscale", capability: "network.logs" });
+      }
+    },
+  },
+];
+
 export const adminProviderControlTools = [
+  ...tailscaleTools,
   {
     name: "provider_capabilities",
-    description: "Matriz canônica de capacidades oficiais Contabo/Cloudflare usadas pelo cockpit Admin. Não executa ação externa.",
+    description: "Matriz canônica de capacidades oficiais Contabo/Cloudflare/Tailscale usadas pelo cockpit Admin. Não executa ação externa.",
     annotations: { ...READ, title: "Providers — matriz de capacidades" },
-    inputSchema: z.object({ provider: z.enum(["cloudflare", "contabo"]).optional() }),
+    inputSchema: z.object({ provider: z.enum(["cloudflare", "contabo", "tailscale", "buildkite"]).optional() }),
     handler: async (input) => jsonBlock({
       ok: true,
       status: "PASS",

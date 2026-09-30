@@ -94,3 +94,51 @@ pm2 save
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+
+## Aprendizado verificável
+
+O grupo pode conversar livremente, mas conversa, concordância e persistência textual não provam aprendizado.
+
+```text
+LEARNED != SAID
+DISCUSSED != ADOPTED
+SAVED != APPLIED
+EVOLUTION_IS_NOT_MODEL_AGREEMENT=true
+```
+
+Estados permitidos:
+
+```text
+CONVERSA
+→ CANDIDATE
+→ REPLAY_OBSERVED
+→ EVOLUTION_RECEIPT
+→ PROVED_ADOPTED
+```
+
+`CANDIDATE` e `REPLAY_OBSERVED` permanecem no estado operacional do grupo e não podem ser publicados como “Aprendi hoje” nem promovidos automaticamente para `docs/CONSCIENCIA/APRENDIZADOS.md`.
+
+A promoção para memória canônica exige receipt fail-closed do owner já existente:
+
+```text
+.agents/skills/meta-lupa/scripts/evolution_gate.py
+```
+
+Contrato mínimo do receipt aplicado ao Grupo da Evolução:
+
+```text
+learning_id
+before_ref
+after_ref
+same_scope=true
+tests=PASS+evidence
+counterproof
+regressions=PASS+evidence
+verifier
+receipt_sha256
+verdict=PROVED_ADOPTED
+```
+
+O runtime pode experimentar um candidato em turno futuro para produzir evidência de replay, mas somente o estado `PROVED_ADOPTED` entra na memória permanente consumida por outras IAs.
+
+Aprendizados antigos sem receipt são históricos não provados e não devem ganhar autoridade retroativamente.

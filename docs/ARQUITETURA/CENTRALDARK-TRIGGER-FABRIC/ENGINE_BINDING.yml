@@ -1,9 +1,6 @@
 schema: centraldark.engine-binding.v3
-human_ai_entry: LEIA-ME-IA.md
-contract_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
+contract_owner: LEIA-ME-IA.md
 trigger_fabric_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
-binding_role: EXECUTION_BINDING
-binding_is_normative_owner: false
 binding_mode: LOAD_REFERENCE
 copy_brain: false
 engine_is_owner: false
@@ -30,6 +27,13 @@ engines:
     role: REPLACEABLE_ENGINE
     transport_owner: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
     runtime_specific_claims: MUST_BE_MEASURED
+  hermes:
+    role: EXECUTION_CONTINUITY_RUNTIME
+    owner: PIVETE/HERMES
+    prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md
+    transport_owner: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
+    required_for: [hermes_mission_routing, hermes_session_continuity, hermes_runtime_memory, hermes_hooks, hermes_scheduler, hermes_learning_transfer_test]
+    active_now: NOT_PROVEN_BY_THIS_DOCUMENT
   nous:
     role: REPLACEABLE_ENGINE
     transport_owner: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py
@@ -45,19 +49,11 @@ engines:
     role: REPLACEABLE_ENGINE
     inherits: [LEIA-ME-IA.md, AGENTS.md, Trigger Fabric]
 
-agent_runtimes:
-  hermes:
-    role: EXECUTION_CONTINUITY_RUNTIME
-    owner: PIVETE/HERMES
-    prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md
-    model_catalog_member: false
-    selectable_as_engine: false
-    required_for: [hermes_mission_routing, hermes_session_continuity, hermes_runtime_memory, hermes_hooks, hermes_scheduler, hermes_learning_transfer_test]
-    active_now: NOT_PROVEN_BY_THIS_DOCUMENT
-
 mandatory_inheritance:
-  - TLC23_OPEN
-  - TLC23_CLOSE
+  - GLOBAL_CONTRACT_ENFORCER
+  - DELTA_CONTINUO_GLOBAL
+  - FIXED_HUD_LIVE_DATA
+  - POMBO64_TRACE
   - DESTINATION_LOCK
   - CENTRALDARK_MASTER_CYCLE
   - ACORDAR
@@ -73,12 +69,14 @@ mandatory_inheritance:
   - FIXED_POINT
   - POST_GREEN_LOCK
   - REGISTRA
+  - RASTRO
   - BOOT
   - DISTINCT_ENGINEERING_COMPILER_ON_MATERIAL_GAP
   - CAPABILITY_CONTRACT_ROUTER
   - MEGAZORD_CENTRALDARK_AUTO_COMPOSITION
   - SPIRAL_TRAVERSAL_FORWARD_REVERSE
   - RUNTIME_PLUG_CONTRACT
+  - RUNTIME_PREFLIGHT_LINT
   - SIGNAL_TERRITORY_CRYSTALLIZATION
   - FIXED_POINT_10X12_ADVERSARIAL_WHEN_CRYSTALLIZING
   - ONE_WRITER_PER_SCOPE
@@ -125,6 +123,37 @@ megazord_binding:
   main_is_consequence: true
   deploy_is_consequence: true
 
+
+memory_binding:
+  owner: .agents/skills/brain-memory/SKILL.md
+  required_by_all_engines: true
+  applies_to: [CHATGPT, CLAUDE, HERMES, GROK, GEMINI, CODEX, NOUS, LOCAL_MODELS, FUTURE_ENGINES]
+  current_engine_included: true
+  engine_switch_changes_memory_contract: false
+  chat_ack_is_durable_memory: false
+  session_context_is_durable_memory: false
+  provider_local_memory_is_canonical: false
+  centraldark_durable_memory_is_primary: true
+  chefe_correction_preference_or_rule_auto_ingest: true
+  reuse_existing_memory_owner: true
+  create_parallel_memory: false
+  write_when_authorized_writer_available: true
+  unavailable_writer_behavior: EXISTING_AUTHORIZED_DURABLE_ROUTE_OR_UNKNOWN
+  saved_claim_requires: [LOCATION, READBACK]
+  unknown_is_not_pass: true
+
+runtime_preflight_binding:
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PREFLIGHT-LINT.yml
+  executable_consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py#cmd_preflight_lint
+  required_by_all_engines: true
+  creates_new_executor: false
+  applies_before: [MUTATION, DEPLOY, KILL, RESTART, DIRTY_SYNC, MULTI_SHELL_FANOUT, RUNTIME_GREEN_CLAIM]
+  fail_closed_on: [PREFLIGHT_CONTRACT_INVALID, HOST_TEMPLATE_INTERPOLATION_RISK, POWERSHELL_PID_AUTOMATIC_VARIABLE_COLLISION, MISSING_REQUIRED_PATH]
+  wrapper_parse_fail_is_not_target_fail: true
+  invalid_probe_must_not_become_fact: true
+  external_tool_host_must_invoke_when_applicable: true
+  runtime_executor_hard_enforcement: UNKNOWN_UNTIL_PROVEN
+
 runtime_plug_binding:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml
   conformance: scripts/trigger-fabric/runtime_plug_conformance.py
@@ -134,7 +163,7 @@ runtime_plug_binding:
   transport_adapter_required: true
   shared_heavy_runtime_consumer_lease: true
   unload_only_when_consumer_count_zero: true
-  swap_preserves: [INTENT, STATE, EVIDENCE_REFS, WRITER_SCOPE, PROOF_TARGET, RECEIPT, NEXT_CURSOR, SPIRAL_CURSOR, UNRESOLVED_SET]
+  swap_preserves: [INTENT, STATE, EVIDENCE_REFS, WRITER_SCOPE, PROOF_TARGET, RECEIPT, GLOBAL_GATE_RECEIPT, HUD_STATE_HASH, NEXT_CURSOR, SPIRAL_CURSOR, UNRESOLVED_SET]
   forward_reverse_swap_conformance_required: true
 
 spiral_binding:
@@ -152,13 +181,16 @@ spiral_binding:
 master_cycle_binding:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
   resolver: scripts/trigger-fabric/centraldark_master_cycle.py
+  global_contract: docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+  global_contract_enforcer: scripts/agent-call.mjs
+  deploy_gate: scripts/vps/deploy-guards-dispatcher.sh
+  future_executor_requires_global_gate: true
+  mutation_without_global_entry_gate: FAIL_CLOSED
+  delta_continuo_required: true
+  hud_fixed_live_data_required: true
   explicit_trigger: "!CENTRALDARK"
   plain_word_centraldark_does_not_trigger: true
-  core_chain_source: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#expands_to
-  mandatory_execution_extensions: [AUREOLA_BAHIA_BIBLICA, SEMANTIC_GREEN, POST_GREEN_LOCK]
-  extensions_role: BINDING_EXECUTION_EXTENSIONS_NOT_CORE_AUTHORITY
-  expands_to_role: EFFECTIVE_EXECUTION_CHAIN_DERIVED_FROM_CORE_PLUS_BINDING_EXTENSIONS
-  expands_to: [TLC23_OPEN, DESTINATION_LOCK, ACORDAR, CALIBRAR, MULTIBUSSOLA, AUREOLA_BAHIA_BIBLICA, PEGATUDO, PEGATUDO_HISTORY, DEBITO_COGNITIVO, READERS_MEASURE, META_LUPA, SCOPE_TEMPERATURE, DELTA_MINIMUM, DELTA_UTIL, RENDEZVOUS, RECONCILE, STITCH, OWNER, ONE_WRITER, PATCH, TESTE, CONTRAPROVA, REMEDICAO, SEMANTIC_GREEN, REALITY_JUDGE, FIXED_POINT, TLC23_CLOSE, POST_GREEN_LOCK, REGISTRA, HANDOFF, BOOT]
+  expands_to: [ACORDAR, CALIBRAR, MULTIBUSSOLA, AUREOLA_BAHIA_BIBLICA, META_LUPA, RECONCILIAR, DELTA_UTIL, CONTRAPROVA, REMEDICAO, SEMANTIC_GREEN, FIXED_POINT, POST_GREEN_LOCK, REGISTRA, RASTRO, BOOT]
   session_state_consumer: scripts/trigger-fabric/centraldark_master_cycle.py#resolve_with_session_state
   session_state_requires_caller_file: true
   explicit_activation_requires_chefe_provenance: true
@@ -342,3 +374,12 @@ labels:
   authority: "👑 PERMITO-SEGREDO"
   confirmed_result: "✅ PR CONFIRMADO"
   label_is_authority: false
+
+
+rastro_binding:
+  token: "🔏 !RASTRO"
+  owner: "AGENTS.md"
+  inherited_by_all_engines: true
+  response_without_trace: INVALID
+  required_on_write_claim: [COMMIT_SHA, PATH, LINK, READBACK]
+  memory_claim_requires_location: true

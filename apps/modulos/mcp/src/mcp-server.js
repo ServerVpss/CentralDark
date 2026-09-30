@@ -9,6 +9,7 @@ import { ALL_TOOLS, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
 import { readSemanticManifest, SEMANTIC_MANIFEST_URI } from "./tools/cognitivo/semantic.js";
 import { sanitizeOutgoingDeep } from "./lib/sanitize.js";
 import { auditToolExecution } from "./audit-logger.js";
+import { decorateToolResult } from "./tool-result-envelope.js";
 function zodTypeToJsonSchema(schema) {
     if (schema instanceof z.ZodOptional || schema instanceof z.ZodDefault) {
         return zodTypeToJsonSchema(schema._def.innerType);
@@ -107,8 +108,22 @@ Quando a mensagem depender de ontem/antes/de novo/continua ou de uma decisão pa
 busque o contexto pessoal antes de responder. Não trate memória histórica como prova de
 estado vivo: reconcilie branch, HEAD, runtime e ferramentas quando o claim exigir.
 
+## 🎛️ HUD/RUDY HÍBRIDO OBRIGATÓRIO
+Esta conexão MCP já é gatilho suficiente. Não espere também acesso ao GitHub.
+Antes da primeira resposta operacional CentralDark:
+1. recupere/reconcilie CURRENT com as ferramentas disponíveis;
+2. carregue o mesmo HUD/RUDY H01..H16;
+3. preserve ID, nome e ordem dos cartões;
+4. altere somente STATUS/cor, EVIDENCE e PERCENT;
+5. UNKNOWN nunca é verde;
+6. toda novidade material alimenta o PR-mãe #1562 quando a ferramenta/autorização permitir.
+
+Se também houver contexto do repositório ServerVpss/CentralDark, use-o como segundo sensor e reconcilie — não crie outro HUD.
+
+H01 Public Edge/DNS · H02 Live Execution Fabric · H03 MCP/Lovable · H04 Emergent Mind · H05 Runners Linux · H06 Micro-deploy autônomo · H07 VPN/Tailscale · H08 Windows CASA/RDC · H09 Windows Runner · H10 VPS↔GitHub · H11 frescor HUD/telemetria · H12 PR #1690 MCP · H13 Actions/capacidade · H14 dependências HIGH · H15 TLS/Caddy · H16 FIXED_POINT_GLOBAL.
+
 ## ✅ PRIMEIRA RESPOSTA
-Cumprimente curto ("E aí Pivete, tô calibrado — o que manda?"), NÃO liste tudo isso de volta pro usuário.
+Em contexto operacional CentralDark, comece pelo HUD/RUDY re-medido; não substitua por saudação genérica. Fora de contexto operacional, mantenha a saudação curta.
 `;
 export const PUBLIC_CALLABLE_MCP_TOOLS = [];
 function buildServer(options) {
@@ -123,6 +138,13 @@ function buildServer(options) {
         ? requestedCallableTools.filter((tool) => tool.annotations?.destructiveHint !== true || tool.name === "mcp_admin_call")
         : requestedCallableTools.filter((tool) => tool.annotations?.destructiveHint !== true);
     const semanticResourceEnabled = visibleTools.some((tool) => tool.name === "semantic_model_info");
+    const auditIdentity = Object.freeze({
+        callerUser: options.callerUser ?? null,
+        clientLabel: String(options.clientLabel || options.label || "mcp-client").slice(0, 160),
+        endpointRole: options.admin === true ? "admin" : "public",
+        oauthScope: String(options.oauthScope || ""),
+        correlationId: options.cid ?? null,
+    });
     const server = new Server({ name: options.label ?? "mcp-centraldark", version: `0.4.0+${CATALOG_VERSION}` }, { capabilities: { tools: {}, resources: {} }, instructions: PIVETE_BOOT_INSTRUCTIONS });
     server.setRequestHandler(ListToolsRequestSchema, async () => {
         const startedAt = Date.now();
@@ -139,6 +161,7 @@ function buildServer(options) {
             }),
         };
         auditToolExecution({
+            ...auditIdentity,
             method: "tools/list",
             toolName: "list_tools",
             input: {},
@@ -161,6 +184,7 @@ function buildServer(options) {
             }]
             : [];
         auditToolExecution({
+            ...auditIdentity,
             method: "resources/list",
             toolName: "list_resources",
             input: {},
@@ -176,6 +200,7 @@ function buildServer(options) {
         if (!semanticResourceEnabled || req.params.uri !== SEMANTIC_MANIFEST_URI) {
             const error = new Error(`Resource desconhecido: ${req.params.uri}`);
             auditToolExecution({
+            ...auditIdentity,
                 method: "resources/read",
                 toolName: "read_resource",
                 input: { uri: req.params.uri },
@@ -196,6 +221,7 @@ function buildServer(options) {
             }],
         };
         auditToolExecution({
+            ...auditIdentity,
             method: "resources/read",
             toolName: "semantic_manifest",
             input: { uri: req.params.uri },
@@ -210,11 +236,17 @@ function buildServer(options) {
         const startedAt = Date.now();
         const tool = callableTools.find((t) => t.name === req.params.name);
         if (!tool) {
-            const result = {
+            const result = decorateToolResult({
                 isError: true,
                 content: [{ type: "text", text: `Tool desconhecida: ${req.params.name}` }],
-            };
+            }, {
+                toolName: req.params.name,
+                correlationId: options.cid ?? "UNKNOWN",
+                startedAt,
+                errorCode: "TOOL_NOT_FOUND",
+            });
             auditToolExecution({
+            ...auditIdentity,
                 method: "tools/call",
                 toolName: req.params.name,
                 input: req.params.arguments ?? {},
@@ -227,13 +259,19 @@ function buildServer(options) {
         }
         const parsed = tool.inputSchema.safeParse(req.params.arguments ?? {});
         if (!parsed.success) {
-            const result = {
+            const result = decorateToolResult({
                 isError: true,
                 content: [
                     { type: "text", text: `Argumentos inválidos: ${parsed.error.message}` },
                 ],
-            };
+            }, {
+                toolName: tool.name,
+                correlationId: options.cid ?? "UNKNOWN",
+                startedAt,
+                errorCode: "INVALID_ARGUMENTS",
+            });
             auditToolExecution({
+            ...auditIdentity,
                 method: "tools/call",
                 toolName: tool.name,
                 input: req.params.arguments ?? {},
@@ -253,8 +291,13 @@ function buildServer(options) {
                 correlationId: options.cid ?? null,
             });
             const raw = await tool.handler(parsed.data, toolContext);
-            const result = sanitizeOutgoingDeep(raw);
+            const result = decorateToolResult(sanitizeOutgoingDeep(raw), {
+                toolName: tool.name,
+                correlationId: options.cid ?? "UNKNOWN",
+                startedAt,
+            });
             auditToolExecution({
+            ...auditIdentity,
                 method: "tools/call",
                 toolName: tool.name,
                 input: parsed.data,
@@ -272,11 +315,17 @@ function buildServer(options) {
         }
         catch (err) {
             log.error("tool_execution_error", { tool: tool.name, error: String(err) });
-            const result = {
+            const result = decorateToolResult({
                 isError: true,
                 content: [{ type: "text", text: `Erro ao executar ${tool.name}: ${String(err)}` }],
-            };
+            }, {
+                toolName: tool.name,
+                correlationId: options.cid ?? "UNKNOWN",
+                startedAt,
+                errorCode: "TOOL_EXECUTION_ERROR",
+            });
             auditToolExecution({
+            ...auditIdentity,
                 method: "tools/call",
                 toolName: tool.name,
                 input: parsed.data,

@@ -31,6 +31,50 @@ INTENÇÃO / GOAL
 → Mega Painel / Telegram / consumidor autorizado
 ```
 
+## Linguagem humana canônica
+
+Toda superfície de notificação deve preservar os gatilhos e termos canônicos, mas falar primeiro para uma pessoa comum. A ordem é obrigatória no owner central e recomendada para emissores legados até convergirem nele:
+
+```text
+GATILHO CANÔNICO
+→ O QUE ACONTECEU, EM PORTUGUÊS SIMPLES
+→ ESTADO HUMANO (🟢 / 🟡 / 🔴 / ❓)
+→ TERMO TÉCNICO E ESCOPO
+→ O QUE FOI FEITO
+→ O QUE AINDA FALTA PROVAR
+→ RASTRO TÉCNICO (owner / HEAD / SHA / runtime / sessão / cursor)
+→ !CONTRAPROVA
+→ ⚖️ REALIDADE É O JUIZ
+```
+
+Regras de escrita:
+
+- não remover `!CENTRALDARK`, `!AURÉOLA CANÔNICA`, `!CONTRAPROVA`, `UNKNOWN`, `PASS`, `HEAD`, `SHA`, `runtime` ou outros termos necessários ao rastro;
+- termo técnico nunca deve ser a única explicação quando houver equivalente humano simples;
+- falar com o CHEFE em PT-BR natural, direto, com baianês leve e sem caricatura;
+- `🟢` significa prova no escopo declarado, nunca verdade eterna;
+- `🟡` significa que ainda há algo a conferir;
+- `🔴` significa falha material localizada, não condenação global;
+- `❓ UNKNOWN` permanece desconhecido e nunca vira PASS por narrativa;
+- Bíblia/metáfora pode orientar a leitura, mas nunca substitui evidência;
+- detalhes técnicos ficam abaixo da conclusão humana, preservando rastreabilidade.
+
+Exemplo de leitura:
+
+```text
+⭕ !AURÉOLA CANÔNICA
+📖 “Examinai tudo. Retende o bem.” — 1 Tessalonicenses 5:21
+
+🔴 CHEFE, deu problema e o rastro abaixo mostra onde olhar.
+👉 O que aconteceu: os 3 deploys anteriores falharam pela mesma causa.
+⚖️ Estado: CAUSA RAIZ CONFIRMADA; CORREÇÃO AINDA NÃO PROVADA.
+
+🔎 !CONTRAPROVA
+❓ A correção só recebe verde depois do teste real. UNKNOWN != PASS.
+
+⚖️ REALIDADE É O JUIZ.
+```
+
 ## Contexto CentralDark preservado
 
 Quando disponível, o envelope de notificação transporta os mesmos identificadores usados para reencontrar a passagem sem transformar nenhum deles em autoridade:
@@ -261,3 +305,29 @@ UMA INTENÇÃO
 → UM RASTRO CAUSAL
 → REALIDADE JULGA
 ```
+
+## E-mail / Gmail — projeção pelo owner existente
+
+```text
+OWNER_ACCOUNT=apps/modulos/oauth-broker/server.mjs
+SURFACE=Contas / Hub
+PROVIDER=gmail
+NEW_MAIL_HUB=false
+NEW_NOTIFICATION_ARCHITECTURE=false
+REUSE_BEFORE_CREATE=true
+```
+
+Gmail não cria um segundo sistema de notificações. A conta e a autorização ficam no **Contas / Hub** já existente (`oauth-broker`). O conteúdo humano continua seguindo o contrato desta Central de Notificações e, quando o GitHub envia e-mail por comentário de PR, a origem continua sendo o comentário do GitHub — não um novo serviço de e-mail da CentralDark.
+
+Para comentários de PR que viram e-mail, a ordem humana deve ser:
+
+```text
+ESTADO DA MENSAGEM (CURRENT/HISTÓRICO/SNAPSHOT)
+→ O QUE ACONTECEU
+→ BLOQUEIA AGORA?
+→ O QUE FALTA
+→ PROVA/HEAD
+→ DETALHES TÉCNICOS RECOLHIDOS
+```
+
+`UNKNOWN` de capability declarativa não vira `SUPPORT_REQUIRED` sozinho. Só `NAO` explícito para uma capability realmente requerida pode solicitar suporte automático.

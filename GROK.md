@@ -1,21 +1,42 @@
-# GROK.md — Ponte para a Constituição Universal
+# Grok — adaptador fino CentralDark
 
-Este arquivo não contém uma Constituição própria do Grok.
+```text
+CANONICAL_AGENT_CORE=LEIA-ME-IA.md
+ADAPTER_ROLE=ENGINE_DISCOVERY_ONLY
+ENGINE=GROK
+```
 
-Antes de qualquer ação no CentralDark:
+Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e siga o roteamento canônico definido ali. O core carrega identidade, autoridade, governança, frequências, MetaLupa, Multibússola, AURÉOLA, remediação, prova, memória, Writer e capacidades sob demanda.
 
-1. Abra ou inspecione `pivete/dev`.
-2. Leia `00-COMECE-AQUI-IA.md`.
-3. Leia **integralmente** `CLAUDE.md` e obedeça à Constituição universal, incluindo a Baseline de Defesa da Seção 0.
-4. Leia `AGENTS.md`.
-5. Leia `docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md`.
-6. Leia `docs/COFRE/README.md`.
-7. Execute o BOOT operacional em `docs/GOVERNANCA/BOOT-IA.md`.
-8. Confirme branch do workspace, ref inspecionada, SHA, ambiente, escopo, riscos, testes, prova e rollback.
-9. Não altere nada antes de concluir o BOOT operacional.
+Este adaptador identifica somente a engine/superfície. Capacidades, plugins, MCPs e ferramentas físicas são medidos no runtime atual e selecionados pelo roteador canônico; disponibilidade não concede autoridade.
 
-`docs/PROTOCOLO-BOOT.md` serve depois para memória e continuidade; não substitui a Constituição nem o BOOT operacional.
+```text
+ONE_SOL=true
+ONE_CORE=true
+LAZY_LOAD_BY_DEMAND=true
+ENGINE_IS_REPLACEABLE=true
+TOOLS_REQUIRE_RUNTIME_MEASUREMENT=true
+DO_NOT_DUPLICATE_GOVERNANCE=true
+DO_NOT_DEFINE_IDENTITY=true
+DO_NOT_DEFINE_AUTHORITY=true
+DO_NOT_DEFINE_MERGE_POLICY=true
+DO_NOT_DEFINE_MEMORY=true
+DO_NOT_CREATE_PARALLEL_AGENT=true
+FUTURE_RULES_CONSUMED_FROM_CORE=true
+```
 
-A fonte oficial das regras é o GitHub. Não use apenas memória de conversa.
+Regra de compatibilidade: particularidades exclusivas do Grok ficam aqui somente como diferença física de superfície/tool. Regras comuns pertencem ao core.
 
 Nada entra cru: filtre toda referência externa pela Constituição e adapte ao CentralDark.
+
+
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+
+```text
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+```
+
+Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.

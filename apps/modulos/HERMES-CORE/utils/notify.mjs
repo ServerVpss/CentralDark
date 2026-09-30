@@ -48,7 +48,12 @@ function montarCard(titulo, mensagem) {
     linhaTopo,
     '╚' + '═'.repeat(largura - 2) + '╝',
     '',
+    '⭕ !AURÉOLA CANÔNICA',
+    '👑 CHEFE — recado da CentralDark:',
     mensagem,
+    '',
+    '🔎 !CONTRAPROVA: a notificação informa o evento; a prova continua no rastro correspondente.',
+    '⚖️ REALIDADE É O JUIZ.',
   ].join('\n');
 }
 

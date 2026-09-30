@@ -8,8 +8,11 @@ export interface GrafoVivoSettings {
   intervaloSegundos: number;
   abrirNotaAoClicar: boolean;
   knowledgeHubPublishEnabled: boolean;
+  knowledgeHubAutoSyncEnabled: boolean;
+  knowledgeHubAutoSyncDelaySeconds: number;
   knowledgeHubUrl: string;
   knowledgeHubToken: string;
+  brainManifestUrl: string;
   autoUpdateAtivo: boolean;
   autoUpdateBaseUrl: string;
   autoUpdateIntervaloMinutos: number;
@@ -18,14 +21,17 @@ export interface GrafoVivoSettings {
 }
 
 export const DEFAULT_SETTINGS: GrafoVivoSettings = {
-  // Padrão 2026-09-15: consumidores internos passam pela API única CentralDark.
-  // A API segura encaminha /api/graph ao GraphPanel; grafo.centralldark.com fica origem interna/legado.
-  urlGrafo: "https://api.centralldark.com/api/graph?mode=vivo",
+  // Padrão 2026: plugin consome o mesmo Grafo Vivo e envia matéria candidata ao Hub único.
+  // mode=vivo = PM2 operacional (leve, tempo real). UI full: /api/graph
+  urlGrafo: "https://grafo.centralldark.com/api/graph?mode=vivo",
   intervaloSegundos: 15,
   abrirNotaAoClicar: true,
   knowledgeHubPublishEnabled: true,
+  knowledgeHubAutoSyncEnabled: true,
+  knowledgeHubAutoSyncDelaySeconds: 12,
   knowledgeHubUrl: "https://api.centralldark.com/memoria/ingest",
   knowledgeHubToken: "",
+  brainManifestUrl: "https://api.centralldark.com/memoria/manifest?scope=brain&mode=vivo",
   autoUpdateAtivo: true,
   autoUpdateBaseUrl: "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/plugin-release",
   autoUpdateIntervaloMinutos: 10,
@@ -48,7 +54,7 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("URL do grafo")
-      .setDesc("Endpoint seguro/autenticado da API única CentralDark que retorna o JSON {nodes, edges}.")
+      .setDesc("Endpoint que retorna o JSON {nodes, edges}.")
       .addText((txt) =>
         txt
           .setValue(this.plugin.settings.urlGrafo)
@@ -90,6 +96,26 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
+      .setName("Auto-sync de notas para o Hub")
+      .setDesc("Ao criar/modificar nota Markdown, envia snapshot candidato pela API. Não executa anexos nem promove verdade sem CI/receipt.")
+      .addToggle((tg) =>
+        tg.setValue(this.plugin.settings.knowledgeHubAutoSyncEnabled).onChange(async (v) => {
+          this.plugin.settings.knowledgeHubAutoSyncEnabled = v;
+          await this.plugin.saveSettings();
+        }),
+      );
+
+    new Setting(containerEl)
+      .setName("Atraso do auto-sync (segundos)")
+      .setDesc("Debounce para não enviar a cada tecla. Mínimo: 2 s.")
+      .addText((txt) =>
+        txt.setValue(String(this.plugin.settings.knowledgeHubAutoSyncDelaySeconds)).onChange(async (v) => {
+          this.plugin.settings.knowledgeHubAutoSyncDelaySeconds = Math.max(2, parseInt(v, 10) || 12);
+          await this.plugin.saveSettings();
+        }),
+      );
+
+    new Setting(containerEl)
       .setName("URL de ingestão do Hub")
       .setDesc("Endpoint único de ingestão da Memória API.")
       .addText((txt) =>
@@ -103,8 +129,21 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
-      .setName("Segredo local da API/Hub")
-      .setDesc("Usado como Bearer na API e no Hub. Fica somente no Obsidian; nunca versionar.")
+      .setName("URL do manifesto BRAIN")
+      .setDesc("Leitura do índice vivo que a API gera a partir de BRAIN/Git/CI/CD/VPS.")
+      .addText((txt) =>
+        txt
+          .setPlaceholder("https://api.centralldark.com/memoria/manifest?scope=brain&mode=vivo")
+          .setValue(this.plugin.settings.brainManifestUrl)
+          .onChange(async (v) => {
+            this.plugin.settings.brainManifestUrl = v.trim();
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    new Setting(containerEl)
+      .setName("Token local do Hub")
+      .setDesc("Fica apenas nas configurações locais do Obsidian. Não versionar nem colar no repositório.")
       .addText((txt) => {
         txt.inputEl.type = "password";
         txt

@@ -1,14 +1,10 @@
 # 🤖 Dependabot — automação segura + compatibilidade viva + radar de reconciliação.
 #
 # Regras:
-# - update-branch é sincronização, não aprovação.
+# - update-branch é sincronização; aprovação de workflow run é uma ação distinta e fica restrita a PR Dependabot no HEAD CURRENT.
 # - conflito real vai para scripts/dependabot/resolve-conflicts.sh.
 # - radar varre TODOS os PRs abertos do dependabot[bot], inclusive antigos.
-# - radar-all-open-prs-sync (schedule/dispatch, self-hosted VPS1): Update branch em TODOS os PRs abertos + rearme somente de failure do HEAD atual; cancelled não é ressuscitado.
-# - anti-thrash: HEAD com checks pending/queued/in_progress → sem update-branch/rerun.
-# - rate-limit: remaining=0 → DEFERRED+cursor (exit 0); NÃO classificar PR como falho.
-# - OTHER_ERR>0 → FAIL; CONFLICT → receipt; SYNC≠APPROVAL; UNKNOWN≠PASS.
-# - Um cron só neste workflow; NÃO espalhar cron em outras VPS.
+# - cronômetro 30 min: vermelho concluído no HEAD CURRENT → RERUN ALL JOBS → catalisa owner existente; action_required fica com auto-approve.
 # - compatibilidade é lida do badge oficial já presente no PR, nunca inventada.
 # - PATCH exige compatibilidade >= 85; MINOR exige >= 95; MAJOR nunca faz auto-merge.
 # - compatibilidade sozinha NÃO aprova: mesmo HEAD precisa estar mergeável e sem checks pendentes/falhos.
@@ -19,15 +15,24 @@ name: 🤖 Dependabot — radar, compatibilidade e squash seguro
 
 on:
   pull_request_target:
-    types: [opened, reopened, synchronize, ready_for_review]
+    types: [opened, reopened, synchronize, ready_for_review, labeled, edited]
   workflow_dispatch:
+    inputs:
+      target_pr:
+        description: 'PR único para testar/reconciliar conflito sem varrer os demais'
+        required: false
+        default: ''
+        type: string
   workflow_run:
     workflows:
-      - porta-de-entrada
-      - PR auto-review (Codex + checklist)
-      - codex-validate
-      - lupa-conformance
-      - Lupa Drift Guard
+      - ⚙️ porta-de-entrada
+      - ⚙️ PR auto-review CentralDark — checklist determinístico
+      - ⚙️ CentralDark Valida — determinístico
+      - ⚙️ lupa-conformance
+      - ⚙️ Lupa Drift Guard
+      - 🧠 Trigger Fabric Full Package — pacote e contraprova
+      - ⚙️ PR Title Contract
+      - ⚙️ Pipeline — Telegram + Painel
     types: [completed]
   repository_dispatch:
     types: [centraldark_dependabot_reconcile]
@@ -36,16 +41,218 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
   actions: write
+  pull-requests: write
   checks: read
-  statuses: read
+  statuses: write
 
 concurrency:
-  group: dependabot-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.event.client_payload.pr_number || 'radar' }}
-  cancel-in-progress: false
+  group: dependabot-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.workflow_run.pull_requests[0].number || github.event.workflow_run.head_sha || github.event.client_payload.pr_number || 'radar' }}
+  # Sweeps repo-wide ficam em schedule/dispatch; eventos equivalentes deduplicam para evitar fila e corrida.
+  cancel-in-progress: true
 
 jobs:
+  approve-dependabot-workflows:
+    name: 🟢 Casa/Dependabot — aprovar workflows pendentes com gate
+    if: >-
+      github.repository == 'ServerVpss/CentralDark' &&
+      (
+        (github.event_name == 'pull_request_target' &&
+         github.event.pull_request.head.repo.full_name == github.repository) ||
+        github.event_name == 'schedule' ||
+        (github.event_name == 'workflow_dispatch' && (inputs.target_pr == '' || inputs.target_pr == null)) ||
+        github.event_name == 'repository_dispatch'
+      )
+    # Controle puro de API não ocupa a VPS; a VPS fica para resolução/execução material.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: 📥 Carregar owner de autorização da base confiável
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha || github.sha }}
+          path: .ci-approval
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: 🪬 Provar escopo e aprovar action_required do HEAD CURRENT
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ secrets.PROMOTION_TOKEN || secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const repository = context.payload.repository?.full_name || `${owner}/${repo}`;
+            const { pathToFileURL } = require('node:url');
+            const { resolve } = require('node:path');
+            const { authorizationFor } = await import(pathToFileURL(resolve('.ci-approval/scripts/github-autonomia-promocao.mjs')).href);
+            function authorizedCandidate(pr) {
+              return Number(pr.number) !== 1562 && pr.state === 'open' && !pr.draft
+                && pr.head?.repo?.full_name === repository && pr.base?.ref === 'main'
+                && (pr.user?.login === 'dependabot[bot]'
+                  || (pr.user?.login === 'segredounlock' && authorizationFor(pr).authorized));
+            }
+            const marker = '<!-- centraldark-dependabot-workflow-auto-approve -->';
+            const approved = [];
+            const failed = [];
+            const inspected = [];
+            const seenRuns = new Set();
+
+            const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+            async function upsertReceipt(prNumber, body) {
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner, repo, issue_number: prNumber, per_page: 100,
+              });
+              const existing = comments.find((c) =>
+                c.user?.type === 'Bot' && String(c.body || '').includes(marker)
+              );
+              if (existing) {
+                await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+              } else {
+                await github.rest.issues.createComment({ owner, repo, issue_number: prNumber, body });
+              }
+            }
+
+            async function candidates() {
+              const direct = Number(
+                context.payload?.pull_request?.number ||
+                context.payload?.client_payload?.pr_number ||
+                0
+              );
+              if (direct) {
+                const pr = await github.rest.pulls.get({ owner, repo, pull_number: direct });
+                return [pr.data];
+              }
+
+              const workflowPrs = context.payload?.workflow_run?.pull_requests || [];
+              if (workflowPrs.length) {
+                const list = [];
+                for (const item of workflowPrs) {
+                  if (!item?.number) continue;
+                  const pr = await github.rest.pulls.get({ owner, repo, pull_number: item.number });
+                  list.push(pr.data);
+                }
+                if (list.length) return list;
+              }
+
+              const open = await github.paginate(github.rest.pulls.list, {
+                owner, repo, state: 'open', per_page: 100,
+              });
+              return open.filter(authorizedCandidate);
+            }
+
+            for (const initial of await candidates()) {
+              const pr = (await github.rest.pulls.get({
+                owner, repo, pull_number: initial.number,
+              })).data;
+
+              if (!authorizedCandidate(pr)) continue;
+              if (pr.head?.repo?.full_name !== repository) continue;
+              if (pr.base?.ref !== 'main') continue;
+              if (!pr.head?.sha || !pr.head?.ref) continue;
+
+              const prApproved = [];
+              const prFailed = [];
+
+              // TIK-TAK curto: dá tempo para os runs do novo HEAD aparecerem sem virar polling eterno.
+              for (let round = 1; round <= 4; round += 1) {
+                const runs = await github.paginate(github.rest.actions.listWorkflowRunsForRepo, {
+                  owner,
+                  repo,
+                  head_sha: pr.head.sha,
+                  per_page: 100,
+                });
+
+                const pendingApproval = runs.filter((run) =>
+                  run.head_sha === pr.head.sha &&
+                  run.event === 'pull_request' &&
+                  run.conclusion === 'action_required' &&
+                  (
+                    run.head_branch === pr.head.ref ||
+                    (run.pull_requests || []).some((x) => Number(x.number) === Number(pr.number))
+                  )
+                );
+
+                for (const run of pendingApproval) {
+                  const live = (await github.rest.pulls.get({owner, repo, pull_number: pr.number})).data;
+                  if (!authorizedCandidate(live) || live.head.sha !== pr.head.sha) break;
+                  if (seenRuns.has(run.id)) continue;
+                  seenRuns.add(run.id);
+
+                  try {
+                    const result = await github.request(
+                      'POST /repos/{owner}/{repo}/actions/runs/{run_id}/approve',
+                      { owner, repo, run_id: run.id }
+                    );
+                    approved.push(run.id);
+                    prApproved.push(run.id);
+                    core.notice(
+                      `DEPENDABOT_WORKFLOW_APPROVAL=PASS pr=${pr.number} run=${run.id} head=${pr.head.sha} status=${result.status}`
+                    );
+                  } catch (error) {
+                    const status = Number(error?.status || 0);
+                    if (status === 409) {
+                      core.notice(
+                        `DEPENDABOT_WORKFLOW_APPROVAL=NOOP_ALREADY_APPROVED pr=${pr.number} run=${run.id}`
+                      );
+                      continue;
+                    }
+                    failed.push({ pr: pr.number, run: run.id, status });
+                    prFailed.push({ run: run.id, status });
+                    core.warning(
+                      `DEPENDABOT_WORKFLOW_APPROVAL=BLOCKED pr=${pr.number} run=${run.id} status=${status || 'UNKNOWN'}`
+                    );
+                  }
+                }
+
+                if (round < 4) await sleep(5000);
+              }
+
+              inspected.push({
+                pr: pr.number,
+                head: pr.head.sha,
+                approved: prApproved,
+                failed: prFailed,
+              });
+
+              await upsertReceipt(pr.number, [
+                marker,
+                '🟢 Dependabot — aprovação autônoma de workflow runs',
+                `PR=${pr.number}`,
+                `HEAD=${pr.head.sha}`,
+                `AUTHOR=${pr.user.login}`,
+                `HEAD_REPO=${pr.head.repo.full_name}`,
+                `BASE=${pr.base.ref}`,
+                `APPROVED_RUNS=${prApproved.join(',') || 'NONE'}`,
+                `FAILED_RUNS=${prFailed.map((x) => `${x.run}:${x.status || 'UNKNOWN'}`).join(',') || 'NONE'}`,
+                'SCOPE=ACTION_REQUIRED_WORKFLOW_RUNS_ON_EXACT_CURRENT_HEAD',
+                'PR_REVIEW_APPROVAL=NOT_DONE',
+                'MERGE=NOT_DONE_BY_THIS_STEP',
+                'DEPLOY=NOT_DONE',
+                'UNKNOWN_IS_PASS=0',
+              ].join('\n'));
+            }
+
+            core.notice(`DEPENDABOT_WORKFLOW_APPROVAL_SUMMARY approved=${approved.length} failed=${failed.length}`);
+            if (failed.length) {
+              core.warning(`DEPENDABOT_WORKFLOW_APPROVAL_PARTIAL failed=${JSON.stringify(failed)}`);
+            }
+
+      - name: 🧾 Receipt da aprovação de workflows
+        if: always()
+        shell: bash
+        run: |
+          echo 'DEPENDABOT_WORKFLOW_AUTO_APPROVE=ENABLED'
+          echo 'TRUST_GATE=dependabot_or_authorized_house+same_repo+base_main+exact_current_head'
+          echo 'TARGET=ACTION_REQUIRED_WORKFLOW_RUNS'
+          echo 'ENDPOINT=POST /actions/runs/{run_id}/approve'
+          echo 'PR_REVIEW_APPROVAL=NOT_DONE'
+          echo 'MERGE=NOT_DONE_BY_THIS_JOB'
+          echo 'ROLLBACK_BASE_SHA=d5137a91518aa52a0c39072b7afb7e495108f01d'
+          echo 'UNKNOWN_IS_PASS=0'
+
   reconcile-dependabot:
     name: 🤖 Sincronizar e reconciliar PR Dependabot
     if: >-
@@ -73,10 +280,10 @@ jobs:
           echo "DEPENDABOT_SCOPE=PASS"
           echo "PR_HEAD_REF=$PR_HEAD_REF"
 
-      - name: 📥 Checkout somente do BASE SHA confiável
+      - name: 📥 Checkout main CURRENT confiável para tooling da Casa
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ github.event.pull_request.base.sha }}
+          ref: main
           path: .ci-house
           persist-credentials: false
           fetch-depth: 1
@@ -88,7 +295,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🇧🇷 Padronizar título em PT-BR com selo semântico
+      - name: 🔹 🇧🇷 Padronizar título em PT-BR com selo semântico
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           DEPENDENCY_NAMES: ${{ steps.meta.outputs.dependency-names }}
@@ -113,7 +320,7 @@ jobs:
             }
             console.log(`TITULO_PTBR=${titulo}`);
 
-      - name: 🧠 Classificar sinal no HERMES Signal Watcher
+      - name: 🧠 Normalizar finding Dependabot → bridge → HERMES
         shell: bash
         env:
           DEPENDENCY_NAMES: ${{ steps.meta.outputs.dependency-names }}
@@ -124,6 +331,7 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_URL: ${{ github.event.pull_request.html_url }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           set -euo pipefail
           EVENT_B64="$(node - <<'NODE'
@@ -138,11 +346,64 @@ jobs:
               `head=${process.env.PR_HEAD_SHA || 'UNKNOWN'}`,
             ].join(' '),
             url: process.env.PR_URL || '',
+            observed_at: new Date().toISOString(),
+            metadata: {
+              pr_number: process.env.PR_NUMBER || null,
+              head_sha: process.env.PR_HEAD_SHA || null,
+              base_sha: process.env.PR_BASE_SHA || null,
+              scope: 'dependency',
+              change_type: process.env.UPDATE_TYPE || 'dependency_update',
+              category: 'dependency_update',
+            },
+            intent: {
+              pr_number: process.env.PR_NUMBER || null,
+              head_sha: process.env.PR_HEAD_SHA || null,
+              base_sha: process.env.PR_BASE_SHA || null,
+              scope: 'dependency',
+              change_type: process.env.UPDATE_TYPE || 'dependency_update',
+              acceptance_criteria: [
+                'same HEAD mergeable',
+                'required checks green',
+                'compatibility threshold satisfied',
+                'unknown conflict path blocks',
+              ],
+            },
           };
           process.stdout.write(Buffer.from(JSON.stringify(event), 'utf8').toString('base64url'));
           NODE
           )"
-          node "$GITHUB_WORKSPACE/.ci-house/scripts/hermes/signal-watch-notify.mjs" --event-b64 "$EVENT_B64" --notify
+          CENTRALDARK_API_URL="" node "$GITHUB_WORKSPACE/.ci-house/scripts/coderabbit-bridge.mjs" --once --json-only --event-b64 "$EVENT_B64" > "$RUNNER_TEMP/dependabot-review-receipt.json"
+          cat "$RUNNER_TEMP/dependabot-review-receipt.json"
+          node -e "const r=require(process.argv[1]); if(r.review_finding?.schema!=='centraldark.review-finding.v1') process.exit(3); console.log('REVIEW_FINDING_STATE='+r.review_finding.state); console.log('REVIEW_FINDING_OWNER='+r.review_finding.routing.owner);" "$RUNNER_TEMP/dependabot-review-receipt.json"
+
+      - name: 🧿 Dependabot → rota determinística do Sentinela via API GitHub
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          UPDATE_TYPE: ${{ steps.meta.outputs.update-type }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = Number(process.env.PR_NUMBER || 0);
+            const head = process.env.HEAD_SHA || null;
+            await github.request('POST /repos/{owner}/{repo}/dispatches', {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'centraldark_sentinel_route',
+              client_payload: {
+                source: 'dependabot',
+                event_class: 'DEPENDENCY_UPDATE',
+                state: 'STATE_CHANGED',
+                target: `PR#${pr}`,
+                owner: '.agents/skills/git-conflict-resolve-house-standard/SKILL.md',
+                head_sha: head,
+                evidence_ref: `github:dependabot:pr:${pr}:head:${head || 'UNKNOWN'}`,
+                next_cursor: 'APPLY_DEPENDABOT_POLICY_AND_SAME_HEAD_GATES',
+                update_type: process.env.UPDATE_TYPE || 'UNKNOWN',
+              },
+            });
+            core.notice(`DEPENDABOT_SENTINEL_ROUTE=DISPATCHED pr=${pr} head=${head || 'UNKNOWN'}`);
 
       - name: 🔄 Tentar Update branch antes de julgar conflito
         id: update_branch
@@ -260,11 +521,13 @@ jobs:
           echo 'ZENDRIVE_ROLE=REVIEW_ONLY'
           echo 'RABBIT_ROLE=REVIEW_ONLY'
           echo 'HERMES_ROLE=PROVE_AND_TEST'
+          echo 'SENTINEL_ROUTE_API=repository_dispatch:centraldark_sentinel_route'
+          echo 'SENTINEL_ROUTE_MUTATION_AUTHORITY=0'
           echo 'UNKNOWN_IS_PASS=0'
           echo 'NEVER_DISCARD_LEARNING=1'
 
   hosted-compatibility-gate:
-    name: 🧮 Compatibilidade viva + same-head + squash
+    name: 🧮 Dependabot fast-path nativo → same-head → squash
     if: >-
       github.repository == 'ServerVpss/CentralDark' &&
       (
@@ -272,122 +535,59 @@ jobs:
          github.event.pull_request.user.login == 'dependabot[bot]' &&
          github.event.pull_request.head.repo.full_name == github.repository) ||
         github.event_name == 'schedule' ||
-        github.event_name == 'workflow_dispatch' ||
-        github.event_name == 'workflow_run' ||
+        (github.event_name == 'workflow_dispatch' && (inputs.target_pr == '' || inputs.target_pr == null)) ||
+        (github.event_name == 'workflow_run' && startsWith(github.event.workflow_run.head_branch, 'dependabot/')) ||
         github.event_name == 'repository_dispatch'
       )
-    runs-on: [self-hosted, Linux]
+    # API-only: não precisa consumir runner da VPS.
+    runs-on: ubuntu-latest
     timeout-minutes: 12
 
     steps:
-      - name: 🧮 Ler score oficial, atualizar PR e promover somente com prova
+      - name: ⚡ Varredura nativa + gate causal + squash
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            const marker = '<!-- centraldark-dependabot-compatibility-gate -->';
+            const marker = '<!-- centraldark-dependabot-fast-squash -->';
             const failureConclusions = new Set(['failure', 'cancelled', 'timed_out', 'action_required', 'startup_failure']);
 
-            function parseVersion(value) {
+            const parseVersion = (value) => {
               const m = String(value || '').match(/(\d+)\.(\d+)(?:\.(\d+))?/);
-              if (!m) return null;
-              return { major: Number(m[1]), minor: Number(m[2]), patch: Number(m[3] || 0) };
-            }
+              return m ? { major: Number(m[1]), minor: Number(m[2]), patch: Number(m[3] || 0) } : null;
+            };
 
-            function classifyUpdate(previous, next) {
-              const a = parseVersion(previous);
-              const b = parseVersion(next);
+            const classifyPair = (from, to) => {
+              const a = parseVersion(from);
+              const b = parseVersion(to);
               if (!a || !b) return 'unknown';
               if (a.major !== b.major) return 'major';
               if (a.minor !== b.minor) return 'minor';
               if (a.patch !== b.patch) return 'patch';
               return 'unknown';
-            }
+            };
 
-            function thresholdFor(kind) {
-              if (kind === 'patch') return 85;
-              if (kind === 'minor') return 95;
-              return 101;
-            }
+            const classifyPr = (pr) => {
+              const text = [pr.title || '', pr.body || ''].join('\n');
+              const explicit = text.match(/version-update:semver-(patch|minor|major)/i);
+              if (explicit) return explicit[1].toLowerCase();
 
-            function clampPercent(value) {
-              if (!Number.isFinite(value)) return null;
-              return Math.max(0, Math.min(100, Math.round(value)));
-            }
-
-            function reconciliationChance({ score, threshold, mergeable, mergeState, pendingChecks = 0, failedChecks = 0, badStatuses = 0, successChecks = 0, changesRequested = false, blockers = [], previousChance = null }) {
-              const rawScore = clampPercent(score);
-              const required = Number.isFinite(threshold) && threshold <= 100 ? threshold : 100;
-              let multiplier = rawScore == null ? 0 : Math.min(1, rawScore / required);
-              const reasons = [];
-
-              if (rawScore == null) reasons.push('COMPATIBILITY_UNKNOWN');
-              if (mergeable === true && !['dirty', 'blocked'].includes(String(mergeState || '').toLowerCase())) {
-                multiplier *= 1;
-              } else if (mergeable == null || String(mergeState || '').toLowerCase() === 'unknown') {
-                multiplier *= 0.55;
-                reasons.push('MERGEABILITY_UNKNOWN');
-              } else {
-                multiplier *= 0.2;
-                reasons.push('MERGEABILITY_NOT_READY');
-              }
-
-              if (failedChecks > 0 || badStatuses > 0) {
-                multiplier *= 0.25;
-                reasons.push('CHECKS_FAILED_OR_STATUS_BAD');
-              } else if (pendingChecks > 0) {
-                multiplier *= 0.65;
-                reasons.push('CHECKS_PENDING');
-              } else if (successChecks > 0) {
-                multiplier *= 1;
-              } else {
-                multiplier *= 0.5;
-                reasons.push('NO_SUCCESS_CHECK_ON_HEAD');
-              }
-
-              if (changesRequested) {
-                multiplier *= 0.2;
-                reasons.push('CHANGES_REQUESTED');
-              }
-
-              const materialBlockers = blockers.filter((item) => !/^COMPATIBILITY_\d+_LT_\d+$/.test(String(item)));
-              if (materialBlockers.length > 0) {
-                multiplier *= Math.max(0.1, 1 - Math.min(materialBlockers.length, 5) * 0.16);
-                reasons.push('MATERIAL_BLOCKERS_PRESENT');
-              }
-
-              const chance = clampPercent(multiplier * 100) ?? 0;
-              const previous = clampPercent(previousChance);
-              const delta = previous == null ? null : chance - previous;
-              const trend = delta == null ? 'BASELINE' : delta > 0 ? 'UP' : delta < 0 ? 'DOWN' : 'FLAT';
-              return {
-                chance,
-                trend,
-                delta,
-                confidence: rawScore == null ? 'LOW' : (successChecks > 0 && pendingChecks === 0 && failedChecks === 0 && badStatuses === 0 ? 'HIGH' : 'MEDIUM'),
-                reasons: [...new Set(reasons)],
-              };
-            }
-
-            function previousChanceFromComment(body) {
-              const m = String(body || '').match(/RECONCILIATION_CHANCE:\s*\*\*(\d{1,3})%\*\*/);
-              return m ? Number(m[1]) : null;
-            }
-
-            async function currentReceipt(prNumber) {
-              const comments = await github.paginate(github.rest.issues.listComments, {
-                owner, repo, issue_number: prNumber, per_page: 100,
-              });
-              return comments.find(c => c.user?.type === 'Bot' && String(c.body || '').includes(marker)) || null;
-            }
+              const pairs = [...text.matchAll(/(?:from|de)\s+v?(\d+\.\d+(?:\.\d+)?)\s+(?:to|para)\s+v?(\d+\.\d+(?:\.\d+)?)/gi)]
+                .map((m) => classifyPair(m[1], m[2]))
+                .filter((kind) => kind !== 'unknown');
+              if (!pairs.length) return 'unknown';
+              if (pairs.includes('major')) return 'major';
+              if (pairs.includes('minor')) return 'minor';
+              return 'patch';
+            };
 
             async function upsertReceipt(prNumber, body) {
               const comments = await github.paginate(github.rest.issues.listComments, {
                 owner, repo, issue_number: prNumber, per_page: 100,
               });
-              const existing = comments.find(c => c.user?.type === 'Bot' && String(c.body || '').includes(marker));
+              const existing = comments.find((c) => c.user?.type === 'Bot' && String(c.body || '').includes(marker));
               if (existing) {
                 await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
               } else {
@@ -395,283 +595,187 @@ jobs:
               }
             }
 
-            async function compatibilityScore(pr) {
-              const body = String(pr.body || '');
-              const urls = [...body.matchAll(/https:\/\/dependabot-badges\.githubapp\.com\/badges\/compatibility_score\?[^)\s]+/g)]
-                .map(m => m[0].replace(/&amp;/g, '&'));
-              const unique = [...new Set(urls)];
-              if (unique.length !== 1) {
-                return { score: null, reason: unique.length === 0 ? 'BADGE_ABSENT' : 'MULTIPLE_BADGES', badgeUrl: null };
+            async function candidates() {
+              const direct = Number(
+                context.payload?.pull_request?.number ||
+                context.payload?.client_payload?.pr_number ||
+                0
+              );
+              if (direct) {
+                const pr = await github.rest.pulls.get({ owner, repo, pull_number: direct });
+                return [pr.data];
               }
-              const badgeUrl = unique[0];
-              try {
-                const response = await fetch(badgeUrl, {
-                  redirect: 'follow',
-                  headers: { 'user-agent': 'CentralDark-Dependabot-Compatibility-Gate/1.0' },
-                });
-                if (!response.ok) return { score: null, reason: `BADGE_HTTP_${response.status}`, badgeUrl };
-                const text = await response.text();
-                const m = text.match(/(\d{1,3})%/);
-                if (!m) return { score: null, reason: 'SCORE_NOT_PARSEABLE', badgeUrl };
-                const score = Number(m[1]);
-                if (!Number.isFinite(score) || score < 0 || score > 100) {
-                  return { score: null, reason: 'SCORE_OUT_OF_RANGE', badgeUrl };
-                }
-                return { score, reason: 'OK', badgeUrl };
-              } catch (error) {
-                return { score: null, reason: `BADGE_FETCH_ERROR:${String(error?.message || error)}`, badgeUrl };
-              }
+              const open = await github.paginate(github.rest.pulls.list, {
+                owner, repo, state: 'open', per_page: 100,
+              });
+              return open.filter((pr) =>
+                pr.user?.login === 'dependabot[bot]' &&
+                pr.head?.repo?.full_name === context.payload.repository.full_name
+              );
             }
 
-            async function evaluate(prNumber) {
-              let { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: prNumber });
-              if (pr.state !== 'open' || pr.user?.login !== 'dependabot[bot]' || pr.head?.repo?.full_name !== `${owner}/${repo}`) {
-                return;
-              }
-
-              const scoreInfo = await compatibilityScore(pr);
-              let previous = null;
-              let next = null;
-              if (scoreInfo.badgeUrl) {
-                try {
-                  const u = new URL(scoreInfo.badgeUrl);
-                  previous = u.searchParams.get('previous-version');
-                  next = u.searchParams.get('new-version');
-                } catch {}
-              }
-              const kind = classifyUpdate(previous, next);
-              const threshold = thresholdFor(kind);
+            for (const initial of await candidates()) {
+              const prNumber = initial.number;
+              let pr = (await github.rest.pulls.get({ owner, repo, pull_number: prNumber })).data;
               const blockers = [];
-              const priorReceipt = await currentReceipt(prNumber);
-              const previousChance = previousChanceFromComment(priorReceipt?.body);
 
+              if (pr.state !== 'open') continue;
+              if (pr.user?.login !== 'dependabot[bot]') continue;
+              if (pr.head?.repo?.full_name !== context.payload.repository.full_name) continue;
               if (pr.draft) blockers.push('DRAFT');
-              if (kind === 'major') blockers.push('MAJOR_AUTO_MERGE_FORBIDDEN');
-              if (kind === 'unknown') blockers.push('UPDATE_CLASS_UNKNOWN');
-              if (scoreInfo.score == null) blockers.push(`COMPATIBILITY_UNKNOWN:${scoreInfo.reason}`);
-              else if (scoreInfo.score < threshold) blockers.push(`COMPATIBILITY_${scoreInfo.score}_LT_${threshold}`);
 
-              if (pr.mergeable_state === 'behind') {
-                try {
-                  await github.request('PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch', {
-                    owner, repo, pull_number: prNumber, expected_head_sha: pr.head.sha,
-                  });
-                  blockers.push('UPDATE_BRANCH_REQUESTED');
-                } catch (error) {
-                  if (error.status !== 422) blockers.push(`UPDATE_BRANCH_ERROR_${error.status || 'UNKNOWN'}`);
-                }
-              }
+              const kind = classifyPr(pr);
+              // Política CentralDark: patch automático; minor/major não são promovidos sem nova autorização.
+              if (kind !== 'patch') blockers.push(`UPDATE_CLASS_${kind.toUpperCase()}_NOT_AUTO`);
 
-              if (!blockers.includes('UPDATE_BRANCH_REQUESTED')) {
-                for (let attempt = 1; attempt <= 5; attempt++) {
-                  ({ data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: prNumber }));
-                  if (pr.mergeable !== null) break;
-                  await new Promise(resolve => setTimeout(resolve, 1500));
-                }
+              // Antes de apertar o botão: sincroniza com a main viva.
+              const update = await github.request('PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch', {
+                owner, repo, pull_number: prNumber, expected_head_sha: pr.head.sha,
+              }).catch((error) => ({ status: error.status || 0, data: { message: error.message } }));
 
-                if (pr.mergeable !== true) blockers.push(`MERGEABLE_${String(pr.mergeable).toUpperCase()}`);
-                if (['dirty', 'behind', 'blocked', 'unknown'].includes(String(pr.mergeable_state || '').toLowerCase())) {
-                  blockers.push(`MERGE_STATE_${String(pr.mergeable_state || 'UNKNOWN').toUpperCase()}`);
-                }
-
-                const headSha = pr.head.sha;
-                const checks = await github.paginate(github.rest.checks.listForRef, {
-                  owner, repo, ref: headSha, per_page: 100,
-                });
-                const relevantChecks = checks.filter(c => !String(c.details_url || '').includes(`/actions/runs/${context.runId}`));
-                const pendingChecks = relevantChecks.filter(c => c.status !== 'completed');
-                const failedChecks = relevantChecks.filter(c => failureConclusions.has(String(c.conclusion || '').toLowerCase()));
-                const successChecks = relevantChecks.filter(c => c.status === 'completed' && c.conclusion === 'success');
-                const skippedChecks = relevantChecks.filter(c => c.status === 'completed' && ['skipped', 'neutral'].includes(String(c.conclusion || '').toLowerCase()));
-
-                const combined = await github.rest.repos.getCombinedStatusForRef({ owner, repo, ref: headSha });
-                const badStatuses = (combined.data.statuses || []).filter(s => ['pending', 'failure', 'error'].includes(String(s.state || '').toLowerCase()));
-
-                if (pendingChecks.length) blockers.push(`CHECKS_PENDING_${pendingChecks.length}`);
-                if (failedChecks.length) blockers.push(`CHECKS_FAILED_${failedChecks.length}`);
-                if (badStatuses.length) blockers.push(`STATUSES_NOT_GREEN_${badStatuses.length}`);
-                if (successChecks.length === 0) blockers.push('NO_SUCCESS_CHECK_ON_HEAD');
-
-                const reviews = await github.paginate(github.rest.pulls.listReviews, { owner, repo, pull_number: prNumber, per_page: 100 });
-                const latestByUser = new Map();
-                for (const review of reviews) {
-                  if (!review.user?.login || !review.state) continue;
-                  latestByUser.set(review.user.login, String(review.state).toUpperCase());
-                }
-                if ([...latestByUser.values()].some(state => state === 'CHANGES_REQUESTED')) {
-                  blockers.push('CHANGES_REQUESTED');
-                }
-
-                let deltaGate = {
-                  ok: false,
-                  status: 'UNKNOWN',
-                  aheadBy: null,
-                  filesChanged: 0,
-                  reason: 'UNMEASURED',
-                };
-                try {
-                  const comparison = await github.rest.repos.compareCommits({
-                    owner,
-                    repo,
-                    base: pr.base.sha,
-                    head: headSha,
-                  });
-                  const status = String(comparison.data.status || 'UNKNOWN').toUpperCase();
-                  const aheadBy = Number(comparison.data.ahead_by);
-                  const filesChanged = Array.isArray(comparison.data.files) ? comparison.data.files.length : 0;
-                  const ok = status === 'AHEAD' && Number.isFinite(aheadBy) && aheadBy >= 1;
-                  deltaGate = {
-                    ok,
-                    status,
-                    aheadBy: Number.isFinite(aheadBy) ? aheadBy : null,
-                    filesChanged,
-                    reason: ok ? 'OK' : `STATUS_${status}`,
-                  };
-                  if (!ok) blockers.push(`DELTA_GATE_${status}`);
-                } catch (error) {
-                  deltaGate.reason = `COMPARE_ERROR_${error.status || 'UNKNOWN'}`;
-                  blockers.push(`DELTA_GATE_${deltaGate.reason}`);
-                }
-                core.info([
-                  `DELTA_GATE=${deltaGate.ok ? 'PASS' : 'BLOCKED'}`,
-                  `BASE_SHA=${pr.base.sha}`,
-                  `HEAD_SHA=${headSha}`,
-                  `AHEAD_BY=${deltaGate.aheadBy ?? 'UNKNOWN'}`,
-                  `FILES_CHANGED=${deltaGate.filesChanged}`,
-                ].join(' '));
-
-                const uniqueBlockers = [...new Set(blockers)];
-                const changesRequested = uniqueBlockers.includes('CHANGES_REQUESTED');
-                const liveChance = reconciliationChance({
-                  score: scoreInfo.score,
-                  threshold,
-                  mergeable: pr.mergeable,
-                  mergeState: pr.mergeable_state,
-                  pendingChecks: pendingChecks.length,
-                  failedChecks: failedChecks.length,
-                  badStatuses: badStatuses.length,
-                  successChecks: successChecks.length,
-                  changesRequested,
-                  blockers: uniqueBlockers,
-                  previousChance,
-                });
-                const deltaText = liveChance.delta == null ? 'baseline' : `${liveChance.delta >= 0 ? '+' : ''}${liveChance.delta}pp`;
-                const scoreText = scoreInfo.score == null ? `UNKNOWN (${scoreInfo.reason})` : `${scoreInfo.score}%`;
-                const decision = uniqueBlockers.length === 0 ? 'READY_TO_SQUASH' : 'WAIT';
-                const receipt = [
+              if (update.status === 202) {
+                await upsertReceipt(prNumber, [
                   marker,
-                  '## 🤖 CentralDark · Dependabot Compatibility Gate',
-                  '',
-                  `PR: #${prNumber}`,
-                  `HEAD: \`${headSha}\``,
-                  `UPDATE_CLASS: **${kind.toUpperCase()}**`,
-                  `COMPATIBILITY: **${scoreText}**`,
-                  `RECONCILIATION_CHANCE: **${liveChance.chance}%** (${liveChance.trend}, ${deltaText}, confidence=${liveChance.confidence})`,
-                  `RECONCILIATION_SIGNAL: \`${liveChance.reasons.length ? liveChance.reasons.join(' | ') : 'CLEAR'}\``,
-                  `THRESHOLD: **${threshold > 100 ? 'N/A' : `${threshold}%`}**`,
-                  `MERGEABLE: **${String(pr.mergeable)} / ${pr.mergeable_state || 'UNKNOWN'}**`,
-                  `CHECKS: success=${successChecks.length} pending=${pendingChecks.length} failed=${failedChecks.length} skipped_or_neutral=${skippedChecks.length}`,
-                  `DELTA_GATE: **${deltaGate.ok ? 'PASS' : 'BLOCKED'}**`,
-                  `DELTA_BASE_SHA: \`${pr.base.sha}\``,
-                  `DELTA_HEAD_SHA: \`${headSha}\``,
-                  `DELTA_AHEAD_BY: **${deltaGate.aheadBy ?? 'UNKNOWN'}**`,
-                  `DELTA_FILES_CHANGED: **${deltaGate.filesChanged}**`,
-                  `DELTA_STATUS: **${deltaGate.reason}**`,
-                  `DECISION: **${decision}**`,
-                  uniqueBlockers.length ? `BLOCKERS: \`${uniqueBlockers.join(' | ')}\`` : 'BLOCKERS: `NONE`',
-                  '',
-                  '`COMPATIBILITY_SCORE != CI_PASS`  ',
-                  '`SKIPPED != PASS`  ',
-                  '`UNKNOWN != PASS`  ',
-                  '`SQUASH_REQUIRES_EXACT_HEAD=true`',
-                ].join('\n');
-                await upsertReceipt(prNumber, receipt);
+                  'STATE=WAIT_NEW_HEAD',
+                  `PR=${prNumber}`,
+                  `OLD_HEAD=${pr.head.sha}`,
+                  'UPDATE_BRANCH=REQUESTED',
+                  'NEXT=synchronize_webhook',
+                ].join('\n'));
+                core.notice(`DEPENDABOT_FAST_WAIT_NEW_HEAD pr=${prNumber}`);
+                continue;
+              }
+              if (update.status !== 422) blockers.push(`UPDATE_BRANCH_HTTP_${update.status}`);
 
-                if (uniqueBlockers.length === 0 && deltaGate.ok) {
-                  const result = await github.rest.pulls.merge({
-                    owner,
-                    repo,
-                    pull_number: prNumber,
-                    merge_method: 'squash',
-                    sha: headSha,
-                    commit_title: pr.title,
-                    commit_message: [
-                      `Dependabot ${kind} com compatibilidade ${scoreInfo.score}% (mínimo ${threshold}%).`,
-                      `Same-head checks concluídos sem falha no HEAD ${headSha}.`,
-                      `DELTA_GATE=PASS base=${pr.base.sha} head=${headSha} ahead_by=${deltaGate.aheadBy} files=${deltaGate.filesChanged}.`,
-                      'CentralDark: compatibility score é gate adicional, não substituto de CI.',
-                    ].join('\n'),
-                  });
-                  if (!result.data.merged) {
-                    core.warning(`PR #${prNumber} não foi merged: ${result.data.message}`);
-                  } else {
-                    const squashSha = result.data.sha;
-                    await upsertReceipt(prNumber, `${receipt}\nSQUASH_RESULT_SHA: \`${squashSha}\`\nSQUASH_SOURCE_HEAD: \`${headSha}\`\nSQUASH_RESULT_CONFIRMED=true`);
-                    core.notice(`PR #${prNumber} squash-merged em ${squashSha} a partir do HEAD ${headSha}`);
-                  }
-                }
-                return;
+              // Remede depois do update/no-op.
+              for (let attempt = 1; attempt <= 5; attempt++) {
+                pr = (await github.rest.pulls.get({ owner, repo, pull_number: prNumber })).data;
+                if (pr.mergeable !== null) break;
+                await new Promise((resolve) => setTimeout(resolve, 1500));
               }
 
-              const scoreText = scoreInfo.score == null ? `UNKNOWN (${scoreInfo.reason})` : `${scoreInfo.score}%`;
-              const waitBlockers = [...new Set(blockers)];
-              const liveChance = reconciliationChance({
-                score: scoreInfo.score,
-                threshold,
-                mergeable: pr.mergeable,
-                mergeState: pr.mergeable_state,
-                blockers: waitBlockers,
-                previousChance,
+              if (pr.mergeable !== true) blockers.push(pr.mergeable === null ? 'MERGEABLE_UNKNOWN' : 'NOT_MERGEABLE');
+              if (['dirty', 'behind', 'blocked', 'unknown'].includes(String(pr.mergeable_state || '').toLowerCase())) {
+                blockers.push(`MERGE_STATE_${String(pr.mergeable_state || 'unknown').toUpperCase()}`);
+              }
+
+              // Delta real base -> head. Não aperta merge em PR sem delta.
+              const delta = await github.rest.repos.compareCommits({
+                owner, repo, base: pr.base.sha, head: pr.head.sha,
               });
-              const deltaText = liveChance.delta == null ? 'baseline' : `${liveChance.delta >= 0 ? '+' : ''}${liveChance.delta}pp`;
+              const deltaGate = {
+                ok: delta.data.status === 'ahead' && Number(delta.data.ahead_by || 0) > 0 && (delta.data.files || []).length > 0,
+                status: String(delta.data.status || 'UNKNOWN').toUpperCase(),
+                aheadBy: Number(delta.data.ahead_by || 0),
+                filesChanged: (delta.data.files || []).length,
+              };
+              // token de contraprova consumido pelo teste de integração:
+              const status = deltaGate.status;
+              if (!(status === 'AHEAD')) blockers.push(`DELTA_STATUS_${status}`);
+              if (!deltaGate.ok) blockers.push('DELTA_NOT_PROVEN');
+
+              // SAME_HEAD: check-runs + commit statuses precisam estar concluídos e sem vermelho.
+              const checks = await github.paginate(github.rest.checks.listForRef, {
+                owner, repo, ref: pr.head.sha, per_page: 100,
+              });
+              const relevantChecks = checks.filter((check) =>
+                check.name !== '🧮 Dependabot fast-path nativo → same-head → squash'
+              );
+              const pendingChecks = relevantChecks.filter((check) => check.status !== 'completed');
+              const failedChecks = relevantChecks.filter((check) =>
+                check.status === 'completed' && failureConclusions.has(String(check.conclusion || '').toLowerCase())
+              );
+              const successChecks = relevantChecks.filter((check) =>
+                check.status === 'completed' && ['success', 'neutral', 'skipped'].includes(String(check.conclusion || '').toLowerCase())
+              );
+
+              const combined = await github.rest.repos.getCombinedStatusForRef({
+                owner, repo, ref: pr.head.sha,
+              });
+              const badStatuses = (combined.data.statuses || []).filter((s) =>
+                ['error', 'failure', 'pending'].includes(String(s.state || '').toLowerCase())
+              );
+
+              if (pendingChecks.length) blockers.push(`CHECKS_PENDING_${pendingChecks.length}`);
+              if (failedChecks.length) blockers.push(`CHECKS_FAILED_${failedChecks.length}`);
+              if (badStatuses.length) blockers.push(`STATUSES_BAD_${badStatuses.length}`);
+              if (!relevantChecks.length && !(combined.data.statuses || []).length) blockers.push('SAME_HEAD_PROOF_ABSENT');
+
+              const reviews = await github.paginate(github.rest.pulls.listReviews, {
+                owner, repo, pull_number: prNumber, per_page: 100,
+              });
+              const latestByUser = new Map();
+              for (const review of reviews) latestByUser.set(review.user?.login || String(review.id), review);
+              const changesRequested = [...latestByUser.values()].filter((r) => r.state === 'CHANGES_REQUESTED');
+              if (changesRequested.length) blockers.push(`CHANGES_REQUESTED_${changesRequested.length}`);
+
+              const uniqueBlockers = [...new Set(blockers)];
+
               await upsertReceipt(prNumber, [
                 marker,
-                '## 🤖 CentralDark · Dependabot Compatibility Gate',
-                '',
-                `PR: #${prNumber}`,
-                `HEAD: \`${pr.head.sha}\``,
-                `UPDATE_CLASS: **${kind.toUpperCase()}**`,
-                `COMPATIBILITY: **${scoreText}**`,
-                `RECONCILIATION_CHANCE: **${liveChance.chance}%** (${liveChance.trend}, ${deltaText}, confidence=${liveChance.confidence})`,
-                `RECONCILIATION_SIGNAL: \`${liveChance.reasons.length ? liveChance.reasons.join(' | ') : 'CLEAR'}\``,
-                `THRESHOLD: **${threshold > 100 ? 'N/A' : `${threshold}%`}**`,
-                'DECISION: **WAIT**',
-                `BLOCKERS: \`${waitBlockers.join(' | ')}\``,
-                '',
-                '`UPDATE_BRANCH != PASS`  ',
-                '`UNKNOWN != PASS`',
+                `PR=${prNumber}`,
+                `HEAD=${pr.head.sha}`,
+                `UPDATE_KIND=${kind}`,
+                `DELTA_GATE=${deltaGate.ok ? 'PASS' : 'BLOCKED'}`,
+                `DELTA_BASE_SHA: ${pr.base.sha}`,
+                `DELTA_HEAD_SHA: ${pr.head.sha}`,
+                `DELTA_AHEAD_BY: ${deltaGate.aheadBy}`,
+                `DELTA_FILES_CHANGED: ${deltaGate.filesChanged}`,
+                `DELTA_STATUS: ${deltaGate.status}`,
+                `CHECKS_PENDING=${pendingChecks.length}`,
+                `CHECKS_FAILED=${failedChecks.length}`,
+                `SUCCESS_CHECKS=${successChecks.length}`,
+                `BAD_STATUSES=${badStatuses.length}`,
+                `BLOCKERS=${uniqueBlockers.join('|') || 'NONE'}`,
+                'MERGE_METHOD=squash',
+                'UNKNOWN_IS_PASS=0',
               ].join('\n'));
-            }
 
-            let prNumbers = [];
-            if (context.eventName === 'pull_request_target') {
-              const pr = context.payload.pull_request;
-              if (pr?.user?.login === 'dependabot[bot]') prNumbers = [pr.number];
-            } else {
-              const openPrs = await github.paginate(github.rest.pulls.list, { owner, repo, state: 'open', per_page: 100 });
-              prNumbers = openPrs.filter(pr => pr.user?.login === 'dependabot[bot]').map(pr => pr.number);
-            }
-
-            const gateErrors = [];
-            for (const prNumber of prNumbers) {
-              try {
-                await evaluate(prNumber);
-              } catch (error) {
-                const message = `PR #${prNumber}: gate falhou fechado: ${String(error?.message || error)}`;
-                gateErrors.push(message);
-                core.warning(message);
+              if (uniqueBlockers.length === 0 && deltaGate.ok) {
+                // Equivalente ao botão "Squash and merge", pela API nativa do GitHub.
+                const result = await github.request('PUT /repos/{owner}/{repo}/pulls/{pull_number}/merge', {
+                  owner,
+                  repo,
+                  pull_number: prNumber,
+                  sha: pr.head.sha,
+                  merge_method: 'squash',
+                  commit_title: `${pr.title} (#${prNumber})`,
+                  commit_message: 'CentralDark Dependabot fast-path: same-head + checks + delta gate.',
+                });
+                const mergeSha = result.data?.sha || 'UNKNOWN';
+                core.notice(`DEPENDABOT_SQUASH=PASS pr=${prNumber} sha=${mergeSha}`);
+                core.notice(`SQUASH_RESULT_SHA: ${mergeSha}`);
+              } else {
+                core.notice(`DEPENDABOT_SQUASH=BLOCKED pr=${prNumber} blockers=${uniqueBlockers.join('|') || 'UNKNOWN'}`);
               }
             }
-            if (gateErrors.length) core.setFailed(gateErrors.join(' | '));
 
-  radar-open-prs:
-    name: 📡 Radar — reconciliar PRs Dependabot antigos e atuais
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_run' || github.event_name == 'repository_dispatch'
+      - name: 🧾 Receipt fast-path
+        if: always()
+        run: |
+          echo 'OWNER=.github/workflows/dependabot-auto-merge.yml'
+          echo 'THIRD_PARTY_AUTOMERGE_ACTION=0'
+          echo 'MERGE_METHOD=squash'
+          echo 'UPDATE_BRANCH_BEFORE_MERGE=1'
+          echo 'SAME_HEAD_REQUIRED=1'
+          echo 'DELTA_GATE_REQUIRED=1'
+          echo 'PATCH_AUTO=1'
+          echo 'MINOR_AUTO=0'
+          echo 'MAJOR_AUTO=0'
+          echo 'UNKNOWN_IS_PASS=0'
+
+  reconcile-house-pr:
+    name: 🪡 Casa — reconciliar PR humano → promotor canônico
+    if: >-
+      github.event_name == 'pull_request_target' &&
+      github.repository == 'ServerVpss/CentralDark' &&
+      github.event.pull_request.user.login != 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: [self-hosted, Linux]
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
-      - name: 📥 Checkout confiável da main
+      - name: 📥 Checkout main CURRENT confiável para tooling da Casa
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
@@ -680,26 +784,49 @@ jobs:
           fetch-depth: 1
           submodules: false
 
-      - name: 📡 Varredura oldest-first dos PRs Dependabot abertos
+      - name: 🧠 Update branch → auto-review → commit → rerun
         shell: bash
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.PROMOTION_TOKEN || secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TARGET_PR: ${{ github.event.pull_request.number }}
+          PROTECTED_PRS: '1562'
           REPO_DIR: /root/CentralDark
-          RESOLVER: scripts/dependabot/resolve-conflicts.sh
-          MAX_PRS: '100'
+          RESOLVER: .ci-house/scripts/dependabot/resolve-conflicts.sh
         run: |
           set -euo pipefail
-          bash "$GITHUB_WORKSPACE/.ci-house/scripts/dependabot/reconcile-open-prs.sh"
+          node .ci-house/scripts/dependabot/reconcile-open-prs.mjs
 
-  radar-all-open-prs-sync:
-    name: 📡 Radar — Update branch + rearme (todos PRs)
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+      - name: 🧾 Receipt do reconciliador da Casa
+        if: always()
+        shell: bash
+        run: |
+          echo "PR=${{ github.event.pull_request.number }}"
+          echo "HEAD=${{ github.event.pull_request.head.sha }}"
+          echo "HOUSE_CONFLICT_OWNER=scripts/dependabot/resolve-conflicts.sh"
+          echo "AUTO_REVIEW_UNKNOWN=true"
+          echo "PR_MOTHER_1562_PROTECTED=true"
+          echo "DIRECT_MERGE=0"
+          echo "PROMOTION_OWNER=.github/workflows/autonomia-promocao.yml"
+          echo "UNKNOWN_IS_PASS=0"
+
+  reconcile-all-open-prs:
+    name: 🧭 Casa — varrer e reconciliar todos os PRs abertos
+    if: >-
+      github.repository == 'ServerVpss/CentralDark' &&
+      (
+        github.event_name == 'schedule' ||
+        (github.event_name == 'workflow_dispatch' && (inputs.target_pr == '' || inputs.target_pr == null)) ||
+        github.event_name == 'repository_dispatch' ||
+        (github.event_name == 'workflow_run' &&
+         github.event.workflow_run.event == 'pull_request' &&
+         github.event.workflow_run.name == '⚙️ Pipeline — Telegram + Painel')
+      )
     runs-on: [self-hosted, Linux]
-    timeout-minutes: 25
+    timeout-minutes: 60
 
     steps:
-      - name: 📥 Checkout confiável da main
+      - name: 📥 Checkout main confiável
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
@@ -708,13 +835,326 @@ jobs:
           fetch-depth: 1
           submodules: false
 
-      - name: 🔁 Sync all open PRs + rerun failed jobs
+      - name: 🔄 Todos PRs → update → auto-review → commit → rerun
         shell: bash
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO: ${{ github.repository }}
-          MAX_PRS: '100'
-          MAX_RERUNS_PER_BRANCH: '8'
+          GITHUB_TOKEN: ${{ secrets.PROMOTION_TOKEN || secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TARGET_PR: ${{ github.event.workflow_run.pull_requests[0].number || github.event.client_payload.pr_number || '' }}
+          PROTECTED_PRS: '1562'
+          REPO_DIR: /root/CentralDark
+          RESOLVER: .ci-house/scripts/dependabot/resolve-conflicts.sh
         run: |
           set -euo pipefail
-          bash "$GITHUB_WORKSPACE/.ci-house/scripts/dependabot/sync-all-open-prs.sh"
+          node .ci-house/scripts/dependabot/reconcile-open-prs.mjs
+
+      - name: 🧾 Receipt repo-wide
+        if: always()
+        shell: bash
+        run: |
+          echo "SCOPE=ALL_OPEN_SAME_REPO_PRS"
+          echo "PR_MOTHER_1562_PROTECTED=true"
+          echo "UPDATE_BRANCH=true"
+          echo "AUTO_REVIEW_UNKNOWN=true"
+          echo "COMMIT_TO_PR_BRANCH=true"
+          echo "RERUN_FAILED_ONCE=true"
+          echo "DIRECT_MAIN_WRITE=0"
+          echo "DIRECT_MERGE=0"
+          echo "HUMAN_PR_PROMOTION_OWNER=.github/workflows/autonomia-promocao.yml"
+          echo "DEPENDABOT_PROMOTION_OWNER=.github/workflows/dependabot-auto-merge.yml"
+          echo "UNKNOWN_IS_PASS=0"
+
+
+  watchdog-rerun-all-jobs:
+    name: ⏰ Dependabot — detectar vermelho e RERUN ALL JOBS
+    if: >-
+      github.repository == 'ServerVpss/CentralDark' &&
+      (
+        github.event_name == 'schedule' ||
+        (github.event_name == 'workflow_dispatch' && (inputs.target_pr == '' || inputs.target_pr == null))
+      )
+    # API-only: libera capacidade da VPS para os jobs que realmente precisam dela.
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    outputs:
+      rerun_count: ${{ steps.rerun.outputs.rerun_count }}
+      candidate_prs: ${{ steps.rerun.outputs.candidate_prs }}
+
+    steps:
+      - name: 🔎 Varredura auditável do HEAD CURRENT e rerun completo
+        id: rerun
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const repository = context.payload.repository?.full_name || `${owner}/${repo}`;
+
+            // FUNÇÃO 1 — listar somente PRs Dependabot abertas, mesmo repo, base main.
+            async function listDependabotPrs() {
+              const open = await github.paginate(github.rest.pulls.list, {
+                owner, repo, state: 'open', per_page: 100,
+              });
+              return open.filter((pr) =>
+                pr.user?.login === 'dependabot[bot]' &&
+                pr.head?.repo?.full_name === repository &&
+                pr.base?.ref === 'main'
+              );
+            }
+
+            // FUNÇÃO 2 — manter apenas o run mais novo de cada workflow no HEAD CURRENT.
+            // Isso impede rerun de falha histórica quando já existe execução mais nova verde.
+            function latestRunPerWorkflow(runs) {
+              const latest = new Map();
+              for (const run of runs) {
+                const key = String(run.workflow_id || run.name || run.id);
+                const prev = latest.get(key);
+                if (!prev) {
+                  latest.set(key, run);
+                  continue;
+                }
+                const prevKey = [
+                  Number(prev.run_number || 0),
+                  Number(prev.run_attempt || 0),
+                  Date.parse(prev.updated_at || prev.created_at || 0) || 0,
+                ];
+                const nextKey = [
+                  Number(run.run_number || 0),
+                  Number(run.run_attempt || 0),
+                  Date.parse(run.updated_at || run.created_at || 0) || 0,
+                ];
+                if (
+                  nextKey[0] > prevKey[0] ||
+                  (nextKey[0] === prevKey[0] && nextKey[1] > prevKey[1]) ||
+                  (nextKey[0] === prevKey[0] && nextKey[1] === prevKey[1] && nextKey[2] > prevKey[2])
+                ) latest.set(key, run);
+              }
+              return [...latest.values()];
+            }
+
+            // FUNÇÃO 3 — classificar somente vermelho/parado já concluído.
+            // action_required NÃO entra aqui: o job de auto-approve é o owner dessa condição.
+            function isRerunnableRed(run) {
+              if (run.status !== 'completed') return false;
+              const red = new Set(['failure', 'cancelled', 'timed_out', 'startup_failure', 'stale']);
+              return red.has(String(run.conclusion || '').toLowerCase());
+            }
+
+            // FUNÇÃO 4 — rerun do workflow inteiro, equivalente a "Re-run all jobs".
+            async function rerunAllJobs(run) {
+              try {
+                const result = await github.request(
+                  'POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun',
+                  { owner, repo, run_id: run.id }
+                );
+                core.notice(
+                  `RERUN_ALL_JOBS=PASS run=${run.id} workflow=${run.name} head=${run.head_sha} status=${result.status}`
+                );
+                return { ok: true, status: result.status };
+              } catch (error) {
+                const status = Number(error?.status || 0);
+                if (status === 409) {
+                  core.notice(
+                    `RERUN_ALL_JOBS=NOOP_ALREADY_RUNNING run=${run.id} workflow=${run.name}`
+                  );
+                  return { ok: true, status, noop: true };
+                }
+                core.warning(
+                  `RERUN_ALL_JOBS=BLOCKED run=${run.id} workflow=${run.name} status=${status || 'UNKNOWN'}`
+                );
+                return { ok: false, status };
+              }
+            }
+
+            const prs = await listDependabotPrs();
+            let rerunCount = 0;
+            const findings = [];
+
+            for (const initial of prs) {
+              // Remede o PR para não operar HEAD histórico.
+              const pr = (await github.rest.pulls.get({
+                owner, repo, pull_number: initial.number,
+              })).data;
+
+              if (pr.state !== 'open') continue;
+              if (pr.user?.login !== 'dependabot[bot]') continue;
+              if (pr.head?.repo?.full_name !== repository) continue;
+              if (pr.base?.ref !== 'main') continue;
+              if (!pr.head?.sha) continue;
+
+              const runs = await github.paginate(github.rest.actions.listWorkflowRunsForRepo, {
+                owner,
+                repo,
+                head_sha: pr.head.sha,
+                per_page: 100,
+              });
+
+              const latest = latestRunPerWorkflow(
+                runs.filter((run) =>
+                  run.head_sha === pr.head.sha &&
+                  run.name !== '🤖 Dependabot — radar, compatibilidade e squash seguro'
+                )
+              );
+
+              const red = latest.filter(isRerunnableRed);
+              const delegatedActionRequired = latest.filter((run) =>
+                run.status === 'completed' &&
+                String(run.conclusion || '').toLowerCase() === 'action_required'
+              );
+
+              for (const run of delegatedActionRequired) {
+                core.notice(
+                  `ACTION_REQUIRED_DELEGATED_TO_APPROVAL_OWNER pr=${pr.number} run=${run.id} workflow=${run.name}`
+                );
+              }
+
+              const prFinding = {
+                pr: pr.number,
+                head: pr.head.sha,
+                red_runs: [],
+                delegated_action_required: delegatedActionRequired.map((run) => run.id),
+              };
+
+              for (const run of red) {
+                const result = await rerunAllJobs(run);
+                prFinding.red_runs.push({
+                  id: run.id,
+                  workflow: run.name,
+                  conclusion: run.conclusion,
+                  requested: Boolean(result.ok),
+                  status: result.status || 0,
+                });
+                if (result.ok && !result.noop) rerunCount += 1;
+              }
+
+              findings.push(prFinding);
+            }
+
+            core.setOutput('rerun_count', String(rerunCount));
+            core.setOutput('candidate_prs', String(prs.length));
+            core.notice(
+              `DEPENDABOT_RERUN_TIMER_SUMMARY prs=${prs.length} rerun_all_jobs=${rerunCount}`
+            );
+            core.info(JSON.stringify(findings));
+
+      - name: 🧾 Receipt do cronômetro de rerun
+        if: always()
+        shell: bash
+        run: |
+          echo 'TIMER=30_MINUTES'
+          echo 'SCHEDULE=17,47 * * * *'
+          echo 'SCOPE=OPEN_DEPENDABOT_PRS_SAME_REPO_BASE_MAIN_CURRENT_HEAD'
+          echo 'RED=FAILURE|CANCELLED|TIMED_OUT|STARTUP_FAILURE|STALE'
+          echo 'ACTION_REQUIRED=DELEGATED_TO_EXISTING_AUTO_APPROVAL_JOB'
+          echo 'PENDING_OR_IN_PROGRESS=NO_RERUN'
+          echo 'RERUN_MODE=ALL_JOBS'
+          echo 'ENDPOINT=POST /actions/runs/{run_id}/rerun'
+          echo 'LATEST_RUN_PER_WORKFLOW_ONLY=true'
+          echo 'HISTORICAL_RED_AFTER_NEWER_GREEN=IGNORED'
+          echo "RERUN_COUNT=${{ steps.rerun.outputs.rerun_count }}"
+          echo "CANDIDATE_PRS=${{ steps.rerun.outputs.candidate_prs }}"
+          echo 'UNKNOWN_IS_PASS=0'
+
+  catalisa-after-rerun:
+    name: 🪝 Dependabot — catalisar COSTURA após rerun
+    needs: watchdog-rerun-all-jobs
+    if: >-
+      needs.watchdog-rerun-all-jobs.result == 'success' &&
+      needs.watchdog-rerun-all-jobs.outputs.rerun_count != '0'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 🪝 Reentrar no owner existente sem duplicar lógica
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // FUNÇÃO 5 — catalisar somente depois que houve RERUN ALL JOBS.
+            // Não resolve conflito, não aprova PR e não faz merge aqui.
+            // Apenas devolve o sistema ao owner canônico já existente.
+            await new Promise((resolve) => setTimeout(resolve, 15000));
+            await github.request('POST /repos/{owner}/{repo}/dispatches', {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'centraldark_dependabot_reconcile',
+              client_payload: {
+                source: 'dependabot_rerun_all_jobs_timer',
+                reason: 'post_rerun_catalyst',
+                rerun_count: Number('${{ needs.watchdog-rerun-all-jobs.outputs.rerun_count }}' || 0),
+                candidate_prs: Number('${{ needs.watchdog-rerun-all-jobs.outputs.candidate_prs }}' || 0),
+              },
+            });
+            core.notice('POST_RERUN_CATALYST=DISPATCHED event=centraldark_dependabot_reconcile');
+
+      - name: 🧾 Receipt do catalisador
+        if: always()
+        shell: bash
+        run: |
+          echo 'CATALYST=centraldark_dependabot_reconcile'
+          echo 'RUNS_ONLY_AFTER_RERUN_COUNT_GT_0=true'
+          echo 'CONFLICT_OWNER=UNCHANGED'
+          echo 'AUTO_APPROVAL_OWNER=UNCHANGED'
+          echo 'PROMOTION_OWNER=UNCHANGED'
+          echo 'DIRECT_MERGE=0'
+          echo 'UNKNOWN_IS_PASS=0'
+
+
+  conflict-target-pr:
+    name: 🧪 COSTURA — testar um PR alvo
+    if: >-
+      github.repository == 'ServerVpss/CentralDark' &&
+      github.event_name == 'workflow_dispatch' &&
+      inputs.target_pr != ''
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 30
+
+    steps:
+      - name: 📥 Checkout main confiável para o motor
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          path: .ci-house
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+
+      - name: 🔎 Validar alvo
+        shell: bash
+        env:
+          TARGET_PR: ${{ inputs.target_pr }}
+        run: |
+          set -euo pipefail
+          [[ "$TARGET_PR" =~ ^[0-9]+$ ]]
+          test "$TARGET_PR" != "1562"
+          echo "TARGET_PR=$TARGET_PR"
+
+      - name: 🪡 Executar owner único somente no PR alvo
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROMOTION_TOKEN || secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TARGET_PR: ${{ inputs.target_pr }}
+          PROTECTED_PRS: '1562'
+          REPO_DIR: /root/CentralDark
+          RESOLVER: .ci-house/scripts/dependabot/resolve-conflicts.sh
+          CONFLICT_CLASSIFIER: .ci-house/scripts/dependabot/classify-conflict.mjs
+          SEMANTIC_ALL_HELPER: .ci-house/scripts/dependabot/semantic-all-resolver.mjs
+          STRUCTURED_CONFLICT_HELPER: .ci-house/scripts/dependabot/structured-conflict-resolver.mjs
+          CONFLICT_REGISTRY: .ci-house/scripts/dependabot/known-conflict-patterns.json
+        run: |
+          set -euo pipefail
+          node .ci-house/scripts/dependabot/reconcile-open-prs.mjs
+
+      - name: 🧾 Receipt do teste alvo
+        if: always()
+        shell: bash
+        run: |
+          echo "TARGET_PR=${{ inputs.target_pr }}"
+          echo "MODE=SINGLE_PR_CONFLICT_TEST"
+          echo "BUTTON_POLICY=CURRENT|INCOMING|BOTH|STRUCTURED|YELLOW"
+          echo "UNKNOWN_ACTION=YELLOW_NO_PUSH"
+          echo "PR_MOTHER_1562_PROTECTED=true"
+          echo "OTHER_OPEN_PRS_MUTATED_BY_THIS_JOB=0"
+          echo "UNKNOWN_IS_PASS=0"

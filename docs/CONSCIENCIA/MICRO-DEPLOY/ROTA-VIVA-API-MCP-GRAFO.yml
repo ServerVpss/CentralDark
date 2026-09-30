@@ -1,0 +1,148 @@
+schema: centraldark.live-execution-fabric.v1
+updated: 2026-09-25
+status: CANONICAL_BINDING
+authority: SEGREDO/CHEFE
+owner: docs/CONSCIENCIA/MICRO-DEPLOY/
+architecture: docs/ARQUITETURA/CENTRALDARK-LIVE-EXECUTION-FABRIC.md
+runtime_owner: centraldark-omni-router
+admin_panel: https://admin.centralldark.com/omni
+truth_rule: REALIDADE_IS_JUDGE
+
+purpose: >-
+  Um unico lugar para o CHEFE iniciar, entender, observar e continuar loops reais
+  da CentralDark pelo painel admin ou pelo Hermes Desktop/CASA, com API, MCP,
+  receipts e grafo vivo consumidos por todas as inteligencias autorizadas.
+
+entrypoints:
+  admin_panel:
+    label: "🌀 Hermes Loop — ate quebrar"
+    route_start: POST /api/live-fabric/start
+    route_status: GET /api/live-fabric/status
+    route_graph: GET /api/live-fabric/graph
+    route_receipts: GET /api/microdeploy/receipts/index.json
+  hermes_desktop_casa:
+    canonical_workspace: "E:\\CentralDark"
+    role: LOCAL_CLONE_AND_OPERATOR_SURFACE
+  vps_runtime:
+    canonical_workspace: /root/CentralDark
+    role: RUNTIME_DEPLOY_AND_EVIDENCE_SURFACE
+  github:
+    repository: ServerVpss/CentralDark
+    role: CANONICAL_RECORD
+
+pipeline:
+  - ADMIN_OR_HERMES_STARTS_JOB
+  - CENTRALDARK_API_CREATES_JOB
+  - MCP_OR_ADAPTER_EXECUTES_REAL_TOOLCALL
+  - TARGET_RETURNS_OUTPUT_REAL
+  - HERMES_OR_SOL_CLASSIFIES_PASS_FAIL_UNKNOWN
+  - API_WRITES_RECEIPT
+  - GRAPH_VIVO_UPDATES
+  - HUD_PANEL_EXPLAINS_STATE
+  - NEXT_TIK_TAK
+
+routes_append_only:
+  initial:
+    - VPS_DIRTY_TREE
+    - HUBBOT_MICRODEPLOY
+    - MCP_HEALTH
+    - HERMES_CORE_HEALTH
+    - RECEIPTS_CROSSCHECK
+    - GH_ROVER
+    - TAILSCALE_PORTS
+    - TAILSCALE_NETWORK_LOGS
+    - OMNI_ROUTER
+    - GRAPH_PANEL
+    - BRAIN_IMPORT
+  rule: >-
+    Nao criar um botao novo para cada dor. Acrescentar rota ao mesmo
+    Live Execution Fabric quando for a mesma classe de loop.
+
+protected_crystal:
+  - apps/bot-telegram/unified-bot.cjs
+  - apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml
+  - docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
+  - docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-PREPRODUCAO-MCP-MAO-NA-MASSA.md
+  - docs/CONSCIENCIA/05-APRENDIZADOS/
+  - docs/RECEIPTS/
+  - runtime/microdeploy/
+  - data/runtime/tailscale-local-ports.json
+  - docs/CONSCIENCIA/MICRO-DEPLOY/RECEIPTS/
+
+receipt_sources:
+  - docs/RECEIPTS/
+  - runtime/microdeploy/
+  - docs/CONSCIENCIA/MICRO-DEPLOY/RECEIPTS/
+  - docs/RECEIPTS/2026-09-25-vps-dirty-inventory-before-clean.md
+
+locks:
+  UNKNOWN_IS_NOT_PASS: true
+  UNKNOWN_IS_NOT_LIXO: true
+  ACTION_IS_NOT_PROOF: true
+  PRINTED_COMMAND_IS_NOT_EXECUTED: true
+  DOCUMENTED_IS_NOT_EXECUTED: true
+  MERGED_IS_NOT_DEPLOYED: true
+  NO_SECRET_LEAK: true
+  NO_BLIND_DELETE: true
+  NO_BLIND_PULL_OVER_DIRTY_RUNTIME: true
+  NO_FORCE_PUSH: true
+  NO_PM2_RESTART_ALL: true
+  REUSE_BEFORE_CREATE: true
+  ONE_SYSTEM_ONLY: true
+  ONE_WRITER_PER_SCOPE: true
+  TAILSCALE_LOGS_OWNER_IS_EXISTING_MCP_PROVIDER_CONTROL: true
+  TAILSCALE_LOGS_NO_SECOND_COLLECTOR: true
+  TAILSCALE_LOGS_SECRET_STAYS_IN_VPS_COFRE: true
+
+job_required_output:
+  - job_id
+  - status
+  - current_head
+  - current_branch
+  - dirty_count_before
+  - dirty_count_after
+  - last_good_point
+  - first_failure_point
+  - unknown_cone
+  - crystal_preserved
+  - junk_deleted
+  - unknown_kept
+  - tests
+  - health
+  - receipt_path
+  - graph_nodes
+  - graph_edges
+  - next_cursor
+
+breakpoint_semantics:
+  pass: ADVANCE_OR_MICRODEPLOY_SCOPE
+  fail: RECORD_FIRST_FAILURE_AND_FIX_MINIMUM_SCOPE
+  unknown: KEEP_VISIBLE_AND_COUNTERPROVE_BEFORE_MUTATION
+  papagaio: SIMULATION_FAILURE_TOOLCALL_OR_BLOCK
+
+admin_explanation_required:
+  enabled: true
+  fields:
+    - o_que_este_botao_faz
+    - ate_onde_passou
+    - onde_quebrou
+    - o_que_foi_preservado
+    - o_que_foi_deletado
+    - o_que_ficou_unknown
+    - qual_receipt_prova
+    - proximo_cursor
+
+
+tailscale_network_logs:
+  owner: apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js
+  mcp_tool: tailscale_network_logs
+  upstream: GET /api/v2/tailnet/{tailnet}/logging/network
+  upstream_scope: logs:network:read
+  public_edge_canonical: GET https://api.centralldark.com/tailscale
+  public_edge_compat_alias: GET https://api.centralldark.com/tailscaale
+  auth: CENTRALDARK_MCP_ADMIN_OAUTH
+  default_window_minutes: 15
+  max_window_hours: 24
+  hud_card: H07
+  rule: TAILSCALE_LOGS -> MCP_EXISTENTE -> API_CENTRALDARK -> HUD_EXISTENTE
+  no_parallel_architecture: true

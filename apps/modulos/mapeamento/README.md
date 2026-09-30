@@ -20,7 +20,7 @@ mapa canônico → procurar encaixe existente → mudança mínima → teste/rev
 - `CLAUDE.md` continua sendo a visão humana das travas.
 - `.github/CODEOWNERS` continua sinalizando propriedade.
 - `core/validar-mapa.mjs` é o gate determinístico.
-- O workflow `codex-validate.yml` executa o gate em runner GitHub hospedado.
+- O workflow `centraldark-validate.yml` executa o gate em runner GitHub hospedado.
 - O Cartógrafo executa o mesmo gate na VPS e transforma violação em drift.
 
 Nenhuma dessas visões pode inventar outro mapa.

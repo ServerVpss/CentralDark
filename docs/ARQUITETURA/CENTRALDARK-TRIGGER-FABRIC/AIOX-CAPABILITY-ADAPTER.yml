@@ -140,6 +140,16 @@ capabilities:
       token_budget: OUTPUT_CONTEXT_BUDGET
       import_algorithm_verbatim: false
       preserve_existing_centraldark_handoff_owner: true
+      hud_projection:
+        owner: EXISTING_CENTRALDARK_HUD
+        mode: CONTEXT_PRESSURE_BUDGET
+        source_of_truth: RUNTIME_BUDGET_WHEN_AVAILABLE
+        fallback_when_runtime_budget_unknown: APPROXIMATE_TEXT_HEURISTIC
+        fallback_is_authority: false
+        fixed_token_limit_forbidden: true
+        states: [FRESH, MODERATE, DEPLETED, CRITICAL]
+        on_critical: HANDOFF_PREP_WITH_RECEIPT_AND_NEXT_CURSOR
+        create_parallel_panel: false
     evidence:
       - .[EXT_REDACTED]-core/core/synapse/context/context-tracker.js
       - .[EXT_REDACTED]-core/core-config.yaml

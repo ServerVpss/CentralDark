@@ -1,4 +1,4 @@
-name: dispatcher-bots
+name: ⚙️ dispatcher-bots
 
 # Issues e PRs usam somente labels canônicas em MAIÚSCULAS.
 # Label roteia CAPACIDADE; nome de modelo/agente é somente proveniência e nunca gate.
@@ -24,7 +24,7 @@ jobs:
     # IA-REVISAR define o papel; AGENTE-CODEX é preferência, nunca gate.
     runs-on: ubuntu-latest
     steps:
-      - name: Postar briefing idempotente
+      - name: 🔹 Postar briefing idempotente
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

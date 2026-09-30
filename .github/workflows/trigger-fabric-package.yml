@@ -2,43 +2,7 @@ name: 🧠 Trigger Fabric Full Package — pacote e contraprova
 
 on:
   pull_request:
-    paths:
-      - 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/**'
-      - 'scripts/trigger-fabric/**'
-      - 'central-horario/**'
-      - 'scripts/lupa/validar-horario-centraldark.mjs'
-      - '.github/workflows/trigger-fabric-package.yml'
-      - 'LEIA-ME-IA.md'
-      - 'AGENTS.md'
-      - 'CENTRALDARK_AI_BOOT.yaml'
-      - 'docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md'
-      - 'docs/CONSCIENCIA/MULTIBUSSOLA.md'
-      - 'docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md'
-      - 'docs/CONSCIENCIA/MAPA-DO-CEREBRO.md'
-      - 'docs/CONSCIENCIA/PIVETE-IA/PIVETE-18-ROTA-MEMORIA.md'
-      - 'docs/CONSCIENCIA/APRENDIZADOS/**'
-      - 'docs/BRAIN/00-MAPA-SISTEMA/BRAIN.md'
-      - 'docs/NOTIFY/**'
-      - 'src/lib/notifications-events.ts'
-      - 'supabase/functions/_shared/notifications-events.ts'
-      - 'apps/modulos/elite-gateway/test-local/zendrive_gateway_bridge.py'
-      - 'apps/modulos/elite-gateway/test-local/run_zendrive_segredo.ps1'
-      - 'apps/modulos/memoria-api/**'
-      - 'apps/modulos/obsidian-plugin-grafo-vivo/**'
-      - '.agents/skills/meta-lupa/**'
-      - '.agents/skills/distinct-engineering-compiler/**'
-      - '.agents/skills/capability-contract-router/**'
-      - '.agents/skills/signal-territory-crystallizer/**'
-      - '.agents/skills/engine-gap-closure/**'
-      - 'apps/modulos/HERMES-CORE/**'
-      - 'apps/modulos/fixed-point-fabric/**'
-      - 'scripts/memory-linker/**'
-      - '.agents/skills/session-intelligence-harvester/**'
-      - '.agents/skills/knowledge-compiler/**'
-      - '.agents/skills/vector-memory/**'
-      - 'docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md'
-      - '.github/workflows/autonomia-promocao.yml'
-      - '.github/workflows/porta-de-entrada.yml'
+    branches: [main]
   push:
     branches: [main]
     paths:
@@ -134,7 +98,7 @@ jobs:
           grep -q '^BOT_ENTRY_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
           grep -q '^OUTPUT_GUARD_CONTRACT=PASS$' docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/VERIFY-RESULT.txt
 
-      - name: ⏰ Provar horário canônico ponta a ponta
+      - name: 🔹 ⏰ Provar horário canônico ponta a ponta
         shell: bash
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}

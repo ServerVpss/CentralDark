@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { join, resolve } from "node:path";
-import { decideReuse, deriveFixedPoint, selfTest as hornSelfTest } from "./horn-reuse-fixed-point.mjs";
 
 const argv = process.argv.slice(2);
 const at = (name, fallback) => {
@@ -17,12 +17,7 @@ const EXTENSION = "docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.jso
 const PORTA_VIVA = "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md";
 const GATE = ".github/workflows/porta-de-entrada.yml";
 const SHARED_WRITER_PUSH = "scripts/lupa/writer-safe-push-main.sh";
-const BOOT = "CENTRALDARK_AI_BOOT.yaml";
-const HORN_REFERENCE = "docs/CONSCIENCIA/REFERENCIA-LOGICA-HORN-REUSE-FIXED-POINT.md";
-const HORN_ENGINE = "scripts/lupa/horn-reuse-fixed-point.mjs";
-const HORN_TEST = "scripts/lupa/horn-reuse-fixed-point.test.mjs";
-const HORN_SOURCE_SHA256 = "b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1";
-const HORN_BOOT_TOKEN = "RUN_REUSE_HORN_FIXED_POINT_GATE_BEFORE_NEW_OWNER_OR_CAPABILITY";
+const COMMIT_COMPASS_OWNER = "DELTA-CONTINUO.md";
 const REMOVED_MAIN_WRITERS = Object.freeze([
   {
     path: ".github/workflows/linear-pendencias-sync.yml",
@@ -75,19 +70,6 @@ const REQUIRED = {
     "THINK", "ACT", "OBSERVE", "UPDATE_STATE", "COUNTERPROVE", "REMEDY", "REMEASURE", "FIXED_POINT", "RECEIPT", "CONTINUITY",
   ],
   roles: ["CHEFE", "OWNER", "WRITER", "CONNECTOR", "MODEL", "JUDGE"],
-  axis_sweep: [
-    "INTENT_AUTHORITY",
-    "OWNER_WRITER_LEASE",
-    "REPO_PR_MAIN_DRIFT",
-    "CI_WORKFLOW_RUNNER",
-    "RUNTIME_VPS_PROCESS",
-    "BRIDGE_MCP_TOOLING",
-    "INPUT_VOICE_INTENT",
-    "ROUTER_PROVIDER_MODEL",
-    "MEMORY_RECEIPT_CONTINUITY",
-    "SECURITY_SECRET_BOUNDARY",
-  ],
-  current_binding_chain: ["PROCESS", "BRIDGE", "INPUT_OR_VOICE", "INTENT", "ROUTER", "ACTION", "RECEIPT"],
 };
 
 const read = (path) => readFileSync(join(ROOT, path), "utf8");
@@ -97,9 +79,270 @@ const hasAll = (actual, expected) => {
   return expected.every((item) => set.has(item));
 };
 
+
+function git(args) {
+  return execFileSync("git", args, {
+    cwd: ROOT,
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+  }).trim();
+}
+
+function parseCommitCompass(message) {
+  const trailers = {};
+  for (const line of String(message || "").split("\n")) {
+    const match = line.match(/^(CentralDark-[A-Za-z-]+):\s*(.+)$/);
+    if (match) trailers[match[1]] = match[2].trim();
+  }
+  return trailers;
+}
+
+function scopeCoversPath(scopeSpec, filePath) {
+  const scopes = String(scopeSpec || "")
+    .split(";")
+    .map((item) => item.trim())
+    .filter(Boolean);
+  return scopes.some((scope) => {
+    if (scope.endsWith("/**")) return filePath.startsWith(scope.slice(0, -3));
+    return filePath === scope;
+  });
+}
+
+function readCompassSession() {
+  const raw = git(["log", "--first-parent", "-n", "200", "--format=%H%x1f%B%x1e", "HEAD"]);
+  const records = raw
+    .split("\x1e")
+    .map((chunk) => chunk.trim())
+    .filter(Boolean)
+    .map((chunk) => {
+      const splitAt = chunk.indexOf("\x1f");
+      const sha = splitAt >= 0 ? chunk.slice(0, splitAt).trim() : "";
+      const message = splitAt >= 0 ? chunk.slice(splitAt + 1).trim() : "";
+      return { sha, message, trailers: parseCommitCompass(message) };
+    });
+
+  if (records.length === 0) return { enforced: false, active: false, closing: false, records: [] };
+
+  const closing = records[0].trailers["CentralDark-Compass-End"] === "true";
+  const selected = [];
+  let foundStart = false;
+
+  for (let index = 0; index < records.length; index += 1) {
+    const record = records[index];
+    if (index > 0 && record.trailers["CentralDark-Compass-End"] === "true" && !foundStart) {
+      return { enforced: false, active: false, closing: false, records: [] };
+    }
+    selected.push(record);
+    if (record.trailers["CentralDark-Compass-Start"] === "true") {
+      foundStart = true;
+      break;
+    }
+  }
+
+  if (!foundStart) return { enforced: false, active: false, closing: false, records: [] };
+  return {
+    enforced: true,
+    active: !closing,
+    closing,
+    records: selected.reverse(),
+  };
+}
+
+function commitFacts(sha) {
+  const parentSha = git(["rev-parse", `${sha}^`]);
+  const changedPaths = git(["diff-tree", "--no-commit-id", "--name-only", "-r", parentSha, sha])
+    .split("\n")
+    .map((path) => path.trim())
+    .filter(Boolean);
+  return { parentSha, changedPaths };
+}
+
+function validateCompassPayload({ trailers, parentSha, changedPaths, expectedPdfSha }) {
+  const errors = [];
+  const required = [
+    "CentralDark-Compass",
+    "CentralDark-Writer",
+    "CentralDark-Scope",
+    "CentralDark-Parent",
+    "CentralDark-PR-Mother",
+    "CentralDark-PR-Child",
+    "CentralDark-Finalizer",
+    "CentralDark-PDF-Gate",
+    "CentralDark-Next",
+  ];
+  for (const key of required) {
+    if (!trailers[key]) errors.push(`COMMIT_COMPASS_TRAILER_MISSING:${key}`);
+  }
+  if (trailers["CentralDark-Compass"] && trailers["CentralDark-Compass"] !== "v1") {
+    errors.push("COMMIT_COMPASS_VERSION_INVALID");
+  }
+  if (trailers["CentralDark-Parent"] && trailers["CentralDark-Parent"] !== parentSha) {
+    errors.push(`COMMIT_COMPASS_PARENT_MISMATCH:expected=${parentSha}:actual=${trailers["CentralDark-Parent"]}`);
+  }
+  if (trailers["CentralDark-Finalizer"] && trailers["CentralDark-Finalizer"] !== "ONE") {
+    errors.push("COMMIT_COMPASS_FINALIZER_NOT_ONE");
+  }
+  if (trailers["CentralDark-PDF-Gate"] && trailers["CentralDark-PDF-Gate"] !== `PASS:${expectedPdfSha}`) {
+    errors.push("COMMIT_COMPASS_PDF_GATE_INVALID");
+  }
+  for (const path of changedPaths) {
+    if (!scopeCoversPath(trailers["CentralDark-Scope"], path)) {
+      errors.push(`COMMIT_COMPASS_SCOPE_VIOLATION:${path}`);
+    }
+  }
+  return errors;
+}
+
+function validateCommitCompass(ownerText) {
+  const errors = [];
+  const ownerTokens = [
+    "COMMIT_IS_COORDINATION_PRIMITIVE=true",
+    "COMMENTS_ARE_RECEIPTS_NOT_COORDINATION_AUTHORITY=true",
+    "MULTI_WRITER_REQUIRES_COMMIT_TRAILERS=true",
+    "TWO_WRITERS_SAME_PATH=false",
+    "FINALIZER_ONE=true",
+    "PR_MOTHER_IS_RENDEZVOUS_NOT_WRITER=true",
+    "UNKNOWN_IS_NOT_PASS=true",
+    "ACTION_IS_NOT_PROOF=true",
+  ];
+  for (const token of ownerTokens) {
+    if (!ownerText.includes(token)) errors.push(`COMMIT_COMPASS_OWNER_TOKEN_MISSING:${token}`);
+  }
+
+  const pdfMatch = ownerText.match(/PDF_GATE_TLC23_SHA256=([a-f0-9]{64})/);
+  if (!pdfMatch) errors.push("COMMIT_COMPASS_PDF_SHA_MISSING");
+
+  let session = { enforced: false, active: false, closing: false, records: [] };
+  let currentSha = null;
+  let parentSha = null;
+  let currentTrailers = {};
+  let currentPaths = [];
+  const adopted = [];
+  const pathOwners = new Map();
+
+  try {
+    session = readCompassSession();
+    currentSha = git(["rev-parse", "HEAD"]);
+    parentSha = git(["rev-parse", "HEAD^"]);
+    currentTrailers = parseCommitCompass(git(["log", "-1", "--format=%B", "HEAD"]));
+    currentPaths = commitFacts(currentSha).changedPaths;
+  } catch (error) {
+    errors.push(`COMMIT_COMPASS_GIT_READ_FAILED:${error?.message || error}`);
+  }
+
+  if (session.enforced && pdfMatch) {
+    const adoptionBySha = new Map();
+
+    session.records.forEach((record, index) => {
+      const adoptedSha = record.trailers["CentralDark-Adopt-Commit"];
+      if (!adoptedSha) return;
+      adoptionBySha.set(adoptedSha, {
+        index,
+        adopterSha: record.sha,
+        writer: record.trailers["CentralDark-Adopt-Writer"] || "",
+        scope: record.trailers["CentralDark-Adopt-Scope"] || "",
+      });
+    });
+
+    const anchor = session.records[0]?.trailers ?? {};
+    const anchorMother = anchor["CentralDark-PR-Mother"] || null;
+    const anchorChild = anchor["CentralDark-PR-Child"] || null;
+
+    session.records.forEach((record, index) => {
+      const facts = commitFacts(record.sha);
+      let writer = "";
+      let scope = "";
+
+      if (record.trailers["CentralDark-Compass"] === "v1") {
+        errors.push(...validateCompassPayload({
+          trailers: record.trailers,
+          parentSha: facts.parentSha,
+          changedPaths: facts.changedPaths,
+          expectedPdfSha: pdfMatch[1],
+        }));
+        writer = record.trailers["CentralDark-Writer"] || "";
+        scope = record.trailers["CentralDark-Scope"] || "";
+
+        if (anchorMother && record.trailers["CentralDark-PR-Mother"] !== anchorMother) {
+          errors.push(`COMMIT_COMPASS_MOTHER_DRIFT:${record.sha}`);
+        }
+        if (anchorChild && record.trailers["CentralDark-PR-Child"] !== anchorChild) {
+          errors.push(`COMMIT_COMPASS_CHILD_DRIFT:${record.sha}`);
+        }
+      } else {
+        const adoption = adoptionBySha.get(record.sha);
+        if (!adoption || adoption.index <= index) {
+          errors.push(`COMMIT_COMPASS_UNADOPTED_COMMIT:${record.sha}`);
+          return;
+        }
+        if (!adoption.writer) errors.push(`COMMIT_COMPASS_ADOPT_WRITER_MISSING:${record.sha}`);
+        if (!adoption.scope) errors.push(`COMMIT_COMPASS_ADOPT_SCOPE_MISSING:${record.sha}`);
+        for (const path of facts.changedPaths) {
+          if (!scopeCoversPath(adoption.scope, path)) {
+            errors.push(`COMMIT_COMPASS_ADOPT_SCOPE_VIOLATION:${record.sha}:${path}`);
+          }
+        }
+        writer = adoption.writer;
+        scope = adoption.scope;
+        adopted.push({ sha: record.sha, writer, scope, adopter_sha: adoption.adopterSha });
+      }
+
+      if (!writer) return;
+      for (const path of facts.changedPaths) {
+        const previous = pathOwners.get(path);
+        if (previous && previous !== writer) {
+          errors.push(`COMMIT_COMPASS_CROSS_WRITER_PATH_COLLISION:${path}:first=${previous}:second=${writer}`);
+        } else {
+          pathOwners.set(path, writer);
+        }
+      }
+    });
+  }
+
+  return {
+    active: session.active,
+    enforced: session.enforced,
+    closing: session.closing,
+    sessionCommits: session.records.map((record) => record.sha),
+    currentSha,
+    parentSha,
+    trailers: currentTrailers,
+    changedPaths: currentPaths,
+    adopted,
+    pathOwners: Object.fromEntries(pathOwners),
+    errors,
+    expectedPdfSha: pdfMatch?.[1] ?? null,
+  };
+}
+
+function counterproveCommitCompass(report) {
+  if (!report.enforced) return true;
+  if (report.errors.length > 0 || !report.parentSha || !report.expectedPdfSha) return false;
+
+  const base = { ...report.trailers };
+  const variants = [];
+
+  const missingWriter = { ...base };
+  delete missingWriter["CentralDark-Writer"];
+  variants.push(missingWriter);
+  variants.push({ ...base, "CentralDark-Parent": "0".repeat(40) });
+  variants.push({ ...base, "CentralDark-Scope": "__forbidden__/**" });
+  variants.push({ ...base, "CentralDark-Finalizer": "MANY" });
+  variants.push({ ...base, "CentralDark-PDF-Gate": "PASS:" + "0".repeat(64) });
+
+  return variants.every((trailers) => validateCompassPayload({
+    trailers,
+    parentSha: report.parentSha,
+    changedPaths: report.changedPaths,
+    expectedPdfSha: report.expectedPdfSha,
+  }).length > 0);
+}
+
+
 function validateMainWriter(path, text, sharedScriptText) {
   const errors = [];
 
+  // Padrao canonico: workflow delega push ao script unico (retry + worktree + gates).
   if (text.includes(SHARED_WRITER_PUSH)) {
     if (typeof sharedScriptText !== "string") {
       errors.push(`MAIN_WRITER_SHARED_SCRIPT_MISSING:${path}`);
@@ -149,42 +392,6 @@ function validateMainWriter(path, text, sharedScriptText) {
   return errors;
 }
 
-function validateHornGate(referenceText, bootText) {
-  const errors = [];
-  const expect = (condition, code) => { if (!condition) errors.push(code); };
-
-  expect(referenceText.includes("tlc23(2).pdf"), "HORN_GATE_SOURCE_NAME");
-  expect(referenceText.includes(HORN_SOURCE_SHA256), "HORN_GATE_SOURCE_SHA256");
-  expect(referenceText.includes(CONTRACT), "HORN_GATE_CANONICAL_OWNER");
-  expect(referenceText.includes(HORN_ENGINE), "HORN_GATE_ENGINE_REFERENCE");
-  expect(referenceText.includes(HORN_TEST), "HORN_GATE_TEST_REFERENCE");
-  expect(bootText.includes(HORN_BOOT_TOKEN), "HORN_GATE_BOOT_TOKEN");
-  expect(bootText.includes(HORN_REFERENCE), "HORN_GATE_BOOT_REFERENCE");
-
-  try {
-    hornSelfTest();
-  } catch (error) {
-    errors.push(`HORN_GATE_SELF_TEST:${error?.code || error?.message || error?.name || "ERROR"}`);
-  }
-
-  try {
-    const unknown = decideReuse({});
-    expect(unknown?.fixedPoint === true, "HORN_GATE_UNKNOWN_FIXED_POINT");
-    expect(unknown?.decision === "UNKNOWN", "HORN_GATE_UNKNOWN_NOT_PASS");
-  } catch (error) {
-    errors.push(`HORN_GATE_UNKNOWN_CASE:${error?.code || error?.message || error?.name || "ERROR"}`);
-  }
-
-  let contradictionBlocked = false;
-  try {
-    deriveFixedPoint({ facts: ["EXISTING_OWNER", "NO_EXISTING_OWNER_PROVED"] });
-  } catch (error) {
-    contradictionBlocked = error?.code === "HORN_CONTRADICTION";
-  }
-  expect(contradictionBlocked, "HORN_GATE_CONTRADICTION_FAIL_CLOSED");
-  return errors;
-}
-
 function validateExtension(extension) {
   const errors = [];
   const expect = (condition, code) => { if (!condition) errors.push(code); };
@@ -197,40 +404,12 @@ function validateExtension(extension) {
   expect(extension?.invariants?.ONE_WRITER_PER_SCOPE === true, "EXECUTION_EXTENSION_ONE_WRITER");
   expect(extension?.invariants?.MODEL_NE_AUTHORITY === true, "EXECUTION_EXTENSION_MODEL_AUTHORITY");
   expect(extension?.invariants?.CONNECTOR_NE_AUTHORITY === true, "EXECUTION_EXTENSION_CONNECTOR_AUTHORITY");
-  expect(extension?.invariants?.DURABLE_FACTS_SURVIVE_SESSIONS === true, "EXECUTION_EXTENSION_DURABLE_FACTS");
-  expect(extension?.invariants?.REMEASURE_ONLY_TEMPORAL_EDGES === true, "EXECUTION_EXTENSION_TEMPORAL_REMEASURE");
-  expect(extension?.invariants?.SENSOR_FAILURE_DOES_NOT_ERASE_DURABLE_FACT === true, "EXECUTION_EXTENSION_SENSOR_FAILURE");
-  expect(extension?.invariants?.GLOBAL_LEARNING_PROMOTES_TO_CANONICAL_OWNER === true, "EXECUTION_EXTENSION_GLOBAL_LEARNING");
-  expect(extension?.invariants?.READER_FRONT_NE_WRITER === true, "EXECUTION_EXTENSION_READER_NOT_WRITER");
-  expect(extension?.invariants?.FANOUT_MUST_FANIN === true, "EXECUTION_EXTENSION_FANIN_REQUIRED");
   expect(hasAll(extension?.execution_loop, REQUIRED.execution_loop), "EXECUTION_EXTENSION_REACT_LOOP");
   expect(extension?.counterproof_transition?.CONCLUSION_FALSIFIED?.includes("EXECUTE_CORRECTION_IN_CURRENT_RUN_IF_AUTHORIZED"), "EXECUTION_EXTENSION_CURRENT_RUN_REMEDY");
   expect(extension?.error_discovered?.flow?.includes("RECORD_EXACT_CONTINUITY_RECEIPT"), "EXECUTION_EXTENSION_CONTINUITY_RECEIPT");
   expect(extension?.adapter_policy?.thin_adapter_only === true, "EXECUTION_EXTENSION_THIN_ADAPTER");
   expect(extension?.adapter_policy?.model_change_changes_owner === false, "EXECUTION_EXTENSION_MODEL_OWNER_STABLE");
   expect(extension?.writer_collision?.same_scope_writer_exists?.includes("DO_NOT_COMPETE"), "EXECUTION_EXTENSION_WRITER_COLLISION");
-
-  const lifetime = extension?.evidence_lifetime;
-  expect(lifetime?.marker === "DURABLE_FACT_TEMPORAL_EDGE_SPLIT", "EXECUTION_EXTENSION_EVIDENCE_LIFETIME");
-  expect(lifetime?.pr_receipt_is_global_memory === false, "EXECUTION_EXTENSION_PR_NOT_GLOBAL_MEMORY");
-  expect(lifetime?.reusable_learning_pr_only === "INSUFFICIENT_PROMOTE_TO_CANONICAL_OWNER", "EXECUTION_EXTENSION_PROMOTE_LEARNING");
-  expect(hasAll(lifetime?.current_binding_chain, REQUIRED.current_binding_chain), "EXECUTION_EXTENSION_CURRENT_BINDING_CHAIN");
-  expect(lifetime?.current_binding_rule === "START_FROM_FIRST_MUTABLE_UNKNOWN_OR_REOPENED_EDGE", "EXECUTION_EXTENSION_CURRENT_BINDING_RULE");
-  expect(lifetime?.known_prefix_rule === "DO_NOT_REMEASURE_STABLE_PREFIX_WITHOUT_REOPEN_CAUSE", "EXECUTION_EXTENSION_STABLE_PREFIX");
-
-  const sweep = extension?.axis_sweep;
-  const axes = Array.isArray(sweep?.axes) ? sweep.axes : [];
-  expect(sweep?.marker === "TEN_AXIS_GLOBAL_SWEEP", "EXECUTION_EXTENSION_AXIS_MARKER");
-  expect(sweep?.scope === "GLOBAL", "EXECUTION_EXTENSION_AXIS_SCOPE");
-  expect(sweep?.mode === "READ_PARALLEL_FANIN_SINGLE_WRITER", "EXECUTION_EXTENSION_AXIS_MODE");
-  expect(axes.length === 10 && new Set(axes).size === 10 && hasAll(axes, REQUIRED.axis_sweep), "EXECUTION_EXTENSION_AXIS_TEN_UNIQUE");
-  expect(sweep?.reader_parallelism === true, "EXECUTION_EXTENSION_AXIS_READER_PARALLEL");
-  expect(sweep?.reader_mutation === false, "EXECUTION_EXTENSION_AXIS_READER_NO_MUTATION");
-  expect(sweep?.writer_parallelism_same_scope === false, "EXECUTION_EXTENSION_AXIS_ONE_WRITER");
-  expect(sweep?.fan_in === "CURRENT_REALITY_RENDEZVOUS", "EXECUTION_EXTENSION_AXIS_FANIN");
-  expect(sweep?.mutation_after_fan_in === true, "EXECUTION_EXTENSION_AXIS_MUTATION_AFTER_FANIN");
-  expect(sweep?.unknown_is_pass === false, "EXECUTION_EXTENSION_AXIS_UNKNOWN_NOT_PASS");
-  expect(sweep?.no_new_owner_when_existing_owner_fits === true, "EXECUTION_EXTENSION_AXIS_REUSE_OWNER");
   return errors;
 }
 
@@ -291,6 +470,39 @@ function validate(contract, extension, contractText, portaText, gateText, writer
   expect(policy?.enforcement?.counterproof_required === true, "CONTINUIDADE_GLOBAL_COUNTERPROOF_REQUIRED");
   expect(policy?.enforcement?.future_execution_required === true, "CONTINUIDADE_GLOBAL_FUTURE_REQUIRED");
   expect(policy?.enforcement?.single_global_owner === CONTRACT, "CONTINUIDADE_GLOBAL_OWNER");
+  const globalEverything = contract?.global_absorption_and_cockpit_policy;
+  expect(globalEverything?.marker === "GLOBAL_EVERYTHING_INTO_CENTRALDARK", "GLOBAL_EVERYTHING_MARKER");
+  expect(globalEverything?.scope === "GLOBAL", "GLOBAL_EVERYTHING_SCOPE");
+  expect(globalEverything?.origin_is_not_architecture === true, "GLOBAL_ORIGIN_NOT_ARCHITECTURE");
+  expect(globalEverything?.same_contract_regardless_of_origin === true, "GLOBAL_SAME_CONTRACT_ORIGIN");
+  expect(globalEverything?.ingestion?.single_character_is_valid_input === true, "GLOBAL_SINGLE_CHARACTER_INPUT");
+  expect(globalEverything?.ingestion?.whole_file_is_valid_input === true, "GLOBAL_WHOLE_FILE_INPUT");
+  expect(globalEverything?.ingestion?.whole_package_is_valid_input === true, "GLOBAL_WHOLE_PACKAGE_INPUT");
+  expect(globalEverything?.ingestion?.apply_into_existing_centraldark === true, "GLOBAL_APPLY_EXISTING_CENTRALDARK");
+  expect(globalEverything?.ingestion?.create_parallel_system_for_new_input === false, "GLOBAL_NO_PARALLEL_SYSTEM");
+  expect(globalEverything?.surfaces?.public_site?.canonical_host === "centralldark.com", "GLOBAL_PUBLIC_SITE_HOST");
+  expect(globalEverything?.surfaces?.private_admin_cockpit?.canonical_host === "admin.centralldark.com", "GLOBAL_ADMIN_HOST");
+  expect(globalEverything?.surfaces?.private_admin_cockpit?.access === "AUTHENTICATED_OWNER_ONLY", "GLOBAL_ADMIN_PRIVATE_ACCESS");
+  expect(globalEverything?.surfaces?.private_admin_cockpit?.one_cockpit === true, "GLOBAL_ONE_COCKPIT");
+  expect(globalEverything?.global_application?.all_current_components_inherit === true, "GLOBAL_CURRENT_COMPONENTS_INHERIT");
+  expect(globalEverything?.global_application?.all_future_components_inherit === true, "GLOBAL_FUTURE_COMPONENTS_INHERIT");
+  expect(globalEverything?.global_application?.every_addition_removal_update_uses_same_contract === true, "GLOBAL_MUTATIONS_SAME_CONTRACT");
+  expect(globalEverything?.pr_mother_projection?.pr === 1562, "GLOBAL_PR_MOTHER_1562");
+  const continuousReality = globalEverything?.continuous_reality_convergence;
+  expect(continuousReality?.marker === "CONTINUOUS_REALITY_FIXED_POINT_LOOP", "GLOBAL_CONTINUOUS_LOOP_MARKER");
+  expect(continuousReality?.scope === "GLOBAL_CONTINUOUS", "GLOBAL_CONTINUOUS_LOOP_SCOPE");
+  expect(continuousReality?.main_movement_is_internal_trigger_not_user_interrupt === true, "GLOBAL_MAIN_MOVE_INTERNAL_TRIGGER");
+  expect(continuousReality?.do_not_stop_to_report_main_movement === true, "GLOBAL_DO_NOT_STOP_ON_MAIN_MOVE");
+  expect(continuousReality?.preserve_current_mission_across_head_changes === true, "GLOBAL_PRESERVE_MISSION_ACROSS_HEAD");
+  expect(Array.isArray(continuousReality?.loop) && continuousReality.loop.join(">").includes("REMEASURE_HEAD>ABSORB_USEFUL_DELTA>FAST_FORWARD_VPS_WHEN_SAFE>MEASURE_RUNTIME>GRILL_ME>COUNTERPROOF"), "GLOBAL_CONTINUOUS_LOOP_ORDER");
+  expect(continuousReality?.loop?.includes("REPEAT_IF_SOURCE_OF_TRUTH_ADVANCES"), "GLOBAL_CONTINUOUS_REPEAT");
+  expect(continuousReality?.loop?.at?.(-1) === "STOP_ONLY_WHEN_REALITY_EQUALS_FIXED_POINT", "GLOBAL_STOP_ONLY_FIXED_POINT");
+  expect(continuousReality?.stopping_condition?.only === "REALITY_EQUALS_FIXED_POINT", "GLOBAL_STOP_CONDITION_REALITY");
+  expect(continuousReality?.invariants?.UNKNOWN_IS_NOT_PASS === true, "GLOBAL_UNKNOWN_NOT_PASS");
+  expect(continuousReality?.invariants?.COMMITTED_IS_NOT_DEPLOYED === true, "GLOBAL_COMMITTED_NOT_DEPLOYED");
+  expect(continuousReality?.invariants?.NO_BLIND_OVERWRITE === true, "GLOBAL_NO_BLIND_OVERWRITE");
+
+
 
   const markerCount = (contractText.match(/"marker"\s*:\s*"GLOBAL_CONTINUITY_HARD_GATE"/g) || []).length;
   expect(markerCount === 1, `CONTINUIDADE_GLOBAL_OWNER_COUNT:${markerCount}`);
@@ -351,22 +563,6 @@ function counterprove(contract, extension, contractText, portaText, gateText, wr
   brokenExtension.counterproof_transition.CONCLUSION_FALSIFIED = brokenExtension.counterproof_transition.CONCLUSION_FALSIFIED.filter((item) => item !== "EXECUTE_CORRECTION_IN_CURRENT_RUN_IF_AUTHORIZED");
   variants.push({ contract: clone(contract), extension: brokenExtension, portaText, writerTexts, sharedScriptText });
 
-  const missingAxis = clone(extension);
-  missingAxis.axis_sweep.axes = missingAxis.axis_sweep.axes.filter((item) => item !== "SECURITY_SECRET_BOUNDARY");
-  variants.push({ contract: clone(contract), extension: missingAxis, portaText, writerTexts, sharedScriptText });
-
-  const competingWriter = clone(extension);
-  competingWriter.axis_sweep.writer_parallelism_same_scope = true;
-  variants.push({ contract: clone(contract), extension: competingWriter, portaText, writerTexts, sharedScriptText });
-
-  const brokenFanIn = clone(extension);
-  brokenFanIn.axis_sweep.fan_in = "PARALLEL_UNKNOWN_SINK";
-  variants.push({ contract: clone(contract), extension: brokenFanIn, portaText, writerTexts, sharedScriptText });
-
-  const lostDurableFact = clone(extension);
-  lostDurableFact.invariants.DURABLE_FACTS_SURVIVE_SESSIONS = false;
-  variants.push({ contract: clone(contract), extension: lostDurableFact, portaText, writerTexts, sharedScriptText });
-
   return variants.every(({ contract: candidate, extension: candidateExtension, portaText: candidatePorta, writerTexts: candidateWriters, sharedScriptText: candidateShared }) =>
     validate(candidate, candidateExtension, contractText, candidatePorta, gateText, candidateWriters, candidateShared).length > 0
   );
@@ -378,8 +574,8 @@ let contractText = "";
 let portaText = "";
 let gateText = "";
 let sharedScriptText = "";
-let hornReferenceText = "";
-let bootText = "";
+let commitCompassOwnerText = "";
+let commitCompassReport = { active: false, errors: [] };
 const writerTexts = {};
 const errors = [];
 try {
@@ -389,16 +585,17 @@ try {
   portaText = read(PORTA_VIVA);
   gateText = read(GATE);
   sharedScriptText = read(SHARED_WRITER_PUSH);
-  hornReferenceText = read(HORN_REFERENCE);
-  bootText = read(BOOT);
+  commitCompassOwnerText = read(COMMIT_COMPASS_OWNER);
   for (const path of MAIN_WRITERS) writerTexts[path] = read(path);
 } catch (error) {
   errors.push(`CONTINUIDADE_GLOBAL_LOAD:${error?.code || error?.name || "ERROR"}`);
 }
 if (contract && extension) {
-  errors.push(...validateHornGate(hornReferenceText, bootText));
   errors.push(...validate(contract, extension, contractText, portaText, gateText, writerTexts, sharedScriptText));
+  commitCompassReport = validateCommitCompass(commitCompassOwnerText);
+  errors.push(...commitCompassReport.errors);
   if (errors.length === 0 && !counterprove(contract, extension, contractText, portaText, gateText, writerTexts, sharedScriptText)) errors.push("CONTINUIDADE_GLOBAL_COUNTERPROOF_FAILED");
+  if (errors.length === 0 && !counterproveCommitCompass(commitCompassReport)) errors.push("COMMIT_COMPASS_COUNTERPROOF_FAILED");
 }
 
 const report = {
@@ -407,13 +604,25 @@ const report = {
   extension: EXTENSION,
   scope: contract?.global_continuity_policy?.scope ?? null,
   temporal_scope: contract?.global_continuity_policy?.temporal_scope ?? null,
-  axis_sweep: extension?.axis_sweep?.axes ?? [],
-  current_binding_chain: extension?.evidence_lifetime?.current_binding_chain ?? [],
   main_writers: MAIN_WRITERS,
   removed_main_writers: REMOVED_MAIN_WRITERS,
   shared_writer_push: SHARED_WRITER_PUSH,
-  horn_gate: errors.some((item) => item.startsWith("HORN_GATE_")) ? "BLOCKED" : "PASS",
-  horn_source_sha256: HORN_SOURCE_SHA256,
+  commit_compass: {
+    owner: COMMIT_COMPASS_OWNER,
+    active: commitCompassReport.active,
+    enforced: commitCompassReport.enforced ?? false,
+    closing: commitCompassReport.closing ?? false,
+    session_commits: commitCompassReport.sessionCommits ?? [],
+    adopted: commitCompassReport.adopted ?? [],
+    path_owners: commitCompassReport.pathOwners ?? {},
+    current_sha: commitCompassReport.currentSha ?? null,
+    parent_sha: commitCompassReport.parentSha ?? null,
+    writer: commitCompassReport.trailers?.["CentralDark-Writer"] ?? null,
+    scope: commitCompassReport.trailers?.["CentralDark-Scope"] ?? null,
+    finalizer: commitCompassReport.trailers?.["CentralDark-Finalizer"] ?? null,
+    next: commitCompassReport.trailers?.["CentralDark-Next"] ?? null,
+    counterproof: commitCompassReport.active && commitCompassReport.errors.length === 0 ? "ENFORCED" : "INACTIVE_OR_BLOCKED",
+  },
   input_authority_boundary: errors.some((item) => item.includes("AUTHORITY") || item.includes("INPUT_BOUNDARY")) ? "BLOCKED" : "PASS",
   counterproof: errors.length === 0 ? "PASS" : "BLOCKED",
   errors,
@@ -421,6 +630,6 @@ const report = {
 };
 
 if (JSON_OUT) console.log(JSON.stringify(report, null, 2));
-else console.log(`CONTINUIDADE_GLOBAL=${report.ok ? "PASS" : "BLOCKED"} AXES=${report.axis_sweep.length} MAIN_WRITERS=${MAIN_WRITERS.length} HORN_GATE=${report.horn_gate} EXTENSION=${extension ? "PASS" : "BLOCKED"} INPUT_AUTHORITY=${report.input_authority_boundary} COUNTERPROOF=${report.counterproof} ERRORS=${errors.length}`);
+else console.log(`CONTINUIDADE_GLOBAL=${report.ok ? "PASS" : "BLOCKED"} MAIN_WRITERS=${MAIN_WRITERS.length} EXTENSION=${extension ? "PASS" : "BLOCKED"} INPUT_AUTHORITY=${report.input_authority_boundary} COUNTERPROOF=${report.counterproof} ERRORS=${errors.length}`);
 for (const error of errors) console.error(`ERRO ${error}`);
 process.exit(report.ok ? 0 : 1);

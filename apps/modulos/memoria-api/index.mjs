@@ -3,6 +3,7 @@
 // RANDOLF/session/profile são proveniência; nunca autoridade nem promoção direta.
 
 import http from 'node:http';
+import { readFileSync } from 'node:fs';
 import { appendFile, mkdir, readFile, readdir, stat } from 'node:fs/promises';
 import { createHash, timingSafeEqual } from 'node:crypto';
 import path from 'node:path';
@@ -13,6 +14,7 @@ const INGEST_DIR = path.join(RAIZ, 'BRAIN', '09-INGESTAO');
 const MAX_BYTES = 200 * 1024;
 const MAX_INGEST_BYTES = 256 * 1024;
 const MAX_EVENT_TEXT = 64 * 1024;
+const DEFAULT_INGEST_TOKEN_FILE = '/root/CentralDark/secrets/memoria-ingest.token';
 
 function jsonResp(res, code, body) {
   const s = JSON.stringify(body);
@@ -129,8 +131,19 @@ function igualConstante(a, b) {
   return aa.length === bb.length && timingSafeEqual(aa, bb);
 }
 
+function carregarTokenIngest() {
+  const fromEnv = String(process.env.MEMORIA_INGEST_TOKEN || '').trim();
+  if (fromEnv) return fromEnv;
+  const tokenFile = String(process.env.MEMORIA_INGEST_TOKEN_FILE || DEFAULT_INGEST_TOKEN_FILE).trim();
+  try {
+    return readFileSync(tokenFile, 'utf8').trim();
+  } catch {
+    return '';
+  }
+}
+
 function autorizarIngest(req) {
-  const expected = String(process.env.MEMORIA_INGEST_TOKEN || '').trim();
+  const expected = carregarTokenIngest();
   if (!expected) return { ok: false, reason: 'MEMORIA_INGEST_TOKEN_UNCONFIGURED' };
   const header = String(req.headers.authorization || '');
   const match = header.match(/^Bearer\s+(.+)$/i);
@@ -340,7 +353,7 @@ const server = http.createServer(async (req, res) => {
         ok: true,
         raiz: RAIZ,
         ingest: {
-          enabled: Boolean(String(process.env.MEMORIA_INGEST_TOKEN || '').trim()),
+          enabled: Boolean(carregarTokenIngest()),
           route: '/ingest',
           canonical_write: false,
           continuity_context_preserved: true,

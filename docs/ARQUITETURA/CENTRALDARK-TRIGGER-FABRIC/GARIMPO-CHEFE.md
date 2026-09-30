@@ -37,8 +37,68 @@ Leis:
 
 Fronteira atual:
 - `GARIMPO-CHEFE` como fonte de garimpo: PROVADO por material salvo.
-- Drop operacional único na VPS/Linux: `scripts/memory-linker/inbox/`.
-- Links de conveniência da inbox apontam para evolução, aprendizados, contrato GARIMPO-CHEFE e Dream Review.
-- Wiring automático completo da pasta até cristalização: PARCIAL — sentinel Kanban pode identificar matéria pendente; cristalização continua exigindo Dream Review + MetaLupa + Writer autorizado.
+- Wiring automático completo da pasta até cristalização: NOT_PROVEN.
 - Runtime global: NOT_PROVEN sem receipt SHA→artefato/deployment→runtime.
-- Checkout canônico da VPS deve permanecer espelho limpo; mineração útil trabalha em worktree isolada e volta por commit/push/PR.
+
+## Pós-cristalização — coleta de lixo provada
+
+Depois que o minério foi classificado, deduplicado, absorvido pelo owner e cristalizado com evidência, o GARIMPO pode descartar somente **cópias derivadas comprovadamente reproduzíveis**.
+
+Fluxo obrigatório:
+
+```text
+MINÉRIO
+→ HASH
+→ DEDUPE
+→ CLASSIFY
+→ OWNER
+→ CRYSTALLIZE
+→ COUNTERPROOF
+→ GC_CANDIDATE
+→ DRY_RUN
+→ APPLY
+→ REMEASURE_FREE_SPACE
+→ RECEIPT
+```
+
+Executor subordinado a este contrato:
+
+```text
+scripts/casa/garimpo-proof-gc.ps1
+```
+
+Classes permitidas para GC automático:
+
+```text
+EMPTY_DERIVED_DIR
+EXACT_DUPLICATE_COPY
+REPRODUCIBLE_EXTRACTED_COPY
+EPHEMERAL_NPX_CACHE_NOT_IN_USE
+```
+
+Classes que **nunca** viram lixo por inferência:
+
+```text
+SECRET_OR_CREDENTIAL
+UNIQUE_SOURCE
+UNPROVED_EXTRACTION
+OUT_OF_SCOPE_PERSONAL_FILE
+ACTIVE_RUNTIME_PATH
+UNKNOWN
+```
+
+Invariantes:
+
+```text
+DRY_RUN_DEFAULT=true
+APPLY_REQUIRES_EXPLICIT_SWITCH=true
+HASH_OR_STREAM_IDENTITY_REQUIRED=true
+ONE_COPY_MUST_SURVIVE=true
+PROTECTED_MATERIAL_FAILS_CLOSED=true
+PROCESS_IN_USE_BLOCKS_CACHE_DELETE=true
+CRYSTALLIZED != DELETE_UNLESS_REPRODUCIBLE
+UNKNOWN != DELETE
+GC_RESULT_REQUIRES_RECEIPT=true
+```
+
+O objetivo é impedir reacúmulo sem transformar limpeza em perda de memória: **bruto único permanece; cópia derivada provada pode sair**.

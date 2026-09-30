@@ -1,7 +1,7 @@
 // Plugin CentralDark Grafo Vivo — ponto de entrada.
 // Registra views, comandos, Hub de conhecimento e autoatualizador.
 
-import { Notice, Platform, Plugin, WorkspaceLeaf } from "obsidian";
+import { Notice, Platform, Plugin, TFile, WorkspaceLeaf } from "obsidian";
 import { GrafoVivoView, VIEW_TYPE_GRAFO_VIVO } from "./view";
 import { Grafo3DView, VIEW_TYPE_GRAFO_3D } from "./view3d";
 import { DEFAULT_SETTINGS, GrafoVivoSettings, GrafoVivoSettingTab } from "./settings";
@@ -17,6 +17,7 @@ export default class GrafoVivoPlugin extends Plugin {
   autoUpdater!: AutoAtualizador;
   semanticClient: SemanticClient | null = null;
   knowledgeHubClient: KnowledgeHubClient | null = null;
+  private pendingKnowledgeSync = new Map<string, number>();
 
   async onload() {
     await this.loadSettings();
@@ -31,6 +32,9 @@ export default class GrafoVivoPlugin extends Plugin {
       VIEW_TYPE_GRAFO_3D,
       (leaf) => new Grafo3DView(leaf, this),
     );
+
+    this.registerEvent(this.app.vault.on("create", (file) => this.agendarKnowledgeAutoSync(file)));
+    this.registerEvent(this.app.vault.on("modify", (file) => this.agendarKnowledgeAutoSync(file)));
 
     this.addRibbonIcon("git-fork", "Abrir Grafo Vivo CentralDark", () => {
       this.ativarView();
@@ -127,10 +131,47 @@ export default class GrafoVivoPlugin extends Plugin {
   }
 
   async onunload() {
+    for (const timeoutId of this.pendingKnowledgeSync.values()) {
+      window.clearTimeout(timeoutId);
+    }
+    this.pendingKnowledgeSync.clear();
     this.semanticClient?.stop();
     this.semanticClient = null;
     this.knowledgeHubClient = null;
     this.autoUpdater?.parar();
+  }
+
+  private agendarKnowledgeAutoSync(file: unknown) {
+    if (!this.settings.knowledgeHubAutoSyncEnabled) return;
+    if (!(file instanceof TFile)) return;
+    if (file.extension !== "md") return;
+    if (!this.knowledgeHubClient) return;
+
+    const previous = this.pendingKnowledgeSync.get(file.path);
+    if (previous) window.clearTimeout(previous);
+
+    const delayMs = Math.max(2, this.settings.knowledgeHubAutoSyncDelaySeconds || 12) * 1000;
+    const timeoutId = window.setTimeout(async () => {
+      this.pendingKnowledgeSync.delete(file.path);
+      try {
+        const receipt = await this.knowledgeHubClient!.publishFile(file, {
+          kind: "obsidian.note.autosync",
+          provenance: "Obsidian Grafo Vivo — auto-sync local por criação/modificação de nota",
+          syncMode: "auto",
+          metadata: {
+            route: "OBSIDIAN_PLUGIN -> MEMORIA_API -> BRAIN_LEDGER",
+            manifest_hint: this.settings.brainManifestUrl,
+          },
+        });
+        if (receipt.event_id) {
+          console.log(`[CentralDark Grafo Vivo] nota sincronizada: ${file.path} -> ${receipt.event_id}`);
+        }
+      } catch (error) {
+        console.warn("[CentralDark Grafo Vivo] auto-sync falhou", file.path, error);
+      }
+    }, delayMs);
+
+    this.pendingKnowledgeSync.set(file.path, timeoutId);
   }
 
   async ativarView() {

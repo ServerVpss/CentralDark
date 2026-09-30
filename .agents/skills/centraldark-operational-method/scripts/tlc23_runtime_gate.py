@@ -26,6 +26,8 @@ PDF = ROOT / "docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf"
 SOUL = ROOT / "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
 SOUL_BINDING = ROOT / "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-TLC23-RUNTIME-BINDING.yml"
 BOOT = ROOT / "CENTRALDARK_AI_BOOT.yaml"
+COGNITIVE_CAPABILITIES = ROOT / "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md"
+METACOGNITION = ROOT / "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md"
 SKILL = ROOT / ".agents/skills/centraldark-operational-method/SKILL.md"
 CONTRACT = ROOT / ".agents/skills/centraldark-operational-method/contracts/TLC23-RUNTIME-GATE.yml"
 
@@ -46,6 +48,13 @@ def sha256_file(path: Path) -> str | None:
         for chunk in iter(lambda: fh.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def file_contains_all(path: Path, markers: tuple[str, ...]) -> bool:
+    if not path.is_file():
+        return False
+    content = path.read_text(encoding="utf-8")
+    return all(marker in content for marker in markers)
 
 
 def git_rev_parse(*refs: str) -> str | None:
@@ -77,6 +86,9 @@ def measure_source() -> dict:
         "canonical_soul_present": SOUL.is_file(),
         "soul_binding_present": SOUL_BINDING.is_file(),
         "boot_present": BOOT.is_file(),
+        "cognitive_bios_contract_present": file_contains_all(BOOT, ("cognitive_bios:", 'role: "ADAPTIVE_BOOT_POLICY_LAYER"', "firmware_mutation: false", "native_os_kernel_mutation: false", "COGNITIVE_BIOS_STATUS")),
+        "cognitive_capabilities_present": file_contains_all(COGNITIVE_CAPABILITIES, ("INSTINTO_SUPERIOR=OPERATIONAL_REFLEX", "REALITY_REMAINS_JUDGE=true")),
+        "metacognition_present": file_contains_all(METACOGNITION, ("META_METACOGNICAO_OPERACIONAL", "ZERO_SILENT_LEARNING=true")),
         "operational_skill_present": SKILL.is_file(),
         "contract_present": CONTRACT.is_file(),
     }
@@ -99,6 +111,9 @@ def binding_check(source: dict | None = None, runtime: dict | None = None) -> di
         "canonical_soul_present": source.get("canonical_soul_present") is True,
         "soul_binding_present": source.get("soul_binding_present") is True,
         "boot_present": source.get("boot_present") is True,
+        "cognitive_bios_contract_present": source.get("cognitive_bios_contract_present") is True,
+        "cognitive_capabilities_present": source.get("cognitive_capabilities_present") is True,
+        "metacognition_present": source.get("metacognition_present") is True,
         "operational_skill_present": source.get("operational_skill_present") is True,
         "contract_present": source.get("contract_present") is True,
         "centraldark_runtime_evidence_measured": bool(runtime.get("centraldark_runtime_fingerprint")),
@@ -173,6 +188,108 @@ def evaluate(receipt: dict, source: dict | None = None, runtime: dict | None = N
     }
 
 
+
+def cage_test(iterations: int = 64) -> dict:
+    """Adversarial cage: PASS can only escape through the complete TLC23 body.
+
+    "Loop eterno" is implemented as repeat-until-fixed-point semantics with a
+    bounded probe budget. Hitting the budget without a stable result is fail-closed
+    instead of consuming resources forever.
+    """
+    if iterations < 1 or iterations > 4096:
+        return {
+            "mode": "TLC23_ADVERSARIAL_CAGE",
+            "verdict": "BLOCKED",
+            "reason": "ITERATION_BUDGET_INVALID",
+            "iterations": iterations,
+            "law": "RESOURCE_GUARD != BYPASS",
+        }
+
+    source = measure_source()
+    runtime = runtime_evidence()
+    binding = binding_check(source, runtime)
+    if binding["verdict"] != "PASS":
+        return {
+            "mode": "TLC23_ADVERSARIAL_CAGE",
+            "verdict": "BLOCKED",
+            "reason": "BINDING_NOT_PROVED",
+            "binding": binding,
+            "iterations": 0,
+            "law": "UNKNOWN != PASS",
+        }
+
+    legitimate = {
+        "owner": "TLC23_CAGE_CONTROL",
+        "same_target": True,
+        "same_head_or_runtime_fingerprint": True,
+        "action_executed": True,
+        "action_result_measured": True,
+        "post_probe_passed": True,
+        "counterproof_regression_found": False,
+        "fixed_point_reached": True,
+    }
+
+    attacks = (
+        ("PLAN_ONLY", dict(legitimate, action_executed=False, narrative="vou executar depois"), {"BLOCKED"}),
+        ("NO_ACTION", dict(legitimate, action_executed=False), {"UNKNOWN"}),
+        ("WRONG_TARGET", dict(legitimate, same_target=False), {"UNKNOWN"}),
+        ("STALE_HEAD_OR_RUNTIME", dict(legitimate, same_head_or_runtime_fingerprint=False), {"UNKNOWN"}),
+        ("UNMEASURED_RESULT", dict(legitimate, action_result_measured=False), {"UNKNOWN"}),
+        ("POST_PROBE_FAILED", dict(legitimate, post_probe_passed=False), {"UNKNOWN"}),
+        ("COUNTERPROOF_FOUND_REGRESSION", dict(legitimate, counterproof_regression_found=True), {"UNKNOWN"}),
+        ("FIXED_POINT_FALSE", dict(legitimate, fixed_point_reached=False), {"UNKNOWN"}),
+        ("NO_NEW_INFORMATION", dict(legitimate, new_material_information=False), {"NO_CHANGE"}),
+        ("SAME_STATE_NO_DELTA", dict(legitimate, previous_state_hash="same", current_state_hash="same"), {"NO_CHANGE"}),
+    )
+
+    attack_counts = {name: 0 for name, _receipt, _allowed in attacks}
+    rounds = 0
+    for round_index in range(1, iterations + 1):
+        rounds = round_index
+        for name, receipt, allowed in attacks:
+            result = evaluate(receipt, source, runtime)
+            attack_counts[name] += 1
+            if result["verdict"] == "PASS" or result["verdict"] not in allowed:
+                return {
+                    "mode": "TLC23_ADVERSARIAL_CAGE",
+                    "verdict": "BYPASS_DETECTED",
+                    "round": round_index,
+                    "attack": name,
+                    "observed": result,
+                    "expected": sorted(allowed),
+                    "binding": binding,
+                    "law": "PASS_WITHOUT_COMPLETE_BODY = FAIL",
+                }
+
+        control = evaluate(legitimate, source, runtime)
+        if control["verdict"] != "PASS":
+            return {
+                "mode": "TLC23_ADVERSARIAL_CAGE",
+                "verdict": "BLOCKED",
+                "reason": "LEGITIMATE_EXIT_DID_NOT_PASS",
+                "round": round_index,
+                "control": control,
+                "binding": binding,
+            }
+
+    return {
+        "mode": "TLC23_ADVERSARIAL_CAGE",
+        "verdict": "PASS",
+        "rounds": rounds,
+        "attack_cases": len(attacks),
+        "attack_evaluations": sum(attack_counts.values()),
+        "attack_counts": attack_counts,
+        "legitimate_exit_evaluations": rounds,
+        "bypass_detected": False,
+        "source_identity_proved": source.get("source_identity_proved") is True,
+        "tlc23_sha256": source.get("tlc23_sha256"),
+        "tlc23_size": source.get("tlc23_size"),
+        "target_head": source.get("target_head"),
+        "main_sha": source.get("main_sha"),
+        "runtime": runtime,
+        "law": "ONLY_COMPLETE_TLC23_BODY_MAY_EXIT_AS_PASS",
+    }
+
 def self_test() -> dict:
     source = {
         "target_head": "head",
@@ -181,6 +298,9 @@ def self_test() -> dict:
         "canonical_soul_present": True,
         "soul_binding_present": True,
         "boot_present": True,
+        "cognitive_bios_contract_present": True,
+        "cognitive_capabilities_present": True,
+        "metacognition_present": True,
         "operational_skill_present": True,
         "contract_present": True,
     }
@@ -206,13 +326,15 @@ def self_test() -> dict:
     assert evaluate(loop, source, runtime)["verdict"] == "BLOCKED"
     missing_runtime = dict(runtime, hermes_runtime_fingerprint=None)
     assert binding_check(source, missing_runtime)["verdict"] == "UNKNOWN"
+    missing_cognitive_bios = dict(source, cognitive_bios_contract_present=False)
+    assert binding_check(missing_cognitive_bios, runtime)["verdict"] == "UNKNOWN"
     no_delta = dict(good, new_material_information=False)
     assert evaluate(no_delta, source, runtime)["verdict"] == "NO_CHANGE"
     same_state = dict(good, previous_state_hash="state-1", current_state_hash="state-1")
     assert evaluate(same_state, source, runtime)["verdict"] == "NO_CHANGE"
     changed_state = dict(good, previous_state_hash="state-1", current_state_hash="state-2")
     assert evaluate(changed_state, source, runtime)["verdict"] == "PASS"
-    return {"status": "PASS", "tests": 8}
+    return {"status": "PASS", "tests": 9}
 
 
 def load_receipt(path: str) -> dict:
@@ -227,7 +349,9 @@ def main() -> int:
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--self-test", action="store_true")
     mode.add_argument("--binding-check", action="store_true")
+    mode.add_argument("--cage-test", action="store_true")
     mode.add_argument("--receipt", metavar="PATH")
+    parser.add_argument("--iterations", type=int, default=64)
     args = parser.parse_args()
 
     if args.self_test:
@@ -236,6 +360,9 @@ def main() -> int:
     elif args.binding_check:
         out = binding_check()
         code = 0 if out["verdict"] == "PASS" else 2
+    elif args.cage_test:
+        out = cage_test(args.iterations)
+        code = 0 if out["verdict"] == "PASS" else 3
     else:
         out = evaluate(load_receipt(args.receipt))
         code = 0 if out["verdict"] in {"PASS", "NO_CHANGE"} else 2

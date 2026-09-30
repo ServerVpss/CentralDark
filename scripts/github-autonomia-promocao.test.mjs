@@ -1,16 +1,20 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
   DEFAULT_WAIT_TIMEOUT_MS,
   FAST_MERGE_POLICY,
   CANONICAL_MAP_PATH,
+  PR_MOTHER_NUMBER,
   SQUASH_FIXED_POINT_GOAL,
+  actionRequiredRunIds,
   authorizationFor,
   deriveHornFixedPoint,
   evaluateCandidate,
   executionProvenance,
   intentReceipt,
+  promotionLaneDecision,
   scanPullFiles,
   sealReceipt,
   selectLatestNonSkipped,
@@ -65,6 +69,27 @@ function successfulRuns(required) {
   }));
 }
 
+
+test("child compatible healthy is mandatory lane", () => {
+  const lane = promotionLaneDecision({ matchingChild: { number: 1579, state: "open", draft: false, mergeable: true, mergeable_state: "clean" } });
+  assert.equal(lane.decision, "CHILD_REQUIRED");
+  assert.equal(lane.child_trace_required, true);
+});
+
+test("stale child requires trace before global bypass", () => {
+  const blocked = promotionLaneDecision({ matchingChild: { number: 1579, state: "open", draft: false, mergeable: false, mergeable_state: "dirty" } });
+  assert.equal(blocked.decision, "CHILD_STALE_BLOCKED");
+  assert.equal(blocked.child_blocked_receipt, "CHILD_LANE_STALE_BLOCKED");
+  const bypass = promotionLaneDecision({ matchingChild: { number: 1579, state: "open", draft: false, mergeable: false, mergeable_state: "dirty" }, globalRule: true });
+  assert.equal(bypass.decision, "DIRECT_MAIN_ALLOWED_AFTER_CHILD_TRACE");
+  assert.equal(bypass.post_main_child_receipt_required, true);
+});
+
+test("no child keeps direct main without creating pr", () => {
+  const lane = promotionLaneDecision();
+  assert.equal(lane.decision, "DIRECT_MAIN_ALLOWED");
+  assert.equal(lane.child_trace_required, false);
+});
 
 test("Horn forward chaining converge quando nenhum fato novo pode ser acrescentado", () => {
   const proof = deriveHornFixedPoint(["A"], [
@@ -356,6 +381,25 @@ test("ausência do recibo canônico do mapa é bloqueio explícito", () => {
   assert.match(result.reasons.join(" "), /CANONICAL_VALIDATION_MISSING/);
 });
 
+test("fast path defere missing pending failure cancelled e skipped", () => {
+  const cases = [
+    ["missing", []],
+    ["pending", [{ id: 1, name: "gate-a", run_number: 1, status: "queued", conclusion: null }]],
+    ["failure", [{ id: 1, name: "gate-a", run_number: 1, status: "completed", conclusion: "failure" }]],
+    ["cancelled", [{ id: 1, name: "gate-a", run_number: 1, status: "completed", conclusion: "cancelled" }]],
+    ["skipped", [{ id: 1, name: "gate-a", run_number: 1, status: "completed", conclusion: "skipped" }]],
+  ];
+  for (const [label, workflowRuns] of cases) {
+    const result = evaluate(prFixture({ updated_at: "2026-08-16T00:00:00.000Z" }), {
+      requiredWorkflows: ["gate-a"],
+      workflowRuns,
+      now: Date.parse("2026-08-16T12:00:00.000Z"),
+    });
+    assert.equal(result.decision, "DEFERRED", label);
+    assert.notEqual(result.workflows[0].state, "PASS", label);
+  }
+});
+
 test("fast path ignora thread comum mas não CHANGES_REQUESTED explícito", () => {
   const common = evaluate(prFixture(), { unresolvedThreads: 9 });
   assert.equal(common.decision, "READY");
@@ -377,6 +421,12 @@ test("fast path continua fail-closed para conflito, fork e autor externo", () =>
   assert.equal(external.decision, "BLOCKED");
   assert.match(external.reasons.join(" "), /AUTHOR_NOT_TRUSTED/);
   assert.match(external.reasons.join(" "), /HEAD_EXTERNAL_REPOSITORY/);
+});
+
+test("PR-mãe permanente #1562 nunca entra no veículo de squash", () => {
+  const mother = evaluate(prFixture({ number: PR_MOTHER_NUMBER }));
+  assert.equal(mother.decision, "BLOCKED");
+  assert.match(mother.reasons.join(" "), /PR_MOTHER_MERGE_FORBIDDEN/);
 });
 
 test("scanner bloqueia caminho sensível e segredo literal, não documentação comum", () => {
@@ -412,7 +462,7 @@ test("modo adversarial por label visual preserva workflows e contraprova complet
   const pr = prFixture({ body: "sem recibo", labels: [{ name: "👑 PERMITO-SEGREDO" }] });
   const missing = evaluate(pr, { workflowRuns: [] });
   assert.equal(missing.mode, "ADVERSARIAL");
-  assert.equal(missing.decision, "WAIT");
+  assert.equal(missing.decision, "DEFERRED");
   assert.match(missing.waits.join(" "), /WORKFLOW_MISSING/);
 
   const ready = evaluate(pr, { workflowRuns: successfulRuns(["gate-a", "gate-b"]) });
@@ -427,13 +477,31 @@ test("hold explícito bloqueia sem apagar autorização", () => {
   assert.match(result.reasons.join(" "), /BLOCKING_LABEL:hold/);
 });
 
-test("seleção de workflow ignora skipped mais novo e usa execução real", () => {
-  const selected = selectLatestNonSkipped([
+test("execução mais nova vence PASS antigo inclusive quando falhou ou foi skipped", () => {
+  const selected = selectLatestWorkflowRun([
     { id: 1, name: "gate", run_number: 20, status: "completed", conclusion: "skipped" },
     { id: 2, name: "gate", run_number: 19, status: "completed", conclusion: "success" },
   ], "gate");
-  assert.equal(selected.id, 2);
+  assert.equal(selected.id, 1);
+  assert.equal(workflowVerdicts([selected], ["gate"])[0].state, "FAIL");
   assert.deepEqual(workflowVerdicts([], ["gate"]), [{ name: "gate", state: "MISSING", run_id: null, conclusion: null }]);
+});
+
+test("action_required não é FAIL: WAIT + run_id para approve", () => {
+  const result = evaluate(prFixture(), {
+    requiredWorkflows: ["porta-de-entrada"],
+    workflowRuns: [{
+      id: 35589535285,
+      name: "porta-de-entrada",
+      run_number: 90,
+      status: "completed",
+      conclusion: "action_required",
+    }],
+  });
+  assert.equal(result.decision, "WAIT");
+  assert.equal(result.reasons.includes("WORKFLOW_FAILED:porta-de-entrada:action_required"), false);
+  assert.match(result.waits.join(" "), /WORKFLOW_ACTION_REQUIRED:porta-de-entrada:35589535285/);
+  assert.deepEqual(actionRequiredRunIds(result.workflows), [35589535285]);
 });
 
 test("recibo selado é preso ao hash e expira", () => {
@@ -455,4 +523,45 @@ test("janela adversarial de espera continua configurável", () => {
   assert.equal(waitAgeMs(prFixture({ updated_at: "2026-08-14T02:00:00.000Z" })), null);
   assert.equal(waitTimeoutMsFromEnv({}), DEFAULT_WAIT_TIMEOUT_MS);
   assert.equal(waitTimeoutMsFromEnv({ BOT_WAIT_TIMEOUT_MINUTES: "10" }), 600000);
+});
+
+
+test("Dependabot workflow_run não faz fan-out em main ou PR humano", async () => {
+  const workflow = await readFile(
+    new URL("../.github/workflows/dependabot-auto-merge.yml", import.meta.url),
+    "utf8",
+  );
+  assert.match(
+    workflow,
+    /github\.event_name == 'workflow_run' && startsWith\(github\.event\.workflow_run\.head_branch, 'dependabot\/'\)/,
+  );
+  assert.doesNotMatch(
+    workflow,
+    /^\s*github\.event_name == 'workflow_run' \|\|$/m,
+  );
+});
+
+
+test("Trigger Fabric obrigatório dispara em todo PR para main", async () => {
+  const workflow = await readFile(
+    new URL("../.github/workflows/trigger-fabric-package.yml", import.meta.url),
+    "utf8",
+  );
+  const pullBlock = workflow.match(/\n  pull_request:\n([\s\S]*?)\n  push:\n/);
+  assert.ok(pullBlock, "pull_request block ausente");
+  assert.match(pullBlock[1], /branches:\s*\[main\]/);
+  assert.doesNotMatch(pullBlock[1], /\bpaths:/);
+});
+
+
+test("reconciliador da Casa não vira segundo promotor", async () => {
+  const source = await readFile(
+    new URL("./dependabot/reconcile-open-prs.mjs", import.meta.url),
+    "utf8",
+  );
+  assert.doesNotMatch(source, /\/pulls\/\$\{number\}\/merge/);
+  assert.doesNotMatch(source, /merge_method:\s*['"]squash['"]/);
+  assert.match(source, /centraldark_autonomia_recheck/);
+  assert.match(source, /centraldark_dependabot_reconcile/);
+  assert.match(source, /direct_merge=0/);
 });

@@ -1,0 +1,87 @@
+{
+  "$id": "centraldark://capability-intake/v1",
+  "type": "object",
+  "required": [
+    "source_id",
+    "source_type",
+    "capabilities"
+  ],
+  "properties": {
+    "source_id": {
+      "type": "string"
+    },
+    "source_type": {
+      "enum": [
+        "TEXT",
+        "IMAGE",
+        "VIDEO",
+        "ZIP",
+        "REPO",
+        "LOG",
+        "URL",
+        "DRIVE_DOC",
+        "TRANSCRIPT",
+        "CODE",
+        "OTHER"
+      ]
+    },
+    "content_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "provenance": {
+      "type": "string"
+    },
+    "sensitivity": {
+      "enum": [
+        "NORMAL",
+        "SENSITIVE_QUARANTINE"
+      ]
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "status"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "KNOWN",
+              "PARTIAL",
+              "NEW_MATERIAL",
+              "CONTRADICTED",
+              "HISTORICAL",
+              "UNKNOWN"
+            ]
+          },
+          "owner": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "delta": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "evidence": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

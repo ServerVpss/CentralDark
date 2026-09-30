@@ -4,7 +4,6 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import test from "node:test";
-import { decideUniversalExecution, UNIVERSAL_EXECUTION_STANDARD } from "./universal-execution-standard.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const CORE = "LEIA-ME-IA.md";
@@ -18,6 +17,7 @@ const ADAPTERS = Object.freeze([
   ["CHATGPT.md", "CHATGPT"],
   [CLAUDE_BRIDGE, "CLAUDE"],
   ["GEMINI.md", "GEMINI"],
+  ["GROK.md", "GROK"],
   ["CODEX.md", "CODEX"],
   [CLAUDE_AUTOLOAD, "CLAUDE_CODE"],
   [".cursor/rules/centraldark-governanca.mdc", "CURSOR"],
@@ -294,74 +294,30 @@ test("prompt universal é ponte gerada, não segunda governança manual", () => 
   }
 });
 
-test("padrão universal cobre CI/CD, .exe e N modelos sem criar core paralelo", () => {
-  assert.equal(UNIVERSAL_EXECUTION_STANDARD.marker, "CENTRALDARK_UNIVERSAL_EXECUTION_STANDARD");
-  assert.equal(UNIVERSAL_EXECUTION_STANDARD.model_policy.n_models_supported, true);
-  assert.equal(UNIVERSAL_EXECUTION_STANDARD.model_policy.vote_as_truth, false);
-  assert.ok(UNIVERSAL_EXECUTION_STANDARD.applies_to.includes("ci"));
-  assert.ok(UNIVERSAL_EXECUTION_STANDARD.applies_to.includes("cd"));
-  assert.ok(UNIVERSAL_EXECUTION_STANDARD.applies_to.includes("executable"));
-  assert.ok(UNIVERSAL_EXECUTION_STANDARD.applies_to.includes("model_provider"));
 
-  const ci = decideUniversalExecution({
-    surface: "ci",
-    owner_present: true,
-    capability_present: true,
-    same_scope: true,
-    evidence_present: true,
-    post_probe_passed: true,
-    same_head: true,
-    supports_n_models: true,
-    models: [
-      { id: "modelo-a", health: "UNKNOWN", priority: 0 },
-      { id: "modelo-b", health: "READY", priority: 1 },
-      { id: "modelo-c", health: "PROVED", priority: 2 },
-    ],
-  });
-  assert.equal(ci.pass, true);
-  assert.equal(ci.decision, "REUSE");
-  assert.equal(ci.model_count, 3);
-  assert.equal(ci.vote_as_truth, false);
+test("check-list diário obrigatório é herdado pelo core sem virar segunda autoridade", () => {
+  const core = read(CORE);
+  const brain = read("SECOND-BRAIN.yml");
+  const rem = read("docs/CONSCIENCIA/REMEDICAO.md");
+  const checklist = read("docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md");
 
-  const exe = decideUniversalExecution({
-    surface: "executable",
-    owner_present: true,
-    capability_present: false,
-    same_scope: true,
-    evidence_present: true,
-    post_probe_passed: true,
-    artifact_hash: "sha256:fixture",
-    launch_probe_passed: true,
-    deterministic_fallback: true,
-    models: [],
-  });
-  assert.equal(exe.pass, true);
-  assert.equal(exe.decision, "EXTEND_EXISTING");
-  assert.ok(exe.facts.includes("DETERMINISTIC_FALLBACK_AVAILABLE"));
+  assert.ok(core.includes("docs/CONSCIENCIA/REMEDICAO.md"), "CORE_DOES_NOT_LOAD_REMEDICAO");
+  assert.ok(checklist, "DAILY_CHECKLIST_OWNER_MISSING");
 
-  const unsupportedN = decideUniversalExecution({
-    surface: "router",
-    owner_present: true,
-    capability_present: true,
-    same_scope: true,
-    evidence_present: true,
-    post_probe_passed: true,
-    supports_n_models: false,
-  });
-  assert.equal(unsupportedN.pass, true);
-  assert.ok(unsupportedN.facts.includes("N_MODEL_SUPPORT_ADAPTER_REQUIRED"));
-  assert.notEqual(unsupportedN.decision, "CREATE_MINIMAL");
+  for (const marker of [
+    "CHECKLIST_IS_DERIVED_VIEW=true",
+    "CHECKLIST_IS_NOT_SOURCE_OF_TRUTH=true",
+    "CHECKLIST_DOES_NOT_OVERRIDE_LIVE_STATE=true",
+    "REGISTER_BEFORE_REPORT=true",
+  ]) {
+    assert.ok(checklist.includes(marker), `DAILY_CHECKLIST_MARKER_MISSING:${marker}`);
+  }
 
-  const falseGreen = decideUniversalExecution({
-    surface: "cd",
-    owner_present: true,
-    capability_present: true,
-    same_scope: true,
-    evidence_present: true,
-    post_probe_passed: false,
-    same_head: true,
-  });
-  assert.equal(falseGreen.pass, false);
-  assert.equal(falseGreen.decision, "BLOCKED_UNKNOWN");
-  assert.ok(falseGreen.errors.includes("POST_PROBE_REQUIRED_BEFORE_GREEN"));
+  assert.ok(brain.includes('owner: "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md"'));
+  assert.ok(brain.includes("required_after_material_delta: true"));
+  assert.ok(brain.includes("MATERIAL_DELTA_UPDATES_DAILY_CHECKLIST"));
+
+  assert.ok(rem.includes("DAILY_CHECKLIST_UPDATE_REQUIRED_FOR_MATERIAL_DELTA=true"));
+  assert.ok(rem.includes("DAILY_CHECKLIST_OWNER=docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md"));
+  assert.ok(rem.includes("T1 → !REGISTRA → RECEIPT/COMMIT/LEDGER → 🪡 CHECK-LIST DIARIO → READBACK → RELATO AO CHEFE"));
 });

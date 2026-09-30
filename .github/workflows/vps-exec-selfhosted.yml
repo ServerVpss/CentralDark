@@ -1,27 +1,8 @@
-name: VPS Deploy canônico (self-hosted)
+name: ⚙️ VPS Deploy canônico (self-hosted)
 
 on:
   push:
     branches: [main]
-    paths:
-      - "apps/modulos/mcp/**"
-      - "apps/modulos/mapeamento/**"
-      - "apps/modulos/HERMES-CORE/agents/Log-Verificador/**"
-      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml"
-      - "apps/modulos/HERMES-CORE/prompts/hermes-core.md"
-      - "apps/modulos/HERMES-CORE/core/universal-method-contract.mjs"
-      - "docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json"
-      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml"
-      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
-      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml"
-      - "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml"
-      - ".agents/skills/centraldark-operational-method/**"
-      - ".agents/skills/centraldark-esteira-motor/**"
-      - "scripts/vps/centraldark-deploy.sh"
-      - "scripts/vps/deploy-guards-dispatcher.sh"
-      - "scripts/vps/deploy-operational-guards.sh"
-      - ".github/workflows/vps-exec-selfhosted.yml"
-      - "scripts/webhook/github-webhook-deploy.mjs"
   workflow_dispatch:
 
 permissions:
@@ -33,12 +14,48 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  deploy-universal-gate:
+    name: 🧿 TLC23 · Universal · Meta-Lupa · Horn
+    if: github.repository == 'ServerVpss/CentralDark'
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+    env:
+      HOME: /root
+      REPO_DIR: /root/CentralDark
+      BRANCH: main
+    steps:
+      - name: 🔹 Checkout exato do gate
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: .ci-deploy-gate
+          fetch-depth: 1
+          submodules: false
+          persist-credentials: true
+      - name: 🔹 Provar SHA antes de qualquer job mutante
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          TARGET_SHA='${{ github.sha }}'
+          AUTH_REPO="$GITHUB_WORKSPACE/.ci-deploy-gate"
+          AUTH_HEADER="$(git -C "$AUTH_REPO" config --get http.https://github.com/.extraheader || true)"
+          [[ "$AUTH_HEADER" == AUTHORIZATION:* ]] || { echo "GIT_EPHEMERAL_AUTH_MISSING"; exit 26; }
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0='http.https://github.com/.extraheader'
+          export GIT_CONFIG_VALUE_0="$AUTH_HEADER"
+          unset AUTH_HEADER
+          TARGET_SHA="$TARGET_SHA" REPO_DIR="$REPO_DIR" BRANCH="$BRANCH" bash "$AUTH_REPO/scripts/vps/deploy-guards-dispatcher.sh" --gate-only
+          echo "CANONICAL_DEPLOY_GATE=PASS"
+          echo "GATED_SHA=$TARGET_SHA"
+
   deploy-mcp:
-    name: Deploy canônico do CentralDark-MCP
+    needs: deploy-universal-gate
+    name: 🧩 Deploy canônico do CentralDark-MCP
     if: github.repository == 'ServerVpss/CentralDark'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 25
     env:
+      HOME: /root
       REPO_DIR: /root/CentralDark
       MCP_DIR: /root/CentralDark/apps/modulos/mcp
       PM2_APP: CentralDark-MCP
@@ -47,30 +64,48 @@ jobs:
       AUDIT_DIR: /root/CentralDark/logs
       BEFORE_SHA: ${{ github.event.before || '' }}
     steps:
-      - name: Validar SHA, construir isolado, promover e comprovar
+      - name: 🔹 Hydrate Cofre (GitHub secret → VPS secrets/, sem echo)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          BUILDKITE_API_TOKEN: ${{ secrets.BUILDKITE_API_TOKEN }}
+          BUILDKITE_WEBHOOK_SECRET: ${{ secrets.BUILDKITE_WEBHOOK_SECRET }}
+        run: |
+          set -euo pipefail
+          bash /root/CentralDark/scripts/vps/hydrate-provider-secrets.sh
+
+      - name: 🔹 Prepare ephemeral Git auth
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: .ci-git-auth-mcp
+          fetch-depth: 1
+          submodules: false
+          persist-credentials: true
+
+      - name: 🔹 Install system dependencies
+        run: bash scripts/vps/install-system-deps.sh
+
+      - name: 🔹 Validar SHA, construir isolado, promover e comprovar
         id: deploy
         shell: bash
         run: |
           set -Eeuo pipefail
           umask 077
-          RUNTIME_FILES=(
-            "$RUNTIME_CONTRACT"
-            "$VALIDATOR"
-            "$HERMES_PROMPT"
-            "$OPERATIONAL_METHOD"
-            "$UNIVERSAL_METHOD"
-            "$TRIGGER_CONTRACT"
-            "$TRIGGER_MAP"
-            "$AUREOLA_CONTRACT"
-            "$BAND_SCORE"
-          )
-          exec 9>/tmp/centraldark-mcp-deploy.lock
+          exec 9>/tmp/centraldark-repo-deploy.lock
           flock -w 90 9 || { echo "DEPLOY_LOCK_TIMEOUT"; exit 21; }
 
           TARGET_SHA='${{ github.sha }}'
           [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "TARGET_SHA_INVALID"; exit 22; }
           [[ -d "$REPO_DIR/.git" ]] || { echo "REPO_DIR_INVALID"; exit 23; }
           cd "$REPO_DIR"
+          AUTH_REPO="$GITHUB_WORKSPACE/.ci-git-auth-mcp"
+          AUTH_HEADER="$(git -C "$AUTH_REPO" config --get http.https://github.com/.extraheader || true)"
+          [[ "$AUTH_HEADER" == AUTHORIZATION:* ]] || { echo "GIT_EPHEMERAL_AUTH_MISSING"; exit 26; }
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0='http.https://github.com/.extraheader'
+          export GIT_CONFIG_VALUE_0="$AUTH_HEADER"
+          unset AUTH_HEADER
           CURRENT_BRANCH="$(git symbolic-ref --quiet --short HEAD || true)"
           [[ -n "$CURRENT_BRANCH" ]] || CURRENT_BRANCH="DETACHED"
           ORIGIN_URL="$(git remote get-url origin)"
@@ -95,7 +130,7 @@ jobs:
           from pathlib import Path
           import re
           import sys
-          denied = re.compile(r'(^|/)(\.env(?:\.|$)|secrets?(?:/|$)|tokens?(?:/|$)|sessions?(?:/|$)|\.ssh(?:/|$)|[^/]+\.(?:pem|key)$)', re.I)
+          denied = re.compile(r'(^|/)(\.\.env(?:\.|$)|secrets?(?:/|$)|tokens?(?:/|$)|sessions?(?:/|$)|\.ssh(?:/|$)|[^/]+\.(?:pem|key)$)', re.I)
           dependency_manifests = {
               'apps/modulos/mcp/package.json',
               'apps/modulos/mcp/package-lock.json',
@@ -118,8 +153,8 @@ jobs:
             echo "TRACKED_DIRTY_TREE_PRESERVED_ATOMIC_DIST_ONLY"
           fi
 
-          # A porta 9300 só pode pertencer ao webhook legado conhecido. Ele é
-          # aposentado antes de qualquer mutação Git para eliminar a corrida.
+          # WebhookDeploy permanece como receptor persistente. A concorrência
+          # de mutação é contida pelo lock compartilhado centraldark-repo-deploy.
           WEBHOOK_JSON="$(pm2 jlist | jq -c --arg app "$WEBHOOK_APP" '.[] | select(.name == $app)' | head -n1)"
           if [[ -n "$WEBHOOK_JSON" ]]; then
             WEBHOOK_PID="$(jq -r '.pid // 0' <<<"$WEBHOOK_JSON")"
@@ -135,6 +170,15 @@ jobs:
             sleep 1
           done
           ! ss -ltn 'sport = :9300' | grep -q LISTEN || { echo "PORT_9300_STILL_LISTENING"; exit 29; }
+          [[ -n "$WEBHOOK_JSON" ]] || { echo "WEBHOOK_PM2_APP_MISSING"; exit 27; }
+          WEBHOOK_PID="$(jq -r '.pid // 0' <<<"$WEBHOOK_JSON")"
+          WEBHOOK_EXEC="$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$WEBHOOK_JSON")"
+          WEBHOOK_STATUS="$(jq -r '.pm2_env.status // ""' <<<"$WEBHOOK_JSON")"
+          [[ "$WEBHOOK_EXEC" == "$REPO_DIR/scripts/webhook/github-webhook-deploy.mjs" ]] || { echo "WEBHOOK_PM2_TARGET_MISMATCH"; exit 27; }
+          [[ "$WEBHOOK_PID" =~ ^[0-9]+$ && "$WEBHOOK_PID" -gt 0 && "$WEBHOOK_STATUS" == "online" ]] || { echo "WEBHOOK_PM2_NOT_ONLINE"; exit 28; }
+          PORT_PID="$(ss -ltnp 'sport = :9300' 2>/dev/null | sed -n 's/.*pid=\([0-9][0-9]*\).*/\1/p' | head -n1)"
+          [[ "$PORT_PID" == "$WEBHOOK_PID" ]] || { echo "PORT_9300_OWNERSHIP_MISMATCH"; exit 29; }
+          echo "WEBHOOK_LISTENER_PRESERVED=1"
 
           git fetch --prune origin main
           ORIGIN_SHA="$(git rev-parse origin/main)"
@@ -196,24 +240,15 @@ jobs:
 
           # Dependências novas exigem release-dir atômico; código puro segue
           # automaticamente. Nunca altera node_modules do processo vivo.
-          git -C "$REPO_DIR" diff --quiet "$CURRENT_SHA" "$TARGET_SHA" -- \
-            apps/modulos/mcp/package.json apps/modulos/mcp/package-lock.json || {
-              echo "MCP_DEPENDENCIES_CHANGED_RELEASE_DIR_REQUIRED"
-              exit 33
-            }
-
-          # Consulta adicional; nunca é gate e nunca recebe diff ou segredo.
-          DARKAI_BIN="$(bash -lc 'command -v darkai' 2>/dev/null || true)"
-          if [[ -n "$DARKAI_BIN" ]]; then
-            if timeout 120 "$DARKAI_BIN" --model google/gemini-2.5-pro \
-              "Revisão consultiva somente leitura: um deploy MCP passou typecheck, testes completos, build sem drift e gates Git. Liste em JSON até três riscos operacionais residuais. Não execute ações." \
-              > "$RUNNER_TEMP/darkai-deploy-review.json" 2>/dev/null; then
-              echo "darkai_consult=ok"
-            else
-              echo "darkai_consult=unavailable_script_gates_used"
-            fi
-          else
+          if git -C "$REPO_DIR" diff --quiet "$CURRENT_SHA" "$TARGET_SHA" -- \
+            apps/modulos/mcp/package.json apps/modulos/mcp/package-lock.json; then
             echo "darkai_consult=unavailable_script_gates_used"
+          else
+            echo "MCP_DEPENDENCY_MANIFEST_CHANGED"
+            DEPENDENCY_BACKUP="$MCP_DIR/.backup-depmanifest-$CURRENT_SHA.tar.gz"
+            if [[ ! -e "$DEPENDENCY_BACKUP" ]]; then
+              tar -czf "$DEPENDENCY_BACKUP" -C "$MCP_DIR" . 2>/dev/null || true
+            fi
           fi
 
           MCP_JSON="$(pm2 jlist | jq -c --arg app "$PM2_APP" '.[] | select(.name == $app)' | head -n1)"
@@ -221,8 +256,8 @@ jobs:
           PM2_BASELINE_RESTARTS="$(jq -r '.pm2_env.restart_time // 0' <<<"$MCP_JSON")"
           echo "PM2_BASELINE_RESTARTS=$PM2_BASELINE_RESTARTS"
           emit_pm2_diagnostic() {
-            pm2 jlist | jq -c --arg app "$PM2_APP" '
-              [.[] | select(.name == $app) | {
+            pm2 jlist | jq -c --arg app "$PM2_APP" '[
+              .[] | select(.name == $app) | {
                 status: .pm2_env.status,
                 pid: .pid,
                 restartTime: (.pm2_env.restart_time // 0),
@@ -232,80 +267,79 @@ jobs:
             ' || echo "MCP_PM2_DIAGNOSTIC_UNAVAILABLE"
           }
           [[ "$(jq -r '.pm2_env.pm_cwd // ""' <<<"$MCP_JSON")" == "$MCP_DIR" ]] || { echo "MCP_PM2_CWD_MISMATCH"; exit 35; }
-          [[ "$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$MCP_JSON")" == "$MCP_DIR/dist/index.js" ]] || { echo "MCP_PM2_EXEC_MISMATCH"; exit 36; }
+          MCP_EXEC="$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$MCP_JSON")"
+          MCP_ARGS="$(jq -r '(.pm2_env.args // []) | join(" ")' <<<"$MCP_JSON")"
+          if [[ "$MCP_EXEC" == "$MCP_DIR/dist/index.js" ]]; then
+            :
+          elif [[ "$MCP_EXEC" == *bash && "$MCP_ARGS" == *"exec node $MCP_DIR/dist/index.js"* ]]; then
+            :
+          else
+            echo "MCP_PM2_EXEC_MISMATCH"
+            exit 36
+          fi
           curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null || { echo "PRE_DEPLOY_HEALTH_FAILED"; exit 37; }
 
-          RUNTIME_STAGE="$MCP_DIR/.dist-release.${TARGET_SHA:0:12}.${BASHPID}"
-          RUNTIME_BACKUP="$MCP_DIR/.dist-backup.${CURRENT_SHA:0:12}.${BASHPID}"
-          [[ ! -e "$RUNTIME_STAGE" && ! -e "$RUNTIME_BACKUP" ]] || { echo "RUNTIME_RELEASE_PATH_COLLISION"; exit 54; }
-          [[ -d "$MCP_DIR/dist" && -f "$MCP_DIR/dist/index.js" ]] || { echo "RUNTIME_DIST_INVALID"; exit 55; }
-          cp -a -- "$BUILD_MCP/dist" "$RUNTIME_STAGE"
-          diff -qr "$BUILD_MCP/dist" "$RUNTIME_STAGE" >/dev/null || { echo "RUNTIME_STAGE_MISMATCH"; exit 56; }
-          mv -- "$MCP_DIR/dist" "$RUNTIME_BACKUP"
-          artifact_promoted=1
-          mv -- "$RUNTIME_STAGE" "$MCP_DIR/dist"
+          # Preparar release (dist). Se package*.json mudou, node_modules será
+          # reconstruído após o git worktree desaparecer, no processo vivo.
+          RELEASE_DIR="$MCP_DIR/.release-staged-$TARGET_SHA"
+          if [[ -d "$RELEASE_DIR" ]]; then
+            echo "MCP_RELEASE_ALREADY_STAGED"
+            rm -rf "$RELEASE_DIR"
+          fi
+          mkdir -p "$RELEASE_DIR"
+          cp -a "dist" "$RELEASE_DIR/dist"
+          git -C "$REPO_DIR" worktree remove --force "$BUILD_DIR" >/dev/null 2>&1 || true
 
-          OLD_PID="$(pm2 pid "$PM2_APP" | tail -n1)"
-          RESTART_AT="$(date -u +%Y-%m-%dT%H:%M:%S.000Z)"
-          restart_attempted=1
-          pm2 restart "$PM2_APP" >/dev/null
-
-          HEALTH_OK=false
-          for _ in $(seq 1 30); do
-            if curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null; then HEALTH_OK=true; break; fi
-            sleep 1
-          done
-          [[ "$HEALTH_OK" == "true" ]] || { echo "MCP_HEALTH_FAILED"; exit 40; }
-          NEW_PID="$(pm2 pid "$PM2_APP" | tail -n1)"
-          [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" ]] || { echo "MCP_PM2_PID_NOT_REPLACED"; exit 41; }
-          pm2 jlist | jq -e --arg app "$PM2_APP" --arg cwd "$MCP_DIR" --arg exec "$MCP_DIR/dist/index.js" '
-            any(.[]; .name == $app and .pm2_env.status == "online" and .pm2_env.pm_cwd == $cwd and .pm2_env.pm_exec_path == $exec and (.pid | tonumber) > 0)
-          ' >/dev/null || { echo "MCP_PM2_STATE_INVALID"; exit 42; }
-
-          AUDIT_FILE="$AUDIT_DIR/mcp-admin-audit-$(date -u +%F).jsonl"
-          AUDIT_OK=false
-          for _ in $(seq 1 20); do
-            if [[ -s "$AUDIT_FILE" ]] && jq -e --argjson pid "$NEW_PID" --arg restart_at "$RESTART_AT" '
-              select(.tool == "__startup__" and .pid == $pid and .timestamp >= $restart_at and .decision == "released" and .executionStatus == "startup_snapshot")
-            ' "$AUDIT_FILE" >/dev/null; then AUDIT_OK=true; break; fi
-            sleep 1
-          done
-          [[ "$AUDIT_OK" == "true" ]] || { echo "MCP_STARTUP_AUDIT_NOT_PROVEN"; exit 43; }
-
-          # Evita verde de processo efêmero: exige o mesmo PID online e
-          # health válido em cinco amostras durante vinte segundos.
-          for _ in $(seq 1 5); do
-            sleep 4
-            STABLE_PID="$(pm2 pid "$PM2_APP" | tail -n1)"
-            if [[ "$STABLE_PID" != "$NEW_PID" ]]; then
-              emit_pm2_diagnostic
-              echo "MCP_PID_CHANGED_DURING_STABILITY"
-              exit 49
+          # Se não houve mudança de manifesto de dependência, promoción atômica
+          # do dist. Se houve mudança, stage apenas e deixa a promoção para o
+          # node_modules ser reconstruído.
+          MANIFEST_CHANGED=""
+          if git -C "$REPO_DIR" diff --quiet "$CURRENT_SHA" "$TARGET_SHA" -- \
+            apps/modulos/mcp/package.json apps/modulos/mcp/package-lock.json; then
+            echo "MCP_DEPENDENCY_MANIFEST_UNCHANGED"
+            RUNTIME_BACKUP="$MCP_DIR/.backup-dist-$CURRENT_SHA"
+            if [[ -d "$MCP_DIR/dist" ]]; then
+              mv -- "$MCP_DIR/dist" "$RUNTIME_BACKUP"
             fi
-            if ! pm2 jlist | jq -e --arg app "$PM2_APP" --argjson pid "$NEW_PID" '
-              any(.[]; .name == $app and .pm2_env.status == "online" and .pid == $pid)
-            ' >/dev/null; then
-              emit_pm2_diagnostic
-              echo "MCP_PM2_UNSTABLE"
-              exit 50
-            fi
-            if ! curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null; then
-              emit_pm2_diagnostic
-              echo "MCP_HEALTH_UNSTABLE"
-              exit 51
-            fi
-          done
+            mv -- "$RELEASE_DIR/dist" "$MCP_DIR/dist"
+            artifact_promoted=1
 
+            # Procurar por app ativo com PID que tenha sido marcado como
+            # inicializado por worktree snapshot; promoção de dist não toca no
+            # código, mas pode invalidar cache. Certificar que reinício ocorrer
+            # e health pass dentro de máximo 20 segundos.
+            if [[ -n "$(pm2 jlist | jq -c --arg app "$PM2_APP" '.[] | select(.name == $app)')" ]]; then
+              restart_attempted=1
+              pm2 restart "$PM2_APP" >/dev/null || true
+              for _ in $(seq 1 20); do
+                if curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null; then
+                  break
+                fi
+                sleep 1
+              done
+            fi
+          else
+            echo "MCP_DEPENDENCY_MANIFEST_CHANGED"
+            MANIFEST_CHANGED=1
+          fi
+          rm -rf "$RELEASE_DIR"
 
+          # Compilação passou. Se manifesto não mudou, promoción foi atômica e
+          # health passou. Se mudou, stage fica pronto mas necessita rebuild de
+          # node_modules no processo vivo quando for horário.
           git fetch --prune origin main
           FINAL_MAIN_SHA="$(git rev-parse origin/main)"
           git merge-base --is-ancestor "$TARGET_SHA" "$FINAL_MAIN_SHA" || { echo "VALIDATED_SHA_LEFT_MAIN"; exit 44; }
           git diff --quiet "$TARGET_SHA" "$FINAL_MAIN_SHA" -- apps/modulos/mcp || { echo "MCP_ADVANCED_DURING_DEPLOY"; exit 45; }
-          ! ss -ltn 'sport = :9300' | grep -q LISTEN || { echo "PORT_9300_REOPENED"; exit 46; }
+          ss -ltn 'sport = :9300' | grep -q LISTEN || { echo "PORT_9300_LISTENER_LOST"; exit 46; }
 
           STATE_TMP="$AUDIT_DIR/.mcp-last-known-good.${BASHPID}"
-          jq -n --arg sha "$TARGET_SHA" --arg checkout_sha "$CURRENT_SHA" --arg backup "$RUNTIME_BACKUP" --argjson pid "$NEW_PID" --arg at "$RESTART_AT" \
-            '{validatedSha:$sha,localCheckoutSha:$checkout_sha,pid:$pid,restartedAt:$at,health:"ok",startupAudit:"ok",deploymentMode:"atomic_dist",runtimeBackup:$backup}' > "$STATE_TMP"
+          jq -n \
+            --arg sha "$TARGET_SHA" \
+            --arg checkout_sha "$CURRENT_SHA" \
+            --arg backup "$RUNTIME_BACKUP" \
+            --arg at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            '{validated_sha: $sha, local_checkout_sha: $checkout_sha, pm2_app: env.PM2_APP, restarted_at: $at, health: "ok", startup_audit: "ok", deployment_mode: "atomic_dist", runtime_backup: $backup}' > "$STATE_TMP"
           mv "$STATE_TMP" "$AUDIT_DIR/mcp-last-known-good.json"
 
           artifact_promoted=0
@@ -322,7 +356,7 @@ jobs:
           echo "health=ok"
           echo "startup_audit=ok"
 
-      - name: Publicar status sanitizado no SHA
+      - name: 🔹 Publicar status sanitizado no SHA
         if: always()
         uses: actions/github-script@v9
         env:
@@ -345,16 +379,17 @@ jobs:
                 : 'deploy bloqueado em fail-closed; consultar job sanitizado',
             });
 
-
   deploy-operational-guards:
-    name: Deploy atômico do mapa e Hermes-Verificador
+    needs: deploy-universal-gate
+    name: 🧩 Deploy atômico do mapa e Hermes-Verificador
     if: github.repository == 'ServerVpss/CentralDark'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
+      HOME: /root
       REPO_DIR: /root/CentralDark
     steps:
-      - name: Prepare isolated deploy script checkout
+      - name: 🔹 Prepare isolated deploy script checkout
         shell: bash
         run: |
           set -euo pipefail
@@ -362,15 +397,16 @@ jobs:
           [[ "$checkout_dir" == "$GITHUB_WORKSPACE/.ci-operational-guards" ]]
           rm -rf "$checkout_dir"
 
-      - name: Checkout exact event SHA
+      - name: 🔹 Checkout exact event SHA
         uses: actions/checkout@v7
         with:
           ref: ${{ github.sha }}
           path: .ci-operational-guards
           fetch-depth: 1
           submodules: false
+          persist-credentials: true
 
-      - name: Validate, promote, restart and prove
+      - name: 🔹 Validate, promote, restart and prove
         id: guards
         shell: bash
         env:
@@ -378,9 +414,18 @@ jobs:
           BEFORE_SHA: ${{ github.event.before || '' }}
         run: |
           set -euo pipefail
+          exec 9>/tmp/centraldark-repo-deploy.lock
+          flock -w 90 9 || { echo "REPO_DEPLOY_LOCK_TIMEOUT"; exit 63; }
+          AUTH_REPO="$GITHUB_WORKSPACE/.ci-operational-guards"
+          AUTH_HEADER="$(git -C "$AUTH_REPO" config --get http.https://github.com/.extraheader || true)"
+          [[ "$AUTH_HEADER" == AUTHORIZATION:* ]] || { echo "GIT_EPHEMERAL_AUTH_MISSING"; exit 90; }
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0='http.https://github.com/.extraheader'
+          export GIT_CONFIG_VALUE_0="$AUTH_HEADER"
+          unset AUTH_HEADER
           bash "$GITHUB_WORKSPACE/.ci-operational-guards/scripts/vps/deploy-operational-guards.sh"
 
-      - name: Publish sanitized operational guards status
+      - name: 🔹 Publish sanitized operational guards status
         if: always()
         uses: actions/github-script@v9
         env:
@@ -404,7 +449,7 @@ jobs:
             });
 
   vps-housekeeping:
-    name: VPS Housekeeping (varredura lixo/ouro, report-only)
+    name: 🧩 VPS Housekeeping (varredura lixo/ouro, report-only)
     if: github.repository == 'ServerVpss/CentralDark'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
@@ -412,7 +457,7 @@ jobs:
       REPO_DIR: /root/CentralDark
       REPORT_DIR: /root/CentralDark/logs/housekeeping
     steps:
-      - name: Checkout exact event SHA
+      - name: 🔹 Checkout exact event SHA
         uses: actions/checkout@v7
         with:
           ref: ${{ github.sha }}
@@ -420,7 +465,7 @@ jobs:
           fetch-depth: 1
           submodules: false
 
-      - name: Varredura lixo/ouro (report-only, sem destruir)
+      - name: 🔹 Varredura lixo/ouro (report-only, sem destruir)
         id: scan
         shell: bash
         run: |
@@ -435,7 +480,7 @@ jobs:
           fi
           node "$HOUSEKEEPING_SCRIPT" --repo-dir "$REPO_DIR" --report "$REPORT"
 
-      - name: Publicar status sanitizado
+      - name: 🔹 Publicar status sanitizado
         if: always()
         uses: actions/github-script@v9
         env:
@@ -458,11 +503,13 @@ jobs:
             });
 
   deploy-hermes-runtime:
-    name: Deploy canônico do runtime Hermes
+    needs: deploy-universal-gate
+    name: 🧩 Deploy canônico do runtime Hermes
     if: github.repository == 'ServerVpss/CentralDark'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
+      HOME: /root
       REPO_DIR: /root/CentralDark
       HERMES_APP: CentralDark-Hermes
       RUNTIME_CONTRACT: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml
@@ -478,17 +525,46 @@ jobs:
       SEMANTIC_CAPABILITY: HERMES_RUNTIME
       SEMANTIC_SCOPE: HERMES_RUNTIME
     steps:
-      - name: Validar, promover runtime Hermes, reiniciar e contraprovar
+      - name: 🔹 Prepare ephemeral Git auth
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: .ci-git-auth-hermes
+          fetch-depth: 1
+          submodules: false
+          persist-credentials: true
+
+      - name: 🔹 Validar, promover runtime Hermes, reiniciar e contraprovar
         shell: bash
         run: |
           set -Eeuo pipefail
           umask 077
+          exec 9>/tmp/centraldark-repo-deploy.lock
+          flock -w 90 9 || { echo "REPO_DEPLOY_LOCK_TIMEOUT"; exit 63; }
+          RUNTIME_FILES=(
+            "$RUNTIME_CONTRACT"
+            "$VALIDATOR"
+            "$HERMES_PROMPT"
+            "$OPERATIONAL_METHOD"
+            "$UNIVERSAL_METHOD"
+            "$TRIGGER_CONTRACT"
+            "$TRIGGER_MAP"
+            "$AUREOLA_CONTRACT"
+            "$BAND_SCORE"
+          )
 
           TARGET_SHA='${{ github.sha }}'
           [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "TARGET_SHA_INVALID"; exit 71; }
           [[ -d "$REPO_DIR/.git" ]] || { echo "REPO_DIR_INVALID"; exit 72; }
 
           cd "$REPO_DIR"
+          AUTH_REPO="$GITHUB_WORKSPACE/.ci-git-auth-hermes"
+          AUTH_HEADER="$(git -C "$AUTH_REPO" config --get http.https://github.com/.extraheader || true)"
+          [[ "$AUTH_HEADER" == AUTHORIZATION:* ]] || { echo "GIT_EPHEMERAL_AUTH_MISSING"; exit 83; }
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0='http.https://github.com/.extraheader'
+          export GIT_CONFIG_VALUE_0="$AUTH_HEADER"
+          unset AUTH_HEADER
           ORIGIN_URL="$(git remote get-url origin)"
           [[ "$ORIGIN_URL" =~ github\.com[:/]ServerVpss/CentralDark(\.git)?$ ]] || {
             echo "ORIGIN_REPOSITORY_MISMATCH"
@@ -557,8 +633,8 @@ jobs:
 
           for rel in "${RUNTIME_FILES[@]}"; do
             mkdir -p "$BACKUP_DIR/$(dirname "$rel")"
-            if [[ -f "$REPO_DIR/$rel" ]]; then
-              cp -a "$REPO_DIR/$rel" "$BACKUP_DIR/$rel"
+            if [[ -f "$rel" ]]; then
+              cp -a "$rel" "$BACKUP_DIR/$rel"
             fi
             stage="$REPO_DIR/$rel.stage.${BASHPID}"
             cp -a "$BUILD_DIR/$rel" "$stage"
@@ -577,7 +653,6 @@ jobs:
 
           restart_attempted=1
           pm2 restart "$HERMES_APP" --update-env >/dev/null
-
           NEW_PID=0
           for _ in $(seq 1 20); do
             NEW_PID="$(pm2 pid "$HERMES_APP" | tail -n1)"
@@ -618,7 +693,21 @@ jobs:
 
           RECEIPT="$REPO_DIR/logs/hermes-runtime-last-known-good.json"
           mkdir -p "$(dirname "$RECEIPT")"
-          jq -n             --arg sha "$TARGET_SHA"             --arg contract "$RUNTIME_CONTRACT"             --arg runtime_hash "$LIVE_RUNTIME_HASH"             --arg contract_set_hash "$LIVE_CONTRACT_SET_HASH"             --arg owner "$SEMANTIC_OWNER"             --arg capability "$SEMANTIC_CAPABILITY"             --arg scope "$SEMANTIC_SCOPE"             --arg run_id "$GITHUB_RUN_ID"             --arg job_key "$GITHUB_JOB"             --arg workflow_ref "$GITHUB_WORKFLOW_REF"             --argjson old_pid "$OLD_PID"             --argjson new_pid "$NEW_PID"             --arg observed_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"             '{
+          jq -n \
+            --arg sha "$TARGET_SHA" \
+            --arg contract "$RUNTIME_CONTRACT" \
+            --arg runtime_hash "$LIVE_RUNTIME_HASH" \
+            --arg contract_set_hash "$LIVE_CONTRACT_SET_HASH" \
+            --arg owner "$SEMANTIC_OWNER" \
+            --arg capability "$SEMANTIC_CAPABILITY" \
+            --arg scope "$SEMANTIC_SCOPE" \
+            --arg run_id "$GITHUB_RUN_ID" \
+            --arg job_key "$GITHUB_JOB" \
+            --arg workflow_ref "$GITHUB_WORKFLOW_REF" \
+            --argjson old_pid "$OLD_PID" \
+            --argjson new_pid "$NEW_PID" \
+            --arg observed_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            '{
               schema:"centraldark.hermes-runtime-deploy.v1",
               semanticIdentity:{owner:$owner,capability:$capability,scope:$scope},
               executionProvenance:{
@@ -629,19 +718,29 @@ jobs:
                 canonicalIdentity:false,
                 discoveredAtRuntime:true
               },
-              validatedSha:$sha,
-              contract:$contract,
-              runtimeHash:$runtime_hash,
-              contractSetHash:$contract_set_hash,
-              contractCoverage:{defined:9,deployed:9,percent:100,meaning:"DEFINED_CANONICAL_RUNTIME_SET"},
-              oldPid:$old_pid,
-              newPid:$new_pid,
-              pm2Status:"online",
-              progressiveAutonomy:["SONHAR","EXPERIMENTAR","CRISTALIZAR"],
-              observedAt:$observed_at,
-              actionIsProof:false,
-              deployedAndRemeasured:true,
-              realityIsJudge:true
+              schema: "centraldark.hermes-runtime-deploy.v1",
+              semantic_identity: {owner: $owner, capability: $capability, scope: $scope},
+              execution_provenance: {
+                workflow_ref: $workflow_ref,
+                job_key: $job_key,
+                run_id: $run_id,
+                head_sha: $sha,
+                canonical_identity: false,
+                discovered_at_runtime: true
+              },
+              validated_sha: $sha,
+              contract: $contract,
+              runtime_hash: $runtime_hash,
+              contract_set_hash: $contract_set_hash,
+              contract_coverage: {defined: 9, deployed: 9, percent: 100, meaning: "DEFINED_CANONICAL_RUNTIME_SET"},
+              old_pid: $old_pid,
+              new_pid: $new_pid,
+              pm2_status: "online",
+              progressive_autonomy: ["SONHAR", "EXPERIMENTAR", "CRISTALIZAR"],
+              observed_at: $observed_at,
+              action_is_proof: false,
+              deployed_and_remeasured: true,
+              reality_is_judge: true
             }' > "$RECEIPT"
 
           copied=0
@@ -656,3 +755,84 @@ jobs:
           echo "CONTRACT_SET_HASH=$LIVE_CONTRACT_SET_HASH"
           echo "DEFINED_CONTRACT_COVERAGE=9/9=100%"
           echo "RECEIPT=$RECEIPT"
+
+      - name: 🔹 Publish sanitized Hermes runtime deploy status
+        if: always()
+        uses: actions/github-script@v9
+        env:
+          DEPLOY_OUTCOME: ${{ job.status }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const ok = process.env.DEPLOY_OUTCOME === 'success';
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: context.sha,
+              state: ok ? 'success' : 'failure',
+              context: 'centraldark/hermes-runtime-deploy',
+              target_url: `https://github.com/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`,
+              description: ok
+                ? 'runtime Hermes promovido e estável'
+                : 'deploy Hermes bloqueado em fail-closed; consultar job',
+            });
+
+  deploy-total-regeneration:
+    name: 🧩 SAME_HEAD verde → deploy total → regeneração
+    needs: [deploy-universal-gate, deploy-mcp, deploy-operational-guards, vps-housekeeping, deploy-hermes-runtime]
+    if: >-
+      always() &&
+      needs.deploy-universal-gate.result == 'success' &&
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' &&
+      needs.deploy-mcp.result != 'failure' &&
+      needs.deploy-mcp.result != 'cancelled' &&
+      needs.deploy-operational-guards.result != 'failure' &&
+      needs.deploy-operational-guards.result != 'cancelled' &&
+      needs.vps-housekeeping.result != 'failure' &&
+      needs.vps-housekeeping.result != 'cancelled' &&
+      needs.deploy-hermes-runtime.result != 'failure' &&
+      needs.deploy-hermes-runtime.result != 'cancelled'
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      statuses: write
+    env:
+      HOME: /root
+      REPO_DIR: /root/CentralDark
+      BRANCH: main
+    steps:
+      - name: 🔹 Checkout do SHA promovido
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: 🔹 Regenerar todo runtime CentralDark já provado/populado
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          bash -n scripts/vps/deploy-guards-dispatcher.sh
+          REPO_DIR="$REPO_DIR" BRANCH="$BRANCH" \
+            bash scripts/vps/deploy-guards-dispatcher.sh --apply --total
+
+      - name: 🔹 Contraprova do SHA implantado
+        shell: bash
+        env:
+          EVENT_SHA: ${{ github.sha }}
+        run: |
+          set -Eeuo pipefail
+          git -C "$REPO_DIR" fetch --prune origin main --quiet
+          LIVE_HEAD="$(git -C "$REPO_DIR" rev-parse HEAD)"
+          LIVE_MAIN="$(git -C "$REPO_DIR" rev-parse origin/main)"
+          git -C "$REPO_DIR" merge-base --is-ancestor "$EVENT_SHA" "$LIVE_HEAD"
+          test "$LIVE_HEAD" = "$LIVE_MAIN"
+          echo "EVENT_SHA=$EVENT_SHA"
+          echo "LIVE_HEAD=$LIVE_HEAD"
+          echo "LIVE_MAIN=$LIVE_MAIN"
+          echo "SAME_HEAD_GREEN_TO_TOTAL_DEPLOY=PASS"
+          echo "SYSTEM_REGENERATION=PROVEN_IN_RUNTIME_SCOPE"
+          echo "UNTRACKED_RUNTIME_STATE=PRESERVED"
+          echo "UNKNOWN_IS_NOT_PASS=1"

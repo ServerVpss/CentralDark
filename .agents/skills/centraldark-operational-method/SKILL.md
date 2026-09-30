@@ -47,6 +47,20 @@ CENTRALDARK_AI_BOOT:
   writer: "NONE|nome-do-escritor-atual"
 ```
 
+## 🔏 Lei do Rastro
+
+```text
+TRIGGER=🔏 !RASTRO
+OWNER=AGENTS.md
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+APPLIES_TO_ALL_ENGINES=true
+```
+
+O rastro fecha o ciclo operacional; não cria segundo workflow, owner ou memória.
+
 ## Principio central: Menos é mais = precisao, nao brevidade
 
 | MENOS (cortar) | MAIS (garantir) |
@@ -78,6 +92,35 @@ EVIDÊNCIA
   → PRÓXIMO PASSO (um só, claro)
 ```
 
+## Contrato humano de execução integral
+
+Este método é universal: não é preferência de um usuário específico. O sistema deve absorver complexidade operacional sempre que isso puder ser feito com segurança.
+
+```text
+INTENÇÃO HUMANA
+  → DETECTAR CONTEXTO
+  → ANTECIPAR FALHAS PREVISÍVEIS
+  → PREPARAR PREFLIGHT + CHECKPOINT + TIMEOUT + RETRY LIMITADO + FALLBACK + ROLLBACK
+  → EXECUTAR CONJUNTO COMPLETO
+  → VALIDAR
+  → FALHOU? DIAGNOSTICAR + CORRIGIR + FALLBACK + REMEDIR
+  → AINDA FALHOU? MOSTRAR ERRO EXATO, LOCAL EXATO, CAUSA/INCERTEZA, ROTAS TENTADAS E AÇÃO HUMANA EXATA
+  → HUMAN_FRONTIER? HUMANO FAZ SÓ O INEVITÁVEL NO LOCAL SEGURO
+  → RETOMAR AUTOMATICAMENTE
+  → PROVAR RESULTADO OU BLOCKER EXATO
+```
+
+Regras:
+- microcomando não é padrão; operação integral autocontida é o padrão quando tecnicamente possível;
+- se a máquina pode descobrir, o humano não deve adivinhar;
+- se a máquina pode corrigir com segurança, o humano não deve executar a correção manualmente;
+- diagnóstico deve apontar host/componente/serviço e, quando conhecido, arquivo/linha/função;
+- causa não provada permanece hipótese rotulada;
+- falha não resolvida deve listar o que já foi tentado e por que cada rota não resolveu;
+- segredo/senha/token entra no sistema de origem ou prompt seguro, não no chat;
+- após login/MFA/consentimento/permissão/pagamento/ação física/decisão humana inevitável, o executor retoma sozinho;
+- `UNKNOWN != PASS`; erro genérico sem localização e próximo passo acionável é FAIL.
+
 ## Writer unico por escopo
 
 - Leitores investigam em paralelo
@@ -102,6 +145,71 @@ INTENÇÃO
 ```
 
 Proibido: v2, v3, novo, final, copy, backup como fuga de reconciliação.
+
+### Measure Before Creation — medir antes de criar
+
+Generalização nomeada pelo CHEFE: antes de criar arquitetura, bot, rota, skill, memória, scheduler, workflow, app ou owner novo, medir o que já existe e provar se o gap é real.
+
+```text
+MEASURE_BEFORE_CREATION
+  → medir o que já existe
+  → provar se está vivo
+  → descobrir owner atual
+  → reutilizar antes de inventar
+  → corrigir o menor delta
+  → criar somente se o gap for real
+```
+
+```text
+REUSE_BEFORE_CREATE
++ UNKNOWN != PASS
++ DOCUMENTED != EXECUTED
++ REALITY = JUDGE
+= MEASURE_BEFORE_CREATION
+```
+
+Vínculo semântico compartilhado: `1Ts 5:21` → examinar tudo → medir/comparar/contraprovar → reter o que a realidade provar bom → melhorar o owner existente antes de criar outro.
+
+```text
+MEASURE_BEFORE_CREATION_SEMANTIC_REFERENCE="1Ts 5:21"
+MEASURE_BEFORE_CREATION_APPLIES_TO=ALL_CURRENT_AND_FUTURE_AGENTS
+VERSE_IS_SEMANTIC_CUE_NOT_PROOF=true
+IMPROVE_EXISTING_OWNER_BEFORE_NEW_OWNER=true
+```
+
+Exemplo provado: no Telegram, não criar bot novo; medir o owner existente; provar o estado real; preservar canal válido; corrigir somente o delta causal.
+
+### Remeasure Before Create — remedir o mesmo alvo antes de criar
+
+REMEASURE_BEFORE_CREATE é uma especialização de MEASURE_BEFORE_CREATION no mesmo owner, não uma regra/arquitetura paralela. Aplica-se quando o alvo é vivo, mutável, temporal, externo ou quando a última observação pode ter envelhecido.
+
+\`\`\`text
+REMEASURE_BEFORE_CREATE=true
+REMEASURE_BEFORE_CREATE_EXTENDS=MEASURE_BEFORE_CREATION
+SAME_TARGET_FRESH_OBSERVATION_REQUIRED=true
+HISTORY_IS_INPUT_NOT_CURRENT_PROOF=true
+STALE_MEASUREMENT_CANNOT_AUTHORIZE_CREATION=true
+SENSOR_FAILURE_IS_NOT_WORLD_FAILURE=true
+ALTERNATE_AUTHORIZED_ROUTE_BEFORE_BLOCKER=true
+CONFLICTING_SENSORS_REQUIRE_DISCRIMINATING_TEST=true
+UNKNOWN_OR_BLOCKED_IF_FRESH_REMEASUREMENT_UNAVAILABLE=true
+\`\`\`
+
+Fluxo obrigatório quando houver possibilidade de drift:
+
+\`\`\`text
+PEDIDO DE CRIAÇÃO/CORREÇÃO
+  → IDENTIFICAR O MESMO ALVO
+  → REMEDIR O ESTADO VIVO
+  → CRUZAR COM OWNER + HEAD/FINGERPRINT + RUNTIME
+  → SE CONFLITAR, TESTE DISCRIMINANTE
+  → REUTILIZAR/ESTENDER OWNER EXISTENTE
+  → CRIAR SOMENTE SE O GAP SOBREVIVER À REMEDIÇÃO
+  → T1 NO MESMO ALVO
+\`\`\`
+
+Regra temporal: PROVADO_ANTES != PROVADO_AGORA. Receipt e memória servem como proveniência e hipótese de reutilização; não substituem uma leitura CURRENT quando o fato pode ter mudado.
+
 
 ## Risco e autorização (fail-closed proporcional)
 
@@ -1686,6 +1794,37 @@ filepath = os.path.join(destino_abs, base_name)
 - Em técnico copiável: bloco de código, PT-BR, comando completo
 - Em explicação: duas camadas (SIGNIFICA → NA PRÁTICA → NOME TÉCNICO → PROVA → PRÓXIMO PASSO)
 
+## Skills absorvidas via Kimetsu/17 Respirações (2026-09-22)
+
+Esta seção registra o delta de absorção de skills locais (`E:\CentralDark\Pivete\skills\`) na biblioteca canônica via `regenerative-self-refinement-engine.md` / método Kimetsu/17 Respirações. Regra de ouro: NÃO copiar pasta inteira por nome — comparar, absorver somente o delta útil, manter owner canônico existente.
+
+### `screenpipe-hermes-integration` → `screenpipe-live-observer` (status: ABSORVIDO)
+- Classe: UNIQUE_DELTA (canônico cobre sensor/OCR/handoff; local traz procedimento prático de integração Screenpipe+Hermes via Omni Router não coberto pelo canônico)
+- O que foi absorvido: gatilhos de ativação, pré-requisitos, 6 passos de configuração do Omni Router + Screenpipe Provider, pitfalls, monitoração in-the-job, investigação forense (READ_ONLY/zero-mutation), status codes, leis não-negociáveis, o que não prova, Hermes Screenpipe Tool Gap
+- Onde: nova seção "Integração prática com Screenpipe + Hermes via Omni Router" inserida antes de "# Screenpipe Live Observer — sensor global da Casa" no presente arquivo
+- Proveniência preservada: skill local permanece em `E:\CentralDark\Pivete\skills\screenpipe-hermes-integration\` como registro histórico; não deletado, não promovido a owner separado
+- Regra aplicada: ZERO_BLIND_COPY=true; SAME_NAME != SAME_ENTITY; delta checado antes de absorver
+
+### `fable-loop` → `fable-loop` canônico (status: NÃO_ABSORVIDO — deixar local)
+- Classe: DUPLICATE_DIVERGED (same name + same archetype, conteúdo paralelo não-overlapping: local = contract de autoload SKILL.md coreano/inglês; canônico = método centraldark de calibração contínua PT-BR, experimental, READ_ONLY)
+- Decisão: NÃO fundir. Manter ambos. Canônico mantém owner SEGREDO/CHEFE e status experimental-read-only. Local permanece em `E:\CentralDark\Pivete\skills\fable-loop\` como referência de autoload alternativo. Documentar divergência, não criar espaço paralelo.
+
+### `brain-vault-watcher` → `brain-memory` canônico (status: NÃO_ABSORVIDO — GAP_NAO_PROVADO)
+- Classe: NOVEL + GAP_A_PROVEAR (local = watcher de sync de MOCs/indexes do Obsidian vault, com triggers, deduplicação, cron; canônico = layer de prefs via `brain_feedback` + `apply-evidence`, read-only, owner SEGREDO/CHEFE)
+- Gap a provar antes de absorver: demonstrar que o canônico `brain-memory` NÃO cobre sync de índices/MOCs do vault. Enquanto não provado: NÃO criar memory owner paralelo, NÃO duplicar.
+- Decisão: deixar local com documentação cruzada. Se no futuro a Casa precisar de watcher de vault, escrever no dono canônico existente ou no novo owner apropriado — não importar skill inteira.
+
+### `operational/*` (6 sub-skills) → `centraldark-operational-method` canônico (status: PARTIAL — deltas absorvidos abaixo)
+- Classe MIXTA após leitura:
+  - `absolute-lock-protection-protocol`: NOVEL/delta (procedimento de lock de arquivo compartilhado com trap, sleep antes de unlock, falha se stale > 30s)
+  - `autonomous-execution-mode`: DELTA_MENOR (subcomando autocontido para container; canônico já cobre "execução integral autocontida")
+  - `hermes-platform-access-control`: NOVEL (conexão autenticada Hermes Desktop + resultado final escondido)
+  - `intention-driven-workflow`: DELTA_MENOR (2 clocks, clock registra, outro executa; já coberto pelo canônico)
+  - `multi-agent-rendezvous`: DELTA_MENOR (rendezvous, results.txt, post-run merge)
+  - `operational-incident-response`: DELTA_MENOR (PASS/FAIL/UNKNOWN triage, SQLite audit, 1 file < 100 lines)
+- Decisão: absorver content DOIS content de operational no canônico existente (não criar skill separado); deixar local com docs cruzadas
+- Regra aplicada: REUSE_BEFORE_CREATE=true; ONE_OWNER_PER_CAPABILITY=true
+
 ## Referências
 
 - references/jeito-correto-pivete.md — metodo completo
@@ -1976,3 +2115,145 @@ REGRA: se a direção se perder, TRAVAR ANTES DE MUTAR NO ESCURO, recarregar SOU
 Ferramentas, webhooks e bots que queiram executar acao CentralDark podem declarar
 `centraldark_gate_required=true` e anexar `centraldark_gate` com os fatos do gate.
 Sem os fatos obrigatorios, o receptor deve falhar fechado.
+
+## Gatilho REGISTRA — sequência completa, não anotação
+
+`REGISTRA` é comando operacional do CHEFE, não pedido para apenas escrever documentação.
+
+```text
+REGISTRA_MEANS_COMMIT_PUSH_PR_SQUASH_MAIN=true
+REGISTRA
+→ medir CURRENT_MAIN_SHA/HEAD
+→ dedupe + owner existente
+→ menor MVP útil
+→ teste aplicável + contraprova
+→ commit
+→ push em branch filha
+→ abrir PR filha vinculada à #1562
+→ remeasure live
+→ blocker técnico recuperável: continuar até HUMAN_FRONTIER real
+→ conflito: usar git-conflict-resolve-house-standard
+→ SAME_HEAD gates fechados no HEAD atual
+→ SQUASH_CHILD_ONLY com expected_head_sha
+→ readback da main + novo CURRENT_MAIN_SHA
+→ DEPLOY_CAUSAL somente se o delta exigir runtime
+→ T1 quando houver deploy causal
+→ receipt no PR filho e na PR-mãe
+→ fixed point do delta
+→ voltar ao #1562
+```
+
+A `#1562` permanece aberta como PR-MÃE permanente, rendezvous/ledger e `DO_NOT_MERGE`. Ela não é veículo de código para main; os filhos passam por ela e registram o que foi absorvido.
+
+### Lapidação progressiva
+
+Não esperar somente “ouro/diamante”. Toda peça útil pode entrar como candidato e melhorar por iteração:
+
+```text
+IDEIA_UTIL
+→ MVP_MINIMO
+→ EXECUTAR/ABRIR
+→ TESTAR
+→ MEDIR
+→ ERRO? APRENDER + CORRIGIR
+→ SOBREVIVEU? PROMOVER
+→ REPETIR
+```
+
+Metáfora permitida: pepita, bronze, prata, ouro, diamante, qualquer “joia” = nível de maturidade. Nenhum rótulo substitui prova.
+
+```text
+USEFUL_BEATS_PERFECT_WAITING=true
+MVP_FIRST=true
+ITERATIVE_LAPIDATION=true
+ERROR_IS_LEARNING_ONLY_WITH_EVIDENCE=true
+FAILED_GATE_STAYS_OFF_MAIN=true
+CHEFE_SEES_MATERIAL_DECISION_OR_RESULT=true
+```
+
+O sistema deve construir sem paralisia, mas não baixar gates de segurança, segredo, produção, destruição ou falso-verde.
+
+### 53. PROVEN_PATH_REPLAY_LOCK — caminho provado vira receita reutilizável
+
+**Regra cristalizada:** quando uma sequência já produziu resultado reproduzível,
+sobreviveu à contraprova e foi selada, o próximo executor não redesenha a solução
+do zero. Ele reutiliza a mesma receita e adapta apenas os bindings inevitáveis do
+ambiente.
+
+```text
+CAMINHO_JA_PROVADO
+→ SELAR_RECEITA_EXECUTAVEL
+→ GUARDAR_FINGERPRINT
+→ PROXIMO_EXECUTOR_CARREGA_RECEITA
+→ ADAPTAR_SOMENTE_AMBIENTE
+→ EXECUTAR_MESMA_SEQUENCIA
+→ RODAR_MESMA_PROVA
+→ COMPARAR_RESULTADO
+→ DIVERGIU? DELTA_NOVO + REVALIDAR_CONE_AFETADO
+→ NAO_DIVERGIU? REUTILIZAR_CRISTAL
+```
+
+```text
+PROVEN_PATH_REPLAY_LOCK=true
+PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO=true
+SAME_FINGERPRINT_REUSES_PROVEN_RECIPE=true
+ENVIRONMENT_ADAPTATION_MUST_NOT_CHANGE_GOAL=true
+ENVIRONMENT_ADAPTATION_MUST_NOT_CHANGE_PROOF_LOGIC=true
+RAW_OUTPUT_BYTE_EQUALITY_REQUIRED=false
+RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH=true
+HUMAN_RETEACH_REQUIRED_FOR_SAME_PROVEN_PATH=false
+NO_NEW_SYSTEM_FOR_PROVEN_PATH_REUSE=true
+```
+
+Owner existente:
+`docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml`.
+
+Runtime consumidor:
+`scripts/trigger-fabric/centraldark_full_trigger_boot.py`.
+
+Isso estende `REUSE_BEFORE_CREATE`, `REUSE_PROOF_NO_REPEAT` e
+`REUSE_CRYSTAL_NOT_RETHINK`; não cria segunda memória, segundo método ou
+segundo cérebro.
+
+
+
+## Runtime preflight obrigatório
+
+Antes de qualquer probe/comando de runtime que possa gerar fato operacional, validar primeiro o wrapper, shell, host-mode, paths requeridos e evidência de ownership quando aplicável pelo consumer canônico `scripts/trigger-fabric/centraldark_full_trigger_boot.py preflight-lint`.
+
+```text
+WRAPPER_PREFLIGHT
+→ PASS
+→ EXECUTE_TARGET_PROBE
+→ OBSERVE_TARGET
+→ PROOF
+→ COUNTERPROOF
+→ REALITY_JUDGE
+
+WRAPPER_PREFLIGHT_FAIL
+→ TARGET_NOT_EXECUTED
+→ INVALIDATED_PROBE
+→ FIX_PREFLIGHT_AND_RETRY
+```
+
+`PREFLIGHT_PASS != RUNTIME_PASS`.
+`WRAPPER_PARSE_FAIL != TARGET_FAIL`.
+`INVALID_PROBE_MUST_NOT_BECOME_FACT=true`.
+`BRIDGE_OWNERSHIP_CLAIM_REQUIRES_COMPLETE_EVIDENCE=true`.
+
+Este preflight é extensão do método existente, não segundo gate/owner. Falha do wrapper impede promover conclusão sobre o alvo; PASS do wrapper apenas autoriza executar a prova real.
+
+### Reality Judge não é permissão de execução
+
+`REALITY_IS_JUDGE` limita falso-verde e valida o efeito observado. Não é porteiro antes da ação, não reduz a autoridade do CHEFE e não autoriza revalidar tudo quando há rota determinística e fingerprint preservado.
+
+```text
+REALITY_JUDGE_AFTER_EFFECT=true
+REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true
+REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+DETERMINISTIC_ROUTE_FIRST=true
+CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true
+OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
+```
+
+Se a observação contradiz o comando, medir sensor/cache/cone/timestamp, corrigir o menor gate causal e continuar. Não transformar prudência em bloqueio.
