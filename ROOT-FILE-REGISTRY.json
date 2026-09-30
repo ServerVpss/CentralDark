@@ -15,7 +15,12 @@
       "every_memory_claim_names_where": true,
       "ledger_1562_receipt_same_turn_as_direct_main": true,
       "applies_to_all_engines": true
-    }
+    },
+    "global_policy_owner": "docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md",
+    "all_root_files_inherit_global_policy": true,
+    "all_model_routers_inherit_global_policy": true,
+    "all_operational_docs_inherit_global_policy": true,
+    "build_configs_inherit_by_registry": true
   },
   "categories": {
     "core": {
