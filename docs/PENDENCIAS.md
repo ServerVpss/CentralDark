@@ -859,19 +859,54 @@ REALITY = JUDGE
 
 ---
 
-### 🟢 PENDÊNCIA FUTURA — KASTRA EDGE · EXPLORAÇÃO POSTERIOR
+### 🟢 PENDÊNCIA FUTURA — KIT DE INTEGRAÇÃO · AGENTES CLOUD + EVENT BUS + KASTRA EDGE
 
-**Status:** 🟢 **FUTURO / SOMENTE LEMBRANÇA / NÃO EXECUTAR AGORA**  
+**Status:** 🟢 **FUTURO / LEMBRANÇA / NÃO EXECUTAR AGORA**  
 **Data:** 30/09/2026
 
-**Intenção preservada:** futuramente explorar o **Kastra Edge** como possível camada local de política/auditoria para agentes de IA no Windows/Casa, especialmente para controlar e registrar ações de executores como Hermes, Claude Code, Codex, Cursor e afins.
+**Intenção do CHEFE:** futuramente trazer para dentro da CentralDark o comportamento observado agora entre ChatGPT/SOL, GitHub e Claude Cloud: agentes remotos vivos, assinando o mesmo owner, recebendo mudanças em tempo real, herdando o estado compartilhado e continuando a missão sem depender da Casa permanecer ligada.
 
 ```text
 DO_NOT_EXECUTE_NOW=true
 FUTURE_EXPLORATION=true
 REUSE_BEFORE_CREATE=true
+ONE_SYSTEM_ONLY=true
 CURRENT > HISTORY
 UNKNOWN != PASS
 ```
 
-**Quando reabrir:** medir o produto ao vivo, integrações suportadas, modelo de políticas ALLOW/DENY/APPROVAL, auditoria local/offline e encaixe com a arquitetura CentralDark antes de qualquer adoção.
+**Kit futuro a explorar/reusar:**
+- **Cloud Agent Runtime:** executor remoto persistente que continua ativo fora da Casa.
+- **GitHub/Event Bus:** PRs/issues/comments/checks como barramento auditável de handoff entre agentes.
+- **Subscriptions/Watch:** agente assina PR/owner e recebe delta material em tempo real.
+- **Shared State/Ledger:** estado e receipts compartilhados; sem "memória mágica" entre modelos.
+- **PR-MÃE #1562:** rendezvous/ledger canônico para convergência dos agentes.
+- **CentralDark API/MCP Admin:** uma porta de controle para providers, runtimes, tools e executores.
+- **Cloud ↔ VPS ↔ Casa:** VPS como runtime always-on; Casa como edge opcional; cloud agents como executores adicionais do mesmo sistema.
+- **Handoff multi-modelo:** ChatGPT/SOL, Claude, Codex, Hermes e futuros agentes continuam o mesmo owner por eventos/estado compartilhado.
+- **Kastra Edge:** candidato futuro para política/auditoria local de ações de agentes no Windows/Casa, com ALLOW/DENY/APPROVAL.
+- **Observabilidade/receipts:** toda continuidade deve deixar rastro verificável de evento → execução → resultado → readback.
+
+**Exemplo de fluxo desejado futuramente:**
+
+```text
+CHEFE
+→ api.centralldark.com / MCP
+→ owner canônico
+→ evento/PR/issue
+→ agentes cloud inscritos
+→ executor adequado
+→ VPS/CENTRALDARK-OS/Casa quando aplicável
+→ prova
+→ contraprova
+→ receipt
+→ estado compartilhado
+→ próximo agente continua sem redescobrir
+```
+
+**Quando reabrir:** medir primeiro quais partes já existem no CentralDark atual (MCP Admin, GitHub, subscriptions, PR-MÃE, Hermes, Cloud executors, provider-control, ledger). Implementar somente o delta faltante; não criar segundo cérebro, segundo orquestrador ou arquitetura V1/V2/V3.
+
+**Critério de exploração futura:** provar pelo menos um handoff completo em que um agente grava delta no owner, outro agente cloud recebe automaticamente, executa a continuação correta e registra receipt do mesmo estado, sem intervenção manual para transportar contexto.
+
+**Kastra Edge especificamente:** medir produto ao vivo, integrações suportadas, política ALLOW/DENY/APPROVAL, auditoria local/offline e encaixe com CentralDark antes de adoção.
+
