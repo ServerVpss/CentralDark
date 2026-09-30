@@ -1,10 +1,22 @@
 {
   "_meta": {
     "descricao": "Fonte única e canônica do avanço do cockpit /admin/cockpit. Sem v1/v2. Editar aqui = painel AVANÇO reflete.",
-    "atualizado_em": "2026-07-25",
+    "atualizado_em": "2026-09-20",
     "schema_versao": 2,
-    "areas": ["cockpit", "hub", "hermes", "seguranca", "infra", "ia"],
-    "severidades": ["p0", "p1", "p2", "p3"],
+    "areas": [
+      "cockpit",
+      "hub",
+      "hermes",
+      "seguranca",
+      "infra",
+      "ia"
+    ],
+    "severidades": [
+      "p0",
+      "p1",
+      "p2",
+      "p3"
+    ],
     "regras": [
       "Zoom out: item pertence ao cockpit? Se não, não entra.",
       "Zoom in: existe evidência (commit/arquivo/print)? Se não, status = pendente.",
@@ -22,7 +34,12 @@
       "atualizado_em": "2026-07-25",
       "area": "cockpit",
       "severidade": "p2",
-      "palavras_chave": ["avanco", "cockpit", "painel", "acompanhamento"],
+      "palavras_chave": [
+        "avanco",
+        "cockpit",
+        "painel",
+        "acompanhamento"
+      ],
       "depende_de": [],
       "card": {
         "antes_sha256": "N/A",
@@ -62,8 +79,17 @@
       "atualizado_em": "2026-07-25",
       "area": "cockpit",
       "severidade": "p1",
-      "palavras_chave": ["busca", "filtro", "dependencia", "editor", "sha256", "prova"],
-      "depende_de": ["menu-avanco"],
+      "palavras_chave": [
+        "busca",
+        "filtro",
+        "dependencia",
+        "editor",
+        "sha256",
+        "prova"
+      ],
+      "depende_de": [
+        "menu-avanco"
+      ],
       "card": {
         "antes_sha256": "N/A",
         "depois_sha256": "N/A",
@@ -103,12 +129,19 @@
       "atualizado_em": "2026-07-25",
       "area": "cockpit",
       "severidade": "p2",
-      "palavras_chave": ["esmeralda", "design", "tokens", "3d-tatil"],
+      "palavras_chave": [
+        "esmeralda",
+        "design",
+        "tokens",
+        "3d-tatil"
+      ],
       "depende_de": [],
       "card": {
         "antes_sha256": "N/A",
         "depois_sha256": "N/A",
-        "arquivos_modificados": ["src/paginas/admin-cockpit/sala-controle.css"],
+        "arquivos_modificados": [
+          "src/paginas/admin-cockpit/sala-controle.css"
+        ],
         "outros_arquivos_tocados": "N/A",
         "restart_executed": "não",
         "instalado_no_hermes": "não",
@@ -119,7 +152,9 @@
         "quando_usar": "N/A — aplicado automaticamente.",
         "por_que_usar_isso": "Sistema 3D Tátil obriga tokens semânticos, não hex.",
         "prova": "Diff no arquivo: --sc-em: hsl(var(--primary))",
-        "tutorial": ["Já está aplicado — nada a fazer."]
+        "tutorial": [
+          "Já está aplicado — nada a fazer."
+        ]
       }
     },
     {
@@ -130,7 +165,14 @@
       "atualizado_em": "2026-07-25",
       "area": "seguranca",
       "severidade": "p0",
-      "palavras_chave": ["pix", "webhook", "hmac", "fraude", "efi", "misticpay"],
+      "palavras_chave": [
+        "pix",
+        "webhook",
+        "hmac",
+        "fraude",
+        "efi",
+        "misticpay"
+      ],
       "depende_de": [],
       "motivo_bloqueio": "Aguardando seu OK pra atacar o Bloco 1 (findings #1 #2 #4 do scanner).",
       "card": {
@@ -147,7 +189,9 @@
         "quando_usar": "Você me libera → eu implemento verificação HMAC nas 3 edges.",
         "por_que_usar_isso": "Sem isso, painel vaza dinheiro.",
         "prova": "N/A — ainda não feito",
-        "tutorial": ["Aguardando autorização."]
+        "tutorial": [
+          "Aguardando autorização."
+        ]
       }
     },
     {
@@ -158,12 +202,19 @@
       "atualizado_em": "2026-07-25",
       "area": "seguranca",
       "severidade": "p0",
-      "palavras_chave": ["rls", "pagamento", "pix", "self-update"],
+      "palavras_chave": [
+        "rls",
+        "pagamento",
+        "pix",
+        "self-update"
+      ],
       "depende_de": [],
       "card": {
         "antes_sha256": "N/A",
         "depois_sha256": "N/A",
-        "arquivos_modificados": ["migration Supabase"],
+        "arquivos_modificados": [
+          "migration Supabase"
+        ],
         "outros_arquivos_tocados": "políticas RLS em pending_payments e pix_transactions",
         "restart_executed": "não",
         "instalado_no_hermes": "não",
@@ -174,7 +225,9 @@
         "quando_usar": "N/A",
         "por_que_usar_isso": "Sem isso, qualquer usuário virava pagante grátis.",
         "prova": "Migration aplicada, findings pending_payments_self_update_status e pix_transactions_self_update_status resolvidos.",
-        "tutorial": ["Já ativo."]
+        "tutorial": [
+          "Já ativo."
+        ]
       }
     },
     {
@@ -185,12 +238,18 @@
       "atualizado_em": "2026-07-25",
       "area": "cockpit",
       "severidade": "p1",
-      "palavras_chave": ["mobile", "tablet", "responsivo"],
+      "palavras_chave": [
+        "mobile",
+        "tablet",
+        "responsivo"
+      ],
       "depende_de": [],
       "card": {
         "antes_sha256": "N/A",
         "depois_sha256": "N/A",
-        "arquivos_modificados": ["src/paginas/admin-cockpit/sala-controle.css"],
+        "arquivos_modificados": [
+          "src/paginas/admin-cockpit/sala-controle.css"
+        ],
         "outros_arquivos_tocados": "N/A",
         "restart_executed": "não",
         "instalado_no_hermes": "não",
@@ -201,7 +260,9 @@
         "quando_usar": "N/A",
         "por_que_usar_isso": "Você usa direto no telefone.",
         "prova": "Validado 360px a 1024px.",
-        "tutorial": ["Já ativo."]
+        "tutorial": [
+          "Já ativo."
+        ]
       }
     },
     {
@@ -212,8 +273,15 @@
       "atualizado_em": "2026-07-25",
       "area": "hermes",
       "severidade": "p1",
-      "palavras_chave": ["hermes", "logs", "endpoint", "hub"],
-      "depende_de": ["endpoint-hermes-eventos"],
+      "palavras_chave": [
+        "hermes",
+        "logs",
+        "endpoint",
+        "hub"
+      ],
+      "depende_de": [
+        "endpoint-hermes-eventos"
+      ],
       "card": {
         "antes_sha256": "N/A",
         "depois_sha256": "N/A",
@@ -228,7 +296,9 @@
         "quando_usar": "Precisa endpoint no HUB expondo os últimos eventos do Hermes.",
         "por_que_usar_isso": "Sem isso, o cockpit é vitrine, não ferramenta.",
         "prova": "N/A — endpoint não existe ainda",
-        "tutorial": ["Aguardando endpoint no HUB."]
+        "tutorial": [
+          "Aguardando endpoint no HUB."
+        ]
       }
     },
     {
@@ -239,7 +309,12 @@
       "atualizado_em": "2026-07-25",
       "area": "hub",
       "severidade": "p1",
-      "palavras_chave": ["hub", "endpoint", "hermes", "eventos"],
+      "palavras_chave": [
+        "hub",
+        "endpoint",
+        "hermes",
+        "eventos"
+      ],
       "depende_de": [],
       "motivo_bloqueio": "Falta definir formato do payload e trava do super_admin.",
       "card": {
@@ -256,7 +331,9 @@
         "quando_usar": "Antes de destravar logs-reais-hermes.",
         "por_que_usar_isso": "Fonte única para eventos.",
         "prova": "N/A",
-        "tutorial": ["Aguardando spec."]
+        "tutorial": [
+          "Aguardando spec."
+        ]
       }
     },
     {
@@ -267,7 +344,12 @@
       "atualizado_em": "2026-07-25",
       "area": "ia",
       "severidade": "p2",
-      "palavras_chave": ["roteamento", "intent", "tiers", "custo"],
+      "palavras_chave": [
+        "roteamento",
+        "intent",
+        "tiers",
+        "custo"
+      ],
       "depende_de": [],
       "motivo_bloqueio": "Escopo é VPS, não Lovable. Precisa você definir se implementa aqui como painel de config ou só na VPS.",
       "card": {
@@ -284,7 +366,9 @@
         "quando_usar": "Você me libera escopo → eu abro PR na VPS.",
         "por_que_usar_isso": "Corta 60%+ de custo mantendo qualidade.",
         "prova": "N/A — nunca foi implementado. Assumi teatro anterior.",
-        "tutorial": ["Aguardando você definir escopo."]
+        "tutorial": [
+          "Aguardando você definir escopo."
+        ]
       }
     },
     {
@@ -295,7 +379,12 @@
       "atualizado_em": "2026-07-25",
       "area": "seguranca",
       "severidade": "p0",
-      "palavras_chave": ["telegram", "token", "bundle", "frontend"],
+      "palavras_chave": [
+        "telegram",
+        "token",
+        "bundle",
+        "frontend"
+      ],
       "depende_de": [],
       "card": {
         "antes_sha256": "N/A",
@@ -311,7 +400,9 @@
         "quando_usar": "Bloco 2 do plano de segurança.",
         "por_que_usar_isso": "Token vazado = qualquer um manda mensagem pelo bot.",
         "prova": "N/A",
-        "tutorial": ["Aguardando autorização."]
+        "tutorial": [
+          "Aguardando autorização."
+        ]
       }
     },
     {
@@ -322,7 +413,13 @@
       "atualizado_em": "2026-07-25",
       "area": "seguranca",
       "severidade": "p1",
-      "palavras_chave": ["pii", "lgpd", "auth", "edge", "efi"],
+      "palavras_chave": [
+        "pii",
+        "lgpd",
+        "auth",
+        "edge",
+        "efi"
+      ],
       "depende_de": [],
       "card": {
         "antes_sha256": "N/A",
@@ -338,7 +435,53 @@
         "quando_usar": "Bloco 3 do plano de segurança.",
         "por_que_usar_isso": "LGPD e higiene.",
         "prova": "N/A",
-        "tutorial": ["Aguardando autorização."]
+        "tutorial": [
+          "Aguardando autorização."
+        ]
+      }
+    },
+    {
+      "id": "vps-gpu-capacidade-futura",
+      "titulo": "GPU dedicada na VPS — capacidade futura",
+      "status": "pendente",
+      "porcentagem": 0,
+      "atualizado_em": "2026-09-20",
+      "area": "infra",
+      "severidade": "p3",
+      "palavras_chave": [
+        "gpu",
+        "vram",
+        "vps",
+        "render",
+        "inferencia",
+        "runtime",
+        "futuro"
+      ],
+      "depende_de": [],
+      "motivo_bloqueio": "A VPS atual não expõe GPU: nvidia-smi, rocminfo e /dev/dri ausentes. Reavaliar somente quando o host tiver GPU real.",
+      "card": {
+        "antes_sha256": "N/A",
+        "depois_sha256": "N/A",
+        "arquivos_modificados": [
+          "docs/PENDENCIAS.md",
+          "docs/CONSCIENCIA/COCKPIT-AVANCO.json"
+        ],
+        "outros_arquivos_tocados": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/GARIMPO-CHEFE.md; scripts/casa/garimpo-proof-gc.ps1",
+        "restart_executed": "não",
+        "instalado_no_hermes": "não — capacidade futura",
+        "onde": "/admin/cockpit → AVANÇO → infra; alvo futuro: VPS vmi3256920 ou sucessora com GPU",
+        "por_que": "Hoje a VPS é CPU-only. Registrar agora evita esquecer a expansão de GPU e impede falso-verde.",
+        "pra_que": "Quando houver GPU real, o mesmo OmniRouter poderá usar Casa/VPS de forma híbrida sem criar arquitetura paralela.",
+        "como_usar": "Nenhuma ação agora. Quando a infraestrutura mudar, repetir hardware probe e seguir o card.",
+        "quando_usar": "Na migração futura para VPS/host com GPU dedicada ou passthrough comprovado.",
+        "por_que_usar_isso": "Transforma uma intenção futura em pendência visível e mensurável sem fingir capacidade inexistente.",
+        "prova": "Hardware probe 2026-09-20: nvidia-smi=ABSENT; rocminfo=ABSENT; /dev/dri=ABSENT; VGA virtual/emulada.",
+        "tutorial": [
+          "1. Abra /admin/cockpit e filtre área=infra ou busque GPU.",
+          "2. Enquanto não houver GPU real, mantenha este item pendente.",
+          "3. Quando o host mudar, rode hardware probe de GPU/VRAM/driver.",
+          "4. Só marque andando/feito após benchmark e receipt same-runtime."
+        ]
       }
     }
   ]

@@ -41,6 +41,35 @@ modes:
     transport: JSON_RPC_STDIO
     preferred_for: [IDE_INTEGRATION, TOOL_INTEGRATION, DESKTOP_COCKPIT_ADAPTER]
 
+runtime_pattern_snapshot:
+  path: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/GROK-RUNTIME-PATTERN.json
+  captured_from_live_console: true
+  raw_prompts_included: false
+  secrets_included: false
+  selected_is_active: false
+  available_is_observed: false
+
+admin_mode_control:
+  state_file: /root/CentralDark/logs/control/grok-mode.json
+  consumer: apps/modulos/HERMES-CORE/core/grok-build-adapter.mjs
+  ui: MCP /admin → Grok
+  selection_is_runtime_proof: false
+  explicit_invocation_input_overrides_admin_default: true
+  invocation_modes: [HEADLESS, READ_ONLY_AUDIT, INTERACTIVE_PTY, ACP_STDIO, INSPECT]
+  agent_profiles: [general-purpose, plan, explore]
+  permission_modes_documented: [default, acceptEdits, auto, dontAsk, bypassPermissions, plan]
+  permission_modes_admin_selectable: [default, plan]
+  elevated_permission_modes_require_mutation_intent_and_writer_scope: true
+  observed_models: [grok-4.6, grok-4.5]
+  safe_default:
+    invocation_mode: HEADLESS
+    agent_profile: general-purpose
+    permission_mode: default
+    model: grok-4.6
+    reasoning_effort: low
+    subagents_enabled: true
+    plan_enabled: true
+
 headless_contract:
   no_auto_update_required: true
   workdir_required: true
@@ -155,7 +184,10 @@ promotion:
   source_doc_read: PROVEN
   adapter_contract: CANDIDATE
   runtime_adapter_self_test_required: true
-  actual_grok_binary_present: UNKNOWN_UNTIL_RUNTIME_PROBE
-  actual_grok_auth_valid: UNKNOWN_UNTIL_RUNTIME_PROBE
-  actual_grok_invocation: UNKNOWN_UNTIL_RUNTIME_PROBE
+  actual_grok_binary_present: PROVEN_RUNTIME_2026_09_19
+  actual_grok_auth_valid: PROVEN_FOR_OBSERVED_ACTIVE_SESSION_2026_09_19
+  actual_grok_invocation: PROVEN_RUNTIME_2026_09_19
+  active_process_binary: grok-1.0.30-linux-x86_64
+  installed_stable_version: 1.0.34
+  version_drift_requires_remeasure: true
   same_head_ci_required: true

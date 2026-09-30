@@ -780,6 +780,30 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Resumo do fechamento:** Remediado no commit 328dfb027: os 3 canvas vazios foram destrackeados do PR #1369 (git rm --cached, arquivos preservados no disco conforme DETECT != DELETE). A mensagem enganosa do 41f1f7e85 fica no histórico como registro do erro, com o commit corretivo explicando a divergência. Aprendizado #33 registra a lei extraída: mensagem de commit não é prova, conteúdo de commit é prova — rodar git diff --cached --stat antes de declarar recibo, nunca git add -A cego.
 - **Sintoma:** O commit 41f1f7e85 na branch reconciliacao/casa-20260829-consolidacao tem mensagem "docs(reconciliation): inventory of E:\CentralDark — SOBRA_BRAIN classification, proof of mirrors" mas contém apenas 3 arquivos canvas vazios (docs/BRAIN/Sem título*.canvas, 1 linha cada), pegos por um git add -A cego. O relatório de inventário citado na mensagem nunca entrou no repositório.
 - **Onde mexer:** PR #1369, branch reconciliacao/casa-20260829-consolidacao, commit 41f1f7e85, arquivos docs/BRAIN/Sem título*.canvas
+- **Critério pra fechar:** Os 3 canvas vazios removidos do PR #1369 (não pertencem ao escopo), e o commit reescrito ou seguido de commit corretivo cuja mensagem descreva o que realmente contém. Nenhum commit do PR anuncia prova que não esteja no diff.
+
+---
+
+## 🟢 #143 — GPU dedicada na VPS — capacidade futura
+**Status:** pendente futuro / não bloqueia o runtime atual  
+**Data de registro:** 20/09/2026  
+**Fato medido:** a VPS `vmi3256920` não expõe aceleração GPU no estado atual: `nvidia-smi=ABSENT`, `rocminfo=ABSENT`, `/dev/dri=ABSENT`; o adaptador VGA observado é virtual/emulado.  
+**Intenção:** quando a VPS migrar para host/plano com GPU, habilitar capacidade de inferência/render híbrida sem criar segundo router.
+
+**Como fechar:**
+1. Repetir hardware probe no host novo.
+2. Medir GPU, VRAM, driver e backend compatível.
+3. Ligar a capacidade ao `RUNTIME-PLUG-CONTRACT.yml` e ao OmniRouter existente.
+4. Provar `LOCAL_GPU_CASA → VPS_GPU → provider opcional` por benchmark/health.
+5. Atualizar o cockpit com SHA/runtime receipt.
+
+**Hoje:**
+```text
+VPS_GPU=UNAVAILABLE_BY_CURRENT_PROBE
+FUTURE_CAPABILITY=RECORDED
+CURRENT_RUNTIME_BLOCKED_BY_THIS=false
+UNKNOWN != PASS
+```
 
 ---
 

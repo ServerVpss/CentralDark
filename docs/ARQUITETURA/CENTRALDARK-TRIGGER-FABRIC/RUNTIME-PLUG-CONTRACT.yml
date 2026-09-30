@@ -392,3 +392,26 @@ fixed_point:
 invariant:
   formula: "COMPLETE_CONTROL_PLANE + CATALOGUED_UNIVERSE + SELECTED_RUNTIME_PLUG -> SAME_OPERATIONAL_CONTRACT"
   slogan: "ARQUITETURA INTEIRA; MOTOR SOB DEMANDA; CONTINUIDADE NOS DOIS SENTIDOS."
+
+universal_operational_envelope:
+  inherited_by_every_runtime_plug: true
+  producer: apps/modulos/HERMES-CORE/core/runtime-operational-envelope.mjs
+  reuse_fanout_owner: apps/modulos/HERMES-CORE/core/perception-orchestra.mjs
+  phases:
+    - DISCOVER
+    - FANOUT
+    - RENDEZVOUS
+    - DEDUPE
+    - COUNTERPROOF
+    - REMEASURE
+    - REALITY_JUDGE
+    - RECEIPT
+    - NEXT_CURSOR
+  four_fronts:
+    required_roles: [A_LOGIC, B_IMPLEMENTATION, C_REGRESSION_FALSE_GREEN, D_SIMPLIFICATION]
+    role_names_are_provider_neutral: true
+    provider_native_subagent_names_are_provenance_only: true
+  retry_requires_information_gain: true
+  parent_rendezvous_required_before_mutation: true
+  mutation_serialized_by_writer_scope: true
+  receipt_required: true
