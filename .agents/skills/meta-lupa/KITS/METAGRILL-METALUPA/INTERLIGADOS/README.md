@@ -62,6 +62,7 @@ SKILLS/INTERLIGACAO-OPERACIONAL.json → cadeia máquina: intenção → skill �
 SKILLS/MAPA-MENTAL-OPERACIONAL.md    → mapa visual das skills, gatilhos e cadeia de decisão
 RUNTIME/FRONTEIRAS-REAIS.md          → somente o que ainda precisa Casa/VPS/runtime atual
 RUNTIME/API-TOOL-RESOURCE-BRIDGE.md  → ponte recurso temporário ↔ path estável
+RUNTIME/LOCAL-FIRST-MULTI-ACCOUNT-ROUTE.md → rota curta local + multi-account + fallback VPS/Tailscale + lei PR-filho→PR-mãe→main
 RECEIPTS/                            → rastros desta cristalização
 ```
 
