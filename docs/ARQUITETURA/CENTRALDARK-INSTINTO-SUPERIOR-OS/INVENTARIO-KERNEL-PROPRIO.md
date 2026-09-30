@@ -613,10 +613,10 @@ Não repetir trabalho já provado. Não transformar CI base preexistente em bloc
 | Provider | Credencial | Status |
 |---|---|---|
 | Cloudflare | `CLOUDFLARE_API_TOKEN` | CONFIGURED |
-| Contabo | `CONTABO_CLIENT_ID` | MISSING |
-| Contabo | `CONTABO_CLIENT_SECRET` | MISSING |
-| Contabo | `CONTABO_API_USER` | MISSING |
-| Contabo | `CONTABO_API_PASSWORD` | MISSING |
+| Contabo | `CONTABO_CLIENT_ID` | PROVEN (auth via Casa PowerShell) |
+| Contabo | `CONTABO_CLIENT_SECRET` | PROVEN (auth via Casa PowerShell) |
+| Contabo | `CONTABO_API_USER` | PROVEN (auth via Casa PowerShell) |
+| Contabo | `CONTABO_API_PASSWORD` | PROVEN (auth via Casa PowerShell) |
 | Tailscale | `TAILSCALE_API_KEY` | CONFIGURED |
 | Buildkite | `BUILDKITE_API_TOKEN` | CONFIGURED |
 
@@ -687,30 +687,73 @@ HTTP_STATUS=200
 PROVIDER_READ=PASS
 ```
 
-### 13.5 Contabo — BLOQUEADO
+### 13.5 Contabo — readback provado
+
+**Medido em:** 2026-09-30T10:20Z | **Superfície:** CHEFE executou `curl.exe` via PowerShell (Casa) direto na API Contabo | **Auth:** OAuth2 password grant
 
 ```text
-CONTABO_CLIENT_ID=MISSING
-CONTABO_CLIENT_SECRET=MISSING
-CONTABO_API_USER=MISSING
-CONTABO_API_PASSWORD=MISSING
-PROVIDER_READ=BLOCKED
-CAPABILITIES_BLOCKED=instances.list, instances.get, snapshots.list, snapshots.create, snapshots.rollback
-GATE_C_IMPACT=Fase C (Snapshot/Rollback) não pode prosseguir sem credenciais Contabo
+CONTABO_AUTH=PASS (access_token obtido via /auth/realms/contabo/protocol/openid-connect/token)
+CONTABO_INSTANCES_READ=PASS
+CONTABO_SNAPSHOTS_READ=PASS
+PROVIDER_READ=PASS
 ```
 
-As 4 credenciais Contabo são pré-requisito para Gate B (instance exact match) e Gate C (snapshot/rollback). O CHEFE precisa configurar estas credenciais no MCP runtime ou fornecer por via segura.
+**Instance provada:**
 
-### 13.6 Gate B — veredicto parcial
+| Campo | Valor |
+|---|---|
+| instanceId | 203256920 |
+| name | vmi3256920 |
+| displayName | CENTRALDARK-OS |
+| ipv4 | 89.117.78.124 |
+| ipv6 | 2605:a144:2325:6920::1 |
+| vCpu | 8 cores |
+| RAM | 24576 MB (24 GB) |
+| Disk | 204800 MB (200 GB NVMe) |
+| DC | United States (East) 1 |
+| status | running |
+| product | Cloud VPS 30 NVMe (V97) |
+| created | 2026-04-25 |
+| imageId | afecbb85-e2fc-46f0-9684-b46b1faf00bb |
+| defaultUser | root |
+| macAddress | 00:50:56:63:70:5d |
+
+**Snapshot provado:**
+
+| Campo | Valor |
+|---|---|
+| snapshotId | snap1790430960 |
+| name | central |
+| instanceId | 203256920 |
+| created | 2026-09-26T11:56:00Z |
+| autoDeleteDate | 2026-10-26T13:56:00Z |
+| imageName | ubuntu-22.04 |
+| daysRemaining | ~26 (medido 2026-09-30) |
+
+**Nota:** Contabo exige OAuth2 password grant com 4 credenciais (client_id, client_secret, username, password) + header `x-request-id` com UUID4 válido. Snapshots endpoint é per-instance: `/v1/compute/instances/{instanceId}/snapshots`.
+
+### 13.6 Gate B — veredicto PASS
 
 ```text
 CLOUDFLARE_READ=PASS (zone + DNS + account provados)
 TAILSCALE_READ=PASS (4 devices, VPS connected, key permanent)
 BUILDKITE_READ=PASS (user + org provados)
-CONTABO_READ=BLOCKED (4 credenciais MISSING)
+CONTABO_READ=PASS (auth + instances + snapshots provados)
 GITHUB_READ=PASS (repo/main/PR acessíveis via MCP)
-VPS_INSTANCE_EXACT_MATCH=UNKNOWN (requer Contabo instances.get)
-GATE_B=PARTIAL_PASS (3/4 providers provados, Contabo bloqueado)
+VPS_INSTANCE_EXACT_MATCH=PASS (instanceId 203256920, displayName CENTRALDARK-OS, 89.117.78.124)
+GATE_B=PASS (4/4 providers provados)
+```
+
+### 13.8 Gate C — snapshot parcial (medição read-only)
+
+```text
+SNAPSHOT_EXISTS=PASS (snap1790430960, name "central", created 2026-09-26)
+SNAPSHOT_AUTO_DELETE=2026-10-26 (~26 dias restantes)
+SNAPSHOT_BASE_IMAGE=ubuntu-22.04
+ROLLBACK_API_PATH=POST /v1/compute/instances/203256920/snapshots/snap1790430960/rollback
+ROLLBACK_TESTED=NO (read-only phase, endpoint identificado mas não invocado)
+VNC_RESCUE_TESTED=NO (requer painel Contabo)
+GATE_C=PARTIAL_PASS (snapshot existe e é recuperável via API; rollback e VNC não testados)
 ```
 
 ### 13.7 Fase A — Vault status
