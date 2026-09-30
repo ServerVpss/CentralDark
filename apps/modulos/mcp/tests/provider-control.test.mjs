@@ -186,6 +186,10 @@ test("fingerprints nao carregam ator bruto", () => {
 });
 
 
+test("tools dedicadas Tailscale reutilizam owners existentes e ficam read-only", () => {
+  assert.deepEqual(
+    tailscaleTools.map((tool) => tool.name),
+    ["tailscale_status", "tailscale_bridge_status", "tailscale_devices_list", "tailscale_dns_nameservers", "tailscale_network_logs"],
 test("tools dedicadas Tailscale reutilizam provider-control e ficam read-only", () => {
   assert.deepEqual(
     tailscaleTools.map((tool) => tool.name),
