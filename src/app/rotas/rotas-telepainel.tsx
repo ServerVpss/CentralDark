@@ -27,7 +27,7 @@ import UsuarioPerfil from "@/funcionalidades/telepainel/pages/UsuarioPerfil";
 import PonteMCP from "@/funcionalidades/telepainel/pages/PonteMCP";
 import MapaSite from "@/funcionalidades/telepainel/pages/MapaSite";
 import AiProxyConfig from "@/funcionalidades/telepainel/pages/AiProxyConfig";
-import HermesPanel from "@/funcionalidades/hermes-panel/pages/HermesPanel";
+import HermesPanel from "@/funcionalidades/hermes/pages/HermesPanel";
 
 type RotaTP = { path: string; element: JSX.Element; adminOnly?: boolean };
 
@@ -53,6 +53,8 @@ const rotas: RotaTP[] = [
   { path: "mapa", element: <MapaSite />, adminOnly: true },
   { path: "consciencia", element: <ConscienciaViva />, adminOnly: true },
   { path: "hermes", element: <HermesPanel />, adminOnly: true },
+  // Guardião removido do TelePainel por decisão do CHEFE: ele não pertence ao módulo público/Builder Booth.
+  // Próxima integração deve convergir para o painel admin CentralDark/Omni/MCP, sem criar painel paralelo.
   { path: "ai-proxy", element: <AiProxyConfig />, adminOnly: true },
 ];
 

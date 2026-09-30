@@ -73,8 +73,8 @@ const CONFIG = {
 
   // Fallback chain do Omni Router (ordem de preferência)
   fallbackChain: [
-    'nous',
     'hermes',
+    'nous',
     'google',
     'claude-code',
     'xai',
@@ -134,7 +134,7 @@ let state = {
   lastCheck: 0,
   consecutiveFailures: {},
   lastFailover: 0,
-  currentProvider: 'nous',
+  currentProvider: 'hermes',
   deployInProgress: false,
   history: [],
 };
